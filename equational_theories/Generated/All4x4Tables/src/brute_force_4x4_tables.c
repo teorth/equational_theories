@@ -123,8 +123,8 @@ int find_or_insert(HashTableEntry *hash_table, const char *hash, int table_numbe
     return -1; // Indicates a new entry
 }
 
-void skip_to_table(int *table, int target_index) {
-    for (int i = 0; i < target_index; i++) {
+void skip_to_table(int *table, int64_t target_index) {
+    for (int64_t i = 0; i < target_index; i++) {
         next_table(table);
     }
 }
