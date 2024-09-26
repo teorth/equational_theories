@@ -58,24 +58,24 @@ def parse_proofs_file(file_name):
             known_not_implies.add((m.group(1), m.group(2)))
     return universe, known_implies, known_not_implies
 
-
-try:
-    file_name = argv[1]
-    assert os.path.exists(file_name)
-except:
-    print('Usage: python process_implications.py <file_name.lean>')
-    exit(1)
-
-
-universe, known_implies, known_not_implies = parse_proofs_file(file_name)
+if __name__ == '__main__':
+    try:
+        file_name = argv[1]
+        assert os.path.exists(file_name)
+    except:
+        print('Usage: python process_implications.py <file_name.lean>')
+        exit(1)
 
 
-all_unknown = get_unknown_implications(universe, known_implies, known_not_implies)
+    universe, known_implies, known_not_implies = parse_proofs_file(file_name)
 
-print(f'Found {len(all_unknown)} unknown implications')
-if all_unknown:
-    k = min(10, len(all_unknown))
-    if k < len(all_unknown):
-        print('Sample of', k, 'unknown implications:')
-    for a, b in sample(list(all_unknown), k):
-        print(f'{a} => {b}')
+
+    all_unknown = get_unknown_implications(universe, known_implies, known_not_implies)
+
+    print(f'Found {len(all_unknown)} unknown implications')
+    if all_unknown:
+        k = min(10, len(all_unknown))
+        if k < len(all_unknown):
+            print('Sample of', k, 'unknown implications:')
+        for a, b in sample(list(all_unknown), k):
+            print(f'{a} => {b}')
