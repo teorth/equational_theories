@@ -134,7 +134,7 @@ theorem Equation3_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation3
   . intro _
     rfl
   by_contra h
-  replace h := h 0 1 2
+  specialize h 0 1 2
   simp [hG] at h
 
 theorem Equation3_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation4512 G := by
@@ -146,7 +146,7 @@ theorem Equation3_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equatio
   . intro x
     simp [hG]
   by_contra h
-  replace h := h 1 2 3
+  specialize h 1 2 3
   simp [hG] at h
 
 theorem Equation4_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation43 G := by
@@ -158,7 +158,7 @@ theorem Equation4_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4
   . intro _ _
     rfl
   by_contra h
-  replace h := h 1 0
+  specialize h 1 0
   dsimp [hG] at h
   linarith
 
@@ -171,7 +171,7 @@ theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equatio
   . intro _ _
     rfl
   by_contra h
-  replace h := h 0 0 0 1 0 0
+  specialize h 0 0 0 1 0 0
   dsimp [hG] at h
   linarith
 
@@ -184,7 +184,7 @@ theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation
   . intro _ _ _
     simp [hG]
   by_contra h
-  replace h := h 0 1
+  specialize h 0 1
   dsimp [hG] at h
   linarith
 
@@ -197,7 +197,7 @@ theorem Equation42_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equati
   . intro _ _ _
     simp [hG]
   by_contra h
-  replace h := h 0 0 0
+  specialize h 0 0 0
   dsimp [hG] at h
   linarith
 
@@ -209,7 +209,7 @@ theorem Equation43_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation4
   constructor
   . exact Nat.add_comm
   by_contra h
-  replace h := h 1
+  specialize h 1
   simp [hG] at h
 
 theorem Equation43_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation42 G := by
@@ -220,7 +220,7 @@ theorem Equation43_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation
   constructor
   . exact Nat.add_comm
   by_contra h
-  replace h := h 0 0 1
+  specialize h 0 0 1
   dsimp [hG] at h
   linarith
 
@@ -232,7 +232,7 @@ theorem Equation43_not_implies_Equation387 : ∃ (G: Type) (_: Magma G), Equatio
   constructor
   . exact Nat.add_comm
   by_contra h
-  replace h := h 0 1
+  specialize h 0 1
   dsimp [hG] at h
   linarith
 
@@ -246,7 +246,7 @@ theorem Equation43_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equati
     dsimp [hG]
     ring
   by_contra h
-  replace h := h 0 0 1
+  specialize h 0 0 1
   dsimp [hG] at h
   linarith
 
@@ -259,7 +259,7 @@ theorem Equation46_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation4
   . intro _ _ _ _
     rfl
   by_contra h
-  replace h := h 1
+  specialize h 1
   dsimp [hG] at h
   linarith
 
@@ -272,7 +272,7 @@ theorem Equation46_not_implies_Equation4 : ∃ (G: Type) (_: Magma G), Equation4
   . intro _ _ _ _
     rfl
   by_contra h
-  replace h := h 1 0
+  specialize h 1 0
   dsimp [hG] at h
   linarith
 
@@ -285,7 +285,7 @@ theorem Equation387_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equatio
   . intro x y
     simp [hG, Bool.or_comm]
   by_contra h
-  replace h := h false true false
+  specialize h false true false
   simp [hG] at h
 
 theorem Equation387_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation4512 G := by
@@ -298,7 +298,7 @@ theorem Equation387_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equat
     simp [hG]
     ring
   by_contra h
-  replace h := h 0 0 1
+  specialize h 0 0 1
   field_simp [hG] at h
 
 theorem Equation4512_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation42 G := by
@@ -311,7 +311,7 @@ theorem Equation4512_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equati
     simp [hG]
     abel
   by_contra h
-  replace h := h 0 0 1
+  specialize h 0 0 1
   dsimp [hG] at h
   linarith
 
@@ -325,7 +325,7 @@ theorem Equation4512_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equa
     simp [hG]
     abel
   by_contra h
-  replace h := h 0 0 0 1
+  specialize h 0 0 0 1
   dsimp [hG] at h
   linarith
 
@@ -339,7 +339,7 @@ theorem Equation4513_not_implies_Equation4552 : ∃ (G: Type) (_: Magma G), Equa
     simp [hG]
     split_ifs <;> simp_all
   by_contra h
-  replace h := h 0 0 0 3 3
+  specialize h 0 0 0 3 3
   dsimp [hG] at h
   linarith
 
@@ -353,7 +353,7 @@ theorem Equation4582_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equati
     simp [hG]
     split_ifs <;> simp_all
   by_contra h
-  replace h := h 0 0 1
+  specialize h 0 0 1
   dsimp [hG] at h
   linarith
 
@@ -367,6 +367,6 @@ theorem Equation4582_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equati
     simp [hG]
     split_ifs <;> simp_all
   by_contra h
-  replace h := h 1 2
+  specialize h 1 2
   dsimp [hG] at h
   linarith
