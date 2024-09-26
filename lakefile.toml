@@ -10,5 +10,14 @@ relaxedAutoImplicit = false
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"
 
+
+[[require]]
+name = "checkdecls"
+git = "https://github.com/PatrickMassot/checkdecls.git"
+
+[[require]]
+name = "«doc-gen4»"
+git = "https://github.com/leanprover/doc-gen4"
+rev = "main"
 [[lean_lib]]
 name = "equational_theories"
