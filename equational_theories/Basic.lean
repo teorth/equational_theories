@@ -130,13 +130,7 @@ theorem Equation4582_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equati
   constructor
   . intro x y z w u v
     simp [hG]
-    calc
-      _ = 2 := by
-        by_cases h' : y = 0 ∧ z = 0
-        all_goals {simp [h']}
-      _ = _ := by
-        by_cases h' : w = 0 ∧ u = 0
-        all_goals {simp [h']}
+    split_ifs <;> simp_all
   by_contra h
   replace h := h 0 0 1
   dsimp [hG] at h
@@ -150,13 +144,7 @@ theorem Equation4582_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equati
   constructor
   . intro x y z w u v
     simp [hG]
-    calc
-      _ = 4 := by
-        by_cases h' : y = 1 ∧ z = 2
-        all_goals {simp [h']}
-      _ = _ := by
-        by_cases h' : w = 1 ∧ u = 2
-        all_goals {simp [h']}
+    split_ifs <;> simp_all
   by_contra h
   replace h := h 1 2
   dsimp [hG] at h
@@ -221,20 +209,8 @@ theorem Equation4513_not_implies_Equation4552 : ∃ (G: Type) (_: Magma G), Equa
   use ℕ, hG
   constructor
   . intro x y z w
-    by_cases h : x = 0
-    . simp [hG, h]
-      have : ¬ (if y ≤ 2 then 1 else 2) = 0 := by
-        by_cases h' : y ≤ 2
-        all_goals {simp [h']}
-      simp [this]
-      congr 1
-      by_cases h0 : y = 0
-      . simp [h0]
-        by_cases hz : z ≤ 2
-        all_goals {simp [hz]}
-      by_cases h' : y ≤ 2
-      all_goals {simp [h0, h']}
-    simp [hG, h]
+    simp [hG]
+    split_ifs <;> simp_all
   by_contra h
   replace h := h 0 0 0 3 3
   dsimp [hG] at h

@@ -8,23 +8,15 @@ from sys import argv
 
 
 def transitive_closure(pairs):
-    closure = set(pairs) | {(a, a) for a in universe}
-    last_round = closure
-    while True:
-        new_pairs = set()
-        for a, b in last_round:
-            for c, d in pairs:
-                if b == c:
-                    new_pairs.add((a, d))
-        for a, b in pairs:
-            for c, d in last_round:
-                if b == c:
-                    new_pairs.add((a, d))
-        new_pairs = new_pairs - closure
-        if not new_pairs:
-            break
+    new_pairs = closure = set(pairs)
+    while new_pairs:
+        new_pairs = {
+            (a, d)
+            for a, b in new_pairs
+            for c, d in pairs
+            if b == c
+        } - closure
         closure |= new_pairs
-        last_round = new_pairs
     return closure
 
 
@@ -49,19 +41,21 @@ def get_unknown_implications(universe, known_implies, known_not_implies):
 
 def parse_proofs_file(file_name):
     # This code is buggy: it doesn't verify that the proofs are correct.
+    # It is also extermely sensitive to formatting of the proof types. There's
+    # probably a way to get this directly from Lean.
     universe = []
-    true_statements = []
-    known_implies, known_not_implies = [], []
+    known_implies, known_not_implies = set(), set()
     for line in open(file_name):
-        if m := re.match(r'def (Equation\d+) ', line):
+        if m := re.match(r'def\s+(Equation\d+)\s+', line):
             universe.append(m.group(1))
-        if m := re.match(r'theorem (Equation\d+)_implies_(Equation\d) ', line):
-            known_implies.append((m.group(1), m.group(2)))
-        if m := re.match(r'theorem (Equation\d+)_not_implies_(Equation\d) ', line):
-            known_not_implies.append((m.group(1), m.group(2)))
-        if m := re.match(r'theorem (Equation\d+)_true ', line):
-            true_statements.append(m.group(1))
-    known_implies.extend((a, x) for a in universe for x in true_statements)
+            known_implies.add((m.group(1), m.group(1)))
+        elif m := re.match(r'theorem\s+.*\[Magma\s+G\]\s*:\s*(Equation\d+)\s*G\s*:=', line):
+            for eq in universe:
+                known_implies.add((eq, m.group(1)))
+        elif m := re.match(r'theorem\s+.*\[Magma\s+G\]\s*\(.:\s*(Equation\d+)\s+G\)\s*:\s*(Equation\d+)\s+G\s*:=', line):
+            known_implies.add((m.group(1), m.group(2)))
+        elif m := re.match(r'theorem\s+.*:\s*∃.*\(_:\s*Magma\s+G\),\s*(Equation\d+)\s+G\s*∧\s*¬\s*(Equation\d+)\s+G\s*:=', line):
+            known_not_implies.add((m.group(1), m.group(2)))
     return universe, known_implies, known_not_implies
 
 
@@ -74,19 +68,6 @@ except:
 
 
 universe, known_implies, known_not_implies = parse_proofs_file(file_name)
-
-# Missing proofs in Equational/Basic.lean:
-
-# known_implies.extend([
-#     ('Equation3', 'Equation8'),
-#     ('Equation9', 'Equation10'),
-# ])
-# known_not_implies.extend([
-#     ('Equation4', 'Equation6'),
-#     ('Equation4', 'Equation10'),
-#     ('Equation6', 'Equation10'),
-#     ('Equation7', 'Equation4'),
-# ])
 
 
 all_unknown = get_unknown_implications(universe, known_implies, known_not_implies)
