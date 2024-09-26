@@ -64,6 +64,12 @@ theorem Equation2_implies_Equation46 (G: Type*) [Magma G] (h: Equation2 G) : Equ
 theorem Equation2_implies_Equation4 (G: Type*) [Magma G] (h: Equation2 G) : Equation4 G :=
   fun _ _ => h _ _
 
+theorem Equation2_implies_Equation7 (G: Type*) [Magma G] (h: Equation2 G) : Equation7 G :=
+  sorry
+
+theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G :=
+  sorry
+
 theorem Equation46_implies_Equation387 (G: Type*) [Magma G] (h: Equation46 G) : Equation387 G :=
   fun _ _ => h _ _ _ _
 

@@ -25,3 +25,10 @@ Also, from two applications of \eqref{387-again} one has
 $$(x \circ x) \circ (y \circ y) = (y \circ y) \circ x = x \circ y.$$
 Thus \eqref{op-idem} simplifies to $x \circ y = y \circ x$, which is Definition \ref{eq43}.
 \end{proof}
+
+\begin{theorem}[7 equivalent to 2]\label{7_equiv_2}\uses{eq2,eq7}\lean{Equation7_implies_Equation2, Equation2_implies_Equation7}\leanok  Definition \ref{eq7} is equivalent to Definition \ref{eq2}.
+\end{theorem}
+
+\begin{proof}
+  When $x = y * z$, obviously $x = y$ because $x = x * x$ and $y = x * x$. the other way around is trivial.
+\end{proof}
