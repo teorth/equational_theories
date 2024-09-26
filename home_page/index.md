@@ -8,8 +8,8 @@ usemathjax: true
 
 Useful links:
 
-* [Zulip chat for Lean](https://leanprover.zulipchat.com/) for coordination
-* [Blueprint](blueprint/)
-* [Blueprint as pdf](blueprint.pdf)
-* [Dependency graph](blueprint/dep_graph_document.html)
-* [Doc pages for this repository](docs/)
+* [Zulip chat for Lean](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational) for coordination
+* [Blueprint]({{ site.url }}/blueprint/)
+* [Blueprint as pdf]({{ site.url }}/blueprint.pdf)
+* [Dependency graph]({{ site.url }}/blueprint/dep_graph_document.html)
+* [Doc pages for this repository]({{ site.url }}/docs/)

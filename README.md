@@ -4,6 +4,8 @@
 
 The purpose of this project is to explore the space of equational theories of magmas, ordered by implication.  To begin with we shall focus only on theories of a single equation, which are listed [here](https://github.com/teorth/equational_theories/blob/main/scripts/equations.txt).
 
+A (manually created) graph of the dependencies obtained so far can be found [here](images/implications.png), current as of Sep 26 2024.
+
 Links:
 
 - [Main web page](https://teorth.github.io/equational_theories/)
