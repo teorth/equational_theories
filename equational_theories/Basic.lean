@@ -136,7 +136,7 @@ theorem Equation3_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation3
   by_contra h
   specialize h 0 1 2
   simp [hG] at h
-
+        
 theorem Equation3_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation4512 G := by
   let hG : Magma Nat := {
     op := fun x y => if x = y then x else x + 1
