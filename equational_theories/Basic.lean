@@ -33,13 +33,13 @@ def Equation4582 (G: Type*) [Magma G] := ∀ x y z w u v: G, x ∘ (y ∘ z) = (
 
 /- Positive implications -/
 
-theorem Equation1_implies_Equation46 (G: Type*) [Magma G] (h: Equation2 G) : Equation46 G :=
+theorem Equation2_implies_Equation46 (G: Type*) [Magma G] (h: Equation2 G) : Equation46 G :=
   fun _ _ _ _ => h _ _
 
-theorem Equation1_implies_Equation3 (G: Type*) [Magma G] (h: Equation2 G) : Equation4 G :=
+theorem Equation2_implies_Equation4 (G: Type*) [Magma G] (h: Equation2 G) : Equation4 G :=
   fun _ _ => h _ _
 
-theorem Equation46_implies_Equation4 (G: Type*) [Magma G] (h: Equation46 G) : Equation387 G :=
+theorem Equation46_implies_Equation387 (G: Type*) [Magma G] (h: Equation46 G) : Equation387 G :=
   fun _ _ => h _ _ _ _
 
 theorem Equation46_implies_Equation4582 (G: Type*) [Magma G] (h: Equation46 G) : Equation4582 G :=
@@ -48,16 +48,16 @@ theorem Equation46_implies_Equation4582 (G: Type*) [Magma G] (h: Equation46 G) :
 theorem Equation46_implies_Equation42 (G: Type*) [Magma G] (h: Equation46 G) : Equation42 G :=
   fun _ _ _ => h _ _ _ _
 
-theorem Equation3_implies_Equation42 (G: Type*) [Magma G] (h: Equation4 G) : Equation42 G := by
+theorem Equation4_implies_Equation42 (G: Type*) [Magma G] (h: Equation4 G) : Equation42 G := by
   intro _ _ _
   rw [<-h, <-h]
 
-theorem Equation3_implies_Equation4552 (G: Type*) [Magma G] (h: Equation4 G) : Equation4552 G := by
+theorem Equation4_implies_Equation4552 (G: Type*) [Magma G] (h: Equation4 G) : Equation4552 G := by
   intro x y z w u
   rw [<-h, <-h, <-h]
 
 /-- This proof is from https://mathoverflow.net/a/450905/766 -/
-theorem Equation4_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) : Equation43 G := by
+theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) : Equation43 G := by
   have idem (x : G) : (x ∘ x) ∘ (x ∘ x) = (x ∘ x) := by
     rw [<-h, <-h]
   have comm (x y : G) : (x ∘ x) ∘ y = y ∘ (x ∘ x) := by
@@ -76,7 +76,7 @@ theorem Equation4552_implies_Equation4513 (G: Type*) [Magma G] (h: Equation4552 
 theorem Equation4513_implies_Equation4512 (G: Type*) [Magma G] (h: Equation4513 G) : Equation4512 G :=
   fun _ _ _ => h _ _ _ _
 
-theorem Equation11_true (G: Type*) [Magma G] : Equation1 G :=
+theorem Equation1_true (G: Type*) [Magma G] : Equation1 G :=
   fun _ => rfl
 
 
