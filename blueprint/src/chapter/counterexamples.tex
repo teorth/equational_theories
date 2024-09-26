@@ -70,11 +70,17 @@ $x \circ y$ equal to $1$ if $x=y=0$ and $2$ otherwise.
 \begin{theorem}[Equation 387 does not imply Equation 42]\label{387_not_imply_42}\lean{Equation387_not_implies_Equation42}\leanok\uses{eq387,eq42} Definition \ref{eq387} does not imply Definition \ref{eq42}.
 \end{theorem}
 
-\begin{proof} ???
+\begin{proof}\leanok Use the boolean type $\mathrm{Bool}$ with $x \circ y := x || y$.
 \end{proof}
 
 \begin{theorem}[Equation 43 does not imply Equation 387]\label{43_not_imply_387}\lean{Equation43_not_implies_Equation387}\leanok\uses{eq43,eq387} Definition \ref{eq43} does not imply Definition \ref{eq387}.
 \end{theorem}
 
-\begin{proof} ???
+\begin{proof}\leanok Use the natural numbers $\N$ with $x \circ y := x+y$.
+\end{proof}
+
+\begin{theorem}[Equation 387 does not imply Equation 4512]\label{387_not_imply_4512}\lean{Equation387_not_implies_Equation4512}\leanok\uses{eq387,eq4512} Definition \ref{eq387} does not imply Definition \ref{eq4512}.
+\end{theorem}
+
+\begin{proof}\leanok Use the reals $\R$ with $x \circ y := (x+y)/2$.
 \end{proof}
