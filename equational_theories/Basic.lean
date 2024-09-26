@@ -213,6 +213,18 @@ theorem Equation43_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation
   dsimp [hG] at h
   linarith
 
+theorem Equation43_not_implies_Equation387 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation387 G := by
+  let hG : Magma Nat := {
+    op := fun x y => x+y
+  }
+  use ℕ, hG
+  constructor
+  . exact Nat.add_comm
+  by_contra h
+  replace h := h 0 1
+  dsimp [hG] at h
+  linarith
+
 theorem Equation43_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation4512 G := by
   let hG : Magma Nat := {
     op := fun x y => x * y + 1
@@ -270,7 +282,26 @@ theorem Equation4512_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equati
   linarith
 
 theorem Equation387_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation42 G := by
-  sorry
+  let hG : Magma Bool := {
+    op := fun x y => x || y
+  }
+  use Bool, hG
+  constructor
+  . intro x y
+    simp [hG, Bool.or_comm]
+  by_contra h
+  replace h := h false true false
+  simp [hG] at h
 
-theorem Equation43_not_implies_Equation387 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation42 G := by
-  sorry
+theorem Equation387_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation4512 G := by
+  let hG : Magma Real := {
+    op := fun x y => (x + y) / 2
+  }
+  use ℝ, hG
+  constructor
+  . intro x y
+    simp [hG]
+    ring
+  by_contra h
+  replace h := h 0 0 1
+  field_simp [hG] at h
