@@ -1,0 +1,18 @@
+{
+    // Configure editor to insert spaces when pressing Tab
+    "editor.insertSpaces": true,
+    // Set the number of spaces per tab
+    "editor.tabSize": 2,
+    // Display vertical rulers at specified character column for readability
+    "editor.rulers": [100],
+    // Set the default file encoding to UTF-8
+    "files.encoding": "utf8",
+    // Use Unix-style line endings ('\n') by default
+    "files.eol": "\n",
+    // Ensure a final newline at the end of files
+    "files.insertFinalNewline": true,
+    // Trim final newlines at the end of files
+    "files.trimFinalNewlines": true,
+    // Remove any trailing whitespace on save
+    "files.trimTrailingWhitespace": true
+}

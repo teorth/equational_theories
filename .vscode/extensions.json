@@ -1,0 +1,12 @@
+{
+    // Learn about workspace recommendations at:
+    // https://go.microsoft.com/fwlink/?LinkId=827846
+
+    // The extension identifier format is ${publisher}.${name}
+    // Example: vscode.csharp
+
+    // List of extensions that should be recommended for users of this workspace
+    "recommendations": [
+        "leanprover.lean4"  // Extension for Lean 4 support
+    ]
+}
