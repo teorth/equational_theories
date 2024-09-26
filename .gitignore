@@ -1,0 +1,38 @@
+## macOS
+.DS_Store
+## Lake
+.lake/*
+.cache/*
+## Blueprint
+/blueprint/print/print.log
+/blueprint/web/
+/blueprint/src/web.paux
+/blueprint/src/web.bbl
+/blueprint/print/
+## Docs
+docs/_includes/sorries.md
+## TeX
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
