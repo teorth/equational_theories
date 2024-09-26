@@ -36,6 +36,8 @@ def Equation7 (G: Type*) [Magma G] := ∀ x y z : G, x = y ∘ z
 
 def Equation8 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ (x ∘ x)
 
+def Equation23 (G: Type*) [Magma G] := ∀ x : G, x = (x ∘ x) ∘ x
+
 /-- value of multiplication is independent of right argument -/
 def Equation38 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = x ∘ y
 
@@ -57,10 +59,64 @@ def Equation43 (G: Type*) [Magma G] := ∀ x y : G, x ∘ y = y ∘ x
 /-- The constant law -/
 def Equation46 (G: Type*) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ w
 
+def Equation47 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ (x ∘ (x ∘ x))
+
+def Equation99 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ ((x ∘ x) ∘ x)
+
+def Equation151 (G: Type*) [Magma G] := ∀ x : G, x = (x ∘ x) ∘ (x ∘ x)
+
 /-- The central groupoid law -/
 def Equation168 (G: Type*) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x ∘ z)
 
+def Equation203 (G: Type*) [Magma G] := ∀ x : G, x = (x ∘ (x ∘ x)) ∘ x
+
+def Equation255 (G: Type*) [Magma G] := ∀ x : G, x = ((x ∘ x) ∘ x) ∘ x
+
+def Equation307 (G: Type*) [Magma G] := ∀ x : G, x ∘ x = x ∘ (x ∘ x)
+
+def Equation359 (G: Type*) [Magma G] := ∀ x : G, x ∘ x = (x ∘ x) ∘ x
+
 def Equation387 (G: Type*) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ x
+
+def Equation411 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ (x ∘ (x ∘ (x ∘ x)))
+
+def Equation614 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ (x ∘ ((x ∘ x) ∘ x))
+
+def Equation817 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ ((x ∘ x) ∘ (x ∘ x))
+
+def Equation1020 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ ((x ∘ (x ∘ x)) ∘ x)
+
+def Equation1223 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ (((x ∘ x) ∘ x) ∘ x)
+
+def Equation1426 (G: Type*) [Magma G] := ∀ x : G, x = (x ∘ x) ∘ (x ∘ (x ∘ x))
+
+def Equation1629 (G: Type*) [Magma G] := ∀ x : G, x = (x ∘ x) ∘ ((x ∘ x) ∘ x)
+
+def Equation1832 (G: Type*) [Magma G] := ∀ x : G, x = (x ∘ (x ∘ x)) ∘ (x ∘ x)
+
+def Equation2035 (G: Type*) [Magma G] := ∀ x : G, x = ((x ∘ x) ∘ x) ∘ (x ∘ x)
+
+def Equation2238 (G: Type*) [Magma G] := ∀ x : G, x = (x ∘ (x ∘ (x ∘ x))) ∘ x
+
+def Equation2441 (G: Type*) [Magma G] := ∀ x : G, x = (x ∘ ((x ∘ x) ∘ x)) ∘ x
+
+def Equation2644 (G: Type*) [Magma G] := ∀ x : G, x = ((x ∘ x) ∘ (x ∘ x)) ∘ x
+
+def Equation2847 (G: Type*) [Magma G] := ∀ x : G, x = ((x ∘ (x ∘ x)) ∘ x) ∘ x
+
+def Equation3050 (G: Type*) [Magma G] := ∀ x : G, x = (((x ∘ x) ∘ x) ∘ x) ∘ x
+
+def Equation3253 (G: Type*) [Magma G] := ∀ x : G, x ∘ x = x ∘ (x ∘ (x ∘ x))
+
+def Equation3456 (G: Type*) [Magma G] := ∀ x : G, x ∘ x = x ∘ ((x ∘ x) ∘ x)
+
+def Equation3659 (G: Type*) [Magma G] := ∀ x : G, x ∘ x = (x ∘ x) ∘ (x ∘ x)
+
+def Equation3862 (G: Type*) [Magma G] := ∀ x : G, x ∘ x = (x ∘ (x ∘ x)) ∘ x
+
+def Equation4065 (G: Type*) [Magma G] := ∀ x : G, x ∘ x = ((x ∘ x) ∘ x) ∘ x
+
+def Equation4380 (G: Type*) [Magma G] := ∀ x : G, x ∘ (x ∘ x) = (x ∘ x) ∘ x
 
 /-- The associative law -/
 def Equation4512 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ z
@@ -90,6 +146,82 @@ theorem Equation2_implies_Equation7 (G: Type*) [Magma G] (h: Equation2 G) : Equa
 theorem Equation2_implies_Equation46 (G: Type*) [Magma G] (h: Equation2 G) : Equation46 G :=
   fun _ _ _ _ => h _ _
 
+theorem Equation3_implies_Equation8 (G: Type*) [Magma G] (h: Equation3 G) : Equation8 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation3_implies_Equation23 (G: Type*) [Magma G] (h: Equation3 G) : Equation23 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation3_implies_Equation47 (G: Type*) [Magma G] (h: Equation3 G) : Equation47 G := by
+  intro x
+  rw [<-h, <-h, <-h]
+
+theorem Equation3_implies_Equation99 (G: Type*) [Magma G] (h: Equation3 G) : Equation99 G := by
+  intro x
+  rw [<-h, <-h, <-h]
+
+theorem Equation3_implies_Equation151 (G: Type*) [Magma G] (h: Equation3 G) : Equation151 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation3_implies_Equation203 (G: Type*) [Magma G] (h: Equation3 G) : Equation203 G := by
+  intro x
+  rw [<-h, <-h, <-h]
+
+theorem Equation3_implies_Equation255 (G: Type*) [Magma G] (h: Equation3 G) : Equation255 G := by
+  intro x
+  rw [<-h, <-h, <-h]
+
+theorem Equation3_implies_Equation307 (G: Type*) [Magma G] (h: Equation3 G) : Equation307 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation3_implies_Equation359 (G: Type*) [Magma G] (h: Equation3 G) : Equation359 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation3_implies_Equation614 (G: Type*) [Magma G] (h: Equation3 G) : Equation614 G := by
+  intro x
+  rw [<-h, <-h, <-h, <-h]
+
+theorem Equation3_implies_Equation817 (G: Type*) [Magma G] (h: Equation3 G) : Equation817 G := by
+  intro x
+  rw [<-h, <-h, <-h]
+
+theorem Equation3_implies_Equation1223 (G: Type*) [Magma G] (h: Equation3 G) : Equation1223 G := by
+  intro x
+  rw [<-h, <-h, <-h, <-h]
+
+theorem Equation3_implies_Equation1426 (G: Type*) [Magma G] (h: Equation3 G) : Equation1426 G := by
+  intro x
+  rw [<-h, <-h, <-h]
+
+theorem Equation3_implies_Equation2035 (G: Type*) [Magma G] (h: Equation3 G) : Equation2035 G := by
+  intro x
+  rw [<-h, <-h, <-h]
+
+theorem Equation3_implies_Equation2238 (G: Type*) [Magma G] (h: Equation3 G) : Equation2238 G := by
+  intro x
+  rw [<-h, <-h, <-h, <-h]
+
+theorem Equation3_implies_Equation2644 (G: Type*) [Magma G] (h: Equation3 G) : Equation2644 G := by
+  intro x
+  rw [<-h, <-h, <-h]
+
+theorem Equation3_implies_Equation2847 (G: Type*) [Magma G] (h: Equation3 G) : Equation2847 G := by
+  intro x
+  rw [<-h, <-h, <-h, <-h]
+
+theorem Equation3_implies_Equation3659 (G: Type*) [Magma G] (h: Equation3 G) : Equation3659 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation3_implies_Equation4380 (G: Type*) [Magma G] (h: Equation3 G) : Equation4380 G := by
+  intro x
+  rw [<-h]
+
 theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G := by
   intro a b
   rw [h a a, ← h b]
@@ -110,6 +242,46 @@ theorem Equation4_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4 G) : E
   intro x y z w u
   rw [<-h, <-h, <-h]
 
+theorem Equation8_implies_Equation411 (G: Type*) [Magma G] (h: Equation8 G) : Equation411 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation8_implies_Equation1020 (G: Type*) [Magma G] (h: Equation8 G) : Equation1020 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation8_implies_Equation1832 (G: Type*) [Magma G] (h: Equation8 G) : Equation1832 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation8_implies_Equation3253 (G: Type*) [Magma G] (h: Equation8 G) : Equation3253 G := by
+  intro x
+  rw [<-h]
+
+theorem Equation8_implies_Equation3862 (G: Type*) [Magma G] (h: Equation8 G) : Equation3862 G := by
+  intro x
+  rw [<-h]
+
+theorem Equation23_implies_Equation1629 (G: Type*) [Magma G] (h: Equation23 G) : Equation1629 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation23_implies_Equation2441 (G: Type*) [Magma G] (h: Equation23 G) : Equation2441 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation23_implies_Equation3050 (G: Type*) [Magma G] (h: Equation23 G) : Equation3050 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation23_implies_Equation3456 (G: Type*) [Magma G] (h: Equation23 G) : Equation3456 G := by
+  intro x
+  rw [<-h]
+
+theorem Equation23_implies_Equation4065 (G: Type*) [Magma G] (h: Equation23 G) : Equation4065 G := by
+  intro x
+  rw [<-h]
+
 theorem Equation46_implies_Equation42 (G: Type*) [Magma G] (h: Equation46 G) : Equation42 G :=
   fun _ _ _ => h _ _ _ _
 
@@ -118,6 +290,14 @@ theorem Equation46_implies_Equation387 (G: Type*) [Magma G] (h: Equation46 G) : 
 
 theorem Equation46_implies_Equation4582 (G: Type*) [Magma G] (h: Equation46 G) : Equation4582 G :=
   fun _ _ _ _ _ _ => h _ _ _ _
+
+theorem Equation307_implies_Equation3253 (G: Type*) [Magma G] (h: Equation307 G) : Equation3253 G := by
+  intro x
+  rw [<-h, <-h]
+
+theorem Equation359_implies_Equation4065 (G: Type*) [Magma G] (h: Equation359 G) : Equation4065 G := by
+  intro x
+  rw [<-h, <-h]
 
 /-- This proof is from https://mathoverflow.net/a/450905/766 -/
 theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) : Equation43 G := by
