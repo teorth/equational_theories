@@ -27,11 +27,18 @@ jobs:
     name: Build project
     steps:
       - name: Add 'awaiting-CI' label
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-        uses: actions-ecosystem/action-add-labels@v1
+        if: >
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/github-script@v6
         with:
-          labels: awaiting-CI
-          number: ${{ github.event.pull_request.number }}
+          script: |
+            await github.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['awaiting-CI'],
+            });
 
       - name: Checkout project
         uses: actions/checkout@v4
@@ -135,8 +142,24 @@ jobs:
         run: mv home_page/docs .lake/build/doc
 
       - name: Remove 'awaiting-CI' label
-        if: always() && github.event_name == 'pull_request'
-        uses: actions-ecosystem/action-remove-labels@v1
+        if: >
+          always() &&
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/github-script@v6
         with:
-          labels: awaiting-CI
-          number: ${{ github.event.pull_request.number }}
+          script: |
+            try {
+              await github.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                name: 'awaiting-CI',
+              });
+            } catch (error) {
+              if (error.status === 404) {
+                console.log('Label "awaiting-CI" does not exist on this issue.');
+              } else {
+                throw error;
+              }
+            }
