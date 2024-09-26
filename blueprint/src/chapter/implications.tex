@@ -32,3 +32,11 @@ Thus \eqref{op-idem} simplifies to $x \circ y = y \circ x$, which is Definition 
 \begin{proof}
   When $x = y * z$, obviously $x = y$ because $x = x * x$ and $y = x * x$. the other way around is trivial.
 \end{proof}
+
+\begin{theorem}[6 equivalent to 2]\label{6_equiv_2}\uses{eq2,eq6}\lean{Equation6_implies_Equation2, Equation2_implies_Equation6}\leanok  Definition \ref{eq6} is equivalent to Definition \ref{eq2}.
+\end{theorem}
+
+\begin{proof}  Similar to the previous argument.
+\end{proof}
+
+More generally, any equation of the form $x = f(y,z,w,u,v)$ is equivalent to Equation 2 (eventually once we have enough API for Magma relations, we could formalize this general claim rather than establish it on a case by case basis).
