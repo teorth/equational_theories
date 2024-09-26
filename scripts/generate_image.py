@@ -18,8 +18,8 @@ def name_to_ind(name):
     return int(name.removeprefix('Equation'))
 
 UNKNOWN_COLOR = (0, 0, 0)
-KNOWN_IMPLIES_COLOR = (255, 0, 0)
-KNOWN_NOT_IMPLIES_COLOR = (0, 255, 0)
+KNOWN_IMPLIES_COLOR = (0, 255, 0)
+KNOWN_NOT_IMPLIES_COLOR = (255, 0, 0)
 
 if __name__ == '__main__':
     try:
