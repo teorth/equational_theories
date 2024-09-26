@@ -1,0 +1,27 @@
+\chapter{Implications}
+
+To reduce clutter, trivial or very easy implications will not be displayed here.
+
+\begin{theorem}[387 implies 43]\label{387_implies_43}  Definition \ref{eq387} implies Definition \ref{eq43}.
+\end{theorem}
+
+\begin{proof} (From \url{MathOverflow}{https://mathoverflow.net/a/450905/766}).
+  By Definition \ref{eq387}, one has the law
+\begin{equation}\label{387-again}
+  (x \circ x) \circ y = y \circ x.
+\end{equation}
+Specializing to $y=x \circ x$, we conclude
+$$(x \circ x) \circ (x \circ x) = (x \circ x) \circ x$$
+and hence by another application of \eqref{eq387} we see that $x \circ x$ is idempotent:
+\begin{equation}\label{idem}
+  (x \circ x) \circ (x \circ x) = x \circ x.
+\end{equation}
+Now, replacing $x$ by $x \circ x$ in \eqref{387-again} and then using \eqref{idem} we see that
+$$ (x \circ x) \circ y = y \circ (x \circ x)$$
+so in particular $x \circ x$ commutes with $y \circ y$:
+\begin{equation}\label{op-idem} (x \circ x) \circ (y \circ y) = (y \circ y) \circ (x \circ x).
+\end{equation}
+Also, from two applications of \eqref{387-again} one has
+$$(x \circ x) \circ (y \circ y) = (y \circ y) \circ x = x \circ y.$$
+Thus \eqref{op-idem} simplifies to $x \circ y = y \circ x$, which is Definition \ref{eq43}.
+\end{proof}
