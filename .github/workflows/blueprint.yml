@@ -19,7 +19,8 @@ permissions:
   contents: read          # Read access to repository contents
   pages: write            # Write access to GitHub Pages
   id-token: write         # Write access to ID tokens
-  issues: write           # Write access to issues and pull requests (needed for labeling)
+  issues: write           # Write access to issues
+  pull-requests: write    # Write access to pull requests
 
 jobs:
   build_project:
@@ -28,8 +29,7 @@ jobs:
     steps:
       - name: Add 'awaiting-CI' label
         if: >
-          github.event_name == 'pull_request' &&
-          github.event.pull_request.head.repo.full_name == github.repository
+          github.event_name == 'pull_request'
         run: |
           curl --request POST \
             --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels \
@@ -141,8 +141,7 @@ jobs:
       - name: Remove 'awaiting-CI' label
         if: >
           always() &&
-          github.event_name == 'pull_request' &&
-          github.event.pull_request.head.repo.full_name == github.repository
+          github.event_name == 'pull_request'
         run: |
           curl --request DELETE \
             --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels/awaiting-CI \
