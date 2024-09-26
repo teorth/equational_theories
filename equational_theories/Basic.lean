@@ -48,6 +48,10 @@ theorem Equation46_implies_Equation4582 (G: Type*) [Magma G] (h: Equation46 G) :
 theorem Equation46_implies_Equation42 (G: Type*) [Magma G] (h: Equation46 G) : Equation42 G :=
   fun _ _ _ => h _ _ _ _
 
+theorem Equation4_implies_Equation3 (G: Type*) [Magma G] (h: Equation4 G) : Equation3 G := by
+  intro _
+  rw [<-h]
+
 theorem Equation4_implies_Equation42 (G: Type*) [Magma G] (h: Equation4 G) : Equation42 G := by
   intro _ _ _
   rw [<-h, <-h]
@@ -82,6 +86,43 @@ theorem Equation1_true (G: Type*) [Magma G] : Equation1 G :=
 
 
 /- Counterexamples -/
+
+theorem Equation3_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation42 G := by
+  let hG : Magma Nat := {
+    op := fun _ y => y
+  }
+  use ℕ, hG
+  constructor
+  . intro _
+    rfl
+  by_contra h
+  replace h := h 0 1 2
+  simp [hG] at h
+
+theorem Equation3_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation4512 G := by
+  let hG : Magma Nat := {
+    op := fun x y => if x = y then x else x + 1
+  }
+  use ℕ, hG
+  constructor
+  . intro x
+    simp [hG]
+  by_contra h
+  replace h := h 1 2 3
+  simp [hG] at h
+
+theorem Equation46_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation46 G ∧ ¬ Equation3 G := by
+  let hG : Magma Nat := {
+    op := fun _ _ => 0
+  }
+  use ℕ, hG
+  constructor
+  . intro _ _ _ _
+    rfl
+  by_contra h
+  replace h := h 1
+  dsimp [hG] at h
+  linarith
 
 theorem Equation46_not_implies_Equation4 : ∃ (G: Type) (_: Magma G), Equation46 G ∧ ¬ Equation4 G := by
   let hG : Magma Nat := {
@@ -175,6 +216,17 @@ theorem Equation42_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equati
   replace h := h 0 0 0
   dsimp [hG] at h
   linarith
+
+theorem Equation43_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation3 G := by
+  let hG : Magma Nat := {
+    op := fun x y => x+y
+  }
+  use ℕ, hG
+  constructor
+  . exact Nat.add_comm
+  by_contra h
+  replace h := h 1
+  simp [hG] at h
 
 theorem Equation43_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation42 G := by
   let hG : Magma Nat := {
