@@ -1,4 +1,4 @@
-mage: leanprovercommunity/mathlib:gitpod
+image: leanprovercommunity/mathlib:gitpod
 
 vscode:
   extensions:
