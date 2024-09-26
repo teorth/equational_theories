@@ -27,10 +27,9 @@ jobs:
     name: Build project
     steps:
       - name: Add 'awaiting-CI' label
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         uses: actions-ecosystem/action-add-labels@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: awaiting-CI
           number: ${{ github.event.pull_request.number }}
 
@@ -139,6 +138,5 @@ jobs:
         if: always() && github.event_name == 'pull_request'
         uses: actions-ecosystem/action-remove-labels@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: awaiting-CI
           number: ${{ github.event.pull_request.number }}
