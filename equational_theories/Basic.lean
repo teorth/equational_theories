@@ -34,6 +34,14 @@ def Equation7 (G: Type*) [Magma G] := ∀ x y z : G, x = y ∘ z
 
 def Equation8 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ (x ∘ x)
 
+def Equation38 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = x ∘ y
+
+def Equation39 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = y ∘ x
+
+def Equation40 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = y ∘ y
+
+def Equation41 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ z
+
 def Equation42 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ z
 
 def Equation43 (G: Type*) [Magma G] := ∀ x y : G, x ∘ y = y ∘ x
@@ -136,7 +144,7 @@ theorem Equation3_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation3
   by_contra h
   specialize h 0 1 2
   simp [hG] at h
-        
+
 theorem Equation3_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation4512 G := by
   let hG : Magma Nat := {
     op := fun x y => if x = y then x else x + 1
