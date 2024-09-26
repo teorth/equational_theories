@@ -73,19 +73,21 @@ theorem Equation2_implies_Equation4 (G: Type*) [Magma G] (h: Equation2 G) : Equa
   fun _ _ => h _ _
 
 theorem Equation2_implies_Equation6 (G: Type*) [Magma G] (h: Equation2 G) : Equation6 G :=
-  sorry
+  fun _ _ => h _ _
 
 theorem Equation2_implies_Equation7 (G: Type*) [Magma G] (h: Equation2 G) : Equation7 G :=
-  sorry
+  fun _ _ _ => h _ _
 
 theorem Equation2_implies_Equation46 (G: Type*) [Magma G] (h: Equation2 G) : Equation46 G :=
   fun _ _ _ _ => h _ _
 
-theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G :=
-  sorry
+theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G := by
+  intro a b
+  rw [h a a, ← h b]
 
-theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G :=
-  sorry
+theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G := by
+  intro a b
+  rw [h a a a, ←h b]
 
 theorem Equation4_implies_Equation3 (G: Type*) [Magma G] (h: Equation4 G) : Equation3 G := by
   intro _
