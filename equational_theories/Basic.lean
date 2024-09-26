@@ -243,3 +243,9 @@ theorem Equation4512_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equati
   replace h := h 0 0 1
   dsimp [hG] at h
   linarith
+
+theorem Equation387_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation42 G := by
+  sorry
+
+theorem Equation43_not_implies_Equation387 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation42 G := by
+  sorry
