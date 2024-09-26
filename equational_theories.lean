@@ -1,1 +1,1 @@
-import equational_theories.Example
+import equational_theories.Basic
