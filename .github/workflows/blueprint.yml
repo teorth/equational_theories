@@ -33,7 +33,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            await github.issues.addLabels({
+            github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
@@ -150,7 +150,7 @@ jobs:
         with:
           script: |
             try {
-              await github.issues.removeLabel({
+              await github.rest.issues.removeLabel({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
