@@ -21,3 +21,5 @@ Links:
     - [Vampire](https://en.wikipedia.org/wiki/Vampire_(theorem_prover))
     - ["Guided Equality Saturation"](https://dl.acm.org/doi/10.1145/3632900), Thomas Kœhler, Andrés Goens, Siddharth Bhat, Tobias Grosser, Phil Trinder, Michel Steuwer, Jan 5 2024.
     - ["Rewrite Rule Inference Using Equality Saturation"](https://arxiv.org/abs/2108.10436), Chandrakana Nandi, Max Willsey, Amy Zhu, Yisu Remy Wang, Brett Saiki, Adam Anderson, Adriana Schulz, Dan Grossman, Zachary Tatlock, 23 Aug 2021.
+- Other tools
+    - [egg - e-graphs good](https://egraphs-good.github.io/)
