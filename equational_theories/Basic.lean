@@ -83,7 +83,7 @@ theorem Equation1_true (G: Type*) [Magma G] : Equation1 G :=
 
 /- Counterexamples -/
 
-theorem Equation46_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation46 G ∧ ¬ Equation4 G := by
+theorem Equation46_not_implies_Equation4 : ∃ (G: Type) (_: Magma G), Equation46 G ∧ ¬ Equation4 G := by
   let hG : Magma Nat := {
     op := fun _ _ => 0
   }
@@ -96,7 +96,7 @@ theorem Equation46_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation4
   dsimp [hG] at h
   linarith
 
-theorem Equation3_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation4582 G := by
+theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation4582 G := by
   let hG : Magma Nat := {
     op := fun x _ => x
   }
@@ -109,7 +109,7 @@ theorem Equation3_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equatio
   dsimp [hG] at h
   linarith
 
-theorem Equation3_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation43 G := by
+theorem Equation4_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation43 G := by
   let hG : Magma Nat := {
     op := fun x _ => x
   }
