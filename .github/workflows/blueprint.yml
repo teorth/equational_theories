@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - main # Trigger on pushes to the default branch
-  workflow_dispatch:        # Allow manual triggering of the workflow from the GitHub Actions interface
+  pull_request:
+    branches:
+      - main # Trigger only on pull requests targeting the main branch
+  workflow_dispatch: # Allow manual triggering of the workflow from the GitHub Actions interface
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -49,7 +52,7 @@ jobs:
 
       - name: Build project API documentation
         run: ~/.elan/bin/lake -R -Kenv=dev build equational_theories:docs
-      
+
       - name: Check for `home_page` folder # this is meant to detect a Jekyll-based website
         id: check_home_page
         run: |
@@ -117,4 +120,3 @@ jobs:
 
       - name: Make sure the API documentation cache works
         run: mv home_page/docs .lake/build/doc
-     
