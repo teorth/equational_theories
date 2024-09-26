@@ -9,6 +9,11 @@ on:
       - main # Trigger only on pull requests targeting the main branch
   workflow_dispatch: # Allow manual triggering of the workflow from the GitHub Actions interface
 
+# Cancel previous runs if a new commit is pushed to the same PR or branch
+concurrency:
+  group: ${{ github.ref }}  # Group runs by the ref (branch or PR)
+  cancel-in-progress: true  # Cancel any ongoing runs in the same group
+
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read  # Read access to repository contents
