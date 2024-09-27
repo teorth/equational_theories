@@ -39,3 +39,5 @@ docs/_includes/sorries.md
 ## Python
 **/venv
 **/*.pyc
+#TypeScript
+widget/node_modules/*
