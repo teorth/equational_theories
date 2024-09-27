@@ -143,32 +143,26 @@ theorem Equation4_implies_Equation3 (G: Type*) [Magma G] (h: Equation4 G) : Equa
 theorem Equation4_implies_Equation8 (G: Type*) [Magma G] (h: Equation4 G) : Equation8 G :=
   fun _ ↦ h _ _
 
-theorem Equation4_implies_Equation42 (G: Type*) [Magma G] (h: Equation4 G) : Equation42 G := by
-  intro _ _ _
-  rw [← h, ← h]
+theorem Equation4_implies_Equation42 (G: Type*) [Magma G] (h: Equation4 G) : Equation42 G :=
+  fun _ _ _ ↦ by rw [← h, ← h]
 
-theorem Equation4_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4 G) : Equation4522 G := by
-  intro x y z w u
-  rw [← h, ← h, ← h]
+theorem Equation4_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4 G) : Equation4522 G :=
+  fun _ _ _ _ _ ↦ by repeat rw [← h]
 
 theorem Equation5_implies_Equation3 (G: Type*) [Magma G] (h: Equation5 G) : Equation3 G :=
   fun _ ↦ h _ _
 
-theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G := by
-  intro a b
-  rw [h a a, ← h b]
+theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G :=
+  fun a b ↦ by rw [h a a, ← h b]
 
-theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G := by
-  intro a b
-  rw [h a a a, ← h b]
+theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G :=
+  fun a b ↦ by rw [h a a a, ← h b]
 
-theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G := by
-  intro x y z
-  rw [← h]
+theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G :=
+  fun x y z ↦ by rw [← h]
 
-theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : Equation40 G := by
-  intro x y
-  rw [h x y y]
+theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : Equation40 G :=
+  fun x y ↦ by rw [h x y y]
 
 theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : Equation46 G := by
   intro x y z w
@@ -205,7 +199,6 @@ theorem Equation4522_implies_Equation4513 (G: Type*) [Magma G] (h: Equation4522 
 
 theorem Equation4582_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4522 G :=
   fun _ _ _ _ _ ↦ h _ _ _ _ _ _
-
 
 /- Counterexamples -/
 
