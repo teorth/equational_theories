@@ -73,11 +73,10 @@ theorem Equation2_implies_Equation4582 (G: Type*) [Magma G] (h: Equation2 G) : E
   fun _ _ _ _ _ _ ↦ h _ _
 
 theorem Equation3_implies_Equation8 (G: Type*) [Magma G] (h: Equation3 G) : Equation8 G :=
-  fun x ↦ by rw [← h, ← h]
+  fun x ↦ by repeat rw [← h]
 
-theorem Equation4_implies_Equation3 (G: Type*) [Magma G] (h: Equation4 G) : Equation3 G := by
-  intro _
-  rw [← h]
+theorem Equation4_implies_Equation3 (G: Type*) [Magma G] (h: Equation4 G) : Equation3 G :=
+  fun _ ↦ by rw [← h]
 
 theorem Equation4_implies_Equation8 (G: Type*) [Magma G] (h: Equation4 G) : Equation8 G :=
   fun _ ↦ h _ _
@@ -123,12 +122,9 @@ theorem Equation46_implies_Equation4582 (G: Type*) [Magma G] (h: Equation46 G) :
 
 /-- This proof is from https://mathoverflow.net/a/450905/766 -/
 theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) : Equation43 G := by
-  have idem (x : G) : (x ∘ x) ∘ (x ∘ x) = (x ∘ x) := by
-    rw [← h, ← h]
-  have comm (x y : G) : (x ∘ x) ∘ y = y ∘ (x ∘ x) := by
-    rw [← idem, ← h, idem]
-  have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by
-    rw [← h, ← h]
+  have idem (x : G) : (x ∘ x) ∘ (x ∘ x) = (x ∘ x) := by rw [← h, ← h]
+  have comm (x y : G) : (x ∘ x) ∘ y = y ∘ (x ∘ x) := by rw [← idem, ← h, idem]
+  have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by rw [← h, ← h]
   exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
 
 theorem Equation4513_implies_Equation4512 (G: Type*) [Magma G] (h: Equation4513 G) : Equation4512 G :=
