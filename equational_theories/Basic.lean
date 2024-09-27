@@ -1,9 +1,9 @@
 import Mathlib.Data.Nat.Defs
 import Mathlib.Tactic
 
-/---------------------------------------------------
-THIS FILE IS NOW DEPRECATED.  PLEASE USE `Subgraph.lean` instead.
-------------------------------------------------/
+--------------------------------------------------------------------
+-- THIS FILE IS NOW DEPRECATED.  PLEASE USE `Subgraph.lean` instead.
+--------------------------------------------------------------------
 
 
 universe u
