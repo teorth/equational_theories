@@ -2,6 +2,8 @@ import equational_theories.Magma
 
 universe u
 
+namespace AllEquations
+
 -- We use abbrev here so that type class search, in particular `by decide` can look through them
 abbrev Equation1 (G: Type u) [Magma G] := ∀ x : G, x = x
 abbrev Equation2 (G: Type u) [Magma G] := ∀ x y : G, x = y
@@ -4697,3 +4699,5 @@ abbrev Equation4691 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = 
 abbrev Equation4692 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ y) ∘ z = (w ∘ z) ∘ u
 abbrev Equation4693 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ y) ∘ z = (w ∘ u) ∘ z
 abbrev Equation4694 (G: Type u) [Magma G] := ∀ x y z w u v : G, (x ∘ y) ∘ z = (w ∘ u) ∘ v
+
+end AllEquations
