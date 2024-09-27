@@ -114,6 +114,10 @@ theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equ
   intro x y z
   rw [<-h]
 
+theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : Equation40 G := by
+  intro x y
+  rw [h x y y]
+
 theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : Equation46 G := by
   intro x y z w
   rwa [← h, h]
