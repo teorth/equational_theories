@@ -164,9 +164,8 @@ theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equ
 theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : Equation40 G :=
   fun x y ↦ by rw [h x y y]
 
-theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : Equation46 G := by
-  intro x y z w
-  rwa [← h, h]
+theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : Equation46 G :=
+  fun _ _ _ _ ↦ by rwa [← h, h]
 
 theorem Equation46_implies_Equation41 (G: Type*) [Magma G] (h: Equation46 G) : Equation41 G :=
   fun _ _ _ => h _ _ _ _
@@ -188,8 +187,7 @@ theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) :
     rw [← idem, ← h, idem]
   have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by
     rw [← h, ← h]
-  intro x y
-  rw [← op_idem, comm, op_idem]
+  exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
 
 theorem Equation4513_implies_Equation4512 (G: Type*) [Magma G] (h: Equation4513 G) : Equation4512 G :=
   fun _ _ _ ↦ h _ _ _ _
