@@ -19,13 +19,6 @@ syntax "Facts " term:max " [" num,* "] " " [" num,* "]" : term
 -- Using a macro that iterative expands the list was too slow,
 -- so here we elaborate to a `Expr` directly.
 
-open Lean in
-private partial def balancedAnd (es : Array Expr) : Expr :=
-   let n := es.size
-   if  n = 0 then mkConst ``True
-   else if n = 1 then es[0]!
-   else mkApp2 (mkConst ``And) (balancedAnd es[:n/2]) (balancedAnd es[n/2:])
-
 open Lean Meta Elab Term Tactic Parser.Term in
 elab_rules : term | `(Facts $G [ $sats,* ] [ $refs,*]) => do
   let G ← elabTerm G none
@@ -37,11 +30,11 @@ elab_rules : term | `(Facts $G [ $sats,* ] [ $refs,*]) => do
   let r := refs.getElems.map fun ⟨s⟩ =>
     let n := .mkSimple s!"Equation{s.toNat}"
     mkApp (mkConst ``Not)  (mkApp2 (mkConst n [u]) G inst)
-  let e := balancedAnd (s ++ r)
+  let e := mkAndN (s ++ r).toList
   return e
 
 example (G : Type _) [Magma G] :
-   Facts G [1, 2] [4, 5] ↔ (Equation1 G ∧ Equation2 G) ∧ ¬ Equation4 G ∧ ¬ Equation5 G :=
+   Facts G [1, 2] [4, 5] ↔ Equation1 G ∧ Equation2 G ∧ ¬ Equation4 G ∧ ¬ Equation5 G :=
    Iff.rfl
 
 example (G : Type _) [Magma G] :
