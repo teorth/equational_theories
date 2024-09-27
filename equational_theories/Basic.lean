@@ -90,14 +90,6 @@ theorem Equation2_implies_Equation7 (G: Type*) [Magma G] (h: Equation2 G) : Equa
 theorem Equation2_implies_Equation46 (G: Type*) [Magma G] (h: Equation2 G) : Equation46 G :=
   fun _ _ _ _ => h _ _
 
-theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G := by
-  intro a b
-  rw [h a a, ← h b]
-
-theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G := by
-  intro a b
-  rw [h a a a, ←h b]
-
 theorem Equation4_implies_Equation3 (G: Type*) [Magma G] (h: Equation4 G) : Equation3 G := by
   intro _
   rw [<-h]
@@ -110,6 +102,18 @@ theorem Equation4_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4 G) : E
   intro x y z w u
   rw [<-h, <-h, <-h]
 
+theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G := by
+  intro a b
+  rw [h a a, ← h b]
+
+theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G := by
+  intro a b
+  rw [h a a a, ←h b]
+
+theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G := by
+  intro x y z
+  rw [<-h]
+
 theorem Equation46_implies_Equation42 (G: Type*) [Magma G] (h: Equation46 G) : Equation42 G :=
   fun _ _ _ => h _ _ _ _
 
@@ -118,10 +122,6 @@ theorem Equation46_implies_Equation387 (G: Type*) [Magma G] (h: Equation46 G) : 
 
 theorem Equation46_implies_Equation4582 (G: Type*) [Magma G] (h: Equation46 G) : Equation4582 G :=
   fun _ _ _ _ _ _ => h _ _ _ _
-
-theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G := by
-  intro x y z
-  rw [<-h]
 
 /-- This proof is from https://mathoverflow.net/a/450905/766 -/
 theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) : Equation43 G := by
