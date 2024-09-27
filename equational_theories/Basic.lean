@@ -119,6 +119,10 @@ theorem Equation46_implies_Equation387 (G: Type*) [Magma G] (h: Equation46 G) : 
 theorem Equation46_implies_Equation4582 (G: Type*) [Magma G] (h: Equation46 G) : Equation4582 G :=
   fun _ _ _ _ _ _ => h _ _ _ _
 
+theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G := by
+  intro x y z
+  rw [<-h]
+
 /-- This proof is from https://mathoverflow.net/a/450905/766 -/
 theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) : Equation43 G := by
   have idem (x : G) : (x ∘ x) ∘ (x ∘ x) = (x ∘ x) := by
