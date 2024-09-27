@@ -51,6 +51,9 @@ jobs:
       - name: Build project
         run: ~/.elan/bin/lake build equational_theories
 
+      - name: Build Counterexamples
+        run: ~/.elan/bin/lake build counterexamples
+
       - name: Cache mathlib API docs
         uses: actions/cache@v4
         with:
