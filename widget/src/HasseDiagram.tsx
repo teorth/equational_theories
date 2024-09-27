@@ -44,14 +44,43 @@ const Diagram: React.FC<DiagramProps> = ({ implications, nonimplications }) => {
       const data = { nodes, edges };
       const options = {
         layout: {
-          hierarchical: {
-            direction: 'UD', // Up-Down layout
-            sortMethod: 'hubsize'
-          },
+          randomSeed: 2, // Seed for random layout (to get consistent results)
+          improvedLayout: true, // Allow for some improvement on the random layout
         },
         physics: {
           enabled: true,
-          solver: 'barnesHut',
+          solver: 'repulsion', // Use repulsion solver for more dynamic placement
+          repulsion: {
+            nodeDistance: 150, // Distance between nodes
+            centralGravity: 0.3, // Pull nodes towards the center
+            springLength: 100, // Default length of the springs
+          },
+        },
+        nodes: {
+          shape: 'dot', // Change to dot shape for simplicity
+          size: 12, // Set a uniform size for nodes
+          color: {
+            border: '#2B7CE9',
+            background: '#97c2fc',
+          },
+          font: {
+            size: 18,
+            color: '#000000',
+          },
+        },
+        edges: {
+          color: {
+            inherit: 'from',
+          },
+          arrows: {
+            to: {
+              enabled: true,
+            },
+          },
+        },
+        interaction: {
+          hover: true,
+          tooltipDelay: 200,
         },
       };
 
