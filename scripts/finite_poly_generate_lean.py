@@ -12,8 +12,9 @@ import re
 # we have 4694 equations
 full = set(list(range(4694)))
 
-def generate_lean(refutation_line):
-    _, eq, nums = refutation_line.split("'")
+def parse_row(row):
+    if not row.startswith("'(") or "seen" in row: return
+    _, eq, nums = row.split("'")
     data = set(ast.literal_eval(nums.strip()))
     # the numbers are off by one, the offcial equations list is 1-indexed
     satisfied = [i+1 for i in range(4694) if i in data]
@@ -31,6 +32,15 @@ def generate_lean(refutation_line):
     pretty_eq = poly
     pretty_eq = pretty_eq.replace("**2", "²")
     poly = poly.replace("x**2", "x*x").replace("y**2", "y*y")
+    return {"raw": row, "poly": poly, "pretty_eq": pretty_eq, "div": div, "satisfied": satisfied, "refuted": refuted}
+
+def generate_lean(data):
+    raw = data["raw"]
+    poly = data["poly"]
+    pretty_eq = data["pretty_eq"]
+    div = data["div"]
+    satisfied = data["satisfied"]
+    refuted = data["refuted"]
 
     name = f"FinitePoly {pretty_eq} % {div}"
     satname= lambda i: f"{name} satisfies Equation{i}"
@@ -44,7 +54,7 @@ import equational_theories.FinitePoly.FactsSyntax
 /-!
 This file is generated from the following refutation as produced by
 random generation of polynomials:
-{refutation_line}-/
+{raw}-/
 
 set_option linter.unusedVariables false
 
@@ -64,7 +74,8 @@ with open("data/finite_poly_refutations.txt") as f:
     lines = f.readlines()
     for i, line in enumerate(lines):
         leanfile = f"equational_theories/FinitePoly/Refutation{i}.lean"
-        print(f"Writing {leanfile}")
-        if line.startswith("'(") and not "seen" in line:
+        data = parse_row(line)
+        if data and data["div"] < 5:
+          print(f"Writing {leanfile}")
           with open(leanfile, "w") as f:
-                f.write(generate_lean(line))
+                f.write(generate_lean(data))
