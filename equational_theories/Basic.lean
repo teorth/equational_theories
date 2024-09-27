@@ -110,6 +110,14 @@ theorem Equation4_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4 G) : E
   intro x y z w u
   rw [<-h, <-h, <-h]
 
+theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : Equation46 G := by
+  intro x y z w
+  rwa [← h, h]
+
+theorem Equation46_implies_Equation41 (G: Type*) [Magma G] (h: Equation46 G) : Equation41 G :=
+  fun _ _ _ => h _ _ _ _
+
+
 theorem Equation46_implies_Equation42 (G: Type*) [Magma G] (h: Equation46 G) : Equation42 G :=
   fun _ _ _ => h _ _ _ _
 
