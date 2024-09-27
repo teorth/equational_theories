@@ -59,7 +59,7 @@ def Equation4512 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘
 
 def Equation4513 (G: Type*) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ y) ∘ w
 
-def Equation4552 (G: Type*) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (x ∘ w) ∘ u
+def Equation4522 (G: Type*) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (x ∘ w) ∘ u
 
 def Equation4582 (G: Type*) [Magma G] := ∀ x y z w u v: G, x ∘ (y ∘ z) = (w ∘ u) ∘ v
 
@@ -97,7 +97,7 @@ theorem Equation4_implies_Equation42 (G: Type*) [Magma G] (h: Equation4 G) : Equ
   intro _ _ _
   rw [<-h, <-h]
 
-theorem Equation4_implies_Equation4552 (G: Type*) [Magma G] (h: Equation4 G) : Equation4552 G := by
+theorem Equation4_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4 G) : Equation4522 G := by
   intro x y z w u
   rw [<-h, <-h, <-h]
 
@@ -124,10 +124,10 @@ theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) :
 theorem Equation4513_implies_Equation4512 (G: Type*) [Magma G] (h: Equation4513 G) : Equation4512 G :=
   fun _ _ _ => h _ _ _ _
 
-theorem Equation4552_implies_Equation4513 (G: Type*) [Magma G] (h: Equation4552 G) : Equation4513 G :=
+theorem Equation4522_implies_Equation4513 (G: Type*) [Magma G] (h: Equation4522 G) : Equation4513 G :=
   fun _ _ _ _ => h _ _ _ _ _
 
-theorem Equation4582_implies_Equation4552 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4552 G :=
+theorem Equation4582_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4522 G :=
   fun _ _ _ _ _ => h _ _ _ _ _ _
 
 
@@ -339,7 +339,7 @@ theorem Equation4512_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equa
   dsimp [hG] at h
   linarith
 
-theorem Equation4513_not_implies_Equation4552 : ∃ (G: Type) (_: Magma G), Equation4513 G ∧ ¬ Equation4552 G := by
+theorem Equation4513_not_implies_Equation4522 : ∃ (G: Type) (_: Magma G), Equation4513 G ∧ ¬ Equation4522 G := by
   let hG : Magma Nat := {
     op := fun x y => if x = 0 then (if y ≤ 2 then 1 else 2) else x
   }
