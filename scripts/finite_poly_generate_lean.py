@@ -65,6 +65,6 @@ with open("data/finite_poly_refutations.txt") as f:
     for i, line in enumerate(lines):
         leanfile = f"equational_theories/FinitePoly/Refutation{i}.lean"
         print(f"Writing {leanfile}")
-        if not "seen" in line:
+        if line.startswith("'(") and not "seen" in line:
           with open(leanfile, "w") as f:
                 f.write(generate_lean(line))
