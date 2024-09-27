@@ -5,7 +5,7 @@ This is a variant of the `decide` tactic that doesn’t actually check the propo
 This is useful in non-interactive mode, where we know it will succeed, and we really just want the
 check done once, in the kernel.
 
-This also includes a hack to do large disjunctions outside the `decdies`, as inference can blow up.
+This also includes a hack to do large disjunctions outside the `decides`, as inference can blow up.
 -/
 
 open Lean Elab Tactic Meta
@@ -71,7 +71,7 @@ Like `decide!`, but only supports goals that are conjunctions of (possibly negat
 of the form `∀ (x … z : Fin n), lhs = rhs`.
 
 Using type class synthesis to infer the decidability instances can be very slow, slower than the
-actual proof checking, so this tactic construts the instances very directly.
+actual proof checking, so this tactic constructs the instances very directly.
 -/
 elab "decideFin!" : tactic => do
   closeMainGoalUsing `decideFin fun expectedType => do
