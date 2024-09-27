@@ -39,7 +39,3 @@ docs/_includes/sorries.md
 ## Python
 **/venv
 **/*.pyc
-
-
-# Do not commit these for now
-equational_theories/FinitePoly/Refutation*.lean

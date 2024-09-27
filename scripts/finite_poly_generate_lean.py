@@ -36,59 +36,31 @@ def generate_lean(refutation_line):
     satname= lambda i: f"{name} satisfies Equation{i}"
     refname= lambda i: f"{name} refutes Equation{i}"
 
-    out = """
+    out = f"""
 import equational_theories.FinitePoly.Common
 import equational_theories.FinitePoly.DecideBang
-"""
+import equational_theories.FinitePoly.FactsSyntax
 
-    out += f"""
 /-!
 This file is generated from the following refutation as produced by
 random generation of polynomials:
 {refutation_line}
 -/
-"""
 
-    out += f"""
--- The magma definition
+set_option maxRecDepth 10000000
+set_option maxHeartbeats 200000000
+set_option synthInstance.maxHeartbeats 200000000
+
+/-! The magma definition -/
 def «{name}» : Magma (Fin {div}) where
   op x y := {poly}
+
+/-! The facts -/
+theorem «Facts from {name}» :
+  ∃ (G : Type) (_ : Magma G), Facts G {satisfied} {refuted} := by
+    refine ⟨Fin {div}, «{name}», ?_⟩
+    decide!
 """
-
-    out += f"""
-/-! The satisfied equations -/
-"""
-    for eq in satisfied:
-      out += f"""
-theorem «{satname(eq)}» :
-  @Equation{eq} _ «{name}» := by unfold Equation{eq}; decide!
-
-"""
-
-    out += f"""
-/-! The refuted equations -/
-    """
-    for eq in refuted:
-      out += f"""
-theorem «{refname(eq)}» :
-  ¬ @Equation{eq} _ «{name}» := by unfold Equation{eq}; decide!
-
-"""
-
-    if False: # turn generation of implications on and off here
-      # Do we really want to write all of these out?
-      out += f"""
-  /-! The antiimplications -/
-  """
-
-      for seq in satisfied:
-        for req in refuted:
-          out += f"""
-  theorem Equation{seq}_not_implies_Equation{req} :
-    ∃ (G: Type) (_: Magma G), Equation{seq} G ∧ ¬ Equation{req} G :=
-      ⟨_, _, «{satname(seq)}», «{refname(req)}» ⟩
-  """
-
     return out
 
 

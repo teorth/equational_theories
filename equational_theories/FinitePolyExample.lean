@@ -1,34 +1,26 @@
-universe u
-
-class Magma (α : Type u) where
-  /-- `a ∘ b` computes a binary operation of `a` and `b`. -/
-  op : α → α → α
-
-@[inherit_doc] infixl:65 " ∘ "   => Magma.op
+-- This is an example file, repesenting the generated files, but with shorter lists
 
 
-def Equation1 (G: Type _) [Magma G] := ∀ x : G, x = x
-def Equation2 (G: Type _) [Magma G] := ∀ x y : G, x = y
-def Equation1629 (G: Type _) [Magma G] := ∀ x : G, x = (x ∘ x) ∘ ((x ∘ x) ∘ x)
+import equational_theories.FinitePoly.Common
+import equational_theories.FinitePoly.DecideBang
+import equational_theories.FinitePoly.FactsSyntax
 
--- The following line produced by the tool
--- '(4 * x**2 + 4 * y**2 + 1 * x + 0 * y + 0 * x * y) % 6' (0, 1628, 3252, 3260, 3305, 3318, 3333, 4064, 4117)
--- would be translated to the following output
+/-!
+This file is generated from the following refutation as produced by
+random generation of polynomials:
+'(4 * x**2 + 4 * y**2 + 4 * x + 4 * y + 0 * x * y) % 5' (0, 42, 3252, 3318, 3341, 3455, 3521, 3544, 3861, 3914, 3963, 4064, 4117, 4166, 4282, 4357, 4379, 4397, 4404, 4434, 4441, 4481, 4530, 4543, 4634, 4676)
 
-def «FinitePoly 4x² + 4y² + x % 6» : Magma (Fin 6) where
-  op x y := 4*x*x + 4*y*y + 6
+-/
 
-theorem «FinitePoly 4x² + 4y² + x % 6 satisfies Equation1» :
-  @Equation1 _ «FinitePoly 4x² + 4y² + x % 6» := by unfold Equation1; decide
+set_option maxRecDepth 100000
+set_option synthInstance.maxHeartbeats 20000000
 
--- and more
+/-! The magma definition -/
+def «FinitePoly 4 * x² + 4 * y² + 4 * x + 4 * y» : Magma (Fin 5) where
+  op x y := 4 * x*x + 4 * y*y + 4 * x + 4 * y
 
-theorem «FinitePoly 4x² + 4y² + x % 6 refutes Equation1629» :
-  ¬ @Equation1629 _ «FinitePoly 4x² + 4y² + x % 6» := by unfold Equation1629; decide
-
--- The following non-implications are now trivial combinations of the above,
--- we'll see if they are actually needed in the final repo setup
-
-theorem Equation1_not_implies_Equation1629 :
-    ∃ (G: Type) (_: Magma G), Equation1 G ∧ ¬ Equation1629 G :=
-  ⟨_, _, «FinitePoly 4x² + 4y² + x % 6 satisfies Equation1», «FinitePoly 4x² + 4y² + x % 6 refutes Equation1629» ⟩
+/-! The facts -/
+theorem «Facts from FinitePoly 4 * x² + 4 * y² + 4 * x + 4 * y» :
+  ∃ (G : Type) (_ : Magma G), Facts G [1, 43, 3253] [2, 3, 4] := by
+    refine ⟨Fin 5, «FinitePoly 4 * x² + 4 * y² + 4 * x + 4 * y», ?_⟩
+    decide!
