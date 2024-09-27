@@ -152,6 +152,9 @@ theorem Equation4_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4 G) : E
 theorem Equation5_implies_Equation3 (G: Type*) [Magma G] (h: Equation5 G) : Equation3 G :=
   fun _ ↦ h _ _
 
+theorem Equation5_implies_Equation39 (G: Type*) [Magma G] (h: Equation5 G) : Equation39 G :=
+  fun _ _ ↦ by repeat rw [← h]
+
 theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G :=
   fun a b ↦ by rw [h a a, ← h b]
 
