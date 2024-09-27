@@ -28,10 +28,6 @@ name = "DecideBang"
 root = "DecideBang"
 precompileModules = true
 
-[[lean_lib]]
-name = "counterexamples"
-globs = "equational_theories.FinitePoly.+"
-
 [[require]]
 name = "egg"
 git  = "https://github.com/marcusrossel/lean-egg"

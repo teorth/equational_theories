@@ -48,8 +48,8 @@ def generate_lean(data):
 
     out = f"""
 import DecideBang
-import equational_theories.FinitePoly.Common
-import equational_theories.FinitePoly.FactsSyntax
+import equational_theories.AllEquations
+import equational_theories.FactsSyntax
 
 /-!
 This file is generated from the following refutation as produced by
@@ -71,11 +71,13 @@ theorem «Facts from {name}» :
 
 
 with open("data/finite_poly_refutations.txt") as f:
-    lines = f.readlines()
-    for i, line in enumerate(lines):
-        leanfile = f"equational_theories/FinitePoly/Refutation{i}.lean"
-        data = parse_row(line)
-        if data and data["div"] < 5:
-          print(f"Writing {leanfile}")
-          with open(leanfile, "w") as f:
-                f.write(generate_lean(data))
+    with open("equational_theories/FinitePoly.lean", "w") as main:
+      lines = f.readlines()
+      for i, line in enumerate(lines):
+          leanfile = f"equational_theories/FinitePoly/Refutation{i}.lean"
+          data = parse_row(line)
+          if data and data["div"] < 5:
+            print(f"Writing {leanfile}")
+            main.write(f"import equational_theories.FinitePoly.Refutation{i}\n")
+            with open(leanfile, "w") as f:
+                  f.write(generate_lean(data))

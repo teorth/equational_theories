@@ -1,7 +1,7 @@
 
 import DecideBang
-import equational_theories.FinitePoly.Common
-import equational_theories.FinitePoly.FactsSyntax
+import equational_theories.AllEquations
+import equational_theories.FactsSyntax
 
 /-!
 This file is generated from the following refutation as produced by
