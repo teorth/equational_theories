@@ -39,5 +39,4 @@ elab "decide!" : tactic => do
       let rflPrf ← mkEqRefl (toExpr true)
       return mkApp3 (Lean.mkConst ``of_decide_eq_true) expectedType s rflPrf
     let proof ← proofs.pop.foldrM (mkAppM ``And.intro #[·, ·]) proofs.back
-    check proof
     return proof
