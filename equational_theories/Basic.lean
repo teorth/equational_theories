@@ -1,7 +1,6 @@
 import Mathlib.Data.Nat.Defs
 import Mathlib.Tactic
 
-
 universe u
 
 class Magma (α : Type u) where
@@ -9,7 +8,6 @@ class Magma (α : Type u) where
   op : α → α → α
 
 @[inherit_doc] infixl:65 " ∘ "   => Magma.op
-
 
 /- List of equational laws being studied -/
 
@@ -112,7 +110,7 @@ theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equa
 
 theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G := by
   intro x y z
-  rw [<-h]
+  rw [← h]
 
 theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : Equation40 G := by
   intro x y
