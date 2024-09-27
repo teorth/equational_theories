@@ -59,7 +59,7 @@ def «{name}» : Magma (Fin {div}) where
 theorem «Facts from {name}» :
   ∃ (G : Type) (_ : Magma G), Facts G {satisfied} {refuted} := by
     refine ⟨Fin {div}, «{name}», ?_⟩
-    decide!
+    decideFin!
 """
     return out
 

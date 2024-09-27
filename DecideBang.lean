@@ -40,3 +40,46 @@ elab "decide!" : tactic => do
       return mkApp3 (Lean.mkConst ``of_decide_eq_true) expectedType s rflPrf
     let proof ← proofs.pop.foldrM (mkAppM ``And.intro #[·, ·]) proofs.back
     return proof
+
+private partial def inferDecideFin (p : Expr) : MetaM Expr := do
+  let p ← whnfR p
+  match p with
+  | .forallE i d b bi =>
+    match_expr (← whnfR d) with
+    | Fin n =>
+      let inst ← withLocalDeclD i d fun x => do
+        let body := b.instantiate1 x
+        let inst ← inferDecideFin body
+        mkLambdaFVars #[x] inst
+      return mkApp3 (mkConst ``Nat.decidableForallFin) n (.lam i d b bi) inst
+    | _ => throwError "Expected Fin n quantifier"
+  | _ =>
+    match_expr p with
+    | Not p' =>
+      let inst ← inferDecideFin p'
+      return mkApp2 (mkConst ``instDecidableNot) p' inst
+    | Eq t l r =>
+      match_expr (← whnfR t) with
+      | Fin n =>
+        return mkApp3 (mkConst ``instDecidableEqFin) n l r
+      | _ => throwError "Expected Fin n equality"
+    | _ => throwError "Unsupported propositoin"
+
+
+/-!
+Like `decide!`, but only supports goals that are conjunctions of (possibly negations of) goals
+of the form `∀ (x … z : Fin n), lhs = rhs`.
+
+Using type class synthesis to infer the decidability instances can be very slow, slower than the
+actual proof checking, so this tactic construts the instances very directly.
+-/
+elab "decideFin!" : tactic => do
+  closeMainGoalUsing `decideFin fun expectedType => do
+    let expectedType ← preprocessPropToDecide expectedType
+    let expectedTypes := splitConjs expectedType
+    let proofs ← expectedTypes.mapM fun expectedType => do
+      let s ← inferDecideFin expectedType
+      let rflPrf ← mkEqRefl (toExpr true)
+      return mkApp3 (Lean.mkConst ``of_decide_eq_true) expectedType s rflPrf
+    let proof ← proofs.pop.foldrM (mkAppM ``And.intro #[·, ·]) proofs.back
+    return proof

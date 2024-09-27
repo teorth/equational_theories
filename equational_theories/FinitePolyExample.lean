@@ -1,8 +1,8 @@
 -- This is an example file, repesenting the generated files, but with shorter lists
 
 
+import DecideBang
 import equational_theories.FinitePoly.Common
-import equational_theories.FinitePoly.DecideBang
 import equational_theories.FinitePoly.FactsSyntax
 
 /-!
@@ -23,4 +23,4 @@ def «FinitePoly 4 * x² + 4 * y² + 4 * x + 4 * y» : Magma (Fin 5) where
 theorem «Facts from FinitePoly 4 * x² + 4 * y² + 4 * x + 4 * y» :
   ∃ (G : Type) (_ : Magma G), Facts G [1, 43, 3253] [2, 3, 4] := by
     refine ⟨Fin 5, «FinitePoly 4 * x² + 4 * y² + 4 * x + 4 * y», ?_⟩
-    decide!
+    decideFin!
