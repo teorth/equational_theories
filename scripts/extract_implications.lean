@@ -41,8 +41,9 @@ Attempts to parse an `Implication` from the type of a theorem.
 -/
 def parseImplication (thm_ty : Expr) : MetaM (Option Implication) := do
   Meta.forallTelescope thm_ty fun fvars rhs => do
-    let #[_g, _magma, lhsv] := fvars | return none
-    -- TODO assert that g and magma have the expected types
+    let #[g, magma, lhsv] := fvars | return none
+    if !(← Meta.isType g) then return none
+    let (.app (.const `Magma _) _) := ← Meta.inferType magma | return none
     let lhs ← Meta.inferType lhsv
     return implicationFromApps lhs rhs
 
@@ -51,11 +52,17 @@ Attempts to parse a negated `Implication` from the type of a theorem.
 -/
 def parseNonimplication (thm_ty : Expr) : MetaM (Option Implication) := do
   match_expr thm_ty with
-  | Exists _ body =>
-    Meta.lambdaTelescope body fun _ ty => do
+  | Exists b body =>
+    if !(← Meta.isType b) then return none
+    Meta.lambdaTelescope body fun fvars ty => do
+      let #[g] := fvars | return none
+      if !(← Meta.isType g) then return none
       match_expr ty with
-      | Exists _ body1 =>
-        Meta.lambdaTelescope body1 fun _ ty1 => do
+      | Exists b1 body1 =>
+        let (.app (.const `Magma _) _) := b1 | return none
+        Meta.lambdaTelescope body1 fun fvars1 ty1 => do
+          let #[magma] := fvars1 | return none
+          let (.app (.const `Magma _) _) := ← Meta.inferType magma | return none
           match_expr ty1 with
           | And rhs b =>
             match_expr b with
@@ -63,7 +70,6 @@ def parseNonimplication (thm_ty : Expr) : MetaM (Option Implication) := do
               return implicationFromApps lhs rhs
             | _ => return none
           | _ => return none
-
       | _ => return none
   | _ => return none
 
