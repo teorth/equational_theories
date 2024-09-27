@@ -1,6 +1,6 @@
 
+import DecideBang
 import equational_theories.FinitePoly.Common
-import equational_theories.FinitePoly.DecideBang
 import equational_theories.FinitePoly.FactsSyntax
 
 /-!

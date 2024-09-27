@@ -22,6 +22,12 @@ rev = "main"
 [[lean_lib]]
 name = "equational_theories"
 
+# until this tactic is upstreamed we want to run it as compiled code
+[[lean_lib]]
+name = "DecideBang"
+root = "DecideBang"
+precompileModules = true
+
 [[lean_lib]]
 name = "counterexamples"
 globs = "equational_theories.FinitePoly.+"

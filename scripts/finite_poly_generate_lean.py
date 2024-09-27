@@ -37,8 +37,8 @@ def generate_lean(refutation_line):
     refname= lambda i: f"{name} refutes Equation{i}"
 
     out = f"""
+import DecideBang
 import equational_theories.FinitePoly.Common
-import equational_theories.FinitePoly.DecideBang
 import equational_theories.FinitePoly.FactsSyntax
 
 /-!
