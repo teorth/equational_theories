@@ -28,22 +28,30 @@ def Equation4 (G: Type*) [Magma G] := ∀ x y : G, x = x ∘ y
 /-- The right absorption law -/
 def Equation5 (G: Type*) [Magma G] := ∀ x y : G, x = y ∘ x
 
+@[inherit_doc Equation2]
 def Equation6 (G: Type*) [Magma G] := ∀ x y : G, x = y ∘ y
 
+@[inherit_doc Equation2]
 def Equation7 (G: Type*) [Magma G] := ∀ x y z : G, x = y ∘ z
 
 def Equation8 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ (x ∘ x)
 
+/-- value of multiplication is independent of right argument -/
 def Equation38 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = x ∘ y
 
+/-- value of multiplication is independent of left argument; dual of 38 -/
 def Equation39 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = y ∘ x
 
+/-- all squares are the same -/
 def Equation40 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = y ∘ y
 
+/-- all products are the same -/
 def Equation41 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ z
 
+@[inherit_doc Equation38]
 def Equation42 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ z
 
+/-- The commutative law -/
 def Equation43 (G: Type*) [Magma G] := ∀ x y : G, x ∘ y = y ∘ x
 
 /-- The constant law -/
@@ -59,8 +67,9 @@ def Equation4512 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘
 
 def Equation4513 (G: Type*) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ y) ∘ w
 
-def Equation4552 (G: Type*) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (x ∘ w) ∘ u
+def Equation4522 (G: Type*) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (x ∘ w) ∘ u
 
+/-- all products of three values are the same, regardless bracketing -/
 def Equation4582 (G: Type*) [Magma G] := ∀ x y z w u v: G, x ∘ (y ∘ z) = (w ∘ u) ∘ v
 
 
@@ -73,19 +82,21 @@ theorem Equation2_implies_Equation4 (G: Type*) [Magma G] (h: Equation2 G) : Equa
   fun _ _ => h _ _
 
 theorem Equation2_implies_Equation6 (G: Type*) [Magma G] (h: Equation2 G) : Equation6 G :=
-  sorry
+  fun _ _ => h _ _
 
 theorem Equation2_implies_Equation7 (G: Type*) [Magma G] (h: Equation2 G) : Equation7 G :=
-  sorry
+  fun _ _ _ => h _ _
 
 theorem Equation2_implies_Equation46 (G: Type*) [Magma G] (h: Equation2 G) : Equation46 G :=
   fun _ _ _ _ => h _ _
 
-theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G :=
-  sorry
+theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G := by
+  intro a b
+  rw [h a a, ← h b]
 
-theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G :=
-  sorry
+theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G := by
+  intro a b
+  rw [h a a a, ←h b]
 
 theorem Equation4_implies_Equation3 (G: Type*) [Magma G] (h: Equation4 G) : Equation3 G := by
   intro _
@@ -95,7 +106,7 @@ theorem Equation4_implies_Equation42 (G: Type*) [Magma G] (h: Equation4 G) : Equ
   intro _ _ _
   rw [<-h, <-h]
 
-theorem Equation4_implies_Equation4552 (G: Type*) [Magma G] (h: Equation4 G) : Equation4552 G := by
+theorem Equation4_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4 G) : Equation4522 G := by
   intro x y z w u
   rw [<-h, <-h, <-h]
 
@@ -122,10 +133,10 @@ theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) :
 theorem Equation4513_implies_Equation4512 (G: Type*) [Magma G] (h: Equation4513 G) : Equation4512 G :=
   fun _ _ _ => h _ _ _ _
 
-theorem Equation4552_implies_Equation4513 (G: Type*) [Magma G] (h: Equation4552 G) : Equation4513 G :=
+theorem Equation4522_implies_Equation4513 (G: Type*) [Magma G] (h: Equation4522 G) : Equation4513 G :=
   fun _ _ _ _ => h _ _ _ _ _
 
-theorem Equation4582_implies_Equation4552 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4552 G :=
+theorem Equation4582_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4522 G :=
   fun _ _ _ _ _ => h _ _ _ _ _ _
 
 
@@ -337,7 +348,7 @@ theorem Equation4512_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equa
   dsimp [hG] at h
   linarith
 
-theorem Equation4513_not_implies_Equation4552 : ∃ (G: Type) (_: Magma G), Equation4513 G ∧ ¬ Equation4552 G := by
+theorem Equation4513_not_implies_Equation4522 : ∃ (G: Type) (_: Magma G), Equation4513 G ∧ ¬ Equation4522 G := by
   let hG : Magma Nat := {
     op := fun x y => if x = 0 then (if y ≤ 2 then 1 else 2) else x
   }
