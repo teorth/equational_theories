@@ -32,7 +32,7 @@ def generate_lean(refutation_line):
     pretty_eq = pretty_eq.replace("**2", "²")
     poly = poly.replace("x**2", "x*x").replace("y**2", "y*y")
 
-    name = f"FinitePoly {pretty_eq}"
+    name = f"FinitePoly {pretty_eq} % {div}"
     satname= lambda i: f"{name} satisfies Equation{i}"
     refname= lambda i: f"{name} refutes Equation{i}"
 
@@ -44,12 +44,8 @@ import equational_theories.FinitePoly.FactsSyntax
 /-!
 This file is generated from the following refutation as produced by
 random generation of polynomials:
-{refutation_line}
--/
+{refutation_line}-/
 
-set_option maxRecDepth 10000000
-set_option maxHeartbeats 200000000
-set_option synthInstance.maxHeartbeats 200000000
 set_option linter.unusedVariables false
 
 /-! The magma definition -/
@@ -58,9 +54,8 @@ def «{name}» : Magma (Fin {div}) where
 
 /-! The facts -/
 theorem «Facts from {name}» :
-  ∃ (G : Type) (_ : Magma G), Facts G {satisfied} {refuted} := by
-    refine ⟨Fin {div}, «{name}», ?_⟩
-    decideFin!
+  ∃ (G : Type) (_ : Magma G), Facts G {satisfied} {refuted} :=
+    ⟨Fin {div}, «{name}», by decideFin!⟩
 """
     return out
 
