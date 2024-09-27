@@ -156,16 +156,16 @@ theorem Equation5_implies_Equation39 (G: Type*) [Magma G] (h: Equation5 G) : Equ
   fun _ _ ↦ by repeat rw [← h]
 
 theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G :=
-  fun a b ↦ by rw [h a a, ← h b]
+  fun a _ ↦ by rw [h a a, ← h]
 
 theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G :=
-  fun a b ↦ by rw [h a a a, ← h b]
+  fun a _ ↦ by rw [h a a a, ← h]
 
 theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G :=
-  fun x y z ↦ by rw [← h]
+  fun _ _ _ ↦ by rw [← h]
 
 theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : Equation40 G :=
-  fun x y ↦ by rw [h x y y]
+  fun _ _ ↦ by rw [h]
 
 theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : Equation46 G :=
   fun _ _ _ _ ↦ by rwa [← h, h]
