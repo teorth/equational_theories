@@ -91,7 +91,10 @@ actual proof checking, so this tactic construts the instances very directly.
 elab "decideFin!" : tactic => do
   closeMainGoalUsing `decideFin fun expectedType => do
     let expectedType ← preprocessPropToDecide expectedType
+    let cls := mkApp (mkConst ``Decidable) expectedType
     let inst ← inferDecideFin expectedType
+    let instName ← mkNativeAuxDecl `_nativeDecideInst cls inst
+    let inst := Lean.mkConst instName
     let d := mkApp2 (mkConst ``decide) expectedType inst
     let auxDeclName ← mkNativeAuxDecl `_nativeDecide (Lean.mkConst `Bool) d
     let rflPrf ← mkEqRefl (toExpr true)
