@@ -55,6 +55,10 @@ private partial def inferDecideFin (p : Expr) : MetaM Expr := do
     | _ => throwError "Expected Fin n quantifier"
   | _ =>
     match_expr p with
+    | And p1 p2 =>
+      let inst1 ← inferDecideFin p1
+      let inst2 ← inferDecideFin p2
+      return mkApp4 (mkConst ``instDecidableAnd) p1 p2 inst1 inst2
     | Not p' =>
       let inst ← inferDecideFin p'
       return mkApp2 (mkConst ``instDecidableNot) p' inst
@@ -64,6 +68,17 @@ private partial def inferDecideFin (p : Expr) : MetaM Expr := do
         return mkApp3 (mkConst ``instDecidableEqFin) n l r
       | _ => throwError "Expected Fin n equality"
     | _ => throwError "Unsupported propositoin"
+
+private def mkNativeAuxDecl (baseName : Name) (type value : Expr) : TermElabM Name := do
+  let auxName ← Term.mkAuxName baseName
+  let decl := Declaration.defnDecl {
+    name := auxName, levelParams := [], type, value
+    hints := .abbrev
+    safety := .safe
+  }
+  addDecl decl
+  compileDecl decl
+  pure auxName
 
 
 /-!
@@ -76,10 +91,8 @@ actual proof checking, so this tactic construts the instances very directly.
 elab "decideFin!" : tactic => do
   closeMainGoalUsing `decideFin fun expectedType => do
     let expectedType ← preprocessPropToDecide expectedType
-    let expectedTypes := splitConjs expectedType
-    let proofs ← expectedTypes.mapM fun expectedType => do
-      let s ← inferDecideFin expectedType
-      let rflPrf ← mkEqRefl (toExpr true)
-      return mkApp3 (Lean.mkConst ``of_decide_eq_true) expectedType s rflPrf
-    let proof ← proofs.pop.foldrM (mkAppM ``And.intro #[·, ·]) proofs.back
-    return proof
+    let inst ← inferDecideFin expectedType
+    let d := mkApp2 (mkConst ``decide) expectedType inst
+    let auxDeclName ← mkNativeAuxDecl `_nativeDecide (Lean.mkConst `Bool) d
+    let rflPrf ← mkEqRefl (toExpr true)
+    return mkApp3 (Lean.mkConst ``of_decide_eq_true) expectedType inst <| mkApp3 (Lean.mkConst ``Lean.ofReduceBool) (Lean.mkConst auxDeclName) (toExpr true) rflPrf
