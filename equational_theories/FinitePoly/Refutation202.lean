@@ -13,6 +13,7 @@ random generation of polynomials:
 set_option maxRecDepth 10000000
 set_option maxHeartbeats 200000000
 set_option synthInstance.maxHeartbeats 200000000
+set_option linter.unusedVariables false
 
 /-! The magma definition -/
 def «FinitePoly 2 * x² + 5 * y² + 6 * x + 2 * x * y» : Magma (Fin 8) where
