@@ -1,80 +1,14 @@
 import Mathlib.Data.Nat.Defs
-import Mathlib.Tactic
+import equational_theories.Equations
 
---------------------------------------------------------------------
--- THIS FILE IS NOW DEPRECATED.  PLEASE USE `Subgraph.lean` instead.
---------------------------------------------------------------------
+/- This is a subproject of the main project to completely describe a small subgraph of the entire implication graph.  Currently we are focusing only on the following equations:
 
+1-8, 38-43, 46, 168, 387, 4512, 4513, 4522, 4582
 
-universe u
+Implications here should be placed inside the "Subgraph" namespace.
+-/
 
-class Magma (α : Type u) where
-  /-- `a ∘ b` computes a binary operation of `a` and `b`. -/
-  op : α → α → α
-
-@[inherit_doc] infixl:65 " ∘ "   => Magma.op
-
-/- List of equational laws being studied -/
-
-/-- The reflexive law -/
-def Equation1 (G: Type*) [Magma G] := ∀ x : G, x = x
-
-/-- The singleton law -/
-def Equation2 (G: Type*) [Magma G] := ∀ x y : G, x = y
-
-/-- The idempotence law -/
-def Equation3 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ x
-
-/-- The left absorption law -/
-def Equation4 (G: Type*) [Magma G] := ∀ x y : G, x = x ∘ y
-
-/-- The right absorption law -/
-def Equation5 (G: Type*) [Magma G] := ∀ x y : G, x = y ∘ x
-
-@[inherit_doc Equation2]
-def Equation6 (G: Type*) [Magma G] := ∀ x y : G, x = y ∘ y
-
-@[inherit_doc Equation2]
-def Equation7 (G: Type*) [Magma G] := ∀ x y z : G, x = y ∘ z
-
-def Equation8 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ (x ∘ x)
-
-/-- value of multiplication is independent of right argument -/
-def Equation38 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = x ∘ y
-
-/-- value of multiplication is independent of left argument; dual of 38 -/
-def Equation39 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = y ∘ x
-
-/-- all squares are the same -/
-def Equation40 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = y ∘ y
-
-/-- all products are the same -/
-def Equation41 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ z
-
-@[inherit_doc Equation38]
-def Equation42 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ z
-
-/-- The commutative law -/
-def Equation43 (G: Type*) [Magma G] := ∀ x y : G, x ∘ y = y ∘ x
-
-/-- The constant law -/
-def Equation46 (G: Type*) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ w
-
-/-- The central groupoid law -/
-def Equation168 (G: Type*) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x ∘ z)
-
-def Equation387 (G: Type*) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ x
-
-/-- The associative law -/
-def Equation4512 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ z
-
-def Equation4513 (G: Type*) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ y) ∘ w
-
-def Equation4522 (G: Type*) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (x ∘ w) ∘ u
-
-/-- all products of three values are the same, regardless bracketing -/
-def Equation4582 (G: Type*) [Magma G] := ∀ x y z w u v: G, x ∘ (y ∘ z) = (w ∘ u) ∘ v
-
+namespace Subgraph
 
 /- Positive implications -/
 
@@ -139,11 +73,10 @@ theorem Equation2_implies_Equation4582 (G: Type*) [Magma G] (h: Equation2 G) : E
   fun _ _ _ _ _ _ ↦ h _ _
 
 theorem Equation3_implies_Equation8 (G: Type*) [Magma G] (h: Equation3 G) : Equation8 G :=
-  fun x ↦ by rw [← h, ← h]
+  fun x ↦ by repeat rw [← h]
 
-theorem Equation4_implies_Equation3 (G: Type*) [Magma G] (h: Equation4 G) : Equation3 G := by
-  intro _
-  rw [← h]
+theorem Equation4_implies_Equation3 (G: Type*) [Magma G] (h: Equation4 G) : Equation3 G :=
+  fun _ ↦ by rw [← h]
 
 theorem Equation4_implies_Equation8 (G: Type*) [Magma G] (h: Equation4 G) : Equation8 G :=
   fun _ ↦ h _ _
@@ -189,12 +122,9 @@ theorem Equation46_implies_Equation4582 (G: Type*) [Magma G] (h: Equation46 G) :
 
 /-- This proof is from https://mathoverflow.net/a/450905/766 -/
 theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) : Equation43 G := by
-  have idem (x : G) : (x ∘ x) ∘ (x ∘ x) = (x ∘ x) := by
-    rw [← h, ← h]
-  have comm (x y : G) : (x ∘ x) ∘ y = y ∘ (x ∘ x) := by
-    rw [← idem, ← h, idem]
-  have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by
-    rw [← h, ← h]
+  have idem (x : G) : (x ∘ x) ∘ (x ∘ x) = (x ∘ x) := by rw [← h, ← h]
+  have comm (x y : G) : (x ∘ x) ∘ y = y ∘ (x ∘ x) := by rw [← idem, ← h, idem]
+  have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by rw [← h, ← h]
   exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
 
 theorem Equation4513_implies_Equation4512 (G: Type*) [Magma G] (h: Equation4513 G) : Equation4512 G :=
@@ -368,3 +298,6 @@ theorem Equation4582_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equati
     specialize h 1 2
     dsimp [hG] at h
     linarith
+
+
+end Subgraph
