@@ -50,6 +50,7 @@ def generate_lean(data):
 import DecideBang
 import equational_theories.AllEquations
 import equational_theories.FactsSyntax
+import equational_theories.MemoFinOp
 
 /-!
 This file is generated from the following refutation as produced by
@@ -60,7 +61,7 @@ set_option linter.unusedVariables false
 
 /-! The magma definition -/
 def «{name}» : Magma (Fin {div}) where
-  op x y := {poly}
+  op := memoFinOp fun x y => {poly}
 
 /-! The facts -/
 theorem «Facts from {name}» :

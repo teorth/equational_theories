@@ -2,6 +2,7 @@
 import DecideBang
 import equational_theories.AllEquations
 import equational_theories.FactsSyntax
+import equational_theories.MemoFinOp
 
 /-!
 This file is generated from the following refutation as produced by
@@ -13,7 +14,7 @@ set_option linter.unusedVariables false
 
 /-! The magma definition -/
 def «FinitePoly y² + y % 3» : Magma (Fin 3) where
-  op x y := y*y + y
+  op := memoFinOp fun x y => y*y + y
 
 /-! The facts -/
 theorem «Facts from FinitePoly y² + y % 3» :
