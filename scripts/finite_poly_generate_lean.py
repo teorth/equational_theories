@@ -25,7 +25,7 @@ def generate_lean(refutation_line):
     div = int(m.group(2))
 
     summands = m.group(1).split(" + ")
-    summands = [ s.replace("1 * ","") for s in summands if not s.startswith("0 * ") ]
+    summands = [ s.removeprefix("1 * ") for s in summands if not s.startswith("0 * ") ]
     poly = " + ".join(summands) if summands else "0"
 
     pretty_eq = poly
