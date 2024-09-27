@@ -1419,7 +1419,7 @@
          ns6:version="1.10.2"
          ns6:texconverter="pdflatex"
          ns6:pdfconverter="inkscape"
-         ns6:text="$x\\circ (y\\circ z)=(x\\circ w)\\circ u\\ (4552)$"
+         ns6:text="$x\\circ (y\\circ z)=(x\\circ w)\\circ u\\ (4522)$"
          ns6:preamble="C:\Users\teort\AppData\Roaming\inkscape\extensions\textext\default_packages.tex"
          ns6:scale="1.0"
          ns6:alignment="middle center"
