@@ -60,4 +60,4 @@ jobs:
 
     - name: Log PR and issue link result
       if: env.not_assigned == 'false'
-      run: echo "PR #${{ env.pr_number }} has been successfully linked to issue #${{ github.event.issue.number }}."
+      run: echo "PR ${{ env.pr_number }} has been successfully linked to issue ${{ github.event.issue.number }}."
