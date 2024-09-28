@@ -19,3 +19,22 @@ cargo run -- --help
 Press `q` to quit.
 
 By default, it will use `db.ron` as the database file.
+
+
+### TODO
+
+- [ ] Add a `ModelSearcher`:
+  - Choose a small `N`
+  - Randomly build a magma model as a `NxN` matrix of naturals `<N`
+  - Check the validity of all equations
+    - Parition into `(Valid, Invalid)`
+  - For all `(V, I)` pairs, `V -> I` is a non-impliation
+- [ ] Add an `EggSearcher`:
+  - Choose an equation `E`
+  - Choose a term `t` from one side of some other equation
+  - Use egg to perform equality saturation from `t` using `E`
+  - For all `u` in the output, `E -> t=u` is an implication
+- [ ] Add a `TransitivitySearcher`
+- [ ] Run all `Searcher`s in parallel
+- [ ] Generate Lean proofs from the results
+- [ ] Image generation
