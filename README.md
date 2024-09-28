@@ -7,7 +7,7 @@
 [![Paper](https://img.shields.io/badge/Paper-WIP-blue)](https://teorth.github.io/equational_theories/blueprint.pdf)
 [![Zulip Channel](https://img.shields.io/badge/Zulip_Channel-Join-blue)](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational)
 
-The purpose of this project is to explore the space of equational theories of magmas, ordered by implication.  To begin with we shall focus only on theories of a single equation, which are listed [here](https://github.com/teorth/equational_theories/blob/main/scripts/equations.txt).
+The purpose of this project is to explore the space of equational theories of magmas, ordered by implication.  To begin with we shall focus only on theories of a single equation, which are listed [here](https://github.com/teorth/equational_theories/blob/main/equational_theories/AllEquations.lean).
 
 A (manually created) graph of the dependencies obtained so far can be found [here](images/implications.png), current as of Sep 27 2024.
 
