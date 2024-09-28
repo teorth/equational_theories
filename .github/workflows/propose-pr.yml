@@ -10,6 +10,7 @@ jobs:
     steps:
       - name: Check if Comment is on a PR
         id: check_pr
+        shell: bash
         run: |
           if [[ -z "${{ github.event.issue.pull_request }}" ]]; then
             echo "This comment is not on a PR. Exiting."
@@ -17,6 +18,7 @@ jobs:
           else
             echo "This comment is on a PR."
             echo "is_pr=true" >> $GITHUB_OUTPUT
+          fi
       - name: Parse Comment for Issue Number
         if: steps.check_pr.outputs.is_pr == 'true'
         id: parse_comment
@@ -29,6 +31,7 @@ jobs:
           else
             echo "Comment does not match the required pattern."
             exit 1
+          fi
       - name: Verify Issue Assignment
         if: steps.check_pr.outputs.is_pr == 'true'
         id: check_assignee
