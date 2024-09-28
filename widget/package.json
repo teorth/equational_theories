@@ -1,0 +1,44 @@
+{
+  "name": "equational_theories",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "watch": "rollup --environment NODE_ENV:production --config --watch",
+    "watch-dev": "rollup --config --watch",
+    "build": "npx tsc && rollup --environment NODE_ENV:production --config",
+    "build-dev": "npx tsc && rollup --config",
+    "clean": "rm -r dist/"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "type": "module",
+  "dependencies": {
+    "@leanprover/infoview": "~0.7.2",
+    "@penrose/core": "^3.2.0",
+    "@react-three/drei": "^9.64.0",
+    "@react-three/fiber": "^8.12.0",
+    "@rollup/plugin-typescript": "^12.1.0",
+    "@svgdotjs/svg.js": "^3.2.0",
+    "react": "^18.2.0",
+    "react-d3-tree": "^3.5.1",
+    "react-dom": "^18.2.0",
+    "recharts": "^2.5.0",
+    "three": "^0.164.1",
+    "use-resize-observer": "^9.1.0",
+    "vis-network": "^9.1.9",
+    "vscode-languageserver-protocol": "^3.17.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
+    "@types/three": "^0.164.0",
+    "glob": "^10.3.15",
+    "rollup": "^4.17.2",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.3"
+  }
+}
