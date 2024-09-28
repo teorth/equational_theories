@@ -59,7 +59,7 @@ jobs:
         )
         echo "Sending query: $QUERY"
 
-        RESPONSE=$(curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+        RESPONSE=$(curl -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
           -H "Content-Type: application/json" \
           --data "$QUERY" https://api.github.com/graphql)
 
@@ -82,7 +82,7 @@ jobs:
         }
         EOF
         )
-        curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+        curl -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
         -H "Content-Type: application/json" \
         --data "$QUERY" \
         https://api.github.com/graphql
