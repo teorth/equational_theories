@@ -1,4 +1,5 @@
 use clap::Parser;
+use db::{Database, Equation, Implication, NonImplication, Proof, Term};
 use image::RgbImage;
 use ratatui::{
     crossterm::event::{self, KeyCode, KeyEventKind},
@@ -6,146 +7,14 @@ use ratatui::{
     DefaultTerminal,
 };
 use regex::Regex;
-use serde::{Deserialize, Serialize};
-use std::{
-    collections::BTreeMap,
-    fmt::Display,
-    sync::{LazyLock, RwLock},
-    time::Duration,
-};
+use searcher::ReflexiveSearcher;
+use searcher::Searcher;
+use std::{sync::RwLock, time::Duration};
 
 // ===========================================================================
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(untagged)]
-pub enum Term {
-    Var(char),
-    BinOp(Box<Term>, Box<Term>),
-}
-
-impl Default for Term {
-    fn default() -> Self {
-        Term::Var('x')
-    }
-}
-
-impl Display for Term {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Term::Var(var) => write!(f, "{}", var),
-            Term::BinOp(lhs, rhs) => write!(f, "({lhs} ∘ {rhs})"),
-        }
-    }
-}
-
-static RE_VAR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r#"\w"#).unwrap());
-
-impl Term {
-    fn parse(s: &str) -> Result<Self, String> {
-        if s.len() == 1 {
-            return Ok(Term::Var(s.chars().next().unwrap()));
-        }
-        // modify the string to be parseable
-        let s1 = s.replace("∘", ",");
-        let s2 = RE_VAR.replace_all(&s1, "'$0'");
-        let s3 = format!("({s2})");
-        // parse the string
-        ron::de::from_str::<Term>(&s3)
-            .map_err(|e| format!("Failed to parse term: <{s}> <{s1}> <{s2}> <{s3}> {e}"))
-    }
-}
-
-#[derive(Debug, Default, Serialize, Deserialize, Clone)]
-pub struct Equation(Term, Term);
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub enum Proof {
-    Implication(Implication),
-    NonImplication(NonImplication),
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub enum Implication {
-    /// an egg Explanation
-    Explanation,
-    /// transitivity from A --> B and B --> C
-    Transitivity(usize, usize, usize),
-    /// reflexivity from A --> A
-    Reflexivity,
-    /// an external Lean proof
-    Lean(String),
-}
-use Implication::*;
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub enum NonImplication {
-    /// a counter-example model
-    Model(Model),
-    /// an external Lean proof
-    Lean(String),
-}
-use NonImplication::*;
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Model {
-    magma: Vec<Vec<usize>>,
-}
-
-pub fn interpret(_equation: &Equation, _magma: &Model) -> bool {
-    todo!()
-}
-
-#[derive(Debug, Default, Serialize, Deserialize, Clone)]
-pub struct Database {
-    #[serde(default)]
-    pub equations: BTreeMap<usize, Equation>,
-    #[serde(default)]
-    pub proofs: BTreeMap<usize, BTreeMap<usize, Vec<Proof>>>,
-}
-
-// ===========================================================================
-
-trait Searcher {
-    fn init(&mut self, db: &RwLock<Database>) -> Result<(), String>;
-    fn step(&mut self, db: &RwLock<Database>) -> Result<usize, String>;
-}
-
-/// Dummy example Searcher
-pub struct ReflexiveSearcher {
-    eqs: Vec<usize>,
-}
-
-impl Default for ReflexiveSearcher {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl ReflexiveSearcher {
-    pub fn new() -> Self {
-        Self { eqs: vec![] }
-    }
-}
-
-impl Searcher for ReflexiveSearcher {
-    fn init(&mut self, db: &RwLock<Database>) -> Result<(), String> {
-        let read = db.read().map_err(|e| e.to_string())?;
-        self.eqs = read.equations.keys().cloned().collect();
-        Ok(())
-    }
-
-    fn step(&mut self, db: &RwLock<Database>) -> Result<usize, String> {
-        if let Some(eq) = self.eqs.pop() {
-            let mut write = db.write().map_err(|e| e.to_string())?;
-            let proofs = write.proofs.entry(eq).or_default().entry(eq).or_default();
-            if proofs.is_empty() {
-                proofs.push(Proof::Implication(Implication::Reflexivity));
-                return Ok(1);
-            }
-        }
-        Ok(0)
-    }
-}
+pub mod db;
+pub mod searcher;
 
 // ===========================================================================
 
@@ -164,7 +33,7 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
     let wait = |terminal: &mut DefaultTerminal, message: &mut String| -> Result<(), String> {
         if args.debug {
             message.push_str("Press any key to continue...\n");
-            draw(terminal, &message)?;
+            draw(terminal, message)?;
             event::read().map_err(|e| e.to_string())?;
         }
         Ok(())
@@ -248,9 +117,9 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
             }
         }
     }
-
     message.clear();
 
+    // generate image
     if let Some(image) = &args.image {
         message.push_str(&format!("Generating image {image}...\n"));
         draw(&mut terminal, &message)?;
@@ -262,6 +131,8 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
             if let Some(proofs) = db.proofs.get(eq1) {
                 for (j, eq2) in db.equations.keys().enumerate() {
                     if let Some(proofs) = proofs.get(eq2) {
+                        use Implication::*;
+                        use NonImplication::*;
                         let color = match proofs.first() {
                             Some(Proof::Implication(Explanation)) => [0, 255, 0],
                             Some(Proof::Implication(Reflexivity)) => [255, 255, 255],
@@ -291,6 +162,7 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
 
     wait(&mut terminal, &mut message)?;
 
+    // done
     Ok(())
 }
 
