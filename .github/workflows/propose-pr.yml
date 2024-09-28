@@ -1,0 +1,51 @@
+name: Propose Pull Request
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  propose_pr:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check if the comment contains "propose PR"
+      if: contains(github.event.comment.body, 'propose PR')
+      run: echo "Comment contains 'propose PR'. Proceeding with the validation."
+
+    - name: Extract PR and issue number from comment
+      id: extract_numbers
+      run: |
+        PR_NUMBER=$(echo "${{ github.event.comment.body }}" | grep -oP '(?<=propose PR #)\d+')
+        ISSUE_NUMBER=$(echo "${{ github.event.comment.body }}" | grep -oP '(?<=#)\d+')
+        echo "pr_number=$PR_NUMBER" >> $GITHUB_ENV
+        echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_ENV
+
+    - name: Get issue details
+      id: issue
+      run: |
+        curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        https://api.github.com/repos/${{ github.repository }}/issues/${{ env.issue_number }} > issue.json
+        cat issue.json
+
+    - name: Check if the commenter is assigned to the issue
+      id: check_assignee
+      run: |
+        COMMENTER="${{ github.event.comment.user.login }}"
+        ASSIGNED=$(jq --arg user "$COMMENTER" '.assignees[]?.login | select(. == $user)' issue.json)
+        if [ -z "$ASSIGNED" ]; then
+          echo "not_assigned=true" >> $GITHUB_ENV
+        else
+          echo "not_assigned=false" >> $GITHUB_ENV
+        fi
+
+    - name: Add PR to resolve the issue
+      if: env.not_assigned == 'false'
+      run: |
+        curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -d "{\"body\": \"This PR resolves issue #${{ env.issue_number }}.\n\n${{ github.event.comment.user.login }} has proposed this PR.\"}" \
+        https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.pr_number }}
+
+    - name: Log the result
+      if: env.not_assigned == 'true'
+      run: echo "User is not assigned to this issue. No PR linked."
