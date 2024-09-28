@@ -1,8 +1,11 @@
 \chapter{Subgraph equations}\label{subgraph-eq}
 
-In this project we study the 4694 equational laws (up to symmetry and relabeling) that involve at most four applications of the binary operation $\circ$.  The full list of such laws may be found \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/AllEquations.lean}{here}, and a script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}.
+In this project we study the 4694 equational laws (up to symmetry and relabeling) that involve at most four applications of the binary operation $\circ$.  The full list of such laws may be found \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/AllEquations.lean}{here}, and a script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}.  The list is sorted by the total number of operations, then by the number of operations on the LHS. Within each such class we define an order on expressions by variable $<$ operation, and lexical order on variables.
 
 Selected equations of interest are listed below, as well as in \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Equations.lean}{this file}.  Equations in this list will be referred to as ``subgraph equations'', as we shall inspect the subgraph of the implication subgraph induced by these equations.
+
+
+
 
 \begin{definition}[Equation 1]\label{eq1}\lean{Equation1}\leanok\uses{magma-def}  Equation 1 is the law $x=x$.
 \end{definition}
