@@ -1,0 +1,46 @@
+\chapter{General implications}
+
+In this chapter we record some general implications between equational laws.
+
+\begin{theorem}[Singleton law implies all other laws]\label{singleton-all}  The singleton law (Definition \ref{eq2}) implies all other laws.
+\end{theorem}
+
+\begin{proof} This is clear from substitution.
+\end{proof}
+
+\begin{theorem}[All laws imply the trivial law]\label{all-trivial}  All laws imply the trivial law (Definition \ref{eq1}).
+\end{theorem}
+
+\begin{proof} Trivial.
+\end{proof}
+
+Every law $E$ has a \emph{dual} $E^{\mathrm{op}}$, formed by replacing the magma operation $\circ$ with its opposite $\circ^{\mathrm{op}}:(x,y) \mapsto y \circ x$.  For instance, the opposite of the law $x \circ y = x \circ z$ is $y \circ x = z \circ x$.
+
+The implication graph has a duality symmetry:
+
+\begin{theorem}[Duality]\label{duality}  If $E,F$ are equational laws, then $E$ implies $F$ if and only if $E^{\mathrm{op}}$ implies $F^{\mathrm{op}}$.
+\end{theorem}
+
+\begin{proof} This is because a magma $M$ obeys a law $E$ if and only if the opposite magma $M^{\mathrm{op}}$ obeys $E^{\mathrm{op}}$.
+\end{proof}
+
+Some equational laws can be ``diagonalized'':
+
+\begin{theorem}[Diagonalization]\label{diag}  An equational law of the form
+  \begin{equation}\label{prediag} F(x_1,\dots,x_n) = G(y_1,\dots,y_m),
+  \end{equation}
+  where $x_1,\dots,x_n$ and $y_1,\dots,y_m$ are distinct indeterminates, implies the diagonalized law
+$$ F(x_1,\dots,x_n) = F(x'_1,\dots,x'_n).$$
+In particular, if $G(y_1,\dots,y_m)$ can be viewed as a specialization of $F(x'_1,\dots,x'_n)$, then these two laws are equivalent.
+\end{theorem}
+
+\begin{proof}  From two applications of \eqref{prediag} one has
+$$ F(x_1,\dots,x_n) = G(y_1,\dots,y_m)$$
+and
+$$ F(x'_1,\dots,x'_n) = G(y_1,\dots,y_m)$$
+whence the claim.
+\end{proof}
+
+Thus for instance, Definition \ref{eq7} is equivalent to Definition \ref{eq2}.
+
+
