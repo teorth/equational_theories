@@ -68,6 +68,7 @@ Proofs generated programmatically are also welcome. If you do this, you are enco
 - Then add a single Lean file (e.g., "equational_theories/Generated/MyTechnique.lean") that references all your theorems.
 - Add a README (e.g., "equational_theories/Generated/MyTechnique/README.md") to document how to reproduce your automatically generated theorems (to the extent possible, for randomized algorithms).
 - In [.gitattributes](.gitattributes) add `equational_theories/Generated/MyTechnique.lean linguist-generated` for all automatically generated files.
+- In the file `equational_theories/Generated.lean` add the import line `import equational_theories.Generated.MyTechnique` replacing "MyTechnique with the name of your folder.
 - Consider adding to the blueprint to explain the automated proof technique used.
 
 ## Images

@@ -1,1 +1,1 @@
-import Generated.SimpleRewrites
+import equational_theories.Generated.SimpleRewrites
