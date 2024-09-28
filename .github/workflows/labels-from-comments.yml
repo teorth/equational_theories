@@ -22,6 +22,7 @@ jobs:
           const { owner, repo, number: issue_number } = context.issue;
 
           // Remove the labels if they exist
+          await github.rest.issues.removeLabel({ owner, repo, issue_number, name: 'project-task' }).catch(() => {});
           await github.rest.issues.removeLabel({ owner, repo, issue_number, name: 'awaiting-review' }).catch(() => {});
           await github.rest.issues.removeLabel({ owner, repo, issue_number, name: 'awaiting-author' }).catch(() => {});
           await github.rest.issues.removeLabel({ owner, repo, issue_number, name: 'WIP' }).catch(() => {});
@@ -34,7 +35,9 @@ jobs:
           const { owner, repo, number: issue_number  } = context.issue;
           const commentBody = context.payload.comment.body;
 
-          if (commentBody == 'awaiting-review') {
+          if (commentBody == 'project-task') {
+            await github.rest.issues.addLabels({ owner, repo, issue_number, labels: ['project-task'] });
+          } else if (commentBody == 'awaiting-review') {
             await github.rest.issues.addLabels({ owner, repo, issue_number, labels: ['awaiting-review'] });
           } else if (commentBody == 'awaiting-author') {
             await github.rest.issues.addLabels({ owner, repo, issue_number, labels: ['awaiting-author'] });
