@@ -15,9 +15,10 @@ $$ 1, 1, 10, 3330, 178981952, 2483527537094825, 14325590003318891522275680, \dot
 
 The singleton or empty magma obeys all equational laws.  One can ask whether an equational law admits nontrivial finite or infinite models.  The following result was established in \cite{Kisielewicz}:
 
-\begin{theorem}  The equational law
+\begin{theorem}
+  \lean{Finite.EquationKis_implies_Equation2,EquationKis_not_implies_Equation2}\leanok\uses{eq2,magma-def}  The equational law
   \begin{equation}\label{biglaw}
-     (((y \circ y) \circ y) \circ x) \circ ((y \circ y) \circ z) = x
+     x = (((y \circ y) \circ y) \circ x) \circ ((y \circ y) \circ z)
   \end{equation}
 has an infinite model, but no non-trivial finite model.
 \end{theorem}
