@@ -64,10 +64,10 @@ Contributions in programming languages other than Lean are very welcome; the cod
 ## Automated Proofs
 
 Proofs generated programmatically are also welcome. If you do this, you are encouraged to use the following format:
-- Add a new directory for your new proof technique (e.g., "equational_theories/MyTechnique"), the automatically generated theorems ("equational_theories/MyTechnique/theorems"), and the corresponding source code ("equational_theories/MyTechnique/src") that generates these theorems.
-- Then add a single Lean file (e.g., "equational_theories/MyTechnique.lean") that references all your theorems.
-- Add a README (e.g., "equational_theories/MyTechnique/README.md") to document how to reproduce your automatically generated theorems (to the extent possible, for randomized algorithms).
-- In [.gitattributes](.gitattributes) add `equational_theories/MyTechnique.lean linguist-generated` for all automatically generated files.
+- Add a new directory for your new proof technique (e.g., "equational_theories/Generated/MyTechnique"), the automatically generated theorems ("equational_theories/Generated/MyTechnique/theorems"), and the corresponding source code ("equational_theories/Generated/MyTechnique/src") that generates these theorems.
+- Then add a single Lean file (e.g., "equational_theories/Generated/MyTechnique.lean") that references all your theorems.
+- Add a README (e.g., "equational_theories/Generated/MyTechnique/README.md") to document how to reproduce your automatically generated theorems (to the extent possible, for randomized algorithms).
+- In [.gitattributes](.gitattributes) add `equational_theories/Generated/MyTechnique.lean linguist-generated` for all automatically generated files.
 - Consider adding to the blueprint to explain the automated proof technique used.
 
 ## Images
