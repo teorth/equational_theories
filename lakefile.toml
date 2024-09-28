@@ -31,9 +31,3 @@ supportInterpreter = true
 name = "egg"
 git  = "https://github.com/marcusrossel/lean-egg"
 rev  = "main"
-
-# until this tactic is upstreamed we want to run it as compiled code
-[[lean_lib]]
-name = "DecideBang"
-root = "DecideBang"
-precompileModules = true

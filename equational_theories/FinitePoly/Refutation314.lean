@@ -1,8 +1,8 @@
 
-import DecideBang
 import equational_theories.AllEquations
 import equational_theories.FactsSyntax
 import equational_theories.MemoFinOp
+import equational_theories.DecideBang
 
 /-!
 This file is generated from the following refutation as produced by
