@@ -1,0 +1,55 @@
+name: Remove Assignment on Disclaim
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  disclaim_issue:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check if the comment contains exactly "disclaim"
+      id: check_disclaim
+      run: |
+        if [[ "${{ github.event.comment.body }}" =~ ^disclaim$ ]]; then
+          echo "exact_disclaim=true" >> $GITHUB_ENV
+        else
+          echo "exact_disclaim=false" >> $GITHUB_ENV
+        fi
+
+    - name: Get issue details
+      if: env.exact_disclaim == 'true'
+      id: issue
+      run: |
+        curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }} > issue.json
+        cat issue.json
+      continue-on-error: true
+
+    - name: Check if the commenter is assigned to the issue
+      if: env.exact_disclaim == 'true'
+      id: check_assignee
+      run: |
+        COMMENTER="${{ github.event.comment.user.login }}"
+        ASSIGNED=$(jq --arg user "$COMMENTER" '.assignees[]?.login | select(. == $user)' issue.json)
+        if [ -z "$ASSIGNED" ]; then
+          echo "not_assigned=true" >> $GITHUB_ENV
+        else
+          echo "not_assigned=false" >> $GITHUB_ENV
+        fi
+
+    - name: Remove the user from the assignees
+      if: env.exact_disclaim == 'true' && env.not_assigned == 'false'
+      run: |
+        curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -d '{"assignees":["${{ github.event.comment.user.login }}"]}' \
+        https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/assignees
+
+    - name: Log the unassignment result
+      if: env.exact_disclaim == 'true' && env.not_assigned == 'false'
+      run: echo "User ${{ github.event.comment.user.login }} has been unassigned from the issue."
+
+    - name: Log no action result
+      if: env.exact_disclaim == 'false'
+      run: echo "The comment does not contain exactly the word 'disclaim', no action taken."
