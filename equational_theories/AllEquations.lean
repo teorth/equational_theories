@@ -5,13 +5,15 @@ import equational_theories.EquationsCommand
 /-! List of equational laws being studied -/
 
 /-
-This files contains a small list of selected Equations. This way this file can be conveniently
-viewed and edited, without having to open a very large files.
+This files contains the full list of 4694 Equations under considered, except for the the selected
+equations in `Equations.lean`, which are imported.  Include this file if you want to establish
+results concerning the entire list of equations.  If you are proving many results about a specific
+equation of interest, consider transferring it into `Equations.lean`.
 
-See `AllEquations.lean` for the remaining ones. Feel free to move individual equations here if
-you do manual proofs about them and you want to import just this file.
-
-The equations are marked as `abbrev` so that tactics like `decide` will look through the definition.
+The equations were enumerated from
+`https://github.com/teorth/equational_theories/blob/main/scripts/extract_implications.lean`, and can
+be described as the set of all equational laws involving at most four magma operations, up to
+symmetry and relabeling.
 
 See `EquationsCommand.lean` for the definition of the `equation` command.
 -/
