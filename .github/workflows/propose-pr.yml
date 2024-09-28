@@ -1,4 +1,4 @@
-name: Propose Pull Request
+name: Propose PR
 
 on:
   issue_comment:
@@ -9,6 +9,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Check if the comment is on a pull request
+      id: check_pull_request
+      run: |
+        if [[ -z "${{ github.event.issue.pull_request }}" ]]; then
+          echo "This is not a pull request comment."
+          exit 0
+        fi
+
     - name: Check if the comment contains "propose PR"
       if: contains(github.event.comment.body, 'propose PR')
       run: echo "Comment contains 'propose PR'. Proceeding with the validation."
