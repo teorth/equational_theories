@@ -17,7 +17,7 @@ Maintainers review and merge it.
 
 ### Some Rules and Notes
 1. Please respect the issue claims. If an issue has been assigned to someone, please don't try to work on it simulatenously without discussing with the claimant first. This allows for a coordination process that respects every contributor's time and effort.
-2. Please note that this process is still experimental. As such there are bound to be issues and bugs. We will improve this as we go along. Feedback is welcome on the [Lean zulip chat channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/)
+2. Please note that this process is still experimental. As such there are bound to be issues and bugs. We will improve this as we go along. Feedback is welcome on the [Lean Zulip chat channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/)
 3.  Until the process above is automated with enough CI actions, maintainers of the project dashboard and manually handling things. So please be patient with us.
 
 ## Discussion
@@ -45,7 +45,7 @@ In addition to these files, contributors are welcome to add additional Lean file
 - Consider adding a chapter to the blueprint corresponding to the Lean file, which can for instance detail the methodology used to generate the content of that file.
 - Computer-generated Lean files can go in the [`Generated`](https://github.com/teorth/equational_theories/tree/main/equational_theories/Generated) subfolder.  You are also welcome to create additional subfolders as appropriate.
 
-Contributions to the Lean codebase will pass through continuous integration (CI) checks that ensure that the Lean code compiles.
+Contributions to the Lean codebase will pass through continuous integration (CI) checks that ensure that the Lean code compiles.  Contributors of Lean code are highly encouraged to interact with the [Lean Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/) to help coordinate their contributions and resolve technical issues.
 
 At present, the API for magmas only allows for theorems that study a finite number of individual equational laws at a time.  We plan to expand the API to also allow one to establish metatheorems about entire classes of equations.
 
