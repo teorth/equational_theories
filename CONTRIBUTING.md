@@ -16,9 +16,10 @@ Maintainers review and merge it.
 7. Merged tasks move to the `Completed Tasks` column of the dashboard
 
 ### Some Rules and Notes
+
 a. Please respect the issue claims. If an issue has been assigned to someone, please don't try to work on it simulatenously without discussing with the claimant first. This allows for a coordination process that respects every contributor's time and effort
-2. Please note that this process is still experimental. As such there are bound to be issues and bugs. We will improve this as we go along. Feedback is welcome on the [Lean zulip chat channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/)
-3. Until the process above is automated with enough CI actions, maintainers of the project dashboard and manually handling things. So please be patient with us.
+b. Please note that this process is still experimental. As such there are bound to be issues and bugs. We will improve this as we go along. Feedback is welcome on the [Lean zulip chat channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/)
+c. Until the process above is automated with enough CI actions, maintainers of the project dashboard and manually handling things. So please be patient with us.
 
 ## Discussion
 
