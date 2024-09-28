@@ -1,5 +1,5 @@
 use clap::Parser;
-use image::{Rgb, RgbImage};
+use image::RgbImage;
 use ratatui::{
     crossterm::event::{self, KeyCode, KeyEventKind},
     widgets::Paragraph,
@@ -66,23 +66,33 @@ pub enum Proof {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum Implication {
-    // an egg Explanation
+    /// an egg Explanation
     Explanation,
-    // transitivity from A --> B and B --> C
+    /// transitivity from A --> B and B --> C
     Transitivity(usize, usize, usize),
-    // reflexivity from A --> A
+    /// reflexivity from A --> A
     Reflexivity,
+    /// an external Lean proof
+    Lean(String),
 }
+use Implication::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum NonImplication {
-    // a counter-example model
+    /// a counter-example model
     Model(Model),
+    /// an external Lean proof
+    Lean(String),
 }
+use NonImplication::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Model {
     magma: Vec<Vec<usize>>,
+}
+
+pub fn interpret(_equation: &Equation, _magma: &Model) -> bool {
+    todo!()
 }
 
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
@@ -103,6 +113,12 @@ trait Searcher {
 /// Dummy example Searcher
 pub struct ReflexiveSearcher {
     eqs: Vec<usize>,
+}
+
+impl Default for ReflexiveSearcher {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl ReflexiveSearcher {
@@ -242,13 +258,15 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
                 for (j, eq2) in db.equations.keys().enumerate() {
                     if let Some(proofs) = proofs.get(eq2) {
                         let color = match proofs.first() {
-                            Some(Proof::Implication(Implication::Explanation)) => Rgb([0, 255, 0]),
-                            Some(Proof::Implication(Implication::Reflexivity)) => Rgb([0, 0, 255]),
-                            Some(Proof::Implication(Implication::Transitivity(_, _, _))) => Rgb([0, 255, 255]),
-                            Some(Proof::NonImplication(NonImplication::Model(_))) => Rgb([255, 0, 0]),
-                            None => Rgb([0, 0, 0]),
+                            Some(Proof::Implication(Explanation)) => [0, 255, 0],
+                            Some(Proof::Implication(Reflexivity)) => [255, 255, 255],
+                            Some(Proof::Implication(Transitivity(..))) => [0, 255, 255],
+                            Some(Proof::Implication(Implication::Lean(_))) => [0, 255, 128],
+                            Some(Proof::NonImplication(Model(_))) => [255, 0, 0],
+                            Some(Proof::NonImplication(NonImplication::Lean(_))) => [255, 0, 128],
+                            None => [0, 0, 0],
                         };
-                        img.get_pixel_mut(i as u32, j as u32).0 = color.0;
+                        img.get_pixel_mut(i as u32, j as u32).0 = color;
                     }
                 }
             }
