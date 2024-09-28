@@ -1,7 +1,10 @@
+import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
+import Batteries.Util.ProofWanted
 import equational_theories.Equations
 
-/- This is a subproject of the main project to completely describe a small subgraph of the entire implication graph.  Currently we are focusing only on the following equations:
+/- This is a subproject of the main project to completely describe a small subgraph of the entire
+implication graph.  Currently we are focusing only on the following equations:
 
 1-8, 38-43, 46, 168, 387, 4512, 4513, 4522, 4582
 
@@ -90,8 +93,14 @@ theorem Equation4_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4 G) : E
 theorem Equation5_implies_Equation3 (G: Type*) [Magma G] (h: Equation5 G) : Equation3 G :=
   fun _ ↦ h _ _
 
+theorem Equation5_implies_Equation8 (G: Type*) [Magma G] (h: Equation5 G) : Equation8 G :=
+  fun _  ↦ by repeat rw [← h]
+
 theorem Equation5_implies_Equation39 (G: Type*) [Magma G] (h: Equation5 G) : Equation39 G :=
   fun _ _ ↦ by repeat rw [← h]
+
+theorem Equation5_implies_Equation4512 (G: Type*) [Magma G] (h: Equation5 G) : Equation4512 G :=
+  fun _ _ _  ↦ by repeat rw [← h]
 
 theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G :=
   fun a _ ↦ by rw [h a a, ← h]
@@ -102,11 +111,23 @@ theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equa
 theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G :=
   fun _ _ _ ↦ by rw [← h]
 
+theorem Equation38_implies_Equation42 (G: Type*) [Magma G] (h: Equation38 G) : Equation42 G := by
+  intro x y z
+  calc
+    x ∘ y = x ∘ x := by rw [h]
+    _ = x ∘ z := by rw [h]
+
 theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : Equation40 G :=
   fun _ _ ↦ by rw [h]
 
 theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : Equation46 G :=
   fun _ _ _ _ ↦ by rwa [← h, h]
+
+theorem Equation42_implies_Equation38 (G: Type*) [Magma G] (h: Equation42 G) : Equation38 G := by
+  intro x y
+  rw [h x x y]
+
+proof_wanted Equation46_implies_Equation40 (G: Type*) [Magma G] (_: Equation46 G) : Equation40 G
 
 theorem Equation46_implies_Equation41 (G: Type*) [Magma G] (h: Equation46 G) : Equation41 G :=
   fun _ _ _ => h _ _ _ _
@@ -152,6 +173,9 @@ theorem Equation3_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equatio
   specialize h 1 2 3
   simp [hG] at h
 
+-- The 2 element magma that satisfies 4 does not satisfy 40.
+proof_wanted Equation4_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation40 G
+
 theorem Equation4_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation43 G := by
   let hG : Magma Nat := { op := fun x _ ↦ x }
   refine ⟨ℕ, hG, fun _ _ ↦ rfl, ?_⟩
@@ -167,6 +191,27 @@ theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equatio
   specialize h 0 0 0 1 0 0
   dsimp [hG] at h
   linarith
+
+-- The magma with 2 elements a and b which satisfies equation 5 serves as counterexamples here. For 43, a * b = b, but b * a = a. For 4513, a * (a * a) = a, but (a * a) * b = b.
+
+proof_wanted Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation42 G
+
+proof_wanted Equation5_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation43 G
+
+proof_wanted Equation5_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation4513 G
+
+-- For the next few implications, use the "implies" magma with two elements, true and false, where "true implies false" is false and all other pairs are true
+
+proof_wanted Equation40_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation3 G
+
+proof_wanted Equation40_not_implies_Equation8 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation8 G
+
+proof_wanted Equation40_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation42 G
+
+proof_wanted Equation40_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation43 G
+
+proof_wanted Equation40_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation4512 G
+
 
 theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation43 G := by
   let hG : Magma Nat := { op := fun x _ ↦ x }
@@ -233,6 +278,9 @@ theorem Equation46_not_implies_Equation4 : ∃ (G: Type) (_: Magma G), Equation4
   dsimp [hG] at h
   linarith
 
+-- The "and" magma on the two element set of booleans satisfies 387, but does not satisfy 40.
+proof_wanted Equation387_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation40 G
+
 theorem Equation387_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation42 G := by
   let hG : Magma Bool := { op := fun x y ↦ x || y }
   refine ⟨Bool, hG, fun _ _ ↦ by simp [hG, Bool.or_comm], ?_⟩
@@ -278,6 +326,9 @@ theorem Equation4513_not_implies_Equation4522 : ∃ (G: Type) (_: Magma G), Equa
     specialize h 0 0 0 3 3
     dsimp [hG] at h
     linarith
+
+-- use "saturating addition" on the set {1, 2, 3}, where we add in the normal way but cap the result at 3 (x*y = min(3, x+y)).
+proof_wanted Equation4582_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation40 G
 
 theorem Equation4582_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation42 G := by
   let hG : Magma Nat := { op := fun x y ↦ if x = 0 ∧ y = 0 then 1 else 2 }

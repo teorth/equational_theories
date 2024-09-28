@@ -1,18 +1,29 @@
 import equational_theories.Magma
+import equational_theories.Equations
+
+/-! List of equational laws being studied -/
+
+/-
+This files contains a small list of selected Equations. This way this file can be conveniently
+viewed and edited, without having to open a very large files.
+
+See `AllEquations.lean` for the remaining ones. Feel free to move individual equations here if
+you do manual proofs about them and you want to import just this file.
+
+The equations are marked as `abbrev` so that tactics like `decide` will look through the definition.
+-/
 
 universe u
 
-namespace AllEquations
 
--- We use abbrev here so that type class search, in particular `by decide` can look through them
-abbrev Equation1 (G: Type u) [Magma G] := ∀ x : G, x = x
-abbrev Equation2 (G: Type u) [Magma G] := ∀ x y : G, x = y
-abbrev Equation3 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ x
-abbrev Equation4 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ y
-abbrev Equation5 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ x
-abbrev Equation6 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ y
-abbrev Equation7 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ z
-abbrev Equation8 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ (x ∘ x)
+-- abbrev Equation1 (G: Type u) [Magma G] := ∀ x : G, x = x
+-- abbrev Equation2 (G: Type u) [Magma G] := ∀ x y : G, x = y
+-- abbrev Equation3 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ x
+-- abbrev Equation4 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ y
+-- abbrev Equation5 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ x
+-- abbrev Equation6 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ y
+-- abbrev Equation7 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ z
+-- abbrev Equation8 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ (x ∘ x)
 abbrev Equation9 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ y)
 abbrev Equation10 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ x)
 abbrev Equation11 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ y)
@@ -42,15 +53,15 @@ abbrev Equation34 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ x
 abbrev Equation35 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ y
 abbrev Equation36 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ z
 abbrev Equation37 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ w
-abbrev Equation38 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ y
-abbrev Equation39 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ x
-abbrev Equation40 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ y
-abbrev Equation41 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ z
-abbrev Equation42 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ z
-abbrev Equation43 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ x
+-- abbrev Equation38 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ y
+-- abbrev Equation39 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ x
+-- abbrev Equation40 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ y
+-- abbrev Equation41 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ z
+-- abbrev Equation42 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ z
+-- abbrev Equation43 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ x
 abbrev Equation44 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ z
 abbrev Equation45 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ y
-abbrev Equation46 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ w
+-- abbrev Equation46 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ w
 abbrev Equation47 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ (x ∘ (x ∘ x))
 abbrev Equation48 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ (x ∘ y))
 abbrev Equation49 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ (y ∘ x))
@@ -172,7 +183,7 @@ abbrev Equation164 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z 
 abbrev Equation165 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ (z ∘ w)
 abbrev Equation166 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (x ∘ x)
 abbrev Equation167 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (x ∘ y)
-abbrev Equation168 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x ∘ z)
+-- abbrev Equation168 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x ∘ z)
 abbrev Equation169 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (y ∘ x)
 abbrev Equation170 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (y ∘ y)
 abbrev Equation171 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (y ∘ z)
@@ -391,7 +402,7 @@ abbrev Equation383 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z)
 abbrev Equation384 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ x) ∘ x
 abbrev Equation385 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ x) ∘ y
 abbrev Equation386 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ x) ∘ z
-abbrev Equation387 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ x
+-- abbrev Equation387 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ x
 abbrev Equation388 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ y
 abbrev Equation389 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ y) ∘ z
 abbrev Equation390 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ x
@@ -4516,8 +4527,8 @@ abbrev Equation4508 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x
 abbrev Equation4509 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ x) ∘ w
 abbrev Equation4510 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ x
 abbrev Equation4511 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ y
-abbrev Equation4512 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ z
-abbrev Equation4513 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ y) ∘ w
+-- abbrev Equation4512 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ z
+-- abbrev Equation4513 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ y) ∘ w
 abbrev Equation4514 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ z) ∘ x
 abbrev Equation4515 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ z) ∘ y
 abbrev Equation4516 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ z) ∘ z
@@ -4526,7 +4537,7 @@ abbrev Equation4518 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = 
 abbrev Equation4519 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ w) ∘ y
 abbrev Equation4520 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ w) ∘ z
 abbrev Equation4521 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ w) ∘ w
-abbrev Equation4522 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (x ∘ w) ∘ u
+-- abbrev Equation4522 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (x ∘ w) ∘ u
 abbrev Equation4523 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (y ∘ x) ∘ x
 abbrev Equation4524 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (y ∘ x) ∘ y
 abbrev Equation4525 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (y ∘ x) ∘ z
@@ -4586,7 +4597,7 @@ abbrev Equation4578 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) 
 abbrev Equation4579 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ u) ∘ z
 abbrev Equation4580 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ u) ∘ w
 abbrev Equation4581 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ u) ∘ u
-abbrev Equation4582 (G: Type u) [Magma G] := ∀ x y z w u v : G, x ∘ (y ∘ z) = (w ∘ u) ∘ v
+-- abbrev Equation4582 (G: Type u) [Magma G] := ∀ x y z w u v : G, x ∘ (y ∘ z) = (w ∘ u) ∘ v
 abbrev Equation4583 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ x = (x ∘ x) ∘ y
 abbrev Equation4584 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ x = (x ∘ y) ∘ x
 abbrev Equation4585 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ x = (x ∘ y) ∘ y
@@ -4699,5 +4710,3 @@ abbrev Equation4691 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = 
 abbrev Equation4692 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ y) ∘ z = (w ∘ z) ∘ u
 abbrev Equation4693 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ y) ∘ z = (w ∘ u) ∘ z
 abbrev Equation4694 (G: Type u) [Magma G] := ∀ x y z w u v : G, (x ∘ y) ∘ z = (w ∘ u) ∘ v
-
-end AllEquations
