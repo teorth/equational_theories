@@ -25,10 +25,14 @@ Links:
     - [A related MathOverflow post](https://mathoverflow.net/questions/450890/is-there-an-identity-between-the-commutative-identity-and-the-constant-identity), Jul 16 2023.
 - Automated provers for equational theories
     - [Prover9 and Mace4](https://www.cs.unm.edu/~mccune/prover9/)
+        - [aa](https://github.com/gsfk/aa) - a project to use Prover9/Mace4 to brute force axioms for finite mathematical domains
     - [Vampire](https://en.wikipedia.org/wiki/Vampire_(theorem_prover))
     - [eprover](https://github.com/eprover/eprover)
     - [twee](https://nick8325.github.io/twee/)
     - [zipperposition](https://github.com/sneeuwballen/zipperposition)
+    - [Z3](https://microsoft.github.io/z3guide/docs/logic/intro/)
+    - [Knuckledragger](https://github.com/philzook58/knuckledragger)
+    - A [blog post](https://www.philipzucker.com/tao_algebra/) by Philip Zucker testing many of the above provers on a sample implication of this project.
     - ["Guided Equality Saturation"](https://dl.acm.org/doi/10.1145/3632900), Thomas Kœhler, Andrés Goens, Siddharth Bhat, Tobias Grosser, Phil Trinder, Michel Steuwer, Jan 5 2024.
     - ["Rewrite Rule Inference Using Equality Saturation"](https://arxiv.org/abs/2108.10436), Chandrakana Nandi, Max Willsey, Amy Zhu, Yisu Remy Wang, Brett Saiki, Adam Anderson, Adriana Schulz, Dan Grossman, Zachary Tatlock, 23 Aug 2021.
 - Other tools
