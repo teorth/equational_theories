@@ -6,6 +6,7 @@ on:
 
 jobs:
   propose_pr:
+    if: contains(github.event.comment.body, 'propose PR')
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +23,6 @@ jobs:
         fi
 
     - name: Get issue details
-      if: ${{ env.pr_number != '' }}  # Proceed only if pr_number is set
       id: get_issue
       run: |
         curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -30,7 +30,6 @@ jobs:
         cat issue.json
 
     - name: Check if the commenter is assigned to the issue
-      if: ${{ env.pr_number != '' }}
       id: check_assignee
       run: |
         COMMENTER="${{ github.event.comment.user.login }}"
@@ -42,13 +41,13 @@ jobs:
         fi
 
     - name: Notify the user if they are not assigned
-      if: ${{ env.pr_number != '' }} && env.not_assigned == 'true'
+      if: env.not_assigned == 'true'
       run: |
         echo "User ${{ github.event.comment.user.login }} is not assigned to this issue, exiting."
         exit 0
 
     - name: Link PR #PR_NUMBER to the issue
-      if: ${{ env.pr_number != '' }} && env.not_assigned == 'false'
+      if: env.not_assigned == 'false'
       run: |
         PR_BODY=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.pr_number }} | jq -r '.body')
@@ -60,11 +59,10 @@ jobs:
         https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.pr_number }}
 
     - name: Log PR and issue link result
-      if: ${{ env.pr_number != '' }} && env.not_assigned == 'false'
+      if: env.not_assigned == 'false'
       run: echo "PR ${{ env.pr_number }} has been successfully linked to issue ${{ github.event.issue.number }}."
 
     - name: Retrieve the project ITEM_ID
-      if: ${{ env.pr_number != '' }} && env.not_assigned == 'false'
       id: get_item_id
       run: |
         QUERY=$(cat <<EOF
@@ -90,7 +88,6 @@ jobs:
         fi
 
     - name: Retrieve the project FIELD_ID for "Status"
-      if: ${{ env.pr_number != '' }} && env.not_assigned == 'false'
       id: get_field_id
       run: |
         QUERY=$(cat <<EOF
@@ -116,7 +113,6 @@ jobs:
         fi
 
     - name: Retrieve the "In Progress" option ID
-      if: ${{ env.pr_number != '' }} && env.not_assigned == 'false'
       id: find_in_progress_tasks_id
       run: |
         QUERY=$(cat <<EOF
@@ -142,7 +138,6 @@ jobs:
         fi
 
     - name: Move task to "In Progress" column
-      if: ${{ env.pr_number != '' }} && env.not_assigned == 'false'
       run: |
         QUERY=$(cat <<EOF
         {
@@ -156,5 +151,4 @@ jobs:
         https://api.github.com/graphql
 
     - name: Log the project card movement result
-      if: ${{ env.pr_number != '' }} && env.not_assigned == 'false'
       run: echo "Task successfully moved to 'In Progress' column."
