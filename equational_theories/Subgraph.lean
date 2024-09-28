@@ -6,9 +6,10 @@ import equational_theories.Equations
 /- This is a subproject of the main project to completely describe a small subgraph of the entire
 implication graph.  Currently we are focusing only on the following equations:
 
-1-8, 38-43, 46, 168, 387, 4512, 4513, 4522, 4582
+1-8, 23, 38-43, 45-46, 168, 387, 4378, 4512, 4513, 4522, 4564, 4582
 
 Implications here should be placed inside the "Subgraph" namespace.
+
 -/
 
 namespace Subgraph
@@ -105,17 +106,22 @@ theorem Equation5_implies_Equation4512 (G: Type*) [Magma G] (h: Equation5 G) : E
 theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equation2 G :=
   fun a _ ↦ by rw [h a a, ← h]
 
+theorem Equation6_implies_Equation3 (G: Type*) [Magma G] (h: Equation6 G) : Equation3 G :=
+  fun _ ↦ h _ _
+
 theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G :=
   fun a _ ↦ by rw [h a a a, ← h]
+
+theorem Equation7_implies_Equation3 (G: Type*) [Magma G] (h: Equation7 G) : Equation3 G :=
+  fun _ ↦ h _ _ _
 
 theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G :=
   fun _ _ _ ↦ by rw [← h]
 
-theorem Equation38_implies_Equation42 (G: Type*) [Magma G] (h: Equation38 G) : Equation42 G := by
-  intro x y z
-  calc
-    x ∘ y = x ∘ x := by rw [h]
-    _ = x ∘ z := by rw [h]
+theorem Equation38_implies_Equation42 (G: Type*) [Magma G] (h: Equation38 G) : Equation42 G :=
+  fun _ _ _ ↦ by rw [← h, h]
+
+proof_wanted Equation39_implies_Equation45 (G: Type*) [Magma G] (h: Equation39 G) : Equation45 G
 
 theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : Equation40 G :=
   fun _ _ ↦ by rw [h]
@@ -123,9 +129,10 @@ theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : E
 theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : Equation46 G :=
   fun _ _ _ _ ↦ by rwa [← h, h]
 
-theorem Equation42_implies_Equation38 (G: Type*) [Magma G] (h: Equation42 G) : Equation38 G := by
-  intro x y
-  rw [h x x y]
+theorem Equation42_implies_Equation38 (G: Type*) [Magma G] (h: Equation42 G) : Equation38 G :=
+  fun _ _ ↦ by rw [h]
+
+proof_wanted Equation45_implies_Equation39 (G: Type*) [Magma G] (h: Equation45 G) : Equation39 G
 
 theorem Equation46_implies_Equation40 (G: Type*) [Magma G] (h: Equation46 G) : Equation40 G :=
   fun x y ↦ h x x y y
@@ -175,7 +182,13 @@ theorem Equation3_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equatio
   simp [hG] at h
 
 -- The 2 element magma that satisfies 4 does not satisfy 40.
-proof_wanted Equation4_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation40 G
+theorem Equation4_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation40 G := by
+  let a : Type := Fin 2
+  let hG : Magma a := { op := fun x _ ↦ x }
+  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
+  by_contra h
+  specialize h 0 1
+  simp [hG] at h
 
 theorem Equation4_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation43 G := by
   let hG : Magma Nat := { op := fun x _ ↦ x }
@@ -240,13 +253,37 @@ theorem Equation39_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equatio
 
 -- For the next few implications, use the "implies" magma with two elements, true and false, where "true implies false" is false and all other pairs are true
 
-proof_wanted Equation40_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation3 G
+theorem Equation40_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation3 G := by
+  let a : Type := Bool
+  let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
+  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
+  by_contra h
+  specialize h false
+  simp [hG] at h
 
-proof_wanted Equation40_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation42 G
+theorem Equation40_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation42 G := by
+  let a : Type := Bool
+  let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
+  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
+  by_contra h
+  specialize h true false true
+  simp [hG] at h
 
-proof_wanted Equation40_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation43 G
+theorem Equation40_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation43 G := by
+  let a : Type := Bool
+  let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
+  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
+  by_contra h
+  specialize h true false
+  simp [hG] at h
 
-proof_wanted Equation40_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation4512 G
+theorem Equation40_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation4512 G := by
+  let a : Type := Bool
+  let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
+  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
+  by_contra h
+  specialize h false false
+  simp [hG] at h
 
 theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation43 G := by
   let hG : Magma Nat := { op := fun x _ ↦ x }
@@ -324,7 +361,12 @@ theorem Equation168_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equati
     Bool.eq_false_and_eq_true_self, and_self, not_false_eq_true]
 
 -- The "and" magma on the two element set of booleans satisfies 387, but does not satisfy 40.
-proof_wanted Equation387_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation40 G
+theorem Equation387_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation40 G := by
+  let hG : Magma Bool := { op := fun x y ↦ x && y }
+  refine ⟨Bool, hG, fun _ _ ↦ by simp [hG, Bool.and_comm], ?_⟩
+  by_contra h
+  specialize h false true
+  simp [hG] at h
 
 theorem Equation387_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation42 G := by
   let hG : Magma Bool := { op := fun x y ↦ x || y }
@@ -373,7 +415,69 @@ theorem Equation4513_not_implies_Equation4522 : ∃ (G: Type) (_: Magma G), Equa
     linarith
 
 -- use "saturating addition" on the set {1, 2, 3}, where we add in the normal way but cap the result at 3 (x*y = min(3, x+y)).
-proof_wanted Equation4582_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation40 G
+
+inductive Th
+  | t1 : Th
+  | t2 : Th
+  | t3 : Th
+
+def add : Th → Th → Th
+| Th.t1, Th.t1 => Th.t2
+| Th.t1, Th.t2 => Th.t3
+| Th.t1, Th.t3 => Th.t3
+| Th.t2, Th.t1 => Th.t3
+| Th.t2, Th.t2 => Th.t3
+| Th.t2, Th.t3 => Th.t3
+| Th.t3, _ => Th.t3
+theorem add3 (a b c :Th) : add (add a b ) c = Th.t3:= by
+
+  cases a;
+  cases b;
+  cases c; trivial; trivial; trivial;
+  cases c; trivial; trivial; trivial;
+  cases c; trivial; trivial; trivial;
+  cases b;
+  cases c; trivial; trivial; trivial;
+  cases c; trivial; trivial; trivial;
+  cases c; trivial; trivial; trivial;
+  cases b;
+  cases c; trivial; trivial; trivial;
+  cases c; trivial; trivial; trivial;
+  cases c; trivial; trivial; trivial
+
+theorem add3_ (a b c :Th) : add  a (add b c ) = Th.t3:= by
+
+  cases a;
+  cases b;
+  cases c; trivial; trivial; trivial;
+  cases c; trivial; trivial; trivial;
+  cases c; trivial; trivial; trivial;
+  cases b;
+  cases c; trivial; trivial; trivial;
+  cases c; trivial; trivial; trivial;
+  cases c; trivial; trivial; trivial;
+  cases b;
+  cases c; trivial; trivial; trivial;
+  cases c; trivial; trivial; trivial;
+  cases c; trivial; trivial; trivial
+
+theorem Equation4582_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation40 G := by
+
+  let hG : Magma Th := { op := fun x y ↦ add x y}
+  have hh : Equation4582 Th := by
+    intro x y z w u v
+    simp [hG]
+    calc
+      add x (add y z) = Th.t3 := by rw[add3_ x y z]
+      _ = add (add w u) v := by rw[add3 w u v]
+
+  refine ⟨Th, hG, hh, ?_⟩
+  by_contra h
+  specialize h Th.t1 Th.t2
+  have h1: Th.t1 ∘ Th.t1 = Th.t2 := by rfl
+  have h2: Th.t2 ∘ Th.t2 = Th.t3 := by rfl
+  have h3: Th.t1 ∘ Th.t1 ≠ Th.t2 ∘ Th.t2 := by rw[h1, h2]; intro hhh; cases hhh
+  exact absurd h h3
 
 theorem Equation4582_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation42 G := by
   let hG : Magma Nat := { op := fun x y ↦ if x = 0 ∧ y = 0 then 1 else 2 }
