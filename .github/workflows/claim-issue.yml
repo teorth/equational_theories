@@ -57,11 +57,21 @@ jobs:
         }
         EOF
         )
-        CLAIMED_TASKS_ID=$(curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          --data "$QUERY" https://api.github.com/graphql | jq -r '.data.node.fields.nodes[] | select(.name == "Status") | .options[] | select(.name == "Claimed Tasks").id')
-        echo "CLAIMED_TASKS_ID=$CLAIMED_TASKS_ID" >> $GITHUB_ENV
+        echo "Sending query: $QUERY"
 
+        RESPONSE=$(curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data "$QUERY" https://api.github.com/graphql)
+
+        echo "GraphQL Response: $RESPONSE"
+        CLAIMED_TASKS_ID=$(echo "$RESPONSE" | jq -r '.data.node.fields.nodes[] | select(.name == "Status") | .options[] | select(.name == "Claimed Tasks").id')
+
+        if [ -z "$CLAIMED_TASKS_ID" ]; then
+          echo "Error: Could not retrieve 'Claimed Tasks' ID"
+          exit 1
+        else
+          echo "CLAIMED_TASKS_ID=$CLAIMED_TASKS_ID" >> $GITHUB_ENV
+        fi
     - name: Move task to "Claimed Tasks" column
       if: env.exact_claim == 'true'
       run: |
