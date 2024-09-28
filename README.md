@@ -32,6 +32,20 @@ Links:
     - [Followup discussion on Mastodon](https://mathstodon.xyz/deck/@tao/113201989529992957), Sep 25, 2024.
 - [The MathOverflow post that inspired the project](https://mathoverflow.net/questions/450930/is-there-an-identity-between-the-associative-identity-and-the-constant-identity), Jul 17, 2023.
     - [A related MathOverflow post](https://mathoverflow.net/questions/450890/is-there-an-identity-between-the-commutative-identity-and-the-constant-identity), Jul 16, 2023.
+- Scripts
+    - Lean
+        - [`extract_implications`](scripts/extract_implications.lean) - extracts implications from one or more Lean files
+    - Python
+        - [`find_dual`](scripts/find_dual.py) - finds the dual of an equation
+        - [`find_equation_id`](scripts/find_equation_id.py) - finds the equation number of an equation string
+        - [`generate_eqs_list`](scripts/generate_eqs_list.py) - generates a list of equations
+        - [`generate_image`](scripts/generate_image.py) - generates an image of implications
+        - [`generate_most_wanted_list`](scripts/generate_most_wanted_list.py) - generates the "most wanted" implications
+        - [`process_implications`](scripts/process_implications.py) - processes implications from one or more Lean files
+    - Ruby
+        - [`transitive_closure`](scripts/transitive_closure.rb) - computes the transitive closure of a set of implications
+        - [`transitive_reduction`](scripts/transitive_reduction.rb) - finds a transitive reduction of a set of implications
+        - [`transitive_reduction_exact`](scripts/transitive_reduction_exact.rb) - finds an exact transitive reduction of a set of implications
 - Automated provers for equational theories
     - [Prover9 and Mace4](https://www.cs.unm.edu/~mccune/prover9/)
         - [aa](https://github.com/gsfk/aa) - a project to use Prover9/Mace4 to brute force axioms for finite mathematical domains
