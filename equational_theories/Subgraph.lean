@@ -1,6 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
-import Batteries.Util.ProofWanted
+import equational_theories.Conjecture
 import equational_theories.Equations
 
 /- This is a subproject of the main project to completely describe a small subgraph of the entire
@@ -121,7 +121,7 @@ theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equ
 theorem Equation38_implies_Equation42 (G: Type*) [Magma G] (h: Equation38 G) : Equation42 G :=
   fun _ _ _ ↦ by rw [← h, h]
 
-proof_wanted Equation39_implies_Equation45 (G: Type*) [Magma G] (h: Equation39 G) : Equation45 G
+conjecture Equation39_implies_Equation45 (G: Type*) [Magma G] (_h: Equation39 G) : Equation45 G
 
 theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : Equation40 G :=
   fun _ _ ↦ by rw [h]
@@ -132,7 +132,7 @@ theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : E
 theorem Equation42_implies_Equation38 (G: Type*) [Magma G] (h: Equation42 G) : Equation38 G :=
   fun _ _ ↦ by rw [h]
 
-proof_wanted Equation45_implies_Equation39 (G: Type*) [Magma G] (h: Equation45 G) : Equation39 G
+conjecture Equation45_implies_Equation39 (G: Type*) [Magma G] (_h: Equation45 G) : Equation39 G
 
 theorem Equation46_implies_Equation40 (G: Type*) [Magma G] (h: Equation46 G) : Equation40 G :=
   fun x y ↦ h x x y y
