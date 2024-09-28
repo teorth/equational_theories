@@ -55,5 +55,7 @@ Dir["#{dir}/Output/errors_*"].each { |s|
     end
   }
 
-  check_theorem(theorem_line_start, code_lines.length + 1, code_lines, error_line_numbers)
+  if theorem_line_start && in_theorem
+    check_theorem(theorem_line_start, code_lines.length + 1, code_lines, error_line_numbers)
+  end
 }
