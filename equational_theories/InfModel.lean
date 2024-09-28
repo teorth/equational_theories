@@ -69,14 +69,12 @@ theorem EquationKis_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equati
   · simp only [hx, ↓reduceIte, PNat.val_ofNat, PNat.ofNat_inj, OfNat.ofNat_ne_one, ne_eq,
     Nat.succ_ne_self, not_false_eq_true, padicValNat_primes, pow_zero]
     rw [if_neg]
-    intro nh
-    split_ifs at nh
-    · absurd nh
-      apply ne_of_lt
+    split_ifs
+    · apply ne_of_lt
       simp only [← PNat.coe_lt_coe, PNat.val_ofNat, PNat.pow_coe]
       apply lt_self_pow (by simp)
       apply one_lt_pow (by simp) (by simp)
-    · contradiction
+    · trivial
   simp only [Ne.symm hx, ↓reduceIte, PNat.pow_coe, PNat.val_ofNat, padicValNat.prime_pow,
     PNat.coe_toPNat']
   rw [if_neg, if_neg]
