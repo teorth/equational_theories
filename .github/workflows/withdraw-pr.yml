@@ -6,6 +6,7 @@ on:
 
 jobs:
   withdraw_pr:
+    if: contains(github.event.comment.body, 'withdraw PR')
     runs-on: ubuntu-latest
 
     steps:
