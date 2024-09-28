@@ -13,19 +13,11 @@ jobs:
       if: contains(github.event.comment.body, 'disclaim')
       run: echo "Comment contains 'disclaim'. Proceeding with the unassignment."
 
-    - name: Get issue details
-      id: issue
-      run: |
-        curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }} > issue.json
-        cat issue.json
-      continue-on-error: true
-
     - name: Check if the commenter is assigned to the issue
       id: check_assignee
       run: |
         COMMENTER="${{ github.event.comment.user.login }}"
-        ASSIGNED=$(jq --arg user "$COMMENTER" '.assignees[]?.login | select(. == $user)' issue.json)
+        ASSIGNED=$(echo "${{ toJson(github.event.issue.assignees) }}" | jq --arg user "$COMMENTER" '.[]?.login | select(. == $user)')
         if [ -z "$ASSIGNED" ]; then
           echo "not_assigned=true" >> $GITHUB_ENV
         else
