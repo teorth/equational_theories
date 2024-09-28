@@ -185,6 +185,30 @@ theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equatio
   dsimp [hG] at h
   linarith
 
+theorem Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation42 G := by
+  let a : Type := Fin 2
+  let hG : Magma a := { op := fun _ x ↦ x }
+  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
+  by_contra h
+  specialize h 0 1 0
+  simp [hG] at h
+
+theorem Equation5_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation43 G := by
+  let a : Type := Fin 2
+  let hG : Magma a := { op := fun _ x ↦ x }
+  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
+  by_contra h
+  specialize h 0 1
+  simp [hG] at h
+
+theorem Equation5_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation4513 G := by
+  let a : Type := Fin 2
+  let hG : Magma a := { op := fun _ x ↦ x }
+  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
+  by_contra h
+  specialize h 0 0 0 1
+  simp [hG] at h
+
 theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation43 G := by
   let hG : Magma Nat := { op := fun x _ ↦ x }
   refine ⟨ℕ, hG, fun _ _ _ ↦ rfl, ?_⟩
