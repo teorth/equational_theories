@@ -38,9 +38,10 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            const core = require('@actions/core');
             const issueNumber = parseInt('${{ steps.parse_comment.outputs.issue_number }}');
             const commenter = '${{ github.event.comment.user.login }}';
-            const { data: issue } = await github.issues.get({
+            const { data: issue } = await octokit.rest.issues.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber,
@@ -57,9 +58,9 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const prNumber = ${{ github.event.issue.number }};
             const issueNumber = parseInt('${{ steps.parse_comment.outputs.issue_number }}');
-            const { data: pr } = await github.pulls.get({
+            const prNumber = ${{ github.event.issue.number }};
+            const { data: pr } = await octokit.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: prNumber,
@@ -68,7 +69,7 @@ jobs:
             const fixText = `Fixes #${issueNumber}`;
             if (!prBody.includes(fixText)) {
               prBody += `\n\n${fixText}`;
-              await github.pulls.update({
+              await octokit.rest.pulls.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 pull_number: prNumber,
