@@ -13,9 +13,12 @@ jobs:
         run: |
           if [[ -z "${{ github.event.issue.pull_request }}" ]]; then
             echo "This comment is not on a PR. Exiting."
-            exit 1
-          fi
+            echo "is_pr=false" >> $GITHUB_OUTPUT
+          else
+            echo "This comment is on a PR."
+            echo "is_pr=true" >> $GITHUB_OUTPUT
       - name: Parse Comment for Issue Number
+        if: steps.check_pr.outputs.is_pr == 'true'
         id: parse_comment
         shell: bash
         run: |
@@ -27,6 +30,7 @@ jobs:
             echo "Comment does not match the required pattern."
             exit 1
       - name: Verify Issue Assignment
+        if: steps.check_pr.outputs.is_pr == 'true'
         id: check_assignee
         uses: actions/github-script@v6
         with:
@@ -46,7 +50,7 @@ jobs:
               console.log(`User ${commenter} is NOT assigned to issue #${issueNumber}.`);
             }
       - name: Link PR to Issue
-        if: steps.check_assignee.outputs.assigned == 'true'
+        if: steps.check_pr.outputs.is_pr == 'true' && steps.check_assignee.outputs.assigned == 'true'
         uses: actions/github-script@v6
         with:
           script: |
@@ -72,6 +76,6 @@ jobs:
               console.log(`PR #${prNumber} already links to issue #${issueNumber}.`);
             }
       - name: Notify User if Not Assigned
-        if: steps.check_assignee.outputs.assigned == 'false'
+        if: steps.check_pr.outputs.is_pr == 'true' && steps.check_assignee.outputs.assigned == 'false'
         run: |
           echo "User is not assigned to issue #${{ steps.parse_comment.outputs.issue_number }}. No action taken."
