@@ -42,10 +42,7 @@ theorem EquationKis_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equati
   simp only [↓reduceIte, PNat.pow_coe, PNat.val_ofNat]
   have t1 (y : ℕ+) : 2 ^ (y : ℕ) ≠ y := by
     apply_fun PNat.val
-    simp only [PNat.pow_coe, PNat.val_ofNat, ne_eq]
-    apply ne_of_gt
-    apply Nat.lt_pow_self
-    decide
+    simp [ne_of_gt, Nat.lt_pow_self]
   have t3 (y : ℕ+) (n : ℕ) : (2 : ℕ+) ^ (y : ℕ) ≠ 3^n := by
     apply_fun PNat.val
     simp only [PNat.pow_coe, PNat.val_ofNat, ne_eq]
@@ -71,7 +68,7 @@ theorem EquationKis_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equati
   by_cases hx : x = 1
   · simp only [hx, ↓reduceIte, PNat.val_ofNat, PNat.ofNat_inj, OfNat.ofNat_ne_one, ne_eq,
     Nat.succ_ne_self, not_false_eq_true, padicValNat_primes, pow_zero]
-    rw [eq_comm, ite_eq_else]
+    rw [if_neg]
     intro nh
     split_ifs at nh
     · absurd nh
