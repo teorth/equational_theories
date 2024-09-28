@@ -7,53 +7,71 @@ on:
 jobs:
   propose_pr:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Check if the comment is on a pull request
-      id: check_pull_request
-      run: |
-        if [[ -z "${{ github.event.issue.pull_request }}" ]]; then
-          echo "This is not a pull request comment."
-          exit 0
-        fi
-
-    - name: Check if the comment contains "propose PR"
-      if: contains(github.event.comment.body, 'propose PR')
-      run: echo "Comment contains 'propose PR'. Proceeding with the validation."
-
-    - name: Extract PR and issue number from comment
-      id: extract_numbers
-      run: |
-        PR_NUMBER=$(echo "${{ github.event.comment.body }}" | grep -oP '(?<=propose PR #)\d+')
-        ISSUE_NUMBER=$(echo "${{ github.event.comment.body }}" | grep -oP '(?<=#)\d+')
-        echo "pr_number=$PR_NUMBER" >> $GITHUB_ENV
-        echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_ENV
-
-    - name: Get issue details
-      id: issue
-      run: |
-        curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        https://api.github.com/repos/${{ github.repository }}/issues/${{ env.issue_number }} > issue.json
-        cat issue.json
-
-    - name: Check if the commenter is assigned to the issue
-      id: check_assignee
-      run: |
-        COMMENTER="${{ github.event.comment.user.login }}"
-        ASSIGNED=$(jq --arg user "$COMMENTER" '.assignees[]?.login | select(. == $user)' issue.json)
-        if [ -z "$ASSIGNED" ]; then
-          echo "not_assigned=true" >> $GITHUB_ENV
-        else
-          echo "not_assigned=false" >> $GITHUB_ENV
-        fi
-
-    - name: Add PR to resolve the issue
-      if: env.not_assigned == 'false'
-      run: |
-        curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        -d "{\"body\": \"This PR resolves issue #${{ env.issue_number }}.\n\n${{ github.event.comment.user.login }} has proposed this PR.\"}" \
-        https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.pr_number }}
-
-    - name: Log the result
-      if: env.not_assigned == 'true'
-      run: echo "User is not assigned to this issue. No PR linked."
+      - name: Check if Comment is on a PR
+        id: check_pr
+        run: |
+          if [[ -z "${{ github.event.issue.pull_request }}" ]]; then
+            echo "This comment is not on a PR. Exiting."
+            exit 1
+          fi
+      - name: Parse Comment for Issue Number
+        id: parse_comment
+        shell: bash
+        run: |
+          echo "Comment body: ${{ github.event.comment.body }}"
+          if [[ "${{ github.event.comment.body }}" =~ propose\ PR\ \#([0-9]+) ]]; then
+            echo "Issue number found: ${BASH_REMATCH[1]}"
+            echo "issue_number=${BASH_REMATCH[1]}" >> $GITHUB_OUTPUT
+          else
+            echo "Comment does not match the required pattern."
+            exit 1
+      - name: Verify Issue Assignment
+        id: check_assignee
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issueNumber = parseInt('${{ steps.parse_comment.outputs.issue_number }}');
+            const commenter = '${{ github.event.comment.user.login }}';
+            const { data: issue } = await github.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+            });
+            const isAssigned = issue.assignees.some(assignee => assignee.login === commenter);
+            core.setOutput('assigned', isAssigned);
+            if (isAssigned) {
+              console.log(`User ${commenter} is assigned to issue #${issueNumber}.`);
+            } else {
+              console.log(`User ${commenter} is NOT assigned to issue #${issueNumber}.`);
+            }
+      - name: Link PR to Issue
+        if: steps.check_assignee.outputs.assigned == 'true'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = ${{ github.event.issue.number }};
+            const issueNumber = parseInt('${{ steps.parse_comment.outputs.issue_number }}');
+            const { data: pr } = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+            });
+            let prBody = pr.body || '';
+            const fixText = `Fixes #${issueNumber}`;
+            if (!prBody.includes(fixText)) {
+              prBody += `\n\n${fixText}`;
+              await github.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                body: prBody,
+              });
+              console.log(`Updated PR #${prNumber} to link to issue #${issueNumber}.`);
+            } else {
+              console.log(`PR #${prNumber} already links to issue #${issueNumber}.`);
+            }
+      - name: Notify User if Not Assigned
+        if: steps.check_assignee.outputs.assigned == 'false'
+        run: |
+          echo "User is not assigned to issue #${{ steps.parse_comment.outputs.issue_number }}. No action taken."
