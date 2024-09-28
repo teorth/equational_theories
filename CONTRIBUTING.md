@@ -59,7 +59,11 @@ Contributions to the blueprint will pass through continuous integration (CI) che
 
 ## Scripts
 
-Contributions in programming languages other than Lean are very welcome; the code and data for such contributions can be placed in [this directory](scripts).  It would probably be a good idea to announce such scripts on the [Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational) for feedback and review.
+Contributions in programming languages other than Lean are very welcome; the code for such contributions can be placed in [this directory](scripts).  It would probably be a good idea to announce such scripts on the [Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational) for feedback and review.
+
+## Data
+
+Output from code that is not Lean proofs (or `proof_wanted` claims in Lean) can be placed in the [data directory](data).
 
 ## Automated Proofs
 
