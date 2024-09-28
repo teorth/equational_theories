@@ -90,7 +90,7 @@ jobs:
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "{ node(id: \\"PVT_kwHOAAMKjM4Ao-Sa\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name id } ... on ProjectV2IterationField { name id } ... on ProjectV2TextField { name id } } } } } }"
+          "query": "{ node(id: \\"PVT_kwHOAAMKjM4Ao-Sa\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name id } ... on ProjectV2IterationField { name id } } } } } }"
         }
         EOF
         )
