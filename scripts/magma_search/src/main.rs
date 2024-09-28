@@ -161,6 +161,14 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
             .map_err(|e| e.to_string())?;
         Ok(())
     };
+    let wait = |terminal: &mut DefaultTerminal, message: &mut String| -> Result<(), String> {
+        if args.debug {
+            message.push_str("Press any key to continue...\n");
+            draw(terminal, &message)?;
+            event::read().map_err(|e| e.to_string())?;
+        }
+        Ok(())
+    };
 
     // load db
     message.clear();
@@ -200,10 +208,7 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
         draw(&mut terminal, &message)?;
     }
 
-    // wait to begin
-    if args.debug {
-        event::read().map_err(|e| e.to_string())?;
-    }
+    wait(&mut terminal, &mut message)?;
 
     // search
     let mut steps = 0;
@@ -280,9 +285,11 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
     let db = &*db.read().map_err(|e| e.to_string())?;
     let db_content =
         ron::ser::to_string_pretty(db, Default::default()).map_err(|e| e.to_string())?;
-    message.push_str(&format!("Writing DB to {}...", args.db));
+    message.push_str(&format!("Writing DB to {}...\n", args.db));
     draw(&mut terminal, &message)?;
     std::fs::write(args.db.as_str(), db_content).map_err(|e| e.to_string())?;
+
+    wait(&mut terminal, &mut message)?;
 
     Ok(())
 }
