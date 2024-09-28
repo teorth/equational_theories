@@ -9,11 +9,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if the comment contains "disclaim"
-      if: contains(github.event.comment.body, 'disclaim')
-      run: echo "Comment contains 'disclaim'. Proceeding with the unassignment."
+    - name: Check if the comment contains exactly "disclaim"
+      id: check_disclaim
+      run: |
+        if [[ "${{ github.event.comment.body }}" =~ ^disclaim$ ]]; then
+          echo "exact_disclaim=true" >> $GITHUB_ENV
+        else
+          echo "exact_disclaim=false" >> $GITHUB_ENV
+        fi
 
     - name: Get issue details
+      if: env.exact_disclaim == 'true'
       id: issue
       run: |
         curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -22,6 +28,7 @@ jobs:
       continue-on-error: true
 
     - name: Check if the commenter is assigned to the issue
+      if: env.exact_disclaim == 'true'
       id: check_assignee
       run: |
         COMMENTER="${{ github.event.comment.user.login }}"
@@ -33,12 +40,16 @@ jobs:
         fi
 
     - name: Remove the user from the assignees
-      if: env.not_assigned == 'false'
+      if: env.exact_disclaim == 'true' && env.not_assigned == 'false'
       run: |
         curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         -d '{"assignees":["${{ github.event.comment.user.login }}"]}' \
         https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/assignees
 
     - name: Log the unassignment result
-      if: env.not_assigned == 'true'
-      run: echo "The user was not assigned to the issue, so no action was taken."
+      if: env.exact_disclaim == 'true' && env.not_assigned == 'false'
+      run: echo "User ${{ github.event.comment.user.login }} has been unassigned from the issue."
+
+    - name: Log no action result
+      if: env.exact_disclaim == 'false'
+      run: echo "The comment does not contain exactly the word 'disclaim', no action taken."
