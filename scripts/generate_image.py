@@ -5,8 +5,8 @@ Example usage:
 
 ```sh
 $ pip install pillow
-$ python scripts/generate_image.py equational_theories/Basic.lean --close --filter
-$ open equational_theories/Basic.png
+$ python scripts/generate_image.py equational_theories/Subgraph.lean --close --filter
+$ open equational_theories/Subgraph.png
 ```
 """
 

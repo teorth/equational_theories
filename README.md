@@ -13,7 +13,8 @@ Some selected equations are listed [here](https://github.com/teorth/equational_t
 
 Some automatically generated progress:
 - Sep 28, 2024: [85 laws](https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/Constant.lean) have been shown to be equivalent to the constant law [`Equation46`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq46), and [815 laws](https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/Singleton.lean) have been shown to be equivalent to the singleton law [`Equation2`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq2).
-
+- Sep 28, 2024: [18972 implications](https://github.com/teorth/equational_theories/tree/main/equational_theories/Generated/SimpleRewrites/theorems) were established by simple rewrite laws.
+- Sep 28, 2024: [4.2m implication proven by a transitive reduction of 15k theorems](https://github.com/teorth/equational_theories/tree/main/equational_theories/Generated/TrivialBruteforce/theorems) were proven using simple rewrite proof scripts.
 
 Coming soon: statistics on how many implications have been established so far, and visualization tools to explore the implication graph.
 
@@ -40,7 +41,7 @@ Links:
     - [zipperposition](https://github.com/sneeuwballen/zipperposition)
     - [Z3](https://microsoft.github.io/z3guide/docs/logic/intro/)
     - [Knuckledragger](https://github.com/philzook58/knuckledragger)
-    - A [blog post](https://www.philipzucker.com/tao_algebra/) by Philip Zucker testing many of the above provers on a sample implication of this project.
+    - A [blog post](https://www.philipzucker.com/tao_algebra/) by Philip Zucker testing many of the above provers on a [sample implication](https://teorth.github.io/equational_theories/blueprint/sect0003.html#387_implies_43) of this project.
     - ["Guided Equality Saturation"](https://dl.acm.org/doi/10.1145/3632900), Thomas Kœhler, Andrés Goens, Siddharth Bhat, Tobias Grosser, Phil Trinder, Michel Steuwer, Jan 5, 2024.
     - ["Rewrite Rule Inference Using Equality Saturation"](https://arxiv.org/abs/2108.10436), Chandrakana Nandi, Max Willsey, Amy Zhu, Yisu Remy Wang, Brett Saiki, Adam Anderson, Adriana Schulz, Dan Grossman, Zachary Tatlock, 23 Aug, 2021.
 - Other tools
