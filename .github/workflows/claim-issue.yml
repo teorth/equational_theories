@@ -13,31 +13,20 @@ jobs:
       if: contains(github.event.comment.body, 'claim')
       run: echo "Comment contains 'claim'. Proceeding with the assignment."
 
-    - name: Get issue details
-      id: issue
-      run: |
-        curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }} > issue.json
-        cat issue.json
-      continue-on-error: true
-
     - name: Check if issue is already assigned
       id: check_assignee
       run: |
-        ASSIGNEES=$(jq '.assignees | length' issue.json)
-        if [ "$ASSIGNEES" -gt 0 ]; then
-          echo "assigned=true" >> $GITHUB_ENV
-        else
-          echo "assigned=false" >> $GITHUB_ENV
+        ASSIGNEES_COUNT=$(echo "${{ toJson(github.event.issue.assignees) }}" | jq length)
+        if [ "$ASSIGNEES_COUNT" -gt 0 ]; then
+          echo "Issue is already assigned."
+          exit 0
         fi
 
     - name: Assign the issue to the commenter
-      if: env.assigned == 'false'
       run: |
         curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         -d '{"assignees":["${{ github.event.comment.user.login }}"]}' \
         https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
 
     - name: Log the assignment result
-      if: env.assigned == 'true'
-      run: echo "Issue is already assigned to someone."
+      run: echo "Issue successfully assigned to ${{ github.event.comment.user.login }}."
