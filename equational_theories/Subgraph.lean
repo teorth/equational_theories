@@ -127,7 +127,8 @@ theorem Equation42_implies_Equation38 (G: Type*) [Magma G] (h: Equation42 G) : E
   intro x y
   rw [h x x y]
 
-proof_wanted Equation46_implies_Equation40 (G: Type*) [Magma G] (_: Equation46 G) : Equation40 G
+theorem Equation46_implies_Equation40 (G: Type*) [Magma G] (h: Equation46 G) : Equation40 G :=
+  fun x y ↦ h x x y y
 
 theorem Equation46_implies_Equation41 (G: Type*) [Magma G] (h: Equation46 G) : Equation41 G :=
   fun _ _ _ => h _ _ _ _
