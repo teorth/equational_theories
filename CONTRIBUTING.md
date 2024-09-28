@@ -29,6 +29,7 @@ In addition to these files, contributors are welcome to add additional lean file
 
 Contributions to the Lean codebase will pass through continuous integration (CI) checks that ensure that the Lean code compiles.
 
+At present, the API for magmas only allows for theorems that study a finite number of individual equational laws at a time.  We plan to expand the API to also allow one to establish metatheorems about entire classes of equations.
 
 ## Blueprint
 
