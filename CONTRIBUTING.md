@@ -39,7 +39,7 @@ In addition to these files, contributors are welcome to add additional Lean file
 - The standard form for an implication "Equation X implies Equation Y" is
 `theorem EquationX_implies_EquationY (G: Type*) [Magma G] (h: EquationX G) : EquationY G`
 - The standard form for an anti-implication "Equation X does not imply Equation Y" is `theorem EquationX_not_implies_EquationY : ∃ (G: Type) (_: Magma G), EquationX G ∧ ¬ EquationY G`.
-- You are also encouraged to add `proof_wanted` versions of these theorems, for results that were obtained by hand or by some other automated tool whose output is not in the form of a Lean proof.  If you are creating such `proof_wanted` statements, consider adding a sketch of the proof as a comment in the Lean file.  We can then add tasks (via Github issues) to convert such `proof_wanted` statements into theorems.  (Technical note: to avoid linter warnings, one can replace `h: EquationX G` with `_: EquationX G` in a `proof_wanted` implication.)
+- You are also encouraged to add `conjecture` versions of these theorems, for results that were obtained by hand or by some other automated tool whose output is not in the form of a Lean proof.  If you are creating such `conjecture` statements, consider adding a sketch of the proof as a comment in the Lean file.  We can then add tasks (via Github issues) to convert such `conjecture` statements into theorems.  (Technical note: to avoid linter warnings, one can replace `h: EquationX G` with `_: EquationX G` in a `conjecture` implication.)
 - To establish an equivalence between two Equations X and Y, split it into two implications "Equation X implies Equation Y" and "Equation Y implies Equation X" as above.
 - To avoid collisions, implications and anti-implications should be placed inside a namespace specific to your Lean file.
 - Consider adding a chapter to the blueprint corresponding to the Lean file, which can for instance detail the methodology used to generate the content of that file.
@@ -63,7 +63,7 @@ Contributions in programming languages other than Lean are very welcome; the cod
 
 ## Data
 
-Output from code that is not Lean proofs (or `proof_wanted` claims in Lean) can be placed in the [data directory](data).
+Output from code that is not Lean proofs (or `conjecture` claims in Lean) can be placed in the [data directory](data).
 
 ## Automated Proofs
 
