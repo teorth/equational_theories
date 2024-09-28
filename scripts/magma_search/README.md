@@ -34,14 +34,18 @@ Press `q` to quit.
 
 By default, it will use `db.ron` as the database file.
 
-### TODO
+### Searchers
 
-- [ ] Add a `ModelSearcher`:
+- `TransitivitySearcher`: Simple demo
+- `ModelSearcher`:
   - Choose a small `N`
   - Randomly build a magma model as a `NxN` matrix of naturals `<N`
   - Check the validity of all equations
     - Parition into `(Valid, Invalid)`
   - For all `(V, I)` pairs, `V -> I` is a non-impliation
+
+### TODO
+
 - [ ] Add an `EggSearcher`:
   - Choose an equation `E`
   - Choose a term `t` from one side of some other equation
@@ -50,4 +54,3 @@ By default, it will use `db.ron` as the database file.
 - [ ] Add a `TransitivitySearcher`
 - [ ] Run all `Searcher`s in parallel
 - [ ] Generate Lean proofs from the results
-- [x] Image generation

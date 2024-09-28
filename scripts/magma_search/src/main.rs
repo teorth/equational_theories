@@ -1,5 +1,5 @@
 use clap::Parser;
-use db::{Database, Equation, Implication, NonImplication, Proof, Term};
+use database::{Database, Equation, Implication, NonImplication, Proof, Term};
 use image::RgbImage;
 use ratatui::{
     crossterm::event::{self, KeyCode, KeyEventKind},
@@ -7,13 +7,13 @@ use ratatui::{
     DefaultTerminal,
 };
 use regex::Regex;
-use searcher::ReflexiveSearcher;
+use searcher::ModelSearcher;
 use searcher::Searcher;
 use std::{sync::RwLock, time::Duration};
 
 // ===========================================================================
 
-pub mod db;
+pub mod database;
 pub mod searcher;
 
 // ===========================================================================
@@ -85,7 +85,8 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
     let mut found_total = db.proofs.values().map(|ps| ps.len()).sum::<usize>();
     let found_goal = db.equations.len() * db.equations.len();
     let db = RwLock::new(db);
-    let mut searcher = ReflexiveSearcher::new();
+    // let mut searcher = ReflexiveSearcher::new();
+    let mut searcher = ModelSearcher::new();
     searcher.init(&db)?;
     loop {
         steps += 1;
