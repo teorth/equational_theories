@@ -3,15 +3,15 @@
 Anyone can contribute to the equational theories project! Specific guidelines for contributions are as follows.
 
 ## The Contributions Process
-The project is coordinated using a [github project dashboard](https://github.com/users/teorth/projects/1)
+The project is coordinated using a [Github project dashboard](https://github.com/users/teorth/projects/1).
 Contributions to the project take the form of Github pull requests that complete tasks. The detailed instructions are as follows:
 
 1. Each task is posted as an issue that appears in the `Unclaimed Outstanding Task` column of the [dashboard](https://github.com/users/teorth/projects/1)
-2. A contributor can lay claim to a task by commenting `claim` in the corresponding github issue. A user who wishes to drop their claim can comment `disclaim` on the issue. 
+2. A contributor can lay claim to a task by commenting `claim` in the corresponding github issue. A user who wishes to drop their claim can comment `disclaim` on the issue.
 3. If there is no other user assigned to the task, the user gets assigned to the issue. A `claim`ed issue moves to the `Claimed Tasks` column of the dashboard.
 4. The user creates a PR to solve the task and then comments "propose PR #xyz" under the issue. If the issue is already assigned to them, their PR is now linked to the issue. The PR now moves to the `In Progress` column of the dashoboard and is shown with the linked PR.
 5. To withdraw their PR, a user can comment `withdraw PR #xyz`. The task moves to the `Claimed Tasks` column and the user remains assigned to the github issue.
-6. Upon finishing the PR, the user may comment `awaiting-review` on the PR which is shown in the task view of the dashboard against the PR. 
+6. Upon finishing the PR, the user may comment `awaiting-review` on the PR which is shown in the task view of the dashboard against the PR.
 Maintainers review and merge it.
 7. Merged tasks move to the `Completed Tasks` column of the dashboard
 
