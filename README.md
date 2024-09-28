@@ -14,6 +14,7 @@ Some selected equations are listed [here](https://github.com/teorth/equational_t
 Some automatically generated progress:
 - Sep 28, 2024: [85 laws](https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/Constant.lean) have been shown to be equivalent to the constant law [`Equation46`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq46), and [815 laws](https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/Singleton.lean) have been shown to be equivalent to the singleton law [`Equation2`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq2).
 - Sep 28, 2024: [18972 implications](https://github.com/teorth/equational_theories/tree/main/equational_theories/Generated/SimpleRewrites/theorems) were established by simple rewrite laws.
+- Sep 28, 2024: [4.2m implication proven by a transitive reduction of 15k theorems](https://github.com/teorth/equational_theories/tree/main/equational_theories/Generated/TrivialBruteforce/theorems) were proven using simple rewrite proof scripts.
 
 Coming soon: statistics on how many implications have been established so far, and visualization tools to explore the implication graph.
 
