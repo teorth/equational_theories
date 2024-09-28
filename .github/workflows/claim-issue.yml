@@ -47,12 +47,34 @@ jobs:
       if: env.exact_claim == 'true'
       run: echo "Issue successfully assigned to ${{ github.event.comment.user.login }}."
 
+    - name: Retrieve field options for the project
+      if: env.exact_claim == 'true'
+      id: get_field_options
+      run: |
+        QUERY=$(cat <<EOF
+        {
+          "query": "{ node(id: \\"PROJECT_ID\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name options { id name } } } } } } }"
+        }
+        EOF
+        )
+        curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+        -H "Content-Type: application/json" \
+        --data "$QUERY" \
+        https://api.github.com/graphql
+
+    - name: Find the "Claimed Tasks" option ID
+      if: env.exact_claim == 'true'
+      id: find_claimed_tasks_id
+      run: |
+        CLAIMED_TASKS_ID=$(jq -r '.data.node.fields.nodes[] | select(.name == "Status") | .options[] | select(.name == "Claimed Tasks").id' <field-options.json>)
+        echo "CLAIMED_TASKS_ID=$CLAIMED_TASKS_ID" >> $GITHUB_ENV
+
     - name: Move task to "Claimed Tasks" column
       if: env.exact_claim == 'true'
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "mutation {\\n updateProjectV2ItemFieldValue(input: {\\n projectId: \\"PROJECT_ID\\",\\n itemId: \\"ITEM_ID\\",\\n fieldId: \\"FIELD_ID\\",\\n value: \\"Claimed Tasks\\" }) {\\n clientMutationId \\n }}\\n"
+          "query": "mutation { updateProjectV2ItemFieldValue(input: { projectId: \\"PROJECT_ID\\", itemId: \\"ITEM_ID\\", fieldId: \\"FIELD_ID\\", value: { singleSelectOptionId: \\"$CLAIMED_TASKS_ID\\" } }) { projectV2Item { id } } }"
         }
         EOF
         )
