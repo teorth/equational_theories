@@ -55,7 +55,7 @@ The [blueprint for the project](blueprint) is a human-readable record of the res
 
 Contributors are welcome to make suggestions or additions to the blueprint, whose files can be found [here](blueprint/src/chapter).
 
-Contributions to the blueprint will pass through continuous integration (CI) checks that ensure that the blueprint compiles.  You may first wish to test that the [print version of the blueprint](blueprint/src/print.tex) compiles locally before pushing changes to the blueprint.
+Contributions to the blueprint will pass through continuous integration (CI) checks that ensure that the blueprint compiles.  You may first wish to test that the [print version of the blueprint](blueprint/src/print.tex) compiles locally before pushing changes to the blueprint.  Also, if using the `\lean{}` macro to link to results in the Lean files, make sure that any namespace that the Lean result is stored in is stated.
 
 ## Scripts
 
