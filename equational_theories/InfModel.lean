@@ -7,8 +7,8 @@ abbrev EquationKis (G: Type*) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ y)
 /--
 In a finite model `EquationKis` implies `Equation2`, that the model is a subsingleton.
 -/
-theorem Finite.EquationKis_implies_Equation2 (G : Type*) [Magma G] [Finite G]
-    (h : ∀ (x y z : G), x = (((y ∘ y) ∘ y) ∘ x) ∘ ((y ∘ y) ∘ z)) : Equation2 G := by
+theorem Finite.EquationKis_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : EquationKis G) :
+    Equation2 G := by
   have : ∀ (y z u : G), (y ∘ y) ∘ z = (y ∘ y) ∘ u := by
     intro y
     let f (x : G) := ((y ∘ y) ∘ y) ∘ x
