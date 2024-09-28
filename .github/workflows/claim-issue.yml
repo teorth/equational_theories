@@ -6,6 +6,7 @@ on:
 
 jobs:
   claim_issue:
+    if: github.event.comment.body == 'claim'  # This ensures the workflow only runs if the comment contains exactly 'claim'
     runs-on: ubuntu-latest
 
     steps:
@@ -17,17 +18,7 @@ jobs:
           exit 0
         fi
 
-    - name: Check if the comment contains exactly "claim"
-      id: check_claim
-      run: |
-        if [[ "${{ github.event.comment.body }}" =~ ^claim$ ]]; then
-          echo "exact_claim=true" >> $GITHUB_ENV
-        else
-          echo "exact_claim=false" >> $GITHUB_ENV
-        fi
-
     - name: Check if issue is already assigned
-      if: env.exact_claim == 'true'
       id: check_assignee
       run: |
         ASSIGNEES_COUNT=$(echo "${{ toJson(github.event.issue.assignees) }}" | jq length)
@@ -37,18 +28,15 @@ jobs:
         fi
 
     - name: Assign the issue to the commenter
-      if: env.exact_claim == 'true'
       run: |
         curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         -d '{"assignees":["${{ github.event.comment.user.login }}"]}' \
         https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
 
     - name: Log the assignment result
-      if: env.exact_claim == 'true'
       run: echo "Issue successfully assigned to ${{ github.event.comment.user.login }}."
 
     - name: Retrieve the project ITEM_ID
-      if: env.exact_claim == 'true'
       id: get_item_id
       run: |
         QUERY=$(cat <<EOF
@@ -74,7 +62,6 @@ jobs:
         fi
 
     - name: Retrieve the project FIELD_ID for "Status"
-      if: env.exact_claim == 'true'
       id: get_field_id
       run: |
         QUERY=$(cat <<EOF
@@ -100,7 +87,6 @@ jobs:
         fi
 
     - name: Retrieve the "Claimed Tasks" option ID
-      if: env.exact_claim == 'true'
       id: find_claimed_tasks_id
       run: |
         QUERY=$(cat <<EOF
@@ -126,7 +112,6 @@ jobs:
         fi
 
     - name: Move task to "Claimed Tasks" column
-      if: env.exact_claim == 'true'
       run: |
         QUERY=$(cat <<EOF
         {
@@ -140,9 +125,4 @@ jobs:
         https://api.github.com/graphql
 
     - name: Log the project card movement result
-      if: env.exact_claim == 'true'
       run: echo "Task successfully moved to 'Claimed Tasks' column."
-
-    - name: Log when no exact match is found
-      if: env.exact_claim == 'false'
-      run: echo "The comment does not contain exactly the word 'claim'."
