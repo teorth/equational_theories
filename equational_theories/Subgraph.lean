@@ -1,4 +1,5 @@
 import Mathlib.Data.Nat.Defs
+import Batteries.Util.ProofWanted
 import equational_theories.Equations
 
 /- This is a subproject of the main project to completely describe a small subgraph of the entire implication graph.  Currently we are focusing only on the following equations:
@@ -102,11 +103,19 @@ theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equa
 theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G :=
   fun _ _ _ ↦ by rw [← h]
 
+proof_wanted Equation38_implies_Equation42 (G: Type*) [Magma G] (h: Equation38 G) : Equation42 G
+
+proof_wanted Equation39_implies_Equation42 (G: Type*) [Magma G] (h: Equation39 G) : Equation42 G
+
 theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : Equation40 G :=
   fun _ _ ↦ by rw [h]
 
 theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : Equation46 G :=
   fun _ _ _ _ ↦ by rwa [← h, h]
+
+proof_wanted Equation42_implies_Equation38 (G: Type*) [Magma G] (h: Equation42 G) : Equation38 G
+
+proof_wanted Equation42_implies_Equation39 (G: Type*) [Magma G] (h: Equation42 G) : Equation39 G
 
 theorem Equation46_implies_Equation41 (G: Type*) [Magma G] (h: Equation46 G) : Equation41 G :=
   fun _ _ _ => h _ _ _ _
