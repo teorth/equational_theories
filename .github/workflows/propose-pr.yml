@@ -7,79 +7,52 @@ on:
 jobs:
   propose_pr:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check if Comment is on a PR
-        id: check_pr
-        shell: bash
-        run: |
-          if [[ -z "${{ github.event.issue.pull_request }}" ]]; then
-            echo "This comment is not on a PR. Exiting."
-            echo "is_pr=false" >> $GITHUB_OUTPUT
-          else
-            echo "This comment is on a PR."
-            echo "is_pr=true" >> $GITHUB_OUTPUT
-          fi
-      - name: Parse Comment for Issue Number
-        if: steps.check_pr.outputs.is_pr == 'true'
-        id: parse_comment
-        shell: bash
-        run: |
-          echo "Comment body: ${{ github.event.comment.body }}"
-          if [[ "${{ github.event.comment.body }}" =~ propose\ PR\ \#([0-9]+) ]]; then
-            echo "Issue number found: ${BASH_REMATCH[1]}"
-            echo "issue_number=${BASH_REMATCH[1]}" >> $GITHUB_OUTPUT
-          else
-            echo "Comment does not match the required pattern."
-            exit 1
-          fi
-      - name: Verify Issue Assignment
-        if: steps.check_pr.outputs.is_pr == 'true'
-        id: check_assignee
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const core = require('@actions/core');
-            const issueNumber = parseInt('${{ steps.parse_comment.outputs.issue_number }}');
-            const commenter = '${{ github.event.comment.user.login }}';
-            const { data: issue } = await octokit.rest.issues.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber,
-            });
-            const isAssigned = issue.assignees.some(assignee => assignee.login === commenter);
-            core.setOutput('assigned', isAssigned);
-            if (isAssigned) {
-              console.log(`User ${commenter} is assigned to issue #${issueNumber}.`);
-            } else {
-              console.log(`User ${commenter} is NOT assigned to issue #${issueNumber}.`);
-            }
-      - name: Link PR to Issue
-        if: steps.check_pr.outputs.is_pr == 'true' && steps.check_assignee.outputs.assigned == 'true'
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const issueNumber = parseInt('${{ steps.parse_comment.outputs.issue_number }}');
-            const prNumber = ${{ github.event.issue.number }};
-            const { data: pr } = await octokit.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-            });
-            let prBody = pr.body || '';
-            const fixText = `Fixes #${issueNumber}`;
-            if (!prBody.includes(fixText)) {
-              prBody += `\n\n${fixText}`;
-              await octokit.rest.pulls.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: prNumber,
-                body: prBody,
-              });
-              console.log(`Updated PR #${prNumber} to link to issue #${issueNumber}.`);
-            } else {
-              console.log(`PR #${prNumber} already links to issue #${issueNumber}.`);
-            }
-      - name: Notify User if Not Assigned
-        if: steps.check_pr.outputs.is_pr == 'true' && steps.check_assignee.outputs.assigned == 'false'
-        run: |
-          echo "User is not assigned to issue #${{ steps.parse_comment.outputs.issue_number }}. No action taken."
+    - name: Check if the comment contains "propose PR #PR_NUMBER"
+      id: check_propose
+      run: |
+        COMMENT_BODY="${{ github.event.comment.body }}"
+        if [[ "$COMMENT_BODY" =~ propose\ PR\ \#([0-9]+) ]]; then
+          PR_NUMBER="${BASH_REMATCH[1]}"
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_ENV
+        else
+          echo "The comment does not contain a valid 'propose PR #PR_NUMBER' format."
+          exit 0
+        fi
+
+    - name: Get issue details
+      id: get_issue
+      run: |
+        curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }} > issue.json
+        cat issue.json
+      continue-on-error: true
+
+    - name: Check if the commenter is assigned to the issue
+      id: check_assignee
+      run: |
+        COMMENTER="${{ github.event.comment.user.login }}"
+        ASSIGNED=$(jq --arg user "$COMMENTER" '.assignees[]?.login | select(. == $user)' issue.json)
+        if [ -z "$ASSIGNED" ]; then
+          echo "not_assigned=true" >> $GITHUB_ENV
+        else
+          echo "not_assigned=false" >> $GITHUB_ENV
+        fi
+
+    - name: Notify the user if they are not assigned
+      if: env.not_assigned == 'true'
+      run: |
+        echo "User ${{ github.event.comment.user.login }} is not assigned to this issue, exiting."
+        exit 0
+
+    - name: Link PR to the issue
+      if: env.not_assigned == 'false'
+      run: |
+        curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -d '{"body": "Linking PR #${{ env.pr_number }} to this issue."}' \
+        https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments
+
+    - name: Log PR and issue link result
+      if: env.not_assigned == 'false'
+      run: echo "PR #${{ env.pr_number }} has been successfully linked to issue #${{ github.event.issue.number }}."
