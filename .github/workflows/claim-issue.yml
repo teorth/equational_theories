@@ -47,6 +47,32 @@ jobs:
       if: env.exact_claim == 'true'
       run: echo "Issue successfully assigned to ${{ github.event.comment.user.login }}."
 
+    - name: Retrieve the project ITEM_ID
+      if: env.exact_claim == 'true'
+      id: get_item_id
+      run: |
+        QUERY=$(cat <<EOF
+        {
+          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { projectItems(first: 10) { nodes { id } } } } }"
+        }
+        EOF
+        )
+        echo "Sending query: $QUERY"
+
+        RESPONSE=$(curl -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data "$QUERY" https://api.github.com/graphql)
+
+        echo "GraphQL Response: $RESPONSE"
+        ITEM_ID=$(echo "$RESPONSE" | jq -r '.data.repository.issue.projectItems.nodes[0].id')
+
+        if [ -z "$ITEM_ID" ]; then
+          echo "Error: Could not retrieve ITEM_ID"
+          exit 1
+        else
+          echo "ITEM_ID=$ITEM_ID" >> $GITHUB_ENV
+        fi
+
     - name: Retrieve the "Claimed Tasks" option ID
       if: env.exact_claim == 'true'
       id: find_claimed_tasks_id
@@ -78,7 +104,7 @@ jobs:
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "mutation { updateProjectV2ItemFieldValue(input: { projectId: \\"PVT_kwHOAAMKjM4Ao-Sa\\", itemId: \\"ITEM_ID\\", fieldId: \\"FIELD_ID\\", value: { singleSelectOptionId: \\"$CLAIMED_TASKS_ID\\" } }) { projectV2Item { id } } }"
+          "query": "mutation { updateProjectV2ItemFieldValue(input: { projectId: \\"PVT_kwHOAAMKjM4Ao-Sa\\", itemId: \\"$ITEM_ID\\", fieldId: \\"FIELD_ID\\", value: { singleSelectOptionId: \\"$CLAIMED_TASKS_ID\\" } }) { projectV2Item { id } } }"
         }
         EOF
         )
