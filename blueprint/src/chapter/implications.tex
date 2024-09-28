@@ -1,6 +1,6 @@
-\chapter{Implications}
+\chapter{Subgraph implications}
 
-To reduce clutter, trivial or very easy implications will not be displayed here.
+Interesting implications between the subgraph equations in Chapter \ref{subgraph-eq}. To reduce clutter, trivial or very easy implications will not be displayed here.
 
 \begin{theorem}[387 implies 43]\label{387_implies_43}\uses{eq387,eq43}\lean{Subgraph.Equation387_implies_Equation43}\leanok  Definition \ref{eq387} implies Definition \ref{eq43}.
 \end{theorem}
@@ -25,18 +25,3 @@ Also, from two applications of \eqref{387-again} one has
 $$(x \circ x) \circ (y \circ y) = (y \circ y) \circ x = x \circ y.$$
 Thus \eqref{op-idem} simplifies to $x \circ y = y \circ x$, which is Definition \ref{eq43}.
 \end{proof}
-
-\begin{theorem}[7 equivalent to 2]\label{7_equiv_2}\uses{eq2,eq7}\lean{Subgraph.Equation7_implies_Equation2, Subgraph.Equation2_implies_Equation7}\leanok  Definition \ref{eq7} is equivalent to Definition \ref{eq2}.
-\end{theorem}
-
-\begin{proof}\leanok
-  When $x = y * z$, obviously $x = y$ because $x = x * x$ and $y = x * x$. the other way around is trivial.
-\end{proof}
-
-\begin{theorem}[6 equivalent to 2]\label{6_equiv_2}\uses{eq2,eq6}\lean{Subgraph.Equation6_implies_Equation2, Subgraph.Equation2_implies_Equation6}\leanok  Definition \ref{eq6} is equivalent to Definition \ref{eq2}.
-\end{theorem}
-
-\begin{proof}\leanok  Similar to the previous argument.
-\end{proof}
-
-More generally, any equation of the form $x = f(y,z,w,u,v)$ is equivalent to Equation 2 (eventually once we have enough API for Magma relations, we could formalize this general claim rather than establish it on a case by case basis).  It is also trivial that Equation 2 implies every other equation.
