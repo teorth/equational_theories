@@ -106,13 +106,13 @@ theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equa
   fun a _ ↦ by rw [h a a, ← h]
 
 theorem Equation6_implies_Equation3 (G: Type*) [Magma G] (h: Equation6 G) : Equation3 G :=
-  fun a ↦ h a a
+  fun _ ↦ h _ _
 
 theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G :=
   fun a _ ↦ by rw [h a a a, ← h]
 
 theorem Equation7_implies_Equation3 (G: Type*) [Magma G] (h: Equation7 G) : Equation3 G :=
-  fun a ↦ h a a a
+  fun _ ↦ h _ _ _
 
 theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G :=
   fun _ _ _ ↦ by rw [← h]
