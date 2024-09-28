@@ -45,11 +45,14 @@ def parse_proofs_file(file_name):
     # probably a way to get this directly from Lean.
     universe = []
     known_implies, known_not_implies = set(), set()
-    for line in open(file_name):
-        if m := re.match(r'def\s+(Equation\d+)\s+', line):
+    equations_file = os.path.join(os.path.dirname(file_name), "Equations.lean")
+    for line in open(equations_file):
+        if m := re.match(r'abbrev\s+(Equation\d+)\s+', line):
             universe.append(m.group(1))
             known_implies.add((m.group(1), m.group(1)))
-        elif m := re.match(r'theorem\s+.*\[Magma\s+G\]\s*:\s*(Equation\d+)\s*G\s*:=', line):
+
+    for line in open(file_name):
+        if m := re.match(r'theorem\s+.*\[Magma\s+G\]\s*:\s*(Equation\d+)\s*G\s*:=', line):
             for eq in universe:
                 known_implies.add((eq, m.group(1)))
         elif m := re.match(r'theorem\s+.*\[Magma\s+G\]\s*\(.:\s*(Equation\d+)\s+G\)\s*:\s*(Equation\d+)\s+G\s*:=', line):
