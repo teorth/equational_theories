@@ -22,6 +22,11 @@ rev = "main"
 [[lean_lib]]
 name = "equational_theories"
 
+[[lean_exe]]
+name = "extract_implications"
+root = "scripts.extract_implications"
+supportInterpreter = true
+
 [[require]]
 name = "egg"
 git  = "https://github.com/marcusrossel/lean-egg"
