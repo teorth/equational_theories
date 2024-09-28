@@ -1,3 +1,16 @@
+# Given as an input a CSV of "1,2" pairs of implications, this generates their transitive
+# reduction, e.g. the minimal set of implications necessary to prove all of them (e.g. if
+# A->B->C is proven, then A->C does not need to be included.)
+#
+# This implementation uses an algorithm optimized to parsing large cyclic graphs, e.g.
+# condensing the initial graph to an acyclic graph, transitively reducing that, and then
+# uncondensing and transitively reducing that again. Cyclic graphs are otherwise slow to
+# transitively reduce.
+#
+# Note that this implementation is not totally optimal because finding a minimal graph
+# requires finding a hamiltonian cycle (NP) during uncondensing, but in practice this
+# did not appear to be a problem when used with large (~1m implications) data sets.
+
 class Graph
   attr_accessor :adj_list
 

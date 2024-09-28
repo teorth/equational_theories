@@ -1,3 +1,8 @@
+# Given as an input a CSV of "1,2" pairs of implications, this generates their transitive
+# closure, e.g. all of the implications that can be derived from these implications (e.g.
+# A->B->C implies A->C). This algorithm is slow so it should preferably be used with inputs
+# that have been transitively reduced (see scripts/transitive_reduction.rb)
+
 class Graph
   attr_accessor :adj_list
 
