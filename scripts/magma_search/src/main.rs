@@ -1,11 +1,17 @@
 use clap::Parser;
+use image::{Rgb, RgbImage};
 use ratatui::{
-    crossterm::event::{self, KeyCode, KeyEventKind}, layout::Constraint, widgets::{Cell, Paragraph, Row, Table}, DefaultTerminal
+    crossterm::event::{self, KeyCode, KeyEventKind},
+    widgets::Paragraph,
+    DefaultTerminal,
 };
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::{
-    collections::BTreeMap, env::temp_dir, fmt::Display, sync::{Arc, LazyLock, RwLock}, time::Duration
+    collections::BTreeMap,
+    fmt::Display,
+    sync::{LazyLock, RwLock},
+    time::Duration,
 };
 
 // ===========================================================================
@@ -187,7 +193,7 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
     let mut steps = 0;
     let mut found_run = 0;
     let mut found_total = db.proofs.values().map(|ps| ps.len()).sum::<usize>();
-    let found_goal = db.equations.len()*db.equations.len();
+    let found_goal = db.equations.len() * db.equations.len();
     let db = RwLock::new(db);
     let mut searcher = ReflexiveSearcher::new();
     searcher.init(&db)?;
@@ -207,8 +213,10 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
         message.push_str(&format!("- Found this run: {found_run}\n"));
         message.push_str(&format!("- Found total: {found_total}\n"));
         message.push_str(&format!("- Goal: {found_goal}\n"));
-        message.push_str(&format!("- Progress: {:.10}%\n", 100.0 * found_total as f64 / found_goal as f64));
-
+        message.push_str(&format!(
+            "- Progress: {:.10}%\n",
+            100.0 * found_total as f64 / found_goal as f64
+        ));
         draw(&mut terminal, &message)?;
 
         if event::poll(Duration::from_millis(0)).map_err(|e| e.to_string())? {
@@ -220,8 +228,35 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
         }
     }
 
-    // save db
     message.clear();
+
+    if let Some(image) = &args.image {
+        message.push_str(&format!("Generating image {image}...\n"));
+        draw(&mut terminal, &message)?;
+        let db = &*db.read().map_err(|e| e.to_string())?;
+
+        let dim = db.equations.len() as u32;
+        let mut img = RgbImage::new(dim, dim);
+        for (i, eq1) in db.equations.keys().enumerate() {
+            if let Some(proofs) = db.proofs.get(eq1) {
+                for (j, eq2) in db.equations.keys().enumerate() {
+                    if let Some(proofs) = proofs.get(eq2) {
+                        let color = match proofs.first() {
+                            Some(Proof::Implication(Implication::Explanation)) => Rgb([0, 255, 0]),
+                            Some(Proof::Implication(Implication::Reflexivity)) => Rgb([0, 0, 255]),
+                            Some(Proof::Implication(Implication::Transitivity(_, _, _))) => Rgb([0, 255, 255]),
+                            Some(Proof::NonImplication(NonImplication::Model(_))) => Rgb([255, 0, 0]),
+                            None => Rgb([0, 0, 0]),
+                        };
+                        img.get_pixel_mut(i as u32, j as u32).0 = color.0;
+                    }
+                }
+            }
+        }
+        img.save(image).map_err(|e| e.to_string())?;
+    }
+
+    // save db
     message.push_str("Serializing DB...\n");
     draw(&mut terminal, &message)?;
     let db = &*db.read().map_err(|e| e.to_string())?;
@@ -252,6 +287,9 @@ struct Args {
     /// Debug mode
     #[clap(long)]
     debug: bool,
+    /// Generate an image from the database
+    #[clap(long)]
+    image: Option<String>,
 }
 
 fn main() -> Result<(), String> {

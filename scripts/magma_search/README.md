@@ -37,4 +37,4 @@ By default, it will use `db.ron` as the database file.
 - [ ] Add a `TransitivitySearcher`
 - [ ] Run all `Searcher`s in parallel
 - [ ] Generate Lean proofs from the results
-- [ ] Image generation
+- [x] Image generation

@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.5.18", features = ["derive"] }
+image = "0.25.2"
 ratatui = "0.28.1"
 regex = "1.10.6"
 ron = "0.8.1"
