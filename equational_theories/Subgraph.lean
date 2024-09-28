@@ -109,7 +109,11 @@ theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equa
 theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G :=
   fun _ _ _ ↦ by rw [← h]
 
-proof_wanted Equation38_implies_Equation42 (G: Type*) [Magma G] (_: Equation38 G) : Equation42 G
+theorem Equation38_implies_Equation42 (G: Type*) [Magma G] (h: Equation38 G) : Equation42 G := by
+  intro x y z
+  calc
+    x ∘ y = x ∘ x := by rw [h]
+    _ = x ∘ z := by rw [h]
 
 theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : Equation40 G :=
   fun _ _ ↦ by rw [h]
@@ -117,7 +121,9 @@ theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : E
 theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : Equation46 G :=
   fun _ _ _ _ ↦ by rwa [← h, h]
 
-proof_wanted Equation42_implies_Equation38 (G: Type*) [Magma G] (_: Equation42 G) : Equation38 G
+theorem Equation42_implies_Equation38 (G: Type*) [Magma G] (h: Equation42 G) : Equation38 G := by
+  intro x y
+  rw [h x x y]
 
 theorem Equation46_implies_Equation41 (G: Type*) [Magma G] (h: Equation46 G) : Equation41 G :=
   fun _ _ _ => h _ _ _ _
