@@ -47,9 +47,9 @@ jobs:
       if: env.exact_claim == 'true'
       run: echo "Issue successfully assigned to ${{ github.event.comment.user.login }}."
 
-    - name: Retrieve field options for the project
+    - name: Retrieve the "Claimed Tasks" option ID
       if: env.exact_claim == 'true'
-      id: get_field_options
+      id: find_claimed_tasks_id
       run: |
         QUERY=$(cat <<EOF
         {
@@ -57,16 +57,9 @@ jobs:
         }
         EOF
         )
-        curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-        -H "Content-Type: application/json" \
-        --data "$QUERY" \
-        https://api.github.com/graphql
-
-    - name: Find the "Claimed Tasks" option ID
-      if: env.exact_claim == 'true'
-      id: find_claimed_tasks_id
-      run: |
-        CLAIMED_TASKS_ID=$(jq -r '.data.node.fields.nodes[] | select(.name == "Status") | .options[] | select(.name == "Claimed Tasks").id' <field-options.json>)
+        CLAIMED_TASKS_ID=$(curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data "$QUERY" https://api.github.com/graphql | jq -r '.data.node.fields.nodes[] | select(.name == "Status") | .options[] | select(.name == "Claimed Tasks").id')
         echo "CLAIMED_TASKS_ID=$CLAIMED_TASKS_ID" >> $GITHUB_ENV
 
     - name: Move task to "Claimed Tasks" column
