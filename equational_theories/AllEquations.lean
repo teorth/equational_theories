@@ -40,7 +40,7 @@ equation 19 := x = y ∘ (z ∘ x)
 equation 20 := x = y ∘ (z ∘ y)
 equation 21 := x = y ∘ (z ∘ z)
 equation 22 := x = y ∘ (z ∘ w)
-equation 23 := x = (x ∘ x) ∘ x
+-- equation 23 := x = (x ∘ x) ∘ x
 equation 24 := x = (x ∘ x) ∘ y
 equation 25 := x = (x ∘ y) ∘ x
 equation 26 := x = (x ∘ y) ∘ y
@@ -62,7 +62,7 @@ equation 37 := x = (y ∘ z) ∘ w
 -- equation 42 := x ∘ y = x ∘ z
 -- equation 43 := x ∘ y = y ∘ x
 equation 44 := x ∘ y = y ∘ z
-equation 45 := x ∘ y = z ∘ y
+-- equation 45 := x ∘ y = z ∘ y
 -- equation 46 := x ∘ y = z ∘ w
 equation 47 := x = x ∘ (x ∘ (x ∘ x))
 equation 48 := x = x ∘ (x ∘ (x ∘ y))
@@ -4581,7 +4581,7 @@ equation 4560 := x ∘ (y ∘ z) = (w ∘ x) ∘ w
 equation 4561 := x ∘ (y ∘ z) = (w ∘ x) ∘ u
 equation 4562 := x ∘ (y ∘ z) = (w ∘ y) ∘ x
 equation 4563 := x ∘ (y ∘ z) = (w ∘ y) ∘ y
-equation 4564 := x ∘ (y ∘ z) = (w ∘ y) ∘ z
+-- equation 4564 := x ∘ (y ∘ z) = (w ∘ y) ∘ z
 equation 4565 := x ∘ (y ∘ z) = (w ∘ y) ∘ w
 equation 4566 := x ∘ (y ∘ z) = (w ∘ y) ∘ u
 equation 4567 := x ∘ (y ∘ z) = (w ∘ z) ∘ x
@@ -4596,7 +4596,7 @@ equation 4575 := x ∘ (y ∘ z) = (w ∘ w) ∘ w
 equation 4576 := x ∘ (y ∘ z) = (w ∘ w) ∘ u
 equation 4577 := x ∘ (y ∘ z) = (w ∘ u) ∘ x
 equation 4578 := x ∘ (y ∘ z) = (w ∘ u) ∘ y
-equation 4579 := x ∘ (y ∘ z) = (w ∘ u) ∘ z
+-- equation 4579 := x ∘ (y ∘ z) = (w ∘ u) ∘ z
 equation 4580 := x ∘ (y ∘ z) = (w ∘ u) ∘ w
 equation 4581 := x ∘ (y ∘ z) = (w ∘ u) ∘ u
 -- equation 4582 := x ∘ (y ∘ z) = (w ∘ u) ∘ v

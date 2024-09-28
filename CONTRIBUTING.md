@@ -18,7 +18,7 @@ Maintainers review and merge it.
 ### Some Rules and Notes
 1. Please respect the issue claims. If an issue has been assigned to someone, please don't try to work on it simulatenously without discussing with the claimant first. This allows for a coordination process that respects every contributor's time and effort.
 2. Please note that this process is still experimental. As such there are bound to be issues and bugs. We will improve this as we go along. Feedback is welcome on the [Lean Zulip chat channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/)
-3.  Until the process above is automated with enough CI actions, maintainers of the project dashboard and manually handling things. So please be patient with us.
+3.  Until the process above is automated with enough CI actions, maintainers of the project dashboard are manually handling things. So please be patient with us.
 
 ## Discussion
 
@@ -39,7 +39,7 @@ In addition to these files, contributors are welcome to add additional Lean file
 - The standard form for an implication "Equation X implies Equation Y" is
 `theorem EquationX_implies_EquationY (G: Type*) [Magma G] (h: EquationX G) : EquationY G`
 - The standard form for an anti-implication "Equation X does not imply Equation Y" is `theorem EquationX_not_implies_EquationY : ∃ (G: Type) (_: Magma G), EquationX G ∧ ¬ EquationY G`.
-- You are also encouraged to add `proof_wanted` versions of these theorems, for results that were obtained by hand or by some other automated tool whose output is not in the form of a Lean proof.  If you are creating such `proof_wanted` statements, consider adding a sketch of the proof as a comment in the Lean file.  We can then add tasks (via Github issues) to convert such `proof_wanted` statements into theorems.  (Technical note: to avoid linter warnings, one can replace `h: EquationX G` with `_: EquationX G` in a `proof_wanted` implication.)
+- You are also encouraged to add `conjecture` versions of these theorems, for results that were obtained by hand or by some other automated tool whose output is not in the form of a Lean proof.  If you are creating such `conjecture` statements, consider adding a sketch of the proof as a comment in the Lean file.  We can then add tasks (via Github issues) to convert such `conjecture` statements into theorems.  (Technical note: to avoid linter warnings, one can replace `h: EquationX G` with `_: EquationX G` in a `conjecture` implication.)
 - To establish an equivalence between two Equations X and Y, split it into two implications "Equation X implies Equation Y" and "Equation Y implies Equation X" as above.
 - To avoid collisions, implications and anti-implications should be placed inside a namespace specific to your Lean file.
 - Consider adding a chapter to the blueprint corresponding to the Lean file, which can for instance detail the methodology used to generate the content of that file.
@@ -59,7 +59,11 @@ Contributions to the blueprint will pass through continuous integration (CI) che
 
 ## Scripts
 
-Contributions in programming languages other than Lean are very welcome; the code and data for such contributions can be placed in [this directory](scripts).  It would probably be a good idea to announce such scripts on the [Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational) for feedback and review.
+Contributions in programming languages other than Lean are very welcome; the code for such contributions can be placed in [this directory](scripts).  It would probably be a good idea to announce such scripts on the [Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational) for feedback and review.
+
+## Data
+
+Output from code that is not Lean proofs (or `conjecture` claims in Lean) can be placed in the [data directory](data).
 
 ## Automated Proofs
 
@@ -68,6 +72,7 @@ Proofs generated programmatically are also welcome. If you do this, you are enco
 - Then add a single Lean file (e.g., "equational_theories/Generated/MyTechnique.lean") that references all your theorems.
 - Add a README (e.g., "equational_theories/Generated/MyTechnique/README.md") to document how to reproduce your automatically generated theorems (to the extent possible, for randomized algorithms).
 - In [.gitattributes](.gitattributes) add `equational_theories/Generated/MyTechnique.lean linguist-generated` for all automatically generated files.
+- In the file `equational_theories/Generated.lean` add the import line `import equational_theories.Generated.MyTechnique` replacing "MyTechnique" with the name of your folder.
 - Consider adding to the blueprint to explain the automated proof technique used.
 
 ## Images
