@@ -33,7 +33,7 @@ jobs:
         run: |
           curl --request POST \
             --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels \
-            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            --header 'authorization: Bearer ${{ secrets.PAT_TOKEN }}' \
             --header 'Content-Type: application/json' \
             --data '["awaiting-CI"]'
 
@@ -148,5 +148,5 @@ jobs:
         run: |
           curl --request DELETE \
             --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels/awaiting-CI \
-            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            --header 'authorization: Bearer ${{ secrets.PAT_TOKEN }}' \
             --header 'Content-Type: application/json'
