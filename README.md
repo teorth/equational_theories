@@ -13,6 +13,8 @@ Some selected equations are listed [here](https://github.com/teorth/equational_t
 
 Coming soon: statistics on how many implications have been established so far, and visualization tools to explore the implication graph.
 
+For guidelines on how to contribute, see the [CONTRIBUTING.md](https://github.com/teorth/equational_theories/blob/main/CONTRIBUTING.md) file.
+
 Links:
 
 - [Main web page](https://teorth.github.io/equational_theories/)
