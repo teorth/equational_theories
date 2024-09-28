@@ -53,7 +53,7 @@ jobs:
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "{ node(id: \\"PROJECT_ID\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name options { id name } } } } } } }"
+          "query": "{ node(id: \\"PVT_kwHOAAMKjM4Ao-Sa\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name options { id name } } } } } } }"
         }
         EOF
         )
@@ -72,12 +72,13 @@ jobs:
         else
           echo "CLAIMED_TASKS_ID=$CLAIMED_TASKS_ID" >> $GITHUB_ENV
         fi
+
     - name: Move task to "Claimed Tasks" column
       if: env.exact_claim == 'true'
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "mutation { updateProjectV2ItemFieldValue(input: { projectId: \\"PROJECT_ID\\", itemId: \\"ITEM_ID\\", fieldId: \\"FIELD_ID\\", value: { singleSelectOptionId: \\"$CLAIMED_TASKS_ID\\" } }) { projectV2Item { id } } }"
+          "query": "mutation { updateProjectV2ItemFieldValue(input: { projectId: \\"PVT_kwHOAAMKjM4Ao-Sa\\", itemId: \\"ITEM_ID\\", fieldId: \\"FIELD_ID\\", value: { singleSelectOptionId: \\"$CLAIMED_TASKS_ID\\" } }) { projectV2Item { id } } }"
         }
         EOF
         )
