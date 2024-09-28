@@ -4,7 +4,7 @@
 Example usage:
 
 ```sh
-$ python scripts/generate_most_wanted_list.py equational_theories/Basic.lean
+$ python scripts/generate_most_wanted_list.py equational_theories/Subgraph.lean
 $ less most_wanted.md
 ```
 """
@@ -34,10 +34,10 @@ if __name__ == '__main__':
         print('Usage: python generate_most_wanted_list.py <file_name.lean>')
         exit(1)
 
-    
+
     universe, known_implies, known_not_implies = parse_proofs_file(file_name)
     known_implies = close(known_implies)
-    
+
     ascendants = defaultdict(int) # equation -> equations it's implied by
     descendants = defaultdict(int) # equation -> equations it implies
     for a, b in known_implies:
@@ -56,9 +56,8 @@ if __name__ == '__main__':
         # speed things up by not recording explicitly zero-value edges
         if v > 0:
             edge_value[(a,b)] = v
-        
+
     with open('most_wanted.md', 'w+') as fh:
         fh.write(f"# Most Wanted list of implications as of ({datetime.now().strftime('%Y-%m-%d %H:%M:%S')})" + "\n\n")
         for a,b in sorted(edge_value, key=lambda ab:edge_value[ab], reverse=True):
             fh.write(f"* `{a}` -> `{b}` (implied by {ascendants[a]} -> implies {descendants[b]} = {edge_value[(a,b)]})"+'\n')
-
