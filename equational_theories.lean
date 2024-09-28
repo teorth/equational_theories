@@ -1,1 +1,2 @@
-import equational_theories.Basic
+import equational_theories.Subgraph
+import equational_theories.AllEquations
