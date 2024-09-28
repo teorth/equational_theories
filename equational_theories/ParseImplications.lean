@@ -74,7 +74,7 @@ def parseNonimplication (thm_ty : Expr) : MetaM (Option Implication) := do
   | _ => return none
 
 unsafe def generateOutput : IO Output := do
-  let module := `equational_theories.Basic
+  let module := `equational_theories.Subgraph
   searchPathRef.set compile_time_search_path%
 
   withImportModules #[{module}] {} (trustLevel := 1024) fun env =>
