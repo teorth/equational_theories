@@ -70,20 +70,20 @@ abbrev Equation168 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x 
 
 abbrev Equation387 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ x
 
-/-- dual of 4522 -/
-abbrev Equation4378 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = w ∘ (u ∘ z)
-
 /-- The associative law -/
 abbrev Equation4512 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ z
 
 /-- dual of 4564 -/
 abbrev Equation4513 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ y) ∘ w
 
-/-- dual of 4378 -/
+/-- dual of 4579 -/
 abbrev Equation4522 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (x ∘ w) ∘ u
 
 /-- dual of 4513 -/
 abbrev Equation4564 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ y) ∘ z
+
+/-- dual of 4522 -/
+abbrev Equation4579 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ u) ∘ z
 
 /-- all products of three values are the same, regardless bracketing -/
 abbrev Equation4582 (G: Type u) [Magma G] := ∀ x y z w u v: G, x ∘ (y ∘ z) = (w ∘ u) ∘ v
