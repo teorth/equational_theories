@@ -21,9 +21,9 @@ theorem Finite.EquationKis_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h
     obtain ⟨finv, hf⟩ := (Finite.surjective_of_injective this.injective).hasRightInverse
     let fy := finv ((y ∘ y) ∘ y)
     replace hf : ((y ∘ y) ∘ y) ∘ fy = (y ∘ y) ∘ y := hf _
-    have := (h fy y · |>.symm)
+    have := h fy y
     simp only [hf] at this
-    simp [f, this]
+    simp [f, ← this]
   intro x u
   have y := x
   have z := x
