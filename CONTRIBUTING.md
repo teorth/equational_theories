@@ -3,7 +3,7 @@
 Anyone can contribute to the equational theories project! Specific guidelines for contributions are as follows.
 
 ## The Contributions Process
-The project is coordinated using a github project [dashboard](https://github.com/users/teorth/projects/1)
+The project is coordinated using a [github project dashboard](https://github.com/users/teorth/projects/1)
 Contributions to the project take the form of Github pull requests that complete tasks. The detailed instructions are as follows:
 
 1. Each task is posted as an issue that appears in the `Unclaimed Outstanding Task` column of the [dashboard](https://github.com/users/teorth/projects/1)
