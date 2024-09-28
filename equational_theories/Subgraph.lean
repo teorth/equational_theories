@@ -265,7 +265,6 @@ theorem Equation42_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equati
   dsimp [hG] at h
   linarith
 
--- redundant because `3->8` , `46->386`, `386->43`, and `not(46->8)`
 theorem Equation43_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation3 G := by
   let hG : Magma Nat := { op := fun x y ↦ x+y }
   refine ⟨ℕ, hG, fun _ _ ↦ Nat.add_comm _ _, ?_⟩
