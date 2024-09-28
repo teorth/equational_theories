@@ -9,28 +9,74 @@ import equational_theories.Equations
 Implications here should be placed inside the "Subgraph" namespace.
 -/
 
+abbrev GithubId: Type := String
+
+abbrev implies (e e': Equation): Prop :=
+  ∀ (G: Type) [Magma G], (e.interp G) -> (e'.interp G)
+
+class Edge (b: Bool) (e e': Equation): Prop where
+  prf: if b then implies e e' else ¬(implies e e')
+
+set_option synthInstance.checkSynthOrder false
+
+instance Edge.trans_true {e e' e'': Equation}
+  [prf0: Edge true e e'] [prf1: Edge true e' e'']: Edge true e e'' := by
+    sorry
+
+instance Edge.abduct_false0 {e e' e'': Equation}
+  [prf0: Edge false e e''] [prf1: Edge true e e']: Edge false e' e'' := by
+    sorry
+
+instance Edge.abduct_false1 {e e' e'': Equation}
+  [prf0: Edge false e e''] [prf1: Edge true e' e'']: Edge false e e' := by
+    sorry
+
+
+
+inductive Status: Type :=
+| proven
+| disproven
+| wip (workers: List GithubId) {_: workers ≠ []}
+| claimed_proven (claimers: List String)
+| claimed_disproven (claimers: List String)
+| unknown
+
+abbrev Graph: Type := Equation -> Equation -> Status
+
+-- def Graph.interp (g: Graph): Prop := ∀ (e e': Equation),
+--    match g e e' with
+--    | .proven => implies e e'
+--    | .disproven => ¬(implies e e')
+--    | _ => True
+def Graph.valid (g: Graph): Prop := ∀ (e e': Equation),
+   match g e e' with
+   | .proven => Edge true e e'
+   | .disproven => Edge false e e'
+   | _ => True
+
 namespace Subgraph
 
 /- Positive implications -/
+/- instance: (∀ e, Edge true e .e3) where <--- why this doesn't work? -/
+instance (e: Equation): (Edge true e .e1) where
+  prf := fun _ _ _ _ ↦ rfl
 
-theorem Equation1_true (G: Type*) [Magma G] : Equation1 G :=
-  fun _ ↦ rfl
+instance : (Edge true .e2 .e3) where
+  prf := fun _ _ h _ ↦ h _ _
 
-theorem Equation2_implies_Equation3 (G: Type*) [Magma G] (h: Equation2 G) : Equation3 G :=
-  fun _ ↦ h _ _
+instance : (Edge true .e2 .e4) where
+  prf := fun _ _ h _ _ ↦ h _ _
 
-theorem Equation2_implies_Equation4 (G: Type*) [Magma G] (h: Equation2 G) : Equation4 G :=
-  fun _ _ ↦ h _ _
+instance : (Edge true .e2 .e5) where
+  prf := fun _ _ h _ _ ↦ h _ _
 
-theorem Equation2_implies_Equation5 (G: Type*) [Magma G] (h: Equation2 G) : Equation5 G :=
-  fun _ _ ↦ h _ _
+instance : (Edge true .e2 .e6) where
+  prf := fun _ _ h _ _ ↦ h _ _
 
-theorem Equation2_implies_Equation6 (G: Type*) [Magma G] (h: Equation2 G) : Equation6 G :=
-  fun _ _ ↦ h _ _
+instance : (Edge true .e2 .e7) where
+  prf := fun _ _ h _ _ _ ↦ h _ _
 
-theorem Equation2_implies_Equation7 (G: Type*) [Magma G] (h: Equation2 G) : Equation7 G :=
-  fun _ _ _ ↦ h _ _
-
+/-
 theorem Equation2_implies_Equation8 (G: Type*) [Magma G] (h: Equation2 G) : Equation8 G :=
   fun _ ↦ h _ _
 
@@ -154,16 +200,19 @@ theorem Equation4522_implies_Equation4513 (G: Type*) [Magma G] (h: Equation4522 
 
 theorem Equation4582_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4522 G :=
   fun _ _ _ _ _ ↦ h _ _ _ _ _ _
+-/
 
 /- Counterexamples -/
-
-theorem Equation3_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation42 G := by
+instance : Edge false .e3 .e42 where
+prf := by
+  simp
   let hG : Magma Nat := { op := fun _ y ↦ y }
   refine ⟨ℕ, hG, fun _ ↦ rfl, ?_⟩
   by_contra h
   specialize h 0 1 2
   simp [hG] at h
 
+/-
 theorem Equation3_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation4512 G := by
   let hG : Magma Nat := { op := fun x y ↦ if x = y then x else x + 1 }
   refine ⟨ℕ, hG, fun _ ↦ by simp [hG], ?_⟩
@@ -347,6 +396,43 @@ theorem Equation4582_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equati
     specialize h 1 2
     dsimp [hG] at h
     linarith
+-/
 
+/- Below are just to test whether typeclass works -/
+instance : (Edge true .e4 .e40) where
+  prf := by sorry
+
+instance : (Edge true .e3 .e5) where
+  prf := by sorry
+
+instance : (Edge true .e6 .e42) where
+  prf := by sorry
+
+def subgraph: Graph := fun e e' =>
+  match e, e' with
+  | _, .e1 => .proven
+  | .e2, .e3 => .proven
+  | .e2, .e4 => .proven
+  | .e2, .e5 => .proven
+  | .e2, .e6 => .proven
+  | .e2, .e7 => .proven
+  | .e3, .e42 => .disproven
+
+  /- Setup for typeclass tests -/
+  | .e4, .e40 => .proven
+  | .e3, .e5 => .proven
+  | .e6, .e42 => .proven
+  /- Below is automatically derived from .trans_true -/
+  | .e2, .e40 => .proven
+  /- Below is automatically derived from .abduct_false0 -/
+  | .e5, .e42 => .disproven
+  /- Below is automatically derived from .abduct_false1 -/
+  | .e3, .e6 => .disproven
+  | _, _ => .unknown
+
+  theorem subgraph_valid: subgraph.valid := by
+    intro e e'
+    dsimp [subgraph]
+    cases e <;> cases e' <;> simp <;> apply inferInstance
 
 end Subgraph

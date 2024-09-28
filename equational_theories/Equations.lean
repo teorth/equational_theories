@@ -2,44 +2,30 @@ import equational_theories.Magma
 import Mathlib.Tactic
 
 /- List of equational laws being studied -/
+inductive Equation: Type :=
+| e1 | e2 | e3 | e4 | e5 | e6 | e7 | e8 | e38 | e39
+| e40 | e41 | e42 | e43 | e46 | e168 | e387 | e4512 | e4513 | e4522 | e4582
 
-/-- The reflexive law -/
-def Equation1 (G: Type*) [Magma G] := ∀ x : G, x = x
-
-/-- The singleton law -/
-def Equation2 (G: Type*) [Magma G] := ∀ x y : G, x = y
-
-/-- The idempotence law -/
-def Equation3 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ x
-
-/-- The left absorption law -/
-def Equation4 (G: Type*) [Magma G] := ∀ x y : G, x = x ∘ y
-
-/-- The right absorption law -/
-def Equation5 (G: Type*) [Magma G] := ∀ x y : G, x = y ∘ x
-
-@[inherit_doc Equation2]
-def Equation6 (G: Type*) [Magma G] := ∀ x y : G, x = y ∘ y
-
-@[inherit_doc Equation2]
-def Equation7 (G: Type*) [Magma G] := ∀ x y z : G, x = y ∘ z
-
-def Equation8 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ (x ∘ x)
-
-/-- value of multiplication is independent of right argument -/
-def Equation38 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = x ∘ y
-
-/-- value of multiplication is independent of left argument; dual of 38 -/
-def Equation39 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = y ∘ x
-
-/-- all squares are the same -/
-def Equation40 (G: Type*) [Magma G] := ∀ x y : G, x ∘ x = y ∘ y
-
-/-- all products are the same -/
-def Equation41 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ z
-
-@[inherit_doc Equation38]
-def Equation42 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ z
+def Equation.interp (G: Type*) [Magma G] (e: Equation): Prop :=
+  match e with
+  /- The reflexive law -/
+  | .e1 => ∀ x : G, x = x
+  /- The singleton law -/
+  | .e2 => ∀ x y : G, x = y
+  | .e3 => ∀ x : G, x = x ∘ x
+  /- The left absorption law -/
+  | .e4 => ∀ x y : G, x = x ∘ y
+  /- The right absorption law -/
+  | .e5 => ∀ x y : G, x = y ∘ x
+  | .e6 => ∀ x y : G, x = y ∘ y
+  | .e7 => ∀ x y z : G, x = y ∘ z
+  | .e8 => ∀ x : G, x = x ∘ (x ∘ x)
+  | .e38 => ∀ x y : G, x ∘ x = x ∘ y
+  | .e39 => ∀ x y : G, x ∘ x = y ∘ x
+  | .e40 => ∀ x y : G, x ∘ x = y ∘ y
+  | .e41 => ∀ x y z : G, x ∘ x = y ∘ z
+  | .e42 => ∀ x y z : G, x ∘ y = x ∘ z
+  | _ => False
 
 /-- The commutative law -/
 def Equation43 (G: Type*) [Magma G] := ∀ x y : G, x ∘ y = y ∘ x
