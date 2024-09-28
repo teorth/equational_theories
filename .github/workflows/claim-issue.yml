@@ -47,6 +47,24 @@ jobs:
       if: env.exact_claim == 'true'
       run: echo "Issue successfully assigned to ${{ github.event.comment.user.login }}."
 
+    - name: Move task to "Claimed Tasks" column
+      if: env.exact_claim == 'true'
+      run: |
+        QUERY=$(cat <<EOF
+        {
+          "query": "mutation {\\n updateProjectV2ItemFieldValue(input: {\\n projectId: \\"PROJECT_ID\\",\\n itemId: \\"ITEM_ID\\",\\n fieldId: \\"FIELD_ID\\",\\n value: \\"Claimed Tasks\\" }) {\\n clientMutationId \\n }}\\n"
+        }
+        EOF
+        )
+        curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+        -H "Content-Type: application/json" \
+        --data "$QUERY" \
+        https://api.github.com/graphql
+
+    - name: Log the project card movement result
+      if: env.exact_claim == 'true'
+      run: echo "Task successfully moved to 'Claimed Tasks' column."
+
     - name: Log when no exact match is found
       if: env.exact_claim == 'false'
       run: echo "The comment does not contain exactly the word 'claim'."
