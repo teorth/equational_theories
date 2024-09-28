@@ -1,3 +1,3 @@
 import equational_theories.Subgraph
 import equational_theories.AllEquations
-import equational_theories.Generated.SimpleRewrites
+import equational_theories.Generated
