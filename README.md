@@ -25,6 +25,7 @@ Links:
     - [A related MathOverflow post](https://mathoverflow.net/questions/450890/is-there-an-identity-between-the-commutative-identity-and-the-constant-identity), Jul 16 2023.
 - Automated provers for equational theories
     - [Prover9 and Mace4](https://www.cs.unm.edu/~mccune/prover9/)
+        - [aa](https://github.com/gsfk/aa) - a project to use Prover9/Mace4 to brute force axioms for finite mathematical domains
     - [Vampire](https://en.wikipedia.org/wiki/Vampire_(theorem_prover))
     - [eprover](https://github.com/eprover/eprover)
     - [twee](https://nick8325.github.io/twee/)
