@@ -14,12 +14,25 @@ Install Rust: https://www.rust-lang.org/tools/install
 cargo run
 # for help:
 cargo run -- --help
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.21s
+     Running `target/debug/magma_search --help`
+Search for proofs of implication/non-implication in magmas
+
+Usage: magma_search [OPTIONS]
+
+Options:
+      --db <DB>                The name to say hello to [default: db.ron]
+      --equations <EQUATIONS>  Load equations from Lean file
+      --wipe                   Wipe the database before starting
+      --debug                  Debug mode
+      --image <IMAGE>          Generate an image from the database
+  -h, --help                   Print help
+  -V, --version                Print version
 ```
 
 Press `q` to quit.
 
 By default, it will use `db.ron` as the database file.
-
 
 ### TODO
 
