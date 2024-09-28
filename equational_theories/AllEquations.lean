@@ -1,4710 +1,4714 @@
 import equational_theories.Magma
 import equational_theories.Equations
+import equational_theories.EquationsCommand
 
 /-! List of equational laws being studied -/
 
 /-
-This files contains the full list of 4694 Equations under considered, except for the the selected equations in `Equations.lean`, which are imported.  Include this file if you want to establish results concerning the entire list of equations.  If you are proving many results about a specific equation of interest, consider transferring it into `Equations.lean`.
+This files contains the full list of 4694 Equations under considered, except for the the selected
+equations in `Equations.lean`, which are imported.  Include this file if you want to establish
+results concerning the entire list of equations.  If you are proving many results about a specific
+equation of interest, consider transferring it into `Equations.lean`.
 
-The equations are marked as `abbrev` so that tactics like `decide` will look through the definition.
+The equations were enumerated from
+`https://github.com/teorth/equational_theories/blob/main/scripts/extract_implications.lean`, and can
+be described as the set of all equational laws involving at most four magma operations, up to
+symmetry and relabeling.
 
-The equations were enumerated from `https://github.com/teorth/equational_theories/blob/main/scripts/extract_implications.lean`, and can be described as the set of all equational laws involving at most four magma operations, up to symmetry and relabeling.
+See `EquationsCommand.lean` for the definition of the `equation` command.
 -/
 
-universe u
-
-
--- abbrev Equation1 (G: Type u) [Magma G] := ∀ x : G, x = x
--- abbrev Equation2 (G: Type u) [Magma G] := ∀ x y : G, x = y
--- abbrev Equation3 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ x
--- abbrev Equation4 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ y
--- abbrev Equation5 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ x
--- abbrev Equation6 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ y
--- abbrev Equation7 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ z
--- abbrev Equation8 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ (x ∘ x)
-abbrev Equation9 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ y)
-abbrev Equation10 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ x)
-abbrev Equation11 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ y)
-abbrev Equation12 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ z)
-abbrev Equation13 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ x)
-abbrev Equation14 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ y)
-abbrev Equation15 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ z)
-abbrev Equation16 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ x)
-abbrev Equation17 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ y)
-abbrev Equation18 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ z)
-abbrev Equation19 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ x)
-abbrev Equation20 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ y)
-abbrev Equation21 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ z)
-abbrev Equation22 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ w)
-abbrev Equation23 (G: Type u) [Magma G] := ∀ x : G, x = (x ∘ x) ∘ x
-abbrev Equation24 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ y
-abbrev Equation25 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ x
-abbrev Equation26 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ y
-abbrev Equation27 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ z
-abbrev Equation28 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ x
-abbrev Equation29 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ y
-abbrev Equation30 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ z
-abbrev Equation31 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ x
-abbrev Equation32 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ y
-abbrev Equation33 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ z
-abbrev Equation34 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ x
-abbrev Equation35 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ y
-abbrev Equation36 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ z
-abbrev Equation37 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ w
--- abbrev Equation38 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ y
--- abbrev Equation39 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ x
--- abbrev Equation40 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ y
--- abbrev Equation41 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ z
--- abbrev Equation42 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ z
--- abbrev Equation43 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ x
-abbrev Equation44 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ z
-abbrev Equation45 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ y
--- abbrev Equation46 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ w
-abbrev Equation47 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ (x ∘ (x ∘ x))
-abbrev Equation48 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ (x ∘ y))
-abbrev Equation49 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ (y ∘ x))
-abbrev Equation50 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ (y ∘ y))
-abbrev Equation51 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ (y ∘ z))
-abbrev Equation52 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ (x ∘ x))
-abbrev Equation53 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ (x ∘ y))
-abbrev Equation54 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (x ∘ z))
-abbrev Equation55 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ (y ∘ x))
-abbrev Equation56 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ (y ∘ y))
-abbrev Equation57 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (y ∘ z))
-abbrev Equation58 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (z ∘ x))
-abbrev Equation59 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (z ∘ y))
-abbrev Equation60 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (z ∘ z))
-abbrev Equation61 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ (z ∘ w))
-abbrev Equation62 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ (x ∘ x))
-abbrev Equation63 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ (x ∘ y))
-abbrev Equation64 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (x ∘ z))
-abbrev Equation65 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ (y ∘ x))
-abbrev Equation66 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ (y ∘ y))
-abbrev Equation67 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (y ∘ z))
-abbrev Equation68 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (z ∘ x))
-abbrev Equation69 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (z ∘ y))
-abbrev Equation70 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (z ∘ z))
-abbrev Equation71 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ (z ∘ w))
-abbrev Equation72 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ (x ∘ x))
-abbrev Equation73 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ (x ∘ y))
-abbrev Equation74 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (x ∘ z))
-abbrev Equation75 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ (y ∘ x))
-abbrev Equation76 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ (y ∘ y))
-abbrev Equation77 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (y ∘ z))
-abbrev Equation78 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (z ∘ x))
-abbrev Equation79 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (z ∘ y))
-abbrev Equation80 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (z ∘ z))
-abbrev Equation81 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ (z ∘ w))
-abbrev Equation82 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (x ∘ x))
-abbrev Equation83 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (x ∘ y))
-abbrev Equation84 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (x ∘ z))
-abbrev Equation85 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (x ∘ w))
-abbrev Equation86 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (y ∘ x))
-abbrev Equation87 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (y ∘ y))
-abbrev Equation88 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (y ∘ z))
-abbrev Equation89 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (y ∘ w))
-abbrev Equation90 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (z ∘ x))
-abbrev Equation91 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (z ∘ y))
-abbrev Equation92 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (z ∘ z))
-abbrev Equation93 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (z ∘ w))
-abbrev Equation94 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ x))
-abbrev Equation95 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ y))
-abbrev Equation96 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ z))
-abbrev Equation97 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ w))
-abbrev Equation98 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (w ∘ u))
-abbrev Equation99 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ ((x ∘ x) ∘ x)
-abbrev Equation100 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ x) ∘ y)
-abbrev Equation101 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ y) ∘ x)
-abbrev Equation102 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ y) ∘ y)
-abbrev Equation103 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ y) ∘ z)
-abbrev Equation104 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ x) ∘ x)
-abbrev Equation105 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ x) ∘ y)
-abbrev Equation106 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ x) ∘ z)
-abbrev Equation107 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ y) ∘ x)
-abbrev Equation108 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ y) ∘ y)
-abbrev Equation109 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ y) ∘ z)
-abbrev Equation110 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ z) ∘ x)
-abbrev Equation111 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ z) ∘ y)
-abbrev Equation112 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ z) ∘ z)
-abbrev Equation113 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ z) ∘ w)
-abbrev Equation114 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ x) ∘ x)
-abbrev Equation115 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ x) ∘ y)
-abbrev Equation116 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ x) ∘ z)
-abbrev Equation117 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ y) ∘ x)
-abbrev Equation118 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ y) ∘ y)
-abbrev Equation119 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ y) ∘ z)
-abbrev Equation120 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ z) ∘ x)
-abbrev Equation121 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ z) ∘ y)
-abbrev Equation122 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ z) ∘ z)
-abbrev Equation123 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ z) ∘ w)
-abbrev Equation124 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ x) ∘ x)
-abbrev Equation125 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ x) ∘ y)
-abbrev Equation126 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ x) ∘ z)
-abbrev Equation127 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ y) ∘ x)
-abbrev Equation128 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ y) ∘ y)
-abbrev Equation129 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ y) ∘ z)
-abbrev Equation130 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ z) ∘ x)
-abbrev Equation131 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ z) ∘ y)
-abbrev Equation132 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ z) ∘ z)
-abbrev Equation133 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ z) ∘ w)
-abbrev Equation134 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ x) ∘ x)
-abbrev Equation135 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ x) ∘ y)
-abbrev Equation136 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ x) ∘ z)
-abbrev Equation137 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ x) ∘ w)
-abbrev Equation138 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ y) ∘ x)
-abbrev Equation139 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ y) ∘ y)
-abbrev Equation140 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ y) ∘ z)
-abbrev Equation141 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ y) ∘ w)
-abbrev Equation142 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ z) ∘ x)
-abbrev Equation143 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ z) ∘ y)
-abbrev Equation144 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ z) ∘ z)
-abbrev Equation145 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ z) ∘ w)
-abbrev Equation146 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ x)
-abbrev Equation147 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ y)
-abbrev Equation148 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ z)
-abbrev Equation149 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ w)
-abbrev Equation150 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ w) ∘ u)
-abbrev Equation151 (G: Type u) [Magma G] := ∀ x : G, x = (x ∘ x) ∘ (x ∘ x)
-abbrev Equation152 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ (x ∘ y)
-abbrev Equation153 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ (y ∘ x)
-abbrev Equation154 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ (y ∘ y)
-abbrev Equation155 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ (y ∘ z)
-abbrev Equation156 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ (x ∘ x)
-abbrev Equation157 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ (x ∘ y)
-abbrev Equation158 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (x ∘ z)
-abbrev Equation159 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ (y ∘ x)
-abbrev Equation160 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ (y ∘ y)
-abbrev Equation161 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (y ∘ z)
-abbrev Equation162 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z ∘ x)
-abbrev Equation163 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z ∘ y)
-abbrev Equation164 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z ∘ z)
-abbrev Equation165 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ (z ∘ w)
-abbrev Equation166 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (x ∘ x)
-abbrev Equation167 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (x ∘ y)
--- abbrev Equation168 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x ∘ z)
-abbrev Equation169 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (y ∘ x)
-abbrev Equation170 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (y ∘ y)
-abbrev Equation171 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (y ∘ z)
-abbrev Equation172 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (z ∘ x)
-abbrev Equation173 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (z ∘ y)
-abbrev Equation174 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (z ∘ z)
-abbrev Equation175 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ (z ∘ w)
-abbrev Equation176 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ (x ∘ x)
-abbrev Equation177 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ (x ∘ y)
-abbrev Equation178 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (x ∘ z)
-abbrev Equation179 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ (y ∘ x)
-abbrev Equation180 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ (y ∘ y)
-abbrev Equation181 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (y ∘ z)
-abbrev Equation182 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (z ∘ x)
-abbrev Equation183 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (z ∘ y)
-abbrev Equation184 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (z ∘ z)
-abbrev Equation185 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ (z ∘ w)
-abbrev Equation186 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (x ∘ x)
-abbrev Equation187 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (x ∘ y)
-abbrev Equation188 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (x ∘ z)
-abbrev Equation189 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (x ∘ w)
-abbrev Equation190 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ x)
-abbrev Equation191 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ y)
-abbrev Equation192 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ z)
-abbrev Equation193 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (y ∘ w)
-abbrev Equation194 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (z ∘ x)
-abbrev Equation195 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (z ∘ y)
-abbrev Equation196 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (z ∘ z)
-abbrev Equation197 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (z ∘ w)
-abbrev Equation198 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ x)
-abbrev Equation199 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ y)
-abbrev Equation200 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ z)
-abbrev Equation201 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ w)
-abbrev Equation202 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (w ∘ u)
-abbrev Equation203 (G: Type u) [Magma G] := ∀ x : G, x = (x ∘ (x ∘ x)) ∘ x
-abbrev Equation204 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ x)) ∘ y
-abbrev Equation205 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ y)) ∘ x
-abbrev Equation206 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ y)) ∘ y
-abbrev Equation207 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ y)) ∘ z
-abbrev Equation208 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ x)) ∘ x
-abbrev Equation209 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ x)) ∘ y
-abbrev Equation210 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ x)) ∘ z
-abbrev Equation211 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ y)) ∘ x
-abbrev Equation212 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ y)) ∘ y
-abbrev Equation213 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ y)) ∘ z
-abbrev Equation214 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ z)) ∘ x
-abbrev Equation215 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ z)) ∘ y
-abbrev Equation216 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ z)) ∘ z
-abbrev Equation217 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ z)) ∘ w
-abbrev Equation218 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ x)) ∘ x
-abbrev Equation219 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ x)) ∘ y
-abbrev Equation220 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ x)) ∘ z
-abbrev Equation221 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ y)) ∘ x
-abbrev Equation222 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ y)) ∘ y
-abbrev Equation223 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ y)) ∘ z
-abbrev Equation224 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ z)) ∘ x
-abbrev Equation225 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ z)) ∘ y
-abbrev Equation226 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ z)) ∘ z
-abbrev Equation227 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ z)) ∘ w
-abbrev Equation228 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ x)) ∘ x
-abbrev Equation229 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ x)) ∘ y
-abbrev Equation230 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ x)) ∘ z
-abbrev Equation231 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ y)) ∘ x
-abbrev Equation232 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ y)) ∘ y
-abbrev Equation233 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ y)) ∘ z
-abbrev Equation234 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ z)) ∘ x
-abbrev Equation235 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ z)) ∘ y
-abbrev Equation236 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ z)) ∘ z
-abbrev Equation237 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ z)) ∘ w
-abbrev Equation238 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ x)) ∘ x
-abbrev Equation239 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ x)) ∘ y
-abbrev Equation240 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ x)) ∘ z
-abbrev Equation241 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ x)) ∘ w
-abbrev Equation242 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ y)) ∘ x
-abbrev Equation243 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ y)) ∘ y
-abbrev Equation244 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ y)) ∘ z
-abbrev Equation245 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ y)) ∘ w
-abbrev Equation246 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ z)) ∘ x
-abbrev Equation247 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ z)) ∘ y
-abbrev Equation248 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ z)) ∘ z
-abbrev Equation249 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ z)) ∘ w
-abbrev Equation250 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ x
-abbrev Equation251 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ y
-abbrev Equation252 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ z
-abbrev Equation253 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ w
-abbrev Equation254 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ w)) ∘ u
-abbrev Equation255 (G: Type u) [Magma G] := ∀ x : G, x = ((x ∘ x) ∘ x) ∘ x
-abbrev Equation256 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ x) ∘ y
-abbrev Equation257 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ y) ∘ x
-abbrev Equation258 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ y) ∘ y
-abbrev Equation259 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ y) ∘ z
-abbrev Equation260 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ x) ∘ x
-abbrev Equation261 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ x) ∘ y
-abbrev Equation262 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ x) ∘ z
-abbrev Equation263 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ y) ∘ x
-abbrev Equation264 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ y) ∘ y
-abbrev Equation265 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ y) ∘ z
-abbrev Equation266 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ z) ∘ x
-abbrev Equation267 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ z) ∘ y
-abbrev Equation268 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ z) ∘ z
-abbrev Equation269 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ z) ∘ w
-abbrev Equation270 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ x) ∘ x
-abbrev Equation271 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ x) ∘ y
-abbrev Equation272 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ x) ∘ z
-abbrev Equation273 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ y) ∘ x
-abbrev Equation274 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ y) ∘ y
-abbrev Equation275 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ y) ∘ z
-abbrev Equation276 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ z) ∘ x
-abbrev Equation277 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ z) ∘ y
-abbrev Equation278 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ z) ∘ z
-abbrev Equation279 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ z) ∘ w
-abbrev Equation280 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ x) ∘ x
-abbrev Equation281 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ x) ∘ y
-abbrev Equation282 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ x) ∘ z
-abbrev Equation283 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ y) ∘ x
-abbrev Equation284 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ y) ∘ y
-abbrev Equation285 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ y) ∘ z
-abbrev Equation286 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ z) ∘ x
-abbrev Equation287 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ z) ∘ y
-abbrev Equation288 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ z) ∘ z
-abbrev Equation289 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ z) ∘ w
-abbrev Equation290 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ x) ∘ x
-abbrev Equation291 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ x) ∘ y
-abbrev Equation292 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ x) ∘ z
-abbrev Equation293 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ x) ∘ w
-abbrev Equation294 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ y) ∘ x
-abbrev Equation295 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ y) ∘ y
-abbrev Equation296 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ y) ∘ z
-abbrev Equation297 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ y) ∘ w
-abbrev Equation298 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ z) ∘ x
-abbrev Equation299 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ z) ∘ y
-abbrev Equation300 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ z) ∘ z
-abbrev Equation301 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ z) ∘ w
-abbrev Equation302 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ x
-abbrev Equation303 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ y
-abbrev Equation304 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ z
-abbrev Equation305 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ w
-abbrev Equation306 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ w) ∘ u
-abbrev Equation307 (G: Type u) [Magma G] := ∀ x : G, x ∘ x = x ∘ (x ∘ x)
-abbrev Equation308 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ (x ∘ y)
-abbrev Equation309 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ (y ∘ x)
-abbrev Equation310 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ (y ∘ y)
-abbrev Equation311 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ (y ∘ z)
-abbrev Equation312 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ (x ∘ x)
-abbrev Equation313 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ (x ∘ y)
-abbrev Equation314 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (x ∘ z)
-abbrev Equation315 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ (y ∘ x)
-abbrev Equation316 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ (y ∘ y)
-abbrev Equation317 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (y ∘ z)
-abbrev Equation318 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (z ∘ x)
-abbrev Equation319 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (z ∘ y)
-abbrev Equation320 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (z ∘ z)
-abbrev Equation321 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ (z ∘ w)
-abbrev Equation322 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ (x ∘ x)
-abbrev Equation323 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ (x ∘ y)
-abbrev Equation324 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (x ∘ z)
-abbrev Equation325 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ (y ∘ x)
-abbrev Equation326 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ (y ∘ y)
-abbrev Equation327 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (y ∘ z)
-abbrev Equation328 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (z ∘ x)
-abbrev Equation329 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (z ∘ y)
-abbrev Equation330 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (z ∘ z)
-abbrev Equation331 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ (z ∘ w)
-abbrev Equation332 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (x ∘ x)
-abbrev Equation333 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (x ∘ y)
-abbrev Equation334 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (x ∘ z)
-abbrev Equation335 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (y ∘ x)
-abbrev Equation336 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (y ∘ y)
-abbrev Equation337 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (y ∘ z)
-abbrev Equation338 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (z ∘ x)
-abbrev Equation339 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (z ∘ y)
-abbrev Equation340 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (z ∘ z)
-abbrev Equation341 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ (z ∘ w)
-abbrev Equation342 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (x ∘ x)
-abbrev Equation343 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (x ∘ y)
-abbrev Equation344 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (x ∘ z)
-abbrev Equation345 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (x ∘ w)
-abbrev Equation346 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (y ∘ x)
-abbrev Equation347 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (y ∘ y)
-abbrev Equation348 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (y ∘ z)
-abbrev Equation349 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (y ∘ w)
-abbrev Equation350 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (z ∘ x)
-abbrev Equation351 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (z ∘ y)
-abbrev Equation352 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (z ∘ z)
-abbrev Equation353 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (z ∘ w)
-abbrev Equation354 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ x)
-abbrev Equation355 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ y)
-abbrev Equation356 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ z)
-abbrev Equation357 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ w)
-abbrev Equation358 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (w ∘ u)
-abbrev Equation359 (G: Type u) [Magma G] := ∀ x : G, x ∘ x = (x ∘ x) ∘ x
-abbrev Equation360 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ x) ∘ y
-abbrev Equation361 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ y) ∘ x
-abbrev Equation362 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ y) ∘ y
-abbrev Equation363 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ y) ∘ z
-abbrev Equation364 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ x) ∘ x
-abbrev Equation365 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ x) ∘ y
-abbrev Equation366 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ x) ∘ z
-abbrev Equation367 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ y) ∘ x
-abbrev Equation368 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ y) ∘ y
-abbrev Equation369 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ y) ∘ z
-abbrev Equation370 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ z) ∘ x
-abbrev Equation371 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ z) ∘ y
-abbrev Equation372 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ z) ∘ z
-abbrev Equation373 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ z) ∘ w
-abbrev Equation374 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ x) ∘ x
-abbrev Equation375 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ x) ∘ y
-abbrev Equation376 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ x) ∘ z
-abbrev Equation377 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ y) ∘ x
-abbrev Equation378 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ y) ∘ y
-abbrev Equation379 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ y) ∘ z
-abbrev Equation380 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ x
-abbrev Equation381 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ y
-abbrev Equation382 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ z
-abbrev Equation383 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ w
-abbrev Equation384 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ x) ∘ x
-abbrev Equation385 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ x) ∘ y
-abbrev Equation386 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ x) ∘ z
--- abbrev Equation387 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ x
-abbrev Equation388 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ y
-abbrev Equation389 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ y) ∘ z
-abbrev Equation390 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ x
-abbrev Equation391 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ y
-abbrev Equation392 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ z
-abbrev Equation393 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ z) ∘ w
-abbrev Equation394 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ x) ∘ x
-abbrev Equation395 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ x) ∘ y
-abbrev Equation396 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ x) ∘ z
-abbrev Equation397 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ x) ∘ w
-abbrev Equation398 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ y) ∘ x
-abbrev Equation399 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ y) ∘ y
-abbrev Equation400 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ y) ∘ z
-abbrev Equation401 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ y) ∘ w
-abbrev Equation402 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ z) ∘ x
-abbrev Equation403 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ z) ∘ y
-abbrev Equation404 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ z) ∘ z
-abbrev Equation405 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ z) ∘ w
-abbrev Equation406 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ x
-abbrev Equation407 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ y
-abbrev Equation408 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ z
-abbrev Equation409 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ w
-abbrev Equation410 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ w) ∘ u
-abbrev Equation411 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ (x ∘ (x ∘ (x ∘ x)))
-abbrev Equation412 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ (x ∘ (x ∘ y)))
-abbrev Equation413 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ (x ∘ (y ∘ x)))
-abbrev Equation414 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ (x ∘ (y ∘ y)))
-abbrev Equation415 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ (x ∘ (y ∘ z)))
-abbrev Equation416 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ (y ∘ (x ∘ x)))
-abbrev Equation417 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ (y ∘ (x ∘ y)))
-abbrev Equation418 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ (y ∘ (x ∘ z)))
-abbrev Equation419 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ (y ∘ (y ∘ x)))
-abbrev Equation420 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ (y ∘ (y ∘ y)))
-abbrev Equation421 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ (y ∘ (y ∘ z)))
-abbrev Equation422 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ (y ∘ (z ∘ x)))
-abbrev Equation423 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ (y ∘ (z ∘ y)))
-abbrev Equation424 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ (y ∘ (z ∘ z)))
-abbrev Equation425 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (x ∘ (y ∘ (z ∘ w)))
-abbrev Equation426 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ (x ∘ (x ∘ x)))
-abbrev Equation427 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ (x ∘ (x ∘ y)))
-abbrev Equation428 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (x ∘ (x ∘ z)))
-abbrev Equation429 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ (x ∘ (y ∘ x)))
-abbrev Equation430 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ (x ∘ (y ∘ y)))
-abbrev Equation431 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (x ∘ (y ∘ z)))
-abbrev Equation432 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (x ∘ (z ∘ x)))
-abbrev Equation433 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (x ∘ (z ∘ y)))
-abbrev Equation434 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (x ∘ (z ∘ z)))
-abbrev Equation435 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ (x ∘ (z ∘ w)))
-abbrev Equation436 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ (y ∘ (x ∘ x)))
-abbrev Equation437 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ (y ∘ (x ∘ y)))
-abbrev Equation438 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (y ∘ (x ∘ z)))
-abbrev Equation439 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ (y ∘ (y ∘ x)))
-abbrev Equation440 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ (y ∘ (y ∘ y)))
-abbrev Equation441 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (y ∘ (y ∘ z)))
-abbrev Equation442 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (y ∘ (z ∘ x)))
-abbrev Equation443 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (y ∘ (z ∘ y)))
-abbrev Equation444 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (y ∘ (z ∘ z)))
-abbrev Equation445 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ (y ∘ (z ∘ w)))
-abbrev Equation446 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (z ∘ (x ∘ x)))
-abbrev Equation447 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (z ∘ (x ∘ y)))
-abbrev Equation448 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (z ∘ (x ∘ z)))
-abbrev Equation449 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ (z ∘ (x ∘ w)))
-abbrev Equation450 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (z ∘ (y ∘ x)))
-abbrev Equation451 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (z ∘ (y ∘ y)))
-abbrev Equation452 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (z ∘ (y ∘ z)))
-abbrev Equation453 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ (z ∘ (y ∘ w)))
-abbrev Equation454 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (z ∘ (z ∘ x)))
-abbrev Equation455 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (z ∘ (z ∘ y)))
-abbrev Equation456 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ (z ∘ (z ∘ z)))
-abbrev Equation457 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ (z ∘ (z ∘ w)))
-abbrev Equation458 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ (z ∘ (w ∘ x)))
-abbrev Equation459 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ (z ∘ (w ∘ y)))
-abbrev Equation460 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ (z ∘ (w ∘ z)))
-abbrev Equation461 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ (z ∘ (w ∘ w)))
-abbrev Equation462 (G: Type u) [Magma G] := ∀ x y z w u : G, x = x ∘ (y ∘ (z ∘ (w ∘ u)))
-abbrev Equation463 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ (x ∘ (x ∘ x)))
-abbrev Equation464 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ (x ∘ (x ∘ y)))
-abbrev Equation465 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (x ∘ (x ∘ z)))
-abbrev Equation466 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ (x ∘ (y ∘ x)))
-abbrev Equation467 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ (x ∘ (y ∘ y)))
-abbrev Equation468 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (x ∘ (y ∘ z)))
-abbrev Equation469 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (x ∘ (z ∘ x)))
-abbrev Equation470 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (x ∘ (z ∘ y)))
-abbrev Equation471 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (x ∘ (z ∘ z)))
-abbrev Equation472 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ (x ∘ (z ∘ w)))
-abbrev Equation473 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ (y ∘ (x ∘ x)))
-abbrev Equation474 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ (y ∘ (x ∘ y)))
-abbrev Equation475 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (y ∘ (x ∘ z)))
-abbrev Equation476 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ (y ∘ (y ∘ x)))
-abbrev Equation477 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ (y ∘ (y ∘ y)))
-abbrev Equation478 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (y ∘ (y ∘ z)))
-abbrev Equation479 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (y ∘ (z ∘ x)))
-abbrev Equation480 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (y ∘ (z ∘ y)))
-abbrev Equation481 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (y ∘ (z ∘ z)))
-abbrev Equation482 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ (y ∘ (z ∘ w)))
-abbrev Equation483 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (z ∘ (x ∘ x)))
-abbrev Equation484 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (z ∘ (x ∘ y)))
-abbrev Equation485 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (z ∘ (x ∘ z)))
-abbrev Equation486 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ (z ∘ (x ∘ w)))
-abbrev Equation487 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (z ∘ (y ∘ x)))
-abbrev Equation488 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (z ∘ (y ∘ y)))
-abbrev Equation489 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (z ∘ (y ∘ z)))
-abbrev Equation490 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ (z ∘ (y ∘ w)))
-abbrev Equation491 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (z ∘ (z ∘ x)))
-abbrev Equation492 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (z ∘ (z ∘ y)))
-abbrev Equation493 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ (z ∘ (z ∘ z)))
-abbrev Equation494 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ (z ∘ (z ∘ w)))
-abbrev Equation495 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ (z ∘ (w ∘ x)))
-abbrev Equation496 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ (z ∘ (w ∘ y)))
-abbrev Equation497 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ (z ∘ (w ∘ z)))
-abbrev Equation498 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ (z ∘ (w ∘ w)))
-abbrev Equation499 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (x ∘ (z ∘ (w ∘ u)))
-abbrev Equation500 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ (x ∘ (x ∘ x)))
-abbrev Equation501 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ (x ∘ (x ∘ y)))
-abbrev Equation502 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (x ∘ (x ∘ z)))
-abbrev Equation503 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ (x ∘ (y ∘ x)))
-abbrev Equation504 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ (x ∘ (y ∘ y)))
-abbrev Equation505 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (x ∘ (y ∘ z)))
-abbrev Equation506 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (x ∘ (z ∘ x)))
-abbrev Equation507 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (x ∘ (z ∘ y)))
-abbrev Equation508 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (x ∘ (z ∘ z)))
-abbrev Equation509 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ (x ∘ (z ∘ w)))
-abbrev Equation510 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ (y ∘ (x ∘ x)))
-abbrev Equation511 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ (y ∘ (x ∘ y)))
-abbrev Equation512 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (y ∘ (x ∘ z)))
-abbrev Equation513 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ (y ∘ (y ∘ x)))
-abbrev Equation514 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ (y ∘ (y ∘ y)))
-abbrev Equation515 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (y ∘ (y ∘ z)))
-abbrev Equation516 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (y ∘ (z ∘ x)))
-abbrev Equation517 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (y ∘ (z ∘ y)))
-abbrev Equation518 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (y ∘ (z ∘ z)))
-abbrev Equation519 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ (y ∘ (z ∘ w)))
-abbrev Equation520 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (z ∘ (x ∘ x)))
-abbrev Equation521 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (z ∘ (x ∘ y)))
-abbrev Equation522 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (z ∘ (x ∘ z)))
-abbrev Equation523 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ (z ∘ (x ∘ w)))
-abbrev Equation524 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (z ∘ (y ∘ x)))
-abbrev Equation525 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (z ∘ (y ∘ y)))
-abbrev Equation526 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (z ∘ (y ∘ z)))
-abbrev Equation527 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ (z ∘ (y ∘ w)))
-abbrev Equation528 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (z ∘ (z ∘ x)))
-abbrev Equation529 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (z ∘ (z ∘ y)))
-abbrev Equation530 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (z ∘ (z ∘ z)))
-abbrev Equation531 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ (z ∘ (z ∘ w)))
-abbrev Equation532 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ (z ∘ (w ∘ x)))
-abbrev Equation533 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ (z ∘ (w ∘ y)))
-abbrev Equation534 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ (z ∘ (w ∘ z)))
-abbrev Equation535 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ (z ∘ (w ∘ w)))
-abbrev Equation536 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (y ∘ (z ∘ (w ∘ u)))
-abbrev Equation537 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (x ∘ (x ∘ x)))
-abbrev Equation538 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (x ∘ (x ∘ y)))
-abbrev Equation539 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (x ∘ (x ∘ z)))
-abbrev Equation540 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (x ∘ (x ∘ w)))
-abbrev Equation541 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (x ∘ (y ∘ x)))
-abbrev Equation542 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (x ∘ (y ∘ y)))
-abbrev Equation543 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (x ∘ (y ∘ z)))
-abbrev Equation544 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (x ∘ (y ∘ w)))
-abbrev Equation545 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (x ∘ (z ∘ x)))
-abbrev Equation546 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (x ∘ (z ∘ y)))
-abbrev Equation547 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (x ∘ (z ∘ z)))
-abbrev Equation548 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (x ∘ (z ∘ w)))
-abbrev Equation549 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (x ∘ (w ∘ x)))
-abbrev Equation550 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (x ∘ (w ∘ y)))
-abbrev Equation551 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (x ∘ (w ∘ z)))
-abbrev Equation552 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (x ∘ (w ∘ w)))
-abbrev Equation553 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (x ∘ (w ∘ u)))
-abbrev Equation554 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (y ∘ (x ∘ x)))
-abbrev Equation555 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (y ∘ (x ∘ y)))
-abbrev Equation556 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (y ∘ (x ∘ z)))
-abbrev Equation557 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (y ∘ (x ∘ w)))
-abbrev Equation558 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (y ∘ (y ∘ x)))
-abbrev Equation559 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (y ∘ (y ∘ y)))
-abbrev Equation560 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (y ∘ (y ∘ z)))
-abbrev Equation561 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (y ∘ (y ∘ w)))
-abbrev Equation562 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (y ∘ (z ∘ x)))
-abbrev Equation563 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (y ∘ (z ∘ y)))
-abbrev Equation564 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (y ∘ (z ∘ z)))
-abbrev Equation565 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (y ∘ (z ∘ w)))
-abbrev Equation566 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (y ∘ (w ∘ x)))
-abbrev Equation567 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (y ∘ (w ∘ y)))
-abbrev Equation568 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (y ∘ (w ∘ z)))
-abbrev Equation569 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (y ∘ (w ∘ w)))
-abbrev Equation570 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (y ∘ (w ∘ u)))
-abbrev Equation571 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (z ∘ (x ∘ x)))
-abbrev Equation572 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (z ∘ (x ∘ y)))
-abbrev Equation573 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (z ∘ (x ∘ z)))
-abbrev Equation574 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (z ∘ (x ∘ w)))
-abbrev Equation575 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (z ∘ (y ∘ x)))
-abbrev Equation576 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (z ∘ (y ∘ y)))
-abbrev Equation577 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (z ∘ (y ∘ z)))
-abbrev Equation578 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (z ∘ (y ∘ w)))
-abbrev Equation579 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (z ∘ (z ∘ x)))
-abbrev Equation580 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (z ∘ (z ∘ y)))
-abbrev Equation581 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ (z ∘ (z ∘ z)))
-abbrev Equation582 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (z ∘ (z ∘ w)))
-abbrev Equation583 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (z ∘ (w ∘ x)))
-abbrev Equation584 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (z ∘ (w ∘ y)))
-abbrev Equation585 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (z ∘ (w ∘ z)))
-abbrev Equation586 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (z ∘ (w ∘ w)))
-abbrev Equation587 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (z ∘ (w ∘ u)))
-abbrev Equation588 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (x ∘ x)))
-abbrev Equation589 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (x ∘ y)))
-abbrev Equation590 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (x ∘ z)))
-abbrev Equation591 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (x ∘ w)))
-abbrev Equation592 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (w ∘ (x ∘ u)))
-abbrev Equation593 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (y ∘ x)))
-abbrev Equation594 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (y ∘ y)))
-abbrev Equation595 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (y ∘ z)))
-abbrev Equation596 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (y ∘ w)))
-abbrev Equation597 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (w ∘ (y ∘ u)))
-abbrev Equation598 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (z ∘ x)))
-abbrev Equation599 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (z ∘ y)))
-abbrev Equation600 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (z ∘ z)))
-abbrev Equation601 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (z ∘ w)))
-abbrev Equation602 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (w ∘ (z ∘ u)))
-abbrev Equation603 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (w ∘ x)))
-abbrev Equation604 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (w ∘ y)))
-abbrev Equation605 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (w ∘ z)))
-abbrev Equation606 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ (w ∘ (w ∘ w)))
-abbrev Equation607 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (w ∘ (w ∘ u)))
-abbrev Equation608 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (w ∘ (u ∘ x)))
-abbrev Equation609 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (w ∘ (u ∘ y)))
-abbrev Equation610 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (w ∘ (u ∘ z)))
-abbrev Equation611 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (w ∘ (u ∘ w)))
-abbrev Equation612 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ (w ∘ (u ∘ u)))
-abbrev Equation613 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = y ∘ (z ∘ (w ∘ (u ∘ v)))
-abbrev Equation614 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ (x ∘ ((x ∘ x) ∘ x))
-abbrev Equation615 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ ((x ∘ x) ∘ y))
-abbrev Equation616 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ ((x ∘ y) ∘ x))
-abbrev Equation617 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ ((x ∘ y) ∘ y))
-abbrev Equation618 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ ((x ∘ y) ∘ z))
-abbrev Equation619 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ ((y ∘ x) ∘ x))
-abbrev Equation620 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ ((y ∘ x) ∘ y))
-abbrev Equation621 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ ((y ∘ x) ∘ z))
-abbrev Equation622 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ ((y ∘ y) ∘ x))
-abbrev Equation623 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (x ∘ ((y ∘ y) ∘ y))
-abbrev Equation624 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ ((y ∘ y) ∘ z))
-abbrev Equation625 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ ((y ∘ z) ∘ x))
-abbrev Equation626 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ ((y ∘ z) ∘ y))
-abbrev Equation627 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (x ∘ ((y ∘ z) ∘ z))
-abbrev Equation628 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (x ∘ ((y ∘ z) ∘ w))
-abbrev Equation629 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ ((x ∘ x) ∘ x))
-abbrev Equation630 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ ((x ∘ x) ∘ y))
-abbrev Equation631 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((x ∘ x) ∘ z))
-abbrev Equation632 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ ((x ∘ y) ∘ x))
-abbrev Equation633 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ ((x ∘ y) ∘ y))
-abbrev Equation634 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((x ∘ y) ∘ z))
-abbrev Equation635 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((x ∘ z) ∘ x))
-abbrev Equation636 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((x ∘ z) ∘ y))
-abbrev Equation637 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((x ∘ z) ∘ z))
-abbrev Equation638 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ ((x ∘ z) ∘ w))
-abbrev Equation639 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ ((y ∘ x) ∘ x))
-abbrev Equation640 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ ((y ∘ x) ∘ y))
-abbrev Equation641 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((y ∘ x) ∘ z))
-abbrev Equation642 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ ((y ∘ y) ∘ x))
-abbrev Equation643 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (y ∘ ((y ∘ y) ∘ y))
-abbrev Equation644 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((y ∘ y) ∘ z))
-abbrev Equation645 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((y ∘ z) ∘ x))
-abbrev Equation646 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((y ∘ z) ∘ y))
-abbrev Equation647 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((y ∘ z) ∘ z))
-abbrev Equation648 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ ((y ∘ z) ∘ w))
-abbrev Equation649 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((z ∘ x) ∘ x))
-abbrev Equation650 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((z ∘ x) ∘ y))
-abbrev Equation651 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((z ∘ x) ∘ z))
-abbrev Equation652 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ ((z ∘ x) ∘ w))
-abbrev Equation653 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((z ∘ y) ∘ x))
-abbrev Equation654 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((z ∘ y) ∘ y))
-abbrev Equation655 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((z ∘ y) ∘ z))
-abbrev Equation656 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ ((z ∘ y) ∘ w))
-abbrev Equation657 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((z ∘ z) ∘ x))
-abbrev Equation658 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((z ∘ z) ∘ y))
-abbrev Equation659 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (y ∘ ((z ∘ z) ∘ z))
-abbrev Equation660 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ ((z ∘ z) ∘ w))
-abbrev Equation661 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ ((z ∘ w) ∘ x))
-abbrev Equation662 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ ((z ∘ w) ∘ y))
-abbrev Equation663 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ ((z ∘ w) ∘ z))
-abbrev Equation664 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (y ∘ ((z ∘ w) ∘ w))
-abbrev Equation665 (G: Type u) [Magma G] := ∀ x y z w u : G, x = x ∘ (y ∘ ((z ∘ w) ∘ u))
-abbrev Equation666 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ ((x ∘ x) ∘ x))
-abbrev Equation667 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ ((x ∘ x) ∘ y))
-abbrev Equation668 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((x ∘ x) ∘ z))
-abbrev Equation669 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ ((x ∘ y) ∘ x))
-abbrev Equation670 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ ((x ∘ y) ∘ y))
-abbrev Equation671 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((x ∘ y) ∘ z))
-abbrev Equation672 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((x ∘ z) ∘ x))
-abbrev Equation673 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((x ∘ z) ∘ y))
-abbrev Equation674 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((x ∘ z) ∘ z))
-abbrev Equation675 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ ((x ∘ z) ∘ w))
-abbrev Equation676 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ ((y ∘ x) ∘ x))
-abbrev Equation677 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ ((y ∘ x) ∘ y))
-abbrev Equation678 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((y ∘ x) ∘ z))
-abbrev Equation679 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ ((y ∘ y) ∘ x))
-abbrev Equation680 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ ((y ∘ y) ∘ y))
-abbrev Equation681 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((y ∘ y) ∘ z))
-abbrev Equation682 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((y ∘ z) ∘ x))
-abbrev Equation683 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((y ∘ z) ∘ y))
-abbrev Equation684 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((y ∘ z) ∘ z))
-abbrev Equation685 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ ((y ∘ z) ∘ w))
-abbrev Equation686 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((z ∘ x) ∘ x))
-abbrev Equation687 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((z ∘ x) ∘ y))
-abbrev Equation688 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((z ∘ x) ∘ z))
-abbrev Equation689 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ ((z ∘ x) ∘ w))
-abbrev Equation690 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((z ∘ y) ∘ x))
-abbrev Equation691 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((z ∘ y) ∘ y))
-abbrev Equation692 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((z ∘ y) ∘ z))
-abbrev Equation693 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ ((z ∘ y) ∘ w))
-abbrev Equation694 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((z ∘ z) ∘ x))
-abbrev Equation695 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((z ∘ z) ∘ y))
-abbrev Equation696 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (x ∘ ((z ∘ z) ∘ z))
-abbrev Equation697 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ ((z ∘ z) ∘ w))
-abbrev Equation698 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ ((z ∘ w) ∘ x))
-abbrev Equation699 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ ((z ∘ w) ∘ y))
-abbrev Equation700 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ ((z ∘ w) ∘ z))
-abbrev Equation701 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (x ∘ ((z ∘ w) ∘ w))
-abbrev Equation702 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (x ∘ ((z ∘ w) ∘ u))
-abbrev Equation703 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ ((x ∘ x) ∘ x))
-abbrev Equation704 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ ((x ∘ x) ∘ y))
-abbrev Equation705 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((x ∘ x) ∘ z))
-abbrev Equation706 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ ((x ∘ y) ∘ x))
-abbrev Equation707 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ ((x ∘ y) ∘ y))
-abbrev Equation708 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((x ∘ y) ∘ z))
-abbrev Equation709 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((x ∘ z) ∘ x))
-abbrev Equation710 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((x ∘ z) ∘ y))
-abbrev Equation711 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((x ∘ z) ∘ z))
-abbrev Equation712 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ ((x ∘ z) ∘ w))
-abbrev Equation713 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ ((y ∘ x) ∘ x))
-abbrev Equation714 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ ((y ∘ x) ∘ y))
-abbrev Equation715 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((y ∘ x) ∘ z))
-abbrev Equation716 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ ((y ∘ y) ∘ x))
-abbrev Equation717 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ ((y ∘ y) ∘ y))
-abbrev Equation718 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((y ∘ y) ∘ z))
-abbrev Equation719 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((y ∘ z) ∘ x))
-abbrev Equation720 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((y ∘ z) ∘ y))
-abbrev Equation721 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((y ∘ z) ∘ z))
-abbrev Equation722 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ ((y ∘ z) ∘ w))
-abbrev Equation723 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((z ∘ x) ∘ x))
-abbrev Equation724 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((z ∘ x) ∘ y))
-abbrev Equation725 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((z ∘ x) ∘ z))
-abbrev Equation726 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ ((z ∘ x) ∘ w))
-abbrev Equation727 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((z ∘ y) ∘ x))
-abbrev Equation728 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((z ∘ y) ∘ y))
-abbrev Equation729 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((z ∘ y) ∘ z))
-abbrev Equation730 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ ((z ∘ y) ∘ w))
-abbrev Equation731 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((z ∘ z) ∘ x))
-abbrev Equation732 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((z ∘ z) ∘ y))
-abbrev Equation733 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ ((z ∘ z) ∘ z))
-abbrev Equation734 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ ((z ∘ z) ∘ w))
-abbrev Equation735 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ ((z ∘ w) ∘ x))
-abbrev Equation736 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ ((z ∘ w) ∘ y))
-abbrev Equation737 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ ((z ∘ w) ∘ z))
-abbrev Equation738 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (y ∘ ((z ∘ w) ∘ w))
-abbrev Equation739 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (y ∘ ((z ∘ w) ∘ u))
-abbrev Equation740 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((x ∘ x) ∘ x))
-abbrev Equation741 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((x ∘ x) ∘ y))
-abbrev Equation742 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((x ∘ x) ∘ z))
-abbrev Equation743 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((x ∘ x) ∘ w))
-abbrev Equation744 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((x ∘ y) ∘ x))
-abbrev Equation745 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((x ∘ y) ∘ y))
-abbrev Equation746 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((x ∘ y) ∘ z))
-abbrev Equation747 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((x ∘ y) ∘ w))
-abbrev Equation748 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((x ∘ z) ∘ x))
-abbrev Equation749 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((x ∘ z) ∘ y))
-abbrev Equation750 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((x ∘ z) ∘ z))
-abbrev Equation751 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((x ∘ z) ∘ w))
-abbrev Equation752 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((x ∘ w) ∘ x))
-abbrev Equation753 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((x ∘ w) ∘ y))
-abbrev Equation754 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((x ∘ w) ∘ z))
-abbrev Equation755 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((x ∘ w) ∘ w))
-abbrev Equation756 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ ((x ∘ w) ∘ u))
-abbrev Equation757 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((y ∘ x) ∘ x))
-abbrev Equation758 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((y ∘ x) ∘ y))
-abbrev Equation759 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((y ∘ x) ∘ z))
-abbrev Equation760 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((y ∘ x) ∘ w))
-abbrev Equation761 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((y ∘ y) ∘ x))
-abbrev Equation762 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((y ∘ y) ∘ y))
-abbrev Equation763 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((y ∘ y) ∘ z))
-abbrev Equation764 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((y ∘ y) ∘ w))
-abbrev Equation765 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((y ∘ z) ∘ x))
-abbrev Equation766 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((y ∘ z) ∘ y))
-abbrev Equation767 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((y ∘ z) ∘ z))
-abbrev Equation768 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((y ∘ z) ∘ w))
-abbrev Equation769 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((y ∘ w) ∘ x))
-abbrev Equation770 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((y ∘ w) ∘ y))
-abbrev Equation771 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((y ∘ w) ∘ z))
-abbrev Equation772 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((y ∘ w) ∘ w))
-abbrev Equation773 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ ((y ∘ w) ∘ u))
-abbrev Equation774 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((z ∘ x) ∘ x))
-abbrev Equation775 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((z ∘ x) ∘ y))
-abbrev Equation776 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((z ∘ x) ∘ z))
-abbrev Equation777 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((z ∘ x) ∘ w))
-abbrev Equation778 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((z ∘ y) ∘ x))
-abbrev Equation779 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((z ∘ y) ∘ y))
-abbrev Equation780 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((z ∘ y) ∘ z))
-abbrev Equation781 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((z ∘ y) ∘ w))
-abbrev Equation782 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((z ∘ z) ∘ x))
-abbrev Equation783 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((z ∘ z) ∘ y))
-abbrev Equation784 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (z ∘ ((z ∘ z) ∘ z))
-abbrev Equation785 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((z ∘ z) ∘ w))
-abbrev Equation786 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((z ∘ w) ∘ x))
-abbrev Equation787 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((z ∘ w) ∘ y))
-abbrev Equation788 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((z ∘ w) ∘ z))
-abbrev Equation789 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((z ∘ w) ∘ w))
-abbrev Equation790 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ ((z ∘ w) ∘ u))
-abbrev Equation791 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ x) ∘ x))
-abbrev Equation792 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ x) ∘ y))
-abbrev Equation793 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ x) ∘ z))
-abbrev Equation794 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ x) ∘ w))
-abbrev Equation795 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ ((w ∘ x) ∘ u))
-abbrev Equation796 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ y) ∘ x))
-abbrev Equation797 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ y) ∘ y))
-abbrev Equation798 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ y) ∘ z))
-abbrev Equation799 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ y) ∘ w))
-abbrev Equation800 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ ((w ∘ y) ∘ u))
-abbrev Equation801 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ z) ∘ x))
-abbrev Equation802 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ z) ∘ y))
-abbrev Equation803 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ z) ∘ z))
-abbrev Equation804 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ z) ∘ w))
-abbrev Equation805 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ ((w ∘ z) ∘ u))
-abbrev Equation806 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ w) ∘ x))
-abbrev Equation807 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ w) ∘ y))
-abbrev Equation808 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ w) ∘ z))
-abbrev Equation809 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (z ∘ ((w ∘ w) ∘ w))
-abbrev Equation810 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ ((w ∘ w) ∘ u))
-abbrev Equation811 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ ((w ∘ u) ∘ x))
-abbrev Equation812 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ ((w ∘ u) ∘ y))
-abbrev Equation813 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ ((w ∘ u) ∘ z))
-abbrev Equation814 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ ((w ∘ u) ∘ w))
-abbrev Equation815 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (z ∘ ((w ∘ u) ∘ u))
-abbrev Equation816 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = y ∘ (z ∘ ((w ∘ u) ∘ v))
-abbrev Equation817 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ ((x ∘ x) ∘ (x ∘ x))
-abbrev Equation818 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ x) ∘ (x ∘ y))
-abbrev Equation819 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ x) ∘ (y ∘ x))
-abbrev Equation820 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ x) ∘ (y ∘ y))
-abbrev Equation821 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ x) ∘ (y ∘ z))
-abbrev Equation822 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ y) ∘ (x ∘ x))
-abbrev Equation823 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ y) ∘ (x ∘ y))
-abbrev Equation824 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ y) ∘ (x ∘ z))
-abbrev Equation825 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ y) ∘ (y ∘ x))
-abbrev Equation826 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ y) ∘ (y ∘ y))
-abbrev Equation827 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ y) ∘ (y ∘ z))
-abbrev Equation828 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ y) ∘ (z ∘ x))
-abbrev Equation829 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ y) ∘ (z ∘ y))
-abbrev Equation830 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ y) ∘ (z ∘ z))
-abbrev Equation831 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((x ∘ y) ∘ (z ∘ w))
-abbrev Equation832 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ x) ∘ (x ∘ x))
-abbrev Equation833 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ x) ∘ (x ∘ y))
-abbrev Equation834 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ x) ∘ (x ∘ z))
-abbrev Equation835 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ x) ∘ (y ∘ x))
-abbrev Equation836 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ x) ∘ (y ∘ y))
-abbrev Equation837 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ x) ∘ (y ∘ z))
-abbrev Equation838 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ x) ∘ (z ∘ x))
-abbrev Equation839 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ x) ∘ (z ∘ y))
-abbrev Equation840 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ x) ∘ (z ∘ z))
-abbrev Equation841 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ x) ∘ (z ∘ w))
-abbrev Equation842 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ y) ∘ (x ∘ x))
-abbrev Equation843 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ y) ∘ (x ∘ y))
-abbrev Equation844 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ y) ∘ (x ∘ z))
-abbrev Equation845 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ y) ∘ (y ∘ x))
-abbrev Equation846 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ y) ∘ (y ∘ y))
-abbrev Equation847 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ y) ∘ (y ∘ z))
-abbrev Equation848 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ y) ∘ (z ∘ x))
-abbrev Equation849 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ y) ∘ (z ∘ y))
-abbrev Equation850 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ y) ∘ (z ∘ z))
-abbrev Equation851 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ y) ∘ (z ∘ w))
-abbrev Equation852 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ z) ∘ (x ∘ x))
-abbrev Equation853 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ z) ∘ (x ∘ y))
-abbrev Equation854 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ z) ∘ (x ∘ z))
-abbrev Equation855 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ z) ∘ (x ∘ w))
-abbrev Equation856 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ z) ∘ (y ∘ x))
-abbrev Equation857 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ z) ∘ (y ∘ y))
-abbrev Equation858 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ z) ∘ (y ∘ z))
-abbrev Equation859 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ z) ∘ (y ∘ w))
-abbrev Equation860 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ z) ∘ (z ∘ x))
-abbrev Equation861 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ z) ∘ (z ∘ y))
-abbrev Equation862 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ z) ∘ (z ∘ z))
-abbrev Equation863 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ z) ∘ (z ∘ w))
-abbrev Equation864 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ z) ∘ (w ∘ x))
-abbrev Equation865 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ z) ∘ (w ∘ y))
-abbrev Equation866 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ z) ∘ (w ∘ z))
-abbrev Equation867 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ z) ∘ (w ∘ w))
-abbrev Equation868 (G: Type u) [Magma G] := ∀ x y z w u : G, x = x ∘ ((y ∘ z) ∘ (w ∘ u))
-abbrev Equation869 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ x) ∘ (x ∘ x))
-abbrev Equation870 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ x) ∘ (x ∘ y))
-abbrev Equation871 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ x) ∘ (x ∘ z))
-abbrev Equation872 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ x) ∘ (y ∘ x))
-abbrev Equation873 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ x) ∘ (y ∘ y))
-abbrev Equation874 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ x) ∘ (y ∘ z))
-abbrev Equation875 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ x) ∘ (z ∘ x))
-abbrev Equation876 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ x) ∘ (z ∘ y))
-abbrev Equation877 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ x) ∘ (z ∘ z))
-abbrev Equation878 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ x) ∘ (z ∘ w))
-abbrev Equation879 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ y) ∘ (x ∘ x))
-abbrev Equation880 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ y) ∘ (x ∘ y))
-abbrev Equation881 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ y) ∘ (x ∘ z))
-abbrev Equation882 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ y) ∘ (y ∘ x))
-abbrev Equation883 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ y) ∘ (y ∘ y))
-abbrev Equation884 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ y) ∘ (y ∘ z))
-abbrev Equation885 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ y) ∘ (z ∘ x))
-abbrev Equation886 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ y) ∘ (z ∘ y))
-abbrev Equation887 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ y) ∘ (z ∘ z))
-abbrev Equation888 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ y) ∘ (z ∘ w))
-abbrev Equation889 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ z) ∘ (x ∘ x))
-abbrev Equation890 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ z) ∘ (x ∘ y))
-abbrev Equation891 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ z) ∘ (x ∘ z))
-abbrev Equation892 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ z) ∘ (x ∘ w))
-abbrev Equation893 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ z) ∘ (y ∘ x))
-abbrev Equation894 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ z) ∘ (y ∘ y))
-abbrev Equation895 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ z) ∘ (y ∘ z))
-abbrev Equation896 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ z) ∘ (y ∘ w))
-abbrev Equation897 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ z) ∘ (z ∘ x))
-abbrev Equation898 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ z) ∘ (z ∘ y))
-abbrev Equation899 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ z) ∘ (z ∘ z))
-abbrev Equation900 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ z) ∘ (z ∘ w))
-abbrev Equation901 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ z) ∘ (w ∘ x))
-abbrev Equation902 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ z) ∘ (w ∘ y))
-abbrev Equation903 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ z) ∘ (w ∘ z))
-abbrev Equation904 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ z) ∘ (w ∘ w))
-abbrev Equation905 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((x ∘ z) ∘ (w ∘ u))
-abbrev Equation906 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ x) ∘ (x ∘ x))
-abbrev Equation907 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ x) ∘ (x ∘ y))
-abbrev Equation908 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ x) ∘ (x ∘ z))
-abbrev Equation909 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ x) ∘ (y ∘ x))
-abbrev Equation910 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ x) ∘ (y ∘ y))
-abbrev Equation911 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ x) ∘ (y ∘ z))
-abbrev Equation912 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ x) ∘ (z ∘ x))
-abbrev Equation913 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ x) ∘ (z ∘ y))
-abbrev Equation914 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ x) ∘ (z ∘ z))
-abbrev Equation915 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ x) ∘ (z ∘ w))
-abbrev Equation916 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ y) ∘ (x ∘ x))
-abbrev Equation917 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ y) ∘ (x ∘ y))
-abbrev Equation918 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ y) ∘ (x ∘ z))
-abbrev Equation919 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ y) ∘ (y ∘ x))
-abbrev Equation920 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ y) ∘ (y ∘ y))
-abbrev Equation921 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ y) ∘ (y ∘ z))
-abbrev Equation922 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ y) ∘ (z ∘ x))
-abbrev Equation923 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ y) ∘ (z ∘ y))
-abbrev Equation924 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ y) ∘ (z ∘ z))
-abbrev Equation925 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ y) ∘ (z ∘ w))
-abbrev Equation926 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ z) ∘ (x ∘ x))
-abbrev Equation927 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ z) ∘ (x ∘ y))
-abbrev Equation928 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ z) ∘ (x ∘ z))
-abbrev Equation929 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ z) ∘ (x ∘ w))
-abbrev Equation930 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ z) ∘ (y ∘ x))
-abbrev Equation931 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ z) ∘ (y ∘ y))
-abbrev Equation932 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ z) ∘ (y ∘ z))
-abbrev Equation933 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ z) ∘ (y ∘ w))
-abbrev Equation934 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ z) ∘ (z ∘ x))
-abbrev Equation935 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ z) ∘ (z ∘ y))
-abbrev Equation936 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ z) ∘ (z ∘ z))
-abbrev Equation937 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ z) ∘ (z ∘ w))
-abbrev Equation938 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ z) ∘ (w ∘ x))
-abbrev Equation939 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ z) ∘ (w ∘ y))
-abbrev Equation940 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ z) ∘ (w ∘ z))
-abbrev Equation941 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ z) ∘ (w ∘ w))
-abbrev Equation942 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((y ∘ z) ∘ (w ∘ u))
-abbrev Equation943 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ x) ∘ (x ∘ x))
-abbrev Equation944 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ x) ∘ (x ∘ y))
-abbrev Equation945 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ x) ∘ (x ∘ z))
-abbrev Equation946 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ x) ∘ (x ∘ w))
-abbrev Equation947 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ x) ∘ (y ∘ x))
-abbrev Equation948 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ x) ∘ (y ∘ y))
-abbrev Equation949 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ x) ∘ (y ∘ z))
-abbrev Equation950 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ x) ∘ (y ∘ w))
-abbrev Equation951 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ x) ∘ (z ∘ x))
-abbrev Equation952 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ x) ∘ (z ∘ y))
-abbrev Equation953 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ x) ∘ (z ∘ z))
-abbrev Equation954 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ x) ∘ (z ∘ w))
-abbrev Equation955 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ x) ∘ (w ∘ x))
-abbrev Equation956 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ x) ∘ (w ∘ y))
-abbrev Equation957 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ x) ∘ (w ∘ z))
-abbrev Equation958 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ x) ∘ (w ∘ w))
-abbrev Equation959 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ x) ∘ (w ∘ u))
-abbrev Equation960 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ y) ∘ (x ∘ x))
-abbrev Equation961 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ y) ∘ (x ∘ y))
-abbrev Equation962 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ y) ∘ (x ∘ z))
-abbrev Equation963 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ y) ∘ (x ∘ w))
-abbrev Equation964 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ y) ∘ (y ∘ x))
-abbrev Equation965 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ y) ∘ (y ∘ y))
-abbrev Equation966 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ y) ∘ (y ∘ z))
-abbrev Equation967 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ y) ∘ (y ∘ w))
-abbrev Equation968 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ y) ∘ (z ∘ x))
-abbrev Equation969 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ y) ∘ (z ∘ y))
-abbrev Equation970 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ y) ∘ (z ∘ z))
-abbrev Equation971 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ y) ∘ (z ∘ w))
-abbrev Equation972 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ y) ∘ (w ∘ x))
-abbrev Equation973 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ y) ∘ (w ∘ y))
-abbrev Equation974 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ y) ∘ (w ∘ z))
-abbrev Equation975 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ y) ∘ (w ∘ w))
-abbrev Equation976 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ y) ∘ (w ∘ u))
-abbrev Equation977 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ z) ∘ (x ∘ x))
-abbrev Equation978 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ z) ∘ (x ∘ y))
-abbrev Equation979 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ z) ∘ (x ∘ z))
-abbrev Equation980 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ z) ∘ (x ∘ w))
-abbrev Equation981 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ z) ∘ (y ∘ x))
-abbrev Equation982 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ z) ∘ (y ∘ y))
-abbrev Equation983 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ z) ∘ (y ∘ z))
-abbrev Equation984 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ z) ∘ (y ∘ w))
-abbrev Equation985 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ z) ∘ (z ∘ x))
-abbrev Equation986 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ z) ∘ (z ∘ y))
-abbrev Equation987 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ z) ∘ (z ∘ z))
-abbrev Equation988 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ z) ∘ (z ∘ w))
-abbrev Equation989 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ z) ∘ (w ∘ x))
-abbrev Equation990 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ z) ∘ (w ∘ y))
-abbrev Equation991 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ z) ∘ (w ∘ z))
-abbrev Equation992 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ z) ∘ (w ∘ w))
-abbrev Equation993 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ z) ∘ (w ∘ u))
-abbrev Equation994 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (x ∘ x))
-abbrev Equation995 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (x ∘ y))
-abbrev Equation996 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (x ∘ z))
-abbrev Equation997 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (x ∘ w))
-abbrev Equation998 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ w) ∘ (x ∘ u))
-abbrev Equation999 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (y ∘ x))
-abbrev Equation1000 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (y ∘ y))
-abbrev Equation1001 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (y ∘ z))
-abbrev Equation1002 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (y ∘ w))
-abbrev Equation1003 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ w) ∘ (y ∘ u))
-abbrev Equation1004 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (z ∘ x))
-abbrev Equation1005 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (z ∘ y))
-abbrev Equation1006 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (z ∘ z))
-abbrev Equation1007 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (z ∘ w))
-abbrev Equation1008 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ w) ∘ (z ∘ u))
-abbrev Equation1009 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (w ∘ x))
-abbrev Equation1010 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (w ∘ y))
-abbrev Equation1011 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (w ∘ z))
-abbrev Equation1012 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ w) ∘ (w ∘ w))
-abbrev Equation1013 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ w) ∘ (w ∘ u))
-abbrev Equation1014 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ w) ∘ (u ∘ x))
-abbrev Equation1015 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ w) ∘ (u ∘ y))
-abbrev Equation1016 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ w) ∘ (u ∘ z))
-abbrev Equation1017 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ w) ∘ (u ∘ w))
-abbrev Equation1018 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ w) ∘ (u ∘ u))
-abbrev Equation1019 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = y ∘ ((z ∘ w) ∘ (u ∘ v))
-abbrev Equation1020 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ ((x ∘ (x ∘ x)) ∘ x)
-abbrev Equation1021 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ (x ∘ x)) ∘ y)
-abbrev Equation1022 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ (x ∘ y)) ∘ x)
-abbrev Equation1023 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ (x ∘ y)) ∘ y)
-abbrev Equation1024 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ (x ∘ y)) ∘ z)
-abbrev Equation1025 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ (y ∘ x)) ∘ x)
-abbrev Equation1026 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ (y ∘ x)) ∘ y)
-abbrev Equation1027 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ (y ∘ x)) ∘ z)
-abbrev Equation1028 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ (y ∘ y)) ∘ x)
-abbrev Equation1029 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((x ∘ (y ∘ y)) ∘ y)
-abbrev Equation1030 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ (y ∘ y)) ∘ z)
-abbrev Equation1031 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ (y ∘ z)) ∘ x)
-abbrev Equation1032 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ (y ∘ z)) ∘ y)
-abbrev Equation1033 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((x ∘ (y ∘ z)) ∘ z)
-abbrev Equation1034 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((x ∘ (y ∘ z)) ∘ w)
-abbrev Equation1035 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ (x ∘ x)) ∘ x)
-abbrev Equation1036 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ (x ∘ x)) ∘ y)
-abbrev Equation1037 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (x ∘ x)) ∘ z)
-abbrev Equation1038 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ (x ∘ y)) ∘ x)
-abbrev Equation1039 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ (x ∘ y)) ∘ y)
-abbrev Equation1040 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (x ∘ y)) ∘ z)
-abbrev Equation1041 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (x ∘ z)) ∘ x)
-abbrev Equation1042 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (x ∘ z)) ∘ y)
-abbrev Equation1043 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (x ∘ z)) ∘ z)
-abbrev Equation1044 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ (x ∘ z)) ∘ w)
-abbrev Equation1045 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ (y ∘ x)) ∘ x)
-abbrev Equation1046 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ (y ∘ x)) ∘ y)
-abbrev Equation1047 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (y ∘ x)) ∘ z)
-abbrev Equation1048 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ (y ∘ y)) ∘ x)
-abbrev Equation1049 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ ((y ∘ (y ∘ y)) ∘ y)
-abbrev Equation1050 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (y ∘ y)) ∘ z)
-abbrev Equation1051 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (y ∘ z)) ∘ x)
-abbrev Equation1052 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (y ∘ z)) ∘ y)
-abbrev Equation1053 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (y ∘ z)) ∘ z)
-abbrev Equation1054 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ (y ∘ z)) ∘ w)
-abbrev Equation1055 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (z ∘ x)) ∘ x)
-abbrev Equation1056 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (z ∘ x)) ∘ y)
-abbrev Equation1057 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (z ∘ x)) ∘ z)
-abbrev Equation1058 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ (z ∘ x)) ∘ w)
-abbrev Equation1059 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (z ∘ y)) ∘ x)
-abbrev Equation1060 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (z ∘ y)) ∘ y)
-abbrev Equation1061 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (z ∘ y)) ∘ z)
-abbrev Equation1062 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ (z ∘ y)) ∘ w)
-abbrev Equation1063 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (z ∘ z)) ∘ x)
-abbrev Equation1064 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (z ∘ z)) ∘ y)
-abbrev Equation1065 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ ((y ∘ (z ∘ z)) ∘ z)
-abbrev Equation1066 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ (z ∘ z)) ∘ w)
-abbrev Equation1067 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ (z ∘ w)) ∘ x)
-abbrev Equation1068 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ (z ∘ w)) ∘ y)
-abbrev Equation1069 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ (z ∘ w)) ∘ z)
-abbrev Equation1070 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ ((y ∘ (z ∘ w)) ∘ w)
-abbrev Equation1071 (G: Type u) [Magma G] := ∀ x y z w u : G, x = x ∘ ((y ∘ (z ∘ w)) ∘ u)
-abbrev Equation1072 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ (x ∘ x)) ∘ x)
-abbrev Equation1073 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ (x ∘ x)) ∘ y)
-abbrev Equation1074 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (x ∘ x)) ∘ z)
-abbrev Equation1075 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ (x ∘ y)) ∘ x)
-abbrev Equation1076 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ (x ∘ y)) ∘ y)
-abbrev Equation1077 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (x ∘ y)) ∘ z)
-abbrev Equation1078 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (x ∘ z)) ∘ x)
-abbrev Equation1079 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (x ∘ z)) ∘ y)
-abbrev Equation1080 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (x ∘ z)) ∘ z)
-abbrev Equation1081 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ (x ∘ z)) ∘ w)
-abbrev Equation1082 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ (y ∘ x)) ∘ x)
-abbrev Equation1083 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ (y ∘ x)) ∘ y)
-abbrev Equation1084 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (y ∘ x)) ∘ z)
-abbrev Equation1085 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ (y ∘ y)) ∘ x)
-abbrev Equation1086 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((x ∘ (y ∘ y)) ∘ y)
-abbrev Equation1087 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (y ∘ y)) ∘ z)
-abbrev Equation1088 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (y ∘ z)) ∘ x)
-abbrev Equation1089 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (y ∘ z)) ∘ y)
-abbrev Equation1090 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (y ∘ z)) ∘ z)
-abbrev Equation1091 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ (y ∘ z)) ∘ w)
-abbrev Equation1092 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (z ∘ x)) ∘ x)
-abbrev Equation1093 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (z ∘ x)) ∘ y)
-abbrev Equation1094 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (z ∘ x)) ∘ z)
-abbrev Equation1095 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ (z ∘ x)) ∘ w)
-abbrev Equation1096 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (z ∘ y)) ∘ x)
-abbrev Equation1097 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (z ∘ y)) ∘ y)
-abbrev Equation1098 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (z ∘ y)) ∘ z)
-abbrev Equation1099 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ (z ∘ y)) ∘ w)
-abbrev Equation1100 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (z ∘ z)) ∘ x)
-abbrev Equation1101 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (z ∘ z)) ∘ y)
-abbrev Equation1102 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((x ∘ (z ∘ z)) ∘ z)
-abbrev Equation1103 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ (z ∘ z)) ∘ w)
-abbrev Equation1104 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ (z ∘ w)) ∘ x)
-abbrev Equation1105 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ (z ∘ w)) ∘ y)
-abbrev Equation1106 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ (z ∘ w)) ∘ z)
-abbrev Equation1107 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((x ∘ (z ∘ w)) ∘ w)
-abbrev Equation1108 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((x ∘ (z ∘ w)) ∘ u)
-abbrev Equation1109 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ (x ∘ x)) ∘ x)
-abbrev Equation1110 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ (x ∘ x)) ∘ y)
-abbrev Equation1111 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (x ∘ x)) ∘ z)
-abbrev Equation1112 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ (x ∘ y)) ∘ x)
-abbrev Equation1113 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ (x ∘ y)) ∘ y)
-abbrev Equation1114 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (x ∘ y)) ∘ z)
-abbrev Equation1115 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (x ∘ z)) ∘ x)
-abbrev Equation1116 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (x ∘ z)) ∘ y)
-abbrev Equation1117 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (x ∘ z)) ∘ z)
-abbrev Equation1118 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ (x ∘ z)) ∘ w)
-abbrev Equation1119 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ (y ∘ x)) ∘ x)
-abbrev Equation1120 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ (y ∘ x)) ∘ y)
-abbrev Equation1121 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (y ∘ x)) ∘ z)
-abbrev Equation1122 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ (y ∘ y)) ∘ x)
-abbrev Equation1123 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ ((y ∘ (y ∘ y)) ∘ y)
-abbrev Equation1124 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (y ∘ y)) ∘ z)
-abbrev Equation1125 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (y ∘ z)) ∘ x)
-abbrev Equation1126 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (y ∘ z)) ∘ y)
-abbrev Equation1127 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (y ∘ z)) ∘ z)
-abbrev Equation1128 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ (y ∘ z)) ∘ w)
-abbrev Equation1129 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (z ∘ x)) ∘ x)
-abbrev Equation1130 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (z ∘ x)) ∘ y)
-abbrev Equation1131 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (z ∘ x)) ∘ z)
-abbrev Equation1132 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ (z ∘ x)) ∘ w)
-abbrev Equation1133 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (z ∘ y)) ∘ x)
-abbrev Equation1134 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (z ∘ y)) ∘ y)
-abbrev Equation1135 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (z ∘ y)) ∘ z)
-abbrev Equation1136 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ (z ∘ y)) ∘ w)
-abbrev Equation1137 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (z ∘ z)) ∘ x)
-abbrev Equation1138 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (z ∘ z)) ∘ y)
-abbrev Equation1139 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((y ∘ (z ∘ z)) ∘ z)
-abbrev Equation1140 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ (z ∘ z)) ∘ w)
-abbrev Equation1141 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ (z ∘ w)) ∘ x)
-abbrev Equation1142 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ (z ∘ w)) ∘ y)
-abbrev Equation1143 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ (z ∘ w)) ∘ z)
-abbrev Equation1144 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((y ∘ (z ∘ w)) ∘ w)
-abbrev Equation1145 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((y ∘ (z ∘ w)) ∘ u)
-abbrev Equation1146 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (x ∘ x)) ∘ x)
-abbrev Equation1147 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (x ∘ x)) ∘ y)
-abbrev Equation1148 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (x ∘ x)) ∘ z)
-abbrev Equation1149 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (x ∘ x)) ∘ w)
-abbrev Equation1150 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (x ∘ y)) ∘ x)
-abbrev Equation1151 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (x ∘ y)) ∘ y)
-abbrev Equation1152 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (x ∘ y)) ∘ z)
-abbrev Equation1153 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (x ∘ y)) ∘ w)
-abbrev Equation1154 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (x ∘ z)) ∘ x)
-abbrev Equation1155 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (x ∘ z)) ∘ y)
-abbrev Equation1156 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (x ∘ z)) ∘ z)
-abbrev Equation1157 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (x ∘ z)) ∘ w)
-abbrev Equation1158 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (x ∘ w)) ∘ x)
-abbrev Equation1159 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (x ∘ w)) ∘ y)
-abbrev Equation1160 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (x ∘ w)) ∘ z)
-abbrev Equation1161 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (x ∘ w)) ∘ w)
-abbrev Equation1162 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ (x ∘ w)) ∘ u)
-abbrev Equation1163 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (y ∘ x)) ∘ x)
-abbrev Equation1164 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (y ∘ x)) ∘ y)
-abbrev Equation1165 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (y ∘ x)) ∘ z)
-abbrev Equation1166 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (y ∘ x)) ∘ w)
-abbrev Equation1167 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (y ∘ y)) ∘ x)
-abbrev Equation1168 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (y ∘ y)) ∘ y)
-abbrev Equation1169 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (y ∘ y)) ∘ z)
-abbrev Equation1170 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (y ∘ y)) ∘ w)
-abbrev Equation1171 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (y ∘ z)) ∘ x)
-abbrev Equation1172 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (y ∘ z)) ∘ y)
-abbrev Equation1173 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (y ∘ z)) ∘ z)
-abbrev Equation1174 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (y ∘ z)) ∘ w)
-abbrev Equation1175 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (y ∘ w)) ∘ x)
-abbrev Equation1176 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (y ∘ w)) ∘ y)
-abbrev Equation1177 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (y ∘ w)) ∘ z)
-abbrev Equation1178 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (y ∘ w)) ∘ w)
-abbrev Equation1179 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ (y ∘ w)) ∘ u)
-abbrev Equation1180 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (z ∘ x)) ∘ x)
-abbrev Equation1181 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (z ∘ x)) ∘ y)
-abbrev Equation1182 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (z ∘ x)) ∘ z)
-abbrev Equation1183 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (z ∘ x)) ∘ w)
-abbrev Equation1184 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (z ∘ y)) ∘ x)
-abbrev Equation1185 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (z ∘ y)) ∘ y)
-abbrev Equation1186 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (z ∘ y)) ∘ z)
-abbrev Equation1187 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (z ∘ y)) ∘ w)
-abbrev Equation1188 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (z ∘ z)) ∘ x)
-abbrev Equation1189 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (z ∘ z)) ∘ y)
-abbrev Equation1190 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ ((z ∘ (z ∘ z)) ∘ z)
-abbrev Equation1191 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (z ∘ z)) ∘ w)
-abbrev Equation1192 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (z ∘ w)) ∘ x)
-abbrev Equation1193 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (z ∘ w)) ∘ y)
-abbrev Equation1194 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (z ∘ w)) ∘ z)
-abbrev Equation1195 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (z ∘ w)) ∘ w)
-abbrev Equation1196 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ (z ∘ w)) ∘ u)
-abbrev Equation1197 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ x)) ∘ x)
-abbrev Equation1198 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ x)) ∘ y)
-abbrev Equation1199 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ x)) ∘ z)
-abbrev Equation1200 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ x)) ∘ w)
-abbrev Equation1201 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ (w ∘ x)) ∘ u)
-abbrev Equation1202 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ y)) ∘ x)
-abbrev Equation1203 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ y)) ∘ y)
-abbrev Equation1204 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ y)) ∘ z)
-abbrev Equation1205 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ y)) ∘ w)
-abbrev Equation1206 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ (w ∘ y)) ∘ u)
-abbrev Equation1207 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ z)) ∘ x)
-abbrev Equation1208 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ z)) ∘ y)
-abbrev Equation1209 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ z)) ∘ z)
-abbrev Equation1210 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ z)) ∘ w)
-abbrev Equation1211 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ (w ∘ z)) ∘ u)
-abbrev Equation1212 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ w)) ∘ x)
-abbrev Equation1213 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ w)) ∘ y)
-abbrev Equation1214 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ w)) ∘ z)
-abbrev Equation1215 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ ((z ∘ (w ∘ w)) ∘ w)
-abbrev Equation1216 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ (w ∘ w)) ∘ u)
-abbrev Equation1217 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ (w ∘ u)) ∘ x)
-abbrev Equation1218 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ (w ∘ u)) ∘ y)
-abbrev Equation1219 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ (w ∘ u)) ∘ z)
-abbrev Equation1220 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ (w ∘ u)) ∘ w)
-abbrev Equation1221 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ ((z ∘ (w ∘ u)) ∘ u)
-abbrev Equation1222 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = y ∘ ((z ∘ (w ∘ u)) ∘ v)
-abbrev Equation1223 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ (((x ∘ x) ∘ x) ∘ x)
-abbrev Equation1224 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((x ∘ x) ∘ x) ∘ y)
-abbrev Equation1225 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((x ∘ x) ∘ y) ∘ x)
-abbrev Equation1226 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((x ∘ x) ∘ y) ∘ y)
-abbrev Equation1227 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((x ∘ x) ∘ y) ∘ z)
-abbrev Equation1228 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((x ∘ y) ∘ x) ∘ x)
-abbrev Equation1229 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((x ∘ y) ∘ x) ∘ y)
-abbrev Equation1230 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((x ∘ y) ∘ x) ∘ z)
-abbrev Equation1231 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((x ∘ y) ∘ y) ∘ x)
-abbrev Equation1232 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((x ∘ y) ∘ y) ∘ y)
-abbrev Equation1233 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((x ∘ y) ∘ y) ∘ z)
-abbrev Equation1234 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((x ∘ y) ∘ z) ∘ x)
-abbrev Equation1235 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((x ∘ y) ∘ z) ∘ y)
-abbrev Equation1236 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((x ∘ y) ∘ z) ∘ z)
-abbrev Equation1237 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (((x ∘ y) ∘ z) ∘ w)
-abbrev Equation1238 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((y ∘ x) ∘ x) ∘ x)
-abbrev Equation1239 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((y ∘ x) ∘ x) ∘ y)
-abbrev Equation1240 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ x) ∘ x) ∘ z)
-abbrev Equation1241 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((y ∘ x) ∘ y) ∘ x)
-abbrev Equation1242 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((y ∘ x) ∘ y) ∘ y)
-abbrev Equation1243 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ x) ∘ y) ∘ z)
-abbrev Equation1244 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ x) ∘ z) ∘ x)
-abbrev Equation1245 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ x) ∘ z) ∘ y)
-abbrev Equation1246 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ x) ∘ z) ∘ z)
-abbrev Equation1247 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (((y ∘ x) ∘ z) ∘ w)
-abbrev Equation1248 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((y ∘ y) ∘ x) ∘ x)
-abbrev Equation1249 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((y ∘ y) ∘ x) ∘ y)
-abbrev Equation1250 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ y) ∘ x) ∘ z)
-abbrev Equation1251 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((y ∘ y) ∘ y) ∘ x)
-abbrev Equation1252 (G: Type u) [Magma G] := ∀ x y : G, x = x ∘ (((y ∘ y) ∘ y) ∘ y)
-abbrev Equation1253 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ y) ∘ y) ∘ z)
-abbrev Equation1254 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ y) ∘ z) ∘ x)
-abbrev Equation1255 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ y) ∘ z) ∘ y)
-abbrev Equation1256 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ y) ∘ z) ∘ z)
-abbrev Equation1257 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (((y ∘ y) ∘ z) ∘ w)
-abbrev Equation1258 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ z) ∘ x) ∘ x)
-abbrev Equation1259 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ z) ∘ x) ∘ y)
-abbrev Equation1260 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ z) ∘ x) ∘ z)
-abbrev Equation1261 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (((y ∘ z) ∘ x) ∘ w)
-abbrev Equation1262 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ z) ∘ y) ∘ x)
-abbrev Equation1263 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ z) ∘ y) ∘ y)
-abbrev Equation1264 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ z) ∘ y) ∘ z)
-abbrev Equation1265 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (((y ∘ z) ∘ y) ∘ w)
-abbrev Equation1266 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ z) ∘ z) ∘ x)
-abbrev Equation1267 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ z) ∘ z) ∘ y)
-abbrev Equation1268 (G: Type u) [Magma G] := ∀ x y z : G, x = x ∘ (((y ∘ z) ∘ z) ∘ z)
-abbrev Equation1269 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (((y ∘ z) ∘ z) ∘ w)
-abbrev Equation1270 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (((y ∘ z) ∘ w) ∘ x)
-abbrev Equation1271 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (((y ∘ z) ∘ w) ∘ y)
-abbrev Equation1272 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (((y ∘ z) ∘ w) ∘ z)
-abbrev Equation1273 (G: Type u) [Magma G] := ∀ x y z w : G, x = x ∘ (((y ∘ z) ∘ w) ∘ w)
-abbrev Equation1274 (G: Type u) [Magma G] := ∀ x y z w u : G, x = x ∘ (((y ∘ z) ∘ w) ∘ u)
-abbrev Equation1275 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((x ∘ x) ∘ x) ∘ x)
-abbrev Equation1276 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((x ∘ x) ∘ x) ∘ y)
-abbrev Equation1277 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ x) ∘ x) ∘ z)
-abbrev Equation1278 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((x ∘ x) ∘ y) ∘ x)
-abbrev Equation1279 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((x ∘ x) ∘ y) ∘ y)
-abbrev Equation1280 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ x) ∘ y) ∘ z)
-abbrev Equation1281 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ x) ∘ z) ∘ x)
-abbrev Equation1282 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ x) ∘ z) ∘ y)
-abbrev Equation1283 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ x) ∘ z) ∘ z)
-abbrev Equation1284 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((x ∘ x) ∘ z) ∘ w)
-abbrev Equation1285 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((x ∘ y) ∘ x) ∘ x)
-abbrev Equation1286 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((x ∘ y) ∘ x) ∘ y)
-abbrev Equation1287 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ y) ∘ x) ∘ z)
-abbrev Equation1288 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((x ∘ y) ∘ y) ∘ x)
-abbrev Equation1289 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((x ∘ y) ∘ y) ∘ y)
-abbrev Equation1290 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ y) ∘ y) ∘ z)
-abbrev Equation1291 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ y) ∘ z) ∘ x)
-abbrev Equation1292 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ y) ∘ z) ∘ y)
-abbrev Equation1293 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ y) ∘ z) ∘ z)
-abbrev Equation1294 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((x ∘ y) ∘ z) ∘ w)
-abbrev Equation1295 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ z) ∘ x) ∘ x)
-abbrev Equation1296 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ z) ∘ x) ∘ y)
-abbrev Equation1297 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ z) ∘ x) ∘ z)
-abbrev Equation1298 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((x ∘ z) ∘ x) ∘ w)
-abbrev Equation1299 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ z) ∘ y) ∘ x)
-abbrev Equation1300 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ z) ∘ y) ∘ y)
-abbrev Equation1301 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ z) ∘ y) ∘ z)
-abbrev Equation1302 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((x ∘ z) ∘ y) ∘ w)
-abbrev Equation1303 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ z) ∘ z) ∘ x)
-abbrev Equation1304 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ z) ∘ z) ∘ y)
-abbrev Equation1305 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((x ∘ z) ∘ z) ∘ z)
-abbrev Equation1306 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((x ∘ z) ∘ z) ∘ w)
-abbrev Equation1307 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((x ∘ z) ∘ w) ∘ x)
-abbrev Equation1308 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((x ∘ z) ∘ w) ∘ y)
-abbrev Equation1309 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((x ∘ z) ∘ w) ∘ z)
-abbrev Equation1310 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((x ∘ z) ∘ w) ∘ w)
-abbrev Equation1311 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((x ∘ z) ∘ w) ∘ u)
-abbrev Equation1312 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((y ∘ x) ∘ x) ∘ x)
-abbrev Equation1313 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((y ∘ x) ∘ x) ∘ y)
-abbrev Equation1314 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ x) ∘ x) ∘ z)
-abbrev Equation1315 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((y ∘ x) ∘ y) ∘ x)
-abbrev Equation1316 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((y ∘ x) ∘ y) ∘ y)
-abbrev Equation1317 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ x) ∘ y) ∘ z)
-abbrev Equation1318 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ x) ∘ z) ∘ x)
-abbrev Equation1319 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ x) ∘ z) ∘ y)
-abbrev Equation1320 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ x) ∘ z) ∘ z)
-abbrev Equation1321 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((y ∘ x) ∘ z) ∘ w)
-abbrev Equation1322 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((y ∘ y) ∘ x) ∘ x)
-abbrev Equation1323 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((y ∘ y) ∘ x) ∘ y)
-abbrev Equation1324 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ y) ∘ x) ∘ z)
-abbrev Equation1325 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((y ∘ y) ∘ y) ∘ x)
-abbrev Equation1326 (G: Type u) [Magma G] := ∀ x y : G, x = y ∘ (((y ∘ y) ∘ y) ∘ y)
-abbrev Equation1327 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ y) ∘ y) ∘ z)
-abbrev Equation1328 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ y) ∘ z) ∘ x)
-abbrev Equation1329 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ y) ∘ z) ∘ y)
-abbrev Equation1330 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ y) ∘ z) ∘ z)
-abbrev Equation1331 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((y ∘ y) ∘ z) ∘ w)
-abbrev Equation1332 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ z) ∘ x) ∘ x)
-abbrev Equation1333 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ z) ∘ x) ∘ y)
-abbrev Equation1334 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ z) ∘ x) ∘ z)
-abbrev Equation1335 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((y ∘ z) ∘ x) ∘ w)
-abbrev Equation1336 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ z) ∘ y) ∘ x)
-abbrev Equation1337 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ z) ∘ y) ∘ y)
-abbrev Equation1338 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ z) ∘ y) ∘ z)
-abbrev Equation1339 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((y ∘ z) ∘ y) ∘ w)
-abbrev Equation1340 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ z) ∘ z) ∘ x)
-abbrev Equation1341 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ z) ∘ z) ∘ y)
-abbrev Equation1342 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((y ∘ z) ∘ z) ∘ z)
-abbrev Equation1343 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((y ∘ z) ∘ z) ∘ w)
-abbrev Equation1344 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((y ∘ z) ∘ w) ∘ x)
-abbrev Equation1345 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((y ∘ z) ∘ w) ∘ y)
-abbrev Equation1346 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((y ∘ z) ∘ w) ∘ z)
-abbrev Equation1347 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((y ∘ z) ∘ w) ∘ w)
-abbrev Equation1348 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((y ∘ z) ∘ w) ∘ u)
-abbrev Equation1349 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ x) ∘ x) ∘ x)
-abbrev Equation1350 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ x) ∘ x) ∘ y)
-abbrev Equation1351 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ x) ∘ x) ∘ z)
-abbrev Equation1352 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ x) ∘ x) ∘ w)
-abbrev Equation1353 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ x) ∘ y) ∘ x)
-abbrev Equation1354 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ x) ∘ y) ∘ y)
-abbrev Equation1355 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ x) ∘ y) ∘ z)
-abbrev Equation1356 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ x) ∘ y) ∘ w)
-abbrev Equation1357 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ x) ∘ z) ∘ x)
-abbrev Equation1358 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ x) ∘ z) ∘ y)
-abbrev Equation1359 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ x) ∘ z) ∘ z)
-abbrev Equation1360 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ x) ∘ z) ∘ w)
-abbrev Equation1361 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ x) ∘ w) ∘ x)
-abbrev Equation1362 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ x) ∘ w) ∘ y)
-abbrev Equation1363 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ x) ∘ w) ∘ z)
-abbrev Equation1364 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ x) ∘ w) ∘ w)
-abbrev Equation1365 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((z ∘ x) ∘ w) ∘ u)
-abbrev Equation1366 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ y) ∘ x) ∘ x)
-abbrev Equation1367 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ y) ∘ x) ∘ y)
-abbrev Equation1368 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ y) ∘ x) ∘ z)
-abbrev Equation1369 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ y) ∘ x) ∘ w)
-abbrev Equation1370 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ y) ∘ y) ∘ x)
-abbrev Equation1371 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ y) ∘ y) ∘ y)
-abbrev Equation1372 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ y) ∘ y) ∘ z)
-abbrev Equation1373 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ y) ∘ y) ∘ w)
-abbrev Equation1374 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ y) ∘ z) ∘ x)
-abbrev Equation1375 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ y) ∘ z) ∘ y)
-abbrev Equation1376 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ y) ∘ z) ∘ z)
-abbrev Equation1377 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ y) ∘ z) ∘ w)
-abbrev Equation1378 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ y) ∘ w) ∘ x)
-abbrev Equation1379 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ y) ∘ w) ∘ y)
-abbrev Equation1380 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ y) ∘ w) ∘ z)
-abbrev Equation1381 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ y) ∘ w) ∘ w)
-abbrev Equation1382 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((z ∘ y) ∘ w) ∘ u)
-abbrev Equation1383 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ z) ∘ x) ∘ x)
-abbrev Equation1384 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ z) ∘ x) ∘ y)
-abbrev Equation1385 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ z) ∘ x) ∘ z)
-abbrev Equation1386 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ z) ∘ x) ∘ w)
-abbrev Equation1387 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ z) ∘ y) ∘ x)
-abbrev Equation1388 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ z) ∘ y) ∘ y)
-abbrev Equation1389 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ z) ∘ y) ∘ z)
-abbrev Equation1390 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ z) ∘ y) ∘ w)
-abbrev Equation1391 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ z) ∘ z) ∘ x)
-abbrev Equation1392 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ z) ∘ z) ∘ y)
-abbrev Equation1393 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ (((z ∘ z) ∘ z) ∘ z)
-abbrev Equation1394 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ z) ∘ z) ∘ w)
-abbrev Equation1395 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ z) ∘ w) ∘ x)
-abbrev Equation1396 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ z) ∘ w) ∘ y)
-abbrev Equation1397 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ z) ∘ w) ∘ z)
-abbrev Equation1398 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ z) ∘ w) ∘ w)
-abbrev Equation1399 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((z ∘ z) ∘ w) ∘ u)
-abbrev Equation1400 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ x) ∘ x)
-abbrev Equation1401 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ x) ∘ y)
-abbrev Equation1402 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ x) ∘ z)
-abbrev Equation1403 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ x) ∘ w)
-abbrev Equation1404 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((z ∘ w) ∘ x) ∘ u)
-abbrev Equation1405 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ y) ∘ x)
-abbrev Equation1406 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ y) ∘ y)
-abbrev Equation1407 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ y) ∘ z)
-abbrev Equation1408 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ y) ∘ w)
-abbrev Equation1409 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((z ∘ w) ∘ y) ∘ u)
-abbrev Equation1410 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ z) ∘ x)
-abbrev Equation1411 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ z) ∘ y)
-abbrev Equation1412 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ z) ∘ z)
-abbrev Equation1413 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ z) ∘ w)
-abbrev Equation1414 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((z ∘ w) ∘ z) ∘ u)
-abbrev Equation1415 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ w) ∘ x)
-abbrev Equation1416 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ w) ∘ y)
-abbrev Equation1417 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ w) ∘ z)
-abbrev Equation1418 (G: Type u) [Magma G] := ∀ x y z w : G, x = y ∘ (((z ∘ w) ∘ w) ∘ w)
-abbrev Equation1419 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((z ∘ w) ∘ w) ∘ u)
-abbrev Equation1420 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((z ∘ w) ∘ u) ∘ x)
-abbrev Equation1421 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((z ∘ w) ∘ u) ∘ y)
-abbrev Equation1422 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((z ∘ w) ∘ u) ∘ z)
-abbrev Equation1423 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((z ∘ w) ∘ u) ∘ w)
-abbrev Equation1424 (G: Type u) [Magma G] := ∀ x y z w u : G, x = y ∘ (((z ∘ w) ∘ u) ∘ u)
-abbrev Equation1425 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = y ∘ (((z ∘ w) ∘ u) ∘ v)
-abbrev Equation1426 (G: Type u) [Magma G] := ∀ x : G, x = (x ∘ x) ∘ (x ∘ (x ∘ x))
-abbrev Equation1427 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ (x ∘ (x ∘ y))
-abbrev Equation1428 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ (x ∘ (y ∘ x))
-abbrev Equation1429 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ (x ∘ (y ∘ y))
-abbrev Equation1430 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ (x ∘ (y ∘ z))
-abbrev Equation1431 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ (y ∘ (x ∘ x))
-abbrev Equation1432 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ (y ∘ (x ∘ y))
-abbrev Equation1433 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ (y ∘ (x ∘ z))
-abbrev Equation1434 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ (y ∘ (y ∘ x))
-abbrev Equation1435 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ (y ∘ (y ∘ y))
-abbrev Equation1436 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ (y ∘ (y ∘ z))
-abbrev Equation1437 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ (y ∘ (z ∘ x))
-abbrev Equation1438 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ (y ∘ (z ∘ y))
-abbrev Equation1439 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ (y ∘ (z ∘ z))
-abbrev Equation1440 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ x) ∘ (y ∘ (z ∘ w))
-abbrev Equation1441 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ (x ∘ (x ∘ x))
-abbrev Equation1442 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ (x ∘ (x ∘ y))
-abbrev Equation1443 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (x ∘ (x ∘ z))
-abbrev Equation1444 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ (x ∘ (y ∘ x))
-abbrev Equation1445 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ (x ∘ (y ∘ y))
-abbrev Equation1446 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (x ∘ (y ∘ z))
-abbrev Equation1447 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (x ∘ (z ∘ x))
-abbrev Equation1448 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (x ∘ (z ∘ y))
-abbrev Equation1449 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (x ∘ (z ∘ z))
-abbrev Equation1450 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ (x ∘ (z ∘ w))
-abbrev Equation1451 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ (y ∘ (x ∘ x))
-abbrev Equation1452 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ (y ∘ (x ∘ y))
-abbrev Equation1453 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (y ∘ (x ∘ z))
-abbrev Equation1454 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ (y ∘ (y ∘ x))
-abbrev Equation1455 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ (y ∘ (y ∘ y))
-abbrev Equation1456 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (y ∘ (y ∘ z))
-abbrev Equation1457 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (y ∘ (z ∘ x))
-abbrev Equation1458 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (y ∘ (z ∘ y))
-abbrev Equation1459 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (y ∘ (z ∘ z))
-abbrev Equation1460 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ (y ∘ (z ∘ w))
-abbrev Equation1461 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z ∘ (x ∘ x))
-abbrev Equation1462 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z ∘ (x ∘ y))
-abbrev Equation1463 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z ∘ (x ∘ z))
-abbrev Equation1464 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ (z ∘ (x ∘ w))
-abbrev Equation1465 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z ∘ (y ∘ x))
-abbrev Equation1466 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z ∘ (y ∘ y))
-abbrev Equation1467 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z ∘ (y ∘ z))
-abbrev Equation1468 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ (z ∘ (y ∘ w))
-abbrev Equation1469 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z ∘ (z ∘ x))
-abbrev Equation1470 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z ∘ (z ∘ y))
-abbrev Equation1471 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ (z ∘ (z ∘ z))
-abbrev Equation1472 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ (z ∘ (z ∘ w))
-abbrev Equation1473 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ (z ∘ (w ∘ x))
-abbrev Equation1474 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ (z ∘ (w ∘ y))
-abbrev Equation1475 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ (z ∘ (w ∘ z))
-abbrev Equation1476 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ (z ∘ (w ∘ w))
-abbrev Equation1477 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (x ∘ y) ∘ (z ∘ (w ∘ u))
-abbrev Equation1478 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (x ∘ (x ∘ x))
-abbrev Equation1479 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (x ∘ (x ∘ y))
-abbrev Equation1480 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x ∘ (x ∘ z))
-abbrev Equation1481 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (x ∘ (y ∘ x))
-abbrev Equation1482 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (x ∘ (y ∘ y))
-abbrev Equation1483 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x ∘ (y ∘ z))
-abbrev Equation1484 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x ∘ (z ∘ x))
-abbrev Equation1485 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x ∘ (z ∘ y))
-abbrev Equation1486 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x ∘ (z ∘ z))
-abbrev Equation1487 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ (x ∘ (z ∘ w))
-abbrev Equation1488 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (y ∘ (x ∘ x))
-abbrev Equation1489 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (y ∘ (x ∘ y))
-abbrev Equation1490 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (y ∘ (x ∘ z))
-abbrev Equation1491 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (y ∘ (y ∘ x))
-abbrev Equation1492 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ (y ∘ (y ∘ y))
-abbrev Equation1493 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (y ∘ (y ∘ z))
-abbrev Equation1494 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (y ∘ (z ∘ x))
-abbrev Equation1495 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (y ∘ (z ∘ y))
-abbrev Equation1496 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (y ∘ (z ∘ z))
-abbrev Equation1497 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ (y ∘ (z ∘ w))
-abbrev Equation1498 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (z ∘ (x ∘ x))
-abbrev Equation1499 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (z ∘ (x ∘ y))
-abbrev Equation1500 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (z ∘ (x ∘ z))
-abbrev Equation1501 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ (z ∘ (x ∘ w))
-abbrev Equation1502 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (z ∘ (y ∘ x))
-abbrev Equation1503 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (z ∘ (y ∘ y))
-abbrev Equation1504 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (z ∘ (y ∘ z))
-abbrev Equation1505 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ (z ∘ (y ∘ w))
-abbrev Equation1506 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (z ∘ (z ∘ x))
-abbrev Equation1507 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (z ∘ (z ∘ y))
-abbrev Equation1508 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (z ∘ (z ∘ z))
-abbrev Equation1509 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ (z ∘ (z ∘ w))
-abbrev Equation1510 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ (z ∘ (w ∘ x))
-abbrev Equation1511 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ (z ∘ (w ∘ y))
-abbrev Equation1512 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ (z ∘ (w ∘ z))
-abbrev Equation1513 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ (z ∘ (w ∘ w))
-abbrev Equation1514 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ x) ∘ (z ∘ (w ∘ u))
-abbrev Equation1515 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ (x ∘ (x ∘ x))
-abbrev Equation1516 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ (x ∘ (x ∘ y))
-abbrev Equation1517 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (x ∘ (x ∘ z))
-abbrev Equation1518 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ (x ∘ (y ∘ x))
-abbrev Equation1519 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ (x ∘ (y ∘ y))
-abbrev Equation1520 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (x ∘ (y ∘ z))
-abbrev Equation1521 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (x ∘ (z ∘ x))
-abbrev Equation1522 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (x ∘ (z ∘ y))
-abbrev Equation1523 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (x ∘ (z ∘ z))
-abbrev Equation1524 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ (x ∘ (z ∘ w))
-abbrev Equation1525 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ (y ∘ (x ∘ x))
-abbrev Equation1526 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ (y ∘ (x ∘ y))
-abbrev Equation1527 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (y ∘ (x ∘ z))
-abbrev Equation1528 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ (y ∘ (y ∘ x))
-abbrev Equation1529 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ (y ∘ (y ∘ y))
-abbrev Equation1530 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (y ∘ (y ∘ z))
-abbrev Equation1531 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (y ∘ (z ∘ x))
-abbrev Equation1532 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (y ∘ (z ∘ y))
-abbrev Equation1533 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (y ∘ (z ∘ z))
-abbrev Equation1534 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ (y ∘ (z ∘ w))
-abbrev Equation1535 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (z ∘ (x ∘ x))
-abbrev Equation1536 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (z ∘ (x ∘ y))
-abbrev Equation1537 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (z ∘ (x ∘ z))
-abbrev Equation1538 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ (z ∘ (x ∘ w))
-abbrev Equation1539 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (z ∘ (y ∘ x))
-abbrev Equation1540 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (z ∘ (y ∘ y))
-abbrev Equation1541 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (z ∘ (y ∘ z))
-abbrev Equation1542 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ (z ∘ (y ∘ w))
-abbrev Equation1543 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (z ∘ (z ∘ x))
-abbrev Equation1544 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (z ∘ (z ∘ y))
-abbrev Equation1545 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ (z ∘ (z ∘ z))
-abbrev Equation1546 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ (z ∘ (z ∘ w))
-abbrev Equation1547 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ (z ∘ (w ∘ x))
-abbrev Equation1548 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ (z ∘ (w ∘ y))
-abbrev Equation1549 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ (z ∘ (w ∘ z))
-abbrev Equation1550 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ (z ∘ (w ∘ w))
-abbrev Equation1551 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ y) ∘ (z ∘ (w ∘ u))
-abbrev Equation1552 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (x ∘ (x ∘ x))
-abbrev Equation1553 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (x ∘ (x ∘ y))
-abbrev Equation1554 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (x ∘ (x ∘ z))
-abbrev Equation1555 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (x ∘ (x ∘ w))
-abbrev Equation1556 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (x ∘ (y ∘ x))
-abbrev Equation1557 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (x ∘ (y ∘ y))
-abbrev Equation1558 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (x ∘ (y ∘ z))
-abbrev Equation1559 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (x ∘ (y ∘ w))
-abbrev Equation1560 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (x ∘ (z ∘ x))
-abbrev Equation1561 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (x ∘ (z ∘ y))
-abbrev Equation1562 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (x ∘ (z ∘ z))
-abbrev Equation1563 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (x ∘ (z ∘ w))
-abbrev Equation1564 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (x ∘ (w ∘ x))
-abbrev Equation1565 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (x ∘ (w ∘ y))
-abbrev Equation1566 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (x ∘ (w ∘ z))
-abbrev Equation1567 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (x ∘ (w ∘ w))
-abbrev Equation1568 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (x ∘ (w ∘ u))
-abbrev Equation1569 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ (x ∘ x))
-abbrev Equation1570 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ (x ∘ y))
-abbrev Equation1571 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ (x ∘ z))
-abbrev Equation1572 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (y ∘ (x ∘ w))
-abbrev Equation1573 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ (y ∘ x))
-abbrev Equation1574 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ (y ∘ y))
-abbrev Equation1575 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ (y ∘ z))
-abbrev Equation1576 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (y ∘ (y ∘ w))
-abbrev Equation1577 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ (z ∘ x))
-abbrev Equation1578 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ (z ∘ y))
-abbrev Equation1579 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ (z ∘ z))
-abbrev Equation1580 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (y ∘ (z ∘ w))
-abbrev Equation1581 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (y ∘ (w ∘ x))
-abbrev Equation1582 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (y ∘ (w ∘ y))
-abbrev Equation1583 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (y ∘ (w ∘ z))
-abbrev Equation1584 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (y ∘ (w ∘ w))
-abbrev Equation1585 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (y ∘ (w ∘ u))
-abbrev Equation1586 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (z ∘ (x ∘ x))
-abbrev Equation1587 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (z ∘ (x ∘ y))
-abbrev Equation1588 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (z ∘ (x ∘ z))
-abbrev Equation1589 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (z ∘ (x ∘ w))
-abbrev Equation1590 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (z ∘ (y ∘ x))
-abbrev Equation1591 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (z ∘ (y ∘ y))
-abbrev Equation1592 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (z ∘ (y ∘ z))
-abbrev Equation1593 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (z ∘ (y ∘ w))
-abbrev Equation1594 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (z ∘ (z ∘ x))
-abbrev Equation1595 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (z ∘ (z ∘ y))
-abbrev Equation1596 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (z ∘ (z ∘ z))
-abbrev Equation1597 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (z ∘ (z ∘ w))
-abbrev Equation1598 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (z ∘ (w ∘ x))
-abbrev Equation1599 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (z ∘ (w ∘ y))
-abbrev Equation1600 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (z ∘ (w ∘ z))
-abbrev Equation1601 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (z ∘ (w ∘ w))
-abbrev Equation1602 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (z ∘ (w ∘ u))
-abbrev Equation1603 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (x ∘ x))
-abbrev Equation1604 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (x ∘ y))
-abbrev Equation1605 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (x ∘ z))
-abbrev Equation1606 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (x ∘ w))
-abbrev Equation1607 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (w ∘ (x ∘ u))
-abbrev Equation1608 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (y ∘ x))
-abbrev Equation1609 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (y ∘ y))
-abbrev Equation1610 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (y ∘ z))
-abbrev Equation1611 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (y ∘ w))
-abbrev Equation1612 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (w ∘ (y ∘ u))
-abbrev Equation1613 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (z ∘ x))
-abbrev Equation1614 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (z ∘ y))
-abbrev Equation1615 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (z ∘ z))
-abbrev Equation1616 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (z ∘ w))
-abbrev Equation1617 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (w ∘ (z ∘ u))
-abbrev Equation1618 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (w ∘ x))
-abbrev Equation1619 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (w ∘ y))
-abbrev Equation1620 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (w ∘ z))
-abbrev Equation1621 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ (w ∘ (w ∘ w))
-abbrev Equation1622 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (w ∘ (w ∘ u))
-abbrev Equation1623 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (w ∘ (u ∘ x))
-abbrev Equation1624 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (w ∘ (u ∘ y))
-abbrev Equation1625 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (w ∘ (u ∘ z))
-abbrev Equation1626 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (w ∘ (u ∘ w))
-abbrev Equation1627 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ (w ∘ (u ∘ u))
-abbrev Equation1628 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = (y ∘ z) ∘ (w ∘ (u ∘ v))
-abbrev Equation1629 (G: Type u) [Magma G] := ∀ x : G, x = (x ∘ x) ∘ ((x ∘ x) ∘ x)
-abbrev Equation1630 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ ((x ∘ x) ∘ y)
-abbrev Equation1631 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ ((x ∘ y) ∘ x)
-abbrev Equation1632 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ ((x ∘ y) ∘ y)
-abbrev Equation1633 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ ((x ∘ y) ∘ z)
-abbrev Equation1634 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ ((y ∘ x) ∘ x)
-abbrev Equation1635 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ ((y ∘ x) ∘ y)
-abbrev Equation1636 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ ((y ∘ x) ∘ z)
-abbrev Equation1637 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ ((y ∘ y) ∘ x)
-abbrev Equation1638 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ x) ∘ ((y ∘ y) ∘ y)
-abbrev Equation1639 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ ((y ∘ y) ∘ z)
-abbrev Equation1640 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ ((y ∘ z) ∘ x)
-abbrev Equation1641 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ ((y ∘ z) ∘ y)
-abbrev Equation1642 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ x) ∘ ((y ∘ z) ∘ z)
-abbrev Equation1643 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ x) ∘ ((y ∘ z) ∘ w)
-abbrev Equation1644 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ ((x ∘ x) ∘ x)
-abbrev Equation1645 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ ((x ∘ x) ∘ y)
-abbrev Equation1646 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((x ∘ x) ∘ z)
-abbrev Equation1647 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ ((x ∘ y) ∘ x)
-abbrev Equation1648 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ ((x ∘ y) ∘ y)
-abbrev Equation1649 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((x ∘ y) ∘ z)
-abbrev Equation1650 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((x ∘ z) ∘ x)
-abbrev Equation1651 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((x ∘ z) ∘ y)
-abbrev Equation1652 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((x ∘ z) ∘ z)
-abbrev Equation1653 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ ((x ∘ z) ∘ w)
-abbrev Equation1654 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ ((y ∘ x) ∘ x)
-abbrev Equation1655 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ ((y ∘ x) ∘ y)
-abbrev Equation1656 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((y ∘ x) ∘ z)
-abbrev Equation1657 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ ((y ∘ y) ∘ x)
-abbrev Equation1658 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ y) ∘ ((y ∘ y) ∘ y)
-abbrev Equation1659 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((y ∘ y) ∘ z)
-abbrev Equation1660 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((y ∘ z) ∘ x)
-abbrev Equation1661 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((y ∘ z) ∘ y)
-abbrev Equation1662 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((y ∘ z) ∘ z)
-abbrev Equation1663 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ ((y ∘ z) ∘ w)
-abbrev Equation1664 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((z ∘ x) ∘ x)
-abbrev Equation1665 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((z ∘ x) ∘ y)
-abbrev Equation1666 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((z ∘ x) ∘ z)
-abbrev Equation1667 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ ((z ∘ x) ∘ w)
-abbrev Equation1668 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((z ∘ y) ∘ x)
-abbrev Equation1669 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((z ∘ y) ∘ y)
-abbrev Equation1670 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((z ∘ y) ∘ z)
-abbrev Equation1671 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ ((z ∘ y) ∘ w)
-abbrev Equation1672 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((z ∘ z) ∘ x)
-abbrev Equation1673 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((z ∘ z) ∘ y)
-abbrev Equation1674 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ y) ∘ ((z ∘ z) ∘ z)
-abbrev Equation1675 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ ((z ∘ z) ∘ w)
-abbrev Equation1676 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ ((z ∘ w) ∘ x)
-abbrev Equation1677 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ ((z ∘ w) ∘ y)
-abbrev Equation1678 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ ((z ∘ w) ∘ z)
-abbrev Equation1679 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ y) ∘ ((z ∘ w) ∘ w)
-abbrev Equation1680 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (x ∘ y) ∘ ((z ∘ w) ∘ u)
-abbrev Equation1681 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ ((x ∘ x) ∘ x)
-abbrev Equation1682 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ ((x ∘ x) ∘ y)
-abbrev Equation1683 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((x ∘ x) ∘ z)
-abbrev Equation1684 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ ((x ∘ y) ∘ x)
-abbrev Equation1685 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ ((x ∘ y) ∘ y)
-abbrev Equation1686 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((x ∘ y) ∘ z)
-abbrev Equation1687 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((x ∘ z) ∘ x)
-abbrev Equation1688 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((x ∘ z) ∘ y)
-abbrev Equation1689 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((x ∘ z) ∘ z)
-abbrev Equation1690 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ ((x ∘ z) ∘ w)
-abbrev Equation1691 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ ((y ∘ x) ∘ x)
-abbrev Equation1692 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ ((y ∘ x) ∘ y)
-abbrev Equation1693 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((y ∘ x) ∘ z)
-abbrev Equation1694 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ ((y ∘ y) ∘ x)
-abbrev Equation1695 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ ((y ∘ y) ∘ y)
-abbrev Equation1696 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((y ∘ y) ∘ z)
-abbrev Equation1697 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((y ∘ z) ∘ x)
-abbrev Equation1698 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((y ∘ z) ∘ y)
-abbrev Equation1699 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((y ∘ z) ∘ z)
-abbrev Equation1700 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ ((y ∘ z) ∘ w)
-abbrev Equation1701 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((z ∘ x) ∘ x)
-abbrev Equation1702 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((z ∘ x) ∘ y)
-abbrev Equation1703 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((z ∘ x) ∘ z)
-abbrev Equation1704 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ ((z ∘ x) ∘ w)
-abbrev Equation1705 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((z ∘ y) ∘ x)
-abbrev Equation1706 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((z ∘ y) ∘ y)
-abbrev Equation1707 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((z ∘ y) ∘ z)
-abbrev Equation1708 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ ((z ∘ y) ∘ w)
-abbrev Equation1709 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((z ∘ z) ∘ x)
-abbrev Equation1710 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((z ∘ z) ∘ y)
-abbrev Equation1711 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((z ∘ z) ∘ z)
-abbrev Equation1712 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ ((z ∘ z) ∘ w)
-abbrev Equation1713 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ ((z ∘ w) ∘ x)
-abbrev Equation1714 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ ((z ∘ w) ∘ y)
-abbrev Equation1715 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ ((z ∘ w) ∘ z)
-abbrev Equation1716 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ x) ∘ ((z ∘ w) ∘ w)
-abbrev Equation1717 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ x) ∘ ((z ∘ w) ∘ u)
-abbrev Equation1718 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ ((x ∘ x) ∘ x)
-abbrev Equation1719 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ ((x ∘ x) ∘ y)
-abbrev Equation1720 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((x ∘ x) ∘ z)
-abbrev Equation1721 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ ((x ∘ y) ∘ x)
-abbrev Equation1722 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ ((x ∘ y) ∘ y)
-abbrev Equation1723 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((x ∘ y) ∘ z)
-abbrev Equation1724 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((x ∘ z) ∘ x)
-abbrev Equation1725 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((x ∘ z) ∘ y)
-abbrev Equation1726 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((x ∘ z) ∘ z)
-abbrev Equation1727 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ ((x ∘ z) ∘ w)
-abbrev Equation1728 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ ((y ∘ x) ∘ x)
-abbrev Equation1729 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ ((y ∘ x) ∘ y)
-abbrev Equation1730 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((y ∘ x) ∘ z)
-abbrev Equation1731 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ ((y ∘ y) ∘ x)
-abbrev Equation1732 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ y) ∘ ((y ∘ y) ∘ y)
-abbrev Equation1733 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((y ∘ y) ∘ z)
-abbrev Equation1734 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((y ∘ z) ∘ x)
-abbrev Equation1735 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((y ∘ z) ∘ y)
-abbrev Equation1736 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((y ∘ z) ∘ z)
-abbrev Equation1737 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ ((y ∘ z) ∘ w)
-abbrev Equation1738 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((z ∘ x) ∘ x)
-abbrev Equation1739 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((z ∘ x) ∘ y)
-abbrev Equation1740 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((z ∘ x) ∘ z)
-abbrev Equation1741 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ ((z ∘ x) ∘ w)
-abbrev Equation1742 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((z ∘ y) ∘ x)
-abbrev Equation1743 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((z ∘ y) ∘ y)
-abbrev Equation1744 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((z ∘ y) ∘ z)
-abbrev Equation1745 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ ((z ∘ y) ∘ w)
-abbrev Equation1746 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((z ∘ z) ∘ x)
-abbrev Equation1747 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((z ∘ z) ∘ y)
-abbrev Equation1748 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ y) ∘ ((z ∘ z) ∘ z)
-abbrev Equation1749 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ ((z ∘ z) ∘ w)
-abbrev Equation1750 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ ((z ∘ w) ∘ x)
-abbrev Equation1751 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ ((z ∘ w) ∘ y)
-abbrev Equation1752 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ ((z ∘ w) ∘ z)
-abbrev Equation1753 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ y) ∘ ((z ∘ w) ∘ w)
-abbrev Equation1754 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ y) ∘ ((z ∘ w) ∘ u)
-abbrev Equation1755 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((x ∘ x) ∘ x)
-abbrev Equation1756 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((x ∘ x) ∘ y)
-abbrev Equation1757 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((x ∘ x) ∘ z)
-abbrev Equation1758 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((x ∘ x) ∘ w)
-abbrev Equation1759 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((x ∘ y) ∘ x)
-abbrev Equation1760 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((x ∘ y) ∘ y)
-abbrev Equation1761 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((x ∘ y) ∘ z)
-abbrev Equation1762 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((x ∘ y) ∘ w)
-abbrev Equation1763 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((x ∘ z) ∘ x)
-abbrev Equation1764 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((x ∘ z) ∘ y)
-abbrev Equation1765 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((x ∘ z) ∘ z)
-abbrev Equation1766 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((x ∘ z) ∘ w)
-abbrev Equation1767 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((x ∘ w) ∘ x)
-abbrev Equation1768 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((x ∘ w) ∘ y)
-abbrev Equation1769 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((x ∘ w) ∘ z)
-abbrev Equation1770 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((x ∘ w) ∘ w)
-abbrev Equation1771 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ ((x ∘ w) ∘ u)
-abbrev Equation1772 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((y ∘ x) ∘ x)
-abbrev Equation1773 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((y ∘ x) ∘ y)
-abbrev Equation1774 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((y ∘ x) ∘ z)
-abbrev Equation1775 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((y ∘ x) ∘ w)
-abbrev Equation1776 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((y ∘ y) ∘ x)
-abbrev Equation1777 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((y ∘ y) ∘ y)
-abbrev Equation1778 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((y ∘ y) ∘ z)
-abbrev Equation1779 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((y ∘ y) ∘ w)
-abbrev Equation1780 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((y ∘ z) ∘ x)
-abbrev Equation1781 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((y ∘ z) ∘ y)
-abbrev Equation1782 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((y ∘ z) ∘ z)
-abbrev Equation1783 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((y ∘ z) ∘ w)
-abbrev Equation1784 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((y ∘ w) ∘ x)
-abbrev Equation1785 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((y ∘ w) ∘ y)
-abbrev Equation1786 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((y ∘ w) ∘ z)
-abbrev Equation1787 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((y ∘ w) ∘ w)
-abbrev Equation1788 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ ((y ∘ w) ∘ u)
-abbrev Equation1789 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((z ∘ x) ∘ x)
-abbrev Equation1790 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((z ∘ x) ∘ y)
-abbrev Equation1791 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((z ∘ x) ∘ z)
-abbrev Equation1792 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((z ∘ x) ∘ w)
-abbrev Equation1793 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((z ∘ y) ∘ x)
-abbrev Equation1794 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((z ∘ y) ∘ y)
-abbrev Equation1795 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((z ∘ y) ∘ z)
-abbrev Equation1796 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((z ∘ y) ∘ w)
-abbrev Equation1797 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((z ∘ z) ∘ x)
-abbrev Equation1798 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((z ∘ z) ∘ y)
-abbrev Equation1799 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ ((z ∘ z) ∘ z)
-abbrev Equation1800 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((z ∘ z) ∘ w)
-abbrev Equation1801 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((z ∘ w) ∘ x)
-abbrev Equation1802 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((z ∘ w) ∘ y)
-abbrev Equation1803 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((z ∘ w) ∘ z)
-abbrev Equation1804 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((z ∘ w) ∘ w)
-abbrev Equation1805 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ ((z ∘ w) ∘ u)
-abbrev Equation1806 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ x) ∘ x)
-abbrev Equation1807 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ x) ∘ y)
-abbrev Equation1808 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ x) ∘ z)
-abbrev Equation1809 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ x) ∘ w)
-abbrev Equation1810 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ ((w ∘ x) ∘ u)
-abbrev Equation1811 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ y) ∘ x)
-abbrev Equation1812 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ y) ∘ y)
-abbrev Equation1813 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ y) ∘ z)
-abbrev Equation1814 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ y) ∘ w)
-abbrev Equation1815 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ ((w ∘ y) ∘ u)
-abbrev Equation1816 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ z) ∘ x)
-abbrev Equation1817 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ z) ∘ y)
-abbrev Equation1818 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ z) ∘ z)
-abbrev Equation1819 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ z) ∘ w)
-abbrev Equation1820 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ ((w ∘ z) ∘ u)
-abbrev Equation1821 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ w) ∘ x)
-abbrev Equation1822 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ w) ∘ y)
-abbrev Equation1823 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ w) ∘ z)
-abbrev Equation1824 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ z) ∘ ((w ∘ w) ∘ w)
-abbrev Equation1825 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ ((w ∘ w) ∘ u)
-abbrev Equation1826 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ ((w ∘ u) ∘ x)
-abbrev Equation1827 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ ((w ∘ u) ∘ y)
-abbrev Equation1828 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ ((w ∘ u) ∘ z)
-abbrev Equation1829 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ ((w ∘ u) ∘ w)
-abbrev Equation1830 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ z) ∘ ((w ∘ u) ∘ u)
-abbrev Equation1831 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = (y ∘ z) ∘ ((w ∘ u) ∘ v)
-abbrev Equation1832 (G: Type u) [Magma G] := ∀ x : G, x = (x ∘ (x ∘ x)) ∘ (x ∘ x)
-abbrev Equation1833 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ x)) ∘ (x ∘ y)
-abbrev Equation1834 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ x)) ∘ (y ∘ x)
-abbrev Equation1835 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ x)) ∘ (y ∘ y)
-abbrev Equation1836 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ x)) ∘ (y ∘ z)
-abbrev Equation1837 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ y)) ∘ (x ∘ x)
-abbrev Equation1838 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ y)) ∘ (x ∘ y)
-abbrev Equation1839 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ y)) ∘ (x ∘ z)
-abbrev Equation1840 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ y)) ∘ (y ∘ x)
-abbrev Equation1841 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ y)) ∘ (y ∘ y)
-abbrev Equation1842 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ y)) ∘ (y ∘ z)
-abbrev Equation1843 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ y)) ∘ (z ∘ x)
-abbrev Equation1844 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ y)) ∘ (z ∘ y)
-abbrev Equation1845 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ y)) ∘ (z ∘ z)
-abbrev Equation1846 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (x ∘ y)) ∘ (z ∘ w)
-abbrev Equation1847 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ x)) ∘ (x ∘ x)
-abbrev Equation1848 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ x)) ∘ (x ∘ y)
-abbrev Equation1849 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ x)) ∘ (x ∘ z)
-abbrev Equation1850 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ x)) ∘ (y ∘ x)
-abbrev Equation1851 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ x)) ∘ (y ∘ y)
-abbrev Equation1852 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ x)) ∘ (y ∘ z)
-abbrev Equation1853 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ x)) ∘ (z ∘ x)
-abbrev Equation1854 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ x)) ∘ (z ∘ y)
-abbrev Equation1855 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ x)) ∘ (z ∘ z)
-abbrev Equation1856 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ x)) ∘ (z ∘ w)
-abbrev Equation1857 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ y)) ∘ (x ∘ x)
-abbrev Equation1858 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ y)) ∘ (x ∘ y)
-abbrev Equation1859 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ y)) ∘ (x ∘ z)
-abbrev Equation1860 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ y)) ∘ (y ∘ x)
-abbrev Equation1861 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ y)) ∘ (y ∘ y)
-abbrev Equation1862 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ y)) ∘ (y ∘ z)
-abbrev Equation1863 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ y)) ∘ (z ∘ x)
-abbrev Equation1864 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ y)) ∘ (z ∘ y)
-abbrev Equation1865 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ y)) ∘ (z ∘ z)
-abbrev Equation1866 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ y)) ∘ (z ∘ w)
-abbrev Equation1867 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ z)) ∘ (x ∘ x)
-abbrev Equation1868 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ z)) ∘ (x ∘ y)
-abbrev Equation1869 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ z)) ∘ (x ∘ z)
-abbrev Equation1870 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ z)) ∘ (x ∘ w)
-abbrev Equation1871 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ z)) ∘ (y ∘ x)
-abbrev Equation1872 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ z)) ∘ (y ∘ y)
-abbrev Equation1873 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ z)) ∘ (y ∘ z)
-abbrev Equation1874 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ z)) ∘ (y ∘ w)
-abbrev Equation1875 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ z)) ∘ (z ∘ x)
-abbrev Equation1876 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ z)) ∘ (z ∘ y)
-abbrev Equation1877 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ z)) ∘ (z ∘ z)
-abbrev Equation1878 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ z)) ∘ (z ∘ w)
-abbrev Equation1879 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ z)) ∘ (w ∘ x)
-abbrev Equation1880 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ z)) ∘ (w ∘ y)
-abbrev Equation1881 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ z)) ∘ (w ∘ z)
-abbrev Equation1882 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ z)) ∘ (w ∘ w)
-abbrev Equation1883 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (x ∘ (y ∘ z)) ∘ (w ∘ u)
-abbrev Equation1884 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ x)) ∘ (x ∘ x)
-abbrev Equation1885 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ x)) ∘ (x ∘ y)
-abbrev Equation1886 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ x)) ∘ (x ∘ z)
-abbrev Equation1887 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ x)) ∘ (y ∘ x)
-abbrev Equation1888 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ x)) ∘ (y ∘ y)
-abbrev Equation1889 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ x)) ∘ (y ∘ z)
-abbrev Equation1890 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ x)) ∘ (z ∘ x)
-abbrev Equation1891 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ x)) ∘ (z ∘ y)
-abbrev Equation1892 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ x)) ∘ (z ∘ z)
-abbrev Equation1893 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ x)) ∘ (z ∘ w)
-abbrev Equation1894 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ y)) ∘ (x ∘ x)
-abbrev Equation1895 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ y)) ∘ (x ∘ y)
-abbrev Equation1896 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ y)) ∘ (x ∘ z)
-abbrev Equation1897 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ y)) ∘ (y ∘ x)
-abbrev Equation1898 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ y)) ∘ (y ∘ y)
-abbrev Equation1899 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ y)) ∘ (y ∘ z)
-abbrev Equation1900 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ y)) ∘ (z ∘ x)
-abbrev Equation1901 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ y)) ∘ (z ∘ y)
-abbrev Equation1902 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ y)) ∘ (z ∘ z)
-abbrev Equation1903 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ y)) ∘ (z ∘ w)
-abbrev Equation1904 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ z)) ∘ (x ∘ x)
-abbrev Equation1905 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ z)) ∘ (x ∘ y)
-abbrev Equation1906 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ z)) ∘ (x ∘ z)
-abbrev Equation1907 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ z)) ∘ (x ∘ w)
-abbrev Equation1908 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ z)) ∘ (y ∘ x)
-abbrev Equation1909 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ z)) ∘ (y ∘ y)
-abbrev Equation1910 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ z)) ∘ (y ∘ z)
-abbrev Equation1911 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ z)) ∘ (y ∘ w)
-abbrev Equation1912 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ z)) ∘ (z ∘ x)
-abbrev Equation1913 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ z)) ∘ (z ∘ y)
-abbrev Equation1914 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ z)) ∘ (z ∘ z)
-abbrev Equation1915 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ z)) ∘ (z ∘ w)
-abbrev Equation1916 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ z)) ∘ (w ∘ x)
-abbrev Equation1917 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ z)) ∘ (w ∘ y)
-abbrev Equation1918 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ z)) ∘ (w ∘ z)
-abbrev Equation1919 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ z)) ∘ (w ∘ w)
-abbrev Equation1920 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (x ∘ z)) ∘ (w ∘ u)
-abbrev Equation1921 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ x)) ∘ (x ∘ x)
-abbrev Equation1922 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ x)) ∘ (x ∘ y)
-abbrev Equation1923 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ x)) ∘ (x ∘ z)
-abbrev Equation1924 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ x)) ∘ (y ∘ x)
-abbrev Equation1925 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ x)) ∘ (y ∘ y)
-abbrev Equation1926 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ x)) ∘ (y ∘ z)
-abbrev Equation1927 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ x)) ∘ (z ∘ x)
-abbrev Equation1928 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ x)) ∘ (z ∘ y)
-abbrev Equation1929 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ x)) ∘ (z ∘ z)
-abbrev Equation1930 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ x)) ∘ (z ∘ w)
-abbrev Equation1931 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ y)) ∘ (x ∘ x)
-abbrev Equation1932 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ y)) ∘ (x ∘ y)
-abbrev Equation1933 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ y)) ∘ (x ∘ z)
-abbrev Equation1934 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ y)) ∘ (y ∘ x)
-abbrev Equation1935 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ y)) ∘ (y ∘ y)
-abbrev Equation1936 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ y)) ∘ (y ∘ z)
-abbrev Equation1937 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ y)) ∘ (z ∘ x)
-abbrev Equation1938 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ y)) ∘ (z ∘ y)
-abbrev Equation1939 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ y)) ∘ (z ∘ z)
-abbrev Equation1940 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ y)) ∘ (z ∘ w)
-abbrev Equation1941 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ z)) ∘ (x ∘ x)
-abbrev Equation1942 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ z)) ∘ (x ∘ y)
-abbrev Equation1943 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ z)) ∘ (x ∘ z)
-abbrev Equation1944 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ z)) ∘ (x ∘ w)
-abbrev Equation1945 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ z)) ∘ (y ∘ x)
-abbrev Equation1946 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ z)) ∘ (y ∘ y)
-abbrev Equation1947 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ z)) ∘ (y ∘ z)
-abbrev Equation1948 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ z)) ∘ (y ∘ w)
-abbrev Equation1949 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ z)) ∘ (z ∘ x)
-abbrev Equation1950 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ z)) ∘ (z ∘ y)
-abbrev Equation1951 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ z)) ∘ (z ∘ z)
-abbrev Equation1952 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ z)) ∘ (z ∘ w)
-abbrev Equation1953 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ z)) ∘ (w ∘ x)
-abbrev Equation1954 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ z)) ∘ (w ∘ y)
-abbrev Equation1955 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ z)) ∘ (w ∘ z)
-abbrev Equation1956 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ z)) ∘ (w ∘ w)
-abbrev Equation1957 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (y ∘ z)) ∘ (w ∘ u)
-abbrev Equation1958 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ x)) ∘ (x ∘ x)
-abbrev Equation1959 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ x)) ∘ (x ∘ y)
-abbrev Equation1960 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ x)) ∘ (x ∘ z)
-abbrev Equation1961 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ x)) ∘ (x ∘ w)
-abbrev Equation1962 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ x)) ∘ (y ∘ x)
-abbrev Equation1963 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ x)) ∘ (y ∘ y)
-abbrev Equation1964 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ x)) ∘ (y ∘ z)
-abbrev Equation1965 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ x)) ∘ (y ∘ w)
-abbrev Equation1966 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ x)) ∘ (z ∘ x)
-abbrev Equation1967 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ x)) ∘ (z ∘ y)
-abbrev Equation1968 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ x)) ∘ (z ∘ z)
-abbrev Equation1969 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ x)) ∘ (z ∘ w)
-abbrev Equation1970 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ x)) ∘ (w ∘ x)
-abbrev Equation1971 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ x)) ∘ (w ∘ y)
-abbrev Equation1972 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ x)) ∘ (w ∘ z)
-abbrev Equation1973 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ x)) ∘ (w ∘ w)
-abbrev Equation1974 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ x)) ∘ (w ∘ u)
-abbrev Equation1975 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ y)) ∘ (x ∘ x)
-abbrev Equation1976 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ y)) ∘ (x ∘ y)
-abbrev Equation1977 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ y)) ∘ (x ∘ z)
-abbrev Equation1978 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ y)) ∘ (x ∘ w)
-abbrev Equation1979 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ y)) ∘ (y ∘ x)
-abbrev Equation1980 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ y)) ∘ (y ∘ y)
-abbrev Equation1981 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ y)) ∘ (y ∘ z)
-abbrev Equation1982 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ y)) ∘ (y ∘ w)
-abbrev Equation1983 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ y)) ∘ (z ∘ x)
-abbrev Equation1984 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ y)) ∘ (z ∘ y)
-abbrev Equation1985 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ y)) ∘ (z ∘ z)
-abbrev Equation1986 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ y)) ∘ (z ∘ w)
-abbrev Equation1987 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ y)) ∘ (w ∘ x)
-abbrev Equation1988 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ y)) ∘ (w ∘ y)
-abbrev Equation1989 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ y)) ∘ (w ∘ z)
-abbrev Equation1990 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ y)) ∘ (w ∘ w)
-abbrev Equation1991 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ y)) ∘ (w ∘ u)
-abbrev Equation1992 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ z)) ∘ (x ∘ x)
-abbrev Equation1993 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ z)) ∘ (x ∘ y)
-abbrev Equation1994 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ z)) ∘ (x ∘ z)
-abbrev Equation1995 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ z)) ∘ (x ∘ w)
-abbrev Equation1996 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ z)) ∘ (y ∘ x)
-abbrev Equation1997 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ z)) ∘ (y ∘ y)
-abbrev Equation1998 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ z)) ∘ (y ∘ z)
-abbrev Equation1999 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ z)) ∘ (y ∘ w)
-abbrev Equation2000 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ z)) ∘ (z ∘ x)
-abbrev Equation2001 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ z)) ∘ (z ∘ y)
-abbrev Equation2002 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ z)) ∘ (z ∘ z)
-abbrev Equation2003 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ z)) ∘ (z ∘ w)
-abbrev Equation2004 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ z)) ∘ (w ∘ x)
-abbrev Equation2005 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ z)) ∘ (w ∘ y)
-abbrev Equation2006 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ z)) ∘ (w ∘ z)
-abbrev Equation2007 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ z)) ∘ (w ∘ w)
-abbrev Equation2008 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ z)) ∘ (w ∘ u)
-abbrev Equation2009 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (x ∘ x)
-abbrev Equation2010 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (x ∘ y)
-abbrev Equation2011 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (x ∘ z)
-abbrev Equation2012 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (x ∘ w)
-abbrev Equation2013 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ w)) ∘ (x ∘ u)
-abbrev Equation2014 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (y ∘ x)
-abbrev Equation2015 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (y ∘ y)
-abbrev Equation2016 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (y ∘ z)
-abbrev Equation2017 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (y ∘ w)
-abbrev Equation2018 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ w)) ∘ (y ∘ u)
-abbrev Equation2019 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (z ∘ x)
-abbrev Equation2020 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (z ∘ y)
-abbrev Equation2021 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (z ∘ z)
-abbrev Equation2022 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (z ∘ w)
-abbrev Equation2023 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ w)) ∘ (z ∘ u)
-abbrev Equation2024 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (w ∘ x)
-abbrev Equation2025 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (w ∘ y)
-abbrev Equation2026 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (w ∘ z)
-abbrev Equation2027 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ w)) ∘ (w ∘ w)
-abbrev Equation2028 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ w)) ∘ (w ∘ u)
-abbrev Equation2029 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ w)) ∘ (u ∘ x)
-abbrev Equation2030 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ w)) ∘ (u ∘ y)
-abbrev Equation2031 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ w)) ∘ (u ∘ z)
-abbrev Equation2032 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ w)) ∘ (u ∘ w)
-abbrev Equation2033 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ w)) ∘ (u ∘ u)
-abbrev Equation2034 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = (y ∘ (z ∘ w)) ∘ (u ∘ v)
-abbrev Equation2035 (G: Type u) [Magma G] := ∀ x : G, x = ((x ∘ x) ∘ x) ∘ (x ∘ x)
-abbrev Equation2036 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ x) ∘ (x ∘ y)
-abbrev Equation2037 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ x) ∘ (y ∘ x)
-abbrev Equation2038 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ x) ∘ (y ∘ y)
-abbrev Equation2039 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ x) ∘ (y ∘ z)
-abbrev Equation2040 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ y) ∘ (x ∘ x)
-abbrev Equation2041 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ y) ∘ (x ∘ y)
-abbrev Equation2042 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ y) ∘ (x ∘ z)
-abbrev Equation2043 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ y) ∘ (y ∘ x)
-abbrev Equation2044 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ y) ∘ (y ∘ y)
-abbrev Equation2045 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ y) ∘ (y ∘ z)
-abbrev Equation2046 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ y) ∘ (z ∘ x)
-abbrev Equation2047 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ y) ∘ (z ∘ y)
-abbrev Equation2048 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ y) ∘ (z ∘ z)
-abbrev Equation2049 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ x) ∘ y) ∘ (z ∘ w)
-abbrev Equation2050 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ x) ∘ (x ∘ x)
-abbrev Equation2051 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ x) ∘ (x ∘ y)
-abbrev Equation2052 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ x) ∘ (x ∘ z)
-abbrev Equation2053 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ x) ∘ (y ∘ x)
-abbrev Equation2054 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ x) ∘ (y ∘ y)
-abbrev Equation2055 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ x) ∘ (y ∘ z)
-abbrev Equation2056 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ x) ∘ (z ∘ x)
-abbrev Equation2057 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ x) ∘ (z ∘ y)
-abbrev Equation2058 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ x) ∘ (z ∘ z)
-abbrev Equation2059 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ x) ∘ (z ∘ w)
-abbrev Equation2060 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ y) ∘ (x ∘ x)
-abbrev Equation2061 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ y) ∘ (x ∘ y)
-abbrev Equation2062 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ y) ∘ (x ∘ z)
-abbrev Equation2063 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ y) ∘ (y ∘ x)
-abbrev Equation2064 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ y) ∘ (y ∘ y)
-abbrev Equation2065 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ y) ∘ (y ∘ z)
-abbrev Equation2066 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ y) ∘ (z ∘ x)
-abbrev Equation2067 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ y) ∘ (z ∘ y)
-abbrev Equation2068 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ y) ∘ (z ∘ z)
-abbrev Equation2069 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ y) ∘ (z ∘ w)
-abbrev Equation2070 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ z) ∘ (x ∘ x)
-abbrev Equation2071 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ z) ∘ (x ∘ y)
-abbrev Equation2072 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ z) ∘ (x ∘ z)
-abbrev Equation2073 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ z) ∘ (x ∘ w)
-abbrev Equation2074 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ z) ∘ (y ∘ x)
-abbrev Equation2075 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ z) ∘ (y ∘ y)
-abbrev Equation2076 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ z) ∘ (y ∘ z)
-abbrev Equation2077 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ z) ∘ (y ∘ w)
-abbrev Equation2078 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ z) ∘ (z ∘ x)
-abbrev Equation2079 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ z) ∘ (z ∘ y)
-abbrev Equation2080 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ z) ∘ (z ∘ z)
-abbrev Equation2081 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ z) ∘ (z ∘ w)
-abbrev Equation2082 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ z) ∘ (w ∘ x)
-abbrev Equation2083 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ z) ∘ (w ∘ y)
-abbrev Equation2084 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ z) ∘ (w ∘ z)
-abbrev Equation2085 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ z) ∘ (w ∘ w)
-abbrev Equation2086 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((x ∘ y) ∘ z) ∘ (w ∘ u)
-abbrev Equation2087 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ x) ∘ (x ∘ x)
-abbrev Equation2088 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ x) ∘ (x ∘ y)
-abbrev Equation2089 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ x) ∘ (x ∘ z)
-abbrev Equation2090 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ x) ∘ (y ∘ x)
-abbrev Equation2091 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ x) ∘ (y ∘ y)
-abbrev Equation2092 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ x) ∘ (y ∘ z)
-abbrev Equation2093 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ x) ∘ (z ∘ x)
-abbrev Equation2094 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ x) ∘ (z ∘ y)
-abbrev Equation2095 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ x) ∘ (z ∘ z)
-abbrev Equation2096 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ x) ∘ (z ∘ w)
-abbrev Equation2097 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ y) ∘ (x ∘ x)
-abbrev Equation2098 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ y) ∘ (x ∘ y)
-abbrev Equation2099 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ y) ∘ (x ∘ z)
-abbrev Equation2100 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ y) ∘ (y ∘ x)
-abbrev Equation2101 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ y) ∘ (y ∘ y)
-abbrev Equation2102 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ y) ∘ (y ∘ z)
-abbrev Equation2103 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ y) ∘ (z ∘ x)
-abbrev Equation2104 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ y) ∘ (z ∘ y)
-abbrev Equation2105 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ y) ∘ (z ∘ z)
-abbrev Equation2106 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ y) ∘ (z ∘ w)
-abbrev Equation2107 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ z) ∘ (x ∘ x)
-abbrev Equation2108 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ z) ∘ (x ∘ y)
-abbrev Equation2109 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ z) ∘ (x ∘ z)
-abbrev Equation2110 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ z) ∘ (x ∘ w)
-abbrev Equation2111 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ z) ∘ (y ∘ x)
-abbrev Equation2112 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ z) ∘ (y ∘ y)
-abbrev Equation2113 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ z) ∘ (y ∘ z)
-abbrev Equation2114 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ z) ∘ (y ∘ w)
-abbrev Equation2115 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ z) ∘ (z ∘ x)
-abbrev Equation2116 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ z) ∘ (z ∘ y)
-abbrev Equation2117 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ z) ∘ (z ∘ z)
-abbrev Equation2118 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ z) ∘ (z ∘ w)
-abbrev Equation2119 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ z) ∘ (w ∘ x)
-abbrev Equation2120 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ z) ∘ (w ∘ y)
-abbrev Equation2121 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ z) ∘ (w ∘ z)
-abbrev Equation2122 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ z) ∘ (w ∘ w)
-abbrev Equation2123 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ x) ∘ z) ∘ (w ∘ u)
-abbrev Equation2124 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ x) ∘ (x ∘ x)
-abbrev Equation2125 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ x) ∘ (x ∘ y)
-abbrev Equation2126 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ x) ∘ (x ∘ z)
-abbrev Equation2127 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ x) ∘ (y ∘ x)
-abbrev Equation2128 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ x) ∘ (y ∘ y)
-abbrev Equation2129 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ x) ∘ (y ∘ z)
-abbrev Equation2130 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ x) ∘ (z ∘ x)
-abbrev Equation2131 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ x) ∘ (z ∘ y)
-abbrev Equation2132 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ x) ∘ (z ∘ z)
-abbrev Equation2133 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ x) ∘ (z ∘ w)
-abbrev Equation2134 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ y) ∘ (x ∘ x)
-abbrev Equation2135 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ y) ∘ (x ∘ y)
-abbrev Equation2136 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ y) ∘ (x ∘ z)
-abbrev Equation2137 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ y) ∘ (y ∘ x)
-abbrev Equation2138 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ y) ∘ (y ∘ y)
-abbrev Equation2139 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ y) ∘ (y ∘ z)
-abbrev Equation2140 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ y) ∘ (z ∘ x)
-abbrev Equation2141 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ y) ∘ (z ∘ y)
-abbrev Equation2142 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ y) ∘ (z ∘ z)
-abbrev Equation2143 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ y) ∘ (z ∘ w)
-abbrev Equation2144 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ z) ∘ (x ∘ x)
-abbrev Equation2145 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ z) ∘ (x ∘ y)
-abbrev Equation2146 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ z) ∘ (x ∘ z)
-abbrev Equation2147 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ z) ∘ (x ∘ w)
-abbrev Equation2148 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ z) ∘ (y ∘ x)
-abbrev Equation2149 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ z) ∘ (y ∘ y)
-abbrev Equation2150 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ z) ∘ (y ∘ z)
-abbrev Equation2151 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ z) ∘ (y ∘ w)
-abbrev Equation2152 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ z) ∘ (z ∘ x)
-abbrev Equation2153 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ z) ∘ (z ∘ y)
-abbrev Equation2154 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ z) ∘ (z ∘ z)
-abbrev Equation2155 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ z) ∘ (z ∘ w)
-abbrev Equation2156 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ z) ∘ (w ∘ x)
-abbrev Equation2157 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ z) ∘ (w ∘ y)
-abbrev Equation2158 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ z) ∘ (w ∘ z)
-abbrev Equation2159 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ z) ∘ (w ∘ w)
-abbrev Equation2160 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ y) ∘ z) ∘ (w ∘ u)
-abbrev Equation2161 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ x) ∘ (x ∘ x)
-abbrev Equation2162 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ x) ∘ (x ∘ y)
-abbrev Equation2163 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ x) ∘ (x ∘ z)
-abbrev Equation2164 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ x) ∘ (x ∘ w)
-abbrev Equation2165 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ x) ∘ (y ∘ x)
-abbrev Equation2166 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ x) ∘ (y ∘ y)
-abbrev Equation2167 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ x) ∘ (y ∘ z)
-abbrev Equation2168 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ x) ∘ (y ∘ w)
-abbrev Equation2169 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ x) ∘ (z ∘ x)
-abbrev Equation2170 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ x) ∘ (z ∘ y)
-abbrev Equation2171 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ x) ∘ (z ∘ z)
-abbrev Equation2172 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ x) ∘ (z ∘ w)
-abbrev Equation2173 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ x) ∘ (w ∘ x)
-abbrev Equation2174 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ x) ∘ (w ∘ y)
-abbrev Equation2175 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ x) ∘ (w ∘ z)
-abbrev Equation2176 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ x) ∘ (w ∘ w)
-abbrev Equation2177 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ x) ∘ (w ∘ u)
-abbrev Equation2178 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ y) ∘ (x ∘ x)
-abbrev Equation2179 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ y) ∘ (x ∘ y)
-abbrev Equation2180 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ y) ∘ (x ∘ z)
-abbrev Equation2181 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ y) ∘ (x ∘ w)
-abbrev Equation2182 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ y) ∘ (y ∘ x)
-abbrev Equation2183 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ y) ∘ (y ∘ y)
-abbrev Equation2184 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ y) ∘ (y ∘ z)
-abbrev Equation2185 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ y) ∘ (y ∘ w)
-abbrev Equation2186 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ y) ∘ (z ∘ x)
-abbrev Equation2187 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ y) ∘ (z ∘ y)
-abbrev Equation2188 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ y) ∘ (z ∘ z)
-abbrev Equation2189 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ y) ∘ (z ∘ w)
-abbrev Equation2190 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ y) ∘ (w ∘ x)
-abbrev Equation2191 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ y) ∘ (w ∘ y)
-abbrev Equation2192 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ y) ∘ (w ∘ z)
-abbrev Equation2193 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ y) ∘ (w ∘ w)
-abbrev Equation2194 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ y) ∘ (w ∘ u)
-abbrev Equation2195 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ z) ∘ (x ∘ x)
-abbrev Equation2196 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ z) ∘ (x ∘ y)
-abbrev Equation2197 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ z) ∘ (x ∘ z)
-abbrev Equation2198 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ z) ∘ (x ∘ w)
-abbrev Equation2199 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ z) ∘ (y ∘ x)
-abbrev Equation2200 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ z) ∘ (y ∘ y)
-abbrev Equation2201 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ z) ∘ (y ∘ z)
-abbrev Equation2202 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ z) ∘ (y ∘ w)
-abbrev Equation2203 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ z) ∘ (z ∘ x)
-abbrev Equation2204 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ z) ∘ (z ∘ y)
-abbrev Equation2205 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ z) ∘ (z ∘ z)
-abbrev Equation2206 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ z) ∘ (z ∘ w)
-abbrev Equation2207 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ z) ∘ (w ∘ x)
-abbrev Equation2208 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ z) ∘ (w ∘ y)
-abbrev Equation2209 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ z) ∘ (w ∘ z)
-abbrev Equation2210 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ z) ∘ (w ∘ w)
-abbrev Equation2211 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ z) ∘ (w ∘ u)
-abbrev Equation2212 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (x ∘ x)
-abbrev Equation2213 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (x ∘ y)
-abbrev Equation2214 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (x ∘ z)
-abbrev Equation2215 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (x ∘ w)
-abbrev Equation2216 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ w) ∘ (x ∘ u)
-abbrev Equation2217 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (y ∘ x)
-abbrev Equation2218 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (y ∘ y)
-abbrev Equation2219 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (y ∘ z)
-abbrev Equation2220 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (y ∘ w)
-abbrev Equation2221 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ w) ∘ (y ∘ u)
-abbrev Equation2222 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (z ∘ x)
-abbrev Equation2223 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (z ∘ y)
-abbrev Equation2224 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (z ∘ z)
-abbrev Equation2225 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (z ∘ w)
-abbrev Equation2226 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ w) ∘ (z ∘ u)
-abbrev Equation2227 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (w ∘ x)
-abbrev Equation2228 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (w ∘ y)
-abbrev Equation2229 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (w ∘ z)
-abbrev Equation2230 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ w) ∘ (w ∘ w)
-abbrev Equation2231 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ w) ∘ (w ∘ u)
-abbrev Equation2232 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ w) ∘ (u ∘ x)
-abbrev Equation2233 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ w) ∘ (u ∘ y)
-abbrev Equation2234 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ w) ∘ (u ∘ z)
-abbrev Equation2235 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ w) ∘ (u ∘ w)
-abbrev Equation2236 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ w) ∘ (u ∘ u)
-abbrev Equation2237 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = ((y ∘ z) ∘ w) ∘ (u ∘ v)
-abbrev Equation2238 (G: Type u) [Magma G] := ∀ x : G, x = (x ∘ (x ∘ (x ∘ x))) ∘ x
-abbrev Equation2239 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ (x ∘ x))) ∘ y
-abbrev Equation2240 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ (x ∘ y))) ∘ x
-abbrev Equation2241 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ (x ∘ y))) ∘ y
-abbrev Equation2242 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ (x ∘ y))) ∘ z
-abbrev Equation2243 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ (y ∘ x))) ∘ x
-abbrev Equation2244 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ (y ∘ x))) ∘ y
-abbrev Equation2245 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ (y ∘ x))) ∘ z
-abbrev Equation2246 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ (y ∘ y))) ∘ x
-abbrev Equation2247 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (x ∘ (y ∘ y))) ∘ y
-abbrev Equation2248 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ (y ∘ y))) ∘ z
-abbrev Equation2249 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ (y ∘ z))) ∘ x
-abbrev Equation2250 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ (y ∘ z))) ∘ y
-abbrev Equation2251 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (x ∘ (y ∘ z))) ∘ z
-abbrev Equation2252 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (x ∘ (y ∘ z))) ∘ w
-abbrev Equation2253 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ (x ∘ x))) ∘ x
-abbrev Equation2254 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ (x ∘ x))) ∘ y
-abbrev Equation2255 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (x ∘ x))) ∘ z
-abbrev Equation2256 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ (x ∘ y))) ∘ x
-abbrev Equation2257 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ (x ∘ y))) ∘ y
-abbrev Equation2258 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (x ∘ y))) ∘ z
-abbrev Equation2259 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (x ∘ z))) ∘ x
-abbrev Equation2260 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (x ∘ z))) ∘ y
-abbrev Equation2261 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (x ∘ z))) ∘ z
-abbrev Equation2262 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ (x ∘ z))) ∘ w
-abbrev Equation2263 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ (y ∘ x))) ∘ x
-abbrev Equation2264 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ (y ∘ x))) ∘ y
-abbrev Equation2265 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (y ∘ x))) ∘ z
-abbrev Equation2266 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ (y ∘ y))) ∘ x
-abbrev Equation2267 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ (y ∘ (y ∘ y))) ∘ y
-abbrev Equation2268 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (y ∘ y))) ∘ z
-abbrev Equation2269 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (y ∘ z))) ∘ x
-abbrev Equation2270 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (y ∘ z))) ∘ y
-abbrev Equation2271 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (y ∘ z))) ∘ z
-abbrev Equation2272 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ (y ∘ z))) ∘ w
-abbrev Equation2273 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (z ∘ x))) ∘ x
-abbrev Equation2274 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (z ∘ x))) ∘ y
-abbrev Equation2275 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (z ∘ x))) ∘ z
-abbrev Equation2276 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ (z ∘ x))) ∘ w
-abbrev Equation2277 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (z ∘ y))) ∘ x
-abbrev Equation2278 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (z ∘ y))) ∘ y
-abbrev Equation2279 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (z ∘ y))) ∘ z
-abbrev Equation2280 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ (z ∘ y))) ∘ w
-abbrev Equation2281 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (z ∘ z))) ∘ x
-abbrev Equation2282 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (z ∘ z))) ∘ y
-abbrev Equation2283 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ (y ∘ (z ∘ z))) ∘ z
-abbrev Equation2284 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ (z ∘ z))) ∘ w
-abbrev Equation2285 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ (z ∘ w))) ∘ x
-abbrev Equation2286 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ (z ∘ w))) ∘ y
-abbrev Equation2287 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ (z ∘ w))) ∘ z
-abbrev Equation2288 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ (y ∘ (z ∘ w))) ∘ w
-abbrev Equation2289 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (x ∘ (y ∘ (z ∘ w))) ∘ u
-abbrev Equation2290 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ (x ∘ x))) ∘ x
-abbrev Equation2291 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ (x ∘ x))) ∘ y
-abbrev Equation2292 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (x ∘ x))) ∘ z
-abbrev Equation2293 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ (x ∘ y))) ∘ x
-abbrev Equation2294 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ (x ∘ y))) ∘ y
-abbrev Equation2295 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (x ∘ y))) ∘ z
-abbrev Equation2296 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (x ∘ z))) ∘ x
-abbrev Equation2297 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (x ∘ z))) ∘ y
-abbrev Equation2298 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (x ∘ z))) ∘ z
-abbrev Equation2299 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ (x ∘ z))) ∘ w
-abbrev Equation2300 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ (y ∘ x))) ∘ x
-abbrev Equation2301 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ (y ∘ x))) ∘ y
-abbrev Equation2302 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (y ∘ x))) ∘ z
-abbrev Equation2303 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ (y ∘ y))) ∘ x
-abbrev Equation2304 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (x ∘ (y ∘ y))) ∘ y
-abbrev Equation2305 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (y ∘ y))) ∘ z
-abbrev Equation2306 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (y ∘ z))) ∘ x
-abbrev Equation2307 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (y ∘ z))) ∘ y
-abbrev Equation2308 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (y ∘ z))) ∘ z
-abbrev Equation2309 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ (y ∘ z))) ∘ w
-abbrev Equation2310 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (z ∘ x))) ∘ x
-abbrev Equation2311 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (z ∘ x))) ∘ y
-abbrev Equation2312 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (z ∘ x))) ∘ z
-abbrev Equation2313 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ (z ∘ x))) ∘ w
-abbrev Equation2314 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (z ∘ y))) ∘ x
-abbrev Equation2315 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (z ∘ y))) ∘ y
-abbrev Equation2316 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (z ∘ y))) ∘ z
-abbrev Equation2317 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ (z ∘ y))) ∘ w
-abbrev Equation2318 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (z ∘ z))) ∘ x
-abbrev Equation2319 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (z ∘ z))) ∘ y
-abbrev Equation2320 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (x ∘ (z ∘ z))) ∘ z
-abbrev Equation2321 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ (z ∘ z))) ∘ w
-abbrev Equation2322 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ (z ∘ w))) ∘ x
-abbrev Equation2323 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ (z ∘ w))) ∘ y
-abbrev Equation2324 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ (z ∘ w))) ∘ z
-abbrev Equation2325 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (x ∘ (z ∘ w))) ∘ w
-abbrev Equation2326 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (x ∘ (z ∘ w))) ∘ u
-abbrev Equation2327 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ (x ∘ x))) ∘ x
-abbrev Equation2328 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ (x ∘ x))) ∘ y
-abbrev Equation2329 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (x ∘ x))) ∘ z
-abbrev Equation2330 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ (x ∘ y))) ∘ x
-abbrev Equation2331 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ (x ∘ y))) ∘ y
-abbrev Equation2332 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (x ∘ y))) ∘ z
-abbrev Equation2333 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (x ∘ z))) ∘ x
-abbrev Equation2334 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (x ∘ z))) ∘ y
-abbrev Equation2335 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (x ∘ z))) ∘ z
-abbrev Equation2336 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ (x ∘ z))) ∘ w
-abbrev Equation2337 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ (y ∘ x))) ∘ x
-abbrev Equation2338 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ (y ∘ x))) ∘ y
-abbrev Equation2339 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (y ∘ x))) ∘ z
-abbrev Equation2340 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ (y ∘ y))) ∘ x
-abbrev Equation2341 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ (y ∘ (y ∘ y))) ∘ y
-abbrev Equation2342 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (y ∘ y))) ∘ z
-abbrev Equation2343 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (y ∘ z))) ∘ x
-abbrev Equation2344 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (y ∘ z))) ∘ y
-abbrev Equation2345 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (y ∘ z))) ∘ z
-abbrev Equation2346 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ (y ∘ z))) ∘ w
-abbrev Equation2347 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (z ∘ x))) ∘ x
-abbrev Equation2348 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (z ∘ x))) ∘ y
-abbrev Equation2349 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (z ∘ x))) ∘ z
-abbrev Equation2350 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ (z ∘ x))) ∘ w
-abbrev Equation2351 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (z ∘ y))) ∘ x
-abbrev Equation2352 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (z ∘ y))) ∘ y
-abbrev Equation2353 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (z ∘ y))) ∘ z
-abbrev Equation2354 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ (z ∘ y))) ∘ w
-abbrev Equation2355 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (z ∘ z))) ∘ x
-abbrev Equation2356 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (z ∘ z))) ∘ y
-abbrev Equation2357 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (y ∘ (z ∘ z))) ∘ z
-abbrev Equation2358 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ (z ∘ z))) ∘ w
-abbrev Equation2359 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ (z ∘ w))) ∘ x
-abbrev Equation2360 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ (z ∘ w))) ∘ y
-abbrev Equation2361 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ (z ∘ w))) ∘ z
-abbrev Equation2362 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (y ∘ (z ∘ w))) ∘ w
-abbrev Equation2363 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (y ∘ (z ∘ w))) ∘ u
-abbrev Equation2364 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (x ∘ x))) ∘ x
-abbrev Equation2365 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (x ∘ x))) ∘ y
-abbrev Equation2366 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (x ∘ x))) ∘ z
-abbrev Equation2367 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (x ∘ x))) ∘ w
-abbrev Equation2368 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (x ∘ y))) ∘ x
-abbrev Equation2369 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (x ∘ y))) ∘ y
-abbrev Equation2370 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (x ∘ y))) ∘ z
-abbrev Equation2371 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (x ∘ y))) ∘ w
-abbrev Equation2372 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (x ∘ z))) ∘ x
-abbrev Equation2373 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (x ∘ z))) ∘ y
-abbrev Equation2374 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (x ∘ z))) ∘ z
-abbrev Equation2375 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (x ∘ z))) ∘ w
-abbrev Equation2376 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (x ∘ w))) ∘ x
-abbrev Equation2377 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (x ∘ w))) ∘ y
-abbrev Equation2378 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (x ∘ w))) ∘ z
-abbrev Equation2379 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (x ∘ w))) ∘ w
-abbrev Equation2380 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ (x ∘ w))) ∘ u
-abbrev Equation2381 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (y ∘ x))) ∘ x
-abbrev Equation2382 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (y ∘ x))) ∘ y
-abbrev Equation2383 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (y ∘ x))) ∘ z
-abbrev Equation2384 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (y ∘ x))) ∘ w
-abbrev Equation2385 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (y ∘ y))) ∘ x
-abbrev Equation2386 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (y ∘ y))) ∘ y
-abbrev Equation2387 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (y ∘ y))) ∘ z
-abbrev Equation2388 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (y ∘ y))) ∘ w
-abbrev Equation2389 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (y ∘ z))) ∘ x
-abbrev Equation2390 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (y ∘ z))) ∘ y
-abbrev Equation2391 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (y ∘ z))) ∘ z
-abbrev Equation2392 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (y ∘ z))) ∘ w
-abbrev Equation2393 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (y ∘ w))) ∘ x
-abbrev Equation2394 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (y ∘ w))) ∘ y
-abbrev Equation2395 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (y ∘ w))) ∘ z
-abbrev Equation2396 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (y ∘ w))) ∘ w
-abbrev Equation2397 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ (y ∘ w))) ∘ u
-abbrev Equation2398 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (z ∘ x))) ∘ x
-abbrev Equation2399 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (z ∘ x))) ∘ y
-abbrev Equation2400 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (z ∘ x))) ∘ z
-abbrev Equation2401 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (z ∘ x))) ∘ w
-abbrev Equation2402 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (z ∘ y))) ∘ x
-abbrev Equation2403 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (z ∘ y))) ∘ y
-abbrev Equation2404 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (z ∘ y))) ∘ z
-abbrev Equation2405 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (z ∘ y))) ∘ w
-abbrev Equation2406 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (z ∘ z))) ∘ x
-abbrev Equation2407 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (z ∘ z))) ∘ y
-abbrev Equation2408 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ (z ∘ (z ∘ z))) ∘ z
-abbrev Equation2409 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (z ∘ z))) ∘ w
-abbrev Equation2410 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (z ∘ w))) ∘ x
-abbrev Equation2411 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (z ∘ w))) ∘ y
-abbrev Equation2412 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (z ∘ w))) ∘ z
-abbrev Equation2413 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (z ∘ w))) ∘ w
-abbrev Equation2414 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ (z ∘ w))) ∘ u
-abbrev Equation2415 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ x))) ∘ x
-abbrev Equation2416 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ x))) ∘ y
-abbrev Equation2417 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ x))) ∘ z
-abbrev Equation2418 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ x))) ∘ w
-abbrev Equation2419 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ (w ∘ x))) ∘ u
-abbrev Equation2420 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ y))) ∘ x
-abbrev Equation2421 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ y))) ∘ y
-abbrev Equation2422 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ y))) ∘ z
-abbrev Equation2423 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ y))) ∘ w
-abbrev Equation2424 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ (w ∘ y))) ∘ u
-abbrev Equation2425 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ z))) ∘ x
-abbrev Equation2426 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ z))) ∘ y
-abbrev Equation2427 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ z))) ∘ z
-abbrev Equation2428 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ z))) ∘ w
-abbrev Equation2429 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ (w ∘ z))) ∘ u
-abbrev Equation2430 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ w))) ∘ x
-abbrev Equation2431 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ w))) ∘ y
-abbrev Equation2432 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ w))) ∘ z
-abbrev Equation2433 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ (z ∘ (w ∘ w))) ∘ w
-abbrev Equation2434 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ (w ∘ w))) ∘ u
-abbrev Equation2435 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ (w ∘ u))) ∘ x
-abbrev Equation2436 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ (w ∘ u))) ∘ y
-abbrev Equation2437 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ (w ∘ u))) ∘ z
-abbrev Equation2438 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ (w ∘ u))) ∘ w
-abbrev Equation2439 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ (z ∘ (w ∘ u))) ∘ u
-abbrev Equation2440 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = (y ∘ (z ∘ (w ∘ u))) ∘ v
-abbrev Equation2441 (G: Type u) [Magma G] := ∀ x : G, x = (x ∘ ((x ∘ x) ∘ x)) ∘ x
-abbrev Equation2442 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((x ∘ x) ∘ x)) ∘ y
-abbrev Equation2443 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((x ∘ x) ∘ y)) ∘ x
-abbrev Equation2444 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((x ∘ x) ∘ y)) ∘ y
-abbrev Equation2445 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((x ∘ x) ∘ y)) ∘ z
-abbrev Equation2446 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((x ∘ y) ∘ x)) ∘ x
-abbrev Equation2447 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((x ∘ y) ∘ x)) ∘ y
-abbrev Equation2448 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((x ∘ y) ∘ x)) ∘ z
-abbrev Equation2449 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((x ∘ y) ∘ y)) ∘ x
-abbrev Equation2450 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((x ∘ y) ∘ y)) ∘ y
-abbrev Equation2451 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((x ∘ y) ∘ y)) ∘ z
-abbrev Equation2452 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((x ∘ y) ∘ z)) ∘ x
-abbrev Equation2453 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((x ∘ y) ∘ z)) ∘ y
-abbrev Equation2454 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((x ∘ y) ∘ z)) ∘ z
-abbrev Equation2455 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ ((x ∘ y) ∘ z)) ∘ w
-abbrev Equation2456 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((y ∘ x) ∘ x)) ∘ x
-abbrev Equation2457 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((y ∘ x) ∘ x)) ∘ y
-abbrev Equation2458 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ x) ∘ x)) ∘ z
-abbrev Equation2459 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((y ∘ x) ∘ y)) ∘ x
-abbrev Equation2460 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((y ∘ x) ∘ y)) ∘ y
-abbrev Equation2461 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ x) ∘ y)) ∘ z
-abbrev Equation2462 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ x) ∘ z)) ∘ x
-abbrev Equation2463 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ x) ∘ z)) ∘ y
-abbrev Equation2464 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ x) ∘ z)) ∘ z
-abbrev Equation2465 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ ((y ∘ x) ∘ z)) ∘ w
-abbrev Equation2466 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((y ∘ y) ∘ x)) ∘ x
-abbrev Equation2467 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((y ∘ y) ∘ x)) ∘ y
-abbrev Equation2468 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ y) ∘ x)) ∘ z
-abbrev Equation2469 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((y ∘ y) ∘ y)) ∘ x
-abbrev Equation2470 (G: Type u) [Magma G] := ∀ x y : G, x = (x ∘ ((y ∘ y) ∘ y)) ∘ y
-abbrev Equation2471 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ y) ∘ y)) ∘ z
-abbrev Equation2472 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ y) ∘ z)) ∘ x
-abbrev Equation2473 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ y) ∘ z)) ∘ y
-abbrev Equation2474 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ y) ∘ z)) ∘ z
-abbrev Equation2475 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ ((y ∘ y) ∘ z)) ∘ w
-abbrev Equation2476 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ z) ∘ x)) ∘ x
-abbrev Equation2477 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ z) ∘ x)) ∘ y
-abbrev Equation2478 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ z) ∘ x)) ∘ z
-abbrev Equation2479 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ ((y ∘ z) ∘ x)) ∘ w
-abbrev Equation2480 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ z) ∘ y)) ∘ x
-abbrev Equation2481 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ z) ∘ y)) ∘ y
-abbrev Equation2482 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ z) ∘ y)) ∘ z
-abbrev Equation2483 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ ((y ∘ z) ∘ y)) ∘ w
-abbrev Equation2484 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ z) ∘ z)) ∘ x
-abbrev Equation2485 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ z) ∘ z)) ∘ y
-abbrev Equation2486 (G: Type u) [Magma G] := ∀ x y z : G, x = (x ∘ ((y ∘ z) ∘ z)) ∘ z
-abbrev Equation2487 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ ((y ∘ z) ∘ z)) ∘ w
-abbrev Equation2488 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ ((y ∘ z) ∘ w)) ∘ x
-abbrev Equation2489 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ ((y ∘ z) ∘ w)) ∘ y
-abbrev Equation2490 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ ((y ∘ z) ∘ w)) ∘ z
-abbrev Equation2491 (G: Type u) [Magma G] := ∀ x y z w : G, x = (x ∘ ((y ∘ z) ∘ w)) ∘ w
-abbrev Equation2492 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (x ∘ ((y ∘ z) ∘ w)) ∘ u
-abbrev Equation2493 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((x ∘ x) ∘ x)) ∘ x
-abbrev Equation2494 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((x ∘ x) ∘ x)) ∘ y
-abbrev Equation2495 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ x) ∘ x)) ∘ z
-abbrev Equation2496 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((x ∘ x) ∘ y)) ∘ x
-abbrev Equation2497 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((x ∘ x) ∘ y)) ∘ y
-abbrev Equation2498 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ x) ∘ y)) ∘ z
-abbrev Equation2499 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ x) ∘ z)) ∘ x
-abbrev Equation2500 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ x) ∘ z)) ∘ y
-abbrev Equation2501 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ x) ∘ z)) ∘ z
-abbrev Equation2502 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((x ∘ x) ∘ z)) ∘ w
-abbrev Equation2503 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((x ∘ y) ∘ x)) ∘ x
-abbrev Equation2504 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((x ∘ y) ∘ x)) ∘ y
-abbrev Equation2505 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ y) ∘ x)) ∘ z
-abbrev Equation2506 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((x ∘ y) ∘ y)) ∘ x
-abbrev Equation2507 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((x ∘ y) ∘ y)) ∘ y
-abbrev Equation2508 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ y) ∘ y)) ∘ z
-abbrev Equation2509 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ y) ∘ z)) ∘ x
-abbrev Equation2510 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ y) ∘ z)) ∘ y
-abbrev Equation2511 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ y) ∘ z)) ∘ z
-abbrev Equation2512 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((x ∘ y) ∘ z)) ∘ w
-abbrev Equation2513 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ z) ∘ x)) ∘ x
-abbrev Equation2514 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ z) ∘ x)) ∘ y
-abbrev Equation2515 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ z) ∘ x)) ∘ z
-abbrev Equation2516 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((x ∘ z) ∘ x)) ∘ w
-abbrev Equation2517 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ z) ∘ y)) ∘ x
-abbrev Equation2518 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ z) ∘ y)) ∘ y
-abbrev Equation2519 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ z) ∘ y)) ∘ z
-abbrev Equation2520 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((x ∘ z) ∘ y)) ∘ w
-abbrev Equation2521 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ z) ∘ z)) ∘ x
-abbrev Equation2522 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ z) ∘ z)) ∘ y
-abbrev Equation2523 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((x ∘ z) ∘ z)) ∘ z
-abbrev Equation2524 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((x ∘ z) ∘ z)) ∘ w
-abbrev Equation2525 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((x ∘ z) ∘ w)) ∘ x
-abbrev Equation2526 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((x ∘ z) ∘ w)) ∘ y
-abbrev Equation2527 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((x ∘ z) ∘ w)) ∘ z
-abbrev Equation2528 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((x ∘ z) ∘ w)) ∘ w
-abbrev Equation2529 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((x ∘ z) ∘ w)) ∘ u
-abbrev Equation2530 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((y ∘ x) ∘ x)) ∘ x
-abbrev Equation2531 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((y ∘ x) ∘ x)) ∘ y
-abbrev Equation2532 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ x) ∘ x)) ∘ z
-abbrev Equation2533 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((y ∘ x) ∘ y)) ∘ x
-abbrev Equation2534 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((y ∘ x) ∘ y)) ∘ y
-abbrev Equation2535 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ x) ∘ y)) ∘ z
-abbrev Equation2536 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ x) ∘ z)) ∘ x
-abbrev Equation2537 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ x) ∘ z)) ∘ y
-abbrev Equation2538 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ x) ∘ z)) ∘ z
-abbrev Equation2539 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((y ∘ x) ∘ z)) ∘ w
-abbrev Equation2540 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((y ∘ y) ∘ x)) ∘ x
-abbrev Equation2541 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((y ∘ y) ∘ x)) ∘ y
-abbrev Equation2542 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ y) ∘ x)) ∘ z
-abbrev Equation2543 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((y ∘ y) ∘ y)) ∘ x
-abbrev Equation2544 (G: Type u) [Magma G] := ∀ x y : G, x = (y ∘ ((y ∘ y) ∘ y)) ∘ y
-abbrev Equation2545 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ y) ∘ y)) ∘ z
-abbrev Equation2546 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ y) ∘ z)) ∘ x
-abbrev Equation2547 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ y) ∘ z)) ∘ y
-abbrev Equation2548 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ y) ∘ z)) ∘ z
-abbrev Equation2549 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((y ∘ y) ∘ z)) ∘ w
-abbrev Equation2550 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ z) ∘ x)) ∘ x
-abbrev Equation2551 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ z) ∘ x)) ∘ y
-abbrev Equation2552 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ z) ∘ x)) ∘ z
-abbrev Equation2553 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((y ∘ z) ∘ x)) ∘ w
-abbrev Equation2554 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ z) ∘ y)) ∘ x
-abbrev Equation2555 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ z) ∘ y)) ∘ y
-abbrev Equation2556 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ z) ∘ y)) ∘ z
-abbrev Equation2557 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((y ∘ z) ∘ y)) ∘ w
-abbrev Equation2558 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ z) ∘ z)) ∘ x
-abbrev Equation2559 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ z) ∘ z)) ∘ y
-abbrev Equation2560 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((y ∘ z) ∘ z)) ∘ z
-abbrev Equation2561 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((y ∘ z) ∘ z)) ∘ w
-abbrev Equation2562 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((y ∘ z) ∘ w)) ∘ x
-abbrev Equation2563 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((y ∘ z) ∘ w)) ∘ y
-abbrev Equation2564 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((y ∘ z) ∘ w)) ∘ z
-abbrev Equation2565 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((y ∘ z) ∘ w)) ∘ w
-abbrev Equation2566 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((y ∘ z) ∘ w)) ∘ u
-abbrev Equation2567 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ x) ∘ x)) ∘ x
-abbrev Equation2568 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ x) ∘ x)) ∘ y
-abbrev Equation2569 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ x) ∘ x)) ∘ z
-abbrev Equation2570 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ x) ∘ x)) ∘ w
-abbrev Equation2571 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ x) ∘ y)) ∘ x
-abbrev Equation2572 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ x) ∘ y)) ∘ y
-abbrev Equation2573 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ x) ∘ y)) ∘ z
-abbrev Equation2574 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ x) ∘ y)) ∘ w
-abbrev Equation2575 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ x) ∘ z)) ∘ x
-abbrev Equation2576 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ x) ∘ z)) ∘ y
-abbrev Equation2577 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ x) ∘ z)) ∘ z
-abbrev Equation2578 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ x) ∘ z)) ∘ w
-abbrev Equation2579 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ x) ∘ w)) ∘ x
-abbrev Equation2580 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ x) ∘ w)) ∘ y
-abbrev Equation2581 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ x) ∘ w)) ∘ z
-abbrev Equation2582 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ x) ∘ w)) ∘ w
-abbrev Equation2583 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((z ∘ x) ∘ w)) ∘ u
-abbrev Equation2584 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ y) ∘ x)) ∘ x
-abbrev Equation2585 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ y) ∘ x)) ∘ y
-abbrev Equation2586 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ y) ∘ x)) ∘ z
-abbrev Equation2587 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ y) ∘ x)) ∘ w
-abbrev Equation2588 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ y) ∘ y)) ∘ x
-abbrev Equation2589 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ y) ∘ y)) ∘ y
-abbrev Equation2590 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ y) ∘ y)) ∘ z
-abbrev Equation2591 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ y) ∘ y)) ∘ w
-abbrev Equation2592 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ y) ∘ z)) ∘ x
-abbrev Equation2593 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ y) ∘ z)) ∘ y
-abbrev Equation2594 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ y) ∘ z)) ∘ z
-abbrev Equation2595 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ y) ∘ z)) ∘ w
-abbrev Equation2596 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ y) ∘ w)) ∘ x
-abbrev Equation2597 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ y) ∘ w)) ∘ y
-abbrev Equation2598 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ y) ∘ w)) ∘ z
-abbrev Equation2599 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ y) ∘ w)) ∘ w
-abbrev Equation2600 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((z ∘ y) ∘ w)) ∘ u
-abbrev Equation2601 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ z) ∘ x)) ∘ x
-abbrev Equation2602 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ z) ∘ x)) ∘ y
-abbrev Equation2603 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ z) ∘ x)) ∘ z
-abbrev Equation2604 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ z) ∘ x)) ∘ w
-abbrev Equation2605 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ z) ∘ y)) ∘ x
-abbrev Equation2606 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ z) ∘ y)) ∘ y
-abbrev Equation2607 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ z) ∘ y)) ∘ z
-abbrev Equation2608 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ z) ∘ y)) ∘ w
-abbrev Equation2609 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ z) ∘ z)) ∘ x
-abbrev Equation2610 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ z) ∘ z)) ∘ y
-abbrev Equation2611 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ ((z ∘ z) ∘ z)) ∘ z
-abbrev Equation2612 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ z) ∘ z)) ∘ w
-abbrev Equation2613 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ z) ∘ w)) ∘ x
-abbrev Equation2614 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ z) ∘ w)) ∘ y
-abbrev Equation2615 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ z) ∘ w)) ∘ z
-abbrev Equation2616 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ z) ∘ w)) ∘ w
-abbrev Equation2617 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((z ∘ z) ∘ w)) ∘ u
-abbrev Equation2618 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ x)) ∘ x
-abbrev Equation2619 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ x)) ∘ y
-abbrev Equation2620 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ x)) ∘ z
-abbrev Equation2621 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ x)) ∘ w
-abbrev Equation2622 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((z ∘ w) ∘ x)) ∘ u
-abbrev Equation2623 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ y)) ∘ x
-abbrev Equation2624 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ y)) ∘ y
-abbrev Equation2625 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ y)) ∘ z
-abbrev Equation2626 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ y)) ∘ w
-abbrev Equation2627 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((z ∘ w) ∘ y)) ∘ u
-abbrev Equation2628 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ z)) ∘ x
-abbrev Equation2629 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ z)) ∘ y
-abbrev Equation2630 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ z)) ∘ z
-abbrev Equation2631 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ z)) ∘ w
-abbrev Equation2632 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((z ∘ w) ∘ z)) ∘ u
-abbrev Equation2633 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ w)) ∘ x
-abbrev Equation2634 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ w)) ∘ y
-abbrev Equation2635 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ w)) ∘ z
-abbrev Equation2636 (G: Type u) [Magma G] := ∀ x y z w : G, x = (y ∘ ((z ∘ w) ∘ w)) ∘ w
-abbrev Equation2637 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((z ∘ w) ∘ w)) ∘ u
-abbrev Equation2638 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((z ∘ w) ∘ u)) ∘ x
-abbrev Equation2639 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((z ∘ w) ∘ u)) ∘ y
-abbrev Equation2640 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((z ∘ w) ∘ u)) ∘ z
-abbrev Equation2641 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((z ∘ w) ∘ u)) ∘ w
-abbrev Equation2642 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (y ∘ ((z ∘ w) ∘ u)) ∘ u
-abbrev Equation2643 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = (y ∘ ((z ∘ w) ∘ u)) ∘ v
-abbrev Equation2644 (G: Type u) [Magma G] := ∀ x : G, x = ((x ∘ x) ∘ (x ∘ x)) ∘ x
-abbrev Equation2645 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ (x ∘ x)) ∘ y
-abbrev Equation2646 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ (x ∘ y)) ∘ x
-abbrev Equation2647 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ (x ∘ y)) ∘ y
-abbrev Equation2648 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ (x ∘ y)) ∘ z
-abbrev Equation2649 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ (y ∘ x)) ∘ x
-abbrev Equation2650 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ (y ∘ x)) ∘ y
-abbrev Equation2651 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ (y ∘ x)) ∘ z
-abbrev Equation2652 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ (y ∘ y)) ∘ x
-abbrev Equation2653 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ x) ∘ (y ∘ y)) ∘ y
-abbrev Equation2654 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ (y ∘ y)) ∘ z
-abbrev Equation2655 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ (y ∘ z)) ∘ x
-abbrev Equation2656 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ (y ∘ z)) ∘ y
-abbrev Equation2657 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ x) ∘ (y ∘ z)) ∘ z
-abbrev Equation2658 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ x) ∘ (y ∘ z)) ∘ w
-abbrev Equation2659 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ (x ∘ x)) ∘ x
-abbrev Equation2660 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ (x ∘ x)) ∘ y
-abbrev Equation2661 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (x ∘ x)) ∘ z
-abbrev Equation2662 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ (x ∘ y)) ∘ x
-abbrev Equation2663 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ (x ∘ y)) ∘ y
-abbrev Equation2664 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (x ∘ y)) ∘ z
-abbrev Equation2665 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (x ∘ z)) ∘ x
-abbrev Equation2666 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (x ∘ z)) ∘ y
-abbrev Equation2667 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (x ∘ z)) ∘ z
-abbrev Equation2668 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ (x ∘ z)) ∘ w
-abbrev Equation2669 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ (y ∘ x)) ∘ x
-abbrev Equation2670 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ (y ∘ x)) ∘ y
-abbrev Equation2671 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (y ∘ x)) ∘ z
-abbrev Equation2672 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ (y ∘ y)) ∘ x
-abbrev Equation2673 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ (y ∘ y)) ∘ y
-abbrev Equation2674 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (y ∘ y)) ∘ z
-abbrev Equation2675 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (y ∘ z)) ∘ x
-abbrev Equation2676 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (y ∘ z)) ∘ y
-abbrev Equation2677 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (y ∘ z)) ∘ z
-abbrev Equation2678 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ (y ∘ z)) ∘ w
-abbrev Equation2679 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (z ∘ x)) ∘ x
-abbrev Equation2680 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (z ∘ x)) ∘ y
-abbrev Equation2681 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (z ∘ x)) ∘ z
-abbrev Equation2682 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ (z ∘ x)) ∘ w
-abbrev Equation2683 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (z ∘ y)) ∘ x
-abbrev Equation2684 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (z ∘ y)) ∘ y
-abbrev Equation2685 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (z ∘ y)) ∘ z
-abbrev Equation2686 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ (z ∘ y)) ∘ w
-abbrev Equation2687 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (z ∘ z)) ∘ x
-abbrev Equation2688 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (z ∘ z)) ∘ y
-abbrev Equation2689 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ y) ∘ (z ∘ z)) ∘ z
-abbrev Equation2690 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ (z ∘ z)) ∘ w
-abbrev Equation2691 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ (z ∘ w)) ∘ x
-abbrev Equation2692 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ (z ∘ w)) ∘ y
-abbrev Equation2693 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ (z ∘ w)) ∘ z
-abbrev Equation2694 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ y) ∘ (z ∘ w)) ∘ w
-abbrev Equation2695 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((x ∘ y) ∘ (z ∘ w)) ∘ u
-abbrev Equation2696 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ (x ∘ x)) ∘ x
-abbrev Equation2697 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ (x ∘ x)) ∘ y
-abbrev Equation2698 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (x ∘ x)) ∘ z
-abbrev Equation2699 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ (x ∘ y)) ∘ x
-abbrev Equation2700 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ (x ∘ y)) ∘ y
-abbrev Equation2701 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (x ∘ y)) ∘ z
-abbrev Equation2702 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (x ∘ z)) ∘ x
-abbrev Equation2703 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (x ∘ z)) ∘ y
-abbrev Equation2704 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (x ∘ z)) ∘ z
-abbrev Equation2705 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ (x ∘ z)) ∘ w
-abbrev Equation2706 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ (y ∘ x)) ∘ x
-abbrev Equation2707 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ (y ∘ x)) ∘ y
-abbrev Equation2708 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (y ∘ x)) ∘ z
-abbrev Equation2709 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ (y ∘ y)) ∘ x
-abbrev Equation2710 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ x) ∘ (y ∘ y)) ∘ y
-abbrev Equation2711 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (y ∘ y)) ∘ z
-abbrev Equation2712 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (y ∘ z)) ∘ x
-abbrev Equation2713 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (y ∘ z)) ∘ y
-abbrev Equation2714 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (y ∘ z)) ∘ z
-abbrev Equation2715 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ (y ∘ z)) ∘ w
-abbrev Equation2716 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (z ∘ x)) ∘ x
-abbrev Equation2717 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (z ∘ x)) ∘ y
-abbrev Equation2718 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (z ∘ x)) ∘ z
-abbrev Equation2719 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ (z ∘ x)) ∘ w
-abbrev Equation2720 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (z ∘ y)) ∘ x
-abbrev Equation2721 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (z ∘ y)) ∘ y
-abbrev Equation2722 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (z ∘ y)) ∘ z
-abbrev Equation2723 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ (z ∘ y)) ∘ w
-abbrev Equation2724 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (z ∘ z)) ∘ x
-abbrev Equation2725 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (z ∘ z)) ∘ y
-abbrev Equation2726 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ x) ∘ (z ∘ z)) ∘ z
-abbrev Equation2727 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ (z ∘ z)) ∘ w
-abbrev Equation2728 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ (z ∘ w)) ∘ x
-abbrev Equation2729 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ (z ∘ w)) ∘ y
-abbrev Equation2730 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ (z ∘ w)) ∘ z
-abbrev Equation2731 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ x) ∘ (z ∘ w)) ∘ w
-abbrev Equation2732 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ x) ∘ (z ∘ w)) ∘ u
-abbrev Equation2733 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ (x ∘ x)) ∘ x
-abbrev Equation2734 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ (x ∘ x)) ∘ y
-abbrev Equation2735 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (x ∘ x)) ∘ z
-abbrev Equation2736 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ (x ∘ y)) ∘ x
-abbrev Equation2737 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ (x ∘ y)) ∘ y
-abbrev Equation2738 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (x ∘ y)) ∘ z
-abbrev Equation2739 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (x ∘ z)) ∘ x
-abbrev Equation2740 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (x ∘ z)) ∘ y
-abbrev Equation2741 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (x ∘ z)) ∘ z
-abbrev Equation2742 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ (x ∘ z)) ∘ w
-abbrev Equation2743 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ (y ∘ x)) ∘ x
-abbrev Equation2744 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ (y ∘ x)) ∘ y
-abbrev Equation2745 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (y ∘ x)) ∘ z
-abbrev Equation2746 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ (y ∘ y)) ∘ x
-abbrev Equation2747 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ y) ∘ (y ∘ y)) ∘ y
-abbrev Equation2748 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (y ∘ y)) ∘ z
-abbrev Equation2749 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (y ∘ z)) ∘ x
-abbrev Equation2750 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (y ∘ z)) ∘ y
-abbrev Equation2751 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (y ∘ z)) ∘ z
-abbrev Equation2752 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ (y ∘ z)) ∘ w
-abbrev Equation2753 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (z ∘ x)) ∘ x
-abbrev Equation2754 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (z ∘ x)) ∘ y
-abbrev Equation2755 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (z ∘ x)) ∘ z
-abbrev Equation2756 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ (z ∘ x)) ∘ w
-abbrev Equation2757 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (z ∘ y)) ∘ x
-abbrev Equation2758 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (z ∘ y)) ∘ y
-abbrev Equation2759 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (z ∘ y)) ∘ z
-abbrev Equation2760 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ (z ∘ y)) ∘ w
-abbrev Equation2761 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (z ∘ z)) ∘ x
-abbrev Equation2762 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (z ∘ z)) ∘ y
-abbrev Equation2763 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ y) ∘ (z ∘ z)) ∘ z
-abbrev Equation2764 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ (z ∘ z)) ∘ w
-abbrev Equation2765 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ (z ∘ w)) ∘ x
-abbrev Equation2766 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ (z ∘ w)) ∘ y
-abbrev Equation2767 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ (z ∘ w)) ∘ z
-abbrev Equation2768 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ y) ∘ (z ∘ w)) ∘ w
-abbrev Equation2769 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ y) ∘ (z ∘ w)) ∘ u
-abbrev Equation2770 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (x ∘ x)) ∘ x
-abbrev Equation2771 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (x ∘ x)) ∘ y
-abbrev Equation2772 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (x ∘ x)) ∘ z
-abbrev Equation2773 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (x ∘ x)) ∘ w
-abbrev Equation2774 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (x ∘ y)) ∘ x
-abbrev Equation2775 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (x ∘ y)) ∘ y
-abbrev Equation2776 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (x ∘ y)) ∘ z
-abbrev Equation2777 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (x ∘ y)) ∘ w
-abbrev Equation2778 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (x ∘ z)) ∘ x
-abbrev Equation2779 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (x ∘ z)) ∘ y
-abbrev Equation2780 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (x ∘ z)) ∘ z
-abbrev Equation2781 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (x ∘ z)) ∘ w
-abbrev Equation2782 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (x ∘ w)) ∘ x
-abbrev Equation2783 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (x ∘ w)) ∘ y
-abbrev Equation2784 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (x ∘ w)) ∘ z
-abbrev Equation2785 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (x ∘ w)) ∘ w
-abbrev Equation2786 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ (x ∘ w)) ∘ u
-abbrev Equation2787 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (y ∘ x)) ∘ x
-abbrev Equation2788 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (y ∘ x)) ∘ y
-abbrev Equation2789 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (y ∘ x)) ∘ z
-abbrev Equation2790 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (y ∘ x)) ∘ w
-abbrev Equation2791 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (y ∘ y)) ∘ x
-abbrev Equation2792 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (y ∘ y)) ∘ y
-abbrev Equation2793 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (y ∘ y)) ∘ z
-abbrev Equation2794 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (y ∘ y)) ∘ w
-abbrev Equation2795 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (y ∘ z)) ∘ x
-abbrev Equation2796 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (y ∘ z)) ∘ y
-abbrev Equation2797 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (y ∘ z)) ∘ z
-abbrev Equation2798 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (y ∘ z)) ∘ w
-abbrev Equation2799 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (y ∘ w)) ∘ x
-abbrev Equation2800 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (y ∘ w)) ∘ y
-abbrev Equation2801 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (y ∘ w)) ∘ z
-abbrev Equation2802 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (y ∘ w)) ∘ w
-abbrev Equation2803 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ (y ∘ w)) ∘ u
-abbrev Equation2804 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (z ∘ x)) ∘ x
-abbrev Equation2805 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (z ∘ x)) ∘ y
-abbrev Equation2806 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (z ∘ x)) ∘ z
-abbrev Equation2807 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (z ∘ x)) ∘ w
-abbrev Equation2808 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (z ∘ y)) ∘ x
-abbrev Equation2809 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (z ∘ y)) ∘ y
-abbrev Equation2810 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (z ∘ y)) ∘ z
-abbrev Equation2811 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (z ∘ y)) ∘ w
-abbrev Equation2812 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (z ∘ z)) ∘ x
-abbrev Equation2813 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (z ∘ z)) ∘ y
-abbrev Equation2814 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ z) ∘ (z ∘ z)) ∘ z
-abbrev Equation2815 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (z ∘ z)) ∘ w
-abbrev Equation2816 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (z ∘ w)) ∘ x
-abbrev Equation2817 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (z ∘ w)) ∘ y
-abbrev Equation2818 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (z ∘ w)) ∘ z
-abbrev Equation2819 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (z ∘ w)) ∘ w
-abbrev Equation2820 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ (z ∘ w)) ∘ u
-abbrev Equation2821 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ x)) ∘ x
-abbrev Equation2822 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ x)) ∘ y
-abbrev Equation2823 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ x)) ∘ z
-abbrev Equation2824 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ x)) ∘ w
-abbrev Equation2825 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ (w ∘ x)) ∘ u
-abbrev Equation2826 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ y)) ∘ x
-abbrev Equation2827 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ y)) ∘ y
-abbrev Equation2828 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ y)) ∘ z
-abbrev Equation2829 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ y)) ∘ w
-abbrev Equation2830 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ (w ∘ y)) ∘ u
-abbrev Equation2831 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ z)) ∘ x
-abbrev Equation2832 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ z)) ∘ y
-abbrev Equation2833 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ z)) ∘ z
-abbrev Equation2834 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ z)) ∘ w
-abbrev Equation2835 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ (w ∘ z)) ∘ u
-abbrev Equation2836 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ w)) ∘ x
-abbrev Equation2837 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ w)) ∘ y
-abbrev Equation2838 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ w)) ∘ z
-abbrev Equation2839 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ z) ∘ (w ∘ w)) ∘ w
-abbrev Equation2840 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ (w ∘ w)) ∘ u
-abbrev Equation2841 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ (w ∘ u)) ∘ x
-abbrev Equation2842 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ (w ∘ u)) ∘ y
-abbrev Equation2843 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ (w ∘ u)) ∘ z
-abbrev Equation2844 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ (w ∘ u)) ∘ w
-abbrev Equation2845 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ z) ∘ (w ∘ u)) ∘ u
-abbrev Equation2846 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = ((y ∘ z) ∘ (w ∘ u)) ∘ v
-abbrev Equation2847 (G: Type u) [Magma G] := ∀ x : G, x = ((x ∘ (x ∘ x)) ∘ x) ∘ x
-abbrev Equation2848 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (x ∘ x)) ∘ x) ∘ y
-abbrev Equation2849 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (x ∘ x)) ∘ y) ∘ x
-abbrev Equation2850 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (x ∘ x)) ∘ y) ∘ y
-abbrev Equation2851 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (x ∘ x)) ∘ y) ∘ z
-abbrev Equation2852 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (x ∘ y)) ∘ x) ∘ x
-abbrev Equation2853 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (x ∘ y)) ∘ x) ∘ y
-abbrev Equation2854 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (x ∘ y)) ∘ x) ∘ z
-abbrev Equation2855 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (x ∘ y)) ∘ y) ∘ x
-abbrev Equation2856 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (x ∘ y)) ∘ y) ∘ y
-abbrev Equation2857 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (x ∘ y)) ∘ y) ∘ z
-abbrev Equation2858 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (x ∘ y)) ∘ z) ∘ x
-abbrev Equation2859 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (x ∘ y)) ∘ z) ∘ y
-abbrev Equation2860 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (x ∘ y)) ∘ z) ∘ z
-abbrev Equation2861 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ (x ∘ y)) ∘ z) ∘ w
-abbrev Equation2862 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (y ∘ x)) ∘ x) ∘ x
-abbrev Equation2863 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (y ∘ x)) ∘ x) ∘ y
-abbrev Equation2864 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ x)) ∘ x) ∘ z
-abbrev Equation2865 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (y ∘ x)) ∘ y) ∘ x
-abbrev Equation2866 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (y ∘ x)) ∘ y) ∘ y
-abbrev Equation2867 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ x)) ∘ y) ∘ z
-abbrev Equation2868 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ x)) ∘ z) ∘ x
-abbrev Equation2869 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ x)) ∘ z) ∘ y
-abbrev Equation2870 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ x)) ∘ z) ∘ z
-abbrev Equation2871 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ (y ∘ x)) ∘ z) ∘ w
-abbrev Equation2872 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (y ∘ y)) ∘ x) ∘ x
-abbrev Equation2873 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (y ∘ y)) ∘ x) ∘ y
-abbrev Equation2874 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ y)) ∘ x) ∘ z
-abbrev Equation2875 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (y ∘ y)) ∘ y) ∘ x
-abbrev Equation2876 (G: Type u) [Magma G] := ∀ x y : G, x = ((x ∘ (y ∘ y)) ∘ y) ∘ y
-abbrev Equation2877 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ y)) ∘ y) ∘ z
-abbrev Equation2878 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ y)) ∘ z) ∘ x
-abbrev Equation2879 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ y)) ∘ z) ∘ y
-abbrev Equation2880 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ y)) ∘ z) ∘ z
-abbrev Equation2881 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ (y ∘ y)) ∘ z) ∘ w
-abbrev Equation2882 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ z)) ∘ x) ∘ x
-abbrev Equation2883 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ z)) ∘ x) ∘ y
-abbrev Equation2884 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ z)) ∘ x) ∘ z
-abbrev Equation2885 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ (y ∘ z)) ∘ x) ∘ w
-abbrev Equation2886 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ z)) ∘ y) ∘ x
-abbrev Equation2887 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ z)) ∘ y) ∘ y
-abbrev Equation2888 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ z)) ∘ y) ∘ z
-abbrev Equation2889 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ (y ∘ z)) ∘ y) ∘ w
-abbrev Equation2890 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ z)) ∘ z) ∘ x
-abbrev Equation2891 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ z)) ∘ z) ∘ y
-abbrev Equation2892 (G: Type u) [Magma G] := ∀ x y z : G, x = ((x ∘ (y ∘ z)) ∘ z) ∘ z
-abbrev Equation2893 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ (y ∘ z)) ∘ z) ∘ w
-abbrev Equation2894 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ (y ∘ z)) ∘ w) ∘ x
-abbrev Equation2895 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ (y ∘ z)) ∘ w) ∘ y
-abbrev Equation2896 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ (y ∘ z)) ∘ w) ∘ z
-abbrev Equation2897 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((x ∘ (y ∘ z)) ∘ w) ∘ w
-abbrev Equation2898 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((x ∘ (y ∘ z)) ∘ w) ∘ u
-abbrev Equation2899 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (x ∘ x)) ∘ x) ∘ x
-abbrev Equation2900 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (x ∘ x)) ∘ x) ∘ y
-abbrev Equation2901 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ x)) ∘ x) ∘ z
-abbrev Equation2902 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (x ∘ x)) ∘ y) ∘ x
-abbrev Equation2903 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (x ∘ x)) ∘ y) ∘ y
-abbrev Equation2904 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ x)) ∘ y) ∘ z
-abbrev Equation2905 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ x)) ∘ z) ∘ x
-abbrev Equation2906 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ x)) ∘ z) ∘ y
-abbrev Equation2907 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ x)) ∘ z) ∘ z
-abbrev Equation2908 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (x ∘ x)) ∘ z) ∘ w
-abbrev Equation2909 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (x ∘ y)) ∘ x) ∘ x
-abbrev Equation2910 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (x ∘ y)) ∘ x) ∘ y
-abbrev Equation2911 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ y)) ∘ x) ∘ z
-abbrev Equation2912 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (x ∘ y)) ∘ y) ∘ x
-abbrev Equation2913 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (x ∘ y)) ∘ y) ∘ y
-abbrev Equation2914 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ y)) ∘ y) ∘ z
-abbrev Equation2915 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ y)) ∘ z) ∘ x
-abbrev Equation2916 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ y)) ∘ z) ∘ y
-abbrev Equation2917 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ y)) ∘ z) ∘ z
-abbrev Equation2918 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (x ∘ y)) ∘ z) ∘ w
-abbrev Equation2919 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ z)) ∘ x) ∘ x
-abbrev Equation2920 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ z)) ∘ x) ∘ y
-abbrev Equation2921 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ z)) ∘ x) ∘ z
-abbrev Equation2922 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (x ∘ z)) ∘ x) ∘ w
-abbrev Equation2923 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ z)) ∘ y) ∘ x
-abbrev Equation2924 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ z)) ∘ y) ∘ y
-abbrev Equation2925 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ z)) ∘ y) ∘ z
-abbrev Equation2926 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (x ∘ z)) ∘ y) ∘ w
-abbrev Equation2927 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ z)) ∘ z) ∘ x
-abbrev Equation2928 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ z)) ∘ z) ∘ y
-abbrev Equation2929 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (x ∘ z)) ∘ z) ∘ z
-abbrev Equation2930 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (x ∘ z)) ∘ z) ∘ w
-abbrev Equation2931 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (x ∘ z)) ∘ w) ∘ x
-abbrev Equation2932 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (x ∘ z)) ∘ w) ∘ y
-abbrev Equation2933 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (x ∘ z)) ∘ w) ∘ z
-abbrev Equation2934 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (x ∘ z)) ∘ w) ∘ w
-abbrev Equation2935 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (x ∘ z)) ∘ w) ∘ u
-abbrev Equation2936 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (y ∘ x)) ∘ x) ∘ x
-abbrev Equation2937 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (y ∘ x)) ∘ x) ∘ y
-abbrev Equation2938 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ x)) ∘ x) ∘ z
-abbrev Equation2939 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (y ∘ x)) ∘ y) ∘ x
-abbrev Equation2940 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (y ∘ x)) ∘ y) ∘ y
-abbrev Equation2941 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ x)) ∘ y) ∘ z
-abbrev Equation2942 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ x)) ∘ z) ∘ x
-abbrev Equation2943 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ x)) ∘ z) ∘ y
-abbrev Equation2944 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ x)) ∘ z) ∘ z
-abbrev Equation2945 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (y ∘ x)) ∘ z) ∘ w
-abbrev Equation2946 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (y ∘ y)) ∘ x) ∘ x
-abbrev Equation2947 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (y ∘ y)) ∘ x) ∘ y
-abbrev Equation2948 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ y)) ∘ x) ∘ z
-abbrev Equation2949 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (y ∘ y)) ∘ y) ∘ x
-abbrev Equation2950 (G: Type u) [Magma G] := ∀ x y : G, x = ((y ∘ (y ∘ y)) ∘ y) ∘ y
-abbrev Equation2951 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ y)) ∘ y) ∘ z
-abbrev Equation2952 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ y)) ∘ z) ∘ x
-abbrev Equation2953 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ y)) ∘ z) ∘ y
-abbrev Equation2954 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ y)) ∘ z) ∘ z
-abbrev Equation2955 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (y ∘ y)) ∘ z) ∘ w
-abbrev Equation2956 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ z)) ∘ x) ∘ x
-abbrev Equation2957 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ z)) ∘ x) ∘ y
-abbrev Equation2958 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ z)) ∘ x) ∘ z
-abbrev Equation2959 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (y ∘ z)) ∘ x) ∘ w
-abbrev Equation2960 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ z)) ∘ y) ∘ x
-abbrev Equation2961 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ z)) ∘ y) ∘ y
-abbrev Equation2962 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ z)) ∘ y) ∘ z
-abbrev Equation2963 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (y ∘ z)) ∘ y) ∘ w
-abbrev Equation2964 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ z)) ∘ z) ∘ x
-abbrev Equation2965 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ z)) ∘ z) ∘ y
-abbrev Equation2966 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (y ∘ z)) ∘ z) ∘ z
-abbrev Equation2967 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (y ∘ z)) ∘ z) ∘ w
-abbrev Equation2968 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (y ∘ z)) ∘ w) ∘ x
-abbrev Equation2969 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (y ∘ z)) ∘ w) ∘ y
-abbrev Equation2970 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (y ∘ z)) ∘ w) ∘ z
-abbrev Equation2971 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (y ∘ z)) ∘ w) ∘ w
-abbrev Equation2972 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (y ∘ z)) ∘ w) ∘ u
-abbrev Equation2973 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ x)) ∘ x) ∘ x
-abbrev Equation2974 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ x)) ∘ x) ∘ y
-abbrev Equation2975 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ x)) ∘ x) ∘ z
-abbrev Equation2976 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ x)) ∘ x) ∘ w
-abbrev Equation2977 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ x)) ∘ y) ∘ x
-abbrev Equation2978 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ x)) ∘ y) ∘ y
-abbrev Equation2979 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ x)) ∘ y) ∘ z
-abbrev Equation2980 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ x)) ∘ y) ∘ w
-abbrev Equation2981 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ x)) ∘ z) ∘ x
-abbrev Equation2982 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ x)) ∘ z) ∘ y
-abbrev Equation2983 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ x)) ∘ z) ∘ z
-abbrev Equation2984 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ x)) ∘ z) ∘ w
-abbrev Equation2985 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ x)) ∘ w) ∘ x
-abbrev Equation2986 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ x)) ∘ w) ∘ y
-abbrev Equation2987 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ x)) ∘ w) ∘ z
-abbrev Equation2988 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ x)) ∘ w) ∘ w
-abbrev Equation2989 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (z ∘ x)) ∘ w) ∘ u
-abbrev Equation2990 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ y)) ∘ x) ∘ x
-abbrev Equation2991 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ y)) ∘ x) ∘ y
-abbrev Equation2992 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ y)) ∘ x) ∘ z
-abbrev Equation2993 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ y)) ∘ x) ∘ w
-abbrev Equation2994 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ y)) ∘ y) ∘ x
-abbrev Equation2995 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ y)) ∘ y) ∘ y
-abbrev Equation2996 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ y)) ∘ y) ∘ z
-abbrev Equation2997 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ y)) ∘ y) ∘ w
-abbrev Equation2998 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ y)) ∘ z) ∘ x
-abbrev Equation2999 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ y)) ∘ z) ∘ y
-abbrev Equation3000 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ y)) ∘ z) ∘ z
-abbrev Equation3001 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ y)) ∘ z) ∘ w
-abbrev Equation3002 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ y)) ∘ w) ∘ x
-abbrev Equation3003 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ y)) ∘ w) ∘ y
-abbrev Equation3004 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ y)) ∘ w) ∘ z
-abbrev Equation3005 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ y)) ∘ w) ∘ w
-abbrev Equation3006 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (z ∘ y)) ∘ w) ∘ u
-abbrev Equation3007 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ z)) ∘ x) ∘ x
-abbrev Equation3008 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ z)) ∘ x) ∘ y
-abbrev Equation3009 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ z)) ∘ x) ∘ z
-abbrev Equation3010 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ z)) ∘ x) ∘ w
-abbrev Equation3011 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ z)) ∘ y) ∘ x
-abbrev Equation3012 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ z)) ∘ y) ∘ y
-abbrev Equation3013 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ z)) ∘ y) ∘ z
-abbrev Equation3014 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ z)) ∘ y) ∘ w
-abbrev Equation3015 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ z)) ∘ z) ∘ x
-abbrev Equation3016 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ z)) ∘ z) ∘ y
-abbrev Equation3017 (G: Type u) [Magma G] := ∀ x y z : G, x = ((y ∘ (z ∘ z)) ∘ z) ∘ z
-abbrev Equation3018 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ z)) ∘ z) ∘ w
-abbrev Equation3019 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ z)) ∘ w) ∘ x
-abbrev Equation3020 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ z)) ∘ w) ∘ y
-abbrev Equation3021 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ z)) ∘ w) ∘ z
-abbrev Equation3022 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ z)) ∘ w) ∘ w
-abbrev Equation3023 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (z ∘ z)) ∘ w) ∘ u
-abbrev Equation3024 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ x) ∘ x
-abbrev Equation3025 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ x) ∘ y
-abbrev Equation3026 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ x) ∘ z
-abbrev Equation3027 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ x) ∘ w
-abbrev Equation3028 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (z ∘ w)) ∘ x) ∘ u
-abbrev Equation3029 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ y) ∘ x
-abbrev Equation3030 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ y) ∘ y
-abbrev Equation3031 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ y) ∘ z
-abbrev Equation3032 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ y) ∘ w
-abbrev Equation3033 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (z ∘ w)) ∘ y) ∘ u
-abbrev Equation3034 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ z) ∘ x
-abbrev Equation3035 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ z) ∘ y
-abbrev Equation3036 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ z) ∘ z
-abbrev Equation3037 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ z) ∘ w
-abbrev Equation3038 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (z ∘ w)) ∘ z) ∘ u
-abbrev Equation3039 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ w) ∘ x
-abbrev Equation3040 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ w) ∘ y
-abbrev Equation3041 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ w) ∘ z
-abbrev Equation3042 (G: Type u) [Magma G] := ∀ x y z w : G, x = ((y ∘ (z ∘ w)) ∘ w) ∘ w
-abbrev Equation3043 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (z ∘ w)) ∘ w) ∘ u
-abbrev Equation3044 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (z ∘ w)) ∘ u) ∘ x
-abbrev Equation3045 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (z ∘ w)) ∘ u) ∘ y
-abbrev Equation3046 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (z ∘ w)) ∘ u) ∘ z
-abbrev Equation3047 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (z ∘ w)) ∘ u) ∘ w
-abbrev Equation3048 (G: Type u) [Magma G] := ∀ x y z w u : G, x = ((y ∘ (z ∘ w)) ∘ u) ∘ u
-abbrev Equation3049 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = ((y ∘ (z ∘ w)) ∘ u) ∘ v
-abbrev Equation3050 (G: Type u) [Magma G] := ∀ x : G, x = (((x ∘ x) ∘ x) ∘ x) ∘ x
-abbrev Equation3051 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ x) ∘ x) ∘ x) ∘ y
-abbrev Equation3052 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ x) ∘ x) ∘ y) ∘ x
-abbrev Equation3053 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ x) ∘ x) ∘ y) ∘ y
-abbrev Equation3054 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ x) ∘ x) ∘ y) ∘ z
-abbrev Equation3055 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ x) ∘ y) ∘ x) ∘ x
-abbrev Equation3056 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ x) ∘ y) ∘ x) ∘ y
-abbrev Equation3057 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ x) ∘ y) ∘ x) ∘ z
-abbrev Equation3058 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ x) ∘ y) ∘ y) ∘ x
-abbrev Equation3059 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ x) ∘ y) ∘ y) ∘ y
-abbrev Equation3060 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ x) ∘ y) ∘ y) ∘ z
-abbrev Equation3061 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ x) ∘ y) ∘ z) ∘ x
-abbrev Equation3062 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ x) ∘ y) ∘ z) ∘ y
-abbrev Equation3063 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ x) ∘ y) ∘ z) ∘ z
-abbrev Equation3064 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((x ∘ x) ∘ y) ∘ z) ∘ w
-abbrev Equation3065 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ y) ∘ x) ∘ x) ∘ x
-abbrev Equation3066 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ y) ∘ x) ∘ x) ∘ y
-abbrev Equation3067 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ x) ∘ x) ∘ z
-abbrev Equation3068 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ y) ∘ x) ∘ y) ∘ x
-abbrev Equation3069 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ y) ∘ x) ∘ y) ∘ y
-abbrev Equation3070 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ x) ∘ y) ∘ z
-abbrev Equation3071 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ x) ∘ z) ∘ x
-abbrev Equation3072 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ x) ∘ z) ∘ y
-abbrev Equation3073 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ x) ∘ z) ∘ z
-abbrev Equation3074 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((x ∘ y) ∘ x) ∘ z) ∘ w
-abbrev Equation3075 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ y) ∘ y) ∘ x) ∘ x
-abbrev Equation3076 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ y) ∘ y) ∘ x) ∘ y
-abbrev Equation3077 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ y) ∘ x) ∘ z
-abbrev Equation3078 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ y) ∘ y) ∘ y) ∘ x
-abbrev Equation3079 (G: Type u) [Magma G] := ∀ x y : G, x = (((x ∘ y) ∘ y) ∘ y) ∘ y
-abbrev Equation3080 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ y) ∘ y) ∘ z
-abbrev Equation3081 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ y) ∘ z) ∘ x
-abbrev Equation3082 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ y) ∘ z) ∘ y
-abbrev Equation3083 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ y) ∘ z) ∘ z
-abbrev Equation3084 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((x ∘ y) ∘ y) ∘ z) ∘ w
-abbrev Equation3085 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ z) ∘ x) ∘ x
-abbrev Equation3086 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ z) ∘ x) ∘ y
-abbrev Equation3087 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ z) ∘ x) ∘ z
-abbrev Equation3088 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((x ∘ y) ∘ z) ∘ x) ∘ w
-abbrev Equation3089 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ z) ∘ y) ∘ x
-abbrev Equation3090 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ z) ∘ y) ∘ y
-abbrev Equation3091 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ z) ∘ y) ∘ z
-abbrev Equation3092 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((x ∘ y) ∘ z) ∘ y) ∘ w
-abbrev Equation3093 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ z) ∘ z) ∘ x
-abbrev Equation3094 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ z) ∘ z) ∘ y
-abbrev Equation3095 (G: Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ y) ∘ z) ∘ z) ∘ z
-abbrev Equation3096 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((x ∘ y) ∘ z) ∘ z) ∘ w
-abbrev Equation3097 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((x ∘ y) ∘ z) ∘ w) ∘ x
-abbrev Equation3098 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((x ∘ y) ∘ z) ∘ w) ∘ y
-abbrev Equation3099 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((x ∘ y) ∘ z) ∘ w) ∘ z
-abbrev Equation3100 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((x ∘ y) ∘ z) ∘ w) ∘ w
-abbrev Equation3101 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((x ∘ y) ∘ z) ∘ w) ∘ u
-abbrev Equation3102 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ x) ∘ x) ∘ x) ∘ x
-abbrev Equation3103 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ x) ∘ x) ∘ x) ∘ y
-abbrev Equation3104 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ x) ∘ x) ∘ z
-abbrev Equation3105 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ x) ∘ x) ∘ y) ∘ x
-abbrev Equation3106 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ x) ∘ x) ∘ y) ∘ y
-abbrev Equation3107 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ x) ∘ y) ∘ z
-abbrev Equation3108 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ x) ∘ z) ∘ x
-abbrev Equation3109 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ x) ∘ z) ∘ y
-abbrev Equation3110 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ x) ∘ z) ∘ z
-abbrev Equation3111 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ x) ∘ x) ∘ z) ∘ w
-abbrev Equation3112 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ x) ∘ y) ∘ x) ∘ x
-abbrev Equation3113 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ x) ∘ y) ∘ x) ∘ y
-abbrev Equation3114 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ y) ∘ x) ∘ z
-abbrev Equation3115 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ x) ∘ y) ∘ y) ∘ x
-abbrev Equation3116 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ x) ∘ y) ∘ y) ∘ y
-abbrev Equation3117 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ y) ∘ y) ∘ z
-abbrev Equation3118 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ y) ∘ z) ∘ x
-abbrev Equation3119 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ y) ∘ z) ∘ y
-abbrev Equation3120 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ y) ∘ z) ∘ z
-abbrev Equation3121 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ x) ∘ y) ∘ z) ∘ w
-abbrev Equation3122 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ z) ∘ x) ∘ x
-abbrev Equation3123 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ z) ∘ x) ∘ y
-abbrev Equation3124 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ z) ∘ x) ∘ z
-abbrev Equation3125 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ x) ∘ z) ∘ x) ∘ w
-abbrev Equation3126 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ z) ∘ y) ∘ x
-abbrev Equation3127 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ z) ∘ y) ∘ y
-abbrev Equation3128 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ z) ∘ y) ∘ z
-abbrev Equation3129 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ x) ∘ z) ∘ y) ∘ w
-abbrev Equation3130 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ z) ∘ z) ∘ x
-abbrev Equation3131 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ z) ∘ z) ∘ y
-abbrev Equation3132 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ x) ∘ z) ∘ z) ∘ z
-abbrev Equation3133 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ x) ∘ z) ∘ z) ∘ w
-abbrev Equation3134 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ x) ∘ z) ∘ w) ∘ x
-abbrev Equation3135 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ x) ∘ z) ∘ w) ∘ y
-abbrev Equation3136 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ x) ∘ z) ∘ w) ∘ z
-abbrev Equation3137 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ x) ∘ z) ∘ w) ∘ w
-abbrev Equation3138 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ x) ∘ z) ∘ w) ∘ u
-abbrev Equation3139 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ y) ∘ x) ∘ x) ∘ x
-abbrev Equation3140 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ y) ∘ x) ∘ x) ∘ y
-abbrev Equation3141 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ x) ∘ x) ∘ z
-abbrev Equation3142 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ y) ∘ x) ∘ y) ∘ x
-abbrev Equation3143 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ y) ∘ x) ∘ y) ∘ y
-abbrev Equation3144 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ x) ∘ y) ∘ z
-abbrev Equation3145 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ x) ∘ z) ∘ x
-abbrev Equation3146 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ x) ∘ z) ∘ y
-abbrev Equation3147 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ x) ∘ z) ∘ z
-abbrev Equation3148 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ y) ∘ x) ∘ z) ∘ w
-abbrev Equation3149 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ y) ∘ y) ∘ x) ∘ x
-abbrev Equation3150 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ y) ∘ y) ∘ x) ∘ y
-abbrev Equation3151 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ y) ∘ x) ∘ z
-abbrev Equation3152 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ y) ∘ y) ∘ y) ∘ x
-abbrev Equation3153 (G: Type u) [Magma G] := ∀ x y : G, x = (((y ∘ y) ∘ y) ∘ y) ∘ y
-abbrev Equation3154 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ y) ∘ y) ∘ z
-abbrev Equation3155 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ y) ∘ z) ∘ x
-abbrev Equation3156 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ y) ∘ z) ∘ y
-abbrev Equation3157 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ y) ∘ z) ∘ z
-abbrev Equation3158 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ y) ∘ y) ∘ z) ∘ w
-abbrev Equation3159 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ z) ∘ x) ∘ x
-abbrev Equation3160 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ z) ∘ x) ∘ y
-abbrev Equation3161 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ z) ∘ x) ∘ z
-abbrev Equation3162 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ y) ∘ z) ∘ x) ∘ w
-abbrev Equation3163 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ z) ∘ y) ∘ x
-abbrev Equation3164 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ z) ∘ y) ∘ y
-abbrev Equation3165 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ z) ∘ y) ∘ z
-abbrev Equation3166 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ y) ∘ z) ∘ y) ∘ w
-abbrev Equation3167 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ z) ∘ z) ∘ x
-abbrev Equation3168 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ z) ∘ z) ∘ y
-abbrev Equation3169 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ z) ∘ z) ∘ z
-abbrev Equation3170 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ y) ∘ z) ∘ z) ∘ w
-abbrev Equation3171 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ y) ∘ z) ∘ w) ∘ x
-abbrev Equation3172 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ y) ∘ z) ∘ w) ∘ y
-abbrev Equation3173 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ y) ∘ z) ∘ w) ∘ z
-abbrev Equation3174 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ y) ∘ z) ∘ w) ∘ w
-abbrev Equation3175 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ y) ∘ z) ∘ w) ∘ u
-abbrev Equation3176 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ x) ∘ x) ∘ x
-abbrev Equation3177 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ x) ∘ x) ∘ y
-abbrev Equation3178 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ x) ∘ x) ∘ z
-abbrev Equation3179 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ x) ∘ x) ∘ w
-abbrev Equation3180 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ x) ∘ y) ∘ x
-abbrev Equation3181 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ x) ∘ y) ∘ y
-abbrev Equation3182 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ x) ∘ y) ∘ z
-abbrev Equation3183 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ x) ∘ y) ∘ w
-abbrev Equation3184 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ x) ∘ z) ∘ x
-abbrev Equation3185 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ x) ∘ z) ∘ y
-abbrev Equation3186 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ x) ∘ z) ∘ z
-abbrev Equation3187 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ x) ∘ z) ∘ w
-abbrev Equation3188 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ x) ∘ w) ∘ x
-abbrev Equation3189 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ x) ∘ w) ∘ y
-abbrev Equation3190 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ x) ∘ w) ∘ z
-abbrev Equation3191 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ x) ∘ w) ∘ w
-abbrev Equation3192 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ z) ∘ x) ∘ w) ∘ u
-abbrev Equation3193 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ y) ∘ x) ∘ x
-abbrev Equation3194 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ y) ∘ x) ∘ y
-abbrev Equation3195 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ y) ∘ x) ∘ z
-abbrev Equation3196 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ y) ∘ x) ∘ w
-abbrev Equation3197 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ y) ∘ y) ∘ x
-abbrev Equation3198 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ y) ∘ y) ∘ y
-abbrev Equation3199 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ y) ∘ y) ∘ z
-abbrev Equation3200 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ y) ∘ y) ∘ w
-abbrev Equation3201 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ y) ∘ z) ∘ x
-abbrev Equation3202 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ y) ∘ z) ∘ y
-abbrev Equation3203 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ y) ∘ z) ∘ z
-abbrev Equation3204 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ y) ∘ z) ∘ w
-abbrev Equation3205 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ y) ∘ w) ∘ x
-abbrev Equation3206 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ y) ∘ w) ∘ y
-abbrev Equation3207 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ y) ∘ w) ∘ z
-abbrev Equation3208 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ y) ∘ w) ∘ w
-abbrev Equation3209 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ z) ∘ y) ∘ w) ∘ u
-abbrev Equation3210 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ z) ∘ x) ∘ x
-abbrev Equation3211 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ z) ∘ x) ∘ y
-abbrev Equation3212 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ z) ∘ x) ∘ z
-abbrev Equation3213 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ z) ∘ x) ∘ w
-abbrev Equation3214 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ z) ∘ y) ∘ x
-abbrev Equation3215 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ z) ∘ y) ∘ y
-abbrev Equation3216 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ z) ∘ y) ∘ z
-abbrev Equation3217 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ z) ∘ y) ∘ w
-abbrev Equation3218 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ z) ∘ z) ∘ x
-abbrev Equation3219 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ z) ∘ z) ∘ y
-abbrev Equation3220 (G: Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ z) ∘ z) ∘ z) ∘ z
-abbrev Equation3221 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ z) ∘ z) ∘ w
-abbrev Equation3222 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ z) ∘ w) ∘ x
-abbrev Equation3223 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ z) ∘ w) ∘ y
-abbrev Equation3224 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ z) ∘ w) ∘ z
-abbrev Equation3225 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ z) ∘ w) ∘ w
-abbrev Equation3226 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ z) ∘ z) ∘ w) ∘ u
-abbrev Equation3227 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ x) ∘ x
-abbrev Equation3228 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ x) ∘ y
-abbrev Equation3229 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ x) ∘ z
-abbrev Equation3230 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ x) ∘ w
-abbrev Equation3231 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ z) ∘ w) ∘ x) ∘ u
-abbrev Equation3232 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ y) ∘ x
-abbrev Equation3233 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ y) ∘ y
-abbrev Equation3234 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ y) ∘ z
-abbrev Equation3235 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ y) ∘ w
-abbrev Equation3236 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ z) ∘ w) ∘ y) ∘ u
-abbrev Equation3237 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ z) ∘ x
-abbrev Equation3238 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ z) ∘ y
-abbrev Equation3239 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ z) ∘ z
-abbrev Equation3240 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ z) ∘ w
-abbrev Equation3241 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ z) ∘ w) ∘ z) ∘ u
-abbrev Equation3242 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ w) ∘ x
-abbrev Equation3243 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ w) ∘ y
-abbrev Equation3244 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ w) ∘ z
-abbrev Equation3245 (G: Type u) [Magma G] := ∀ x y z w : G, x = (((y ∘ z) ∘ w) ∘ w) ∘ w
-abbrev Equation3246 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ z) ∘ w) ∘ w) ∘ u
-abbrev Equation3247 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ z) ∘ w) ∘ u) ∘ x
-abbrev Equation3248 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ z) ∘ w) ∘ u) ∘ y
-abbrev Equation3249 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ z) ∘ w) ∘ u) ∘ z
-abbrev Equation3250 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ z) ∘ w) ∘ u) ∘ w
-abbrev Equation3251 (G: Type u) [Magma G] := ∀ x y z w u : G, x = (((y ∘ z) ∘ w) ∘ u) ∘ u
-abbrev Equation3252 (G: Type u) [Magma G] := ∀ x y z w u v : G, x = (((y ∘ z) ∘ w) ∘ u) ∘ v
-abbrev Equation3253 (G: Type u) [Magma G] := ∀ x : G, x ∘ x = x ∘ (x ∘ (x ∘ x))
-abbrev Equation3254 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ (x ∘ (x ∘ y))
-abbrev Equation3255 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ (x ∘ (y ∘ x))
-abbrev Equation3256 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ (x ∘ (y ∘ y))
-abbrev Equation3257 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ (x ∘ (y ∘ z))
-abbrev Equation3258 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ (y ∘ (x ∘ x))
-abbrev Equation3259 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ (y ∘ (x ∘ y))
-abbrev Equation3260 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ (y ∘ (x ∘ z))
-abbrev Equation3261 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ (y ∘ (y ∘ x))
-abbrev Equation3262 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ (y ∘ (y ∘ y))
-abbrev Equation3263 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ (y ∘ (y ∘ z))
-abbrev Equation3264 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ (y ∘ (z ∘ x))
-abbrev Equation3265 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ (y ∘ (z ∘ y))
-abbrev Equation3266 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ (y ∘ (z ∘ z))
-abbrev Equation3267 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = x ∘ (y ∘ (z ∘ w))
-abbrev Equation3268 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ (x ∘ (x ∘ x))
-abbrev Equation3269 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ (x ∘ (x ∘ y))
-abbrev Equation3270 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (x ∘ (x ∘ z))
-abbrev Equation3271 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ (x ∘ (y ∘ x))
-abbrev Equation3272 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ (x ∘ (y ∘ y))
-abbrev Equation3273 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (x ∘ (y ∘ z))
-abbrev Equation3274 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (x ∘ (z ∘ x))
-abbrev Equation3275 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (x ∘ (z ∘ y))
-abbrev Equation3276 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (x ∘ (z ∘ z))
-abbrev Equation3277 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ (x ∘ (z ∘ w))
-abbrev Equation3278 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ (y ∘ (x ∘ x))
-abbrev Equation3279 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ (y ∘ (x ∘ y))
-abbrev Equation3280 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (y ∘ (x ∘ z))
-abbrev Equation3281 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ (y ∘ (y ∘ x))
-abbrev Equation3282 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ (y ∘ (y ∘ y))
-abbrev Equation3283 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (y ∘ (y ∘ z))
-abbrev Equation3284 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (y ∘ (z ∘ x))
-abbrev Equation3285 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (y ∘ (z ∘ y))
-abbrev Equation3286 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (y ∘ (z ∘ z))
-abbrev Equation3287 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ (y ∘ (z ∘ w))
-abbrev Equation3288 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (z ∘ (x ∘ x))
-abbrev Equation3289 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (z ∘ (x ∘ y))
-abbrev Equation3290 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (z ∘ (x ∘ z))
-abbrev Equation3291 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ (z ∘ (x ∘ w))
-abbrev Equation3292 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (z ∘ (y ∘ x))
-abbrev Equation3293 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (z ∘ (y ∘ y))
-abbrev Equation3294 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (z ∘ (y ∘ z))
-abbrev Equation3295 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ (z ∘ (y ∘ w))
-abbrev Equation3296 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (z ∘ (z ∘ x))
-abbrev Equation3297 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (z ∘ (z ∘ y))
-abbrev Equation3298 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ (z ∘ (z ∘ z))
-abbrev Equation3299 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ (z ∘ (z ∘ w))
-abbrev Equation3300 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ (z ∘ (w ∘ x))
-abbrev Equation3301 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ (z ∘ (w ∘ y))
-abbrev Equation3302 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ (z ∘ (w ∘ z))
-abbrev Equation3303 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ (z ∘ (w ∘ w))
-abbrev Equation3304 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ x = y ∘ (z ∘ (w ∘ u))
-abbrev Equation3305 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ (x ∘ (x ∘ x))
-abbrev Equation3306 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ (x ∘ (x ∘ y))
-abbrev Equation3307 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (x ∘ (x ∘ z))
-abbrev Equation3308 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ (x ∘ (y ∘ x))
-abbrev Equation3309 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ (x ∘ (y ∘ y))
-abbrev Equation3310 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (x ∘ (y ∘ z))
-abbrev Equation3311 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (x ∘ (z ∘ x))
-abbrev Equation3312 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (x ∘ (z ∘ y))
-abbrev Equation3313 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (x ∘ (z ∘ z))
-abbrev Equation3314 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ (x ∘ (z ∘ w))
-abbrev Equation3315 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ (y ∘ (x ∘ x))
-abbrev Equation3316 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ (y ∘ (x ∘ y))
-abbrev Equation3317 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (y ∘ (x ∘ z))
-abbrev Equation3318 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ (y ∘ (y ∘ x))
-abbrev Equation3319 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ (y ∘ (y ∘ y))
-abbrev Equation3320 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (y ∘ (y ∘ z))
-abbrev Equation3321 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (y ∘ (z ∘ x))
-abbrev Equation3322 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (y ∘ (z ∘ y))
-abbrev Equation3323 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (y ∘ (z ∘ z))
-abbrev Equation3324 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ (y ∘ (z ∘ w))
-abbrev Equation3325 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (z ∘ (x ∘ x))
-abbrev Equation3326 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (z ∘ (x ∘ y))
-abbrev Equation3327 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (z ∘ (x ∘ z))
-abbrev Equation3328 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ (z ∘ (x ∘ w))
-abbrev Equation3329 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (z ∘ (y ∘ x))
-abbrev Equation3330 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (z ∘ (y ∘ y))
-abbrev Equation3331 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (z ∘ (y ∘ z))
-abbrev Equation3332 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ (z ∘ (y ∘ w))
-abbrev Equation3333 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (z ∘ (z ∘ x))
-abbrev Equation3334 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (z ∘ (z ∘ y))
-abbrev Equation3335 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ (z ∘ (z ∘ z))
-abbrev Equation3336 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ (z ∘ (z ∘ w))
-abbrev Equation3337 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ (z ∘ (w ∘ x))
-abbrev Equation3338 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ (z ∘ (w ∘ y))
-abbrev Equation3339 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ (z ∘ (w ∘ z))
-abbrev Equation3340 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ (z ∘ (w ∘ w))
-abbrev Equation3341 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = x ∘ (z ∘ (w ∘ u))
-abbrev Equation3342 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (x ∘ (x ∘ x))
-abbrev Equation3343 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (x ∘ (x ∘ y))
-abbrev Equation3344 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (x ∘ (x ∘ z))
-abbrev Equation3345 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (x ∘ (y ∘ x))
-abbrev Equation3346 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (x ∘ (y ∘ y))
-abbrev Equation3347 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (x ∘ (y ∘ z))
-abbrev Equation3348 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (x ∘ (z ∘ x))
-abbrev Equation3349 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (x ∘ (z ∘ y))
-abbrev Equation3350 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (x ∘ (z ∘ z))
-abbrev Equation3351 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ (x ∘ (z ∘ w))
-abbrev Equation3352 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (y ∘ (x ∘ x))
-abbrev Equation3353 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (y ∘ (x ∘ y))
-abbrev Equation3354 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (y ∘ (x ∘ z))
-abbrev Equation3355 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (y ∘ (y ∘ x))
-abbrev Equation3356 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (y ∘ (y ∘ y))
-abbrev Equation3357 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (y ∘ (y ∘ z))
-abbrev Equation3358 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (y ∘ (z ∘ x))
-abbrev Equation3359 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (y ∘ (z ∘ y))
-abbrev Equation3360 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (y ∘ (z ∘ z))
-abbrev Equation3361 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ (y ∘ (z ∘ w))
-abbrev Equation3362 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (z ∘ (x ∘ x))
-abbrev Equation3363 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (z ∘ (x ∘ y))
-abbrev Equation3364 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (z ∘ (x ∘ z))
-abbrev Equation3365 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ (z ∘ (x ∘ w))
-abbrev Equation3366 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (z ∘ (y ∘ x))
-abbrev Equation3367 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (z ∘ (y ∘ y))
-abbrev Equation3368 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (z ∘ (y ∘ z))
-abbrev Equation3369 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ (z ∘ (y ∘ w))
-abbrev Equation3370 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (z ∘ (z ∘ x))
-abbrev Equation3371 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (z ∘ (z ∘ y))
-abbrev Equation3372 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ (z ∘ (z ∘ z))
-abbrev Equation3373 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ (z ∘ (z ∘ w))
-abbrev Equation3374 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ (z ∘ (w ∘ x))
-abbrev Equation3375 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ (z ∘ (w ∘ y))
-abbrev Equation3376 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ (z ∘ (w ∘ z))
-abbrev Equation3377 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ (z ∘ (w ∘ w))
-abbrev Equation3378 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = y ∘ (z ∘ (w ∘ u))
-abbrev Equation3379 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (x ∘ (x ∘ x))
-abbrev Equation3380 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (x ∘ (x ∘ y))
-abbrev Equation3381 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (x ∘ (x ∘ z))
-abbrev Equation3382 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (x ∘ (x ∘ w))
-abbrev Equation3383 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (x ∘ (y ∘ x))
-abbrev Equation3384 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (x ∘ (y ∘ y))
-abbrev Equation3385 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (x ∘ (y ∘ z))
-abbrev Equation3386 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (x ∘ (y ∘ w))
-abbrev Equation3387 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (x ∘ (z ∘ x))
-abbrev Equation3388 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (x ∘ (z ∘ y))
-abbrev Equation3389 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (x ∘ (z ∘ z))
-abbrev Equation3390 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (x ∘ (z ∘ w))
-abbrev Equation3391 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (x ∘ (w ∘ x))
-abbrev Equation3392 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (x ∘ (w ∘ y))
-abbrev Equation3393 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (x ∘ (w ∘ z))
-abbrev Equation3394 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (x ∘ (w ∘ w))
-abbrev Equation3395 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (x ∘ (w ∘ u))
-abbrev Equation3396 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (y ∘ (x ∘ x))
-abbrev Equation3397 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (y ∘ (x ∘ y))
-abbrev Equation3398 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (y ∘ (x ∘ z))
-abbrev Equation3399 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (y ∘ (x ∘ w))
-abbrev Equation3400 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (y ∘ (y ∘ x))
-abbrev Equation3401 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (y ∘ (y ∘ y))
-abbrev Equation3402 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (y ∘ (y ∘ z))
-abbrev Equation3403 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (y ∘ (y ∘ w))
-abbrev Equation3404 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (y ∘ (z ∘ x))
-abbrev Equation3405 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (y ∘ (z ∘ y))
-abbrev Equation3406 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (y ∘ (z ∘ z))
-abbrev Equation3407 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (y ∘ (z ∘ w))
-abbrev Equation3408 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (y ∘ (w ∘ x))
-abbrev Equation3409 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (y ∘ (w ∘ y))
-abbrev Equation3410 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (y ∘ (w ∘ z))
-abbrev Equation3411 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (y ∘ (w ∘ w))
-abbrev Equation3412 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (y ∘ (w ∘ u))
-abbrev Equation3413 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (z ∘ (x ∘ x))
-abbrev Equation3414 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (z ∘ (x ∘ y))
-abbrev Equation3415 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (z ∘ (x ∘ z))
-abbrev Equation3416 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (z ∘ (x ∘ w))
-abbrev Equation3417 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (z ∘ (y ∘ x))
-abbrev Equation3418 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (z ∘ (y ∘ y))
-abbrev Equation3419 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (z ∘ (y ∘ z))
-abbrev Equation3420 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (z ∘ (y ∘ w))
-abbrev Equation3421 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (z ∘ (z ∘ x))
-abbrev Equation3422 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (z ∘ (z ∘ y))
-abbrev Equation3423 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ (z ∘ (z ∘ z))
-abbrev Equation3424 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (z ∘ (z ∘ w))
-abbrev Equation3425 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (z ∘ (w ∘ x))
-abbrev Equation3426 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (z ∘ (w ∘ y))
-abbrev Equation3427 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (z ∘ (w ∘ z))
-abbrev Equation3428 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (z ∘ (w ∘ w))
-abbrev Equation3429 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (z ∘ (w ∘ u))
-abbrev Equation3430 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (x ∘ x))
-abbrev Equation3431 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (x ∘ y))
-abbrev Equation3432 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (x ∘ z))
-abbrev Equation3433 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (x ∘ w))
-abbrev Equation3434 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (w ∘ (x ∘ u))
-abbrev Equation3435 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (y ∘ x))
-abbrev Equation3436 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (y ∘ y))
-abbrev Equation3437 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (y ∘ z))
-abbrev Equation3438 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (y ∘ w))
-abbrev Equation3439 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (w ∘ (y ∘ u))
-abbrev Equation3440 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (z ∘ x))
-abbrev Equation3441 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (z ∘ y))
-abbrev Equation3442 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (z ∘ z))
-abbrev Equation3443 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (z ∘ w))
-abbrev Equation3444 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (w ∘ (z ∘ u))
-abbrev Equation3445 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (w ∘ x))
-abbrev Equation3446 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (w ∘ y))
-abbrev Equation3447 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (w ∘ z))
-abbrev Equation3448 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ (w ∘ (w ∘ w))
-abbrev Equation3449 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (w ∘ (w ∘ u))
-abbrev Equation3450 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (w ∘ (u ∘ x))
-abbrev Equation3451 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (w ∘ (u ∘ y))
-abbrev Equation3452 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (w ∘ (u ∘ z))
-abbrev Equation3453 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (w ∘ (u ∘ w))
-abbrev Equation3454 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ (w ∘ (u ∘ u))
-abbrev Equation3455 (G: Type u) [Magma G] := ∀ x y z w u v : G, x ∘ y = z ∘ (w ∘ (u ∘ v))
-abbrev Equation3456 (G: Type u) [Magma G] := ∀ x : G, x ∘ x = x ∘ ((x ∘ x) ∘ x)
-abbrev Equation3457 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ ((x ∘ x) ∘ y)
-abbrev Equation3458 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ ((x ∘ y) ∘ x)
-abbrev Equation3459 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ ((x ∘ y) ∘ y)
-abbrev Equation3460 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ ((x ∘ y) ∘ z)
-abbrev Equation3461 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ ((y ∘ x) ∘ x)
-abbrev Equation3462 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ ((y ∘ x) ∘ y)
-abbrev Equation3463 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ ((y ∘ x) ∘ z)
-abbrev Equation3464 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ ((y ∘ y) ∘ x)
-abbrev Equation3465 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ ((y ∘ y) ∘ y)
-abbrev Equation3466 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ ((y ∘ y) ∘ z)
-abbrev Equation3467 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ ((y ∘ z) ∘ x)
-abbrev Equation3468 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ ((y ∘ z) ∘ y)
-abbrev Equation3469 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = x ∘ ((y ∘ z) ∘ z)
-abbrev Equation3470 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = x ∘ ((y ∘ z) ∘ w)
-abbrev Equation3471 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ ((x ∘ x) ∘ x)
-abbrev Equation3472 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ ((x ∘ x) ∘ y)
-abbrev Equation3473 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((x ∘ x) ∘ z)
-abbrev Equation3474 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ ((x ∘ y) ∘ x)
-abbrev Equation3475 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ ((x ∘ y) ∘ y)
-abbrev Equation3476 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((x ∘ y) ∘ z)
-abbrev Equation3477 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((x ∘ z) ∘ x)
-abbrev Equation3478 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((x ∘ z) ∘ y)
-abbrev Equation3479 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((x ∘ z) ∘ z)
-abbrev Equation3480 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ ((x ∘ z) ∘ w)
-abbrev Equation3481 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ ((y ∘ x) ∘ x)
-abbrev Equation3482 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ ((y ∘ x) ∘ y)
-abbrev Equation3483 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((y ∘ x) ∘ z)
-abbrev Equation3484 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ ((y ∘ y) ∘ x)
-abbrev Equation3485 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = y ∘ ((y ∘ y) ∘ y)
-abbrev Equation3486 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((y ∘ y) ∘ z)
-abbrev Equation3487 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((y ∘ z) ∘ x)
-abbrev Equation3488 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((y ∘ z) ∘ y)
-abbrev Equation3489 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((y ∘ z) ∘ z)
-abbrev Equation3490 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ ((y ∘ z) ∘ w)
-abbrev Equation3491 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((z ∘ x) ∘ x)
-abbrev Equation3492 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((z ∘ x) ∘ y)
-abbrev Equation3493 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((z ∘ x) ∘ z)
-abbrev Equation3494 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ ((z ∘ x) ∘ w)
-abbrev Equation3495 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((z ∘ y) ∘ x)
-abbrev Equation3496 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((z ∘ y) ∘ y)
-abbrev Equation3497 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((z ∘ y) ∘ z)
-abbrev Equation3498 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ ((z ∘ y) ∘ w)
-abbrev Equation3499 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((z ∘ z) ∘ x)
-abbrev Equation3500 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((z ∘ z) ∘ y)
-abbrev Equation3501 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = y ∘ ((z ∘ z) ∘ z)
-abbrev Equation3502 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ ((z ∘ z) ∘ w)
-abbrev Equation3503 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ ((z ∘ w) ∘ x)
-abbrev Equation3504 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ ((z ∘ w) ∘ y)
-abbrev Equation3505 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ ((z ∘ w) ∘ z)
-abbrev Equation3506 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = y ∘ ((z ∘ w) ∘ w)
-abbrev Equation3507 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ x = y ∘ ((z ∘ w) ∘ u)
-abbrev Equation3508 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ ((x ∘ x) ∘ x)
-abbrev Equation3509 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ ((x ∘ x) ∘ y)
-abbrev Equation3510 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((x ∘ x) ∘ z)
-abbrev Equation3511 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ ((x ∘ y) ∘ x)
-abbrev Equation3512 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ ((x ∘ y) ∘ y)
-abbrev Equation3513 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((x ∘ y) ∘ z)
-abbrev Equation3514 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((x ∘ z) ∘ x)
-abbrev Equation3515 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((x ∘ z) ∘ y)
-abbrev Equation3516 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((x ∘ z) ∘ z)
-abbrev Equation3517 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ ((x ∘ z) ∘ w)
-abbrev Equation3518 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ ((y ∘ x) ∘ x)
-abbrev Equation3519 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ ((y ∘ x) ∘ y)
-abbrev Equation3520 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((y ∘ x) ∘ z)
-abbrev Equation3521 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ ((y ∘ y) ∘ x)
-abbrev Equation3522 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = x ∘ ((y ∘ y) ∘ y)
-abbrev Equation3523 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((y ∘ y) ∘ z)
-abbrev Equation3524 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((y ∘ z) ∘ x)
-abbrev Equation3525 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((y ∘ z) ∘ y)
-abbrev Equation3526 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((y ∘ z) ∘ z)
-abbrev Equation3527 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ ((y ∘ z) ∘ w)
-abbrev Equation3528 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((z ∘ x) ∘ x)
-abbrev Equation3529 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((z ∘ x) ∘ y)
-abbrev Equation3530 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((z ∘ x) ∘ z)
-abbrev Equation3531 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ ((z ∘ x) ∘ w)
-abbrev Equation3532 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((z ∘ y) ∘ x)
-abbrev Equation3533 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((z ∘ y) ∘ y)
-abbrev Equation3534 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((z ∘ y) ∘ z)
-abbrev Equation3535 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ ((z ∘ y) ∘ w)
-abbrev Equation3536 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((z ∘ z) ∘ x)
-abbrev Equation3537 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((z ∘ z) ∘ y)
-abbrev Equation3538 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ ((z ∘ z) ∘ z)
-abbrev Equation3539 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ ((z ∘ z) ∘ w)
-abbrev Equation3540 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ ((z ∘ w) ∘ x)
-abbrev Equation3541 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ ((z ∘ w) ∘ y)
-abbrev Equation3542 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ ((z ∘ w) ∘ z)
-abbrev Equation3543 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = x ∘ ((z ∘ w) ∘ w)
-abbrev Equation3544 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = x ∘ ((z ∘ w) ∘ u)
-abbrev Equation3545 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ ((x ∘ x) ∘ x)
-abbrev Equation3546 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ ((x ∘ x) ∘ y)
-abbrev Equation3547 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((x ∘ x) ∘ z)
-abbrev Equation3548 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ ((x ∘ y) ∘ x)
-abbrev Equation3549 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ ((x ∘ y) ∘ y)
-abbrev Equation3550 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((x ∘ y) ∘ z)
-abbrev Equation3551 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((x ∘ z) ∘ x)
-abbrev Equation3552 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((x ∘ z) ∘ y)
-abbrev Equation3553 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((x ∘ z) ∘ z)
-abbrev Equation3554 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ ((x ∘ z) ∘ w)
-abbrev Equation3555 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ ((y ∘ x) ∘ x)
-abbrev Equation3556 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ ((y ∘ x) ∘ y)
-abbrev Equation3557 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((y ∘ x) ∘ z)
-abbrev Equation3558 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ ((y ∘ y) ∘ x)
-abbrev Equation3559 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ ((y ∘ y) ∘ y)
-abbrev Equation3560 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((y ∘ y) ∘ z)
-abbrev Equation3561 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((y ∘ z) ∘ x)
-abbrev Equation3562 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((y ∘ z) ∘ y)
-abbrev Equation3563 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((y ∘ z) ∘ z)
-abbrev Equation3564 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ ((y ∘ z) ∘ w)
-abbrev Equation3565 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((z ∘ x) ∘ x)
-abbrev Equation3566 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((z ∘ x) ∘ y)
-abbrev Equation3567 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((z ∘ x) ∘ z)
-abbrev Equation3568 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ ((z ∘ x) ∘ w)
-abbrev Equation3569 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((z ∘ y) ∘ x)
-abbrev Equation3570 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((z ∘ y) ∘ y)
-abbrev Equation3571 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((z ∘ y) ∘ z)
-abbrev Equation3572 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ ((z ∘ y) ∘ w)
-abbrev Equation3573 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((z ∘ z) ∘ x)
-abbrev Equation3574 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((z ∘ z) ∘ y)
-abbrev Equation3575 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = y ∘ ((z ∘ z) ∘ z)
-abbrev Equation3576 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ ((z ∘ z) ∘ w)
-abbrev Equation3577 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ ((z ∘ w) ∘ x)
-abbrev Equation3578 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ ((z ∘ w) ∘ y)
-abbrev Equation3579 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ ((z ∘ w) ∘ z)
-abbrev Equation3580 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = y ∘ ((z ∘ w) ∘ w)
-abbrev Equation3581 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = y ∘ ((z ∘ w) ∘ u)
-abbrev Equation3582 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((x ∘ x) ∘ x)
-abbrev Equation3583 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((x ∘ x) ∘ y)
-abbrev Equation3584 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((x ∘ x) ∘ z)
-abbrev Equation3585 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((x ∘ x) ∘ w)
-abbrev Equation3586 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((x ∘ y) ∘ x)
-abbrev Equation3587 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((x ∘ y) ∘ y)
-abbrev Equation3588 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((x ∘ y) ∘ z)
-abbrev Equation3589 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((x ∘ y) ∘ w)
-abbrev Equation3590 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((x ∘ z) ∘ x)
-abbrev Equation3591 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((x ∘ z) ∘ y)
-abbrev Equation3592 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((x ∘ z) ∘ z)
-abbrev Equation3593 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((x ∘ z) ∘ w)
-abbrev Equation3594 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((x ∘ w) ∘ x)
-abbrev Equation3595 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((x ∘ w) ∘ y)
-abbrev Equation3596 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((x ∘ w) ∘ z)
-abbrev Equation3597 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((x ∘ w) ∘ w)
-abbrev Equation3598 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ ((x ∘ w) ∘ u)
-abbrev Equation3599 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((y ∘ x) ∘ x)
-abbrev Equation3600 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((y ∘ x) ∘ y)
-abbrev Equation3601 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((y ∘ x) ∘ z)
-abbrev Equation3602 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((y ∘ x) ∘ w)
-abbrev Equation3603 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((y ∘ y) ∘ x)
-abbrev Equation3604 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((y ∘ y) ∘ y)
-abbrev Equation3605 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((y ∘ y) ∘ z)
-abbrev Equation3606 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((y ∘ y) ∘ w)
-abbrev Equation3607 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((y ∘ z) ∘ x)
-abbrev Equation3608 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((y ∘ z) ∘ y)
-abbrev Equation3609 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((y ∘ z) ∘ z)
-abbrev Equation3610 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((y ∘ z) ∘ w)
-abbrev Equation3611 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((y ∘ w) ∘ x)
-abbrev Equation3612 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((y ∘ w) ∘ y)
-abbrev Equation3613 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((y ∘ w) ∘ z)
-abbrev Equation3614 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((y ∘ w) ∘ w)
-abbrev Equation3615 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ ((y ∘ w) ∘ u)
-abbrev Equation3616 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((z ∘ x) ∘ x)
-abbrev Equation3617 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((z ∘ x) ∘ y)
-abbrev Equation3618 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((z ∘ x) ∘ z)
-abbrev Equation3619 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((z ∘ x) ∘ w)
-abbrev Equation3620 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((z ∘ y) ∘ x)
-abbrev Equation3621 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((z ∘ y) ∘ y)
-abbrev Equation3622 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((z ∘ y) ∘ z)
-abbrev Equation3623 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((z ∘ y) ∘ w)
-abbrev Equation3624 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((z ∘ z) ∘ x)
-abbrev Equation3625 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((z ∘ z) ∘ y)
-abbrev Equation3626 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = z ∘ ((z ∘ z) ∘ z)
-abbrev Equation3627 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((z ∘ z) ∘ w)
-abbrev Equation3628 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((z ∘ w) ∘ x)
-abbrev Equation3629 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((z ∘ w) ∘ y)
-abbrev Equation3630 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((z ∘ w) ∘ z)
-abbrev Equation3631 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((z ∘ w) ∘ w)
-abbrev Equation3632 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ ((z ∘ w) ∘ u)
-abbrev Equation3633 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ x) ∘ x)
-abbrev Equation3634 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ x) ∘ y)
-abbrev Equation3635 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ x) ∘ z)
-abbrev Equation3636 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ x) ∘ w)
-abbrev Equation3637 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ ((w ∘ x) ∘ u)
-abbrev Equation3638 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ y) ∘ x)
-abbrev Equation3639 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ y) ∘ y)
-abbrev Equation3640 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ y) ∘ z)
-abbrev Equation3641 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ y) ∘ w)
-abbrev Equation3642 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ ((w ∘ y) ∘ u)
-abbrev Equation3643 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ z) ∘ x)
-abbrev Equation3644 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ z) ∘ y)
-abbrev Equation3645 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ z) ∘ z)
-abbrev Equation3646 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ z) ∘ w)
-abbrev Equation3647 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ ((w ∘ z) ∘ u)
-abbrev Equation3648 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ w) ∘ x)
-abbrev Equation3649 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ w) ∘ y)
-abbrev Equation3650 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ w) ∘ z)
-abbrev Equation3651 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ ((w ∘ w) ∘ w)
-abbrev Equation3652 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ ((w ∘ w) ∘ u)
-abbrev Equation3653 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ ((w ∘ u) ∘ x)
-abbrev Equation3654 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ ((w ∘ u) ∘ y)
-abbrev Equation3655 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ ((w ∘ u) ∘ z)
-abbrev Equation3656 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ ((w ∘ u) ∘ w)
-abbrev Equation3657 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = z ∘ ((w ∘ u) ∘ u)
-abbrev Equation3658 (G: Type u) [Magma G] := ∀ x y z w u v : G, x ∘ y = z ∘ ((w ∘ u) ∘ v)
-abbrev Equation3659 (G: Type u) [Magma G] := ∀ x : G, x ∘ x = (x ∘ x) ∘ (x ∘ x)
-abbrev Equation3660 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ x) ∘ (x ∘ y)
-abbrev Equation3661 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ x) ∘ (y ∘ x)
-abbrev Equation3662 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ x) ∘ (y ∘ y)
-abbrev Equation3663 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ x) ∘ (y ∘ z)
-abbrev Equation3664 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ y) ∘ (x ∘ x)
-abbrev Equation3665 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ y) ∘ (x ∘ y)
-abbrev Equation3666 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ y) ∘ (x ∘ z)
-abbrev Equation3667 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ y) ∘ (y ∘ x)
-abbrev Equation3668 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ y) ∘ (y ∘ y)
-abbrev Equation3669 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ y) ∘ (y ∘ z)
-abbrev Equation3670 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ y) ∘ (z ∘ x)
-abbrev Equation3671 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ y) ∘ (z ∘ y)
-abbrev Equation3672 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ y) ∘ (z ∘ z)
-abbrev Equation3673 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (x ∘ y) ∘ (z ∘ w)
-abbrev Equation3674 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ x) ∘ (x ∘ x)
-abbrev Equation3675 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ x) ∘ (x ∘ y)
-abbrev Equation3676 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ x) ∘ (x ∘ z)
-abbrev Equation3677 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ x) ∘ (y ∘ x)
-abbrev Equation3678 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ x) ∘ (y ∘ y)
-abbrev Equation3679 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ x) ∘ (y ∘ z)
-abbrev Equation3680 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ x) ∘ (z ∘ x)
-abbrev Equation3681 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ x) ∘ (z ∘ y)
-abbrev Equation3682 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ x) ∘ (z ∘ z)
-abbrev Equation3683 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ x) ∘ (z ∘ w)
-abbrev Equation3684 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ y) ∘ (x ∘ x)
-abbrev Equation3685 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ y) ∘ (x ∘ y)
-abbrev Equation3686 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ y) ∘ (x ∘ z)
-abbrev Equation3687 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ y) ∘ (y ∘ x)
-abbrev Equation3688 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ y) ∘ (y ∘ y)
-abbrev Equation3689 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ y) ∘ (y ∘ z)
-abbrev Equation3690 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ y) ∘ (z ∘ x)
-abbrev Equation3691 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ y) ∘ (z ∘ y)
-abbrev Equation3692 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ y) ∘ (z ∘ z)
-abbrev Equation3693 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ y) ∘ (z ∘ w)
-abbrev Equation3694 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ z) ∘ (x ∘ x)
-abbrev Equation3695 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ z) ∘ (x ∘ y)
-abbrev Equation3696 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ z) ∘ (x ∘ z)
-abbrev Equation3697 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ z) ∘ (x ∘ w)
-abbrev Equation3698 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ z) ∘ (y ∘ x)
-abbrev Equation3699 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ z) ∘ (y ∘ y)
-abbrev Equation3700 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ z) ∘ (y ∘ z)
-abbrev Equation3701 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ z) ∘ (y ∘ w)
-abbrev Equation3702 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ z) ∘ (z ∘ x)
-abbrev Equation3703 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ z) ∘ (z ∘ y)
-abbrev Equation3704 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ z) ∘ (z ∘ z)
-abbrev Equation3705 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ z) ∘ (z ∘ w)
-abbrev Equation3706 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ z) ∘ (w ∘ x)
-abbrev Equation3707 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ z) ∘ (w ∘ y)
-abbrev Equation3708 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ z) ∘ (w ∘ z)
-abbrev Equation3709 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ z) ∘ (w ∘ w)
-abbrev Equation3710 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ x = (y ∘ z) ∘ (w ∘ u)
-abbrev Equation3711 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ x) ∘ (x ∘ x)
-abbrev Equation3712 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ x) ∘ (x ∘ y)
-abbrev Equation3713 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ x) ∘ (x ∘ z)
-abbrev Equation3714 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ x) ∘ (y ∘ x)
-abbrev Equation3715 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ x) ∘ (y ∘ y)
-abbrev Equation3716 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ x) ∘ (y ∘ z)
-abbrev Equation3717 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ x) ∘ (z ∘ x)
-abbrev Equation3718 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ x) ∘ (z ∘ y)
-abbrev Equation3719 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ x) ∘ (z ∘ z)
-abbrev Equation3720 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ x) ∘ (z ∘ w)
-abbrev Equation3721 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ y) ∘ (x ∘ x)
-abbrev Equation3722 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ y) ∘ (x ∘ y)
-abbrev Equation3723 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ y) ∘ (x ∘ z)
-abbrev Equation3724 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ y) ∘ (y ∘ x)
-abbrev Equation3725 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ y) ∘ (y ∘ y)
-abbrev Equation3726 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ y) ∘ (y ∘ z)
-abbrev Equation3727 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ y) ∘ (z ∘ x)
-abbrev Equation3728 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ y) ∘ (z ∘ y)
-abbrev Equation3729 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ y) ∘ (z ∘ z)
-abbrev Equation3730 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ y) ∘ (z ∘ w)
-abbrev Equation3731 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ (x ∘ x)
-abbrev Equation3732 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ (x ∘ y)
-abbrev Equation3733 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ (x ∘ z)
-abbrev Equation3734 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ (x ∘ w)
-abbrev Equation3735 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ (y ∘ x)
-abbrev Equation3736 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ (y ∘ y)
-abbrev Equation3737 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ (y ∘ z)
-abbrev Equation3738 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ (y ∘ w)
-abbrev Equation3739 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ (z ∘ x)
-abbrev Equation3740 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ (z ∘ y)
-abbrev Equation3741 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ (z ∘ z)
-abbrev Equation3742 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ (z ∘ w)
-abbrev Equation3743 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ (w ∘ x)
-abbrev Equation3744 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ (w ∘ y)
-abbrev Equation3745 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ (w ∘ z)
-abbrev Equation3746 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ (w ∘ w)
-abbrev Equation3747 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (x ∘ z) ∘ (w ∘ u)
-abbrev Equation3748 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ x) ∘ (x ∘ x)
-abbrev Equation3749 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ x) ∘ (x ∘ y)
-abbrev Equation3750 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ x) ∘ (x ∘ z)
-abbrev Equation3751 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ x) ∘ (y ∘ x)
-abbrev Equation3752 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ x) ∘ (y ∘ y)
-abbrev Equation3753 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ x) ∘ (y ∘ z)
-abbrev Equation3754 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ x) ∘ (z ∘ x)
-abbrev Equation3755 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ x) ∘ (z ∘ y)
-abbrev Equation3756 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ x) ∘ (z ∘ z)
-abbrev Equation3757 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ x) ∘ (z ∘ w)
-abbrev Equation3758 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ (x ∘ x)
-abbrev Equation3759 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ (x ∘ y)
-abbrev Equation3760 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ y) ∘ (x ∘ z)
-abbrev Equation3761 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ (y ∘ x)
-abbrev Equation3762 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ (y ∘ y)
-abbrev Equation3763 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ y) ∘ (y ∘ z)
-abbrev Equation3764 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ y) ∘ (z ∘ x)
-abbrev Equation3765 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ y) ∘ (z ∘ y)
-abbrev Equation3766 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ y) ∘ (z ∘ z)
-abbrev Equation3767 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ y) ∘ (z ∘ w)
-abbrev Equation3768 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ (x ∘ x)
-abbrev Equation3769 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ (x ∘ y)
-abbrev Equation3770 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ (x ∘ z)
-abbrev Equation3771 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ z) ∘ (x ∘ w)
-abbrev Equation3772 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ (y ∘ x)
-abbrev Equation3773 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ (y ∘ y)
-abbrev Equation3774 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ (y ∘ z)
-abbrev Equation3775 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ z) ∘ (y ∘ w)
-abbrev Equation3776 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ (z ∘ x)
-abbrev Equation3777 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ (z ∘ y)
-abbrev Equation3778 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ z) ∘ (z ∘ z)
-abbrev Equation3779 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ z) ∘ (z ∘ w)
-abbrev Equation3780 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ z) ∘ (w ∘ x)
-abbrev Equation3781 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ z) ∘ (w ∘ y)
-abbrev Equation3782 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ z) ∘ (w ∘ z)
-abbrev Equation3783 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ z) ∘ (w ∘ w)
-abbrev Equation3784 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (y ∘ z) ∘ (w ∘ u)
-abbrev Equation3785 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ x) ∘ (x ∘ x)
-abbrev Equation3786 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ x) ∘ (x ∘ y)
-abbrev Equation3787 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ x) ∘ (x ∘ z)
-abbrev Equation3788 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ x) ∘ (x ∘ w)
-abbrev Equation3789 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ x) ∘ (y ∘ x)
-abbrev Equation3790 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ x) ∘ (y ∘ y)
-abbrev Equation3791 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ x) ∘ (y ∘ z)
-abbrev Equation3792 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ x) ∘ (y ∘ w)
-abbrev Equation3793 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ x) ∘ (z ∘ x)
-abbrev Equation3794 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ x) ∘ (z ∘ y)
-abbrev Equation3795 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ x) ∘ (z ∘ z)
-abbrev Equation3796 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ x) ∘ (z ∘ w)
-abbrev Equation3797 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ x) ∘ (w ∘ x)
-abbrev Equation3798 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ x) ∘ (w ∘ y)
-abbrev Equation3799 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ x) ∘ (w ∘ z)
-abbrev Equation3800 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ x) ∘ (w ∘ w)
-abbrev Equation3801 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ x) ∘ (w ∘ u)
-abbrev Equation3802 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ y) ∘ (x ∘ x)
-abbrev Equation3803 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ y) ∘ (x ∘ y)
-abbrev Equation3804 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ y) ∘ (x ∘ z)
-abbrev Equation3805 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ y) ∘ (x ∘ w)
-abbrev Equation3806 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ y) ∘ (y ∘ x)
-abbrev Equation3807 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ y) ∘ (y ∘ y)
-abbrev Equation3808 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ y) ∘ (y ∘ z)
-abbrev Equation3809 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ y) ∘ (y ∘ w)
-abbrev Equation3810 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ y) ∘ (z ∘ x)
-abbrev Equation3811 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ y) ∘ (z ∘ y)
-abbrev Equation3812 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ y) ∘ (z ∘ z)
-abbrev Equation3813 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ y) ∘ (z ∘ w)
-abbrev Equation3814 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ y) ∘ (w ∘ x)
-abbrev Equation3815 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ y) ∘ (w ∘ y)
-abbrev Equation3816 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ y) ∘ (w ∘ z)
-abbrev Equation3817 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ y) ∘ (w ∘ w)
-abbrev Equation3818 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ y) ∘ (w ∘ u)
-abbrev Equation3819 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ z) ∘ (x ∘ x)
-abbrev Equation3820 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ z) ∘ (x ∘ y)
-abbrev Equation3821 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ z) ∘ (x ∘ z)
-abbrev Equation3822 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ z) ∘ (x ∘ w)
-abbrev Equation3823 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ z) ∘ (y ∘ x)
-abbrev Equation3824 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ z) ∘ (y ∘ y)
-abbrev Equation3825 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ z) ∘ (y ∘ z)
-abbrev Equation3826 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ z) ∘ (y ∘ w)
-abbrev Equation3827 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ z) ∘ (z ∘ x)
-abbrev Equation3828 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ z) ∘ (z ∘ y)
-abbrev Equation3829 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ z) ∘ (z ∘ z)
-abbrev Equation3830 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ z) ∘ (z ∘ w)
-abbrev Equation3831 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ z) ∘ (w ∘ x)
-abbrev Equation3832 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ z) ∘ (w ∘ y)
-abbrev Equation3833 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ z) ∘ (w ∘ z)
-abbrev Equation3834 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ z) ∘ (w ∘ w)
-abbrev Equation3835 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ z) ∘ (w ∘ u)
-abbrev Equation3836 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (x ∘ x)
-abbrev Equation3837 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (x ∘ y)
-abbrev Equation3838 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (x ∘ z)
-abbrev Equation3839 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (x ∘ w)
-abbrev Equation3840 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ w) ∘ (x ∘ u)
-abbrev Equation3841 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (y ∘ x)
-abbrev Equation3842 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (y ∘ y)
-abbrev Equation3843 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (y ∘ z)
-abbrev Equation3844 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (y ∘ w)
-abbrev Equation3845 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ w) ∘ (y ∘ u)
-abbrev Equation3846 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (z ∘ x)
-abbrev Equation3847 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (z ∘ y)
-abbrev Equation3848 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (z ∘ z)
-abbrev Equation3849 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (z ∘ w)
-abbrev Equation3850 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ w) ∘ (z ∘ u)
-abbrev Equation3851 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (w ∘ x)
-abbrev Equation3852 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (w ∘ y)
-abbrev Equation3853 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (w ∘ z)
-abbrev Equation3854 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ w) ∘ (w ∘ w)
-abbrev Equation3855 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ w) ∘ (w ∘ u)
-abbrev Equation3856 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ w) ∘ (u ∘ x)
-abbrev Equation3857 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ w) ∘ (u ∘ y)
-abbrev Equation3858 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ w) ∘ (u ∘ z)
-abbrev Equation3859 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ w) ∘ (u ∘ w)
-abbrev Equation3860 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ w) ∘ (u ∘ u)
-abbrev Equation3861 (G: Type u) [Magma G] := ∀ x y z w u v : G, x ∘ y = (z ∘ w) ∘ (u ∘ v)
-abbrev Equation3862 (G: Type u) [Magma G] := ∀ x : G, x ∘ x = (x ∘ (x ∘ x)) ∘ x
-abbrev Equation3863 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ (x ∘ x)) ∘ y
-abbrev Equation3864 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ (x ∘ y)) ∘ x
-abbrev Equation3865 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ (x ∘ y)) ∘ y
-abbrev Equation3866 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ (x ∘ y)) ∘ z
-abbrev Equation3867 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ (y ∘ x)) ∘ x
-abbrev Equation3868 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ (y ∘ x)) ∘ y
-abbrev Equation3869 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ (y ∘ x)) ∘ z
-abbrev Equation3870 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ (y ∘ y)) ∘ x
-abbrev Equation3871 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (x ∘ (y ∘ y)) ∘ y
-abbrev Equation3872 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ (y ∘ y)) ∘ z
-abbrev Equation3873 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ (y ∘ z)) ∘ x
-abbrev Equation3874 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ (y ∘ z)) ∘ y
-abbrev Equation3875 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (x ∘ (y ∘ z)) ∘ z
-abbrev Equation3876 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (x ∘ (y ∘ z)) ∘ w
-abbrev Equation3877 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ (x ∘ x)) ∘ x
-abbrev Equation3878 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ (x ∘ x)) ∘ y
-abbrev Equation3879 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (x ∘ x)) ∘ z
-abbrev Equation3880 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ (x ∘ y)) ∘ x
-abbrev Equation3881 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ (x ∘ y)) ∘ y
-abbrev Equation3882 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (x ∘ y)) ∘ z
-abbrev Equation3883 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (x ∘ z)) ∘ x
-abbrev Equation3884 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (x ∘ z)) ∘ y
-abbrev Equation3885 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (x ∘ z)) ∘ z
-abbrev Equation3886 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ (x ∘ z)) ∘ w
-abbrev Equation3887 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ (y ∘ x)) ∘ x
-abbrev Equation3888 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ (y ∘ x)) ∘ y
-abbrev Equation3889 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (y ∘ x)) ∘ z
-abbrev Equation3890 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ (y ∘ y)) ∘ x
-abbrev Equation3891 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = (y ∘ (y ∘ y)) ∘ y
-abbrev Equation3892 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (y ∘ y)) ∘ z
-abbrev Equation3893 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (y ∘ z)) ∘ x
-abbrev Equation3894 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (y ∘ z)) ∘ y
-abbrev Equation3895 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (y ∘ z)) ∘ z
-abbrev Equation3896 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ (y ∘ z)) ∘ w
-abbrev Equation3897 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (z ∘ x)) ∘ x
-abbrev Equation3898 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (z ∘ x)) ∘ y
-abbrev Equation3899 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (z ∘ x)) ∘ z
-abbrev Equation3900 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ (z ∘ x)) ∘ w
-abbrev Equation3901 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (z ∘ y)) ∘ x
-abbrev Equation3902 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (z ∘ y)) ∘ y
-abbrev Equation3903 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (z ∘ y)) ∘ z
-abbrev Equation3904 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ (z ∘ y)) ∘ w
-abbrev Equation3905 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (z ∘ z)) ∘ x
-abbrev Equation3906 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (z ∘ z)) ∘ y
-abbrev Equation3907 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = (y ∘ (z ∘ z)) ∘ z
-abbrev Equation3908 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ (z ∘ z)) ∘ w
-abbrev Equation3909 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ (z ∘ w)) ∘ x
-abbrev Equation3910 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ (z ∘ w)) ∘ y
-abbrev Equation3911 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ (z ∘ w)) ∘ z
-abbrev Equation3912 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = (y ∘ (z ∘ w)) ∘ w
-abbrev Equation3913 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ x = (y ∘ (z ∘ w)) ∘ u
-abbrev Equation3914 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ (x ∘ x)) ∘ x
-abbrev Equation3915 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ (x ∘ x)) ∘ y
-abbrev Equation3916 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (x ∘ x)) ∘ z
-abbrev Equation3917 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ (x ∘ y)) ∘ x
-abbrev Equation3918 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ (x ∘ y)) ∘ y
-abbrev Equation3919 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (x ∘ y)) ∘ z
-abbrev Equation3920 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (x ∘ z)) ∘ x
-abbrev Equation3921 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (x ∘ z)) ∘ y
-abbrev Equation3922 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (x ∘ z)) ∘ z
-abbrev Equation3923 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ (x ∘ z)) ∘ w
-abbrev Equation3924 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ (y ∘ x)) ∘ x
-abbrev Equation3925 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ (y ∘ x)) ∘ y
-abbrev Equation3926 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (y ∘ x)) ∘ z
-abbrev Equation3927 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ (y ∘ y)) ∘ x
-abbrev Equation3928 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ (y ∘ y)) ∘ y
-abbrev Equation3929 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (y ∘ y)) ∘ z
-abbrev Equation3930 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (y ∘ z)) ∘ x
-abbrev Equation3931 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (y ∘ z)) ∘ y
-abbrev Equation3932 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (y ∘ z)) ∘ z
-abbrev Equation3933 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ (y ∘ z)) ∘ w
-abbrev Equation3934 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (z ∘ x)) ∘ x
-abbrev Equation3935 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (z ∘ x)) ∘ y
-abbrev Equation3936 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (z ∘ x)) ∘ z
-abbrev Equation3937 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ (z ∘ x)) ∘ w
-abbrev Equation3938 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (z ∘ y)) ∘ x
-abbrev Equation3939 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (z ∘ y)) ∘ y
-abbrev Equation3940 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (z ∘ y)) ∘ z
-abbrev Equation3941 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ (z ∘ y)) ∘ w
-abbrev Equation3942 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (z ∘ z)) ∘ x
-abbrev Equation3943 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (z ∘ z)) ∘ y
-abbrev Equation3944 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ (z ∘ z)) ∘ z
-abbrev Equation3945 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ (z ∘ z)) ∘ w
-abbrev Equation3946 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ (z ∘ w)) ∘ x
-abbrev Equation3947 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ (z ∘ w)) ∘ y
-abbrev Equation3948 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ (z ∘ w)) ∘ z
-abbrev Equation3949 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ (z ∘ w)) ∘ w
-abbrev Equation3950 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (x ∘ (z ∘ w)) ∘ u
-abbrev Equation3951 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ (x ∘ x)) ∘ x
-abbrev Equation3952 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ (x ∘ x)) ∘ y
-abbrev Equation3953 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (x ∘ x)) ∘ z
-abbrev Equation3954 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ (x ∘ y)) ∘ x
-abbrev Equation3955 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ (x ∘ y)) ∘ y
-abbrev Equation3956 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (x ∘ y)) ∘ z
-abbrev Equation3957 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (x ∘ z)) ∘ x
-abbrev Equation3958 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (x ∘ z)) ∘ y
-abbrev Equation3959 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (x ∘ z)) ∘ z
-abbrev Equation3960 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ (x ∘ z)) ∘ w
-abbrev Equation3961 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ (y ∘ x)) ∘ x
-abbrev Equation3962 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ (y ∘ x)) ∘ y
-abbrev Equation3963 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (y ∘ x)) ∘ z
-abbrev Equation3964 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ (y ∘ y)) ∘ x
-abbrev Equation3965 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ (y ∘ y)) ∘ y
-abbrev Equation3966 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (y ∘ y)) ∘ z
-abbrev Equation3967 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (y ∘ z)) ∘ x
-abbrev Equation3968 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (y ∘ z)) ∘ y
-abbrev Equation3969 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (y ∘ z)) ∘ z
-abbrev Equation3970 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ (y ∘ z)) ∘ w
-abbrev Equation3971 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (z ∘ x)) ∘ x
-abbrev Equation3972 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (z ∘ x)) ∘ y
-abbrev Equation3973 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (z ∘ x)) ∘ z
-abbrev Equation3974 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ (z ∘ x)) ∘ w
-abbrev Equation3975 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (z ∘ y)) ∘ x
-abbrev Equation3976 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (z ∘ y)) ∘ y
-abbrev Equation3977 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (z ∘ y)) ∘ z
-abbrev Equation3978 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ (z ∘ y)) ∘ w
-abbrev Equation3979 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (z ∘ z)) ∘ x
-abbrev Equation3980 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (z ∘ z)) ∘ y
-abbrev Equation3981 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (y ∘ (z ∘ z)) ∘ z
-abbrev Equation3982 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ (z ∘ z)) ∘ w
-abbrev Equation3983 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ (z ∘ w)) ∘ x
-abbrev Equation3984 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ (z ∘ w)) ∘ y
-abbrev Equation3985 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ (z ∘ w)) ∘ z
-abbrev Equation3986 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (y ∘ (z ∘ w)) ∘ w
-abbrev Equation3987 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (y ∘ (z ∘ w)) ∘ u
-abbrev Equation3988 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (x ∘ x)) ∘ x
-abbrev Equation3989 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (x ∘ x)) ∘ y
-abbrev Equation3990 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (x ∘ x)) ∘ z
-abbrev Equation3991 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (x ∘ x)) ∘ w
-abbrev Equation3992 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (x ∘ y)) ∘ x
-abbrev Equation3993 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (x ∘ y)) ∘ y
-abbrev Equation3994 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (x ∘ y)) ∘ z
-abbrev Equation3995 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (x ∘ y)) ∘ w
-abbrev Equation3996 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (x ∘ z)) ∘ x
-abbrev Equation3997 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (x ∘ z)) ∘ y
-abbrev Equation3998 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (x ∘ z)) ∘ z
-abbrev Equation3999 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (x ∘ z)) ∘ w
-abbrev Equation4000 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (x ∘ w)) ∘ x
-abbrev Equation4001 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (x ∘ w)) ∘ y
-abbrev Equation4002 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (x ∘ w)) ∘ z
-abbrev Equation4003 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (x ∘ w)) ∘ w
-abbrev Equation4004 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ (x ∘ w)) ∘ u
-abbrev Equation4005 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (y ∘ x)) ∘ x
-abbrev Equation4006 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (y ∘ x)) ∘ y
-abbrev Equation4007 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (y ∘ x)) ∘ z
-abbrev Equation4008 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (y ∘ x)) ∘ w
-abbrev Equation4009 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (y ∘ y)) ∘ x
-abbrev Equation4010 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (y ∘ y)) ∘ y
-abbrev Equation4011 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (y ∘ y)) ∘ z
-abbrev Equation4012 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (y ∘ y)) ∘ w
-abbrev Equation4013 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (y ∘ z)) ∘ x
-abbrev Equation4014 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (y ∘ z)) ∘ y
-abbrev Equation4015 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (y ∘ z)) ∘ z
-abbrev Equation4016 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (y ∘ z)) ∘ w
-abbrev Equation4017 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (y ∘ w)) ∘ x
-abbrev Equation4018 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (y ∘ w)) ∘ y
-abbrev Equation4019 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (y ∘ w)) ∘ z
-abbrev Equation4020 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (y ∘ w)) ∘ w
-abbrev Equation4021 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ (y ∘ w)) ∘ u
-abbrev Equation4022 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (z ∘ x)) ∘ x
-abbrev Equation4023 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (z ∘ x)) ∘ y
-abbrev Equation4024 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (z ∘ x)) ∘ z
-abbrev Equation4025 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (z ∘ x)) ∘ w
-abbrev Equation4026 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (z ∘ y)) ∘ x
-abbrev Equation4027 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (z ∘ y)) ∘ y
-abbrev Equation4028 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (z ∘ y)) ∘ z
-abbrev Equation4029 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (z ∘ y)) ∘ w
-abbrev Equation4030 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (z ∘ z)) ∘ x
-abbrev Equation4031 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (z ∘ z)) ∘ y
-abbrev Equation4032 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (z ∘ (z ∘ z)) ∘ z
-abbrev Equation4033 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (z ∘ z)) ∘ w
-abbrev Equation4034 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (z ∘ w)) ∘ x
-abbrev Equation4035 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (z ∘ w)) ∘ y
-abbrev Equation4036 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (z ∘ w)) ∘ z
-abbrev Equation4037 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (z ∘ w)) ∘ w
-abbrev Equation4038 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ (z ∘ w)) ∘ u
-abbrev Equation4039 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ x)) ∘ x
-abbrev Equation4040 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ x)) ∘ y
-abbrev Equation4041 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ x)) ∘ z
-abbrev Equation4042 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ x)) ∘ w
-abbrev Equation4043 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ (w ∘ x)) ∘ u
-abbrev Equation4044 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ y)) ∘ x
-abbrev Equation4045 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ y)) ∘ y
-abbrev Equation4046 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ y)) ∘ z
-abbrev Equation4047 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ y)) ∘ w
-abbrev Equation4048 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ (w ∘ y)) ∘ u
-abbrev Equation4049 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ z)) ∘ x
-abbrev Equation4050 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ z)) ∘ y
-abbrev Equation4051 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ z)) ∘ z
-abbrev Equation4052 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ z)) ∘ w
-abbrev Equation4053 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ (w ∘ z)) ∘ u
-abbrev Equation4054 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ w)) ∘ x
-abbrev Equation4055 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ w)) ∘ y
-abbrev Equation4056 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ w)) ∘ z
-abbrev Equation4057 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (z ∘ (w ∘ w)) ∘ w
-abbrev Equation4058 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ (w ∘ w)) ∘ u
-abbrev Equation4059 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ (w ∘ u)) ∘ x
-abbrev Equation4060 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ (w ∘ u)) ∘ y
-abbrev Equation4061 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ (w ∘ u)) ∘ z
-abbrev Equation4062 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ (w ∘ u)) ∘ w
-abbrev Equation4063 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = (z ∘ (w ∘ u)) ∘ u
-abbrev Equation4064 (G: Type u) [Magma G] := ∀ x y z w u v : G, x ∘ y = (z ∘ (w ∘ u)) ∘ v
-abbrev Equation4065 (G: Type u) [Magma G] := ∀ x : G, x ∘ x = ((x ∘ x) ∘ x) ∘ x
-abbrev Equation4066 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((x ∘ x) ∘ x) ∘ y
-abbrev Equation4067 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((x ∘ x) ∘ y) ∘ x
-abbrev Equation4068 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((x ∘ x) ∘ y) ∘ y
-abbrev Equation4069 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((x ∘ x) ∘ y) ∘ z
-abbrev Equation4070 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((x ∘ y) ∘ x) ∘ x
-abbrev Equation4071 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((x ∘ y) ∘ x) ∘ y
-abbrev Equation4072 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((x ∘ y) ∘ x) ∘ z
-abbrev Equation4073 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((x ∘ y) ∘ y) ∘ x
-abbrev Equation4074 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((x ∘ y) ∘ y) ∘ y
-abbrev Equation4075 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((x ∘ y) ∘ y) ∘ z
-abbrev Equation4076 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((x ∘ y) ∘ z) ∘ x
-abbrev Equation4077 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((x ∘ y) ∘ z) ∘ y
-abbrev Equation4078 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((x ∘ y) ∘ z) ∘ z
-abbrev Equation4079 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = ((x ∘ y) ∘ z) ∘ w
-abbrev Equation4080 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((y ∘ x) ∘ x) ∘ x
-abbrev Equation4081 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((y ∘ x) ∘ x) ∘ y
-abbrev Equation4082 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ x) ∘ x) ∘ z
-abbrev Equation4083 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((y ∘ x) ∘ y) ∘ x
-abbrev Equation4084 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((y ∘ x) ∘ y) ∘ y
-abbrev Equation4085 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ x) ∘ y) ∘ z
-abbrev Equation4086 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ x) ∘ z) ∘ x
-abbrev Equation4087 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ x) ∘ z) ∘ y
-abbrev Equation4088 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ x) ∘ z) ∘ z
-abbrev Equation4089 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = ((y ∘ x) ∘ z) ∘ w
-abbrev Equation4090 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((y ∘ y) ∘ x) ∘ x
-abbrev Equation4091 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((y ∘ y) ∘ x) ∘ y
-abbrev Equation4092 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ y) ∘ x) ∘ z
-abbrev Equation4093 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((y ∘ y) ∘ y) ∘ x
-abbrev Equation4094 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = ((y ∘ y) ∘ y) ∘ y
-abbrev Equation4095 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ y) ∘ y) ∘ z
-abbrev Equation4096 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ y) ∘ z) ∘ x
-abbrev Equation4097 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ y) ∘ z) ∘ y
-abbrev Equation4098 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ y) ∘ z) ∘ z
-abbrev Equation4099 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = ((y ∘ y) ∘ z) ∘ w
-abbrev Equation4100 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ z) ∘ x) ∘ x
-abbrev Equation4101 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ z) ∘ x) ∘ y
-abbrev Equation4102 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ z) ∘ x) ∘ z
-abbrev Equation4103 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = ((y ∘ z) ∘ x) ∘ w
-abbrev Equation4104 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ z) ∘ y) ∘ x
-abbrev Equation4105 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ z) ∘ y) ∘ y
-abbrev Equation4106 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ z) ∘ y) ∘ z
-abbrev Equation4107 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = ((y ∘ z) ∘ y) ∘ w
-abbrev Equation4108 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ z) ∘ z) ∘ x
-abbrev Equation4109 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ z) ∘ z) ∘ y
-abbrev Equation4110 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ x = ((y ∘ z) ∘ z) ∘ z
-abbrev Equation4111 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = ((y ∘ z) ∘ z) ∘ w
-abbrev Equation4112 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = ((y ∘ z) ∘ w) ∘ x
-abbrev Equation4113 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = ((y ∘ z) ∘ w) ∘ y
-abbrev Equation4114 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = ((y ∘ z) ∘ w) ∘ z
-abbrev Equation4115 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ x = ((y ∘ z) ∘ w) ∘ w
-abbrev Equation4116 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ x = ((y ∘ z) ∘ w) ∘ u
-abbrev Equation4117 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((x ∘ x) ∘ x) ∘ x
-abbrev Equation4118 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((x ∘ x) ∘ x) ∘ y
-abbrev Equation4119 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ x) ∘ x) ∘ z
-abbrev Equation4120 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((x ∘ x) ∘ y) ∘ x
-abbrev Equation4121 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((x ∘ x) ∘ y) ∘ y
-abbrev Equation4122 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ x) ∘ y) ∘ z
-abbrev Equation4123 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ x) ∘ z) ∘ x
-abbrev Equation4124 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ x) ∘ z) ∘ y
-abbrev Equation4125 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ x) ∘ z) ∘ z
-abbrev Equation4126 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((x ∘ x) ∘ z) ∘ w
-abbrev Equation4127 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((x ∘ y) ∘ x) ∘ x
-abbrev Equation4128 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((x ∘ y) ∘ x) ∘ y
-abbrev Equation4129 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ y) ∘ x) ∘ z
-abbrev Equation4130 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((x ∘ y) ∘ y) ∘ x
-abbrev Equation4131 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((x ∘ y) ∘ y) ∘ y
-abbrev Equation4132 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ y) ∘ y) ∘ z
-abbrev Equation4133 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ y) ∘ z) ∘ x
-abbrev Equation4134 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ y) ∘ z) ∘ y
-abbrev Equation4135 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ y) ∘ z) ∘ z
-abbrev Equation4136 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((x ∘ y) ∘ z) ∘ w
-abbrev Equation4137 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ z) ∘ x) ∘ x
-abbrev Equation4138 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ z) ∘ x) ∘ y
-abbrev Equation4139 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ z) ∘ x) ∘ z
-abbrev Equation4140 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((x ∘ z) ∘ x) ∘ w
-abbrev Equation4141 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ z) ∘ y) ∘ x
-abbrev Equation4142 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ z) ∘ y) ∘ y
-abbrev Equation4143 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ z) ∘ y) ∘ z
-abbrev Equation4144 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((x ∘ z) ∘ y) ∘ w
-abbrev Equation4145 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ z) ∘ z) ∘ x
-abbrev Equation4146 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ z) ∘ z) ∘ y
-abbrev Equation4147 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((x ∘ z) ∘ z) ∘ z
-abbrev Equation4148 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((x ∘ z) ∘ z) ∘ w
-abbrev Equation4149 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((x ∘ z) ∘ w) ∘ x
-abbrev Equation4150 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((x ∘ z) ∘ w) ∘ y
-abbrev Equation4151 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((x ∘ z) ∘ w) ∘ z
-abbrev Equation4152 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((x ∘ z) ∘ w) ∘ w
-abbrev Equation4153 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((x ∘ z) ∘ w) ∘ u
-abbrev Equation4154 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((y ∘ x) ∘ x) ∘ x
-abbrev Equation4155 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((y ∘ x) ∘ x) ∘ y
-abbrev Equation4156 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ x) ∘ x) ∘ z
-abbrev Equation4157 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((y ∘ x) ∘ y) ∘ x
-abbrev Equation4158 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((y ∘ x) ∘ y) ∘ y
-abbrev Equation4159 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ x) ∘ y) ∘ z
-abbrev Equation4160 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ x) ∘ z) ∘ x
-abbrev Equation4161 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ x) ∘ z) ∘ y
-abbrev Equation4162 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ x) ∘ z) ∘ z
-abbrev Equation4163 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((y ∘ x) ∘ z) ∘ w
-abbrev Equation4164 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((y ∘ y) ∘ x) ∘ x
-abbrev Equation4165 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((y ∘ y) ∘ x) ∘ y
-abbrev Equation4166 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ y) ∘ x) ∘ z
-abbrev Equation4167 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((y ∘ y) ∘ y) ∘ x
-abbrev Equation4168 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = ((y ∘ y) ∘ y) ∘ y
-abbrev Equation4169 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ y) ∘ y) ∘ z
-abbrev Equation4170 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ y) ∘ z) ∘ x
-abbrev Equation4171 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ y) ∘ z) ∘ y
-abbrev Equation4172 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ y) ∘ z) ∘ z
-abbrev Equation4173 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((y ∘ y) ∘ z) ∘ w
-abbrev Equation4174 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ z) ∘ x) ∘ x
-abbrev Equation4175 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ z) ∘ x) ∘ y
-abbrev Equation4176 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ z) ∘ x) ∘ z
-abbrev Equation4177 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((y ∘ z) ∘ x) ∘ w
-abbrev Equation4178 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ z) ∘ y) ∘ x
-abbrev Equation4179 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ z) ∘ y) ∘ y
-abbrev Equation4180 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ z) ∘ y) ∘ z
-abbrev Equation4181 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((y ∘ z) ∘ y) ∘ w
-abbrev Equation4182 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ z) ∘ z) ∘ x
-abbrev Equation4183 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ z) ∘ z) ∘ y
-abbrev Equation4184 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((y ∘ z) ∘ z) ∘ z
-abbrev Equation4185 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((y ∘ z) ∘ z) ∘ w
-abbrev Equation4186 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((y ∘ z) ∘ w) ∘ x
-abbrev Equation4187 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((y ∘ z) ∘ w) ∘ y
-abbrev Equation4188 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((y ∘ z) ∘ w) ∘ z
-abbrev Equation4189 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((y ∘ z) ∘ w) ∘ w
-abbrev Equation4190 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((y ∘ z) ∘ w) ∘ u
-abbrev Equation4191 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ x) ∘ x) ∘ x
-abbrev Equation4192 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ x) ∘ x) ∘ y
-abbrev Equation4193 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ x) ∘ x) ∘ z
-abbrev Equation4194 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ x) ∘ x) ∘ w
-abbrev Equation4195 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ x) ∘ y) ∘ x
-abbrev Equation4196 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ x) ∘ y) ∘ y
-abbrev Equation4197 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ x) ∘ y) ∘ z
-abbrev Equation4198 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ x) ∘ y) ∘ w
-abbrev Equation4199 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ x) ∘ z) ∘ x
-abbrev Equation4200 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ x) ∘ z) ∘ y
-abbrev Equation4201 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ x) ∘ z) ∘ z
-abbrev Equation4202 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ x) ∘ z) ∘ w
-abbrev Equation4203 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ x) ∘ w) ∘ x
-abbrev Equation4204 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ x) ∘ w) ∘ y
-abbrev Equation4205 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ x) ∘ w) ∘ z
-abbrev Equation4206 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ x) ∘ w) ∘ w
-abbrev Equation4207 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((z ∘ x) ∘ w) ∘ u
-abbrev Equation4208 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ y) ∘ x) ∘ x
-abbrev Equation4209 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ y) ∘ x) ∘ y
-abbrev Equation4210 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ y) ∘ x) ∘ z
-abbrev Equation4211 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ y) ∘ x) ∘ w
-abbrev Equation4212 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ y) ∘ y) ∘ x
-abbrev Equation4213 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ y) ∘ y) ∘ y
-abbrev Equation4214 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ y) ∘ y) ∘ z
-abbrev Equation4215 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ y) ∘ y) ∘ w
-abbrev Equation4216 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ y) ∘ z) ∘ x
-abbrev Equation4217 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ y) ∘ z) ∘ y
-abbrev Equation4218 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ y) ∘ z) ∘ z
-abbrev Equation4219 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ y) ∘ z) ∘ w
-abbrev Equation4220 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ y) ∘ w) ∘ x
-abbrev Equation4221 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ y) ∘ w) ∘ y
-abbrev Equation4222 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ y) ∘ w) ∘ z
-abbrev Equation4223 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ y) ∘ w) ∘ w
-abbrev Equation4224 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((z ∘ y) ∘ w) ∘ u
-abbrev Equation4225 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ z) ∘ x) ∘ x
-abbrev Equation4226 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ z) ∘ x) ∘ y
-abbrev Equation4227 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ z) ∘ x) ∘ z
-abbrev Equation4228 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ z) ∘ x) ∘ w
-abbrev Equation4229 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ z) ∘ y) ∘ x
-abbrev Equation4230 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ z) ∘ y) ∘ y
-abbrev Equation4231 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ z) ∘ y) ∘ z
-abbrev Equation4232 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ z) ∘ y) ∘ w
-abbrev Equation4233 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ z) ∘ z) ∘ x
-abbrev Equation4234 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ z) ∘ z) ∘ y
-abbrev Equation4235 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = ((z ∘ z) ∘ z) ∘ z
-abbrev Equation4236 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ z) ∘ z) ∘ w
-abbrev Equation4237 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ z) ∘ w) ∘ x
-abbrev Equation4238 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ z) ∘ w) ∘ y
-abbrev Equation4239 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ z) ∘ w) ∘ z
-abbrev Equation4240 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ z) ∘ w) ∘ w
-abbrev Equation4241 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((z ∘ z) ∘ w) ∘ u
-abbrev Equation4242 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ x) ∘ x
-abbrev Equation4243 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ x) ∘ y
-abbrev Equation4244 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ x) ∘ z
-abbrev Equation4245 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ x) ∘ w
-abbrev Equation4246 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((z ∘ w) ∘ x) ∘ u
-abbrev Equation4247 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ y) ∘ x
-abbrev Equation4248 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ y) ∘ y
-abbrev Equation4249 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ y) ∘ z
-abbrev Equation4250 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ y) ∘ w
-abbrev Equation4251 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((z ∘ w) ∘ y) ∘ u
-abbrev Equation4252 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ z) ∘ x
-abbrev Equation4253 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ z) ∘ y
-abbrev Equation4254 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ z) ∘ z
-abbrev Equation4255 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ z) ∘ w
-abbrev Equation4256 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((z ∘ w) ∘ z) ∘ u
-abbrev Equation4257 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ w) ∘ x
-abbrev Equation4258 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ w) ∘ y
-abbrev Equation4259 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ w) ∘ z
-abbrev Equation4260 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = ((z ∘ w) ∘ w) ∘ w
-abbrev Equation4261 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((z ∘ w) ∘ w) ∘ u
-abbrev Equation4262 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((z ∘ w) ∘ u) ∘ x
-abbrev Equation4263 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((z ∘ w) ∘ u) ∘ y
-abbrev Equation4264 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((z ∘ w) ∘ u) ∘ z
-abbrev Equation4265 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((z ∘ w) ∘ u) ∘ w
-abbrev Equation4266 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ y = ((z ∘ w) ∘ u) ∘ u
-abbrev Equation4267 (G: Type u) [Magma G] := ∀ x y z w u v : G, x ∘ y = ((z ∘ w) ∘ u) ∘ v
-abbrev Equation4268 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = x ∘ (x ∘ y)
-abbrev Equation4269 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = x ∘ (y ∘ x)
-abbrev Equation4270 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = x ∘ (y ∘ y)
-abbrev Equation4271 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ x) = x ∘ (y ∘ z)
-abbrev Equation4272 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = y ∘ (x ∘ x)
-abbrev Equation4273 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = y ∘ (x ∘ y)
-abbrev Equation4274 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ x) = y ∘ (x ∘ z)
-abbrev Equation4275 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = y ∘ (y ∘ x)
-abbrev Equation4276 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = y ∘ (y ∘ y)
-abbrev Equation4277 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ x) = y ∘ (y ∘ z)
-abbrev Equation4278 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ x) = y ∘ (z ∘ x)
-abbrev Equation4279 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ x) = y ∘ (z ∘ y)
-abbrev Equation4280 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ x) = y ∘ (z ∘ z)
-abbrev Equation4281 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ x) = y ∘ (z ∘ w)
-abbrev Equation4282 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = x ∘ (x ∘ z)
-abbrev Equation4283 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = x ∘ (y ∘ x)
-abbrev Equation4284 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = x ∘ (y ∘ y)
-abbrev Equation4285 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = x ∘ (y ∘ z)
-abbrev Equation4286 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = x ∘ (z ∘ x)
-abbrev Equation4287 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = x ∘ (z ∘ y)
-abbrev Equation4288 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = x ∘ (z ∘ z)
-abbrev Equation4289 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = x ∘ (z ∘ w)
-abbrev Equation4290 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = y ∘ (x ∘ x)
-abbrev Equation4291 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = y ∘ (x ∘ y)
-abbrev Equation4292 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = y ∘ (x ∘ z)
-abbrev Equation4293 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = y ∘ (y ∘ x)
-abbrev Equation4294 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = y ∘ (y ∘ z)
-abbrev Equation4295 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = y ∘ (z ∘ x)
-abbrev Equation4296 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = y ∘ (z ∘ y)
-abbrev Equation4297 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = y ∘ (z ∘ z)
-abbrev Equation4298 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = y ∘ (z ∘ w)
-abbrev Equation4299 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = z ∘ (x ∘ x)
-abbrev Equation4300 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = z ∘ (x ∘ y)
-abbrev Equation4301 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = z ∘ (x ∘ z)
-abbrev Equation4302 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = z ∘ (x ∘ w)
-abbrev Equation4303 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = z ∘ (y ∘ x)
-abbrev Equation4304 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = z ∘ (y ∘ y)
-abbrev Equation4305 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = z ∘ (y ∘ z)
-abbrev Equation4306 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = z ∘ (y ∘ w)
-abbrev Equation4307 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = z ∘ (z ∘ y)
-abbrev Equation4308 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = z ∘ (z ∘ w)
-abbrev Equation4309 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = z ∘ (w ∘ x)
-abbrev Equation4310 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = z ∘ (w ∘ y)
-abbrev Equation4311 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = z ∘ (w ∘ z)
-abbrev Equation4312 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = z ∘ (w ∘ w)
-abbrev Equation4313 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (x ∘ y) = z ∘ (w ∘ u)
-abbrev Equation4314 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ x) = x ∘ (y ∘ y)
-abbrev Equation4315 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = x ∘ (y ∘ z)
-abbrev Equation4316 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = x ∘ (z ∘ x)
-abbrev Equation4317 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = x ∘ (z ∘ y)
-abbrev Equation4318 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = x ∘ (z ∘ z)
-abbrev Equation4319 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = x ∘ (z ∘ w)
-abbrev Equation4320 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ x) = y ∘ (x ∘ x)
-abbrev Equation4321 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ x) = y ∘ (x ∘ y)
-abbrev Equation4322 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = y ∘ (x ∘ z)
-abbrev Equation4323 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = y ∘ (z ∘ x)
-abbrev Equation4324 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = y ∘ (z ∘ y)
-abbrev Equation4325 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = y ∘ (z ∘ z)
-abbrev Equation4326 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = y ∘ (z ∘ w)
-abbrev Equation4327 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = z ∘ (x ∘ x)
-abbrev Equation4328 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = z ∘ (x ∘ y)
-abbrev Equation4329 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = z ∘ (x ∘ w)
-abbrev Equation4330 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = z ∘ (y ∘ x)
-abbrev Equation4331 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = z ∘ (y ∘ y)
-abbrev Equation4332 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = z ∘ (y ∘ z)
-abbrev Equation4333 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = z ∘ (y ∘ w)
-abbrev Equation4334 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = z ∘ (w ∘ x)
-abbrev Equation4335 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = z ∘ (w ∘ y)
-abbrev Equation4336 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = z ∘ (w ∘ z)
-abbrev Equation4337 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = z ∘ (w ∘ w)
-abbrev Equation4338 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ x) = z ∘ (w ∘ u)
-abbrev Equation4339 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = x ∘ (y ∘ z)
-abbrev Equation4340 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = x ∘ (z ∘ y)
-abbrev Equation4341 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = x ∘ (z ∘ z)
-abbrev Equation4342 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = x ∘ (z ∘ w)
-abbrev Equation4343 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ y) = y ∘ (x ∘ x)
-abbrev Equation4344 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = y ∘ (x ∘ z)
-abbrev Equation4345 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = y ∘ (z ∘ x)
-abbrev Equation4346 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = y ∘ (z ∘ z)
-abbrev Equation4347 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = y ∘ (z ∘ w)
-abbrev Equation4348 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = z ∘ (x ∘ y)
-abbrev Equation4349 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = z ∘ (x ∘ w)
-abbrev Equation4350 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = z ∘ (y ∘ x)
-abbrev Equation4351 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = z ∘ (y ∘ y)
-abbrev Equation4352 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = z ∘ (y ∘ w)
-abbrev Equation4353 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = z ∘ (w ∘ x)
-abbrev Equation4354 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = z ∘ (w ∘ y)
-abbrev Equation4355 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = z ∘ (w ∘ w)
-abbrev Equation4356 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ y) = z ∘ (w ∘ u)
-abbrev Equation4357 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = x ∘ (y ∘ w)
-abbrev Equation4358 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = x ∘ (z ∘ y)
-abbrev Equation4359 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = x ∘ (z ∘ w)
-abbrev Equation4360 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = x ∘ (w ∘ z)
-abbrev Equation4361 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = x ∘ (w ∘ u)
-abbrev Equation4362 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = y ∘ (x ∘ z)
-abbrev Equation4363 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = y ∘ (x ∘ w)
-abbrev Equation4364 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = y ∘ (z ∘ x)
-abbrev Equation4365 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = y ∘ (z ∘ w)
-abbrev Equation4366 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = y ∘ (w ∘ x)
-abbrev Equation4367 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = y ∘ (w ∘ z)
-abbrev Equation4368 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = y ∘ (w ∘ u)
-abbrev Equation4369 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = z ∘ (y ∘ x)
-abbrev Equation4370 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = z ∘ (y ∘ w)
-abbrev Equation4371 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = z ∘ (w ∘ x)
-abbrev Equation4372 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = z ∘ (w ∘ y)
-abbrev Equation4373 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = z ∘ (w ∘ u)
-abbrev Equation4374 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = w ∘ (y ∘ z)
-abbrev Equation4375 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = w ∘ (y ∘ u)
-abbrev Equation4376 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = w ∘ (z ∘ y)
-abbrev Equation4377 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = w ∘ (z ∘ u)
-abbrev Equation4378 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = w ∘ (u ∘ z)
-abbrev Equation4379 (G: Type u) [Magma G] := ∀ x y z w u v : G, x ∘ (y ∘ z) = w ∘ (u ∘ v)
-abbrev Equation4380 (G: Type u) [Magma G] := ∀ x : G, x ∘ (x ∘ x) = (x ∘ x) ∘ x
-abbrev Equation4381 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = (x ∘ x) ∘ y
-abbrev Equation4382 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = (x ∘ y) ∘ x
-abbrev Equation4383 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = (x ∘ y) ∘ y
-abbrev Equation4384 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ x) = (x ∘ y) ∘ z
-abbrev Equation4385 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = (y ∘ x) ∘ x
-abbrev Equation4386 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = (y ∘ x) ∘ y
-abbrev Equation4387 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ x) = (y ∘ x) ∘ z
-abbrev Equation4388 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = (y ∘ y) ∘ x
-abbrev Equation4389 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ x) = (y ∘ y) ∘ y
-abbrev Equation4390 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ x) = (y ∘ y) ∘ z
-abbrev Equation4391 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ x) = (y ∘ z) ∘ x
-abbrev Equation4392 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ x) = (y ∘ z) ∘ y
-abbrev Equation4393 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ x) = (y ∘ z) ∘ z
-abbrev Equation4394 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ x) = (y ∘ z) ∘ w
-abbrev Equation4395 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = (x ∘ x) ∘ x
-abbrev Equation4396 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = (x ∘ x) ∘ y
-abbrev Equation4397 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (x ∘ x) ∘ z
-abbrev Equation4398 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = (x ∘ y) ∘ x
-abbrev Equation4399 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = (x ∘ y) ∘ y
-abbrev Equation4400 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (x ∘ y) ∘ z
-abbrev Equation4401 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (x ∘ z) ∘ x
-abbrev Equation4402 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (x ∘ z) ∘ y
-abbrev Equation4403 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (x ∘ z) ∘ z
-abbrev Equation4404 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = (x ∘ z) ∘ w
-abbrev Equation4405 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = (y ∘ x) ∘ x
-abbrev Equation4406 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = (y ∘ x) ∘ y
-abbrev Equation4407 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (y ∘ x) ∘ z
-abbrev Equation4408 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = (y ∘ y) ∘ x
-abbrev Equation4409 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (x ∘ y) = (y ∘ y) ∘ y
-abbrev Equation4410 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (y ∘ y) ∘ z
-abbrev Equation4411 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (y ∘ z) ∘ x
-abbrev Equation4412 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (y ∘ z) ∘ y
-abbrev Equation4413 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (y ∘ z) ∘ z
-abbrev Equation4414 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = (y ∘ z) ∘ w
-abbrev Equation4415 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (z ∘ x) ∘ x
-abbrev Equation4416 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (z ∘ x) ∘ y
-abbrev Equation4417 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (z ∘ x) ∘ z
-abbrev Equation4418 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = (z ∘ x) ∘ w
-abbrev Equation4419 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (z ∘ y) ∘ x
-abbrev Equation4420 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (z ∘ y) ∘ y
-abbrev Equation4421 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (z ∘ y) ∘ z
-abbrev Equation4422 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = (z ∘ y) ∘ w
-abbrev Equation4423 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (z ∘ z) ∘ x
-abbrev Equation4424 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (z ∘ z) ∘ y
-abbrev Equation4425 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (x ∘ y) = (z ∘ z) ∘ z
-abbrev Equation4426 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = (z ∘ z) ∘ w
-abbrev Equation4427 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = (z ∘ w) ∘ x
-abbrev Equation4428 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = (z ∘ w) ∘ y
-abbrev Equation4429 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = (z ∘ w) ∘ z
-abbrev Equation4430 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (x ∘ y) = (z ∘ w) ∘ w
-abbrev Equation4431 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (x ∘ y) = (z ∘ w) ∘ u
-abbrev Equation4432 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ x) = (x ∘ x) ∘ x
-abbrev Equation4433 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ x) = (x ∘ x) ∘ y
-abbrev Equation4434 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (x ∘ x) ∘ z
-abbrev Equation4435 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ x) = (x ∘ y) ∘ x
-abbrev Equation4436 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ x) = (x ∘ y) ∘ y
-abbrev Equation4437 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (x ∘ y) ∘ z
-abbrev Equation4438 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (x ∘ z) ∘ x
-abbrev Equation4439 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (x ∘ z) ∘ y
-abbrev Equation4440 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (x ∘ z) ∘ z
-abbrev Equation4441 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = (x ∘ z) ∘ w
-abbrev Equation4442 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ x) = (y ∘ x) ∘ x
-abbrev Equation4443 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ x) = (y ∘ x) ∘ y
-abbrev Equation4444 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (y ∘ x) ∘ z
-abbrev Equation4445 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ x) = (y ∘ y) ∘ x
-abbrev Equation4446 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ x) = (y ∘ y) ∘ y
-abbrev Equation4447 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (y ∘ y) ∘ z
-abbrev Equation4448 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (y ∘ z) ∘ x
-abbrev Equation4449 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (y ∘ z) ∘ y
-abbrev Equation4450 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (y ∘ z) ∘ z
-abbrev Equation4451 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = (y ∘ z) ∘ w
-abbrev Equation4452 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (z ∘ x) ∘ x
-abbrev Equation4453 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (z ∘ x) ∘ y
-abbrev Equation4454 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (z ∘ x) ∘ z
-abbrev Equation4455 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = (z ∘ x) ∘ w
-abbrev Equation4456 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (z ∘ y) ∘ x
-abbrev Equation4457 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (z ∘ y) ∘ y
-abbrev Equation4458 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (z ∘ y) ∘ z
-abbrev Equation4459 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = (z ∘ y) ∘ w
-abbrev Equation4460 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (z ∘ z) ∘ x
-abbrev Equation4461 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (z ∘ z) ∘ y
-abbrev Equation4462 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ x) = (z ∘ z) ∘ z
-abbrev Equation4463 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = (z ∘ z) ∘ w
-abbrev Equation4464 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = (z ∘ w) ∘ x
-abbrev Equation4465 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = (z ∘ w) ∘ y
-abbrev Equation4466 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = (z ∘ w) ∘ z
-abbrev Equation4467 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ x) = (z ∘ w) ∘ w
-abbrev Equation4468 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ x) = (z ∘ w) ∘ u
-abbrev Equation4469 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ y) = (x ∘ x) ∘ x
-abbrev Equation4470 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ y) = (x ∘ x) ∘ y
-abbrev Equation4471 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (x ∘ x) ∘ z
-abbrev Equation4472 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ y) = (x ∘ y) ∘ x
-abbrev Equation4473 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ y) = (x ∘ y) ∘ y
-abbrev Equation4474 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (x ∘ y) ∘ z
-abbrev Equation4475 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (x ∘ z) ∘ x
-abbrev Equation4476 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (x ∘ z) ∘ y
-abbrev Equation4477 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (x ∘ z) ∘ z
-abbrev Equation4478 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = (x ∘ z) ∘ w
-abbrev Equation4479 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ y) = (y ∘ x) ∘ x
-abbrev Equation4480 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ y) = (y ∘ x) ∘ y
-abbrev Equation4481 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (y ∘ x) ∘ z
-abbrev Equation4482 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ y) = (y ∘ y) ∘ x
-abbrev Equation4483 (G: Type u) [Magma G] := ∀ x y : G, x ∘ (y ∘ y) = (y ∘ y) ∘ y
-abbrev Equation4484 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (y ∘ y) ∘ z
-abbrev Equation4485 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (y ∘ z) ∘ x
-abbrev Equation4486 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (y ∘ z) ∘ y
-abbrev Equation4487 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (y ∘ z) ∘ z
-abbrev Equation4488 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = (y ∘ z) ∘ w
-abbrev Equation4489 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (z ∘ x) ∘ x
-abbrev Equation4490 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (z ∘ x) ∘ y
-abbrev Equation4491 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (z ∘ x) ∘ z
-abbrev Equation4492 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = (z ∘ x) ∘ w
-abbrev Equation4493 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (z ∘ y) ∘ x
-abbrev Equation4494 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (z ∘ y) ∘ y
-abbrev Equation4495 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (z ∘ y) ∘ z
-abbrev Equation4496 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = (z ∘ y) ∘ w
-abbrev Equation4497 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (z ∘ z) ∘ x
-abbrev Equation4498 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (z ∘ z) ∘ y
-abbrev Equation4499 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ y) = (z ∘ z) ∘ z
-abbrev Equation4500 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = (z ∘ z) ∘ w
-abbrev Equation4501 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = (z ∘ w) ∘ x
-abbrev Equation4502 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = (z ∘ w) ∘ y
-abbrev Equation4503 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = (z ∘ w) ∘ z
-abbrev Equation4504 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ y) = (z ∘ w) ∘ w
-abbrev Equation4505 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ y) = (z ∘ w) ∘ u
-abbrev Equation4506 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ x) ∘ x
-abbrev Equation4507 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ x) ∘ y
-abbrev Equation4508 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ x) ∘ z
-abbrev Equation4509 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ x) ∘ w
-abbrev Equation4510 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ x
-abbrev Equation4511 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ y
--- abbrev Equation4512 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ z
--- abbrev Equation4513 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ y) ∘ w
-abbrev Equation4514 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ z) ∘ x
-abbrev Equation4515 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ z) ∘ y
-abbrev Equation4516 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ z) ∘ z
-abbrev Equation4517 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ z) ∘ w
-abbrev Equation4518 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ w) ∘ x
-abbrev Equation4519 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ w) ∘ y
-abbrev Equation4520 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ w) ∘ z
-abbrev Equation4521 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ w) ∘ w
--- abbrev Equation4522 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (x ∘ w) ∘ u
-abbrev Equation4523 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (y ∘ x) ∘ x
-abbrev Equation4524 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (y ∘ x) ∘ y
-abbrev Equation4525 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (y ∘ x) ∘ z
-abbrev Equation4526 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (y ∘ x) ∘ w
-abbrev Equation4527 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (y ∘ y) ∘ x
-abbrev Equation4528 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (y ∘ y) ∘ y
-abbrev Equation4529 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (y ∘ y) ∘ z
-abbrev Equation4530 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (y ∘ y) ∘ w
-abbrev Equation4531 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (y ∘ z) ∘ x
-abbrev Equation4532 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (y ∘ z) ∘ y
-abbrev Equation4533 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (y ∘ z) ∘ z
-abbrev Equation4534 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (y ∘ z) ∘ w
-abbrev Equation4535 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (y ∘ w) ∘ x
-abbrev Equation4536 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (y ∘ w) ∘ y
-abbrev Equation4537 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (y ∘ w) ∘ z
-abbrev Equation4538 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (y ∘ w) ∘ w
-abbrev Equation4539 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (y ∘ w) ∘ u
-abbrev Equation4540 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (z ∘ x) ∘ x
-abbrev Equation4541 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (z ∘ x) ∘ y
-abbrev Equation4542 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (z ∘ x) ∘ z
-abbrev Equation4543 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (z ∘ x) ∘ w
-abbrev Equation4544 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (z ∘ y) ∘ x
-abbrev Equation4545 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (z ∘ y) ∘ y
-abbrev Equation4546 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (z ∘ y) ∘ z
-abbrev Equation4547 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (z ∘ y) ∘ w
-abbrev Equation4548 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (z ∘ z) ∘ x
-abbrev Equation4549 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (z ∘ z) ∘ y
-abbrev Equation4550 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (z ∘ z) ∘ z
-abbrev Equation4551 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (z ∘ z) ∘ w
-abbrev Equation4552 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (z ∘ w) ∘ x
-abbrev Equation4553 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (z ∘ w) ∘ y
-abbrev Equation4554 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (z ∘ w) ∘ z
-abbrev Equation4555 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (z ∘ w) ∘ w
-abbrev Equation4556 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (z ∘ w) ∘ u
-abbrev Equation4557 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ x) ∘ x
-abbrev Equation4558 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ x) ∘ y
-abbrev Equation4559 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ x) ∘ z
-abbrev Equation4560 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ x) ∘ w
-abbrev Equation4561 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ x) ∘ u
-abbrev Equation4562 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ y) ∘ x
-abbrev Equation4563 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ y) ∘ y
-abbrev Equation4564 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ y) ∘ z
-abbrev Equation4565 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ y) ∘ w
-abbrev Equation4566 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ y) ∘ u
-abbrev Equation4567 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ z) ∘ x
-abbrev Equation4568 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ z) ∘ y
-abbrev Equation4569 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ z) ∘ z
-abbrev Equation4570 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ z) ∘ w
-abbrev Equation4571 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ z) ∘ u
-abbrev Equation4572 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ w) ∘ x
-abbrev Equation4573 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ w) ∘ y
-abbrev Equation4574 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ w) ∘ z
-abbrev Equation4575 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (w ∘ w) ∘ w
-abbrev Equation4576 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ w) ∘ u
-abbrev Equation4577 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ u) ∘ x
-abbrev Equation4578 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ u) ∘ y
-abbrev Equation4579 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ u) ∘ z
-abbrev Equation4580 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ u) ∘ w
-abbrev Equation4581 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (w ∘ u) ∘ u
--- abbrev Equation4582 (G: Type u) [Magma G] := ∀ x y z w u v : G, x ∘ (y ∘ z) = (w ∘ u) ∘ v
-abbrev Equation4583 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ x = (x ∘ x) ∘ y
-abbrev Equation4584 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ x = (x ∘ y) ∘ x
-abbrev Equation4585 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ x = (x ∘ y) ∘ y
-abbrev Equation4586 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ x = (x ∘ y) ∘ z
-abbrev Equation4587 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ x = (y ∘ x) ∘ x
-abbrev Equation4588 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ x = (y ∘ x) ∘ y
-abbrev Equation4589 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ x = (y ∘ x) ∘ z
-abbrev Equation4590 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ x = (y ∘ y) ∘ x
-abbrev Equation4591 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ x = (y ∘ y) ∘ y
-abbrev Equation4592 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ x = (y ∘ y) ∘ z
-abbrev Equation4593 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ x = (y ∘ z) ∘ x
-abbrev Equation4594 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ x = (y ∘ z) ∘ y
-abbrev Equation4595 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ x = (y ∘ z) ∘ z
-abbrev Equation4596 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ x) ∘ x = (y ∘ z) ∘ w
-abbrev Equation4597 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (x ∘ x) ∘ z
-abbrev Equation4598 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ y = (x ∘ y) ∘ x
-abbrev Equation4599 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ y = (x ∘ y) ∘ y
-abbrev Equation4600 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (x ∘ y) ∘ z
-abbrev Equation4601 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (x ∘ z) ∘ x
-abbrev Equation4602 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (x ∘ z) ∘ y
-abbrev Equation4603 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (x ∘ z) ∘ z
-abbrev Equation4604 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ x) ∘ y = (x ∘ z) ∘ w
-abbrev Equation4605 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ y = (y ∘ x) ∘ x
-abbrev Equation4606 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ y = (y ∘ x) ∘ y
-abbrev Equation4607 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (y ∘ x) ∘ z
-abbrev Equation4608 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ x) ∘ y = (y ∘ y) ∘ x
-abbrev Equation4609 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (y ∘ y) ∘ z
-abbrev Equation4610 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (y ∘ z) ∘ x
-abbrev Equation4611 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (y ∘ z) ∘ y
-abbrev Equation4612 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (y ∘ z) ∘ z
-abbrev Equation4613 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ x) ∘ y = (y ∘ z) ∘ w
-abbrev Equation4614 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (z ∘ x) ∘ x
-abbrev Equation4615 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (z ∘ x) ∘ y
-abbrev Equation4616 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (z ∘ x) ∘ z
-abbrev Equation4617 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ x) ∘ y = (z ∘ x) ∘ w
-abbrev Equation4618 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (z ∘ y) ∘ x
-abbrev Equation4619 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (z ∘ y) ∘ y
-abbrev Equation4620 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (z ∘ y) ∘ z
-abbrev Equation4621 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ x) ∘ y = (z ∘ y) ∘ w
-abbrev Equation4622 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ x) ∘ y = (z ∘ z) ∘ y
-abbrev Equation4623 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ x) ∘ y = (z ∘ z) ∘ w
-abbrev Equation4624 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ x) ∘ y = (z ∘ w) ∘ x
-abbrev Equation4625 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ x) ∘ y = (z ∘ w) ∘ y
-abbrev Equation4626 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ x) ∘ y = (z ∘ w) ∘ z
-abbrev Equation4627 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ x) ∘ y = (z ∘ w) ∘ w
-abbrev Equation4628 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ x) ∘ y = (z ∘ w) ∘ u
-abbrev Equation4629 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ y) ∘ x = (x ∘ y) ∘ y
-abbrev Equation4630 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (x ∘ y) ∘ z
-abbrev Equation4631 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (x ∘ z) ∘ x
-abbrev Equation4632 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (x ∘ z) ∘ y
-abbrev Equation4633 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (x ∘ z) ∘ z
-abbrev Equation4634 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ x = (x ∘ z) ∘ w
-abbrev Equation4635 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ y) ∘ x = (y ∘ x) ∘ x
-abbrev Equation4636 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ y) ∘ x = (y ∘ x) ∘ y
-abbrev Equation4637 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (y ∘ x) ∘ z
-abbrev Equation4638 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (y ∘ z) ∘ x
-abbrev Equation4639 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (y ∘ z) ∘ y
-abbrev Equation4640 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (y ∘ z) ∘ z
-abbrev Equation4641 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ x = (y ∘ z) ∘ w
-abbrev Equation4642 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (z ∘ x) ∘ x
-abbrev Equation4643 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (z ∘ x) ∘ y
-abbrev Equation4644 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ x = (z ∘ x) ∘ w
-abbrev Equation4645 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (z ∘ y) ∘ x
-abbrev Equation4646 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (z ∘ y) ∘ y
-abbrev Equation4647 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ x = (z ∘ y) ∘ z
-abbrev Equation4648 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ x = (z ∘ y) ∘ w
-abbrev Equation4649 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ x = (z ∘ w) ∘ x
-abbrev Equation4650 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ x = (z ∘ w) ∘ y
-abbrev Equation4651 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ x = (z ∘ w) ∘ z
-abbrev Equation4652 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ x = (z ∘ w) ∘ w
-abbrev Equation4653 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ y) ∘ x = (z ∘ w) ∘ u
-abbrev Equation4654 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ y = (x ∘ y) ∘ z
-abbrev Equation4655 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ y = (x ∘ z) ∘ y
-abbrev Equation4656 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ y = (x ∘ z) ∘ z
-abbrev Equation4657 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ y = (x ∘ z) ∘ w
-abbrev Equation4658 (G: Type u) [Magma G] := ∀ x y : G, (x ∘ y) ∘ y = (y ∘ x) ∘ x
-abbrev Equation4659 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ y = (y ∘ x) ∘ z
-abbrev Equation4660 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ y = (y ∘ z) ∘ x
-abbrev Equation4661 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ y = (y ∘ z) ∘ z
-abbrev Equation4662 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ y = (y ∘ z) ∘ w
-abbrev Equation4663 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ y = (z ∘ x) ∘ y
-abbrev Equation4664 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ y = (z ∘ x) ∘ w
-abbrev Equation4665 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ y = (z ∘ y) ∘ x
-abbrev Equation4666 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ y = (z ∘ y) ∘ y
-abbrev Equation4667 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ y = (z ∘ y) ∘ w
-abbrev Equation4668 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ y = (z ∘ w) ∘ x
-abbrev Equation4669 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ y = (z ∘ w) ∘ y
-abbrev Equation4670 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ y = (z ∘ w) ∘ w
-abbrev Equation4671 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ y) ∘ y = (z ∘ w) ∘ u
-abbrev Equation4672 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = (x ∘ y) ∘ w
-abbrev Equation4673 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ z = (x ∘ z) ∘ y
-abbrev Equation4674 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = (x ∘ z) ∘ w
-abbrev Equation4675 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = (x ∘ w) ∘ z
-abbrev Equation4676 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ y) ∘ z = (x ∘ w) ∘ u
-abbrev Equation4677 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ z = (y ∘ x) ∘ z
-abbrev Equation4678 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = (y ∘ x) ∘ w
-abbrev Equation4679 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ z = (y ∘ z) ∘ x
-abbrev Equation4680 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = (y ∘ z) ∘ w
-abbrev Equation4681 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = (y ∘ w) ∘ x
-abbrev Equation4682 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = (y ∘ w) ∘ z
-abbrev Equation4683 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ y) ∘ z = (y ∘ w) ∘ u
-abbrev Equation4684 (G: Type u) [Magma G] := ∀ x y z : G, (x ∘ y) ∘ z = (z ∘ y) ∘ x
-abbrev Equation4685 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = (z ∘ y) ∘ w
-abbrev Equation4686 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = (z ∘ w) ∘ x
-abbrev Equation4687 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = (z ∘ w) ∘ y
-abbrev Equation4688 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ y) ∘ z = (z ∘ w) ∘ u
-abbrev Equation4689 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = (w ∘ y) ∘ z
-abbrev Equation4690 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ y) ∘ z = (w ∘ y) ∘ u
-abbrev Equation4691 (G: Type u) [Magma G] := ∀ x y z w : G, (x ∘ y) ∘ z = (w ∘ z) ∘ y
-abbrev Equation4692 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ y) ∘ z = (w ∘ z) ∘ u
-abbrev Equation4693 (G: Type u) [Magma G] := ∀ x y z w u : G, (x ∘ y) ∘ z = (w ∘ u) ∘ z
-abbrev Equation4694 (G: Type u) [Magma G] := ∀ x y z w u v : G, (x ∘ y) ∘ z = (w ∘ u) ∘ v
+-- equation 1 := x = x
+-- equation 2 := x = y
+-- equation 3 := x = x ∘ x
+-- equation 4 := x = x ∘ y
+-- equation 5 := x = y ∘ x
+-- equation 6 := x = y ∘ y
+-- equation 7 := x = y ∘ z
+-- equation 8 := x = x ∘ (x ∘ x)
+equation 9 := x = x ∘ (x ∘ y)
+equation 10 := x = x ∘ (y ∘ x)
+equation 11 := x = x ∘ (y ∘ y)
+equation 12 := x = x ∘ (y ∘ z)
+equation 13 := x = y ∘ (x ∘ x)
+equation 14 := x = y ∘ (x ∘ y)
+equation 15 := x = y ∘ (x ∘ z)
+equation 16 := x = y ∘ (y ∘ x)
+equation 17 := x = y ∘ (y ∘ y)
+equation 18 := x = y ∘ (y ∘ z)
+equation 19 := x = y ∘ (z ∘ x)
+equation 20 := x = y ∘ (z ∘ y)
+equation 21 := x = y ∘ (z ∘ z)
+equation 22 := x = y ∘ (z ∘ w)
+-- equation 23 := x = (x ∘ x) ∘ x
+equation 24 := x = (x ∘ x) ∘ y
+equation 25 := x = (x ∘ y) ∘ x
+equation 26 := x = (x ∘ y) ∘ y
+equation 27 := x = (x ∘ y) ∘ z
+equation 28 := x = (y ∘ x) ∘ x
+equation 29 := x = (y ∘ x) ∘ y
+equation 30 := x = (y ∘ x) ∘ z
+equation 31 := x = (y ∘ y) ∘ x
+equation 32 := x = (y ∘ y) ∘ y
+equation 33 := x = (y ∘ y) ∘ z
+equation 34 := x = (y ∘ z) ∘ x
+equation 35 := x = (y ∘ z) ∘ y
+equation 36 := x = (y ∘ z) ∘ z
+equation 37 := x = (y ∘ z) ∘ w
+-- equation 38 := x ∘ x = x ∘ y
+-- equation 39 := x ∘ x = y ∘ x
+-- equation 40 := x ∘ x = y ∘ y
+-- equation 41 := x ∘ x = y ∘ z
+-- equation 42 := x ∘ y = x ∘ z
+-- equation 43 := x ∘ y = y ∘ x
+equation 44 := x ∘ y = y ∘ z
+-- equation 45 := x ∘ y = z ∘ y
+-- equation 46 := x ∘ y = z ∘ w
+equation 47 := x = x ∘ (x ∘ (x ∘ x))
+equation 48 := x = x ∘ (x ∘ (x ∘ y))
+equation 49 := x = x ∘ (x ∘ (y ∘ x))
+equation 50 := x = x ∘ (x ∘ (y ∘ y))
+equation 51 := x = x ∘ (x ∘ (y ∘ z))
+equation 52 := x = x ∘ (y ∘ (x ∘ x))
+equation 53 := x = x ∘ (y ∘ (x ∘ y))
+equation 54 := x = x ∘ (y ∘ (x ∘ z))
+equation 55 := x = x ∘ (y ∘ (y ∘ x))
+equation 56 := x = x ∘ (y ∘ (y ∘ y))
+equation 57 := x = x ∘ (y ∘ (y ∘ z))
+equation 58 := x = x ∘ (y ∘ (z ∘ x))
+equation 59 := x = x ∘ (y ∘ (z ∘ y))
+equation 60 := x = x ∘ (y ∘ (z ∘ z))
+equation 61 := x = x ∘ (y ∘ (z ∘ w))
+equation 62 := x = y ∘ (x ∘ (x ∘ x))
+equation 63 := x = y ∘ (x ∘ (x ∘ y))
+equation 64 := x = y ∘ (x ∘ (x ∘ z))
+equation 65 := x = y ∘ (x ∘ (y ∘ x))
+equation 66 := x = y ∘ (x ∘ (y ∘ y))
+equation 67 := x = y ∘ (x ∘ (y ∘ z))
+equation 68 := x = y ∘ (x ∘ (z ∘ x))
+equation 69 := x = y ∘ (x ∘ (z ∘ y))
+equation 70 := x = y ∘ (x ∘ (z ∘ z))
+equation 71 := x = y ∘ (x ∘ (z ∘ w))
+equation 72 := x = y ∘ (y ∘ (x ∘ x))
+equation 73 := x = y ∘ (y ∘ (x ∘ y))
+equation 74 := x = y ∘ (y ∘ (x ∘ z))
+equation 75 := x = y ∘ (y ∘ (y ∘ x))
+equation 76 := x = y ∘ (y ∘ (y ∘ y))
+equation 77 := x = y ∘ (y ∘ (y ∘ z))
+equation 78 := x = y ∘ (y ∘ (z ∘ x))
+equation 79 := x = y ∘ (y ∘ (z ∘ y))
+equation 80 := x = y ∘ (y ∘ (z ∘ z))
+equation 81 := x = y ∘ (y ∘ (z ∘ w))
+equation 82 := x = y ∘ (z ∘ (x ∘ x))
+equation 83 := x = y ∘ (z ∘ (x ∘ y))
+equation 84 := x = y ∘ (z ∘ (x ∘ z))
+equation 85 := x = y ∘ (z ∘ (x ∘ w))
+equation 86 := x = y ∘ (z ∘ (y ∘ x))
+equation 87 := x = y ∘ (z ∘ (y ∘ y))
+equation 88 := x = y ∘ (z ∘ (y ∘ z))
+equation 89 := x = y ∘ (z ∘ (y ∘ w))
+equation 90 := x = y ∘ (z ∘ (z ∘ x))
+equation 91 := x = y ∘ (z ∘ (z ∘ y))
+equation 92 := x = y ∘ (z ∘ (z ∘ z))
+equation 93 := x = y ∘ (z ∘ (z ∘ w))
+equation 94 := x = y ∘ (z ∘ (w ∘ x))
+equation 95 := x = y ∘ (z ∘ (w ∘ y))
+equation 96 := x = y ∘ (z ∘ (w ∘ z))
+equation 97 := x = y ∘ (z ∘ (w ∘ w))
+equation 98 := x = y ∘ (z ∘ (w ∘ u))
+equation 99 := x = x ∘ ((x ∘ x) ∘ x)
+equation 100 := x = x ∘ ((x ∘ x) ∘ y)
+equation 101 := x = x ∘ ((x ∘ y) ∘ x)
+equation 102 := x = x ∘ ((x ∘ y) ∘ y)
+equation 103 := x = x ∘ ((x ∘ y) ∘ z)
+equation 104 := x = x ∘ ((y ∘ x) ∘ x)
+equation 105 := x = x ∘ ((y ∘ x) ∘ y)
+equation 106 := x = x ∘ ((y ∘ x) ∘ z)
+equation 107 := x = x ∘ ((y ∘ y) ∘ x)
+equation 108 := x = x ∘ ((y ∘ y) ∘ y)
+equation 109 := x = x ∘ ((y ∘ y) ∘ z)
+equation 110 := x = x ∘ ((y ∘ z) ∘ x)
+equation 111 := x = x ∘ ((y ∘ z) ∘ y)
+equation 112 := x = x ∘ ((y ∘ z) ∘ z)
+equation 113 := x = x ∘ ((y ∘ z) ∘ w)
+equation 114 := x = y ∘ ((x ∘ x) ∘ x)
+equation 115 := x = y ∘ ((x ∘ x) ∘ y)
+equation 116 := x = y ∘ ((x ∘ x) ∘ z)
+equation 117 := x = y ∘ ((x ∘ y) ∘ x)
+equation 118 := x = y ∘ ((x ∘ y) ∘ y)
+equation 119 := x = y ∘ ((x ∘ y) ∘ z)
+equation 120 := x = y ∘ ((x ∘ z) ∘ x)
+equation 121 := x = y ∘ ((x ∘ z) ∘ y)
+equation 122 := x = y ∘ ((x ∘ z) ∘ z)
+equation 123 := x = y ∘ ((x ∘ z) ∘ w)
+equation 124 := x = y ∘ ((y ∘ x) ∘ x)
+equation 125 := x = y ∘ ((y ∘ x) ∘ y)
+equation 126 := x = y ∘ ((y ∘ x) ∘ z)
+equation 127 := x = y ∘ ((y ∘ y) ∘ x)
+equation 128 := x = y ∘ ((y ∘ y) ∘ y)
+equation 129 := x = y ∘ ((y ∘ y) ∘ z)
+equation 130 := x = y ∘ ((y ∘ z) ∘ x)
+equation 131 := x = y ∘ ((y ∘ z) ∘ y)
+equation 132 := x = y ∘ ((y ∘ z) ∘ z)
+equation 133 := x = y ∘ ((y ∘ z) ∘ w)
+equation 134 := x = y ∘ ((z ∘ x) ∘ x)
+equation 135 := x = y ∘ ((z ∘ x) ∘ y)
+equation 136 := x = y ∘ ((z ∘ x) ∘ z)
+equation 137 := x = y ∘ ((z ∘ x) ∘ w)
+equation 138 := x = y ∘ ((z ∘ y) ∘ x)
+equation 139 := x = y ∘ ((z ∘ y) ∘ y)
+equation 140 := x = y ∘ ((z ∘ y) ∘ z)
+equation 141 := x = y ∘ ((z ∘ y) ∘ w)
+equation 142 := x = y ∘ ((z ∘ z) ∘ x)
+equation 143 := x = y ∘ ((z ∘ z) ∘ y)
+equation 144 := x = y ∘ ((z ∘ z) ∘ z)
+equation 145 := x = y ∘ ((z ∘ z) ∘ w)
+equation 146 := x = y ∘ ((z ∘ w) ∘ x)
+equation 147 := x = y ∘ ((z ∘ w) ∘ y)
+equation 148 := x = y ∘ ((z ∘ w) ∘ z)
+equation 149 := x = y ∘ ((z ∘ w) ∘ w)
+equation 150 := x = y ∘ ((z ∘ w) ∘ u)
+equation 151 := x = (x ∘ x) ∘ (x ∘ x)
+equation 152 := x = (x ∘ x) ∘ (x ∘ y)
+equation 153 := x = (x ∘ x) ∘ (y ∘ x)
+equation 154 := x = (x ∘ x) ∘ (y ∘ y)
+equation 155 := x = (x ∘ x) ∘ (y ∘ z)
+equation 156 := x = (x ∘ y) ∘ (x ∘ x)
+equation 157 := x = (x ∘ y) ∘ (x ∘ y)
+equation 158 := x = (x ∘ y) ∘ (x ∘ z)
+equation 159 := x = (x ∘ y) ∘ (y ∘ x)
+equation 160 := x = (x ∘ y) ∘ (y ∘ y)
+equation 161 := x = (x ∘ y) ∘ (y ∘ z)
+equation 162 := x = (x ∘ y) ∘ (z ∘ x)
+equation 163 := x = (x ∘ y) ∘ (z ∘ y)
+equation 164 := x = (x ∘ y) ∘ (z ∘ z)
+equation 165 := x = (x ∘ y) ∘ (z ∘ w)
+equation 166 := x = (y ∘ x) ∘ (x ∘ x)
+equation 167 := x = (y ∘ x) ∘ (x ∘ y)
+-- equation 168 := x = (y ∘ x) ∘ (x ∘ z)
+equation 169 := x = (y ∘ x) ∘ (y ∘ x)
+equation 170 := x = (y ∘ x) ∘ (y ∘ y)
+equation 171 := x = (y ∘ x) ∘ (y ∘ z)
+equation 172 := x = (y ∘ x) ∘ (z ∘ x)
+equation 173 := x = (y ∘ x) ∘ (z ∘ y)
+equation 174 := x = (y ∘ x) ∘ (z ∘ z)
+equation 175 := x = (y ∘ x) ∘ (z ∘ w)
+equation 176 := x = (y ∘ y) ∘ (x ∘ x)
+equation 177 := x = (y ∘ y) ∘ (x ∘ y)
+equation 178 := x = (y ∘ y) ∘ (x ∘ z)
+equation 179 := x = (y ∘ y) ∘ (y ∘ x)
+equation 180 := x = (y ∘ y) ∘ (y ∘ y)
+equation 181 := x = (y ∘ y) ∘ (y ∘ z)
+equation 182 := x = (y ∘ y) ∘ (z ∘ x)
+equation 183 := x = (y ∘ y) ∘ (z ∘ y)
+equation 184 := x = (y ∘ y) ∘ (z ∘ z)
+equation 185 := x = (y ∘ y) ∘ (z ∘ w)
+equation 186 := x = (y ∘ z) ∘ (x ∘ x)
+equation 187 := x = (y ∘ z) ∘ (x ∘ y)
+equation 188 := x = (y ∘ z) ∘ (x ∘ z)
+equation 189 := x = (y ∘ z) ∘ (x ∘ w)
+equation 190 := x = (y ∘ z) ∘ (y ∘ x)
+equation 191 := x = (y ∘ z) ∘ (y ∘ y)
+equation 192 := x = (y ∘ z) ∘ (y ∘ z)
+equation 193 := x = (y ∘ z) ∘ (y ∘ w)
+equation 194 := x = (y ∘ z) ∘ (z ∘ x)
+equation 195 := x = (y ∘ z) ∘ (z ∘ y)
+equation 196 := x = (y ∘ z) ∘ (z ∘ z)
+equation 197 := x = (y ∘ z) ∘ (z ∘ w)
+equation 198 := x = (y ∘ z) ∘ (w ∘ x)
+equation 199 := x = (y ∘ z) ∘ (w ∘ y)
+equation 200 := x = (y ∘ z) ∘ (w ∘ z)
+equation 201 := x = (y ∘ z) ∘ (w ∘ w)
+equation 202 := x = (y ∘ z) ∘ (w ∘ u)
+equation 203 := x = (x ∘ (x ∘ x)) ∘ x
+equation 204 := x = (x ∘ (x ∘ x)) ∘ y
+equation 205 := x = (x ∘ (x ∘ y)) ∘ x
+equation 206 := x = (x ∘ (x ∘ y)) ∘ y
+equation 207 := x = (x ∘ (x ∘ y)) ∘ z
+equation 208 := x = (x ∘ (y ∘ x)) ∘ x
+equation 209 := x = (x ∘ (y ∘ x)) ∘ y
+equation 210 := x = (x ∘ (y ∘ x)) ∘ z
+equation 211 := x = (x ∘ (y ∘ y)) ∘ x
+equation 212 := x = (x ∘ (y ∘ y)) ∘ y
+equation 213 := x = (x ∘ (y ∘ y)) ∘ z
+equation 214 := x = (x ∘ (y ∘ z)) ∘ x
+equation 215 := x = (x ∘ (y ∘ z)) ∘ y
+equation 216 := x = (x ∘ (y ∘ z)) ∘ z
+equation 217 := x = (x ∘ (y ∘ z)) ∘ w
+equation 218 := x = (y ∘ (x ∘ x)) ∘ x
+equation 219 := x = (y ∘ (x ∘ x)) ∘ y
+equation 220 := x = (y ∘ (x ∘ x)) ∘ z
+equation 221 := x = (y ∘ (x ∘ y)) ∘ x
+equation 222 := x = (y ∘ (x ∘ y)) ∘ y
+equation 223 := x = (y ∘ (x ∘ y)) ∘ z
+equation 224 := x = (y ∘ (x ∘ z)) ∘ x
+equation 225 := x = (y ∘ (x ∘ z)) ∘ y
+equation 226 := x = (y ∘ (x ∘ z)) ∘ z
+equation 227 := x = (y ∘ (x ∘ z)) ∘ w
+equation 228 := x = (y ∘ (y ∘ x)) ∘ x
+equation 229 := x = (y ∘ (y ∘ x)) ∘ y
+equation 230 := x = (y ∘ (y ∘ x)) ∘ z
+equation 231 := x = (y ∘ (y ∘ y)) ∘ x
+equation 232 := x = (y ∘ (y ∘ y)) ∘ y
+equation 233 := x = (y ∘ (y ∘ y)) ∘ z
+equation 234 := x = (y ∘ (y ∘ z)) ∘ x
+equation 235 := x = (y ∘ (y ∘ z)) ∘ y
+equation 236 := x = (y ∘ (y ∘ z)) ∘ z
+equation 237 := x = (y ∘ (y ∘ z)) ∘ w
+equation 238 := x = (y ∘ (z ∘ x)) ∘ x
+equation 239 := x = (y ∘ (z ∘ x)) ∘ y
+equation 240 := x = (y ∘ (z ∘ x)) ∘ z
+equation 241 := x = (y ∘ (z ∘ x)) ∘ w
+equation 242 := x = (y ∘ (z ∘ y)) ∘ x
+equation 243 := x = (y ∘ (z ∘ y)) ∘ y
+equation 244 := x = (y ∘ (z ∘ y)) ∘ z
+equation 245 := x = (y ∘ (z ∘ y)) ∘ w
+equation 246 := x = (y ∘ (z ∘ z)) ∘ x
+equation 247 := x = (y ∘ (z ∘ z)) ∘ y
+equation 248 := x = (y ∘ (z ∘ z)) ∘ z
+equation 249 := x = (y ∘ (z ∘ z)) ∘ w
+equation 250 := x = (y ∘ (z ∘ w)) ∘ x
+equation 251 := x = (y ∘ (z ∘ w)) ∘ y
+equation 252 := x = (y ∘ (z ∘ w)) ∘ z
+equation 253 := x = (y ∘ (z ∘ w)) ∘ w
+equation 254 := x = (y ∘ (z ∘ w)) ∘ u
+equation 255 := x = ((x ∘ x) ∘ x) ∘ x
+equation 256 := x = ((x ∘ x) ∘ x) ∘ y
+equation 257 := x = ((x ∘ x) ∘ y) ∘ x
+equation 258 := x = ((x ∘ x) ∘ y) ∘ y
+equation 259 := x = ((x ∘ x) ∘ y) ∘ z
+equation 260 := x = ((x ∘ y) ∘ x) ∘ x
+equation 261 := x = ((x ∘ y) ∘ x) ∘ y
+equation 262 := x = ((x ∘ y) ∘ x) ∘ z
+equation 263 := x = ((x ∘ y) ∘ y) ∘ x
+equation 264 := x = ((x ∘ y) ∘ y) ∘ y
+equation 265 := x = ((x ∘ y) ∘ y) ∘ z
+equation 266 := x = ((x ∘ y) ∘ z) ∘ x
+equation 267 := x = ((x ∘ y) ∘ z) ∘ y
+equation 268 := x = ((x ∘ y) ∘ z) ∘ z
+equation 269 := x = ((x ∘ y) ∘ z) ∘ w
+equation 270 := x = ((y ∘ x) ∘ x) ∘ x
+equation 271 := x = ((y ∘ x) ∘ x) ∘ y
+equation 272 := x = ((y ∘ x) ∘ x) ∘ z
+equation 273 := x = ((y ∘ x) ∘ y) ∘ x
+equation 274 := x = ((y ∘ x) ∘ y) ∘ y
+equation 275 := x = ((y ∘ x) ∘ y) ∘ z
+equation 276 := x = ((y ∘ x) ∘ z) ∘ x
+equation 277 := x = ((y ∘ x) ∘ z) ∘ y
+equation 278 := x = ((y ∘ x) ∘ z) ∘ z
+equation 279 := x = ((y ∘ x) ∘ z) ∘ w
+equation 280 := x = ((y ∘ y) ∘ x) ∘ x
+equation 281 := x = ((y ∘ y) ∘ x) ∘ y
+equation 282 := x = ((y ∘ y) ∘ x) ∘ z
+equation 283 := x = ((y ∘ y) ∘ y) ∘ x
+equation 284 := x = ((y ∘ y) ∘ y) ∘ y
+equation 285 := x = ((y ∘ y) ∘ y) ∘ z
+equation 286 := x = ((y ∘ y) ∘ z) ∘ x
+equation 287 := x = ((y ∘ y) ∘ z) ∘ y
+equation 288 := x = ((y ∘ y) ∘ z) ∘ z
+equation 289 := x = ((y ∘ y) ∘ z) ∘ w
+equation 290 := x = ((y ∘ z) ∘ x) ∘ x
+equation 291 := x = ((y ∘ z) ∘ x) ∘ y
+equation 292 := x = ((y ∘ z) ∘ x) ∘ z
+equation 293 := x = ((y ∘ z) ∘ x) ∘ w
+equation 294 := x = ((y ∘ z) ∘ y) ∘ x
+equation 295 := x = ((y ∘ z) ∘ y) ∘ y
+equation 296 := x = ((y ∘ z) ∘ y) ∘ z
+equation 297 := x = ((y ∘ z) ∘ y) ∘ w
+equation 298 := x = ((y ∘ z) ∘ z) ∘ x
+equation 299 := x = ((y ∘ z) ∘ z) ∘ y
+equation 300 := x = ((y ∘ z) ∘ z) ∘ z
+equation 301 := x = ((y ∘ z) ∘ z) ∘ w
+equation 302 := x = ((y ∘ z) ∘ w) ∘ x
+equation 303 := x = ((y ∘ z) ∘ w) ∘ y
+equation 304 := x = ((y ∘ z) ∘ w) ∘ z
+equation 305 := x = ((y ∘ z) ∘ w) ∘ w
+equation 306 := x = ((y ∘ z) ∘ w) ∘ u
+equation 307 := x ∘ x = x ∘ (x ∘ x)
+equation 308 := x ∘ x = x ∘ (x ∘ y)
+equation 309 := x ∘ x = x ∘ (y ∘ x)
+equation 310 := x ∘ x = x ∘ (y ∘ y)
+equation 311 := x ∘ x = x ∘ (y ∘ z)
+equation 312 := x ∘ x = y ∘ (x ∘ x)
+equation 313 := x ∘ x = y ∘ (x ∘ y)
+equation 314 := x ∘ x = y ∘ (x ∘ z)
+equation 315 := x ∘ x = y ∘ (y ∘ x)
+equation 316 := x ∘ x = y ∘ (y ∘ y)
+equation 317 := x ∘ x = y ∘ (y ∘ z)
+equation 318 := x ∘ x = y ∘ (z ∘ x)
+equation 319 := x ∘ x = y ∘ (z ∘ y)
+equation 320 := x ∘ x = y ∘ (z ∘ z)
+equation 321 := x ∘ x = y ∘ (z ∘ w)
+equation 322 := x ∘ y = x ∘ (x ∘ x)
+equation 323 := x ∘ y = x ∘ (x ∘ y)
+equation 324 := x ∘ y = x ∘ (x ∘ z)
+equation 325 := x ∘ y = x ∘ (y ∘ x)
+equation 326 := x ∘ y = x ∘ (y ∘ y)
+equation 327 := x ∘ y = x ∘ (y ∘ z)
+equation 328 := x ∘ y = x ∘ (z ∘ x)
+equation 329 := x ∘ y = x ∘ (z ∘ y)
+equation 330 := x ∘ y = x ∘ (z ∘ z)
+equation 331 := x ∘ y = x ∘ (z ∘ w)
+equation 332 := x ∘ y = y ∘ (x ∘ x)
+equation 333 := x ∘ y = y ∘ (x ∘ y)
+equation 334 := x ∘ y = y ∘ (x ∘ z)
+equation 335 := x ∘ y = y ∘ (y ∘ x)
+equation 336 := x ∘ y = y ∘ (y ∘ y)
+equation 337 := x ∘ y = y ∘ (y ∘ z)
+equation 338 := x ∘ y = y ∘ (z ∘ x)
+equation 339 := x ∘ y = y ∘ (z ∘ y)
+equation 340 := x ∘ y = y ∘ (z ∘ z)
+equation 341 := x ∘ y = y ∘ (z ∘ w)
+equation 342 := x ∘ y = z ∘ (x ∘ x)
+equation 343 := x ∘ y = z ∘ (x ∘ y)
+equation 344 := x ∘ y = z ∘ (x ∘ z)
+equation 345 := x ∘ y = z ∘ (x ∘ w)
+equation 346 := x ∘ y = z ∘ (y ∘ x)
+equation 347 := x ∘ y = z ∘ (y ∘ y)
+equation 348 := x ∘ y = z ∘ (y ∘ z)
+equation 349 := x ∘ y = z ∘ (y ∘ w)
+equation 350 := x ∘ y = z ∘ (z ∘ x)
+equation 351 := x ∘ y = z ∘ (z ∘ y)
+equation 352 := x ∘ y = z ∘ (z ∘ z)
+equation 353 := x ∘ y = z ∘ (z ∘ w)
+equation 354 := x ∘ y = z ∘ (w ∘ x)
+equation 355 := x ∘ y = z ∘ (w ∘ y)
+equation 356 := x ∘ y = z ∘ (w ∘ z)
+equation 357 := x ∘ y = z ∘ (w ∘ w)
+equation 358 := x ∘ y = z ∘ (w ∘ u)
+equation 359 := x ∘ x = (x ∘ x) ∘ x
+equation 360 := x ∘ x = (x ∘ x) ∘ y
+equation 361 := x ∘ x = (x ∘ y) ∘ x
+equation 362 := x ∘ x = (x ∘ y) ∘ y
+equation 363 := x ∘ x = (x ∘ y) ∘ z
+equation 364 := x ∘ x = (y ∘ x) ∘ x
+equation 365 := x ∘ x = (y ∘ x) ∘ y
+equation 366 := x ∘ x = (y ∘ x) ∘ z
+equation 367 := x ∘ x = (y ∘ y) ∘ x
+equation 368 := x ∘ x = (y ∘ y) ∘ y
+equation 369 := x ∘ x = (y ∘ y) ∘ z
+equation 370 := x ∘ x = (y ∘ z) ∘ x
+equation 371 := x ∘ x = (y ∘ z) ∘ y
+equation 372 := x ∘ x = (y ∘ z) ∘ z
+equation 373 := x ∘ x = (y ∘ z) ∘ w
+equation 374 := x ∘ y = (x ∘ x) ∘ x
+equation 375 := x ∘ y = (x ∘ x) ∘ y
+equation 376 := x ∘ y = (x ∘ x) ∘ z
+equation 377 := x ∘ y = (x ∘ y) ∘ x
+equation 378 := x ∘ y = (x ∘ y) ∘ y
+equation 379 := x ∘ y = (x ∘ y) ∘ z
+equation 380 := x ∘ y = (x ∘ z) ∘ x
+equation 381 := x ∘ y = (x ∘ z) ∘ y
+equation 382 := x ∘ y = (x ∘ z) ∘ z
+equation 383 := x ∘ y = (x ∘ z) ∘ w
+equation 384 := x ∘ y = (y ∘ x) ∘ x
+equation 385 := x ∘ y = (y ∘ x) ∘ y
+equation 386 := x ∘ y = (y ∘ x) ∘ z
+-- equation 387 := x ∘ y = (y ∘ y) ∘ x
+equation 388 := x ∘ y = (y ∘ y) ∘ y
+equation 389 := x ∘ y = (y ∘ y) ∘ z
+equation 390 := x ∘ y = (y ∘ z) ∘ x
+equation 391 := x ∘ y = (y ∘ z) ∘ y
+equation 392 := x ∘ y = (y ∘ z) ∘ z
+equation 393 := x ∘ y = (y ∘ z) ∘ w
+equation 394 := x ∘ y = (z ∘ x) ∘ x
+equation 395 := x ∘ y = (z ∘ x) ∘ y
+equation 396 := x ∘ y = (z ∘ x) ∘ z
+equation 397 := x ∘ y = (z ∘ x) ∘ w
+equation 398 := x ∘ y = (z ∘ y) ∘ x
+equation 399 := x ∘ y = (z ∘ y) ∘ y
+equation 400 := x ∘ y = (z ∘ y) ∘ z
+equation 401 := x ∘ y = (z ∘ y) ∘ w
+equation 402 := x ∘ y = (z ∘ z) ∘ x
+equation 403 := x ∘ y = (z ∘ z) ∘ y
+equation 404 := x ∘ y = (z ∘ z) ∘ z
+equation 405 := x ∘ y = (z ∘ z) ∘ w
+equation 406 := x ∘ y = (z ∘ w) ∘ x
+equation 407 := x ∘ y = (z ∘ w) ∘ y
+equation 408 := x ∘ y = (z ∘ w) ∘ z
+equation 409 := x ∘ y = (z ∘ w) ∘ w
+equation 410 := x ∘ y = (z ∘ w) ∘ u
+equation 411 := x = x ∘ (x ∘ (x ∘ (x ∘ x)))
+equation 412 := x = x ∘ (x ∘ (x ∘ (x ∘ y)))
+equation 413 := x = x ∘ (x ∘ (x ∘ (y ∘ x)))
+equation 414 := x = x ∘ (x ∘ (x ∘ (y ∘ y)))
+equation 415 := x = x ∘ (x ∘ (x ∘ (y ∘ z)))
+equation 416 := x = x ∘ (x ∘ (y ∘ (x ∘ x)))
+equation 417 := x = x ∘ (x ∘ (y ∘ (x ∘ y)))
+equation 418 := x = x ∘ (x ∘ (y ∘ (x ∘ z)))
+equation 419 := x = x ∘ (x ∘ (y ∘ (y ∘ x)))
+equation 420 := x = x ∘ (x ∘ (y ∘ (y ∘ y)))
+equation 421 := x = x ∘ (x ∘ (y ∘ (y ∘ z)))
+equation 422 := x = x ∘ (x ∘ (y ∘ (z ∘ x)))
+equation 423 := x = x ∘ (x ∘ (y ∘ (z ∘ y)))
+equation 424 := x = x ∘ (x ∘ (y ∘ (z ∘ z)))
+equation 425 := x = x ∘ (x ∘ (y ∘ (z ∘ w)))
+equation 426 := x = x ∘ (y ∘ (x ∘ (x ∘ x)))
+equation 427 := x = x ∘ (y ∘ (x ∘ (x ∘ y)))
+equation 428 := x = x ∘ (y ∘ (x ∘ (x ∘ z)))
+equation 429 := x = x ∘ (y ∘ (x ∘ (y ∘ x)))
+equation 430 := x = x ∘ (y ∘ (x ∘ (y ∘ y)))
+equation 431 := x = x ∘ (y ∘ (x ∘ (y ∘ z)))
+equation 432 := x = x ∘ (y ∘ (x ∘ (z ∘ x)))
+equation 433 := x = x ∘ (y ∘ (x ∘ (z ∘ y)))
+equation 434 := x = x ∘ (y ∘ (x ∘ (z ∘ z)))
+equation 435 := x = x ∘ (y ∘ (x ∘ (z ∘ w)))
+equation 436 := x = x ∘ (y ∘ (y ∘ (x ∘ x)))
+equation 437 := x = x ∘ (y ∘ (y ∘ (x ∘ y)))
+equation 438 := x = x ∘ (y ∘ (y ∘ (x ∘ z)))
+equation 439 := x = x ∘ (y ∘ (y ∘ (y ∘ x)))
+equation 440 := x = x ∘ (y ∘ (y ∘ (y ∘ y)))
+equation 441 := x = x ∘ (y ∘ (y ∘ (y ∘ z)))
+equation 442 := x = x ∘ (y ∘ (y ∘ (z ∘ x)))
+equation 443 := x = x ∘ (y ∘ (y ∘ (z ∘ y)))
+equation 444 := x = x ∘ (y ∘ (y ∘ (z ∘ z)))
+equation 445 := x = x ∘ (y ∘ (y ∘ (z ∘ w)))
+equation 446 := x = x ∘ (y ∘ (z ∘ (x ∘ x)))
+equation 447 := x = x ∘ (y ∘ (z ∘ (x ∘ y)))
+equation 448 := x = x ∘ (y ∘ (z ∘ (x ∘ z)))
+equation 449 := x = x ∘ (y ∘ (z ∘ (x ∘ w)))
+equation 450 := x = x ∘ (y ∘ (z ∘ (y ∘ x)))
+equation 451 := x = x ∘ (y ∘ (z ∘ (y ∘ y)))
+equation 452 := x = x ∘ (y ∘ (z ∘ (y ∘ z)))
+equation 453 := x = x ∘ (y ∘ (z ∘ (y ∘ w)))
+equation 454 := x = x ∘ (y ∘ (z ∘ (z ∘ x)))
+equation 455 := x = x ∘ (y ∘ (z ∘ (z ∘ y)))
+equation 456 := x = x ∘ (y ∘ (z ∘ (z ∘ z)))
+equation 457 := x = x ∘ (y ∘ (z ∘ (z ∘ w)))
+equation 458 := x = x ∘ (y ∘ (z ∘ (w ∘ x)))
+equation 459 := x = x ∘ (y ∘ (z ∘ (w ∘ y)))
+equation 460 := x = x ∘ (y ∘ (z ∘ (w ∘ z)))
+equation 461 := x = x ∘ (y ∘ (z ∘ (w ∘ w)))
+equation 462 := x = x ∘ (y ∘ (z ∘ (w ∘ u)))
+equation 463 := x = y ∘ (x ∘ (x ∘ (x ∘ x)))
+equation 464 := x = y ∘ (x ∘ (x ∘ (x ∘ y)))
+equation 465 := x = y ∘ (x ∘ (x ∘ (x ∘ z)))
+equation 466 := x = y ∘ (x ∘ (x ∘ (y ∘ x)))
+equation 467 := x = y ∘ (x ∘ (x ∘ (y ∘ y)))
+equation 468 := x = y ∘ (x ∘ (x ∘ (y ∘ z)))
+equation 469 := x = y ∘ (x ∘ (x ∘ (z ∘ x)))
+equation 470 := x = y ∘ (x ∘ (x ∘ (z ∘ y)))
+equation 471 := x = y ∘ (x ∘ (x ∘ (z ∘ z)))
+equation 472 := x = y ∘ (x ∘ (x ∘ (z ∘ w)))
+equation 473 := x = y ∘ (x ∘ (y ∘ (x ∘ x)))
+equation 474 := x = y ∘ (x ∘ (y ∘ (x ∘ y)))
+equation 475 := x = y ∘ (x ∘ (y ∘ (x ∘ z)))
+equation 476 := x = y ∘ (x ∘ (y ∘ (y ∘ x)))
+equation 477 := x = y ∘ (x ∘ (y ∘ (y ∘ y)))
+equation 478 := x = y ∘ (x ∘ (y ∘ (y ∘ z)))
+equation 479 := x = y ∘ (x ∘ (y ∘ (z ∘ x)))
+equation 480 := x = y ∘ (x ∘ (y ∘ (z ∘ y)))
+equation 481 := x = y ∘ (x ∘ (y ∘ (z ∘ z)))
+equation 482 := x = y ∘ (x ∘ (y ∘ (z ∘ w)))
+equation 483 := x = y ∘ (x ∘ (z ∘ (x ∘ x)))
+equation 484 := x = y ∘ (x ∘ (z ∘ (x ∘ y)))
+equation 485 := x = y ∘ (x ∘ (z ∘ (x ∘ z)))
+equation 486 := x = y ∘ (x ∘ (z ∘ (x ∘ w)))
+equation 487 := x = y ∘ (x ∘ (z ∘ (y ∘ x)))
+equation 488 := x = y ∘ (x ∘ (z ∘ (y ∘ y)))
+equation 489 := x = y ∘ (x ∘ (z ∘ (y ∘ z)))
+equation 490 := x = y ∘ (x ∘ (z ∘ (y ∘ w)))
+equation 491 := x = y ∘ (x ∘ (z ∘ (z ∘ x)))
+equation 492 := x = y ∘ (x ∘ (z ∘ (z ∘ y)))
+equation 493 := x = y ∘ (x ∘ (z ∘ (z ∘ z)))
+equation 494 := x = y ∘ (x ∘ (z ∘ (z ∘ w)))
+equation 495 := x = y ∘ (x ∘ (z ∘ (w ∘ x)))
+equation 496 := x = y ∘ (x ∘ (z ∘ (w ∘ y)))
+equation 497 := x = y ∘ (x ∘ (z ∘ (w ∘ z)))
+equation 498 := x = y ∘ (x ∘ (z ∘ (w ∘ w)))
+equation 499 := x = y ∘ (x ∘ (z ∘ (w ∘ u)))
+equation 500 := x = y ∘ (y ∘ (x ∘ (x ∘ x)))
+equation 501 := x = y ∘ (y ∘ (x ∘ (x ∘ y)))
+equation 502 := x = y ∘ (y ∘ (x ∘ (x ∘ z)))
+equation 503 := x = y ∘ (y ∘ (x ∘ (y ∘ x)))
+equation 504 := x = y ∘ (y ∘ (x ∘ (y ∘ y)))
+equation 505 := x = y ∘ (y ∘ (x ∘ (y ∘ z)))
+equation 506 := x = y ∘ (y ∘ (x ∘ (z ∘ x)))
+equation 507 := x = y ∘ (y ∘ (x ∘ (z ∘ y)))
+equation 508 := x = y ∘ (y ∘ (x ∘ (z ∘ z)))
+equation 509 := x = y ∘ (y ∘ (x ∘ (z ∘ w)))
+equation 510 := x = y ∘ (y ∘ (y ∘ (x ∘ x)))
+equation 511 := x = y ∘ (y ∘ (y ∘ (x ∘ y)))
+equation 512 := x = y ∘ (y ∘ (y ∘ (x ∘ z)))
+equation 513 := x = y ∘ (y ∘ (y ∘ (y ∘ x)))
+equation 514 := x = y ∘ (y ∘ (y ∘ (y ∘ y)))
+equation 515 := x = y ∘ (y ∘ (y ∘ (y ∘ z)))
+equation 516 := x = y ∘ (y ∘ (y ∘ (z ∘ x)))
+equation 517 := x = y ∘ (y ∘ (y ∘ (z ∘ y)))
+equation 518 := x = y ∘ (y ∘ (y ∘ (z ∘ z)))
+equation 519 := x = y ∘ (y ∘ (y ∘ (z ∘ w)))
+equation 520 := x = y ∘ (y ∘ (z ∘ (x ∘ x)))
+equation 521 := x = y ∘ (y ∘ (z ∘ (x ∘ y)))
+equation 522 := x = y ∘ (y ∘ (z ∘ (x ∘ z)))
+equation 523 := x = y ∘ (y ∘ (z ∘ (x ∘ w)))
+equation 524 := x = y ∘ (y ∘ (z ∘ (y ∘ x)))
+equation 525 := x = y ∘ (y ∘ (z ∘ (y ∘ y)))
+equation 526 := x = y ∘ (y ∘ (z ∘ (y ∘ z)))
+equation 527 := x = y ∘ (y ∘ (z ∘ (y ∘ w)))
+equation 528 := x = y ∘ (y ∘ (z ∘ (z ∘ x)))
+equation 529 := x = y ∘ (y ∘ (z ∘ (z ∘ y)))
+equation 530 := x = y ∘ (y ∘ (z ∘ (z ∘ z)))
+equation 531 := x = y ∘ (y ∘ (z ∘ (z ∘ w)))
+equation 532 := x = y ∘ (y ∘ (z ∘ (w ∘ x)))
+equation 533 := x = y ∘ (y ∘ (z ∘ (w ∘ y)))
+equation 534 := x = y ∘ (y ∘ (z ∘ (w ∘ z)))
+equation 535 := x = y ∘ (y ∘ (z ∘ (w ∘ w)))
+equation 536 := x = y ∘ (y ∘ (z ∘ (w ∘ u)))
+equation 537 := x = y ∘ (z ∘ (x ∘ (x ∘ x)))
+equation 538 := x = y ∘ (z ∘ (x ∘ (x ∘ y)))
+equation 539 := x = y ∘ (z ∘ (x ∘ (x ∘ z)))
+equation 540 := x = y ∘ (z ∘ (x ∘ (x ∘ w)))
+equation 541 := x = y ∘ (z ∘ (x ∘ (y ∘ x)))
+equation 542 := x = y ∘ (z ∘ (x ∘ (y ∘ y)))
+equation 543 := x = y ∘ (z ∘ (x ∘ (y ∘ z)))
+equation 544 := x = y ∘ (z ∘ (x ∘ (y ∘ w)))
+equation 545 := x = y ∘ (z ∘ (x ∘ (z ∘ x)))
+equation 546 := x = y ∘ (z ∘ (x ∘ (z ∘ y)))
+equation 547 := x = y ∘ (z ∘ (x ∘ (z ∘ z)))
+equation 548 := x = y ∘ (z ∘ (x ∘ (z ∘ w)))
+equation 549 := x = y ∘ (z ∘ (x ∘ (w ∘ x)))
+equation 550 := x = y ∘ (z ∘ (x ∘ (w ∘ y)))
+equation 551 := x = y ∘ (z ∘ (x ∘ (w ∘ z)))
+equation 552 := x = y ∘ (z ∘ (x ∘ (w ∘ w)))
+equation 553 := x = y ∘ (z ∘ (x ∘ (w ∘ u)))
+equation 554 := x = y ∘ (z ∘ (y ∘ (x ∘ x)))
+equation 555 := x = y ∘ (z ∘ (y ∘ (x ∘ y)))
+equation 556 := x = y ∘ (z ∘ (y ∘ (x ∘ z)))
+equation 557 := x = y ∘ (z ∘ (y ∘ (x ∘ w)))
+equation 558 := x = y ∘ (z ∘ (y ∘ (y ∘ x)))
+equation 559 := x = y ∘ (z ∘ (y ∘ (y ∘ y)))
+equation 560 := x = y ∘ (z ∘ (y ∘ (y ∘ z)))
+equation 561 := x = y ∘ (z ∘ (y ∘ (y ∘ w)))
+equation 562 := x = y ∘ (z ∘ (y ∘ (z ∘ x)))
+equation 563 := x = y ∘ (z ∘ (y ∘ (z ∘ y)))
+equation 564 := x = y ∘ (z ∘ (y ∘ (z ∘ z)))
+equation 565 := x = y ∘ (z ∘ (y ∘ (z ∘ w)))
+equation 566 := x = y ∘ (z ∘ (y ∘ (w ∘ x)))
+equation 567 := x = y ∘ (z ∘ (y ∘ (w ∘ y)))
+equation 568 := x = y ∘ (z ∘ (y ∘ (w ∘ z)))
+equation 569 := x = y ∘ (z ∘ (y ∘ (w ∘ w)))
+equation 570 := x = y ∘ (z ∘ (y ∘ (w ∘ u)))
+equation 571 := x = y ∘ (z ∘ (z ∘ (x ∘ x)))
+equation 572 := x = y ∘ (z ∘ (z ∘ (x ∘ y)))
+equation 573 := x = y ∘ (z ∘ (z ∘ (x ∘ z)))
+equation 574 := x = y ∘ (z ∘ (z ∘ (x ∘ w)))
+equation 575 := x = y ∘ (z ∘ (z ∘ (y ∘ x)))
+equation 576 := x = y ∘ (z ∘ (z ∘ (y ∘ y)))
+equation 577 := x = y ∘ (z ∘ (z ∘ (y ∘ z)))
+equation 578 := x = y ∘ (z ∘ (z ∘ (y ∘ w)))
+equation 579 := x = y ∘ (z ∘ (z ∘ (z ∘ x)))
+equation 580 := x = y ∘ (z ∘ (z ∘ (z ∘ y)))
+equation 581 := x = y ∘ (z ∘ (z ∘ (z ∘ z)))
+equation 582 := x = y ∘ (z ∘ (z ∘ (z ∘ w)))
+equation 583 := x = y ∘ (z ∘ (z ∘ (w ∘ x)))
+equation 584 := x = y ∘ (z ∘ (z ∘ (w ∘ y)))
+equation 585 := x = y ∘ (z ∘ (z ∘ (w ∘ z)))
+equation 586 := x = y ∘ (z ∘ (z ∘ (w ∘ w)))
+equation 587 := x = y ∘ (z ∘ (z ∘ (w ∘ u)))
+equation 588 := x = y ∘ (z ∘ (w ∘ (x ∘ x)))
+equation 589 := x = y ∘ (z ∘ (w ∘ (x ∘ y)))
+equation 590 := x = y ∘ (z ∘ (w ∘ (x ∘ z)))
+equation 591 := x = y ∘ (z ∘ (w ∘ (x ∘ w)))
+equation 592 := x = y ∘ (z ∘ (w ∘ (x ∘ u)))
+equation 593 := x = y ∘ (z ∘ (w ∘ (y ∘ x)))
+equation 594 := x = y ∘ (z ∘ (w ∘ (y ∘ y)))
+equation 595 := x = y ∘ (z ∘ (w ∘ (y ∘ z)))
+equation 596 := x = y ∘ (z ∘ (w ∘ (y ∘ w)))
+equation 597 := x = y ∘ (z ∘ (w ∘ (y ∘ u)))
+equation 598 := x = y ∘ (z ∘ (w ∘ (z ∘ x)))
+equation 599 := x = y ∘ (z ∘ (w ∘ (z ∘ y)))
+equation 600 := x = y ∘ (z ∘ (w ∘ (z ∘ z)))
+equation 601 := x = y ∘ (z ∘ (w ∘ (z ∘ w)))
+equation 602 := x = y ∘ (z ∘ (w ∘ (z ∘ u)))
+equation 603 := x = y ∘ (z ∘ (w ∘ (w ∘ x)))
+equation 604 := x = y ∘ (z ∘ (w ∘ (w ∘ y)))
+equation 605 := x = y ∘ (z ∘ (w ∘ (w ∘ z)))
+equation 606 := x = y ∘ (z ∘ (w ∘ (w ∘ w)))
+equation 607 := x = y ∘ (z ∘ (w ∘ (w ∘ u)))
+equation 608 := x = y ∘ (z ∘ (w ∘ (u ∘ x)))
+equation 609 := x = y ∘ (z ∘ (w ∘ (u ∘ y)))
+equation 610 := x = y ∘ (z ∘ (w ∘ (u ∘ z)))
+equation 611 := x = y ∘ (z ∘ (w ∘ (u ∘ w)))
+equation 612 := x = y ∘ (z ∘ (w ∘ (u ∘ u)))
+equation 613 := x = y ∘ (z ∘ (w ∘ (u ∘ v)))
+equation 614 := x = x ∘ (x ∘ ((x ∘ x) ∘ x))
+equation 615 := x = x ∘ (x ∘ ((x ∘ x) ∘ y))
+equation 616 := x = x ∘ (x ∘ ((x ∘ y) ∘ x))
+equation 617 := x = x ∘ (x ∘ ((x ∘ y) ∘ y))
+equation 618 := x = x ∘ (x ∘ ((x ∘ y) ∘ z))
+equation 619 := x = x ∘ (x ∘ ((y ∘ x) ∘ x))
+equation 620 := x = x ∘ (x ∘ ((y ∘ x) ∘ y))
+equation 621 := x = x ∘ (x ∘ ((y ∘ x) ∘ z))
+equation 622 := x = x ∘ (x ∘ ((y ∘ y) ∘ x))
+equation 623 := x = x ∘ (x ∘ ((y ∘ y) ∘ y))
+equation 624 := x = x ∘ (x ∘ ((y ∘ y) ∘ z))
+equation 625 := x = x ∘ (x ∘ ((y ∘ z) ∘ x))
+equation 626 := x = x ∘ (x ∘ ((y ∘ z) ∘ y))
+equation 627 := x = x ∘ (x ∘ ((y ∘ z) ∘ z))
+equation 628 := x = x ∘ (x ∘ ((y ∘ z) ∘ w))
+equation 629 := x = x ∘ (y ∘ ((x ∘ x) ∘ x))
+equation 630 := x = x ∘ (y ∘ ((x ∘ x) ∘ y))
+equation 631 := x = x ∘ (y ∘ ((x ∘ x) ∘ z))
+equation 632 := x = x ∘ (y ∘ ((x ∘ y) ∘ x))
+equation 633 := x = x ∘ (y ∘ ((x ∘ y) ∘ y))
+equation 634 := x = x ∘ (y ∘ ((x ∘ y) ∘ z))
+equation 635 := x = x ∘ (y ∘ ((x ∘ z) ∘ x))
+equation 636 := x = x ∘ (y ∘ ((x ∘ z) ∘ y))
+equation 637 := x = x ∘ (y ∘ ((x ∘ z) ∘ z))
+equation 638 := x = x ∘ (y ∘ ((x ∘ z) ∘ w))
+equation 639 := x = x ∘ (y ∘ ((y ∘ x) ∘ x))
+equation 640 := x = x ∘ (y ∘ ((y ∘ x) ∘ y))
+equation 641 := x = x ∘ (y ∘ ((y ∘ x) ∘ z))
+equation 642 := x = x ∘ (y ∘ ((y ∘ y) ∘ x))
+equation 643 := x = x ∘ (y ∘ ((y ∘ y) ∘ y))
+equation 644 := x = x ∘ (y ∘ ((y ∘ y) ∘ z))
+equation 645 := x = x ∘ (y ∘ ((y ∘ z) ∘ x))
+equation 646 := x = x ∘ (y ∘ ((y ∘ z) ∘ y))
+equation 647 := x = x ∘ (y ∘ ((y ∘ z) ∘ z))
+equation 648 := x = x ∘ (y ∘ ((y ∘ z) ∘ w))
+equation 649 := x = x ∘ (y ∘ ((z ∘ x) ∘ x))
+equation 650 := x = x ∘ (y ∘ ((z ∘ x) ∘ y))
+equation 651 := x = x ∘ (y ∘ ((z ∘ x) ∘ z))
+equation 652 := x = x ∘ (y ∘ ((z ∘ x) ∘ w))
+equation 653 := x = x ∘ (y ∘ ((z ∘ y) ∘ x))
+equation 654 := x = x ∘ (y ∘ ((z ∘ y) ∘ y))
+equation 655 := x = x ∘ (y ∘ ((z ∘ y) ∘ z))
+equation 656 := x = x ∘ (y ∘ ((z ∘ y) ∘ w))
+equation 657 := x = x ∘ (y ∘ ((z ∘ z) ∘ x))
+equation 658 := x = x ∘ (y ∘ ((z ∘ z) ∘ y))
+equation 659 := x = x ∘ (y ∘ ((z ∘ z) ∘ z))
+equation 660 := x = x ∘ (y ∘ ((z ∘ z) ∘ w))
+equation 661 := x = x ∘ (y ∘ ((z ∘ w) ∘ x))
+equation 662 := x = x ∘ (y ∘ ((z ∘ w) ∘ y))
+equation 663 := x = x ∘ (y ∘ ((z ∘ w) ∘ z))
+equation 664 := x = x ∘ (y ∘ ((z ∘ w) ∘ w))
+equation 665 := x = x ∘ (y ∘ ((z ∘ w) ∘ u))
+equation 666 := x = y ∘ (x ∘ ((x ∘ x) ∘ x))
+equation 667 := x = y ∘ (x ∘ ((x ∘ x) ∘ y))
+equation 668 := x = y ∘ (x ∘ ((x ∘ x) ∘ z))
+equation 669 := x = y ∘ (x ∘ ((x ∘ y) ∘ x))
+equation 670 := x = y ∘ (x ∘ ((x ∘ y) ∘ y))
+equation 671 := x = y ∘ (x ∘ ((x ∘ y) ∘ z))
+equation 672 := x = y ∘ (x ∘ ((x ∘ z) ∘ x))
+equation 673 := x = y ∘ (x ∘ ((x ∘ z) ∘ y))
+equation 674 := x = y ∘ (x ∘ ((x ∘ z) ∘ z))
+equation 675 := x = y ∘ (x ∘ ((x ∘ z) ∘ w))
+equation 676 := x = y ∘ (x ∘ ((y ∘ x) ∘ x))
+equation 677 := x = y ∘ (x ∘ ((y ∘ x) ∘ y))
+equation 678 := x = y ∘ (x ∘ ((y ∘ x) ∘ z))
+equation 679 := x = y ∘ (x ∘ ((y ∘ y) ∘ x))
+equation 680 := x = y ∘ (x ∘ ((y ∘ y) ∘ y))
+equation 681 := x = y ∘ (x ∘ ((y ∘ y) ∘ z))
+equation 682 := x = y ∘ (x ∘ ((y ∘ z) ∘ x))
+equation 683 := x = y ∘ (x ∘ ((y ∘ z) ∘ y))
+equation 684 := x = y ∘ (x ∘ ((y ∘ z) ∘ z))
+equation 685 := x = y ∘ (x ∘ ((y ∘ z) ∘ w))
+equation 686 := x = y ∘ (x ∘ ((z ∘ x) ∘ x))
+equation 687 := x = y ∘ (x ∘ ((z ∘ x) ∘ y))
+equation 688 := x = y ∘ (x ∘ ((z ∘ x) ∘ z))
+equation 689 := x = y ∘ (x ∘ ((z ∘ x) ∘ w))
+equation 690 := x = y ∘ (x ∘ ((z ∘ y) ∘ x))
+equation 691 := x = y ∘ (x ∘ ((z ∘ y) ∘ y))
+equation 692 := x = y ∘ (x ∘ ((z ∘ y) ∘ z))
+equation 693 := x = y ∘ (x ∘ ((z ∘ y) ∘ w))
+equation 694 := x = y ∘ (x ∘ ((z ∘ z) ∘ x))
+equation 695 := x = y ∘ (x ∘ ((z ∘ z) ∘ y))
+equation 696 := x = y ∘ (x ∘ ((z ∘ z) ∘ z))
+equation 697 := x = y ∘ (x ∘ ((z ∘ z) ∘ w))
+equation 698 := x = y ∘ (x ∘ ((z ∘ w) ∘ x))
+equation 699 := x = y ∘ (x ∘ ((z ∘ w) ∘ y))
+equation 700 := x = y ∘ (x ∘ ((z ∘ w) ∘ z))
+equation 701 := x = y ∘ (x ∘ ((z ∘ w) ∘ w))
+equation 702 := x = y ∘ (x ∘ ((z ∘ w) ∘ u))
+equation 703 := x = y ∘ (y ∘ ((x ∘ x) ∘ x))
+equation 704 := x = y ∘ (y ∘ ((x ∘ x) ∘ y))
+equation 705 := x = y ∘ (y ∘ ((x ∘ x) ∘ z))
+equation 706 := x = y ∘ (y ∘ ((x ∘ y) ∘ x))
+equation 707 := x = y ∘ (y ∘ ((x ∘ y) ∘ y))
+equation 708 := x = y ∘ (y ∘ ((x ∘ y) ∘ z))
+equation 709 := x = y ∘ (y ∘ ((x ∘ z) ∘ x))
+equation 710 := x = y ∘ (y ∘ ((x ∘ z) ∘ y))
+equation 711 := x = y ∘ (y ∘ ((x ∘ z) ∘ z))
+equation 712 := x = y ∘ (y ∘ ((x ∘ z) ∘ w))
+equation 713 := x = y ∘ (y ∘ ((y ∘ x) ∘ x))
+equation 714 := x = y ∘ (y ∘ ((y ∘ x) ∘ y))
+equation 715 := x = y ∘ (y ∘ ((y ∘ x) ∘ z))
+equation 716 := x = y ∘ (y ∘ ((y ∘ y) ∘ x))
+equation 717 := x = y ∘ (y ∘ ((y ∘ y) ∘ y))
+equation 718 := x = y ∘ (y ∘ ((y ∘ y) ∘ z))
+equation 719 := x = y ∘ (y ∘ ((y ∘ z) ∘ x))
+equation 720 := x = y ∘ (y ∘ ((y ∘ z) ∘ y))
+equation 721 := x = y ∘ (y ∘ ((y ∘ z) ∘ z))
+equation 722 := x = y ∘ (y ∘ ((y ∘ z) ∘ w))
+equation 723 := x = y ∘ (y ∘ ((z ∘ x) ∘ x))
+equation 724 := x = y ∘ (y ∘ ((z ∘ x) ∘ y))
+equation 725 := x = y ∘ (y ∘ ((z ∘ x) ∘ z))
+equation 726 := x = y ∘ (y ∘ ((z ∘ x) ∘ w))
+equation 727 := x = y ∘ (y ∘ ((z ∘ y) ∘ x))
+equation 728 := x = y ∘ (y ∘ ((z ∘ y) ∘ y))
+equation 729 := x = y ∘ (y ∘ ((z ∘ y) ∘ z))
+equation 730 := x = y ∘ (y ∘ ((z ∘ y) ∘ w))
+equation 731 := x = y ∘ (y ∘ ((z ∘ z) ∘ x))
+equation 732 := x = y ∘ (y ∘ ((z ∘ z) ∘ y))
+equation 733 := x = y ∘ (y ∘ ((z ∘ z) ∘ z))
+equation 734 := x = y ∘ (y ∘ ((z ∘ z) ∘ w))
+equation 735 := x = y ∘ (y ∘ ((z ∘ w) ∘ x))
+equation 736 := x = y ∘ (y ∘ ((z ∘ w) ∘ y))
+equation 737 := x = y ∘ (y ∘ ((z ∘ w) ∘ z))
+equation 738 := x = y ∘ (y ∘ ((z ∘ w) ∘ w))
+equation 739 := x = y ∘ (y ∘ ((z ∘ w) ∘ u))
+equation 740 := x = y ∘ (z ∘ ((x ∘ x) ∘ x))
+equation 741 := x = y ∘ (z ∘ ((x ∘ x) ∘ y))
+equation 742 := x = y ∘ (z ∘ ((x ∘ x) ∘ z))
+equation 743 := x = y ∘ (z ∘ ((x ∘ x) ∘ w))
+equation 744 := x = y ∘ (z ∘ ((x ∘ y) ∘ x))
+equation 745 := x = y ∘ (z ∘ ((x ∘ y) ∘ y))
+equation 746 := x = y ∘ (z ∘ ((x ∘ y) ∘ z))
+equation 747 := x = y ∘ (z ∘ ((x ∘ y) ∘ w))
+equation 748 := x = y ∘ (z ∘ ((x ∘ z) ∘ x))
+equation 749 := x = y ∘ (z ∘ ((x ∘ z) ∘ y))
+equation 750 := x = y ∘ (z ∘ ((x ∘ z) ∘ z))
+equation 751 := x = y ∘ (z ∘ ((x ∘ z) ∘ w))
+equation 752 := x = y ∘ (z ∘ ((x ∘ w) ∘ x))
+equation 753 := x = y ∘ (z ∘ ((x ∘ w) ∘ y))
+equation 754 := x = y ∘ (z ∘ ((x ∘ w) ∘ z))
+equation 755 := x = y ∘ (z ∘ ((x ∘ w) ∘ w))
+equation 756 := x = y ∘ (z ∘ ((x ∘ w) ∘ u))
+equation 757 := x = y ∘ (z ∘ ((y ∘ x) ∘ x))
+equation 758 := x = y ∘ (z ∘ ((y ∘ x) ∘ y))
+equation 759 := x = y ∘ (z ∘ ((y ∘ x) ∘ z))
+equation 760 := x = y ∘ (z ∘ ((y ∘ x) ∘ w))
+equation 761 := x = y ∘ (z ∘ ((y ∘ y) ∘ x))
+equation 762 := x = y ∘ (z ∘ ((y ∘ y) ∘ y))
+equation 763 := x = y ∘ (z ∘ ((y ∘ y) ∘ z))
+equation 764 := x = y ∘ (z ∘ ((y ∘ y) ∘ w))
+equation 765 := x = y ∘ (z ∘ ((y ∘ z) ∘ x))
+equation 766 := x = y ∘ (z ∘ ((y ∘ z) ∘ y))
+equation 767 := x = y ∘ (z ∘ ((y ∘ z) ∘ z))
+equation 768 := x = y ∘ (z ∘ ((y ∘ z) ∘ w))
+equation 769 := x = y ∘ (z ∘ ((y ∘ w) ∘ x))
+equation 770 := x = y ∘ (z ∘ ((y ∘ w) ∘ y))
+equation 771 := x = y ∘ (z ∘ ((y ∘ w) ∘ z))
+equation 772 := x = y ∘ (z ∘ ((y ∘ w) ∘ w))
+equation 773 := x = y ∘ (z ∘ ((y ∘ w) ∘ u))
+equation 774 := x = y ∘ (z ∘ ((z ∘ x) ∘ x))
+equation 775 := x = y ∘ (z ∘ ((z ∘ x) ∘ y))
+equation 776 := x = y ∘ (z ∘ ((z ∘ x) ∘ z))
+equation 777 := x = y ∘ (z ∘ ((z ∘ x) ∘ w))
+equation 778 := x = y ∘ (z ∘ ((z ∘ y) ∘ x))
+equation 779 := x = y ∘ (z ∘ ((z ∘ y) ∘ y))
+equation 780 := x = y ∘ (z ∘ ((z ∘ y) ∘ z))
+equation 781 := x = y ∘ (z ∘ ((z ∘ y) ∘ w))
+equation 782 := x = y ∘ (z ∘ ((z ∘ z) ∘ x))
+equation 783 := x = y ∘ (z ∘ ((z ∘ z) ∘ y))
+equation 784 := x = y ∘ (z ∘ ((z ∘ z) ∘ z))
+equation 785 := x = y ∘ (z ∘ ((z ∘ z) ∘ w))
+equation 786 := x = y ∘ (z ∘ ((z ∘ w) ∘ x))
+equation 787 := x = y ∘ (z ∘ ((z ∘ w) ∘ y))
+equation 788 := x = y ∘ (z ∘ ((z ∘ w) ∘ z))
+equation 789 := x = y ∘ (z ∘ ((z ∘ w) ∘ w))
+equation 790 := x = y ∘ (z ∘ ((z ∘ w) ∘ u))
+equation 791 := x = y ∘ (z ∘ ((w ∘ x) ∘ x))
+equation 792 := x = y ∘ (z ∘ ((w ∘ x) ∘ y))
+equation 793 := x = y ∘ (z ∘ ((w ∘ x) ∘ z))
+equation 794 := x = y ∘ (z ∘ ((w ∘ x) ∘ w))
+equation 795 := x = y ∘ (z ∘ ((w ∘ x) ∘ u))
+equation 796 := x = y ∘ (z ∘ ((w ∘ y) ∘ x))
+equation 797 := x = y ∘ (z ∘ ((w ∘ y) ∘ y))
+equation 798 := x = y ∘ (z ∘ ((w ∘ y) ∘ z))
+equation 799 := x = y ∘ (z ∘ ((w ∘ y) ∘ w))
+equation 800 := x = y ∘ (z ∘ ((w ∘ y) ∘ u))
+equation 801 := x = y ∘ (z ∘ ((w ∘ z) ∘ x))
+equation 802 := x = y ∘ (z ∘ ((w ∘ z) ∘ y))
+equation 803 := x = y ∘ (z ∘ ((w ∘ z) ∘ z))
+equation 804 := x = y ∘ (z ∘ ((w ∘ z) ∘ w))
+equation 805 := x = y ∘ (z ∘ ((w ∘ z) ∘ u))
+equation 806 := x = y ∘ (z ∘ ((w ∘ w) ∘ x))
+equation 807 := x = y ∘ (z ∘ ((w ∘ w) ∘ y))
+equation 808 := x = y ∘ (z ∘ ((w ∘ w) ∘ z))
+equation 809 := x = y ∘ (z ∘ ((w ∘ w) ∘ w))
+equation 810 := x = y ∘ (z ∘ ((w ∘ w) ∘ u))
+equation 811 := x = y ∘ (z ∘ ((w ∘ u) ∘ x))
+equation 812 := x = y ∘ (z ∘ ((w ∘ u) ∘ y))
+equation 813 := x = y ∘ (z ∘ ((w ∘ u) ∘ z))
+equation 814 := x = y ∘ (z ∘ ((w ∘ u) ∘ w))
+equation 815 := x = y ∘ (z ∘ ((w ∘ u) ∘ u))
+equation 816 := x = y ∘ (z ∘ ((w ∘ u) ∘ v))
+equation 817 := x = x ∘ ((x ∘ x) ∘ (x ∘ x))
+equation 818 := x = x ∘ ((x ∘ x) ∘ (x ∘ y))
+equation 819 := x = x ∘ ((x ∘ x) ∘ (y ∘ x))
+equation 820 := x = x ∘ ((x ∘ x) ∘ (y ∘ y))
+equation 821 := x = x ∘ ((x ∘ x) ∘ (y ∘ z))
+equation 822 := x = x ∘ ((x ∘ y) ∘ (x ∘ x))
+equation 823 := x = x ∘ ((x ∘ y) ∘ (x ∘ y))
+equation 824 := x = x ∘ ((x ∘ y) ∘ (x ∘ z))
+equation 825 := x = x ∘ ((x ∘ y) ∘ (y ∘ x))
+equation 826 := x = x ∘ ((x ∘ y) ∘ (y ∘ y))
+equation 827 := x = x ∘ ((x ∘ y) ∘ (y ∘ z))
+equation 828 := x = x ∘ ((x ∘ y) ∘ (z ∘ x))
+equation 829 := x = x ∘ ((x ∘ y) ∘ (z ∘ y))
+equation 830 := x = x ∘ ((x ∘ y) ∘ (z ∘ z))
+equation 831 := x = x ∘ ((x ∘ y) ∘ (z ∘ w))
+equation 832 := x = x ∘ ((y ∘ x) ∘ (x ∘ x))
+equation 833 := x = x ∘ ((y ∘ x) ∘ (x ∘ y))
+equation 834 := x = x ∘ ((y ∘ x) ∘ (x ∘ z))
+equation 835 := x = x ∘ ((y ∘ x) ∘ (y ∘ x))
+equation 836 := x = x ∘ ((y ∘ x) ∘ (y ∘ y))
+equation 837 := x = x ∘ ((y ∘ x) ∘ (y ∘ z))
+equation 838 := x = x ∘ ((y ∘ x) ∘ (z ∘ x))
+equation 839 := x = x ∘ ((y ∘ x) ∘ (z ∘ y))
+equation 840 := x = x ∘ ((y ∘ x) ∘ (z ∘ z))
+equation 841 := x = x ∘ ((y ∘ x) ∘ (z ∘ w))
+equation 842 := x = x ∘ ((y ∘ y) ∘ (x ∘ x))
+equation 843 := x = x ∘ ((y ∘ y) ∘ (x ∘ y))
+equation 844 := x = x ∘ ((y ∘ y) ∘ (x ∘ z))
+equation 845 := x = x ∘ ((y ∘ y) ∘ (y ∘ x))
+equation 846 := x = x ∘ ((y ∘ y) ∘ (y ∘ y))
+equation 847 := x = x ∘ ((y ∘ y) ∘ (y ∘ z))
+equation 848 := x = x ∘ ((y ∘ y) ∘ (z ∘ x))
+equation 849 := x = x ∘ ((y ∘ y) ∘ (z ∘ y))
+equation 850 := x = x ∘ ((y ∘ y) ∘ (z ∘ z))
+equation 851 := x = x ∘ ((y ∘ y) ∘ (z ∘ w))
+equation 852 := x = x ∘ ((y ∘ z) ∘ (x ∘ x))
+equation 853 := x = x ∘ ((y ∘ z) ∘ (x ∘ y))
+equation 854 := x = x ∘ ((y ∘ z) ∘ (x ∘ z))
+equation 855 := x = x ∘ ((y ∘ z) ∘ (x ∘ w))
+equation 856 := x = x ∘ ((y ∘ z) ∘ (y ∘ x))
+equation 857 := x = x ∘ ((y ∘ z) ∘ (y ∘ y))
+equation 858 := x = x ∘ ((y ∘ z) ∘ (y ∘ z))
+equation 859 := x = x ∘ ((y ∘ z) ∘ (y ∘ w))
+equation 860 := x = x ∘ ((y ∘ z) ∘ (z ∘ x))
+equation 861 := x = x ∘ ((y ∘ z) ∘ (z ∘ y))
+equation 862 := x = x ∘ ((y ∘ z) ∘ (z ∘ z))
+equation 863 := x = x ∘ ((y ∘ z) ∘ (z ∘ w))
+equation 864 := x = x ∘ ((y ∘ z) ∘ (w ∘ x))
+equation 865 := x = x ∘ ((y ∘ z) ∘ (w ∘ y))
+equation 866 := x = x ∘ ((y ∘ z) ∘ (w ∘ z))
+equation 867 := x = x ∘ ((y ∘ z) ∘ (w ∘ w))
+equation 868 := x = x ∘ ((y ∘ z) ∘ (w ∘ u))
+equation 869 := x = y ∘ ((x ∘ x) ∘ (x ∘ x))
+equation 870 := x = y ∘ ((x ∘ x) ∘ (x ∘ y))
+equation 871 := x = y ∘ ((x ∘ x) ∘ (x ∘ z))
+equation 872 := x = y ∘ ((x ∘ x) ∘ (y ∘ x))
+equation 873 := x = y ∘ ((x ∘ x) ∘ (y ∘ y))
+equation 874 := x = y ∘ ((x ∘ x) ∘ (y ∘ z))
+equation 875 := x = y ∘ ((x ∘ x) ∘ (z ∘ x))
+equation 876 := x = y ∘ ((x ∘ x) ∘ (z ∘ y))
+equation 877 := x = y ∘ ((x ∘ x) ∘ (z ∘ z))
+equation 878 := x = y ∘ ((x ∘ x) ∘ (z ∘ w))
+equation 879 := x = y ∘ ((x ∘ y) ∘ (x ∘ x))
+equation 880 := x = y ∘ ((x ∘ y) ∘ (x ∘ y))
+equation 881 := x = y ∘ ((x ∘ y) ∘ (x ∘ z))
+equation 882 := x = y ∘ ((x ∘ y) ∘ (y ∘ x))
+equation 883 := x = y ∘ ((x ∘ y) ∘ (y ∘ y))
+equation 884 := x = y ∘ ((x ∘ y) ∘ (y ∘ z))
+equation 885 := x = y ∘ ((x ∘ y) ∘ (z ∘ x))
+equation 886 := x = y ∘ ((x ∘ y) ∘ (z ∘ y))
+equation 887 := x = y ∘ ((x ∘ y) ∘ (z ∘ z))
+equation 888 := x = y ∘ ((x ∘ y) ∘ (z ∘ w))
+equation 889 := x = y ∘ ((x ∘ z) ∘ (x ∘ x))
+equation 890 := x = y ∘ ((x ∘ z) ∘ (x ∘ y))
+equation 891 := x = y ∘ ((x ∘ z) ∘ (x ∘ z))
+equation 892 := x = y ∘ ((x ∘ z) ∘ (x ∘ w))
+equation 893 := x = y ∘ ((x ∘ z) ∘ (y ∘ x))
+equation 894 := x = y ∘ ((x ∘ z) ∘ (y ∘ y))
+equation 895 := x = y ∘ ((x ∘ z) ∘ (y ∘ z))
+equation 896 := x = y ∘ ((x ∘ z) ∘ (y ∘ w))
+equation 897 := x = y ∘ ((x ∘ z) ∘ (z ∘ x))
+equation 898 := x = y ∘ ((x ∘ z) ∘ (z ∘ y))
+equation 899 := x = y ∘ ((x ∘ z) ∘ (z ∘ z))
+equation 900 := x = y ∘ ((x ∘ z) ∘ (z ∘ w))
+equation 901 := x = y ∘ ((x ∘ z) ∘ (w ∘ x))
+equation 902 := x = y ∘ ((x ∘ z) ∘ (w ∘ y))
+equation 903 := x = y ∘ ((x ∘ z) ∘ (w ∘ z))
+equation 904 := x = y ∘ ((x ∘ z) ∘ (w ∘ w))
+equation 905 := x = y ∘ ((x ∘ z) ∘ (w ∘ u))
+equation 906 := x = y ∘ ((y ∘ x) ∘ (x ∘ x))
+equation 907 := x = y ∘ ((y ∘ x) ∘ (x ∘ y))
+equation 908 := x = y ∘ ((y ∘ x) ∘ (x ∘ z))
+equation 909 := x = y ∘ ((y ∘ x) ∘ (y ∘ x))
+equation 910 := x = y ∘ ((y ∘ x) ∘ (y ∘ y))
+equation 911 := x = y ∘ ((y ∘ x) ∘ (y ∘ z))
+equation 912 := x = y ∘ ((y ∘ x) ∘ (z ∘ x))
+equation 913 := x = y ∘ ((y ∘ x) ∘ (z ∘ y))
+equation 914 := x = y ∘ ((y ∘ x) ∘ (z ∘ z))
+equation 915 := x = y ∘ ((y ∘ x) ∘ (z ∘ w))
+equation 916 := x = y ∘ ((y ∘ y) ∘ (x ∘ x))
+equation 917 := x = y ∘ ((y ∘ y) ∘ (x ∘ y))
+equation 918 := x = y ∘ ((y ∘ y) ∘ (x ∘ z))
+equation 919 := x = y ∘ ((y ∘ y) ∘ (y ∘ x))
+equation 920 := x = y ∘ ((y ∘ y) ∘ (y ∘ y))
+equation 921 := x = y ∘ ((y ∘ y) ∘ (y ∘ z))
+equation 922 := x = y ∘ ((y ∘ y) ∘ (z ∘ x))
+equation 923 := x = y ∘ ((y ∘ y) ∘ (z ∘ y))
+equation 924 := x = y ∘ ((y ∘ y) ∘ (z ∘ z))
+equation 925 := x = y ∘ ((y ∘ y) ∘ (z ∘ w))
+equation 926 := x = y ∘ ((y ∘ z) ∘ (x ∘ x))
+equation 927 := x = y ∘ ((y ∘ z) ∘ (x ∘ y))
+equation 928 := x = y ∘ ((y ∘ z) ∘ (x ∘ z))
+equation 929 := x = y ∘ ((y ∘ z) ∘ (x ∘ w))
+equation 930 := x = y ∘ ((y ∘ z) ∘ (y ∘ x))
+equation 931 := x = y ∘ ((y ∘ z) ∘ (y ∘ y))
+equation 932 := x = y ∘ ((y ∘ z) ∘ (y ∘ z))
+equation 933 := x = y ∘ ((y ∘ z) ∘ (y ∘ w))
+equation 934 := x = y ∘ ((y ∘ z) ∘ (z ∘ x))
+equation 935 := x = y ∘ ((y ∘ z) ∘ (z ∘ y))
+equation 936 := x = y ∘ ((y ∘ z) ∘ (z ∘ z))
+equation 937 := x = y ∘ ((y ∘ z) ∘ (z ∘ w))
+equation 938 := x = y ∘ ((y ∘ z) ∘ (w ∘ x))
+equation 939 := x = y ∘ ((y ∘ z) ∘ (w ∘ y))
+equation 940 := x = y ∘ ((y ∘ z) ∘ (w ∘ z))
+equation 941 := x = y ∘ ((y ∘ z) ∘ (w ∘ w))
+equation 942 := x = y ∘ ((y ∘ z) ∘ (w ∘ u))
+equation 943 := x = y ∘ ((z ∘ x) ∘ (x ∘ x))
+equation 944 := x = y ∘ ((z ∘ x) ∘ (x ∘ y))
+equation 945 := x = y ∘ ((z ∘ x) ∘ (x ∘ z))
+equation 946 := x = y ∘ ((z ∘ x) ∘ (x ∘ w))
+equation 947 := x = y ∘ ((z ∘ x) ∘ (y ∘ x))
+equation 948 := x = y ∘ ((z ∘ x) ∘ (y ∘ y))
+equation 949 := x = y ∘ ((z ∘ x) ∘ (y ∘ z))
+equation 950 := x = y ∘ ((z ∘ x) ∘ (y ∘ w))
+equation 951 := x = y ∘ ((z ∘ x) ∘ (z ∘ x))
+equation 952 := x = y ∘ ((z ∘ x) ∘ (z ∘ y))
+equation 953 := x = y ∘ ((z ∘ x) ∘ (z ∘ z))
+equation 954 := x = y ∘ ((z ∘ x) ∘ (z ∘ w))
+equation 955 := x = y ∘ ((z ∘ x) ∘ (w ∘ x))
+equation 956 := x = y ∘ ((z ∘ x) ∘ (w ∘ y))
+equation 957 := x = y ∘ ((z ∘ x) ∘ (w ∘ z))
+equation 958 := x = y ∘ ((z ∘ x) ∘ (w ∘ w))
+equation 959 := x = y ∘ ((z ∘ x) ∘ (w ∘ u))
+equation 960 := x = y ∘ ((z ∘ y) ∘ (x ∘ x))
+equation 961 := x = y ∘ ((z ∘ y) ∘ (x ∘ y))
+equation 962 := x = y ∘ ((z ∘ y) ∘ (x ∘ z))
+equation 963 := x = y ∘ ((z ∘ y) ∘ (x ∘ w))
+equation 964 := x = y ∘ ((z ∘ y) ∘ (y ∘ x))
+equation 965 := x = y ∘ ((z ∘ y) ∘ (y ∘ y))
+equation 966 := x = y ∘ ((z ∘ y) ∘ (y ∘ z))
+equation 967 := x = y ∘ ((z ∘ y) ∘ (y ∘ w))
+equation 968 := x = y ∘ ((z ∘ y) ∘ (z ∘ x))
+equation 969 := x = y ∘ ((z ∘ y) ∘ (z ∘ y))
+equation 970 := x = y ∘ ((z ∘ y) ∘ (z ∘ z))
+equation 971 := x = y ∘ ((z ∘ y) ∘ (z ∘ w))
+equation 972 := x = y ∘ ((z ∘ y) ∘ (w ∘ x))
+equation 973 := x = y ∘ ((z ∘ y) ∘ (w ∘ y))
+equation 974 := x = y ∘ ((z ∘ y) ∘ (w ∘ z))
+equation 975 := x = y ∘ ((z ∘ y) ∘ (w ∘ w))
+equation 976 := x = y ∘ ((z ∘ y) ∘ (w ∘ u))
+equation 977 := x = y ∘ ((z ∘ z) ∘ (x ∘ x))
+equation 978 := x = y ∘ ((z ∘ z) ∘ (x ∘ y))
+equation 979 := x = y ∘ ((z ∘ z) ∘ (x ∘ z))
+equation 980 := x = y ∘ ((z ∘ z) ∘ (x ∘ w))
+equation 981 := x = y ∘ ((z ∘ z) ∘ (y ∘ x))
+equation 982 := x = y ∘ ((z ∘ z) ∘ (y ∘ y))
+equation 983 := x = y ∘ ((z ∘ z) ∘ (y ∘ z))
+equation 984 := x = y ∘ ((z ∘ z) ∘ (y ∘ w))
+equation 985 := x = y ∘ ((z ∘ z) ∘ (z ∘ x))
+equation 986 := x = y ∘ ((z ∘ z) ∘ (z ∘ y))
+equation 987 := x = y ∘ ((z ∘ z) ∘ (z ∘ z))
+equation 988 := x = y ∘ ((z ∘ z) ∘ (z ∘ w))
+equation 989 := x = y ∘ ((z ∘ z) ∘ (w ∘ x))
+equation 990 := x = y ∘ ((z ∘ z) ∘ (w ∘ y))
+equation 991 := x = y ∘ ((z ∘ z) ∘ (w ∘ z))
+equation 992 := x = y ∘ ((z ∘ z) ∘ (w ∘ w))
+equation 993 := x = y ∘ ((z ∘ z) ∘ (w ∘ u))
+equation 994 := x = y ∘ ((z ∘ w) ∘ (x ∘ x))
+equation 995 := x = y ∘ ((z ∘ w) ∘ (x ∘ y))
+equation 996 := x = y ∘ ((z ∘ w) ∘ (x ∘ z))
+equation 997 := x = y ∘ ((z ∘ w) ∘ (x ∘ w))
+equation 998 := x = y ∘ ((z ∘ w) ∘ (x ∘ u))
+equation 999 := x = y ∘ ((z ∘ w) ∘ (y ∘ x))
+equation 1000 := x = y ∘ ((z ∘ w) ∘ (y ∘ y))
+equation 1001 := x = y ∘ ((z ∘ w) ∘ (y ∘ z))
+equation 1002 := x = y ∘ ((z ∘ w) ∘ (y ∘ w))
+equation 1003 := x = y ∘ ((z ∘ w) ∘ (y ∘ u))
+equation 1004 := x = y ∘ ((z ∘ w) ∘ (z ∘ x))
+equation 1005 := x = y ∘ ((z ∘ w) ∘ (z ∘ y))
+equation 1006 := x = y ∘ ((z ∘ w) ∘ (z ∘ z))
+equation 1007 := x = y ∘ ((z ∘ w) ∘ (z ∘ w))
+equation 1008 := x = y ∘ ((z ∘ w) ∘ (z ∘ u))
+equation 1009 := x = y ∘ ((z ∘ w) ∘ (w ∘ x))
+equation 1010 := x = y ∘ ((z ∘ w) ∘ (w ∘ y))
+equation 1011 := x = y ∘ ((z ∘ w) ∘ (w ∘ z))
+equation 1012 := x = y ∘ ((z ∘ w) ∘ (w ∘ w))
+equation 1013 := x = y ∘ ((z ∘ w) ∘ (w ∘ u))
+equation 1014 := x = y ∘ ((z ∘ w) ∘ (u ∘ x))
+equation 1015 := x = y ∘ ((z ∘ w) ∘ (u ∘ y))
+equation 1016 := x = y ∘ ((z ∘ w) ∘ (u ∘ z))
+equation 1017 := x = y ∘ ((z ∘ w) ∘ (u ∘ w))
+equation 1018 := x = y ∘ ((z ∘ w) ∘ (u ∘ u))
+equation 1019 := x = y ∘ ((z ∘ w) ∘ (u ∘ v))
+equation 1020 := x = x ∘ ((x ∘ (x ∘ x)) ∘ x)
+equation 1021 := x = x ∘ ((x ∘ (x ∘ x)) ∘ y)
+equation 1022 := x = x ∘ ((x ∘ (x ∘ y)) ∘ x)
+equation 1023 := x = x ∘ ((x ∘ (x ∘ y)) ∘ y)
+equation 1024 := x = x ∘ ((x ∘ (x ∘ y)) ∘ z)
+equation 1025 := x = x ∘ ((x ∘ (y ∘ x)) ∘ x)
+equation 1026 := x = x ∘ ((x ∘ (y ∘ x)) ∘ y)
+equation 1027 := x = x ∘ ((x ∘ (y ∘ x)) ∘ z)
+equation 1028 := x = x ∘ ((x ∘ (y ∘ y)) ∘ x)
+equation 1029 := x = x ∘ ((x ∘ (y ∘ y)) ∘ y)
+equation 1030 := x = x ∘ ((x ∘ (y ∘ y)) ∘ z)
+equation 1031 := x = x ∘ ((x ∘ (y ∘ z)) ∘ x)
+equation 1032 := x = x ∘ ((x ∘ (y ∘ z)) ∘ y)
+equation 1033 := x = x ∘ ((x ∘ (y ∘ z)) ∘ z)
+equation 1034 := x = x ∘ ((x ∘ (y ∘ z)) ∘ w)
+equation 1035 := x = x ∘ ((y ∘ (x ∘ x)) ∘ x)
+equation 1036 := x = x ∘ ((y ∘ (x ∘ x)) ∘ y)
+equation 1037 := x = x ∘ ((y ∘ (x ∘ x)) ∘ z)
+equation 1038 := x = x ∘ ((y ∘ (x ∘ y)) ∘ x)
+equation 1039 := x = x ∘ ((y ∘ (x ∘ y)) ∘ y)
+equation 1040 := x = x ∘ ((y ∘ (x ∘ y)) ∘ z)
+equation 1041 := x = x ∘ ((y ∘ (x ∘ z)) ∘ x)
+equation 1042 := x = x ∘ ((y ∘ (x ∘ z)) ∘ y)
+equation 1043 := x = x ∘ ((y ∘ (x ∘ z)) ∘ z)
+equation 1044 := x = x ∘ ((y ∘ (x ∘ z)) ∘ w)
+equation 1045 := x = x ∘ ((y ∘ (y ∘ x)) ∘ x)
+equation 1046 := x = x ∘ ((y ∘ (y ∘ x)) ∘ y)
+equation 1047 := x = x ∘ ((y ∘ (y ∘ x)) ∘ z)
+equation 1048 := x = x ∘ ((y ∘ (y ∘ y)) ∘ x)
+equation 1049 := x = x ∘ ((y ∘ (y ∘ y)) ∘ y)
+equation 1050 := x = x ∘ ((y ∘ (y ∘ y)) ∘ z)
+equation 1051 := x = x ∘ ((y ∘ (y ∘ z)) ∘ x)
+equation 1052 := x = x ∘ ((y ∘ (y ∘ z)) ∘ y)
+equation 1053 := x = x ∘ ((y ∘ (y ∘ z)) ∘ z)
+equation 1054 := x = x ∘ ((y ∘ (y ∘ z)) ∘ w)
+equation 1055 := x = x ∘ ((y ∘ (z ∘ x)) ∘ x)
+equation 1056 := x = x ∘ ((y ∘ (z ∘ x)) ∘ y)
+equation 1057 := x = x ∘ ((y ∘ (z ∘ x)) ∘ z)
+equation 1058 := x = x ∘ ((y ∘ (z ∘ x)) ∘ w)
+equation 1059 := x = x ∘ ((y ∘ (z ∘ y)) ∘ x)
+equation 1060 := x = x ∘ ((y ∘ (z ∘ y)) ∘ y)
+equation 1061 := x = x ∘ ((y ∘ (z ∘ y)) ∘ z)
+equation 1062 := x = x ∘ ((y ∘ (z ∘ y)) ∘ w)
+equation 1063 := x = x ∘ ((y ∘ (z ∘ z)) ∘ x)
+equation 1064 := x = x ∘ ((y ∘ (z ∘ z)) ∘ y)
+equation 1065 := x = x ∘ ((y ∘ (z ∘ z)) ∘ z)
+equation 1066 := x = x ∘ ((y ∘ (z ∘ z)) ∘ w)
+equation 1067 := x = x ∘ ((y ∘ (z ∘ w)) ∘ x)
+equation 1068 := x = x ∘ ((y ∘ (z ∘ w)) ∘ y)
+equation 1069 := x = x ∘ ((y ∘ (z ∘ w)) ∘ z)
+equation 1070 := x = x ∘ ((y ∘ (z ∘ w)) ∘ w)
+equation 1071 := x = x ∘ ((y ∘ (z ∘ w)) ∘ u)
+equation 1072 := x = y ∘ ((x ∘ (x ∘ x)) ∘ x)
+equation 1073 := x = y ∘ ((x ∘ (x ∘ x)) ∘ y)
+equation 1074 := x = y ∘ ((x ∘ (x ∘ x)) ∘ z)
+equation 1075 := x = y ∘ ((x ∘ (x ∘ y)) ∘ x)
+equation 1076 := x = y ∘ ((x ∘ (x ∘ y)) ∘ y)
+equation 1077 := x = y ∘ ((x ∘ (x ∘ y)) ∘ z)
+equation 1078 := x = y ∘ ((x ∘ (x ∘ z)) ∘ x)
+equation 1079 := x = y ∘ ((x ∘ (x ∘ z)) ∘ y)
+equation 1080 := x = y ∘ ((x ∘ (x ∘ z)) ∘ z)
+equation 1081 := x = y ∘ ((x ∘ (x ∘ z)) ∘ w)
+equation 1082 := x = y ∘ ((x ∘ (y ∘ x)) ∘ x)
+equation 1083 := x = y ∘ ((x ∘ (y ∘ x)) ∘ y)
+equation 1084 := x = y ∘ ((x ∘ (y ∘ x)) ∘ z)
+equation 1085 := x = y ∘ ((x ∘ (y ∘ y)) ∘ x)
+equation 1086 := x = y ∘ ((x ∘ (y ∘ y)) ∘ y)
+equation 1087 := x = y ∘ ((x ∘ (y ∘ y)) ∘ z)
+equation 1088 := x = y ∘ ((x ∘ (y ∘ z)) ∘ x)
+equation 1089 := x = y ∘ ((x ∘ (y ∘ z)) ∘ y)
+equation 1090 := x = y ∘ ((x ∘ (y ∘ z)) ∘ z)
+equation 1091 := x = y ∘ ((x ∘ (y ∘ z)) ∘ w)
+equation 1092 := x = y ∘ ((x ∘ (z ∘ x)) ∘ x)
+equation 1093 := x = y ∘ ((x ∘ (z ∘ x)) ∘ y)
+equation 1094 := x = y ∘ ((x ∘ (z ∘ x)) ∘ z)
+equation 1095 := x = y ∘ ((x ∘ (z ∘ x)) ∘ w)
+equation 1096 := x = y ∘ ((x ∘ (z ∘ y)) ∘ x)
+equation 1097 := x = y ∘ ((x ∘ (z ∘ y)) ∘ y)
+equation 1098 := x = y ∘ ((x ∘ (z ∘ y)) ∘ z)
+equation 1099 := x = y ∘ ((x ∘ (z ∘ y)) ∘ w)
+equation 1100 := x = y ∘ ((x ∘ (z ∘ z)) ∘ x)
+equation 1101 := x = y ∘ ((x ∘ (z ∘ z)) ∘ y)
+equation 1102 := x = y ∘ ((x ∘ (z ∘ z)) ∘ z)
+equation 1103 := x = y ∘ ((x ∘ (z ∘ z)) ∘ w)
+equation 1104 := x = y ∘ ((x ∘ (z ∘ w)) ∘ x)
+equation 1105 := x = y ∘ ((x ∘ (z ∘ w)) ∘ y)
+equation 1106 := x = y ∘ ((x ∘ (z ∘ w)) ∘ z)
+equation 1107 := x = y ∘ ((x ∘ (z ∘ w)) ∘ w)
+equation 1108 := x = y ∘ ((x ∘ (z ∘ w)) ∘ u)
+equation 1109 := x = y ∘ ((y ∘ (x ∘ x)) ∘ x)
+equation 1110 := x = y ∘ ((y ∘ (x ∘ x)) ∘ y)
+equation 1111 := x = y ∘ ((y ∘ (x ∘ x)) ∘ z)
+equation 1112 := x = y ∘ ((y ∘ (x ∘ y)) ∘ x)
+equation 1113 := x = y ∘ ((y ∘ (x ∘ y)) ∘ y)
+equation 1114 := x = y ∘ ((y ∘ (x ∘ y)) ∘ z)
+equation 1115 := x = y ∘ ((y ∘ (x ∘ z)) ∘ x)
+equation 1116 := x = y ∘ ((y ∘ (x ∘ z)) ∘ y)
+equation 1117 := x = y ∘ ((y ∘ (x ∘ z)) ∘ z)
+equation 1118 := x = y ∘ ((y ∘ (x ∘ z)) ∘ w)
+equation 1119 := x = y ∘ ((y ∘ (y ∘ x)) ∘ x)
+equation 1120 := x = y ∘ ((y ∘ (y ∘ x)) ∘ y)
+equation 1121 := x = y ∘ ((y ∘ (y ∘ x)) ∘ z)
+equation 1122 := x = y ∘ ((y ∘ (y ∘ y)) ∘ x)
+equation 1123 := x = y ∘ ((y ∘ (y ∘ y)) ∘ y)
+equation 1124 := x = y ∘ ((y ∘ (y ∘ y)) ∘ z)
+equation 1125 := x = y ∘ ((y ∘ (y ∘ z)) ∘ x)
+equation 1126 := x = y ∘ ((y ∘ (y ∘ z)) ∘ y)
+equation 1127 := x = y ∘ ((y ∘ (y ∘ z)) ∘ z)
+equation 1128 := x = y ∘ ((y ∘ (y ∘ z)) ∘ w)
+equation 1129 := x = y ∘ ((y ∘ (z ∘ x)) ∘ x)
+equation 1130 := x = y ∘ ((y ∘ (z ∘ x)) ∘ y)
+equation 1131 := x = y ∘ ((y ∘ (z ∘ x)) ∘ z)
+equation 1132 := x = y ∘ ((y ∘ (z ∘ x)) ∘ w)
+equation 1133 := x = y ∘ ((y ∘ (z ∘ y)) ∘ x)
+equation 1134 := x = y ∘ ((y ∘ (z ∘ y)) ∘ y)
+equation 1135 := x = y ∘ ((y ∘ (z ∘ y)) ∘ z)
+equation 1136 := x = y ∘ ((y ∘ (z ∘ y)) ∘ w)
+equation 1137 := x = y ∘ ((y ∘ (z ∘ z)) ∘ x)
+equation 1138 := x = y ∘ ((y ∘ (z ∘ z)) ∘ y)
+equation 1139 := x = y ∘ ((y ∘ (z ∘ z)) ∘ z)
+equation 1140 := x = y ∘ ((y ∘ (z ∘ z)) ∘ w)
+equation 1141 := x = y ∘ ((y ∘ (z ∘ w)) ∘ x)
+equation 1142 := x = y ∘ ((y ∘ (z ∘ w)) ∘ y)
+equation 1143 := x = y ∘ ((y ∘ (z ∘ w)) ∘ z)
+equation 1144 := x = y ∘ ((y ∘ (z ∘ w)) ∘ w)
+equation 1145 := x = y ∘ ((y ∘ (z ∘ w)) ∘ u)
+equation 1146 := x = y ∘ ((z ∘ (x ∘ x)) ∘ x)
+equation 1147 := x = y ∘ ((z ∘ (x ∘ x)) ∘ y)
+equation 1148 := x = y ∘ ((z ∘ (x ∘ x)) ∘ z)
+equation 1149 := x = y ∘ ((z ∘ (x ∘ x)) ∘ w)
+equation 1150 := x = y ∘ ((z ∘ (x ∘ y)) ∘ x)
+equation 1151 := x = y ∘ ((z ∘ (x ∘ y)) ∘ y)
+equation 1152 := x = y ∘ ((z ∘ (x ∘ y)) ∘ z)
+equation 1153 := x = y ∘ ((z ∘ (x ∘ y)) ∘ w)
+equation 1154 := x = y ∘ ((z ∘ (x ∘ z)) ∘ x)
+equation 1155 := x = y ∘ ((z ∘ (x ∘ z)) ∘ y)
+equation 1156 := x = y ∘ ((z ∘ (x ∘ z)) ∘ z)
+equation 1157 := x = y ∘ ((z ∘ (x ∘ z)) ∘ w)
+equation 1158 := x = y ∘ ((z ∘ (x ∘ w)) ∘ x)
+equation 1159 := x = y ∘ ((z ∘ (x ∘ w)) ∘ y)
+equation 1160 := x = y ∘ ((z ∘ (x ∘ w)) ∘ z)
+equation 1161 := x = y ∘ ((z ∘ (x ∘ w)) ∘ w)
+equation 1162 := x = y ∘ ((z ∘ (x ∘ w)) ∘ u)
+equation 1163 := x = y ∘ ((z ∘ (y ∘ x)) ∘ x)
+equation 1164 := x = y ∘ ((z ∘ (y ∘ x)) ∘ y)
+equation 1165 := x = y ∘ ((z ∘ (y ∘ x)) ∘ z)
+equation 1166 := x = y ∘ ((z ∘ (y ∘ x)) ∘ w)
+equation 1167 := x = y ∘ ((z ∘ (y ∘ y)) ∘ x)
+equation 1168 := x = y ∘ ((z ∘ (y ∘ y)) ∘ y)
+equation 1169 := x = y ∘ ((z ∘ (y ∘ y)) ∘ z)
+equation 1170 := x = y ∘ ((z ∘ (y ∘ y)) ∘ w)
+equation 1171 := x = y ∘ ((z ∘ (y ∘ z)) ∘ x)
+equation 1172 := x = y ∘ ((z ∘ (y ∘ z)) ∘ y)
+equation 1173 := x = y ∘ ((z ∘ (y ∘ z)) ∘ z)
+equation 1174 := x = y ∘ ((z ∘ (y ∘ z)) ∘ w)
+equation 1175 := x = y ∘ ((z ∘ (y ∘ w)) ∘ x)
+equation 1176 := x = y ∘ ((z ∘ (y ∘ w)) ∘ y)
+equation 1177 := x = y ∘ ((z ∘ (y ∘ w)) ∘ z)
+equation 1178 := x = y ∘ ((z ∘ (y ∘ w)) ∘ w)
+equation 1179 := x = y ∘ ((z ∘ (y ∘ w)) ∘ u)
+equation 1180 := x = y ∘ ((z ∘ (z ∘ x)) ∘ x)
+equation 1181 := x = y ∘ ((z ∘ (z ∘ x)) ∘ y)
+equation 1182 := x = y ∘ ((z ∘ (z ∘ x)) ∘ z)
+equation 1183 := x = y ∘ ((z ∘ (z ∘ x)) ∘ w)
+equation 1184 := x = y ∘ ((z ∘ (z ∘ y)) ∘ x)
+equation 1185 := x = y ∘ ((z ∘ (z ∘ y)) ∘ y)
+equation 1186 := x = y ∘ ((z ∘ (z ∘ y)) ∘ z)
+equation 1187 := x = y ∘ ((z ∘ (z ∘ y)) ∘ w)
+equation 1188 := x = y ∘ ((z ∘ (z ∘ z)) ∘ x)
+equation 1189 := x = y ∘ ((z ∘ (z ∘ z)) ∘ y)
+equation 1190 := x = y ∘ ((z ∘ (z ∘ z)) ∘ z)
+equation 1191 := x = y ∘ ((z ∘ (z ∘ z)) ∘ w)
+equation 1192 := x = y ∘ ((z ∘ (z ∘ w)) ∘ x)
+equation 1193 := x = y ∘ ((z ∘ (z ∘ w)) ∘ y)
+equation 1194 := x = y ∘ ((z ∘ (z ∘ w)) ∘ z)
+equation 1195 := x = y ∘ ((z ∘ (z ∘ w)) ∘ w)
+equation 1196 := x = y ∘ ((z ∘ (z ∘ w)) ∘ u)
+equation 1197 := x = y ∘ ((z ∘ (w ∘ x)) ∘ x)
+equation 1198 := x = y ∘ ((z ∘ (w ∘ x)) ∘ y)
+equation 1199 := x = y ∘ ((z ∘ (w ∘ x)) ∘ z)
+equation 1200 := x = y ∘ ((z ∘ (w ∘ x)) ∘ w)
+equation 1201 := x = y ∘ ((z ∘ (w ∘ x)) ∘ u)
+equation 1202 := x = y ∘ ((z ∘ (w ∘ y)) ∘ x)
+equation 1203 := x = y ∘ ((z ∘ (w ∘ y)) ∘ y)
+equation 1204 := x = y ∘ ((z ∘ (w ∘ y)) ∘ z)
+equation 1205 := x = y ∘ ((z ∘ (w ∘ y)) ∘ w)
+equation 1206 := x = y ∘ ((z ∘ (w ∘ y)) ∘ u)
+equation 1207 := x = y ∘ ((z ∘ (w ∘ z)) ∘ x)
+equation 1208 := x = y ∘ ((z ∘ (w ∘ z)) ∘ y)
+equation 1209 := x = y ∘ ((z ∘ (w ∘ z)) ∘ z)
+equation 1210 := x = y ∘ ((z ∘ (w ∘ z)) ∘ w)
+equation 1211 := x = y ∘ ((z ∘ (w ∘ z)) ∘ u)
+equation 1212 := x = y ∘ ((z ∘ (w ∘ w)) ∘ x)
+equation 1213 := x = y ∘ ((z ∘ (w ∘ w)) ∘ y)
+equation 1214 := x = y ∘ ((z ∘ (w ∘ w)) ∘ z)
+equation 1215 := x = y ∘ ((z ∘ (w ∘ w)) ∘ w)
+equation 1216 := x = y ∘ ((z ∘ (w ∘ w)) ∘ u)
+equation 1217 := x = y ∘ ((z ∘ (w ∘ u)) ∘ x)
+equation 1218 := x = y ∘ ((z ∘ (w ∘ u)) ∘ y)
+equation 1219 := x = y ∘ ((z ∘ (w ∘ u)) ∘ z)
+equation 1220 := x = y ∘ ((z ∘ (w ∘ u)) ∘ w)
+equation 1221 := x = y ∘ ((z ∘ (w ∘ u)) ∘ u)
+equation 1222 := x = y ∘ ((z ∘ (w ∘ u)) ∘ v)
+equation 1223 := x = x ∘ (((x ∘ x) ∘ x) ∘ x)
+equation 1224 := x = x ∘ (((x ∘ x) ∘ x) ∘ y)
+equation 1225 := x = x ∘ (((x ∘ x) ∘ y) ∘ x)
+equation 1226 := x = x ∘ (((x ∘ x) ∘ y) ∘ y)
+equation 1227 := x = x ∘ (((x ∘ x) ∘ y) ∘ z)
+equation 1228 := x = x ∘ (((x ∘ y) ∘ x) ∘ x)
+equation 1229 := x = x ∘ (((x ∘ y) ∘ x) ∘ y)
+equation 1230 := x = x ∘ (((x ∘ y) ∘ x) ∘ z)
+equation 1231 := x = x ∘ (((x ∘ y) ∘ y) ∘ x)
+equation 1232 := x = x ∘ (((x ∘ y) ∘ y) ∘ y)
+equation 1233 := x = x ∘ (((x ∘ y) ∘ y) ∘ z)
+equation 1234 := x = x ∘ (((x ∘ y) ∘ z) ∘ x)
+equation 1235 := x = x ∘ (((x ∘ y) ∘ z) ∘ y)
+equation 1236 := x = x ∘ (((x ∘ y) ∘ z) ∘ z)
+equation 1237 := x = x ∘ (((x ∘ y) ∘ z) ∘ w)
+equation 1238 := x = x ∘ (((y ∘ x) ∘ x) ∘ x)
+equation 1239 := x = x ∘ (((y ∘ x) ∘ x) ∘ y)
+equation 1240 := x = x ∘ (((y ∘ x) ∘ x) ∘ z)
+equation 1241 := x = x ∘ (((y ∘ x) ∘ y) ∘ x)
+equation 1242 := x = x ∘ (((y ∘ x) ∘ y) ∘ y)
+equation 1243 := x = x ∘ (((y ∘ x) ∘ y) ∘ z)
+equation 1244 := x = x ∘ (((y ∘ x) ∘ z) ∘ x)
+equation 1245 := x = x ∘ (((y ∘ x) ∘ z) ∘ y)
+equation 1246 := x = x ∘ (((y ∘ x) ∘ z) ∘ z)
+equation 1247 := x = x ∘ (((y ∘ x) ∘ z) ∘ w)
+equation 1248 := x = x ∘ (((y ∘ y) ∘ x) ∘ x)
+equation 1249 := x = x ∘ (((y ∘ y) ∘ x) ∘ y)
+equation 1250 := x = x ∘ (((y ∘ y) ∘ x) ∘ z)
+equation 1251 := x = x ∘ (((y ∘ y) ∘ y) ∘ x)
+equation 1252 := x = x ∘ (((y ∘ y) ∘ y) ∘ y)
+equation 1253 := x = x ∘ (((y ∘ y) ∘ y) ∘ z)
+equation 1254 := x = x ∘ (((y ∘ y) ∘ z) ∘ x)
+equation 1255 := x = x ∘ (((y ∘ y) ∘ z) ∘ y)
+equation 1256 := x = x ∘ (((y ∘ y) ∘ z) ∘ z)
+equation 1257 := x = x ∘ (((y ∘ y) ∘ z) ∘ w)
+equation 1258 := x = x ∘ (((y ∘ z) ∘ x) ∘ x)
+equation 1259 := x = x ∘ (((y ∘ z) ∘ x) ∘ y)
+equation 1260 := x = x ∘ (((y ∘ z) ∘ x) ∘ z)
+equation 1261 := x = x ∘ (((y ∘ z) ∘ x) ∘ w)
+equation 1262 := x = x ∘ (((y ∘ z) ∘ y) ∘ x)
+equation 1263 := x = x ∘ (((y ∘ z) ∘ y) ∘ y)
+equation 1264 := x = x ∘ (((y ∘ z) ∘ y) ∘ z)
+equation 1265 := x = x ∘ (((y ∘ z) ∘ y) ∘ w)
+equation 1266 := x = x ∘ (((y ∘ z) ∘ z) ∘ x)
+equation 1267 := x = x ∘ (((y ∘ z) ∘ z) ∘ y)
+equation 1268 := x = x ∘ (((y ∘ z) ∘ z) ∘ z)
+equation 1269 := x = x ∘ (((y ∘ z) ∘ z) ∘ w)
+equation 1270 := x = x ∘ (((y ∘ z) ∘ w) ∘ x)
+equation 1271 := x = x ∘ (((y ∘ z) ∘ w) ∘ y)
+equation 1272 := x = x ∘ (((y ∘ z) ∘ w) ∘ z)
+equation 1273 := x = x ∘ (((y ∘ z) ∘ w) ∘ w)
+equation 1274 := x = x ∘ (((y ∘ z) ∘ w) ∘ u)
+equation 1275 := x = y ∘ (((x ∘ x) ∘ x) ∘ x)
+equation 1276 := x = y ∘ (((x ∘ x) ∘ x) ∘ y)
+equation 1277 := x = y ∘ (((x ∘ x) ∘ x) ∘ z)
+equation 1278 := x = y ∘ (((x ∘ x) ∘ y) ∘ x)
+equation 1279 := x = y ∘ (((x ∘ x) ∘ y) ∘ y)
+equation 1280 := x = y ∘ (((x ∘ x) ∘ y) ∘ z)
+equation 1281 := x = y ∘ (((x ∘ x) ∘ z) ∘ x)
+equation 1282 := x = y ∘ (((x ∘ x) ∘ z) ∘ y)
+equation 1283 := x = y ∘ (((x ∘ x) ∘ z) ∘ z)
+equation 1284 := x = y ∘ (((x ∘ x) ∘ z) ∘ w)
+equation 1285 := x = y ∘ (((x ∘ y) ∘ x) ∘ x)
+equation 1286 := x = y ∘ (((x ∘ y) ∘ x) ∘ y)
+equation 1287 := x = y ∘ (((x ∘ y) ∘ x) ∘ z)
+equation 1288 := x = y ∘ (((x ∘ y) ∘ y) ∘ x)
+equation 1289 := x = y ∘ (((x ∘ y) ∘ y) ∘ y)
+equation 1290 := x = y ∘ (((x ∘ y) ∘ y) ∘ z)
+equation 1291 := x = y ∘ (((x ∘ y) ∘ z) ∘ x)
+equation 1292 := x = y ∘ (((x ∘ y) ∘ z) ∘ y)
+equation 1293 := x = y ∘ (((x ∘ y) ∘ z) ∘ z)
+equation 1294 := x = y ∘ (((x ∘ y) ∘ z) ∘ w)
+equation 1295 := x = y ∘ (((x ∘ z) ∘ x) ∘ x)
+equation 1296 := x = y ∘ (((x ∘ z) ∘ x) ∘ y)
+equation 1297 := x = y ∘ (((x ∘ z) ∘ x) ∘ z)
+equation 1298 := x = y ∘ (((x ∘ z) ∘ x) ∘ w)
+equation 1299 := x = y ∘ (((x ∘ z) ∘ y) ∘ x)
+equation 1300 := x = y ∘ (((x ∘ z) ∘ y) ∘ y)
+equation 1301 := x = y ∘ (((x ∘ z) ∘ y) ∘ z)
+equation 1302 := x = y ∘ (((x ∘ z) ∘ y) ∘ w)
+equation 1303 := x = y ∘ (((x ∘ z) ∘ z) ∘ x)
+equation 1304 := x = y ∘ (((x ∘ z) ∘ z) ∘ y)
+equation 1305 := x = y ∘ (((x ∘ z) ∘ z) ∘ z)
+equation 1306 := x = y ∘ (((x ∘ z) ∘ z) ∘ w)
+equation 1307 := x = y ∘ (((x ∘ z) ∘ w) ∘ x)
+equation 1308 := x = y ∘ (((x ∘ z) ∘ w) ∘ y)
+equation 1309 := x = y ∘ (((x ∘ z) ∘ w) ∘ z)
+equation 1310 := x = y ∘ (((x ∘ z) ∘ w) ∘ w)
+equation 1311 := x = y ∘ (((x ∘ z) ∘ w) ∘ u)
+equation 1312 := x = y ∘ (((y ∘ x) ∘ x) ∘ x)
+equation 1313 := x = y ∘ (((y ∘ x) ∘ x) ∘ y)
+equation 1314 := x = y ∘ (((y ∘ x) ∘ x) ∘ z)
+equation 1315 := x = y ∘ (((y ∘ x) ∘ y) ∘ x)
+equation 1316 := x = y ∘ (((y ∘ x) ∘ y) ∘ y)
+equation 1317 := x = y ∘ (((y ∘ x) ∘ y) ∘ z)
+equation 1318 := x = y ∘ (((y ∘ x) ∘ z) ∘ x)
+equation 1319 := x = y ∘ (((y ∘ x) ∘ z) ∘ y)
+equation 1320 := x = y ∘ (((y ∘ x) ∘ z) ∘ z)
+equation 1321 := x = y ∘ (((y ∘ x) ∘ z) ∘ w)
+equation 1322 := x = y ∘ (((y ∘ y) ∘ x) ∘ x)
+equation 1323 := x = y ∘ (((y ∘ y) ∘ x) ∘ y)
+equation 1324 := x = y ∘ (((y ∘ y) ∘ x) ∘ z)
+equation 1325 := x = y ∘ (((y ∘ y) ∘ y) ∘ x)
+equation 1326 := x = y ∘ (((y ∘ y) ∘ y) ∘ y)
+equation 1327 := x = y ∘ (((y ∘ y) ∘ y) ∘ z)
+equation 1328 := x = y ∘ (((y ∘ y) ∘ z) ∘ x)
+equation 1329 := x = y ∘ (((y ∘ y) ∘ z) ∘ y)
+equation 1330 := x = y ∘ (((y ∘ y) ∘ z) ∘ z)
+equation 1331 := x = y ∘ (((y ∘ y) ∘ z) ∘ w)
+equation 1332 := x = y ∘ (((y ∘ z) ∘ x) ∘ x)
+equation 1333 := x = y ∘ (((y ∘ z) ∘ x) ∘ y)
+equation 1334 := x = y ∘ (((y ∘ z) ∘ x) ∘ z)
+equation 1335 := x = y ∘ (((y ∘ z) ∘ x) ∘ w)
+equation 1336 := x = y ∘ (((y ∘ z) ∘ y) ∘ x)
+equation 1337 := x = y ∘ (((y ∘ z) ∘ y) ∘ y)
+equation 1338 := x = y ∘ (((y ∘ z) ∘ y) ∘ z)
+equation 1339 := x = y ∘ (((y ∘ z) ∘ y) ∘ w)
+equation 1340 := x = y ∘ (((y ∘ z) ∘ z) ∘ x)
+equation 1341 := x = y ∘ (((y ∘ z) ∘ z) ∘ y)
+equation 1342 := x = y ∘ (((y ∘ z) ∘ z) ∘ z)
+equation 1343 := x = y ∘ (((y ∘ z) ∘ z) ∘ w)
+equation 1344 := x = y ∘ (((y ∘ z) ∘ w) ∘ x)
+equation 1345 := x = y ∘ (((y ∘ z) ∘ w) ∘ y)
+equation 1346 := x = y ∘ (((y ∘ z) ∘ w) ∘ z)
+equation 1347 := x = y ∘ (((y ∘ z) ∘ w) ∘ w)
+equation 1348 := x = y ∘ (((y ∘ z) ∘ w) ∘ u)
+equation 1349 := x = y ∘ (((z ∘ x) ∘ x) ∘ x)
+equation 1350 := x = y ∘ (((z ∘ x) ∘ x) ∘ y)
+equation 1351 := x = y ∘ (((z ∘ x) ∘ x) ∘ z)
+equation 1352 := x = y ∘ (((z ∘ x) ∘ x) ∘ w)
+equation 1353 := x = y ∘ (((z ∘ x) ∘ y) ∘ x)
+equation 1354 := x = y ∘ (((z ∘ x) ∘ y) ∘ y)
+equation 1355 := x = y ∘ (((z ∘ x) ∘ y) ∘ z)
+equation 1356 := x = y ∘ (((z ∘ x) ∘ y) ∘ w)
+equation 1357 := x = y ∘ (((z ∘ x) ∘ z) ∘ x)
+equation 1358 := x = y ∘ (((z ∘ x) ∘ z) ∘ y)
+equation 1359 := x = y ∘ (((z ∘ x) ∘ z) ∘ z)
+equation 1360 := x = y ∘ (((z ∘ x) ∘ z) ∘ w)
+equation 1361 := x = y ∘ (((z ∘ x) ∘ w) ∘ x)
+equation 1362 := x = y ∘ (((z ∘ x) ∘ w) ∘ y)
+equation 1363 := x = y ∘ (((z ∘ x) ∘ w) ∘ z)
+equation 1364 := x = y ∘ (((z ∘ x) ∘ w) ∘ w)
+equation 1365 := x = y ∘ (((z ∘ x) ∘ w) ∘ u)
+equation 1366 := x = y ∘ (((z ∘ y) ∘ x) ∘ x)
+equation 1367 := x = y ∘ (((z ∘ y) ∘ x) ∘ y)
+equation 1368 := x = y ∘ (((z ∘ y) ∘ x) ∘ z)
+equation 1369 := x = y ∘ (((z ∘ y) ∘ x) ∘ w)
+equation 1370 := x = y ∘ (((z ∘ y) ∘ y) ∘ x)
+equation 1371 := x = y ∘ (((z ∘ y) ∘ y) ∘ y)
+equation 1372 := x = y ∘ (((z ∘ y) ∘ y) ∘ z)
+equation 1373 := x = y ∘ (((z ∘ y) ∘ y) ∘ w)
+equation 1374 := x = y ∘ (((z ∘ y) ∘ z) ∘ x)
+equation 1375 := x = y ∘ (((z ∘ y) ∘ z) ∘ y)
+equation 1376 := x = y ∘ (((z ∘ y) ∘ z) ∘ z)
+equation 1377 := x = y ∘ (((z ∘ y) ∘ z) ∘ w)
+equation 1378 := x = y ∘ (((z ∘ y) ∘ w) ∘ x)
+equation 1379 := x = y ∘ (((z ∘ y) ∘ w) ∘ y)
+equation 1380 := x = y ∘ (((z ∘ y) ∘ w) ∘ z)
+equation 1381 := x = y ∘ (((z ∘ y) ∘ w) ∘ w)
+equation 1382 := x = y ∘ (((z ∘ y) ∘ w) ∘ u)
+equation 1383 := x = y ∘ (((z ∘ z) ∘ x) ∘ x)
+equation 1384 := x = y ∘ (((z ∘ z) ∘ x) ∘ y)
+equation 1385 := x = y ∘ (((z ∘ z) ∘ x) ∘ z)
+equation 1386 := x = y ∘ (((z ∘ z) ∘ x) ∘ w)
+equation 1387 := x = y ∘ (((z ∘ z) ∘ y) ∘ x)
+equation 1388 := x = y ∘ (((z ∘ z) ∘ y) ∘ y)
+equation 1389 := x = y ∘ (((z ∘ z) ∘ y) ∘ z)
+equation 1390 := x = y ∘ (((z ∘ z) ∘ y) ∘ w)
+equation 1391 := x = y ∘ (((z ∘ z) ∘ z) ∘ x)
+equation 1392 := x = y ∘ (((z ∘ z) ∘ z) ∘ y)
+equation 1393 := x = y ∘ (((z ∘ z) ∘ z) ∘ z)
+equation 1394 := x = y ∘ (((z ∘ z) ∘ z) ∘ w)
+equation 1395 := x = y ∘ (((z ∘ z) ∘ w) ∘ x)
+equation 1396 := x = y ∘ (((z ∘ z) ∘ w) ∘ y)
+equation 1397 := x = y ∘ (((z ∘ z) ∘ w) ∘ z)
+equation 1398 := x = y ∘ (((z ∘ z) ∘ w) ∘ w)
+equation 1399 := x = y ∘ (((z ∘ z) ∘ w) ∘ u)
+equation 1400 := x = y ∘ (((z ∘ w) ∘ x) ∘ x)
+equation 1401 := x = y ∘ (((z ∘ w) ∘ x) ∘ y)
+equation 1402 := x = y ∘ (((z ∘ w) ∘ x) ∘ z)
+equation 1403 := x = y ∘ (((z ∘ w) ∘ x) ∘ w)
+equation 1404 := x = y ∘ (((z ∘ w) ∘ x) ∘ u)
+equation 1405 := x = y ∘ (((z ∘ w) ∘ y) ∘ x)
+equation 1406 := x = y ∘ (((z ∘ w) ∘ y) ∘ y)
+equation 1407 := x = y ∘ (((z ∘ w) ∘ y) ∘ z)
+equation 1408 := x = y ∘ (((z ∘ w) ∘ y) ∘ w)
+equation 1409 := x = y ∘ (((z ∘ w) ∘ y) ∘ u)
+equation 1410 := x = y ∘ (((z ∘ w) ∘ z) ∘ x)
+equation 1411 := x = y ∘ (((z ∘ w) ∘ z) ∘ y)
+equation 1412 := x = y ∘ (((z ∘ w) ∘ z) ∘ z)
+equation 1413 := x = y ∘ (((z ∘ w) ∘ z) ∘ w)
+equation 1414 := x = y ∘ (((z ∘ w) ∘ z) ∘ u)
+equation 1415 := x = y ∘ (((z ∘ w) ∘ w) ∘ x)
+equation 1416 := x = y ∘ (((z ∘ w) ∘ w) ∘ y)
+equation 1417 := x = y ∘ (((z ∘ w) ∘ w) ∘ z)
+equation 1418 := x = y ∘ (((z ∘ w) ∘ w) ∘ w)
+equation 1419 := x = y ∘ (((z ∘ w) ∘ w) ∘ u)
+equation 1420 := x = y ∘ (((z ∘ w) ∘ u) ∘ x)
+equation 1421 := x = y ∘ (((z ∘ w) ∘ u) ∘ y)
+equation 1422 := x = y ∘ (((z ∘ w) ∘ u) ∘ z)
+equation 1423 := x = y ∘ (((z ∘ w) ∘ u) ∘ w)
+equation 1424 := x = y ∘ (((z ∘ w) ∘ u) ∘ u)
+equation 1425 := x = y ∘ (((z ∘ w) ∘ u) ∘ v)
+equation 1426 := x = (x ∘ x) ∘ (x ∘ (x ∘ x))
+equation 1427 := x = (x ∘ x) ∘ (x ∘ (x ∘ y))
+equation 1428 := x = (x ∘ x) ∘ (x ∘ (y ∘ x))
+equation 1429 := x = (x ∘ x) ∘ (x ∘ (y ∘ y))
+equation 1430 := x = (x ∘ x) ∘ (x ∘ (y ∘ z))
+equation 1431 := x = (x ∘ x) ∘ (y ∘ (x ∘ x))
+equation 1432 := x = (x ∘ x) ∘ (y ∘ (x ∘ y))
+equation 1433 := x = (x ∘ x) ∘ (y ∘ (x ∘ z))
+equation 1434 := x = (x ∘ x) ∘ (y ∘ (y ∘ x))
+equation 1435 := x = (x ∘ x) ∘ (y ∘ (y ∘ y))
+equation 1436 := x = (x ∘ x) ∘ (y ∘ (y ∘ z))
+equation 1437 := x = (x ∘ x) ∘ (y ∘ (z ∘ x))
+equation 1438 := x = (x ∘ x) ∘ (y ∘ (z ∘ y))
+equation 1439 := x = (x ∘ x) ∘ (y ∘ (z ∘ z))
+equation 1440 := x = (x ∘ x) ∘ (y ∘ (z ∘ w))
+equation 1441 := x = (x ∘ y) ∘ (x ∘ (x ∘ x))
+equation 1442 := x = (x ∘ y) ∘ (x ∘ (x ∘ y))
+equation 1443 := x = (x ∘ y) ∘ (x ∘ (x ∘ z))
+equation 1444 := x = (x ∘ y) ∘ (x ∘ (y ∘ x))
+equation 1445 := x = (x ∘ y) ∘ (x ∘ (y ∘ y))
+equation 1446 := x = (x ∘ y) ∘ (x ∘ (y ∘ z))
+equation 1447 := x = (x ∘ y) ∘ (x ∘ (z ∘ x))
+equation 1448 := x = (x ∘ y) ∘ (x ∘ (z ∘ y))
+equation 1449 := x = (x ∘ y) ∘ (x ∘ (z ∘ z))
+equation 1450 := x = (x ∘ y) ∘ (x ∘ (z ∘ w))
+equation 1451 := x = (x ∘ y) ∘ (y ∘ (x ∘ x))
+equation 1452 := x = (x ∘ y) ∘ (y ∘ (x ∘ y))
+equation 1453 := x = (x ∘ y) ∘ (y ∘ (x ∘ z))
+equation 1454 := x = (x ∘ y) ∘ (y ∘ (y ∘ x))
+equation 1455 := x = (x ∘ y) ∘ (y ∘ (y ∘ y))
+equation 1456 := x = (x ∘ y) ∘ (y ∘ (y ∘ z))
+equation 1457 := x = (x ∘ y) ∘ (y ∘ (z ∘ x))
+equation 1458 := x = (x ∘ y) ∘ (y ∘ (z ∘ y))
+equation 1459 := x = (x ∘ y) ∘ (y ∘ (z ∘ z))
+equation 1460 := x = (x ∘ y) ∘ (y ∘ (z ∘ w))
+equation 1461 := x = (x ∘ y) ∘ (z ∘ (x ∘ x))
+equation 1462 := x = (x ∘ y) ∘ (z ∘ (x ∘ y))
+equation 1463 := x = (x ∘ y) ∘ (z ∘ (x ∘ z))
+equation 1464 := x = (x ∘ y) ∘ (z ∘ (x ∘ w))
+equation 1465 := x = (x ∘ y) ∘ (z ∘ (y ∘ x))
+equation 1466 := x = (x ∘ y) ∘ (z ∘ (y ∘ y))
+equation 1467 := x = (x ∘ y) ∘ (z ∘ (y ∘ z))
+equation 1468 := x = (x ∘ y) ∘ (z ∘ (y ∘ w))
+equation 1469 := x = (x ∘ y) ∘ (z ∘ (z ∘ x))
+equation 1470 := x = (x ∘ y) ∘ (z ∘ (z ∘ y))
+equation 1471 := x = (x ∘ y) ∘ (z ∘ (z ∘ z))
+equation 1472 := x = (x ∘ y) ∘ (z ∘ (z ∘ w))
+equation 1473 := x = (x ∘ y) ∘ (z ∘ (w ∘ x))
+equation 1474 := x = (x ∘ y) ∘ (z ∘ (w ∘ y))
+equation 1475 := x = (x ∘ y) ∘ (z ∘ (w ∘ z))
+equation 1476 := x = (x ∘ y) ∘ (z ∘ (w ∘ w))
+equation 1477 := x = (x ∘ y) ∘ (z ∘ (w ∘ u))
+equation 1478 := x = (y ∘ x) ∘ (x ∘ (x ∘ x))
+equation 1479 := x = (y ∘ x) ∘ (x ∘ (x ∘ y))
+equation 1480 := x = (y ∘ x) ∘ (x ∘ (x ∘ z))
+equation 1481 := x = (y ∘ x) ∘ (x ∘ (y ∘ x))
+equation 1482 := x = (y ∘ x) ∘ (x ∘ (y ∘ y))
+equation 1483 := x = (y ∘ x) ∘ (x ∘ (y ∘ z))
+equation 1484 := x = (y ∘ x) ∘ (x ∘ (z ∘ x))
+equation 1485 := x = (y ∘ x) ∘ (x ∘ (z ∘ y))
+equation 1486 := x = (y ∘ x) ∘ (x ∘ (z ∘ z))
+equation 1487 := x = (y ∘ x) ∘ (x ∘ (z ∘ w))
+equation 1488 := x = (y ∘ x) ∘ (y ∘ (x ∘ x))
+equation 1489 := x = (y ∘ x) ∘ (y ∘ (x ∘ y))
+equation 1490 := x = (y ∘ x) ∘ (y ∘ (x ∘ z))
+equation 1491 := x = (y ∘ x) ∘ (y ∘ (y ∘ x))
+equation 1492 := x = (y ∘ x) ∘ (y ∘ (y ∘ y))
+equation 1493 := x = (y ∘ x) ∘ (y ∘ (y ∘ z))
+equation 1494 := x = (y ∘ x) ∘ (y ∘ (z ∘ x))
+equation 1495 := x = (y ∘ x) ∘ (y ∘ (z ∘ y))
+equation 1496 := x = (y ∘ x) ∘ (y ∘ (z ∘ z))
+equation 1497 := x = (y ∘ x) ∘ (y ∘ (z ∘ w))
+equation 1498 := x = (y ∘ x) ∘ (z ∘ (x ∘ x))
+equation 1499 := x = (y ∘ x) ∘ (z ∘ (x ∘ y))
+equation 1500 := x = (y ∘ x) ∘ (z ∘ (x ∘ z))
+equation 1501 := x = (y ∘ x) ∘ (z ∘ (x ∘ w))
+equation 1502 := x = (y ∘ x) ∘ (z ∘ (y ∘ x))
+equation 1503 := x = (y ∘ x) ∘ (z ∘ (y ∘ y))
+equation 1504 := x = (y ∘ x) ∘ (z ∘ (y ∘ z))
+equation 1505 := x = (y ∘ x) ∘ (z ∘ (y ∘ w))
+equation 1506 := x = (y ∘ x) ∘ (z ∘ (z ∘ x))
+equation 1507 := x = (y ∘ x) ∘ (z ∘ (z ∘ y))
+equation 1508 := x = (y ∘ x) ∘ (z ∘ (z ∘ z))
+equation 1509 := x = (y ∘ x) ∘ (z ∘ (z ∘ w))
+equation 1510 := x = (y ∘ x) ∘ (z ∘ (w ∘ x))
+equation 1511 := x = (y ∘ x) ∘ (z ∘ (w ∘ y))
+equation 1512 := x = (y ∘ x) ∘ (z ∘ (w ∘ z))
+equation 1513 := x = (y ∘ x) ∘ (z ∘ (w ∘ w))
+equation 1514 := x = (y ∘ x) ∘ (z ∘ (w ∘ u))
+equation 1515 := x = (y ∘ y) ∘ (x ∘ (x ∘ x))
+equation 1516 := x = (y ∘ y) ∘ (x ∘ (x ∘ y))
+equation 1517 := x = (y ∘ y) ∘ (x ∘ (x ∘ z))
+equation 1518 := x = (y ∘ y) ∘ (x ∘ (y ∘ x))
+equation 1519 := x = (y ∘ y) ∘ (x ∘ (y ∘ y))
+equation 1520 := x = (y ∘ y) ∘ (x ∘ (y ∘ z))
+equation 1521 := x = (y ∘ y) ∘ (x ∘ (z ∘ x))
+equation 1522 := x = (y ∘ y) ∘ (x ∘ (z ∘ y))
+equation 1523 := x = (y ∘ y) ∘ (x ∘ (z ∘ z))
+equation 1524 := x = (y ∘ y) ∘ (x ∘ (z ∘ w))
+equation 1525 := x = (y ∘ y) ∘ (y ∘ (x ∘ x))
+equation 1526 := x = (y ∘ y) ∘ (y ∘ (x ∘ y))
+equation 1527 := x = (y ∘ y) ∘ (y ∘ (x ∘ z))
+equation 1528 := x = (y ∘ y) ∘ (y ∘ (y ∘ x))
+equation 1529 := x = (y ∘ y) ∘ (y ∘ (y ∘ y))
+equation 1530 := x = (y ∘ y) ∘ (y ∘ (y ∘ z))
+equation 1531 := x = (y ∘ y) ∘ (y ∘ (z ∘ x))
+equation 1532 := x = (y ∘ y) ∘ (y ∘ (z ∘ y))
+equation 1533 := x = (y ∘ y) ∘ (y ∘ (z ∘ z))
+equation 1534 := x = (y ∘ y) ∘ (y ∘ (z ∘ w))
+equation 1535 := x = (y ∘ y) ∘ (z ∘ (x ∘ x))
+equation 1536 := x = (y ∘ y) ∘ (z ∘ (x ∘ y))
+equation 1537 := x = (y ∘ y) ∘ (z ∘ (x ∘ z))
+equation 1538 := x = (y ∘ y) ∘ (z ∘ (x ∘ w))
+equation 1539 := x = (y ∘ y) ∘ (z ∘ (y ∘ x))
+equation 1540 := x = (y ∘ y) ∘ (z ∘ (y ∘ y))
+equation 1541 := x = (y ∘ y) ∘ (z ∘ (y ∘ z))
+equation 1542 := x = (y ∘ y) ∘ (z ∘ (y ∘ w))
+equation 1543 := x = (y ∘ y) ∘ (z ∘ (z ∘ x))
+equation 1544 := x = (y ∘ y) ∘ (z ∘ (z ∘ y))
+equation 1545 := x = (y ∘ y) ∘ (z ∘ (z ∘ z))
+equation 1546 := x = (y ∘ y) ∘ (z ∘ (z ∘ w))
+equation 1547 := x = (y ∘ y) ∘ (z ∘ (w ∘ x))
+equation 1548 := x = (y ∘ y) ∘ (z ∘ (w ∘ y))
+equation 1549 := x = (y ∘ y) ∘ (z ∘ (w ∘ z))
+equation 1550 := x = (y ∘ y) ∘ (z ∘ (w ∘ w))
+equation 1551 := x = (y ∘ y) ∘ (z ∘ (w ∘ u))
+equation 1552 := x = (y ∘ z) ∘ (x ∘ (x ∘ x))
+equation 1553 := x = (y ∘ z) ∘ (x ∘ (x ∘ y))
+equation 1554 := x = (y ∘ z) ∘ (x ∘ (x ∘ z))
+equation 1555 := x = (y ∘ z) ∘ (x ∘ (x ∘ w))
+equation 1556 := x = (y ∘ z) ∘ (x ∘ (y ∘ x))
+equation 1557 := x = (y ∘ z) ∘ (x ∘ (y ∘ y))
+equation 1558 := x = (y ∘ z) ∘ (x ∘ (y ∘ z))
+equation 1559 := x = (y ∘ z) ∘ (x ∘ (y ∘ w))
+equation 1560 := x = (y ∘ z) ∘ (x ∘ (z ∘ x))
+equation 1561 := x = (y ∘ z) ∘ (x ∘ (z ∘ y))
+equation 1562 := x = (y ∘ z) ∘ (x ∘ (z ∘ z))
+equation 1563 := x = (y ∘ z) ∘ (x ∘ (z ∘ w))
+equation 1564 := x = (y ∘ z) ∘ (x ∘ (w ∘ x))
+equation 1565 := x = (y ∘ z) ∘ (x ∘ (w ∘ y))
+equation 1566 := x = (y ∘ z) ∘ (x ∘ (w ∘ z))
+equation 1567 := x = (y ∘ z) ∘ (x ∘ (w ∘ w))
+equation 1568 := x = (y ∘ z) ∘ (x ∘ (w ∘ u))
+equation 1569 := x = (y ∘ z) ∘ (y ∘ (x ∘ x))
+equation 1570 := x = (y ∘ z) ∘ (y ∘ (x ∘ y))
+equation 1571 := x = (y ∘ z) ∘ (y ∘ (x ∘ z))
+equation 1572 := x = (y ∘ z) ∘ (y ∘ (x ∘ w))
+equation 1573 := x = (y ∘ z) ∘ (y ∘ (y ∘ x))
+equation 1574 := x = (y ∘ z) ∘ (y ∘ (y ∘ y))
+equation 1575 := x = (y ∘ z) ∘ (y ∘ (y ∘ z))
+equation 1576 := x = (y ∘ z) ∘ (y ∘ (y ∘ w))
+equation 1577 := x = (y ∘ z) ∘ (y ∘ (z ∘ x))
+equation 1578 := x = (y ∘ z) ∘ (y ∘ (z ∘ y))
+equation 1579 := x = (y ∘ z) ∘ (y ∘ (z ∘ z))
+equation 1580 := x = (y ∘ z) ∘ (y ∘ (z ∘ w))
+equation 1581 := x = (y ∘ z) ∘ (y ∘ (w ∘ x))
+equation 1582 := x = (y ∘ z) ∘ (y ∘ (w ∘ y))
+equation 1583 := x = (y ∘ z) ∘ (y ∘ (w ∘ z))
+equation 1584 := x = (y ∘ z) ∘ (y ∘ (w ∘ w))
+equation 1585 := x = (y ∘ z) ∘ (y ∘ (w ∘ u))
+equation 1586 := x = (y ∘ z) ∘ (z ∘ (x ∘ x))
+equation 1587 := x = (y ∘ z) ∘ (z ∘ (x ∘ y))
+equation 1588 := x = (y ∘ z) ∘ (z ∘ (x ∘ z))
+equation 1589 := x = (y ∘ z) ∘ (z ∘ (x ∘ w))
+equation 1590 := x = (y ∘ z) ∘ (z ∘ (y ∘ x))
+equation 1591 := x = (y ∘ z) ∘ (z ∘ (y ∘ y))
+equation 1592 := x = (y ∘ z) ∘ (z ∘ (y ∘ z))
+equation 1593 := x = (y ∘ z) ∘ (z ∘ (y ∘ w))
+equation 1594 := x = (y ∘ z) ∘ (z ∘ (z ∘ x))
+equation 1595 := x = (y ∘ z) ∘ (z ∘ (z ∘ y))
+equation 1596 := x = (y ∘ z) ∘ (z ∘ (z ∘ z))
+equation 1597 := x = (y ∘ z) ∘ (z ∘ (z ∘ w))
+equation 1598 := x = (y ∘ z) ∘ (z ∘ (w ∘ x))
+equation 1599 := x = (y ∘ z) ∘ (z ∘ (w ∘ y))
+equation 1600 := x = (y ∘ z) ∘ (z ∘ (w ∘ z))
+equation 1601 := x = (y ∘ z) ∘ (z ∘ (w ∘ w))
+equation 1602 := x = (y ∘ z) ∘ (z ∘ (w ∘ u))
+equation 1603 := x = (y ∘ z) ∘ (w ∘ (x ∘ x))
+equation 1604 := x = (y ∘ z) ∘ (w ∘ (x ∘ y))
+equation 1605 := x = (y ∘ z) ∘ (w ∘ (x ∘ z))
+equation 1606 := x = (y ∘ z) ∘ (w ∘ (x ∘ w))
+equation 1607 := x = (y ∘ z) ∘ (w ∘ (x ∘ u))
+equation 1608 := x = (y ∘ z) ∘ (w ∘ (y ∘ x))
+equation 1609 := x = (y ∘ z) ∘ (w ∘ (y ∘ y))
+equation 1610 := x = (y ∘ z) ∘ (w ∘ (y ∘ z))
+equation 1611 := x = (y ∘ z) ∘ (w ∘ (y ∘ w))
+equation 1612 := x = (y ∘ z) ∘ (w ∘ (y ∘ u))
+equation 1613 := x = (y ∘ z) ∘ (w ∘ (z ∘ x))
+equation 1614 := x = (y ∘ z) ∘ (w ∘ (z ∘ y))
+equation 1615 := x = (y ∘ z) ∘ (w ∘ (z ∘ z))
+equation 1616 := x = (y ∘ z) ∘ (w ∘ (z ∘ w))
+equation 1617 := x = (y ∘ z) ∘ (w ∘ (z ∘ u))
+equation 1618 := x = (y ∘ z) ∘ (w ∘ (w ∘ x))
+equation 1619 := x = (y ∘ z) ∘ (w ∘ (w ∘ y))
+equation 1620 := x = (y ∘ z) ∘ (w ∘ (w ∘ z))
+equation 1621 := x = (y ∘ z) ∘ (w ∘ (w ∘ w))
+equation 1622 := x = (y ∘ z) ∘ (w ∘ (w ∘ u))
+equation 1623 := x = (y ∘ z) ∘ (w ∘ (u ∘ x))
+equation 1624 := x = (y ∘ z) ∘ (w ∘ (u ∘ y))
+equation 1625 := x = (y ∘ z) ∘ (w ∘ (u ∘ z))
+equation 1626 := x = (y ∘ z) ∘ (w ∘ (u ∘ w))
+equation 1627 := x = (y ∘ z) ∘ (w ∘ (u ∘ u))
+equation 1628 := x = (y ∘ z) ∘ (w ∘ (u ∘ v))
+equation 1629 := x = (x ∘ x) ∘ ((x ∘ x) ∘ x)
+equation 1630 := x = (x ∘ x) ∘ ((x ∘ x) ∘ y)
+equation 1631 := x = (x ∘ x) ∘ ((x ∘ y) ∘ x)
+equation 1632 := x = (x ∘ x) ∘ ((x ∘ y) ∘ y)
+equation 1633 := x = (x ∘ x) ∘ ((x ∘ y) ∘ z)
+equation 1634 := x = (x ∘ x) ∘ ((y ∘ x) ∘ x)
+equation 1635 := x = (x ∘ x) ∘ ((y ∘ x) ∘ y)
+equation 1636 := x = (x ∘ x) ∘ ((y ∘ x) ∘ z)
+equation 1637 := x = (x ∘ x) ∘ ((y ∘ y) ∘ x)
+equation 1638 := x = (x ∘ x) ∘ ((y ∘ y) ∘ y)
+equation 1639 := x = (x ∘ x) ∘ ((y ∘ y) ∘ z)
+equation 1640 := x = (x ∘ x) ∘ ((y ∘ z) ∘ x)
+equation 1641 := x = (x ∘ x) ∘ ((y ∘ z) ∘ y)
+equation 1642 := x = (x ∘ x) ∘ ((y ∘ z) ∘ z)
+equation 1643 := x = (x ∘ x) ∘ ((y ∘ z) ∘ w)
+equation 1644 := x = (x ∘ y) ∘ ((x ∘ x) ∘ x)
+equation 1645 := x = (x ∘ y) ∘ ((x ∘ x) ∘ y)
+equation 1646 := x = (x ∘ y) ∘ ((x ∘ x) ∘ z)
+equation 1647 := x = (x ∘ y) ∘ ((x ∘ y) ∘ x)
+equation 1648 := x = (x ∘ y) ∘ ((x ∘ y) ∘ y)
+equation 1649 := x = (x ∘ y) ∘ ((x ∘ y) ∘ z)
+equation 1650 := x = (x ∘ y) ∘ ((x ∘ z) ∘ x)
+equation 1651 := x = (x ∘ y) ∘ ((x ∘ z) ∘ y)
+equation 1652 := x = (x ∘ y) ∘ ((x ∘ z) ∘ z)
+equation 1653 := x = (x ∘ y) ∘ ((x ∘ z) ∘ w)
+equation 1654 := x = (x ∘ y) ∘ ((y ∘ x) ∘ x)
+equation 1655 := x = (x ∘ y) ∘ ((y ∘ x) ∘ y)
+equation 1656 := x = (x ∘ y) ∘ ((y ∘ x) ∘ z)
+equation 1657 := x = (x ∘ y) ∘ ((y ∘ y) ∘ x)
+equation 1658 := x = (x ∘ y) ∘ ((y ∘ y) ∘ y)
+equation 1659 := x = (x ∘ y) ∘ ((y ∘ y) ∘ z)
+equation 1660 := x = (x ∘ y) ∘ ((y ∘ z) ∘ x)
+equation 1661 := x = (x ∘ y) ∘ ((y ∘ z) ∘ y)
+equation 1662 := x = (x ∘ y) ∘ ((y ∘ z) ∘ z)
+equation 1663 := x = (x ∘ y) ∘ ((y ∘ z) ∘ w)
+equation 1664 := x = (x ∘ y) ∘ ((z ∘ x) ∘ x)
+equation 1665 := x = (x ∘ y) ∘ ((z ∘ x) ∘ y)
+equation 1666 := x = (x ∘ y) ∘ ((z ∘ x) ∘ z)
+equation 1667 := x = (x ∘ y) ∘ ((z ∘ x) ∘ w)
+equation 1668 := x = (x ∘ y) ∘ ((z ∘ y) ∘ x)
+equation 1669 := x = (x ∘ y) ∘ ((z ∘ y) ∘ y)
+equation 1670 := x = (x ∘ y) ∘ ((z ∘ y) ∘ z)
+equation 1671 := x = (x ∘ y) ∘ ((z ∘ y) ∘ w)
+equation 1672 := x = (x ∘ y) ∘ ((z ∘ z) ∘ x)
+equation 1673 := x = (x ∘ y) ∘ ((z ∘ z) ∘ y)
+equation 1674 := x = (x ∘ y) ∘ ((z ∘ z) ∘ z)
+equation 1675 := x = (x ∘ y) ∘ ((z ∘ z) ∘ w)
+equation 1676 := x = (x ∘ y) ∘ ((z ∘ w) ∘ x)
+equation 1677 := x = (x ∘ y) ∘ ((z ∘ w) ∘ y)
+equation 1678 := x = (x ∘ y) ∘ ((z ∘ w) ∘ z)
+equation 1679 := x = (x ∘ y) ∘ ((z ∘ w) ∘ w)
+equation 1680 := x = (x ∘ y) ∘ ((z ∘ w) ∘ u)
+equation 1681 := x = (y ∘ x) ∘ ((x ∘ x) ∘ x)
+equation 1682 := x = (y ∘ x) ∘ ((x ∘ x) ∘ y)
+equation 1683 := x = (y ∘ x) ∘ ((x ∘ x) ∘ z)
+equation 1684 := x = (y ∘ x) ∘ ((x ∘ y) ∘ x)
+equation 1685 := x = (y ∘ x) ∘ ((x ∘ y) ∘ y)
+equation 1686 := x = (y ∘ x) ∘ ((x ∘ y) ∘ z)
+equation 1687 := x = (y ∘ x) ∘ ((x ∘ z) ∘ x)
+equation 1688 := x = (y ∘ x) ∘ ((x ∘ z) ∘ y)
+equation 1689 := x = (y ∘ x) ∘ ((x ∘ z) ∘ z)
+equation 1690 := x = (y ∘ x) ∘ ((x ∘ z) ∘ w)
+equation 1691 := x = (y ∘ x) ∘ ((y ∘ x) ∘ x)
+equation 1692 := x = (y ∘ x) ∘ ((y ∘ x) ∘ y)
+equation 1693 := x = (y ∘ x) ∘ ((y ∘ x) ∘ z)
+equation 1694 := x = (y ∘ x) ∘ ((y ∘ y) ∘ x)
+equation 1695 := x = (y ∘ x) ∘ ((y ∘ y) ∘ y)
+equation 1696 := x = (y ∘ x) ∘ ((y ∘ y) ∘ z)
+equation 1697 := x = (y ∘ x) ∘ ((y ∘ z) ∘ x)
+equation 1698 := x = (y ∘ x) ∘ ((y ∘ z) ∘ y)
+equation 1699 := x = (y ∘ x) ∘ ((y ∘ z) ∘ z)
+equation 1700 := x = (y ∘ x) ∘ ((y ∘ z) ∘ w)
+equation 1701 := x = (y ∘ x) ∘ ((z ∘ x) ∘ x)
+equation 1702 := x = (y ∘ x) ∘ ((z ∘ x) ∘ y)
+equation 1703 := x = (y ∘ x) ∘ ((z ∘ x) ∘ z)
+equation 1704 := x = (y ∘ x) ∘ ((z ∘ x) ∘ w)
+equation 1705 := x = (y ∘ x) ∘ ((z ∘ y) ∘ x)
+equation 1706 := x = (y ∘ x) ∘ ((z ∘ y) ∘ y)
+equation 1707 := x = (y ∘ x) ∘ ((z ∘ y) ∘ z)
+equation 1708 := x = (y ∘ x) ∘ ((z ∘ y) ∘ w)
+equation 1709 := x = (y ∘ x) ∘ ((z ∘ z) ∘ x)
+equation 1710 := x = (y ∘ x) ∘ ((z ∘ z) ∘ y)
+equation 1711 := x = (y ∘ x) ∘ ((z ∘ z) ∘ z)
+equation 1712 := x = (y ∘ x) ∘ ((z ∘ z) ∘ w)
+equation 1713 := x = (y ∘ x) ∘ ((z ∘ w) ∘ x)
+equation 1714 := x = (y ∘ x) ∘ ((z ∘ w) ∘ y)
+equation 1715 := x = (y ∘ x) ∘ ((z ∘ w) ∘ z)
+equation 1716 := x = (y ∘ x) ∘ ((z ∘ w) ∘ w)
+equation 1717 := x = (y ∘ x) ∘ ((z ∘ w) ∘ u)
+equation 1718 := x = (y ∘ y) ∘ ((x ∘ x) ∘ x)
+equation 1719 := x = (y ∘ y) ∘ ((x ∘ x) ∘ y)
+equation 1720 := x = (y ∘ y) ∘ ((x ∘ x) ∘ z)
+equation 1721 := x = (y ∘ y) ∘ ((x ∘ y) ∘ x)
+equation 1722 := x = (y ∘ y) ∘ ((x ∘ y) ∘ y)
+equation 1723 := x = (y ∘ y) ∘ ((x ∘ y) ∘ z)
+equation 1724 := x = (y ∘ y) ∘ ((x ∘ z) ∘ x)
+equation 1725 := x = (y ∘ y) ∘ ((x ∘ z) ∘ y)
+equation 1726 := x = (y ∘ y) ∘ ((x ∘ z) ∘ z)
+equation 1727 := x = (y ∘ y) ∘ ((x ∘ z) ∘ w)
+equation 1728 := x = (y ∘ y) ∘ ((y ∘ x) ∘ x)
+equation 1729 := x = (y ∘ y) ∘ ((y ∘ x) ∘ y)
+equation 1730 := x = (y ∘ y) ∘ ((y ∘ x) ∘ z)
+equation 1731 := x = (y ∘ y) ∘ ((y ∘ y) ∘ x)
+equation 1732 := x = (y ∘ y) ∘ ((y ∘ y) ∘ y)
+equation 1733 := x = (y ∘ y) ∘ ((y ∘ y) ∘ z)
+equation 1734 := x = (y ∘ y) ∘ ((y ∘ z) ∘ x)
+equation 1735 := x = (y ∘ y) ∘ ((y ∘ z) ∘ y)
+equation 1736 := x = (y ∘ y) ∘ ((y ∘ z) ∘ z)
+equation 1737 := x = (y ∘ y) ∘ ((y ∘ z) ∘ w)
+equation 1738 := x = (y ∘ y) ∘ ((z ∘ x) ∘ x)
+equation 1739 := x = (y ∘ y) ∘ ((z ∘ x) ∘ y)
+equation 1740 := x = (y ∘ y) ∘ ((z ∘ x) ∘ z)
+equation 1741 := x = (y ∘ y) ∘ ((z ∘ x) ∘ w)
+equation 1742 := x = (y ∘ y) ∘ ((z ∘ y) ∘ x)
+equation 1743 := x = (y ∘ y) ∘ ((z ∘ y) ∘ y)
+equation 1744 := x = (y ∘ y) ∘ ((z ∘ y) ∘ z)
+equation 1745 := x = (y ∘ y) ∘ ((z ∘ y) ∘ w)
+equation 1746 := x = (y ∘ y) ∘ ((z ∘ z) ∘ x)
+equation 1747 := x = (y ∘ y) ∘ ((z ∘ z) ∘ y)
+equation 1748 := x = (y ∘ y) ∘ ((z ∘ z) ∘ z)
+equation 1749 := x = (y ∘ y) ∘ ((z ∘ z) ∘ w)
+equation 1750 := x = (y ∘ y) ∘ ((z ∘ w) ∘ x)
+equation 1751 := x = (y ∘ y) ∘ ((z ∘ w) ∘ y)
+equation 1752 := x = (y ∘ y) ∘ ((z ∘ w) ∘ z)
+equation 1753 := x = (y ∘ y) ∘ ((z ∘ w) ∘ w)
+equation 1754 := x = (y ∘ y) ∘ ((z ∘ w) ∘ u)
+equation 1755 := x = (y ∘ z) ∘ ((x ∘ x) ∘ x)
+equation 1756 := x = (y ∘ z) ∘ ((x ∘ x) ∘ y)
+equation 1757 := x = (y ∘ z) ∘ ((x ∘ x) ∘ z)
+equation 1758 := x = (y ∘ z) ∘ ((x ∘ x) ∘ w)
+equation 1759 := x = (y ∘ z) ∘ ((x ∘ y) ∘ x)
+equation 1760 := x = (y ∘ z) ∘ ((x ∘ y) ∘ y)
+equation 1761 := x = (y ∘ z) ∘ ((x ∘ y) ∘ z)
+equation 1762 := x = (y ∘ z) ∘ ((x ∘ y) ∘ w)
+equation 1763 := x = (y ∘ z) ∘ ((x ∘ z) ∘ x)
+equation 1764 := x = (y ∘ z) ∘ ((x ∘ z) ∘ y)
+equation 1765 := x = (y ∘ z) ∘ ((x ∘ z) ∘ z)
+equation 1766 := x = (y ∘ z) ∘ ((x ∘ z) ∘ w)
+equation 1767 := x = (y ∘ z) ∘ ((x ∘ w) ∘ x)
+equation 1768 := x = (y ∘ z) ∘ ((x ∘ w) ∘ y)
+equation 1769 := x = (y ∘ z) ∘ ((x ∘ w) ∘ z)
+equation 1770 := x = (y ∘ z) ∘ ((x ∘ w) ∘ w)
+equation 1771 := x = (y ∘ z) ∘ ((x ∘ w) ∘ u)
+equation 1772 := x = (y ∘ z) ∘ ((y ∘ x) ∘ x)
+equation 1773 := x = (y ∘ z) ∘ ((y ∘ x) ∘ y)
+equation 1774 := x = (y ∘ z) ∘ ((y ∘ x) ∘ z)
+equation 1775 := x = (y ∘ z) ∘ ((y ∘ x) ∘ w)
+equation 1776 := x = (y ∘ z) ∘ ((y ∘ y) ∘ x)
+equation 1777 := x = (y ∘ z) ∘ ((y ∘ y) ∘ y)
+equation 1778 := x = (y ∘ z) ∘ ((y ∘ y) ∘ z)
+equation 1779 := x = (y ∘ z) ∘ ((y ∘ y) ∘ w)
+equation 1780 := x = (y ∘ z) ∘ ((y ∘ z) ∘ x)
+equation 1781 := x = (y ∘ z) ∘ ((y ∘ z) ∘ y)
+equation 1782 := x = (y ∘ z) ∘ ((y ∘ z) ∘ z)
+equation 1783 := x = (y ∘ z) ∘ ((y ∘ z) ∘ w)
+equation 1784 := x = (y ∘ z) ∘ ((y ∘ w) ∘ x)
+equation 1785 := x = (y ∘ z) ∘ ((y ∘ w) ∘ y)
+equation 1786 := x = (y ∘ z) ∘ ((y ∘ w) ∘ z)
+equation 1787 := x = (y ∘ z) ∘ ((y ∘ w) ∘ w)
+equation 1788 := x = (y ∘ z) ∘ ((y ∘ w) ∘ u)
+equation 1789 := x = (y ∘ z) ∘ ((z ∘ x) ∘ x)
+equation 1790 := x = (y ∘ z) ∘ ((z ∘ x) ∘ y)
+equation 1791 := x = (y ∘ z) ∘ ((z ∘ x) ∘ z)
+equation 1792 := x = (y ∘ z) ∘ ((z ∘ x) ∘ w)
+equation 1793 := x = (y ∘ z) ∘ ((z ∘ y) ∘ x)
+equation 1794 := x = (y ∘ z) ∘ ((z ∘ y) ∘ y)
+equation 1795 := x = (y ∘ z) ∘ ((z ∘ y) ∘ z)
+equation 1796 := x = (y ∘ z) ∘ ((z ∘ y) ∘ w)
+equation 1797 := x = (y ∘ z) ∘ ((z ∘ z) ∘ x)
+equation 1798 := x = (y ∘ z) ∘ ((z ∘ z) ∘ y)
+equation 1799 := x = (y ∘ z) ∘ ((z ∘ z) ∘ z)
+equation 1800 := x = (y ∘ z) ∘ ((z ∘ z) ∘ w)
+equation 1801 := x = (y ∘ z) ∘ ((z ∘ w) ∘ x)
+equation 1802 := x = (y ∘ z) ∘ ((z ∘ w) ∘ y)
+equation 1803 := x = (y ∘ z) ∘ ((z ∘ w) ∘ z)
+equation 1804 := x = (y ∘ z) ∘ ((z ∘ w) ∘ w)
+equation 1805 := x = (y ∘ z) ∘ ((z ∘ w) ∘ u)
+equation 1806 := x = (y ∘ z) ∘ ((w ∘ x) ∘ x)
+equation 1807 := x = (y ∘ z) ∘ ((w ∘ x) ∘ y)
+equation 1808 := x = (y ∘ z) ∘ ((w ∘ x) ∘ z)
+equation 1809 := x = (y ∘ z) ∘ ((w ∘ x) ∘ w)
+equation 1810 := x = (y ∘ z) ∘ ((w ∘ x) ∘ u)
+equation 1811 := x = (y ∘ z) ∘ ((w ∘ y) ∘ x)
+equation 1812 := x = (y ∘ z) ∘ ((w ∘ y) ∘ y)
+equation 1813 := x = (y ∘ z) ∘ ((w ∘ y) ∘ z)
+equation 1814 := x = (y ∘ z) ∘ ((w ∘ y) ∘ w)
+equation 1815 := x = (y ∘ z) ∘ ((w ∘ y) ∘ u)
+equation 1816 := x = (y ∘ z) ∘ ((w ∘ z) ∘ x)
+equation 1817 := x = (y ∘ z) ∘ ((w ∘ z) ∘ y)
+equation 1818 := x = (y ∘ z) ∘ ((w ∘ z) ∘ z)
+equation 1819 := x = (y ∘ z) ∘ ((w ∘ z) ∘ w)
+equation 1820 := x = (y ∘ z) ∘ ((w ∘ z) ∘ u)
+equation 1821 := x = (y ∘ z) ∘ ((w ∘ w) ∘ x)
+equation 1822 := x = (y ∘ z) ∘ ((w ∘ w) ∘ y)
+equation 1823 := x = (y ∘ z) ∘ ((w ∘ w) ∘ z)
+equation 1824 := x = (y ∘ z) ∘ ((w ∘ w) ∘ w)
+equation 1825 := x = (y ∘ z) ∘ ((w ∘ w) ∘ u)
+equation 1826 := x = (y ∘ z) ∘ ((w ∘ u) ∘ x)
+equation 1827 := x = (y ∘ z) ∘ ((w ∘ u) ∘ y)
+equation 1828 := x = (y ∘ z) ∘ ((w ∘ u) ∘ z)
+equation 1829 := x = (y ∘ z) ∘ ((w ∘ u) ∘ w)
+equation 1830 := x = (y ∘ z) ∘ ((w ∘ u) ∘ u)
+equation 1831 := x = (y ∘ z) ∘ ((w ∘ u) ∘ v)
+equation 1832 := x = (x ∘ (x ∘ x)) ∘ (x ∘ x)
+equation 1833 := x = (x ∘ (x ∘ x)) ∘ (x ∘ y)
+equation 1834 := x = (x ∘ (x ∘ x)) ∘ (y ∘ x)
+equation 1835 := x = (x ∘ (x ∘ x)) ∘ (y ∘ y)
+equation 1836 := x = (x ∘ (x ∘ x)) ∘ (y ∘ z)
+equation 1837 := x = (x ∘ (x ∘ y)) ∘ (x ∘ x)
+equation 1838 := x = (x ∘ (x ∘ y)) ∘ (x ∘ y)
+equation 1839 := x = (x ∘ (x ∘ y)) ∘ (x ∘ z)
+equation 1840 := x = (x ∘ (x ∘ y)) ∘ (y ∘ x)
+equation 1841 := x = (x ∘ (x ∘ y)) ∘ (y ∘ y)
+equation 1842 := x = (x ∘ (x ∘ y)) ∘ (y ∘ z)
+equation 1843 := x = (x ∘ (x ∘ y)) ∘ (z ∘ x)
+equation 1844 := x = (x ∘ (x ∘ y)) ∘ (z ∘ y)
+equation 1845 := x = (x ∘ (x ∘ y)) ∘ (z ∘ z)
+equation 1846 := x = (x ∘ (x ∘ y)) ∘ (z ∘ w)
+equation 1847 := x = (x ∘ (y ∘ x)) ∘ (x ∘ x)
+equation 1848 := x = (x ∘ (y ∘ x)) ∘ (x ∘ y)
+equation 1849 := x = (x ∘ (y ∘ x)) ∘ (x ∘ z)
+equation 1850 := x = (x ∘ (y ∘ x)) ∘ (y ∘ x)
+equation 1851 := x = (x ∘ (y ∘ x)) ∘ (y ∘ y)
+equation 1852 := x = (x ∘ (y ∘ x)) ∘ (y ∘ z)
+equation 1853 := x = (x ∘ (y ∘ x)) ∘ (z ∘ x)
+equation 1854 := x = (x ∘ (y ∘ x)) ∘ (z ∘ y)
+equation 1855 := x = (x ∘ (y ∘ x)) ∘ (z ∘ z)
+equation 1856 := x = (x ∘ (y ∘ x)) ∘ (z ∘ w)
+equation 1857 := x = (x ∘ (y ∘ y)) ∘ (x ∘ x)
+equation 1858 := x = (x ∘ (y ∘ y)) ∘ (x ∘ y)
+equation 1859 := x = (x ∘ (y ∘ y)) ∘ (x ∘ z)
+equation 1860 := x = (x ∘ (y ∘ y)) ∘ (y ∘ x)
+equation 1861 := x = (x ∘ (y ∘ y)) ∘ (y ∘ y)
+equation 1862 := x = (x ∘ (y ∘ y)) ∘ (y ∘ z)
+equation 1863 := x = (x ∘ (y ∘ y)) ∘ (z ∘ x)
+equation 1864 := x = (x ∘ (y ∘ y)) ∘ (z ∘ y)
+equation 1865 := x = (x ∘ (y ∘ y)) ∘ (z ∘ z)
+equation 1866 := x = (x ∘ (y ∘ y)) ∘ (z ∘ w)
+equation 1867 := x = (x ∘ (y ∘ z)) ∘ (x ∘ x)
+equation 1868 := x = (x ∘ (y ∘ z)) ∘ (x ∘ y)
+equation 1869 := x = (x ∘ (y ∘ z)) ∘ (x ∘ z)
+equation 1870 := x = (x ∘ (y ∘ z)) ∘ (x ∘ w)
+equation 1871 := x = (x ∘ (y ∘ z)) ∘ (y ∘ x)
+equation 1872 := x = (x ∘ (y ∘ z)) ∘ (y ∘ y)
+equation 1873 := x = (x ∘ (y ∘ z)) ∘ (y ∘ z)
+equation 1874 := x = (x ∘ (y ∘ z)) ∘ (y ∘ w)
+equation 1875 := x = (x ∘ (y ∘ z)) ∘ (z ∘ x)
+equation 1876 := x = (x ∘ (y ∘ z)) ∘ (z ∘ y)
+equation 1877 := x = (x ∘ (y ∘ z)) ∘ (z ∘ z)
+equation 1878 := x = (x ∘ (y ∘ z)) ∘ (z ∘ w)
+equation 1879 := x = (x ∘ (y ∘ z)) ∘ (w ∘ x)
+equation 1880 := x = (x ∘ (y ∘ z)) ∘ (w ∘ y)
+equation 1881 := x = (x ∘ (y ∘ z)) ∘ (w ∘ z)
+equation 1882 := x = (x ∘ (y ∘ z)) ∘ (w ∘ w)
+equation 1883 := x = (x ∘ (y ∘ z)) ∘ (w ∘ u)
+equation 1884 := x = (y ∘ (x ∘ x)) ∘ (x ∘ x)
+equation 1885 := x = (y ∘ (x ∘ x)) ∘ (x ∘ y)
+equation 1886 := x = (y ∘ (x ∘ x)) ∘ (x ∘ z)
+equation 1887 := x = (y ∘ (x ∘ x)) ∘ (y ∘ x)
+equation 1888 := x = (y ∘ (x ∘ x)) ∘ (y ∘ y)
+equation 1889 := x = (y ∘ (x ∘ x)) ∘ (y ∘ z)
+equation 1890 := x = (y ∘ (x ∘ x)) ∘ (z ∘ x)
+equation 1891 := x = (y ∘ (x ∘ x)) ∘ (z ∘ y)
+equation 1892 := x = (y ∘ (x ∘ x)) ∘ (z ∘ z)
+equation 1893 := x = (y ∘ (x ∘ x)) ∘ (z ∘ w)
+equation 1894 := x = (y ∘ (x ∘ y)) ∘ (x ∘ x)
+equation 1895 := x = (y ∘ (x ∘ y)) ∘ (x ∘ y)
+equation 1896 := x = (y ∘ (x ∘ y)) ∘ (x ∘ z)
+equation 1897 := x = (y ∘ (x ∘ y)) ∘ (y ∘ x)
+equation 1898 := x = (y ∘ (x ∘ y)) ∘ (y ∘ y)
+equation 1899 := x = (y ∘ (x ∘ y)) ∘ (y ∘ z)
+equation 1900 := x = (y ∘ (x ∘ y)) ∘ (z ∘ x)
+equation 1901 := x = (y ∘ (x ∘ y)) ∘ (z ∘ y)
+equation 1902 := x = (y ∘ (x ∘ y)) ∘ (z ∘ z)
+equation 1903 := x = (y ∘ (x ∘ y)) ∘ (z ∘ w)
+equation 1904 := x = (y ∘ (x ∘ z)) ∘ (x ∘ x)
+equation 1905 := x = (y ∘ (x ∘ z)) ∘ (x ∘ y)
+equation 1906 := x = (y ∘ (x ∘ z)) ∘ (x ∘ z)
+equation 1907 := x = (y ∘ (x ∘ z)) ∘ (x ∘ w)
+equation 1908 := x = (y ∘ (x ∘ z)) ∘ (y ∘ x)
+equation 1909 := x = (y ∘ (x ∘ z)) ∘ (y ∘ y)
+equation 1910 := x = (y ∘ (x ∘ z)) ∘ (y ∘ z)
+equation 1911 := x = (y ∘ (x ∘ z)) ∘ (y ∘ w)
+equation 1912 := x = (y ∘ (x ∘ z)) ∘ (z ∘ x)
+equation 1913 := x = (y ∘ (x ∘ z)) ∘ (z ∘ y)
+equation 1914 := x = (y ∘ (x ∘ z)) ∘ (z ∘ z)
+equation 1915 := x = (y ∘ (x ∘ z)) ∘ (z ∘ w)
+equation 1916 := x = (y ∘ (x ∘ z)) ∘ (w ∘ x)
+equation 1917 := x = (y ∘ (x ∘ z)) ∘ (w ∘ y)
+equation 1918 := x = (y ∘ (x ∘ z)) ∘ (w ∘ z)
+equation 1919 := x = (y ∘ (x ∘ z)) ∘ (w ∘ w)
+equation 1920 := x = (y ∘ (x ∘ z)) ∘ (w ∘ u)
+equation 1921 := x = (y ∘ (y ∘ x)) ∘ (x ∘ x)
+equation 1922 := x = (y ∘ (y ∘ x)) ∘ (x ∘ y)
+equation 1923 := x = (y ∘ (y ∘ x)) ∘ (x ∘ z)
+equation 1924 := x = (y ∘ (y ∘ x)) ∘ (y ∘ x)
+equation 1925 := x = (y ∘ (y ∘ x)) ∘ (y ∘ y)
+equation 1926 := x = (y ∘ (y ∘ x)) ∘ (y ∘ z)
+equation 1927 := x = (y ∘ (y ∘ x)) ∘ (z ∘ x)
+equation 1928 := x = (y ∘ (y ∘ x)) ∘ (z ∘ y)
+equation 1929 := x = (y ∘ (y ∘ x)) ∘ (z ∘ z)
+equation 1930 := x = (y ∘ (y ∘ x)) ∘ (z ∘ w)
+equation 1931 := x = (y ∘ (y ∘ y)) ∘ (x ∘ x)
+equation 1932 := x = (y ∘ (y ∘ y)) ∘ (x ∘ y)
+equation 1933 := x = (y ∘ (y ∘ y)) ∘ (x ∘ z)
+equation 1934 := x = (y ∘ (y ∘ y)) ∘ (y ∘ x)
+equation 1935 := x = (y ∘ (y ∘ y)) ∘ (y ∘ y)
+equation 1936 := x = (y ∘ (y ∘ y)) ∘ (y ∘ z)
+equation 1937 := x = (y ∘ (y ∘ y)) ∘ (z ∘ x)
+equation 1938 := x = (y ∘ (y ∘ y)) ∘ (z ∘ y)
+equation 1939 := x = (y ∘ (y ∘ y)) ∘ (z ∘ z)
+equation 1940 := x = (y ∘ (y ∘ y)) ∘ (z ∘ w)
+equation 1941 := x = (y ∘ (y ∘ z)) ∘ (x ∘ x)
+equation 1942 := x = (y ∘ (y ∘ z)) ∘ (x ∘ y)
+equation 1943 := x = (y ∘ (y ∘ z)) ∘ (x ∘ z)
+equation 1944 := x = (y ∘ (y ∘ z)) ∘ (x ∘ w)
+equation 1945 := x = (y ∘ (y ∘ z)) ∘ (y ∘ x)
+equation 1946 := x = (y ∘ (y ∘ z)) ∘ (y ∘ y)
+equation 1947 := x = (y ∘ (y ∘ z)) ∘ (y ∘ z)
+equation 1948 := x = (y ∘ (y ∘ z)) ∘ (y ∘ w)
+equation 1949 := x = (y ∘ (y ∘ z)) ∘ (z ∘ x)
+equation 1950 := x = (y ∘ (y ∘ z)) ∘ (z ∘ y)
+equation 1951 := x = (y ∘ (y ∘ z)) ∘ (z ∘ z)
+equation 1952 := x = (y ∘ (y ∘ z)) ∘ (z ∘ w)
+equation 1953 := x = (y ∘ (y ∘ z)) ∘ (w ∘ x)
+equation 1954 := x = (y ∘ (y ∘ z)) ∘ (w ∘ y)
+equation 1955 := x = (y ∘ (y ∘ z)) ∘ (w ∘ z)
+equation 1956 := x = (y ∘ (y ∘ z)) ∘ (w ∘ w)
+equation 1957 := x = (y ∘ (y ∘ z)) ∘ (w ∘ u)
+equation 1958 := x = (y ∘ (z ∘ x)) ∘ (x ∘ x)
+equation 1959 := x = (y ∘ (z ∘ x)) ∘ (x ∘ y)
+equation 1960 := x = (y ∘ (z ∘ x)) ∘ (x ∘ z)
+equation 1961 := x = (y ∘ (z ∘ x)) ∘ (x ∘ w)
+equation 1962 := x = (y ∘ (z ∘ x)) ∘ (y ∘ x)
+equation 1963 := x = (y ∘ (z ∘ x)) ∘ (y ∘ y)
+equation 1964 := x = (y ∘ (z ∘ x)) ∘ (y ∘ z)
+equation 1965 := x = (y ∘ (z ∘ x)) ∘ (y ∘ w)
+equation 1966 := x = (y ∘ (z ∘ x)) ∘ (z ∘ x)
+equation 1967 := x = (y ∘ (z ∘ x)) ∘ (z ∘ y)
+equation 1968 := x = (y ∘ (z ∘ x)) ∘ (z ∘ z)
+equation 1969 := x = (y ∘ (z ∘ x)) ∘ (z ∘ w)
+equation 1970 := x = (y ∘ (z ∘ x)) ∘ (w ∘ x)
+equation 1971 := x = (y ∘ (z ∘ x)) ∘ (w ∘ y)
+equation 1972 := x = (y ∘ (z ∘ x)) ∘ (w ∘ z)
+equation 1973 := x = (y ∘ (z ∘ x)) ∘ (w ∘ w)
+equation 1974 := x = (y ∘ (z ∘ x)) ∘ (w ∘ u)
+equation 1975 := x = (y ∘ (z ∘ y)) ∘ (x ∘ x)
+equation 1976 := x = (y ∘ (z ∘ y)) ∘ (x ∘ y)
+equation 1977 := x = (y ∘ (z ∘ y)) ∘ (x ∘ z)
+equation 1978 := x = (y ∘ (z ∘ y)) ∘ (x ∘ w)
+equation 1979 := x = (y ∘ (z ∘ y)) ∘ (y ∘ x)
+equation 1980 := x = (y ∘ (z ∘ y)) ∘ (y ∘ y)
+equation 1981 := x = (y ∘ (z ∘ y)) ∘ (y ∘ z)
+equation 1982 := x = (y ∘ (z ∘ y)) ∘ (y ∘ w)
+equation 1983 := x = (y ∘ (z ∘ y)) ∘ (z ∘ x)
+equation 1984 := x = (y ∘ (z ∘ y)) ∘ (z ∘ y)
+equation 1985 := x = (y ∘ (z ∘ y)) ∘ (z ∘ z)
+equation 1986 := x = (y ∘ (z ∘ y)) ∘ (z ∘ w)
+equation 1987 := x = (y ∘ (z ∘ y)) ∘ (w ∘ x)
+equation 1988 := x = (y ∘ (z ∘ y)) ∘ (w ∘ y)
+equation 1989 := x = (y ∘ (z ∘ y)) ∘ (w ∘ z)
+equation 1990 := x = (y ∘ (z ∘ y)) ∘ (w ∘ w)
+equation 1991 := x = (y ∘ (z ∘ y)) ∘ (w ∘ u)
+equation 1992 := x = (y ∘ (z ∘ z)) ∘ (x ∘ x)
+equation 1993 := x = (y ∘ (z ∘ z)) ∘ (x ∘ y)
+equation 1994 := x = (y ∘ (z ∘ z)) ∘ (x ∘ z)
+equation 1995 := x = (y ∘ (z ∘ z)) ∘ (x ∘ w)
+equation 1996 := x = (y ∘ (z ∘ z)) ∘ (y ∘ x)
+equation 1997 := x = (y ∘ (z ∘ z)) ∘ (y ∘ y)
+equation 1998 := x = (y ∘ (z ∘ z)) ∘ (y ∘ z)
+equation 1999 := x = (y ∘ (z ∘ z)) ∘ (y ∘ w)
+equation 2000 := x = (y ∘ (z ∘ z)) ∘ (z ∘ x)
+equation 2001 := x = (y ∘ (z ∘ z)) ∘ (z ∘ y)
+equation 2002 := x = (y ∘ (z ∘ z)) ∘ (z ∘ z)
+equation 2003 := x = (y ∘ (z ∘ z)) ∘ (z ∘ w)
+equation 2004 := x = (y ∘ (z ∘ z)) ∘ (w ∘ x)
+equation 2005 := x = (y ∘ (z ∘ z)) ∘ (w ∘ y)
+equation 2006 := x = (y ∘ (z ∘ z)) ∘ (w ∘ z)
+equation 2007 := x = (y ∘ (z ∘ z)) ∘ (w ∘ w)
+equation 2008 := x = (y ∘ (z ∘ z)) ∘ (w ∘ u)
+equation 2009 := x = (y ∘ (z ∘ w)) ∘ (x ∘ x)
+equation 2010 := x = (y ∘ (z ∘ w)) ∘ (x ∘ y)
+equation 2011 := x = (y ∘ (z ∘ w)) ∘ (x ∘ z)
+equation 2012 := x = (y ∘ (z ∘ w)) ∘ (x ∘ w)
+equation 2013 := x = (y ∘ (z ∘ w)) ∘ (x ∘ u)
+equation 2014 := x = (y ∘ (z ∘ w)) ∘ (y ∘ x)
+equation 2015 := x = (y ∘ (z ∘ w)) ∘ (y ∘ y)
+equation 2016 := x = (y ∘ (z ∘ w)) ∘ (y ∘ z)
+equation 2017 := x = (y ∘ (z ∘ w)) ∘ (y ∘ w)
+equation 2018 := x = (y ∘ (z ∘ w)) ∘ (y ∘ u)
+equation 2019 := x = (y ∘ (z ∘ w)) ∘ (z ∘ x)
+equation 2020 := x = (y ∘ (z ∘ w)) ∘ (z ∘ y)
+equation 2021 := x = (y ∘ (z ∘ w)) ∘ (z ∘ z)
+equation 2022 := x = (y ∘ (z ∘ w)) ∘ (z ∘ w)
+equation 2023 := x = (y ∘ (z ∘ w)) ∘ (z ∘ u)
+equation 2024 := x = (y ∘ (z ∘ w)) ∘ (w ∘ x)
+equation 2025 := x = (y ∘ (z ∘ w)) ∘ (w ∘ y)
+equation 2026 := x = (y ∘ (z ∘ w)) ∘ (w ∘ z)
+equation 2027 := x = (y ∘ (z ∘ w)) ∘ (w ∘ w)
+equation 2028 := x = (y ∘ (z ∘ w)) ∘ (w ∘ u)
+equation 2029 := x = (y ∘ (z ∘ w)) ∘ (u ∘ x)
+equation 2030 := x = (y ∘ (z ∘ w)) ∘ (u ∘ y)
+equation 2031 := x = (y ∘ (z ∘ w)) ∘ (u ∘ z)
+equation 2032 := x = (y ∘ (z ∘ w)) ∘ (u ∘ w)
+equation 2033 := x = (y ∘ (z ∘ w)) ∘ (u ∘ u)
+equation 2034 := x = (y ∘ (z ∘ w)) ∘ (u ∘ v)
+equation 2035 := x = ((x ∘ x) ∘ x) ∘ (x ∘ x)
+equation 2036 := x = ((x ∘ x) ∘ x) ∘ (x ∘ y)
+equation 2037 := x = ((x ∘ x) ∘ x) ∘ (y ∘ x)
+equation 2038 := x = ((x ∘ x) ∘ x) ∘ (y ∘ y)
+equation 2039 := x = ((x ∘ x) ∘ x) ∘ (y ∘ z)
+equation 2040 := x = ((x ∘ x) ∘ y) ∘ (x ∘ x)
+equation 2041 := x = ((x ∘ x) ∘ y) ∘ (x ∘ y)
+equation 2042 := x = ((x ∘ x) ∘ y) ∘ (x ∘ z)
+equation 2043 := x = ((x ∘ x) ∘ y) ∘ (y ∘ x)
+equation 2044 := x = ((x ∘ x) ∘ y) ∘ (y ∘ y)
+equation 2045 := x = ((x ∘ x) ∘ y) ∘ (y ∘ z)
+equation 2046 := x = ((x ∘ x) ∘ y) ∘ (z ∘ x)
+equation 2047 := x = ((x ∘ x) ∘ y) ∘ (z ∘ y)
+equation 2048 := x = ((x ∘ x) ∘ y) ∘ (z ∘ z)
+equation 2049 := x = ((x ∘ x) ∘ y) ∘ (z ∘ w)
+equation 2050 := x = ((x ∘ y) ∘ x) ∘ (x ∘ x)
+equation 2051 := x = ((x ∘ y) ∘ x) ∘ (x ∘ y)
+equation 2052 := x = ((x ∘ y) ∘ x) ∘ (x ∘ z)
+equation 2053 := x = ((x ∘ y) ∘ x) ∘ (y ∘ x)
+equation 2054 := x = ((x ∘ y) ∘ x) ∘ (y ∘ y)
+equation 2055 := x = ((x ∘ y) ∘ x) ∘ (y ∘ z)
+equation 2056 := x = ((x ∘ y) ∘ x) ∘ (z ∘ x)
+equation 2057 := x = ((x ∘ y) ∘ x) ∘ (z ∘ y)
+equation 2058 := x = ((x ∘ y) ∘ x) ∘ (z ∘ z)
+equation 2059 := x = ((x ∘ y) ∘ x) ∘ (z ∘ w)
+equation 2060 := x = ((x ∘ y) ∘ y) ∘ (x ∘ x)
+equation 2061 := x = ((x ∘ y) ∘ y) ∘ (x ∘ y)
+equation 2062 := x = ((x ∘ y) ∘ y) ∘ (x ∘ z)
+equation 2063 := x = ((x ∘ y) ∘ y) ∘ (y ∘ x)
+equation 2064 := x = ((x ∘ y) ∘ y) ∘ (y ∘ y)
+equation 2065 := x = ((x ∘ y) ∘ y) ∘ (y ∘ z)
+equation 2066 := x = ((x ∘ y) ∘ y) ∘ (z ∘ x)
+equation 2067 := x = ((x ∘ y) ∘ y) ∘ (z ∘ y)
+equation 2068 := x = ((x ∘ y) ∘ y) ∘ (z ∘ z)
+equation 2069 := x = ((x ∘ y) ∘ y) ∘ (z ∘ w)
+equation 2070 := x = ((x ∘ y) ∘ z) ∘ (x ∘ x)
+equation 2071 := x = ((x ∘ y) ∘ z) ∘ (x ∘ y)
+equation 2072 := x = ((x ∘ y) ∘ z) ∘ (x ∘ z)
+equation 2073 := x = ((x ∘ y) ∘ z) ∘ (x ∘ w)
+equation 2074 := x = ((x ∘ y) ∘ z) ∘ (y ∘ x)
+equation 2075 := x = ((x ∘ y) ∘ z) ∘ (y ∘ y)
+equation 2076 := x = ((x ∘ y) ∘ z) ∘ (y ∘ z)
+equation 2077 := x = ((x ∘ y) ∘ z) ∘ (y ∘ w)
+equation 2078 := x = ((x ∘ y) ∘ z) ∘ (z ∘ x)
+equation 2079 := x = ((x ∘ y) ∘ z) ∘ (z ∘ y)
+equation 2080 := x = ((x ∘ y) ∘ z) ∘ (z ∘ z)
+equation 2081 := x = ((x ∘ y) ∘ z) ∘ (z ∘ w)
+equation 2082 := x = ((x ∘ y) ∘ z) ∘ (w ∘ x)
+equation 2083 := x = ((x ∘ y) ∘ z) ∘ (w ∘ y)
+equation 2084 := x = ((x ∘ y) ∘ z) ∘ (w ∘ z)
+equation 2085 := x = ((x ∘ y) ∘ z) ∘ (w ∘ w)
+equation 2086 := x = ((x ∘ y) ∘ z) ∘ (w ∘ u)
+equation 2087 := x = ((y ∘ x) ∘ x) ∘ (x ∘ x)
+equation 2088 := x = ((y ∘ x) ∘ x) ∘ (x ∘ y)
+equation 2089 := x = ((y ∘ x) ∘ x) ∘ (x ∘ z)
+equation 2090 := x = ((y ∘ x) ∘ x) ∘ (y ∘ x)
+equation 2091 := x = ((y ∘ x) ∘ x) ∘ (y ∘ y)
+equation 2092 := x = ((y ∘ x) ∘ x) ∘ (y ∘ z)
+equation 2093 := x = ((y ∘ x) ∘ x) ∘ (z ∘ x)
+equation 2094 := x = ((y ∘ x) ∘ x) ∘ (z ∘ y)
+equation 2095 := x = ((y ∘ x) ∘ x) ∘ (z ∘ z)
+equation 2096 := x = ((y ∘ x) ∘ x) ∘ (z ∘ w)
+equation 2097 := x = ((y ∘ x) ∘ y) ∘ (x ∘ x)
+equation 2098 := x = ((y ∘ x) ∘ y) ∘ (x ∘ y)
+equation 2099 := x = ((y ∘ x) ∘ y) ∘ (x ∘ z)
+equation 2100 := x = ((y ∘ x) ∘ y) ∘ (y ∘ x)
+equation 2101 := x = ((y ∘ x) ∘ y) ∘ (y ∘ y)
+equation 2102 := x = ((y ∘ x) ∘ y) ∘ (y ∘ z)
+equation 2103 := x = ((y ∘ x) ∘ y) ∘ (z ∘ x)
+equation 2104 := x = ((y ∘ x) ∘ y) ∘ (z ∘ y)
+equation 2105 := x = ((y ∘ x) ∘ y) ∘ (z ∘ z)
+equation 2106 := x = ((y ∘ x) ∘ y) ∘ (z ∘ w)
+equation 2107 := x = ((y ∘ x) ∘ z) ∘ (x ∘ x)
+equation 2108 := x = ((y ∘ x) ∘ z) ∘ (x ∘ y)
+equation 2109 := x = ((y ∘ x) ∘ z) ∘ (x ∘ z)
+equation 2110 := x = ((y ∘ x) ∘ z) ∘ (x ∘ w)
+equation 2111 := x = ((y ∘ x) ∘ z) ∘ (y ∘ x)
+equation 2112 := x = ((y ∘ x) ∘ z) ∘ (y ∘ y)
+equation 2113 := x = ((y ∘ x) ∘ z) ∘ (y ∘ z)
+equation 2114 := x = ((y ∘ x) ∘ z) ∘ (y ∘ w)
+equation 2115 := x = ((y ∘ x) ∘ z) ∘ (z ∘ x)
+equation 2116 := x = ((y ∘ x) ∘ z) ∘ (z ∘ y)
+equation 2117 := x = ((y ∘ x) ∘ z) ∘ (z ∘ z)
+equation 2118 := x = ((y ∘ x) ∘ z) ∘ (z ∘ w)
+equation 2119 := x = ((y ∘ x) ∘ z) ∘ (w ∘ x)
+equation 2120 := x = ((y ∘ x) ∘ z) ∘ (w ∘ y)
+equation 2121 := x = ((y ∘ x) ∘ z) ∘ (w ∘ z)
+equation 2122 := x = ((y ∘ x) ∘ z) ∘ (w ∘ w)
+equation 2123 := x = ((y ∘ x) ∘ z) ∘ (w ∘ u)
+equation 2124 := x = ((y ∘ y) ∘ x) ∘ (x ∘ x)
+equation 2125 := x = ((y ∘ y) ∘ x) ∘ (x ∘ y)
+equation 2126 := x = ((y ∘ y) ∘ x) ∘ (x ∘ z)
+equation 2127 := x = ((y ∘ y) ∘ x) ∘ (y ∘ x)
+equation 2128 := x = ((y ∘ y) ∘ x) ∘ (y ∘ y)
+equation 2129 := x = ((y ∘ y) ∘ x) ∘ (y ∘ z)
+equation 2130 := x = ((y ∘ y) ∘ x) ∘ (z ∘ x)
+equation 2131 := x = ((y ∘ y) ∘ x) ∘ (z ∘ y)
+equation 2132 := x = ((y ∘ y) ∘ x) ∘ (z ∘ z)
+equation 2133 := x = ((y ∘ y) ∘ x) ∘ (z ∘ w)
+equation 2134 := x = ((y ∘ y) ∘ y) ∘ (x ∘ x)
+equation 2135 := x = ((y ∘ y) ∘ y) ∘ (x ∘ y)
+equation 2136 := x = ((y ∘ y) ∘ y) ∘ (x ∘ z)
+equation 2137 := x = ((y ∘ y) ∘ y) ∘ (y ∘ x)
+equation 2138 := x = ((y ∘ y) ∘ y) ∘ (y ∘ y)
+equation 2139 := x = ((y ∘ y) ∘ y) ∘ (y ∘ z)
+equation 2140 := x = ((y ∘ y) ∘ y) ∘ (z ∘ x)
+equation 2141 := x = ((y ∘ y) ∘ y) ∘ (z ∘ y)
+equation 2142 := x = ((y ∘ y) ∘ y) ∘ (z ∘ z)
+equation 2143 := x = ((y ∘ y) ∘ y) ∘ (z ∘ w)
+equation 2144 := x = ((y ∘ y) ∘ z) ∘ (x ∘ x)
+equation 2145 := x = ((y ∘ y) ∘ z) ∘ (x ∘ y)
+equation 2146 := x = ((y ∘ y) ∘ z) ∘ (x ∘ z)
+equation 2147 := x = ((y ∘ y) ∘ z) ∘ (x ∘ w)
+equation 2148 := x = ((y ∘ y) ∘ z) ∘ (y ∘ x)
+equation 2149 := x = ((y ∘ y) ∘ z) ∘ (y ∘ y)
+equation 2150 := x = ((y ∘ y) ∘ z) ∘ (y ∘ z)
+equation 2151 := x = ((y ∘ y) ∘ z) ∘ (y ∘ w)
+equation 2152 := x = ((y ∘ y) ∘ z) ∘ (z ∘ x)
+equation 2153 := x = ((y ∘ y) ∘ z) ∘ (z ∘ y)
+equation 2154 := x = ((y ∘ y) ∘ z) ∘ (z ∘ z)
+equation 2155 := x = ((y ∘ y) ∘ z) ∘ (z ∘ w)
+equation 2156 := x = ((y ∘ y) ∘ z) ∘ (w ∘ x)
+equation 2157 := x = ((y ∘ y) ∘ z) ∘ (w ∘ y)
+equation 2158 := x = ((y ∘ y) ∘ z) ∘ (w ∘ z)
+equation 2159 := x = ((y ∘ y) ∘ z) ∘ (w ∘ w)
+equation 2160 := x = ((y ∘ y) ∘ z) ∘ (w ∘ u)
+equation 2161 := x = ((y ∘ z) ∘ x) ∘ (x ∘ x)
+equation 2162 := x = ((y ∘ z) ∘ x) ∘ (x ∘ y)
+equation 2163 := x = ((y ∘ z) ∘ x) ∘ (x ∘ z)
+equation 2164 := x = ((y ∘ z) ∘ x) ∘ (x ∘ w)
+equation 2165 := x = ((y ∘ z) ∘ x) ∘ (y ∘ x)
+equation 2166 := x = ((y ∘ z) ∘ x) ∘ (y ∘ y)
+equation 2167 := x = ((y ∘ z) ∘ x) ∘ (y ∘ z)
+equation 2168 := x = ((y ∘ z) ∘ x) ∘ (y ∘ w)
+equation 2169 := x = ((y ∘ z) ∘ x) ∘ (z ∘ x)
+equation 2170 := x = ((y ∘ z) ∘ x) ∘ (z ∘ y)
+equation 2171 := x = ((y ∘ z) ∘ x) ∘ (z ∘ z)
+equation 2172 := x = ((y ∘ z) ∘ x) ∘ (z ∘ w)
+equation 2173 := x = ((y ∘ z) ∘ x) ∘ (w ∘ x)
+equation 2174 := x = ((y ∘ z) ∘ x) ∘ (w ∘ y)
+equation 2175 := x = ((y ∘ z) ∘ x) ∘ (w ∘ z)
+equation 2176 := x = ((y ∘ z) ∘ x) ∘ (w ∘ w)
+equation 2177 := x = ((y ∘ z) ∘ x) ∘ (w ∘ u)
+equation 2178 := x = ((y ∘ z) ∘ y) ∘ (x ∘ x)
+equation 2179 := x = ((y ∘ z) ∘ y) ∘ (x ∘ y)
+equation 2180 := x = ((y ∘ z) ∘ y) ∘ (x ∘ z)
+equation 2181 := x = ((y ∘ z) ∘ y) ∘ (x ∘ w)
+equation 2182 := x = ((y ∘ z) ∘ y) ∘ (y ∘ x)
+equation 2183 := x = ((y ∘ z) ∘ y) ∘ (y ∘ y)
+equation 2184 := x = ((y ∘ z) ∘ y) ∘ (y ∘ z)
+equation 2185 := x = ((y ∘ z) ∘ y) ∘ (y ∘ w)
+equation 2186 := x = ((y ∘ z) ∘ y) ∘ (z ∘ x)
+equation 2187 := x = ((y ∘ z) ∘ y) ∘ (z ∘ y)
+equation 2188 := x = ((y ∘ z) ∘ y) ∘ (z ∘ z)
+equation 2189 := x = ((y ∘ z) ∘ y) ∘ (z ∘ w)
+equation 2190 := x = ((y ∘ z) ∘ y) ∘ (w ∘ x)
+equation 2191 := x = ((y ∘ z) ∘ y) ∘ (w ∘ y)
+equation 2192 := x = ((y ∘ z) ∘ y) ∘ (w ∘ z)
+equation 2193 := x = ((y ∘ z) ∘ y) ∘ (w ∘ w)
+equation 2194 := x = ((y ∘ z) ∘ y) ∘ (w ∘ u)
+equation 2195 := x = ((y ∘ z) ∘ z) ∘ (x ∘ x)
+equation 2196 := x = ((y ∘ z) ∘ z) ∘ (x ∘ y)
+equation 2197 := x = ((y ∘ z) ∘ z) ∘ (x ∘ z)
+equation 2198 := x = ((y ∘ z) ∘ z) ∘ (x ∘ w)
+equation 2199 := x = ((y ∘ z) ∘ z) ∘ (y ∘ x)
+equation 2200 := x = ((y ∘ z) ∘ z) ∘ (y ∘ y)
+equation 2201 := x = ((y ∘ z) ∘ z) ∘ (y ∘ z)
+equation 2202 := x = ((y ∘ z) ∘ z) ∘ (y ∘ w)
+equation 2203 := x = ((y ∘ z) ∘ z) ∘ (z ∘ x)
+equation 2204 := x = ((y ∘ z) ∘ z) ∘ (z ∘ y)
+equation 2205 := x = ((y ∘ z) ∘ z) ∘ (z ∘ z)
+equation 2206 := x = ((y ∘ z) ∘ z) ∘ (z ∘ w)
+equation 2207 := x = ((y ∘ z) ∘ z) ∘ (w ∘ x)
+equation 2208 := x = ((y ∘ z) ∘ z) ∘ (w ∘ y)
+equation 2209 := x = ((y ∘ z) ∘ z) ∘ (w ∘ z)
+equation 2210 := x = ((y ∘ z) ∘ z) ∘ (w ∘ w)
+equation 2211 := x = ((y ∘ z) ∘ z) ∘ (w ∘ u)
+equation 2212 := x = ((y ∘ z) ∘ w) ∘ (x ∘ x)
+equation 2213 := x = ((y ∘ z) ∘ w) ∘ (x ∘ y)
+equation 2214 := x = ((y ∘ z) ∘ w) ∘ (x ∘ z)
+equation 2215 := x = ((y ∘ z) ∘ w) ∘ (x ∘ w)
+equation 2216 := x = ((y ∘ z) ∘ w) ∘ (x ∘ u)
+equation 2217 := x = ((y ∘ z) ∘ w) ∘ (y ∘ x)
+equation 2218 := x = ((y ∘ z) ∘ w) ∘ (y ∘ y)
+equation 2219 := x = ((y ∘ z) ∘ w) ∘ (y ∘ z)
+equation 2220 := x = ((y ∘ z) ∘ w) ∘ (y ∘ w)
+equation 2221 := x = ((y ∘ z) ∘ w) ∘ (y ∘ u)
+equation 2222 := x = ((y ∘ z) ∘ w) ∘ (z ∘ x)
+equation 2223 := x = ((y ∘ z) ∘ w) ∘ (z ∘ y)
+equation 2224 := x = ((y ∘ z) ∘ w) ∘ (z ∘ z)
+equation 2225 := x = ((y ∘ z) ∘ w) ∘ (z ∘ w)
+equation 2226 := x = ((y ∘ z) ∘ w) ∘ (z ∘ u)
+equation 2227 := x = ((y ∘ z) ∘ w) ∘ (w ∘ x)
+equation 2228 := x = ((y ∘ z) ∘ w) ∘ (w ∘ y)
+equation 2229 := x = ((y ∘ z) ∘ w) ∘ (w ∘ z)
+equation 2230 := x = ((y ∘ z) ∘ w) ∘ (w ∘ w)
+equation 2231 := x = ((y ∘ z) ∘ w) ∘ (w ∘ u)
+equation 2232 := x = ((y ∘ z) ∘ w) ∘ (u ∘ x)
+equation 2233 := x = ((y ∘ z) ∘ w) ∘ (u ∘ y)
+equation 2234 := x = ((y ∘ z) ∘ w) ∘ (u ∘ z)
+equation 2235 := x = ((y ∘ z) ∘ w) ∘ (u ∘ w)
+equation 2236 := x = ((y ∘ z) ∘ w) ∘ (u ∘ u)
+equation 2237 := x = ((y ∘ z) ∘ w) ∘ (u ∘ v)
+equation 2238 := x = (x ∘ (x ∘ (x ∘ x))) ∘ x
+equation 2239 := x = (x ∘ (x ∘ (x ∘ x))) ∘ y
+equation 2240 := x = (x ∘ (x ∘ (x ∘ y))) ∘ x
+equation 2241 := x = (x ∘ (x ∘ (x ∘ y))) ∘ y
+equation 2242 := x = (x ∘ (x ∘ (x ∘ y))) ∘ z
+equation 2243 := x = (x ∘ (x ∘ (y ∘ x))) ∘ x
+equation 2244 := x = (x ∘ (x ∘ (y ∘ x))) ∘ y
+equation 2245 := x = (x ∘ (x ∘ (y ∘ x))) ∘ z
+equation 2246 := x = (x ∘ (x ∘ (y ∘ y))) ∘ x
+equation 2247 := x = (x ∘ (x ∘ (y ∘ y))) ∘ y
+equation 2248 := x = (x ∘ (x ∘ (y ∘ y))) ∘ z
+equation 2249 := x = (x ∘ (x ∘ (y ∘ z))) ∘ x
+equation 2250 := x = (x ∘ (x ∘ (y ∘ z))) ∘ y
+equation 2251 := x = (x ∘ (x ∘ (y ∘ z))) ∘ z
+equation 2252 := x = (x ∘ (x ∘ (y ∘ z))) ∘ w
+equation 2253 := x = (x ∘ (y ∘ (x ∘ x))) ∘ x
+equation 2254 := x = (x ∘ (y ∘ (x ∘ x))) ∘ y
+equation 2255 := x = (x ∘ (y ∘ (x ∘ x))) ∘ z
+equation 2256 := x = (x ∘ (y ∘ (x ∘ y))) ∘ x
+equation 2257 := x = (x ∘ (y ∘ (x ∘ y))) ∘ y
+equation 2258 := x = (x ∘ (y ∘ (x ∘ y))) ∘ z
+equation 2259 := x = (x ∘ (y ∘ (x ∘ z))) ∘ x
+equation 2260 := x = (x ∘ (y ∘ (x ∘ z))) ∘ y
+equation 2261 := x = (x ∘ (y ∘ (x ∘ z))) ∘ z
+equation 2262 := x = (x ∘ (y ∘ (x ∘ z))) ∘ w
+equation 2263 := x = (x ∘ (y ∘ (y ∘ x))) ∘ x
+equation 2264 := x = (x ∘ (y ∘ (y ∘ x))) ∘ y
+equation 2265 := x = (x ∘ (y ∘ (y ∘ x))) ∘ z
+equation 2266 := x = (x ∘ (y ∘ (y ∘ y))) ∘ x
+equation 2267 := x = (x ∘ (y ∘ (y ∘ y))) ∘ y
+equation 2268 := x = (x ∘ (y ∘ (y ∘ y))) ∘ z
+equation 2269 := x = (x ∘ (y ∘ (y ∘ z))) ∘ x
+equation 2270 := x = (x ∘ (y ∘ (y ∘ z))) ∘ y
+equation 2271 := x = (x ∘ (y ∘ (y ∘ z))) ∘ z
+equation 2272 := x = (x ∘ (y ∘ (y ∘ z))) ∘ w
+equation 2273 := x = (x ∘ (y ∘ (z ∘ x))) ∘ x
+equation 2274 := x = (x ∘ (y ∘ (z ∘ x))) ∘ y
+equation 2275 := x = (x ∘ (y ∘ (z ∘ x))) ∘ z
+equation 2276 := x = (x ∘ (y ∘ (z ∘ x))) ∘ w
+equation 2277 := x = (x ∘ (y ∘ (z ∘ y))) ∘ x
+equation 2278 := x = (x ∘ (y ∘ (z ∘ y))) ∘ y
+equation 2279 := x = (x ∘ (y ∘ (z ∘ y))) ∘ z
+equation 2280 := x = (x ∘ (y ∘ (z ∘ y))) ∘ w
+equation 2281 := x = (x ∘ (y ∘ (z ∘ z))) ∘ x
+equation 2282 := x = (x ∘ (y ∘ (z ∘ z))) ∘ y
+equation 2283 := x = (x ∘ (y ∘ (z ∘ z))) ∘ z
+equation 2284 := x = (x ∘ (y ∘ (z ∘ z))) ∘ w
+equation 2285 := x = (x ∘ (y ∘ (z ∘ w))) ∘ x
+equation 2286 := x = (x ∘ (y ∘ (z ∘ w))) ∘ y
+equation 2287 := x = (x ∘ (y ∘ (z ∘ w))) ∘ z
+equation 2288 := x = (x ∘ (y ∘ (z ∘ w))) ∘ w
+equation 2289 := x = (x ∘ (y ∘ (z ∘ w))) ∘ u
+equation 2290 := x = (y ∘ (x ∘ (x ∘ x))) ∘ x
+equation 2291 := x = (y ∘ (x ∘ (x ∘ x))) ∘ y
+equation 2292 := x = (y ∘ (x ∘ (x ∘ x))) ∘ z
+equation 2293 := x = (y ∘ (x ∘ (x ∘ y))) ∘ x
+equation 2294 := x = (y ∘ (x ∘ (x ∘ y))) ∘ y
+equation 2295 := x = (y ∘ (x ∘ (x ∘ y))) ∘ z
+equation 2296 := x = (y ∘ (x ∘ (x ∘ z))) ∘ x
+equation 2297 := x = (y ∘ (x ∘ (x ∘ z))) ∘ y
+equation 2298 := x = (y ∘ (x ∘ (x ∘ z))) ∘ z
+equation 2299 := x = (y ∘ (x ∘ (x ∘ z))) ∘ w
+equation 2300 := x = (y ∘ (x ∘ (y ∘ x))) ∘ x
+equation 2301 := x = (y ∘ (x ∘ (y ∘ x))) ∘ y
+equation 2302 := x = (y ∘ (x ∘ (y ∘ x))) ∘ z
+equation 2303 := x = (y ∘ (x ∘ (y ∘ y))) ∘ x
+equation 2304 := x = (y ∘ (x ∘ (y ∘ y))) ∘ y
+equation 2305 := x = (y ∘ (x ∘ (y ∘ y))) ∘ z
+equation 2306 := x = (y ∘ (x ∘ (y ∘ z))) ∘ x
+equation 2307 := x = (y ∘ (x ∘ (y ∘ z))) ∘ y
+equation 2308 := x = (y ∘ (x ∘ (y ∘ z))) ∘ z
+equation 2309 := x = (y ∘ (x ∘ (y ∘ z))) ∘ w
+equation 2310 := x = (y ∘ (x ∘ (z ∘ x))) ∘ x
+equation 2311 := x = (y ∘ (x ∘ (z ∘ x))) ∘ y
+equation 2312 := x = (y ∘ (x ∘ (z ∘ x))) ∘ z
+equation 2313 := x = (y ∘ (x ∘ (z ∘ x))) ∘ w
+equation 2314 := x = (y ∘ (x ∘ (z ∘ y))) ∘ x
+equation 2315 := x = (y ∘ (x ∘ (z ∘ y))) ∘ y
+equation 2316 := x = (y ∘ (x ∘ (z ∘ y))) ∘ z
+equation 2317 := x = (y ∘ (x ∘ (z ∘ y))) ∘ w
+equation 2318 := x = (y ∘ (x ∘ (z ∘ z))) ∘ x
+equation 2319 := x = (y ∘ (x ∘ (z ∘ z))) ∘ y
+equation 2320 := x = (y ∘ (x ∘ (z ∘ z))) ∘ z
+equation 2321 := x = (y ∘ (x ∘ (z ∘ z))) ∘ w
+equation 2322 := x = (y ∘ (x ∘ (z ∘ w))) ∘ x
+equation 2323 := x = (y ∘ (x ∘ (z ∘ w))) ∘ y
+equation 2324 := x = (y ∘ (x ∘ (z ∘ w))) ∘ z
+equation 2325 := x = (y ∘ (x ∘ (z ∘ w))) ∘ w
+equation 2326 := x = (y ∘ (x ∘ (z ∘ w))) ∘ u
+equation 2327 := x = (y ∘ (y ∘ (x ∘ x))) ∘ x
+equation 2328 := x = (y ∘ (y ∘ (x ∘ x))) ∘ y
+equation 2329 := x = (y ∘ (y ∘ (x ∘ x))) ∘ z
+equation 2330 := x = (y ∘ (y ∘ (x ∘ y))) ∘ x
+equation 2331 := x = (y ∘ (y ∘ (x ∘ y))) ∘ y
+equation 2332 := x = (y ∘ (y ∘ (x ∘ y))) ∘ z
+equation 2333 := x = (y ∘ (y ∘ (x ∘ z))) ∘ x
+equation 2334 := x = (y ∘ (y ∘ (x ∘ z))) ∘ y
+equation 2335 := x = (y ∘ (y ∘ (x ∘ z))) ∘ z
+equation 2336 := x = (y ∘ (y ∘ (x ∘ z))) ∘ w
+equation 2337 := x = (y ∘ (y ∘ (y ∘ x))) ∘ x
+equation 2338 := x = (y ∘ (y ∘ (y ∘ x))) ∘ y
+equation 2339 := x = (y ∘ (y ∘ (y ∘ x))) ∘ z
+equation 2340 := x = (y ∘ (y ∘ (y ∘ y))) ∘ x
+equation 2341 := x = (y ∘ (y ∘ (y ∘ y))) ∘ y
+equation 2342 := x = (y ∘ (y ∘ (y ∘ y))) ∘ z
+equation 2343 := x = (y ∘ (y ∘ (y ∘ z))) ∘ x
+equation 2344 := x = (y ∘ (y ∘ (y ∘ z))) ∘ y
+equation 2345 := x = (y ∘ (y ∘ (y ∘ z))) ∘ z
+equation 2346 := x = (y ∘ (y ∘ (y ∘ z))) ∘ w
+equation 2347 := x = (y ∘ (y ∘ (z ∘ x))) ∘ x
+equation 2348 := x = (y ∘ (y ∘ (z ∘ x))) ∘ y
+equation 2349 := x = (y ∘ (y ∘ (z ∘ x))) ∘ z
+equation 2350 := x = (y ∘ (y ∘ (z ∘ x))) ∘ w
+equation 2351 := x = (y ∘ (y ∘ (z ∘ y))) ∘ x
+equation 2352 := x = (y ∘ (y ∘ (z ∘ y))) ∘ y
+equation 2353 := x = (y ∘ (y ∘ (z ∘ y))) ∘ z
+equation 2354 := x = (y ∘ (y ∘ (z ∘ y))) ∘ w
+equation 2355 := x = (y ∘ (y ∘ (z ∘ z))) ∘ x
+equation 2356 := x = (y ∘ (y ∘ (z ∘ z))) ∘ y
+equation 2357 := x = (y ∘ (y ∘ (z ∘ z))) ∘ z
+equation 2358 := x = (y ∘ (y ∘ (z ∘ z))) ∘ w
+equation 2359 := x = (y ∘ (y ∘ (z ∘ w))) ∘ x
+equation 2360 := x = (y ∘ (y ∘ (z ∘ w))) ∘ y
+equation 2361 := x = (y ∘ (y ∘ (z ∘ w))) ∘ z
+equation 2362 := x = (y ∘ (y ∘ (z ∘ w))) ∘ w
+equation 2363 := x = (y ∘ (y ∘ (z ∘ w))) ∘ u
+equation 2364 := x = (y ∘ (z ∘ (x ∘ x))) ∘ x
+equation 2365 := x = (y ∘ (z ∘ (x ∘ x))) ∘ y
+equation 2366 := x = (y ∘ (z ∘ (x ∘ x))) ∘ z
+equation 2367 := x = (y ∘ (z ∘ (x ∘ x))) ∘ w
+equation 2368 := x = (y ∘ (z ∘ (x ∘ y))) ∘ x
+equation 2369 := x = (y ∘ (z ∘ (x ∘ y))) ∘ y
+equation 2370 := x = (y ∘ (z ∘ (x ∘ y))) ∘ z
+equation 2371 := x = (y ∘ (z ∘ (x ∘ y))) ∘ w
+equation 2372 := x = (y ∘ (z ∘ (x ∘ z))) ∘ x
+equation 2373 := x = (y ∘ (z ∘ (x ∘ z))) ∘ y
+equation 2374 := x = (y ∘ (z ∘ (x ∘ z))) ∘ z
+equation 2375 := x = (y ∘ (z ∘ (x ∘ z))) ∘ w
+equation 2376 := x = (y ∘ (z ∘ (x ∘ w))) ∘ x
+equation 2377 := x = (y ∘ (z ∘ (x ∘ w))) ∘ y
+equation 2378 := x = (y ∘ (z ∘ (x ∘ w))) ∘ z
+equation 2379 := x = (y ∘ (z ∘ (x ∘ w))) ∘ w
+equation 2380 := x = (y ∘ (z ∘ (x ∘ w))) ∘ u
+equation 2381 := x = (y ∘ (z ∘ (y ∘ x))) ∘ x
+equation 2382 := x = (y ∘ (z ∘ (y ∘ x))) ∘ y
+equation 2383 := x = (y ∘ (z ∘ (y ∘ x))) ∘ z
+equation 2384 := x = (y ∘ (z ∘ (y ∘ x))) ∘ w
+equation 2385 := x = (y ∘ (z ∘ (y ∘ y))) ∘ x
+equation 2386 := x = (y ∘ (z ∘ (y ∘ y))) ∘ y
+equation 2387 := x = (y ∘ (z ∘ (y ∘ y))) ∘ z
+equation 2388 := x = (y ∘ (z ∘ (y ∘ y))) ∘ w
+equation 2389 := x = (y ∘ (z ∘ (y ∘ z))) ∘ x
+equation 2390 := x = (y ∘ (z ∘ (y ∘ z))) ∘ y
+equation 2391 := x = (y ∘ (z ∘ (y ∘ z))) ∘ z
+equation 2392 := x = (y ∘ (z ∘ (y ∘ z))) ∘ w
+equation 2393 := x = (y ∘ (z ∘ (y ∘ w))) ∘ x
+equation 2394 := x = (y ∘ (z ∘ (y ∘ w))) ∘ y
+equation 2395 := x = (y ∘ (z ∘ (y ∘ w))) ∘ z
+equation 2396 := x = (y ∘ (z ∘ (y ∘ w))) ∘ w
+equation 2397 := x = (y ∘ (z ∘ (y ∘ w))) ∘ u
+equation 2398 := x = (y ∘ (z ∘ (z ∘ x))) ∘ x
+equation 2399 := x = (y ∘ (z ∘ (z ∘ x))) ∘ y
+equation 2400 := x = (y ∘ (z ∘ (z ∘ x))) ∘ z
+equation 2401 := x = (y ∘ (z ∘ (z ∘ x))) ∘ w
+equation 2402 := x = (y ∘ (z ∘ (z ∘ y))) ∘ x
+equation 2403 := x = (y ∘ (z ∘ (z ∘ y))) ∘ y
+equation 2404 := x = (y ∘ (z ∘ (z ∘ y))) ∘ z
+equation 2405 := x = (y ∘ (z ∘ (z ∘ y))) ∘ w
+equation 2406 := x = (y ∘ (z ∘ (z ∘ z))) ∘ x
+equation 2407 := x = (y ∘ (z ∘ (z ∘ z))) ∘ y
+equation 2408 := x = (y ∘ (z ∘ (z ∘ z))) ∘ z
+equation 2409 := x = (y ∘ (z ∘ (z ∘ z))) ∘ w
+equation 2410 := x = (y ∘ (z ∘ (z ∘ w))) ∘ x
+equation 2411 := x = (y ∘ (z ∘ (z ∘ w))) ∘ y
+equation 2412 := x = (y ∘ (z ∘ (z ∘ w))) ∘ z
+equation 2413 := x = (y ∘ (z ∘ (z ∘ w))) ∘ w
+equation 2414 := x = (y ∘ (z ∘ (z ∘ w))) ∘ u
+equation 2415 := x = (y ∘ (z ∘ (w ∘ x))) ∘ x
+equation 2416 := x = (y ∘ (z ∘ (w ∘ x))) ∘ y
+equation 2417 := x = (y ∘ (z ∘ (w ∘ x))) ∘ z
+equation 2418 := x = (y ∘ (z ∘ (w ∘ x))) ∘ w
+equation 2419 := x = (y ∘ (z ∘ (w ∘ x))) ∘ u
+equation 2420 := x = (y ∘ (z ∘ (w ∘ y))) ∘ x
+equation 2421 := x = (y ∘ (z ∘ (w ∘ y))) ∘ y
+equation 2422 := x = (y ∘ (z ∘ (w ∘ y))) ∘ z
+equation 2423 := x = (y ∘ (z ∘ (w ∘ y))) ∘ w
+equation 2424 := x = (y ∘ (z ∘ (w ∘ y))) ∘ u
+equation 2425 := x = (y ∘ (z ∘ (w ∘ z))) ∘ x
+equation 2426 := x = (y ∘ (z ∘ (w ∘ z))) ∘ y
+equation 2427 := x = (y ∘ (z ∘ (w ∘ z))) ∘ z
+equation 2428 := x = (y ∘ (z ∘ (w ∘ z))) ∘ w
+equation 2429 := x = (y ∘ (z ∘ (w ∘ z))) ∘ u
+equation 2430 := x = (y ∘ (z ∘ (w ∘ w))) ∘ x
+equation 2431 := x = (y ∘ (z ∘ (w ∘ w))) ∘ y
+equation 2432 := x = (y ∘ (z ∘ (w ∘ w))) ∘ z
+equation 2433 := x = (y ∘ (z ∘ (w ∘ w))) ∘ w
+equation 2434 := x = (y ∘ (z ∘ (w ∘ w))) ∘ u
+equation 2435 := x = (y ∘ (z ∘ (w ∘ u))) ∘ x
+equation 2436 := x = (y ∘ (z ∘ (w ∘ u))) ∘ y
+equation 2437 := x = (y ∘ (z ∘ (w ∘ u))) ∘ z
+equation 2438 := x = (y ∘ (z ∘ (w ∘ u))) ∘ w
+equation 2439 := x = (y ∘ (z ∘ (w ∘ u))) ∘ u
+equation 2440 := x = (y ∘ (z ∘ (w ∘ u))) ∘ v
+equation 2441 := x = (x ∘ ((x ∘ x) ∘ x)) ∘ x
+equation 2442 := x = (x ∘ ((x ∘ x) ∘ x)) ∘ y
+equation 2443 := x = (x ∘ ((x ∘ x) ∘ y)) ∘ x
+equation 2444 := x = (x ∘ ((x ∘ x) ∘ y)) ∘ y
+equation 2445 := x = (x ∘ ((x ∘ x) ∘ y)) ∘ z
+equation 2446 := x = (x ∘ ((x ∘ y) ∘ x)) ∘ x
+equation 2447 := x = (x ∘ ((x ∘ y) ∘ x)) ∘ y
+equation 2448 := x = (x ∘ ((x ∘ y) ∘ x)) ∘ z
+equation 2449 := x = (x ∘ ((x ∘ y) ∘ y)) ∘ x
+equation 2450 := x = (x ∘ ((x ∘ y) ∘ y)) ∘ y
+equation 2451 := x = (x ∘ ((x ∘ y) ∘ y)) ∘ z
+equation 2452 := x = (x ∘ ((x ∘ y) ∘ z)) ∘ x
+equation 2453 := x = (x ∘ ((x ∘ y) ∘ z)) ∘ y
+equation 2454 := x = (x ∘ ((x ∘ y) ∘ z)) ∘ z
+equation 2455 := x = (x ∘ ((x ∘ y) ∘ z)) ∘ w
+equation 2456 := x = (x ∘ ((y ∘ x) ∘ x)) ∘ x
+equation 2457 := x = (x ∘ ((y ∘ x) ∘ x)) ∘ y
+equation 2458 := x = (x ∘ ((y ∘ x) ∘ x)) ∘ z
+equation 2459 := x = (x ∘ ((y ∘ x) ∘ y)) ∘ x
+equation 2460 := x = (x ∘ ((y ∘ x) ∘ y)) ∘ y
+equation 2461 := x = (x ∘ ((y ∘ x) ∘ y)) ∘ z
+equation 2462 := x = (x ∘ ((y ∘ x) ∘ z)) ∘ x
+equation 2463 := x = (x ∘ ((y ∘ x) ∘ z)) ∘ y
+equation 2464 := x = (x ∘ ((y ∘ x) ∘ z)) ∘ z
+equation 2465 := x = (x ∘ ((y ∘ x) ∘ z)) ∘ w
+equation 2466 := x = (x ∘ ((y ∘ y) ∘ x)) ∘ x
+equation 2467 := x = (x ∘ ((y ∘ y) ∘ x)) ∘ y
+equation 2468 := x = (x ∘ ((y ∘ y) ∘ x)) ∘ z
+equation 2469 := x = (x ∘ ((y ∘ y) ∘ y)) ∘ x
+equation 2470 := x = (x ∘ ((y ∘ y) ∘ y)) ∘ y
+equation 2471 := x = (x ∘ ((y ∘ y) ∘ y)) ∘ z
+equation 2472 := x = (x ∘ ((y ∘ y) ∘ z)) ∘ x
+equation 2473 := x = (x ∘ ((y ∘ y) ∘ z)) ∘ y
+equation 2474 := x = (x ∘ ((y ∘ y) ∘ z)) ∘ z
+equation 2475 := x = (x ∘ ((y ∘ y) ∘ z)) ∘ w
+equation 2476 := x = (x ∘ ((y ∘ z) ∘ x)) ∘ x
+equation 2477 := x = (x ∘ ((y ∘ z) ∘ x)) ∘ y
+equation 2478 := x = (x ∘ ((y ∘ z) ∘ x)) ∘ z
+equation 2479 := x = (x ∘ ((y ∘ z) ∘ x)) ∘ w
+equation 2480 := x = (x ∘ ((y ∘ z) ∘ y)) ∘ x
+equation 2481 := x = (x ∘ ((y ∘ z) ∘ y)) ∘ y
+equation 2482 := x = (x ∘ ((y ∘ z) ∘ y)) ∘ z
+equation 2483 := x = (x ∘ ((y ∘ z) ∘ y)) ∘ w
+equation 2484 := x = (x ∘ ((y ∘ z) ∘ z)) ∘ x
+equation 2485 := x = (x ∘ ((y ∘ z) ∘ z)) ∘ y
+equation 2486 := x = (x ∘ ((y ∘ z) ∘ z)) ∘ z
+equation 2487 := x = (x ∘ ((y ∘ z) ∘ z)) ∘ w
+equation 2488 := x = (x ∘ ((y ∘ z) ∘ w)) ∘ x
+equation 2489 := x = (x ∘ ((y ∘ z) ∘ w)) ∘ y
+equation 2490 := x = (x ∘ ((y ∘ z) ∘ w)) ∘ z
+equation 2491 := x = (x ∘ ((y ∘ z) ∘ w)) ∘ w
+equation 2492 := x = (x ∘ ((y ∘ z) ∘ w)) ∘ u
+equation 2493 := x = (y ∘ ((x ∘ x) ∘ x)) ∘ x
+equation 2494 := x = (y ∘ ((x ∘ x) ∘ x)) ∘ y
+equation 2495 := x = (y ∘ ((x ∘ x) ∘ x)) ∘ z
+equation 2496 := x = (y ∘ ((x ∘ x) ∘ y)) ∘ x
+equation 2497 := x = (y ∘ ((x ∘ x) ∘ y)) ∘ y
+equation 2498 := x = (y ∘ ((x ∘ x) ∘ y)) ∘ z
+equation 2499 := x = (y ∘ ((x ∘ x) ∘ z)) ∘ x
+equation 2500 := x = (y ∘ ((x ∘ x) ∘ z)) ∘ y
+equation 2501 := x = (y ∘ ((x ∘ x) ∘ z)) ∘ z
+equation 2502 := x = (y ∘ ((x ∘ x) ∘ z)) ∘ w
+equation 2503 := x = (y ∘ ((x ∘ y) ∘ x)) ∘ x
+equation 2504 := x = (y ∘ ((x ∘ y) ∘ x)) ∘ y
+equation 2505 := x = (y ∘ ((x ∘ y) ∘ x)) ∘ z
+equation 2506 := x = (y ∘ ((x ∘ y) ∘ y)) ∘ x
+equation 2507 := x = (y ∘ ((x ∘ y) ∘ y)) ∘ y
+equation 2508 := x = (y ∘ ((x ∘ y) ∘ y)) ∘ z
+equation 2509 := x = (y ∘ ((x ∘ y) ∘ z)) ∘ x
+equation 2510 := x = (y ∘ ((x ∘ y) ∘ z)) ∘ y
+equation 2511 := x = (y ∘ ((x ∘ y) ∘ z)) ∘ z
+equation 2512 := x = (y ∘ ((x ∘ y) ∘ z)) ∘ w
+equation 2513 := x = (y ∘ ((x ∘ z) ∘ x)) ∘ x
+equation 2514 := x = (y ∘ ((x ∘ z) ∘ x)) ∘ y
+equation 2515 := x = (y ∘ ((x ∘ z) ∘ x)) ∘ z
+equation 2516 := x = (y ∘ ((x ∘ z) ∘ x)) ∘ w
+equation 2517 := x = (y ∘ ((x ∘ z) ∘ y)) ∘ x
+equation 2518 := x = (y ∘ ((x ∘ z) ∘ y)) ∘ y
+equation 2519 := x = (y ∘ ((x ∘ z) ∘ y)) ∘ z
+equation 2520 := x = (y ∘ ((x ∘ z) ∘ y)) ∘ w
+equation 2521 := x = (y ∘ ((x ∘ z) ∘ z)) ∘ x
+equation 2522 := x = (y ∘ ((x ∘ z) ∘ z)) ∘ y
+equation 2523 := x = (y ∘ ((x ∘ z) ∘ z)) ∘ z
+equation 2524 := x = (y ∘ ((x ∘ z) ∘ z)) ∘ w
+equation 2525 := x = (y ∘ ((x ∘ z) ∘ w)) ∘ x
+equation 2526 := x = (y ∘ ((x ∘ z) ∘ w)) ∘ y
+equation 2527 := x = (y ∘ ((x ∘ z) ∘ w)) ∘ z
+equation 2528 := x = (y ∘ ((x ∘ z) ∘ w)) ∘ w
+equation 2529 := x = (y ∘ ((x ∘ z) ∘ w)) ∘ u
+equation 2530 := x = (y ∘ ((y ∘ x) ∘ x)) ∘ x
+equation 2531 := x = (y ∘ ((y ∘ x) ∘ x)) ∘ y
+equation 2532 := x = (y ∘ ((y ∘ x) ∘ x)) ∘ z
+equation 2533 := x = (y ∘ ((y ∘ x) ∘ y)) ∘ x
+equation 2534 := x = (y ∘ ((y ∘ x) ∘ y)) ∘ y
+equation 2535 := x = (y ∘ ((y ∘ x) ∘ y)) ∘ z
+equation 2536 := x = (y ∘ ((y ∘ x) ∘ z)) ∘ x
+equation 2537 := x = (y ∘ ((y ∘ x) ∘ z)) ∘ y
+equation 2538 := x = (y ∘ ((y ∘ x) ∘ z)) ∘ z
+equation 2539 := x = (y ∘ ((y ∘ x) ∘ z)) ∘ w
+equation 2540 := x = (y ∘ ((y ∘ y) ∘ x)) ∘ x
+equation 2541 := x = (y ∘ ((y ∘ y) ∘ x)) ∘ y
+equation 2542 := x = (y ∘ ((y ∘ y) ∘ x)) ∘ z
+equation 2543 := x = (y ∘ ((y ∘ y) ∘ y)) ∘ x
+equation 2544 := x = (y ∘ ((y ∘ y) ∘ y)) ∘ y
+equation 2545 := x = (y ∘ ((y ∘ y) ∘ y)) ∘ z
+equation 2546 := x = (y ∘ ((y ∘ y) ∘ z)) ∘ x
+equation 2547 := x = (y ∘ ((y ∘ y) ∘ z)) ∘ y
+equation 2548 := x = (y ∘ ((y ∘ y) ∘ z)) ∘ z
+equation 2549 := x = (y ∘ ((y ∘ y) ∘ z)) ∘ w
+equation 2550 := x = (y ∘ ((y ∘ z) ∘ x)) ∘ x
+equation 2551 := x = (y ∘ ((y ∘ z) ∘ x)) ∘ y
+equation 2552 := x = (y ∘ ((y ∘ z) ∘ x)) ∘ z
+equation 2553 := x = (y ∘ ((y ∘ z) ∘ x)) ∘ w
+equation 2554 := x = (y ∘ ((y ∘ z) ∘ y)) ∘ x
+equation 2555 := x = (y ∘ ((y ∘ z) ∘ y)) ∘ y
+equation 2556 := x = (y ∘ ((y ∘ z) ∘ y)) ∘ z
+equation 2557 := x = (y ∘ ((y ∘ z) ∘ y)) ∘ w
+equation 2558 := x = (y ∘ ((y ∘ z) ∘ z)) ∘ x
+equation 2559 := x = (y ∘ ((y ∘ z) ∘ z)) ∘ y
+equation 2560 := x = (y ∘ ((y ∘ z) ∘ z)) ∘ z
+equation 2561 := x = (y ∘ ((y ∘ z) ∘ z)) ∘ w
+equation 2562 := x = (y ∘ ((y ∘ z) ∘ w)) ∘ x
+equation 2563 := x = (y ∘ ((y ∘ z) ∘ w)) ∘ y
+equation 2564 := x = (y ∘ ((y ∘ z) ∘ w)) ∘ z
+equation 2565 := x = (y ∘ ((y ∘ z) ∘ w)) ∘ w
+equation 2566 := x = (y ∘ ((y ∘ z) ∘ w)) ∘ u
+equation 2567 := x = (y ∘ ((z ∘ x) ∘ x)) ∘ x
+equation 2568 := x = (y ∘ ((z ∘ x) ∘ x)) ∘ y
+equation 2569 := x = (y ∘ ((z ∘ x) ∘ x)) ∘ z
+equation 2570 := x = (y ∘ ((z ∘ x) ∘ x)) ∘ w
+equation 2571 := x = (y ∘ ((z ∘ x) ∘ y)) ∘ x
+equation 2572 := x = (y ∘ ((z ∘ x) ∘ y)) ∘ y
+equation 2573 := x = (y ∘ ((z ∘ x) ∘ y)) ∘ z
+equation 2574 := x = (y ∘ ((z ∘ x) ∘ y)) ∘ w
+equation 2575 := x = (y ∘ ((z ∘ x) ∘ z)) ∘ x
+equation 2576 := x = (y ∘ ((z ∘ x) ∘ z)) ∘ y
+equation 2577 := x = (y ∘ ((z ∘ x) ∘ z)) ∘ z
+equation 2578 := x = (y ∘ ((z ∘ x) ∘ z)) ∘ w
+equation 2579 := x = (y ∘ ((z ∘ x) ∘ w)) ∘ x
+equation 2580 := x = (y ∘ ((z ∘ x) ∘ w)) ∘ y
+equation 2581 := x = (y ∘ ((z ∘ x) ∘ w)) ∘ z
+equation 2582 := x = (y ∘ ((z ∘ x) ∘ w)) ∘ w
+equation 2583 := x = (y ∘ ((z ∘ x) ∘ w)) ∘ u
+equation 2584 := x = (y ∘ ((z ∘ y) ∘ x)) ∘ x
+equation 2585 := x = (y ∘ ((z ∘ y) ∘ x)) ∘ y
+equation 2586 := x = (y ∘ ((z ∘ y) ∘ x)) ∘ z
+equation 2587 := x = (y ∘ ((z ∘ y) ∘ x)) ∘ w
+equation 2588 := x = (y ∘ ((z ∘ y) ∘ y)) ∘ x
+equation 2589 := x = (y ∘ ((z ∘ y) ∘ y)) ∘ y
+equation 2590 := x = (y ∘ ((z ∘ y) ∘ y)) ∘ z
+equation 2591 := x = (y ∘ ((z ∘ y) ∘ y)) ∘ w
+equation 2592 := x = (y ∘ ((z ∘ y) ∘ z)) ∘ x
+equation 2593 := x = (y ∘ ((z ∘ y) ∘ z)) ∘ y
+equation 2594 := x = (y ∘ ((z ∘ y) ∘ z)) ∘ z
+equation 2595 := x = (y ∘ ((z ∘ y) ∘ z)) ∘ w
+equation 2596 := x = (y ∘ ((z ∘ y) ∘ w)) ∘ x
+equation 2597 := x = (y ∘ ((z ∘ y) ∘ w)) ∘ y
+equation 2598 := x = (y ∘ ((z ∘ y) ∘ w)) ∘ z
+equation 2599 := x = (y ∘ ((z ∘ y) ∘ w)) ∘ w
+equation 2600 := x = (y ∘ ((z ∘ y) ∘ w)) ∘ u
+equation 2601 := x = (y ∘ ((z ∘ z) ∘ x)) ∘ x
+equation 2602 := x = (y ∘ ((z ∘ z) ∘ x)) ∘ y
+equation 2603 := x = (y ∘ ((z ∘ z) ∘ x)) ∘ z
+equation 2604 := x = (y ∘ ((z ∘ z) ∘ x)) ∘ w
+equation 2605 := x = (y ∘ ((z ∘ z) ∘ y)) ∘ x
+equation 2606 := x = (y ∘ ((z ∘ z) ∘ y)) ∘ y
+equation 2607 := x = (y ∘ ((z ∘ z) ∘ y)) ∘ z
+equation 2608 := x = (y ∘ ((z ∘ z) ∘ y)) ∘ w
+equation 2609 := x = (y ∘ ((z ∘ z) ∘ z)) ∘ x
+equation 2610 := x = (y ∘ ((z ∘ z) ∘ z)) ∘ y
+equation 2611 := x = (y ∘ ((z ∘ z) ∘ z)) ∘ z
+equation 2612 := x = (y ∘ ((z ∘ z) ∘ z)) ∘ w
+equation 2613 := x = (y ∘ ((z ∘ z) ∘ w)) ∘ x
+equation 2614 := x = (y ∘ ((z ∘ z) ∘ w)) ∘ y
+equation 2615 := x = (y ∘ ((z ∘ z) ∘ w)) ∘ z
+equation 2616 := x = (y ∘ ((z ∘ z) ∘ w)) ∘ w
+equation 2617 := x = (y ∘ ((z ∘ z) ∘ w)) ∘ u
+equation 2618 := x = (y ∘ ((z ∘ w) ∘ x)) ∘ x
+equation 2619 := x = (y ∘ ((z ∘ w) ∘ x)) ∘ y
+equation 2620 := x = (y ∘ ((z ∘ w) ∘ x)) ∘ z
+equation 2621 := x = (y ∘ ((z ∘ w) ∘ x)) ∘ w
+equation 2622 := x = (y ∘ ((z ∘ w) ∘ x)) ∘ u
+equation 2623 := x = (y ∘ ((z ∘ w) ∘ y)) ∘ x
+equation 2624 := x = (y ∘ ((z ∘ w) ∘ y)) ∘ y
+equation 2625 := x = (y ∘ ((z ∘ w) ∘ y)) ∘ z
+equation 2626 := x = (y ∘ ((z ∘ w) ∘ y)) ∘ w
+equation 2627 := x = (y ∘ ((z ∘ w) ∘ y)) ∘ u
+equation 2628 := x = (y ∘ ((z ∘ w) ∘ z)) ∘ x
+equation 2629 := x = (y ∘ ((z ∘ w) ∘ z)) ∘ y
+equation 2630 := x = (y ∘ ((z ∘ w) ∘ z)) ∘ z
+equation 2631 := x = (y ∘ ((z ∘ w) ∘ z)) ∘ w
+equation 2632 := x = (y ∘ ((z ∘ w) ∘ z)) ∘ u
+equation 2633 := x = (y ∘ ((z ∘ w) ∘ w)) ∘ x
+equation 2634 := x = (y ∘ ((z ∘ w) ∘ w)) ∘ y
+equation 2635 := x = (y ∘ ((z ∘ w) ∘ w)) ∘ z
+equation 2636 := x = (y ∘ ((z ∘ w) ∘ w)) ∘ w
+equation 2637 := x = (y ∘ ((z ∘ w) ∘ w)) ∘ u
+equation 2638 := x = (y ∘ ((z ∘ w) ∘ u)) ∘ x
+equation 2639 := x = (y ∘ ((z ∘ w) ∘ u)) ∘ y
+equation 2640 := x = (y ∘ ((z ∘ w) ∘ u)) ∘ z
+equation 2641 := x = (y ∘ ((z ∘ w) ∘ u)) ∘ w
+equation 2642 := x = (y ∘ ((z ∘ w) ∘ u)) ∘ u
+equation 2643 := x = (y ∘ ((z ∘ w) ∘ u)) ∘ v
+equation 2644 := x = ((x ∘ x) ∘ (x ∘ x)) ∘ x
+equation 2645 := x = ((x ∘ x) ∘ (x ∘ x)) ∘ y
+equation 2646 := x = ((x ∘ x) ∘ (x ∘ y)) ∘ x
+equation 2647 := x = ((x ∘ x) ∘ (x ∘ y)) ∘ y
+equation 2648 := x = ((x ∘ x) ∘ (x ∘ y)) ∘ z
+equation 2649 := x = ((x ∘ x) ∘ (y ∘ x)) ∘ x
+equation 2650 := x = ((x ∘ x) ∘ (y ∘ x)) ∘ y
+equation 2651 := x = ((x ∘ x) ∘ (y ∘ x)) ∘ z
+equation 2652 := x = ((x ∘ x) ∘ (y ∘ y)) ∘ x
+equation 2653 := x = ((x ∘ x) ∘ (y ∘ y)) ∘ y
+equation 2654 := x = ((x ∘ x) ∘ (y ∘ y)) ∘ z
+equation 2655 := x = ((x ∘ x) ∘ (y ∘ z)) ∘ x
+equation 2656 := x = ((x ∘ x) ∘ (y ∘ z)) ∘ y
+equation 2657 := x = ((x ∘ x) ∘ (y ∘ z)) ∘ z
+equation 2658 := x = ((x ∘ x) ∘ (y ∘ z)) ∘ w
+equation 2659 := x = ((x ∘ y) ∘ (x ∘ x)) ∘ x
+equation 2660 := x = ((x ∘ y) ∘ (x ∘ x)) ∘ y
+equation 2661 := x = ((x ∘ y) ∘ (x ∘ x)) ∘ z
+equation 2662 := x = ((x ∘ y) ∘ (x ∘ y)) ∘ x
+equation 2663 := x = ((x ∘ y) ∘ (x ∘ y)) ∘ y
+equation 2664 := x = ((x ∘ y) ∘ (x ∘ y)) ∘ z
+equation 2665 := x = ((x ∘ y) ∘ (x ∘ z)) ∘ x
+equation 2666 := x = ((x ∘ y) ∘ (x ∘ z)) ∘ y
+equation 2667 := x = ((x ∘ y) ∘ (x ∘ z)) ∘ z
+equation 2668 := x = ((x ∘ y) ∘ (x ∘ z)) ∘ w
+equation 2669 := x = ((x ∘ y) ∘ (y ∘ x)) ∘ x
+equation 2670 := x = ((x ∘ y) ∘ (y ∘ x)) ∘ y
+equation 2671 := x = ((x ∘ y) ∘ (y ∘ x)) ∘ z
+equation 2672 := x = ((x ∘ y) ∘ (y ∘ y)) ∘ x
+equation 2673 := x = ((x ∘ y) ∘ (y ∘ y)) ∘ y
+equation 2674 := x = ((x ∘ y) ∘ (y ∘ y)) ∘ z
+equation 2675 := x = ((x ∘ y) ∘ (y ∘ z)) ∘ x
+equation 2676 := x = ((x ∘ y) ∘ (y ∘ z)) ∘ y
+equation 2677 := x = ((x ∘ y) ∘ (y ∘ z)) ∘ z
+equation 2678 := x = ((x ∘ y) ∘ (y ∘ z)) ∘ w
+equation 2679 := x = ((x ∘ y) ∘ (z ∘ x)) ∘ x
+equation 2680 := x = ((x ∘ y) ∘ (z ∘ x)) ∘ y
+equation 2681 := x = ((x ∘ y) ∘ (z ∘ x)) ∘ z
+equation 2682 := x = ((x ∘ y) ∘ (z ∘ x)) ∘ w
+equation 2683 := x = ((x ∘ y) ∘ (z ∘ y)) ∘ x
+equation 2684 := x = ((x ∘ y) ∘ (z ∘ y)) ∘ y
+equation 2685 := x = ((x ∘ y) ∘ (z ∘ y)) ∘ z
+equation 2686 := x = ((x ∘ y) ∘ (z ∘ y)) ∘ w
+equation 2687 := x = ((x ∘ y) ∘ (z ∘ z)) ∘ x
+equation 2688 := x = ((x ∘ y) ∘ (z ∘ z)) ∘ y
+equation 2689 := x = ((x ∘ y) ∘ (z ∘ z)) ∘ z
+equation 2690 := x = ((x ∘ y) ∘ (z ∘ z)) ∘ w
+equation 2691 := x = ((x ∘ y) ∘ (z ∘ w)) ∘ x
+equation 2692 := x = ((x ∘ y) ∘ (z ∘ w)) ∘ y
+equation 2693 := x = ((x ∘ y) ∘ (z ∘ w)) ∘ z
+equation 2694 := x = ((x ∘ y) ∘ (z ∘ w)) ∘ w
+equation 2695 := x = ((x ∘ y) ∘ (z ∘ w)) ∘ u
+equation 2696 := x = ((y ∘ x) ∘ (x ∘ x)) ∘ x
+equation 2697 := x = ((y ∘ x) ∘ (x ∘ x)) ∘ y
+equation 2698 := x = ((y ∘ x) ∘ (x ∘ x)) ∘ z
+equation 2699 := x = ((y ∘ x) ∘ (x ∘ y)) ∘ x
+equation 2700 := x = ((y ∘ x) ∘ (x ∘ y)) ∘ y
+equation 2701 := x = ((y ∘ x) ∘ (x ∘ y)) ∘ z
+equation 2702 := x = ((y ∘ x) ∘ (x ∘ z)) ∘ x
+equation 2703 := x = ((y ∘ x) ∘ (x ∘ z)) ∘ y
+equation 2704 := x = ((y ∘ x) ∘ (x ∘ z)) ∘ z
+equation 2705 := x = ((y ∘ x) ∘ (x ∘ z)) ∘ w
+equation 2706 := x = ((y ∘ x) ∘ (y ∘ x)) ∘ x
+equation 2707 := x = ((y ∘ x) ∘ (y ∘ x)) ∘ y
+equation 2708 := x = ((y ∘ x) ∘ (y ∘ x)) ∘ z
+equation 2709 := x = ((y ∘ x) ∘ (y ∘ y)) ∘ x
+equation 2710 := x = ((y ∘ x) ∘ (y ∘ y)) ∘ y
+equation 2711 := x = ((y ∘ x) ∘ (y ∘ y)) ∘ z
+equation 2712 := x = ((y ∘ x) ∘ (y ∘ z)) ∘ x
+equation 2713 := x = ((y ∘ x) ∘ (y ∘ z)) ∘ y
+equation 2714 := x = ((y ∘ x) ∘ (y ∘ z)) ∘ z
+equation 2715 := x = ((y ∘ x) ∘ (y ∘ z)) ∘ w
+equation 2716 := x = ((y ∘ x) ∘ (z ∘ x)) ∘ x
+equation 2717 := x = ((y ∘ x) ∘ (z ∘ x)) ∘ y
+equation 2718 := x = ((y ∘ x) ∘ (z ∘ x)) ∘ z
+equation 2719 := x = ((y ∘ x) ∘ (z ∘ x)) ∘ w
+equation 2720 := x = ((y ∘ x) ∘ (z ∘ y)) ∘ x
+equation 2721 := x = ((y ∘ x) ∘ (z ∘ y)) ∘ y
+equation 2722 := x = ((y ∘ x) ∘ (z ∘ y)) ∘ z
+equation 2723 := x = ((y ∘ x) ∘ (z ∘ y)) ∘ w
+equation 2724 := x = ((y ∘ x) ∘ (z ∘ z)) ∘ x
+equation 2725 := x = ((y ∘ x) ∘ (z ∘ z)) ∘ y
+equation 2726 := x = ((y ∘ x) ∘ (z ∘ z)) ∘ z
+equation 2727 := x = ((y ∘ x) ∘ (z ∘ z)) ∘ w
+equation 2728 := x = ((y ∘ x) ∘ (z ∘ w)) ∘ x
+equation 2729 := x = ((y ∘ x) ∘ (z ∘ w)) ∘ y
+equation 2730 := x = ((y ∘ x) ∘ (z ∘ w)) ∘ z
+equation 2731 := x = ((y ∘ x) ∘ (z ∘ w)) ∘ w
+equation 2732 := x = ((y ∘ x) ∘ (z ∘ w)) ∘ u
+equation 2733 := x = ((y ∘ y) ∘ (x ∘ x)) ∘ x
+equation 2734 := x = ((y ∘ y) ∘ (x ∘ x)) ∘ y
+equation 2735 := x = ((y ∘ y) ∘ (x ∘ x)) ∘ z
+equation 2736 := x = ((y ∘ y) ∘ (x ∘ y)) ∘ x
+equation 2737 := x = ((y ∘ y) ∘ (x ∘ y)) ∘ y
+equation 2738 := x = ((y ∘ y) ∘ (x ∘ y)) ∘ z
+equation 2739 := x = ((y ∘ y) ∘ (x ∘ z)) ∘ x
+equation 2740 := x = ((y ∘ y) ∘ (x ∘ z)) ∘ y
+equation 2741 := x = ((y ∘ y) ∘ (x ∘ z)) ∘ z
+equation 2742 := x = ((y ∘ y) ∘ (x ∘ z)) ∘ w
+equation 2743 := x = ((y ∘ y) ∘ (y ∘ x)) ∘ x
+equation 2744 := x = ((y ∘ y) ∘ (y ∘ x)) ∘ y
+equation 2745 := x = ((y ∘ y) ∘ (y ∘ x)) ∘ z
+equation 2746 := x = ((y ∘ y) ∘ (y ∘ y)) ∘ x
+equation 2747 := x = ((y ∘ y) ∘ (y ∘ y)) ∘ y
+equation 2748 := x = ((y ∘ y) ∘ (y ∘ y)) ∘ z
+equation 2749 := x = ((y ∘ y) ∘ (y ∘ z)) ∘ x
+equation 2750 := x = ((y ∘ y) ∘ (y ∘ z)) ∘ y
+equation 2751 := x = ((y ∘ y) ∘ (y ∘ z)) ∘ z
+equation 2752 := x = ((y ∘ y) ∘ (y ∘ z)) ∘ w
+equation 2753 := x = ((y ∘ y) ∘ (z ∘ x)) ∘ x
+equation 2754 := x = ((y ∘ y) ∘ (z ∘ x)) ∘ y
+equation 2755 := x = ((y ∘ y) ∘ (z ∘ x)) ∘ z
+equation 2756 := x = ((y ∘ y) ∘ (z ∘ x)) ∘ w
+equation 2757 := x = ((y ∘ y) ∘ (z ∘ y)) ∘ x
+equation 2758 := x = ((y ∘ y) ∘ (z ∘ y)) ∘ y
+equation 2759 := x = ((y ∘ y) ∘ (z ∘ y)) ∘ z
+equation 2760 := x = ((y ∘ y) ∘ (z ∘ y)) ∘ w
+equation 2761 := x = ((y ∘ y) ∘ (z ∘ z)) ∘ x
+equation 2762 := x = ((y ∘ y) ∘ (z ∘ z)) ∘ y
+equation 2763 := x = ((y ∘ y) ∘ (z ∘ z)) ∘ z
+equation 2764 := x = ((y ∘ y) ∘ (z ∘ z)) ∘ w
+equation 2765 := x = ((y ∘ y) ∘ (z ∘ w)) ∘ x
+equation 2766 := x = ((y ∘ y) ∘ (z ∘ w)) ∘ y
+equation 2767 := x = ((y ∘ y) ∘ (z ∘ w)) ∘ z
+equation 2768 := x = ((y ∘ y) ∘ (z ∘ w)) ∘ w
+equation 2769 := x = ((y ∘ y) ∘ (z ∘ w)) ∘ u
+equation 2770 := x = ((y ∘ z) ∘ (x ∘ x)) ∘ x
+equation 2771 := x = ((y ∘ z) ∘ (x ∘ x)) ∘ y
+equation 2772 := x = ((y ∘ z) ∘ (x ∘ x)) ∘ z
+equation 2773 := x = ((y ∘ z) ∘ (x ∘ x)) ∘ w
+equation 2774 := x = ((y ∘ z) ∘ (x ∘ y)) ∘ x
+equation 2775 := x = ((y ∘ z) ∘ (x ∘ y)) ∘ y
+equation 2776 := x = ((y ∘ z) ∘ (x ∘ y)) ∘ z
+equation 2777 := x = ((y ∘ z) ∘ (x ∘ y)) ∘ w
+equation 2778 := x = ((y ∘ z) ∘ (x ∘ z)) ∘ x
+equation 2779 := x = ((y ∘ z) ∘ (x ∘ z)) ∘ y
+equation 2780 := x = ((y ∘ z) ∘ (x ∘ z)) ∘ z
+equation 2781 := x = ((y ∘ z) ∘ (x ∘ z)) ∘ w
+equation 2782 := x = ((y ∘ z) ∘ (x ∘ w)) ∘ x
+equation 2783 := x = ((y ∘ z) ∘ (x ∘ w)) ∘ y
+equation 2784 := x = ((y ∘ z) ∘ (x ∘ w)) ∘ z
+equation 2785 := x = ((y ∘ z) ∘ (x ∘ w)) ∘ w
+equation 2786 := x = ((y ∘ z) ∘ (x ∘ w)) ∘ u
+equation 2787 := x = ((y ∘ z) ∘ (y ∘ x)) ∘ x
+equation 2788 := x = ((y ∘ z) ∘ (y ∘ x)) ∘ y
+equation 2789 := x = ((y ∘ z) ∘ (y ∘ x)) ∘ z
+equation 2790 := x = ((y ∘ z) ∘ (y ∘ x)) ∘ w
+equation 2791 := x = ((y ∘ z) ∘ (y ∘ y)) ∘ x
+equation 2792 := x = ((y ∘ z) ∘ (y ∘ y)) ∘ y
+equation 2793 := x = ((y ∘ z) ∘ (y ∘ y)) ∘ z
+equation 2794 := x = ((y ∘ z) ∘ (y ∘ y)) ∘ w
+equation 2795 := x = ((y ∘ z) ∘ (y ∘ z)) ∘ x
+equation 2796 := x = ((y ∘ z) ∘ (y ∘ z)) ∘ y
+equation 2797 := x = ((y ∘ z) ∘ (y ∘ z)) ∘ z
+equation 2798 := x = ((y ∘ z) ∘ (y ∘ z)) ∘ w
+equation 2799 := x = ((y ∘ z) ∘ (y ∘ w)) ∘ x
+equation 2800 := x = ((y ∘ z) ∘ (y ∘ w)) ∘ y
+equation 2801 := x = ((y ∘ z) ∘ (y ∘ w)) ∘ z
+equation 2802 := x = ((y ∘ z) ∘ (y ∘ w)) ∘ w
+equation 2803 := x = ((y ∘ z) ∘ (y ∘ w)) ∘ u
+equation 2804 := x = ((y ∘ z) ∘ (z ∘ x)) ∘ x
+equation 2805 := x = ((y ∘ z) ∘ (z ∘ x)) ∘ y
+equation 2806 := x = ((y ∘ z) ∘ (z ∘ x)) ∘ z
+equation 2807 := x = ((y ∘ z) ∘ (z ∘ x)) ∘ w
+equation 2808 := x = ((y ∘ z) ∘ (z ∘ y)) ∘ x
+equation 2809 := x = ((y ∘ z) ∘ (z ∘ y)) ∘ y
+equation 2810 := x = ((y ∘ z) ∘ (z ∘ y)) ∘ z
+equation 2811 := x = ((y ∘ z) ∘ (z ∘ y)) ∘ w
+equation 2812 := x = ((y ∘ z) ∘ (z ∘ z)) ∘ x
+equation 2813 := x = ((y ∘ z) ∘ (z ∘ z)) ∘ y
+equation 2814 := x = ((y ∘ z) ∘ (z ∘ z)) ∘ z
+equation 2815 := x = ((y ∘ z) ∘ (z ∘ z)) ∘ w
+equation 2816 := x = ((y ∘ z) ∘ (z ∘ w)) ∘ x
+equation 2817 := x = ((y ∘ z) ∘ (z ∘ w)) ∘ y
+equation 2818 := x = ((y ∘ z) ∘ (z ∘ w)) ∘ z
+equation 2819 := x = ((y ∘ z) ∘ (z ∘ w)) ∘ w
+equation 2820 := x = ((y ∘ z) ∘ (z ∘ w)) ∘ u
+equation 2821 := x = ((y ∘ z) ∘ (w ∘ x)) ∘ x
+equation 2822 := x = ((y ∘ z) ∘ (w ∘ x)) ∘ y
+equation 2823 := x = ((y ∘ z) ∘ (w ∘ x)) ∘ z
+equation 2824 := x = ((y ∘ z) ∘ (w ∘ x)) ∘ w
+equation 2825 := x = ((y ∘ z) ∘ (w ∘ x)) ∘ u
+equation 2826 := x = ((y ∘ z) ∘ (w ∘ y)) ∘ x
+equation 2827 := x = ((y ∘ z) ∘ (w ∘ y)) ∘ y
+equation 2828 := x = ((y ∘ z) ∘ (w ∘ y)) ∘ z
+equation 2829 := x = ((y ∘ z) ∘ (w ∘ y)) ∘ w
+equation 2830 := x = ((y ∘ z) ∘ (w ∘ y)) ∘ u
+equation 2831 := x = ((y ∘ z) ∘ (w ∘ z)) ∘ x
+equation 2832 := x = ((y ∘ z) ∘ (w ∘ z)) ∘ y
+equation 2833 := x = ((y ∘ z) ∘ (w ∘ z)) ∘ z
+equation 2834 := x = ((y ∘ z) ∘ (w ∘ z)) ∘ w
+equation 2835 := x = ((y ∘ z) ∘ (w ∘ z)) ∘ u
+equation 2836 := x = ((y ∘ z) ∘ (w ∘ w)) ∘ x
+equation 2837 := x = ((y ∘ z) ∘ (w ∘ w)) ∘ y
+equation 2838 := x = ((y ∘ z) ∘ (w ∘ w)) ∘ z
+equation 2839 := x = ((y ∘ z) ∘ (w ∘ w)) ∘ w
+equation 2840 := x = ((y ∘ z) ∘ (w ∘ w)) ∘ u
+equation 2841 := x = ((y ∘ z) ∘ (w ∘ u)) ∘ x
+equation 2842 := x = ((y ∘ z) ∘ (w ∘ u)) ∘ y
+equation 2843 := x = ((y ∘ z) ∘ (w ∘ u)) ∘ z
+equation 2844 := x = ((y ∘ z) ∘ (w ∘ u)) ∘ w
+equation 2845 := x = ((y ∘ z) ∘ (w ∘ u)) ∘ u
+equation 2846 := x = ((y ∘ z) ∘ (w ∘ u)) ∘ v
+equation 2847 := x = ((x ∘ (x ∘ x)) ∘ x) ∘ x
+equation 2848 := x = ((x ∘ (x ∘ x)) ∘ x) ∘ y
+equation 2849 := x = ((x ∘ (x ∘ x)) ∘ y) ∘ x
+equation 2850 := x = ((x ∘ (x ∘ x)) ∘ y) ∘ y
+equation 2851 := x = ((x ∘ (x ∘ x)) ∘ y) ∘ z
+equation 2852 := x = ((x ∘ (x ∘ y)) ∘ x) ∘ x
+equation 2853 := x = ((x ∘ (x ∘ y)) ∘ x) ∘ y
+equation 2854 := x = ((x ∘ (x ∘ y)) ∘ x) ∘ z
+equation 2855 := x = ((x ∘ (x ∘ y)) ∘ y) ∘ x
+equation 2856 := x = ((x ∘ (x ∘ y)) ∘ y) ∘ y
+equation 2857 := x = ((x ∘ (x ∘ y)) ∘ y) ∘ z
+equation 2858 := x = ((x ∘ (x ∘ y)) ∘ z) ∘ x
+equation 2859 := x = ((x ∘ (x ∘ y)) ∘ z) ∘ y
+equation 2860 := x = ((x ∘ (x ∘ y)) ∘ z) ∘ z
+equation 2861 := x = ((x ∘ (x ∘ y)) ∘ z) ∘ w
+equation 2862 := x = ((x ∘ (y ∘ x)) ∘ x) ∘ x
+equation 2863 := x = ((x ∘ (y ∘ x)) ∘ x) ∘ y
+equation 2864 := x = ((x ∘ (y ∘ x)) ∘ x) ∘ z
+equation 2865 := x = ((x ∘ (y ∘ x)) ∘ y) ∘ x
+equation 2866 := x = ((x ∘ (y ∘ x)) ∘ y) ∘ y
+equation 2867 := x = ((x ∘ (y ∘ x)) ∘ y) ∘ z
+equation 2868 := x = ((x ∘ (y ∘ x)) ∘ z) ∘ x
+equation 2869 := x = ((x ∘ (y ∘ x)) ∘ z) ∘ y
+equation 2870 := x = ((x ∘ (y ∘ x)) ∘ z) ∘ z
+equation 2871 := x = ((x ∘ (y ∘ x)) ∘ z) ∘ w
+equation 2872 := x = ((x ∘ (y ∘ y)) ∘ x) ∘ x
+equation 2873 := x = ((x ∘ (y ∘ y)) ∘ x) ∘ y
+equation 2874 := x = ((x ∘ (y ∘ y)) ∘ x) ∘ z
+equation 2875 := x = ((x ∘ (y ∘ y)) ∘ y) ∘ x
+equation 2876 := x = ((x ∘ (y ∘ y)) ∘ y) ∘ y
+equation 2877 := x = ((x ∘ (y ∘ y)) ∘ y) ∘ z
+equation 2878 := x = ((x ∘ (y ∘ y)) ∘ z) ∘ x
+equation 2879 := x = ((x ∘ (y ∘ y)) ∘ z) ∘ y
+equation 2880 := x = ((x ∘ (y ∘ y)) ∘ z) ∘ z
+equation 2881 := x = ((x ∘ (y ∘ y)) ∘ z) ∘ w
+equation 2882 := x = ((x ∘ (y ∘ z)) ∘ x) ∘ x
+equation 2883 := x = ((x ∘ (y ∘ z)) ∘ x) ∘ y
+equation 2884 := x = ((x ∘ (y ∘ z)) ∘ x) ∘ z
+equation 2885 := x = ((x ∘ (y ∘ z)) ∘ x) ∘ w
+equation 2886 := x = ((x ∘ (y ∘ z)) ∘ y) ∘ x
+equation 2887 := x = ((x ∘ (y ∘ z)) ∘ y) ∘ y
+equation 2888 := x = ((x ∘ (y ∘ z)) ∘ y) ∘ z
+equation 2889 := x = ((x ∘ (y ∘ z)) ∘ y) ∘ w
+equation 2890 := x = ((x ∘ (y ∘ z)) ∘ z) ∘ x
+equation 2891 := x = ((x ∘ (y ∘ z)) ∘ z) ∘ y
+equation 2892 := x = ((x ∘ (y ∘ z)) ∘ z) ∘ z
+equation 2893 := x = ((x ∘ (y ∘ z)) ∘ z) ∘ w
+equation 2894 := x = ((x ∘ (y ∘ z)) ∘ w) ∘ x
+equation 2895 := x = ((x ∘ (y ∘ z)) ∘ w) ∘ y
+equation 2896 := x = ((x ∘ (y ∘ z)) ∘ w) ∘ z
+equation 2897 := x = ((x ∘ (y ∘ z)) ∘ w) ∘ w
+equation 2898 := x = ((x ∘ (y ∘ z)) ∘ w) ∘ u
+equation 2899 := x = ((y ∘ (x ∘ x)) ∘ x) ∘ x
+equation 2900 := x = ((y ∘ (x ∘ x)) ∘ x) ∘ y
+equation 2901 := x = ((y ∘ (x ∘ x)) ∘ x) ∘ z
+equation 2902 := x = ((y ∘ (x ∘ x)) ∘ y) ∘ x
+equation 2903 := x = ((y ∘ (x ∘ x)) ∘ y) ∘ y
+equation 2904 := x = ((y ∘ (x ∘ x)) ∘ y) ∘ z
+equation 2905 := x = ((y ∘ (x ∘ x)) ∘ z) ∘ x
+equation 2906 := x = ((y ∘ (x ∘ x)) ∘ z) ∘ y
+equation 2907 := x = ((y ∘ (x ∘ x)) ∘ z) ∘ z
+equation 2908 := x = ((y ∘ (x ∘ x)) ∘ z) ∘ w
+equation 2909 := x = ((y ∘ (x ∘ y)) ∘ x) ∘ x
+equation 2910 := x = ((y ∘ (x ∘ y)) ∘ x) ∘ y
+equation 2911 := x = ((y ∘ (x ∘ y)) ∘ x) ∘ z
+equation 2912 := x = ((y ∘ (x ∘ y)) ∘ y) ∘ x
+equation 2913 := x = ((y ∘ (x ∘ y)) ∘ y) ∘ y
+equation 2914 := x = ((y ∘ (x ∘ y)) ∘ y) ∘ z
+equation 2915 := x = ((y ∘ (x ∘ y)) ∘ z) ∘ x
+equation 2916 := x = ((y ∘ (x ∘ y)) ∘ z) ∘ y
+equation 2917 := x = ((y ∘ (x ∘ y)) ∘ z) ∘ z
+equation 2918 := x = ((y ∘ (x ∘ y)) ∘ z) ∘ w
+equation 2919 := x = ((y ∘ (x ∘ z)) ∘ x) ∘ x
+equation 2920 := x = ((y ∘ (x ∘ z)) ∘ x) ∘ y
+equation 2921 := x = ((y ∘ (x ∘ z)) ∘ x) ∘ z
+equation 2922 := x = ((y ∘ (x ∘ z)) ∘ x) ∘ w
+equation 2923 := x = ((y ∘ (x ∘ z)) ∘ y) ∘ x
+equation 2924 := x = ((y ∘ (x ∘ z)) ∘ y) ∘ y
+equation 2925 := x = ((y ∘ (x ∘ z)) ∘ y) ∘ z
+equation 2926 := x = ((y ∘ (x ∘ z)) ∘ y) ∘ w
+equation 2927 := x = ((y ∘ (x ∘ z)) ∘ z) ∘ x
+equation 2928 := x = ((y ∘ (x ∘ z)) ∘ z) ∘ y
+equation 2929 := x = ((y ∘ (x ∘ z)) ∘ z) ∘ z
+equation 2930 := x = ((y ∘ (x ∘ z)) ∘ z) ∘ w
+equation 2931 := x = ((y ∘ (x ∘ z)) ∘ w) ∘ x
+equation 2932 := x = ((y ∘ (x ∘ z)) ∘ w) ∘ y
+equation 2933 := x = ((y ∘ (x ∘ z)) ∘ w) ∘ z
+equation 2934 := x = ((y ∘ (x ∘ z)) ∘ w) ∘ w
+equation 2935 := x = ((y ∘ (x ∘ z)) ∘ w) ∘ u
+equation 2936 := x = ((y ∘ (y ∘ x)) ∘ x) ∘ x
+equation 2937 := x = ((y ∘ (y ∘ x)) ∘ x) ∘ y
+equation 2938 := x = ((y ∘ (y ∘ x)) ∘ x) ∘ z
+equation 2939 := x = ((y ∘ (y ∘ x)) ∘ y) ∘ x
+equation 2940 := x = ((y ∘ (y ∘ x)) ∘ y) ∘ y
+equation 2941 := x = ((y ∘ (y ∘ x)) ∘ y) ∘ z
+equation 2942 := x = ((y ∘ (y ∘ x)) ∘ z) ∘ x
+equation 2943 := x = ((y ∘ (y ∘ x)) ∘ z) ∘ y
+equation 2944 := x = ((y ∘ (y ∘ x)) ∘ z) ∘ z
+equation 2945 := x = ((y ∘ (y ∘ x)) ∘ z) ∘ w
+equation 2946 := x = ((y ∘ (y ∘ y)) ∘ x) ∘ x
+equation 2947 := x = ((y ∘ (y ∘ y)) ∘ x) ∘ y
+equation 2948 := x = ((y ∘ (y ∘ y)) ∘ x) ∘ z
+equation 2949 := x = ((y ∘ (y ∘ y)) ∘ y) ∘ x
+equation 2950 := x = ((y ∘ (y ∘ y)) ∘ y) ∘ y
+equation 2951 := x = ((y ∘ (y ∘ y)) ∘ y) ∘ z
+equation 2952 := x = ((y ∘ (y ∘ y)) ∘ z) ∘ x
+equation 2953 := x = ((y ∘ (y ∘ y)) ∘ z) ∘ y
+equation 2954 := x = ((y ∘ (y ∘ y)) ∘ z) ∘ z
+equation 2955 := x = ((y ∘ (y ∘ y)) ∘ z) ∘ w
+equation 2956 := x = ((y ∘ (y ∘ z)) ∘ x) ∘ x
+equation 2957 := x = ((y ∘ (y ∘ z)) ∘ x) ∘ y
+equation 2958 := x = ((y ∘ (y ∘ z)) ∘ x) ∘ z
+equation 2959 := x = ((y ∘ (y ∘ z)) ∘ x) ∘ w
+equation 2960 := x = ((y ∘ (y ∘ z)) ∘ y) ∘ x
+equation 2961 := x = ((y ∘ (y ∘ z)) ∘ y) ∘ y
+equation 2962 := x = ((y ∘ (y ∘ z)) ∘ y) ∘ z
+equation 2963 := x = ((y ∘ (y ∘ z)) ∘ y) ∘ w
+equation 2964 := x = ((y ∘ (y ∘ z)) ∘ z) ∘ x
+equation 2965 := x = ((y ∘ (y ∘ z)) ∘ z) ∘ y
+equation 2966 := x = ((y ∘ (y ∘ z)) ∘ z) ∘ z
+equation 2967 := x = ((y ∘ (y ∘ z)) ∘ z) ∘ w
+equation 2968 := x = ((y ∘ (y ∘ z)) ∘ w) ∘ x
+equation 2969 := x = ((y ∘ (y ∘ z)) ∘ w) ∘ y
+equation 2970 := x = ((y ∘ (y ∘ z)) ∘ w) ∘ z
+equation 2971 := x = ((y ∘ (y ∘ z)) ∘ w) ∘ w
+equation 2972 := x = ((y ∘ (y ∘ z)) ∘ w) ∘ u
+equation 2973 := x = ((y ∘ (z ∘ x)) ∘ x) ∘ x
+equation 2974 := x = ((y ∘ (z ∘ x)) ∘ x) ∘ y
+equation 2975 := x = ((y ∘ (z ∘ x)) ∘ x) ∘ z
+equation 2976 := x = ((y ∘ (z ∘ x)) ∘ x) ∘ w
+equation 2977 := x = ((y ∘ (z ∘ x)) ∘ y) ∘ x
+equation 2978 := x = ((y ∘ (z ∘ x)) ∘ y) ∘ y
+equation 2979 := x = ((y ∘ (z ∘ x)) ∘ y) ∘ z
+equation 2980 := x = ((y ∘ (z ∘ x)) ∘ y) ∘ w
+equation 2981 := x = ((y ∘ (z ∘ x)) ∘ z) ∘ x
+equation 2982 := x = ((y ∘ (z ∘ x)) ∘ z) ∘ y
+equation 2983 := x = ((y ∘ (z ∘ x)) ∘ z) ∘ z
+equation 2984 := x = ((y ∘ (z ∘ x)) ∘ z) ∘ w
+equation 2985 := x = ((y ∘ (z ∘ x)) ∘ w) ∘ x
+equation 2986 := x = ((y ∘ (z ∘ x)) ∘ w) ∘ y
+equation 2987 := x = ((y ∘ (z ∘ x)) ∘ w) ∘ z
+equation 2988 := x = ((y ∘ (z ∘ x)) ∘ w) ∘ w
+equation 2989 := x = ((y ∘ (z ∘ x)) ∘ w) ∘ u
+equation 2990 := x = ((y ∘ (z ∘ y)) ∘ x) ∘ x
+equation 2991 := x = ((y ∘ (z ∘ y)) ∘ x) ∘ y
+equation 2992 := x = ((y ∘ (z ∘ y)) ∘ x) ∘ z
+equation 2993 := x = ((y ∘ (z ∘ y)) ∘ x) ∘ w
+equation 2994 := x = ((y ∘ (z ∘ y)) ∘ y) ∘ x
+equation 2995 := x = ((y ∘ (z ∘ y)) ∘ y) ∘ y
+equation 2996 := x = ((y ∘ (z ∘ y)) ∘ y) ∘ z
+equation 2997 := x = ((y ∘ (z ∘ y)) ∘ y) ∘ w
+equation 2998 := x = ((y ∘ (z ∘ y)) ∘ z) ∘ x
+equation 2999 := x = ((y ∘ (z ∘ y)) ∘ z) ∘ y
+equation 3000 := x = ((y ∘ (z ∘ y)) ∘ z) ∘ z
+equation 3001 := x = ((y ∘ (z ∘ y)) ∘ z) ∘ w
+equation 3002 := x = ((y ∘ (z ∘ y)) ∘ w) ∘ x
+equation 3003 := x = ((y ∘ (z ∘ y)) ∘ w) ∘ y
+equation 3004 := x = ((y ∘ (z ∘ y)) ∘ w) ∘ z
+equation 3005 := x = ((y ∘ (z ∘ y)) ∘ w) ∘ w
+equation 3006 := x = ((y ∘ (z ∘ y)) ∘ w) ∘ u
+equation 3007 := x = ((y ∘ (z ∘ z)) ∘ x) ∘ x
+equation 3008 := x = ((y ∘ (z ∘ z)) ∘ x) ∘ y
+equation 3009 := x = ((y ∘ (z ∘ z)) ∘ x) ∘ z
+equation 3010 := x = ((y ∘ (z ∘ z)) ∘ x) ∘ w
+equation 3011 := x = ((y ∘ (z ∘ z)) ∘ y) ∘ x
+equation 3012 := x = ((y ∘ (z ∘ z)) ∘ y) ∘ y
+equation 3013 := x = ((y ∘ (z ∘ z)) ∘ y) ∘ z
+equation 3014 := x = ((y ∘ (z ∘ z)) ∘ y) ∘ w
+equation 3015 := x = ((y ∘ (z ∘ z)) ∘ z) ∘ x
+equation 3016 := x = ((y ∘ (z ∘ z)) ∘ z) ∘ y
+equation 3017 := x = ((y ∘ (z ∘ z)) ∘ z) ∘ z
+equation 3018 := x = ((y ∘ (z ∘ z)) ∘ z) ∘ w
+equation 3019 := x = ((y ∘ (z ∘ z)) ∘ w) ∘ x
+equation 3020 := x = ((y ∘ (z ∘ z)) ∘ w) ∘ y
+equation 3021 := x = ((y ∘ (z ∘ z)) ∘ w) ∘ z
+equation 3022 := x = ((y ∘ (z ∘ z)) ∘ w) ∘ w
+equation 3023 := x = ((y ∘ (z ∘ z)) ∘ w) ∘ u
+equation 3024 := x = ((y ∘ (z ∘ w)) ∘ x) ∘ x
+equation 3025 := x = ((y ∘ (z ∘ w)) ∘ x) ∘ y
+equation 3026 := x = ((y ∘ (z ∘ w)) ∘ x) ∘ z
+equation 3027 := x = ((y ∘ (z ∘ w)) ∘ x) ∘ w
+equation 3028 := x = ((y ∘ (z ∘ w)) ∘ x) ∘ u
+equation 3029 := x = ((y ∘ (z ∘ w)) ∘ y) ∘ x
+equation 3030 := x = ((y ∘ (z ∘ w)) ∘ y) ∘ y
+equation 3031 := x = ((y ∘ (z ∘ w)) ∘ y) ∘ z
+equation 3032 := x = ((y ∘ (z ∘ w)) ∘ y) ∘ w
+equation 3033 := x = ((y ∘ (z ∘ w)) ∘ y) ∘ u
+equation 3034 := x = ((y ∘ (z ∘ w)) ∘ z) ∘ x
+equation 3035 := x = ((y ∘ (z ∘ w)) ∘ z) ∘ y
+equation 3036 := x = ((y ∘ (z ∘ w)) ∘ z) ∘ z
+equation 3037 := x = ((y ∘ (z ∘ w)) ∘ z) ∘ w
+equation 3038 := x = ((y ∘ (z ∘ w)) ∘ z) ∘ u
+equation 3039 := x = ((y ∘ (z ∘ w)) ∘ w) ∘ x
+equation 3040 := x = ((y ∘ (z ∘ w)) ∘ w) ∘ y
+equation 3041 := x = ((y ∘ (z ∘ w)) ∘ w) ∘ z
+equation 3042 := x = ((y ∘ (z ∘ w)) ∘ w) ∘ w
+equation 3043 := x = ((y ∘ (z ∘ w)) ∘ w) ∘ u
+equation 3044 := x = ((y ∘ (z ∘ w)) ∘ u) ∘ x
+equation 3045 := x = ((y ∘ (z ∘ w)) ∘ u) ∘ y
+equation 3046 := x = ((y ∘ (z ∘ w)) ∘ u) ∘ z
+equation 3047 := x = ((y ∘ (z ∘ w)) ∘ u) ∘ w
+equation 3048 := x = ((y ∘ (z ∘ w)) ∘ u) ∘ u
+equation 3049 := x = ((y ∘ (z ∘ w)) ∘ u) ∘ v
+equation 3050 := x = (((x ∘ x) ∘ x) ∘ x) ∘ x
+equation 3051 := x = (((x ∘ x) ∘ x) ∘ x) ∘ y
+equation 3052 := x = (((x ∘ x) ∘ x) ∘ y) ∘ x
+equation 3053 := x = (((x ∘ x) ∘ x) ∘ y) ∘ y
+equation 3054 := x = (((x ∘ x) ∘ x) ∘ y) ∘ z
+equation 3055 := x = (((x ∘ x) ∘ y) ∘ x) ∘ x
+equation 3056 := x = (((x ∘ x) ∘ y) ∘ x) ∘ y
+equation 3057 := x = (((x ∘ x) ∘ y) ∘ x) ∘ z
+equation 3058 := x = (((x ∘ x) ∘ y) ∘ y) ∘ x
+equation 3059 := x = (((x ∘ x) ∘ y) ∘ y) ∘ y
+equation 3060 := x = (((x ∘ x) ∘ y) ∘ y) ∘ z
+equation 3061 := x = (((x ∘ x) ∘ y) ∘ z) ∘ x
+equation 3062 := x = (((x ∘ x) ∘ y) ∘ z) ∘ y
+equation 3063 := x = (((x ∘ x) ∘ y) ∘ z) ∘ z
+equation 3064 := x = (((x ∘ x) ∘ y) ∘ z) ∘ w
+equation 3065 := x = (((x ∘ y) ∘ x) ∘ x) ∘ x
+equation 3066 := x = (((x ∘ y) ∘ x) ∘ x) ∘ y
+equation 3067 := x = (((x ∘ y) ∘ x) ∘ x) ∘ z
+equation 3068 := x = (((x ∘ y) ∘ x) ∘ y) ∘ x
+equation 3069 := x = (((x ∘ y) ∘ x) ∘ y) ∘ y
+equation 3070 := x = (((x ∘ y) ∘ x) ∘ y) ∘ z
+equation 3071 := x = (((x ∘ y) ∘ x) ∘ z) ∘ x
+equation 3072 := x = (((x ∘ y) ∘ x) ∘ z) ∘ y
+equation 3073 := x = (((x ∘ y) ∘ x) ∘ z) ∘ z
+equation 3074 := x = (((x ∘ y) ∘ x) ∘ z) ∘ w
+equation 3075 := x = (((x ∘ y) ∘ y) ∘ x) ∘ x
+equation 3076 := x = (((x ∘ y) ∘ y) ∘ x) ∘ y
+equation 3077 := x = (((x ∘ y) ∘ y) ∘ x) ∘ z
+equation 3078 := x = (((x ∘ y) ∘ y) ∘ y) ∘ x
+equation 3079 := x = (((x ∘ y) ∘ y) ∘ y) ∘ y
+equation 3080 := x = (((x ∘ y) ∘ y) ∘ y) ∘ z
+equation 3081 := x = (((x ∘ y) ∘ y) ∘ z) ∘ x
+equation 3082 := x = (((x ∘ y) ∘ y) ∘ z) ∘ y
+equation 3083 := x = (((x ∘ y) ∘ y) ∘ z) ∘ z
+equation 3084 := x = (((x ∘ y) ∘ y) ∘ z) ∘ w
+equation 3085 := x = (((x ∘ y) ∘ z) ∘ x) ∘ x
+equation 3086 := x = (((x ∘ y) ∘ z) ∘ x) ∘ y
+equation 3087 := x = (((x ∘ y) ∘ z) ∘ x) ∘ z
+equation 3088 := x = (((x ∘ y) ∘ z) ∘ x) ∘ w
+equation 3089 := x = (((x ∘ y) ∘ z) ∘ y) ∘ x
+equation 3090 := x = (((x ∘ y) ∘ z) ∘ y) ∘ y
+equation 3091 := x = (((x ∘ y) ∘ z) ∘ y) ∘ z
+equation 3092 := x = (((x ∘ y) ∘ z) ∘ y) ∘ w
+equation 3093 := x = (((x ∘ y) ∘ z) ∘ z) ∘ x
+equation 3094 := x = (((x ∘ y) ∘ z) ∘ z) ∘ y
+equation 3095 := x = (((x ∘ y) ∘ z) ∘ z) ∘ z
+equation 3096 := x = (((x ∘ y) ∘ z) ∘ z) ∘ w
+equation 3097 := x = (((x ∘ y) ∘ z) ∘ w) ∘ x
+equation 3098 := x = (((x ∘ y) ∘ z) ∘ w) ∘ y
+equation 3099 := x = (((x ∘ y) ∘ z) ∘ w) ∘ z
+equation 3100 := x = (((x ∘ y) ∘ z) ∘ w) ∘ w
+equation 3101 := x = (((x ∘ y) ∘ z) ∘ w) ∘ u
+equation 3102 := x = (((y ∘ x) ∘ x) ∘ x) ∘ x
+equation 3103 := x = (((y ∘ x) ∘ x) ∘ x) ∘ y
+equation 3104 := x = (((y ∘ x) ∘ x) ∘ x) ∘ z
+equation 3105 := x = (((y ∘ x) ∘ x) ∘ y) ∘ x
+equation 3106 := x = (((y ∘ x) ∘ x) ∘ y) ∘ y
+equation 3107 := x = (((y ∘ x) ∘ x) ∘ y) ∘ z
+equation 3108 := x = (((y ∘ x) ∘ x) ∘ z) ∘ x
+equation 3109 := x = (((y ∘ x) ∘ x) ∘ z) ∘ y
+equation 3110 := x = (((y ∘ x) ∘ x) ∘ z) ∘ z
+equation 3111 := x = (((y ∘ x) ∘ x) ∘ z) ∘ w
+equation 3112 := x = (((y ∘ x) ∘ y) ∘ x) ∘ x
+equation 3113 := x = (((y ∘ x) ∘ y) ∘ x) ∘ y
+equation 3114 := x = (((y ∘ x) ∘ y) ∘ x) ∘ z
+equation 3115 := x = (((y ∘ x) ∘ y) ∘ y) ∘ x
+equation 3116 := x = (((y ∘ x) ∘ y) ∘ y) ∘ y
+equation 3117 := x = (((y ∘ x) ∘ y) ∘ y) ∘ z
+equation 3118 := x = (((y ∘ x) ∘ y) ∘ z) ∘ x
+equation 3119 := x = (((y ∘ x) ∘ y) ∘ z) ∘ y
+equation 3120 := x = (((y ∘ x) ∘ y) ∘ z) ∘ z
+equation 3121 := x = (((y ∘ x) ∘ y) ∘ z) ∘ w
+equation 3122 := x = (((y ∘ x) ∘ z) ∘ x) ∘ x
+equation 3123 := x = (((y ∘ x) ∘ z) ∘ x) ∘ y
+equation 3124 := x = (((y ∘ x) ∘ z) ∘ x) ∘ z
+equation 3125 := x = (((y ∘ x) ∘ z) ∘ x) ∘ w
+equation 3126 := x = (((y ∘ x) ∘ z) ∘ y) ∘ x
+equation 3127 := x = (((y ∘ x) ∘ z) ∘ y) ∘ y
+equation 3128 := x = (((y ∘ x) ∘ z) ∘ y) ∘ z
+equation 3129 := x = (((y ∘ x) ∘ z) ∘ y) ∘ w
+equation 3130 := x = (((y ∘ x) ∘ z) ∘ z) ∘ x
+equation 3131 := x = (((y ∘ x) ∘ z) ∘ z) ∘ y
+equation 3132 := x = (((y ∘ x) ∘ z) ∘ z) ∘ z
+equation 3133 := x = (((y ∘ x) ∘ z) ∘ z) ∘ w
+equation 3134 := x = (((y ∘ x) ∘ z) ∘ w) ∘ x
+equation 3135 := x = (((y ∘ x) ∘ z) ∘ w) ∘ y
+equation 3136 := x = (((y ∘ x) ∘ z) ∘ w) ∘ z
+equation 3137 := x = (((y ∘ x) ∘ z) ∘ w) ∘ w
+equation 3138 := x = (((y ∘ x) ∘ z) ∘ w) ∘ u
+equation 3139 := x = (((y ∘ y) ∘ x) ∘ x) ∘ x
+equation 3140 := x = (((y ∘ y) ∘ x) ∘ x) ∘ y
+equation 3141 := x = (((y ∘ y) ∘ x) ∘ x) ∘ z
+equation 3142 := x = (((y ∘ y) ∘ x) ∘ y) ∘ x
+equation 3143 := x = (((y ∘ y) ∘ x) ∘ y) ∘ y
+equation 3144 := x = (((y ∘ y) ∘ x) ∘ y) ∘ z
+equation 3145 := x = (((y ∘ y) ∘ x) ∘ z) ∘ x
+equation 3146 := x = (((y ∘ y) ∘ x) ∘ z) ∘ y
+equation 3147 := x = (((y ∘ y) ∘ x) ∘ z) ∘ z
+equation 3148 := x = (((y ∘ y) ∘ x) ∘ z) ∘ w
+equation 3149 := x = (((y ∘ y) ∘ y) ∘ x) ∘ x
+equation 3150 := x = (((y ∘ y) ∘ y) ∘ x) ∘ y
+equation 3151 := x = (((y ∘ y) ∘ y) ∘ x) ∘ z
+equation 3152 := x = (((y ∘ y) ∘ y) ∘ y) ∘ x
+equation 3153 := x = (((y ∘ y) ∘ y) ∘ y) ∘ y
+equation 3154 := x = (((y ∘ y) ∘ y) ∘ y) ∘ z
+equation 3155 := x = (((y ∘ y) ∘ y) ∘ z) ∘ x
+equation 3156 := x = (((y ∘ y) ∘ y) ∘ z) ∘ y
+equation 3157 := x = (((y ∘ y) ∘ y) ∘ z) ∘ z
+equation 3158 := x = (((y ∘ y) ∘ y) ∘ z) ∘ w
+equation 3159 := x = (((y ∘ y) ∘ z) ∘ x) ∘ x
+equation 3160 := x = (((y ∘ y) ∘ z) ∘ x) ∘ y
+equation 3161 := x = (((y ∘ y) ∘ z) ∘ x) ∘ z
+equation 3162 := x = (((y ∘ y) ∘ z) ∘ x) ∘ w
+equation 3163 := x = (((y ∘ y) ∘ z) ∘ y) ∘ x
+equation 3164 := x = (((y ∘ y) ∘ z) ∘ y) ∘ y
+equation 3165 := x = (((y ∘ y) ∘ z) ∘ y) ∘ z
+equation 3166 := x = (((y ∘ y) ∘ z) ∘ y) ∘ w
+equation 3167 := x = (((y ∘ y) ∘ z) ∘ z) ∘ x
+equation 3168 := x = (((y ∘ y) ∘ z) ∘ z) ∘ y
+equation 3169 := x = (((y ∘ y) ∘ z) ∘ z) ∘ z
+equation 3170 := x = (((y ∘ y) ∘ z) ∘ z) ∘ w
+equation 3171 := x = (((y ∘ y) ∘ z) ∘ w) ∘ x
+equation 3172 := x = (((y ∘ y) ∘ z) ∘ w) ∘ y
+equation 3173 := x = (((y ∘ y) ∘ z) ∘ w) ∘ z
+equation 3174 := x = (((y ∘ y) ∘ z) ∘ w) ∘ w
+equation 3175 := x = (((y ∘ y) ∘ z) ∘ w) ∘ u
+equation 3176 := x = (((y ∘ z) ∘ x) ∘ x) ∘ x
+equation 3177 := x = (((y ∘ z) ∘ x) ∘ x) ∘ y
+equation 3178 := x = (((y ∘ z) ∘ x) ∘ x) ∘ z
+equation 3179 := x = (((y ∘ z) ∘ x) ∘ x) ∘ w
+equation 3180 := x = (((y ∘ z) ∘ x) ∘ y) ∘ x
+equation 3181 := x = (((y ∘ z) ∘ x) ∘ y) ∘ y
+equation 3182 := x = (((y ∘ z) ∘ x) ∘ y) ∘ z
+equation 3183 := x = (((y ∘ z) ∘ x) ∘ y) ∘ w
+equation 3184 := x = (((y ∘ z) ∘ x) ∘ z) ∘ x
+equation 3185 := x = (((y ∘ z) ∘ x) ∘ z) ∘ y
+equation 3186 := x = (((y ∘ z) ∘ x) ∘ z) ∘ z
+equation 3187 := x = (((y ∘ z) ∘ x) ∘ z) ∘ w
+equation 3188 := x = (((y ∘ z) ∘ x) ∘ w) ∘ x
+equation 3189 := x = (((y ∘ z) ∘ x) ∘ w) ∘ y
+equation 3190 := x = (((y ∘ z) ∘ x) ∘ w) ∘ z
+equation 3191 := x = (((y ∘ z) ∘ x) ∘ w) ∘ w
+equation 3192 := x = (((y ∘ z) ∘ x) ∘ w) ∘ u
+equation 3193 := x = (((y ∘ z) ∘ y) ∘ x) ∘ x
+equation 3194 := x = (((y ∘ z) ∘ y) ∘ x) ∘ y
+equation 3195 := x = (((y ∘ z) ∘ y) ∘ x) ∘ z
+equation 3196 := x = (((y ∘ z) ∘ y) ∘ x) ∘ w
+equation 3197 := x = (((y ∘ z) ∘ y) ∘ y) ∘ x
+equation 3198 := x = (((y ∘ z) ∘ y) ∘ y) ∘ y
+equation 3199 := x = (((y ∘ z) ∘ y) ∘ y) ∘ z
+equation 3200 := x = (((y ∘ z) ∘ y) ∘ y) ∘ w
+equation 3201 := x = (((y ∘ z) ∘ y) ∘ z) ∘ x
+equation 3202 := x = (((y ∘ z) ∘ y) ∘ z) ∘ y
+equation 3203 := x = (((y ∘ z) ∘ y) ∘ z) ∘ z
+equation 3204 := x = (((y ∘ z) ∘ y) ∘ z) ∘ w
+equation 3205 := x = (((y ∘ z) ∘ y) ∘ w) ∘ x
+equation 3206 := x = (((y ∘ z) ∘ y) ∘ w) ∘ y
+equation 3207 := x = (((y ∘ z) ∘ y) ∘ w) ∘ z
+equation 3208 := x = (((y ∘ z) ∘ y) ∘ w) ∘ w
+equation 3209 := x = (((y ∘ z) ∘ y) ∘ w) ∘ u
+equation 3210 := x = (((y ∘ z) ∘ z) ∘ x) ∘ x
+equation 3211 := x = (((y ∘ z) ∘ z) ∘ x) ∘ y
+equation 3212 := x = (((y ∘ z) ∘ z) ∘ x) ∘ z
+equation 3213 := x = (((y ∘ z) ∘ z) ∘ x) ∘ w
+equation 3214 := x = (((y ∘ z) ∘ z) ∘ y) ∘ x
+equation 3215 := x = (((y ∘ z) ∘ z) ∘ y) ∘ y
+equation 3216 := x = (((y ∘ z) ∘ z) ∘ y) ∘ z
+equation 3217 := x = (((y ∘ z) ∘ z) ∘ y) ∘ w
+equation 3218 := x = (((y ∘ z) ∘ z) ∘ z) ∘ x
+equation 3219 := x = (((y ∘ z) ∘ z) ∘ z) ∘ y
+equation 3220 := x = (((y ∘ z) ∘ z) ∘ z) ∘ z
+equation 3221 := x = (((y ∘ z) ∘ z) ∘ z) ∘ w
+equation 3222 := x = (((y ∘ z) ∘ z) ∘ w) ∘ x
+equation 3223 := x = (((y ∘ z) ∘ z) ∘ w) ∘ y
+equation 3224 := x = (((y ∘ z) ∘ z) ∘ w) ∘ z
+equation 3225 := x = (((y ∘ z) ∘ z) ∘ w) ∘ w
+equation 3226 := x = (((y ∘ z) ∘ z) ∘ w) ∘ u
+equation 3227 := x = (((y ∘ z) ∘ w) ∘ x) ∘ x
+equation 3228 := x = (((y ∘ z) ∘ w) ∘ x) ∘ y
+equation 3229 := x = (((y ∘ z) ∘ w) ∘ x) ∘ z
+equation 3230 := x = (((y ∘ z) ∘ w) ∘ x) ∘ w
+equation 3231 := x = (((y ∘ z) ∘ w) ∘ x) ∘ u
+equation 3232 := x = (((y ∘ z) ∘ w) ∘ y) ∘ x
+equation 3233 := x = (((y ∘ z) ∘ w) ∘ y) ∘ y
+equation 3234 := x = (((y ∘ z) ∘ w) ∘ y) ∘ z
+equation 3235 := x = (((y ∘ z) ∘ w) ∘ y) ∘ w
+equation 3236 := x = (((y ∘ z) ∘ w) ∘ y) ∘ u
+equation 3237 := x = (((y ∘ z) ∘ w) ∘ z) ∘ x
+equation 3238 := x = (((y ∘ z) ∘ w) ∘ z) ∘ y
+equation 3239 := x = (((y ∘ z) ∘ w) ∘ z) ∘ z
+equation 3240 := x = (((y ∘ z) ∘ w) ∘ z) ∘ w
+equation 3241 := x = (((y ∘ z) ∘ w) ∘ z) ∘ u
+equation 3242 := x = (((y ∘ z) ∘ w) ∘ w) ∘ x
+equation 3243 := x = (((y ∘ z) ∘ w) ∘ w) ∘ y
+equation 3244 := x = (((y ∘ z) ∘ w) ∘ w) ∘ z
+equation 3245 := x = (((y ∘ z) ∘ w) ∘ w) ∘ w
+equation 3246 := x = (((y ∘ z) ∘ w) ∘ w) ∘ u
+equation 3247 := x = (((y ∘ z) ∘ w) ∘ u) ∘ x
+equation 3248 := x = (((y ∘ z) ∘ w) ∘ u) ∘ y
+equation 3249 := x = (((y ∘ z) ∘ w) ∘ u) ∘ z
+equation 3250 := x = (((y ∘ z) ∘ w) ∘ u) ∘ w
+equation 3251 := x = (((y ∘ z) ∘ w) ∘ u) ∘ u
+equation 3252 := x = (((y ∘ z) ∘ w) ∘ u) ∘ v
+equation 3253 := x ∘ x = x ∘ (x ∘ (x ∘ x))
+equation 3254 := x ∘ x = x ∘ (x ∘ (x ∘ y))
+equation 3255 := x ∘ x = x ∘ (x ∘ (y ∘ x))
+equation 3256 := x ∘ x = x ∘ (x ∘ (y ∘ y))
+equation 3257 := x ∘ x = x ∘ (x ∘ (y ∘ z))
+equation 3258 := x ∘ x = x ∘ (y ∘ (x ∘ x))
+equation 3259 := x ∘ x = x ∘ (y ∘ (x ∘ y))
+equation 3260 := x ∘ x = x ∘ (y ∘ (x ∘ z))
+equation 3261 := x ∘ x = x ∘ (y ∘ (y ∘ x))
+equation 3262 := x ∘ x = x ∘ (y ∘ (y ∘ y))
+equation 3263 := x ∘ x = x ∘ (y ∘ (y ∘ z))
+equation 3264 := x ∘ x = x ∘ (y ∘ (z ∘ x))
+equation 3265 := x ∘ x = x ∘ (y ∘ (z ∘ y))
+equation 3266 := x ∘ x = x ∘ (y ∘ (z ∘ z))
+equation 3267 := x ∘ x = x ∘ (y ∘ (z ∘ w))
+equation 3268 := x ∘ x = y ∘ (x ∘ (x ∘ x))
+equation 3269 := x ∘ x = y ∘ (x ∘ (x ∘ y))
+equation 3270 := x ∘ x = y ∘ (x ∘ (x ∘ z))
+equation 3271 := x ∘ x = y ∘ (x ∘ (y ∘ x))
+equation 3272 := x ∘ x = y ∘ (x ∘ (y ∘ y))
+equation 3273 := x ∘ x = y ∘ (x ∘ (y ∘ z))
+equation 3274 := x ∘ x = y ∘ (x ∘ (z ∘ x))
+equation 3275 := x ∘ x = y ∘ (x ∘ (z ∘ y))
+equation 3276 := x ∘ x = y ∘ (x ∘ (z ∘ z))
+equation 3277 := x ∘ x = y ∘ (x ∘ (z ∘ w))
+equation 3278 := x ∘ x = y ∘ (y ∘ (x ∘ x))
+equation 3279 := x ∘ x = y ∘ (y ∘ (x ∘ y))
+equation 3280 := x ∘ x = y ∘ (y ∘ (x ∘ z))
+equation 3281 := x ∘ x = y ∘ (y ∘ (y ∘ x))
+equation 3282 := x ∘ x = y ∘ (y ∘ (y ∘ y))
+equation 3283 := x ∘ x = y ∘ (y ∘ (y ∘ z))
+equation 3284 := x ∘ x = y ∘ (y ∘ (z ∘ x))
+equation 3285 := x ∘ x = y ∘ (y ∘ (z ∘ y))
+equation 3286 := x ∘ x = y ∘ (y ∘ (z ∘ z))
+equation 3287 := x ∘ x = y ∘ (y ∘ (z ∘ w))
+equation 3288 := x ∘ x = y ∘ (z ∘ (x ∘ x))
+equation 3289 := x ∘ x = y ∘ (z ∘ (x ∘ y))
+equation 3290 := x ∘ x = y ∘ (z ∘ (x ∘ z))
+equation 3291 := x ∘ x = y ∘ (z ∘ (x ∘ w))
+equation 3292 := x ∘ x = y ∘ (z ∘ (y ∘ x))
+equation 3293 := x ∘ x = y ∘ (z ∘ (y ∘ y))
+equation 3294 := x ∘ x = y ∘ (z ∘ (y ∘ z))
+equation 3295 := x ∘ x = y ∘ (z ∘ (y ∘ w))
+equation 3296 := x ∘ x = y ∘ (z ∘ (z ∘ x))
+equation 3297 := x ∘ x = y ∘ (z ∘ (z ∘ y))
+equation 3298 := x ∘ x = y ∘ (z ∘ (z ∘ z))
+equation 3299 := x ∘ x = y ∘ (z ∘ (z ∘ w))
+equation 3300 := x ∘ x = y ∘ (z ∘ (w ∘ x))
+equation 3301 := x ∘ x = y ∘ (z ∘ (w ∘ y))
+equation 3302 := x ∘ x = y ∘ (z ∘ (w ∘ z))
+equation 3303 := x ∘ x = y ∘ (z ∘ (w ∘ w))
+equation 3304 := x ∘ x = y ∘ (z ∘ (w ∘ u))
+equation 3305 := x ∘ y = x ∘ (x ∘ (x ∘ x))
+equation 3306 := x ∘ y = x ∘ (x ∘ (x ∘ y))
+equation 3307 := x ∘ y = x ∘ (x ∘ (x ∘ z))
+equation 3308 := x ∘ y = x ∘ (x ∘ (y ∘ x))
+equation 3309 := x ∘ y = x ∘ (x ∘ (y ∘ y))
+equation 3310 := x ∘ y = x ∘ (x ∘ (y ∘ z))
+equation 3311 := x ∘ y = x ∘ (x ∘ (z ∘ x))
+equation 3312 := x ∘ y = x ∘ (x ∘ (z ∘ y))
+equation 3313 := x ∘ y = x ∘ (x ∘ (z ∘ z))
+equation 3314 := x ∘ y = x ∘ (x ∘ (z ∘ w))
+equation 3315 := x ∘ y = x ∘ (y ∘ (x ∘ x))
+equation 3316 := x ∘ y = x ∘ (y ∘ (x ∘ y))
+equation 3317 := x ∘ y = x ∘ (y ∘ (x ∘ z))
+equation 3318 := x ∘ y = x ∘ (y ∘ (y ∘ x))
+equation 3319 := x ∘ y = x ∘ (y ∘ (y ∘ y))
+equation 3320 := x ∘ y = x ∘ (y ∘ (y ∘ z))
+equation 3321 := x ∘ y = x ∘ (y ∘ (z ∘ x))
+equation 3322 := x ∘ y = x ∘ (y ∘ (z ∘ y))
+equation 3323 := x ∘ y = x ∘ (y ∘ (z ∘ z))
+equation 3324 := x ∘ y = x ∘ (y ∘ (z ∘ w))
+equation 3325 := x ∘ y = x ∘ (z ∘ (x ∘ x))
+equation 3326 := x ∘ y = x ∘ (z ∘ (x ∘ y))
+equation 3327 := x ∘ y = x ∘ (z ∘ (x ∘ z))
+equation 3328 := x ∘ y = x ∘ (z ∘ (x ∘ w))
+equation 3329 := x ∘ y = x ∘ (z ∘ (y ∘ x))
+equation 3330 := x ∘ y = x ∘ (z ∘ (y ∘ y))
+equation 3331 := x ∘ y = x ∘ (z ∘ (y ∘ z))
+equation 3332 := x ∘ y = x ∘ (z ∘ (y ∘ w))
+equation 3333 := x ∘ y = x ∘ (z ∘ (z ∘ x))
+equation 3334 := x ∘ y = x ∘ (z ∘ (z ∘ y))
+equation 3335 := x ∘ y = x ∘ (z ∘ (z ∘ z))
+equation 3336 := x ∘ y = x ∘ (z ∘ (z ∘ w))
+equation 3337 := x ∘ y = x ∘ (z ∘ (w ∘ x))
+equation 3338 := x ∘ y = x ∘ (z ∘ (w ∘ y))
+equation 3339 := x ∘ y = x ∘ (z ∘ (w ∘ z))
+equation 3340 := x ∘ y = x ∘ (z ∘ (w ∘ w))
+equation 3341 := x ∘ y = x ∘ (z ∘ (w ∘ u))
+equation 3342 := x ∘ y = y ∘ (x ∘ (x ∘ x))
+equation 3343 := x ∘ y = y ∘ (x ∘ (x ∘ y))
+equation 3344 := x ∘ y = y ∘ (x ∘ (x ∘ z))
+equation 3345 := x ∘ y = y ∘ (x ∘ (y ∘ x))
+equation 3346 := x ∘ y = y ∘ (x ∘ (y ∘ y))
+equation 3347 := x ∘ y = y ∘ (x ∘ (y ∘ z))
+equation 3348 := x ∘ y = y ∘ (x ∘ (z ∘ x))
+equation 3349 := x ∘ y = y ∘ (x ∘ (z ∘ y))
+equation 3350 := x ∘ y = y ∘ (x ∘ (z ∘ z))
+equation 3351 := x ∘ y = y ∘ (x ∘ (z ∘ w))
+equation 3352 := x ∘ y = y ∘ (y ∘ (x ∘ x))
+equation 3353 := x ∘ y = y ∘ (y ∘ (x ∘ y))
+equation 3354 := x ∘ y = y ∘ (y ∘ (x ∘ z))
+equation 3355 := x ∘ y = y ∘ (y ∘ (y ∘ x))
+equation 3356 := x ∘ y = y ∘ (y ∘ (y ∘ y))
+equation 3357 := x ∘ y = y ∘ (y ∘ (y ∘ z))
+equation 3358 := x ∘ y = y ∘ (y ∘ (z ∘ x))
+equation 3359 := x ∘ y = y ∘ (y ∘ (z ∘ y))
+equation 3360 := x ∘ y = y ∘ (y ∘ (z ∘ z))
+equation 3361 := x ∘ y = y ∘ (y ∘ (z ∘ w))
+equation 3362 := x ∘ y = y ∘ (z ∘ (x ∘ x))
+equation 3363 := x ∘ y = y ∘ (z ∘ (x ∘ y))
+equation 3364 := x ∘ y = y ∘ (z ∘ (x ∘ z))
+equation 3365 := x ∘ y = y ∘ (z ∘ (x ∘ w))
+equation 3366 := x ∘ y = y ∘ (z ∘ (y ∘ x))
+equation 3367 := x ∘ y = y ∘ (z ∘ (y ∘ y))
+equation 3368 := x ∘ y = y ∘ (z ∘ (y ∘ z))
+equation 3369 := x ∘ y = y ∘ (z ∘ (y ∘ w))
+equation 3370 := x ∘ y = y ∘ (z ∘ (z ∘ x))
+equation 3371 := x ∘ y = y ∘ (z ∘ (z ∘ y))
+equation 3372 := x ∘ y = y ∘ (z ∘ (z ∘ z))
+equation 3373 := x ∘ y = y ∘ (z ∘ (z ∘ w))
+equation 3374 := x ∘ y = y ∘ (z ∘ (w ∘ x))
+equation 3375 := x ∘ y = y ∘ (z ∘ (w ∘ y))
+equation 3376 := x ∘ y = y ∘ (z ∘ (w ∘ z))
+equation 3377 := x ∘ y = y ∘ (z ∘ (w ∘ w))
+equation 3378 := x ∘ y = y ∘ (z ∘ (w ∘ u))
+equation 3379 := x ∘ y = z ∘ (x ∘ (x ∘ x))
+equation 3380 := x ∘ y = z ∘ (x ∘ (x ∘ y))
+equation 3381 := x ∘ y = z ∘ (x ∘ (x ∘ z))
+equation 3382 := x ∘ y = z ∘ (x ∘ (x ∘ w))
+equation 3383 := x ∘ y = z ∘ (x ∘ (y ∘ x))
+equation 3384 := x ∘ y = z ∘ (x ∘ (y ∘ y))
+equation 3385 := x ∘ y = z ∘ (x ∘ (y ∘ z))
+equation 3386 := x ∘ y = z ∘ (x ∘ (y ∘ w))
+equation 3387 := x ∘ y = z ∘ (x ∘ (z ∘ x))
+equation 3388 := x ∘ y = z ∘ (x ∘ (z ∘ y))
+equation 3389 := x ∘ y = z ∘ (x ∘ (z ∘ z))
+equation 3390 := x ∘ y = z ∘ (x ∘ (z ∘ w))
+equation 3391 := x ∘ y = z ∘ (x ∘ (w ∘ x))
+equation 3392 := x ∘ y = z ∘ (x ∘ (w ∘ y))
+equation 3393 := x ∘ y = z ∘ (x ∘ (w ∘ z))
+equation 3394 := x ∘ y = z ∘ (x ∘ (w ∘ w))
+equation 3395 := x ∘ y = z ∘ (x ∘ (w ∘ u))
+equation 3396 := x ∘ y = z ∘ (y ∘ (x ∘ x))
+equation 3397 := x ∘ y = z ∘ (y ∘ (x ∘ y))
+equation 3398 := x ∘ y = z ∘ (y ∘ (x ∘ z))
+equation 3399 := x ∘ y = z ∘ (y ∘ (x ∘ w))
+equation 3400 := x ∘ y = z ∘ (y ∘ (y ∘ x))
+equation 3401 := x ∘ y = z ∘ (y ∘ (y ∘ y))
+equation 3402 := x ∘ y = z ∘ (y ∘ (y ∘ z))
+equation 3403 := x ∘ y = z ∘ (y ∘ (y ∘ w))
+equation 3404 := x ∘ y = z ∘ (y ∘ (z ∘ x))
+equation 3405 := x ∘ y = z ∘ (y ∘ (z ∘ y))
+equation 3406 := x ∘ y = z ∘ (y ∘ (z ∘ z))
+equation 3407 := x ∘ y = z ∘ (y ∘ (z ∘ w))
+equation 3408 := x ∘ y = z ∘ (y ∘ (w ∘ x))
+equation 3409 := x ∘ y = z ∘ (y ∘ (w ∘ y))
+equation 3410 := x ∘ y = z ∘ (y ∘ (w ∘ z))
+equation 3411 := x ∘ y = z ∘ (y ∘ (w ∘ w))
+equation 3412 := x ∘ y = z ∘ (y ∘ (w ∘ u))
+equation 3413 := x ∘ y = z ∘ (z ∘ (x ∘ x))
+equation 3414 := x ∘ y = z ∘ (z ∘ (x ∘ y))
+equation 3415 := x ∘ y = z ∘ (z ∘ (x ∘ z))
+equation 3416 := x ∘ y = z ∘ (z ∘ (x ∘ w))
+equation 3417 := x ∘ y = z ∘ (z ∘ (y ∘ x))
+equation 3418 := x ∘ y = z ∘ (z ∘ (y ∘ y))
+equation 3419 := x ∘ y = z ∘ (z ∘ (y ∘ z))
+equation 3420 := x ∘ y = z ∘ (z ∘ (y ∘ w))
+equation 3421 := x ∘ y = z ∘ (z ∘ (z ∘ x))
+equation 3422 := x ∘ y = z ∘ (z ∘ (z ∘ y))
+equation 3423 := x ∘ y = z ∘ (z ∘ (z ∘ z))
+equation 3424 := x ∘ y = z ∘ (z ∘ (z ∘ w))
+equation 3425 := x ∘ y = z ∘ (z ∘ (w ∘ x))
+equation 3426 := x ∘ y = z ∘ (z ∘ (w ∘ y))
+equation 3427 := x ∘ y = z ∘ (z ∘ (w ∘ z))
+equation 3428 := x ∘ y = z ∘ (z ∘ (w ∘ w))
+equation 3429 := x ∘ y = z ∘ (z ∘ (w ∘ u))
+equation 3430 := x ∘ y = z ∘ (w ∘ (x ∘ x))
+equation 3431 := x ∘ y = z ∘ (w ∘ (x ∘ y))
+equation 3432 := x ∘ y = z ∘ (w ∘ (x ∘ z))
+equation 3433 := x ∘ y = z ∘ (w ∘ (x ∘ w))
+equation 3434 := x ∘ y = z ∘ (w ∘ (x ∘ u))
+equation 3435 := x ∘ y = z ∘ (w ∘ (y ∘ x))
+equation 3436 := x ∘ y = z ∘ (w ∘ (y ∘ y))
+equation 3437 := x ∘ y = z ∘ (w ∘ (y ∘ z))
+equation 3438 := x ∘ y = z ∘ (w ∘ (y ∘ w))
+equation 3439 := x ∘ y = z ∘ (w ∘ (y ∘ u))
+equation 3440 := x ∘ y = z ∘ (w ∘ (z ∘ x))
+equation 3441 := x ∘ y = z ∘ (w ∘ (z ∘ y))
+equation 3442 := x ∘ y = z ∘ (w ∘ (z ∘ z))
+equation 3443 := x ∘ y = z ∘ (w ∘ (z ∘ w))
+equation 3444 := x ∘ y = z ∘ (w ∘ (z ∘ u))
+equation 3445 := x ∘ y = z ∘ (w ∘ (w ∘ x))
+equation 3446 := x ∘ y = z ∘ (w ∘ (w ∘ y))
+equation 3447 := x ∘ y = z ∘ (w ∘ (w ∘ z))
+equation 3448 := x ∘ y = z ∘ (w ∘ (w ∘ w))
+equation 3449 := x ∘ y = z ∘ (w ∘ (w ∘ u))
+equation 3450 := x ∘ y = z ∘ (w ∘ (u ∘ x))
+equation 3451 := x ∘ y = z ∘ (w ∘ (u ∘ y))
+equation 3452 := x ∘ y = z ∘ (w ∘ (u ∘ z))
+equation 3453 := x ∘ y = z ∘ (w ∘ (u ∘ w))
+equation 3454 := x ∘ y = z ∘ (w ∘ (u ∘ u))
+equation 3455 := x ∘ y = z ∘ (w ∘ (u ∘ v))
+equation 3456 := x ∘ x = x ∘ ((x ∘ x) ∘ x)
+equation 3457 := x ∘ x = x ∘ ((x ∘ x) ∘ y)
+equation 3458 := x ∘ x = x ∘ ((x ∘ y) ∘ x)
+equation 3459 := x ∘ x = x ∘ ((x ∘ y) ∘ y)
+equation 3460 := x ∘ x = x ∘ ((x ∘ y) ∘ z)
+equation 3461 := x ∘ x = x ∘ ((y ∘ x) ∘ x)
+equation 3462 := x ∘ x = x ∘ ((y ∘ x) ∘ y)
+equation 3463 := x ∘ x = x ∘ ((y ∘ x) ∘ z)
+equation 3464 := x ∘ x = x ∘ ((y ∘ y) ∘ x)
+equation 3465 := x ∘ x = x ∘ ((y ∘ y) ∘ y)
+equation 3466 := x ∘ x = x ∘ ((y ∘ y) ∘ z)
+equation 3467 := x ∘ x = x ∘ ((y ∘ z) ∘ x)
+equation 3468 := x ∘ x = x ∘ ((y ∘ z) ∘ y)
+equation 3469 := x ∘ x = x ∘ ((y ∘ z) ∘ z)
+equation 3470 := x ∘ x = x ∘ ((y ∘ z) ∘ w)
+equation 3471 := x ∘ x = y ∘ ((x ∘ x) ∘ x)
+equation 3472 := x ∘ x = y ∘ ((x ∘ x) ∘ y)
+equation 3473 := x ∘ x = y ∘ ((x ∘ x) ∘ z)
+equation 3474 := x ∘ x = y ∘ ((x ∘ y) ∘ x)
+equation 3475 := x ∘ x = y ∘ ((x ∘ y) ∘ y)
+equation 3476 := x ∘ x = y ∘ ((x ∘ y) ∘ z)
+equation 3477 := x ∘ x = y ∘ ((x ∘ z) ∘ x)
+equation 3478 := x ∘ x = y ∘ ((x ∘ z) ∘ y)
+equation 3479 := x ∘ x = y ∘ ((x ∘ z) ∘ z)
+equation 3480 := x ∘ x = y ∘ ((x ∘ z) ∘ w)
+equation 3481 := x ∘ x = y ∘ ((y ∘ x) ∘ x)
+equation 3482 := x ∘ x = y ∘ ((y ∘ x) ∘ y)
+equation 3483 := x ∘ x = y ∘ ((y ∘ x) ∘ z)
+equation 3484 := x ∘ x = y ∘ ((y ∘ y) ∘ x)
+equation 3485 := x ∘ x = y ∘ ((y ∘ y) ∘ y)
+equation 3486 := x ∘ x = y ∘ ((y ∘ y) ∘ z)
+equation 3487 := x ∘ x = y ∘ ((y ∘ z) ∘ x)
+equation 3488 := x ∘ x = y ∘ ((y ∘ z) ∘ y)
+equation 3489 := x ∘ x = y ∘ ((y ∘ z) ∘ z)
+equation 3490 := x ∘ x = y ∘ ((y ∘ z) ∘ w)
+equation 3491 := x ∘ x = y ∘ ((z ∘ x) ∘ x)
+equation 3492 := x ∘ x = y ∘ ((z ∘ x) ∘ y)
+equation 3493 := x ∘ x = y ∘ ((z ∘ x) ∘ z)
+equation 3494 := x ∘ x = y ∘ ((z ∘ x) ∘ w)
+equation 3495 := x ∘ x = y ∘ ((z ∘ y) ∘ x)
+equation 3496 := x ∘ x = y ∘ ((z ∘ y) ∘ y)
+equation 3497 := x ∘ x = y ∘ ((z ∘ y) ∘ z)
+equation 3498 := x ∘ x = y ∘ ((z ∘ y) ∘ w)
+equation 3499 := x ∘ x = y ∘ ((z ∘ z) ∘ x)
+equation 3500 := x ∘ x = y ∘ ((z ∘ z) ∘ y)
+equation 3501 := x ∘ x = y ∘ ((z ∘ z) ∘ z)
+equation 3502 := x ∘ x = y ∘ ((z ∘ z) ∘ w)
+equation 3503 := x ∘ x = y ∘ ((z ∘ w) ∘ x)
+equation 3504 := x ∘ x = y ∘ ((z ∘ w) ∘ y)
+equation 3505 := x ∘ x = y ∘ ((z ∘ w) ∘ z)
+equation 3506 := x ∘ x = y ∘ ((z ∘ w) ∘ w)
+equation 3507 := x ∘ x = y ∘ ((z ∘ w) ∘ u)
+equation 3508 := x ∘ y = x ∘ ((x ∘ x) ∘ x)
+equation 3509 := x ∘ y = x ∘ ((x ∘ x) ∘ y)
+equation 3510 := x ∘ y = x ∘ ((x ∘ x) ∘ z)
+equation 3511 := x ∘ y = x ∘ ((x ∘ y) ∘ x)
+equation 3512 := x ∘ y = x ∘ ((x ∘ y) ∘ y)
+equation 3513 := x ∘ y = x ∘ ((x ∘ y) ∘ z)
+equation 3514 := x ∘ y = x ∘ ((x ∘ z) ∘ x)
+equation 3515 := x ∘ y = x ∘ ((x ∘ z) ∘ y)
+equation 3516 := x ∘ y = x ∘ ((x ∘ z) ∘ z)
+equation 3517 := x ∘ y = x ∘ ((x ∘ z) ∘ w)
+equation 3518 := x ∘ y = x ∘ ((y ∘ x) ∘ x)
+equation 3519 := x ∘ y = x ∘ ((y ∘ x) ∘ y)
+equation 3520 := x ∘ y = x ∘ ((y ∘ x) ∘ z)
+equation 3521 := x ∘ y = x ∘ ((y ∘ y) ∘ x)
+equation 3522 := x ∘ y = x ∘ ((y ∘ y) ∘ y)
+equation 3523 := x ∘ y = x ∘ ((y ∘ y) ∘ z)
+equation 3524 := x ∘ y = x ∘ ((y ∘ z) ∘ x)
+equation 3525 := x ∘ y = x ∘ ((y ∘ z) ∘ y)
+equation 3526 := x ∘ y = x ∘ ((y ∘ z) ∘ z)
+equation 3527 := x ∘ y = x ∘ ((y ∘ z) ∘ w)
+equation 3528 := x ∘ y = x ∘ ((z ∘ x) ∘ x)
+equation 3529 := x ∘ y = x ∘ ((z ∘ x) ∘ y)
+equation 3530 := x ∘ y = x ∘ ((z ∘ x) ∘ z)
+equation 3531 := x ∘ y = x ∘ ((z ∘ x) ∘ w)
+equation 3532 := x ∘ y = x ∘ ((z ∘ y) ∘ x)
+equation 3533 := x ∘ y = x ∘ ((z ∘ y) ∘ y)
+equation 3534 := x ∘ y = x ∘ ((z ∘ y) ∘ z)
+equation 3535 := x ∘ y = x ∘ ((z ∘ y) ∘ w)
+equation 3536 := x ∘ y = x ∘ ((z ∘ z) ∘ x)
+equation 3537 := x ∘ y = x ∘ ((z ∘ z) ∘ y)
+equation 3538 := x ∘ y = x ∘ ((z ∘ z) ∘ z)
+equation 3539 := x ∘ y = x ∘ ((z ∘ z) ∘ w)
+equation 3540 := x ∘ y = x ∘ ((z ∘ w) ∘ x)
+equation 3541 := x ∘ y = x ∘ ((z ∘ w) ∘ y)
+equation 3542 := x ∘ y = x ∘ ((z ∘ w) ∘ z)
+equation 3543 := x ∘ y = x ∘ ((z ∘ w) ∘ w)
+equation 3544 := x ∘ y = x ∘ ((z ∘ w) ∘ u)
+equation 3545 := x ∘ y = y ∘ ((x ∘ x) ∘ x)
+equation 3546 := x ∘ y = y ∘ ((x ∘ x) ∘ y)
+equation 3547 := x ∘ y = y ∘ ((x ∘ x) ∘ z)
+equation 3548 := x ∘ y = y ∘ ((x ∘ y) ∘ x)
+equation 3549 := x ∘ y = y ∘ ((x ∘ y) ∘ y)
+equation 3550 := x ∘ y = y ∘ ((x ∘ y) ∘ z)
+equation 3551 := x ∘ y = y ∘ ((x ∘ z) ∘ x)
+equation 3552 := x ∘ y = y ∘ ((x ∘ z) ∘ y)
+equation 3553 := x ∘ y = y ∘ ((x ∘ z) ∘ z)
+equation 3554 := x ∘ y = y ∘ ((x ∘ z) ∘ w)
+equation 3555 := x ∘ y = y ∘ ((y ∘ x) ∘ x)
+equation 3556 := x ∘ y = y ∘ ((y ∘ x) ∘ y)
+equation 3557 := x ∘ y = y ∘ ((y ∘ x) ∘ z)
+equation 3558 := x ∘ y = y ∘ ((y ∘ y) ∘ x)
+equation 3559 := x ∘ y = y ∘ ((y ∘ y) ∘ y)
+equation 3560 := x ∘ y = y ∘ ((y ∘ y) ∘ z)
+equation 3561 := x ∘ y = y ∘ ((y ∘ z) ∘ x)
+equation 3562 := x ∘ y = y ∘ ((y ∘ z) ∘ y)
+equation 3563 := x ∘ y = y ∘ ((y ∘ z) ∘ z)
+equation 3564 := x ∘ y = y ∘ ((y ∘ z) ∘ w)
+equation 3565 := x ∘ y = y ∘ ((z ∘ x) ∘ x)
+equation 3566 := x ∘ y = y ∘ ((z ∘ x) ∘ y)
+equation 3567 := x ∘ y = y ∘ ((z ∘ x) ∘ z)
+equation 3568 := x ∘ y = y ∘ ((z ∘ x) ∘ w)
+equation 3569 := x ∘ y = y ∘ ((z ∘ y) ∘ x)
+equation 3570 := x ∘ y = y ∘ ((z ∘ y) ∘ y)
+equation 3571 := x ∘ y = y ∘ ((z ∘ y) ∘ z)
+equation 3572 := x ∘ y = y ∘ ((z ∘ y) ∘ w)
+equation 3573 := x ∘ y = y ∘ ((z ∘ z) ∘ x)
+equation 3574 := x ∘ y = y ∘ ((z ∘ z) ∘ y)
+equation 3575 := x ∘ y = y ∘ ((z ∘ z) ∘ z)
+equation 3576 := x ∘ y = y ∘ ((z ∘ z) ∘ w)
+equation 3577 := x ∘ y = y ∘ ((z ∘ w) ∘ x)
+equation 3578 := x ∘ y = y ∘ ((z ∘ w) ∘ y)
+equation 3579 := x ∘ y = y ∘ ((z ∘ w) ∘ z)
+equation 3580 := x ∘ y = y ∘ ((z ∘ w) ∘ w)
+equation 3581 := x ∘ y = y ∘ ((z ∘ w) ∘ u)
+equation 3582 := x ∘ y = z ∘ ((x ∘ x) ∘ x)
+equation 3583 := x ∘ y = z ∘ ((x ∘ x) ∘ y)
+equation 3584 := x ∘ y = z ∘ ((x ∘ x) ∘ z)
+equation 3585 := x ∘ y = z ∘ ((x ∘ x) ∘ w)
+equation 3586 := x ∘ y = z ∘ ((x ∘ y) ∘ x)
+equation 3587 := x ∘ y = z ∘ ((x ∘ y) ∘ y)
+equation 3588 := x ∘ y = z ∘ ((x ∘ y) ∘ z)
+equation 3589 := x ∘ y = z ∘ ((x ∘ y) ∘ w)
+equation 3590 := x ∘ y = z ∘ ((x ∘ z) ∘ x)
+equation 3591 := x ∘ y = z ∘ ((x ∘ z) ∘ y)
+equation 3592 := x ∘ y = z ∘ ((x ∘ z) ∘ z)
+equation 3593 := x ∘ y = z ∘ ((x ∘ z) ∘ w)
+equation 3594 := x ∘ y = z ∘ ((x ∘ w) ∘ x)
+equation 3595 := x ∘ y = z ∘ ((x ∘ w) ∘ y)
+equation 3596 := x ∘ y = z ∘ ((x ∘ w) ∘ z)
+equation 3597 := x ∘ y = z ∘ ((x ∘ w) ∘ w)
+equation 3598 := x ∘ y = z ∘ ((x ∘ w) ∘ u)
+equation 3599 := x ∘ y = z ∘ ((y ∘ x) ∘ x)
+equation 3600 := x ∘ y = z ∘ ((y ∘ x) ∘ y)
+equation 3601 := x ∘ y = z ∘ ((y ∘ x) ∘ z)
+equation 3602 := x ∘ y = z ∘ ((y ∘ x) ∘ w)
+equation 3603 := x ∘ y = z ∘ ((y ∘ y) ∘ x)
+equation 3604 := x ∘ y = z ∘ ((y ∘ y) ∘ y)
+equation 3605 := x ∘ y = z ∘ ((y ∘ y) ∘ z)
+equation 3606 := x ∘ y = z ∘ ((y ∘ y) ∘ w)
+equation 3607 := x ∘ y = z ∘ ((y ∘ z) ∘ x)
+equation 3608 := x ∘ y = z ∘ ((y ∘ z) ∘ y)
+equation 3609 := x ∘ y = z ∘ ((y ∘ z) ∘ z)
+equation 3610 := x ∘ y = z ∘ ((y ∘ z) ∘ w)
+equation 3611 := x ∘ y = z ∘ ((y ∘ w) ∘ x)
+equation 3612 := x ∘ y = z ∘ ((y ∘ w) ∘ y)
+equation 3613 := x ∘ y = z ∘ ((y ∘ w) ∘ z)
+equation 3614 := x ∘ y = z ∘ ((y ∘ w) ∘ w)
+equation 3615 := x ∘ y = z ∘ ((y ∘ w) ∘ u)
+equation 3616 := x ∘ y = z ∘ ((z ∘ x) ∘ x)
+equation 3617 := x ∘ y = z ∘ ((z ∘ x) ∘ y)
+equation 3618 := x ∘ y = z ∘ ((z ∘ x) ∘ z)
+equation 3619 := x ∘ y = z ∘ ((z ∘ x) ∘ w)
+equation 3620 := x ∘ y = z ∘ ((z ∘ y) ∘ x)
+equation 3621 := x ∘ y = z ∘ ((z ∘ y) ∘ y)
+equation 3622 := x ∘ y = z ∘ ((z ∘ y) ∘ z)
+equation 3623 := x ∘ y = z ∘ ((z ∘ y) ∘ w)
+equation 3624 := x ∘ y = z ∘ ((z ∘ z) ∘ x)
+equation 3625 := x ∘ y = z ∘ ((z ∘ z) ∘ y)
+equation 3626 := x ∘ y = z ∘ ((z ∘ z) ∘ z)
+equation 3627 := x ∘ y = z ∘ ((z ∘ z) ∘ w)
+equation 3628 := x ∘ y = z ∘ ((z ∘ w) ∘ x)
+equation 3629 := x ∘ y = z ∘ ((z ∘ w) ∘ y)
+equation 3630 := x ∘ y = z ∘ ((z ∘ w) ∘ z)
+equation 3631 := x ∘ y = z ∘ ((z ∘ w) ∘ w)
+equation 3632 := x ∘ y = z ∘ ((z ∘ w) ∘ u)
+equation 3633 := x ∘ y = z ∘ ((w ∘ x) ∘ x)
+equation 3634 := x ∘ y = z ∘ ((w ∘ x) ∘ y)
+equation 3635 := x ∘ y = z ∘ ((w ∘ x) ∘ z)
+equation 3636 := x ∘ y = z ∘ ((w ∘ x) ∘ w)
+equation 3637 := x ∘ y = z ∘ ((w ∘ x) ∘ u)
+equation 3638 := x ∘ y = z ∘ ((w ∘ y) ∘ x)
+equation 3639 := x ∘ y = z ∘ ((w ∘ y) ∘ y)
+equation 3640 := x ∘ y = z ∘ ((w ∘ y) ∘ z)
+equation 3641 := x ∘ y = z ∘ ((w ∘ y) ∘ w)
+equation 3642 := x ∘ y = z ∘ ((w ∘ y) ∘ u)
+equation 3643 := x ∘ y = z ∘ ((w ∘ z) ∘ x)
+equation 3644 := x ∘ y = z ∘ ((w ∘ z) ∘ y)
+equation 3645 := x ∘ y = z ∘ ((w ∘ z) ∘ z)
+equation 3646 := x ∘ y = z ∘ ((w ∘ z) ∘ w)
+equation 3647 := x ∘ y = z ∘ ((w ∘ z) ∘ u)
+equation 3648 := x ∘ y = z ∘ ((w ∘ w) ∘ x)
+equation 3649 := x ∘ y = z ∘ ((w ∘ w) ∘ y)
+equation 3650 := x ∘ y = z ∘ ((w ∘ w) ∘ z)
+equation 3651 := x ∘ y = z ∘ ((w ∘ w) ∘ w)
+equation 3652 := x ∘ y = z ∘ ((w ∘ w) ∘ u)
+equation 3653 := x ∘ y = z ∘ ((w ∘ u) ∘ x)
+equation 3654 := x ∘ y = z ∘ ((w ∘ u) ∘ y)
+equation 3655 := x ∘ y = z ∘ ((w ∘ u) ∘ z)
+equation 3656 := x ∘ y = z ∘ ((w ∘ u) ∘ w)
+equation 3657 := x ∘ y = z ∘ ((w ∘ u) ∘ u)
+equation 3658 := x ∘ y = z ∘ ((w ∘ u) ∘ v)
+equation 3659 := x ∘ x = (x ∘ x) ∘ (x ∘ x)
+equation 3660 := x ∘ x = (x ∘ x) ∘ (x ∘ y)
+equation 3661 := x ∘ x = (x ∘ x) ∘ (y ∘ x)
+equation 3662 := x ∘ x = (x ∘ x) ∘ (y ∘ y)
+equation 3663 := x ∘ x = (x ∘ x) ∘ (y ∘ z)
+equation 3664 := x ∘ x = (x ∘ y) ∘ (x ∘ x)
+equation 3665 := x ∘ x = (x ∘ y) ∘ (x ∘ y)
+equation 3666 := x ∘ x = (x ∘ y) ∘ (x ∘ z)
+equation 3667 := x ∘ x = (x ∘ y) ∘ (y ∘ x)
+equation 3668 := x ∘ x = (x ∘ y) ∘ (y ∘ y)
+equation 3669 := x ∘ x = (x ∘ y) ∘ (y ∘ z)
+equation 3670 := x ∘ x = (x ∘ y) ∘ (z ∘ x)
+equation 3671 := x ∘ x = (x ∘ y) ∘ (z ∘ y)
+equation 3672 := x ∘ x = (x ∘ y) ∘ (z ∘ z)
+equation 3673 := x ∘ x = (x ∘ y) ∘ (z ∘ w)
+equation 3674 := x ∘ x = (y ∘ x) ∘ (x ∘ x)
+equation 3675 := x ∘ x = (y ∘ x) ∘ (x ∘ y)
+equation 3676 := x ∘ x = (y ∘ x) ∘ (x ∘ z)
+equation 3677 := x ∘ x = (y ∘ x) ∘ (y ∘ x)
+equation 3678 := x ∘ x = (y ∘ x) ∘ (y ∘ y)
+equation 3679 := x ∘ x = (y ∘ x) ∘ (y ∘ z)
+equation 3680 := x ∘ x = (y ∘ x) ∘ (z ∘ x)
+equation 3681 := x ∘ x = (y ∘ x) ∘ (z ∘ y)
+equation 3682 := x ∘ x = (y ∘ x) ∘ (z ∘ z)
+equation 3683 := x ∘ x = (y ∘ x) ∘ (z ∘ w)
+equation 3684 := x ∘ x = (y ∘ y) ∘ (x ∘ x)
+equation 3685 := x ∘ x = (y ∘ y) ∘ (x ∘ y)
+equation 3686 := x ∘ x = (y ∘ y) ∘ (x ∘ z)
+equation 3687 := x ∘ x = (y ∘ y) ∘ (y ∘ x)
+equation 3688 := x ∘ x = (y ∘ y) ∘ (y ∘ y)
+equation 3689 := x ∘ x = (y ∘ y) ∘ (y ∘ z)
+equation 3690 := x ∘ x = (y ∘ y) ∘ (z ∘ x)
+equation 3691 := x ∘ x = (y ∘ y) ∘ (z ∘ y)
+equation 3692 := x ∘ x = (y ∘ y) ∘ (z ∘ z)
+equation 3693 := x ∘ x = (y ∘ y) ∘ (z ∘ w)
+equation 3694 := x ∘ x = (y ∘ z) ∘ (x ∘ x)
+equation 3695 := x ∘ x = (y ∘ z) ∘ (x ∘ y)
+equation 3696 := x ∘ x = (y ∘ z) ∘ (x ∘ z)
+equation 3697 := x ∘ x = (y ∘ z) ∘ (x ∘ w)
+equation 3698 := x ∘ x = (y ∘ z) ∘ (y ∘ x)
+equation 3699 := x ∘ x = (y ∘ z) ∘ (y ∘ y)
+equation 3700 := x ∘ x = (y ∘ z) ∘ (y ∘ z)
+equation 3701 := x ∘ x = (y ∘ z) ∘ (y ∘ w)
+equation 3702 := x ∘ x = (y ∘ z) ∘ (z ∘ x)
+equation 3703 := x ∘ x = (y ∘ z) ∘ (z ∘ y)
+equation 3704 := x ∘ x = (y ∘ z) ∘ (z ∘ z)
+equation 3705 := x ∘ x = (y ∘ z) ∘ (z ∘ w)
+equation 3706 := x ∘ x = (y ∘ z) ∘ (w ∘ x)
+equation 3707 := x ∘ x = (y ∘ z) ∘ (w ∘ y)
+equation 3708 := x ∘ x = (y ∘ z) ∘ (w ∘ z)
+equation 3709 := x ∘ x = (y ∘ z) ∘ (w ∘ w)
+equation 3710 := x ∘ x = (y ∘ z) ∘ (w ∘ u)
+equation 3711 := x ∘ y = (x ∘ x) ∘ (x ∘ x)
+equation 3712 := x ∘ y = (x ∘ x) ∘ (x ∘ y)
+equation 3713 := x ∘ y = (x ∘ x) ∘ (x ∘ z)
+equation 3714 := x ∘ y = (x ∘ x) ∘ (y ∘ x)
+equation 3715 := x ∘ y = (x ∘ x) ∘ (y ∘ y)
+equation 3716 := x ∘ y = (x ∘ x) ∘ (y ∘ z)
+equation 3717 := x ∘ y = (x ∘ x) ∘ (z ∘ x)
+equation 3718 := x ∘ y = (x ∘ x) ∘ (z ∘ y)
+equation 3719 := x ∘ y = (x ∘ x) ∘ (z ∘ z)
+equation 3720 := x ∘ y = (x ∘ x) ∘ (z ∘ w)
+equation 3721 := x ∘ y = (x ∘ y) ∘ (x ∘ x)
+equation 3722 := x ∘ y = (x ∘ y) ∘ (x ∘ y)
+equation 3723 := x ∘ y = (x ∘ y) ∘ (x ∘ z)
+equation 3724 := x ∘ y = (x ∘ y) ∘ (y ∘ x)
+equation 3725 := x ∘ y = (x ∘ y) ∘ (y ∘ y)
+equation 3726 := x ∘ y = (x ∘ y) ∘ (y ∘ z)
+equation 3727 := x ∘ y = (x ∘ y) ∘ (z ∘ x)
+equation 3728 := x ∘ y = (x ∘ y) ∘ (z ∘ y)
+equation 3729 := x ∘ y = (x ∘ y) ∘ (z ∘ z)
+equation 3730 := x ∘ y = (x ∘ y) ∘ (z ∘ w)
+equation 3731 := x ∘ y = (x ∘ z) ∘ (x ∘ x)
+equation 3732 := x ∘ y = (x ∘ z) ∘ (x ∘ y)
+equation 3733 := x ∘ y = (x ∘ z) ∘ (x ∘ z)
+equation 3734 := x ∘ y = (x ∘ z) ∘ (x ∘ w)
+equation 3735 := x ∘ y = (x ∘ z) ∘ (y ∘ x)
+equation 3736 := x ∘ y = (x ∘ z) ∘ (y ∘ y)
+equation 3737 := x ∘ y = (x ∘ z) ∘ (y ∘ z)
+equation 3738 := x ∘ y = (x ∘ z) ∘ (y ∘ w)
+equation 3739 := x ∘ y = (x ∘ z) ∘ (z ∘ x)
+equation 3740 := x ∘ y = (x ∘ z) ∘ (z ∘ y)
+equation 3741 := x ∘ y = (x ∘ z) ∘ (z ∘ z)
+equation 3742 := x ∘ y = (x ∘ z) ∘ (z ∘ w)
+equation 3743 := x ∘ y = (x ∘ z) ∘ (w ∘ x)
+equation 3744 := x ∘ y = (x ∘ z) ∘ (w ∘ y)
+equation 3745 := x ∘ y = (x ∘ z) ∘ (w ∘ z)
+equation 3746 := x ∘ y = (x ∘ z) ∘ (w ∘ w)
+equation 3747 := x ∘ y = (x ∘ z) ∘ (w ∘ u)
+equation 3748 := x ∘ y = (y ∘ x) ∘ (x ∘ x)
+equation 3749 := x ∘ y = (y ∘ x) ∘ (x ∘ y)
+equation 3750 := x ∘ y = (y ∘ x) ∘ (x ∘ z)
+equation 3751 := x ∘ y = (y ∘ x) ∘ (y ∘ x)
+equation 3752 := x ∘ y = (y ∘ x) ∘ (y ∘ y)
+equation 3753 := x ∘ y = (y ∘ x) ∘ (y ∘ z)
+equation 3754 := x ∘ y = (y ∘ x) ∘ (z ∘ x)
+equation 3755 := x ∘ y = (y ∘ x) ∘ (z ∘ y)
+equation 3756 := x ∘ y = (y ∘ x) ∘ (z ∘ z)
+equation 3757 := x ∘ y = (y ∘ x) ∘ (z ∘ w)
+equation 3758 := x ∘ y = (y ∘ y) ∘ (x ∘ x)
+equation 3759 := x ∘ y = (y ∘ y) ∘ (x ∘ y)
+equation 3760 := x ∘ y = (y ∘ y) ∘ (x ∘ z)
+equation 3761 := x ∘ y = (y ∘ y) ∘ (y ∘ x)
+equation 3762 := x ∘ y = (y ∘ y) ∘ (y ∘ y)
+equation 3763 := x ∘ y = (y ∘ y) ∘ (y ∘ z)
+equation 3764 := x ∘ y = (y ∘ y) ∘ (z ∘ x)
+equation 3765 := x ∘ y = (y ∘ y) ∘ (z ∘ y)
+equation 3766 := x ∘ y = (y ∘ y) ∘ (z ∘ z)
+equation 3767 := x ∘ y = (y ∘ y) ∘ (z ∘ w)
+equation 3768 := x ∘ y = (y ∘ z) ∘ (x ∘ x)
+equation 3769 := x ∘ y = (y ∘ z) ∘ (x ∘ y)
+equation 3770 := x ∘ y = (y ∘ z) ∘ (x ∘ z)
+equation 3771 := x ∘ y = (y ∘ z) ∘ (x ∘ w)
+equation 3772 := x ∘ y = (y ∘ z) ∘ (y ∘ x)
+equation 3773 := x ∘ y = (y ∘ z) ∘ (y ∘ y)
+equation 3774 := x ∘ y = (y ∘ z) ∘ (y ∘ z)
+equation 3775 := x ∘ y = (y ∘ z) ∘ (y ∘ w)
+equation 3776 := x ∘ y = (y ∘ z) ∘ (z ∘ x)
+equation 3777 := x ∘ y = (y ∘ z) ∘ (z ∘ y)
+equation 3778 := x ∘ y = (y ∘ z) ∘ (z ∘ z)
+equation 3779 := x ∘ y = (y ∘ z) ∘ (z ∘ w)
+equation 3780 := x ∘ y = (y ∘ z) ∘ (w ∘ x)
+equation 3781 := x ∘ y = (y ∘ z) ∘ (w ∘ y)
+equation 3782 := x ∘ y = (y ∘ z) ∘ (w ∘ z)
+equation 3783 := x ∘ y = (y ∘ z) ∘ (w ∘ w)
+equation 3784 := x ∘ y = (y ∘ z) ∘ (w ∘ u)
+equation 3785 := x ∘ y = (z ∘ x) ∘ (x ∘ x)
+equation 3786 := x ∘ y = (z ∘ x) ∘ (x ∘ y)
+equation 3787 := x ∘ y = (z ∘ x) ∘ (x ∘ z)
+equation 3788 := x ∘ y = (z ∘ x) ∘ (x ∘ w)
+equation 3789 := x ∘ y = (z ∘ x) ∘ (y ∘ x)
+equation 3790 := x ∘ y = (z ∘ x) ∘ (y ∘ y)
+equation 3791 := x ∘ y = (z ∘ x) ∘ (y ∘ z)
+equation 3792 := x ∘ y = (z ∘ x) ∘ (y ∘ w)
+equation 3793 := x ∘ y = (z ∘ x) ∘ (z ∘ x)
+equation 3794 := x ∘ y = (z ∘ x) ∘ (z ∘ y)
+equation 3795 := x ∘ y = (z ∘ x) ∘ (z ∘ z)
+equation 3796 := x ∘ y = (z ∘ x) ∘ (z ∘ w)
+equation 3797 := x ∘ y = (z ∘ x) ∘ (w ∘ x)
+equation 3798 := x ∘ y = (z ∘ x) ∘ (w ∘ y)
+equation 3799 := x ∘ y = (z ∘ x) ∘ (w ∘ z)
+equation 3800 := x ∘ y = (z ∘ x) ∘ (w ∘ w)
+equation 3801 := x ∘ y = (z ∘ x) ∘ (w ∘ u)
+equation 3802 := x ∘ y = (z ∘ y) ∘ (x ∘ x)
+equation 3803 := x ∘ y = (z ∘ y) ∘ (x ∘ y)
+equation 3804 := x ∘ y = (z ∘ y) ∘ (x ∘ z)
+equation 3805 := x ∘ y = (z ∘ y) ∘ (x ∘ w)
+equation 3806 := x ∘ y = (z ∘ y) ∘ (y ∘ x)
+equation 3807 := x ∘ y = (z ∘ y) ∘ (y ∘ y)
+equation 3808 := x ∘ y = (z ∘ y) ∘ (y ∘ z)
+equation 3809 := x ∘ y = (z ∘ y) ∘ (y ∘ w)
+equation 3810 := x ∘ y = (z ∘ y) ∘ (z ∘ x)
+equation 3811 := x ∘ y = (z ∘ y) ∘ (z ∘ y)
+equation 3812 := x ∘ y = (z ∘ y) ∘ (z ∘ z)
+equation 3813 := x ∘ y = (z ∘ y) ∘ (z ∘ w)
+equation 3814 := x ∘ y = (z ∘ y) ∘ (w ∘ x)
+equation 3815 := x ∘ y = (z ∘ y) ∘ (w ∘ y)
+equation 3816 := x ∘ y = (z ∘ y) ∘ (w ∘ z)
+equation 3817 := x ∘ y = (z ∘ y) ∘ (w ∘ w)
+equation 3818 := x ∘ y = (z ∘ y) ∘ (w ∘ u)
+equation 3819 := x ∘ y = (z ∘ z) ∘ (x ∘ x)
+equation 3820 := x ∘ y = (z ∘ z) ∘ (x ∘ y)
+equation 3821 := x ∘ y = (z ∘ z) ∘ (x ∘ z)
+equation 3822 := x ∘ y = (z ∘ z) ∘ (x ∘ w)
+equation 3823 := x ∘ y = (z ∘ z) ∘ (y ∘ x)
+equation 3824 := x ∘ y = (z ∘ z) ∘ (y ∘ y)
+equation 3825 := x ∘ y = (z ∘ z) ∘ (y ∘ z)
+equation 3826 := x ∘ y = (z ∘ z) ∘ (y ∘ w)
+equation 3827 := x ∘ y = (z ∘ z) ∘ (z ∘ x)
+equation 3828 := x ∘ y = (z ∘ z) ∘ (z ∘ y)
+equation 3829 := x ∘ y = (z ∘ z) ∘ (z ∘ z)
+equation 3830 := x ∘ y = (z ∘ z) ∘ (z ∘ w)
+equation 3831 := x ∘ y = (z ∘ z) ∘ (w ∘ x)
+equation 3832 := x ∘ y = (z ∘ z) ∘ (w ∘ y)
+equation 3833 := x ∘ y = (z ∘ z) ∘ (w ∘ z)
+equation 3834 := x ∘ y = (z ∘ z) ∘ (w ∘ w)
+equation 3835 := x ∘ y = (z ∘ z) ∘ (w ∘ u)
+equation 3836 := x ∘ y = (z ∘ w) ∘ (x ∘ x)
+equation 3837 := x ∘ y = (z ∘ w) ∘ (x ∘ y)
+equation 3838 := x ∘ y = (z ∘ w) ∘ (x ∘ z)
+equation 3839 := x ∘ y = (z ∘ w) ∘ (x ∘ w)
+equation 3840 := x ∘ y = (z ∘ w) ∘ (x ∘ u)
+equation 3841 := x ∘ y = (z ∘ w) ∘ (y ∘ x)
+equation 3842 := x ∘ y = (z ∘ w) ∘ (y ∘ y)
+equation 3843 := x ∘ y = (z ∘ w) ∘ (y ∘ z)
+equation 3844 := x ∘ y = (z ∘ w) ∘ (y ∘ w)
+equation 3845 := x ∘ y = (z ∘ w) ∘ (y ∘ u)
+equation 3846 := x ∘ y = (z ∘ w) ∘ (z ∘ x)
+equation 3847 := x ∘ y = (z ∘ w) ∘ (z ∘ y)
+equation 3848 := x ∘ y = (z ∘ w) ∘ (z ∘ z)
+equation 3849 := x ∘ y = (z ∘ w) ∘ (z ∘ w)
+equation 3850 := x ∘ y = (z ∘ w) ∘ (z ∘ u)
+equation 3851 := x ∘ y = (z ∘ w) ∘ (w ∘ x)
+equation 3852 := x ∘ y = (z ∘ w) ∘ (w ∘ y)
+equation 3853 := x ∘ y = (z ∘ w) ∘ (w ∘ z)
+equation 3854 := x ∘ y = (z ∘ w) ∘ (w ∘ w)
+equation 3855 := x ∘ y = (z ∘ w) ∘ (w ∘ u)
+equation 3856 := x ∘ y = (z ∘ w) ∘ (u ∘ x)
+equation 3857 := x ∘ y = (z ∘ w) ∘ (u ∘ y)
+equation 3858 := x ∘ y = (z ∘ w) ∘ (u ∘ z)
+equation 3859 := x ∘ y = (z ∘ w) ∘ (u ∘ w)
+equation 3860 := x ∘ y = (z ∘ w) ∘ (u ∘ u)
+equation 3861 := x ∘ y = (z ∘ w) ∘ (u ∘ v)
+equation 3862 := x ∘ x = (x ∘ (x ∘ x)) ∘ x
+equation 3863 := x ∘ x = (x ∘ (x ∘ x)) ∘ y
+equation 3864 := x ∘ x = (x ∘ (x ∘ y)) ∘ x
+equation 3865 := x ∘ x = (x ∘ (x ∘ y)) ∘ y
+equation 3866 := x ∘ x = (x ∘ (x ∘ y)) ∘ z
+equation 3867 := x ∘ x = (x ∘ (y ∘ x)) ∘ x
+equation 3868 := x ∘ x = (x ∘ (y ∘ x)) ∘ y
+equation 3869 := x ∘ x = (x ∘ (y ∘ x)) ∘ z
+equation 3870 := x ∘ x = (x ∘ (y ∘ y)) ∘ x
+equation 3871 := x ∘ x = (x ∘ (y ∘ y)) ∘ y
+equation 3872 := x ∘ x = (x ∘ (y ∘ y)) ∘ z
+equation 3873 := x ∘ x = (x ∘ (y ∘ z)) ∘ x
+equation 3874 := x ∘ x = (x ∘ (y ∘ z)) ∘ y
+equation 3875 := x ∘ x = (x ∘ (y ∘ z)) ∘ z
+equation 3876 := x ∘ x = (x ∘ (y ∘ z)) ∘ w
+equation 3877 := x ∘ x = (y ∘ (x ∘ x)) ∘ x
+equation 3878 := x ∘ x = (y ∘ (x ∘ x)) ∘ y
+equation 3879 := x ∘ x = (y ∘ (x ∘ x)) ∘ z
+equation 3880 := x ∘ x = (y ∘ (x ∘ y)) ∘ x
+equation 3881 := x ∘ x = (y ∘ (x ∘ y)) ∘ y
+equation 3882 := x ∘ x = (y ∘ (x ∘ y)) ∘ z
+equation 3883 := x ∘ x = (y ∘ (x ∘ z)) ∘ x
+equation 3884 := x ∘ x = (y ∘ (x ∘ z)) ∘ y
+equation 3885 := x ∘ x = (y ∘ (x ∘ z)) ∘ z
+equation 3886 := x ∘ x = (y ∘ (x ∘ z)) ∘ w
+equation 3887 := x ∘ x = (y ∘ (y ∘ x)) ∘ x
+equation 3888 := x ∘ x = (y ∘ (y ∘ x)) ∘ y
+equation 3889 := x ∘ x = (y ∘ (y ∘ x)) ∘ z
+equation 3890 := x ∘ x = (y ∘ (y ∘ y)) ∘ x
+equation 3891 := x ∘ x = (y ∘ (y ∘ y)) ∘ y
+equation 3892 := x ∘ x = (y ∘ (y ∘ y)) ∘ z
+equation 3893 := x ∘ x = (y ∘ (y ∘ z)) ∘ x
+equation 3894 := x ∘ x = (y ∘ (y ∘ z)) ∘ y
+equation 3895 := x ∘ x = (y ∘ (y ∘ z)) ∘ z
+equation 3896 := x ∘ x = (y ∘ (y ∘ z)) ∘ w
+equation 3897 := x ∘ x = (y ∘ (z ∘ x)) ∘ x
+equation 3898 := x ∘ x = (y ∘ (z ∘ x)) ∘ y
+equation 3899 := x ∘ x = (y ∘ (z ∘ x)) ∘ z
+equation 3900 := x ∘ x = (y ∘ (z ∘ x)) ∘ w
+equation 3901 := x ∘ x = (y ∘ (z ∘ y)) ∘ x
+equation 3902 := x ∘ x = (y ∘ (z ∘ y)) ∘ y
+equation 3903 := x ∘ x = (y ∘ (z ∘ y)) ∘ z
+equation 3904 := x ∘ x = (y ∘ (z ∘ y)) ∘ w
+equation 3905 := x ∘ x = (y ∘ (z ∘ z)) ∘ x
+equation 3906 := x ∘ x = (y ∘ (z ∘ z)) ∘ y
+equation 3907 := x ∘ x = (y ∘ (z ∘ z)) ∘ z
+equation 3908 := x ∘ x = (y ∘ (z ∘ z)) ∘ w
+equation 3909 := x ∘ x = (y ∘ (z ∘ w)) ∘ x
+equation 3910 := x ∘ x = (y ∘ (z ∘ w)) ∘ y
+equation 3911 := x ∘ x = (y ∘ (z ∘ w)) ∘ z
+equation 3912 := x ∘ x = (y ∘ (z ∘ w)) ∘ w
+equation 3913 := x ∘ x = (y ∘ (z ∘ w)) ∘ u
+equation 3914 := x ∘ y = (x ∘ (x ∘ x)) ∘ x
+equation 3915 := x ∘ y = (x ∘ (x ∘ x)) ∘ y
+equation 3916 := x ∘ y = (x ∘ (x ∘ x)) ∘ z
+equation 3917 := x ∘ y = (x ∘ (x ∘ y)) ∘ x
+equation 3918 := x ∘ y = (x ∘ (x ∘ y)) ∘ y
+equation 3919 := x ∘ y = (x ∘ (x ∘ y)) ∘ z
+equation 3920 := x ∘ y = (x ∘ (x ∘ z)) ∘ x
+equation 3921 := x ∘ y = (x ∘ (x ∘ z)) ∘ y
+equation 3922 := x ∘ y = (x ∘ (x ∘ z)) ∘ z
+equation 3923 := x ∘ y = (x ∘ (x ∘ z)) ∘ w
+equation 3924 := x ∘ y = (x ∘ (y ∘ x)) ∘ x
+equation 3925 := x ∘ y = (x ∘ (y ∘ x)) ∘ y
+equation 3926 := x ∘ y = (x ∘ (y ∘ x)) ∘ z
+equation 3927 := x ∘ y = (x ∘ (y ∘ y)) ∘ x
+equation 3928 := x ∘ y = (x ∘ (y ∘ y)) ∘ y
+equation 3929 := x ∘ y = (x ∘ (y ∘ y)) ∘ z
+equation 3930 := x ∘ y = (x ∘ (y ∘ z)) ∘ x
+equation 3931 := x ∘ y = (x ∘ (y ∘ z)) ∘ y
+equation 3932 := x ∘ y = (x ∘ (y ∘ z)) ∘ z
+equation 3933 := x ∘ y = (x ∘ (y ∘ z)) ∘ w
+equation 3934 := x ∘ y = (x ∘ (z ∘ x)) ∘ x
+equation 3935 := x ∘ y = (x ∘ (z ∘ x)) ∘ y
+equation 3936 := x ∘ y = (x ∘ (z ∘ x)) ∘ z
+equation 3937 := x ∘ y = (x ∘ (z ∘ x)) ∘ w
+equation 3938 := x ∘ y = (x ∘ (z ∘ y)) ∘ x
+equation 3939 := x ∘ y = (x ∘ (z ∘ y)) ∘ y
+equation 3940 := x ∘ y = (x ∘ (z ∘ y)) ∘ z
+equation 3941 := x ∘ y = (x ∘ (z ∘ y)) ∘ w
+equation 3942 := x ∘ y = (x ∘ (z ∘ z)) ∘ x
+equation 3943 := x ∘ y = (x ∘ (z ∘ z)) ∘ y
+equation 3944 := x ∘ y = (x ∘ (z ∘ z)) ∘ z
+equation 3945 := x ∘ y = (x ∘ (z ∘ z)) ∘ w
+equation 3946 := x ∘ y = (x ∘ (z ∘ w)) ∘ x
+equation 3947 := x ∘ y = (x ∘ (z ∘ w)) ∘ y
+equation 3948 := x ∘ y = (x ∘ (z ∘ w)) ∘ z
+equation 3949 := x ∘ y = (x ∘ (z ∘ w)) ∘ w
+equation 3950 := x ∘ y = (x ∘ (z ∘ w)) ∘ u
+equation 3951 := x ∘ y = (y ∘ (x ∘ x)) ∘ x
+equation 3952 := x ∘ y = (y ∘ (x ∘ x)) ∘ y
+equation 3953 := x ∘ y = (y ∘ (x ∘ x)) ∘ z
+equation 3954 := x ∘ y = (y ∘ (x ∘ y)) ∘ x
+equation 3955 := x ∘ y = (y ∘ (x ∘ y)) ∘ y
+equation 3956 := x ∘ y = (y ∘ (x ∘ y)) ∘ z
+equation 3957 := x ∘ y = (y ∘ (x ∘ z)) ∘ x
+equation 3958 := x ∘ y = (y ∘ (x ∘ z)) ∘ y
+equation 3959 := x ∘ y = (y ∘ (x ∘ z)) ∘ z
+equation 3960 := x ∘ y = (y ∘ (x ∘ z)) ∘ w
+equation 3961 := x ∘ y = (y ∘ (y ∘ x)) ∘ x
+equation 3962 := x ∘ y = (y ∘ (y ∘ x)) ∘ y
+equation 3963 := x ∘ y = (y ∘ (y ∘ x)) ∘ z
+equation 3964 := x ∘ y = (y ∘ (y ∘ y)) ∘ x
+equation 3965 := x ∘ y = (y ∘ (y ∘ y)) ∘ y
+equation 3966 := x ∘ y = (y ∘ (y ∘ y)) ∘ z
+equation 3967 := x ∘ y = (y ∘ (y ∘ z)) ∘ x
+equation 3968 := x ∘ y = (y ∘ (y ∘ z)) ∘ y
+equation 3969 := x ∘ y = (y ∘ (y ∘ z)) ∘ z
+equation 3970 := x ∘ y = (y ∘ (y ∘ z)) ∘ w
+equation 3971 := x ∘ y = (y ∘ (z ∘ x)) ∘ x
+equation 3972 := x ∘ y = (y ∘ (z ∘ x)) ∘ y
+equation 3973 := x ∘ y = (y ∘ (z ∘ x)) ∘ z
+equation 3974 := x ∘ y = (y ∘ (z ∘ x)) ∘ w
+equation 3975 := x ∘ y = (y ∘ (z ∘ y)) ∘ x
+equation 3976 := x ∘ y = (y ∘ (z ∘ y)) ∘ y
+equation 3977 := x ∘ y = (y ∘ (z ∘ y)) ∘ z
+equation 3978 := x ∘ y = (y ∘ (z ∘ y)) ∘ w
+equation 3979 := x ∘ y = (y ∘ (z ∘ z)) ∘ x
+equation 3980 := x ∘ y = (y ∘ (z ∘ z)) ∘ y
+equation 3981 := x ∘ y = (y ∘ (z ∘ z)) ∘ z
+equation 3982 := x ∘ y = (y ∘ (z ∘ z)) ∘ w
+equation 3983 := x ∘ y = (y ∘ (z ∘ w)) ∘ x
+equation 3984 := x ∘ y = (y ∘ (z ∘ w)) ∘ y
+equation 3985 := x ∘ y = (y ∘ (z ∘ w)) ∘ z
+equation 3986 := x ∘ y = (y ∘ (z ∘ w)) ∘ w
+equation 3987 := x ∘ y = (y ∘ (z ∘ w)) ∘ u
+equation 3988 := x ∘ y = (z ∘ (x ∘ x)) ∘ x
+equation 3989 := x ∘ y = (z ∘ (x ∘ x)) ∘ y
+equation 3990 := x ∘ y = (z ∘ (x ∘ x)) ∘ z
+equation 3991 := x ∘ y = (z ∘ (x ∘ x)) ∘ w
+equation 3992 := x ∘ y = (z ∘ (x ∘ y)) ∘ x
+equation 3993 := x ∘ y = (z ∘ (x ∘ y)) ∘ y
+equation 3994 := x ∘ y = (z ∘ (x ∘ y)) ∘ z
+equation 3995 := x ∘ y = (z ∘ (x ∘ y)) ∘ w
+equation 3996 := x ∘ y = (z ∘ (x ∘ z)) ∘ x
+equation 3997 := x ∘ y = (z ∘ (x ∘ z)) ∘ y
+equation 3998 := x ∘ y = (z ∘ (x ∘ z)) ∘ z
+equation 3999 := x ∘ y = (z ∘ (x ∘ z)) ∘ w
+equation 4000 := x ∘ y = (z ∘ (x ∘ w)) ∘ x
+equation 4001 := x ∘ y = (z ∘ (x ∘ w)) ∘ y
+equation 4002 := x ∘ y = (z ∘ (x ∘ w)) ∘ z
+equation 4003 := x ∘ y = (z ∘ (x ∘ w)) ∘ w
+equation 4004 := x ∘ y = (z ∘ (x ∘ w)) ∘ u
+equation 4005 := x ∘ y = (z ∘ (y ∘ x)) ∘ x
+equation 4006 := x ∘ y = (z ∘ (y ∘ x)) ∘ y
+equation 4007 := x ∘ y = (z ∘ (y ∘ x)) ∘ z
+equation 4008 := x ∘ y = (z ∘ (y ∘ x)) ∘ w
+equation 4009 := x ∘ y = (z ∘ (y ∘ y)) ∘ x
+equation 4010 := x ∘ y = (z ∘ (y ∘ y)) ∘ y
+equation 4011 := x ∘ y = (z ∘ (y ∘ y)) ∘ z
+equation 4012 := x ∘ y = (z ∘ (y ∘ y)) ∘ w
+equation 4013 := x ∘ y = (z ∘ (y ∘ z)) ∘ x
+equation 4014 := x ∘ y = (z ∘ (y ∘ z)) ∘ y
+equation 4015 := x ∘ y = (z ∘ (y ∘ z)) ∘ z
+equation 4016 := x ∘ y = (z ∘ (y ∘ z)) ∘ w
+equation 4017 := x ∘ y = (z ∘ (y ∘ w)) ∘ x
+equation 4018 := x ∘ y = (z ∘ (y ∘ w)) ∘ y
+equation 4019 := x ∘ y = (z ∘ (y ∘ w)) ∘ z
+equation 4020 := x ∘ y = (z ∘ (y ∘ w)) ∘ w
+equation 4021 := x ∘ y = (z ∘ (y ∘ w)) ∘ u
+equation 4022 := x ∘ y = (z ∘ (z ∘ x)) ∘ x
+equation 4023 := x ∘ y = (z ∘ (z ∘ x)) ∘ y
+equation 4024 := x ∘ y = (z ∘ (z ∘ x)) ∘ z
+equation 4025 := x ∘ y = (z ∘ (z ∘ x)) ∘ w
+equation 4026 := x ∘ y = (z ∘ (z ∘ y)) ∘ x
+equation 4027 := x ∘ y = (z ∘ (z ∘ y)) ∘ y
+equation 4028 := x ∘ y = (z ∘ (z ∘ y)) ∘ z
+equation 4029 := x ∘ y = (z ∘ (z ∘ y)) ∘ w
+equation 4030 := x ∘ y = (z ∘ (z ∘ z)) ∘ x
+equation 4031 := x ∘ y = (z ∘ (z ∘ z)) ∘ y
+equation 4032 := x ∘ y = (z ∘ (z ∘ z)) ∘ z
+equation 4033 := x ∘ y = (z ∘ (z ∘ z)) ∘ w
+equation 4034 := x ∘ y = (z ∘ (z ∘ w)) ∘ x
+equation 4035 := x ∘ y = (z ∘ (z ∘ w)) ∘ y
+equation 4036 := x ∘ y = (z ∘ (z ∘ w)) ∘ z
+equation 4037 := x ∘ y = (z ∘ (z ∘ w)) ∘ w
+equation 4038 := x ∘ y = (z ∘ (z ∘ w)) ∘ u
+equation 4039 := x ∘ y = (z ∘ (w ∘ x)) ∘ x
+equation 4040 := x ∘ y = (z ∘ (w ∘ x)) ∘ y
+equation 4041 := x ∘ y = (z ∘ (w ∘ x)) ∘ z
+equation 4042 := x ∘ y = (z ∘ (w ∘ x)) ∘ w
+equation 4043 := x ∘ y = (z ∘ (w ∘ x)) ∘ u
+equation 4044 := x ∘ y = (z ∘ (w ∘ y)) ∘ x
+equation 4045 := x ∘ y = (z ∘ (w ∘ y)) ∘ y
+equation 4046 := x ∘ y = (z ∘ (w ∘ y)) ∘ z
+equation 4047 := x ∘ y = (z ∘ (w ∘ y)) ∘ w
+equation 4048 := x ∘ y = (z ∘ (w ∘ y)) ∘ u
+equation 4049 := x ∘ y = (z ∘ (w ∘ z)) ∘ x
+equation 4050 := x ∘ y = (z ∘ (w ∘ z)) ∘ y
+equation 4051 := x ∘ y = (z ∘ (w ∘ z)) ∘ z
+equation 4052 := x ∘ y = (z ∘ (w ∘ z)) ∘ w
+equation 4053 := x ∘ y = (z ∘ (w ∘ z)) ∘ u
+equation 4054 := x ∘ y = (z ∘ (w ∘ w)) ∘ x
+equation 4055 := x ∘ y = (z ∘ (w ∘ w)) ∘ y
+equation 4056 := x ∘ y = (z ∘ (w ∘ w)) ∘ z
+equation 4057 := x ∘ y = (z ∘ (w ∘ w)) ∘ w
+equation 4058 := x ∘ y = (z ∘ (w ∘ w)) ∘ u
+equation 4059 := x ∘ y = (z ∘ (w ∘ u)) ∘ x
+equation 4060 := x ∘ y = (z ∘ (w ∘ u)) ∘ y
+equation 4061 := x ∘ y = (z ∘ (w ∘ u)) ∘ z
+equation 4062 := x ∘ y = (z ∘ (w ∘ u)) ∘ w
+equation 4063 := x ∘ y = (z ∘ (w ∘ u)) ∘ u
+equation 4064 := x ∘ y = (z ∘ (w ∘ u)) ∘ v
+equation 4065 := x ∘ x = ((x ∘ x) ∘ x) ∘ x
+equation 4066 := x ∘ x = ((x ∘ x) ∘ x) ∘ y
+equation 4067 := x ∘ x = ((x ∘ x) ∘ y) ∘ x
+equation 4068 := x ∘ x = ((x ∘ x) ∘ y) ∘ y
+equation 4069 := x ∘ x = ((x ∘ x) ∘ y) ∘ z
+equation 4070 := x ∘ x = ((x ∘ y) ∘ x) ∘ x
+equation 4071 := x ∘ x = ((x ∘ y) ∘ x) ∘ y
+equation 4072 := x ∘ x = ((x ∘ y) ∘ x) ∘ z
+equation 4073 := x ∘ x = ((x ∘ y) ∘ y) ∘ x
+equation 4074 := x ∘ x = ((x ∘ y) ∘ y) ∘ y
+equation 4075 := x ∘ x = ((x ∘ y) ∘ y) ∘ z
+equation 4076 := x ∘ x = ((x ∘ y) ∘ z) ∘ x
+equation 4077 := x ∘ x = ((x ∘ y) ∘ z) ∘ y
+equation 4078 := x ∘ x = ((x ∘ y) ∘ z) ∘ z
+equation 4079 := x ∘ x = ((x ∘ y) ∘ z) ∘ w
+equation 4080 := x ∘ x = ((y ∘ x) ∘ x) ∘ x
+equation 4081 := x ∘ x = ((y ∘ x) ∘ x) ∘ y
+equation 4082 := x ∘ x = ((y ∘ x) ∘ x) ∘ z
+equation 4083 := x ∘ x = ((y ∘ x) ∘ y) ∘ x
+equation 4084 := x ∘ x = ((y ∘ x) ∘ y) ∘ y
+equation 4085 := x ∘ x = ((y ∘ x) ∘ y) ∘ z
+equation 4086 := x ∘ x = ((y ∘ x) ∘ z) ∘ x
+equation 4087 := x ∘ x = ((y ∘ x) ∘ z) ∘ y
+equation 4088 := x ∘ x = ((y ∘ x) ∘ z) ∘ z
+equation 4089 := x ∘ x = ((y ∘ x) ∘ z) ∘ w
+equation 4090 := x ∘ x = ((y ∘ y) ∘ x) ∘ x
+equation 4091 := x ∘ x = ((y ∘ y) ∘ x) ∘ y
+equation 4092 := x ∘ x = ((y ∘ y) ∘ x) ∘ z
+equation 4093 := x ∘ x = ((y ∘ y) ∘ y) ∘ x
+equation 4094 := x ∘ x = ((y ∘ y) ∘ y) ∘ y
+equation 4095 := x ∘ x = ((y ∘ y) ∘ y) ∘ z
+equation 4096 := x ∘ x = ((y ∘ y) ∘ z) ∘ x
+equation 4097 := x ∘ x = ((y ∘ y) ∘ z) ∘ y
+equation 4098 := x ∘ x = ((y ∘ y) ∘ z) ∘ z
+equation 4099 := x ∘ x = ((y ∘ y) ∘ z) ∘ w
+equation 4100 := x ∘ x = ((y ∘ z) ∘ x) ∘ x
+equation 4101 := x ∘ x = ((y ∘ z) ∘ x) ∘ y
+equation 4102 := x ∘ x = ((y ∘ z) ∘ x) ∘ z
+equation 4103 := x ∘ x = ((y ∘ z) ∘ x) ∘ w
+equation 4104 := x ∘ x = ((y ∘ z) ∘ y) ∘ x
+equation 4105 := x ∘ x = ((y ∘ z) ∘ y) ∘ y
+equation 4106 := x ∘ x = ((y ∘ z) ∘ y) ∘ z
+equation 4107 := x ∘ x = ((y ∘ z) ∘ y) ∘ w
+equation 4108 := x ∘ x = ((y ∘ z) ∘ z) ∘ x
+equation 4109 := x ∘ x = ((y ∘ z) ∘ z) ∘ y
+equation 4110 := x ∘ x = ((y ∘ z) ∘ z) ∘ z
+equation 4111 := x ∘ x = ((y ∘ z) ∘ z) ∘ w
+equation 4112 := x ∘ x = ((y ∘ z) ∘ w) ∘ x
+equation 4113 := x ∘ x = ((y ∘ z) ∘ w) ∘ y
+equation 4114 := x ∘ x = ((y ∘ z) ∘ w) ∘ z
+equation 4115 := x ∘ x = ((y ∘ z) ∘ w) ∘ w
+equation 4116 := x ∘ x = ((y ∘ z) ∘ w) ∘ u
+equation 4117 := x ∘ y = ((x ∘ x) ∘ x) ∘ x
+equation 4118 := x ∘ y = ((x ∘ x) ∘ x) ∘ y
+equation 4119 := x ∘ y = ((x ∘ x) ∘ x) ∘ z
+equation 4120 := x ∘ y = ((x ∘ x) ∘ y) ∘ x
+equation 4121 := x ∘ y = ((x ∘ x) ∘ y) ∘ y
+equation 4122 := x ∘ y = ((x ∘ x) ∘ y) ∘ z
+equation 4123 := x ∘ y = ((x ∘ x) ∘ z) ∘ x
+equation 4124 := x ∘ y = ((x ∘ x) ∘ z) ∘ y
+equation 4125 := x ∘ y = ((x ∘ x) ∘ z) ∘ z
+equation 4126 := x ∘ y = ((x ∘ x) ∘ z) ∘ w
+equation 4127 := x ∘ y = ((x ∘ y) ∘ x) ∘ x
+equation 4128 := x ∘ y = ((x ∘ y) ∘ x) ∘ y
+equation 4129 := x ∘ y = ((x ∘ y) ∘ x) ∘ z
+equation 4130 := x ∘ y = ((x ∘ y) ∘ y) ∘ x
+equation 4131 := x ∘ y = ((x ∘ y) ∘ y) ∘ y
+equation 4132 := x ∘ y = ((x ∘ y) ∘ y) ∘ z
+equation 4133 := x ∘ y = ((x ∘ y) ∘ z) ∘ x
+equation 4134 := x ∘ y = ((x ∘ y) ∘ z) ∘ y
+equation 4135 := x ∘ y = ((x ∘ y) ∘ z) ∘ z
+equation 4136 := x ∘ y = ((x ∘ y) ∘ z) ∘ w
+equation 4137 := x ∘ y = ((x ∘ z) ∘ x) ∘ x
+equation 4138 := x ∘ y = ((x ∘ z) ∘ x) ∘ y
+equation 4139 := x ∘ y = ((x ∘ z) ∘ x) ∘ z
+equation 4140 := x ∘ y = ((x ∘ z) ∘ x) ∘ w
+equation 4141 := x ∘ y = ((x ∘ z) ∘ y) ∘ x
+equation 4142 := x ∘ y = ((x ∘ z) ∘ y) ∘ y
+equation 4143 := x ∘ y = ((x ∘ z) ∘ y) ∘ z
+equation 4144 := x ∘ y = ((x ∘ z) ∘ y) ∘ w
+equation 4145 := x ∘ y = ((x ∘ z) ∘ z) ∘ x
+equation 4146 := x ∘ y = ((x ∘ z) ∘ z) ∘ y
+equation 4147 := x ∘ y = ((x ∘ z) ∘ z) ∘ z
+equation 4148 := x ∘ y = ((x ∘ z) ∘ z) ∘ w
+equation 4149 := x ∘ y = ((x ∘ z) ∘ w) ∘ x
+equation 4150 := x ∘ y = ((x ∘ z) ∘ w) ∘ y
+equation 4151 := x ∘ y = ((x ∘ z) ∘ w) ∘ z
+equation 4152 := x ∘ y = ((x ∘ z) ∘ w) ∘ w
+equation 4153 := x ∘ y = ((x ∘ z) ∘ w) ∘ u
+equation 4154 := x ∘ y = ((y ∘ x) ∘ x) ∘ x
+equation 4155 := x ∘ y = ((y ∘ x) ∘ x) ∘ y
+equation 4156 := x ∘ y = ((y ∘ x) ∘ x) ∘ z
+equation 4157 := x ∘ y = ((y ∘ x) ∘ y) ∘ x
+equation 4158 := x ∘ y = ((y ∘ x) ∘ y) ∘ y
+equation 4159 := x ∘ y = ((y ∘ x) ∘ y) ∘ z
+equation 4160 := x ∘ y = ((y ∘ x) ∘ z) ∘ x
+equation 4161 := x ∘ y = ((y ∘ x) ∘ z) ∘ y
+equation 4162 := x ∘ y = ((y ∘ x) ∘ z) ∘ z
+equation 4163 := x ∘ y = ((y ∘ x) ∘ z) ∘ w
+equation 4164 := x ∘ y = ((y ∘ y) ∘ x) ∘ x
+equation 4165 := x ∘ y = ((y ∘ y) ∘ x) ∘ y
+equation 4166 := x ∘ y = ((y ∘ y) ∘ x) ∘ z
+equation 4167 := x ∘ y = ((y ∘ y) ∘ y) ∘ x
+equation 4168 := x ∘ y = ((y ∘ y) ∘ y) ∘ y
+equation 4169 := x ∘ y = ((y ∘ y) ∘ y) ∘ z
+equation 4170 := x ∘ y = ((y ∘ y) ∘ z) ∘ x
+equation 4171 := x ∘ y = ((y ∘ y) ∘ z) ∘ y
+equation 4172 := x ∘ y = ((y ∘ y) ∘ z) ∘ z
+equation 4173 := x ∘ y = ((y ∘ y) ∘ z) ∘ w
+equation 4174 := x ∘ y = ((y ∘ z) ∘ x) ∘ x
+equation 4175 := x ∘ y = ((y ∘ z) ∘ x) ∘ y
+equation 4176 := x ∘ y = ((y ∘ z) ∘ x) ∘ z
+equation 4177 := x ∘ y = ((y ∘ z) ∘ x) ∘ w
+equation 4178 := x ∘ y = ((y ∘ z) ∘ y) ∘ x
+equation 4179 := x ∘ y = ((y ∘ z) ∘ y) ∘ y
+equation 4180 := x ∘ y = ((y ∘ z) ∘ y) ∘ z
+equation 4181 := x ∘ y = ((y ∘ z) ∘ y) ∘ w
+equation 4182 := x ∘ y = ((y ∘ z) ∘ z) ∘ x
+equation 4183 := x ∘ y = ((y ∘ z) ∘ z) ∘ y
+equation 4184 := x ∘ y = ((y ∘ z) ∘ z) ∘ z
+equation 4185 := x ∘ y = ((y ∘ z) ∘ z) ∘ w
+equation 4186 := x ∘ y = ((y ∘ z) ∘ w) ∘ x
+equation 4187 := x ∘ y = ((y ∘ z) ∘ w) ∘ y
+equation 4188 := x ∘ y = ((y ∘ z) ∘ w) ∘ z
+equation 4189 := x ∘ y = ((y ∘ z) ∘ w) ∘ w
+equation 4190 := x ∘ y = ((y ∘ z) ∘ w) ∘ u
+equation 4191 := x ∘ y = ((z ∘ x) ∘ x) ∘ x
+equation 4192 := x ∘ y = ((z ∘ x) ∘ x) ∘ y
+equation 4193 := x ∘ y = ((z ∘ x) ∘ x) ∘ z
+equation 4194 := x ∘ y = ((z ∘ x) ∘ x) ∘ w
+equation 4195 := x ∘ y = ((z ∘ x) ∘ y) ∘ x
+equation 4196 := x ∘ y = ((z ∘ x) ∘ y) ∘ y
+equation 4197 := x ∘ y = ((z ∘ x) ∘ y) ∘ z
+equation 4198 := x ∘ y = ((z ∘ x) ∘ y) ∘ w
+equation 4199 := x ∘ y = ((z ∘ x) ∘ z) ∘ x
+equation 4200 := x ∘ y = ((z ∘ x) ∘ z) ∘ y
+equation 4201 := x ∘ y = ((z ∘ x) ∘ z) ∘ z
+equation 4202 := x ∘ y = ((z ∘ x) ∘ z) ∘ w
+equation 4203 := x ∘ y = ((z ∘ x) ∘ w) ∘ x
+equation 4204 := x ∘ y = ((z ∘ x) ∘ w) ∘ y
+equation 4205 := x ∘ y = ((z ∘ x) ∘ w) ∘ z
+equation 4206 := x ∘ y = ((z ∘ x) ∘ w) ∘ w
+equation 4207 := x ∘ y = ((z ∘ x) ∘ w) ∘ u
+equation 4208 := x ∘ y = ((z ∘ y) ∘ x) ∘ x
+equation 4209 := x ∘ y = ((z ∘ y) ∘ x) ∘ y
+equation 4210 := x ∘ y = ((z ∘ y) ∘ x) ∘ z
+equation 4211 := x ∘ y = ((z ∘ y) ∘ x) ∘ w
+equation 4212 := x ∘ y = ((z ∘ y) ∘ y) ∘ x
+equation 4213 := x ∘ y = ((z ∘ y) ∘ y) ∘ y
+equation 4214 := x ∘ y = ((z ∘ y) ∘ y) ∘ z
+equation 4215 := x ∘ y = ((z ∘ y) ∘ y) ∘ w
+equation 4216 := x ∘ y = ((z ∘ y) ∘ z) ∘ x
+equation 4217 := x ∘ y = ((z ∘ y) ∘ z) ∘ y
+equation 4218 := x ∘ y = ((z ∘ y) ∘ z) ∘ z
+equation 4219 := x ∘ y = ((z ∘ y) ∘ z) ∘ w
+equation 4220 := x ∘ y = ((z ∘ y) ∘ w) ∘ x
+equation 4221 := x ∘ y = ((z ∘ y) ∘ w) ∘ y
+equation 4222 := x ∘ y = ((z ∘ y) ∘ w) ∘ z
+equation 4223 := x ∘ y = ((z ∘ y) ∘ w) ∘ w
+equation 4224 := x ∘ y = ((z ∘ y) ∘ w) ∘ u
+equation 4225 := x ∘ y = ((z ∘ z) ∘ x) ∘ x
+equation 4226 := x ∘ y = ((z ∘ z) ∘ x) ∘ y
+equation 4227 := x ∘ y = ((z ∘ z) ∘ x) ∘ z
+equation 4228 := x ∘ y = ((z ∘ z) ∘ x) ∘ w
+equation 4229 := x ∘ y = ((z ∘ z) ∘ y) ∘ x
+equation 4230 := x ∘ y = ((z ∘ z) ∘ y) ∘ y
+equation 4231 := x ∘ y = ((z ∘ z) ∘ y) ∘ z
+equation 4232 := x ∘ y = ((z ∘ z) ∘ y) ∘ w
+equation 4233 := x ∘ y = ((z ∘ z) ∘ z) ∘ x
+equation 4234 := x ∘ y = ((z ∘ z) ∘ z) ∘ y
+equation 4235 := x ∘ y = ((z ∘ z) ∘ z) ∘ z
+equation 4236 := x ∘ y = ((z ∘ z) ∘ z) ∘ w
+equation 4237 := x ∘ y = ((z ∘ z) ∘ w) ∘ x
+equation 4238 := x ∘ y = ((z ∘ z) ∘ w) ∘ y
+equation 4239 := x ∘ y = ((z ∘ z) ∘ w) ∘ z
+equation 4240 := x ∘ y = ((z ∘ z) ∘ w) ∘ w
+equation 4241 := x ∘ y = ((z ∘ z) ∘ w) ∘ u
+equation 4242 := x ∘ y = ((z ∘ w) ∘ x) ∘ x
+equation 4243 := x ∘ y = ((z ∘ w) ∘ x) ∘ y
+equation 4244 := x ∘ y = ((z ∘ w) ∘ x) ∘ z
+equation 4245 := x ∘ y = ((z ∘ w) ∘ x) ∘ w
+equation 4246 := x ∘ y = ((z ∘ w) ∘ x) ∘ u
+equation 4247 := x ∘ y = ((z ∘ w) ∘ y) ∘ x
+equation 4248 := x ∘ y = ((z ∘ w) ∘ y) ∘ y
+equation 4249 := x ∘ y = ((z ∘ w) ∘ y) ∘ z
+equation 4250 := x ∘ y = ((z ∘ w) ∘ y) ∘ w
+equation 4251 := x ∘ y = ((z ∘ w) ∘ y) ∘ u
+equation 4252 := x ∘ y = ((z ∘ w) ∘ z) ∘ x
+equation 4253 := x ∘ y = ((z ∘ w) ∘ z) ∘ y
+equation 4254 := x ∘ y = ((z ∘ w) ∘ z) ∘ z
+equation 4255 := x ∘ y = ((z ∘ w) ∘ z) ∘ w
+equation 4256 := x ∘ y = ((z ∘ w) ∘ z) ∘ u
+equation 4257 := x ∘ y = ((z ∘ w) ∘ w) ∘ x
+equation 4258 := x ∘ y = ((z ∘ w) ∘ w) ∘ y
+equation 4259 := x ∘ y = ((z ∘ w) ∘ w) ∘ z
+equation 4260 := x ∘ y = ((z ∘ w) ∘ w) ∘ w
+equation 4261 := x ∘ y = ((z ∘ w) ∘ w) ∘ u
+equation 4262 := x ∘ y = ((z ∘ w) ∘ u) ∘ x
+equation 4263 := x ∘ y = ((z ∘ w) ∘ u) ∘ y
+equation 4264 := x ∘ y = ((z ∘ w) ∘ u) ∘ z
+equation 4265 := x ∘ y = ((z ∘ w) ∘ u) ∘ w
+equation 4266 := x ∘ y = ((z ∘ w) ∘ u) ∘ u
+equation 4267 := x ∘ y = ((z ∘ w) ∘ u) ∘ v
+equation 4268 := x ∘ (x ∘ x) = x ∘ (x ∘ y)
+equation 4269 := x ∘ (x ∘ x) = x ∘ (y ∘ x)
+equation 4270 := x ∘ (x ∘ x) = x ∘ (y ∘ y)
+equation 4271 := x ∘ (x ∘ x) = x ∘ (y ∘ z)
+equation 4272 := x ∘ (x ∘ x) = y ∘ (x ∘ x)
+equation 4273 := x ∘ (x ∘ x) = y ∘ (x ∘ y)
+equation 4274 := x ∘ (x ∘ x) = y ∘ (x ∘ z)
+equation 4275 := x ∘ (x ∘ x) = y ∘ (y ∘ x)
+equation 4276 := x ∘ (x ∘ x) = y ∘ (y ∘ y)
+equation 4277 := x ∘ (x ∘ x) = y ∘ (y ∘ z)
+equation 4278 := x ∘ (x ∘ x) = y ∘ (z ∘ x)
+equation 4279 := x ∘ (x ∘ x) = y ∘ (z ∘ y)
+equation 4280 := x ∘ (x ∘ x) = y ∘ (z ∘ z)
+equation 4281 := x ∘ (x ∘ x) = y ∘ (z ∘ w)
+equation 4282 := x ∘ (x ∘ y) = x ∘ (x ∘ z)
+equation 4283 := x ∘ (x ∘ y) = x ∘ (y ∘ x)
+equation 4284 := x ∘ (x ∘ y) = x ∘ (y ∘ y)
+equation 4285 := x ∘ (x ∘ y) = x ∘ (y ∘ z)
+equation 4286 := x ∘ (x ∘ y) = x ∘ (z ∘ x)
+equation 4287 := x ∘ (x ∘ y) = x ∘ (z ∘ y)
+equation 4288 := x ∘ (x ∘ y) = x ∘ (z ∘ z)
+equation 4289 := x ∘ (x ∘ y) = x ∘ (z ∘ w)
+equation 4290 := x ∘ (x ∘ y) = y ∘ (x ∘ x)
+equation 4291 := x ∘ (x ∘ y) = y ∘ (x ∘ y)
+equation 4292 := x ∘ (x ∘ y) = y ∘ (x ∘ z)
+equation 4293 := x ∘ (x ∘ y) = y ∘ (y ∘ x)
+equation 4294 := x ∘ (x ∘ y) = y ∘ (y ∘ z)
+equation 4295 := x ∘ (x ∘ y) = y ∘ (z ∘ x)
+equation 4296 := x ∘ (x ∘ y) = y ∘ (z ∘ y)
+equation 4297 := x ∘ (x ∘ y) = y ∘ (z ∘ z)
+equation 4298 := x ∘ (x ∘ y) = y ∘ (z ∘ w)
+equation 4299 := x ∘ (x ∘ y) = z ∘ (x ∘ x)
+equation 4300 := x ∘ (x ∘ y) = z ∘ (x ∘ y)
+equation 4301 := x ∘ (x ∘ y) = z ∘ (x ∘ z)
+equation 4302 := x ∘ (x ∘ y) = z ∘ (x ∘ w)
+equation 4303 := x ∘ (x ∘ y) = z ∘ (y ∘ x)
+equation 4304 := x ∘ (x ∘ y) = z ∘ (y ∘ y)
+equation 4305 := x ∘ (x ∘ y) = z ∘ (y ∘ z)
+equation 4306 := x ∘ (x ∘ y) = z ∘ (y ∘ w)
+equation 4307 := x ∘ (x ∘ y) = z ∘ (z ∘ y)
+equation 4308 := x ∘ (x ∘ y) = z ∘ (z ∘ w)
+equation 4309 := x ∘ (x ∘ y) = z ∘ (w ∘ x)
+equation 4310 := x ∘ (x ∘ y) = z ∘ (w ∘ y)
+equation 4311 := x ∘ (x ∘ y) = z ∘ (w ∘ z)
+equation 4312 := x ∘ (x ∘ y) = z ∘ (w ∘ w)
+equation 4313 := x ∘ (x ∘ y) = z ∘ (w ∘ u)
+equation 4314 := x ∘ (y ∘ x) = x ∘ (y ∘ y)
+equation 4315 := x ∘ (y ∘ x) = x ∘ (y ∘ z)
+equation 4316 := x ∘ (y ∘ x) = x ∘ (z ∘ x)
+equation 4317 := x ∘ (y ∘ x) = x ∘ (z ∘ y)
+equation 4318 := x ∘ (y ∘ x) = x ∘ (z ∘ z)
+equation 4319 := x ∘ (y ∘ x) = x ∘ (z ∘ w)
+equation 4320 := x ∘ (y ∘ x) = y ∘ (x ∘ x)
+equation 4321 := x ∘ (y ∘ x) = y ∘ (x ∘ y)
+equation 4322 := x ∘ (y ∘ x) = y ∘ (x ∘ z)
+equation 4323 := x ∘ (y ∘ x) = y ∘ (z ∘ x)
+equation 4324 := x ∘ (y ∘ x) = y ∘ (z ∘ y)
+equation 4325 := x ∘ (y ∘ x) = y ∘ (z ∘ z)
+equation 4326 := x ∘ (y ∘ x) = y ∘ (z ∘ w)
+equation 4327 := x ∘ (y ∘ x) = z ∘ (x ∘ x)
+equation 4328 := x ∘ (y ∘ x) = z ∘ (x ∘ y)
+equation 4329 := x ∘ (y ∘ x) = z ∘ (x ∘ w)
+equation 4330 := x ∘ (y ∘ x) = z ∘ (y ∘ x)
+equation 4331 := x ∘ (y ∘ x) = z ∘ (y ∘ y)
+equation 4332 := x ∘ (y ∘ x) = z ∘ (y ∘ z)
+equation 4333 := x ∘ (y ∘ x) = z ∘ (y ∘ w)
+equation 4334 := x ∘ (y ∘ x) = z ∘ (w ∘ x)
+equation 4335 := x ∘ (y ∘ x) = z ∘ (w ∘ y)
+equation 4336 := x ∘ (y ∘ x) = z ∘ (w ∘ z)
+equation 4337 := x ∘ (y ∘ x) = z ∘ (w ∘ w)
+equation 4338 := x ∘ (y ∘ x) = z ∘ (w ∘ u)
+equation 4339 := x ∘ (y ∘ y) = x ∘ (y ∘ z)
+equation 4340 := x ∘ (y ∘ y) = x ∘ (z ∘ y)
+equation 4341 := x ∘ (y ∘ y) = x ∘ (z ∘ z)
+equation 4342 := x ∘ (y ∘ y) = x ∘ (z ∘ w)
+equation 4343 := x ∘ (y ∘ y) = y ∘ (x ∘ x)
+equation 4344 := x ∘ (y ∘ y) = y ∘ (x ∘ z)
+equation 4345 := x ∘ (y ∘ y) = y ∘ (z ∘ x)
+equation 4346 := x ∘ (y ∘ y) = y ∘ (z ∘ z)
+equation 4347 := x ∘ (y ∘ y) = y ∘ (z ∘ w)
+equation 4348 := x ∘ (y ∘ y) = z ∘ (x ∘ y)
+equation 4349 := x ∘ (y ∘ y) = z ∘ (x ∘ w)
+equation 4350 := x ∘ (y ∘ y) = z ∘ (y ∘ x)
+equation 4351 := x ∘ (y ∘ y) = z ∘ (y ∘ y)
+equation 4352 := x ∘ (y ∘ y) = z ∘ (y ∘ w)
+equation 4353 := x ∘ (y ∘ y) = z ∘ (w ∘ x)
+equation 4354 := x ∘ (y ∘ y) = z ∘ (w ∘ y)
+equation 4355 := x ∘ (y ∘ y) = z ∘ (w ∘ w)
+equation 4356 := x ∘ (y ∘ y) = z ∘ (w ∘ u)
+equation 4357 := x ∘ (y ∘ z) = x ∘ (y ∘ w)
+equation 4358 := x ∘ (y ∘ z) = x ∘ (z ∘ y)
+equation 4359 := x ∘ (y ∘ z) = x ∘ (z ∘ w)
+equation 4360 := x ∘ (y ∘ z) = x ∘ (w ∘ z)
+equation 4361 := x ∘ (y ∘ z) = x ∘ (w ∘ u)
+equation 4362 := x ∘ (y ∘ z) = y ∘ (x ∘ z)
+equation 4363 := x ∘ (y ∘ z) = y ∘ (x ∘ w)
+equation 4364 := x ∘ (y ∘ z) = y ∘ (z ∘ x)
+equation 4365 := x ∘ (y ∘ z) = y ∘ (z ∘ w)
+equation 4366 := x ∘ (y ∘ z) = y ∘ (w ∘ x)
+equation 4367 := x ∘ (y ∘ z) = y ∘ (w ∘ z)
+equation 4368 := x ∘ (y ∘ z) = y ∘ (w ∘ u)
+equation 4369 := x ∘ (y ∘ z) = z ∘ (y ∘ x)
+equation 4370 := x ∘ (y ∘ z) = z ∘ (y ∘ w)
+equation 4371 := x ∘ (y ∘ z) = z ∘ (w ∘ x)
+equation 4372 := x ∘ (y ∘ z) = z ∘ (w ∘ y)
+equation 4373 := x ∘ (y ∘ z) = z ∘ (w ∘ u)
+equation 4374 := x ∘ (y ∘ z) = w ∘ (y ∘ z)
+equation 4375 := x ∘ (y ∘ z) = w ∘ (y ∘ u)
+equation 4376 := x ∘ (y ∘ z) = w ∘ (z ∘ y)
+equation 4377 := x ∘ (y ∘ z) = w ∘ (z ∘ u)
+-- equation 4378 := x ∘ (y ∘ z) = w ∘ (u ∘ z)
+equation 4379 := x ∘ (y ∘ z) = w ∘ (u ∘ v)
+equation 4380 := x ∘ (x ∘ x) = (x ∘ x) ∘ x
+equation 4381 := x ∘ (x ∘ x) = (x ∘ x) ∘ y
+equation 4382 := x ∘ (x ∘ x) = (x ∘ y) ∘ x
+equation 4383 := x ∘ (x ∘ x) = (x ∘ y) ∘ y
+equation 4384 := x ∘ (x ∘ x) = (x ∘ y) ∘ z
+equation 4385 := x ∘ (x ∘ x) = (y ∘ x) ∘ x
+equation 4386 := x ∘ (x ∘ x) = (y ∘ x) ∘ y
+equation 4387 := x ∘ (x ∘ x) = (y ∘ x) ∘ z
+equation 4388 := x ∘ (x ∘ x) = (y ∘ y) ∘ x
+equation 4389 := x ∘ (x ∘ x) = (y ∘ y) ∘ y
+equation 4390 := x ∘ (x ∘ x) = (y ∘ y) ∘ z
+equation 4391 := x ∘ (x ∘ x) = (y ∘ z) ∘ x
+equation 4392 := x ∘ (x ∘ x) = (y ∘ z) ∘ y
+equation 4393 := x ∘ (x ∘ x) = (y ∘ z) ∘ z
+equation 4394 := x ∘ (x ∘ x) = (y ∘ z) ∘ w
+equation 4395 := x ∘ (x ∘ y) = (x ∘ x) ∘ x
+equation 4396 := x ∘ (x ∘ y) = (x ∘ x) ∘ y
+equation 4397 := x ∘ (x ∘ y) = (x ∘ x) ∘ z
+equation 4398 := x ∘ (x ∘ y) = (x ∘ y) ∘ x
+equation 4399 := x ∘ (x ∘ y) = (x ∘ y) ∘ y
+equation 4400 := x ∘ (x ∘ y) = (x ∘ y) ∘ z
+equation 4401 := x ∘ (x ∘ y) = (x ∘ z) ∘ x
+equation 4402 := x ∘ (x ∘ y) = (x ∘ z) ∘ y
+equation 4403 := x ∘ (x ∘ y) = (x ∘ z) ∘ z
+equation 4404 := x ∘ (x ∘ y) = (x ∘ z) ∘ w
+equation 4405 := x ∘ (x ∘ y) = (y ∘ x) ∘ x
+equation 4406 := x ∘ (x ∘ y) = (y ∘ x) ∘ y
+equation 4407 := x ∘ (x ∘ y) = (y ∘ x) ∘ z
+equation 4408 := x ∘ (x ∘ y) = (y ∘ y) ∘ x
+equation 4409 := x ∘ (x ∘ y) = (y ∘ y) ∘ y
+equation 4410 := x ∘ (x ∘ y) = (y ∘ y) ∘ z
+equation 4411 := x ∘ (x ∘ y) = (y ∘ z) ∘ x
+equation 4412 := x ∘ (x ∘ y) = (y ∘ z) ∘ y
+equation 4413 := x ∘ (x ∘ y) = (y ∘ z) ∘ z
+equation 4414 := x ∘ (x ∘ y) = (y ∘ z) ∘ w
+equation 4415 := x ∘ (x ∘ y) = (z ∘ x) ∘ x
+equation 4416 := x ∘ (x ∘ y) = (z ∘ x) ∘ y
+equation 4417 := x ∘ (x ∘ y) = (z ∘ x) ∘ z
+equation 4418 := x ∘ (x ∘ y) = (z ∘ x) ∘ w
+equation 4419 := x ∘ (x ∘ y) = (z ∘ y) ∘ x
+equation 4420 := x ∘ (x ∘ y) = (z ∘ y) ∘ y
+equation 4421 := x ∘ (x ∘ y) = (z ∘ y) ∘ z
+equation 4422 := x ∘ (x ∘ y) = (z ∘ y) ∘ w
+equation 4423 := x ∘ (x ∘ y) = (z ∘ z) ∘ x
+equation 4424 := x ∘ (x ∘ y) = (z ∘ z) ∘ y
+equation 4425 := x ∘ (x ∘ y) = (z ∘ z) ∘ z
+equation 4426 := x ∘ (x ∘ y) = (z ∘ z) ∘ w
+equation 4427 := x ∘ (x ∘ y) = (z ∘ w) ∘ x
+equation 4428 := x ∘ (x ∘ y) = (z ∘ w) ∘ y
+equation 4429 := x ∘ (x ∘ y) = (z ∘ w) ∘ z
+equation 4430 := x ∘ (x ∘ y) = (z ∘ w) ∘ w
+equation 4431 := x ∘ (x ∘ y) = (z ∘ w) ∘ u
+equation 4432 := x ∘ (y ∘ x) = (x ∘ x) ∘ x
+equation 4433 := x ∘ (y ∘ x) = (x ∘ x) ∘ y
+equation 4434 := x ∘ (y ∘ x) = (x ∘ x) ∘ z
+equation 4435 := x ∘ (y ∘ x) = (x ∘ y) ∘ x
+equation 4436 := x ∘ (y ∘ x) = (x ∘ y) ∘ y
+equation 4437 := x ∘ (y ∘ x) = (x ∘ y) ∘ z
+equation 4438 := x ∘ (y ∘ x) = (x ∘ z) ∘ x
+equation 4439 := x ∘ (y ∘ x) = (x ∘ z) ∘ y
+equation 4440 := x ∘ (y ∘ x) = (x ∘ z) ∘ z
+equation 4441 := x ∘ (y ∘ x) = (x ∘ z) ∘ w
+equation 4442 := x ∘ (y ∘ x) = (y ∘ x) ∘ x
+equation 4443 := x ∘ (y ∘ x) = (y ∘ x) ∘ y
+equation 4444 := x ∘ (y ∘ x) = (y ∘ x) ∘ z
+equation 4445 := x ∘ (y ∘ x) = (y ∘ y) ∘ x
+equation 4446 := x ∘ (y ∘ x) = (y ∘ y) ∘ y
+equation 4447 := x ∘ (y ∘ x) = (y ∘ y) ∘ z
+equation 4448 := x ∘ (y ∘ x) = (y ∘ z) ∘ x
+equation 4449 := x ∘ (y ∘ x) = (y ∘ z) ∘ y
+equation 4450 := x ∘ (y ∘ x) = (y ∘ z) ∘ z
+equation 4451 := x ∘ (y ∘ x) = (y ∘ z) ∘ w
+equation 4452 := x ∘ (y ∘ x) = (z ∘ x) ∘ x
+equation 4453 := x ∘ (y ∘ x) = (z ∘ x) ∘ y
+equation 4454 := x ∘ (y ∘ x) = (z ∘ x) ∘ z
+equation 4455 := x ∘ (y ∘ x) = (z ∘ x) ∘ w
+equation 4456 := x ∘ (y ∘ x) = (z ∘ y) ∘ x
+equation 4457 := x ∘ (y ∘ x) = (z ∘ y) ∘ y
+equation 4458 := x ∘ (y ∘ x) = (z ∘ y) ∘ z
+equation 4459 := x ∘ (y ∘ x) = (z ∘ y) ∘ w
+equation 4460 := x ∘ (y ∘ x) = (z ∘ z) ∘ x
+equation 4461 := x ∘ (y ∘ x) = (z ∘ z) ∘ y
+equation 4462 := x ∘ (y ∘ x) = (z ∘ z) ∘ z
+equation 4463 := x ∘ (y ∘ x) = (z ∘ z) ∘ w
+equation 4464 := x ∘ (y ∘ x) = (z ∘ w) ∘ x
+equation 4465 := x ∘ (y ∘ x) = (z ∘ w) ∘ y
+equation 4466 := x ∘ (y ∘ x) = (z ∘ w) ∘ z
+equation 4467 := x ∘ (y ∘ x) = (z ∘ w) ∘ w
+equation 4468 := x ∘ (y ∘ x) = (z ∘ w) ∘ u
+equation 4469 := x ∘ (y ∘ y) = (x ∘ x) ∘ x
+equation 4470 := x ∘ (y ∘ y) = (x ∘ x) ∘ y
+equation 4471 := x ∘ (y ∘ y) = (x ∘ x) ∘ z
+equation 4472 := x ∘ (y ∘ y) = (x ∘ y) ∘ x
+equation 4473 := x ∘ (y ∘ y) = (x ∘ y) ∘ y
+equation 4474 := x ∘ (y ∘ y) = (x ∘ y) ∘ z
+equation 4475 := x ∘ (y ∘ y) = (x ∘ z) ∘ x
+equation 4476 := x ∘ (y ∘ y) = (x ∘ z) ∘ y
+equation 4477 := x ∘ (y ∘ y) = (x ∘ z) ∘ z
+equation 4478 := x ∘ (y ∘ y) = (x ∘ z) ∘ w
+equation 4479 := x ∘ (y ∘ y) = (y ∘ x) ∘ x
+equation 4480 := x ∘ (y ∘ y) = (y ∘ x) ∘ y
+equation 4481 := x ∘ (y ∘ y) = (y ∘ x) ∘ z
+equation 4482 := x ∘ (y ∘ y) = (y ∘ y) ∘ x
+equation 4483 := x ∘ (y ∘ y) = (y ∘ y) ∘ y
+equation 4484 := x ∘ (y ∘ y) = (y ∘ y) ∘ z
+equation 4485 := x ∘ (y ∘ y) = (y ∘ z) ∘ x
+equation 4486 := x ∘ (y ∘ y) = (y ∘ z) ∘ y
+equation 4487 := x ∘ (y ∘ y) = (y ∘ z) ∘ z
+equation 4488 := x ∘ (y ∘ y) = (y ∘ z) ∘ w
+equation 4489 := x ∘ (y ∘ y) = (z ∘ x) ∘ x
+equation 4490 := x ∘ (y ∘ y) = (z ∘ x) ∘ y
+equation 4491 := x ∘ (y ∘ y) = (z ∘ x) ∘ z
+equation 4492 := x ∘ (y ∘ y) = (z ∘ x) ∘ w
+equation 4493 := x ∘ (y ∘ y) = (z ∘ y) ∘ x
+equation 4494 := x ∘ (y ∘ y) = (z ∘ y) ∘ y
+equation 4495 := x ∘ (y ∘ y) = (z ∘ y) ∘ z
+equation 4496 := x ∘ (y ∘ y) = (z ∘ y) ∘ w
+equation 4497 := x ∘ (y ∘ y) = (z ∘ z) ∘ x
+equation 4498 := x ∘ (y ∘ y) = (z ∘ z) ∘ y
+equation 4499 := x ∘ (y ∘ y) = (z ∘ z) ∘ z
+equation 4500 := x ∘ (y ∘ y) = (z ∘ z) ∘ w
+equation 4501 := x ∘ (y ∘ y) = (z ∘ w) ∘ x
+equation 4502 := x ∘ (y ∘ y) = (z ∘ w) ∘ y
+equation 4503 := x ∘ (y ∘ y) = (z ∘ w) ∘ z
+equation 4504 := x ∘ (y ∘ y) = (z ∘ w) ∘ w
+equation 4505 := x ∘ (y ∘ y) = (z ∘ w) ∘ u
+equation 4506 := x ∘ (y ∘ z) = (x ∘ x) ∘ x
+equation 4507 := x ∘ (y ∘ z) = (x ∘ x) ∘ y
+equation 4508 := x ∘ (y ∘ z) = (x ∘ x) ∘ z
+equation 4509 := x ∘ (y ∘ z) = (x ∘ x) ∘ w
+equation 4510 := x ∘ (y ∘ z) = (x ∘ y) ∘ x
+equation 4511 := x ∘ (y ∘ z) = (x ∘ y) ∘ y
+-- equation 4512 := x ∘ (y ∘ z) = (x ∘ y) ∘ z
+-- equation 4513 := x ∘ (y ∘ z) = (x ∘ y) ∘ w
+equation 4514 := x ∘ (y ∘ z) = (x ∘ z) ∘ x
+equation 4515 := x ∘ (y ∘ z) = (x ∘ z) ∘ y
+equation 4516 := x ∘ (y ∘ z) = (x ∘ z) ∘ z
+equation 4517 := x ∘ (y ∘ z) = (x ∘ z) ∘ w
+equation 4518 := x ∘ (y ∘ z) = (x ∘ w) ∘ x
+equation 4519 := x ∘ (y ∘ z) = (x ∘ w) ∘ y
+equation 4520 := x ∘ (y ∘ z) = (x ∘ w) ∘ z
+equation 4521 := x ∘ (y ∘ z) = (x ∘ w) ∘ w
+-- equation 4522 := x ∘ (y ∘ z) = (x ∘ w) ∘ u
+equation 4523 := x ∘ (y ∘ z) = (y ∘ x) ∘ x
+equation 4524 := x ∘ (y ∘ z) = (y ∘ x) ∘ y
+equation 4525 := x ∘ (y ∘ z) = (y ∘ x) ∘ z
+equation 4526 := x ∘ (y ∘ z) = (y ∘ x) ∘ w
+equation 4527 := x ∘ (y ∘ z) = (y ∘ y) ∘ x
+equation 4528 := x ∘ (y ∘ z) = (y ∘ y) ∘ y
+equation 4529 := x ∘ (y ∘ z) = (y ∘ y) ∘ z
+equation 4530 := x ∘ (y ∘ z) = (y ∘ y) ∘ w
+equation 4531 := x ∘ (y ∘ z) = (y ∘ z) ∘ x
+equation 4532 := x ∘ (y ∘ z) = (y ∘ z) ∘ y
+equation 4533 := x ∘ (y ∘ z) = (y ∘ z) ∘ z
+equation 4534 := x ∘ (y ∘ z) = (y ∘ z) ∘ w
+equation 4535 := x ∘ (y ∘ z) = (y ∘ w) ∘ x
+equation 4536 := x ∘ (y ∘ z) = (y ∘ w) ∘ y
+equation 4537 := x ∘ (y ∘ z) = (y ∘ w) ∘ z
+equation 4538 := x ∘ (y ∘ z) = (y ∘ w) ∘ w
+equation 4539 := x ∘ (y ∘ z) = (y ∘ w) ∘ u
+equation 4540 := x ∘ (y ∘ z) = (z ∘ x) ∘ x
+equation 4541 := x ∘ (y ∘ z) = (z ∘ x) ∘ y
+equation 4542 := x ∘ (y ∘ z) = (z ∘ x) ∘ z
+equation 4543 := x ∘ (y ∘ z) = (z ∘ x) ∘ w
+equation 4544 := x ∘ (y ∘ z) = (z ∘ y) ∘ x
+equation 4545 := x ∘ (y ∘ z) = (z ∘ y) ∘ y
+equation 4546 := x ∘ (y ∘ z) = (z ∘ y) ∘ z
+equation 4547 := x ∘ (y ∘ z) = (z ∘ y) ∘ w
+equation 4548 := x ∘ (y ∘ z) = (z ∘ z) ∘ x
+equation 4549 := x ∘ (y ∘ z) = (z ∘ z) ∘ y
+equation 4550 := x ∘ (y ∘ z) = (z ∘ z) ∘ z
+equation 4551 := x ∘ (y ∘ z) = (z ∘ z) ∘ w
+equation 4552 := x ∘ (y ∘ z) = (z ∘ w) ∘ x
+equation 4553 := x ∘ (y ∘ z) = (z ∘ w) ∘ y
+equation 4554 := x ∘ (y ∘ z) = (z ∘ w) ∘ z
+equation 4555 := x ∘ (y ∘ z) = (z ∘ w) ∘ w
+equation 4556 := x ∘ (y ∘ z) = (z ∘ w) ∘ u
+equation 4557 := x ∘ (y ∘ z) = (w ∘ x) ∘ x
+equation 4558 := x ∘ (y ∘ z) = (w ∘ x) ∘ y
+equation 4559 := x ∘ (y ∘ z) = (w ∘ x) ∘ z
+equation 4560 := x ∘ (y ∘ z) = (w ∘ x) ∘ w
+equation 4561 := x ∘ (y ∘ z) = (w ∘ x) ∘ u
+equation 4562 := x ∘ (y ∘ z) = (w ∘ y) ∘ x
+equation 4563 := x ∘ (y ∘ z) = (w ∘ y) ∘ y
+-- equation 4564 := x ∘ (y ∘ z) = (w ∘ y) ∘ z
+equation 4565 := x ∘ (y ∘ z) = (w ∘ y) ∘ w
+equation 4566 := x ∘ (y ∘ z) = (w ∘ y) ∘ u
+equation 4567 := x ∘ (y ∘ z) = (w ∘ z) ∘ x
+equation 4568 := x ∘ (y ∘ z) = (w ∘ z) ∘ y
+equation 4569 := x ∘ (y ∘ z) = (w ∘ z) ∘ z
+equation 4570 := x ∘ (y ∘ z) = (w ∘ z) ∘ w
+equation 4571 := x ∘ (y ∘ z) = (w ∘ z) ∘ u
+equation 4572 := x ∘ (y ∘ z) = (w ∘ w) ∘ x
+equation 4573 := x ∘ (y ∘ z) = (w ∘ w) ∘ y
+equation 4574 := x ∘ (y ∘ z) = (w ∘ w) ∘ z
+equation 4575 := x ∘ (y ∘ z) = (w ∘ w) ∘ w
+equation 4576 := x ∘ (y ∘ z) = (w ∘ w) ∘ u
+equation 4577 := x ∘ (y ∘ z) = (w ∘ u) ∘ x
+equation 4578 := x ∘ (y ∘ z) = (w ∘ u) ∘ y
+equation 4579 := x ∘ (y ∘ z) = (w ∘ u) ∘ z
+equation 4580 := x ∘ (y ∘ z) = (w ∘ u) ∘ w
+equation 4581 := x ∘ (y ∘ z) = (w ∘ u) ∘ u
+-- equation 4582 := x ∘ (y ∘ z) = (w ∘ u) ∘ v
+equation 4583 := (x ∘ x) ∘ x = (x ∘ x) ∘ y
+equation 4584 := (x ∘ x) ∘ x = (x ∘ y) ∘ x
+equation 4585 := (x ∘ x) ∘ x = (x ∘ y) ∘ y
+equation 4586 := (x ∘ x) ∘ x = (x ∘ y) ∘ z
+equation 4587 := (x ∘ x) ∘ x = (y ∘ x) ∘ x
+equation 4588 := (x ∘ x) ∘ x = (y ∘ x) ∘ y
+equation 4589 := (x ∘ x) ∘ x = (y ∘ x) ∘ z
+equation 4590 := (x ∘ x) ∘ x = (y ∘ y) ∘ x
+equation 4591 := (x ∘ x) ∘ x = (y ∘ y) ∘ y
+equation 4592 := (x ∘ x) ∘ x = (y ∘ y) ∘ z
+equation 4593 := (x ∘ x) ∘ x = (y ∘ z) ∘ x
+equation 4594 := (x ∘ x) ∘ x = (y ∘ z) ∘ y
+equation 4595 := (x ∘ x) ∘ x = (y ∘ z) ∘ z
+equation 4596 := (x ∘ x) ∘ x = (y ∘ z) ∘ w
+equation 4597 := (x ∘ x) ∘ y = (x ∘ x) ∘ z
+equation 4598 := (x ∘ x) ∘ y = (x ∘ y) ∘ x
+equation 4599 := (x ∘ x) ∘ y = (x ∘ y) ∘ y
+equation 4600 := (x ∘ x) ∘ y = (x ∘ y) ∘ z
+equation 4601 := (x ∘ x) ∘ y = (x ∘ z) ∘ x
+equation 4602 := (x ∘ x) ∘ y = (x ∘ z) ∘ y
+equation 4603 := (x ∘ x) ∘ y = (x ∘ z) ∘ z
+equation 4604 := (x ∘ x) ∘ y = (x ∘ z) ∘ w
+equation 4605 := (x ∘ x) ∘ y = (y ∘ x) ∘ x
+equation 4606 := (x ∘ x) ∘ y = (y ∘ x) ∘ y
+equation 4607 := (x ∘ x) ∘ y = (y ∘ x) ∘ z
+equation 4608 := (x ∘ x) ∘ y = (y ∘ y) ∘ x
+equation 4609 := (x ∘ x) ∘ y = (y ∘ y) ∘ z
+equation 4610 := (x ∘ x) ∘ y = (y ∘ z) ∘ x
+equation 4611 := (x ∘ x) ∘ y = (y ∘ z) ∘ y
+equation 4612 := (x ∘ x) ∘ y = (y ∘ z) ∘ z
+equation 4613 := (x ∘ x) ∘ y = (y ∘ z) ∘ w
+equation 4614 := (x ∘ x) ∘ y = (z ∘ x) ∘ x
+equation 4615 := (x ∘ x) ∘ y = (z ∘ x) ∘ y
+equation 4616 := (x ∘ x) ∘ y = (z ∘ x) ∘ z
+equation 4617 := (x ∘ x) ∘ y = (z ∘ x) ∘ w
+equation 4618 := (x ∘ x) ∘ y = (z ∘ y) ∘ x
+equation 4619 := (x ∘ x) ∘ y = (z ∘ y) ∘ y
+equation 4620 := (x ∘ x) ∘ y = (z ∘ y) ∘ z
+equation 4621 := (x ∘ x) ∘ y = (z ∘ y) ∘ w
+equation 4622 := (x ∘ x) ∘ y = (z ∘ z) ∘ y
+equation 4623 := (x ∘ x) ∘ y = (z ∘ z) ∘ w
+equation 4624 := (x ∘ x) ∘ y = (z ∘ w) ∘ x
+equation 4625 := (x ∘ x) ∘ y = (z ∘ w) ∘ y
+equation 4626 := (x ∘ x) ∘ y = (z ∘ w) ∘ z
+equation 4627 := (x ∘ x) ∘ y = (z ∘ w) ∘ w
+equation 4628 := (x ∘ x) ∘ y = (z ∘ w) ∘ u
+equation 4629 := (x ∘ y) ∘ x = (x ∘ y) ∘ y
+equation 4630 := (x ∘ y) ∘ x = (x ∘ y) ∘ z
+equation 4631 := (x ∘ y) ∘ x = (x ∘ z) ∘ x
+equation 4632 := (x ∘ y) ∘ x = (x ∘ z) ∘ y
+equation 4633 := (x ∘ y) ∘ x = (x ∘ z) ∘ z
+equation 4634 := (x ∘ y) ∘ x = (x ∘ z) ∘ w
+equation 4635 := (x ∘ y) ∘ x = (y ∘ x) ∘ x
+equation 4636 := (x ∘ y) ∘ x = (y ∘ x) ∘ y
+equation 4637 := (x ∘ y) ∘ x = (y ∘ x) ∘ z
+equation 4638 := (x ∘ y) ∘ x = (y ∘ z) ∘ x
+equation 4639 := (x ∘ y) ∘ x = (y ∘ z) ∘ y
+equation 4640 := (x ∘ y) ∘ x = (y ∘ z) ∘ z
+equation 4641 := (x ∘ y) ∘ x = (y ∘ z) ∘ w
+equation 4642 := (x ∘ y) ∘ x = (z ∘ x) ∘ x
+equation 4643 := (x ∘ y) ∘ x = (z ∘ x) ∘ y
+equation 4644 := (x ∘ y) ∘ x = (z ∘ x) ∘ w
+equation 4645 := (x ∘ y) ∘ x = (z ∘ y) ∘ x
+equation 4646 := (x ∘ y) ∘ x = (z ∘ y) ∘ y
+equation 4647 := (x ∘ y) ∘ x = (z ∘ y) ∘ z
+equation 4648 := (x ∘ y) ∘ x = (z ∘ y) ∘ w
+equation 4649 := (x ∘ y) ∘ x = (z ∘ w) ∘ x
+equation 4650 := (x ∘ y) ∘ x = (z ∘ w) ∘ y
+equation 4651 := (x ∘ y) ∘ x = (z ∘ w) ∘ z
+equation 4652 := (x ∘ y) ∘ x = (z ∘ w) ∘ w
+equation 4653 := (x ∘ y) ∘ x = (z ∘ w) ∘ u
+equation 4654 := (x ∘ y) ∘ y = (x ∘ y) ∘ z
+equation 4655 := (x ∘ y) ∘ y = (x ∘ z) ∘ y
+equation 4656 := (x ∘ y) ∘ y = (x ∘ z) ∘ z
+equation 4657 := (x ∘ y) ∘ y = (x ∘ z) ∘ w
+equation 4658 := (x ∘ y) ∘ y = (y ∘ x) ∘ x
+equation 4659 := (x ∘ y) ∘ y = (y ∘ x) ∘ z
+equation 4660 := (x ∘ y) ∘ y = (y ∘ z) ∘ x
+equation 4661 := (x ∘ y) ∘ y = (y ∘ z) ∘ z
+equation 4662 := (x ∘ y) ∘ y = (y ∘ z) ∘ w
+equation 4663 := (x ∘ y) ∘ y = (z ∘ x) ∘ y
+equation 4664 := (x ∘ y) ∘ y = (z ∘ x) ∘ w
+equation 4665 := (x ∘ y) ∘ y = (z ∘ y) ∘ x
+equation 4666 := (x ∘ y) ∘ y = (z ∘ y) ∘ y
+equation 4667 := (x ∘ y) ∘ y = (z ∘ y) ∘ w
+equation 4668 := (x ∘ y) ∘ y = (z ∘ w) ∘ x
+equation 4669 := (x ∘ y) ∘ y = (z ∘ w) ∘ y
+equation 4670 := (x ∘ y) ∘ y = (z ∘ w) ∘ w
+equation 4671 := (x ∘ y) ∘ y = (z ∘ w) ∘ u
+equation 4672 := (x ∘ y) ∘ z = (x ∘ y) ∘ w
+equation 4673 := (x ∘ y) ∘ z = (x ∘ z) ∘ y
+equation 4674 := (x ∘ y) ∘ z = (x ∘ z) ∘ w
+equation 4675 := (x ∘ y) ∘ z = (x ∘ w) ∘ z
+equation 4676 := (x ∘ y) ∘ z = (x ∘ w) ∘ u
+equation 4677 := (x ∘ y) ∘ z = (y ∘ x) ∘ z
+equation 4678 := (x ∘ y) ∘ z = (y ∘ x) ∘ w
+equation 4679 := (x ∘ y) ∘ z = (y ∘ z) ∘ x
+equation 4680 := (x ∘ y) ∘ z = (y ∘ z) ∘ w
+equation 4681 := (x ∘ y) ∘ z = (y ∘ w) ∘ x
+equation 4682 := (x ∘ y) ∘ z = (y ∘ w) ∘ z
+equation 4683 := (x ∘ y) ∘ z = (y ∘ w) ∘ u
+equation 4684 := (x ∘ y) ∘ z = (z ∘ y) ∘ x
+equation 4685 := (x ∘ y) ∘ z = (z ∘ y) ∘ w
+equation 4686 := (x ∘ y) ∘ z = (z ∘ w) ∘ x
+equation 4687 := (x ∘ y) ∘ z = (z ∘ w) ∘ y
+equation 4688 := (x ∘ y) ∘ z = (z ∘ w) ∘ u
+equation 4689 := (x ∘ y) ∘ z = (w ∘ y) ∘ z
+equation 4690 := (x ∘ y) ∘ z = (w ∘ y) ∘ u
+equation 4691 := (x ∘ y) ∘ z = (w ∘ z) ∘ y
+equation 4692 := (x ∘ y) ∘ z = (w ∘ z) ∘ u
+equation 4693 := (x ∘ y) ∘ z = (w ∘ u) ∘ z
+equation 4694 := (x ∘ y) ∘ z = (w ∘ u) ∘ v

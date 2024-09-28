@@ -1,24 +1,27 @@
 \chapter{Subgraph equations}\label{subgraph-eq}
 
-In this project we study the 4694 equational laws (up to symmetry and relabeling) that involve at most four applications of the binary operation $\circ$.  The full list of such laws may be found \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/AllEquations.lean}{here}, and a script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}.
+In this project we study the 4694 equational laws (up to symmetry and relabeling) that involve at most four applications of the binary operation $\circ$.  The full list of such laws may be found \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/AllEquations.lean}{here}, and a script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}.  The list is sorted by the total number of operations, then by the number of operations on the LHS. Within each such class we define an order on expressions by variable $<$ operation, and lexical order on variables.
 
 Selected equations of interest are listed below, as well as in \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Equations.lean}{this file}.  Equations in this list will be referred to as ``subgraph equations'', as we shall inspect the subgraph of the implication subgraph induced by these equations.
+
+
+
 
 \begin{definition}[Equation 1]\label{eq1}\lean{Equation1}\leanok\uses{magma-def}  Equation 1 is the law $x=x$.
 \end{definition}
 
-This is the trivial law, satisfied by all magmas.
+This is the trivial law, satisfied by all magmas. It is self-dual.
 
 
 \begin{definition}[Equation 2]\label{eq2}\lean{Equation2}\leanok\uses{magma-def}  Equation 2 is the law $x=y$.
 \end{definition}
 
-This is the singleton law, satisfied only by the empty and singleton magmas.
+This is the singleton law, satisfied only by the empty and singleton magmas.  It is self-dual.
 
 \begin{definition}[Equation 3]\label{eq3}\lean{Equation3}\leanok\uses{magma-def}  Equation 3 is the law $x=x \circ x$.
 \end{definition}
 
-This is the idempotence law.
+This is the idempotence law.  It is self-dual.
 
 \begin{definition}[Equation 4]\label{eq4}\lean{Equation4}\leanok\uses{magma-def}  Equation 4 is the law $x=x \circ y$.
 \end{definition}
@@ -43,6 +46,11 @@ This law is equivalent to the singleton law.
 \begin{definition}[Equation 8]\label{eq8}\lean{Equation8}\leanok\uses{magma-def}  Equation 8 is the law $x=x \circ (x \circ x)$.
 \end{definition}
 
+\begin{definition}[Equation 23]\label{eq23}\lean{Equation23}\leanok\uses{magma-def}  Equation 23 is the law $x= (x \circ x) \circ x$.
+\end{definition}
+
+This is the dual of Definition \ref{eq8}.
+
 \begin{definition}[Equation 38]\label{eq38}\lean{Equation38}\leanok\uses{magma-def}  Equation 38 is the law $x \circ x = x \circ y$.
 \end{definition}
 
@@ -56,7 +64,7 @@ This law asserts that the magma operation is independent of the first argument (
 \begin{definition}[Equation 40]\label{eq40}\lean{Equation40}\leanok\uses{magma-def}  Equation 40 is the law $x \circ x = y \circ y$.
 \end{definition}
 
-This law asserts that all squares are constant.
+This law asserts that all squares are constant. It is self-dual.
 
 \begin{definition}[Equation 41]\label{eq41}\lean{Equation41}\leanok\uses{magma-def}  Equation 41 is the law $x \circ x = y \circ z$.
 \end{definition}
@@ -71,31 +79,49 @@ Equivalent to Definition \ref{eq38}.
 \begin{definition}[Equation 43]\label{eq43}\lean{Equation43}\leanok\uses{magma-def}  Equation 43 is the law $x \circ y = y \circ x$.
 \end{definition}
 
-The commutative law.
+The commutative law. It is self-dual.
+
+\begin{definition}[Equation 45]\label{eq45}\lean{Equation45}\leanok\uses{magma-def}  Equation 45 is the law $x \circ y = z \circ y$.
+\end{definition}
+
+This is the dual of Definition \ref{eq42}.
 
 \begin{definition}[Equation 46]\label{eq46}\lean{Equation46}\leanok\uses{magma-def}  Equation 46 is the law $x \circ y = z \circ w$.
 \end{definition}
 
-The constant law: all products are constant.
+The constant law: all products are constant. It is self-dual.
 
 \begin{definition}[Equation 168]\label{eq168}\lean{Equation168}\leanok\uses{magma-def}  Equation 168 is the law $x = (y \circ x) \circ (x \circ z)$.
 \end{definition}
 
-The law of a central groupoid.
+The law of a central groupoid. It is self-dual.
 
 \begin{definition}[Equation 387]\label{eq387}\lean{Equation387}\leanok\uses{magma-def}  Equation 387 is the law $x \circ y = (y \circ y) \circ x$.
 \end{definition}
 
+\begin{definition}[Equation 4378]\label{eq4378}\lean{Equation4378}\leanok\uses{magma-def}  Equation 4378 is the law $x \circ (y \circ z) = w \circ (u \circ z)$.
+\end{definition}
+
+Dual to Definition \ref{eq4522}.
+
+
 \begin{definition}[Equation 4512]\label{eq4512}\lean{Equation4512}\leanok\uses{magma-def}  Equation 4512 is the law $x \circ (y \circ z) = (x \circ y) \circ z$.
 \end{definition}
 
-The associative law.
+The associative law. It is self-dual.
 
 \begin{definition}[Equation 4513]\label{eq4513}\lean{Equation4513}\leanok\uses{magma-def}  Equation 4513 is the law $x \circ (y \circ z) = (x \circ y) \circ w$.
 \end{definition}
 
 \begin{definition}[Equation 4522]\label{eq4522}\lean{Equation4522}\leanok\uses{magma-def}  Equation 4522 is the law $x \circ (y \circ z) = (x \circ w) \circ u$.
 \end{definition}
+
+Dual to Definition \ref{eq4378}.
+
+\begin{definition}[Equation 4564]\label{eq4564}\lean{Equation4564}\leanok\uses{magma-def}  Equation 4564 is the law $x \circ (y \circ z) = (w \circ y) \circ z$.
+\end{definition}
+
+Dual to Definition \ref{eq4513}.
 
 \begin{definition}[Equation 4582]\label{eq4582}\lean{Equation4582}\leanok\uses{magma-def}  Equation 4582 is the law $x \circ (y \circ z) = (w \circ u) \circ v$.
 \end{definition}
