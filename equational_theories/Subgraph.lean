@@ -219,11 +219,45 @@ theorem Equation5_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equatio
   specialize h 0 0 0 1
   simp [hG] at h
 
+theorem Equation8_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation8 G ∧ ¬ Equation3 G := by
+  simp only [not_forall]
+  use (Fin 2)
+  use ⟨(. + .)⟩
+  simp only [self_eq_add_right, Fin.isValue]
+  constructor
+  · decide
+  · use 1
+    simp only [Fin.isValue, one_ne_zero, not_false_eq_true]
+
+theorem Equation38_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation38 G ∧ ¬ Equation8 G := by
+  simp only [not_forall]
+  use Nat
+  use ⟨fun x y => x + 1⟩
+  constructor
+  · exact fun _ _ ↦ rfl
+  · simp only [self_eq_add_right, one_ne_zero, not_false_eq_true, exists_const]
+
+theorem Equation39_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation39 G ∧ ¬ Equation8 G := by
+  simp only [not_forall]
+  use Nat
+  use ⟨fun x y => y + 1⟩
+  constructor
+  · exact fun _ _ ↦ rfl
+  · use 0
+    simp only [zero_add, Nat.reduceAdd, OfNat.zero_ne_ofNat, not_false_eq_true]
+
 -- For the next few implications, use the "implies" magma with two elements, true and false, where "true implies false" is false and all other pairs are true
 
 proof_wanted Equation40_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation3 G
 
-proof_wanted Equation40_not_implies_Equation8 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation8 G
+theorem Equation40_not_implies_Equation8 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation8 G :=  by
+  simp only [not_forall]
+  use Bool
+  use ⟨(! . || .)⟩
+  constructor
+  · simp only [Bool.forall_bool, Bool.not_false, Bool.or_false, Bool.not_or_self, implies_true,
+    Bool.not_true, Bool.or_true, and_self]
+  · simp only [Bool.not_or_self, Bool.or_true, Bool.not_eq_true, exists_eq]
 
 proof_wanted Equation40_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation42 G
 
@@ -239,6 +273,7 @@ theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation
   dsimp [hG] at h
   linarith
 
+
 theorem Equation42_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation4512 G := by
   let hG : Magma Nat := { op := fun x _ ↦ x + 1 }
   refine ⟨ℕ, hG, fun _ _ _ ↦ rfl, ?_⟩
@@ -246,6 +281,16 @@ theorem Equation42_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equati
   specialize h 0 0 0
   dsimp [hG] at h
   linarith
+
+/-- use Nat with (. * .) -/
+theorem Equation43_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation43 G ∧ ¬ Equation8 G := by
+  simp only [not_forall]
+  use Nat, ⟨(. + .)⟩
+  simp only [self_eq_add_right, AddLeftCancelMonoid.add_eq_zero, and_self]
+  constructor
+  · exact Nat.add_comm
+  · use 1
+    decide
 
 theorem Equation43_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation3 G := by
   let hG : Magma Nat := { op := fun x y ↦ x+y }
@@ -296,6 +341,15 @@ theorem Equation46_not_implies_Equation4 : ∃ (G: Type) (_: Magma G), Equation4
   dsimp [hG] at h
   linarith
 
+theorem Equation168_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation8 G := by
+  dsimp [Equation168]
+  use Bool × Bool
+  use ⟨fun x y => ⟨x.snd,y.fst⟩⟩
+  constructor
+  · simp only [Prod.mk.eta, implies_true]
+  · simp only [Prod.forall, Prod.mk.injEq, and_true, Bool.forall_bool,
+    Bool.eq_false_and_eq_true_self, and_self, not_false_eq_true]
+
 -- The "and" magma on the two element set of booleans satisfies 387, but does not satisfy 40.
 proof_wanted Equation387_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation40 G
 
@@ -334,6 +388,16 @@ theorem Equation4512_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equa
     specialize h 0 0 0 1
     dsimp [hG] at h
     linarith
+
+theorem Equation4512_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation4512 G ∧ ¬ Equation8 G := by
+  use Nat
+  use ⟨(. + .)⟩
+  simp only [Equation4512, not_forall, self_eq_add_right, AddLeftCancelMonoid.add_eq_zero, and_self]
+  constructor
+  · exact (Nat.add_assoc . . . |>.symm)
+  · use 1
+    simp only [one_ne_zero, not_false_eq_true]
+
 
 theorem Equation4513_not_implies_Equation4522 : ∃ (G: Type) (_: Magma G), Equation4513 G ∧ ¬ Equation4522 G := by
   let hG : Magma Nat := { op := fun x y ↦ if x = 0 then (if y ≤ 2 then 1 else 2) else x }
