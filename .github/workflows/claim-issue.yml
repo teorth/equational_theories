@@ -39,7 +39,7 @@ jobs:
     - name: Assign the issue to the commenter
       if: env.exact_claim == 'true'
       run: |
-        curl -X POST -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+        curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         -d '{"assignees":["${{ github.event.comment.user.login }}"]}' \
         https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
 
