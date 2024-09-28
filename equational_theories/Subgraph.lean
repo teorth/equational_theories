@@ -1,8 +1,10 @@
+import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
 import Batteries.Util.ProofWanted
 import equational_theories.Equations
 
-/- This is a subproject of the main project to completely describe a small subgraph of the entire implication graph.  Currently we are focusing only on the following equations:
+/- This is a subproject of the main project to completely describe a small subgraph of the entire
+implication graph.  Currently we are focusing only on the following equations:
 
 1-8, 38-43, 46, 168, 387, 4512, 4513, 4522, 4582
 
@@ -125,7 +127,8 @@ theorem Equation42_implies_Equation38 (G: Type*) [Magma G] (h: Equation42 G) : E
   intro x y
   rw [h x x y]
 
-proof_wanted Equation46_implies_Equation40 (G: Type*) [Magma G] (_: Equation46 G) : Equation40 G
+theorem Equation46_implies_Equation40 (G: Type*) [Magma G] (h: Equation46 G) : Equation40 G :=
+  fun x y ↦ h x x y y
 
 theorem Equation46_implies_Equation41 (G: Type*) [Magma G] (h: Equation46 G) : Equation41 G :=
   fun _ _ _ => h _ _ _ _
