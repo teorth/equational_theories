@@ -1,0 +1,11 @@
+[package]
+name = "magma_search"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.5.18", features = ["derive"] }
+ratatui = "0.28.1"
+regex = "1.10.6"
+ron = "0.8.1"
+serde = { version = "1.0.210", features = ["derive"] }
