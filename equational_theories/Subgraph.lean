@@ -195,11 +195,29 @@ theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equatio
 
 -- The magma with 2 elements a and b which satisfies equation 5 serves as counterexamples here. For 43, a * b = b, but b * a = a. For 4513, a * (a * a) = a, but (a * a) * b = b.
 
-proof_wanted Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation42 G
+theorem Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation42 G := by
+  let a : Type := Fin 2
+  let hG : Magma a := { op := fun _ x ↦ x }
+  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
+  by_contra h
+  specialize h 0 1 0
+  simp [hG] at h
 
-proof_wanted Equation5_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation43 G
+theorem Equation5_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation43 G := by
+  let a : Type := Fin 2
+  let hG : Magma a := { op := fun _ x ↦ x }
+  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
+  by_contra h
+  specialize h 0 1
+  simp [hG] at h
 
-proof_wanted Equation5_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation4513 G
+theorem Equation5_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation4513 G := by
+  let a : Type := Fin 2
+  let hG : Magma a := { op := fun _ x ↦ x }
+  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
+  by_contra h
+  specialize h 0 0 0 1
+  simp [hG] at h
 
 -- For the next few implications, use the "implies" magma with two elements, true and false, where "true implies false" is false and all other pairs are true
 
@@ -212,7 +230,6 @@ proof_wanted Equation40_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equ
 proof_wanted Equation40_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation43 G
 
 proof_wanted Equation40_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation4512 G
-
 
 theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation43 G := by
   let hG : Magma Nat := { op := fun x _ ↦ x }
