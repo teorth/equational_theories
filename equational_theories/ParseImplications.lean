@@ -64,3 +64,13 @@ def parseNonimplication (thm_ty : Expr) : MetaM (Option Implication) := do
           | _ => return none
       | _ => return none
   | _ => return none
+
+/--
+Attempts to parse theorem type as an unconditional equation.
+-/
+def parseUnconditionalEquation (thm_ty : Expr) : MetaM (Option String) := do
+  Meta.forallTelescope thm_ty fun fvars rhs => do
+    let #[g, magma] := fvars | return none
+    if !(← Meta.isType g) then return none
+    let (.app (.const `Magma _) _) := ← Meta.inferType magma | return none
+    return getEquationName rhs

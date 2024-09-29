@@ -12,6 +12,8 @@ namespace Result
 inductive EntryVariant where
   | implication : Implication → EntryVariant
   | nonimplication : Implication → EntryVariant
+  /-- An equation that always holds. -/
+  | unconditional : String → EntryVariant
 deriving Lean.ToJson, Lean.FromJson
 
 /-- An entry in the equational results environment extension -/
@@ -44,23 +46,22 @@ initialize equationalResultAttr : Unit ←
        let filename := (←read).fileName
        discard <| Meta.MetaM.run do
        let info ← getConstInfo declName
-       let maybe_entry ← match info with
-                    | .thmInfo  (val : TheoremVal) =>
-                      if let some imp ← parseImplication val.type then
-                        pure <| some ⟨val.name, filename, .implication imp⟩
-                      else if let some nimp ← parseNonimplication val.type then
-                        pure <| some ⟨val.name, filename, .nonimplication nimp⟩
-                      else
-                        pure none
-                    | _ => pure none
-       if let some entry := maybe_entry then
-         modifyEnv fun env =>
-           equationalResultsExtension.addEntry env entry
-       pure ()
+       let entry ← match info with
+                   | .thmInfo  (val : TheoremVal) =>
+                     if let some imp ← parseImplication val.type then
+                       pure <| ⟨val.name, filename, .implication imp⟩
+                     else if let some nimp ← parseNonimplication val.type then
+                       pure <| ⟨val.name, filename, .nonimplication nimp⟩
+                     else if let some uncond ← parseUnconditionalEquation val.type then
+                       pure <| ⟨val.name, filename, .unconditional uncond⟩
+                     else
+                       throwError "failed to match type of @[equational_result] theorem"
+                   | _ => throwError "@[equational_result] is only allowed on theorems"
+       modifyEnv fun env =>
+         equationalResultsExtension.addEntry env entry
     erase := fun _declName =>
       throwError "can't remove `equational_result` attribute (not implemented yet)"
   }
-
 
 /-- Returns the contents of the equational results environment extension.
 -/
@@ -79,11 +80,13 @@ elab_rules : command
     match res with
     | .implication ⟨lhs, rhs⟩ => println! "{name}: {lhs} → {rhs}"
     | .nonimplication ⟨lhs, rhs⟩ => println! "{name}: ¬ ({lhs} → {rhs})"
+    | .unconditional rhs => println! "{name}: {rhs} holds unconitionally"
 
 --- Output of the extract_implications executable.
 structure Output where
   implications : List Implication
   nonimplications : List Implication
+  unconditionals : List String
 deriving Lean.ToJson, Lean.FromJson
 
 def collectResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
@@ -91,8 +94,10 @@ def collectResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
   let rs := equationalResultsExtension.getState (← getEnv)
   let mut implications : List Implication := []
   let mut nonimplications : List Implication := []
+  let mut unconditionals : List String := []
   for ⟨_name, _filename, res⟩ in rs do
     match res with
     | .implication imp => implications := imp::implications
     | .nonimplication nimp => nonimplications := nimp::nonimplications
-  return ⟨implications, nonimplications⟩
+    | .unconditional s => unconditionals := s::unconditionals
+  return ⟨implications, nonimplications, unconditionals⟩
