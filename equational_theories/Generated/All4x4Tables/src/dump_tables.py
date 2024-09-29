@@ -15,7 +15,7 @@ def to_table(packed_int):
             table[i][j] = cell_value
 
     # Print the table
-    return np.array(table)[:,::-1]
+    return np.array(table)[::-1,::-1]
 
 for line in open("data/covering_set.txt"):
     if 'Table' not in line: continue
