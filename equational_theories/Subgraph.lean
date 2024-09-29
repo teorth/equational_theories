@@ -291,10 +291,6 @@ theorem Equation39_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equati
   simp only [not_forall]
   exact ⟨Nat, ⟨fun _ _ ↦ _ + 1⟩, fun _ _ ↦ rfl, 0, Nat.zero_ne_add_one 0⟩
 
-theorem Equation39_not_implies_Equation23 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation23 G := by
-  use Fin 2, ⟨fun _ x ↦ x + 1⟩
-  decide
-
 theorem Equation39_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation40 G := by
   use Fin 2, ⟨fun _ x ↦ x + 1⟩
   decide
