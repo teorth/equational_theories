@@ -9,6 +9,8 @@ def Result.EntryVariant.lhs : EntryVariant → String
 def Result.EntryVariant.rhs : EntryVariant → String
   | .nonimplication x | .implication x => x.rhs
 
+namespace Closure
+
 
 partial def dfs1 (graph : Array (Array Nat)) (vertex : Nat) (vis : Array Bool) (order : Array Nat) :
     Id (Array Bool × Array Nat) := do
@@ -24,7 +26,7 @@ partial def dfs2 (graph : Array (Array Nat)) (vertex : Nat) (component : Array N
   let mut comp := component.set! vertex component_id
   for v in graph[vertex]! do
     if component[v]! == 0 then
-      comp := dfs2 graph v component component_id
+      comp := dfs2 graph v comp component_id
   pure comp
 
 def Bitset := Array UInt64
@@ -39,7 +41,8 @@ def Bitset.set (b : Bitset) (n : Nat) : Bitset :=
 instance : HOr Bitset Bitset Bitset where
   hOr a b := a.zipWith b (· ||| ·)
 
-def closure (inp : Array EntryVariant) : Id (Array EntryVariant) := do
+def closure (inp : Array EntryVariant) : IO (Array EntryVariant) := do
+
   -- number the equations (arbitrarily) for easier processing
   let mut eqs : Std.HashMap String Nat := {}
   let mut eqs_order : Array String := #[]
@@ -47,11 +50,11 @@ def closure (inp : Array EntryVariant) : Id (Array EntryVariant) := do
     match eqs.containsThenInsertIfNew imp.lhs eqs.size with
     | (n, neqs) =>
       eqs := neqs
-      if n then eqs_order := eqs_order.push imp.lhs
+      unless n do eqs_order := eqs_order.push imp.lhs
     match eqs.containsThenInsertIfNew imp.rhs eqs.size with
     | (n, neqs) =>
       eqs := neqs
-      if n then eqs_order := eqs_order.push imp.rhs
+      unless n do eqs_order := eqs_order.push imp.rhs
 
   -- construct the implication/non-implication graph
   let n := eqs.size
@@ -74,17 +77,18 @@ def closure (inp : Array EntryVariant) : Id (Array EntryVariant) := do
   -- compute SCCs and the condensation graph using Kosaraju's algorithm
   for i in [0:2*n] do
     unless vis[i]! do
-      (vis, order) ← dfs1 graph i vis order
+      (vis, order) := dfs1 graph i vis order
 
   order := order.reverse
 
   let mut component : Array Nat := Array.mkArray (2 * n) 0
   let mut last_component : Nat := 0
 
+
   for i in order do
     if component[i]! == 0 then do
       last_component := last_component + 1
-      component ← dfs2 graph i component last_component
+      component := dfs2 graph i component last_component
 
   let mut components : Array (Array Nat) := Array.mkArray last_component #[]
   let mut comp_graph : Array (Std.HashSet Nat) := Array.mkArray last_component {}
@@ -94,6 +98,8 @@ def closure (inp : Array EntryVariant) : Id (Array EntryVariant) := do
     for j in graph[i]! do
       unless component[i]! == component[j]! do
         comp_graph := comp_graph.modify (component[i]!-1) (fun x ↦ x.insert (component[j]!-1))
+
+  IO.eprintln s!"{components}"
 
   -- Run bitset transitive closure on the condensation graph
   let mut reachable : Array Bitset := Array.mkArray last_component (Bitset.mk last_component)
@@ -125,8 +131,10 @@ syntax (name := printClosure) "#print_closure" : command
 elab_rules : command
 | `(command| #print_closure) => do
   let rs ← extractResults
-  let rs' : Array EntryVariant := closure (rs.map Entry.variant)
+  let rs' : Array EntryVariant ← closure (rs.map Entry.variant)
   for res in rs' do
     match res with
     | .implication ⟨lhs, rhs⟩ => println! "{lhs} → {rhs}"
     | .nonimplication ⟨lhs, rhs⟩ => println! "¬ ({lhs} → {rhs})"
+
+end Closure
