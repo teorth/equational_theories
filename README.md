@@ -41,6 +41,7 @@ Links:
         - [`generate_eqs_list`](scripts/generate_eqs_list.py) - generates a list of equations
         - [`generate_image`](scripts/generate_image.py) - generates an image of implications
         - [`generate_most_wanted_list`](scripts/generate_most_wanted_list.py) - generates the "most wanted" implications
+        - [`generate_z3_counterexample`](scripts/generate_z3_counterexample.py) - given an implication statement between two equations, calls Z3 to try to generate a counterexample
         - [`process_implications`](scripts/process_implications.py) - processes implications from one or more Lean files
     - Ruby
         - [`transitive_closure`](scripts/transitive_closure.rb) - computes the transitive closure of a set of implications
