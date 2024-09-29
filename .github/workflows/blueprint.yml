@@ -48,29 +48,23 @@ jobs:
       - name: Get Mathlib cache
         run: ~/.elan/bin/lake exe cache get || true
 
-      - name: Build project
-        run: ~/.elan/bin/lake build equational_theories
-
-      - name: Cache mathlib API docs
+      - name: Cache build artifacts and Mathlib API docs
         uses: actions/cache@v4
         with:
           path: |
-            .lake/build/doc/Init
-            .lake/build/doc/Lake
-            .lake/build/doc/Lean
-            .lake/build/doc/Std
-            .lake/build/doc/Mathlib
-            .lake/build/doc/declarations
-            .lake/build/doc/find
-            .lake/build/doc/*.*
+            .lake/build
+            !.lake/build/doc-data
             !.lake/build/doc/declarations/declaration-data-equational_theories*
-          key: MathlibDoc-${{ hashFiles('lake-manifest.json') }}
-          restore-keys: MathlibDoc-
+          key: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}-${{ github.sha }}
+          restore-keys: LakeBuild-
+
+      - name: Build project
+        run: ~/.elan/bin/lake build equational_theories
 
       - name: Build project API documentation
         run: ~/.elan/bin/lake -R -Kenv=dev build equational_theories:docs
 
-      - name: Check for `home_page` folder # this is meant to detect a Jekyll-based website
+      - name: Check for `home_page` folder
         id: check_home_page
         run: |
           if [ -d home_page ]; then
