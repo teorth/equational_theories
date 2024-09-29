@@ -132,8 +132,8 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Make sure the API documentation cache works
-        run: mv home_page/docs .lake/build/doc
+      # - name: Make sure the API documentation cache works
+      #   run: mv home_page/docs .lake/build/doc
 
       - name: Remove 'awaiting-CI' label
         if: >
