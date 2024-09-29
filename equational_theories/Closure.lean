@@ -3,11 +3,13 @@ import equational_theories.Conjecture
 
 open Result
 
-def Result.EntryVariant.lhs : EntryVariant → String
-  | .nonimplication x | .implication x => x.lhs
+def Result.EntryVariant.get : EntryVariant → Implication
+  | .nonimplication x | .implication x => x
 
-def Result.EntryVariant.rhs : EntryVariant → String
-  | .nonimplication x | .implication x => x.rhs
+def Result.EntryVariant.lhs : EntryVariant → String := Implication.lhs ∘ get
+
+def Result.EntryVariant.rhs : EntryVariant → String := Implication.rhs ∘ get
+
 
 namespace Closure
 
@@ -142,5 +144,21 @@ elab_rules : command
     match res with
     | .implication ⟨lhs, rhs⟩ => println! "{lhs} → {rhs}"
     | .nonimplication ⟨lhs, rhs⟩ => println! "¬ ({lhs} → {rhs})"
+
+syntax (name := checkClosure) "#check_closure" ident ident : command
+
+elab_rules : command
+| `(command| #check_closure $a $b) => do
+  let rs ← extractResults
+  let rs' : Array EntryVariant ← closure (rs.map Entry.variant)
+  if rs'.contains (.implication ⟨a.getId.toString, b.getId.toString⟩) then
+    println! "{a} → {b}"
+  if rs'.contains (.nonimplication ⟨a.getId.toString, b.getId.toString⟩) then
+    println! "¬ ({a} → {b})"
+  if rs'.contains (.implication ⟨b.getId.toString, a.getId.toString⟩) then
+    println! "{b} → {a}"
+  if rs'.contains (.nonimplication ⟨b.getId.toString, a.getId.toString⟩) then
+    println! "¬ ({b} → {a})"
+
 
 end Closure

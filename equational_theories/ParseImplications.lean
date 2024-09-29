@@ -12,7 +12,7 @@ open Lean Core Elab
 structure Implication where
   lhs : String
   rhs : String
-deriving Lean.ToJson, Lean.FromJson
+deriving Lean.ToJson, Lean.FromJson, DecidableEq
 
 --- Output of the extract_implications executable.
 structure Output where
@@ -64,9 +64,9 @@ def parseNonimplication (thm_ty : Expr) : MetaM (Option Implication) := do
           let #[magma] := fvars1 | return none
           let (.app (.const `Magma _) _) := ← Meta.inferType magma | return none
           match_expr ty1 with
-          | And rhs b =>
+          | And lhs b =>
             match_expr b with
-            | Not lhs =>
+            | Not rhs =>
               return implicationFromApps lhs rhs
             | _ => return none
           | _ => return none

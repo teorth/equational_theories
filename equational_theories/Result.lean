@@ -14,6 +14,7 @@ syntax (name := result) declModifiers "result " declId ppIndent(declSig) declVal
 inductive EntryVariant where
   | implication : Implication → EntryVariant
   | nonimplication : Implication → EntryVariant
+  deriving DecidableEq
 
 /-- An entry in the conjecture environment extension -/
 structure Entry where
