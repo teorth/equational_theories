@@ -31,12 +31,17 @@ partial def dfs2 (graph : Array (Array Nat)) (vertex : Nat) (component : Array N
 
 def Bitset := Array UInt64
 
+def Bitset.toArray : Bitset → Array UInt64 := id
+
 instance : Inhabited Bitset := ⟨#[]⟩
 
 def Bitset.mk (n : Nat) : Bitset := Array.mkArray ((n + 63) >>> 6) 0
 
 def Bitset.set (b : Bitset) (n : Nat) : Bitset :=
   b.modify (n >>> 6) (fun x ↦ x ||| (1 <<< ((UInt64.ofNat n) &&& 63)))
+
+def Bitset.get (b : Bitset) (n : Nat) : Bool :=
+  (b.toArray[n >>> 6]! >>> ((UInt64.ofNat n) &&& 63)) &&& 1 != 0
 
 instance : HOr Bitset Bitset Bitset where
   hOr a b := a.zipWith b (· ||| ·)
@@ -69,7 +74,7 @@ def closure (inp : Array EntryVariant) : IO (Array EntryVariant) := do
       revgraph := revgraph.modify (eqs[imp.lhs]! + n) (fun x => x.push (eqs[imp.rhs]! + n))
     | .nonimplication imp =>
       graph := graph.modify (eqs[imp.lhs]!) (fun x => x.push (eqs[imp.rhs]! + n))
-      revgraph := graph.modify (eqs[imp.rhs]! + n) (fun x => x.push eqs[imp.lhs]!)
+      revgraph := revgraph.modify (eqs[imp.rhs]! + n) (fun x => x.push eqs[imp.lhs]!)
 
   let mut vis : Array Bool := Array.mkArray (2 * n) false
   let mut order : Array Nat := Array.mkEmpty (2 * n)
@@ -88,7 +93,7 @@ def closure (inp : Array EntryVariant) : IO (Array EntryVariant) := do
   for i in order do
     if component[i]! == 0 then do
       last_component := last_component + 1
-      component := dfs2 graph i component last_component
+      component := dfs2 revgraph i component last_component
 
   let mut components : Array (Array Nat) := Array.mkArray last_component #[]
   let mut comp_graph : Array (Std.HashSet Nat) := Array.mkArray last_component {}
@@ -99,7 +104,7 @@ def closure (inp : Array EntryVariant) : IO (Array EntryVariant) := do
       unless component[i]! == component[j]! do
         comp_graph := comp_graph.modify (component[i]!-1) (fun x ↦ x.insert (component[j]!-1))
 
-  IO.eprintln s!"{components}"
+  IO.eprintln s!"{components.map (·.filterMap eqs_order.get?)}"
 
   -- Run bitset transitive closure on the condensation graph
   let mut reachable : Array Bitset := Array.mkArray last_component (Bitset.mk last_component)
@@ -114,13 +119,14 @@ def closure (inp : Array EntryVariant) : IO (Array EntryVariant) := do
   let mut ans : Array EntryVariant := #[]
 
   for i in [:last_component] do
-    for j in comp_graph[i]! do
-      for x in components[i]! do
-        for y in components[j]! do
-          if x < n && y < n then
-            ans := ans.push (.implication ⟨eqs_order[y]!, eqs_order[x]!⟩)
-          else if x < n then
-            ans := ans.push (.nonimplication ⟨eqs_order[x]!, eqs_order[y - n]!⟩)
+    for j in [:last_component] do
+      if reachable[i]!.get j then
+        for x in components[i]! do
+          for y in components[j]! do
+            if x < n && y < n then
+              ans := ans.push (.implication ⟨eqs_order[y]!, eqs_order[x]!⟩)
+            else if x < n then
+              ans := ans.push (.nonimplication ⟨eqs_order[x]!, eqs_order[y - n]!⟩)
 
   pure ans
 
