@@ -53,3 +53,35 @@ example (G : Type _) [Magma G] :
 example (G : Type _) [Magma G] :
    Facts G [] [] ↔ True :=
    Iff.rfl
+
+open Lean Meta Elab Term Tactic Parser.Term in
+/--
+A relatively crude command for brute-forcing all equations. Given a type and a magma instance and
+a tactic, like this:
+```
+calculate_facts (Fin 2) Magma2a by decide
+```
+will print out which on equations the tactic succeeds and on which it fails.
+-/
+elab "calculate_facts " Gs:term:arg insts:term:arg " by " tac:tacticSeq : command => Command.liftTermElabM do
+  let G ← elabTerm Gs none
+  let some u := (← getLevel G).dec | throwError "expected G to be a type"
+  let inst ← elabTerm insts (mkApp (mkConst ``Magma [u]) G)
+  let mut s : Array (TSyntax `num) := #[]
+  let mut r : Array (TSyntax `num) := #[]
+  for n in [1:4694+1] do
+    let eqName := .mkSimple s!"Equation{n}"
+    let goal ← mkFreshExprSyntheticOpaqueMVar (mkApp2 (mkConst eqName [u]) G inst)
+    try
+      discard <| withCurrHeartbeats <| Tactic.run goal.mvarId! do evalTactic tac
+      s := s.push (quote n)
+    catch _ =>
+      r := r.push (quote n)
+  /-
+  let factS : Term ← `(term|Facts $Gs [ $(.mk s),* ] [ $(.mk r),* ])
+  let suggest ← `(command|
+      example : Facts $Gs [ $(.mk (s.map fun n => quote n)),* ] [ $(.mk (r.map fun n => quote n)),* ]
+         := by sorry)
+  TryThis.addSuggestion tk suggest
+  -/
+  logInfo m!"These equations can be solved by the tactic:\n{s}\nAnd these cannot:\n{r}"

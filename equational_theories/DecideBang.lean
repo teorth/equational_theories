@@ -55,6 +55,8 @@ private partial def inferDecideFin (p : Expr) : MetaM Expr := do
     | _ => throwError "Expected Fin n quantifier"
   | _ =>
     match_expr p with
+    | True =>
+      return mkConst ``True.intro
     | Not p' =>
       let inst ← inferDecideFin p'
       return mkApp2 (mkConst ``instDecidableNot) p' inst
@@ -63,7 +65,7 @@ private partial def inferDecideFin (p : Expr) : MetaM Expr := do
       | Fin n =>
         return mkApp3 (mkConst ``instDecidableEqFin) n l r
       | _ => throwError "Expected Fin n equality"
-    | _ => throwError "Unsupported propositoin"
+    | _ => throwError "Unsupported proposition {p}"
 
 
 /-!
