@@ -55,7 +55,7 @@ jobs:
             .lake/build
             !.lake/build/doc-data
             !.lake/build/doc/declarations/declaration-data-equational_theories*
-          key: LakeBuild-${{ hashFiles('lake-manifest.json') }}
+          key: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}-${{ github.sha }}
           restore-keys: LakeBuild-
 
       - name: Build project
