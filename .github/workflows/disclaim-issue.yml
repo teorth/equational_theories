@@ -6,7 +6,7 @@ on:
 
 jobs:
   disclaim_issue:
-    if: github.event.comment.body == 'disclaim'  # This ensures the workflow only runs if the comment contains exactly 'disclaim'
+    if: github.event.comment.body == 'disclaim'
     runs-on: ubuntu-latest
 
     steps:
