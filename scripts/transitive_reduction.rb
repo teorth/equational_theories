@@ -32,7 +32,7 @@ class Graph
     sccs = []
 
     @adj_list.keys.each { |v|
-      strongconnect(v, index, stack, lowlink, index_map, on_stack, sccs) unless index_map[v]
+      strongconnect(v, stack, lowlink, index_map, on_stack, sccs) unless index_map[v]
     }
 
     (@adj_list.keys - index_map.keys).each { |v|
@@ -42,16 +42,16 @@ class Graph
     sccs
   end
 
-  def strongconnect(v, index, stack, lowlink, index_map, on_stack, sccs)
+  def strongconnect(v, stack, lowlink, index_map, on_stack, sccs)
+    index = index_map.length
     index_map[v] = index
     lowlink[v] = index
-    index += 1
     stack.push(v)
     on_stack[v] = true
 
     @adj_list[v].each { |w|
       if !index_map[w]
-        strongconnect(w, index, stack, lowlink, index_map, on_stack, sccs)
+        strongconnect(w, stack, lowlink, index_map, on_stack, sccs)
         lowlink[v] = [lowlink[v], lowlink[w]].min
       elsif on_stack[w]
         lowlink[v] = [lowlink[v], index_map[w]].min
