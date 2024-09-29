@@ -155,8 +155,8 @@ fn run(args: &Args, mut terminal: DefaultTerminal) -> Result<(), String> {
     message.push_str("Serializing DB...\n");
     draw(&mut terminal, &message)?;
     let db = &*db.read().map_err(|e| e.to_string())?;
-    let db_content =
-        ron::ser::to_string_pretty(db, Default::default()).map_err(|e| e.to_string())?;
+    let config = ron::ser::PrettyConfig::new().compact_arrays(true);
+    let db_content = ron::ser::to_string_pretty(db, config).map_err(|e| e.to_string())?;
     message.push_str(&format!("Writing DB to {}...\n", args.db));
     draw(&mut terminal, &message)?;
     std::fs::write(args.db.as_str(), db_content).map_err(|e| e.to_string())?;

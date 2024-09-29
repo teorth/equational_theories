@@ -88,12 +88,13 @@ impl Equation {
 
     pub fn valid(&self, model: &Model) -> bool {
         let free_vars = self.free_vars();
-        for i in 0..(free_vars.len().pow(model.size as u32)) {
+        let size = model.magma.len();
+        for i in 0..(free_vars.len().pow(size as u32)) {
             let mut vars = BTreeMap::new();
             let mut i = i;
             for var in free_vars.iter() {
-                vars.insert(*var, (i % model.size as usize) as u8);
-                i /= model.size as usize;
+                vars.insert(*var, (i % size as usize) as u8);
+                i /= size as usize;
             }
             if !self.evaluate(model, &vars) {
                 return false;
@@ -131,7 +132,6 @@ pub enum NonImplication {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Model {
-    pub size: u8,
     pub magma: Vec<Vec<u8>>,
 }
 
@@ -143,7 +143,7 @@ impl Model {
                 magma[i as usize][j as usize] = rand::random::<u8>() % size;
             }
         }
-        Self { size, magma }
+        Self { magma }
     }
 }
 

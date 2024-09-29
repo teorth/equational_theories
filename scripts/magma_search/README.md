@@ -46,6 +46,8 @@ By default, it will use `db.ron` as the database file.
 
 ### TODO
 
+- [ ] Improve the "in-memory database approach"
+  - Will more compact serialization help?
 - [ ] Add an `EggSearcher`:
   - Choose an equation `E`
   - Choose a term `t` from one side of some other equation
