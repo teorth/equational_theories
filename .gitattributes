@@ -1,3 +1,7 @@
+equational_theories/Generated/TrivialBruteforce/theorems/Apply.lean linguist-generated
+equational_theories/Generated/TrivialBruteforce/theorems/RewriteGoal.lean linguist-generated
+equational_theories/Generated/TrivialBruteforce/theorems/RewriteHypothesis.lean linguist-generated
+equational_theories/Generated/TrivialBruteforce/theorems/RewriteHypothesisAndGoal.lean linguist-generated
 
 equational_theories/FinitePoly/Refutation*.lean linguist-generated
 equational_theories/FinitePoly.lean linguist-generated

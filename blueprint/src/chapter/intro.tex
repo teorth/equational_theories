@@ -5,6 +5,41 @@
 
 A \emph{law} is an equation involving a finite number of indeterminate variables and the operation $\circ$.  A magma $G$ then obeys that law if the equation holds for all possible choices of indeterminate variables in $G$.  For instance, the commutative law
 $$ x \circ y = y \circ x$$
-holds in a magma $G$ if and only if that magma is abelian.
+holds in a magma $G$ if and only if that magma is abelian. Here is a more complicated law, introduced in \cite{Kisielewicz}:
+
+
+\begin{definition}[Equation 374794]
+  \lean{EquationKis}\leanok
+  \label{eq374794}\uses{magma-def}
+  Equation 374794 is the law $x = (((y \circ y) \circ y) \circ x) \circ ((y \circ y) \circ z)$.
+\end{definition}
 
 We will be interested in seeing which laws imply which other laws, in the sense that magmas obeying the former law automatically obey the latter.  We will also be interested in \emph{anti-implications} showing that one law does \emph{not} imply another, by producing examples of magmas that obey the former law but not the latter.
+
+The number of finite magmas of length $n=0,1,2,\dots$, up to isomorphism, is
+$$ 1, 1, 10, 3330, 178981952, 2483527537094825, 14325590003318891522275680, \dots$$
+(\href{OEIS A001329}{https://oeis.org/A001329}).
+
+The singleton or empty magma obeys all equational laws.  One can ask whether an equational law admits nontrivial finite or infinite models.  The following result was established in \cite{Kisielewicz}:
+
+\begin{theorem}[Kisielewicz theorem]
+  \lean{InfModel.Finite.EquationKis_implies_Equation2,InfModel.EquationKis_not_implies_Equation2}\leanok
+  \label{kis-thm}\uses{eq374794,eq2}
+  Definition \ref{eq374794} has an infinite model, but no non-trivial finite model.
+\end{theorem}
+
+\begin{proof} \leanok Suppose for contradiction that we have a non-trivial model of Definition \ref{eq374794}. Write $y^2 := y \circ y$ and $y^3 := y^2 \circ y$. For any $y,z$, introduce the functions $f_y: x \mapsto y^3 \circ x$ and $g_{yz}: x \mapsto x \circ (y^2 \circ z)$.  Definition \ref{eq374794} says that $g_{yz}$ is a left-inverse of $f_y$, hence by finiteness these are inverses and $g_{yz}$ is independent of $z$. In particular
+$$ f(y^3) = g_{yy}(y^3) = g_{yz}(y^3) = f(y^2 \circ z)$$
+and hence $y^2 \circ z$ is independent of $z$.  Thus
+$$ f_y(x) = (y^2 \circ y) \circ x = (y^2 \circ y^2) \circ x$$
+is independent of $x$.  As $f_y$ is invertible, this forces the magma to be trivial, a contradiction.
+
+To construct an infinite magma, take the positive integers $\Z^+$ with the operation $x \circ y$ defined as
+\begin{itemize}
+  \item $2^x$ if $y=x$;
+  \item $3^y$ if $x = 1 \neq y$;
+  \item $\min(j,1)$ if $x=3^j$ and $y \neq x$; and
+  \item $1$ otherwise.
+\end{itemize}
+Then $y^2 = 2^y$, $y^3 = 1$, and $y^2 \circ z$ a power of two for all $y, z$, and $(1 \circ x) \circ w = x$ for all $x$ whenever $w$ is a power of two, so Definition \ref{eq374794} is satisfied.
+\end{proof}
