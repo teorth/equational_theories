@@ -1,7 +1,14 @@
-# This scripts allows one, given a left_eqn and a right_eqn,
-# to generate a lean file wich validates a Z3 counterexample.
-# This script requires Z3 and, for now, entering the left and
-# right equations and their "theorem numbers" by hand.
+# This scripts allows one, given a left_eqn and a right_eqn, to
+# generate a lean file wich validates a Z3 counterexample.  This
+# script requires the Z3 python bindings and passing in the equation
+# numbers on the command line. It depends on the `generate_eqs_list`
+# script.
+
+from generate_eqs_list import *
+from z3 import *
+import sys
+
+big_eqn_list = eqs
 
 M = DeclareSort('M')
 
@@ -9,18 +16,28 @@ x = Const('x', M)
 y = Const('y', M)
 z = Const('z', M)
 w = Const('w', M)
-t = Const('t', M)
 u = Const('u', M)
+v = Const('v', M)
 
 m = Function('m', M, M, M)
-
-left_eqn = m(x, m(x, y)) == m(x, m(y, x))
-
-right_eqn = m(x, m(y, z)) == m(x, m(z, y))
 
 left = 4283
 
 right = 4358
+
+def tup_to_term(tup):
+    if isinstance(tup, int):
+        return Const(VAR_NAMES[tup], M)
+    elif isinstance(tup, tuple):
+        assert len(tup) == 2
+        return m(tup_to_term(tup[0]), tup_to_term(tup[1]))
+    else:
+        raise ValueError("Expected an int or a tuple")
+
+def eqn_to_z3(tup):
+    left = tup[0]
+    right = tup[1]
+    return tup_to_term(left) == tup_to_term(right)
 
 def get_vars(t: ExprRef):
     all_vars = set()
@@ -37,23 +54,16 @@ def Univ(t: ExprRef):
 def mk_goal(lhs, rhs):
     return Implies(Univ(lhs), Univ(rhs))
 
-goal = mk_goal(left_eqn, right_eqn)
-
 def prove(f):
     s = Solver()
     s.add(Not(f))
     res = s.check()
     if res == sat:
-        # print ("found countermodel")
         model = s.model()
-        # print (model)
         return model
     elif res == unsat:
-        # print ("proved")
-        return None
+        return True
     else:
-        # print ("found neither proof nor countermodel")
-        # print (res)
         return None
 
 def get_elts(model: ModelRef):
@@ -65,9 +75,6 @@ def get_elts(model: ModelRef):
 
 def get_val(model: ModelRef, f, a, b):
     return model.evaluate(f(a, b))
-
-mod = prove(goal)
-univ = get_elts(mod)
 
 def print_incs():
     return ("import equational_theories.Magma\n"
@@ -88,7 +95,8 @@ def print_derives():
     return "deriving DecidableEq, Fintype\n"
 
 def print_ind(model: ModelRef):
-    univ = get_elts(mod)
+    print(model)
+    univ = get_elts(model)
     s = ""
     s += print_ind_dec()
     s += print_ind_ctr(univ)
@@ -130,15 +138,34 @@ def print_non_imp_proof(left: int, right: int):
             "∃ (G: Type) (_: Magma G), Equation{left} G ∧ ¬ Equation{right} G :=\n"
             "by exists M, M.Magma\n\n".format(left = left, right = right))
 
-#for now we assume goal is set
-def print_file():
+def pretty_eqn(tup):
+    return "{} = {}".format(format_expr(tup[0]), format_expr(tup[1]))
+
+def print_file(left, right):
+    tup_l = big_eqn_list[left-1]
+    tup_r = big_eqn_list[right-1]
+    l = eqn_to_z3(tup_l)
+    r = eqn_to_z3(tup_r)
+    goal = mk_goal(l, r)
     model = prove(goal)
-    univ = get_elts(model)
     s = ""
-    s = "-- This countermodel was automatically generated using Z3.\n"
-    s += print_incs()
-    s += print_ind(univ)
-    s += print_fun(mod)
-    s += print_instance()
-    s += print_non_imp_proof(left, right)
-    return s
+    if model == True:
+        s += "For {} -> {}\n".format(pretty_eqn(tup_l), pretty_eqn(tup_r))
+        s += "No countermodel was generated because the implication is true!"
+        return s
+    elif model == None:
+        s += "For {} -> {}\n".format(pretty_eqn(tup_l), pretty_eqn(tup_r))
+        s += "No countermodel was generated because the implication could not be refuted by Z3."
+        return s
+    else:
+        s += "-- This countermodel was automatically generated using Z3.\n"
+        s += "-- It refutes {} -> {}\n".format(pretty_eqn(tup_l), pretty_eqn(tup_r))
+        s += print_incs()
+        s += print_ind(model)
+        s += print_fun(model)
+        s += print_instance()
+        s += print_non_imp_proof(left, right)
+        return s
+
+if __name__ == "__main__":
+    print(print_file(int(sys.argv[1]), int(sys.argv[2])))
