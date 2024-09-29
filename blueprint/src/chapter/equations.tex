@@ -1,138 +1,180 @@
-\chapter{Subgraph equations}\label{subgraph-eq}
+\chapter{Subgraph laws}\label{subgraph-eq}
 
-In this project we study the 4694 equational laws (up to symmetry and relabeling) that involve at most four applications of the binary operation $\circ$.  The full list of such laws may be found \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/AllEquations.lean}{here}, and a script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}.  The list is sorted by the total number of operations, then by the number of operations on the LHS. Within each such class we define an order on expressions by variable $<$ operation, and lexical order on variables.
+In this project we study the 4694 laws (up to symmetry and relabeling) of total order at most $4$.
 
-Selected equations of interest are listed below, as well as in \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Equations.lean}{this file}.  Equations in this list will be referred to as ``subgraph equations'', as we shall inspect the subgraph of the implication subgraph induced by these equations.
+Selected laws of interest are listed below, as well as in \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Equations.lean}{this file}.  Laws in this list will be referred to as ``subgraph equations'', as we shall inspect the subgraph of the implication subgraph induced by these equations.
 
-
-
-
-\begin{definition}[Equation 1]\label{eq1}\lean{Equation1}\leanok\uses{magma-def}  Equation 1 is the law $x=x$.
+\begin{definition}[Equation 1]\label{eq1}\lean{Equation1}\leanok\uses{magma-def}  Equation 1 is the law $0 \formaleq 0$ (or the equation $x=x$).
 \end{definition}
 
 This is the trivial law, satisfied by all magmas. It is self-dual.
 
 
-\begin{definition}[Equation 2]\label{eq2}\lean{Equation2}\leanok\uses{magma-def}  Equation 2 is the law $x=y$.
+\begin{definition}[Equation 2]\label{eq2}\lean{Equation2}\leanok\uses{magma-def}  Equation 2 is the law $0 \formaleq 1$ (or the equation $x=y$).
 \end{definition}
 
 This is the singleton law, satisfied only by the empty and singleton magmas.  It is self-dual.
 
-\begin{definition}[Equation 3]\label{eq3}\lean{Equation3}\leanok\uses{magma-def}  Equation 3 is the law $x=x \circ x$.
+\begin{definition}[Equation 3]\label{eq3}\lean{Equation3}\leanok\uses{magma-def}  Equation 3 is the law $0 \formaleq 0 \circ 0$ (or the equation $x = x \circ x$).
 \end{definition}
 
 This is the idempotence law.  It is self-dual.
 
-\begin{definition}[Equation 4]\label{eq4}\lean{Equation4}\leanok\uses{magma-def}  Equation 4 is the law $x=x \circ y$.
+\begin{definition}[Equation 4]\label{eq4}\lean{Equation4}\leanok\uses{magma-def}  Equation 4 is the law $0 \formaleq 0 \circ 1$ (or the equation $x = x \circ y$).
 \end{definition}
 
 This is the left absorption law.
 
-\begin{definition}[Equation 5]\label{eq5}\lean{Equation5}\leanok\uses{magma-def}  Equation 5 is the law $x=y \circ x$.
+\begin{definition}[Equation 5]\label{eq5}\lean{Equation5}\leanok\uses{magma-def}  Equation 5 is the law $0 \formaleq 1 \circ 0$ (or the equation $x = y \circ x$).
 \end{definition}
 
 This is the right absorption law (the dual of Definition \ref{eq4}).
 
-\begin{definition}[Equation 6]\label{eq6}\lean{Equation6}\leanok\uses{magma-def}  Equation 6 is the law $x=y \circ y$.
+\begin{definition}[Equation 6]\label{eq6}\lean{Equation6}\leanok\uses{magma-def}  Equation 6 is the law $0 \formaleq 1 \circ 1$ (or the equation $x = y \circ y$).
 \end{definition}
 
 This law is equivalent to the singleton law.
 
-\begin{definition}[Equation 7]\label{eq7}\lean{Equation7}\leanok\uses{magma-def}  Equation 7 is the law $x=y \circ z$.
+\begin{definition}[Equation 7]\label{eq7}\lean{Equation7}\leanok\uses{magma-def}  Equation 7 is the law $0 \formaleq 1 \circ 2$ (or the equation $x = y \circ z$).
 \end{definition}
 
 This law is equivalent to the singleton law.
 
-\begin{definition}[Equation 8]\label{eq8}\lean{Equation8}\leanok\uses{magma-def}  Equation 8 is the law $x=x \circ (x \circ x)$.
+\begin{definition}[Equation 8]\label{eq8}\lean{Equation8}\leanok\uses{magma-def}  Equation 8 is the law $0 \formaleq 0 \circ (0 \circ 0)$ (or the equation $x = x \circ (x \circ x)$).
 \end{definition}
 
-\begin{definition}[Equation 23]\label{eq23}\lean{Equation23}\leanok\uses{magma-def}  Equation 23 is the law $x= (x \circ x) \circ x$.
+\begin{definition}[Equation 14]\label{eq14}\lean{Equation14}\leanok\uses{magma-def}  Equation 14 is the law $0 \formaleq  1 \circ (0 \circ 1)$ (or the equation $x = y ∘ (x ∘ y))$.
+\end{definition}
+
+Appears in Problem A1 from Putnam 2001.
+
+
+\begin{definition}[Equation 23]\label{eq23}\lean{Equation23}\leanok\uses{magma-def}  Equation 23 is the law $0 \formaleq  (0 \circ 0) \circ 0$ (or the equation $x = (x \circ x) \circ x$).
 \end{definition}
 
 This is the dual of Definition \ref{eq8}.
 
-\begin{definition}[Equation 38]\label{eq38}\lean{Equation38}\leanok\uses{magma-def}  Equation 38 is the law $x \circ x = x \circ y$.
+\begin{definition}[Equation 29]\label{eq29}\lean{Equation29}\leanok\uses{magma-def}  Equation 29 is the law $0 \formaleq  (1 \circ 0) \circ 1$ (or the equation $x = (y ∘ x) ∘ y)$.
+\end{definition}
+
+Appears in Problem A1 from Putnam 2001.  Dual to Definition \ref{eq14}.
+
+\begin{definition}[Equation 38]\label{eq38}\lean{Equation38}\leanok\uses{magma-def}  Equation 38 is the law $0 \circ 0  \formaleq  0 \circ 1$ (or the equation $x \circ x = x \circ y$).
 \end{definition}
 
 This law asserts that the magma operation is independent of the second argument.
 
-\begin{definition}[Equation 39]\label{eq39}\lean{Equation39}\leanok\uses{magma-def}  Equation 39 is the law $x \circ x = y \circ x$.
+\begin{definition}[Equation 39]\label{eq39}\lean{Equation39}\leanok\uses{magma-def}  Equation 39 is the law $0 \circ 0  \formaleq  1 \circ 0$ (or the equation $x \circ x = y \circ x$).
 \end{definition}
 
 This law asserts that the magma operation is independent of the first argument (the dual of Definition \ref{eq38}).
 
-\begin{definition}[Equation 40]\label{eq40}\lean{Equation40}\leanok\uses{magma-def}  Equation 40 is the law $x \circ x = y \circ y$.
+\begin{definition}[Equation 40]\label{eq40}\lean{Equation40}\leanok\uses{magma-def}  Equation 40 is the law $0 \circ 0  \formaleq  1 \circ 1$ (or the equation $x \circ x = y \circ y$).
 \end{definition}
 
 This law asserts that all squares are constant. It is self-dual.
 
-\begin{definition}[Equation 41]\label{eq41}\lean{Equation41}\leanok\uses{magma-def}  Equation 41 is the law $x \circ x = y \circ z$.
+\begin{definition}[Equation 41]\label{eq41}\lean{Equation41}\leanok\uses{magma-def}  Equation 41 is the law $0 \circ 0  \formaleq  1 \circ 2$ (or the equation $x \circ x = y \circ z$).
 \end{definition}
 
 This law is equivalent to the constant law, Definition \ref{eq46}.
 
-\begin{definition}[Equation 42]\label{eq42}\lean{Equation42}\leanok\uses{magma-def}  Equation 42 is the law $x \circ y = x \circ z$.
+\begin{definition}[Equation 42]\label{eq42}\lean{Equation42}\leanok\uses{magma-def}  Equation 42 is the law $0 \circ 1  \formaleq  0 \circ 2$ (or the equation $x \circ y = x \circ z$).
 \end{definition}
 
 Equivalent to Definition \ref{eq38}.
 
-\begin{definition}[Equation 43]\label{eq43}\lean{Equation43}\leanok\uses{magma-def}  Equation 43 is the law $x \circ y = y \circ x$.
+\begin{definition}[Equation 43]\label{eq43}\lean{Equation43}\leanok\uses{magma-def}  Equation 43 is the law $0 \circ 1  \formaleq  1 \circ 0$ (or the equation $x \circ y = y \circ x$).
 \end{definition}
 
 The commutative law. It is self-dual.
 
-\begin{definition}[Equation 45]\label{eq45}\lean{Equation45}\leanok\uses{magma-def}  Equation 45 is the law $x \circ y = z \circ y$.
+\begin{definition}[Equation 45]\label{eq45}\lean{Equation45}\leanok\uses{magma-def}  Equation 45 is the law $0 \circ 1  \formaleq  2 \circ 1$ (or the equation $x \circ y = z \circ y$).
 \end{definition}
 
 This is the dual of Definition \ref{eq42}.
 
-\begin{definition}[Equation 46]\label{eq46}\lean{Equation46}\leanok\uses{magma-def}  Equation 46 is the law $x \circ y = z \circ w$.
+\begin{definition}[Equation 46]\label{eq46}\lean{Equation46}\leanok\uses{magma-def}  Equation 46 is the law $0 \circ 1  \formaleq  2 \circ 3$ (or the equation $x \circ y = z \circ w$).
 \end{definition}
 
 The constant law: all products are constant. It is self-dual.
 
-\begin{definition}[Equation 168]\label{eq168}\lean{Equation168}\leanok\uses{magma-def}  Equation 168 is the law $x = (y \circ x) \circ (x \circ z)$.
+\begin{definition}[Equation 168]\label{eq168}\lean{Equation168}\leanok\uses{magma-def}  Equation 168 is the law $0  \formaleq  (1 \circ 0) \circ (0 \circ 2)$ (or the equation $x = (y \circ x) \circ (x \circ z)$).
 \end{definition}
 
 The law of a central groupoid. It is self-dual.
 
-\begin{definition}[Equation 387]\label{eq387}\lean{Equation387}\leanok\uses{magma-def}  Equation 387 is the law $x \circ y = (y \circ y) \circ x$.
+\begin{definition}[Equation 381]\label{eq381}\lean{Equation381}\leanok\uses{magma-def}  Equation 381 is the law $0 \circ 1  \formaleq  (0 \circ 2) \circ 1$ (or the equation $x \circ y = (x \circ z) \circ y$).
 \end{definition}
 
+Appears in Putnam 1978, Problem A4, part (b).
 
-\begin{definition}[Equation 4512]\label{eq4512}\lean{Equation4512}\leanok\uses{magma-def}  Equation 4512 is the law $x \circ (y \circ z) = (x \circ y) \circ z$.
+\begin{definition}[Equation 387]\label{eq387}\lean{Equation387}\leanok\uses{magma-def}  Equation 387 is the law $0 \circ 1  \formaleq  (1 \circ 1) \circ 0$ (or the equation $x \circ y = (y \circ y) \circ x$).
+\end{definition}
+
+\begin{definition}[Equation 3722]\label{eq3722}\lean{Equation3722}\leanok\uses{magma-def}  Equation 3722 is the law $0 \circ 1  \formaleq  (0 \circ 1) \circ (0 \circ 1)$ (or the equation $x \circ y = (x \circ y) \circ (x \circ y)$).
+\end{definition}
+
+Appears in Putnam 1978, Problem A4, part (a), where it is called a ``bypass operation''.  It is self-dual.
+
+\begin{definition}[Equation 4512]\label{eq4512}\lean{Equation4512}\leanok\uses{magma-def}  Equation 4512 is the law $0 \circ (1 \circ 2)  \formaleq  (0 \circ 1) \circ 2$ (or the equation $x \circ (y \circ z) = (x \circ y) \circ z$).
 \end{definition}
 
 The associative law. It is self-dual.
 
-\begin{definition}[Equation 4513]\label{eq4513}\lean{Equation4513}\leanok\uses{magma-def}  Equation 4513 is the law $x \circ (y \circ z) = (x \circ y) \circ w$.
+\begin{definition}[Equation 4513]\label{eq4513}\lean{Equation4513}\leanok\uses{magma-def}  Equation 4513 is the law $0 \circ (1 \circ 2)  \formaleq  (0 \circ 1) \circ 3$ (or the equation $x \circ (y \circ z) = (x \circ y) \circ w$).
 \end{definition}
 
-\begin{definition}[Equation 4522]\label{eq4522}\lean{Equation4522}\leanok\uses{magma-def}  Equation 4522 is the law $x \circ (y \circ z) = (x \circ w) \circ u$.
+\begin{definition}[Equation 4522]\label{eq4522}\lean{Equation4522}\leanok\uses{magma-def}  Equation 4522 is the law $0 \circ (1 \circ 2)  \formaleq  (0 \circ 3) \circ 4$ (or the equation $x \circ (y \circ z) = (x \circ w) \circ u$).
 \end{definition}
 
 Dual to Definition \ref{eq4579}.
 
-\begin{definition}[Equation 4564]\label{eq4564}\lean{Equation4564}\leanok\uses{magma-def}  Equation 4564 is the law $x \circ (y \circ z) = (w \circ y) \circ z$.
+\begin{definition}[Equation 4564]\label{eq4564}\lean{Equation4564}\leanok\uses{magma-def}  Equation 4564 is the law $0 \circ (1 \circ 2)  \formaleq  (3 \circ 1) \circ 2$ (or the equation $x \circ (y \circ z) = (w \circ y) \circ z$).
 \end{definition}
 
 Dual to Definition \ref{eq4513}.
 
-\begin{definition}[Equation 4579]\label{eq4579}\lean{Equation4579}\leanok\uses{magma-def}  Equation 4579 is the law $x \circ (y \circ z) = (w \circ u) \circ z$.
+\begin{definition}[Equation 4579]\label{eq4579}\lean{Equation4579}\leanok\uses{magma-def}  Equation 4579 is the law $0 \circ (1 \circ 2)  \formaleq  (3 \circ 4) \circ 2$ (or the equation $x \circ (y \circ z) = (w \circ u) \circ z$).
 \end{definition}
 
 Dual to Definition \ref{eq4522}.
 
-\begin{definition}[Equation 4582]\label{eq4582}\lean{Equation4582}\leanok\uses{magma-def}  Equation 4582 is the law $x \circ (y \circ z) = (w \circ u) \circ v$.
+\begin{definition}[Equation 4582]\label{eq4582}\lean{Equation4582}\leanok\uses{magma-def}  Equation 4582 is the law $0 \circ (1 \circ 2)  \formaleq  (3 \circ 4) \circ 5$ (or the equation $x \circ (y \circ z) = (w \circ u) \circ v$).
 \end{definition}
 
 This law asserts that all triple constants (regardless of bracketing) are constant.
 
-Implications between these laws are depicted in Figure \ref{fig:implications}.
+Here is a more complicated law, introduced by Kisielewicz \cite{Kisielewicz}:
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.5\linewidth]{../../images/implications.png}
-  \caption{Implications between the above equations.}
-  \label{fig:implications}
-\end{figure}
+\begin{definition}[Equation 374794]
+  \lean{EquationKis}\leanok
+  \label{eq374794}\uses{magma-def}
+  Equation 374794 is the law $0  \formaleq  (((1 \circ 1) \circ 1) \circ 0) \circ ((1 \circ 1) \circ 2)$ (or the equation $x = (((y \circ y) \circ y) \circ x) \circ ((y \circ y) \circ z)$).
+\end{definition}
+
+We will be interested in seeing which laws imply which other laws, in the sense that magmas obeying the former law automatically obey the latter.  We will also be interested in \emph{anti-implications} showing that one law does \emph{not} imply another, by producing examples of magmas that obey the former law but not the latter.
+
+The singleton or empty magma obeys all equational laws.  One can ask whether an equational law admits nontrivial finite or infinite models.  The following result was established in \cite{Kisielewicz}:
+
+\begin{theorem}[Kisielewicz theorem]
+  \lean{InfModel.Finite.EquationKis_implies_Equation2,InfModel.EquationKis_not_implies_Equation2}\leanok
+  \label{kis-thm}\uses{eq374794,eq2}
+  Definition \ref{eq374794} has an infinite model, but no non-trivial finite model.
+\end{theorem}
+
+\begin{proof} \leanok Suppose for contradiction that we have a non-trivial model of Definition \ref{eq374794}. Write $y^2 := y \circ y$ and $y^3 := y^2 \circ y$. For any $y,z$, introduce the functions $f_y: x \mapsto y^3 \circ x$ and $g_{yz}: x \mapsto x \circ (y^2 \circ z)$.  Definition \ref{eq374794} says that $g_{yz}$ is a left-inverse of $f_y$, hence by finiteness these are inverses and $g_{yz}$ is independent of $z$. In particular
+$$ f(y^3) = g_{yy}(y^3) = g_{yz}(y^3) = f(y^2 \circ z)$$
+and hence $y^2 \circ z$ is independent of $z$.  Thus
+$$ f_y(x) = (y^2 \circ y) \circ x = (y^2 \circ y^2) \circ x$$
+is independent of $x$.  As $f_y$ is invertible, this forces the magma to be trivial, a contradiction.
+
+To construct an infinite magma, take the positive integers $\Z^+$ with the operation $x \circ y$ defined as
+\begin{itemize}
+  \item $2^x$ if $y=x$;
+  \item $3^y$ if $x = 1 \neq y$;
+  \item $\min(j,1)$ if $x=3^j$ and $y \neq x$; and
+  \item $1$ otherwise.
+\end{itemize}
+Then $y^2 = 2^y$, $y^3 = 1$, and $y^2 \circ z$ a power of two for all $y, z$, and $(1 \circ x) \circ w = x$ for all $x$ whenever $w$ is a power of two, so Definition \ref{eq374794} is satisfied.
+\end{proof}
