@@ -139,7 +139,7 @@ theorem Equation42_implies_Equation38 (G: Type*) [Magma G] (h: Equation42 G) : E
 theorem Equation45_implies_Equation39 (G: Type*) [Magma G] (h: Equation45 G) : Equation39 G :=
   fun _ _ ↦ by rw [h]
 
-thoerem Equation46_implies_Equation39 (G: Type*) [Magma G] (h: Equation46 G) : Equation39 G :=
+theorem Equation46_implies_Equation39 (G: Type*) [Magma G] (h: Equation46 G) : Equation39 G :=
   fun x y ↦ h x x y x
 
 theorem Equation46_implies_Equation40 (G: Type*) [Magma G] (h: Equation46 G) : Equation40 G :=
