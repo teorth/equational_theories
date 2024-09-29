@@ -4,6 +4,8 @@ import Mathlib.NumberTheory.Padics.PadicVal.Basic
 
 abbrev EquationKis (G: Type*) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ y) ∘ x) ∘ ((y ∘ y) ∘ z)
 
+namespace InfModel
+
 /--
 In a finite model `EquationKis` implies `Equation2`, that the model is a subsingleton.
 -/
@@ -28,6 +30,7 @@ theorem Finite.EquationKis_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h
   have y := x
   have z := x
   rw [h x y z, this y y (y ∘ y), this (y ∘ y) x u, ← this y y (y ∘ y), ← h]
+
 
 /--
 However, `EquationKis` doesn't imply `Equation2`.
@@ -82,3 +85,5 @@ theorem EquationKis_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equati
   · split
     · apply t4
     · convert t4 _ 0
+
+end InfModel
