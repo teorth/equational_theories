@@ -11,6 +11,8 @@ inductive FreeMagma (α : Type u)
 infixl:65 " ⋆ " => FreeMagma.Fork
 def Lf {α : Type u} : (α → FreeMagma α) := FreeMagma.Leaf
 
+instance FreeMagma.Magma {α} : Magma (FreeMagma α) := ⟨ Fork ⟩
+
 def fmapFreeMagma {α : Type u} {β : Type v} (f : α → β) : FreeMagma α → FreeMagma β
   | FreeMagma.Leaf a => FreeMagma.Leaf (f a)
   | FreeMagma.Fork lchild rchild => FreeMagma.Fork (fmapFreeMagma f lchild) (fmapFreeMagma f rchild)
