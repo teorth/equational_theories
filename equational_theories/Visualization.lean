@@ -1,4 +1,4 @@
-import equational_theories.Result
+import equational_theories.EquationalResult
 import ProofWidgets
 
 open Lean Core Elab Command ProofWidgets Server
