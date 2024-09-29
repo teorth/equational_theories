@@ -77,3 +77,20 @@ elab_rules : command
     match res with
     | .implication ⟨lhs, rhs⟩ => println! "{name}: {lhs} → {rhs}"
     | .nonimplication ⟨lhs, rhs⟩ => println! "{name}: ¬ ({lhs} → {rhs})"
+
+--- Output of the extract_implications executable.
+structure Output where
+  implications : List Implication
+  nonimplications : List Implication
+deriving Lean.ToJson, Lean.FromJson
+
+def collectResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
+    m Output := do
+  let rs := resultExtension.getState (← getEnv)
+  let mut implications : List Implication := []
+  let mut nonimplications : List Implication := []
+  for ⟨_name, _filename, res⟩ in rs do
+    match res with
+    | .implication imp => implications := imp::implications
+    | .nonimplication nimp => nonimplications := nimp::nonimplications
+  return ⟨implications, nonimplications⟩
