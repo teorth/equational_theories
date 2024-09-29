@@ -27,6 +27,11 @@ name = "extract_implications"
 root = "scripts.extract_implications"
 supportInterpreter = true
 
+[[lean_exe]]
+name = "compute_closure"
+root = "scripts.compute_closure"
+supportInterpreter = true
+
 [[require]]
 name = "egg"
 git  = "https://github.com/marcusrossel/lean-egg"
