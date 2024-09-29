@@ -88,29 +88,30 @@ def count_vars(expr):
 
 eqs = list(generate_all_eqs())
 
-if len(argv) > 1 and argv[1] in {'-h', '/h', '/?', '--help', '/help'}:
-    print(f'Usage: python {argv[0]} [--shapes | --lean]')
-    print(f'    Generates all equations up to {EQ_SIZE} operations and sends them to the standard output.')
-    print(f'    To output to a file use the > operator of your shell.')
-    print(f'    If the --shapes option is present, the shapes of the equations are printed instead.')
-    print(f'    If the --lean option is present, the equations are printed in the format of https://github.com/teorth/equational')
-    exit(1)
+if __name__ == "__main__":
+    if len(argv) > 1 and argv[1] in {'-h', '/h', '/?', '--help', '/help'}:
+        print(f'Usage: python {argv[0]} [--shapes | --lean]')
+        print(f'    Generates all equations up to {EQ_SIZE} operations and sends them to the standard output.')
+        print(f'    To output to a file use the > operator of your shell.')
+        print(f'    If the --shapes option is present, the shapes of the equations are printed instead.')
+        print(f'    If the --lean option is present, the equations are printed in the format of https://github.com/teorth/equational')
+        exit(1)
 
-print(f'Generated {len(eqs)} equations', file=stderr)
-if len(argv) > 1 and argv[1] == '--shapes':
-    shapes = set()
-    for lhs, rhs in eqs:
-        shape = (expr_shape(lhs), expr_shape(rhs))
-        if shape not in shapes:
-            shapes.add(shape)
-            print(format_shape(shape[0]), '=', format_shape(shape[1]))
-    exit(0)
+    print(f'Generated {len(eqs)} equations', file=stderr)
+    if len(argv) > 1 and argv[1] == '--shapes':
+        shapes = set()
+        for lhs, rhs in eqs:
+            shape = (expr_shape(lhs), expr_shape(rhs))
+            if shape not in shapes:
+                shapes.add(shape)
+                print(format_shape(shape[0]), '=', format_shape(shape[1]))
+        exit(0)
 
-if len(argv) > 1 and argv[1] == '--lean':
-    for i, (lhs, rhs) in enumerate(eqs):
-        vars = ' '.join(VAR_NAMES[i] for i in range(max(count_vars(lhs), count_vars(rhs))))
-        print(f'def Equation{i + 1} (G: Type*) [Magma G] := ∀ {vars} : G, {format_expr(lhs)} = {format_expr(rhs)}')
-    exit(0)
+    if len(argv) > 1 and argv[1] == '--lean':
+        for i, (lhs, rhs) in enumerate(eqs):
+            vars = ' '.join(VAR_NAMES[i] for i in range(max(count_vars(lhs), count_vars(rhs))))
+            print(f'def Equation{i + 1} (G: Type*) [Magma G] := ∀ {vars} : G, {format_expr(lhs)} = {format_expr(rhs)}')
+        exit(0)
 
-for lhs, rhs in generate_all_eqs():
-    print(format_expr(lhs), '=', format_expr(rhs))
+    for lhs, rhs in generate_all_eqs():
+        print(format_expr(lhs), '=', format_expr(rhs))
