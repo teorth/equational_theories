@@ -38,11 +38,13 @@ abbrev Equation7 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ z
 /-- dual of 23 -/
 abbrev Equation8 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ (x ∘ x)
 
+/-- Appears in Problem A1 from Putnam 2001 -/
 abbrev Equation14 (G : Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ y)
 
 /-- dual of 8 -/
 abbrev Equation23 (G: Type u) [Magma G] := ∀ x : G, x = (x ∘ x) ∘ x
 
+/-- Appears in Problem A1 from Putnam 2001.  Dual of 14 -/
 abbrev Equation29 (G : Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ y
 
 /-- value of multiplication is independent of right argument -/
