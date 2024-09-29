@@ -15,7 +15,7 @@ deriving Lean.ToJson, Lean.FromJson
 def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
   let modules := inp.variableArgsAs! ModuleName
   if modules.isEmpty then
-    IO.eprintln "Please input some files"
+    inp.printHelp
     return 1
   searchPathRef.set compile_time_search_path%
 
@@ -41,7 +41,7 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
       pure 0
 
 def extract_implications : Cmd := `[Cli|
-  extract_implications VIA generateOutput; ["0.0.0"]
+  extract_implications VIA generateOutput;
   "Extract the implications explicitly proven in the mentioned files."
 
   ARGS:
