@@ -3,6 +3,24 @@ import Lean.Elab.Declaration
 
 import equational_theories.ParseImplications
 
+/-!
+This file defines the @[equational_result] attribute, intended for marking theorems that
+represent edges in the implication graph.
+
+At one point we discussed getting the same information by scanning through the environment
+and collecting all theorems that have the correct shape.
+See https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Refactoring.20the.20Lean.20file.20structure/near/473148427.
+
+That approach would have the advantage of allowing the theorems to be more succinct in the
+source code (no need to add an attribute). However, using an attribute and environment
+extension, as done in this file, has the following advantages:
+  - If a theorem does not quite match the correct shape, the attribute handler can report
+    the error immediately at the theorem declaration.
+  - Recording the results just once avoids the need to linearly scan the whole environment
+    (could get expensive) at each downstream usage point.
+  - Requiring explicit opt-in prevents the possibilty of accidental inclusions of unwanted theorems.
+-/
+
 open Lean Parser Elab Command
 
 namespace Result
