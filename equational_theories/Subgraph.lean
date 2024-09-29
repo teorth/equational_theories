@@ -165,9 +165,9 @@ theorem Equation46_implies_Equation4582 (G: Type*) [Magma G] (h: Equation46 G) :
 
 /-- This proof is from https://mathoverflow.net/a/450905/766 -/
 theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) : Equation43 G := by
-  have idem (x : G) : (x ∘ x) ∘ (x ∘ x) = (x ∘ x) := by rw [← h, ← h]
+  have idem (x : G) : (x ∘ x) ∘ (x ∘ x) = (x ∘ x) := by repeat rw [← h]
   have comm (x y : G) : (x ∘ x) ∘ y = y ∘ (x ∘ x) := by rw [← idem, ← h, idem]
-  have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by rw [← h, ← h]
+  have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by repeat rw [← h]
   exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
 
 theorem Equation4513_implies_Equation4512 (G: Type*) [Magma G] (h: Equation4513 G) : Equation4512 G :=
@@ -248,23 +248,11 @@ theorem Equation5_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equatio
 
 theorem Equation8_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation8 G ∧ ¬ Equation3 G := by
   simp only [not_forall]
-  use (Fin 2)
-  use ⟨(. + .)⟩
-  simp only [self_eq_add_right, Fin.isValue]
-  constructor
-  · decide
-  · use 1
-    simp only [Fin.isValue, one_ne_zero, not_false_eq_true]
+  exact ⟨Fin 2, ⟨(. + .)⟩, by decide, 1, one_ne_zero⟩
 
 theorem Equation23_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation23 G ∧ ¬ Equation3 G := by
   simp only [not_forall]
-  use (Fin 2)
-  use ⟨(· + ·)⟩
-  simp only [self_eq_add_right, Fin.isValue]
-  constructor
-  · decide
-  · use 1
-    simp only [Fin.isValue, one_ne_zero, not_false_eq_true]
+  exact ⟨Fin 2, ⟨(· + ·)⟩, by decide, 1, one_ne_zero⟩
 
 theorem Equation38_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equation38 G ∧ ¬ Equation23 G := by
   simp only [not_forall]
