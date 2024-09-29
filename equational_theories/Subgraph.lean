@@ -118,7 +118,7 @@ theorem Equation7_implies_Equation3 (G: Type*) [Magma G] (h: Equation7 G) : Equa
 theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G :=
   fun _ _ _ ↦ by rw [← h]
 
--- This implication is Problem A1 from Putnam 2001
+/-- This implication is Problem A1 from Putnam 2001 -/
 theorem Equation29_implies_Equation14 (G: Type*) [Magma G] (h: Equation29 G) : Equation14 G :=
   fun x y ↦ Eq.trans (h x (x ∘ y)) (congrArg (fun z ↦ z ∘ (x ∘ y)) (Eq.symm (h y x)))
 
@@ -161,6 +161,17 @@ theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) :
   have comm (x y : G) : (x ∘ x) ∘ y = y ∘ (x ∘ x) := by rw [← idem, ← h, idem]
   have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by rw [← h, ← h]
   exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
+
+/-- Putnam 1978, problem A4, part (b) -/
+theorem Equation3744_implies_Equation381 (G : Type*) [Magma G] (h: Equation3744 G) : Equation381 G :=
+  fun x y z ↦ Eq.trans
+    (h x y z y) $ Eq.trans
+    (congrArg (fun a ↦ a ∘ (y ∘ y)) (h x z z x))
+    (Eq.symm $ h (x ∘ z) y (x ∘ z) y)
+
+/-- Putnam 1978, problem A4, part (a) -/
+theorem Equation3744_implies_Equation3722 (G: Type*) [Magma G] (h: Equation3744 G) : Equation3722 G :=
+  fun x y ↦ h x y y x
 
 theorem Equation4513_implies_Equation4512 (G: Type*) [Magma G] (h: Equation4513 G) : Equation4512 G :=
   fun _ _ _ ↦ h _ _ _ _
