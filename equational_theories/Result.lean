@@ -7,19 +7,14 @@ open Lean Parser Elab Command
 
 namespace Result
 
-/--
-A theorem providing an implication or negated implication to our directed graph.
--/
-syntax (name := result) declModifiers "result " declId ppIndent(declSig) declVal : command
-
-/-- An entry in the result environment extension.
+/-- An entry in the equational results environment extension.
 -/
 inductive EntryVariant where
   | implication : Implication → EntryVariant
   | nonimplication : Implication → EntryVariant
 deriving Lean.ToJson, Lean.FromJson
 
-/-- An entry in the result environment extension -/
+/-- An entry in the equational results environment extension -/
 structure Entry where
 /-- Name of the declaration. -/
 (name : Name)
@@ -29,53 +24,57 @@ structure Entry where
 (variant : EntryVariant)
 deriving Lean.ToJson, Lean.FromJson
 
-initialize resultExtension : SimplePersistentEnvExtension Entry (Array Entry) ←
+initialize equationalResultsExtension : SimplePersistentEnvExtension Entry (Array Entry) ←
   registerSimplePersistentEnvExtension {
-    name := `result
+    name := `equational_result
     addImportedFn := Array.concatMap id
     addEntryFn    := Array.push
   }
 
-/-- Elaborates a `result` declaration.
--/
-elab_rules : command
-| `(command| $dm:declModifiers result $di:declId $ds:declSig $dv:declVal) => do
-  let filename := (←read).fileName
-  let modifiers ← elabModifiers dm
-  let expanded_decl_id ← expandDeclId di modifiers
+private def equationalResultHelpString : String :=
+"tags theorems that provide implications or negated implications to the directed graph"
 
-  let cmd ← `(command | $dm:declModifiers theorem $di $ds $dv)
-  Lean.Elab.Command.elabCommand cmd
-
-  let maybe_entry ← match ←getConstInfo expanded_decl_id.declName with
+/-- Initialization of `equational_result` attribute -/
+initialize equationalResultAttr : Unit ←
+  registerBuiltinAttribute {
+    name  := `equational_result
+    descr := equationalResultHelpString
+    applicationTime := AttributeApplicationTime.afterCompilation
+    add   := fun declName _stx _attrKind => do
+       let filename := (←read).fileName
+       discard <| Meta.MetaM.run do
+       let info ← getConstInfo declName
+       let maybe_entry ← match info with
                     | .thmInfo  (val : TheoremVal) =>
-                      liftCoreM <| Meta.MetaM.run' do
                       if let some imp ← parseImplication val.type then
-                        return some ⟨val.name, filename, .implication imp⟩
-                      if let some nimp ← parseNonimplication val.type then
-                        return some ⟨val.name, filename, .nonimplication nimp⟩
-                      return  none
+                        pure <| some ⟨val.name, filename, .implication imp⟩
+                      else if let some nimp ← parseNonimplication val.type then
+                        pure <| some ⟨val.name, filename, .nonimplication nimp⟩
+                      else
+                        pure none
                     | _ => pure none
+       if let some entry := maybe_entry then
+         modifyEnv fun env =>
+           equationalResultsExtension.addEntry env entry
+       pure ()
+    erase := fun _declName =>
+      throwError "can't remove `equational_result` attribute (not implemented yet)"
+  }
 
-  if let some entry := maybe_entry then
-    modifyEnv fun env =>
-      resultExtension.addEntry env entry
 
-  pure ()
-
-/-- Returns the contents of the result environment extension.
+/-- Returns the contents of the equational results environment extension.
 -/
-def extractResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
+def extractEquationalResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
     m (Array Entry) := do
-  return resultExtension.getState (← getEnv)
+  return equationalResultsExtension.getState (← getEnv)
 
-/-- Prints the contents of the result environment extension.
+/-- Prints the contents of the equational results environment extension.
 -/
-syntax (name := printResults) "#print_results" : command
+syntax (name := printEquationalResults) "#print_equational_results" : command
 
 elab_rules : command
-| `(command| #print_results) => do
-  let rs ← extractResults
+| `(command| #print_equational_results) => do
+  let rs ← extractEquationalResults
   for ⟨name, _filename, res⟩ in rs do
     match res with
     | .implication ⟨lhs, rhs⟩ => println! "{name}: {lhs} → {rhs}"
@@ -89,7 +88,7 @@ deriving Lean.ToJson, Lean.FromJson
 
 def collectResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
     m Output := do
-  let rs := resultExtension.getState (← getEnv)
+  let rs := equationalResultsExtension.getState (← getEnv)
   let mut implications : List Implication := []
   let mut nonimplications : List Implication := []
   for ⟨_name, _filename, res⟩ in rs do
