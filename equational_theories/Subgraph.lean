@@ -259,7 +259,7 @@ theorem Equation8_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation
 theorem Equation23_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation23 G ∧ ¬ Equation3 G := by
   simp only [not_forall]
   use (Fin 2)
-  use ⟨(. + .)⟩
+  use ⟨(· + ·)⟩
   simp only [self_eq_add_right, Fin.isValue]
   constructor
   · decide
