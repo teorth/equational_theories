@@ -16,12 +16,31 @@ jobs:
         -d '{"labels":["awaiting-review"]}' \
         https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels
 
-    - name: Retrieve the project ITEM_ID
+    - name: Get PR details
+      id: get_pr
+      run: |
+        curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} > pr.json
+        cat pr.json
+
+    - name: Extract related issue number
+      id: extract_issue
+      run: |
+        ISSUE_NUMBER=$(jq -r '.body | capture("Closes #(?<num>[0-9]+)") | .num' pr.json)
+        echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_ENV
+
+    - name: Fail if no related issue is found
+      if: ${{ env.issue_number == '' }}
+      run: |
+        echo "No related issue found in PR body. Exiting..."
+        exit 1
+
+    - name: Retrieve the project ITEM_ID for the related issue
       id: get_item_id
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { projectItems(first: 10) { nodes { id } } } } }"
+          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ env.issue_number }}) { projectItems(first: 10) { nodes { id } } } } }"
         }
         EOF
         )
