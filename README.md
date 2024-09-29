@@ -46,7 +46,6 @@ Links:
     - Ruby
         - [`transitive_closure`](scripts/transitive_closure.rb) - computes the transitive closure of a set of implications
         - [`transitive_reduction`](scripts/transitive_reduction.rb) - finds a transitive reduction of a set of implications
-        - [`transitive_reduction_exact`](scripts/transitive_reduction_exact.rb) - finds an exact transitive reduction of a set of implications
 - Automated provers for equational theories
     - [Prover9 and Mace4](https://www.cs.unm.edu/~mccune/prover9/)
         - [aa](https://github.com/gsfk/aa) - a project to use Prover9/Mace4 to brute force axioms for finite mathematical domains

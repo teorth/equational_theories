@@ -130,6 +130,9 @@ theorem Equation7_implies_Equation3 (G: Type*) [Magma G] (h: Equation7 G) : Equa
 theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G :=
   fun _ _ _ ↦ by rw [← h]
 
+/-- dual to Problem A1 from Putnam 2001 -/
+conjecture Equation14_implies_Equation29 (G: Type*) [Magma G] (h: Equation14 G) : Equation29 G
+
 /-- This implication is Problem A1 from Putnam 2001 -/
 theorem Equation29_implies_Equation14 (G: Type*) [Magma G] (h: Equation29 G) : Equation14 G :=
   fun x y ↦ Eq.trans (h x (x ∘ y)) (congrArg (fun z ↦ z ∘ (x ∘ y)) (Eq.symm (h y x)))

@@ -1,7 +1,7 @@
 \chapter{General implications}
 
-\begin{definition}[Implication]\label{impl}\uses{law-def}  A law $w == w'$ is said to \emph{imply} another law $w'' == w'''$, if every magma $G$ that satisfies the former, satisfies the latter:
-  $$ G \models w == w' \implies G \models w'' == w'''.$$
+\begin{definition}[Implication]\label{impl}\uses{law-def}  A law $w  \formaleq  w'$ is said to \emph{imply} another law $w''  \formaleq  w'''$, if every magma $G$ that satisfies the former, satisfies the latter:
+  $$ G \models w  \formaleq  w' \implies G \models w''  \formaleq  w'''.$$
 Two laws are said to be \emph{equivalent} if they imply each other.
 \end{definition}
 
@@ -21,28 +21,28 @@ Implications between these laws are depicted in Figure \ref{fig:implications}.
 \end{figure}
 
 
-\begin{lemma}[Minimal element]\label{minimal}\uses{pre-order}  The law $0 == 0$ is the minimal element in this pre-order.
+\begin{lemma}[Minimal element]\label{minimal}\uses{pre-order}  The law $0  \formaleq  0$ is the minimal element in this pre-order.
 \end{lemma}
 
 \begin{proof} Trivial.
 \end{proof}
 
-\begin{lemma}[Maximal element]\label{maximal}\uses{pre-order}  The law $0 == 0$ is the minimal element in this pre-order.
+\begin{lemma}[Maximal element]\label{maximal}\uses{pre-order}  The law $0  \formaleq  0$ is the minimal element in this pre-order.
 \end{lemma}
 
 \begin{proof} Trivial.
 \end{proof}
 
-Every magma $G$ has a \emph{reversal} $G^{\mathrm{op}}$, formed by by replacing the magma operation $\circ$ with its opposite $\circ^{\mathrm{op}}:(x,y) \mapsto y \circ x$. There is a natural isomorphism between these magmas, which induces an involution $w \mapsto w^{\mathrm{op}}$ on words $w \in M_X$.  Every law $w == w'$ then has a \emph{dual} $w^{\mathrm{op}} == (w')^{\mathrm{op}}$.
+Every magma $G$ has a \emph{reversal} $G^{\mathrm{op}}$, formed by by replacing the magma operation $\circ$ with its opposite $\circ^{\mathrm{op}}:(x,y) \mapsto y \circ x$. There is a natural isomorphism between these magmas, which induces an involution $w \mapsto w^{\mathrm{op}}$ on words $w \in M_X$.  Every law $w  \formaleq  w'$ then has a \emph{dual} $w^{\mathrm{op}}  \formaleq  (w')^{\mathrm{op}}$.
 
 For instance, the dual of the law $0 \circ 1 = 0 \circ 2$ is $1 \circ 0 = 2 \circ 0$, which after relabeling is $0 \circ 1 = 2 \circ 1$.  A list of equations and their duals can be found \href{https://github.com/teorth/equational_theories/blob/main/data/dual_equations.md}{here}.  Of the 4694 equations under consideration, 84 are self-dual, leaving 2305 pairs of dual equations.
 
 The pre-ordering on laws has a duality symmetry:
 
-\begin{lemma}[Duality of laws]\label{duality}\uses{pre-order}  If $w == w'$ implies $w'' == w'''$, then $w^{\mathrm{op}} == (w')^{\mathrm{op}}$ implies $w''^{\mathrm{op}} == (w''')^{\mathrm{op}}$.
+\begin{lemma}[Duality of laws]\label{duality}\uses{pre-order}  If $w  \formaleq  w'$ implies $w''  \formaleq  w'''$, then $w^{\mathrm{op}}  \formaleq  (w')^{\mathrm{op}}$ implies $w''^{\mathrm{op}}  \formaleq  (w''')^{\mathrm{op}}$.
 \end{lemma}
 
-\begin{proof} This follows from the fact that a magma $G$ satisfies a law $w == w'$ if and only if $G^{\mathrm{op}}$ satisfies $w^{\mathrm{op}} == (w')^{\mathrm{op}}$.
+\begin{proof} This follows from the fact that a magma $G$ satisfies a law $w  \formaleq  w'$ if and only if $G^{\mathrm{op}}$ satisfies $w^{\mathrm{op}}  \formaleq  (w')^{\mathrm{op}}$.
 \end{proof}
 
 Some equational laws can be ``diagonalized'':
