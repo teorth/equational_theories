@@ -145,6 +145,9 @@ theorem Equation46_implies_Equation41 (G: Type*) [Magma G] (h: Equation46 G) : E
 theorem Equation46_implies_Equation42 (G: Type*) [Magma G] (h: Equation46 G) : Equation42 G :=
   fun _ _ _ ↦ h _ _ _ _
 
+theorem Equation46_implies_Equation43 (G: Type*) [Magma G] (h: Equation46 G) : Equation43 G :=
+  fun _ _ ↦ h _ _ _ _
+
 theorem Equation46_implies_Equation387 (G: Type*) [Magma G] (h: Equation46 G) : Equation387 G :=
   fun _ _ ↦ h _ _ _ _
 
