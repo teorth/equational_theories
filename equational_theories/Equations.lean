@@ -38,8 +38,12 @@ abbrev Equation7 (G: Type u) [Magma G] := ∀ x y z : G, x = y ∘ z
 /-- dual of 23 -/
 abbrev Equation8 (G: Type u) [Magma G] := ∀ x : G, x = x ∘ (x ∘ x)
 
+abbrev Equation14 (G : Type u) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ y)
+
 /-- dual of 8 -/
 abbrev Equation23 (G: Type u) [Magma G] := ∀ x : G, x = (x ∘ x) ∘ x
+
+abbrev Equation29 (G : Type u) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ y
 
 /-- value of multiplication is independent of right argument -/
 abbrev Equation38 (G: Type u) [Magma G] := ∀ x y : G, x ∘ x = x ∘ y
@@ -68,7 +72,16 @@ abbrev Equation46 (G: Type u) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ w
 /-- The central groupoid law -/
 abbrev Equation168 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x ∘ z)
 
+/-- From Putnam 1978, Problem A4, part (b) -/
+abbrev Equation381 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ y
+
 abbrev Equation387 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ x
+
+/-- From Putnam 1978, Problem A4, part (a) -/
+abbrev Equation3722 (G : Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ y) ∘ (x ∘ y)
+
+/-- Putnam 1978, Problem A4 calls this a "bypass operation" -/
+abbrev Equation3744 (G : Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ (w ∘ y)
 
 /-- The associative law -/
 abbrev Equation4512 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ z
