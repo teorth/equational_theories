@@ -12,9 +12,9 @@ universe u
 variable {α : Type u} {x y z : FreeMagma α}
 
 -- examples to test
-def w (x y : FreeMagma α) := x ⋆ y
-#check x ⋆ (w x y) ⋆ z ≃ z
-#reduce x ⋆ (w x z)
+def combine (x y : FreeMagma α) := x ⋆ (y ⋆ y)
+#check x ⋆ (combine x y) ⋆ z ≃ z
+#reduce x ⋆ (combine x z)
 
 
 end MagmaLaw
