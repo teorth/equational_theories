@@ -49,12 +49,12 @@ $$ \pi_*(0 \circ 1) = 1 \circ 2$$
 $$ \pi_*(1 \circ (0 \circ 1)) = 2 \circ (1 \circ 2)$$
 and so forth.
 
-\begin{definition}[Law]\label{law-def}\uses{induced-def}  Let $X$ be a set. A \emph{law} with alphabet $X$ is a formal expression of the form $w == w'$, where $w, w' \in M_X$ are words with alphabet $X$ (thus one can identify laws with alphabet $X$ with elements of $M_X \times M_X$).  A magma $G$ \emph{satisfies} the law $w == w'$ if we have $\varphi_f( w ) = \varphi_f ( w' )$ for all $f: X \to G$, in which case we write $G \models w == w'$.
+\begin{definition}[Law]\label{law-def}\uses{induced-def}  Let $X$ be a set. A \emph{law} with alphabet $X$ is a formal expression of the form $w \formaleq w'$, where $w, w' \in M_X$ are words with alphabet $X$ (thus one can identify laws with alphabet $X$ with elements of $M_X \times M_X$).  A magma $G$ \emph{satisfies} the law $w \formaleq w'$ if we have $\varphi_f( w ) = \varphi_f ( w' )$ for all $f: X \to G$, in which case we write $G \models w \formaleq w'$.
 \end{definition}
 
 Thus, for instance, the commutative law
 \begin{equation}\label{comm-law}
-  0 \circ 1 == 1 \circ 0
+  0 \circ 1 \formaleq 1 \circ 0
 \end{equation}
 is satisfied by a magma $G$ if and only if
 \begin{equation}\label{comm-law-2}
@@ -62,25 +62,25 @@ is satisfied by a magma $G$ if and only if
 \end{equation}
 for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} associated to the law \eqref{comm-law}.  One can think of equations as the ``semantic'' intrepretation of a ``syntactic'' law.  However, we shall often abuse notation and a law with its associated equation thus we shall (somewhat carelessly) also refer to \eqref{comm-law-2} as ``the commutative law'' (rather than ``the commutative equation'').
 
-\begin{lemma}[Pushforward]\label{push}\uses{law-def}  Let $w == w'$ be a law with some alphabet $X$, $G$ be a magma, and $\pi: X \to Y$ be a function.  If $G \models w == w'$, then $G \models \pi_*(w) == \pi_*(w')$.  In particular, if $\pi$ is a bijection, the statements If $G \models w == w'$, then $G \models \pi_*(w) == \pi_*(w')$ are equivalent.
+\begin{lemma}[Pushforward]\label{push}\uses{law-def}  Let $w \formaleq w'$ be a law with some alphabet $X$, $G$ be a magma, and $\pi: X \to Y$ be a function.  If $G \models w \formaleq w'$, then $G \models \pi_*(w) \formaleq \pi_*(w')$.  In particular, if $\pi$ is a bijection, the statements If $G \models w \formaleq w'$, then $G \models \pi_*(w) \formaleq \pi_*(w')$ are equivalent.
 \end{lemma}
 
-If $\pi$ is a bijection, we will call $\pi_*(w) == \pi_*(w')$ a \emph{relabeling} of the law $w == w'$.  Thus for instance
-$$ 5 \circ 7 == 7 \circ 5$$
+If $\pi$ is a bijection, we will call $\pi_*(w) \formaleq \pi_*(w')$ a \emph{relabeling} of the law $w \formaleq w'$.  Thus for instance
+$$ 5 \circ 7 \formaleq 7 \circ 5$$
 is a relabeling of the commutative law \eqref{comm-law}.  By the above lemma, relabeling does not affect whether a given magna satisfies a given law.
 
 \begin{proof}  Trivial.
 \end{proof}
 
-\begin{lemma}[Equivalence]\label{equiv}\uses{law-def}  Let $G$ be a magma and $X$ be an alphabet.  Then the relation $G \models w == w'$ is an equivalence relation on $M_X$.
+\begin{lemma}[Equivalence]\label{equiv}\uses{law-def}  Let $G$ be a magma and $X$ be an alphabet.  Then the relation $G \models w \formaleq w'$ is an equivalence relation on $M_X$.
 \end{lemma}
 
 \begin{proof}  Trivial.
 \end{proof}
 
-Define the total order of a law $w == w'$ to be the sum of the orders of $w$ and $w'$.
+Define the total order of a law $w \formaleq w'$ to be the sum of the orders of $w$ and $w'$.
 
-\begin{lemma}[Counting laws up to relabeling]\label{law-count}\uses{push}  Up to relabeling, the number of laws $w == w'$ of total order $n$ is $C_{n+1} B_{n+2}$.
+\begin{lemma}[Counting laws up to relabeling]\label{law-count}\uses{push}  Up to relabeling, the number of laws $w \formaleq w'$ of total order $n$ is $C_{n+1} B_{n+2}$.
 \end{lemma}
 
 \begin{proof} Follows from the properties of Catalan and Bell numbers.
@@ -96,7 +96,7 @@ $$ 2, 10, 75, 728, 8526, 115764, \dots$$
 
 Now we would also like to count laws up to relabeling and symmetry.
 
-\begin{lemma}[Counting laws up to relabeling and symmetry]\label{law-count-sym}\uses{push} Up to relabeling and symmetry, the number of laws $w == w'$ of total order $n$ is
+\begin{lemma}[Counting laws up to relabeling and symmetry]\label{law-count-sym}\uses{push} Up to relabeling and symmetry, the number of laws $w \formaleq w'$ of total order $n$ is
 $$ C_{n+1} B_{n+2}/2$$
 when $n$ is odd, and
 $$ (C_{n+1} B_{n+2} + C_{n/2} (2D_{n+2} - B_{n+2}))/2$$
@@ -112,7 +112,7 @@ $$ 1, 1, 2, 4, 11, 32, 117, \dots$$
 $$ 2, 5, 41, 364, 4294, 57882, 888440, \dots$$
 {\bf check this matches the formula}
 
-We can also identify all laws of the form $w==w$ with the trivial law $0==0$.  The number of such laws of total order $n$ is zero if $n$ is odd, and $C_{n/2} B_{n/2+1}$ if $n$ is even.  We conclude:
+We can also identify all laws of the form $w \formaleq w$ with the trivial law $0 \formaleq 0$.  The number of such laws of total order $n$ is zero if $n$ is odd, and $C_{n/2} B_{n/2+1}$ if $n$ is even.  We conclude:
 
 \begin{lemma}[Counting laws up to relabeling, symmetry, and triviality]  Up to relabeling, symmetry, and triviality, the number of laws of total order $n$ is
 $$ C_{n+1} B_{n+2}/2$$
