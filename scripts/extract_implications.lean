@@ -13,10 +13,12 @@ structure Output where
 deriving Lean.ToJson, Lean.FromJson
 
 def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
-  let modules := inp.variableArgsAs! ModuleName
-  if modules.isEmpty then
+  let some modules := inp.variableArgsAs? ModuleName |
     inp.printHelp
     return 1
+  if modules.isEmpty then
+    inp.printHelp
+    return 2
   searchPathRef.set compile_time_search_path%
 
   unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
