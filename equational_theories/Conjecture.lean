@@ -26,7 +26,8 @@ inductive EntryVariant where
 structure Entry where
 /-- Name of the declaration. -/
 (name : Name)
-/-- Lean code to be included in the extracted problem file. -/
+
+/-- Which kind of conjecture is it? -/
 (variant : EntryVariant)
 
 initialize conjectureExtension : SimplePersistentEnvExtension Entry (Array Entry) ←
