@@ -80,24 +80,24 @@ elab_rules : command
     match res with
     | .implication ⟨lhs, rhs⟩ => println! "{name}: {lhs} → {rhs}"
     | .nonimplication ⟨lhs, rhs⟩ => println! "{name}: ¬ ({lhs} → {rhs})"
-    | .unconditional rhs => println! "{name}: {rhs} holds unconitionally"
+    | .unconditional rhs => println! "{name}: {rhs} holds unconditionally"
 
 --- Output of the extract_implications executable.
 structure Output where
-  implications : List Implication
-  nonimplications : List Implication
-  unconditionals : List String
+  implications : Array Implication
+  nonimplications : Array Implication
+  unconditionals : Array String
 deriving Lean.ToJson, Lean.FromJson
 
 def collectResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
     m Output := do
   let rs := equationalResultsExtension.getState (← getEnv)
-  let mut implications : List Implication := []
-  let mut nonimplications : List Implication := []
-  let mut unconditionals : List String := []
+  let mut implications : Array Implication := #[]
+  let mut nonimplications : Array Implication := #[]
+  let mut unconditionals : Array String := #[]
   for ⟨_name, _filename, res⟩ in rs do
     match res with
-    | .implication imp => implications := imp::implications
-    | .nonimplication nimp => nonimplications := nimp::nonimplications
-    | .unconditional s => unconditionals := s::unconditionals
+    | .implication imp => implications := implications.push imp
+    | .nonimplication nimp => nonimplications := nonimplications.push nimp
+    | .unconditional s => unconditionals := unconditionals.push s
   return ⟨implications, nonimplications, unconditionals⟩
