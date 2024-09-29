@@ -41,7 +41,7 @@ def get_unknown_implications(universe, known_implies, known_not_implies):
 
 def parse_proofs_file(file_name):
     # This code is buggy: it doesn't verify that the proofs are correct.
-    # It is also extermely sensitive to formatting of the proof types. There's
+    # It is also extremely sensitive to formatting of the proof types. There's
     # probably a way to get this directly from Lean.
     universe = []
     known_implies, known_not_implies = set(), set()

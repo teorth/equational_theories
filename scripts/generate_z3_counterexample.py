@@ -1,5 +1,5 @@
 # This scripts allows one, given a left_eqn and a right_eqn, to
-# generate a lean file wich validates a Z3 counterexample.  This
+# generate a lean file which validates a Z3 counterexample.  This
 # script requires the Z3 python bindings and passing in the equation
 # numbers on the command line. It depends on the `generate_eqs_list`
 # script.
