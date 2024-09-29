@@ -253,7 +253,9 @@ theorem Equation39_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equatio
   · use 0
     simp only [zero_add, Nat.reduceAdd, OfNat.zero_ne_ofNat, not_false_eq_true]
 
--- For the next few implications, use the "implies" magma with two elements, true and false, where "true implies false" is false and all other pairs are true
+theorem Equation39_not_implies_Equation168 : ∃ (G : Type) (_ : Magma G), Equation39 G ∧ ¬ Equation168 G := by
+  simp only [not_forall]
+  use ℕ, ⟨fun _ y ↦ y⟩, (fun _ _ ↦ rfl), 0, 0, 1, nofun
 
 theorem Equation40_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation3 G := by
   let a : Type := Bool
@@ -311,6 +313,13 @@ theorem Equation43_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation4
   specialize h 1
   simp [hG] at h
 
+theorem Equation43_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation3 G := by
+  let hG : Magma Nat := { op := fun x y ↦ x+y }
+  refine ⟨ℕ, hG, fun _ _ ↦ Nat.add_comm _ _, ?_⟩
+  by_contra h
+  specialize h 1
+  simp [hG] at h
+
 theorem Equation43_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation42 G := by
   let hG : Magma Nat := { op := fun x y ↦ x+y }
   refine ⟨ℕ, hG, fun _ _ ↦ Nat.add_comm _ _, ?_⟩
@@ -361,6 +370,11 @@ theorem Equation168_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equati
   · simp only [Prod.mk.eta, implies_true]
   · simp only [Prod.forall, Prod.mk.injEq, and_true, Bool.forall_bool,
     Bool.eq_false_and_eq_true_self, and_self, not_false_eq_true]
+
+theorem Equation168_not_implies_Equation39 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation39 G := by
+  use Bool × Bool
+  use ⟨fun x y => ⟨x.snd,y.fst⟩⟩
+  decide
 
 -- The "and" magma on the two element set of booleans satisfies 387, but does not satisfy 40.
 theorem Equation387_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation40 G := by
@@ -500,6 +514,5 @@ theorem Equation4582_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equati
     specialize h 1 2
     dsimp [hG] at h
     linarith
-
 
 end Subgraph
