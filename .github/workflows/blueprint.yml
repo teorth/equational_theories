@@ -73,6 +73,7 @@ jobs:
           else
             echo "The 'home_page' folder does not exist in the repository."
             echo "HOME_PAGE_EXISTS=false" >> $GITHUB_ENV
+          fi
 
       - name: Build blueprint and copy to `home_page/blueprint`
         uses: xu-cheng/texlive-action@v2
