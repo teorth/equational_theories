@@ -152,7 +152,7 @@ theorem Equation46_implies_Equation40 (G: Type*) [Magma G] (h: Equation46 G) : E
   fun x y ↦ h x x y y
 
 theorem Equation46_implies_Equation41 (G: Type*) [Magma G] (h: Equation46 G) : Equation41 G :=
-  fun _ _ _ => h _ _ _ _
+  fun _ _ _ ↦ h _ _ _ _
 
 theorem Equation46_implies_Equation42 (G: Type*) [Magma G] (h: Equation46 G) : Equation42 G :=
   fun _ _ _ ↦ h _ _ _ _
@@ -260,12 +260,12 @@ theorem Equation38_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equati
 
 theorem Equation39_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation39 G ∧ ¬ Equation8 G := by
   simp only [not_forall]
-  refine ⟨Nat, ⟨fun _ y => y + 1⟩, fun _ _ ↦ rfl, 0, ?_⟩
+  refine ⟨Nat, ⟨fun _ y ↦ y + 1⟩, fun _ _ ↦ rfl, 0, ?_⟩
   simp only [zero_add, Nat.reduceAdd, OfNat.zero_ne_ofNat, not_false_eq_true]
 
 theorem Equation39_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equation39 G ∧ ¬ Equation23 G := by
   simp only [not_forall]
-  exact ⟨Nat, ⟨fun _ _ => _ + 1⟩, fun _ _ ↦ rfl, 0, Nat.zero_ne_add_one 0⟩
+  exact ⟨Nat, ⟨fun _ _ ↦ _ + 1⟩, fun _ _ ↦ rfl, 0, Nat.zero_ne_add_one 0⟩
 
 -- For the next few implications, use the "implies" magma with two elements, true and false, where "true implies false" is false and all other pairs are true
 
@@ -355,10 +355,10 @@ theorem Equation46_not_implies_Equation4 : ∃ (G: Type) (_: Magma G), Equation4
   linarith
 
 theorem Equation168_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation8 G :=
-  ⟨Bool × Bool, ⟨fun x y => ⟨x.snd,y.fst⟩⟩, fun _ _ _ ↦ rfl, of_decide_eq_false rfl⟩
+  ⟨Bool × Bool, ⟨fun x y ↦ ⟨x.snd,y.fst⟩⟩, fun _ _ _ ↦ rfl, of_decide_eq_false rfl⟩
 
 theorem Equation168_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation23 G :=
-  ⟨Bool × Bool, ⟨fun x y => ⟨x.snd,y.fst⟩⟩, fun _ _ _ ↦ rfl, of_decide_eq_false rfl⟩
+  ⟨Bool × Bool, ⟨fun x y ↦ ⟨x.snd,y.fst⟩⟩, fun _ _ _ ↦ rfl, of_decide_eq_false rfl⟩
 
 -- The "and" magma on the two element set of booleans satisfies 387, but does not satisfy 40.
 theorem Equation387_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation40 G := by
