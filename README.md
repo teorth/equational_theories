@@ -20,7 +20,17 @@ Coming soon: statistics on how many implications have been established so far, a
 
 For guidelines on how to contribute, see the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
-Links:
+## Building the project
+
+To build this project after [installing Lean](https://www.lean-lang.org/lean-get-started) and cloning this repository, follow these steps:
+
+```
+% cd equational_theories/
+% lake exe cache get
+% lake build
+```
+
+## Links
 
 - [Main web page](https://teorth.github.io/equational_theories/)
     - [Blueprint](https://teorth.github.io/equational_theories/blueprint/)
