@@ -31,7 +31,7 @@ equation 10 := x = x ∘ (y ∘ x)
 equation 11 := x = x ∘ (y ∘ y)
 equation 12 := x = x ∘ (y ∘ z)
 equation 13 := x = y ∘ (x ∘ x)
-equation 14 := x = y ∘ (x ∘ y)
+-- equation 14 := x = y ∘ (x ∘ y)
 equation 15 := x = y ∘ (x ∘ z)
 equation 16 := x = y ∘ (y ∘ x)
 equation 17 := x = y ∘ (y ∘ y)
@@ -46,7 +46,7 @@ equation 25 := x = (x ∘ y) ∘ x
 equation 26 := x = (x ∘ y) ∘ y
 equation 27 := x = (x ∘ y) ∘ z
 equation 28 := x = (y ∘ x) ∘ x
-equation 29 := x = (y ∘ x) ∘ y
+-- equation 29 := x = (y ∘ x) ∘ y
 equation 30 := x = (y ∘ x) ∘ z
 equation 31 := x = (y ∘ y) ∘ x
 equation 32 := x = (y ∘ y) ∘ y
