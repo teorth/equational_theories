@@ -7,24 +7,27 @@ open Lean Parser Elab Command
 
 namespace Result
 
+/--
+A theorem providing an implication or negated implication to our directed graph.
+-/
 syntax (name := result) declModifiers "result " declId ppIndent(declSig) declVal : command
 
-/-- An entry in the conjecture environment extension.
+/-- An entry in the result environment extension.
 -/
 inductive EntryVariant where
   | implication : Implication → EntryVariant
   | nonimplication : Implication → EntryVariant
+deriving Lean.ToJson, Lean.FromJson
 
-/-- An entry in the conjecture environment extension -/
+/-- An entry in the result environment extension -/
 structure Entry where
 /-- Name of the declaration. -/
 (name : Name)
-
 /-- Name of the file where this declaration was found. -/
 (filename : String)
-
-/-- Lean code to be included in the extracted problem file. -/
+/-- Which kind of result is it? -/
 (variant : EntryVariant)
+deriving Lean.ToJson, Lean.FromJson
 
 initialize resultExtension : SimplePersistentEnvExtension Entry (Array Entry) ←
   registerSimplePersistentEnvExtension {
@@ -36,7 +39,7 @@ initialize resultExtension : SimplePersistentEnvExtension Entry (Array Entry) �
 /-- Elaborates a `result` declaration.
 -/
 elab_rules : command
-| `(command| $dm:declModifiers result%$rs $di:declId $ds:declSig $dv:declVal) => do
+| `(command| $dm:declModifiers result $di:declId $ds:declSig $dv:declVal) => do
   let filename := (←read).fileName
   let modifiers ← elabModifiers dm
   let expanded_decl_id ← expandDeclId di modifiers
@@ -66,7 +69,7 @@ def extractResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
     m (Array Entry) := do
   return resultExtension.getState (← getEnv)
 
-/-- Prints the contents of the conjecture environment extension.
+/-- Prints the contents of the result environment extension.
 -/
 syntax (name := printResults) "#print_results" : command
 
