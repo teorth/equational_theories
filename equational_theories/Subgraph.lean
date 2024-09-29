@@ -1,7 +1,7 @@
 import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
 import equational_theories.Conjecture
-import equational_theories.Result
+import equational_theories.EquationalResult
 import equational_theories.Equations
 
 /- This is a subproject of the main project to completely describe a small subgraph of the entire

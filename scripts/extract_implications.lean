@@ -1,7 +1,7 @@
 import Lean.Meta.Basic
 import Lean.Util
 
-import equational_theories.Result
+import equational_theories.EquationalResult
 
 open Lean
 
