@@ -4195,3 +4195,573 @@ theorem Equation4582_not_implies_Equation4 : ∃ (G: Type) (_: Magma G), Equatio
     intro h
     specialize h 1 0
     simp [hG] at h
+
+theorem Equation4582_not_implies_Equation5 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation5 G := by
+  let G := Fin 6
+  let hG : Magma G := {
+      op := fun x y ↦ match x, y with
+        | 0, 0 => 4
+        | 0, 1 => 4
+        | 0, 2 => 2
+        | 0, 3 => 4
+        | 0, 4 => 2
+        | 0, 5 => 4
+        | 1, 0 => 4
+        | 1, 1 => 4
+        | 1, 2 => 2
+        | 1, 3 => 4
+        | 1, 4 => 2
+        | 1, 5 => 4
+        | 2, 0 => 2
+        | 2, 1 => 2
+        | 2, 2 => 2
+        | 2, 3 => 2
+        | 2, 4 => 2
+        | 2, 5 => 2
+        | 3, 0 => 4
+        | 3, 1 => 2
+        | 3, 2 => 2
+        | 3, 3 => 4
+        | 3, 4 => 2
+        | 3, 5 => 4
+        | 4, 0 => 2
+        | 4, 1 => 2
+        | 4, 2 => 2
+        | 4, 3 => 2
+        | 4, 4 => 2
+        | 4, 5 => 2
+        | 5, 0 => 4
+        | 5, 1 => 4
+        | 5, 2 => 2
+        | 5, 3 => 4
+        | 5, 4 => 2
+        | 5, 5 => 4
+  }
+  refine ⟨G, hG, ?eq4582, ?neq5⟩
+  ·
+    intro x y z w u v
+    fin_cases x <;>
+    fin_cases y <;>
+    fin_cases z <;>
+    fin_cases w <;>
+    fin_cases u <;>
+    fin_cases v <;>
+    all_goals simp [hG]
+  ·
+    intro h
+    specialize h 0 0
+    simp [hG] at h
+    try { exact Fin.ne_of_val_ne (by decide) h }
+
+theorem Equation4582_not_implies_Equation6 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation6 G := by
+  let G := Fin 6
+  let hG : Magma G := {
+      op := fun x y ↦ match x, y with
+        | 0, 0 => 2
+        | 0, 1 => 2
+        | 0, 2 => 2
+        | 0, 3 => 2
+        | 0, 4 => 2
+        | 0, 5 => 2
+        | 1, 0 => 2
+        | 1, 1 => 2
+        | 1, 2 => 2
+        | 1, 3 => 2
+        | 1, 4 => 2
+        | 1, 5 => 2
+        | 2, 0 => 2
+        | 2, 1 => 2
+        | 2, 2 => 2
+        | 2, 3 => 2
+        | 2, 4 => 2
+        | 2, 5 => 2
+        | 3, 0 => 2
+        | 3, 1 => 2
+        | 3, 2 => 2
+        | 3, 3 => 1
+        | 3, 4 => 1
+        | 3, 5 => 0
+        | 4, 0 => 2
+        | 4, 1 => 2
+        | 4, 2 => 2
+        | 4, 3 => 2
+        | 4, 4 => 2
+        | 4, 5 => 2
+        | 5, 0 => 2
+        | 5, 1 => 2
+        | 5, 2 => 2
+        | 5, 3 => 0
+        | 5, 4 => 2
+        | 5, 5 => 0
+  }
+  refine ⟨G, hG, ?eq4582, ?neq6⟩
+  ·
+    intro x y z w u v
+    fin_cases x <;>
+    fin_cases y <;>
+    fin_cases z <;>
+    fin_cases w <;>
+    fin_cases u <;>
+    fin_cases v <;>
+    all_goals simp [hG]
+  ·
+    intro h
+    specialize h 0 0
+    simp [hG] at h
+    try { exact Fin.ne_of_val_ne (by decide) h }
+
+theorem Equation4582_not_implies_Equation7 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation7 G := by
+  let G := Fin 6
+  let hG : Magma G := {
+      op := fun x y ↦ match x, y with
+        | 0, 0 => 5
+        | 0, 1 => 1
+        | 0, 2 => 5
+        | 0, 3 => 5
+        | 0, 4 => 5
+        | 0, 5 => 1
+        | 1, 0 => 1
+        | 1, 1 => 1
+        | 1, 2 => 1
+        | 1, 3 => 1
+        | 1, 4 => 1
+        | 1, 5 => 1
+        | 2, 0 => 5
+        | 2, 1 => 1
+        | 2, 2 => 5
+        | 2, 3 => 1
+        | 2, 4 => 5
+        | 2, 5 => 1
+        | 3, 0 => 5
+        | 3, 1 => 1
+        | 3, 2 => 1
+        | 3, 3 => 5
+        | 3, 4 => 5
+        | 3, 5 => 1
+        | 4, 0 => 5
+        | 4, 1 => 1
+        | 4, 2 => 5
+        | 4, 3 => 5
+        | 4, 4 => 5
+        | 4, 5 => 1
+        | 5, 0 => 1
+        | 5, 1 => 1
+        | 5, 2 => 1
+        | 5, 3 => 1
+        | 5, 4 => 1
+        | 5, 5 => 1
+  }
+  refine ⟨G, hG, ?eq4582, ?neq7⟩
+  ·
+    intro x y z w u v
+    fin_cases x <;>
+    fin_cases y <;>
+    fin_cases z <;>
+    fin_cases w <;>
+    fin_cases u <;>
+    fin_cases v <;>
+    all_goals simp [hG]
+  ·
+    intro h
+    specialize h 0 0 0
+    simp [hG] at h
+    try { exact Fin.ne_of_val_ne (by decide) h }
+
+theorem Equation4582_not_implies_Equation8 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation8 G := by
+  let G := Fin 6
+  let hG : Magma G := {
+      op := fun x y ↦ match x, y with
+        | 0, 0 => 4
+        | 0, 1 => 1
+        | 0, 2 => 4
+        | 0, 3 => 1
+        | 0, 4 => 1
+        | 0, 5 => 1
+        | 1, 0 => 1
+        | 1, 1 => 1
+        | 1, 2 => 1
+        | 1, 3 => 1
+        | 1, 4 => 1
+        | 1, 5 => 1
+        | 2, 0 => 3
+        | 2, 1 => 1
+        | 2, 2 => 3
+        | 2, 3 => 1
+        | 2, 4 => 1
+        | 2, 5 => 3
+        | 3, 0 => 1
+        | 3, 1 => 1
+        | 3, 2 => 1
+        | 3, 3 => 1
+        | 3, 4 => 1
+        | 3, 5 => 1
+        | 4, 0 => 1
+        | 4, 1 => 1
+        | 4, 2 => 1
+        | 4, 3 => 1
+        | 4, 4 => 1
+        | 4, 5 => 1
+        | 5, 0 => 4
+        | 5, 1 => 1
+        | 5, 2 => 4
+        | 5, 3 => 1
+        | 5, 4 => 1
+        | 5, 5 => 4
+  }
+  refine ⟨G, hG, ?eq4582, ?neq8⟩
+  ·
+    intro x y z w u v
+    fin_cases x <;>
+    fin_cases y <;>
+    fin_cases z <;>
+    fin_cases w <;>
+    fin_cases u <;>
+    fin_cases v <;>
+    all_goals simp [hG]
+  ·
+    intro h
+    specialize h 0
+    simp [hG] at h
+    try { exact Fin.ne_of_val_ne (by decide) h }
+
+theorem Equation4582_not_implies_Equation38 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation38 G := by
+  let G := Fin 6
+  let hG : Magma G := {
+      op := fun x y ↦ match x, y with
+        | 0, 0 => 1
+        | 0, 1 => 5
+        | 0, 2 => 5
+        | 0, 3 => 5
+        | 0, 4 => 5
+        | 0, 5 => 5
+        | 1, 0 => 5
+        | 1, 1 => 5
+        | 1, 2 => 5
+        | 1, 3 => 5
+        | 1, 4 => 5
+        | 1, 5 => 5
+        | 2, 0 => 5
+        | 2, 1 => 5
+        | 2, 2 => 5
+        | 2, 3 => 4
+        | 2, 4 => 5
+        | 2, 5 => 5
+        | 3, 0 => 4
+        | 3, 1 => 5
+        | 3, 2 => 5
+        | 3, 3 => 4
+        | 3, 4 => 5
+        | 3, 5 => 5
+        | 4, 0 => 5
+        | 4, 1 => 5
+        | 4, 2 => 5
+        | 4, 3 => 5
+        | 4, 4 => 5
+        | 4, 5 => 5
+        | 5, 0 => 5
+        | 5, 1 => 5
+        | 5, 2 => 5
+        | 5, 3 => 5
+        | 5, 4 => 5
+        | 5, 5 => 5
+  }
+  refine ⟨G, hG, ?eq4582, ?neq38⟩
+  ·
+    intro x y z w u v
+    fin_cases x <;>
+    fin_cases y <;>
+    fin_cases z <;>
+    fin_cases w <;>
+    fin_cases u <;>
+    fin_cases v <;>
+    all_goals simp [hG]
+  ·
+    intro h
+    specialize h 0 1
+    simp [hG] at h
+    try { exact Fin.ne_of_val_ne (by decide) h }
+
+theorem Equation4582_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation39 G := by
+  let G := Fin 6
+  let hG : Magma G := {
+      op := fun x y ↦ match x, y with
+        | 0, 0 => 5
+        | 0, 1 => 5
+        | 0, 2 => 5
+        | 0, 3 => 5
+        | 0, 4 => 5
+        | 0, 5 => 5
+        | 1, 0 => 5
+        | 1, 1 => 5
+        | 1, 2 => 5
+        | 1, 3 => 5
+        | 1, 4 => 5
+        | 1, 5 => 5
+        | 2, 0 => 5
+        | 2, 1 => 5
+        | 2, 2 => 0
+        | 2, 3 => 5
+        | 2, 4 => 5
+        | 2, 5 => 5
+        | 3, 0 => 5
+        | 3, 1 => 5
+        | 3, 2 => 5
+        | 3, 3 => 5
+        | 3, 4 => 5
+        | 3, 5 => 5
+        | 4, 0 => 5
+        | 4, 1 => 5
+        | 4, 2 => 5
+        | 4, 3 => 5
+        | 4, 4 => 1
+        | 4, 5 => 5
+        | 5, 0 => 5
+        | 5, 1 => 5
+        | 5, 2 => 5
+        | 5, 3 => 5
+        | 5, 4 => 5
+        | 5, 5 => 5
+  }
+  refine ⟨G, hG, ?eq4582, ?neq39⟩
+  ·
+    intro x y z w u v
+    fin_cases x <;>
+    fin_cases y <;>
+    fin_cases z <;>
+    fin_cases w <;>
+    fin_cases u <;>
+    fin_cases v <;>
+    all_goals simp [hG]
+  ·
+    intro h
+    specialize h 2 0
+    simp [hG] at h
+    try { exact Fin.ne_of_val_ne (by decide) h }
+
+theorem Equation4582_not_implies_Equation41 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation41 G := by
+  let G := Fin 6
+  let hG : Magma G := {
+      op := fun x y ↦ match x, y with
+        | 0, 0 => 5
+        | 0, 1 => 5
+        | 0, 2 => 5
+        | 0, 3 => 5
+        | 0, 4 => 5
+        | 0, 5 => 5
+        | 1, 0 => 5
+        | 1, 1 => 5
+        | 1, 2 => 5
+        | 1, 3 => 5
+        | 1, 4 => 5
+        | 1, 5 => 5
+        | 2, 0 => 5
+        | 2, 1 => 5
+        | 2, 2 => 5
+        | 2, 3 => 5
+        | 2, 4 => 5
+        | 2, 5 => 5
+        | 3, 0 => 5
+        | 3, 1 => 5
+        | 3, 2 => 5
+        | 3, 3 => 4
+        | 3, 4 => 5
+        | 3, 5 => 5
+        | 4, 0 => 5
+        | 4, 1 => 5
+        | 4, 2 => 5
+        | 4, 3 => 5
+        | 4, 4 => 5
+        | 4, 5 => 5
+        | 5, 0 => 5
+        | 5, 1 => 5
+        | 5, 2 => 5
+        | 5, 3 => 5
+        | 5, 4 => 5
+        | 5, 5 => 5
+  }
+  refine ⟨G, hG, ?eq4582, ?neq41⟩
+  ·
+    intro x y z w u v
+    fin_cases x <;>
+    fin_cases y <;>
+    fin_cases z <;>
+    fin_cases w <;>
+    fin_cases u <;>
+    fin_cases v <;>
+    all_goals simp [hG]
+  ·
+    intro h
+    specialize h 0 3 3
+    simp [hG] at h
+    try { exact Fin.ne_of_val_ne (by decide) h }
+
+theorem Equation4582_not_implies_Equation46 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation46 G := by
+  let G := Fin 6
+  let hG : Magma G := {
+      op := fun x y ↦ match x, y with
+        | 0, 0 => 4
+        | 0, 1 => 4
+        | 0, 2 => 4
+        | 0, 3 => 4
+        | 0, 4 => 4
+        | 0, 5 => 4
+        | 1, 0 => 4
+        | 1, 1 => 4
+        | 1, 2 => 4
+        | 1, 3 => 4
+        | 1, 4 => 4
+        | 1, 5 => 4
+        | 2, 0 => 4
+        | 2, 1 => 4
+        | 2, 2 => 1
+        | 2, 3 => 4
+        | 2, 4 => 4
+        | 2, 5 => 4
+        | 3, 0 => 4
+        | 3, 1 => 4
+        | 3, 2 => 4
+        | 3, 3 => 4
+        | 3, 4 => 4
+        | 3, 5 => 4
+        | 4, 0 => 4
+        | 4, 1 => 4
+        | 4, 2 => 4
+        | 4, 3 => 4
+        | 4, 4 => 4
+        | 4, 5 => 4
+        | 5, 0 => 4
+        | 5, 1 => 4
+        | 5, 2 => 4
+        | 5, 3 => 4
+        | 5, 4 => 4
+        | 5, 5 => 0
+  }
+  refine ⟨G, hG, ?eq4582, ?neq46⟩
+  ·
+    intro x y z w u v
+    fin_cases x <;>
+    fin_cases y <;>
+    fin_cases z <;>
+    fin_cases w <;>
+    fin_cases u <;>
+    fin_cases v <;>
+    all_goals simp [hG]
+  ·
+    intro h
+    specialize h 0 0 2 2
+    simp [hG] at h
+    try { exact Fin.ne_of_val_ne (by decide) h }
+
+theorem Equation4582_not_implies_Equation168 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation168 G := by
+  let G := Fin 6
+  let hG : Magma G := {
+      op := fun x y ↦ match x, y with
+        | 0, 0 => 2
+        | 0, 1 => 2
+        | 0, 2 => 2
+        | 0, 3 => 2
+        | 0, 4 => 2
+        | 0, 5 => 3
+        | 1, 0 => 3
+        | 1, 1 => 3
+        | 1, 2 => 2
+        | 1, 3 => 2
+        | 1, 4 => 3
+        | 1, 5 => 2
+        | 2, 0 => 2
+        | 2, 1 => 2
+        | 2, 2 => 2
+        | 2, 3 => 2
+        | 2, 4 => 2
+        | 2, 5 => 2
+        | 3, 0 => 2
+        | 3, 1 => 2
+        | 3, 2 => 2
+        | 3, 3 => 2
+        | 3, 4 => 2
+        | 3, 5 => 2
+        | 4, 0 => 3
+        | 4, 1 => 2
+        | 4, 2 => 2
+        | 4, 3 => 2
+        | 4, 4 => 2
+        | 4, 5 => 3
+        | 5, 0 => 3
+        | 5, 1 => 3
+        | 5, 2 => 2
+        | 5, 3 => 2
+        | 5, 4 => 3
+        | 5, 5 => 2
+  }
+  refine ⟨G, hG, ?eq4582, ?neq168⟩
+  ·
+    intro x y z w u v
+    fin_cases x <;>
+    fin_cases y <;>
+    fin_cases z <;>
+    fin_cases w <;>
+    fin_cases u <;>
+    fin_cases v <;>
+    all_goals simp [hG]
+  ·
+    intro h
+    specialize h 0 0 0
+    simp [hG] at h
+    try { exact Fin.ne_of_val_ne (by decide) h }
+
+theorem Equation4582_not_implies_Equation387 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation387 G := by
+  let G := Fin 6
+  let hG : Magma G := {
+      op := fun x y ↦ match x, y with
+        | 0, 0 => 5
+        | 0, 1 => 5
+        | 0, 2 => 5
+        | 0, 3 => 5
+        | 0, 4 => 5
+        | 0, 5 => 5
+        | 1, 0 => 5
+        | 1, 1 => 2
+        | 1, 2 => 5
+        | 1, 3 => 5
+        | 1, 4 => 5
+        | 1, 5 => 5
+        | 2, 0 => 5
+        | 2, 1 => 5
+        | 2, 2 => 5
+        | 2, 3 => 5
+        | 2, 4 => 5
+        | 2, 5 => 5
+        | 3, 0 => 5
+        | 3, 1 => 5
+        | 3, 2 => 5
+        | 3, 3 => 5
+        | 3, 4 => 5
+        | 3, 5 => 5
+        | 4, 0 => 5
+        | 4, 1 => 5
+        | 4, 2 => 5
+        | 4, 3 => 5
+        | 4, 4 => 5
+        | 4, 5 => 5
+        | 5, 0 => 5
+        | 5, 1 => 5
+        | 5, 2 => 5
+        | 5, 3 => 5
+        | 5, 4 => 5
+        | 5, 5 => 5
+  }
+  refine ⟨G, hG, ?eq4582, ?neq387⟩
+  ·
+    intro x y z w u v
+    fin_cases x <;>
+    fin_cases y <;>
+    fin_cases z <;>
+    fin_cases w <;>
+    fin_cases u <;>
+    fin_cases v <;>
+    all_goals simp [hG]
+  ·
+    intro h
+    specialize h 1 1
+    simp [hG] at h
+    try { exact Fin.ne_of_val_ne (by decide) h }
