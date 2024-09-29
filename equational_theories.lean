@@ -1,7 +1,6 @@
 import equational_theories.FreeMagma
 import equational_theories.Subgraph
 import equational_theories.AllEquations
-import equational_theories.FinitePoly
 import equational_theories.InfModel
 import equational_theories.Generated
 import equational_theories.SmallMagmas

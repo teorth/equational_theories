@@ -5,7 +5,7 @@ import re
 
 #
 # This script reads the file `finite_poly_refutations.txt` and turns each line into a
-# a file `equational_theories/FinitePoly/Refutation<n>.lean`
+# a file `equational_theories/Generated/FinitePoly/Refutation<n>.lean`
 #
 
 
@@ -72,13 +72,13 @@ theorem «Facts from {name}» :
 
 
 with open("data/finite_poly_refutations.txt") as f:
-    with open("equational_theories/FinitePoly.lean", "w") as main:
+    with open("equational_theories/Generated/FinitePoly.lean", "w") as main:
       lines = f.readlines()
       for i, line in enumerate(lines):
-          leanfile = f"equational_theories/FinitePoly/Refutation{i}.lean"
+          leanfile = f"equational_theories/Generated/FinitePoly/Refutation{i}.lean"
           data = parse_row(line)
           if data and data["div"] < 5:
             print(f"Writing {leanfile}")
-            main.write(f"import equational_theories.FinitePoly.Refutation{i}\n")
+            main.write(f"import equational_theories.Generated.FinitePoly.Refutation{i}\n")
             with open(leanfile, "w") as f:
                   f.write(generate_lean(data))
