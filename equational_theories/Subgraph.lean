@@ -156,10 +156,10 @@ theorem Equation45_implies_Equation39 (G: Type*) [Magma G] (h: Equation45 G) : E
   fun _ _ ↦ by rw [h]
 
 theorem Equation46_implies_Equation39 (G: Type*) [Magma G] (h: Equation46 G) : Equation39 G :=
-  fun x y ↦ h x x y x
+  fun _ _ ↦ h _ _ _ _
 
 theorem Equation46_implies_Equation40 (G: Type*) [Magma G] (h: Equation46 G) : Equation40 G :=
-  fun x y ↦ h x x y y
+  fun _ _ ↦ h _ _ _ _
 
 theorem Equation46_implies_Equation41 (G: Type*) [Magma G] (h: Equation46 G) : Equation41 G :=
   fun _ _ _ ↦ h _ _ _ _
@@ -189,7 +189,7 @@ theorem Equation3744_implies_Equation381 (G : Type*) [Magma G] (h: Equation3744 
 
 /-- Putnam 1978, problem A4, part (a) -/
 theorem Equation3744_implies_Equation3722 (G: Type*) [Magma G] (h: Equation3744 G) : Equation3722 G :=
-  fun x y ↦ h x y y x
+  fun _ _ ↦ h _ _ _ _
 
 theorem Equation4513_implies_Equation4512 (G: Type*) [Magma G] (h: Equation4513 G) : Equation4512 G :=
   fun _ _ _ ↦ h _ _ _ _
