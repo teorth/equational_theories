@@ -91,8 +91,8 @@ theorem Equation4_implies_Equation3 (G: Type*) [Magma G] (h: Equation4 G) : Equa
 theorem Equation4_implies_Equation8 (G: Type*) [Magma G] (h: Equation4 G) : Equation8 G :=
   fun _ ↦ h _ _
 
-theorem Equation4_implies_Equation23 (G: Type*) [Magma G] (h: Equation4 G) : Equation23 G := by
-  exact Equation3_implies_Equation23 G fun x ↦ h x x
+theorem Equation4_implies_Equation23 (G: Type*) [Magma G] (h: Equation4 G) : Equation23 G :=
+  Equation3_implies_Equation23 G fun _ ↦ h _ _
 
 theorem Equation4_implies_Equation42 (G: Type*) [Magma G] (h: Equation4 G) : Equation42 G :=
   fun _ _ _ ↦ by rw [← h, ← h]
@@ -268,64 +268,38 @@ theorem Equation23_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equatio
 
 theorem Equation38_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equation38 G ∧ ¬ Equation23 G := by
   simp only [not_forall]
-  use Nat
-  use ⟨fun x y => x + 1⟩
-  constructor
-  · exact fun _ _ ↦ rfl
-  · use 0
-    exact Nat.zero_ne_add_one _
+  exact ⟨Nat, ⟨fun x _ ↦ x + 1⟩, fun _ _ ↦ rfl, 0, Nat.zero_ne_add_one _⟩
 
 theorem Equation39_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation39 G ∧ ¬ Equation8 G := by
   simp only [not_forall]
-  use Nat
-  use ⟨fun x y => y + 1⟩
-  constructor
-  · exact fun _ _ ↦ rfl
-  · use 0
-    simp only [zero_add, Nat.reduceAdd, OfNat.zero_ne_ofNat, not_false_eq_true]
+  refine ⟨Nat, ⟨fun _ y => y + 1⟩, fun _ _ ↦ rfl, 0, ?_⟩
+  simp only [zero_add, Nat.reduceAdd, OfNat.zero_ne_ofNat, not_false_eq_true]
 
 theorem Equation39_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equation39 G ∧ ¬ Equation23 G := by
   simp only [not_forall]
-  use Nat
-  use ⟨fun x y => y + 1⟩
-  constructor
-  · exact fun _ _ ↦ rfl
-  · use 0
-    exact Nat.zero_ne_add_one 0
+  exact ⟨Nat, ⟨fun _ _ => _ + 1⟩, fun _ _ ↦ rfl, 0, Nat.zero_ne_add_one 0⟩
 
 -- For the next few implications, use the "implies" magma with two elements, true and false, where "true implies false" is false and all other pairs are true
 
 theorem Equation40_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation3 G := by
   let a : Type := Bool
   let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
-  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
-  by_contra h
-  specialize h false
-  simp [hG] at h
+  exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
 theorem Equation40_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation42 G := by
   let a : Type := Bool
   let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
-  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
-  by_contra h
-  specialize h true false true
-  simp [hG] at h
+  exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
 theorem Equation40_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation43 G := by
   let a : Type := Bool
   let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
-  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
-  by_contra h
-  specialize h true false
-  simp [hG] at h
+  exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
 theorem Equation40_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation4512 G := by
   let a : Type := Bool
   let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
-  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
-  by_contra h
-  specialize h false false
-  simp [hG] at h
+  exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
 theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation43 G := by
   let hG : Magma Nat := { op := fun x _ ↦ x }
@@ -334,7 +308,6 @@ theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation
   specialize h 0 1
   dsimp [hG] at h
   linarith
-
 
 theorem Equation42_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation4512 G := by
   let hG : Magma Nat := { op := fun x _ ↦ x + 1 }
@@ -393,39 +366,20 @@ theorem Equation46_not_implies_Equation4 : ∃ (G: Type) (_: Magma G), Equation4
   dsimp [hG] at h
   linarith
 
-theorem Equation168_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation8 G := by
-  dsimp [Equation168]
-  use Bool × Bool
-  use ⟨fun x y => ⟨x.snd,y.fst⟩⟩
-  constructor
-  · simp only [Prod.mk.eta, implies_true]
-  · simp only [Prod.forall, Prod.mk.injEq, and_true, Bool.forall_bool,
-    Bool.eq_false_and_eq_true_self, and_self, not_false_eq_true]
+theorem Equation168_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation8 G :=
+  ⟨Bool × Bool, ⟨fun x y => ⟨x.snd,y.fst⟩⟩, fun _ _ _ ↦ rfl, of_decide_eq_false rfl⟩
 
-theorem Equation168_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation23 G := by
-  dsimp [Equation168]
-  use Bool × Bool
-  use ⟨fun x y => ⟨x.snd,y.fst⟩⟩
-  constructor
-  · simp only [Prod.mk.eta, implies_true]
-  · simp only [Prod.forall, Prod.mk.injEq, and_true, Bool.forall_bool,
-    Bool.eq_false_and_eq_true_self, and_self, not_false_eq_true]
-    exact of_decide_eq_false rfl
+theorem Equation168_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation23 G :=
+  ⟨Bool × Bool, ⟨fun x y => ⟨x.snd,y.fst⟩⟩, fun _ _ _ ↦ rfl, of_decide_eq_false rfl⟩
 
 -- The "and" magma on the two element set of booleans satisfies 387, but does not satisfy 40.
 theorem Equation387_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation40 G := by
   let hG : Magma Bool := { op := fun x y ↦ x && y }
-  refine ⟨Bool, hG, fun _ _ ↦ by simp [hG, Bool.and_comm], ?_⟩
-  by_contra h
-  specialize h false true
-  simp [hG] at h
+  exact ⟨Bool, hG, fun _ _ ↦ by simp [hG, Bool.and_comm], of_decide_eq_false rfl⟩
 
 theorem Equation387_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation42 G := by
   let hG : Magma Bool := { op := fun x y ↦ x || y }
-  refine ⟨Bool, hG, fun _ _ ↦ by simp [hG, Bool.or_comm], ?_⟩
-  by_contra h
-  specialize h false true false
-  simp [hG] at h
+  exact ⟨Bool, hG, fun _ _ ↦ by simp [hG, Bool.or_comm], of_decide_eq_false rfl⟩
 
 theorem Equation387_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation4512 G := by
   let hG : Magma Real := { op := fun x y ↦ (x + y) / 2 }
