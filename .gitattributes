@@ -2,3 +2,4 @@ equational_theories/Generated/TrivialBruteforce/theorems/Apply.lean linguist-gen
 equational_theories/Generated/TrivialBruteforce/theorems/RewriteGoal.lean linguist-generated
 equational_theories/Generated/TrivialBruteforce/theorems/RewriteHypothesis.lean linguist-generated
 equational_theories/Generated/TrivialBruteforce/theorems/RewriteHypothesisAndGoal.lean linguist-generated
+equational_theories/Generated/FinSearch/theorems/FinSearch.lean linguist-generated
