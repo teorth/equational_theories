@@ -9,7 +9,7 @@ unsafe def main (args : List String) : IO Unit := do
   let module := ← match args with
     | [] => pure `equational_theories
     | [mod] => pure mod.toName
-    | _ => throw <| IO.userError "usage: extract_impliations MODULE"
+    | _ => throw <| IO.userError "usage: extract_implications MODULE"
 
   searchPathRef.set compile_time_search_path%
 
