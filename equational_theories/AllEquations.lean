@@ -12,7 +12,7 @@ results concerning the entire list of equations.  If you are proving many result
 equation of interest, consider transferring it into `Equations.lean`.
 
 The equations were enumerated from
-`https://github.com/teorth/equational_theories/blob/main/scripts/extract_implications.lean`, and can
+`https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py`, and can
 be described as the set of all equational laws involving at most four magma operations, up to
 symmetry and relabeling.
 

@@ -3,6 +3,7 @@ import Mathlib.Data.Nat.Defs
 import equational_theories.Conjecture
 import equational_theories.EquationalResult
 import equational_theories.Equations
+import equational_theories.FactsSyntax
 
 /- This is a subproject of the main project to completely describe a small subgraph of the entire
 implication graph.  Currently we are focusing only on the following equations:
@@ -324,34 +325,26 @@ theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equatio
   dsimp [hG] at h
   linarith
 
--- The magma with 2 elements a and b which satisfies equation 5 serves as counterexamples here. For 43, a * b = b, but b * a = a. For 4513, a * (a * a) = a, but (a * a) * b = b.
+-- The magma with 2 elements a and b which satisfies equation 5 serves as counterexamples here. For
+-- 43, a * b = b, but b * a = a. For 4513, a * (a * a) = a, but (a * a) * b = b.
+--
+-- We can use the `Facts` syntax to state multiple anti-implications from the same magma in one theorem
 
 @[equational_result]
-theorem Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation42 G := by
+theorem Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Facts G [5] [42, 43, 4513] := by
   let a : Type := Fin 2
   let hG : Magma a := { op := fun _ x ↦ x }
-  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
-  by_contra h
-  specialize h 0 1 0
-  simp [hG] at h
-
-@[equational_result]
-theorem Equation5_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation43 G := by
-  let a : Type := Fin 2
-  let hG : Magma a := { op := fun _ x ↦ x }
-  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
-  by_contra h
-  specialize h 0 1
-  simp [hG] at h
-
-@[equational_result]
-theorem Equation5_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation4513 G := by
-  let a : Type := Fin 2
-  let hG : Magma a := { op := fun _ x ↦ x }
-  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
-  by_contra h
-  specialize h 0 0 0 1
-  simp [hG] at h
+  refine ⟨a, hG, ?_, ?_, ?_, ?_⟩
+  · simp [Equation5, hG]
+  · by_contra h
+    specialize h 0 1 0
+    simp [hG] at h
+  · by_contra h
+    specialize h 0 1
+    simp [hG] at h
+  · by_contra h
+    specialize h 0 0 0 1
+    simp [hG] at h
 
 @[equational_result]
 theorem Equation8_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation8 G ∧ ¬ Equation3 G := by
