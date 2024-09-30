@@ -79,6 +79,9 @@ abbrev Equation381 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) �
 
 abbrev Equation387 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ x
 
+/-- From a paper of Kisielewicz -/
+abbrev Equation1689 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((x ∘ z) ∘ z)
+
 /-- From Putnam 1978, Problem A4, part (a) -/
 abbrev Equation3722 (G : Type u) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ y) ∘ (x ∘ y)
 
