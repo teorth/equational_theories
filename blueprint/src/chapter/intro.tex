@@ -49,7 +49,14 @@ $$ \pi_*(0 \circ 1) = 1 \circ 2$$
 $$ \pi_*(1 \circ (0 \circ 1)) = 2 \circ (1 \circ 2)$$
 and so forth.
 
-\begin{definition}[Law]\label{law-def}\uses{induced-def}  Let $X$ be a set. A \emph{law} with alphabet $X$ is a formal expression of the form $w \formaleq w'$, where $w, w' \in M_X$ are words with alphabet $X$ (thus one can identify laws with alphabet $X$ with elements of $M_X \times M_X$).  A magma $G$ \emph{satisfies} the law $w \formaleq w'$ if we have $\varphi_f( w ) = \varphi_f ( w' )$ for all $f: X \to G$, in which case we write $G \models w \formaleq w'$.
+\begin{definition}[Law]\label{law-def}
+  \lean{MagmaLaw}\leanok
+  \uses{induced-def}
+  Let $X$ be a set. A \emph{law} with alphabet $X$ is a formal expression of the form $w \formaleq w'$,
+  where $w, w' \in M_X$ are words with alphabet $X$ (thus one can identify laws with alphabet $X$
+  with elements of $M_X \times M_X$).  A magma $G$ \emph{satisfies} the law $w \formaleq w'$ if
+  we have $\varphi_f( w ) = \varphi_f ( w' )$ for all $f: X \to G$, in which case we write
+  $G \models w \formaleq w'$.
 \end{definition}
 
 Thus, for instance, the commutative law
@@ -61,6 +68,41 @@ is satisfied by a magma $G$ if and only if
  x \circ y = y \circ x
 \end{equation}
 for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} associated to the law \eqref{comm-law}.  One can think of equations as the ``semantic'' intrepretation of a ``syntactic'' law.  However, we shall often abuse notation and a law with its associated equation thus we shall (somewhat carelessly) also refer to \eqref{comm-law-2} as ``the commutative law'' (rather than ``the commutative equation'').
+
+\begin{definition}[Models]\label{models-def}
+  \lean{models}\leanok
+  \uses{law-def}
+  Given an arbitrary set $\Gamma$ of laws, a magma $G$ is a \emph{model} of $\Gamma$ with the
+  (overloaded) notation $G\models\Gamma$ if $G\models w\formaleq w'$ for every $w\formaleq w'$ in $\Gamma$.
+\end{definition}
+
+\begin{definition}[Derivation]\label{derivation-def}
+  \lean{derive}\leanok
+  \uses{law-def}
+  Given a set $\Gamma$ of laws and a law $w\formaleq w'$ over a fixed alphabet $X$, we say that
+  $\Gamma$ \emph{derives} $w\formaleq w'$, and write $\Gamma\vdash w\formaleq w'$, if the law can
+  be obtained using a finite number of applications of the following rules:
+  \begin{enumerate}
+    \item if $w\formaleq w' \in \Gamma$, then $\Gamma\vdash w\formaleq w'$
+    \item $\Gamma\vdash w\formaleq w$ for any word $w$
+    \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w'\formaleq w$
+    \item if $\Gamma\vdash w\formaleq w'$ and $\Gamma\vdash w'\formaleq w''$ then $\Gamma\vdash w\formaleq w''$
+    \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w\sigma\formaleq w'\sigma$, where $\sigma$ is an arbitrary map from $X$ to words in $M_X$ and $w\sigma$ replaces each occurence of an element of $X$ with it's image by $\sigma$ in $w$.
+    \item if $\Gamma\vdash w_1\formaleq w_2$ and $\Gamma\vdash w_3\formaleq w_4$ then $\Gamma\vdash w_1 \circ w_3\formaleq w2\circ w_4$
+  \end{enumerate}
+\end{definition}
+
+This definition is useful because of the following theorem:
+
+\begin{theorem}[Completeness]\label{sound-complete} (Birkhoff's completeness theorem)
+  \lean{Completeness}\leanok
+  For any set of laws $\Gamma$ and words $w, w'$ over a fixed alphabet
+  $$ \Gamma\vdash w\formaleq w'\ \mathrm{iff}\ \Gamma\models w\formaleq w' $$
+\end{theorem}
+\begin{proof}
+  \leanok
+  TODO.
+\end{proof}
 
 \begin{lemma}[Pushforward]\label{push}\uses{law-def}  Let $w \formaleq w'$ be a law with some alphabet $X$, $G$ be a magma, and $\pi: X \to Y$ be a function.  If $G \models w \formaleq w'$, then $G \models \pi_*(w) \formaleq \pi_*(w')$.  In particular, if $\pi$ is a bijection, the statements If $G \models w \formaleq w'$, then $G \models \pi_*(w) \formaleq \pi_*(w')$ are equivalent.
 \end{lemma}
