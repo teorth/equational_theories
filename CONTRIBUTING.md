@@ -11,9 +11,10 @@ Contributions to the project take the form of Github pull requests that complete
 3. If there is no other user assigned to the task, the user gets assigned to the issue. A `claim`ed issue moves to the `Claimed Tasks` column of the dashboard.
 4. The user creates a PR to solve the task and then comments "propose PR #xyz" under the issue. If the issue is already assigned to them, their PR is now linked to the issue. The PR now moves to the `In Progress` column of the dashboard and is shown with the linked PR.
 5. To withdraw their PR, a user can comment `withdraw PR #xyz`. The task moves to the `Claimed Tasks` column and the user remains assigned to the Github issue.
-6. Upon finishing the PR, the user may comment `awaiting-review` on the PR which is shown in the task view of the dashboard against the PR.
+6. **Important**: If you wish to propose a different PR, the user needs to first withdraw their previous PR (step 6) in one comment. In a subsequent comment, they may propose the new PR (as in step 4).
+7. Upon finishing the PR, the user may comment `awaiting-review` on the PR which is shown in the task view of the dashboard against the PR.
 Maintainers review and merge it.
-7. Merged tasks move to the `Completed Tasks` column of the dashboard.
+8. Merged tasks move to the `Completed Tasks` column of the dashboard.
 
 ### Some Rules and Notes
 1. Please respect the issue claims. If an issue has been assigned to someone, please don't try to work on it simultaneously without discussing with the claimant first. This allows for a coordination process that respects every contributor's time and effort.
