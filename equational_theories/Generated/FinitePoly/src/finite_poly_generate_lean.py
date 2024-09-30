@@ -21,18 +21,6 @@ with open(f"{dir}/src/implications.json") as f:
   implications = json.load(f)["implications"]
 implications = [ (int(i["lhs"].removeprefix("Equation")), int(i["rhs"].removeprefix("Equation"))) for i in implications ]
 
-def transitive_closure(pairs):
-    new_pairs = closure = set(pairs)
-    while new_pairs:
-        new_pairs = {
-            (a, d)
-            for a, b in new_pairs
-            for c, d in pairs
-            if b == c
-        } - closure
-        closure |= new_pairs
-    return closure
-
 print("Number of implications:", len(implications))
 
 impliedBy = { i : set() for i in full }
