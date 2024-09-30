@@ -102,3 +102,17 @@ abbrev Equation4579 (G: Type u) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) 
 
 /-- all products of three values are the same, regardless bracketing -/
 abbrev Equation4582 (G: Type u) [Magma G] := ∀ x y z w u v: G, x ∘ (y ∘ z) = (w ∘ u) ∘ v
+
+
+/- Some order 5 laws -/
+
+/-- Mentioned in a paper of Kisielewicz as a conjectural Austin law -/
+abbrev Equation5105 (G : Type u) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (y ∘ (x ∘ (z ∘ y))))
+
+/-- Kisielewicz's second Austin law -/
+abbrev Equation28393 (G : Type u) [Magma G] := ∀ x y z : G, x = (((x ∘ x) ∘ x) ∘ y) ∘ (x ∘ z)
+
+/- Some order 6 laws -/
+
+/-- Kisielewicz's first Austin law -/
+abbrev Equation374794 (G : Type u) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ y) ∘ x) ∘ ((y ∘ y) ∘ z)
