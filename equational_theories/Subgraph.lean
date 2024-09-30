@@ -628,10 +628,7 @@ theorem Equation4582_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equati
   refine ⟨Th, hG, hh, ?_⟩
   by_contra h
   specialize h Th.t1 Th.t2
-  have h1: Th.t1 ∘ Th.t1 = Th.t2 := rfl
-  have h2: Th.t2 ∘ Th.t2 = Th.t3 := rfl
-  have h3: Th.t1 ∘ Th.t1 ≠ Th.t2 ∘ Th.t2 := by rw [h1, h2]; intro hhh; cases hhh
-  exact absurd h h3
+  exact absurd h (by intro hhh; cases hhh)
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation42 G := by
