@@ -113,22 +113,40 @@ elab_rules : command
     | .facts ⟨satisfied, refuted⟩ => println! "{name}: {satisfied} // {refuted}"
     | .unconditional rhs => println! "{name}: {rhs} holds unconditionally"
 
---- Output of the extract_implications executable.
-structure Output where
-  implications : Array Implication
-  nonimplications : Array Implication
-  unconditionals : Array String
-deriving Lean.ToJson, Lean.FromJson
+end Result
 
-def collectResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
-    m Output := do
-  let rs := equationalResultsExtension.getState (← getEnv)
-  let mut implications : Array Implication := #[]
-  let mut nonimplications : Array Implication := #[]
-  let mut unconditionals : Array String := #[]
-  for ⟨_name, _filename, res⟩ in rs do
-    match res with
-    | .implication imp => implications := implications.push imp
-    | .nonimplication nimp => nonimplications := nonimplications.push nimp
-    | .unconditional s => unconditionals := unconditionals.push s
-  return ⟨implications, nonimplications, unconditionals⟩
+namespace Conjecture
+
+/--
+Like `proof_wanted` from Batteries, but records the conjecture in an
+environment extension.
+-/
+@[command_parser]
+def «conjecture» := leading_parser
+  declModifiers false >> "conjecture" >> declId >> ppIndent declSig
+
+/-- Elaborates a `conjecture` declaration. The declaration is translated to an axiom during
+elaboration, but it's then removed from the environment.
+-/
+@[command_elab «conjecture»]
+def elabConjecture : CommandElab
+  | `($mods:declModifiers conjecture $name $args* : $res) => do
+    let maybe_entry ← withoutModifyingEnv do
+      let original_length := (equationalResultsExtension.getState (← getEnv)).size
+
+      -- The helper axiom is used instead of `sorry` to avoid spurious warnings
+      elabDeclaration <| ← `(command| axiom helper (p : Prop) : p)
+      elabDeclaration <| ← `(command| $mods:declModifiers
+                                      theorem $name $args* : $res := helper _)
+
+      if original_length < (equationalResultsExtension.getState (← getEnv)).size then
+        return some (equationalResultsExtension.getState (← getEnv)).back
+      return none
+
+    if let some entry := maybe_entry then
+      modifyEnv fun env =>
+        equationalResultsExtension.addEntry env entry.toConjecture
+    pure ()
+  | _ => throwUnsupportedSyntax
+
+end Conjecture

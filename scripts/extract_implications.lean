@@ -6,12 +6,6 @@ import equational_theories.Closure
 
 open Lean Core Elab Cli
 
---- Output of the extract_implications executable.
-structure Output where
-  implications : Array Implication
-  nonimplications : Array Implication
-deriving Lean.ToJson, Lean.FromJson
-
 def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
   let some modules := inp.variableArgsAs? ModuleName |
     inp.printHelp
@@ -30,9 +24,8 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
       let mut rs ← Result.extractEquationalResults
       if !include_conj then
         rs := rs.filter (·.proven)
-      let mut rs' := rs.filterMap (EntryVariant.toEdge? ∘ Entry.variant)
-      if include_impl then
-        rs' := Closure.closure rs'
+      let rs' := rs.map (·.variant)
+      let mut rs' ← if include_impl then Closure.closure rs' else Closure.toEdges rs'
       for edge in rs' do
         if edge.isTrue then IO.println s!"{edge.lhs} → {edge.rhs}"
         else IO.println s!"¬ ({edge.lhs} → {edge.rhs})"

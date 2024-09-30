@@ -19,11 +19,6 @@ def Edge.lhs : Edge → String := Implication.lhs ∘ get
 
 def Edge.rhs : Edge → String := Implication.rhs ∘ get
 
-def _root_.EntryVariant.toEdge? : EntryVariant → Option Edge
-  | .implication x => some (.implication x)
-  | .nonimplication x => some (.nonimplication x)
-  | _ => none
-
 inductive Outcome
   | explicit_proof_true
   | implicit_proof_true
@@ -122,24 +117,53 @@ def Bitset.set (b : Bitset) (n : Nat) : Bitset :=
 def Bitset.get (b : Bitset) (n : Nat) : Bool :=
   (b.toArray[n >>> 6]! >>> ((UInt64.ofNat n) &&& 63)) &&& 1 != 0
 
-def closure (inp : Array Edge) : Array Edge := Id.run do
+def toEdges (inp : Array EntryVariant) : IO (Array Edge) := do
+  let mut edges : Std.HashSet Edge := {}
+  for imp in inp do
+    -- println! "Running, size {edges.size}"
+    match imp with
+    | .implication ⟨lhs, rhs⟩ =>
+      -- println! "Implication"
+      edges := edges.insert (.implication ⟨lhs, rhs⟩)
+    | .facts ⟨satisfied, refuted⟩ =>
+      -- println! "Facts {satisfied[0]?} {refuted[0]?}"
+      for f1 in satisfied do
+        -- println! "Processing {f1}"
+        for f2 in refuted do
+          -- println! "Sub-Processing {f2}"
+          edges := edges.insert (.nonimplication ⟨f1, f2⟩)
+    | _ => continue
+  -- println! "Done"
+  return edges.toArray
+
+def closure (inp : Array EntryVariant) : IO (Array Edge) := do
   -- number the equations (arbitrarily) for easier processing
   let mut eqs : Std.HashMap String Nat := {}
   let mut eqs_order : Array String := #[]
   for imp in inp do
-    match eqs.containsThenInsertIfNew imp.lhs eqs.size with
-    | (n, neqs) =>
-      eqs := neqs
-      unless n do eqs_order := eqs_order.push imp.lhs
-    match eqs.containsThenInsertIfNew imp.rhs eqs.size with
-    | (n, neqs) =>
-      eqs := neqs
-      unless n do eqs_order := eqs_order.push imp.rhs
+    match imp with
+    | .implication ⟨lhs, rhs⟩ =>
+      match eqs.containsThenInsertIfNew lhs eqs.size with
+      | (n, neqs) =>
+        eqs := neqs
+        unless n do eqs_order := eqs_order.push lhs
+      match eqs.containsThenInsertIfNew rhs eqs.size with
+      | (n, neqs) =>
+        eqs := neqs
+        unless n do eqs_order := eqs_order.push rhs
+    | .facts ⟨satisfied, refuted⟩ =>
+      for lhs in satisfied ++ refuted do
+        match eqs.containsThenInsertIfNew lhs eqs.size with
+      | (n, neqs) =>
+        eqs := neqs
+        unless n do eqs_order := eqs_order.push lhs
+    | _ => pure ()
 
   -- construct the implication/non-implication graph
   let n := eqs.size
-  let mut graph : Array (Array Nat) := Array.mkArray (2 * n) #[]
-  let mut revgraph : Array (Array Nat) := Array.mkArray (2 * n) #[]
+  let mut graph_size := 2 * n
+  let mut graph : Array (Array Nat) := Array.mkArray graph_size #[]
+  let mut revgraph : Array (Array Nat) := Array.mkArray graph_size #[]
   for imp in inp do
     match imp with
     | .implication imp =>
@@ -147,21 +171,34 @@ def closure (inp : Array Edge) : Array Edge := Id.run do
       graph := graph.modify (eqs[imp.rhs]! + n) (fun x => x.push (eqs[imp.lhs]! + n))
       revgraph := revgraph.modify (eqs[imp.lhs]!) (fun x => x.push eqs[imp.rhs]!)
       revgraph := revgraph.modify (eqs[imp.lhs]! + n) (fun x => x.push (eqs[imp.rhs]! + n))
-    | .nonimplication imp =>
-      graph := graph.modify (eqs[imp.lhs]!) (fun x => x.push (eqs[imp.rhs]! + n))
-      revgraph := revgraph.modify (eqs[imp.rhs]! + n) (fun x => x.push eqs[imp.lhs]!)
+    | .facts ⟨satisfied, refuted⟩ =>
+      if satisfied.size * refuted.size < satisfied.size + refuted.size + 1 then
+        for lhs in satisfied do
+          for rhs in refuted do
+            graph := graph.modify (eqs[lhs]!) (fun x => x.push (eqs[rhs]! + n))
+            revgraph := revgraph.modify (eqs[rhs]! + n) (fun x => x.push eqs[lhs]!)
+      else
+        let dummy := graph_size
+        graph_size := graph_size + 1
+        graph := graph.push (refuted.map (eqs[·]! + n))
+        revgraph := revgraph.push (satisfied.map (eqs[·]!))
+        for f1 in satisfied do
+          graph := graph.modify eqs[f1]! (fun x ↦ x.push dummy)
+        for f1 in refuted do
+          revgraph := revgraph.modify (eqs[f1]! + n) (fun x ↦ x.push dummy)
+    | _ => pure ()
 
-  let mut vis : Array Bool := Array.mkArray (2 * n) false
-  let mut order : Array Nat := Array.mkEmpty (2 * n)
+  let mut vis : Array Bool := Array.mkArray graph_size false
+  let mut order : Array Nat := Array.mkEmpty graph_size
 
   -- compute SCCs and the condensation graph using Kosaraju's algorithm
-  for i in [0:2*n] do
+  for i in [:graph_size] do
     unless vis[i]! do
       (vis, order) := dfs1 graph i vis order
 
   order := order.reverse
 
-  let mut component : Array Nat := Array.mkArray (2 * n) 0
+  let mut component : Array Nat := Array.mkArray graph_size 0
   let mut last_component : Nat := 0
 
 
@@ -173,7 +210,7 @@ def closure (inp : Array Edge) : Array Edge := Id.run do
   let mut components : Array (Array Nat) := Array.mkArray last_component #[]
   let mut comp_graph : Array (Std.HashSet Nat) := Array.mkArray last_component {}
 
-  for i in [0:2*n] do
+  for i in [:graph_size] do
     components := components.modify (component[i]!-1) (fun x ↦ x.push i)
     for j in graph[i]! do
       unless component[i]! == component[j]! do
@@ -182,7 +219,7 @@ def closure (inp : Array Edge) : Array Edge := Id.run do
   -- Run bitset transitive closure on the condensation graph
   let mut reachable : Array Bitset := Array.mkArray last_component (Bitset.mk last_component)
 
-  for i_ in [0:last_component] do
+  for i_ in [:last_component] do
     let i := last_component - 1 - i_
     reachable := reachable.modify i (fun x ↦ x.set i)
     for j in comp_graph[i]! do
@@ -202,43 +239,9 @@ def closure (inp : Array Edge) : Array Edge := Id.run do
             if x == y then continue
             if y < n then
               ans := ans.push (.implication ⟨eqs_order[y]!, eqs_order[x]!⟩)
-            else
+            else if y < 2*n then
               ans := ans.push (.nonimplication ⟨eqs_order[x]!, eqs_order[y - n]!⟩)
 
   pure ans
-
-def collectClosure {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
-    m (Std.HashMap Implication Outcome) := do
-  let mut ans : Std.HashMap Implication Outcome := {}
-  let thms := (← Result.extractTheorems).filterMap (EntryVariant.toEdge? ∘ Entry.variant)
-  for thm in thms do
-    ans := ans.insertIfNew thm.get (.explicit_theorem thm.isTrue)
-  for imp_thm in closure thms do
-    ans := ans.insertIfNew imp_thm.get (.implicit_theorem imp_thm.isTrue)
-  let all := (← Result.extractEquationalResults).filterMap (EntryVariant.toEdge? ∘ Entry.variant)
-  for thm in all do
-    ans := ans.insertIfNew thm.get (.explicit_conjecture thm.isTrue)
-  for imp_thm in closure all do
-    ans := ans.insertIfNew imp_thm.get (.implicit_conjecture imp_thm.isTrue)
-
-  return ans
-
-/-- Prints the contents of the conjecture environment extension.
--/
-syntax (name := printClosure) "#print_closure" : command
-
-elab_rules : command
-| `(command| #print_closure) => do
-  let rs ← collectClosure
-  for ⟨⟨lhs, rhs⟩, out⟩ in rs do
-    println! "{lhs} → {rhs}: {out}"
-
-syntax (name := checkClosure) "#check_closure" ident ident : command
-
-elab_rules : command
-| `(command| #check_closure $a $b) => do
-  let rs ← collectClosure
-  println! "{a} → {b}: {rs.getD ⟨a.getId.toString, b.getId.toString⟩ .unknown}"
-  println! "{b} → {a}: {rs.getD ⟨b.getId.toString, a.getId.toString⟩ .unknown}"
 
 end Closure
