@@ -4,7 +4,7 @@ import equational_theories.Completeness
 def FreeMagma.size {α} (t : FreeMagma α) : Nat :=
   match t with
   | .Leaf _ => 0
-  | .Fork t₁ t₂ => FreeMagma.size t₁ + FreeMagma.size t₂
+  | .Fork t₁ t₂ => FreeMagma.size t₁ + FreeMagma.size t₂ + 1
 
 theorem FreeMagma.sizeLtSubst {α} (t : FreeMagma α) (σ : α → FreeMagma α) :
   FreeMagma.size t ≤ FreeMagma.size (t ⬝ σ) :=
