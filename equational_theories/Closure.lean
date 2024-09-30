@@ -117,7 +117,7 @@ def Bitset.set (b : Bitset) (n : Nat) : Bitset :=
 def Bitset.get (b : Bitset) (n : Nat) : Bool :=
   (b.toArray[n >>> 6]! >>> ((UInt64.ofNat n) &&& 63)) &&& 1 != 0
 
-def toEdges (inp : Array EntryVariant) : IO (Array Edge) := do
+def toEdges (inp : Array EntryVariant) : Array Edge := Id.run do
   let mut edges : Std.HashSet Edge := {}
   for imp in inp do
     -- println! "Running, size {edges.size}"
@@ -136,7 +136,7 @@ def toEdges (inp : Array EntryVariant) : IO (Array Edge) := do
   -- println! "Done"
   return edges.toArray
 
-def closure (inp : Array EntryVariant) : IO (Array Edge) := do
+def closure (inp : Array EntryVariant) : Array Edge := Id.run do
   -- number the equations (arbitrarily) for easier processing
   let mut eqs : Std.HashMap String Nat := {}
   let mut eqs_order : Array String := #[]

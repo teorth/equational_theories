@@ -25,7 +25,7 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
       if !include_conj then
         rs := rs.filter (·.proven)
       let rs' := rs.map (·.variant)
-      let mut rs' ← if include_impl then Closure.closure rs' else Closure.toEdges rs'
+      let mut rs' := if include_impl then Closure.closure rs' else Closure.toEdges rs'
       for edge in rs' do
         if edge.isTrue then IO.println s!"{edge.lhs} → {edge.rhs}"
         else IO.println s!"¬ ({edge.lhs} → {edge.rhs})"
