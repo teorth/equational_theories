@@ -15,6 +15,9 @@ deriving Lean.ToJson, Lean.FromJson
 /--
 Names of equations satisfied rsp. refuted by the same magma; used to concisely express
 antiimplications.
+
+For example, if `satisfied = [1, 2]` and `refuted = [4, 5]`, then this expresses
+the four antiimplications `¬ 1→4`, `¬ 1→5`, `¬ 2→4`, `¬ 2→5`.
 -/
 structure Facts where
   satisfied : Array String
