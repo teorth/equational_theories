@@ -3,6 +3,7 @@ import Mathlib.Data.Nat.Defs
 import equational_theories.Conjecture
 import equational_theories.EquationalResult
 import equational_theories.Equations
+import equational_theories.FactsSyntax
 
 /- This is a subproject of the main project to completely describe a small subgraph of the entire
 implication graph.  Currently we are focusing only on the following equations:
@@ -173,7 +174,7 @@ conjecture Equation14_implies_Equation29 (G: Type*) [Magma G] (h: Equation14 G) 
 /-- This implication is Problem A1 from Putnam 2001 -/
 @[equational_result]
 theorem Equation29_implies_Equation14 (G: Type*) [Magma G] (h: Equation29 G) : Equation14 G :=
-  fun x y ↦ Eq.trans (h x (x ∘ y)) (congrArg (fun z ↦ z ∘ (x ∘ y)) (Eq.symm (h y x)))
+  fun x y ↦ (h x (x ∘ y)).trans (congrArg (· ∘ (x ∘ y)) (h y x).symm)
 
 @[equational_result]
 theorem Equation38_implies_Equation42 (G: Type*) [Magma G] (h: Equation38 G) : Equation42 G :=
@@ -240,10 +241,10 @@ conjecture Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 
 /-- Putnam 1978, problem A4, part (b) -/
 @[equational_result]
 theorem Equation3744_implies_Equation381 (G : Type*) [Magma G] (h: Equation3744 G) : Equation381 G :=
-  fun x y z ↦ Eq.trans
-    (h x y z y) $ Eq.trans
-    (congrArg (fun a ↦ a ∘ (y ∘ y)) (h x z z x))
-    (Eq.symm $ h (x ∘ z) y (x ∘ z) y)
+  fun x y z ↦
+    (h x y z y).trans $
+    (congrArg (· ∘ (y ∘ y)) (h x z z x)).trans
+    (h (x ∘ z) y (x ∘ z) y).symm
 
 /-- Putnam 1978, problem A4, part (a) -/
 @[equational_result]
@@ -324,34 +325,26 @@ theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equatio
   dsimp [hG] at h
   linarith
 
--- The magma with 2 elements a and b which satisfies equation 5 serves as counterexamples here. For 43, a * b = b, but b * a = a. For 4513, a * (a * a) = a, but (a * a) * b = b.
+-- The magma with 2 elements a and b which satisfies equation 5 serves as counterexamples here. For
+-- 43, a * b = b, but b * a = a. For 4513, a * (a * a) = a, but (a * a) * b = b.
+--
+-- We can use the `Facts` syntax to state multiple anti-implications from the same magma in one theorem
 
 @[equational_result]
-theorem Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation42 G := by
+theorem Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Facts G [5] [42, 43, 4513] := by
   let a : Type := Fin 2
   let hG : Magma a := { op := fun _ x ↦ x }
-  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
-  by_contra h
-  specialize h 0 1 0
-  simp [hG] at h
-
-@[equational_result]
-theorem Equation5_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation43 G := by
-  let a : Type := Fin 2
-  let hG : Magma a := { op := fun _ x ↦ x }
-  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
-  by_contra h
-  specialize h 0 1
-  simp [hG] at h
-
-@[equational_result]
-theorem Equation5_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation4513 G := by
-  let a : Type := Fin 2
-  let hG : Magma a := { op := fun _ x ↦ x }
-  refine ⟨a, hG, fun _ ↦ by simp [hG], ?_⟩
-  by_contra h
-  specialize h 0 0 0 1
-  simp [hG] at h
+  refine ⟨a, hG, ?_, ?_, ?_, ?_⟩
+  · simp [Equation5, hG]
+  · by_contra h
+    specialize h 0 1 0
+    simp [hG] at h
+  · by_contra h
+    specialize h 0 1
+    simp [hG] at h
+  · by_contra h
+    specialize h 0 0 0 1
+    simp [hG] at h
 
 @[equational_result]
 theorem Equation8_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation8 G ∧ ¬ Equation3 G := by

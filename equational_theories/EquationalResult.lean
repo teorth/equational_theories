@@ -29,7 +29,7 @@ namespace Result
 -/
 inductive EntryVariant where
   | implication : Implication → EntryVariant
-  | nonimplication : Implication → EntryVariant
+  | facts : Facts → EntryVariant
   /-- An equation that always holds. -/
   | unconditional : String → EntryVariant
 deriving Lean.ToJson, Lean.FromJson
@@ -68,8 +68,8 @@ initialize equationalResultAttr : Unit ←
                    | .thmInfo  (val : TheoremVal) =>
                      if let some imp ← parseImplication val.type then
                        pure <| ⟨val.name, filename, .implication imp⟩
-                     else if let some nimp ← parseNonimplication val.type then
-                       pure <| ⟨val.name, filename, .nonimplication nimp⟩
+                     else if let some facts ← parseFacts val.type then
+                       pure <| ⟨val.name, filename, .facts facts⟩
                      else if let some uncond ← parseUnconditionalEquation val.type then
                        pure <| ⟨val.name, filename, .unconditional uncond⟩
                      else
@@ -97,13 +97,13 @@ elab_rules : command
   for ⟨name, _filename, res⟩ in rs do
     match res with
     | .implication ⟨lhs, rhs⟩ => println! "{name}: {lhs} → {rhs}"
-    | .nonimplication ⟨lhs, rhs⟩ => println! "{name}: ¬ ({lhs} → {rhs})"
+    | .facts ⟨satisfied, refuted⟩ => println! "{name}: {satisfied} // {refuted}"
     | .unconditional rhs => println! "{name}: {rhs} holds unconditionally"
 
 --- Output of the extract_implications executable.
 structure Output where
   implications : Array Implication
-  nonimplications : Array Implication
+  facts : Array Facts
   unconditionals : Array String
 deriving Lean.ToJson, Lean.FromJson
 
@@ -111,11 +111,11 @@ def collectResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
     m Output := do
   let rs := equationalResultsExtension.getState (← getEnv)
   let mut implications : Array Implication := #[]
-  let mut nonimplications : Array Implication := #[]
+  let mut facts : Array Facts := #[]
   let mut unconditionals : Array String := #[]
   for ⟨_name, _filename, res⟩ in rs do
     match res with
     | .implication imp => implications := implications.push imp
-    | .nonimplication nimp => nonimplications := nonimplications.push nimp
+    | .facts fact => facts := facts.push fact
     | .unconditional s => unconditionals := unconditionals.push s
-  return ⟨implications, nonimplications, unconditionals⟩
+  return ⟨implications, facts, unconditionals⟩
