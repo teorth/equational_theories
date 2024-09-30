@@ -1,5 +1,4 @@
 import equational_theories.EquationalResult
-import equational_theories.Subgraph
 import ProofWidgets
 
 open Lean Core Elab Command ProofWidgets Server
@@ -17,3 +16,5 @@ unsafe def displayImplications : CommandElab := fun stx => do
   runTermElabM fun _ => do
     Widget.savePanelWidgetInfo (stx := stx) (hash := ImplicationDiagram.javascriptHash.val) do
       return toJson output
+
+#display_implications
