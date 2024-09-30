@@ -33,13 +33,21 @@ def transitive_closure(pairs):
         closure |= new_pairs
     return closure
 
-implications = transitive_closure(implications)
+print("Number of implications:", len(implications))
 
-impliedBy = { i : set(j for j in full if (i, j) in implications) for i in full }
-implying = { j : set(i for i in full if (i, j) in implications) for j in full }
+impliedBy = { i : set() for i in full }
+implying = { j : set() for j in full }
 
-print("Size of transitive closure:", len(implications))
+for i, j in implications:
+  impliedBy[i].add(j)
+  impliedBy[i] |= impliedBy[j]
+  implying[j].add(i)
+  implying[j] |= implying[i]
 
+print("Size of transitive closure:", sum([len (s) for s in impliedBy.values()]))
+
+removed = 0
+if_we_did_not_remove = 0
 
 def parse_row(row):
     if not row.startswith("'(") or "seen" in row: return
@@ -80,6 +88,10 @@ def prune_row(data):
         # remove all that this is ruling out
         refuted = refuted - impliedBy[i]
         refuted.add(i)
+    global if_we_did_not_remove
+    global removed
+    if_we_did_not_remove += len(data["satisfied"]) + len(data["refuted"])
+    removed += len(data["satisfied"]) + len(data["refuted"]) - len(satisfied) - len(refuted)
     data["satisfied"] = sorted(satisfied)
     data["refuted"] = sorted(refuted)
     return data
@@ -133,3 +145,6 @@ with open(f"{dir}/src/finite_poly_refutations.txt") as f:
             main.write(f"import equational_theories.Generated.FinitePoly.Refutation{i}\n")
             with open(leanfile, "w") as f:
                   f.write(generate_lean(data))
+
+
+print(f"Pruning by implication removed {removed} facts to check, down from {if_we_did_not_remove}, leaving {if_we_did_not_remove-removed}.")
