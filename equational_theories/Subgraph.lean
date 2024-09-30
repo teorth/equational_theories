@@ -182,7 +182,7 @@ theorem Equation38_implies_Equation42 (G: Type*) [Magma G] (h: Equation38 G) : E
 
 @[equational_result]
 theorem Equation39_implies_Equation45 (G: Type*) [Magma G] (h: Equation39 G) : Equation45 G :=
-  fun _ _ _ ↦ by rw[← h, h]
+  fun _ _ _ ↦ by rw [← h, h]
 
 @[equational_result]
 theorem Equation41_implies_Equation39 (G: Type*) [Magma G] (h: Equation41 G) : Equation39 G :=
@@ -603,8 +603,8 @@ def add : Th → Th → Th
 | Th.t2, Th.t2 => Th.t3
 | Th.t2, Th.t3 => Th.t3
 | Th.t3, _ => Th.t3
-theorem add3 (a b c :Th) : add (add a b ) c = Th.t3:= by
 
+theorem add3 (a b c : Th) : add (add a b) c = Th.t3 := by
   cases a;
   cases b;
   cases c; trivial; trivial; trivial;
@@ -619,8 +619,7 @@ theorem add3 (a b c :Th) : add (add a b ) c = Th.t3:= by
   cases c; trivial; trivial; trivial;
   cases c; trivial; trivial; trivial
 
-theorem add3_ (a b c :Th) : add  a (add b c ) = Th.t3:= by
-
+theorem add3_ (a b c : Th) : add a (add b c) = Th.t3 := by
   cases a;
   cases b;
   cases c; trivial; trivial; trivial;
@@ -659,7 +658,7 @@ theorem Equation4582_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equati
   specialize h Th.t1 Th.t2
   have h1: Th.t1 ∘ Th.t1 = Th.t2 := rfl
   have h2: Th.t2 ∘ Th.t2 = Th.t3 := rfl
-  have h3: Th.t1 ∘ Th.t1 ≠ Th.t2 ∘ Th.t2 := by rw[h1, h2]; intro hhh; cases hhh
+  have h3: Th.t1 ∘ Th.t1 ≠ Th.t2 ∘ Th.t2 := by rw [h1, h2]; intro hhh; cases hhh
   exact absurd h h3
 
 @[equational_result]
