@@ -627,8 +627,7 @@ theorem Equation4582_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equati
       _ = add (add w u) v := by rw [add3 w u v]
   refine ⟨Th, hG, hh, ?_⟩
   by_contra h
-  specialize h Th.t1 Th.t2
-  exact absurd h (by intro hhh; cases hhh)
+  exact absurd (h Th.t1 Th.t2) (fun hh ↦ by cases hh)
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation42 G := by
