@@ -604,7 +604,7 @@ def add : Th → Th → Th
 | Th.t2, Th.t3 => Th.t3
 | Th.t3, _ => Th.t3
 
-theorem add3 (a b c :Th) : add (add a b ) c = Th.t3:= by
+theorem add3 (a b c : Th) : add (add a b) c = Th.t3 := by
   cases a;
   cases b;
   cases c; trivial; trivial; trivial;
@@ -619,7 +619,7 @@ theorem add3 (a b c :Th) : add (add a b ) c = Th.t3:= by
   cases c; trivial; trivial; trivial;
   cases c; trivial; trivial; trivial
 
-theorem add3_ (a b c :Th) : add  a (add b c ) = Th.t3:= by
+theorem add3_ (a b c : Th) : add a (add b c) = Th.t3 := by
   cases a;
   cases b;
   cases c; trivial; trivial; trivial;
