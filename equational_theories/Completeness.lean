@@ -4,8 +4,6 @@
 import equational_theories.FreeMagma
 import Mathlib.Data.Set.Defs
 
-#check Set
-
 structure MagmaLaw (α : Type) where
   lhs : FreeMagma α
   rhs : FreeMagma α
@@ -20,14 +18,8 @@ match t with
 
 infix:66 " ⬝ " => substFreeMagma
 
-#check ((Lf 0) ⬝ (λ i ↦ Lf i))
-
 @[inline, simp]
 def Ctx α := Set (MagmaLaw α)
-
-#print Membership
-
-#print Set.instMembership
 
 -- FIXME: figure out how to remove this.
 instance Ctx.Membership α : Membership (MagmaLaw α) (Ctx α) := ⟨ Set.instMembership.mem ⟩
@@ -165,6 +157,7 @@ theorem substLFId {α} (t : FreeMagma α) : t ⬝ Lf = t :=
 by
   cases t <;> simp [substFreeMagma]; trivial
   constructor <;> apply substLFId
+
 
 @[simp]
 def LfEmbed {α} (Γ : Ctx α) : α → FreeMagmaWithLaws Γ := embed Γ ∘ Lf
