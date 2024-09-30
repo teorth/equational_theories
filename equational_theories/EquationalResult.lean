@@ -27,7 +27,7 @@ open Lean Parser Elab Command
 -/
 inductive EntryVariant where
   | implication : Implication → EntryVariant
-  | nonimplication : Implication → EntryVariant
+  | facts : Facts → EntryVariant
   /-- An equation that always holds. -/
   | unconditional : String → EntryVariant
 deriving Lean.ToJson, Lean.FromJson, Inhabited
@@ -73,8 +73,8 @@ initialize equationalResultAttr : Unit ←
                    | .thmInfo  (val : TheoremVal) =>
                      if let some imp ← parseImplication val.type then
                        pure <| ⟨val.name, filename, .implication imp, true⟩
-                     else if let some nimp ← parseNonimplication val.type then
-                       pure <| ⟨val.name, filename, .nonimplication nimp, true⟩
+                     else if let some facts ← parseFacts val.type then
+                       pure <| ⟨val.name, filename, .facts facts, true⟩
                      else if let some uncond ← parseUnconditionalEquation val.type then
                        pure <| ⟨val.name, filename, .unconditional uncond, true⟩
                      else
@@ -110,43 +110,25 @@ elab_rules : command
   for ⟨name, _filename, res, _⟩ in rs do
     match res with
     | .implication ⟨lhs, rhs⟩ => println! "{name}: {lhs} → {rhs}"
-    | .nonimplication ⟨lhs, rhs⟩ => println! "{name}: ¬ ({lhs} → {rhs})"
+    | .facts ⟨satisfied, refuted⟩ => println! "{name}: {satisfied} // {refuted}"
     | .unconditional rhs => println! "{name}: {rhs} holds unconditionally"
 
-end Result
+--- Output of the extract_implications executable.
+structure Output where
+  implications : Array Implication
+  nonimplications : Array Implication
+  unconditionals : Array String
+deriving Lean.ToJson, Lean.FromJson
 
-namespace Conjecture
-
-/--
-Like `proof_wanted` from Batteries, but records the conjecture in an
-environment extension.
--/
-@[command_parser]
-def «conjecture» := leading_parser
-  declModifiers false >> "conjecture" >> declId >> ppIndent declSig
-
-/-- Elaborates a `conjecture` declaration. The declaration is translated to an axiom during
-elaboration, but it's then removed from the environment.
--/
-@[command_elab «conjecture»]
-def elabConjecture : CommandElab
-  | `($mods:declModifiers conjecture $name $args* : $res) => do
-    let maybe_entry ← withoutModifyingEnv do
-      let original_length := (equationalResultsExtension.getState (← getEnv)).size
-
-      -- The helper axiom is used instead of `sorry` to avoid spurious warnings
-      elabDeclaration <| ← `(command| axiom helper (p : Prop) : p)
-      elabDeclaration <| ← `(command| $mods:declModifiers
-                                      theorem $name $args* : $res := helper _)
-
-      if original_length < (equationalResultsExtension.getState (← getEnv)).size then
-        return some (equationalResultsExtension.getState (← getEnv)).back
-      return none
-
-    if let some entry := maybe_entry then
-      modifyEnv fun env =>
-        equationalResultsExtension.addEntry env entry.toConjecture
-    pure ()
-  | _ => throwUnsupportedSyntax
-
-end Conjecture
+def collectResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
+    m Output := do
+  let rs := equationalResultsExtension.getState (← getEnv)
+  let mut implications : Array Implication := #[]
+  let mut nonimplications : Array Implication := #[]
+  let mut unconditionals : Array String := #[]
+  for ⟨_name, _filename, res⟩ in rs do
+    match res with
+    | .implication imp => implications := implications.push imp
+    | .nonimplication nimp => nonimplications := nonimplications.push nimp
+    | .unconditional s => unconditionals := unconditionals.push s
+  return ⟨implications, nonimplications, unconditionals⟩
