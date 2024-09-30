@@ -333,9 +333,8 @@ theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equatio
 
 @[equational_result]
 theorem Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Facts G [5] [42, 43, 4513] := by
-  let a : Type := Fin 2
-  let hG : Magma a := { op := fun _ x ↦ x }
-  refine ⟨a, hG, ?_, ?_, ?_, ?_⟩
+  let hG : Magma (Fin 2) := { op := fun _ x ↦ x }
+  refine ⟨Fin 2, hG, ?_, ?_, ?_, ?_⟩
   · simp [Equation5, hG]
   · by_contra h
     specialize h 0 1 0
@@ -412,9 +411,8 @@ theorem Equation39_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equati
 
 @[equational_result]
 theorem Equation40_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation3 G := by
-  let a : Type := Bool
-  let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
-  exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
+  let hG : Magma Bool := { op := fun x y ↦ ¬ x ∨ y }
+  exact ⟨Bool, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
 @[equational_result]
 theorem Equation40_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation39 G :=
@@ -422,21 +420,18 @@ theorem Equation40_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation
 
 @[equational_result]
 theorem Equation40_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation42 G := by
-  let a : Type := Bool
-  let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
-  exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
+  let hG : Magma Bool := { op := fun x y ↦ ¬ x ∨ y }
+  exact ⟨Bool, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
 @[equational_result]
 theorem Equation40_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation43 G := by
-  let a : Type := Bool
-  let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
-  exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
+  let hG : Magma Bool := { op := fun x y ↦ ¬ x ∨ y }
+  exact ⟨Bool, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
 @[equational_result]
 theorem Equation40_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation4512 G := by
-  let a : Type := Bool
-  let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
-  exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
+  let hG : Magma Bool := { op := fun x y ↦ ¬ x ∨ y }
+  exact ⟨Bool, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
 @[equational_result]
 theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation43 G := by
