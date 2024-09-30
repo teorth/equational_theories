@@ -11,7 +11,6 @@ implication graph.  Currently we are focusing only on the following equations:
 Implications here should be placed inside the "Subgraph" namespace.
 
 -/
-
 namespace Subgraph
 
 /- Positive implications -/
@@ -159,10 +158,10 @@ theorem Equation45_implies_Equation39 (G: Type*) [Magma G] (h: Equation45 G) : E
   fun _ _ ↦ by rw [h]
 
 theorem Equation46_implies_Equation39 (G: Type*) [Magma G] (h: Equation46 G) : Equation39 G :=
-  fun x y ↦ h x x y x
+  fun _ _ ↦ h _ _ _ _
 
 theorem Equation46_implies_Equation40 (G: Type*) [Magma G] (h: Equation46 G) : Equation40 G :=
-  fun x y ↦ h x x y y
+  fun _ _ ↦ h _ _ _ _
 
 theorem Equation46_implies_Equation41 (G: Type*) [Magma G] (h: Equation46 G) : Equation41 G :=
   fun _ _ _ ↦ h _ _ _ _
@@ -192,7 +191,7 @@ theorem Equation3744_implies_Equation381 (G : Type*) [Magma G] (h: Equation3744 
 
 /-- Putnam 1978, problem A4, part (a) -/
 theorem Equation3744_implies_Equation3722 (G: Type*) [Magma G] (h: Equation3744 G) : Equation3722 G :=
-  fun x y ↦ h x y y x
+  fun _ _ ↦ h _ _ _ _
 
 theorem Equation4513_implies_Equation4512 (G: Type*) [Magma G] (h: Equation4513 G) : Equation4512 G :=
   fun _ _ _ ↦ h _ _ _ _
@@ -211,9 +210,8 @@ theorem Equation4582_implies_Equation4579 (G: Type*) [Magma G] (h: Equation4582 
 
 /- Counterexamples -/
 
-theorem Equation3_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation39 G := by
-  use Fin 3, ⟨fun x y ↦ 2*x-y⟩
-  decide
+theorem Equation3_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation39 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
 
 theorem Equation3_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation42 G := by
   let hG : Magma ℕ := { op := fun _ y ↦ y }
@@ -229,9 +227,8 @@ theorem Equation3_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equatio
   specialize h 1 2 3
   simp [hG] at h
 
-theorem Equation4_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation39 G := by
-  use Fin 2, ⟨fun x _ ↦ x⟩
-  decide
+theorem Equation4_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation39 G :=
+  ⟨Fin 2, ⟨fun x _ ↦ x⟩, by decide⟩
 
 -- The 2 element magma that satisfies 4 does not satisfy 40.
 theorem Equation4_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation40 G := by
@@ -296,9 +293,8 @@ theorem Equation38_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equati
   simp only [not_forall]
   exact ⟨ℕ, ⟨fun x _ ↦ x + 1⟩, fun _ _ ↦ rfl, 0, Nat.zero_ne_add_one _⟩
 
-theorem Equation23_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation23 G ∧ ¬ Equation39 G := by
-  use Fin 2, ⟨fun x _ ↦ x⟩
-  decide
+theorem Equation23_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation23 G ∧ ¬ Equation39 G :=
+  ⟨Fin 2, ⟨fun x _ ↦ x⟩, by decide⟩
 
 theorem Equation39_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation39 G ∧ ¬ Equation8 G := by
   simp only [not_forall]
@@ -316,38 +312,31 @@ theorem Equation39_not_implies_Equation168 : ∃ (G : Type) (_ : Magma G), Equat
   simp only [not_forall]
   use ℕ, ⟨fun _ y ↦ y⟩, (fun _ _ ↦ rfl), 0, 0, 1, nofun
 
-theorem Equation39_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4512 G := by
-  use Fin 2, ⟨fun _ x ↦ x + 1⟩
-  decide
+theorem Equation39_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4512 G :=
+  ⟨Fin 2, ⟨fun _ x ↦ x + 1⟩, by decide⟩
 
-theorem Equation39_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4513 G := by
-  use Fin 2, ⟨fun _ x ↦ x + 1⟩
-  decide
+theorem Equation39_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4513 G :=
+  ⟨Fin 2, ⟨fun _ x ↦ x + 1⟩, by decide⟩
 
-theorem Equation39_not_implies_Equation4522 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4522 G := by
-  use Fin 2, ⟨fun _ x ↦ x + 1⟩
-  decide
+theorem Equation39_not_implies_Equation4522 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4522 G :=
+  ⟨Fin 2, ⟨fun _ x ↦ x + 1⟩, by decide⟩
 
-theorem Equation39_not_implies_Equation4564 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4564 G := by
-  use Fin 2, ⟨fun _ x ↦ x + 1⟩
-  decide
+theorem Equation39_not_implies_Equation4564 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4564 G :=
+  ⟨Fin 2, ⟨fun _ x ↦ x + 1⟩, by decide⟩
 
-theorem Equation39_not_implies_Equation4579 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4579 G := by
-  use Fin 2, ⟨fun _ x ↦ x + 1⟩
-  decide
+theorem Equation39_not_implies_Equation4579 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4579 G :=
+  ⟨Fin 2, ⟨fun _ x ↦ x + 1⟩, by decide⟩
 
-theorem Equation39_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4582 G := by
-  use Fin 2, ⟨fun _ x ↦ x + 1⟩
-  decide
+theorem Equation39_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4582 G :=
+  ⟨Fin 2, ⟨fun _ x ↦ x + 1⟩, by decide⟩
 
 theorem Equation40_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation3 G := by
   let a : Type := Bool
   let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
   exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
-theorem Equation40_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation39 G := by
-  use Fin 2, ⟨fun x y ↦ x - y⟩
-  decide
+theorem Equation40_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation39 G :=
+  ⟨Fin 2, ⟨fun x y ↦ x - y⟩, by decide⟩
 
 theorem Equation40_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation42 G := by
   let a : Type := Bool
@@ -442,14 +431,11 @@ theorem Equation168_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equati
 theorem Equation168_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation23 G :=
   ⟨Bool × Bool, ⟨fun x y ↦ ⟨x.snd,y.fst⟩⟩, fun _ _ _ ↦ rfl, of_decide_eq_false rfl⟩
 
-theorem Equation168_not_implies_Equation39 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation39 G := by
-  use Bool × Bool
-  use ⟨fun x y => ⟨x.snd,y.fst⟩⟩
-  decide
+theorem Equation168_not_implies_Equation39 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation39 G :=
+  ⟨Bool × Bool, ⟨fun x y ↦ ⟨x.snd,y.fst⟩⟩, by decide⟩
 
-theorem Equation387_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation39 G := by
-  use Bool, ⟨fun x y ↦ x && y⟩
-  decide
+theorem Equation387_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation39 G :=
+  ⟨Bool, ⟨fun x y ↦ x && y⟩, by decide⟩
 
 -- The "and" magma on the two element set of booleans satisfies 387, but does not satisfy 40.
 theorem Equation387_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation40 G := by

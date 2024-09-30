@@ -1,52 +1,49 @@
-name: Assign Issue on Claim
+name: Awaiting Review
 
 on:
   issue_comment:
     types: [created]
 
 jobs:
-  claim_issue:
-    if: github.event.comment.body == 'claim'
+  awaiting_review:
+    if: github.event.issue.pull_request != null && github.event.comment.body == 'awaiting-review'
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if this is an issue, not a pull request
-      id: check_issue
-      run: |
-        if [[ -n "${{ github.event.issue.pull_request }}" ]]; then
-          echo "This is a pull request, not an issue."
-          exit 0
-        fi
-
-    - name: Check if issue is already assigned
-      id: check_assignee
-      run: |
-        ASSIGNEES_COUNT=$(echo "${{ toJson(github.event.issue.assignees) }}" | jq length)
-        if [ "$ASSIGNEES_COUNT" -gt 0 ]; then
-          echo "Issue is already assigned."
-          exit 0
-        fi
-
-    - name: Assign the issue to the commenter
+    - name: Add "awaiting-review" label to the PR
       run: |
         curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        -d '{"assignees":["${{ github.event.comment.user.login }}"]}' \
-        https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
+        -d '{"labels":["awaiting-review"]}' \
+        https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels
 
-    - name: Log the assignment result
-      run: echo "Issue successfully assigned to ${{ github.event.comment.user.login }}."
+    - name: Get PR details
+      id: get_pr
+      run: |
+        curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} > pr.json
+        cat pr.json
 
-    - name: Retrieve the project ITEM_ID
+    - name: Extract related issue number
+      id: extract_issue
+      run: |
+        ISSUE_NUMBER=$(jq -r '.body | capture("Closes #(?<num>[0-9]+)") | .num' pr.json)
+        echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_ENV
+
+    - name: Fail if no related issue is found
+      if: ${{ env.issue_number == '' }}
+      run: |
+        echo "No related issue found in PR body. Exiting..."
+        exit 1
+
+    - name: Retrieve the project ITEM_ID for the related issue
       id: get_item_id
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { projectItems(first: 10) { nodes { id } } } } }"
+          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ env.issue_number }}) { projectItems(first: 10) { nodes { id } } } } }"
         }
         EOF
         )
-        echo "Sending query: $QUERY"
-
         RESPONSE=$(curl -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
           -H "Content-Type: application/json" \
           --data "$QUERY" https://api.github.com/graphql)
@@ -70,8 +67,6 @@ jobs:
         }
         EOF
         )
-        echo "Sending query: $QUERY"
-
         RESPONSE=$(curl -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
           -H "Content-Type: application/json" \
           --data "$QUERY" https://api.github.com/graphql)
@@ -86,8 +81,8 @@ jobs:
           echo "FIELD_ID=$FIELD_ID" >> $GITHUB_ENV
         fi
 
-    - name: Retrieve the "Claimed Tasks" option ID
-      id: find_claimed_tasks_id
+    - name: Retrieve the "PRs in Review" option ID
+      id: find_in_review_tasks_id
       run: |
         QUERY=$(cat <<EOF
         {
@@ -95,27 +90,25 @@ jobs:
         }
         EOF
         )
-        echo "Sending query: $QUERY"
-
         RESPONSE=$(curl -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
           -H "Content-Type: application/json" \
           --data "$QUERY" https://api.github.com/graphql)
 
         echo "GraphQL Response: $RESPONSE"
-        CLAIMED_TASKS_ID=$(echo "$RESPONSE" | jq -r '.data.node.fields.nodes[] | select(.name == "Status") | .options[] | select(.name == "Claimed Tasks").id')
+        PR_IN_REVIEW_ID=$(echo "$RESPONSE" | jq -r '.data.node.fields.nodes[] | select(.name == "Status") | .options[] | select(.name == "PRs in Review").id')
 
-        if [ -z "$CLAIMED_TASKS_ID" ]; then
-          echo "Error: Could not retrieve 'Claimed Tasks' ID"
+        if [ -z "$PR_IN_REVIEW_ID" ]; then
+          echo "Error: Could not retrieve 'PRs in Review' ID"
           exit 1
         else
-          echo "CLAIMED_TASKS_ID=$CLAIMED_TASKS_ID" >> $GITHUB_ENV
+          echo "PR_IN_REVIEW_ID=$PR_IN_REVIEW_ID" >> $GITHUB_ENV
         fi
 
-    - name: Move task to "Claimed Tasks" column
+    - name: Move task to "PRs in Review" column
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "mutation { updateProjectV2ItemFieldValue(input: { projectId: \\"PVT_kwHOAAMKjM4Ao-Sa\\", itemId: \\"$ITEM_ID\\", fieldId: \\"$FIELD_ID\\", value: { singleSelectOptionId: \\"$CLAIMED_TASKS_ID\\" } }) { projectV2Item { id } } }"
+          "query": "mutation { updateProjectV2ItemFieldValue(input: { projectId: \\"PVT_kwHOAAMKjM4Ao-Sa\\", itemId: \\"$ITEM_ID\\", fieldId: \\"$FIELD_ID\\", value: { singleSelectOptionId: \\"$PR_IN_REVIEW_ID\\" } }) { projectV2Item { id } } }"
         }
         EOF
         )
@@ -125,4 +118,4 @@ jobs:
         https://api.github.com/graphql
 
     - name: Log the project card movement result
-      run: echo "Task successfully moved to 'Claimed Tasks' column."
+      run: echo "Task successfully moved to 'PRs in Review' column."
