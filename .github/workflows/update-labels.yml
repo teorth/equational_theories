@@ -1,0 +1,46 @@
+# This workflow allows any user to add one of the `awaiting-author`, `WIP`, or `do-not-merge` labels
+# by commenting on the PR or issue. Other labels from this set are removed automatically.
+
+name: Update Labels on Comment
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  update-label:
+    if: github.event.issue.pull_request != null && (github.event.comment.body == 'do-not-merge' || github.event.comment.body == 'awaiting-author' || github.event.comment.body == 'WIP')
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Update Labels
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { owner, repo, number: issue_number } = context.issue;
+          const commentBody = context.payload.comment.body;
+          const validLabels = ['awaiting-author', 'WIP', 'do-not-merge'];
+
+          // Remove all valid labels before adding the new one
+          for (const label of validLabels) {
+            try {
+              await github.rest.issues.removeLabel({ owner, repo, issue_number, name: label });
+            } catch (error) {
+              // Ignore if label doesn't exist
+            }
+          }
+
+          // Add label based on comment if it's valid
+          if (validLabels.includes(commentBody)) {
+            await github.rest.issues.addLabels({ owner, repo, issue_number, labels: [commentBody] });
+          }
+
+    # - name: Delete the comment
+    #   uses: actions/github-script@v6
+    #   with:
+    #     github-token: ${{ secrets.GITHUB_TOKEN }}
+    #     script: |
+    #       const { owner, repo } = context.repo;
+
+    #       await github.rest.issues.deleteComment({ owner, repo, comment_id: context.payload.comment.id });
