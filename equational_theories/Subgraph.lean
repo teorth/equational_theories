@@ -235,6 +235,8 @@ theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) :
   have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by repeat rw [← h]
   exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
 
+conjecture Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G
+
 /-- Putnam 1978, problem A4, part (b) -/
 @[equational_result]
 theorem Equation3744_implies_Equation381 (G : Type*) [Magma G] (h: Equation3744 G) : Equation381 G :=
