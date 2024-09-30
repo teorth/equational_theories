@@ -134,6 +134,7 @@ def «{name}» : Magma (Fin {div}) where
   op := memoFinOp fun x y => {poly}
 
 /-! The facts -/
+@[equational_result]
 theorem «Facts from {name}» :
   ∃ (G : Type) (_ : Magma G), Facts G {satisfied} {refuted} :=
     ⟨Fin {div}, «{name}», by decideFin!⟩

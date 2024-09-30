@@ -17,6 +17,7 @@ def «FinitePoly 3 * x² + 2 * x * y % 5» : Magma (Fin 5) where
   op := memoFinOp fun x y => 3 * x*x + 2 * x * y
 
 /-! The facts -/
+@[equational_result]
 theorem «Facts from FinitePoly 3 * x² + 2 * x * y % 5» :
   ∃ (G : Type) (_ : Magma G), Facts G [369, 3684, 3685, 4099, 4341, 4609] [378, 4131] :=
     ⟨Fin 5, «FinitePoly 3 * x² + 2 * x * y % 5», by decideFin!⟩

@@ -17,6 +17,7 @@ def «FinitePoly x² + 2 * x + x * y % 4» : Magma (Fin 4) where
   op := memoFinOp fun x y => x*x + 2 * x + x * y
 
 /-! The facts -/
+@[equational_result]
 theorem «Facts from FinitePoly x² + 2 * x + x * y % 4» :
   ∃ (G : Type) (_ : Magma G), Facts G [369, 378, 3684, 3685, 3687, 4099, 4341, 4609] [8, 99, 361, 362, 364, 365, 374, 375, 377, 384, 385, 411, 817, 1020, 1223, 1832, 3253, 3721, 3724, 3725, 3862, 4070, 4071, 4073, 4081, 4083, 4084, 4269, 4293, 4314, 4584, 4588, 4598, 4606, 4636] :=
     ⟨Fin 4, «FinitePoly x² + 2 * x + x * y % 4», by decideFin!⟩
