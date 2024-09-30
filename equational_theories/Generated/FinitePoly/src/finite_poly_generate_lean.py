@@ -34,9 +34,6 @@ for i, j in implications:
 
 print("Size of transitive closure:", sum([len (s) for s in impliedBy.values()]))
 
-removed = 0
-if_we_did_not_remove = 0
-
 def parse_row(row):
     if not row.startswith("'(") or "seen" in row: return
     _, eq, nums = row.split("'")
@@ -59,7 +56,20 @@ def parse_row(row):
     poly = poly.replace("x**2", "x*x").replace("y**2", "y*y")
     return {"raw": row, "poly": poly, "pretty_eq": pretty_eq, "div": div, "satisfied": satisfied, "refuted": refuted}
 
+
+stats = {
+  "total" : 0,
+  "removed_by_implication": 0,
+  "removed_by_covering": 0,
+}
+
+notImpliedBy = { i : set() for i in full }
+notImplying = { j : set() for j in full }
+
 def prune_row(data):
+    stats["total"] += len(data["satisfied"]) + len(data["refuted"])
+
+    # prune by implications
     satisfied = set()
     for i in data["satisfied"]:
         # already implied
@@ -76,10 +86,20 @@ def prune_row(data):
         # remove all that this is ruling out
         refuted = refuted - impliedBy[i]
         refuted.add(i)
-    global if_we_did_not_remove
-    global removed
-    if_we_did_not_remove += len(data["satisfied"]) + len(data["refuted"])
-    removed += len(data["satisfied"]) + len(data["refuted"]) - len(satisfied) - len(refuted)
+    stats["removed_by_implication"] += len(data["satisfied"]) + len(data["refuted"]) - len(satisfied) - len(refuted)
+
+    # prune by earlier examples
+    satisfied_ = {i for i in satisfied if refuted - notImpliedBy[i] }
+    refuted_   = {j for j in refuted   if satisfied - notImplying[j] }
+
+    stats["removed_by_covering"] += len(satisfied) + len(refuted) - len(satisfied_) - len(refuted_)
+    satisfied, refuted = satisfied_, refuted_
+
+    for i in satisfied:
+      for j in refuted:
+        notImpliedBy[i].add(j)
+        notImplying[j].add(i)
+
     data["satisfied"] = sorted(satisfied)
     data["refuted"] = sorted(refuted)
     return data
@@ -135,4 +155,15 @@ with open(f"{dir}/src/finite_poly_refutations.txt") as f:
                   f.write(generate_lean(data))
 
 
-print(f"Pruning by implication removed {removed} facts to check, down from {if_we_did_not_remove}, leaving {if_we_did_not_remove-removed}.")
+total = stats["total"]
+removed_by_implication = stats["removed_by_implication"]
+removed_by_covering = stats["removed_by_covering"]
+remaining = total - removed_by_implication - removed_by_covering
+
+percentage_removed_by_implication = (removed_by_implication / total) * 100 if total > 0 else 0
+percentage_removed_by_covering = (removed_by_covering / total) * 100 if total > 0 else 0
+
+print(f"Out of {total} facts to check, pruning by implication removed " +
+  f"{removed_by_implication} facts ({percentage_removed_by_implication:.2f}%) to check, " +
+  f"pruning by covering removed {removed_by_covering} facts ({percentage_removed_by_covering:.2f}%), " +
+  f"leaving {remaining} facts to check.")
