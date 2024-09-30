@@ -4,7 +4,11 @@ import random
 
 def parse_line(line):
     # Extract the list from the line using string manipulation
-    return list(map(int, line.split('[')[1].split(']')[0].split(', ')))
+    try:
+        return list(map(int, line.split('[')[1].split(']')[0].split(', ')))
+    except:
+        print("Failed on", line)
+        return [0]
 
 def prune_rows(lines, matrix_size=4696):
     matrix = np.zeros((matrix_size, matrix_size), dtype=bool)

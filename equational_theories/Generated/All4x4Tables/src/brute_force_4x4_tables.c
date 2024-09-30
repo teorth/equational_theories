@@ -22,9 +22,8 @@ bool check_rule(int nvar, FunctionPtr fn, int* table) {
     if (!fn(table, 0x6789)) {
       return false;
     }
-    
+
     for (int combination = 0; combination < max_combinations; combination++) {
-        
         if (!fn(table, combination)) {
             return false;
         }

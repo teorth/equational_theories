@@ -145,13 +145,9 @@ S = list(range(4))
 
 for row in open("../data/refutations.txt").readlines()[3*30:]:
     if 'Table' in row:
-        print()
-        print()
-        print(row.strip())
-        table = np.array(eval(row.split("Table")[1]))[::-1]
+        table = np.array(eval(row.split("Table")[1]))
     elif 'Proves' in row:
         proves = eval(row.split("Proves")[1])
-        print(proves)
 
         ok = []
         for x in proves:
@@ -160,6 +156,7 @@ for row in open("../data/refutations.txt").readlines()[3*30:]:
 
             this = check_rule(nvar, fn, S, op)
             #print(this, string)
+            assert this
             
             ok.append(this)
         print(collections.Counter(ok))
