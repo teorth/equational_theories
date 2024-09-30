@@ -167,7 +167,7 @@ theorem Equation7_implies_Equation3 (G: Type*) [Magma G] (h: Equation7 G) : Equa
 theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G :=
   fun _ _ _ ↦ by rw [← h]
 
-/-- dual to Problem A1 from Putnam 2001 -/
+/-- Dual to Problem A1 from Putnam 2001 -/
 conjecture Equation14_implies_Equation29 (G: Type*) [Magma G] (h: Equation14 G) : Equation29 G
 
 /-- This implication is Problem A1 from Putnam 2001 -/
@@ -388,7 +388,7 @@ theorem Equation39_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation
 @[equational_result]
 theorem Equation39_not_implies_Equation168 : ∃ (G : Type) (_ : Magma G), Equation39 G ∧ ¬ Equation168 G := by
   simp only [not_forall]
-  use ℕ, ⟨fun _ y ↦ y⟩, (fun _ _ ↦ rfl), 0, 0, 1, nofun
+  exact ⟨ℕ, ⟨fun _ y ↦ y⟩, (fun _ _ ↦ rfl), 0, 0, 1, nofun⟩
 
 @[equational_result]
 theorem Equation39_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation39 G ∧ ¬ Equation4512 G :=
