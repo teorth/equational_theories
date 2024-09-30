@@ -1,11 +1,7 @@
 import Lean
 
 /-!
-This is a variant of the `decide` tactic that doesn’t actually check the proposition in meta code.
-This is useful in non-interactive mode, where we know it will succeed, and we really just want the
-check done once, in the kernel.
-
-This also includes a hack to do large disjunctions outside the `decides`, as inference can blow up.
+This module defines variatns of the `decide` tactic with various hacks to speed up elaboration.
 -/
 
 open Lean Elab Tactic Meta
@@ -27,6 +23,11 @@ private def splitConjs (e : Lean.Expr) : Array (Lean.Expr) := Id.run do
   r := r.push e
   return r
 
+/--
+This is a variant of the `decide` tactic. It does not actually check the proposition at elaboration
+time, and just assumes it is true.  This is useful in generated lean code, where we know it will
+succeed, and we really just want the check done once, in the kernel.
+-/
 elab "decide!" : tactic => do
   closeMainGoalUsing `decide fun expectedType => do
     let expectedType ← preprocessPropToDecide expectedType

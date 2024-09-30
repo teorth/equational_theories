@@ -1,12 +1,13 @@
 import Lean
 
 /-!
-This file defines a macro `memoFinOp` that takes a function `f : Fin n → Fin n → Fin n`, at
-elaboration time calculates its table of values, encodes it into a single `Nat`, and returns a term
-that implements the operation via lookup in this table.
+This file defines the macro `memoFinOp` that memoizes a function `f : Fin n → Fin n → Fin n`; see
+its docstring for more info.
 -/
 
-open Lean Meta Elab  Term
+namespace MemeFinOp
+
+open Lean Meta Elab Term
 
 def opOfTable {n : Nat} (t : Nat) (a : Fin n) (b : Fin n) : Fin n :=
   let i := a.val * n + b.val
@@ -30,13 +31,32 @@ example :
     opOfTable (buildMemo f) = f := by
   funext a b; revert a b; native_decide
 
-@[implemented_by Meta.evalExpr]
-private opaque myEvalExpr (α) (expectedType : Expr) (value : Expr) (safety := DefinitionSafety.safe) : MetaM α
+private unsafe def evalNatImpl (e : Expr) : MetaM Nat := do
+  let t ← inferType e
+  unless t.isConstOf ``Nat do
+    throwError "evalNat: expected expression of type `Nat`, but got {t}"
+  let e ← instantiateMVars e
+  if e.hasExprMVar then
+    throwError "evalNat: cannot evaluate expression{indentExpr e}\nit contains metavariables"
+  evalExpr Nat (mkConst ``Nat) e
 
+@[implemented_by evalNatImpl]
+private opaque evalNat (value : Expr) : MetaM Nat
+
+/-
+The syntax `memoFinOp f` takes a function `f : Fin n → Fin n → Fin n` and implements it in a
+kernel-reduction friendly way.
+
+More precisely, it tabulates all values of `f` at elabortion time and encodes that table into a
+single `Nat`, which it queries using `/` and `%`. This should perform decenetly well in compiled
+code, and make a big difference when using kernel reduction (e.g. `by decide`) because efficient
+arrays are not available there.
+-/
 elab "memoFinOp" fn:term:arg :term <= expectedType? => do
-  let fn ← elabTerm fn expectedType?
+  let fn ← elabTermAndSynthesize fn expectedType?
   Term.synthesizeSyntheticMVarsNoPostponing
   if (← Term.logUnassignedUsingErrorInfos (← getMVars fn)) then throwAbortTerm
+  let fn ← zetaReduce fn
 
   -- Type checking
   let type ← inferType fn
@@ -47,21 +67,17 @@ elab "memoFinOp" fn:term:arg :term <= expectedType? => do
   unless t.isAppOfArity ``Fin 1 do
     throwError "expected a function of Fin n for some n"
   let nE ← instantiateMVars t.appArg!
-  -- let .lit (.natVal _) := nE
-  --  | throwError "expected a function of Fin n for a concrete n, got {nE}"
   let expectedType := .forallE `a t (.forallE `b t t .default) .default
-  unless (← isDefEq type  expectedType ) do
+  unless (← isDefEq type expectedType ) do
     throwError "expected type {expectedType}, got {type}"
 
-  let eval ← instantiateMVars (mkApp2 (mkConst ``buildMemo) nE fn)
-  if eval.hasMVar then
-    throwError "cannot evaluate expression {eval}, it contains metavariables"
-  let t ← myEvalExpr Nat (mkConst ``Nat) eval
-
-  return mkApp2 (mkConst ``opOfTable) nE (.lit (.natVal t))
-
-set_option pp.instantiateMVars false
+  -- Tabulation
+  let table ← evalNat (mkApp2 (mkConst ``buildMemo) nE fn)
+  return mkApp2 (mkConst ``opOfTable) nE (.lit (.natVal table))
 
 example :
-    memoFinOp (fun (a b : Fin 4) => a * a * b + 2) = (fun (a b : Fin 4) => a * a * b + 2) := by
-  funext a b; revert a b; native_decide
+    let f := fun (a b : Fin 4) => a * a * b + (2 : Fin 4)
+    memoFinOp f = f := by
+  funext a b; revert a b; decide
+
+end MemeFinOp
