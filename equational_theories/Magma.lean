@@ -11,4 +11,4 @@ class Magma (α : Type _) where
   /-- `a ∘ b` computes a binary operation of `a` and `b`. -/
   op : α → α → α
 
-@[inherit_doc] infixl:65 " ∘ "   => Magma.op
+@[inherit_doc] infix:65 " ∘ " => Magma.op
