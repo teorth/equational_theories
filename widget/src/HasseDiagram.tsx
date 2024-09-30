@@ -6,12 +6,17 @@ interface Implication {
   rhs: string;
 }
 
-interface DiagramProps {
-  implications: Implication[];
-  nonimplications: Implication[];
+interface Facts {
+  satisfied: string[];
+  refuted: string[];
 }
 
-const Diagram: React.FC<DiagramProps> = ({ implications, nonimplications }) => {
+interface DiagramProps {
+  implications: Implication[];
+  facts: Facts[];
+}
+
+const Diagram: React.FC<DiagramProps> = ({ implications, facts }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -34,10 +39,14 @@ const Diagram: React.FC<DiagramProps> = ({ implications, nonimplications }) => {
       });
 
       // Add nodes and edges for non-implications
-      nonimplications.forEach(({ lhs, rhs }) => {
-        addNodeIfNotExists(lhs, lhs);
-        addNodeIfNotExists(rhs, rhs);
-        edges.add({ id: `nonimplication-${lhs}-${rhs}`, from: lhs, to: rhs, arrows: 'to', color: '#ff9999' }); // Non-implication edge color
+      facts.forEach(({ satisfied, refuted }) => {
+        satisfied.forEach(lhs => {
+          refuted.forEach(rhs => {
+            addNodeIfNotExists(lhs, lhs);
+            addNodeIfNotExists(rhs, rhs);
+            edges.add({ id: `nonimplication-${lhs}-${rhs}`, from: lhs, to: rhs, arrows: 'to', color: '#ff9999' }); // Non-implication edge color
+          });
+        });
       });
 
       // Create a network
@@ -91,7 +100,7 @@ const Diagram: React.FC<DiagramProps> = ({ implications, nonimplications }) => {
         network.destroy();
       };
     }
-  }, [implications, nonimplications]);
+  }, [implications, facts]);
 
   return <div ref={containerRef} style={{ height: '500px', width: '100%' }} />;
 };
