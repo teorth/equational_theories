@@ -2,15 +2,44 @@
 
 import ast
 import re
+import json
+from pathlib import Path
 
 #
 # This script reads the file `finite_poly_refutations.txt` and turns each line into a
 # a file `equational_theories/Generated/FinitePoly/Refutation<n>.lean`
 #
+# It also takes `implications.json` into account and prunes entries based on that.
+#
 
+dir = Path(__file__).parent.parent
 
 # we have 4694 equations
-full = set(list(range(4694)))
+full = range(1,4694+1)
+
+with open(f"{dir}/src/implications.json") as f:
+  implications = json.load(f)["implications"]
+implications = [ (int(i["lhs"].removeprefix("Equation")), int(i["rhs"].removeprefix("Equation"))) for i in implications ]
+
+def transitive_closure(pairs):
+    new_pairs = closure = set(pairs)
+    while new_pairs:
+        new_pairs = {
+            (a, d)
+            for a, b in new_pairs
+            for c, d in pairs
+            if b == c
+        } - closure
+        closure |= new_pairs
+    return closure
+
+implications = transitive_closure(implications)
+
+impliedBy = { i : set(j for j in full if (i, j) in implications) for i in full }
+implying = { j : set(i for i in full if (i, j) in implications) for j in full }
+
+print("Size of transitive closure:", len(implications))
+
 
 def parse_row(row):
     if not row.startswith("'(") or "seen" in row: return
@@ -33,6 +62,27 @@ def parse_row(row):
     pretty_eq = pretty_eq.replace("**2", "²")
     poly = poly.replace("x**2", "x*x").replace("y**2", "y*y")
     return {"raw": row, "poly": poly, "pretty_eq": pretty_eq, "div": div, "satisfied": satisfied, "refuted": refuted}
+
+def prune_row(data):
+    satisfied = set()
+    for i in data["satisfied"]:
+        # already implied
+        if implying[i].intersection(satisfied):
+          continue
+        # remove all implied by this
+        satisfied = satisfied - impliedBy[i]
+        satisfied.add(i)
+    refuted = set()
+    for i in data["refuted"]:
+        # already ruled out
+        if impliedBy[i].intersection(refuted):
+          continue
+        # remove all that this is ruling out
+        refuted = refuted - impliedBy[i]
+        refuted.add(i)
+    data["satisfied"] = sorted(satisfied)
+    data["refuted"] = sorted(refuted)
+    return data
 
 def generate_lean(data):
     raw = data["raw"]
@@ -71,13 +121,14 @@ theorem «Facts from {name}» :
     return out
 
 
-with open("data/finite_poly_refutations.txt") as f:
-    with open("equational_theories/Generated/FinitePoly.lean", "w") as main:
+with open(f"{dir}/src/finite_poly_refutations.txt") as f:
+    with open(f"{dir.parent}/FinitePoly.lean", "w") as main:
       lines = f.readlines()
       for i, line in enumerate(lines):
-          leanfile = f"equational_theories/Generated/FinitePoly/Refutation{i}.lean"
+          leanfile = f"{dir}/Refutation{i}.lean"
           data = parse_row(line)
           if data and data["div"] < 5:
+            data = prune_row(data)
             print(f"Writing {leanfile}")
             main.write(f"import equational_theories.Generated.FinitePoly.Refutation{i}\n")
             with open(leanfile, "w") as f:
