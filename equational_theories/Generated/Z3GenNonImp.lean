@@ -168,5 +168,6 @@ match x, y with
 
 instance M.Magma : Magma M := ⟨ m ⟩
 
+@[equational_result]
 theorem Equation4283_not_implies_Equation4358 :  ∃ (G: Type) (_: Magma G), Equation4283 G ∧ ¬ Equation4358 G :=
 by exists M, M.Magma
