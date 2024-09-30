@@ -1,10 +1,8 @@
-import Batteries.Data.String.Basic
-import Batteries.Tactic.Lint
 import Lean.Environment
 import Lean.Meta.Basic
 import Lean.Util
 
-open Lean Core Elab
+open Lean
 
 /--
 `lhs` implies `rhs`, where `lhs` and `rhs` are equation names for the form "Equation17".
@@ -13,12 +11,6 @@ structure Implication where
   lhs : String
   rhs : String
 deriving Lean.ToJson, Lean.FromJson, DecidableEq
-
---- Output of the extract_implications executable.
-structure Output where
-  implications : List Implication
-  nonimplications : List Implication
-deriving Lean.ToJson, Lean.FromJson
 
 /--
 Extracts the equation name out of an expression of the form `EquationN G inst`.
@@ -72,3 +64,13 @@ def parseNonimplication (thm_ty : Expr) : MetaM (Option Implication) := do
           | _ => return none
       | _ => return none
   | _ => return none
+
+/--
+Attempts to parse theorem type as an unconditional equation.
+-/
+def parseUnconditionalEquation (thm_ty : Expr) : MetaM (Option String) := do
+  Meta.forallTelescope thm_ty fun fvars rhs => do
+    let #[g, magma] := fvars | return none
+    if !(← Meta.isType g) then return none
+    let (.app (.const `Magma _) _) := ← Meta.inferType magma | return none
+    return getEquationName rhs
