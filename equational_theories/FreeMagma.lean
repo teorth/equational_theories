@@ -1,4 +1,4 @@
-import equational_theories.Conjecture
+import equational_theories.EquationalResult
 import equational_theories.AllEquations
 
 universe u

@@ -10,14 +10,9 @@ unsafe def generateOutput : IO Unit := do
     let ctx := {fileName := "", fileMap := default}
     let state := {env}
     Prod.fst <$> (Meta.MetaM.toIO · ctx state)  do
-      IO.eprintln "Running"
-      let rs ← extractResults
-      IO.eprintln s!"Running {rs.size}"
-      let rs' : Array EntryVariant ← closure (rs.map Entry.variant)
-      for res in rs' do
-        match res with
-        | .implication ⟨lhs, rhs⟩ => println! "{lhs} → {rhs}"
-        | .nonimplication ⟨lhs, rhs⟩ => println! "¬ ({lhs} → {rhs})"
+      let rs ← collectClosure
+      for ⟨⟨lhs, rhs⟩, out⟩ in rs do
+        println! "{lhs} → {rhs}: {out}"
 
 unsafe def main (_args : List String) : IO Unit := do
   generateOutput

@@ -10,7 +10,7 @@ open Lean
 structure Implication where
   lhs : String
   rhs : String
-deriving Lean.ToJson, Lean.FromJson, DecidableEq
+deriving Lean.ToJson, Lean.FromJson, DecidableEq, Hashable
 
 /--
 Extracts the equation name out of an expression of the form `EquationN G inst`.
