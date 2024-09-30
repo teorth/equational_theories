@@ -3,6 +3,7 @@ import Mathlib.Data.Nat.Defs
 import equational_theories.Conjecture
 import equational_theories.Duality
 import equational_theories.Equations
+import equational_theories.FiniteSatUtils
 
 /- This is a subproject of the main project to completely describe a small subgraph of the entire
 implication graph.  Currently we are focusing only on the following equations:
@@ -82,7 +83,7 @@ theorem Equation2_implies_Equation4582 (G: Type*) [Magma G] (h: Equation2 G) : E
 theorem Equation3_implies_Equation8 (G: Type*) [Magma G] (h: Equation3 G) : Equation8 G :=
   fun x ↦ by repeat rw [← h]
 
-theorem Equation3_implies_Equation23 (G: Type*) [Magma G] (h: Equation3 G) : Equation23 G :=
+theorem Equation3_implies_Equation23 (G: Type) [Magma G] (h: Equation3 G) : Equation23 G :=
   fun x ↦ by repeat rw [← h]
 
 theorem Equation4_implies_Equation3 (G: Type*) [Magma G] (h: Equation4 G) : Equation3 G :=
@@ -92,7 +93,7 @@ theorem Equation4_implies_Equation8 (G: Type*) [Magma G] (h: Equation4 G) : Equa
   fun _ ↦ h _ _
 
 theorem Equation4_implies_Equation23 (G: Type*) [Magma G] (h: Equation4 G) : Equation23 G :=
-  Equation3_implies_Equation23 G fun _ ↦ h _ _
+  fun _ ↦ by rw [← h, ← h]
 
 theorem Equation4_implies_Equation42 (G: Type*) [Magma G] (h: Equation4 G) : Equation42 G :=
   fun _ _ _ ↦ by rw [← h, ← h]
@@ -182,6 +183,21 @@ theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) :
   have comm (x y : G) : (x ∘ x) ∘ y = y ∘ (x ∘ x) := by rw [← idem, ← h, idem]
   have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by repeat rw [← h]
   exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
+
+/-- Argument by dual from Equation387_implies_Equation43
+    Proof-of-concept duality proof, still very clunky, but could be streamlined more. -/
+theorem Equation332_implies_Equation43 (G: Type) [Magma G] (h: Equation332 G) : Equation43 G := by
+  let law43 : MagmaLaw (Fin 2) := MagmaLaw.mk (Lf 0 ⋆ Lf 1) (Lf 1 ⋆ Lf 0)
+  let law332 : MagmaLaw (Fin 2) := MagmaLaw.mk (Lf 0 ⋆ Lf 1) (Lf 1 ⋆ (Lf 0 ⋆ Lf 0))
+  let law387 : MagmaLaw (Fin 2) := MagmaLaw.mk (Lf 1 ⋆ Lf 0) ((Lf 0 ⋆ Lf 0) ⋆ Lf 1)
+  have sat332 : G ⊧ law332 := fun sub ↦ h (sub 0) (sub 1)
+  have dualSat387 : DualMagma G ⊧ law387 := DualizeLawFromMagma G law332 sat332
+  have dualUniv387 : Equation387 (DualMagma G) := fun x y ↦ ConvertFromSatTwoVar law387 (DualMagma G) dualSat387 y x
+  have dualUniv43 : Equation43 (DualMagma G) := Equation387_implies_Equation43 (DualMagma G) dualUniv387
+  have dualSat43 : DualMagma G ⊧ (dualizeLaw law43) := ConvertToSatTwoVar (dualizeLaw law43) (DualMagma G) (fun x y ↦ dualUniv43 y x)
+  have sat43 : G ⊧ law43 := UndualizeLawFromDualMagma G law43 dualSat43
+  have univ43 : Equation43 G := ConvertFromSatTwoVar law43 G sat43
+  exact univ43
 
 /-- Putnam 1978, problem A4, part (b) -/
 theorem Equation3744_implies_Equation381 (G : Type*) [Magma G] (h: Equation3744 G) : Equation381 G :=

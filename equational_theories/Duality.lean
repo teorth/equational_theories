@@ -2,7 +2,7 @@ import equational_theories.Completeness
 import equational_theories.Conjecture
 import equational_theories.FreeMagma
 
-universe u
+local infix:60 " ≃ " => MagmaLaw.mk
 
 def dualizeLaw {α : Type} (law : MagmaLaw α) : MagmaLaw α :=
   dualizeTree law.lhs ≃ dualizeTree law.rhs
@@ -12,26 +12,26 @@ theorem DualizeLawIsInvolution {α : Type} (law : MagmaLaw α) : dualizeLaw (dua
     (congrArg (fun expr ↦ expr ≃ (dualizeTree $ dualizeTree law.rhs)) (DualizeTreeIsInvolution law.lhs))
     (congrArg (fun expr ↦ law.lhs ≃ expr) (DualizeTreeIsInvolution law.rhs))
 
-inductive DualMagma (α : Type u) [Magma α]
+inductive DualMagma (α : Type) [Magma α]
   | DualWrap : α → DualMagma α
 
-def dualWrap {G : Type u} [Magma G] : (G → DualMagma G) := DualMagma.DualWrap
+def dualWrap {G : Type} [Magma G] : (G → DualMagma G) := DualMagma.DualWrap
 
-def dualUnwrap {G : Type u} [Magma G] : (DualMagma G → G)
+def dualUnwrap {G : Type} [Magma G] : (DualMagma G → G)
   | DualMagma.DualWrap x => x
 
-instance {G : Type u} [Magma G] : Magma (DualMagma G) where
+instance {G : Type} [Magma G] : Magma (DualMagma G) where
   op x y := dualWrap $ (dualUnwrap y) ∘ (dualUnwrap x)
 
 -- TODO: Once we have an API for magma isomorphism, prove dualWrap and dualUnwrap are isomorphisms
 
-theorem DualMapIsAntihomomorphism (G : Type u) [Magma G] : ∀ x y : G, dualWrap (x ∘ y) = dualWrap y ∘ dualWrap x :=
+theorem DualMapIsAntihomomorphism (G : Type) [Magma G] : ∀ x y : G, dualWrap (x ∘ y) = dualWrap y ∘ dualWrap x :=
   fun _ _ ↦ refl _
 
-theorem DualMapCancellable (G : Type u) [Magma G] : ∀ x y : G, dualWrap x = dualWrap y → x = y :=
+theorem DualMapCancellable (G : Type) [Magma G] : ∀ x y : G, dualWrap x = dualWrap y → x = y :=
   fun _ _ eq ↦ congrArg dualUnwrap eq
 
-theorem EvalReversedInDualMagma {α : Type} (G : Type u) [Magma G]
+theorem EvalReversedInDualMagma {α : Type} (G : Type) [Magma G]
   (expr : FreeMagma α) (sub : α → G) : dualWrap (evalInMagma sub expr) = evalInMagma (dualWrap ∘ sub) (dualizeTree expr) :=
   match expr with
   | FreeMagma.Leaf n => Eq.refl (dualWrap $ sub n)
@@ -48,7 +48,7 @@ theorem EvalReversedInDualMagma {α : Type} (G : Type u) [Magma G]
       (congrArg (fun t ↦ (evalInMagma subd (dualizeTree rightExpr)) ∘ t) leftCase)
       decompDualEval
 
-theorem EvalPreservedInDoubleDualMagma {α : Type} (G : Type u) [Magma G]
+theorem EvalPreservedInDoubleDualMagma {α : Type} (G : Type) [Magma G]
   (expr : FreeMagma α) (sub : α → G) : dualWrap (dualWrap (evalInMagma sub expr)) = evalInMagma (dualWrap ∘ (dualWrap ∘ sub)) expr :=
   Eq.trans
     (congrArg dualWrap (EvalReversedInDualMagma G expr sub)) $ Eq.trans

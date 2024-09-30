@@ -77,6 +77,10 @@ abbrev Equation168 (G: Type u) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x 
 /-- From Putnam 1978, Problem A4, part (b) -/
 abbrev Equation381 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ y
 
+/-- dual of 387 -/
+abbrev Equation332 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = y ∘ (x ∘ x)
+
+/-- dual of 332 -/
 abbrev Equation387 (G: Type u) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ x
 
 /-- From Putnam 1978, Problem A4, part (a) -/

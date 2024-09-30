@@ -6,12 +6,12 @@ import Mathlib.Data.Set.Defs
 
 #check Set
 
-structure MagmaLaw (α : Type) where
+structure MagmaLaw (α : Type*) where
   lhs : FreeMagma α
   rhs : FreeMagma α
 deriving DecidableEq
 
-infix:60 " ≃ " => MagmaLaw.mk
+local infix:60 " ≃ " => MagmaLaw.mk
 
 def substFreeMagma {α β} (t : FreeMagma α) (σ : α → FreeMagma β) : FreeMagma β :=
 match t with
@@ -51,10 +51,10 @@ inductive derive {α} : Ctx α → MagmaLaw α → Type :=
 
 end DeriveDef
 
-def satisfiesPhi {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
+def satisfiesPhi {α G : Type*} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
   evalInMagma φ E.lhs = evalInMagma φ E.rhs
 
-def satisfies {α : Type} (G : Type) [Magma G] (E : MagmaLaw α) := ∀ (φ : α → G), satisfiesPhi φ E
+def satisfies {α : Type*} (G : Type*) [Magma G] (E : MagmaLaw α) := ∀ (φ : α → G), satisfiesPhi φ E
 
 def satisfiesSet {α : Type} (G : Type) [Magma G] (Γ : Set (MagmaLaw α)) : Prop :=
   ∀ E ∈ Γ, satisfies G E
