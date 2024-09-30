@@ -134,7 +134,7 @@ def print_instance():
 
 
 def print_non_imp_proof(left: int, right: int):
-    return ("theorem Equation{left}_not_implies_Equation{right} :  "
+    return ("@[equational_result]\ntheorem Equation{left}_not_implies_Equation{right} :  "
             "∃ (G: Type) (_: Magma G), Equation{left} G ∧ ¬ Equation{right} G :=\n"
             "by exists M, M.Magma\n\n".format(left = left, right = right))
 
