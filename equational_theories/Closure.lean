@@ -58,6 +58,39 @@ def Outcome.explicit_conjecture : Bool → Outcome
   | true => explicit_conjecture_true
   | false => explicit_conjecture_false
 
+def Outcome.isExplicit : Outcome → Bool
+  | explicit_proof_true => true
+  | implicit_proof_true => false
+  | explicit_conjecture_true => true
+  | implicit_conjecture_true => false
+  | unknown => false
+  | implicit_conjecture_false => false
+  | explicit_conjecture_false => true
+  | implicit_proof_false => false
+  | explicit_proof_false => true
+
+def Outcome.isProven : Outcome → Bool
+  | explicit_proof_true => true
+  | implicit_proof_true => true
+  | explicit_conjecture_true => false
+  | implicit_conjecture_true => false
+  | unknown => false
+  | implicit_conjecture_false => false
+  | explicit_conjecture_false => false
+  | implicit_proof_false => true
+  | explicit_proof_false => true
+
+def Outcome.isTrue : Outcome → Bool
+  | explicit_proof_true => true
+  | implicit_proof_true => true
+  | explicit_conjecture_true => true
+  | implicit_conjecture_true => true
+  | unknown => false
+  | implicit_conjecture_false => false
+  | explicit_conjecture_false => false
+  | implicit_proof_false => false
+  | explicit_proof_false => false
+
 partial def dfs1 (graph : Array (Array Nat)) (vertex : Nat) (vis : Array Bool) (order : Array Nat) :
     Array Bool × Array Nat := Id.run do
   let mut vis1 := vis.set! vertex true

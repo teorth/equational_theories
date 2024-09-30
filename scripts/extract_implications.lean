@@ -1,8 +1,10 @@
-import Lean.Meta.Basic
-import Lean.Util
-import equational_theories.EquationalResult
+import Batteries.Data.Array.Basic
+import Batteries.Tactic.Lint.Frontend
+import Cli.Basic
+import Lean.Util.SearchPath
+import equational_theories.Closure
 
-open Lean Core Elab
+open Lean Core Elab Cli
 
 --- Output of the extract_implications executable.
 structure Output where
@@ -11,25 +13,39 @@ structure Output where
   unconditionals : Array String
 deriving Lean.ToJson, Lean.FromJson
 
-def main (args : List String) : IO Unit := do
-  let module := ← match args with
-    | [] => pure `equational_theories
-    | [mod] => pure mod.toName
-    | _ => throw <| IO.userError "usage: extract_implications MODULE"
-
+def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
+  let some modules := inp.variableArgsAs? ModuleName |
+    inp.printHelp
+    return 1
+  if modules.isEmpty then
+    inp.printHelp
+    return 2
+  let include_conj := inp.hasFlag "conjecture"
+  let include_impl := inp.hasFlag "closure"
   searchPathRef.set compile_time_search_path%
 
-  unsafe withImportModules #[{module}] {} (trustLevel := 1024) fun env =>
+  unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
     let ctx := {fileName := "", fileMap := default}
     let state := {env}
     Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
-      let rs ← Result.extractTheorems
-      let mut implications : Array Implication := #[]
-      let mut nonimplications : Array Implication := #[]
-      let mut unconditionals : Array String := #[]
-      for ⟨_name, _filename, res, _⟩ in rs do
-        match res with
-        | .implication imp => implications := implications.push imp
-        | .nonimplication nimp => nonimplications := nonimplications.push nimp
-        | .unconditional s => unconditionals := unconditionals.push s
-      IO.println (Lean.toJson (Output.mk implications nonimplications unconditionals)).pretty
+      let rs ← Closure.collectClosure
+      for ⟨⟨lhs, rhs⟩, outcome⟩ in rs do
+        if (outcome.isExplicit || include_impl) && (outcome.isProven || include_conj) then
+          if outcome.isTrue then println! s!"{lhs} → {rhs}"
+          else println! s!"¬ ({lhs} → {rhs})"
+      pure 0
+
+def extract_implications : Cmd := `[Cli|
+  extract_implications VIA generateOutput;
+  "Extract the implications shown in the mentioned files."
+
+  FLAGS:
+    «conjecture»; "Include conjectures"
+    closure; "Compute the transitive closure"
+
+  ARGS:
+    ...files : Array ModuleName; "The files to extract the implications from"
+]
+
+def main (args : List String) : IO UInt32 := do
+  extract_implications.validate args
