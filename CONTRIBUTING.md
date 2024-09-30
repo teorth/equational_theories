@@ -29,6 +29,13 @@ The main discussion will be held in this [Lean Zulip channel](https://leanprover
 The core Lean files are as follows:
 
 - [`Magma.lean`](equational_theories/Magma.lean)  This contains the API for Magmas.
+- [`FreeMagma.lean`](equational_theories/FreeMagma.lean)  Contains the API for free Magmas.
+- [`Conjecture.lean`](equational_theories/Conjecture.lean)  Introduces the `conjecture` keyword, which is a variant of `proof_wanted` with more metadata to allow for easier aggregation of conjectured implications.
+- [`Result.lean`](equational_theories/Result.lean)  Introduces the `result` keyword, which is a variant of `theorem` with more metadata to allow for easier aggregation of proven implications.
+- [`Generated.lean`](equational_theories/Generated.lean)  This short file imports all the generated data sets.
+- [`EquationsCommand.lean`](equational_theories/EquationsCommand.lean)  A technical file to speed up elaboration of equations.
+- [`ParseImplications.lean`](equational_theories/ParseImplications.lean)  Tools to help parse implications within Lean.
+- [`Visualization.lean`](equational_theories/Visualization.lean) A tool to visualize the implications within the Lean infoview.
 - [`Equations.lean`](equational_theories/Equations.lean)  A list of selected equations of particular interest, which we will refer to as "subgraph equations".
 - [`AllEquations.lean`](equational_theories/AllEquations.lean)  The complete set of 4692 equational laws involving at most four magma operations (up to symmetry and relabeling).  It was generated using [this script](scripts/generate_eqs_list.py).  The subgraph equations are included as an import.  If you find an equation here of particular interest to study, consider transferring it to `Equations.lean` to give it the status of a subgraph equation.
 - [`Subgraph.lean`](equational_theories/Subgraph.lean)  This is the file for all results concerning the subgraph equations specifically.
@@ -39,19 +46,29 @@ In addition to these files, contributors are welcome to add additional Lean file
 - The standard form for an implication "Equation X implies Equation Y" is
 `theorem EquationX_implies_EquationY (G: Type*) [Magma G] (h: EquationX G) : EquationY G`
 - The standard form for an anti-implication "Equation X does not imply Equation Y" is `theorem EquationX_not_implies_EquationY : ∃ (G: Type) (_: Magma G), EquationX G ∧ ¬ EquationY G`.
+- Add the `@[equational_result]` attribute to theorems of the above forms to make them visible to our analysis tools.
+- NOTE: We are potentially in the process of updating our base representation of equations, so that the above guidance may change in the future.  See [this Zulip thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Equations.20vs.20Laws) for some relevant discussion.
 - You are also encouraged to add `conjecture` versions of these theorems, for results that were obtained by hand or by some other automated tool whose output is not in the form of a Lean proof.  If you are creating such `conjecture` statements, consider adding a sketch of the proof as a comment in the Lean file.  We can then add tasks (via Github issues) to convert such `conjecture` statements into theorems.  (Technical note: to avoid linter warnings, one can replace `h: EquationX G` with `_: EquationX G` in a `conjecture` implication.)
 - To establish an equivalence between two Equations X and Y, split it into two implications "Equation X implies Equation Y" and "Equation Y implies Equation X" as above.
 - To avoid collisions, implications and anti-implications should be placed inside a namespace specific to your Lean file.
-- Consider adding a chapter to the blueprint corresponding to the Lean file, which can for instance detail the methodology used to generate the content of that file.
-- Computer-generated Lean files can go in the [`Generated`](https://github.com/teorth/equational_theories/tree/main/equational_theories/Generated) subfolder.  You are also welcome to create additional subfolders as appropriate.
+- Consider adding a chapter to the blueprint corresponding to the Lean file, which can for instance detail the methodology used to generate the content of that file.  Also update [this CONTRIBUTING.md file](CONTRIBUTING.md) to add a link to your Lean file.
+- For computer-generated Lean files, see the "Automated Proofs" section below.
 
 Contributions to the Lean codebase will pass through continuous integration (CI) checks that ensure that the Lean code compiles.  Contributors of Lean code are highly encouraged to interact with the [Lean Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/) to help coordinate their contributions and resolve technical issues.
+
+Here is a list of human-contributed Lean files:
+- [`InfModel.lean`](equational_theories/InfModel.lean)  Studies specific laws that are known to only have infinite non-trivial models.
 
 At present, the API for magmas only allows for theorems that study a finite number of individual equational laws at a time.  We plan to expand the API to also allow one to establish metatheorems about entire classes of equations.
 
 ## Blueprint
 
 The [blueprint for the project](blueprint) is a human-readable record of the results established (in Lean or otherwise). Not every result generated by the project needs to be explicitly included in the blueprint, but ideally the most interesting results should be present, as well as descriptions of the methodology used to automatically generate large numbers of implications.
+
+The blueprint is written in a special form of LaTeX that supports some integration with Lean.  In particular, definitions, theorems, and proofs of theorems can be tagged with additional macros:
+- A macro `\lean{leanThm}` in the statement of a definition or theorem in the blueprint, will allow the blueprint to connect that definition or theorem to the corresponding Lean definition or theorem.  It is possible to link a blueprint theorem to multiple Lean theorems, e.g., `\lean{leanThm1, leanThm2}`.  Note that in some cases you will need to specify a namespace for the Lean theorem.
+- The macro `\uses{ref1, ref2}` in the statement of a definition or theorem, or a proof of that theorem, will indicate that the relevant statement or proof uses the results in the blueprint that have the indicated `\label{}`s (in this case, `\label{ref1}` and `\label{ref2}`).  These will create edges in the [dependency graph](https://teorth.github.io/equational_theories/blueprint/dep_graph_document.html) of the blueprint.
+- The macro `\leanok` in the statement of a definition or theorem indicates that the statement has been formalized.  The macro `\leanok` in the proof of a theorem indicates that the proof has been formalized.  This will create various colors in the nodes of the [dependency graph](https://teorth.github.io/equational_theories/blueprint/dep_graph_document.html) of the blueprint, as explained in the legend.
 
 Contributors are welcome to make suggestions or additions to the blueprint, whose files can be found [here](blueprint/src/chapter).
 
@@ -80,3 +97,8 @@ Proofs generated programmatically are also welcome. If you do this, you are enco
 ## Images
 
 Any images generated by the project can be placed in [this directory](images).
+
+## Other ways to contribute
+
+- Have an idea for some future directions that this project can go in?  Please contribute your thoughts to the [Future directions thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Future.20directions) on Zulip.
+- Want to share some feedback, impressions, or suggestions about the project?  You are encouraged to share them at the [Thoughts and impressions thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Thoughts.20and.20impressions.20thread) on the Zulip.
