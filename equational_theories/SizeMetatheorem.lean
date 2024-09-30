@@ -1,23 +1,18 @@
 import equational_theories.Completeness
+import equational_theories.Counting
 
-@[simp]
-def FreeMagma.size {α} (t : FreeMagma α) : Nat :=
-  match t with
-  | .Leaf _ => 0
-  | .Fork t₁ t₂ => FreeMagma.size t₁ + FreeMagma.size t₂ + 1
-
-theorem FreeMagma.sizeLtSubst {α} (t : FreeMagma α) (σ : α → FreeMagma α) :
-  FreeMagma.size t ≤ FreeMagma.size (t ⬝ σ) :=
+theorem FreeMagma.orderLtSubst {α} (t : FreeMagma α) (σ : α → FreeMagma α) :
+  FreeMagma.order t ≤ FreeMagma.order (t ⬝ σ) :=
 by
-  cases t <;> simp
+  cases t <;> simp [order]
   case Fork t u =>
-    have h₁ := FreeMagma.sizeLtSubst t σ
-    have h₂ := FreeMagma.sizeLtSubst u σ
+    have h₁ := FreeMagma.orderLtSubst t σ
+    have h₂ := FreeMagma.orderLtSubst u σ
     omega
 
 -- We use min here, as we want terms of *at least* size n.
 @[simp]
-def MagmaLaw.size {α} (E : MagmaLaw α) : Nat := min (FreeMagma.size E.lhs) (FreeMagma.size E.rhs)
+def MagmaLaw.size {α} (E : MagmaLaw α) : Nat := min (FreeMagma.order E.lhs) (FreeMagma.order E.rhs)
 
 @[inline, simp]
 def Ctx.IsOfSize {α} (Γ : Ctx α) (n : Nat) := ∀ E ∈ Γ, n ≤ MagmaLaw.size E
@@ -33,18 +28,16 @@ by
     case inl eq =>
       left; simp at *; rw [eq]
     case inr h =>
-      right; simp at *
-      rw [Nat.min_comm]
-      apply h
+      right; simp at *; omega
   case Trans _ _ _ h₁ h₂ =>
     cases (derive.PreservesSize _ _ sizeBound _ h₁) <;> cases (derive.PreservesSize _ _ sizeBound _ h₂) <;> simp at *
     case inl.inl h₁ h₂ =>
       left;
       rw [h₁, h₂]
     case inl.inr h₁ h₂ =>
-      right; rw [h₁]; trivial
+      right; rw [h₁]; omega
     case inr.inl h₁ h₂ =>
-      right; rw [← h₂]; trivial
+      right; rw [← h₁]; omega
     case inr.inr =>
       right; omega
   case Subst t u σ h =>
@@ -52,8 +45,8 @@ by
     case inl h => left; rw [h]
     case inr =>
       right
-      have h₁ := FreeMagma.sizeLtSubst t σ
-      have h₂ := FreeMagma.sizeLtSubst u σ
+      have h₁ := FreeMagma.orderLtSubst t σ
+      have h₂ := FreeMagma.orderLtSubst u σ
       omega
   case Cong h₁ h₂ =>
     cases (derive.PreservesSize _ _ sizeBound _ h₁) <;> cases (derive.PreservesSize _ _ sizeBound _ h₂) <;> simp at *
@@ -64,7 +57,7 @@ by
       right; rw [h₁]
       omega
     case inr.inl h₁ h₂ =>
-      right; rw [← h₂]; omega
+      right; rw [← h₁]; omega
     case inr.inr =>
       right; omega
 
