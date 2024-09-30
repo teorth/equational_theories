@@ -31,11 +31,23 @@ const Diagram: React.FC<DiagramProps> = ({ implications, facts }) => {
         }
       };
 
+      const addEdgeIfNotExists = (data : {
+          id: string;
+          from: string;
+          to: string;
+          arrows?: string;
+          color: string;
+      }) => {
+        if (!edges.get(data.id)) {
+          edges.add(data);
+        }
+      };
+
       // Add nodes and edges for implications
       implications.forEach(({ lhs, rhs }) => {
         addNodeIfNotExists(lhs, lhs);
         addNodeIfNotExists(rhs, rhs);
-        edges.add({ id: `implication-${lhs}-${rhs}`, from: lhs, to: rhs, arrows: 'to', color: '#97c2fc' }); // Implication edge color
+        addEdgeIfNotExists({ id: `implication-${lhs}-${rhs}`, from: lhs, to: rhs, arrows: 'to', color: '#97c2fc' }); // Implication edge color
       });
 
       // Add nodes and edges for non-implications
@@ -44,7 +56,7 @@ const Diagram: React.FC<DiagramProps> = ({ implications, facts }) => {
           addNodeIfNotExists(lhs, lhs);
           refuted.forEach(rhs => {
             addNodeIfNotExists(rhs, rhs);
-            edges.add({ id: `nonimplication-${lhs}-${rhs}`, from: lhs, to: rhs, arrows: 'to', color: '#ff9999' }); // Non-implication edge color
+            addEdgeIfNotExists({ id: `nonimplication-${lhs}-${rhs}`, from: lhs, to: rhs, arrows: 'to', color: '#ff9999' }); // Non-implication edge color
           });
         });
       });
