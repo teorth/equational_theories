@@ -191,7 +191,7 @@ def closure (inp : Array EntryVariant) : IO (Array Edge) := do
   let mut vis : Array Bool := Array.mkArray graph_size false
   let mut order : Array Nat := Array.mkEmpty graph_size
 
-  -- compute SCCs and the condensation graph using Kosaraju's algorithm
+  -- compute strongly connected components and the condensation graph using Kosaraju's algorithm
   for i in [:graph_size] do
     unless vis[i]! do
       (vis, order) := dfs1 graph i vis order
