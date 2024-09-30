@@ -155,7 +155,7 @@ by
 
 theorem substLFId {α} (t : FreeMagma α) : t ⬝ Lf = t :=
 by
-  cases t <;> simp [substFreeMagma]; trivial
+  cases t <;> simp [substFreeMagma]
   constructor <;> apply substLFId
 
 
