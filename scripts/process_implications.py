@@ -56,20 +56,24 @@ def parse_proofs_file_internal(universe, known_implies, known_not_implies, equat
                 universe.add(m.group(1))
                 known_implies.add((m.group(1), m.group(1)))
 
-    for line in open(file_name):
-        if m := re.match(r'theorem\s+.*\[Magma\s+G\]\s*:\s*(Equation\d+)\s*G\s*:=', line):
-            universe.add(m.group(1))
-            for eq in universe:
-                known_implies.add((eq, m.group(1)))
-        elif m := re.match(r'theorem\s+.*\[Magma\s+G\]\s*\(.\s*:\s*(Equation\d+)\s+G\)\s*:\s*(Equation\d+)\s+G\s*:=', line):
-            universe.add(m.group(1))
-            universe.add(m.group(2))
-            known_implies.add((m.group(1), m.group(2)))
-        elif m := re.match(r'theorem\s+.*:\s*∃.*\(_:\s*Magma\s+G\),\s*(Equation\d+)\s+G\s*∧\s*¬\s*(Equation\d+)\s+G\s*:=', line):
-            universe.add(m.group(1))
-            universe.add(m.group(2))
-            known_not_implies.add((m.group(1), m.group(2)))
-    return universe, known_implies, known_not_implies
+    try:
+        for line in open(file_name):
+            if m := re.match(r'theorem\s+.*\[Magma\s+G\]\s*:\s*(Equation\d+)\s*G\s*:=', line):
+                universe.add(m.group(1))
+                for eq in universe:
+                    known_implies.add((eq, m.group(1)))
+            elif m := re.match(r'theorem\s+.*\[Magma\s+G\]\s*\(.\s*:\s*(Equation\d+)\s+G\)\s*:\s*(Equation\d+)\s+G\s*:=', line):
+                universe.add(m.group(1))
+                universe.add(m.group(2))
+                known_implies.add((m.group(1), m.group(2)))
+            elif m := re.match(r'theorem\s+.*:\s*∃.*\(_:\s*Magma\s+G\),\s*(Equation\d+)\s+G\s*∧\s*¬\s*(Equation\d+)\s+G\s*:=', line):
+                universe.add(m.group(1))
+                universe.add(m.group(2))
+                known_not_implies.add((m.group(1), m.group(2)))
+        return universe, known_implies, known_not_implies
+    except UnicodeDecodeError as err:
+        print(f"File {file_name} encounter error: {err}")
+        raise err
 
 def parse_proofs_file(equations_file, file_name):
     universe = set()
