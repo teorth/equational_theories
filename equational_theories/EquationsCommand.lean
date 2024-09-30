@@ -26,4 +26,4 @@ elab tk:"equation " i:num " := " t:term : command => do
   let mut t : Term := ⟨t⟩
   for i in is.reverse do
     t ← `(∀ $(⟨i⟩) : $G, $t)
-  elabCommand (← `(command| abbrev%$tk $eqName ($G : Type _) [$inst : Magma $G] := $t))
+  elabCommand (← `(command| abbrev%$tk $eqName ($G : Type*) [$inst : Magma $G] := $t))

@@ -45,7 +45,7 @@ File.open("Makefile.#{campaign}", "w") { |f|
 
       f.puts <<-END
 @[equational_result]
-theorem Equation#{s1}_implies_Equation#{s2} (G: Type _) [Magma G] (h: Equation#{s1} G) : Equation#{s2} G := by
+theorem Equation#{s1}_implies_Equation#{s2} (G: Type*) [Magma G] (h: Equation#{s1} G) : Equation#{s2} G := by
   repeat intro
   apply h
 END

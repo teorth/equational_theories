@@ -7,9 +7,9 @@ the Magma operation `∘` differs from the usual multiplication operation `*`
 suggest associativity, whereas most of the Magmas in our application will not be anywhere close to
 associative.) -/
 
-universe u
+import Mathlib.Tactic.TypeStar
 
-class Magma (α : Type u) where
+class Magma (α : Type*) where
   /-- `a ∘ b` computes a binary operation of `a` and `b`. -/
   op : α → α → α
 
