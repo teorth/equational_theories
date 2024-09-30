@@ -29,7 +29,7 @@ Thus \eqref{op-idem} simplifies to $x \circ y = y \circ x$, which is Definition 
 \begin{theorem}[29 equivalent to 14]\label{29_equiv_14} \uses{eq29,eq14}\lean{Subgraph.Equation29_implies_Equation14}\leanok  Definition \ref{eq29} is equivalent to Definition \ref{eq14}.
 \end{theorem}
 
-This result was posed as  Problem A1 from Putnam 2001.
+This result was posed as Problem A1 from Putnam 2001.
 
 \begin{proof}\leanok\uses{duality} By Lemma \ref{duality} it suffices to show that Definition \ref{eq29} implies Definition \ref{eq14}.  From Definition \ref{eq29} one has
   $$ x = ((x \circ y) \circ x) \circ (x \circ y)$$
@@ -39,16 +39,13 @@ This result was posed as  Problem A1 from Putnam 2001.
 \end{proof}
 
 
-\begin{theorem}[29 equivalent to 14]\label{29_equiv_14} \uses{eq29,eq14}\lean{Subgraph.Equation29_implies_Equation14}\leanok  Definition \ref{eq29} is equivalent to Definition \ref{eq14}.
+\begin{theorem}[14 implies 29]\label{14_implies_29} \uses{eq29,eq14}\lean{Subgraph.Equation14_implies_Equation29}\leanok  Definition \ref{eq14} implies Definition \ref{eq29}.
 \end{theorem}
 
-This result was posed as  Problem A1 from Putnam 2001.
+This result was posed as Problem A1 from Putnam 2001.
 
-\begin{proof}\uses{duality} By Lemma \ref{duality} it suffices to show that Definition \ref{eq29} implies Definition \ref{eq14}.  From Definition \ref{eq29} one has
-  $$ x = ((x \circ y) \circ x) \circ (x \circ y)$$
-  and also
-  $$ y = (x \circ y) \circ x$$
-  giving $x = y \circ (x \circ y)$, which is Definition \ref{eq14}.
+\begin{proof}\leanok
+generated automatically
 \end{proof}
 
 % abbrev Equation381 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ y
