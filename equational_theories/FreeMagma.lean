@@ -1,3 +1,5 @@
+import Mathlib.Order.Defs
+
 import equational_theories.Conjecture
 import equational_theories.AllEquations
 
@@ -30,6 +32,18 @@ def evalInMagma {α : Type u} {G : Type v} [Magma G] (f : α -> G) : FreeMagma �
   | Lf a => f a
   | lchild ⋆ rchild => (evalInMagma f lchild) ∘ (evalInMagma f rchild)
 
+def dualizeTree {α : Type u} : FreeMagma α → FreeMagma α
+  | FreeMagma.Leaf a => FreeMagma.Leaf a
+  | FreeMagma.Fork lchild rchild => FreeMagma.Fork (dualizeTree rchild) (dualizeTree lchild)
+
+theorem DualizeTreeIsInvolution {α : Type u} (t : FreeMagma α) : dualizeTree (dualizeTree t) = t :=
+  match t with
+  | FreeMagma.Leaf a => refl (Lf a)
+  | FreeMagma.Fork lchild rchild => Eq.trans
+    (congrArg (fun s ↦ (dualizeTree $ dualizeTree lchild) ⋆ s) (DualizeTreeIsInvolution rchild))
+    (congrArg (fun s ↦ s ⋆ rchild) (DualizeTreeIsInvolution lchild))
+
+-- Metatheorem: if x0 = f(x1,x2,...), then x = y.
 theorem ExpressionEqualsAnything_implies_Equation2 (G: Type u) [Magma G]
   : (∃ n : Nat, ∃ expr : FreeMagma (Fin n), ∀ x : G, ∀ sub : Fin n → G, x = evalInMagma sub expr) → Equation2 G := by
   intros ex x y
@@ -52,3 +66,20 @@ theorem Equation514_implies_Equation2 (G : Type u) [Magma G]
     Lf 0 ⋆ (Lf 0 ⋆ (Lf 0 ⋆ Lf 0)), -- The syntactic representation of y ∘ (y ∘ (y ∘ y)))
     fun k sub ↦ univ k (sub 0)
   ⟩
+
+def EquationLaw := FreeMagma Nat × FreeMagma Nat
+
+def satisfiesLaw (G : Type u) [Magma G] (law : EquationLaw) : Prop :=
+  ∀ sub : Nat → G, evalInMagma sub law.1 = evalInMagma sub law.2
+
+def dualizeLaw (law : EquationLaw) : EquationLaw :=
+  (dualizeTree law.1, dualizeTree law.2)
+
+theorem DualizeLawIsInvolution (law : EquationLaw) : dualizeLaw (dualizeLaw law) = law :=
+  Eq.trans
+    (congrArg (fun expr ↦ (expr, dualizeTree $ dualizeTree law.2)) (DualizeTreeIsInvolution law.1))
+    (congrArg (fun expr ↦ (law.1, expr)) (DualizeTreeIsInvolution law.2))
+
+infixl:65 " ⊨ " => satisfiesLaw
+
+def EquationLawImplication (law1 law2 : EquationLaw) := (∀ (G : Type u) [Magma G], G ⊨ law1 → G ⊨ law2)
