@@ -1,6 +1,7 @@
 import equational_theories.Magma
 import equational_theories.Equations
 import equational_theories.EquationsCommand
+import equational_theories.EquationalResult
 
 /-! List of equational laws being studied -/
 

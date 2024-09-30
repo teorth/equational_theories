@@ -17,7 +17,7 @@ def get_eq():
         variables = variables.strip().split()
         rule = eq.split(",")[1]
         fns.append((variables, utils.make_tree(rule)))
-    
+
     return fns
 
 equations = get_eq()
@@ -43,7 +43,7 @@ for i,(v_a, a) in enumerate(equations):
         remapk = tuple(sorted(remap.items()))
         if remapk not in remap_to_rule:
             remap_to_rule[remapk] = []
-        oo = (f"theorem Equation{i+1}_implies_Equation{j+1} (G : Type*) [Magma G] (h : Equation{i+1} G) : Equation{j+1} G := λ " + " ".join(v_b) + " => h " + " ".join([remap.get(x) or x for x in v_a]))
+        oo = (f"@[equational_result]\ntheorem Equation{i+1}_implies_Equation{j+1} (G : Type*) [Magma G] (h : Equation{i+1} G) : Equation{j+1} G := λ " + " ".join(v_b) + " => h " + " ".join([remap.get(x) or x for x in v_a]))
         remap_to_rule[remapk].append(oo)
 
 
@@ -64,5 +64,3 @@ namespace SimpleRewrites
 
 """ + proofs + "\nend SimpleRewrites"
     open(fname, "w").write(proofs)
-
-
