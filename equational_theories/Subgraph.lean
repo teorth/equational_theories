@@ -250,24 +250,31 @@ theorem Equation1689_implies_h4 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a
     calc a ∘ (b ∘ ((b ∘ c) ∘ c)) = (a ∘ b) ∘ b := by nth_rewrite 1 [ h b (a ∘ b) c]; rw [Equation1689_implies_h2 G h a b ((b ∘ c) ∘ c)]
       _ = (a ∘ b) ∘ b := by rfl
 
-theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G:= by
-
-
-  have h5: ∀ a b c : G, ((a ∘ (b ∘ c)) ∘ c) ∘ c = b ∘ c := by
+theorem Equation1689_implies_h5 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, ((a ∘ (b ∘ c)) ∘ c) ∘ c = b ∘ c := by
     intro a b c
-    sorry
-  have h6: ∀ a b c d : G, (a ∘ (b ∘ (c ∘ d))) ∘ (c ∘ d) = b ∘ (c ∘ d) := by
+    calc ((a ∘ (b ∘ c)) ∘ c) ∘ c = (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ b) ∘ b)) := by rw [Equation1689_implies_h4 G h]
+    _ = b ∘ c := by rw[Equation1689_implies_h3 G h]
+
+theorem Equation1689_implies_h6 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c d : G, (a ∘ (b ∘ (c ∘ d))) ∘ (c ∘ d) = b ∘ (c ∘ d) := by
     intro a b c d
     have hh : (a ∘ (b ∘ (c ∘ d))) ∘ (((b ∘ (c ∘ d)) ∘ d) ∘ d) = (b ∘ (c ∘ d)) := by rw[← h _ _ _]
-    rw [h5] at hh
+    rw [Equation1689_implies_h5 G h] at hh
     exact hh
 
-  have h7: ∀ a b c : G, (a ∘ (b ∘ c)) ∘ (b ∘ c) = a ∘ (b ∘ c) := by
+theorem Equation1689_implies_h7 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, (a ∘ (b ∘ c)) ∘ (b ∘ c) = a ∘ (b ∘ c) := by
     intro a b c
-    sorry
-  have h8: ∀ a b c : G, ((a ∘ b) ∘ ((b ∘ c) ∘ c)) ∘ ((b ∘ c) ∘ c)=b := by
+    calc (a ∘ (b ∘ c)) ∘ (b ∘ c) = ((a ∘ (a ∘ (b ∘ c))) ∘ (b ∘ c)) ∘ (b ∘ c) := by rw[Equation1689_implies_h6 G h]
+    _ = a ∘ (b ∘ c) := by rw[Equation1689_implies_h5 G h]
+
+theorem Equation1689_implies_h8 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, ((a ∘ b) ∘ ((b ∘ c) ∘ c)) ∘ ((b ∘ c) ∘ c)=b := by
     intro a b c
-    sorry
+    calc
+      ((a ∘ b) ∘ ((b ∘ c) ∘ c)) ∘ ((b ∘ c) ∘ c) = ((a ∘ ((a∘b)∘((b∘c)∘c))) ∘ ((b ∘ c) ∘ c)) ∘ ((b ∘ c) ∘ c) := by nth_rewrite 1 [h b a c]; rfl
+      _ = (a∘b)∘((b∘c)∘c) := by rw [Equation1689_implies_h5 G h]
+      _ = b := by rw [← h]
+
+theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G:= by
+
   have h9: ∀ a b : G, a ∘ ((a ∘ b) ∘ b) = a := by
     intro a b
     sorry
