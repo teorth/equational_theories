@@ -12,7 +12,7 @@ results concerning the entire list of equations.  If you are proving many result
 equation of interest, consider transferring it into `Equations.lean`.
 
 The equations were enumerated from
-`https://github.com/teorth/equational_theories/blob/main/scripts/extract_implications.lean`, and can
+`https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py`, and can
 be described as the set of all equational laws involving at most four magma operations, up to
 symmetry and relabeling.
 
@@ -1707,7 +1707,7 @@ equation 1685 := x = (y ∘ x) ∘ ((x ∘ y) ∘ y)
 equation 1686 := x = (y ∘ x) ∘ ((x ∘ y) ∘ z)
 equation 1687 := x = (y ∘ x) ∘ ((x ∘ z) ∘ x)
 equation 1688 := x = (y ∘ x) ∘ ((x ∘ z) ∘ y)
-equation 1689 := x = (y ∘ x) ∘ ((x ∘ z) ∘ z)
+-- equation 1689 := x = (y ∘ x) ∘ ((x ∘ z) ∘ z)
 equation 1690 := x = (y ∘ x) ∘ ((x ∘ z) ∘ w)
 equation 1691 := x = (y ∘ x) ∘ ((y ∘ x) ∘ x)
 equation 1692 := x = (y ∘ x) ∘ ((y ∘ x) ∘ y)
