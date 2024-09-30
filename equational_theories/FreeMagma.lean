@@ -8,16 +8,24 @@ inductive FreeMagma (α : Type u)
   | Leaf : α → FreeMagma α
   | Fork : FreeMagma α → FreeMagma α → FreeMagma α
 
+instance (α : Type u) : Magma (FreeMagma α) where
+  op := FreeMagma.Fork
+
 infixl:65 " ⋆ " => FreeMagma.Fork
+
+@[simp]
+theorem FreeMagma_op_eq_fork (α : Type u) (a b : FreeMagma α) : a ∘ b = a ⋆ b := rfl
+
+@[match_pattern]
 def Lf {α : Type u} : (α → FreeMagma α) := FreeMagma.Leaf
 
 def fmapFreeMagma {α : Type u} {β : Type v} (f : α → β) : FreeMagma α → FreeMagma β
-  | FreeMagma.Leaf a => FreeMagma.Leaf (f a)
-  | FreeMagma.Fork lchild rchild => FreeMagma.Fork (fmapFreeMagma f lchild) (fmapFreeMagma f rchild)
+  | Lf a => FreeMagma.Leaf (f a)
+  | lchild ⋆ rchild => FreeMagma.Fork (fmapFreeMagma f lchild) (fmapFreeMagma f rchild)
 
 def evalInMagma {α : Type u} {G : Type v} [Magma G] (f : α -> G) : FreeMagma α → G
-  | FreeMagma.Leaf a => f a
-  | FreeMagma.Fork lchild rchild => (evalInMagma f lchild) ∘ (evalInMagma f rchild)
+  | Lf a => f a
+  | lchild ⋆ rchild => (evalInMagma f lchild) ∘ (evalInMagma f rchild)
 
 theorem ExpressionEqualsAnything_implies_Equation2 (G: Type u) [Magma G]
   : (∃ n : Nat, ∃ expr : FreeMagma (Fin n), ∀ x : G, ∀ sub : Fin n → G, x = evalInMagma sub expr) → Equation2 G := by
