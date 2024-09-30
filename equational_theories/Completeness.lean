@@ -6,13 +6,11 @@ import Mathlib.Data.Set.Defs
 
 #check Set
 
-structure SynEqn (α : Type) where
+structure MagmaLaw (α : Type) where
   lhs : FreeMagma α
   rhs : FreeMagma α
 
-infix:60 " ≃ " => SynEqn.mk
-
-#check (Lf 1 ≃ Lf 2 : SynEqn Nat)
+infix:60 " ≃ " => MagmaLaw.mk
 
 def substFreeMagma {α β} (t : FreeMagma α) (σ : α → FreeMagma β) : FreeMagma β :=
 match t with
@@ -24,41 +22,34 @@ infix:66 " ⬝ " => substFreeMagma
 #check ((Lf 0) ⬝ (λ i ↦ Lf i))
 
 @[inline, simp]
-def Ctx α := Set (SynEqn α)
+def Ctx α := Set (MagmaLaw α)
 
 #print Membership
 
 #print Set.instMembership
 
 -- FIXME: figure out how to remove this.
-instance Ctx.Membership α : Membership (SynEqn α) (Ctx α) := ⟨ Set.instMembership.mem ⟩
+instance Ctx.Membership α : Membership (MagmaLaw α) (Ctx α) := ⟨ Set.instMembership.mem ⟩
+
+section DeriveDef
+
+set_option hygiene false
+
+local infix:50 " ⊢ " =>  derive
 
 -- We keep this in type, because we're going to want to gather
 -- the (finite!) set of required axioms later.
-inductive derive {α} : Ctx α → SynEqn α → Type :=
-| Ax Γ E (h : E ∈ Γ) : derive Γ E
-| Ref Γ t : derive Γ (t ≃ t)
-| Sym Γ t u : derive Γ (t ≃ u) → derive Γ (u ≃ t)
-| Trans Γ t u v : derive Γ (t ≃ u) → derive Γ (u ≃ v) → derive Γ (t ≃ v)
+inductive derive {α} : Ctx α → MagmaLaw α → Type :=
+| Ax Γ E (h : E ∈ Γ) : Γ ⊢ E
+| Ref Γ t : Γ ⊢ (t ≃ t)
+| Sym Γ t u : Γ ⊢ (t ≃ u) → Γ ⊢ (u ≃ t)
+| Trans Γ t u v : Γ ⊢ (t ≃ u) → Γ ⊢ (u ≃ v) → Γ ⊢ (t ≃ v)
 -- This is not as polymorphic as it could be, shouldn't be an issue at the moment
-| Subst Γ t u σ : derive Γ (t ≃ u) → derive Γ (t ⬝ σ ≃ u ⬝ σ)
-| Cong₁ Γ t₁ t₂ u : derive Γ (t₁ ≃ t₂) → derive Γ (t₁ ⋆ u ≃ t₂ ⋆ u)
-| Cong₂ Γ t u₁ u₂ : derive Γ (u₁ ≃ u₂) → derive Γ (t ⋆ u₁ ≃ t ⋆ u₂)
+| Subst Γ t u σ : Γ ⊢ (t ≃ u) → Γ ⊢ (t ⬝ σ ≃ u ⬝ σ)
+| Cong Γ t₁ t₂ u₁ u₂ : Γ ⊢ (t₁ ≃ t₂) → Γ ⊢ (u₁ ≃ u₂) → Γ ⊢ (t₁ ⋆ u₁ ≃ t₂ ⋆ u₂)
 
-<<<<<<< HEAD
-def modelsEqPhi {α G : Type} [Magma G] (φ : α → G) (E : SynEqn α) : Prop :=
-  evalInMagma φ E.lhs = evalInMagma φ E.rhs
+end DeriveDef
 
-def modelsEq {α : Type} (G : Type) [Magma G] (E : SynEqn α) := ∀ (φ : α → G), modelsEqPhi φ E
-
-def modelsSet {α : Type} (G : Type) [Magma G] (Γ : Set (SynEqn α)) : Prop :=
-  ∀ E ∈ Γ, modelsEq G E
-
-
-def models {α} (Γ : Ctx α) (E : SynEqn α) : Prop :=
-  ∀ (G : Type)[Magma G], modelsSet G Γ → modelsEq G E
-
-=======
 def satisfiesPhi {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
   evalInMagma φ E.lhs = evalInMagma φ E.rhs
 
@@ -75,7 +66,6 @@ infix:50 " ⊧ " => (satisfies)
 
 infix:50 " ⊧ " => (satisfiesSet)
 
->>>>>>> Start adding theorems to the blueprint, clean up notation in Lean.
 infix:50 " ⊧ " => (models)
 
 infix:50 " ⊢ " => (derive)
@@ -113,18 +103,6 @@ by
     simp [models, satisfiesPhi, evalInMagma] at *
     repeat rw [SubstEval]
     rw [h]; trivial
-<<<<<<< HEAD
-  case Cong₁ _ _ _ prf =>
-    intros φ mset
-    have h := Soundness _ _ prf
-    simp [models, modelsEqPhi, evalInMagma] at *
-    rw [h]; trivial
-  case Cong₂ _ _ _ prf =>
-    intros φ mset
-    have h := Soundness _ _ prf
-    simp [models, modelsEqPhi, evalInMagma] at *
-    rw [h]; trivial
-=======
   case Cong _ _ _ prf₁ prf₂ =>
     intros _ _
     have h₁ := Soundness _ _ prf₁
@@ -221,7 +199,6 @@ by
   apply funext
   trivial
 
-
 theorem FreeMagmaWithLaws.isModel {α} (Γ : Ctx α) : FreeMagmaWithLaws Γ ⊧ Γ :=
 by
   simp [satisfiesSet]
@@ -240,4 +217,3 @@ by
   apply FreeMagmaWithLaws.isDerives
   apply h
   apply FreeMagmaWithLaws.isModel
->>>>>>> Start adding theorems to the blueprint, clean up notation in Lean.
