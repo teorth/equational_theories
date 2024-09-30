@@ -19,6 +19,8 @@ theorem FreeMagma_op_eq_fork (α : Type u) (a b : FreeMagma α) : a ∘ b = a �
 @[match_pattern]
 def Lf {α : Type u} : (α → FreeMagma α) := FreeMagma.Leaf
 
+namespace FreeMagma
+
 def fmapFreeMagma {α : Type u} {β : Type v} (f : α → β) : FreeMagma α → FreeMagma β
   | Lf a => FreeMagma.Leaf (f a)
   | lchild ⋆ rchild => FreeMagma.Fork (fmapFreeMagma f lchild) (fmapFreeMagma f rchild)
@@ -49,3 +51,5 @@ theorem Equation514_implies_Equation2 (G : Type u) [Magma G]
     Lf 0 ⋆ (Lf 0 ⋆ (Lf 0 ⋆ Lf 0)), -- The syntactic representation of y ∘ (y ∘ (y ∘ y)))
     fun k sub ↦ univ k (sub 0)
   ⟩
+
+end FreeMagma
