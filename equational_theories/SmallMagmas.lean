@@ -25,23 +25,22 @@ private def ofMatrix {n : Nat} [Inhabited (Fin n)]
   table[x.val]![y.val]!
 
 /-!
-A few magmas of size 2.
-(Maybe all up to isomorphisms and reversing the arguments, didn't think it through completely)
+All magmas of size 2, up to isomorphism and look at the dual operation.
 -/
 
-/-- `x ∘ y => 0` -/
+/-- `x ∘ y => ⊥` -/
 def Magma2a : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[0, 0] ])
 
-/-- `x ∘ y => x * y % 2` -/
+/-- `x ∘ y => x ∧ y` -/
 def Magma2b : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[0, 1] ])
 
-/-- `x ∘ y => x * (1-y) % 2` -/
+/-- `x ∘ y => x ∧ ¬ y` -/
 def Magma2c : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[1, 0] ])
 
 /-- `x ∘ y => x` -/
 def Magma2d : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[1, 1] ])
 
-/-- `x ∘ y => x + y` -/
+/-- `x ∘ y => x ^ y` -/
 def Magma2e : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 1], #[1, 0] ])
 
 /-- `x ∘ y = x || y` -/
