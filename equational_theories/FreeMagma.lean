@@ -68,18 +68,3 @@ theorem Equation514_implies_Equation2 (G : Type u) [Magma G]
   ⟩
 
 def EquationLaw := FreeMagma Nat × FreeMagma Nat
-
-def satisfiesLaw (G : Type u) [Magma G] (law : EquationLaw) : Prop :=
-  ∀ sub : Nat → G, evalInMagma sub law.1 = evalInMagma sub law.2
-
-def dualizeLaw (law : EquationLaw) : EquationLaw :=
-  (dualizeTree law.1, dualizeTree law.2)
-
-theorem DualizeLawIsInvolution (law : EquationLaw) : dualizeLaw (dualizeLaw law) = law :=
-  Eq.trans
-    (congrArg (fun expr ↦ (expr, dualizeTree $ dualizeTree law.2)) (DualizeTreeIsInvolution law.1))
-    (congrArg (fun expr ↦ (law.1, expr)) (DualizeTreeIsInvolution law.2))
-
-infixl:65 " ⊨ " => satisfiesLaw
-
-def EquationLawImplication (law1 law2 : EquationLaw) := (∀ (G : Type u) [Magma G], G ⊨ law1 → G ⊨ law2)
