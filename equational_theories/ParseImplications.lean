@@ -71,7 +71,7 @@ partial def parseFacts (thm_ty : Expr) : MetaM (Option Facts) := do
   | _ => return none
 where
   -- NB: This is written as a tail-recursive function, else some large facts statements
-  -- cauase this to blow the stack
+  -- cause this to blow the stack
   go (todo : Array Expr) (satisfied refuted : Array String) : Option Facts := do
     if todo.isEmpty then
       return ⟨satisfied, refuted⟩
