@@ -115,7 +115,7 @@ Appears in Putnam 1978, Problem A4, part (b).
 \begin{definition}[Equation 3722]\label{eq3722}\lean{Equation3722}\leanok\uses{magma-def}  Equation 3722 is the law $0 \circ 1  \formaleq  (0 \circ 1) \circ (0 \circ 1)$ (or the equation $x \circ y = (x \circ y) \circ (x \circ y)$).
 \end{definition}
 
-Appears in Putnam 1978, Problem A4, part (a).
+Appears in Putnam 1978, Problem A4, part (a).  It is self-dual.
 
 \begin{definition}[Equation 3744]\label{eq3744}\lean{Equation3744}\leanok\uses{magma-def}  Equation 3744 is the law $0 \circ 1  \formaleq  (0 \circ 2) \circ (3 \circ 1)$ (or the equation $x \circ y = (x \circ z) \circ (w \circ y)$).
 \end{definition}
@@ -160,12 +160,14 @@ Here is a more complicated law, introduced by Kisielewicz \cite{Kisielewicz}:
 
 We will be interested in seeing which laws imply which other laws, in the sense that magmas obeying the former law automatically obey the latter.  We will also be interested in \emph{anti-implications} showing that one law does \emph{not} imply another, by producing examples of magmas that obey the former law but not the latter.
 
-The singleton or empty magma obeys all equational laws.  One can ask whether an equational law admits nontrivial finite or infinite models.  The following result was established in \cite{Kisielewicz}:
+The singleton or empty magma obeys all equational laws.  One can ask whether an equational law admits nontrivial finite or infinite models.  An \emph{Austin law} is a law which admits infinite models, but no nontrivial finite models.  Austin \cite{austin} established the first such law, namely the order $9$ law
+$$ (((1 \circ 1) \circ 1) \circ 0) \circ (((1 \circ 1) \circ ((1 \circ 1) \circ 1)) \circ 2) = 0.$$
+A shorter Austin law (order $6$) was established in \cite{Kisielewicz}:
 
 \begin{theorem}[Kisielewicz theorem]
   \lean{InfModel.Finite.EquationKis_implies_Equation2,InfModel.EquationKis_not_implies_Equation2}\leanok
   \label{kis-thm}\uses{eq374794,eq2}
-  Definition \ref{eq374794} has an infinite model, but no non-trivial finite model.
+  Definition \ref{eq374794} is an Austin law.
 \end{theorem}
 
 \begin{proof} \leanok Suppose for contradiction that we have a non-trivial model of Definition \ref{eq374794}. Write $y^2 := y \circ y$ and $y^3 := y^2 \circ y$. For any $y,z$, introduce the functions $f_y: x \mapsto y^3 \circ x$ and $g_{yz}: x \mapsto x \circ (y^2 \circ z)$.  Definition \ref{eq374794} says that $g_{yz}$ is a left-inverse of $f_y$, hence by finiteness these are inverses and $g_{yz}$ is independent of $z$. In particular
@@ -183,3 +185,30 @@ To construct an infinite magma, take the positive integers $\Z^+$ with the opera
 \end{itemize}
 Then $y^2 = 2^y$, $y^3 = 1$, and $y^2 \circ z$ a power of two for all $y, z$, and $(1 \circ x) \circ w = x$ for all $x$ whenever $w$ is a power of two, so Definition \ref{eq374794} is satisfied.
 \end{proof}
+
+An even shorter law (order $5$) was obtained by the same author in a followup paper \cite{Kisielewicz2}:
+
+\begin{theorem}[Kisielewicz theoremII]\label{kis-thm2}\uses{eq2}
+$(((1 \circ 1) \circ 1) \circ 0) \circ (1 \circ 2) \formaleq 0$ is an Austin law.
+\end{theorem}
+
+\begin{proof} Using the $y^2$ and $y^3$ notation as before, the law reads
+\begin{equation}\label{kis2-law}
+   (y^3 \circ x) \circ (y \circ z) = x.
+  \end{equation}
+In particular, for any $y$, the map $T_y \colon x \mapsto y^3 \circ x$ is injective, hence bijective in a finite model $G$.  In particular we can find a function $f : G \to G$ such that $T_y f(y) = y^3$ for all $y$  Applying \eqref{kis2-law} with $x = f(y)$, we conclude
+$$ T_y(y \circ z) = y^3 \circ (y \circ z) = f(y) $$
+and thus $y \circ z$ is independent of $z$ by injectivity of $T_y$.  Thus, the left-hand side of \eqref{kis2-law} does not depend on $x$, and so the model is trivial.  This shows there are no non-trivial finite models.
+
+To establish an infinite model, use $\N$ with $x \circ y$ defined by requiring
+$$ y \circ y = 2^y; \quad 2^y \circ y = 3^y$$
+and
+$$ 3^y \circ x = 3^y 5^x$$
+for $x \neq 3^y$, and
+$$ (3^y 5^x) \circ z = x$$
+for $z \neq 3^y 5^x$.  Finally set
+$$ 2^{3^y} \circ z = 3^y$$
+for $z \neq 3^y, 2^{3^y}$.  All other assignments of $\circ$ may be made arbitrarily. It is then a routine matter to establish \eqref{kis2-law}.
+\end{proof}
+
+In that paper a computer search was also used to show that no law of order four or less is an Austin law.
