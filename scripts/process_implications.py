@@ -32,6 +32,27 @@ def transitive_closure(pairs):
     return closure
 
 
+def longest_path(pairs, src, dst):
+    fwd = defaultdict(list)
+    for a, b in pairs:
+        if b != a:
+            fwd[a].append(b)
+    cache = {dst: (dst,)}
+    # Explicit stack since we can't DFS over 4000 vertices in Python
+    stack = [src]
+    while stack:
+        node = stack[-1]
+        if node in cache:
+            stack.pop()
+            continue
+        if child := next((child for child in fwd[node] if child not in cache), None):
+            stack.append(child)
+            continue
+        cache[node] = (node,) + max((cache[child] for child in fwd[node]), key=len)
+        stack.pop()
+    return cache[src]
+
+
 def get_unknown_implications(universe, known_implies, known_not_implies):
     all_implications = transitive_closure(known_implies)
 
@@ -113,11 +134,10 @@ def parse_extracted_implications():
         names.add(name)
         for eq in comp:
             comp_names[eq] = name
-    assert 'Equation2' in names
     print(f'Processing {len(names)} equivalence classes of {len(universe)} laws')
 
-    all_implications = transitive_closure(known_implies)
-    all_implications = {(lhs, rhs) for lhs, rhs in all_implications if lhs in names and rhs in names}
+    comp_implies = {(comp_names[lhs], comp_names[rhs]) for lhs, rhs in known_implies}
+    all_implications = transitive_closure(comp_implies)
     print('All implications:', len(all_implications))
 
     fwd_implications = {eq: set() for eq in names}
@@ -138,16 +158,26 @@ def parse_extracted_implications():
     irreducible = missing_implications
     irreducible = {
         (lhs, rhs) for lhs, rhs in irreducible
-        if all((pred, rhs) not in irreducible for pred in bwd_implications[lhs] if pred != lhs)
+        if all((succ, rhs) not in irreducible for succ in fwd_implications[lhs] if succ != lhs)
     }
     irreducible = {
         (lhs, rhs) for lhs, rhs in irreducible
-        if all((lhs, succ) not in irreducible for succ in fwd_implications[rhs] if succ != rhs)
+        if all((lhs, pred) not in irreducible for pred in bwd_implications[rhs] if pred != rhs)
     }
-    print(f'Irreducible missing implications: {len(irreducible)}')
 
+    G = nx.DiGraph()
+    G.add_nodes_from(names)
+    G.add_edges_from(comp_implies)
+    G.add_edges_from(irreducible)
+    print('Equivalence classes if all conjectured implications hold:', len(list(nx.strongly_connected_components(G))))
+
+    path = longest_path({(lhs, rhs) for lhs, rhs in all_implications if (rhs, lhs) in all_negative_implications}, 'Equation2', 'Equation1')
+    print('Longest known chain of non-equivalent implications: ', ' => '.join(eq[8:] for eq in path))
+
+    print(f'Irreducible missing implications: {len(irreducible)}')
     for lhs, rhs in sorted(irreducible, key=lambda x: (int(x[0][8:]), int(x[1][8:]))):
         print(lhs, '=>', rhs)
+
 
 if __name__ == '__main__':
     if len(argv) == 1:
