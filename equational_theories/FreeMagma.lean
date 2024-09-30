@@ -23,8 +23,6 @@ notation "Lf" => FreeMagma.Leaf
 
 instance FreeMagma.Magma {α} : Magma (FreeMagma α) := ⟨ Fork ⟩
 
-instance FreeMagma.Magma {α} : Magma (FreeMagma α) := ⟨ Fork ⟩
-
 def fmapFreeMagma {α : Type u} {β : Type v} (f : α → β) : FreeMagma α → FreeMagma β
   | Lf a => FreeMagma.Leaf (f a)
   | lchild ⋆ rchild => FreeMagma.Fork (fmapFreeMagma f lchild) (fmapFreeMagma f rchild)
