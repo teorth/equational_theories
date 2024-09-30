@@ -129,14 +129,14 @@ instance FreeMagmaWithLaws.Magma {α} (Γ : Ctx α) : Magma (FreeMagmaWithLaws �
 
 theorem FreeMagmaWithLaws.evalInMagmaIsQuot {α} (Γ : Ctx α) (t : FreeMagma α) (σ : α → FreeMagma α):
     evalInMagma (embed Γ ∘ σ) t = embed Γ (t ⬝ σ) := by
-  cases t <;> simp [evalInMagma]
-  case Leaf => trivial
+  cases t <;> rw [evalInMagma]
+  case Leaf => rfl
   case Fork =>
-  simp [Magma.op, ForkWithLaws]
-  repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot]
-  simp [Quotient.lift₂, Quotient.mk, Quotient.lift]
-  apply Quot.sound; simp [Setoid.r, RelOfLaws, substFreeMagma]
-  constructor; apply derive.Ref
+    simp only [Magma.op, ForkWithLaws]
+    repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot]
+    simp only [Quotient.lift₂]
+    apply Quot.sound; rw [substFreeMagma]
+    exact ⟨derive.Ref _ _⟩
 
 theorem substLFId {α} (t : FreeMagma α) : t ⬝ Lf = t := by
   cases t <;> simp [substFreeMagma]
@@ -150,17 +150,16 @@ theorem FreeMagmaWithLaws.isDerives {α} (Γ : Ctx α) (E : MagmaLaw α) :
   FreeMagmaWithLaws Γ ⊧ E → Nonempty (Γ ⊢ E) := by
   simp [satisfies, satisfiesPhi, evalInMagma]
   intros eq; have h := (eq (LfEmbed Γ))
-  simp at h
+  simp only [LfEmbed] at h
   repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot] at h
   have h' := Quotient.exact h
   simp [HasEquiv.Equiv, Setoid.r, RelOfLaws] at h'
   repeat rw [substLFId] at h'
-  apply h'
+  exact h'
 
 -- Sadly, we falter here and use choice. Somewhat confident it's not needed.
 theorem PhiAsSubst_aux {α} (Γ : Ctx α) (φ : α → FreeMagmaWithLaws Γ) :
-  ∃ (σ : α → FreeMagma α), ∀ x, φ x = (embed Γ) (σ x) :=
-by
+  ∃ (σ : α → FreeMagma α), ∀ x, φ x = (embed Γ) (σ x) := by
   apply Classical.axiomOfChoice (r := λ x y ↦ φ x = (embed Γ) y)
   intros x
   have ⟨a, h⟩ := (Quotient.exists_rep (φ x))
@@ -168,15 +167,11 @@ by
   symm; trivial
 
 theorem PhiAsSubst {α} (Γ : Ctx α) (φ : α → FreeMagmaWithLaws Γ) :
-  ∃ (σ : α → FreeMagma α), φ = (embed Γ) ∘ σ :=
-by
-  have ⟨ σ, h ⟩ := PhiAsSubst_aux Γ φ
-  exists σ
-  apply funext
-  trivial
+  ∃ (σ : α → FreeMagma α), φ = (embed Γ) ∘ σ := by
+  have ⟨σ, h⟩ := PhiAsSubst_aux Γ φ
+  exact ⟨σ, funext fun x ↦ h x⟩
 
-theorem FreeMagmaWithLaws.isModel {α} (Γ : Ctx α) : FreeMagmaWithLaws Γ ⊧ Γ :=
-by
+theorem FreeMagmaWithLaws.isModel {α} (Γ : Ctx α) : FreeMagmaWithLaws Γ ⊧ Γ := by
   simp [satisfiesSet]
   intros E mem φ
   simp [satisfiesPhi]
@@ -184,12 +179,8 @@ by
   rw [eq_sig]
   repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot]
   apply Quotient.sound; simp [HasEquiv.Equiv, Setoid.r, RelOfLaws]
-  constructor
-  apply derive.Subst; apply derive.Ax; trivial
+  exact ⟨derive.Subst _ _ _ _ (derive.Ax _ _ mem)⟩
 
 -- Birkhoff's completeness theorem
 theorem Completeness {α} (Γ : Ctx α) (E : MagmaLaw α) (h : Γ ⊧ E) : Nonempty (Γ ⊢ E) :=
-by
-  apply FreeMagmaWithLaws.isDerives
-  apply h
-  apply FreeMagmaWithLaws.isModel
+  FreeMagmaWithLaws.isDerives _ _ (h _ (FreeMagmaWithLaws.isModel _))
