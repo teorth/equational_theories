@@ -7,6 +7,7 @@ universe v
 inductive FreeMagma (α : Type u)
   | Leaf : α → FreeMagma α
   | Fork : FreeMagma α → FreeMagma α → FreeMagma α
+deriving DecidableEq
 
 instance (α : Type u) : Magma (FreeMagma α) where
   op := FreeMagma.Fork

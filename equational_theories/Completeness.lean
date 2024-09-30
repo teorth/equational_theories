@@ -9,8 +9,9 @@ import Mathlib.Data.Set.Defs
 structure MagmaLaw (α : Type) where
   lhs : FreeMagma α
   rhs : FreeMagma α
+deriving DecidableEq
 
-infix:60 " ≃ " => MagmaLaw.mk
+local infix:60 " ≃ " => MagmaLaw.mk
 
 def substFreeMagma {α β} (t : FreeMagma α) (σ : α → FreeMagma β) : FreeMagma β :=
 match t with
