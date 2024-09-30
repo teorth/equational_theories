@@ -9,6 +9,8 @@ from typing import List, Callable
 
 import re
 
+DEBUG = False
+
 # Define the expression node
 class ExprNode:
     def __init__(self, value, left=None, right=None):
@@ -136,6 +138,10 @@ fns = get_fns()
 
 def check_rule(nvar, check, S, op):
     for args in product(S, repeat=nvar):
+        if DEBUG:
+            VARS = "xyzwuv"
+            print("Checking equation on assignments",
+                    ", ".join([f"{VARS[i]}={args[i]}" for i in range(nvar)]))
         if not check(op, *args):
             return False
     return True
@@ -151,11 +157,17 @@ for row in open("../data/refutations.txt").readlines()[3*30:]:
 
         ok = []
         for x in proves:
+            if DEBUG:
+                print(f"Showing that {fns[x-1][0]}")
+                print(f"is correct on Magma\n{table}")
             string, nvar, fn = fns[x-1]
-            op = lambda a,b: table[a][b]
+            def op(x, y):
+                if DEBUG:
+                    print(f"table[{x}, {y}] = {table[x, y]}")
+                return table[x, y]
 
             this = check_rule(nvar, fn, S, op)
-            #print(this, string)
+            print(this, string)
             assert this
             
             ok.append(this)
