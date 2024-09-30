@@ -118,8 +118,8 @@ end Result
 namespace Conjecture
 
 /--
-Like `proof_wanted` from Batteries, but records the conjecture in an
-environment extension.
+Like `proof_wanted` from Batteries, but "leaks" a `@[equational_result]` attribute modifier,
+marking it as a conjecture.
 -/
 @[command_parser]
 def «conjecture» := leading_parser
@@ -139,12 +139,13 @@ def elabConjecture : CommandElab
       elabDeclaration <| ← `(command| $mods:declModifiers
                                       theorem $name $args* : $res := helper _)
 
+      -- If we add a new entry to the equational results list
       if original_length < (equationalResultsExtension.getState (← getEnv)).size then
         return some (equationalResultsExtension.getState (← getEnv)).back
       return none
 
     if let some entry := maybe_entry then
-      modifyEnv fun env =>
+      modifyEnv fun env => -- then add it as a conjecture
         equationalResultsExtension.addEntry env entry.toConjecture
     pure ()
   | _ => throwUnsupportedSyntax
