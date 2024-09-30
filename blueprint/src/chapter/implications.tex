@@ -39,28 +39,6 @@ This result was posed as  Problem A1 from Putnam 2001.
 \end{proof}
 
 
-\begin{theorem}[29 equivalent to 14]\label{29_equiv_14} \uses{eq29,eq14}\lean{Subgraph.Equation29_implies_Equation14}\leanok  Definition \ref{eq29} is equivalent to Definition \ref{eq14}.
-\end{theorem}
-
-This result was posed as  Problem A1 from Putnam 2001.
-
-\begin{proof}\uses{duality} By Lemma \ref{duality} it suffices to show that Definition \ref{eq29} implies Definition \ref{eq14}.  From Definition \ref{eq29} one has
-  $$ x = ((x \circ y) \circ x) \circ (x \circ y)$$
-  and also
-  $$ y = (x \circ y) \circ x$$
-  giving $x = y \circ (x \circ y)$, which is Definition \ref{eq14}.
-\end{proof}
-
-% abbrev Equation381 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ y
-% abbrev Equation3744 (G : Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ (w ∘ y)
-
-%theorem Equation3744_implies_Equation381 (G : Type*) [Magma G] (h: Equation3744 G) : Equation381 G :=
-%fun x y z ↦ Eq.trans
-%  (h x y z y) $ Eq.trans
-%  (congrArg (fun a ↦ a ∘ (y ∘ y)) (h x z z x))
-%  (Eq.symm $ h (x ∘ z) y (x ∘ z) y)
-%/-- Putnam 1978, problem A4, part (a) -/
-
 The following result was problem A4 on Putnam 1978.
 
 \begin{theorem}[3744 implies 3722, 381]\label{3744_implies_3722_381} Definition \ref{eq3744} implies Definition \ref{eq3722} and Definition \ref{eq381}.
@@ -78,4 +56,10 @@ for all $x,y,z,w$.  Various specializations of this give
 The equation \eqref{381-2} gives Definition \ref{eq3722}, while \eqref{381-1}, \eqref{381-2}, \eqref{381-3} gives
 $$ x \circ y = (x\circ z) \circ y$$
 which is Definition \ref{eq381}.
+\end{proof}
+
+\begin{theorem}[1689 implies 2]\label{1689_implies_2} Definition \ref{eq1689} implies Definition \ref{eq2}.
+\end{theorem}
+
+\begin{proof}  This is a surprisingly long chain of implications; see pages 326--327 of \cite{Kisielewicz2}.
 \end{proof}
