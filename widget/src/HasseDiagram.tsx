@@ -41,8 +41,8 @@ const Diagram: React.FC<DiagramProps> = ({ implications, facts }) => {
       // Add nodes and edges for non-implications
       facts.forEach(({ satisfied, refuted }) => {
         satisfied.forEach(lhs => {
+          addNodeIfNotExists(lhs, lhs);
           refuted.forEach(rhs => {
-            addNodeIfNotExists(lhs, lhs);
             addNodeIfNotExists(rhs, rhs);
             edges.add({ id: `nonimplication-${lhs}-${rhs}`, from: lhs, to: rhs, arrows: 'to', color: '#ff9999' }); // Non-implication edge color
           });
