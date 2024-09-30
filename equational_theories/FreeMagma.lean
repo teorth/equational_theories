@@ -9,7 +9,7 @@ universe v
 inductive FreeMagma (α : Type u)
   | Leaf : α → FreeMagma α
   | Fork : FreeMagma α → FreeMagma α → FreeMagma α
-deriving DecidableEq
+  deriving DecidableEq
 
 instance (α : Type u) : Magma (FreeMagma α) where
   op := FreeMagma.Fork
@@ -19,8 +19,9 @@ infixl:65 " ⋆ " => FreeMagma.Fork
 @[simp]
 theorem FreeMagma_op_eq_fork (α : Type u) (a b : FreeMagma α) : a ∘ b = a ⋆ b := rfl
 
-@[match_pattern]
-def Lf {α : Type u} : (α → FreeMagma α) := FreeMagma.Leaf
+notation "Lf" => FreeMagma.Leaf
+
+instance FreeMagma.Magma {α} : Magma (FreeMagma α) := ⟨ Fork ⟩
 
 instance FreeMagma.Magma {α} : Magma (FreeMagma α) := ⟨ Fork ⟩
 
@@ -46,10 +47,9 @@ theorem DualizeTreeIsInvolution {α : Type u} (t : FreeMagma α) : dualizeTree (
 -- Metatheorem: if x0 = f(x1,x2,...), then x = y.
 theorem ExpressionEqualsAnything_implies_Equation2 (G: Type u) [Magma G]
   : (∃ n : Nat, ∃ expr : FreeMagma (Fin n), ∀ x : G, ∀ sub : Fin n → G, x = evalInMagma sub expr) → Equation2 G := by
-  intros ex x y
-  let ⟨n, expr, univ⟩ := ex
+  intro ⟨n, expr, univ⟩ x y
   let constx : Fin n → G := fun _ ↦ x
-  exact (Eq.trans (univ x constx) (Eq.symm (univ y constx)))
+  exact (univ x constx).trans (univ y constx).symm
 
 theorem Equation37_implies_Equation2 (G : Type u) [Magma G]
   : (∀ x y z w : G, x = (y ∘ z) ∘ w) → Equation2 G :=

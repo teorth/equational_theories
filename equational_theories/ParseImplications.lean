@@ -1,10 +1,8 @@
-import Batteries.Data.String.Basic
-import Batteries.Tactic.Lint
 import Lean.Environment
 import Lean.Meta.Basic
 import Lean.Util
 
-open Lean Core Elab
+open Lean
 
 /--
 `lhs` implies `rhs`, where `lhs` and `rhs` are equation names for the form "Equation17".
@@ -14,11 +12,17 @@ structure Implication where
   rhs : String
 deriving Lean.ToJson, Lean.FromJson
 
---- Output of the extract_implications executable.
-structure Output where
-  implications : List Implication
-  nonimplications : List Implication
-deriving Lean.ToJson, Lean.FromJson
+/--
+Names of equations satisfied rsp. refuted by the same magma; used to concisely express
+antiimplications.
+
+For example, if `satisfied = [1, 2]` and `refuted = [4, 5]`, then this expresses
+the four antiimplications `¬ 1→4`, `¬ 1→5`, `¬ 2→4`, `¬ 2→5`.
+-/
+structure Facts where
+  satisfied : Array String
+  refuted : Array String
+deriving Lean.ToJson, Lean.FromJson, Inhabited
 
 /--
 Extracts the equation name out of an expression of the form `EquationN G inst`.
@@ -48,9 +52,9 @@ def parseImplication (thm_ty : Expr) : MetaM (Option Implication) := do
     return implicationFromApps lhs rhs
 
 /--
-Attempts to parse a negated `Implication` from the type of a theorem.
+Attempts to parse an exisential statement of monoid facts from the type of a theorem.
 -/
-def parseNonimplication (thm_ty : Expr) : MetaM (Option Implication) := do
+partial def parseFacts (thm_ty : Expr) : MetaM (Option Facts) := do
   match_expr thm_ty with
   | Exists b body =>
     if !(← Meta.isType b) then return none
@@ -63,36 +67,35 @@ def parseNonimplication (thm_ty : Expr) : MetaM (Option Implication) := do
         Meta.lambdaTelescope body1 fun fvars1 ty1 => do
           let #[magma] := fvars1 | return none
           let (.app (.const `Magma _) _) := ← Meta.inferType magma | return none
-          match_expr ty1 with
-          | And rhs b =>
-            match_expr b with
-            | Not lhs =>
-              return implicationFromApps lhs rhs
-            | _ => return none
-          | _ => return none
+          let some facts := go #[ty1] #[] #[] | return none
+          if facts.satisfied.isEmpty && facts.refuted.isEmpty then return none
+          return .some facts
       | _ => return none
   | _ => return none
+where
+  -- NB: This is written as a tail-recursive function, else some large facts statements
+  -- cause this to blow the stack
+  go (todo : Array Expr) (satisfied refuted : Array String) : Option Facts := do
+    if todo.isEmpty then
+      return ⟨satisfied, refuted⟩
+    else
+      let e := todo.back
+      let todo := todo.pop
+      if e.isAppOfArity ``And 2 then
+        go ((todo.push e.appFn!.appArg!).push e.appArg!) satisfied refuted
+      else if e.isAppOfArity ``Not 1 then
+        let name ← getEquationName e.appArg!
+        go todo satisfied (refuted.push name)
+      else
+        let name ← getEquationName e
+        go todo (satisfied.push name) refuted
 
-unsafe def generateOutput : IO Output := do
-  let module := `equational_theories.Subgraph
-  searchPathRef.set compile_time_search_path%
-
-  withImportModules #[{module}] {} (trustLevel := 1024) fun env =>
-    let ctx := {fileName := "", fileMap := default}
-    let state := {env}
-    Prod.fst <$> (Meta.MetaM.toIO · ctx state)  do
-      let decls ← Batteries.Tactic.Lint.getDeclsInPackage module
-      let mut implications : List Implication := []
-      let mut nonimplications : List Implication := []
-      for d in decls do
-        if not d.isInternal then
-          match ← getConstInfo d with
-          | .thmInfo thm =>
-            -- TODO check axioms for `sorry`
-            if let some imp ← parseImplication thm.type then
-              implications := imp :: implications
-            if let some nimp ← parseNonimplication thm.type then
-              nonimplications := nimp :: nonimplications
-            pure ()
-          | _ => pure ()
-      pure ⟨implications, nonimplications⟩
+/--
+Attempts to parse theorem type as an unconditional equation.
+-/
+def parseUnconditionalEquation (thm_ty : Expr) : MetaM (Option String) := do
+  Meta.forallTelescope thm_ty fun fvars rhs => do
+    let #[g, magma] := fvars | return none
+    if !(← Meta.isType g) then return none
+    let (.app (.const `Magma _) _) := ← Meta.inferType magma | return none
+    return getEquationName rhs

@@ -1,5 +1,7 @@
 \chapter{General implications}
 
+We will be interested in seeing which laws imply which other laws, in the sense that magmas obeying the former law automatically obey the latter.  We will also be interested in \emph{anti-implications} showing that one law does \emph{not} imply another, by producing examples of magmas that obey the former law but not the latter. Here is a formal definition.
+
 \begin{definition}[Implication]\label{impl}\uses{law-def}  A law $w  \formaleq  w'$ is said to \emph{imply} another law $w''  \formaleq  w'''$, if every magma $G$ that satisfies the former, satisfies the latter:
   $$ G \models w  \formaleq  w' \implies G \models w''  \formaleq  w'''.$$
 Two laws are said to be \emph{equivalent} if they imply each other.
@@ -11,7 +13,7 @@ Two laws are said to be \emph{equivalent} if they imply each other.
 \begin{proof} Trivial.
 \end{proof}
 
-Implications between these laws are depicted in Figure \ref{fig:implications}.
+Implications between the laws from Chapter \ref{subgraph-eq} are depicted in Figure \ref{fig:implications}.
 
 \begin{figure}
   \centering
@@ -64,3 +66,15 @@ whence the claim.
 \end{proof}
 
 Thus for instance, Definition \ref{eq7} is equivalent to Definition \ref{eq2}.
+
+\begin{theorem}[Laws implied by the constant law]\label{constant-impl}\uses{impl,eq46}  If $w, w'$ each have order at least one, then the law $w \formaleq w'$ is implied by the constant law (Definition \ref{eq46}).  If exactly one of $w, w'$ has order zero, and the law $w \formaleq w'$ is not implied by the constant law.
+\end{theorem}
+
+\begin{proof} Routine.
+\end{proof}
+
+\begin{theorem}[Criterion for implication]\label{variable-impl}\uses{impl}  If $w \formaleq w'$ is such that every variable appears the same number of times in both $w$ and $w'$, and $w \formaleq w'$ implies another law $w'' \formaleq w'''$, then every variable appears the same number of times in both $w''$ and $w'''$.
+\end{theorem}
+
+\begin{proof} Consider the magma $\R$ with the addition law $+$.  By hypothesis, this magma obeys $w \formaleq w'$, and hence $w'' \formaleq w'''$, giving the claim by comparing coefficients of the linear forms associated to $w''$ and $w'''$ in this magma.
+\end{proof}

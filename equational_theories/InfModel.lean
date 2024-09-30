@@ -2,14 +2,12 @@ import equational_theories.Equations
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 
-abbrev EquationKis (G: Type*) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ y) ∘ x) ∘ ((y ∘ y) ∘ z)
-
 namespace InfModel
 
 /--
-In a finite model `EquationKis` implies `Equation2`, that the model is a subsingleton.
+In a finite model `Equation374794` implies `Equation2`, that the model is a subsingleton.
 -/
-theorem Finite.EquationKis_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : EquationKis G) :
+theorem Finite.Equation374794_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : Equation374794 G) :
     Equation2 G := by
   have : ∀ (y z u : G), (y ∘ y) ∘ z = (y ∘ y) ∘ u := by
     intro y
@@ -33,9 +31,9 @@ theorem Finite.EquationKis_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h
 
 
 /--
-However, `EquationKis` doesn't imply `Equation2`.
+However, `Equation374794` doesn't imply `Equation2`.
 -/
-theorem EquationKis_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), EquationKis G ∧ ¬Equation2 G := by
+theorem Equation374794_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equation374794 G ∧ ¬Equation2 G := by
   letI : Magma ℕ+ := { op := fun a b ↦ if a = b then 2^a.val else
     if a = 1 then 3^b.val else
     if a = 3 ^ (padicValNat 3 a) then Nat.toPNat' (padicValNat 3 a) else 1}

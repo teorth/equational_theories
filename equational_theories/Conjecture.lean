@@ -19,14 +19,15 @@ def «conjecture» := leading_parser
 -/
 inductive EntryVariant where
   | implication : Implication → EntryVariant
-  | nonimplication : Implication → EntryVariant
+  | facts : Facts → EntryVariant
   | other : EntryVariant
 
 /-- An entry in the conjecture environment extension -/
 structure Entry where
 /-- Name of the declaration. -/
 (name : Name)
-/-- Lean code to be included in the extracted problem file. -/
+
+/-- Which kind of conjecture is it? -/
 (variant : EntryVariant)
 
 initialize conjectureExtension : SimplePersistentEnvExtension Entry (Array Entry) ←
@@ -56,8 +57,8 @@ def elabConjecture : CommandElab
         liftCoreM <| Meta.MetaM.run' do
         if let some imp ← parseImplication val.type then
           return some ⟨val.name, .implication imp⟩
-        if let some nimp ← parseNonimplication val.type then
-          return some ⟨val.name, .nonimplication nimp⟩
+        if let some facts ← parseFacts val.type then
+          return some ⟨val.name, .facts facts⟩
         return some ⟨val.name, .other⟩
       | _ => pure none
 
@@ -83,5 +84,5 @@ elab_rules : command
   for ⟨name, conj⟩ in cs do
     match conj with
     | .implication ⟨lhs, rhs⟩ => println! "{name}: {lhs} → {rhs}"
-    | .nonimplication ⟨lhs, rhs⟩ => println! "{name}: ¬ ({lhs} → {rhs})"
+    | .facts ⟨satisfied, refuted⟩ => println! "{name}: {satisfied} // {refuted}"
     | _ => println! "{name}"

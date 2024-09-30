@@ -4,9 +4,7 @@
 import equational_theories.FreeMagma
 import Mathlib.Data.Set.Defs
 
-#check Set
-
-structure MagmaLaw (α : Type*) where
+structure MagmaLaw (α : Type) where
   lhs : FreeMagma α
   rhs : FreeMagma α
 deriving DecidableEq
@@ -20,14 +18,8 @@ match t with
 
 infix:66 " ⬝ " => substFreeMagma
 
-#check ((Lf 0) ⬝ (λ i ↦ Lf i))
-
 @[inline, simp]
 def Ctx α := Set (MagmaLaw α)
-
-#print Membership
-
-#print Set.instMembership
 
 -- FIXME: figure out how to remove this.
 instance Ctx.Membership α : Membership (MagmaLaw α) (Ctx α) := ⟨ Set.instMembership.mem ⟩
@@ -51,10 +43,10 @@ inductive derive {α} : Ctx α → MagmaLaw α → Type :=
 
 end DeriveDef
 
-def satisfiesPhi {α G : Type*} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
+def satisfiesPhi {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
   evalInMagma φ E.lhs = evalInMagma φ E.rhs
 
-def satisfies {α : Type*} (G : Type*) [Magma G] (E : MagmaLaw α) := ∀ (φ : α → G), satisfiesPhi φ E
+def satisfies {α : Type} (G : Type) [Magma G] (E : MagmaLaw α) := ∀ (φ : α → G), satisfiesPhi φ E
 
 def satisfiesSet {α : Type} (G : Type) [Magma G] (Γ : Set (MagmaLaw α)) : Prop :=
   ∀ E ∈ Γ, satisfies G E
@@ -163,7 +155,7 @@ by
 
 theorem substLFId {α} (t : FreeMagma α) : t ⬝ Lf = t :=
 by
-  cases t <;> simp [substFreeMagma]; trivial
+  cases t <;> simp [substFreeMagma]
   constructor <;> apply substLFId
 
 @[simp]

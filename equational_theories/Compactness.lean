@@ -1,17 +1,6 @@
 import equational_theories.Completeness
 import Mathlib.Data.Finset.Basic
 
-
-#print derive
-
-#print Finset
-
-theorem test : 4 ∈ ({4} : Finset Nat) := by simp
-
-#check ({4} : Finset Nat) ∪ {5}
-
-#print FreeMagma
-
 def derive.getAxioms {α} [DecidableEq α] {Γ : Ctx α} {E : MagmaLaw α}(h : Γ ⊢ E) : Finset (MagmaLaw α) :=
 match h with
 | .Ax _ E _ => {E}
@@ -22,10 +11,6 @@ match h with
 | .Cong _ _ _ _ _ h₁ h₂ => derive.getAxioms h₁ ∪ derive.getAxioms h₂
 
 def ToCtx {α} (S : Set (MagmaLaw α)) : Ctx α := S
-
-#print Nonempty
-
-#print HasSubset
 
 instance Ctx.hasSubset {α} : HasSubset (Ctx α) := Set.instHasSubset
 
