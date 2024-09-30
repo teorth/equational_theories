@@ -235,7 +235,63 @@ theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) :
   have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by repeat rw [← h]
   exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
 
-conjecture Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G
+theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G:= by
+  have h2: ∀ a b c : G, a ∘ ((((a ∘ b)∘ b)∘ c)∘ c) = (a∘ b)∘ b := by
+    intro a b c
+    calc a ∘ ((((a ∘ b)∘ b)∘ c)∘ c) = ((a ∘ a) ∘ ((a ∘ b) ∘ b)) ∘ ((((a ∘ b)∘ b)∘ c)∘ c) := by rw [←  h a a b, h a b c]
+    _ = (a∘ b)∘ b := by rw[← h ((a ∘ b) ∘ b) (a ∘ a) c]
+  have h3: ∀ a b c d : G, (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ d) ∘ d)) = b ∘ c := by
+    intro a b c d
+    calc (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ d) ∘ d)) =  (a ∘ (b ∘ c)) ∘ (((b ∘ c) ∘ ((c ∘ d) ∘ d)) ∘ ((c ∘ d) ∘ d)) := by rw [←  h c b d]
+    _ = b ∘ c := by rw [←  h _ _ _]
+  have h4: ∀ a b c : G, a ∘ (b ∘ ((b ∘ c) ∘ c)) = (a ∘ b) ∘ b := by
+    intro a b c
+    sorry
+  have h5: ∀ a b c : G, ((a ∘ (b ∘ c)) ∘ c) ∘ c = b ∘ c := by
+    intro a b c
+    sorry
+  have h6: ∀ a b c d : G, (a ∘ (b ∘ (c ∘ d))) ∘ (c ∘ d) = b ∘ (c ∘ d) := by
+    intro a b c d
+    sorry
+  have h7: ∀ a b c : G, (a ∘ (b ∘ c)) ∘ (b ∘ c) = a ∘ (b ∘ c) := by
+    intro a b c
+    sorry
+  have h8: ∀ a b c : G, ((a ∘ b) ∘ ((b ∘ c) ∘ c)) ∘ ((b ∘ c) ∘ c)=b := by
+    intro a b c
+    sorry
+  have h9: ∀ a b : G, a ∘ ((a ∘ b) ∘ b) = a := by
+    intro a b
+    sorry
+  have h10: ∀ a b c : G, a ∘ (a ∘ (b ∘ c))=a := by
+    intro a b c
+    sorry
+  have h11: ∀ a b : G, (a ∘ b) ∘ b=a ∘ b := by
+    intro a b
+    sorry
+  have h12: ∀ a : G, (a ∘ a) ∘ a = a := by
+    intro a
+    calc
+      (a ∘ a) ∘ a = a ∘ (a ∘ ((a ∘ a) ∘ a)) := by rw[h4]
+      _ = a := by rw[h10]
+
+  have h13: ∀ a b : G, (a ∘ b) ∘ b = b := by
+    intro a b
+    calc
+      (a ∘ b) ∘ b = (a ∘ b) ∘ ((b ∘ b) ∘ b) := by rw[h12]
+      _ = b := by rw[← h]
+  have h14: ∀ a b : G, a ∘ b = b := by
+    intro a b
+    rw [← h11 a b, h13 a b]
+  intro a b
+  calc
+    a = a ∘ ((a ∘ b) ∘ b) := by rw[ h9 a b]
+    _ = a ∘ b := by rw[ h14 (a ∘ b) b]
+    _ = b := by rw[ h14 a b]
+
+
+
+
+
 
 /-- Putnam 1978, problem A4, part (b) -/
 @[equational_result]
