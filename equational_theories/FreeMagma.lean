@@ -29,10 +29,9 @@ def evalInMagma {α : Type u} {G : Type v} [Magma G] (f : α -> G) : FreeMagma �
 
 theorem ExpressionEqualsAnything_implies_Equation2 (G: Type u) [Magma G]
   : (∃ n : Nat, ∃ expr : FreeMagma (Fin n), ∀ x : G, ∀ sub : Fin n → G, x = evalInMagma sub expr) → Equation2 G := by
-  intros ex x y
-  let ⟨n, expr, univ⟩ := ex
+  intro ⟨n, expr, univ⟩ x y
   let constx : Fin n → G := fun _ ↦ x
-  exact (Eq.trans (univ x constx) (Eq.symm (univ y constx)))
+  exact (univ x constx).trans (univ y constx).symm
 
 theorem Equation37_implies_Equation2 (G : Type u) [Magma G]
   : (∀ x y z w : G, x = (y ∘ z) ∘ w) → Equation2 G :=
