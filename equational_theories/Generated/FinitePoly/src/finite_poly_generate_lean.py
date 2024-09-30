@@ -139,7 +139,7 @@ with open(f"{dir}/src/finite_poly_refutations.txt") as f:
       for i, line in enumerate(lines):
           leanfile = f"{dir}/Refutation{i}.lean"
           data = parse_row(line)
-          if data and data["div"] < 5:
+          if data and data["div"] < 6:
             data = prune_row(data)
             print(f"Writing {leanfile}")
             main.write(f"import equational_theories.Generated.FinitePoly.Refutation{i}\n")
