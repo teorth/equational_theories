@@ -258,7 +258,10 @@ theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) 
     sorry
   have h6: ∀ a b c d : G, (a ∘ (b ∘ (c ∘ d))) ∘ (c ∘ d) = b ∘ (c ∘ d) := by
     intro a b c d
-    sorry
+    have hh : (a ∘ (b ∘ (c ∘ d))) ∘ (((b ∘ (c ∘ d)) ∘ d) ∘ d) = (b ∘ (c ∘ d)) := by rw[← h _ _ _]
+    rw [h5] at hh
+    exact hh
+
   have h7: ∀ a b c : G, (a ∘ (b ∘ c)) ∘ (b ∘ c) = a ∘ (b ∘ c) := by
     intro a b c
     sorry
