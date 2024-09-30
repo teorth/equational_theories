@@ -10,7 +10,6 @@ open Lean Core Elab Cli
 structure Output where
   implications : Array Implication
   nonimplications : Array Implication
-  unconditionals : Array String
 deriving Lean.ToJson, Lean.FromJson
 
 def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
@@ -28,11 +27,15 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
     let ctx := {fileName := "", fileMap := default}
     let state := {env}
     Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
-      let rs ← Closure.collectClosure
-      for ⟨⟨lhs, rhs⟩, outcome⟩ in rs do
-        if (outcome.isExplicit || include_impl) && (outcome.isProven || include_conj) then
-          if outcome.isTrue then println! s!"{lhs} → {rhs}"
-          else println! s!"¬ ({lhs} → {rhs})"
+      let mut rs ← Result.extractEquationalResults
+      if !include_conj then
+        rs := rs.filter (·.proven)
+      let mut rs' := rs.filterMap (EntryVariant.toEdge? ∘ Entry.variant)
+      if include_impl then
+        rs' := Closure.closure rs'
+      for edge in rs' do
+        if edge.isTrue then IO.println s!"{edge.lhs} → {edge.rhs}"
+        else IO.println s!"¬ ({edge.lhs} → {edge.rhs})"
       pure 0
 
 def extract_implications : Cmd := `[Cli|

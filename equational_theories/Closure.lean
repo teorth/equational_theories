@@ -19,7 +19,7 @@ def Edge.lhs : Edge → String := Implication.lhs ∘ get
 
 def Edge.rhs : Edge → String := Implication.rhs ∘ get
 
-def EntryVariant.toEdge? : EntryVariant → Option Edge
+def _root_.EntryVariant.toEdge? : EntryVariant → Option Edge
   | .implication x => some (.implication x)
   | .nonimplication x => some (.nonimplication x)
   | _ => none
@@ -122,9 +122,6 @@ def Bitset.set (b : Bitset) (n : Nat) : Bitset :=
 def Bitset.get (b : Bitset) (n : Nat) : Bool :=
   (b.toArray[n >>> 6]! >>> ((UInt64.ofNat n) &&& 63)) &&& 1 != 0
 
-instance : HOr Bitset Bitset Bitset where
-  hOr a b := a.zipWith b (· ||| ·)
-
 def closure (inp : Array Edge) : Array Edge := Id.run do
   -- number the equations (arbitrarily) for easier processing
   let mut eqs : Std.HashMap String Nat := {}
@@ -189,20 +186,23 @@ def closure (inp : Array Edge) : Array Edge := Id.run do
     let i := last_component - 1 - i_
     reachable := reachable.modify i (fun x ↦ x.set i)
     for j in comp_graph[i]! do
-      reachable := reachable.modify i (fun x ↦ x ||| reachable[j]!)
+      reachable := reachable.modify i (fun x ↦ x.mapIdx (fun idx val ↦
+        reachable[j]!.toArray[idx]! ||| val))
 
   -- extract the implications
-  let mut ans : Array Edge := #[]
+  let mut ans : Array Edge := Array.mkEmpty (n*n)
+
 
   for i in [:last_component] do
+    if components[i]!.back >= n then continue
     for j in [:last_component] do
       if reachable[i]!.get j then
         for x in components[i]! do
           for y in components[j]! do
             if x == y then continue
-            if x < n && y < n then
+            if y < n then
               ans := ans.push (.implication ⟨eqs_order[y]!, eqs_order[x]!⟩)
-            else if x < n then
+            else
               ans := ans.push (.nonimplication ⟨eqs_order[x]!, eqs_order[y - n]!⟩)
 
   pure ans
