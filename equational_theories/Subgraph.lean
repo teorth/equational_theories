@@ -235,18 +235,24 @@ theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) :
   have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by repeat rw [← h]
   exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
 
-theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G:= by
-  have h2: ∀ a b c : G, a ∘ ((((a ∘ b)∘ b)∘ c)∘ c) = (a∘ b)∘ b := by
+theorem Equation1689_implies_h2 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, a ∘ ((((a ∘ b)∘ b)∘ c)∘ c) = (a∘ b)∘ b := by
     intro a b c
     calc a ∘ ((((a ∘ b)∘ b)∘ c)∘ c) = ((a ∘ a) ∘ ((a ∘ b) ∘ b)) ∘ ((((a ∘ b)∘ b)∘ c)∘ c) := by rw [←  h a a b, h a b c]
     _ = (a∘ b)∘ b := by rw[← h ((a ∘ b) ∘ b) (a ∘ a) c]
-  have h3: ∀ a b c d : G, (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ d) ∘ d)) = b ∘ c := by
+
+theorem Equation1689_implies_h3 (G: Type*) [Magma G] (h: Equation1689 G) :∀ a b c d : G, (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ d) ∘ d)) = b ∘ c := by
     intro a b c d
     calc (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ d) ∘ d)) =  (a ∘ (b ∘ c)) ∘ (((b ∘ c) ∘ ((c ∘ d) ∘ d)) ∘ ((c ∘ d) ∘ d)) := by rw [←  h c b d]
     _ = b ∘ c := by rw [←  h _ _ _]
-  have h4: ∀ a b c : G, a ∘ (b ∘ ((b ∘ c) ∘ c)) = (a ∘ b) ∘ b := by
+
+theorem Equation1689_implies_h4 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, a ∘ (b ∘ ((b ∘ c) ∘ c)) = (a ∘ b) ∘ b := by
     intro a b c
-    sorry
+    calc a ∘ (b ∘ ((b ∘ c) ∘ c)) = (a ∘ b) ∘ b := by nth_rewrite 1 [ h b (a ∘ b) c]; rw [Equation1689_implies_h2 G h a b ((b ∘ c) ∘ c)]
+      _ = (a ∘ b) ∘ b := by rfl
+
+theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G:= by
+
+
   have h5: ∀ a b c : G, ((a ∘ (b ∘ c)) ∘ c) ∘ c = b ∘ c := by
     intro a b c
     sorry
@@ -271,7 +277,7 @@ theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) 
   have h12: ∀ a : G, (a ∘ a) ∘ a = a := by
     intro a
     calc
-      (a ∘ a) ∘ a = a ∘ (a ∘ ((a ∘ a) ∘ a)) := by rw[h4]
+      (a ∘ a) ∘ a = a ∘ (a ∘ ((a ∘ a) ∘ a)) := by rw[Equation1689_implies_h4 G h]
       _ = a := by rw[h10]
 
   have h13: ∀ a b : G, (a ∘ b) ∘ b = b := by
@@ -287,10 +293,6 @@ theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) 
     a = a ∘ ((a ∘ b) ∘ b) := by rw[ h9 a b]
     _ = a ∘ b := by rw[ h14 (a ∘ b) b]
     _ = b := by rw[ h14 a b]
-
-
-
-
 
 
 /-- Putnam 1978, problem A4, part (b) -/
