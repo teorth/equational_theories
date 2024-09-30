@@ -18,8 +18,7 @@ instance Ctx.hasSubset {α} : HasSubset (Ctx α) := Set.instHasSubset
 theorem foo (S T : Set Nat) : S ⊆ S ∪ T := Set.subset_union_left
 
 def derive.Weak {α} {Γ Δ : Ctx α}{E : MagmaLaw α}(inc : Γ ⊆ Δ) (h : Γ ⊢ E) :
-  Δ ⊢ E :=
-by
+    Δ ⊢ E := by
   cases h
   case Ax => apply derive.Ax; apply inc; trivial
   case Ref => apply derive.Ref
@@ -29,8 +28,7 @@ by
   case Cong => apply derive.Cong <;> apply derive.Weak <;> trivial
 
 def derive.getAxiomsEnough {α} [DecidableEq α] {Γ : Ctx α} {E : MagmaLaw α}(h : Γ ⊢ E) :
-  ToCtx (derive.getAxioms h) ⊢ E :=
-by
+    ToCtx (derive.getAxioms h) ⊢ E := by
   cases h <;> simp [ToCtx, getAxioms]
   case Ax => constructor; trivial
   case Ref => exact derive.Ref _ _
