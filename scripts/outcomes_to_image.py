@@ -1,10 +1,18 @@
 #! /usr/bin/env python3
 
-import argparse
-from PIL import Image  # pip install pillow
-import json
+"""
+Generates a png image to visualize the output of `extract_implications outcomes`.
 
-############################################
+Example usage:
+
+$ lake exe extract_implications outcomes equational_theories.Subgraph > /tmp/subgraph.json
+$ python scripts/outcomes_to_image.py /tmp/subgraph.json --outfile subgraph.png
+"""
+
+import argparse
+import json
+import os
+from PIL import Image  # pip install pillow
 
 def name_to_id(name):
     return int(name.removeprefix('Equation'))
@@ -33,8 +41,16 @@ def outcome_to_color(outcome) :
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="render an image")
-    parser.add_argument("file", help="json file containing output of `lake exe extract_implications outcomes")
+    parser.add_argument("file",
+                        help="json file containing output of `lake exe extract_implications outcomes")
+    parser.add_argument("--outfile",
+                        type=str, default=None,
+                        help="name of output file")
     args = parser.parse_args()
+
+    outfile = args.outfile
+    if outfile is None:
+        outfile = os.path.splitext(args.file)[0] + ".png"
 
     with open(args.file, 'r') as f:
         data = json.load(f)
@@ -61,4 +77,5 @@ if __name__ == '__main__':
                 pixels[i_idx, j_idx] = outcome_to_color("implicit_proof_true")
             else :
                 pixels[i_idx, j_idx] = outcome_to_color(outcome)
-    img.save("out.png")
+    img.save(outfile)
+    print("saved to " + outfile)
