@@ -15,7 +15,6 @@ using them as parameters so that the implication holds in any Magma `G`.
 def implies (l₁ l₂ : MagmaLaw α) := ∀ {G : Type} [Magma G],
   satisfies G l₁ → satisfies G l₂
 
-
 instance : LE (MagmaLaw α) where
   le l₁ l₂ := l₁.implies l₂
 
