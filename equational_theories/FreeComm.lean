@@ -7,6 +7,7 @@ import Mathlib.Data.Multiset.Basic
 import equational_theories.FreeMagma
 import equational_theories.Completeness
 
+open FreeMagma
 
 instance Multiset.isMagma {α} [DecidableEq α] : Magma (Multiset α) := { op := (. + .) }
 
