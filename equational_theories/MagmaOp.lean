@@ -6,7 +6,7 @@
 import equational_theories.FreeMagma
 import equational_theories.Completeness
 
-#print FreeMagma
+open FreeMagma
 
 def FreeMagma.op {α} (w : FreeMagma α) : FreeMagma α :=
 match w with
@@ -19,7 +19,6 @@ def Op (G : Type) : Type := G
 @[simp]
 instance opMagma {G : Type} [Magma G] : Magma (Op G) := { op := λ (x y : G) ↦ (y ∘ x : G) }
 
-#check evalInMagma
 
 theorem evalInMagmaOp {α G} [Magma G] (φ : α → G) (w : FreeMagma α):
   evalInMagma (G := Op G) φ w.op = evalInMagma (G := G) φ w :=
