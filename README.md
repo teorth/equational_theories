@@ -51,6 +51,7 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
         - [`find_dual`](scripts/find_dual.py) - finds the dual of an equation
         - [`find_equation_id`](scripts/find_equation_id.py) - finds the equation number of an equation string
         - [`generate_eqs_list`](scripts/generate_eqs_list.py) - generates a list of equations
+        - [`generate_graphviz_graph`](scripts/generate_graphviz_graph.rb) - generates a graphviz dot file, that can be used to create an implication graph
         - [`generate_image`](scripts/generate_image.py) - generates an image of implications
         - [`generate_most_wanted_list`](scripts/generate_most_wanted_list.py) - generates the "most wanted" implications
         - [`generate_z3_counterexample`](scripts/generate_z3_counterexample.py) - given an implication statement between two equations, calls Z3 to try to generate a counterexample
