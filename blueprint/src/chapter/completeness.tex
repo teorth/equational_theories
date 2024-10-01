@@ -21,7 +21,7 @@ Definition \ref{impl} is basically the case where $\Gamma$ is a singleton.
 \begin{theorem}[Completeness theorem]\label{completeness-thm}\uses{semantic-def,syntactic-def}  Let $\Gamma$ be a collection of laws, and let $E$ be a law.  Then $\Gamma \models E$ if and only if $\Gamma \vdash E$.
 \end{theorem}
 
-\begin{proof} (Sketch) The `only if' component is soundness, and follows from verifying that the rules of inference in Definition \ref{synctactic-def} holds for $\models$.  The `if` part is completeness, and is proven by constructing the magma of words, quotiented out by the relation $\Gamma \vdash w \formaleq w'$, which is easily seen to be an equivalence relation respecting the magma operation
+\begin{proof} (Sketch) The `only if' component is soundness, and follows from verifying that the rules of inference in Definition \ref{syntactic-def} holds for $\models$.  The `if` part is completeness, and is proven by constructing the magma of words, quotiented out by the relation $\Gamma \vdash w \formaleq w'$, which is easily seen to be an equivalence relation respecting the magma operation
 \end{proof}
 
 \begin{corollary}[Compactness theorem]\label{compactness-thm}\uses{semantic-def,syntactic-def}  Let $\Gamma$ be a collection of laws, and let $E$ be a law.  Then $\Gamma \models E$ if and only if there exists a finite subset $\Gamma'$ of $\Gamma$ such that $\Gamma' \models E$.
