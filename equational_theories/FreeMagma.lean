@@ -7,6 +7,7 @@ universe v
 inductive FreeMagma (α : Type u)
   | Leaf : α → FreeMagma α
   | Fork : FreeMagma α → FreeMagma α → FreeMagma α
+  deriving DecidableEq
 
 instance (α : Type u) : Magma (FreeMagma α) where
   op := FreeMagma.Fork
@@ -16,8 +17,9 @@ infixl:65 " ⋆ " => FreeMagma.Fork
 @[simp]
 theorem FreeMagma_op_eq_fork (α : Type u) (a b : FreeMagma α) : a ∘ b = a ⋆ b := rfl
 
-@[match_pattern]
-def Lf {α : Type u} : (α → FreeMagma α) := FreeMagma.Leaf
+notation "Lf" => FreeMagma.Leaf
+
+instance FreeMagma.Magma {α} : Magma (FreeMagma α) := ⟨ Fork ⟩
 
 def fmapFreeMagma {α : Type u} {β : Type v} (f : α → β) : FreeMagma α → FreeMagma β
   | Lf a => FreeMagma.Leaf (f a)

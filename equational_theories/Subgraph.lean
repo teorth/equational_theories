@@ -8,7 +8,8 @@ import equational_theories.FactsSyntax
 /- This is a subproject of the main project to completely describe a small subgraph of the entire
 implication graph.  Currently we are focusing only on the following equations:
 
-1-8, 14, 23, 29, 38-43, 45-46, 168, 381, 387, 3722, 4378, 4512, 4513, 4522, 4564, 4582
+1-8, 14, 23, 29, 38-43, 45-46, 168, 381, 387, 1689, 5105, 3722, 4378, 4512, 4513, 4522, 4564, 4582,
+5105, 28393, 374794
 
 Implications here should be placed inside the "Subgraph" namespace.
 
@@ -183,7 +184,7 @@ theorem Equation38_implies_Equation42 (G: Type*) [Magma G] (h: Equation38 G) : E
 
 @[equational_result]
 theorem Equation39_implies_Equation45 (G: Type*) [Magma G] (h: Equation39 G) : Equation45 G :=
-  fun _ _ _ ↦ by rw[← h, h]
+  fun _ _ _ ↦ by rw [← h, h]
 
 @[equational_result]
 theorem Equation41_implies_Equation39 (G: Type*) [Magma G] (h: Equation41 G) : Equation39 G :=
@@ -315,7 +316,7 @@ theorem Equation4_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4
   by_contra h
   specialize h 1 0
   dsimp [hG] at h
-  linarith
+  contradiction
 
 @[equational_result]
 theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation4582 G := by
@@ -324,7 +325,7 @@ theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equatio
   by_contra h
   specialize h 0 0 0 1 0 0
   dsimp [hG] at h
-  linarith
+  contradiction
 
 -- The magma with 2 elements a and b which satisfies equation 5 serves as counterexamples here. For
 -- 43, a * b = b, but b * a = a. For 4513, a * (a * a) = a, but (a * a) * b = b.
@@ -333,9 +334,8 @@ theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equatio
 
 @[equational_result]
 theorem Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Facts G [5] [42, 43, 4513] := by
-  let a : Type := Fin 2
-  let hG : Magma a := { op := fun _ x ↦ x }
-  refine ⟨a, hG, ?_, ?_, ?_, ?_⟩
+  let hG : Magma (Fin 2) := { op := fun _ x ↦ x }
+  refine ⟨Fin 2, hG, ?_, ?_, ?_, ?_⟩
   · simp [Equation5, hG]
   · by_contra h
     specialize h 0 1 0
@@ -412,9 +412,8 @@ theorem Equation39_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equati
 
 @[equational_result]
 theorem Equation40_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation3 G := by
-  let a : Type := Bool
-  let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
-  exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
+  let hG : Magma Bool := { op := fun x y ↦ ¬ x ∨ y }
+  exact ⟨Bool, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
 @[equational_result]
 theorem Equation40_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation39 G :=
@@ -422,21 +421,18 @@ theorem Equation40_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation
 
 @[equational_result]
 theorem Equation40_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation42 G := by
-  let a : Type := Bool
-  let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
-  exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
+  let hG : Magma Bool := { op := fun x y ↦ ¬ x ∨ y }
+  exact ⟨Bool, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
 @[equational_result]
 theorem Equation40_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation43 G := by
-  let a : Type := Bool
-  let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
-  exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
+  let hG : Magma Bool := { op := fun x y ↦ ¬ x ∨ y }
+  exact ⟨Bool, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
 @[equational_result]
 theorem Equation40_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation4512 G := by
-  let a : Type := Bool
-  let hG : Magma a := { op := fun x y ↦ ¬ x ∨ y }
-  exact ⟨a, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
+  let hG : Magma Bool := { op := fun x y ↦ ¬ x ∨ y }
+  exact ⟨Bool, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
 
 @[equational_result]
 theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation43 G := by
@@ -445,7 +441,7 @@ theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation
   by_contra h
   specialize h 0 1
   dsimp [hG] at h
-  linarith
+  contradiction
 
 @[equational_result]
 theorem Equation42_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation4512 G := by
@@ -454,7 +450,7 @@ theorem Equation42_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equati
   by_contra h
   specialize h 0 0 0
   dsimp [hG] at h
-  linarith
+  contradiction
 
 @[equational_result]
 theorem Equation43_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation3 G := by
@@ -479,7 +475,7 @@ theorem Equation43_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation
   by_contra h
   specialize h 0 0 1
   dsimp [hG] at h
-  linarith
+  contradiction
 
 @[equational_result]
 theorem Equation43_not_implies_Equation387 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation387 G := by
@@ -488,7 +484,7 @@ theorem Equation43_not_implies_Equation387 : ∃ (G: Type) (_: Magma G), Equatio
   by_contra h
   specialize h 0 1
   dsimp [hG] at h
-  linarith
+  contradiction
 
 @[equational_result]
 theorem Equation43_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation4512 G := by
@@ -499,7 +495,7 @@ theorem Equation43_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equati
   · by_contra h
     specialize h 0 0 1
     dsimp [hG] at h
-    linarith
+    contradiction
 
 @[equational_result]
 theorem Equation46_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation46 G ∧ ¬ Equation3 G := by
@@ -508,7 +504,7 @@ theorem Equation46_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation4
   by_contra h
   specialize h 1
   dsimp [hG] at h
-  linarith
+  contradiction
 
 @[equational_result]
 theorem Equation46_not_implies_Equation4 : ∃ (G: Type) (_: Magma G), Equation46 G ∧ ¬ Equation4 G := by
@@ -517,7 +513,7 @@ theorem Equation46_not_implies_Equation4 : ∃ (G: Type) (_: Magma G), Equation4
   by_contra h
   specialize h 1 0
   dsimp [hG] at h
-  linarith
+  contradiction
 
 @[equational_result]
 theorem Equation168_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation8 G :=
@@ -565,7 +561,7 @@ theorem Equation4512_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equati
   · by_contra h
     specialize h 0 0 1
     dsimp [hG] at h
-    linarith
+    contradiction
 
 @[equational_result]
 theorem Equation4512_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation4513 G := by
@@ -576,7 +572,7 @@ theorem Equation4512_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equa
   · by_contra h
     specialize h 0 0 0 1
     dsimp [hG] at h
-    linarith
+    contradiction
 
 @[equational_result]
 theorem Equation4513_not_implies_Equation4522 : ∃ (G: Type) (_: Magma G), Equation4513 G ∧ ¬ Equation4522 G := by
@@ -587,7 +583,7 @@ theorem Equation4513_not_implies_Equation4522 : ∃ (G: Type) (_: Magma G), Equa
   · by_contra h
     specialize h 0 0 0 3 3
     dsimp [hG] at h
-    linarith
+    contradiction
 
 -- use "saturating addition" on the set {1, 2, 3}, where we add in the normal way but cap the result at 3 (x*y = min(3, x+y)).
 
@@ -604,37 +600,12 @@ def add : Th → Th → Th
 | Th.t2, Th.t2 => Th.t3
 | Th.t2, Th.t3 => Th.t3
 | Th.t3, _ => Th.t3
-theorem add3 (a b c :Th) : add (add a b ) c = Th.t3:= by
 
-  cases a;
-  cases b;
-  cases c; trivial; trivial; trivial;
-  cases c; trivial; trivial; trivial;
-  cases c; trivial; trivial; trivial;
-  cases b;
-  cases c; trivial; trivial; trivial;
-  cases c; trivial; trivial; trivial;
-  cases c; trivial; trivial; trivial;
-  cases b;
-  cases c; trivial; trivial; trivial;
-  cases c; trivial; trivial; trivial;
-  cases c; trivial; trivial; trivial
+theorem add3 (a b c : Th) : add (add a b) c = Th.t3 := by
+  cases a <;> cases b <;> cases c <;> trivial
 
-theorem add3_ (a b c :Th) : add  a (add b c ) = Th.t3:= by
-
-  cases a;
-  cases b;
-  cases c; trivial; trivial; trivial;
-  cases c; trivial; trivial; trivial;
-  cases c; trivial; trivial; trivial;
-  cases b;
-  cases c; trivial; trivial; trivial;
-  cases c; trivial; trivial; trivial;
-  cases c; trivial; trivial; trivial;
-  cases b;
-  cases c; trivial; trivial; trivial;
-  cases c; trivial; trivial; trivial;
-  cases c; trivial; trivial; trivial
+theorem add3_ (a b c : Th) : add a (add b c) = Th.t3 := by
+  cases a <;> cases b <;> cases c <;> trivial
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation39 G := by
@@ -657,11 +628,7 @@ theorem Equation4582_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equati
       _ = add (add w u) v := by rw [add3 w u v]
   refine ⟨Th, hG, hh, ?_⟩
   by_contra h
-  specialize h Th.t1 Th.t2
-  have h1: Th.t1 ∘ Th.t1 = Th.t2 := rfl
-  have h2: Th.t2 ∘ Th.t2 = Th.t3 := rfl
-  have h3: Th.t1 ∘ Th.t1 ≠ Th.t2 ∘ Th.t2 := by rw[h1, h2]; intro hhh; cases hhh
-  exact absurd h h3
+  exact absurd (h Th.t1 Th.t2) (fun hh ↦ by cases hh)
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation42 G := by
@@ -672,7 +639,7 @@ theorem Equation4582_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equati
   · by_contra h
     specialize h 0 0 1
     dsimp [hG] at h
-    linarith
+    contradiction
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation43 G := by
@@ -683,6 +650,6 @@ theorem Equation4582_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equati
   · by_contra h
     specialize h 1 2
     dsimp [hG] at h
-    linarith
+    contradiction
 
 end Subgraph
