@@ -6,12 +6,18 @@ import Mathlib.Data.Set.Defs
 
 open FreeMagma
 
+namespace Law
+
 structure MagmaLaw (α : Type) where
   lhs : FreeMagma α
   rhs : FreeMagma α
 deriving DecidableEq
 
-local infix:60 " ≃ " => MagmaLaw.mk
+infix:60 " ≃ " => MagmaLaw.mk
+
+end Law
+
+open Law
 
 def substFreeMagma {α β} (t : FreeMagma α) (σ : α → FreeMagma β) : FreeMagma β :=
 match t with
