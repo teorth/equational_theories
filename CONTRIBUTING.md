@@ -9,11 +9,14 @@ Contributions to the project take the form of Github pull requests that complete
 1. Each task is posted as an issue that appears in the `Unclaimed Outstanding Task` column of the [dashboard](https://github.com/users/teorth/projects/1)
 2. A contributor can lay claim to a task by commenting `claim` in the corresponding github issue. A user who wishes to drop their claim can comment `disclaim` on the issue.
 3. If there is no other user assigned to the task, the user gets assigned to the issue. A `claim`ed issue moves to the `Claimed Tasks` column of the dashboard.
-4. The user creates a PR to solve the task and then comments "propose PR #xyz" under the issue. If the issue is already assigned to them, their PR is now linked to the issue. The PR now moves to the `In Progress` column of the dashboard and is shown with the linked PR.
-5. To withdraw their PR, a user can comment `withdraw PR #xyz`. The task moves to the `Claimed Tasks` column and the user remains assigned to the Github issue.
-6. Upon finishing the PR, the user may comment `awaiting-review` on the PR which is shown in the task view of the dashboard against the PR.
+   * If you wish to give up on a task, please comment `disclaim` on it. This allows others to `claim` it. Only one github user can claim a task at a time.
+5. The user creates a PR to solve the task and then comments `propose PR #xyz` under the issue. If the issue is already assigned to them, their PR is now linked to the issue. The PR now moves to the `In Progress` column of the dashboard and is shown with the linked PR.
+   * _A PR proposal is only accepted if an issue has been claimed by the github user._
+7. To withdraw their PR, a user can comment `withdraw PR #xyz`. The task moves to the `Claimed Tasks` column and the user remains assigned to the Github issue.
+     * **Important**: _If a user wishes to propose a different PR, the user needs to first withdraw their previous PR (step 6) in one comment. In a subsequent comment, they may propose the new PR (as in step 4)._
+8. Upon finishing the PR, the user may comment `awaiting-review` on the PR which is shown in the task view of the dashboard against the PR.
 Maintainers review and merge it.
-7. Merged tasks move to the `Completed Tasks` column of the dashboard.
+9. Merged tasks move to the `Completed Tasks` column of the dashboard.
 
 ### Some Rules and Notes
 1. Please respect the issue claims. If an issue has been assigned to someone, please don't try to work on it simultaneously without discussing with the claimant first. This allows for a coordination process that respects every contributor's time and effort.
@@ -83,7 +86,7 @@ When PR'ing a new script, consider also adding a brief link and description to t
 
 ## Data
 
-Output from code that is not Lean proofs (or `conjecture` claims in Lean) can be placed in the [data directory](data).
+Output from code that is not Lean proofs (or `conjecture` claims in Lean) can be placed in the [data directory](data).  One can then update the [README.md](README.md) to list this new data set.  Note: if the data set is not fully validated (e.g., due to potential bugs in the code used to generate the data), please disclose this when reporting it to [README.md](README.md).  In the blueprint, one can add a chapter describing the data set, the code used to generate it, and any further comments (such as comparisons with other data sets).
 
 ## Automated Proofs
 

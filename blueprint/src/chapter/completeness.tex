@@ -1,0 +1,31 @@
+\chapter{Completeness and compactness theorems}
+
+We now generalize the implication concept from Definition \ref{impl}:
+
+\begin{definition}[Semantic consequence]\label{semantic-def}\uses{law-def} Let $\Gamma$ be a collection of laws, and let $E$ be a law. We say that $E$ is a \emph{semantic consequence} of $\Gamma$, and write $\Gamma \models E$, if every magma that obeys every law in $\Gamma$, also obeys $E$.
+\end{definition}
+
+Definition \ref{impl} is basically the case where $\Gamma$ is a singleton.
+
+\begin{definition}[Syntactic consequence]\label{syntactic-def}\uses{law-def, push} Let $\Gamma$ be a collection of laws, and let $E$ be a law. We say that $E$ is a \emph{syntactic consequence} of $\Gamma$, and write $\Gamma \vdash E$, if $E$ can be deduced from $\Gamma$ using the following rules of inference:
+\begin{itemize}
+\item If $E$ is an element of $\Gamma$, then $\Gamma \vdash E$.
+\item For any word $w$, we have $\Gamma \vdash w \formaleq w$.
+\item If $w,w'$ are words with $\Gamma \vdash w \formaleq w'$, then $\Gamma \vdash w' \formaleq w$.
+\item If $w,w',w''$ are words with $\Gamma \vdash w \formaleq w'$ and $\Gamma \vdash w' \formaleq w''$, then $\Gamma \vdash w \formaleq w''$.
+\item If $w,w'$ are words with $\Gamma \vdash w \formaleq w'$, and $\pi : \N \to \N$ is a function, then $\Gamma \vdash \pi_* w \formaleq \pi_* w'$.
+\item If $w,w',v$ are words with $\Gamma \vdash w \formaleq w'$, then $\Gamma \vdash v \circ w \formaleq v \circ w'$ and $\Gamma \vdash w \circ v \formaleq w' \circ v$.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Completeness theorem]\label{completeness-thm}\uses{semantic-def,syntactic-def}  Let $\Gamma$ be a collection of laws, and let $E$ be a law.  Then $\Gamma \models E$ if and only if $\Gamma \vdash E$.
+\end{theorem}
+
+\begin{proof} (Sketch) The `only if' component is soundness, and follows from verifying that the rules of inference in Definition \ref{synctactic-def} holds for $\models$.  The `if` part is completeness, and is proven by constructing the magma of words, quotiented out by the relation $\Gamma \vdash w \formaleq w'$, which is easily seen to be an equivalence relation respecting the magma operation
+\end{proof}
+
+\begin{corollary}[Compactness theorem]\label{compactness-thm}\uses{semantic-def,syntactic-def}  Let $\Gamma$ be a collection of laws, and let $E$ be a law.  Then $\Gamma \models E$ if and only if there exists a finite subset $\Gamma'$ of $\Gamma$ such that $\Gamma' \models E$.
+\end{corollary}
+
+\begin{proof}\uses{completeness-thm} The claim is obvious for $\vdash$, and the claim then follows from Theorem \ref{completeness-thm}
+\end{proof}
