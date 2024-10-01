@@ -4,6 +4,8 @@
 import equational_theories.FreeMagma
 import Mathlib.Data.Set.Defs
 
+open FreeMagma
+
 structure MagmaLaw (α : Type) where
   lhs : FreeMagma α
   rhs : FreeMagma α
@@ -44,7 +46,7 @@ inductive derive {α} : Ctx α → MagmaLaw α → Type :=
 end DeriveDef
 
 def satisfiesPhi {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
-  evalInMagma φ E.lhs = evalInMagma φ E.rhs
+  E.lhs.evalInMagma φ = E.rhs.evalInMagma φ
 
 def satisfies {α : Type} (G : Type) [Magma G] (E : MagmaLaw α) := ∀ (φ : α → G), satisfiesPhi φ E
 
