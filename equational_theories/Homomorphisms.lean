@@ -156,6 +156,24 @@ lemma MagmaEquiv.toMagmaHom_coe {F G H : Type*} [Magma G] [Magma H] [EquivLike F
     ((f : G →∘ H) : G → H) = f :=
   rfl
 
+/-- The identity is a magma automorphism. -/
+def idMagmaEquiv (G : Type*) [Magma G] : G ≃∘ G where
+  toFun := id
+  invFun := id
+  left_inv := fun _ ↦ rfl
+  right_inv := fun _ ↦ rfl
+  map_op' := fun _ _ ↦ rfl
+
+/-- `MagmaEquiv` out of two `MagmaHom`s.-/
+def MagmaHom.toMagmaEquiv {G H : Type*} [Magma G] [Magma H]
+    {f₁ : G →∘ H} {f₂ : H →∘ G} (hfH : f₁ ∘ f₂ = idMagmaEquiv H) (hfG : f₂ ∘ f₁ = idMagmaEquiv G) :
+    G ≃∘ H where
+  toFun := f₁
+  invFun := f₂
+  left_inv x := show (f₂ ∘ f₁) x = x from hfG ▸ refl x
+  right_inv x := show (f₁ ∘ f₂) x = x from hfH ▸ refl x
+  map_op' := f₁.map_op'
+
 /- Inverses -/
 
 /-- Inverse magma isomorphism. -/
@@ -176,51 +194,3 @@ lemma MagmaEquiv.symm_comp {G H I : Type*} [Magma G] [Magma H] [Magma I]
     (f₁ : G ≃∘ H) (f₂ : H ≃∘ I) :
     (f₁.comp f₂).symm = f₂.symm.comp f₁.symm :=
   rfl
-
-/- TODO? -/
-
-/-- The identity is a magma automorphism. -/
-def idMagmaEquiv (G : Type*) [Magma G] : G ≃∘ G where
-  toFun := id
-  invFun := id
-  left_inv := fun _ ↦ rfl
-  right_inv := fun _ ↦ rfl
-  map_op' := fun _ _ ↦ rfl
-
-/- Do we want this one? -/
-def MagmaHom.toMagmaEquiv' {G H : Type*} [Magma G] [Magma H]
-    (f₁ : G →∘ H) (f₂ : H → G) (hfH : f₁ ∘ f₂ = idMagmaEquiv H) (hfG : f₂ ∘ f₁ = idMagmaEquiv G) :
-    G ≃∘ H where
-  toFun := f₁
-  invFun := f₂
-  left_inv x := show (f₂ ∘ f₁) x = x from hfG ▸ refl x
-  right_inv x := show (f₁ ∘ f₂) x = x from hfH ▸ refl x
-  map_op' := f₁.map_op'
-
-/-- `MagmaEquiv` out of two `MagmaHom`s.-/
-def MagmaHom.toMagmaEquiv {G H : Type*} [Magma G] [Magma H]
-    {f₁ : G →∘ H} {f₂ : H →∘ G} (hfH : f₁ ∘ f₂ = idMagmaEquiv H) (hfG : f₂ ∘ f₁ = idMagmaEquiv G) :
-    G ≃∘ H :=
-  MagmaHom.toMagmaEquiv' f₁ f₂.toFun hfH hfG
-
-/- Do we want this one? -/
-def MagmaHom.toMagmaEquiv'' {G H : Type*} [Magma G] [Magma H]
-    (f₁ : G →∘ H) (f₂ : H →∘ G) (hfH : f₁ ∘ f₂ = id) (hfG : f₂ ∘ f₁ = id) :
-    G ≃∘ H where
-  toFun := f₁
-  invFun := f₂
-  left_inv x := show (f₂ ∘ f₁) x = x from hfG ▸ refl x
-  right_inv x := show (f₁ ∘ f₂) x = x from hfH ▸ refl x
-  map_op' := f₁.map_op'
-
-/- Do we want this one? -/
-def MagmaHom.toMagmaEquiv''' {G H : Type*} [Magma G] [Magma H]
-    (f₁ : G →∘ H) (f₂ : H →∘ G)
-    (hfG : f₁.comp f₂ = (idMagmaEquiv G).toMagmaHom)
-    (hfH : f₂.comp f₁ = (idMagmaEquiv H).toMagmaHom) :
-    G ≃∘ H where
-  toFun := f₁
-  invFun := f₂
-  left_inv x := show (MagmaHom.comp f₁ f₂) x = x from hfG ▸ refl x
-  right_inv x := show (MagmaHom.comp f₂ f₁) x = x from hfH ▸ refl x
-  map_op' := f₁.map_op'
