@@ -169,34 +169,8 @@ theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equ
   fun _ _ _ ↦ by rw [← h]
 
 /-- Dual to Problem A1 from Putnam 2001 -/
-theorem Equation14_implies_Equation29 (G: Type*) [Magma G] (h: Equation14 G) : Equation29 G := by
-  -- generated automatically by gapt
-  rename Equation14 G => h0
-  unfold Equation14 at h0
-  unfold Equation29
-  intro a1 a2
-  have h1: ( ( a2 ∘ a1 ) ∘ a2 ) = a1 -- cut
-  · have h2 := h0 -- c:l
-    have h3: ( a1 ∘ ( a2 ∘ a1 ) ) = a2 -- cut
-    · have h4: a2 = ( a1 ∘ ( a2 ∘ a1 ) ) -- cut
-      · have h5: ∀ y, a2 = ( y ∘ ( a2 ∘ y ) ) := by apply h2 -- ∀:l
-        clear h2
-        have h6: a2 = ( a1 ∘ ( a2 ∘ a1 ) ) := by apply h5 -- ∀:l
-        clear h5
-        exact h6 -- ax
-      · nth_rw  1 [←h4] -- eq:r
-    · nth_rw  2 [←h3] -- eq:r
-      clear h3 -- w:l
-      have h7: a1 = ( ( a2 ∘ a1 ) ∘ ( a1 ∘ ( a2 ∘ a1 ) ) ) -- cut
-      · have h8: ∀ y, a1 = ( y ∘ ( a1 ∘ y ) ) := by apply h0 -- ∀:l
-        clear h0
-        have h9: a1 = ( ( a2 ∘ a1 ) ∘ ( a1 ∘ ( a2 ∘ a1 ) ) ) := by apply h8 -- ∀:l
-        clear h8
-        exact h9 -- ax
-      · nth_rw  1 [←h7] -- eq:r
-  · have h10: a1 = ( ( a2 ∘ a1 ) ∘ a2 ) -- cut
-    · nth_rw  1 [←h1] -- eq:r
-    · exact h10 -- ax
+theorem Equation14_implies_Equation29 (G: Type*) [Magma G] (h: Equation14 G) : Equation29 G :=
+  fun x y ↦ (h x (y ∘ x)).trans (congrArg ((y ∘ x) ∘ ·) (h y x).symm)
 
 /-- This implication is Problem A1 from Putnam 2001 -/
 @[equational_result]
