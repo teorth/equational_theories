@@ -1,0 +1,64 @@
+#! /usr/bin/env python3
+
+import argparse
+from PIL import Image  # pip install pillow
+import json
+
+############################################
+
+def name_to_id(name):
+    return int(name.removeprefix('Equation'))
+
+def outcome_to_color(outcome) :
+    if outcome == "explicit_proof_true":
+        return (0, 255, 0)
+    elif outcome == "implicit_proof_true":
+        return (16, 92, 16)
+    elif outcome == "explicit_conjecture_true":
+        return (0, 0, 255)
+    elif outcome == "implicit_conjecture_true":
+        return (16, 16, 92)
+    elif outcome == "unknown":
+        return (0, 0, 0)
+    elif outcome == "explicit_conjecture_false":
+        return (128, 0, 128)
+    elif outcome == "implicit_conjecture_false":
+        return (48, 8, 48)
+    elif outcome == "explicit_proof_false":
+        return (255, 0, 0)
+    elif outcome == "implicit_proof_false":
+        return (92, 16, 16)
+    else:
+        raise Exception("unknown outcome: " + outcome)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="render an image")
+    parser.add_argument("file", help="json file containing output of `lake exe extract_implications outcomes")
+    args = parser.parse_args()
+
+    with open(args.file, 'r') as f:
+        data = json.load(f)
+
+    outcomes = data["outcomes"]
+    eqs = data["equations"]
+
+    size = len(eqs)
+    print("size = ", size)
+
+    # construct map from equation ID to its index in eqs.
+    reverse_map = dict()
+    for ii, eq in enumerate(eqs):
+        reverse_map[name_to_id(eq)] = ii
+
+    img = Image.new('RGB', (size, size))
+    pixels = img.load()
+    for ii, row in enumerate(outcomes):
+        for jj, outcome in enumerate(row):
+            i_idx = reverse_map[ii+1]
+            j_idx = reverse_map[jj+1]
+            if ii == jj:
+                # always true.
+                pixels[i_idx, j_idx] = outcome_to_color("implicit_proof_true")
+            else :
+                pixels[i_idx, j_idx] = outcome_to_color(outcome)
+    img.save("out.png")
