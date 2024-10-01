@@ -715,4 +715,14 @@ theorem Equation4582_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equati
     specialize h 1 2
     simp [hG] at h
 
+@[equational_result]
+theorem Equation4582_not_implies_Equation46 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation46 G := by
+  let hG : Magma (Fin 3) := { op := fun x y ↦ if x = 2 ∧ y = 2 then 1 else 0 }
+  refine ⟨Fin 3, hG, fun _ _ _ _ _ _ ↦ ?_, ?_⟩
+  . dsimp [hG]
+    split_ifs <;> simp_all
+  · by_contra h
+    specialize h 0 0 2 2
+    simp [hG] at h
+
 end Subgraph
