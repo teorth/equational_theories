@@ -1,7 +1,7 @@
 import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
-import equational_theories.Conjecture
 import equational_theories.EquationalResult
+import equational_theories.Closure
 import equational_theories.Equations
 import equational_theories.FactsSyntax
 
@@ -173,7 +173,9 @@ theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equ
   fun _ _ _ ↦ by rw [← h]
 
 /-- Dual to Problem A1 from Putnam 2001 -/
-conjecture Equation14_implies_Equation29 (G: Type*) [Magma G] (h: Equation14 G) : Equation29 G
+@[equational_result]
+theorem Equation14_implies_Equation29 (G: Type*) [Magma G] (h: Equation14 G) : Equation29 G :=
+  fun x y ↦ (h x (y ∘ x)).trans (congrArg ((y ∘ x) ∘ ·) (h y x).symm)
 
 /-- This implication is Problem A1 from Putnam 2001 -/
 @[equational_result]
@@ -242,13 +244,13 @@ theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) :
 
 theorem Lemma_eq1689_implies_h2 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, a ∘ ((((a ∘ b)∘ b)∘ c)∘ c) = (a∘ b)∘ b := by
     intro a b c
-    calc a ∘ ((((a ∘ b)∘ b)∘ c)∘ c) = ((a ∘ a) ∘ ((a ∘ b) ∘ b)) ∘ ((((a ∘ b)∘ b)∘ c)∘ c) := by rw [←  h a a b, h a b c]
+    calc a ∘ ((((a ∘ b)∘ b)∘ c)∘ c) = ((a ∘ a) ∘ ((a ∘ b) ∘ b)) ∘ ((((a ∘ b)∘ b)∘ c)∘ c) := by rw [← h a a b, h a b c]
     _ = (a∘ b)∘ b := by rw[← h ((a ∘ b) ∘ b) (a ∘ a) c]
 
 theorem Lemma_eq1689_implies_h3 (G: Type*) [Magma G] (h: Equation1689 G) :∀ a b c d : G, (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ d) ∘ d)) = b ∘ c := by
     intro a b c d
-    calc (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ d) ∘ d)) =  (a ∘ (b ∘ c)) ∘ (((b ∘ c) ∘ ((c ∘ d) ∘ d)) ∘ ((c ∘ d) ∘ d)) := by rw [←  h c b d]
-    _ = b ∘ c := by rw [←  h _ _ _]
+    calc (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ d) ∘ d)) =  (a ∘ (b ∘ c)) ∘ (((b ∘ c) ∘ ((c ∘ d) ∘ d)) ∘ ((c ∘ d) ∘ d)) := by rw [← h c b d]
+    _ = b ∘ c := by rw [← h _ _ _]
 
 theorem Lemma_eq1689_implies_h4 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, a ∘ (b ∘ ((b ∘ c) ∘ c)) = (a ∘ b) ∘ b := by
     intro a b c
