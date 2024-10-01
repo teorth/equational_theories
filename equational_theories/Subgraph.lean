@@ -281,6 +281,7 @@ theorem Lemma_eq1689_implies_h8 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a
     _ = (a ∘ b) ∘ ((b ∘ c) ∘ c) := by rw [Lemma_eq1689_implies_h5 G h]
     _ = b := by rw [← h]
 
+/-- This result was first obtained by Kisielewicz in 1997 via computer assistance. -/
 @[equational_result]
 theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G:= by
   have h9: ∀ a b : G, a ∘ ((a ∘ b) ∘ b) = a := by
