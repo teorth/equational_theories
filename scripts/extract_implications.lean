@@ -41,8 +41,10 @@ def generateOutcomes (inp : Cli.Parsed) : IO UInt32 := do
         for a in outcomes do
           for b in a do
             count := count.insert b (count.getD b 0 + 1)
+        IO.print "{"
         for ⟨a, b⟩ in count do
-          println! "{a}: {b}"
+          println! "{a}: {b},"
+        IO.println "}"
       else
         IO.println (toJson ({equations, outcomes : OutputOutcomes})).compress
       pure 0
