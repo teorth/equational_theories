@@ -26,7 +26,7 @@ def Ctx α := Set (MagmaLaw α)
 -- FIXME: figure out how to remove this.
 instance Ctx.Membership α : Membership (MagmaLaw α) (Ctx α) := ⟨ Set.instMembership.mem ⟩
 
-instance {α : Type} : Singleton  (MagmaLaw α) (Ctx α) := ⟨Set.singleton⟩
+instance {α : Type} : Singleton (MagmaLaw α) (Ctx α) := ⟨Set.singleton⟩
 
 section DeriveDef
 

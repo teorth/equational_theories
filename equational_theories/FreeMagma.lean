@@ -19,7 +19,7 @@ theorem FreeMagma_op_eq_fork (α : Type u) (a b : FreeMagma α) : a ∘ b = a �
 
 notation "Lf" => FreeMagma.Leaf
 
-instance FreeMagma.Magma {α} : Magma (FreeMagma α) := ⟨ Fork ⟩
+instance FreeMagma.isMagma {α} : Magma (FreeMagma α) := ⟨ Fork ⟩
 
 namespace FreeMagma
 
@@ -27,7 +27,7 @@ def fmapFreeMagma {α : Type u} {β : Type v} (f : α → β) : FreeMagma α →
   | Lf a => FreeMagma.Leaf (f a)
   | lchild ⋆ rchild => FreeMagma.Fork (fmapFreeMagma f lchild) (fmapFreeMagma f rchild)
 
-def evalInMagma {α : Type u} {G : Type v} [_root_.Magma G] (f : α -> G) : FreeMagma α → G
+def evalInMagma {α : Type u} {G : Type v} [Magma G] (f : α -> G) : FreeMagma α → G
   | Lf a => f a
   | lchild ⋆ rchild => (evalInMagma f lchild) ∘ (evalInMagma f rchild)
 
