@@ -3,3 +3,5 @@ import equational_theories.Generated.TrivialBruteforce.theorems.Apply2
 import equational_theories.Generated.TrivialBruteforce.theorems.RewriteGoal
 import equational_theories.Generated.TrivialBruteforce.theorems.RewriteHypothesis
 import equational_theories.Generated.TrivialBruteforce.theorems.RewriteHypothesisAndGoal
+import equational_theories.Generated.TrivialBruteforce.theorems.RewriteCombinations
+import equational_theories.Generated.TrivialBruteforce.theorems.NthRewrites
