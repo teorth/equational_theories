@@ -1,7 +1,7 @@
 import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
-import equational_theories.Conjecture
 import equational_theories.EquationalResult
+import equational_theories.Closure
 import equational_theories.Equations
 import equational_theories.FactsSyntax
 
@@ -172,7 +172,8 @@ theorem Equation7_implies_Equation3 (G: Type*) [Magma G] (h: Equation7 G) : Equa
 theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G :=
   fun _ _ _ ↦ by rw [← h]
 
-/-- Dual to Problem A1 from Putnam 2001 -/
+/-- dual to Problem A1 from Putnam 2001 -/
+@[equational_result]
 conjecture Equation14_implies_Equation29 (G: Type*) [Magma G] (h: Equation14 G) : Equation29 G
 
 /-- This implication is Problem A1 from Putnam 2001 -/

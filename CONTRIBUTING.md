@@ -33,8 +33,8 @@ The core Lean files are as follows:
 
 - [`Magma.lean`](equational_theories/Magma.lean)  This contains the API for Magmas.
 - [`FreeMagma.lean`](equational_theories/FreeMagma.lean)  Contains the API for free Magmas.
-- [`Conjecture.lean`](equational_theories/Conjecture.lean)  Introduces the `conjecture` keyword, which is a variant of `proof_wanted` with more metadata to allow for easier aggregation of conjectured implications.
-- [`Result.lean`](equational_theories/Result.lean)  Introduces the `result` keyword, which is a variant of `theorem` with more metadata to allow for easier aggregation of proven implications.
+- [`EquationalResults.lean`](equational_theories/EquationalResults.lean)  Introduces the `@[equational_result]` attribute, which adds metadata to allow for easier aggregation of implications. Also adds `conjecture` keyword, which is a variant of `proof_wanted` which keeps the metadata produced by `@[equational_result]` (but marking it as a conjecture).
+- [`Closure.lean`](equational_theories/Closure.lean)  Contains code for computing the transitive closure of the implications.
 - [`Generated.lean`](equational_theories/Generated.lean)  This short file imports all the generated data sets.
 - [`EquationsCommand.lean`](equational_theories/EquationsCommand.lean)  A technical file to speed up elaboration of equations.
 - [`ParseImplications.lean`](equational_theories/ParseImplications.lean)  Tools to help parse implications within Lean.
@@ -51,7 +51,7 @@ In addition to these files, contributors are welcome to add additional Lean file
 - The standard form for an anti-implication "Equation X does not imply Equation Y" is `theorem EquationX_not_implies_EquationY : ∃ (G: Type) (_: Magma G), EquationX G ∧ ¬ EquationY G`.
 - Add the `@[equational_result]` attribute to theorems of the above forms to make them visible to our analysis tools.
 - NOTE: We are potentially in the process of updating our base representation of equations, so that the above guidance may change in the future.  See [this Zulip thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Equations.20vs.20Laws) for some relevant discussion.
-- You are also encouraged to add `conjecture` versions of these theorems, for results that were obtained by hand or by some other automated tool whose output is not in the form of a Lean proof.  If you are creating such `conjecture` statements, consider adding a sketch of the proof as a comment in the Lean file.  We can then add tasks (via Github issues) to convert such `conjecture` statements into theorems.  (Technical note: to avoid linter warnings, one can replace `h: EquationX G` with `_: EquationX G` in a `conjecture` implication.)
+- You are also encouraged to add `conjecture` versions of these theorems, for results that were obtained by hand or by some other automated tool whose output is not in the form of a Lean proof.  If you are creating such `conjecture` statements, consider adding a sketch of the proof as a comment in the Lean file.  We can then add tasks (via Github issues) to convert such `conjecture` statements into theorems. Note that you should add `@[equational_result]` to conjectures as well.  (Technical note: to avoid linter warnings, one can replace `h: EquationX G` with `_: EquationX G` in a `conjecture` implication.)
 - To establish an equivalence between two Equations X and Y, split it into two implications "Equation X implies Equation Y" and "Equation Y implies Equation X" as above.
 - To avoid collisions, implications and anti-implications should be placed inside a namespace specific to your Lean file.
 - Consider adding a chapter to the blueprint corresponding to the Lean file, which can for instance detail the methodology used to generate the content of that file.  Also update [this CONTRIBUTING.md file](CONTRIBUTING.md) to add a link to your Lean file.

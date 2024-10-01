@@ -10,7 +10,7 @@ open Lean
 structure Implication where
   lhs : String
   rhs : String
-deriving Lean.ToJson, Lean.FromJson
+deriving Lean.ToJson, Lean.FromJson, DecidableEq, Hashable
 
 /--
 Names of equations satisfied rsp. refuted by the same magma; used to concisely express

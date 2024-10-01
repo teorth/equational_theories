@@ -23,26 +23,29 @@ extension, as done in this file, has the following advantages:
 
 open Lean Parser Elab Command
 
-namespace Result
-
-/-- An entry in the equational results environment extension.
+/-- An entry in the equational results or conjecture environment extension.
 -/
 inductive EntryVariant where
   | implication : Implication → EntryVariant
   | facts : Facts → EntryVariant
   /-- An equation that always holds. -/
   | unconditional : String → EntryVariant
-deriving Lean.ToJson, Lean.FromJson
+deriving Lean.ToJson, Lean.FromJson, Inhabited
 
 /-- An entry in the equational results environment extension -/
 structure Entry where
-/-- Name of the declaration. -/
-(name : Name)
-/-- Name of the file where this declaration was found. -/
-(filename : String)
-/-- Which kind of result is it? -/
-(variant : EntryVariant)
-deriving Lean.ToJson, Lean.FromJson
+  /-- Name of the declaration. -/
+  name : Name
+  /-- Name of the file where this declaration was found. -/
+  filename : String
+  /-- Which kind of result is it? -/
+  variant : EntryVariant
+  /-- Is it proven? -/
+  proven : Bool
+deriving Lean.ToJson, Lean.FromJson, Inhabited
+
+def Entry.toConjecture : Entry → Entry
+  | .mk n f v _ => ⟨n, f, v, false⟩
 
 initialize equationalResultsExtension : SimplePersistentEnvExtension Entry (Array Entry) ←
   registerSimplePersistentEnvExtension {
@@ -50,6 +53,8 @@ initialize equationalResultsExtension : SimplePersistentEnvExtension Entry (Arra
     addImportedFn := Array.concatMap id
     addEntryFn    := Array.push
   }
+
+namespace Result
 
 private def equationalResultHelpString : String :=
 "tags theorems that provide implications or negated implications to the directed graph"
@@ -67,11 +72,11 @@ initialize equationalResultAttr : Unit ←
        let entry ← match info with
                    | .thmInfo  (val : TheoremVal) =>
                      if let some imp ← parseImplication val.type then
-                       pure <| ⟨val.name, filename, .implication imp⟩
+                       pure <| ⟨val.name, filename, .implication imp, true⟩
                      else if let some facts ← parseFacts val.type then
-                       pure <| ⟨val.name, filename, .facts facts⟩
+                       pure <| ⟨val.name, filename, .facts facts, true⟩
                      else if let some uncond ← parseUnconditionalEquation val.type then
-                       pure <| ⟨val.name, filename, .unconditional uncond⟩
+                       pure <| ⟨val.name, filename, .unconditional uncond, true⟩
                      else
                        throwError "failed to match type of @[equational_result] theorem"
                    | _ => throwError "@[equational_result] is only allowed on theorems"
@@ -87,35 +92,62 @@ def extractEquationalResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadEr
     m (Array Entry) := do
   return equationalResultsExtension.getState (← getEnv)
 
+def extractTheorems {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
+    m (Array Entry) := do
+  return (equationalResultsExtension.getState (← getEnv)).filter (·.proven)
+
+def extractConjectures {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
+    m (Array Entry) := do
+  return (equationalResultsExtension.getState (← getEnv)).filter (!·.proven)
+
 /-- Prints the contents of the equational results environment extension.
 -/
 syntax (name := printEquationalResults) "#print_equational_results" : command
 
 elab_rules : command
 | `(command| #print_equational_results) => do
-  let rs ← extractEquationalResults
-  for ⟨name, _filename, res⟩ in rs do
+  let rs ← extractTheorems
+  for ⟨name, _filename, res, _⟩ in rs do
     match res with
     | .implication ⟨lhs, rhs⟩ => println! "{name}: {lhs} → {rhs}"
     | .facts ⟨satisfied, refuted⟩ => println! "{name}: {satisfied} // {refuted}"
     | .unconditional rhs => println! "{name}: {rhs} holds unconditionally"
 
---- Output of the extract_implications executable.
-structure Output where
-  implications : Array Implication
-  facts : Array Facts
-  unconditionals : Array String
-deriving Lean.ToJson, Lean.FromJson
+end Result
 
-def collectResults {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
-    m Output := do
-  let rs := equationalResultsExtension.getState (← getEnv)
-  let mut implications : Array Implication := #[]
-  let mut facts : Array Facts := #[]
-  let mut unconditionals : Array String := #[]
-  for ⟨_name, _filename, res⟩ in rs do
-    match res with
-    | .implication imp => implications := implications.push imp
-    | .facts fact => facts := facts.push fact
-    | .unconditional s => unconditionals := unconditionals.push s
-  return ⟨implications, facts, unconditionals⟩
+namespace Conjecture
+
+/--
+Like `proof_wanted` from Batteries, but "leaks" a `@[equational_result]` attribute modifier,
+marking it as a conjecture.
+-/
+@[command_parser]
+def «conjecture» := leading_parser
+  declModifiers false >> "conjecture" >> declId >> ppIndent declSig
+
+/-- Elaborates a `conjecture` declaration. The declaration is translated to an axiom during
+elaboration, but it's then removed from the environment.
+-/
+@[command_elab «conjecture»]
+def elabConjecture : CommandElab
+  | `($mods:declModifiers conjecture $name $args* : $res) => do
+    let maybe_entry ← withoutModifyingEnv do
+      let original_length := (equationalResultsExtension.getState (← getEnv)).size
+
+      -- The helper axiom is used instead of `sorry` to avoid spurious warnings
+      elabDeclaration <| ← `(command| axiom helper (p : Prop) : p)
+      elabDeclaration <| ← `(command| $mods:declModifiers
+                                      theorem $name $args* : $res := helper _)
+
+      -- If we add a new entry to the equational results list
+      if original_length < (equationalResultsExtension.getState (← getEnv)).size then
+        return some (equationalResultsExtension.getState (← getEnv)).back
+      return none
+
+    if let some entry := maybe_entry then
+      modifyEnv fun env => -- then add it as a conjecture
+        equationalResultsExtension.addEntry env entry.toConjecture
+    pure ()
+  | _ => throwUnsupportedSyntax
+
+end Conjecture
