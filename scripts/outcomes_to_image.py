@@ -61,17 +61,27 @@ if __name__ == '__main__':
     size = len(eqs)
     print("size = ", size)
 
-    # construct map from equation ID to its index in eqs.
-    reverse_map = dict()
+    # We want to canonicalize the ordering of the rows and columns, using the ordering
+    # on equation numbers. We need to account for the fact that there may be gaps
+    # between equation numbers (e.g. if we only include Subgraph.lean).
+    #
+    # We will contruct the array `image_to_eqs` such that it maps an image row or column
+    # index into an `eqs` index.
+    image_to_eqs = []
+
+    eqs_with_idxs = []
     for ii, eq in enumerate(eqs):
-        reverse_map[name_to_id(eq)] = ii
+        eqs_with_idxs.append((name_to_id(eq), ii))
+    eqs_with_idxs.sort()
+    for eqid, eqidx in eqs_with_idxs:
+        image_to_eqs.append(eqidx)
 
     img = Image.new('RGB', (size, size))
     pixels = img.load()
     for ii, row in enumerate(outcomes):
         for jj, outcome in enumerate(row):
-            i_idx = reverse_map[ii+1]
-            j_idx = reverse_map[jj+1]
+            i_idx = image_to_eqs[ii]
+            j_idx = image_to_eqs[jj]
             if ii == jj:
                 # always true.
                 pixels[i_idx, j_idx] = outcome_to_color("implicit_proof_true")
