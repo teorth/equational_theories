@@ -33,7 +33,7 @@ The core Lean files are as follows:
 
 - [`Magma.lean`](equational_theories/Magma.lean)  This contains the API for Magmas.
 - [`FreeMagma.lean`](equational_theories/FreeMagma.lean)  Contains the API for free Magmas.
-- [`EquationalResults.lean`](equational_theories/EquationalResults.lean)  Introduces the `@[equational_result]` attribute, which adds metadata to allow for easier aggregation of implications. Also adds `conjecture` keyword, which is a variant of `proof_wanted` which keeps the metadata produced by `@[equational_result]` (but marking it as a conjecture).
+- [`EquationalResult.lean`](equational_theories/EquationalResult.lean)  Introduces the `@[equational_result]` attribute, which adds metadata to allow for easier aggregation of implications. Also adds `conjecture` keyword, which is a variant of `proof_wanted` which keeps the metadata produced by `@[equational_result]` (but marking it as a conjecture).
 - [`Closure.lean`](equational_theories/Closure.lean)  Contains code for computing the transitive closure of the implications.
 - [`Generated.lean`](equational_theories/Generated.lean)  This short file imports all the generated data sets.
 - [`EquationsCommand.lean`](equational_theories/EquationsCommand.lean)  A technical file to speed up elaboration of equations.
