@@ -1,7 +1,7 @@
 import Lean
 
 /-!
-This module defines variatns of the `decide` tactic with various hacks to speed up elaboration.
+This module defines variants of the `decide` tactic with various hacks to speed up elaboration.
 -/
 
 open Lean Elab Tactic Meta

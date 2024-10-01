@@ -12,7 +12,7 @@ open Lean Meta Elab Term
 def opOfTable {n : Nat} (t : Nat) (a : Fin n) (b : Fin n) : Fin n :=
   let i := a.val * n + b.val
   let r := (t / n^i) % n
-  ⟨r, Nat.mod_lt _ (by exact Fin.pos a)⟩
+  ⟨r, Nat.mod_lt _ (Fin.pos a)⟩
 
 /-- `enum n` is the array of all elements of `Fin n` in order -/
 private def Fin.enum (n) : Array (Fin n) := Array.ofFn id
