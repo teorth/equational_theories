@@ -44,7 +44,16 @@ instance : Inhabited Outcome where
   default := .unknown
 
 instance : ToString Outcome where
-  toString := toString ∘ repr
+  toString
+  | .unknown => "\"unknown\""
+  | .explicit_proof_true => "\"explicit_proof_true\""
+  | .implicit_proof_true => "\"implicit_proof_true\""
+  | .explicit_proof_false => "\"explicit_proof_false\""
+  | .implicit_proof_false => "\"implicit_proof_false\""
+  | .explicit_conjecture_true => "\"explicit_conjecture_true\""
+  | .implicit_conjecture_true => "\"implicit_conjecture_true\""
+  | .explicit_conjecture_false => "\"explicit_conjecture_false\""
+  | .implicit_conjecture_false => "\"implicit_conjecture_false\""
 
 def Outcome.implicit_theorem : Bool → Outcome
   | true => implicit_proof_true
@@ -175,7 +184,12 @@ def toEdges (inp : Array EntryVariant) : Array Edge := Id.run do
         edges := edges.push (.nonimplication ⟨eqs_order[i]!, eqs_order[j]!⟩)
   return edges
 
-def closure_aux (inp : Array EntryVariant) (eqs : Std.HashMap String Nat) : Array Bitset × Array (Array Nat) := Id.run do
+structure Reachability where
+  size : Nat
+  reachable : Array Bitset
+  components : Array (Array Nat)
+
+def closure_aux (inp : Array EntryVariant) (eqs : Std.HashMap String Nat) : Reachability := Id.run do
 
   -- construct the implication/non-implication graph
   let n := eqs.size
@@ -244,7 +258,24 @@ def closure_aux (inp : Array EntryVariant) (eqs : Std.HashMap String Nat) : Arra
       reachable := reachable.modify i (fun x ↦ x.mapIdx (fun idx val ↦
         reachable[j]!.toArray[idx]! ||| val))
 
-  pure (reachable, components)
+  pure ⟨n, reachable, components⟩
+
+instance {m : Type → Type} : ForIn m Reachability (Nat × Nat × Bool) where
+  forIn {β : Type} [Monad m] (reachability : Reachability) (state : β)
+      (f : (Nat × Nat × Bool) → β → m (ForInStep β)) := do
+    let mut v := state
+    for i in reachability.components, i2 in reachability.reachable do
+      if i.back >= reachability.size then continue
+      for j in reachability.components, j2 in [:reachability.components.size] do
+        if i2.get j2 then
+          for x in i do
+            for y in j do
+              if x == y || y >= reachability.size * 2 then continue
+              let val := if y < reachability.size then (y, x, true) else (x, y - reachability.size, false)
+              match ← f val v with
+              | .done a => return a
+              | .yield a => v := a
+    return v
 
 /--
 This computes the closure of the implications/non-implications represented by `inp`.
@@ -254,24 +285,39 @@ def closure (inp : Array EntryVariant) : Array Edge := Id.run do
   let n := eqs.size
 
 
-  let (reachable, components) := closure_aux inp eqs
-
   -- extract the implications
   let mut ans : Array Edge := Array.mkEmpty (n*n)
 
-
-  for i in components, i2 in reachable do
-    if i.back >= n then continue
-    for j in components, j2 in [:components.size] do
-      if i2.get j2 then
-        for x in i do
-          for y in j do
-            if x == y then continue
-            if y < n then
-              ans := ans.push (.implication ⟨eqs_order[y]!, eqs_order[x]!⟩)
-            else if y < 2*n then
-              ans := ans.push (.nonimplication ⟨eqs_order[x]!, eqs_order[y - n]!⟩)
+  for ⟨x, y, is_true⟩ in closure_aux inp eqs do
+    if is_true then
+      ans := ans.push (.implication ⟨eqs_order[x]!, eqs_order[y]!⟩)
+    else
+      ans := ans.push (.nonimplication ⟨eqs_order[x]!, eqs_order[y]!⟩)
 
   pure ans
+
+def list_outcomes {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
+    m (Array String × Array (Array Outcome)) := do
+  let rs := (← Result.extractEquationalResults).map (·.variant)
+  let prs := ((← Result.extractTheorems).map (·.variant))
+  let (eqs, eqs_order) := number_equations rs
+  let n := eqs.size
+  let mut outcomes : Array (Array Outcome) := Array.mkArray n (Array.mkArray n .unknown)
+  for edge in toEdges prs do
+    outcomes := outcomes.modify eqs[edge.lhs]! (fun a ↦ a.set! eqs[edge.rhs]!
+      (.explicit_theorem edge.isTrue))
+  for edge in toEdges rs do
+    outcomes := outcomes.modify eqs[edge.lhs]! (fun a ↦ a.modify eqs[edge.rhs]!
+      fun y ↦ if y = .unknown then .explicit_conjecture edge.isTrue else y)
+
+  for ⟨x, y, is_true⟩ in closure_aux prs eqs do
+    outcomes := outcomes.modify x (fun a ↦ a.modify y
+                fun y ↦ if y = .unknown then .implicit_theorem is_true else y)
+
+  for ⟨x, y, is_true⟩ in closure_aux rs eqs do
+    outcomes := outcomes.modify x (fun a ↦ a.modify y
+                fun y ↦ if y = .unknown then .implicit_conjecture is_true else y)
+
+  return (eqs_order, outcomes)
 
 end Closure
