@@ -8,7 +8,7 @@ others”.
 -/
 
 /--
-Concise syntax for stating that a given magma satsifies resp. refutes multiple of the equations:
+Concise syntax for stating that a given magma satisfies resp. refutes multiple of the equations:
 
 ```
 Facts G [1, 2] [4, 5] ↔ Equation1 G ∧ Equation2 G ∧ ¬ Equation4 G ∧ ¬ Equation5 G
