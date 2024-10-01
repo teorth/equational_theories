@@ -1,4 +1,5 @@
 import Mathlib.Order.Defs
+import Mathlib.Data.Set.Basic
 import equational_theories.Completeness
 
 namespace MagmaLaw
@@ -29,3 +30,8 @@ theorem implies_trans {l₁ l₂ l₃ : MagmaLaw α} : l₁ ≤ l₂ → l₂ �
 instance : Preorder (MagmaLaw α) where
   le_refl := implies_refl
   le_trans := fun _ _ _ => implies_trans
+
+theorem implies_eq_singleton_models {l₁ l₂ : MagmaLaw α} : l₁ ≤ l₂ ↔ {l₁} ⊧ l₂ := by
+  simp only [LE.le, implies, models, satisfiesSet, Ctx, Set.mem_singleton_iff, forall_eq]
+
+end MagmaLaw
