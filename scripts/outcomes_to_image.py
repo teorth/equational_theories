@@ -46,6 +46,10 @@ if __name__ == '__main__':
     parser.add_argument("--outfile",
                         type=str, default=None,
                         help="name of output file")
+    parser.add_argument("--scale",
+                        type=int, default=1,
+                        help="integer scale factor")
+
     args = parser.parse_args()
 
     outfile = args.outfile
@@ -87,5 +91,9 @@ if __name__ == '__main__':
                 pixels[i_idx, j_idx] = outcome_to_color("implicit_proof_true")
             else :
                 pixels[i_idx, j_idx] = outcome_to_color(outcome)
+
+    if args.scale != 1:
+        new_size = (size * args.scale, size * args.scale)
+        img = img.resize(new_size, Image.NEAREST)
     img.save(outfile)
     print("saved to " + outfile)
