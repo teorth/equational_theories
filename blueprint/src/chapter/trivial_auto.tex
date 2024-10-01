@@ -1,5 +1,51 @@
 \chapter{Trivial auto-generated theorems}
 
-\href{https://github.com/teorth/equational_theories/tree/main/equational_theories/Generated/TrivialBruteforce/theorems}{4.2m implications proven by a transitive reduction of 15k theorems} were proven using simple rewrite proof scripts.
+\href{https://github.com/teorth/equational_theories/tree/main/equational_theories/Generated/TrivialBruteforce}{Approximately 4.5m transitive implications were proven by a transitive reduction of about 15k theorems}. Most of these implications were derived from being the first automated run to connect the largest equivalence classes, hence creating a large set of transitively closed implications.
 
-{\bf include more details of the methodology, and any comparisons with other generated implication data sets.}
+Scripts generated theorems to try simple combinations of equation rewrites to reach the desired goal for every unknown implication. The generated proof scripts were run with lean and the successful theorems were extracted. An example of the types of generated rewrites that were tested:
+
+\begin{verbatim}
+  repeat intro
+  apply
+\end{verbatim}
+
+\begin{verbatim}
+  repeat intro
+  try { rw [<-h] }
+  try { rw [<-h, <-h] }
+  try { rw [<-h, <-h, <-h] }
+  try { rw [<-h, <-h, <-h, <-h] }
+  try { rw [<-h, <-h, <-h, <-h, <-h] }
+  repeat rw [h]
+\end{verbatim}
+
+\begin{verbatim}
+  repeat intro
+  try {
+    nth_rewrite 1 [h]
+    try { rw [h] }
+    try { rw [<-h] }
+  }
+  try {
+    nth_rewrite 2 [h]
+    try { rw [h] }
+    try { rw [<-h] }
+  }
+  try {
+    nth_rewrite 3 [h]
+    try { rw [h] }
+    try { rw [<-h] }
+  }
+  try {
+    nth_rewrite 4 [h]
+    try { rw [h] }
+    try { rw [<-h] }
+  }
+  try {
+    nth_rewrite 1 [h]
+    nth_rewrite 1 [h]
+    try { rw [h] }
+    try { rw [<-h] }
+  }
+  ...
+\end{verbatim}

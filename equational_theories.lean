@@ -1,6 +1,7 @@
 import equational_theories.Completeness
 import equational_theories.Compactness
 import equational_theories.FreeMagma
+import equational_theories.MagmaOp
 import equational_theories.Subgraph
 import equational_theories.AllEquations
 import equational_theories.InfModel

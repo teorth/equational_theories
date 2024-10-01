@@ -6,6 +6,43 @@ import equational_theories.Closure
 
 open Lean Core Elab Cli
 
+def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
+  let some modules := inp.variableArgsAs? ModuleName |
+    inp.printHelp
+    return 1
+  if modules.isEmpty then
+    inp.printHelp
+    return 2
+  searchPathRef.set compile_time_search_path%
+
+  unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
+    let ctx := {fileName := "", fileMap := default}
+    let state := {env}
+    Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
+      let mut rs ← Result.extractEquationalResults
+      if inp.hasFlag "proven" then
+        rs := rs.filter (·.proven)
+      let rs' := rs.map (·.variant)
+      let (equations, outcomes) := Closure.outcomes_mod_equiv rs'
+      let mut unknowns : Array Implication := #[]
+      for i in [:equations.size] do
+        for j in [:equations.size] do
+          if outcomes[i]![j]!.isNone then
+            unknowns := unknowns.push ⟨equations[i]!, equations[j]!⟩
+      IO.println (toJson unknowns).compress
+      pure 0
+
+def unknowns : Cmd := `[Cli|
+  unknowns VIA generateUnknowns;
+  "List all unknown implications modulo equivalence."
+
+  FLAGS:
+    proven; "Only consider proven results"
+
+  ARGS:
+    ...files : Array ModuleName; "The files to extract the implications from"
+]
+
 --- Output of the extract_implications executable.
 structure Output where
   implications : Array Implication
@@ -102,7 +139,7 @@ def extract_implications : Cmd := `[Cli|
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"
 
-  SUBCOMMANDS: outcomes
+  SUBCOMMANDS: outcomes; unknowns
 ]
 
 def main (args : List String) : IO UInt32 := do

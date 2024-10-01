@@ -16,6 +16,7 @@ Some automatically generated progress:
 - Sep 28, 2024: [18972 implications](equational_theories/Generated/SimpleRewrites/theorems) were established by simple rewrite laws.
 - Sep 28, 2024: [4.2m implications proven by a transitive reduction of 15k theorems](equational_theories/Generated/TrivialBruteforce) were proven using simple rewrite proof scripts.
 - Sep 29, 2024: [13.7m implications were conjectured to be refused by a collection of 515 magmas](equational_theories/Generated/All4x4Tables), collected by enumerating all 4^(4*4) operators and reducing to a covering set.
+- Oct 1, 2024: Another [~250k transitive implications](equational_theories/Generated/TrivialBruteforce) were proven by simple proof generation.
 
 Some statistics and data files from a given point in time:
 - Sep 28, 2024: [A repository of unknown implications](https://github.com/amirlb/equational_theories/tree/unknown-implications), including all unknown implications, known equivalence classes, unknown implications modulo known equivalence, and only the strongest unknown implications.
@@ -63,6 +64,7 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
         - [`find_dual`](scripts/find_dual.py) - finds the dual of an equation
         - [`find_equation_id`](scripts/find_equation_id.py) - finds the equation number of an equation string
         - [`generate_eqs_list`](scripts/generate_eqs_list.py) - generates a list of equations
+        - [`generate_graphviz_graph`](scripts/generate_graphviz_graph.rb) - generates a graphviz dot file, that can be used to create an implication graph
         - [`generate_image`](scripts/generate_image.py) - generates an image of implications
         - [`generate_most_wanted_list`](scripts/generate_most_wanted_list.py) - generates the "most wanted" implications
         - [`generate_z3_counterexample`](scripts/generate_z3_counterexample.py) - given an implication statement between two equations, calls Z3 to try to generate a counterexample
