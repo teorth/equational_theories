@@ -10,7 +10,11 @@ open Lean Core Elab Cli
 structure Output where
   implications : Array Implication
   nonimplications : Array Implication
-deriving Lean.ToJson, Lean.FromJson
+
+def Implication.asJson (v : Implication) : String := s!"\{\"rhs\":\"{v.rhs}\", \"lhs\":\"{v.lhs}\"}"
+
+def Output.asJson (v : Output) : String :=
+  s!"\{\"nonimplications\":[{",".intercalate (v.nonimplications.map Implication.asJson).toList}],\"implications\":[{",".intercalate (v.implications.map Implication.asJson).toList}]}"
 
 def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
   let some modules := inp.variableArgsAs? ModuleName |
@@ -35,7 +39,7 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
       if inp.hasFlag "json" then
         let implications := (rs'.filter (·.isTrue)).map (·.get)
         let nonimplications := (rs'.filter (!·.isTrue)).map (·.get)
-        IO.println (toJson ({implications, nonimplications : Output})).compress
+        IO.println ({implications, nonimplications : Output}).asJson
       else
         for edge in rs' do
           if edge.isTrue then IO.println s!"{edge.lhs} → {edge.rhs}"
