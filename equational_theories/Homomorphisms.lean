@@ -90,10 +90,10 @@ instance {G H : Type*} [Magma G] [Magma H] : CoeFun (G ≃∘ H) (fun _ ↦ G �
   coe f := f
 
 @[ext]
-lemma MagmaEquiv.ext {G H : Type*} [Magma G] [Magma H] {f₁ f₂ : G ≃∘ H}
-    (hf : ∀ x : G, f₁ x = f₂ x) :
-    f₁ = f₂ :=
-  DFunLike.ext f₁ f₂ hf
+lemma MagmaEquiv.ext {G H : Type*} [Magma G] [Magma H] {e₁ e₂ : G ≃∘ H}
+    (hf : ∀ x : G, e₁ x = e₂ x) :
+    e₁ = e₂ :=
+  DFunLike.ext e₁ e₂ hf
 
 /-- Composition of magma isomorphisms. -/
 def MagmaEquiv.comp {G H I : Type*} [Magma G] [Magma H] [Magma I] (f₁ : G ≃∘ H) (f₂ : H ≃∘ I) :
@@ -202,3 +202,14 @@ def MagmaHom.toMagmaEquiv''' {G H : Type*} [Magma G] [Magma H]
   left_inv x := show (MagmaHom.comp f₁ f₂) x = x from hfG ▸ refl x
   right_inv x := show (MagmaHom.comp f₂ f₁) x = x from hfH ▸ refl x
   map_op' := f₁.map_op'
+
+
+def MagmaEquiv.symm {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) : H ≃∘ G where
+  toFun := f.invFun
+  invFun := f.toFun
+  left_inv := f.right_inv
+  right_inv := f.left_inv
+  map_op' x y := by simpa using (congr_arg f.invFun (f.map_op' (f.invFun x) (f.invFun y))).symm
+
+lemma MagmaEquiv.symm_symm {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) : f.symm.symm = f :=
+  rfl
