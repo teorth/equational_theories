@@ -233,4 +233,14 @@ for $z \neq 3^y, 2^{3^y}$.  All other assignments of $\circ$ may be made arbitra
 
 In that paper a computer search was also used to show that no law of order four or less is an Austin law.
 
-An open question is whether Definition \ref{eq5105} is an Austin law.  In \cite{Kisielewicz2} it was shown that this law admits nontrivial finite models, but it is not yet known if it admits infinite models.
+An open question is whether Definition \ref{eq5105} is an Austin law.  We have the following partial result from \cite{Kisielewicz2}:
+
+\begin{theorem}[Equation 5105 has no non-trivial finite models]\label{5105-nontrivial}\uses{eq5105} Definition \ref{eq5105} has no non-trivial finite models.
+\end{theorem}
+
+\begin{proof} From Definition \ref{eq5105} we see that the map $w \mapsto y \circ w$ is onto; in particular, we may substitute $u := z \circ y$ and conclude that
+$$  x = y \circ (y \circ (y \circ (x \circ u)))$$
+for all $x,y,u$.  In particular $x \mapsto x \circ u$ is injective.  If the model is finite, then both maps must be invertible, hence the magma is cancellative.  Since
+$$ y \circ (y \circ (y \circ (x \circ (z \circ y)))) = x = y \circ (y \circ (y \circ (x \circ (z' \circ y))))$$
+we conclude on inverting many left and right magma operations that $z = z'$, giving triviality.
+\end{proof}
