@@ -84,6 +84,9 @@ theorem Equation2_implies_Equation168 (G: Type*) [Magma G] (h: Equation2 G) : Eq
 theorem Equation2_implies_Equation387 (G: Type*) [Magma G] (h: Equation2 G) : Equation387 G :=
   fun _ _ ↦ h _ _
 
+theorem Equation2_implies_Equation1689 (G: Type*) [Magma G] (h: Equation2 G) : Equation1689 G:=
+  fun _ _ _ ↦ h _ _
+
 @[equational_result]
 theorem Equation2_implies_Equation4512 (G: Type*) [Magma G] (h: Equation2 G) : Equation4512 G :=
   fun _ _ _ ↦ h _ _
@@ -235,59 +238,69 @@ theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) :
   have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by repeat rw [← h]
   exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
 
-theorem Equation1689_implies_h2 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, a ∘ ((((a ∘ b)∘ b)∘ c)∘ c) = (a∘ b)∘ b := by
+theorem Lemma_eq1689_implies_h2 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, a ∘ ((((a ∘ b)∘ b)∘ c)∘ c) = (a∘ b)∘ b := by
     intro a b c
     calc a ∘ ((((a ∘ b)∘ b)∘ c)∘ c) = ((a ∘ a) ∘ ((a ∘ b) ∘ b)) ∘ ((((a ∘ b)∘ b)∘ c)∘ c) := by rw [←  h a a b, h a b c]
     _ = (a∘ b)∘ b := by rw[← h ((a ∘ b) ∘ b) (a ∘ a) c]
 
-theorem Equation1689_implies_h3 (G: Type*) [Magma G] (h: Equation1689 G) :∀ a b c d : G, (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ d) ∘ d)) = b ∘ c := by
+theorem Lemma_eq1689_implies_h3 (G: Type*) [Magma G] (h: Equation1689 G) :∀ a b c d : G, (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ d) ∘ d)) = b ∘ c := by
     intro a b c d
     calc (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ d) ∘ d)) =  (a ∘ (b ∘ c)) ∘ (((b ∘ c) ∘ ((c ∘ d) ∘ d)) ∘ ((c ∘ d) ∘ d)) := by rw [←  h c b d]
     _ = b ∘ c := by rw [←  h _ _ _]
 
-theorem Equation1689_implies_h4 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, a ∘ (b ∘ ((b ∘ c) ∘ c)) = (a ∘ b) ∘ b := by
+theorem Lemma_eq1689_implies_h4 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, a ∘ (b ∘ ((b ∘ c) ∘ c)) = (a ∘ b) ∘ b := by
     intro a b c
-    calc a ∘ (b ∘ ((b ∘ c) ∘ c)) = (a ∘ b) ∘ b := by nth_rewrite 1 [ h b (a ∘ b) c]; rw [Equation1689_implies_h2 G h a b ((b ∘ c) ∘ c)]
+    calc a ∘ (b ∘ ((b ∘ c) ∘ c)) = (a ∘ b) ∘ b := by nth_rewrite 1 [ h b (a ∘ b) c]; rw [Lemma_eq1689_implies_h2 G h a b ((b ∘ c) ∘ c)]
       _ = (a ∘ b) ∘ b := by rfl
 
-theorem Equation1689_implies_h5 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, ((a ∘ (b ∘ c)) ∘ c) ∘ c = b ∘ c := by
+theorem Lemma_eq1689_implies_h5 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, ((a ∘ (b ∘ c)) ∘ c) ∘ c = b ∘ c := by
     intro a b c
-    calc ((a ∘ (b ∘ c)) ∘ c) ∘ c = (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ b) ∘ b)) := by rw [Equation1689_implies_h4 G h]
-    _ = b ∘ c := by rw[Equation1689_implies_h3 G h]
+    calc ((a ∘ (b ∘ c)) ∘ c) ∘ c = (a ∘ (b ∘ c)) ∘ (c ∘ ((c ∘ b) ∘ b)) := by rw [Lemma_eq1689_implies_h4 G h]
+    _ = b ∘ c := by rw[Lemma_eq1689_implies_h3 G h]
 
-theorem Equation1689_implies_h6 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c d : G, (a ∘ (b ∘ (c ∘ d))) ∘ (c ∘ d) = b ∘ (c ∘ d) := by
+theorem Lemma_eq1689_implies_h6 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c d : G, (a ∘ (b ∘ (c ∘ d))) ∘ (c ∘ d) = b ∘ (c ∘ d) := by
     intro a b c d
     have hh : (a ∘ (b ∘ (c ∘ d))) ∘ (((b ∘ (c ∘ d)) ∘ d) ∘ d) = (b ∘ (c ∘ d)) := by rw[← h _ _ _]
-    rw [Equation1689_implies_h5 G h] at hh
+    rw [Lemma_eq1689_implies_h5 G h] at hh
     exact hh
 
-theorem Equation1689_implies_h7 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, (a ∘ (b ∘ c)) ∘ (b ∘ c) = a ∘ (b ∘ c) := by
+theorem Lemma_eq1689_implies_h7 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, (a ∘ (b ∘ c)) ∘ (b ∘ c) = a ∘ (b ∘ c) := by
     intro a b c
-    calc (a ∘ (b ∘ c)) ∘ (b ∘ c) = ((a ∘ (a ∘ (b ∘ c))) ∘ (b ∘ c)) ∘ (b ∘ c) := by rw[Equation1689_implies_h6 G h]
-    _ = a ∘ (b ∘ c) := by rw[Equation1689_implies_h5 G h]
+    calc (a ∘ (b ∘ c)) ∘ (b ∘ c) = ((a ∘ (a ∘ (b ∘ c))) ∘ (b ∘ c)) ∘ (b ∘ c) := by rw[Lemma_eq1689_implies_h6 G h]
+    _ = a ∘ (b ∘ c) := by rw[Lemma_eq1689_implies_h5 G h]
 
-theorem Equation1689_implies_h8 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, ((a ∘ b) ∘ ((b ∘ c) ∘ c)) ∘ ((b ∘ c) ∘ c)=b := by
+theorem Lemma_eq1689_implies_h8 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, ((a ∘ b) ∘ ((b ∘ c) ∘ c)) ∘ ((b ∘ c) ∘ c)=b := by
     intro a b c
     calc
       ((a ∘ b) ∘ ((b ∘ c) ∘ c)) ∘ ((b ∘ c) ∘ c) = ((a ∘ ((a∘b)∘((b∘c)∘c))) ∘ ((b ∘ c) ∘ c)) ∘ ((b ∘ c) ∘ c) := by nth_rewrite 1 [h b a c]; rfl
-      _ = (a∘b)∘((b∘c)∘c) := by rw [Equation1689_implies_h5 G h]
+      _ = (a∘b)∘((b∘c)∘c) := by rw [Lemma_eq1689_implies_h5 G h]
       _ = b := by rw [← h]
 
 theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G:= by
 
   have h9: ∀ a b : G, a ∘ ((a ∘ b) ∘ b) = a := by
     intro a b
-    sorry
+    calc
+      a ∘ ((a ∘ b) ∘ b) = ((a ∘ a) ∘ ((a ∘ b) ∘ b)) ∘ ((a ∘ b) ∘ b):= by rw [← h a a b]
+      _= (a ∘ a) ∘ ((a ∘ b) ∘ b) := by rw [Lemma_eq1689_implies_h7 G h]
+      _ = a := by rw[← h]
+
   have h10: ∀ a b c : G, a ∘ (a ∘ (b ∘ c))=a := by
     intro a b c
-    sorry
+    calc
+      a ∘ (a ∘ (b ∘ c)) = a ∘ ((a ∘ (b ∘ c)) ∘ (b ∘ c)) := by rw[Lemma_eq1689_implies_h7 G h]
+      _ = a := by rw[h9]
+
   have h11: ∀ a b : G, (a ∘ b) ∘ b=a ∘ b := by
     intro a b
-    sorry
+    calc
+      (a ∘ b) ∘ b = (a ∘ b) ∘ (((a ∘ b) ∘ ((b ∘ b) ∘ b)) ∘ ((b ∘ b) ∘ b)) := by rw[Lemma_eq1689_implies_h8 G h]
+      _ = a ∘ b := by rw [h9]
+
   have h12: ∀ a : G, (a ∘ a) ∘ a = a := by
     intro a
     calc
-      (a ∘ a) ∘ a = a ∘ (a ∘ ((a ∘ a) ∘ a)) := by rw[Equation1689_implies_h4 G h]
+      (a ∘ a) ∘ a = a ∘ (a ∘ ((a ∘ a) ∘ a)) := by rw[Lemma_eq1689_implies_h4 G h]
       _ = a := by rw[h10]
 
   have h13: ∀ a b : G, (a ∘ b) ∘ b = b := by
