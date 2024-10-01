@@ -17,14 +17,19 @@ Some automatically generated progress:
 - Sep 28, 2024: [4.2m implications proven by a transitive reduction of 15k theorems](equational_theories/Generated/TrivialBruteforce) were proven using simple rewrite proof scripts.
 - Sep 29, 2024: [13.7m implications were conjectured to be refused by a collection of 515 magmas](equational_theories/Generated/All4x4Tables), collected by enumerating all 4^(4*4) operators and reducing to a covering set.
 
-Some statistics:
+Some statistics from a given point in time:
 - Sep 29, 2024: [Here](https://leanprover.zulipchat.com/user_uploads/3121/7ImuNeVLCa_gIsS8bHYIsokB/direct.tar.xz) is a text file of the (21K or so) direct implications proven to date, and [here](https://leanprover.zulipchat.com/user_uploads/3121/wnbVe2BZ1gamFjlMYFE7sIs9/closure.tar.xz) is the transitive closure of these implications (about 4.5m). More precisely, we have 21791 implications explicitly proven true, 4494090 additional relations implicitly proven true, 739207 explicitly proven false, 12764328 implicitly proven false, one additional relations explicitly conjectured true (and 64 more implicitly conjectured true), and 4014155 remaining implications which remain completely open.  Quotienting out by known equivalences, there are 3182453 open implications remaining.
 
-Some visualizations:
+Some visualizations from a given point in time:
 - Sep 28, 2024: A (manually created) [Hasse diagram](https://en.wikipedia.org/wiki/Hasse_diagram) of the [dependencies obtained up to this date](equational_theories/Subgraph.lean) for the [selected equations of interest](equational_theories/Equations.lean) can be found [here](images/implications.png)
 - Sep 28, 2024: A directed acyclic graph of automatically generated implications is [here](images/implications_092824.svg?raw=true): circular vertices are for nodes representing multiple equivalent equations and equations in green are from [`Subgraph.lean`](equational_theories/Subgraph.lean).
 -
 
+Current statistics, updated automatically:
+- coming soon!
+
+Current visualizations, updated automatically:
+- coming soon!
 
 For guidelines on how to contribute, see the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
