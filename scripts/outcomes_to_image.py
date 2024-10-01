@@ -11,23 +11,23 @@ def name_to_id(name):
 
 def outcome_to_color(outcome) :
     if outcome == "explicit_proof_true":
-        return (0, 255, 0)
+        return (0, 192, 255)
     elif outcome == "implicit_proof_true":
-        return (16, 92, 16)
+        return (0, 96, 128)
     elif outcome == "explicit_conjecture_true":
-        return (0, 0, 255)
+        return (102, 255, 0)
     elif outcome == "implicit_conjecture_true":
-        return (16, 16, 92)
+        return (0, 128, 0)
     elif outcome == "unknown":
         return (0, 0, 0)
     elif outcome == "explicit_conjecture_false":
-        return (128, 0, 128)
+        return (255, 221, 85)
     elif outcome == "implicit_conjecture_false":
-        return (48, 8, 48)
+        return (170, 136, 0)
     elif outcome == "explicit_proof_false":
-        return (255, 0, 0)
+        return (255, 72, 72)
     elif outcome == "implicit_proof_false":
-        return (92, 16, 16)
+        return (128, 0, 0)
     else:
         raise Exception("unknown outcome: " + outcome)
 
