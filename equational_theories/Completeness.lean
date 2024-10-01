@@ -9,7 +9,7 @@ structure MagmaLaw (α : Type) where
   rhs : FreeMagma α
 deriving DecidableEq
 
-local infix:60 " ≃ " => MagmaLaw.mk
+infix:60 " ≃ " => MagmaLaw.mk
 
 def substFreeMagma {α β} (t : FreeMagma α) (σ : α → FreeMagma β) : FreeMagma β :=
 match t with
