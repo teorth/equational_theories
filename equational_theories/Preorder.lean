@@ -18,8 +18,7 @@ def implies (l₁ l₂ : MagmaLaw α) := ∀ {G : Type} [Magma G],
 instance : LE (MagmaLaw α) where
   le l₁ l₂ := l₁.implies l₂
 
-theorem implies_refl (l : MagmaLaw α) : l ≤ l := by
-  intro G inst h; exact h
+theorem implies_refl (l : MagmaLaw α) : l ≤ l := fun {G} [Magma G] a ↦ a
 
 theorem implies_trans {l₁ l₂ l₃ : MagmaLaw α} : l₁ ≤ l₂ → l₂ ≤ l₃ → l₁ ≤ l₃ := by
   intro h₁ h₂ G inst h
@@ -28,7 +27,7 @@ theorem implies_trans {l₁ l₂ l₃ : MagmaLaw α} : l₁ ≤ l₂ → l₂ �
 
 instance : Preorder (MagmaLaw α) where
   le_refl := implies_refl
-  le_trans := fun _ _ _ => implies_trans
+  le_trans := fun _ _ _ ↦ implies_trans
 
 theorem implies_eq_singleton_models {l₁ l₂ : MagmaLaw α} : l₁ ≤ l₂ ↔ {l₁} ⊧ l₂ := by
   simp only [LE.le, implies, models, satisfiesSet, Ctx, Set.mem_singleton_iff, forall_eq]
