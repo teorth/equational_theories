@@ -103,6 +103,9 @@ partial def dfs2 (graph : Array (Array Nat)) (vertex : Nat) (component : Array N
       comp := dfs2 graph v comp component_id
   pure comp
 
+/-- This is a bitset (https://en.cppreference.com/w/cpp/utility/bitset).
+It represents an array of bits by directly packing them to UInt64, which makes some operations
+more efficient.  -/
 def Bitset := Array UInt64
 
 def Bitset.toArray : Bitset → Array UInt64 := id
@@ -117,26 +120,7 @@ def Bitset.set (b : Bitset) (n : Nat) : Bitset :=
 def Bitset.get (b : Bitset) (n : Nat) : Bool :=
   (b.toArray[n >>> 6]! >>> ((UInt64.ofNat n) &&& 63)) &&& 1 != 0
 
-def toEdges (inp : Array EntryVariant) : Array Edge := Id.run do
-  let mut edges : Std.HashSet Edge := {}
-  for imp in inp do
-    -- println! "Running, size {edges.size}"
-    match imp with
-    | .implication ⟨lhs, rhs⟩ =>
-      -- println! "Implication"
-      edges := edges.insert (.implication ⟨lhs, rhs⟩)
-    | .facts ⟨satisfied, refuted⟩ =>
-      -- println! "Facts {satisfied[0]?} {refuted[0]?}"
-      for f1 in satisfied do
-        -- println! "Processing {f1}"
-        for f2 in refuted do
-          -- println! "Sub-Processing {f2}"
-          edges := edges.insert (.nonimplication ⟨f1, f2⟩)
-    | _ => continue
-  -- println! "Done"
-  return edges.toArray
-
-def closure (inp : Array EntryVariant) : Array Edge := Id.run do
+def number_equations (inp : Array EntryVariant) : Std.HashMap String Nat × Array String := Id.run do
   -- number the equations (arbitrarily) for easier processing
   let mut eqs : Std.HashMap String Nat := {}
   let mut eqs_order : Array String := #[]
@@ -158,6 +142,51 @@ def closure (inp : Array EntryVariant) : Array Edge := Id.run do
         eqs := neqs
         unless n do eqs_order := eqs_order.push lhs
     | _ => pure ()
+  pure (eqs, eqs_order)
+
+/--
+This transforms the `Facts` in the input array to `Edge`s
+-/
+def toEdges (inp : Array EntryVariant) : Array Edge := Id.run do
+  let (eqs, eqs_order) := number_equations inp
+  let mut edges : Array Edge := Array.mkEmpty inp.size
+  let mut nonimplies : Array Bitset := Array.mkArray eqs.size (Bitset.mk eqs.size)
+  let mut nonimpliedby : Array Bitset := Array.mkArray eqs.size (Bitset.mk eqs.size)
+  for imp in inp do
+    match imp with
+    | .implication ⟨lhs, rhs⟩ =>
+      edges := edges.push (.implication ⟨lhs, rhs⟩)
+    | .facts ⟨satisfied, refuted⟩ =>
+      if satisfied.size > eqs.size / 64 && (refuted.size ≤ eqs.size / 64 || refuted.size < satisfied.size) then
+        let mut satArray : Bitset := Bitset.mk eqs.size
+        for f1 in satisfied do
+          satArray := satArray.set eqs[f1]!
+        for f2 in refuted do
+          nonimpliedby := nonimpliedby.modify eqs[f2]!
+            (fun x ↦ x.mapIdx (fun idx val ↦ val ||| satArray.toArray[idx]!))
+      else if refuted.size > eqs.size / 64 then
+        let mut unsatArray : Bitset := Bitset.mk eqs.size
+        for f1 in refuted do
+          unsatArray := unsatArray.set eqs[f1]!
+        for f2 in satisfied do
+          nonimplies := nonimplies.modify eqs[f2]!
+            (fun x ↦ x.mapIdx (fun idx val ↦ val ||| unsatArray.toArray[idx]!))
+      else
+        for f1 in satisfied do
+          for f2 in refuted do
+            nonimplies := nonimplies.modify eqs[f1]! (fun x ↦ x.set eqs[f2]!)
+    | _ => continue
+  for i in [:eqs.size] do
+    for j in [:eqs.size] do
+      if nonimpliedby[j]!.get i || nonimplies[i]!.get j then
+        edges := edges.push (.nonimplication ⟨eqs_order[i]!, eqs_order[j]!⟩)
+  return edges
+
+/--
+This computes the closure of the implications/non-implications represented by `inp`.
+-/
+def closure (inp : Array EntryVariant) : Array Edge := Id.run do
+  let (eqs, eqs_order) := number_equations inp
 
   -- construct the implication/non-implication graph
   let n := eqs.size
