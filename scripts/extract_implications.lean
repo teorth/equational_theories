@@ -33,8 +33,8 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
       let rs' := rs.map (·.variant)
       let mut rs' := if include_impl then Closure.closure rs' else Closure.toEdges rs'
       if inp.hasFlag "json" then
-        let implications :=(rs'.filter (·.isTrue)).map (·.get)
-        let nonimplications :=(rs'.filter (!·.isTrue)).map (·.get)
+        let implications := (rs'.filter (·.isTrue)).map (·.get)
+        let nonimplications := (rs'.filter (!·.isTrue)).map (·.get)
         IO.println (toJson ({implications, nonimplications : Output})).compress
       else
         for edge in rs' do
