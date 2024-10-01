@@ -156,6 +156,28 @@ lemma MagmaEquiv.toMagmaHom_coe {F G H : Type*} [Magma G] [Magma H] [EquivLike F
     ((f : G →∘ H) : G → H) = f :=
   rfl
 
+/- Inverses -/
+
+/-- Inverse magma isomorphism. -/
+def MagmaEquiv.symm {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) : H ≃∘ G where
+  toFun := f.invFun
+  invFun := f.toFun
+  left_inv := f.right_inv
+  right_inv := f.left_inv
+  map_op' x y := by simpa using (congr_arg f.invFun (f.map_op' (f.invFun x) (f.invFun y))).symm
+
+/-- Inversing is idempotent. -/
+@[simp]
+lemma MagmaEquiv.symm_symm {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) : f.symm.symm = f :=
+  rfl
+
+/-- Inverse of composition is equal to the composition of inverses swapped. -/
+lemma MagmaEquiv.symm_comp {G H I : Type*} [Magma G] [Magma H] [Magma I]
+    (f₁ : G ≃∘ H) (f₂ : H ≃∘ I) :
+    (f₁.comp f₂).symm = f₂.symm.comp f₁.symm :=
+  rfl
+
+/- TODO? -/
 
 /-- The identity is a magma automorphism. -/
 def idMagmaEquiv (G : Type*) [Magma G] : G ≃∘ G where
@@ -202,14 +224,3 @@ def MagmaHom.toMagmaEquiv''' {G H : Type*} [Magma G] [Magma H]
   left_inv x := show (MagmaHom.comp f₁ f₂) x = x from hfG ▸ refl x
   right_inv x := show (MagmaHom.comp f₂ f₁) x = x from hfH ▸ refl x
   map_op' := f₁.map_op'
-
-
-def MagmaEquiv.symm {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) : H ≃∘ G where
-  toFun := f.invFun
-  invFun := f.toFun
-  left_inv := f.right_inv
-  right_inv := f.left_inv
-  map_op' x y := by simpa using (congr_arg f.invFun (f.map_op' (f.invFun x) (f.invFun y))).symm
-
-lemma MagmaEquiv.symm_symm {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) : f.symm.symm = f :=
-  rfl
