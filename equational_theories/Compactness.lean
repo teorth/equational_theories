@@ -1,6 +1,8 @@
 import equational_theories.Completeness
 import Mathlib.Data.Finset.Basic
 
+open Law
+
 def derive.getAxioms {α} [DecidableEq α] {Γ : Ctx α} {E : MagmaLaw α} (h : Γ ⊢ E) :
     Finset (MagmaLaw α) :=
   match h with

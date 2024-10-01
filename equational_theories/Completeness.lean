@@ -4,6 +4,8 @@
 import equational_theories.FreeMagma
 import Mathlib.Data.Set.Defs
 
+open FreeMagma
+
 namespace Law
 
 structure MagmaLaw (α : Type) where
@@ -30,6 +32,8 @@ def Ctx α := Set (MagmaLaw α)
 -- FIXME: figure out how to remove this.
 instance Ctx.Membership α : Membership (MagmaLaw α) (Ctx α) := ⟨ Set.instMembership.mem ⟩
 
+instance {α : Type} : Singleton (MagmaLaw α) (Ctx α) := ⟨Set.singleton⟩
+
 section DeriveDef
 
 set_option hygiene false
@@ -50,7 +54,7 @@ inductive derive {α} : Ctx α → MagmaLaw α → Type :=
 end DeriveDef
 
 def satisfiesPhi {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
-  evalInMagma φ E.lhs = evalInMagma φ E.rhs
+  E.lhs.evalInMagma φ = E.rhs.evalInMagma φ
 
 def satisfies {α : Type} (G : Type) [Magma G] (E : MagmaLaw α) := ∀ (φ : α → G), satisfiesPhi φ E
 

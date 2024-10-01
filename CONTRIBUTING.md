@@ -1,27 +1,57 @@
-# Contributing to Equational Theories
+# Contributing to the Equational Theories Project
 
-Anyone can contribute to the equational theories project! Specific guidelines for contributions are as follows.
+Thank you for your interest in contributing to the Equational Theories Project! This guide provides detailed instructions on how to effectively and efficiently contribute to the project.
 
-## The Contributions Process
-The project is coordinated using a [Github project dashboard](https://github.com/users/teorth/projects/1).
-Contributions to the project take the form of Github pull requests that complete tasks. The detailed instructions are as follows:
+## Project Coordination
 
-1. Each task is posted as an issue that appears in the `Unclaimed Outstanding Task` column of the [dashboard](https://github.com/users/teorth/projects/1)
-2. A contributor can lay claim to a task by commenting `claim` in the corresponding github issue. A user who wishes to drop their claim can comment `disclaim` on the issue.
-3. If there is no other user assigned to the task, the user gets assigned to the issue. A `claim`ed issue moves to the `Claimed Tasks` column of the dashboard.
-   * If you wish to give up on a task, please comment `disclaim` on it. This allows others to `claim` it. Only one github user can claim a task at a time.
-5. The user creates a PR to solve the task and then comments `propose PR #xyz` under the issue. If the issue is already assigned to them, their PR is now linked to the issue. The PR now moves to the `In Progress` column of the dashboard and is shown with the linked PR.
-   * _A PR proposal is only accepted if an issue has been claimed by the github user._
-7. To withdraw their PR, a user can comment `withdraw PR #xyz`. The task moves to the `Claimed Tasks` column and the user remains assigned to the Github issue.
-     * **Important**: _If a user wishes to propose a different PR, the user needs to first withdraw their previous PR (step 6) in one comment. In a subsequent comment, they may propose the new PR (as in step 4)._
-8. Upon finishing the PR, the user may comment `awaiting-review` on the PR which is shown in the task view of the dashboard against the PR.
-Maintainers review and merge it.
-9. Merged tasks move to the `Completed Tasks` column of the dashboard.
+The project is managed using a [GitHub project dashboard](https://github.com/users/teorth/projects/1), which tracks tasks through various stages, from assignment to completion.
 
-### Some Rules and Notes
-1. Please respect the issue claims. If an issue has been assigned to someone, please don't try to work on it simultaneously without discussing with the claimant first. This allows for a coordination process that respects every contributor's time and effort.
-2. Please note that this process is still experimental. As such there are bound to be issues and bugs. We will improve this as we go along. Feedback is welcome on the [Lean Zulip chat channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/)
-3.  Until the process above is automated with enough CI actions, maintainers of the project dashboard are manually handling things. So please be patient with us.
+## How to Contribute
+
+Contributions to the project are made through GitHub pull requests (PRs) that correspond to specific tasks outlined in the project's issues.
+The following instructions detail the process for claiming and completing tasks.
+
+### 1. Task Identification
+
+- Tasks are posted as GitHub issues and can be found in the `Unclaimed Outstanding Tasks` column of the project dashboard.
+- Each issue represents a specific task to be completed. The issue title and description contain relevant details and requirements.
+
+### 2. Claiming a Task
+
+- To claim a task, comment `claim` on the relevant GitHub issue.
+- If no other user is assigned, you will automatically be assigned to the task, and the issue will move to the `Claimed Tasks` column.
+- You may only claim one task at a time. If you decide not to work on a task after claiming it, comment `disclaim` on the issue. This will unassign you and return the issue to the `Unclaimed Outstanding Tasks` column, making it available for others to claim.
+
+### 3. Working on the Task
+
+Once you are assigned to an issue, begin working on the corresponding task. You should create a new branch from the `main` branch to develop your solution.
+
+### 4. Submitting a Pull Request
+
+- When you are ready to submit your solution, create a PR from your working branch to the project’s `main` branch.
+- After submitting the PR, comment `propose PR #PR_NUMBER` on the original issue. This links your PR to the task, and the task will move to the `In Progress` column on the dashboard.
+- A task can only move to `In Progress` if it has been claimed by the user proposing the PR.
+
+### 5. Withdrawing or Updating a PR
+
+- If you need to withdraw your PR, comment `withdraw PR #PR_NUMBER` on the issue. The task will return to the `Claimed Tasks` column, but you will remain assigned to the issue.
+- To submit an updated PR after withdrawal, comment `propose PR #NEW_PR_NUMBER` following the same process outlined in step 4.
+
+### 6. Review Process
+
+- After finishing the task and ensuring your PR is ready for review, comment `awaiting-review` on the PR. This will add the `awaiting-review` label to your PR and move the task from `In Progress` to the `PRs in Review` column of the dashboard.
+- The project maintainers will review the PR. They may request changes, approve the PR, or provide feedback.
+
+### 7. Task Completion
+
+- Once the PR is approved and merged, the task will automatically move to the `Completed` column.
+- If further adjustments are needed after merging, a new issue will be created to track additional work.
+
+### Additional Guidelines and Notes
+
+1. Please adhere to the issue claiming process. If an issue is already assigned to another contributor, refrain from working on it without prior communication with the current claimant. This ensures a collaborative and respectful workflow that values each contributor’s efforts.
+2. Be aware that this contribution process is still in an experimental phase. As a result, occasional issues and inefficiencies may arise. We are committed to continuously refining the process, and your constructive feedback is highly appreciated. You can share your thoughts and suggestions on the [Lean Zulip chat channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/).
+3. Until the integration of sufficient CI automation, the management of the project dashboard is handled manually by the maintainers. We ask for your patience and understanding as we work to keep the process running smoothly.
 
 ## Discussion
 

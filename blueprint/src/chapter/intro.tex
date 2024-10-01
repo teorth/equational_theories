@@ -67,7 +67,7 @@ is satisfied by a magma $G$ if and only if
 \begin{equation}\label{comm-law-2}
  x \circ y = y \circ x
 \end{equation}
-for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} associated to the law \eqref{comm-law}.  One can think of equations as the ``semantic'' intrepretation of a ``syntactic'' law.  However, we shall often abuse notation and a law with its associated equation thus we shall (somewhat carelessly) also refer to \eqref{comm-law-2} as ``the commutative law'' (rather than ``the commutative equation'').
+for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} associated to the law \eqref{comm-law}.  One can think of equations as the ``semantic'' interpretation of a ``syntactic'' law.  However, we shall often abuse notation and a law with its associated equation thus we shall (somewhat carelessly) also refer to \eqref{comm-law-2} as ``the commutative law'' (rather than ``the commutative equation'').
 
 \begin{definition}[Models]\label{models-def}
   \lean{models}\leanok
@@ -87,7 +87,7 @@ for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} ass
     \item $\Gamma\vdash w\formaleq w$ for any word $w$
     \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w'\formaleq w$
     \item if $\Gamma\vdash w\formaleq w'$ and $\Gamma\vdash w'\formaleq w''$ then $\Gamma\vdash w\formaleq w''$
-    \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w\sigma\formaleq w'\sigma$, where $\sigma$ is an arbitrary map from $X$ to words in $M_X$ and $w\sigma$ replaces each occurence of an element of $X$ with it's image by $\sigma$ in $w$.
+    \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w\sigma\formaleq w'\sigma$, where $\sigma$ is an arbitrary map from $X$ to words in $M_X$ and $w\sigma$ replaces each occurrence of an element of $X$ with it's image by $\sigma$ in $w$.
     \item if $\Gamma\vdash w_1\formaleq w_2$ and $\Gamma\vdash w_3\formaleq w_4$ then $\Gamma\vdash w_1 \circ w_3\formaleq w2\circ w_4$
   \end{enumerate}
 \end{definition}
@@ -168,5 +168,6 @@ if $n \geq 2$ is even.
 
 This sequence is
 $$2, 5, 39, 364, 4284, 57882, 888365, \dots$$
+(\href{https://oeis.org/A376640}{OEIS A376640}).
 
 In particular, up to relabeling, symmetry, and triviality, there are exactly $4694$ laws of total order at most $4$.  A list can be found \href{https://github.com/teorth/equational_theories/blob/main/data/equations.txt}{here}.  A script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}.  The list is sorted by the total number of operations, then by the number of operations on the LHS. Within each such class we define an order on expressions by variable $<$ operation, and lexical order on variables.
