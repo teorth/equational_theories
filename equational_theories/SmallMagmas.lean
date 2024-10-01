@@ -21,7 +21,7 @@ The use of `memoFinOp` below ensures that the actual computation is done efficie
 how `op` is defined here.
 -/
 private def ofMatrix {n : Nat} [Inhabited (Fin n)]
-  (table : Array (Array (Fin n))) (x y : Fin n)  : Fin n :=
+  (table : Array (Array (Fin n))) (x y : Fin n) : Fin n :=
   table[x.val]![y.val]!
 
 /-!
