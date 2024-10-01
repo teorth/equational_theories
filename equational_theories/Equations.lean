@@ -75,6 +75,7 @@ abbrev Equation168 (G: Type _) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ (x 
 /-- From Putnam 1978, Problem A4, part (b) -/
 abbrev Equation381 (G: Type _) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ y
 
+/-- from the mathoverflow post by paste bee -/
 abbrev Equation387 (G: Type _) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ x
 
 /-- From a paper of Kisielewicz -/
