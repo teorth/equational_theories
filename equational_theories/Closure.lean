@@ -20,14 +20,23 @@ def Edge.lhs : Edge → String := Implication.lhs ∘ get
 def Edge.rhs : Edge → String := Implication.rhs ∘ get
 
 inductive Outcome
+  /-- the implication has an explicit proof -/
   | explicit_proof_true
+  /-- the implication can be derived from proven theorems -/
   | implicit_proof_true
+  /-- the implication is explicitly conjectured -/
   | explicit_conjecture_true
+  /-- the implication can be derived from theorems and conjectures -/
   | implicit_conjecture_true
+  /-- the status of the implication is unknown -/
   | unknown
+  /-- the implication can be disproved from theorems and conjectures -/
   | implicit_conjecture_false
+  /-- the implication can is explicitly conjectured to be false -/
   | explicit_conjecture_false
+  /-- the falsity of the implication can be derived from proven theorems -/
   | implicit_proof_false
+  /-- the implication has an explicit disproof -/
   | explicit_proof_false
   deriving Repr, DecidableEq, Hashable, Lean.ToJson, Lean.FromJson
 
@@ -166,11 +175,7 @@ def toEdges (inp : Array EntryVariant) : Array Edge := Id.run do
         edges := edges.push (.nonimplication ⟨eqs_order[i]!, eqs_order[j]!⟩)
   return edges
 
-/--
-This computes the closure of the implications/non-implications represented by `inp`.
--/
-def closure (inp : Array EntryVariant) : Array Edge := Id.run do
-  let (eqs, eqs_order) := number_equations inp
+def closure_aux (inp : Array EntryVariant) (eqs : Std.HashMap String Nat) : Array Bitset × Array (Array Nat) := Id.run do
 
   -- construct the implication/non-implication graph
   let n := eqs.size
@@ -239,16 +244,28 @@ def closure (inp : Array EntryVariant) : Array Edge := Id.run do
       reachable := reachable.modify i (fun x ↦ x.mapIdx (fun idx val ↦
         reachable[j]!.toArray[idx]! ||| val))
 
+  pure (reachable, components)
+
+/--
+This computes the closure of the implications/non-implications represented by `inp`.
+-/
+def closure (inp : Array EntryVariant) : Array Edge := Id.run do
+  let (eqs, eqs_order) := number_equations inp
+  let n := eqs.size
+
+
+  let (reachable, components) := closure_aux inp eqs
+
   -- extract the implications
   let mut ans : Array Edge := Array.mkEmpty (n*n)
 
 
-  for i in [:last_component] do
-    if components[i]!.back >= n then continue
-    for j in [:last_component] do
-      if reachable[i]!.get j then
-        for x in components[i]! do
-          for y in components[j]! do
+  for i in components, i2 in reachable do
+    if i.back >= n then continue
+    for j in components, j2 in [:components.size] do
+      if i2.get j2 then
+        for x in i do
+          for y in j do
             if x == y then continue
             if y < n then
               ans := ans.push (.implication ⟨eqs_order[y]!, eqs_order[x]!⟩)
