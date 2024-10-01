@@ -3,13 +3,12 @@
 #include <stdbool.h>
 #include <string.h>
 #include <inttypes.h>
-
-#define N 4
-#define TABLE_SIZE (N * N)
-#define MAX_ARGS 6
-#define NUM_FUNCTIONS 4694
-
-typedef bool (*FunctionPtr)(int*, int);
+#include "header.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <openssl/md5.h>
 
 extern FunctionPtr* functions;
 extern int* nvar_list;
@@ -59,12 +58,6 @@ void initialize_random_table(int* table) {
         table[i] = rand() % N;
     }
 }
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <openssl/md5.h>
 
 
 #define HASH_TABLE_SIZE 10000019 // A prime number larger than MAX_TABLES
