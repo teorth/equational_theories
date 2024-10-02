@@ -6,9 +6,6 @@
 usemathjax: true
 ---
 
-## Overview
-
-
 The purpose of this project, launched on Sep 25, 2024, is to explore the space of equational theories of magmas, ordered by implication. To begin with we shall focus only on theories of a single equation, and specifically on [this list](equational_theories/AllEquations.lean) of 4694 equations (all laws involving at most four magma operations, up to symmetry and relabeling).  This creates 4694*(4694-1) = 22,028,942 implications that need to be proven or disproven.
 
 Some selected equations of interest are listed [here](equational_theories/Equations.lean).
