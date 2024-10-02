@@ -73,7 +73,7 @@ for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} ass
   \lean{models}\leanok
   \uses{law-def}
   Given an arbitrary set $\Gamma$ of laws, a magma $G$ is a \emph{model} of $\Gamma$ with the
-  (overloaded) notation $G\models\Gamma$ if $G\models w\formaleq w'$ for every $w\formaleq w'$ in $\Gamma$.
+  (overloaded) notation $G\models\Gamma$ if $G\models w\formaleq w'$ for every $w\formaleq w'$ in $\Gamma$.  Given a law $E$, we write $\Gamma \models E$ if every magma $G$ that models $\Gamma$, also models $E$.
 \end{definition}
 
 \begin{definition}[Derivation]\label{derivation-def}
@@ -96,7 +96,7 @@ This definition is useful because of the following theorem:
 
 \begin{theorem}[Birkhoff's completeness theorem]\label{sound-complete}\lean{Completeness}\leanok\uses{models-def, derivation-def}
   For any set of laws $\Gamma$ and words $w, w'$ over a fixed alphabet
-  $$ \Gamma\vdash w\formaleq w'\ \mathrm{iff}\ \Gamma\models w\formaleq w' $$
+  $$ \Gamma\vdash w\formaleq w'\ \mathrm{iff}\ \Gamma\models w\formaleq w'.$$
 \end{theorem}
 \begin{proof}
   \leanok
@@ -107,19 +107,19 @@ This definition is useful because of the following theorem:
 \begin{corollary}[Compactness theorem]\label{compactness-thm}\uses{models-def}  Let $\Gamma$ be a collection of laws, and let $E$ be a law.  Then $\Gamma \models E$ if and only if there exists a finite subset $\Gamma'$ of $\Gamma$ such that $\Gamma' \models E$.
 \end{corollary}
 
-\begin{proof}\uses{sound-complete} The claim is obvious for $\vdash$, and the claim then follows from Theorem \ref{sound-complete}
+\begin{proof}\uses{sound-complete} The claim is obvious for $\vdash$, and the claim then follows from Theorem \ref{sound-complete}.
 \end{proof}
 
 
 \begin{lemma}[Pushforward]\label{push}\uses{law-def}  Let $w \formaleq w'$ be a law with some alphabet $X$, $G$ be a magma, and $\pi: X \to Y$ be a function.  If $G \models w \formaleq w'$, then $G \models \pi_*(w) \formaleq \pi_*(w')$.  In particular, if $\pi$ is a bijection, the statements If $G \models w \formaleq w'$, then $G \models \pi_*(w) \formaleq \pi_*(w')$ are equivalent.
 \end{lemma}
 
+\begin{proof}  Trivial.
+\end{proof}
+
 If $\pi$ is a bijection, we will call $\pi_*(w) \formaleq \pi_*(w')$ a \emph{relabeling} of the law $w \formaleq w'$.  Thus for instance
 $$ 5 \circ 7 \formaleq 7 \circ 5$$
 is a relabeling of the commutative law \eqref{comm-law}.  By the above lemma, relabeling does not affect whether a given magna satisfies a given law.
-
-\begin{proof}  Trivial.
-\end{proof}
 
 \begin{lemma}[Equivalence]\label{equiv}\uses{law-def}  Let $G$ be a magma and $X$ be an alphabet.  Then the relation $G \models w \formaleq w'$ is an equivalence relation on $M_X$.
 \end{lemma}
@@ -177,4 +177,4 @@ This sequence is
 $$2, 5, 39, 364, 4284, 57882, 888365, \dots$$
 (\href{https://oeis.org/A376640}{OEIS A376640}).
 
-In particular, up to relabeling, symmetry, and triviality, there are exactly $4694$ laws of total order at most $4$.  A list can be found \href{https://github.com/teorth/equational_theories/blob/main/data/equations.txt}{here}.  A script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}.  The list is sorted by the total number of operations, then by the number of operations on the LHS. Within each such class we define an order on expressions by variable $<$ operation, and lexical order on variables.
+In particular, up to relabeling, symmetry, and triviality, there are exactly $4694$ laws of total order at most $4$.  A list can be found \href{https://github.com/teorth/equational_theories/blob/main/data/equations.txt}{here}.  A script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}.  The list is sorted first by the total number of operations, then by the number of operations on the LHS. Within each such class we define an order on expressions by lexical order on variables (ordered $x, y, z, w, u, v$).  The equation are arranged to be minimal with respect to this sorting order, thus the LHS will be shorter than or equal than the RHS, and earlier in the lexical order if the LHS and RHS are of equal length.
