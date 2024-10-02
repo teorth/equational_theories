@@ -54,6 +54,13 @@ structure OutputOutcomes where
   outcomes : Array (Array Closure.Outcome)
   deriving Lean.ToJson
 
+--- Output of the extract_implications raw subcommand.
+structure OutputRaw where
+  implications : Array Implication
+  facts : Array Facts
+  unconditionals : Array String
+deriving Lean.ToJson, Lean.FromJson
+
 def Implication.asJson (v : Implication) : String := s!"\{\"rhs\":\"{v.rhs}\", \"lhs\":\"{v.lhs}\"}"
 
 def Output.asJson (v : Output) : String :=
@@ -127,6 +134,45 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
           else IO.println s!"¬ ({edge.lhs} → {edge.rhs})"
       pure 0
 
+def generateRaw (inp : Cli.Parsed) : IO UInt32 := do
+  let some modules := inp.variableArgsAs? ModuleName |
+    inp.printHelp
+    return 1
+  if modules.isEmpty then
+    inp.printHelp
+    return 2
+  searchPathRef.set compile_time_search_path%
+
+  unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
+    let ctx := {fileName := "", fileMap := default}
+    let state := {env}
+    Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
+      let mut rs ← Result.extractEquationalResults
+      if inp.hasFlag "proven" then
+        rs := rs.filter (·.proven)
+      let mut implications : Array Implication := #[]
+      let mut facts : Array Facts := #[]
+      let mut unconditionals : Array String := #[]
+      for entry in rs do
+        match entry.variant with
+        | .implication imp => implications := implications.push imp
+        | .facts fact => facts := facts.push fact
+        | .unconditional s => unconditionals := unconditionals.push s
+      let output : OutputRaw := ⟨implications, facts, unconditionals⟩
+      IO.println (toJson output).pretty
+      pure 0
+
+def raw : Cmd := `[Cli|
+  raw VIA generateRaw;
+  "Print all equational results in JSON format for use in other scripts."
+
+  FLAGS:
+    proven; "Only consider proven results"
+
+  ARGS:
+    ...files : Array ModuleName; "The files to extract the implications from"
+]
+
 def extract_implications : Cmd := `[Cli|
   extract_implications VIA generateOutput;
   "Extract the implications shown in the mentioned files."
@@ -139,7 +185,7 @@ def extract_implications : Cmd := `[Cli|
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"
 
-  SUBCOMMANDS: outcomes; unknowns
+  SUBCOMMANDS: outcomes; unknowns; raw
 ]
 
 def main (args : List String) : IO UInt32 := do
