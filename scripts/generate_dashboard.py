@@ -14,27 +14,51 @@ if __name__ == '__main__':
     with open(args.hist_file, 'r') as f:
         data = json.load(f)
 
-    explicit_proof_true = data['explicit_proof_true']
-    implicit_proof_true = data['implicit_proof_true']
-    explicit_proof_false = data['explicit_proof_false']
-    implicit_proof_false = data['implicit_proof_false']
+    explicit_proof_true = data.get('explicit_proof_true', 0)
+    implicit_proof_true = data.get('implicit_proof_true', 0)
+    explicit_proof_false = data.get('explicit_proof_false', 0)
+    implicit_proof_false = data.get('implicit_proof_false', 0)
+    explicit_conjecture_true = data.get('explicit_conjecture_true', 0)
+    implicit_conjecture_true = data.get('implicit_conjecture_true', 0)
+    explicit_conjecture_false = data.get('explicit_conjecture_false', 0)
+    implicit_conjecture_false = data.get('implicit_conjecture_false', 0)
     unknown = data['unknown'];
-    known_total = explicit_proof_true + implicit_proof_true + explicit_proof_false + implicit_proof_false
-    total = known_total + unknown
+    proved_total = explicit_proof_true + implicit_proof_true + explicit_proof_false + implicit_proof_false
+    conjectured_total = explicit_conjecture_true + implicit_conjecture_true + explicit_conjecture_false + implicit_conjecture_false
+
+    total = proved_total + conjectured_total + unknown
 
     directory = os.path.dirname(args.out_file)
     if not os.path.exists(directory):
         os.makedirs(directory)
 
     outfile = open(args.out_file, 'w')
+
     outfile.write("\n")
-    outfile.write("Implication counts (see [this github issue](https://github.com/teorth/equational_theories/issues/29) for an explanation):\n\n")
-    outfile.write("| explicitly true | implicitly true | explicitly false | implicitly false | unknown |\n")
+    ratio = proved_total / total
+    outfile.write(f"The implication graph is **{ratio:.3%}** complete.\n\n")
+
+    outfile.write(
+        """An implication is *explicitly true* or *explicitly false* if we directly have
+           a proof of the corresponding proposition in Lean. It is *implicitly true* or
+           *implicitly false* if the proposition follows by taking the reflexive transitive
+           closure of explicitly proven implications.\n\n""")
+    outfile.write("Our current counts of implications in each of those categories are:\n\n")
+    outfile.write("| explicitly true | implicitly true | explicitly false | implicitly false | no proof |\n")
     outfile.write("| -- | -- | -- | -- | -- |\n")
     outfile.write("| {} | {} | {} | {} | {} |\n".format(
         explicit_proof_true, implicit_proof_true, explicit_proof_false,
-        implicit_proof_false, unknown))
+        implicit_proof_false, conjectured_total + unknown))
     outfile.write("\n")
-    ratio = known_total / total
-    outfile.write(f"**{ratio:.3%}** complete")
 
+
+    outfile.write("\nThe _no proof_ column above represents work that we still need to do.\n")
+    outfile.write("Among the _no proof_ implications, we have the following conjecture counts:\n\n")
+    outfile.write("| explicitly true | implicitly true | explicitly false | implicitly false | no conjecture |\n")
+    outfile.write("| -- | -- | -- | -- | -- |\n")
+    outfile.write("| {} | {} | {} | {} | {} |\n".format(
+        explicit_conjecture_true, implicit_conjecture_true, explicit_conjecture_false,
+        implicit_conjecture_false, unknown))
+    outfile.write("\n")
+    ratio = (proved_total + conjectured_total) / total
+    outfile.write(f"The implication graph is **{ratio:.3%}** complete if we include conjectures.\n\n")
