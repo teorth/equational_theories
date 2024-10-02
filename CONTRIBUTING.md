@@ -63,15 +63,20 @@ The core Lean files are as follows:
 
 - [`Magma.lean`](equational_theories/Magma.lean)  This contains the API for Magmas.
 - [`FreeMagma.lean`](equational_theories/FreeMagma.lean)  Contains the API for free Magmas.
+- [`Generated.lean`](equational_theories/Generated.lean)  This short file imports all the generated data sets.
+- [`Visualization.lean`](equational_theories/Visualization.lean) A tool to visualize the implications within the Lean infoview.
+- [`Equations.lean`](equational_theories/Equations.lean)  A list of selected equations of particular interest.
+- [`AllEquations.lean`](equational_theories/AllEquations.lean)  The complete set of 4692 equational laws involving at most four magma operations (up to symmetry and relabeling).  It was generated using [this script](scripts/generate_eqs_list.py).  The subgraph equations are included as an import.  If you find an equation here of particular interest to study, consider transferring it to `Equations.lean`.
+- [`Subgraph.lean`](equational_theories/Subgraph.lean)  This is the file for all results concerning the specific laws of interest.
+
+Some technical Lean files:
 - [`EquationalResult.lean`](equational_theories/EquationalResult.lean)  Introduces the `@[equational_result]` attribute, which adds metadata to allow for easier aggregation of implications. Also adds `conjecture` keyword, which is a variant of `proof_wanted` which keeps the metadata produced by `@[equational_result]` (but marking it as a conjecture).
 - [`Closure.lean`](equational_theories/Closure.lean)  Contains code for computing the transitive closure of the implications.
-- [`Generated.lean`](equational_theories/Generated.lean)  This short file imports all the generated data sets.
-- [`EquationsCommand.lean`](equational_theories/EquationsCommand.lean)  A technical file to speed up elaboration of equations.
 - [`ParseImplications.lean`](equational_theories/ParseImplications.lean)  Tools to help parse implications within Lean.
-- [`Visualization.lean`](equational_theories/Visualization.lean) A tool to visualize the implications within the Lean infoview.
-- [`Equations.lean`](equational_theories/Equations.lean)  A list of selected equations of particular interest, which we will refer to as "subgraph equations".
-- [`AllEquations.lean`](equational_theories/AllEquations.lean)  The complete set of 4692 equational laws involving at most four magma operations (up to symmetry and relabeling).  It was generated using [this script](scripts/generate_eqs_list.py).  The subgraph equations are included as an import.  If you find an equation here of particular interest to study, consider transferring it to `Equations.lean` to give it the status of a subgraph equation.
-- [`Subgraph.lean`](equational_theories/Subgraph.lean)  This is the file for all results concerning the subgraph equations specifically.
+- [`FactsSyntax.lean`](equational_theories/FactsSyntax.lean)  Support for assertions that a given magma obeys one set of laws but fails another.
+- [`DecideBang.lean`](equational_theories/DecideBang.lean) Variants of the `decide` tactic with various hacks to speed up elaboration.
+- [`EquationsCommand.lean`](equational_theories/EquationsCommand.lean)  Speeds up elaboration of equations.
+- [`MemoFinOp.lean`](equational_theories/MemoFinOp.lean) Defines the macro `memoFinOp` that memoizes a function `f : Fin n → Fin n → Fin n`.
 
 In addition to these files, contributors are welcome to add additional Lean files to the project in the [`equational_theories` folder](equational_theories) or one of its subfolders, to establish more facts about equations.  In order for your contributions to be easily detected by automated tools, please try to follow the following guidelines.
 
@@ -90,8 +95,14 @@ In addition to these files, contributors are welcome to add additional Lean file
 
 Contributions to the Lean codebase will pass through continuous integration (CI) checks that ensure that the Lean code compiles.  Contributors of Lean code are highly encouraged to interact with the [Lean Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/) to help coordinate their contributions and resolve technical issues.
 
-Here is a list of human-contributed Lean files:
+Here is a list of human-contributed Lean files with mathematical content:
 - [`InfModel.lean`](equational_theories/InfModel.lean)  Studies specific laws that are known to only have infinite non-trivial models.
+- [`Completeness.lean`](equational_theories/Completeness.lean)  The Birkhoff completeness theorem.
+- [`Compactness.lean`](equational_theories/Compactness.lean)  The compactness theorem.
+- [`Counting.lean`](equational_theories/Counting.lean) Various theorems about counting laws.
+- [`MagmaOp.lean`](equational_theories/MagmaOp.lean) Magma duality.
+- [`Preorder.lean`](equational_theories/Preorder.lean) Preorder on magmas.
+
 
 At present, the API for magmas only allows for theorems that study a finite number of individual equational laws at a time.  We plan to expand the API to also allow one to establish metatheorems about entire classes of equations.
 

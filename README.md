@@ -71,6 +71,8 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
         - [`generate_z3_counterexample`](scripts/generate_z3_counterexample.py) - given an implication statement between two equations, calls Z3 to try to generate a counterexample
         - [`process_implications`](scripts/process_implications.py) - processes implications from one or more Lean files
     - Ruby
+        - [`generate_graphviz_graph`](scripts/generate_graphviz_graph.rb) - creates a graphviz graph
+        - [`graph`](scripts/graph.rb) - graph condensation tools
         - [`transitive_closure`](scripts/transitive_closure.rb) - computes the transitive closure of a set of implications
         - [`transitive_reduction`](scripts/transitive_reduction.rb) - finds a transitive reduction of a set of implications
 - Automated provers for equational theories
