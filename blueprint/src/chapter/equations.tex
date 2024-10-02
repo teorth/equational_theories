@@ -235,9 +235,9 @@ In that paper a computer search was also used to show that no law of order four 
 
 An open question is whether Definition \ref{eq5105} is an Austin law.  We have the following partial result from \cite{Kisielewicz2}:
 
-\begin{theorem}[Equation 5105 has no non-trivial finite models]\label{5105-nontrivial}\uses{eq5105} Definition \ref{eq5105} has no non-trivial finite models.
+\begin{theorem}[Equation 5105 has no non-trivial finite models]\lean{InfModel.Finite.Equation5105_implies_Equation2}\leanok\label{5105-nontrivial}\uses{eq5105} Definition \ref{eq5105} has no non-trivial finite models.
 \end{theorem}
 
-\begin{proof} From Definition \ref{eq5105} we see that the map $w \mapsto y \circ w$ is onto, hence injective in a finite model.  Using this injectivity four times in Definition \ref{eq5105}, we see that $z \circ y$ does not depend on $z$, hence the expression
+\begin{proof} \leanok From Definition \ref{eq5105} we see that the map $w \mapsto y \circ w$ is onto, hence injective in a finite model.  Using this injectivity four times in Definition \ref{eq5105}, we see that $z \circ y$ does not depend on $z$, hence the expression
 $x \circ (z \circ y)$ does not depend on $x$.  By Definition \ref{eq5105} again, this means that $x$ does not depend on $x$, which is absurd in a non-trivial model.
 \end{proof}
