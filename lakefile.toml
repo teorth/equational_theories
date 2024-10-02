@@ -26,8 +26,3 @@ name = "equational_theories"
 name = "extract_implications"
 root = "scripts.extract_implications"
 supportInterpreter = true
-
-[[require]]
-name = "egg"
-git  = "https://github.com/marcusrossel/lean-egg"
-rev  = "main"
