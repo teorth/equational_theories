@@ -22,6 +22,7 @@ def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → IO UInt32)
       action rs
 
 def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
+  let only_e_c := inp.hasFlag "equivalence_creators"
   withExtractedResults inp fun rs => do
     let rs' := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
     let rs' := rs'.map (·.variant)
@@ -30,7 +31,11 @@ def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
     for i in [:equations.size] do
       for j in [:equations.size] do
         if outcomes[i]![j]!.isNone then
-          unknowns := unknowns.push ⟨equations[i]!, equations[j]!⟩
+          if only_e_c then
+            if outcomes[j]![i]!.getD false then
+              unknowns := unknowns.push ⟨equations[i]!, equations[j]!⟩
+          else
+            unknowns := unknowns.push ⟨equations[i]!, equations[j]!⟩
     IO.println (toJson unknowns).compress
     pure 0
 
@@ -40,6 +45,7 @@ def unknowns : Cmd := `[Cli|
 
   FLAGS:
     proven; "Only consider proven results"
+    equivalence_creators; "Output only implications whose converse is known to be true"
 
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"
