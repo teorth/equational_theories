@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 
+from collections import defaultdict
 import ast
 import re
 import json
@@ -23,16 +24,28 @@ implications = [ (int(i["lhs"].removeprefix("Equation")), int(i["rhs"].removepre
 
 print("Number of implications:", len(implications))
 
+def transitive_closure(pairs):
+    pairs_idx = defaultdict(list)
+    for a, b in pairs:
+        pairs_idx[a].append(b)
+    closure = set()
+    new_pairs = set(pairs)
+    while new_pairs:
+        (a,b) = new_pairs.pop()
+        closure.add((a, b))
+        for c in pairs_idx[b]:
+          if (a, c) not in closure:
+            new_pairs.add((a, c))
+    return closure
+
+closure = transitive_closure(implications)
+print(f"Size of transitive closure: {len(closure)}")
+
 impliedBy = { i : set() for i in full }
 implying = { j : set() for j in full }
-
-for i, j in implications:
-  impliedBy[i].add(j)
-  impliedBy[i] |= impliedBy[j]
-  implying[j].add(i)
-  implying[j] |= implying[i]
-
-print("Size of transitive closure:", sum([len (s) for s in impliedBy.values()]))
+for (a,b) in closure:
+    impliedBy[a].add(b)
+    implying[b].add(a)
 
 def parse_row(row):
     if not row.startswith("'(") or "seen" in row: return
