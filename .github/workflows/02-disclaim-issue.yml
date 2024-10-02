@@ -1,4 +1,4 @@
-name: Remove Assignment on Disclaim
+name: Disclaim Issue
 
 on:
   issue_comment:
@@ -6,18 +6,10 @@ on:
 
 jobs:
   disclaim_issue:
-    if: github.event.comment.body == 'disclaim'
+    if: github.event.issue.pull_request == null && github.event.comment.body == 'disclaim'
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if this is an issue, not a pull request
-      id: check_issue
-      run: |
-        if [[ -n "${{ github.event.issue.pull_request }}" ]]; then
-          echo "This is a pull request, not an issue."
-          exit 0
-        fi
-
     - name: Get issue details
       id: issue
       run: |

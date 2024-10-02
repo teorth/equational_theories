@@ -17,5 +17,8 @@ python3 dump_tables.py > data/refutations.txt
 python3 generate_lean.py
 
 This scripts also reads `data/implications.json`, to prune the resulting `Fact` in the theorems.
-As new implications are known this file can be updated, and the script re-run to redue the size
-of the theorems.
+As new implications are known this file can be updated using
+```
+lake exe extract_implications  --json --only-implications equational_theories > equational_theories/Generated/All4x4Tables/data/implications.json
+```
+and the script re-run to redue the size of the theorems.
