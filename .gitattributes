@@ -5,3 +5,5 @@ equational_theories/Generated/TrivialBruteforce/theorems/RewriteHypothesisAndGoa
 
 equational_theories/FinitePoly/Refutation*.lean linguist-generated
 equational_theories/FinitePoly.lean linguist-generated
+equational_theories/All4x4Tables/Refutation*.lean linguist-generated
+equational_theories/All4x4Tables.lean linguist-generated

@@ -12,3 +12,10 @@ python3 prune.py > data/covering_set.txt
 
 # Dump the tables and split into files
 python3 dump_tables.py > data/refutations.txt
+
+# Generate the lean files
+python3 generate_lean.py
+
+This scripts also reads `data/implications.json`, to prune the resulting `Fact` in the theorems.
+As new implications are known this file can be updated, and the script re-run to redue the size
+of the theorems.
