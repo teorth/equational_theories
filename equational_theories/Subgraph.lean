@@ -352,6 +352,30 @@ theorem Equation4582_implies_Equation4564 (G: Type*) [Magma G] (h: Equation4582 
 theorem Equation4582_implies_Equation4579 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4579 G :=
   fun _ _ _ _ _ ↦ h _ _ _ _ _ _
 
+-- Obtained with lean-egg
+@[equational_result]
+theorem Equation14_implies_Equation23 (G: Type _) [Magma G] (h: Equation14 G) : Equation23 G := by
+ intro x
+ calc
+     x
+     _ = (x ∘ x) ∘ (x ∘ (x ∘ x)) := (h x (x ∘ x))
+     _ = (x ∘ x) ∘ x := by rw [← h x x]
+
+
+@[equational_result]
+theorem Equation14_implies_Equation8 (G: Type _) [Magma G] (h: Equation14 G) : Equation8 G := by
+intro x
+calc
+    x
+    _ = x ∘ (x ∘ x) := h x x
+
+@[equational_result]
+theorem Equation2_implies_Equation14 (G: Type _) [Magma G] (h: Equation2 G) : Equation14 G := by
+intro x y
+calc
+    x
+    _ = y ∘ (x ∘ y) := Eq.symm (h (y ∘ (x ∘ y)) x)
+
 /- Counterexamples -/
 
 @[equational_result]
