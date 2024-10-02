@@ -2,15 +2,17 @@
 
 We will be interested in seeing which laws imply which other laws, in the sense that magmas obeying the former law automatically obey the latter.  We will also be interested in \emph{anti-implications} showing that one law does \emph{not} imply another, by producing examples of magmas that obey the former law but not the latter. Here is a formal definition.
 
-\begin{definition}[Implication]\label{impl}\uses{law-def}  A law $w  \formaleq  w'$ is said to \emph{imply} another law $w''  \formaleq  w'''$, if every magma $G$ that satisfies the former, satisfies the latter:
-  $$ G \models w  \formaleq  w' \implies G \models w''  \formaleq  w'''.$$
+\begin{definition}[Implication]\label{impl}\uses{models-def}  A law $E$ is said to \emph{imply} another law $E'$ if $\{E\} \models E'$, or equivalently:
+  $$ G \models w  \formaleq  w' \implies G \models w''  \formaleq  w''' \hbox{ for all magmas } G$$
 Two laws are said to be \emph{equivalent} if they imply each other.
 \end{definition}
 
-\begin{lemma}[Pre-order]\label{pre-order}\uses{impl}  Implication is a pre-order on the set of laws, and equivalence is an equivalence relation.
+\begin{lemma}[Pre-order]\leanok\label{pre-order}\uses{impl}  If we define $E \leq E'$ if $E$ implies $E'$, then this is a pre-order on the set of laws, and equivalence is an equivalence relation.
 \end{lemma}
 
-\begin{proof} Trivial.
+Note that we view the stronger law as less than or equal to the weaker law.  This is because the class of magmas that obey the stronger law is a subset of the class of magmas that obey the weaker law.  It is also consistent with the conventions of Lean's Mathlib.
+
+\begin{proof}\leanok Trivial.
 \end{proof}
 
 Implications between the laws from Chapter \ref{subgraph-eq} are depicted in Figure \ref{fig:implications}.
@@ -23,13 +25,13 @@ Implications between the laws from Chapter \ref{subgraph-eq} are depicted in Fig
 \end{figure}
 
 
-\begin{lemma}[Minimal element]\label{minimal}\uses{pre-order}  The law $0  \formaleq  0$ is the minimal element in this pre-order.
+\begin{lemma}[Maximal element]\label{maximal}\uses{pre-order}  The law $0  \formaleq  0$ is the maximal element in this pre-order.
 \end{lemma}
 
 \begin{proof} Trivial.
 \end{proof}
 
-\begin{lemma}[Maximal element]\label{maximal}\uses{pre-order}  The law $0  \formaleq  0$ is the minimal element in this pre-order.
+\begin{lemma}[Minimal element]\label{minimal}\uses{pre-order}  The law $0  \formaleq  1$ is the minimal element in this pre-order.
 \end{lemma}
 
 \begin{proof} Trivial.
@@ -73,8 +75,8 @@ Thus for instance, Definition \ref{eq7} is equivalent to Definition \ref{eq2}.
 \begin{proof} Routine.
 \end{proof}
 
-\begin{theorem}[Criterion for implication]\label{variable-impl}\uses{impl}  If $w \formaleq w'$ is such that every variable appears the same number of times in both $w$ and $w'$, and $w \formaleq w'$ implies another law $w'' \formaleq w'''$, then every variable appears the same number of times in both $w''$ and $w'''$.
+\begin{theorem}[Criterion for implication]\label{variable-impl}\uses{impl}\lean{Law.MagmaLaw.SameCount.derive}\leanok  If $w \formaleq w'$ is such that every variable appears the same number of times in both $w$ and $w'$, and $w \formaleq w'$ implies another law $w'' \formaleq w'''$, then every variable appears the same number of times in both $w''$ and $w'''$.
 \end{theorem}
 
-\begin{proof} Consider the magma $\R$ with the addition law $+$.  By hypothesis, this magma obeys $w \formaleq w'$, and hence $w'' \formaleq w'''$, giving the claim by comparing coefficients of the linear forms associated to $w''$ and $w'''$ in this magma.
+\begin{proof} Consider the magma $\mathrm{MS}$ of multisets over an arbitrary set $A$ (which can be seen as finitely suported maps $A\rightarrow \N$), with the multiset addition law $+$.  By hypothesis, this magma obeys $w \formaleq w'$, and hence $w'' \formaleq w'''$, giving the claim by comparing the orders of the elements of $A$ appearing in $w''$ and $w'''$ in this magma.
 \end{proof}
