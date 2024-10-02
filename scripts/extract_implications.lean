@@ -11,7 +11,7 @@ def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → IO UInt32)
     imp.printHelp
     return 1
   if modules.isEmpty then
-    modules := #[(ParseableType.parse? "equational_theories").get!]
+    modules := #[`equational_theories]
   searchPathRef.set compile_time_search_path%
 
   unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
