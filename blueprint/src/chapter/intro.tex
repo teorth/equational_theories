@@ -3,7 +3,7 @@
 \begin{definition}[Magma]\label{magma-def}\lean{Magma}\leanok A \emph{magma} is a set $G$ equipped with a binary operation $\circ: G \times G \to G$.  A \emph{homomorphism} $\varphi : G \to H$ between two magmas is a map such that $\varphi(x \circ y) = \varphi(x) \circ \varphi(y)$ for all $x,y \in G$.  An \emph{isomorphism} is an invertible homomorphism.
 \end{definition}
 
-Groups, semi-groups, and monoids are familiar examples of magmas.  However, in general we do not expect magmas to have any associative properties.
+Groups, semi-groups, and monoids are familiar examples of magmas.  However, in general we do not expect magmas to have any associative properties.  In some literature, magmas are also known as groupoids, although this term is also used for a slightly different object (a category with inverses).
 
 A magma is called \emph{empty} if it has cardinality zero, \emph{singleton} if it has cardinality one, and \emph{non-trivial} otherwise.
 
@@ -83,10 +83,10 @@ for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} ass
   $\Gamma$ \emph{derives} $w\formaleq w'$, and write $\Gamma\vdash w\formaleq w'$, if the law can
   be obtained using a finite number of applications of the following rules:
   \begin{enumerate}
-    \item if $w\formaleq w' \in \Gamma$, then $\Gamma\vdash w\formaleq w'$
-    \item $\Gamma\vdash w\formaleq w$ for any word $w$
-    \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w'\formaleq w$
-    \item if $\Gamma\vdash w\formaleq w'$ and $\Gamma\vdash w'\formaleq w''$ then $\Gamma\vdash w\formaleq w''$
+    \item if $w\formaleq w' \in \Gamma$, then $\Gamma\vdash w\formaleq w'$.
+    \item $\Gamma\vdash w\formaleq w$ for any word $w$.
+    \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w'\formaleq w$.
+    \item if $\Gamma\vdash w\formaleq w'$ and $\Gamma\vdash w'\formaleq w''$ then $\Gamma\vdash w\formaleq w''$.
     \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w\sigma\formaleq w'\sigma$, where $\sigma$ is an arbitrary map from $X$ to words in $M_X$ and $w\sigma$ replaces each occurrence of an element of $X$ with it's image by $\sigma$ in $w$.
     \item if $\Gamma\vdash w_1\formaleq w_2$ and $\Gamma\vdash w_3\formaleq w_4$ then $\Gamma\vdash w_1 \circ w_3\formaleq w2\circ w_4$
   \end{enumerate}
@@ -94,15 +94,22 @@ for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} ass
 
 This definition is useful because of the following theorem:
 
-\begin{theorem}[Completeness]\label{sound-complete} (Birkhoff's completeness theorem)
-  \lean{Completeness}\leanok
+\begin{theorem}[Birkhoff's completeness theorem]\label{sound-complete}\lean{Completeness}\leanok\uses{models-def, derivation-def}
   For any set of laws $\Gamma$ and words $w, w'$ over a fixed alphabet
   $$ \Gamma\vdash w\formaleq w'\ \mathrm{iff}\ \Gamma\models w\formaleq w' $$
 \end{theorem}
 \begin{proof}
   \leanok
-  TODO.
+  (Sketch) The `only if' component is soundness, and follows from verifying that the rules of inference in Definition \ref{derivation-def} holds for $\models$.  The `if` part is completeness, and is proven by constructing the magma of words, quotiented out by the relation $\Gamma \vdash w \formaleq w'$, which is easily seen to be an equivalence relation respecting the magma operation.
 \end{proof}
+
+
+\begin{corollary}[Compactness theorem]\label{compactness-thm}\uses{models-def}  Let $\Gamma$ be a collection of laws, and let $E$ be a law.  Then $\Gamma \models E$ if and only if there exists a finite subset $\Gamma'$ of $\Gamma$ such that $\Gamma' \models E$.
+\end{corollary}
+
+\begin{proof}\uses{sound-complete} The claim is obvious for $\vdash$, and the claim then follows from Theorem \ref{sound-complete}
+\end{proof}
+
 
 \begin{lemma}[Pushforward]\label{push}\uses{law-def}  Let $w \formaleq w'$ be a law with some alphabet $X$, $G$ be a magma, and $\pi: X \to Y$ be a function.  If $G \models w \formaleq w'$, then $G \models \pi_*(w) \formaleq \pi_*(w')$.  In particular, if $\pi$ is a bijection, the statements If $G \models w \formaleq w'$, then $G \models \pi_*(w) \formaleq \pi_*(w')$ are equivalent.
 \end{lemma}
