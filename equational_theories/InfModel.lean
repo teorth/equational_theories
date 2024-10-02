@@ -121,4 +121,26 @@ theorem Finite.Equation5105_implies_Equation2 (G : Type*) [Magma G] [Finite G] (
       _= x ∘ (x ∘ (x ∘ (y ∘ (x ∘ x)))) := by rw [hhhh]
       _= y := by rw [←  h y x x]
 
+theorem Finite.Equation28393_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : Equation28393 G) :
+    Equation2 G := by
+    have : ∀ (y z u : G), y ∘ z = y ∘ u := by
+      intro y
+      let f (x : G) := ((y ∘ y) ∘ y) ∘ x
+      let g (x : G) := x ∘ (y ∘ y)
+      have : Function.RightInverse f g := by
+        intro x
+        simp [f, g, ← h]
+      intro z u
+      apply this.injective
+      obtain ⟨finv, hf⟩ := (Finite.surjective_of_injective this.injective).hasRightInverse
+      let fy := finv ((y ∘ y) ∘ y)
+      replace hf : ((y ∘ y) ∘ y) ∘ fy = (y ∘ y) ∘ y := hf _
+      have := h fy y
+      simp only [hf] at this
+      simp [f, ← this]
+    intro x u
+    have y := x
+    have z := x
+    rw [h x y z, this ((y ∘ y) ∘ y)  x u, ← this ((y ∘ y) ∘ y) u u, ← h]
+
 end InfModel

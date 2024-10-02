@@ -112,7 +112,7 @@ abbrev Equation4582 (G: Type _) [Magma G] := ∀ x y z w u v : G, x ∘ (y ∘ z
 abbrev Equation5105 (G : Type _) [Magma G] := ∀ x y z : G, x = y ∘ (y ∘ (y ∘ (x ∘ (z ∘ y))))
 
 /-- Kisielewicz's second Austin law -/
-abbrev Equation28393 (G : Type _) [Magma G] := ∀ x y z : G, x = (((x ∘ x) ∘ x) ∘ y) ∘ (x ∘ z)
+abbrev Equation28393 (G : Type _) [Magma G] := ∀ x y z : G, x = (((y ∘ y) ∘ y) ∘ x) ∘ (y ∘ z)
 
 /- Some order 6 laws -/
 
