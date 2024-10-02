@@ -5,12 +5,12 @@
 An example proof illustrates the logic it uses:
 
 \begin{verbatim}
-  have eq3315 (x y : G) : x ∘ y = x ∘ (y ∘ (x ∘ x)) := by
+  have eq3315 (x y : G) : x * y = x * (y * (x * x)) := by
     apply Apply.Equation12_implies_Equation11 at h
     apply RewriteHypothesis.Equation11_implies_Equation3323 at h
     apply Apply.Equation3323_implies_Equation3315 at h
     apply h
-  have eq52 (x y : G) : x = x ∘ (y ∘ (x ∘ x)) := by
+  have eq52 (x y : G) : x = x * (y * (x * x)) := by
     apply Apply.Equation12_implies_Equation61 at h
     apply Apply.Equation61_implies_Equation54 at h
     apply Apply.Equation54_implies_Equation52 at h
