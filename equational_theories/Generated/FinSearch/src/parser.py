@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import re
+import os
 from dataclasses import dataclass
 from typing import List, Union
 
@@ -88,7 +89,7 @@ class Equation:
         return self.lhs.eval(assignment, op) == self.rhs.eval(assignment, op)
 
 def read_eqs():
-    for line in open("equational_theories/Generated/FinSearch/src/equations.txt"):
+    for line in open(os.path.join(os.path.dirname(__file__), "equations.txt")):
         yield Equation(line)
 
 if __name__ == "__main__":

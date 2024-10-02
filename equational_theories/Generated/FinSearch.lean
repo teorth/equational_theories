@@ -1,1 +1,14 @@
-import equational_theories.Generated.FinSearch.theorems.FinSearch
+import equational_theories.Generated.FinSearch.theorems.proofs5_467
+import equational_theories.Generated.FinSearch.theorems.proofs5_677
+import equational_theories.Generated.FinSearch.theorems.proofs5_704
+import equational_theories.Generated.FinSearch.theorems.proofs5_1076
+import equational_theories.Generated.FinSearch.theorems.proofs5_1279
+import equational_theories.Generated.FinSearch.theorems.proofs5_1313
+import equational_theories.Generated.FinSearch.theorems.proofs5_1516
+import equational_theories.Generated.FinSearch.theorems.proofs5_2091
+import equational_theories.Generated.FinSearch.theorems.proofs5_2294
+import equational_theories.Generated.FinSearch.theorems.proofs5_2328
+import equational_theories.Generated.FinSearch.theorems.proofs5_2531
+import equational_theories.Generated.FinSearch.theorems.proofs5_2903
+import equational_theories.Generated.FinSearch.theorems.proofs5_2910
+import equational_theories.Generated.FinSearch.theorems.proofs5_3140
