@@ -4,7 +4,7 @@
 #include <string.h>
 #include "header.h"
 
-#define uint64_t u_int64_t
+#define uint64_t int
 
 FunctionPtr* functions;
 int* nvar_list;
