@@ -9,7 +9,7 @@
 
 The purpose of this project, launched on Sep 25, 2024, is to explore the space of equational theories of magmas, ordered by implication. To begin with we shall focus only on theories of a single equation, and specifically on [this list](equational_theories/AllEquations.lean) of 4694 equations (all laws involving at most four magma operations, up to symmetry and relabeling).  This creates 4694*(4694-1) = 22,028,942 implications that need to be proven or disproven.
 
-Some selected equations of interest are listed [here](equational_theories/Equations.lean).
+Some selected equations of interest are listed [here](equational_theories/Equations.lean) (in Lean form) and [here](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html) (in a human readable blueprint).
 
 Some automatically generated progress:
 - Sep 28, 2024: [85 laws](equational_theories/Generated/Constant.lean) have been shown to be equivalent to the constant law [`Equation46`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq46), and [815 laws](equational_theories/Generated/Singleton.lean) have been shown to be equivalent to the singleton law [`Equation2`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq2).
@@ -52,6 +52,7 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - [Blueprint](https://teorth.github.io/equational_theories/blueprint/)
     - [Documentation](https://teorth.github.io/equational_theories/docs/)
     - [The Lean Zulip stream for the project](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/)
+    - [Instructions on how to contribute](CONTRIBUTING.md)
 - [A blog post describing the project.](https://terrytao.wordpress.com/2024/09/25/a-pilot-project-in-universal-algebra-to-explore-new-ways-to-collaborate-and-use-machine-assistance/), Sep 25, 2024.
 - [Initial discussion on Zulip](https://leanprover.zulipchat.com/#narrow/stream/113488-general/topic/Proposing.20a.20universal.20algebra.20exploration.20using.20Lean), Sep 26, 2024.
 - [Initial discussion on Mastodon](https://mathstodon.xyz/@tao/110736805384878353), Jul 18, 2023.
