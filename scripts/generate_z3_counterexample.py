@@ -1,5 +1,5 @@
 # This scripts allows one, given a left_eqn and a right_eqn, to
-# generate a lean file wich validates a Z3 counterexample.  This
+# generate a lean file which validates a Z3 counterexample.  This
 # script requires the Z3 python bindings and passing in the equation
 # numbers on the command line. It depends on the `generate_eqs_list`
 # script.
@@ -134,7 +134,7 @@ def print_instance():
 
 
 def print_non_imp_proof(left: int, right: int):
-    return ("theorem Equation{left}_not_implies_Equation{right} :  "
+    return ("@[equational_result]\ntheorem Equation{left}_not_implies_Equation{right} :  "
             "∃ (G: Type) (_: Magma G), Equation{left} G ∧ ¬ Equation{right} G :=\n"
             "by exists M, M.Magma\n\n".format(left = left, right = right))
 

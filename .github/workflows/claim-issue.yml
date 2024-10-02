@@ -1,4 +1,4 @@
-name: Assign Issue on Claim
+name: Claim Issue
 
 on:
   issue_comment:
@@ -6,18 +6,10 @@ on:
 
 jobs:
   claim_issue:
-    if: github.event.comment.body == 'claim'  # This ensures the workflow only runs if the comment contains exactly 'claim'
+    if: github.event.issue.pull_request == null && github.event.comment.body == 'claim'
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if this is an issue, not a pull request
-      id: check_issue
-      run: |
-        if [[ -n "${{ github.event.issue.pull_request }}" ]]; then
-          echo "This is a pull request, not an issue."
-          exit 0
-        fi
-
     - name: Check if issue is already assigned
       id: check_assignee
       run: |

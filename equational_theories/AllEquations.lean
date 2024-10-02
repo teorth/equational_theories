@@ -1,6 +1,7 @@
 import equational_theories.Magma
 import equational_theories.Equations
 import equational_theories.EquationsCommand
+import equational_theories.EquationalResult
 
 /-! List of equational laws being studied -/
 
@@ -11,7 +12,7 @@ results concerning the entire list of equations.  If you are proving many result
 equation of interest, consider transferring it into `Equations.lean`.
 
 The equations were enumerated from
-`https://github.com/teorth/equational_theories/blob/main/scripts/extract_implications.lean`, and can
+`https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py`, and can
 be described as the set of all equational laws involving at most four magma operations, up to
 symmetry and relabeling.
 
@@ -31,7 +32,7 @@ equation 10 := x = x ∘ (y ∘ x)
 equation 11 := x = x ∘ (y ∘ y)
 equation 12 := x = x ∘ (y ∘ z)
 equation 13 := x = y ∘ (x ∘ x)
-equation 14 := x = y ∘ (x ∘ y)
+-- equation 14 := x = y ∘ (x ∘ y)
 equation 15 := x = y ∘ (x ∘ z)
 equation 16 := x = y ∘ (y ∘ x)
 equation 17 := x = y ∘ (y ∘ y)
@@ -46,7 +47,7 @@ equation 25 := x = (x ∘ y) ∘ x
 equation 26 := x = (x ∘ y) ∘ y
 equation 27 := x = (x ∘ y) ∘ z
 equation 28 := x = (y ∘ x) ∘ x
-equation 29 := x = (y ∘ x) ∘ y
+-- equation 29 := x = (y ∘ x) ∘ y
 equation 30 := x = (y ∘ x) ∘ z
 equation 31 := x = (y ∘ y) ∘ x
 equation 32 := x = (y ∘ y) ∘ y
@@ -398,7 +399,7 @@ equation 377 := x ∘ y = (x ∘ y) ∘ x
 equation 378 := x ∘ y = (x ∘ y) ∘ y
 equation 379 := x ∘ y = (x ∘ y) ∘ z
 equation 380 := x ∘ y = (x ∘ z) ∘ x
-equation 381 := x ∘ y = (x ∘ z) ∘ y
+-- equation 381 := x ∘ y = (x ∘ z) ∘ y
 equation 382 := x ∘ y = (x ∘ z) ∘ z
 equation 383 := x ∘ y = (x ∘ z) ∘ w
 equation 384 := x ∘ y = (y ∘ x) ∘ x
@@ -1706,7 +1707,7 @@ equation 1685 := x = (y ∘ x) ∘ ((x ∘ y) ∘ y)
 equation 1686 := x = (y ∘ x) ∘ ((x ∘ y) ∘ z)
 equation 1687 := x = (y ∘ x) ∘ ((x ∘ z) ∘ x)
 equation 1688 := x = (y ∘ x) ∘ ((x ∘ z) ∘ y)
-equation 1689 := x = (y ∘ x) ∘ ((x ∘ z) ∘ z)
+-- equation 1689 := x = (y ∘ x) ∘ ((x ∘ z) ∘ z)
 equation 1690 := x = (y ∘ x) ∘ ((x ∘ z) ∘ w)
 equation 1691 := x = (y ∘ x) ∘ ((y ∘ x) ∘ x)
 equation 1692 := x = (y ∘ x) ∘ ((y ∘ x) ∘ y)
@@ -3739,7 +3740,7 @@ equation 3718 := x ∘ y = (x ∘ x) ∘ (z ∘ y)
 equation 3719 := x ∘ y = (x ∘ x) ∘ (z ∘ z)
 equation 3720 := x ∘ y = (x ∘ x) ∘ (z ∘ w)
 equation 3721 := x ∘ y = (x ∘ y) ∘ (x ∘ x)
-equation 3722 := x ∘ y = (x ∘ y) ∘ (x ∘ y)
+-- equation 3722 := x ∘ y = (x ∘ y) ∘ (x ∘ y)
 equation 3723 := x ∘ y = (x ∘ y) ∘ (x ∘ z)
 equation 3724 := x ∘ y = (x ∘ y) ∘ (y ∘ x)
 equation 3725 := x ∘ y = (x ∘ y) ∘ (y ∘ y)
@@ -3761,7 +3762,7 @@ equation 3740 := x ∘ y = (x ∘ z) ∘ (z ∘ y)
 equation 3741 := x ∘ y = (x ∘ z) ∘ (z ∘ z)
 equation 3742 := x ∘ y = (x ∘ z) ∘ (z ∘ w)
 equation 3743 := x ∘ y = (x ∘ z) ∘ (w ∘ x)
-equation 3744 := x ∘ y = (x ∘ z) ∘ (w ∘ y)
+-- equation 3744 := x ∘ y = (x ∘ z) ∘ (w ∘ y)
 equation 3745 := x ∘ y = (x ∘ z) ∘ (w ∘ z)
 equation 3746 := x ∘ y = (x ∘ z) ∘ (w ∘ w)
 equation 3747 := x ∘ y = (x ∘ z) ∘ (w ∘ u)
