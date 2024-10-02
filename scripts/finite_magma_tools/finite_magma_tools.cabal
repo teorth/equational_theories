@@ -15,7 +15,7 @@ executable make-plan
     other-modules:    FiniteMagmaTools.Equation,
                       FiniteMagmaTools.Magma,
                       FiniteMagmaTools.All4By4Parser,
-                      MakePlan.Plan
+                      FiniteMagmaTools.Plan
 
     build-depends:    base,
                       array,
@@ -35,8 +35,8 @@ executable min-cover
     other-modules:    FiniteMagmaTools.Equation,
                       FiniteMagmaTools.Magma,
                       FiniteMagmaTools.All4By4Parser,
-                      MakePlan.Plan,
-                      MakePlan.PlanParser
+                      FiniteMagmaTools.Plan,
+                      FiniteMagmaTools.PlanParser
 
     build-depends:    base,
                       array,
@@ -55,8 +55,8 @@ executable gen-refutations
     other-modules:    FiniteMagmaTools.Equation,
                       FiniteMagmaTools.Magma,
                       FiniteMagmaTools.All4By4Parser,
-                      MakePlan.Plan,
-                      MakePlan.PlanParser
+                      FiniteMagmaTools.Plan,
+                      FiniteMagmaTools.PlanParser
 
     build-depends:    base,
                       array,
@@ -74,7 +74,7 @@ executable parse-mace4
             
     other-modules:    FiniteMagmaTools.Equation,
                       FiniteMagmaTools.Magma,
-                      MakePlan.Plan,
+                      FiniteMagmaTools.Plan,
                       ParseMace4.ParseInterps
 
     build-depends:    base,

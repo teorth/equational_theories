@@ -14,8 +14,8 @@ import qualified FiniteMagmaTools.Equation as Equation
 import FiniteMagmaTools.All4By4Parser
 import qualified Data.Foldable as F
 
-import MakePlan.Plan
-import MakePlan.PlanParser
+import FiniteMagmaTools.Plan
+import FiniteMagmaTools.PlanParser
 
 displayHelp :: IO ()
 displayHelp =

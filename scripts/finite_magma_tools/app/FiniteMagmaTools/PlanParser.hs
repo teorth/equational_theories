@@ -1,6 +1,6 @@
-module MakePlan.PlanParser (parsePlan) where
+module FiniteMagmaTools.PlanParser (parsePlan) where
 
-import MakePlan.Plan
+import FiniteMagmaTools.Plan
 import FiniteMagmaTools.Equation (Equation)
 import qualified FiniteMagmaTools.Equation as Equation
 

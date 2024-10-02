@@ -6,8 +6,8 @@ import qualified FiniteMagmaTools.Equation as Equation
 import FiniteMagmaTools.Magma (Magma)
 import qualified FiniteMagmaTools.Magma as Magma
 
-import MakePlan.Plan
-import MakePlan.PlanParser
+import FiniteMagmaTools.Plan
+import FiniteMagmaTools.PlanParser
 
 import Data.List (intersperse)
 

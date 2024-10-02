@@ -6,7 +6,7 @@ import qualified FiniteMagmaTools.Equation as Equation
 import FiniteMagmaTools.Magma (Magma)
 import qualified FiniteMagmaTools.Magma as Magma
 
-import MakePlan.Plan
+import FiniteMagmaTools.Plan
 
 import ParseMace4.ParseInterps (parseMace4)
 

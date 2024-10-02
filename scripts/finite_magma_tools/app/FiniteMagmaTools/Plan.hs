@@ -1,4 +1,4 @@
-module MakePlan.Plan where
+module FiniteMagmaTools.Plan where
 
 import FiniteMagmaTools.Equation (Equation)
 

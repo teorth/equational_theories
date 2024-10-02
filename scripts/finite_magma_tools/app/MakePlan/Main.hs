@@ -7,7 +7,7 @@ import FiniteMagmaTools.Magma (Magma)
 import qualified FiniteMagmaTools.Magma as Magma
 
 import FiniteMagmaTools.All4By4Parser
-import MakePlan.Plan
+import FiniteMagmaTools.Plan
 
 import qualified Data.Set as Set
 import Data.List (sortOn,intersperse)
