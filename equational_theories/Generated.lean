@@ -3,5 +3,6 @@ import equational_theories.Generated.Constant
 import equational_theories.Generated.Singleton
 import equational_theories.Generated.TrivialBruteforce
 import equational_theories.Generated.FinitePoly
+import equational_theories.Generated.All4x4Tables
 import equational_theories.Generated.EquationSearch
 import equational_theories.Generated.Vampire

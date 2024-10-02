@@ -1,8 +1,8 @@
-\chapter{Subgraph laws}\label{subgraph-eq}
+\chapter{Selected laws}\label{subgraph-eq}
 
 In this project we study the 4694 laws (up to symmetry and relabeling) of total order at most $4$.
 
-Selected laws of interest are listed below, as well as in \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Equations.lean}{this file}.  Laws in this list will be referred to as ``subgraph equations'', as we shall inspect the subgraph of the implication subgraph induced by these equations.
+Selected laws of interest are listed below, as well as in \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Equations.lean}{this file}.
 
 \begin{definition}[Equation 1]\label{eq1}\lean{Equation1}\leanok\uses{magma-def}  Equation 1 is the law $0 \formaleq 0$ (or the equation $x=x$).
 \end{definition}
@@ -159,7 +159,6 @@ This law asserts that all triple constants (regardless of bracketing) are consta
 
 We also note some selected laws of order more than $5$.
 
-
 \begin{definition}[Equation 5105]
   \label{eq5105}\uses{magma-def}
   Equation 5105 is the law $0  \formaleq 1 \circ (1 \circ (1 \circ (0 \circ (2 \circ 1))))$ (or the equation $x = y \circ (y \circ (y \circ (x \circ (z \circ y))))$).
@@ -172,14 +171,15 @@ This law of order $5$ was mentioned in \cite{Kisielewicz2}.
   Equation 28393 is the law $0  \formaleq  (((0 \circ 0) \circ 0) \circ 1) \circ (0 \circ 2)$ (or the equation $x = (((x \circ x) \circ x) \circ y) \circ (x \circ z)$).
 \end{definition}
 
+This law of order $5$ was introduced by Kisielewicz \cite{Kisielewicz}.
+
 \begin{definition}[Equation 374794]
   \lean{Equation374794}\leanok
   \label{eq374794}\uses{magma-def}
   Equation 374794 is the law $0  \formaleq  (((1 \circ 1) \circ 1) \circ 0) \circ ((1 \circ 1) \circ 2)$ (or the equation $x = (((y \circ y) \circ y) \circ x) \circ ((y \circ y) \circ z)$).
 \end{definition}
 
-This order $6$ law was introduced by Kisielewicz \cite{Kisielewicz}.
-
+This law of order $6$ was introduced by Kisielewicz \cite{Kisielewicz}.
 
 The singleton or empty magma obeys all equational laws.  One can ask whether an equational law admits nontrivial finite or infinite models.  An \emph{Austin law} is a law which admits infinite models, but no nontrivial finite models.  Austin \cite{austin} established the first such law, namely the order $9$ law
 $$ (((1 \circ 1) \circ 1) \circ 0) \circ (((1 \circ 1) \circ ((1 \circ 1) \circ 1)) \circ 2) \formaleq 0.$$
@@ -235,12 +235,9 @@ In that paper a computer search was also used to show that no law of order four 
 
 An open question is whether Definition \ref{eq5105} is an Austin law.  We have the following partial result from \cite{Kisielewicz2}:
 
-\begin{theorem}[Equation 5105 has no non-trivial finite models]\label{5105-nontrivial}\uses{eq5105} Definition \ref{eq5105} has no non-trivial finite models.
+\begin{theorem}[Equation 5105 has no non-trivial finite models]\lean{InfModel.Finite.Equation5105_implies_Equation2}\leanok\label{5105-nontrivial}\uses{eq5105} Definition \ref{eq5105} has no non-trivial finite models.
 \end{theorem}
 
-\begin{proof} From Definition \ref{eq5105} we see that the map $w \mapsto y \circ w$ is onto; in particular, we may substitute $u := z \circ y$ and conclude that
-$$  x = y \circ (y \circ (y \circ (x \circ u)))$$
-for all $x,y,u$.  In particular $x \mapsto x \circ u$ is injective.  If the model is finite, then both maps must be invertible, hence the magma is cancellative.  Since
-$$ y \circ (y \circ (y \circ (x \circ (z \circ y)))) = x = y \circ (y \circ (y \circ (x \circ (z' \circ y))))$$
-we conclude on inverting many left and right magma operations that $z = z'$, giving triviality.
+\begin{proof} \leanok From Definition \ref{eq5105} we see that the map $w \mapsto y \circ w$ is onto, hence injective in a finite model.  Using this injectivity four times in Definition \ref{eq5105}, we see that $z \circ y$ does not depend on $z$, hence the expression
+$x \circ (z \circ y)$ does not depend on $x$.  By Definition \ref{eq5105} again, this means that $x$ does not depend on $x$, which is absurd in a non-trivial model.
 \end{proof}

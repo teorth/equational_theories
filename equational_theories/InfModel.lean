@@ -84,4 +84,41 @@ theorem Equation374794_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equ
     · apply t4
     · convert t4 _ 0
 
+theorem Finite.Equation5105_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : Equation5105 G) :
+    Equation2 G:= by
+    intro x y
+    let f (y w : G) := y ∘ w
+    have f_onto : ∀ y : G, Function.Surjective (f y) := by
+      intro y x
+      use (y ∘ (y ∘ (x ∘ (x ∘ y))))
+      dsimp [f]
+      rw [← h]
+    have f_inj : ∀ y : G, Function.Injective (f y) :=by
+      intro y
+      exact Finite.injective_iff_surjective.mpr (f_onto y)
+    have hh: ∀ y z w : G, z ∘ y = w ∘ y := by
+      intro y z w
+      let g := f y
+      have h1 : g (y ∘ (y ∘ (x ∘ (z ∘ y)))) = g (y ∘ (y ∘ (x ∘ (w ∘ y)))):= by dsimp [g, f]; rw [← h, ← h]
+      have h2 : g (y ∘ (x ∘ (z ∘ y))) = g (y ∘ (x ∘ (w ∘ y))) := by
+        dsimp [g, f]
+        exact f_inj y h1
+      have h3 : g (x ∘ (z ∘ y)) = g (x ∘ (w ∘ y)) := by
+        dsimp [g, f]
+        exact f_inj y h2
+      have h4 : f x (z ∘ y) = f x (w ∘ y) := by
+        dsimp [f]
+        exact f_inj y h3
+      exact f_inj x h4
+    have hhh : ∀ a b c d: G, c ∘ (a ∘ b) = d ∘ (a ∘ b) := by
+      intro a b c d
+      exact hh (a ∘ b) c d
+    have hhhh : ∀ a b: G, b ∘ (b ∘ (b ∘ (x ∘ (a ∘ b)))) = b ∘ (b ∘ (b ∘ (y ∘ (a ∘ b)))) := by
+      intro a b
+      rw [hhh a b _ _]
+    calc
+      x = x ∘ (x ∘ (x ∘ (x ∘ (x ∘ x)))) := by exact h x x x
+      _= x ∘ (x ∘ (x ∘ (y ∘ (x ∘ x)))) := by rw [hhhh]
+      _= y := by rw [←  h y x x]
+
 end InfModel
