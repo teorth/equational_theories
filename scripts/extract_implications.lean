@@ -106,6 +106,7 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
     return 2
   let include_conj := inp.hasFlag "conjecture"
   let include_impl := inp.hasFlag "closure"
+  let only_implications := inp.hasFlag "only-implications"
   searchPathRef.set compile_time_search_path%
 
   unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
@@ -115,6 +116,8 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
       let mut rs ← Result.extractEquationalResults
       if !include_conj then
         rs := rs.filter (·.proven)
+      if only_implications then
+        rs := rs.filter (·.variant matches .implication ..)
       let rs' := rs.map (·.variant)
       let rs' := if include_impl then Closure.closure rs' else Closure.toEdges rs'
       if inp.hasFlag "json" then
@@ -135,6 +138,7 @@ def extract_implications : Cmd := `[Cli|
     «conjecture»; "Include conjectures"
     closure; "Compute the transitive closure"
     json; "Output the data as JSON"
+    "only-implications"; "Only consider implications"
 
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"
