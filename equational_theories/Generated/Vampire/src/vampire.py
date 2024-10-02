@@ -57,7 +57,7 @@ for problem in tqdm(problems):
   except Exception as e:
     try:
       start_time = time.perf_counter()
-      out = subprocess.check_output(['/home/commandmaster/Downloads/vampire', '--mode', 'casc_sat',
+      out = subprocess.check_output(['~/Downloads/vampire', '--mode', 'casc_sat',
                                    '/proc/self/fd/0', '-t', '0.3'], input=pr.encode()).decode()
       dur = time.perf_counter() - start_time
       if 'Termination reason: Satisfiable' in out:
