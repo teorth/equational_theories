@@ -54,5 +54,5 @@ def prune_file(name : str):
 
 
 if __name__  == "__main__":
-    #generate_file(subgraph_equations, "Equations")
+    generate_file(subgraph_equations, "Equations")
     prune_file("Equations")
