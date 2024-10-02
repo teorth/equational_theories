@@ -1,6 +1,6 @@
-\chapter{Subgraph implications}
+\chapter{Implications between selected laws}
 
-Interesting implications between the subgraph equations in Chapter \ref{subgraph-eq}. To reduce clutter, trivial or very easy implications will not be displayed here.
+We collect here some notable implications between the the selected laws in Chapter \ref{subgraph-eq}.   By Theorem \ref{sound-complete}, every implication can basically be established by a finite number of rewrites.  In most cases, the sequence of rewrites is quite straightforward, and the implication is very easy, but we record some less obvious examples.
 
 \begin{theorem}[387 implies 43]\label{387_implies_43}\uses{eq387,eq43}\lean{Subgraph.Equation387_implies_Equation43}\leanok  Definition \ref{eq387} implies Definition \ref{eq43}.
 \end{theorem}
@@ -46,16 +46,6 @@ This result was posed as Problem A1 from Putnam 2001.
 \begin{proof}\leanok
 \end{proof}
 
-% abbrev Equation381 (G: Type u) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) ∘ y
-% abbrev Equation3744 (G : Type u) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ (w ∘ y)
-
-%theorem Equation3744_implies_Equation381 (G : Type*) [Magma G] (h: Equation3744 G) : Equation381 G :=
-%fun x y z ↦ Eq.trans
-%  (h x y z y) $ Eq.trans
-%  (congrArg (fun a ↦ a ∘ (y ∘ y)) (h x z z x))
-%  (Eq.symm $ h (x ∘ z) y (x ∘ z) y)
-%/-- Putnam 1978, problem A4, part (a) -/
-
 The following result was problem A4 on Putnam 1978.
 
 \begin{theorem}[3744 implies 3722, 381]\label{3744_implies_3722_381}\uses{eq3744, eq3722, eq381} Definition \ref{eq3744} implies Definition \ref{eq3722} and Definition \ref{eq381}.
@@ -79,6 +69,21 @@ which is Definition \ref{eq381}.
 \end{theorem}
 
 
-\begin{proof}\leanok  The implication of Definition \ref{eq1689} from Definition \ref{eq2} is trivial.  The converse is a surprisingly long chain of implications; see pages 326--327 of \cite{Kisielewicz2}.
-
+\begin{proof}\leanok  The implication of Definition \ref{eq1689} from Definition \ref{eq2} is trivial.  The converse is a surprisingly long chain of implications; see pages 326--327 of \cite{Kisielewicz2}.  The initial law
+$$ x = (y \circ x) \circ ((x \circ z) \circ z)$$
+is used to obtain, in turn,
+$$ x \circ ((((x \circ y) \circ y) \circ z) \circ z) = (x \circ y) \circ y,$$
+$$(x \circ (y \circ z)) \circ (z \circ ((z \circ w) \circ w)) = y \circ z,$$
+$$x \circ (y \circ ((y \circ z) \circ z)) = (x \circ y) \circ y,$$
+$$((x \circ (y \circ z)) \circ z) \circ z = y \circ z,$$
+$$(x \circ (y \circ (z \circ w))) \circ (z \circ w) = y \circ (z \circ w),$$
+$$(x \circ (y \circ z)) \circ (y \circ z) = x \circ (y \circ z),$$
+$$((x \circ y) \circ ((y \circ z) \circ z)) \circ ((y \circ z) \circ z) = y,$$
+$$((x \circ y) \circ ((y \circ z) \circ z)) \circ ((y \circ z) \circ z) = ((x \circ ((x \circ y) \circ ((y \circ z) \circ z))) \circ ((y \circ z) \circ z)) \circ ((y \circ z) \circ z),$$
+$$ x \circ ((x \circ y) \circ y) = x,$$
+$$ x \circ (x \circ (y \circ z)) = x,$$
+$$ (x \circ y) \circ y = x \circ y,$$
+$$ (x \circ x) \circ x = x,$$
+$$ (x \circ y) \circ y = y,$$
+$$ x \circ y = y.$$
 \end{proof}
