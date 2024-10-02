@@ -1,0 +1,66 @@
+cabal-version:      2.4
+name:               finite-magma-tools
+version:            0.1.0.0
+
+-- synopsis: Haskell tools that help with refuting implications using finite magmas.
+author:             Zoltan Kocsis
+
+executable make-plan
+    main-is:          MakePlan/Main.hs
+
+    ghc-options:
+            -O2
+            -threaded
+            
+    other-modules:    FiniteMagmaTools.Equation,
+                      FiniteMagmaTools.Magma,
+                      FiniteMagmaTools.All4By4Parser,
+                      MakePlan.Plan
+
+    build-depends:    base,
+                      array,
+                      containers,
+                      regex-posix
+    hs-source-dirs:   app
+    default-language: Haskell2010
+
+
+executable min-cover
+    main-is:          MinCover/Main.hs
+
+    ghc-options:
+            -O2
+            -threaded
+            
+    other-modules:    FiniteMagmaTools.Equation,
+                      FiniteMagmaTools.Magma,
+                      FiniteMagmaTools.All4By4Parser,
+                      MakePlan.Plan,
+                      MakePlan.PlanParser
+
+    build-depends:    base,
+                      array,
+                      containers,
+                      sbv
+    hs-source-dirs:   app
+    default-language: Haskell2010
+
+executable gen-refutations
+    main-is:          GenRefutations/Main.hs
+
+    ghc-options:
+            -O2
+            -threaded
+            
+    other-modules:    FiniteMagmaTools.Equation,
+                      FiniteMagmaTools.Magma,
+                      FiniteMagmaTools.All4By4Parser,
+                      MakePlan.Plan,
+                      MakePlan.PlanParser
+
+    build-depends:    base,
+                      array,
+                      containers,
+                      mtl
+    hs-source-dirs:   app
+    default-language: Haskell2010
