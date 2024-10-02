@@ -6,7 +6,7 @@ on:
 
 jobs:
   claim_issue:
-    if: github.event.comment.body == 'claim'
+    if: github.event.issue.pull_request == null && github.event.comment.body == 'claim'
     runs-on: ubuntu-latest
 
     steps:
