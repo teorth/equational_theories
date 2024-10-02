@@ -75,8 +75,8 @@ Thus for instance, Definition \ref{eq7} is equivalent to Definition \ref{eq2}.
 \begin{proof} Routine.
 \end{proof}
 
-\begin{theorem}[Criterion for implication]\label{variable-impl}\uses{impl}  If $w \formaleq w'$ is such that every variable appears the same number of times in both $w$ and $w'$, and $w \formaleq w'$ implies another law $w'' \formaleq w'''$, then every variable appears the same number of times in both $w''$ and $w'''$.
+\begin{theorem}[Criterion for implication]\label{variable-impl}\uses{impl}\lean{Law.MagmaLaw.SameCount.derive}\leanok  If $w \formaleq w'$ is such that every variable appears the same number of times in both $w$ and $w'$, and $w \formaleq w'$ implies another law $w'' \formaleq w'''$, then every variable appears the same number of times in both $w''$ and $w'''$.
 \end{theorem}
 
-\begin{proof} Consider the magma $\R$ with the addition law $+$.  By hypothesis, this magma obeys $w \formaleq w'$, and hence $w'' \formaleq w'''$, giving the claim by comparing coefficients of the linear forms associated to $w''$ and $w'''$ in this magma.
+\begin{proof} Consider the magma $\mathrm{MS}$ of multisets over an arbitrary set $A$ (which can be seen as finitely suported maps $A\rightarrow \N$), with the multiset addition law $+$.  By hypothesis, this magma obeys $w \formaleq w'$, and hence $w'' \formaleq w'''$, giving the claim by comparing the orders of the elements of $A$ appearing in $w''$ and $w'''$ in this magma.
 \end{proof}
