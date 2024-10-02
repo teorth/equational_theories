@@ -64,3 +64,23 @@ executable gen-refutations
                       mtl
     hs-source-dirs:   app
     default-language: Haskell2010
+
+executable parse-mace4
+    main-is:          ParseMace4/Main.hs
+
+    ghc-options:
+            -O2
+            -threaded
+            
+    other-modules:    FiniteMagmaTools.Equation,
+                      FiniteMagmaTools.Magma,
+                      MakePlan.Plan,
+                      ParseMace4.ParseInterps
+
+    build-depends:    base,
+                      array,
+                      containers,
+                      regex-posix,
+                      mtl
+    hs-source-dirs:   app
+    default-language: Haskell2010

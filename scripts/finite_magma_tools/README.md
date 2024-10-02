@@ -13,12 +13,13 @@ selection and checking of finite magmas and equations.
 ## Build Instructions
 
 To build these tools, you need a recent version of the Glasgow Haskell Compiler
-and the build tool Cabal. You can then build and run the executables directly:
+and the build tool Cabal. You can then build and run the runutables directly:
 
 ```
 cabal run make-plan < input.txt > output.txt
 cabal run min-cover < input.txt > output.txt
 cabal run gen-refutations < input.txt
+cabal run parse-mace4 < input.txt > output.txt
 ```
 
 ## The tools
@@ -30,7 +31,7 @@ satisfy, using a cost model. The goal is to reduce the number of verifications
 required by the Lean kernel while ensuring that all counterexamples of the original
 list still remain covered.
 
-Usage: `cabal exec make-plan < input.txt > output.txt`
+Usage: `cabal run make-plan < input.txt > output.txt`
 
 
 The input should be a list of finite magmas and the equations they satisfy,
@@ -61,7 +62,7 @@ Finds a minimal subset of the given list of finite magmas and the equations they
 satisfy which still provides counterexamples to the same set of potential
 implications.
 
-Usage: `cabal exec min-cover < input.txt > output.txt`
+Usage: `cabal run min-cover < input.txt > output.txt`
 
 The input can be in the same format as the output of make-plan or All4x4Tables.
 
@@ -69,7 +70,7 @@ Optimization is performed using an SMT solver. It is very slow for large equatio
 sets or many magmas, and it's not inteded to be used on full sets of either.
 Instead, it's mostly a useful ingredient for other heuristics. Adjust
 equationsOfInterest in the configuration section of Main.hs before running.
-As an example, try `cabal exec min-cover < examples/short_refutations.txt`.
+As an example, try `cabal run min-cover < examples/short_refutations.txt`.
 
 **gen-refutations**
 
@@ -77,10 +78,20 @@ Generates Lean refutation files from the input plan. Each output file contains
 the necessary Lean code to check the refutations, in the same format as used in
 `All4x4Tables`.
 
-Usage: `cabal exec gen-refutations < input.txt`
+Usage: `cabal run gen-refutations < input.txt`
 
 The input should be the output from make-plan. The output will be `Refutation<n>.lean`
 where each `<n>` corresponds to an input magma.
+
+**parse-mace4**
+
+Converts mace4 output files (pushed through get_interps) into make-plan's
+output format.
+
+Usage: `cabal run gen-refutations < input.txt`
+
+The input file should contain only a list of interpretations. The `get-interps`
+tool distributed with Mace4 is able to pre-process files in the required way.
 
 **Other tools**
 
