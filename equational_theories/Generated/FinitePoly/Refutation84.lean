@@ -19,5 +19,5 @@ def «FinitePoly 2 * y² + x * y % 3» : Magma (Fin 3) where
 /-! The facts -/
 @[equational_result]
 theorem «Facts from FinitePoly 2 * y² + x * y % 3» :
-  ∃ (G : Type) (_ : Magma G), Facts G [316, 3303, 3709, 4355, 4590] [323, 3306] :=
+  ∃ (G : Type) (_ : Magma G), Facts G [316] [323, 3306] :=
     ⟨Fin 3, «FinitePoly 2 * y² + x * y % 3», by decideFin!⟩
