@@ -1,7 +1,7 @@
 # This workflow allows any user to add one of the `awaiting-author`, `WIP`, or `do-not-merge` labels
 # by commenting on the PR or issue. Other labels from this set are removed automatically.
 
-name: Update Labels on Comment
+name: Update Labels
 
 on:
   issue_comment:
@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Update Labels
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
@@ -37,7 +37,7 @@ jobs:
           }
 
     # - name: Delete the comment
-    #   uses: actions/github-script@v6
+    #   uses: actions/github-script@v7
     #   with:
     #     github-token: ${{ secrets.GITHUB_TOKEN }}
     #     script: |

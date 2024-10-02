@@ -3,5 +3,7 @@ equational_theories/Generated/TrivialBruteforce/theorems/RewriteGoal.lean lingui
 equational_theories/Generated/TrivialBruteforce/theorems/RewriteHypothesis.lean linguist-generated
 equational_theories/Generated/TrivialBruteforce/theorems/RewriteHypothesisAndGoal.lean linguist-generated
 
-equational_theories/FinitePoly/Refutation*.lean linguist-generated
-equational_theories/FinitePoly.lean linguist-generated
+equational_theories/Generated/FinitePoly/Refutation*.lean linguist-generated
+equational_theories/Generated/FinitePoly.lean linguist-generated
+equational_theories/Generated/All4x4Tables/Refutation*.lean linguist-generated
+equational_theories/Generated/All4x4Tables.lean linguist-generated

@@ -296,28 +296,53 @@ def closure (inp : Array EntryVariant) : Array Edge := Id.run do
 
   pure ans
 
-def list_outcomes {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
-    m (Array String × Array (Array Outcome)) := do
-  let rs := (← Result.extractEquationalResults).map (·.variant)
-  let prs := ((← Result.extractTheorems).map (·.variant))
+def list_outcomes (res : Array Entry) : Array String × Array (Array Outcome) := Id.run do
+  let rs := res.map (·.variant)
+  let prs := res.filter (·.proven) |>.map (·.variant)
   let (eqs, eqs_order) := number_equations rs
   let n := eqs.size
   let mut outcomes : Array (Array Outcome) := Array.mkArray n (Array.mkArray n .unknown)
   for edge in toEdges prs do
     outcomes := outcomes.modify eqs[edge.lhs]! (fun a ↦ a.set! eqs[edge.rhs]!
       (.explicit_theorem edge.isTrue))
-  for edge in toEdges rs do
-    outcomes := outcomes.modify eqs[edge.lhs]! (fun a ↦ a.modify eqs[edge.rhs]!
-      fun y ↦ if y = .unknown then .explicit_conjecture edge.isTrue else y)
 
   for ⟨x, y, is_true⟩ in closure_aux prs eqs do
     outcomes := outcomes.modify x (fun a ↦ a.modify y
                 fun y ↦ if y = .unknown then .implicit_theorem is_true else y)
+
+  for edge in toEdges rs do
+    outcomes := outcomes.modify eqs[edge.lhs]! (fun a ↦ a.modify eqs[edge.rhs]!
+      fun y ↦ if y = .unknown then .explicit_conjecture edge.isTrue else y)
 
   for ⟨x, y, is_true⟩ in closure_aux rs eqs do
     outcomes := outcomes.modify x (fun a ↦ a.modify y
                 fun y ↦ if y = .unknown then .implicit_conjecture is_true else y)
 
   return (eqs_order, outcomes)
+
+def outcomes_mod_equiv (inp : Array EntryVariant) : Array String × Array (Array (Option Bool)) := Id.run do
+  let (eqs, eqs_order) := number_equations inp
+  let n := eqs.size
+  let reachable := closure_aux inp eqs
+  let mut reprs_id : Std.HashMap Nat Nat := {}
+  let mut reprs : Array String := Array.mkEmpty (reachable.components.size / 2)
+  for comp in reachable.components do
+    if comp[0]! < n then
+      reprs_id := reprs_id.insert comp[0]! reprs.size
+      reprs := reprs.push eqs_order[comp[0]!]!
+
+  let mut implies : Array (Array (Option Bool)) :=
+    Array.mkArray reprs.size (Array.mkArray reprs.size none)
+
+  for i in reachable.components, i2 in reachable.reachable do
+    if i[0]! >= reachable.size then continue
+      for j in reachable.components, j2 in [:reachable.components.size] do
+        if i2.get j2 then
+          if j[0]! < n then
+            implies := implies.modify reprs_id[j[0]!]! (fun x ↦ x.set! reprs_id[i[0]!]! true)
+          else if j.back < 2*n then
+            implies := implies.modify reprs_id[i[0]!]! (fun x ↦ x.set! reprs_id[j[0]! - n]! false)
+
+  return (reprs, implies)
 
 end Closure

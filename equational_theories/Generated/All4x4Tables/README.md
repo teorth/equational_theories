@@ -46,3 +46,13 @@ When going from ../data/refutations4x4.txt to ../data/refutations3x3.txt
 The number of solved equtions goes from 13732566 to 13760346 for a delta of 27780
 And ../data/refutations3x3.txt has 291 / 299 already covered magmas
 ```
+
+# Generate the lean files
+python3 generate_lean.py
+
+This scripts also reads `data/implications.json`, to prune the resulting `Fact` in the theorems.
+As new implications are known this file can be updated using
+```
+lake exe extract_implications  --json --only-implications equational_theories > equational_theories/Generated/All4x4Tables/data/implications.json
+```
+and the script re-run to redue the size of the theorems.
