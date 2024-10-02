@@ -296,10 +296,9 @@ def closure (inp : Array EntryVariant) : Array Edge := Id.run do
 
   pure ans
 
-def list_outcomes {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m] :
-    m (Array String × Array (Array Outcome)) := do
-  let rs := (← Result.extractEquationalResults).map (·.variant)
-  let prs := ((← Result.extractTheorems).map (·.variant))
+def list_outcomes (res : Array Entry) : Array String × Array (Array Outcome) := Id.run do
+  let rs := res.map (·.variant)
+  let prs := res.filter (·.proven) |>.map (·.variant)
   let (eqs, eqs_order) := number_equations rs
   let n := eqs.size
   let mut outcomes : Array (Array Outcome) := Array.mkArray n (Array.mkArray n .unknown)
