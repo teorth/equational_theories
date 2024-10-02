@@ -22,7 +22,7 @@ if __name__ == '__main__':
     implicit_conjecture_true = data.get('implicit_conjecture_true', 0)
     explicit_conjecture_false = data.get('explicit_conjecture_false', 0)
     implicit_conjecture_false = data.get('implicit_conjecture_false', 0)
-    unknown = data['unknown'];
+    unknown = data.get('unknown', 0);
     proved_total = explicit_proof_true + implicit_proof_true + explicit_proof_false + implicit_proof_false
     conjectured_total = explicit_conjecture_true + implicit_conjecture_true + explicit_conjecture_false + implicit_conjecture_false
 
