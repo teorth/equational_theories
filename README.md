@@ -18,6 +18,7 @@ Some automatically generated progress:
 - Sep 29, 2024: [13.7m implications were conjectured to be refused by a collection of 515 magmas](equational_theories/Generated/All4x4Tables), collected by enumerating all 4^(4*4) operators and reducing to a covering set. Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0008.html).
 - Oct 1, 2024: Another [~250k transitive implications](equational_theories/Generated/TrivialBruteforce) were proven by simple proof generation. Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0007.html).
 - Oct 1, 2024: [~500k transitive implications](equational_theories/Generated/EquationSearch) were proven by a custom tool that chooses hypotheses and leveraged previously found implications to search by using the implied equations as substitutions.  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0009.html).
+- Oct 2, 2024: almost all still unknown implications were [conjecturally resolved using the vampire ATP](equational_theories/Generated/Vampire).
 
 Some statistics and data files from a given point in time:
 - Sep 28, 2024: [A repository of unknown implications](https://github.com/amirlb/equational_theories/tree/unknown-implications), including all unknown implications, known equivalence classes, unknown implications modulo known equivalence, and only the strongest unknown implications.
