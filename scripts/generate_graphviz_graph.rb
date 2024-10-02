@@ -1,9 +1,11 @@
 # lake exe extract_implications --json equational_theories | ruby -rjson -e 'JSON.parse($stdin.read)["implications"].each { |s| puts s["lhs"][8,10] + "," + s["rhs"][8,10] }' | sort -u > /tmp/implications.csv
-# ruby scripts/transitive_reduction.rb /tmp/implications.csv > /tmp/implications.reduction.csv
-# ruby scripts/generate_graphviz_graph.rb /tmp/implications.reduction.csv > graph.dot
+# ruby scripts/generate_graphviz_graph.rb /tmp/implications.csv > graph.dot
 # dot -T svg -o graph.svg graph.dot
 #
 # Note: there are also options to limit the number of variables or operations in the generated graph.
+#
+# In order to reduce the cleanest looking graph, this tools generates a transitive closure and then
+# reduces it to get a graph with minimal edges. That causes generation to be slow.
 
 require 'optparse'
 require File.join(__dir__, 'graph')
@@ -53,21 +55,21 @@ if options[:limit_operations]
   }
 end
 
+# Reducing first improves the speed of the closure
+graph = graph.transitive_reduction
+graph = graph.transitive_closure
 if vertices_to_delete.length > 0
   vertices_to_delete = Set.new vertices_to_delete
 
-  # If we're deleting elements, we want to compute the closure+reduction to avoid breaking up SCCs and having to do DFS
-  # to discover all children of deleted vrtices
-  $stderr.puts "Running closure"
-  graph = graph.transitive_closure
+  # If we're deleting elements, we want to compute the deletions over the closure to
+  # avoid breaking up SCCs and having to do DFS to discover all children of deleted vrtices
 
   # For every vertex we delete, we want to connect it's ancestors to it's children
   vertices_to_delete.each { |v| graph.adj_list.delete(v) }
   graph.adj_list.keys.each { |v| graph.adj_list[v] -= vertices_to_delete }
-
-  $stderr.puts "Running reduction"
-  graph = graph.transitive_reduction
 end
+
+graph = graph.transitive_reduction
 
 # Manual Graph condensation
 sccs = graph.scc
