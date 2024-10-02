@@ -98,16 +98,18 @@ def outcomes : Cmd := `[Cli|
 def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
   let include_conj := inp.hasFlag "conjecture"
   let include_impl := inp.hasFlag "closure"
+  let only_implications := inp.hasFlag "only-implications"
   withExtractedResults inp fun rs => do
-      let rs' := if include_conj then rs else rs.filter (·.proven)
-      let rs' := rs'.map (·.variant)
-      let rs' := if include_impl then Closure.closure rs' else Closure.toEdges rs'
+      let rs := if include_conj then rs else rs.filter (·.proven)
+      let rs := if only_implications then rs.filter (·.variant matches .implication ..) else rs
+      let rs := rs.map (·.variant)
+      let rs := if include_impl then Closure.closure rs else Closure.toEdges rs
       if inp.hasFlag "json" then
-        let implications := (rs'.filter (·.isTrue)).map (·.get)
-        let nonimplications := (rs'.filter (!·.isTrue)).map (·.get)
+        let implications := (rs.filter (·.isTrue)).map (·.get)
+        let nonimplications := (rs.filter (!·.isTrue)).map (·.get)
         IO.println ({implications, nonimplications : Output}).asJson
       else
-        for edge in rs' do
+        for edge in rs do
           if edge.isTrue then IO.println s!"{edge.lhs} → {edge.rhs}"
           else IO.println s!"¬ ({edge.lhs} → {edge.rhs})"
       pure 0
@@ -146,6 +148,7 @@ def extract_implications : Cmd := `[Cli|
     «conjecture»; "Include conjectures"
     closure; "Compute the transitive closure"
     json; "Output the data as JSON"
+    "only-implications"; "Only consider implications"
 
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"
