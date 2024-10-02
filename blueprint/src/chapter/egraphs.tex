@@ -2,7 +2,7 @@
 
 For proving implications, we used another technique called equality saturation~\cite{DBLP:journals/pacmpl/WillseyNWFTP21} with a tactic, to automatically construct proofs.
 
-\section{methodology}
+\section{Methodology}
 
 The basic methodology of equality saturation is based on E-Graphs, a data structure that can store equivalence classes of terms efficiently.
 We used the lean-egg tactic (\url{https://github.com/marcusrossel/lean-egg}), based on equality saturation as a tactic, which (re)constructs a proof from the E-graph~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24} in Lean.
@@ -13,7 +13,7 @@ In many cases, we have laws of the form $x = y$, where neither set of variables 
 In this case the laws cannot be used as rewrite rules: it's not clear what it would be rewritten to, since there are unknowns on both sides of the equation.
 For these cases we used a simple heuristic, where we instantiate the variables with terms found in the (proof) context, as those are likely to be important for proving the equality.
 
-\section{results}
+\section{Results}
 
 Out of the possible implications between the $34$ equations considered in Chapter~\ref{subgraph-eq}, this method found an additional 86 implications that were not found before.
 Some of these seem to be missing in the computation of the transitive closure of implications of the equalities (an investigation is in progress), but some of these are genuinely new theorems, and the \texttt{lean-egg} tactic finds good proofs of these (these can be rewritten using \texttt{calc} style with a different tactic, \texttt{calcify}: \url{https://github.com/nomeata/lean-calcify}). An example of this is the following proof, found by lean-egg:
