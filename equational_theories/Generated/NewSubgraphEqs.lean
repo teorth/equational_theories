@@ -6,18 +6,38 @@ import Calcify
 set_option egg.explosion true
 set_option egg.timeLimit 1
 
+set_option trace.egg true in
 @[equational_result]
-theorem Equation14_implies_Equation23 (G: Type _) [Magma G] (h: Equation14 G) : Equation23 G := by egg [*]
+theorem Equation14_implies_Equation23 (G: Type _) [Magma G] (h: Equation14 G) : Equation23 G := by
+ intro x
+ calc
+     x
+     _ = (x ∘ x) ∘ (x ∘ (x ∘ x)) := (h x (x ∘ x))
+     _ = (x ∘ x) ∘ x := by rw [← h x x] -- note: this rw was not easy to get from calcify
 
 @[equational_result]
-theorem Equation14_implies_Equation8 (G: Type _) [Magma G] (h: Equation14 G) : Equation8 G := by egg [*]
+theorem Equation2_implies_Equation1689 (G: Type _) [Magma G] (h: Equation2 G) : Equation1689 G := by
+intro x y z
+calc
+    x
+    _ = (y ∘ x) ∘ ((x ∘ z) ∘ z) := Eq.symm (h ((y ∘ x) ∘ ((x ∘ z) ∘ z)) x)
+    -- note: calcify worked great here!
 
 @[equational_result]
-theorem Equation2_implies_Equation14 (G: Type _) [Magma G] (h: Equation2 G) : Equation14 G := by egg [*]
+theorem Equation14_implies_Equation8 (G: Type _) [Magma G] (h: Equation14 G) : Equation8 G := by
+intro x
+calc
+    x
+    _ = x ∘ (x ∘ x) := h x x
+    -- note: calcify was great here!
 
 @[equational_result]
-theorem Equation2_implies_Equation1689 (G: Type _) [Magma G] (h: Equation2 G) : Equation1689 G := by egg [*]
-
+theorem Equation2_implies_Equation14 (G: Type _) [Magma G] (h: Equation2 G) : Equation14 G := by
+intro x y
+calc
+    x
+    _ = y ∘ (x ∘ y) := Eq.symm (h (y ∘ (x ∘ y)) x)
+    -- note: calcify was great here!
 
 -- redundant: come through transitivity
 @[equational_result]
