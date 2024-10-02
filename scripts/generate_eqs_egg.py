@@ -13,6 +13,7 @@ def generate_equation_statement(lhs : int, rhs : int):
 def generate_file(eqs_list : list[int], name : str):
     preamble = f"""import equational_theories.{name}
 import Egg
+import equational_theories.EquationalResult
 
 set_option egg.explosion true
 set_option egg.timeLimit 1
@@ -33,6 +34,7 @@ def prune_file(name : str):
     err = re.compile(f"{path}:([0-9]+):[0-9]+: (error|egg failed)")
     warn = re.compile(f"{path}:([0-9]+):[0-9]+: warning: unused variable")
     variable = re.compile("h: Equation")
+    thm = re.compile('theorem')
 
     err_matches = err.finditer(res.stdout)
     warn_matches = warn.finditer(res.stdout)
@@ -46,6 +48,8 @@ def prune_file(name : str):
         for n, line in enumerate(lines):
             # python counts from 0
             if (n + 1) not in error_lines:
+                if thm.match(line):
+                    f.write("\n@[equational_result]\n")
                 if (n + 1) in warn_lines:
                     line_no_unused_var = variable.sub("_ : Equation", line)
                     f.write(line_no_unused_var)
