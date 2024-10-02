@@ -6,31 +6,33 @@ import equational_theories.Closure
 
 open Lean Core Elab Cli
 
-def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
-  let some modules := inp.variableArgsAs? ModuleName |
-    inp.printHelp
+def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → IO UInt32) : IO UInt32 := do
+  let mut some modules := imp.variableArgsAs? ModuleName |
+    imp.printHelp
     return 1
   if modules.isEmpty then
-    inp.printHelp
-    return 2
+    modules := #[(ParseableType.parse? "equational_theories").get!]
   searchPathRef.set compile_time_search_path%
 
   unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
     let ctx := {fileName := "", fileMap := default}
     let state := {env}
     Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
-      let mut rs ← Result.extractEquationalResults
-      if inp.hasFlag "proven" then
-        rs := rs.filter (·.proven)
-      let rs' := rs.map (·.variant)
-      let (equations, outcomes) := Closure.outcomes_mod_equiv rs'
-      let mut unknowns : Array Implication := #[]
-      for i in [:equations.size] do
-        for j in [:equations.size] do
-          if outcomes[i]![j]!.isNone then
-            unknowns := unknowns.push ⟨equations[i]!, equations[j]!⟩
-      IO.println (toJson unknowns).compress
-      pure 0
+      let rs ← Result.extractEquationalResults
+      action rs
+
+def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
+  withExtractedResults inp fun rs => do
+    let rs' := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
+    let rs' := rs'.map (·.variant)
+    let (equations, outcomes) := Closure.outcomes_mod_equiv rs'
+    let mut unknowns : Array Implication := #[]
+    for i in [:equations.size] do
+      for j in [:equations.size] do
+        if outcomes[i]![j]!.isNone then
+          unknowns := unknowns.push ⟨equations[i]!, equations[j]!⟩
+    IO.println (toJson unknowns).compress
+    pure 0
 
 def unknowns : Cmd := `[Cli|
   unknowns VIA generateUnknowns;
@@ -67,31 +69,20 @@ def Output.asJson (v : Output) : String :=
   s!"\{\"nonimplications\":[{",".intercalate (v.nonimplications.map Implication.asJson).toList}],\"implications\":[{",".intercalate (v.implications.map Implication.asJson).toList}]}"
 
 def generateOutcomes (inp : Cli.Parsed) : IO UInt32 := do
-  let some modules := inp.variableArgsAs? ModuleName |
-    inp.printHelp
-    return 1
-  if modules.isEmpty then
-    inp.printHelp
-    return 2
-  searchPathRef.set compile_time_search_path%
-
-  unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
-    let ctx := {fileName := "", fileMap := default}
-    let state := {env}
-    Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
-      let (equations, outcomes) ← Closure.list_outcomes
-      if inp.hasFlag "hist" then
-        let mut count : Std.HashMap Closure.Outcome Nat := {}
-        for a in outcomes do
-          for b in a do
-            count := count.insert b (count.getD b 0 + 1)
-        IO.print "{"
-        for ⟨a, b⟩ in count do
-          println! "{a}: {b},"
-        IO.println "}"
-      else
-        IO.println (toJson ({equations, outcomes : OutputOutcomes})).compress
-      pure 0
+  withExtractedResults inp fun rs => do
+    let (equations, outcomes) := Closure.list_outcomes rs
+    if inp.hasFlag "hist" then
+      let mut count : Std.HashMap Closure.Outcome Nat := {}
+      for a in outcomes do
+        for b in a do
+          count := count.insert b (count.getD b 0 + 1)
+      IO.print "{"
+      for ⟨a, b⟩ in count do
+        println! "{a}: {b},"
+      IO.println "}"
+    else
+      IO.println (toJson ({equations, outcomes : OutputOutcomes})).compress
+    pure 0
 
 def outcomes : Cmd := `[Cli|
   outcomes VIA generateOutcomes;
@@ -105,24 +96,11 @@ def outcomes : Cmd := `[Cli|
 ]
 
 def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
-  let some modules := inp.variableArgsAs? ModuleName |
-    inp.printHelp
-    return 1
-  if modules.isEmpty then
-    inp.printHelp
-    return 2
   let include_conj := inp.hasFlag "conjecture"
   let include_impl := inp.hasFlag "closure"
-  searchPathRef.set compile_time_search_path%
-
-  unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
-    let ctx := {fileName := "", fileMap := default}
-    let state := {env}
-    Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
-      let mut rs ← Result.extractEquationalResults
-      if !include_conj then
-        rs := rs.filter (·.proven)
-      let rs' := rs.map (·.variant)
+  withExtractedResults inp fun rs => do
+      let rs' := if include_conj then rs else rs.filter (·.proven)
+      let rs' := rs'.map (·.variant)
       let rs' := if include_impl then Closure.closure rs' else Closure.toEdges rs'
       if inp.hasFlag "json" then
         let implications := (rs'.filter (·.isTrue)).map (·.get)
@@ -135,32 +113,19 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
       pure 0
 
 def generateRaw (inp : Cli.Parsed) : IO UInt32 := do
-  let some modules := inp.variableArgsAs? ModuleName |
-    inp.printHelp
-    return 1
-  if modules.isEmpty then
-    inp.printHelp
-    return 2
-  searchPathRef.set compile_time_search_path%
-
-  unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
-    let ctx := {fileName := "", fileMap := default}
-    let state := {env}
-    Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
-      let mut rs ← Result.extractEquationalResults
-      if inp.hasFlag "proven" then
-        rs := rs.filter (·.proven)
-      let mut implications : Array Implication := #[]
-      let mut facts : Array Facts := #[]
-      let mut unconditionals : Array String := #[]
-      for entry in rs do
-        match entry.variant with
-        | .implication imp => implications := implications.push imp
-        | .facts fact => facts := facts.push fact
-        | .unconditional s => unconditionals := unconditionals.push s
-      let output : OutputRaw := ⟨implications, facts, unconditionals⟩
-      IO.println (toJson output).pretty
-      pure 0
+  withExtractedResults inp fun rs => do
+    let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
+    let mut implications : Array Implication := #[]
+    let mut facts : Array Facts := #[]
+    let mut unconditionals : Array String := #[]
+    for entry in rs do
+      match entry.variant with
+      | .implication imp => implications := implications.push imp
+      | .facts fact => facts := facts.push fact
+      | .unconditional s => unconditionals := unconditionals.push s
+    let output : OutputRaw := ⟨implications, facts, unconditionals⟩
+    IO.println (toJson output).pretty
+    pure 0
 
 def raw : Cmd := `[Cli|
   raw VIA generateRaw;
