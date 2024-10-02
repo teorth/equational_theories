@@ -6,7 +6,7 @@ on:
 
 jobs:
   propose_pr:
-    if: contains(github.event.comment.body, 'propose PR')
+    if: github.event.issue.pull_request == null && contains(github.event.comment.body, 'propose PR')
     runs-on: ubuntu-latest
 
     steps:
