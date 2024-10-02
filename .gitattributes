@@ -6,4 +6,5 @@ equational_theories/Generated/FinitePoly/Refutation*.lean linguist-generated
 equational_theories/Generated/FinitePoly.lean linguist-generated
 equational_theories/Generated/All4x4Tables/Refutation*.lean linguist-generated
 equational_theories/Generated/All4x4Tables.lean linguist-generated
-equational_theories/Generated/FinSearch/theorems/FinSearch.lean linguist-generated
+equational_theories/Generated/FinSearch/theorems/*.lean linguist-generated
+equational_theories/Generated/FinSearch.lean linguist-generated

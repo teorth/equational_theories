@@ -37,6 +37,12 @@ class FiniteMagma:
         #[ #[2,1,1,2], #[2,1,1,2], #[3,0,0,3], #[3,0,0,3] ]
         return "#[ " + ", ".join("#[" + ",".join(str(self.op(i,j)) for j in range(self.num_elements)) + "]" for i in range(self.num_elements)) + " ]"
 
+    def to_data(self, all_equations: list[Equation]):
+        #Table [[2, 3, 2, 3], [3, 2, 3, 2], [1, 0, 1, 0], [0, 1, 0, 1]]
+        ret = "Table [" + ", ".join("[" + ",".join(str(self.op(i,j)) for j in range(self.num_elements)) + "]" for i in range(self.num_elements)) + "]\n"
+        ret += "Proves " + str(sorted(eq.equation_number for eq in all_equations if self.proves(eq)))
+        return ret
+
     @property
     def id(self):
         return f"{self.num_elements}_{self.number}"

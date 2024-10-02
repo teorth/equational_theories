@@ -1,11 +1,12 @@
 import sys
 import highspy
+import random
 
 from parser import read_eqs, Equation
 from finite_magma import enumerate_assignments, FiniteMagma, Theorem
 
 
-def find_counter_example(N: int, eq1: Equation, eq2_list: list[Equation], debug_output=False, exclude=None):
+def find_counter_example(N: int, eq1: Equation, eq2_list: list[Equation], debug_output=False):
     if debug_output:
         print(f"N={N}")
     h = highspy.Highs()
@@ -24,16 +25,6 @@ def find_counter_example(N: int, eq1: Equation, eq2_list: list[Equation], debug_
             for k in n:
                 t[(i,j,k)] = h.addBinary()
             h.addConstr(sum(t[(i,j,k)] for k in n) == 1)
-
-    if exclude:
-        factor = 1
-        id_sum = 0
-        for i in n:
-            for j in n:
-                for k in n:
-                    id_sum += factor*t[(i,j,k)]*k
-                factor *= N
-        h.addConstr(id_sum >= max(other.number for other in exclude)+1)
 
     # For each possible assignment, eq1 must be satisfied
     is_unsat = False
@@ -196,9 +187,9 @@ def solve(n, lhs, rhs_list, n_min=2, debug_output=False) -> list[Theorem]:
 
     return theorems
 
-def search_satisfying_magma(eq, n_min, n_max, debug_output=False, exclude=None):
+def search_satisfying_magma(eq, n_min, n_max, debug_output=False):
     for n in range(n_min, n_max+1):
-        m = find_counter_example(n, eq, [], debug_output=debug_output, exclude=exclude)
+        m = find_counter_example(n, eq, [], debug_output=debug_output)
         if m:
             return m
     return None
@@ -208,22 +199,39 @@ def main():
         print(f"Usage: {sys.argv[0]} N lhs [rhs1, rhs2, ...]")
         sys.exit(1)
 
+    search_all = "--search-all" in sys.argv
+    if search_all:
+        sys.argv.remove("--search-all")
+
     all_eqs = {e.equation_number:e for e in read_eqs()}
     n, lhs = int(sys.argv[1]), all_eqs[int(sys.argv[2])]
     rhs_list = [all_eqs[int(x)] for x in sys.argv[3:]]
     if rhs_list:
         theorems = solve(n, lhs, rhs_list)
-        print(theorems)
         for t in theorems:
-            print(t.to_lean())
+            print(t.magma.to_data(all_eqs.values()))
+    elif search_all:
+        magma = search_satisfying_magma(lhs, n, n)
+        if not magma:
+            print("-- none found")
+        else:
+            print(magma.to_data(all_eqs.values()))
+            todo = [eq for eq in all_eqs.values() if magma.proves(eq) and eq.equation_number != lhs.equation_number]
+            while todo:
+                rhs = random.choice(todo)
+                print(f"--todo: {len(todo)}, searching for counter example to {rhs}")
+                theorems = solve(n, lhs, [rhs])
+                if theorems:
+                    magma = theorems[0].magma
+                    print(magma.to_data(all_eqs.values()))
+                    todo = [eq for eq in todo if magma.proves(eq)]
+                else:
+                    print("-- none found")
+                    todo.remove(rhs)
     else:
         magma = search_satisfying_magma(lhs, n, n)
         if magma:
-            theorem = Theorem(magma, [lhs], [])
-            for eq in all_eqs.values():
-                if not magma.proves(eq):
-                    theorem.unsat.append(eq)
-            print(theorem.to_lean())
+            print(magma.to_data(all_eqs.values()))
         else:
             print("-- none found")
 

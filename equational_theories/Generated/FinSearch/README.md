@@ -18,6 +18,12 @@ python3 insearch.py 5 467
 ```
 This command searches for a magma over Fin 5 that satisfies equation 467.
 
+Example:
+```
+python3 insearch.py 5 467 --search-all
+```
+This command searches for magmas over Fin 5 that satisfies equation 467 and provides counter examples to all other equations (if one exists)
+
 # Method
 
 A mixed integer linear program is set up that tries to determine the "truth table" for the magma. The problem is then solved using highs [https://highs.dev/]. The script relies on highspy being installed.
