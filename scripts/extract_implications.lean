@@ -77,9 +77,12 @@ def generateOutcomes (inp : Cli.Parsed) : IO UInt32 := do
         for b in a do
           count := count.insert b (count.getD b 0 + 1)
       IO.print "{"
+      let mut first := true
       for ⟨a, b⟩ in count do
-        println! "{a}: {b},"
-      IO.println "}"
+        if !first then IO.print ",\n"
+        IO.print f!"{a}: {b}"
+        first := false
+      IO.println "\n}"
     else
       IO.println (toJson ({equations, outcomes : OutputOutcomes})).compress
     pure 0

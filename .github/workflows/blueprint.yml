@@ -108,6 +108,11 @@ jobs:
           find home_page/docs -name "*.trace" -delete
           find home_page/docs -name "*.hash" -delete
 
+      - name: Generate home_page/dashboard.md
+        run: |
+          ~/.elan/bin/lake exe extract_implications outcomes equational_theories --hist > /tmp/hist.json
+          python scripts/generate_dashboard.py /tmp/hist.json
+
       - name: Bundle dependencies
         if: github.event_name == 'push'
         uses: ruby/setup-ruby@v1
