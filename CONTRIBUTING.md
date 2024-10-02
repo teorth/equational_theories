@@ -1,6 +1,8 @@
 # Contributing to the Equational Theories Project
 
-Thank you for your interest in contributing to the Equational Theories Project! This guide provides detailed instructions on how to effectively and efficiently contribute to the project.
+Thank you for your interest in contributing to the Equational Theories Project! We welcome contributions from all sources: human-generated contributions from either professional mathematicians or interested members of the public, as well as computer-generated contributions from programs in various languages, automated theorem provers, or modern AI tools.  (In fact, one of the main goals of this project is to learn how such a diverse pool of contributions can effectively be combined with each other to advance a common objective.)
+
+This guide provides detailed instructions on how to effectively and efficiently contribute to the project.
 
 ## Project Coordination
 
