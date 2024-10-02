@@ -20,9 +20,9 @@ The following instructions detail the process for claiming and completing tasks.
 
 ### 2. Claiming a Task
 
-- To claim a task, comment `claim` on the relevant GitHub issue.
+- To claim a task, comment the single word `claim` on the relevant GitHub issue.
 - If no other user is assigned, you will automatically be assigned to the task, and the issue will move to the `Claimed Tasks` column.
-- You may only claim one task at a time. If you decide not to work on a task after claiming it, comment `disclaim` on the issue. This will unassign you and return the issue to the `Unclaimed Outstanding Tasks` column, making it available for others to claim.
+- You may only claim one task at a time. If you decide not to work on a task after claiming it, comment the single word `disclaim` on the issue. This will unassign you and return the issue to the `Unclaimed Outstanding Tasks` column, making it available for others to claim.
 
 ### 3. Working on the Task
 
@@ -31,12 +31,12 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 ### 4. Submitting a Pull Request
 
 - When you are ready to submit your solution, create a PR from your working branch to the project’s `main` branch.
-- After submitting the PR, comment `propose PR #PR_NUMBER` on the original issue. This links your PR to the task, and the task will move to the `In Progress` column on the dashboard.
+- After submitting the PR, comment the single phrase `propose PR #PR_NUMBER` on the original issue. This links your PR to the task, and the task will move to the `In Progress` column on the dashboard.
 - A task can only move to `In Progress` if it has been claimed by the user proposing the PR.
 
 ### 5. Withdrawing or Updating a PR
 
-- If you need to withdraw your PR, comment `withdraw PR #PR_NUMBER` on the issue. The task will return to the `Claimed Tasks` column, but you will remain assigned to the issue.
+- If you need to withdraw your PR, comment the single phrase `withdraw PR #PR_NUMBER` on the issue. The task will return to the `Claimed Tasks` column, but you will remain assigned to the issue.
 - To submit an updated PR after withdrawal, comment `propose PR #NEW_PR_NUMBER` following the same process outlined in step 4.
 
 ### 6. Review Process
