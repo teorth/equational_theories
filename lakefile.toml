@@ -31,3 +31,8 @@ supportInterpreter = true
 name = "egg"
 git  = "https://github.com/marcusrossel/lean-egg"
 rev  = "main"
+
+[[require]]
+name = "calcify"
+git  = "https://github.com/nomeata/lean-calcify"
+rev  = "master"

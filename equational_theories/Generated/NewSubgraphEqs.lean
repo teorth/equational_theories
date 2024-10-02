@@ -1,16 +1,172 @@
 import equational_theories.Equations
 import equational_theories.EquationalResult
 import Egg
+import Calcify
 
 set_option egg.explosion true
 set_option egg.timeLimit 1
 
+@[equational_result]
+theorem Equation14_implies_Equation23 (G: Type _) [Magma G] (h: Equation14 G) : Equation23 G := by egg [*]
+
+@[equational_result]
+theorem Equation14_implies_Equation8 (G: Type _) [Magma G] (h: Equation14 G) : Equation8 G := by egg [*]
+
+@[equational_result]
+theorem Equation2_implies_Equation14 (G: Type _) [Magma G] (h: Equation2 G) : Equation14 G := by egg [*]
+
+@[equational_result]
+theorem Equation2_implies_Equation1689 (G: Type _) [Magma G] (h: Equation2 G) : Equation1689 G := by egg [*]
+
+
+-- redundant: come through transitivity
+@[equational_result]
+theorem Equation29_implies_Equation23 (G: Type _) [Magma G] (h: Equation29 G) : Equation23 G := by egg [*]
+
+@[equational_result]
+theorem Equation29_implies_Equation8 (G: Type _) [Magma G] (h: Equation29 G) : Equation8 G := by egg [*]
+
+-- Redundant: Equation 1 is tautology
+@[equational_result]
+theorem Equation2_implies_Equation1 (G: Type _) [Magma G] (_ : Equation2 G) : Equation1 G := by egg [*]
+
+@[equational_result]
+theorem Equation1689_implies_Equation1 (G: Type _) [Magma G] (_ : Equation1689 G) : Equation1 G := by egg [*]
+
+@[equational_result]
+theorem Equation168_implies_Equation1 (G: Type _) [Magma G] (_ : Equation168 G) : Equation1 G := by egg [*]
+
+@[equational_result]
+theorem Equation23_implies_Equation1 (G: Type _) [Magma G] (_ : Equation23 G) : Equation1 G := by egg [*]
+
+@[equational_result]
+theorem Equation28393_implies_Equation1 (G: Type _) [Magma G] (_ : Equation28393 G) : Equation1 G := by egg [*]
+
+@[equational_result]
+theorem Equation29_implies_Equation1 (G: Type _) [Magma G] (_ : Equation29 G) : Equation1 G := by egg [*]
+
+@[equational_result]
+theorem Equation14_implies_Equation1 (G: Type _) [Magma G] (_ : Equation14 G) : Equation1 G := by egg [*]
+
+/-
+TODO: sort through:
+
+18,19d28
+< Equation2 → Equation28393
+< Equation2 → Equation29
+21,23d29
+< Equation2 → Equation3722
+< Equation2 → Equation3744
+< Equation2 → Equation374794
+25d30
+< Equation2 → Equation381
+42d46
+< Equation2 → Equation5105
+46,47d49
+< Equation3722 → Equation1
+< Equation3744 → Equation1
+50,53d51
+< Equation3744 → Equation4512
+< Equation374794 → Equation1
+< Equation381 → Equation1
+< Equation387 → Equation1
+55d52
+< Equation38 → Equation1
+57,58d53
+< Equation39 → Equation1
+< Equation39 → Equation381
+60d54
+< Equation3 → Equation1
+62d55
+< Equation3 → Equation3722
+64,67d56
+< Equation40 → Equation1
+< Equation41 → Equation1
+< Equation41 → Equation3722
+< Equation41 → Equation3744
+69d57
+< Equation41 → Equation381
+83d70
+< Equation42 → Equation1
+85,87d71
+< Equation43 → Equation1
+< Equation4512 → Equation1
+< Equation4513 → Equation1
+89d72
+< Equation4522 → Equation1
+92,97d74
+< Equation4564 → Equation1
+< Equation4564 → Equation4512
+< Equation4579 → Equation1
+< Equation4579 → Equation4512
+< Equation4579 → Equation4564
+< Equation4582 → Equation1
+103,104d79
+< Equation45 → Equation1
+< Equation45 → Equation381
+106,108d80
+< Equation46 → Equation1
+< Equation46 → Equation3722
+< Equation46 → Equation3744
+110d81
+< Equation46 → Equation381
+124d94
+< Equation4 → Equation1
+126d95
+< Equation4 → Equation28393
+128,129d96
+< Equation4 → Equation3722
+< Equation4 → Equation3744
+131d97
+< Equation4 → Equation381
+137,138d102
+< Equation5105 → Equation1
+< Equation5 → Equation1
+141,143d104
+< Equation5 → Equation3722
+< Equation5 → Equation3744
+< Equation5 → Equation381
+147,148d107
+< Equation5 → Equation4564
+< Equation5 → Equation4579
+150,151d108
+< Equation6 → Equation1
+< Equation6 → Equation14
+153d109
+< Equation6 → Equation1689
+156,157d111
+< Equation6 → Equation28393
+< Equation6 → Equation29
+159,161d112
+< Equation6 → Equation3722
+< Equation6 → Equation3744
+< Equation6 → Equation374794
+163d113
+< Equation6 → Equation381
+180d129
+< Equation6 → Equation5105
+183,184d131
+< Equation7 → Equation1
+< Equation7 → Equation14
+186d132
+< Equation7 → Equation1689
+189,190d134
+< Equation7 → Equation28393
+< Equation7 → Equation29
+192,194d135
+< Equation7 → Equation3722
+< Equation7 → Equation3744
+< Equation7 → Equation374794
+196d136
+< Equation7 → Equation381
+213d152
+< Equation7 → Equation5105
+216d154
+-/
 
 @[equational_result]
 theorem Equation1_implies_Equation1 (G: Type _) [Magma G] (_ : Equation1 G) : Equation1 G := by egg [*]
 
-@[equational_result]
-theorem Equation2_implies_Equation1 (G: Type _) [Magma G] (_ : Equation2 G) : Equation1 G := by egg [*]
 
 @[equational_result]
 theorem Equation2_implies_Equation2 (G: Type _) [Magma G] (h: Equation2 G) : Equation2 G := by egg [*]
@@ -32,9 +188,6 @@ theorem Equation2_implies_Equation7 (G: Type _) [Magma G] (h: Equation2 G) : Equ
 
 @[equational_result]
 theorem Equation2_implies_Equation8 (G: Type _) [Magma G] (h: Equation2 G) : Equation8 G := by egg [*]
-
-@[equational_result]
-theorem Equation2_implies_Equation14 (G: Type _) [Magma G] (h: Equation2 G) : Equation14 G := by egg [*]
 
 @[equational_result]
 theorem Equation2_implies_Equation23 (G: Type _) [Magma G] (h: Equation2 G) : Equation23 G := by egg [*]
@@ -74,9 +227,6 @@ theorem Equation2_implies_Equation381 (G: Type _) [Magma G] (h: Equation2 G) : E
 
 @[equational_result]
 theorem Equation2_implies_Equation387 (G: Type _) [Magma G] (h: Equation2 G) : Equation387 G := by egg [*]
-
-@[equational_result]
-theorem Equation2_implies_Equation1689 (G: Type _) [Magma G] (h: Equation2 G) : Equation1689 G := by egg [*]
 
 @[equational_result]
 theorem Equation2_implies_Equation3722 (G: Type _) [Magma G] (h: Equation2 G) : Equation3722 G := by egg [*]
@@ -291,38 +441,19 @@ theorem Equation8_implies_Equation1 (G: Type _) [Magma G] (_ : Equation8 G) : Eq
 @[equational_result]
 theorem Equation8_implies_Equation8 (G: Type _) [Magma G] (h: Equation8 G) : Equation8 G := by egg [*]
 
-@[equational_result]
-theorem Equation14_implies_Equation1 (G: Type _) [Magma G] (_ : Equation14 G) : Equation1 G := by egg [*]
-
-@[equational_result]
-theorem Equation14_implies_Equation8 (G: Type _) [Magma G] (h: Equation14 G) : Equation8 G := by egg [*]
 
 @[equational_result]
 theorem Equation14_implies_Equation14 (G: Type _) [Magma G] (h: Equation14 G) : Equation14 G := by egg [*]
 
-@[equational_result]
-theorem Equation14_implies_Equation23 (G: Type _) [Magma G] (h: Equation14 G) : Equation23 G := by egg [*]
 
 @[equational_result]
 theorem Equation14_implies_Equation29 (G: Type _) [Magma G] (h: Equation14 G) : Equation29 G := by egg [*]
 
 @[equational_result]
-theorem Equation23_implies_Equation1 (G: Type _) [Magma G] (_ : Equation23 G) : Equation1 G := by egg [*]
-
-@[equational_result]
 theorem Equation23_implies_Equation23 (G: Type _) [Magma G] (h: Equation23 G) : Equation23 G := by egg [*]
 
 @[equational_result]
-theorem Equation29_implies_Equation1 (G: Type _) [Magma G] (_ : Equation29 G) : Equation1 G := by egg [*]
-
-@[equational_result]
-theorem Equation29_implies_Equation8 (G: Type _) [Magma G] (h: Equation29 G) : Equation8 G := by egg [*]
-
-@[equational_result]
 theorem Equation29_implies_Equation14 (G: Type _) [Magma G] (h: Equation29 G) : Equation14 G := by egg [*]
-
-@[equational_result]
-theorem Equation29_implies_Equation23 (G: Type _) [Magma G] (h: Equation29 G) : Equation23 G := by egg [*]
 
 @[equational_result]
 theorem Equation29_implies_Equation29 (G: Type _) [Magma G] (h: Equation29 G) : Equation29 G := by egg [*]
@@ -496,9 +627,6 @@ theorem Equation46_implies_Equation4579 (G: Type _) [Magma G] (h: Equation46 G) 
 theorem Equation46_implies_Equation4582 (G: Type _) [Magma G] (h: Equation46 G) : Equation4582 G := by egg [*]
 
 @[equational_result]
-theorem Equation168_implies_Equation1 (G: Type _) [Magma G] (_ : Equation168 G) : Equation1 G := by egg [*]
-
-@[equational_result]
 theorem Equation168_implies_Equation168 (G: Type _) [Magma G] (h: Equation168 G) : Equation168 G := by egg [*]
 
 @[equational_result]
@@ -516,8 +644,6 @@ theorem Equation387_implies_Equation43 (G: Type _) [Magma G] (h: Equation387 G) 
 @[equational_result]
 theorem Equation387_implies_Equation387 (G: Type _) [Magma G] (h: Equation387 G) : Equation387 G := by egg [*]
 
-@[equational_result]
-theorem Equation1689_implies_Equation1 (G: Type _) [Magma G] (_ : Equation1689 G) : Equation1 G := by egg [*]
 
 -- @[equational_result]
 -- theorem Equation1689_implies_Equation2 (G: Type _) [Magma G] (h: Equation1689 G) : Equation2 G:= by
@@ -622,9 +748,6 @@ theorem Equation5105_implies_Equation1 (G: Type _) [Magma G] (_ : Equation5105 G
 
 @[equational_result]
 theorem Equation5105_implies_Equation5105 (G: Type _) [Magma G] (h: Equation5105 G) : Equation5105 G := by egg [*]
-
-@[equational_result]
-theorem Equation28393_implies_Equation1 (G: Type _) [Magma G] (_ : Equation28393 G) : Equation1 G := by egg [*]
 
 @[equational_result]
 theorem Equation28393_implies_Equation28393 (G: Type _) [Magma G] (h: Equation28393 G) : Equation28393 G := by egg [*]
