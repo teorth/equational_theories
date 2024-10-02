@@ -143,4 +143,25 @@ theorem Finite.Equation28393_implies_Equation2 (G : Type*) [Magma G] [Finite G] 
     have z := x
     rw [h x y z, this ((y ∘ y) ∘ y)  x u, ← this ((y ∘ y) ∘ y) u u, ← h]
 
+theorem Equation28393_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equation28393 G ∧ ¬Equation2 G := by
+  letI : Magma ℕ := { op := sorry }
+  refine ⟨ℕ, this, ⟨?_, fun x ↦ nomatch (x 0 1)⟩⟩
+  intro x y z
+  have h1 : ∀ (y: ℕ), y ∘ y = 2^y := sorry
+  have h2 : ∀ (y: ℕ), (2^y) ∘ y = 3^y := sorry
+  have h3 : ∀ (x y: ℕ), x ≠ 3^y → (3^y) ∘ x = 3^y * 5^x := sorry
+  have h4 : ∀ (x y z: ℕ), z ≠ 3^y * 5^x → (3^y * 5^x) ∘ z = x := sorry
+  have h5 : ∀ (y z: ℕ), z ≠ 3^y ∧ z ≠ 2^(3^y) → (2^(3^y)) ∘ z = 3^y := sorry
+  rw [h1, h2]
+  by_cases hx : x = 3^y
+  .
+    rw [hx, h1, h5 y (y ∘ z) sorry]
+  .
+    rw [h3 x y hx]
+    by_cases hz : z = 3^y
+    .
+      sorry
+    .
+      rw [h4 x y (y ∘ z) sorry]
+
 end InfModel
