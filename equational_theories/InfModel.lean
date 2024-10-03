@@ -144,42 +144,41 @@ theorem Finite.Equation28393_implies_Equation2 (G : Type*) [Magma G] [Finite G] 
     rw [h x y z, this ((y ∘ y) ∘ y)  x u, ← this ((y ∘ y) ∘ y) u u, ← h]
 
 theorem Equation28393_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equation28393 G ∧ ¬Equation2 G := by
-  letI : Magma ℕ := { op := fun a b ↦ if a = b then 2^b else
-        if a = 2^b then 3^b else
-        if a = 3^(padicValNat 3 a) then a * 5^b else
-        if a = 3^(padicValNat 3 a) * 5^(padicValNat 5 a) then padicValNat 5 a else
+  letI : Magma ℕ+ := { op := fun a b ↦ if a = b then 2^b.val else
+        if a = 2^b.val then 3^b.val else
+        if a = 3^(padicValNat 3 a) then a * 5^b.val else
+        if a = 3^(padicValNat 3 a) * 5^(padicValNat 5 a) then Nat.toPNat' (padicValNat 5 a) else
         if a = 2^(3^(padicValNat 3 (padicValNat 2 a))) then 3^(padicValNat 3 (padicValNat 2 a)) else 1}
-  refine ⟨ℕ, this, ⟨?_, fun x ↦ nomatch (x 0 1)⟩⟩
+  refine ⟨ℕ+, this, ⟨?_, fun x ↦ nomatch (x 1 2)⟩⟩
   intro x y z
-  have h1 : ∀ (y: ℕ), y ∘ y = 2^y := by
+  have h1 : ∀ (y: ℕ+), y ∘ y = 2^y.val := by
     intro y
     unfold Magma.op
     simp only [ite_true]
-  have h2 : ∀ (y: ℕ), (2^y) ∘ y = 3^y := sorry
-  have h3 : ∀ (x y: ℕ), x ≠ 3^y → (3^y) ∘ x = 3^y * 5^x := sorry
-  have h4 : ∀ (x y z: ℕ), z ≠ 3^y * 5^x → (3^y * 5^x) ∘ z = x := sorry
-  have h5 : ∀ (y z: ℕ), z ≠ 3^y ∧ z ≠ 2^(3^y) → (2^(3^y)) ∘ z = 3^y := sorry
+  have h2 : ∀ (y: ℕ+), (2^y.val) ∘ y = 3^y.val := sorry
+  have h3 : ∀ (x y: ℕ+), x ≠ 3^y.val → (3^y.val) ∘ x = 3^y.val * 5^x.val := sorry
+  have h4 : ∀ (x y z: ℕ+), z ≠ 3^y.val * 5^x.val → (3^y.val * 5^x.val) ∘ z = x := sorry
+  have h5 : ∀ (y z: ℕ+), z ≠ 3^y.val ∧ z ≠ 2^(3^y.val) → (2^(3^y.val)) ∘ z = 3^y.val := sorry
   rw [h1, h2]
-  by_cases hx : x = 3^y
+  by_cases hx : x = 3^y.val
   .
     rw [hx, h1]
-    by_cases hyz : y ∘ z = 2^(3^y)
+    by_cases hyz : y ∘ z = 2^(3^y.val)
     .
-      rw [hyz, h1]
+      simp [hyz, h1]
       sorry
     .
-      by_cases hyz' : y ∘ z = 3^y
+      by_cases hyz' : y ∘ z = 3^y.val
       .
-        rw [hyz', h2]
+        simp [hyz', h2]
         sorry
       .
-        have : (y ∘ z) ≠ 3^y ∧ (y ∘ z) ≠ 2^(3^y)  := And.intro hyz' hyz
-        rw [h5 y (y ∘ z) this]
+        have : (y ∘ z) ≠ 3^y.val ∧ (y ∘ z) ≠ 2^(3^y.val)  := And.intro hyz' hyz
+        simp [h5 y (y ∘ z) this]
   .
     rw [h3 x y hx]
-    by_cases hyz : y ∘ z = 3^y * 5^x
+    by_cases hyz : y ∘ z = 3^y.val * 5^x.val
     .
-
       rw [hyz, h1]
       sorry
     .
