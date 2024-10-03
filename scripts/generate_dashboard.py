@@ -2,6 +2,10 @@ import argparse
 import json
 import os
 
+def make_progress_badge(ratio):
+    percent = f"{ratio:.1%}"
+    return f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="20" role="img" aria-label="Progress: {percent}"><title>Progress: {percent}</title><linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient><clipPath id="r"><rect width="100" height="20" rx="3" fill="#fff"/></clipPath><g clip-path="url(#r)"><rect width="59" height="20" fill="#555"/><rect x="59" width="41" height="20" fill="#007ec6"/><rect width="100" height="20" fill="url(#s)"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110"><text aria-hidden="true" x="305" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="490">Progress</text><text x="305" y="140" transform="scale(.1)" fill="#fff" textLength="490">Progress</text><text aria-hidden="true" x="790" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="330">{percent}</text><text x="790" y="140" transform="scale(.1)" fill="#fff" textLength="330">{percent}</text></g></svg>'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="generate the dashboard markdown")
     parser.add_argument("hist_file",
@@ -9,6 +13,9 @@ if __name__ == '__main__':
     parser.add_argument("--out_file",
                         default="home_page/dashboard/index.md",
                         help="markdown file to pass to jekyll")
+    parser.add_argument("--badge_file",
+                        default="home_page/dashboard/progress_badge.svg",
+                        help="path to create the progress badge for the Github repo")
 
     args = parser.parse_args()
     with open(args.hist_file, 'r') as f:
@@ -62,3 +69,5 @@ if __name__ == '__main__':
     outfile.write("\n")
     ratio = (proved_total + conjectured_total) / total
     outfile.write(f"The implication graph is **{ratio:.3%}** complete if we include conjectures.\n\n")
+
+    open(args.badge_file, 'w').write(make_progress_badge(ratio))
