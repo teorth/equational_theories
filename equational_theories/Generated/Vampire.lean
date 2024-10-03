@@ -1,0 +1,9 @@
+import equational_theories.Generated.Vampire.Vampire_conjecture_95583
+import equational_theories.Generated.Vampire.Vampire_conjecture_30856
+import equational_theories.Generated.Vampire.Vampire_conjecture_63402
+import equational_theories.Generated.Vampire.Vampire_conjecture_68753
+import equational_theories.Generated.Vampire.Vampire_conjecture_6877
+import equational_theories.Generated.Vampire.Vampire_conjecture_7081
+import equational_theories.Generated.Vampire.Vampire_conjecture_81246
+import equational_theories.Generated.Vampire.Vampire_conjecture_10675
+import equational_theories.Generated.Vampire.Vampire_conjecture_79416

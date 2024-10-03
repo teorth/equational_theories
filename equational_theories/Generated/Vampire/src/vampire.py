@@ -11,7 +11,9 @@ random.seed(17)
 with open('out.json') as fs:
   problems = json.load(fs)
 
-problems = random.sample(problems, 1000)
+problems = problems
+
+print(len(problems))
 
 BVARS = 'XYZWUV'
 
@@ -42,35 +44,26 @@ for problem in tqdm(problems):
 
   try:
     start_time = time.perf_counter()
-    out = subprocess.check_output(['/home/commandmaster/Downloads/vampire',
-                                    '/proc/self/fd/0', '-t', '0.1'], timeout=0.03, input=pr.encode()).decode()
+    out = subprocess.check_output(['~/Downloads/vampire',
+                                    '/proc/self/fd/0', '-t', '0.5'], input=pr.encode()).decode()
+    # print(out)
     dur = time.perf_counter() - start_time
     if 'Termination reason: Satisfiable' in out:
       count_disproven += 1
+      if 'outcome' in problem:
+         assert problem['outcome'] == 'unknown' or 'false' in problem['outcome']
       disproven.append([problem, f'inter {dur}'])
     elif 'Termination reason: Refutation' in out:
+      if 'outcome' in problem:
+         assert problem['outcome'] == 'unknown' or 'true' in problem['outcome']
       count_proven += 1
       proven.append([problem, dur])
     else:
        print("Anomaly!!")
        print(out)
-  except Exception as e:
-    try:
-      start_time = time.perf_counter()
-      out = subprocess.check_output(['/home/commandmaster/Downloads/vampire', '--mode', 'casc_sat',
-                                   '/proc/self/fd/0', '-t', '0.3'], input=pr.encode()).decode()
-      dur = time.perf_counter() - start_time
-      if 'Termination reason: Satisfiable' in out:
-        count_disproven += 1
-        disproven.append([problem, dur])
-      elif 'Termination reason: Refutation' in out:
-        count_proven += 1
-        proven.append([problem, f'inter {dur}'])
-      else:
-        print("Anomaly!!")
-        print(out)
-    except Exception:
-      count_unsolved += 1
+  except subprocess.CalledProcessError as e:
+    assert e.returncode == 1
+    count_unsolved += 1
 
 print('Unsolved', count_unsolved)
 print('Proven', count_proven)
