@@ -25,7 +25,7 @@
 <g id="a_node2"><a xlink:title="inbound edges: 5 &#160;outbound edges: 1">
 <polygon fill="green" stroke="black" points="7100,-1290.85 7006.75,-1290.85 7006.75,-1249.85 7100,-1249.85 7100,-1290.85"/>
 <text text-anchor="middle" x="7053.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 8</text>
-<text text-anchor="middle" x="7053.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ∘ (x ∘ x)</text>
+<text text-anchor="middle" x="7053.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ◇ (x ◇ x)</text>
 </a>
 </g>
 </g>
@@ -44,7 +44,7 @@
 <g id="a_node3"><a xlink:title="inbound edges: 5 &#160;outbound edges: 1">
 <polygon fill="green" stroke="black" points="9359,-1290.85 9265.75,-1290.85 9265.75,-1249.85 9359,-1249.85 9359,-1290.85"/>
 <text text-anchor="middle" x="9312.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 23</text>
-<text text-anchor="middle" x="9312.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ∘ x) ∘ x</text>
+<text text-anchor="middle" x="9312.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ◇ x) ◇ x</text>
 </a>
 </g>
 </g>
@@ -63,7 +63,7 @@
 <g id="a_node5"><a xlink:title="inbound edges: 15 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="4193.25,-1367.85 4071.5,-1367.85 4071.5,-1326.85 4193.25,-1326.85 4193.25,-1367.85"/>
 <text text-anchor="middle" x="4132.38" y="-1350.55" font-family="Times,serif" font-size="14.00">Eq 99</text>
-<text text-anchor="middle" x="4132.38" y="-1334.05" font-family="Times,serif" font-size="14.00">x = x ∘ ((x ∘ x) ∘ x)</text>
+<text text-anchor="middle" x="4132.38" y="-1334.05" font-family="Times,serif" font-size="14.00">x = x ◇ ((x ◇ x) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -82,7 +82,7 @@
 <g id="a_node21"><a xlink:title="inbound edges: 15 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="6174.25,-1290.85 6052.5,-1290.85 6052.5,-1249.85 6174.25,-1249.85 6174.25,-1290.85"/>
 <text text-anchor="middle" x="6113.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 151</text>
-<text text-anchor="middle" x="6113.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ∘ x) ∘ (x ∘ x)</text>
+<text text-anchor="middle" x="6113.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ◇ x) ◇ (x ◇ x)</text>
 </a>
 </g>
 </g>
@@ -101,7 +101,7 @@
 <g id="a_node36"><a xlink:title="inbound edges: 12 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="2348.75,-1367.85 2236,-1367.85 2236,-1326.85 2348.75,-1326.85 2348.75,-1367.85"/>
 <text text-anchor="middle" x="2292.38" y="-1350.55" font-family="Times,serif" font-size="14.00">Eq 307</text>
-<text text-anchor="middle" x="2292.38" y="-1334.05" font-family="Times,serif" font-size="14.00">x ∘ x = x ∘ (x ∘ x)</text>
+<text text-anchor="middle" x="2292.38" y="-1334.05" font-family="Times,serif" font-size="14.00">x ◇ x = x ◇ (x ◇ x)</text>
 </a>
 </g>
 </g>
@@ -120,7 +120,7 @@
 <g id="a_node39"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="green" stroke="black" points="383.5,-1290.85 299.25,-1290.85 299.25,-1249.85 383.5,-1249.85 383.5,-1290.85"/>
 <text text-anchor="middle" x="341.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 40</text>
-<text text-anchor="middle" x="341.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = y ∘ y</text>
+<text text-anchor="middle" x="341.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = y ◇ y</text>
 </a>
 </g>
 </g>
@@ -139,7 +139,7 @@
 <g id="a_node41"><a xlink:title="inbound edges: 15 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8197.25,-1367.85 8075.5,-1367.85 8075.5,-1326.85 8197.25,-1326.85 8197.25,-1367.85"/>
 <text text-anchor="middle" x="8136.38" y="-1350.55" font-family="Times,serif" font-size="14.00">Eq 203</text>
-<text text-anchor="middle" x="8136.38" y="-1334.05" font-family="Times,serif" font-size="14.00">x = (x ∘ (x ∘ x)) ∘ x</text>
+<text text-anchor="middle" x="8136.38" y="-1334.05" font-family="Times,serif" font-size="14.00">x = (x ◇ (x ◇ x)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -158,7 +158,7 @@
 <g id="a_node43"><a xlink:title="inbound edges: 12 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="1038.75,-1367.85 926,-1367.85 926,-1326.85 1038.75,-1326.85 1038.75,-1367.85"/>
 <text text-anchor="middle" x="982.38" y="-1350.55" font-family="Times,serif" font-size="14.00">Eq 359</text>
-<text text-anchor="middle" x="982.38" y="-1334.05" font-family="Times,serif" font-size="14.00">x ∘ x = (x ∘ x) ∘ x</text>
+<text text-anchor="middle" x="982.38" y="-1334.05" font-family="Times,serif" font-size="14.00">x ◇ x = (x ◇ x) ◇ x</text>
 </a>
 </g>
 </g>
@@ -177,7 +177,7 @@
 <g id="a_node45"><a xlink:title="inbound edges: 14 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="9677.25,-1290.85 9555.5,-1290.85 9555.5,-1249.85 9677.25,-1249.85 9677.25,-1290.85"/>
 <text text-anchor="middle" x="9616.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 255</text>
-<text text-anchor="middle" x="9616.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = ((x ∘ x) ∘ x) ∘ x</text>
+<text text-anchor="middle" x="9616.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = ((x ◇ x) ◇ x) ◇ x</text>
 </a>
 </g>
 </g>
@@ -196,7 +196,7 @@
 <g id="a_node49"><a xlink:title="inbound edges: 14 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="11005.25,-1290.85 10883.5,-1290.85 10883.5,-1249.85 11005.25,-1249.85 11005.25,-1290.85"/>
 <text text-anchor="middle" x="10944.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 47</text>
-<text text-anchor="middle" x="10944.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ∘ (x ∘ (x ∘ x))</text>
+<text text-anchor="middle" x="10944.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ◇ (x ◇ (x ◇ x))</text>
 </a>
 </g>
 </g>
@@ -215,7 +215,7 @@
 <g id="a_node112"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="green" stroke="black" points="453.5,-1367.85 369.25,-1367.85 369.25,-1326.85 453.5,-1326.85 453.5,-1367.85"/>
 <text text-anchor="middle" x="411.38" y="-1350.55" font-family="Times,serif" font-size="14.00">Eq 43</text>
-<text text-anchor="middle" x="411.38" y="-1334.05" font-family="Times,serif" font-size="14.00">x ∘ y = y ∘ x</text>
+<text text-anchor="middle" x="411.38" y="-1334.05" font-family="Times,serif" font-size="14.00">x ◇ y = y ◇ x</text>
 </a>
 </g>
 </g>
@@ -231,10 +231,10 @@
 <!-- SCC3 -->
 <g id="node4" class="node">
 <title>SCC3</title>
-<g id="a_node4"><a xlink:title="inbound edges: 1 &#160;outbound edges: 2&#10;Equations 14, 29&#10;x = y ∘ (x ∘ y)&#10;x = (y ∘ x) ∘ y">
+<g id="a_node4"><a xlink:title="inbound edges: 1 &#160;outbound edges: 2&#10;Equations 14, 29&#10;x = y ◇ (x ◇ y)&#10;x = (y ◇ x) ◇ y">
 <ellipse fill="none" stroke="black" cx="8167.38" cy="-1104.96" rx="104.12" ry="104.12"/>
 <text text-anchor="middle" x="8167.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eqs 14, ... (2 equations)</text>
-<text text-anchor="middle" x="8167.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ∘ (x ∘ y)</text>
+<text text-anchor="middle" x="8167.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ◇ (x ◇ y)</text>
 </a>
 </g>
 </g>
@@ -253,7 +253,7 @@
 <g id="a_node10"><a xlink:title="inbound edges: 2 &#160;outbound edges: 2">
 <polygon fill="none" stroke="black" points="4669,-876.44 4575.75,-876.44 4575.75,-835.44 4669,-835.44 4669,-876.44"/>
 <text text-anchor="middle" x="4622.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 10</text>
-<text text-anchor="middle" x="4622.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ∘ (y ∘ x)</text>
+<text text-anchor="middle" x="4622.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ◇ (y ◇ x)</text>
 </a>
 </g>
 </g>
@@ -272,7 +272,7 @@
 <g id="a_node11"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="7196,-876.44 7102.75,-876.44 7102.75,-835.44 7196,-835.44 7196,-876.44"/>
 <text text-anchor="middle" x="7149.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 16</text>
-<text text-anchor="middle" x="7149.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ∘ (y ∘ x)</text>
+<text text-anchor="middle" x="7149.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ◇ (y ◇ x)</text>
 </a>
 </g>
 </g>
@@ -291,7 +291,7 @@
 <g id="a_node50"><a xlink:title="inbound edges: 2 &#160;outbound edges: 9">
 <polygon fill="green" stroke="black" points="7172.75,-1125.46 7108,-1125.46 7108,-1084.46 7172.75,-1084.46 7172.75,-1125.46"/>
 <text text-anchor="middle" x="7140.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 3</text>
-<text text-anchor="middle" x="7140.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ∘ x</text>
+<text text-anchor="middle" x="7140.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ◇ x</text>
 </a>
 </g>
 </g>
@@ -310,7 +310,7 @@
 <g id="a_node155"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="7110,-627.43 7016.75,-627.43 7016.75,-586.43 7110,-586.43 7110,-627.43"/>
 <text text-anchor="middle" x="7063.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 11</text>
-<text text-anchor="middle" x="7063.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = x ∘ (y ∘ y)</text>
+<text text-anchor="middle" x="7063.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = x ◇ (y ◇ y)</text>
 </a>
 </g>
 </g>
@@ -347,7 +347,7 @@
 <g id="a_node85"><a xlink:title="inbound edges: 2 &#160;outbound edges: 2">
 <polygon fill="none" stroke="black" points="8196,-876.44 8102.75,-876.44 8102.75,-835.44 8196,-835.44 8196,-876.44"/>
 <text text-anchor="middle" x="8149.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 25</text>
-<text text-anchor="middle" x="8149.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ∘ y) ∘ x</text>
+<text text-anchor="middle" x="8149.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ◇ y) ◇ x</text>
 </a>
 </g>
 </g>
@@ -366,7 +366,7 @@
 <g id="a_node91"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8340,-627.43 8246.75,-627.43 8246.75,-586.43 8340,-586.43 8340,-627.43"/>
 <text text-anchor="middle" x="8293.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 31</text>
-<text text-anchor="middle" x="8293.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = (y ∘ y) ∘ x</text>
+<text text-anchor="middle" x="8293.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = (y ◇ y) ◇ x</text>
 </a>
 </g>
 </g>
@@ -385,7 +385,7 @@
 <g id="a_node153"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8307,-876.44 8213.75,-876.44 8213.75,-835.44 8307,-835.44 8307,-876.44"/>
 <text text-anchor="middle" x="8260.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 26</text>
-<text text-anchor="middle" x="8260.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ∘ y) ∘ y</text>
+<text text-anchor="middle" x="8260.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ◇ y) ◇ y</text>
 </a>
 </g>
 </g>
@@ -401,7 +401,7 @@
 <!-- SCC209 -->
 <g id="node210" class="node">
 <title>SCC209</title>
-<g id="a_node210"><a xlink:title="inbound edges: 0 &#160;outbound edges: 21&#10;Equations 2, 6, 7, 15, 17, 18, 20, 21, 30, 32, 33, 35, 36, 64, 67, 74, 76, 77, 79, 80, 84, 87, 88, 91, 92, 116, 122, 128, 129, 131, 132, 136, 139, 140, 143, 144, 171, 180, 181, 183, 184, 188, 191, 192, 195, 196, 220, 223, 226, 230, 232, 233, 235, 236, 240, 243, 244, 247, 248, 272, 275, 278, 284, 285, 287, 288, 292, 295, 296, 299, 300&#10;x = y&#10;x = y ∘ y&#10;x = y ∘ z&#10;x = y ∘ (x ∘ z)&#10;x = y ∘ (y ∘ y)&#10;x = y ∘ (y ∘ z)&#10;x = y ∘ (z ∘ y)&#10;x = y ∘ (z ∘ z)&#10;x = (y ∘ x) ∘ z&#10;x = (y ∘ y) ∘ y&#10;x = (y ∘ y) ∘ z&#10;x = (y ∘ z) ∘ y&#10;x = (y ∘ z) ∘ z&#10;x = y ∘ (x ∘ (x ∘ z))&#10;x = y ∘ (x ∘ (y ∘ z))&#10;x = y ∘ (y ∘ (x ∘ z))&#10;x = y ∘ (y ∘ (y ∘ y))&#10;x = y ∘ (y ∘ (y ∘ z))&#10;x = y ∘ (y ∘ (z ∘ y))&#10;x = y ∘ (y ∘ (z ∘ z))&#10;x = y ∘ (z ∘ (x ∘ z))&#10;x = y ∘ (z ∘ (y ∘ y))&#10;x = y ∘ (z ∘ (y ∘ z))&#10;x = y ∘ (z ∘ (z ∘ y))&#10;x = y ∘ (z ∘ (z ∘ z))&#10;x = y ∘ ((x ∘ x) ∘ z)&#10;x = y ∘ ((x ∘ z) ∘ z)&#10;x = y ∘ ((y ∘ y) ∘ y)&#10;x = y ∘ ((y ∘ y) ∘ z)&#10;x = y ∘ ((y ∘ z) ∘ y)&#10;x = y ∘ ((y ∘ z) ∘ z)&#10;x = y ∘ ((z ∘ x) ∘ z)&#10;x = y ∘ ((z ∘ y) ∘ y)&#10;x = y ∘ ((z ∘ y) ∘ z)&#10;x = y ∘ ((z ∘ z) ∘ y)&#10;x = y ∘ ((z ∘ z) ∘ z)&#10;x = (y ∘ x) ∘ (y ∘ z)&#10;x = (y ∘ y) ∘ (y ∘ y)&#10;x = (y ∘ y) ∘ (y ∘ z)&#10;x = (y ∘ y) ∘ (z ∘ y)&#10;x = (y ∘ y) ∘ (z ∘ z)&#10;x = (y ∘ z) ∘ (x ∘ z)&#10;x = (y ∘ z) ∘ (y ∘ y)&#10;x = (y ∘ z) ∘ (y ∘ z)&#10;x = (y ∘ z) ∘ (z ∘ y)&#10;x = (y ∘ z) ∘ (z ∘ z)&#10;x = (y ∘ (x ∘ x)) ∘ z&#10;x = (y ∘ (x ∘ y)) ∘ z&#10;x = (y ∘ (x ∘ z)) ∘ z&#10;x = (y ∘ (y ∘ x)) ∘ z&#10;x = (y ∘ (y ∘ y)) ∘ y&#10;x = (y ∘ (y ∘ y)) ∘ z&#10;x = (y ∘ (y ∘ z)) ∘ y&#10;x = (y ∘ (y ∘ z)) ∘ z&#10;x = (y ∘ (z ∘ x)) ∘ z&#10;x = (y ∘ (z ∘ y)) ∘ y&#10;x = (y ∘ (z ∘ y)) ∘ z&#10;x = (y ∘ (z ∘ z)) ∘ y&#10;x = (y ∘ (z ∘ z)) ∘ z&#10;x = ((y ∘ x) ∘ x) ∘ z&#10;x = ((y ∘ x) ∘ y) ∘ z&#10;x = ((y ∘ x) ∘ z) ∘ z&#10;x = ((y ∘ y) ∘ y) ∘ y&#10;x = ((y ∘ y) ∘ y) ∘ z&#10;x = ((y ∘ y) ∘ z) ∘ y&#10;x = ((y ∘ y) ∘ z) ∘ z&#10;x = ((y ∘ z) ∘ x) ∘ z&#10;x = ((y ∘ z) ∘ y) ∘ y&#10;x = ((y ∘ z) ∘ y) ∘ z&#10;x = ((y ∘ z) ∘ z) ∘ y&#10;x = ((y ∘ z) ∘ z) ∘ z">
+<g id="a_node210"><a xlink:title="inbound edges: 0 &#160;outbound edges: 21&#10;Equations 2, 6, 7, 15, 17, 18, 20, 21, 30, 32, 33, 35, 36, 64, 67, 74, 76, 77, 79, 80, 84, 87, 88, 91, 92, 116, 122, 128, 129, 131, 132, 136, 139, 140, 143, 144, 171, 180, 181, 183, 184, 188, 191, 192, 195, 196, 220, 223, 226, 230, 232, 233, 235, 236, 240, 243, 244, 247, 248, 272, 275, 278, 284, 285, 287, 288, 292, 295, 296, 299, 300&#10;x = y&#10;x = y ◇ y&#10;x = y ◇ z&#10;x = y ◇ (x ◇ z)&#10;x = y ◇ (y ◇ y)&#10;x = y ◇ (y ◇ z)&#10;x = y ◇ (z ◇ y)&#10;x = y ◇ (z ◇ z)&#10;x = (y ◇ x) ◇ z&#10;x = (y ◇ y) ◇ y&#10;x = (y ◇ y) ◇ z&#10;x = (y ◇ z) ◇ y&#10;x = (y ◇ z) ◇ z&#10;x = y ◇ (x ◇ (x ◇ z))&#10;x = y ◇ (x ◇ (y ◇ z))&#10;x = y ◇ (y ◇ (x ◇ z))&#10;x = y ◇ (y ◇ (y ◇ y))&#10;x = y ◇ (y ◇ (y ◇ z))&#10;x = y ◇ (y ◇ (z ◇ y))&#10;x = y ◇ (y ◇ (z ◇ z))&#10;x = y ◇ (z ◇ (x ◇ z))&#10;x = y ◇ (z ◇ (y ◇ y))&#10;x = y ◇ (z ◇ (y ◇ z))&#10;x = y ◇ (z ◇ (z ◇ y))&#10;x = y ◇ (z ◇ (z ◇ z))&#10;x = y ◇ ((x ◇ x) ◇ z)&#10;x = y ◇ ((x ◇ z) ◇ z)&#10;x = y ◇ ((y ◇ y) ◇ y)&#10;x = y ◇ ((y ◇ y) ◇ z)&#10;x = y ◇ ((y ◇ z) ◇ y)&#10;x = y ◇ ((y ◇ z) ◇ z)&#10;x = y ◇ ((z ◇ x) ◇ z)&#10;x = y ◇ ((z ◇ y) ◇ y)&#10;x = y ◇ ((z ◇ y) ◇ z)&#10;x = y ◇ ((z ◇ z) ◇ y)&#10;x = y ◇ ((z ◇ z) ◇ z)&#10;x = (y ◇ x) ◇ (y ◇ z)&#10;x = (y ◇ y) ◇ (y ◇ y)&#10;x = (y ◇ y) ◇ (y ◇ z)&#10;x = (y ◇ y) ◇ (z ◇ y)&#10;x = (y ◇ y) ◇ (z ◇ z)&#10;x = (y ◇ z) ◇ (x ◇ z)&#10;x = (y ◇ z) ◇ (y ◇ y)&#10;x = (y ◇ z) ◇ (y ◇ z)&#10;x = (y ◇ z) ◇ (z ◇ y)&#10;x = (y ◇ z) ◇ (z ◇ z)&#10;x = (y ◇ (x ◇ x)) ◇ z&#10;x = (y ◇ (x ◇ y)) ◇ z&#10;x = (y ◇ (x ◇ z)) ◇ z&#10;x = (y ◇ (y ◇ x)) ◇ z&#10;x = (y ◇ (y ◇ y)) ◇ y&#10;x = (y ◇ (y ◇ y)) ◇ z&#10;x = (y ◇ (y ◇ z)) ◇ y&#10;x = (y ◇ (y ◇ z)) ◇ z&#10;x = (y ◇ (z ◇ x)) ◇ z&#10;x = (y ◇ (z ◇ y)) ◇ y&#10;x = (y ◇ (z ◇ y)) ◇ z&#10;x = (y ◇ (z ◇ z)) ◇ y&#10;x = (y ◇ (z ◇ z)) ◇ z&#10;x = ((y ◇ x) ◇ x) ◇ z&#10;x = ((y ◇ x) ◇ y) ◇ z&#10;x = ((y ◇ x) ◇ z) ◇ z&#10;x = ((y ◇ y) ◇ y) ◇ y&#10;x = ((y ◇ y) ◇ y) ◇ z&#10;x = ((y ◇ y) ◇ z) ◇ y&#10;x = ((y ◇ y) ◇ z) ◇ z&#10;x = ((y ◇ z) ◇ x) ◇ z&#10;x = ((y ◇ z) ◇ y) ◇ y&#10;x = ((y ◇ z) ◇ y) ◇ z&#10;x = ((y ◇ z) ◇ z) ◇ y&#10;x = ((y ◇ z) ◇ z) ◇ z">
 <ellipse fill="green" stroke="black" cx="7364.38" cy="-104.12" rx="104.12" ry="104.12"/>
 <text text-anchor="middle" x="7364.38" y="-107.32" font-family="Times,serif" font-size="14.00">Eqs 2, ... (71 equations)</text>
 <text text-anchor="middle" x="7364.38" y="-90.82" font-family="Times,serif" font-size="14.00">x = y</text>
@@ -423,7 +423,7 @@
 <g id="a_node6"><a xlink:title="inbound edges: 7 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="4263.25,-1290.85 4141.5,-1290.85 4141.5,-1249.85 4263.25,-1249.85 4263.25,-1290.85"/>
 <text text-anchor="middle" x="4202.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 101</text>
-<text text-anchor="middle" x="4202.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ∘ ((x ∘ y) ∘ x)</text>
+<text text-anchor="middle" x="4202.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ◇ ((x ◇ y) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -442,7 +442,7 @@
 <g id="a_node7"><a xlink:title="inbound edges: 7 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="4123.25,-1290.85 4001.5,-1290.85 4001.5,-1249.85 4123.25,-1249.85 4123.25,-1290.85"/>
 <text text-anchor="middle" x="4062.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 104</text>
-<text text-anchor="middle" x="4062.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ∘ ((y ∘ x) ∘ x)</text>
+<text text-anchor="middle" x="4062.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ◇ ((y ◇ x) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -461,7 +461,7 @@
 <g id="a_node8"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="4403.25,-1290.85 4281.5,-1290.85 4281.5,-1249.85 4403.25,-1249.85 4403.25,-1290.85"/>
 <text text-anchor="middle" x="4342.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 107</text>
-<text text-anchor="middle" x="4342.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ∘ ((y ∘ y) ∘ x)</text>
+<text text-anchor="middle" x="4342.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ◇ ((y ◇ y) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -480,7 +480,7 @@
 <g id="a_node12"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="3843.25,-1290.85 3721.5,-1290.85 3721.5,-1249.85 3843.25,-1249.85 3843.25,-1290.85"/>
 <text text-anchor="middle" x="3782.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 114</text>
-<text text-anchor="middle" x="3782.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ∘ ((x ∘ x) ∘ x)</text>
+<text text-anchor="middle" x="3782.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ◇ ((x ◇ x) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -499,7 +499,7 @@
 <g id="a_node13"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="3703.25,-1290.85 3581.5,-1290.85 3581.5,-1249.85 3703.25,-1249.85 3703.25,-1290.85"/>
 <text text-anchor="middle" x="3642.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 117</text>
-<text text-anchor="middle" x="3642.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ∘ ((x ∘ y) ∘ x)</text>
+<text text-anchor="middle" x="3642.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ◇ ((x ◇ y) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -518,7 +518,7 @@
 <g id="a_node15"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="3563.25,-1290.85 3441.5,-1290.85 3441.5,-1249.85 3563.25,-1249.85 3563.25,-1290.85"/>
 <text text-anchor="middle" x="3502.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 124</text>
-<text text-anchor="middle" x="3502.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ∘ ((y ∘ x) ∘ x)</text>
+<text text-anchor="middle" x="3502.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ◇ ((y ◇ x) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -537,7 +537,7 @@
 <g id="a_node16"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="3983.25,-1290.85 3861.5,-1290.85 3861.5,-1249.85 3983.25,-1249.85 3983.25,-1290.85"/>
 <text text-anchor="middle" x="3922.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 127</text>
-<text text-anchor="middle" x="3922.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ∘ ((y ∘ y) ∘ x)</text>
+<text text-anchor="middle" x="3922.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ◇ ((y ◇ y) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -565,7 +565,7 @@
 <g id="a_node106"><a xlink:title="inbound edges: 6 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="4683.25,-1290.85 4561.5,-1290.85 4561.5,-1249.85 4683.25,-1249.85 4683.25,-1290.85"/>
 <text text-anchor="middle" x="4622.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 100</text>
-<text text-anchor="middle" x="4622.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ∘ ((x ∘ x) ∘ y)</text>
+<text text-anchor="middle" x="4622.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ◇ ((x ◇ x) ◇ y)</text>
 </a>
 </g>
 </g>
@@ -584,7 +584,7 @@
 <g id="a_node156"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="4543.25,-1290.85 4421.5,-1290.85 4421.5,-1249.85 4543.25,-1249.85 4543.25,-1290.85"/>
 <text text-anchor="middle" x="4482.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 102</text>
-<text text-anchor="middle" x="4482.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ∘ ((x ∘ y) ∘ y)</text>
+<text text-anchor="middle" x="4482.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ◇ ((x ◇ y) ◇ y)</text>
 </a>
 </g>
 </g>
@@ -603,7 +603,7 @@
 <g id="a_node158"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="4963.25,-1290.85 4841.5,-1290.85 4841.5,-1249.85 4963.25,-1249.85 4963.25,-1290.85"/>
 <text text-anchor="middle" x="4902.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 105</text>
-<text text-anchor="middle" x="4902.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ∘ ((y ∘ x) ∘ y)</text>
+<text text-anchor="middle" x="4902.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ◇ ((y ◇ x) ◇ y)</text>
 </a>
 </g>
 </g>
@@ -622,7 +622,7 @@
 <g id="a_node160"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="4823.25,-1290.85 4701.5,-1290.85 4701.5,-1249.85 4823.25,-1249.85 4823.25,-1290.85"/>
 <text text-anchor="middle" x="4762.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 108</text>
-<text text-anchor="middle" x="4762.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ∘ ((y ∘ y) ∘ y)</text>
+<text text-anchor="middle" x="4762.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = x ◇ ((y ◇ y) ◇ y)</text>
 </a>
 </g>
 </g>
@@ -641,7 +641,7 @@
 <g id="a_node184"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="3423.25,-1290.85 3301.5,-1290.85 3301.5,-1249.85 3423.25,-1249.85 3423.25,-1290.85"/>
 <text text-anchor="middle" x="3362.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 118</text>
-<text text-anchor="middle" x="3362.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ∘ ((x ∘ y) ∘ y)</text>
+<text text-anchor="middle" x="3362.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ◇ ((x ◇ y) ◇ y)</text>
 </a>
 </g>
 </g>
@@ -660,7 +660,7 @@
 <g id="a_node186"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="3143.25,-1290.85 3021.5,-1290.85 3021.5,-1249.85 3143.25,-1249.85 3143.25,-1290.85"/>
 <text text-anchor="middle" x="3082.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 115</text>
-<text text-anchor="middle" x="3082.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ∘ ((x ∘ x) ∘ y)</text>
+<text text-anchor="middle" x="3082.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ◇ ((x ◇ x) ◇ y)</text>
 </a>
 </g>
 </g>
@@ -679,7 +679,7 @@
 <g id="a_node188"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="3283.25,-1290.85 3161.5,-1290.85 3161.5,-1249.85 3283.25,-1249.85 3283.25,-1290.85"/>
 <text text-anchor="middle" x="3222.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 125</text>
-<text text-anchor="middle" x="3222.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ∘ ((y ∘ x) ∘ y)</text>
+<text text-anchor="middle" x="3222.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = y ◇ ((y ◇ x) ◇ y)</text>
 </a>
 </g>
 </g>
@@ -698,7 +698,7 @@
 <g id="a_node9"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="4243.88,-1125.46 4122.88,-1125.46 4122.88,-1084.46 4243.88,-1084.46 4243.88,-1125.46"/>
 <text text-anchor="middle" x="4183.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 110</text>
-<text text-anchor="middle" x="4183.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ∘ ((y ∘ z) ∘ x)</text>
+<text text-anchor="middle" x="4183.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ◇ ((y ◇ z) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -717,7 +717,7 @@
 <g id="a_node14"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="3649.88,-1125.46 3528.88,-1125.46 3528.88,-1084.46 3649.88,-1084.46 3649.88,-1125.46"/>
 <text text-anchor="middle" x="3589.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 120</text>
-<text text-anchor="middle" x="3589.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ∘ ((x ∘ z) ∘ x)</text>
+<text text-anchor="middle" x="3589.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ◇ ((x ◇ z) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -736,7 +736,7 @@
 <g id="a_node17"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="3788.88,-1125.46 3667.88,-1125.46 3667.88,-1084.46 3788.88,-1084.46 3788.88,-1125.46"/>
 <text text-anchor="middle" x="3728.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 130</text>
-<text text-anchor="middle" x="3728.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ∘ ((y ∘ z) ∘ x)</text>
+<text text-anchor="middle" x="3728.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ◇ ((y ◇ z) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -755,7 +755,7 @@
 <g id="a_node87"><a xlink:title="inbound edges: 1 &#160;outbound edges: 8">
 <polygon fill="none" stroke="black" points="8183.88,-627.43 8062.88,-627.43 8062.88,-586.43 8183.88,-586.43 8183.88,-627.43"/>
 <text text-anchor="middle" x="8123.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 276</text>
-<text text-anchor="middle" x="8123.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((y ∘ x) ∘ z) ∘ x</text>
+<text text-anchor="middle" x="8123.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((y ◇ x) ◇ z) ◇ x</text>
 </a>
 </g>
 </g>
@@ -774,7 +774,7 @@
 <g id="a_node157"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="4421.88,-1125.46 4300.88,-1125.46 4300.88,-1084.46 4421.88,-1084.46 4421.88,-1125.46"/>
 <text text-anchor="middle" x="4361.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 103</text>
-<text text-anchor="middle" x="4361.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ∘ ((x ∘ y) ∘ z)</text>
+<text text-anchor="middle" x="4361.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ◇ ((x ◇ y) ◇ z)</text>
 </a>
 </g>
 </g>
@@ -793,7 +793,7 @@
 <g id="a_node162"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="4977.88,-1125.46 4856.88,-1125.46 4856.88,-1084.46 4977.88,-1084.46 4977.88,-1125.46"/>
 <text text-anchor="middle" x="4917.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 111</text>
-<text text-anchor="middle" x="4917.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ∘ ((y ∘ z) ∘ y)</text>
+<text text-anchor="middle" x="4917.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ◇ ((y ◇ z) ◇ y)</text>
 </a>
 </g>
 </g>
@@ -812,7 +812,7 @@
 <g id="a_node187"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="3093.88,-1125.46 2972.88,-1125.46 2972.88,-1084.46 3093.88,-1084.46 3093.88,-1125.46"/>
 <text text-anchor="middle" x="3033.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 121</text>
-<text text-anchor="middle" x="3033.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ∘ ((x ∘ z) ∘ y)</text>
+<text text-anchor="middle" x="3033.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ◇ ((x ◇ z) ◇ y)</text>
 </a>
 </g>
 </g>
@@ -840,7 +840,7 @@
 <g id="a_node18"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="3510.88,-1125.46 3389.88,-1125.46 3389.88,-1084.46 3510.88,-1084.46 3510.88,-1125.46"/>
 <text text-anchor="middle" x="3450.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 134</text>
-<text text-anchor="middle" x="3450.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ∘ ((z ∘ x) ∘ x)</text>
+<text text-anchor="middle" x="3450.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ◇ ((z ◇ x) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -859,7 +859,7 @@
 <g id="a_node19"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="3927.88,-1125.46 3806.88,-1125.46 3806.88,-1084.46 3927.88,-1084.46 3927.88,-1125.46"/>
 <text text-anchor="middle" x="3867.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 138</text>
-<text text-anchor="middle" x="3867.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ∘ ((z ∘ y) ∘ x)</text>
+<text text-anchor="middle" x="3867.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ◇ ((z ◇ y) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -875,10 +875,10 @@
 <!-- SCC52 -->
 <g id="node53" class="node">
 <title>SCC52</title>
-<g id="a_node53"><a xlink:title="inbound edges: 1 &#160;outbound edges: 7&#10;Equations 28, 290&#10;x = (y ∘ x) ∘ x&#10;x = ((y ∘ z) ∘ x) ∘ x">
+<g id="a_node53"><a xlink:title="inbound edges: 1 &#160;outbound edges: 7&#10;Equations 28, 290&#10;x = (y ◇ x) ◇ x&#10;x = ((y ◇ z) ◇ x) ◇ x">
 <ellipse fill="none" stroke="black" cx="7232.38" cy="-606.93" rx="104.12" ry="104.12"/>
 <text text-anchor="middle" x="7232.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eqs 28, ... (2 equations)</text>
-<text text-anchor="middle" x="7232.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = (y ∘ x) ∘ x</text>
+<text text-anchor="middle" x="7232.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = (y ◇ x) ◇ x</text>
 </a>
 </g>
 </g>
@@ -897,7 +897,7 @@
 <g id="a_node159"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="4699.88,-1125.46 4578.88,-1125.46 4578.88,-1084.46 4699.88,-1084.46 4699.88,-1125.46"/>
 <text text-anchor="middle" x="4639.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 106</text>
-<text text-anchor="middle" x="4639.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ∘ ((y ∘ x) ∘ z)</text>
+<text text-anchor="middle" x="4639.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ◇ ((y ◇ x) ◇ z)</text>
 </a>
 </g>
 </g>
@@ -916,7 +916,7 @@
 <g id="a_node163"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="4560.5,-1125.46 4440.25,-1125.46 4440.25,-1084.46 4560.5,-1084.46 4560.5,-1125.46"/>
 <text text-anchor="middle" x="4500.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 112</text>
-<text text-anchor="middle" x="4500.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ∘ ((y ∘ z) ∘ z)</text>
+<text text-anchor="middle" x="4500.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ◇ ((y ◇ z) ◇ z)</text>
 </a>
 </g>
 </g>
@@ -935,7 +935,7 @@
 <g id="a_node190"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="2954.88,-1125.46 2833.88,-1125.46 2833.88,-1084.46 2954.88,-1084.46 2954.88,-1125.46"/>
 <text text-anchor="middle" x="2894.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 135</text>
-<text text-anchor="middle" x="2894.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ∘ ((z ∘ x) ∘ y)</text>
+<text text-anchor="middle" x="2894.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ◇ ((z ◇ x) ◇ y)</text>
 </a>
 </g>
 </g>
@@ -963,7 +963,7 @@
 <g id="a_node20"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="4066.5,-1125.46 3946.25,-1125.46 3946.25,-1084.46 4066.5,-1084.46 4066.5,-1125.46"/>
 <text text-anchor="middle" x="4006.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 142</text>
-<text text-anchor="middle" x="4006.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ∘ ((z ∘ z) ∘ x)</text>
+<text text-anchor="middle" x="4006.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ◇ ((z ◇ z) ◇ x)</text>
 </a>
 </g>
 </g>
@@ -982,7 +982,7 @@
 <g id="a_node161"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="4838.88,-1125.46 4717.88,-1125.46 4717.88,-1084.46 4838.88,-1084.46 4838.88,-1125.46"/>
 <text text-anchor="middle" x="4778.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 109</text>
-<text text-anchor="middle" x="4778.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ∘ ((y ∘ y) ∘ z)</text>
+<text text-anchor="middle" x="4778.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = x ◇ ((y ◇ y) ◇ z)</text>
 </a>
 </g>
 </g>
@@ -1007,10 +1007,10 @@
 <!-- SCC34 -->
 <g id="node35" class="node">
 <title>SCC34</title>
-<g id="a_node35"><a xlink:title="inbound edges: 1 &#160;outbound edges: 13&#10;Equations 13, 19&#10;x = y ∘ (x ∘ x)&#10;x = y ∘ (z ∘ x)">
+<g id="a_node35"><a xlink:title="inbound edges: 1 &#160;outbound edges: 13&#10;Equations 13, 19&#10;x = y ◇ (x ◇ x)&#10;x = y ◇ (z ◇ x)">
 <ellipse fill="none" stroke="black" cx="5608.38" cy="-606.93" rx="104.12" ry="104.12"/>
 <text text-anchor="middle" x="5608.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eqs 13, ... (2 equations)</text>
-<text text-anchor="middle" x="5608.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ∘ (x ∘ x)</text>
+<text text-anchor="middle" x="5608.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ◇ (x ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1026,10 +1026,10 @@
 <!-- SCC176 -->
 <g id="node177" class="node">
 <title>SCC176</title>
-<g id="a_node177"><a xlink:title="inbound edges: 1 &#160;outbound edges: 19&#10;Equations 4, 12, 54, 57&#10;x = x ∘ y&#10;x = x ∘ (y ∘ z)&#10;x = x ∘ (y ∘ (x ∘ z))&#10;x = x ∘ (y ∘ (y ∘ z))">
+<g id="a_node177"><a xlink:title="inbound edges: 1 &#160;outbound edges: 19&#10;Equations 4, 12, 54, 57&#10;x = x ◇ y&#10;x = x ◇ (y ◇ z)&#10;x = x ◇ (y ◇ (x ◇ z))&#10;x = x ◇ (y ◇ (y ◇ z))">
 <ellipse fill="green" stroke="black" cx="7919.38" cy="-353.14" rx="99.35" ry="99.35"/>
 <text text-anchor="middle" x="7919.38" y="-356.34" font-family="Times,serif" font-size="14.00">Eqs 4, ... (4 equations)</text>
-<text text-anchor="middle" x="7919.38" y="-339.84" font-family="Times,serif" font-size="14.00">x = x ∘ y</text>
+<text text-anchor="middle" x="7919.38" y="-339.84" font-family="Times,serif" font-size="14.00">x = x ◇ y</text>
 </a>
 </g>
 </g>
@@ -1102,7 +1102,7 @@
 <g id="a_node185"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="3371.88,-1125.46 3250.88,-1125.46 3250.88,-1084.46 3371.88,-1084.46 3371.88,-1125.46"/>
 <text text-anchor="middle" x="3311.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 119</text>
-<text text-anchor="middle" x="3311.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ∘ ((x ∘ y) ∘ z)</text>
+<text text-anchor="middle" x="3311.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ◇ ((x ◇ y) ◇ z)</text>
 </a>
 </g>
 </g>
@@ -1148,7 +1148,7 @@
 <g id="a_node189"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="3232.88,-1125.46 3111.88,-1125.46 3111.88,-1084.46 3232.88,-1084.46 3232.88,-1125.46"/>
 <text text-anchor="middle" x="3172.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 126</text>
-<text text-anchor="middle" x="3172.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ∘ ((y ∘ x) ∘ z)</text>
+<text text-anchor="middle" x="3172.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = y ◇ ((y ◇ x) ◇ z)</text>
 </a>
 </g>
 </g>
@@ -1230,7 +1230,7 @@
 <g id="a_node22"><a xlink:title="inbound edges: 6 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="6174.25,-1125.46 6052.5,-1125.46 6052.5,-1084.46 6174.25,-1084.46 6174.25,-1125.46"/>
 <text text-anchor="middle" x="6113.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 153</text>
-<text text-anchor="middle" x="6113.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ x) ∘ (y ∘ x)</text>
+<text text-anchor="middle" x="6113.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ x) ◇ (y ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1249,7 +1249,7 @@
 <g id="a_node23"><a xlink:title="inbound edges: 7 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="6454.25,-1125.46 6332.5,-1125.46 6332.5,-1084.46 6454.25,-1084.46 6454.25,-1125.46"/>
 <text text-anchor="middle" x="6393.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 156</text>
-<text text-anchor="middle" x="6393.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ y) ∘ (x ∘ x)</text>
+<text text-anchor="middle" x="6393.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ y) ◇ (x ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1268,7 +1268,7 @@
 <g id="a_node24"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="6734.25,-1125.46 6612.5,-1125.46 6612.5,-1084.46 6734.25,-1084.46 6734.25,-1125.46"/>
 <text text-anchor="middle" x="6673.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 159</text>
-<text text-anchor="middle" x="6673.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ y) ∘ (y ∘ x)</text>
+<text text-anchor="middle" x="6673.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ y) ◇ (y ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1287,7 +1287,7 @@
 <g id="a_node26"><a xlink:title="inbound edges: 6 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="5754.25,-1125.46 5632.5,-1125.46 5632.5,-1084.46 5754.25,-1084.46 5754.25,-1125.46"/>
 <text text-anchor="middle" x="5693.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 166</text>
-<text text-anchor="middle" x="5693.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ x) ∘ (x ∘ x)</text>
+<text text-anchor="middle" x="5693.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ x) ◇ (x ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1306,7 +1306,7 @@
 <g id="a_node27"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="6034.25,-1125.46 5912.5,-1125.46 5912.5,-1084.46 6034.25,-1084.46 6034.25,-1125.46"/>
 <text text-anchor="middle" x="5973.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 169</text>
-<text text-anchor="middle" x="5973.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ x) ∘ (y ∘ x)</text>
+<text text-anchor="middle" x="5973.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ x) ◇ (y ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1325,7 +1325,7 @@
 <g id="a_node29"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="5614.25,-1125.46 5492.5,-1125.46 5492.5,-1084.46 5614.25,-1084.46 5614.25,-1125.46"/>
 <text text-anchor="middle" x="5553.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 176</text>
-<text text-anchor="middle" x="5553.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ y) ∘ (x ∘ x)</text>
+<text text-anchor="middle" x="5553.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ y) ◇ (x ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1344,7 +1344,7 @@
 <g id="a_node30"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="5894.25,-1125.46 5772.5,-1125.46 5772.5,-1084.46 5894.25,-1084.46 5894.25,-1125.46"/>
 <text text-anchor="middle" x="5833.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 179</text>
-<text text-anchor="middle" x="5833.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ y) ∘ (y ∘ x)</text>
+<text text-anchor="middle" x="5833.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ y) ◇ (y ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1372,7 +1372,7 @@
 <g id="a_node107"><a xlink:title="inbound edges: 6 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="6594.25,-1125.46 6472.5,-1125.46 6472.5,-1084.46 6594.25,-1084.46 6594.25,-1125.46"/>
 <text text-anchor="middle" x="6533.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 152</text>
-<text text-anchor="middle" x="6533.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ x) ∘ (x ∘ y)</text>
+<text text-anchor="middle" x="6533.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ x) ◇ (x ◇ y)</text>
 </a>
 </g>
 </g>
@@ -1391,7 +1391,7 @@
 <g id="a_node136"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="6314.25,-1125.46 6192.5,-1125.46 6192.5,-1084.46 6314.25,-1084.46 6314.25,-1125.46"/>
 <text text-anchor="middle" x="6253.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 154</text>
-<text text-anchor="middle" x="6253.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ x) ∘ (y ∘ y)</text>
+<text text-anchor="middle" x="6253.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ x) ◇ (y ◇ y)</text>
 </a>
 </g>
 </g>
@@ -1410,7 +1410,7 @@
 <g id="a_node138"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="7014.25,-1125.46 6892.5,-1125.46 6892.5,-1084.46 7014.25,-1084.46 7014.25,-1125.46"/>
 <text text-anchor="middle" x="6953.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 157</text>
-<text text-anchor="middle" x="6953.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ y) ∘ (x ∘ y)</text>
+<text text-anchor="middle" x="6953.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ y) ◇ (x ◇ y)</text>
 </a>
 </g>
 </g>
@@ -1429,7 +1429,7 @@
 <g id="a_node140"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="6874.25,-1125.46 6752.5,-1125.46 6752.5,-1084.46 6874.25,-1084.46 6874.25,-1125.46"/>
 <text text-anchor="middle" x="6813.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 160</text>
-<text text-anchor="middle" x="6813.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ y) ∘ (y ∘ y)</text>
+<text text-anchor="middle" x="6813.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ y) ◇ (y ◇ y)</text>
 </a>
 </g>
 </g>
@@ -1448,7 +1448,7 @@
 <g id="a_node178"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="5334.25,-1125.46 5212.5,-1125.46 5212.5,-1084.46 5334.25,-1084.46 5334.25,-1125.46"/>
 <text text-anchor="middle" x="5273.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 167</text>
-<text text-anchor="middle" x="5273.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ x) ∘ (x ∘ y)</text>
+<text text-anchor="middle" x="5273.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ x) ◇ (x ◇ y)</text>
 </a>
 </g>
 </g>
@@ -1467,7 +1467,7 @@
 <g id="a_node180"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="5194.25,-1125.46 5072.5,-1125.46 5072.5,-1084.46 5194.25,-1084.46 5194.25,-1125.46"/>
 <text text-anchor="middle" x="5133.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 170</text>
-<text text-anchor="middle" x="5133.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ x) ∘ (y ∘ y)</text>
+<text text-anchor="middle" x="5133.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ x) ◇ (y ◇ y)</text>
 </a>
 </g>
 </g>
@@ -1486,7 +1486,7 @@
 <g id="a_node194"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="5474.25,-1125.46 5352.5,-1125.46 5352.5,-1084.46 5474.25,-1084.46 5474.25,-1125.46"/>
 <text text-anchor="middle" x="5413.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 177</text>
-<text text-anchor="middle" x="5413.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ y) ∘ (x ∘ y)</text>
+<text text-anchor="middle" x="5413.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ y) ◇ (x ◇ y)</text>
 </a>
 </g>
 </g>
@@ -1505,7 +1505,7 @@
 <g id="a_node25"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="6452.88,-876.44 6331.88,-876.44 6331.88,-835.44 6452.88,-835.44 6452.88,-876.44"/>
 <text text-anchor="middle" x="6392.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 162</text>
-<text text-anchor="middle" x="6392.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ∘ y) ∘ (z ∘ x)</text>
+<text text-anchor="middle" x="6392.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ◇ y) ◇ (z ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1524,7 +1524,7 @@
 <g id="a_node28"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="5896.88,-876.44 5775.88,-876.44 5775.88,-835.44 5896.88,-835.44 5896.88,-876.44"/>
 <text text-anchor="middle" x="5836.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 172</text>
-<text text-anchor="middle" x="5836.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ∘ x) ∘ (z ∘ x)</text>
+<text text-anchor="middle" x="5836.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ◇ x) ◇ (z ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1543,7 +1543,7 @@
 <g id="a_node31"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="5757.88,-876.44 5636.88,-876.44 5636.88,-835.44 5757.88,-835.44 5757.88,-876.44"/>
 <text text-anchor="middle" x="5697.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 182</text>
-<text text-anchor="middle" x="5697.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ∘ y) ∘ (z ∘ x)</text>
+<text text-anchor="middle" x="5697.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ◇ y) ◇ (z ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1562,7 +1562,7 @@
 <g id="a_node137"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="6313.88,-876.44 6192.88,-876.44 6192.88,-835.44 6313.88,-835.44 6313.88,-876.44"/>
 <text text-anchor="middle" x="6253.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 155</text>
-<text text-anchor="middle" x="6253.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ∘ x) ∘ (y ∘ z)</text>
+<text text-anchor="middle" x="6253.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ◇ x) ◇ (y ◇ z)</text>
 </a>
 </g>
 </g>
@@ -1581,7 +1581,7 @@
 <g id="a_node142"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="7084.88,-876.44 6963.88,-876.44 6963.88,-835.44 7084.88,-835.44 7084.88,-876.44"/>
 <text text-anchor="middle" x="7024.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 163</text>
-<text text-anchor="middle" x="7024.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ∘ y) ∘ (z ∘ y)</text>
+<text text-anchor="middle" x="7024.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ◇ y) ◇ (z ◇ y)</text>
 </a>
 </g>
 </g>
@@ -1600,7 +1600,7 @@
 <g id="a_node191"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="4884.88,-876.44 4763.88,-876.44 4763.88,-835.44 4884.88,-835.44 4884.88,-876.44"/>
 <text text-anchor="middle" x="4824.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 173</text>
-<text text-anchor="middle" x="4824.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ∘ x) ∘ (z ∘ y)</text>
+<text text-anchor="middle" x="4824.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ◇ x) ◇ (z ◇ y)</text>
 </a>
 </g>
 </g>
@@ -1628,7 +1628,7 @@
 <g id="a_node32"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="5579.88,-876.44 5458.88,-876.44 5458.88,-835.44 5579.88,-835.44 5579.88,-876.44"/>
 <text text-anchor="middle" x="5519.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 186</text>
-<text text-anchor="middle" x="5519.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ∘ z) ∘ (x ∘ x)</text>
+<text text-anchor="middle" x="5519.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ◇ z) ◇ (x ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1647,7 +1647,7 @@
 <g id="a_node33"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="6174.88,-876.44 6053.88,-876.44 6053.88,-835.44 6174.88,-835.44 6174.88,-876.44"/>
 <text text-anchor="middle" x="6114.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 190</text>
-<text text-anchor="middle" x="6114.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ∘ z) ∘ (y ∘ x)</text>
+<text text-anchor="middle" x="6114.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ◇ z) ◇ (y ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1675,7 +1675,7 @@
 <g id="a_node139"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="6806.88,-876.44 6685.88,-876.44 6685.88,-835.44 6806.88,-835.44 6806.88,-876.44"/>
 <text text-anchor="middle" x="6746.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 158</text>
-<text text-anchor="middle" x="6746.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ∘ y) ∘ (x ∘ z)</text>
+<text text-anchor="middle" x="6746.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ◇ y) ◇ (x ◇ z)</text>
 </a>
 </g>
 </g>
@@ -1694,7 +1694,7 @@
 <g id="a_node143"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="6591.5,-876.44 6471.25,-876.44 6471.25,-835.44 6591.5,-835.44 6591.5,-876.44"/>
 <text text-anchor="middle" x="6531.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 164</text>
-<text text-anchor="middle" x="6531.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ∘ y) ∘ (z ∘ z)</text>
+<text text-anchor="middle" x="6531.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ◇ y) ◇ (z ◇ z)</text>
 </a>
 </g>
 </g>
@@ -1713,7 +1713,7 @@
 <g id="a_node196"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="5162.88,-876.44 5041.88,-876.44 5041.88,-835.44 5162.88,-835.44 5162.88,-876.44"/>
 <text text-anchor="middle" x="5102.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 187</text>
-<text text-anchor="middle" x="5102.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ∘ z) ∘ (x ∘ y)</text>
+<text text-anchor="middle" x="5102.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ◇ z) ◇ (x ◇ y)</text>
 </a>
 </g>
 </g>
@@ -1741,7 +1741,7 @@
 <g id="a_node34"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="6035.5,-876.44 5915.25,-876.44 5915.25,-835.44 6035.5,-835.44 6035.5,-876.44"/>
 <text text-anchor="middle" x="5975.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 194</text>
-<text text-anchor="middle" x="5975.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ∘ z) ∘ (z ∘ x)</text>
+<text text-anchor="middle" x="5975.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ◇ z) ◇ (z ◇ x)</text>
 </a>
 </g>
 </g>
@@ -1760,7 +1760,7 @@
 <g id="a_node141"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="6945.88,-876.44 6824.88,-876.44 6824.88,-835.44 6945.88,-835.44 6945.88,-876.44"/>
 <text text-anchor="middle" x="6885.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 161</text>
-<text text-anchor="middle" x="6885.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ∘ y) ∘ (y ∘ z)</text>
+<text text-anchor="middle" x="6885.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (x ◇ y) ◇ (y ◇ z)</text>
 </a>
 </g>
 </g>
@@ -1785,10 +1785,10 @@
 <!-- SCC153 -->
 <g id="node154" class="node">
 <title>SCC153</title>
-<g id="a_node154"><a xlink:title="inbound edges: 1 &#160;outbound edges: 13&#10;Equations 24, 27&#10;x = (x ∘ x) ∘ y&#10;x = (x ∘ y) ∘ z">
+<g id="a_node154"><a xlink:title="inbound edges: 1 &#160;outbound edges: 13&#10;Equations 24, 27&#10;x = (x ◇ x) ◇ y&#10;x = (x ◇ y) ◇ z">
 <ellipse fill="none" stroke="black" cx="7940.38" cy="-606.93" rx="104.12" ry="104.12"/>
 <text text-anchor="middle" x="7940.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eqs 24, ... (2 equations)</text>
-<text text-anchor="middle" x="7940.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = (x ∘ x) ∘ y</text>
+<text text-anchor="middle" x="7940.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = (x ◇ x) ◇ y</text>
 </a>
 </g>
 </g>
@@ -1843,7 +1843,7 @@
 <g id="a_node179"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="green" stroke="black" points="5440.88,-876.44 5319.88,-876.44 5319.88,-835.44 5440.88,-835.44 5440.88,-876.44"/>
 <text text-anchor="middle" x="5380.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 168</text>
-<text text-anchor="middle" x="5380.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ∘ x) ∘ (x ∘ z)</text>
+<text text-anchor="middle" x="5380.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ◇ x) ◇ (x ◇ z)</text>
 </a>
 </g>
 </g>
@@ -1862,7 +1862,7 @@
 <g id="a_node181"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="5023.5,-876.44 4903.25,-876.44 4903.25,-835.44 5023.5,-835.44 5023.5,-876.44"/>
 <text text-anchor="middle" x="4963.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 174</text>
-<text text-anchor="middle" x="4963.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ∘ x) ∘ (z ∘ z)</text>
+<text text-anchor="middle" x="4963.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ◇ x) ◇ (z ◇ z)</text>
 </a>
 </g>
 </g>
@@ -1926,7 +1926,7 @@
 <g id="a_node195"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="5301.88,-876.44 5180.88,-876.44 5180.88,-835.44 5301.88,-835.44 5301.88,-876.44"/>
 <text text-anchor="middle" x="5241.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 178</text>
-<text text-anchor="middle" x="5241.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ∘ y) ∘ (x ∘ z)</text>
+<text text-anchor="middle" x="5241.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = (y ◇ y) ◇ (x ◇ z)</text>
 </a>
 </g>
 </g>
@@ -2005,10 +2005,10 @@
 <!-- SCC104 -->
 <g id="node105" class="node">
 <title>SCC104</title>
-<g id="a_node105"><a xlink:title="inbound edges: 1 &#160;outbound edges: 19&#10;Equations 5, 34, 298&#10;x = y ∘ x&#10;x = (y ∘ z) ∘ x&#10;x = ((y ∘ z) ∘ z) ∘ x">
+<g id="a_node105"><a xlink:title="inbound edges: 1 &#160;outbound edges: 19&#10;Equations 5, 34, 298&#10;x = y ◇ x&#10;x = (y ◇ z) ◇ x&#10;x = ((y ◇ z) ◇ z) ◇ x">
 <ellipse fill="green" stroke="black" cx="8252.38" cy="-353.14" rx="99.35" ry="99.35"/>
 <text text-anchor="middle" x="8252.38" y="-356.34" font-family="Times,serif" font-size="14.00">Eqs 5, ... (3 equations)</text>
-<text text-anchor="middle" x="8252.38" y="-339.84" font-family="Times,serif" font-size="14.00">x = y ∘ x</text>
+<text text-anchor="middle" x="8252.38" y="-339.84" font-family="Times,serif" font-size="14.00">x = y ◇ x</text>
 </a>
 </g>
 </g>
@@ -2027,7 +2027,7 @@
 <g id="a_node37"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="2348.75,-1290.85 2236,-1290.85 2236,-1249.85 2348.75,-1249.85 2348.75,-1290.85"/>
 <text text-anchor="middle" x="2292.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 310</text>
-<text text-anchor="middle" x="2292.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = x ∘ (y ∘ y)</text>
+<text text-anchor="middle" x="2292.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = x ◇ (y ◇ y)</text>
 </a>
 </g>
 </g>
@@ -2046,7 +2046,7 @@
 <g id="a_node38"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="2086.75,-1290.85 1974,-1290.85 1974,-1249.85 2086.75,-1249.85 2086.75,-1290.85"/>
 <text text-anchor="middle" x="2030.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 312</text>
-<text text-anchor="middle" x="2030.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = y ∘ (x ∘ x)</text>
+<text text-anchor="middle" x="2030.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = y ◇ (x ◇ x)</text>
 </a>
 </g>
 </g>
@@ -2065,7 +2065,7 @@
 <g id="a_node47"><a xlink:title="inbound edges: 4 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="2741.75,-1290.85 2629,-1290.85 2629,-1249.85 2741.75,-1249.85 2741.75,-1290.85"/>
 <text text-anchor="middle" x="2685.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 326</text>
-<text text-anchor="middle" x="2685.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ y = x ∘ (y ∘ y)</text>
+<text text-anchor="middle" x="2685.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ y = x ◇ (y ◇ y)</text>
 </a>
 </g>
 </g>
@@ -2084,7 +2084,7 @@
 <g id="a_node62"><a xlink:title="inbound edges: 4 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="2479.75,-1290.85 2367,-1290.85 2367,-1249.85 2479.75,-1249.85 2479.75,-1290.85"/>
 <text text-anchor="middle" x="2423.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 309</text>
-<text text-anchor="middle" x="2423.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = x ∘ (y ∘ x)</text>
+<text text-anchor="middle" x="2423.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = x ◇ (y ◇ x)</text>
 </a>
 </g>
 </g>
@@ -2103,7 +2103,7 @@
 <g id="a_node63"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="1955.75,-1290.85 1843,-1290.85 1843,-1249.85 1955.75,-1249.85 1955.75,-1290.85"/>
 <text text-anchor="middle" x="1899.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 315</text>
-<text text-anchor="middle" x="1899.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = y ∘ (y ∘ x)</text>
+<text text-anchor="middle" x="1899.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = y ◇ (y ◇ x)</text>
 </a>
 </g>
 </g>
@@ -2122,7 +2122,7 @@
 <g id="a_node65"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="2610.75,-1290.85 2498,-1290.85 2498,-1249.85 2610.75,-1249.85 2610.75,-1290.85"/>
 <text text-anchor="middle" x="2554.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 323</text>
-<text text-anchor="middle" x="2554.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ y = x ∘ (x ∘ y)</text>
+<text text-anchor="middle" x="2554.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ y = x ◇ (x ◇ y)</text>
 </a>
 </g>
 </g>
@@ -2141,7 +2141,7 @@
 <g id="a_node67"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="2217.75,-1290.85 2105,-1290.85 2105,-1249.85 2217.75,-1249.85 2217.75,-1290.85"/>
 <text text-anchor="middle" x="2161.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 333</text>
-<text text-anchor="middle" x="2161.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ y = y ∘ (x ∘ y)</text>
+<text text-anchor="middle" x="2161.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ y = y ◇ (x ◇ y)</text>
 </a>
 </g>
 </g>
@@ -2160,7 +2160,7 @@
 <g id="a_node108"><a xlink:title="inbound edges: 4 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="2872.75,-1290.85 2760,-1290.85 2760,-1249.85 2872.75,-1249.85 2872.75,-1290.85"/>
 <text text-anchor="middle" x="2816.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 308</text>
-<text text-anchor="middle" x="2816.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = x ∘ (x ∘ y)</text>
+<text text-anchor="middle" x="2816.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = x ◇ (x ◇ y)</text>
 </a>
 </g>
 </g>
@@ -2179,7 +2179,7 @@
 <g id="a_node114"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="3003.75,-1290.85 2891,-1290.85 2891,-1249.85 3003.75,-1249.85 3003.75,-1290.85"/>
 <text text-anchor="middle" x="2947.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 325</text>
-<text text-anchor="middle" x="2947.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ y = x ∘ (y ∘ x)</text>
+<text text-anchor="middle" x="2947.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ y = x ◇ (y ◇ x)</text>
 </a>
 </g>
 </g>
@@ -2198,7 +2198,7 @@
 <g id="a_node125"><a xlink:title="inbound edges: 1 &#160;outbound edges: 2">
 <polygon fill="none" stroke="black" points="1562.75,-1290.85 1450,-1290.85 1450,-1249.85 1562.75,-1249.85 1562.75,-1290.85"/>
 <text text-anchor="middle" x="1506.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 335</text>
-<text text-anchor="middle" x="1506.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ y = y ∘ (y ∘ x)</text>
+<text text-anchor="middle" x="1506.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ y = y ◇ (y ◇ x)</text>
 </a>
 </g>
 </g>
@@ -2217,7 +2217,7 @@
 <g id="a_node127"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="1824.75,-1290.85 1712,-1290.85 1712,-1249.85 1824.75,-1249.85 1824.75,-1290.85"/>
 <text text-anchor="middle" x="1768.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 313</text>
-<text text-anchor="middle" x="1768.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = y ∘ (x ∘ y)</text>
+<text text-anchor="middle" x="1768.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = y ◇ (x ◇ y)</text>
 </a>
 </g>
 </g>
@@ -2236,7 +2236,7 @@
 <g id="a_node130"><a xlink:title="inbound edges: 1 &#160;outbound edges: 2">
 <polygon fill="none" stroke="black" points="1693.75,-1290.85 1581,-1290.85 1581,-1249.85 1693.75,-1249.85 1693.75,-1290.85"/>
 <text text-anchor="middle" x="1637.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 384</text>
-<text text-anchor="middle" x="1637.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ y = (y ∘ x) ∘ x</text>
+<text text-anchor="middle" x="1637.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ y = (y ◇ x) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2252,10 +2252,10 @@
 <!-- SCC39 -->
 <g id="node40" class="node">
 <title>SCC39</title>
-<g id="a_node40"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3&#10;Equations 316, 320&#10;x ∘ x = y ∘ (y ∘ y)&#10;x ∘ x = y ∘ (z ∘ z)">
+<g id="a_node40"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3&#10;Equations 316, 320&#10;x ◇ x = y ◇ (y ◇ y)&#10;x ◇ x = y ◇ (z ◇ z)">
 <ellipse fill="none" stroke="black" cx="1942.38" cy="-1104.96" rx="108.89" ry="108.89"/>
 <text text-anchor="middle" x="1942.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eqs 316, ... (2 equations)</text>
-<text text-anchor="middle" x="1942.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ x = y ∘ (y ∘ y)</text>
+<text text-anchor="middle" x="1942.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ x = y ◇ (y ◇ y)</text>
 </a>
 </g>
 </g>
@@ -2274,7 +2274,7 @@
 <g id="a_node116"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="2479.38,-1125.46 2367.38,-1125.46 2367.38,-1084.46 2479.38,-1084.46 2479.38,-1125.46"/>
 <text text-anchor="middle" x="2423.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 311</text>
-<text text-anchor="middle" x="2423.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ x = x ∘ (y ∘ z)</text>
+<text text-anchor="middle" x="2423.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ x = x ◇ (y ◇ z)</text>
 </a>
 </g>
 </g>
@@ -2302,7 +2302,7 @@
 <g id="a_node64"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="2181.38,-1125.46 2069.38,-1125.46 2069.38,-1084.46 2181.38,-1084.46 2181.38,-1125.46"/>
 <text text-anchor="middle" x="2125.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 318</text>
-<text text-anchor="middle" x="2125.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ x = y ∘ (z ∘ x)</text>
+<text text-anchor="middle" x="2125.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ x = y ◇ (z ◇ x)</text>
 </a>
 </g>
 </g>
@@ -2321,7 +2321,7 @@
 <g id="a_node68"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="2311.38,-1125.46 2199.38,-1125.46 2199.38,-1084.46 2311.38,-1084.46 2311.38,-1125.46"/>
 <text text-anchor="middle" x="2255.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 343</text>
-<text text-anchor="middle" x="2255.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ y = z ∘ (x ∘ y)</text>
+<text text-anchor="middle" x="2255.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ y = z ◇ (x ◇ y)</text>
 </a>
 </g>
 </g>
@@ -2346,10 +2346,10 @@
 <!-- SCC123 -->
 <g id="node124" class="node">
 <title>SCC123</title>
-<g id="a_node124"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3&#10;Equations 368, 369&#10;x ∘ x = (y ∘ y) ∘ y&#10;x ∘ x = (y ∘ y) ∘ z">
+<g id="a_node124"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3&#10;Equations 368, 369&#10;x ◇ x = (y ◇ y) ◇ y&#10;x ◇ x = (y ◇ y) ◇ z">
 <ellipse fill="none" stroke="black" cx="340.38" cy="-1104.96" rx="108.89" ry="108.89"/>
 <text text-anchor="middle" x="340.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eqs 368, ... (2 equations)</text>
-<text text-anchor="middle" x="340.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ x = (y ∘ y) ∘ y</text>
+<text text-anchor="middle" x="340.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ x = (y ◇ y) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2368,7 +2368,7 @@
 <g id="a_node126"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="2097.38,-876.44 1985.38,-876.44 1985.38,-835.44 2097.38,-835.44 2097.38,-876.44"/>
 <text text-anchor="middle" x="2041.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 317</text>
-<text text-anchor="middle" x="2041.38" y="-842.64" font-family="Times,serif" font-size="14.00">x ∘ x = y ∘ (y ∘ z)</text>
+<text text-anchor="middle" x="2041.38" y="-842.64" font-family="Times,serif" font-size="14.00">x ◇ x = y ◇ (y ◇ z)</text>
 </a>
 </g>
 </g>
@@ -2387,7 +2387,7 @@
 <g id="a_node128"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="1967.38,-876.44 1855.38,-876.44 1855.38,-835.44 1967.38,-835.44 1967.38,-876.44"/>
 <text text-anchor="middle" x="1911.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 319</text>
-<text text-anchor="middle" x="1911.38" y="-842.64" font-family="Times,serif" font-size="14.00">x ∘ x = y ∘ (z ∘ y)</text>
+<text text-anchor="middle" x="1911.38" y="-842.64" font-family="Times,serif" font-size="14.00">x ◇ x = y ◇ (z ◇ y)</text>
 </a>
 </g>
 </g>
@@ -2406,7 +2406,7 @@
 <g id="a_node42"><a xlink:title="inbound edges: 4 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="7707.25,-1290.85 7585.5,-1290.85 7585.5,-1249.85 7707.25,-1249.85 7707.25,-1290.85"/>
 <text text-anchor="middle" x="7646.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 218</text>
-<text text-anchor="middle" x="7646.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ∘ (x ∘ x)) ∘ x</text>
+<text text-anchor="middle" x="7646.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ◇ (x ◇ x)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2434,7 +2434,7 @@
 <g id="a_node70"><a xlink:title="inbound edges: 7 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8547.25,-1290.85 8425.5,-1290.85 8425.5,-1249.85 8547.25,-1249.85 8547.25,-1290.85"/>
 <text text-anchor="middle" x="8486.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 205</text>
-<text text-anchor="middle" x="8486.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ∘ (x ∘ y)) ∘ x</text>
+<text text-anchor="middle" x="8486.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ◇ (x ◇ y)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2453,7 +2453,7 @@
 <g id="a_node71"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="7567.25,-1290.85 7445.5,-1290.85 7445.5,-1249.85 7567.25,-1249.85 7567.25,-1290.85"/>
 <text text-anchor="middle" x="7506.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 221</text>
-<text text-anchor="middle" x="7506.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ∘ (x ∘ y)) ∘ x</text>
+<text text-anchor="middle" x="7506.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ◇ (x ◇ y)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2472,7 +2472,7 @@
 <g id="a_node73"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="7847.25,-1290.85 7725.5,-1290.85 7725.5,-1249.85 7847.25,-1249.85 7847.25,-1290.85"/>
 <text text-anchor="middle" x="7786.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 228</text>
-<text text-anchor="middle" x="7786.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ∘ (y ∘ x)) ∘ x</text>
+<text text-anchor="middle" x="7786.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ◇ (y ◇ x)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2491,7 +2491,7 @@
 <g id="a_node74"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="7427.25,-1290.85 7305.5,-1290.85 7305.5,-1249.85 7427.25,-1249.85 7427.25,-1290.85"/>
 <text text-anchor="middle" x="7366.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 231</text>
-<text text-anchor="middle" x="7366.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ∘ (y ∘ y)) ∘ x</text>
+<text text-anchor="middle" x="7366.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ◇ (y ◇ y)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2510,7 +2510,7 @@
 <g id="a_node76"><a xlink:title="inbound edges: 6 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8127.25,-1290.85 8005.5,-1290.85 8005.5,-1249.85 8127.25,-1249.85 8127.25,-1290.85"/>
 <text text-anchor="middle" x="8066.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 208</text>
-<text text-anchor="middle" x="8066.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ∘ (y ∘ x)) ∘ x</text>
+<text text-anchor="middle" x="8066.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ◇ (y ◇ x)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2529,7 +2529,7 @@
 <g id="a_node79"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8267.25,-1290.85 8145.5,-1290.85 8145.5,-1249.85 8267.25,-1249.85 8267.25,-1290.85"/>
 <text text-anchor="middle" x="8206.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 211</text>
-<text text-anchor="middle" x="8206.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ∘ (y ∘ y)) ∘ x</text>
+<text text-anchor="middle" x="8206.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ◇ (y ◇ y)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2548,7 +2548,7 @@
 <g id="a_node144"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8967.25,-1290.85 8845.5,-1290.85 8845.5,-1249.85 8967.25,-1249.85 8967.25,-1290.85"/>
 <text text-anchor="middle" x="8906.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 204</text>
-<text text-anchor="middle" x="8906.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ∘ (x ∘ x)) ∘ y</text>
+<text text-anchor="middle" x="8906.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ◇ (x ◇ x)) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2567,7 +2567,7 @@
 <g id="a_node145"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8827.25,-1290.85 8705.5,-1290.85 8705.5,-1249.85 8827.25,-1249.85 8827.25,-1290.85"/>
 <text text-anchor="middle" x="8766.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 206</text>
-<text text-anchor="middle" x="8766.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ∘ (x ∘ y)) ∘ y</text>
+<text text-anchor="middle" x="8766.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ◇ (x ◇ y)) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2586,7 +2586,7 @@
 <g id="a_node147"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="9247.25,-1290.85 9125.5,-1290.85 9125.5,-1249.85 9247.25,-1249.85 9247.25,-1290.85"/>
 <text text-anchor="middle" x="9186.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 209</text>
-<text text-anchor="middle" x="9186.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ∘ (y ∘ x)) ∘ y</text>
+<text text-anchor="middle" x="9186.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ◇ (y ◇ x)) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2605,7 +2605,7 @@
 <g id="a_node149"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="9107.25,-1290.85 8985.5,-1290.85 8985.5,-1249.85 9107.25,-1249.85 9107.25,-1290.85"/>
 <text text-anchor="middle" x="9046.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 212</text>
-<text text-anchor="middle" x="9046.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ∘ (y ∘ y)) ∘ y</text>
+<text text-anchor="middle" x="9046.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (x ◇ (y ◇ y)) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2624,7 +2624,7 @@
 <g id="a_node197"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8407.25,-1290.85 8285.5,-1290.85 8285.5,-1249.85 8407.25,-1249.85 8407.25,-1290.85"/>
 <text text-anchor="middle" x="8346.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 219</text>
-<text text-anchor="middle" x="8346.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ∘ (x ∘ x)) ∘ y</text>
+<text text-anchor="middle" x="8346.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ◇ (x ◇ x)) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2643,7 +2643,7 @@
 <g id="a_node198"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8687.25,-1290.85 8565.5,-1290.85 8565.5,-1249.85 8687.25,-1249.85 8687.25,-1290.85"/>
 <text text-anchor="middle" x="8626.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 222</text>
-<text text-anchor="middle" x="8626.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ∘ (x ∘ y)) ∘ y</text>
+<text text-anchor="middle" x="8626.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ◇ (x ◇ y)) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2662,7 +2662,7 @@
 <g id="a_node200"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="7987.25,-1290.85 7865.5,-1290.85 7865.5,-1249.85 7987.25,-1249.85 7987.25,-1290.85"/>
 <text text-anchor="middle" x="7926.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 229</text>
-<text text-anchor="middle" x="7926.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ∘ (y ∘ x)) ∘ y</text>
+<text text-anchor="middle" x="7926.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x = (y ◇ (y ◇ x)) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2690,7 +2690,7 @@
 <g id="a_node72"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="7766.88,-1125.46 7645.88,-1125.46 7645.88,-1084.46 7766.88,-1084.46 7766.88,-1125.46"/>
 <text text-anchor="middle" x="7706.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 224</text>
-<text text-anchor="middle" x="7706.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ (x ∘ z)) ∘ x</text>
+<text text-anchor="middle" x="7706.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ (x ◇ z)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2709,7 +2709,7 @@
 <g id="a_node77"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="7905.88,-1125.46 7784.88,-1125.46 7784.88,-1084.46 7905.88,-1084.46 7905.88,-1125.46"/>
 <text text-anchor="middle" x="7845.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 238</text>
-<text text-anchor="middle" x="7845.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ (z ∘ x)) ∘ x</text>
+<text text-anchor="middle" x="7845.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ (z ◇ x)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2728,7 +2728,7 @@
 <g id="a_node80"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="7488.5,-1125.46 7368.25,-1125.46 7368.25,-1084.46 7488.5,-1084.46 7488.5,-1125.46"/>
 <text text-anchor="middle" x="7428.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 246</text>
-<text text-anchor="middle" x="7428.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ (z ∘ z)) ∘ x</text>
+<text text-anchor="middle" x="7428.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ (z ◇ z)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2747,7 +2747,7 @@
 <g id="a_node44"><a xlink:title="inbound edges: 4 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="907.75,-1290.85 795,-1290.85 795,-1249.85 907.75,-1249.85 907.75,-1290.85"/>
 <text text-anchor="middle" x="851.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 364</text>
-<text text-anchor="middle" x="851.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = (y ∘ x) ∘ x</text>
+<text text-anchor="middle" x="851.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = (y ◇ x) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2766,7 +2766,7 @@
 <g id="a_node48"><a xlink:title="inbound edges: 4 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="1169.75,-1290.85 1057,-1290.85 1057,-1249.85 1169.75,-1249.85 1169.75,-1290.85"/>
 <text text-anchor="middle" x="1113.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 375</text>
-<text text-anchor="middle" x="1113.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ y = (x ∘ x) ∘ y</text>
+<text text-anchor="middle" x="1113.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ y = (x ◇ x) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2785,7 +2785,7 @@
 <g id="a_node54"><a xlink:title="inbound edges: 4 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="776.75,-1290.85 664,-1290.85 664,-1249.85 776.75,-1249.85 776.75,-1290.85"/>
 <text text-anchor="middle" x="720.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 361</text>
-<text text-anchor="middle" x="720.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = (x ∘ y) ∘ x</text>
+<text text-anchor="middle" x="720.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = (x ◇ y) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2804,7 +2804,7 @@
 <g id="a_node55"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="243.75,-1290.85 131,-1290.85 131,-1249.85 243.75,-1249.85 243.75,-1290.85"/>
 <text text-anchor="middle" x="187.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 367</text>
-<text text-anchor="middle" x="187.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = (y ∘ y) ∘ x</text>
+<text text-anchor="middle" x="187.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = (y ◇ y) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2823,7 +2823,7 @@
 <g id="a_node57"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="1300.75,-1290.85 1188,-1290.85 1188,-1249.85 1300.75,-1249.85 1300.75,-1290.85"/>
 <text text-anchor="middle" x="1244.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 378</text>
-<text text-anchor="middle" x="1244.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ y = (x ∘ y) ∘ y</text>
+<text text-anchor="middle" x="1244.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ y = (x ◇ y) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2842,7 +2842,7 @@
 <g id="a_node59"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="1038.75,-1290.85 926,-1290.85 926,-1249.85 1038.75,-1249.85 1038.75,-1290.85"/>
 <text text-anchor="middle" x="982.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 385</text>
-<text text-anchor="middle" x="982.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ y = (y ∘ x) ∘ y</text>
+<text text-anchor="middle" x="982.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ y = (y ◇ x) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2861,7 +2861,7 @@
 <g id="a_node118"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="645.75,-1290.85 533,-1290.85 533,-1249.85 645.75,-1249.85 645.75,-1290.85"/>
 <text text-anchor="middle" x="589.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 360</text>
-<text text-anchor="middle" x="589.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = (x ∘ x) ∘ y</text>
+<text text-anchor="middle" x="589.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = (x ◇ x) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2880,7 +2880,7 @@
 <g id="a_node119"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="1431.75,-1290.85 1319,-1290.85 1319,-1249.85 1431.75,-1249.85 1431.75,-1290.85"/>
 <text text-anchor="middle" x="1375.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 377</text>
-<text text-anchor="middle" x="1375.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ y = (x ∘ y) ∘ x</text>
+<text text-anchor="middle" x="1375.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ y = (x ◇ y) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2899,7 +2899,7 @@
 <g id="a_node121"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="514.75,-1290.85 402,-1290.85 402,-1249.85 514.75,-1249.85 514.75,-1290.85"/>
 <text text-anchor="middle" x="458.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 362</text>
-<text text-anchor="middle" x="458.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = (x ∘ y) ∘ y</text>
+<text text-anchor="middle" x="458.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = (x ◇ y) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2936,7 +2936,7 @@
 <g id="a_node131"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="112.75,-1290.85 0,-1290.85 0,-1249.85 112.75,-1249.85 112.75,-1290.85"/>
 <text text-anchor="middle" x="56.38" y="-1273.55" font-family="Times,serif" font-size="14.00">Eq 365</text>
-<text text-anchor="middle" x="56.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ∘ x = (y ∘ x) ∘ y</text>
+<text text-anchor="middle" x="56.38" y="-1257.05" font-family="Times,serif" font-size="14.00">x ◇ x = (y ◇ x) ◇ y</text>
 </a>
 </g>
 </g>
@@ -2964,7 +2964,7 @@
 <g id="a_node56"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="785.38,-1125.46 673.38,-1125.46 673.38,-1084.46 785.38,-1084.46 785.38,-1125.46"/>
 <text text-anchor="middle" x="729.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 370</text>
-<text text-anchor="middle" x="729.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ x = (y ∘ z) ∘ x</text>
+<text text-anchor="middle" x="729.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ x = (y ◇ z) ◇ x</text>
 </a>
 </g>
 </g>
@@ -2983,7 +2983,7 @@
 <g id="a_node60"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="991.38,-1125.46 879.38,-1125.46 879.38,-1084.46 991.38,-1084.46 991.38,-1125.46"/>
 <text text-anchor="middle" x="935.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 395</text>
-<text text-anchor="middle" x="935.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ y = (z ∘ x) ∘ y</text>
+<text text-anchor="middle" x="935.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ y = (z ◇ x) ◇ y</text>
 </a>
 </g>
 </g>
@@ -3002,7 +3002,7 @@
 <g id="a_node133"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="571,-876.44 459.75,-876.44 459.75,-835.44 571,-835.44 571,-876.44"/>
 <text text-anchor="middle" x="515.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 372</text>
-<text text-anchor="middle" x="515.38" y="-842.64" font-family="Times,serif" font-size="14.00">x ∘ x = (y ∘ z) ∘ z</text>
+<text text-anchor="middle" x="515.38" y="-842.64" font-family="Times,serif" font-size="14.00">x ◇ x = (y ◇ z) ◇ z</text>
 </a>
 </g>
 </g>
@@ -3021,7 +3021,7 @@
 <g id="a_node46"><a xlink:title="inbound edges: 7 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8905.25,-876.44 8783.5,-876.44 8783.5,-835.44 8905.25,-835.44 8905.25,-876.44"/>
 <text text-anchor="middle" x="8844.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 260</text>
-<text text-anchor="middle" x="8844.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ∘ y) ∘ x) ∘ x</text>
+<text text-anchor="middle" x="8844.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ◇ y) ◇ x) ◇ x</text>
 </a>
 </g>
 </g>
@@ -3049,7 +3049,7 @@
 <g id="a_node52"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8765.25,-876.44 8643.5,-876.44 8643.5,-835.44 8765.25,-835.44 8765.25,-876.44"/>
 <text text-anchor="middle" x="8704.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 280</text>
-<text text-anchor="middle" x="8704.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ∘ y) ∘ x) ∘ x</text>
+<text text-anchor="middle" x="8704.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ◇ y) ◇ x) ◇ x</text>
 </a>
 </g>
 </g>
@@ -3068,7 +3068,7 @@
 <g id="a_node81"><a xlink:title="inbound edges: 6 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="9045.25,-876.44 8923.5,-876.44 8923.5,-835.44 9045.25,-835.44 9045.25,-876.44"/>
 <text text-anchor="middle" x="8984.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 257</text>
-<text text-anchor="middle" x="8984.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ∘ x) ∘ y) ∘ x</text>
+<text text-anchor="middle" x="8984.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ◇ x) ◇ y) ◇ x</text>
 </a>
 </g>
 </g>
@@ -3087,7 +3087,7 @@
 <g id="a_node82"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="9325.25,-876.44 9203.5,-876.44 9203.5,-835.44 9325.25,-835.44 9325.25,-876.44"/>
 <text text-anchor="middle" x="9264.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 263</text>
-<text text-anchor="middle" x="9264.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ∘ y) ∘ y) ∘ x</text>
+<text text-anchor="middle" x="9264.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ◇ y) ◇ y) ◇ x</text>
 </a>
 </g>
 </g>
@@ -3106,7 +3106,7 @@
 <g id="a_node86"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8485.25,-876.44 8363.5,-876.44 8363.5,-835.44 8485.25,-835.44 8485.25,-876.44"/>
 <text text-anchor="middle" x="8424.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 273</text>
-<text text-anchor="middle" x="8424.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ∘ x) ∘ y) ∘ x</text>
+<text text-anchor="middle" x="8424.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ◇ x) ◇ y) ◇ x</text>
 </a>
 </g>
 </g>
@@ -3125,7 +3125,7 @@
 <g id="a_node88"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="8625.25,-876.44 8503.5,-876.44 8503.5,-835.44 8625.25,-835.44 8625.25,-876.44"/>
 <text text-anchor="middle" x="8564.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 283</text>
-<text text-anchor="middle" x="8564.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ∘ y) ∘ y) ∘ x</text>
+<text text-anchor="middle" x="8564.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ◇ y) ◇ y) ◇ x</text>
 </a>
 </g>
 </g>
@@ -3144,7 +3144,7 @@
 <g id="a_node164"><a xlink:title="inbound edges: 4 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="9745.25,-876.44 9623.5,-876.44 9623.5,-835.44 9745.25,-835.44 9745.25,-876.44"/>
 <text text-anchor="middle" x="9684.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 256</text>
-<text text-anchor="middle" x="9684.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ∘ x) ∘ x) ∘ y</text>
+<text text-anchor="middle" x="9684.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ◇ x) ◇ x) ◇ y</text>
 </a>
 </g>
 </g>
@@ -3163,7 +3163,7 @@
 <g id="a_node165"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="9605.25,-876.44 9483.5,-876.44 9483.5,-835.44 9605.25,-835.44 9605.25,-876.44"/>
 <text text-anchor="middle" x="9544.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 258</text>
-<text text-anchor="middle" x="9544.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ∘ x) ∘ y) ∘ y</text>
+<text text-anchor="middle" x="9544.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ◇ x) ◇ y) ◇ y</text>
 </a>
 </g>
 </g>
@@ -3182,7 +3182,7 @@
 <g id="a_node167"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="9185.25,-876.44 9063.5,-876.44 9063.5,-835.44 9185.25,-835.44 9185.25,-876.44"/>
 <text text-anchor="middle" x="9124.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 261</text>
-<text text-anchor="middle" x="9124.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ∘ y) ∘ x) ∘ y</text>
+<text text-anchor="middle" x="9124.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ◇ y) ◇ x) ◇ y</text>
 </a>
 </g>
 </g>
@@ -3201,7 +3201,7 @@
 <g id="a_node169"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="9465.25,-876.44 9343.5,-876.44 9343.5,-835.44 9465.25,-835.44 9465.25,-876.44"/>
 <text text-anchor="middle" x="9404.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 264</text>
-<text text-anchor="middle" x="9404.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ∘ y) ∘ y) ∘ y</text>
+<text text-anchor="middle" x="9404.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((x ◇ y) ◇ y) ◇ y</text>
 </a>
 </g>
 </g>
@@ -3220,7 +3220,7 @@
 <g id="a_node202"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="10165.25,-876.44 10043.5,-876.44 10043.5,-835.44 10165.25,-835.44 10165.25,-876.44"/>
 <text text-anchor="middle" x="10104.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 271</text>
-<text text-anchor="middle" x="10104.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ∘ x) ∘ x) ∘ y</text>
+<text text-anchor="middle" x="10104.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ◇ x) ◇ x) ◇ y</text>
 </a>
 </g>
 </g>
@@ -3239,7 +3239,7 @@
 <g id="a_node203"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="9885.25,-876.44 9763.5,-876.44 9763.5,-835.44 9885.25,-835.44 9885.25,-876.44"/>
 <text text-anchor="middle" x="9824.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 274</text>
-<text text-anchor="middle" x="9824.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ∘ x) ∘ y) ∘ y</text>
+<text text-anchor="middle" x="9824.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ◇ x) ◇ y) ◇ y</text>
 </a>
 </g>
 </g>
@@ -3258,7 +3258,7 @@
 <g id="a_node205"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="10025.25,-876.44 9903.5,-876.44 9903.5,-835.44 10025.25,-835.44 10025.25,-876.44"/>
 <text text-anchor="middle" x="9964.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 281</text>
-<text text-anchor="middle" x="9964.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ∘ y) ∘ x) ∘ y</text>
+<text text-anchor="middle" x="9964.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ◇ y) ◇ x) ◇ y</text>
 </a>
 </g>
 </g>
@@ -3286,7 +3286,7 @@
 <g id="a_node83"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="8904.88,-627.43 8783.88,-627.43 8783.88,-586.43 8904.88,-586.43 8904.88,-627.43"/>
 <text text-anchor="middle" x="8844.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 266</text>
-<text text-anchor="middle" x="8844.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((x ∘ y) ∘ z) ∘ x</text>
+<text text-anchor="middle" x="8844.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((x ◇ y) ◇ z) ◇ x</text>
 </a>
 </g>
 </g>
@@ -3314,7 +3314,7 @@
 <g id="a_node90"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="8484.88,-627.43 8363.88,-627.43 8363.88,-586.43 8484.88,-586.43 8484.88,-627.43"/>
 <text text-anchor="middle" x="8424.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 294</text>
-<text text-anchor="middle" x="8424.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((y ∘ z) ∘ y) ∘ x</text>
+<text text-anchor="middle" x="8424.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((y ◇ z) ◇ y) ◇ x</text>
 </a>
 </g>
 </g>
@@ -3333,7 +3333,7 @@
 <g id="a_node168"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="9044.88,-627.43 8923.88,-627.43 8923.88,-586.43 9044.88,-586.43 9044.88,-627.43"/>
 <text text-anchor="middle" x="8984.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 262</text>
-<text text-anchor="middle" x="8984.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((x ∘ y) ∘ x) ∘ z</text>
+<text text-anchor="middle" x="8984.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((x ◇ y) ◇ x) ◇ z</text>
 </a>
 </g>
 </g>
@@ -3352,7 +3352,7 @@
 <g id="a_node172"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="9323.5,-627.43 9203.25,-627.43 9203.25,-586.43 9323.5,-586.43 9323.5,-627.43"/>
 <text text-anchor="middle" x="9263.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 268</text>
-<text text-anchor="middle" x="9263.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((x ∘ y) ∘ z) ∘ z</text>
+<text text-anchor="middle" x="9263.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((x ◇ y) ◇ z) ◇ z</text>
 </a>
 </g>
 </g>
@@ -3371,7 +3371,7 @@
 <g id="a_node207"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="10023.88,-627.43 9902.88,-627.43 9902.88,-586.43 10023.88,-586.43 10023.88,-627.43"/>
 <text text-anchor="middle" x="9963.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 291</text>
-<text text-anchor="middle" x="9963.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((y ∘ z) ∘ x) ∘ y</text>
+<text text-anchor="middle" x="9963.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((y ◇ z) ◇ x) ◇ y</text>
 </a>
 </g>
 </g>
@@ -3399,7 +3399,7 @@
 <g id="a_node66"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="2609.38,-1125.46 2497.38,-1125.46 2497.38,-1084.46 2609.38,-1084.46 2609.38,-1125.46"/>
 <text text-anchor="middle" x="2553.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 329</text>
-<text text-anchor="middle" x="2553.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ y = x ∘ (z ∘ y)</text>
+<text text-anchor="middle" x="2553.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ y = x ◇ (z ◇ y)</text>
 </a>
 </g>
 </g>
@@ -3415,10 +3415,10 @@
 <!-- SCC112 -->
 <g id="node113" class="node">
 <title>SCC112</title>
-<g id="a_node113"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3&#10;Equations 332, 387&#10;x ∘ y = y ∘ (x ∘ x)&#10;x ∘ y = (y ∘ y) ∘ x">
+<g id="a_node113"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3&#10;Equations 332, 387&#10;x ◇ y = y ◇ (x ◇ x)&#10;x ◇ y = (y ◇ y) ◇ x">
 <ellipse fill="green" stroke="black" cx="1118.38" cy="-1104.96" rx="108.89" ry="108.89"/>
 <text text-anchor="middle" x="1118.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eqs 332, ... (2 equations)</text>
-<text text-anchor="middle" x="1118.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ y = y ∘ (x ∘ x)</text>
+<text text-anchor="middle" x="1118.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ y = y ◇ (x ◇ x)</text>
 </a>
 </g>
 </g>
@@ -3437,7 +3437,7 @@
 <g id="a_node115"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="2777.38,-1125.46 2665.38,-1125.46 2665.38,-1084.46 2777.38,-1084.46 2777.38,-1125.46"/>
 <text text-anchor="middle" x="2721.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 327</text>
-<text text-anchor="middle" x="2721.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ y = x ∘ (y ∘ z)</text>
+<text text-anchor="middle" x="2721.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ y = x ◇ (y ◇ z)</text>
 </a>
 </g>
 </g>
@@ -3465,7 +3465,7 @@
 <g id="a_node58"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="1357.38,-1125.46 1245.38,-1125.46 1245.38,-1084.46 1357.38,-1084.46 1357.38,-1125.46"/>
 <text text-anchor="middle" x="1301.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 381</text>
-<text text-anchor="middle" x="1301.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ y = (x ∘ z) ∘ y</text>
+<text text-anchor="middle" x="1301.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ y = (x ◇ z) ◇ y</text>
 </a>
 </g>
 </g>
@@ -3511,7 +3511,7 @@
 <g id="a_node92"><a xlink:title="inbound edges: 6 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="10725.25,-876.44 10603.5,-876.44 10603.5,-835.44 10725.25,-835.44 10725.25,-876.44"/>
 <text text-anchor="middle" x="10664.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 49</text>
-<text text-anchor="middle" x="10664.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ∘ (x ∘ (y ∘ x))</text>
+<text text-anchor="middle" x="10664.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ◇ (x ◇ (y ◇ x))</text>
 </a>
 </g>
 </g>
@@ -3530,7 +3530,7 @@
 <g id="a_node93"><a xlink:title="inbound edges: 5 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="11145.25,-876.44 11023.5,-876.44 11023.5,-835.44 11145.25,-835.44 11145.25,-876.44"/>
 <text text-anchor="middle" x="11084.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 52</text>
-<text text-anchor="middle" x="11084.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ∘ (y ∘ (x ∘ x))</text>
+<text text-anchor="middle" x="11084.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ◇ (y ◇ (x ◇ x))</text>
 </a>
 </g>
 </g>
@@ -3549,7 +3549,7 @@
 <g id="a_node94"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="11005.25,-876.44 10883.5,-876.44 10883.5,-835.44 11005.25,-835.44 11005.25,-876.44"/>
 <text text-anchor="middle" x="10944.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 55</text>
-<text text-anchor="middle" x="10944.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ∘ (y ∘ (y ∘ x))</text>
+<text text-anchor="middle" x="10944.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ◇ (y ◇ (y ◇ x))</text>
 </a>
 </g>
 </g>
@@ -3568,7 +3568,7 @@
 <g id="a_node96"><a xlink:title="inbound edges: 4 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="10865.25,-876.44 10743.5,-876.44 10743.5,-835.44 10865.25,-835.44 10865.25,-876.44"/>
 <text text-anchor="middle" x="10804.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 62</text>
-<text text-anchor="middle" x="10804.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ∘ (x ∘ (x ∘ x))</text>
+<text text-anchor="middle" x="10804.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ◇ (x ◇ (x ◇ x))</text>
 </a>
 </g>
 </g>
@@ -3587,7 +3587,7 @@
 <g id="a_node97"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="10305.25,-876.44 10183.5,-876.44 10183.5,-835.44 10305.25,-835.44 10305.25,-876.44"/>
 <text text-anchor="middle" x="10244.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 65</text>
-<text text-anchor="middle" x="10244.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ∘ (x ∘ (y ∘ x))</text>
+<text text-anchor="middle" x="10244.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ◇ (x ◇ (y ◇ x))</text>
 </a>
 </g>
 </g>
@@ -3606,7 +3606,7 @@
 <g id="a_node99"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="10585.25,-876.44 10463.5,-876.44 10463.5,-835.44 10585.25,-835.44 10585.25,-876.44"/>
 <text text-anchor="middle" x="10524.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 72</text>
-<text text-anchor="middle" x="10524.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ∘ (y ∘ (x ∘ x))</text>
+<text text-anchor="middle" x="10524.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ◇ (y ◇ (x ◇ x))</text>
 </a>
 </g>
 </g>
@@ -3625,7 +3625,7 @@
 <g id="a_node100"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="10445.25,-876.44 10323.5,-876.44 10323.5,-835.44 10445.25,-835.44 10445.25,-876.44"/>
 <text text-anchor="middle" x="10384.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 75</text>
-<text text-anchor="middle" x="10384.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ∘ (y ∘ (y ∘ x))</text>
+<text text-anchor="middle" x="10384.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ◇ (y ◇ (y ◇ x))</text>
 </a>
 </g>
 </g>
@@ -3644,7 +3644,7 @@
 <g id="a_node110"><a xlink:title="inbound edges: 3 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="11565.25,-876.44 11443.5,-876.44 11443.5,-835.44 11565.25,-835.44 11565.25,-876.44"/>
 <text text-anchor="middle" x="11504.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 50</text>
-<text text-anchor="middle" x="11504.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ∘ (x ∘ (y ∘ y))</text>
+<text text-anchor="middle" x="11504.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ◇ (x ◇ (y ◇ y))</text>
 </a>
 </g>
 </g>
@@ -3663,7 +3663,7 @@
 <g id="a_node173"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="11285.25,-876.44 11163.5,-876.44 11163.5,-835.44 11285.25,-835.44 11285.25,-876.44"/>
 <text text-anchor="middle" x="11224.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 53</text>
-<text text-anchor="middle" x="11224.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ∘ (y ∘ (x ∘ y))</text>
+<text text-anchor="middle" x="11224.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ◇ (y ◇ (x ◇ y))</text>
 </a>
 </g>
 </g>
@@ -3682,7 +3682,7 @@
 <g id="a_node174"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="11425.25,-876.44 11303.5,-876.44 11303.5,-835.44 11425.25,-835.44 11425.25,-876.44"/>
 <text text-anchor="middle" x="11364.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 56</text>
-<text text-anchor="middle" x="11364.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ∘ (y ∘ (y ∘ y))</text>
+<text text-anchor="middle" x="11364.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ◇ (y ◇ (y ◇ y))</text>
 </a>
 </g>
 </g>
@@ -3701,7 +3701,7 @@
 <g id="a_node182"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="11705.25,-876.44 11583.5,-876.44 11583.5,-835.44 11705.25,-835.44 11705.25,-876.44"/>
 <text text-anchor="middle" x="11644.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 66</text>
-<text text-anchor="middle" x="11644.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ∘ (x ∘ (y ∘ y))</text>
+<text text-anchor="middle" x="11644.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ◇ (x ◇ (y ◇ y))</text>
 </a>
 </g>
 </g>
@@ -3720,7 +3720,7 @@
 <g id="a_node192"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="11845.25,-876.44 11723.5,-876.44 11723.5,-835.44 11845.25,-835.44 11845.25,-876.44"/>
 <text text-anchor="middle" x="11784.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 63</text>
-<text text-anchor="middle" x="11784.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ∘ (x ∘ (x ∘ y))</text>
+<text text-anchor="middle" x="11784.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ◇ (x ◇ (x ◇ y))</text>
 </a>
 </g>
 </g>
@@ -3739,7 +3739,7 @@
 <g id="a_node208"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="11985.25,-876.44 11863.5,-876.44 11863.5,-835.44 11985.25,-835.44 11985.25,-876.44"/>
 <text text-anchor="middle" x="11924.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 73</text>
-<text text-anchor="middle" x="11924.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ∘ (y ∘ (x ∘ y))</text>
+<text text-anchor="middle" x="11924.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = y ◇ (y ◇ (x ◇ y))</text>
 </a>
 </g>
 </g>
@@ -3758,7 +3758,7 @@
 <g id="a_node51"><a xlink:title="inbound edges: 2 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="7374.25,-876.44 7252.5,-876.44 7252.5,-835.44 7374.25,-835.44 7374.25,-876.44"/>
 <text text-anchor="middle" x="7313.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 270</text>
-<text text-anchor="middle" x="7313.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ∘ x) ∘ x) ∘ x</text>
+<text text-anchor="middle" x="7313.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = ((y ◇ x) ◇ x) ◇ x</text>
 </a>
 </g>
 </g>
@@ -3777,7 +3777,7 @@
 <g id="a_node109"><a xlink:title="inbound edges: 1 &#160;outbound edges: 1">
 <polygon fill="none" stroke="black" points="7552.25,-876.44 7430.5,-876.44 7430.5,-835.44 7552.25,-835.44 7552.25,-876.44"/>
 <text text-anchor="middle" x="7491.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 48</text>
-<text text-anchor="middle" x="7491.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ∘ (x ∘ (x ∘ y))</text>
+<text text-anchor="middle" x="7491.38" y="-842.64" font-family="Times,serif" font-size="14.00">x = x ◇ (x ◇ (x ◇ y))</text>
 </a>
 </g>
 </g>
@@ -3823,7 +3823,7 @@
 <g id="a_node89"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="8694.88,-627.43 8573.88,-627.43 8573.88,-586.43 8694.88,-586.43 8694.88,-627.43"/>
 <text text-anchor="middle" x="8634.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 286</text>
-<text text-anchor="middle" x="8634.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((y ∘ y) ∘ z) ∘ x</text>
+<text text-anchor="middle" x="8634.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((y ◇ y) ◇ z) ◇ x</text>
 </a>
 </g>
 </g>
@@ -3842,7 +3842,7 @@
 <g id="a_node206"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="9742.88,-627.43 9621.88,-627.43 9621.88,-586.43 9742.88,-586.43 9742.88,-627.43"/>
 <text text-anchor="middle" x="9682.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 282</text>
-<text text-anchor="middle" x="9682.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((y ∘ y) ∘ x) ∘ z</text>
+<text text-anchor="middle" x="9682.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((y ◇ y) ◇ x) ◇ z</text>
 </a>
 </g>
 </g>
@@ -3888,7 +3888,7 @@
 <g id="a_node122"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="655.38,-1125.46 543.38,-1125.46 543.38,-1084.46 655.38,-1084.46 655.38,-1125.46"/>
 <text text-anchor="middle" x="599.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 363</text>
-<text text-anchor="middle" x="599.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ x = (x ∘ y) ∘ z</text>
+<text text-anchor="middle" x="599.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ x = (x ◇ y) ◇ z</text>
 </a>
 </g>
 </g>
@@ -3907,7 +3907,7 @@
 <g id="a_node132"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="419.38,-876.44 307.38,-876.44 307.38,-835.44 419.38,-835.44 419.38,-876.44"/>
 <text text-anchor="middle" x="363.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eq 371</text>
-<text text-anchor="middle" x="363.38" y="-842.64" font-family="Times,serif" font-size="14.00">x ∘ x = (y ∘ z) ∘ y</text>
+<text text-anchor="middle" x="363.38" y="-842.64" font-family="Times,serif" font-size="14.00">x ◇ x = (y ◇ z) ◇ y</text>
 </a>
 </g>
 </g>
@@ -3941,10 +3941,10 @@
 <!-- SCC60 -->
 <g id="node61" class="node">
 <title>SCC60</title>
-<g id="a_node61"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3&#10;Equations 39, 45, 388, 391, 399, 403&#10;x ∘ x = y ∘ x&#10;x ∘ y = z ∘ y&#10;x ∘ y = (y ∘ y) ∘ y&#10;x ∘ y = (y ∘ z) ∘ y&#10;x ∘ y = (z ∘ y) ∘ y&#10;x ∘ y = (z ∘ z) ∘ y">
+<g id="a_node61"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3&#10;Equations 39, 45, 388, 391, 399, 403&#10;x ◇ x = y ◇ x&#10;x ◇ y = z ◇ y&#10;x ◇ y = (y ◇ y) ◇ y&#10;x ◇ y = (y ◇ z) ◇ y&#10;x ◇ y = (z ◇ y) ◇ y&#10;x ◇ y = (z ◇ z) ◇ y">
 <ellipse fill="green" stroke="black" cx="1330.38" cy="-855.94" rx="104.12" ry="104.12"/>
 <text text-anchor="middle" x="1330.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eqs 39, ... (6 equations)</text>
-<text text-anchor="middle" x="1330.38" y="-842.64" font-family="Times,serif" font-size="14.00">x ∘ x = y ∘ x</text>
+<text text-anchor="middle" x="1330.38" y="-842.64" font-family="Times,serif" font-size="14.00">x ◇ x = y ◇ x</text>
 </a>
 </g>
 </g>
@@ -3963,7 +3963,7 @@
 <g id="a_node134"><a xlink:title="inbound edges: 1 &#160;outbound edges: 4">
 <polygon fill="none" stroke="black" points="655.38,-627.43 543.38,-627.43 543.38,-586.43 655.38,-586.43 655.38,-627.43"/>
 <text text-anchor="middle" x="599.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 366</text>
-<text text-anchor="middle" x="599.38" y="-593.63" font-family="Times,serif" font-size="14.00">x ∘ x = (y ∘ x) ∘ z</text>
+<text text-anchor="middle" x="599.38" y="-593.63" font-family="Times,serif" font-size="14.00">x ◇ x = (y ◇ x) ◇ z</text>
 </a>
 </g>
 </g>
@@ -3991,7 +3991,7 @@
 <g id="a_node120"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="1487.38,-1125.46 1375.38,-1125.46 1375.38,-1084.46 1487.38,-1084.46 1487.38,-1125.46"/>
 <text text-anchor="middle" x="1431.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 379</text>
-<text text-anchor="middle" x="1431.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ∘ y = (x ∘ y) ∘ z</text>
+<text text-anchor="middle" x="1431.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x ◇ y = (x ◇ y) ◇ z</text>
 </a>
 </g>
 </g>
@@ -4016,10 +4016,10 @@
 <!-- SCC122 -->
 <g id="node123" class="node">
 <title>SCC122</title>
-<g id="a_node123"><a xlink:title="inbound edges: 2 &#160;outbound edges: 4&#10;Equations 374, 376, 380, 382&#10;x ∘ y = (x ∘ x) ∘ x&#10;x ∘ y = (x ∘ x) ∘ z&#10;x ∘ y = (x ∘ z) ∘ x&#10;x ∘ y = (x ∘ z) ∘ z">
+<g id="a_node123"><a xlink:title="inbound edges: 2 &#160;outbound edges: 4&#10;Equations 374, 376, 380, 382&#10;x ◇ y = (x ◇ x) ◇ x&#10;x ◇ y = (x ◇ x) ◇ z&#10;x ◇ y = (x ◇ z) ◇ x&#10;x ◇ y = (x ◇ z) ◇ z">
 <ellipse fill="none" stroke="black" cx="1462.38" cy="-606.93" rx="108.89" ry="108.89"/>
 <text text-anchor="middle" x="1462.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eqs 374, ... (4 equations)</text>
-<text text-anchor="middle" x="1462.38" y="-593.63" font-family="Times,serif" font-size="14.00">x ∘ y = (x ∘ x) ∘ x</text>
+<text text-anchor="middle" x="1462.38" y="-593.63" font-family="Times,serif" font-size="14.00">x ◇ y = (x ◇ x) ◇ x</text>
 </a>
 </g>
 </g>
@@ -4053,10 +4053,10 @@
 <!-- SCC68 -->
 <g id="node69" class="node">
 <title>SCC68</title>
-<g id="a_node69"><a xlink:title="inbound edges: 2 &#160;outbound edges: 4&#10;Equations 336, 339, 347, 351&#10;x ∘ y = y ∘ (y ∘ y)&#10;x ∘ y = y ∘ (z ∘ y)&#10;x ∘ y = z ∘ (y ∘ y)&#10;x ∘ y = z ∘ (z ∘ y)">
+<g id="a_node69"><a xlink:title="inbound edges: 2 &#160;outbound edges: 4&#10;Equations 336, 339, 347, 351&#10;x ◇ y = y ◇ (y ◇ y)&#10;x ◇ y = y ◇ (z ◇ y)&#10;x ◇ y = z ◇ (y ◇ y)&#10;x ◇ y = z ◇ (z ◇ y)">
 <ellipse fill="none" stroke="black" cx="2238.38" cy="-606.93" rx="108.89" ry="108.89"/>
 <text text-anchor="middle" x="2238.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eqs 336, ... (4 equations)</text>
-<text text-anchor="middle" x="2238.38" y="-593.63" font-family="Times,serif" font-size="14.00">x ∘ y = y ∘ (y ∘ y)</text>
+<text text-anchor="middle" x="2238.38" y="-593.63" font-family="Times,serif" font-size="14.00">x ◇ y = y ◇ (y ◇ y)</text>
 </a>
 </g>
 </g>
@@ -4147,7 +4147,7 @@
 <g id="a_node129"><a xlink:title="inbound edges: 1 &#160;outbound edges: 4">
 <polygon fill="none" stroke="black" points="2097.38,-627.43 1985.38,-627.43 1985.38,-586.43 2097.38,-586.43 2097.38,-627.43"/>
 <text text-anchor="middle" x="2041.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 314</text>
-<text text-anchor="middle" x="2041.38" y="-593.63" font-family="Times,serif" font-size="14.00">x ∘ x = y ∘ (x ∘ z)</text>
+<text text-anchor="middle" x="2041.38" y="-593.63" font-family="Times,serif" font-size="14.00">x ◇ x = y ◇ (x ◇ z)</text>
 </a>
 </g>
 </g>
@@ -4190,10 +4190,10 @@
 <!-- SCC116 -->
 <g id="node117" class="node">
 <title>SCC116</title>
-<g id="a_node117"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3&#10;Equations 38, 42, 322, 324, 328, 330&#10;x ∘ x = x ∘ y&#10;x ∘ y = x ∘ z&#10;x ∘ y = x ∘ (x ∘ x)&#10;x ∘ y = x ∘ (x ∘ z)&#10;x ∘ y = x ∘ (z ∘ x)&#10;x ∘ y = x ∘ (z ∘ z)">
+<g id="a_node117"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3&#10;Equations 38, 42, 322, 324, 328, 330&#10;x ◇ x = x ◇ y&#10;x ◇ y = x ◇ z&#10;x ◇ y = x ◇ (x ◇ x)&#10;x ◇ y = x ◇ (x ◇ z)&#10;x ◇ y = x ◇ (z ◇ x)&#10;x ◇ y = x ◇ (z ◇ z)">
 <ellipse fill="green" stroke="black" cx="2422.38" cy="-855.94" rx="104.12" ry="104.12"/>
 <text text-anchor="middle" x="2422.38" y="-859.14" font-family="Times,serif" font-size="14.00">Eqs 38, ... (6 equations)</text>
-<text text-anchor="middle" x="2422.38" y="-842.64" font-family="Times,serif" font-size="14.00">x ∘ x = x ∘ y</text>
+<text text-anchor="middle" x="2422.38" y="-842.64" font-family="Times,serif" font-size="14.00">x ◇ x = x ◇ y</text>
 </a>
 </g>
 </g>
@@ -4236,10 +4236,10 @@
 <!-- SCC134 -->
 <g id="node135" class="node">
 <title>SCC134</title>
-<g id="a_node135"><a xlink:title="inbound edges: 1 &#160;outbound edges: 7&#10;Equations 41, 44, 334, 337, 338, 340, 342, 344, 346, 348, 350, 352, 386, 389, 390, 392, 394, 396, 398, 400, 402, 404&#10;x ∘ x = y ∘ z&#10;x ∘ y = y ∘ z&#10;x ∘ y = y ∘ (x ∘ z)&#10;x ∘ y = y ∘ (y ∘ z)&#10;x ∘ y = y ∘ (z ∘ x)&#10;x ∘ y = y ∘ (z ∘ z)&#10;x ∘ y = z ∘ (x ∘ x)&#10;x ∘ y = z ∘ (x ∘ z)&#10;x ∘ y = z ∘ (y ∘ x)&#10;x ∘ y = z ∘ (y ∘ z)&#10;x ∘ y = z ∘ (z ∘ x)&#10;x ∘ y = z ∘ (z ∘ z)&#10;x ∘ y = (y ∘ x) ∘ z&#10;x ∘ y = (y ∘ y) ∘ z&#10;x ∘ y = (y ∘ z) ∘ x&#10;x ∘ y = (y ∘ z) ∘ z&#10;x ∘ y = (z ∘ x) ∘ x&#10;x ∘ y = (z ∘ x) ∘ z&#10;x ∘ y = (z ∘ y) ∘ x&#10;x ∘ y = (z ∘ y) ∘ z&#10;x ∘ y = (z ∘ z) ∘ x&#10;x ∘ y = (z ∘ z) ∘ z">
+<g id="a_node135"><a xlink:title="inbound edges: 1 &#160;outbound edges: 7&#10;Equations 41, 44, 334, 337, 338, 340, 342, 344, 346, 348, 350, 352, 386, 389, 390, 392, 394, 396, 398, 400, 402, 404&#10;x ◇ x = y ◇ z&#10;x ◇ y = y ◇ z&#10;x ◇ y = y ◇ (x ◇ z)&#10;x ◇ y = y ◇ (y ◇ z)&#10;x ◇ y = y ◇ (z ◇ x)&#10;x ◇ y = y ◇ (z ◇ z)&#10;x ◇ y = z ◇ (x ◇ x)&#10;x ◇ y = z ◇ (x ◇ z)&#10;x ◇ y = z ◇ (y ◇ x)&#10;x ◇ y = z ◇ (y ◇ z)&#10;x ◇ y = z ◇ (z ◇ x)&#10;x ◇ y = z ◇ (z ◇ z)&#10;x ◇ y = (y ◇ x) ◇ z&#10;x ◇ y = (y ◇ y) ◇ z&#10;x ◇ y = (y ◇ z) ◇ x&#10;x ◇ y = (y ◇ z) ◇ z&#10;x ◇ y = (z ◇ x) ◇ x&#10;x ◇ y = (z ◇ x) ◇ z&#10;x ◇ y = (z ◇ y) ◇ x&#10;x ◇ y = (z ◇ y) ◇ z&#10;x ◇ y = (z ◇ z) ◇ x&#10;x ◇ y = (z ◇ z) ◇ z">
 <ellipse fill="green" stroke="black" cx="1618.38" cy="-353.14" rx="108.89" ry="108.89"/>
 <text text-anchor="middle" x="1618.38" y="-356.34" font-family="Times,serif" font-size="14.00">Eqs 41, ... (22 equations)</text>
-<text text-anchor="middle" x="1618.38" y="-339.84" font-family="Times,serif" font-size="14.00">x ∘ x = y ∘ z</text>
+<text text-anchor="middle" x="1618.38" y="-339.84" font-family="Times,serif" font-size="14.00">x ◇ x = y ◇ z</text>
 </a>
 </g>
 </g>
@@ -4267,7 +4267,7 @@
 <g id="a_node75"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="7627.88,-1125.46 7506.88,-1125.46 7506.88,-1084.46 7627.88,-1084.46 7627.88,-1125.46"/>
 <text text-anchor="middle" x="7567.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 234</text>
-<text text-anchor="middle" x="7567.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ (y ∘ z)) ∘ x</text>
+<text text-anchor="middle" x="7567.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ (y ◇ z)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -4286,7 +4286,7 @@
 <g id="a_node84"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="8410.88,-1125.46 8289.88,-1125.46 8289.88,-1084.46 8410.88,-1084.46 8410.88,-1125.46"/>
 <text text-anchor="middle" x="8350.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 214</text>
-<text text-anchor="middle" x="8350.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ (y ∘ z)) ∘ x</text>
+<text text-anchor="middle" x="8350.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ (y ◇ z)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -4302,10 +4302,10 @@
 <!-- SCC110 -->
 <g id="node111" class="node">
 <title>SCC110</title>
-<g id="a_node111"><a xlink:title="inbound edges: 1 &#160;outbound edges: 7&#10;Equations 9, 51&#10;x = x ∘ (x ∘ y)&#10;x = x ∘ (x ∘ (y ∘ z))">
+<g id="a_node111"><a xlink:title="inbound edges: 1 &#160;outbound edges: 7&#10;Equations 9, 51&#10;x = x ◇ (x ◇ y)&#10;x = x ◇ (x ◇ (y ◇ z))">
 <ellipse fill="none" stroke="black" cx="7491.38" cy="-606.93" rx="99.35" ry="99.35"/>
 <text text-anchor="middle" x="7491.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eqs 9, ... (2 equations)</text>
-<text text-anchor="middle" x="7491.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = x ∘ (x ∘ y)</text>
+<text text-anchor="middle" x="7491.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = x ◇ (x ◇ y)</text>
 </a>
 </g>
 </g>
@@ -4324,7 +4324,7 @@
 <g id="a_node146"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="8727.88,-1125.46 8606.88,-1125.46 8606.88,-1084.46 8727.88,-1084.46 8727.88,-1125.46"/>
 <text text-anchor="middle" x="8667.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 207</text>
-<text text-anchor="middle" x="8667.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ (x ∘ y)) ∘ z</text>
+<text text-anchor="middle" x="8667.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ (x ◇ y)) ◇ z</text>
 </a>
 </g>
 </g>
@@ -4343,7 +4343,7 @@
 <g id="a_node151"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="9283.88,-1125.46 9162.88,-1125.46 9162.88,-1084.46 9283.88,-1084.46 9283.88,-1125.46"/>
 <text text-anchor="middle" x="9223.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 215</text>
-<text text-anchor="middle" x="9223.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ (y ∘ z)) ∘ y</text>
+<text text-anchor="middle" x="9223.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ (y ◇ z)) ◇ y</text>
 </a>
 </g>
 </g>
@@ -4362,7 +4362,7 @@
 <g id="a_node199"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="8588.88,-1125.46 8467.88,-1125.46 8467.88,-1084.46 8588.88,-1084.46 8588.88,-1125.46"/>
 <text text-anchor="middle" x="8528.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 225</text>
-<text text-anchor="middle" x="8528.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ (x ∘ z)) ∘ y</text>
+<text text-anchor="middle" x="8528.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ (x ◇ z)) ◇ y</text>
 </a>
 </g>
 </g>
@@ -4390,7 +4390,7 @@
 <g id="a_node78"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="7311.88,-1125.46 7190.88,-1125.46 7190.88,-1084.46 7311.88,-1084.46 7311.88,-1125.46"/>
 <text text-anchor="middle" x="7251.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 242</text>
-<text text-anchor="middle" x="7251.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ (z ∘ y)) ∘ x</text>
+<text text-anchor="middle" x="7251.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ (z ◇ y)) ◇ x</text>
 </a>
 </g>
 </g>
@@ -4499,7 +4499,7 @@
 <g id="a_node148"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="9005.88,-1125.46 8884.88,-1125.46 8884.88,-1084.46 9005.88,-1084.46 9005.88,-1125.46"/>
 <text text-anchor="middle" x="8945.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 210</text>
-<text text-anchor="middle" x="8945.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ (y ∘ x)) ∘ z</text>
+<text text-anchor="middle" x="8945.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ (y ◇ x)) ◇ z</text>
 </a>
 </g>
 </g>
@@ -4518,7 +4518,7 @@
 <g id="a_node152"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="8866.5,-1125.46 8746.25,-1125.46 8746.25,-1084.46 8866.5,-1084.46 8866.5,-1125.46"/>
 <text text-anchor="middle" x="8806.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 216</text>
-<text text-anchor="middle" x="8806.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ (y ∘ z)) ∘ z</text>
+<text text-anchor="middle" x="8806.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ (y ◇ z)) ◇ z</text>
 </a>
 </g>
 </g>
@@ -4537,7 +4537,7 @@
 <g id="a_node201"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="8044.88,-1125.46 7923.88,-1125.46 7923.88,-1084.46 8044.88,-1084.46 8044.88,-1125.46"/>
 <text text-anchor="middle" x="7984.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 239</text>
-<text text-anchor="middle" x="7984.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ∘ (z ∘ x)) ∘ y</text>
+<text text-anchor="middle" x="7984.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (y ◇ (z ◇ x)) ◇ y</text>
 </a>
 </g>
 </g>
@@ -4592,7 +4592,7 @@
 <g id="a_node150"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="9144.88,-1125.46 9023.88,-1125.46 9023.88,-1084.46 9144.88,-1084.46 9144.88,-1125.46"/>
 <text text-anchor="middle" x="9084.38" y="-1108.16" font-family="Times,serif" font-size="14.00">Eq 213</text>
-<text text-anchor="middle" x="9084.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ∘ (y ∘ y)) ∘ z</text>
+<text text-anchor="middle" x="9084.38" y="-1091.66" font-family="Times,serif" font-size="14.00">x = (x ◇ (y ◇ y)) ◇ z</text>
 </a>
 </g>
 </g>
@@ -4647,7 +4647,7 @@
 <g id="a_node166"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="9603.88,-627.43 9482.88,-627.43 9482.88,-586.43 9603.88,-586.43 9603.88,-627.43"/>
 <text text-anchor="middle" x="9543.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 259</text>
-<text text-anchor="middle" x="9543.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((x ∘ x) ∘ y) ∘ z</text>
+<text text-anchor="middle" x="9543.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((x ◇ x) ◇ y) ◇ z</text>
 </a>
 </g>
 </g>
@@ -4666,7 +4666,7 @@
 <g id="a_node171"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="9183.88,-627.43 9062.88,-627.43 9062.88,-586.43 9183.88,-586.43 9183.88,-627.43"/>
 <text text-anchor="middle" x="9123.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 267</text>
-<text text-anchor="middle" x="9123.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((x ∘ y) ∘ z) ∘ y</text>
+<text text-anchor="middle" x="9123.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((x ◇ y) ◇ z) ◇ y</text>
 </a>
 </g>
 </g>
@@ -4685,7 +4685,7 @@
 <g id="a_node204"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="9883.88,-627.43 9762.88,-627.43 9762.88,-586.43 9883.88,-586.43 9883.88,-627.43"/>
 <text text-anchor="middle" x="9823.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 277</text>
-<text text-anchor="middle" x="9823.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((y ∘ x) ∘ z) ∘ y</text>
+<text text-anchor="middle" x="9823.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((y ◇ x) ◇ z) ◇ y</text>
 </a>
 </g>
 </g>
@@ -4713,7 +4713,7 @@
 <g id="a_node170"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="9463.88,-627.43 9342.88,-627.43 9342.88,-586.43 9463.88,-586.43 9463.88,-627.43"/>
 <text text-anchor="middle" x="9403.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 265</text>
-<text text-anchor="middle" x="9403.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((x ∘ y) ∘ y) ∘ z</text>
+<text text-anchor="middle" x="9403.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = ((x ◇ y) ◇ y) ◇ z</text>
 </a>
 </g>
 </g>
@@ -4849,7 +4849,7 @@
 <g id="a_node95"><a xlink:title="inbound edges: 2 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="11000.88,-627.43 10879.88,-627.43 10879.88,-586.43 11000.88,-586.43 11000.88,-627.43"/>
 <text text-anchor="middle" x="10940.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 58</text>
-<text text-anchor="middle" x="10940.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = x ∘ (y ∘ (z ∘ x))</text>
+<text text-anchor="middle" x="10940.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = x ◇ (y ◇ (z ◇ x))</text>
 </a>
 </g>
 </g>
@@ -4868,7 +4868,7 @@
 <g id="a_node98"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="10583.88,-627.43 10462.88,-627.43 10462.88,-586.43 10583.88,-586.43 10583.88,-627.43"/>
 <text text-anchor="middle" x="10523.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 68</text>
-<text text-anchor="middle" x="10523.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ∘ (x ∘ (z ∘ x))</text>
+<text text-anchor="middle" x="10523.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ◇ (x ◇ (z ◇ x))</text>
 </a>
 </g>
 </g>
@@ -4887,7 +4887,7 @@
 <g id="a_node101"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="10444.88,-627.43 10323.88,-627.43 10323.88,-586.43 10444.88,-586.43 10444.88,-627.43"/>
 <text text-anchor="middle" x="10384.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 78</text>
-<text text-anchor="middle" x="10384.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ∘ (y ∘ (z ∘ x))</text>
+<text text-anchor="middle" x="10384.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ◇ (y ◇ (z ◇ x))</text>
 </a>
 </g>
 </g>
@@ -4915,7 +4915,7 @@
 <g id="a_node175"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="11211.88,-627.43 11090.88,-627.43 11090.88,-586.43 11211.88,-586.43 11211.88,-627.43"/>
 <text text-anchor="middle" x="11151.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 59</text>
-<text text-anchor="middle" x="11151.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = x ∘ (y ∘ (z ∘ y))</text>
+<text text-anchor="middle" x="11151.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = x ◇ (y ◇ (z ◇ y))</text>
 </a>
 </g>
 </g>
@@ -4934,7 +4934,7 @@
 <g id="a_node193"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="11693.88,-627.43 11572.88,-627.43 11572.88,-586.43 11693.88,-586.43 11693.88,-627.43"/>
 <text text-anchor="middle" x="11633.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 69</text>
-<text text-anchor="middle" x="11633.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ∘ (x ∘ (z ∘ y))</text>
+<text text-anchor="middle" x="11633.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ◇ (x ◇ (z ◇ y))</text>
 </a>
 </g>
 </g>
@@ -4962,7 +4962,7 @@
 <g id="a_node102"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="10861.88,-627.43 10740.88,-627.43 10740.88,-586.43 10861.88,-586.43 10861.88,-627.43"/>
 <text text-anchor="middle" x="10801.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 82</text>
-<text text-anchor="middle" x="10801.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ∘ (z ∘ (x ∘ x))</text>
+<text text-anchor="middle" x="10801.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ◇ (z ◇ (x ◇ x))</text>
 </a>
 </g>
 </g>
@@ -4981,7 +4981,7 @@
 <g id="a_node103"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="10305.88,-627.43 10184.88,-627.43 10184.88,-586.43 10305.88,-586.43 10305.88,-627.43"/>
 <text text-anchor="middle" x="10245.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 86</text>
-<text text-anchor="middle" x="10245.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ∘ (z ∘ (y ∘ x))</text>
+<text text-anchor="middle" x="10245.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ◇ (z ◇ (y ◇ x))</text>
 </a>
 </g>
 </g>
@@ -5000,7 +5000,7 @@
 <g id="a_node176"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="11387.5,-627.43 11267.25,-627.43 11267.25,-586.43 11387.5,-586.43 11387.5,-627.43"/>
 <text text-anchor="middle" x="11327.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 60</text>
-<text text-anchor="middle" x="11327.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = x ∘ (y ∘ (z ∘ z))</text>
+<text text-anchor="middle" x="11327.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = x ◇ (y ◇ (z ◇ z))</text>
 </a>
 </g>
 </g>
@@ -5019,7 +5019,7 @@
 <g id="a_node209"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="11838.88,-627.43 11717.88,-627.43 11717.88,-586.43 11838.88,-586.43 11838.88,-627.43"/>
 <text text-anchor="middle" x="11778.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 83</text>
-<text text-anchor="middle" x="11778.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ∘ (z ∘ (x ∘ y))</text>
+<text text-anchor="middle" x="11778.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ◇ (z ◇ (x ◇ y))</text>
 </a>
 </g>
 </g>
@@ -5047,7 +5047,7 @@
 <g id="a_node104"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="10722.5,-627.43 10602.25,-627.43 10602.25,-586.43 10722.5,-586.43 10722.5,-627.43"/>
 <text text-anchor="middle" x="10662.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 90</text>
-<text text-anchor="middle" x="10662.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ∘ (z ∘ (z ∘ x))</text>
+<text text-anchor="middle" x="10662.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ◇ (z ◇ (z ◇ x))</text>
 </a>
 </g>
 </g>
@@ -5111,7 +5111,7 @@
 <g id="a_node183"><a xlink:title="inbound edges: 1 &#160;outbound edges: 3">
 <polygon fill="none" stroke="black" points="11544.5,-627.43 11424.25,-627.43 11424.25,-586.43 11544.5,-586.43 11544.5,-627.43"/>
 <text text-anchor="middle" x="11484.38" y="-610.13" font-family="Times,serif" font-size="14.00">Eq 70</text>
-<text text-anchor="middle" x="11484.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ∘ (x ∘ (z ∘ z))</text>
+<text text-anchor="middle" x="11484.38" y="-593.63" font-family="Times,serif" font-size="14.00">x = y ◇ (x ◇ (z ◇ z))</text>
 </a>
 </g>
 </g>

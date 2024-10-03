@@ -1,5 +1,5 @@
 ﻿-- This countermodel was automatically generated using Z3.
--- It refutes x ∘ (x ∘ y) = x ∘ (y ∘ x) -> x ∘ (y ∘ z) = x ∘ (z ∘ y)
+-- It refutes x ◇ (x ◇ y) = x ◇ (y ◇ x) -> x ◇ (y ◇ z) = x ◇ (z ◇ y)
 import equational_theories.Magma
 import equational_theories.AllEquations
 import Mathlib.Data.Fintype.Basic

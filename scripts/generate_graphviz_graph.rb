@@ -54,7 +54,7 @@ if options[:limit_variables]
 end
 if options[:limit_operations]
   vertices_to_delete.concat all_vertices.filter { |k|
-    equations[k].count("∘") > options[:limit_operations]
+    equations[k].count("◇") > options[:limit_operations]
   }
 end
 if options[:remove_eq1]

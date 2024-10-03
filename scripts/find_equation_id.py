@@ -9,7 +9,7 @@ ExprType = Union[str, Tuple['ExprType', str, 'ExprType']]
 
 def tokenize(expr: str) -> List[str]:
     """Convert an expression string into a list of tokens."""
-    expr = expr.replace(".", "∘").replace("(", " ( ").replace(")", " ) ").replace("∘", " ∘ ")
+    expr = expr.replace(".", "◇").replace("(", " ( ").replace(")", " ) ").replace("◇", " ◇ ")
     return [token for token in expr.split() if token]
 
 def parse_expr(tokens: List[str]) -> ExprType:
@@ -22,25 +22,25 @@ def parse_expr(tokens: List[str]) -> ExprType:
         if tokens[0] == '(':
             tokens.pop(0)  # Remove opening parenthesis
             left = parse_element()
-            if not tokens or tokens[0] != '∘':
-                raise ValueError("Expected '∘' after element in parentheses")
-            tokens.pop(0)  # Remove '∘'
+            if not tokens or tokens[0] != '◇':
+                raise ValueError("Expected '◇' after element in parentheses")
+            tokens.pop(0)  # Remove '◇'
             right = parse_element()
             if not tokens or tokens[0] != ')':
                 raise ValueError("Missing closing parenthesis")
             tokens.pop(0)  # Remove closing parenthesis
-            return (left, '∘', right)
+            return (left, '◇', right)
         raise ValueError(f"Unexpected token: {tokens[0]}")
 
     result = parse_element()
     if tokens:
-        if tokens[0] != '∘':
+        if tokens[0] != '◇':
             raise ValueError(f"Unexpected token after main element: {tokens[0]}")
-        tokens.pop(0)  # Remove '∘'
+        tokens.pop(0)  # Remove '◇'
         right = parse_element()
         if tokens:
             raise ValueError(f"Unexpected tokens at the end of expression: {' '.join(tokens)}")
-        result = (result, '∘', right)
+        result = (result, '◇', right)
     return result
 
 def canonicalize_equation(eq_str: str) -> str:
@@ -71,7 +71,7 @@ def _canonicalize_equation_help(eq_str: str) -> str:
     
     def rewrite_expr(expr: ExprType) -> ExprType:
         if isinstance(expr, str):
-            if expr == '∘':
+            if expr == '◇':
                 return expr
             if expr not in var_map:
                 var_map[expr] = next(next_var)
@@ -152,7 +152,7 @@ def format_expr(expr: Union[int, Tuple], outermost: bool = True) -> str:
     """Format an expression as a string."""
     if isinstance(expr, int):
         return VAR_NAMES[expr]
-    s = f'{format_expr(expr[0], outermost=False)} ∘ {format_expr(expr[1], outermost=False)}'
+    s = f'{format_expr(expr[0], outermost=False)} ◇ {format_expr(expr[1], outermost=False)}'
     if not outermost:
         return f'({s})'
     return s

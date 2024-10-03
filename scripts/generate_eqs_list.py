@@ -21,7 +21,7 @@ def format_shape(shape, outermost=True):
     if shape == '.':
         return '_'
     left, right = shape
-    s = f'{format_shape(left, outermost=False)} ∘ {format_shape(right, outermost=False)}'
+    s = f'{format_shape(left, outermost=False)} ◇ {format_shape(right, outermost=False)}'
     if not outermost:
         return f'({s})'
     return s
@@ -68,7 +68,7 @@ def generate_all_eqs():
 def format_expr(expr, outermost=True):
     if isinstance(expr, int):
         return VAR_NAMES[expr]
-    s = f'{format_expr(expr[0], outermost=False)} ∘ {format_expr(expr[1], outermost=False)}'
+    s = f'{format_expr(expr[0], outermost=False)} ◇ {format_expr(expr[1], outermost=False)}'
     if not outermost:
         return f'({s})'
     return s

@@ -60,7 +60,7 @@ If this runs very rapidly, it's possible that your files are not being run corre
 
 ```
 equational_theories/BruteforceApply/bf_17.lean:4:2: error: tactic 'apply' failed, failed to unify
-  ?x = ?y ∘ (?y ∘ ?y)
+  ?x = ?y ◇ (?y ◇ ?y)
 with
   x✝ = y✝
 G : Type u_1

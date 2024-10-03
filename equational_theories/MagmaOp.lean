@@ -17,7 +17,7 @@ match w with
 def Op (G : Type) : Type := G
 
 @[simp]
-instance opMagma {G : Type} [Magma G] : Magma (Op G) := { op := λ (x y : G) ↦ (y ∘ x : G) }
+instance opMagma {G : Type} [Magma G] : Magma (Op G) := { op := λ (x y : G) ↦ (y ◇ x : G) }
 
 
 theorem evalInMagmaOp {α G} [Magma G] (φ : α → G) (w : FreeMagma α):

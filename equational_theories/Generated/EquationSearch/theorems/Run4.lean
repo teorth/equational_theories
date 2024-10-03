@@ -13,7 +13,7 @@ import Mathlib.Tactic
 namespace Run4
 @[equational_result]
 theorem Equation48_implies_Equation615 (G: Type _) [Magma G] (h: Equation48 G) : Equation615 G := by
-  have eq375 (x y : G) : x ∘ y = (x ∘ x) ∘ y := by
+  have eq375 (x y : G) : x ◇ y = (x ◇ x) ◇ y := by
     apply Run3.Equation48_implies_Equation3 at h
     apply RewriteHypothesis.Equation3_implies_Equation3715 at h
     apply NthRewrites.Equation3715_implies_Equation375 at h
@@ -25,7 +25,7 @@ theorem Equation48_implies_Equation615 (G: Type _) [Magma G] (h: Equation48 G) :
   apply h
 @[equational_result]
 theorem Equation57_implies_Equation61 (G: Type _) [Magma G] (h: Equation57 G) : Equation61 G := by
-  have eq3267 (x y z w : G) : x ∘ x = x ∘ (y ∘ (z ∘ w)) := by
+  have eq3267 (x y z w : G) : x ◇ x = x ◇ (y ◇ (z ◇ w)) := by
     apply Run3.Equation57_implies_Equation3336 at h
     apply Apply.Equation3336_implies_Equation3335 at h
     apply SimpleRewrites.Equation3335_implies_Equation3305 at h
@@ -35,7 +35,7 @@ theorem Equation57_implies_Equation61 (G: Type _) [Magma G] (h: Equation57 G) : 
     apply SimpleRewrites.Equation331_implies_Equation311 at h
     apply Apply.Equation311_implies_Equation3267 at h
     apply h
-  have eq3263 (x y z : G) : x ∘ x = x ∘ (y ∘ (y ∘ z)) := by
+  have eq3263 (x y z : G) : x ◇ x = x ◇ (y ◇ (y ◇ z)) := by
     apply Run3.Equation57_implies_Equation3336 at h
     apply Apply.Equation3336_implies_Equation3335 at h
     apply SimpleRewrites.Equation3335_implies_Equation3305 at h
@@ -55,7 +55,7 @@ theorem Equation57_implies_Equation61 (G: Type _) [Magma G] (h: Equation57 G) : 
   repeat assumption
 @[equational_result]
 theorem Equation64_implies_Equation98 (G: Type _) [Magma G] (h: Equation64 G) : Equation98 G := by
-  have eq3304 (x y z w u : G) : x ∘ x = y ∘ (z ∘ (w ∘ u)) := by
+  have eq3304 (x y z w u : G) : x ◇ x = y ◇ (z ◇ (w ◇ u)) := by
     apply Run3.Equation64_implies_Equation3403 at h
     apply Apply.Equation3403_implies_Equation3402 at h
     apply RewriteCombinations.Equation3402_implies_Equation3357 at h
@@ -72,7 +72,7 @@ theorem Equation64_implies_Equation98 (G: Type _) [Magma G] (h: Equation64 G) : 
     apply RewriteCombinations.Equation314_implies_Equation3291 at h
     apply Run1.Equation3291_implies_Equation3304 at h
     apply h
-  have eq3270 (x y z : G) : x ∘ x = y ∘ (x ∘ (x ∘ z)) := by
+  have eq3270 (x y z : G) : x ◇ x = y ◇ (x ◇ (x ◇ z)) := by
     apply Run3.Equation64_implies_Equation3403 at h
     apply Apply.Equation3403_implies_Equation3402 at h
     apply RewriteCombinations.Equation3402_implies_Equation3357 at h
@@ -99,7 +99,7 @@ theorem Equation64_implies_Equation98 (G: Type _) [Magma G] (h: Equation64 G) : 
   repeat assumption
 @[equational_result]
 theorem Equation67_implies_Equation681 (G: Type _) [Magma G] (h: Equation67 G) : Equation681 G := by
-  have eq375 (x y : G) : x ∘ y = (x ∘ x) ∘ y := by
+  have eq375 (x y : G) : x ◇ y = (x ◇ x) ◇ y := by
     apply Apply.Equation67_implies_Equation48 at h
     apply Run3.Equation48_implies_Equation3 at h
     apply RewriteHypothesis.Equation3_implies_Equation3715 at h
@@ -112,7 +112,7 @@ theorem Equation67_implies_Equation681 (G: Type _) [Magma G] (h: Equation67 G) :
   apply h
 @[equational_result]
 theorem Equation270_implies_Equation2899 (G: Type _) [Magma G] (h: Equation270 G) : Equation2899 G := by
-  have eq326 (x y : G) : x ∘ y = x ∘ (y ∘ y) := by
+  have eq326 (x y : G) : x ◇ y = x ◇ (y ◇ y) := by
     apply Run3.Equation270_implies_Equation3 at h
     apply RewriteHypothesis.Equation3_implies_Equation3715 at h
     apply NthRewrites.Equation3715_implies_Equation326 at h
@@ -124,7 +124,7 @@ theorem Equation270_implies_Equation2899 (G: Type _) [Magma G] (h: Equation270 G
   apply h
 @[equational_result]
 theorem Equation272_implies_Equation98 (G: Type _) [Magma G] (h: Equation272 G) : Equation98 G := by
-  have eq3304 (x y z w u : G) : x ∘ x = y ∘ (z ∘ (w ∘ u)) := by
+  have eq3304 (x y z w u : G) : x ◇ x = y ◇ (z ◇ (w ◇ u)) := by
     apply Run3.Equation272_implies_Equation4193 at h
     apply RewriteCombinations.Equation4193_implies_Equation4191 at h
     apply RewriteCombinations.Equation4191_implies_Equation4156 at h
@@ -138,7 +138,7 @@ theorem Equation272_implies_Equation98 (G: Type _) [Magma G] (h: Equation272 G) 
     apply RewriteCombinations.Equation314_implies_Equation3291 at h
     apply Run1.Equation3291_implies_Equation3304 at h
     apply h
-  have eq4082 (x y z : G) : x ∘ x = ((y ∘ x) ∘ x) ∘ z := by
+  have eq4082 (x y z : G) : x ◇ x = ((y ◇ x) ◇ x) ◇ z := by
     apply Run3.Equation272_implies_Equation4193 at h
     apply RewriteCombinations.Equation4193_implies_Equation4191 at h
     apply RewriteCombinations.Equation4191_implies_Equation4156 at h
@@ -164,7 +164,7 @@ theorem Equation272_implies_Equation98 (G: Type _) [Magma G] (h: Equation272 G) 
   repeat assumption
 @[equational_result]
 theorem Equation276_implies_Equation4086 (G: Type _) [Magma G] (h: Equation276 G) : Equation4086 G := by
-  have eq3 (x : G) : x = x ∘ x := by
+  have eq3 (x : G) : x = x ◇ x := by
     apply Apply.Equation276_implies_Equation270 at h
     apply Run3.Equation270_implies_Equation3 at h
     apply h
@@ -173,7 +173,7 @@ theorem Equation276_implies_Equation4086 (G: Type _) [Magma G] (h: Equation276 G
   apply h
 @[equational_result]
 theorem Equation276_implies_Equation2905 (G: Type _) [Magma G] (h: Equation276 G) : Equation2905 G := by
-  have eq326 (x y : G) : x ∘ y = x ∘ (y ∘ y) := by
+  have eq326 (x y : G) : x ◇ y = x ◇ (y ◇ y) := by
     apply Apply.Equation276_implies_Equation270 at h
     apply Run3.Equation270_implies_Equation3 at h
     apply RewriteHypothesis.Equation3_implies_Equation3715 at h
@@ -186,7 +186,7 @@ theorem Equation276_implies_Equation2905 (G: Type _) [Magma G] (h: Equation276 G
   apply h
 @[equational_result]
 theorem Equation290_implies_Equation4100 (G: Type _) [Magma G] (h: Equation290 G) : Equation4100 G := by
-  have eq3 (x : G) : x = x ∘ x := by
+  have eq3 (x : G) : x = x ◇ x := by
     apply Apply.Equation290_implies_Equation270 at h
     apply Run3.Equation270_implies_Equation3 at h
     apply h
@@ -195,7 +195,7 @@ theorem Equation290_implies_Equation4100 (G: Type _) [Magma G] (h: Equation290 G
   apply h
 @[equational_result]
 theorem Equation292_implies_Equation3009 (G: Type _) [Magma G] (h: Equation292 G) : Equation3009 G := by
-  have eq326 (x y : G) : x ∘ y = x ∘ (y ∘ y) := by
+  have eq326 (x y : G) : x ◇ y = x ◇ (y ◇ y) := by
     apply Apply.Equation292_implies_Equation270 at h
     apply Run3.Equation270_implies_Equation3 at h
     apply RewriteHypothesis.Equation3_implies_Equation3715 at h
@@ -208,7 +208,7 @@ theorem Equation292_implies_Equation3009 (G: Type _) [Magma G] (h: Equation292 G
   apply h
 @[equational_result]
 theorem Equation298_implies_Equation5 (G: Type _) [Magma G] (h: Equation298 G) : Equation5 G := by
-  have eq4146 (x y z : G) : x ∘ y = ((x ∘ z) ∘ z) ∘ y := by
+  have eq4146 (x y z : G) : x ◇ y = ((x ◇ z) ◇ z) ◇ y := by
     apply Run3.Equation298_implies_Equation4258 at h
     apply SimpleRewrites.Equation4258_implies_Equation4234 at h
     apply SimpleRewrites.Equation4234_implies_Equation4168 at h
@@ -231,13 +231,13 @@ theorem Equation298_implies_Equation5 (G: Type _) [Magma G] (h: Equation298 G) :
   repeat assumption
 @[equational_result]
 theorem Equation3344_implies_Equation4178 (G: Type _) [Magma G] (h: Equation3344 G) : Equation4178 G := by
-  have eq4138 (x y z : G) : x ∘ y = ((x ∘ z) ∘ x) ∘ y := by
+  have eq4138 (x y z : G) : x ◇ y = ((x ◇ z) ◇ x) ◇ y := by
     apply Run3.Equation3344_implies_Equation3348 at h
     apply NthRewrites.Equation3348_implies_Equation395 at h
     apply Apply.Equation395_implies_Equation4243 at h
     apply Apply.Equation4243_implies_Equation4138 at h
     apply h
-  have eq3320 (x y z : G) : x ∘ y = x ∘ (y ∘ (y ∘ z)) := by
+  have eq3320 (x y z : G) : x ◇ y = x ◇ (y ◇ (y ◇ z)) := by
     apply Run3.Equation3344_implies_Equation3320 at h
     apply h
   intro x y z
@@ -249,13 +249,13 @@ theorem Equation3344_implies_Equation4178 (G: Type _) [Magma G] (h: Equation3344
   repeat assumption
 @[equational_result]
 theorem Equation3344_implies_Equation4212 (G: Type _) [Magma G] (h: Equation3344 G) : Equation4212 G := by
-  have eq4192 (x y z : G) : x ∘ y = ((z ∘ x) ∘ x) ∘ y := by
+  have eq4192 (x y z : G) : x ◇ y = ((z ◇ x) ◇ x) ◇ y := by
     apply Run3.Equation3344_implies_Equation3348 at h
     apply NthRewrites.Equation3348_implies_Equation395 at h
     apply Apply.Equation395_implies_Equation4243 at h
     apply Apply.Equation4243_implies_Equation4192 at h
     apply h
-  have eq3320 (x y z : G) : x ∘ y = x ∘ (y ∘ (y ∘ z)) := by
+  have eq3320 (x y z : G) : x ◇ y = x ◇ (y ◇ (y ◇ z)) := by
     apply Run3.Equation3344_implies_Equation3320 at h
     apply h
   intro x y z
@@ -267,13 +267,13 @@ theorem Equation3344_implies_Equation4212 (G: Type _) [Magma G] (h: Equation3344
   repeat assumption
 @[equational_result]
 theorem Equation3344_implies_Equation4195 (G: Type _) [Magma G] (h: Equation3344 G) : Equation4195 G := by
-  have eq4209 (x y z : G) : x ∘ y = ((z ∘ y) ∘ x) ∘ y := by
+  have eq4209 (x y z : G) : x ◇ y = ((z ◇ y) ◇ x) ◇ y := by
     apply Run3.Equation3344_implies_Equation3348 at h
     apply NthRewrites.Equation3348_implies_Equation395 at h
     apply Apply.Equation395_implies_Equation4243 at h
     apply Apply.Equation4243_implies_Equation4209 at h
     apply h
-  have eq3320 (x y z : G) : x ∘ y = x ∘ (y ∘ (y ∘ z)) := by
+  have eq3320 (x y z : G) : x ◇ y = x ◇ (y ◇ (y ◇ z)) := by
     apply Run3.Equation3344_implies_Equation3320 at h
     apply h
   intro x y z
@@ -285,13 +285,13 @@ theorem Equation3344_implies_Equation4195 (G: Type _) [Magma G] (h: Equation3344
   repeat assumption
 @[equational_result]
 theorem Equation3344_implies_Equation4229 (G: Type _) [Magma G] (h: Equation3344 G) : Equation4229 G := by
-  have eq4226 (x y z : G) : x ∘ y = ((z ∘ z) ∘ x) ∘ y := by
+  have eq4226 (x y z : G) : x ◇ y = ((z ◇ z) ◇ x) ◇ y := by
     apply Run3.Equation3344_implies_Equation3348 at h
     apply NthRewrites.Equation3348_implies_Equation395 at h
     apply Apply.Equation395_implies_Equation4243 at h
     apply Apply.Equation4243_implies_Equation4226 at h
     apply h
-  have eq3320 (x y z : G) : x ∘ y = x ∘ (y ∘ (y ∘ z)) := by
+  have eq3320 (x y z : G) : x ◇ y = x ◇ (y ◇ (y ◇ z)) := by
     apply Run3.Equation3344_implies_Equation3320 at h
     apply h
   intro x y z
@@ -303,12 +303,12 @@ theorem Equation3344_implies_Equation4229 (G: Type _) [Magma G] (h: Equation3344
   repeat assumption
 @[equational_result]
 theorem Equation3344_implies_Equation4247 (G: Type _) [Magma G] (h: Equation3344 G) : Equation4247 G := by
-  have eq4243 (x y z w : G) : x ∘ y = ((z ∘ w) ∘ x) ∘ y := by
+  have eq4243 (x y z w : G) : x ◇ y = ((z ◇ w) ◇ x) ◇ y := by
     apply Run3.Equation3344_implies_Equation3348 at h
     apply NthRewrites.Equation3348_implies_Equation395 at h
     apply Apply.Equation395_implies_Equation4243 at h
     apply h
-  have eq3320 (x y z : G) : x ∘ y = x ∘ (y ∘ (y ∘ z)) := by
+  have eq3320 (x y z : G) : x ◇ y = x ◇ (y ◇ (y ◇ z)) := by
     apply Run3.Equation3344_implies_Equation3320 at h
     apply h
   intro x y z w
