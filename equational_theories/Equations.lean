@@ -37,13 +37,15 @@ abbrev Equation7 (G: Type _) [Magma G] := ∀ x y z : G, x = y ∘ z
 abbrev Equation8 (G: Type _) [Magma G] := ∀ x : G, x = x ∘ (x ∘ x)
 
 /-- Appears in Problem A1 from Putnam 2001 -/
-abbrev Equation14 (G : Type _) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ y)
+abbrev Equation14 (G: Type _) [Magma G] := ∀ x y : G, x = y ∘ (x ∘ y)
+
+abbrev Equation16 (G: Type _) [Magma G] := ∀ x y : G, x = y ∘ (y ∘ x)
 
 /-- dual of 8 -/
 abbrev Equation23 (G: Type _) [Magma G] := ∀ x : G, x = (x ∘ x) ∘ x
 
 /-- Appears in Problem A1 from Putnam 2001.  Dual of 14 -/
-abbrev Equation29 (G : Type _) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ y
+abbrev Equation29 (G: Type _) [Magma G] := ∀ x y : G, x = (y ∘ x) ∘ y
 
 /-- value of multiplication is independent of right argument -/
 abbrev Equation38 (G: Type _) [Magma G] := ∀ x y : G, x ∘ x = x ∘ y
@@ -78,14 +80,21 @@ abbrev Equation381 (G: Type _) [Magma G] := ∀ x y z : G, x ∘ y = (x ∘ z) �
 /-- from the mathoverflow post by paste bee -/
 abbrev Equation387 (G: Type _) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ x
 
+/-- From a paper of Mendelsohn & Padmanabhan, this law axiomatizes abelian groups of exponent 2 -/
+abbrev Equation1571 (G: Type _) [Magma G] := ∀ x y z : G, x = (y ∘ z) ∘ (y ∘ (x ∘ z))
+-- x = (y ∘ z) ∘ (y ∘ (x ∘ z))
+-- x =
+
 /-- From a paper of Kisielewicz -/
 abbrev Equation1689 (G: Type _) [Magma G] := ∀ x y z : G, x = (y ∘ x) ∘ ((x ∘ z) ∘ z)
 
+abbrev Equation2662 (G: Type _) [Magma G] := ∀ x y : G, x = ((x ∘ y) ∘ (x ∘ y)) ∘ x
+
 /-- From Putnam 1978, Problem A4, part (a) -/
-abbrev Equation3722 (G : Type _) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ y) ∘ (x ∘ y)
+abbrev Equation3722 (G: Type _) [Magma G] := ∀ x y : G, x ∘ y = (x ∘ y) ∘ (x ∘ y)
 
 /-- Putnam 1978, Problem A4 calls this a "bypass operation" -/
-abbrev Equation3744 (G : Type _) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ (w ∘ y)
+abbrev Equation3744 (G: Type _) [Magma G] := ∀ x y z w : G, x ∘ y = (x ∘ z) ∘ (w ∘ y)
 
 /-- The associative law -/
 abbrev Equation4512 (G: Type _) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ z

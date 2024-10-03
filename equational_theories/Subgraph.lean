@@ -281,6 +281,68 @@ theorem Lemma_eq1689_implies_h8 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a
     _ = (a ∘ b) ∘ ((b ∘ c) ∘ c) := by rw [Lemma_eq1689_implies_h5 G h]
     _ = b := by rw [← h]
 
+/-- The below results for Equation1571 are out of order because early ones are lemmas for later ones -/
+@[equational_result]
+theorem Equation1571_implies_Equation2662 (G: Type*) [Magma G] (h: Equation1571 G) : Equation2662 G :=
+  fun x y ↦ Eq.trans (h x (x ∘ y) (x ∘ y)) (congrArg (fun z ↦ ((x ∘ y) ∘ (x ∘ y)) ∘ z) (Eq.symm $ h x x y))
+
+@[equational_result]
+theorem Equation1571_implies_Equation40 (G: Type*) [Magma G] (h: Equation1571 G) : Equation40 G := by
+  have eq2662 := Equation1571_implies_Equation2662 G h
+  have sqRotate : ∀ x y z : G, (x ∘ y) ∘ (x ∘ y) = (y ∘ z) ∘ (y ∘ z)
+    := fun x y z ↦ Eq.trans (congrArg (fun w ↦ (x ∘ y) ∘ (x ∘ w)) (eq2662 y z)) (Eq.symm $ h ((y ∘ z) ∘ (y ∘ z)) x y)
+  have sqConstInImage : ∀ x y z w : G, (x ∘ y) ∘ (x ∘ y) = (z ∘ w) ∘ (z ∘ w)
+    := fun x y z w ↦ Eq.trans (sqRotate x y z) (sqRotate y z w)
+  intro x y
+  rw [h x x x, h y y y]
+  exact sqConstInImage (x ∘ x) (x ∘ (x ∘ x)) (y ∘ y) (y ∘ (y ∘ y))
+
+@[equational_result]
+theorem Equation1571_implies_Equation23 (G: Type*) [Magma G] (h: Equation1571 G) : Equation23 G := by
+  have eq40 := Equation1571_implies_Equation40 G h
+  intro x
+  apply Eq.trans $ h x (x ∘ x) (x ∘ x)
+  rw [← h x x x]
+  rw [← eq40 x (x ∘ x)]
+
+@[equational_result]
+theorem Equation1571_implies_Equation8 (G: Type*) [Magma G] (h: Equation1571 G) : Equation8 G := by
+  have eq23 := Equation1571_implies_Equation23 G h
+  have eq40 := Equation1571_implies_Equation40 G h
+  intro x
+  apply Eq.trans $ h x x x
+  apply Eq.trans $ congrArg (fun a ↦ a ∘ (x ∘ (x ∘ x))) (eq40 x (x ∘ (x ∘ x)))
+  apply Eq.trans $ Eq.symm $ eq23 (x ∘ (x ∘ x))
+  apply refl _
+
+@[equational_result]
+theorem Equation1571_implies_Equation16 (G: Type*) [Magma G] (h: Equation1571 G) : Equation16 G := by
+  have eq8 := Equation1571_implies_Equation8 G h
+  have eq40 := Equation1571_implies_Equation40 G h
+  intro x y
+  apply Eq.symm
+  apply Eq.trans $ congrArg (fun w ↦ y ∘ (y ∘ w)) (eq8 x)
+  rw [eq40 x y]
+  apply Eq.trans $ (congrArg (fun w ↦ w ∘ (y ∘ (x ∘ (y ∘ y))))) (eq8 y)
+  exact Eq.symm $ (h x y (y ∘ y))
+
+@[equational_result]
+theorem Equation1571_implies_Equation43 (G: Type*) [Magma G] (h: Equation1571 G) : Equation43 G := by
+  have eq16 := Equation1571_implies_Equation16 G h
+  have eq23 := Equation1571_implies_Equation23 G h
+  have eq40 := Equation1571_implies_Equation40 G h
+  intro x y
+  apply Eq.trans $ h _ (x ∘ x) (x ∘ (x ∘ y))
+  rw [← h x x y, ← eq23 x, ← eq16 y x, eq40 x y, ← eq23 y]
+
+@[equational_result]
+theorem Equation1571_implies_Equation4512 (G: Type*) [Magma G] (h: Equation1571 G) : Equation4512 G := by
+  have eq16 := Equation1571_implies_Equation16 G h
+  have eq43 := Equation1571_implies_Equation43 G h
+  intro x y z
+  apply Eq.trans $ h (x ∘ (y ∘ z)) y x
+  rw [eq43 (x ∘ (y ∘ z)) x, ← eq16 (y ∘ z) x, ← eq16 z y, eq43 y x]
+
 /-- This result was first obtained by Kisielewicz in 1997 via computer assistance. -/
 @[equational_result]
 theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G:= by
