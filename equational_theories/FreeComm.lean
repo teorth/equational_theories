@@ -1,6 +1,6 @@
 /-
   Define the free associative-commutative magma as the multisets with union.
-  Prove lemma 3.8: Any consequence of a word equation with equal occurences of
+  Prove lemma 3.8: Any consequence of a word equation with equal occurrences of
   vars on the lhs and rhs must also have that property.
 
 -/

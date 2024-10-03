@@ -1,4 +1,4 @@
-# Very rudimentary equational reasoning based on direct string substituion. By
+# Very rudimentary equational reasoning based on direct string substitution. By
 # consuming the graph of known implications, we can 'reason' from a given hypothesis
 # by performing legal substitutions.
 #

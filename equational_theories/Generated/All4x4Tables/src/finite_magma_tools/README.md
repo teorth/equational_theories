@@ -67,7 +67,7 @@ Usage: `cabal run min-cover < input.txt > output.txt`
 The input can be in the same format as the output of make-plan or All4x4Tables.
 
 Optimization is performed using an SMT solver. It is very slow for large equation
-sets or many magmas, and it's not inteded to be used on full sets of either.
+sets or many magmas, and it's not intended to be used on full sets of either.
 Instead, it's mostly a useful ingredient for other heuristics. Adjust
 equationsOfInterest in the configuration section of Main.hs before running.
 As an example, try `cabal run min-cover < examples/short_refutations.txt`.
