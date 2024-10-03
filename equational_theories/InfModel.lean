@@ -151,11 +151,18 @@ theorem Equation28393_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
         if a = 2^(3^(padicValNat 3 (padicValNat 2 a))) then 3^(padicValNat 3 (padicValNat 2 a)) else 1}
   refine ⟨ℕ+, this, ⟨?_, fun x ↦ nomatch (x 1 2)⟩⟩
   intro x y z
+  -- t1 is from the proof of Equation374794_not_implies_Equation2
+  have t1 (y : ℕ+) : 2 ^ (y : ℕ) ≠ y := by
+    apply_fun PNat.val
+    simp [ne_of_gt, Nat.lt_pow_self]
   have h1 : ∀ (y: ℕ+), y ∘ y = 2^y.val := by
     intro y
     unfold Magma.op
     simp only [ite_true]
-  have h2 : ∀ (y: ℕ+), (2^y.val) ∘ y = 3^y.val := sorry
+  have h2 : ∀ (y: ℕ+), (2^y.val) ∘ y = 3^y.val := by
+    intro y
+    unfold Magma.op
+    simp [t1]
   have h3 : ∀ (x y: ℕ+), x ≠ 3^y.val → (3^y.val) ∘ x = 3^y.val * 5^x.val := sorry
   have h4 : ∀ (x y z: ℕ+), z ≠ 3^y.val * 5^x.val → (3^y.val * 5^x.val) ∘ z = x := sorry
   have h5 : ∀ (y z: ℕ+), z ≠ 3^y.val ∧ z ≠ 2^(3^y.val) → (2^(3^y.val)) ∘ z = 3^y.val := sorry
