@@ -2,7 +2,8 @@
 # ruby scripts/generate_graphviz_graph.rb /tmp/implications.csv > graph.dot
 # dot -T svg -o graph.svg graph.dot
 #
-# Note: there are also options to limit the number of variables or operations in the generated graph.
+# Note: there are also options to limit the number of variables or operations in the generated graph,
+# or delete Equation 1 and the Equation 2 equivalence class.
 #
 # In order to reduce the cleanest looking graph, this tools generates a transitive closure and then
 # reduces it to get a graph with minimal edges. That causes generation to be slow.
@@ -16,6 +17,8 @@ opt_parser= OptionParser.new do |opt|
 
   opt.on('--limit-variables NUM') { |o| options[:limit_variables] = o.to_i }
   opt.on('--limit-operations NUM') { |o| options[:limit_operations] = o.to_i }
+  opt.on('--remove-eq1', 'Remove Equation1 from the output') { |o| options[:remove_eq1] = true }
+  opt.on('--remove-eq2', 'Remove the entire Equation2 equivalence class from the output') { |o| options[:remove_eq2] = true }
 end
 
 opt_parser.parse!
@@ -53,6 +56,12 @@ if options[:limit_operations]
   vertices_to_delete.concat all_vertices.filter { |k|
     equations[k].count("∘") > options[:limit_operations]
   }
+end
+if options[:remove_eq1]
+  vertices_to_delete << 1
+end
+if options[:remove_eq2]
+  vertices_to_delete.concat graph.scc.filter { |scc| scc.include? 2 }[0]
 end
 
 # Reducing first improves the speed of the closure
@@ -130,7 +139,7 @@ scc_reverse_map.each { |scc_name, nodes|
 
 condensed_graph.adj_list.each { |node, neighbors|
   neighbors.each { |neighbor|
-    puts "  #{node} -> #{neighbor} [tooltip=\"#{name(scc_reverse_map[node])} -> #{name(scc_reverse_map[neighbor])}\"];"
+    puts "  #{neighbor} -> #{node} [tooltip=\"#{name(scc_reverse_map[neighbor])} -> #{name(scc_reverse_map[node])}\"];"
   }
 }
 
