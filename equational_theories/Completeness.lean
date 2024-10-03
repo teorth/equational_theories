@@ -73,7 +73,7 @@ infix:50 " ⊧ " => (models)
 infix:50 " ⊢ " => (derive)
 
 theorem SubstEval {α} G [Magma G] (t : FreeMagma α) (σ : α → FreeMagma α) (φ : α → G) :
-    evalInMagma φ (t ⬝ σ) = evalInMagma (evalInMagma φ ∘ σ) t := by
+    evalInMagma φ (t ⬝ σ) = evalInMagma (evalInMagma φ <| σ ·) t := by
   cases t
   case Leaf => rfl
   case Fork t₁ t₂ => simp only [evalInMagma]; repeat rw [SubstEval]
@@ -138,7 +138,7 @@ instance FreeMagmaWithLaws.Magma {α} (Γ : Ctx α) : Magma (FreeMagmaWithLaws �
   { op := ForkWithLaws Γ }
 
 theorem FreeMagmaWithLaws.evalInMagmaIsQuot {α} (Γ : Ctx α) (t : FreeMagma α) (σ : α → FreeMagma α):
-    evalInMagma (embed Γ ∘ σ) t = embed Γ (t ⬝ σ) := by
+    evalInMagma (embed Γ <| σ ·) t = embed Γ (t ⬝ σ) := by
   cases t <;> rw [evalInMagma]
   case Leaf => rfl
   case Fork =>
@@ -153,15 +153,16 @@ theorem substLFId {α} (t : FreeMagma α) : t ⬝ Lf = t := by
   constructor <;> apply substLFId
 
 @[simp]
-def LfEmbed {α} (Γ : Ctx α) : α → FreeMagmaWithLaws Γ := embed Γ ∘ Lf
+def LfEmbed {α} (Γ : Ctx α) : α → FreeMagmaWithLaws Γ := (embed Γ <| Lf ·)
 
 -- Mostly forward reasoning here, so we delay the intros.
 theorem FreeMagmaWithLaws.isDerives {α} (Γ : Ctx α) (E : MagmaLaw α) :
   FreeMagmaWithLaws Γ ⊧ E → Nonempty (Γ ⊢ E) := by
   simp [satisfies, satisfiesPhi, evalInMagma]
-  intros eq; have h := (eq (LfEmbed Γ))
-  simp only [LfEmbed] at h
-  repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot] at h
+  intros eq;
+  have h := eq (LfEmbed Γ)
+  unfold LfEmbed at h
+  repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot (σ := Lf)] at h
   have h' := Quotient.exact h
   simp [HasEquiv.Equiv, Setoid.r, RelOfLaws] at h'
   repeat rw [substLFId] at h'
@@ -177,7 +178,7 @@ theorem PhiAsSubst_aux {α} (Γ : Ctx α) (φ : α → FreeMagmaWithLaws Γ) :
   symm; trivial
 
 theorem PhiAsSubst {α} (Γ : Ctx α) (φ : α → FreeMagmaWithLaws Γ) :
-  ∃ (σ : α → FreeMagma α), φ = (embed Γ) ∘ σ := by
+  ∃ (σ : α → FreeMagma α), φ = (embed Γ <| σ ·) := by
   have ⟨σ, h⟩ := PhiAsSubst_aux Γ φ
   exact ⟨σ, funext fun x ↦ h x⟩
 
