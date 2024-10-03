@@ -112,7 +112,7 @@ where
     write_with(path, |file| {
         let encoder = zstd::Encoder::new(file, compression_level)?;
         let mut writer: BufWriter<zstd::Encoder<'_, BufWriter<&File>>> = BufWriter::new(encoder);
-        
+
         f(&mut writer)?;
 
         // Ensure all data is written and compressed
@@ -226,7 +226,7 @@ impl<P> PartiallyBoundApplier<P>
         values.dedup();
 
         for subst in substs {
-            multi_assign(&mut subst.clone(), self.vars.iter().copied(), values.iter().copied(), &mut |subst| 
+            multi_assign(&mut subst.clone(), self.vars.iter().copied(), values.iter().copied(), &mut |subst|
                 out.push(subst.clone()));
             /*
             for assignment in self.vars.iter().map(|_| values.iter().copied()).multi_cartesian_product() {
@@ -477,7 +477,7 @@ impl<R: Read> Read for SpaceSqueezer<R> {
 fn read_proof(dir: impl AsRef<Path>, implication: (usize, usize)) -> Result<Option<Proof>> {
     if let Some(proof) = try_read_proof(dir, implication, "let", |reader| {
         // TODO: this is horribly inefficient, switch to a decent sexp crate that actually has basic features like incremental parsing
-        
+
         // squeeze spaces so we are much less likely to OOM when reading pretty printed sexps
         let mut reader = BufReader::new(SpaceSqueezer::new(reader));
 
@@ -496,7 +496,7 @@ fn with_stack_size<T: Send>(stack_size: usize, f: impl FnOnce() -> T + Send) -> 
         let worker = thread::Builder::new().stack_size(stack_size).spawn_scoped(scope, move || {
             f()
         }).unwrap();
-        
+
         worker.join().unwrap()
     })
 }
@@ -528,7 +528,7 @@ impl<'a, 'b> SubprocessSpawner<'a, 'b> {
             status => Err(anyhow!("fork child terminated due to {:?}", status))
         }
     }
-    
+
     fn in_subprocess_with_stack_size(&mut self, stack_size: usize, f: impl FnOnce() -> i32 + Send) -> Result<i32> {
         self.in_subprocess(|| {
             with_stack_size(stack_size, f)
@@ -565,7 +565,7 @@ fn process_in_parallel_with_subprocess_spawner<E: Send, I: IntoIterator<Item: Se
 
     let mt_lock = &RwLock::new(());
     let barrier = Barrier::new(parallelism);
-    
+
     in_parallel(parallelism, |_| {
         // make sure we don't fork while a thread is being spawned
         barrier.wait();
@@ -625,7 +625,7 @@ impl App {
                 return Err(e)?
             }
         };
-    
+
         let equations = read_equations(&args.equations)?;
         let implications = read_implications(&args.implications)?;
         let parallelism = args.parallelism.or_else(|| std::thread::available_parallelism().map(|x| x.into()).ok()).unwrap_or(1);
@@ -685,7 +685,7 @@ impl App {
                             Ok(1)
                         }
                     })();
-                    
+
                     match res {
                         Ok(x) => x,
                         Err(e) => {
@@ -739,7 +739,7 @@ impl App {
 
                                 let mut functions = FxHashMap::default();
                                 functions.insert(Symbol::new("∘"), Function {head: AppHead {symbol: Symbol::new("F"), fixity: Fixity::Prefix}, congr: Symbol::new("C")});
-            
+
                                 let lean = export::convert_explanation_to_lean_proof(&sexp, &rules, &functions)?;
 
                                 let path = self.args.proofs.join(format!("{}_{}.lean.zst", implication.0, implication.1));
@@ -815,10 +815,10 @@ impl App {
                 if name.ends_with(".lean.zst") {
                     if let Some(captures) = re.captures(&name) {
                         let h = captures.get(1).unwrap().as_str().parse::<usize>()?;
-                        let goal = captures.get(2).unwrap().as_str().parse::<usize>()?;            
+                        let goal = captures.get(2).unwrap().as_str().parse::<usize>()?;
                         let size = entry.metadata()?.len();
                         proofs.push((size, (h, goal), os_name));
-                    }                    
+                    }
                 }
             }
         }
@@ -852,7 +852,7 @@ private abbrev C := @congr_op
         let output_small = args.output.join("small");
         let output_large = args.output.join("Large");
         let mut large_files = Vec::new();
-        
+
         for (_size, (h, goal), os_name) in proofs {
             let proof = read_with_zstd(self.args.proofs.join(os_name), |mut reader| {
                 let mut str = String::new();
@@ -862,11 +862,11 @@ private abbrev C := @congr_op
 
             let proof = (String::from("\n") + &proof).replace("\n", "\n  ");
             let proof = proof.replace("F", "M"); // we used to use F instead of M
-            
+
             let goal_vars = equation_vars(&self.equations[goal]);
             let goal_vars = goal_vars.into_iter().map(|x| String::from(&x.to_string()[1..]));
             let goal_vars = goal_vars.collect::<Vec<_>>().join(" ");
-            
+
             let proof = format!("@[equational_result]\ntheorem Equation{h}_implies_Equation{goal} (G: Type _) [Magma G] (h: Equation{h} G) : Equation{goal} G := fun {goal_vars} =>{proof}\n\n");
 
             let lines = proof.chars().filter(|x| *x == '\n').count() as u64;
@@ -885,12 +885,12 @@ private abbrev C := @congr_op
                         out.close()?;
                         cur_small = None;
                     }
-                }    
+                }
 
                 if cur_small.is_none() {
                     let out_name = format!("MagmaEgg_small{:02}.lean", next_small_idx);
                     next_small_idx += 1;
-                    
+
                     let mut out = OutputFile::new(&output_small, &out_name)?;
                     out.append(header, header_lines)?;
                     cur_small = Some(out);
@@ -916,7 +916,7 @@ private abbrev C := @congr_op
 
         let mut out = OutputFile::new(&args.output, "small.lean")?;
         for i in 0..next_small_idx {
-            out.append(&format!("import equational_theories.Generated.MagmaEgg.small.MagmaEgg_small_{:02}\n", i), 1)?;
+            out.append(&format!("import equational_theories.Generated.MagmaEgg.small.MagmaEgg_small{:02}\n", i), 1)?;
         }
         out.close()?;
 
