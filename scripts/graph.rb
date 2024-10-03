@@ -6,6 +6,16 @@ class Graph
     @adj_list = Hash.new { |hash, key| hash[key] = Set.new([]) }
   end
 
+  def self.from_csv(path)
+    graph = Graph.new
+    File.read(path).split("\n").each { |s|
+      a,b = s.split(",")
+      graph.add_edge(a.to_i, b.to_i)
+    }
+
+    graph
+  end
+
   def add_edge(from, to)
     @adj_list[from] << to
   end
