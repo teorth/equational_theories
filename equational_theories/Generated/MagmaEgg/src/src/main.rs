@@ -319,18 +319,55 @@ fn add_equation_to_rules(rules: &mut FxHashMap<Symbol, Rule>, name: &str, eq: &E
     rules.insert(Symbol::new(format!("{}b", name)), Rule::new(rhs, lhs, name, vars, RuleDirection::Backward));
 }
 
-fn derive_equation(h: &Equation, goal: &Equation, ms: u64, node_limit: usize, length_optimization: bool) -> Result<Option<egg::Explanation<TermLang>>> {
+type BoolDefaultTrue = bool;
+
+#[derive(Debug, Clone, Parser)]
+struct SearchArgs {
+    /// Time limit in milliseconds
+    #[clap(long)]
+    ms: u64,
+    /// Node limit
+    #[clap(long, default_value = "16777216")]
+    node_limit: usize,
+    /// Stop as soon as a proof is found. This might result in missing a shorter proof
+    #[clap(long)]
+    stop_asap: bool,
+    /// Do explanation length optimization. This might crash the process; if so and running with the driver, it will try again with it disabled
+    #[clap(long, default_value = "true")]
+    length_optimization: BoolDefaultTrue
+}
+
+fn found_proof<L: Language, A: Analysis<L>>(runner: &Runner<L, A>) -> bool {
+    let roots = [runner.roots[0], runner.roots[1]];
+    let roots = roots.map(|x| runner.egraph.find(x));
+
+    roots[0] == roots[1]
+}
+
+fn derive_equation(h: &Equation, goal: &Equation, args: &SearchArgs) -> Result<Option<egg::Explanation<TermLang>>> {
     let h = patterns_from_equation(h);
     let goal = recexprs_from_equation(goal);
 
     let runner = Runner::default()
         .with_explanations_enabled()
-        .with_node_limit(node_limit)
-        .with_time_limit(Duration::from_millis(ms))
+        .with_node_limit(args.node_limit)
+        .with_time_limit(Duration::from_millis(args.ms))
         .with_expr(&goal[0])
         .with_expr(&goal[1]);
 
-    let runner = if length_optimization {
+    let runner = if args.stop_asap {
+        runner.with_hook(|runner| {
+            if found_proof(runner) {
+                Err("found a proof".to_string())
+            } else {
+                Ok(())
+            }
+        })
+    } else {
+        runner
+    };
+
+    let runner = if args.length_optimization {
         runner.with_explanation_length_optimization()
     } else {
         runner.without_explanation_length_optimization()
@@ -345,11 +382,8 @@ fn derive_equation(h: &Equation, goal: &Equation, ms: u64, node_limit: usize, le
     let mut runner = runner.run(&rules);
     eprintln!("stop: {:?}", runner.stop_reason);
 
-    let roots = [runner.roots[0], runner.roots[1]];
-    let roots = roots.map(|x| runner.egraph.find(x));
-
-    if roots[0] == roots[1] {
-        eprintln!("explain now");
+    if found_proof(&runner) {
+        //eprintln!("explain now");
         Ok(Some(runner.explain_equivalence(&goal[0], &goal[1])))
     } else {
         Ok(None)
@@ -653,16 +687,6 @@ impl App {
     }
 }
 
-#[derive(Parser, Debug)]
-struct SearchArgs {
-    /// Time limit in milliseconds
-    #[clap(long)]
-    ms: u64,
-    /// Node limit
-    #[clap(long, default_value = "16777216")]
-    node_limit: usize
-}
-
 impl App {
     fn search(self, args: SearchArgs) -> Result<()> {
         let implications: Vec<_> = self.implications.into_iter().filter(|x| !self.db.proven.contains(x) && self.db.attempted.get(x).filter(|&&x| x >= args.ms).is_none()).collect();
@@ -672,10 +696,11 @@ impl App {
             let (h, goal) = item;
             eprintln!("{} => {}", h, goal);
             let mut proven = false;
-            for length_optimization in [true, false] {
+            let mut args = args.clone();
+            loop {
                 let ret = spawner.in_subprocess_with_stack_size(self.args.stack_size, || {
                     let res = (|| {
-                        let res = derive_equation(&self.equations[h], &self.equations[goal], args.ms, args.node_limit, length_optimization)?;
+                        let res = derive_equation(&self.equations[h], &self.equations[goal], &args)?;
                         if let Some(explanation) = res {
                             let str = explanation.get_string_with_let();
                             eprintln!("{} => {}: proven with len {}", h, goal, str.len());
@@ -700,6 +725,15 @@ impl App {
                     Ok(1) => {break}
                     _ => {}
                 }
+
+                if args.length_optimization {
+                    // length optimization currently often crashes the process, try again without it
+                    // TODO: we should probably either fix it or run explanation extraction in a forked subprocess so we don't have to search again for the proof
+                    args.length_optimization = false;
+                    continue;
+                }
+
+                break
             }
             let mut db = db.lock().unwrap();
             if proven {
