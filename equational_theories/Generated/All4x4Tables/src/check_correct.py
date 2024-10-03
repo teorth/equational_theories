@@ -36,7 +36,7 @@ class Parser:
     def parse_expression(self):
         nodes = [self.parse_term()]
 
-        while self.current_char() == '∘':
+        while self.current_char() == '◇':
             op = self.current_char()
             self.advance()
             right = self.parse_term()
@@ -80,7 +80,7 @@ class Parser:
 
 # Function to convert expression tree to prefix notation
 def expr_to_prefix(node):
-    if node.value == '∘':
+    if node.value == '◇':
         left = expr_to_prefix(node.left)
         right = expr_to_prefix(node.right)
         return f"f({left}, {right})"

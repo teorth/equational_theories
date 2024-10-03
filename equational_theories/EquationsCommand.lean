@@ -5,8 +5,8 @@ open Lean Elab Command
 
 /--
 For a more concise syntax, but more importantly to speed up elaboration (where type inference
-for each `∘` makes processing this file very slow) we defined custom syntax for defining
-equations, and a custom elaborator that instantiates the instante parameter of `∘`.
+for each `◇` makes processing this file very slow) we defined custom syntax for defining
+equations, and a custom elaborator that instantiates the instante parameter of `◇`.
 -/
 elab tk:"equation " i:num " := " t:term : command => do
   let G := mkIdent (← MonadQuotation.addMacroScope `G)
@@ -18,9 +18,9 @@ elab tk:"equation " i:num " := " t:term : command => do
   for s in t.topDown do
     if s.isIdent && !is.contains s then
       is := is.push s
-  -- Rewrite `∘` to `inst.op` to avoid type class inference
+  -- Rewrite `◇` to `inst.op` to avoid type class inference
   let t ← t.rewriteBottomUpM fun s => match s with
-    | `($a ∘ $b) => `($(inst).op $a $b)
+    | `($a ◇ $b) => `($(inst).op $a $b)
     | _ => pure s
   -- Assemble term and command
   let mut t : Term := ⟨t⟩
