@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Equation Implication Table</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+      .page { display: none; }
+      .active { display: block; }
+      .equation-list { height: 600px; overflow-y: auto; border: 1px solid #ccc; }
+      .equation-item { cursor: pointer; padding: 5px; margin: 2px 0; display: flex; }
+      .equation-item:hover { background-color: #f0f0f0; }
+      .equation-name { flex: 2; }
+      .equation-stat { flex: 1; text-align: center; }
+      .implication-box { border: 1px solid #ccc; margin: 10px 0; padding: 10px; }
+      .implication-table { width: 100%; border-collapse: collapse; }
+      .implication-table th, .implication-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+      .implication-table th { background-color: #f2f2f2; }
+      .implication-list { height: 200px; overflow-y: auto; }
+      .yes { color: green; }
+      .no { color: red; }
+      .maybe { color: orange; }
+      .conjectured { background-color: #fffacd; }
+      #backButton { float: right; margin: 10px; }
+      h1, h2, h3 { margin-bottom: 10px; }
+      .header { font-weight: bold; background-color: #f0f0f0;  position: sticky;}
+      .header .equation-stat { cursor: pointer; }
+      .header .equation-stat:hover { background-color: #e0e0e0; }
+      .checkbox-container { margin: 10px 0; }
+
+      
+      input[type="text"] {
+          width: 300px;
+          padding: 5px;
+      }
+      button {
+          padding: 5px 10px;
+      }
+      #result {
+          margin-top: 20px;
+      }
+      .overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+      }
+      .error-popup {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: white;
+          padding: 20px;
+          border-radius: 5px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          max-width: 80%;
+          z-index: 1001;
+      }
+      .close-btn {
+          float: right;
+          cursor: pointer;
+          font-size: 20px;
+      }
+      
+    </style>
+    
+  </head>
+  <body>
+    <div id="listPage" class="page active">
+      <h1>All Equations</h1>
+
+      
+      <input type="text" id="equationInput" placeholder="Enter an equation (e.g., x*y=y*x)">
+      <button onclick="findEquation()">Jump to Equation</button>
+      <div id="result"></div>
+
+      <div id="errorOverlay" class="overlay">
+        <div class="error-popup">
+          <span class="close-btn" onclick="closeErrorPopup()">&times;</span>
+          <h2>Oops! There's an issue with your equation</h2>
+          <p id="errorMessage"></p>
+        </div>
+      </div>
+
+      
+      <div class="checkbox-container">
+        <label>
+          <input type="checkbox" checked="checked" id="treatConjectedAsUnknownList"> Treat conjectures as unknown
+        </label>
+      </div>
+      <div id="equationList" class="equation-list">
+        <div class="equation-item header">
+          <div class="equation-name" data-sort="index">Equation</div>
+          <div class="equation-stat" data-sort="implies">Implies</div>
+          <div class="equation-stat" data-sort="impliedBy">Implied By</div>
+          <div class="equation-stat" data-sort="antiImplies">Anti-Implies</div>
+          <div class="equation-stat" data-sort="antiImpliedBy">Anti-Implied By</div>
+          <div class="equation-stat" data-sort="unknown">Unknown</div>
+          <div class="equation-stat" data-sort="unknownBy">Unknown By</div>
+        </div>
+      </div>
+    </div>
+    <div id="detailPage" class="page">
+      <button id="backButton">Back to List</button>
+      <h1>Equation Details</h1>
+      <h2 id="selectedEquation"></h2>
+      <div class="checkbox-container">
+        <label>
+          <input type="checkbox" id="showOnlyExplicitProofs"> Show only explicit proofs
+        </label>
+        <label>
+          <input type="checkbox" id="treatConjectedAsUnknownDetail"> Treat conjectures as unknown
+        </label>
+      </div>
+      <div class="implication-box">
+        <h3>This equation implies (=&gt;):</h3>
+        <table class="implication-table">
+          <tr>
+            <th>Implies</th>
+            <th>Anti-Implies</th>
+            <th>Unknown</th>
+          </tr>
+          <tr>
+            <td><div id="impliesList" class="implication-list"></div></td>
+            <td><div id="antiImpliesList" class="implication-list"></div></td>
+            <td><div id="unknownImpliesList" class="implication-list"></div></td>
+          </tr>
+        </table>
+      </div>
+      <div class="implication-box">
+        <h3>This equation is implied by (&lt;=):</h3>
+        <table class="implication-table">
+          <tr>
+            <th>Implied By</th>
+            <th>Anti-Implied By</th>
+            <th>Unknown By</th>
+          </tr>
+          <tr>
+            <td><div id="impliedByList" class="implication-list"></div></td>
+            <td><div id="antiImpliedByList" class="implication-list"></div></td>
+            <td><div id="unknownImpliedByList" class="implication-list"></div></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <script src="out.js">
+    </script>
+    <script>
+
+      // Generate sample equations
+
+      const ids = [
+	  "explicit_conjecture_false",
+	  "explicit_conjecture_true",
+	  "explicit_proof_false",
+	  "explicit_proof_true",
+	  "implicit_conjecture_false",
+	  "implicit_conjecture_true",
+	  "implicit_proof_false",
+	  "implicit_proof_true",
+	  "unknown"
+      ];
+
+      // Assuming arr is already defined
+      // const arr = [...];  // Your RLE encoded array
+
+      function decodeRLE(arr) {
+	  const decoded = [];
+	  for (let i = 0; i < arr.length; i += 2) {
+	      const value = arr[i];
+	      const count = arr[i + 1];
+	      decoded.push(...Array(count).fill(value));
+	  }
+	  return decoded;
+      }
+
+      function mapThroughLUT(decoded) {
+	  return decoded.map(index => ids[index]);
+      }
+
+      function reshape(array, rows, cols) {
+	  const result = [];
+	  for (let i = 0; i < rows; i++) {
+	      result.push(array.slice(i * cols, (i + 1) * cols));
+	  }
+	  return result;
+      }
+
+      // Decode RLE
+      const decoded = decodeRLE(arr);
+
+      // Map through LUT
+      const mapped = mapThroughLUT(decoded);
+
+      // Reshape to 2694x2694
+      const implications = reshape(mapped, 4694, 4694);
+
+
+      const listPage = document.getElementById('listPage');
+      const detailPage = document.getElementById('detailPage');
+      const equationList = document.getElementById('equationList');
+      const selectedEquation = document.getElementById('selectedEquation');
+      const impliesList = document.getElementById('impliesList');
+      const antiImpliesList = document.getElementById('antiImpliesList');
+      const unknownImpliesList = document.getElementById('unknownImpliesList');
+      const impliedByList = document.getElementById('impliedByList');
+      const antiImpliedByList = document.getElementById('antiImpliedByList');
+      const unknownImpliedByList = document.getElementById('unknownImpliedByList');
+      const backButton = document.getElementById('backButton');
+      const showOnlyExplicitProofs = document.getElementById('showOnlyExplicitProofs');
+      const treatConjectedAsUnknownList = document.getElementById('treatConjectedAsUnknownList');
+      const treatConjectedAsUnknownDetail = document.getElementById('treatConjectedAsUnknownDetail');
+
+      let currentEquationIndex = null;
+
+      function showPage(pageId) {
+          document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+          document.getElementById(pageId).classList.add('active');
+      }
+
+      
+
+      // Pre-compute boolean flags for each status
+      const statusFlags = {
+	  explicit_conjecture_false: { explicit: true, conjecture: true, isTrue: false },
+	  explicit_conjecture_true: { explicit: true, conjecture: true, isTrue: true },
+	  explicit_proof_false: { explicit: true, conjecture: false, isTrue: false },
+	  explicit_proof_true: { explicit: true, conjecture: false, isTrue: true },
+	  implicit_conjecture_false: { explicit: false, conjecture: true, isTrue: false },
+	  implicit_conjecture_true: { explicit: false, conjecture: true, isTrue: true },
+	  implicit_proof_false: { explicit: false, conjecture: false, isTrue: false },
+	  implicit_proof_true: { explicit: false, conjecture: false, isTrue: true },
+	  unknown: { explicit: false, conjecture: false, isTrue: false }
+      };
+
+      function isImplies(status, onlyExplicit = false, treatConjecturedAsUnknown = false) {
+	  const flags = statusFlags[status];
+	  if (onlyExplicit && !flags.explicit) return false;
+	  if (treatConjecturedAsUnknown && flags.conjecture) return false;
+	  return flags.isTrue;
+      }
+
+      function isAntiImplies(status, onlyExplicit = false, treatConjecturedAsUnknown = false) {
+	  const flags = statusFlags[status];
+	  if (onlyExplicit && !flags.explicit) return false;
+	  if (treatConjecturedAsUnknown && flags.conjecture) return false;
+	  return !flags.isTrue && status !== 'unknown';
+      }
+      function isUnknown(status, treatConjecturedAsUnknown = false) {
+          return status === 'unknown' || (treatConjecturedAsUnknown && status.includes('conjecture'));
+      }
+
+      function calculateStats(index, treatConjecturedAsUnknown = false) {
+          const stats = {implies: 0, impliedBy: 0, antiImplies: 0, antiImpliedBy: 0, unknown: 0, unknownBy: 0};
+          for (let i = 0; i < implications.length; i++) {
+              if (i === index) continue;
+              const forwardStatus = implications[index][i];
+              const backwardStatus = implications[i][index];
+
+              if (isImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.implies++;
+              else if (isAntiImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.antiImplies++;
+              else stats.unknown++;
+
+              if (isImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.impliedBy++;
+              else if (isAntiImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.antiImpliedBy++;
+              else stats.unknownBy++;
+          }
+          return stats;
+      }
+
+      let cachedItems = [];
+      let cachedItemElements = [];
+
+
+      function initializeEquationList() {
+	  const treatConjecturedAsUnknown = treatConjectedAsUnknownList.checked;
+	  cachedItems = equations.map((eq, index) => {
+              const stats = calculateStats(index, treatConjecturedAsUnknown);
+              const element = document.createElement('div');
+              element.className = 'equation-item';
+              element.dataset.index = index;
+              element.innerHTML = `
+            <div class="equation-name">${eq}</div>
+            <div class="equation-stat implies">${stats.implies}</div>
+            <div class="equation-stat impliedBy">${stats.impliedBy}</div>
+            <div class="equation-stat antiImplies">${stats.antiImplies}</div>
+            <div class="equation-stat antiImpliedBy">${stats.antiImpliedBy}</div>
+            <div class="equation-stat unknown">${stats.unknown}</div>
+            <div class="equation-stat unknownBy">${stats.unknownBy}</div>
+        `;
+              return {
+		  eq,
+		  index,
+		  stats,
+		  element,
+		  statElements: {
+                      implies: element.querySelector('.implies'),
+                      impliedBy: element.querySelector('.impliedBy'),
+                      antiImplies: element.querySelector('.antiImplies'),
+                      antiImpliedBy: element.querySelector('.antiImpliedBy'),
+                      unknown: element.querySelector('.unknown'),
+                      unknownBy: element.querySelector('.unknownBy')
+		  }
+              };
+	  });
+      }
+
+      function updateEquationListStats() {
+	  const treatConjecturedAsUnknown = treatConjectedAsUnknownList.checked;
+	  cachedItems.forEach((item) => {
+              const stats = calculateStats(item.index, treatConjecturedAsUnknown);
+              item.stats = stats;
+              item.statElements.implies.textContent = stats.implies;
+              item.statElements.impliedBy.textContent = stats.impliedBy;
+              item.statElements.antiImplies.textContent = stats.antiImplies;
+              item.statElements.antiImpliedBy.textContent = stats.antiImpliedBy;
+              item.statElements.unknown.textContent = stats.unknown;
+              item.statElements.unknownBy.textContent = stats.unknownBy;
+	  });
+      }
+      function renderEquationList(sortBy = 'index', sortOrder = 'asc') {
+	  const header = equationList.querySelector('.header');
+	  
+	  cachedItems.sort((a, b) => {
+              if (sortBy === 'index') {
+		  return sortOrder === 'asc' ? a.index - b.index : b.index - a.index;
+              }
+              return sortOrder === 'asc' ? a.stats[sortBy] - b.stats[sortBy] : b.stats[sortBy] - a.stats[sortBy];
+	  });
+
+	  const fragment = document.createDocumentFragment();
+	  cachedItems.forEach(item => fragment.appendChild(item.element));
+
+	  equationList.innerHTML = '';
+	  equationList.appendChild(header);
+	  equationList.appendChild(fragment);
+      }
+
+      // Call this function once when the page loads
+      initializeEquationList();
+
+
+      function renderImplications(index) {
+          if (index === null || index < 0 || index >= equations.length) {
+              console.error('Invalid equation index:', index);
+              return;
+          }
+
+          currentEquationIndex = index;
+          selectedEquation.textContent = equations[index];
+          selectedEquation.dataset.index = index;
+          
+          const onlyExplicit = showOnlyExplicitProofs.checked;
+          const treatConjecturedAsUnknown = treatConjectedAsUnknownDetail.checked;
+          
+          const implies = [];
+          const antiImplies = [];
+          const unknownImplies = [];
+          const impliedBy = [];
+          const antiImpliedBy = [];
+          const unknownImpliedBy = [];
+
+          implications[index].forEach((status, i) => {
+              if (i === index) return; // Skip self-implication
+              const eq = equations[i];
+              const isConjectured = status.includes('conjecture');
+              const item = `<div class="implication-item ${status} ${isConjectured ? 'conjectured' : ''}">${eq}</div>`;
+              
+              if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
+                  implies.push(item);
+              } else if (isAntiImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
+                  antiImplies.push(item);
+              } else if (isUnknown(status, treatConjecturedAsUnknown)) {
+                  unknownImplies.push(item);
+              }
+          });
+
+          implications.forEach((row, i) => {
+              if (i === index) return; // Skip self-implication
+              const status = row[index];
+              const eq = equations[i];
+              const isConjectured = status.includes('conjecture');
+              const item = `<div class="implication-item ${status} ${isConjectured ? 'conjectured' : ''}">${eq}</div>`;
+              
+              if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
+                  impliedBy.push(item);
+              } else if (isAntiImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
+                  antiImpliedBy.push(item);
+              } else if (isUnknown(status, treatConjecturedAsUnknown)) {
+                  unknownImpliedBy.push(item);
+              }
+          });
+
+          impliesList.innerHTML = implies.join('') || 'None';
+          antiImpliesList.innerHTML = antiImplies.join('') || 'None';
+          unknownImpliesList.innerHTML = unknownImplies.join('') || 'None';
+          impliedByList.innerHTML = impliedBy.join('') || 'None';
+          antiImpliedByList.innerHTML = antiImpliedBy.join('') || 'None';
+          unknownImpliedByList.innerHTML = unknownImpliedBy.join('') || 'None';
+      }
+
+      equationList.addEventListener('click', (e) => {
+          if (e.target.closest('.equation-item:not(.header)')) {
+              const index = parseInt(e.target.closest('.equation-item').dataset.index);
+              renderImplications(index);
+              showPage('detailPage');
+          } else if (e.target.classList.contains('equation-stat') || e.target.classList.contains('equation-name')) {
+              const sortBy = e.target.dataset.sort;
+              const currentOrder = e.target.dataset.order || 'asc';
+              const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+              e.target.dataset.order = newOrder;
+              renderEquationList(sortBy, newOrder);
+          }
+      });
+
+      backButton.addEventListener('click', () => {
+          showPage('listPage');
+          renderEquationList(); // Re-sort by equation number when returning to list
+      });
+
+
+      // Modify the event listener for the checkbox
+      showOnlyExplicitProofs.addEventListener('change', () => {
+          if (currentEquationIndex !== null) {
+              renderImplications(currentEquationIndex);
+          }
+      });
+
+      treatConjectedAsUnknownDetail.addEventListener('change', () => {
+          if (currentEquationIndex !== null) {
+              renderImplications(currentEquationIndex);
+          }
+      });
+      
+      // Modify the event listener for the checkbox
+      treatConjectedAsUnknownList.addEventListener('change', () => {
+	  updateEquationListStats();
+	  renderEquationList();
+      });
+
+      // Initial render
+      renderEquationList();
+
+
+
+
+      const EQ_SIZE = 4;
+      const VAR_NAMES = 'xyzwuv';
+
+      function showErrorPopup(message) {
+          document.getElementById('errorMessage').textContent = message;
+          document.getElementById('errorOverlay').style.display = 'block';
+      }
+
+      function closeErrorPopup() {
+          document.getElementById('errorOverlay').style.display = 'none';
+      }
+
+      function tokenize(expr) {
+          return expr.replace(/\./g, '∘').replace(/\*/g, '∘').replace(/\(/g, ' ( ').replace(/\)/g, ' ) ').replace(/∘/g, ' ∘ ')
+              .split(' ')
+              .filter(token => token.trim() !== '');
+      }
+
+      function parseExpr(tokens) {
+          function parseElement() {
+              if (tokens.length === 0) {
+                  throw new Error("Unexpected end of expression. Did you forget to complete your equation?");
+              }
+              if (VAR_NAMES.includes(tokens[0])) {
+                  return tokens.shift();
+              }
+              if (tokens[0] === '(') {
+                  tokens.shift();
+                  const left = parseElement();
+                  if (tokens.length === 0 || tokens[0] !== '∘') {
+                      throw new Error(`Expected '∘' after '${left}' in parentheses. Did you mean to write '(${left} ∘ ...)'?`);
+                  }
+                  tokens.shift();
+                  const right = parseElement();
+                  if (tokens.length === 0 || tokens[0] !== ')') {
+                      throw new Error(`Missing closing parenthesis after '(${left} ∘ ${right}'. Did you forget to close the parentheses?`);
+                  }
+                  tokens.shift();
+                  return [left, '∘', right];
+              }
+              throw new Error(`Unexpected token: '${tokens[0]}'. Valid tokens are variables (${VAR_NAMES}), '∘', '(', or ')'.`);
+          }
+
+          let result = parseElement();
+          if (tokens.length > 0) {
+              if (tokens[0] !== '∘') {
+                  throw new Error(`Unexpected token '${tokens[0]}' after main element. Did you mean to use '∘' here?`);
+              }
+              tokens.shift();
+              const right = parseElement();
+              if (tokens.length > 0) {
+                  throw new Error(`Unexpected tokens at the end of expression: '${tokens.join(' ')}'. Make sure your equation is properly formatted.`);
+              }
+              result = [result, '∘', right];
+          }
+          return result;
+      }
+
+      function canonicalizeEquation(eqStr) {
+          const parts = eqStr.split('=');
+          if (parts.length !== 2) {
+              throw new Error("Your equation should have exactly one '=' sign. Please check your input.");
+          }
+
+          function canonicalizeEquationHelp(eqStr) {
+              const [lhs, rhs] = eqStr.split('=').map(side => side.trim());
+              const lhsTokens = tokenize(lhs);
+              const rhsTokens = tokenize(rhs);
+              const lhsParsed = parseExpr(lhsTokens);
+              const rhsParsed = parseExpr(rhsTokens);
+
+              const varMap = {};
+              let nextVarIndex = 0;
+
+              function rewriteExpr(expr) {
+                  if (typeof expr === 'string') {
+                      if (expr === '∘') return expr;
+                      if (!(expr in varMap)) {
+                          varMap[expr] = VAR_NAMES[nextVarIndex++];
+                      }
+                      return varMap[expr];
+                  }
+                  const [left, op, right] = expr;
+                  return [rewriteExpr(left), op, rewriteExpr(right)];
+              }
+
+              const canonLhs = rewriteExpr(lhsParsed);
+              const canonRhs = rewriteExpr(rhsParsed);
+
+              function exprToStr(expr) {
+                  if (typeof expr === 'string') return expr;
+                  const [left, op, right] = expr;
+                  return `(${exprToStr(left)} ${op} ${exprToStr(right)})`;
+              }
+
+              const lhsStr = exprToStr(canonLhs);
+              const rhsStr = exprToStr(canonRhs);
+
+              return lhsStr.length > rhsStr.length ? `${rhsStr} = ${lhsStr}` : `${lhsStr} = ${rhsStr}`;
+          }
+
+          const canonEq = canonicalizeEquationHelp(eqStr);
+          const [left, right] = canonEq.split('=');
+          const flippedEq = canonicalizeEquationHelp(`${right}=${left}`);
+
+          return left.length === right.length && reorder(flippedEq) < reorder(canonEq) ? flippedEq : canonEq;
+      }
+
+      function reorder(expr) {
+          return expr.replace(/[xyzwuv]/g, (match) => VAR_NAMES.indexOf(match));
+      }
+
+      function* generateShapes(size) {
+          if (size === 0) {
+              yield '.';
+              return;
+          }
+          for (let i = 0; i < size; i++) {
+              for (const left of generateShapes(i)) {
+                  for (const right of generateShapes(size - 1 - i)) {
+                      yield [left, right];
+                  }
+              }
+          }
+      }
+
+      function* exprsWithShape(shape, usedVars) {
+          if (shape === '.') {
+              for (let var_ = 0; var_ <= usedVars; var_++) {
+                  yield [var_, Math.max(var_ + 1, usedVars)];
+              }
+          } else {
+              const [left, right] = shape;
+              for (const [leftExpr, usedVars1] of exprsWithShape(left, usedVars)) {
+                  for (const [rightExpr, usedVars2] of exprsWithShape(right, usedVars1)) {
+                      yield [[leftExpr, rightExpr], usedVars2];
+                  }
+              }
+          }
+      }
+
+      function renameVars(expr, perm) {
+          if (typeof expr === 'number') {
+              return perm[expr];
+          }
+          const [left, right] = expr;
+          return [renameVars(left, perm), renameVars(right, perm)];
+      }
+
+      function* eqSymmetries(lhs, rhs, nVars) {
+          for (const renaming of permutations(nVars)) {
+              yield [renameVars(lhs, renaming), renameVars(rhs, renaming)];
+          }
+          for (const renaming of permutations(nVars)) {
+              yield [renameVars(rhs, renaming), renameVars(lhs, renaming)];
+          }
+      }
+
+      function* permutations(n) {
+          const range = Array.from({length: n}, (_, i) => i);
+          yield* permutationsHelper(range);
+      }
+
+      function* permutationsHelper(arr) {
+          if (arr.length <= 1) {
+              yield arr;
+          } else {
+              for (let i = 0; i < arr.length; i++) {
+                  const rest = [...arr.slice(0, i), ...arr.slice(i + 1)];
+                  for (const perm of permutationsHelper(rest)) {
+                      yield [arr[i], ...perm];
+                  }
+              }
+          }
+      }
+
+      function* generateAllEqs() {
+          const allEqs = new Set();
+          for (let size = 0; size <= EQ_SIZE; size++) {
+              for (let lhsSize = 0; lhsSize <= size; lhsSize++) {
+                  for (const lhsShape of generateShapes(lhsSize)) {
+                      for (const rhsShape of generateShapes(size - lhsSize)) {
+                          for (const [lhs, usedVars] of exprsWithShape(lhsShape, 0)) {
+                              for (const [rhs, allUsedVars] of exprsWithShape(rhsShape, usedVars)) {
+                                  let isUnique = true;
+                                  for (const symmetry of eqSymmetries(lhs, rhs, allUsedVars)) {
+                                      if (allEqs.has(JSON.stringify(symmetry))) {
+                                          isUnique = false;
+                                          break;
+                                      }
+                                  }
+                                  if (isUnique && (typeof lhs === 'number' || typeof rhs === 'number' || JSON.stringify(lhs) !== JSON.stringify(rhs))) {
+                                      allEqs.add(JSON.stringify([lhs, rhs]));
+                                      yield [lhs, rhs];
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+
+      function formatExpr(expr, outermost = true) {
+          if (typeof expr === 'number') {
+              return VAR_NAMES[expr];
+          }
+          const [left, right] = expr;
+          const s = `${formatExpr(left, false)} ∘ ${formatExpr(right, false)}`;
+          return outermost ? s : `(${s})`;
+      }
+
+      function findEquationNumber(inputEq) {
+          const canonicalInput = canonicalizeEquation(inputEq);
+          let eqNum = 1;
+          for (const [lhs, rhs] of generateAllEqs()) {
+              const eqStr = `${formatExpr(lhs)} = ${formatExpr(rhs)}`;
+              if (canonicalizeEquation(eqStr) === canonicalInput) {
+                  return eqNum;
+              }
+              eqNum++;
+          }
+          return null;
+      }
+
+      function findEquation() {
+          const inputEq = document.getElementById('equationInput').value;
+          const resultDiv = document.getElementById('result');
+          
+          try {
+              const eqNum = findEquationNumber(inputEq);
+              
+              if (eqNum) {
+                  renderImplications(eqNum);
+                  showPage('detailPage');
+              } else {
+                  resultDiv.innerHTML = `The equation '${inputEq}' (canonicalized as '${canonicalizeEquation(inputEq)}') was not found in the generated list`;
+              }
+          } catch (error) {
+              showErrorPopup(error.message);
+              resultDiv.innerHTML = '';
+          }
+      }
+      
+    </script>
+  </body>
+</html>
