@@ -36,9 +36,9 @@ It was also able to (re)prove Theorem~\ref{1689_equiv_2}, albeit with a manually
 
 This is a simple but apparently at least somewhat effective Rust theorem prover based on egg e-graph library written for this project.
 
-It proved 5574 of the 24283 implications in the "only_strongest.txt" file at the time.
+It proved 5574 of the 24283 implications in the "only\_strongest.txt" file at the time.
 
-The code was originally based on the magma_search pull request, but has been pretty much completely rewritten.
+The code was originally based on the magma\_search pull request, but has been pretty much completely rewritten.
 
 Currently search just uses the egg library in a basic fashion, except that in case there are extra variables not present in the LHS, it has code to instantiate them with all subexpressions of the original goal.
 
@@ -49,7 +49,7 @@ Possible future work:
 \begin{itemize}
 	\item Figure out which implications are important to prove and try it on them
 	\item Replace the fork-based code with self-execution so that it works on Windows and is less of na hack
-	\itme Fork egg and fix the buggy and slow length optimization of explanations
+	\item Fork egg and fix the buggy and slow length optimization of explanations
 	\item Maybe write Lean code directly instead of writing explanation sexps and converting to Lean code in a second run
 	\item Fix the generation of extra variable values so it doesn't take too much time in pathological cases (i.e. goals with 4-6 variables)
 	\item Determine whether it actually has some advantages compared to Vampire and lean-egg
