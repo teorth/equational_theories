@@ -35,11 +35,27 @@ def MagmaHom.comp {G H I : Type*} [Magma G] [Magma H] [Magma I] (f₁ : G →∘
     have hxy := f₂.map_op' (f₁.toFun x) (f₁.toFun y)
     rwa [←f₁.map_op'] at hxy
 
+lemma MagmaHom.comp_apply {G H I : Type*} [Magma G] [Magma H] [Magma I]
+    (f₁ : G →∘ H) (f₂ : H →∘ I) (x : G) :
+    (f₁.comp f₂) x = f₂ (f₁ x) :=
+  rfl
+
 /-- The composition of magma homomorphisms is associative. -/
 lemma MagmaHom.comp_assoc {G H I J : Type*} [Magma G] [Magma H] [Magma I] [Magma J]
     (f₁ : G →∘ H) (f₂ : H →∘ I) (f₃ : I →∘ J) :
     f₁.comp (f₂.comp f₃) = (f₁.comp f₂).comp f₃ :=
   rfl
+
+lemma MagmaHom.cancel_right {G H I : Type*} [Magma G] [Magma H] [Magma I] {f : G →∘ H}
+    (hf : Function.Surjective f) (f₁ f₂ : H →∘ I) :
+    f.comp f₁ = f.comp f₂ ↔ f₁ = f₂ :=
+  ⟨MagmaHom.ext ∘ hf.forall.2 ∘ DFunLike.ext_iff.1, (· ▸ rfl)⟩
+
+lemma MagmaHom.cancel_left {G H I : Type*} [Magma G] [Magma H] [Magma I] {f : H →∘ I}
+    (hf : Function.Injective f) (f₁ f₂ : G →∘ H) :
+    f₁.comp f = f₂.comp f ↔ f₁ = f₂ :=
+  ⟨fun hf₁₂ ↦ MagmaHom.ext (fun _ ↦ hf (by rw [←MagmaHom.comp_apply, hf₁₂, MagmaHom.comp_apply])),
+    (· ▸ rfl)⟩
 
 /-- `MagmaHomClass F G H` states that `F` is a type of operation-preserving homomorphisms. -/
 class MagmaHomClass (F : Type*) (G H : outParam Type*) [Magma G] [Magma H] [FunLike F G H] :
@@ -163,6 +179,10 @@ def idMagmaEquiv (G : Type*) [Magma G] : G ≃∘ G where
   left_inv := fun _ ↦ rfl
   right_inv := fun _ ↦ rfl
   map_op' := fun _ _ ↦ rfl
+
+lemma MagmaEquiv.comp_id {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) :
+    f.comp (idMagmaEquiv H) = f :=
+  rfl
 
 /-- `MagmaEquiv` out of two `MagmaHom`s.-/
 def MagmaHom.toMagmaEquiv {G H : Type*} [Magma G] [Magma H]
