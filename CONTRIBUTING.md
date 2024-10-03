@@ -29,10 +29,12 @@ The following instructions detail the process for claiming and completing tasks.
 Once you are assigned to an issue, begin working on the corresponding task. You should create a new branch from the `main` branch to develop your solution.
 
 > [!WARNING]
-> Before pushing any changes, it is strongly recommended to run
+> Before pushing any changes, it is strongly recommended to install the pre-push hook by running:
+>
 > ```bash
-> source scripts/run_before_push.sh
+> source scripts/install_pre-push.sh
 > ```
+>
 > to reduce the risk of CI check failures.
 
 ### 4. Submitting a Pull Request
