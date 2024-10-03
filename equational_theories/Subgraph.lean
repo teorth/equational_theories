@@ -6,10 +6,7 @@ import equational_theories.Equations
 import equational_theories.FactsSyntax
 
 /- This is a subproject of the main project to completely describe a small subgraph of the entire
-implication graph.  Currently we are focusing only on the following equations:
-
-1-8, 14, 23, 29, 38-43, 45-46, 168, 381, 387, 1689, 5105, 3722, 4378, 4512, 4513, 4522, 4564, 4582,
-5105, 28393, 374794
+implication graph. The list of equations under consideration can be found at https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html
 
 Implications here should be placed inside the "Subgraph" namespace.
 
