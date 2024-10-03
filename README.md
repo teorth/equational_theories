@@ -74,6 +74,8 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
 - [The MathOverflow post that inspired the project](https://mathoverflow.net/questions/450930/is-there-an-identity-between-the-associative-identity-and-the-constant-identity), Jul 17, 2023.
     - [A related MathOverflow post](https://mathoverflow.net/questions/450890/is-there-an-identity-between-the-commutative-identity-and-the-constant-identity), Jul 16, 2023.
 - [Scripts](scripts)
+    - Shell
+        - [`run_before_push`](scripts/run_before_push.sh) - performs some of the CI checks, suitable for running just before pushing a new PR
     - Lean
         - [`extract_implications`](scripts/extract_implications.lean) - extracts implications from one or more Lean files
     - Python
