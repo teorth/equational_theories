@@ -12,7 +12,7 @@ def parse_line(line):
 
 def prune_rows(lines, matrix_size=4696):
     matrix = np.zeros((matrix_size, matrix_size), dtype=bool)
-    
+
     random.shuffle(lines)
     keep = []
     for i,line in enumerate(lines):

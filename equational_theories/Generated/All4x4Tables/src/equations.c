@@ -2,16 +2,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "header.h"
 
-#define uint64_t u_int64_t
-
-#define N 4
-#define TABLE_SIZE (N * N)
-#define MAX_ARGS 6
-#define NUM_FUNCTIONS 4694
-
-typedef bool (*FunctionPtr)(int*, uint64_t);
-
+#define uint64_t int
 
 FunctionPtr* functions;
 int* nvar_list;
