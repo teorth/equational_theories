@@ -86,11 +86,7 @@ if __name__ == '__main__':
         for jj, outcome in enumerate(row):
             i_idx = image_to_eqs[ii]
             j_idx = image_to_eqs[jj]
-            if ii == jj:
-                # always true.
-                pixels[i_idx, j_idx] = outcome_to_color("implicit_proof_true")
-            else :
-                pixels[i_idx, j_idx] = outcome_to_color(outcome)
+            pixels[i_idx, j_idx] = outcome_to_color(outcome)
 
     if args.scale != 1:
         new_size = (size * args.scale, size * args.scale)
