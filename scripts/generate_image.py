@@ -90,7 +90,7 @@ if __name__ == '__main__':
                     assert False
 
                 i += 1
-    except e:
+    except Exception as e:
         print(e)
         print_usage()
         exit(1)

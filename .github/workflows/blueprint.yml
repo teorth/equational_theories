@@ -108,8 +108,13 @@ jobs:
           find home_page/docs -name "*.trace" -delete
           find home_page/docs -name "*.hash" -delete
 
+      - name: Generate home_page/dashboard.md
+        run: |
+          ~/.elan/bin/lake exe extract_implications outcomes equational_theories --hist > /tmp/hist.json
+          python scripts/generate_dashboard.py /tmp/hist.json
+
       - name: Bundle dependencies
-        if: github.event_name == 'push' && github.event.pull_request == null
+        if: github.event_name == 'push'
         uses: ruby/setup-ruby@v1
         with:
           working-directory: home_page
@@ -117,18 +122,18 @@ jobs:
           bundler-cache: true  # Enable caching for bundler
 
       - name: Build website using Jekyll
-        if: github.event_name == 'push' && github.event.pull_request == null && env.HOME_PAGE_EXISTS == 'true'
+        if: github.event_name == 'push' && env.HOME_PAGE_EXISTS == 'true'
         working-directory: home_page
         run: JEKYLL_ENV=production bundle exec jekyll build  # Note this will also copy the blueprint and API doc into home_page/_site
 
       - name: "Upload website (API documentation, blueprint and any home page)"
-        if: github.event_name == 'push' && github.event.pull_request == null
+        if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ env.HOME_PAGE_EXISTS == 'true' && 'home_page/_site' || 'home_page/' }}
 
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.event.pull_request == null
+        if: github.event_name == 'push'
         id: deployment
         uses: actions/deploy-pages@v4
 

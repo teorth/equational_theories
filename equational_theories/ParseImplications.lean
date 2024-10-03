@@ -10,7 +10,7 @@ open Lean
 structure Implication where
   lhs : String
   rhs : String
-deriving Lean.ToJson, Lean.FromJson
+deriving Lean.ToJson, Lean.FromJson, DecidableEq, Hashable
 
 /--
 Names of equations satisfied rsp. refuted by the same magma; used to concisely express
@@ -29,7 +29,10 @@ Extracts the equation name out of an expression of the form `EquationN G inst`.
 -/
 def getEquationName (app : Expr) : Option String := do
   match app with
-  | (.app (.app (.const name _) _) _) => some ("" ++ name.toString)
+  | (.app (.app (.const name _) _) _) =>
+    -- Copy the string to allow it to safely escape from `Lean.withImportModules`.
+    -- Otherwise, segfaults are possible.
+    some ("" ++ name.toString)
   | _ => none
 
 /--
