@@ -1,0 +1,6 @@
+jobs: 4
+optimization: 2
+with-compiler: ghc-9.10.1
+
+packages:
+  ./.
