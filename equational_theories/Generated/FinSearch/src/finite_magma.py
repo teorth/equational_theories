@@ -26,7 +26,7 @@ class FiniteMagma:
         return self.table[x + self.num_elements*y]
 
     def __str__(self):
-        ret = "x | y | x ∘ y"
+        ret = "x | y | x ◇ y"
         for x in range(self.num_elements):
             for y in range(self.num_elements):
                 ret += f"\n{x} | {y} |   {self.op(x,y)}"

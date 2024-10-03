@@ -58,20 +58,20 @@ class Equation:
         # Parse the equation into an expression tree
         def parse_expression(expr: str) -> Node:
             expr = expr.strip()
-            if '∘' not in expr:
+            if '◇' not in expr:
                 return Node(expr)
 
-            # Find the outermost ∘ operator
+            # Find the outermost ◇ operator
             bracket_count = 0
             for i, char in enumerate(expr):
                 if char == '(':
                     bracket_count += 1
                 elif char == ')':
                     bracket_count -= 1
-                elif char == '∘' and bracket_count == 0:
+                elif char == '◇' and bracket_count == 0:
                     left = parse_expression(expr[:i])
                     right = parse_expression(expr[i+1:])
-                    return Node('∘', left, right)
+                    return Node('◇', left, right)
 
             # If we get here, the expression is wrapped in brackets
             return parse_expression(expr[1:-1])
