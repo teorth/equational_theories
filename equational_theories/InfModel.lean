@@ -144,10 +144,17 @@ theorem Finite.Equation28393_implies_Equation2 (G : Type*) [Magma G] [Finite G] 
     rw [h x y z, this ((y ∘ y) ∘ y)  x u, ← this ((y ∘ y) ∘ y) u u, ← h]
 
 theorem Equation28393_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equation28393 G ∧ ¬Equation2 G := by
-  letI : Magma ℕ := { op := sorry }
+  letI : Magma ℕ := { op := fun a b ↦ if a = b then 2^b else
+        if a = 2^b then 3^b else
+        if a = 3^(padicValNat 3 a) then a * 5^b else
+        if a = 3^(padicValNat 3 a) * 5^(padicValNat 5 a) then padicValNat 5 a else
+        if a = 2^(3^(padicValNat 3 (padicValNat 2 a))) then 3^(padicValNat 3 (padicValNat 2 a)) else 1}
   refine ⟨ℕ, this, ⟨?_, fun x ↦ nomatch (x 0 1)⟩⟩
   intro x y z
-  have h1 : ∀ (y: ℕ), y ∘ y = 2^y := sorry
+  have h1 : ∀ (y: ℕ), y ∘ y = 2^y := by
+    intro y
+    unfold Magma.op
+    simp only [ite_true]
   have h2 : ∀ (y: ℕ), (2^y) ∘ y = 3^y := sorry
   have h3 : ∀ (x y: ℕ), x ≠ 3^y → (3^y) ∘ x = 3^y * 5^x := sorry
   have h4 : ∀ (x y z: ℕ), z ≠ 3^y * 5^x → (3^y * 5^x) ∘ z = x := sorry
