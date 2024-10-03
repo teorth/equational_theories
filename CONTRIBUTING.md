@@ -33,7 +33,7 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 > ```bash
 > source scripts/run_before_push.sh
 > ```
-> to reduce the likelihood of CI check failures.
+> to reduce the risk of CI check failures.
 
 ### 4. Submitting a Pull Request
 
