@@ -212,6 +212,52 @@ def MagmaEquiv.symm {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) : H ≃�
   right_inv := f.left_inv
   map_op' x y := by simpa using (congr_arg f.invFun (f.map_op' (f.invFun x) (f.invFun y))).symm
 
+lemma MagmaEquiv.symm_apply_apply {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) (x : G) :
+    e.symm (e x) = x :=
+  e.toEquiv.symm_apply_apply x
+
+lemma MagmaEquiv.apply_symm_apply {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) (y : H) :
+    e (e.symm y) = y :=
+  e.toEquiv.apply_symm_apply y
+
+lemma MagmaEquiv.symm_comp_self {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) : e.symm ∘ e = id :=
+  funext e.symm_apply_apply
+
+lemma MagmaEquiv.self_comp_symm {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) : e ∘ e.symm = id :=
+  funext e.apply_symm_apply
+
+lemma MagmaEquiv.apply_eq_iff_symm_apply {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) (x : G) (y : H) :
+    e x = y ↔ x = e.symm y :=
+  e.toEquiv.apply_eq_iff_eq_symm_apply
+
+lemma MagmaEquiv.symm_apply_eq {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) (x : G) (y : H) :
+    e.symm y = x ↔ y = e x :=
+  e.toEquiv.symm_apply_eq
+
+lemma MagmaEquiv.eq_symm_apply {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) (x : G) (y : H) :
+    x = e.symm y ↔ e x = y :=
+  e.toEquiv.eq_symm_apply
+
+lemma MagmaEquiv.eq_comp_symm {G H I : Type*} [Magma G] [Magma H]
+    (e : G ≃∘ H) (f : H → I) (f' : G → I) :
+    f = f' ∘ e.symm ↔ f ∘ e = f' :=
+  e.toEquiv.eq_comp_symm f f'
+
+lemma MagmaEquiv.comp_symm_eq {G H I : Type*} [Magma G] [Magma H]
+    (e : G ≃∘ H) (f : H → I) (f' : G → I) :
+    f' ∘ e.symm = f ↔ f' = f ∘ e :=
+  e.toEquiv.comp_symm_eq f f'
+
+lemma MagmaEquiv.eq_symm_comp {G H I : Type*} [Magma G] [Magma H]
+    (e : G ≃∘ H) (f : I → G) (f' : I → H) :
+    f = e.symm ∘ f' ↔ e ∘ f = f' :=
+  e.toEquiv.eq_symm_comp f f'
+
+lemma MagmaEquiv.symm_comp_eq {G H I : Type*} [Magma G] [Magma H]
+    (e : G ≃∘ H) (f : I → G) (f' : I → H) :
+    e.symm ∘ f' = f ↔ f' = e ∘ f :=
+  e.toEquiv.symm_comp_eq f f'
+
 /-- Inversing the identity gives the identity. -/
 @[simp]
 lemma MagmaEquiv.symm_id {G : Type*} [Magma G] : (idMagmaEquiv G).symm = idMagmaEquiv G :=
