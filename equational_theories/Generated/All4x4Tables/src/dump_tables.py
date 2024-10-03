@@ -1,23 +1,24 @@
 import numpy as np
 
+N = 4
+
 def to_table(packed_int):
     # Ensure the input is treated as an unsigned 64-bit integer
     packed_int = packed_int & 0xFFFFFFFFFFFFFFFF
 
-    # Create the 4x4 table
-    table = [[0 for _ in range(4)] for _ in range(4)]
+    # Create the NxN table
+    table = [[0 for _ in range(N)] for _ in range(N)]
 
     # Fill the table
-    for i in range(4):
-        for j in range(4):
-            # Extract 2 bits for each cell
-            cell_value = (packed_int >> (2 * (i * 4 + j))) & 0b11
+    for i in range(N):
+        for j in range(N):
+            # Extract log2(K) bits for each cell, ensuring values in 0..K-1 range
+            cell_value = (packed_int // (N ** (i * N + j))) % N
             table[i][j] = cell_value
 
-    # Print the table
-    return np.array(table)[::-1,::-1]
-
-for line in open("data/covering_set.txt"):
+    # Convert to numpy array and return flipped
+    return np.array(table)[::-1, ::-1]
+for line in open(f"data/covering_set_{N}x{N}.txt"):
     if 'Table' not in line: continue
     line = line.strip()
     parts = line.split('[')
