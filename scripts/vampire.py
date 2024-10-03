@@ -28,7 +28,7 @@ def format_eq(eq):
 
 
 def encode_problem(problem):
-  assumption, goal = eqs[int(problem['lhs'].split('n')[1])], eqs[int(problem['rhs'].split('n')[1])]
+  assumption, goal = eqs[int(problem['lhs'].split('n')[1]) - 1], eqs[int(problem['rhs'].split('n')[1]) - 1]
   return f'fof(lhs, axiom, {format_eq(assumption)}).\nfof(rhs, conjecture, {format_eq(goal)}).\n'
 
 count_proven = 0
@@ -42,7 +42,7 @@ for problem in tqdm(problems):
 
   try:
     start_time = time.perf_counter()
-    out = subprocess.check_output(['~/Downloads/vampire',
+    out = subprocess.check_output(['/home/commandmaster/Downloads/vampire',
                                     '/proc/self/fd/0', '-t', '0.1'], timeout=0.03, input=pr.encode()).decode()
     dur = time.perf_counter() - start_time
     if 'Termination reason: Satisfiable' in out:
@@ -57,7 +57,7 @@ for problem in tqdm(problems):
   except Exception as e:
     try:
       start_time = time.perf_counter()
-      out = subprocess.check_output(['~/Downloads/vampire', '--mode', 'casc_sat',
+      out = subprocess.check_output(['/home/commandmaster/Downloads/vampire', '--mode', 'casc_sat',
                                    '/proc/self/fd/0', '-t', '0.3'], input=pr.encode()).decode()
       dur = time.perf_counter() - start_time
       if 'Termination reason: Satisfiable' in out:
