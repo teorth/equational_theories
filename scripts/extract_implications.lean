@@ -22,15 +22,20 @@ def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → IO UInt32)
       action rs
 
 def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
+  let only_e_c := inp.hasFlag "equivalence_creators"
   withExtractedResults inp fun rs => do
     let rs' := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
     let rs' := rs'.map (·.variant)
-    let (equations, outcomes) := Closure.outcomes_mod_equiv rs'
+    let (equations, outcomes) ← Closure.outcomes_mod_equiv rs'
     let mut unknowns : Array Implication := #[]
     for i in [:equations.size] do
       for j in [:equations.size] do
         if outcomes[i]![j]!.isNone then
-          unknowns := unknowns.push ⟨equations[i]!, equations[j]!⟩
+          if only_e_c then
+            if outcomes[j]![i]!.getD false then
+              unknowns := unknowns.push ⟨equations[i]!, equations[j]!⟩
+          else
+            unknowns := unknowns.push ⟨equations[i]!, equations[j]!⟩
     IO.println (toJson unknowns).compress
     pure 0
 
@@ -40,6 +45,7 @@ def unknowns : Cmd := `[Cli|
 
   FLAGS:
     proven; "Only consider proven results"
+    equivalence_creators; "Output only implications whose converse is known to be true"
 
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"
@@ -70,16 +76,19 @@ def Output.asJson (v : Output) : String :=
 
 def generateOutcomes (inp : Cli.Parsed) : IO UInt32 := do
   withExtractedResults inp fun rs => do
-    let (equations, outcomes) := Closure.list_outcomes rs
+    let (equations, outcomes) ← Closure.list_outcomes rs
     if inp.hasFlag "hist" then
       let mut count : Std.HashMap Closure.Outcome Nat := {}
       for a in outcomes do
         for b in a do
           count := count.insert b (count.getD b 0 + 1)
       IO.print "{"
+      let mut first := true
       for ⟨a, b⟩ in count do
-        println! "{a}: {b},"
-      IO.println "}"
+        if !first then IO.print ",\n"
+        IO.print f!"{a}: {b}"
+        first := false
+      IO.println "\n}"
     else
       IO.println (toJson ({equations, outcomes : OutputOutcomes})).compress
     pure 0
@@ -103,7 +112,7 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
       let rs := if include_conj then rs else rs.filter (·.proven)
       let rs := if only_implications then rs.filter (·.variant matches .implication ..) else rs
       let rs := rs.map (·.variant)
-      let rs := if include_impl then Closure.closure rs else Closure.toEdges rs
+      let rs ← if include_impl then Closure.closure rs else pure (Closure.toEdges rs)
       if inp.hasFlag "json" then
         let implications := (rs.filter (·.isTrue)).map (·.get)
         let nonimplications := (rs.filter (!·.isTrue)).map (·.get)

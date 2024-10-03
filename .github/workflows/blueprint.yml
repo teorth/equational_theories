@@ -3,11 +3,30 @@ name: Compile blueprint
 on:
   push:
     branches:
-      - main # Trigger on pushes to the default branch
+      - main
+    paths:
+      - '**/*.lean'
+      - '**/blueprint.yml'
+      - 'home_page/**'
+      - 'home'
+      - '**/generate_dashboard.py'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
   pull_request:
     branches:
-      - main # Trigger only on pull requests targeting the main branch
+      - main
+    paths:
+      - '**/*.lean'
+      - '**/blueprint.yml'
+      - 'home_page/**'
+      - 'home'
+      - '**/generate_dashboard.py'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
   workflow_dispatch: # Allow manual triggering of the workflow from the GitHub Actions interface
+
 
 # Cancel previous runs if a new commit is pushed to the same PR or branch
 concurrency:
@@ -107,6 +126,11 @@ jobs:
         run: |
           find home_page/docs -name "*.trace" -delete
           find home_page/docs -name "*.hash" -delete
+
+      - name: Generate home_page/dashboard.md
+        run: |
+          ~/.elan/bin/lake exe extract_implications outcomes equational_theories --hist > /tmp/hist.json
+          python scripts/generate_dashboard.py /tmp/hist.json
 
       - name: Bundle dependencies
         if: github.event_name == 'push'

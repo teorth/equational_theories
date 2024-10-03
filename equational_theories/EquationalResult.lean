@@ -1,5 +1,6 @@
 import Lean.Elab.Exception
 import Lean.Elab.Declaration
+import Lean.Util.CollectAxioms
 
 import equational_theories.ParseImplications
 
@@ -68,6 +69,14 @@ initialize equationalResultAttr : Unit ←
     add   := fun declName _stx _attrKind => do
        let filename := (←read).fileName
        discard <| Meta.MetaM.run do
+       let mut is_conjecture := false
+       let axioms ← Lean.collectAxioms declName
+       for a in axioms do
+         if a = `Conjecture.conjectureAx then
+           is_conjecture := true
+         else if not (a ∈ [``propext, ``Classical.choice, ``Quot.sound]) then
+           throwError s!"declaration uses a prohibited axiom: {a}"
+
        let info ← getConstInfo declName
        let entry ← match info with
                    | .thmInfo  (val : TheoremVal) =>
@@ -80,6 +89,8 @@ initialize equationalResultAttr : Unit ←
                      else
                        throwError "failed to match type of @[equational_result] theorem"
                    | _ => throwError "@[equational_result] is only allowed on theorems"
+
+       let entry := if is_conjecture then entry.toConjecture else entry
        modifyEnv fun env =>
          equationalResultsExtension.addEntry env entry
     erase := fun _declName =>
@@ -125,6 +136,9 @@ marking it as a conjecture.
 def «conjecture» := leading_parser
   declModifiers false >> "conjecture" >> declId >> ppIndent declSig
 
+-- Axiom used in conjectures.
+axiom conjectureAx (p : Prop) : p
+
 /-- Elaborates a `conjecture` declaration. The declaration is translated to an axiom during
 elaboration, but it's then removed from the environment.
 -/
@@ -134,10 +148,8 @@ def elabConjecture : CommandElab
     let maybe_entry ← withoutModifyingEnv do
       let original_length := (equationalResultsExtension.getState (← getEnv)).size
 
-      -- The helper axiom is used instead of `sorry` to avoid spurious warnings
-      elabDeclaration <| ← `(command| axiom helper (p : Prop) : p)
       elabDeclaration <| ← `(command| $mods:declModifiers
-                                      theorem $name $args* : $res := helper _)
+                                      theorem $name $args* : $res := Conjecture.conjectureAx _)
 
       -- If we add a new entry to the equational results list
       if original_length < (equationalResultsExtension.getState (← getEnv)).size then
