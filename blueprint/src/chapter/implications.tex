@@ -46,7 +46,7 @@ This result was posed as Problem A1 from Putnam 2001.
 \begin{proof}\leanok
 \end{proof}
 
-The following result was problem A4 on Putnam 1978.
+The following result was Problem A4 on Putnam 1978.
 
 \begin{theorem}[3744 implies 3722, 381]\label{3744_implies_3722_381}\uses{eq3744, eq3722, eq381} Definition \ref{eq3744} implies Definition \ref{eq3722} and Definition \ref{eq381}.
 \end{theorem}
@@ -138,4 +138,15 @@ $$x \circ (y \circ z) = (y \circ x) \circ (z \circ ((x \circ (y \circ z)) \circ 
 which one can simplify using commutativity and \eqref{16-again} (or \eqref{14-again}) to eventually obtain
 $$x \circ (y \circ z) = (x \circ y) \circ z$$
 which is Definition \ref{eq4512}.  $G$ is now commutative and associative, and every element is its own inverse and of exponent $2$, hence is an abelian group thanks to \eqref{xxe}, so $G$ is an abelian group of exponent $2$ as claimed.  The converse is easily verified.
+\end{proof}
+
+\begin{theorem}[953 is equivalent to 2]\label{953_equiv_2}\uses{eq953, eq2}  Definition \ref{eq953} is equivalent to Definition \ref{eq2}.
+\end{theorem}
+
+\begin{proof}  It suffices to show that Definition \ref{eq953} implies Definition \ref{eq2}.  Pick an element $0$ of $G$ and define $1 = 0 \circ 0$ and $2 = 1 \circ 1$ (we do not require $0,1,2$ to be distinct).
+From Definition \ref{eq953} with $x=z=0$ we have
+$$ 0 = y \circ 2.$$
+If we then apply Definition \ref{eq953} with $z=1$ we conclude that
+$$ x = y \circ 0$$
+for all $x,y$, from which one concludes $x=x'$ for any $x,x' \in G$, giving Definition \ref{eq2}.
 \end{proof}
