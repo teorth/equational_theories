@@ -10,6 +10,7 @@ by
     have h₂ := FreeMagma.orderLtSubst u σ
     omega
 
+open Law
 -- We use min here, as we want terms of *at least* size n.
 @[simp]
 def MagmaLaw.order {α} (E : MagmaLaw α) : Nat := min (FreeMagma.order E.lhs) (FreeMagma.order E.rhs)
