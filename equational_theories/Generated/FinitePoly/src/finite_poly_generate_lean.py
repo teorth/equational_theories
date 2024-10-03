@@ -51,7 +51,7 @@ def parse_row(row):
     if not row.startswith("'(") or "seen" in row: return
     _, eq, nums = row.split("'")
     data = set(ast.literal_eval(nums.strip()))
-    # the numbers are off by one, the offcial equations list is 1-indexed
+    # the numbers are off by one, the official equations list is 1-indexed
     satisfied = [i+1 for i in range(4694) if i in data]
     refuted = [i+1 for i in range(4694) if i not in data]
 

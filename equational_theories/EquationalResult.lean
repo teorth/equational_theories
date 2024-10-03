@@ -18,7 +18,7 @@ extension, as done in this file, has the following advantages:
     the error immediately at the theorem declaration.
   - Recording the results just once avoids the need to linearly scan the whole environment
     (could get expensive) at each downstream usage point.
-  - Requiring explicit opt-in prevents the possibilty of accidental inclusions of unwanted theorems.
+  - Requiring explicit opt-in prevents the possibility of accidental inclusions of unwanted theorems.
 -/
 
 open Lean Parser Elab Command
