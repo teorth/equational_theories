@@ -50,7 +50,15 @@ def rle_encode(data):
     encoded.extend((current, count))
     return encoded
 
-n = np.load("/tmp/a.npy")
+n = np.array(np.load("/tmp/a.npy"), dtype=np.uint8)
+
+from PIL import Image
+#n = n!=8
+#n = n[:, np.argsort(np.sum(n, 0))]
+#n = n[np.argsort(np.sum(n, 1)), :]
+#Image.fromarray(255*np.array(n, dtype=np.uint8)).save("a.png")
+#exit(0)
+
 
 print("var arr = ",rle_encode(n.flatten().tolist()));
 
@@ -61,3 +69,9 @@ for line in open("../equational_theories/AllEquations.lean"):
         N += 1
         eqs.append("Equation"+str(N)+"["+line.split(":=")[1].strip()+"]")
 print("var equations = ", eqs);
+
+special = []
+for line in open("../equational_theories/Equations.lean"):
+    if line.startswith("abbrev Equation"):
+        special.append(line.split()[1])
+print("var special = ", special)

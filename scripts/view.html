@@ -29,6 +29,10 @@
       .header .equation-stat:hover { background-color: #e0e0e0; }
       .checkbox-container { margin: 10px 0; }
 
+      .special {
+	  font-weight: bold
+      }
+      
       
       input[type="text"] {
           width: 300px;
@@ -150,7 +154,7 @@
       </div>
     </div>
 
-    <script src="out.js">
+    <script src="out.js?">
     </script>
     <script>
 
@@ -195,8 +199,6 @@
 
       // Decode RLE
       const decoded = decodeRLE(arr);
-      console.log(decoded[0,1])
-      console.log(decoded[1,0])
 
       // Map through LUT
       const mapped = mapThroughLUT(decoded);
@@ -288,8 +290,9 @@
               const element = document.createElement('div');
               element.className = 'equation-item';
               element.dataset.index = index;
+	      const isspecial = special.indexOf(eq.split("[")[0]) !== -1 ? "special" : "";
               element.innerHTML = `
-            <div class="equation-name">${eq}</div>
+            <div class="equation-name ${isspecial}">${eq}</div>
             <div class="equation-stat implies">${stats.implies}</div>
             <div class="equation-stat impliedBy">${stats.impliedBy}</div>
             <div class="equation-stat antiImplies">${stats.antiImplies}</div>
@@ -373,7 +376,8 @@
               if (i === index) return; // Skip self-implication
               const eq = equations[i];
               const isConjectured = status.includes('conjecture');
-              const item = `<div class="implication-item ${status} ${isConjectured ? 'conjectured' : ''}">${eq}</div>`;
+	      const isspecial = special.indexOf(equations[i].split("[")[0]) !== -1 ? "special" : "";
+              const item = `<div class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}</div>`;
               
               if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
                   implies.push(item);
