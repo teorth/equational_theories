@@ -34,7 +34,7 @@ equation 12 := x = x ∘ (y ∘ z)
 equation 13 := x = y ∘ (x ∘ x)
 -- equation 14 := x = y ∘ (x ∘ y)
 equation 15 := x = y ∘ (x ∘ z)
-equation 16 := x = y ∘ (y ∘ x)
+-- equation 16 := x = y ∘ (y ∘ x)
 equation 17 := x = y ∘ (y ∘ y)
 equation 18 := x = y ∘ (y ∘ z)
 equation 19 := x = y ∘ (z ∘ x)
@@ -1589,7 +1589,7 @@ equation 1567 := x = (y ∘ z) ∘ (x ∘ (w ∘ w))
 equation 1568 := x = (y ∘ z) ∘ (x ∘ (w ∘ u))
 equation 1569 := x = (y ∘ z) ∘ (y ∘ (x ∘ x))
 equation 1570 := x = (y ∘ z) ∘ (y ∘ (x ∘ y))
-equation 1571 := x = (y ∘ z) ∘ (y ∘ (x ∘ z))
+-- equation 1571 := x = (y ∘ z) ∘ (y ∘ (x ∘ z))
 equation 1572 := x = (y ∘ z) ∘ (y ∘ (x ∘ w))
 equation 1573 := x = (y ∘ z) ∘ (y ∘ (y ∘ x))
 equation 1574 := x = (y ∘ z) ∘ (y ∘ (y ∘ y))
@@ -2680,7 +2680,7 @@ equation 2658 := x = ((x ∘ x) ∘ (y ∘ z)) ∘ w
 equation 2659 := x = ((x ∘ y) ∘ (x ∘ x)) ∘ x
 equation 2660 := x = ((x ∘ y) ∘ (x ∘ x)) ∘ y
 equation 2661 := x = ((x ∘ y) ∘ (x ∘ x)) ∘ z
-equation 2662 := x = ((x ∘ y) ∘ (x ∘ y)) ∘ x
+-- equation 2662 := x = ((x ∘ y) ∘ (x ∘ y)) ∘ x
 equation 2663 := x = ((x ∘ y) ∘ (x ∘ y)) ∘ y
 equation 2664 := x = ((x ∘ y) ∘ (x ∘ y)) ∘ z
 equation 2665 := x = ((x ∘ y) ∘ (x ∘ z)) ∘ x
