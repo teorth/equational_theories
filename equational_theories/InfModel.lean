@@ -155,13 +155,27 @@ theorem Equation28393_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
   rw [h1, h2]
   by_cases hx : x = 3^y
   .
-    rw [hx, h1, h5 y (y ∘ z) sorry]
-  .
-    rw [h3 x y hx]
-    by_cases hz : z = 3^y
+    rw [hx, h1]
+    by_cases hyz : y ∘ z = 2^(3^y)
     .
+      rw [hyz, h1]
       sorry
     .
-      rw [h4 x y (y ∘ z) sorry]
+      by_cases hyz' : y ∘ z = 3^y
+      .
+        rw [hyz', h2]
+        sorry
+      .
+        have : (y ∘ z) ≠ 3^y ∧ (y ∘ z) ≠ 2^(3^y)  := And.intro hyz' hyz
+        rw [h5 y (y ∘ z) this]
+  .
+    rw [h3 x y hx]
+    by_cases hyz : y ∘ z = 3^y * 5^x
+    .
+
+      rw [hyz, h1]
+      sorry
+    .
+      rw [h4 x y (y ∘ z) hyz]
 
 end InfModel
