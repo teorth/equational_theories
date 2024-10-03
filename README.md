@@ -18,7 +18,6 @@ Some automatically generated progress:
 - Sep 29, 2024: [13.7m implications were conjectured to be refused by a collection of 515 magmas](equational_theories/Generated/All4x4Tables), collected by enumerating all 4^(4*4) operators and reducing to a covering set. Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0008.html).
 - Oct 1, 2024: Another [~250k transitive implications](equational_theories/Generated/TrivialBruteforce) were proven by simple proof generation. Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0007.html).
 - Oct 1, 2024: [~500k transitive implications](equational_theories/Generated/EquationSearch) were proven by a custom tool that chooses hypotheses and leveraged previously found implications to search by using the implied equations as substitutions.  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0009.html).
-- Oct 2, 2024: All but 7999 implications (99.958%) were [conjecturally resolved using the vampire ATP](equational_theories/Generated/Vampire).
 - Oct 2, 2024: 86 (potentially) new implications in `Subgraph.lean` conclusively (i.e. in Lean) resolved using the [lean-egg tactic](https://github.com/marcusrossel/lean-egg). Some of these were simply missed by the transitive closure computation and technically already implied, but some were genuinely new.
 
 Some statistics and data files from a given point in time:
