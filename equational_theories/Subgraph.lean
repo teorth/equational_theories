@@ -335,6 +335,14 @@ theorem Equation1571_implies_Equation43 (G: Type*) [Magma G] (h: Equation1571 G)
   apply Eq.trans $ h _ (x ∘ x) (x ∘ (x ∘ y))
   rw [← h x x y, ← eq23 x, ← eq16 y x, eq40 x y, ← eq23 y]
 
+@[equational_result]
+theorem Equation1571_implies_Equation4512 (G: Type*) [Magma G] (h: Equation1571 G) : Equation4512 G := by
+  have eq16 := Equation1571_implies_Equation16 G h
+  have eq43 := Equation1571_implies_Equation43 G h
+  intro x y z
+  apply Eq.trans $ h (x ∘ (y ∘ z)) y x
+  rw [eq43 (x ∘ (y ∘ z)) x, ← eq16 (y ∘ z) x, ← eq16 z y, eq43 y x]
+
 /-- This result was first obtained by Kisielewicz in 1997 via computer assistance. -/
 @[equational_result]
 theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G:= by
