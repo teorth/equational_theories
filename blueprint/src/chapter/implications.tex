@@ -87,3 +87,55 @@ $$ (x \circ x) \circ x = x,$$
 $$ (x \circ y) \circ y = y,$$
 $$ x \circ y = y.$$
 \end{proof}
+
+The following result was established in \cite{mendelsohn-padmanabhan}.
+
+\begin{theorem}[Consequences of 1571]\label{1571_impl}\uses{eq1571, eq2662, eq40, eq23, eq8, eq16, eq14, eq43, eq4512}\lean{Subgraph.Equation1571_implies_Equation2662, Subgraph.Equation1571_implies_Equation40, Subgraph.Equation1571_implies_Equation23,Equation1571_implies_Equation8, Equation1571_implies_Equation16, Equation1571_implies_Equation43, Equation1571_implies_Equation4512}\leanok  Magmas obeying Definition \ref{eq1571} also obey Definitions \ref{eq2662}, \ref{eq40}, \ref{eq23}, \ref{eq8}, \ref{eq16}, \eqref{eq14}, \ref{eq43}, and \ref{eq4512}, and are in fact abelian groups of exponent two.  Conversely, all abelian groups of exponent two obey Definition \ref{eq1571}.
+\end{theorem}
+
+\begin{proof}\leanok  Suppose that a magma $G$ obeys Definition \ref{eq1571}, thus
+\begin{equation}\label{1571-again}
+ x = (y \circ z) \circ (y \circ (x \circ z)).
+\end{equation}
+$$ x = ((x \circ y) \circ (x \circ y)) \circ ((x \circ y) \circ (x \circ (x \circ y)))$$
+and
+$$ x = (x \circ y) \circ (x \circ (x \circ y))$$
+whence
+$$x = ((x \circ y) \circ (x \circ y)) \circ x$$
+which is Definition \ref{eq2662}.  This gives
+$$y = ((y \circ z) \circ (y \circ z)) \circ y$$
+while from \eqref{1571-again} one has
+$$ (y \circ z) \circ (y \circ z) = (x \circ y) \circ (x \circ ((y \circ z) \circ (y \circ z) \circ y))$$
+whence
+$$ (x \circ y) \circ (x \circ y) = (y \circ z) \circ (y \circ z).$$
+This implies that $(x \circ y) \circ (x \circ y)$ does not depend on $x$, or on $y$, hence is equal to some constant $e$:
+$$ (x \circ y) \circ (x \circ y) = e.$$
+From \eqref{1571-again} the magma operation is surjective, hence
+\begin{equation}\label{xxe} x \circ x = e
+\end{equation}
+which gives Definition \ref{eq40}.  Applying \eqref{1571-again} with $x=y=z$ we conclude
+$$ x = e \circ (x \circ e)$$
+while if we instead take $y=z=e$ we have
+$$ x = e \circ (e \circ (x \circ e))$$
+hence
+$$ x = e \circ x$$
+and then also
+$$ x = x \circ e$$
+from which we readily conclude Definitions \ref{eq23, eq8}; thus $e$ is an identity element.  From \eqref{1571-again} with $z=e$ we now have
+\begin{equation}\label{16-again}
+ x = y \circ (y \circ x)
+\end{equation}
+which is Definition \ref{eq16}. If instead we take $y=e$ we have
+\begin{equation}\label{14-again}
+  x = z \circ (x \circ z)
+\end{equation}
+which is Definition \ref{eq14}.  So if we substitute $z = x \circ y$ and use \eqref{16-again} we obtain
+$$ x = (x \circ y) \circ y$$
+and hence
+$$ y \circ x = y \circ ((x \circ y) \circ y) = x \circ y$$
+thanks to \eqref{14-again}.  This gives Definition \ref{eq43}, thus $G$ is now commutative.  From \eqref{1571-again} once more one has
+$$x \circ (y \circ z) = (y \circ x) \circ (z \circ ((x \circ (y \circ z)) \circ x))$$
+which one can simplify using commutativity and \eqref{16-again} (or \eqref{14-again}) to eventually obtain
+$$x \circ (y \circ z) = (x \circ y) \circ z$$
+which is Definition \ref{eq4512}.  $G$ is now commutative and associative, and every element is its own inverse and of exponent $2$, hence is an abelian group thanks to \eqref{xxe}, so $G$ is an abelian group of exponent $2$ as claimed.  The converse is easily verified.
+\end{proof}
