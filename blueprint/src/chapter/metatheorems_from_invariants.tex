@@ -42,7 +42,7 @@ When using this result, we commonly take the contrapositive: if $I(w) = I(w')$ a
 The fundamental property of invariants is not a theorem, nor a metatheorem: it is a meta-metatheorem, in the sense that it will allow us to get a metatheorem for every invariant we find.
 
 \subsubsection*{Example: absorption law}
-Let $E$ be the equation $x \circ y = x$. Intuitively, we must have
+Let $E$ be the equation $x \op y = x$. Intuitively, we must have
 \[
 \mathcal{Y}(E) = \{w = w' \mid \text{the leftmost variable is the same for $w$ and $w'$}\}.
 \]
@@ -52,7 +52,7 @@ We will talk about proving statements like this one (say in Lean) later on; take
 \end{metatheorem}
 
 \subsubsection*{Example: associativity}
-For a more complicated example, let $E$ be the associativity equation $x \circ (y \circ z) = (x \circ y) \circ z$. Intuitively, we must have
+For a more complicated example, let $E$ be the associativity equation $x \op (y \op z) = (x \op y) \op z$. Intuitively, we must have
 \[
 \mathcal{Y}(E) = \{\text{equations that, when we remove all parentheses, are of the form $w = w$}\}.
 \]
@@ -61,12 +61,12 @@ There is an invariant lurking behind: it is the (ordered) list of variables appe
 	Let $w = w'$ be an equation such that the variables appearing in $w$, taking into account order and repetitions, are the same ones that appear in $w'$. Then $w = w'$ cannot imply an equation that does not have the property from the last sentence.
 \end{metatheorem}
 
-If we were coding a computer program that computes $I(w)$ given $w$, one could take the string of symbols that is $w$, ignore all parentheses, replace all symbols $\circ$ by commas, and surround with an appropriate delimiter. (I imagine one could easily do this using \href{https://en.wikipedia.org/wiki/Regular_expression}{regular expressions}.
+If we were coding a computer program that computes $I(w)$ given $w$, one could take the string of symbols that is $w$, ignore all parentheses, replace all symbols $\op$ by commas, and surround with an appropriate delimiter. (I imagine one could easily do this using \href{https://en.wikipedia.org/wiki/Regular_expression}{regular expressions}.
 
-We can compute other examples, but the invariant can get complicated even for simple equations. Exercise: what is the invariant for commutativity? Answer: To compute $I(w)$ from $w$ replace all parentheses with curly braces and all symbols $\circ$ with commas, and interpret the result as nested sets.
+We can compute other examples, but the invariant can get complicated even for simple equations. Exercise: what is the invariant for commutativity? Answer: To compute $I(w)$ from $w$ replace all parentheses with curly braces and all symbols $\op$ with commas, and interpret the result as nested sets.
 
 \section{Expanding the language}
-The method of invariants really shines when we expand our formal language. Right now our language consists of variables, parentheses, the equal sign, and $\circ$ (there is also an implicit use of $\forall$ but let's ignore that for now).  Let $\Pi$ denote the preorder of equations (built from the language described) ordered by implication.
+The method of invariants really shines when we expand our formal language. Right now our language consists of variables, parentheses, the equal sign, and $\op$ (there is also an implicit use of $\forall$ but let's ignore that for now).  Let $\Pi$ denote the preorder of equations (built from the language described) ordered by implication.
 
 We will add the symbol $\wedge$ (`and') to our language. Then we consider a bigger preorder $\Pi' \supseteq \Pi$ which includes equations and also conjunctions of equations. Even if we only care about $\Pi$ it will be apparent that studying invariants in $\Pi'$ gives us useful metatheorems about $\Pi$. Equations and conjunctions of equations are examples of \emph{formulas} (or formulae, according to taste).
 
@@ -77,7 +77,7 @@ If $\varphi$ is a formula, we can define $\mathcal{Y}(\varphi)$ to be the set of
 Again, this clearly agrees with our previous definition. Although $\mathcal{Y}(\varphi) \cap \Pi$ might not be upwards closed in $\Pi'$, it is upwards closed in $\Pi$, which is enough to get the fundamental property of invariants \emph{verbatim}. This leads to more metatheorems we didn't have access to before.
 
 \subsubsection*{Example: associativity and idempotency}
-Let $\varphi$ be the conjunction of the associative law and the idempotency law ($x \circ x = x$). Again, we will rely on our intuition, which says that an invariant $I$ defined by taking $I(w)$ to be the set of all variables appearing in $w$, works. The corresponding metatheorem is the following
+Let $\varphi$ be the conjunction of the associative law and the idempotency law ($x \op x = x$). Again, we will rely on our intuition, which says that an invariant $I$ defined by taking $I(w)$ to be the set of all variables appearing in $w$, works. The corresponding metatheorem is the following
 
 \begin{metatheorem}
 	Let $w = w'$ be an equation such that the set of variables appearing in $w$ is equal to the set of variables appearing on $w'$. Then $w = w'$ cannot imply an equation that does not have the property from the last sentence.
@@ -93,9 +93,9 @@ For a similar example, we can let $\varphi$ be the conjunction of the associativ
 Trivia: this was the first example of a metatheorem obtained by use of an invariant.
 
 \subsubsection*{Example: associativity and commutativity with a twist}
-We can keep expanding our language if it helps us express more intricate invariants. For instance, we can add the symbol `1' to our language. Let $\varphi$ be the conjunction of associativity, commutativity, the equations $1 \circ x = x$, and
+We can keep expanding our language if it helps us express more intricate invariants. For instance, we can add the symbol `1' to our language. Let $\varphi$ be the conjunction of associativity, commutativity, the equations $1 \op x = x$, and
 \[
-\underbrace{x \circ x \circ \cdots \circ x}_{m\text{ times}} = 1,
+\underbrace{x \op x \op \cdots \op x}_{m\text{ times}} = 1,
 \]
 for some fixed positive integer $m$. Pause to guess the invariant before we move on.
 
