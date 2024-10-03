@@ -103,7 +103,7 @@ instance MagmaEquiv.toFunLike {G H : Type*} [Magma G] [Magma H] : FunLike (G ≃
   coe_injective' _ _ := (mk.injEq ..).mpr ∘ Equiv.coe_inj.mp
 
 instance {G H : Type*} [Magma G] [Magma H] : CoeFun (G ≃∘ H) (fun _ ↦ G → H) where
-  coe f := f
+  coe e := e
 
 @[ext]
 lemma MagmaEquiv.ext {G H : Type*} [Magma G] [Magma H] {e₁ e₂ : G ≃∘ H}
@@ -112,24 +112,24 @@ lemma MagmaEquiv.ext {G H : Type*} [Magma G] [Magma H] {e₁ e₂ : G ≃∘ H}
   DFunLike.ext e₁ e₂ hf
 
 /-- Composition of magma isomorphisms. -/
-def MagmaEquiv.comp {G H I : Type*} [Magma G] [Magma H] [Magma I] (f₁ : G ≃∘ H) (f₂ : H ≃∘ I) :
+def MagmaEquiv.comp {G H I : Type*} [Magma G] [Magma H] [Magma I] (e₁ : G ≃∘ H) (e₂ : H ≃∘ I) :
     G ≃∘ I where
-  toFun := f₂ ∘ f₁
-  invFun := f₁.symm ∘ f₂.symm
-  left_inv x := show f₁.symm (f₂.symm (f₂.toEquiv (f₁ x))) = x by
+  toFun := e₂ ∘ e₁
+  invFun := e₁.symm ∘ e₂.symm
+  left_inv x := show e₁.symm (e₂.symm (e₂.toEquiv (e₁ x))) = x by
     rw [Equiv.symm_apply_apply]
     apply Equiv.symm_apply_apply
-  right_inv x := show f₂ (f₁.toEquiv (f₁.symm (f₂.symm x))) = x by
+  right_inv x := show e₂ (e₁.toEquiv (e₁.symm (e₂.symm x))) = x by
     rw [Equiv.apply_symm_apply]
     apply Equiv.apply_symm_apply
   map_op' x y := by
-    have hxy := f₂.map_op' (f₁.toFun x) (f₁.toFun y)
-    rwa [←f₁.map_op'] at hxy
+    have hxy := e₂.map_op' (e₁.toFun x) (e₁.toFun y)
+    rwa [←e₁.map_op'] at hxy
 
 /-- The composition of magma isomorphisms is associative. -/
 lemma MagmaEquiv.comp_assoc {G H I J : Type*} [Magma G] [Magma H] [Magma I] [Magma J]
-    (f₁ : G ≃∘ H) (f₂ : H ≃∘ I) (f₃ : I ≃∘ J) :
-    f₁.comp (f₂.comp f₃) = (f₁.comp f₂).comp f₃ :=
+    (e₁ : G ≃∘ H) (e₂ : H ≃∘ I) (e₃ : I ≃∘ J) :
+    e₁.comp (e₂.comp e₃) = (e₁.comp e₂).comp e₃ :=
   rfl
 
 /-- `MagmaEquivClass F G H` states that `F` is a type of operation-preserving isomorphisms. -/
@@ -183,13 +183,13 @@ def idMagmaEquiv (G : Type*) [Magma G] : G ≃∘ G where
   map_op' := fun _ _ ↦ rfl
 
 /-- Composing any magma isomorphism with the identity preserves the magma isomorphism. -/
-lemma MagmaEquiv.comp_id {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) :
-    f.comp (idMagmaEquiv H) = f :=
+lemma MagmaEquiv.comp_id {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) :
+    e.comp (idMagmaEquiv H) = e :=
   rfl
 
 /-- Composing the identity wíth any magma isomorphism preserves the magma isomorphism. -/
-lemma MagmaEquiv.id_comp {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) :
-    (idMagmaEquiv G).comp f = f :=
+lemma MagmaEquiv.id_comp {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) :
+    (idMagmaEquiv G).comp e = e :=
   rfl
 
 /-- `MagmaEquiv` out of two `MagmaHom`s.-/
@@ -204,13 +204,15 @@ def MagmaHom.toMagmaEquiv {G H : Type*} [Magma G] [Magma H]
 
 /- Inverses -/
 
+lemma MagmaEquiv.symm_map_op {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) (x y : H) :
+    e.symm (x ∘ y) = e.symm x ∘ e.symm y := by -- this line refers to `Equiv.symm`
+  simpa using (congr_arg e.invFun (e.map_op' (e.invFun x) (e.invFun y))).symm
+
 /-- Inverse magma isomorphism. -/
-def MagmaEquiv.symm {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) : H ≃∘ G where
-  toFun := f.invFun
-  invFun := f.toFun
-  left_inv := f.right_inv
-  right_inv := f.left_inv
-  map_op' x y := by simpa using (congr_arg f.invFun (f.map_op' (f.invFun x) (f.invFun y))).symm
+def MagmaEquiv.symm {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) : H ≃∘ G :=
+  ⟨e.toEquiv.symm, e.symm_map_op⟩
+
+-- from now on `.symm` refers to `MagmaEquiv.symm`
 
 lemma MagmaEquiv.symm_apply_apply {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) (x : G) :
     e.symm (e x) = x :=
@@ -219,12 +221,6 @@ lemma MagmaEquiv.symm_apply_apply {G H : Type*} [Magma G] [Magma H] (e : G ≃�
 lemma MagmaEquiv.apply_symm_apply {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) (y : H) :
     e (e.symm y) = y :=
   e.toEquiv.apply_symm_apply y
-
-lemma MagmaEquiv.symm_comp_self {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) : e.symm ∘ e = id :=
-  funext e.symm_apply_apply
-
-lemma MagmaEquiv.self_comp_symm {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) : e ∘ e.symm = id :=
-  funext e.apply_symm_apply
 
 lemma MagmaEquiv.apply_eq_iff_symm_apply {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) (x : G) (y : H) :
     e x = y ↔ x = e.symm y :=
@@ -237,6 +233,12 @@ lemma MagmaEquiv.symm_apply_eq {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H
 lemma MagmaEquiv.eq_symm_apply {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) (x : G) (y : H) :
     x = e.symm y ↔ e x = y :=
   e.toEquiv.eq_symm_apply
+
+lemma MagmaEquiv.symm_comp_self {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) : e.symm ∘ e = id :=
+  funext e.symm_apply_apply
+
+lemma MagmaEquiv.self_comp_symm {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) : e ∘ e.symm = id :=
+  funext e.apply_symm_apply
 
 lemma MagmaEquiv.eq_comp_symm {G H I : Type*} [Magma G] [Magma H]
     (e : G ≃∘ H) (f : H → I) (f' : G → I) :
@@ -265,13 +267,13 @@ lemma MagmaEquiv.symm_id {G : Type*} [Magma G] : (idMagmaEquiv G).symm = idMagma
 
 /-- Inversing is idempotent. -/
 @[simp]
-lemma MagmaEquiv.symm_symm {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) : f.symm.symm = f :=
+lemma MagmaEquiv.symm_symm {G H : Type*} [Magma G] [Magma H] (e : G ≃∘ H) : e.symm.symm = e :=
   rfl
 
 /-- Inverse of composition is equal to the composition of inverses swapped. -/
 lemma MagmaEquiv.symm_comp {G H I : Type*} [Magma G] [Magma H] [Magma I]
-    (f₁ : G ≃∘ H) (f₂ : H ≃∘ I) :
-    (f₁.comp f₂).symm = f₂.symm.comp f₁.symm :=
+    (e₁ : G ≃∘ H) (e₂ : H ≃∘ I) :
+    (e₁.comp e₂).symm = e₂.symm.comp e₁.symm :=
   rfl
 
 /-- The inversion operation is a bijection between magma isomorphisms there and back. -/
