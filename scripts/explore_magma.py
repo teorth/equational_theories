@@ -19,15 +19,15 @@ def is_expected_equation_format(equation_string):
         return False
     if equation_string.count("(") != equation_string.count(")"):
         return False
-    if equation_string.count(" ∘ ") != equation_string.count("∘"):
+    if equation_string.count(" ◇ ") != equation_string.count("◇"):
         return False
     if equation_string.count(" = ") != equation_string.count("="):
         return False
     if equation_string.count(" = ") != 1:
         return False
     if not re.match(
-        f"^([{ALLOWED_SYMBOL_NAMES}] ∘ )+$",
-        equation_string.replace("(", "").replace("= ", "∘ ").replace(")", "") + " ∘ ",
+        f"^([{ALLOWED_SYMBOL_NAMES}] ◇ )+$",
+        equation_string.replace("(", "").replace("= ", "◇ ").replace(")", "") + " ◇ ",
     ):
         return False
     return True
@@ -81,16 +81,16 @@ def test_equation_with_values(equation, variable_value_map, binary_operation_map
     transformations.append(
         f"{equation} # example with {readable_value_map.rstrip(', ')}"
     )
-    assert equation.count(" ∘ ") == equation.count("∘")
-    for _ in range(equation.count(" ∘ ") + 1):
+    assert equation.count(" ◇ ") == equation.count("◇")
+    for _ in range(equation.count(" ◇ ") + 1):
         for (left, right), value in binary_operation_map.items():
             reduced_equation = remove_redundant_parentheses(
-                equation.replace(f"{left} ∘ {right}", str(value))
+                equation.replace(f"{left} ◇ {right}", str(value))
             )
             if reduced_equation != equation:
                 transformations.append(reduced_equation)
                 equation = reduced_equation
-            if "∘" not in equation:
+            if "◇" not in equation:
                 assert len(equation) == 5 and " = " in equation
                 lhs, rhs = equation.split(" = ", 1)
                 return lhs == rhs, transformations, distinct_values
@@ -191,7 +191,7 @@ def print_binary_operation_map(binary_operation_map):
     n_symbols = len(get_symbols(binary_operation_map))
     for i, ((left, right), value) in enumerate(binary_operation_map.items()):
         print(
-            f"{left} ∘ {right} = {value}",
+            f"{left} ◇ {right} = {value}",
             end=("\n" if (i + 1) % n_symbols == 0 else "     "),
         )
     print("```")
@@ -204,7 +204,7 @@ def main():
     parser.add_argument(
         "magma_table",
         type=str,
-        help=f'A JSON-like 2D list representing a magma operation table. Each entry represents the result of a binary operation ∘ between two elements. Example format: "{EXAMPLE_MAGMA_TABLE}"',
+        help=f'A JSON-like 2D list representing a magma operation table. Each entry represents the result of a binary operation ◇ between two elements. Example format: "{EXAMPLE_MAGMA_TABLE}"',
     )
     parser.add_argument(
         "--ids",
@@ -274,7 +274,7 @@ def main():
                 if args.verbose:
                     print_transformations = True
         assert transformations and transformations[0] == equation_string
-        assert "∘" not in transformations[-1]
+        assert "◇" not in transformations[-1]
         if print_transformations:
             for transformation in transformations[1:]:
                 print(
