@@ -1,3 +1,4 @@
+require 'set'
 
 class Graph
   attr_accessor :adj_list
