@@ -257,7 +257,7 @@ def closure_aux (inp : Array EntryVariant) (eqs : Std.HashMap String Nat) : IO R
     for j in comp_graph[i]! do
       reachable := reachable.modify i (fun x ↦ x.mapIdx (fun idx val ↦
         reachable[j]!.toArray[idx]! ||| val))
-    if components[i]![0]! < n && reachable[i]!.get component[components[i]![0]! + n]! then
+    if components[i]![0]! < n && reachable[i]!.get (component[components[i]![0]! + n]!-1) then
       throw (IO.userError "Inconsistent conjectures!")
 
   pure ⟨n, reachable, components⟩
