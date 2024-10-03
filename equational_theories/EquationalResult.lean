@@ -1,5 +1,6 @@
 import Lean.Elab.Exception
 import Lean.Elab.Declaration
+import Lean.Util.CollectAxioms
 
 import equational_theories.ParseImplications
 
@@ -68,6 +69,11 @@ initialize equationalResultAttr : Unit ←
     add   := fun declName _stx _attrKind => do
        let filename := (←read).fileName
        discard <| Meta.MetaM.run do
+       let axioms ← Lean.collectAxioms declName
+       for a in axioms do
+         if not (a ∈ [``propext, ``Classical.choice, ``Quot.sound]) then
+           throwError s!"declaration uses a prohibited axiom: {a}"
+
        let info ← getConstInfo declName
        let entry ← match info with
                    | .thmInfo  (val : TheoremVal) =>
