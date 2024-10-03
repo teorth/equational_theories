@@ -69,7 +69,7 @@ if __name__ == '__main__':
     # on equation numbers. We need to account for the fact that there may be gaps
     # between equation numbers (e.g. if we only include Subgraph.lean).
     #
-    # We will contruct the array `image_to_eqs` such that it maps an image row or column
+    # We will construct the array `image_to_eqs` such that it maps an image row or column
     # index into an `eqs` index.
     image_to_eqs = []
 

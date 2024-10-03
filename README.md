@@ -77,6 +77,7 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - Lean
         - [`extract_implications`](scripts/extract_implications.lean) - extracts implications from one or more Lean files
     - Python
+        - [`explore_magma`](scripts/explore_magma.py) - test a given magma table against all or a subset of the equations in `AllEquations.lean`
         - [`find_dual`](scripts/find_dual.py) - finds the dual of an equation
         - [`find_equation_id`](scripts/find_equation_id.py) - finds the equation number of an equation string
         - [`generate_eqs_list`](scripts/generate_eqs_list.py) - generates a list of equations
