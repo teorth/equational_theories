@@ -140,8 +140,7 @@ Proofs generated programmatically are also welcome. If you do this, you are enco
 - In [.gitattributes](.gitattributes) add `equational_theories/Generated/MyTechnique.lean linguist-generated` for all automatically generated files.
 - In the file `equational_theories/Generated.lean` add the import line `import equational_theories.Generated.MyTechnique` replacing "MyTechnique" with the name of your folder.
 - Consider adding to the blueprint to explain the automated proof technique used.
-
-In order to reduce verification time, automated proofs should be reduced to the minimum number necessary. For automated proofs of implications, the [transitive reduction](https://en.wikipedia.org/wiki/Transitive_reduction) will calculate this minimum required set, e.g. if A implies B implies C is proven, then a proof for A implies C is unnecessary. An example workflow showing such a process is [here](equational_theories/Generated/EquationSearch/README.md), with the implication graph being saved in Step 1 and then deriving the required theorems in Step 3.
+- Proofs of implications and nonimplications should be reduced to the minimum required set. See [here](docs/graph_operations.md) for more.
 
 ## Images
 
