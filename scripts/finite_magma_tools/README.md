@@ -93,6 +93,10 @@ Usage: `cabal run gen-refutations < input.txt`
 The input file should contain only a list of interpretations. The `get-interps`
 tool distributed with Mace4 is able to pre-process files in the required way.
 
+You can supply the `-c /path/to/equations.txt` or `--check-equations` optional
+argument: if supplied, the tool will check which of the equations in the given
+text file hold in each magma, and output it in `All4x4Tables` format.
+
 **Other tools**
 
 More tools are on the way. The source code also has many utility functions

@@ -1,10 +1,11 @@
 module FiniteMagmaTools.Magma
   ( Magma, fromTable, name, size, table
   , Record (Record), fromRecord, satisfies
+  , printRecords
   ) where
 
 import FiniteMagmaTools.Equation (Equation)
-import Data.Set (Set)
+import Data.Set (Set, toList)
 
 data Magma
   = Magma
@@ -36,3 +37,11 @@ data Record
   { fromRecord :: Magma
   , satisfies :: Set Equation
   } deriving (Show)
+
+printRecords :: [Record] -> IO ()
+printRecords [] = return ()
+printRecords (r:rs) = do
+  putStrLn $ "Table " ++ (show.table.fromRecord) r
+  putStrLn $ "Proves " ++ (show. toList . satisfies) r
+  putStrLn ""
+  printRecords rs

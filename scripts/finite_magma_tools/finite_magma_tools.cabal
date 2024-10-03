@@ -75,12 +75,14 @@ executable parse-mace4
     other-modules:    FiniteMagmaTools.Equation,
                       FiniteMagmaTools.Magma,
                       FiniteMagmaTools.Plan,
+                      FiniteMagmaTools.Evaluator,
                       ParseMace4.ParseInterps
 
     build-depends:    base,
                       array,
                       containers,
                       regex-posix,
+                      optparse-applicative,
                       mtl
     hs-source-dirs:   app
     default-language: Haskell2010

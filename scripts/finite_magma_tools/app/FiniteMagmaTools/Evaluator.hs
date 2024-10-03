@@ -30,11 +30,11 @@ data Relation
   } deriving (Show)
 
 -- All equations that hold in the magma with given optable.
-satisfied :: Magma -> [Relation] -> Set Equation
-satisfied magma =
-  Set.fromList .
-  map equation .
-  filter (checkRelation (Magma.table magma))
+satisfied :: [Relation] -> Magma -> Set Equation
+satisfied relations magma =
+  Set.fromList $
+  map equation $
+  filter (checkRelation (Magma.table magma)) relations
 
 variables :: Relation -> [String]
 variables rel =
