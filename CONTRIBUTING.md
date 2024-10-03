@@ -70,6 +70,7 @@ The core Lean files are as follows:
 - [`Equations.lean`](equational_theories/Equations.lean)  A list of selected equations of particular interest.
 - [`AllEquations.lean`](equational_theories/AllEquations.lean)  The complete set of 4692 equational laws involving at most four magma operations (up to symmetry and relabeling).  It was generated using [this script](scripts/generate_eqs_list.py).  The subgraph equations are included as an import.  If you find an equation here of particular interest to study, consider transferring it to `Equations.lean`.
 - [`Subgraph.lean`](equational_theories/Subgraph.lean)  This is the file for all results concerning the specific laws of interest.
+- [`Homomorphisms.lean`](equational_theories/Homomorphisms.lean)  This file defines magma homomorphisms and magma isomorphisms and provides basic API for them.
 
 Some technical Lean files:
 - [`EquationalResult.lean`](equational_theories/EquationalResult.lean)  Introduces the `@[equational_result]` attribute, which adds metadata to allow for easier aggregation of implications. Also adds `conjecture` keyword, which is a variant of `proof_wanted` which keeps the metadata produced by `@[equational_result]` (but marking it as a conjecture).

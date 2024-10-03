@@ -422,17 +422,207 @@ theorem Equation14_implies_Equation23 (G: Type*) [Magma G] (h: Equation14 G) : E
 
 @[equational_result]
 theorem Equation14_implies_Equation8 (G: Type*) [Magma G] (h: Equation14 G) : Equation8 G := by
-intro x
-calc
-    x
-    _ = x ∘ (x ∘ x) := h x x
+ intro x
+ exact h x x
 
 @[equational_result]
 theorem Equation2_implies_Equation14 (G: Type*) [Magma G] (h: Equation2 G) : Equation14 G := by
-intro x y
-calc
+ intro x y
+ exact Eq.symm (h (y ∘ (x ∘ y)) x)
+
+@[equational_result]
+theorem Equation2_implies_Equation381 (G: Type _) [Magma G] (h: Equation2 G) : Equation381 G := by
+  intro x y z
+  calc
+    x ∘ y
+    _ = x := (h (x ∘ y) x)
+    _ = (x ∘ z) ∘ y := Eq.symm (h ((x ∘ z) ∘ y) x)
+
+@[equational_result]
+theorem Equation2_implies_Equation3722 (G: Type _) [Magma G] (h: Equation2 G) : Equation3722 G := by
+  intro x y
+  calc
+    x ∘ y
+    _ = x := (h (x ∘ y) x)
+    _ = (x ∘ y) ∘ (x ∘ y) := Eq.symm (h ((x ∘ y) ∘ (x ∘ y)) x)
+
+@[equational_result]
+theorem Equation2_implies_Equation3744 (G: Type _) [Magma G] (h: Equation2 G) : Equation3744 G := by
+  intro x y z w
+  calc
+    x ∘ y
+    _ = x := (h (x ∘ y) x)
+    _ = (x ∘ z) ∘ (w ∘ y) := Eq.symm (h ((x ∘ z) ∘ (w ∘ y)) x)
+
+@[equational_result]
+theorem Equation2_implies_Equation5105 (G: Type _) [Magma G] (h: Equation2 G) : Equation5105 G := by
+  intro x y z
+  exact Eq.symm (h (y ∘ (y ∘ (y ∘ (x ∘ (z ∘ y))))) x)
+
+@[equational_result]
+theorem Equation2_implies_Equation28393 (G: Type _) [Magma G] (h: Equation2 G) : Equation28393 G := by
+  intro x y z
+  exact Eq.symm (h ((((x ∘ x) ∘ x) ∘ y) ∘ (x ∘ z)) x)
+
+@[equational_result]
+theorem Equation2_implies_Equation374794 (G: Type _) [Magma G] (h: Equation2 G) : Equation374794 G := by
+  intro x y z
+  exact Eq.symm (h ((((y ∘ y) ∘ y) ∘ x) ∘ ((y ∘ y) ∘ z)) x)
+
+@[equational_result]
+theorem Equation3_implies_Equation3722 (G: Type _) [Magma G] (h: Equation3 G) : Equation3722 G := by
+  intro x y
+  exact h (x ∘ y)
+
+@[equational_result]
+theorem Equation4_implies_Equation381 (G: Type _) [Magma G] (h: Equation4 G) : Equation381 G := by
+  intro x y z
+  rw (config := {occs := .pos [1]}) [h x z]
+
+@[equational_result]
+theorem Equation4_implies_Equation3722 (G: Type _) [Magma G] (h: Equation4 G) : Equation3722 G := by
+  intro x y
+  exact h (x ∘ y) (x ∘ y)
+
+@[equational_result]
+theorem Equation4_implies_Equation3744 (G: Type _) [Magma G] (h: Equation4 G) : Equation3744 G := by
+  intro x y z w
+  calc
+    x ∘ y
+    _ = (x ∘ z) ∘ y := by rw (config := {occs := .pos [1]}) [h x z]
+    _ = x ∘ z := (Eq.symm (h (x ∘ z) y))
+    _ = (x ∘ z) ∘ (w ∘ y) := h (x ∘ z) (w ∘ y)
+
+@[equational_result]
+theorem Equation4_implies_Equation28393 (G: Type _) [Magma G] (h: Equation4 G) : Equation28393 G := by
+  intro x y z
+  calc
     x
-    _ = y ∘ (x ∘ y) := Eq.symm (h (y ∘ (x ∘ y)) x)
+    _ = x ∘ x := (h x x)
+    _ = (x ∘ x) ∘ x := by rw (config := {occs := .pos [1]}) [h x x]
+    _ = ((x ∘ x) ∘ x) ∘ y := (h ((x ∘ x) ∘ x) y)
+    _ = (((x ∘ x) ∘ x) ∘ y) ∘ x := (h (((x ∘ x) ∘ x) ∘ y) x)
+    _ = (((x ∘ x) ∘ x) ∘ y) ∘ (x ∘ z) := by rw (config := {occs := .pos [4]}) [h x z]
+
+@[equational_result]
+theorem Equation5_implies_Equation381 (G: Type _) [Magma G] (h: Equation5 G) : Equation381 G := by
+  intro x y z
+  calc
+    x ∘ y
+    _ = y := (Eq.symm (h y x))
+    _ = (x ∘ z) ∘ y := h y (x ∘ z)
+
+@[equational_result]
+theorem Equation5_implies_Equation3722 (G: Type _) [Magma G] (h: Equation5 G) : Equation3722 G := by
+  intro x y
+  exact h (x ∘ y) (x ∘ y)
+
+@[equational_result]
+theorem Equation5_implies_Equation3744 (G: Type _) [Magma G] (h: Equation5 G) : Equation3744 G := by
+  intro x y z w
+  calc
+    x ∘ y
+    _ = y := (Eq.symm (h y x))
+    _ = (x ∘ z) ∘ y := (h y (x ∘ z))
+    _ = (x ∘ z) ∘ (w ∘ y) := by rw (config := {occs := .pos [1]}) [h y w]
+
+@[equational_result]
+theorem Equation5_implies_Equation4564 (G: Type _) [Magma G] (h: Equation5 G) : Equation4564 G := by
+  intro x y z w
+  calc
+    x ∘ (y ∘ z)
+    _ = y ∘ (x ∘ (y ∘ z)) := (h (x ∘ (y ∘ z)) y)
+    _ = (w ∘ y) ∘ (x ∘ (y ∘ z)) := by rw (config := {occs := .pos [1]}) [h y w]
+    _ = (w ∘ y) ∘ (x ∘ z) := by rw (config := {occs := .pos [2]}) [h z y]
+    _ = (w ∘ y) ∘ z := by rw  [← h z x]
+
+@[equational_result]
+theorem Equation5_implies_Equation4579 (G: Type _) [Magma G] (h: Equation5 G) : Equation4579 G := by
+  intro x y z w u
+  calc
+    x ∘ (y ∘ z)
+    _ = x ∘ z := by rw [← h z y]
+    _ = z := (Eq.symm (h z x))
+    _ = (w ∘ u) ∘ z := h z (w ∘ u)
+
+@[equational_result]
+theorem Equation39_implies_Equation381 (G: Type _) [Magma G] (h: Equation39 G) : Equation381 G := by
+  intro x y z
+  calc
+    x ∘ y
+    _ = y ∘ y := (Eq.symm (h y x))
+    _ = (x ∘ z) ∘ y := h y (x ∘ z)
+
+@[equational_result]
+theorem Equation41_implies_Equation381 (G: Type _) [Magma G] (h: Equation41 G) : Equation381 G := by
+  intro x y z
+  calc
+    x ∘ y
+    _ = x ∘ x := (Eq.symm (h x x y))
+    _ = (x ∘ z) ∘ y := h x (x ∘ z) y
+
+@[equational_result]
+theorem Equation41_implies_Equation3722 (G: Type _) [Magma G] (h: Equation41 G) : Equation3722 G := by
+  intro x y
+  exact Eq.symm (h (x ∘ y) x y)
+
+@[equational_result]
+theorem Equation41_implies_Equation3744 (G: Type _) [Magma G] (h: Equation41 G) : Equation3744 G := by
+  intro x y z w
+  calc
+    x ∘ y
+    _ = x ∘ x := (Eq.symm (h x x y))
+    _ = (x ∘ z) ∘ (w ∘ y) := h x (x ∘ z) (w ∘ y)
+
+@[equational_result]
+theorem Equation45_implies_Equation381 (G: Type _) [Magma G] (h: Equation45 G) : Equation381 G := by
+  intro x y z
+  exact Eq.symm (h (x ∘ z) y x)
+
+@[equational_result]
+theorem Equation46_implies_Equation381 (G: Type _) [Magma G] (h: Equation46 G) : Equation381 G := by
+  intro x y z
+  exact Eq.symm (h (x ∘ z) y x y)
+
+@[equational_result]
+theorem Equation46_implies_Equation3722 (G: Type _) [Magma G] (h: Equation46 G) : Equation3722 G := by
+  intro x y
+  exact Eq.symm (h (x ∘ y) (x ∘ y) x y)
+
+@[equational_result]
+theorem Equation46_implies_Equation3744 (G: Type _) [Magma G] (h: Equation46 G) : Equation3744 G := by
+  intro x y z w
+  calc
+    x ∘ y
+    _ = x ∘ x := (h x y x x)
+    _ = (x ∘ z) ∘ (w ∘ y) := Eq.symm (h (x ∘ z) (w ∘ y) x x)
+
+@[equational_result]
+theorem Equation3744_implies_Equation4512 (G: Type _) [Magma G] (h: Equation3744 G) : Equation4512 G := by
+  intro x y z
+  calc
+    x ∘ (y ∘ z)
+    _ = (x ∘ y) ∘ (x ∘ (y ∘ z)) := (h x (y ∘ z) y x)
+    _ = ((x ∘ y) ∘ (x ∘ y)) ∘ (x ∘ (y ∘ z)) := by rw (config := {occs := .pos [1]}) [h x y y x]
+    _ = (x ∘ y) ∘ (y ∘ z) := (Eq.symm (h (x ∘ y) (y ∘ z) (x ∘ y) x))
+    _ = ((x ∘ y) ∘ x) ∘ ((y ∘ x) ∘ (y ∘ z)) := (h (x ∘ y) (y ∘ z) x (y ∘ x))
+    _ = ((x ∘ y) ∘ x) ∘ (y ∘ z) := by rw (config := {occs := .pos [1]}) [← h y z x y]
+    _ = (x ∘ y) ∘ z := Eq.symm (h (x ∘ y) z x y)
+
+@[equational_result]
+theorem Equation4564_implies_Equation4512 (G: Type _) [Magma G] (h: Equation4564 G) : Equation4512 G := by
+  intro x y z
+  exact h x y z x
+
+@[equational_result]
+theorem Equation4579_implies_Equation4512 (G: Type _) [Magma G] (h: Equation4579 G) : Equation4512 G := by
+  intro x y z
+  exact h x y z x y
+
+@[equational_result]
+theorem Equation4579_implies_Equation4564 (G: Type _) [Magma G] (h: Equation4579 G) : Equation4564 G := by
+  intro x y z w
+  exact h x y z w y
 
 /- Counterexamples -/
 
@@ -515,6 +705,10 @@ theorem Equation8_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation
 theorem Equation23_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation23 G ∧ ¬ Equation3 G := by
   simp only [not_forall]
   exact ⟨Fin 2, ⟨(· + ·)⟩, by decide, 1, one_ne_zero⟩
+
+@[equational_result]
+theorem Equation23_not_implies_Equation14 : ∃ (G: Type) (_ : Magma G), Equation23 G ∧ ¬ Equation14 G :=
+  ⟨Fin 2, { op := fun x y ↦ x * y }, by decide⟩
 
 @[equational_result]
 theorem Equation38_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equation38 G ∧ ¬ Equation23 G := by
