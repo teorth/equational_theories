@@ -1,8 +1,8 @@
-\chapter{Subgraph laws}\label{subgraph-eq}
+\chapter{Selected laws}\label{subgraph-eq}
 
 In this project we study the 4694 laws (up to symmetry and relabeling) of total order at most $4$.
 
-Selected laws of interest are listed below, as well as in \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Equations.lean}{this file}.  Laws in this list will be referred to as ``subgraph equations'', as we shall inspect the subgraph of the implication subgraph induced by these equations.
+Selected laws of interest are listed below, as well as in \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Equations.lean}{this file}.
 
 \begin{definition}[Equation 1]\label{eq1}\lean{Equation1}\leanok\uses{magma-def}  Equation 1 is the law $0 \formaleq 0$ (or the equation $x=x$).
 \end{definition}
@@ -43,18 +43,20 @@ This law is equivalent to the singleton law.
 \begin{definition}[Equation 8]\label{eq8}\lean{Equation8}\leanok\uses{magma-def}  Equation 8 is the law $0 \formaleq 0 \circ (0 \circ 0)$ (or the equation $x = x \circ (x \circ x)$).
 \end{definition}
 
-\begin{definition}[Equation 14]\label{eq14}\lean{Equation14}\leanok\uses{magma-def}  Equation 14 is the law $0 \formaleq  1 \circ (0 \circ 1)$ (or the equation $x = y ∘ (x ∘ y))$.
+\begin{definition}[Equation 14]\label{eq14}\lean{Equation14}\leanok\uses{magma-def}  Equation 14 is the law $0 \formaleq  1 \circ (0 \circ 1)$ (or the equation $x = y \circ (x \circ y))$.
 \end{definition}
 
 Appears in Problem A1 from Putnam 2001.
 
+\begin{definition}[Equation 16]\label{eq16}\lean{Equation16}\leanok\uses{magma-def}  Equation 16 is the law $0 \formaleq  1 \circ (1 \circ 0)$ (or the equation $x = y \circ (y \circ x))$.
+\end{definition}
 
 \begin{definition}[Equation 23]\label{eq23}\lean{Equation23}\leanok\uses{magma-def}  Equation 23 is the law $0 \formaleq  (0 \circ 0) \circ 0$ (or the equation $x = (x \circ x) \circ x$).
 \end{definition}
 
 This is the dual of Definition \ref{eq8}.
 
-\begin{definition}[Equation 29]\label{eq29}\lean{Equation29}\leanok\uses{magma-def}  Equation 29 is the law $0 \formaleq  (1 \circ 0) \circ 1$ (or the equation $x = (y ∘ x) ∘ y)$.
+\begin{definition}[Equation 29]\label{eq29}\lean{Equation29}\leanok\uses{magma-def}  Equation 29 is the law $0 \formaleq  (1 \circ 0) \circ 1$ (or the equation $x = (y \circ x) \circ y)$.
 \end{definition}
 
 Appears in Problem A1 from Putnam 2001.  Dual to Definition \ref{eq14}.
@@ -114,10 +116,23 @@ Appears in Putnam 1978, Problem A4, part (b).
 
 Introduced in \href{https://mathoverflow.net/a/450905/766}{MathOverflow}.
 
+\begin{definition}[Equation 953]\label{eq953}\lean{Equation953}\leanok\uses{magma-def}  Equation 953 is the law $0 = 1 \circ ((2 \circ 0) \circ (2 \circ 2))$ (or the equation $x = y \circ ((z \circ x) \circ (z \circ z))$).
+\end{definition}
+
+\begin{definition}[Equation 1571]\label{eq1571}\lean{Equation1571}\leanok\uses{magma-def}  Equation 1571 is the law $0 \formaleq  (1 \circ 2) \circ (1 \circ (0 \circ 2))$ (or the equation $x = (y \circ z) \circ (y \circ (x \circ z))$).
+\end{definition}
+
+Introduced in \cite{mendelsohn-padmanabhan}.
+
 \begin{definition}[Equation 1689]\label{eq1689}\lean{Equation1689}\leanok\uses{magma-def}  Equation 1689 is the law $0 \formaleq  (1 \circ 0) \circ ((0 \circ 2) \circ 2)$ (or the equation $x = (y \circ x) \circ ((x \circ z) \circ z)$).
 \end{definition}
 
 Mentioned in \cite{Kisielewicz2}.
+
+\begin{definition}[Equation 2662]\label{eq2662}\lean{Equation2662}\leanok\uses{magma-def}  Equation 2662 is the law $0 \formaleq  ((0 \circ 1) \circ (0 \circ 1)) \circ 0$ (or the equation $x = ((x \circ y) \circ (x \circ y)) \circ x$).
+\end{definition}
+
+Appears in \cite{mendelsohn-padmanabhan}.
 
 \begin{definition}[Equation 3722]\label{eq3722}\lean{Equation3722}\leanok\uses{magma-def}  Equation 3722 is the law $0 \circ 1  \formaleq  (0 \circ 1) \circ (0 \circ 1)$ (or the equation $x \circ y = (x \circ y) \circ (x \circ y)$).
 \end{definition}
@@ -159,7 +174,6 @@ This law asserts that all triple constants (regardless of bracketing) are consta
 
 We also note some selected laws of order more than $5$.
 
-
 \begin{definition}[Equation 5105]
   \label{eq5105}\uses{magma-def}
   Equation 5105 is the law $0  \formaleq 1 \circ (1 \circ (1 \circ (0 \circ (2 \circ 1))))$ (or the equation $x = y \circ (y \circ (y \circ (x \circ (z \circ y))))$).
@@ -172,14 +186,15 @@ This law of order $5$ was mentioned in \cite{Kisielewicz2}.
   Equation 28393 is the law $0  \formaleq  (((0 \circ 0) \circ 0) \circ 1) \circ (0 \circ 2)$ (or the equation $x = (((x \circ x) \circ x) \circ y) \circ (x \circ z)$).
 \end{definition}
 
+This law of order $5$ was introduced by Kisielewicz \cite{Kisielewicz}.
+
 \begin{definition}[Equation 374794]
   \lean{Equation374794}\leanok
   \label{eq374794}\uses{magma-def}
   Equation 374794 is the law $0  \formaleq  (((1 \circ 1) \circ 1) \circ 0) \circ ((1 \circ 1) \circ 2)$ (or the equation $x = (((y \circ y) \circ y) \circ x) \circ ((y \circ y) \circ z)$).
 \end{definition}
 
-This order $6$ law was introduced by Kisielewicz \cite{Kisielewicz}.
-
+This law of order $6$ was introduced by Kisielewicz \cite{Kisielewicz}.
 
 The singleton or empty magma obeys all equational laws.  One can ask whether an equational law admits nontrivial finite or infinite models.  An \emph{Austin law} is a law which admits infinite models, but no nontrivial finite models.  Austin \cite{austin} established the first such law, namely the order $9$ law
 $$ (((1 \circ 1) \circ 1) \circ 0) \circ (((1 \circ 1) \circ ((1 \circ 1) \circ 1)) \circ 2) \formaleq 0.$$
@@ -233,4 +248,11 @@ for $z \neq 3^y, 2^{3^y}$.  All other assignments of $\circ$ may be made arbitra
 
 In that paper a computer search was also used to show that no law of order four or less is an Austin law.
 
-An open question is whether Definition \ref{eq5105} is an Austin law.  In \cite{Kisielewicz2} it was shown that this law admits nontrivial finite models, but it is not yet known if it admits infinite models.
+An open question is whether Definition \ref{eq5105} is an Austin law.  We have the following partial result from \cite{Kisielewicz2}:
+
+\begin{theorem}[Equation 5105 has no non-trivial finite models]\lean{InfModel.Finite.Equation5105_implies_Equation2}\leanok\label{5105-nontrivial}\uses{eq5105} Definition \ref{eq5105} has no non-trivial finite models.
+\end{theorem}
+
+\begin{proof} \leanok From Definition \ref{eq5105} we see that the map $w \mapsto y \circ w$ is onto, hence injective in a finite model.  Using this injectivity four times in Definition \ref{eq5105}, we see that $z \circ y$ does not depend on $z$, hence the expression
+$x \circ (z \circ y)$ does not depend on $x$.  By Definition \ref{eq5105} again, this means that $x$ does not depend on $x$, which is absurd in a non-trivial model.
+\end{proof}

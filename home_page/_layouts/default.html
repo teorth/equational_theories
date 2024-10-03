@@ -27,9 +27,10 @@
     <h1 class="project-name">{{ page.title | default: site.title | default: site.github.repository_name }}</h1>
     <h2 class="project-tagline">{{ page.description | default: site.description | default: site.github.project_tagline
       }}</h2>
-    <a href="blueprint" class="btn">Blueprint (web)</a>
-    <a href="blueprint.pdf" class="btn">Blueprint (pdf)</a>
-    <a href="docs" class="btn">Documentation</a>
+    <a href="{{site.url}}/blueprint" class="btn">Blueprint (web)</a>
+    <a href="{{site.url}}/blueprint.pdf" class="btn">Blueprint (pdf)</a>
+    <a href="{{site.url}}/docs" class="btn">Documentation</a>
+    <a href="{{site.url}}/dashboard" class="btn">Dashboard</a>
     {% if site.github.is_project_page %}
     <a href="{{ site.github.repository_url }}" class="btn">GitHub</a>
     {% endif %}
@@ -40,8 +41,12 @@
 
     <footer class="site-footer">
       {% if site.github.is_project_page %}
-      <span class="site-footer-owner"><a href="{{ site.github.repository_url }}">{{ site.github.repository_name }}</a>
-	is maintained by Terence Tao. Visit the GitHub repository for more information.</span>
+        <span class="site-footer-owner">
+          This project is maintained by <a href="https://github.com/teorth">Terence Tao</a>,
+          <a href="https://github.com/pitmonticone">Pietro Monticone</a>, and
+          <a href="https://github.com/Shreyas4991">Shreyas Srinivas</a>.
+          Please visit the <a href="{{ site.github.repository_url }}">GitHub repository</a> for more information.
+        </span>
       {% endif %}
     </footer>
   </main>

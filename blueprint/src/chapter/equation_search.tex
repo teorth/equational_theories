@@ -1,0 +1,27 @@
+\chapter{Equation Search}
+
+\href{https://github.com/teorth/equational_theories/tree/main/equational_theories/Generated/EquationSearch}{Approximately ~650k transitive implications were proven by a custom tool leveraging the implication graph}. After previous brute force had derived many implications expressible as a small number of rewrites, this search tool uses substitutions implied by the implication graph to search further.
+
+An example proof illustrates the logic it uses:
+
+\begin{verbatim}
+  have eq3315 (x y : G) : x * y = x * (y * (x * x)) := by
+    apply Apply.Equation12_implies_Equation11 at h
+    apply RewriteHypothesis.Equation11_implies_Equation3323 at h
+    apply Apply.Equation3323_implies_Equation3315 at h
+    apply h
+  have eq52 (x y : G) : x = x * (y * (x * x)) := by
+    apply Apply.Equation12_implies_Equation61 at h
+    apply Apply.Equation61_implies_Equation54 at h
+    apply Apply.Equation54_implies_Equation52 at h
+    apply h
+  repeat intro
+  nth_rewrite 1 [eq3315]
+  nth_rewrite 1 [← eq52]
+  apply h
+  repeat assumption
+\end{verbatim}
+
+Using the graph of implications and refutations, it identifies equivalence classes/strongly-connected components in the implication graph and possible goals by subtracting out the refutation graph. Iterating through all equivalence classes, it can perform a meet-in-the-middle graph search where it searches outwards from both hypotheses and goals by performing equation substitutions. Depending on the number of hypotheses versus goals, it dynamically adjusts the search depth on both sides based on a configured branching factor.
+
+Due to it's naive implementation, it may only be able to perform certain substitutions in a round-about way and the graph size explodes faster than it must, so it's limited to fairly shallow search depths. Also, the tool may emit proofs without some information Lean may require, so some generated proofs have to be fixed-up afterwards.
