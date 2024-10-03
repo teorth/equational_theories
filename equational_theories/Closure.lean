@@ -189,7 +189,7 @@ structure Reachability where
   reachable : Array Bitset
   components : Array (Array Nat)
 
-def closure_aux (inp : Array EntryVariant) (eqs : Std.HashMap String Nat) : Reachability := Id.run do
+def closure_aux (inp : Array EntryVariant) (eqs : Std.HashMap String Nat) : IO Reachability := do
 
   -- construct the implication/non-implication graph
   let n := eqs.size
@@ -257,6 +257,8 @@ def closure_aux (inp : Array EntryVariant) (eqs : Std.HashMap String Nat) : Reac
     for j in comp_graph[i]! do
       reachable := reachable.modify i (fun x ↦ x.mapIdx (fun idx val ↦
         reachable[j]!.toArray[idx]! ||| val))
+    if components[i]![0]! < n && reachable[i]!.get component[components[i]![0]! + n]! then
+      throw (IO.userError "Inconsistent conjectures!")
 
   pure ⟨n, reachable, components⟩
 
@@ -270,7 +272,7 @@ instance {m : Type → Type} : ForIn m Reachability (Nat × Nat × Bool) where
         if i2.get j2 then
           for x in i do
             for y in j do
-              if x == y || y >= reachability.size * 2 then continue
+              if y >= reachability.size * 2 then continue
               let val := if y < reachability.size then (y, x, true) else (x, y - reachability.size, false)
               match ← f val v with
               | .done a => return a
@@ -280,7 +282,7 @@ instance {m : Type → Type} : ForIn m Reachability (Nat × Nat × Bool) where
 /--
 This computes the closure of the implications/non-implications represented by `inp`.
 -/
-def closure (inp : Array EntryVariant) : Array Edge := Id.run do
+def closure (inp : Array EntryVariant) : IO (Array Edge) := do
   let (eqs, eqs_order) := number_equations inp
   let n := eqs.size
 
@@ -288,15 +290,16 @@ def closure (inp : Array EntryVariant) : Array Edge := Id.run do
   -- extract the implications
   let mut ans : Array Edge := Array.mkEmpty (n*n)
 
-  for ⟨x, y, is_true⟩ in closure_aux inp eqs do
-    if is_true then
-      ans := ans.push (.implication ⟨eqs_order[x]!, eqs_order[y]!⟩)
-    else
-      ans := ans.push (.nonimplication ⟨eqs_order[x]!, eqs_order[y]!⟩)
+  for ⟨x, y, is_true⟩ in ← closure_aux inp eqs do
+    unless x == y do
+      if is_true then
+        ans := ans.push (.implication ⟨eqs_order[x]!, eqs_order[y]!⟩)
+      else
+        ans := ans.push (.nonimplication ⟨eqs_order[x]!, eqs_order[y]!⟩)
 
   pure ans
 
-def list_outcomes (res : Array Entry) : Array String × Array (Array Outcome) := Id.run do
+def list_outcomes (res : Array Entry) : IO (Array String × Array (Array Outcome)) := do
   let rs := res.map (·.variant)
   let prs := res.filter (·.proven) |>.map (·.variant)
   let (eqs, eqs_order) := number_equations rs
@@ -306,7 +309,7 @@ def list_outcomes (res : Array Entry) : Array String × Array (Array Outcome) :=
     outcomes := outcomes.modify eqs[edge.lhs]! (fun a ↦ a.set! eqs[edge.rhs]!
       (.explicit_theorem edge.isTrue))
 
-  for ⟨x, y, is_true⟩ in closure_aux prs eqs do
+  for ⟨x, y, is_true⟩ in ← closure_aux prs eqs do
     outcomes := outcomes.modify x (fun a ↦ a.modify y
                 fun y ↦ if y = .unknown then .implicit_theorem is_true else y)
 
@@ -314,16 +317,16 @@ def list_outcomes (res : Array Entry) : Array String × Array (Array Outcome) :=
     outcomes := outcomes.modify eqs[edge.lhs]! (fun a ↦ a.modify eqs[edge.rhs]!
       fun y ↦ if y = .unknown then .explicit_conjecture edge.isTrue else y)
 
-  for ⟨x, y, is_true⟩ in closure_aux rs eqs do
+  for ⟨x, y, is_true⟩ in ← closure_aux rs eqs do
     outcomes := outcomes.modify x (fun a ↦ a.modify y
                 fun y ↦ if y = .unknown then .implicit_conjecture is_true else y)
 
   return (eqs_order, outcomes)
 
-def outcomes_mod_equiv (inp : Array EntryVariant) : Array String × Array (Array (Option Bool)) := Id.run do
+def outcomes_mod_equiv (inp : Array EntryVariant) : IO (Array String × Array (Array (Option Bool))) := do
   let (eqs, eqs_order) := number_equations inp
   let n := eqs.size
-  let reachable := closure_aux inp eqs
+  let reachable ← closure_aux inp eqs
   let mut reprs_id : Std.HashMap Nat Nat := {}
   let mut reprs : Array String := Array.mkEmpty (reachable.components.size / 2)
   for comp in reachable.components do
