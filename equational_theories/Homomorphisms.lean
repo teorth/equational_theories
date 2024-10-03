@@ -172,6 +172,8 @@ lemma MagmaEquiv.toMagmaHom_coe {F G H : Type*} [Magma G] [Magma H] [EquivLike F
     ((f : G →∘ H) : G → H) = f :=
   rfl
 
+/- Identity -/
+
 /-- The identity is a magma automorphism. -/
 def idMagmaEquiv (G : Type*) [Magma G] : G ≃∘ G where
   toFun := id
@@ -180,8 +182,14 @@ def idMagmaEquiv (G : Type*) [Magma G] : G ≃∘ G where
   right_inv := fun _ ↦ rfl
   map_op' := fun _ _ ↦ rfl
 
+/-- Composing any magma isomorphism with the identity preserves the magma isomorphism. -/
 lemma MagmaEquiv.comp_id {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) :
     f.comp (idMagmaEquiv H) = f :=
+  rfl
+
+/-- Composing the identity wíth any magma isomorphism preserves the magma isomorphism. -/
+lemma MagmaEquiv.id_comp {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) :
+    (idMagmaEquiv G).comp f = f :=
   rfl
 
 /-- `MagmaEquiv` out of two `MagmaHom`s.-/
@@ -204,6 +212,11 @@ def MagmaEquiv.symm {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) : H ≃�
   right_inv := f.left_inv
   map_op' x y := by simpa using (congr_arg f.invFun (f.map_op' (f.invFun x) (f.invFun y))).symm
 
+/-- Inversing the identity gives the identity. -/
+@[simp]
+lemma MagmaEquiv.symm_id {G : Type*} [Magma G] : (idMagmaEquiv G).symm = idMagmaEquiv G :=
+  rfl
+
 /-- Inversing is idempotent. -/
 @[simp]
 lemma MagmaEquiv.symm_symm {G H : Type*} [Magma G] [Magma H] (f : G ≃∘ H) : f.symm.symm = f :=
@@ -214,3 +227,8 @@ lemma MagmaEquiv.symm_comp {G H I : Type*} [Magma G] [Magma H] [Magma I]
     (f₁ : G ≃∘ H) (f₂ : H ≃∘ I) :
     (f₁.comp f₂).symm = f₂.symm.comp f₁.symm :=
   rfl
+
+/-- The inversion operation is a bijection between magma isomorphisms there and back. -/
+lemma MagmaEquiv.symm_bijective {G H : Type*} [Magma G] [Magma H] :
+    Function.Bijective (MagmaEquiv.symm : (G ≃∘ H) → (H ≃∘ G)) :=
+  Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
