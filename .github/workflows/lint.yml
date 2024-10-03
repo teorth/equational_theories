@@ -1,11 +1,23 @@
 name: Lint Style
 
 on:
-    push:
-       branches: ["main"] # Trigger the workflow on pushes to the "main" branch (replace "main" with your default branch if different)
-    pull_request:
-       branches: ["main"] # Trigger the workflow on pull requests targeting the "main" branch (replace "main" with your default branch if different)
-    workflow_dispatch:    # Allow manual triggering of the workflow from the GitHub Actions interface
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.lean'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**/*.lean'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+  workflow_dispatch: # Allow manual triggering of the workflow from the GitHub Actions interface
 
 # Set permissions for the workflow
 permissions:
