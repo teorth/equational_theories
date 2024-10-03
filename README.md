@@ -7,9 +7,18 @@
 [![Paper](https://img.shields.io/badge/Paper-WIP-blue)](https://teorth.github.io/equational_theories/blueprint.pdf)
 [![Zulip Channel](https://img.shields.io/badge/Zulip_Channel-Join-blue)](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational)
 
-The purpose of this project, launched on Sep 25, 2024, is to explore the space of equational theories of magmas, ordered by implication. To begin with we shall focus only on theories of a single equation, and specifically on [this list](equational_theories/AllEquations.lean) of 4694 equations (all laws involving at most four magma operations, up to symmetry and relabeling).  This creates 4694*(4694-1) = 22,028,942 implications that need to be proven or disproven.
+The purpose of this project, launched on Sep 25, 2024, is to explore the space of equational theories of magmas, ordered by implication. To begin with we shall focus only on theories of a single equation, and specifically on the 4694 equational laws
+involving at most four magma operations, up to symmetry and relabeling (here is the list [in Lean](equational_theories/AllEquations.lean) and in [plain text](https://github.com/teorth/equational_theories/blob/main/data/equations.txt)).  This creates 4694*(4694-1) = 22,028,942 implications that need to be proven or disproven, creating both "implications" and "anti-implications".
 
-Some selected equations of interest are listed [here](equational_theories/Equations.lean) (in Lean form) and [here](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html) (in a human readable blueprint).
+We will accumulate both "proven" and "conjectured" implications and anti-implications: proven assertions will be verified in the proof assistant language [Lean](https://www.lean-lang.org/), and "conjectured" assertions represent all claims (either human-generated or computer-generated) that have not yet been verified in Lean.  The current status of the project can be found on the [dashboard](https://teorth.github.io/equational_theories/dashboard/).
+
+Some selected equations of interest are listed [here](equational_theories/Equations.lean) (in Lean form) and [here](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html) (in a human readable blueprint).  Examples include
+- Equation 1: `x = x`.  The trivial law.
+- Equation 2: `x = y`.  The singleton law.
+- Equation 43: `x ∘ y = y ∘ x`.  The commutative law.
+- Equation 46: `x ∘ y = z ∘ w`.  The constant law.
+- Equation 168: `x = (y ∘ x) ∘ (x ∘ z)`.  The central groupoid law.
+- Equation 4512: `x ∘ (y ∘ z) = (x ∘ y) ∘ z`.  The associative law.
 
 Some automatically generated progress:
 - Sep 28, 2024: [85 laws](equational_theories/Generated/Constant.lean) have been shown to be equivalent to the constant law [`Equation46`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq46), and [815 laws](equational_theories/Generated/Singleton.lean) have been shown to be equivalent to the singleton law [`Equation2`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq2).  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0005.html).
@@ -22,10 +31,10 @@ Some automatically generated progress:
 - Oct 3, 2024: Another ~150k transitive implications were proven by [EquationSearch](equational_theories/Generated/EquationSearch) after improved capabilities were added.
 
 Some statistics and data files from a given point in time:
-- Oct 2, 2024: [A list of unknown implications whose converse is proven](https://github.com/amirlb/equational_theories/blob/extract_implications_equivalence_creators_data/scripts/equivalence_creators.json), i.e. implications that would reduce the number of equivalence classes of equations. At the time of creation we had 2969 equivalence classes. This file contains 4526 unknown implications, if all hold then it will reduce the number of equivalence classes to 1300.
 - Sep 28, 2024: [A repository of unknown implications](https://github.com/amirlb/equational_theories/tree/unknown-implications), including all unknown implications, known equivalence classes, unknown implications modulo known equivalence, and only the strongest unknown implications.
 - Sep 29, 2024: [Here](https://leanprover.zulipchat.com/user_uploads/3121/7ImuNeVLCa_gIsS8bHYIsokB/direct.tar.xz) is a text file of the (21K or so) direct implications proven to date, and [here](https://leanprover.zulipchat.com/user_uploads/3121/wnbVe2BZ1gamFjlMYFE7sIs9/closure.tar.xz) is the transitive closure of these implications (about 4.5m). More precisely, we have 21791 implications explicitly proven true, 4494090 additional relations implicitly proven true, 739207 explicitly proven false, 12764328 implicitly proven false, one additional relations explicitly conjectured true (and 64 more implicitly conjectured true), and 4014155 remaining implications which remain completely open.  Quotienting out by known equivalences, there are 3182453 open implications remaining.
-- Oct 2, 2024: 23019 implications explicitly proven true (and an additional 5925922 implicitly proven); 829607 explicitly proven false (and an additional 12994633 implicitly disproven); 38489 explicitly conjectured true (and an additional 1223057 implicitly conjectured), and 79635 explicitly conjectured false (and an additional 1540725 implicitly conjectured false).  This only leads 7999 open implications!
+- Oct 2, 2024: [A list of unknown implications whose converse is proven](https://github.com/amirlb/equational_theories/blob/extract_implications_equivalence_creators_data/scripts/equivalence_creators.json), i.e. implications that would reduce the number of equivalence classes of equations. At the time of creation we had 2969 equivalence classes. This file contains 4526 unknown implications, if all hold then it will reduce the number of equivalence classes to 1300.
+
 
 Some visualizations from a given point in time:
 - Sep 28, 2024: A (manually created) [Hasse diagram](https://en.wikipedia.org/wiki/Hasse_diagram) of the [dependencies obtained up to this date](equational_theories/Subgraph.lean) for the [selected equations of interest](equational_theories/Equations.lean) can be found [here](images/implications.png).  Note: the orientation in these legacy images is reversed from that in current guidance.
