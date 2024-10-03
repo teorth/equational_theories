@@ -17,16 +17,18 @@ ids = ["explicit_conjecture_false",
 
 ids = {x: i for i,x in enumerate(ids)}
 
+reorder = f['equations']
+order = [int(x[8:]) for x in reorder]
+            
+
 #print(ids)
 
-r = []
+r = np.zeros((4694, 4694))
 for i,row in enumerate(outcomes):
-    s = []
     for j,col in enumerate(row):
-        s.append(ids[col])
-    r.append(s)
+        r[order[i]-1, order[j]-1] = ids[col]
 
-np.save('/tmp/a.npy', np.array(r))
+np.save('/tmp/a.npy', r)
 #"""
 
 def rle_encode(data):
