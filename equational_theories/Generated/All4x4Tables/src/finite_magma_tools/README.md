@@ -88,9 +88,9 @@ where each `<n>` corresponds to an input magma.
 Converts mace4 output files (pushed through get_interps) into make-plan's
 output format.
 
-Usage: `cabal run gen-refutations < input.txt`
+Usage: `cabal run parse-mace4 -- [-c] < input.txt > output.txt`
 
-The input file should contain only a list of interpretations. The `get-interps`
+The input file should contain only a list of interpretations. The `get_interps`
 tool distributed with Mace4 is able to pre-process files in the required way.
 
 You can supply the `-c /path/to/equations.txt` or `--check-equations` optional

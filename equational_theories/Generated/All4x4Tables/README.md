@@ -50,7 +50,7 @@ The brute-forcing takes a couple hundred CPU hours.
 # 5x5 cancellative magmas
 
 Once the 4x4 and smaller magmas have been brute-forced and `refutations.txt`
-in step 4, running the bash script `src/generate_5x5_refutations.sh` does
+generated, running the bash script `src/generate_5x5_refutations.sh` does
 the following:
 
 **1.** Uses Mace4 to generate a list of all 5x5 cancellative magmas up to isomorphism.
