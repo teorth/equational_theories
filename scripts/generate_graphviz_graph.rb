@@ -1,9 +1,12 @@
 # lake exe extract_implications --json equational_theories | ruby -rjson -e 'JSON.parse($stdin.read)["implications"].each { |s| puts s["lhs"][8,10] + "," + s["rhs"][8,10] }' | sort -u > /tmp/implications.csv
-# ruby scripts/transitive_reduction.rb /tmp/implications.csv > /tmp/implications.reduction.csv
-# ruby scripts/generate_graphviz_graph.rb /tmp/implications.reduction.csv > graph.dot
+# ruby scripts/generate_graphviz_graph.rb /tmp/implications.csv > graph.dot
 # dot -T svg -o graph.svg graph.dot
 #
-# Note: there are also options to limit the number of variables or operations in the generated graph.
+# Note: there are also options to limit the number of variables or operations in the generated graph,
+# or delete Equation 1 and the Equation 2 equivalence class.
+#
+# In order to reduce the cleanest looking graph, this tools generates a transitive closure and then
+# reduces it to get a graph with minimal edges. That causes generation to be slow.
 
 require 'optparse'
 require File.join(__dir__, 'graph')
@@ -14,6 +17,8 @@ opt_parser= OptionParser.new do |opt|
 
   opt.on('--limit-variables NUM') { |o| options[:limit_variables] = o.to_i }
   opt.on('--limit-operations NUM') { |o| options[:limit_operations] = o.to_i }
+  opt.on('--remove-eq1', 'Remove Equation1 from the output') { |o| options[:remove_eq1] = true }
+  opt.on('--remove-eq2', 'Remove the entire Equation2 equivalence class from the output') { |o| options[:remove_eq2] = true }
 end
 
 opt_parser.parse!
@@ -52,22 +57,28 @@ if options[:limit_operations]
     equations[k].count("∘") > options[:limit_operations]
   }
 end
+if options[:remove_eq1]
+  vertices_to_delete << 1
+end
+if options[:remove_eq2]
+  vertices_to_delete.concat graph.scc.filter { |scc| scc.include? 2 }[0]
+end
 
+# Reducing first improves the speed of the closure
+graph = graph.transitive_reduction
+graph = graph.transitive_closure
 if vertices_to_delete.length > 0
   vertices_to_delete = Set.new vertices_to_delete
 
-  # If we're deleting elements, we want to compute the closure+reduction to avoid breaking up SCCs and having to do DFS
-  # to discover all children of deleted vrtices
-  $stderr.puts "Running closure"
-  graph = graph.transitive_closure
+  # If we're deleting elements, we want to compute the deletions over the closure to
+  # avoid breaking up SCCs and having to do DFS to discover all children of deleted vrtices
 
   # For every vertex we delete, we want to connect it's ancestors to it's children
   vertices_to_delete.each { |v| graph.adj_list.delete(v) }
   graph.adj_list.keys.each { |v| graph.adj_list[v] -= vertices_to_delete }
-
-  $stderr.puts "Running reduction"
-  graph = graph.transitive_reduction
 end
+
+graph = graph.transitive_reduction
 
 # Manual Graph condensation
 sccs = graph.scc
@@ -128,7 +139,7 @@ scc_reverse_map.each { |scc_name, nodes|
 
 condensed_graph.adj_list.each { |node, neighbors|
   neighbors.each { |neighbor|
-    puts "  #{node} -> #{neighbor} [tooltip=\"#{name(scc_reverse_map[node])} -> #{name(scc_reverse_map[neighbor])}\"];"
+    puts "  #{neighbor} -> #{node} [tooltip=\"#{name(scc_reverse_map[neighbor])} -> #{name(scc_reverse_map[node])}\"];"
   }
 }
 

@@ -1,9 +1,20 @@
+require 'set'
 
 class Graph
   attr_accessor :adj_list
 
   def initialize
     @adj_list = Hash.new { |hash, key| hash[key] = Set.new([]) }
+  end
+
+  def self.from_csv(path)
+    graph = Graph.new
+    File.read(path).split("\n").each { |s|
+      a,b = s.split(",")
+      graph.add_edge(a.to_i, b.to_i)
+    }
+
+    graph
   end
 
   def add_edge(from, to)

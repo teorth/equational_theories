@@ -83,7 +83,7 @@ END
     if $_ =~ /have eq(\d+) (.+) := by sorry/
       path = graph.bfs(cur_theorem, $1.to_i)
       if !path
-        $stderr.puts "Failed to find path? #{path}"
+        $stderr.puts "Failed to find path for #{cur_theorem}->#{$1}"
         exit 1
       end
 
