@@ -16,10 +16,10 @@ We will accumulate both "proven" and "conjectured" implications and anti-implica
 Some selected equations of interest are listed [here](equational_theories/Equations.lean) (in Lean form) and [here](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html) (in a human readable blueprint).  Examples include
 - Equation 1: `x = x`.  The trivial law.
 - Equation 2: `x = y`.  The singleton law.
-- Equation 43: `x ∘ y = y ∘ x`.  The commutative law.
-- Equation 46: `x ∘ y = z ∘ w`.  The constant law.
-- Equation 168: `x = (y ∘ x) ∘ (x ∘ z)`.  The central groupoid law.
-- Equation 4512: `x ∘ (y ∘ z) = (x ∘ y) ∘ z`.  The associative law.
+- Equation 43: `x ◇ y = y ◇ x`.  The commutative law.
+- Equation 46: `x ◇ y = z ◇ w`.  The constant law.
+- Equation 168: `x = (y ◇ x) ◇ (x ◇ z)`.  The central groupoid law.
+- Equation 4512: `x ◇ (y ◇ z) = (x ◇ y) ◇ z`.  The associative law.
 
 Some automatically generated progress:
 - Sep 28, 2024: [85 laws](equational_theories/Generated/Constant.lean) have been shown to be equivalent to the constant law [`Equation46`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq46), and [815 laws](equational_theories/Generated/Singleton.lean) have been shown to be equivalent to the singleton law [`Equation2`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq2).  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0005.html).
