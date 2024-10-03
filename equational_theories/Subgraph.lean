@@ -707,6 +707,10 @@ theorem Equation23_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equatio
   exact ⟨Fin 2, ⟨(· + ·)⟩, by decide, 1, one_ne_zero⟩
 
 @[equational_result]
+theorem Equation23_not_implies_Equation14 : ∃ (G: Type) (_ : Magma G), Equation23 G ∧ ¬ Equation14 G :=
+  ⟨Fin 2, { op := fun x y ↦ x * y }, by decide⟩
+
+@[equational_result]
 theorem Equation38_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equation38 G ∧ ¬ Equation23 G := by
   simp only [not_forall]
   exact ⟨ℕ, ⟨fun x _ ↦ x + 1⟩, fun _ _ ↦ rfl, 0, Nat.zero_ne_add_one _⟩
