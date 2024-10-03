@@ -1,6 +1,8 @@
 import equational_theories.Equations
+import equational_theories.AllEquations
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
+import equational_theories.ForMathlib.Algebra.Group.Nat
 
 namespace InfModel
 
@@ -120,5 +122,55 @@ theorem Finite.Equation5105_implies_Equation2 (G : Type*) [Magma G] [Finite G] (
       x = x ∘ (x ∘ (x ∘ (x ∘ (x ∘ x)))) := by exact h x x x
       _= x ∘ (x ∘ (x ∘ (y ∘ (x ∘ x)))) := by rw [hhhh]
       _= y := by rw [←  h y x x]
+
+theorem Finite.Equation3994_implies_Equation3588 (G : Type*) [Magma G] [Finite G] (h : Equation3994 G) :
+    Equation3588 G := by
+  intro x y z
+  let S := {x | ∃ a b : G, a ∘ b = x}
+  have m1 : S.MapsTo (z ∘ ·) S := by
+    intro
+    simp [S]
+  have m2 : S.MapsTo (· ∘ z) S := by
+    intro
+    simp [S]
+  have : S.LeftInvOn (· ∘ z) (z ∘ ·) := by
+    intro x hx
+    simp only [Set.mem_setOf_eq, S] at hx
+    obtain ⟨a, b, rfl⟩ := hx
+    simp [← h]
+  have t2 := this.surjOn m1
+  rw [Set.Finite.surjOn_iff_bijOn_of_mapsTo (Set.toFinite _) m2] at t2
+  replace this := Set.InjOn.rightInvOn_of_leftInvOn (s := S) t2.injOn this m2 m1
+  apply (this _).symm
+  simp [S]
+
+theorem Equation3994_not_implies_Equation3588 : ∃ (G : Type) (_ : Magma G), Equation3994 G ∧ ¬Equation3588 G := by
+  let magN : Magma ℕ := ⟨fun x y ↦ if Even x ∧ Even y then x ^^^ y else if Even y then y + 2
+    else if Even x then x - 2 else 0⟩
+  use ℕ, magN
+  have range : ∀ x y : ℕ, Even (x ∘ y : ℕ) := by
+    intro x y
+    simp only [magN]
+    split_ifs
+    · simp_all
+    · simpa [Nat.even_add]
+    · by_cases x < 2
+      · rw [Nat.sub_eq_zero_of_le]
+        simp
+        omega
+      rw [Nat.even_sub]
+      · simp_all
+      · omega
+    · exact even_zero
+  constructor
+  · intro x y z
+    generalize h : x ∘ y = v
+    have : Even v := by rw [← h]; apply range
+    by_cases hz : Even z
+    · simp [magN, this, hz, Nat.xor_comm, Nat.xor_cancel_left]
+    · simp [magN, hz, this, Nat.even_add]
+  simp only [not_forall]
+  use 1, 1, 1
+  simp [magN]
 
 end InfModel
