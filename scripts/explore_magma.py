@@ -217,6 +217,11 @@ def main():
         help="Only print the number of equations passed and tested, without displaying detailed results.",
     )
     parser.add_argument(
+        "--json",
+        action="store_true",
+        help='Output results in JSON format. Uses the magma JSON format: {"size": […], "table": […], "satisfies": […], "tested_up_to": […]}',
+    )
+    parser.add_argument(
         "--verbose",
         action="store_true",
         help="Enable detailed output. This includes specific counterexamples for any failures when checking against specific equation ids (specified using --ids).",
@@ -235,6 +240,27 @@ def main():
     equations_map = read_equations_map()
     equation_ids = sorted(list(set(args.ids)) if args.ids else equations_map.keys())
     assert equation_ids
+
+    if args.json:
+        satisfies = []
+        for equation_id, _, passed, _ in test_equation_ids(
+            equation_ids, binary_operation_map
+        ):
+            if passed:
+                satisfies.append(equation_id)
+        result_object = {
+            "size": len(get_symbols(binary_operation_map)),
+            "table": parsed_magma_table,
+            "satisfies": satisfies,
+        }
+        if len(equation_ids) == len(equations_map):
+            # Set tested_up_to only if we've tested all equations.
+            result_object["tested_up_to"] = max(equations_map.keys())
+        else:
+            result_object["tested_up_to"] = None
+        print(json.dumps(result_object))
+        sys.exit(0)
+
     for equation_id in equation_ids:
         if equation_id not in equations_map:
             print(f"ERROR: Unknown equation id {equation_id}")
