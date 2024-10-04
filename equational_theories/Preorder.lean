@@ -4,7 +4,7 @@ import equational_theories.MagmaLaw
 
 open Law
 
-namespace MagmaLaw
+namespace Law.MagmaLaw
 
 variable {α : Type}
 
@@ -17,21 +17,28 @@ using them as parameters so that the implication holds in any Magma `G`.
 def implies (l₁ l₂ : MagmaLaw α) := ∀ {G : Type} [Magma G],
   satisfies G l₁ → satisfies G l₂
 
+/--
+If a law `l₁` implies a law `l₂`, then we say `l₂ ≤ l₁` (the inverse direction).
+
+A stronger law is smaller than a weaker law, because this corresponds to the inclusion of
+the class of magmas that obey these laws:  the class of magmas that obey the stronger law is a
+subset of the class of magmas that obey the weaker law.
+-/
 instance : LE (MagmaLaw α) where
-  le l₁ l₂ := l₁.implies l₂
+  le l₁ l₂ := l₂.implies l₁
 
 theorem implies_refl (l : MagmaLaw α) : l ≤ l := fun {G} [Magma G] a ↦ a
 
 theorem implies_trans {l₁ l₂ l₃ : MagmaLaw α} : l₁ ≤ l₂ → l₂ ≤ l₃ → l₁ ≤ l₃ := by
   intro h₁ h₂ G inst h
   dsimp only [satisfies, satisfiesPhi] at *
-  exact h₂ (h₁ h)
+  exact h₁ (h₂ h)
 
 instance : Preorder (MagmaLaw α) where
   le_refl := implies_refl
   le_trans := fun _ _ _ ↦ implies_trans
 
-theorem implies_eq_singleton_models {l₁ l₂ : MagmaLaw α} : l₁ ≤ l₂ ↔ {l₁} ⊧ l₂ := by
+theorem implies_eq_singleton_models {l₁ l₂ : MagmaLaw α} : l₁ ≤ l₂ ↔ {l₂} ⊧ l₁ := by
   simp only [LE.le, implies, models, satisfiesSet, Ctx, Set.mem_singleton_iff, forall_eq]
 
-end MagmaLaw
+end Law.MagmaLaw
