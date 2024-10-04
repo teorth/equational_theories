@@ -1,3 +1,4 @@
+
 import equational_theories.AllEquations
 import equational_theories.FactsSyntax
 import equational_theories.MemoFinOp
@@ -7,6 +8,7 @@ import equational_theories.DecideBang
 This file is generated from the following operator table:
 [[0,0,0,1],[1,1,0,1],[2,0,2,2],[3,2,3,3]]
 -/
+
 set_option linter.unusedVariables false
 
 /-! The magma definition -/
