@@ -44,8 +44,9 @@ print(f"Size of transitive closure: {len(closure)}")
 impliedBy = { i : set() for i in full }
 implying = { j : set() for j in full }
 for (a,b) in closure:
-    impliedBy[a].add(b)
-    implying[b].add(a)
+    if a in full and b in full:
+        impliedBy[a].add(b)
+        implying[b].add(a)
 
 def parse_row(row):
     if not row.startswith("'(") or "seen" in row: return
