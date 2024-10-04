@@ -7,6 +7,7 @@ on:
     paths:
       - '**/*.lean'
       - '**/blueprint.yml'
+      - 'blueprint/**'
       - 'home_page/**'
       - 'home'
       - '**/generate_dashboard.py'
@@ -19,6 +20,7 @@ on:
     paths:
       - '**/*.lean'
       - '**/blueprint.yml'
+      - 'blueprint/**'
       - 'home_page/**'
       - 'home'
       - '**/generate_dashboard.py'

@@ -148,8 +148,7 @@ def check_rule(nvar, check, S, op):
 
 S = list(range(4))
 
-
-for row in open("../data/refutations.txt").readlines()[3*30:]:
+for row in open("../data/refutations4x4.txt").readlines():
     if 'Table' in row:
         table = np.array(eval(row.split("Table")[1]))
     elif 'Proves' in row:
@@ -167,7 +166,6 @@ for row in open("../data/refutations.txt").readlines()[3*30:]:
                 return table[x, y]
 
             this = check_rule(nvar, fn, S, op)
-            print(this, string)
             assert this
             
             ok.append(this)
