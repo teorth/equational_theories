@@ -63,7 +63,7 @@ def find_most_useful_implication(matrix, k, one_per_equiv_class=True):
         
         if np.any(unknown_mask):
             unknown_indices = np.argwhere(unknown_mask)
-            value = component_sizes[comp1] * component_sizes[comp2] - 1
+            value = component_sizes[comp1] * component_sizes[comp2]
             
             for i, j in unknown_indices:
                 actual_i, actual_j = nodes1[i], nodes2[j]
