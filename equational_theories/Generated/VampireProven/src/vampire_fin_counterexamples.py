@@ -72,7 +72,7 @@ for problem in tqdm(problems):
   print(f'  ⟨Fin {len(model)}, ⟨memoFinOp fun x y => {table(model)}[x.val]![y.val]!⟩, by decideFin!⟩', file=disproofs)
   print(file=disproofs)
   length += 4
-  if length >= 5000:
+  if length >= 1000:
     length = 0
     disproofs.close()
     dpind += 1
