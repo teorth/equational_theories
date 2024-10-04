@@ -624,6 +624,24 @@ theorem Equation4579_implies_Equation4564 (G: Type _) [Magma G] (h: Equation4579
   intro x y z w
   exact h x y z w y
 
+@[equational_result]
+theorem Equation953_implies_Equation2 (G : Type _) [Magma G] (h: Equation953 G) : Equation2 G := by
+  intro z x
+  let i := z ◇ z
+  let n := i ◇ i
+  have ie : z ◇ z = i := by simp
+  have ne : i ◇ i = n := by simp
+  have zyn : ∀ y : G, z = y ◇ n := by
+    intro y
+    have := h z y z
+    rwa [ie, ne] at this
+  have hzzi := h z z i
+  rw [ne, ←zyn] at hzzi
+  have := h x z i
+  rw [ne, ←zyn, ←hzzi] at this
+  symm
+  exact this
+
 /- Counterexamples -/
 
 @[equational_result]
