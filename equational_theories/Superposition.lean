@@ -44,7 +44,7 @@ elab "superpose " eq1:term:arg eq2:term:arg : term <= typ => do
   let eq1type ← inferType eq1
   let eq2 ← elabTerm eq2 none
   let eq2type ← inferType eq2
-  let (args1, _, e1) ← forallMetaTelescope eq1type
+  let (args1, _, _e1) ← forallMetaTelescope eq1type
   let eq1 := mkAppN eq1 args1
   let (args2, _, e2) ← forallMetaTelescope eq2type
   let eq2 := mkAppN eq2 args2
@@ -69,38 +69,6 @@ elab "superpose " eq1:term:arg eq2:term:arg : term <= typ => do
     for mvar in ← getMVarsNoDelayed expr do
       mvar.assumption
     return expr
-  -- catch _ => try
-  --   restoreState s
-  --   guard (← isDefEq (e1.getArg! 2) (e2.getArg! 1))
-  --   let expr ← instantiateMVars (← mkEqTrans eq1 eq2)
-  --   guard (← isDefEq typ (← inferType expr))
-  --   for mvar in ← getMVarsNoDelayed expr do
-  --     mvar.assumption
-  --   return expr
-  -- catch _ => try
-  --   restoreState s
-  --   guard (← isDefEq (e1.getArg! 1) (e2.getArg! 1))
-  --   let expr ← instantiateMVars (← mkEqTrans (← mkEqSymm eq1) eq2)
-  --   guard (← isDefEq typ (← inferType expr))
-  --   for mvar in ← getMVarsNoDelayed expr do
-  --     mvar.assumption
-  --   return expr
-  -- catch _ => try
-  --   restoreState s
-  --   guard (← isDefEq (e1.getArg! 2) (e2.getArg! 2))
-  --   let expr ← instantiateMVars (← mkEqTrans eq1 (← mkEqSymm eq2))
-  --   guard (← isDefEq typ (← inferType expr))
-  --   for mvar in ← getMVarsNoDelayed expr do
-  --     mvar.assumption
-  --   return expr
-  -- catch _ =>
-  --   restoreState s
-  --   guard (← isDefEq (e1.getArg! 1) (e2.getArg! 2))
-  --   let expr ← instantiateMVars (← mkEqTrans (← mkEqSymm eq1) (← mkEqSymm eq2))
-  --   guard (← isDefEq typ (← inferType expr))
-  --   for mvar in ← getMVarsNoDelayed expr do
-  --     mvar.assumption
-    -- return expr
 
 
 elab "subsumption " eq1:term:arg eq2:term:arg : tactic => do
