@@ -4,9 +4,10 @@
 -/
 
 import equational_theories.FreeMagma
-import equational_theories.Completeness
+import equational_theories.MagmaLaw
 
 open FreeMagma
+open Law
 
 def FreeMagma.op {α} (w : FreeMagma α) : FreeMagma α :=
 match w with
