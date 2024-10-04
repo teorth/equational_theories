@@ -81,11 +81,11 @@ theorem FreeMagmaWithLaws.evalInMagmaIsQuot {α} (Γ : Ctx α) (t : FreeMagma α
     simp only [Magma.op, ForkWithLaws]
     repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot]
     simp only [Quotient.lift₂]
-    apply Quot.sound; rw [evalInMagma]
+    apply Quot.sound; rw [substFreeMagma]
     exact ⟨derive.Ref _ _⟩
 
 theorem substLFId {α} (t : FreeMagma α) : t ⬝ Lf = t := by
-  cases t <;> simp [evalInMagma]
+  cases t <;> simp [substFreeMagma]
   constructor <;> apply substLFId
 
 @[simp]
