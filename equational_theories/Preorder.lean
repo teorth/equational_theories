@@ -17,15 +17,23 @@ using them as parameters so that the implication holds in any Magma `G`.
 def implies (l₁ l₂ : MagmaLaw α) := ∀ {G : Type} [Magma G],
   satisfies G l₁ → satisfies G l₂
 
-/--
-If a law `l₁` implies a law `l₂`, then we say `l₂ ≤ l₁` (the inverse direction).
 
+/--
+If a law `l₁` implies a law `l₂`, then we say `l₁ ≤ l₂`.
+-/
+instance : LE (MagmaLaw α) where
+  le l₁ l₂ := l₂.implies l₁
+
+/--
 A stronger law is smaller than a weaker law, because this corresponds to the inclusion of
 the class of magmas that obey these laws:  the class of magmas that obey the stronger law is a
 subset of the class of magmas that obey the weaker law.
 -/
-instance : LE (MagmaLaw α) where
-  le l₁ l₂ := l₂.implies l₁
+theorem implies_set {α} (l₁ l₂ : MagmaLaw α) (h : l₁.implies l₂) :
+  { Sigma.mk G inst | @satisfies α G inst l₁ } ⊆ { Sigma.mk G inst | @satisfies α G inst l₂ } := by
+  simp_all [Membership.mem, Set.Mem]
+  intro ⟨G,inst⟩ h1
+  exact h h1
 
 theorem implies_refl (l : MagmaLaw α) : l ≤ l := fun {G} [Magma G] a ↦ a
 
