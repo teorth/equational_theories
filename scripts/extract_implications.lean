@@ -82,13 +82,8 @@ def generateOutcomes (inp : Cli.Parsed) : IO UInt32 := do
       for a in outcomes do
         for b in a do
           count := count.insert b (count.getD b 0 + 1)
-      IO.print "{"
-      let mut first := true
-      for ⟨a, b⟩ in count do
-        if !first then IO.print ",\n"
-        IO.print f!"{a}: {b}"
-        first := false
-      IO.println "\n}"
+      let hist := Json.mkObj $ count.toList.map fun (x, n) => (toString x, toJson n)
+      IO.println hist.pretty
     else
       IO.println (toJson ({equations, outcomes : OutputOutcomes})).compress
     pure 0
