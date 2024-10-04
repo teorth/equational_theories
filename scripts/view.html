@@ -128,6 +128,7 @@
       <button id="backButton">Back to List</button>
       <h1>Equation Details</h1>
       <h2 id="selectedEquation"></h2>
+      <h3 id="selectedEquationDual"></h3>
       <div class="checkbox-container">
 	<label>
 	  <input checked="checked" type="checkbox" id="showEquivalences2"> Hide equivalent equations
@@ -239,6 +240,7 @@
       const detailPage = document.getElementById('detailPage');
       const equationList = document.getElementById('equationList');
       const selectedEquation = document.getElementById('selectedEquation');
+      const selectedEquationDual = document.getElementById('selectedEquationDual');
       const impliesList = document.getElementById('impliesList');
       const antiImpliesList = document.getElementById('antiImpliesList');
       const unknownImpliesList = document.getElementById('unknownImpliesList');
@@ -383,6 +385,12 @@ function filterEquations() {
       }
 
       function renderEquationList(sortBy = 'index', sortOrder = 'asc') {
+
+	  // Get the current URL
+	  let currentURL = window.location.href;
+	  // Update the URL without reloading the page
+	  history.pushState(null, '', currentURL.split("?")[0]);
+	  
     const header = equationList.querySelector('.header');
     
     filteredCachedItems.sort((a, b) => {
@@ -405,6 +413,19 @@ function filterEquations() {
 
 
       function renderImplications(index) {
+	  // Get the current URL
+	  let currentURL = window.location.href;
+
+	  // Check if there's already a query string
+	  if (currentURL.indexOf('?') > -1) {
+	      currentURL = currentURL.split('?')[0] + '?' + (index+1);
+	  } else {
+	      currentURL += '?' + (index+1);
+	  }
+
+	  // Update the URL without reloading the page
+	  history.pushState(null, '', currentURL);
+	  
           if (index === null || index < 0 || index >= equations.length) {
               console.error('Invalid equation index:', index);
               return;
@@ -413,6 +434,23 @@ function filterEquations() {
           currentEquationIndex = index;
           selectedEquation.textContent = equations[index];
           selectedEquation.dataset.index = index;
+
+
+          function findDual(index, duals) {
+	      for (let pair of duals) {
+		  if (pair[0] === index) return pair[1];
+		  if (pair[1] === index) return pair[0];
+	      }
+	      return null; // Return null if no dual is found
+	  }
+
+	  // Usage:
+	  let dualIndex = findDual(index+1, duals);
+	  if (dualIndex !== null) {
+	      selectedEquationDual.innerHTML = "(Dual equation: <a href='#' onclick='renderImplications("+(dualIndex-1)+");'>" + equations[dualIndex-1] + ")</a>";
+	  } else {
+	      selectedEquationDual.innerHTML = "";
+	  }
 
 	  
     // Add this section to display equivalent equations
@@ -501,7 +539,6 @@ function filterEquations() {
     document.querySelectorAll('.implication-item').forEach(item => {
         item.addEventListener('click', (e) => {
             const clickedIndex = parseInt(e.target.attributes['uid'].value);
-	    console.log('sdf', clickedIndex);
             renderImplications(clickedIndex);
             showPage('detailPage');
             window.scrollTo(0, 0);  // Scroll to the top of the page
@@ -565,10 +602,30 @@ function filterEquations() {
 	  renderEquationList();
       });
 
-      // Initial render
-      renderEquationList();
 
+      let currentURL = window.location.href;
+      if (currentURL.indexOf('?') > -1) {
+          renderImplications(currentURL.split('?')[1]-1);
+          showPage('detailPage');
+      } else {
+	  renderEquationList();
+      }
 
+      
+      // Function to handle URL changes (including back/forward navigation)
+      function handleUrlChange() {
+	  alert("pop" + window.location.href);
+	  let currentURL = window.location.href;
+	  if (currentURL.indexOf('?') > -1) {
+              renderImplications(currentURL.split('?')[1]-1);
+              showPage('detailPage');
+	  } else {
+	      renderEquationList();
+              showPage('listPage');
+	  }
+      }
+
+      window.addEventListener('popstate', handleUrlChange);
 
 
       const EQ_SIZE = 4;
