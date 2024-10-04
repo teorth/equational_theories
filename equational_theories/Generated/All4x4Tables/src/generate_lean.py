@@ -192,7 +192,7 @@ with open(f"{dir.parent}/All4x4Tables.lean", "w") as main:
   for i, row in enumerate(rows):
       leanfile = f"{dir}/Refutation{i}.lean"
       data = parse_row(row)
-      if data and data["div"] < 10:
+      if data:
         data = prune_row(data)
         print(f"Writing {leanfile}")
         main.write(f"import equational_theories.Generated.All4x4Tables.Refutation{i}\n")
