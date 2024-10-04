@@ -65,7 +65,7 @@ theorem satisfies_op_op {α G} [Magma G] {l : MagmaLaw α} (h : (Op G) ⊧ l) : 
   apply satisfiesPhi_op
   apply h
 
-theorem implies_op {α} {l₁ l₂ : Law.MagmaLaw α} (h : l₁.implies l₂) : l₁.op.implies l₂.op := by
+theorem implies_op {α} {l₁ l₂ : MagmaLaw α} (h : l₁.implies l₂) : l₁.op.implies l₂.op := by
   simp [op, implies] at *
   intro G inst hsat
   apply satisfies_op_op
@@ -73,5 +73,10 @@ theorem implies_op {α} {l₁ l₂ : Law.MagmaLaw α} (h : l₁.implies l₂) : 
   rw [← law_op_op l₁]
   apply satisfies_op_op
   exact hsat
+
+theorem le_op {α} {l₁ l₂ : MagmaLaw α} (h : l₁ ≤ l₂) : l₁.op ≤ l₂.op := by
+  simp [LE.le]
+  apply implies_op
+  exact h
 
 end Law.MagmaLaw
