@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 import numpy as np
 
@@ -9,13 +10,13 @@ outcomes = f['outcomes']
 
 ids = ["explicit_conjecture_false",
        "explicit_conjecture_true",
- "explicit_proof_false",
- "explicit_proof_true",
- "implicit_conjecture_false",
- "implicit_conjecture_true",
- "implicit_proof_false",
- "implicit_proof_true",
- "unknown"]
+       "explicit_proof_false",
+       "explicit_proof_true",
+       "implicit_conjecture_false",
+       "implicit_conjecture_true",
+       "implicit_proof_false",
+       "implicit_proof_true",
+       "unknown"]
 
 ids = {x: i for i,x in enumerate(ids)}
 
@@ -33,6 +34,7 @@ for i,row in enumerate(outcomes):
 
 np.save('/tmp/a.npy', r)
 #"""
+
 
 def rle_encode(data):
     if not data:
@@ -54,6 +56,7 @@ def rle_encode(data):
     return encoded
 
 import numpy as np
+n = np.load('/tmp/a.npy')
 
 def find_equivalence_classes_fast(implications):
     # Convert implications to NumPy array
@@ -82,12 +85,10 @@ def find_equivalence_classes_fast(implications):
 
     return equivalence_classes
 
-#n = np.array(np.load("/tmp/a.npy"), dtype=np.uint8)
-#exit(0)
-
-from PIL import Image
-
-sys.stdout = open("home_page/implications/implications.js")
+if not os.path.exists("home_page/implications"):
+    os.mkdir("home_page/implications")
+        
+sys.stdout = open("home_page/implications/implications.js","w")
 
 print("var arr = ",rle_encode(n.flatten().tolist()));
 
