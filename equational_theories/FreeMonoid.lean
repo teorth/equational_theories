@@ -5,8 +5,6 @@ import equational_theories.MagmaLaw
 open FreeMagma
 open Law
 
-namespace FreeMonoid
-
 def treeConcat {α : Type _} (t : FreeMagma α) : List α :=
   match t with
     | Lf a      => [a]
@@ -48,3 +46,15 @@ theorem Assoc4 {G : Type _} [Magma G] (assoc : Equation4512 G)
     assoc
     (fun | 0 => x | 1 => y | 2 => z | 3 => w : Fin 4 → G)
     (((Lf 0 ⋆ Lf 1) ⋆ Lf 2) ⋆ Lf 3)
+
+inductive FreeSemigroup (α : Type _)
+  | Singleton : α → FreeSemigroup α
+  | Cons : α → FreeSemigroup α → FreeSemigroup α
+
+def semigroupConcat {α : Type _} (s1 s2 : FreeSemigroup α) : FreeSemigroup α :=
+  match s1 with
+    | FreeSemigroup.Singleton a   => FreeSemigroup.Cons a s2
+    | FreeSemigroup.Cons a s1tail => FreeSemigroup.Cons a (semigroupConcat s1tail s2)
+
+instance (α : Type _) : Magma (FreeSemigroup α) where
+  op := semigroupConcat
