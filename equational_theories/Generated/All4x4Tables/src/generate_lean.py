@@ -89,7 +89,7 @@ def prune_row(data):
         if impliedBy[i].intersection(refuted):
           continue
         # remove all that this is ruling out
-        refuted = refuted - impliedBy[i]
+        refuted = refuted - implying[i]
         refuted.add(i)
     stats["removed_by_implication"] += len(data["satisfied"]) + len(data["refuted"]) - len(satisfied) - len(refuted)
 
