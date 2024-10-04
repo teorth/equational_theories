@@ -187,9 +187,7 @@ def create_rows(f):
                 row = []
     return all_rows
 
-rows = []
-with open(f"{dir}/data/plan.txt") as f:
-    rows = create_rows(f)
+rows = create_rows(open(f"{dir}/data/plan.txt"))
 with open(f"{dir.parent}/All4x4Tables.lean", "w") as main:
   for i, row in enumerate(rows):
       leanfile = f"{dir}/Refutation{i}.lean"
