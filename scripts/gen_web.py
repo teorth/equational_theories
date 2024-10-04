@@ -1,6 +1,6 @@
 import json
 import numpy as np
-#"""
+"""
 f = json.load(open("../out.json"))
 
 outcomes = f['outcomes']
@@ -70,7 +70,6 @@ def find_equivalence_classes_fast(implications):
     unassigned = set(range(n))
     equivalence_classes = []
 
-    print(adj_matrix)
 
     while unassigned:
         node = unassigned.pop()
