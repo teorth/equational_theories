@@ -47,8 +47,9 @@ print(f"Size of transitive closure: {len(closure)}")
 impliedBy = { i : set() for i in full }
 implying = { j : set() for j in full }
 for (a,b) in closure:
-    impliedBy[a].add(b)
-    implying[b].add(a)
+    if a in full and b in full:
+        impliedBy[a].add(b)
+        implying[b].add(a)
 
 def parse_row(row):
     assert len(row) == 3
@@ -89,7 +90,7 @@ def prune_row(data):
         if impliedBy[i].intersection(refuted):
           continue
         # remove all that this is ruling out
-        refuted = refuted - impliedBy[i]
+        refuted = refuted - implying[i]
         refuted.add(i)
     stats["removed_by_implication"] += len(data["satisfied"]) + len(data["refuted"]) - len(satisfied) - len(refuted)
 
