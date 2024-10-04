@@ -71,6 +71,16 @@
           cursor: pointer;
           font-size: 20px;
       }
+
+      .implication-item {
+    cursor: pointer;
+    padding: 5px;
+    margin: 2px 0;
+}
+
+.implication-item:hover {
+    background-color: #f0f0f0;
+}
       
     </style>
     
@@ -92,8 +102,12 @@
         </div>
       </div>
 
+
       
       <div class="checkbox-container">
+	<label>
+	  <input checked="checked" type="checkbox" id="showEquivalences"> Hide equivalent equations
+	</label>
         <label>
           <input type="checkbox" checked="checked" id="treatConjectedAsUnknownList"> Treat conjectures as unknown
         </label>
@@ -115,12 +129,16 @@
       <h1>Equation Details</h1>
       <h2 id="selectedEquation"></h2>
       <div class="checkbox-container">
+	<label>
+	  <input checked="checked" type="checkbox" id="showEquivalences2"> Hide equivalent equations
+	</label>
         <label>
           <input type="checkbox" id="showOnlyExplicitProofs"> Show only explicit proofs
         </label>
         <label>
           <input type="checkbox" id="treatConjectedAsUnknownDetail"> Treat conjectures as unknown
         </label>
+	
       </div>
       <div class="implication-box">
         <h3>This equation implies (=&gt;):</h3>
@@ -152,9 +170,19 @@
           </tr>
         </table>
       </div>
+      <div class="implication-box">
+        <table class="implication-table">
+          <tr>
+            <th>Equivalent Equations</th>
+          </tr>
+	  <tr>
+	    <td><div id="equivalentEquations" class="implication-list"></div></td>
+	  </tr>
+	</table>
+      </div>
     </div>
 
-    <script src="out.js?">
+    <script src="out.js?2">
     </script>
     <script>
 
@@ -229,6 +257,24 @@
           document.getElementById(pageId).classList.add('active');
       }
 
+      let showEquivalences = false;
+let filteredCachedItems = [];
+
+function filterEquations() {
+    if (showEquivalences) {
+        filteredCachedItems = cachedItems;
+    } else {
+        const seenClasses = new Set();
+        filteredCachedItems = cachedItems.filter(item => {
+            const eqClass = equiv.find(cls => cls.includes(item.index));
+            if (!seenClasses.has(eqClass[0])) {
+                seenClasses.add(eqClass[0]);
+                return true;
+            }
+            return false;
+        });
+    }
+}
       
 
       // Pre-compute boolean flags for each status
@@ -315,6 +361,9 @@
 		  }
               };
 	  });
+
+	  filterEquations();
+
       }
 
       function updateEquationListStats() {
@@ -329,24 +378,27 @@
               item.statElements.unknown.textContent = stats.unknown;
               item.statElements.unknownBy.textContent = stats.unknownBy;
 	  });
-      }
-      function renderEquationList(sortBy = 'index', sortOrder = 'asc') {
-	  const header = equationList.querySelector('.header');
 	  
-	  cachedItems.sort((a, b) => {
-              if (sortBy === 'index') {
-		  return sortOrder === 'asc' ? a.index - b.index : b.index - a.index;
-              }
-              return sortOrder === 'asc' ? a.stats[sortBy] - b.stats[sortBy] : b.stats[sortBy] - a.stats[sortBy];
-	  });
-
-	  const fragment = document.createDocumentFragment();
-	  cachedItems.forEach(item => fragment.appendChild(item.element));
-
-	  equationList.innerHTML = '';
-	  equationList.appendChild(header);
-	  equationList.appendChild(fragment);
+	  filterEquations();
       }
+
+      function renderEquationList(sortBy = 'index', sortOrder = 'asc') {
+    const header = equationList.querySelector('.header');
+    
+    filteredCachedItems.sort((a, b) => {
+        if (sortBy === 'index') {
+            return sortOrder === 'asc' ? a.index - b.index : b.index - a.index;
+        }
+        return sortOrder === 'asc' ? a.stats[sortBy] - b.stats[sortBy] : b.stats[sortBy] - a.stats[sortBy];
+    });
+
+    const fragment = document.createDocumentFragment();
+    filteredCachedItems.forEach(item => fragment.appendChild(item.element));
+
+    equationList.innerHTML = '';
+    equationList.appendChild(header);
+    equationList.appendChild(fragment);
+}
 
       // Call this function once when the page loads
       initializeEquationList();
@@ -361,6 +413,21 @@
           currentEquationIndex = index;
           selectedEquation.textContent = equations[index];
           selectedEquation.dataset.index = index;
+
+	  
+    // Add this section to display equivalent equations
+    const equivalentClass = equiv.find(cls => cls.includes(index)) || [index];
+    const equivalentEquations = equivalentClass
+        .filter(eqIndex => eqIndex !== index)
+        .map(eqIndex => equations[eqIndex]);
+    
+    const equivalentEquationsHtml = equivalentEquations.length > 0
+        ? `<h3>Equivalent Equations:</h3><ul>${equivalentEquations.map(eq => `<li>${eq}</li>`).join('')}</ul>`
+        : '';
+
+    // Add this line to insert the equivalent equations HTML
+    document.getElementById('equivalentEquations').innerHTML = equivalentEquationsHtml;
+
           
           const onlyExplicit = showOnlyExplicitProofs.checked;
           const treatConjecturedAsUnknown = treatConjectedAsUnknownDetail.checked;
@@ -372,12 +439,20 @@
           const antiImpliedBy = [];
           const unknownImpliedBy = [];
 
+          let seenClasses = new Set();
           implications[index].forEach((status, i) => {
               if (i === index) return; // Skip self-implication
+              const eqClass = equiv.find(cls => cls.includes(i));
+	      if (seenClasses.has(eqClass[0]) && !showEquivalences) {
+                  return true;
+              }
+              seenClasses.add(eqClass[0]);
+	      let more_same = eqClass.length > 1 ? ` (+ ${eqClass.length-1} equiv.)` : "";
+
               const eq = equations[i];
               const isConjectured = status.includes('conjecture');
 	      const isspecial = special.indexOf(equations[i].split("[")[0]) !== -1 ? "special" : "";
-              const item = `<div class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}</div>`;
+              const item = `<div uid=${i} class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}</div>`;
               
               if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
                   implies.push(item);
@@ -388,12 +463,21 @@
               }
           });
 
+          seenClasses = new Set();
           implications.forEach((row, i) => {
               if (i === index) return; // Skip self-implication
+              const eqClass = equiv.find(cls => cls.includes(i));
+	      if (seenClasses.has(eqClass[0]) && !showEquivalences) {
+                  return true;
+              }
+              seenClasses.add(eqClass[0]);
+	      let more_same = eqClass.length > 1 ? ` (+ ${eqClass.length-1} equiv.)` : "";
+
               const status = row[index];
               const eq = equations[i];
+	      const isspecial = special.indexOf(equations[i].split("[")[0]) !== -1 ? "special" : "";
               const isConjectured = status.includes('conjecture');
-              const item = `<div class="implication-item ${status} ${isConjectured ? 'conjectured' : ''}">${eq}</div>`;
+              const item = `<div uid=${i} class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}</div>`;
               
               if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
                   impliedBy.push(item);
@@ -410,6 +494,18 @@
           impliedByList.innerHTML = impliedBy.join('') || 'None';
           antiImpliedByList.innerHTML = antiImpliedBy.join('') || 'None';
           unknownImpliedByList.innerHTML = unknownImpliedBy.join('') || 'None';
+	  
+    // Add click event listeners to all implication items
+    document.querySelectorAll('.implication-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            const clickedIndex = parseInt(e.target.attributes['uid'].value);
+	    console.log('sdf', clickedIndex);
+            renderImplications(clickedIndex);
+            showPage('detailPage');
+            window.scrollTo(0, 0);  // Scroll to the top of the page
+        });
+    });
+	  
       }
 
       equationList.addEventListener('click', (e) => {
@@ -426,6 +522,22 @@
           }
       });
 
+      const showEquivalencesCheckbox = document.getElementById('showEquivalences');
+      showEquivalencesCheckbox.addEventListener('change', () => {
+	  showEquivalencesCheckbox2.checked = showEquivalences;
+	  showEquivalences = !showEquivalencesCheckbox.checked;
+	  filterEquations();
+	  renderEquationList();
+      });
+
+      const showEquivalencesCheckbox2 = document.getElementById('showEquivalences2');
+      showEquivalencesCheckbox2.addEventListener('change', () => {
+	  showEquivalencesCheckbox.checked = showEquivalences;
+	  showEquivalences = !showEquivalencesCheckbox.checked;
+	  filterEquations();
+          renderImplications(currentEquationIndex);
+      });
+      
       backButton.addEventListener('click', () => {
           showPage('listPage');
           renderEquationList(); // Re-sort by equation number when returning to list
