@@ -43,6 +43,7 @@ CABALHOME="$REPODIR/src/finite_magma_tools/bin"
 echo "Checking if finite_magma_tools needs to be built..."
 cd "$REPODIR/src/finite_magma_tools/" || exit
 cabal build
+mkdir -p bin
 EXECUTABLES=$(find "./dist-newstyle/build" -type f -executable)
 if [ -z "$EXECUTABLES" ]; then
     echo "FAILED"
