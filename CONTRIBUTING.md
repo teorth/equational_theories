@@ -1,6 +1,6 @@
 # Contributing to the Equational Theories Project
 
-Thank you for your interest in contributing to the Equational Theories Project! We welcome contributions from all sources: human-generated contributions from either professional mathematicians or interested members of the public, as well as computer-generated contributions from programs in various languages, automated theorem provers, or modern AI tools.  (In fact, one of the main goals of this project is to learn how such a diverse pool of contributions can effectively be combined with each other to advance a common objective.)
+Thank you for your interest in contributing to the Equational Theories Project! We welcome contributions from all sources: human-generated contributions from either professional mathematicians or interested members of the public, as well as computer-generated contributions from programs in various languages, automated theorem provers, or modern AI tools. (In fact, one of the main goals of this project is to learn how such a diverse pool of contributions can effectively be combined with each other to advance a common objective.)
 
 This guide provides detailed instructions on how to effectively and efficiently contribute to the project.
 
@@ -27,6 +27,25 @@ The following instructions detail the process for claiming and completing tasks.
 ### 3. Working on the Task
 
 Once you are assigned to an issue, begin working on the corresponding task. You should create a new branch from the `main` branch to develop your solution.
+
+> [!WARNING]
+> Before pushing any changes, you have the following options:
+>
+> - You might want to install the git pre-push hook by running:
+>
+>   ```bash
+>   source scripts/install_pre-push.sh
+>   ```
+>   This will automatically run checks before every push, reducing the risk of CI check failures.
+>
+> - You can manually run the following script before pushing, reducing the risk of CI check failures:
+>
+>   ```bash
+>   source scripts/run_before_push.sh
+>   ```
+>   This requires manual execution and won't stop the push if skipped.
+>
+> - You may push your changes without any safeguards, increasing the risk of CI check failures.
 
 ### 4. Submitting a Pull Request
 
@@ -70,6 +89,7 @@ The core Lean files are as follows:
 - [`Equations.lean`](equational_theories/Equations.lean)  A list of selected equations of particular interest.
 - [`AllEquations.lean`](equational_theories/AllEquations.lean)  The complete set of 4692 equational laws involving at most four magma operations (up to symmetry and relabeling).  It was generated using [this script](scripts/generate_eqs_list.py).  The subgraph equations are included as an import.  If you find an equation here of particular interest to study, consider transferring it to `Equations.lean`.
 - [`Subgraph.lean`](equational_theories/Subgraph.lean)  This is the file for all results concerning the specific laws of interest.
+- [`Homomorphisms.lean`](equational_theories/Homomorphisms.lean)  This file defines magma homomorphisms and magma isomorphisms and provides basic API for them.
 
 Some technical Lean files:
 - [`EquationalResult.lean`](equational_theories/EquationalResult.lean)  Introduces the `@[equational_result]` attribute, which adds metadata to allow for easier aggregation of implications. Also adds `conjecture` keyword, which is a variant of `proof_wanted` which keeps the metadata produced by `@[equational_result]` (but marking it as a conjecture).
@@ -140,6 +160,7 @@ Proofs generated programmatically are also welcome. If you do this, you are enco
 - In [.gitattributes](.gitattributes) add `equational_theories/Generated/MyTechnique.lean linguist-generated` for all automatically generated files.
 - In the file `equational_theories/Generated.lean` add the import line `import equational_theories.Generated.MyTechnique` replacing "MyTechnique" with the name of your folder.
 - Consider adding to the blueprint to explain the automated proof technique used.
+- Proofs of implications and nonimplications should be reduced to the minimum required set. See [here](docs/graph_operations.md) for more.
 
 ## Images
 

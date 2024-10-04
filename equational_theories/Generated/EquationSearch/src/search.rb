@@ -1,4 +1,4 @@
-# Very rudimentary equational reasoning based on direct string substituion. By
+# Very rudimentary equational reasoning based on direct string substitution. By
 # consuming the graph of known implications, we can 'reason' from a given hypothesis
 # by performing legal substitutions.
 #
@@ -9,19 +9,19 @@
 #
 # Inspired by the following proof:
 # theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) : Equation43 G := by
-#   have idem (x : G) : (x ∘ x) ∘ (x ∘ x) = (x ∘ x) := by rw [← h, ← h]
-#   have comm (x y : G) : (x ∘ x) ∘ y = y ∘ (x ∘ x) := by rw [← idem, ← h, idem]
-#   have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by rw [← h, ← h]
+#   have idem (x : G) : (x ◇ x) ◇ (x ◇ x) = (x ◇ x) := by rw [← h, ← h]
+#   have comm (x y : G) : (x ◇ x) ◇ y = y ◇ (x ◇ x) := by rw [← idem, ← h, idem]
+#   have op_idem (x y : G) : (x ◇ x) ◇ (y ◇ y) = x ◇ y := by rw [← h, ← h]
 #   exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
 #
-#  Equation 43: x ∘ y = y ∘ x
-#  Equation 387: x ∘ y = (y ∘ y) ∘ x
+#  Equation 43: x ◇ y = y ◇ x
+#  Equation 387: x ◇ y = (y ◇ y) ◇ x
 #
-#  Equation 3659: x ∘ x = (x ∘ x) ∘ (x ∘ x)
-#  Equation 4482: (x ∘ x) ∘ y = y ∘ (x ∘ x)
-#  Equation 3715: x ∘ y = (x ∘ x) ∘ (y ∘ y)
+#  Equation 3659: x ◇ x = (x ◇ x) ◇ (x ◇ x)
+#  Equation 4482: (x ◇ x) ◇ y = y ◇ (x ◇ x)
+#  Equation 3715: x ◇ y = (x ◇ x) ◇ (y ◇ y)
 
-# Generate all possible rebinding permutatuions, e.g. x ∘ y -> z ∘ w and add them to the search
+# Generate all possible rebinding permutatuions, e.g. x ◇ y -> z ◇ w and add them to the search
 # space. Reaches new proofs, at the cost of a large increase in the search space.
 GENERATE_PERMUTATIONS = true
 # Match sub-expressions of the LHS/RHS and not just the entire LHS/RHS. Only does so for a subset of
@@ -62,7 +62,7 @@ def expr_variables(expr)
 end
 
 def expr_operations(expr)
-  expr.count("∘")
+  expr.count("◇")
 end
 
 # Replacing an expression on the LHS or RHS could require changing variables names on one (or both) sides.
@@ -81,7 +81,7 @@ def rebind(lhs, rhs, left, next_expr)
     binding_table = {}
     binding_table_free_idx = 0
     next_expr.length.times { |i|
-      if next_expr[i] == '(' || next_expr[i] == ')' || next_expr[i] == ' ' || next_expr[i] == '∘'
+      if next_expr[i] == '(' || next_expr[i] == ')' || next_expr[i] == ' ' || next_expr[i] == '◇'
         next
       else
         var_idx = VAR_NAME_TO_IDX[next_expr[i]]
@@ -102,7 +102,7 @@ def rebind(lhs, rhs, left, next_expr)
     free_map = {}
 
     rhs.length.times { |i|
-      if rhs[i] == '(' || rhs[i] == ')' || rhs[i] == ' ' || rhs[i] == '∘'
+      if rhs[i] == '(' || rhs[i] == ')' || rhs[i] == ' ' || rhs[i] == '◇'
         next
       else
         var_idx = VAR_NAME_TO_IDX[rhs[i]]
@@ -129,7 +129,7 @@ def rebind(lhs, rhs, left, next_expr)
     free_map = {}
 
     next_expr.length.times { |i|
-      if next_expr[i] == '(' || next_expr[i] == ')' || next_expr[i] == ' ' || next_expr[i] == '∘'
+      if next_expr[i] == '(' || next_expr[i] == ')' || next_expr[i] == ' ' || next_expr[i] == '◇'
         next
       else
         var_idx = VAR_NAME_TO_IDX[next_expr[i]]
@@ -151,22 +151,22 @@ def rebind(lhs, rhs, left, next_expr)
   end
 end
 
-raise "Error" unless rebind("x ∘ x", "(x ∘ y) ∘ z", true, "x ∘ y")[1] == "(x ∘ z) ∘ w"
-raise "Error" unless rebind("x ∘ y", "(x ∘ z) ∘ w", true, "x ∘ x")[1] == "(x ∘ y) ∘ z"
-raise "Error" unless rebind("x ∘ y", "(x ∘ y) ∘ z", true, "x ∘ x")[1] == "(x ∘ y) ∘ z"
-raise "Error" unless rebind("x ∘ y", "y ∘ (x ∘ z)", true, "(x ∘ x) ∘ (y ∘ z)")[1] == "y ∘ (x ∘ w)"
-raise "Error" unless rebind("x ∘ y", "(z ∘ y) ∘ x", true, "((x ∘ y) ∘ x) ∘ x")[1] == "(z ∘ y) ∘ x"
-raise "Error" unless rebind("x ∘ y", "y ∘ (x ∘ z)", true, "y ∘ y") == ['x ∘ x', 'x ∘ (y ∘ z)']
-raise "Error" unless rebind("x ∘ (y ∘ z)", "(z ∘ w) ∘ x", true, "(x ∘ z) ∘ x") == ["(x ∘ y) ∘ x", "(y ∘ z) ∘ x"]
-raise "Error" unless rebind("x ∘ (y ∘ x)", "(x ∘ z) ∘ x", true, "y ∘ (z ∘ y)") == ["x ∘ (y ∘ x)", "(z ∘ w) ∘ z"]
-raise "Error" unless rebind("x ∘ (y ∘ z)", "(y ∘ w) ∘ y", true, "x ∘ (y ∘ x)") == ["x ∘ (y ∘ x)", "(y ∘ z) ∘ y"]
-raise "Error" unless rebind("x ∘ (y ∘ x)", "(y ∘ z) ∘ y", true, "y ∘ (z ∘ y)") == ["x ∘ (y ∘ x)", "(x ∘ z) ∘ x"]
+raise "Error" unless rebind("x ◇ x", "(x ◇ y) ◇ z", true, "x ◇ y")[1] == "(x ◇ z) ◇ w"
+raise "Error" unless rebind("x ◇ y", "(x ◇ z) ◇ w", true, "x ◇ x")[1] == "(x ◇ y) ◇ z"
+raise "Error" unless rebind("x ◇ y", "(x ◇ y) ◇ z", true, "x ◇ x")[1] == "(x ◇ y) ◇ z"
+raise "Error" unless rebind("x ◇ y", "y ◇ (x ◇ z)", true, "(x ◇ x) ◇ (y ◇ z)")[1] == "y ◇ (x ◇ w)"
+raise "Error" unless rebind("x ◇ y", "(z ◇ y) ◇ x", true, "((x ◇ y) ◇ x) ◇ x")[1] == "(z ◇ y) ◇ x"
+raise "Error" unless rebind("x ◇ y", "y ◇ (x ◇ z)", true, "y ◇ y") == ['x ◇ x', 'x ◇ (y ◇ z)']
+raise "Error" unless rebind("x ◇ (y ◇ z)", "(z ◇ w) ◇ x", true, "(x ◇ z) ◇ x") == ["(x ◇ y) ◇ x", "(y ◇ z) ◇ x"]
+raise "Error" unless rebind("x ◇ (y ◇ x)", "(x ◇ z) ◇ x", true, "y ◇ (z ◇ y)") == ["x ◇ (y ◇ x)", "(z ◇ w) ◇ z"]
+raise "Error" unless rebind("x ◇ (y ◇ z)", "(y ◇ w) ◇ y", true, "x ◇ (y ◇ x)") == ["x ◇ (y ◇ x)", "(y ◇ z) ◇ y"]
+raise "Error" unless rebind("x ◇ (y ◇ x)", "(y ◇ z) ◇ y", true, "y ◇ (z ◇ y)") == ["x ◇ (y ◇ x)", "(x ◇ z) ◇ x"]
 
-raise "Error" unless rebind("x ∘ y", "(x ∘ y) ∘ z", false, "x ∘ y") == ["x ∘ y", "x ∘ y"]
-raise "Error" unless rebind("x ∘ y", "(x ∘ y) ∘ z", false, "y") == ["x ∘ y", "y"]
-raise "Error" unless rebind("x ∘ y", "x", false, "x ∘ y") == ["x ∘ y", "x ∘ z"]
-raise "Error" unless rebind("x ∘ y", "(x ∘ y) ∘ z", false, "x ∘ w") == ["x ∘ y", "x ∘ z"]
-raise "Error" unless rebind("x", "(x ∘ x) ∘ y", false, "(x ∘ z) ∘ y") == ["x", "(x ∘ y) ∘ z"]
+raise "Error" unless rebind("x ◇ y", "(x ◇ y) ◇ z", false, "x ◇ y") == ["x ◇ y", "x ◇ y"]
+raise "Error" unless rebind("x ◇ y", "(x ◇ y) ◇ z", false, "y") == ["x ◇ y", "y"]
+raise "Error" unless rebind("x ◇ y", "x", false, "x ◇ y") == ["x ◇ y", "x ◇ z"]
+raise "Error" unless rebind("x ◇ y", "(x ◇ y) ◇ z", false, "x ◇ w") == ["x ◇ y", "x ◇ z"]
+raise "Error" unless rebind("x", "(x ◇ x) ◇ y", false, "(x ◇ z) ◇ y") == ["x", "(x ◇ y) ◇ z"]
 
 def permutations_recurse(lhs, rhs, decl_vars, unbound_vars, binding, &block)
   if decl_vars.length == 0

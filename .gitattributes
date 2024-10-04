@@ -2,10 +2,14 @@ equational_theories/Generated/TrivialBruteforce/theorems/Apply.lean linguist-gen
 equational_theories/Generated/TrivialBruteforce/theorems/RewriteGoal.lean linguist-generated
 equational_theories/Generated/TrivialBruteforce/theorems/RewriteHypothesis.lean linguist-generated
 equational_theories/Generated/TrivialBruteforce/theorems/RewriteHypothesisAndGoal.lean linguist-generated
-
 equational_theories/Generated/FinitePoly/Refutation*.lean linguist-generated
 equational_theories/Generated/FinitePoly.lean linguist-generated
 equational_theories/Generated/All4x4Tables/Refutation*.lean linguist-generated
 equational_theories/Generated/All4x4Tables.lean linguist-generated
 
 equational_theories/Generated/VampireProven/Disproofs*.lean linguist-generated
+
+equational_theories/Generated/FinSearch/theorems/*.lean linguist-generated
+equational_theories/Generated/FinSearch.lean linguist-generated
+equational_theories/Generated/MagmaEgg/*/*.lean linguist-generated
+equational_theories/Generated/MagmaEgg/*.lean linguist-generated
