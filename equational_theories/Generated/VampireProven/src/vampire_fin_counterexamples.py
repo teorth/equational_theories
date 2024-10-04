@@ -59,7 +59,7 @@ for problem in tqdm(problems):
 
   start_time = time.perf_counter()
   try:
-    out = subprocess.check_output(['/home/commandmaster/Downloads/vampire', '--mode', 'casc_sat',
+    out = subprocess.check_output(['~/Downloads/vampire', '--mode', 'casc_sat',
                                   '/proc/self/fd/0', '-t', '1'], input=pr.encode()).decode()
   except Exception:
     remaining.append(problem)
