@@ -1,3 +1,4 @@
+
 import equational_theories.AllEquations
 import equational_theories.FactsSyntax
 import equational_theories.MemoFinOp
@@ -7,6 +8,7 @@ import equational_theories.DecideBang
 This file is generated from the following operator table:
 [[0,0,2,3],[2,3,2,3],[0,1,2,3],[0,1,2,3]]
 -/
+
 set_option linter.unusedVariables false
 
 /-! The magma definition -/
@@ -16,5 +18,5 @@ def «FinitePoly [[0,0,2,3],[2,3,2,3],[0,1,2,3],[0,1,2,3]]» : Magma (Fin 4) whe
 /-! The facts -/
 @[equational_result]
 theorem «Facts from FinitePoly [[0,0,2,3],[2,3,2,3],[0,1,2,3],[0,1,2,3]]» :
-  ∃ (G : Type) (_ : Magma G), Facts G [224,2306,2322,2333,2376,2774,2782] [2530,3461,3464,4320] :=
+  ∃ (G : Type) (_ : Magma G), Facts G [224, 2376] [2530, 3461, 3464, 4320] :=
     ⟨Fin 4, «FinitePoly [[0,0,2,3],[2,3,2,3],[0,1,2,3],[0,1,2,3]]», by decideFin!⟩
