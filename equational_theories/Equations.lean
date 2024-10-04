@@ -90,6 +90,8 @@ abbrev Equation1689 (G: Type _) [Magma G] := ∀ x y z : G, x = (y ◇ x) ◇ ((
 
 abbrev Equation2662 (G: Type _) [Magma G] := ∀ x y : G, x = ((x ◇ y) ◇ (x ◇ y)) ◇ x
 
+abbrev Equation3167 (G: Type _) [Magma G] := ∀ x y z : G, x = (((y ◇ y) ◇ z) ◇ z) ◇ x
+
 /-- From Putnam 1978, Problem A4, part (a) -/
 abbrev Equation3722 (G: Type _) [Magma G] := ∀ x y : G, x ◇ y = (x ◇ y) ◇ (x ◇ y)
 

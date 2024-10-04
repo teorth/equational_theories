@@ -4,6 +4,7 @@ import equational_theories.EquationalResult
 import equational_theories.Closure
 import equational_theories.Equations
 import equational_theories.FactsSyntax
+import equational_theories.FreeMonoid
 
 /- This is a subproject of the main project to completely describe a small subgraph of the entire
 implication graph. The list of equations under consideration can be found at https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html
@@ -339,6 +340,17 @@ theorem Equation1571_implies_Equation4512 (G: Type*) [Magma G] (h: Equation1571 
   intro x y z
   apply Eq.trans $ h (x ◇ (y ◇ z)) y x
   rw [eq43 (x ◇ (y ◇ z)) x, ← eq16 (y ◇ z) x, ← eq16 z y, eq43 y x]
+
+/-- An example usage of AssocFullyRightAssociate -/
+theorem Equation1571_implies_Equation3167 (G : Type _) [Magma G] (h : Equation1571 G) : Equation3167 G := by
+  intros x y z
+  have eq4512 := Equation1571_implies_Equation4512 G h
+  have eq16 := Equation1571_implies_Equation16 G h
+  apply Eq.symm
+  apply Eq.trans $ FreeMonoid.AssocFullyRightAssociate eq4512 (fun | 0 => y | 1 => y | 2 => z | 3 => z | 4 => x : Fin 5 → G) ((((Lf 0 ⋆ Lf 1) ⋆ Lf 2) ⋆ Lf 3) ⋆ Lf 4)
+  apply Eq.trans $ Eq.symm $ eq16 _ y
+  apply Eq.trans $ Eq.symm $ eq16 _ z
+  exact Eq.refl _
 
 /-- This result was first obtained by Kisielewicz in 1997 via computer assistance. -/
 @[equational_result]
