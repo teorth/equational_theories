@@ -46,20 +46,33 @@ print(f"Size of transitive closure: {len(closure)}")
 impliedBy = { i : set() for i in full }
 implying = { j : set() for j in full }
 for (a,b) in closure:
-    impliedBy[a].add(b)
-    implying[b].add(a)
+    if a in full and b in full:
+        impliedBy[a].add(b)
+        implying[b].add(a)
 
 def parse_row(row):
-    assert len(row) == 3
-    assert row[0].startswith("Table ")
-    table = row[0].removeprefix("Table ").strip()
-    assert row[1].startswith("Proves ")
-    satisfied = set(ast.literal_eval(row[1].removeprefix("Proves ")))
-    refuted = {i for i in range(1,4694+1) if i not in satisfied}
-
-    div = 4 # hardcoded
-
-    return {"table": table, "div": div, "satisfied": satisfied, "refuted": refuted}
+    if len(row) == 2:
+        # parse dump_tables rows
+        assert row[0].startswith("Table ")
+        table = row[0].removeprefix("Table ").strip()
+        assert row[1].startswith("Proves ")
+        satisfied = set(ast.literal_eval(row[1].removeprefix("Proves ")))
+        refuted = {i for i in range(1,4694+1) if i not in satisfied}
+        div = 4 # hardcoded
+        return {"table": table, "div": div, "satisfied": satisfied, "refuted": refuted}
+    elif len(row) == 3:
+        # parse make-plan rows
+        assert row[0].startswith("Magma ")
+        table = row[0].removeprefix("Magma ").strip()
+        assert row[1].startswith("Satisfies ")
+        assert row[2].startswith("Refutes ")
+        satisfied = set(ast.literal_eval(row[1].removeprefix("Satisfies ")))
+        refuted = set(ast.literal_eval(row[2].removeprefix("Refutes ")))
+        div = table.count("[") - 1
+        assert div > 0
+        return {"table": table, "div": div, "satisfied": satisfied, "refuted": refuted}
+    else:
+        assert len(row) == 2 or len(row) == 3
 
 
 stats = {
@@ -146,22 +159,47 @@ theorem «Facts from {name}» :
 """
     return out
 
+def create_rows(f):
+    first_line = f.readline().strip()
+    all_rows = []
+    row = []
+    if not first_line.startswith("Plan"):
+        # processing a dump_tables output file
+        print("Reading dump_tables output...")
+        if first_line.startswith("Table") or first_line.startswith("Proves"):
+            row.append(first_line)
+        for line in f:
+            line = line.strip()
+            if line.startswith("Table") or line.startswith("Proves"):
+                row.append(line)
+            if len(row) == 2:
+                all_rows.append(row)
+                row = []
+    else:
+        # processing a make-plan output file
+        print("Reading make-plan output...")
+        for line in f:
+            line = line.strip()
+            if line.startswith("Magma") or line.startswith("Satisfies") or line.startswith("Refutes"):
+                row.append(line)
+            if len(row) == 3:
+                all_rows.append(row)
+                row = []
+    return all_rows
 
-with open(f"{dir}/data/refutations.txt") as f:
-    with open(f"{dir.parent}/All4x4Tables.lean", "w") as main:
-      lines = f.readlines()
-      # the format is groups-of-three-lines-based
-      lines = [lines[i:i + 3] for i in range(0, len(lines), 3)]
-      for i, line in enumerate(lines):
-          leanfile = f"{dir}/Refutation{i}.lean"
-          data = parse_row(line)
-          if data and data["div"] < 6:
-            data = prune_row(data)
-            print(f"Writing {leanfile}")
-            main.write(f"import equational_theories.Generated.All4x4Tables.Refutation{i}\n")
-            with open(leanfile, "w") as f:
-                  f.write(generate_lean(data))
-
+rows = []
+with open(f"{dir}/data/plan-5x5.txt") as f:
+    rows = create_rows(f)
+with open(f"{dir.parent}/All4x4Tables.lean", "w") as main:
+  for i, row in enumerate(rows):
+      leanfile = f"{dir}/Refutation{i}.lean"
+      data = parse_row(row)
+      if data and data["div"] < 6:
+        data = prune_row(data)
+        print(f"Writing {leanfile}")
+        main.write(f"import equational_theories.Generated.All4x4Tables.Refutation{i}\n")
+        with open(leanfile, "w") as f:
+              f.write(generate_lean(data))
 
 total = stats["total"]
 removed_by_implication = stats["removed_by_implication"]
