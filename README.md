@@ -8,7 +8,7 @@
 [![Paper](https://img.shields.io/badge/Paper-WIP-blue)](https://teorth.github.io/equational_theories/blueprint.pdf)
 [![Zulip Channel](https://img.shields.io/badge/Zulip_Channel-Join-blue)](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational)
 
-The purpose of this project, launched on Sep 25, 2024, is to explore the space of equational theories of magmas, ordered by implication. To begin with we shall focus only on theories of a single equation, and specifically on the 4694 equational laws
+The purpose of this project, launched on Sep 25, 2024, is to explore the space of equational theories of [magmas](https://en.wikipedia.org/wiki/Magma_(algebra)), ordered by implication. To begin with we shall focus only on theories of a single equation, and specifically on the 4694 equational laws
 involving at most four magma operations, up to symmetry and relabeling (here is the list [in Lean](equational_theories/AllEquations.lean) and in [plain text](https://github.com/teorth/equational_theories/blob/main/data/equations.txt)).  This creates 4694*(4694-1) = 22,028,942 implications that need to be proven or disproven, creating both "implications" and "anti-implications".
 
 We will accumulate both "proven" and "conjectured" implications and anti-implications: proven assertions will be verified in the proof assistant language [Lean](https://www.lean-lang.org/), and "conjectured" assertions represent all claims (either human-generated or computer-generated) that have not yet been verified in Lean.  The current status of the project can be found on the [dashboard](https://teorth.github.io/equational_theories/dashboard/).
@@ -21,11 +21,13 @@ Some selected equations of interest are listed [here](equational_theories/Equati
 - Equation 168: `x = (y ◇ x) ◇ (x ◇ z)`.  The central groupoid law.
 - Equation 4512: `x ◇ (y ◇ z) = (x ◇ y) ◇ z`.  The associative law.
 
+(Note: in some legacy portions of this project, the magma operation was denoted `◦︎` instead of `◇`.)
+
 Some automatically generated progress:
 - Sep 28, 2024: [85 laws](equational_theories/Generated/Constant.lean) have been shown to be equivalent to the constant law [`Equation46`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq46), and [815 laws](equational_theories/Generated/Singleton.lean) have been shown to be equivalent to the singleton law [`Equation2`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq2).  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0005.html).
 - Sep 28, 2024: [18972 implications](equational_theories/Generated/SimpleRewrites/theorems) were established by simple rewrite laws.  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0006.html).
 - Sep 28, 2024: [4.2m implications proven by a transitive reduction of 15k theorems](equational_theories/Generated/TrivialBruteforce) were proven using simple rewrite proof scripts.  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0007.html).
-- Sep 29, 2024: [13.7m implications were conjectured to be refused by a collection of 515 magmas](equational_theories/Generated/All4x4Tables), collected by enumerating all 4^(4*4) operators and reducing to a covering set. Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0008.html).  (Update, Oct 3, 2024: these implications are now formalized in Lean as theorems, and the number of implications established by this method increased to 13.8m.)
+- Sep 29, 2024: [13.7m implications were conjectured to be refuted by a collection of 515 magmas](equational_theories/Generated/All4x4Tables), collected by enumerating all 4^(4*4) operators and reducing to a covering set. Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0008.html).  (Update, Oct 3, 2024: these anti-implications are now formalized in Lean as theorems, and the number of implications established by this method increased to 13.8m.)
 - Oct 1, 2024: Another [~250k transitive implications](equational_theories/Generated/TrivialBruteforce) were proven by simple proof generation. Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0007.html).
 - Oct 1, 2024: ~500k transitive implications were proven by [EquationSearch](equational_theories/Generated/EquationSearch), a custom tool that chooses hypotheses and leverages previously found implications to search by using the implied equations as substitutions.  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0009.html).
 - Oct 2, 2024: 86 (potentially) new implications in `Subgraph.lean` conclusively (i.e. in Lean) resolved using the [lean-egg tactic](https://github.com/marcusrossel/lean-egg). Some of these were simply missed by the transitive closure computation and technically already implied, but some were genuinely new.
@@ -46,7 +48,7 @@ Current statistics and data files, updated automatically:
 - [dashboard](https://teorth.github.io/equational_theories/dashboard/)
 
 Current visualizations, updated automatically:
-- coming soon!
+- An experimental tool for exploring the graph of equation implications is available [https://nicholas.carlini.com/tmp/view.html here].  It will be more fully integrated into the project in the near future.
 
 For guidelines on how to contribute, see the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
