@@ -1,5 +1,6 @@
 import Mathlib.Data.Finset.Basic
 import equational_theories.Completeness
+import equational_theories.MagmaLaw
 
 open Law
 

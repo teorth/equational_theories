@@ -7,7 +7,7 @@
 import Mathlib.Data.Multiset.Basic
 import Mathlib.Algebra.BigOperators.Finprod
 import equational_theories.FreeMagma
-import equational_theories.Completeness
+import equational_theories.MagmaLaw
 
 
 open Law
