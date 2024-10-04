@@ -140,10 +140,10 @@ $$x \op (y \op z) = (x \op y) \op z$$
 which is Definition \ref{eq4512}.  $G$ is now commutative and associative, and every element is its own inverse and of exponent $2$, hence is an abelian group thanks to \eqref{xxe}, so $G$ is an abelian group of exponent $2$ as claimed.  The converse is easily verified.
 \end{proof}
 
-\begin{theorem}[953 is equivalent to 2]\label{953_equiv_2}\uses{eq953, eq2}  Definition \ref{eq953} is equivalent to Definition \ref{eq2}.
+\begin{theorem}[953 is equivalent to 2]\label{953_equiv_2}\uses{eq953, eq2}\lean{Subgraph.Equation953_implies-Equation2}\leanok  Definition \ref{eq953} is equivalent to Definition \ref{eq2}.
 \end{theorem}
 
-\begin{proof}  It suffices to show that Definition \ref{eq953} implies Definition \ref{eq2}.  Pick an element $0$ of $G$ and define $1 = 0 \op 0$ and $2 = 1 \op 1$ (we do not require $0,1,2$ to be distinct).
+\begin{proof}\leanok  It suffices to show that Definition \ref{eq953} implies Definition \ref{eq2}.  Pick an element $0$ of $G$ and define $1 = 0 \op 0$ and $2 = 1 \op 1$ (we do not require $0,1,2$ to be distinct).
 From Definition \ref{eq953} with $x=z=0$ we have
 $$ 0 = y \op 2.$$
 If we then apply Definition \ref{eq953} with $z=1$ we conclude that
