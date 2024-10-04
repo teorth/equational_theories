@@ -182,7 +182,7 @@
       </div>
     </div>
 
-    <script src="out.js?3">
+    <script src="out.js?4">
     </script>
     <script>
 
@@ -443,11 +443,12 @@ function filterEquations() {
           implications[index].forEach((status, i) => {
               if (i === index) return; // Skip self-implication
               const eqClass = equiv.find(cls => cls.includes(i));
+	      if (eqClass.includes(index) && !showEquivalences) return;
 	      if (seenClasses.has(eqClass[0]) && !showEquivalences) {
                   return true;
               }
               seenClasses.add(eqClass[0]);
-	      let more_same = eqClass.length > 1 ? ` (+ ${eqClass.length-1} equiv.)` : "";
+	      let more_same = !showEquivalences && eqClass.length > 1 ? ` (+ ${eqClass.length-1} equiv.)` : "";
 
               const eq = equations[i];
               const isConjectured = status.includes('conjecture');
@@ -467,11 +468,12 @@ function filterEquations() {
           implications.forEach((row, i) => {
               if (i === index) return; // Skip self-implication
               const eqClass = equiv.find(cls => cls.includes(i));
+	      if (eqClass.includes(index) && !showEquivalences) return;
 	      if (seenClasses.has(eqClass[0]) && !showEquivalences) {
                   return true;
               }
               seenClasses.add(eqClass[0]);
-	      let more_same = eqClass.length > 1 ? ` (+ ${eqClass.length-1} equiv.)` : "";
+	      let more_same = !showEquivalences && eqClass.length > 1 ? ` (+ ${eqClass.length-1} equiv.)` : "";
 
               const status = row[index];
               const eq = equations[i];

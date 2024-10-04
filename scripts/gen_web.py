@@ -1,6 +1,6 @@
 import json
 import numpy as np
-"""
+#"""
 f = json.load(open("../out.json"))
 
 outcomes = f['outcomes']
@@ -26,7 +26,8 @@ order = [int(x[8:]) for x in reorder]
 r = np.zeros((4694, 4694))
 for i,row in enumerate(outcomes):
     for j,col in enumerate(row):
-        r[order[i]-1, order[j]-1] = ids[col]
+        if order[i] <= 4694 and order[j] <= 4694:
+            r[order[i]-1, order[j]-1] = ids[col]
 
 np.save('/tmp/a.npy', r)
 #"""
