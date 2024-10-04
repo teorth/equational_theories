@@ -27,6 +27,10 @@ lemma MagmaHom.ext {G H : Type*} [Magma G] [Magma H] {f₁ f₂ : G →◇ H}
     f₁ = f₂ :=
   DFunLike.ext f₁ f₂ hf
 
+lemma MagmaHom.map_op {G H : Type*} [Magma G] [Magma H] (f : G →◇ H) (x y : G) :
+    f (x ◇ y) = f x ◇ f y :=
+  f.map_op' x y
+
 /-- Composition of magma homomorphisms. -/
 def MagmaHom.comp {G H I : Type*} [Magma G] [Magma H] [Magma I] (f₁ : G →◇ H) (f₂ : H →◇ I) :
     G →◇ I where

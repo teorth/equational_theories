@@ -51,12 +51,12 @@ inductive derive {α} : Ctx α → MagmaLaw α → Type :=
 def satisfiesPhi {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
   E.lhs.evalInMagma φ = E.rhs.evalInMagma φ
 
-def satisfies {α : Type} (G : Type) [Magma G] (E : MagmaLaw α) := ∀ (φ : α → G), satisfiesPhi φ E
+abbrev satisfies {α : Type} (G : Type) [Magma G] (E : MagmaLaw α) := ∀ (φ : α → G), satisfiesPhi φ E
 
-def satisfiesSet {α : Type} (G : Type) [Magma G] (Γ : Set (MagmaLaw α)) : Prop :=
+abbrev satisfiesSet {α : Type} (G : Type) [Magma G] (Γ : Set (MagmaLaw α)) : Prop :=
   ∀ E ∈ Γ, satisfies G E
 
-def models {α} (Γ : Ctx α) (E : MagmaLaw α) : Prop :=
+abbrev models {α} (Γ : Ctx α) (E : MagmaLaw α) : Prop :=
   ∀ (G : Type)[Magma G], satisfiesSet G Γ → satisfies G E
 
 /-- Notation for derivability and entailment -/
@@ -67,3 +67,8 @@ infix:50 " ⊧ " => (satisfiesSet)
 infix:50 " ⊧ " => (models)
 
 infix:50 " ⊢ " => (derive)
+
+theorem satisfiesPhi.evalHom {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) (f : G →◇ G) :
+    satisfiesPhi (f ∘ φ) E ↔ f (E.lhs.evalInMagma φ) = f (E.rhs.evalInMagma φ) := by
+  rw [satisfiesPhi, FreeMagma.evalHom]
+  rfl

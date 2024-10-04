@@ -1,5 +1,6 @@
 import equational_theories.EquationalResult
 import equational_theories.AllEquations
+import equational_theories.Homomorphisms
 
 universe u
 universe v
@@ -27,9 +28,16 @@ def fmapFreeMagma {α : Type u} {β : Type v} (f : α → β) : FreeMagma α →
   | Lf a => FreeMagma.Leaf (f a)
   | lchild ⋆ rchild => FreeMagma.Fork (fmapFreeMagma f lchild) (fmapFreeMagma f rchild)
 
-def evalInMagma {α : Type u} {G : Type v} [Magma G] (f : α -> G) : FreeMagma α → G
+def evalInMagma {α : Type u} {G : Type v} [Magma G] (f : α → G) : FreeMagma α → G
   | Lf a => f a
   | lchild ⋆ rchild => (evalInMagma f lchild) ◇ (evalInMagma f rchild)
+
+theorem evalHom {α : Type u} {G : Type v} [Magma G] (f : α → G) (map : G →◇ G) :
+    evalInMagma (map ∘ f) = map ∘ evalInMagma f := by
+  funext t
+  induction t with
+  | Leaf a => rfl
+  | Fork lchild rchild ihl ihr => simp [evalInMagma, ihl, ihr, map.map_op]
 
 end FreeMagma
 
