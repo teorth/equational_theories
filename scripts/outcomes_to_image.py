@@ -68,25 +68,25 @@ if __name__ == '__main__':
     # We want to canonicalize the ordering of the rows and columns, using the ordering
     # on equation numbers. We need to account for the fact that there may be gaps
     # between equation numbers (e.g. if we only include Subgraph.lean).
-    #
-    # We will construct the array `image_to_eqs` such that it maps an image row or column
-    # index into an `eqs` index.
-    image_to_eqs = []
 
-    eqs_with_idxs = []
-    for ii, eq in enumerate(eqs):
-        eqs_with_idxs.append((name_to_id(eq), ii))
-    eqs_with_idxs.sort()
-    for eqid, eqidx in eqs_with_idxs:
-        image_to_eqs.append(eqidx)
+    # `matrixidx` is an index into the `eqs` array or `outcomes` matrix.
+    # `imageidx` is an index in image pixel coordinates
+    # `eqid` is an Equation number.
+
+    eqid_from_matrixidx = list(map(name_to_id, eqs))
+    imageidx_from_eqid = dict()
+    for imageidx, eqid in enumerate(eqid_from_matrixidx):
+        imageidx_from_eqid[eqid] = imageidx
 
     img = Image.new('RGB', (size, size))
     pixels = img.load()
     for ii, row in enumerate(outcomes):
         for jj, outcome in enumerate(row):
-            i_idx = image_to_eqs[ii]
-            j_idx = image_to_eqs[jj]
-            pixels[i_idx, j_idx] = outcome_to_color(outcome)
+            ii_eqidx = eqid_from_matrixidx[ii]
+            ii_imageidx = imageidx_from_eqid[ii_eqidx]
+            jj_eqidx = eqid_from_matrixidx[jj]
+            jj_imageidx = imageidx_from_eqid[jj_eqidx]
+            pixels[ii_imageidx, jj_imageidx] = outcome_to_color(outcome)
 
     if args.scale != 1:
         new_size = (size * args.scale, size * args.scale)
