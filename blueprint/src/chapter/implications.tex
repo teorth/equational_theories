@@ -150,3 +150,32 @@ If we then apply Definition \ref{eq953} with $z=1$ we conclude that
 $$ x = y \op 0$$
 for all $x,y$, from which one concludes $x=x'$ for any $x,x' \in G$, giving Definition \ref{eq2}.
 \end{proof}
+
+
+Some other notable equational laws are as follows.
+
+\begin{theorem}[Sheffer stroke axiom]\label{sheffer}  The law
+$$ 0 \formaleq (1 \op ((0 \op 1) \op 1)) \op (0 \op (2 \op 1))$$
+or in equation form
+$$ x = y \op ((x \op y) \op y) \op (0 \op (2 \op 1)) $$
+axiomatizes the Sheffer stroke operation. {\bf TODO: locate the equation number for this law}
+\end{theorem}
+
+\begin{proof}
+See \cite{mccune_et_al}.  In fact this is the shortest law with this property.
+\end{proof}
+
+A \emph{natural central groupoid} is, up to isomorphism, a magma with carrier $S \times S$ for some set $S$ and operation
+$$ (a,b) \op (c,d) = (b,c).$$
+These are examples of central groupoids (Definition \ref{eq168}).
+
+\begin{theorem}[Natural central groupoid axiom]\label{natural-central-groupoid}  The law
+$$ 0 \formaleq (1 \circ ((2 \circ 0) \circ 3)) \circ (0 \circ 3)$$
+or in equation form
+$$ x = y \circ ((z \circ x) \circ w) \circ (x \circ w)$$
+characterizes natural central groupoids.
+\end{theorem}
+
+\begin{proof}
+  See \cite[Theorem 5]{knuth}.
+\end{proof}
