@@ -196,8 +196,7 @@ with open(f"{dir.parent}/All4x4Tables.lean", "w") as main:
         data = prune_row(data)
         print(f"Writing {leanfile}")
         main.write(f"import equational_theories.Generated.All4x4Tables.Refutation{i}\n")
-        with open(leanfile, "w") as f:
-              f.write(generate_lean(data))
+        open(leanfile, "w").write(generate_lean(data))
 
 total = stats["total"]
 removed_by_implication = stats["removed_by_implication"]
