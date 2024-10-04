@@ -1,8 +1,12 @@
 \chapter{E-Graphs}
 
-For proving implications, we used another technique called equality saturation~\cite{DBLP:journals/pacmpl/WillseyNWFTP21} with a tactic, to automatically construct proofs.
+For proving implications, we used another technique called equality saturation~\cite{DBLP:journals/pacmpl/WillseyNWFTP21} with the lean-egg tactic, to automatically construct proofs.
 
-\section{Methodology}
+A similar approach is being pursued in the MagmaEgg tool as well, which is a standalone program that only supports magma equalities, while the lean-egg tactic supports any Lean expression.
+
+\section{lean-egg}
+
+\subsection{Methodology}
 
 The basic methodology of equality saturation is based on E-Graphs, a data structure that can store equivalence classes of terms efficiently.
 We used the lean-egg tactic (\url{https://github.com/marcusrossel/lean-egg}), based on equality saturation as a tactic, which (re)constructs a proof from the E-graph~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24} in Lean.
@@ -13,7 +17,7 @@ In many cases, we have laws of the form $x = y$, where neither set of variables 
 In this case the laws cannot be used as rewrite rules: it's not clear what it would be rewritten to, since there are unknowns on both sides of the equation.
 For these cases we used a simple heuristic, where we instantiate the variables with terms found in the (proof) context, as those are likely to be important for proving the equality.
 
-\section{Results}
+\subsection{Results}
 
 Out of the possible implications between the $34$ equations considered in Chapter~\ref{subgraph-eq}, this method found an additional 86 implications that were not found before.
 Some of these seem to be missing in the computation of the transitive closure of implications of the equalities (an investigation is in progress), but some of these are genuinely new theorems, and the \texttt{lean-egg} tactic finds good proofs of these (these can be rewritten using \texttt{calc} style with a different tactic, \texttt{calcify}: \url{https://github.com/nomeata/lean-calcify}). An example of this is the following proof, found by lean-egg:
@@ -27,3 +31,31 @@ $$ x = (x \op x) \op (x \op (x \op x)) = (x \op x) \op x $$
 \end{proof}
 
 It was also able to (re)prove Theorem~\ref{1689_equiv_2}, albeit with a manually-provided hint (guide, in the sense of~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24}).
+
+\section{MagmaEgg}
+
+This is a simple but apparently at least somewhat effective Rust theorem prover based on egg e-graph library written for this project.
+
+It proved $5574$ of the $24283$ implications in the ``only\_strongest.txt'' file at the time.
+
+The code was originally based on the magma\_search pull request, but has been pretty much completely rewritten.
+
+Currently search just uses the egg library in a basic fashion, except that in case there are extra variables not present in the LHS, it has code to instantiate them with all subexpressions of the original goal.
+
+Exporting the proofs to Lean has turned out to be harder than finding the proofs, but a good solution has been implemented (modulo some issues in egg that require to sometimes turn off explanation optimization since it sometimes triggers stack overflows and assert failures) that directly produces proof terms using let/have and Eq.refl, Eq.symm, Eq.trans, Magma.op, a congruence lemma for Magma.op and variables and the hypothesis. I define one letter aliases for them to reduce verbosity.
+
+Possible future work:
+
+\begin{itemize}
+	\item Figure out which implications are important to prove and try it on them
+	\item Replace the fork-based code with self-execution so that it works on Windows and is less of na hack
+	\item Fork egg and fix the buggy and slow length optimization of explanations
+	\item Maybe write Lean code directly instead of writing explanation sexps and converting to Lean code in a second run
+	\item Fix the generation of extra variable values so it doesn't take too much time in pathological cases (i.e. goals with 4-6 variables)
+	\item Determine whether it actually has some advantages compared to Vampire and lean-egg
+	\item Support searching for multiple goal equations at once
+	\item Write a custom elaborator for Lean to speed up elaboration
+	\item If the Lean kernel turns out to be too slow for some large necessary proofs and thus the custom elaborator is not enough, write a custom verified typechecker
+	\item Support having extra rewrite rules, such as other implications that have been found implied by the hypothesis, or simple equalities found by the egraph search itself
+	\item Run it with massive computing resources if deemed useful and someone offers those, once it's a bit more mature
+\end{itemize}
