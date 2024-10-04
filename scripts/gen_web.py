@@ -1,6 +1,7 @@
 import json
 import numpy as np
-#"""
+
+"""
 f = json.load(open("../out.json"))
 
 outcomes = f['outcomes']
@@ -109,3 +110,6 @@ for line in open("../equational_theories/Equations.lean"):
 print("var special = ", special)
 
 print("var equiv = " + str(find_equivalence_classes_fast(n)))
+
+print("var duals = ", open("../data/duals.json").read())
+
