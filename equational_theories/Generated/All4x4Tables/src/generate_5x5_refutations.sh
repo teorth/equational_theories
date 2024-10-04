@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Usage: just run with ./generate_5x5_refutations.sh
-# Final output will be in the lean_output folder.
+# Final output will be in the raw_lean_output folder.
 #
 # This script:
 # 1. uses Mace4 to generate a list of all 5x5 cancellative magmas up to iso,
@@ -43,6 +43,7 @@ CABALHOME="$REPODIR/src/finite_magma_tools/bin"
 echo "Checking if finite_magma_tools needs to be built..."
 cd "$REPODIR/src/finite_magma_tools/" || exit
 cabal build
+mkdir -p bin
 EXECUTABLES=$(find "./dist-newstyle/build" -type f -executable)
 if [ -z "$EXECUTABLES" ]; then
     echo "FAILED"
@@ -55,42 +56,47 @@ cd -
 # end build finite_magma_tools
 
 # find 5x5 cancellative magmas using Mace4
-if [[ ! -f "$REPODIR/data/cancellative-5x5.out" ]]; then
+if [[ ! -f "$REPODIR/data/cancellative5x5.out" ]]; then
   echo "Finding 5x5 cancellative magmas..."
-  "$MACE4HOME/mace4" -f cancellative-5x5.in | "$MACE4HOME/get_interps" | "$MACE4HOME/isofilter" > "$REPODIR/data/cancellative-5x5.out"
+  "$MACE4HOME/mace4" -f cancellative5x5.in | "$MACE4HOME/get_interps" | "$MACE4HOME/isofilter" > "$REPODIR/data/cancellative5x5.out"
 fi
-if [[ ! -f "$REPODIR/data/cancellative-5x5.out" ]]; then
+if [[ ! -f "$REPODIR/data/cancellative5x5.out" ]]; then
   echo "FAILED"
   exit 1
 fi
 
 # find satisfied equations using finite_magma_tools
-if [[ ! -f "$REPODIR/data/cancellative-5x5.txt" ]]; then
+if [[ ! -f "$REPODIR/data/cancellative5x5.txt" ]]; then
   echo "Finding all equations satisfied in 5x5 magmas..."
-  "$CABALHOME/parse-mace4" -c "$REPOROOT/data/equations.txt" < "$REPODIR/data/cancellative-5x5.out" > "$REPODIR/data/cancellative-5x5.txt"
+  "$CABALHOME/parse-mace4" -c "$REPOROOT/data/equations.txt" < "$REPODIR/data/cancellative5x5.out" > "$REPODIR/data/cancellative5x5.txt"
 fi
-if [[ ! -f "$REPODIR/data/cancellative-5x5.txt" ]]; then
+if [[ ! -f "$REPODIR/data/cancellative5x5.txt" ]]; then
   echo "FAILED"
   exit 1
 fi
 
 # merge with refutations.txt and cancellative-manual.txt
-if [[ ! -f "$REPODIR/data/refutations-5x5.txt" ]]; then
-  echo "Merging 4x4 refutations and cancellative 5x5 refutations..."
-  cat "$REPODIR/data/cancellative-5x5.txt" "$REPODIR/data/refutations.txt" "$REPODIR/data/cancellative-manual.txt" > "$REPODIR/data/refutations-5x5.txt"
+if [[ ! -f "$REPODIR/data/refutations_combined.txt" ]]; then
+  echo "Merging 2x2-4x4 refutations with cancellative 5x5 refutations..."
+  cat "$REPODIR/data/refutations2x2.txt"      \
+      "$REPODIR/data/refutations3x3.txt"      \
+      "$REPODIR/data/refutations4x4.txt"      \
+      "$REPODIR/data/cancellative5x5.txt"     \
+      "$REPODIR/data/cancellative-manual.txt" > "$REPODIR/data/refutations_combined.txt"
 fi
-if [[ ! -f "$REPODIR/data/refutations-5x5.txt" ]]; then
+if [[ ! -f "$REPODIR/data/refutations_combined.txt" ]]; then
   echo "FAILED"
   exit 1
 fi
 
 # find a short plan using finite_magma_tools and generate lean (this takes a while)
-if [[ ! -f "$REPODIR/data/plan-5x5.txt" ]]; then
+if [[ ! -f "$REPODIR/data/plan.txt" ]]; then
   echo "Optimizing proof plan (might take a while)..."
-  "$CABALHOME/make-plan" < "$REPODIR/data/refutations-5x5.txt" > "$REPODIR/data/plan-5x5.txt"
+  "$CABALHOME/make-plan" < "$REPODIR/data/refutations_combined.txt" > "$REPODIR/data/plan.txt"
 fi
-echo "Generating refutations in ./lean_output/..."
-"$CABALHOME/gen-refutations" < "$REPODIR/data/plan-5x5.txt"
-mkdir -p "lean_output"
-mv Refutation*.lean lean_output
+echo "Generating refutations in ./raw_lean_output/..."
+"$CABALHOME/gen-refutations" < "$REPODIR/data/plan.txt"
+mkdir -p "raw_lean_output"
+mv Refutation*.lean raw_lean_output
+echo "You should now run generate_lean.py to generate the final set of proofs."
 echo "ALL OK"

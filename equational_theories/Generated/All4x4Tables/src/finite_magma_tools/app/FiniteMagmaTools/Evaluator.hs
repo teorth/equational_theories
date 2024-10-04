@@ -116,7 +116,7 @@ shuntingYard' (t:ts) stack output
     where
         (newStack, newOutput) = popUntilLeftParen stack output
 
--- we support both +/* and composition notation for the monoid op, but
+-- we support both +/*/◇ and composition notation for the magma op, but
 -- the latter is processed in replaceOpSymbol
 isOperator :: String -> Bool
 isOperator "+" = True
@@ -156,5 +156,6 @@ tokenize (c:cs)
 -- which causes complications.
 replaceOpSymbol :: String -> String
 replaceOpSymbol [] = []
+replaceOpSymbol ('◇':xs) = '+':replaceOpSymbol xs
 replaceOpSymbol ('\9702':'\65038':xs) = '+':replaceOpSymbol xs
 replaceOpSymbol (x:xs) = x:replaceOpSymbol xs
