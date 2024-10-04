@@ -1,0 +1,4 @@
+import equational_theories.Generated.VampireProven.Disproofs1
+import equational_theories.Generated.VampireProven.Disproofs2
+import equational_theories.Generated.VampireProven.Disproofs3
+import equational_theories.Generated.VampireProven.Disproofs4
