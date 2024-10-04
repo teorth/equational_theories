@@ -289,54 +289,34 @@ function renderImplications(index) {
     const unknownImpliedBy = [];
 
     let seenClasses = new Set();
-    implications[index].forEach((status, i) => {
-        if (i === index) return; // Skip self-implication
-        const eqClass = equiv.find(cls => cls.includes(i));
-	if (eqClass.includes(index) && !showEquivalences) return;
-	if (seenClasses.has(eqClass[0]) && !showEquivalences) {
-            return true;
-        }
-        seenClasses.add(eqClass[0]);
-	let more_same = !showEquivalences && eqClass.length > 1 ? ` (+ ${eqClass.length-1} equiv.)` : "";
-
-        const eq = equations[i];
-        const isConjectured = status.includes('conjecture');
-	const isspecial = special.indexOf(equations[i].split("[")[0]) !== -1 ? "special" : "";
-        const item = `<div uid=${i} class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}</div>`;
-        
-        if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
-            implies.push(item);
-        } else if (isAntiImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
-            antiImplies.push(item);
-        } else if (isUnknown(status, treatConjecturedAsUnknown)) {
-            unknownImplies.push(item);
-        }
-    });
-
-    seenClasses = new Set();
     implications.forEach((row, i) => {
-        if (i === index) return; // Skip self-implication
-        const eqClass = equiv.find(cls => cls.includes(i));
+	if (i === index) return; // Skip self-implication
+
+	const eqClass = equiv.find(cls => cls.includes(i));
 	if (eqClass.includes(index) && !showEquivalences) return;
-	if (seenClasses.has(eqClass[0]) && !showEquivalences) {
-            return true;
-        }
-        seenClasses.add(eqClass[0]);
+	if (seenClasses.has(eqClass[0]) && !showEquivalences) return;
+
+	seenClasses.add(eqClass[0]);
 	let more_same = !showEquivalences && eqClass.length > 1 ? ` (+ ${eqClass.length-1} equiv.)` : "";
 
-        const status = row[index];
-        const eq = equations[i];
-	const isspecial = special.indexOf(equations[i].split("[")[0]) !== -1 ? "special" : "";
-        const isConjectured = status.includes('conjecture');
-        const item = `<div uid=${i} class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}</div>`;
-        
-        if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
-            impliedBy.push(item);
-        } else if (isAntiImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
-            antiImpliedBy.push(item);
-        } else if (isUnknown(status, treatConjecturedAsUnknown)) {
-            unknownImpliedBy.push(item);
-        }
+	const eq = equations[i];
+	const isspecial = special.indexOf(eq.split("[")[0]) !== -1 ? "special" : "";
+
+	const forwardStatus = row[index];
+	const backwardStatus = implications[index][i];
+
+	[forwardStatus, backwardStatus].forEach((status, statusIndex) => {
+            const isConjectured = status.includes('conjecture');
+            const item = `<div uid=${i} class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}</div>`;
+
+            if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
+		statusIndex === 0 ? impliedBy.push(item) : implies.push(item);
+            } else if (isAntiImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
+		statusIndex === 0 ? antiImpliedBy.push(item) : antiImplies.push(item);
+            } else if (isUnknown(status, treatConjecturedAsUnknown)) {
+		statusIndex === 0 ? unknownImpliedBy.push(item) : unknownImplies.push(item);
+            }
+	});
     });
 
     impliesList.innerHTML = implies.join('') || 'None';
