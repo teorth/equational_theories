@@ -188,13 +188,13 @@ def create_rows(f):
     return all_rows
 
 rows = []
-with open(f"{dir}/data/plan-5x5.txt") as f:
+with open(f"{dir}/data/plan.txt") as f:
     rows = create_rows(f)
 with open(f"{dir.parent}/All4x4Tables.lean", "w") as main:
   for i, row in enumerate(rows):
       leanfile = f"{dir}/Refutation{i}.lean"
       data = parse_row(row)
-      if data and data["div"] < 6:
+      if data and data["div"] < 10:
         data = prune_row(data)
         print(f"Writing {leanfile}")
         main.write(f"import equational_theories.Generated.All4x4Tables.Refutation{i}\n")

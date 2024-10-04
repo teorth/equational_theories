@@ -18,5 +18,5 @@ def «FinitePoly [[1,2,2,1],[3,1,2,3],[3,1,2,3],[0,1,1,3]]» : Magma (Fin 4) whe
 /-! The facts -/
 @[equational_result]
 theorem «Facts from FinitePoly [[1,2,2,1],[3,1,2,3],[3,1,2,3],[0,1,1,3]]» :
-  ∃ (G : Type) (_ : Magma G), Facts G [260, 2919] [3253, 3306, 3684] :=
+  ∃ (G : Type) (_ : Magma G), Facts G [260, 2919] [3253, 3684] :=
     ⟨Fin 4, «FinitePoly [[1,2,2,1],[3,1,2,3],[3,1,2,3],[0,1,1,3]]», by decideFin!⟩
