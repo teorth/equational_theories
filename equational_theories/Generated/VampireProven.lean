@@ -2,3 +2,15 @@ import equational_theories.Generated.VampireProven.Disproofs1
 import equational_theories.Generated.VampireProven.Disproofs2
 import equational_theories.Generated.VampireProven.Disproofs3
 import equational_theories.Generated.VampireProven.Disproofs4
+import equational_theories.Generated.VampireProven.Disproofs5
+import equational_theories.Generated.VampireProven.Disproofs6
+import equational_theories.Generated.VampireProven.Disproofs7
+import equational_theories.Generated.VampireProven.Disproofs8
+import equational_theories.Generated.VampireProven.Disproofs9
+import equational_theories.Generated.VampireProven.Disproofs10
+import equational_theories.Generated.VampireProven.Disproofs11
+import equational_theories.Generated.VampireProven.Disproofs12
+import equational_theories.Generated.VampireProven.Disproofs13
+import equational_theories.Generated.VampireProven.Disproofs14
+import equational_theories.Generated.VampireProven.Disproofs15
+import equational_theories.Generated.VampireProven.Disproofs16
