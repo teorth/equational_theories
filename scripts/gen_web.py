@@ -50,7 +50,39 @@ def rle_encode(data):
     encoded.extend((current, count))
     return encoded
 
+import numpy as np
+
+def find_equivalence_classes_fast(implications):
+    # Convert implications to NumPy array
+    adj_matrix = ((implications == 1) |
+                  (implications == 3) |
+                  (implications == 5) |
+                  (implications == 7))
+
+    # Set diagonal to 1 (each node implies itself)
+    np.fill_diagonal(adj_matrix, 1)
+
+    # Keep only mutual implications
+    adj_matrix = np.logical_and(adj_matrix, adj_matrix.T)
+
+    # Find equivalence classes
+    n = adj_matrix.shape[0]
+    unassigned = set(range(n))
+    equivalence_classes = []
+
+    print(adj_matrix)
+
+    while unassigned:
+        node = unassigned.pop()
+        equivalence_class = np.where(adj_matrix[node])[0].tolist()
+        equivalence_classes.append(sorted(equivalence_class))
+        unassigned -= set(equivalence_class)
+
+    return equivalence_classes
+
+
 n = np.array(np.load("/tmp/a.npy"), dtype=np.uint8)
+#exit(0)
 
 from PIL import Image
 #n = n!=8
@@ -75,3 +107,5 @@ for line in open("../equational_theories/Equations.lean"):
     if line.startswith("abbrev Equation"):
         special.append(line.split()[1])
 print("var special = ", special)
+
+print("var equiv = " + str(find_equivalence_classes_fast(n)))
