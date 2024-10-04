@@ -85,6 +85,7 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
         - [`explore_magma`](scripts/explore_magma.py) - test a given magma table against all or a subset of the equations in `AllEquations.lean`
         - [`find_dual`](scripts/find_dual.py) - finds the dual of an equation
         - [`find_equation_id`](scripts/find_equation_id.py) - finds the equation number of an equation string
+        - [`find_powerful_theorems.py`](scripts/find_powerful_theorems.py) - finds theorems that, if proved, would imply many others
         - [`generate_eqs_list`](scripts/generate_eqs_list.py) - generates a list of equations
         - [`generate_graphviz_graph`](scripts/generate_graphviz_graph.rb) - generates a graphviz dot file, that can be used to create an implication graph
         - [`generate_image`](scripts/generate_image.py) - generates an image of implications
