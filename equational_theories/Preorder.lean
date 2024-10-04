@@ -1,6 +1,8 @@
 import Mathlib.Order.Defs
 import Mathlib.Data.Set.Basic
-import equational_theories.Completeness
+import equational_theories.MagmaLaw
+
+open Law
 
 namespace MagmaLaw
 
