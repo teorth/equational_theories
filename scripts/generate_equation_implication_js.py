@@ -1,8 +1,9 @@
 import json
+import sys
 import numpy as np
 
-"""
-f = json.load(open("../out.json"))
+#"""
+f = json.load(open(sys.argv[1]))
 
 outcomes = f['outcomes']
 
@@ -81,35 +82,30 @@ def find_equivalence_classes_fast(implications):
 
     return equivalence_classes
 
-
-n = np.array(np.load("/tmp/a.npy"), dtype=np.uint8)
+#n = np.array(np.load("/tmp/a.npy"), dtype=np.uint8)
 #exit(0)
 
 from PIL import Image
-#n = n!=8
-#n = n[:, np.argsort(np.sum(n, 0))]
-#n = n[np.argsort(np.sum(n, 1)), :]
-#Image.fromarray(255*np.array(n, dtype=np.uint8)).save("a.png")
-#exit(0)
 
+sys.stdout = open("home_page/implications/implications.js")
 
 print("var arr = ",rle_encode(n.flatten().tolist()));
 
 eqs = []
 N = 0
-for line in open("../equational_theories/AllEquations.lean"):
+for line in open("equational_theories/AllEquations.lean"):
     if ':=' in line:
         N += 1
         eqs.append("Equation"+str(N)+"["+line.split(":=")[1].strip()+"]")
 print("var equations = ", eqs);
 
 special = []
-for line in open("../equational_theories/Equations.lean"):
+for line in open("equational_theories/Equations.lean"):
     if line.startswith("abbrev Equation"):
         special.append(line.split()[1])
 print("var special = ", special)
 
 print("var equiv = " + str(find_equivalence_classes_fast(n)))
 
-print("var duals = ", open("../data/duals.json").read())
+print("var duals = ", open("data/duals.json").read())
 
