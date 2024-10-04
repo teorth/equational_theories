@@ -113,7 +113,7 @@ for problem in tqdm(problems):
   start_time = time.perf_counter()
   # print(problem)
   # print(pr)
-  out = subprocess.check_output(['/home/commandmaster/Downloads/vampire',
+  out = subprocess.check_output(['~/Downloads/vampire',
                                  '--proof_extra', 'full',
                                 '/proc/self/fd/0', '-t', '1'], input=pr.encode()).decode()
   lean_proof = leanify(out, problem)
