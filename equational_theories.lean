@@ -9,5 +9,6 @@ import equational_theories.InfModel
 import equational_theories.Generated
 import equational_theories.Counting
 import equational_theories.OrderMetatheorem
+import equational_theories.Preorder
 import equational_theories.SmallMagmas
 import equational_theories.Homomorphisms
