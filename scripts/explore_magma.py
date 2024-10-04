@@ -303,11 +303,12 @@ def main():
         assert "◇" not in transformations[-1]
         if print_transformations:
             for transformation in transformations[1:]:
-                print(
-                    f"       {transformation}".replace(
-                        " = ", " = " if passed else " ≠ "
+                if not passed:
+                    transformation = transformation.replace(" = ", " ≠ ")
+                    transformation = transformation.replace(
+                        "# example ", "# counterexample "
                     )
-                )
+                print(f"       {transformation}")
             print("")
     print("```")
     print("")
