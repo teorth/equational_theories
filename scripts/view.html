@@ -29,6 +29,17 @@
       .header .equation-stat:hover { background-color: #e0e0e0; }
       .checkbox-container { margin: 10px 0; }
 
+      .link {
+	  color: #0000EE;
+	  text-decoration: underline;
+	  cursor: pointer;
+      }
+      
+      a:hover, a:focus {
+	  color: #0000FF;
+	  text-decoration: none;
+      }
+
       .special {
 	  font-weight: bold
       }
@@ -183,7 +194,7 @@
       </div>
     </div>
 
-    <script src="out.js?4">
+    <script src="out.js?6">
     </script>
     <script>
 
@@ -447,7 +458,7 @@ function filterEquations() {
 	  // Usage:
 	  let dualIndex = findDual(index+1, duals);
 	  if (dualIndex !== null) {
-	      selectedEquationDual.innerHTML = "(Dual equation: <a href='#' onclick='renderImplications("+(dualIndex-1)+");'>" + equations[dualIndex-1] + ")</a>";
+	      selectedEquationDual.innerHTML = "(Dual equation: <a class='link' onclick='renderImplications("+(dualIndex-1)+");'>" + equations[dualIndex-1] + "</a>)";
 	  } else {
 	      selectedEquationDual.innerHTML = "";
 	  }
