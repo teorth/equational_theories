@@ -12,3 +12,4 @@ import equational_theories.OrderMetatheorem
 import equational_theories.Preorder
 import equational_theories.SmallMagmas
 import equational_theories.Homomorphisms
+import equational_theories.Z3Counterexamples
