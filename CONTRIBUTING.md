@@ -160,6 +160,7 @@ Proofs generated programmatically are also welcome. If you do this, you are enco
 - In [.gitattributes](.gitattributes) add `equational_theories/Generated/MyTechnique.lean linguist-generated` for all automatically generated files.
 - In the file `equational_theories/Generated.lean` add the import line `import equational_theories.Generated.MyTechnique` replacing "MyTechnique" with the name of your folder.
 - Consider adding to the blueprint to explain the automated proof technique used.
+- Proofs of implications and nonimplications should be reduced to the minimum required set. See [here](docs/graph_operations.md) for more.
 
 ## Images
 
