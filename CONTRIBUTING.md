@@ -100,6 +100,7 @@ Some technical Lean files:
 - [`EquationsCommand.lean`](equational_theories/EquationsCommand.lean)  Speeds up elaboration of equations.
 - [`MemoFinOp.lean`](equational_theories/MemoFinOp.lean) Defines the macro `memoFinOp` that memoizes a function `f : Fin n → Fin n → Fin n`.
 - [`Superposition.lean`](equational_theories/Superposition.lean) The `superpose` tactic, used in several automated proofs
+- [`Superposition.lean`](equational_theories/Superposition.lean) The `superpose` tactic, used in several automated proofs
 
 In addition to these files, contributors are welcome to add additional Lean files to the project in the [`equational_theories` folder](equational_theories) or one of its subfolders, to establish more facts about equations.  In order for your contributions to be easily detected by automated tools, please try to follow the following guidelines.
 
@@ -115,6 +116,7 @@ In addition to these files, contributors are welcome to add additional Lean file
 - Consider adding a chapter to the blueprint corresponding to the Lean file, which can for instance detail the methodology used to generate the content of that file.  Also update [this CONTRIBUTING.md file](CONTRIBUTING.md) to add a link to your Lean file.
 - For computer-generated Lean files, see the "Automated Proofs" section below.
 - Lean files that are outside of the [`Generated`](equational_theories/Generated) folder are considered to be part of the human-curated Lean space; it is acceptable to put some auto-generated proofs outside of this folder, but they should be human-readable, and it is acceptable to have human editors optimize these proofs for readability, aesthetics, or other concerns.  On the other hand, Lean files within the [`Generated`](equational_theories/Generated) folder should be 100% computer generated, with no additional human curation.
+- Add your Lean file to the top level [`equational_theories.lean`](equational_theories.lean) file so that it gets picked by the CI and automated implication extraction tools.
 - Add your Lean file to the top level [`equational_theories.lean`](equational_theories.lean) file so that it gets picked by the CI and automated implication extraction tools.
 
 Contributions to the Lean codebase will pass through continuous integration (CI) checks that ensure that the Lean code compiles.  Contributors of Lean code are highly encouraged to interact with the [Lean Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/) to help coordinate their contributions and resolve technical issues.
