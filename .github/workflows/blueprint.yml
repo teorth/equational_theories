@@ -133,8 +133,8 @@ jobs:
 
       - name: Generate home_page/dashboard.md
         run: |
-          ~/.elan/bin/lake exe extract_implications outcomes equational_theories --hist > /tmp/hist.json
-          python scripts/generate_dashboard.py /tmp/hist.json
+          pip install pillow
+          python scripts/generate_dashboard.py
 
       - name: Generate home_page/implications/implications.js
         run: |
