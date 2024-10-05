@@ -34,8 +34,6 @@ theorem Equation9_implies_Equation3457 (G: Type _) [Magma G] (h: Equation9 G) : 
   intro x y
   symm
   nth_rewrite 1 [eq307]
-  symm
-  symm
   nth_rewrite 1 [← eq3915]
   symm
   nth_rewrite 1 [eq307]
@@ -57,8 +55,6 @@ theorem Equation9_implies_Equation205 (G: Type _) [Magma G] (h: Equation9 G) : E
   nth_rewrite 1 [eq8 x]
   symm
   nth_rewrite 1 [← eq3864]
-  symm
-  symm
   nth_rewrite 1 [eq308]
   symm
   nth_rewrite 1 [← eq8]
@@ -77,8 +73,6 @@ theorem Equation9_implies_Equation100 (G: Type _) [Magma G] (h: Equation9 G) : E
   intro x y
   symm
   nth_rewrite 1 [eq307]
-  symm
-  symm
   nth_rewrite 1 [← eq3915]
   symm
   apply h
@@ -118,8 +112,6 @@ theorem Equation13_implies_Equation16 (G: Type _) [Magma G] (h: Equation13 G) : 
   intro x y
   symm
   nth_rewrite 1 [← eq4275]
-  symm
-  symm
   nth_rewrite 1 [eq4272]
   symm
   apply h
@@ -145,8 +137,6 @@ theorem Equation28_implies_Equation104 (G: Type _) [Magma G] (h: Equation28 G) :
   intro x y
   symm
   nth_rewrite 1 [← eq3461]
-  symm
-  symm
   nth_rewrite 1 [eq364]
   symm
   apply h
@@ -176,14 +166,8 @@ theorem Equation28_implies_Equation3674 (G: Type _) [Magma G] (h: Equation28 G) 
   intro x y
   symm
   nth_rewrite 1 [eq359]
-  symm
-  symm
   nth_rewrite 1 [← eq1681]
-  symm
-  symm
   nth_rewrite 1 [eq23 x]
-  symm
-  symm
   nth_rewrite 1 [eq4587]
   symm
   nth_rewrite 1 [← eq3]
@@ -214,14 +198,8 @@ theorem Equation28_implies_Equation3877 (G: Type _) [Magma G] (h: Equation28 G) 
   intro x y
   symm
   nth_rewrite 1 [eq359]
-  symm
-  symm
   nth_rewrite 1 [← eq2493]
-  symm
-  symm
   nth_rewrite 1 [eq23 x]
-  symm
-  symm
   nth_rewrite 1 [eq4587]
   symm
   nth_rewrite 1 [← eq3]
@@ -246,11 +224,7 @@ theorem Equation29_implies_Equation1075 (G: Type _) [Magma G] (h: Equation29 G) 
   intro x y
   symm
   nth_rewrite 1 [← eq3917]
-  symm
-  symm
   nth_rewrite 1 [← eq4273]
-  symm
-  symm
   nth_rewrite 1 [eq4386]
   symm
   apply h
@@ -274,11 +248,7 @@ theorem Equation29_implies_Equation1276 (G: Type _) [Magma G] (h: Equation29 G) 
   intro x y
   symm
   nth_rewrite 1 [← eq4118]
-  symm
-  symm
   nth_rewrite 1 [← eq4273]
-  symm
-  symm
   nth_rewrite 1 [eq4386]
   symm
   apply h
@@ -317,8 +287,6 @@ theorem Equation34_implies_Equation5 (G: Type _) [Magma G] (h: Equation34 G) : E
   intro x y
   symm
   nth_rewrite 1 [← eq39]
-  symm
-  symm
   nth_rewrite 1 [eq370]
   symm
   apply h
@@ -366,11 +334,7 @@ theorem Equation34_implies_Equation13 (G: Type _) [Magma G] (h: Equation34 G) : 
   intro x y
   symm
   nth_rewrite 1 [← eq4272]
-  symm
-  symm
   nth_rewrite 1 [← eq307]
-  symm
-  symm
   nth_rewrite 1 [eq370]
   symm
   apply h
@@ -425,8 +389,6 @@ theorem Equation34_implies_Equation3824 (G: Type _) [Magma G] (h: Equation34 G) 
   nth_rewrite 1 [eq359]
   symm
   nth_rewrite 1 [← eq3684]
-  symm
-  symm
   nth_rewrite 1 [eq370]
   symm
   nth_rewrite 1 [← eq23]
@@ -443,8 +405,6 @@ theorem Equation332_implies_Equation387 (G: Type _) [Magma G] (h: Equation332 G)
   intro x y
   symm
   nth_rewrite 1 [← eq4482]
-  symm
-  symm
   nth_rewrite 1 [eq4343]
   symm
   apply h
@@ -513,8 +473,6 @@ theorem Equation3401_implies_Equation3375 (G: Type _) [Magma G] (h: Equation3401
   nth_rewrite 1 [eq359]
   symm
   nth_rewrite 1 [← eq3264]
-  symm
-  symm
   nth_rewrite 1 [eq3268]
   symm
   nth_rewrite 1 [← eq388]
