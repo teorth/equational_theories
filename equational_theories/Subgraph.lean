@@ -296,19 +296,13 @@ theorem Equation1571_implies_Equation40 (G: Type*) [Magma G] (h: Equation1571 G)
 
 @[equational_result]
 theorem Equation1571_implies_Equation23 (G: Type*) [Magma G] (h: Equation1571 G) : Equation23 G := by
-  have eq40 := Equation1571_implies_Equation40 G h
-  intro x
-  apply (h x (x ◇ x) (x ◇ x)).trans
-  rw [← h x x x, ← eq40 x (x ◇ x)]
+  refine fun x ↦ (h x (x ◇ x) (x ◇ x)).trans ?_
+  rw [← h x x x, ← Equation1571_implies_Equation40 G h x (x ◇ x)]
 
 @[equational_result]
-theorem Equation1571_implies_Equation8 (G: Type*) [Magma G] (h: Equation1571 G) : Equation8 G := by
-  have eq23 := Equation1571_implies_Equation23 G h
-  have eq40 := Equation1571_implies_Equation40 G h
-  intro x
-  apply (h x x x).trans
-  apply (congrArg (· ◇ (x ◇ (x ◇ x))) (eq40 x (x ◇ (x ◇ x)))).trans
-  exact (eq23 (x ◇ (x ◇ x))).symm
+theorem Equation1571_implies_Equation8 (G: Type*) [Magma G] (h: Equation1571 G) : Equation8 G :=
+  fun x ↦ (h x x x).trans ((congrArg (· ◇ (x ◇ (x ◇ x))) (Equation1571_implies_Equation40 G h x
+    (x ◇ (x ◇ x)))).trans (Equation1571_implies_Equation23 G h (x ◇ (x ◇ x))).symm)
 
 @[equational_result]
 theorem Equation1571_implies_Equation16 (G: Type*) [Magma G] (h: Equation1571 G) : Equation16 G := by
