@@ -538,3 +538,7 @@ import equational_theories.Generated.All4x4Tables.Refutation536
 import equational_theories.Generated.All4x4Tables.Refutation537
 import equational_theories.Generated.All4x4Tables.Refutation538
 import equational_theories.Generated.All4x4Tables.Refutation539
+import equational_theories.Generated.All4x4Tables.Refutation540
+import equational_theories.Generated.All4x4Tables.Refutation541
+import equational_theories.Generated.All4x4Tables.Refutation542
+import equational_theories.Generated.All4x4Tables.Refutation543
