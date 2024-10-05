@@ -738,3 +738,4 @@ import equational_theories.Generated.All4x4Tables.Refutation736
 import equational_theories.Generated.All4x4Tables.Refutation737
 import equational_theories.Generated.All4x4Tables.Refutation738
 import equational_theories.Generated.All4x4Tables.Refutation739
+import equational_theories.Generated.All4x4Tables.Refutation740

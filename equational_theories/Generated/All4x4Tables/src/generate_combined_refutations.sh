@@ -83,6 +83,7 @@ if [[ ! -f "$REPODIR/data/refutations_combined.txt" ]]; then
       "$REPODIR/data/refutations4x4.txt"      \
       "$REPODIR/data/cancellative5x5.txt"     \
       "$REPODIR/data/manual-5x5.txt"          \
+      "$REPODIR/data/manual-13x13.txt"        \
       "$REPODIR/data/vampire-generated.txt"   \
       "$REPODIR/data/z3-generated.txt"        \
       "$REPODIR/data/cancellative-manual.txt" > "$REPODIR/data/refutations_combined.txt"

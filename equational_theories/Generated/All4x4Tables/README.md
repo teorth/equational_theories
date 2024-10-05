@@ -5,7 +5,7 @@ has a counterexample in one of the following kinds of structures:
 
 * every `2x2`, `3x3` or `4x4` magma,
 * every cancellative `5x5` magma,
-* a motley crew of other `5x5-9x9` finite magmas listed in `data/*.txt`.
+* a motley crew of other `5x5-13x13` finite magmas listed in `data/*.txt`.
 
 Automated tools used to find these counterexamples include:
 
