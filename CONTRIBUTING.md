@@ -116,6 +116,7 @@ In addition to these files, contributors are welcome to add additional Lean file
 - For computer-generated Lean files, see the "Automated Proofs" section below.
 - Lean files that are outside of the [`Generated`](equational_theories/Generated) folder are considered to be part of the human-curated Lean space; it is acceptable to put some auto-generated proofs outside of this folder, but they should be human-readable, and it is acceptable to have human editors optimize these proofs for readability, aesthetics, or other concerns.  On the other hand, Lean files within the [`Generated`](equational_theories/Generated) folder should be 100% computer generated, with no additional human curation.
 - Add your Lean file to the top level [`equational_theories.lean`](equational_theories.lean) file so that it gets picked by the CI and automated implication extraction tools.
+- Add your Lean file to the top level [`equational_theories.lean`](equational_theories.lean) file so that it gets picked by the CI and automated implication extraction tools.
 
 Contributions to the Lean codebase will pass through continuous integration (CI) checks that ensure that the Lean code compiles.  Contributors of Lean code are highly encouraged to interact with the [Lean Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/) to help coordinate their contributions and resolve technical issues.
 
@@ -129,7 +130,7 @@ Here is a list of human-contributed Lean files with mathematical content:
 - [`CentralGroupoids.lean`](equational_theories/CentralGroupoids.lean)  Facts about central groupoids.
 - [`OrderMetatheorem.lean`](equational_theories/OrderMetatheorem.lean) Metatheorems about the ordering relation on laws.
 - [`SmallMagmas.lean`](equational_theories/SmallMagmas.lean) Results about very small magmas
-
+- [`Z3Counterexamples.lean`](equational_theories/Z3Counterexamples.lean) Counterexamples generated automatically from the Z3 prover
 
 
 At present, the API for magmas only allows for theorems that study a finite number of individual equational laws at a time.  We plan to expand the API to also allow one to establish metatheorems about entire classes of equations.
