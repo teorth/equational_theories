@@ -33,11 +33,17 @@ instance Ctx.Membership α : Membership (MagmaLaw α) (Ctx α) := ⟨ Set.instMe
 
 instance {α : Type} : Singleton (MagmaLaw α) (Ctx α) := ⟨Set.singleton⟩
 
-/-- Definition of derivability -/
+
+section DeriveDef
+
+set_option hygiene false
+
+/-- Local Notation for derivability -/
 local infix:50 " ⊢ " =>  derive
 
 -- We keep this in type, because we're going to want to gather
 -- the (finite!) set of required axioms later.
+/-- Definition for derivability-/
 inductive derive {α} : Ctx α → MagmaLaw α → Type :=
   | Ax Γ E (h : E ∈ Γ) : Γ ⊢ E
   | Ref Γ t : Γ ⊢ (t ≃ t)
@@ -47,6 +53,7 @@ inductive derive {α} : Ctx α → MagmaLaw α → Type :=
   | Subst Γ t u σ : Γ ⊢ (t ≃ u) → Γ ⊢ (t ⬝ σ ≃ u ⬝ σ)
   | Cong Γ t₁ t₂ u₁ u₂ : Γ ⊢ (t₁ ≃ t₂) → Γ ⊢ (u₁ ≃ u₂) → Γ ⊢ (t₁ ⋆ u₁ ≃ t₂ ⋆ u₂)
 
+end DeriveDef
 /-- Definitions of entailment -/
 def satisfiesPhi {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
   E.lhs.evalInMagma φ = E.rhs.evalInMagma φ
