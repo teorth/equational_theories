@@ -124,7 +124,7 @@ theorem Equation4_implies_Equation23 (G: Type*) [Magma G] (h: Equation4 G) : Equ
 
 @[equational_result]
 theorem Equation4_implies_Equation42 (G: Type*) [Magma G] (h: Equation4 G) : Equation42 G :=
-  fun _ _ _ ↦ by rw [← h, ← h]
+  fun _ _ _ ↦ by repeat rw [← h]
 
 @[equational_result]
 theorem Equation4_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4 G) : Equation4522 G :=
@@ -281,18 +281,14 @@ theorem Lemma_eq1689_implies_h8 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a
 /-- The below results for Equation1571 are out of order because early ones are lemmas for later ones -/
 @[equational_result]
 theorem Equation1571_implies_Equation2662 (G: Type*) [Magma G] (h: Equation1571 G) : Equation2662 G :=
-  fun x y ↦ (h x (x ◇ y) (x ◇ y)).trans (congrArg (((x ◇ y) ◇ (x ◇ y)) ◇ ·) (h x x y).symm)
+  fun _ _ ↦ (h _ _ _).trans (congrArg _ (h _ _ _).symm)
 
 @[equational_result]
 theorem Equation1571_implies_Equation40 (G: Type*) [Magma G] (h: Equation1571 G) : Equation40 G := by
-  have eq2662 := Equation1571_implies_Equation2662 G h
   have sqRotate (x y z : G) : (x ◇ y) ◇ (x ◇ y) = (y ◇ z) ◇ (y ◇ z) :=
-    (congrArg (fun w ↦ (x ◇ y) ◇ (x ◇ w)) (eq2662 y z)).trans (h ((y ◇ z) ◇ (y ◇ z)) x y).symm
-  have sqConstInImage (x y z w : G) : (x ◇ y) ◇ (x ◇ y) = (z ◇ w) ◇ (z ◇ w) :=
-    (sqRotate x y z).trans (sqRotate y z w)
-  intro x y
-  rw [h x x x, h y y y]
-  exact sqConstInImage (x ◇ x) (x ◇ (x ◇ x)) (y ◇ y) (y ◇ (y ◇ y))
+    (congrArg (fun w ↦ (x ◇ y) ◇ (x ◇ w)) (Equation1571_implies_Equation2662 G h _ _)).trans
+      (h _ _ _).symm
+  exact fun x y ↦ h x x x ▸ h y y y ▸ (sqRotate _ _ _).trans (sqRotate _ _ _)
 
 @[equational_result]
 theorem Equation1571_implies_Equation23 (G: Type*) [Magma G] (h: Equation1571 G) : Equation23 G := by
