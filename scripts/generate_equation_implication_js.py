@@ -26,24 +26,22 @@ order = [int(x[8:]) for x in reorder]
 
 #print(ids)
 
-r = np.zeros((4694, 4694))
-for i,row in enumerate(outcomes):
-    for j,col in enumerate(row):
+# Initialize a 4694x4694 matrix with zeros using list comprehensions
+n = [[0 for _ in range(4694)] for _ in range(4694)]
+
+for i, row in enumerate(outcomes):
+    for j, col in enumerate(row):
         if order[i] <= 4694 and order[j] <= 4694:
-            r[order[i]-1, order[j]-1] = ids[col]
-
-np.save('/tmp/a.npy', r)
-#"""
-
+            n[order[i] - 1][order[j] - 1] = ids[col]
 
 def rle_encode(data):
     if not data:
         return []
-    
+
     encoded = []
     count = 1
     current = data[0]
-    
+
     for item in data[1:]:
         if item == current:
             count += 1
@@ -51,37 +49,46 @@ def rle_encode(data):
             encoded.extend((current, count))
             current = item
             count = 1
-    
+
     encoded.extend((current, count))
     return encoded
 
-import numpy as np
-n = np.load('/tmp/a.npy')
-
 def find_equivalence_classes_fast(implications):
-    # Convert implications to NumPy array
-    adj_matrix = ((implications == 1) |
-                  (implications == 3) |
-                  (implications == 5) |
-                  (implications == 7))
+    # Convert implications to adjacency matrix
+    # Assuming implications is a list of lists or similar iterable structure
+    n_nodes = len(implications)
+    adj_matrix = [[False for _ in range(n_nodes)] for _ in range(n_nodes)]
 
-    # Set diagonal to 1 (each node implies itself)
-    np.fill_diagonal(adj_matrix, 1)
+    for i in range(n_nodes):
+        for j in range(n_nodes):
+            if implications[i][j] in {1, 3, 5, 7}:
+                adj_matrix[i][j] = True
+
+    # Set diagonal to True (each node implies itself)
+    for i in range(n_nodes):
+        adj_matrix[i][i] = True
 
     # Keep only mutual implications
-    adj_matrix = np.logical_and(adj_matrix, adj_matrix.T)
+    for i in range(n_nodes):
+        for j in range(n_nodes):
+            if adj_matrix[i][j] and adj_matrix[j][i]:
+                adj_matrix[i][j] = True
+            else:
+                adj_matrix[i][j] = False
 
     # Find equivalence classes
-    n = adj_matrix.shape[0]
-    unassigned = set(range(n))
+    unassigned = set(range(n_nodes))
     equivalence_classes = []
-
 
     while unassigned:
         node = unassigned.pop()
-        equivalence_class = np.where(adj_matrix[node])[0].tolist()
+        # Find all nodes connected to 'node'
+        equivalence_class = set()
+        for j in range(n_nodes):
+            if adj_matrix[node][j]:
+                equivalence_class.add(j)
         equivalence_classes.append(sorted(equivalence_class))
-        unassigned -= set(equivalence_class)
+        unassigned -= equivalence_class
 
     return equivalence_classes
 
@@ -90,7 +97,9 @@ if not os.path.exists("home_page/implications"):
         
 sys.stdout = open("home_page/implications/implications.js","w")
 
-print("var arr = ",rle_encode(n.flatten().tolist()));
+flattened_list = [item for sublist in n for item in sublist]
+encoded = rle_encode(flattened_list)
+print("var arr = ",encoded)
 
 eqs = []
 N = 0
