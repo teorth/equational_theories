@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Update Mathlib and the Lean toolchain.
 
 # Download the latest lean-toolchain file from the Mathlib4 repository

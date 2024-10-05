@@ -15,8 +15,9 @@ if [ ! -f lakefile.toml ]; then
   echo "❌ Error: This doesn't appear to be the outermost 'equational_theories' directory.
         Please run this script from the correct folder."
   exit 1
+else
+  echo "✅ Correct directory detected."
 fi
-echo "✅ Correct directory detected."
 
 # Get Mathlib cache
 echo "Attempting to get Mathlib cache..."

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ################################################################################
 # TEST SCRIPT TO RUN BEFORE PUSHING CHANGES
 #
@@ -16,7 +18,7 @@ if [ ! -f lakefile.toml ]; then
         Please run this script from the correct folder."
   echo "Press any key to exit..."
   read
-  return 1
+  exit 1
 fi
 echo "✅ Correct directory detected."
 
@@ -34,7 +36,7 @@ if ! lake build equational_theories; then
   echo "❌ Error: Project build failed. Please check the code for errors."
   echo "Press any key to exit..."
   read
-  return 1
+  exit 1
 else
   echo "✅ Project build completed successfully."
 fi
@@ -45,7 +47,7 @@ if ! leanblueprint pdf; then
   echo "❌ Error: Failed to generate PDF version of the blueprint."
   echo "Press any key to exit..."
   read
-  return 1
+  exit 1
 else
   echo "✅ PDF version of the blueprint generated successfully."
 fi
@@ -56,7 +58,7 @@ if ! leanblueprint web; then
   echo "❌ Error: Failed to generate web version of the blueprint."
   echo "Press any key to exit..."
   read
-  return 1
+  exit 1
 else
   echo "✅ Web version of the blueprint generated successfully."
 fi
@@ -67,7 +69,7 @@ if ! lake exe checkdecls blueprint/lean_decls; then
   echo "❌ Error: Some declarations in the blueprint do not match Lean declarations in the codebase."
   echo "Press any key to exit..."
   read
-  return 1
+  exit 1
 else
   echo "✅ All declarations match successfully."
 fi
