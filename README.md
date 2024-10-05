@@ -52,7 +52,7 @@ Current statistics and data files, updated automatically:
 - [dashboard](https://teorth.github.io/equational_theories/dashboard/)
 
 Current visualizations, updated automatically:
-- An experimental tool for exploring the graph of equation implications is available [here](https://nicholas.carlini.com/tmp/view.html).  It will be more fully integrated into the project in the near future.
+- A tool for exploring the graph of equation implications is available [here](https://teorth.github.io/equational_theories/implications).
 - An experimental tool to interactively explore a Hasse diagram of the graph is available [here](https://tsyrklevi.ch/eqviz/index.html?2)
 
 For guidelines on how to contribute, see the [CONTRIBUTING.md](CONTRIBUTING.md) file.
