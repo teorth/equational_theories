@@ -18,9 +18,6 @@ instance Multiset.isMagma : Magma (Multiset α) := { op := (. + .) }
 def FreeMagma.vars (w : FreeMagma α) : Multiset α :=
   evalInMagma (fun x ↦ ({x} : Multiset α)) w
 
-lemma Multiset.subset_add_left {s t : Multiset α} : s ⊆ s + t := by intro a ha; simp [ha]
-lemma Multiset.subset_add_right {s t : Multiset α} : s ⊆ t + s := by intro a ha; simp [ha]
-
 @[simp] lemma FreeMagma.vars_leaf (a : α) : (Lf a).vars = {a} := rfl
 @[simp] lemma FreeMagma.vars_fork (v w : FreeMagma α) : (v ⋆ w).vars = v.vars + w.vars := rfl
 
