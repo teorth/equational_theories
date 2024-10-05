@@ -56,7 +56,7 @@ for problem in tqdm(problems):
   pr = encode_problem(problem)
 
   start_time = time.perf_counter()
-  out = subprocess.check_output(['/home/commandmaster/Downloads/vampire', '-sa', 'fmb',
+  out = subprocess.check_output(['~/Downloads/vampire', '-sa', 'fmb',
                                  '-fmbswr', '0',
                                 '/proc/self/fd/0', '-t', '5'], input=pr.encode()).decode()
   assert 'Termination reason: Satisfiable' in out
