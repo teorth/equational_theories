@@ -3,6 +3,7 @@
 import argparse
 import json
 import os
+import subprocess
 
 def make_progress_badge(ratio):
     percent = f"{ratio:.1%}"
@@ -10,8 +11,6 @@ def make_progress_badge(ratio):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="generate the dashboard markdown")
-    parser.add_argument("hist_file",
-                        help="json file containing output of `lake exe extract_implications outcomes --hist")
     parser.add_argument("--out_file",
                         default="home_page/dashboard/index.md",
                         help="markdown file to pass to jekyll")
@@ -20,8 +19,36 @@ if __name__ == '__main__':
                         help="path to create the progress badge for the Github repo")
 
     args = parser.parse_args()
-    with open(args.hist_file, 'r') as f:
-        data = json.load(f)
+
+    directory = os.path.dirname(args.out_file)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    outcomes_image_path = os.path.join(directory, "outcomes.png")
+
+    print("extracting histogram...")
+    hist_command = [os.path.expanduser("~/.elan/bin/lake"),
+                    "exe", "extract_implications",
+                    "outcomes", "equational_theories", "--hist"]
+    hist_result = subprocess.run(hist_command, capture_output=True, text=True, check=True)
+
+    print("extracting outcomes json...")
+    outcomes_json_path = "/tmp/outcomes.json"
+    with open(outcomes_json_path, "w") as outcomes_file:
+        outcomes_command = [os.path.expanduser("~/.elan/bin/lake"),
+                            "exe", "extract_implications",
+                            "outcomes", "equational_theories"]
+        outcomes_result = subprocess.run(outcomes_command, text=True, check=True,
+                                         stdout = outcomes_file)
+
+    print("generating image...")
+    generate_image_command = ["./scripts/outcomes_to_image.py",
+                              outcomes_json_path,
+                              "--out",
+                              outcomes_image_path]
+    subprocess.run(generate_image_command, check=True)
+
+    print("generating markdown...")
+    data = json.loads(hist_result.stdout)
 
     explicit_proof_true = data.get('explicit_proof_true', 0)
     implicit_proof_true = data.get('implicit_proof_true', 0)
@@ -36,10 +63,6 @@ if __name__ == '__main__':
     conjectured_total = explicit_conjecture_true + implicit_conjecture_true + explicit_conjecture_false + implicit_conjecture_false
 
     total = proved_total + conjectured_total + unknown
-
-    directory = os.path.dirname(args.out_file)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
 
     outfile = open(args.out_file, 'w')
 
@@ -60,7 +83,6 @@ if __name__ == '__main__':
         implicit_proof_false, conjectured_total + unknown))
     outfile.write("\n")
 
-
     outfile.write("\nThe _no proof_ column above represents work that we still need to do.\n")
     outfile.write("Among the _no proof_ implications, we have the following conjecture counts:\n\n")
     outfile.write("| explicitly true | implicitly true | explicitly false | implicitly false | no conjecture |\n")
@@ -71,5 +93,8 @@ if __name__ == '__main__':
     outfile.write("\n")
     ratio = (proved_total + conjectured_total) / total
     outfile.write(f"The implication graph is **{ratio:.3%}** complete if we include conjectures.\n\n")
+
+    outfile.write('## progress visualization\n\n')
+    outfile.write('<img src="{{site.url}}/dashboard/outcomes.png" width="700"/>')
 
     open(args.badge_file, 'w').write(make_progress_badge(ratio))
