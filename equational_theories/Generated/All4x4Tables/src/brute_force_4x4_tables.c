@@ -17,10 +17,8 @@ extern void setup();
 #define BLOOM_WORDS (BLOOM_SIZE / BITS_PER_WORD)
 #define NUM_PROBES 8
 #define NUM_THREADS 176
-//176
 
 volatile uint64_t unique_tables_found = 0;
-
 
 typedef uint64_t word_t;
 
@@ -88,19 +86,7 @@ void print_table(int* table) {
     printf("\n");
 }
 
-/*
-bool next_table(int* table) {
-    for (int i = TABLE_SIZE - 1; i >= 0; i--) {
-        if (table[i] < N - 1) {
-            table[i]++;
-            return true;
-        }
-        table[i] = 0;
-    }
-    return false; // No more tables
-}
-*/
-
+#ifdef COMMUTATIVE
 bool next_table(int* table) {
     for (int i = N - 1; i >= 0; i--) {
         for (int j = N - 1; j >= i; j--) {
@@ -134,6 +120,19 @@ bool next_table(int* table) {
     }
     return false;  // No more tables to generate
 }
+#else
+bool next_table(int* table) {
+    for (int i = TABLE_SIZE - 1; i >= 0; i--) {
+        if (table[i] < N - 1) {
+            table[i]++;
+            return true;
+        }
+        table[i] = 0;
+    }
+    return false; // No more tables
+}
+#endif
+
 
 void print_result(int* table, word_t* ok, int ok_count) {
     printf("Table:\n");
@@ -222,14 +221,15 @@ int main() {
 
     // Calculate total number of tables: N^(N*N)
     uint64_t total_tables = 1;
-    /*
-    for (int i = 0; i < TABLE_SIZE; i++) {
-        total_tables *= N;
-    }
-    */
+    #ifdef COMMUTATIVE
     for (int i = 0; i < N*(N+1)/2; i++) {
         total_tables *= N;
     }
+    #else
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        total_tables *= N;
+    }
+    #endif
     uint64_t tables_per_thread = total_tables / NUM_THREADS;
 
 
