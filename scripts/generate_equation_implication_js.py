@@ -110,7 +110,7 @@ print("var equations = ", eqs);
 
 special = []
 for line in open("equational_theories/Equations.lean"):
-    if line.startswith("abbrev Equation"):
+    if line.startswith("equation") and ':=' in line:
         special.append(line.split()[1])
 print("var special = ", special)
 
