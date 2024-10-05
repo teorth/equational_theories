@@ -42,21 +42,21 @@ theorem Soundness {α} (Γ : Ctx α) E (h : Γ ⊢ E) : Γ ⊧ E := by
 -- (we want to extract the "used" axioms, e.g.) we smush the derivation
 -- down to prop using Nonempty for creating a setoid.
 def RelOfLaws {α} (Γ : Ctx α) : FreeMagma α → FreeMagma α → Prop :=
-  λ t u ↦ Nonempty (Γ ⊢ t ≃ u)
+  λ t u ↦ Nonempty (Γ ⊢' t ≃ u)
 
 -- eazy peezy since we basically have exactly the axioms.
 theorem RelOfLaws.isEquivalence {α} (Γ : Ctx α) : Equivalence (RelOfLaws Γ) := by
   constructor <;> simp [RelOfLaws]
-  case refl => intros x; constructor; apply derive.Ref
+  case refl => intros x; constructor; apply derive'.Ref
   case symm =>
     intros x y h
     constructor
-    apply derive.Sym
+    apply derive'.Sym
     assumption
   case trans =>
     intros x y z h₁ h₂
     constructor
-    apply derive.Trans
+    apply derive'.Trans
       <;> trivial
 
 instance SetoidOfLaws {α} (Γ : Ctx α): Setoid (FreeMagma α) :=
@@ -75,7 +75,7 @@ def ForkWithLaws {α} (Γ : Ctx α) : FreeMagmaWithLaws Γ → FreeMagmaWithLaws
       simp [HasEquiv.Equiv, Setoid.r, RelOfLaws]
       intros x z y w d₁ d₂;
       apply Quotient.sound; simp [HasEquiv.Equiv, Setoid.r, RelOfLaws]; constructor
-      apply derive.Cong <;> trivial
+      apply derive'.Cong <;> trivial
   )
 
 instance FreeMagmaWithLaws.Magma {α} (Γ : Ctx α) : Magma (FreeMagmaWithLaws Γ) :=
@@ -90,7 +90,7 @@ theorem FreeMagmaWithLaws.evalInMagmaIsQuot {α} (Γ : Ctx α) (t : FreeMagma α
     repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot]
     simp only [Quotient.lift₂]
     apply Quot.sound; rw [substFreeMagma]
-    exact ⟨derive.Ref _ _⟩
+    exact ⟨derive'.Ref _ _⟩
 
 theorem substLFId {α} (t : FreeMagma α) : t ⬝ Lf = t := by
   cases t <;> simp [substFreeMagma]
@@ -101,7 +101,7 @@ def LfEmbed {α} (Γ : Ctx α) : α → FreeMagmaWithLaws Γ := embed Γ ∘ Lf
 
 -- Mostly forward reasoning here, so we delay the intros.
 theorem FreeMagmaWithLaws.isDerives {α} (Γ : Ctx α) (E : MagmaLaw α) :
-  FreeMagmaWithLaws Γ ⊧ E → Nonempty (Γ ⊢ E) := by
+  FreeMagmaWithLaws Γ ⊧ E → Nonempty (Γ ⊢' E) := by
   simp [satisfies, satisfiesPhi, evalInMagma]
   intros eq; have h := (eq (LfEmbed Γ))
   simp only [LfEmbed] at h
@@ -133,8 +133,12 @@ theorem FreeMagmaWithLaws.isModel {α} (Γ : Ctx α) : FreeMagmaWithLaws Γ ⊧ 
   rw [eq_sig]
   repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot]
   apply Quotient.sound; simp [HasEquiv.Equiv, Setoid.r, RelOfLaws]
-  exact ⟨derive.Subst _ _ _ _ (derive.Ax _ _ mem)⟩
+  exact ⟨derive'.SubstAx _ _ mem _⟩
 
 -- Birkhoff's completeness theorem
-theorem Completeness {α} (Γ : Ctx α) (E : MagmaLaw α) (h : Γ ⊧ E) : Nonempty (Γ ⊢ E) :=
+theorem Completeness' {α} (Γ : Ctx α) (E : MagmaLaw α) (h : Γ ⊧ E) : Nonempty (Γ ⊢' E) :=
   FreeMagmaWithLaws.isDerives _ _ (h _ (FreeMagmaWithLaws.isModel _))
+
+theorem Completeness {α} (Γ : Ctx α) (E : MagmaLaw α) (h : Γ ⊧ E) : Nonempty (Γ ⊢ E) :=
+  match Completeness' Γ E h with
+  | .intro x => .intro (derive_of_derive' x)
