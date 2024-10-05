@@ -24,7 +24,7 @@
       .conjectured { background-color: #fffacd; }
       #backButton { float: right; margin: 10px; }
       h1, h2, h3 { margin-bottom: 10px; }
-      .header { font-weight: bold; background-color: #f0f0f0;  position: sticky;}
+      .header { font-weight: bold; background-color: #f0f0f0; position: sticky; top: 0; z-index: 1; }
       .header .equation-stat { cursor: pointer; }
       .header .equation-stat:hover { background-color: #e0e0e0; }
       .checkbox-container { margin: 10px 0; }
@@ -34,7 +34,7 @@
 	  text-decoration: underline;
 	  cursor: pointer;
       }
-      
+
       a:hover, a:focus {
 	  color: #0000FF;
 	  text-decoration: none;
@@ -43,8 +43,7 @@
       .special {
 	  font-weight: bold
       }
-      
-      
+
       input[type="text"] {
           width: 300px;
           padding: 5px;
@@ -92,15 +91,15 @@
 .implication-item:hover {
     background-color: #f0f0f0;
 }
-      
+
     </style>
-    
+
   </head>
   <body>
     <div id="listPage" class="page active">
       <h1>All Equations</h1>
 
-      
+
       <input type="text" id="equationInput" placeholder="Enter an equation (e.g., x*y=y*x)">
       <button onclick="findEquation()">Jump to Equation</button>
       <div id="result"></div>
@@ -114,7 +113,7 @@
       </div>
 
 
-      
+
       <div class="checkbox-container">
 	<label>
 	  <input checked="checked" type="checkbox" id="showEquivalences"> Hide equivalent equations
@@ -150,7 +149,7 @@
         <label>
           <input type="checkbox" id="treatConjectedAsUnknownDetail"> Treat conjectures as unknown
         </label>
-	
+
       </div>
       <div class="implication-box">
         <h3>This equation implies (=&gt;):</h3>
