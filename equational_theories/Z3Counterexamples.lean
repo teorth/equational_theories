@@ -90,6 +90,10 @@ def f_834_10 : Fin 8 → Fin 8 →  Fin 8
 | 0b011, 0b101 => ⟨0b011, by omega⟩
 | 0b011, 0b110 => ⟨0b011, by omega⟩
 
+def Magma834_10 : Magma (Fin 8) where op := f_834_10
+
+-- TODO use calculate_facts to find more places where this magma helps.
+
 @[equational_result]
-theorem Equation834_not_implies_Equation10 : ∃ (G: Type) (_: Magma G), Equation834 G ∧ ¬ Equation10 G :=
-  ⟨Fin 8, ⟨f_834_10⟩, by decide⟩
+theorem Equation834_not_implies_Equation10 : ∃ (G: Type) (_: Magma G), Facts G [834] [10] :=
+  ⟨Fin 8, Magma834_10, by decide!⟩
