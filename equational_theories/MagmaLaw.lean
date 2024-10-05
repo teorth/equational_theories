@@ -1,8 +1,6 @@
 import equational_theories.FreeMagma
 import Mathlib.Data.Set.Defs
 
-set_option hygiene false
-
 open FreeMagma
 
 namespace Law
