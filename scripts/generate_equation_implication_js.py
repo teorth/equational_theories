@@ -2,6 +2,7 @@ import json
 import os
 import sys
 
+
 #"""
 f = json.load(open(sys.argv[1]))
 
@@ -118,3 +119,28 @@ print("var equiv = " + str(find_equivalence_classes_fast(n)))
 
 print("var duals = ", open("data/duals.json").read())
 
+
+
+import time
+import subprocess
+import json
+
+def get_git_commit_hash():
+    try:
+        return subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii').strip()
+    except:
+        return "Unable to retrieve Git hash"
+
+# Get current UTC time as a timestamp
+utc_timestamp = int(time.time())
+
+# Get the current Git commit hash
+commit_hash = get_git_commit_hash()
+
+# Create a dictionary with the information
+update_info = {
+    "timestamp": utc_timestamp,
+    "commit_hash": commit_hash
+}
+
+print("var last_updated = ",json.dumps(update_info))
