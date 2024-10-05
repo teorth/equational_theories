@@ -261,7 +261,7 @@ theorem Equation28393_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
     .
       by_cases hyz' : y ◇ z = 3^y.val
       .
-        simp [hyz', h2]
+        rw [←hyz', h2, hyz']
         sorry
       .
         have : (y ◇ z) ≠ 3^y.val ∧ (y ◇ z) ≠ 2^(3^y.val)  := And.intro hyz' hyz
