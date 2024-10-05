@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 
 """
 Generates a png image to visualize the output of `extract_implications outcomes`.
