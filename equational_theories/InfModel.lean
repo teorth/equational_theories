@@ -146,6 +146,9 @@ theorem Finite.Equation28393_implies_Equation2 (G : Type*) [Magma G] [Finite G] 
     rw [h x y z, this ((y ◇ y) ◇ y)  x u, ← this ((y ◇ y) ◇ y) u u, ← h]
 
 theorem Equation28393_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equation28393 G ∧ ¬Equation2 G := by
+  have : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
+  have : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
+  have : Fact (Nat.Prime 5) := ⟨Nat.prime_five⟩
   letI : Magma ℕ+ := { op := fun a b ↦ if a = b then 2^b.val else
         if a = 2^b.val then 3^b.val else
         if a = 3^(padicValNat 3 a) then a * 5^b.val else
@@ -169,78 +172,52 @@ theorem Equation28393_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
     intro x y hxy
     unfold Magma.op
     simp
-    have : (3: ℕ+)^↑y.val ≠ x := by
+    rw [if_neg]
+    case hnc =>
       intro h''
       apply hxy
       simp [h'']
-    simp [this]
-    intro h'
-    have : (3: ℕ+)^↑y.val ≠ (2: ℕ+)^↑x.val := by
-      apply_fun PNat.val
-      simp only [PNat.pow_coe, PNat.val_ofNat, ne_eq]
-      intro nh
-      apply eq_of_prime_pow_eq at nh
-      · contradiction
-      · exact Nat.prime_three.prime
-      · exact Nat.prime_two.prime
-      · simp
-    have : False := this h'
-    contradiction
+    simp
+    contrapose
+    intro _
+    apply_fun PNat.val
+    simp only [PNat.pow_coe, PNat.val_ofNat, ne_eq]
+    intro nh
+    apply eq_of_prime_pow_eq at nh
+    · contradiction
+    · exact Nat.prime_three.prime
+    · exact Nat.prime_two.prime
+    · simp
   have h4 : ∀ (x y z: ℕ+), z ≠ 3^y.val * 5^x.val → (3^y.val * 5^x.val) ◇ z = x := by
     intro x y z hxyz
     unfold Magma.op
     simp
-    have : 3^y.val * 5^x.val ≠ z := by
-      intro h'
-      apply hxyz
-      simp [h']
-    simp [this]
-    have : (3: ℕ+)^y.val * (5: ℕ+)^x.val ≠ (2: ℕ+)^z.val := by
+    rw [if_neg]
+    case hnc =>
+        intro h'
+        apply hxyz
+        simp [h']
+    rw [if_neg]
+    case hnc =>
       apply_fun PNat.val
       simp [PNat.pow_coe, PNat.val_ofNat, ne_eq]
       intro nh
-      have : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
-      have : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
-      have : Fact (Nat.Prime 5) := ⟨Nat.prime_five⟩
-      have : ↑z = (0: ℕ) := calc ↑z
-        _ = padicValNat 2 (2^z.val) := by simp
+      apply PNat.ne_zero z
+      calc ↑z
         _ = padicValNat 2 (3^y.val * 5^x.val) := by simp [nh]
-        _ = padicValNat 2 (3^y.val) + padicValNat 2 (5^x.val) := by simp [padicValNat.mul]
-        _ = 0 := by simp [padicValNat_prime_prime_pow]
-      have := PNat.ne_zero z
-      contradiction
-    simp [this]
-    have : (3: ℕ+)^y.val * (5: ℕ+) ^x.val ≠ (3: ℕ+) ^ padicValNat 3 (3^y.val * 5^x.val) := by
+        _ = 0 := by simp [padicValNat.mul, padicValNat_prime_prime_pow]
+    rw [if_neg]
+    case hnc =>
       intro hc
-      have : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
-      have : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
-      have : Fact (Nat.Prime 5) := ⟨Nat.prime_five⟩
-      have : ↑x = (0: ℕ) := calc ↑x
-        _ = padicValNat 5 (5^x.val) := by simp
-        _ = padicValNat 5 (3^y.val) + padicValNat 5 (5^x.val) := by simp [padicValNat_prime_prime_pow]
-        _ = padicValNat 5 ↑((3: ℕ+)^y.val * (5: ℕ+)^x.val) := by simp [padicValNat.mul]
+      apply PNat.ne_zero x
+      calc ↑x
+        _ = padicValNat 5 ↑((3: ℕ+)^y.val * (5: ℕ+)^x.val) := by simp [padicValNat_prime_prime_pow, padicValNat.mul]
         _ = padicValNat 5 ((3: ℕ+)^(padicValNat (3: ℕ) ((3: ℕ)^y.val * (5: ℕ)^x.val))) := by simp [hc]
         _ = 0 := by simp [padicValNat_prime_prime_pow]
-      have := PNat.ne_zero x
-      contradiction
-    simp [this]
-    have : (3: ℕ+)^y.val * (5: ℕ+)^x.val = (3: ℕ+)^padicValNat 3 ((3: ℕ+)^y.val * (5: ℕ+)^x.val) * (5: ℕ+) ^ padicValNat 5 ((3: ℕ+)^y.val * (5: ℕ+)^x.val) := by
-      rw [padicValNat.mul]
-        <;> try simp
-      have : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
-      have : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
-      have : Fact (Nat.Prime 5) := ⟨Nat.prime_five⟩
-      simp [padicValNat_prime_prime_pow]
-      rw [padicValNat.mul]
-        <;> try simp
-      simp [padicValNat_prime_prime_pow]
-    simp [this]
-    rw [Subtype.ext_iff]
-    have : Fact (Nat.Prime 5) := ⟨Nat.prime_five⟩
-    rw [padicValNat.mul]
-      <;> try simp
-    rw [padicValNat_prime_prime_pow _ (by simp)]
-    simp
+    rw [if_pos]
+    case hc =>
+      simp [padicValNat.mul, padicValNat_prime_prime_pow]
+    simp [this, Subtype.ext_iff, padicValNat.mul, padicValNat_prime_prime_pow]
   have h5 : ∀ (y z: ℕ+), z ≠ 3^y.val ∧ z ≠ 2^(3^y.val) → (2^(3^y.val)) ◇ z = 3^y.val := sorry
   rw [h1, h2]
   by_cases hx : x = 3^y.val
