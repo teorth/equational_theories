@@ -1,4 +1,4 @@
-#define N 4
+#define N 5
 #define TABLE_SIZE (N * N)
 #define MAX_ARGS 6
 #define NUM_FUNCTIONS 4694

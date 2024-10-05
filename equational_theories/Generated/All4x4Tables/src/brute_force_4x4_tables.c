@@ -2,54 +2,79 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include <inttypes.h>
+#include <omp.h>
+#include <stdint.h>
 #include "header.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <openssl/md5.h>
 
 extern FunctionPtr* functions;
 extern int* nvar_list;
 extern void setup();
 
+#define TABLE_SIZE (N * N)
+#define BITS_PER_WORD 64
+#define WORD_COUNT ((NUM_FUNCTIONS + BITS_PER_WORD - 1) / BITS_PER_WORD)
+#define BLOOM_SIZE (1<<28)
+#define BLOOM_WORDS (BLOOM_SIZE / BITS_PER_WORD)
+#define NUM_PROBES 8
+#define NUM_THREADS 176
+
+volatile uint64_t unique_tables_found = 0;
+
+typedef uint64_t word_t;
+
 
 bool check_rule(int nvar, FunctionPtr fn, int* table) {
-    int max_combinations = 1 << (2 * nvar);
+    int max_combinations = 1 << (3 * nvar);
 
-    #if N == 4
-    if (!fn(table, 0x6789)) {
-      return false;
+    if (!fn(table, 0b100011010001100011)) {
+        return false;
     }
-    #endif
 
-    for (int combination = 0; combination < max_combinations; combination++) {
-      #if N == 3
-      if ((combination & (combination>>1)) & 0x5555555) continue;
-      #endif
-      #if N == 2
-      if ((combination) & 0xaaaaaaa) continue;
-      #endif
-      fflush(stdout);
-        if (!fn(table, combination)) {
+    int combination = 0;
+    for (; combination <= max_combinations - 8; combination += 8) {
+        // Unrolling 5 iterations
+        // Check the first combination
+        if ((((combination & (combination >> 2)) & 0b001001001001001001) |
+             ((combination & (combination >> 1)) & 0b010010010010010010))) {
+	  continue;
+	}
+
+	if (!fn(table, combination)) {
+	  return false;
+	}
+
+        // The next 4 combinations do not need the condition checks
+        if (!fn(table, combination + 1)) {
+            return false;
+        }
+
+        if (!fn(table, combination + 2)) {
+            return false;
+        }
+
+        if (!fn(table, combination + 3)) {
+            return false;
+        }
+
+        if (!fn(table, combination + 4)) {
             return false;
         }
     }
-    
+
+    // Handle remaining combinations
+    for (; combination < max_combinations; combination++) {
+        if ((((combination & (combination >> 2)) & 0b001001001001001001) |
+             ((combination & (combination >> 1)) & 0b010010010010010010)) == 0) {
+            if (!fn(table, combination)) {
+                return false;
+            }
+        }
+    }
+
     return true;
 }
 
-bool next_table(int* table) {
-    for (int i = TABLE_SIZE - 1; i >= 0; i--) {
-        if (table[i] < N - 1) {
-            table[i]++;
-            return true;
-        }
-        table[i] = 0;
-    }
-    return false; // No more tables
-}
+#define SIZE (N * N)
 
 void print_table(int* table) {
     for (int i = 0; i < N; i++) {
@@ -61,174 +86,243 @@ void print_table(int* table) {
     printf("\n");
 }
 
+#ifdef COMMUTATIVE
+bool next_table(int* table) {
+    for (int i = N - 1; i >= 0; i--) {
+        for (int j = N - 1; j >= i; j--) {
+            int index = i * N + j;
+            if (table[index] < N - 1) {
+                table[index]++;
+                if (i != j) {
+                    table[j * N + i] = table[index];  // Ensure symmetry
+                }
 
-void initialize_random_table(int* table) {
-    for (int i = 0; i < TABLE_SIZE; i++) {
-        table[i] = rand() % N;
+                // Reset all elements after this one
+                for (int row = i; row < N; row++) {
+                    for (int col = (row == i ? j + 1 : row); col < N; col++) {
+                        int k = row * N + col;
+                        table[k] = 0;
+                        if (row != col) {
+                            table[col * N + row] = 0;
+                        }
+                    }
+                }
+
+                return true;  // Successfully generated next table
+            } else {
+                // Reset the current element and its symmetric counterpart
+                table[index] = 0;
+                if (i != j) {
+                    table[j * N + i] = 0;  // Ensure symmetry
+                }
+            }
+        }
     }
+    return false;  // No more tables to generate
+}
+#else
+bool next_table(int* table) {
+    for (int i = TABLE_SIZE - 1; i >= 0; i--) {
+        if (table[i] < N - 1) {
+            table[i]++;
+            return true;
+        }
+        table[i] = 0;
+    }
+    return false; // No more tables
+}
+#endif
+
+
+void print_result(int* table, word_t* ok, int ok_count) {
+    printf("Table:\n");
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            printf("%d ", table[i * N + j]);
+        }
+        printf("\n");
+    }
+    printf("\nSatisfied equations: ");
+    bool first = true;
+    for (int i = 0; i < NUM_FUNCTIONS; i++) {
+        if ((ok[i / BITS_PER_WORD] >> (i % BITS_PER_WORD)) & 1) {
+            if (!first) {
+                printf(", ");
+            }
+            printf("%d", i);
+            first = false;
+        }
+    }
+    printf("\n\n");
 }
 
-
-#define HASH_TABLE_SIZE 10000019 // A prime number larger than MAX_TABLES
-
-
-void md5_hash(int *array, int size, char *output) {
-    MD5_CTX ctx;
-    unsigned char digest[MD5_DIGEST_LENGTH];
-    
-    MD5_Init(&ctx);
-    MD5_Update(&ctx, array, size * sizeof(int));
-    MD5_Final(digest, &ctx);
-    
-    for (int i = 0; i < MD5_DIGEST_LENGTH; i++) {
-        sprintf(&output[i*2], "%02x", (unsigned int)digest[i]);
+uint64_t hash_function(word_t* ok, int seed) {
+    uint64_t hash = seed;
+    for (int i = 0; i < WORD_COUNT; i++) {
+        hash ^= ok[i];
+        hash *= 0x5bd1e995;
+        hash ^= hash >> 15;
     }
-}
-
-typedef struct {
-    char hash[33];
-    int table_number;
-    int count;
-    bool occupied;
-} HashTableEntry;
-
-unsigned long hash_function(const char *str) {
-    unsigned long hash = 5381;
-    int c;
-    while ((c = *str++))
-        hash = ((hash << 5) + hash) + c; // hash * 33 + c
     return hash;
 }
 
-int find_or_insert(HashTableEntry *hash_table, const char *hash, int table_number) {
-    unsigned long index = hash_function(hash) % HASH_TABLE_SIZE;
-    int original_index = index;
-    
-    while (hash_table[index].occupied) {
-        if (strcmp(hash_table[index].hash, hash) == 0) {
-  	    hash_table[index].count += 1;
-            return hash_table[index].table_number; // Hash already exists
-        }
-        index = (index + 1) % HASH_TABLE_SIZE;
-        if (index == original_index) {
-            fprintf(stderr, "Hash table is full\n");
-            exit(1);
+bool check_and_set_bloom(word_t* bloom_filter, word_t* ok) {
+    bool seen = true;
+    for (int i = 0; i < NUM_PROBES; i++) {
+        uint64_t hash = hash_function(ok, i) % BLOOM_SIZE;
+        uint64_t word_index = hash / BITS_PER_WORD;
+        uint64_t bit_index = hash % BITS_PER_WORD;
+        
+        if (!(bloom_filter[word_index] & (1ULL << bit_index))) {
+            seen = false;
+            bloom_filter[word_index] |= (1ULL << bit_index);
         }
     }
-    
-    // Insert new entry
-    strcpy(hash_table[index].hash, hash);
-    hash_table[index].table_number = table_number;
-    hash_table[index].count = 0;
-    hash_table[index].occupied = true;
-    return -1; // Indicates a new entry
+    return seen;
 }
 
-void skip_to_table(int *table, int64_t target_index) {
-    for (int64_t i = 0; i < target_index; i++) {
-        next_table(table);
+
+void start_table_at_index(uint64_t table_number, int size, int max_value, int table[]) {
+    int num_elements = (size * (size + 1)) / 2;  // Number of elements in the upper triangle (including diagonal)
+    int base = max_value;
+
+    // Initialize an array to store the values of the upper triangle
+    int upper_triangle_values[num_elements];
+
+    // Convert the table_number to base-(max_value + 1)
+    uint64_t current_number = table_number;
+    for (int i = num_elements - 1; i >= 0; i--) {
+        upper_triangle_values[i] = current_number % base;
+        current_number /= base;
+    }
+
+    // Initialize the table with zeros
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            table[i * size + j] = 0;
+        }
+    }
+
+    // Fill the upper triangle of the matrix, including the diagonal
+    int index = 0;
+    for (int i = 0; i < size; i++) {
+        for (int j = i; j < size; j++) {
+            table[i * size + j] = upper_triangle_values[index];
+            table[j * size + i] = upper_triangle_values[index];  // Ensure symmetry
+            index++;
+        }
     }
 }
 
-int main(int argc, char *argv[]) {
-    if (argc != 3) {
-        fprintf(stderr, "Usage: %s <start_index> <end_index>\n", argv[0]);
-        return 1;
-    }
 
-    int64_t start_index = atoll(argv[1]);
-    int64_t end_index = atoll(argv[2]);
-
-    if (start_index < 0 || end_index < start_index) {
-        fprintf(stderr, "Invalid start or end index\n");
-        return 1;
-    }
-
+int main() {
     setup();
-    int table[TABLE_SIZE] = {0}; // Start with all zeros
-    int ok[NUM_FUNCTIONS];
-    int ok_count;
-    char filename[100];
-    char hash[33]; // 32 characters for MD5 hash + null terminator
-    FILE *file;
+    word_t* bloom_filter = malloc(sizeof(word_t)*BLOOM_WORDS);
 
-    // Initialize hash table
-    HashTableEntry *hash_table = calloc(HASH_TABLE_SIZE, sizeof(HashTableEntry));
-    if (hash_table == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
-        return 1;
+    // Calculate total number of tables: N^(N*N)
+    uint64_t total_tables = 1;
+    #ifdef COMMUTATIVE
+    for (int i = 0; i < N*(N+1)/2; i++) {
+        total_tables *= N;
     }
+    #else
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        total_tables *= N;
+    }
+    #endif
+    uint64_t tables_per_thread = total_tables / NUM_THREADS;
 
-    int unique_count = 0;
 
-    // Skip to the start index
-    skip_to_table(table, start_index);
+    #pragma omp parallel num_threads(NUM_THREADS)
+    {
+        int thread_id = omp_get_thread_num();
+        uint64_t start_index = thread_id * tables_per_thread;
+        uint64_t end_index = (thread_id == NUM_THREADS - 1) ? total_tables : (thread_id + 1) * tables_per_thread;
+        uint64_t tables_to_check = end_index - start_index;
+        uint64_t progress_step = tables_to_check / 1000; // 0.1% of tables for this thread
 
-    for (int64_t table_count = start_index; table_count <= end_index; table_count++) {
-        ok_count = 0;
-        for (int i = 0; i < NUM_FUNCTIONS; i++) {
-            if (check_rule(nvar_list[i], functions[i], table)) {
-                ok[ok_count++] = i;
+        int table[TABLE_SIZE] = {0};
+        word_t ok[WORD_COUNT];
+        int ok_count;
+
+        // Brute force skip to the starting table
+        start_table_at_index(start_index, N, N, table);
+	
+        #pragma omp critical
+	{
+	printf("Init at table ");
+	print_table(table);
+	}
+
+        for (uint64_t current_index = start_index; current_index < end_index; current_index++) {
+            ok_count = 0;
+            memset(ok, 0, sizeof(ok)); // Reset all words
+
+	    size_t main_loop_end = NUM_FUNCTIONS - (NUM_FUNCTIONS % BITS_PER_WORD);
+
+	    // Main loop processing BITS_PER_WORD functions at a time
+	    for (size_t i = 0; i < main_loop_end; i += BITS_PER_WORD) {
+	      unsigned long long temp = 0;
+    
+	      for (int j = 0; j < BITS_PER_WORD; j++) {
+		temp |= (unsigned long long)check_rule(nvar_list[i+j], functions[i+j], table) << j;
+	      }
+
+	      ok[i / BITS_PER_WORD] = temp;
+	      ok_count += __builtin_popcountll(temp);
+	    }
+
+	    // Handle remaining functions
+	    unsigned long long temp = 0;
+	    for (size_t i = main_loop_end; i < NUM_FUNCTIONS; i++) {
+	      temp |= (unsigned long long)check_rule(nvar_list[i], functions[i], table) << (i % BITS_PER_WORD);
+	    }
+
+	    if (main_loop_end < NUM_FUNCTIONS) {
+	      ok[main_loop_end / BITS_PER_WORD] = temp;
+	      ok_count += __builtin_popcountll(temp);
+	    }
+
+            if (ok_count > 0 && !check_and_set_bloom(bloom_filter, ok)) {
+                #pragma omp atomic
+                unique_tables_found++;
+
+                #pragma omp critical
+                {
+                    print_result(table, ok, ok_count);
+                }
+            }
+
+            // Progress reporting
+            if ((current_index - start_index + 1) % progress_step == 0) {
+            #pragma omp critical
+	    {
+                int progress = (int)((current_index - start_index + 1) * 100 / tables_to_check);
+                printf("ThreadID %d: status: %d%%\n", thread_id, progress);
+	    }
+            }
+
+            // Thread 0 reports additional statistics
+            if (thread_id == 0 && (current_index - start_index + 1) % progress_step == 0) {
+                double bloom_filter_fullness = 0;
+                for (int i = 0; i < BLOOM_WORDS; i++) {
+                    bloom_filter_fullness += __builtin_popcountll(bloom_filter[i]);
+                }
+                bloom_filter_fullness /= BLOOM_SIZE;
+
+            #pragma omp critical
+	    {
+                printf("Thread 0 Report:\n");
+                printf("  Unique tables found: %lu\n", unique_tables_found);
+                printf("  Bloom filter fullness: %.2f%%\n", bloom_filter_fullness * 100);
+	    }
+            }
+
+            if (!next_table(table)) {
+                break;
             }
         }
-
-        // Generate MD5 hash of ok array
-        md5_hash(ok, ok_count, hash);
-
-        // Check if we've seen this hash before and insert if new
-        int existing_table = find_or_insert(hash_table, hash, table_count);
-
-        if (existing_table == -1) {
-            // New unique hash
-            unique_count++;
-
-            // Create a new file with the hash as the name
-            snprintf(filename, sizeof(filename), "tables/table_%s.txt", hash);
-            file = fopen(filename, "w");
-            if (file == NULL) {
-                fprintf(stderr, "Error opening file %s\n", filename);
-                free(hash_table);
-                exit(1);
-            }
-
-            fprintf(file, "Table %ld [", table_count);
-            for (int j = 0; j < ok_count; j++) {
-                fprintf(file, "%d", ok[j]);
-                if (j < ok_count - 1) fprintf(file, ", ");
-            }
-            fprintf(file, "]\n");
-
-            fclose(file);
-        }
-
-        if (table_count < end_index && !next_table(table)) {
-            fprintf(stderr, "Reached end of tables before end_index\n");
-            break;
-        }
     }
-
-    printf("Processed tables from %ld to %ld\n", start_index, end_index);
-    printf("Unique hashes: %d\n", unique_count);
-
-    // Dump the table-hash pairs
-    snprintf(filename, sizeof(filename), "table_hash_pairs_%ld.txt", start_index);
-    file = fopen(filename, "w");
-    if (file == NULL) {
-        fprintf(stderr, "Error opening table_hash_pairs.txt\n");
-        free(hash_table);
-        return 1;
-    }
-
-    for (int i = 0; i < HASH_TABLE_SIZE; i++) {
-        if (hash_table[i].occupied) {
-            fprintf(file, "Table %d: %s %d\n", hash_table[i].table_number,
-		    hash_table[i].hash,
-		    hash_table[i].count);
-        }
-    }
-
-    fclose(file);
-    free(hash_table);
 
     return 0;
 }
