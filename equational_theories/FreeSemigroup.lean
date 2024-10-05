@@ -118,7 +118,7 @@ theorem AssocImpliesSgrProjFaithful {α : Type _} {G : Type _} [Magma G] (assoc 
       apply Eq.trans $ congrArg (fun s ↦ (_ ◇ s) ◇ _) (AssocImpliesSgrProjFaithful assoc f tl2)
       trivial
 
-def insertSemigroupSorted {n : Nat} (i : Fin n) (ls : FreeSemigroup (Fin n)) : FreeSemigroup (Fin n) :=
+def insertSgrSorted {n : Nat} (i : Fin n) (ls : FreeSemigroup (Fin n)) : FreeSemigroup (Fin n) :=
   match ls with
     | j .+        => if i ≤ j then i ,+ j .+ else j ,+ i .+
     | j ,+ lstail => if i ≤ j then i ,+ j ,+ lstail else j ,+ i ,+ lstail
@@ -126,10 +126,10 @@ def insertSemigroupSorted {n : Nat} (i : Fin n) (ls : FreeSemigroup (Fin n)) : F
 def insertionSortSgr {n : Nat} (ls : FreeSemigroup (Fin n)) : FreeSemigroup (Fin n) :=
   match ls with
     | i .+ => i .+
-    | i ,+ lstail => insertSemigroupSorted i (insertionSortSgr lstail)
+    | i ,+ lstail => insertSgrSorted i (insertionSortSgr lstail)
 
 theorem CommSgrImpliesInsertSortedFaithful {n : Nat} {G : Type _} [Magma G] (assoc : Equation4512 G) (comm : Equation43 G) (f : Fin n → G)
-  : ∀ i : Fin n, ∀ ls : FreeSemigroup (Fin n), evalInSgr f (insertSemigroupSorted i ls) = (f i) ◇ evalInSgr f ls :=
+  : ∀ i : Fin n, ∀ ls : FreeSemigroup (Fin n), evalInSgr f (insertSgrSorted i ls) = (f i) ◇ evalInSgr f ls :=
   fun i ls ↦ match ls with
   | j .+ => by
       have eqor := ite_eq_or_eq (i ≤ j) (i ,+ j .+) (j ,+ i .+)
