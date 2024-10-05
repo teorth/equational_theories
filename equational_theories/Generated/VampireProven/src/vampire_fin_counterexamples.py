@@ -7,10 +7,8 @@ from collections import defaultdict
 
 random.seed(17)
 
-with open('conjectures.json') as fs:
-  problems = json.load(fs)
-
-problems = problems['nonimplications']
+with open('rnt.csv') as fs:
+  problems = [{'lhs': 'Equation' + x.split(',')[0], 'rhs': 'Equation' + x.strip().split(',')[1]} for x in fs]
 
 print(len(problems))
 
@@ -58,12 +56,9 @@ for problem in tqdm(problems):
   pr = encode_problem(problem)
 
   start_time = time.perf_counter()
-  try:
-    out = subprocess.check_output(['~/Downloads/vampire', '--mode', 'casc_sat',
-                                  '/proc/self/fd/0', '-t', '1'], input=pr.encode()).decode()
-  except Exception:
-    remaining.append(problem)
-    continue
+  out = subprocess.check_output(['/home/commandmaster/Downloads/vampire', '-sa', 'fmb',
+                                 '-fmbswr', '0',
+                                '/proc/self/fd/0', '-t', '5'], input=pr.encode()).decode()
   assert 'Termination reason: Satisfiable' in out
   model = build_model(out)
   print('@[equational_result]', file=disproofs)
@@ -72,7 +67,7 @@ for problem in tqdm(problems):
   print(f'  ⟨Fin {len(model)}, ⟨memoFinOp fun x y => {table(model)}[x.val]![y.val]!⟩, by decideFin!⟩', file=disproofs)
   print(file=disproofs)
   length += 4
-  if length >= 1000:
+  if length >= 500:
     length = 0
     disproofs.close()
     dpind += 1

@@ -3,1002 +3,502 @@ import equational_theories.MemoFinOp
 import equational_theories.DecideBang
 
 @[equational_result]
-theorem Equation837_not_implies_Equation1022 : ∃ (G: Type) (_: Magma G), Equation837 G ∧ ¬ Equation1022 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 2, 3, 5, 5, 0, 0, 2, 0, 5], [8, 8, 1, 1, 1, 1, 1, 1, 1, 8], [5, 2, 2, 2, 2, 2, 2, 2, 2, 2], [4, 3, 3, 4, 4, 3, 3, 3, 3, 3], [8, 4, 4, 8, 8, 4, 4, 4, 4, 8], [5, 5, 5, 5, 5, 5, 5, 5, 5, 5], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [8, 7, 7, 7, 7, 7, 7, 7, 7, 7], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [1, 1, 9, 9, 9, 9, 9, 9, 9, 1]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1868_not_implies_Equation4067 : ∃ (G: Type) (_: Magma G), Equation1868 G ∧ ¬ Equation4067 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 2, 2, 2, 2, 2], [3, 3, 3, 3, 5, 3], [5, 3, 0, 4, 5, 4], [1, 1, 1, 1, 2, 1], [2, 5, 5, 2, 5, 2], [2, 4, 4, 1, 2, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation837_not_implies_Equation1251 : ∃ (G: Type) (_: Magma G), Equation837 G ∧ ¬ Equation1251 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 0, 0, 6, 5, 0, 0, 0, 0, 6], [1, 2, 2, 1, 1, 2, 1, 1, 1, 5], [2, 3, 7, 2, 2, 7, 2, 2, 2, 5], [4, 3, 3, 4, 4, 4, 3, 3, 1, 1], [6, 6, 4, 6, 6, 4, 4, 4, 4, 5], [5, 2, 2, 5, 5, 2, 5, 5, 5, 1], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [7, 7, 7, 7, 7, 7, 7, 7, 7, 5], [8, 8, 8, 6, 8, 8, 8, 8, 6, 6], [8, 9, 9, 8, 8, 9, 9, 3, 3, 8]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1869_not_implies_Equation1435 : ∃ (G: Type) (_: Magma G), Equation1869 G ∧ ¬ Equation1435 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 2, 2, 2, 2, 2], [3, 3, 3, 4, 3, 4], [5, 0, 0, 0, 5, 0], [1, 1, 1, 1, 1, 1], [5, 5, 5, 1, 5, 1], [2, 4, 4, 4, 2, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation837_not_implies_Equation1262 : ∃ (G: Type) (_: Magma G), Equation837 G ∧ ¬ Equation1262 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 0, 0, 0, 6, 6, 0, 6, 0, 0], [1, 6, 3, 6, 1, 6, 1, 1, 1, 0], [2, 6, 6, 2, 2, 6, 2, 6, 2, 0], [3, 4, 3, 6, 6, 6, 3, 3, 3, 6], [5, 4, 4, 4, 8, 8, 4, 4, 8, 4], [5, 5, 5, 5, 8, 8, 5, 8, 8, 7], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [0, 7, 0, 7, 0, 0, 7, 0, 7, 7], [8, 8, 8, 8, 6, 6, 8, 6, 6, 6], [9, 3, 3, 3, 9, 3, 9, 9, 9, 3]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1869_not_implies_Equation1638 : ∃ (G: Type) (_: Magma G), Equation1869 G ∧ ¬ Equation1638 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 3, 3, 2, 2, 2], [3, 3, 3, 3, 3, 3], [4, 0, 0, 0, 0, 4], [1, 0, 0, 1, 1, 1], [2, 5, 5, 5, 5, 2], [4, 4, 4, 4, 4, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation837_not_implies_Equation1228 : ∃ (G: Type) (_: Magma G), Equation837 G ∧ ¬ Equation1228 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[9, 2, 5, 0, 5, 2, 0, 0, 0, 9], [9, 5, 1, 1, 5, 5, 1, 1, 1, 5], [3, 2, 2, 2, 5, 2, 2, 2, 2, 7], [4, 3, 3, 6, 6, 3, 6, 3, 8, 3], [7, 7, 7, 7, 7, 4, 7, 4, 8, 8], [7, 7, 5, 5, 5, 7, 5, 5, 5, 7], [3, 7, 6, 7, 7, 6, 7, 6, 7, 6], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [8, 8, 8, 7, 7, 8, 7, 8, 8, 8], [7, 7, 7, 9, 7, 7, 9, 9, 9, 7]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1869_not_implies_Equation3261 : ∃ (G: Type) (_: Magma G), Equation1869 G ∧ ¬ Equation3261 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 2, 5, 2, 5, 2], [3, 3, 3, 4, 3, 4], [3, 3, 0, 0, 0, 0], [2, 2, 1, 1, 1, 1], [5, 5, 5, 1, 5, 1], [4, 4, 0, 4, 0, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation837_not_implies_Equation1045 : ∃ (G: Type) (_: Magma G), Equation837 G ∧ ¬ Equation1045 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 6, 0, 6, 5, 0, 0, 0, 6, 0], [2, 6, 3, 6, 6, 1, 1, 0, 2, 5], [2, 5, 2, 2, 2, 2, 2, 2, 2, 2], [4, 0, 3, 0, 0, 3, 3, 8, 4, 8], [2, 5, 4, 5, 5, 4, 4, 2, 7, 4], [5, 5, 5, 5, 5, 5, 5, 6, 5, 5], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [7, 5, 7, 5, 6, 5, 7, 6, 7, 7], [2, 5, 8, 2, 2, 8, 8, 8, 8, 8], [9, 6, 9, 6, 9, 9, 9, 9, 9, 6]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1869_not_implies_Equation3262 : ∃ (G: Type) (_: Magma G), Equation1869 G ∧ ¬ Equation3262 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 2, 5, 2, 5, 2], [3, 3, 3, 4, 3, 4], [3, 3, 0, 0, 0, 0], [2, 2, 1, 1, 1, 1], [5, 5, 5, 1, 5, 1], [4, 4, 0, 4, 0, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation837_not_implies_Equation1239 : ∃ (G: Type) (_: Magma G), Equation837 G ∧ ¬ Equation1239 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 6, 6, 0, 5, 7, 7, 0, 0, 8], [2, 9, 9, 1, 1, 9, 1, 1, 5, 9], [3, 3, 7, 7, 7, 7, 2, 2, 2, 7], [3, 4, 7, 3, 7, 7, 3, 3, 3, 3], [6, 4, 4, 6, 6, 4, 6, 4, 4, 4], [2, 2, 2, 2, 5, 2, 5, 5, 5, 3], [7, 6, 6, 6, 7, 7, 7, 6, 6, 6], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [8, 7, 8, 8, 8, 7, 8, 8, 8, 8], [3, 7, 7, 9, 7, 7, 9, 9, 9, 7]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1869_not_implies_Equation3462 : ∃ (G: Type) (_: Magma G), Equation1869 G ∧ ¬ Equation3462 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 2, 5, 2, 5, 2], [3, 3, 3, 3, 3, 3], [0, 0, 0, 0, 0, 0], [1, 4, 1, 1, 1, 4], [5, 3, 5, 5, 5, 3], [4, 4, 0, 4, 0, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation837_not_implies_Equation1225 : ∃ (G: Type) (_: Magma G), Equation837 G ∧ ¬ Equation1225 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 5, 5, 5, 5, 2, 0, 0, 2, 8], [5, 5, 5, 1, 1, 5, 1, 5, 5, 1], [7, 3, 7, 5, 5, 7, 2, 2, 7, 7], [4, 9, 9, 9, 9, 3, 3, 4, 9, 4], [7, 6, 7, 6, 6, 4, 4, 6, 6, 7], [6, 6, 6, 6, 5, 6, 5, 5, 6, 5], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [6, 6, 7, 6, 6, 7, 7, 7, 7, 7], [6, 6, 6, 6, 6, 6, 8, 8, 6, 6], [6, 6, 6, 6, 6, 9, 9, 9, 6, 6]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1869_not_implies_Equation3465 : ∃ (G: Type) (_: Magma G), Equation1869 G ∧ ¬ Equation3465 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 2, 4, 2, 2, 4], [3, 3, 3, 5, 5, 3], [3, 3, 0, 0, 0, 0], [2, 2, 1, 1, 1, 1], [5, 5, 0, 5, 5, 0], [4, 4, 4, 1, 1, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation837_not_implies_Equation1048 : ∃ (G: Type) (_: Magma G), Equation837 G ∧ ¬ Equation1048 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 2, 2, 5, 5, 2, 0, 2, 0, 0], [2, 2, 3, 2, 2, 3, 1, 2, 1, 2], [6, 6, 6, 6, 2, 8, 2, 6, 2, 2], [4, 4, 4, 4, 4, 3, 3, 4, 3, 4], [6, 8, 4, 6, 6, 4, 4, 6, 4, 4], [8, 8, 8, 5, 5, 5, 5, 8, 5, 4], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [2, 2, 2, 2, 2, 3, 7, 2, 7, 7], [6, 8, 8, 8, 8, 8, 8, 8, 8, 6], [9, 8, 9, 8, 9, 4, 9, 9, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1869_not_implies_Equation3518 : ∃ (G: Type) (_: Magma G), Equation1869 G ∧ ¬ Equation3518 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 2, 4, 2, 2, 4], [3, 3, 3, 3, 3, 3], [3, 3, 0, 0, 0, 0], [2, 3, 1, 1, 1, 1], [5, 5, 0, 5, 5, 4], [4, 4, 4, 4, 4, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation837_not_implies_Equation1051 : ∃ (G: Type) (_: Magma G), Equation837 G ∧ ¬ Equation1051 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 8, 8, 9, 3, 6, 8, 0, 0, 0], [7, 8, 3, 4, 7, 8, 8, 4, 1, 8], [6, 0, 6, 2, 6, 2, 6, 2, 2, 2], [7, 7, 3, 7, 3, 3, 3, 7, 3, 3], [5, 5, 4, 4, 5, 5, 4, 4, 4, 4], [8, 8, 8, 8, 8, 8, 5, 5, 5, 5], [8, 8, 8, 6, 6, 6, 9, 6, 6, 6], [7, 8, 7, 8, 7, 7, 7, 8, 7, 7], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [9, 8, 8, 9, 9, 9, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1869_not_implies_Equation3521 : ∃ (G: Type) (_: Magma G), Equation1869 G ∧ ¬ Equation3521 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 2, 4, 2, 2, 4], [3, 3, 3, 5, 5, 3], [3, 3, 0, 0, 0, 0], [2, 2, 1, 1, 1, 1], [5, 5, 0, 5, 5, 0], [4, 4, 4, 1, 1, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation837_not_implies_Equation1254 : ∃ (G: Type) (_: Magma G), Equation837 G ∧ ¬ Equation1254 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 3, 4, 0, 3, 6, 0, 3, 3, 0], [3, 3, 3, 1, 3, 1, 3, 3, 1, 3], [1, 1, 1, 2, 2, 2, 1, 1, 7, 1], [3, 3, 4, 3, 3, 3, 3, 3, 3, 3], [5, 4, 4, 4, 5, 5, 5, 5, 5, 7], [3, 5, 5, 5, 3, 3, 5, 3, 5, 3], [6, 3, 4, 6, 3, 6, 6, 6, 6, 6], [3, 3, 5, 7, 3, 3, 7, 6, 3, 7], [3, 8, 3, 8, 3, 8, 8, 3, 3, 3], [9, 3, 5, 9, 1, 3, 9, 9, 3, 6]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1869_not_implies_Equation4314 : ∃ (G: Type) (_: Magma G), Equation1869 G ∧ ¬ Equation4314 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 2, 3, 2, 2, 3], [2, 4, 4, 4, 1, 1], [3, 0, 0, 0, 1, 3], [2, 5, 0, 5, 2, 3], [1, 1, 1, 1, 1, 1], [3, 3, 3, 3, 3, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation1633 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation1633 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 0, 4, 0, 0, 0, 0, 4, 4], [7, 1, 1, 7, 7, 7, 9, 1, 2, 1], [3, 7, 2, 2, 2, 2, 2, 2, 2, 2], [5, 5, 9, 3, 3, 3, 5, 3, 5, 3], [5, 5, 5, 5, 4, 4, 5, 4, 5, 5], [5, 5, 5, 5, 7, 5, 7, 5, 5, 5], [6, 2, 6, 6, 2, 6, 6, 6, 2, 2], [7, 7, 7, 7, 2, 7, 7, 7, 2, 2], [9, 8, 9, 9, 8, 9, 9, 9, 8, 8], [9, 9, 9, 9, 9, 9, 9, 9, 4, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1888_not_implies_Equation1629 : ∃ (G: Type) (_: Magma G), Equation1888 G ∧ ¬ Equation1629 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[1, 2, 0, 4, 3], [2, 4, 3, 0, 1], [3, 0, 2, 1, 4], [0, 1, 4, 3, 2], [4, 3, 1, 2, 0]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation1028 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation1028 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 0, 4, 0, 4, 0, 0, 0, 0], [8, 1, 1, 8, 1, 1, 8, 1, 1, 8], [3, 9, 2, 2, 2, 2, 2, 2, 2, 2], [7, 8, 8, 3, 8, 3, 8, 3, 3, 8], [4, 9, 9, 4, 4, 4, 4, 4, 9, 4], [3, 8, 3, 5, 8, 5, 8, 5, 5, 8], [6, 4, 4, 6, 6, 6, 6, 6, 6, 6], [8, 8, 8, 8, 8, 7, 8, 7, 7, 8], [8, 7, 5, 8, 8, 8, 8, 8, 8, 8], [4, 4, 6, 4, 9, 4, 9, 4, 4, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation1038 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation1038 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 2, 3, 3, 0], [3, 2, 1, 3, 0], [4, 2, 1, 3, 3], [4, 2, 1, 3, 0], [4, 3, 1, 3, 0]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation2446 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation2446 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 0, 4, 0, 7, 7, 0, 7, 0], [4, 1, 4, 4, 1, 4, 1, 1, 4, 4], [3, 9, 2, 2, 9, 2, 9, 9, 2, 2], [5, 8, 3, 3, 8, 3, 3, 5, 3, 8], [4, 6, 7, 7, 4, 4, 4, 4, 7, 4], [5, 9, 5, 5, 5, 5, 8, 5, 5, 5], [5, 9, 5, 6, 5, 6, 6, 5, 6, 6], [7, 9, 9, 9, 9, 7, 7, 7, 9, 7], [5, 8, 5, 5, 5, 8, 5, 8, 8, 8], [5, 9, 5, 5, 5, 9, 5, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation1225 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation1225 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[2, 4, 0, 1, 4], [2, 3, 4, 1, 4], [2, 3, 0, 4, 4], [4, 3, 0, 1, 4], [2, 3, 0, 1, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation828 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation828 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 0, 0, 2, 0, 0, 2, 0, 8], [6, 1, 6, 7, 1, 6, 1, 1, 6, 6], [2, 5, 2, 8, 5, 2, 5, 2, 2, 5], [4, 6, 4, 3, 3, 4, 3, 6, 4, 6], [4, 4, 4, 4, 4, 4, 4, 4, 4, 4], [7, 5, 7, 7, 5, 5, 7, 5, 5, 5], [6, 6, 6, 4, 6, 6, 6, 4, 6, 6], [7, 7, 5, 7, 1, 7, 7, 7, 5, 1], [8, 8, 8, 2, 2, 8, 2, 8, 8, 8], [8, 8, 9, 8, 8, 8, 8, 8, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation1644 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation1644 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 2, 4, 0, 4], [4, 2, 1, 0, 4], [3, 2, 1, 4, 4], [3, 4, 1, 0, 4], [3, 2, 1, 0, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation3460 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation3460 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 0, 0, 5, 0, 8, 0, 0, 0], [4, 1, 7, 4, 1, 1, 4, 1, 7, 4], [4, 2, 2, 4, 2, 4, 4, 2, 4, 4], [9, 9, 4, 3, 3, 9, 4, 9, 9, 3], [4, 4, 4, 4, 4, 4, 4, 4, 4, 4], [3, 3, 7, 5, 5, 5, 7, 5, 7, 5], [9, 3, 6, 6, 6, 9, 6, 6, 3, 6], [5, 5, 7, 7, 5, 7, 7, 7, 5, 7], [8, 3, 8, 8, 8, 8, 8, 8, 8, 8], [4, 9, 9, 9, 9, 9, 3, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation1654 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation1654 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 2, 3, 3, 0], [3, 2, 1, 3, 0], [4, 2, 1, 3, 3], [4, 2, 1, 3, 0], [4, 3, 1, 3, 0]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation1026 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation1026 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 0, 3, 0, 1, 1, 1, 1, 1, 3], [2, 1, 1, 2, 1, 1, 1, 1, 1, 1], [2, 6, 2, 9, 2, 2, 2, 2, 2, 2], [3, 4, 3, 3, 3, 3, 3, 3, 3, 3], [9, 4, 4, 9, 4, 4, 4, 4, 4, 4], [2, 8, 5, 2, 2, 5, 5, 2, 5, 5], [2, 4, 6, 2, 6, 2, 6, 2, 2, 6], [9, 5, 7, 9, 5, 7, 7, 7, 7, 7], [2, 5, 8, 2, 2, 8, 8, 8, 8, 8], [2, 8, 9, 2, 5, 9, 9, 2, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation1857 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation1857 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 4, 1, 0, 4], [3, 2, 1, 4, 4], [4, 2, 1, 0, 4], [3, 2, 4, 0, 4], [3, 2, 1, 0, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation1031 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation1031 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 0, 4, 0, 0, 0, 0, 4, 5], [6, 1, 4, 6, 1, 1, 1, 1, 6, 6], [3, 4, 2, 2, 2, 4, 2, 2, 2, 4], [3, 3, 3, 3, 3, 3, 3, 3, 3, 4], [6, 6, 6, 6, 4, 4, 4, 4, 6, 6], [2, 5, 5, 5, 5, 5, 2, 2, 2, 2], [6, 5, 6, 5, 6, 6, 6, 5, 6, 5], [7, 5, 7, 5, 5, 7, 7, 7, 7, 8], [8, 8, 8, 5, 5, 8, 8, 8, 8, 8], [6, 6, 6, 9, 6, 9, 9, 6, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation3306 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation3306 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 2, 3, 3, 0], [3, 2, 1, 3, 0], [4, 2, 1, 3, 3], [4, 2, 1, 3, 0], [4, 3, 1, 3, 0]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation1631 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation1631 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 0, 4, 0, 4, 0, 9, 0, 0], [5, 1, 1, 5, 5, 1, 5, 1, 5, 5], [3, 2, 2, 2, 2, 2, 9, 8, 2, 2], [8, 8, 9, 3, 3, 3, 9, 8, 3, 3], [8, 9, 9, 9, 4, 4, 9, 9, 4, 4], [7, 5, 1, 1, 5, 5, 5, 5, 5, 1], [2, 9, 6, 6, 2, 2, 6, 3, 6, 6], [6, 7, 7, 9, 7, 9, 7, 7, 7, 7], [5, 8, 5, 5, 5, 8, 5, 8, 8, 5], [4, 9, 9, 8, 9, 9, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation3343 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation3343 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 2, 3, 3, 0], [3, 2, 1, 3, 0], [4, 2, 1, 3, 3], [4, 2, 1, 3, 0], [4, 3, 1, 3, 0]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation3458 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation3458 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 0, 4, 0, 4, 4, 4, 4, 4], [8, 1, 8, 1, 8, 8, 1, 1, 1, 8], [3, 2, 2, 2, 3, 2, 2, 2, 2, 2], [7, 6, 9, 3, 7, 7, 3, 3, 9, 3], [2, 2, 4, 4, 4, 2, 2, 4, 2, 4], [8, 5, 5, 5, 5, 5, 5, 5, 5, 5], [7, 9, 9, 6, 7, 7, 6, 6, 9, 6], [3, 3, 3, 7, 3, 3, 7, 7, 9, 7], [7, 6, 6, 8, 7, 7, 8, 8, 8, 8], [7, 6, 6, 9, 7, 3, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation3880 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation3880 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[2, 3, 0, 4, 4], [4, 3, 0, 1, 4], [2, 4, 0, 1, 4], [2, 3, 4, 1, 4], [2, 3, 0, 1, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation822 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation822 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 0, 4, 0, 0, 0, 9, 9, 0], [6, 1, 1, 1, 6, 6, 1, 1, 1, 1], [3, 2, 2, 2, 2, 2, 9, 2, 2, 2], [8, 3, 8, 3, 3, 8, 3, 8, 3, 1], [6, 4, 1, 4, 4, 4, 4, 5, 5, 6], [6, 5, 1, 5, 1, 5, 5, 5, 1, 1], [3, 6, 1, 6, 1, 6, 6, 6, 6, 1], [9, 7, 9, 7, 7, 7, 3, 7, 7, 7], [6, 8, 1, 8, 1, 1, 8, 8, 8, 1], [4, 9, 4, 5, 9, 9, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation4067 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation4067 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[2, 4, 0, 1, 4], [2, 3, 4, 1, 4], [2, 3, 0, 4, 4], [4, 3, 0, 1, 4], [2, 3, 0, 1, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation1027 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation1027 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 0, 3, 0, 5, 0, 5, 5, 5, 5], [2, 1, 1, 7, 7, 7, 7, 1, 1, 7], [2, 7, 2, 7, 2, 7, 4, 2, 2, 7], [3, 4, 0, 3, 3, 3, 3, 3, 3, 7], [4, 4, 4, 4, 4, 4, 4, 4, 4, 4], [5, 0, 0, 5, 5, 5, 5, 5, 5, 5], [4, 4, 4, 4, 6, 4, 6, 4, 4, 4], [8, 8, 8, 8, 8, 8, 7, 7, 7, 7], [9, 9, 9, 9, 9, 9, 9, 9, 8, 8], [8, 8, 8, 8, 8, 8, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation4118 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation4118 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 2, 4, 0, 4], [4, 2, 1, 0, 4], [3, 2, 1, 4, 4], [3, 4, 1, 0, 4], [3, 2, 1, 0, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation824 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation824 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 4, 0, 0, 4, 0, 0, 3, 7], [2, 1, 1, 2, 2, 1, 2, 2, 2, 2], [5, 5, 2, 2, 2, 2, 5, 2, 2, 2], [3, 3, 3, 3, 2, 3, 3, 3, 3, 3], [3, 4, 4, 4, 4, 3, 3, 3, 4, 3], [9, 9, 9, 5, 5, 5, 5, 4, 5, 5], [3, 4, 6, 6, 6, 3, 6, 3, 3, 3], [7, 3, 7, 7, 7, 7, 3, 7, 7, 3], [7, 7, 8, 8, 7, 7, 3, 8, 8, 3], [6, 6, 6, 9, 9, 9, 9, 4, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation4128 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation4128 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 2, 2, 0, 4], [2, 1, 2, 4, 4], [3, 1, 2, 0, 4], [3, 4, 2, 0, 4], [3, 1, 2, 0, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation1032 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation1032 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 9, 0, 4, 0, 2, 9, 2, 9, 0], [1, 1, 3, 1, 8, 8, 1, 1, 1, 8], [2, 9, 2, 2, 2, 2, 9, 2, 9, 2], [3, 0, 3, 3, 3, 3, 4, 3, 4, 3], [4, 5, 4, 4, 4, 4, 5, 4, 5, 4], [4, 4, 4, 5, 5, 5, 4, 5, 4, 4], [5, 5, 6, 6, 6, 6, 6, 6, 5, 6], [7, 0, 7, 4, 7, 7, 4, 7, 9, 7], [6, 6, 6, 6, 8, 8, 8, 8, 8, 8], [2, 2, 9, 2, 2, 2, 9, 2, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation4155 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation4155 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 2, 2, 0, 4], [2, 1, 2, 2, 4], [3, 1, 2, 0, 4], [3, 4, 2, 0, 4], [3, 1, 2, 0, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation1225 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation1225 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 0, 4, 0, 4, 0, 4, 4, 4], [3, 1, 3, 1, 1, 3, 3, 3, 3, 3], [3, 6, 2, 2, 2, 2, 2, 6, 2, 4], [4, 3, 4, 3, 3, 3, 3, 4, 4, 4], [6, 6, 6, 6, 4, 4, 4, 4, 4, 6], [8, 5, 8, 8, 8, 5, 8, 5, 5, 5], [5, 5, 5, 5, 5, 6, 6, 6, 6, 6], [4, 7, 4, 4, 7, 4, 7, 7, 4, 4], [7, 7, 7, 7, 8, 7, 8, 8, 8, 8], [6, 6, 6, 6, 6, 9, 9, 9, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1904_not_implies_Equation4291 : ∃ (G: Type) (_: Magma G), Equation1904 G ∧ ¬ Equation4291 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 2, 3, 3, 0], [3, 2, 1, 3, 0], [4, 2, 1, 3, 3], [4, 2, 1, 3, 0], [4, 3, 1, 3, 0]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation829 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation829 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 0, 0, 9, 6, 0, 0, 0, 0], [6, 1, 6, 6, 6, 6, 1, 6, 6, 6], [2, 4, 2, 5, 2, 2, 2, 2, 2, 2], [9, 3, 9, 3, 5, 3, 9, 9, 9, 3], [4, 9, 4, 9, 4, 9, 9, 4, 4, 4], [9, 5, 9, 6, 9, 5, 5, 9, 9, 5], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [7, 8, 8, 8, 7, 8, 7, 7, 7, 8], [8, 4, 8, 7, 8, 8, 4, 8, 8, 8], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1924_not_implies_Equation1109 : ∃ (G: Type) (_: Magma G), Equation1924 G ∧ ¬ Equation1109 G :=
+  ⟨Fin 7, ⟨memoFinOp fun x y => [[2, 6, 0, 3, 1, 5, 4], [4, 1, 3, 5, 6, 2, 0], [2, 1, 0, 6, 4, 3, 5], [1, 4, 5, 3, 0, 6, 2], [6, 0, 3, 5, 4, 2, 1], [1, 4, 6, 2, 0, 5, 3], [1, 4, 3, 5, 0, 2, 6]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation2452 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation2452 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 0, 0, 2, 0, 0, 0, 0, 0], [1, 1, 8, 7, 8, 8, 7, 1, 1, 1], [2, 2, 2, 1, 6, 6, 2, 2, 2, 1], [9, 9, 4, 3, 3, 3, 3, 9, 3, 3], [8, 5, 5, 5, 4, 4, 5, 5, 4, 5], [8, 8, 8, 5, 8, 5, 5, 5, 5, 5], [6, 6, 6, 6, 1, 0, 6, 0, 6, 6], [9, 9, 9, 7, 9, 9, 7, 7, 9, 7], [8, 9, 8, 8, 9, 8, 8, 8, 8, 8], [9, 9, 6, 6, 6, 6, 9, 9, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1924_not_implies_Equation4118 : ∃ (G: Type) (_: Magma G), Equation1924 G ∧ ¬ Equation4118 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 1, 0, 4, 5, 3], [2, 1, 0, 4, 5, 3], [2, 3, 0, 5, 4, 1], [2, 5, 0, 3, 1, 4], [2, 3, 0, 5, 4, 1], [2, 4, 0, 1, 3, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation1227 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation1227 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 0, 0, 5, 0, 0, 0, 3, 3], [5, 1, 5, 5, 5, 1, 1, 1, 5, 5], [4, 4, 2, 4, 2, 6, 2, 2, 2, 4], [3, 3, 4, 3, 3, 7, 3, 3, 3, 7], [6, 6, 4, 6, 4, 6, 4, 6, 6, 6], [6, 5, 5, 6, 5, 5, 5, 5, 5, 7], [2, 2, 6, 2, 6, 2, 6, 2, 2, 2], [7, 7, 0, 7, 1, 7, 1, 7, 7, 8], [8, 8, 0, 8, 1, 8, 1, 8, 8, 8], [9, 9, 4, 9, 9, 4, 9, 0, 0, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1993_not_implies_Equation1020 : ∃ (G: Type) (_: Magma G), Equation1993 G ∧ ¬ Equation1020 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[1, 2, 4, 3, 0], [2, 1, 0, 4, 3], [3, 0, 1, 2, 4], [0, 4, 3, 1, 2], [4, 3, 2, 0, 1]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1033_not_implies_Equation831 : ∃ (G: Type) (_: Magma G), Equation1033 G ∧ ¬ Equation831 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 4, 9, 7, 0, 6, 0, 0, 4, 0], [7, 1, 7, 7, 7, 1, 1, 1, 1, 7], [2, 8, 2, 0, 2, 8, 8, 2, 2, 2], [3, 8, 8, 3, 3, 8, 8, 8, 3, 8], [5, 4, 9, 6, 4, 4, 4, 4, 4, 4], [9, 5, 5, 1, 5, 5, 8, 5, 5, 5], [6, 6, 9, 6, 9, 6, 6, 9, 6, 6], [6, 6, 5, 6, 6, 7, 7, 7, 6, 7], [4, 4, 4, 4, 8, 8, 8, 4, 8, 8], [9, 9, 9, 1, 9, 1, 1, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1993_not_implies_Equation1223 : ∃ (G: Type) (_: Magma G), Equation1993 G ∧ ¬ Equation1223 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[1, 2, 4, 3, 0], [2, 1, 0, 4, 3], [3, 0, 1, 2, 4], [0, 4, 3, 1, 2], [4, 3, 2, 0, 1]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1443_not_implies_Equation3521 : ∃ (G: Type) (_: Magma G), Equation1443 G ∧ ¬ Equation3521 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 2, 7, 5, 5, 7, 7, 7, 7, 7], [3, 3, 9, 8, 8, 6, 8, 8, 8, 8], [0, 0, 9, 0, 9, 6, 0, 0, 0, 0], [4, 1, 1, 5, 1, 1, 4, 5, 1, 1], [3, 3, 3, 6, 8, 6, 6, 6, 6, 8], [3, 3, 9, 3, 3, 6, 3, 0, 3, 3], [2, 5, 5, 5, 5, 5, 4, 5, 1, 4], [9, 9, 9, 0, 9, 9, 9, 0, 9, 9], [1, 4, 1, 4, 4, 1, 4, 1, 1, 1], [2, 2, 2, 5, 2, 2, 7, 2, 1, 7]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1993_not_implies_Equation2238 : ∃ (G: Type) (_: Magma G), Equation1993 G ∧ ¬ Equation2238 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[1, 2, 3, 0, 4], [2, 1, 0, 4, 3], [4, 0, 1, 3, 2], [3, 4, 2, 1, 0], [0, 3, 4, 2, 1]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation910_not_implies_Equation513 : ∃ (G: Type) (_: Magma G), Equation910 G ∧ ¬ Equation513 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[4, 1, 9, 3, 0, 5, 6, 8, 7, 2], [2, 9, 3, 0, 1, 8, 4, 5, 7, 6], [0, 7, 4, 9, 2, 5, 6, 1, 8, 3], [8, 5, 1, 7, 3, 2, 4, 6, 9, 0], [0, 1, 2, 5, 4, 3, 6, 7, 8, 9], [0, 1, 7, 3, 5, 4, 6, 2, 9, 8], [0, 9, 2, 7, 6, 5, 4, 3, 8, 1], [2, 1, 0, 3, 7, 9, 6, 4, 8, 5], [0, 1, 2, 3, 8, 6, 5, 9, 4, 7], [7, 1, 6, 5, 9, 3, 2, 0, 8, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1993_not_implies_Equation2441 : ∃ (G: Type) (_: Magma G), Equation1993 G ∧ ¬ Equation2441 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[1, 2, 3, 0, 4], [2, 1, 0, 4, 3], [4, 0, 1, 3, 2], [3, 4, 2, 1, 0], [0, 3, 4, 2, 1]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation910_not_implies_Equation1861 : ∃ (G: Type) (_: Magma G), Equation910 G ∧ ¬ Equation1861 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 8, 3, 5, 4, 9, 7, 1, 6, 2], [6, 2, 1, 7, 5, 3, 8, 0, 9, 4], [5, 1, 2, 9, 6, 8, 3, 4, 7, 0], [9, 0, 4, 8, 7, 2, 1, 5, 3, 6], [4, 3, 8, 6, 0, 7, 9, 2, 5, 1], [2, 7, 9, 0, 1, 6, 5, 3, 4, 8], [1, 9, 7, 4, 2, 5, 6, 8, 0, 3], [8, 6, 5, 1, 3, 0, 4, 9, 2, 7], [7, 4, 0, 3, 9, 1, 2, 6, 8, 5], [3, 5, 6, 2, 8, 4, 0, 7, 1, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1993_not_implies_Equation2865 : ∃ (G: Type) (_: Magma G), Equation1993 G ∧ ¬ Equation2865 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 0, 2, 4, 1], [1, 3, 0, 2, 4], [0, 4, 3, 1, 2], [4, 2, 1, 3, 0], [2, 1, 4, 0, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation3727 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation3727 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 3, 7, 1, 0, 7, 8, 0, 0, 8], [4, 8, 8, 1, 0, 4, 4, 1, 1, 8], [4, 3, 8, 1, 5, 4, 4, 2, 2, 8], [4, 3, 8, 7, 5, 4, 4, 3, 3, 8], [4, 3, 8, 1, 8, 4, 4, 4, 4, 8], [8, 3, 8, 1, 5, 8, 7, 5, 5, 8], [7, 3, 8, 1, 6, 7, 7, 6, 6, 8], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [4, 3, 8, 1, 6, 4, 4, 9, 9, 8]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1993_not_implies_Equation2940 : ∃ (G: Type) (_: Magma G), Equation1993 G ∧ ¬ Equation2940 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 1, 0, 4, 2], [0, 3, 4, 2, 1], [2, 0, 3, 1, 4], [4, 2, 1, 3, 0], [1, 4, 2, 0, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1046 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1046 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 6, 0, 7, 5, 6, 5, 0, 0, 8], [2, 7, 3, 2, 1, 8, 1, 1, 1, 7], [2, 6, 7, 2, 1, 6, 5, 2, 2, 8], [7, 4, 3, 8, 5, 6, 5, 3, 3, 7], [2, 4, 0, 2, 8, 4, 7, 4, 4, 7], [2, 7, 3, 2, 5, 7, 5, 5, 5, 8], [2, 6, 0, 2, 8, 6, 7, 6, 6, 7], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [2, 6, 0, 2, 1, 4, 5, 9, 9, 7]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1993_not_implies_Equation3068 : ∃ (G: Type) (_: Magma G), Equation1993 G ∧ ¬ Equation3068 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 2, 0, 1, 4], [4, 3, 2, 0, 1], [2, 1, 3, 4, 0], [1, 0, 4, 3, 2], [0, 4, 1, 2, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1245 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1245 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 7, 4, 0, 2, 6, 5, 1, 0, 8], [3, 8, 1, 0, 8, 1, 8, 1, 1, 8], [3, 2, 8, 0, 2, 2, 8, 8, 2, 8], [3, 7, 4, 8, 2, 6, 5, 1, 3, 8], [3, 5, 4, 0, 8, 1, 5, 1, 4, 8], [3, 5, 5, 0, 8, 8, 5, 8, 5, 8], [3, 2, 1, 0, 2, 6, 8, 1, 6, 8], [3, 7, 5, 0, 2, 2, 5, 8, 7, 8], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [3, 7, 4, 0, 2, 6, 5, 1, 9, 8]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1993_not_implies_Equation429 : ∃ (G: Type) (_: Magma G), Equation1993 G ∧ ¬ Equation429 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 4, 2, 1, 0], [2, 3, 1, 0, 4], [0, 2, 3, 4, 1], [1, 0, 4, 3, 2], [4, 1, 0, 2, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation3864 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation3864 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 3, 0, 4, 3, 0, 2, 2, 2, 2], [5, 2, 1, 1, 2, 0, 2, 2, 2, 2], [2, 2, 2, 2, 2, 2, 2, 2, 2, 2], [5, 3, 3, 2, 3, 0, 2, 2, 2, 2], [5, 2, 4, 4, 2, 0, 2, 2, 2, 2], [5, 3, 5, 1, 3, 2, 2, 2, 2, 2], [5, 3, 6, 1, 3, 0, 2, 2, 2, 2], [5, 3, 7, 1, 3, 0, 2, 2, 2, 2], [5, 3, 8, 1, 3, 0, 2, 2, 2, 2], [5, 3, 9, 1, 3, 0, 2, 2, 2, 2]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1993_not_implies_Equation4435 : ∃ (G: Type) (_: Magma G), Equation1993 G ∧ ¬ Equation4435 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 0, 2, 4, 1], [1, 3, 0, 2, 4], [0, 4, 3, 1, 2], [4, 2, 1, 3, 0], [2, 1, 4, 0, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation3931 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation3931 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 3, 4, 0, 5, 4, 0, 6, 3, 3], [3, 3, 4, 1, 5, 4, 1, 6, 3, 3], [3, 6, 3, 2, 2, 3, 2, 6, 3, 3], [3, 3, 3, 3, 3, 3, 3, 3, 3, 3], [3, 3, 4, 4, 6, 4, 4, 6, 3, 3], [3, 6, 3, 5, 5, 3, 5, 3, 3, 3], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [3, 6, 4, 7, 2, 4, 7, 3, 3, 3], [3, 6, 4, 8, 2, 4, 8, 3, 3, 3], [3, 6, 4, 9, 2, 4, 9, 3, 6, 3]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1993_not_implies_Equation632 : ∃ (G: Type) (_: Magma G), Equation1993 G ∧ ¬ Equation632 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 1, 0, 4, 2], [0, 3, 4, 2, 1], [2, 0, 3, 1, 4], [4, 2, 1, 3, 0], [1, 4, 2, 0, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1261 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1261 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 3, 4, 6, 2, 0, 7, 6, 0, 8], [5, 8, 4, 1, 2, 0, 8, 1, 1, 8], [5, 3, 8, 6, 2, 0, 7, 6, 2, 8], [5, 3, 4, 8, 2, 0, 3, 8, 3, 8], [5, 7, 4, 1, 8, 0, 7, 1, 4, 8], [5, 7, 4, 6, 2, 8, 7, 6, 5, 8], [5, 8, 4, 6, 2, 0, 8, 6, 6, 8], [5, 7, 4, 8, 2, 0, 7, 8, 7, 8], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [5, 3, 4, 1, 2, 0, 3, 6, 9, 8]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation1993_not_implies_Equation707 : ∃ (G: Type) (_: Magma G), Equation1993 G ∧ ¬ Equation707 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 0, 2, 4, 1], [1, 3, 0, 2, 4], [0, 4, 3, 1, 2], [4, 2, 1, 3, 0], [2, 1, 4, 0, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation837 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation837 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 7, 6, 0, 5, 6, 2, 0, 0, 8], [3, 8, 4, 0, 2, 6, 5, 1, 1, 8], [3, 8, 8, 0, 2, 7, 2, 2, 2, 8], [3, 8, 4, 8, 5, 4, 2, 3, 3, 8], [3, 8, 4, 0, 8, 4, 7, 4, 4, 8], [3, 8, 8, 0, 5, 8, 5, 5, 5, 8], [3, 8, 6, 0, 7, 6, 8, 6, 6, 8], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [3, 8, 4, 0, 5, 4, 5, 9, 9, 8]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2045_not_implies_Equation2060 : ∃ (G: Type) (_: Magma G), Equation2045 G ∧ ¬ Equation2060 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 2, 2, 0, 2, 4], [3, 3, 3, 3, 3, 3], [4, 0, 4, 4, 4, 2], [5, 5, 5, 5, 5, 5], [0, 4, 0, 2, 0, 0], [1, 1, 1, 1, 1, 1]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1230 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1230 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 3, 5, 1, 0, 6, 5, 5, 0, 8], [4, 8, 1, 1, 0, 8, 1, 1, 1, 8], [4, 2, 8, 8, 0, 2, 8, 8, 2, 8], [4, 3, 8, 8, 0, 3, 8, 8, 3, 8], [4, 3, 5, 5, 8, 3, 5, 5, 4, 8], [4, 8, 5, 5, 0, 8, 5, 5, 5, 8], [4, 6, 8, 8, 0, 6, 8, 8, 6, 8], [4, 7, 8, 8, 0, 7, 8, 8, 7, 8], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [4, 3, 5, 5, 0, 2, 1, 5, 9, 8]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2045_not_implies_Equation255 : ∃ (G: Type) (_: Magma G), Equation2045 G ∧ ¬ Equation255 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 1, 5, 1, 5, 1], [2, 4, 4, 2, 4, 4], [3, 0, 3, 3, 3, 0], [5, 5, 1, 5, 1, 5], [0, 3, 0, 0, 0, 3], [4, 2, 2, 4, 2, 2]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation105 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation105 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 3, 0, 4, 3, 0, 0, 0, 0, 6], [2, 5, 0, 1, 7, 1, 1, 1, 1, 5], [2, 3, 5, 1, 3, 2, 2, 2, 2, 5], [2, 3, 0, 5, 3, 3, 3, 3, 3, 5], [2, 5, 0, 4, 6, 4, 4, 4, 4, 6], [5, 5, 5, 5, 5, 5, 5, 5, 5, 5], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [2, 3, 0, 1, 3, 9, 9, 9, 9, 8]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2045_not_implies_Equation2644 : ∃ (G: Type) (_: Magma G), Equation2045 G ∧ ¬ Equation2644 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 4, 1, 1, 4, 1], [2, 2, 5, 2, 2, 5], [3, 0, 0, 3, 0, 0], [4, 1, 4, 4, 1, 4], [5, 5, 2, 5, 5, 2], [0, 3, 3, 0, 3, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1271 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1271 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 6, 4, 8, 2, 0, 7, 6, 0, 8], [5, 8, 4, 5, 2, 3, 1, 8, 1, 8], [5, 6, 8, 5, 2, 0, 7, 6, 2, 8], [8, 6, 4, 8, 2, 3, 1, 6, 3, 8], [5, 6, 4, 5, 8, 0, 1, 6, 4, 8], [5, 6, 4, 5, 2, 8, 1, 6, 5, 8], [5, 6, 4, 5, 2, 0, 8, 6, 6, 8], [5, 8, 4, 5, 2, 0, 7, 8, 7, 8], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [5, 6, 4, 5, 2, 0, 7, 6, 9, 8]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2045_not_implies_Equation2847 : ∃ (G: Type) (_: Magma G), Equation2045 G ∧ ¬ Equation2847 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 1, 4, 1, 1, 4], [2, 5, 5, 2, 5, 5], [3, 0, 3, 3, 0, 3], [4, 4, 1, 4, 4, 1], [5, 2, 2, 5, 2, 2], [0, 3, 0, 0, 3, 0]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation833 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation833 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 3, 0, 1, 5, 1, 0, 6, 0, 6], [2, 6, 7, 1, 6, 1, 1, 2, 0, 6], [2, 5, 6, 4, 3, 1, 2, 2, 6, 6], [2, 3, 7, 6, 3, 6, 3, 8, 0, 6], [2, 6, 0, 4, 6, 4, 4, 2, 0, 6], [8, 5, 0, 6, 5, 6, 5, 8, 0, 6], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [6, 3, 7, 4, 3, 4, 7, 6, 7, 6], [8, 5, 6, 4, 3, 4, 8, 8, 6, 6], [8, 5, 7, 1, 5, 1, 9, 2, 0, 6]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2045_not_implies_Equation3253 : ∃ (G: Type) (_: Magma G), Equation2045 G ∧ ¬ Equation3253 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 2, 2, 1, 1, 1], [5, 5, 5, 5, 4, 4], [4, 4, 4, 4, 5, 5], [2, 1, 1, 2, 2, 2], [0, 3, 3, 0, 3, 3], [3, 0, 0, 3, 0, 0]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1042 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1042 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 0, 3, 4, 3, 6, 0, 0, 0, 6], [1, 7, 3, 4, 3, 1, 1, 1, 6, 7], [1, 5, 7, 2, 7, 1, 2, 2, 0, 7], [8, 5, 3, 7, 3, 1, 3, 3, 0, 7], [1, 5, 6, 4, 7, 8, 4, 4, 5, 7], [7, 5, 3, 4, 3, 7, 5, 5, 5, 7], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [8, 7, 3, 4, 3, 8, 8, 8, 6, 7], [1, 5, 3, 4, 3, 8, 9, 9, 0, 7]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2045_not_implies_Equation3456 : ∃ (G: Type) (_: Magma G), Equation2045 G ∧ ¬ Equation3456 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 3, 3, 3, 3, 1], [2, 4, 2, 4, 2, 2], [0, 0, 5, 0, 5, 0], [4, 2, 4, 2, 4, 4], [5, 5, 0, 5, 0, 5], [3, 1, 1, 1, 1, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1242 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1242 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 9, 0, 1, 0, 4, 0, 9, 6, 7], [2, 4, 0, 1, 1, 2, 1, 4, 2, 1], [2, 3, 6, 1, 2, 2, 2, 3, 2, 1], [2, 3, 8, 6, 3, 2, 3, 3, 2, 6], [4, 4, 4, 4, 4, 4, 4, 4, 4, 4], [6, 3, 5, 7, 5, 6, 5, 3, 6, 7], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [2, 4, 5, 7, 7, 2, 7, 6, 2, 7], [6, 9, 8, 1, 8, 6, 8, 9, 6, 1], [2, 9, 0, 6, 9, 2, 9, 9, 2, 6]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2045_not_implies_Equation4598 : ∃ (G: Type) (_: Magma G), Equation2045 G ∧ ¬ Equation4598 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 3, 1, 3, 1, 1], [2, 2, 4, 2, 4, 2], [5, 0, 0, 0, 0, 5], [4, 4, 2, 4, 2, 4], [0, 5, 5, 5, 5, 0], [3, 1, 3, 1, 3, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1264 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1264 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 4, 0, 6, 1, 6, 0, 0, 0, 8], [7, 8, 3, 7, 1, 7, 1, 5, 1, 8], [2, 4, 8, 2, 1, 2, 2, 8, 2, 8], [6, 4, 3, 6, 1, 8, 3, 3, 3, 8], [7, 4, 5, 7, 8, 2, 4, 0, 4, 8], [6, 4, 5, 6, 1, 6, 5, 5, 5, 8], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [7, 4, 8, 7, 1, 7, 7, 6, 7, 8], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [7, 4, 0, 2, 1, 2, 9, 0, 9, 8]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2045_not_implies_Equation4656 : ∃ (G: Type) (_: Magma G), Equation2045 G ∧ ¬ Equation4656 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 2, 2, 5, 0, 2], [4, 4, 4, 4, 4, 4], [5, 0, 5, 2, 5, 5], [1, 1, 1, 1, 1, 1], [3, 3, 3, 3, 3, 3], [0, 5, 0, 0, 2, 0]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1229 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1229 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 2, 5, 0, 5, 2, 0, 0, 0, 6], [3, 8, 1, 0, 1, 7, 1, 1, 1, 8], [3, 2, 7, 0, 8, 2, 2, 2, 2, 6], [3, 4, 5, 6, 1, 4, 3, 3, 3, 6], [3, 4, 6, 0, 6, 4, 4, 4, 4, 6], [3, 6, 5, 0, 5, 7, 5, 5, 5, 6], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [3, 4, 1, 0, 5, 2, 9, 9, 9, 6]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2061_not_implies_Equation2660 : ∃ (G: Type) (_: Magma G), Equation2061 G ∧ ¬ Equation2660 G :=
+  ⟨Fin 7, ⟨memoFinOp fun x y => [[3, 2, 3, 3, 3, 3, 3], [1, 1, 1, 1, 1, 1, 1], [6, 4, 2, 2, 5, 2, 2], [4, 6, 4, 4, 4, 4, 4], [0, 5, 0, 0, 0, 0, 0], [5, 3, 5, 6, 2, 5, 5], [2, 0, 6, 5, 6, 6, 6]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1260 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1260 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 7, 3, 6, 0, 6, 5, 0, 7, 7], [4, 7, 3, 6, 0, 6, 3, 1, 7, 7], [4, 7, 7, 2, 0, 2, 7, 2, 7, 7], [4, 7, 3, 7, 0, 7, 3, 3, 7, 7], [4, 7, 5, 6, 7, 2, 5, 4, 7, 7], [4, 7, 5, 7, 0, 7, 5, 5, 7, 7], [4, 7, 7, 6, 0, 6, 7, 6, 7, 7], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [4, 7, 5, 2, 0, 2, 3, 8, 7, 7], [4, 7, 5, 2, 0, 2, 3, 9, 7, 7]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation206_not_implies_Equation1841 : ∃ (G: Type) (_: Magma G), Equation206 G ∧ ¬ Equation1841 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 2, 3, 5, 3, 2], [4, 4, 4, 4, 4, 4], [5, 3, 2, 0, 2, 3], [2, 0, 5, 3, 5, 0], [1, 1, 1, 1, 1, 1], [3, 5, 0, 2, 0, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation3726 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation3726 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 3, 6, 1, 0, 6, 0, 6, 6, 6], [4, 6, 4, 1, 0, 4, 1, 6, 6, 6], [6, 3, 6, 1, 2, 6, 2, 6, 6, 6], [4, 3, 4, 6, 5, 4, 3, 6, 6, 6], [4, 3, 4, 1, 6, 4, 4, 6, 6, 6], [6, 3, 6, 1, 5, 6, 5, 6, 6, 6], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [4, 3, 4, 1, 5, 4, 7, 6, 6, 6], [4, 3, 4, 1, 5, 4, 8, 6, 6, 6], [4, 3, 4, 1, 5, 4, 9, 6, 6, 6]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation206_not_implies_Equation2247 : ∃ (G: Type) (_: Magma G), Equation206 G ∧ ¬ Equation2247 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 4, 3, 4, 5, 3], [2, 2, 2, 2, 2, 2], [1, 1, 1, 1, 1, 1], [5, 3, 4, 3, 0, 4], [3, 5, 0, 5, 4, 0], [4, 0, 5, 0, 3, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1239 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1239 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 3, 0, 1, 1, 0, 0, 0, 3, 0], [2, 7, 0, 1, 1, 0, 1, 1, 6, 1], [2, 3, 7, 1, 1, 6, 2, 2, 3, 2], [2, 3, 0, 6, 6, 0, 3, 3, 3, 3], [5, 4, 0, 7, 6, 0, 4, 4, 4, 4], [5, 3, 7, 1, 8, 7, 5, 5, 3, 5], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [2, 7, 0, 8, 8, 0, 8, 8, 6, 8], [9, 9, 9, 9, 9, 9, 9, 9, 9, 6]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation206_not_implies_Equation2444 : ∃ (G: Type) (_: Magma G), Equation206 G ∧ ¬ Equation2444 G :=
+  ⟨Fin 7, ⟨memoFinOp fun x y => [[2, 4, 2, 4, 5, 1, 4], [5, 1, 6, 2, 0, 4, 3], [0, 3, 0, 6, 3, 3, 1], [3, 6, 1, 3, 6, 6, 2], [1, 5, 4, 5, 4, 0, 5], [4, 0, 5, 0, 1, 5, 0], [6, 2, 3, 1, 2, 2, 6]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1265 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1265 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 5, 4, 0, 2, 1, 7, 0, 0, 8], [3, 8, 4, 0, 2, 1, 3, 1, 1, 8], [3, 5, 8, 6, 2, 1, 3, 2, 2, 8], [3, 5, 4, 8, 2, 1, 3, 3, 3, 8], [3, 5, 4, 0, 8, 1, 3, 4, 4, 8], [3, 5, 4, 6, 2, 8, 3, 5, 5, 8], [8, 5, 4, 6, 2, 1, 8, 6, 6, 8], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [3, 5, 4, 6, 2, 1, 3, 9, 9, 8]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation206_not_implies_Equation3319 : ∃ (G: Type) (_: Magma G), Equation206 G ∧ ¬ Equation3319 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 2, 5, 0, 2, 4], [3, 3, 3, 3, 3, 3], [4, 5, 2, 2, 5, 0], [1, 1, 1, 1, 1, 1], [5, 4, 0, 4, 4, 2], [2, 0, 4, 5, 0, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1052 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1052 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 0, 7, 4, 7, 6, 0, 2, 0, 8], [1, 6, 3, 4, 3, 1, 1, 2, 1, 6], [1, 5, 8, 2, 6, 1, 2, 2, 2, 6], [1, 5, 3, 6, 3, 1, 3, 6, 3, 6], [1, 5, 6, 4, 8, 1, 4, 4, 4, 6], [6, 5, 3, 4, 7, 6, 5, 4, 5, 8], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [1, 0, 7, 6, 7, 1, 7, 6, 7, 6], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [1, 5, 7, 4, 3, 1, 9, 4, 9, 6]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2066_not_implies_Equation2040 : ∃ (G: Type) (_: Magma G), Equation2066 G ∧ ¬ Equation2040 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 4, 0, 2, 4, 0], [2, 1, 3, 2, 1, 3], [2, 1, 0, 2, 1, 0], [5, 1, 3, 5, 1, 3], [5, 4, 0, 5, 4, 0], [5, 4, 3, 5, 4, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1263 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1263 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[4, 0, 3, 2, 0, 0, 0, 4, 0, 2], [1, 8, 3, 2, 1, 1, 4, 1, 1, 2], [1, 0, 4, 2, 2, 2, 7, 6, 2, 2], [6, 0, 3, 8, 3, 3, 0, 1, 3, 4], [4, 4, 4, 4, 4, 4, 4, 4, 4, 4], [5, 5, 5, 5, 5, 4, 5, 5, 5, 5], [6, 8, 9, 2, 6, 6, 4, 6, 6, 2], [4, 7, 3, 2, 7, 7, 7, 4, 7, 2], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [6, 0, 9, 8, 9, 9, 0, 1, 9, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2066_not_implies_Equation2043 : ∃ (G: Type) (_: Magma G), Equation2066 G ∧ ¬ Equation2043 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 1, 0, 1, 0, 2], [4, 1, 0, 1, 0, 4], [2, 3, 0, 3, 0, 2], [2, 3, 5, 3, 5, 2], [4, 1, 5, 1, 5, 4], [4, 3, 5, 3, 5, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation834 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation834 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 6, 4, 0, 1, 6, 1, 4, 0, 8], [3, 8, 8, 0, 1, 8, 1, 8, 1, 8], [3, 8, 8, 0, 2, 8, 2, 8, 2, 8], [3, 6, 6, 8, 5, 6, 5, 4, 3, 8], [3, 4, 4, 0, 8, 4, 8, 4, 4, 8], [3, 8, 8, 0, 5, 8, 5, 8, 5, 8], [3, 6, 6, 0, 8, 6, 8, 6, 6, 8], [3, 8, 8, 0, 7, 8, 7, 8, 7, 8], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [3, 6, 6, 0, 5, 6, 2, 4, 9, 8]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2066_not_implies_Equation2050 : ∃ (G: Type) (_: Magma G), Equation2066 G ∧ ¬ Equation2050 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[3, 1, 0, 0, 3, 1], [2, 1, 0, 0, 2, 1], [2, 1, 4, 4, 2, 1], [3, 5, 0, 0, 3, 5], [2, 5, 4, 4, 2, 5], [3, 5, 4, 4, 3, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1056 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1056 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 5, 7, 0, 7, 6, 5, 0, 7, 7], [3, 7, 7, 4, 3, 1, 7, 1, 7, 7], [3, 5, 7, 0, 3, 1, 5, 2, 7, 7], [3, 5, 7, 7, 3, 6, 5, 3, 7, 7], [7, 5, 7, 4, 7, 6, 5, 4, 7, 7], [3, 5, 7, 0, 3, 7, 5, 5, 7, 7], [3, 7, 7, 0, 3, 6, 7, 6, 7, 7], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [3, 5, 7, 0, 3, 1, 5, 8, 7, 7], [3, 5, 7, 0, 3, 1, 5, 9, 7, 7]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2066_not_implies_Equation2053 : ∃ (G: Type) (_: Magma G), Equation2066 G ∧ ¬ Equation2053 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[5, 1, 0, 5, 1, 0], [2, 1, 0, 2, 1, 0], [2, 1, 3, 2, 1, 3], [2, 4, 3, 2, 4, 3], [5, 4, 3, 5, 4, 3], [5, 4, 0, 5, 4, 0]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation3321 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation3321 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 3, 3, 0, 0, 6, 0, 6, 6, 6], [4, 6, 6, 1, 5, 4, 1, 6, 6, 6], [4, 6, 3, 2, 5, 4, 2, 6, 6, 6], [3, 3, 3, 3, 3, 3, 3, 3, 3, 3], [4, 3, 3, 4, 3, 4, 4, 6, 6, 6], [6, 3, 6, 5, 5, 3, 5, 6, 6, 6], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [4, 6, 3, 7, 5, 4, 7, 6, 6, 6], [4, 3, 3, 8, 5, 4, 8, 6, 6, 6], [4, 3, 3, 9, 5, 4, 9, 6, 6, 6]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2066_not_implies_Equation4599 : ∃ (G: Type) (_: Magma G), Equation2066 G ∧ ¬ Equation4599 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[3, 2, 2, 0, 3, 0], [3, 1, 1, 4, 3, 4], [5, 2, 2, 0, 5, 0], [3, 1, 1, 0, 3, 0], [5, 1, 1, 4, 5, 4], [5, 2, 2, 4, 5, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1043_not_implies_Equation1259 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1259 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 8, 3, 2, 0, 6, 8, 0, 1, 7], [4, 7, 3, 2, 0, 1, 7, 1, 1, 7], [4, 5, 7, 2, 0, 6, 5, 2, 6, 7], [4, 8, 3, 7, 0, 6, 8, 3, 1, 7], [4, 5, 3, 2, 7, 1, 5, 4, 1, 7], [4, 5, 3, 2, 0, 7, 5, 5, 7, 7], [4, 7, 3, 2, 0, 6, 7, 6, 6, 7], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [4, 8, 3, 2, 0, 7, 8, 8, 7, 7], [4, 5, 3, 2, 0, 1, 5, 9, 6, 7]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1043_not_implies_Equation1267 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1267 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 8, 6, 2, 1, 0, 2, 1, 1, 1], [5, 5, 3, 2, 1, 1, 2, 1, 1, 1], [5, 7, 5, 2, 1, 2, 2, 1, 1, 1], [5, 4, 3, 5, 1, 3, 5, 1, 1, 1], [5, 4, 3, 2, 5, 4, 2, 5, 5, 5], [5, 5, 5, 5, 5, 5, 5, 5, 5, 5], [5, 7, 6, 5, 1, 6, 5, 1, 1, 1], [5, 7, 6, 2, 5, 7, 2, 5, 5, 5], [5, 8, 6, 2, 5, 8, 2, 5, 5, 5], [5, 9, 6, 2, 5, 9, 2, 5, 5, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1043_not_implies_Equation1243 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1243 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 4, 0, 0, 1, 6, 0, 6, 6, 6], [3, 6, 5, 0, 1, 2, 1, 6, 6, 6], [2, 4, 6, 6, 1, 2, 2, 6, 6, 6], [3, 4, 6, 6, 1, 3, 3, 6, 6, 6], [3, 4, 5, 5, 6, 2, 4, 6, 6, 6], [6, 4, 5, 5, 1, 6, 5, 6, 6, 6], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [2, 4, 5, 5, 1, 2, 7, 6, 6, 6], [2, 4, 5, 5, 1, 2, 8, 6, 6, 6], [3, 4, 5, 5, 1, 2, 9, 6, 6, 6]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1043_not_implies_Equation3318 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation3318 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 2, 0, 0, 5, 0, 2, 2, 2, 2], [3, 5, 1, 4, 3, 1, 2, 2, 2, 2], [2, 2, 2, 2, 2, 2, 2, 2, 2, 2], [3, 2, 3, 5, 3, 3, 2, 2, 2, 2], [5, 5, 4, 4, 5, 4, 2, 2, 2, 2], [5, 5, 5, 5, 5, 5, 5, 5, 5, 5], [3, 5, 6, 4, 3, 6, 2, 2, 2, 2], [3, 5, 7, 4, 3, 7, 2, 2, 2, 2], [3, 2, 8, 4, 3, 8, 2, 2, 2, 2], [3, 2, 9, 4, 3, 9, 2, 2, 2, 2]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1043_not_implies_Equation1240 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation1240 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[9, 9, 5, 0, 2, 2, 2, 9, 9, 0], [3, 9, 5, 7, 2, 2, 2, 3, 9, 1], [3, 9, 9, 7, 2, 2, 2, 3, 9, 2], [3, 9, 4, 9, 2, 2, 2, 3, 9, 3], [3, 9, 4, 7, 9, 9, 9, 3, 9, 4], [3, 9, 5, 0, 9, 9, 9, 3, 9, 5], [3, 9, 6, 7, 9, 9, 9, 3, 9, 6], [9, 9, 5, 7, 2, 2, 2, 9, 9, 7], [3, 9, 5, 0, 2, 2, 2, 3, 9, 8], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1043_not_implies_Equation3724 : ∃ (G: Type) (_: Magma G), Equation1043 G ∧ ¬ Equation3724 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 2, 1, 0, 6, 0, 0, 0, 0, 8], [3, 6, 1, 4, 5, 0, 1, 1, 1, 6], [5, 2, 7, 4, 5, 0, 2, 2, 2, 6], [3, 2, 1, 8, 3, 8, 3, 3, 3, 6], [6, 2, 1, 4, 7, 4, 4, 4, 4, 6], [5, 2, 1, 6, 5, 6, 5, 5, 5, 6], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [5, 2, 1, 4, 5, 0, 9, 9, 9, 6]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3102_not_implies_Equation2087 : ∃ (G: Type) (_: Magma G), Equation3102 G ∧ ¬ Equation2087 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 8, 3, 1, 3, 8, 7, 6, 6], [2, 1, 6, 0, 4, 3, 3, 8, 6, 6], [3, 1, 2, 9, 1, 4, 3, 0, 6, 6], [4, 1, 6, 3, 5, 5, 6, 0, 6, 6], [0, 1, 6, 9, 4, 5, 3, 0, 6, 6], [6, 1, 9, 0, 4, 5, 3, 0, 6, 6], [4, 2, 2, 0, 5, 3, 6, 7, 8, 9], [3, 5, 6, 3, 5, 3, 6, 7, 6, 6], [3, 5, 2, 9, 1, 3, 6, 7, 8, 6], [6, 4, 2, 3, 5, 3, 3, 8, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3102_not_implies_Equation1238 : ∃ (G: Type) (_: Magma G), Equation3102 G ∧ ¬ Equation1238 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 8, 6, 3, 5, 4, 1, 2, 6, 8], [2, 1, 8, 3, 2, 5, 6, 2, 6, 8], [3, 1, 2, 0, 4, 1, 1, 7, 6, 8], [4, 1, 6, 3, 5, 6, 1, 4, 6, 4], [0, 3, 5, 1, 4, 5, 1, 7, 6, 9], [4, 3, 2, 0, 4, 5, 1, 4, 6, 8], [4, 3, 2, 1, 2, 5, 6, 4, 8, 8], [4, 3, 5, 1, 5, 5, 1, 7, 6, 8], [4, 1, 2, 0, 5, 1, 6, 7, 8, 9], [4, 3, 8, 0, 5, 6, 8, 8, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3102_not_implies_Equation2899 : ∃ (G: Type) (_: Magma G), Equation3102 G ∧ ¬ Equation2899 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 5, 1, 5, 6, 5, 1, 7, 8, 4], [2, 1, 2, 2, 8, 9, 5, 7, 5, 2], [3, 5, 2, 3, 6, 0, 5, 0, 9, 9], [4, 1, 2, 3, 6, 9, 5, 7, 5, 9], [0, 3, 3, 6, 4, 5, 5, 5, 8, 9], [0, 1, 1, 2, 4, 5, 6, 7, 8, 2], [0, 1, 9, 2, 4, 9, 6, 7, 9, 2], [0, 5, 9, 2, 6, 0, 6, 7, 9, 2], [0, 5, 1, 2, 4, 0, 5, 3, 8, 2], [6, 5, 2, 8, 5, 5, 7, 5, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3102_not_implies_Equation3065 : ∃ (G: Type) (_: Magma G), Equation3102 G ∧ ¬ Equation3065 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 1, 2, 3, 6, 3, 6, 6, 4], [3, 1, 2, 2, 3, 6, 3, 6, 6, 4], [1, 1, 2, 3, 3, 3, 5, 7, 6, 4], [4, 1, 4, 3, 4, 5, 6, 6, 6, 4], [0, 1, 2, 2, 4, 6, 5, 6, 6, 9], [4, 1, 1, 2, 3, 5, 6, 6, 6, 4], [0, 5, 1, 2, 3, 5, 6, 7, 8, 9], [4, 8, 1, 2, 3, 5, 3, 7, 6, 6], [6, 1, 4, 2, 3, 5, 3, 2, 8, 6], [4, 3, 1, 2, 3, 3, 3, 2, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3102_not_implies_Equation4080 : ∃ (G: Type) (_: Magma G), Equation3102 G ∧ ¬ Equation4080 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 1, 2, 1, 4, 5, 6, 7, 8, 6], [2, 1, 2, 2, 0, 0, 3, 0, 0, 6], [3, 1, 2, 3, 0, 0, 0, 0, 0, 6], [4, 2, 2, 3, 0, 0, 6, 0, 0, 6], [0, 5, 0, 3, 4, 0, 0, 0, 0, 6], [6, 1, 0, 2, 0, 5, 0, 0, 0, 6], [0, 0, 0, 2, 0, 0, 6, 0, 8, 9], [0, 0, 1, 2, 0, 0, 0, 7, 0, 6], [0, 0, 1, 4, 0, 0, 0, 0, 8, 6], [8, 2, 0, 4, 0, 0, 0, 0, 0, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3102_not_implies_Equation2696 : ∃ (G: Type) (_: Magma G), Equation3102 G ∧ ¬ Equation2696 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 1, 2, 3, 4, 5, 2, 7, 8, 7], [2, 1, 0, 0, 4, 0, 2, 7, 0, 7], [3, 0, 2, 4, 0, 0, 6, 1, 8, 7], [4, 9, 0, 3, 0, 0, 2, 0, 7, 7], [0, 0, 0, 3, 4, 0, 2, 1, 0, 7], [0, 0, 0, 0, 4, 5, 2, 1, 0, 7], [0, 0, 0, 0, 0, 0, 6, 1, 0, 7], [0, 9, 0, 5, 1, 0, 0, 7, 8, 9], [0, 9, 0, 9, 0, 0, 2, 1, 8, 9], [3, 1, 1, 0, 0, 3, 0, 0, 2, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3102_not_implies_Equation3139 : ∃ (G: Type) (_: Magma G), Equation3102 G ∧ ¬ Equation3139 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 3, 3, 1, 5, 6, 1, 8, 6], [2, 1, 2, 0, 4, 0, 0, 5, 0, 6], [3, 3, 2, 0, 4, 0, 0, 5, 0, 6], [4, 1, 2, 3, 2, 0, 0, 5, 6, 6], [0, 1, 3, 3, 4, 0, 0, 5, 0, 6], [0, 3, 2, 3, 1, 5, 0, 7, 0, 6], [0, 3, 3, 0, 1, 0, 6, 7, 8, 9], [5, 3, 1, 5, 1, 0, 0, 7, 6, 6], [4, 3, 1, 0, 2, 0, 0, 5, 8, 6], [4, 1, 1, 5, 1, 0, 0, 5, 0, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3102_not_implies_Equation3176 : ∃ (G: Type) (_: Magma G), Equation3102 G ∧ ¬ Equation3176 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 2, 8, 4, 3, 9, 4, 2, 8], [3, 1, 3, 5, 6, 3, 9, 5, 2, 8], [1, 4, 2, 6, 0, 3, 9, 5, 8, 8], [4, 1, 2, 3, 0, 5, 9, 7, 2, 8], [0, 1, 5, 5, 4, 3, 9, 7, 2, 8], [0, 1, 2, 3, 6, 5, 9, 7, 8, 8], [4, 1, 0, 3, 4, 3, 6, 3, 5, 8], [4, 1, 3, 6, 4, 5, 9, 7, 5, 8], [4, 1, 0, 3, 0, 3, 9, 7, 8, 9], [4, 1, 3, 5, 7, 7, 6, 8, 2, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3355_not_implies_Equation4131 : ∃ (G: Type) (_: Magma G), Equation3355 G ∧ ¬ Equation4131 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 2, 7, 9, 6, 7, 8, 5, 6, 3], [5, 3, 3, 3, 6, 7, 8, 2, 8, 4], [7, 3, 2, 9, 3, 6, 6, 7, 8, 3], [9, 3, 9, 3, 6, 0, 4, 7, 4, 0], [6, 8, 3, 6, 9, 4, 3, 5, 3, 4], [7, 3, 6, 0, 4, 7, 6, 0, 8, 0], [8, 8, 6, 4, 3, 6, 2, 2, 0, 9], [5, 3, 7, 7, 9, 0, 2, 2, 2, 0], [6, 8, 8, 4, 3, 8, 0, 2, 2, 4], [3, 8, 3, 0, 4, 0, 9, 0, 4, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3951_not_implies_Equation3253 : ∃ (G: Type) (_: Magma G), Equation3951 G ∧ ¬ Equation3253 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 3, 2, 7, 7, 7, 6, 7, 1], [7, 5, 7, 5, 6, 1, 4, 9, 8, 7], [1, 9, 6, 9, 9, 7, 2, 1, 9, 3], [7, 5, 7, 5, 8, 3, 8, 9, 4, 7], [7, 6, 9, 8, 6, 4, 4, 7, 8, 9], [2, 1, 2, 3, 4, 5, 6, 7, 8, 2], [7, 4, 7, 8, 4, 6, 5, 2, 8, 7], [6, 7, 1, 7, 7, 2, 7, 6, 7, 9], [7, 8, 9, 4, 8, 8, 8, 7, 4, 9], [3, 2, 3, 2, 9, 7, 9, 9, 9, 3]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation428_not_implies_Equation837 : ∃ (G: Type) (_: Magma G), Equation428 G ∧ ¬ Equation837 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 4, 0, 0, 6, 0, 0, 6, 4], [3, 1, 4, 1, 1, 1, 1, 6, 1, 1], [6, 8, 2, 6, 2, 6, 2, 6, 2, 8], [3, 3, 6, 3, 1, 1, 3, 3, 9, 3], [4, 4, 4, 1, 4, 4, 0, 0, 4, 4], [6, 5, 6, 1, 5, 5, 5, 6, 1, 1], [6, 6, 6, 6, 5, 6, 6, 6, 6, 3], [7, 3, 6, 7, 0, 6, 7, 7, 6, 3], [6, 8, 8, 1, 8, 1, 8, 6, 8, 8], [3, 9, 8, 9, 9, 1, 8, 3, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation428_not_implies_Equation824 : ∃ (G: Type) (_: Magma G), Equation428 G ∧ ¬ Equation824 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 4, 0, 0, 0, 4, 0, 4, 7], [7, 1, 7, 1, 1, 7, 1, 1, 1, 1], [7, 7, 2, 7, 2, 2, 7, 2, 4, 7], [3, 3, 7, 3, 1, 7, 7, 3, 1, 3], [4, 4, 4, 0, 4, 4, 4, 4, 4, 4], [5, 4, 5, 7, 5, 5, 7, 5, 4, 4], [7, 6, 4, 7, 6, 4, 6, 6, 4, 6], [7, 7, 7, 7, 7, 7, 7, 7, 9, 7], [4, 8, 4, 1, 8, 4, 4, 4, 8, 8], [3, 9, 7, 9, 9, 7, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation428_not_implies_Equation3723 : ∃ (G: Type) (_: Magma G), Equation428 G ∧ ¬ Equation3723 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 4, 0, 0, 0, 0, 0, 6, 0], [9, 1, 7, 1, 9, 3, 9, 1, 9, 1], [5, 7, 2, 5, 2, 2, 2, 2, 2, 8], [3, 3, 7, 3, 0, 3, 5, 3, 9, 3], [4, 7, 4, 5, 4, 4, 4, 4, 4, 4], [5, 9, 5, 5, 5, 5, 5, 0, 9, 5], [6, 9, 6, 0, 6, 6, 6, 6, 6, 6], [7, 7, 7, 7, 7, 3, 7, 7, 7, 4], [7, 7, 8, 9, 8, 9, 8, 8, 8, 8], [9, 9, 5, 9, 9, 9, 9, 3, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1223 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1223 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 3, 0, 2, 7, 5, 9, 4, 6, 8], [2, 9, 1, 3, 8, 6, 7, 5, 4, 0], [3, 0, 2, 5, 6, 8, 4, 9, 7, 1], [5, 7, 3, 0, 9, 2, 1, 6, 8, 4], [7, 8, 6, 9, 4, 1, 2, 3, 0, 5], [9, 4, 5, 8, 1, 3, 0, 7, 2, 6], [8, 5, 4, 7, 2, 9, 6, 0, 1, 3], [6, 1, 7, 4, 3, 0, 5, 8, 9, 2], [4, 6, 8, 1, 0, 7, 3, 2, 5, 9], [0, 2, 9, 6, 5, 4, 8, 1, 3, 7]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3112 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3112 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 4, 0, 3, 2, 7, 5, 6, 9, 8], [2, 7, 1, 5, 4, 8, 9, 0, 3, 6], [4, 0, 2, 6, 3, 9, 8, 1, 7, 5], [7, 9, 3, 4, 6, 0, 2, 5, 8, 1], [3, 8, 4, 2, 0, 1, 6, 9, 5, 7], [6, 3, 9, 7, 8, 5, 1, 4, 0, 2], [9, 5, 6, 8, 1, 4, 3, 7, 2, 0], [0, 2, 7, 9, 5, 6, 4, 8, 1, 3], [5, 1, 8, 0, 9, 3, 7, 2, 6, 4], [8, 6, 5, 1, 7, 2, 0, 3, 4, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3253 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3253 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 3, 0, 6, 9, 7, 4, 8, 5], [3, 4, 2, 1, 0, 6, 5, 9, 7, 8], [8, 9, 0, 2, 5, 4, 6, 1, 3, 7], [2, 0, 8, 3, 1, 7, 9, 5, 6, 4], [0, 3, 7, 4, 9, 8, 2, 6, 5, 1], [9, 6, 4, 7, 8, 5, 0, 3, 1, 2], [5, 7, 1, 6, 4, 0, 8, 2, 9, 3], [6, 8, 9, 5, 2, 3, 1, 7, 4, 0], [4, 5, 6, 8, 7, 1, 3, 0, 2, 9], [7, 1, 5, 9, 3, 2, 4, 8, 0, 6]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3462 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3462 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 4, 1, 2, 8, 9, 7, 6, 5, 3], [1, 2, 4, 5, 0, 6, 3, 9, 8, 7], [2, 0, 3, 1, 4, 7, 9, 5, 6, 8], [3, 1, 0, 9, 6, 4, 5, 8, 7, 2], [4, 8, 9, 7, 1, 5, 2, 3, 0, 6], [5, 7, 6, 3, 2, 8, 4, 1, 9, 0], [7, 5, 8, 4, 9, 2, 6, 0, 3, 1], [6, 9, 5, 8, 3, 1, 0, 7, 2, 4], [8, 3, 7, 6, 5, 0, 1, 2, 4, 9], [9, 6, 2, 0, 7, 3, 8, 4, 1, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3994 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3994 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 2, 0, 8, 7, 5, 1, 4, 9, 3], [5, 0, 1, 7, 9, 2, 4, 3, 8, 6], [1, 5, 2, 6, 3, 8, 0, 9, 4, 7], [0, 9, 3, 4, 6, 7, 2, 5, 1, 8], [9, 7, 4, 2, 8, 0, 6, 1, 3, 5], [3, 8, 5, 9, 4, 1, 7, 6, 2, 0], [2, 1, 6, 0, 5, 9, 3, 8, 7, 4], [4, 3, 9, 5, 1, 6, 8, 7, 0, 2], [7, 6, 8, 3, 2, 4, 9, 0, 5, 1], [8, 4, 7, 1, 0, 3, 5, 2, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2947 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2947 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 3, 7, 5, 4, 0, 8, 9, 6, 2], [5, 2, 0, 3, 9, 1, 7, 6, 4, 8], [0, 5, 8, 9, 6, 2, 4, 3, 1, 7], [4, 8, 6, 0, 5, 3, 2, 7, 9, 1], [2, 6, 9, 7, 3, 4, 1, 5, 8, 0], [3, 0, 1, 4, 7, 5, 9, 8, 2, 6], [8, 7, 4, 2, 1, 9, 6, 0, 3, 5], [6, 9, 2, 1, 8, 7, 0, 4, 5, 3], [9, 1, 5, 6, 0, 8, 3, 2, 7, 4], [7, 4, 3, 8, 2, 6, 5, 1, 0, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3272 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3272 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 7, 8, 4, 3, 5, 1, 6, 9, 0], [0, 3, 9, 2, 5, 4, 7, 8, 6, 1], [9, 0, 1, 5, 7, 6, 3, 4, 8, 2], [6, 9, 2, 7, 8, 0, 5, 1, 4, 3], [3, 5, 7, 8, 4, 2, 9, 0, 1, 6], [1, 6, 4, 3, 2, 8, 0, 9, 7, 5], [7, 8, 5, 0, 9, 1, 6, 2, 3, 4], [4, 1, 6, 9, 0, 3, 8, 5, 2, 7], [5, 4, 3, 6, 1, 9, 2, 7, 0, 8], [8, 2, 0, 1, 6, 7, 4, 3, 5, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation614 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation614 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 4, 0, 3, 2, 8, 5, 9, 6, 7], [2, 6, 1, 8, 4, 7, 0, 5, 9, 3], [4, 0, 2, 5, 3, 9, 1, 8, 7, 6], [6, 7, 3, 4, 5, 2, 8, 1, 0, 9], [3, 9, 4, 2, 0, 5, 7, 6, 1, 8], [7, 8, 5, 9, 1, 3, 6, 0, 4, 2], [0, 2, 6, 7, 8, 4, 9, 3, 5, 1], [9, 5, 8, 1, 6, 0, 3, 7, 2, 4], [5, 3, 7, 6, 9, 1, 4, 2, 8, 0], [8, 1, 9, 0, 7, 6, 2, 4, 3, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation4091 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation4091 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 1, 3, 8, 5, 6, 4, 9, 0, 7], [5, 3, 7, 6, 0, 4, 8, 2, 1, 9], [8, 4, 5, 3, 9, 0, 7, 6, 2, 1], [1, 8, 9, 0, 2, 7, 6, 5, 3, 4], [6, 5, 1, 9, 4, 3, 2, 8, 7, 0], [0, 7, 8, 4, 6, 9, 3, 1, 5, 2], [7, 9, 4, 2, 3, 5, 1, 0, 6, 8], [9, 2, 6, 5, 8, 1, 0, 7, 4, 3], [3, 6, 0, 1, 7, 2, 9, 4, 8, 5], [4, 0, 2, 7, 1, 8, 5, 3, 9, 6]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2051 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2051 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 0, 6, 8, 5, 4, 1, 3, 7, 9], [6, 1, 0, 4, 7, 8, 9, 2, 5, 3], [1, 2, 7, 5, 9, 3, 6, 0, 4, 8], [5, 3, 8, 9, 1, 0, 2, 7, 6, 4], [8, 4, 2, 7, 3, 6, 5, 1, 9, 0], [4, 8, 3, 0, 6, 5, 7, 9, 1, 2], [9, 6, 4, 3, 8, 7, 0, 5, 2, 1], [0, 7, 1, 6, 2, 9, 8, 4, 3, 5], [3, 5, 9, 2, 0, 1, 4, 6, 8, 7], [7, 9, 5, 1, 4, 2, 3, 8, 0, 6]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2847 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2847 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 5, 3, 8, 0, 7, 6, 9, 4], [5, 4, 2, 9, 0, 1, 8, 3, 6, 7], [3, 7, 0, 5, 6, 2, 4, 9, 8, 1], [4, 6, 8, 2, 9, 3, 1, 7, 5, 0], [0, 5, 9, 6, 7, 4, 3, 1, 2, 8], [2, 0, 3, 8, 1, 5, 9, 4, 7, 6], [7, 8, 4, 1, 3, 9, 6, 2, 0, 5], [9, 1, 6, 0, 5, 7, 2, 8, 4, 3], [6, 9, 1, 7, 4, 8, 0, 5, 3, 2], [8, 3, 7, 4, 2, 6, 5, 0, 1, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2238 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2238 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 3, 0, 9, 8, 5, 7, 6, 4], [3, 5, 2, 1, 8, 0, 9, 6, 4, 7], [7, 9, 0, 2, 5, 4, 1, 3, 8, 6], [2, 0, 7, 3, 6, 1, 4, 8, 9, 5], [9, 8, 5, 6, 4, 7, 3, 1, 0, 2], [0, 3, 6, 5, 7, 9, 8, 4, 2, 1], [8, 7, 9, 4, 3, 2, 6, 5, 1, 0], [5, 4, 8, 7, 1, 6, 0, 2, 3, 9], [4, 6, 1, 8, 0, 5, 2, 9, 7, 3], [6, 1, 4, 9, 2, 3, 7, 0, 5, 8]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1038 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1038 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 2, 0, 3, 8, 4, 9, 1, 5, 6], [3, 0, 1, 2, 7, 5, 4, 6, 9, 8], [1, 3, 2, 5, 9, 6, 8, 0, 7, 4], [8, 5, 3, 1, 0, 2, 6, 9, 4, 7], [5, 6, 9, 8, 4, 7, 0, 3, 1, 2], [9, 7, 5, 6, 1, 3, 2, 4, 8, 0], [4, 9, 6, 0, 3, 8, 5, 7, 2, 1], [2, 1, 7, 4, 6, 9, 3, 8, 0, 5], [0, 4, 8, 9, 5, 1, 7, 2, 6, 3], [6, 8, 4, 7, 2, 0, 1, 5, 3, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2441 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2441 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 4, 0, 3, 2, 8, 5, 9, 6, 7], [2, 6, 1, 8, 4, 7, 0, 5, 9, 3], [4, 0, 2, 5, 3, 9, 1, 8, 7, 6], [6, 7, 3, 4, 5, 2, 8, 1, 0, 9], [3, 9, 4, 2, 0, 5, 7, 6, 1, 8], [7, 8, 5, 9, 1, 3, 6, 0, 4, 2], [0, 2, 6, 7, 8, 4, 9, 3, 5, 1], [9, 5, 8, 1, 6, 0, 3, 7, 2, 4], [5, 3, 7, 6, 9, 1, 4, 2, 8, 0], [8, 1, 9, 0, 7, 6, 2, 4, 3, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3534 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3534 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 2, 3, 1, 8, 7, 5, 0, 4, 9], [3, 1, 5, 6, 0, 4, 9, 8, 7, 2], [0, 3, 4, 5, 6, 1, 7, 2, 9, 8], [8, 5, 2, 9, 7, 6, 1, 3, 0, 4], [1, 9, 7, 2, 3, 8, 6, 4, 5, 0], [9, 6, 8, 3, 1, 0, 4, 5, 2, 7], [7, 4, 0, 8, 9, 5, 2, 6, 3, 1], [5, 8, 6, 4, 2, 9, 0, 7, 1, 3], [4, 7, 9, 0, 5, 2, 3, 1, 8, 6], [2, 0, 1, 7, 4, 3, 8, 9, 6, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation477 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation477 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 9, 8, 2, 7, 0, 6, 4, 3, 5], [5, 2, 0, 4, 6, 1, 3, 8, 7, 9], [0, 5, 4, 8, 1, 2, 7, 6, 9, 3], [8, 6, 9, 3, 0, 7, 2, 5, 1, 4], [3, 1, 5, 6, 8, 4, 0, 9, 2, 7], [9, 0, 1, 7, 2, 5, 8, 3, 4, 6], [2, 7, 3, 0, 4, 6, 9, 1, 5, 8], [4, 8, 6, 5, 9, 3, 1, 7, 0, 2], [7, 3, 2, 9, 5, 8, 4, 0, 6, 1], [6, 4, 7, 1, 3, 9, 5, 2, 8, 0]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation4435 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation4435 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 1, 3, 9, 5, 4, 7, 0, 6, 2], [2, 6, 9, 7, 8, 5, 3, 1, 4, 0], [0, 4, 5, 6, 1, 8, 9, 2, 7, 3], [4, 5, 2, 1, 0, 7, 8, 3, 9, 6], [5, 8, 1, 0, 4, 6, 2, 9, 3, 7], [9, 0, 7, 2, 6, 3, 4, 5, 8, 1], [1, 7, 4, 3, 2, 9, 0, 6, 5, 8], [6, 3, 8, 5, 9, 2, 1, 7, 0, 4], [7, 9, 0, 4, 3, 1, 6, 8, 2, 5], [3, 2, 6, 8, 7, 0, 5, 4, 1, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1492 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1492 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 4, 0, 7, 2, 6, 5, 9, 8, 3], [2, 3, 1, 0, 4, 8, 7, 6, 9, 5], [4, 0, 2, 1, 8, 3, 9, 5, 7, 6], [0, 2, 3, 5, 9, 1, 8, 4, 6, 7], [8, 5, 4, 6, 0, 9, 3, 7, 2, 1], [9, 1, 5, 2, 6, 7, 4, 3, 0, 8], [5, 7, 9, 8, 3, 4, 6, 0, 1, 2], [6, 9, 7, 3, 1, 2, 0, 8, 5, 4], [3, 6, 8, 9, 7, 5, 1, 2, 4, 0], [7, 8, 6, 4, 5, 0, 2, 1, 3, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation326 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation326 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 3, 4, 5, 9, 8, 1, 6, 7], [5, 3, 0, 9, 4, 2, 1, 8, 7, 6], [9, 8, 4, 0, 7, 5, 2, 6, 1, 3], [7, 6, 8, 5, 0, 1, 3, 4, 2, 9], [1, 5, 6, 8, 9, 0, 4, 7, 3, 2], [2, 1, 9, 6, 8, 7, 5, 3, 4, 0], [8, 9, 7, 1, 2, 3, 6, 5, 0, 4], [4, 0, 5, 3, 1, 6, 7, 2, 9, 8], [6, 7, 1, 2, 3, 4, 0, 9, 8, 5], [3, 4, 2, 7, 6, 8, 9, 0, 5, 1]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1020 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1020 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 6, 3, 8, 7, 0, 9, 4, 5], [6, 5, 2, 9, 3, 0, 1, 8, 7, 4], [3, 4, 0, 6, 9, 8, 2, 7, 5, 1], [5, 8, 7, 2, 4, 9, 3, 6, 1, 0], [9, 1, 8, 0, 7, 6, 4, 5, 2, 3], [0, 6, 9, 8, 1, 4, 5, 2, 3, 7], [2, 0, 3, 7, 5, 1, 6, 4, 9, 8], [8, 9, 1, 4, 6, 5, 7, 3, 0, 2], [4, 7, 5, 1, 2, 3, 9, 0, 8, 6], [7, 3, 4, 5, 0, 2, 8, 1, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1832 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1832 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 8, 9, 5, 7, 6, 4, 0, 3], [8, 7, 2, 6, 9, 3, 5, 0, 1, 4], [6, 3, 0, 5, 4, 1, 8, 9, 2, 7], [5, 1, 9, 4, 7, 6, 0, 8, 3, 2], [9, 5, 1, 8, 6, 2, 3, 7, 4, 0], [4, 6, 3, 0, 1, 5, 7, 2, 9, 8], [7, 9, 4, 3, 8, 0, 2, 5, 6, 1], [0, 8, 5, 1, 2, 4, 9, 3, 7, 6], [2, 0, 6, 7, 3, 9, 4, 1, 8, 5], [3, 4, 7, 2, 0, 8, 1, 6, 5, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation359 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation359 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 9, 0, 5, 6, 3, 7, 4, 8, 2], [2, 6, 1, 8, 3, 7, 0, 5, 4, 9], [9, 0, 2, 6, 5, 4, 1, 3, 7, 8], [4, 1, 3, 7, 8, 9, 2, 6, 0, 5], [7, 8, 5, 0, 4, 2, 9, 1, 6, 3], [3, 7, 4, 9, 2, 5, 8, 0, 1, 6], [0, 2, 6, 1, 7, 8, 3, 9, 5, 4], [5, 4, 7, 2, 9, 0, 6, 8, 3, 1], [6, 5, 8, 3, 0, 1, 4, 2, 9, 7], [8, 3, 9, 4, 1, 6, 5, 7, 2, 0]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3588 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3588 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[9, 0, 1, 5, 3, 4, 7, 6, 8, 2], [2, 1, 8, 7, 6, 9, 5, 3, 4, 0], [8, 2, 0, 9, 4, 7, 3, 5, 1, 6], [4, 7, 6, 3, 9, 2, 0, 1, 5, 8], [7, 4, 9, 2, 8, 5, 1, 0, 6, 3], [0, 5, 3, 4, 2, 6, 9, 8, 7, 1], [3, 6, 7, 8, 5, 1, 4, 2, 0, 9], [6, 3, 5, 1, 0, 8, 2, 7, 9, 4], [5, 8, 4, 0, 1, 3, 6, 9, 2, 7], [1, 9, 2, 6, 7, 0, 8, 4, 3, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation151 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation151 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 4, 3, 9, 8, 6, 5, 7, 0, 2], [8, 2, 0, 5, 4, 3, 7, 9, 1, 6], [0, 8, 6, 4, 9, 7, 1, 5, 2, 3], [5, 9, 2, 7, 1, 0, 8, 6, 3, 4], [7, 6, 5, 3, 0, 2, 9, 8, 4, 1], [6, 3, 7, 0, 2, 5, 4, 1, 9, 8], [9, 1, 8, 2, 5, 4, 3, 0, 6, 7], [2, 5, 9, 8, 3, 1, 6, 4, 7, 0], [4, 0, 1, 6, 7, 9, 2, 3, 8, 5], [3, 7, 4, 1, 6, 8, 0, 2, 5, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation105 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation105 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 0, 1, 5, 3, 4, 8, 2, 6, 9], [2, 1, 9, 7, 6, 8, 4, 0, 3, 5], [9, 2, 0, 6, 7, 5, 3, 8, 4, 1], [0, 3, 4, 8, 5, 2, 9, 1, 7, 6], [5, 6, 8, 2, 4, 7, 1, 9, 0, 3], [6, 5, 7, 3, 2, 9, 0, 4, 1, 8], [8, 4, 3, 9, 1, 0, 6, 5, 2, 7], [1, 7, 2, 0, 8, 6, 5, 3, 9, 4], [4, 8, 6, 1, 9, 3, 2, 7, 5, 0], [3, 9, 5, 4, 0, 1, 7, 6, 8, 2]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation817 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation817 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 4, 3, 9, 6, 7, 0, 5, 8, 2], [6, 2, 0, 5, 4, 3, 1, 8, 9, 7], [0, 6, 7, 4, 9, 8, 2, 1, 5, 3], [5, 9, 2, 8, 1, 0, 3, 6, 7, 4], [8, 7, 5, 3, 0, 2, 4, 9, 6, 1], [7, 3, 8, 0, 2, 5, 9, 4, 1, 6], [4, 0, 1, 7, 8, 9, 6, 2, 3, 5], [9, 1, 6, 2, 5, 4, 7, 3, 0, 8], [2, 5, 9, 6, 3, 1, 8, 7, 4, 0], [3, 8, 4, 1, 7, 6, 5, 0, 2, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3880 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3880 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 3, 4, 9, 6, 5, 0, 8, 7, 1], [8, 5, 3, 4, 2, 7, 1, 6, 0, 9], [6, 8, 9, 7, 4, 3, 2, 5, 1, 0], [1, 2, 5, 3, 7, 9, 8, 0, 6, 4], [5, 1, 7, 2, 0, 6, 4, 3, 9, 8], [9, 6, 8, 0, 1, 4, 5, 7, 2, 3], [4, 7, 0, 8, 5, 1, 6, 9, 3, 2], [3, 9, 2, 5, 8, 0, 7, 1, 4, 6], [7, 0, 1, 6, 9, 2, 3, 4, 8, 5], [0, 4, 6, 1, 3, 8, 9, 2, 5, 7]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation4158 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation4158 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 0, 1, 3, 8, 2, 7, 6, 9, 4], [2, 1, 3, 9, 7, 0, 8, 4, 5, 6], [3, 2, 0, 1, 5, 6, 4, 8, 7, 9], [8, 3, 9, 2, 0, 7, 6, 5, 4, 1], [9, 7, 6, 8, 4, 3, 0, 1, 2, 5], [1, 5, 2, 4, 6, 8, 3, 9, 0, 7], [4, 6, 7, 0, 3, 5, 9, 2, 1, 8], [6, 4, 8, 5, 1, 9, 2, 7, 3, 0], [0, 8, 4, 7, 9, 1, 5, 3, 6, 2], [7, 9, 5, 6, 2, 4, 1, 0, 8, 3]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation307 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation307 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 4, 9, 0, 3, 6, 8, 7, 5], [4, 3, 2, 0, 1, 7, 5, 6, 9, 8], [6, 7, 0, 8, 2, 1, 4, 5, 3, 9], [0, 4, 5, 7, 3, 9, 8, 1, 6, 2], [2, 0, 6, 1, 4, 8, 9, 3, 5, 7], [9, 6, 7, 2, 8, 5, 3, 0, 4, 1], [3, 8, 9, 5, 6, 0, 2, 7, 1, 4], [5, 1, 8, 4, 7, 6, 0, 9, 2, 3], [7, 9, 3, 6, 5, 4, 1, 2, 8, 0], [8, 5, 1, 3, 9, 2, 7, 4, 0, 6]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3685 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3685 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 4, 7, 9, 8, 5, 0, 6, 1, 3], [0, 3, 6, 2, 7, 9, 1, 8, 4, 5], [6, 0, 1, 5, 9, 8, 2, 7, 3, 4], [8, 6, 2, 4, 1, 0, 3, 9, 5, 7], [9, 1, 8, 6, 5, 3, 4, 2, 7, 0], [1, 8, 9, 3, 6, 7, 5, 4, 0, 2], [7, 2, 0, 1, 3, 4, 6, 5, 9, 8], [5, 9, 3, 8, 4, 6, 7, 0, 2, 1], [4, 7, 5, 0, 2, 1, 9, 3, 8, 6], [3, 5, 4, 7, 0, 2, 8, 1, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1894 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1894 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[4, 2, 6, 9, 3, 7, 1, 5, 8, 0], [6, 1, 3, 5, 8, 0, 4, 9, 2, 7], [0, 6, 5, 1, 9, 4, 3, 8, 7, 2], [8, 4, 7, 0, 5, 1, 6, 2, 9, 3], [9, 5, 0, 3, 2, 8, 7, 6, 1, 4], [1, 8, 9, 7, 4, 6, 2, 3, 0, 5], [7, 3, 2, 4, 1, 9, 8, 0, 5, 6], [5, 9, 8, 2, 6, 3, 0, 7, 4, 1], [2, 0, 1, 6, 7, 5, 9, 4, 3, 8], [3, 7, 4, 8, 0, 2, 5, 1, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation203 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation203 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 4, 3, 0, 6, 8, 9, 5, 7], [4, 6, 2, 5, 1, 9, 0, 8, 7, 3], [3, 9, 0, 4, 2, 1, 7, 6, 8, 5], [6, 7, 8, 2, 3, 0, 5, 1, 4, 9], [2, 0, 3, 8, 4, 7, 1, 5, 9, 6], [8, 3, 9, 6, 7, 5, 2, 4, 1, 0], [0, 4, 5, 7, 6, 8, 9, 3, 2, 1], [9, 8, 6, 1, 5, 4, 3, 7, 0, 2], [7, 5, 1, 9, 8, 2, 6, 0, 3, 4], [5, 1, 7, 0, 9, 3, 4, 2, 6, 8]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3862 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3862 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 4, 3, 0, 6, 8, 9, 5, 7], [4, 6, 2, 5, 1, 9, 0, 8, 7, 3], [3, 9, 0, 4, 2, 1, 7, 6, 8, 5], [6, 7, 8, 2, 3, 0, 5, 1, 4, 9], [2, 0, 3, 8, 4, 7, 1, 5, 9, 6], [8, 3, 9, 6, 7, 5, 2, 4, 1, 0], [0, 4, 5, 7, 6, 8, 9, 3, 2, 1], [9, 8, 6, 1, 5, 4, 3, 7, 0, 2], [7, 5, 1, 9, 8, 2, 6, 0, 3, 4], [5, 1, 7, 0, 9, 3, 4, 2, 6, 8]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation680 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation680 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 6, 0, 9, 5, 4, 2, 3, 8, 7], [2, 3, 1, 0, 8, 9, 6, 4, 7, 5], [6, 0, 2, 1, 3, 7, 8, 5, 9, 4], [0, 2, 3, 4, 1, 8, 7, 9, 5, 6], [7, 1, 4, 2, 9, 6, 5, 8, 0, 3], [4, 9, 7, 8, 6, 5, 3, 2, 1, 0], [8, 4, 6, 5, 7, 3, 0, 1, 2, 9], [9, 8, 5, 6, 0, 2, 4, 7, 3, 1], [3, 5, 8, 7, 4, 1, 9, 0, 6, 2], [5, 7, 9, 3, 2, 0, 1, 6, 4, 8]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2736 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2736 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 1, 3, 0, 5, 7, 2, 4, 9, 8], [7, 2, 4, 1, 3, 0, 9, 5, 8, 6], [1, 3, 0, 2, 4, 6, 8, 9, 5, 7], [2, 4, 1, 3, 8, 9, 0, 6, 7, 5], [9, 8, 6, 4, 1, 2, 5, 7, 3, 0], [4, 7, 8, 9, 6, 5, 1, 2, 0, 3], [3, 5, 2, 6, 9, 8, 7, 0, 1, 4], [0, 9, 5, 7, 2, 4, 3, 8, 6, 1], [5, 0, 9, 8, 7, 1, 6, 3, 4, 2], [8, 6, 7, 5, 0, 3, 4, 1, 2, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1481 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1481 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 1, 3, 9, 5, 0, 4, 8, 7, 2], [2, 4, 9, 5, 3, 1, 8, 7, 6, 0], [0, 8, 7, 4, 9, 2, 5, 6, 1, 3], [8, 7, 2, 1, 6, 3, 9, 5, 0, 4], [1, 5, 8, 3, 0, 4, 7, 9, 2, 6], [4, 3, 6, 7, 1, 5, 0, 2, 9, 8], [5, 9, 0, 8, 4, 6, 2, 1, 3, 7], [9, 0, 5, 2, 8, 7, 6, 3, 4, 1], [7, 6, 1, 0, 2, 9, 3, 4, 8, 5], [3, 2, 4, 6, 7, 8, 1, 0, 5, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3955 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3955 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 8, 5, 7, 3, 4, 6, 0, 9], [8, 6, 2, 9, 5, 4, 0, 3, 1, 7], [9, 3, 0, 7, 4, 6, 5, 1, 2, 8], [7, 1, 5, 4, 6, 2, 8, 9, 3, 0], [5, 7, 1, 8, 9, 0, 6, 2, 4, 3], [3, 4, 6, 2, 0, 5, 9, 8, 7, 1], [0, 8, 7, 1, 2, 9, 3, 4, 6, 5], [4, 9, 3, 0, 1, 8, 2, 7, 5, 6], [2, 0, 9, 6, 3, 7, 1, 5, 8, 4], [6, 5, 4, 3, 8, 1, 7, 0, 9, 2]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3259 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3259 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 0, 3, 1, 6, 9, 4, 5, 8, 7], [3, 1, 0, 8, 7, 4, 9, 2, 5, 6], [1, 2, 7, 3, 8, 6, 5, 0, 9, 4], [8, 3, 4, 0, 9, 5, 7, 6, 1, 2], [9, 4, 2, 6, 5, 7, 3, 1, 0, 8], [6, 5, 9, 2, 1, 8, 0, 7, 4, 3], [4, 9, 5, 7, 3, 0, 6, 8, 2, 1], [0, 7, 1, 9, 2, 3, 8, 4, 6, 5], [7, 8, 6, 5, 4, 1, 2, 9, 3, 0], [5, 6, 8, 4, 0, 2, 1, 3, 7, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation221 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation221 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 1, 4, 6, 0, 2, 7, 3, 9, 8], [6, 2, 7, 0, 1, 8, 3, 4, 5, 9], [1, 4, 0, 5, 2, 9, 8, 7, 6, 3], [7, 6, 9, 3, 8, 1, 2, 5, 4, 0], [2, 7, 1, 8, 4, 0, 5, 9, 3, 6], [4, 3, 2, 9, 5, 6, 0, 8, 7, 1], [0, 8, 3, 7, 6, 4, 9, 2, 1, 5], [8, 9, 5, 2, 7, 3, 6, 1, 0, 4], [9, 5, 6, 4, 3, 7, 1, 0, 8, 2], [3, 0, 8, 1, 9, 5, 4, 6, 2, 7]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation4118 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation4118 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 2, 8, 5, 0, 4, 7, 6, 1, 9], [0, 6, 5, 4, 1, 8, 3, 9, 2, 7], [7, 1, 9, 8, 2, 3, 4, 0, 5, 6], [4, 0, 7, 1, 3, 5, 9, 2, 6, 8], [5, 3, 6, 0, 4, 9, 1, 8, 7, 2], [9, 7, 2, 6, 5, 0, 8, 1, 3, 4], [8, 4, 1, 3, 6, 7, 2, 5, 9, 0], [6, 9, 0, 2, 8, 1, 5, 7, 4, 3], [2, 5, 3, 9, 7, 6, 0, 4, 8, 1], [1, 8, 4, 7, 9, 2, 6, 3, 0, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation669 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation669 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 2, 0, 9, 3, 7, 1, 5, 8, 4], [8, 0, 1, 3, 7, 9, 5, 4, 2, 6], [1, 8, 2, 5, 6, 4, 0, 9, 3, 7], [7, 6, 3, 8, 4, 2, 9, 0, 5, 1], [0, 9, 4, 1, 5, 6, 2, 8, 7, 3], [9, 7, 5, 4, 2, 3, 6, 1, 0, 8], [2, 1, 6, 7, 0, 8, 4, 3, 9, 5], [5, 4, 9, 0, 8, 1, 3, 7, 6, 2], [4, 3, 8, 2, 9, 5, 7, 6, 1, 0], [3, 5, 7, 6, 1, 0, 8, 2, 4, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation170 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation170 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 6, 7, 8, 9, 1, 3, 5, 2, 4], [2, 3, 6, 7, 1, 9, 0, 4, 8, 5], [6, 1, 5, 4, 2, 3, 7, 0, 9, 8], [5, 4, 1, 2, 3, 8, 9, 7, 0, 6], [9, 7, 3, 1, 4, 2, 5, 8, 6, 0], [8, 0, 4, 3, 5, 6, 2, 9, 1, 7], [7, 9, 2, 0, 6, 4, 8, 3, 5, 1], [3, 8, 9, 5, 7, 0, 6, 1, 4, 2], [1, 2, 0, 9, 8, 5, 4, 6, 7, 3], [4, 5, 8, 6, 0, 7, 1, 2, 3, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1519 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1519 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 6, 2, 7, 9, 1, 5, 0, 3, 4], [9, 2, 4, 8, 7, 5, 3, 1, 6, 0], [5, 7, 3, 1, 4, 6, 0, 2, 9, 8], [2, 1, 7, 0, 6, 9, 8, 3, 4, 5], [6, 5, 0, 9, 1, 7, 2, 4, 8, 3], [0, 3, 9, 6, 8, 4, 1, 5, 7, 2], [1, 8, 5, 4, 0, 3, 6, 9, 2, 7], [3, 4, 1, 2, 5, 8, 9, 7, 0, 6], [7, 9, 6, 3, 2, 0, 4, 8, 5, 1], [4, 0, 8, 5, 3, 2, 7, 6, 1, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2902 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2902 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 6, 7, 0, 4, 1, 5, 3, 9, 8], [0, 8, 3, 1, 9, 6, 7, 5, 2, 4], [3, 0, 1, 2, 5, 8, 9, 7, 4, 6], [7, 2, 0, 3, 6, 9, 8, 4, 1, 5], [1, 5, 9, 4, 7, 0, 3, 6, 8, 2], [6, 7, 4, 9, 1, 5, 2, 8, 0, 3], [9, 1, 5, 6, 8, 7, 4, 2, 3, 0], [4, 9, 8, 7, 3, 2, 6, 0, 5, 1], [5, 3, 2, 8, 0, 4, 1, 9, 6, 7], [8, 4, 6, 5, 2, 3, 0, 1, 7, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation255 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation255 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 3, 0, 2, 4, 7, 5, 6, 9, 8], [2, 6, 1, 3, 7, 8, 0, 9, 5, 4], [3, 0, 2, 4, 5, 9, 1, 8, 7, 6], [4, 9, 3, 0, 2, 5, 8, 1, 6, 7], [6, 8, 4, 5, 3, 2, 7, 0, 1, 9], [8, 7, 5, 1, 9, 4, 6, 3, 0, 2], [0, 2, 6, 7, 8, 3, 9, 5, 4, 1], [5, 4, 8, 9, 6, 1, 3, 7, 2, 0], [9, 5, 7, 6, 1, 0, 4, 2, 8, 3], [7, 1, 9, 8, 0, 6, 2, 4, 3, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2459 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2459 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 8, 1, 6, 7, 3, 9, 4, 5, 2], [1, 2, 8, 7, 6, 5, 4, 9, 0, 3], [2, 0, 9, 4, 3, 7, 5, 6, 8, 1], [3, 4, 7, 5, 1, 6, 0, 8, 2, 9], [7, 6, 3, 1, 4, 2, 8, 0, 9, 5], [5, 9, 4, 0, 2, 8, 6, 1, 3, 7], [6, 7, 2, 9, 8, 1, 3, 5, 4, 0], [4, 3, 5, 2, 0, 9, 1, 7, 6, 8], [8, 5, 6, 3, 9, 0, 7, 2, 1, 4], [9, 1, 0, 8, 5, 4, 2, 3, 7, 6]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1276 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1276 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 0, 5, 6, 9, 1, 7, 3, 8, 4], [5, 1, 0, 9, 6, 8, 2, 4, 7, 3], [1, 2, 6, 4, 8, 5, 0, 9, 3, 7], [7, 9, 8, 3, 0, 4, 5, 2, 6, 1], [3, 4, 2, 8, 7, 9, 1, 6, 0, 5], [8, 5, 4, 2, 3, 0, 9, 7, 1, 6], [0, 6, 1, 7, 2, 3, 4, 5, 9, 8], [9, 7, 3, 5, 1, 2, 6, 8, 4, 0], [6, 8, 9, 0, 4, 7, 3, 1, 5, 2], [4, 3, 7, 1, 5, 6, 8, 0, 2, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1358 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1358 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 3, 1, 0, 4, 7, 8, 5, 9, 6], [4, 0, 7, 1, 3, 9, 6, 8, 2, 5], [3, 1, 9, 2, 8, 6, 5, 4, 7, 0], [1, 4, 0, 3, 6, 8, 7, 9, 5, 2], [9, 6, 5, 4, 1, 2, 3, 7, 0, 8], [7, 9, 6, 8, 2, 5, 0, 1, 3, 4], [5, 2, 8, 6, 7, 0, 4, 3, 1, 9], [8, 5, 2, 7, 0, 1, 9, 6, 4, 3], [6, 7, 4, 5, 9, 3, 2, 0, 8, 1], [0, 8, 3, 9, 5, 4, 1, 2, 6, 7]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2573 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2573 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 6, 1, 8, 9, 3, 0, 7, 5, 4], [7, 0, 9, 3, 5, 4, 1, 6, 2, 8], [6, 1, 5, 4, 3, 0, 2, 8, 9, 7], [4, 2, 8, 7, 0, 5, 3, 9, 1, 6], [9, 5, 3, 0, 4, 7, 8, 2, 6, 1], [0, 8, 6, 1, 7, 9, 5, 4, 3, 2], [1, 7, 0, 9, 8, 2, 6, 3, 4, 5], [5, 3, 4, 6, 2, 8, 7, 1, 0, 9], [3, 9, 7, 2, 6, 1, 4, 5, 8, 0], [8, 4, 2, 5, 1, 6, 9, 0, 7, 3]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2256 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2256 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[4, 2, 0, 5, 1, 3, 7, 8, 6, 9], [9, 0, 1, 6, 5, 8, 3, 7, 4, 2], [1, 9, 2, 8, 0, 6, 4, 5, 3, 7], [5, 6, 8, 3, 7, 1, 9, 0, 2, 4], [2, 1, 4, 7, 6, 9, 0, 3, 5, 8], [8, 3, 5, 1, 4, 7, 2, 6, 9, 0], [0, 8, 6, 9, 2, 4, 5, 1, 7, 3], [3, 4, 7, 0, 8, 2, 6, 9, 1, 5], [7, 5, 3, 2, 9, 0, 1, 4, 8, 6], [6, 7, 9, 4, 3, 5, 8, 2, 0, 1]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation375 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation375 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 0, 9, 5, 6, 8, 4, 7, 3, 1], [9, 1, 0, 2, 8, 6, 3, 5, 4, 7], [1, 2, 3, 0, 5, 4, 7, 8, 6, 9], [0, 3, 1, 6, 7, 9, 2, 4, 5, 8], [6, 8, 5, 7, 4, 0, 9, 2, 1, 3], [4, 5, 8, 3, 0, 7, 1, 6, 9, 2], [8, 6, 2, 1, 9, 3, 5, 0, 7, 4], [3, 7, 4, 8, 2, 1, 6, 9, 0, 5], [5, 4, 7, 9, 1, 2, 0, 3, 8, 6], [7, 9, 6, 4, 3, 5, 8, 1, 2, 0]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3319 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3319 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 5, 6, 7, 0, 9, 4, 8, 3], [5, 3, 2, 0, 8, 1, 7, 6, 9, 4], [8, 4, 0, 7, 9, 2, 6, 3, 5, 1], [0, 5, 9, 4, 1, 3, 2, 8, 7, 6], [9, 1, 7, 5, 6, 4, 3, 2, 0, 8], [2, 0, 8, 1, 3, 5, 4, 9, 6, 7], [7, 9, 1, 3, 5, 6, 8, 0, 4, 2], [4, 6, 3, 8, 2, 9, 0, 7, 1, 5], [3, 7, 6, 9, 4, 8, 5, 1, 2, 0], [6, 8, 4, 2, 0, 7, 1, 5, 3, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3915 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3915 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 2, 1, 4, 8, 6, 7, 5, 0, 9], [2, 1, 4, 6, 5, 9, 0, 8, 7, 3], [7, 4, 6, 3, 1, 8, 5, 9, 2, 0], [8, 6, 9, 5, 4, 0, 1, 2, 3, 7], [9, 5, 7, 2, 0, 1, 6, 3, 4, 8], [0, 9, 3, 8, 7, 2, 4, 6, 5, 1], [1, 0, 8, 7, 3, 5, 9, 4, 6, 2], [6, 8, 0, 9, 2, 4, 3, 7, 1, 5], [4, 7, 5, 0, 9, 3, 2, 1, 8, 6], [5, 3, 2, 1, 6, 7, 8, 0, 9, 4]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3511 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3511 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 3, 5, 7, 8, 1, 4, 9, 6], [1, 6, 0, 3, 8, 7, 2, 9, 4, 5], [2, 3, 1, 0, 9, 5, 8, 6, 7, 4], [3, 9, 5, 2, 6, 0, 4, 1, 8, 7], [7, 8, 9, 6, 4, 1, 5, 0, 2, 3], [5, 4, 6, 8, 1, 3, 7, 2, 0, 9], [6, 0, 2, 7, 5, 4, 9, 8, 3, 1], [4, 5, 8, 9, 0, 6, 3, 7, 1, 2], [8, 7, 4, 1, 2, 9, 6, 3, 5, 0], [9, 1, 7, 4, 3, 2, 0, 5, 6, 8]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2909 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2909 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 1, 6, 9, 3, 7, 0, 5, 2, 4], [3, 2, 9, 4, 0, 8, 1, 7, 5, 6], [1, 6, 0, 5, 8, 3, 2, 4, 7, 9], [0, 5, 4, 7, 9, 1, 3, 8, 6, 2], [9, 3, 7, 2, 4, 6, 5, 0, 1, 8], [7, 8, 3, 1, 6, 5, 4, 2, 9, 0], [2, 9, 1, 8, 5, 4, 6, 3, 0, 7], [4, 0, 5, 6, 1, 2, 7, 9, 8, 3], [6, 4, 2, 0, 7, 9, 8, 1, 3, 5], [5, 7, 8, 3, 2, 0, 9, 6, 4, 1]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3722 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3722 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 4, 6, 9, 7, 2, 5, 0, 8, 3], [7, 2, 0, 8, 4, 3, 9, 1, 5, 6], [0, 7, 3, 1, 5, 6, 4, 2, 9, 8], [5, 1, 7, 6, 9, 8, 2, 3, 0, 4], [8, 3, 9, 5, 0, 1, 6, 4, 7, 2], [6, 8, 4, 0, 3, 5, 1, 9, 2, 7], [9, 5, 2, 7, 1, 4, 8, 6, 3, 0], [4, 0, 1, 2, 8, 9, 3, 7, 6, 5], [2, 9, 5, 3, 6, 0, 7, 8, 4, 1], [3, 6, 8, 4, 2, 7, 0, 5, 1, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3522 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3522 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[9, 1, 3, 0, 6, 7, 8, 5, 4, 2], [4, 2, 6, 1, 8, 9, 3, 7, 0, 5], [1, 3, 0, 2, 5, 4, 6, 8, 9, 7], [2, 6, 1, 3, 9, 8, 7, 4, 5, 0], [0, 5, 8, 4, 7, 1, 2, 9, 6, 3], [7, 9, 4, 8, 1, 5, 0, 2, 3, 6], [5, 7, 9, 6, 4, 0, 1, 3, 2, 8], [8, 0, 5, 7, 3, 2, 4, 6, 1, 9], [6, 4, 7, 5, 2, 3, 9, 0, 8, 1], [3, 8, 2, 9, 0, 6, 5, 1, 7, 4]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3456 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3456 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 4, 0, 3, 2, 6, 9, 8, 7, 5], [2, 6, 1, 5, 4, 7, 0, 3, 9, 8], [4, 0, 2, 9, 3, 8, 1, 6, 5, 7], [6, 8, 3, 4, 9, 0, 5, 7, 1, 2], [3, 7, 4, 2, 0, 1, 8, 5, 6, 9], [9, 3, 8, 6, 7, 5, 4, 0, 2, 1], [0, 2, 6, 8, 5, 9, 7, 1, 3, 4], [5, 1, 7, 0, 8, 3, 2, 9, 4, 6], [7, 9, 5, 1, 6, 2, 3, 4, 8, 0], [8, 5, 9, 7, 1, 4, 6, 2, 0, 3]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation4380 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation4380 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 3, 0, 6, 8, 7, 4, 5, 9], [3, 6, 2, 1, 5, 9, 0, 8, 7, 4], [9, 5, 0, 2, 1, 4, 8, 7, 6, 3], [2, 0, 9, 3, 8, 6, 1, 5, 4, 7], [7, 9, 5, 8, 4, 0, 2, 1, 3, 6], [4, 1, 8, 5, 9, 7, 3, 6, 2, 0], [0, 3, 4, 6, 7, 1, 5, 2, 9, 8], [8, 4, 1, 7, 2, 3, 6, 9, 0, 5], [5, 7, 6, 4, 3, 2, 9, 0, 8, 1], [6, 8, 7, 9, 0, 5, 4, 3, 1, 2]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3917 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3917 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 0, 6, 7, 9, 5, 1, 3, 4, 8], [6, 1, 0, 8, 3, 4, 5, 9, 2, 7], [1, 2, 8, 5, 7, 9, 6, 4, 0, 3], [9, 3, 2, 4, 8, 0, 7, 6, 1, 5], [7, 4, 9, 1, 5, 3, 2, 0, 8, 6], [8, 5, 7, 3, 1, 6, 4, 2, 9, 0], [5, 6, 3, 9, 4, 1, 0, 8, 7, 2], [3, 9, 4, 6, 0, 2, 8, 7, 5, 1], [0, 8, 1, 2, 6, 7, 9, 5, 3, 4], [4, 7, 5, 0, 2, 8, 3, 1, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation4647 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation4647 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 3, 5, 9, 8, 0, 6, 2, 4, 1], [0, 8, 9, 2, 6, 1, 4, 5, 7, 3], [6, 4, 0, 3, 1, 2, 5, 8, 9, 7], [4, 1, 7, 6, 0, 3, 8, 9, 5, 2], [8, 6, 1, 0, 4, 9, 7, 3, 2, 5], [2, 7, 6, 8, 9, 5, 3, 0, 1, 4], [1, 9, 3, 5, 7, 6, 2, 4, 8, 0], [5, 0, 2, 4, 3, 7, 9, 1, 6, 8], [9, 5, 4, 1, 2, 8, 0, 7, 3, 6], [3, 2, 8, 7, 5, 4, 1, 6, 0, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation4083 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation4083 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 6, 4, 5, 7, 3, 8, 1, 9, 2], [2, 8, 6, 1, 3, 7, 0, 5, 4, 9], [6, 1, 7, 2, 0, 9, 4, 8, 3, 5], [5, 4, 8, 3, 9, 0, 7, 2, 1, 6], [8, 9, 5, 4, 1, 2, 6, 0, 7, 3], [3, 7, 9, 0, 2, 5, 1, 4, 6, 8], [4, 5, 2, 6, 8, 1, 9, 3, 0, 7], [9, 0, 3, 7, 5, 4, 2, 6, 8, 1], [7, 3, 1, 8, 4, 6, 5, 9, 2, 0], [1, 2, 0, 9, 6, 8, 3, 7, 5, 4]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2534 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2534 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 0, 1, 3, 9, 2, 7, 8, 6, 4], [2, 1, 3, 8, 6, 0, 4, 5, 9, 7], [3, 2, 0, 1, 7, 9, 5, 4, 8, 6], [7, 3, 8, 2, 5, 4, 0, 6, 1, 9], [9, 6, 7, 5, 4, 8, 1, 3, 0, 2], [1, 5, 2, 6, 8, 7, 9, 0, 4, 3], [8, 4, 9, 7, 1, 3, 6, 2, 5, 0], [0, 7, 6, 4, 3, 1, 8, 9, 2, 5], [4, 8, 5, 9, 0, 6, 2, 7, 3, 1], [6, 9, 4, 0, 2, 5, 3, 1, 7, 8]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation4470 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation4470 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 4, 1, 5, 0, 8, 9, 7, 3, 6], [7, 0, 6, 2, 1, 9, 3, 4, 8, 5], [4, 1, 5, 6, 2, 0, 7, 3, 9, 8], [8, 6, 7, 3, 9, 1, 0, 5, 2, 4], [1, 7, 0, 9, 4, 2, 5, 8, 6, 3], [0, 3, 4, 8, 5, 6, 2, 9, 1, 7], [3, 9, 2, 7, 6, 4, 8, 0, 5, 1], [5, 8, 9, 0, 7, 3, 6, 1, 4, 2], [9, 2, 3, 1, 8, 5, 4, 6, 7, 0], [6, 5, 8, 4, 3, 7, 1, 2, 0, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2303 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2303 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 9, 1, 5, 3, 8, 7, 6, 2, 4], [1, 2, 9, 7, 4, 6, 5, 8, 3, 0], [2, 0, 8, 6, 7, 4, 3, 5, 1, 9], [3, 6, 7, 4, 5, 0, 1, 9, 8, 2], [4, 8, 6, 0, 9, 5, 2, 1, 7, 3], [5, 7, 2, 8, 1, 3, 9, 4, 0, 6], [7, 5, 3, 1, 2, 9, 6, 0, 4, 8], [6, 3, 4, 2, 8, 1, 0, 7, 9, 5], [8, 1, 0, 9, 6, 2, 4, 3, 5, 7], [9, 4, 5, 3, 0, 7, 8, 2, 6, 1]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation836 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation836 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 2, 1, 4, 0, 5, 8, 3, 9, 6], [2, 1, 3, 6, 9, 7, 5, 8, 0, 4], [9, 3, 8, 1, 2, 0, 4, 7, 6, 5], [5, 6, 9, 0, 3, 4, 1, 2, 8, 7], [3, 9, 6, 5, 4, 8, 7, 0, 2, 1], [6, 7, 2, 8, 5, 3, 9, 1, 4, 0], [0, 5, 7, 9, 6, 1, 2, 4, 3, 8], [4, 8, 5, 3, 7, 9, 0, 6, 1, 2], [1, 0, 4, 7, 8, 2, 6, 9, 5, 3], [8, 4, 0, 2, 1, 6, 3, 5, 7, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation47 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation47 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 3, 0, 8, 7, 4, 5, 6, 9], [3, 8, 2, 1, 5, 9, 7, 6, 0, 4], [9, 5, 0, 2, 1, 4, 6, 8, 7, 3], [2, 0, 9, 3, 7, 8, 5, 4, 1, 6], [6, 9, 5, 7, 4, 0, 1, 3, 2, 8], [4, 1, 7, 5, 9, 6, 8, 2, 3, 0], [7, 4, 1, 6, 2, 3, 9, 0, 8, 5], [5, 6, 8, 4, 3, 2, 0, 7, 9, 1], [0, 3, 4, 8, 6, 1, 2, 9, 5, 7], [8, 7, 6, 9, 0, 5, 3, 1, 4, 2]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation4446 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation4446 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 5, 1, 6, 7, 4, 8, 9, 3], [1, 3, 0, 2, 9, 5, 8, 4, 6, 7], [2, 5, 1, 8, 3, 0, 9, 7, 4, 6], [3, 0, 2, 9, 8, 4, 7, 6, 5, 1], [6, 7, 8, 5, 4, 9, 0, 3, 1, 2], [5, 9, 7, 6, 1, 2, 3, 0, 8, 4], [4, 8, 9, 7, 0, 3, 6, 1, 2, 5], [7, 6, 3, 4, 2, 8, 1, 5, 0, 9], [8, 4, 6, 3, 5, 1, 2, 9, 7, 0], [9, 1, 4, 0, 7, 6, 5, 2, 3, 8]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2709 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2709 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[4, 7, 8, 2, 6, 0, 5, 1, 3, 9], [2, 3, 9, 8, 4, 1, 7, 6, 5, 0], [3, 0, 2, 4, 9, 7, 1, 5, 6, 8], [7, 5, 6, 9, 2, 3, 4, 0, 8, 1], [5, 9, 1, 7, 8, 4, 6, 3, 0, 2], [6, 8, 7, 1, 0, 5, 9, 2, 4, 3], [9, 2, 4, 3, 1, 6, 0, 8, 7, 5], [1, 6, 5, 0, 3, 2, 8, 7, 9, 4], [0, 4, 3, 6, 5, 8, 2, 9, 1, 7], [8, 1, 0, 5, 7, 9, 3, 4, 2, 6]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1152 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1152 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 4, 8, 7, 2, 9, 1, 5, 6], [2, 8, 3, 0, 6, 5, 1, 9, 4, 7], [3, 1, 7, 4, 0, 9, 2, 8, 6, 5], [4, 9, 2, 5, 8, 7, 3, 6, 0, 1], [8, 5, 9, 3, 1, 6, 4, 0, 7, 2], [1, 2, 0, 6, 3, 4, 5, 7, 9, 8], [9, 4, 8, 7, 5, 3, 6, 2, 1, 0], [5, 0, 6, 2, 9, 1, 7, 3, 8, 4], [7, 6, 1, 9, 4, 0, 8, 5, 2, 3], [6, 7, 5, 1, 2, 8, 0, 4, 3, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3659 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3659 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 6, 8, 0, 4, 2, 3, 9, 5, 7], [3, 2, 0, 1, 5, 7, 6, 4, 9, 8], [0, 3, 7, 2, 9, 8, 5, 1, 6, 4], [6, 0, 1, 3, 8, 9, 4, 2, 7, 5], [2, 9, 5, 4, 6, 0, 8, 7, 3, 1], [8, 4, 6, 9, 2, 5, 7, 0, 1, 3], [4, 7, 9, 6, 3, 1, 0, 5, 8, 2], [5, 1, 3, 7, 0, 4, 9, 8, 2, 6], [9, 5, 2, 8, 7, 6, 1, 3, 4, 0], [7, 8, 4, 5, 1, 3, 2, 6, 0, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation8 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation8 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 7, 8, 4, 9, 3, 0, 6, 5], [7, 3, 2, 0, 6, 4, 5, 1, 9, 8], [4, 5, 0, 9, 7, 6, 1, 2, 8, 3], [0, 7, 6, 5, 9, 1, 8, 3, 2, 4], [3, 9, 8, 6, 2, 5, 0, 4, 7, 1], [6, 1, 9, 7, 0, 8, 4, 5, 3, 2], [8, 4, 5, 2, 3, 0, 6, 9, 1, 7], [2, 0, 4, 1, 8, 3, 9, 7, 5, 6], [9, 6, 1, 3, 5, 7, 2, 8, 4, 0], [5, 8, 3, 4, 1, 2, 7, 6, 0, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2496 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2496 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 8, 1, 7, 3, 5, 9, 4, 0, 6], [5, 0, 6, 3, 9, 8, 7, 2, 1, 4], [8, 1, 4, 9, 0, 7, 5, 6, 2, 3], [9, 2, 7, 5, 4, 6, 8, 1, 3, 0], [0, 7, 8, 1, 6, 9, 2, 3, 4, 5], [4, 3, 9, 8, 7, 1, 6, 0, 5, 2], [7, 9, 2, 4, 8, 0, 3, 5, 6, 1], [3, 6, 5, 2, 1, 4, 0, 7, 9, 8], [1, 5, 0, 6, 2, 3, 4, 9, 8, 7], [6, 4, 3, 0, 5, 2, 1, 8, 7, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2128 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2128 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 5, 3, 6, 7, 8, 2, 4, 0, 9], [8, 2, 0, 4, 3, 5, 7, 9, 1, 6], [0, 8, 7, 5, 9, 6, 3, 1, 2, 4], [4, 6, 2, 9, 0, 1, 5, 8, 3, 7], [7, 3, 9, 0, 4, 2, 8, 5, 6, 1], [9, 7, 4, 3, 2, 0, 1, 6, 5, 8], [3, 9, 5, 1, 8, 7, 6, 0, 4, 2], [6, 1, 8, 2, 5, 4, 9, 3, 7, 0], [5, 0, 1, 7, 6, 9, 4, 2, 8, 3], [2, 4, 6, 8, 1, 3, 0, 7, 9, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3050 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3050 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 3, 0, 2, 4, 7, 8, 9, 6, 5], [2, 9, 1, 3, 7, 8, 4, 6, 5, 0], [3, 0, 2, 4, 5, 6, 9, 8, 7, 1], [4, 6, 3, 0, 2, 5, 7, 1, 9, 8], [9, 8, 4, 5, 3, 2, 6, 0, 1, 7], [8, 7, 5, 1, 6, 4, 2, 3, 0, 9], [7, 1, 6, 8, 0, 9, 5, 4, 3, 2], [5, 4, 8, 6, 9, 1, 0, 7, 2, 3], [6, 5, 7, 9, 1, 0, 3, 2, 8, 4], [0, 2, 9, 7, 8, 3, 1, 5, 4, 6]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1629 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1629 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 4, 0, 9, 2, 6, 7, 5, 8, 3], [2, 6, 1, 8, 4, 3, 0, 9, 5, 7], [4, 0, 2, 6, 8, 9, 1, 3, 7, 5], [5, 1, 3, 7, 9, 8, 2, 6, 0, 4], [8, 3, 4, 5, 0, 1, 9, 7, 2, 6], [7, 8, 9, 0, 3, 5, 4, 1, 6, 2], [0, 2, 6, 1, 5, 7, 3, 4, 9, 8], [9, 5, 7, 2, 1, 4, 6, 8, 3, 0], [6, 9, 8, 3, 7, 0, 5, 2, 4, 1], [3, 7, 5, 4, 6, 2, 8, 0, 1, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation281 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation281 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 1, 6, 4, 9, 2, 0, 8, 7, 3], [9, 2, 3, 6, 0, 8, 1, 7, 5, 4], [1, 6, 0, 3, 5, 7, 2, 4, 9, 8], [8, 7, 5, 1, 2, 4, 3, 6, 0, 9], [3, 9, 7, 5, 4, 1, 8, 0, 6, 2], [6, 4, 2, 8, 7, 9, 5, 1, 3, 0], [2, 3, 1, 7, 8, 0, 6, 9, 4, 5], [4, 0, 8, 9, 1, 5, 7, 3, 2, 6], [7, 5, 9, 0, 6, 3, 4, 2, 8, 1], [0, 8, 4, 2, 3, 6, 9, 5, 1, 7]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation4386 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation4386 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 5, 4, 3, 8, 1, 6, 9, 7], [2, 7, 0, 8, 1, 4, 3, 5, 6, 9], [5, 3, 6, 9, 2, 0, 8, 7, 4, 1], [4, 6, 1, 3, 0, 2, 7, 9, 5, 8], [3, 5, 8, 0, 4, 9, 2, 1, 7, 6], [8, 9, 3, 7, 5, 1, 6, 2, 0, 4], [1, 0, 4, 5, 6, 7, 9, 3, 8, 2], [6, 4, 9, 2, 7, 5, 0, 8, 1, 3], [9, 1, 7, 6, 8, 3, 5, 4, 2, 0], [7, 8, 2, 1, 9, 6, 4, 0, 3, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation4065 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation4065 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 3, 0, 2, 4, 7, 5, 6, 9, 8], [2, 6, 1, 3, 7, 8, 0, 9, 5, 4], [3, 0, 2, 4, 5, 9, 1, 8, 7, 6], [4, 9, 3, 0, 2, 5, 8, 1, 6, 7], [6, 8, 4, 5, 3, 2, 7, 0, 1, 9], [8, 7, 5, 1, 9, 4, 6, 3, 0, 2], [0, 2, 6, 7, 8, 3, 9, 5, 4, 1], [5, 4, 8, 9, 6, 1, 3, 7, 2, 0], [9, 5, 7, 6, 1, 0, 4, 2, 8, 3], [7, 1, 9, 8, 0, 6, 2, 4, 3, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1113 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1113 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 1, 3, 0, 7, 8, 2, 4, 9, 5], [8, 2, 9, 1, 6, 0, 4, 7, 5, 3], [1, 3, 0, 2, 8, 6, 7, 5, 4, 9], [2, 9, 1, 3, 5, 4, 0, 8, 6, 7], [7, 6, 8, 5, 4, 3, 9, 2, 1, 0], [9, 8, 7, 4, 3, 5, 1, 0, 2, 6], [3, 5, 2, 6, 9, 7, 8, 1, 0, 4], [5, 0, 4, 7, 2, 1, 6, 9, 3, 8], [0, 4, 5, 8, 1, 9, 3, 6, 7, 2], [4, 7, 6, 9, 0, 2, 5, 3, 8, 1]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1432 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1432 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 5, 8, 6, 0, 4, 3, 7, 9], [5, 3, 2, 0, 9, 1, 8, 4, 6, 7], [9, 4, 0, 6, 7, 2, 3, 1, 8, 5], [0, 5, 7, 4, 1, 3, 9, 8, 2, 6], [7, 1, 6, 5, 8, 4, 2, 9, 3, 0], [2, 0, 9, 1, 3, 5, 7, 6, 4, 8], [4, 8, 3, 9, 2, 7, 6, 5, 0, 1], [8, 9, 4, 2, 0, 6, 5, 7, 1, 3], [6, 7, 1, 3, 5, 8, 0, 2, 9, 4], [3, 6, 8, 7, 4, 9, 1, 0, 5, 2]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation620 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation620 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 2, 3, 1, 7, 5, 4, 0, 9, 8], [0, 9, 4, 2, 3, 8, 7, 1, 5, 6], [8, 1, 5, 4, 6, 9, 3, 2, 0, 7], [2, 4, 6, 3, 9, 1, 5, 8, 7, 0], [5, 8, 2, 6, 0, 7, 9, 4, 1, 3], [1, 3, 7, 0, 2, 4, 8, 5, 6, 9], [7, 0, 8, 9, 4, 3, 1, 6, 2, 5], [4, 6, 9, 8, 5, 2, 0, 7, 3, 1], [9, 5, 0, 7, 1, 6, 2, 3, 8, 4], [3, 7, 1, 5, 8, 0, 6, 9, 4, 2]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3472 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3472 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 5, 1, 8, 3, 0, 9, 7, 4, 6], [7, 0, 9, 3, 6, 1, 4, 5, 2, 8], [5, 1, 4, 6, 0, 2, 3, 8, 9, 7], [6, 2, 8, 7, 4, 3, 0, 9, 1, 5], [0, 8, 5, 1, 9, 4, 7, 6, 3, 2], [1, 7, 0, 9, 2, 5, 8, 3, 6, 4], [9, 4, 3, 0, 7, 8, 6, 2, 5, 1], [4, 3, 6, 5, 8, 7, 2, 1, 0, 9], [3, 9, 7, 2, 1, 6, 5, 4, 8, 0], [8, 6, 2, 4, 5, 9, 1, 0, 7, 3]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1426 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1426 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 6, 4, 9, 5, 0, 8, 7, 3], [6, 3, 2, 0, 8, 9, 1, 5, 4, 7], [5, 7, 0, 8, 4, 6, 2, 9, 3, 1], [0, 6, 9, 7, 2, 8, 3, 1, 5, 4], [8, 9, 1, 3, 5, 7, 4, 6, 0, 2], [3, 8, 4, 9, 6, 2, 5, 7, 1, 0], [2, 0, 5, 1, 7, 4, 6, 3, 9, 8], [9, 1, 8, 6, 3, 0, 7, 4, 2, 5], [7, 4, 3, 5, 0, 1, 9, 2, 8, 6], [4, 5, 7, 2, 1, 3, 8, 0, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3308 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3308 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 1, 3, 4, 2, 0, 8, 9, 6, 5], [2, 9, 4, 5, 0, 1, 7, 6, 8, 3], [0, 6, 8, 9, 3, 2, 1, 5, 7, 4], [6, 8, 2, 1, 9, 3, 0, 4, 5, 7], [3, 2, 9, 7, 4, 6, 5, 1, 0, 8], [9, 3, 7, 8, 6, 5, 4, 0, 2, 1], [8, 7, 1, 0, 5, 4, 6, 3, 9, 2], [5, 4, 0, 6, 8, 7, 3, 2, 1, 9], [4, 0, 5, 2, 1, 8, 9, 7, 3, 6], [1, 5, 6, 3, 7, 9, 2, 8, 4, 0]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation1036 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation1036 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 7, 8, 3, 1, 9, 0, 4, 6, 5], [4, 1, 3, 7, 2, 0, 9, 8, 5, 6], [6, 5, 7, 1, 9, 3, 2, 0, 8, 4], [7, 0, 9, 8, 6, 5, 3, 1, 4, 2], [9, 8, 1, 5, 3, 6, 4, 7, 2, 0], [1, 3, 2, 0, 7, 4, 5, 6, 9, 8], [8, 9, 0, 4, 5, 7, 6, 2, 3, 1], [0, 4, 6, 9, 8, 2, 7, 5, 1, 3], [3, 2, 5, 6, 4, 1, 8, 9, 0, 7], [5, 6, 4, 2, 0, 8, 1, 3, 7, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2097 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2097 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 6, 1, 8, 9, 3, 7, 5, 2, 4], [1, 2, 6, 9, 8, 4, 0, 7, 5, 3], [2, 0, 8, 7, 3, 9, 6, 4, 1, 5], [3, 4, 2, 5, 7, 8, 9, 1, 0, 6], [9, 5, 7, 1, 4, 2, 3, 8, 6, 0], [5, 9, 4, 0, 6, 7, 2, 3, 8, 1], [6, 7, 3, 4, 2, 5, 1, 0, 9, 8], [7, 8, 9, 3, 1, 0, 5, 6, 4, 2], [8, 1, 0, 2, 5, 6, 4, 9, 3, 7], [4, 3, 5, 6, 0, 1, 8, 2, 7, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3549 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3549 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 2, 6, 8, 9, 5, 1, 4, 3, 0], [0, 3, 4, 7, 6, 8, 2, 9, 5, 1], [8, 1, 5, 9, 7, 3, 4, 6, 0, 2], [6, 9, 1, 2, 8, 0, 5, 7, 4, 3], [5, 8, 2, 6, 0, 9, 7, 3, 1, 4], [1, 6, 9, 3, 2, 4, 0, 8, 7, 5], [2, 4, 7, 0, 3, 1, 6, 5, 9, 8], [9, 0, 8, 5, 4, 6, 3, 1, 2, 7], [3, 5, 0, 4, 1, 7, 9, 2, 8, 6], [4, 7, 3, 1, 5, 2, 8, 0, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2291 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2291 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 1, 7, 5, 2, 9, 8, 4, 6], [1, 2, 3, 0, 6, 8, 4, 7, 9, 5], [2, 0, 5, 3, 7, 1, 8, 9, 6, 4], [3, 7, 4, 1, 9, 6, 5, 0, 8, 2], [4, 9, 2, 6, 8, 0, 3, 1, 5, 7], [5, 1, 0, 9, 2, 4, 7, 6, 3, 8], [9, 4, 8, 5, 3, 7, 6, 2, 1, 0], [7, 5, 6, 8, 4, 9, 2, 3, 0, 1], [8, 6, 9, 2, 0, 5, 1, 4, 7, 3], [6, 8, 7, 4, 1, 3, 0, 5, 2, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation66 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation66 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 1, 4, 6, 2, 8, 9, 5, 7], [1, 2, 3, 0, 4, 6, 9, 8, 7, 5], [2, 0, 5, 3, 9, 1, 7, 6, 4, 8], [3, 4, 8, 1, 0, 7, 6, 5, 9, 2], [4, 5, 7, 6, 3, 9, 0, 2, 8, 1], [5, 1, 0, 9, 7, 8, 3, 4, 2, 6], [6, 7, 9, 2, 8, 5, 4, 1, 0, 3], [9, 8, 6, 5, 2, 4, 1, 7, 3, 0], [8, 9, 2, 7, 1, 0, 5, 3, 6, 4], [7, 6, 4, 8, 5, 3, 2, 0, 1, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3878 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3878 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 7, 8, 0, 6, 5, 4, 3, 9, 2], [3, 2, 0, 1, 8, 9, 5, 7, 4, 6], [0, 3, 6, 2, 5, 4, 1, 9, 7, 8], [7, 0, 1, 3, 9, 8, 2, 5, 6, 4], [6, 8, 5, 9, 4, 1, 7, 2, 0, 3], [2, 4, 9, 5, 1, 7, 6, 8, 3, 0], [9, 1, 3, 6, 7, 0, 8, 4, 2, 5], [5, 6, 4, 7, 2, 3, 9, 0, 8, 1], [4, 9, 2, 8, 0, 6, 3, 1, 5, 7], [8, 5, 7, 4, 3, 2, 0, 6, 1, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation219 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation219 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 5, 4, 2, 8, 6, 3, 9, 1, 7], [2, 6, 5, 3, 9, 0, 4, 8, 7, 1], [5, 1, 8, 7, 0, 4, 9, 3, 6, 2], [1, 2, 0, 4, 5, 9, 7, 6, 8, 3], [6, 3, 7, 9, 1, 5, 8, 2, 0, 4], [4, 7, 2, 8, 6, 3, 0, 1, 9, 5], [8, 9, 1, 0, 4, 7, 2, 5, 3, 6], [9, 8, 3, 6, 2, 1, 5, 7, 4, 0], [3, 0, 9, 1, 7, 2, 6, 4, 5, 8], [7, 4, 6, 5, 3, 8, 1, 0, 2, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation2576 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation2576 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 2, 3, 1, 9, 5, 8, 0, 7, 4], [0, 4, 8, 2, 6, 9, 7, 1, 3, 5], [9, 1, 5, 8, 7, 4, 3, 2, 6, 0], [2, 8, 6, 3, 0, 1, 5, 9, 4, 7], [3, 7, 1, 5, 2, 0, 6, 4, 9, 8], [1, 3, 7, 0, 4, 8, 9, 5, 2, 6], [7, 0, 9, 4, 5, 3, 1, 6, 8, 2], [8, 6, 4, 9, 1, 2, 0, 7, 5, 3], [5, 9, 2, 6, 3, 7, 4, 8, 0, 1], [4, 5, 0, 7, 8, 6, 2, 3, 1, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation115_not_implies_Equation3678 : ∃ (G: Type) (_: Magma G), Equation115 G ∧ ¬ Equation3678 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 1, 4, 7, 9, 3, 8, 5, 6, 0], [3, 4, 6, 5, 7, 0, 2, 9, 8, 1], [9, 5, 3, 0, 4, 8, 7, 6, 1, 2], [0, 6, 9, 8, 5, 7, 1, 4, 2, 3], [1, 9, 8, 6, 0, 2, 3, 7, 5, 4], [7, 3, 1, 4, 8, 5, 9, 2, 0, 6], [8, 2, 7, 1, 3, 9, 6, 0, 4, 5], [6, 8, 5, 3, 2, 4, 0, 1, 9, 7], [5, 0, 2, 9, 6, 1, 4, 3, 7, 8], [4, 7, 0, 2, 1, 6, 5, 8, 3, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation439_not_implies_Equation3862 : ∃ (G: Type) (_: Magma G), Equation439 G ∧ ¬ Equation3862 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 5, 0, 2, 0, 2, 0, 0, 4], [1, 4, 5, 1, 5, 7, 0, 1, 1, 4], [2, 2, 5, 1, 2, 3, 2, 2, 2, 6], [6, 9, 3, 9, 2, 3, 8, 2, 3, 6], [4, 4, 8, 4, 2, 4, 8, 5, 5, 4], [4, 4, 5, 0, 5, 7, 5, 0, 5, 4], [6, 7, 5, 6, 6, 8, 2, 5, 6, 6], [4, 8, 7, 7, 5, 7, 7, 1, 9, 7], [8, 8, 8, 8, 9, 8, 8, 9, 8, 7], [4, 4, 8, 9, 2, 9, 3, 9, 9, 4]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation439_not_implies_Equation3915 : ∃ (G: Type) (_: Magma G), Equation439 G ∧ ¬ Equation3915 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 2, 3, 4, 6, 6, 0, 3, 0, 0], [1, 9, 9, 8, 1, 1, 1, 8, 5, 8], [6, 3, 6, 8, 1, 2, 2, 2, 4, 2], [3, 3, 9, 8, 3, 3, 7, 3, 6, 2], [9, 4, 9, 4, 1, 8, 4, 3, 4, 2], [9, 5, 5, 5, 6, 1, 5, 1, 5, 4], [3, 6, 6, 5, 6, 6, 5, 3, 6, 2], [2, 7, 7, 4, 1, 6, 7, 8, 5, 4], [1, 5, 0, 8, 8, 8, 8, 8, 0, 8], [5, 9, 9, 8, 9, 9, 1, 9, 6, 8]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1465_not_implies_Equation4631 : ∃ (G: Type) (_: Magma G), Equation1465 G ∧ ¬ Equation4631 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 0, 2, 6, 0, 6, 1, 8, 8], [3, 5, 0, 5, 6, 0, 6, 3, 8, 8], [3, 5, 0, 5, 4, 0, 4, 3, 8, 8], [1, 2, 7, 2, 4, 7, 4, 1, 9, 9], [3, 2, 7, 2, 6, 7, 6, 3, 8, 8], [1, 2, 7, 2, 6, 7, 6, 1, 9, 9], [1, 5, 0, 5, 4, 0, 4, 1, 9, 9], [3, 5, 7, 5, 4, 7, 4, 3, 9, 9], [1, 2, 0, 2, 4, 0, 4, 1, 8, 8], [3, 5, 7, 5, 6, 7, 6, 3, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1465_not_implies_Equation4070 : ∃ (G: Type) (_: Magma G), Equation1465 G ∧ ¬ Equation4070 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 1, 8, 8, 4, 2, 1, 0, 0, 4], [3, 6, 8, 8, 9, 3, 6, 0, 0, 9], [2, 6, 7, 7, 9, 2, 6, 0, 0, 9], [3, 1, 8, 8, 4, 3, 1, 5, 5, 4], [3, 6, 7, 7, 4, 3, 6, 0, 0, 4], [3, 6, 7, 7, 9, 3, 6, 5, 5, 9], [2, 1, 7, 7, 4, 2, 1, 5, 5, 4], [2, 6, 8, 8, 4, 2, 6, 5, 5, 4], [3, 1, 7, 7, 9, 3, 1, 0, 0, 9], [2, 1, 8, 8, 9, 2, 1, 5, 5, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2066_not_implies_Equation4631 : ∃ (G: Type) (_: Magma G), Equation2066 G ∧ ¬ Equation4631 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[3, 1, 0, 0, 1, 3], [2, 1, 0, 0, 1, 2], [2, 1, 5, 5, 1, 2], [3, 4, 0, 0, 4, 3], [3, 4, 5, 5, 4, 3], [2, 4, 5, 5, 4, 2]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
 theorem Equation2070_not_implies_Equation3253 : ∃ (G: Type) (_: Magma G), Equation2070 G ∧ ¬ Equation3253 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 3, 3, 3, 1, 1, 1, 2, 1], [8, 6, 4, 8, 8, 6, 4, 4, 8, 8], [8, 6, 8, 8, 8, 6, 4, 4, 8, 8], [8, 6, 6, 4, 8, 6, 4, 4, 4, 8], [0, 0, 7, 5, 7, 0, 0, 0, 0, 0], [3, 3, 1, 3, 3, 3, 1, 2, 2, 1], [5, 0, 7, 5, 0, 0, 5, 5, 0, 0], [3, 3, 2, 3, 3, 2, 1, 2, 2, 1], [5, 0, 7, 5, 0, 0, 0, 0, 0, 0], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 2, 2, 2, 1, 2], [4, 4, 4, 3, 4, 3], [4, 4, 3, 3, 3, 3], [0, 0, 5, 5, 0, 0], [0, 0, 5, 0, 0, 0], [1, 2, 2, 2, 1, 2]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2070_not_implies_Equation3306 : ∃ (G: Type) (_: Magma G), Equation2070 G ∧ ¬ Equation3306 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 2, 3, 3, 7, 2, 7, 2, 7, 3], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [5, 5, 5, 9, 5, 5, 4, 9, 9, 5], [5, 5, 5, 9, 5, 5, 4, 4, 9, 4], [8, 6, 8, 6, 6, 8, 8, 0, 6, 8], [6, 6, 8, 6, 8, 0, 0, 0, 0, 8], [3, 2, 7, 3, 7, 2, 3, 2, 2, 3], [5, 5, 5, 9, 5, 5, 4, 4, 9, 4], [7, 7, 3, 2, 7, 2, 7, 2, 2, 3], [6, 6, 8, 6, 6, 0, 6, 0, 0, 8]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2074_not_implies_Equation3255 : ∃ (G: Type) (_: Magma G), Equation2074 G ∧ ¬ Equation3255 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 1, 2, 1, 1, 2], [3, 3, 5, 5, 5, 3], [3, 3, 5, 5, 5, 3], [0, 4, 0, 0, 4, 4], [2, 1, 2, 1, 1, 2], [0, 4, 0, 0, 4, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2550_not_implies_Equation2253 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2253 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 4, 3, 9, 4, 9, 6, 7, 4, 9], [2, 1, 2, 9, 4, 9, 0, 6, 8, 9], [0, 1, 2, 9, 8, 9, 6, 6, 8, 9], [4, 1, 2, 3, 6, 9, 6, 6, 1, 9], [0, 1, 9, 3, 4, 9, 6, 6, 8, 9], [9, 2, 9, 3, 4, 5, 0, 6, 1, 9], [0, 2, 9, 3, 4, 9, 6, 7, 1, 9], [6, 8, 2, 9, 6, 9, 6, 7, 8, 9], [0, 1, 2, 3, 4, 9, 6, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 6, 1, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2074_not_implies_Equation4316 : ∃ (G: Type) (_: Magma G), Equation2074 G ∧ ¬ Equation4316 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 5, 1, 5, 5, 1], [2, 2, 2, 3, 3, 3], [4, 0, 0, 4, 0, 4], [4, 0, 0, 4, 0, 4], [1, 5, 1, 5, 5, 1], [2, 2, 2, 3, 3, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2550_not_implies_Equation2476 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2476 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 4, 5, 8, 5, 5, 8, 8, 8, 8], [4, 1, 3, 2, 8, 4, 4, 8, 8, 8], [4, 7, 2, 3, 4, 4, 7, 7, 9, 9], [4, 1, 2, 3, 4, 5, 4, 8, 8, 8], [0, 1, 2, 3, 4, 5, 6, 8, 8, 8], [6, 1, 2, 3, 4, 5, 8, 8, 8, 8], [0, 1, 4, 3, 4, 5, 6, 8, 8, 9], [4, 1, 4, 3, 4, 4, 6, 7, 9, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 6, 4, 6, 4, 3, 7, 7, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2082_not_implies_Equation3319 : ∃ (G: Type) (_: Magma G), Equation2082 G ∧ ¬ Equation3319 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[2, 2, 4, 4, 2, 4], [3, 0, 0, 0, 3, 3], [1, 1, 1, 5, 5, 5], [2, 2, 4, 4, 2, 4], [1, 1, 1, 5, 5, 5], [3, 0, 0, 0, 3, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2550_not_implies_Equation2679 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2679 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 9, 6, 5, 9, 6, 9, 6, 9], [8, 1, 9, 8, 8, 9, 8, 9, 8, 2], [4, 7, 2, 7, 8, 5, 7, 7, 8, 9], [0, 1, 6, 3, 5, 9, 6, 6, 6, 9], [0, 6, 6, 6, 4, 5, 6, 6, 8, 6], [6, 7, 7, 6, 4, 5, 7, 7, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 8, 5, 6, 7, 8, 9], [0, 7, 9, 3, 4, 9, 6, 9, 8, 7], [6, 1, 2, 3, 4, 5, 6, 7, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2093_not_implies_Equation3952 : ∃ (G: Type) (_: Magma G), Equation2093 G ∧ ¬ Equation3952 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[3, 2, 1, 0, 3], [4, 2, 1, 4, 3], [1, 2, 1, 4, 3], [4, 0, 1, 4, 3], [4, 0, 1, 0, 0]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2550_not_implies_Equation1055 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation1055 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 6, 3, 3, 4, 8, 4, 8, 8, 2], [2, 1, 2, 8, 8, 6, 6, 7, 8, 9], [0, 6, 2, 3, 4, 8, 6, 8, 8, 9], [4, 6, 2, 3, 8, 8, 4, 8, 8, 9], [0, 1, 9, 8, 4, 8, 6, 8, 8, 7], [7, 6, 3, 3, 8, 5, 4, 8, 8, 3], [7, 1, 9, 8, 4, 5, 6, 7, 8, 7], [0, 6, 2, 8, 6, 5, 4, 7, 8, 9], [0, 6, 2, 3, 4, 5, 6, 7, 8, 9], [0, 6, 2, 8, 6, 8, 4, 8, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2127_not_implies_Equation1629 : ∃ (G: Type) (_: Magma G), Equation2127 G ∧ ¬ Equation1629 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[1, 1, 3, 2, 1], [2, 4, 3, 2, 1], [3, 0, 3, 0, 1], [2, 0, 0, 2, 1], [3, 1, 0, 0, 1]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2550_not_implies_Equation1958 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation1958 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 1, 4, 3, 4, 2, 1, 1, 8, 8], [0, 1, 5, 4, 5, 5, 6, 7, 8, 8], [3, 1, 2, 3, 4, 5, 6, 1, 8, 8], [0, 1, 5, 3, 5, 5, 6, 7, 8, 8], [1, 1, 2, 3, 4, 5, 6, 1, 8, 8], [6, 1, 2, 3, 4, 5, 6, 1, 8, 8], [0, 1, 2, 3, 4, 2, 6, 7, 8, 8], [6, 1, 4, 8, 2, 2, 1, 7, 8, 9], [0, 1, 4, 3, 2, 4, 6, 1, 8, 9], [6, 6, 4, 0, 2, 2, 8, 1, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2227_not_implies_Equation411 : ∃ (G: Type) (_: Magma G), Equation2227 G ∧ ¬ Equation411 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 2, 3, 4, 5, 0], [5, 0, 1, 2, 3, 4], [1, 2, 3, 4, 5, 0], [5, 0, 1, 2, 3, 4], [1, 2, 3, 4, 5, 0], [5, 0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2550_not_implies_Equation3897 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation3897 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 6, 5, 5, 4, 9, 6, 6, 8, 2], [7, 1, 6, 4, 9, 9, 6, 6, 8, 9], [3, 6, 2, 3, 4, 5, 7, 6, 6, 9], [0, 6, 6, 3, 9, 9, 7, 6, 7, 2], [5, 6, 6, 3, 4, 9, 7, 6, 6, 9], [0, 1, 2, 3, 9, 5, 6, 6, 7, 9], [0, 1, 2, 5, 9, 5, 6, 7, 8, 9], [0, 1, 2, 5, 9, 9, 6, 7, 8, 2], [6, 6, 2, 5, 9, 2, 6, 6, 8, 2], [0, 6, 2, 3, 4, 5, 7, 6, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2227_not_implies_Equation4307 : ∃ (G: Type) (_: Magma G), Equation2227 G ∧ ¬ Equation4307 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 3, 1, 2, 0], [4, 2, 1, 3, 0], [4, 2, 1, 3, 0], [4, 2, 1, 3, 0], [4, 2, 3, 1, 0]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2550_not_implies_Equation2513 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2513 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 8, 8, 8, 7, 9, 2, 3, 6], [0, 1, 8, 4, 8, 7, 6, 3, 3, 6], [3, 1, 2, 8, 3, 5, 9, 7, 8, 6], [0, 2, 2, 3, 4, 5, 9, 7, 8, 6], [5, 2, 8, 3, 4, 5, 9, 7, 8, 6], [0, 1, 8, 3, 4, 5, 9, 7, 3, 6], [8, 2, 8, 3, 8, 7, 6, 4, 8, 9], [0, 1, 8, 8, 8, 5, 6, 7, 8, 6], [0, 1, 2, 3, 4, 7, 9, 7, 8, 6], [0, 1, 2, 8, 8, 5, 6, 5, 3, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2260_not_implies_Equation1426 : ∃ (G: Type) (_: Magma G), Equation2260 G ∧ ¬ Equation1426 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 2, 4, 1, 4, 4], [3, 0, 3, 3, 0, 3], [5, 5, 5, 0, 5, 5], [4, 1, 1, 4, 1, 1], [0, 3, 0, 5, 3, 0], [2, 4, 2, 2, 2, 2]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2550_not_implies_Equation3867 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation3867 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 7, 3, 3, 4, 5, 6, 7, 5, 3], [2, 1, 2, 2, 7, 2, 2, 7, 2, 2], [0, 7, 2, 3, 7, 5, 6, 4, 8, 9], [4, 7, 2, 3, 7, 5, 4, 4, 5, 9], [0, 1, 2, 5, 4, 5, 6, 7, 8, 3], [0, 4, 2, 3, 4, 5, 7, 4, 8, 9], [0, 1, 2, 5, 7, 2, 6, 7, 8, 9], [0, 1, 2, 5, 4, 2, 6, 7, 8, 9], [7, 7, 2, 3, 0, 2, 0, 7, 8, 3], [2, 7, 2, 5, 4, 2, 7, 4, 5, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2260_not_implies_Equation203 : ∃ (G: Type) (_: Magma G), Equation2260 G ∧ ¬ Equation203 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 2, 5, 5, 1, 5], [4, 0, 4, 4, 4, 0], [3, 3, 3, 3, 0, 3], [2, 5, 2, 2, 2, 2], [5, 1, 1, 1, 5, 1], [0, 4, 0, 0, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2550_not_implies_Equation2716 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2716 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 7, 6, 3, 6, 7, 6, 7, 8, 9], [3, 1, 2, 8, 6, 7, 6, 7, 3, 3], [4, 1, 2, 3, 4, 7, 4, 7, 8, 7], [0, 7, 7, 3, 5, 7, 7, 7, 8, 9], [0, 1, 2, 8, 4, 7, 6, 8, 8, 7], [3, 2, 2, 0, 4, 5, 7, 7, 0, 0], [0, 7, 2, 8, 4, 7, 6, 8, 0, 7], [8, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 1, 3, 5, 5, 6, 7, 8, 9], [8, 7, 2, 3, 6, 7, 7, 7, 3, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2260_not_implies_Equation3456 : ∃ (G: Type) (_: Magma G), Equation2260 G ∧ ¬ Equation3456 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 3, 3, 3, 1, 3], [2, 0, 4, 0, 4, 4], [5, 5, 5, 1, 5, 5], [0, 4, 0, 4, 0, 0], [3, 1, 1, 5, 3, 1], [4, 2, 2, 2, 2, 2]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2550_not_implies_Equation1847 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation1847 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 8, 3, 5, 4, 5, 2, 7, 8, 5], [2, 1, 2, 5, 0, 5, 2, 0, 2, 5], [0, 1, 2, 5, 4, 5, 6, 7, 8, 5], [4, 8, 2, 3, 9, 5, 6, 0, 8, 9], [0, 8, 8, 5, 4, 3, 2, 7, 2, 5], [0, 8, 2, 3, 4, 5, 6, 0, 8, 9], [4, 2, 8, 5, 9, 5, 6, 0, 8, 5], [4, 8, 8, 5, 0, 3, 6, 7, 8, 5], [0, 1, 2, 5, 0, 9, 6, 0, 8, 5], [0, 2, 8, 3, 4, 5, 6, 0, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2270_not_implies_Equation203 : ∃ (G: Type) (_: Magma G), Equation2270 G ∧ ¬ Equation203 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[1, 2, 5, 1, 5, 5], [4, 4, 0, 4, 4, 0], [3, 3, 4, 3, 0, 4], [5, 5, 2, 5, 2, 2], [2, 1, 1, 2, 1, 1], [0, 0, 3, 0, 3, 3]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2550_not_implies_Equation2618 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2618 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 1, 7, 4, 7, 6, 6, 7, 7, 8], [0, 1, 2, 3, 7, 6, 6, 7, 9, 9], [3, 1, 2, 1, 7, 6, 5, 7, 8, 8], [0, 1, 1, 3, 7, 6, 5, 7, 7, 7], [1, 1, 2, 3, 4, 6, 6, 7, 8, 8], [1, 1, 4, 1, 7, 5, 6, 4, 7, 8], [1, 1, 1, 1, 7, 5, 6, 7, 7, 8], [1, 1, 2, 3, 4, 6, 5, 7, 8, 9], [1, 1, 4, 7, 7, 6, 5, 4, 8, 9], [1, 1, 7, 1, 4, 6, 5, 4, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation2550_not_implies_Equation1025 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation1025 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 6, 3, 3, 5, 4, 7, 6, 5, 6], [2, 1, 4, 4, 4, 5, 7, 6, 2, 6], [0, 5, 2, 3, 4, 4, 7, 7, 8, 7], [4, 7, 2, 3, 4, 4, 7, 7, 4, 7], [0, 1, 2, 3, 4, 5, 7, 7, 8, 6], [0, 1, 2, 2, 4, 5, 7, 6, 8, 6], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 4, 2, 4, 4, 6, 7, 4, 9], [0, 1, 4, 4, 4, 5, 7, 7, 8, 6], [6, 7, 6, 6, 6, 6, 6, 6, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation2550_not_implies_Equation2503 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2503 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 2, 3, 6, 5, 6, 6, 2, 5], [9, 1, 5, 4, 6, 5, 6, 6, 8, 5], [3, 1, 2, 0, 6, 5, 6, 6, 8, 5], [0, 4, 8, 3, 6, 9, 6, 6, 2, 5], [5, 1, 8, 3, 4, 9, 6, 6, 9, 5], [0, 6, 2, 6, 6, 5, 6, 7, 8, 9], [0, 1, 2, 3, 4, 9, 6, 7, 2, 5], [0, 4, 2, 0, 4, 5, 6, 7, 5, 5], [6, 1, 2, 6, 6, 9, 6, 6, 8, 5], [0, 6, 2, 6, 6, 5, 6, 6, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation2550_not_implies_Equation2466 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2466 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 8, 3, 7, 7, 8, 4, 3, 8, 6], [2, 1, 8, 3, 4, 5, 6, 7, 8, 9], [0, 8, 2, 7, 4, 8, 7, 7, 8, 9], [4, 8, 2, 3, 4, 8, 6, 7, 8, 6], [0, 8, 8, 9, 4, 8, 6, 3, 8, 9], [8, 1, 8, 1, 1, 5, 1, 1, 8, 1], [0, 8, 8, 3, 7, 8, 6, 3, 8, 9], [0, 8, 2, 3, 4, 1, 6, 7, 8, 9], [0, 1, 2, 3, 7, 5, 7, 3, 8, 6], [0, 8, 2, 3, 7, 8, 4, 7, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation2550_not_implies_Equation2787 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2787 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 8, 2, 9, 5, 8, 9, 5, 8, 9], [4, 1, 3, 9, 6, 6, 7, 6, 9, 3], [9, 7, 2, 9, 5, 5, 9, 6, 6, 9], [8, 5, 2, 3, 5, 7, 6, 7, 8, 9], [0, 1, 2, 9, 4, 6, 8, 5, 8, 9], [6, 1, 2, 9, 4, 5, 6, 7, 8, 9], [0, 1, 3, 9, 4, 5, 6, 7, 8, 3], [8, 1, 9, 9, 4, 5, 6, 7, 8, 3], [0, 1, 4, 9, 4, 5, 6, 7, 8, 3], [0, 7, 2, 3, 5, 7, 6, 7, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation2550_not_implies_Equation2649 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2649 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 6, 3, 3, 8, 6, 7, 6, 6, 6], [2, 1, 9, 6, 4, 5, 6, 7, 6, 6], [0, 6, 2, 6, 1, 1, 7, 1, 6, 6], [4, 6, 2, 3, 5, 5, 8, 5, 6, 6], [0, 6, 9, 6, 4, 5, 7, 5, 6, 6], [0, 1, 9, 6, 4, 5, 6, 7, 6, 6], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 9, 3, 5, 5, 6, 7, 8, 9], [0, 1, 9, 3, 4, 1, 6, 1, 8, 9], [0, 6, 2, 6, 8, 6, 7, 6, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation2550_not_implies_Equation2584 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2584 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 1, 2, 8, 4, 7, 8, 7, 8, 7], [0, 1, 6, 8, 2, 5, 8, 4, 8, 5], [5, 3, 2, 3, 4, 7, 8, 7, 8, 9], [4, 1, 7, 3, 7, 4, 6, 5, 8, 5], [0, 1, 6, 8, 4, 5, 6, 7, 8, 9], [0, 6, 2, 8, 4, 5, 8, 7, 8, 9], [0, 1, 2, 8, 4, 7, 6, 7, 8, 9], [0, 6, 2, 8, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 7, 7, 6, 7, 8, 2], [7, 3, 0, 3, 7, 7, 3, 7, 3, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation2550_not_implies_Equation2364 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2364 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 6, 3, 7, 7, 4, 7, 5, 8, 9], [2, 1, 9, 7, 7, 4, 7, 5, 8, 2], [0, 6, 2, 7, 7, 4, 6, 7, 8, 9], [4, 6, 2, 3, 7, 4, 5, 7, 8, 9], [0, 6, 2, 7, 4, 5, 6, 7, 8, 9], [0, 1, 9, 3, 4, 5, 6, 7, 1, 9], [0, 1, 2, 7, 7, 4, 6, 5, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 1, 9], [5, 6, 3, 7, 7, 4, 7, 5, 8, 6], [0, 1, 2, 7, 4, 4, 5, 5, 1, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1855_not_implies_Equation1834 : ∃ (G: Type) (_: Magma G), Equation1855 G ∧ ¬ Equation1834 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 6, 3, 2, 3, 3, 3, 2, 3, 3], [4, 9, 1, 6, 5, 1, 1, 0, 1, 1], [2, 2, 2, 2, 2, 2, 2, 2, 2, 2], [6, 2, 0, 5, 5, 0, 0, 0, 0, 0], [4, 5, 7, 7, 5, 7, 2, 2, 7, 7], [5, 5, 5, 5, 5, 5, 5, 5, 5, 5], [8, 8, 8, 8, 8, 8, 9, 2, 2, 8], [4, 2, 4, 6, 5, 4, 4, 9, 5, 4], [6, 6, 6, 6, 3, 6, 2, 6, 5, 6], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1855_not_implies_Equation4131 : ∃ (G: Type) (_: Magma G), Equation1855 G ∧ ¬ Equation4131 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 2, 5, 2, 5, 2, 2, 2, 2, 5], [6, 6, 9, 9, 5, 9, 9, 9, 9, 5], [3, 3, 3, 0, 5, 0, 0, 0, 0, 0], [3, 3, 3, 3, 3, 3, 3, 3, 3, 3], [3, 3, 6, 4, 7, 4, 4, 4, 4, 5], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [5, 5, 5, 5, 5, 5, 5, 5, 5, 5], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [1, 5, 6, 1, 3, 1, 1, 1, 1, 3]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1855_not_implies_Equation1860 : ∃ (G: Type) (_: Magma G), Equation1855 G ∧ ¬ Equation1860 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 9, 3, 7, 3, 3, 3, 2, 3, 3], [4, 2, 1, 9, 1, 1, 1, 1, 1, 1], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [8, 5, 0, 9, 5, 0, 0, 0, 0, 0], [9, 7, 7, 7, 5, 7, 7, 0, 7, 7], [5, 5, 5, 5, 5, 5, 5, 5, 5, 5], [2, 2, 2, 2, 2, 2, 2, 2, 2, 2], [4, 4, 4, 6, 5, 4, 4, 2, 4, 4], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1855_not_implies_Equation1863 : ∃ (G: Type) (_: Magma G), Equation1855 G ∧ ¬ Equation1863 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[4, 3, 3, 9, 3, 3, 3, 5, 3, 3], [1, 2, 7, 7, 7, 7, 7, 6, 7, 7], [4, 4, 4, 4, 4, 4, 4, 4, 4, 4], [6, 3, 0, 6, 0, 0, 0, 0, 0, 0], [2, 2, 2, 2, 2, 2, 2, 2, 2, 2], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [1, 9, 1, 5, 1, 1, 1, 5, 1, 1], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [5, 5, 5, 5, 5, 5, 5, 5, 5, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1855_not_implies_Equation1853 : ∃ (G: Type) (_: Magma G), Equation1855 G ∧ ¬ Equation1853 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 4, 3, 4, 3, 4, 2, 0, 4, 4], [3, 8, 6, 4, 6, 6, 0, 0, 6, 6], [5, 2, 8, 2, 6, 2, 2, 2, 2, 2], [3, 9, 3, 8, 3, 2, 0, 2, 3, 2], [3, 4, 9, 0, 8, 6, 0, 0, 0, 0], [3, 9, 7, 4, 7, 8, 7, 2, 7, 7], [1, 9, 1, 2, 8, 6, 8, 1, 1, 1], [5, 5, 5, 2, 9, 2, 9, 8, 5, 5], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [9, 9, 9, 8, 9, 9, 9, 9, 9, 8]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation1855_not_implies_Equation1850 : ∃ (G: Type) (_: Magma G), Equation1855 G ∧ ¬ Equation1850 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 9, 3, 1, 0, 3, 3, 1, 6, 3], [2, 6, 5, 1, 2, 2, 2, 1, 2, 2], [2, 9, 9, 1, 1, 1, 1, 1, 2, 1], [5, 0, 4, 9, 0, 1, 0, 9, 2, 0], [5, 5, 5, 9, 6, 9, 5, 1, 2, 5], [6, 4, 4, 4, 2, 6, 4, 9, 6, 4], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [5, 8, 7, 9, 6, 9, 8, 6, 2, 8], [5, 4, 7, 9, 6, 9, 7, 9, 9, 7], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3108_not_implies_Equation3803 : ∃ (G: Type) (_: Magma G), Equation3108 G ∧ ¬ Equation3803 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 3, 4, 3, 4, 4, 4, 7, 4, 3], [4, 1, 7, 3, 4, 5, 6, 7, 8, 9], [7, 4, 2, 3, 4, 4, 4, 7, 4, 3], [0, 1, 2, 3, 2, 1, 9, 7, 9, 9], [0, 1, 2, 1, 4, 5, 6, 2, 8, 9], [4, 1, 4, 1, 4, 5, 6, 1, 8, 9], [4, 1, 4, 9, 4, 5, 6, 1, 8, 9], [0, 1, 2, 3, 1, 1, 1, 7, 1, 3], [4, 1, 4, 9, 4, 5, 6, 1, 8, 9], [3, 1, 4, 3, 4, 5, 6, 1, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3108_not_implies_Equation2716 : ∃ (G: Type) (_: Magma G), Equation3108 G ∧ ¬ Equation2716 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 6, 6, 3, 4, 6, 6, 4, 3, 9], [3, 1, 2, 3, 4, 6, 6, 2, 3, 2], [4, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 2, 5, 6, 6, 8, 2], [0, 1, 2, 1, 4, 6, 6, 7, 2, 2], [3, 6, 2, 3, 2, 5, 6, 6, 8, 6], [0, 1, 2, 3, 4, 5, 6, 7, 2, 9], [6, 6, 2, 6, 4, 2, 6, 7, 2, 6], [3, 2, 2, 3, 2, 5, 5, 2, 8, 2], [0, 2, 2, 6, 6, 2, 6, 2, 2, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation3108_not_implies_Equation2778 : ∃ (G: Type) (_: Magma G), Equation3108 G ∧ ¬ Equation2778 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 1, 4, 3, 4, 5, 6, 7, 8, 9], [0, 1, 3, 3, 4, 0, 3, 0, 3, 9], [5, 4, 2, 3, 4, 5, 6, 7, 3, 9], [0, 1, 2, 3, 2, 6, 6, 0, 8, 9], [0, 1, 2, 0, 4, 2, 0, 2, 0, 0], [0, 0, 2, 6, 0, 5, 6, 7, 0, 2], [0, 0, 2, 3, 0, 5, 6, 7, 8, 9], [0, 0, 2, 6, 0, 5, 6, 7, 0, 6], [0, 3, 9, 3, 0, 6, 6, 0, 8, 9], [0, 1, 2, 3, 1, 6, 6, 6, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation828_not_implies_Equation359 : ∃ (G: Type) (_: Magma G), Equation828 G ∧ ¬ Equation359 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 9, 9, 1, 9, 9, 0, 9, 7, 0], [2, 6, 6, 1, 6, 9, 3, 9, 2, 3], [2, 9, 6, 2, 6, 9, 3, 9, 7, 3], [7, 9, 6, 7, 6, 6, 3, 6, 7, 3], [1, 6, 6, 4, 6, 6, 3, 9, 2, 3], [2, 6, 6, 5, 6, 6, 3, 6, 2, 3], [7, 6, 6, 7, 6, 6, 3, 6, 7, 3], [7, 6, 6, 7, 6, 9, 0, 9, 7, 0], [7, 9, 9, 7, 9, 9, 8, 9, 7, 8], [7, 6, 6, 7, 6, 6, 3, 9, 7, 3]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation828_not_implies_Equation4065 : ∃ (G: Type) (_: Magma G), Equation828 G ∧ ¬ Equation4065 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 5, 6, 6, 8, 0, 0, 0, 1, 7], [2, 6, 6, 6, 8, 8, 8, 8, 1, 7], [3, 5, 4, 7, 8, 8, 8, 8, 2, 7], [3, 6, 6, 6, 8, 0, 8, 0, 3, 7], [1, 4, 4, 4, 8, 0, 8, 0, 1, 5], [3, 5, 6, 5, 8, 0, 8, 0, 3, 7], [1, 6, 6, 6, 8, 8, 8, 8, 1, 5], [3, 7, 6, 7, 8, 8, 8, 8, 3, 7], [3, 5, 6, 5, 8, 8, 8, 8, 3, 5], [9, 5, 4, 5, 0, 0, 0, 0, 3, 5]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation4428_not_implies_Equation4320 : ∃ (G: Type) (_: Magma G), Equation4428 G ∧ ¬ Equation4320 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[4, 9, 3, 9, 9, 3, 3, 3, 3, 9], [2, 2, 9, 2, 5, 9, 2, 2, 2, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9, 9, 2, 2, 2, 2, 9], [9, 9, 9, 9, 9, 2, 2, 2, 2, 9], [9, 9, 9, 9, 9, 2, 2, 2, 2, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
-
-@[equational_result]
-theorem Equation4428_not_implies_Equation4362 : ∃ (G: Type) (_: Magma G), Equation4428 G ∧ ¬ Equation4362 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[9, 9, 5, 4, 9, 9, 4, 4, 4, 9], [3, 3, 3, 9, 3, 6, 9, 3, 3, 9], [9, 9, 9, 9, 9, 9, 9, 3, 3, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9, 9, 6, 9, 3, 3, 9], [9, 9, 9, 9, 9, 9, 5, 3, 3, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2314_not_implies_Equation2330 : ∃ (G: Type) (_: Magma G), Equation2314 G ∧ ¬ Equation2330 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[2, 2, 4, 3, 3], [4, 2, 3, 2, 3], [4, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 2, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
 theorem Equation2347_not_implies_Equation2669 : ∃ (G: Type) (_: Magma G), Equation2347 G ∧ ¬ Equation2669 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 1, 4, 3, 9, 6, 7, 8, 5], [3, 1, 2, 3, 6, 2, 3, 7, 8, 5], [7, 1, 2, 4, 3, 5, 6, 0, 8, 9], [0, 1, 8, 3, 4, 9, 6, 7, 2, 5], [3, 7, 8, 3, 4, 9, 6, 1, 2, 5], [7, 3, 8, 1, 6, 5, 4, 0, 2, 9], [7, 3, 8, 1, 4, 9, 6, 0, 2, 5], [0, 1, 8, 4, 3, 9, 4, 7, 2, 5], [7, 3, 2, 1, 6, 9, 4, 0, 8, 5], [0, 7, 8, 4, 3, 5, 4, 1, 2, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 2, 2, 4, 3], [3, 1, 3, 3, 4], [0, 1, 2, 4, 3], [0, 1, 2, 3, 4], [2, 1, 3, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation65_not_implies_Equation872 : ∃ (G: Type) (_: Magma G), Equation65 G ∧ ¬ Equation872 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 1, 9, 7, 6, 5, 4, 3, 8, 0], [3, 1, 7, 9, 4, 5, 2, 0, 8, 6], [2, 1, 9, 4, 3, 5, 7, 6, 8, 0], [2, 1, 9, 3, 4, 5, 6, 7, 8, 0], [2, 5, 9, 3, 4, 1, 6, 7, 8, 0], [2, 1, 9, 3, 6, 5, 4, 7, 8, 0], [2, 1, 9, 3, 4, 8, 6, 7, 5, 0], [2, 1, 9, 3, 4, 5, 6, 7, 8, 0], [2, 1, 9, 3, 4, 5, 7, 6, 8, 0], [2, 1, 9, 6, 7, 5, 3, 4, 8, 0]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2381_not_implies_Equation1055 : ∃ (G: Type) (_: Magma G), Equation2381 G ∧ ¬ Equation1055 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 1, 1, 3, 4, 5], [5, 1, 2, 4, 5, 5], [3, 1, 2, 5, 5, 0], [0, 1, 1, 3, 4, 5], [5, 2, 1, 3, 4, 5], [0, 2, 1, 3, 4, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation65_not_implies_Equation4118 : ∃ (G: Type) (_: Magma G), Equation65 G ∧ ¬ Equation4118 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 1, 9, 3, 7, 6, 5, 4, 8, 0], [2, 1, 9, 3, 4, 5, 6, 7, 8, 0], [2, 3, 9, 1, 4, 5, 8, 7, 6, 0], [2, 1, 9, 3, 4, 5, 6, 7, 8, 0], [2, 1, 9, 3, 4, 5, 6, 7, 8, 0], [2, 1, 9, 3, 8, 5, 6, 7, 4, 0], [2, 3, 9, 1, 4, 5, 6, 7, 8, 0], [2, 1, 9, 3, 4, 5, 6, 7, 8, 0], [2, 7, 9, 5, 4, 3, 6, 1, 8, 0], [2, 1, 9, 3, 4, 6, 5, 7, 8, 0]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2381_not_implies_Equation1958 : ∃ (G: Type) (_: Magma G), Equation2381 G ∧ ¬ Equation1958 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 4, 3, 3, 4, 5], [5, 1, 2, 4, 5, 0], [3, 3, 2, 3, 5, 0], [0, 1, 2, 3, 4, 5], [5, 1, 2, 3, 4, 5], [0, 1, 3, 3, 4, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation65_not_implies_Equation679 : ∃ (G: Type) (_: Magma G), Equation65 G ∧ ¬ Equation679 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 6, 4, 3, 5, 1, 7, 8, 9], [4, 2, 6, 0, 5, 3, 1, 7, 8, 9], [3, 2, 6, 5, 0, 4, 1, 7, 8, 9], [5, 2, 6, 3, 4, 0, 1, 7, 8, 9], [5, 2, 6, 3, 4, 0, 1, 7, 8, 9], [0, 2, 6, 4, 3, 5, 1, 7, 8, 9], [0, 2, 6, 3, 4, 5, 1, 7, 8, 9], [0, 2, 6, 3, 4, 5, 1, 7, 8, 9], [0, 2, 6, 3, 4, 5, 1, 7, 8, 9], [0, 2, 6, 3, 4, 5, 1, 7, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2381_not_implies_Equation2263 : ∃ (G: Type) (_: Magma G), Equation2381 G ∧ ¬ Equation2263 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 1, 2, 4, 1], [2, 1, 3, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 1], [2, 2, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation65_not_implies_Equation1518 : ∃ (G: Type) (_: Magma G), Equation65 G ∧ ¬ Equation1518 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 6, 4, 3, 5, 1, 7, 8, 9], [3, 2, 6, 5, 0, 4, 1, 7, 8, 9], [4, 2, 6, 0, 5, 3, 1, 7, 8, 9], [5, 2, 6, 3, 4, 0, 1, 7, 8, 9], [5, 2, 6, 3, 4, 0, 1, 7, 8, 9], [0, 2, 6, 4, 3, 5, 1, 7, 8, 9], [0, 2, 6, 3, 4, 5, 1, 7, 8, 9], [0, 2, 6, 3, 4, 5, 1, 7, 8, 9], [0, 2, 6, 3, 4, 5, 1, 7, 8, 9], [0, 2, 6, 3, 4, 5, 1, 7, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2381_not_implies_Equation2364 : ∃ (G: Type) (_: Magma G), Equation2381 G ∧ ¬ Equation2364 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 1, 2, 3, 4, 5], [5, 1, 3, 4, 0, 5], [3, 0, 2, 3, 5, 5], [0, 1, 2, 3, 5, 5], [5, 0, 2, 3, 4, 5], [0, 1, 3, 3, 4, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation65_not_implies_Equation375 : ∃ (G: Type) (_: Magma G), Equation65 G ∧ ¬ Equation375 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 2, 1, 5, 4, 0, 6, 7, 8, 9], [3, 1, 2, 5, 4, 0, 6, 7, 8, 9], [3, 1, 2, 5, 4, 0, 6, 7, 8, 9], [3, 4, 2, 5, 1, 0, 6, 7, 8, 9], [3, 1, 2, 5, 4, 0, 6, 7, 8, 9], [3, 1, 2, 5, 4, 0, 6, 7, 8, 9], [3, 1, 2, 5, 4, 0, 6, 7, 8, 9], [3, 1, 2, 5, 4, 0, 6, 7, 8, 9], [3, 1, 2, 5, 4, 0, 6, 7, 8, 9], [3, 1, 2, 5, 4, 0, 6, 7, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2381_not_implies_Equation2503 : ∃ (G: Type) (_: Magma G), Equation2381 G ∧ ¬ Equation2503 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 2, 5, 5, 5, 5], [5, 1, 5, 4, 5, 5], [3, 1, 2, 5, 5, 5], [0, 1, 5, 3, 5, 5], [5, 1, 5, 3, 4, 5], [0, 1, 2, 3, 4, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation65_not_implies_Equation3915 : ∃ (G: Type) (_: Magma G), Equation65 G ∧ ¬ Equation3915 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 2, 1, 4, 0, 5, 6, 7, 8, 9], [3, 1, 2, 4, 0, 5, 6, 7, 8, 9], [3, 1, 2, 4, 0, 5, 6, 7, 8, 9], [3, 1, 2, 4, 0, 5, 6, 7, 8, 9], [3, 5, 2, 4, 0, 1, 6, 7, 8, 9], [3, 1, 2, 4, 0, 5, 6, 7, 8, 9], [3, 1, 2, 4, 0, 5, 6, 7, 8, 9], [3, 1, 2, 4, 0, 5, 6, 7, 8, 9], [3, 1, 2, 4, 0, 5, 6, 7, 8, 9], [3, 1, 2, 4, 0, 5, 6, 7, 8, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2381_not_implies_Equation2669 : ∃ (G: Type) (_: Magma G), Equation2381 G ∧ ¬ Equation2669 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 2, 3, 3, 3, 5], [3, 1, 3, 3, 3, 5], [5, 1, 2, 4, 3, 5], [0, 1, 2, 3, 4, 5], [5, 1, 2, 3, 4, 5], [0, 1, 3, 3, 3, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation3545 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation3545 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 2, 3, 2, 3, 3, 3, 2, 3, 0], [3, 9, 2, 1, 5, 4, 9, 9, 5, 6], [3, 3, 3, 0, 3, 3, 2, 3, 3, 2], [0, 6, 2, 5, 3, 9, 1, 6, 3, 5], [3, 4, 3, 9, 6, 6, 5, 4, 6, 3], [3, 5, 3, 3, 6, 6, 4, 5, 6, 9], [2, 9, 3, 6, 4, 5, 9, 9, 4, 1], [3, 9, 2, 1, 5, 4, 9, 9, 5, 6], [3, 4, 3, 9, 6, 6, 5, 4, 6, 3], [2, 1, 0, 5, 9, 3, 6, 1, 9, 5]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2381_not_implies_Equation3897 : ∃ (G: Type) (_: Magma G), Equation2381 G ∧ ¬ Equation3897 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 5, 2, 3, 3, 5], [5, 1, 4, 4, 3, 5], [3, 5, 2, 5, 3, 5], [0, 5, 2, 3, 4, 5], [5, 5, 2, 3, 4, 5], [0, 1, 4, 3, 4, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation3253 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation3253 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 2, 0, 9, 1, 5, 4, 8, 7], [5, 4, 0, 4, 3, 2, 4, 6, 6, 1], [1, 5, 1, 2, 4, 2, 0, 7, 8, 9], [2, 4, 5, 4, 6, 0, 4, 1, 6, 3], [4, 6, 7, 1, 5, 9, 3, 5, 1, 9], [2, 0, 1, 5, 7, 1, 2, 9, 8, 4], [0, 4, 2, 4, 1, 5, 4, 3, 6, 6], [7, 1, 9, 3, 9, 4, 6, 5, 1, 5], [8, 6, 8, 6, 1, 8, 6, 1, 8, 1], [9, 3, 4, 6, 5, 7, 1, 9, 1, 5]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation238_not_implies_Equation2300 : ∃ (G: Type) (_: Magma G), Equation238 G ∧ ¬ Equation2300 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 1, 3, 4, 4], [2, 1, 2, 4, 4], [0, 1, 2, 4, 4], [0, 1, 2, 3, 4], [2, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4544 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4544 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 1, 1, 8, 5, 1, 3, 8, 3], [3, 5, 2, 3, 1, 7, 3, 5, 1, 5], [1, 3, 1, 1, 5, 8, 1, 2, 5, 2], [1, 2, 1, 1, 8, 5, 1, 3, 8, 3], [5, 7, 8, 5, 6, 6, 5, 1, 6, 1], [8, 1, 5, 8, 6, 6, 8, 7, 6, 7], [1, 2, 1, 1, 8, 5, 1, 3, 8, 3], [2, 5, 3, 2, 7, 1, 2, 5, 7, 5], [5, 7, 8, 5, 6, 6, 5, 1, 6, 1], [2, 5, 3, 2, 7, 1, 2, 5, 7, 5]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation238_not_implies_Equation2337 : ∃ (G: Type) (_: Magma G), Equation238 G ∧ ¬ Equation2337 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 1, 2, 4, 4], [2, 1, 3, 4, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [2, 0, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4283 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4283 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[9, 1, 0, 2, 9, 1, 2, 0, 9, 4], [2, 9, 1, 9, 1, 5, 6, 1, 1, 3], [4, 3, 5, 1, 0, 9, 7, 5, 8, 5], [1, 9, 3, 9, 2, 6, 5, 3, 1, 1], [9, 2, 4, 1, 9, 2, 1, 4, 9, 0], [2, 6, 7, 5, 1, 1, 1, 7, 1, 9], [1, 5, 9, 6, 2, 1, 1, 9, 1, 7], [4, 3, 5, 1, 0, 9, 7, 5, 8, 5], [9, 1, 8, 1, 9, 1, 1, 8, 9, 8], [0, 1, 5, 3, 4, 7, 9, 5, 8, 5]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2398_not_implies_Equation1025 : ∃ (G: Type) (_: Magma G), Equation2398 G ∧ ¬ Equation1025 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 2, 3, 2, 4], [2, 1, 4, 3, 2], [0, 1, 2, 3, 4], [4, 1, 2, 3, 4], [0, 3, 2, 1, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation3342 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation3342 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 1, 4, 6, 0, 3, 0, 9, 1], [9, 6, 0, 8, 1, 9, 5, 9, 6, 2], [1, 9, 1, 6, 3, 2, 4, 2, 0, 1], [6, 1, 3, 0, 0, 5, 6, 5, 8, 4], [3, 5, 4, 6, 0, 8, 0, 8, 1, 6], [2, 6, 9, 1, 5, 6, 8, 6, 9, 0], [4, 8, 6, 0, 6, 1, 0, 1, 5, 3], [2, 6, 9, 1, 5, 6, 8, 6, 9, 0], [0, 9, 2, 5, 8, 6, 1, 6, 6, 9], [1, 0, 1, 3, 4, 9, 6, 9, 2, 1]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2398_not_implies_Equation1847 : ∃ (G: Type) (_: Magma G), Equation2398 G ∧ ¬ Equation1847 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 2, 3, 2, 2], [2, 1, 4, 2, 4], [0, 1, 2, 3, 4], [4, 1, 2, 3, 4], [0, 3, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4405 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4405 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 2, 1, 1, 0, 6, 0, 6, 6, 9], [2, 2, 0, 6, 1, 9, 1, 9, 1, 6], [0, 1, 7, 8, 7, 6, 7, 6, 3, 2], [6, 1, 3, 4, 8, 5, 8, 5, 4, 9], [1, 0, 7, 3, 7, 2, 7, 2, 8, 6], [9, 6, 2, 9, 6, 3, 6, 3, 5, 3], [1, 0, 7, 3, 7, 2, 7, 2, 8, 6], [9, 6, 2, 9, 6, 3, 6, 3, 5, 3], [1, 6, 8, 4, 3, 9, 3, 9, 4, 5], [6, 9, 6, 5, 2, 3, 2, 3, 9, 3]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2398_not_implies_Equation2253 : ∃ (G: Type) (_: Magma G), Equation2398 G ∧ ¬ Equation2253 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 1, 3, 2, 4], [2, 1, 4, 3, 2], [0, 1, 2, 3, 4], [4, 1, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4442 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4442 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 2, 1, 1, 0, 0, 6, 7, 0, 1], [2, 2, 0, 0, 1, 1, 7, 6, 1, 0], [0, 1, 7, 7, 7, 7, 2, 5, 7, 7], [0, 1, 7, 7, 7, 7, 2, 5, 7, 7], [1, 0, 7, 7, 7, 7, 5, 2, 7, 7], [1, 0, 7, 7, 7, 7, 5, 2, 7, 7], [7, 6, 5, 5, 2, 2, 0, 0, 2, 5], [6, 7, 2, 2, 5, 5, 0, 0, 5, 2], [1, 0, 7, 7, 7, 7, 5, 2, 7, 7], [0, 1, 7, 7, 7, 7, 2, 5, 7, 7]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2398_not_implies_Equation2300 : ∃ (G: Type) (_: Magma G), Equation2398 G ∧ ¬ Equation2300 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 1, 3, 2, 4], [2, 1, 2, 4, 3], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [2, 2, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4435 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4435 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 2, 4, 0, 5, 4, 3, 1, 6, 3], [1, 5, 7, 1, 2, 7, 8, 5, 9, 8], [0, 1, 9, 9, 4, 9, 3, 7, 2, 3], [4, 7, 9, 9, 0, 9, 3, 1, 3, 2], [5, 1, 0, 4, 5, 0, 3, 2, 3, 6], [0, 1, 9, 9, 4, 9, 3, 7, 2, 3], [3, 8, 3, 3, 3, 3, 6, 8, 0, 0], [2, 5, 1, 7, 1, 1, 8, 5, 8, 9], [3, 8, 3, 2, 6, 3, 0, 9, 7, 7], [6, 9, 2, 3, 3, 2, 0, 8, 7, 7]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2398_not_implies_Equation2446 : ∃ (G: Type) (_: Magma G), Equation2398 G ∧ ¬ Equation2446 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 1, 3, 2, 4], [2, 1, 4, 2, 4], [0, 1, 2, 3, 4], [4, 1, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4677 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4677 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 2, 1, 5, 2, 3, 3, 0, 5, 9], [1, 5, 5, 8, 5, 2, 2, 7, 8, 2], [2, 5, 5, 7, 5, 1, 1, 8, 7, 2], [0, 7, 8, 1, 7, 5, 5, 1, 1, 9], [1, 5, 5, 8, 5, 2, 2, 7, 8, 2], [3, 1, 2, 0, 1, 3, 3, 5, 0, 9], [3, 1, 2, 0, 1, 3, 3, 5, 0, 9], [5, 8, 7, 1, 8, 0, 0, 1, 1, 9], [0, 7, 8, 1, 7, 5, 5, 1, 1, 9], [9, 2, 2, 9, 2, 9, 9, 9, 9, 6]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2398_not_implies_Equation2466 : ∃ (G: Type) (_: Magma G), Equation2398 G ∧ ¬ Equation2466 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 3, 3, 2, 4], [2, 1, 4, 2, 4], [0, 1, 2, 3, 4], [4, 1, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4358 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4358 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 2, 3, 1, 5, 7, 4, 0, 1, 0], [1, 4, 2, 4, 2, 9, 5, 3, 4, 6], [2, 4, 4, 2, 3, 5, 6, 1, 2, 9], [3, 2, 4, 4, 1, 6, 9, 2, 4, 5], [0, 3, 1, 2, 5, 0, 7, 5, 2, 4], [4, 5, 6, 9, 7, 3, 3, 0, 9, 0], [0, 6, 9, 5, 4, 0, 3, 7, 5, 3], [5, 1, 2, 3, 0, 4, 0, 5, 3, 7], [3, 2, 4, 4, 1, 6, 9, 2, 4, 5], [7, 9, 5, 6, 0, 3, 0, 4, 6, 3]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2398_not_implies_Equation2503 : ∃ (G: Type) (_: Magma G), Equation2398 G ∧ ¬ Equation2503 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 2, 2, 3, 4, 5], [5, 1, 2, 4, 3, 0], [3, 1, 2, 0, 5, 5], [0, 2, 2, 3, 4, 5], [5, 2, 2, 3, 4, 0], [0, 1, 2, 3, 4, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4635 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4635 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 2, 5, 7, 3, 4, 5, 3, 5, 0], [4, 2, 5, 9, 1, 2, 5, 2, 5, 3], [3, 1, 3, 4, 3, 5, 9, 5, 3, 8], [0, 3, 8, 5, 4, 9, 6, 7, 8, 5], [5, 5, 3, 8, 3, 1, 9, 3, 3, 4], [2, 2, 1, 3, 5, 2, 5, 4, 1, 9], [5, 5, 9, 6, 9, 5, 3, 5, 9, 6], [3, 4, 3, 0, 5, 2, 5, 3, 3, 7], [3, 1, 3, 4, 3, 5, 9, 5, 3, 8], [7, 9, 4, 5, 8, 3, 6, 0, 4, 5]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2398_not_implies_Equation2649 : ∃ (G: Type) (_: Magma G), Equation2398 G ∧ ¬ Equation2649 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 4, 3, 4, 4], [2, 1, 4, 3, 4], [0, 1, 2, 1, 4], [4, 4, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4167 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4167 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[9, 2, 9, 8, 9, 0, 0, 9, 3, 2], [0, 3, 2, 5, 2, 3, 3, 0, 1, 3], [9, 0, 9, 3, 9, 2, 2, 9, 8, 0], [3, 1, 8, 2, 8, 5, 5, 3, 2, 1], [9, 0, 9, 3, 9, 2, 2, 9, 8, 0], [2, 3, 0, 1, 0, 3, 3, 2, 5, 3], [2, 3, 0, 1, 0, 3, 3, 2, 5, 3], [9, 2, 9, 8, 9, 0, 0, 9, 3, 2], [8, 5, 3, 2, 3, 1, 1, 8, 2, 5], [0, 3, 2, 5, 2, 3, 3, 0, 1, 3]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2398_not_implies_Equation2669 : ∃ (G: Type) (_: Magma G), Equation2398 G ∧ ¬ Equation2669 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 2, 2, 3, 4], [3, 1, 3, 0, 0], [0, 1, 2, 4, 3], [0, 1, 2, 3, 4], [2, 2, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4118 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4118 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 2, 3, 4, 3, 0, 0, 7, 8, 9], [0, 9, 2, 8, 4, 9, 9, 6, 1, 3], [3, 4, 3, 0, 3, 2, 2, 9, 7, 8], [2, 9, 4, 9, 0, 8, 8, 1, 3, 6], [3, 0, 3, 2, 3, 4, 4, 8, 9, 7], [4, 8, 0, 9, 2, 9, 9, 3, 6, 1], [4, 8, 0, 9, 2, 9, 9, 3, 6, 1], [8, 1, 7, 3, 9, 6, 6, 4, 4, 9], [9, 3, 8, 6, 7, 1, 1, 9, 4, 4], [7, 6, 9, 1, 8, 3, 3, 4, 9, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2398_not_implies_Equation3867 : ∃ (G: Type) (_: Magma G), Equation2398 G ∧ ¬ Equation3867 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 1, 3, 2, 4], [2, 1, 4, 3, 2], [0, 1, 2, 3, 4], [4, 0, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation3319 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation3319 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 2, 5, 0, 5, 2, 7, 6, 9, 9], [5, 3, 1, 4, 3, 2, 9, 4, 9, 9], [0, 4, 6, 6, 1, 5, 3, 2, 9, 9], [5, 1, 6, 6, 4, 0, 2, 3, 9, 9], [2, 3, 4, 1, 3, 5, 4, 9, 9, 9], [2, 5, 0, 5, 2, 2, 6, 7, 9, 9], [6, 4, 2, 3, 9, 7, 5, 5, 9, 9], [7, 9, 3, 2, 4, 6, 5, 5, 9, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2450_not_implies_Equation2254 : ∃ (G: Type) (_: Magma G), Equation2450 G ∧ ¬ Equation2254 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 2, 5, 4, 3, 2], [1, 1, 1, 1, 1, 1], [4, 3, 2, 5, 0, 3], [2, 4, 0, 3, 5, 4], [5, 0, 3, 2, 4, 0], [3, 5, 4, 0, 2, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation3915 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation3915 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 0, 1, 8, 0, 9, 5, 3, 7, 2], [2, 2, 9, 7, 1, 0, 5, 8, 3, 0], [9, 0, 7, 5, 7, 7, 6, 4, 2, 1], [7, 3, 2, 0, 4, 5, 6, 2, 0, 8], [1, 9, 7, 2, 7, 7, 6, 5, 4, 0], [0, 1, 7, 4, 7, 7, 6, 2, 5, 9], [5, 5, 6, 6, 6, 6, 8, 6, 6, 5], [8, 7, 5, 0, 2, 4, 6, 0, 2, 3], [3, 8, 4, 2, 5, 2, 6, 0, 0, 7], [0, 2, 0, 3, 9, 1, 5, 7, 8, 2]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2450_not_implies_Equation3306 : ∃ (G: Type) (_: Magma G), Equation2450 G ∧ ¬ Equation3306 G :=
+  ⟨Fin 7, ⟨memoFinOp fun x y => [[0, 2, 3, 4, 5, 6, 1], [6, 1, 0, 5, 3, 2, 4], [1, 5, 2, 0, 6, 4, 3], [2, 4, 6, 3, 0, 1, 5], [3, 6, 5, 1, 4, 0, 2], [4, 3, 1, 6, 2, 5, 0], [5, 0, 4, 2, 1, 3, 6]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation3522 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation3522 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 2, 2, 1, 4, 5, 5, 0, 3, 8], [3, 3, 5, 8, 2, 4, 5, 1, 2, 0], [5, 4, 1, 3, 1, 1, 1, 7, 2, 9], [8, 0, 9, 4, 7, 3, 1, 5, 1, 4], [2, 5, 1, 9, 1, 1, 1, 3, 4, 7], [4, 2, 1, 7, 1, 1, 1, 9, 5, 3], [5, 5, 1, 1, 1, 1, 6, 1, 5, 1], [1, 8, 3, 4, 9, 7, 1, 4, 0, 5], [2, 3, 4, 0, 5, 2, 5, 8, 3, 1], [0, 1, 7, 5, 3, 9, 1, 4, 8, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2499_not_implies_Equation3529 : ∃ (G: Type) (_: Magma G), Equation2499 G ∧ ¬ Equation3529 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 3, 3, 3, 4, 5], [5, 1, 3, 3, 3, 5], [4, 3, 2, 3, 4, 3], [0, 1, 2, 3, 4, 5], [0, 5, 2, 3, 4, 5], [0, 1, 3, 3, 4, 5]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4380 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4380 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 1, 5, 0, 3, 9, 9, 9, 9], [0, 3, 2, 4, 3, 1, 9, 9, 9, 9], [1, 0, 1, 3, 2, 5, 9, 9, 9, 9], [3, 1, 5, 2, 4, 2, 9, 9, 9, 9], [2, 3, 0, 1, 3, 4, 9, 9, 9, 9], [5, 4, 3, 2, 1, 2, 9, 9, 9, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9, 9, 9, 9, 9, 8, 9], [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2499_not_implies_Equation4362 : ∃ (G: Type) (_: Magma G), Equation2499 G ∧ ¬ Equation4362 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 4, 4, 3, 4], [4, 1, 3, 3, 4], [4, 3, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4398 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4398 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[3, 2, 0, 8, 9, 9, 9, 1, 3, 0], [9, 5, 2, 9, 5, 4, 1, 7, 2, 1], [1, 7, 1, 3, 2, 1, 3, 1, 0, 9], [0, 1, 9, 2, 9, 5, 6, 3, 8, 2], [2, 5, 7, 1, 5, 1, 4, 2, 9, 9], [9, 1, 3, 6, 4, 3, 3, 1, 9, 5], [9, 4, 1, 5, 1, 3, 3, 3, 9, 6], [0, 2, 1, 9, 7, 3, 1, 1, 1, 3], [3, 9, 1, 0, 2, 9, 9, 0, 3, 8], [8, 9, 3, 2, 1, 6, 5, 9, 0, 2]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2507_not_implies_Equation2338 : ∃ (G: Type) (_: Magma G), Equation2507 G ∧ ¬ Equation2338 G :=
+  ⟨Fin 9, ⟨memoFinOp fun x y => [[5, 6, 7, 3, 8, 0, 1, 2, 4], [2, 1, 0, 6, 5, 4, 3, 8, 7], [8, 3, 2, 1, 6, 7, 4, 5, 0], [3, 4, 8, 0, 1, 5, 7, 6, 2], [1, 0, 6, 7, 4, 8, 2, 3, 5], [0, 2, 1, 5, 7, 3, 8, 4, 6], [7, 5, 4, 8, 2, 1, 6, 0, 3], [4, 8, 3, 2, 0, 6, 5, 7, 1], [6, 7, 5, 4, 3, 2, 0, 1, 8]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4065 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4065 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 8, 1, 1, 7, 0, 2, 9, 2, 4], [2, 4, 8, 8, 5, 5, 4, 6, 0, 1], [2, 0, 1, 1, 4, 2, 8, 7, 1, 9], [2, 0, 1, 1, 4, 2, 8, 7, 1, 9], [9, 6, 7, 7, 0, 1, 5, 0, 4, 4], [8, 4, 0, 0, 6, 4, 5, 1, 2, 5], [0, 5, 2, 2, 1, 4, 4, 5, 8, 6], [4, 1, 9, 9, 4, 5, 6, 0, 7, 0], [1, 2, 2, 2, 9, 8, 0, 4, 1, 7], [7, 5, 4, 4, 0, 6, 1, 4, 9, 0]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2507_not_implies_Equation3079 : ∃ (G: Type) (_: Magma G), Equation2507 G ∧ ¬ Equation3079 G :=
+  ⟨Fin 9, ⟨memoFinOp fun x y => [[5, 2, 1, 3, 8, 0, 7, 6, 4], [4, 7, 5, 6, 0, 2, 3, 1, 8], [8, 3, 4, 1, 2, 7, 6, 5, 0], [3, 4, 7, 0, 1, 5, 8, 2, 6], [7, 5, 2, 8, 6, 1, 4, 0, 3], [0, 6, 8, 5, 7, 3, 1, 4, 2], [1, 0, 6, 7, 4, 8, 2, 3, 5], [2, 1, 0, 4, 3, 6, 5, 8, 7], [6, 8, 3, 2, 5, 4, 0, 7, 1]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4482 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4482 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[7, 6, 3, 3, 4, 0, 7, 6, 4, 7], [6, 2, 1, 1, 1, 6, 6, 6, 1, 6], [4, 1, 0, 0, 0, 7, 3, 5, 0, 4], [4, 1, 0, 0, 0, 7, 3, 5, 0, 4], [3, 1, 0, 0, 0, 5, 4, 7, 0, 3], [6, 6, 5, 5, 7, 4, 0, 4, 7, 6], [7, 6, 4, 4, 3, 6, 7, 0, 3, 7], [0, 6, 7, 7, 5, 4, 6, 4, 5, 0], [3, 1, 0, 0, 0, 5, 4, 7, 0, 3], [7, 6, 3, 3, 4, 0, 7, 6, 4, 7]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2507_not_implies_Equation4283 : ∃ (G: Type) (_: Magma G), Equation2507 G ∧ ¬ Equation4283 G :=
+  ⟨Fin 9, ⟨memoFinOp fun x y => [[6, 2, 1, 4, 3, 8, 0, 7, 5], [3, 4, 6, 0, 1, 5, 2, 8, 7], [4, 7, 3, 2, 0, 6, 5, 1, 8], [5, 6, 2, 8, 7, 0, 1, 4, 3], [8, 1, 7, 6, 5, 4, 3, 2, 0], [2, 5, 0, 7, 4, 1, 8, 3, 6], [0, 8, 4, 5, 2, 3, 7, 6, 1], [7, 3, 5, 1, 8, 2, 6, 0, 4], [1, 0, 8, 3, 6, 7, 4, 5, 2]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation43 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 2, 3, 2, 4, 7, 9, 5, 0, 9], [3, 7, 7, 7, 9, 9, 8, 2, 9, 8], [2, 7, 7, 7, 8, 9, 9, 3, 9, 9], [3, 7, 7, 7, 9, 9, 8, 2, 9, 8], [9, 8, 9, 8, 0, 8, 0, 4, 5, 0], [0, 9, 9, 9, 5, 9, 8, 7, 9, 8], [4, 9, 8, 9, 0, 5, 0, 9, 8, 0], [5, 3, 2, 3, 9, 0, 4, 5, 7, 4], [7, 9, 9, 9, 8, 9, 5, 0, 9, 5], [4, 9, 8, 9, 0, 5, 0, 9, 8, 0]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2507_not_implies_Equation4482 : ∃ (G: Type) (_: Magma G), Equation2507 G ∧ ¬ Equation4482 G :=
+  ⟨Fin 9, ⟨memoFinOp fun x y => [[0, 6, 3, 2, 7, 8, 1, 4, 5], [3, 2, 1, 0, 8, 6, 5, 7, 4], [4, 1, 7, 5, 0, 3, 8, 2, 6], [7, 5, 8, 4, 3, 1, 6, 0, 2], [1, 0, 5, 3, 6, 2, 4, 8, 7], [8, 4, 6, 7, 1, 5, 2, 3, 0], [2, 8, 0, 6, 4, 7, 3, 5, 1], [6, 7, 2, 8, 5, 4, 0, 1, 3], [5, 3, 4, 1, 2, 0, 7, 6, 8]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3964_not_implies_Equation4531 : ∃ (G: Type) (_: Magma G), Equation3964 G ∧ ¬ Equation4531 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[4, 5, 9, 4, 8, 4, 7, 4, 4, 2], [4, 2, 3, 2, 9, 5, 4, 4, 5, 1], [2, 1, 5, 3, 4, 9, 6, 2, 9, 5], [5, 2, 1, 2, 4, 4, 9, 5, 4, 3], [7, 4, 6, 9, 2, 8, 2, 7, 8, 4], [4, 4, 2, 5, 7, 4, 8, 4, 4, 9], [8, 9, 4, 4, 2, 7, 2, 8, 7, 6], [4, 5, 9, 4, 8, 4, 7, 4, 4, 2], [4, 4, 2, 5, 7, 4, 8, 4, 4, 9], [9, 3, 5, 1, 6, 2, 4, 9, 2, 5]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2507_not_implies_Equation707 : ∃ (G: Type) (_: Magma G), Equation2507 G ∧ ¬ Equation707 G :=
+  ⟨Fin 9, ⟨memoFinOp fun x y => [[0, 2, 1, 5, 8, 3, 7, 6, 4], [6, 7, 5, 4, 3, 2, 0, 1, 8], [7, 3, 6, 1, 4, 8, 2, 0, 5], [5, 6, 8, 3, 7, 0, 1, 4, 2], [1, 0, 4, 8, 2, 7, 6, 5, 3], [3, 4, 7, 0, 1, 5, 8, 2, 6], [8, 5, 2, 7, 6, 1, 4, 3, 0], [4, 1, 3, 2, 0, 6, 5, 8, 7], [2, 8, 0, 6, 5, 4, 3, 7, 1]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1034_not_implies_Equation1231 : ∃ (G: Type) (_: Magma G), Equation1034 G ∧ ¬ Equation1231 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 0, 0, 2, 2, 2, 2, 2, 2], [1, 1, 1, 6, 6, 9, 1, 6, 6, 1], [3, 3, 2, 2, 2, 3, 3, 3, 3, 3], [4, 4, 4, 3, 3, 3, 3, 3, 4, 4], [6, 6, 6, 6, 4, 4, 4, 6, 6, 6], [7, 7, 7, 7, 7, 5, 7, 5, 7, 7], [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], [5, 5, 5, 5, 5, 7, 5, 7, 5, 5], [6, 6, 6, 6, 6, 6, 8, 6, 8, 6], [6, 6, 6, 6, 6, 6, 9, 6, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2513_not_implies_Equation1025 : ∃ (G: Type) (_: Magma G), Equation2513 G ∧ ¬ Equation1025 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 2, 3, 4, 4], [2, 1, 2, 4, 4], [0, 1, 2, 4, 4], [4, 4, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1034_not_implies_Equation1229 : ∃ (G: Type) (_: Magma G), Equation1034 G ∧ ¬ Equation1229 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 0, 0, 2, 0, 2, 2, 2, 0], [7, 1, 7, 7, 1, 7, 7, 1, 7, 7], [3, 2, 2, 2, 2, 3, 3, 3, 3, 3], [3, 4, 3, 3, 3, 4, 3, 3, 3, 3], [8, 8, 8, 8, 4, 8, 8, 8, 4, 8], [3, 3, 3, 5, 5, 5, 3, 3, 3, 3], [9, 9, 9, 9, 9, 9, 6, 9, 9, 6], [1, 7, 1, 1, 1, 1, 1, 7, 1, 1], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [6, 6, 6, 6, 6, 6, 9, 6, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2513_not_implies_Equation1847 : ∃ (G: Type) (_: Magma G), Equation2513 G ∧ ¬ Equation1847 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 2, 3, 4, 2], [2, 1, 2, 4, 4], [0, 1, 2, 3, 4], [4, 2, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation1034_not_implies_Equation1232 : ∃ (G: Type) (_: Magma G), Equation1034 G ∧ ¬ Equation1232 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[0, 2, 0, 0, 5, 0, 8, 8, 0, 8], [7, 1, 7, 7, 7, 7, 7, 1, 1, 7], [2, 3, 2, 2, 2, 2, 0, 3, 2, 2], [8, 4, 8, 3, 3, 3, 8, 4, 3, 8], [4, 4, 4, 4, 4, 4, 4, 4, 4, 4], [8, 8, 5, 8, 8, 5, 8, 8, 5, 8], [4, 4, 4, 4, 6, 4, 6, 4, 4, 4], [1, 7, 1, 1, 1, 1, 1, 7, 1, 1], [5, 5, 5, 5, 5, 8, 5, 5, 8, 5], [6, 6, 6, 6, 9, 6, 9, 6, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2513_not_implies_Equation2253 : ∃ (G: Type) (_: Magma G), Equation2513 G ∧ ¬ Equation2253 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 2, 3, 3, 2], [2, 1, 2, 3, 2], [0, 1, 2, 3, 4], [4, 4, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3600_not_implies_Equation4155 : ∃ (G: Type) (_: Magma G), Equation3600 G ∧ ¬ Equation4155 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 2, 2, 3, 4, 5, 2, 7, 9, 9], [3, 7, 2, 3, 4, 5, 2, 7, 9, 9], [3, 5, 2, 3, 4, 5, 2, 7, 9, 9], [4, 2, 2, 3, 4, 5, 2, 7, 9, 9], [5, 5, 2, 3, 4, 5, 2, 7, 9, 9], [5, 5, 2, 3, 4, 5, 2, 7, 9, 9], [3, 5, 2, 3, 4, 5, 2, 7, 9, 9], [9, 7, 2, 3, 4, 5, 2, 7, 9, 9], [2, 5, 2, 3, 4, 5, 2, 7, 9, 9], [2, 5, 2, 3, 4, 5, 2, 7, 9, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2513_not_implies_Equation2466 : ∃ (G: Type) (_: Magma G), Equation2513 G ∧ ¬ Equation2466 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 3, 3, 3, 4], [2, 1, 2, 4, 4], [0, 1, 2, 3, 4], [4, 1, 2, 3, 4], [0, 2, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3161_not_implies_Equation3068 : ∃ (G: Type) (_: Magma G), Equation3161 G ∧ ¬ Equation3068 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[5, 1, 7, 6, 9, 3, 0, 2, 4, 8], [2, 5, 9, 1, 0, 8, 4, 6, 3, 7], [8, 3, 5, 7, 4, 9, 2, 1, 0, 6], [4, 9, 6, 5, 7, 2, 3, 0, 8, 1], [3, 2, 0, 8, 5, 7, 1, 9, 6, 4], [9, 7, 3, 0, 8, 5, 6, 4, 1, 2], [0, 4, 2, 3, 1, 6, 5, 8, 7, 9], [7, 0, 4, 2, 6, 1, 8, 5, 9, 3], [1, 6, 8, 9, 2, 4, 7, 3, 5, 0], [6, 8, 1, 4, 3, 0, 9, 7, 2, 5]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2513_not_implies_Equation2649 : ∃ (G: Type) (_: Magma G), Equation2513 G ∧ ¬ Equation2649 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 2, 3, 4, 4], [2, 1, 2, 4, 4], [0, 1, 2, 4, 4], [4, 2, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3161_not_implies_Equation429 : ∃ (G: Type) (_: Magma G), Equation3161 G ∧ ¬ Equation429 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 9, 3, 2, 4, 0, 8, 6, 7, 5], [2, 1, 6, 4, 7, 5, 9, 8, 3, 0], [5, 0, 1, 8, 6, 2, 4, 7, 9, 3], [9, 8, 4, 1, 5, 7, 3, 0, 6, 2], [6, 3, 0, 9, 1, 8, 7, 5, 2, 4], [0, 5, 2, 7, 8, 1, 6, 3, 4, 9], [4, 2, 5, 0, 3, 6, 1, 9, 8, 7], [7, 4, 9, 6, 0, 3, 2, 1, 5, 8], [3, 7, 8, 5, 9, 4, 0, 2, 1, 6], [8, 6, 7, 3, 2, 9, 5, 4, 0, 1]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2513_not_implies_Equation3867 : ∃ (G: Type) (_: Magma G), Equation2513 G ∧ ¬ Equation3867 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 2, 3, 3, 2], [2, 1, 2, 4, 2], [0, 1, 2, 3, 4], [4, 2, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation3085_not_implies_Equation3456 : ∃ (G: Type) (_: Magma G), Equation3085 G ∧ ¬ Equation3456 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 6, 3, 3, 6, 1, 9, 3, 6, 9], [2, 7, 7, 2, 2, 7, 2, 2, 2, 2], [8, 6, 6, 3, 6, 3, 6, 3, 8, 8], [2, 7, 2, 2, 2, 7, 2, 7, 2, 2], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [7, 7, 7, 7, 7, 7, 7, 7, 7, 7], [7, 7, 2, 2, 4, 7, 2, 2, 7, 4], [8, 1, 6, 3, 6, 5, 6, 5, 8, 8], [0, 7, 2, 7, 2, 7, 2, 7, 2, 0], [4, 4, 4, 4, 4, 4, 4, 4, 4, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2536_not_implies_Equation221 : ∃ (G: Type) (_: Magma G), Equation2536 G ∧ ¬ Equation221 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 2, 2, 2, 4], [3, 4, 3, 3, 4], [0, 0, 4, 0, 4], [1, 1, 1, 4, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2679_not_implies_Equation3253 : ∃ (G: Type) (_: Magma G), Equation2679 G ∧ ¬ Equation3253 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 3, 3, 2, 1, 2, 1, 1, 1], [7, 6, 6, 5, 6, 5, 6, 7, 7, 6], [6, 7, 6, 6, 6, 6, 6, 7, 6, 6], [6, 7, 6, 6, 6, 6, 6, 6, 7, 6], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [8, 9, 8, 8, 8, 8, 8, 8, 9, 8], [0, 8, 8, 8, 4, 8, 8, 8, 8, 9], [0, 8, 8, 8, 4, 8, 8, 9, 8, 9], [2, 1, 2, 3, 1, 1, 1, 1, 1, 2], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2536_not_implies_Equation2293 : ∃ (G: Type) (_: Magma G), Equation2536 G ∧ ¬ Equation2293 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 2, 2, 2, 4], [3, 4, 3, 3, 4], [0, 0, 4, 0, 4], [1, 1, 1, 4, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2679_not_implies_Equation307 : ∃ (G: Type) (_: Magma G), Equation2679 G ∧ ¬ Equation307 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 2, 1, 1, 1, 2, 1, 2, 2], [4, 4, 4, 3, 4, 4, 4, 4, 4, 4], [4, 4, 4, 3, 4, 4, 4, 4, 4, 4], [0, 9, 9, 0, 9, 0, 0, 0, 9, 9], [0, 9, 9, 6, 9, 5, 6, 7, 9, 9], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [2, 2, 2, 2, 2, 2, 2, 2, 2, 2], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [8, 8, 8, 8, 8, 8, 8, 8, 8, 8], [1, 1, 2, 1, 1, 2, 2, 1, 2, 2]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2536_not_implies_Equation2300 : ∃ (G: Type) (_: Magma G), Equation2536 G ∧ ¬ Equation2300 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 3, 3, 3, 4], [2, 4, 2, 2, 4], [1, 1, 4, 1, 4], [0, 0, 0, 4, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2707_not_implies_Equation1223 : ∃ (G: Type) (_: Magma G), Equation2707 G ∧ ¬ Equation1223 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 3, 0, 2, 7, 9, 6, 8, 4, 5], [2, 7, 1, 3, 5, 6, 4, 0, 9, 8], [3, 0, 2, 6, 9, 7, 8, 1, 5, 4], [6, 5, 3, 0, 1, 4, 2, 9, 8, 7], [8, 6, 9, 5, 4, 0, 7, 3, 1, 2], [4, 1, 5, 9, 6, 8, 0, 2, 7, 3], [7, 9, 6, 8, 0, 5, 3, 4, 2, 1], [0, 2, 7, 4, 8, 1, 9, 5, 3, 6], [9, 4, 8, 1, 3, 2, 5, 7, 6, 0], [5, 8, 4, 7, 2, 3, 1, 6, 0, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2536_not_implies_Equation2330 : ∃ (G: Type) (_: Magma G), Equation2536 G ∧ ¬ Equation2330 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 2, 2, 2, 4], [3, 4, 3, 3, 4], [0, 0, 4, 0, 4], [1, 1, 1, 4, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2707_not_implies_Equation3112 : ∃ (G: Type) (_: Magma G), Equation2707 G ∧ ¬ Equation3112 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 7, 0, 3, 6, 8, 4, 2, 9, 5], [2, 8, 1, 5, 9, 6, 3, 7, 0, 4], [7, 0, 2, 9, 5, 4, 8, 3, 1, 6], [8, 4, 3, 7, 1, 0, 6, 9, 5, 2], [6, 9, 5, 1, 4, 2, 7, 8, 3, 0], [9, 3, 4, 8, 2, 5, 0, 6, 7, 1], [5, 1, 6, 0, 7, 3, 9, 4, 2, 8], [3, 6, 7, 2, 8, 1, 5, 0, 4, 9], [0, 2, 8, 4, 3, 9, 1, 5, 6, 7], [4, 5, 9, 6, 0, 7, 2, 1, 8, 3]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2536_not_implies_Equation2506 : ∃ (G: Type) (_: Magma G), Equation2536 G ∧ ¬ Equation2506 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 2, 2, 2, 4], [3, 4, 3, 3, 4], [0, 0, 4, 0, 4], [1, 1, 1, 4, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2707_not_implies_Equation3253 : ∃ (G: Type) (_: Magma G), Equation2707 G ∧ ¬ Equation3253 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[1, 2, 3, 0, 5, 4, 7, 9, 8, 6], [3, 6, 2, 1, 8, 7, 0, 5, 9, 4], [8, 4, 0, 2, 9, 6, 5, 7, 3, 1], [2, 0, 8, 3, 6, 9, 1, 4, 7, 5], [9, 1, 5, 4, 7, 2, 3, 6, 0, 8], [4, 7, 6, 9, 2, 5, 8, 0, 1, 3], [0, 3, 9, 6, 1, 8, 4, 2, 5, 7], [5, 9, 1, 7, 3, 0, 6, 8, 4, 2], [6, 5, 7, 8, 4, 1, 9, 3, 2, 0], [7, 8, 4, 5, 0, 3, 2, 1, 6, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2536_not_implies_Equation2699 : ∃ (G: Type) (_: Magma G), Equation2536 G ∧ ¬ Equation2699 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 3, 3, 3, 4], [2, 4, 2, 2, 4], [1, 1, 4, 1, 4], [0, 0, 0, 4, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2707_not_implies_Equation3462 : ∃ (G: Type) (_: Magma G), Equation2707 G ∧ ¬ Equation3462 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[2, 1, 7, 6, 5, 4, 9, 8, 0, 3], [3, 7, 4, 9, 2, 5, 8, 6, 1, 0], [8, 9, 3, 0, 6, 1, 4, 7, 2, 5], [0, 4, 8, 5, 1, 2, 7, 9, 3, 6], [5, 2, 6, 1, 4, 7, 0, 3, 9, 8], [9, 0, 2, 8, 7, 6, 3, 4, 5, 1], [4, 5, 9, 3, 0, 8, 1, 2, 6, 7], [1, 8, 5, 4, 3, 9, 6, 0, 7, 2], [7, 6, 0, 2, 9, 3, 5, 1, 8, 4], [6, 3, 1, 7, 8, 0, 2, 5, 4, 9]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2536_not_implies_Equation3461 : ∃ (G: Type) (_: Magma G), Equation2536 G ∧ ¬ Equation3461 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[2, 4, 2, 2, 4], [3, 4, 2, 3, 4], [0, 1, 2, 3, 4], [1, 1, 2, 2, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2707_not_implies_Equation3994 : ∃ (G: Type) (_: Magma G), Equation2707 G ∧ ¬ Equation3994 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[9, 0, 1, 5, 6, 7, 4, 3, 8, 2], [2, 1, 8, 9, 3, 4, 7, 6, 5, 0], [8, 2, 0, 6, 7, 5, 3, 9, 1, 4], [0, 3, 7, 4, 9, 2, 8, 5, 6, 1], [7, 4, 6, 1, 5, 3, 2, 8, 0, 9], [6, 5, 9, 3, 1, 8, 0, 2, 4, 7], [4, 7, 3, 8, 2, 0, 6, 1, 9, 5], [5, 6, 4, 2, 0, 9, 1, 7, 3, 8], [3, 8, 5, 7, 4, 1, 9, 0, 2, 6], [1, 9, 2, 0, 8, 6, 5, 4, 7, 3]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2536_not_implies_Equation3749 : ∃ (G: Type) (_: Magma G), Equation2536 G ∧ ¬ Equation3749 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 2, 2, 2, 4], [3, 4, 3, 3, 4], [0, 0, 4, 0, 4], [1, 1, 1, 4, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2707_not_implies_Equation2947 : ∃ (G: Type) (_: Magma G), Equation2707 G ∧ ¬ Equation2947 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[8, 2, 1, 6, 4, 9, 0, 5, 3, 7], [2, 1, 3, 9, 8, 6, 5, 0, 7, 4], [5, 3, 7, 1, 0, 4, 2, 9, 8, 6], [4, 9, 5, 0, 6, 8, 3, 7, 2, 1], [9, 8, 2, 7, 3, 0, 4, 6, 1, 5], [7, 6, 0, 2, 9, 5, 1, 8, 4, 3], [3, 5, 9, 4, 7, 1, 6, 2, 0, 8], [1, 0, 6, 8, 2, 3, 7, 4, 5, 9], [6, 7, 4, 3, 5, 2, 8, 1, 9, 0], [0, 4, 8, 5, 1, 7, 9, 3, 6, 2]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2536_not_implies_Equation4155 : ∃ (G: Type) (_: Magma G), Equation2536 G ∧ ¬ Equation4155 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[4, 2, 2, 2, 4], [3, 4, 3, 3, 4], [0, 0, 4, 0, 4], [1, 1, 1, 4, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
 
 @[equational_result]
-theorem Equation2707_not_implies_Equation1241 : ∃ (G: Type) (_: Magma G), Equation2707 G ∧ ¬ Equation1241 G :=
-  ⟨Fin 10, ⟨memoFinOp fun x y => [[6, 9, 1, 7, 4, 8, 3, 0, 5, 2], [2, 1, 6, 5, 9, 0, 4, 8, 7, 3], [8, 3, 4, 6, 5, 7, 1, 2, 0, 9], [4, 6, 2, 0, 7, 1, 5, 3, 9, 8], [9, 0, 7, 2, 3, 5, 8, 4, 6, 1], [1, 4, 9, 8, 0, 2, 6, 5, 3, 7], [7, 5, 8, 3, 1, 4, 9, 6, 2, 0], [3, 8, 5, 4, 2, 9, 0, 7, 1, 6], [5, 7, 0, 9, 6, 3, 2, 1, 8, 4], [0, 2, 3, 1, 8, 6, 7, 9, 4, 5]][x.val]![y.val]!⟩, by decideFin!⟩
+theorem Equation2550_not_implies_Equation1025 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation1025 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 2, 3, 3, 4], [2, 1, 2, 2, 0], [0, 1, 2, 3, 4], [4, 1, 2, 3, 0], [0, 2, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+
+@[equational_result]
+theorem Equation2550_not_implies_Equation1847 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation1847 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 4, 3, 4, 4], [2, 1, 2, 3, 2], [0, 1, 2, 1, 4], [4, 4, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+
+@[equational_result]
+theorem Equation2550_not_implies_Equation2253 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2253 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 4, 3, 3, 4], [2, 1, 2, 2, 4], [0, 4, 2, 3, 4], [4, 4, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+
+@[equational_result]
+theorem Equation2550_not_implies_Equation2466 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2466 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 4, 3, 3, 4], [2, 1, 2, 3, 4], [0, 4, 2, 4, 1], [4, 1, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+
+@[equational_result]
+theorem Equation2550_not_implies_Equation2503 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2503 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 2, 3, 3, 3], [0, 1, 3, 4, 3], [3, 1, 2, 3, 3], [0, 1, 2, 3, 4], [1, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+
+@[equational_result]
+theorem Equation2550_not_implies_Equation2649 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation2649 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 4, 3, 4, 4], [2, 1, 4, 2, 4], [0, 4, 2, 3, 4], [4, 4, 2, 3, 4], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+
+@[equational_result]
+theorem Equation2550_not_implies_Equation3867 : ∃ (G: Type) (_: Magma G), Equation2550 G ∧ ¬ Equation3867 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 3, 3, 3, 4], [2, 1, 2, 3, 4], [0, 1, 2, 1, 1], [4, 1, 2, 3, 4], [0, 3, 2, 1, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+
+@[equational_result]
+theorem Equation2584_not_implies_Equation2862 : ∃ (G: Type) (_: Magma G), Equation2584 G ∧ ¬ Equation2862 G :=
+  ⟨Fin 6, ⟨memoFinOp fun x y => [[0, 4, 3, 3, 4, 2], [2, 1, 2, 4, 4, 2], [0, 1, 2, 4, 0, 5], [4, 1, 2, 3, 0, 5], [5, 1, 2, 3, 4, 2], [0, 1, 3, 4, 0, 5]][x.val]![y.val]!⟩, by decideFin!⟩
+
+@[equational_result]
+theorem Equation2592_not_implies_Equation1629 : ∃ (G: Type) (_: Magma G), Equation2592 G ∧ ¬ Equation1629 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[1, 3, 4, 1, 2], [2, 4, 3, 2, 1], [4, 2, 1, 4, 3], [1, 0, 4, 4, 3], [0, 1, 2, 3, 4]][x.val]![y.val]!⟩, by decideFin!⟩
+
+@[equational_result]
+theorem Equation2592_not_implies_Equation2644 : ∃ (G: Type) (_: Magma G), Equation2592 G ∧ ¬ Equation2644 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[1, 4, 3, 2, 0], [2, 0, 1, 4, 3], [3, 2, 4, 0, 1], [0, 1, 2, 3, 4], [4, 3, 0, 1, 2]][x.val]![y.val]!⟩, by decideFin!⟩
+
+@[equational_result]
+theorem Equation2647_not_implies_Equation3522 : ∃ (G: Type) (_: Magma G), Equation2647 G ∧ ¬ Equation3522 G :=
+  ⟨Fin 5, ⟨memoFinOp fun x y => [[0, 0, 0, 4, 4], [2, 2, 2, 2, 2], [3, 3, 3, 3, 3], [1, 1, 1, 1, 1], [4, 4, 4, 0, 0]][x.val]![y.val]!⟩, by decideFin!⟩
+
+@[equational_result]
+theorem Equation2653_not_implies_Equation3459 : ∃ (G: Type) (_: Magma G), Equation2653 G ∧ ¬ Equation3459 G :=
+  ⟨Fin 7, ⟨memoFinOp fun x y => [[0, 2, 6, 1, 5, 3, 4], [5, 5, 1, 6, 0, 5, 5], [4, 3, 4, 4, 4, 2, 0], [2, 0, 2, 2, 2, 4, 3], [3, 4, 3, 3, 3, 0, 2], [6, 6, 0, 5, 1, 6, 6], [1, 1, 5, 0, 6, 1, 1]][x.val]![y.val]!⟩, by decideFin!⟩
 
