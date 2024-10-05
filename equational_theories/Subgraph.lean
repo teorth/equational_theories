@@ -617,9 +617,8 @@ theorem Equation4_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation4
 -- The 2 element magma that satisfies 4 does not satisfy 40.
 @[equational_result]
 theorem Equation4_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation40 G := by
-  let a : Type := Fin 2
-  let hG : Magma a := { op := fun x _ ↦ x }
-  refine ⟨a, hG, fun _ ↦ by simp [hG], fun h ↦ ?_⟩
+  let hG : Magma (Fin 2) := { op := fun x _ ↦ x }
+  refine ⟨Fin 2, hG, fun _ ↦ by simp [hG], fun h ↦ ?_⟩
   simpa [hG] using h 0 1
 
 @[equational_result]
