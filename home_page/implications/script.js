@@ -191,7 +191,7 @@ function updateEquationListStats() {
         item.statElements.unknown.textContent = stats.unknown;
         item.statElements.unknownBy.textContent = stats.unknownBy;
     });
-    
+
     filterEquations();
 }
 
@@ -201,9 +201,9 @@ function renderEquationList(sortBy = 'index', sortOrder = 'asc') {
     let currentURL = window.location.href;
     // Update the URL without reloading the page
     history.pushState(null, '', currentURL.split("?")[0]);
-    
+
     const header = equationList.querySelector('.header');
-    
+
     filteredCachedItems.sort((a, b) => {
         if (sortBy === 'index') {
             return sortOrder === 'asc' ? a.index - b.index : b.index - a.index;
@@ -236,7 +236,7 @@ function renderImplications(index) {
 
     // Update the URL without reloading the page
     history.pushState(null, '', currentURL);
-    
+
     if (index === null || index < 0 || index >= equations.length) {
         console.error('Invalid equation index:', index);
         return;
@@ -263,13 +263,13 @@ function renderImplications(index) {
 	selectedEquationDual.innerHTML = "";
     }
 
-    
+
     // Add this section to display equivalent equations
     const equivalentClass = equiv.find(cls => cls.includes(index)) || [index];
     const equivalentEquations = equivalentClass
           .filter(eqIndex => eqIndex !== index)
           .map(eqIndex => equations[eqIndex]);
-    
+
     const equivalentEquationsHtml = equivalentEquations.length > 0
           ? `<h3>Equivalent Equations:</h3><ul>${equivalentEquations.map(eq => `<li>${eq}</li>`).join('')}</ul>`
           : '';
@@ -277,10 +277,10 @@ function renderImplications(index) {
     // Add this line to insert the equivalent equations HTML
     document.getElementById('equivalentEquations').innerHTML = equivalentEquationsHtml;
 
-    
+
     const onlyExplicit = showOnlyExplicitProofs.checked;
     const treatConjecturedAsUnknown = treatConjectedAsUnknownDetail.checked;
-    
+
     const implies = [];
     const antiImplies = [];
     const unknownImplies = [];
@@ -327,7 +327,7 @@ function renderImplications(index) {
     impliedByList.innerHTML = impliedBy.join('') || 'None';
     antiImpliedByList.innerHTML = antiImpliedBy.join('') || 'None';
     unknownImpliedByList.innerHTML = unknownImpliedBy.join('') || 'None';
-    
+
     // Add click event listeners to all implication items
     document.querySelectorAll('.implication-item').forEach(item => {
         item.addEventListener('click', (e) => {
@@ -337,7 +337,7 @@ function renderImplications(index) {
             window.scrollTo(0, 0);  // Scroll to the top of the page
         });
     });
-    
+
 }
 
 equationList.addEventListener('click', (e) => {
@@ -407,7 +407,6 @@ if (currentURL.indexOf('?') > -1) {
 
 // Function to handle URL changes (including back/forward navigation)
 function handleUrlChange() {
-    alert("pop" + window.location.href);
     let currentURL = window.location.href;
     if (currentURL.indexOf('?') > -1) {
         renderImplications(currentURL.split('?')[1]-1);
@@ -419,4 +418,3 @@ function handleUrlChange() {
 }
 
 window.addEventListener('popstate', handleUrlChange);
-
