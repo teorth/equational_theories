@@ -19,6 +19,5 @@ min_graph = graph.transitive_reduction
 min_graph.adj_list.each do |(ut, u), neighbors|
   neighbors.each do |vt, v|
     puts "#{u},#{v}" if !ut && vt
-    # puts "#{v},#{u}"
   end
 end
