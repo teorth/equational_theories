@@ -36,8 +36,8 @@ def MagmaA2 : Magma (Fin 3 × Fin 3) where
   op (p1 p2 : Fin 3 × Fin 3) : Fin 3 × Fin 3 :=
   match p1, p2 with
   | (a, b), (⟨0, _⟩, _) => (MagmaA21.op a b, ⟨0, by decide⟩)
-  | (a, b), (c, ⟨0, _⟩) => (b, MagmaA21.op b c)
-  | (a, b), (c, d)     => (b, c)
+  | (_, b), (c, ⟨0, _⟩) => (b, MagmaA21.op b c)
+  | (_, b), (c, _)     => (b, c)
 
 /-- A magma isomorphic to A2, given as an optable. -/
 def MagmaA2T : Magma (Fin 9) where
