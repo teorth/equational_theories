@@ -307,7 +307,9 @@ function renderImplications(index) {
 
 	[forwardStatus, backwardStatus].forEach((status, statusIndex) => {
             const isConjectured = status.includes('conjecture');
-            const item = `<div uid=${i} class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}</div>`;
+	    let proofhref = gen_proof_url(index, i);
+	    let maybe_prove = isUnknown(status, treatConjecturedAsUnknown) ? ` <a href='${proofhref}'>Prove This!</a>` : "";
+            const item = `<div uid=${i} class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}${maybe_prove}</div>`;
 
             if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
 		statusIndex === 0 ? impliedBy.push(item) : implies.push(item);
@@ -405,6 +407,7 @@ if (currentURL.indexOf('?') > -1) {
 
 // Function to handle URL changes (including back/forward navigation)
 function handleUrlChange() {
+    alert("pop" + window.location.href);
     let currentURL = window.location.href;
     if (currentURL.indexOf('?') > -1) {
         renderImplications(currentURL.split('?')[1]-1);
