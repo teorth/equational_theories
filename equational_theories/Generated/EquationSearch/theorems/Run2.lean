@@ -34,14 +34,11 @@ theorem Equation9_implies_Equation3457 (G: Type _) [Magma G] (h: Equation9 G) : 
   intro x y
   symm
   nth_rewrite 1 [eq307]
-  symm
-  symm
   nth_rewrite 1 [← eq3915]
   symm
   nth_rewrite 1 [eq307]
   nth_rewrite 1 [← eq8]
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation9_implies_Equation205 (G: Type _) [Magma G] (h: Equation9 G) : Equation205 G := by
   have eq8 (x : G) : x = x ◇ (x ◇ x) := by
@@ -58,8 +55,6 @@ theorem Equation9_implies_Equation205 (G: Type _) [Magma G] (h: Equation9 G) : E
   nth_rewrite 1 [eq8 x]
   symm
   nth_rewrite 1 [← eq3864]
-  symm
-  symm
   nth_rewrite 1 [eq308]
   symm
   nth_rewrite 1 [← eq8]
@@ -78,12 +73,9 @@ theorem Equation9_implies_Equation100 (G: Type _) [Magma G] (h: Equation9 G) : E
   intro x y
   symm
   nth_rewrite 1 [eq307]
-  symm
-  symm
   nth_rewrite 1 [← eq3915]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation12_implies_Equation4 (G: Type _) [Magma G] (h: Equation12 G) : Equation4 G := by
   have eq327 (x y z : G) : x ◇ y = x ◇ (y ◇ z) := by
@@ -120,8 +112,6 @@ theorem Equation13_implies_Equation16 (G: Type _) [Magma G] (h: Equation13 G) : 
   intro x y
   symm
   nth_rewrite 1 [← eq4275]
-  symm
-  symm
   nth_rewrite 1 [eq4272]
   symm
   apply h
@@ -135,7 +125,6 @@ theorem Equation28_implies_Equation4385 (G: Type _) [Magma G] (h: Equation28 G) 
   intro x y
   nth_rewrite 1 [← eq8]
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation28_implies_Equation104 (G: Type _) [Magma G] (h: Equation28 G) : Equation104 G := by
   have eq3461 (x y : G) : x ◇ x = x ◇ ((y ◇ x) ◇ x) := by
@@ -148,8 +137,6 @@ theorem Equation28_implies_Equation104 (G: Type _) [Magma G] (h: Equation28 G) :
   intro x y
   symm
   nth_rewrite 1 [← eq3461]
-  symm
-  symm
   nth_rewrite 1 [eq364]
   symm
   apply h
@@ -179,14 +166,8 @@ theorem Equation28_implies_Equation3674 (G: Type _) [Magma G] (h: Equation28 G) 
   intro x y
   symm
   nth_rewrite 1 [eq359]
-  symm
-  symm
   nth_rewrite 1 [← eq1681]
-  symm
-  symm
   nth_rewrite 1 [eq23 x]
-  symm
-  symm
   nth_rewrite 1 [eq4587]
   symm
   nth_rewrite 1 [← eq3]
@@ -217,14 +198,8 @@ theorem Equation28_implies_Equation3877 (G: Type _) [Magma G] (h: Equation28 G) 
   intro x y
   symm
   nth_rewrite 1 [eq359]
-  symm
-  symm
   nth_rewrite 1 [← eq2493]
-  symm
-  symm
   nth_rewrite 1 [eq23 x]
-  symm
-  symm
   nth_rewrite 1 [eq4587]
   symm
   nth_rewrite 1 [← eq3]
@@ -249,11 +224,7 @@ theorem Equation29_implies_Equation1075 (G: Type _) [Magma G] (h: Equation29 G) 
   intro x y
   symm
   nth_rewrite 1 [← eq3917]
-  symm
-  symm
   nth_rewrite 1 [← eq4273]
-  symm
-  symm
   nth_rewrite 1 [eq4386]
   symm
   apply h
@@ -277,11 +248,7 @@ theorem Equation29_implies_Equation1276 (G: Type _) [Magma G] (h: Equation29 G) 
   intro x y
   symm
   nth_rewrite 1 [← eq4118]
-  symm
-  symm
   nth_rewrite 1 [← eq4273]
-  symm
-  symm
   nth_rewrite 1 [eq4386]
   symm
   apply h
@@ -320,8 +287,6 @@ theorem Equation34_implies_Equation5 (G: Type _) [Magma G] (h: Equation34 G) : E
   intro x y
   symm
   nth_rewrite 1 [← eq39]
-  symm
-  symm
   nth_rewrite 1 [eq370]
   symm
   apply h
@@ -369,11 +334,7 @@ theorem Equation34_implies_Equation13 (G: Type _) [Magma G] (h: Equation34 G) : 
   intro x y
   symm
   nth_rewrite 1 [← eq4272]
-  symm
-  symm
   nth_rewrite 1 [← eq307]
-  symm
-  symm
   nth_rewrite 1 [eq370]
   symm
   apply h
@@ -428,8 +389,6 @@ theorem Equation34_implies_Equation3824 (G: Type _) [Magma G] (h: Equation34 G) 
   nth_rewrite 1 [eq359]
   symm
   nth_rewrite 1 [← eq3684]
-  symm
-  symm
   nth_rewrite 1 [eq370]
   symm
   nth_rewrite 1 [← eq23]
@@ -446,12 +405,9 @@ theorem Equation332_implies_Equation387 (G: Type _) [Magma G] (h: Equation332 G)
   intro x y
   symm
   nth_rewrite 1 [← eq4482]
-  symm
-  symm
   nth_rewrite 1 [eq4343]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation372_implies_Equation369 (G: Type _) [Magma G] (h: Equation372 G) : Equation369 G := by
   have eq4612 (x y z : G) : (x ◇ x) ◇ y = (y ◇ z) ◇ z := by
@@ -479,7 +435,6 @@ theorem Equation387_implies_Equation4470 (G: Type _) [Magma G] (h: Equation387 G
   symm
   nth_rewrite 1 [← eq326]
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3401_implies_Equation3375 (G: Type _) [Magma G] (h: Equation3401 G) : Equation3375 G := by
   have eq39 (x y : G) : x ◇ x = y ◇ x := by
@@ -518,8 +473,6 @@ theorem Equation3401_implies_Equation3375 (G: Type _) [Magma G] (h: Equation3401
   nth_rewrite 1 [eq359]
   symm
   nth_rewrite 1 [← eq3264]
-  symm
-  symm
   nth_rewrite 1 [eq3268]
   symm
   nth_rewrite 1 [← eq388]
@@ -544,7 +497,6 @@ theorem Equation4017_implies_Equation4059 (G: Type _) [Magma G] (h: Equation4017
   nth_rewrite 1 [eq3255]
   nth_rewrite 1 [← eq3308]
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation4578_implies_Equation4431 (G: Type _) [Magma G] (h: Equation4578 G) : Equation4431 G := by
   have eq4268 (x y : G) : x ◇ (x ◇ x) = x ◇ (x ◇ y) := by
@@ -622,7 +574,6 @@ theorem Equation13_implies_Equation19 (G: Type _) [Magma G] (h: Equation13 G) : 
   nth_rewrite 1 [← eq4340]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation28_implies_Equation218 (G: Type _) [Magma G] (h: Equation28 G) : Equation218 G := by
   have eq326 (x y : G) : x ◇ y = x ◇ (y ◇ y) := by
@@ -635,7 +586,6 @@ theorem Equation28_implies_Equation218 (G: Type _) [Magma G] (h: Equation28 G) :
   nth_rewrite 1 [← eq326]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation28_implies_Equation2290 (G: Type _) [Magma G] (h: Equation28 G) : Equation2290 G := by
   have eq3319 (x y : G) : x ◇ y = x ◇ (y ◇ (y ◇ y)) := by
@@ -648,7 +598,6 @@ theorem Equation28_implies_Equation2290 (G: Type _) [Magma G] (h: Equation28 G) 
   nth_rewrite 1 [← eq3319]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation28_implies_Equation2706 (G: Type _) [Magma G] (h: Equation28 G) : Equation2706 G := by
   have eq3722 (x y : G) : x ◇ y = (x ◇ y) ◇ (x ◇ y) := by
@@ -660,7 +609,6 @@ theorem Equation28_implies_Equation2706 (G: Type _) [Magma G] (h: Equation28 G) 
   nth_rewrite 1 [← eq3722]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation29_implies_Equation2331 (G: Type _) [Magma G] (h: Equation29 G) : Equation2331 G := by
   have eq3308 (x y : G) : x ◇ y = x ◇ (x ◇ (y ◇ x)) := by
@@ -673,7 +621,6 @@ theorem Equation29_implies_Equation2331 (G: Type _) [Magma G] (h: Equation29 G) 
   nth_rewrite 1 [← eq3308]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation29_implies_Equation2291 (G: Type _) [Magma G] (h: Equation29 G) : Equation2291 G := by
   have eq3319 (x y : G) : x ◇ y = x ◇ (y ◇ (y ◇ y)) := by
@@ -686,7 +633,6 @@ theorem Equation29_implies_Equation2291 (G: Type _) [Magma G] (h: Equation29 G) 
   nth_rewrite 1 [← eq3319]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation29_implies_Equation2947 (G: Type _) [Magma G] (h: Equation29 G) : Equation2947 G := by
   have eq3915 (x y : G) : x ◇ y = (x ◇ (x ◇ x)) ◇ y := by
@@ -699,7 +645,6 @@ theorem Equation29_implies_Equation2947 (G: Type _) [Magma G] (h: Equation29 G) 
   nth_rewrite 1 [← eq3915]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation316_implies_Equation320 (G: Type _) [Magma G] (h: Equation316 G) : Equation320 G := by
   have eq4270 (x y : G) : x ◇ (x ◇ x) = x ◇ (y ◇ y) := by
@@ -712,7 +657,6 @@ theorem Equation316_implies_Equation320 (G: Type _) [Magma G] (h: Equation316 G)
   nth_rewrite 1 [← eq4270]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation317_implies_Equation320 (G: Type _) [Magma G] (h: Equation317 G) : Equation320 G := by
   have eq4284 (x y : G) : x ◇ (x ◇ y) = x ◇ (y ◇ y) := by
@@ -725,7 +669,6 @@ theorem Equation317_implies_Equation320 (G: Type _) [Magma G] (h: Equation317 G)
   nth_rewrite 1 [← eq4284]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation368_implies_Equation369 (G: Type _) [Magma G] (h: Equation368 G) : Equation369 G := by
   have eq4583 (x y : G) : (x ◇ x) ◇ x = (x ◇ x) ◇ y := by
@@ -738,7 +681,6 @@ theorem Equation368_implies_Equation369 (G: Type _) [Magma G] (h: Equation368 G)
   nth_rewrite 1 [← eq4583]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation387_implies_Equation3964 (G: Type _) [Magma G] (h: Equation387 G) : Equation3964 G := by
   have eq307 (x : G) : x ◇ x = x ◇ (x ◇ x) := by
@@ -751,7 +693,6 @@ theorem Equation387_implies_Equation3964 (G: Type _) [Magma G] (h: Equation387 G
   nth_rewrite 1 [← eq307]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation591_implies_Equation94 (G: Type _) [Magma G] (h: Equation591 G) : Equation94 G := by
   have eq325 (x y : G) : x ◇ y = x ◇ (y ◇ x) := by
@@ -766,7 +707,6 @@ theorem Equation591_implies_Equation94 (G: Type _) [Magma G] (h: Equation591 G) 
   nth_rewrite 1 [eq325 w]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation591_implies_Equation603 (G: Type _) [Magma G] (h: Equation591 G) : Equation603 G := by
   have eq4283 (x y : G) : x ◇ (x ◇ y) = x ◇ (y ◇ x) := by
@@ -783,7 +723,6 @@ theorem Equation591_implies_Equation603 (G: Type _) [Magma G] (h: Equation591 G)
   nth_rewrite 1 [eq4283]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation591_implies_Equation588 (G: Type _) [Magma G] (h: Equation591 G) : Equation588 G := by
   have eq4314 (x y : G) : x ◇ (y ◇ x) = x ◇ (y ◇ y) := by
@@ -800,7 +739,6 @@ theorem Equation591_implies_Equation588 (G: Type _) [Magma G] (h: Equation591 G)
   nth_rewrite 1 [← eq4314]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation591_implies_Equation794 (G: Type _) [Magma G] (h: Equation591 G) : Equation794 G := by
   have eq4435 (x y : G) : x ◇ (y ◇ x) = (x ◇ y) ◇ x := by
@@ -814,7 +752,6 @@ theorem Equation591_implies_Equation794 (G: Type _) [Magma G] (h: Equation591 G)
   nth_rewrite 1 [← eq4435]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation592_implies_Equation795 (G: Type _) [Magma G] (h: Equation592 G) : Equation795 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -829,7 +766,6 @@ theorem Equation592_implies_Equation795 (G: Type _) [Magma G] (h: Equation592 G)
   nth_rewrite 1 [← eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation742_implies_Equation84 (G: Type _) [Magma G] (h: Equation742 G) : Equation84 G := by
   have eq375 (x y : G) : x ◇ y = (x ◇ x) ◇ y := by
@@ -844,7 +780,6 @@ theorem Equation742_implies_Equation84 (G: Type _) [Magma G] (h: Equation742 G) 
   nth_rewrite 3 [eq375]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation743_implies_Equation85 (G: Type _) [Magma G] (h: Equation743 G) : Equation85 G := by
   have eq375 (x y : G) : x ◇ y = (x ◇ x) ◇ y := by
@@ -860,7 +795,6 @@ theorem Equation743_implies_Equation85 (G: Type _) [Magma G] (h: Equation743 G) 
   nth_rewrite 3 [eq375]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation743_implies_Equation755 (G: Type _) [Magma G] (h: Equation743 G) : Equation755 G := by
   have eq4599 (x y : G) : (x ◇ x) ◇ y = (x ◇ y) ◇ y := by
@@ -879,7 +813,6 @@ theorem Equation743_implies_Equation755 (G: Type _) [Magma G] (h: Equation743 G)
   nth_rewrite 1 [← eq4599]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation877_implies_Equation15 (G: Type _) [Magma G] (h: Equation877 G) : Equation15 G := by
   have eq3715 (x y : G) : x ◇ y = (x ◇ x) ◇ (y ◇ y) := by
@@ -893,7 +826,6 @@ theorem Equation877_implies_Equation15 (G: Type _) [Magma G] (h: Equation877 G) 
   nth_rewrite 2 [eq3715]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation899_implies_Equation15 (G: Type _) [Magma G] (h: Equation899 G) : Equation15 G := by
   have eq3725 (x y : G) : x ◇ y = (x ◇ y) ◇ (y ◇ y) := by
@@ -914,7 +846,6 @@ theorem Equation899_implies_Equation15 (G: Type _) [Magma G] (h: Equation899 G) 
   nth_rewrite 2 [eq3725]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation953_implies_Equation19 (G: Type _) [Magma G] (h: Equation953 G) : Equation19 G := by
   have eq3721 (x y : G) : x ◇ y = (x ◇ y) ◇ (x ◇ x) := by
@@ -928,7 +859,6 @@ theorem Equation953_implies_Equation19 (G: Type _) [Magma G] (h: Equation953 G) 
   nth_rewrite 2 [eq3721]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1604_implies_Equation1807 (G: Type _) [Magma G] (h: Equation1604 G) : Equation1807 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -942,7 +872,6 @@ theorem Equation1604_implies_Equation1807 (G: Type _) [Magma G] (h: Equation1604
   nth_rewrite 2 [← eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1606_implies_Equation1809 (G: Type _) [Magma G] (h: Equation1606 G) : Equation1809 G := by
   have eq4435 (x y : G) : x ◇ (y ◇ x) = (x ◇ y) ◇ x := by
@@ -956,7 +885,6 @@ theorem Equation1606_implies_Equation1809 (G: Type _) [Magma G] (h: Equation1606
   nth_rewrite 1 [← eq4435]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1607_implies_Equation1810 (G: Type _) [Magma G] (h: Equation1607 G) : Equation1810 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -971,7 +899,6 @@ theorem Equation1607_implies_Equation1810 (G: Type _) [Magma G] (h: Equation1607
   nth_rewrite 2 [← eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1715_implies_Equation1712 (G: Type _) [Magma G] (h: Equation1715 G) : Equation1712 G := by
   have eq4598 (x y : G) : (x ◇ x) ◇ y = (x ◇ y) ◇ x := by
@@ -985,7 +912,6 @@ theorem Equation1715_implies_Equation1712 (G: Type _) [Magma G] (h: Equation1715
   nth_rewrite 1 [eq4598]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1757_implies_Equation188 (G: Type _) [Magma G] (h: Equation1757 G) : Equation188 G := by
   have eq375 (x y : G) : x ◇ y = (x ◇ x) ◇ y := by
@@ -1000,7 +926,6 @@ theorem Equation1757_implies_Equation188 (G: Type _) [Magma G] (h: Equation1757 
   nth_rewrite 3 [eq375]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1758_implies_Equation189 (G: Type _) [Magma G] (h: Equation1758 G) : Equation189 G := by
   have eq375 (x y : G) : x ◇ y = (x ◇ x) ◇ y := by
@@ -1016,7 +941,6 @@ theorem Equation1758_implies_Equation189 (G: Type _) [Magma G] (h: Equation1758 
   nth_rewrite 3 [eq375]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1791_implies_Equation194 (G: Type _) [Magma G] (h: Equation1791 G) : Equation194 G := by
   have eq377 (x y : G) : x ◇ y = (x ◇ y) ◇ x := by
@@ -1038,7 +962,6 @@ theorem Equation1791_implies_Equation194 (G: Type _) [Magma G] (h: Equation1791 
   nth_rewrite 3 [eq377]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1791_implies_Equation1594 (G: Type _) [Magma G] (h: Equation1791 G) : Equation1594 G := by
   have eq4398 (x y : G) : x ◇ (x ◇ y) = (x ◇ y) ◇ x := by
@@ -1053,7 +976,6 @@ theorem Equation1791_implies_Equation1594 (G: Type _) [Magma G] (h: Equation1791
   nth_rewrite 1 [eq4398]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1791_implies_Equation1588 (G: Type _) [Magma G] (h: Equation1791 G) : Equation1588 G := by
   have eq4435 (x y : G) : x ◇ (y ◇ x) = (x ◇ y) ◇ x := by
@@ -1067,7 +989,6 @@ theorem Equation1791_implies_Equation1588 (G: Type _) [Magma G] (h: Equation1791
   nth_rewrite 1 [eq4435]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1791_implies_Equation1586 (G: Type _) [Magma G] (h: Equation1791 G) : Equation1586 G := by
   have eq4472 (x y : G) : x ◇ (y ◇ y) = (x ◇ y) ◇ x := by
@@ -1082,7 +1003,6 @@ theorem Equation1791_implies_Equation1586 (G: Type _) [Magma G] (h: Equation1791
   nth_rewrite 1 [eq4472]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1791_implies_Equation1797 (G: Type _) [Magma G] (h: Equation1791 G) : Equation1797 G := by
   have eq4598 (x y : G) : (x ◇ x) ◇ y = (x ◇ y) ◇ x := by
@@ -1100,7 +1020,6 @@ theorem Equation1791_implies_Equation1797 (G: Type _) [Magma G] (h: Equation1791
   nth_rewrite 1 [eq4598]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1791_implies_Equation1789 (G: Type _) [Magma G] (h: Equation1791 G) : Equation1789 G := by
   have eq4629 (x y : G) : (x ◇ y) ◇ x = (x ◇ y) ◇ y := by
@@ -1117,7 +1036,6 @@ theorem Equation1791_implies_Equation1789 (G: Type _) [Magma G] (h: Equation1791
   nth_rewrite 1 [← eq4629]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1792_implies_Equation1589 (G: Type _) [Magma G] (h: Equation1792 G) : Equation1589 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1132,7 +1050,6 @@ theorem Equation1792_implies_Equation1589 (G: Type _) [Magma G] (h: Equation1792
   nth_rewrite 2 [eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1809_implies_Equation198 (G: Type _) [Magma G] (h: Equation1809 G) : Equation198 G := by
   have eq377 (x y : G) : x ◇ y = (x ◇ y) ◇ x := by
@@ -1155,7 +1072,6 @@ theorem Equation1809_implies_Equation198 (G: Type _) [Magma G] (h: Equation1809 
   nth_rewrite 3 [eq377]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1809_implies_Equation1618 (G: Type _) [Magma G] (h: Equation1809 G) : Equation1618 G := by
   have eq4398 (x y : G) : x ◇ (x ◇ y) = (x ◇ y) ◇ x := by
@@ -1171,7 +1087,6 @@ theorem Equation1809_implies_Equation1618 (G: Type _) [Magma G] (h: Equation1809
   nth_rewrite 1 [eq4398]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1809_implies_Equation1606 (G: Type _) [Magma G] (h: Equation1809 G) : Equation1606 G := by
   have eq4435 (x y : G) : x ◇ (y ◇ x) = (x ◇ y) ◇ x := by
@@ -1186,7 +1101,6 @@ theorem Equation1809_implies_Equation1606 (G: Type _) [Magma G] (h: Equation1809
   nth_rewrite 1 [eq4435]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1809_implies_Equation1603 (G: Type _) [Magma G] (h: Equation1809 G) : Equation1603 G := by
   have eq4472 (x y : G) : x ◇ (y ◇ y) = (x ◇ y) ◇ x := by
@@ -1202,7 +1116,6 @@ theorem Equation1809_implies_Equation1603 (G: Type _) [Magma G] (h: Equation1809
   nth_rewrite 1 [eq4472]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1889_implies_Equation171 (G: Type _) [Magma G] (h: Equation1889 G) : Equation171 G := by
   have eq326 (x y : G) : x ◇ y = x ◇ (y ◇ y) := by
@@ -1217,7 +1130,6 @@ theorem Equation1889_implies_Equation171 (G: Type _) [Magma G] (h: Equation1889 
   nth_rewrite 2 [eq326]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1892_implies_Equation1929 (G: Type _) [Magma G] (h: Equation1892 G) : Equation1929 G := by
   have eq4284 (x y : G) : x ◇ (x ◇ y) = x ◇ (y ◇ y) := by
@@ -1238,7 +1150,6 @@ theorem Equation1892_implies_Equation1929 (G: Type _) [Magma G] (h: Equation1892
   nth_rewrite 1 [eq4284]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1892_implies_Equation1902 (G: Type _) [Magma G] (h: Equation1892 G) : Equation1902 G := by
   have eq4314 (x y : G) : x ◇ (y ◇ x) = x ◇ (y ◇ y) := by
@@ -1260,7 +1171,6 @@ theorem Equation1892_implies_Equation1902 (G: Type _) [Magma G] (h: Equation1892
   nth_rewrite 1 [eq4314]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1892_implies_Equation2132 (G: Type _) [Magma G] (h: Equation1892 G) : Equation2132 G := by
   have eq4470 (x y : G) : x ◇ (y ◇ y) = (x ◇ x) ◇ y := by
@@ -1274,7 +1184,6 @@ theorem Equation1892_implies_Equation2132 (G: Type _) [Magma G] (h: Equation1892
   nth_rewrite 1 [← eq4470]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1892_implies_Equation2105 (G: Type _) [Magma G] (h: Equation1892 G) : Equation2105 G := by
   have eq4472 (x y : G) : x ◇ (y ◇ y) = (x ◇ y) ◇ x := by
@@ -1288,7 +1197,6 @@ theorem Equation1892_implies_Equation2105 (G: Type _) [Magma G] (h: Equation1892
   nth_rewrite 1 [← eq4472]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1892_implies_Equation2095 (G: Type _) [Magma G] (h: Equation1892 G) : Equation2095 G := by
   have eq4473 (x y : G) : x ◇ (y ◇ y) = (x ◇ y) ◇ y := by
@@ -1302,7 +1210,6 @@ theorem Equation1892_implies_Equation2095 (G: Type _) [Magma G] (h: Equation1892
   nth_rewrite 1 [← eq4473]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1899_implies_Equation1889 (G: Type _) [Magma G] (h: Equation1899 G) : Equation1889 G := by
   have eq4314 (x y : G) : x ◇ (y ◇ x) = x ◇ (y ◇ y) := by
@@ -1319,7 +1226,6 @@ theorem Equation1899_implies_Equation1889 (G: Type _) [Magma G] (h: Equation1899
   nth_rewrite 1 [← eq4314]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1903_implies_Equation2106 (G: Type _) [Magma G] (h: Equation1903 G) : Equation2106 G := by
   have eq4435 (x y : G) : x ◇ (y ◇ x) = (x ◇ y) ◇ x := by
@@ -1334,7 +1240,6 @@ theorem Equation1903_implies_Equation2106 (G: Type _) [Magma G] (h: Equation1903
   nth_rewrite 1 [← eq4435]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1911_implies_Equation2114 (G: Type _) [Magma G] (h: Equation1911 G) : Equation2114 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1349,7 +1254,6 @@ theorem Equation1911_implies_Equation2114 (G: Type _) [Magma G] (h: Equation1911
   nth_rewrite 1 [← eq4512 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1915_implies_Equation2118 (G: Type _) [Magma G] (h: Equation1915 G) : Equation2118 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1364,7 +1268,6 @@ theorem Equation1915_implies_Equation2118 (G: Type _) [Magma G] (h: Equation1915
   nth_rewrite 1 [← eq4512 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1918_implies_Equation2121 (G: Type _) [Magma G] (h: Equation1918 G) : Equation2121 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1378,7 +1281,6 @@ theorem Equation1918_implies_Equation2121 (G: Type _) [Magma G] (h: Equation1918
   nth_rewrite 1 [← eq4512 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1920_implies_Equation2123 (G: Type _) [Magma G] (h: Equation1920 G) : Equation2123 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1393,7 +1295,6 @@ theorem Equation1920_implies_Equation2123 (G: Type _) [Magma G] (h: Equation1920
   nth_rewrite 2 [← eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1930_implies_Equation1893 (G: Type _) [Magma G] (h: Equation1930 G) : Equation1893 G := by
   have eq4284 (x y : G) : x ◇ (x ◇ y) = x ◇ (y ◇ y) := by
@@ -1411,7 +1312,6 @@ theorem Equation1930_implies_Equation1893 (G: Type _) [Magma G] (h: Equation1930
   nth_rewrite 1 [← eq4284]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1969_implies_Equation2172 (G: Type _) [Magma G] (h: Equation1969 G) : Equation2172 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1425,7 +1325,6 @@ theorem Equation1969_implies_Equation2172 (G: Type _) [Magma G] (h: Equation1969
   nth_rewrite 2 [← eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1972_implies_Equation2175 (G: Type _) [Magma G] (h: Equation1972 G) : Equation2175 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1439,7 +1338,6 @@ theorem Equation1972_implies_Equation2175 (G: Type _) [Magma G] (h: Equation1972
   nth_rewrite 2 [← eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation1978_implies_Equation1995 (G: Type _) [Magma G] (h: Equation1978 G) : Equation1995 G := by
   have eq4314 (x y : G) : x ◇ (y ◇ x) = x ◇ (y ◇ y) := by
@@ -1453,7 +1351,6 @@ theorem Equation1978_implies_Equation1995 (G: Type _) [Magma G] (h: Equation1978
   nth_rewrite 1 [← eq4314]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2106_implies_Equation1930 (G: Type _) [Magma G] (h: Equation2106 G) : Equation1930 G := by
   have eq4398 (x y : G) : x ◇ (x ◇ y) = (x ◇ y) ◇ x := by
@@ -1468,7 +1365,6 @@ theorem Equation2106_implies_Equation1930 (G: Type _) [Magma G] (h: Equation2106
   nth_rewrite 1 [eq4398]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2120_implies_Equation1917 (G: Type _) [Magma G] (h: Equation2120 G) : Equation1917 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1482,7 +1378,6 @@ theorem Equation2120_implies_Equation1917 (G: Type _) [Magma G] (h: Equation2120
   nth_rewrite 1 [eq4512 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2177_implies_Equation1974 (G: Type _) [Magma G] (h: Equation2177 G) : Equation1974 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1496,7 +1391,6 @@ theorem Equation2177_implies_Equation1974 (G: Type _) [Magma G] (h: Equation2177
   nth_rewrite 1 [eq4512 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2298_implies_Equation2523 (G: Type _) [Magma G] (h: Equation2298 G) : Equation2523 G := by
   have eq4399 (x y : G) : x ◇ (x ◇ y) = (x ◇ y) ◇ y := by
@@ -1513,7 +1407,6 @@ theorem Equation2298_implies_Equation2523 (G: Type _) [Magma G] (h: Equation2298
   nth_rewrite 1 [← eq4399]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2312_implies_Equation2523 (G: Type _) [Magma G] (h: Equation2312 G) : Equation2523 G := by
   have eq4436 (x y : G) : x ◇ (y ◇ x) = (x ◇ y) ◇ y := by
@@ -1529,7 +1422,6 @@ theorem Equation2312_implies_Equation2523 (G: Type _) [Magma G] (h: Equation2312
   nth_rewrite 1 [← eq4436]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2320_implies_Equation2523 (G: Type _) [Magma G] (h: Equation2320 G) : Equation2523 G := by
   have eq4473 (x y : G) : x ◇ (y ◇ y) = (x ◇ y) ◇ y := by
@@ -1545,7 +1437,6 @@ theorem Equation2320_implies_Equation2523 (G: Type _) [Magma G] (h: Equation2320
   nth_rewrite 1 [← eq4473]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2324_implies_Equation2527 (G: Type _) [Magma G] (h: Equation2324 G) : Equation2527 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1561,7 +1452,6 @@ theorem Equation2324_implies_Equation2527 (G: Type _) [Magma G] (h: Equation2324
   nth_rewrite 2 [← eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2325_implies_Equation2528 (G: Type _) [Magma G] (h: Equation2325 G) : Equation2528 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1577,7 +1467,6 @@ theorem Equation2325_implies_Equation2528 (G: Type _) [Magma G] (h: Equation2325
   nth_rewrite 2 [← eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2329_implies_Equation30 (G: Type _) [Magma G] (h: Equation2329 G) : Equation30 G := by
   have eq3309 (x y : G) : x ◇ y = x ◇ (x ◇ (y ◇ y)) := by
@@ -1600,7 +1489,6 @@ theorem Equation2329_implies_Equation30 (G: Type _) [Magma G] (h: Equation2329 G
   nth_rewrite 2 [eq3309]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2332_implies_Equation30 (G: Type _) [Magma G] (h: Equation2332 G) : Equation30 G := by
   have eq3308 (x y : G) : x ◇ y = x ◇ (x ◇ (y ◇ x)) := by
@@ -1615,7 +1503,6 @@ theorem Equation2332_implies_Equation30 (G: Type _) [Magma G] (h: Equation2332 G
   nth_rewrite 2 [eq3308]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2339_implies_Equation30 (G: Type _) [Magma G] (h: Equation2339 G) : Equation30 G := by
   have eq3306 (x y : G) : x ◇ y = x ◇ (x ◇ (x ◇ y)) := by
@@ -1631,7 +1518,6 @@ theorem Equation2339_implies_Equation30 (G: Type _) [Magma G] (h: Equation2339 G
   nth_rewrite 2 [eq3306]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2350_implies_Equation2553 (G: Type _) [Magma G] (h: Equation2350 G) : Equation2553 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1647,7 +1533,6 @@ theorem Equation2350_implies_Equation2553 (G: Type _) [Magma G] (h: Equation2350
   nth_rewrite 2 [← eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2366_implies_Equation2603 (G: Type _) [Magma G] (h: Equation2366 G) : Equation2603 G := by
   have eq4470 (x y : G) : x ◇ (y ◇ y) = (x ◇ x) ◇ y := by
@@ -1664,7 +1549,6 @@ theorem Equation2366_implies_Equation2603 (G: Type _) [Magma G] (h: Equation2366
   nth_rewrite 1 [← eq4470]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2374_implies_Equation2603 (G: Type _) [Magma G] (h: Equation2374 G) : Equation2603 G := by
   have eq4433 (x y : G) : x ◇ (y ◇ x) = (x ◇ x) ◇ y := by
@@ -1681,7 +1565,6 @@ theorem Equation2374_implies_Equation2603 (G: Type _) [Magma G] (h: Equation2374
   nth_rewrite 1 [← eq4433]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2378_implies_Equation2581 (G: Type _) [Magma G] (h: Equation2378 G) : Equation2581 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1697,7 +1580,6 @@ theorem Equation2378_implies_Equation2581 (G: Type _) [Magma G] (h: Equation2378
   nth_rewrite 2 [← eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2379_implies_Equation2582 (G: Type _) [Magma G] (h: Equation2379 G) : Equation2582 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1713,7 +1595,6 @@ theorem Equation2379_implies_Equation2582 (G: Type _) [Magma G] (h: Equation2379
   nth_rewrite 2 [← eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2400_implies_Equation2603 (G: Type _) [Magma G] (h: Equation2400 G) : Equation2603 G := by
   have eq4396 (x y : G) : x ◇ (x ◇ y) = (x ◇ x) ◇ y := by
@@ -1729,7 +1610,6 @@ theorem Equation2400_implies_Equation2603 (G: Type _) [Magma G] (h: Equation2400
   nth_rewrite 1 [← eq4396]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2417_implies_Equation2620 (G: Type _) [Magma G] (h: Equation2417 G) : Equation2620 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1745,7 +1625,6 @@ theorem Equation2417_implies_Equation2620 (G: Type _) [Magma G] (h: Equation2417
   nth_rewrite 1 [← eq4512 z]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2418_implies_Equation2621 (G: Type _) [Magma G] (h: Equation2418 G) : Equation2621 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1761,7 +1640,6 @@ theorem Equation2418_implies_Equation2621 (G: Type _) [Magma G] (h: Equation2418
   nth_rewrite 1 [← eq4512 z]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2501_implies_Equation226 (G: Type _) [Magma G] (h: Equation2501 G) : Equation226 G := by
   have eq375 (x y : G) : x ◇ y = (x ◇ x) ◇ y := by
@@ -1775,7 +1653,6 @@ theorem Equation2501_implies_Equation226 (G: Type _) [Magma G] (h: Equation2501 
   nth_rewrite 3 [eq375]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2515_implies_Equation2501 (G: Type _) [Magma G] (h: Equation2515 G) : Equation2501 G := by
   have eq4598 (x y : G) : (x ◇ x) ◇ y = (x ◇ y) ◇ x := by
@@ -1794,7 +1671,6 @@ theorem Equation2515_implies_Equation2501 (G: Type _) [Magma G] (h: Equation2515
   nth_rewrite 1 [eq4598]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2523_implies_Equation2515 (G: Type _) [Magma G] (h: Equation2523 G) : Equation2515 G := by
   have eq4629 (x y : G) : (x ◇ y) ◇ x = (x ◇ y) ◇ y := by
@@ -1812,7 +1688,6 @@ theorem Equation2523_implies_Equation2515 (G: Type _) [Magma G] (h: Equation2523
   nth_rewrite 1 [eq4629]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2527_implies_Equation2324 (G: Type _) [Magma G] (h: Equation2527 G) : Equation2324 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1828,7 +1703,6 @@ theorem Equation2527_implies_Equation2324 (G: Type _) [Magma G] (h: Equation2527
   nth_rewrite 1 [eq4512 x z]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2532_implies_Equation30 (G: Type _) [Magma G] (h: Equation2532 G) : Equation30 G := by
   have eq3512 (x y : G) : x ◇ y = x ◇ ((x ◇ y) ◇ y) := by
@@ -1844,7 +1718,6 @@ theorem Equation2532_implies_Equation30 (G: Type _) [Magma G] (h: Equation2532 G
   nth_rewrite 1 [eq3512 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2535_implies_Equation30 (G: Type _) [Magma G] (h: Equation2535 G) : Equation30 G := by
   have eq3511 (x y : G) : x ◇ y = x ◇ ((x ◇ y) ◇ x) := by
@@ -1859,7 +1732,6 @@ theorem Equation2535_implies_Equation30 (G: Type _) [Magma G] (h: Equation2535 G
   nth_rewrite 1 [eq3511 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2539_implies_Equation2336 (G: Type _) [Magma G] (h: Equation2539 G) : Equation2336 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1875,7 +1747,6 @@ theorem Equation2539_implies_Equation2336 (G: Type _) [Magma G] (h: Equation2539
   nth_rewrite 2 [eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2542_implies_Equation30 (G: Type _) [Magma G] (h: Equation2542 G) : Equation30 G := by
   have eq3509 (x y : G) : x ◇ y = x ◇ ((x ◇ x) ◇ y) := by
@@ -1890,7 +1761,6 @@ theorem Equation2542_implies_Equation30 (G: Type _) [Magma G] (h: Equation2542 G
   nth_rewrite 1 [eq3509 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2569_implies_Equation240 (G: Type _) [Magma G] (h: Equation2569 G) : Equation240 G := by
   have eq378 (x y : G) : x ◇ y = (x ◇ y) ◇ y := by
@@ -1912,7 +1782,6 @@ theorem Equation2569_implies_Equation240 (G: Type _) [Magma G] (h: Equation2569 
   nth_rewrite 1 [eq378 z]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2577_implies_Equation2569 (G: Type _) [Magma G] (h: Equation2577 G) : Equation2569 G := by
   have eq4629 (x y : G) : (x ◇ y) ◇ x = (x ◇ y) ◇ y := by
@@ -1930,7 +1799,6 @@ theorem Equation2577_implies_Equation2569 (G: Type _) [Magma G] (h: Equation2577
   nth_rewrite 1 [← eq4629]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2581_implies_Equation2378 (G: Type _) [Magma G] (h: Equation2581 G) : Equation2378 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1946,7 +1814,6 @@ theorem Equation2581_implies_Equation2378 (G: Type _) [Magma G] (h: Equation2581
   nth_rewrite 1 [eq4512 z]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2603_implies_Equation2577 (G: Type _) [Magma G] (h: Equation2603 G) : Equation2577 G := by
   have eq4598 (x y : G) : (x ◇ x) ◇ y = (x ◇ y) ◇ x := by
@@ -1965,7 +1832,6 @@ theorem Equation2603_implies_Equation2577 (G: Type _) [Magma G] (h: Equation2603
   nth_rewrite 1 [← eq4598]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2620_implies_Equation2417 (G: Type _) [Magma G] (h: Equation2620 G) : Equation2417 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -1981,7 +1847,6 @@ theorem Equation2620_implies_Equation2417 (G: Type _) [Magma G] (h: Equation2620
   nth_rewrite 1 [eq4512 z]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2711_implies_Equation30 (G: Type _) [Magma G] (h: Equation2711 G) : Equation30 G := by
   have eq3721 (x y : G) : x ◇ y = (x ◇ y) ◇ (x ◇ x) := by
@@ -1997,7 +1862,6 @@ theorem Equation2711_implies_Equation30 (G: Type _) [Magma G] (h: Equation2711 G
   nth_rewrite 1 [eq3721 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2735_implies_Equation30 (G: Type _) [Magma G] (h: Equation2735 G) : Equation30 G := by
   have eq3715 (x y : G) : x ◇ y = (x ◇ x) ◇ (y ◇ y) := by
@@ -2010,7 +1874,6 @@ theorem Equation2735_implies_Equation30 (G: Type _) [Magma G] (h: Equation2735 G
   nth_rewrite 1 [eq3715 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2738_implies_Equation30 (G: Type _) [Magma G] (h: Equation2738 G) : Equation30 G := by
   have eq3714 (x y : G) : x ◇ y = (x ◇ x) ◇ (y ◇ x) := by
@@ -2025,7 +1888,6 @@ theorem Equation2738_implies_Equation30 (G: Type _) [Magma G] (h: Equation2738 G
   nth_rewrite 1 [eq3714 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2745_implies_Equation30 (G: Type _) [Magma G] (h: Equation2745 G) : Equation30 G := by
   have eq3712 (x y : G) : x ◇ y = (x ◇ x) ◇ (x ◇ y) := by
@@ -2047,7 +1909,6 @@ theorem Equation2745_implies_Equation30 (G: Type _) [Magma G] (h: Equation2745 G
   nth_rewrite 1 [eq3712 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2904_implies_Equation30 (G: Type _) [Magma G] (h: Equation2904 G) : Equation30 G := by
   have eq3927 (x y : G) : x ◇ y = (x ◇ (y ◇ y)) ◇ x := by
@@ -2062,7 +1923,6 @@ theorem Equation2904_implies_Equation30 (G: Type _) [Magma G] (h: Equation2904 G
   nth_rewrite 1 [eq3927 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2908_implies_Equation2918 (G: Type _) [Magma G] (h: Equation2908 G) : Equation2918 G := by
   have eq4314 (x y : G) : x ◇ (y ◇ x) = x ◇ (y ◇ y) := by
@@ -2081,7 +1941,6 @@ theorem Equation2908_implies_Equation2918 (G: Type _) [Magma G] (h: Equation2908
   nth_rewrite 1 [eq4314]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2908_implies_Equation3148 (G: Type _) [Magma G] (h: Equation2908 G) : Equation3148 G := by
   have eq4470 (x y : G) : x ◇ (y ◇ y) = (x ◇ x) ◇ y := by
@@ -2099,7 +1958,6 @@ theorem Equation2908_implies_Equation3148 (G: Type _) [Magma G] (h: Equation2908
   nth_rewrite 1 [← eq4470]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2933_implies_Equation3136 (G: Type _) [Magma G] (h: Equation2933 G) : Equation3136 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2114,7 +1972,6 @@ theorem Equation2933_implies_Equation3136 (G: Type _) [Magma G] (h: Equation2933
   nth_rewrite 1 [← eq4512 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2935_implies_Equation3138 (G: Type _) [Magma G] (h: Equation2935 G) : Equation3138 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2130,7 +1987,6 @@ theorem Equation2935_implies_Equation3138 (G: Type _) [Magma G] (h: Equation2935
   nth_rewrite 1 [← eq4512 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2980_implies_Equation3183 (G: Type _) [Magma G] (h: Equation2980 G) : Equation3183 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2146,7 +2002,6 @@ theorem Equation2980_implies_Equation3183 (G: Type _) [Magma G] (h: Equation2980
   nth_rewrite 1 [← eq4512 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2987_implies_Equation3190 (G: Type _) [Magma G] (h: Equation2987 G) : Equation3190 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2161,7 +2016,6 @@ theorem Equation2987_implies_Equation3190 (G: Type _) [Magma G] (h: Equation2987
   nth_rewrite 1 [← eq4512 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation2989_implies_Equation3192 (G: Type _) [Magma G] (h: Equation2989 G) : Equation3192 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2177,7 +2031,6 @@ theorem Equation2989_implies_Equation3192 (G: Type _) [Magma G] (h: Equation2989
   nth_rewrite 1 [← eq4512 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3110_implies_Equation3147 (G: Type _) [Magma G] (h: Equation3110 G) : Equation3147 G := by
   have eq4599 (x y : G) : (x ◇ x) ◇ y = (x ◇ y) ◇ y := by
@@ -2191,7 +2044,6 @@ theorem Equation3110_implies_Equation3147 (G: Type _) [Magma G] (h: Equation3110
   nth_rewrite 1 [eq4599]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3110_implies_Equation3120 (G: Type _) [Magma G] (h: Equation3110 G) : Equation3120 G := by
   have eq4629 (x y : G) : (x ◇ y) ◇ x = (x ◇ y) ◇ y := by
@@ -2214,7 +2066,6 @@ theorem Equation3110_implies_Equation3120 (G: Type _) [Magma G] (h: Equation3110
   nth_rewrite 1 [eq4629]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3111_implies_Equation3148 (G: Type _) [Magma G] (h: Equation3111 G) : Equation3148 G := by
   have eq4599 (x y : G) : (x ◇ x) ◇ y = (x ◇ y) ◇ y := by
@@ -2229,7 +2080,6 @@ theorem Equation3111_implies_Equation3148 (G: Type _) [Magma G] (h: Equation3111
   nth_rewrite 1 [eq4599]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3121_implies_Equation3111 (G: Type _) [Magma G] (h: Equation3121 G) : Equation3111 G := by
   have eq4629 (x y : G) : (x ◇ y) ◇ x = (x ◇ y) ◇ y := by
@@ -2249,7 +2099,6 @@ theorem Equation3121_implies_Equation3111 (G: Type _) [Magma G] (h: Equation3121
   nth_rewrite 1 [← eq4629]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3125_implies_Equation2922 (G: Type _) [Magma G] (h: Equation3125 G) : Equation2922 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2264,7 +2113,6 @@ theorem Equation3125_implies_Equation2922 (G: Type _) [Magma G] (h: Equation3125
   nth_rewrite 1 [eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3129_implies_Equation2926 (G: Type _) [Magma G] (h: Equation3129 G) : Equation2926 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2279,7 +2127,6 @@ theorem Equation3129_implies_Equation2926 (G: Type _) [Magma G] (h: Equation3129
   nth_rewrite 1 [eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3133_implies_Equation2930 (G: Type _) [Magma G] (h: Equation3133 G) : Equation2930 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2294,7 +2141,6 @@ theorem Equation3133_implies_Equation2930 (G: Type _) [Magma G] (h: Equation3133
   nth_rewrite 1 [eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3136_implies_Equation2933 (G: Type _) [Magma G] (h: Equation3136 G) : Equation2933 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2309,7 +2155,6 @@ theorem Equation3136_implies_Equation2933 (G: Type _) [Magma G] (h: Equation3136
   nth_rewrite 1 [eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3137_implies_Equation2934 (G: Type _) [Magma G] (h: Equation3137 G) : Equation2934 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2324,7 +2169,6 @@ theorem Equation3137_implies_Equation2934 (G: Type _) [Magma G] (h: Equation3137
   nth_rewrite 1 [eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3148_implies_Equation3121 (G: Type _) [Magma G] (h: Equation3148 G) : Equation3121 G := by
   have eq4598 (x y : G) : (x ◇ x) ◇ y = (x ◇ y) ◇ x := by
@@ -2337,7 +2181,6 @@ theorem Equation3148_implies_Equation3121 (G: Type _) [Magma G] (h: Equation3148
   nth_rewrite 1 [← eq4598]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3162_implies_Equation293 (G: Type _) [Magma G] (h: Equation3162 G) : Equation293 G := by
   have eq375 (x y : G) : x ◇ y = (x ◇ x) ◇ y := by
@@ -2351,7 +2194,6 @@ theorem Equation3162_implies_Equation293 (G: Type _) [Magma G] (h: Equation3162 
   nth_rewrite 1 [eq375 y]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3187_implies_Equation2984 (G: Type _) [Magma G] (h: Equation3187 G) : Equation2984 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2366,7 +2208,6 @@ theorem Equation3187_implies_Equation2984 (G: Type _) [Magma G] (h: Equation3187
   nth_rewrite 1 [eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3189_implies_Equation2986 (G: Type _) [Magma G] (h: Equation3189 G) : Equation2986 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2380,7 +2221,6 @@ theorem Equation3189_implies_Equation2986 (G: Type _) [Magma G] (h: Equation3189
   nth_rewrite 1 [eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3192_implies_Equation2989 (G: Type _) [Magma G] (h: Equation3192 G) : Equation2989 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2395,7 +2235,6 @@ theorem Equation3192_implies_Equation2989 (G: Type _) [Magma G] (h: Equation3192
   nth_rewrite 1 [eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3213_implies_Equation3162 (G: Type _) [Magma G] (h: Equation3213 G) : Equation3162 G := by
   have eq4599 (x y : G) : (x ◇ x) ◇ y = (x ◇ y) ◇ y := by
@@ -2414,7 +2253,6 @@ theorem Equation3213_implies_Equation3162 (G: Type _) [Magma G] (h: Equation3213
   nth_rewrite 1 [eq4599]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3229_implies_Equation3026 (G: Type _) [Magma G] (h: Equation3229 G) : Equation3026 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2429,7 +2267,6 @@ theorem Equation3229_implies_Equation3026 (G: Type _) [Magma G] (h: Equation3229
   nth_rewrite 1 [eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3364_implies_Equation3567 (G: Type _) [Magma G] (h: Equation3364 G) : Equation3567 G := by
   have eq4435 (x y : G) : x ◇ (y ◇ x) = (x ◇ y) ◇ x := by
@@ -2442,7 +2279,6 @@ theorem Equation3364_implies_Equation3567 (G: Type _) [Magma G] (h: Equation3364
   nth_rewrite 1 [← eq4435]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3392_implies_Equation45 (G: Type _) [Magma G] (h: Equation3392 G) : Equation45 G := by
   have eq3338 (x y z w : G) : x ◇ y = x ◇ (z ◇ (w ◇ y)) := by
@@ -2470,7 +2306,6 @@ theorem Equation3436_implies_Equation3446 (G: Type _) [Magma G] (h: Equation3436
   nth_rewrite 1 [eq4284]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation3567_implies_Equation3370 (G: Type _) [Magma G] (h: Equation3567 G) : Equation3370 G := by
   have eq4398 (x y : G) : x ◇ (x ◇ y) = (x ◇ y) ◇ x := by
@@ -2482,7 +2317,6 @@ theorem Equation3567_implies_Equation3370 (G: Type _) [Magma G] (h: Equation3567
   nth_rewrite 1 [eq4398]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation4159_implies_Equation4156 (G: Type _) [Magma G] (h: Equation4159 G) : Equation4156 G := by
   have eq4629 (x y : G) : (x ◇ y) ◇ x = (x ◇ y) ◇ y := by
@@ -2496,7 +2330,6 @@ theorem Equation4159_implies_Equation4156 (G: Type _) [Magma G] (h: Equation4159
   nth_rewrite 1 [← eq4629]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation4197_implies_Equation3994 (G: Type _) [Magma G] (h: Equation4197 G) : Equation3994 G := by
   have eq4512 (x y z : G) : x ◇ (y ◇ z) = (x ◇ y) ◇ z := by
@@ -2507,7 +2340,6 @@ theorem Equation4197_implies_Equation3994 (G: Type _) [Magma G] (h: Equation4197
   nth_rewrite 1 [eq4512]
   symm
   apply h
-  repeat assumption
 @[equational_result]
 theorem Equation4216_implies_Equation4013 (G: Type _) [Magma G] (h: Equation4216 G) : Equation4013 G := by
   have eq4435 (x y : G) : x ◇ (y ◇ x) = (x ◇ y) ◇ x := by
@@ -2520,4 +2352,3 @@ theorem Equation4216_implies_Equation4013 (G: Type _) [Magma G] (h: Equation4216
   nth_rewrite 1 [eq4435]
   symm
   apply h
-  repeat assumption
