@@ -218,7 +218,38 @@ theorem Equation28393_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
     case hc =>
       simp [padicValNat.mul, padicValNat_prime_prime_pow]
     simp [this, Subtype.ext_iff, padicValNat.mul, padicValNat_prime_prime_pow]
-  have h5 : ∀ (y z: ℕ+), z ≠ 3^y.val ∧ z ≠ 2^(3^y.val) → (2^(3^y.val)) ◇ z = 3^y.val := sorry
+  have h5 : ∀ (y z: ℕ+), z ≠ 3^y.val ∧ z ≠ 2^(3^y.val) → (2^(3^y.val)) ◇ z = 3^y.val := by
+    intro y z hyz
+    unfold Magma.op
+    simp
+    rw [if_neg, if_neg, if_neg, if_neg]
+    .
+      intro hc
+      apply PNat.ne_zero ((3: ℕ+)^y.val)
+      calc ↑((3: ℕ+)^y.val)
+        _ = padicValNat 2 ↑(2^3^y.val: ℕ+) := by simp
+        _ = padicValNat 2 _ := by rw [hc]
+        _ = 0 := by simp [padicValNat_prime_prime_pow]
+    .
+      intro hc
+      apply PNat.ne_zero ((3: ℕ+)^y.val)
+      calc ↑((3: ℕ+)^y.val)
+        _ = padicValNat 2 ↑(2^3^y.val: ℕ+) := by simp
+        _ = padicValNat 2 _ := by rw [hc]
+        _ = 0 := by simp [padicValNat_prime_prime_pow]
+    .
+      intro hc
+      apply hyz.1
+      calc z
+        _ = z.val.toPNat' := by simp
+        _ = (padicValNat 2 (2^z.val: ℕ+)).toPNat' := by simp
+        _ = (padicValNat 2 ↑(2^3^y.val: ℕ+)).toPNat' := by rw [←hc]
+        _ = (3^y.val: ℕ).toPNat' := by simp
+        _ = 3^↑y := by rw [←PNat.coe_inj]; simp
+    .
+      intro hc
+      apply hyz.2
+      simp [hc]
   rw [h1, h2]
   by_cases hx : x = 3^y.val
   .
