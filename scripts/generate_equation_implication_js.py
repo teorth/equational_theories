@@ -1,7 +1,6 @@
 import json
 import os
 import sys
-import numpy as np
 
 #"""
 f = json.load(open(sys.argv[1]))
