@@ -13,6 +13,11 @@ inductive FreeMagma (α : Type u)
 instance (α : Type u) : Magma (FreeMagma α) where
   op := FreeMagma.Fork
 
+instance (α : Type u) : Coe α (FreeMagma α) where
+  coe x := FreeMagma.Leaf x
+
+instance {n : Nat} : OfNat (FreeMagma ℕ) n := ⟨FreeMagma.Leaf n⟩
+
 infixl:65 " ⋆ " => FreeMagma.Fork
 
 @[simp]
