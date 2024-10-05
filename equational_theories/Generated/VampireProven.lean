@@ -1,11 +1,3 @@
-import equational_theories.Generated.VampireProven.Disproofs1
-import equational_theories.Generated.VampireProven.Disproofs2
-import equational_theories.Generated.VampireProven.Disproofs3
-import equational_theories.Generated.VampireProven.Disproofs4
-import equational_theories.Generated.VampireProven.Disproofs5
-import equational_theories.Generated.VampireProven.Disproofs6
-import equational_theories.Generated.VampireProven.Disproofs7
-import equational_theories.Generated.VampireProven.Disproofs8
 import equational_theories.Generated.VampireProven.Proofs1
 import equational_theories.Generated.VampireProven.Proofs1
 import equational_theories.Generated.VampireProven.Proofs2
