@@ -11,6 +11,7 @@ on:
       - 'home_page/**'
       - 'home'
       - '**/generate_dashboard.py'
+      - '**/generate_equation_implication_js.py'
       - 'lean-toolchain'
       - 'lakefile.toml'
       - 'lake-manifest.json'
@@ -24,6 +25,7 @@ on:
       - 'home_page/**'
       - 'home'
       - '**/generate_dashboard.py'
+      - '**/generate_equation_implication_js.py'
       - 'lean-toolchain'
       - 'lakefile.toml'
       - 'lake-manifest.json'
@@ -133,6 +135,11 @@ jobs:
         run: |
           ~/.elan/bin/lake exe extract_implications outcomes equational_theories --hist > /tmp/hist.json
           python scripts/generate_dashboard.py /tmp/hist.json
+
+      - name: Generate home_page/implications/implications.js
+        run: |
+          ~/.elan/bin/lake exe extract_implications outcomes > /tmp/out.json
+          python scripts/generate_equation_implication_js.py /tmp/out.json
 
       - name: Bundle dependencies
         if: github.event_name == 'push'
