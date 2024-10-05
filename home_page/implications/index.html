@@ -13,6 +13,7 @@
       .equation-item:hover { background-color: #f0f0f0; }
       .equation-name { flex: 2; }
       .equation-stat { flex: 1; text-align: center; }
+      .equation-item.header div { position: sticky; top: 0; background-color: #f0f0f0; z-index: 2; border-bottom: 1px solid #ddd; }
       .implication-box { border: 1px solid #ccc; margin: 10px 0; padding: 10px; }
       .implication-table { width: 100%; border-collapse: collapse; }
       .implication-table th, .implication-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
@@ -83,14 +84,14 @@
       }
 
       .implication-item {
-    cursor: pointer;
-    padding: 5px;
-    margin: 2px 0;
-}
+        cursor: pointer;
+        padding: 5px;
+        margin: 2px 0;
+      }
 
-.implication-item:hover {
-    background-color: #f0f0f0;
-}
+      .implication-item:hover {
+        background-color: #f0f0f0;
+      }
 
     </style>
 
@@ -98,7 +99,6 @@
   <body>
     <div id="listPage" class="page active">
       <h1>All Equations</h1>
-
 
       <input type="text" id="equationInput" placeholder="Enter an equation (e.g., x*y=y*x)">
       <button onclick="findEquation()">Jump to Equation</button>
@@ -112,12 +112,10 @@
         </div>
       </div>
 
-
-
       <div class="checkbox-container">
-	<label>
-	  <input checked="checked" type="checkbox" id="showEquivalences"> Hide equivalent equations
-	</label>
+        <label>
+          <input checked="checked" type="checkbox" id="showEquivalences"> Hide equivalent equations
+        </label>
         <label>
           <input type="checkbox" checked="checked" id="treatConjectedAsUnknownList"> Treat conjectures as unknown
         </label>
@@ -132,24 +130,25 @@
           <div class="equation-stat" data-sort="unknown">Unknown</div>
           <div class="equation-stat" data-sort="unknownBy">Unknown By</div>
         </div>
+        <!-- Dynamic rows of equations go here -->
       </div>
     </div>
+
     <div id="detailPage" class="page">
       <button id="backButton">Back to List</button>
       <h1>Equation Details</h1>
       <h2 id="selectedEquation"></h2>
       <h3 id="selectedEquationDual"></h3>
       <div class="checkbox-container">
-	<label>
-	  <input checked="checked" type="checkbox" id="showEquivalences2"> Hide equivalent equations
-	</label>
+        <label>
+          <input checked="checked" type="checkbox" id="showEquivalences2"> Hide equivalent equations
+        </label>
         <label>
           <input type="checkbox" id="showOnlyExplicitProofs"> Show only explicit proofs
         </label>
         <label>
           <input type="checkbox" id="treatConjectedAsUnknownDetail"> Treat conjectures as unknown
         </label>
-
       </div>
       <div class="implication-box">
         <h3>This equation implies (=&gt;):</h3>
@@ -186,10 +185,10 @@
           <tr>
             <th>Equivalent Equations</th>
           </tr>
-	  <tr>
-	    <td><div id="equivalentEquations" class="implication-list"></div></td>
-	  </tr>
-	</table>
+          <tr>
+            <td><div id="equivalentEquations" class="implication-list"></div></td>
+          </tr>
+        </table>
       </div>
     </div>
 
