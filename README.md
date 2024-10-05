@@ -33,6 +33,7 @@ Some automatically generated progress:
 - Oct 2, 2024: 86 (potentially) new implications in `Subgraph.lean` conclusively (i.e. in Lean) resolved using the [lean-egg tactic](https://github.com/marcusrossel/lean-egg). Some of these were simply missed by the transitive closure computation and technically already implied, but some were genuinely new.
 - Oct 3, 2024: Another ~150k transitive implications were proven by [EquationSearch](equational_theories/Generated/EquationSearch) after improved capabilities were added.
 - Oct 3, 2024: [~1m transitive implications](equational_theories/Generated/MagmaEgg) were proven by a new custom tool that uses egraphs to find a proof and exports it to a Lean term
+- Oct 5, 2024: 97% of the remaining unknown implications were resolved (transitively) by [Vampire](https://en.wikipedia.org/wiki/Vampire_(theorem_prover)), and then converted to a Lean proof using a custom script and a Lean eleborator implementing the deduction step of superposition calculus.
 
 Some statistics and data files from a given point in time:
 - Sep 28, 2024: [A repository of unknown implications](https://github.com/amirlb/equational_theories/tree/unknown-implications), including all unknown implications, known equivalence classes, unknown implications modulo known equivalence, and only the strongest unknown implications.
