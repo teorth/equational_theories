@@ -418,3 +418,16 @@ function handleUrlChange() {
 }
 
 window.addEventListener('popstate', handleUrlChange);
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const timestamp = last_updated.timestamp * 1000; // Convert to milliseconds
+    const commitHash = last_updated.commit_hash;
+    
+    const localDate = new Date(timestamp);
+    document.getElementById('lastUpdated').textContent = localDate.toLocaleString();
+    
+    const commitLink = document.getElementById('commitLink');
+    commitLink.href = `https://github.com/teorth/equational_theories/tree/${commitHash}`;
+    commitLink.textContent = commitHash.substring(0, 7); // Display first 7 characters of the hash
+});
