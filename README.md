@@ -53,6 +53,7 @@ Current statistics and data files, updated automatically:
 
 Current visualizations, updated automatically:
 - An experimental tool for exploring the graph of equation implications is available [here](https://nicholas.carlini.com/tmp/view.html).  It will be more fully integrated into the project in the near future.
+- An experimental tool to interactively explore a Hasse diagram of the graph is available [here](https://tsyrklevi.ch/eqviz/index.html?2)
 
 For guidelines on how to contribute, see the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
@@ -87,7 +88,7 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - Shell
         - [`run_before_push`](scripts/run_before_push.sh) - performs some of the CI checks, suitable for running just before pushing a new PR
     - Lean
-        - [`extract_implications`](scripts/extract_implications.lean) - extracts implications from one or more Lean files
+        - [`extract_implications`](scripts/extract_implications.lean) - extracts implications from one or more Lean files. This outputs the "ground truth" of implication data, for use by other scripts
     - Python
         - [`explore_magma`](scripts/explore_magma.py) - test a given magma table against all or a subset of the equations in `AllEquations.lean`
         - [`find_dual`](scripts/find_dual.py) - finds the dual of an equation
