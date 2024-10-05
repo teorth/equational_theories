@@ -405,7 +405,6 @@ if (currentURL.indexOf('?') > -1) {
 
 // Function to handle URL changes (including back/forward navigation)
 function handleUrlChange() {
-    alert("pop" + window.location.href);
     let currentURL = window.location.href;
     if (currentURL.indexOf('?') > -1) {
         renderImplications(currentURL.split('?')[1]-1);
