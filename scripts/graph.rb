@@ -222,31 +222,6 @@ class Graph
     end
   end
 
-  # # Should only be used on condensed graphs
-  # def step_reduction
-  #   reduced_graph = Graph.new
-
-  #   @adj_list.each { |u, neighbors|
-  #     neighbors.each { |v|
-  #       reduced_graph.add_edge(u, v)
-  #     }
-  #   }
-
-  #   # For each edge, check if there is an alternative path
-  #   @adj_list.each { |u, neighbors|
-  #     neighbors.each { |v|
-  #       next if u == v # Ignore self-loops
-
-  #       reduced_graph.adj_list[u].delete(v)
-
-  #       reachable = step_reduction_dfs(u, v, reduced_graph)
-  #       reduced_graph.add_edge(u, v) unless reachable # Re-add the edge if v is not reachable
-  #     }
-  #   }
-
-  #   reduced_graph
-  # end
-
   # Should only be used on acyclic graphs
   def step_reduction
     reduced_graph = Graph.new
