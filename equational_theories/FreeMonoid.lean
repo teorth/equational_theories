@@ -1,5 +1,8 @@
+import Mathlib.Logic.Basic
+
 import equational_theories.Equations
 import equational_theories.FreeMagma
+import equational_theories.Homomorphisms
 import equational_theories.MagmaLaw
 
 open FreeMagma
@@ -29,6 +32,7 @@ theorem AssocImpliesForkEquivRightJoin {α : Type _} {G : Type _} [Magma G]
       (Eq.symm $ assoc (evalInMagma f tl1) (evalInMagma f tl2) (evalInMagma f tr))
       (congrArg (fun t ↦ (evalInMagma f tl1) ◇ t) (AssocImpliesForkEquivRightJoin assoc f tl2 tr))
 
+/- Associativity allows us to fully right-associate an entire operation tree -/
 theorem AssocFullyRightAssociate {α : Type _} {G : Type _} [Magma G]
   (assoc : Equation4512 G) (f : α → G) (t : FreeMagma α)
   : evalInMagma f t = evalInMagma f (rightAssociateTree t) :=
@@ -47,14 +51,132 @@ theorem Assoc4 {G : Type _} [Magma G] (assoc : Equation4512 G)
     (fun | 0 => x | 1 => y | 2 => z | 3 => w : Fin 4 → G)
     (((Lf 0 ⋆ Lf 1) ⋆ Lf 2) ⋆ Lf 3)
 
+def insertSortedRightAssocTree {n : Nat} (i : (Fin n)) (t : FreeMagma (Fin n)) : FreeMagma (Fin n) :=
+  match t with
+    | Lf j        => ite (i <= j) (Lf i ⋆ Lf j) (Lf j ⋆ Lf i)
+    | Lf j ⋆ tr   => ite (i <= j) (Lf i ⋆ (Lf j ⋆ tr)) (Lf j ⋆ (Lf i ⋆ tr))
+    | (_ ⋆ _) ⋆ _ => Lf i ⋆ t
+
+theorem AssocCommAllowsSortedInsertion {n : Nat} {G : Type _} [Magma G] (assoc : Equation4512 G) (comm : Equation43 G)
+  (i : Fin n) (f : Fin n → G) (t : FreeMagma (Fin n))
+  : evalInMagma f (insertSortedRightAssocTree i t) = (f i) ◇ (evalInMagma f t) :=
+  match t with
+    | Lf j => by
+      have eqor := ite_eq_or_eq (i ≤ j) (Lf i ⋆ Lf j) (Lf j ⋆ Lf i)
+      cases eqor with
+      | inl eq1 => apply Eq.trans (congrArg (evalInMagma f) eq1); exact Eq.refl _
+      | inr eq2 => apply Eq.trans (congrArg (evalInMagma f) eq2); exact comm (f j) (f i)
+    | Lf j ⋆ tr => by
+      have eqor := ite_eq_or_eq (i ≤ j) (Lf i ⋆ (Lf j ⋆ tr)) (Lf j ⋆ (Lf i ⋆ tr))
+      cases eqor with
+      | inl eq1 =>
+        apply Eq.trans (congrArg (evalInMagma f) eq1);
+        exact Eq.refl _
+      | inr eq2 =>
+        apply Eq.trans (congrArg (evalInMagma f) eq2);
+        apply Eq.trans $ assoc (f j) (f i) _;
+        rw [comm (f j) (f i)];
+        exact Eq.symm $ assoc (f i) (f j) _
+    | (_ ⋆ _) ⋆ _ => Eq.refl _
+
 inductive FreeSemigroup (α : Type _)
   | Singleton : α → FreeSemigroup α
   | Cons : α → FreeSemigroup α → FreeSemigroup α
 
+local postfix:61 ".+" => FreeSemigroup.Singleton
+local infixr:60 " ,+ " => FreeSemigroup.Cons
+
 def semigroupConcat {α : Type _} (s1 s2 : FreeSemigroup α) : FreeSemigroup α :=
   match s1 with
-    | FreeSemigroup.Singleton a   => FreeSemigroup.Cons a s2
-    | FreeSemigroup.Cons a s1tail => FreeSemigroup.Cons a (semigroupConcat s1tail s2)
+    | a .+        => a ,+ s2
+    | a ,+ s1tail => a ,+ (semigroupConcat s1tail s2)
 
 instance (α : Type _) : Magma (FreeSemigroup α) where
   op := semigroupConcat
+
+theorem FreeSgrAssoc {α : Type} : Equation4512 (FreeSemigroup α) :=
+  fun ls1 ls2 ls3 ↦ match ls1 with
+    | _ .+      => Eq.refl _
+    | a ,+ ls1' => congrArg (fun ls ↦ a ,+ ls) (FreeSgrAssoc ls1' ls2 ls3)
+
+/- "Flatten" a FreeMagma tree expression into its semigroup representation -/
+def freeMagmaToFreeSgr {α : Type _} : MagmaHom (FreeMagma α) (FreeSemigroup α) where
+  toFun := fun t ↦ evalInMagma FreeSemigroup.Singleton t
+  map_op' := fun s _ ↦ match s with
+    | Lf _ => Eq.refl _
+    | _ ⋆ _ => Eq.refl _
+
+local postfix:70 " ↠Sgr " => freeMagmaToFreeSgr.toFun
+
+def evalInSgr {α : Type _} {G : Type _} [Magma G] (f : α → G) (ls : FreeSemigroup α) : G :=
+  match ls with
+    | a .+ => f a
+    | a ,+ lstail => f a ◇ evalInSgr f lstail
+
+def evalInSgrHom {α : Type _} {G : Type _} [Magma G] (assoc : Equation4512 G) (f : α → G) : MagmaHom (FreeSemigroup α) G where
+  toFun := evalInSgr f
+  map_op' := let rec mapper : ∀ ls1 ls2 : FreeSemigroup α, evalInSgr f (ls1 ◇ ls2) = evalInSgr f ls1 ◇ evalInSgr f ls2 :=
+    fun ls1 ls2 ↦ match ls1 with
+      | _ .+      => Eq.refl _
+      | a ,+ ls1' => Eq.trans
+        (congrArg (fun x ↦ f a ◇ x) (mapper ls1' ls2))
+        (assoc (f a) (evalInSgr f ls1') (evalInSgr f ls2))
+    mapper
+
+def foldFreeSemigroup {G : Type _} [Magma G] (ls : FreeSemigroup G) : G :=
+  match ls with
+    | a .+        => a
+    | a ,+ lstail => a ◇ (foldFreeSemigroup lstail)
+
+/- When evaluating in an associative structure, we may reduce a FreeMagma tree to a FreeSemigroup list -/
+theorem AssocImpliesSgrProjFaithful {α : Type _} {G : Type _} [Magma G] (assoc : Equation4512 G) (f : α → G) (t : FreeMagma α)
+  : evalInMagma f t = evalInSgr f (freeMagmaToFreeSgr t) :=
+  match t with
+    | Lf a => Eq.refl _
+    | Lf a ⋆ tr => congrArg (fun y ↦ (f a) ◇ y) (AssocImpliesSgrProjFaithful assoc f tr)
+    | (tl1 ⋆ tl2) ⋆ tr => by
+      apply Eq.symm
+      apply Eq.trans $ congrArg (evalInSgr f) $ freeMagmaToFreeSgr.map_op' (tl1 ⋆ tl2) tr
+      apply Eq.trans $ congrArg (fun s ↦ evalInSgr f (s ◇ tr ↠Sgr)) $ freeMagmaToFreeSgr.map_op' tl1 tl2
+      apply Eq.trans $ (evalInSgrHom assoc f).map_op' (tl1 ↠Sgr ◇ tl2 ↠Sgr) (tr ↠Sgr)
+      apply Eq.trans $ congrArg (fun s ↦ s ◇ (evalInSgr f (tr ↠Sgr))) $ (evalInSgrHom assoc f).map_op' (tl1 ↠Sgr) (tl2 ↠Sgr)
+      apply Eq.symm
+      apply Eq.trans $ congrArg (fun s ↦ _ ◇ s) (AssocImpliesSgrProjFaithful assoc f tr)
+      apply Eq.trans $ congrArg (fun s ↦ (s ◇ _) ◇ _) (AssocImpliesSgrProjFaithful assoc f tl1)
+      apply Eq.trans $ congrArg (fun s ↦ (_ ◇ s) ◇ _) (AssocImpliesSgrProjFaithful assoc f tl2)
+      trivial
+
+def insertSemigroupSorted {n : Nat} (i : Fin n) (ls : FreeSemigroup (Fin n)) : FreeSemigroup (Fin n) :=
+  match ls with
+    | j .+        => if i <= j then i ,+ j .+ else j ,+ j .+
+    | j ,+ lstail => if i <= j then i ,+ j ,+ lstail else j ,+ i ,+ lstail
+
+def insertionSortSgr {n : Nat} (ls : FreeSemigroup (Fin n)) : FreeSemigroup (Fin n) :=
+  match ls with
+    | i .+ => i .+
+    | i ,+ lstail => insertSemigroupSorted i (insertionSortSgr lstail)
+
+theorem CommSgrImpliesInsertSortedFaithful {n : Nat} {G : Type _} [Magma G] (assoc : Equation4512 G) (comm : Equation43 G) (f : Fin n → G)
+  : ∀ i : Fin n, ∀ ls : FreeSemigroup (Fin n), evalInSgr f (i ,+ ls) = (f i) ◇ evalInSgr f ls :=
+  fun i ls ↦ match ls with
+  | j .+ => by
+      have eqor := ite_eq_or_eq (i ≤ j) (i ,+ j .+) (j ,+ i .+)
+      cases eqor with
+      | inl eq1 => apply Eq.trans (congrArg (evalInSgr f) eq1); exact Eq.refl _
+      | inr eq2 => apply Eq.trans (congrArg (evalInSgr f) eq2); exact comm (f j) (f i)
+    | Lf j ⋆ tr => by
+      have eqor := ite_eq_or_eq (i ≤ j) (Lf i ⋆ (Lf j ⋆ tr)) (Lf j ⋆ (Lf i ⋆ tr))
+      cases eqor with
+      | inl eq1 =>
+        apply Eq.trans (congrArg (evalInMagma f) eq1);
+        exact Eq.refl _
+      | inr eq2 =>
+        apply Eq.trans (congrArg (evalInMagma f) eq2);
+        apply Eq.trans $ assoc (f j) (f i) _;
+        rw [comm (f j) (f i)];
+        exact Eq.symm $ assoc (f i) (f j) _
+
+theorem CommSgrImpliesInsertionSortFaithful {n : Nat} {G : Type _} [Magma G] (assoc : Equation4512 G) (comm : Equation43 G) (f : Fin n → G)
+  : ∀ ls : FreeSemigroup (Fin n), evalInSgr f ls = evalInSgr f (insertionSortSgr ls)
+  | i .+ => Eq.refl _
+  | i ,+ lstail => _
