@@ -139,7 +139,7 @@ jobs:
       - name: Generate home_page/implications/implications.js
         run: |
           ~/.elan/bin/lake exe extract_implications outcomes > /tmp/out.json
-          python scripts/generate_equation_implications_js.py /tmp/out.json
+          python scripts/generate_equation_implication_js.py /tmp/out.json
 
       - name: Bundle dependencies
         if: github.event_name == 'push'
