@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Rename the pre-push sample file if it exists
 if [ -f ".git/hooks/pre-push.sample" ]; then

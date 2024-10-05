@@ -53,7 +53,25 @@ inductive derive {α} : Ctx α → MagmaLaw α → Type :=
   | Subst Γ t u σ : Γ ⊢ (t ≃ u) → Γ ⊢ (t ⬝ σ ≃ u ⬝ σ)
   | Cong Γ t₁ t₂ u₁ u₂ : Γ ⊢ (t₁ ≃ t₂) → Γ ⊢ (u₁ ≃ u₂) → Γ ⊢ (t₁ ⋆ u₁ ≃ t₂ ⋆ u₂)
 
+local infix:50 " ⊢' " =>  derive'
+
+/-- Definition for derivability where Subst can only be applied to Ax -/
+inductive derive' {α} : Ctx α → MagmaLaw α → Type :=
+  | SubstAx Γ E (h : E ∈ Γ) σ : Γ ⊢' E.lhs ⬝ σ ≃ E.rhs ⬝ σ
+  | Ref Γ t : Γ ⊢' (t ≃ t)
+  | Sym Γ t u : Γ ⊢' (t ≃ u) → Γ ⊢' (u ≃ t)
+  | Trans Γ t u v : Γ ⊢' (t ≃ u) → Γ ⊢' (u ≃ v) → Γ ⊢' (t ≃ v)
+  | Cong Γ t₁ t₂ u₁ u₂ : Γ ⊢' (t₁ ≃ t₂) → Γ ⊢' (u₁ ≃ u₂) → Γ ⊢' (t₁ ⋆ u₁ ≃ t₂ ⋆ u₂)
+
+def derive_of_derive' {α} {Γ: Ctx α} {E : MagmaLaw α} : Γ ⊢' E → Γ ⊢ E
+  | .SubstAx _ E h σ => derive.Subst Γ E.lhs E.rhs σ (derive.Ax Γ E h)
+  | .Ref _ t => derive.Ref Γ t
+  | .Sym _ t u h => derive.Sym Γ t u (derive_of_derive' h)
+  | .Trans _ t u v htu huv => derive.Trans Γ t u v (derive_of_derive' htu) (derive_of_derive' huv)
+  | .Cong _ t₁ t₂ u₁ u₂ h₁ h₂ => derive.Cong Γ t₁ t₂ u₁ u₂ (derive_of_derive' h₁) (derive_of_derive' h₂)
+
 end DeriveDef
+
 /-- Definitions of entailment -/
 def satisfiesPhi {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
   E.lhs.evalInMagma φ = E.rhs.evalInMagma φ
@@ -74,3 +92,5 @@ infix:50 " ⊧ " => (satisfiesSet)
 infix:50 " ⊧ " => (models)
 
 infix:50 " ⊢ " => (derive)
+
+infix:50 " ⊢' " => (derive')

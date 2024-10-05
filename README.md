@@ -33,12 +33,14 @@ Some automatically generated progress:
 - Oct 2, 2024: 86 (potentially) new implications in `Subgraph.lean` conclusively (i.e. in Lean) resolved using the [lean-egg tactic](https://github.com/marcusrossel/lean-egg). Some of these were simply missed by the transitive closure computation and technically already implied, but some were genuinely new.
 - Oct 3, 2024: Another ~150k transitive implications were proven by [EquationSearch](equational_theories/Generated/EquationSearch) after improved capabilities were added.
 - Oct 3, 2024: [~1m transitive implications](equational_theories/Generated/MagmaEgg) were proven by a new custom tool that uses egraphs to find a proof and exports it to a Lean term
+- Oct 5, 2024: 97% of the remaining unknown implications were resolved (transitively) by [Vampire](https://en.wikipedia.org/wiki/Vampire_(theorem_prover)), and then converted to a Lean proof using a custom script and a Lean eleborator implementing the deduction step of superposition calculus.
 
 Some statistics and data files from a given point in time:
 - Sep 28, 2024: [A repository of unknown implications](https://github.com/amirlb/equational_theories/tree/unknown-implications), including all unknown implications, known equivalence classes, unknown implications modulo known equivalence, and only the strongest unknown implications.
 - Sep 29, 2024: [Here](https://leanprover.zulipchat.com/user_uploads/3121/7ImuNeVLCa_gIsS8bHYIsokB/direct.tar.xz) is a text file of the (21K or so) direct implications proven to date, and [here](https://leanprover.zulipchat.com/user_uploads/3121/wnbVe2BZ1gamFjlMYFE7sIs9/closure.tar.xz) is the transitive closure of these implications (about 4.5m). More precisely, we have 21791 implications explicitly proven true, 4494090 additional relations implicitly proven true, 739207 explicitly proven false, 12764328 implicitly proven false, one additional relations explicitly conjectured true (and 64 more implicitly conjectured true), and 4014155 remaining implications which remain completely open.  Quotienting out by known equivalences, there are 3182453 open implications remaining.
 - Oct 2, 2024: [A list of unknown implications whose converse is proven](https://github.com/amirlb/equational_theories/blob/extract_implications_equivalence_creators_data/scripts/equivalence_creators.json), i.e. implications that would reduce the number of equivalence classes of equations. At the time of creation we had 2969 equivalence classes. This file contains 4526 unknown implications, if all hold then it will reduce the number of equivalence classes to 1300.
-- Oct 4, 2024: Current dashboard status: 29248 explicitly proven, 7063191 implicitly proven, 605854, explicitly disproven,13243426 implicitly disproven, 1120090 open (94.923% complete).  No conjectures at this time.  (A more formal time series of progress is planned.)
+- Oct 4, 2024: Current dashboard status: 29248 explicitly proven, 7063191 implicitly proven, 605854 explicitly disproven, 13243426 implicitly disproven, 1120090 open (94.923% complete).  No conjectures at this time.  (A more formal time series of progress is planned.)
+- Oct 5, 2024: Current dashboard status: 31023 explicitly proven, 8151818 implicitly proven, 581166 explicitly disproven, 13268299 ijmplicitly proven, 29503 open (99.866% complete).  Note some pruning of redundant theorems occurred in the explictly disproven theorems to improve compilation time.
 
 Some visualizations from a given point in time:
 - Sep 28, 2024: A (manually created) [Hasse diagram](https://en.wikipedia.org/wiki/Hasse_diagram) of the [dependencies obtained up to this date](equational_theories/Subgraph.lean) for the [selected equations of interest](equational_theories/Equations.lean) can be found [here](images/implications.png).  Note: the orientation in these legacy images is reversed from that in current guidance.
@@ -51,6 +53,7 @@ Current statistics and data files, updated automatically:
 
 Current visualizations, updated automatically:
 - An experimental tool for exploring the graph of equation implications is available [here](https://nicholas.carlini.com/tmp/view.html).  It will be more fully integrated into the project in the near future.
+- An experimental tool to interactively explore a Hasse diagram of the graph is available [here](https://tsyrklevi.ch/eqviz/index.html?2)
 
 For guidelines on how to contribute, see the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
@@ -77,11 +80,15 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - [Followup discussion on Mastodon](https://mathstodon.xyz/deck/@tao/113201989529992957), Sep 25, 2024.
 - [The MathOverflow post that inspired the project](https://mathoverflow.net/questions/450930/is-there-an-identity-between-the-associative-identity-and-the-constant-identity), Jul 17, 2023.
     - [A related MathOverflow post](https://mathoverflow.net/questions/450890/is-there-an-identity-between-the-commutative-identity-and-the-constant-identity), Jul 16, 2023.
+- [Data](data)
+    - [Text list of equations](data/equations.txt)
+    - [List of duals of equations](data/dual_equations.md)
+    - [The smallest magma obeying a given equation (up to N=5)](data/smallest_magma.txt), if it exists
 - [Scripts](scripts)
     - Shell
         - [`run_before_push`](scripts/run_before_push.sh) - performs some of the CI checks, suitable for running just before pushing a new PR
     - Lean
-        - [`extract_implications`](scripts/extract_implications.lean) - extracts implications from one or more Lean files
+        - [`extract_implications`](scripts/extract_implications.lean) - extracts implications from one or more Lean files. This outputs the "ground truth" of implication data, for use by other scripts
     - Python
         - [`explore_magma`](scripts/explore_magma.py) - test a given magma table against all or a subset of the equations in `AllEquations.lean`
         - [`find_dual`](scripts/find_dual.py) - finds the dual of an equation
