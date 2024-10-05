@@ -51,34 +51,6 @@ theorem Assoc4 {G : Type _} [Magma G] (assoc : Equation4512 G)
     (fun | 0 => x | 1 => y | 2 => z | 3 => w : Fin 4 → G)
     (((Lf 0 ⋆ Lf 1) ⋆ Lf 2) ⋆ Lf 3)
 
-def insertSortedRightAssocTree {n : Nat} (i : (Fin n)) (t : FreeMagma (Fin n)) : FreeMagma (Fin n) :=
-  match t with
-    | Lf j        => ite (i <= j) (Lf i ⋆ Lf j) (Lf j ⋆ Lf i)
-    | Lf j ⋆ tr   => ite (i <= j) (Lf i ⋆ (Lf j ⋆ tr)) (Lf j ⋆ (Lf i ⋆ tr))
-    | (_ ⋆ _) ⋆ _ => Lf i ⋆ t
-
-theorem AssocCommAllowsSortedInsertion {n : Nat} {G : Type _} [Magma G] (assoc : Equation4512 G) (comm : Equation43 G)
-  (i : Fin n) (f : Fin n → G) (t : FreeMagma (Fin n))
-  : evalInMagma f (insertSortedRightAssocTree i t) = (f i) ◇ (evalInMagma f t) :=
-  match t with
-    | Lf j => by
-      have eqor := ite_eq_or_eq (i ≤ j) (Lf i ⋆ Lf j) (Lf j ⋆ Lf i)
-      cases eqor with
-      | inl eq1 => apply Eq.trans (congrArg (evalInMagma f) eq1); exact Eq.refl _
-      | inr eq2 => apply Eq.trans (congrArg (evalInMagma f) eq2); exact comm (f j) (f i)
-    | Lf j ⋆ tr => by
-      have eqor := ite_eq_or_eq (i ≤ j) (Lf i ⋆ (Lf j ⋆ tr)) (Lf j ⋆ (Lf i ⋆ tr))
-      cases eqor with
-      | inl eq1 =>
-        apply Eq.trans (congrArg (evalInMagma f) eq1);
-        exact Eq.refl _
-      | inr eq2 =>
-        apply Eq.trans (congrArg (evalInMagma f) eq2);
-        apply Eq.trans $ assoc (f j) (f i) _;
-        rw [comm (f j) (f i)];
-        exact Eq.symm $ assoc (f i) (f j) _
-    | (_ ⋆ _) ⋆ _ => Eq.refl _
-
 inductive FreeSemigroup (α : Type _)
   | Singleton : α → FreeSemigroup α
   | Cons : α → FreeSemigroup α → FreeSemigroup α
@@ -148,8 +120,8 @@ theorem AssocImpliesSgrProjFaithful {α : Type _} {G : Type _} [Magma G] (assoc 
 
 def insertSemigroupSorted {n : Nat} (i : Fin n) (ls : FreeSemigroup (Fin n)) : FreeSemigroup (Fin n) :=
   match ls with
-    | j .+        => if i <= j then i ,+ j .+ else j ,+ j .+
-    | j ,+ lstail => if i <= j then i ,+ j ,+ lstail else j ,+ i ,+ lstail
+    | j .+        => if i ≤ j then i ,+ j .+ else j ,+ i .+
+    | j ,+ lstail => if i ≤ j then i ,+ j ,+ lstail else j ,+ i ,+ lstail
 
 def insertionSortSgr {n : Nat} (ls : FreeSemigroup (Fin n)) : FreeSemigroup (Fin n) :=
   match ls with
@@ -157,26 +129,28 @@ def insertionSortSgr {n : Nat} (ls : FreeSemigroup (Fin n)) : FreeSemigroup (Fin
     | i ,+ lstail => insertSemigroupSorted i (insertionSortSgr lstail)
 
 theorem CommSgrImpliesInsertSortedFaithful {n : Nat} {G : Type _} [Magma G] (assoc : Equation4512 G) (comm : Equation43 G) (f : Fin n → G)
-  : ∀ i : Fin n, ∀ ls : FreeSemigroup (Fin n), evalInSgr f (i ,+ ls) = (f i) ◇ evalInSgr f ls :=
+  : ∀ i : Fin n, ∀ ls : FreeSemigroup (Fin n), evalInSgr f (insertSemigroupSorted i ls) = (f i) ◇ evalInSgr f ls :=
   fun i ls ↦ match ls with
   | j .+ => by
       have eqor := ite_eq_or_eq (i ≤ j) (i ,+ j .+) (j ,+ i .+)
       cases eqor with
       | inl eq1 => apply Eq.trans (congrArg (evalInSgr f) eq1); exact Eq.refl _
       | inr eq2 => apply Eq.trans (congrArg (evalInSgr f) eq2); exact comm (f j) (f i)
-    | Lf j ⋆ tr => by
-      have eqor := ite_eq_or_eq (i ≤ j) (Lf i ⋆ (Lf j ⋆ tr)) (Lf j ⋆ (Lf i ⋆ tr))
+    | j ,+ lstail => by
+      have eqor := ite_eq_or_eq (i ≤ j) (i ,+ j ,+ lstail) (j ,+ i ,+ lstail)
       cases eqor with
       | inl eq1 =>
-        apply Eq.trans (congrArg (evalInMagma f) eq1);
+        apply Eq.trans (congrArg (evalInSgr f) eq1);
         exact Eq.refl _
       | inr eq2 =>
-        apply Eq.trans (congrArg (evalInMagma f) eq2);
+        apply Eq.trans (congrArg (evalInSgr f) eq2);
         apply Eq.trans $ assoc (f j) (f i) _;
         rw [comm (f j) (f i)];
         exact Eq.symm $ assoc (f i) (f j) _
 
 theorem CommSgrImpliesInsertionSortFaithful {n : Nat} {G : Type _} [Magma G] (assoc : Equation4512 G) (comm : Equation43 G) (f : Fin n → G)
   : ∀ ls : FreeSemigroup (Fin n), evalInSgr f ls = evalInSgr f (insertionSortSgr ls)
-  | i .+ => Eq.refl _
-  | i ,+ lstail => _
+  | _ .+        => Eq.refl _
+  | i ,+ lstail => Eq.trans
+    (congrArg (fun s ↦ (f i) ◇ s) (CommSgrImpliesInsertionSortFaithful assoc comm f lstail))
+    (Eq.symm $ CommSgrImpliesInsertSortedFaithful assoc comm f i (insertionSortSgr lstail))
