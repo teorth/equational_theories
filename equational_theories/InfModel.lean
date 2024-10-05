@@ -197,15 +197,50 @@ theorem Equation28393_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
     simp [this]
     have : (3: ℕ+)^y.val * (5: ℕ+)^x.val ≠ (2: ℕ+)^z.val := by
       apply_fun PNat.val
-      simp only [PNat.pow_coe, PNat.val_ofNat, ne_eq]
+      simp [PNat.pow_coe, PNat.val_ofNat, ne_eq]
       intro nh
-      sorry
+      have : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
+      have : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
+      have : Fact (Nat.Prime 5) := ⟨Nat.prime_five⟩
+      have : ↑z = (0: ℕ) := calc ↑z
+        _ = padicValNat 2 (2^z.val) := by simp
+        _ = padicValNat 2 (3^y.val * 5^x.val) := by simp [nh]
+        _ = padicValNat 2 (3^y.val) + padicValNat 2 (5^x.val) := by simp [padicValNat.mul]
+        _ = 0 := by simp [padicValNat_prime_prime_pow]
+      have := PNat.ne_zero z
+      contradiction
     simp [this]
-    have : (3: ℕ+)^y.val * (5: ℕ+) ^x.val ≠ (3: ℕ+) ^ padicValNat 3 (3^y.val * 5^x.val) := sorry
+    have : (3: ℕ+)^y.val * (5: ℕ+) ^x.val ≠ (3: ℕ+) ^ padicValNat 3 (3^y.val * 5^x.val) := by
+      intro hc
+      have : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
+      have : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
+      have : Fact (Nat.Prime 5) := ⟨Nat.prime_five⟩
+      have : ↑x = (0: ℕ) := calc ↑x
+        _ = padicValNat 5 (5^x.val) := by simp
+        _ = padicValNat 5 (3^y.val) + padicValNat 5 (5^x.val) := by simp [padicValNat_prime_prime_pow]
+        _ = padicValNat 5 ↑((3: ℕ+)^y.val * (5: ℕ+)^x.val) := by simp [padicValNat.mul]
+        _ = padicValNat 5 ((3: ℕ+)^(padicValNat (3: ℕ) ((3: ℕ)^y.val * (5: ℕ)^x.val))) := by simp [hc]
+        _ = 0 := by simp [padicValNat_prime_prime_pow]
+      have := PNat.ne_zero x
+      contradiction
     simp [this]
-    have : (3: ℕ+)^y.val * (5: ℕ+)^x.val = (3: ℕ+)^padicValNat 3 ((3: ℕ+)^y.val * (5: ℕ+)^x.val) * (5: ℕ+) ^ padicValNat 5 ((3: ℕ+)^y.val * (5: ℕ+)^x.val) := sorry
+    have : (3: ℕ+)^y.val * (5: ℕ+)^x.val = (3: ℕ+)^padicValNat 3 ((3: ℕ+)^y.val * (5: ℕ+)^x.val) * (5: ℕ+) ^ padicValNat 5 ((3: ℕ+)^y.val * (5: ℕ+)^x.val) := by
+      rw [padicValNat.mul]
+        <;> try simp
+      have : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
+      have : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
+      have : Fact (Nat.Prime 5) := ⟨Nat.prime_five⟩
+      simp [padicValNat_prime_prime_pow]
+      rw [padicValNat.mul]
+        <;> try simp
+      simp [padicValNat_prime_prime_pow]
     simp [this]
-    sorry
+    rw [Subtype.ext_iff]
+    have : Fact (Nat.Prime 5) := ⟨Nat.prime_five⟩
+    rw [padicValNat.mul]
+      <;> try simp
+    rw [padicValNat_prime_prime_pow _ (by simp)]
+    simp
   have h5 : ∀ (y z: ℕ+), z ≠ 3^y.val ∧ z ≠ 2^(3^y.val) → (2^(3^y.val)) ◇ z = 3^y.val := sorry
   rw [h1, h2]
   by_cases hx : x = 3^y.val
