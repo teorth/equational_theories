@@ -15,6 +15,9 @@ instance (α : Type u) : Magma (FreeMagma α) where
 
 infixl:65 " ⋆ " => FreeMagma.Fork
 
+instance {α : Type _} : Coe α (FreeMagma α) where
+  coe a := FreeMagma.Leaf a
+
 @[simp]
 theorem FreeMagma_op_eq_fork (α : Type u) (a b : FreeMagma α) : a ◇ b = a ⋆ b := rfl
 
