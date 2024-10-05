@@ -5,6 +5,7 @@
 
 import equational_theories.FreeMagma
 import equational_theories.MagmaLaw
+import equational_theories.Preorder
 
 open FreeMagma
 open Law
@@ -14,12 +15,20 @@ match w with
 | .Leaf x => .Leaf x
 | .Fork w₁ w₂ => .Fork w₂.op w₁.op
 
+/--
+The dual is indeed dual (an involution).
+-/
+@[simp]
+theorem FreeMagma.op_op {α} (w : FreeMagma α) : w.op.op = w := by
+ induction w <;> simp [op, *]
+
 @[simp]
 def Op (G : Type) : Type := G
 
 @[simp]
 instance opMagma {G : Type} [Magma G] : Magma (Op G) := { op := λ (x y : G) ↦ (y ◇ x : G) }
 
+def Magma.opHom {G} [Magma G] : G → Op G := fun x => x
 
 theorem evalInMagmaOp {α G} [Magma G] (φ : α → G) (w : FreeMagma α):
   evalInMagma (G := Op G) φ w.op = evalInMagma (G := G) φ w :=
@@ -36,3 +45,38 @@ by
   simp [satisfies, satisfiesPhi]
   repeat rw [@evalInMagmaOp]
   apply h
+
+namespace Law.MagmaLaw
+
+def op {α} (l : MagmaLaw α) : MagmaLaw α := { lhs := l.lhs.op, rhs := l.rhs.op}
+
+theorem law_op_op {α} (l : MagmaLaw α) : l.op.op = l := by simp [op]
+
+theorem satisfiesPhi_op {α G} [Magma G] {l : MagmaLaw α} {φ : α → G}
+  (h : satisfiesPhi (Magma.opHom ∘ φ) l) : satisfiesPhi φ l.op := by
+  simp [satisfiesPhi, evalInMagma, op] at *
+  rw [← evalInMagmaOp φ l.lhs.op, ← evalInMagmaOp φ l.rhs.op]
+  simp
+  exact h
+
+theorem satisfies_op_op {α G} [Magma G] {l : MagmaLaw α} (h : (Op G) ⊧ l) : G ⊧ l.op := by
+  intro φ
+  simp [op, satisfies]
+  apply satisfiesPhi_op
+  apply h
+
+theorem implies_op {α} {l₁ l₂ : MagmaLaw α} (h : l₁.implies l₂) : l₁.op.implies l₂.op := by
+  simp [op, implies] at *
+  intro G inst hsat
+  apply satisfies_op_op
+  apply h
+  rw [← law_op_op l₁]
+  apply satisfies_op_op
+  exact hsat
+
+theorem le_op {α} {l₁ l₂ : MagmaLaw α} (h : l₁ ≤ l₂) : l₁.op ≤ l₂.op := by
+  simp [LE.le]
+  apply implies_op
+  exact h
+
+end Law.MagmaLaw
