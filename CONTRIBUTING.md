@@ -100,7 +100,6 @@ Some technical Lean files:
 - [`EquationsCommand.lean`](equational_theories/EquationsCommand.lean)  Speeds up elaboration of equations.
 - [`MemoFinOp.lean`](equational_theories/MemoFinOp.lean) Defines the macro `memoFinOp` that memoizes a function `f : Fin n → Fin n → Fin n`.
 - [`Superposition.lean`](equational_theories/Superposition.lean) The `superpose` tactic, used in several automated proofs
-- [`Superposition.lean`](equational_theories/Superposition.lean) The `superpose` tactic, used in several automated proofs
 
 In addition to these files, contributors are welcome to add additional Lean files to the project in the [`equational_theories` folder](equational_theories) or one of its subfolders, to establish more facts about equations.  In order for your contributions to be easily detected by automated tools, please try to follow the following guidelines.
 
