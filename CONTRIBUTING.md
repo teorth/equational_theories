@@ -41,7 +41,7 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 > - You can manually run the following script before pushing, reducing the risk of CI check failures:
 >
 >   ```bash
->   source scripts/run_before_push.sh
+>   scripts/run_before_push.sh
 >   ```
 >   This requires manual execution and won't stop the push if skipped.
 >
