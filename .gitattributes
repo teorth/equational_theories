@@ -1,7 +1,6 @@
-equational_theories/Generated/TrivialBruteforce/theorems/Apply.lean linguist-generated
-equational_theories/Generated/TrivialBruteforce/theorems/RewriteGoal.lean linguist-generated
-equational_theories/Generated/TrivialBruteforce/theorems/RewriteHypothesis.lean linguist-generated
-equational_theories/Generated/TrivialBruteforce/theorems/RewriteHypothesisAndGoal.lean linguist-generated
+equational_theories/Generated/TrivialBruteforce/theorems/*.lean linguist-generated
+equational_theories/Generated/EquationSearch/theorems/*.lean linguist-generated
+equational_theories/Generated/Equation1.lean linguist-generated
 equational_theories/Generated/FinitePoly/Refutation*.lean linguist-generated
 equational_theories/Generated/FinitePoly.lean linguist-generated
 equational_theories/Generated/All4x4Tables/Refutation*.lean linguist-generated
