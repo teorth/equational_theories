@@ -1,6 +1,7 @@
 module FiniteMagmaTools.Evaluator
   ( Program
   , Relation (Relation), equation, lhs, rhs
+  , variables
   , parseRelations
   , runProgram, checkRelation
   , satisfied
@@ -41,7 +42,7 @@ variables rel =
   let
     vars (Program p) = filter isOperand p
   in
-    vars (lhs rel) `union` vars (rhs rel)
+    nub $ vars (lhs rel) `union` vars (rhs rel)
 
 cartesianProduct :: [[a]] -> [[a]]
 cartesianProduct [] = [[]]
