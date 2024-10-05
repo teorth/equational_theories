@@ -165,8 +165,47 @@ theorem Equation28393_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
     intro y
     unfold Magma.op
     simp [t1]
-  have h3 : ∀ (x y: ℕ+), x ≠ 3^y.val → (3^y.val) ◇ x = 3^y.val * 5^x.val := sorry
-  have h4 : ∀ (x y z: ℕ+), z ≠ 3^y.val * 5^x.val → (3^y.val * 5^x.val) ◇ z = x := sorry
+  have h3 : ∀ (x y: ℕ+), x ≠ 3^y.val → (3^y.val) ◇ x = 3^y.val * 5^x.val := by
+    intro x y hxy
+    unfold Magma.op
+    simp
+    have : (3: ℕ+)^↑y.val ≠ x := by
+      intro h''
+      apply hxy
+      simp [h'']
+    simp [this]
+    intro h'
+    have : (3: ℕ+)^↑y.val ≠ (2: ℕ+)^↑x.val := by
+      apply_fun PNat.val
+      simp only [PNat.pow_coe, PNat.val_ofNat, ne_eq]
+      intro nh
+      apply eq_of_prime_pow_eq at nh
+      · contradiction
+      · exact Nat.prime_three.prime
+      · exact Nat.prime_two.prime
+      · simp
+    have : False := this h'
+    contradiction
+  have h4 : ∀ (x y z: ℕ+), z ≠ 3^y.val * 5^x.val → (3^y.val * 5^x.val) ◇ z = x := by
+    intro x y z hxyz
+    unfold Magma.op
+    simp
+    have : 3^y.val * 5^x.val ≠ z := by
+      intro h'
+      apply hxyz
+      simp [h']
+    simp [this]
+    have : (3: ℕ+)^y.val * (5: ℕ+)^x.val ≠ (2: ℕ+)^z.val := by
+      apply_fun PNat.val
+      simp only [PNat.pow_coe, PNat.val_ofNat, ne_eq]
+      intro nh
+      sorry
+    simp [this]
+    have : (3: ℕ+)^y.val * (5: ℕ+) ^x.val ≠ (3: ℕ+) ^ padicValNat 3 (3^y.val * 5^x.val) := sorry
+    simp [this]
+    have : (3: ℕ+)^y.val * (5: ℕ+)^x.val = (3: ℕ+)^padicValNat 3 ((3: ℕ+)^y.val * (5: ℕ+)^x.val) * (5: ℕ+) ^ padicValNat 5 ((3: ℕ+)^y.val * (5: ℕ+)^x.val) := sorry
+    simp [this]
+    sorry
   have h5 : ∀ (y z: ℕ+), z ≠ 3^y.val ∧ z ≠ 2^(3^y.val) → (2^(3^y.val)) ◇ z = 3^y.val := sorry
   rw [h1, h2]
   by_cases hx : x = 3^y.val
