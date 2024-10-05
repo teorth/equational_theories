@@ -44,14 +44,15 @@ print(f"Size of transitive closure: {len(closure)}")
 impliedBy = { i : set() for i in full }
 implying = { j : set() for j in full }
 for (a,b) in closure:
-    impliedBy[a].add(b)
-    implying[b].add(a)
+    if a in full and b in full:
+        impliedBy[a].add(b)
+        implying[b].add(a)
 
 def parse_row(row):
     if not row.startswith("'(") or "seen" in row: return
     _, eq, nums = row.split("'")
     data = set(ast.literal_eval(nums.strip()))
-    # the numbers are off by one, the offcial equations list is 1-indexed
+    # the numbers are off by one, the official equations list is 1-indexed
     satisfied = [i+1 for i in range(4694) if i in data]
     refuted = [i+1 for i in range(4694) if i not in data]
 
@@ -97,7 +98,7 @@ def prune_row(data):
         if impliedBy[i].intersection(refuted):
           continue
         # remove all that this is ruling out
-        refuted = refuted - impliedBy[i]
+        refuted = refuted - implying[i]
         refuted.add(i)
     stats["removed_by_implication"] += len(data["satisfied"]) + len(data["refuted"]) - len(satisfied) - len(refuted)
 

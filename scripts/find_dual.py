@@ -93,7 +93,7 @@ class Parser:
         """Parse an expression, handling composition operators."""
         nodes = [self.parse_term()]
 
-        while self.current_char() in ['∘', '.']:
+        while self.current_char() in ['◇', '.']:
             op = self.current_char()
             self.advance()
             right = self.parse_term()
@@ -139,7 +139,7 @@ class Parser:
 
 def expr_to_prefix(node: ExprNode):
     """Convert an expression tree to prefix notation."""
-    if node.value == '∘':
+    if node.value == '◇':
         left = expr_to_prefix(node.left)
         right = expr_to_prefix(node.right)
         return f"f({left}, {right})"

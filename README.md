@@ -4,35 +4,53 @@
 [![Website](https://img.shields.io/badge/Website-Ready-green)](https://teorth.github.io/equational_theories/)
 [![Documentation](https://img.shields.io/badge/Documentation-Passing-green)](https://teorth.github.io/equational_theories/docs/)
 [![Blueprint](https://img.shields.io/badge/Blueprint-WIP-blue)](https://teorth.github.io/equational_theories/blueprint/)
+[![Progress](https://teorth.github.io/equational_theories/dashboard/progress_badge.svg)](https://teorth.github.io/equational_theories/dashboard/)
 [![Paper](https://img.shields.io/badge/Paper-WIP-blue)](https://teorth.github.io/equational_theories/blueprint.pdf)
 [![Zulip Channel](https://img.shields.io/badge/Zulip_Channel-Join-blue)](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational)
 
-The purpose of this project, launched on Sep 25, 2024, is to explore the space of equational theories of magmas, ordered by implication. To begin with we shall focus only on theories of a single equation, and specifically on [this list](equational_theories/AllEquations.lean) of 4694 equations (all laws involving at most four magma operations, up to symmetry and relabeling).  This creates 4694*(4694-1) = 22,028,942 implications that need to be proven or disproven.
+The purpose of this project, launched on Sep 25, 2024, is to explore the space of equational theories of [magmas](https://en.wikipedia.org/wiki/Magma_(algebra)), ordered by implication. To begin with we shall focus only on theories of a single equation, and specifically on the 4694 equational laws
+involving at most four magma operations, up to symmetry and relabeling (here is the list [in Lean](equational_theories/AllEquations.lean) and in [plain text](https://github.com/teorth/equational_theories/blob/main/data/equations.txt)).  This creates 4694*(4694-1) = 22,028,942 implications that need to be proven or disproven, creating both "implications" and "anti-implications".
 
-Some selected equations of interest are listed [here](equational_theories/Equations.lean).
+We will accumulate both "proven" and "conjectured" implications and anti-implications: proven assertions will be verified in the proof assistant language [Lean](https://www.lean-lang.org/), and "conjectured" assertions represent all claims (either human-generated or computer-generated) that have not yet been verified in Lean.  The current status of the project can be found on the [dashboard](https://teorth.github.io/equational_theories/dashboard/).
+
+Some selected equations of interest are listed [here](equational_theories/Equations.lean) (in Lean form) and [here](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html) (in a human readable blueprint).  Examples include
+- Equation 1: `x = x`.  The trivial law.
+- Equation 2: `x = y`.  The singleton law.
+- Equation 43: `x ◇ y = y ◇ x`.  The commutative law.
+- Equation 46: `x ◇ y = z ◇ w`.  The constant law.
+- Equation 168: `x = (y ◇ x) ◇ (x ◇ z)`.  The central groupoid law.
+- Equation 4512: `x ◇ (y ◇ z) = (x ◇ y) ◇ z`.  The associative law.
+
+(Note: in some legacy portions of this project, the magma operation was denoted `◦︎` instead of `◇`.)
 
 Some automatically generated progress:
-- Sep 28, 2024: [85 laws](equational_theories/Generated/Constant.lean) have been shown to be equivalent to the constant law [`Equation46`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq46), and [815 laws](equational_theories/Generated/Singleton.lean) have been shown to be equivalent to the singleton law [`Equation2`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq2).
-- Sep 28, 2024: [18972 implications](equational_theories/Generated/SimpleRewrites/theorems) were established by simple rewrite laws.
-- Sep 28, 2024: [4.2m implications proven by a transitive reduction of 15k theorems](equational_theories/Generated/TrivialBruteforce) were proven using simple rewrite proof scripts.
-- Sep 29, 2024: [13.7m implications were conjectured to be refused by a collection of 515 magmas](equational_theories/Generated/All4x4Tables), collected by enumerating all 4^(4*4) operators and reducing to a covering set.
-- Oct 1, 2024: Another [~250k transitive implications](equational_theories/Generated/TrivialBruteforce) were proven by simple proof generation.
-- Oct 1, 2024: [~500k transitive implications](equational_theories/Generated/EquationSearch) were proven by a custom tool that chooses hypotheses and leveraged previously found implications to search by using the implied equations as substitutions.
+- Sep 28, 2024: [85 laws](equational_theories/Generated/Constant.lean) have been shown to be equivalent to the constant law [`Equation46`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq46), and [815 laws](equational_theories/Generated/Singleton.lean) have been shown to be equivalent to the singleton law [`Equation2`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq2).  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0005.html).
+- Sep 28, 2024: [18972 implications](equational_theories/Generated/SimpleRewrites/theorems) were established by simple rewrite laws.  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0006.html).
+- Sep 28, 2024: [4.2m implications proven by a transitive reduction of 15k theorems](equational_theories/Generated/TrivialBruteforce) were proven using simple rewrite proof scripts.  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0007.html).
+- Sep 29, 2024: [13.7m implications were conjectured to be refuted by a collection of 515 magmas](equational_theories/Generated/All4x4Tables), collected by enumerating all 4^(4*4) operators and reducing to a covering set. Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0008.html).  (Update, Oct 3, 2024: these anti-implications are now formalized in Lean as theorems, and the number of implications established by this method increased to 13.8m.)
+- Oct 1, 2024: Another [~250k transitive implications](equational_theories/Generated/TrivialBruteforce) were proven by simple proof generation. Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0007.html).
+- Oct 1, 2024: ~500k transitive implications were proven by [EquationSearch](equational_theories/Generated/EquationSearch), a custom tool that chooses hypotheses and leverages previously found implications to search by using the implied equations as substitutions.  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0009.html).
+- Oct 2, 2024: 86 (potentially) new implications in `Subgraph.lean` conclusively (i.e. in Lean) resolved using the [lean-egg tactic](https://github.com/marcusrossel/lean-egg). Some of these were simply missed by the transitive closure computation and technically already implied, but some were genuinely new.
+- Oct 3, 2024: Another ~150k transitive implications were proven by [EquationSearch](equational_theories/Generated/EquationSearch) after improved capabilities were added.
+- Oct 3, 2024: [~1m transitive implications](equational_theories/Generated/MagmaEgg) were proven by a new custom tool that uses egraphs to find a proof and exports it to a Lean term
 
 Some statistics and data files from a given point in time:
 - Sep 28, 2024: [A repository of unknown implications](https://github.com/amirlb/equational_theories/tree/unknown-implications), including all unknown implications, known equivalence classes, unknown implications modulo known equivalence, and only the strongest unknown implications.
 - Sep 29, 2024: [Here](https://leanprover.zulipchat.com/user_uploads/3121/7ImuNeVLCa_gIsS8bHYIsokB/direct.tar.xz) is a text file of the (21K or so) direct implications proven to date, and [here](https://leanprover.zulipchat.com/user_uploads/3121/wnbVe2BZ1gamFjlMYFE7sIs9/closure.tar.xz) is the transitive closure of these implications (about 4.5m). More precisely, we have 21791 implications explicitly proven true, 4494090 additional relations implicitly proven true, 739207 explicitly proven false, 12764328 implicitly proven false, one additional relations explicitly conjectured true (and 64 more implicitly conjectured true), and 4014155 remaining implications which remain completely open.  Quotienting out by known equivalences, there are 3182453 open implications remaining.
+- Oct 2, 2024: [A list of unknown implications whose converse is proven](https://github.com/amirlb/equational_theories/blob/extract_implications_equivalence_creators_data/scripts/equivalence_creators.json), i.e. implications that would reduce the number of equivalence classes of equations. At the time of creation we had 2969 equivalence classes. This file contains 4526 unknown implications, if all hold then it will reduce the number of equivalence classes to 1300.
+- Oct 4, 2024: Current dashboard status: 29248 explicitly proven, 7063191 implicitly proven, 605854, explicitly disproven,13243426 implicitly disproven, 1120090 open (94.923% complete).  No conjectures at this time.  (A more formal time series of progress is planned.)
 
 Some visualizations from a given point in time:
 - Sep 28, 2024: A (manually created) [Hasse diagram](https://en.wikipedia.org/wiki/Hasse_diagram) of the [dependencies obtained up to this date](equational_theories/Subgraph.lean) for the [selected equations of interest](equational_theories/Equations.lean) can be found [here](images/implications.png).  Note: the orientation in these legacy images is reversed from that in current guidance.
 - Sep 28, 2024: A directed acyclic graph of automatically generated implications is [here](images/implications_092824.svg?raw=true): circular vertices are for nodes representing multiple equivalent equations and equations in green are from [`Subgraph.lean`](equational_theories/Subgraph.lean). Note: the orientation in these legacy images is reversed from that in current guidance.
 - Oct 1, 2024: An image visualizing the graph of proved results can be found [here](images/outcomes_20241001.png). This was generated by [`outcomes_to_image.py`](scripts/outcomes_to_image.py).
+- Oct 3, 2024: The current implications represented as a directed acylic graph were generated using [`generate_graphviz_graph.rb`](scripts/generate_graphviz_graph.rb) to visualize the [entire graph](images/implications_100324.svg?raw=true) and the smaller graph of equations [limited to 3 variables and three operations](images/implications_100324_var3_op3.svg?raw=true). As previously: circular vertices are for nodes representing multiple equivalent equations and vertices in green are from [`Subgraph.lean`](equational_theories/Subgraph.lean).
 
 Current statistics and data files, updated automatically:
-- coming soon!
+- [dashboard](https://teorth.github.io/equational_theories/dashboard/)
 
 Current visualizations, updated automatically:
-- coming soon!
+- An experimental tool for exploring the graph of equation implications is available [here](https://nicholas.carlini.com/tmp/view.html).  It will be more fully integrated into the project in the near future.
 
 For guidelines on how to contribute, see the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
@@ -52,6 +70,7 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - [Blueprint](https://teorth.github.io/equational_theories/blueprint/)
     - [Documentation](https://teorth.github.io/equational_theories/docs/)
     - [The Lean Zulip stream for the project](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/)
+    - [Instructions on how to contribute](CONTRIBUTING.md)
 - [A blog post describing the project.](https://terrytao.wordpress.com/2024/09/25/a-pilot-project-in-universal-algebra-to-explore-new-ways-to-collaborate-and-use-machine-assistance/), Sep 25, 2024.
 - [Initial discussion on Zulip](https://leanprover.zulipchat.com/#narrow/stream/113488-general/topic/Proposing.20a.20universal.20algebra.20exploration.20using.20Lean), Sep 26, 2024.
 - [Initial discussion on Mastodon](https://mathstodon.xyz/@tao/110736805384878353), Jul 18, 2023.
@@ -59,11 +78,15 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
 - [The MathOverflow post that inspired the project](https://mathoverflow.net/questions/450930/is-there-an-identity-between-the-associative-identity-and-the-constant-identity), Jul 17, 2023.
     - [A related MathOverflow post](https://mathoverflow.net/questions/450890/is-there-an-identity-between-the-commutative-identity-and-the-constant-identity), Jul 16, 2023.
 - [Scripts](scripts)
+    - Shell
+        - [`run_before_push`](scripts/run_before_push.sh) - performs some of the CI checks, suitable for running just before pushing a new PR
     - Lean
         - [`extract_implications`](scripts/extract_implications.lean) - extracts implications from one or more Lean files
     - Python
+        - [`explore_magma`](scripts/explore_magma.py) - test a given magma table against all or a subset of the equations in `AllEquations.lean`
         - [`find_dual`](scripts/find_dual.py) - finds the dual of an equation
         - [`find_equation_id`](scripts/find_equation_id.py) - finds the equation number of an equation string
+        - [`find_powerful_theorems.py`](scripts/find_powerful_theorems.py) - finds theorems that, if proved, would imply many others
         - [`generate_eqs_list`](scripts/generate_eqs_list.py) - generates a list of equations
         - [`generate_graphviz_graph`](scripts/generate_graphviz_graph.rb) - generates a graphviz dot file, that can be used to create an implication graph
         - [`generate_image`](scripts/generate_image.py) - generates an image of implications

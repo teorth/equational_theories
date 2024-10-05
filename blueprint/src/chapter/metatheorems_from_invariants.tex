@@ -1,0 +1,187 @@
+\chapter{Metatheorems from Invariants}
+For the purposes of this chapter, a \emph{theorem} is a (true) statement about particular equations, for example `(387 implies 43)' is a theorem. A \emph{metatheorem} is a general statement about implications; one can usually get many theorems from a single metatheorem. This chapter is all about generating many interesting metatheorems using a \emph{meta-metatheorem}, called the fundamental property of invariants. If all this is making your head spin, don't worry. Look at the sections below for examples of metatheorems you can probably agree are both concrete and interesting. Once you have done that, come back here and we will show you how to prove these and other metatheorems using \emph{invariants}.
+
+\section{Invariants}
+Let $E, E_1$, and $E_2$ be equations. If $E \Rightarrow E_1$ and $E_1 \Rightarrow E_2$, then $E \Rightarrow E_2$. Very trivial. Rephrasing this, we see that if $E \Rightarrow E_1$ and $E \nRightarrow E_2$, then $E_1\nRightarrow E_2$.
+
+Extending this idea, suppose we compute the set of all equations which are implied by $E$; we will call this set $\mathcal{Y}(E)$ (we use $\mathcal{Y}$ because this is an example of a \href{https://en.wikipedia.org/wiki/Yoneda_lemma#The_Yoneda_embedding}{Yoneda embedding}). Then $\mathcal{Y}(E)$ is upwards closed, or closed under forward implication: no equation in $\mathcal{Y}(E)$ can imply an equation not in $\mathcal{Y}(E)$. If we know $\mathcal{Y}(E)$ well, this already settles a potentially large number of implications in the negative.
+
+While computing $\mathcal{Y}(E)$ for an arbitrary equation $E$ may seem daunting, for some nice equations we can find \emph{invariants}, which makes the task manageable. An \emph{invariant} for $E$ is some sort of data associated with expressions $w$ so that
+\[
+\mathcal{Y}(E) = \{w = w' \mid \text{Invariant}(w) = \text{Invariant}(w')\}
+\]
+If we can find an invariant which is computable for each term $w$, then we can easily describe $\mathcal{Y}(E)$. The fact that $\mathcal{Y}(E)$ is upwards closed is rephrased as follows; this is called \textbf{the fundamental property of invariants}. Remember that an invariant is a function taking expressions and outputting some data.
+
+\begin{metametatheorem}[Fundamental property of invariants]
+	Let $I$ be an invariant of $E$. If $w = w'$ implies $w'' = w'''$ and $I(w) = I(w')$ (that is, $E$ implies $w = w'$), then $I(w'') = I(w''')$.
+\end{metametatheorem}
+
+More succinctly, for an invariant $I$ of $E$ we must have
+\[
+(w = w' \Rightarrow w'' = w''') \implies (I(w) = I(w') \Rightarrow I(w'') = I(w''')).
+\]
+When using this result, we commonly take the contrapositive: if $I(w) = I(w')$ and $I(w'') \neq I(w''')$, then $w=w'$ cannot imply $w'' = w'''$. Note that the conclusion is independent of the equation $E$; all we need to know is that $I$ is an invariant.
+
+
+%I am stealing the proof environment for a note - this is probably bad practice.
+\begin{proof}[Note for category theorists]\leanok
+	Let $\Pi$ denote the preorder of magma equations ordered by implication. If $I$ is an invariant then define
+	\[
+	I(w = w')\coloneqq \begin{cases}
+		\texttt{true} & \text{ if }I(w) = I(w')\\
+		\texttt{false} & \text{ otherwise}
+	\end{cases}.
+	\]
+	(In programming languages we would say $I(w = w') \coloneqq I(w) == I(w')$). Let $\textbf{Bool} = \{ \texttt{true}, \texttt{false}\}$ be the poset where $\texttt{false} \leq \texttt{true}$. Then $I$ becomes a function $\Pi \to \textbf{Bool}$, and the fundamental property of invariants just says that this function is monotone, i.e. functorial. Thus for every invariant $I$ we obtain a functor $\Pi \to \textbf{Bool}$.
+
+	Question 1: Does every functor $\Pi \to \textbf{Bool}$ come from an invariant?
+
+	Question 2: What can we say about the category of functors $\Pi \to \textbf{Bool}$? Give a nice interpretation of natural transformations between invariants.
+\end{proof}
+
+The fundamental property of invariants is not a theorem, nor a metatheorem: it is a meta-metatheorem, in the sense that it will allow us to get a metatheorem for every invariant we find.
+
+\subsubsection*{Example: absorption law}
+Let $E$ be the equation $x \op y = x$. Intuitively, we must have
+\[
+\mathcal{Y}(E) = \{w = w' \mid \text{the leftmost variable is the same for $w$ and $w'$}\}.
+\]
+We will talk about proving statements like this one (say in Lean) later on; take it as given for now. The invariant is clear: we define $I(w)$ to be the leftmost variable of $w$. Instantiating this invariant in the fundamental property of invariants, we get the following metatheorem.
+\begin{metatheorem}
+	Let $w = w'$ be an equation such that the leftmost variable of $w$ is the same as the leftmost variable of $w'$. Then $w = w'$ cannot imply an equation that does not have the property from the last sentence.
+\end{metatheorem}
+
+\subsubsection*{Example: associativity}
+For a more complicated example, let $E$ be the associativity equation $x \op (y \op z) = (x \op y) \op z$. Intuitively, we must have
+\[
+\mathcal{Y}(E) = \{\text{equations that, when we remove all parentheses, are of the form $w = w$}\}.
+\]
+There is an invariant lurking behind: it is the (ordered) list of variables appearing in an expression, counting repetitions. More formally, we define $I(w)$ to be the tuple of variables appearing in $w$, listed from left to right, say. Again, from the fundamental property of invariants we get the following.
+\begin{metatheorem}
+	Let $w = w'$ be an equation such that the variables appearing in $w$, taking into account order and repetitions, are the same ones that appear in $w'$. Then $w = w'$ cannot imply an equation that does not have the property from the last sentence.
+\end{metatheorem}
+
+If we were coding a computer program that computes $I(w)$ given $w$, one could take the string of symbols that is $w$, ignore all parentheses, replace all symbols $\op$ by commas, and surround with an appropriate delimiter. (I imagine one could easily do this using \href{https://en.wikipedia.org/wiki/Regular_expression}{regular expressions}.
+
+We can compute other examples, but the invariant can get complicated even for simple equations. Exercise: what is the invariant for commutativity? Answer: To compute $I(w)$ from $w$ replace all parentheses with curly braces and all symbols $\op$ with commas, and interpret the result as nested sets.
+
+\section{Expanding the language}
+The method of invariants really shines when we expand our formal language. Right now our language consists of variables, parentheses, the equal sign, and $\op$ (there is also an implicit use of $\forall$ but let's ignore that for now).  Let $\Pi$ denote the preorder of equations (built from the language described) ordered by implication.
+
+We will add the symbol $\wedge$ (`and') to our language. Then we consider a bigger preorder $\Pi' \supseteq \Pi$ which includes equations and also conjunctions of equations. Even if we only care about $\Pi$ it will be apparent that studying invariants in $\Pi'$ gives us useful metatheorems about $\Pi$. Equations and conjunctions of equations are examples of \emph{formulas} (or formulae, according to taste).
+
+If $\varphi$ is a formula, we can define $\mathcal{Y}(\varphi)$ to be the set of all formulae implied by $\varphi$; this agrees with our previous definition. Now define an invariant of $\varphi$ to be a function $I$ on terms such that
+\[
+\mathcal{Y}(\varphi) \cap \Pi = \{w = w' \mid I(w) = I(w')\}.
+\]
+Again, this clearly agrees with our previous definition. Although $\mathcal{Y}(\varphi) \cap \Pi$ might not be upwards closed in $\Pi'$, it is upwards closed in $\Pi$, which is enough to get the fundamental property of invariants \emph{verbatim}. This leads to more metatheorems we didn't have access to before.
+
+\subsubsection*{Example: associativity and idempotency}
+Let $\varphi$ be the conjunction of the associative law and the idempotency law ($x \op x = x$). Again, we will rely on our intuition, which says that an invariant $I$ defined by taking $I(w)$ to be the set of all variables appearing in $w$, works. The corresponding metatheorem is the following
+
+\begin{metatheorem}
+	Let $w = w'$ be an equation such that the set of variables appearing in $w$ is equal to the set of variables appearing on $w'$. Then $w = w'$ cannot imply an equation that does not have the property from the last sentence.
+\end{metatheorem}
+
+\subsubsection*{Example: associativity and commutativity}
+For a similar example, we can let $\varphi$ be the conjunction of the associative and the commutative laws. Here we can define $I(w)$ to be the \href{https://en.wikipedia.org/wiki/Multiset}{multiset} of variables appearing in $w$. We obtain the following metatheorem.
+
+\begin{metatheorem}
+	Let $w = w'$ be an equation such that the variables appearing in $w$, taking into account multiplicity, are the same ones that appear in $w'$. Then $w = w'$ cannot imply an equation that does not have the property from the last sentence.
+\end{metatheorem}
+
+Trivia: this was the first example of a metatheorem obtained by use of an invariant.
+
+\subsubsection*{Example: associativity and commutativity with a twist}
+We can keep expanding our language if it helps us express more intricate invariants. For instance, we can add the symbol `1' to our language. Let $\varphi$ be the conjunction of associativity, commutativity, the equations $1 \op x = x$, and
+\[
+\underbrace{x \op x \op \cdots \op x}_{m\text{ times}} = 1,
+\]
+for some fixed positive integer $m$. Pause to guess the invariant before we move on.
+
+The invariant $I(w)$ is the multiset of variables appearing in $w$ but multiplicities are computed modulo $m$. Thus we have the pretty metatheorem:
+\begin{metatheorem}
+	Fix some positive integer $m$. Let $w = w'$ be an equation such that every variable appearing in $w$ appears the same number of times in $w'$ modulo $m$. Then $w = w'$ cannot imply an equation that does not have the property from the last sentence.
+\end{metatheorem}
+
+\section{Proving metatheorems from invariants in Lean}
+
+For the rest of this chapter we readopt the convention of calling `theorem' an important result, not necessarily pertaining to specific equations.
+
+An invariant is generally a \emph{syntactic} property of an expression. However, invariants can also be described and calculated \emph{semantically} through the notion of a \emph{lifting magma family}, described below. The general idea is that the value of an invariant for an expression can be computed by substituting specific values for the variables in the expression and evaluating the result in a certain magma in the lifting magma family; additional requirements ensure that the fundamental property of invariants is satisfied.
+
+\begin{definition}[Lifting Magma Family]\label{lifting-magma-family}
+	A \emph{lifting magma family} is a family of magmas $\{G_\alpha\}$, one for each type $\alpha$, satisfying the following properties:
+	\begin{itemize}
+		\item For each type $\alpha$, there is a function $\iota_\alpha : \alpha \to G_\alpha$.
+		\item Given a function $f : \alpha \to G_\alpha$, there is a magma homomorphism $\operatorname{lift}{f} : G_\alpha \to G_\alpha$ such that $\operatorname{lift}{f}(\iota_\alpha(x)) = f(x)$ for all $x$ in $\alpha$.
+	\end{itemize}
+\end{definition}
+
+\begin{example}
+	The free Abelian groups form a lifting magma family. When the underlying set is finite, the groups are isomorphic to $\mathbb{Z}^n$.
+\end{example}
+
+\begin{example}
+	Lists form a lifting magma family.
+\end{example}
+
+The key consequence of the definition \ref{lifting-magma-family} is that it is significantly easier to check whether an equation is satisfied in a lifting magma family.
+
+\begin{theorem}[Evaluation theorem for lifting magma families]\label{lifting-magma-basis-evaluation}
+	Suppose $E$ is an equation involving a set of variables $X$, and let $G$ be a lifting magma family.
+
+	Determining whether $E$ is satisfied by $G_X$ is equivalent to checking that $E$ is true with the specific substitution $\iota_X$.
+
+\end{theorem}
+\begin{proof}
+	For the forward direction, suppose $E$ is satisfied by $G_X$. Then, by definition, any substitution of the variables in $E$ with elements of $G_X$ will yield a true equation. In particular, substituting according to $\iota_X$ will yield a true equation.
+
+	For the reverse direction, suppose that $E$ is true when evaluated with the substitution $\iota_X$. Now, consider an arbitrary substitution of variables $f : X \to G_X$. By the lifting magma family property, there is a magma homomorphism $\operatorname{lift}{f} : G_X \to G_X$ such that $\operatorname{lift}{f}(\iota_X(x)) = f(x)$ for all $x$ in $X$. In other words, applying the substitution $f$ is equivalent to first applying to substitution $\iota_X$ and then applying the homomorphism $\operatorname{lift}{f}$. Since $E$ is true when evaluated with the substitution $\iota_X$, it is also true after applying the homomorphism $\operatorname{lift}{f}$. Thus, $E$ is satisfied by $G_X$.
+\end{proof}
+
+\begin{theorem}[The fundamental property of invariants]\label{fundamental-property-of-invariants}
+	Let $E$ and $E'$ be equations involving a set of variables $X$, and let $G$ be a lifting magma family.
+
+	If $E$ is true with the substitution $\iota_X$, and $E$ implies $E'$, then so is $E'$.
+\end{theorem}
+\begin{proof}
+	Applying the evaluation theorem \ref{lifting-magma-basis-evaluation}, we see that $E$ is satisfied by $G_X$. Since $E$ implies $E'$, $E'$ is also satisfied by $G_X$, and in particular, $E'$ is true with the substitution $\iota_X$.
+\end{proof}
+
+\begin{remark}
+	The result of evaluating an expression along the function $\iota_X : X \to G_X$ \emph{is} the invariant.
+
+	In the case of Abelian groups, the result of evaluation is the variables in the expression with multiplicity.
+	In the case of lists, the result of evaluation is the variables in the expression in the order they appear.
+
+	When the lifting magma family has good computational properties, calculating the invariant becomes easy.
+\end{remark}
+
+\begin{remark}
+	Given an equation $\phi$ in the language of magmas (possibly involving logical operations other than equality and universal quantification), the initial (i.e., most general) magmas satisfying $\phi$ (provided they exist) form a lifting magma family.
+
+	However, for the purpose of generating invariants, we are interested in lifting magma families with convenient descriptions that are computationally tractable.
+\end{remark}
+
+\begin{remark}
+	Suppose $S$ is a finite set of equations in the language of magmas that is a confluent term rewriting system under a certain ordering of the terms (in the sense of the Knuth-Bendix algorithm). Then the initial magmas satisfying $S$ form a lifting magma family where equality of elements in the magma is decidable.
+
+	This offers a way of generating examples of lifting magma families with good computational properties for computing invariants of expressions.
+\end{remark}
+
+
+\section{Conclusion: Beyond Invariants}
+We are still lacking:
+\begin{itemize}
+	\item A large collection of invariants.
+	\item An estimate for how many implications the resulting metatheorems will settle.
+	\item Algorithms (in Lean, Python, or otherwise) to compute known invariants.
+	\item General results about lifting magmas.
+	\item Formalization of the method of invariants and resulting metatheorems.
+	\item Knowledge about the category-theoretic interpretation of invariants (see the questions in the note for category theorists).
+\end{itemize}
+
+Related to the last bullet point, we note the following. If all that matters about invariants is the fundamental property, we can apply the old French trick of turning a (meta-meta)theorem into a definition.
+
+Q: If we were to define invariants as any functions satisfying the fundamental property, would anything change? (For those who read the note for category theorists: an equivalent redefinition is to consider invariants as functors $\Pi \to \textbf{Bool}$).

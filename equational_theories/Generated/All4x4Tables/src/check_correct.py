@@ -36,7 +36,7 @@ class Parser:
     def parse_expression(self):
         nodes = [self.parse_term()]
 
-        while self.current_char() == '∘':
+        while self.current_char() == '◇':
             op = self.current_char()
             self.advance()
             right = self.parse_term()
@@ -80,7 +80,7 @@ class Parser:
 
 # Function to convert expression tree to prefix notation
 def expr_to_prefix(node):
-    if node.value == '∘':
+    if node.value == '◇':
         left = expr_to_prefix(node.left)
         right = expr_to_prefix(node.right)
         return f"f({left}, {right})"
@@ -148,8 +148,7 @@ def check_rule(nvar, check, S, op):
 
 S = list(range(4))
 
-
-for row in open("../data/refutations.txt").readlines()[3*30:]:
+for row in open("../data/refutations4x4.txt").readlines():
     if 'Table' in row:
         table = np.array(eval(row.split("Table")[1]))
     elif 'Proves' in row:
@@ -167,7 +166,6 @@ for row in open("../data/refutations.txt").readlines()[3*30:]:
                 return table[x, y]
 
             this = check_rule(nvar, fn, S, op)
-            print(this, string)
             assert this
             
             ok.append(this)

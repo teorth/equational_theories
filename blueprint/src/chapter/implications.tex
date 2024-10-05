@@ -8,22 +8,22 @@ We collect here some notable implications between the the selected laws in Chapt
 \begin{proof}\leanok (From \href{https://mathoverflow.net/a/450905/766}{MathOverflow}).
   By Definition \ref{eq387}, one has the law
 \begin{equation}\label{387-again}
-  (x \circ x) \circ y = y \circ x.
+  (x \op x) \op y = y \op x.
 \end{equation}
-Specializing to $y=x \circ x$, we conclude
-$$(x \circ x) \circ (x \circ x) = (x \circ x) \circ x$$
-and hence by another application of \eqref{eq387} we see that $x \circ x$ is idempotent:
+Specializing to $y=x \op x$, we conclude
+$$(x \op x) \op (x \op x) = (x \op x) \op x$$
+and hence by another application of \eqref{eq387} we see that $x \op x$ is idempotent:
 \begin{equation}\label{idem}
-  (x \circ x) \circ (x \circ x) = x \circ x.
+  (x \op x) \op (x \op x) = x \op x.
 \end{equation}
-Now, replacing $x$ by $x \circ x$ in \eqref{387-again} and then using \eqref{idem} we see that
-$$ (x \circ x) \circ y = y \circ (x \circ x)$$
-so in particular $x \circ x$ commutes with $y \circ y$:
-\begin{equation}\label{op-idem} (x \circ x) \circ (y \circ y) = (y \circ y) \circ (x \circ x).
+Now, replacing $x$ by $x \op x$ in \eqref{387-again} and then using \eqref{idem} we see that
+$$ (x \op x) \op y = y \op (x \op x)$$
+so in particular $x \op x$ commutes with $y \op y$:
+\begin{equation}\label{op-idem} (x \op x) \op (y \op y) = (y \op y) \op (x \op x).
 \end{equation}
 Also, from two applications of \eqref{387-again} one has
-$$(x \circ x) \circ (y \circ y) = (y \circ y) \circ x = x \circ y.$$
-Thus \eqref{op-idem} simplifies to $x \circ y = y \circ x$, which is Definition \ref{eq43}.
+$$(x \op x) \op (y \op y) = (y \op y) \op x = x \op y.$$
+Thus \eqref{op-idem} simplifies to $x \op y = y \op x$, which is Definition \ref{eq43}.
 \end{proof}
 
 \begin{theorem}[29 equivalent to 14]\label{29_equiv_14} \uses{eq29,eq14}\lean{Subgraph.Equation29_implies_Equation14}\leanok  Definition \ref{eq29} is equivalent to Definition \ref{eq14}.
@@ -32,10 +32,10 @@ Thus \eqref{op-idem} simplifies to $x \circ y = y \circ x$, which is Definition 
 This result was posed as Problem A1 from Putnam 2001.
 
 \begin{proof}\leanok\uses{duality} By Lemma \ref{duality} it suffices to show that Definition \ref{eq29} implies Definition \ref{eq14}.  From Definition \ref{eq29} one has
-  $$ x = ((x \circ y) \circ x) \circ (x \circ y)$$
+  $$ x = ((x \op y) \op x) \op (x \op y)$$
   and also
-  $$ y = (x \circ y) \circ x$$
-  giving $x = y \circ (x \circ y)$, which is Definition \ref{eq14}.
+  $$ y = (x \op y) \op x$$
+  giving $x = y \op (x \op y)$, which is Definition \ref{eq14}.
 \end{proof}
 
 \begin{theorem}[14 implies 29]\label{14_implies_29} \uses{eq29,eq14}\lean{Subgraph.Equation14_implies_Equation29}\leanok  Definition \ref{eq14} implies Definition \ref{eq29}.
@@ -46,44 +46,136 @@ This result was posed as Problem A1 from Putnam 2001.
 \begin{proof}\leanok
 \end{proof}
 
-The following result was problem A4 on Putnam 1978.
+The following result was Problem A4 on Putnam 1978.
 
-\begin{theorem}[3744 implies 3722, 381]\label{3744_implies_3722_381}\uses{eq3744, eq3722, eq381} Definition \ref{eq3744} implies Definition \ref{eq3722} and Definition \ref{eq381}.
+\begin{theorem}[3744 implies 3722, 381]\label{3744_implies_3722_381}\uses{eq3744, eq3722, eq381}\lean{Subgraph.Equation3744_implies_Equation3722, Subgraph.Equation3744_implies_Equation381}\leanok Definition \ref{eq3744} implies Definition \ref{eq3722} and Definition \ref{eq381}.
 \end{theorem}
 
-\begin{proof} By hypothesis, one has
-$$x \circ y = (x \circ z) \circ (w \circ y)
+\begin{proof}\leanok By hypothesis, one has
+$$x \op y = (x \op z) \op (w \op y)
   $$
 for all $x,y,z,w$.  Various specializations of this give
 \begin{align}
- x \circ y &= (x \circ z) \circ (y \circ y) \label{381-1} \\
- x \circ z &= (x \circ z) \circ (x \circ z) \label{381-2} \\
-(x \circ z) \circ y &= ((x \circ z) \circ (x \circ z)) \circ (y \circ y) \label{381-3}.
+ x \op y &= (x \op z) \op (y \op y) \label{381-1} \\
+ x \op z &= (x \op z) \op (x \op z) \label{381-2} \\
+(x \op z) \op y &= ((x \op z) \op (x \op z)) \op (y \op y) \label{381-3}.
 \end{align}
 The equation \eqref{381-2} gives Definition \ref{eq3722}, while \eqref{381-1}, \eqref{381-2}, \eqref{381-3} gives
-$$ x \circ y = (x\circ z) \circ y$$
+$$ x \op y = (x\op z) \op y$$
 which is Definition \ref{eq381}.
 \end{proof}
 
-\begin{theorem}[1689 is equivalent to 2]\label{1689_equiv_2}\uses{eq1689, eq2} Definition \ref{eq1689} is equivalent to Definition \ref{eq2}.
+\begin{theorem}[1689 is equivalent to 2]\label{1689_equiv_2}\uses{eq1689, eq2}\lean{Subgraph.Equation1689_implies_Equation2, Subgraph.Equation2_implies_Equation1689}\leanok Definition \ref{eq1689} is equivalent to Definition \ref{eq2}.
 \end{theorem}
 
 
 \begin{proof}\leanok  The implication of Definition \ref{eq1689} from Definition \ref{eq2} is trivial.  The converse is a surprisingly long chain of implications; see pages 326--327 of \cite{Kisielewicz2}.  The initial law
-$$ x = (y \circ x) \circ ((x \circ z) \circ z)$$
+$$ x = (y \op x) \op ((x \op z) \op z)$$
 is used to obtain, in turn,
-$$ x \circ ((((x \circ y) \circ y) \circ z) \circ z) = (x \circ y) \circ y,$$
-$$(x \circ (y \circ z)) \circ (z \circ ((z \circ w) \circ w)) = y \circ z,$$
-$$x \circ (y \circ ((y \circ z) \circ z)) = (x \circ y) \circ y,$$
-$$((x \circ (y \circ z)) \circ z) \circ z = y \circ z,$$
-$$(x \circ (y \circ (z \circ w))) \circ (z \circ w) = y \circ (z \circ w),$$
-$$(x \circ (y \circ z)) \circ (y \circ z) = x \circ (y \circ z),$$
-$$((x \circ y) \circ ((y \circ z) \circ z)) \circ ((y \circ z) \circ z) = y,$$
-$$((x \circ y) \circ ((y \circ z) \circ z)) \circ ((y \circ z) \circ z) = ((x \circ ((x \circ y) \circ ((y \circ z) \circ z))) \circ ((y \circ z) \circ z)) \circ ((y \circ z) \circ z),$$
-$$ x \circ ((x \circ y) \circ y) = x,$$
-$$ x \circ (x \circ (y \circ z)) = x,$$
-$$ (x \circ y) \circ y = x \circ y,$$
-$$ (x \circ x) \circ x = x,$$
-$$ (x \circ y) \circ y = y,$$
-$$ x \circ y = y.$$
+$$ x \op ((((x \op y) \op y) \op z) \op z) = (x \op y) \op y,$$
+$$(x \op (y \op z)) \op (z \op ((z \op w) \op w)) = y \op z,$$
+$$x \op (y \op ((y \op z) \op z)) = (x \op y) \op y,$$
+$$((x \op (y \op z)) \op z) \op z = y \op z,$$
+$$(x \op (y \op (z \op w))) \op (z \op w) = y \op (z \op w),$$
+$$(x \op (y \op z)) \op (y \op z) = x \op (y \op z),$$
+$$((x \op y) \op ((y \op z) \op z)) \op ((y \op z) \op z) = y,$$
+$$((x \op y) \op ((y \op z) \op z)) \op ((y \op z) \op z) = ((x \op ((x \op y) \op ((y \op z) \op z))) \op ((y \op z) \op z)) \op ((y \op z) \op z),$$
+$$ x \op ((x \op y) \op y) = x,$$
+$$ x \op (x \op (y \op z)) = x,$$
+$$ (x \op y) \op y = x \op y,$$
+$$ (x \op x) \op x = x,$$
+$$ (x \op y) \op y = y,$$
+$$ x \op y = y.$$
+\end{proof}
+
+The following result was established in \cite{mendelsohn-padmanabhan}.
+
+\begin{theorem}[Consequences of 1571]\label{1571_impl}\uses{eq1571, eq2662, eq40, eq23, eq8, eq16, eq14, eq43, eq4512}\lean{Subgraph.Equation1571_implies_Equation2662, Subgraph.Equation1571_implies_Equation40, Subgraph.Equation1571_implies_Equation23,Subgraph.Equation1571_implies_Equation8, Subgraph.Equation1571_implies_Equation16, Subgraph.Equation1571_implies_Equation43, Subgraph.Equation1571_implies_Equation4512}\leanok  Magmas obeying Definition \ref{eq1571} also obey Definitions \ref{eq2662}, \ref{eq40}, \ref{eq23}, \ref{eq8}, \ref{eq16}, \eqref{eq14}, \ref{eq43}, and \ref{eq4512}, and are in fact abelian groups of exponent two.  Conversely, all abelian groups of exponent two obey Definition \ref{eq1571}.
+\end{theorem}
+
+\begin{proof}\leanok  Suppose that a magma $G$ obeys Definition \ref{eq1571}, thus
+\begin{equation}\label{1571-again}
+ x = (y \op z) \op (y \op (x \op z)).
+\end{equation}
+$$ x = ((x \op y) \op (x \op y)) \op ((x \op y) \op (x \op (x \op y)))$$
+and
+$$ x = (x \op y) \op (x \op (x \op y))$$
+whence
+$$x = ((x \op y) \op (x \op y)) \op x$$
+which is Definition \ref{eq2662}.  This gives
+$$y = ((y \op z) \op (y \op z)) \op y$$
+while from \eqref{1571-again} one has
+$$ (y \op z) \op (y \op z) = (x \op y) \op (x \op ((y \op z) \op (y \op z) \op y))$$
+whence
+$$ (x \op y) \op (x \op y) = (y \op z) \op (y \op z).$$
+This implies that $(x \op y) \op (x \op y)$ does not depend on $x$, or on $y$, hence is equal to some constant $e$:
+$$ (x \op y) \op (x \op y) = e.$$
+From \eqref{1571-again} the magma operation is surjective, hence
+\begin{equation}\label{xxe} x \op x = e
+\end{equation}
+which gives Definition \ref{eq40}.  Applying \eqref{1571-again} with $x=y=z$ we conclude
+$$ x = e \op (x \op e)$$
+while if we instead take $y=z=e$ we have
+$$ x = e \op (e \op (x \op e))$$
+hence
+$$ x = e \op x$$
+and then also
+$$ x = x \op e$$
+from which we readily conclude Definitions \ref{eq23}, \ref{eq8}; thus $e$ is an identity element.  From \eqref{1571-again} with $z=e$ we now have
+\begin{equation}\label{16-again}
+ x = y \op (y \op x)
+\end{equation}
+which is Definition \ref{eq16}. If instead we take $y=e$ we have
+\begin{equation}\label{14-again}
+  x = z \op (x \op z)
+\end{equation}
+which is Definition \ref{eq14}.  So if we substitute $z = x \op y$ and use \eqref{16-again} we obtain
+$$ x = (x \op y) \op y$$
+and hence
+$$ y \op x = y \op ((x \op y) \op y) = x \op y$$
+thanks to \eqref{14-again}.  This gives Definition \ref{eq43}, thus $G$ is now commutative.  From \eqref{1571-again} once more one has
+$$x \op (y \op z) = (y \op x) \op (z \op ((x \op (y \op z)) \op x))$$
+which one can simplify using commutativity and \eqref{16-again} (or \eqref{14-again}) to eventually obtain
+$$x \op (y \op z) = (x \op y) \op z$$
+which is Definition \ref{eq4512}.  $G$ is now commutative and associative, and every element is its own inverse and of exponent $2$, hence is an abelian group thanks to \eqref{xxe}, so $G$ is an abelian group of exponent $2$ as claimed.  The converse is easily verified.
+\end{proof}
+
+\begin{theorem}[953 is equivalent to 2]\label{953_equiv_2}\uses{eq953, eq2}\lean{Subgraph.Equation953_implies_Equation2}\leanok  Definition \ref{eq953} is equivalent to Definition \ref{eq2}.
+\end{theorem}
+
+\begin{proof}\leanok  It suffices to show that Definition \ref{eq953} implies Definition \ref{eq2}.  Pick an element $0$ of $G$ and define $1 = 0 \op 0$ and $2 = 1 \op 1$ (we do not require $0,1,2$ to be distinct).
+From Definition \ref{eq953} with $x=z=0$ we have
+$$ 0 = y \op 2.$$
+If we then apply Definition \ref{eq953} with $z=1$ we conclude that
+$$ x = y \op 0$$
+for all $x,y$, from which one concludes $x=x'$ for any $x,x' \in G$, giving Definition \ref{eq2}.
+\end{proof}
+
+
+Some other notable equational laws are as follows.
+
+\begin{theorem}[Sheffer stroke axiom]\label{sheffer}  The law
+$$ 0 \formaleq (1 \op ((0 \op 1) \op 1)) \op (0 \op (2 \op 1))$$
+or in equation form
+$$ x = y \op ((x \op y) \op y) \op (0 \op (2 \op 1)) $$
+axiomatizes the Sheffer stroke operation. {\bf TODO: locate the equation number for this law.}
+\end{theorem}
+
+\begin{proof}
+See \cite{mccune_et_al}.  In fact this is the shortest law with this property.
+\end{proof}
+
+A \emph{natural central groupoid} is, up to isomorphism, a magma with carrier $S \times S$ for some set $S$ and operation
+$$ (a,b) \op (c,d) = (b,c).$$
+These are examples of central groupoids (Definition \ref{eq168}).
+
+\begin{theorem}[Natural central groupoid axiom]\label{natural-central-groupoid}  The law
+$$ 0 \formaleq (1 \circ ((2 \circ 0) \circ 3)) \circ (0 \circ 3)$$
+or in equation form
+$$ x = y \circ ((z \circ x) \circ w) \circ (x \circ w)$$
+characterizes natural central groupoids. {\bf TODO: locate the equation number for this law.}
+\end{theorem}
+
+\begin{proof}
+  See \cite[Theorem 5]{knuth}.
 \end{proof}

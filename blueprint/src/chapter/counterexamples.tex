@@ -1,11 +1,12 @@
 \chapter{Selected magmas}
 
-Each magma can be used to establish anti-implications: if $\Gamma$ is the set of all laws obeyed by a magma $G$, then we have $\not E \leq E'$ whenever $E \in \Gamma$ and $E' \not \in \Gamma$.  Large numbers of implications can already be obtained from
+Each magma can be used to establish anti-implications: if $\Gamma$ is the set of all laws obeyed by a magma $G$, then we have $\neg E \leq E'$ whenever $E \in \Gamma$ and $E' \not \in \Gamma$.  Large numbers of implications can already be obtained from
 
 \begin{itemize}
   \item All magmas of order at most $4$, up to isomorphism (of which there are $178,985,294$);
   \item All commutative magmas of order $5$, up to isomorphism {\bf determine their count};
   \item Cyclic groups $\Z/N\Z$ with $2 \leq N \leq 12$ and $x \circ y = ax^2+bxy+cy^2+dx+ey$ for randomly chosen $a,b,c,d,e$.
+  \item There are only $1410$ distinct cancellative magmas of order $5$ (up to isomorphism), and Mace4 can generate all of them in under 20 seconds. A shell script to do this is available \href{https://github.com/zaklogician/equational_theories/tree/cancellative_magmas/scripts/cancellative_magmas}{here}. A magma is cancellative if $xy=xz$ implies $y=z$ and $yx=zx$ implies $y=z$.
 \end{itemize}
 
 
@@ -16,4 +17,8 @@ Some other magmas have been used to establish counterexamples:
   \item The natural numbers with law $x \circ y = xy+1$.
   \item The reals with $x \circ y = (x+y)/2$.
   \item The natural numbers with $x \circ x$ equal to $x$ when $x=y$ and $x+1$ otherwise.
+  \item The set of strings with $x \circ y$ equal to $y$ when $x=y$ or when $x$ ends with $yyy$, or $xy$ otherwise (see \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/3102.20does.20not.20imply.203176}{this Zulip thread}).
+  \item Vector spaces ${\mathbb F}_2^n$ over ${\mathbb F}_2$, which obey Definition \ref{eq1571} (and hence all the subsequent laws mentioned in Theorem \ref{1571_impl}).
+  \item Knuth's construction \cite{knuth} of a central groupoid (Definition \ref{eq168}) as follows.  Let $S$ be a (finite) set with a distinguished element $0$, and a binary operation $*$ such that $x*0=0$ and $0*x=x$   for all $x$, and for each $x,y$ there is a unique $z$ with $x*z=y$.  One can then define a central groupoid on $S \times S$ by defining $(a,b) \op (c,d)$ to equal $(b,c)$ if $c,d \neq 0$; $(b,e)$ if $b*e=c$ is non-zero and $d=0$; and $(a*b,0)$ if $c=0$.  One such example in \cite{knuth} is when $S = \{0,1,2\}$ with $1*1=2*1=2$ and $1*2=2*2=1$.
+  \item A magma of cardinality $8$ was \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/using.20z3}{constructed by Z3} to refute an implication.
 \end{itemize}
