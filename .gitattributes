@@ -13,3 +13,4 @@ equational_theories/Generated/FinSearch/theorems/*.lean linguist-generated
 equational_theories/Generated/FinSearch.lean linguist-generated
 equational_theories/Generated/MagmaEgg/*/*.lean linguist-generated
 equational_theories/Generated/MagmaEgg/*.lean linguist-generated
+equational_theories/Generated/VampireProven/Proofs*.lean linguist-generated

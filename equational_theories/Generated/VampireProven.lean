@@ -14,3 +14,17 @@ import equational_theories.Generated.VampireProven.Disproofs13
 import equational_theories.Generated.VampireProven.Disproofs14
 import equational_theories.Generated.VampireProven.Disproofs15
 import equational_theories.Generated.VampireProven.Disproofs16
+import equational_theories.Generated.VampireProven.Proofs1
+import equational_theories.Generated.VampireProven.Proofs1
+import equational_theories.Generated.VampireProven.Proofs2
+import equational_theories.Generated.VampireProven.Proofs3
+import equational_theories.Generated.VampireProven.Proofs4
+import equational_theories.Generated.VampireProven.Proofs5
+import equational_theories.Generated.VampireProven.Proofs6
+import equational_theories.Generated.VampireProven.Proofs7
+import equational_theories.Generated.VampireProven.Proofs8
+import equational_theories.Generated.VampireProven.Proofs9
+import equational_theories.Generated.VampireProven.Proofs10
+import equational_theories.Generated.VampireProven.Proofs11
+import equational_theories.Generated.VampireProven.Proofs12
+import equational_theories.Generated.VampireProven.Proofs13

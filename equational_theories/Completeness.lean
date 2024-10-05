@@ -48,8 +48,16 @@ def RelOfLaws {α} (Γ : Ctx α) : FreeMagma α → FreeMagma α → Prop :=
 theorem RelOfLaws.isEquivalence {α} (Γ : Ctx α) : Equivalence (RelOfLaws Γ) := by
   constructor <;> simp [RelOfLaws]
   case refl => intros x; constructor; apply derive.Ref
-  case symm => intros x y h; cases h; constructor; apply derive.Sym; trivial
-  case trans => intros x y z h₁ h₂; cases h₁; cases h₂; constructor; apply derive.Trans <;> trivial
+  case symm =>
+    intros x y h
+    constructor
+    apply derive.Sym
+    assumption
+  case trans =>
+    intros x y z h₁ h₂
+    constructor
+    apply derive.Trans
+      <;> trivial
 
 instance SetoidOfLaws {α} (Γ : Ctx α): Setoid (FreeMagma α) :=
   ⟨ RelOfLaws Γ, RelOfLaws.isEquivalence Γ ⟩
@@ -65,7 +73,7 @@ def ForkWithLaws {α} (Γ : Ctx α) : FreeMagmaWithLaws Γ → FreeMagmaWithLaws
   (
     by
       simp [HasEquiv.Equiv, Setoid.r, RelOfLaws]
-      intros x z y w d₁ d₂; cases d₁; cases d₂
+      intros x z y w d₁ d₂;
       apply Quotient.sound; simp [HasEquiv.Equiv, Setoid.r, RelOfLaws]; constructor
       apply derive.Cong <;> trivial
   )
