@@ -76,7 +76,8 @@ def Output.asJson (v : Output) : String :=
 
 def generateOutcomes (inp : Cli.Parsed) : IO UInt32 := do
   withExtractedResults inp fun rs => do
-    let (equations, outcomes) ← Closure.list_outcomes rs
+    let rs' := if inp.hasFlag "extra" then rs else rs.filterMap Entry.keepCore
+    let (equations, outcomes) ← Closure.list_outcomes rs'
     if inp.hasFlag "hist" then
       let mut count : Std.HashMap Closure.Outcome Nat := {}
       for a in outcomes do
@@ -94,6 +95,7 @@ def outcomes : Cmd := `[Cli|
 
   FLAGS:
     hist; "Create a histogram instead of outputting all outcomes"
+    extra; "Include extra equations that are not in the core set"
 
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"
