@@ -1,11 +1,17 @@
 require 'set'
 
 class Graph
-  attr_accessor :adj_list, :vertices
+  attr_accessor :adj_list
 
   def initialize
     @adj_list = Hash.new { |hash, key| hash[key] = Set.new([]) }
-    @vertices = Set.new
+  end
+
+  def vertices
+    retval = Set.new @adj_list.keys
+    @adj_list.each { |k, v| retval += v }
+
+    retval
   end
 
   def self.from_csv(path)
@@ -20,8 +26,6 @@ class Graph
 
   def add_edge(from, to)
     @adj_list[from] << to
-    @vertices.add(from)
-    @vertices.add(to)
   end
 
   def reachable_from(vertex)
@@ -56,11 +60,11 @@ class Graph
     on_stack = {}
     sccs = []
 
-    @vertices.each { |v|
+    vertices.each { |v|
       strongconnect(v, stack, lowlink, index_map, on_stack, sccs) unless index_map[v]
     }
 
-    (@vertices - index_map.keys).each { |v|
+    (vertices - index_map.keys).each { |v|
       sccs << [v] unless sccs.any? { |scc| scc.include?(v) }
     }
 
@@ -218,7 +222,7 @@ class Graph
 
   def transitive_closure
     closure_graph = Graph.new
-    @vertices.each do |vertex|
+    vertices.each do |vertex|
       visited = Hash.new(false)
       reachable = []
       closure_dfs(vertex, visited, reachable)

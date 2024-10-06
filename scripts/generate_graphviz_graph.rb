@@ -33,12 +33,20 @@ if ARGV.length != 1
   exit 1
 end
 
-equations_file = File.read(File.join(__dir__, '../equational_theories/AllEquations.lean'))
-
 $equations = {}
-equations_file.split("\n").each { |s|
+File.read(File.join(__dir__, '../equational_theories/AllEquations.lean')).split("\n").each { |s|
   if s =~ /equation (\d+) := (.+)/
     $equations[$1.to_i] = $2
+  end
+}
+File.read(File.join(__dir__, '../equational_theories/Equations.lean')).split("\n").each { |s|
+  if s =~ /abbrev Equation(\d+).*: G, (.+)/
+    if !$equations[$1.to_i]
+      $equations[$1.to_i] = $2
+    elsif $equations[$1.to_i] != $2
+      $stderr.puts "Equations don't match? #{$1} / #{$equations[$1.to_i]} / #{$2}"
+      exit 1
+    end
   end
 }
 
@@ -46,13 +54,21 @@ implications_graph = Graph.from_csv(ARGV[0])
 
 vertices_to_delete = []
 if options[:limit_variables]
-  vertices_to_delete.concat graph.vertices.filter { |k|
-    equations[k].scan(/[xyzwvu]/).uniq.length > options[:limit_variables]
+  vertices_to_delete.concat implications_graph.vertices.filter { |k|
+    if !$equations[k]
+      $stderr.puts "Did not see equation for #{k}?!"
+      exit 1
+    end
+    $equations[k].scan(/[xyzwvu]/).uniq.length > options[:limit_variables]
   }
 end
 if options[:limit_operations]
-  vertices_to_delete.concat graph.vertices.filter { |k|
-    equations[k].count("∘") > options[:limit_operations]
+  vertices_to_delete.concat implications_graph.vertices.filter { |k|
+    if !$equations[k]
+      $stderr.puts "Did not see equation for #{k}?!"
+      exit 1
+    end
+    $equations[k].count("◇") > options[:limit_operations]
   }
 end
 if options[:remove_eq1]
@@ -104,11 +120,13 @@ implications_graph.adj_list.each { |u, neighbors|
 # Condensation finished, generate graphviz data
 
 reverse_map = {}
-condensed_implications_graph.adj_list.each { |node, neighbors|
-  neighbors.each { |v|
-    reverse_map[v] ||= Set.new []
-    reverse_map[v] << node
-  }
+condensed_implications_graph.vertices.each { |node|
+  if condensed_implications_graph.adj_list[node]
+    condensed_implications_graph.adj_list[node].each { |v|
+      reverse_map[v] ||= Set.new []
+      reverse_map[v] << node
+    }
+  end
 }
 
 roots = reverse_map.keys.filter { |v| condensed_implications_graph.adj_list[v].length == 0 }
