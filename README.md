@@ -18,10 +18,6 @@ Some selected equations of interest are listed [here](equational_theories/Equati
 - [Equation 2](https://teorth.github.io/equational_theories/implications/?2): `x = y`.  The singleton law.
 - [Equation 43](https://teorth.github.io/equational_theories/implications/?43): `x ◇ y = y ◇ x`.  The commutative law.
 - [Equation 46](https://teorth.github.io/equational_theories/implications/?46): `x ◇ y = z ◇ w`.  The constant law.
-<<<<<<< HEAD
-=======
-- [Equation 168](https://teorth.github.io/equational_theories/implications/?168): `x = (y ◇ x) ◇ (x ◇ z)`.  The central groupoid law.
->>>>>>> origin/main
 - [Equation 4512](https://teorth.github.io/equational_theories/implications/?4512): `x ◇ (y ◇ z) = (x ◇ y) ◇ z`.  The associative law.
 
 (Note: in some legacy portions of this project, the magma operation was denoted `◦︎` instead of `◇`.)  [Here is a tour](https://github.com/teorth/equational_theories/wiki/Tour-of-selected-equations) of several selected equations, including the ones above.
