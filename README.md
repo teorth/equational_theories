@@ -14,14 +14,13 @@ involving at most four magma operations, up to symmetry and relabeling (here is 
 We will accumulate both "proven" and "conjectured" implications and anti-implications: proven assertions will be verified in the proof assistant language [Lean](https://www.lean-lang.org/), and "conjectured" assertions represent all claims (either human-generated or computer-generated) that have not yet been verified in Lean.  The current status of the project can be found on the [dashboard](https://teorth.github.io/equational_theories/dashboard/).
 
 Some selected equations of interest are listed [here](equational_theories/Equations.lean) (in Lean form) and [here](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html) (in a human readable blueprint).  Examples include
-- Equation 1: `x = x`.  The trivial law.
-- Equation 2: `x = y`.  The singleton law.
-- Equation 43: `x ◇ y = y ◇ x`.  The commutative law.
-- Equation 46: `x ◇ y = z ◇ w`.  The constant law.
-- Equation 168: `x = (y ◇ x) ◇ (x ◇ z)`.  The central groupoid law.
-- Equation 4512: `x ◇ (y ◇ z) = (x ◇ y) ◇ z`.  The associative law.
+- [Equation 1](https://teorth.github.io/equational_theories/implications/?1): `x = x`.  The trivial law.
+- [Equation 2](https://teorth.github.io/equational_theories/implications/?2): `x = y`.  The singleton law.
+- [Equation 43](https://teorth.github.io/equational_theories/implications/?43): `x ◇ y = y ◇ x`.  The commutative law.
+- [Equation 46](https://teorth.github.io/equational_theories/implications/?46): `x ◇ y = z ◇ w`.  The constant law.
+- [Equation 4512](https://teorth.github.io/equational_theories/implications/?4512): `x ◇ (y ◇ z) = (x ◇ y) ◇ z`.  The associative law.
 
-(Note: in some legacy portions of this project, the magma operation was denoted `◦︎` instead of `◇`.)
+(Note: in some legacy portions of this project, the magma operation was denoted `◦︎` instead of `◇`.)  [Here is a tour](https://github.com/teorth/equational_theories/wiki/Tour-of-selected-equations) of several selected equations, including the ones above.
 
 Some automatically generated progress:
 - Sep 28, 2024: [85 laws](equational_theories/Generated/Constant.lean) have been shown to be equivalent to the constant law [`Equation46`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq46), and [815 laws](equational_theories/Generated/Singleton.lean) have been shown to be equivalent to the singleton law [`Equation2`](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html#eq2).  Discussed in the blueprint [here](https://teorth.github.io/equational_theories/blueprint/sect0005.html).
