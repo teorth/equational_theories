@@ -102,6 +102,8 @@ theorem Equation2_implies_Equation4522 (G: Type*) [Magma G] (h: Equation2 G) : E
 theorem Equation2_implies_Equation4582 (G: Type*) [Magma G] (h: Equation2 G) : Equation4582 G :=
   fun _ _ _ _ _ _ ↦ h _ _
 
+
+
 @[equational_result]
 theorem Equation3_implies_Equation8 (G: Type*) [Magma G] (h: Equation3 G) : Equation8 G :=
   fun x ↦ by repeat rw [← h]
