@@ -1,6 +1,10 @@
 import equational_theories.AllEquations
 
 namespace RewriteHypothesisAndGoal
+
+set_option linter.unusedTactic false
+set_option linter.unreachableTactic false
+
 @[equational_result]
 theorem Equation1000_implies_Equation993 (G: Type _) [Magma G] (h: Equation1000 G) : Equation993 G := by
   intro a
