@@ -4,7 +4,7 @@ import equational_theories.EquationalResult
 import equational_theories.Closure
 import equational_theories.Equations
 import equational_theories.FactsSyntax
-import equational_theories.FreeMonoid
+import equational_theories.FreeSemigroup
 
 /- This is a subproject of the main project to completely describe a small subgraph of the entire
 implication graph. The list of equations under consideration can be found at https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html
@@ -347,7 +347,7 @@ theorem Equation1571_implies_Equation3167 (G : Type _) [Magma G] (h : Equation15
   have eq4512 := Equation1571_implies_Equation4512 G h
   have eq16 := Equation1571_implies_Equation16 G h
   apply Eq.symm
-  apply Eq.trans $ FreeMonoid.AssocFullyRightAssociate eq4512 (fun | 0 => y | 1 => y | 2 => z | 3 => z | 4 => x : Fin 5 → G) ((((Lf 0 ⋆ Lf 1) ⋆ Lf 2) ⋆ Lf 3) ⋆ Lf 4)
+  apply Eq.trans $ AssocFullyRightAssociate eq4512 (fun | 0 => y | 1 => y | 2 => z | 3 => z | 4 => x : Fin 5 → G) ((((Lf 0 ⋆ Lf 1) ⋆ Lf 2) ⋆ Lf 3) ⋆ Lf 4)
   apply Eq.trans $ Eq.symm $ eq16 _ y
   apply Eq.trans $ Eq.symm $ eq16 _ z
   exact Eq.refl _
