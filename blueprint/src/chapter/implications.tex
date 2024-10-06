@@ -158,11 +158,17 @@ Some other notable equational laws are as follows.
 $$ 0 \formaleq (1 \op ((0 \op 1) \op 1)) \op (0 \op (2 \op 1))$$
 or in equation form
 $$ x = y \op ((x \op y) \op y) \op (x \op (z \op y)) $$
-axiomatizes the Sheffer stroke operation. {\bf TODO: locate the equation number for this law.}
+axiomatizes the Sheffer stroke operation $x \op y = \overline{xy}$ in a Boolean algebra. {\bf TODO: locate the equation number for this law.}
 \end{theorem}
 
 \begin{proof}
 See \cite{mccune_et_al}.  In fact this is the shortest law with this property.
+
+A sketch of proof follows.  One can easily verify that the Sheffer stroke operation obeys this law.  Conversely, if this law holds, then automated theorem provers can show that the three Sheffer axioms
+$$ (x \op x) \op (x \op x)  = x$$
+$$ x \op (y \op (y \op y)) = x \op x$$
+$$ (x \op (y \op z)) \op (x \op (y \op z)) = ((y \op y) \op x) \op ((z \op z) \op x)$$
+are satisfied.  A classical result of Sheffer \cite{sheffer} then allows one to conclude.
 \end{proof}
 
 A \emph{natural central groupoid} is, up to isomorphism, a magma with carrier $S \times S$ for some set $S$ and operation
