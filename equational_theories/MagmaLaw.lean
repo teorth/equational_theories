@@ -72,7 +72,7 @@ end DeriveDef
 
 /-- Definitions of entailment -/
 def satisfiesPhi {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
-  E.lhs.evalInMagma φ = E.rhs.evalInMagma φ
+  FreeMagma.evalHom φ E.lhs = FreeMagma.evalHom φ E.rhs
 
 abbrev satisfies {α : Type} (G : Type) [Magma G] (E : MagmaLaw α) := ∀ (φ : α → G), satisfiesPhi φ E
 
@@ -93,8 +93,8 @@ infix:50 " ⊢ " => (derive)
 infix:50 " ⊢' " => (derive')
 
 theorem satisfiesPhi.evalHom {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) (f : G →◇ G) :
-    satisfiesPhi (f ∘ φ) E ↔ f (E.lhs.evalInMagma φ) = f (E.rhs.evalInMagma φ) := by
-  rw [satisfiesPhi, FreeMagma.evalHom]
+    satisfiesPhi (f ∘ φ) E ↔ f (FreeMagma.evalHom φ E.lhs) = f (FreeMagma.evalHom φ E.rhs) := by
+  rw [satisfiesPhi, FreeMagma.evalHom_Hom]
   rfl
 
 namespace Law

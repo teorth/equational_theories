@@ -2,6 +2,7 @@ import equational_theories.MagmaLaw
 import equational_theories.Homomorphisms
 import Mathlib.Data.Finset.Basic
 import Mathlib.Data.Finsupp.Defs
+-- import Mathlib.Algebra.Free
 
 open Law
 
@@ -103,5 +104,7 @@ instance : LiftingMagmaFamily (Multiset ·) where
     funext x
     symm
     apply Multiset.singleton_bind
+
+-- TODO: Lifting family FreeMagma
 
 end Instances
