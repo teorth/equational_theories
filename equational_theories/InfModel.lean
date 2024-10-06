@@ -319,7 +319,68 @@ theorem Equation28393_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
       by_cases hyz' : y ◇ z = 3^y.val
       .
         rw [←hyz', h2, hyz']
-        sorry
+        exfalso
+        have : padicValNat 3 ↑(y ◇ z) = ↑y.val := by simp [hyz']
+        unfold Magma.op at this
+        simp at this
+        repeat rw [apply_ite PNat.val] at this
+        repeat rw [apply_ite (padicValNat 3)] at this
+        simp only [PNat.pow_coe, PNat.val_ofNat] at this
+        simp only [padicValNat.prime_pow] at this
+        simp [padicValNat_prime_prime_pow] at this
+        repeat rw [apply_ite (padicValNat 3)] at this
+        simp [padicValNat.mul, padicValNat_prime_prime_pow] at this
+        repeat simp only [ite_eq_iff] at this
+        simp at this
+        have this' : ((0: ℕ) = y.val) ↔ False := by
+          simp [false_iff]
+          intro hc
+          have hc := Eq.symm hc
+          have hc' := PNat.ne_zero y
+          contradiction
+        simp [this'] at this
+        repeat simp [and_or_left, and_or_left] at this
+        cases this with
+        | inl h =>
+          have h1 := h.2.1
+          have h2 := h.2.2
+          rw [h2] at h1
+          have h1 := Eq.symm h1
+          apply_fun PNat.val at h1
+          simp at h1
+          have this2 := Nat.lt_pow_self (by simp: 1 < 2) y.val
+          have this3 := ne_of_gt this2
+          exact this3 h1
+        | inr this => _
+        cases this with
+        | inl h =>
+          have h1 := h.2.2.1
+          have h2 := h.2.2.2
+          rw [h2] at h1
+          have h1 := Eq.symm h1
+          apply_fun PNat.val at h1
+          simp at h1
+          have this2 := Nat.lt_pow_self (by simp: 1 < 3) y.val
+          have this3 := ne_of_gt this2
+          exact this3 h1
+        | inr this => _
+        cases this with
+        | inl h =>
+          have h := Eq.symm h.2.2.2.2.2
+          have h' := calc y.val
+            _ > Nat.log 5 y.val := by simp [Nat.log_lt_self]
+            _ ≥ padicValNat 5 y.val := by simp [padicValNat_le_nat_log]
+            _ ≥ Nat.log 3 (padicValNat 5 y.val) := by simp [Nat.log_le_self]
+            _ ≥ padicValNat 3 (padicValNat 5 y.val) := by simp [padicValNat_le_nat_log]
+          exact (ne_of_gt h') h
+        | inr this => _
+        have this := Eq.symm this.2.2.2.2.2
+        have this' := calc y.val
+          _ > Nat.log 2 y.val := by simp [Nat.log_lt_self]
+          _ ≥ padicValNat 2 y.val := by simp [padicValNat_le_nat_log]
+          _ ≥ Nat.log 3 (padicValNat 2 y.val) := by simp [Nat.log_le_self]
+          _ ≥ padicValNat 3 (padicValNat 2 y.val) := by simp [padicValNat_le_nat_log]
+        exact (ne_of_gt this') this
       .
         have : (y ◇ z) ≠ 3^y.val ∧ (y ◇ z) ≠ 2^(3^y.val)  := And.intro hyz' hyz
         simp [h5 y (y ◇ z) this]
