@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 
 # Generate a list of equations on magmas
 
@@ -7,7 +7,7 @@ from sys import argv, stderr
 
 
 EQ_SIZE = 4
-VAR_NAMES = 'xyzwuv'
+VAR_NAMES = 'xyzwuvrst'
 
 def generate_shapes(size):
     if size == 0:

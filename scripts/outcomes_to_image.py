@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 
 """
 Generates a png image to visualize the output of `extract_implications outcomes`.
@@ -74,8 +74,11 @@ if __name__ == '__main__':
     # `eqid` is an Equation number.
 
     eqid_from_matrixidx = list(map(name_to_id, eqs))
+
+    # `imageidx` is just the index of the equation when all of the present
+    # equations are sorted by their equation number.
     imageidx_from_eqid = dict()
-    for imageidx, eqid in enumerate(eqid_from_matrixidx):
+    for imageidx, eqid in enumerate(sorted(eqid_from_matrixidx)):
         imageidx_from_eqid[eqid] = imageidx
 
     img = Image.new('RGB', (size, size))

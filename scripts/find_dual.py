@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from __future__ import annotations
 from typing import Optional, Set, Tuple, Dict, List
 import re
@@ -10,6 +12,7 @@ class ExprNode:
         self.left = left
         self.right = right
         self.node_count = 1 + (left.node_count if left else 0) + (right.node_count if right else 0)
+        self.leafs = self.get_leafs()
 
     def __repr__(self) -> str:
         """Return a string representation of the node."""
@@ -46,7 +49,7 @@ def is_same_under_rewriting(left: ExprNode, right: ExprNode):
     Check if two expression trees are equivalent under variable renaming.
     Returns mappings for left and right trees if they're the same, else None.
     """
-    if left.node_count != right.node_count:
+    if left.node_count != right.node_count or left.leafs != right.leafs:
         return None
 
     def traverse(node, mapping):

@@ -11,7 +11,7 @@ For a more concise syntax, but more importantly to speed up elaboration (where t
 for each `◇` makes processing this file very slow) we defined custom syntax for defining
 equations, and a custom elaborator that instantiates the instante parameter of `◇`.
 -/
-elab tk:"equation " i:num " := " t:term : command => do
+elab mods:declModifiers tk:"equation " i:num " := " t:term : command => do
   let G := mkIdent (← MonadQuotation.addMacroScope `G)
   let inst := mkIdent (← MonadQuotation.addMacroScope `inst)
   let eqName := mkIdent (.mkSimple s!"Equation{i.getNat}")
@@ -44,3 +44,7 @@ elab tk:"equation " i:num " := " t:term : command => do
   elabCommand (← `(command| abbrev%$tk $eqName ($G : Type _) [$inst : Magma $G] := $t))
   elabCommand (← `(command| abbrev%$tk $lawName : MagmaLaw (Fin $freeMagmaSize) := $freeEqn))
   elabCommand (← `(command| abbrev%$tk $thmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $lawName ↔ $eqName G := $modelsIffLemma $lawName))
+  Command.liftTermElabM do
+    let declMods ← elabModifiers mods
+    -- Create a decl named `declName`
+    addDocString' (TSyntax.getId eqName) declMods.docString?

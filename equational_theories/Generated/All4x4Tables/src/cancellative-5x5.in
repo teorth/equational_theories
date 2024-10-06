@@ -1,7 +1,0 @@
-% Mace4 script for finding all 5x5 cancellative magmas.
-assign(domain_size, 5).
-assign(max_models, 999999).
-formulas(sos).
-  all x all y all z (x + y = x + z -> y = z).
-  all x all y all z (y + x = z + x -> y = z).
-end_of_list.
