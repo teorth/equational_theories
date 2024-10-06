@@ -240,13 +240,13 @@ theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) :
   have op_idem (x y : G) : (x ◇ x) ◇ (y ◇ y) = x ◇ y := by repeat rw [← h]
   exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
 
-theorem Lemma_eq1689_implies_h2 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, a ◇ ((((a ◇ b) ◇ b) ◇ c) ◇ c) = (a ◇ b) ◇ b := by
-  intro a b c
+theorem Lemma_eq1689_implies_h2 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, a ◇ ((((a ◇ b) ◇ b) ◇ c) ◇ c) = (a ◇ b) ◇ b :=
+  fun a b c ↦
   calc a ◇ ((((a ◇ b) ◇ b) ◇ c) ◇ c) = ((a ◇ a) ◇ ((a ◇ b) ◇ b)) ◇ ((((a ◇ b) ◇ b) ◇ c) ◇ c) := by rw [← h a a b, h a b c]
   _ = (a ◇ b) ◇ b := by rw [← h ((a ◇ b) ◇ b) (a ◇ a) c]
 
-theorem Lemma_eq1689_implies_h3 (G: Type*) [Magma G] (h: Equation1689 G) :∀ a b c d : G, (a ◇ (b ◇ c)) ◇ (c ◇ ((c ◇ d) ◇ d)) = b ◇ c := by
-  intro a b c d
+theorem Lemma_eq1689_implies_h3 (G: Type*) [Magma G] (h: Equation1689 G) :∀ a b c d : G, (a ◇ (b ◇ c)) ◇ (c ◇ ((c ◇ d) ◇ d)) = b ◇ c :=
+  fun a b c d ↦
   calc (a ◇ (b ◇ c)) ◇ (c ◇ ((c ◇ d) ◇ d)) = (a ◇ (b ◇ c)) ◇ (((b ◇ c) ◇ ((c ◇ d) ◇ d)) ◇ ((c ◇ d) ◇ d)) := by rw [← h c b d]
   _ = b ◇ c := by rw [← h]
 
@@ -255,24 +255,24 @@ theorem Lemma_eq1689_implies_h4 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a
   nth_rewrite 1 [h b (a ◇ b) c]
   rw [Lemma_eq1689_implies_h2 G h a b ((b ◇ c) ◇ c)]
 
-theorem Lemma_eq1689_implies_h5 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, ((a ◇ (b ◇ c)) ◇ c) ◇ c = b ◇ c := by
-  intro a b c
+theorem Lemma_eq1689_implies_h5 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, ((a ◇ (b ◇ c)) ◇ c) ◇ c = b ◇ c :=
+  fun a b c ↦
   calc ((a ◇ (b ◇ c)) ◇ c) ◇ c = (a ◇ (b ◇ c)) ◇ (c ◇ ((c ◇ b) ◇ b)) := by rw [Lemma_eq1689_implies_h4 G h]
   _ = b ◇ c := by rw [Lemma_eq1689_implies_h3 G h]
 
-theorem Lemma_eq1689_implies_h6 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c d : G, (a ◇ (b ◇ (c ◇ d))) ◇ (c ◇ d) = b ◇ (c ◇ d) := by
-  intro a b c d
+theorem Lemma_eq1689_implies_h6 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c d : G, (a ◇ (b ◇ (c ◇ d))) ◇ (c ◇ d) = b ◇ (c ◇ d) :=
+  fun a b c d ↦ by
   have hh : (a ◇ (b ◇ (c ◇ d))) ◇ (((b ◇ (c ◇ d)) ◇ d) ◇ d) = (b ◇ (c ◇ d)) := by rw [← h]
   rw [Lemma_eq1689_implies_h5 G h] at hh
   exact hh
 
-theorem Lemma_eq1689_implies_h7 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, (a ◇ (b ◇ c)) ◇ (b ◇ c) = a ◇ (b ◇ c) := by
-  intro a b c
+theorem Lemma_eq1689_implies_h7 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, (a ◇ (b ◇ c)) ◇ (b ◇ c) = a ◇ (b ◇ c) :=
+  fun a b c ↦
   calc (a ◇ (b ◇ c)) ◇ (b ◇ c) = ((a ◇ (a ◇ (b ◇ c))) ◇ (b ◇ c)) ◇ (b ◇ c) := by rw [Lemma_eq1689_implies_h6 G h]
   _ = a ◇ (b ◇ c) := by rw [Lemma_eq1689_implies_h5 G h]
 
-theorem Lemma_eq1689_implies_h8 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, ((a ◇ b) ◇ ((b ◇ c) ◇ c)) ◇ ((b ◇ c) ◇ c) = b := by
-  intro a b c
+theorem Lemma_eq1689_implies_h8 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a b c : G, ((a ◇ b) ◇ ((b ◇ c) ◇ c)) ◇ ((b ◇ c) ◇ c) = b :=
+  fun a b c ↦
   calc
     ((a ◇ b) ◇ ((b ◇ c) ◇ c)) ◇ ((b ◇ c) ◇ c) = ((a ◇ ((a ◇ b) ◇ ((b ◇ c) ◇ c))) ◇ ((b ◇ c) ◇ c)) ◇ ((b ◇ c) ◇ c) := by nth_rewrite 1 [h b a c]; rfl
     _ = (a ◇ b) ◇ ((b ◇ c) ◇ c) := by rw [Lemma_eq1689_implies_h5 G h]
@@ -422,10 +422,7 @@ theorem Equation2_implies_Equation3722 (G: Type _) [Magma G] (h: Equation2 G) : 
 
 @[equational_result]
 theorem Equation2_implies_Equation3744 (G: Type _) [Magma G] (h: Equation2 G) : Equation3744 G :=
-  fun x y z w ↦
-    calc x ◇ y
-    _ = x := (h (x ◇ y) x)
-    _ = (x ◇ z) ◇ (w ◇ y) := (h ((x ◇ z) ◇ (w ◇ y)) x).symm
+  fun x y z w ↦ by exact h _ _
 
 @[equational_result]
 theorem Equation2_implies_Equation5105 (G: Type _) [Magma G] (h: Equation2 G) : Equation5105 G :=
@@ -478,7 +475,7 @@ theorem Equation5_implies_Equation381 (G: Type _) [Magma G] (h: Equation5 G) : E
 
 @[equational_result]
 theorem Equation5_implies_Equation3722 (G: Type _) [Magma G] (h: Equation5 G) : Equation3722 G :=
-  fun x y ↦ h (x ◇ y) (x ◇ y)
+  fun _ _ ↦ h _ _
 
 @[equational_result]
 theorem Equation5_implies_Equation3744 (G: Type _) [Magma G] (h: Equation5 G) : Equation3744 G :=
@@ -501,34 +498,24 @@ theorem Equation5_implies_Equation4564 (G: Type _) [Magma G] (h: Equation5 G) : 
 theorem Equation5_implies_Equation4579 (G: Type _) [Magma G] (h: Equation5 G) : Equation4579 G :=
   fun x y z w u ↦
     calc x ◇ (y ◇ z)
-    _ = x ◇ z := by rw [← h z y]
-    _ = z := (h z x).symm
+    _ = z := h z y ▸ (h z x).symm
     _ = (w ◇ u) ◇ z := h z (w ◇ u)
 
 @[equational_result]
 theorem Equation39_implies_Equation381 (G: Type _) [Magma G] (h: Equation39 G) : Equation381 G :=
-  fun x y z ↦
-    calc x ◇ y
-    _ = y ◇ y := (h y x).symm
-    _ = (x ◇ z) ◇ y := h y (x ◇ z)
+  fun x y z ↦ (h y x).symm ▸ h y (x ◇ z)
 
 @[equational_result]
 theorem Equation41_implies_Equation381 (G: Type _) [Magma G] (h: Equation41 G) : Equation381 G :=
-  fun x y z ↦
-    calc x ◇ y
-    _ = x ◇ x := (h x x y).symm
-    _ = (x ◇ z) ◇ y := h x (x ◇ z) y
+  fun x y z ↦ (h x x y).symm ▸ h x (x ◇ z) y
 
 @[equational_result]
 theorem Equation41_implies_Equation3722 (G: Type _) [Magma G] (h: Equation41 G) : Equation3722 G :=
-  fun x y ↦ (h (x ◇ y) x y).symm
+  fun _ _ ↦ (h _ _ _).symm
 
 @[equational_result]
 theorem Equation41_implies_Equation3744 (G: Type _) [Magma G] (h: Equation41 G) : Equation3744 G :=
-  fun x y z w ↦
-    calc x ◇ y
-    _ = x ◇ x := (h x x y).symm
-    _ = (x ◇ z) ◇ (w ◇ y) := h x (x ◇ z) (w ◇ y)
+  fun x y z w ↦ (h x x y).symm ▸ h x (x ◇ z) (w ◇ y)
 
 @[equational_result]
 theorem Equation45_implies_Equation381 (G: Type _) [Magma G] (h: Equation45 G) : Equation381 G :=
@@ -544,10 +531,7 @@ theorem Equation46_implies_Equation3722 (G: Type _) [Magma G] (h: Equation46 G) 
 
 @[equational_result]
 theorem Equation46_implies_Equation3744 (G: Type _) [Magma G] (h: Equation46 G) : Equation3744 G :=
-  fun x y z w ↦
-    calc x ◇ y
-    _ = x ◇ x := (h x y x x)
-    _ = (x ◇ z) ◇ (w ◇ y) := (h (x ◇ z) (w ◇ y) x x).symm
+  fun _ _ _ _ ↦ (h _ _ _ _).symm
 
 @[equational_result]
 theorem Equation3744_implies_Equation4512 (G: Type _) [Magma G] (h: Equation3744 G) : Equation4512 G :=
@@ -769,8 +753,7 @@ theorem Equation43_not_implies_Equation387 : ∃ (G: Type) (_: Magma G), Equatio
 theorem Equation43_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation4512 G := by
   let hG : Magma ℕ := { op := fun x y ↦ x * y + 1 }
   refine ⟨ℕ, hG, fun _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]
-    ring
+  · dsimp [hG]; ring
   · simpa [hG] using h 0 0 1
 
 @[equational_result]
@@ -816,33 +799,28 @@ theorem Equation387_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equatio
 theorem Equation387_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation4512 G := by
   let hG : Magma Real := { op := fun x y ↦ (x + y) / 2 }
   refine ⟨ℝ, hG, fun _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]
-    ring
-  · specialize h 0 0 1
-    field_simp [hG] at h
+  · dsimp [hG]; ring
+  · specialize h 0 0 1; field_simp [hG] at h
 
 @[equational_result]
 theorem Equation4512_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation42 G := by
   let hG : Magma ℕ := { op := fun x y ↦ x + y }
   refine ⟨ℕ, hG, fun _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]
-    abel
+  · dsimp [hG]; abel
   · simpa [hG] using h 0 0 1
 
 @[equational_result]
 theorem Equation4512_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation4513 G := by
   let hG : Magma ℕ := { op := fun x y ↦ x + y }
   refine ⟨ℕ, hG, fun _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]
-    abel
+  · dsimp [hG]; abel
   · simpa [hG] using h 0 0 0 1
 
 @[equational_result]
 theorem Equation4513_not_implies_Equation4522 : ∃ (G: Type) (_: Magma G), Equation4513 G ∧ ¬ Equation4522 G := by
   let hG : Magma ℕ := { op := fun x y ↦ if x = 0 then (if y ≤ 2 then 1 else 2) else x }
   refine ⟨ℕ, hG, fun _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]
-    split_ifs <;> simp_all
+  · dsimp [hG]; split_ifs <;> simp_all
   · simpa [hG] using h 0 0 0 3 3
 
 -- use "saturating addition" on the set {1, 2, 3}, where we add in the normal way but cap the result at 3 (x*y = min(3, x+y)).
@@ -871,43 +849,37 @@ theorem add3_ (a b c : Th) : add a (add b c) = Th.t3 := by
 theorem Equation4582_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation39 G := by
   let hG : Magma ℕ := { op := fun x y ↦ if x = 1 ∧ y = 2 then 3 else 4 }
   refine ⟨ℕ, hG, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]
-    split_ifs <;> simp_all
+  · dsimp [hG]; split_ifs <;> simp_all
   · simpa [hG] using h 2 1
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation40 G := by
   let hG : Magma Th := { op := fun x y ↦ add x y}
-  have hh : Equation4582 Th := by
-    intro x y z w u v
+  have hh : Equation4582 Th := fun x y z w u v ↦
     calc
-      add x (add y z) = Th.t3 := by rw [add3_ x y z]
+      add x (add y z) = Th.t3 := by rw [add3_ x y z];
       _ = add (add w u) v := by rw [add3 w u v]
-  refine ⟨Th, hG, hh, fun h ↦ ?_⟩
-  exact absurd (h Th.t1 Th.t2) (fun hh ↦ by cases hh)
+  exact ⟨Th, hG, hh, fun h ↦ absurd (h Th.t1 Th.t2) (fun hh ↦ by cases hh)⟩
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation42 G := by
   let hG : Magma ℕ := { op := fun x y ↦ if x = 0 ∧ y = 0 then 1 else 2 }
   refine ⟨ℕ, hG, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]
-    split_ifs <;> simp_all
+  · dsimp [hG]; split_ifs <;> simp_all
   · simpa [hG] using h 0 0 1
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation43 G := by
   let hG : Magma ℕ := { op := fun x y ↦ if x = 1 ∧ y = 2 then 3 else 4 }
   refine ⟨ℕ, hG, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]
-    split_ifs <;> simp_all
+  · dsimp [hG]; split_ifs <;> simp_all
   · simpa [hG] using h 1 2
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation46 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation46 G := by
   let hG : Magma (Fin 3) := { op := fun x y ↦ if x = 2 ∧ y = 2 then 1 else 0 }
   refine ⟨Fin 3, hG, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]
-    split_ifs <;> simp_all
+  · dsimp [hG]; split_ifs <;> simp_all
   · simpa [hG] using h 0 0 2 2
 
 end Subgraph
