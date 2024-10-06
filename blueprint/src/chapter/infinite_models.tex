@@ -102,9 +102,9 @@ We also have such a non-implication involving two laws of order $4$:
   Equation 3588 is the law $0 \op 1 \formaleq 2 \op ((0 \op 1) \op 2)$ (or the equation $x \op y = z \op ((x \op y) \op z)$).
 \end{definition}
 
-\begin{theorem}\label{finite_imp_3994_3588_thm}\uses{eq3994,eq3588}
+\begin{theorem}[3994 implies 3588 for finite models]\label{finite_imp_3994_3588_thm}\uses{eq3994,eq3588}
   \lean{InfModel.Finite.Equation3994_implies_Equation3588}\leanok
-  All finite magmas which satisfy definition \ref{eq3994} also satisfy definition \ref{eq3588}
+  All finite magmas which satisfy definition \ref{eq3994} also satisfy definition \ref{eq3588}.
 \end{theorem}
 
 \begin{proof}\label{finite_imp_3994_3588} \leanok
@@ -115,7 +115,7 @@ We also have such a non-implication involving two laws of order $4$:
   they commute.
 \end{proof}
 
-\begin{theorem}\label{non_imp_3994_3588_thm}
+\begin{theorem}[3994 does not imply 3588 for infinite models]\label{non_imp_3994_3588_thm}
   \lean{InfModel.Equation3994_not_implies_Equation3588}\leanok
   There exists a magma which satisfies \ref{eq3994} and not \ref{eq3588}.
 \end{theorem}
@@ -127,4 +127,12 @@ We also have such a non-implication involving two laws of order $4$:
   Definition \ref{eq3994} is satisfied, because for even $z$ we get $z \oplus (x \op y) \oplus z = x \op y$
   and for odd $z$ we get $(x \op y) + 2 \dot - 2 = x \op y$.
   Setting $x = y = z = 1$, definition \ref{eq3588} isn't satisfied.
+\end{proof}
+
+The following result was established in \cite{austin_finite}:
+
+\begin{theorem}[Austin's finite model theorem]\label{austin-two} Any law with at most two variables has a non-trivial finite model.
+\end{theorem}
+
+\begin{proof}  If neither side of the law is a single variable then the zero law $x \op y = 0$ will work, so one can assume the law takes the form $x = f(x,y)$.  Consider a finite field $F$ with the operation $x \op y := ax+by$ for some coefficients $a,b \in F$.  Then the law becomes a pair of equations $P(a,b)=0$, $Q(a,b)=1$ in the coefficients for some polynomials $P,Q$ with integer coefficients, which one can verify to not divide each other (they have the same degree, and do not have the same set of non-zero monomials).  From Bezout's theorem, this equation has a solution in some field, and hence by the Lefschetz principle it has a solution in a finite field.
 \end{proof}
