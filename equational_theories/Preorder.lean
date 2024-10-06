@@ -38,14 +38,12 @@ theorem le_set {α} (l₁ l₂ : MagmaLaw α) (h : l₁ ≤ l₂) :
 
 /--
 The law `0 ≃ 0` is the maximal element in the pre-order on magma laws (over ℕ).  -/
-theorem Equation1_maximal (l : MagmaLaw ℕ) : l ≤ (0 ≃ 0) := by
-  intro _ _ _ _
-  simp only [satisfies, satisfiesPhi]
+theorem Equation1_maximal (l : MagmaLaw ℕ) : l ≤ (0 ≃ 0) :=
+  fun _ _ ↦ rfl
 
 theorem Equation2_all_eq {G} [Magma G] (h : G ⊧ (0 ≃ 1 : MagmaLaw ℕ)) :
-  ∀ (x y : G), x = y := by
-  intro x y
-  refine h (fun n => match n with
+    ∀ (x y : G), x = y := by
+  refine fun x y ↦ h (fun n => match n with
     | 0 => x
     | 1 => y
     | _ => x)
@@ -53,21 +51,18 @@ theorem Equation2_all_eq {G} [Magma G] (h : G ⊧ (0 ≃ 1 : MagmaLaw ℕ)) :
 theorem Equation2_implies (l : MagmaLaw ℕ) : (0 ≃ 1).implies l := by
   intro G inst h φ
   have hG := Equation2_all_eq h
-  simp [satisfies, satisfiesPhi, FreeMagma.evalInMagma]
+  simp only [satisfiesPhi]
   induction l.lhs <;> induction l.rhs <;>
-    simp [FreeMagma.evalInMagma, hG] <;> aesop
+    simp only [FreeMagma.evalInMagma] <;> aesop
 
 /--
 The law `0 ≃ 1` is the minimal element in the pre-order on magma laws (over ℕ).  -/
-theorem Equation2_minimal (l : MagmaLaw ℕ) : (0 ≃ 1) ≤ l := by
-  apply Equation2_implies
+theorem Equation2_minimal (l : MagmaLaw ℕ) : (0 ≃ 1) ≤ l := Equation2_implies _
 
 theorem implies_refl (l : MagmaLaw α) : l ≤ l := fun {G} [Magma G] a ↦ a
 
-theorem implies_trans {l₁ l₂ l₃ : MagmaLaw α} : l₁ ≤ l₂ → l₂ ≤ l₃ → l₁ ≤ l₃ := by
-  intro h₁ h₂ G inst h
-  dsimp only [satisfies, satisfiesPhi] at *
-  exact h₂ (h₁ h)
+theorem implies_trans {l₁ l₂ l₃ : MagmaLaw α} : l₁ ≤ l₂ → l₂ ≤ l₃ → l₁ ≤ l₃ :=
+  fun h₁ h₂ _ _ h ↦ h₂ (h₁ h)
 
 instance : Preorder (MagmaLaw α) where
   le_refl := implies_refl
@@ -77,14 +72,14 @@ theorem implies_eq_singleton_models {l₁ l₂ : MagmaLaw α} : l₁ ≤ l₂ �
   simp only [LE.le, implies, models, satisfiesSet, Ctx, Set.mem_singleton_iff, forall_eq]
 
 theorem Law.implies_fin_implies_nat {n : Nat} (hn : n ≠ 0) {l₁ l₂ : MagmaLaw (Fin n)}
-  (h : l₁.implies l₂) : (l₁.fmap Fin.val).implies (l₂.fmap Fin.val) := by
+    (h : l₁.implies l₂) : (l₁.fmap Fin.val).implies (l₂.fmap Fin.val) := by
   intro G inst hG
   rw [← satisfies_fin_satisfies_nat hn G l₂]
   rw [← satisfies_fin_satisfies_nat hn G l₁] at hG
   exact h hG
 
 theorem Law.leq_fin_leq_nat {n : Nat} (hn : n ≠ 0) {l₁ l₂ : MagmaLaw (Fin n)} (h : l₁ ≤ l₂) :
-  l₁.fmap Fin.val ≤ l₂.fmap Fin.val := by
-  apply Law.implies_fin_implies_nat hn; exact h
+    l₁.fmap Fin.val ≤ l₂.fmap Fin.val :=
+  implies_fin_implies_nat hn h
 
 end Law.MagmaLaw
