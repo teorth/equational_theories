@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Usage: just run with ./generate_5x5_refutations.sh
 # Final output will be in the raw_lean_output folder.

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import subprocess, json, random
 from tqdm import tqdm
 import time
