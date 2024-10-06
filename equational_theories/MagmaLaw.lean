@@ -102,34 +102,31 @@ theorem MagmaLaw.symm_symm {α : Type} (l : MagmaLaw α) : l.symm.symm = l := by
   simp [symm]
 
 theorem satisfiesPhi_symm_law {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α)
-  (h : satisfiesPhi φ E) : satisfiesPhi φ E.symm := by
-  simp [Law.MagmaLaw.symm, satisfiesPhi]
-  exact h.symm
+    (h : satisfiesPhi φ E) : satisfiesPhi φ E.symm := by
+  simp only [satisfiesPhi, MagmaLaw.symm]; exact h.symm
 
 theorem satisfiesPhi_symm {α G : Type} [Magma G] (φ : α → G) (w₁ w₂ : FreeMagma α)
-  (h : satisfiesPhi φ (w₁ ≃ w₂)) : satisfiesPhi φ (w₂ ≃ w₁) := Law.satisfiesPhi_symm_law φ (w₁ ≃ w₂) h
+    (h : satisfiesPhi φ (w₁ ≃ w₂)) : satisfiesPhi φ (w₂ ≃ w₁) :=
+  Law.satisfiesPhi_symm_law φ (w₁ ≃ w₂) h
 
-theorem satisfies_symm_law {α : Type} (G : Type) [Magma G] (E : MagmaLaw α)
-  (h : G ⊧ E) :  G ⊧ E.symm := fun φ ↦ satisfiesPhi_symm_law φ E (h φ)
+theorem satisfies_symm_law {α : Type} (G : Type) [Magma G] (E : MagmaLaw α) (h : G ⊧ E) :
+    G ⊧ E.symm :=
+  fun φ ↦ satisfiesPhi_symm_law φ E (h φ)
 
-theorem satisfies_symm {α : Type} (G : Type) [Magma G] (w₁ w₂ : FreeMagma α)
-  (h : G ⊧ w₁ ≃ w₂) :  G ⊧ w₂ ≃ w₁ := satisfies_symm_law G (w₁ ≃ w₂) h
+theorem satisfies_symm {α : Type} (G : Type) [Magma G] (w₁ w₂ : FreeMagma α) (h : G ⊧ w₁ ≃ w₂) :
+    G ⊧ w₂ ≃ w₁ :=
+  satisfies_symm_law G (w₁ ≃ w₂) h
 
 def set_symm {α} (Γ : Set (MagmaLaw α)) : Set (MagmaLaw α) := { (γ.symm) | γ ∈ Γ}
 
 theorem satisfiesSet_symm {α : Type} (G : Type) [Magma G] (Γ : Set (MagmaLaw α))
-  (h :  G ⊧ Γ) : G ⊧ (set_symm Γ) := by
-  simp [set_symm]
-  intro E ⟨Esymm, ⟨hEsymm,hEsymmE⟩⟩
-  rw [← hEsymmE]
-  apply Law.satisfies_symm
-  apply h
-  exact hEsymm
+  (h :  G ⊧ Γ) : G ⊧ (set_symm Γ) :=
+  fun _ ⟨_, ⟨hEsymm, hEsymmE⟩⟩ ↦ hEsymmE ▸ Law.satisfies_symm _ _ _ (h _ hEsymm)
 
 theorem models_symm_law {α} (Γ : Ctx α) (E : MagmaLaw α) (h : Γ ⊧ E) : Γ   ⊧ E.symm :=
- fun G [Magma G] hsatisfiesSet ↦ satisfies_symm_law G E (h G hsatisfiesSet)
+  fun G [Magma G] hsatisfiesSet ↦ satisfies_symm_law G E (h G hsatisfiesSet)
 
 theorem models_symm {α} (Γ : Ctx α) (w₁ w₂ : FreeMagma α) (h : Γ ⊧ w₁ ≃ w₂) : Γ ⊧ w₂ ≃ w₁ :=
-   Law.models_symm_law Γ (w₁ ≃ w₂) h
+  Law.models_symm_law Γ (w₁ ≃ w₂) h
 
 end Law
