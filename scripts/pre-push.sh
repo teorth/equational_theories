@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ################################################################################
 # TEST SCRIPT TO RUN BEFORE PUSHING CHANGES
 #

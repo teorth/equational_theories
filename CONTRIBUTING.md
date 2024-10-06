@@ -34,7 +34,7 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 > - You might want to install the git pre-push hook by running:
 >
 >   ```bash
->   source scripts/install_pre-push.sh
+>   scripts/install_pre-push.sh
 >   ```
 >   This will automatically run checks before every push, reducing the risk of CI check failures.
 >
