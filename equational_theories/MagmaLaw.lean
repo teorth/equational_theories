@@ -74,12 +74,12 @@ end DeriveDef
 def satisfiesPhi {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
   FreeMagma.evalHom φ E.lhs = FreeMagma.evalHom φ E.rhs
 
-abbrev satisfies {α : Type} (G : Type) [Magma G] (E : MagmaLaw α) := ∀ (φ : α → G), satisfiesPhi φ E
+def satisfies {α : Type} (G : Type) [Magma G] (E : MagmaLaw α) := ∀ (φ : α → G), satisfiesPhi φ E
 
-abbrev satisfiesSet {α : Type} (G : Type) [Magma G] (Γ : Set (MagmaLaw α)) : Prop :=
+def satisfiesSet {α : Type} (G : Type) [Magma G] (Γ : Set (MagmaLaw α)) : Prop :=
   ∀ E ∈ Γ, satisfies G E
 
-abbrev models {α} (Γ : Ctx α) (E : MagmaLaw α) : Prop :=
+def models {α} (Γ : Ctx α) (E : MagmaLaw α) : Prop :=
   ∀ (G : Type)[Magma G], satisfiesSet G Γ → satisfies G E
 
 /-- Notation for derivability and entailment -/
