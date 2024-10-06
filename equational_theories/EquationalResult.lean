@@ -55,6 +55,19 @@ initialize equationalResultsExtension : SimplePersistentEnvExtension Entry (Arra
     addEntryFn    := Array.push
   }
 
+def Entry.keepCore (e : Entry) : Option Entry :=
+  match e.variant with
+  | .implication { lhs, rhs } =>
+      if isCoreEquationName lhs && isCoreEquationName rhs
+      then some e
+      else none
+  | .facts { satisfied, refuted } =>
+      let sat1 := satisfied.filterMap filterCoreEquationName
+      let ref1 := refuted.filterMap filterCoreEquationName
+      if sat1.isEmpty || ref1.isEmpty then none
+      else some <| {e with variant := .facts {satisfied := sat1, refuted := ref1}}
+  | .unconditional eq => if isCoreEquationName eq then some e else none
+
 namespace Result
 
 private def equationalResultHelpString : String :=
