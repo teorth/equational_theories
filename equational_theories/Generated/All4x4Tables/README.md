@@ -84,26 +84,26 @@ Some information about the overlap between different magma sizes:
 
 ```
 When going from ../data/refutations2x2.txt to ../data/refutations3x3.txt
-The number of solved equtions goes from 12567055 to 13602457 for a delta of 1035402
+The number of solved equations goes from 12567055 to 13602457 for a delta of 1035402
 And ../data/refutations3x3.txt has 9 / 299 already covered magmas
 
 When going from ../data/refutations2x2.txt to ../data/refutations4x4.txt
-The number of solved equtions goes from 12567055 to 13732566 for a delta of 1165511
+The number of solved equations goes from 12567055 to 13732566 for a delta of 1165511
 And ../data/refutations4x4.txt has 7 / 515 already covered magmas
 
 When going from ../data/refutations3x3.txt to ../data/refutations2x2.txt
-The number of solved equtions goes from 13345053 to 13602457 for a delta of 257404
+The number of solved equations goes from 13345053 to 13602457 for a delta of 257404
 And ../data/refutations2x2.txt has 8 / 10 already covered magmas
 
 When going from ../data/refutations3x3.txt to ../data/refutations4x4.txt
-The number of solved equtions goes from 13345053 to 13760346 for a delta of 415293
+The number of solved equations goes from 13345053 to 13760346 for a delta of 415293
 And ../data/refutations4x4.txt has 100 / 515 already covered magmas
 
 When going from ../data/refutations4x4.txt to ../data/refutations2x2.txt
-The number of solved equtions goes from 13732566 to 13732566 for a delta of 0
+The number of solved equations goes from 13732566 to 13732566 for a delta of 0
 And ../data/refutations2x2.txt has 10 / 10 already covered magmas
 
 When going from ../data/refutations4x4.txt to ../data/refutations3x3.txt
-The number of solved equtions goes from 13732566 to 13760346 for a delta of 27780
+The number of solved equations goes from 13732566 to 13760346 for a delta of 27780
 And ../data/refutations3x3.txt has 291 / 299 already covered magmas
 ```
