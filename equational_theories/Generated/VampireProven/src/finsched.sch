@@ -1,0 +1,12 @@
+fmb+10_1:1_sil=256000:i=98885:tgt=full:fmbsr=1.3:fmbss=10_0
+fmb+10_1:1_sil=256000:fmbes=contour:i=214858:bce=on_0
+fmb+10_1:1_sil=256000:fmbss=23:fmbes=contour:newcnf=on:fmbsr=1.14:i=152523:nm=2:gsp=on:rp=on_0
+fmb+10_1:1_sil=8000:fde=unused:fmbes=contour:i=7859:nm=2:fmbswr=0_0
+fmb+10_1:1_sil=32000:i=23580:newcnf=on_0
+fmb+10_1:1_sil=32000:fmbss=17:fmbsr=2.0:i=2892_0
+fmb+10_1:1_fmbas=expand:sil=128000:i=131798:nm=2:fmbksg=on:fmbss=4:fmbsr=1.77:rp=on_0
+fmb+10_1:1_sil=16000:fmbss=16:i=3451:newcnf=on_0
+fmb+10_1:1_sil=64000:i=50409:nm=2:gsp=on_0
+fmb+10_1:1_fmbas=expand:sil=128000:i=17908:nm=2:fmbss=15:gsp=on_0
+fmb+10_1:1_i=30223_0
+fmb+10_1:1_sil=128000:fmbss=21:newcnf=on:i=44200:gsp=on_0
