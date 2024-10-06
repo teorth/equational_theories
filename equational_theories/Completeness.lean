@@ -9,10 +9,11 @@ open FreeMagma
 open Law
 
 theorem SubstEval {α} G [Magma G] (t : FreeMagma α) (σ : α → FreeMagma α) (φ : α → G) :
-    evalInMagma φ (t ⬝ σ) = evalInMagma (evalInMagma φ ∘ σ) t := by
-  cases t
+    evalHom φ (t ⬝ σ) = evalHom (evalHom φ ∘ σ) t := by
+  induction t
   case Leaf => rfl
-  case Fork t₁ t₂ => simp only [evalInMagma]; repeat rw [SubstEval]
+  case Fork t₁ t₂ ih₁ ih₂ =>
+    simp only [substFreeMagma, ← FreeMagma_op_eq_fork, MagmaHom.map_op, ih₁, ih₂]
 
 theorem Soundness {α} (Γ : Ctx α) E (h : Γ ⊢ E) : Γ ⊧ E := by
   intros G _
@@ -35,7 +36,7 @@ theorem Soundness {α} (Γ : Ctx α) E (h : Γ ⊢ E) : Γ ⊧ E := by
     rw [Soundness _ _ prf]; trivial
   case Cong _ _ _ prf₁ prf₂ =>
     intros _ _
-    simp [models, satisfiesPhi, evalInMagma] at *
+    simp [models, satisfiesPhi, ← FreeMagma_op_eq_fork, MagmaHom.map_op, evalInMagma] at *
     rw [Soundness _ _ prf₁, Soundness _ _ prf₂] <;> trivial
 
 -- A little trickery here: since we'd rather have the derivations in Type
@@ -82,14 +83,14 @@ instance FreeMagmaWithLaws.Magma {α} (Γ : Ctx α) : Magma (FreeMagmaWithLaws �
   { op := ForkWithLaws Γ }
 
 theorem FreeMagmaWithLaws.evalInMagmaIsQuot {α} (Γ : Ctx α) (t : FreeMagma α) (σ : α → FreeMagma α):
-    evalInMagma (embed Γ ∘ σ) t = embed Γ (t ⬝ σ) := by
-  cases t <;> rw [evalInMagma]
+    evalHom (embed Γ ∘ σ) t = embed Γ (t ⬝ σ) := by
+  cases t
   case Leaf => rfl
   case Fork =>
-    simp only [Magma.op, ForkWithLaws]
-    repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot]
-    simp only [Quotient.lift₂]
-    apply Quot.sound; rw [substFreeMagma]
+    simp only [substFreeMagma, ← FreeMagma_op_eq_fork, MagmaHom.map_op, ForkWithLaws]
+    rw [FreeMagmaWithLaws.evalInMagmaIsQuot, FreeMagmaWithLaws.evalInMagmaIsQuot]
+    simp [Quotient.lift₂]
+    apply Quot.sound
     exact ⟨derive'.Ref _ _⟩
 
 theorem substLFId {α} (t : FreeMagma α) : t ⬝ Lf = t := by
@@ -102,7 +103,7 @@ def LfEmbed {α} (Γ : Ctx α) : α → FreeMagmaWithLaws Γ := embed Γ ∘ Lf
 -- Mostly forward reasoning here, so we delay the intros.
 theorem FreeMagmaWithLaws.isDerives {α} (Γ : Ctx α) (E : MagmaLaw α) :
   FreeMagmaWithLaws Γ ⊧ E → Nonempty (Γ ⊢' E) := by
-  simp [satisfies, satisfiesPhi, evalInMagma]
+  simp [satisfies, satisfiesPhi]
   intros eq; have h := (eq (LfEmbed Γ))
   simp only [LfEmbed] at h
   repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot] at h

@@ -58,7 +58,7 @@ theorem Equation2_implies (l : MagmaLaw ℕ) : (0 ≃ 1).implies l := by
   have hG := Equation2_all_eq h
   simp [satisfies, satisfiesPhi, FreeMagma.evalInMagma]
   induction l.lhs <;> induction l.rhs <;>
-    simp [FreeMagma.evalInMagma, hG] <;> aesop
+    simp [FreeMagma.evalHom, hG] <;> aesop
 
 /--
 The law `0 ≃ 1` is the minimal element in the pre-order on magma laws (over ℕ).  -/

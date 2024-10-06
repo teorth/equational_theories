@@ -1,5 +1,7 @@
 import equational_theories.EquationalResult
 import equational_theories.Homomorphisms
+-- import equational_theories.AllEquations
+import equational_theories.Homomorphisms
 
 universe u
 universe v
@@ -19,6 +21,9 @@ instance {n : Nat} : OfNat (FreeMagma ℕ) n := ⟨FreeMagma.Leaf n⟩
 
 infixl:65 " ⋆ " => FreeMagma.Fork
 
+instance {α : Type _} : Coe α (FreeMagma α) where
+  coe a := FreeMagma.Leaf a
+
 @[simp]
 theorem FreeMagma_op_eq_fork (α : Type u) (a b : FreeMagma α) : a ◇ b = a ⋆ b := rfl
 
@@ -35,6 +40,14 @@ def evalInMagma {α : Type u} {G : Type v} [Magma G] (f : α -> G) : FreeMagma �
 def evalHom {α : Type u} {G : Type v} [Magma G] (f : α → G) : FreeMagma α →◇ G where
    toFun := evalInMagma f
    map_op' := fun _ _ ↦ refl _
+
+theorem evalHom_Hom {α : Type u} {G : Type v} [Magma G] (f : α → G) (map : G →◇ G) :
+    evalHom (map ∘ f) = (evalHom f).comp map := by
+  ext t
+  induction t with
+  | Leaf a => rfl
+  | Fork lchild rchild ihl ihr =>
+    simp only [← FreeMagma_op_eq_fork, MagmaHom.map_op, ihl, ihr]
 
  def fmapFreeMagma {α : Type u} {β : Type v} (f : α → β) : FreeMagma α → FreeMagma β :=
     evalInMagma (Lf ∘ f)
