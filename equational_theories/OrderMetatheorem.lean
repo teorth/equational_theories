@@ -2,8 +2,7 @@ import equational_theories.Completeness
 import equational_theories.Counting
 
 theorem FreeMagma.orderLtSubst {α} (t : FreeMagma α) (σ : α → FreeMagma α) :
-  FreeMagma.order t ≤ FreeMagma.order (t ⬝ σ) :=
-by
+  FreeMagma.order t ≤ FreeMagma.order (t ⬝ σ) := by
   cases t <;> simp [order]
   case Fork t u =>
     have h₁ := FreeMagma.orderLtSubst t σ
@@ -40,12 +39,11 @@ theorem derive.PreservesOrder {α} (Γ : Ctx α) (n : Nat) (sizeBound : Ctx.IsOf
     simp at ih h2 ⊢
     specialize ih (by rintro rfl; contradiction)
     exact ⟨ih.1.trans <| t.orderLtSubst σ, ih.2.trans <| u.orderLtSubst σ⟩
-  | Cong t₁ t₂ u₁ u₂ _ _ ih₁ ih₂ => 
+  | Cong t₁ t₂ u₁ u₂ _ _ ih₁ ih₂ =>
     simp at ih₁ ih₂ h2 ⊢
     by_cases h : t₁ = t₂ <;> [specialize ih₂ (h2 h); specialize ih₁ h] <;> omega
 
 theorem models.PreservesOrder {α} (Γ : Ctx α) (n : Nat)(sizeBound : Ctx.IsOfOrder Γ n) (E : MagmaLaw α)(h : Γ ⊧ E) :
-  E.lhs = E.rhs ∨ n ≤ MagmaLaw.order E :=
-by
+  E.lhs = E.rhs ∨ n ≤ MagmaLaw.order E := by
   have ⟨ h ⟩ := Completeness _ _ h
   apply derive.PreservesOrder <;> trivial
