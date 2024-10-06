@@ -4,10 +4,8 @@ import equational_theories.FreeMagma
 universe u
 
 theorem ExpressionEqualsAnything_implies_Equation2 (G: Type u) [Magma G] :
-    (∃ n : Nat, ∃ expr : FreeMagma (Fin n), ∀ x : G, ∀ sub : Fin n → G, x = expr.evalInMagma sub) → Equation2 G := by
-  intro ⟨n, expr, univ⟩ x y
-  let constx : Fin n → G := fun _ ↦ x
-  exact (univ x constx).trans (univ y constx).symm
+    (∃ n : Nat, ∃ expr : FreeMagma (Fin n), ∀ x : G, ∀ sub : Fin n → G, x = expr.evalInMagma sub) → Equation2 G :=
+  fun  ⟨_, _, univ⟩ x y ↦ (univ x fun _ ↦ x).trans (univ y fun _ ↦ x).symm
 
 theorem Equation37_implies_Equation2 (G : Type u) [Magma G] :
     (∀ x y z w : G, x = (y ◇ z) ◇ w) → Equation2 G :=

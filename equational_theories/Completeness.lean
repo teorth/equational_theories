@@ -18,18 +18,18 @@ theorem Soundness {α} (Γ : Ctx α) E (h : Γ ⊢ E) : Γ ⊧ E := by
   intros G _
   cases h
   case Ax mem => exact fun a ↦ a E mem
-  case Ref => exact fun _ ↦ congrFun rfl
+  case Ref => exact fun _ _ ↦ rfl
   -- FIXME: try aesop here, might be a 1-liner
   case Sym t u prf =>
-    intros φ mset
+    intros _ _
     simp only [satisfiesPhi] at *
     symm; apply Soundness _ _ prf; trivial
   case Trans _ _ _ prf₁ prf₂ =>
-    intros φ mset
+    intros _ _
     simp [models, satisfiesPhi] at *
     rw [Soundness _ _ prf₁, Soundness _ _ prf₂] <;> trivial
   case Subst t u σ prf =>
-    intros φ mset
+    intros _ _
     simp [models, satisfiesPhi, evalInMagma] at *
     repeat rw [SubstEval]
     rw [Soundness _ _ prf]; trivial
@@ -50,9 +50,7 @@ theorem RelOfLaws.isEquivalence {α} (Γ : Ctx α) : Equivalence (RelOfLaws Γ) 
   case refl => intros x; constructor; apply derive'.Ref
   case symm =>
     intros x y h
-    constructor
-    apply derive'.Sym
-    assumption
+    exact ⟨derive'.Sym _ _ _ h⟩
   case trans =>
     intros x y z h₁ h₂
     constructor
@@ -88,7 +86,7 @@ theorem FreeMagmaWithLaws.evalInMagmaIsQuot {α} (Γ : Ctx α) (t : FreeMagma α
   case Fork =>
     simp only [Magma.op, ForkWithLaws]
     repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot]
-    simp only [Quotient.lift₂]
+    rw [Quotient.lift₂]
     apply Quot.sound; rw [substFreeMagma]
     exact ⟨derive'.Ref _ _⟩
 
@@ -115,25 +113,22 @@ theorem FreeMagmaWithLaws.isDerives {α} (Γ : Ctx α) (E : MagmaLaw α) :
 theorem PhiAsSubst_aux {α} (Γ : Ctx α) (φ : α → FreeMagmaWithLaws Γ) :
   ∃ (σ : α → FreeMagma α), ∀ x, φ x = (embed Γ) (σ x) := by
   apply Classical.axiomOfChoice (r := λ x y ↦ φ x = (embed Γ) y)
-  intros x
+  intro x
   have ⟨a, h⟩ := (Quotient.exists_rep (φ x))
-  exists a
-  symm; trivial
+  exact ⟨a, h.symm⟩
 
 theorem PhiAsSubst {α} (Γ : Ctx α) (φ : α → FreeMagmaWithLaws Γ) :
   ∃ (σ : α → FreeMagma α), φ = (embed Γ) ∘ σ := by
   have ⟨σ, h⟩ := PhiAsSubst_aux Γ φ
-  exact ⟨σ, funext fun x ↦ h x⟩
+  exact ⟨σ, funext fun _ ↦ h _⟩
 
 theorem FreeMagmaWithLaws.isModel {α} (Γ : Ctx α) : FreeMagmaWithLaws Γ ⊧ Γ := by
-  simp [satisfiesSet]
-  intros E mem φ
-  simp [satisfiesPhi]
+  intro E mem φ
+  simp only [satisfiesPhi]
   have ⟨σ, eq_sig⟩ := (PhiAsSubst _ φ)
   rw [eq_sig]
   repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot]
-  apply Quotient.sound; simp [HasEquiv.Equiv, Setoid.r, RelOfLaws]
-  exact ⟨derive'.SubstAx _ _ mem _⟩
+  exact Quotient.sound ⟨derive'.SubstAx _ _ mem _⟩
 
 -- Birkhoff's completeness theorem
 theorem Completeness' {α} (Γ : Ctx α) (E : MagmaLaw α) (h : Γ ⊧ E) : Nonempty (Γ ⊢' E) :=
