@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import numpy as np
 def parse_line(line):
     # Extract the list from the line using string manipulation
