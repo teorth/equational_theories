@@ -6,17 +6,17 @@ import equational_theories.DecideBang
 
 /-!
 This file is generated from the following operator table:
-[[2,1,1,1],[3,1,1,1],[1,3,3,3],[1,3,3,3]]
+[[2,0,0,3],[2,2,1,3],[0,3,3,2],[3,1,2,0]]
 -/
 
 set_option linter.unusedVariables false
 
 /-! The magma definition -/
-def «FinitePoly [[2,1,1,1],[3,1,1,1],[1,3,3,3],[1,3,3,3]]» : Magma (Fin 4) where
-  op := memoFinOp fun x y => [[2,1,1,1],[3,1,1,1],[1,3,3,3],[1,3,3,3]][x.val]![y.val]!
+def «FinitePoly [[2,0,0,3],[2,2,1,3],[0,3,3,2],[3,1,2,0]]» : Magma (Fin 4) where
+  op := memoFinOp fun x y => [[2,0,0,3],[2,2,1,3],[0,3,3,2],[3,1,2,0]][x.val]![y.val]!
 
 /-! The facts -/
 @[equational_result]
-theorem «Facts from FinitePoly [[2,1,1,1],[3,1,1,1],[1,3,3,3],[1,3,3,3]]» :
-  ∃ (G : Type) (_ : Magma G), Facts G [4521] [4396, 4398, 4433, 4435, 4470, 4472, 4583, 4599, 4629, 4631] :=
-    ⟨Fin 4, «FinitePoly [[2,1,1,1],[3,1,1,1],[1,3,3,3],[1,3,3,3]]», by decideFin!⟩
+theorem «Facts from FinitePoly [[2,0,0,3],[2,2,1,3],[0,3,3,2],[3,1,2,0]]» :
+  ∃ (G : Type) (_ : Magma G), Facts G [2540] [4065] :=
+    ⟨Fin 4, «FinitePoly [[2,0,0,3],[2,2,1,3],[0,3,3,2],[3,1,2,0]]», by decideFin!⟩

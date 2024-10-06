@@ -129,7 +129,8 @@ Here is a list of human-contributed Lean files with mathematical content:
 - [`CentralGroupoids.lean`](equational_theories/CentralGroupoids.lean)  Facts about central groupoids.
 - [`OrderMetatheorem.lean`](equational_theories/OrderMetatheorem.lean) Metatheorems about the ordering relation on laws.
 - [`SmallMagmas.lean`](equational_theories/SmallMagmas.lean) Results about very small magmas
-
+- [`Z3Counterexamples.lean`](equational_theories/Z3Counterexamples.lean) Counterexamples generated automatically from the Z3 prover
+- [`StringMagmas.lean`](equational_theories/StringMagmas.lean) Studies specific specific string magmas for counterexamples.
 
 
 At present, the API for magmas only allows for theorems that study a finite number of individual equational laws at a time.  We plan to expand the API to also allow one to establish metatheorems about entire classes of equations.

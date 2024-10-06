@@ -67,7 +67,7 @@ is satisfied by a magma $G$ if and only if
 \begin{equation}\label{comm-law-2}
  x \op y = y \op x
 \end{equation}
-for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} associated to the law \eqref{comm-law}.  One can think of equations as the ``semantic'' interpretation of a ``syntactic'' law.  However, we shall often abuse notation and a law with its associated equation thus we shall (somewhat carelessly) also refer to \eqref{comm-law-2} as ``the commutative law'' (rather than ``the commutative equation'').
+for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} associated to the law \eqref{comm-law}.  One can think of equations as the ``semantic'' interpretation of a ``syntactic'' law.  However, we shall often abuse notation and identify a law with its associated equation.  In particular, we shall (somewhat carelessly) also refer to \eqref{comm-law-2} as ``the commutative law'' (rather than ``the commutative equation'').
 
 \begin{definition}[Models]\label{models-def}
   \lean{models}\leanok
@@ -87,8 +87,8 @@ for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} ass
     \item $\Gamma\vdash w\formaleq w$ for any word $w$.
     \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w'\formaleq w$.
     \item if $\Gamma\vdash w\formaleq w'$ and $\Gamma\vdash w'\formaleq w''$ then $\Gamma\vdash w\formaleq w''$.
-    \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w\sigma\formaleq w'\sigma$, where $\sigma$ is an arbitrary map from $X$ to words in $M_X$ and $w\sigma$ replaces each occurrence of an element of $X$ with it's image by $\sigma$ in $w$.
-    \item if $\Gamma\vdash w_1\formaleq w_2$ and $\Gamma\vdash w_3\formaleq w_4$ then $\Gamma\vdash w_1 \op w_3\formaleq w2\op w_4$
+    \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w\sigma\formaleq w'\sigma$, where $\sigma$ is an arbitrary map from $X$ to words in $M_X$ and $w\sigma$ replaces each occurrence of an element of $X$ with its image by $\sigma$ in $w$.
+    \item if $\Gamma\vdash w_1\formaleq w_2$ and $\Gamma\vdash w_3\formaleq w_4$ then $\Gamma\vdash w_1 \op w_3\formaleq w_2\op w_4$
   \end{enumerate}
 \end{definition}
 
@@ -100,7 +100,7 @@ This definition is useful because of the following theorem:
 \end{theorem}
 \begin{proof}
   \leanok
-  (Sketch) The `only if' component is soundness, and follows from verifying that the rules of inference in Definition \ref{derivation-def} holds for $\models$.  The `if` part is completeness, and is proven by constructing the magma of words, quotiented out by the relation $\Gamma \vdash w \formaleq w'$, which is easily seen to be an equivalence relation respecting the magma operation.
+  (Sketch) The `only if' component is soundness, and follows from verifying that the rules of inference in Definition \ref{derivation-def} holds for $\models$.  The `if' part is completeness, and is proven by constructing the magma of words, quotiented out by the relation $\Gamma \vdash w \formaleq w'$, which is easily seen to be an equivalence relation respecting the magma operation.
 \end{proof}
 
 
@@ -177,4 +177,4 @@ This sequence is
 $$2, 5, 39, 364, 4284, 57882, 888365, \dots$$
 (\href{https://oeis.org/A376640}{OEIS A376640}).
 
-In particular, up to relabeling, symmetry, and triviality, there are exactly $2+5+39+364+4284=4694$ laws of total order at most $4$.  A list can be found \href{https://github.com/teorth/equational_theories/blob/main/data/equations.txt}{here}.  A script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}.  The list is sorted first by the total number of operations, then by the number of operations on the LHS. Within each such class we define an order on expressions by lexical order on variables (ordered $x, y, z, w, u, v$).  The equation are arranged to be minimal with respect to this sorting order, thus the LHS will be shorter than or equal than the RHS, and earlier in the lexical order if the LHS and RHS are of equal length.
+In particular, up to relabeling, symmetry, and triviality, there are exactly $2+5+39+364+4284=4694$ laws of total order at most $4$.  A list can be found \href{https://github.com/teorth/equational_theories/blob/main/data/equations.txt}{here}.  A script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}.  The list is sorted first by the total number of operations, then by the number of operations on the LHS.  Within each such class we define an order on expressions by lexical order on variables (ordered $x, y, z, w, u, v$).  The equations are arranged to be minimal with respect to this sorting order, thus the LHS either has fewer operations than the RHS or else it has the same number of operations and occurs earlier in lexical order than the RHS.
