@@ -170,12 +170,42 @@ $$ (a,b) \op (c,d) = (b,c).$$
 These are examples of central groupoids (Definition \ref{eq168}).
 
 \begin{theorem}[Natural central groupoid axiom]\label{natural-central-groupoid}  The law
-$$ 0 \formaleq (1 \circ ((2 \circ 0) \circ 3)) \circ (0 \circ 3)$$
+$$ 0 \formaleq (1 \op ((2 \op 0) \op 3)) \op (0 \op 3)$$
 or in equation form
-$$ x = y \circ ((z \circ x) \circ w) \circ (x \circ w)$$
-characterizes natural central groupoids. {\bf TODO: locate the equation number for this law.}
+\begin{equation}\label{26302}
+  x = (y \op ((z \op x) \op w)) \op (x \op w)
+\end{equation}
+(Equation 26302) characterizes natural central groupoids.
 \end{theorem}
 
 \begin{proof}
-  See \cite[Theorem 5]{knuth}.
+  See \cite[Theorem 5]{knuth}.  The proof is quite lengthy; a sketch is as follows. It is easy to see that natural central groupoids obey \eqref{26302}.  Conversely, if this law holds, then
+\begin{align*}
+  (y \op z) \op (z \op w) &= (( x \op ((w \op (y \op z)) \op w)) \op ((y \op z) \op w)) \op (z \op w)\\
+  &= z
+\end{align*}
+so we have a central groupoid.  Setting $y = (t \op t) \op t$, $z = t \op (t \op t)$, $w = t \op t$ in \eqref{26302} we also obtain
+$$ (x \op t) \op t = (t \op t) \op t.$$
+Using the notation
+$$ x^{(1)} := (x \op x) \op x, \quad x^{(2)} := x \op (x \op x)$$
+we then have
+\begin{align*}
+  x \op t &= ((x \op x) \op (x \op t)) \op ((x \op t) \op t) \\
+  &= x \op t^{(1)}.
+\end{align*}
+A lengthy computer-assisted argument then gave the dual identity
+$$ t^{(2)} \op x = t \op x$$
+Together, these give
+$$ x^{(2)} \op y^{(1)} = x \op y.$$
+Multiplying on the left by $x = x^{(1)}\op x^{(2)}$, one can conclude that
+$$ x^{(2)} = x \op (x \op y).$$
+One then has
+\begin{align*}
+  (x \op y)^{(1)} &= ((y \op x) \op (x \op y)) \op (x \op y) \\
+&= x \op (x \op y) \\
+&= x^{(2)}
+\end{align*}
+and a similar argument gives
+$$ (x \op y)^{(2)} = y^{(1)}.$$
+Since $(x \op x)^{(1)} = x^{(2)}$ and $(x \op x)^{(2)} = x^{(1)}$, we conclude that $x^{(1)}$ and $x^{(2)}$ are idempotent.  Since $x = x^{(1)} \op x^{(2)}$, we see that every $x$ is the product of two idempotents.  One can show that this representation is unique, and gives a canonical identification with a natural central groupoid.
 \end{proof}
