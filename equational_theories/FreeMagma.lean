@@ -54,8 +54,13 @@ def evalHom {α : Type u} {G : Type v} [Magma G] (f : α → G) : FreeMagma α �
          (Eq.symm $ g.map_op' txleft txright)
    exact (funext equiv)
 
- theorem FmapFreeMagmaUniversalProperty {α : Type u} [Magma α] {β : Type u} (f : α → β)
+ theorem FmapFreeMagmaUniversalProperty {α : Type u} {β : Type u} (f : α → β)
     : ∀ g : FreeMagma α →◇ FreeMagma β, g ∘ Lf = Lf ∘ f → fmapFreeMagma f = g :=
     EvalFreeMagmaUniversalProperty (Lf ∘ f)
+
+theorem evalInMagma_comp {α β} {G} [Magma G] (f : α → β) (g : β → G) :
+  ∀ (x : FreeMagma α), evalInMagma (g ∘ f) x = evalInMagma g (fmapFreeMagma f x) := by
+  intro x
+  induction x <;> simp [fmapFreeMagma, evalInMagma, *]
 
 end FreeMagma

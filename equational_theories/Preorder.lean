@@ -79,4 +79,15 @@ instance : Preorder (MagmaLaw α) where
 theorem implies_eq_singleton_models {l₁ l₂ : MagmaLaw α} : l₁ ≤ l₂ ↔ {l₁} ⊧ l₂ := by
   simp only [LE.le, implies, models, satisfiesSet, Ctx, Set.mem_singleton_iff, forall_eq]
 
+theorem Law.implies_fin_implies_nat {n : Nat} (hn : n ≠ 0) {l₁ l₂ : MagmaLaw (Fin n)}
+  (h : l₁.implies l₂) : (l₁.fmap Fin.val).implies (l₂.fmap Fin.val) := by
+  intro G inst hG
+  rw [← satisfies_fin_satisfies_nat hn G l₂]
+  rw [← satisfies_fin_satisfies_nat hn G l₁] at hG
+  exact h hG
+
+theorem Law.leq_fin_leq_nat {n : Nat} (hn : n ≠ 0) {l₁ l₂ : MagmaLaw (Fin n)} (h : l₁ ≤ l₂) :
+  l₁.fmap Fin.val ≤ l₂.fmap Fin.val := by
+  apply Law.implies_fin_implies_nat hn; exact h
+
 end Law.MagmaLaw
