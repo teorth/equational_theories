@@ -46,14 +46,21 @@ we conclude that $f_y$ is also a constant function.  But this function is alread
 
 To construct an infinite model, consider the magma of positive integers $\Z^+$ with the operation $x \op y$ defined by
 $$
-x \op y = \begin{cases}
-2^x, & y=x\\
-3^y, & x=1,\ y\not=1\\
-\min(j, 1), & x=3^j,\ y \neq x\\
-1, & else
+x \op y =
+\begin{cases}
+2^y, & x=  y            \\
+3^y, & x=  1,\ y \neq 1 \\
+  z, & x=3^z,\ y \neq x \\
+  1, & else
 \end{cases}.
 $$
-Then $y \op y = 2^y$ and $(y \op y) \op y = 1$ for all $y$.  Moreover, $(y \op y) \op z$ is a power of two for all $y, z$, and $(1 \op x) \op w = x$ for all $x$ whenever $w$ is a power of two.  It follows that this magma is a model of Definition \ref{eq374794}.
+Then $y \op y = 2^y$ and $(y \op y) \op y = 1$ for all $y$.  If $x\neq 1$ we have that
+$$ ((y \op y) \op y) \op x = 3^x, $$
+and since $(y \op y) \op z$ is a power of two for all $y, z$ it follows that
+$$ 3^x \op ((y \op y) \op z) = x. $$
+The case $x=1$ requires a further argument: observe that $w = (y \op y) \op z$ evaluates to one unless $z = 2^y$, in which case it evaluates to $2^{2^y}$ (which is greater than or equal to four).  In particular, $w$ never takes the value two.  Thus
+$$ (((y \op y) \op y) \op 1) \op ((y \op y) \op z) = 2 \op w = 1, $$
+concluding our proof that this magma is a model of Definition \ref{eq374794}
 \end{proof}
 
 An even shorter law (order $5$) was obtained by the same author in a follow-up paper \cite{Kisielewicz2}:
