@@ -12,3 +12,5 @@ import equational_theories.Generated.VampireProven.Proofs10
 import equational_theories.Generated.VampireProven.Proofs11
 import equational_theories.Generated.VampireProven.Proofs12
 import equational_theories.Generated.VampireProven.Proofs13
+import equational_theories.Generated.VampireProven.Disproofs1
+import equational_theories.Generated.VampireProven.Disproofs2
