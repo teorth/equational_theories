@@ -76,8 +76,7 @@ theorem elementsOfNumNodesEq_card_eq_catalan_mul_pow (n : ℕ) :
     intros h a
     cases' a with a l r
     · intro h; simp at h
-    · intro h1 h2
-      apply h
+    · refine fun h1 h2 ↦ h ?_
       trans (order l, order r)
       · simp at h1; simp [h1]
       · simp at h2; simp [h2]
