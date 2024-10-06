@@ -1,4 +1,6 @@
-const TEMPLATE = `class Magma (α : Type _) where
+const TEMPLATE = `import Mathlib.Tactic
+
+class Magma (α : Type _) where
   op : α → α → α
 
 infix:65 " ◇ " => Magma.op
@@ -7,10 +9,10 @@ abbrev EquationEQ1 (G: Type _) [Magma G] := ∀ CODE1
 
 abbrev EquationEQ2 (G: Type _) [Magma G] := ∀ CODE2
 
-theorem EquationEQ1_implies_EquationEQ2 (G: Type _) [Magma G] (h: EquationEQ1 G) : EquationEQ2 G := by 
+theorem EquationEQ1_implies_EquationEQ2 (G: Type _) [Magma G] (h: EquationEQ1 G) : EquationEQ2 G := by
   sorry
 
-theorem EquationEQ1_not_implies_EquationEQ2 : ∃ (G: Type _) (_: Magma G), EquationEQ1 G ∧ ¬ EquationEQ2 G := by
+theorem EquationEQ1_not_implies_EquationEQ2 : ∃ (G: Type) (_: Magma G), EquationEQ1 G ∧ ¬ EquationEQ2 G := by
   sorry
 `;
 
