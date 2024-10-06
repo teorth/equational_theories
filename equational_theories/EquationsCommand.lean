@@ -1,7 +1,6 @@
 import Lean
 import Qq
-import equational_theories.Magma
-import equational_theories.MagmaLaw
+import equational_theories.EquationLawConversion
 
 open Lean Elab Meta Command
 
@@ -17,6 +16,7 @@ elab tk:"equation " i:num " := " t:term : command => do
   let inst := mkIdent (← MonadQuotation.addMacroScope `inst)
   let eqName := mkIdent (.mkSimple s!"Equation{i.getNat}")
   let lawName := mkIdent (.mkSimple s!"Law{i.getNat}")
+  let thmName := mkIdent (.str lawName.getId "models_iff")
   let mut is := #[]
   let t := t.raw
   -- Collect all identifiers to introduce them as parameters
@@ -32,6 +32,7 @@ elab tk:"equation " i:num " := " t:term : command => do
       | none => `($a)
   let freeEqn : Term := ⟨freeEqn⟩
   let freeMagmaSize := Syntax.mkNumLit (toString is.size)
+  let modelsIffLemma : Ident := mkIdent (.mkSimple s!"models_iff_{is.size}")
   -- Rewrite `◇` to `inst.op` to avoid type class inference
   let t ← t.rewriteBottomUpM fun s => match s with
     | `($a ◇ $b) => `($(inst).op $a $b)
@@ -42,3 +43,4 @@ elab tk:"equation " i:num " := " t:term : command => do
     t ← `(∀ $(⟨i⟩) : $G, $t)
   elabCommand (← `(command| abbrev%$tk $eqName ($G : Type _) [$inst : Magma $G] := $t))
   elabCommand (← `(command| abbrev%$tk $lawName : MagmaLaw (Fin $freeMagmaSize) := $freeEqn))
+  elabCommand (← `(command| abbrev%$tk $thmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $lawName ↔ $eqName G := $modelsIffLemma $lawName))
