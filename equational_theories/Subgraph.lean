@@ -20,6 +20,10 @@ theorem Equation1_true (G: Type*) [Magma G] : Equation1 G :=
   fun _ ↦ rfl
 
 @[equational_result]
+theorem Equation2_implies_Equation1 (G: Type _) [Magma G] (h: Equation2 G) : Equation1 G :=
+  fun _ ↦ h _ _
+
+@[equational_result]
 theorem Equation2_implies_Equation3 (G: Type*) [Magma G] (h: Equation2 G) : Equation3 G :=
   fun _ ↦ h _ _
 
