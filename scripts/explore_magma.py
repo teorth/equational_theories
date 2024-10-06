@@ -136,12 +136,37 @@ def test_equation_ids(equation_ids, binary_operation_map):
     return results
 
 
+def text_to_magma_table(text):
+    non_whitespace_tokens = re.sub(r"\W+", " ", text).strip().split(" ")
+    try:
+        entries = [int(token) for token in non_whitespace_tokens]
+    except ValueError:
+        return None
+    row_length = int(math.sqrt(len(entries)))
+    if len(entries) != row_length**2:
+        return None
+    table = []
+    for i in range(len(entries) // row_length):
+        row = entries[(i * row_length) : (i + 1) * row_length]
+        table.append(row)
+    return table
+
+
+def json_magma_table_to_short_text(json_magma_table):
+    return re.sub(r"[\[\],]", "", json_magma_table).replace(" ", ",")
+
+
 def parse_magma_table_string(magma_table_string):
     if not magma_table_string:
         return None, None
+    parsed_magma_table = None
     try:
         parsed_magma_table = json.loads(magma_table_string.strip("'\""))
     except json.decoder.JSONDecodeError:
+        pass
+    if not parsed_magma_table:
+        parsed_magma_table = text_to_magma_table(magma_table_string)
+    if not parsed_magma_table:
         return None, None
     if not isinstance(parsed_magma_table, list):
         return None, None
@@ -232,9 +257,15 @@ def main():
         args.magma_table
     )
     if not parsed_magma_table:
+        print(f'ERROR: Unable to parse magma table "{args.magma_table}"')
+        print("")
         print(
-            f'ERROR: Unable to parse magma table (expecting an n×n table with 1 ≤ n ≤ 10 and symbols in the range [0, n-1]). Use the following format: "{EXAMPLE_MAGMA_TABLE}"'
+            "Expecting an n×n table (where 1 ≤ n ≤ 10) and symbols in the range [0, n-1]."
         )
+        print("")
+        print("Examples:")
+        print(f'  "{EXAMPLE_MAGMA_TABLE}"')
+        print(f'  "{json_magma_table_to_short_text(EXAMPLE_MAGMA_TABLE)}"')
         sys.exit(1)
 
     equations_map = read_equations_map()
