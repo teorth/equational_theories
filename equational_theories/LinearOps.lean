@@ -38,45 +38,19 @@ fn main() {
 ```
 -/
 @[equational_result]
-theorem Equation1286_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Facts G [1286] [3, 8, 23, 47, 99, 151, 203, 255, 326, 359, 375, 411, 614, 817, 1020, 1083, 1426, 1629, 1832, 2035, 2238, 2301, 2441, 2504, 2644, 2847, 3050, 3253, 3319, 3456, 3522, 3659, 3715, 3722, 3862, 3915, 4065, 4118, 4380, 4435, 4470] := by
-  refine ⟨ZMod 11, { op := fun x y => 1 * x + 7 * y }, ?_, ?_⟩
-  · intro x y; ring_nf; reduce_mod_char
-  constructorm* _ ∧ _
-  all_goals
-  · simp only [one_mul, self_eq_add_right, not_forall]
-    use 1
-    ring_nf
-    decide
+theorem Equation1286_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Facts G [1279, 1286] [3, 8, 23, 47, 99, 151, 203, 255, 326, 359, 375, 411, 614, 817, 1020, 1083, 1426, 1629, 1832, 2035, 2238, 2301, 2441, 2504, 2644, 2847, 3050, 3253, 3319, 3456, 3522, 3659, 3715, 3722, 3862, 3915, 4065, 4118, 4380, 4435, 4470] :=
+  ⟨ZMod 11, { op := fun x y => 1 * x + 7 * y }, by decide!⟩
 
 /-- Dual of the above. -/
 @[equational_result]
-theorem Equation2301_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Facts G [2301] [3, 8, 23, 47, 99, 151, 203, 255, 307, 326, 359, 375, 411, 614, 817, 1020, 1083, 1223, 1426, 1629, 1832, 2035, 2441, 2504, 2644, 2847, 3050, 3253, 3319, 3456, 3522, 3659, 3715, 3722, 3862, 3915, 4065, 4118, 4380, 4435, 4470] := by
-  refine ⟨ZMod 11, { op := fun x y => 7 * x + 1 * y }, ?_, ?_⟩
-  · intro x y
-    ring_nf
-    reduce_mod_char
-  constructorm* _ ∧ _
-  all_goals
-  · simp only [Equation3, one_mul, self_eq_add_right, not_forall]
-    use 1
-    ring_nf
-    decide
+theorem Equation2301_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Facts G [2328, 2301] [3, 8, 23, 47, 99, 151, 203, 255, 307, 326, 359, 375, 411, 614, 817, 1020, 1083, 1223, 1426, 1629, 1832, 2035, 2441, 2504, 2644, 2847, 3050, 3253, 3319, 3456, 3522, 3659, 3715, 3722, 3862, 3915, 4065, 4118, 4380, 4435, 4470] :=
+  ⟨ZMod 11, { op := fun x y => 7 * x + 1 * y }, by decide!⟩
 
 @[equational_result]
-theorem Equation3116_not_implies_Equation513 : ∃ (G : Type) (_ : Magma G), Facts G [3116] [513] := by
-  refine ⟨ZMod 11, { op := fun x y => 3 * x + 9 * y }, ?_, ?_⟩
-  · intro x y; ring_nf; reduce_mod_char
-  · simp only [one_mul, self_eq_add_right, not_forall]
-    use 1
-    ring_nf
-    decide
+theorem Equation3116_not_implies_Equation513 : ∃ (G : Type) (_ : Magma G), Facts G [3116] [513] :=
+  ⟨ZMod 11, { op := fun x y => 3 * x + 9 * y }, by decide!⟩
 
 -- dual of the above
 @[equational_result]
-theorem Equation511_not_implies_Equation3079 : ∃ (G : Type) (_ : Magma G), Facts G [511] [3079] := by
-  refine ⟨ZMod 11, { op := fun x y => 9 * x + 3 * y }, ?_, ?_⟩
-  · intro x y; ring_nf; reduce_mod_char
-  · simp only [one_mul, self_eq_add_right, not_forall]
-    use 1
-    ring_nf
-    decide
+theorem Equation511_not_implies_Equation3079 : ∃ (G : Type) (_ : Magma G), Facts G [511] [3079] :=
+  ⟨ZMod 11, { op := fun x y => 9 * x + 3 * y }, by decide!⟩
