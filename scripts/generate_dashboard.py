@@ -6,8 +6,8 @@ import os
 import subprocess
 
 def make_progress_badge(ratio):
-    percent = f"{ratio:.1%}"
-    return f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="20" role="img" aria-label="Progress: {percent}"><title>Progress: {percent}</title><linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient><clipPath id="r"><rect width="100" height="20" rx="3" fill="#fff"/></clipPath><g clip-path="url(#r)"><rect width="59" height="20" fill="#555"/><rect x="59" width="41" height="20" fill="#007ec6"/><rect width="100" height="20" fill="url(#s)"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110"><text aria-hidden="true" x="305" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="490">Progress</text><text x="305" y="140" transform="scale(.1)" fill="#fff" textLength="490">Progress</text><text aria-hidden="true" x="790" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="330">{percent}</text><text x="790" y="140" transform="scale(.1)" fill="#fff" textLength="330">{percent}</text></g></svg>'
+    percent = f"{ratio:.4%}"
+    return f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="124" height="20" role="img" aria-label="Progress: {percent}"><title>Progress: {percent}</title><linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient><clipPath id="r"><rect width="124" height="20" rx="3" fill="#fff"/></clipPath><g clip-path="url(#r)"><rect width="57" height="20" fill="#555"/><rect x="57" width="67" height="20" fill="#007ec6"/><rect width="124" height="20" fill="url(#s)"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110"><text aria-hidden="true" x="295" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="470">Progress</text><text x="295" y="140" transform="scale(.1)" fill="#fff" textLength="470">Progress</text><text aria-hidden="true" x="895" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="570">{percent}</text><text x="895" y="140" transform="scale(.1)" fill="#fff" textLength="570">{percent}</text></g></svg>'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="generate the dashboard markdown")
@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
     outfile.write("\n")
     ratio = proved_total / total
-    outfile.write(f"The implication graph is **{ratio:.3%}** complete.\n\n")
+    outfile.write(f"The implication graph is **{ratio:.4%}** complete.\n\n")
 
     outfile.write(
         """An implication is *explicitly true* or *explicitly false* if we directly have
@@ -92,7 +92,7 @@ if __name__ == '__main__':
         implicit_conjecture_false, unknown))
     outfile.write("\n")
     ratio = (proved_total + conjectured_total) / total
-    outfile.write(f"The implication graph is **{ratio:.3%}** complete if we include conjectures.\n\n")
+    outfile.write(f"The implication graph is **{ratio:.4%}** complete if we include conjectures.\n\n")
 
     outfile.write('## progress visualization\n\n')
     outfile.write('<img src="{{site.url}}/dashboard/outcomes.png" width="700"/>')
