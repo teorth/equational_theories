@@ -95,6 +95,9 @@ infix:50 " ⊢' " => (derive')
 
 namespace Law
 
+def MagmaLaw.fmap {α β : Type} (f : α → β) (l : MagmaLaw α) : MagmaLaw β :=
+  {lhs := l.lhs.fmapFreeMagma f, rhs := l.rhs.fmapFreeMagma f}
+
 def MagmaLaw.symm {α : Type} (l : MagmaLaw α) : MagmaLaw α := {lhs := l.rhs, rhs:=l.lhs}
 
 @[simp]
@@ -128,5 +131,28 @@ theorem models_symm_law {α} (Γ : Ctx α) (E : MagmaLaw α) (h : Γ ⊧ E) : Γ
 
 theorem models_symm {α} (Γ : Ctx α) (w₁ w₂ : FreeMagma α) (h : Γ ⊧ w₁ ≃ w₂) : Γ ⊧ w₂ ≃ w₁ :=
   Law.models_symm_law Γ (w₁ ≃ w₂) h
+
+def Fin.valHom {n} : FreeMagma (Fin n) →◇ FreeMagma ℕ := evalHom (Lf ∘ Fin.val)
+
+private def fin_split {n} {α} (hn : n ≠ 0) (f : Fin n → α) : ∃ g : ℕ → α, g ∘ Fin.val = f := by
+      let g := fun i : ℕ => if h : i < n then f ⟨i,h⟩ else f ⟨0, Nat.zero_lt_of_ne_zero hn⟩
+      use g
+      funext i
+      unfold g
+      simp
+
+theorem satisfies_fin_satisfies_nat {n : Nat} (hn : n ≠ 0) (G : Type) [Magma G] (E : MagmaLaw (Fin n))
+    : G ⊧ E ↔ G ⊧ E.fmap Fin.val := by
+    apply Iff.intro
+    · intro h φ
+      simp [satisfies, satisfiesPhi, MagmaLaw.fmap] at *
+      repeat rw [← evalInMagma_comp Fin.val φ]
+      exact h (φ ∘ Fin.val)
+    · intro h φ
+      simp [satisfies, satisfiesPhi, MagmaLaw.fmap] at *
+      have ⟨φ', hφ'_val_eq_phi⟩ := fin_split hn φ
+      have hφ' := h φ'
+      repeat rw [← evalInMagma_comp Fin.val φ', hφ'_val_eq_phi] at hφ'
+      exact hφ'
 
 end Law
