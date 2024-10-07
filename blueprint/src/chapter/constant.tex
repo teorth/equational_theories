@@ -1,12 +1,15 @@
 \chapter{Equivalence with the constant and singleton laws}
 
-\href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/Constant.lean}{85 laws} have been shown to be equivalent to the constant law (Definition \ref{eq46}), and \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/Singleton.lean}{815 laws} have been shown to be equivalent to the singleton law (Definition \ref{eq2}).
+\href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/Constant.lean}{85 laws}
+have been shown to be equivalent to the constant law (Definition \ref{eq46}), and
+\href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/Singleton.lean}{815 laws}
+have been shown to be equivalent to the singleton law (Definition \ref{eq2}).
 
-These are the laws up to 4 operations that follow from diagonalization of \ref{eq2} and of \ref{eq46}.
+These are the laws up to 4 operations that follow from diagonalization of \ref{eq2} and \ref{eq46}.
 
-In order to formalize these in Lean, a search was run on the list of equations to discover
+To formalize these in Lean, a search was run on the list of equations to discover
 diagonalizations of these two specific laws: equations of the form $x = R$ where $R$ doesn't include
-$x$, and equations of the form $x \circ y = R$ where R doesn't include $x$ or $y$.
+$x$, and equations of the form $x \circ y = R$ where $R$ doesn't include $x$ or $y$.
 
 The proofs themselves all look alike, and correspond exactly to the two steps described in the proof
 of \ref{diag}. The Lean proofs were generated semi-manually, using search-and-replace starting from
