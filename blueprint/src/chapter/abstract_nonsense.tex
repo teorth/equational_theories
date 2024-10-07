@@ -93,4 +93,64 @@ Every theory $\Gamma$ then gives a metatheorem about anti-implication:
   Let $\Gamma$ be the theory consisting of the commutative and associative laws, and an additional law $x^n \formaleq y^n$ for a fixed $n$, where $x^n$ denotes the magma operation applied to $n$ copies of $x$ (the order is irrelevant thanks to associativity), then one can check (for finite $X$) that the free magma $M_{X,\Gamma}$ can be taken to be $(\Z/n\Z)^X$ with the addition operation, and $\iota_{X,\Gamma}(x)$ being the standard generator associated to $x$. Then for any word $w$, $\varphi_{\iota_{X,\Gamma}}(w)$ corresponds to a tuple that assigns to each letter $x$ of the alphabet, the number of times $x$ occurs in $w$ modulo $n$. We conclude that if $w,w'$ have the same number of occurrences modulo $n$ of each letter of the alphabet, but $w'', w'''$ do not, then $w \formaleq w'$ cannot imply $w'' \formaleq w'''$. This is a stronger version of \Cref{variable-impl}.
 \end{example}
 
-Even for very simple theories $\Gamma$, the free magma $M_{X,\Gamma}$ subject to this theory, and the invariant $\varphi_{\iota_{X,\Gamma}}$ can get challenging to describe. Suppose for instance that $\Gamma$ consists only of the idempotent law, \Cref{eq3}. The free magma $M_{X,\Gamma}$ can then be described as the collection of words $w \in M_X$ which do not contain any subword of the form $w' \op w'$; the operation $\op_\Gamma$ on $M_{X,\Gamma}$ agrees with the operation $\op$ on $M_X$, with the exception that $w \op_\Gamma w$ is equal to $w$ rather than $w \op w$, and with $\iota_{X,\Gamma}$ being the identity embedding; note that with this definition, the magma operation $\op_\Gamma$ never leaves $M_{X,\Gamma}$ as it cannot create a word that contains a subword $w' \op w'$, unless such a subword already existed in one of the factors. The word $\varphi_{\iota_{X,\Gamma}}(w)$ can then be described as the unique reduction of $w$ after replacing any subword $w' \op w'$ with $w'$, though it requires some effort to verify that this reduction is unique. This gives a (rather complicated) criterion for anti-implication.
+\section{Confluent theories}
+
+One promising source of theories $\Gamma$ for which the free magma $M_{X,\Gamma}$ can be understood are the \emph{confluent theories}.
+
+\begin{definition}[Confluent theory]\label{confluent-theory}\uses{free-magma-def}  Let $\Gamma$ be a theory.  A word $w$ can be \emph{reduced} to another $w'$ if one can get from $w$ to $w'$ by a series of substitutions of laws in $\Gamma$, where no substitution increases the length of the word {\bf this is a working definition, might not be the best one to keep.}.  A theory $\Gamma$ is \emph{confluent} if whenever a word $w$ can be reduced to both $w'$ and $w''$, then both $w'$ and $w''$ can be reduced further to a common reduction $\tilde w$.  As such, each word $w \in M_X$ should have a \emph{unique simplification} to a reduced word $w_\Gamma$ in some normal form, for instance the shortest reduction that is minimal with respect to some suitable ordering such as lexicographical ordering.
+\end{definition}
+
+\begin{example}  The associative law, \Cref{eq4512}, appears to be confluent {\bf check this}.
+\end{example}
+
+\begin{example}  The theory consisting of both the associative and commutative laws, \Cref{eq4512}, \Cref{eq43}, appears to be confluent {\bf check this}.
+\end{example}
+
+\begin{example}  The idempotent law, \Cref{eq3}, appears to be confluent {\bf check this}.
+\end{example}
+
+The significance of confluent theories lies in
+
+\begin{theorem}[Free magma of a confluent theory]\label{free-confluent}\uses{confluent-theory}  Let $\Gamma$ be a confluent theory.  Then the free magma $M_{X,\Gamma}$ subject to this theory can be described as the space of reduced words in $M_X$ in normal form, where the operation $w \op_\Gamma w'$ on this magma is defined as the normal form reduction of $w \op w'$, and $\iota_{X,\Gamma}$ is the identity embedding (note that every single-letter word is already in normal form).
+\end{theorem}
+
+\begin{proof}  Should just be a matter of expanding definitions properly.
+\end{proof}
+
+\begin{corollary}[Criterion for anti-implication]\label{confluent-anti-impl}\uses{models-def}  Let $\Gamma$ be a confluent theory.  Then a law $w \formaleq w'$ is a consequence of $\Gamma$ if and only if $w,w'$ have the same normal form reduction.  In particular, a law with this property cannot imply a law without this property.
+\end{corollary}
+
+\begin{proof}\uses{free-confluent,anti-impl}  Follows from \Cref{anti-impl}.
+\end{proof}
+
+It is thus of interest to locate some confluent laws.  Here is a non-trivial example:
+
+\begin{theorem}[477 confluent]\label{477-confl}\uses{confluent-def} \Cref{eq477} is confluent.
+\end{theorem}
+
+\begin{proof}\uses{477-lemma} See the notes \href{https://www.overleaf.com/project/66f847bb14d0d8f0b77f74e1}{here}. A sketch of proof is as follows.
+
+  We induct on the length of the term.
+As before we consider terms of the form $XY$.
+Also, in both sequences if a simplification is applied to the whole term, then we can assume the sequence is simply final.
+
+By \Cref{477-lemma}, if any of the two sequences is final,
+then right before the last step, the two factors of the outermost product are both simple. This is also true for the result of the non-final sequence. By the induction hypothesis, they can be identified correspondingly, so the two sequences are either both final or both non-final, and in the first case, the same simplification is applied to give the same result.
+\end{proof}
+
+\begin{lemma}[477 lemma]\label{477-lemma}
+    If $Z$ and $W$ are simple, then $Z(W\cdots(WW))$ is simple.
+\end{lemma}
+
+\begin{proof}
+    Assume the contrary. Then we have 2 cases.
+
+    \textbf{Case 1: $W\cdots(WW)$ matches the pattern
+    $y(x(y\cdots(yy)))$, with $k$ occurrences of $W$ ($k \le n$).}
+    Since $|x(y\cdots(yy))| > n|y|$, but $|\cdots(WW)| \le (n-1)|W|$, this is impossible.
+
+    \textbf{Case 2: $Z(W\cdots(WW))$ matches the pattern
+    $y(x(y\cdots(yy)))$.} Since $n \ge 3$, we have $Z = y = W$,
+    so $|W\cdots(WW)| = n|W| = n|Z|$,
+    contradicting $|x(y\cdots(yy))| > n|y|$.
+\end{proof}
