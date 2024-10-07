@@ -138,7 +138,7 @@ theorem simp477_xyyy {α} [DecidableEq α] (x y : FreeMagma α) :
 
 
 @[equational_result]
-theorem Equation477_not_implies_Equation1426 :
+theorem Equation477_Facts :
   ∃ (G : Type) (_ : Magma G), Facts G [477] [1426, 1519, 2035, 2128, 3050, 3150] := by
   use Magma477 Nat, instMagmaMagma477
   repeat' apply And.intro
