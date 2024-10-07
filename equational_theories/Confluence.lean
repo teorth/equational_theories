@@ -14,6 +14,10 @@ theorem FreeMagma.length_pos {α : Type} : (x : FreeMagma α) → 0 < FreeMagma.
     simp [FreeMagma.length]
     omega
 
+@[simp]
+theorem FreeMagma.length_0 {α : Type} (x : FreeMagma α) : ¬ (FreeMagma.length x = 0) :=
+  Nat.not_eq_zero_of_lt x.length_pos
+
 -- equation 477 := x = y ◇ (x ◇ (y ◇ (y ◇ y)))
 
 def simp477 {α : Type} [DecidableEq α] : FreeMagma α → FreeMagma α
@@ -112,8 +116,6 @@ theorem simp477_yyy {α} [DecidableEq α] (y : FreeMagma α) :
       obtain ⟨rfl, heq⟩ := heq
       have := congrArg FreeMagma.length heq
       simp [FreeMagma.length] at this
-      have := FreeMagma.length_pos (simp477 y)
-      omega
     · simp [simp477_yy]
   · simp [simp477_yy]
 
@@ -131,11 +133,8 @@ theorem simp477_xyyy {α} [DecidableEq α] (x y : FreeMagma α) :
       rw [hxy] at heq
       have := congrArg FreeMagma.length heq
       simp [FreeMagma.length] at this
-      have := FreeMagma.length_pos (simp477 x)
-      omega
     · simp [simp477_yyy]
   · simp [simp477_yyy]
-
 
 @[equational_result]
 theorem Equation477_Facts :
