@@ -34,7 +34,7 @@ def evalInMagma {α : Type u} {G : Type v} [Magma G] (f : α -> G) : FreeMagma �
 
 def evalHom {α : Type u} {G : Type v} [Magma G] (f : α → G) : FreeMagma α →◇ G where
    toFun := evalInMagma f
-   map_op' := fun _ _ ↦ refl _
+   map_op' := fun _ _ ↦ rfl
 
  def fmapFreeMagma {α : Type u} {β : Type v} (f : α → β) : FreeMagma α → FreeMagma β :=
     evalInMagma (Lf ∘ f)
