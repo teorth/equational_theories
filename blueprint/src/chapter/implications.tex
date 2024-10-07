@@ -1,4 +1,4 @@
-\chapter{Implications between selected laws}
+\chapter{Implications between selected laws}\label{implications-chapter}
 
 We collect here some notable implications between the the selected laws in \Cref{subgraph-eq}.   By \Cref{sound-complete}, every implication can basically be established by a finite number of rewrites.  In most cases, the sequence of rewrites is quite straightforward, and the implication is very easy, but we record some less obvious examples.
 
@@ -157,7 +157,7 @@ Some other notable equational laws are as follows.
 \begin{theorem}[Sheffer stroke axiom]\label{sheffer}  The law
 $$ 0 \formaleq (1 \op ((0 \op 1) \op 1)) \op (0 \op (2 \op 1))$$
 or in equation form
-$$ x = y \op ((x \op y) \op y) \op (x \op (z \op y)) $$
+$$ x = (y \op ((x \op y) \op y)) \op (x \op (z \op y)) $$
 axiomatizes the Sheffer stroke operation $x \op y = \overline{xy}$ in a Boolean algebra. {\bf TODO: locate the equation number for this law.}
 \end{theorem}
 
