@@ -12,4 +12,4 @@ File.read(ARGV[0]).split("\n").each { |s|
 }
 
 maximal_graph = graph.transitive_closure
-maximal_graph.print_graph
+maximal_graph.print_csv
