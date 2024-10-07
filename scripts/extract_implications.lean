@@ -66,6 +66,13 @@ def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
             unknowns := unknowns.push ⟨c1[0]!, c2[0]!⟩
     if duality then
       let dualityRelation ← DualityRelation.ofFile "data/duals.json"
+      let mut allUnknowns : Std.HashSet Implication := {}
+      for hi : i in [:components.size] do
+        for hj : j in [:components.size] do
+          if outcomes[i]![j]!.isNone then
+            for lhs in components.in_order[i] do
+              for rhs in components.in_order[j] do
+                allUnknowns := allUnknowns.insert ⟨lhs, rhs⟩
       let eqsToComponent := components.in_order.map (fun comp => (comp[0]!, comp)) |>.toList |> Std.HashMap.ofList
       let mut unknownsSet : Std.HashSet Implication := {}
       let mut uniqueUnknowns : Array Implication := #[]
@@ -73,11 +80,12 @@ def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
         match dualityRelation.dual imp with
           | none => throw $ IO.userError "No dual found"
           | some dualImp =>
-            unless unknownsSet.contains dualImp do
-              uniqueUnknowns := uniqueUnknowns.push imp
-            for l_eq in eqsToComponent[imp.lhs]! do
-              for r_eq in eqsToComponent[imp.rhs]! do
-                unknownsSet := unknownsSet.insert ⟨l_eq, r_eq⟩
+            if allUnknowns.contains dualImp then
+              unless unknownsSet.contains dualImp do
+                uniqueUnknowns := uniqueUnknowns.push imp
+              for l_eq in eqsToComponent[imp.lhs]! do
+                for r_eq in eqsToComponent[imp.rhs]! do
+                  unknownsSet := unknownsSet.insert ⟨l_eq, r_eq⟩
       unknowns := uniqueUnknowns
     IO.println (toJson unknowns).compress
 
