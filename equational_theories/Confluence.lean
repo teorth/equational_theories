@@ -1,5 +1,6 @@
 import equational_theories.FreeMagma
 import equational_theories.AllEquations
+import equational_theories.FactsSyntax
 
 def FreeMagma.length {α : Type} : FreeMagma α → Nat
   | .Leaf _ => 1
@@ -80,6 +81,9 @@ instance (α) [DecidableEq α] : Coe α (Magma477 α) where
 instance instMagmaMagma477 {α} [DecidableEq α] : Magma (Magma477 α) where
   op := fun x y => ⟨simp477 (x.1 ◇ y.1), simp477_idempotent _⟩
 
+instance {α} [DecidableEq α] : DecidableEq (Magma477 α) :=
+  inferInstanceAs (DecidableEq {x : FreeMagma α // simp477 x = x })
+
 theorem simp477_yy {α} [DecidableEq α] (y : FreeMagma α) :
     simp477 (y ⋆ y) = simp477 y ⋆ simp477 y := by
   simp [simp477]
@@ -135,11 +139,10 @@ theorem simp477_xyyy {α} [DecidableEq α] (x y : FreeMagma α) :
 
 @[equational_result]
 theorem Equation477_not_implies_Equation1426 :
-  ∃ (G : Type) (_ : Magma G), Equation477 G ∧ ¬Equation1426 G := by
+  ∃ (G : Type) (_ : Magma G), Facts G [477] [1426, 1519, 2035, 2128, 3050, 3150] := by
   use Magma477 Nat, instMagmaMagma477
-  constructor
-  · unfold Equation477
-    rintro ⟨x, hx⟩ ⟨y, hy⟩
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩
     simp [Magma.op]
     apply Subtype.ext
     simp only
@@ -148,6 +151,25 @@ theorem Equation477_not_implies_Equation1426 :
     simp [hx, hy, simp477_yy, simp477_idempotent, simp477_yyy, simp477_xyyy]
   · intro h
     replace h := h (0 : Nat)
-    simp [Magma.op, simp477] at h
-    injection h with h
-    contradiction
+    revert h
+    decide
+  · intro h
+    replace h := h (0 : Nat) (1 : Nat)
+    revert h
+    decide
+  · intro h
+    replace h := h (0 : Nat)
+    revert h
+    decide
+  · intro h
+    replace h := h (0 : Nat) (1 : Nat)
+    revert h
+    decide
+  · intro h
+    replace h := h (0 : Nat)
+    revert h
+    decide
+  · intro h
+    replace h := h (0 : Nat) (1 : Nat)
+    revert h
+    decide
