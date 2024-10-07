@@ -153,6 +153,9 @@ def DenseNumbering.fromArray {α : Type} [BEq α] [Hashable α] (elts : Array α
   let index := Std.HashMap.ofList (elts.mapIdx (fun i x => (x, i.val))).toList
   ⟨elts, index⟩
 
+def DenseNumbering.map {α β : Type} [BEq α] [BEq β] [Hashable α] [Hashable β] (num : DenseNumbering α) (f : α → β) : DenseNumbering β :=
+  DenseNumbering.fromArray (num.in_order.map f)
+
 def ltEquationNames (a b : String) : Bool :=
   assert! a.startsWith "Equation"
   assert! b.startsWith "Equation"
@@ -194,10 +197,10 @@ def toEdges (inp : Array EntryVariant) : Array Edge := Id.run do
         for f2 in refuted do
           nonimplies := nonimplies.modify eqs[f1]! (fun x ↦ x.set eqs[f2]!)
     | _ => continue
-  for i in [:eqs.size] do
-    for j in [:eqs.size] do
+  for hi : i in [:eqs.size] do
+    for hj : j in [:eqs.size] do
       if nonimplies[i]!.get j then
-        edges := edges.push (.nonimplication ⟨eqs.in_order[i]!, eqs.in_order[j]!⟩)
+        edges := edges.push (.nonimplication ⟨eqs.in_order[i], eqs.in_order[j]⟩)
   return edges
 
 structure Reachability where
@@ -248,7 +251,6 @@ def closure_aux (inp : Array EntryVariant) (eqs : DenseNumbering String) : IO Re
 
   let mut component : Array Nat := Array.mkArray graph_size 0
   let mut last_component : Nat := 0
-
 
   for i in order do
     if component[i]! == 0 then do
@@ -302,7 +304,6 @@ def closure (inp : Array EntryVariant) : IO (Array Edge) := do
   let eqs := number_equations inp
   let n := eqs.size
 
-
   -- extract the implications
   let mut ans : Array Edge := Array.mkEmpty (n*n)
 
@@ -339,29 +340,24 @@ def list_outcomes (res : Array Entry) : IO (Array String × Array (Array Outcome
 
   return (eqs.in_order, outcomes)
 
-def outcomes_mod_equiv (inp : Array EntryVariant) : IO (Array String × Array (Array (Option Bool))) := do
+def outcomes_mod_equiv (inp : Array EntryVariant) : IO (DenseNumbering (Array String) × Array (Array (Option Bool))) := do
   let eqs := number_equations inp
   let n := eqs.size
   let reachable ← closure_aux inp eqs
-  let mut reprs_id : Std.HashMap Nat Nat := {}
-  let mut reprs : Array String := Array.mkEmpty (reachable.components.size / 2)
-  for comp in reachable.components do
-    if comp[0]! < n then
-      reprs_id := reprs_id.insert comp[0]! reprs.size
-      reprs := reprs.push eqs.in_order[comp[0]!]!
+  let comps := reachable.components.filter (·[0]! < n) |> DenseNumbering.fromArray
 
   let mut implies : Array (Array (Option Bool)) :=
-    Array.mkArray reprs.size (Array.mkArray reprs.size none)
+    Array.mkArray comps.size (Array.mkArray comps.size none)
 
   for i in reachable.components, i2 in reachable.reachable do
     if i[0]! >= reachable.size then continue
       for j in reachable.components, j2 in [:reachable.components.size] do
         if i2.get j2 then
           if j[0]! < n then
-            implies := implies.modify reprs_id[j[0]!]! (fun x ↦ x.set! reprs_id[i[0]!]! true)
+            implies := implies.modify comps[j]! (fun x ↦ x.set! comps[i]! true)
           else if j.back < 2*n then
-            implies := implies.modify reprs_id[i[0]!]! (fun x ↦ x.set! reprs_id[j[0]! - n]! false)
+            implies := implies.modify comps[i]! (fun x ↦ x.set! comps[j.map (·-n)]! false)
 
-  return (reprs, implies)
+  return (comps.map (fun ids => ids.map (eqs.in_order[·]!)), implies)
 
 end Closure
