@@ -123,10 +123,10 @@ abbrev Equation4656 (G: Type _) [Magma G] := ∀ x y z : G, (x ◇ y) ◇ y = (x
 /-- Mentioned in a paper of Kisielewicz as a conjectural Austin law -/
 equation 5105  :=  x = y ◇ (y ◇ (y ◇ (x ◇ (z ◇ y))))
 
-equation 28393  :=  x = (((x ◇ x) ◇ x) ◇ y) ◇ (x ◇ z)
+equation 28381  :=  x = (((x ◇ x) ◇ x) ◇ y) ◇ (x ◇ z)
 
 /-- Kisielewicz's second Austin law -/
-equation 28394  :=  x = (((y ◇ y) ◇ y) ◇ x) ◇ (y ◇ z)
+equation 28770  :=  x = (((y ◇ y) ◇ y) ◇ x) ◇ (y ◇ z)
 
 /- Some order 6 laws -/
 

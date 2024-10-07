@@ -460,7 +460,7 @@ theorem Equation2_implies_Equation5105 (G: Type _) [Magma G] (h: Equation2 G) : 
   fun _ _ _ ↦ h _ _
 
 @[equational_result]
-theorem Equation2_implies_Equation28393 (G: Type _) [Magma G] (h: Equation2 G) : Equation28393 G :=
+theorem Equation2_implies_Equation28381 (G: Type _) [Magma G] (h: Equation2 G) : Equation28381 G :=
   fun _ _ _ ↦ h _ _
 
 @[equational_result]
@@ -488,7 +488,7 @@ theorem Equation4_implies_Equation3744 (G: Type _) [Magma G] (h: Equation4 G) : 
     _ = (x ◇ z) ◇ (w ◇ y) := h (x ◇ z) (w ◇ y)
 
 @[equational_result]
-theorem Equation4_implies_Equation28393 (G: Type _) [Magma G] (h: Equation4 G) : Equation28393 G :=
+theorem Equation4_implies_Equation28381 (G: Type _) [Magma G] (h: Equation4 G) : Equation28381 G :=
   fun x y z ↦
     calc x
     _ = x ◇ x := (h x x)

@@ -123,7 +123,7 @@ theorem Finite.Equation5105_implies_Equation2 (G : Type*) [Magma G] [Finite G] (
       _= x ◇ (x ◇ (x ◇ (y ◇ (x ◇ x)))) := by rw [hhhh]
       _= y := by rw [←  h y x x]
 
-theorem Finite.Equation28394_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : Equation28394 G) :
+theorem Finite.Equation28770_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : Equation28770 G) :
     Equation2 G := by
     have : ∀ (y z u : G), y ◇ z = y ◇ u := by
       intro y
@@ -145,7 +145,7 @@ theorem Finite.Equation28394_implies_Equation2 (G : Type*) [Magma G] [Finite G] 
     have z := x
     rw [h x y z, this ((y ◇ y) ◇ y)  x u, ← this ((y ◇ y) ◇ y) u u, ← h]
 
-theorem Equation28394_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equation28394 G ∧ ¬Equation2 G := by
+theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equation28770 G ∧ ¬Equation2 G := by
   have : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
   have : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
   have : Fact (Nat.Prime 5) := ⟨Nat.prime_five⟩
