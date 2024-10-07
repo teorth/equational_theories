@@ -15,5 +15,4 @@ import equational_theories.StringMagmas
 import equational_theories.Homomorphisms
 import equational_theories.CentralGroupoids
 import equational_theories.Z3Counterexamples
-import equational_theories.InfiniteModels
 import equational_theories.LinearOps
