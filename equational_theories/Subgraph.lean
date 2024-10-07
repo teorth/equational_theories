@@ -416,6 +416,17 @@ theorem Equation4582_implies_Equation4564 (G: Type*) [Magma G] (h: Equation4582 
 theorem Equation4582_implies_Equation4579 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4579 G :=
   fun _ _ _ _ _ ↦ h _ _ _ _ _ _
 
+@[equational_result]
+theorem Equation953_implies_Equation2 (G : Type _) [Magma G] (h: Equation953 G) : Equation2 G := by
+  intro x y
+  let i := x ◇ x
+  let n := i ◇ i
+  have znx (z : G) : z ◇ n = x := (h x z x).symm
+  have hzzi := h x x i
+  have hyzi := h y x i
+  rw [znx] at hzzi hyzi
+  exact hzzi.trans hyzi.symm
+
 /- Obtained with lean-egg -/
 @[equational_result]
 theorem Equation14_implies_Equation23 (G: Type*) [Magma G] (h: Equation14 G) : Equation23 G :=
@@ -575,17 +586,6 @@ theorem Equation4579_implies_Equation4512 (G: Type _) [Magma G] (h: Equation4579
 @[equational_result]
 theorem Equation4579_implies_Equation4564 (G: Type _) [Magma G] (h: Equation4579 G) : Equation4564 G :=
   fun _ _ _ _ ↦ h _ _ _ _ _
-
-@[equational_result]
-theorem Equation953_implies_Equation2 (G : Type _) [Magma G] (h: Equation953 G) : Equation2 G := by
-  intro x y
-  let i := x ◇ x
-  let n := i ◇ i
-  have znx (z : G) : z ◇ n = x := (h x z x).symm
-  have hzzi := h x x i
-  have hyzi := h y x i
-  rw [znx] at hzzi hyzi
-  exact hzzi.trans hyzi.symm
 
 /- Counterexamples -/
 
