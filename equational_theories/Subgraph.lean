@@ -323,7 +323,9 @@ theorem Equation1571_implies_Equation43 (G: Type _) [Magma G] (h: Equation1571 G
 @[equational_result]
 theorem Equation1571_implies_Equation4512 (G: Type _) [Magma G] (h: Equation1571 G) : Equation4512 G := by
   refine fun x y z ↦ (h (x ◇ (y ◇ z)) y x).trans ?_
-  rw [Equation1571_implies_Equation43 G h (x ◇ (y ◇ z)) x, ← Equation1571_implies_Equation16 G h (y ◇ z) x, ← Equation1571_implies_Equation16 G h z y, Equation1571_implies_Equation43 G h y x]
+  rw [Equation1571_implies_Equation43 G h (x ◇ (y ◇ z)) x,
+    ← Equation1571_implies_Equation16 G h (y ◇ z) x, ← Equation1571_implies_Equation16 G h z y,
+    Equation1571_implies_Equation43 G h y x]
 
 theorem ProveEquation1571Consequence {n : Nat} {G : Type _} [Magma G] (eq1571 : Equation1571 G)
     (law : Law.MagmaLaw (Fin (n+1))) (eq : equation1571Reducer law.lhs = equation1571Reducer law.rhs)
