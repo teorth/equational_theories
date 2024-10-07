@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Graphiti</title>
+
+    <style>
+      /* Styling for the links */
+      .node a {
+        text-decoration: none; /* Remove underline */
+        color: blue; /* Link color */
+      }
+      .node a:hover {
+        color: red; /* Change color on hover */
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        margin-top: 25px; /* Adjust this value to match the height of your top bar */
+      }
+
+      .container {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        color: #555;
+      }
+
+      button {
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      li {
+        margin-bottom: 5px; /* Space between list items */
+      }
+
+      .top-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #a34383;
+        color: white;
+        text-align: center;
+        padding: 3px;
+        font-family: Arial, sans-serif;
+        z-index: 1000;
+      }
+
+      .top-bar a {
+        color: white;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .top-bar a:hover {
+        text-decoration: underline;
+      }
+    </style>
+
+    <script src="https://d3js.org/d3.v7.js"></script>
+    <script src="https://unpkg.com/@hpcc-js/wasm@2.16.1/dist/graphviz.umd.js"></script>
+    <script src="https://unpkg.com/d3-graphviz@5/build/d3-graphviz.js"></script>
+  </head>
+
+  <body>
+    <div class="container" id="container" style="display: none">
+      <img
+        src="logo.png"
+        style="width: 25%; height: auto; display: block; margin: 0 auto"
+      />
+      <form id="searchForm" onsubmit="handleSubmit(event)">
+        <input type="hidden" id="render" name="render" value="true" />
+
+        <label for="implies"
+          >Equation implies (numeric, comma-separated):</label
+        >
+        <input type="text" id="implies" name="implies" /><br />
+
+        <label for="implied_by"
+          >Equation implied by (numeric, comma-separated):</label
+        >
+        <input type="text" id="implied_by" name="implied_by" /><br />
+
+        <label for="limit_equations"
+          >Limit search to equations (numeric, comma-separated):</label
+        >
+        <input type="text" id="limit_equations" name="limit_equations" /><br />
+
+        <label for="max_variables">Maximum variables:</label>
+        <input type="text" id="max_variables" name="max_variables" /><br />
+
+        <label for="max_operations">Maximum operations:</label>
+        <input type="text" id="max_operations" name="max_operations" /><br />
+
+        <label for="highlight_red"
+          >Hightlight equations in red (numeric, comma-separated):</label
+        >
+        <input type="text" id="highlight_red" name="highlight_red" /><br />
+
+        <label for="highlight_blue"
+          >Hightlight equations in blue (numeric, comma-separated):</label
+        >
+        <input type="text" id="highlight_blue" name="highlight_blue" /><br />
+
+        <button type="submit">Submit</button>
+      </form>
+
+      <p>Example queries:</p>
+      <ul>
+        <li>
+          To render the entire graph,
+          <a href="#" onclick="fillForm({})"> just clear the form</a> and click
+          Submit
+        </li>
+        <li>
+          <a
+            href="#"
+            onclick="fillForm({limit_equations: '1, 2, 3, 4, 5, 6, 7, 8, 23, 38, 39, 40, 41, 42, 43, 45, 46, 168, 387, 4512, 4513, 4522, 4564, 4579, 4582'})"
+          >
+            Render the subgraph</a
+          >
+        </li>
+        <li>
+          <a
+            href="#"
+            onclick="fillForm({implies: '2998', implied_by: '1629', highlight_red: '2998', highlight_blue: '1629'})"
+            >See all paths between Eq1629 and Eq2998</a
+          >
+        </li>
+        <li>
+          <a
+            href="#"
+            onclick="fillForm({implies: '43', max_variables: '3', hightlight_red: '43'})"
+            >Equations up to 3 variables implied by the commutative law</a
+          >
+        </li>
+        <li>
+          The lowest common ancestors of Equations 152 and 2449 are Equations
+          428,829,1033,1233,1235,1236.
+          <a
+            href="#"
+            onclick="fillForm({implies: '428,829,1033,1233,1235,1236', implied_by: '152,2449', highlight_red: '428,829,1033,1233,1235,1236', highlight_blue: '152,2449'})"
+            >Graph their relationships.</a
+          >
+        </li>
+      </ul>
+
+      <p>
+        Note that all vertices are clickable links to the Equation Explorer,
+        with equivalence classes linking to the lowest numbered equivalent.
+      </p>
+    </div>
+
+    <div id="graph" style="display: none">
+      <div class="top-bar">
+        <a href="#" id="download-link" onclick="downloadSVG(event)"
+          >Download SVG</a
+        >
+        ◇
+        <a href="#" id="search-link" onclick="backToSearch(event)"
+          >Back to search</a
+        >
+      </div>
+
+      <h1 id="message"></h1>
+
+      <div id="graphSvg" style="text-align: center"></div>
+    </div>
+
+    <div>
+      <p>
+        Last updated at: <span id="lastUpdated"></span> (local time), Git
+        commit: <a id="commitLink" target="_blank"></a>
+      </p>
+    </div>
+
+    <script>
+      const EQUATION_EXPLORER_URL =
+        "https://teorth.github.io/equational_theories/implications/?";
+
+      function hideVisibility(elementId) {
+        const element = document.getElementById(elementId);
+        element.style.display = "none";
+      }
+      function showVisibility(elementId) {
+        const element = document.getElementById(elementId);
+        element.style.display = "block";
+      }
+
+      // Function to fill the form with provided data
+      function fillForm(params) {
+        // Get the form elements by their IDs
+        const form = document.getElementById("searchForm");
+        const inputs = form.getElementsByTagName("input");
+
+        for (let input of inputs) {
+          if (input.type != "hidden") {
+            input.value = ""; // Clear all fields
+          }
+        }
+
+        // Loop over the keys of the params object and fill the corresponding form fields
+        Object.keys(params).forEach((key) => {
+          const inputField = form.querySelector(`input[name="${key}"]`);
+          if (inputField) {
+            inputField.value = params[key];
+          }
+        });
+      }
+
+      function fetchData(url, isBinary, successCallback, errorCallback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+
+        // Set responseType for binary data
+        if (isBinary) {
+          xhr.responseType = "arraybuffer";
+        }
+
+        xhr.onload = function () {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            successCallback(xhr.response); // Call success callback with the response
+          } else {
+            errorCallback(`Error: ${xhr.status}`); // Call error callback with status code
+          }
+        };
+
+        xhr.onerror = function () {
+          errorCallback("Network Error"); // Handle network errors
+        };
+
+        xhr.send();
+      }
+
+      // Function to populate input fields with query string values
+      function populateForm() {
+        const params = new URLSearchParams(window.location.search);
+
+        // Loop through all input elements in the form
+        const inputs = document.querySelectorAll(
+          "#searchForm input, #searchForm textarea",
+        );
+        inputs.forEach((input) => {
+          const name = input.name; // Get the name of the input field
+          if (params.has(name)) {
+            input.value = params.get(name); // Set the value from the query string
+          } else {
+            input.value = ""; // Optional: clear if not in query string
+          }
+        });
+      }
+
+      function handleSubmit(event) {
+        // Prevent default form submission (i.e., stop the page from refreshing)
+        event.preventDefault();
+
+        hideVisibility("container");
+
+        // Access form data
+        const form = document.getElementById("searchForm");
+        const formData = new FormData(form);
+
+        const params = new URLSearchParams();
+        for (let [name, value] of formData.entries()) {
+          if (value) {
+            params.append(name, value);
+          }
+        }
+
+        // Update the URL with the query string
+        const newUrl = window.location.pathname + "?" + params.toString();
+        window.history.pushState({}, "", newUrl);
+
+        renderGraph();
+      }
+
+      function backToSearch(event) {
+        hideVisibility("graph");
+        showVisibility("container");
+
+        populateForm();
+
+        // Get the current URL without the query string
+        const url =
+          window.location.protocol +
+          "//" +
+          window.location.host +
+          window.location.pathname;
+
+        // Use history.replaceState to modify the URL without reloading the page
+        history.replaceState(null, "", url);
+      }
+
+      function downloadSVG(event) {
+        event.preventDefault();
+        // Select the SVG element
+        var svgElement = document.querySelector("svg");
+
+        // Serialize the SVG to a string
+        var serializer = new XMLSerializer();
+        console.log(svgElement);
+        var svgString = serializer.serializeToString(svgElement);
+
+        // Create a Blob from the SVG string
+        var blob = new Blob([svgString], {
+          type: "image/svg+xml;charset=utf-8",
+        });
+
+        // Create a link element
+        var link = document.createElement("a");
+        link.download = "graph.svg"; // File name
+
+        // Create an object URL and assign it to the href attribute of the link
+        link.href = URL.createObjectURL(blob);
+
+        // Append the link to the document, trigger the download, and remove the link
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      function onGraphRender() {
+        document.getElementById("message").innerHTML = "";
+
+        // Set vertex links to have target=_blank (e.g., open new tab)
+        d3.selectAll(".node").each(function (d) {
+          d3.select(this)
+            .select("a")
+            .each(function (text) {
+              d3.select(this).attr("target", "_blank");
+            });
+        });
+      }
+
+      var graphviz = d3.select("#graphSvg").graphviz();
+      var graph_json = undefined;
+
+      function vertices(adj_list) {
+        let vertices = new Set();
+
+        for (let [u, neighbors] of Object.entries(adj_list)) {
+          vertices.add(u);
+          neighbors.forEach((v) => vertices.add(v));
+        }
+
+        return Array.from(vertices);
+      }
+
+      // Transitive reduction making use of the fact we already ahve all reachability info for every vertex
+      function transitive_reduction_of_closure(adj_list) {
+        let reduced_graph = {};
+
+        function is_reachable(u, v, visited, memo) {
+          if (!memo[u]) memo[u] = {};
+          if (memo[u][v] !== undefined) return memo[u][v]; // Memoization check
+          visited.add(u);
+
+          let neighbors = adj_list[u] || [];
+          for (let neighbor of neighbors) {
+            if (
+              neighbor === v ||
+              (visited.has(neighbor) &&
+                is_reachable(neighbor, v, visited, memo))
+            ) {
+              return (memo[u][v] = true);
+            }
+          }
+          return (memo[u][v] = false);
+        }
+
+        // Copy the original graph
+        for (let [v, neighbors] of Object.entries(adj_list)) {
+          reduced_graph[v] = [...neighbors];
+        }
+
+        let memo = {};
+
+        // For each edge (u, v), check if there is an alternative path from u to v
+        for (let [u, neighbors] of Object.entries(adj_list)) {
+          for (let v of neighbors) {
+            let visited = new Set();
+
+            let isRedundant = neighbors.some(
+              (w) => w !== v && is_reachable(w, v, visited, memo),
+            );
+
+            if (isRedundant) {
+              reduced_graph[u].splice(reduced_graph[u].indexOf(v), 1);
+            }
+          }
+        }
+
+        return reduced_graph;
+      }
+
+      function parseCommaSeparatedNumbers(str) {
+        if (str == undefined) {
+          return [];
+        }
+        return str
+          .split(",")
+          .map((num) => Number(num.trim()))
+          .filter((num) => !isNaN(num)); // Removes any NaN values if the conversion fails
+      }
+
+      function renderGraph() {
+        const params = Object.fromEntries(
+          new URLSearchParams(window.location.search).entries(),
+        );
+
+        let vertices_to_delete = new Set();
+        if (params.max_variables) {
+          max_var = Number(params.max_variables);
+          for (const [eqNumStr, eqStr] of Object.entries(
+            graph_json.equations,
+          )) {
+            if (new Set(eqStr.match(/[xyzwvu]/g) || []).size > max_var) {
+              vertices_to_delete.add(Number(eqNumStr));
+            }
+          }
+        }
+        if (params.max_operations) {
+          max_ops = Number(params.max_operations);
+          for (const [eqNumStr, eqStr] of Object.entries(
+            graph_json.equations,
+          )) {
+            if ((eqStr.match(/[◇]/g) || []).length > max_ops) {
+              vertices_to_delete.add(Number(eqNumStr));
+            }
+          }
+        }
+        if (params.implies) {
+          let sources = parseCommaSeparatedNumbers(params.implies);
+          let source_sccs = new Set([
+            ...sources.map((s) => graph_json.node_to_scc_map[s]),
+          ]);
+          let implied_sccs = new Set(source_sccs);
+
+          for (const src of source_sccs) {
+            if (graph_json.condensed_graph[src]) {
+              graph_json.condensed_graph[src].forEach((n) =>
+                implied_sccs.add(n),
+              );
+            }
+          }
+
+          for (const scc of vertices(graph_json.condensed_graph)) {
+            if (!implied_sccs.has(scc)) {
+              graph_json.scc_to_node_map[scc].forEach((x) =>
+                vertices_to_delete.add(x),
+              );
+            }
+          }
+        }
+        if (params.implied_by) {
+          let sinks = parseCommaSeparatedNumbers(params.implied_by);
+          let sink_sccs = new Set([
+            ...sinks.map((s) => graph_json.node_to_scc_map[s]),
+          ]);
+
+          for (const scc of vertices(graph_json.condensed_graph)) {
+            if (sink_sccs.has(scc)) continue;
+            if (
+              !graph_json.condensed_graph[scc] ||
+              !graph_json.condensed_graph[scc].some((x) => sink_sccs.has(x))
+            ) {
+              graph_json.scc_to_node_map[scc].forEach((x) =>
+                vertices_to_delete.add(x),
+              );
+            }
+          }
+        }
+        if (params.limit_equations) {
+          let limit_eqs = parseCommaSeparatedNumbers(params.limit_equations);
+          // ugly, should do it by scc->vertex mapping
+          for (const eqNumStr of Object.keys(graph_json.equations)) {
+            if (limit_eqs.indexOf(Number(eqNumStr)) == -1) {
+              vertices_to_delete.add(Number(eqNumStr));
+            }
+          }
+        }
+
+        dotFile = `
+graph G {
+  layout = dot
+  rankdir = TB
+  graph [ pad="0.2", ranksep="0.75", nodesep="0.35" ];
+  node [ shape="none" ]
+`;
+
+        let scc_to_node_map;
+        let graph;
+        if (vertices_to_delete.length == 0) {
+          scc_to_node_map = graph_json.scc_to_node_map;
+          graph = graph_json.condensed_graph;
+        } else {
+          let sccs_to_delete = new Set();
+          for (const [scc_name, scc] of Object.entries(
+            graph_json.scc_to_node_map,
+          )) {
+            if (scc.every((x) => vertices_to_delete.has(x))) {
+              sccs_to_delete.add(scc_name);
+            }
+          }
+
+          graph = {};
+          for (let [v, neighbors] of Object.entries(
+            graph_json.condensed_graph,
+          )) {
+            if (!sccs_to_delete.has(v)) {
+              graph[v] = neighbors.filter((x) => !sccs_to_delete.has(x));
+            }
+          }
+
+          scc_to_node_map = {};
+          for (const [scc_name, scc] of Object.entries(
+            graph_json.scc_to_node_map,
+          )) {
+            if (!sccs_to_delete.has(scc_name)) {
+              scc_to_node_map[scc_name] = scc.filter(
+                (x) => !vertices_to_delete.has(x),
+              );
+            }
+          }
+        }
+
+        document.getElementById("message").innerHTML +=
+          "Running transitive reduction...<br />";
+        reduced_graph = transitive_reduction_of_closure(graph);
+
+        let highlight_red = parseCommaSeparatedNumbers(params.highlight_red);
+        let highlight_blue = parseCommaSeparatedNumbers(params.highlight_blue);
+
+        for (const [scc_name, scc] of Object.entries(scc_to_node_map)) {
+          sorted_scc = [...scc].sort((a, b) => a - b);
+          eq_pretty_strs = sorted_scc.map(
+            (v) => `${graph_json.equations[v]} (${v})`,
+          );
+          let vertex_name;
+          if (eq_pretty_strs.length > 5) {
+            vertex_name = eq_pretty_strs.slice(0, 4).join("\\n");
+            vertex_name += `\\n... [${eq_pretty_strs.length} total equations]`;
+          } else {
+            vertex_name = eq_pretty_strs.join("\\n");
+          }
+
+          dotFile += `  ${scc_name} [label="${vertex_name}"`;
+
+          if (scc.length > 1) {
+            dotFile += `,shape=Mrecord`;
+          } else {
+            dotFile += `,shape=box`;
+          }
+
+          if (scc.some((x) => highlight_red.includes(x))) {
+            dotFile += `,style=filled,fillcolor="#FFB6C1"`;
+          } else if (scc.some((x) => highlight_blue.includes(x))) {
+            dotFile += `,style=filled,fillcolor="#ADD8E6"`;
+          }
+
+          dotFile += `,href="${EQUATION_EXPLORER_URL}${sorted_scc[0]}"`;
+
+          dotFile += `]\n`;
+        }
+
+        for (const [v, neighbors] of Object.entries(reduced_graph)) {
+          for (const n of neighbors) {
+            dotFile += `  ${n} -- ${v}\n`;
+          }
+        }
+
+        dotFile += "}";
+        //console.log(dotFile)
+
+        document.getElementById("graphSvg").innerHTML = "";
+        showVisibility("graph");
+        document.getElementById("message").innerHTML += "Rendering...<br />";
+        graphviz.renderDot(dotFile).on("end", onGraphRender);
+      }
+
+      const params = Object.fromEntries(
+        new URLSearchParams(window.location.search).entries(),
+      );
+      if (params.render) {
+        hideVisibility("container");
+      } else {
+        showVisibility("container");
+      }
+
+      // On back button press.
+      window.addEventListener("popstate", function (event) {
+        hideVisibility("graph");
+        showVisibility("container");
+      });
+
+      fetchData(
+        "graph.json",
+        false,
+        function (data) {
+          graph_json = JSON.parse(data);
+
+          // Copied from commit f4ec9f2a198a71f5a0bbf432c62ce274c3ad46dc
+          const timestamp = graph_json.timestamp * 1000; // Convert to milliseconds
+          const commitHash = graph_json.commit_hash;
+
+          const localDate = new Date(timestamp);
+          document.getElementById("lastUpdated").textContent =
+            localDate.toLocaleString();
+
+          const commitLink = document.getElementById("commitLink");
+          commitLink.href = `https://github.com/teorth/equational_theories/tree/${commitHash}`;
+          commitLink.textContent = commitHash.substring(0, 7); // Display first 7 characters of the hash
+
+          const params = Object.fromEntries(
+            new URLSearchParams(window.location.search).entries(),
+          );
+          if (params.render) {
+            renderGraph();
+          }
+        },
+        function (error) {
+          document.getElementById("error").textContent = error;
+        },
+      );
+    </script>
+  </body>
+</html>
