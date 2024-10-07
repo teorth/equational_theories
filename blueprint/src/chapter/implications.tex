@@ -48,10 +48,10 @@ This result was posed as Problem A1 from Putnam 2001.
 
 The following result was Problem A4 on Putnam 1978.
 
-\begin{theorem}[3744 implies 3722, 381]\label{3744_implies_3722_381}\uses{eq3744, eq3722, eq381} Definition \ref{eq3744} implies Definition \ref{eq3722} and Definition \ref{eq381}.
+\begin{theorem}[3744 implies 3722, 381]\label{3744_implies_3722_381}\uses{eq3744, eq3722, eq381}\lean{Subgraph.Equation3744_implies_Equation3722, Subgraph.Equation3744_implies_Equation381}\leanok Definition \ref{eq3744} implies Definition \ref{eq3722} and Definition \ref{eq381}.
 \end{theorem}
 
-\begin{proof} By hypothesis, one has
+\begin{proof}\leanok By hypothesis, one has
 $$x \op y = (x \op z) \op (w \op y)
   $$
 for all $x,y,z,w$.  Various specializations of this give
@@ -65,7 +65,7 @@ $$ x \op y = (x\op z) \op y$$
 which is Definition \ref{eq381}.
 \end{proof}
 
-\begin{theorem}[1689 is equivalent to 2]\label{1689_equiv_2}\uses{eq1689, eq2} Definition \ref{eq1689} is equivalent to Definition \ref{eq2}.
+\begin{theorem}[1689 is equivalent to 2]\label{1689_equiv_2}\uses{eq1689, eq2}\lean{Subgraph.Equation1689_implies_Equation2, Subgraph.Equation2_implies_Equation1689}\leanok Definition \ref{eq1689} is equivalent to Definition \ref{eq2}.
 \end{theorem}
 
 
@@ -149,4 +149,69 @@ $$ 0 = y \op 2.$$
 If we then apply Definition \ref{eq953} with $z=1$ we conclude that
 $$ x = y \op 0$$
 for all $x,y$, from which one concludes $x=x'$ for any $x,x' \in G$, giving Definition \ref{eq2}.
+\end{proof}
+
+
+Some other notable equational laws are as follows.
+
+\begin{theorem}[Sheffer stroke axiom]\label{sheffer}  The law
+$$ 0 \formaleq (1 \op ((0 \op 1) \op 1)) \op (0 \op (2 \op 1))$$
+or in equation form
+$$ x = y \op ((x \op y) \op y) \op (x \op (z \op y)) $$
+axiomatizes the Sheffer stroke operation $x \op y = \overline{xy}$ in a Boolean algebra. {\bf TODO: locate the equation number for this law.}
+\end{theorem}
+
+\begin{proof}
+See \cite{mccune_et_al}.  In fact this is the shortest law with this property.
+
+A sketch of proof follows.  One can easily verify that the Sheffer stroke operation obeys this law.  Conversely, if this law holds, then automated theorem provers can show that the three Sheffer axioms
+$$ (x \op x) \op (x \op x)  = x$$
+$$ x \op (y \op (y \op y)) = x \op x$$
+$$ (x \op (y \op z)) \op (x \op (y \op z)) = ((y \op y) \op x) \op ((z \op z) \op x)$$
+are satisfied.  A classical result of Sheffer \cite{sheffer} then allows one to conclude.
+\end{proof}
+
+A \emph{natural central groupoid} is, up to isomorphism, a magma with carrier $S \times S$ for some set $S$ and operation
+$$ (a,b) \op (c,d) = (b,c).$$
+These are examples of central groupoids (Definition \ref{eq168}).
+
+\begin{theorem}[Natural central groupoid axiom]\label{natural-central-groupoid}  The law
+$$ 0 \formaleq (1 \op ((2 \op 0) \op 3)) \op (0 \op 3)$$
+or in equation form
+\begin{equation}\label{26302}
+  x = (y \op ((z \op x) \op w)) \op (x \op w)
+\end{equation}
+(Equation 26302) characterizes natural central groupoids.
+\end{theorem}
+
+\begin{proof}
+  See \cite[Theorem 5]{knuth}.  The proof is quite lengthy; a sketch is as follows. It is easy to see that natural central groupoids obey \eqref{26302}.  Conversely, if this law holds, then
+\begin{align*}
+  (y \op z) \op (z \op w) &= (( x \op ((w \op (y \op z)) \op w)) \op ((y \op z) \op w)) \op (z \op w)\\
+  &= z
+\end{align*}
+so we have a central groupoid.  Setting $y = (t \op t) \op t$, $z = t \op (t \op t)$, $w = t \op t$ in \eqref{26302} we also obtain
+$$ (x \op t) \op t = (t \op t) \op t.$$
+Using the notation
+$$ x^{(1)} := (x \op x) \op x, \quad x^{(2)} := x \op (x \op x)$$
+we then have
+\begin{align*}
+  x \op t &= ((x \op x) \op (x \op t)) \op ((x \op t) \op t) \\
+  &= x \op t^{(1)}.
+\end{align*}
+A lengthy computer-assisted argument then gave the dual identity
+$$ t^{(2)} \op x = t \op x$$
+Together, these give
+$$ x^{(2)} \op y^{(1)} = x \op y.$$
+Multiplying on the left by $x = x^{(1)}\op x^{(2)}$, one can conclude that
+$$ x^{(2)} = x \op (x \op y).$$
+One then has
+\begin{align*}
+  (x \op y)^{(1)} &= ((y \op x) \op (x \op y)) \op (x \op y) \\
+&= x \op (x \op y) \\
+&= x^{(2)}
+\end{align*}
+and a similar argument gives
+$$ (x \op y)^{(2)} = y^{(1)}.$$
+Since $(x \op x)^{(1)} = x^{(2)}$ and $(x \op x)^{(2)} = x^{(1)}$, we conclude that $x^{(1)}$ and $x^{(2)}$ are idempotent.  Since $x = x^{(1)} \op x^{(2)}$, we see that every $x$ is the product of two idempotents.  One can show that this representation is unique, and gives a canonical identification with a natural central groupoid.
 \end{proof}

@@ -136,12 +136,37 @@ def test_equation_ids(equation_ids, binary_operation_map):
     return results
 
 
+def text_to_magma_table(text):
+    non_whitespace_tokens = re.sub(r"\W+", " ", text).strip().split(" ")
+    try:
+        entries = [int(token) for token in non_whitespace_tokens]
+    except ValueError:
+        return None
+    row_length = int(math.sqrt(len(entries)))
+    if len(entries) != row_length**2:
+        return None
+    table = []
+    for i in range(len(entries) // row_length):
+        row = entries[(i * row_length) : (i + 1) * row_length]
+        table.append(row)
+    return table
+
+
+def json_magma_table_to_short_text(json_magma_table):
+    return re.sub(r"[\[\],]", "", json_magma_table).replace(" ", ",")
+
+
 def parse_magma_table_string(magma_table_string):
     if not magma_table_string:
         return None, None
+    parsed_magma_table = None
     try:
         parsed_magma_table = json.loads(magma_table_string.strip("'\""))
     except json.decoder.JSONDecodeError:
+        pass
+    if not parsed_magma_table:
+        parsed_magma_table = text_to_magma_table(magma_table_string)
+    if not parsed_magma_table:
         return None, None
     if not isinstance(parsed_magma_table, list):
         return None, None
@@ -217,6 +242,11 @@ def main():
         help="Only print the number of equations passed and tested, without displaying detailed results.",
     )
     parser.add_argument(
+        "--json",
+        action="store_true",
+        help='Output results in JSON format. Uses the magma JSON format: {"size": […], "table": […], "satisfies": […], "tested_up_to": […]}',
+    )
+    parser.add_argument(
         "--verbose",
         action="store_true",
         help="Enable detailed output. This includes specific counterexamples for any failures when checking against specific equation ids (specified using --ids).",
@@ -227,14 +257,41 @@ def main():
         args.magma_table
     )
     if not parsed_magma_table:
+        print(f'ERROR: Unable to parse magma table "{args.magma_table}"')
+        print("")
         print(
-            f'ERROR: Unable to parse magma table (expecting an n×n table with 1 ≤ n ≤ 10 and symbols in the range [0, n-1]). Use the following format: "{EXAMPLE_MAGMA_TABLE}"'
+            "Expecting an n×n table (where 1 ≤ n ≤ 10) and symbols in the range [0, n-1]."
         )
+        print("")
+        print("Examples:")
+        print(f'  "{EXAMPLE_MAGMA_TABLE}"')
+        print(f'  "{json_magma_table_to_short_text(EXAMPLE_MAGMA_TABLE)}"')
         sys.exit(1)
 
     equations_map = read_equations_map()
     equation_ids = sorted(list(set(args.ids)) if args.ids else equations_map.keys())
     assert equation_ids
+
+    if args.json:
+        satisfies = []
+        for equation_id, _, passed, _ in test_equation_ids(
+            equation_ids, binary_operation_map
+        ):
+            if passed:
+                satisfies.append(equation_id)
+        result_object = {
+            "size": len(get_symbols(binary_operation_map)),
+            "table": parsed_magma_table,
+            "satisfies": satisfies,
+        }
+        if len(equation_ids) == len(equations_map):
+            # Set tested_up_to only if we've tested all equations.
+            result_object["tested_up_to"] = max(equations_map.keys())
+        else:
+            result_object["tested_up_to"] = None
+        print(json.dumps(result_object))
+        sys.exit(0)
+
     for equation_id in equation_ids:
         if equation_id not in equations_map:
             print(f"ERROR: Unknown equation id {equation_id}")
@@ -277,11 +334,12 @@ def main():
         assert "◇" not in transformations[-1]
         if print_transformations:
             for transformation in transformations[1:]:
-                print(
-                    f"       {transformation}".replace(
-                        " = ", " = " if passed else " ≠ "
+                if not passed:
+                    transformation = transformation.replace(" = ", " ≠ ")
+                    transformation = transformation.replace(
+                        "# example ", "# counterexample "
                     )
-                )
+                print(f"       {transformation}")
             print("")
     print("```")
     print("")

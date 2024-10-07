@@ -34,14 +34,14 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 > - You might want to install the git pre-push hook by running:
 >
 >   ```bash
->   source scripts/install_pre-push.sh
+>   scripts/install_pre-push.sh
 >   ```
 >   This will automatically run checks before every push, reducing the risk of CI check failures.
 >
 > - You can manually run the following script before pushing, reducing the risk of CI check failures:
 >
 >   ```bash
->   source scripts/run_before_push.sh
+>   scripts/run_before_push.sh
 >   ```
 >   This requires manual execution and won't stop the push if skipped.
 >
@@ -99,6 +99,7 @@ Some technical Lean files:
 - [`DecideBang.lean`](equational_theories/DecideBang.lean) Variants of the `decide` tactic with various hacks to speed up elaboration.
 - [`EquationsCommand.lean`](equational_theories/EquationsCommand.lean)  Speeds up elaboration of equations.
 - [`MemoFinOp.lean`](equational_theories/MemoFinOp.lean) Defines the macro `memoFinOp` that memoizes a function `f : Fin n → Fin n → Fin n`.
+- [`Superposition.lean`](equational_theories/Superposition.lean) The `superpose` tactic, used in several automated proofs
 
 In addition to these files, contributors are welcome to add additional Lean files to the project in the [`equational_theories` folder](equational_theories) or one of its subfolders, to establish more facts about equations.  In order for your contributions to be easily detected by automated tools, please try to follow the following guidelines.
 
@@ -114,6 +115,7 @@ In addition to these files, contributors are welcome to add additional Lean file
 - Consider adding a chapter to the blueprint corresponding to the Lean file, which can for instance detail the methodology used to generate the content of that file.  Also update [this CONTRIBUTING.md file](CONTRIBUTING.md) to add a link to your Lean file.
 - For computer-generated Lean files, see the "Automated Proofs" section below.
 - Lean files that are outside of the [`Generated`](equational_theories/Generated) folder are considered to be part of the human-curated Lean space; it is acceptable to put some auto-generated proofs outside of this folder, but they should be human-readable, and it is acceptable to have human editors optimize these proofs for readability, aesthetics, or other concerns.  On the other hand, Lean files within the [`Generated`](equational_theories/Generated) folder should be 100% computer generated, with no additional human curation.
+- Add your Lean file to the top level [`equational_theories.lean`](equational_theories.lean) file so that it gets picked by the CI and automated implication extraction tools.
 
 Contributions to the Lean codebase will pass through continuous integration (CI) checks that ensure that the Lean code compiles.  Contributors of Lean code are highly encouraged to interact with the [Lean Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/) to help coordinate their contributions and resolve technical issues.
 
@@ -124,6 +126,11 @@ Here is a list of human-contributed Lean files with mathematical content:
 - [`Counting.lean`](equational_theories/Counting.lean) Various theorems about counting laws.
 - [`MagmaOp.lean`](equational_theories/MagmaOp.lean) Magma duality.
 - [`Preorder.lean`](equational_theories/Preorder.lean) Preorder on magmas.
+- [`CentralGroupoids.lean`](equational_theories/CentralGroupoids.lean)  Facts about central groupoids.
+- [`OrderMetatheorem.lean`](equational_theories/OrderMetatheorem.lean) Metatheorems about the ordering relation on laws.
+- [`SmallMagmas.lean`](equational_theories/SmallMagmas.lean) Results about very small magmas
+- [`Z3Counterexamples.lean`](equational_theories/Z3Counterexamples.lean) Counterexamples generated automatically from the Z3 prover
+- [`StringMagmas.lean`](equational_theories/StringMagmas.lean) Studies specific specific string magmas for counterexamples.
 
 
 At present, the API for magmas only allows for theorems that study a finite number of individual equational laws at a time.  We plan to expand the API to also allow one to establish metatheorems about entire classes of equations.

@@ -35,6 +35,14 @@ def getEquationName (app : Expr) : Option String := do
     some ("" ++ name.toString)
   | _ => none
 
+def isCoreEquationName (s : String) : Bool := Id.run do
+  if !s.startsWith "Equation" then return false
+  let some n := (s.toSubstring.drop 8).toNat? | return false
+  return 0 < n && n <= 4694
+
+def filterCoreEquationName (s : String) : Option String :=
+  if isCoreEquationName s then some s else none
+
 /--
 Extracts an `Implication` from two expressions of the form `EquationN G inst`.
 -/
