@@ -182,8 +182,6 @@ def InvolutiveImpliesInvolutionReduceFaithful {α : Type _} [DecidableEq α] {G 
 def equation1571Reducer {n : Nat} (t : FreeMagma (Fin (n+1))) : FreeSemigroup (Fin (n+1)) :=
   involutionReduce $ insertionSortSgr $ freeMagmaToFreeSgr (t ⋆ (Lf (Fin.last n) ⋆ Lf (Fin.last n)))
 
-theorem foo : equation1571Reducer (n := 3) (Lf 0) = 0 ,+ 3 ,+ 3 .+ := Eq.refl _
-
 def AbGrpPow2ImpliesEquation1571ReducerFaithful {n : Nat} {G : Type _} [Magma G] (t : FreeMagma (Fin (n+1))) (f : Fin (n+1) → G)
   (assoc : Equation4512 G) (comm : Equation43 G) (invol : Equation16 G)
   : evalInMagma f t = evalInSgr f (equation1571Reducer t) := by
