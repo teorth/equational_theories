@@ -5,6 +5,7 @@ import equational_theories.Closure
 import equational_theories.Equations
 import equational_theories.FactsSyntax
 import equational_theories.FreeSemigroup
+import equational_theories.MagmaLaw
 
 /- This is a subproject of the main project to completely describe a small subgraph of the entire
 implication graph. The list of equations under consideration can be found at https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html
@@ -281,11 +282,11 @@ theorem Lemma_eq1689_implies_h8 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a
 
 /-- The below results for Equation1571 are out of order because early ones are lemmas for later ones -/
 @[equational_result]
-theorem Equation1571_implies_Equation2662 (G: Type*) [Magma G] (h: Equation1571 G) : Equation2662 G :=
+theorem Equation1571_implies_Equation2662 (G: Type _) [Magma G] (h: Equation1571 G) : Equation2662 G :=
   fun x y ↦ Eq.trans (h x (x ◇ y) (x ◇ y)) (congrArg (fun z ↦ ((x ◇ y) ◇ (x ◇ y)) ◇ z) (Eq.symm $ h x x y))
 
 @[equational_result]
-theorem Equation1571_implies_Equation40 (G: Type*) [Magma G] (h: Equation1571 G) : Equation40 G := by
+theorem Equation1571_implies_Equation40 (G: Type _) [Magma G] (h: Equation1571 G) : Equation40 G := by
   have eq2662 := Equation1571_implies_Equation2662 G h
   have sqRotate : ∀ x y z : G, (x ◇ y) ◇ (x ◇ y) = (y ◇ z) ◇ (y ◇ z)
     := fun x y z ↦ Eq.trans (congrArg (fun w ↦ (x ◇ y) ◇ (x ◇ w)) (eq2662 y z)) (Eq.symm $ h ((y ◇ z) ◇ (y ◇ z)) x y)
@@ -296,7 +297,7 @@ theorem Equation1571_implies_Equation40 (G: Type*) [Magma G] (h: Equation1571 G)
   exact sqConstInImage (x ◇ x) (x ◇ (x ◇ x)) (y ◇ y) (y ◇ (y ◇ y))
 
 @[equational_result]
-theorem Equation1571_implies_Equation23 (G: Type*) [Magma G] (h: Equation1571 G) : Equation23 G := by
+theorem Equation1571_implies_Equation23 (G: Type _) [Magma G] (h: Equation1571 G) : Equation23 G := by
   have eq40 := Equation1571_implies_Equation40 G h
   intro x
   apply Eq.trans $ h x (x ◇ x) (x ◇ x)
@@ -304,7 +305,7 @@ theorem Equation1571_implies_Equation23 (G: Type*) [Magma G] (h: Equation1571 G)
   rw [← eq40 x (x ◇ x)]
 
 @[equational_result]
-theorem Equation1571_implies_Equation8 (G: Type*) [Magma G] (h: Equation1571 G) : Equation8 G := by
+theorem Equation1571_implies_Equation8 (G: Type _) [Magma G] (h: Equation1571 G) : Equation8 G := by
   have eq23 := Equation1571_implies_Equation23 G h
   have eq40 := Equation1571_implies_Equation40 G h
   intro x
@@ -314,7 +315,7 @@ theorem Equation1571_implies_Equation8 (G: Type*) [Magma G] (h: Equation1571 G) 
   apply refl _
 
 @[equational_result]
-theorem Equation1571_implies_Equation16 (G: Type*) [Magma G] (h: Equation1571 G) : Equation16 G := by
+theorem Equation1571_implies_Equation16 (G: Type _) [Magma G] (h: Equation1571 G) : Equation16 G := by
   have eq8 := Equation1571_implies_Equation8 G h
   have eq40 := Equation1571_implies_Equation40 G h
   intro x y
@@ -325,7 +326,7 @@ theorem Equation1571_implies_Equation16 (G: Type*) [Magma G] (h: Equation1571 G)
   exact Eq.symm $ (h x y (y ◇ y))
 
 @[equational_result]
-theorem Equation1571_implies_Equation43 (G: Type*) [Magma G] (h: Equation1571 G) : Equation43 G := by
+theorem Equation1571_implies_Equation43 (G: Type _) [Magma G] (h: Equation1571 G) : Equation43 G := by
   have eq16 := Equation1571_implies_Equation16 G h
   have eq23 := Equation1571_implies_Equation23 G h
   have eq40 := Equation1571_implies_Equation40 G h
@@ -334,23 +335,41 @@ theorem Equation1571_implies_Equation43 (G: Type*) [Magma G] (h: Equation1571 G)
   rw [← h x x y, ← eq23 x, ← eq16 y x, eq40 x y, ← eq23 y]
 
 @[equational_result]
-theorem Equation1571_implies_Equation4512 (G: Type*) [Magma G] (h: Equation1571 G) : Equation4512 G := by
+theorem Equation1571_implies_Equation4512 (G: Type _) [Magma G] (h: Equation1571 G) : Equation4512 G := by
   have eq16 := Equation1571_implies_Equation16 G h
   have eq43 := Equation1571_implies_Equation43 G h
   intro x y z
   apply Eq.trans $ h (x ◇ (y ◇ z)) y x
   rw [eq43 (x ◇ (y ◇ z)) x, ← eq16 (y ◇ z) x, ← eq16 z y, eq43 y x]
 
-/-- An example usage of AssocFullyRightAssociate -/
-theorem Equation1571_implies_Equation3167 (G : Type _) [Magma G] (h : Equation1571 G) : Equation3167 G := by
+theorem ProveEquation1571Consequence {n : Nat} {G : Type _} [Magma G] (eq1571 : Equation1571 G)
+  (law : Law.MagmaLaw (Fin (n+1))) (eq : equation1571Reducer law.lhs = equation1571Reducer law.rhs)
+  : G ⊧ law := by
+  have comm := Equation1571_implies_Equation43 G eq1571
+  have assoc := Equation1571_implies_Equation4512 G eq1571
+  have invol := Equation1571_implies_Equation16 G eq1571
+  intro sub
+  apply Eq.trans $ AbGrpPow2ImpliesEquation1571ReducerFaithful law.lhs sub assoc comm invol
+  apply Eq.trans $ congrArg (evalInSgr sub) eq
+  exact Eq.symm $ AbGrpPow2ImpliesEquation1571ReducerFaithful law.rhs sub assoc comm invol
+
+/- Example usage of the general-purpose prover ProveEquation1571Consequence -/
+theorem Equation1571_implies_Equation3167 {G : Type} [Magma G] (h : Equation1571 G) : Equation3167 G := by
   intros x y z
-  have eq4512 := Equation1571_implies_Equation4512 G h
-  have eq16 := Equation1571_implies_Equation16 G h
-  apply Eq.symm
-  apply Eq.trans $ AssocFullyRightAssociate eq4512 (fun | 0 => y | 1 => y | 2 => z | 3 => z | 4 => x : Fin 5 → G) ((((Lf 0 ⋆ Lf 1) ⋆ Lf 2) ⋆ Lf 3) ⋆ Lf 4)
-  apply Eq.trans $ Eq.symm $ eq16 _ y
-  apply Eq.trans $ Eq.symm $ eq16 _ z
-  exact Eq.refl _
+  exact ProveEquation1571Consequence (n := 2)
+      h
+      {lhs := Lf 0, rhs := (((Lf 1 ⋆ Lf 1) ⋆ Lf 2) ⋆ Lf 2) ⋆ Lf 0}
+      (Eq.refl _)
+      (fun | 0 => x | 1 => y | 2 => z)
+
+/- Example usage of the general-purpose prover ProveEquation1571Consequence -/
+theorem Equation1571_implies_Equation4656 {G : Type} [Magma G] (h : Equation1571 G) : Equation4656 G := by
+  intros x y z
+  exact ProveEquation1571Consequence (n := 2)
+      h
+      {lhs := (Lf 0 ⋆ Lf 1) ⋆ Lf 1, rhs := (Lf 0 ⋆ Lf 2) ⋆ Lf 2}
+      (Eq.refl _)
+      (fun | 0 => x | 1 => y | 2 => z)
 
 /-- This result was first obtained by Kisielewicz in 1997 via computer assistance. -/
 @[equational_result]

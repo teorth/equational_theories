@@ -4674,7 +4674,7 @@ equation 4652 := (x ◇ y) ◇ x = (z ◇ w) ◇ w
 equation 4653 := (x ◇ y) ◇ x = (z ◇ w) ◇ u
 equation 4654 := (x ◇ y) ◇ y = (x ◇ y) ◇ z
 equation 4655 := (x ◇ y) ◇ y = (x ◇ z) ◇ y
-equation 4656 := (x ◇ y) ◇ y = (x ◇ z) ◇ z
+-- equation 4656 := (x ◇ y) ◇ y = (x ◇ z) ◇ z
 equation 4657 := (x ◇ y) ◇ y = (x ◇ z) ◇ w
 equation 4658 := (x ◇ y) ◇ y = (y ◇ x) ◇ x
 equation 4659 := (x ◇ y) ◇ y = (y ◇ x) ◇ z

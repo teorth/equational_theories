@@ -116,6 +116,7 @@ abbrev Equation4579 (G: Type _) [Magma G] := ∀ x y z w u : G, x ◇ (y ◇ z) 
 /-- all products of three values are the same, regardless bracketing -/
 abbrev Equation4582 (G: Type _) [Magma G] := ∀ x y z w u v : G, x ◇ (y ◇ z) = (w ◇ u) ◇ v
 
+abbrev Equation4656 (G: Type _) [Magma G] := ∀ x y z : G, (x ◇ y) ◇ y = (x ◇ z) ◇ z
 
 /- Some order 5 laws -/
 
