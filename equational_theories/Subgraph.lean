@@ -299,7 +299,7 @@ theorem Equation1571_implies_Equation40 (G: Type _) [Magma G] (h: Equation1571 G
 
 @[equational_result]
 theorem Equation1571_implies_Equation23 (G: Type _) [Magma G] (h: Equation1571 G) : Equation23 G := by
-  refine fun x ↦ Eq.trans (h x (x ◇ x) (x ◇ x)) ?_
+  refine fun x ↦ (h x (x ◇ x) (x ◇ x)).trans ?_
   rw [← h x x x, ← Equation1571_implies_Equation40 G h x (x ◇ x)]
 
 @[equational_result]
