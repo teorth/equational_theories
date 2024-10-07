@@ -71,15 +71,14 @@ for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} ass
 
 \begin{definition}[Models]\label{models-def}
   \lean{models}\leanok
-  \uses{law-def}
-  Given an arbitrary set $\Gamma$ of laws, a magma $G$ is a \emph{model} of $\Gamma$ with the
+  \uses{law-def}  A \emph{theory} is a set $\Gamma$ of laws.  Given a theory $\Gamma$, a magma $G$ is a \emph{model} of $\Gamma$ with the
   (overloaded) notation $G\models\Gamma$ if $G\models w\formaleq w'$ for every $w\formaleq w'$ in $\Gamma$; we also say that $G$ \emph{obeys} $\Gamma$.  Given a law $E$, we write $\Gamma \models E$ if every magma $G$ that models $\Gamma$, also models $E$.
 \end{definition}
 
 \begin{definition}[Derivation]\label{derivation-def}
   \lean{derive}\leanok
   \uses{law-def}
-  Given a set $\Gamma$ of laws and a law $w\formaleq w'$ over a fixed alphabet $X$, we say that
+  Given a theory $\Gamma$ and a law $w\formaleq w'$ over a fixed alphabet $X$, we say that
   $\Gamma$ \emph{derives} $w\formaleq w'$, and write $\Gamma\vdash w\formaleq w'$, if the law can
   be obtained using a finite number of applications of the following rules:
   \begin{enumerate}
@@ -87,7 +86,7 @@ for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} ass
     \item $\Gamma\vdash w\formaleq w$ for any word $w$.
     \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w'\formaleq w$.
     \item if $\Gamma\vdash w\formaleq w'$ and $\Gamma\vdash w'\formaleq w''$ then $\Gamma\vdash w\formaleq w''$.
-    \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w\sigma\formaleq w'\sigma$, where $\sigma$ is an arbitrary map from $X$ to words in $M_X$ and $w\sigma$ replaces each occurrence of an element of $X$ with its image by $\sigma$ in $w$.
+    \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash \varphi_f w \formaleq \varphi_f w'$ for every $f: X \to M_X$.
     \item if $\Gamma\vdash w_1\formaleq w_2$ and $\Gamma\vdash w_3\formaleq w_4$ then $\Gamma\vdash w_1 \op w_3\formaleq w_2\op w_4$
   \end{enumerate}
 \end{definition}
@@ -95,7 +94,7 @@ for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} ass
 This definition is useful because of the following theorem:
 
 \begin{theorem}[Birkhoff's completeness theorem]\label{sound-complete}\lean{Completeness}\leanok\uses{models-def, derivation-def}
-  For any set of laws $\Gamma$ and words $w, w'$ over a fixed alphabet
+  For any theory $\Gamma$ and words $w, w'$ over a fixed alphabet
   $$ \Gamma\vdash w\formaleq w'\ \mathrm{iff}\ \Gamma\models w\formaleq w'.$$
 \end{theorem}
 \begin{proof}
@@ -104,7 +103,7 @@ This definition is useful because of the following theorem:
 \end{proof}
 
 
-\begin{corollary}[Compactness theorem]\label{compactness-thm}\uses{models-def}  Let $\Gamma$ be a collection of laws, and let $E$ be a law.  Then $\Gamma \models E$ if and only if there exists a finite subset $\Gamma'$ of $\Gamma$ such that $\Gamma' \models E$.
+\begin{corollary}[Compactness theorem]\label{compactness-thm}\uses{models-def}  Let $\Gamma$ be a theory, and let $E$ be a law.  Then $\Gamma \models E$ if and only if there exists a finite subset $\Gamma'$ of $\Gamma$ such that $\Gamma' \models E$.
 \end{corollary}
 
 \begin{proof}\uses{sound-complete} The claim is obvious for $\vdash$, and the claim then follows from Theorem \ref{sound-complete}.
