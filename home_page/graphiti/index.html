@@ -189,6 +189,10 @@
           >Download SVG</a
         >
         ◇
+        <a href="#" id="download-link" onclick="downloadPNG(event)"
+          >Download PNG</a
+        >
+        ◇
         <a
           href="https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Graphiti"
           >Leave feedback</a
@@ -308,6 +312,9 @@
       }
 
       function backToSearch(event) {
+        if (document.querySelector("svg")) {
+          document.querySelector("svg").remove();
+        }
         hideVisibility("graph");
         showVisibility("container");
 
@@ -326,12 +333,16 @@
 
       function downloadSVG(event) {
         event.preventDefault();
+
         // Select the SVG element
         var svgElement = document.querySelector("svg");
+        if (!svgElement) {
+          window.alert("Graph hasn't finished rendering yet");
+          return;
+        }
 
         // Serialize the SVG to a string
         var serializer = new XMLSerializer();
-        console.log(svgElement);
         var svgString = serializer.serializeToString(svgElement);
 
         // Create a Blob from the SVG string
@@ -352,20 +363,72 @@
         document.body.removeChild(link);
       }
 
+      function downloadPNG(event) {
+        event.preventDefault();
+
+        var svgElement = document.querySelector("svg");
+        if (!svgElement) {
+          window.alert("Graph hasn't finished rendering yet");
+          return;
+        }
+
+        // Convert the SVG to PNG after rendering
+        const svg = d3.select("#graph svg").node();
+        const serializer = new XMLSerializer();
+        const svgData = serializer.serializeToString(svg);
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+
+        // Create an image element to convert SVG to PNG
+        const img = new Image();
+        const svgBlob = new Blob([svgData], {
+          type: "image/svg+xml;charset=utf-8",
+        });
+        const url = URL.createObjectURL(svgBlob);
+        img.onload = function () {
+          // Set the scaling factor for higher resolution
+          const scaleFactor = 2; // Change this value for higher or lower resolution
+
+          const svgWidth = svg.width.baseVal.value;
+          const svgHeight = svg.height.baseVal.value;
+          canvas.width = svgWidth * scaleFactor; // Scale the width
+          canvas.height = svgHeight * scaleFactor; // Scale the height
+
+          // Set the context scale for drawing
+          context.scale(scaleFactor, scaleFactor);
+
+          // Draw the image on the canvas
+          context.drawImage(img, 0, 0);
+
+          URL.revokeObjectURL(url);
+
+          const pngUrl = canvas.toDataURL("image/png");
+          if (pngUrl.length < 100 || pngUrl === "data:image/png;base64,") {
+            window.alert("Failed to generate PNG, input likely too large");
+            return;
+          }
+
+          const a = document.createElement("a");
+          a.href = pngUrl;
+          a.download = "graph.png";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+
+          console.log(55);
+        };
+
+        img.src = url;
+      }
+
       function onGraphRender() {
+        console.log("onGraphRender");
         document.getElementById("message").innerHTML = "";
 
         // Set vertex links to have target=_blank (e.g., open new tab)
-        d3.selectAll(".node").each(function (d) {
-          d3.select(this)
-            .select("a")
-            .each(function (text) {
-              d3.select(this).attr("target", "_blank");
-            });
-        });
+        d3.selectAll(".node").selectAll("a").attr("target", "_blank");
       }
 
-      var graphviz = d3.select("#graphSvg").graphviz();
       var graph_json = undefined;
 
       function vertices(adj_list) {
@@ -608,7 +671,11 @@ graph G {
         document.getElementById("graphSvg").innerHTML = "";
         showVisibility("graph");
         document.getElementById("message").innerHTML += "Rendering...<br />";
-        graphviz.renderDot(dotFile).on("end", onGraphRender);
+
+        d3.select("#graphSvg")
+          .graphviz({ tweenPaths: false, tweenShapes: false })
+          .renderDot(dotFile)
+          .on("end", onGraphRender);
       }
 
       const params = Object.fromEntries(
