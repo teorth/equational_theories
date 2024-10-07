@@ -77,4 +77,44 @@ theorem Equation3994_not_implies_Equation3588 :
     specialize h 1 1 1
     simp [Magma.op, f_3994_3588] at h
 
--- TODO dual of the above (eq3588 and eq3994 are dual with each other).
+/--
+Dual of the above theorem. The proof here is the same, but with x and y swapped.
+TODO: figure out a way to avoid this code duplication.
+-/
+@[equational_result]
+theorem Equation3588_not_implies_Equation3994 :
+    ∃ (G: Type) (_: Magma G), Equation3588 G ∧ ¬ Equation3994 G := by
+  refine ⟨ℕ, { op := fun x y => f_3994_3588 y x}, ?_, ?_⟩
+  · intro x y z
+    simp only [Magma.op, f_3994_3588]
+    by_cases hy : Even y
+    · simp only [hy, reduceIte]
+      by_cases hx : Even x
+      · have hyx := xor_even_even hy hx
+        simp only [hx, reduceIte]
+        by_cases hz : Even z
+        · simp only [hz, reduceIte, hyx, xor_even_even hz hyx]
+          rw [←Nat.xor_comm z]
+          exact (Nat.xor_cancel_left z (y ^^^ x)).symm
+        · simp [hz, hyx, xor_even_add_two]
+      · simp only [hx, reduceIte]
+        have hy' := xor_even_sub_two hy
+        by_cases hz : Even z
+        · simp only [hz, reduceIte, hy', xor_even_sub_two, xor_even_even]
+          rw [Nat.xor_comm]
+          exact (Nat.xor_cancel_left z (y - 2)).symm
+        · simp [hz, hy', xor_even_add_two hy']
+    · simp [hy]
+      by_cases hx : Even x
+      · simp only [hx, reduceIte]
+        have hx' := xor_even_add_two hx
+        by_cases hz : Even z
+        · simp only [hz, reduceIte, hx', xor_even_even hz hx']
+          rw [Nat.xor_comm]
+          exact (Nat.xor_cancel_left z (x + 2)).symm
+        · simp [hz, hx', xor_even_add_two hx']
+      · simp only [hx, reduceIte]
+        by_cases hz : Even z <;> simp [hz]
+  · intro h
+    specialize h 1 1 1
+    simp [Magma.op, f_3994_3588] at h
