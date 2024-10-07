@@ -8,7 +8,7 @@
 [![Paper](https://img.shields.io/badge/Paper-WIP-blue)](https://teorth.github.io/equational_theories/blueprint.pdf)
 [![Zulip Channel](https://img.shields.io/badge/Zulip_Channel-Join-blue)](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational)
 
-![Hasse diagram of selected equations](https://github.com/teorth/equational_theories/tree/main/images/subgraph.png)
+![Hasse diagram of selected equations](https://github.com/teorth/equational_theories/blob/main/images/subgraph.png?raw=true)
 
 The purpose of this project, launched on Sep 25, 2024, is to explore the space of equational theories of [magmas](https://en.wikipedia.org/wiki/Magma_(algebra)), ordered by implication. To begin with we shall focus only on theories of a single equation, and specifically on the 4694 equational laws
 involving at most four magma operations, up to symmetry and relabeling (here is the list [in Lean](https://github.com/teorth/equational_theories/tree/main/equational_theories/AllEquations.lean) and in [plain text](https://github.com/teorth/equational_theories/tree/main/data/equations.txt)).  This creates 4694*(4694-1) = 22,028,942 implications that need to be proven or disproven, creating both "implications" and "anti-implications".
@@ -28,7 +28,7 @@ Current statistics and data files, updated automatically:
 - [dashboard](https://teorth.github.io/equational_theories/dashboard/)
 
 Current visualizations, updated automatically:
-- A tool for exploring the graph of equation implications is available [here](https://teorth.github.io/equational_theories/implications).
+- [Equation Explorer](https://teorth.github.io/equational_theories/implications) is a tool for exploring the graph of equation implications.
 - An experimental tool to interactively explore a Hasse diagram of the graph is available [here](https://tsyrklevi.ch/eqviz/index.html?2)
 
 For guidelines on how to contribute, see the [CONTRIBUTING.md](https://github.com/teorth/equational_theories/tree/main/CONTRIBUTING.md) file.  Participants are requested to abide by [our code of conduct](https://github.com/teorth/equational_theories/tree/main/CODE_OF_CONDUCT.md).
