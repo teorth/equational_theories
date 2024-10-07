@@ -46,7 +46,33 @@ function encode(string) {
     const keyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
     return _compress(string, 6, x => keyStrUriSafe.charAt(x))
 }
-    
+
+function findRandom8(implications) {
+  // Find all coordinates with value 8
+  const eights = [];
+
+  for (let i = 0; i < implications.length; i++) {
+    for (let j = 0; j < implications[i].length; j++) {
+      if (implications[i][j] === "unknown") {
+        eights.push([i, j]);
+      }
+    }
+  }
+
+  // If no 8s found, return null
+  if (eights.length === 0) {
+    return null;
+  }
+
+  // Pick a random coordinate from the found 8s
+  const randomIndex = Math.floor(Math.random() * eights.length);
+  return eights[randomIndex];
+}
+function randomProof() {
+    var idx = findRandom8(implications);
+    console.log(idx);
+    window.location.href = gen_proof_url(idx[0], idx[1]);
+}
 
 
 /* The following code is the implementation of LZ String.
