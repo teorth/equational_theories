@@ -82,6 +82,7 @@ if options[:limit_to_subgraph]
 end
 
 # Reducing first improves the speed of the closure
+# Much faster to do this all over the condensed graph but the tool is deprecated now anyways.
 implications_graph = implications_graph.transitive_reduction
 implications_graph = implications_graph.transitive_closure
 if vertices_to_delete.length > 0
@@ -95,41 +96,21 @@ if vertices_to_delete.length > 0
   implications_graph.adj_list.keys.each { |v| implications_graph.adj_list[v] -= vertices_to_delete }
 end
 
-implications_graph = implications_graph.transitive_reduction
-
-# Manual Graph condensation
-sccs = implications_graph.scc
-condensed_implications_graph = Graph.new
-scc_map = {}
-scc_reverse_map = {}
-
-sccs.each_with_index { |scc, idx|
-  scc_reverse_map["SCC#{idx}"] = scc.sort
-  scc.each { |node|
-    scc.each { |node| scc_map[node] = "SCC#{idx}" }
-  }
-}
-
-implications_graph.adj_list.each { |u, neighbors|
-  neighbors.each { |v|
-    next if scc_map[u] == scc_map[v]  # Skip edges within the same SCC
-    condensed_implications_graph.add_edge(scc_map[u], scc_map[v])
-  }
-}
+condensed_graph, node_to_scc_map, scc_to_node_map = implications_graph.condensation
+condensed_graph = condensed_graph.transitive_reduction
 
 # Condensation finished, generate graphviz data
-
 reverse_map = {}
-condensed_implications_graph.vertices.each { |node|
-  if condensed_implications_graph.adj_list[node]
-    condensed_implications_graph.adj_list[node].each { |v|
+condensed_graph.vertices.each { |node|
+  if condensed_graph.adj_list[node]
+    condensed_graph.adj_list[node].each { |v|
       reverse_map[v] ||= Set.new []
       reverse_map[v] << node
     }
   end
 }
 
-roots = reverse_map.keys.filter { |v| condensed_implications_graph.adj_list[v].length == 0 }
+roots = reverse_map.keys.filter { |v| condensed_graph.adj_list[v].length == 0 }
 if !roots || roots.length == 0
   $stderr.puts "Failed to find a root in the graph?!"
   exit 1
@@ -157,7 +138,7 @@ def name(nodes)
   equations.join("\\n")
 end
 
-scc_reverse_map.each { |scc_name, nodes|
+scc_to_node_map.each { |scc_name, nodes|
   print "  #{scc_name} ["
   print "label=\"#{name(nodes)}\""
   if nodes.length > 1
@@ -174,7 +155,7 @@ scc_reverse_map.each { |scc_name, nodes|
   puts "]"
 }
 
-condensed_implications_graph.adj_list.each { |node, neighbors|
+condensed_graph.adj_list.each { |node, neighbors|
   neighbors.each { |neighbor|
 
     puts "  #{neighbor} -- #{node};"
