@@ -1,0 +1,54 @@
+<center><h1>Redirecting you to a random implication to prove...</h1></center>
+<script src="implications.js"></script>
+<script src="to_lean.js"></script>
+<script>
+// Generate sample equations
+
+const ids = [
+    "explicit_conjecture_false",
+    "explicit_conjecture_true",
+    "explicit_proof_false",
+    "explicit_proof_true",
+    "implicit_conjecture_false",
+    "implicit_conjecture_true",
+    "implicit_proof_false",
+    "implicit_proof_true",
+    "unknown"
+];
+
+// Assuming arr is already defined
+// const arr = [...];  // Your RLE encoded array
+
+function decodeRLE(arr) {
+    const decoded = [];
+    for (let i = 0; i < arr.length; i += 2) {
+	const value = arr[i];
+	const count = arr[i + 1];
+	decoded.push(...Array(count).fill(value));
+    }
+    return decoded;
+}
+
+function mapThroughLUT(decoded) {
+    return decoded.map(index => ids[index]);
+}
+
+function reshape(array, rows, cols) {
+    const result = [];
+    for (let i = 0; i < rows; i++) {
+	result.push(array.slice(i * cols, (i + 1) * cols));
+    }
+    return result;
+}
+
+// Decode RLE
+const decoded = decodeRLE(arr);
+
+// Map through LUT
+const mapped = mapThroughLUT(decoded);
+
+// Reshape to 2694x2694
+const implications = reshape(mapped, 4694, 4694);
+randomProof();
+</script>  
+             
