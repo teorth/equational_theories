@@ -27,7 +27,7 @@ Current statistics and data files, updated automatically:
 
 Current visualizations, updated automatically:
 - A tool for exploring the graph of equation implications is available [here](https://teorth.github.io/equational_theories/implications).
-- An experimental tool to interactively explore a Hasse diagram of the graph is available [here](https://tsyrklevi.ch/eqviz/index.html?2)
+- [Graphiti](https://teorth.github.io/equational_theories/graphiti) is a tool for visualizing the implication graph.
 
 For guidelines on how to contribute, see the [CONTRIBUTING.md](https://github.com/teorth/equational_theories/blob/main/CONTRIBUTING.md) file.  Participants are requested to abide by [our code of conduct](https://github.com/teorth/equational_theories/blob/main/CODE_OF_CONDUCT.md).
 
@@ -100,16 +100,15 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
         - [`find_equation_id`](https://github.com/teorth/equational_theories/blob/main/scripts/find_equation_id.py) - finds the equation number of an equation string
         - [`find_powerful_theorems.py`](https://github.com/teorth/equational_theories/blob/main/scripts/find_powerful_theorems.py) - finds theorems that, if proved, would imply many others
         - [`generate_eqs_list`](https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py) - generates a list of equations
-        - [`generate_graphviz_graph`](https://github.com/teorth/equational_theories/blob/main/scripts/generate_graphviz_graph.rb) - generates a graphviz dot file, that can be used to create an implication graph
         - [`generate_image`](https://github.com/teorth/equational_theories/blob/main/scripts/generate_image.py) - generates an image of implications
         - [`generate_most_wanted_list`](https://github.com/teorth/equational_theories/blob/main/scripts/generate_most_wanted_list.py) - generates the "most wanted" implications
         - [`generate_z3_counterexample`](https://github.com/teorth/equational_theories/blob/main/scripts/generate_z3_counterexample.py) - given an implication statement between two equations, calls Z3 to try to generate a counterexample
         - [`process_implications`](https://github.com/teorth/equational_theories/blob/main/scripts/process_implications.py) - processes implications from one or more Lean files
     - Ruby
         - [`generate_graphviz_graph`](https://github.com/teorth/equational_theories/blob/main/scripts/generate_graphviz_graph.rb) - creates a graphviz graph
-        - [`graph`](https://github.com/teorth/equational_theories/blob/main/scripts/graph.rb) - graph condensation tools
         - [`transitive_closure`](https://github.com/teorth/equational_theories/blob/main/scripts/transitive_closure.rb) - computes the transitive closure of a set of implications
         - [`transitive_reduction`](https://github.com/teorth/equational_theories/blob/main/scripts/transitive_reduction.rb) - finds a transitive reduction of a set of implications
+        - [`graph`](https://github.com/teorth/equational_theories/blob/main/scripts/graph.rb) - graph library
 - Automated provers for equational theories
     - [Prover9 and Mace4](https://www.cs.unm.edu/~mccune/prover9/)
         - [aa](https://github.com/gsfk/aa) - a project to use Prover9/Mace4 to brute force axioms for finite mathematical domains
