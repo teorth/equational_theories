@@ -19,10 +19,10 @@ For these cases we used a simple heuristic, where we instantiate the variables w
 
 \subsection{Results}
 
-Out of the possible implications between the $34$ equations considered in Chapter~\ref{subgraph-eq}, this method found an additional 86 implications that were not found before.
+Out of the possible implications between the $34$ equations considered in \Cref{subgraph-eq}, this method found an additional 86 implications that were not found before.
 Some of these seem to be missing in the computation of the transitive closure of implications of the equalities (an investigation is in progress), but some of these are genuinely new theorems, and the \texttt{lean-egg} tactic finds good proofs of these (these can be rewritten using \texttt{calc} style with a different tactic, \texttt{calcify}: \url{https://github.com/nomeata/lean-calcify}). An example of this is the following proof, found by lean-egg:
 
-\begin{theorem}[14 implies 23]\label{14_implies_23} \uses{eq23,eq14}\lean{Subgraph.Equation14_implies_Equation23}\leanok  Definition \ref{eq14} is equivalent to Definition \ref{eq23}.
+\begin{theorem}[14 implies 23]\label{14_implies_23} \uses{eq23,eq14}\lean{Subgraph.Equation14_implies_Equation23}\leanok  \Cref{eq14} is equivalent to \Cref{eq23}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -30,7 +30,7 @@ Some of these seem to be missing in the computation of the transitive closure of
 $$ x = (x \op x) \op (x \op (x \op x)) = (x \op x) \op x $$
 \end{proof}
 
-It was also able to (re)prove Theorem~\ref{1689_equiv_2}, albeit with a manually-provided hint (guide, in the sense of~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24}).
+It was also able to (re)prove \Cref{1689_equiv_2}, albeit with a manually-provided hint (guide, in the sense of~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24}).
 
 \section{MagmaEgg}
 
