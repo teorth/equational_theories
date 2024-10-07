@@ -23,3 +23,9 @@ div.corollary_thmcontent {
 div.proof_content {
 	border-left: .08rem solid grey;
 }
+
+/* Limit Hasse diagram to bounding box size */
+img {
+    max-width: 100%;
+    height: auto;
+}
