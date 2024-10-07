@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equation Explorer</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+      .page { display: none; }
+      .active { display: block; }
+      .equation-list { height: 600px; overflow-y: auto; border: 1px solid #ccc; }
+      .equation-item { cursor: pointer; padding: 5px; margin: 2px 0; display: flex; }
+      .equation-item:hover { background-color: #f0f0f0; }
+      .equation-name { flex: 2; }
+      .equation-stat { flex: 1; text-align: center; }
+      .implication-box { border: 1px solid #ccc; margin: 10px 0; padding: 10px; }
+      .implication-table { width: 100%; border-collapse: collapse; }
+      .implication-table th, .implication-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+      .implication-table th { background-color: #f2f2f2; }
+      .implication-list { height: 200px; overflow-y: auto; }
+      .yes { color: green; }
+      .no { color: red; }
+      .maybe { color: orange; }
+      .conjectured { background-color: #fffacd; }
+      #backButton { float: right; margin: 10px; }
+      h1, h2, h3 { margin-bottom: 10px; }
+      .header { font-weight: bold; background-color: #f0f0f0; position: sticky; top: 0; z-index: 1; }
+      .header .equation-stat { cursor: pointer; }
+      .header .equation-stat:hover { background-color: #e0e0e0; }
+      .checkbox-container { margin: 10px 0; }
+
+      .link {
+	  color: #0000EE;
+	  text-decoration: underline;
+	  cursor: pointer;
+      }
+
+      a:hover, a:focus {
+	  color: #0000FF;
+	  text-decoration: none;
+      }
+
+      .special {
+	  font-weight: bold
+      }
+
+      input[type="text"] {
+          width: 300px;
+          padding: 5px;
+      }
+      button {
+          padding: 5px 10px;
+      }
+      #result {
+          margin-top: 20px;
+      }
+      .overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+      }
+      .error-popup {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: white;
+          padding: 20px;
+          border-radius: 5px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          max-width: 80%;
+          z-index: 1001;
+      }
+      .close-btn {
+          float: right;
+          cursor: pointer;
+          font-size: 20px;
+      }
+
+      .implication-item {
+    cursor: pointer;
+    padding: 5px;
+    margin: 2px 0;
+}
+
+.implication-item:hover {
+    background-color: #f0f0f0;
+}
+
+    </style>
+
+  </head>
+  <body>
+    <div id="listPage" class="page active">
+      <h1>Equation Explorer</h1>
+
+
+      <input type="text" id="equationInput" placeholder="Enter an equation (e.g., x*y=y*x)">
+      <button onclick="findEquation()">Jump to Equation</button>
+      <div id="result"></div>
+
+      <div id="errorOverlay" class="overlay">
+        <div class="error-popup">
+          <span class="close-btn" onclick="closeErrorPopup()">&times;</span>
+          <h2>Oops! There's an issue with your equation</h2>
+          <p id="errorMessage"></p>
+        </div>
+      </div>
+
+      <p>
+        Why not try proving a random unknown implication?
+        <button onclick="randomProof()">I'm Feeling Lucky</button>
+      </p>
+
+
+      <div class="checkbox-container">
+	<label>
+	  <input checked="checked" type="checkbox" id="showEquivalences"> Hide equivalent equations
+	</label>
+        <label>
+          <input type="checkbox" checked="checked" id="treatConjectedAsUnknownList"> Treat conjectures as unknown
+        </label>
+      </div>
+      <div id="equationList" class="equation-list">
+        <div class="equation-item header">
+          <div class="equation-name" data-sort="index">Equation</div>
+          <div class="equation-stat" data-sort="implies">Implies</div>
+          <div class="equation-stat" data-sort="impliedBy">Implied By</div>
+          <div class="equation-stat" data-sort="antiImplies">Anti-Implies</div>
+          <div class="equation-stat" data-sort="antiImpliedBy">Anti-Implied By</div>
+          <div class="equation-stat" data-sort="unknown">Unknown</div>
+          <div class="equation-stat" data-sort="unknownBy">Unknown By</div>
+        </div>
+      </div>
+    </div>
+    <div id="detailPage" class="page">
+      <button id="backButton">Back to List</button>
+      <h1>Equation Details</h1>
+      <h2 id="selectedEquation"></h2>
+      <h3><span id="selectedEquationDual"></span> <span id="selectedEquationGraphitiLinks"></span></h3>
+      <div class="checkbox-container">
+	<label>
+	  <input checked="checked" type="checkbox" id="showEquivalences2"> Hide equivalent equations
+	</label>
+        <label>
+          <input type="checkbox" id="showOnlyExplicitProofs"> Show only explicit proofs
+        </label>
+        <label>
+          <input type="checkbox" id="treatConjectedAsUnknownDetail"> Treat conjectures as unknown
+        </label>
+
+      </div>
+      <div class="implication-box">
+        <h3>This equation implies (=&gt;):</h3>
+        <table class="implication-table">
+          <tr>
+            <th>Implies</th>
+            <th>Anti-Implies</th>
+            <th>Unknown</th>
+          </tr>
+          <tr>
+            <td><div id="impliesList" class="implication-list"></div></td>
+            <td><div id="antiImpliesList" class="implication-list"></div></td>
+            <td><div id="unknownImpliesList" class="implication-list"></div></td>
+          </tr>
+        </table>
+      </div>
+      <div class="implication-box">
+        <h3>This equation is implied by (&lt;=):</h3>
+        <table class="implication-table">
+          <tr>
+            <th>Implied By</th>
+            <th>Anti-Implied By</th>
+            <th>Unknown By</th>
+          </tr>
+          <tr>
+            <td><div id="impliedByList" class="implication-list"></div></td>
+            <td><div id="antiImpliedByList" class="implication-list"></div></td>
+            <td><div id="unknownImpliedByList" class="implication-list"></div></td>
+          </tr>
+        </table>
+      </div>
+      <div class="implication-box">
+        <table class="implication-table">
+          <tr>
+            <th>Equivalent Equations</th>
+          </tr>
+	  <tr>
+	    <td><div id="equivalentEquations" class="implication-list"></div></td>
+	  </tr>
+	</table>
+      </div>
+    </div>
+
+    <script src="implications.js?6"></script>
+    <script src="find_equation_id.js"></script>
+    <script src="to_lean.js"></script>
+    <script src="script.js"></script>
+
+    <div>
+      <p>Last updated at: <span id="lastUpdated"></span> (local time), Git commit: <a id="commitLink" target="_blank"></a></p>
+    </div>
+  </body>
+</html>

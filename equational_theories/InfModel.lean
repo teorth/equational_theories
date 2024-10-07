@@ -76,7 +76,7 @@ theorem Equation374794_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equ
     · apply ne_of_lt
       simp only [← PNat.coe_lt_coe, PNat.val_ofNat, PNat.pow_coe]
       apply lt_self_pow (by simp)
-      apply one_lt_pow (by simp) (by simp)
+      apply one_lt_pow₀ (by simp) (by simp)
     · trivial
   simp only [Ne.symm hx, ↓reduceIte, PNat.pow_coe, PNat.val_ofNat, padicValNat.prime_pow,
     PNat.coe_toPNat']
@@ -483,6 +483,7 @@ theorem Finite.Equation3994_implies_Equation3588 (G : Type*) [Magma G] [Finite G
   apply (this _).symm
   simp [S]
 
+@[equational_result]
 theorem Equation3994_not_implies_Equation3588 : ∃ (G : Type) (_ : Magma G), Equation3994 G ∧ ¬Equation3588 G := by
   let magN : Magma ℕ := ⟨fun x y ↦ if Even x ∧ Even y then x ^^^ y else if Even y then y + 2
     else if Even x then x - 2 else 0⟩
@@ -494,6 +495,40 @@ theorem Equation3994_not_implies_Equation3588 : ∃ (G : Type) (_ : Magma G), Eq
     · simp_all
     · simpa [Nat.even_add]
     · by_cases x < 2
+      · rw [Nat.sub_eq_zero_of_le]
+        simp
+        omega
+      rw [Nat.even_sub]
+      · simp_all
+      · omega
+    · exact even_zero
+  constructor
+  · intro x y z
+    generalize h : x ◇ y = v
+    have : Even v := by rw [← h]; apply range
+    by_cases hz : Even z
+    · simp [magN, this, hz, Nat.xor_comm, Nat.xor_cancel_left]
+    · simp [magN, hz, this, Nat.even_add]
+  simp only [not_forall]
+  use 1, 1, 1
+  simp [magN]
+
+/--
+Dual of the above, obtained by swapping x and y in the proof.
+TODO: find a way to avoid this kind of code duplication.
+-/
+@[equational_result]
+theorem Equation3588_not_implies_Equation3944 : ∃ (G : Type) (_ : Magma G), Equation3588 G ∧ ¬ Equation3994 G := by
+  let magN : Magma ℕ := ⟨fun y x ↦ if Even x ∧ Even y then x ^^^ y else if Even y then y + 2
+    else if Even x then x - 2 else 0⟩
+  use ℕ, magN
+  have range : ∀ x y : ℕ, Even (x ◇ y : ℕ) := by
+    intro x y
+    simp only [magN]
+    split_ifs
+    · simp_all
+    · simpa [Nat.even_add]
+    · by_cases y < 2
       · rw [Nat.sub_eq_zero_of_le]
         simp
         omega

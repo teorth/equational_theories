@@ -1,4 +1,4 @@
-\chapter{Basic theory of magmas}
+\chapter{Basic theory of magmas}\label{basic-theory-chapter}
 
 \begin{definition}[Magma]\label{magma-def}\lean{Magma}\leanok A \emph{magma} is a set $G$ equipped with a binary operation $\op: G \times G \to G$.  A \emph{homomorphism} $\varphi : G \to H$ between two magmas is a map such that $\varphi(x \op y) = \varphi(x) \op \varphi(y)$ for all $x,y \in G$.  An \emph{isomorphism} is an invertible homomorphism.
 \end{definition}
@@ -67,19 +67,18 @@ is satisfied by a magma $G$ if and only if
 \begin{equation}\label{comm-law-2}
  x \op y = y \op x
 \end{equation}
-for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} associated to the law \eqref{comm-law}.  One can think of equations as the ``semantic'' interpretation of a ``syntactic'' law.  However, we shall often abuse notation and a law with its associated equation thus we shall (somewhat carelessly) also refer to \eqref{comm-law-2} as ``the commutative law'' (rather than ``the commutative equation'').
+for all $x, y \in G$.  We refer to \Cref{comm-law-2} as the \emph{equation} associated to the law \Cref{comm-law}.  One can think of equations as the ``semantic'' interpretation of a ``syntactic'' law.  However, we shall often abuse notation and identify a law with its associated equation.  In particular, we shall (somewhat carelessly) also refer to \Cref{comm-law-2} as ``the commutative law'' (rather than ``the commutative equation'').
 
 \begin{definition}[Models]\label{models-def}
   \lean{models}\leanok
-  \uses{law-def}
-  Given an arbitrary set $\Gamma$ of laws, a magma $G$ is a \emph{model} of $\Gamma$ with the
+  \uses{law-def}  A \emph{theory} is a set $\Gamma$ of laws.  Given a theory $\Gamma$, a magma $G$ is a \emph{model} of $\Gamma$ with the
   (overloaded) notation $G\models\Gamma$ if $G\models w\formaleq w'$ for every $w\formaleq w'$ in $\Gamma$; we also say that $G$ \emph{obeys} $\Gamma$.  Given a law $E$, we write $\Gamma \models E$ if every magma $G$ that models $\Gamma$, also models $E$.
 \end{definition}
 
 \begin{definition}[Derivation]\label{derivation-def}
   \lean{derive}\leanok
   \uses{law-def}
-  Given a set $\Gamma$ of laws and a law $w\formaleq w'$ over a fixed alphabet $X$, we say that
+  Given a theory $\Gamma$ and a law $w\formaleq w'$ over a fixed alphabet $X$, we say that
   $\Gamma$ \emph{derives} $w\formaleq w'$, and write $\Gamma\vdash w\formaleq w'$, if the law can
   be obtained using a finite number of applications of the following rules:
   \begin{enumerate}
@@ -87,27 +86,27 @@ for all $x, y \in G$.  We refer to \eqref{comm-law-2} as the \emph{equation} ass
     \item $\Gamma\vdash w\formaleq w$ for any word $w$.
     \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w'\formaleq w$.
     \item if $\Gamma\vdash w\formaleq w'$ and $\Gamma\vdash w'\formaleq w''$ then $\Gamma\vdash w\formaleq w''$.
-    \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash w\sigma\formaleq w'\sigma$, where $\sigma$ is an arbitrary map from $X$ to words in $M_X$ and $w\sigma$ replaces each occurrence of an element of $X$ with it's image by $\sigma$ in $w$.
-    \item if $\Gamma\vdash w_1\formaleq w_2$ and $\Gamma\vdash w_3\formaleq w_4$ then $\Gamma\vdash w_1 \op w_3\formaleq w2\op w_4$
+    \item if $\Gamma\vdash w\formaleq w'$ then $\Gamma\vdash \varphi_f w \formaleq \varphi_f w'$ for every $f: X \to M_X$.
+    \item if $\Gamma\vdash w_1\formaleq w_2$ and $\Gamma\vdash w_3\formaleq w_4$ then $\Gamma\vdash w_1 \op w_3\formaleq w_2\op w_4$
   \end{enumerate}
 \end{definition}
 
 This definition is useful because of the following theorem:
 
 \begin{theorem}[Birkhoff's completeness theorem]\label{sound-complete}\lean{Completeness}\leanok\uses{models-def, derivation-def}
-  For any set of laws $\Gamma$ and words $w, w'$ over a fixed alphabet
+  For any theory $\Gamma$ and words $w, w'$ over a fixed alphabet
   $$ \Gamma\vdash w\formaleq w'\ \mathrm{iff}\ \Gamma\models w\formaleq w'.$$
 \end{theorem}
 \begin{proof}
   \leanok
-  (Sketch) The `only if' component is soundness, and follows from verifying that the rules of inference in Definition \ref{derivation-def} holds for $\models$.  The `if` part is completeness, and is proven by constructing the magma of words, quotiented out by the relation $\Gamma \vdash w \formaleq w'$, which is easily seen to be an equivalence relation respecting the magma operation.
+  (Sketch) The `only if' component is soundness, and follows from verifying that the rules of inference in \Cref{derivation-def} holds for $\models$.  The `if' part is completeness, and is proven by constructing the magma of words, quotiented out by the relation $\Gamma \vdash w \formaleq w'$, which is easily seen to be an equivalence relation respecting the magma operation.
 \end{proof}
 
 
-\begin{corollary}[Compactness theorem]\label{compactness-thm}\uses{models-def}  Let $\Gamma$ be a collection of laws, and let $E$ be a law.  Then $\Gamma \models E$ if and only if there exists a finite subset $\Gamma'$ of $\Gamma$ such that $\Gamma' \models E$.
+\begin{corollary}[Compactness theorem]\label{compactness-thm}\uses{models-def}  Let $\Gamma$ be a theory, and let $E$ be a law.  Then $\Gamma \models E$ if and only if there exists a finite subset $\Gamma'$ of $\Gamma$ such that $\Gamma' \models E$.
 \end{corollary}
 
-\begin{proof}\uses{sound-complete} The claim is obvious for $\vdash$, and the claim then follows from Theorem \ref{sound-complete}.
+\begin{proof}\uses{sound-complete} The claim is obvious for $\vdash$, and the claim then follows from \Cref{sound-complete}.
 \end{proof}
 
 
@@ -119,7 +118,7 @@ This definition is useful because of the following theorem:
 
 If $\pi$ is a bijection, we will call $\pi_*(w) \formaleq \pi_*(w')$ a \emph{relabeling} of the law $w \formaleq w'$.  Thus for instance
 $$ 5 \op 7 \formaleq 7 \op 5$$
-is a relabeling of the commutative law \eqref{comm-law}.  By the above lemma, relabeling does not affect whether a given magna satisfies a given law.
+is a relabeling of the commutative law \Cref{comm-law}.  By the above lemma, relabeling does not affect whether a given magna satisfies a given law.
 
 \begin{lemma}[Equivalence]\label{equiv}\uses{law-def}  Let $G$ be a magma and $X$ be an alphabet.  Then the relation $G \models w \formaleq w'$ is an equivalence relation on $M_X$.
 \end{lemma}
@@ -139,7 +138,7 @@ The first few Bell numbers are
 $$ 1, 1, 2, 5, 15, 52, 203, \dots$$
 (\href{https://oeis.org/A000110}{OEIS A000110}).
 
-The sequence in Lemma \ref{law-count} is
+The sequence in \Cref{law-count} is
 $$ 2, 10, 75, 728, 8526, 115764, \dots$$
 (\href{https://oeis.org/A289679}{OEIS A289679}).
 
@@ -157,13 +156,13 @@ when $n$ is even, where $D_n$ is the number of partitions of $[n]$ up to reflect
 
 The sequence $D_n$ is
 $$ 1, 1, 2, 4, 11, 32, 117, \dots$$
-(\href{https://oeis.org/A103293}{OEIS A103293}), and the sequence in Lemma \ref{law-count-sym} is
+(\href{https://oeis.org/A103293}{OEIS A103293}), and the sequence in \Cref{law-count-sym} is
 $$ 2, 5, 41, 364, 4294, 57882, 888440, \dots$$
 (\href{https://oeis.org/A376620}{OEIS A376620}).
 
 We can also identify all laws of the form $w \formaleq w$ with the trivial law $0 \formaleq 0$.  The number of such laws of total order $n$ is zero if $n$ is odd, and $C_{n/2} B_{n/2+1}$ if $n$ is even.  We conclude:
 
-\begin{lemma}[Counting laws up to relabeling, symmetry, and triviality]  Up to relabeling, symmetry, and triviality, the number of laws of total order $n$ is
+\begin{lemma}[Counting laws up to relabeling, symmetry, and triviality]\label{law-count-triv}\uses{law-count-sym}  Up to relabeling, symmetry, and triviality, the number of laws of total order $n$ is
 $$ C_{n+1} B_{n+2}/2$$
 if $n$ is odd, $2$ if $n = 0$, and
 $$ (C_{n+1} B_{n+2} + C_{n/2} (2D_{n+2} - B_{n+2}))/2 - C_{n/2} B_{n/2+1}$$
@@ -177,4 +176,4 @@ This sequence is
 $$2, 5, 39, 364, 4284, 57882, 888365, \dots$$
 (\href{https://oeis.org/A376640}{OEIS A376640}).
 
-In particular, up to relabeling, symmetry, and triviality, there are exactly $2+5+39+364+4284=4694$ laws of total order at most $4$.  A list can be found \href{https://github.com/teorth/equational_theories/blob/main/data/equations.txt}{here}.  A script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}.  The list is sorted first by the total number of operations, then by the number of operations on the LHS. Within each such class we define an order on expressions by lexical order on variables (ordered $x, y, z, w, u, v$).  The equation are arranged to be minimal with respect to this sorting order, thus the LHS will be shorter than or equal than the RHS, and earlier in the lexical order if the LHS and RHS are of equal length.
+In particular, up to relabeling, symmetry, and triviality, there are exactly $2+5+39+364+4284=4694$ laws of total order at most $4$.  A list can be found \href{https://github.com/teorth/equational_theories/blob/main/data/equations.txt}{here}.  A script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}.  The list is sorted first by the total number of operations, then by the number of operations on the LHS.  Within each such class we define an order on expressions by lexical order on variables (ordered $x, y, z, w, u, v$).  The equations are arranged to be minimal with respect to this sorting order, thus the LHS either has fewer operations than the RHS or else it has the same number of operations and occurs earlier in lexical order than the RHS.

@@ -13,5 +13,5 @@ theorem Nat.xor_mod_two_eq (a b : ℕ) : (a ^^^ b) % 2 = (a + b) % 2 := by
 @[simp]
 theorem Nat.even_xor (a b : ℕ) : Even (a ^^^ b) ↔ (Even a ↔ Even b) := by
   simp only [even_iff, xor_mod_two_eq]
-  simp [← even_iff]
+  simp only [← even_iff]
   exact even_add

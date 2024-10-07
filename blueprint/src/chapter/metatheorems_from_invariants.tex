@@ -1,4 +1,5 @@
-\chapter{Metatheorems from Invariants}
+\chapter{Metatheorems from Invariants}\label{metatheory-chapter}
+
 For the purposes of this chapter, a \emph{theorem} is a (true) statement about particular equations, for example `(387 implies 43)' is a theorem. A \emph{metatheorem} is a general statement about implications; one can usually get many theorems from a single metatheorem. This chapter is all about generating many interesting metatheorems using a \emph{meta-metatheorem}, called the fundamental property of invariants. If all this is making your head spin, don't worry. Look at the sections below for examples of metatheorems you can probably agree are both concrete and interesting. Once you have done that, come back here and we will show you how to prove these and other metatheorems using \emph{invariants}.
 
 \section{Invariants}
@@ -126,7 +127,7 @@ An invariant is generally a \emph{syntactic} property of an expression. However,
 	Lists form a lifting magma family.
 \end{example}
 
-The key consequence of the definition \ref{lifting-magma-family} is that it is significantly easier to check whether an equation is satisfied in a lifting magma family.
+The key consequence of the \Cref{lifting-magma-family} is that it is significantly easier to check whether an equation is satisfied in a lifting magma family.
 
 \begin{theorem}[Evaluation theorem for lifting magma families]\label{lifting-magma-basis-evaluation}
 	Suppose $E$ is an equation involving a set of variables $X$, and let $G$ be a lifting magma family.
@@ -146,7 +147,7 @@ The key consequence of the definition \ref{lifting-magma-family} is that it is s
 	If $E$ is true with the substitution $\iota_X$, and $E$ implies $E'$, then so is $E'$.
 \end{theorem}
 \begin{proof}
-	Applying the evaluation theorem \ref{lifting-magma-basis-evaluation}, we see that $E$ is satisfied by $G_X$. Since $E$ implies $E'$, $E'$ is also satisfied by $G_X$, and in particular, $E'$ is true with the substitution $\iota_X$.
+	Applying the evaluation \Cref{lifting-magma-basis-evaluation}, we see that $E$ is satisfied by $G_X$. Since $E$ implies $E'$, $E'$ is also satisfied by $G_X$, and in particular, $E'$ is true with the substitution $\iota_X$.
 \end{proof}
 
 \begin{remark}
