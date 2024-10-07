@@ -1,75 +1,95 @@
 \chapter{Some abstract nonsense}
-
 This is an alternate presentation of the material of the previous section, where we use the ``abstract nonsense'' of free magmas in the presence of a theory as the conceptual foundation.
 
-\begin{definition}[Free magma relative to a theory]\label{free-theory}\uses{models-def}  Let $\Gamma$ be a theory with an alphabet $X$.  A \emph{free magma} with alphabet $X$ subject to the theory $\Gamma$ is a magma $M_{X,\Gamma}$ together with a function $\iota_{X,\Gamma} : X \to M_{X,\Gamma}$, with the following properties:
+\begin{definition}[Free magma relative to a theory]\label{free-theory}\uses{models-def}
+  Let $\Gamma$ be a theory with an alphabet $X$. A \emph{free magma} with alphabet $X$ subject to the theory $\Gamma$ is a magma $M_{X,\Gamma}$ together with a function $\iota_{X,\Gamma} : X \to M_{X,\Gamma}$, with the following properties:
   \begin{itemize}
-    \item[(i)]  $M_{X,\Gamma}$ obeys the theory $\Gamma$: $M_{X,\Gamma} \models \Gamma$.
-    \item[(ii)]  For any magma $M$ obeying the theory $\Gamma$ and any function $f: X \to M$, there exists a unique magma homomorphism $\tilde f: M_{X,\Gamma} \to M$ such that $\tilde f \circ \iota_{X,\Gamma} = f$.
+    \item[(i)] $M_{X,\Gamma}$ obeys the theory $\Gamma$: $M_{X,\Gamma} \models \Gamma$.
+    \item[(ii)] For any magma $M$ obeying the theory $\Gamma$ and any function $f: X \to M$, there exists a unique magma homomorphism $\tilde{f}: M_{X,\Gamma} \to M$ such that $\tilde{f} \circ \iota_{X,\Gamma} = f$.
   \end{itemize}
 \end{definition}
 
 Such magmas exist and are unique up to a suitable isomorphism:
 
-\begin{theorem}[Existence and uniqueness of free magmas]\label{freemag-exist}\uses{free-theory} Let $\Gamma$ be a theory with alphabet $X$.
+\begin{theorem}[Existence and uniqueness of free magmas]\label{freemag-exist}\uses{free-theory}
+  Let $\Gamma$ be a theory with alphabet $X$.
   \begin{itemize}
-    \item[(i)]  There exists a free magma $M_{X,\Gamma}$ with alphabet $X$ subject to the theory $\Gamma$.
-    \item[(ii)]  If $M_{X,\Gamma}$ and $M'_{X,\Gamma}$ are two free magmas with alphabet $X$ subject to the theory $\Gamma$, then there exists a unique magma isomorphism $\phi: M_{X,\Gamma} \to M'_{X,\Gamma}$ such that $\phi \circ \iota_{X,\Gamma} = \iota'_{X,\Gamma}$.
+    \item[(i)] There exists a free magma $M_{X,\Gamma}$ with alphabet $X$ subject to the theory $\Gamma$.
+    \item[(ii)] If $M_{X,\Gamma}$ and $M'_{X,\Gamma}$ are two free magmas with alphabet $X$ subject to the theory $\Gamma$, then there exists a unique magma isomorphism $\phi: M_{X,\Gamma} \to M'_{X,\Gamma}$ such that $\phi \circ \iota_{X,\Gamma} = \iota'_{X,\Gamma}$.
   \end{itemize}
 \end{theorem}
 
 We remark that the ordinary free magma $M_X$ corresponds to the case when $\Gamma$ is the empty theory.
 
-\begin{proof}\uses{sound-complete, equiv}  For (i), we define $M_{X,\Gamma} = M_X/\sim$, where the equivalence relation $\sim$ is defined by requiring $w \sim w'$ if and only if $\Gamma \models w \formaleq w'$; this is an equivalence relation thanks to Lemma \ref{equiv}, and from Theorem \ref{sound-complete} we see that this relation respects the magma operations, so that $M_{X,\Gamma}$ is a magma.  The map $\iota_{X,\Gamma}: X \to M_{X,\Gamma}$ is defined by setting $\iota_{X,\Gamma}(x)$ to be the equivalence class of $x$ in $M_{X,\Gamma}$ for each $x \in X$.
+\begin{proof}\uses{sound-complete, equiv}
+  For (i), we define $M_{X,\Gamma} = M_X / \sim$, where the equivalence relation $\sim$ is defined by requiring $w \sim w'$ if and only if $\Gamma \models w \formaleq w'$; this is an equivalence relation thanks to Lemma \ref{equiv}, and from Theorem \ref{sound-complete} we see that this relation respects the magma operations, so that $M_{X,\Gamma}$ is a magma. The map $\iota_{X,\Gamma}: X \to M_{X,\Gamma}$ is defined by setting $\iota_{X,\Gamma}(x)$ to be the equivalence class of $x$ in $M_{X,\Gamma}$ for each $x \in X$.
 
-We first check that $M_{X,\Gamma}$ obeys $\Gamma$.  Let $w \formaleq w'$ be a law in $\Gamma$, and let $f: X \to M_{X,\Gamma}$ be a function.  We may lift this function to a function $\tilde f: X \to M_X$.  From Definition \ref{derivation-def}, we have $\Gamma \vdash w \formaleq w'$ and hence $\Gamma \vdash \varphi_{\tilde f}(w) \formaleq \varphi_{\tilde f}(w')$.  By Theorem \ref{sound-complete}, we conclude $\Gamma \models \varphi_{\tilde f}(w) \formaleq \varphi_{\tilde f}(w')$.  Quotienting by $\sim$, we conclude that $\varphi_f(w) = \varphi(w')$, giving the claim by Definition \ref{models-def}.
+  We first check that $M_{X,\Gamma}$ obeys $\Gamma$. Let $w \formaleq w'$ be a law in $\Gamma$, and let $f: X \to M_{X,\Gamma}$ be a function. We may lift this function to a function $\tilde{f}: X \to M_X$. From Definition \ref{derivation-def}, we have $\Gamma \vdash w \formaleq w'$ and hence $\Gamma \vdash \varphi_{\tilde{f}}(w) \formaleq \varphi_{\tilde{f}}(w')$. By Theorem \ref{sound-complete}, we conclude $\Gamma \models \varphi_{\tilde{f}}(w) \formaleq \varphi_{\tilde{f}}(w')$. Quotienting by $\sim$, we conclude that $\varphi_f(w) = \varphi(w')$, giving the claim by Definition \ref{models-def}.
 
-Now we check the universal property (ii).  Let $M$ be a magma obeying the theory $\Gamma$, and let $f: X \to M$ be a function, then we have a magma homomorphism $\varphi_f: M_X \to M$.  If $w, w' \in M_X$ are such that $w \sim w'$, then $\Gamma \models w \formaleq w'$ and hence $\varphi_f(w) = \varphi_f(w')$.   Hence $\varphi_f$ descends to a map $\tilde f: M_{X,\Gamma} \to M$, which one can check to be a magma homomorphism with $\tilde f \circ \iota_{X,\Gamma} = f$.  By construction, $M_{X,\Gamma}$ is generated by $\iota_{X,\Gamma}(X)$, and so this homomorphism is unique.
+  Now we check the universal property (ii). Let $M$ be a magma obeying the theory $\Gamma$, and let $f: X \to M$ be a function, then we have a magma homomorphism $\varphi_f: M_X \to M$. If $w, w' \in M_X$ are such that $w \sim w'$, then $\Gamma \models w \formaleq w'$ and hence $\varphi_f(w) = \varphi_f(w')$. Hence $\varphi_f$ descends to a map $\tilde{f}: M_{X,\Gamma} \to M$, which one can check to be a magma homomorphism with $\tilde{f} \circ \iota_{X,\Gamma} = f$. By construction, $M_{X,\Gamma}$ is generated by $\iota_{X,\Gamma}(X)$, and so this homomorphism is unique.
 \end{proof}
 
-\begin{example}[Free associative magma]  Let $\Gamma$ consist solely of the associative law, Definition \ref{eq4512} (so $X$ contains $0,1,2$).  Then one can take $M_{X,\Gamma}$ to be the set of nonempty strings with alphabet $X$, with magma operation given by concatenation, and $\iota_{X,\Gamma}(x)$ being the length one string $x$.  It is a routine matter to verify that this obeys the axioms of a free magma subject to $\Gamma$.
+\begin{example}[Free associative magma]
+  Let $\Gamma$ consist solely of the associative law, Definition \ref{eq4512} (so $X$ contains $0,1,2$). Then one can take $M_{X,\Gamma}$ to be the set of nonempty strings with alphabet $X$, with magma operation given by concatenation, and $\iota_{X,\Gamma}(x)$ being the length one string $x$. It is a routine matter to verify that this obeys the axioms of a free magma subject to $\Gamma$.
 \end{example}
 
-\begin{example}[Free associative commutative magma]\label{facm}  Let $\Gamma$ consist of the associative law (Definition \ref{eq4512}) and the commutative law (Definition \ref{eq43}). Then one can take $M_{X,\Gamma}$ to be the free abelian monoid $\N_0^X \backslash 0$ of tuples $(n_x)_{x \in X}$ with the $n_x$ natural numbers, not all zero, with all but finitely many of the $n_x$ vanishing, with the magma operation given by vector addition, and with $\iota_{X,\Gamma}(x)$ being the standard generator of $\N^X$ associated to $x \in X$; one can think of this space as the space of formal non-empty commuting associating sums of $X$.  It is a routine matter to verify that this obeys the axioms of a free magma subject to $\Gamma$.
+\begin{example}[Free associative commutative magma]\label{facm}
+  Let $\Gamma$ consist of the associative law (Definition \ref{eq4512}) and the commutative law (Definition \ref{eq43}). Then one can take $M_{X,\Gamma}$ to be the free abelian monoid $\N_0^X \backslash 0$ of tuples $(n_x)_{x \in X}$ with the $n_x$ natural numbers, not all zero, with all but finitely many of the $n_x$ vanishing, with the magma operation given by vector addition, and with $\iota_{X,\Gamma}(x)$ being the standard generator of $\N^X$ associated to $x \in X$; one can think of this space as the space of formal non-empty commuting associating sums of $X$. It is a routine matter to verify that this obeys the axioms of a free magma subject to $\Gamma$.
 \end{example}
 
-\begin{example}[Free left absorptive magma]\label{freeleft} Let $\Gamma$ consist of the left absorptive law (Definition \ref{eq4}).  Then one can take $M_{X,\Gamma}$ to be $X$ with the law $x \op y = x$, and $\iota_{X,\Gamma}$ to be the identity map.  It is easy to see that this is indeed a free magma subject to $\Gamma$.
+\begin{example}[Free left absorptive magma]\label{freeleft}
+  Let $\Gamma$ consist of the left absorptive law (Definition \ref{eq4}). Then one can take $M_{X,\Gamma}$ to be $X$ with the law $x \op y = x$, and $\iota_{X,\Gamma}$ to be the identity map. It is easy to see that this is indeed a free magma subject to $\Gamma$.
 \end{example}
 
-\begin{example}[Free constant magma]\label{freeconst} Let $\Gamma$ consist of the constant law (Definition \ref{eq46}).  Then one can take $M_{X,\Gamma}$ to be the disjoint union $X \uplus \{0\}$ of $X$ and another object $0$, with $\iota_{X,\Gamma}$ being the identity embedding, and with the zero magma law $x \op y = 0$ for all $x,y \in X \uplus \{0\}$.
+\begin{example}[Free constant magma]\label{freeconst}
+  Let $\Gamma$ consist of the constant law (Definition \ref{eq46}). Then one can take $M_{X,\Gamma}$ to be the disjoint union $X \uplus \{0\}$ of $X$ and another object $0$, with $\iota_{X,\Gamma}$ being the identity embedding, and with the zero magma law $x \op y = 0$ for all $x,y \in X \uplus \{0\}$.
 \end{example}
 
 Free magmas can be used to characterize entailment by $\Gamma$ in terms of a canonical invariant.
 
-\begin{theorem}[Canonical invariant]\label{canonical-invariant}\uses{free-theory}  Let $\Gamma$ be a theory with some alphabet $X$, and let $M_{X,\Gamma}$ be a free magma with alphabet $X$ subject to $\Gamma$, with associated map $\iota_{X,\Gamma}: X \to M_{X,\Gamma}$.  Then for any $w,w' \in M_X$, we have
- $\Gamma \models w \formaleq w'$ if and only if $\varphi_{\iota_{X,\Gamma}}(w) = \varphi_{\iota_{X,\Gamma}}(w')$.
+\begin{theorem}[Canonical invariant]\label{canonical-invariant}\uses{free-theory}
+  Let $\Gamma$ be a theory with some alphabet $X$, and let $M_{X,\Gamma}$ be a free magma with alphabet $X$ subject to $\Gamma$, with associated map $\iota_{X,\Gamma}: X \to M_{X,\Gamma}$. Then for any $w,w' \in M_X$, we have
+  \[
+  \Gamma \models w \formaleq w' \text{ if and only if } \varphi_{\iota_{X,\Gamma}}(w) = \varphi_{\iota_{X,\Gamma}}(w').
+  \]
 \end{theorem}
 
-\begin{proof}\uses{freemag-exist} By Theorem \ref{freemag-exist} we may take $M_{X,\Gamma}$ to be the canonical free magma constructed in the proof of that theorem.  The claim is then clear from expanding out definitions.
+\begin{proof}\uses{freemag-exist}
+  By Theorem \ref{freemag-exist} we may take $M_{X,\Gamma}$ to be the canonical free magma constructed in the proof of that theorem. The claim is then clear from expanding out definitions.
 \end{proof}
 
 Every theory $\Gamma$ then gives a metatheorem about anti-implication:
 
-\begin{corollary}[Criterion for anti-implication]\label{anti-impl} Let $\Gamma$ be a theory with some alphabet $X$, and let $M_{X,\Gamma}$ be a free magma with alphabet $X$ subject to $\Gamma$, with associated map $\iota_{X,\Gamma}: X \to M_{X,\Gamma}$.   Let $w \formaleq w'$ and $w'' \formaleq w'''$ be laws with alphabet $X$.  If one has
-$$ \varphi_{\iota_{X,\Gamma}}(w) = \varphi_{\iota_{X,\Gamma}}(w')$$
-but
-$$ \varphi_{\iota_{X,\Gamma}}(w'') \neq \varphi_{\iota_{X,\Gamma}}(w''').$$
-Then the law $w \formaleq w'$ cannot imply the law $w'' \formaleq w'''$.
+\begin{corollary}[Criterion for anti-implication]\label{anti-impl}
+  Let $\Gamma$ be a theory with some alphabet $X$, and let $M_{X,\Gamma}$ be a free magma with alphabet $X$ subject to $\Gamma$, with associated map $\iota_{X,\Gamma}: X \to M_{X,\Gamma}$. Let $w \formaleq w'$ and $w'' \formaleq w'''$ be laws with alphabet $X$. If one has
+  \[
+  \varphi_{\iota_{X,\Gamma}}(w) = \varphi_{\iota_{X,\Gamma}}(w')
+  \]
+  but
+  \[
+  \varphi_{\iota_{X,\Gamma}}(w'') \neq \varphi_{\iota_{X,\Gamma}}(w'''),
+  \]
+  then the law $w \formaleq w'$ cannot imply the law $w'' \formaleq w'''$.
 \end{corollary}
 
-\begin{proof}\uses{canonical-invariant}  By Theorem \ref{canonical-invariant}, the hypothesis $\iota_{X,\Gamma}(w) = \iota_{X,\Gamma}(w')$ is equivalent to $\Gamma \models w \formaleq w'$, and the hypothesis $\iota_{X,\Gamma}(w'') \neq \iota_{X,\Gamma}(w''')$ is equivalent to $\Gamma \not\models w'' \formaleq w'''$.  The claim follows.
+\begin{proof}\uses{canonical-invariant}
+  By Theorem \ref{canonical-invariant}, the hypothesis $\iota_{X,\Gamma}(w) = \iota_{X,\Gamma}(w')$ is equivalent to $\Gamma \models w \formaleq w'$, and the hypothesis $\iota_{X,\Gamma}(w'') \neq \iota_{X,\Gamma}(w''')$ is equivalent to $\Gamma \not\models w'' \formaleq w'''$. The claim follows.
 \end{proof}
 
-\begin{example}  Let $\Gamma$ be the associative and commutative law, so that we can take $M_{X,\Gamma} = \N_0^X \backslash 0$ as in Example \ref{facm}.  One can then check that for any word $w \in M_X$, that $\varphi_{\iota_{X,\Gamma}}(w)$ is the tuple that assigns to each letter $x$ of the alphabet, the number of times $x$ appears in $w$.  We conclude that if $w,w'$ have the same number of occurrences of each letter of the alphabet, but $w'', w'''$ do not, then $w \formaleq w'$ cannot imply $w'' \formaleq w'''$.  This recovers Theorem \ref{variable-impl}.
+\begin{example}
+  Let $\Gamma$ be the associative and commutative law, so that we can take $M_{X,\Gamma} = \N_0^X \backslash 0$ as in Example \ref{facm}. One can then check that for any word $w \in M_X$, that $\varphi_{\iota_{X,\Gamma}}(w)$ is the tuple that assigns to each letter $x$ of the alphabet, the number of times $x$ appears in $w$. We conclude that if $w,w'$ have the same number of occurrences of each letter of the alphabet, but $w'', w'''$ do not, then $w \formaleq w'$ cannot imply $w'' \formaleq w'''$. This recovers Theorem \ref{variable-impl}.
 \end{example}
 
-\begin{example} Let $\Gamma$ consist of the left absorption law, so we can take $M_{X,\Gamma} = X$ as in Example \ref{freeleft}.  Then $\varphi_{\iota_{X,\Gamma}}(w)$ is the first letter of $w$.  We conclude that if $w,w'$ have the same first letter, but $w'', w'''$ do not, then $w \formaleq w'$ cannot imply $w'' \formaleq w'''$.
+\begin{example}
+  Let $\Gamma$ consist of the left absorption law, so we can take $M_{X,\Gamma} = X$ as in Example \ref{freeleft}. Then $\varphi_{\iota_{X,\Gamma}}(w)$ is the first letter of $w$. We conclude that if $w,w'$ have the same first letter, but $w'', w'''$ do not, then $w \formaleq w'$ cannot imply $w'' \formaleq w'''$.
 \end{example}
 
-\begin{example}  Let $\Gamma$ consist of the constant law, so we can take $M_{X,\Gamma} = X \uplus \{0\}$ as in Example \ref{freeconst}. Then $\varphi_{\iota_{X,\Gamma}}(w)$ is $x$ if $w$ is just a letter $x$ of the alphabet, and $0$ otherwise.  We conclude that if $w,w', w'''$ have order at least one, but $w''$ has order zero, then $w \formaleq w'$ cannot imply $w'' \formaleq w'''$; this is basically Theorem \ref{constant-impl}.
+\begin{example}
+  Let $\Gamma$ consist of the constant law, so we can take $M_{X,\Gamma} = X \uplus \{0\}$ as in Example \ref{freeconst}. Then $\varphi_{\iota_{X,\Gamma}}(w)$ is $x$ if $w$ is just a letter $x$ of the alphabet, and $0$ otherwise. We conclude that if $w,w', w'''$ have order at least one, but $w''$ has order zero, then $w \formaleq w'$ cannot imply $w'' \formaleq w'''$; this is basically Theorem \ref{constant-impl}.
 \end{example}
 
-\begin{example} Let $\Gamma$ be the theory consisting of the commutative and associative laws, and an additional law $x^n \formaleq y^n$ for a fixed $n$, where $x^n$ denotes the magma operation applied to $n$ copies of $x$ (the order is irrelevant thanks to associativity), then one can check (for finite $X$) that the free magma $M_{X,\Gamma}$ can be taken to be $(\Z/n\Z)^X$ with the addition operation, and $\iota_{X,\Gamma}(x)$ being the standard generator associated to $x$.  Then for any word $w$, $\varphi_{\iota_{X,\Gamma}}(w)$ corresponds to a tuple that assigns to each letter $x$ of the alphabet, the number of times $x$ occurs in $w$ modulo $n$.  We conclude that if $w,w'$ have the same number of occurrences modulo $n$ of each letter of the alphabet, but $w'', w'''$ do not, then $w \formaleq w'$ cannot imply $w'' \formaleq w'''$.  This is a stronger version of Theorem \ref{variable-impl}.
+\begin{example}
+  Let $\Gamma$ be the theory consisting of the commutative and associative laws, and an additional law $x^n \formaleq y^n$ for a fixed $n$, where $x^n$ denotes the magma operation applied to $n$ copies of $x$ (the order is irrelevant thanks to associativity), then one can check (for finite $X$) that the free magma $M_{X,\Gamma}$ can be taken to be $(\Z/n\Z)^X$ with the addition operation, and $\iota_{X,\Gamma}(x)$ being the standard generator associated to $x$. Then for any word $w$, $\varphi_{\iota_{X,\Gamma}}(w)$ corresponds to a tuple that assigns to each letter $x$ of the alphabet, the number of times $x$ occurs in $w$ modulo $n$. We conclude that if $w,w'$ have the same number of occurrences modulo $n$ of each letter of the alphabet, but $w'', w'''$ do not, then $w \formaleq w'$ cannot imply $w'' \formaleq w'''$. This is a stronger version of Theorem \ref{variable-impl}.
 \end{example}
 
-Even for very simple theories $\Gamma$, the free magma $M_{X,\Gamma}$ subject to this theory, and the invariant $\varphi_{\iota_{X,\Gamma}}$ can get challenging to describe. Suppose for instance that $\Gamma$ consists only of the idempotent law, Equation \ref{eq3}.  The free magma $M_{X,\Gamma}$ can then be described as the collection of words $w \in M_X$ which do not contain any subword of the form $w' \op w'$; the operation $\op_\Gamma$ on $M_{X,\Gamma}$ agrees with the operation $\op$ on $M_X$, with the exception that $w \op_\Gamma w$ is equal to $w$ rather than $w \op w$, and with $\iota_{X,\Gamma}$ being the identity embedding; note that with this definition, the magma operation $\op_\Gamma$ never leaves $M_{X,\Gamma}$ as it cannot create a word that contains a subword $w' \op w'$, unless such a subword already existed in one of the factors.  The word $\varphi_{\iota_{X,\Gamma}}(w)$ can then be described as the unique reduction of $w$ after replacing any subword $w' \op w'$ with $w'$, though it requires some effort to verify that this reduction is unique.  This gives a (rather complicated) criterion for anti-implication.
+Even for very simple theories $\Gamma$, the free magma $M_{X,\Gamma}$ subject to this theory, and the invariant $\varphi_{\iota_{X,\Gamma}}$ can get challenging to describe. Suppose for instance that $\Gamma$ consists only of the idempotent law, Equation \ref{eq3}. The free magma $M_{X,\Gamma}$ can then be described as the collection of words $w \in M_X$ which do not contain any subword of the form $w' \op w'$; the operation $\op_\Gamma$ on $M_{X,\Gamma}$ agrees with the operation $\op$ on $M_X$, with the exception that $w \op_\Gamma w$ is equal to $w$ rather than $w \op w$, and with $\iota_{X,\Gamma}$ being the identity embedding; note that with this definition, the magma operation $\op_\Gamma$ never leaves $M_{X,\Gamma}$ as it cannot create a word that contains a subword $w' \op w'$, unless such a subword already existed in one of the factors. The word $\varphi_{\iota_{X,\Gamma}}(w)$ can then be described as the unique reduction of $w$ after replacing any subword $w' \op w'$ with $w'$, though it requires some effort to verify that this reduction is unique. This gives a (rather complicated) criterion for anti-implication.
