@@ -9,7 +9,6 @@ import Mathlib.Tactic.TypeStar
 @[equational_result] conjecture Equation477_not_implies_Equation1492 : ∃ (G: Type) (_: Magma G), Equation477 G ∧ ¬ Equation1492 G
 @[equational_result] conjecture Equation3161_not_implies_Equation1496 : ∃ (G: Type) (_: Magma G), Equation3161 G ∧ ¬ Equation1496 G
 @[equational_result] conjecture Equation481_not_implies_Equation1496 : ∃ (G: Type) (_: Magma G), Equation481 G ∧ ¬ Equation1496 G
-@[equational_result] conjecture Equation3994_not_implies_Equation3588 : ∃ (G: Type) (_: Magma G), Equation3994 G ∧ ¬ Equation3588 G
 @[equational_result] conjecture Equation2093_not_implies_Equation416 : ∃ (G: Type) (_: Magma G), Equation2093 G ∧ ¬ Equation416 G
 @[equational_result] conjecture Equation3150_not_implies_Equation2128 : ∃ (G: Type) (_: Magma G), Equation3150 G ∧ ¬ Equation2128 G
 @[equational_result] conjecture Equation3150_not_implies_Equation1519 : ∃ (G: Type) (_: Magma G), Equation3150 G ∧ ¬ Equation1519 G
