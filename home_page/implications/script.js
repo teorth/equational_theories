@@ -46,12 +46,14 @@ const mapped = mapThroughLUT(decoded);
 // Reshape to 2694x2694
 const implications = reshape(mapped, 4694, 4694);
 
+const GRAPHITI_BASE_URL = "https://teorth.github.io/equational_theories/graphiti/"
 
 const listPage = document.getElementById('listPage');
 const detailPage = document.getElementById('detailPage');
 const equationList = document.getElementById('equationList');
 const selectedEquation = document.getElementById('selectedEquation');
 const selectedEquationDual = document.getElementById('selectedEquationDual');
+const selectedEquationGraphitiLinks = document.getElementById('selectedEquationGraphitiLinks');
 const impliesList = document.getElementById('impliesList');
 const antiImpliesList = document.getElementById('antiImpliesList');
 const unknownImpliesList = document.getElementById('unknownImpliesList');
@@ -263,6 +265,7 @@ function renderImplications(index) {
 	selectedEquationDual.innerHTML = "";
     }
 
+  selectedEquationGraphitiLinks.innerHTML = `(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1}&highlight_red=${index+1}">implied</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1}&highlight_red=${index+1}">implied by</a> equations) `
 
     // Add this section to display equivalent equations
     const equivalentClass = equiv.find(cls => cls.includes(index)) || [index];
