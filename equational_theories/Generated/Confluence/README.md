@@ -15,4 +15,5 @@ The script generates `confluent_equations.txt`. It checks condition 2 very naive
 we have relatively few equations to check and computers are fast enough.
 
 The file `ManuallySampled.lean` includes the implications that were unknown at the time and
-are covered by these arguments.
+are covered by these arguments. These were since manually proven in lean in
+`Confluence.lean`.
