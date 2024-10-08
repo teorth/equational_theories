@@ -63,15 +63,18 @@ theorem everywhere_of_subterm_of_everywhere {P : FreeMagma α → Prop} {x} (h :
 theorem subterm_everywhere {P : FreeMagma α → Prop} {x} (h : x.Everywhere P) {y} (hsub : SubtermOf y x) : P y := by
   apply (everywhere_of_subterm_of_everywhere h hsub).top
 
-def projection (rw : FreeMagma α → FreeMagma α) : Prop := ∀ x, SubtermOf (rw x) x
+class IsProj (rw : FreeMagma α → FreeMagma α) : Prop where
+  proj : ∀ x, SubtermOf (rw x) x
 
-theorem everywhere_of_projection_of_everywhere {rw : FreeMagma α → FreeMagma α}
-    (hproj : projection rw) P : ∀ x, Everywhere P x → (rw x).Everywhere P :=
-  fun x he ↦ everywhere_of_subterm_of_everywhere he (hproj x)
+theorem everywhere_of_projection_of_everywhere
+    (rw : FreeMagma α → FreeMagma α) [IsProj rw] P :
+    ∀ x, Everywhere P x → (rw x).Everywhere P :=
+  fun x he ↦ everywhere_of_subterm_of_everywhere he (IsProj.proj x)
 
-
-theorem projection_everywhere {rw : FreeMagma α → FreeMagma α} (hproj : projection rw) P :
-  ∀ x, Everywhere P x → P (rw x) := fun x he ↦ subterm_everywhere he (hproj x)
+theorem projection_everywhere
+    (rw : FreeMagma α → FreeMagma α) [IsProj rw] P :
+    ∀ x, Everywhere P x → P (rw x) :=
+  fun x he ↦ subterm_everywhere he (IsProj.proj x)
 
 
 end FreeMagma
@@ -92,16 +95,16 @@ attribute [simp] bu.eq_1
 
 def NF (x : FreeMagma α) : Prop := x.Everywhere (fun y => bu rw y = y)
 
-def bu_nf (hproj : FreeMagma.projection rw) : ∀ x, NF rw (bu rw x) := by
+def bu_nf [hproj : IsProj rw] : ∀ x, NF rw (bu rw x) := by
   intro x
   induction x with
   | Leaf =>
     simp [NF, bu, Everywhere]
   | Fork x y ihx ihy =>
     simp only [NF, bu]
-    have hsub := hproj (bu rw x ⋆ bu rw y)
+    have hsub := hproj.proj (bu rw x ⋆ bu rw y)
     obtain (heq | hsub | hsub) := hsub
-    · apply everywhere_of_projection_of_everywhere hproj
+    · apply everywhere_of_projection_of_everywhere
       refine ⟨ihx, ihy, ?_⟩
       dsimp
       simp [bu, Everywhere, *, ihx.top, ihy.top]
@@ -111,8 +114,23 @@ def bu_nf (hproj : FreeMagma.projection rw) : ∀ x, NF rw (bu rw x) := by
 theorem idem_of_NF {x : FreeMagma α} (h : NF rw x) : bu rw x = x := by
   apply h.top
 
-theorem bu_idem (hproj : FreeMagma.projection rw) x :
-    bu rw (bu rw x) = bu rw x := idem_of_NF rw (bu_nf rw hproj x)
+variable [IsProj rw]
+
+@[simp] theorem bu_idem x : bu rw (bu rw x) = bu rw x := idem_of_NF rw (bu_nf rw x)
+
+def ConfMagma := {x : FreeMagma α // bu rw x = x }
+
+instance : Coe α (ConfMagma rw) where
+  coe x := ⟨x, by rfl⟩
+
+instance instMagmaMagma477 : Magma (ConfMagma rw) where
+  op := fun x y => ⟨bu rw (x.1 ◇ y.1), bu_idem rw _⟩
+
+instance [DecidableEq α] : DecidableEq (ConfMagma rw) :=
+  inferInstanceAs (DecidableEq {x : FreeMagma α // bu rw x = x })
+
+
+section rw477
 
 variable [DecidableEq α]
 
@@ -125,27 +143,15 @@ def rw477 : FreeMagma α → FreeMagma α
         m
   | m => m
 
-theorem rw477_projection : projection (@rw477 α _) := by
-  intro x
-  unfold rw477
-  split
-  · split
-    · right; right; right; left; rfl
+instance rw477_projection : IsProj (@rw477 α _) where
+  proj := by
+    intro x
+    unfold rw477
+    split
+    · split
+      · right; right; right; left; rfl
+      · rfl
     · rfl
-  · rfl
-
-def simp477 (x : FreeMagma α) : FreeMagma α := bu rw477 x
-
-def Magma477 (α) [DecidableEq α] := {x : FreeMagma α // bu rw477 x = x }
-
-instance : Coe α (Magma477 α) where
-  coe x := ⟨x, by rfl⟩
-
-instance instMagmaMagma477 : Magma (Magma477 α) where
-  op := fun x y => ⟨simp477 (x.1 ◇ y.1), bu_idem rw477 rw477_projection _⟩
-
-instance : DecidableEq (Magma477 α) :=
-  inferInstanceAs (DecidableEq {x : FreeMagma α // simp477 x = x })
 
 @[simp]
 theorem rw477_yy (y : FreeMagma α) : rw477 (y ⋆ y) = y ⋆ y := by
@@ -207,13 +213,13 @@ theorem rw477_yxyyy {α} [DecidableEq α] (x y : FreeMagma α) :
 @[equational_result]
 theorem Equation477_Facts :
   ∃ (G : Type) (_ : Magma G), Facts G [477] [1426, 1519, 2035, 2128, 3050, 3150] := by
-  use Magma477 Nat, instMagmaMagma477
+  use ConfMagma (@rw477 Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
     simp [Magma.op]
     apply Subtype.ext
     simp only
-    simp [simp477, bu, bu_idem _ rw477_projection, hx, hy]
+    simp [bu, hx, hy]
   · intro h
     replace h := h (0 : Nat)
     revert h
@@ -238,5 +244,9 @@ theorem Equation477_Facts :
     replace h := h (0 : Nat) (1 : Nat)
     revert h
     decide
+
+end rw477
+
+
 
 end Confluence
