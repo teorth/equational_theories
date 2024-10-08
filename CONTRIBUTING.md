@@ -50,13 +50,13 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 ### 4. Submitting a Pull Request
 
 - When you are ready to submit your solution, create a PR from your working branch to the project’s `main` branch.
-- After submitting the PR, comment the single phrase `propose PR #PR_NUMBER` on the original issue. This links your PR to the task, and the task will move to the `In Progress` column on the dashboard.
+- After submitting the PR, comment the single phrase `propose #PR_NUMBER` on the original issue. This links your PR to the task, and the task will move to the `In Progress` column on the dashboard.
 - A task can only move to `In Progress` if it has been claimed by the user proposing the PR.
 
 ### 5. Withdrawing or Updating a PR
 
 - If you need to withdraw your PR, comment the single phrase `withdraw PR #PR_NUMBER` on the issue. The task will return to the `Claimed Tasks` column, but you will remain assigned to the issue.
-- To submit an updated PR after withdrawal, comment the single phrase `propose PR #NEW_PR_NUMBER` following the same process outlined in step 4.
+- To submit an updated PR after withdrawal, comment the single phrase `propose #NEW_PR_NUMBER` following the same process outlined in step 4.
 
 ### 6. Review Process
 
