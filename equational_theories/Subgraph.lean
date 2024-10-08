@@ -4,6 +4,8 @@ import equational_theories.EquationalResult
 import equational_theories.Closure
 import equational_theories.Equations
 import equational_theories.FactsSyntax
+import equational_theories.FreeSemigroup
+import equational_theories.MagmaLaw
 
 /- This is a subproject of the main project to completely describe a small subgraph of the entire
 implication graph. The list of equations under consideration can be found at https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html
@@ -282,44 +284,68 @@ theorem Lemma_eq1689_implies_h8 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a
 
 /-- The below results for Equation1571 are out of order because early ones are lemmas for later ones -/
 @[equational_result]
-theorem Equation1571_implies_Equation2662 (G: Type*) [Magma G] (h: Equation1571 G) : Equation2662 G :=
-  fun _ _ ↦ (h _ _ _).trans (congrArg _ (h _ _ _).symm)
+theorem Equation1571_implies_Equation2662 (G: Type _) [Magma G] (h: Equation1571 G) : Equation2662 G :=
+  fun x y ↦ Eq.trans (h x (x ◇ y) (x ◇ y)) (congrArg (fun z ↦ ((x ◇ y) ◇ (x ◇ y)) ◇ z)
+    (Eq.symm $ h x x y))
 
 @[equational_result]
-theorem Equation1571_implies_Equation40 (G: Type*) [Magma G] (h: Equation1571 G) : Equation40 G := by
-  have sqRotate (x y z : G) : (x ◇ y) ◇ (x ◇ y) = (y ◇ z) ◇ (y ◇ z) :=
-    (congrArg (fun w ↦ (x ◇ y) ◇ (x ◇ w)) (Equation1571_implies_Equation2662 G h _ _)).trans
-      (h _ _ _).symm
-  exact fun x y ↦ h x x x ▸ h y y y ▸ (sqRotate _ _ _).trans (sqRotate _ _ _)
+theorem Equation1571_implies_Equation40 (G: Type _) [Magma G] (h: Equation1571 G) : Equation40 G := by
+  have sqRotate : ∀ x y z : G, (x ◇ y) ◇ (x ◇ y) = (y ◇ z) ◇ (y ◇ z) :=
+    fun x y z ↦ Eq.trans (congrArg (fun w ↦ (x ◇ y) ◇ (x ◇ w))
+      (Equation1571_implies_Equation2662 G h y z)) (Eq.symm $ h ((y ◇ z) ◇ (y ◇ z)) x y)
+  have sqConstInImage : ∀ x y z w : G, (x ◇ y) ◇ (x ◇ y) = (z ◇ w) ◇ (z ◇ w) :=
+    fun x y z w ↦ Eq.trans (sqRotate x y z) (sqRotate y z w)
+  exact fun x y ↦ h x x x ▸ h y y y ▸ sqConstInImage (x ◇ x) (x ◇ (x ◇ x)) (y ◇ y) (y ◇ (y ◇ y))
 
 @[equational_result]
-theorem Equation1571_implies_Equation23 (G: Type*) [Magma G] (h: Equation1571 G) : Equation23 G := by
+theorem Equation1571_implies_Equation23 (G: Type _) [Magma G] (h: Equation1571 G) : Equation23 G := by
   refine fun x ↦ (h x (x ◇ x) (x ◇ x)).trans ?_
   rw [← h x x x, ← Equation1571_implies_Equation40 G h x (x ◇ x)]
 
 @[equational_result]
-theorem Equation1571_implies_Equation8 (G: Type*) [Magma G] (h: Equation1571 G) : Equation8 G :=
-  fun x ↦ (h x x x).trans ((congrArg (· ◇ (x ◇ (x ◇ x))) (Equation1571_implies_Equation40 G h x
-    (x ◇ (x ◇ x)))).trans (Equation1571_implies_Equation23 G h (x ◇ (x ◇ x))).symm)
+theorem Equation1571_implies_Equation8 (G: Type _) [Magma G] (h: Equation1571 G) : Equation8 G :=
+  fun x ↦ Eq.trans (h x x x) (((congrArg (fun a ↦ a ◇ (x ◇ (x ◇ x))))
+    (Equation1571_implies_Equation40 G h x (x ◇ (x ◇ x)))).trans
+      (((Equation1571_implies_Equation23 G h (x ◇ (x ◇ x))).symm).trans rfl))
 
 @[equational_result]
-theorem Equation1571_implies_Equation16 (G: Type*) [Magma G] (h: Equation1571 G) : Equation16 G :=
+theorem Equation1571_implies_Equation16 (G: Type _) [Magma G] (h: Equation1571 G) : Equation16 G :=
   fun x y ↦ ((congrArg (fun w ↦ y ◇ (y ◇ w)) (Equation1571_implies_Equation8 G h x)).trans
-    (Equation1571_implies_Equation40 G h x y ▸ ((congrArg (· ◇ (y ◇ (x ◇ (y ◇ y)))))
-      (Equation1571_implies_Equation8 G h y)).trans (h x y (y ◇ y)).symm)).symm
+    ((Equation1571_implies_Equation40 G h x y ▸ ((congrArg (fun w ↦ w ◇ (y ◇ (x ◇ (y ◇ y)))))
+      (Equation1571_implies_Equation8 G h y)).trans (h x y (y ◇ y)).symm))).symm
 
 @[equational_result]
-theorem Equation1571_implies_Equation43 (G: Type*) [Magma G] (h: Equation1571 G) : Equation43 G := by
+theorem Equation1571_implies_Equation43 (G: Type _) [Magma G] (h: Equation1571 G) : Equation43 G := by
   refine fun x y ↦ (h _ (x ◇ x) (x ◇ (x ◇ y))).trans ?_
   rw [← h x x y, ← Equation1571_implies_Equation23 G h x, ← Equation1571_implies_Equation16 G h y x,
     Equation1571_implies_Equation40 G h x y, ← Equation1571_implies_Equation23 G h y]
 
 @[equational_result]
-theorem Equation1571_implies_Equation4512 (G: Type*) [Magma G] (h: Equation1571 G) : Equation4512 G := by
+theorem Equation1571_implies_Equation4512 (G: Type _) [Magma G] (h: Equation1571 G) : Equation4512 G := by
   refine fun x y z ↦ (h (x ◇ (y ◇ z)) y x).trans ?_
   rw [Equation1571_implies_Equation43 G h (x ◇ (y ◇ z)) x,
     ← Equation1571_implies_Equation16 G h (y ◇ z) x, ← Equation1571_implies_Equation16 G h z y,
-      Equation1571_implies_Equation43 G h y x]
+    Equation1571_implies_Equation43 G h y x]
+
+theorem ProveEquation1571Consequence {n : Nat} {G : Type _} [Magma G] (eq1571 : Equation1571 G)
+    (law : Law.MagmaLaw (Fin (n+1))) (eq : equation1571Reducer law.lhs = equation1571Reducer law.rhs)
+    : G ⊧ law :=
+  fun _ ↦ (AbGrpPow2ImpliesEquation1571ReducerFaithful law.lhs _
+    (Equation1571_implies_Equation4512 G eq1571) (Equation1571_implies_Equation43 G eq1571)
+      (Equation1571_implies_Equation16 G eq1571)).trans ((congrArg (evalInSgr _) eq).trans
+        (AbGrpPow2ImpliesEquation1571ReducerFaithful law.rhs _
+          (Equation1571_implies_Equation4512 G eq1571) (Equation1571_implies_Equation43 G eq1571)
+            (Equation1571_implies_Equation16 G eq1571)).symm)
+
+/- Example usage of the general-purpose prover ProveEquation1571Consequence -/
+theorem Equation1571_implies_Equation3167 {G : Type} [Magma G] (h : Equation1571 G) : Equation3167 G :=
+  fun x y z ↦ ProveEquation1571Consequence (n := 2) h
+    {lhs := Lf 0, rhs := (((Lf 1 ⋆ Lf 1) ⋆ Lf 2) ⋆ Lf 2) ⋆ Lf 0} rfl fun | 0 => x | 1 => y | 2 => z
+
+/- Example usage of the general-purpose prover ProveEquation1571Consequence -/
+theorem Equation1571_implies_Equation4656 {G : Type} [Magma G] (h : Equation1571 G) : Equation4656 G :=
+  fun x y z ↦ ProveEquation1571Consequence (n := 2) h
+    {lhs := (Lf 0 ⋆ Lf 1) ⋆ Lf 1, rhs := (Lf 0 ⋆ Lf 2) ⋆ Lf 2} rfl fun | 0 => x | 1 => y | 2 => z
 
 /-- This result was first obtained by Kisielewicz in 1997 via computer assistance. -/
 @[equational_result]
@@ -390,6 +416,17 @@ theorem Equation4582_implies_Equation4564 (G: Type*) [Magma G] (h: Equation4582 
 theorem Equation4582_implies_Equation4579 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4579 G :=
   fun _ _ _ _ _ ↦ h _ _ _ _ _ _
 
+@[equational_result]
+theorem Equation953_implies_Equation2 (G : Type _) [Magma G] (h: Equation953 G) : Equation2 G := by
+  intro x y
+  let i := x ◇ x
+  let n := i ◇ i
+  have znx (z : G) : z ◇ n = x := (h x z x).symm
+  have hzzi := h x x i
+  have hyzi := h y x i
+  rw [znx] at hzzi hyzi
+  exact hzzi.trans hyzi.symm
+
 /- Obtained with lean-egg -/
 @[equational_result]
 theorem Equation14_implies_Equation23 (G: Type*) [Magma G] (h: Equation14 G) : Equation23 G :=
@@ -423,7 +460,7 @@ theorem Equation2_implies_Equation5105 (G: Type _) [Magma G] (h: Equation2 G) : 
   fun _ _ _ ↦ h _ _
 
 @[equational_result]
-theorem Equation2_implies_Equation28393 (G: Type _) [Magma G] (h: Equation2 G) : Equation28393 G :=
+theorem Equation2_implies_Equation28381 (G: Type _) [Magma G] (h: Equation2 G) : Equation28381 G :=
   fun _ _ _ ↦ h _ _
 
 @[equational_result]
@@ -451,7 +488,7 @@ theorem Equation4_implies_Equation3744 (G: Type _) [Magma G] (h: Equation4 G) : 
     _ = (x ◇ z) ◇ (w ◇ y) := h (x ◇ z) (w ◇ y)
 
 @[equational_result]
-theorem Equation4_implies_Equation28393 (G: Type _) [Magma G] (h: Equation4 G) : Equation28393 G :=
+theorem Equation4_implies_Equation28381 (G: Type _) [Magma G] (h: Equation4 G) : Equation28381 G :=
   fun x y z ↦
     calc x
     _ = x ◇ x := (h x x)
@@ -549,17 +586,6 @@ theorem Equation4579_implies_Equation4512 (G: Type _) [Magma G] (h: Equation4579
 @[equational_result]
 theorem Equation4579_implies_Equation4564 (G: Type _) [Magma G] (h: Equation4579 G) : Equation4564 G :=
   fun _ _ _ _ ↦ h _ _ _ _ _
-
-@[equational_result]
-theorem Equation953_implies_Equation2 (G : Type _) [Magma G] (h: Equation953 G) : Equation2 G := by
-  intro x y
-  let i := x ◇ x
-  let n := i ◇ i
-  have znx (z : G) : z ◇ n = x := (h x z x).symm
-  have hzzi := h x x i
-  have hyzi := h y x i
-  rw [znx] at hzzi hyzi
-  exact hzzi.trans hyzi.symm
 
 /- Counterexamples -/
 

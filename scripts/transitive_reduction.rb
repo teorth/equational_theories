@@ -4,11 +4,6 @@
 
 require File.join(__dir__, 'graph')
 
-graph = Graph.new
-File.read(ARGV[0]).split("\n").each { |s|
-  a,b = s.split(",")
-  graph.add_edge(a.to_i, b.to_i)
-}
-
+graph = Graph.from_csv(ARGV[0])
 min_graph = graph.transitive_reduction
-min_graph.print_graph
+min_graph.print_csv
