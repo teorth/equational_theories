@@ -16,17 +16,13 @@ jobs:
         COMMENT_BODY="${{ github.event.comment.body }}"
         COMMENT_BODY_LOWER=$(echo "$COMMENT_BODY" | tr '[:upper:]' '[:lower:]')
 
-        # Debug: output the comment body for verification
-        echo "Comment Body: $COMMENT_BODY"
-
-        # Check and extract PR number
-        if [[ "$COMMENT_BODY_LOWER" =~ propose\s*(pr\s*)?\#([0-9]+)\s* ]]; then
+        # Use a refined regex with [[:space:]] to match any whitespace
+        if [[ "$COMMENT_BODY_LOWER" =~ propose[[:space:]]*(pr[[:space:]]*)?\#([0-9]+)[[:space:]]* ]]; then
           PR_NUMBER="${BASH_REMATCH[2]}"
           echo "pr_number=$PR_NUMBER" >> $GITHUB_ENV
-          echo "PR Number extracted: $PR_NUMBER"
         else
           echo "The comment does not contain a valid 'propose #PR_NUMBER' format."
-          exit 0
+          exit 1
         fi
 
     - name: Get issue details
@@ -58,9 +54,6 @@ jobs:
       run: |
         # Capture the PR number from the environment variable
         PR_NUMBER="${{ env.pr_number }}"
-
-        # Debug: output the PR number for verification
-        echo "Using PR Number: $PR_NUMBER"
 
         if [ -z "$PR_NUMBER" ]; then
           echo "Error: PR number is not set. Exiting."
