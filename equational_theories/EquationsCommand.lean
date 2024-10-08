@@ -28,11 +28,14 @@ equations, and a custom elaborator that instantiates the instante parameter of `
 elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   let G := mkIdent (← MonadQuotation.addMacroScope `G)
   let inst := mkIdent (← MonadQuotation.addMacroScope `inst)
-  let eqName := mkIdent (.mkSimple s!"Equation{i.getNat}")
-  let finLawName := mkIdent (.mkSimple s!"FinLaw{i.getNat}")
-  let lawName := mkIdent (.mkSimple s!"Law{i.getNat}")
-  let finThmName := mkIdent (.str finLawName.getId "models_iff")
-  let thmName := mkIdent (.str lawName.getId "models_iff")
+  let eqName := .mkSimple s!"Equation{i.getNat}"
+  let eqIdent := mkIdent eqName
+  let finLawName := .mkSimple s!"FinLaw{i.getNat}"
+  let finLawIdent := mkIdent finLawName
+  let lawName := .mkSimple s!"Law{i.getNat}"
+  let lawIdent := mkIdent lawName
+  let finThmName := mkIdent (.str finLawName "models_iff")
+  let thmName := mkIdent (.str lawName "models_iff")
   let mut is := #[]
   let t := tsyn.raw
   -- Collect all identifiers to introduce them as parameters
@@ -47,7 +50,17 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   let mut t : Term := ⟨t⟩
   for i in is.reverse do
     t ← `(∀ $(⟨i⟩) : $G, $t)
-  elabCommand (← `(command| abbrev%$tk $eqName ($G : Type _) [$inst : Magma $G] := $t))
+  elabCommand (← `(command| abbrev%$tk $eqIdent ($G : Type _) [$inst : Magma $G] := $t))
+  Command.liftTermElabM do
+    let declMods ← elabModifiers mods
+    addDocString' (TSyntax.getId eqIdent) declMods.docString?
+    -- TODO: This will go wrong if we are in a namespace. Is this really needed, or is there
+    -- a way to pass the current position already to the `(command|` above?
+    Lean.addDeclarationRanges eqName {
+      range := ← getDeclarationRange (← getRef)
+      selectionRange := ← getDeclarationRange (← getRef) }
+
+
   -- Create law
   let tl := tsyn.raw
   let tl ← tl.rewriteBottomUpM fun s => match s with
@@ -62,19 +75,21 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   let mut tl : Term := ⟨tl⟩
   let freeMagmaSize := Syntax.mkNumLit (toString is.size)
   -- define law over `Fin n`
-  elabCommand (← `(command| abbrev%$tk $finLawName : Law.MagmaLaw (Fin $freeMagmaSize) := $tl))
+  elabCommand (← `(command| abbrev%$tk $finLawIdent : Law.MagmaLaw (Fin $freeMagmaSize) := $tl))
   -- compatibility between the `finLaw` and the original equation
   let modelsIffLemma : Ident := mkIdent (.mkSimple s!"models_iff_{is.size}")
-  elabCommand (← `(command| abbrev%$tk $finThmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $finLawName ↔ $eqName G := $modelsIffLemma $finLawName))
+  elabCommand (← `(command| abbrev%$tk $finThmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $finLawIdent ↔ $eqIdent G := $modelsIffLemma $finLawIdent))
   -- define the actual law over `Nat`
-  elabCommand (← `(command| abbrev%$tk $lawName : Law.NatMagmaLaw := $tl))
+  elabCommand (← `(command| abbrev%$tk $lawIdent : Law.NatMagmaLaw := $tl))
   -- compatibility between the law and the original equation
-  elabCommand (← `(command| abbrev%$tk $thmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $lawName ↔ $eqName G :=
-                    fun G _ ↦ Iff.trans (Law.satisfies_fin_satisfies_nat G $finLawName).symm ($finThmName G)))
+  elabCommand (← `(command| abbrev%$tk $thmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $lawIdent ↔ $eqIdent G :=
+                    fun G _ ↦ Iff.trans (Law.satisfies_fin_satisfies_nat G $finLawIdent).symm ($finThmName G)))
   -- register the law
-  modifyEnv (magmaLawExt.addEntry · (lawName.getId, ← (mkNatMagmaLaw lawName.getId).run
+  modifyEnv (magmaLawExt.addEntry · (lawName, ← (mkNatMagmaLaw lawName).run
     { env := (← getEnv), opts := (← getOptions) }))
   Command.liftTermElabM do
-    let declMods ← elabModifiers mods
-    -- Create a decl named `declName`
-    addDocString' (TSyntax.getId eqName) declMods.docString?
+    -- TODO: This will go wrong if we are in a namespace. Is this really needed, or is there
+    -- a way to pass the current position already to the `(command|` above?
+    Lean.addDeclarationRanges lawName {
+      range := ← getDeclarationRange (← getRef)
+      selectionRange := ← getDeclarationRange (← getRef) }

@@ -6,7 +6,7 @@ on:
 
 jobs:
   awaiting_review:
-    if: github.event.issue.pull_request != null && github.event.comment.body == 'awaiting-review'
+    if: github.event.issue.pull_request != null && contains(github.event.comment.body, 'awaiting-review')
     runs-on: ubuntu-latest
 
     steps:
