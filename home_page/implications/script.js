@@ -271,8 +271,6 @@ function renderImplications(index) {
 	    selectedEquationDual.innerHTML = "";
     }
 
-  selectedEquationGraphitiLinks.innerHTML = `(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1}&highlight_red=${index+1}">implied</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1}&highlight_red=${index+1}">implied by</a> equations) `
-
     // Add this section to display equivalent equations
     const equivalentClass = equiv.find(cls => cls.includes(index)) || [index];
     const equivalentEquations = equivalentClass
@@ -293,9 +291,11 @@ function renderImplications(index) {
     const implies = [];
     const antiImplies = [];
     const unknownImplies = [];
+    const unknownImpliesEqNum = [];
     const impliedBy = [];
     const antiImpliedBy = [];
     const unknownImpliedBy = [];
+    const unknownImpliedByEqNum = [];
 
     let seenClasses = new Set();
     implications.forEach((row, i) => {
@@ -326,9 +326,20 @@ function renderImplications(index) {
 		statusIndex === 0 ? antiImpliedBy.push(item) : antiImplies.push(item);
             } else if (isUnknown(status, treatConjecturedAsUnknown)) {
 		statusIndex === 0 ? unknownImpliedBy.push(item) : unknownImplies.push(item);
+		statusIndex === 0 ? unknownImpliedByEqNum.push(i) : unknownImpliesEqNum.push(i);
             }
 	});
     });
+
+  selectedEquationGraphitiLinks.innerHTML = `<br>(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1}&highlight_red=${index+1}">implied</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1}&highlight_red=${index+1}">implied by</a> of the equation)`
+  if (unknownImpliesEqNum.length > 0) {
+    const implies = unknownImpliesEqNum.map(x => x + 1)
+    selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1},${implies.join(",")}&highlight_red=${index+1}&highlight_blue=${implies.join(",")}&show_unknowns_conjectures=on">implied</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1},${implies.join(",")}&highlight_red=${index+1}&highlight_blue=${implies.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknowns+conjectures</a>)`
+  }
+  if (unknownImpliedByEqNum.length > 0) {
+    const impliedby = unknownImpliedByEqNum.map(x => x + 1)
+    selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1},${impliedby.join(",")}&highlight_red=${index+1}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implied</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1},${impliedby.join(",")}&highlight_red=${index+1}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknown bys+conjectured bys</a>)`
+  }
 
     impliesList.innerHTML = implies.join('') || 'None';
     antiImpliesList.innerHTML = antiImplies.join('') || 'None';

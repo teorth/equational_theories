@@ -7,15 +7,6 @@
     <title>Graphiti</title>
 
     <style>
-      /* Styling for the links */
-      .node a {
-        text-decoration: none; /* Remove underline */
-        color: blue; /* Link color */
-      }
-      .node a:hover {
-        color: red; /* Change color on hover */
-      }
-
       body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -28,11 +19,28 @@
         background: white;
         padding: 20px;
         border-radius: 5px;
+        display: flex;
+        align-items: left;
+      }
+      input[type="text"] {
+        width: 100%; /* Make text inputs take up full width */
+        box-sizing: border-box; /* Ensure padding and border are included in the element's width */
+      }
+      button {
+        width: 100%; /* Make text inputs take up full width */
+        box-sizing: border-box; /* Ensure padding and border are included in the element's width */
+      }
+
+      .checkbox-container {
+        display: flex;
+        flex-direction: row; /* Ensures checkbox and label are in a row */
+        align-items: center;
       }
 
       form {
         display: flex;
         flex-direction: column;
+        align-items: flex-start; /* Aligns all form elements to the left */
       }
 
       label {
@@ -130,6 +138,17 @@
         >
         <input type="text" id="highlight_blue" name="highlight_blue" /><br />
 
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            id="show_unknowns_conjectures"
+            name="show_unknowns_conjectures"
+          />
+          <label for="show_unknowns_conjectures"
+            >Show unknowns and conjectures</label
+          >
+        </div>
+
         <button type="submit">Submit</button>
       </form>
 
@@ -158,7 +177,7 @@
         <li>
           <a
             href="#"
-            onclick="fillForm({implies: '43', max_variables: '3', hightlight_red: '43'})"
+            onclick="fillForm({implies: '43', max_variables: '3', highlight_red: '43'})"
             >Equations up to 3 variables implied by the commutative law</a
           >
         </li>
@@ -231,7 +250,11 @@
         const inputs = form.getElementsByTagName("input");
 
         for (let input of inputs) {
-          if (input.type != "hidden") {
+          if (input.type == "hidden") {
+            continue;
+          } else if (input.type === "checkbox") {
+            input.checked = false; // Uncheck all checkboxes
+          } else {
             input.value = ""; // Clear all fields
           }
         }
@@ -240,7 +263,11 @@
         Object.keys(params).forEach((key) => {
           const inputField = form.querySelector(`input[name="${key}"]`);
           if (inputField) {
-            inputField.value = params[key];
+            if (inputField.type === "checkbox") {
+              inputField.checked = params[key]; // Set checkbox value
+            } else {
+              inputField.value = params[key];
+            }
           }
         });
       }
@@ -273,14 +300,15 @@
       function populateForm() {
         const params = new URLSearchParams(window.location.search);
 
-        // Loop through all input elements in the form
-        const inputs = document.querySelectorAll(
-          "#searchForm input, #searchForm textarea",
-        );
-        inputs.forEach((input) => {
-          const name = input.name; // Get the name of the input field
-          if (params.has(name)) {
-            input.value = params.get(name); // Set the value from the query string
+        // Iterate over the query string parameters
+        params.forEach((value, key) => {
+          let input = document.querySelector(`[name="${key}"]`);
+          if (input) {
+            if (input.type === "checkbox") {
+              input.checked = value === "on"; // Convert string to boolean for checkboxes
+            } else {
+              input.value = value; // Set text input value
+            }
           } else {
             input.value = ""; // Optional: clear if not in query string
           }
@@ -414,8 +442,6 @@
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
-
-          console.log(55);
         };
 
         img.src = url;
@@ -505,6 +531,12 @@
         );
 
         let vertices_to_delete = new Set();
+
+        // These mess up rendering now with the unknowns, get rid of them.
+        vertices_to_delete.add(5105)
+        vertices_to_delete.add(28393)
+        vertices_to_delete.add(374794)
+
         if (params.max_variables) {
           max_var = Number(params.max_variables);
           for (const [eqNumStr, eqStr] of Object.entries(
@@ -577,9 +609,9 @@
         }
 
         dotFile = `
-graph G {
+digraph G {
   layout = dot
-  rankdir = TB
+  rankdir = BT
   graph [ pad="0.2", ranksep="0.75", nodesep="0.35" ];
   node [ shape="none" ]
 `;
@@ -661,7 +693,21 @@ graph G {
 
         for (const [v, neighbors] of Object.entries(reduced_graph)) {
           for (const n of neighbors) {
-            dotFile += `  ${n} -- ${v}\n`;
+            dotFile += `  ${v} -> ${n} [arrowhead="none"]\n`;
+          }
+        }
+
+        if (params.show_unknowns_conjectures == "on") {
+          for (const scc_name of Object.keys(scc_to_node_map)) {
+            if (!graph_json.unknowns[scc_name]) {
+              continue;
+            }
+
+            graph_json.unknowns[scc_name]
+              .filter((x) => x in scc_to_node_map)
+              .forEach((x) => {
+                dotFile += `  ${scc_name} -> ${x} [style="dotted"]\n`;
+              });
           }
         }
 
