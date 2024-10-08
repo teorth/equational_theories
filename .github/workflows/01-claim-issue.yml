@@ -6,7 +6,7 @@ on:
 
 jobs:
   claim_issue:
-    if: github.event.issue.pull_request == null && github.event.comment.body == 'claim'
+    if: github.event.issue.pull_request == null && contains(github.event.comment.body, 'claim') && !contains(github.event.comment.body, 'disclaim')
     runs-on: ubuntu-latest
 
     steps:
@@ -113,8 +113,7 @@ jobs:
         )
         curl -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
         -H "Content-Type: application/json" \
-        --data "$QUERY" \
-        https://api.github.com/graphql
+        --data "$QUERY" https://api.github.com/graphql
 
     - name: Log the project card movement result
       run: echo "Task successfully moved to 'Claimed Tasks' column."
