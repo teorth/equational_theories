@@ -50,6 +50,7 @@ const GRAPHITI_BASE_URL = "https://teorth.github.io/equational_theories/graphiti
 
 const listPage = document.getElementById('listPage');
 const detailPage = document.getElementById('detailPage');
+const equationCommentary = document.getElementById('equationCommentary');
 const equationList = document.getElementById('equationList');
 const selectedEquation = document.getElementById('selectedEquation');
 const selectedEquationDual = document.getElementById('selectedEquationDual');
@@ -231,10 +232,11 @@ function renderImplications(index) {
 
     // Check if there's already a query string
     if (currentURL.indexOf('?') > -1) {
-	currentURL = currentURL.split('?')[0] + '?' + (index+1);
+	    currentURL = currentURL.split('?')[0] + '?' + (index+1);
     } else {
-	currentURL += '?' + (index+1);
+	    currentURL += '?' + (index+1);
     }
+
 
     // Update the URL without reloading the page
     history.pushState(null, '', currentURL);
@@ -245,24 +247,28 @@ function renderImplications(index) {
     }
 
     currentEquationIndex = index;
-    selectedEquation.textContent = equations[index];
     selectedEquation.dataset.index = index;
+    if (commentary[index+1] === undefined) {
+        selectedEquation.textContent = equations[index];
+    } else {
+        equationCommentary.innerHTML = commentary[index+1];
+    }
 
 
     function findDual(index, duals) {
-	for (let pair of duals) {
-	    if (pair[0] === index) return pair[1];
-	    if (pair[1] === index) return pair[0];
-	}
-	return null; // Return null if no dual is found
+	    for (let pair of duals) {
+	        if (pair[0] === index) return pair[1];
+	        if (pair[1] === index) return pair[0];
+	    }
+	    return null; // Return null if no dual is found
     }
 
     // Usage:
     let dualIndex = findDual(index+1, duals);
     if (dualIndex !== null) {
-	selectedEquationDual.innerHTML = "(Dual equation: <a class='link' onclick='renderImplications("+(dualIndex-1)+");'>" + equations[dualIndex-1] + "</a>)";
+	    selectedEquationDual.innerHTML = "(Dual equation: <a class='link' onclick='renderImplications("+(dualIndex-1)+");'>" + equations[dualIndex-1] + "</a>)";
     } else {
-	selectedEquationDual.innerHTML = "";
+	    selectedEquationDual.innerHTML = "";
     }
 
   selectedEquationGraphitiLinks.innerHTML = `(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1}&highlight_red=${index+1}">implied</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1}&highlight_red=${index+1}">implied by</a> equations) `
