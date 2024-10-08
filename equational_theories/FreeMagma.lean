@@ -78,4 +78,20 @@ lemma Fin0_impossible (x : FreeMagma (Fin 0)) : False := by
     cases l; contradiction
   case Fork => assumption
 
+def length {α : Type} : FreeMagma α → Nat
+  | .Leaf _ => 1
+  | .Fork m1 m2 => FreeMagma.length m1 + FreeMagma.length m2
+
+theorem length_pos {α : Type} : (x : FreeMagma α) → 0 < FreeMagma.length x
+  | .Leaf _ => by simp [FreeMagma.length]
+  | .Fork m1 m2 => by
+    have h1 := FreeMagma.length_pos m1
+    have h2 := FreeMagma.length_pos m2
+    simp [FreeMagma.length]
+    omega
+
+@[simp]
+theorem length_ne_0 {α : Type} (x : FreeMagma α) : FreeMagma.length x ≠ 0 :=
+  Nat.not_eq_zero_of_lt x.length_pos
+
 end FreeMagma

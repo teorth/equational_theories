@@ -47,7 +47,17 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   let mut t : Term := ⟨t⟩
   for i in is.reverse do
     t ← `(∀ $(⟨i⟩) : $G, $t)
-  elabCommand (← `(command| abbrev%$tk $eqName ($G : Type _) [$inst : Magma $G] := $t))
+  elabCommand (← `(command| abbrev%$tk $eqIdent ($G : Type _) [$inst : Magma $G] := $t))
+  Command.liftTermElabM do
+    let declMods ← elabModifiers mods
+    addDocString' (TSyntax.getId eqIdent) declMods.docString?
+    -- TODO: This will go wrong if we are in a namespace. Is this really needed, or is there
+    -- a way to pass the current position already to the `(command|` above?
+    Lean.addDeclarationRanges eqName {
+      range := ← getDeclarationRange (← getRef)
+      selectionRange := ← getDeclarationRange (← getRef) }
+
+
   -- Create law
   let tl := tsyn.raw
   let tl ← tl.rewriteBottomUpM fun s => match s with
@@ -75,6 +85,8 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   modifyEnv (magmaLawExt.addEntry · (lawName.getId, ← (mkNatMagmaLaw lawName.getId).run
     { env := (← getEnv), opts := (← getOptions) }))
   Command.liftTermElabM do
-    let declMods ← elabModifiers mods
-    -- Create a decl named `declName`
-    addDocString' (TSyntax.getId eqName) declMods.docString?
+    -- TODO: This will go wrong if we are in a namespace. Is this really needed, or is there
+    -- a way to pass the current position already to the `(command|` above?
+    Lean.addDeclarationRanges lawName {
+      range := ← getDeclarationRange (← getRef)
+      selectionRange := ← getDeclarationRange (← getRef) }

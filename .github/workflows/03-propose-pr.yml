@@ -6,19 +6,23 @@ on:
 
 jobs:
   propose_pr:
-    if: github.event.issue.pull_request == null && contains(github.event.comment.body, 'propose PR')
+    if: github.event.issue.pull_request == null && contains(github.event.comment.body, 'propose')
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if the comment contains "propose PR #PR_NUMBER"
+    - name: Check if the comment contains "propose #PR_NUMBER" or variations with arbitrary whitespaces
       id: check_propose
       run: |
         COMMENT_BODY="${{ github.event.comment.body }}"
-        if [[ "$COMMENT_BODY" =~ propose\ PR\ \#([0-9]+) ]]; then
-          PR_NUMBER="${BASH_REMATCH[1]}"
+        # Convert the comment to lowercase to handle variations like "propose", "PROPOSE", etc.
+        COMMENT_BODY_LOWER=$(echo "$COMMENT_BODY" | tr '[:upper:]' '[:lower:]')
+
+        # Use extended pattern matching to capture variations of "propose #PR_NUMBER"
+        if [[ "$COMMENT_BODY_LOWER" =~ propose\s*(pr\s*)?\#([0-9]+)\s* ]]; then
+          PR_NUMBER="${BASH_REMATCH[2]}"
           echo "pr_number=$PR_NUMBER" >> $GITHUB_ENV
         else
-          echo "The comment does not contain a valid 'propose PR #PR_NUMBER' format."
+          echo "The comment does not contain a valid 'propose #PR_NUMBER' format."
           exit 0
         fi
 
@@ -46,7 +50,7 @@ jobs:
         echo "User ${{ github.event.comment.user.login }} is not assigned to this issue, exiting."
         exit 0
 
-    - name: Link PR #PR_NUMBER to the issue
+    - name: Link PR to the issue
       if: env.not_assigned == 'false'
       run: |
         PR_BODY=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
