@@ -17,6 +17,15 @@ instance (α : Type u) : Coe α (FreeMagma α) where
 
 instance {n : Nat} : OfNat (FreeMagma ℕ) n := ⟨FreeMagma.Leaf n⟩
 
+open Lean in
+def FreeMagma.toJson {α} [ToJson α] : FreeMagma α → Json
+  | FreeMagma.Leaf x => .mkObj [("leaf", Lean.toJson x)]
+  | FreeMagma.Fork x y => .mkObj [("left", toJson x), ("right", toJson y)]
+
+open Lean in
+instance {α} [ToJson α] : ToJson (FreeMagma α) where
+  toJson := FreeMagma.toJson
+
 infixl:65 " ⋆ " => FreeMagma.Fork
 
 @[simp]
