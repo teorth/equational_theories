@@ -58,7 +58,11 @@ Dir["equational_theories/**/*.lean"].each { |path|
       if $_ =~ /namespace (.+)/
         cur_namespace = $1
       elsif $_ =~ /theorem (Equation\d+_implies_Equation\d+)/
-        equation_to_namespace[$1] = cur_namespace
+        if cur_namespace
+          equation_to_namespace[$1] = cur_namespace + "."
+        else
+          equation_to_namespace[$1] = ""
+        end
       end
     end
   }
@@ -74,10 +78,17 @@ import equational_theories.Generated.FinitePoly
 import equational_theories.Subgraph
 END
   cur_theorem = nil
+  cur_theorem_implies = nil
   while f.gets
-    if $_ =~ /^theorem Equation(\d+)_implies_Equation/
+    if $_ =~ /^theorem Equation(\d+)_implies_Equation(\d+)/
+      if cur_theorem
+        graph.add_edge(cur_theorem, cur_theorem_implies)
+      end
+
       puts "@[equational_result]"
       cur_theorem = $1.to_i
+      cur_theorem_implies = $2.to_i
+      equation_to_namespace["Equation#{$1}_implies_Equation#{$2}"] = ""
     end
 
     if $_ =~ /have eq(\d+) (.+) := by sorry/
@@ -98,7 +109,7 @@ END
           $stderr.puts "Missing namespace for #{eqname}"
           exit 1
         end
-        puts "    apply #{namespace}.#{eqname} at h"
+        puts "    apply #{namespace}#{eqname} at h"
       }
       puts "    apply h"
 

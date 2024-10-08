@@ -1,7 +1,1 @@
-import equational_theories.Generated.EquationSearch.theorems.Run1
-import equational_theories.Generated.EquationSearch.theorems.Run2
-import equational_theories.Generated.EquationSearch.theorems.Run3
-import equational_theories.Generated.EquationSearch.theorems.Run4
-import equational_theories.Generated.EquationSearch.theorems.Run5
-import equational_theories.Generated.EquationSearch.theorems.Run6
-import equational_theories.Generated.EquationSearch.theorems.Run7
+import equational_theories.Generated.EquationSearch.theorems.Combined
