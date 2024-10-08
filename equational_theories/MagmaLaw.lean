@@ -12,6 +12,8 @@ deriving DecidableEq
 
 infix:60 " ≃ " => MagmaLaw.mk
 
+abbrev NatMagmaLaw := MagmaLaw Nat
+
 end Law
 
 open Law
