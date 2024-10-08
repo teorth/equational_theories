@@ -16,14 +16,9 @@ jobs:
         COMMENT_BODY="${{ github.event.comment.body }}"
         COMMENT_BODY_LOWER=$(echo "$COMMENT_BODY" | tr '[:upper:]' '[:lower:]')
 
-        # Debug: output the comment body for verification
-        echo "Original Comment Body: $COMMENT_BODY"
-        echo "Lowercased Comment Body: $COMMENT_BODY_LOWER"
-
         # Use a refined regex with [[:space:]] to match any whitespace
         if [[ "$COMMENT_BODY_LOWER" =~ withdraw[[:space:]]*(pr[[:space:]]*)?\#([0-9]+)[[:space:]]* ]]; then
           PR_NUMBER="${BASH_REMATCH[2]}"
-          echo "PR Number extracted: $PR_NUMBER"
           echo "pr_number=$PR_NUMBER" >> $GITHUB_ENV
         else
           echo "The comment does not contain a valid 'withdraw #PR_NUMBER' format."
@@ -163,8 +158,7 @@ jobs:
         )
         curl -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
         -H "Content-Type: application/json" \
-        --data "$QUERY" \
-        https://api.github.com/graphql
+        --data "$QUERY" https://api.github.com/graphql
 
     - name: Log the project card movement result
       if: env.not_assigned == 'false'
