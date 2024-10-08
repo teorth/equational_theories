@@ -123,19 +123,19 @@ def ConfMagma := {x : FreeMagma α // bu rw x = x }
 instance : Coe α (ConfMagma rw) where
   coe x := ⟨x, by rfl⟩
 
-instance instMagmaMagma477 : Magma (ConfMagma rw) where
+instance : Magma (ConfMagma rw) where
   op := fun x y => ⟨bu rw (x.1 ◇ y.1), bu_idem rw _⟩
 
 instance [DecidableEq α] : DecidableEq (ConfMagma rw) :=
   inferInstanceAs (DecidableEq {x : FreeMagma α // bu rw x = x })
 
 
-section rw477
+namespace rw477
 
 variable [DecidableEq α]
 
 -- equation 477 := x = y ◇ (x ◇ (y ◇ (y ◇ y)))
-def rw477 : FreeMagma α → FreeMagma α
+def rule : FreeMagma α → FreeMagma α
   | m@(.Fork y1 (.Fork x (.Fork y2 (.Fork y3 y4)))) =>
       if y1 = y2 ∧ y1 = y3 ∧ y1 = y4 then
         x
@@ -143,10 +143,10 @@ def rw477 : FreeMagma α → FreeMagma α
         m
   | m => m
 
-instance rw477_projection : IsProj (@rw477 α _) where
+instance rule_projection : IsProj (@rule α _) where
   proj := by
     intro x
-    unfold rw477
+    unfold rule
     split
     · split
       · right; right; right; left; rfl
@@ -154,8 +154,8 @@ instance rw477_projection : IsProj (@rw477 α _) where
     · rfl
 
 @[simp]
-theorem rw477_yy (y : FreeMagma α) : rw477 (y ⋆ y) = y ⋆ y := by
-  unfold rw477
+theorem rule_yy (y : FreeMagma α) : rule (y ⋆ y) = y ⋆ y := by
+  unfold rule
   split
   · rename_i m2' y1 x y2 y3 y4 heq
     simp only [Fork.injEq] at heq
@@ -172,9 +172,9 @@ theorem rw477_yy (y : FreeMagma α) : rw477 (y ⋆ y) = y ⋆ y := by
   · rfl
 
 @[simp]
-theorem rw477_yyy {α} [DecidableEq α] (y : FreeMagma α) :
-    rw477 (y ⋆ (y ⋆ y)) = y ⋆ (y ⋆ y) := by
-  unfold rw477
+theorem rule_yyy {α} [DecidableEq α] (y : FreeMagma α) :
+    rule (y ⋆ (y ⋆ y)) = y ⋆ (y ⋆ y) := by
+  unfold rule
   split
   · rename_i m2' y1 x y2 y3 y4 heq
     simp only [Fork.injEq] at heq
@@ -189,9 +189,9 @@ theorem rw477_yyy {α} [DecidableEq α] (y : FreeMagma α) :
   · rfl
 
 @[simp]
-theorem rw477_xyyy {α} [DecidableEq α] (x y : FreeMagma α) :
-    rw477 (x ⋆ (y ⋆ (y ⋆ y))) = x ⋆ (y ⋆ (y ⋆ y)) := by
-  unfold rw477
+theorem rule_xyyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rule (x ⋆ (y ⋆ (y ⋆ y))) = x ⋆ (y ⋆ (y ⋆ y)) := by
+  unfold rule
   split
   · rename_i m2' y1 x y2 y3 y4 heq
     simp only [Fork.injEq] at heq
@@ -206,14 +206,14 @@ theorem rw477_xyyy {α} [DecidableEq α] (x y : FreeMagma α) :
   · rfl
 
 @[simp]
-theorem rw477_yxyyy {α} [DecidableEq α] (x y : FreeMagma α) :
-    rw477 (y ⋆ (x ⋆ (y ⋆ (y ⋆ y)))) = x := by
-  simp [rw477]
+theorem rule_yxyyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rule (y ⋆ (x ⋆ (y ⋆ (y ⋆ y)))) = x := by
+  simp [rule]
 
 @[equational_result]
-theorem Equation477_Facts :
+theorem «Facts» :
   ∃ (G : Type) (_ : Magma G), Facts G [477] [1426, 1519, 2035, 2128, 3050, 3150] := by
-  use ConfMagma (@rw477 Nat _), inferInstance
+  use ConfMagma (@rule Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
     simp [Magma.op]
@@ -247,15 +247,12 @@ theorem Equation477_Facts :
 
 end rw477
 
-
-
-
-section rw467
+namespace rw467
 
 variable [DecidableEq α]
 
 -- equation 467 := x = y ◇ (x ◇ (x ◇ (y ◇ y)))
-def rw467 : FreeMagma α → FreeMagma α
+def rule : FreeMagma α → FreeMagma α
   | m@(.Fork y1 (.Fork x (.Fork x2 (.Fork y2 y3)))) =>
       if y1 = y2 ∧ y1 = y3 ∧ x = x2 then
         x
@@ -263,10 +260,10 @@ def rw467 : FreeMagma α → FreeMagma α
         m
   | m => m
 
-instance rw467_projection : IsProj (@rw467 α _) where
+instance rule_projection : IsProj (@rule α _) where
   proj := by
     intro x
-    unfold rw467
+    unfold rule
     split
     · split
       · right; right; right; left; rfl
@@ -274,8 +271,8 @@ instance rw467_projection : IsProj (@rw467 α _) where
     · rfl
 
 @[simp]
-theorem rw467_yy (y : FreeMagma α) : rw467 (y ⋆ y) = y ⋆ y := by
-  unfold rw467
+theorem rule_yy (y : FreeMagma α) : rule (y ⋆ y) = y ⋆ y := by
+  unfold rule
   split
   · rename_i m2' y1 x y2 y3 y4 heq
     simp only [Fork.injEq] at heq
@@ -292,9 +289,9 @@ theorem rw467_yy (y : FreeMagma α) : rw467 (y ⋆ y) = y ⋆ y := by
   · rfl
 
 @[simp]
-theorem rw467_xyy {α} [DecidableEq α] (x y : FreeMagma α) :
-    rw467 (x ⋆ (y ⋆ y)) = x ⋆ (y ⋆ y) := by
-  unfold rw467
+theorem rule_xyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rule (x ⋆ (y ⋆ y)) = x ⋆ (y ⋆ y) := by
+  unfold rule
   split
   · rename_i m2' y1 x y2 y3 y4 heq
     simp only [Fork.injEq] at heq
@@ -309,9 +306,9 @@ theorem rw467_xyy {α} [DecidableEq α] (x y : FreeMagma α) :
   · rfl
 
 @[simp]
-theorem rw467_xxyy {α} [DecidableEq α] (x y : FreeMagma α) :
-    rw467 (x ⋆ (x ⋆ (y ⋆ y))) = x ⋆ (x ⋆ (y ⋆ y)) := by
-  unfold rw467
+theorem rule_xxyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rule (x ⋆ (x ⋆ (y ⋆ y))) = x ⋆ (x ⋆ (y ⋆ y)) := by
+  unfold rule
   split
   · rename_i m2' y1 x y2 y3 y4 heq
     simp only [Fork.injEq] at heq
@@ -326,14 +323,13 @@ theorem rw467_xxyy {α} [DecidableEq α] (x y : FreeMagma α) :
   · rfl
 
 @[simp]
-theorem rw467_yxxyy {α} [DecidableEq α] (x y : FreeMagma α) :
-    rw467 (y ⋆ (x ⋆ (x ⋆ (y ⋆ y)))) = x := by
-  simp [rw467]
+theorem rule_yxxyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rule (y ⋆ (x ⋆ (x ⋆ (y ⋆ y)))) = x := by
+  simp [rule]
 
 @[equational_result]
-theorem Equation467_Facts :
-  ∃ (G : Type) (_ : Magma G), Facts G [467] [2847] := by
-  use ConfMagma (@rw467 Nat _), inferInstance
+theorem «Facts» : ∃ (G : Type) (_ : Magma G), Facts G [467] [2847] := by
+  use ConfMagma (@rule Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
     simp [Magma.op]
@@ -346,5 +342,7 @@ theorem Equation467_Facts :
     decide
 
 end rw467
+
+-- equation 504 := x = y ◇ (y ◇ (x ◇ (y ◇ y)))
 
 end Confluence
