@@ -3,7 +3,6 @@
 import json
 import os
 import sys
-import markdown
 
 
 #"""
@@ -147,13 +146,3 @@ update_info = {
 }
 
 print("var last_updated = ",json.dumps(update_info))
-
-
-commentary = {}
-
-for eq in os.listdir("commentary/"):
-    if eq.startswith("Equation") and eq.endswith(".md"):
-        commentary[eq.split(".")[0].replace("Equation","")] = markdown.markdown(open("commentary/"+eq).read())
-
-
-print("var commentary = ",json.dumps(commentary))

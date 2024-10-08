@@ -100,7 +100,6 @@ def leanify(proof, problem):
 def get_problem(matrix, bad):
   # ts = time.perf_counter()
   impls = find_most_useful_implication(matrix, -1)
-  print('Returned', impls)
   # print('Time to get implications', time.perf_counter() - ts)
   # if not impls:
   #   raise KeyboardInterrupt('No remaining pairs')
@@ -148,12 +147,12 @@ if __name__ == '__main__':
 
         try:
           out = subprocess.check_output(['~/Downloads/vampire', '--mode', 'casc_sat', '--cores', '0',
-                                        '/proc/self/fd/0', '-t', '0.2'], input=pr.encode()).decode()
+                                        '/proc/self/fd/0', '-t', '2.5'], input=pr.encode()).decode()
         except subprocess.CalledProcessError as e:
           assert e.returncode == 1
           try:
             out = subprocess.check_output(['~/Downloads/vampire', '--mode', 'casc', '--cores', '0',
-                                          '/proc/self/fd/0', '-t', '0.2'], input=pr.encode()).decode()
+                                          '/proc/self/fd/0', '-t', '2.5'], input=pr.encode()).decode()
           except subprocess.CalledProcessError as e:
             assert e.returncode == 1
             tqdm.write(f'Could\'nt handle {problem}')
