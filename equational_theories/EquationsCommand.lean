@@ -3,7 +3,22 @@ import equational_theories.Magma
 import equational_theories.MagmaLaw
 import equational_theories.EquationLawConversion
 
-open Lean Elab Command
+open Lean Elab Command Law
+
+def mkNatMagmaLaw (declName : Name) : ImportM NatMagmaLaw := do
+  let { env, opts, .. } ← read
+  IO.ofExcept <| unsafe env.evalConstCheck NatMagmaLaw opts ``NatMagmaLaw declName
+
+initialize magmaLawExt : PersistentEnvExtension Name (Name × NatMagmaLaw) (Array (Name × NatMagmaLaw)) ←
+  registerPersistentEnvExtension {
+    mkInitial := pure .empty
+    addImportedFn := Array.concatMapM <| Array.mapM <| fun n ↦ do return (n, ← mkNatMagmaLaw n)
+    addEntryFn := Array.push
+    exportEntriesFn := .map Prod.fst
+  }
+
+def getMagmaLaws {M} [Monad M] [MonadEnv M] : M (Array (Name × NatMagmaLaw)) := do
+  return magmaLawExt.getState (← getEnv)
 
 /--
 For a more concise syntax, but more importantly to speed up elaboration (where type inference
@@ -56,6 +71,9 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   -- compatibility between the law and the original equation
   elabCommand (← `(command| abbrev%$tk $thmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $lawName ↔ $eqName G :=
                     fun G _ ↦ Iff.trans (Law.satisfies_fin_satisfies_nat G $finLawName).symm ($finThmName G)))
+  -- register the law
+  modifyEnv (magmaLawExt.addEntry · (lawName.getId, ← (mkNatMagmaLaw lawName.getId).run
+    { env := (← getEnv), opts := (← getOptions) }))
   Command.liftTermElabM do
     let declMods ← elabModifiers mods
     -- Create a decl named `declName`
