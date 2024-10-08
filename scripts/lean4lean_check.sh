@@ -2,7 +2,7 @@
 
 set -e
 
-PINNED_LEAN4LEAN_COMMIT="bba953139f34fdcecebb45f7287c8eb6b7a8ec60"
+OPTIONALLY_PINNED_LEAN4LEAN_COMMIT=""
 
 EQ_ROOT=$(dirname "$(realpath "${BASH_SOURCE[0]}/../")")
 EQ_TOOLCHAIN=$(cat "${EQ_ROOT}/lean-toolchain")
@@ -16,7 +16,9 @@ if [[ ! -d lean4lean/ ]]; then
 fi
 echo "⚪ Building lean4lean"
 cd lean4lean/
-git checkout -q -B pinned-lean4lean-${PINNED_LEAN4LEAN_COMMIT} ${PINNED_LEAN4LEAN_COMMIT}
+if [[ ${OPTIONALLY_PINNED_LEAN4LEAN_COMMIT} != "" ]]; then
+    git checkout -q -B "pinned-lean4lean-${OPTIONALLY_PINNED_LEAN4LEAN_COMMIT}" "${OPTIONALLY_PINNED_LEAN4LEAN_COMMIT}"
+fi
 lake -q build lean4lean
 cd ../
 LEAN4LEAN_TOOLCHAIN=$(cat lean4lean/lean-toolchain)
