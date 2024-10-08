@@ -30,5 +30,5 @@ echo "⚪ Building project"
 lake exe cache get > /dev/null
 lake -q build
 echo "⚪ Running lean4lean"
-lake env lean4lean/.lake/build/bin/lean4lean --verbose equational_theories
+LEAN_NUM_THREADS=2 lake env lean4lean/.lake/build/bin/lean4lean --verbose equational_theories
 echo "🟢 Verification succeeded"
