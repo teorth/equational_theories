@@ -1,5 +1,6 @@
 import equational_theories.Equations
 import equational_theories.AllEquations
+import equational_theories.MagmaLaw
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import equational_theories.ForMathlib.Algebra.Group.Nat
@@ -546,5 +547,8 @@ theorem Equation3588_not_implies_Equation3944 : ∃ (G : Type) (_ : Magma G), Eq
   simp only [not_forall]
   use 1, 1, 1
   simp [magN]
+
+theorem Finite.two_variables_laws {α: Type} [Fintype α] (_: Fintype.card α = 2) (E: Law.MagmaLaw α) :
+  ∃ (G : Type) (_ : Magma G) (_: Finite G), satisfies G E := sorry
 
 end InfModel
