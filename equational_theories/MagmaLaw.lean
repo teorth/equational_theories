@@ -12,6 +12,8 @@ deriving DecidableEq
 
 infix:60 " ≃ " => MagmaLaw.mk
 
+abbrev NatMagmaLaw := MagmaLaw Nat
+
 end Law
 
 open Law
@@ -141,15 +143,20 @@ private def fin_split {n} {α} (hn : n ≠ 0) (f : Fin n → α) : ∃ g : ℕ �
       unfold g
       simp
 
-theorem satisfies_fin_satisfies_nat {n : Nat} (hn : n ≠ 0) (G : Type) [Magma G] (E : MagmaLaw (Fin n))
+theorem satisfies_fin_satisfies_nat {n : Nat} (G : Type) [Magma G] (E : MagmaLaw (Fin n))
     : G ⊧ E ↔ G ⊧ E.fmap Fin.val := by
     apply Iff.intro <;> intro h φ; simp only [ne_eq, satisfies, satisfiesPhi, MagmaLaw.fmap] at *
     · repeat rw [← evalInMagma_comp Fin.val φ]
       exact h (φ ∘ Fin.val)
     · simp only [ne_eq, satisfies, satisfiesPhi, MagmaLaw.fmap] at *
-      obtain ⟨φ', hφ'_val_eq_phi⟩ := fin_split hn φ
-      have hφ' := h φ'
-      repeat rw [← evalInMagma_comp Fin.val φ', hφ'_val_eq_phi] at hφ'
-      exact hφ'
+      if hn:n=0 then
+        subst hn
+        have := FreeMagma.Fin0_impossible E.lhs
+        contradiction
+      else
+        obtain ⟨φ', hφ'_val_eq_phi⟩ := fin_split hn φ
+        have hφ' := h φ'
+        repeat rw [← evalInMagma_comp Fin.val φ', hφ'_val_eq_phi] at hφ'
+        exact hφ'
 
 end Law
