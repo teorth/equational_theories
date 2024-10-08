@@ -217,10 +217,7 @@ theorem «Facts» :
   use ConfMagma (@rule Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
-    simp [Magma.op]
-    apply Subtype.ext
-    simp only
-    simp [bu, hx, hy]
+    simp [Magma.op, bu, hx, hy]
   all_goals refute
 
 end rw477
@@ -310,10 +307,7 @@ theorem «Facts» : ∃ (G : Type) (_ : Magma G), Facts G [467] [2847] := by
   use ConfMagma (@rule Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
-    simp [Magma.op]
-    apply Subtype.ext
-    simp only
-    simp [bu, hx, hy]
+    simp [Magma.op, bu, hx, hy]
   all_goals refute
 
 end rw467
@@ -403,10 +397,7 @@ theorem «Facts» : ∃ (G : Type) (_ : Magma G), Facts G [504] [817, 1629, 1832
   use ConfMagma (@rule Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
-    simp [Magma.op]
-    apply Subtype.ext
-    simp only
-    simp [bu, hx, hy]
+    simp [Magma.op, bu, hx, hy]
   all_goals refute
 
 end rw504
@@ -479,10 +470,7 @@ theorem «Facts» : ∃ (G : Type) (_ : Magma G), Facts G [1515] [4590] := by
   use ConfMagma (@rule Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
-    simp [Magma.op]
-    apply Subtype.ext
-    simp only
-    simp [bu, hx, hy]
+    simp [Magma.op, bu, hx, hy]
   all_goals refute
 
 end rw1515
@@ -556,10 +544,7 @@ theorem «Facts» : ∃ (G : Type) (_ : Magma G), Facts G [2038] [4270] := by
   use ConfMagma (@rule Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
-    simp [Magma.op]
-    apply Subtype.ext
-    simp only
-    simp [bu, hx, hy]
+    simp [Magma.op, bu, hx, hy]
   all_goals refute
 
 end rw2038
@@ -650,10 +635,7 @@ theorem «Facts» : ∃ (G : Type) (_ : Magma G), Facts G [3140] [614] := by
   use ConfMagma (@rule Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
-    simp [Magma.op]
-    apply Subtype.ext
-    simp only
-    simp [bu, hx, hy]
+    simp [Magma.op, bu, hx, hy]
   all_goals refute
 
 end rw3140
@@ -743,10 +725,7 @@ theorem «Facts» : ∃ (G : Type) (_ : Magma G), Facts G [3143] [1629, 1832, 26
   use ConfMagma (@rule Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
-    simp [Magma.op]
-    apply Subtype.ext
-    simp only
-    simp [bu, hx, hy]
+    simp [Magma.op, bu, hx, hy]
   all_goals refute
 
 end rw3143
@@ -837,10 +816,7 @@ theorem «Facts» : ∃ (G : Type) (_ : Magma G), Facts G [3150] [411, 1426, 203
   use ConfMagma (@rule Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
-    simp [Magma.op]
-    apply Subtype.ext
-    simp only
-    simp [bu, hx, hy]
+    simp [Magma.op, bu, hx, hy]
   all_goals refute
 
 end rw3150
@@ -930,10 +906,7 @@ theorem «Facts» : ∃ (G : Type) (_ : Magma G), Facts G [1110] [8, 411, 1629, 
   use ConfMagma (@rule Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
-    simp [Magma.op]
-    apply Subtype.ext
-    simp only
-    simp [bu, hx, hy]
+    simp [Magma.op, bu, hx, hy]
   all_goals refute
 
 end rw1110
