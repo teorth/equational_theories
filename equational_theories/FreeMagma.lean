@@ -63,4 +63,10 @@ theorem evalInMagma_comp {α β} {G} [Magma G] (f : α → β) (g : β → G) :
   intro x
   induction x <;> simp [fmapFreeMagma, evalInMagma, *]
 
+lemma Fin0_impossible (x : FreeMagma (Fin 0)) : False := by
+  induction x
+  case Leaf l =>
+    cases l; contradiction
+  case Fork => assumption
+
 end FreeMagma
