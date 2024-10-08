@@ -65,5 +65,14 @@ else
   echo "✅ All declarations match successfully."
 fi
 
+# Run lean4lean check
+echo "Running Lean-for-Lean check..."
+if ! scripts/lean4lean_check.py; then
+  echo "❌ Error: Lean-for-Lean check failed."
+  exit 1
+else
+  echo "✅ Lean-for-Lean check ran successfully."
+fi
+
 # Final message on test completion
 echo "🎉 All steps completed successfully! You are ready to push."
