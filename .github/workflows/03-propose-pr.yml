@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if the comment contains "propose #PR_NUMBER"
+    - name: Check if the comment contains "propose #PR_NUMBER" or variations with arbitrary whitespaces
       id: check_propose
       run: |
         COMMENT_BODY="${{ github.event.comment.body }}"
@@ -18,7 +18,7 @@ jobs:
         COMMENT_BODY_LOWER=$(echo "$COMMENT_BODY" | tr '[:upper:]' '[:lower:]')
 
         # Use extended pattern matching to capture variations of "propose #PR_NUMBER"
-        if [[ "$COMMENT_BODY_LOWER" =~ propose\ ?(pr\ ?)?\#([0-9]+) ]]; then
+        if [[ "$COMMENT_BODY_LOWER" =~ propose\s*(pr\s*)?\#([0-9]+)\s* ]]; then
           PR_NUMBER="${BASH_REMATCH[2]}"
           echo "pr_number=$PR_NUMBER" >> $GITHUB_ENV
         else
