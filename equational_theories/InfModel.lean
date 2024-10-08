@@ -1,6 +1,7 @@
 import equational_theories.Equations
 import equational_theories.AllEquations
 import equational_theories.MagmaLaw
+import equational_theories.SmallMagmas
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import equational_theories.ForMathlib.Algebra.Group.Nat
@@ -549,6 +550,23 @@ theorem Equation3588_not_implies_Equation3944 : ∃ (G : Type) (_ : Magma G), Eq
   simp [magN]
 
 theorem Finite.two_variables_laws {α: Type} [Fintype α] (_: Fintype.card α = 2) (E: Law.MagmaLaw α) :
-  ∃ (G : Type) (_ : Magma G) (_: Finite G), satisfies G E := sorry
+  ∃ (G : Type) (_ : Magma G) (_: Finite G), satisfies G E ∧ ¬Equation2 G := by
+  match E with
+  | ⟨FreeMagma.Fork _ _, FreeMagma.Fork _ _⟩ =>
+    -- an arbitrary magma with at least 2 elements satisfying the constant law
+    let G := Fin 2
+    let _: Magma G := Magma2a
+    exists G, Magma2a, Finite.of_fintype G
+    split_ands
+    .
+      intro f
+      unfold satisfiesPhi FreeMagma.evalInMagma Magma.op Magma2a MemeFinOp.opOfTable
+      simp only [Nat.zero_div, Nat.zero_mod, Fin.zero_eta, Fin.isValue]
+    .
+      unfold Equation2
+      simp only [not_forall]
+      exists 0, 1
+      simp only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
+  | _ => sorry
 
 end InfModel
