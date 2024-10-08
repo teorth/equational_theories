@@ -1,7 +1,6 @@
 import equational_theories.Equations
 import equational_theories.AllEquations
 import equational_theories.MagmaLaw
-import equational_theories.SmallMagmas
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import equational_theories.ForMathlib.Algebra.Group.Nat
@@ -555,13 +554,13 @@ theorem Finite.two_variables_laws {α: Type} [Fintype α] (_: Fintype.card α = 
   | ⟨FreeMagma.Fork _ _, FreeMagma.Fork _ _⟩ =>
     -- an arbitrary magma with at least 2 elements satisfying the constant law
     let G := Fin 2
-    let _: Magma G := Magma2a
-    exists G, Magma2a, Finite.of_fintype G
+    let M: Magma G := Magma.mk fun x y => 0
+    exists G, M, Finite.of_fintype G
     split_ands
     .
       intro f
-      unfold satisfiesPhi FreeMagma.evalInMagma Magma.op Magma2a MemeFinOp.opOfTable
-      simp only [Nat.zero_div, Nat.zero_mod, Fin.zero_eta, Fin.isValue]
+      unfold satisfiesPhi FreeMagma.evalInMagma
+      rfl
     .
       unfold Equation2
       simp only [not_forall]
