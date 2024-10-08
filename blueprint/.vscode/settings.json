@@ -1,0 +1,5 @@
+{
+    // This setting disables the LaTeX Workshop extension for the current workspace (folder).
+    // It ensures that LaTeX Workshop will not run for any .tex files of the blueprint.
+    "latex-workshop.enabled": false
+}
