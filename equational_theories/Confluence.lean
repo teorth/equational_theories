@@ -249,4 +249,102 @@ end rw477
 
 
 
+
+section rw467
+
+variable [DecidableEq α]
+
+-- equation 467 := x = y ◇ (x ◇ (x ◇ (y ◇ y)))
+def rw467 : FreeMagma α → FreeMagma α
+  | m@(.Fork y1 (.Fork x (.Fork x2 (.Fork y2 y3)))) =>
+      if y1 = y2 ∧ y1 = y3 ∧ x = x2 then
+        x
+      else
+        m
+  | m => m
+
+instance rw467_projection : IsProj (@rw467 α _) where
+  proj := by
+    intro x
+    unfold rw467
+    split
+    · split
+      · right; right; right; left; rfl
+      · rfl
+    · rfl
+
+@[simp]
+theorem rw467_yy (y : FreeMagma α) : rw467 (y ⋆ y) = y ⋆ y := by
+  unfold rw467
+  split
+  · rename_i m2' y1 x y2 y3 y4 heq
+    simp only [Fork.injEq] at heq
+    obtain ⟨rfl, heq⟩ := heq
+    split
+    · exfalso
+      rename_i hys
+      obtain ⟨rfl, rfl, rfl⟩ := hys
+      have := congrArg FreeMagma.length heq
+      simp [FreeMagma.length] at this
+      have := FreeMagma.length_pos y
+      omega
+    · simp [heq]
+  · rfl
+
+@[simp]
+theorem rw467_xyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rw467 (x ⋆ (y ⋆ y)) = x ⋆ (y ⋆ y) := by
+  unfold rw467
+  split
+  · rename_i m2' y1 x y2 y3 y4 heq
+    simp only [Fork.injEq] at heq
+    obtain ⟨rfl, rfl, heq⟩ := heq
+    split
+    · exfalso
+      rename_i hys
+      obtain ⟨rfl, rfl, rfl⟩ := hys
+      have := congrArg FreeMagma.length heq
+      simp [FreeMagma.length] at this
+    · simp [heq]
+  · rfl
+
+@[simp]
+theorem rw467_xxyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rw467 (x ⋆ (x ⋆ (y ⋆ y))) = x ⋆ (x ⋆ (y ⋆ y)) := by
+  unfold rw467
+  split
+  · rename_i m2' y1 x y2 y3 y4 heq
+    simp only [Fork.injEq] at heq
+    obtain ⟨rfl, rfl, rfl, heq⟩ := heq
+    split
+    · exfalso
+      rename_i hys
+      obtain ⟨rfl, rfl, rfl⟩ := hys
+      have := congrArg FreeMagma.length heq
+      simp [FreeMagma.length] at this
+    · simp [heq]
+  · rfl
+
+@[simp]
+theorem rw467_yxxyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rw467 (y ⋆ (x ⋆ (x ⋆ (y ⋆ y)))) = x := by
+  simp [rw467]
+
+@[equational_result]
+theorem Equation467_Facts :
+  ∃ (G : Type) (_ : Magma G), Facts G [467] [2847] := by
+  use ConfMagma (@rw467 Nat _), inferInstance
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩
+    simp [Magma.op]
+    apply Subtype.ext
+    simp only
+    simp [bu, hx, hy]
+  · intro h
+    replace h := h (0 : Nat)
+    revert h
+    decide
+
+end rw467
+
 end Confluence
