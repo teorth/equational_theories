@@ -12,8 +12,10 @@ equations, and a custom elaborator that instantiates the instante parameter of `
 elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   let G := mkIdent (← MonadQuotation.addMacroScope `G)
   let inst := mkIdent (← MonadQuotation.addMacroScope `inst)
-  let eqName := mkIdent (.mkSimple s!"Equation{i.getNat}")
-  let lawName := mkIdent (.mkSimple s!"Law{i.getNat}")
+  let eqName := .mkSimple s!"Equation{i.getNat}"
+  let eqIdent := mkIdent eqName
+  let lawName := .mkSimple s!"Law{i.getNat}"
+  let lawIdent := mkIdent lawName
   let mut is := #[]
   let t := tsyn.raw
   -- Collect all identifiers to introduce them as parameters
@@ -28,7 +30,17 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   let mut t : Term := ⟨t⟩
   for i in is.reverse do
     t ← `(∀ $(⟨i⟩) : $G, $t)
-  elabCommand (← `(command| abbrev%$tk $eqName ($G : Type _) [$inst : Magma $G] := $t))
+  elabCommand (← `(command| abbrev%$tk $eqIdent ($G : Type _) [$inst : Magma $G] := $t))
+  Command.liftTermElabM do
+    let declMods ← elabModifiers mods
+    addDocString' (TSyntax.getId eqIdent) declMods.docString?
+    -- TODO: This will go wrong if we are in a namespace. Is this really needed, or is there
+    -- a way to pass the current position already to the `(command|` above?
+    Lean.addDeclarationRanges eqName {
+      range := ← getDeclarationRange (← getRef)
+      selectionRange := ← getDeclarationRange (← getRef) }
+
+
   -- Create law
   let tl := tsyn.raw
   let tl ← tl.rewriteBottomUpM fun s => match s with
@@ -41,8 +53,10 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
       | some idx => `(FreeMagma.Leaf $(quote idx.val))
       | none => pure s
   let mut tl : Term := ⟨tl⟩
-  elabCommand (← `(command| abbrev%$tk $lawName : Law.MagmaLaw Nat := $tl))
+  elabCommand (← `(command| abbrev%$tk $lawIdent : Law.MagmaLaw Nat := $tl))
   Command.liftTermElabM do
-    let declMods ← elabModifiers mods
-    -- Create a decl named `declName`
-    addDocString' (TSyntax.getId eqName) declMods.docString?
+    -- TODO: This will go wrong if we are in a namespace. Is this really needed, or is there
+    -- a way to pass the current position already to the `(command|` above?
+    Lean.addDeclarationRanges lawName {
+      range := ← getDeclarationRange (← getRef)
+      selectionRange := ← getDeclarationRange (← getRef) }
