@@ -129,6 +129,17 @@ instance : Magma (ConfMagma rw) where
 instance [DecidableEq α] : DecidableEq (ConfMagma rw) :=
   inferInstanceAs (DecidableEq {x : FreeMagma α // bu rw x = x })
 
+/-- Refutation tactic for dedicable FreeMagma equations -/
+macro "refute" : tactic =>
+  `(tactic |(
+    show (¬ ∀ _,_)
+    push_neg
+    first | (use (0 : Nat); decide)
+          | (use (0 : Nat), (1 : Nat); decide)
+    ))
+
+
+/-! This is the end of the setup, the rest is for concrete laws -/
 
 namespace rw477
 
@@ -220,30 +231,7 @@ theorem «Facts» :
     apply Subtype.ext
     simp only
     simp [bu, hx, hy]
-  · intro h
-    replace h := h (0 : Nat)
-    revert h
-    decide
-  · intro h
-    replace h := h (0 : Nat) (1 : Nat)
-    revert h
-    decide
-  · intro h
-    replace h := h (0 : Nat)
-    revert h
-    decide
-  · intro h
-    replace h := h (0 : Nat) (1 : Nat)
-    revert h
-    decide
-  · intro h
-    replace h := h (0 : Nat)
-    revert h
-    decide
-  · intro h
-    replace h := h (0 : Nat) (1 : Nat)
-    revert h
-    decide
+  all_goals refute
 
 end rw477
 
@@ -336,13 +324,102 @@ theorem «Facts» : ∃ (G : Type) (_ : Magma G), Facts G [467] [2847] := by
     apply Subtype.ext
     simp only
     simp [bu, hx, hy]
-  · intro h
-    replace h := h (0 : Nat)
-    revert h
-    decide
+  all_goals refute
 
 end rw467
 
+namespace rw504
+
+variable [DecidableEq α]
+
 -- equation 504 := x = y ◇ (y ◇ (x ◇ (y ◇ y)))
+def rule : FreeMagma α → FreeMagma α
+  | m@(.Fork y1 (.Fork y2 (.Fork x (.Fork y3 y4)))) =>
+      if y1 = y2 ∧ y1 = y3 ∧ y1 = y4 then
+        x
+      else
+        m
+  | m => m
+
+instance rule_projection : IsProj (@rule α _) where
+  proj := by
+    intro x
+    unfold rule
+    split
+    · split
+      · right; right; right; right; right; left; rfl
+      · rfl
+    · rfl
+
+@[simp]
+theorem rule_yy (y : FreeMagma α) : rule (y ⋆ y) = y ⋆ y := by
+  unfold rule
+  split
+  · rename_i m2' y1 x y2 y3 y4 heq
+    simp only [Fork.injEq] at heq
+    obtain ⟨rfl, heq⟩ := heq
+    split
+    · exfalso
+      rename_i hys
+      obtain ⟨rfl, rfl, rfl⟩ := hys
+      have := congrArg FreeMagma.length heq
+      simp [FreeMagma.length] at this
+    · simp [heq]
+  · rfl
+
+@[simp]
+theorem rule_xyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rule (x ⋆ (y ⋆ y)) = x ⋆ (y ⋆ y) := by
+  unfold rule
+  split
+  · rename_i m2' y1 x y2 y3 y4 heq
+    simp only [Fork.injEq] at heq
+    obtain ⟨rfl, rfl, heq⟩ := heq
+    split
+    · exfalso
+      rename_i hys
+      obtain ⟨rfl, rfl, rfl⟩ := hys
+      have := congrArg FreeMagma.length heq
+      simp [FreeMagma.length] at this
+      have := FreeMagma.length_pos x
+      omega
+    · simp [heq]
+  · rfl
+
+@[simp]
+theorem rule_yxyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rule (y ⋆ (x ⋆ (y ⋆ y))) = y ⋆ (x ⋆ (y ⋆ y)) := by
+  unfold rule
+  split
+  · rename_i m2' y1 x y2 y3 y4 heq
+    simp only [Fork.injEq] at heq
+    obtain ⟨rfl, rfl, rfl, heq⟩ := heq
+    split
+    · exfalso
+      rename_i hys
+      obtain ⟨rfl, rfl, rfl⟩ := hys
+      have := congrArg FreeMagma.length heq
+      simp [FreeMagma.length] at this
+    · simp [heq]
+  · rfl
+
+@[simp]
+theorem rule_yyxyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rule (y ⋆ (y ⋆ (x ⋆ (y ⋆ y)))) = x := by
+  simp [rule]
+
+@[equational_result]
+theorem «Facts» : ∃ (G : Type) (_ : Magma G), Facts G [504] [817, 1629, 1832, 1925] := by
+  use ConfMagma (@rule Nat _), inferInstance
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩
+    simp [Magma.op]
+    apply Subtype.ext
+    simp only
+    simp [bu, hx, hy]
+  all_goals refute
+
+end rw504
+
 
 end Confluence
