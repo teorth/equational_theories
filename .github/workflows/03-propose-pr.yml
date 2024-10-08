@@ -20,8 +20,8 @@ jobs:
         echo "Original Comment Body: $COMMENT_BODY"
         echo "Lowercased Comment Body: $COMMENT_BODY_LOWER"
 
-        # Debug: checking the regex matching and output what was matched
-        if [[ "$COMMENT_BODY_LOWER" =~ propose\s*(pr\s*)?\#([0-9]+)\s* ]]; then
+        # Adjusted regex with double backslashes for escaping in Bash
+        if [[ "$COMMENT_BODY_LOWER" =~ propose\\s*(pr\\s*)?\\#([0-9]+)\\s* ]]; then
           PR_NUMBER="${BASH_REMATCH[2]}"
           echo "PR Number extracted: $PR_NUMBER"
           echo "pr_number=$PR_NUMBER" >> $GITHUB_ENV
