@@ -2,139 +2,207 @@ import equational_theories.FreeMagma
 import equational_theories.AllEquations
 import equational_theories.FactsSyntax
 
-def FreeMagma.length {α : Type} : FreeMagma α → Nat
-  | .Leaf _ => 1
-  | .Fork m1 m2 => FreeMagma.length m1 + FreeMagma.length m2
+namespace FreeMagma
 
-theorem FreeMagma.length_pos {α : Type} : (x : FreeMagma α) → 0 < FreeMagma.length x
-  | .Leaf _ => by simp [FreeMagma.length]
-  | .Fork m1 m2 => by
-    have h1 := FreeMagma.length_pos m1
-    have h2 := FreeMagma.length_pos m2
-    simp [FreeMagma.length]
-    omega
+variable {α : Type}
+/-
+inductive Everywhere (P : FreeMagma α → Prop) : FreeMagma α → Prop
+  | leaf (x : α) : P (.Leaf x) → Everywhere P (.Leaf x)
+  | fork (m1 m2 : FreeMagma α) : Everywhere P m1 → Everywhere P m2 → P (.Fork m1 m2) → Everywhere P (.Fork m1 m2)
+-/
+def Everywhere (P : FreeMagma α → Prop) : FreeMagma α → Prop
+  | .Leaf x => P (.Leaf x)
+  | .Fork x y => x.Everywhere P ∧ y.Everywhere P ∧ P (x ⋆ y)
+
+theorem Everywhere.top {P : FreeMagma α → Prop} : {x : FreeMagma α} → Everywhere P x → P x
+  | .Leaf _ => fun h => h
+  | .Fork _ _ => fun h => h.2.2
 
 @[simp]
-theorem FreeMagma.length_0 {α : Type} (x : FreeMagma α) : ¬ (FreeMagma.length x = 0) :=
-  Nat.not_eq_zero_of_lt x.length_pos
+theorem Everywhere_idem {P : FreeMagma α → Prop} : Everywhere (Everywhere P) = Everywhere P := by
+  ext x
+  constructor
+  · intro h
+    induction x with
+    | Leaf => exact h
+    | Fork x y ihx ihy => exact ⟨ihx h.1, ihy h.2.1,  h.2.2.2.2⟩
+  · intro h
+    induction x with
+    | Leaf =>
+      exact h
+    | Fork x y ihx ihy => exact ⟨ihx h.1, ihy h.2.1, h⟩
+
+/-
+inductive SubtermOf (x : FreeMagma α) : FreeMagma α → Prop where
+| here : SubtermOf x x
+| left a b : SubtermOf x a → SubtermOf x (a ⋆ b)
+| right a b : SubtermOf x b → SubtermOf x (a ⋆ b)
+-/
+def SubtermOf (x : FreeMagma α) : (y : FreeMagma α) → Prop
+| .Leaf a => x = .Leaf a
+| .Fork a b => x = .Fork a b ∨ SubtermOf x a ∨ SubtermOf x b
+
+@[refl]
+theorem SubtermOf.refl (x : FreeMagma α) : SubtermOf x x := by
+  cases x with
+  | Leaf => rfl
+  | Fork x y => left; rfl
+
+theorem everywhere_of_subterm_of_everywhere {P : FreeMagma α → Prop} {x} (h : x.Everywhere P) {y}
+    (hsub : SubtermOf y x) : y.Everywhere P := by
+  induction x with
+  | Leaf =>
+    cases hsub
+    apply h.top
+  | Fork x y ihx ihy =>
+    obtain (rfl | hsub | hsub) := hsub
+    · apply h
+    · apply ihx h.1 hsub
+    · apply ihy h.2.1 hsub
+
+theorem subterm_everywhere {P : FreeMagma α → Prop} {x} (h : x.Everywhere P) {y} (hsub : SubtermOf y x) : P y := by
+  apply (everywhere_of_subterm_of_everywhere h hsub).top
+
+def projection (rw : FreeMagma α → FreeMagma α) : Prop := ∀ x, SubtermOf (rw x) x
+
+theorem everywhere_of_projection_of_everywhere {rw : FreeMagma α → FreeMagma α}
+    (hproj : projection rw) P : ∀ x, Everywhere P x → (rw x).Everywhere P :=
+  fun x he ↦ everywhere_of_subterm_of_everywhere he (hproj x)
+
+
+theorem projection_everywhere {rw : FreeMagma α → FreeMagma α} (hproj : projection rw) P :
+  ∀ x, Everywhere P x → P (rw x) := fun x he ↦ subterm_everywhere he (hproj x)
+
+
+end FreeMagma
+
+namespace Confluence
+
+open FreeMagma
+
+variable {α : Type}
+
+variable (rw : FreeMagma α → FreeMagma α)
+
+def bu : FreeMagma α → FreeMagma α
+  | .Leaf x => .Leaf x
+  | .Fork x y => rw (bu x ⋆ bu y)
+
+attribute [simp] bu.eq_1
+
+def NF (x : FreeMagma α) : Prop := x.Everywhere (fun y => bu rw y = y)
+
+def bu_nf (hproj : FreeMagma.projection rw) : ∀ x, NF rw (bu rw x) := by
+  intro x
+  induction x with
+  | Leaf =>
+    simp [NF, bu, Everywhere]
+  | Fork x y ihx ihy =>
+    simp only [NF, bu]
+    have hsub := hproj (bu rw x ⋆ bu rw y)
+    obtain (heq | hsub | hsub) := hsub
+    · apply everywhere_of_projection_of_everywhere hproj
+      refine ⟨ihx, ihy, ?_⟩
+      dsimp
+      simp [bu, Everywhere, *, ihx.top, ihy.top]
+    · exact everywhere_of_subterm_of_everywhere ihx hsub
+    · exact everywhere_of_subterm_of_everywhere ihy hsub
+
+theorem idem_of_NF {x : FreeMagma α} (h : NF rw x) : bu rw x = x := by
+  apply h.top
+
+theorem bu_idem (hproj : FreeMagma.projection rw) x :
+    bu rw (bu rw x) = bu rw x := idem_of_NF rw (bu_nf rw hproj x)
+
+variable [DecidableEq α]
 
 -- equation 477 := x = y ◇ (x ◇ (y ◇ (y ◇ y)))
-
-def simp477 {α : Type} [DecidableEq α] : FreeMagma α → FreeMagma α
-  | .Leaf x => .Leaf x
-  | .Fork m1 m2 =>
-    let y1 := simp477 m1
-    let m2' := simp477 m2
-    match m2' with
-    | .Fork x (.Fork y2 (.Fork y3 y4)) =>
+def rw477 : FreeMagma α → FreeMagma α
+  | m@(.Fork y1 (.Fork x (.Fork y2 (.Fork y3 y4)))) =>
       if y1 = y2 ∧ y1 = y3 ∧ y1 = y4 then
         x
       else
-        .Fork y1 m2'
-    | _ =>
-        .Fork y1 m2'
+        m
+  | m => m
 
-attribute [simp] simp477.eq_1
-
-inductive IsNF {α : Type} [DecidableEq α] : FreeMagma α → Prop
-  | leaf (x : α) : IsNF (.Leaf x)
-  | fork (m1 m2 : FreeMagma α) : IsNF m1 → IsNF m2 → simp477 (.Fork m1 m2) = (.Fork m1 m2) → IsNF (.Fork m1 m2)
-
-theorem idem_of_IsNF {α : Type} [DecidableEq α] {x : FreeMagma α} : IsNF x → simp477 x = x
-  | .leaf x => rfl
-  | .fork _ _ _ _ h => h
-
-theorem simp477_NF {α : Type} [DecidableEq α] (x : FreeMagma α) : IsNF (simp477 x) := by
-  unfold simp477
-  split
-  · constructor
-  · rename_i x m1 m2
-    simp (config := {zetaDelta := true})
-    split
-    · rename_i m2' x y2 y3 y4 heq
-      split
-      · have := simp477_NF m2
-        rw [heq] at this
-        cases this
-        assumption
-      · constructor
-        · apply simp477_NF
-        · apply simp477_NF
-        · simp [simp477]
-          rw [idem_of_IsNF (simp477_NF m2)]
-          rw [idem_of_IsNF (simp477_NF m1)]
-          simp [*]
-    · constructor
-      · apply simp477_NF
-      · apply simp477_NF
-      · simp [simp477]
-        rw [idem_of_IsNF (simp477_NF m2)]
-        rw [idem_of_IsNF (simp477_NF m1)]
-        simp [*]
-
-theorem simp477_idempotent {α : Type} [DecidableEq α] (x : FreeMagma α) :
-    simp477 (simp477 x) = simp477 x := idem_of_IsNF (simp477_NF x)
-
--- def Magma477 (α) [DecidableEq α] := Quot (λ x y => @simp477 α _ x = simp477 y)
-
-def Magma477 (α) [DecidableEq α] := {x : FreeMagma α // simp477 x = x }
-
-instance (α) [DecidableEq α] : Coe α (Magma477 α) where
-  coe x := ⟨x, by rfl⟩
-
-instance instMagmaMagma477 {α} [DecidableEq α] : Magma (Magma477 α) where
-  op := fun x y => ⟨simp477 (x.1 ◇ y.1), simp477_idempotent _⟩
-
-instance {α} [DecidableEq α] : DecidableEq (Magma477 α) :=
-  inferInstanceAs (DecidableEq {x : FreeMagma α // simp477 x = x })
-
-theorem simp477_yy {α} [DecidableEq α] (y : FreeMagma α) :
-    simp477 (y ⋆ y) = simp477 y ⋆ simp477 y := by
-  simp [simp477]
+theorem rw477_projection : projection (@rw477 α _) := by
+  intro x
+  unfold rw477
   split
   · split
-    · exfalso
-      rename_i m2' x y2 y3 y4 heq hys
-      obtain ⟨rfl, rfl, rfl⟩ := hys
-      have := congrArg FreeMagma.length heq
-      simp [FreeMagma.length] at this
-      have := FreeMagma.length_pos (simp477 y)
-      omega
+    · right; right; right; left; rfl
     · rfl
   · rfl
 
-theorem simp477_yyy {α} [DecidableEq α] (y : FreeMagma α) :
-    simp477 (y ⋆ (y ⋆ y)) = simp477 y ⋆ simp477 (y ⋆ y) := by
-  simp [simp477_yy]
-  rw [simp477]
-  split
-  · split
-    · exfalso
-      rename_i m2' x y2 y3 y4 heq hys
-      obtain ⟨rfl, rfl, rfl⟩ := hys
-      simp [simp477_yy] at heq
-      obtain ⟨rfl, heq⟩ := heq
-      have := congrArg FreeMagma.length heq
-      simp [FreeMagma.length] at this
-    · simp [simp477_yy]
-  · simp [simp477_yy]
+def simp477 (x : FreeMagma α) : FreeMagma α := bu rw477 x
 
-theorem simp477_xyyy {α} [DecidableEq α] (x y : FreeMagma α) :
-    simp477 (x ⋆ (y ⋆ (y ⋆ y))) = simp477 x ⋆ simp477 (y ⋆ (y ⋆ y)) := by
-  simp [simp477_yyy]
-  rw [simp477]
+def Magma477 (α) [DecidableEq α] := {x : FreeMagma α // bu rw477 x = x }
+
+instance : Coe α (Magma477 α) where
+  coe x := ⟨x, by rfl⟩
+
+instance instMagmaMagma477 : Magma (Magma477 α) where
+  op := fun x y => ⟨simp477 (x.1 ◇ y.1), bu_idem rw477 rw477_projection _⟩
+
+instance : DecidableEq (Magma477 α) :=
+  inferInstanceAs (DecidableEq {x : FreeMagma α // simp477 x = x })
+
+@[simp]
+theorem rw477_yy (y : FreeMagma α) : rw477 (y ⋆ y) = y ⋆ y := by
+  unfold rw477
   split
-  · split
+  · rename_i m2' y1 x y2 y3 y4 heq
+    simp only [Fork.injEq] at heq
+    obtain ⟨rfl, heq⟩ := heq
+    split
     · exfalso
-      rename_i m2' x y2 y3 y4 heq hys
+      rename_i hys
       obtain ⟨rfl, rfl, rfl⟩ := hys
-      simp [simp477_yyy, simp477_yy] at heq
-      obtain ⟨rfl, hxy, heq⟩ := heq
-      rw [hxy] at heq
       have := congrArg FreeMagma.length heq
       simp [FreeMagma.length] at this
-    · simp [simp477_yyy]
-  · simp [simp477_yyy]
+      have := FreeMagma.length_pos y
+      omega
+    · simp [heq]
+  · rfl
+
+@[simp]
+theorem rw477_yyy {α} [DecidableEq α] (y : FreeMagma α) :
+    rw477 (y ⋆ (y ⋆ y)) = y ⋆ (y ⋆ y) := by
+  unfold rw477
+  split
+  · rename_i m2' y1 x y2 y3 y4 heq
+    simp only [Fork.injEq] at heq
+    obtain ⟨rfl, rfl, heq⟩ := heq
+    split
+    · exfalso
+      rename_i hys
+      obtain ⟨rfl, rfl, rfl⟩ := hys
+      have := congrArg FreeMagma.length heq
+      simp [FreeMagma.length] at this
+    · simp [heq]
+  · rfl
+
+@[simp]
+theorem rw477_xyyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rw477 (x ⋆ (y ⋆ (y ⋆ y))) = x ⋆ (y ⋆ (y ⋆ y)) := by
+  unfold rw477
+  split
+  · rename_i m2' y1 x y2 y3 y4 heq
+    simp only [Fork.injEq] at heq
+    obtain ⟨rfl, rfl, rfl, heq⟩ := heq
+    split
+    · exfalso
+      rename_i hys
+      obtain ⟨rfl, rfl, rfl⟩ := hys
+      have := congrArg FreeMagma.length heq
+      simp [FreeMagma.length] at this
+    · simp [heq]
+  · rfl
+
+@[simp]
+theorem rw477_yxyyy {α} [DecidableEq α] (x y : FreeMagma α) :
+    rw477 (y ⋆ (x ⋆ (y ⋆ (y ⋆ y)))) = x := by
+  simp [rw477]
 
 @[equational_result]
 theorem Equation477_Facts :
@@ -145,9 +213,7 @@ theorem Equation477_Facts :
     simp [Magma.op]
     apply Subtype.ext
     simp only
-    simp [hx, hy, simp477_yy, simp477_idempotent, simp477_yyy, simp477_xyyy]
-    unfold simp477
-    simp [hx, hy, simp477_yy, simp477_idempotent, simp477_yyy, simp477_xyyy]
+    simp [simp477, bu, bu_idem _ rw477_projection, hx, hy]
   · intro h
     replace h := h (0 : Nat)
     revert h
@@ -172,3 +238,5 @@ theorem Equation477_Facts :
     replace h := h (0 : Nat) (1 : Nat)
     revert h
     decide
+
+end Confluence
