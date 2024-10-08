@@ -17,7 +17,7 @@ def main():
   print("hello")
   ## construct absolute file paths
   pwd = Path(os.getcwd())
-  mainToolchainPath = pwd.joinpath(toolchain_filename)
+  localToolchainPath = pwd.joinpath(toolchain_filename)
   l4lPath = pwd.joinpath(l4l_relpath)
   l4ltoolchainPath = l4lPath.joinpath(toolchain_filename)
   l4lBinPath = l4lPath.joinpath(l4l_binpath)
@@ -27,10 +27,11 @@ def main():
     shutil.rmtree(l4lPath)
 
   ## Get a fresh clone of lean4lean
+  print("Cloning a fresh copy of lean4lean...")
   repo = git.Repo.clone_from(l4l_repo_url, l4lPath)
 
   ##Compare toolchains
-  localtoolchain = pwd.read_text()
+  localtoolchain = localToolchainPath.read_text()
   l4l_toolchain = l4ltoolchainPath.read_text()
 
   ## If toolchains don't match, exit without error, but message to contact maintainers
@@ -38,14 +39,16 @@ def main():
     print("The local toolchain doesn't match the lean4lean toolchain")
     print("Contact the maintainers")
     exit(0)
-
+  else:
+    print("Toolchains match!")
+    print("Lean4lean will be built next")
   ## Otherwise build lean4lean
   os.chdir(l4lPath)
   buildret = subprocess.run([lakePath.as_posix(), "build", "lean4lean"]).returncode
 
   ## If build doesn't work, quit without error but contact maintainers
   if buildret != 0:
-    print("lean4lean cannot build currently. Contact the maintainers")
+    print("lean4lean build failed. Lean4lean will not be run. Contact the maintainers")
     exit(0)
 
   ## check if build is successful and run lean4lean on the project
@@ -56,7 +59,7 @@ def main():
     ret = subprocess.run(["env", "LEAN_NUM_THREADS=2",lakePath, "env", l4lBinPath.as_posix(), project_name]).returncode
     print("lean4lean process returned ", ret)
     if ret == 0:
-      print("The project is fine")
+      print("The project is fine. Cleaning up")
     shutil.rmtree(l4lPath)
     sys.exit(ret)
   else:
