@@ -50,7 +50,7 @@ jobs:
         echo "User ${{ github.event.comment.user.login }} is not assigned to this issue, exiting."
         exit 0
 
-    - name: Link PR #PR_NUMBER to the issue
+    - name: Link PR to the issue
       if: env.not_assigned == 'false'
       run: |
         PR_BODY=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
