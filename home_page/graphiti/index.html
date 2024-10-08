@@ -611,7 +611,7 @@
         dotFile = `
 digraph G {
   layout = dot
-  rankdir = TB
+  rankdir = BT
   graph [ pad="0.2", ranksep="0.75", nodesep="0.35" ];
   node [ shape="none" ]
 `;
@@ -693,7 +693,7 @@ digraph G {
 
         for (const [v, neighbors] of Object.entries(reduced_graph)) {
           for (const n of neighbors) {
-            dotFile += `  ${n} -> ${v} [arrowhead="none"]\n`;
+            dotFile += `  ${v} -> ${n} [arrowhead="none"]\n`;
           }
         }
 
