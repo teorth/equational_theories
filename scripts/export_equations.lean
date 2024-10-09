@@ -1,4 +1,3 @@
-import equational_theories.Equations
 import equational_theories.Equations.All
 
 open Lean Elab Command Meta
