@@ -29,6 +29,7 @@ Current statistics and data files, updated automatically:
 
 Current visualizations, updated automatically:
 - [Equation Explorer](https://teorth.github.io/equational_theories/implications) is a tool for exploring the graph of equation implications.
+- [Finite Magma Explorer](https://teorth.github.io/equational_theories/fme) is a tool for exploring finite magmas and the equations they satisfy.
 - [Graphiti](https://teorth.github.io/equational_theories/graphiti) is a tool for visualizing the implication graph.
 
 For guidelines on how to contribute, see the [CONTRIBUTING.md](https://github.com/teorth/equational_theories/tree/main/CONTRIBUTING.md) file.  Participants are requested to abide by [our code of conduct](https://github.com/teorth/equational_theories/tree/main/CODE_OF_CONDUCT.md).
@@ -92,7 +93,7 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
 - [Data](https://github.com/teorth/equational_theories/tree/main/data)
     - [Text list of equations](https://github.com/teorth/equational_theories/tree/main/data/equations.txt)
     - [List of duals of equations](https://github.com/teorth/equational_theories/tree/main/data/dual_equations.md)
-    - [The smallest magma obeying a given equation (up to N=5)](https://github.com/teorth/equational_theories/tree/main/data/smallest_magma.txt), if it exists
+    - [The smallest magma obeying a given equation (up to N=5)](https://github.com/teorth/equational_theories/blob/main/data/smallest_magma.txt), if it exists
 - [Scripts](https://github.com/teorth/equational_theories/tree/main/scripts)
     - Shell
         - [`run_before_push`](https://github.com/teorth/equational_theories/tree/main/scripts/run_before_push.sh) - performs some of the CI checks, suitable for running just before pushing a new PR

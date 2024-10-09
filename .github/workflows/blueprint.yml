@@ -31,7 +31,6 @@ on:
       - 'lake-manifest.json'
   workflow_dispatch: # Allow manual triggering of the workflow from the GitHub Actions interface
 
-
 # Cancel previous runs if a new commit is pushed to the same PR or branch
 concurrency:
   group: ${{ github.ref }}  # Group runs by the ref (branch or PR)
@@ -141,6 +140,14 @@ jobs:
           ~/.elan/bin/lake exe extract_implications outcomes > /tmp/out.json
           pip install markdown
           python scripts/generate_equation_implication_js.py /tmp/out.json
+
+      - name: Generate the Finite Magma Explorer website
+        run: |
+          mkdir -p home_page/fme
+          cp -r tools/fme/dist/* home_page/fme
+          ~/.elan/bin/lake exe extract_implications unknowns > home_page/fme/unknowns.json
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          sed -i "s/VERSION_UNKNOWN/$COMMIT_HASH/g" home_page/fme/index.html
 
       - name: Bundle dependencies
         if: github.event_name == 'push'
