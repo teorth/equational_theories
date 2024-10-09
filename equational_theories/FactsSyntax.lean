@@ -1,6 +1,5 @@
 import Lean
 import equational_theories.Magma
-import equational_theories.Equations.All
 
 /-!
 This defines a compact way of saying “Magma G satisfies this list of equations, but refutes these
@@ -34,25 +33,6 @@ elab_rules : term | `(Facts $G [ $sats,* ] [ $refs,*]) => do
   let e := mkAndN (s ++ r).toList
   return e
 
-example (G : Type _) [Magma G] :
-   Facts G [1, 2] [4, 5] ↔ Equation1 G ∧ Equation2 G ∧ ¬ Equation4 G ∧ ¬ Equation5 G :=
-   Iff.rfl
-
-example (G : Type _) [Magma G] :
-   Facts G [1] [4, 5] ↔ Equation1 G ∧ ¬ Equation4 G ∧ ¬ Equation5 G :=
-   Iff.rfl
-
-example (G : Type _) [Magma G] :
-   Facts G [] [4, 5] ↔ ¬ Equation4 G ∧ ¬ Equation5 G :=
-   Iff.rfl
-
-example (G : Type _) [Magma G] :
-   Facts G [1, 2] [] ↔ Equation1 G ∧ Equation2 G :=
-   Iff.rfl
-
-example (G : Type _) [Magma G] :
-   Facts G [] [] ↔ True :=
-   Iff.rfl
 
 open Lean Meta Elab Term Tactic Parser.Term in
 /--

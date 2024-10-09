@@ -1,4 +1,3 @@
-import equational_theories.EquationalResult
 import equational_theories.Homomorphisms
 
 universe u
