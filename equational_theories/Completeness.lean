@@ -77,7 +77,7 @@ protected instance FreeMagmaWithLaws.Magma {α} (β) (Γ : Ctx α) : Magma (Free
 
 theorem FreeMagmaWithLaws.evalInMagmaIsQuot {α β γ} (Γ : Ctx α)
     (t : FreeMagma β) (σ : β → FreeMagma γ) :
-    evalInMagma (embed Γ ∘ σ) t = embed Γ (evalInMagma σ t) := by
+    t ⬝ (embed Γ ∘ σ) = embed Γ (t ⬝ σ) := by
   cases t <;> rw [evalInMagma]
   case Leaf => rfl
   case Fork =>

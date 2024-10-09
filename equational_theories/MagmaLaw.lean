@@ -22,8 +22,7 @@ end Law
 
 open Law
 
-@[inline, simp]
-def Ctx α := Set (MagmaLaw α)
+abbrev Ctx α := Set (MagmaLaw α)
 
 -- FIXME: figure out how to remove this.
 instance Ctx.Membership α : Membership (MagmaLaw α) (Ctx α) := ⟨ Set.instMembership.mem ⟩
@@ -47,14 +46,14 @@ inductive derive.{u} {α : Type u} (Γ : Ctx α) : MagmaLaw α → Type u :=
   | Sym {t u} : Γ ⊢ t ≃ u → Γ ⊢ u ≃ t
   | Trans {t u v} : Γ ⊢ t ≃ u → Γ ⊢ u ≃ v → Γ ⊢ t ≃ v
   -- This is not as polymorphic as it could be, shouldn't be an issue at the moment
-  | Subst {t u} σ : Γ ⊢ t ≃ u → Γ ⊢ evalInMagma σ t ≃ evalInMagma σ u
+  | Subst {t u} σ : Γ ⊢ t ≃ u → Γ ⊢ t ⬝ σ ≃ u ⬝ σ
   | Cong {t₁ t₂ u₁ u₂} : Γ ⊢ (t₁ ≃ t₂) → Γ ⊢ (u₁ ≃ u₂) → Γ ⊢ (t₁ ⋆ u₁ ≃ t₂ ⋆ u₂)
 
 local infix:50 " ⊢' " =>  derive'
 
 /-- Definition for derivability where Subst can only be applied to Ax -/
 inductive derive'.{u, v} {α : Type u} {β : Type v} (Γ : Ctx α) : MagmaLaw β → Type (max u v) :=
-  | SubstAx {E} (h : E ∈ Γ) (σ) : Γ ⊢' evalInMagma σ E.lhs ≃ evalInMagma σ E.rhs
+  | SubstAx {E} (h : E ∈ Γ) (σ) : Γ ⊢' E.lhs ⬝ σ ≃ E.rhs ⬝ σ
   | Ref {t} : Γ ⊢' t ≃ t
   | Sym {t u} : Γ ⊢' t ≃ u → Γ ⊢' u ≃ t
   | Trans {t u v} : Γ ⊢' t ≃ u → Γ ⊢' u ≃ v → Γ ⊢' t ≃ v
@@ -70,7 +69,7 @@ def derive_of_derive' {α} {Γ : Ctx α} {E : MagmaLaw α} : Γ ⊢' E → Γ �
 def derive'_of_derive {α} {Γ : Ctx α} {E : MagmaLaw α} (H : Γ ⊢ E) : Γ ⊢' E := by
   simpa [evalInMagma_leaf] using go Lf H
 where
-  go {β} (σ : α → FreeMagma β) {E} : Γ ⊢ E → Γ ⊢' evalInMagma σ E.lhs ≃ evalInMagma σ E.rhs
+  go {β} (σ : α → FreeMagma β) {E} : Γ ⊢ E → Γ ⊢' E.lhs ⬝ σ ≃ E.rhs ⬝ σ
   | .Ax h => derive'.SubstAx h σ
   | .Ref  => .Ref
   | .Sym h => .Sym (go σ h)
@@ -82,7 +81,7 @@ end DeriveDef
 
 /-- Definitions of entailment -/
 def satisfiesPhi {α G} [Magma G] (φ : α → G) (E : MagmaLaw α) : Prop :=
-  E.lhs.evalInMagma φ = E.rhs.evalInMagma φ
+  E.lhs ⬝ φ = E.rhs ⬝ φ
 
 /-- `satisfies G E`, or `G ⊧ E`, means that all evaluations of `E` in `G` are true. -/
 def satisfies {α} (G) [Magma G] (E : MagmaLaw α) := ∀ (φ : α → G), satisfiesPhi φ E
@@ -298,29 +297,8 @@ theorem derive'_toNat_iff {α β} [DecidableEq β] {Γ : Ctx α} {E : MagmaLaw �
     Nonempty (Γ ⊢' E.toNat) ↔ Nonempty (Γ ⊢' E) :=
   (derive'_map_injective Fin.val_injective).trans derive'_toFin_iff
 
-def Fin.valHom {n} : FreeMagma (Fin n) →◇ FreeMagma ℕ := evalHom (Lf ∘ Fin.val)
-
-private def fin_split {n} {α} (hn : n ≠ 0) (f : Fin n → α) : ∃ g : ℕ → α, g ∘ Fin.val = f := by
-      let g := fun i : ℕ => if h : i < n then f ⟨i,h⟩ else f ⟨0, Nat.zero_lt_of_ne_zero hn⟩
-      use g
-      funext i
-      unfold g
-      simp
-
-theorem satisfies_fin_satisfies_nat {n : Nat} (G : Type) [Magma G] (E : MagmaLaw (Fin n))
-    : G ⊧ E ↔ G ⊧ E.map Fin.val := by
-    apply Iff.intro <;> intro h φ; simp only [ne_eq, satisfies, satisfiesPhi, MagmaLaw.map] at *
-    · repeat rw [evalInMagma_fmapHom]
-      exact h (φ ∘ Fin.val)
-    · simp only [ne_eq, satisfies, satisfiesPhi, MagmaLaw.map] at *
-      if hn:n=0 then
-        subst hn
-        have := FreeMagma.Fin0_impossible E.lhs
-        contradiction
-      else
-        obtain ⟨φ', hφ'_val_eq_phi⟩ := fin_split hn φ
-        have hφ' := h φ'
-        repeat rw [evalInMagma_fmapHom, hφ'_val_eq_phi] at hφ'
-        exact hφ'
+theorem satisfies_fin_satisfies_nat {n : Nat} (G) [Magma G] (E : MagmaLaw (Fin n)) :
+    G ⊧ E.map Fin.val ↔ G ⊧ E :=
+  satisfies_map_injective _ Fin.val_injective
 
 end Law

@@ -42,6 +42,8 @@ def evalInMagma {α : Type u} {G : Type v} [Magma G] (f : α → G) : FreeMagma 
   | Lf a => f a
   | lchild ⋆ rchild => evalInMagma f lchild ◇ evalInMagma f rchild
 
+notation:63 t:63 " ⬝ " σ:64 => evalInMagma σ t
+
 def evalHom {α : Type u} {G : Type v} [Magma G] (f : α → G) : FreeMagma α →◇ G where
    toFun := evalInMagma f
    map_op' := fun _ _ ↦ rfl
@@ -49,7 +51,7 @@ def evalHom {α : Type u} {G : Type v} [Magma G] (f : α → G) : FreeMagma α �
 @[simp] theorem evalHom_apply {α G} [Magma G] (f : α → G) (m : FreeMagma α) :
     evalHom f m = evalInMagma f m := rfl
 
-theorem evalInMagma_leaf {α} (m : FreeMagma α) : evalInMagma Lf m = m := by
+theorem evalInMagma_leaf {α} (m : FreeMagma α) : m ⬝ Lf = m := by
   induction m <;> simp [evalInMagma, *]
 
  def fmapFreeMagma {α : Type u} {β : Type v} (f : α → β) : FreeMagma α → FreeMagma β :=
@@ -59,24 +61,24 @@ theorem evalInMagma_leaf {α} (m : FreeMagma α) : evalInMagma Lf m = m := by
    evalHom (Lf ∘ f)
 
 theorem evalInMagma_hom {α G H} [Magma G] [Magma H] (f : α → G) (g : G →◇ H) (m : FreeMagma α) :
-    g (evalInMagma f m) = evalInMagma (g ∘ f) m := by
+    g (m ⬝ f) = m ⬝ (g ∘ f) := by
   induction m <;> simp [evalInMagma, g.map_op, *]
 
 theorem evalInMagma_equiv {α G H} [Magma G] [Magma H] (f : α → G) (g : G ≃◇ H) (m : FreeMagma α) :
-    g (evalInMagma f m) = evalInMagma (g ∘ f) m :=
+    g (m ⬝ f) = m ⬝ (g ∘ f) :=
   evalInMagma_hom f (MagmaHomClass.toMagmaHom g) m
 
 theorem SubstEval {α β G} [Magma G] (t : FreeMagma α) (σ : α → FreeMagma β) (φ : β → G) :
-    evalInMagma φ (evalInMagma σ t) = evalInMagma (evalInMagma φ ∘ σ) t :=
+    t ⬝ σ ⬝ φ = t ⬝ (evalInMagma φ ∘ σ) :=
   evalInMagma_hom _ (evalHom _) _
 
 theorem evalInMagma_fmapHom {α β G} [Magma G] (f : α → β) (g : β → G) (m : FreeMagma α) :
-    evalInMagma g (fmapHom f m) = evalInMagma (g ∘ f) m := by
+    fmapHom f m ⬝ g = m ⬝ (g ∘ f) := by
   show evalInMagma g (evalInMagma (Lf ∘ f) m) = evalInMagma (g ∘ f) m
   induction m <;> simp [evalInMagma, *]
 
 theorem evalInMagma_comp {α β} {G} [Magma G] (f : α → β) (g : β → G) (m : FreeMagma α) :
-    evalInMagma (g ∘ f) m = evalInMagma g (fmapFreeMagma f m) :=
+    m ⬝ (g ∘ f) = fmapFreeMagma f m ⬝ g :=
   (evalInMagma_fmapHom ..).symm
 
 theorem evalHom_comp_fmapHom {α β G} [Magma G] (f : α → β) (g : β → G) :
@@ -164,7 +166,7 @@ def toNat {α} [DecidableEq α] (m : FreeMagma α) : FreeMagma ℕ :=
 
 theorem evalInMagma_pmap {α β G} [Magma G] {φ : β → G} {ψ : α → G}
     (m : FreeMagma α) {f : (a : α) → Mem a m → β} (H : ∀ a h, φ (f a h) = ψ a) :
-    evalInMagma φ (m.pmap f) = evalInMagma ψ m := by
+    m.pmap f ⬝ φ = m ⬝ ψ := by
   induction m <;> simp [pmap, evalInMagma, *]
 
 theorem attach_map_val {α} (m : FreeMagma α) : fmapHom (·.val) m.attach = m :=
