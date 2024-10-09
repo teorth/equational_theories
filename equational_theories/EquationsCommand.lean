@@ -29,7 +29,8 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   let G := mkIdent (← MonadQuotation.addMacroScope `G)
   let inst := mkIdent (← MonadQuotation.addMacroScope `inst)
   let eqName := .mkSimple s!"Equation{i.getNat}"
-  let eqIdent := mkIdent eqName
+  let eqStx := mkNullNode #[tk, i]
+  let eqIdent := mkIdentFrom eqStx eqName (canonical := true)
   let finLawName := .mkSimple s!"FinLaw{i.getNat}"
   let finLawIdent := mkIdent finLawName
   let lawName := .mkSimple s!"Law{i.getNat}"
@@ -53,12 +54,16 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   elabCommand (← `(command| abbrev%$tk $eqIdent ($G : Type _) [$inst : Magma $G] := $t))
   Command.liftTermElabM do
     let declMods ← elabModifiers mods
-    addDocString' (TSyntax.getId eqIdent) declMods.docString?
+    let docs := s!"```\nequation {i.getNat} := {← PrettyPrinter.formatTerm tsyn}\n```"
+    let docs := match declMods.docString? with
+      | none => docs
+      | some more => s!"{docs}\n\n---\n{more}"
+    addDocString' (TSyntax.getId eqIdent) docs
     -- TODO: This will go wrong if we are in a namespace. Is this really needed, or is there
     -- a way to pass the current position already to the `(command|` above?
     Lean.addDeclarationRanges eqName {
       range := ← getDeclarationRange (← getRef)
-      selectionRange := ← getDeclarationRange (← getRef) }
+      selectionRange := ← getDeclarationRange eqStx }
 
 
   -- Create law
@@ -85,8 +90,10 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   elabCommand (← `(command| abbrev%$tk $thmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $lawIdent ↔ $eqIdent G :=
                     fun G _ ↦ Iff.trans (Law.satisfies_fin_satisfies_nat G $finLawIdent) ($finThmName G)))
   -- register the law
-  modifyEnv (magmaLawExt.addEntry · (lawName, ← (mkNatMagmaLaw lawName).run
-    { env := (← getEnv), opts := (← getOptions) }))
+  -- (The following two lines have been commented out because they cause the build to become very slow.
+  -- See https://github.com/teorth/equational_theories/issues/464.)
+  --modifyEnv (magmaLawExt.addEntry · (lawName, ← (mkNatMagmaLaw lawName).run
+  --  { env := (← getEnv), opts := (← getOptions) }))
   Command.liftTermElabM do
     -- TODO: This will go wrong if we are in a namespace. Is this really needed, or is there
     -- a way to pass the current position already to the `(command|` above?

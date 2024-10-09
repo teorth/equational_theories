@@ -121,11 +121,9 @@ def MagmaEquiv.comp {G H I : Type*} [Magma G] [Magma H] [Magma I] (e₁ : G ≃�
   toFun := e₂ ∘ e₁
   invFun := e₁.symm ∘ e₂.symm
   left_inv x := show e₁.symm (e₂.symm (e₂.toEquiv (e₁ x))) = x by
-    rw [Equiv.symm_apply_apply]
-    apply Equiv.symm_apply_apply
+    exact Equiv.symm_apply_apply _ _ ▸ Equiv.symm_apply_apply _ _
   right_inv x := show e₂ (e₁.toEquiv (e₁.symm (e₂.symm x))) = x by
-    rw [Equiv.apply_symm_apply]
-    apply Equiv.apply_symm_apply
+    exact Equiv.apply_symm_apply _ _ ▸ Equiv.apply_symm_apply _ _
   map_op' x y := by
     have hxy := e₂.map_op' (e₁.toFun x) (e₁.toFun y)
     rwa [←e₁.map_op'] at hxy
