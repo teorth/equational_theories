@@ -116,7 +116,7 @@ equation 4579  :=  x ◇ (y ◇ z) = (w ◇ u) ◇ z
 /-- all products of three values are the same, regardless bracketing -/
 equation 4582  :=  x ◇ (y ◇ z) = (w ◇ u) ◇ v
 
-abbrev Equation4656 (G: Type _) [Magma G] := ∀ x y z : G, (x ◇ y) ◇ y = (x ◇ z) ◇ z
+equation 4656  :=  (x ◇ y) ◇ y = (x ◇ z) ◇ z
 
 /- Some order 5 laws -/
 
