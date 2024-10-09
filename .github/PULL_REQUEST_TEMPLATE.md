@@ -1,3 +1,5 @@
+<!--
+
 # Contributing to the Equational Theories Project
 
 Thank you for your interest in contributing to the Equational Theories Project! We welcome contributions from all sources: human-generated contributions from either professional mathematicians or interested members of the public, as well as computer-generated contributions from programs in various languages, automated theorem provers, or modern AI tools. (In fact, one of the main goals of this project is to learn how such a diverse pool of contributions can effectively be combined with each other to advance a common objective.)
@@ -77,3 +79,5 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 ## Discussion
 
 The main discussion will be held in this [Lean Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/).  Some secondary discussion will also be held at [this blog post](https://terrytao.wordpress.com/2024/09/25/a-pilot-project-in-universal-algebra-to-explore-new-ways-to-collaborate-and-use-machine-assistance/).
+
+-->
