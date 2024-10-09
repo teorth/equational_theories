@@ -10,12 +10,8 @@ open Law
   contradiction
 
 theorem Fin0.uncurry {X : Type _} (P : (Fin 0 → X) → Prop) : (∀ f : Fin 0 → X, P f) ↔
-      P Fin.elim0 := by
-  constructor
-  · intro h
-    apply h
-  · intro h f
-    simpa only [← match_eq]
+    P Fin.elim0 :=
+  ⟨fun h ↦ h _, fun h f ↦ by simpa only [← match_eq]⟩
 
 theorem models_iff_0 (law : MagmaLaw (Fin 0)) (G  : Type _) [Magma G] : G ⊧ law ↔
     satisfiesPhi (Fin.elim0 (α := G)) law := by
@@ -30,12 +26,9 @@ theorem models_iff_0 (law : MagmaLaw (Fin 0)) (G  : Type _) [Magma G] : G ⊧ la
 
 theorem Fin1.uncurry {X : Type _} (P : (Fin 1 → X) → Prop) : (∀ f : Fin 1 → X, P f) ↔
       ∀ x : X, P (fun | 0 => x) := by
-  constructor
-  · intro h _
-    apply h
-  · intro h f
-    have := h (f 0)
-    simpa only [match_eq]
+  refine ⟨fun h _ ↦ h _, fun h f ↦ ?_⟩
+  have := h (f 0)
+  simpa only [match_eq]
 
 theorem models_iff_1 (law : MagmaLaw (Fin 1)) (G  : Type _) [Magma G] : G ⊧ law ↔
     ∀ x : G, satisfiesPhi (fun | 0 => x) law := by
@@ -50,12 +43,9 @@ theorem models_iff_1 (law : MagmaLaw (Fin 1)) (G  : Type _) [Magma G] : G ⊧ la
 
 theorem Fin2.uncurry {X : Type _} (P : (Fin 2 → X) → Prop) : (∀ f : Fin 2 → X, P f) ↔
       ∀ x y : X, P (fun | 0 => x | 1 => y) := by
-  constructor
-  · intro h _ _
-    apply h
-  · intro h f
-    have := h (f 0) (f 1)
-    simpa only [match_eq]
+  refine ⟨fun h _ _ ↦ h _, fun h f ↦ ?_⟩
+  have := h (f 0) (f 1)
+  simpa only [match_eq]
 
 theorem models_iff_2 (law : MagmaLaw (Fin 2)) (G  : Type _) [Magma G] : G ⊧ law ↔
     ∀ x y : G, satisfiesPhi (fun | 0 => x | 1 => y) law := by
@@ -70,12 +60,9 @@ theorem models_iff_2 (law : MagmaLaw (Fin 2)) (G  : Type _) [Magma G] : G ⊧ la
 
 theorem Fin3.uncurry {X : Type _} (P : (Fin 3 → X) → Prop) : (∀ f : Fin 3 → X, P f) ↔
     ∀ x y z : X, P (fun | 0 => x | 1 => y | 2 => z) := by
-  constructor
-  · intro h _ _ _
-    apply h
-  · intro h f
-    have := h (f 0) (f 1) (f 2)
-    simpa only [match_eq]
+  refine ⟨fun h _ _ _ ↦ h _, fun h f ↦ ?_⟩
+  have := h (f 0) (f 1) (f 2)
+  simpa only [match_eq]
 
 theorem models_iff_3 (law : MagmaLaw (Fin 3)) (G  : Type _) [Magma G] : G ⊧ law ↔
     ∀ x y z : G, satisfiesPhi (fun | 0 => x | 1 => y | 2 => z) law := by
@@ -90,12 +77,9 @@ theorem models_iff_3 (law : MagmaLaw (Fin 3)) (G  : Type _) [Magma G] : G ⊧ la
 
 theorem Fin4.uncurry {X : Type _} (P : (Fin 4 → X) → Prop) : (∀ f : Fin 4 → X, P f) ↔
     ∀ x y z w : X, P (fun | 0 => x | 1 => y | 2 => z | 3 => w) := by
-  constructor
-  · intro h _ _ _ _
-    apply h
-  · intro h f
-    have := h (f 0) (f 1) (f 2) (f 3)
-    simpa only [match_eq]
+  refine ⟨fun h _ _ _ _ ↦ h _, fun h f ↦ ?_⟩
+  have := h (f 0) (f 1) (f 2) (f 3)
+  simpa only [match_eq]
 
 theorem models_iff_4 (law : MagmaLaw (Fin 4)) (G  : Type _) [Magma G] : G ⊧ law ↔
     ∀ x y z w : G, satisfiesPhi (fun | 0 => x | 1 => y | 2 => z | 3 => w) law := by
@@ -110,12 +94,9 @@ theorem models_iff_4 (law : MagmaLaw (Fin 4)) (G  : Type _) [Magma G] : G ⊧ la
 
 theorem Fin5.uncurry {X : Type _} (P : (Fin 5 → X) → Prop) : (∀ f : Fin 5 → X, P f) ↔
     ∀ x y z w v : X, P (fun | 0 => x | 1 => y | 2 => z | 3 => w | 4 => v) := by
-  constructor
-  · intro h _ _ _ _ _
-    apply h
-  · intro h f
-    have := h (f 0) (f 1) (f 2) (f 3) (f 4)
-    simpa only [match_eq]
+  refine ⟨fun h _ _ _ _ _ ↦ h _, fun h f ↦ ?_⟩
+  have := h (f 0) (f 1) (f 2) (f 3) (f 4)
+  simpa only [match_eq]
 
 theorem models_iff_5 (law : MagmaLaw (Fin 5)) (G  : Type _) [Magma G] : G ⊧ law ↔
     ∀ x y z w v : G, satisfiesPhi (fun | 0 => x | 1 => y | 2 => z | 3 => w | 4 => v) law := by
@@ -130,12 +111,9 @@ theorem models_iff_5 (law : MagmaLaw (Fin 5)) (G  : Type _) [Magma G] : G ⊧ la
 
 theorem Fin6.uncurry {X : Type _} (P : (Fin 6 → X) → Prop) : (∀ f : Fin 6 → X, P f) ↔
     ∀ x y z w v u : X, P (fun | 0 => x | 1 => y | 2 => z | 3 => w | 4 => v | 5 => u) := by
-  constructor
-  · intro h _ _ _ _ _ _
-    apply h
-  · intro h f
-    have := h (f 0) (f 1) (f 2) (f 3) (f 4) (f 5)
-    simpa only [match_eq]
+  refine ⟨fun h _ _ _ _ _ _ ↦ h _, fun h f ↦ ?_⟩
+  have := h (f 0) (f 1) (f 2) (f 3) (f 4) (f 5)
+  simpa only [match_eq]
 
 theorem models_iff_6 (law : MagmaLaw (Fin 6)) (G  : Type _) [Magma G] : G ⊧ law ↔
     ∀ x y z w v u : G, satisfiesPhi (fun | 0 => x | 1 => y | 2 => z | 3 => w | 4 => v | 5 => u) law := by
