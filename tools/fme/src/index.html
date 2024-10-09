@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finite Magma Explorer</title>
+    <link rel="stylesheet" href="./assets/reset.css" />
+    <link rel="stylesheet" href="./assets/fme.css?v=1" />
+    <script type="text/javascript" src="./elm.js"></script>
+  </head>
+  <body>
+
+    <div id="elm-app-here"></div>
+    
+    <script>
+      // start the app
+      var app = Elm.Main.init({
+        flags: "UNKNOWN_VERSION",
+        node: document.getElementById("elm-app-here")
+      });
+
+      const worker = new Worker('worker.js');
+      worker.postMessage({ type: 'init' });
+
+      app.ports.checkMagma.subscribe(function (op) {
+        worker.postMessage({ type: 'checkMagma', op });
+        worker.onmessage = function (event) {
+          const { satisfied, refuted, novel } = event.data;
+          app.ports.checkMagmaListener.send({
+            satisfied: satisfied,
+            refuted: refuted,
+            novel: novel
+          });
+        };
+      });
+
+      app.ports.openInNewTab.subscribe(function(url) {
+        window.open(url, '_blank');
+      });
+    </script>
+
+  </body>
+</html>
+
