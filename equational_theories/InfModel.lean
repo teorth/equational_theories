@@ -548,52 +548,50 @@ theorem Equation3588_not_implies_Equation3944 : ∃ (G : Type) (_ : Magma G), Eq
   use 1, 1, 1
   simp [magN]
 
-theorem Finite.two_variables_laws {α: Type} [Fintype α] (_ : Fintype.card α = 2) (E : Law.MagmaLaw α) :
-  ∃ (G : Type) (_ : Magma G) (_ : Finite G), G ⊧ E ∧ ¬Equation2 G := by
-  match E with
-  | ⟨FreeMagma.Fork _ _, FreeMagma.Fork _ _⟩ =>
+theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.card α = 2) (E: Law.MagmaLaw α) :
+  ∃ (G : Type) (hm : Magma G) (hf : Finite G), G ⊧ E ∧ ¬Equation2 G := by
+  revert E
+  suffices hs: ∀ (x: α) (w: FreeMagma α), ∃ (G: Type) (hm: Magma G) (hf: Finite G), G ⊧ (Lf x ≃ w) ∧ ¬Equation2 G by
     -- an arbitrary magma with at least 2 elements satisfying the constant law
     let G := Fin 2
     let M: Magma G := Magma.mk fun x y => 0
-    exists G, M, Finite.of_fintype G
-    split_ands
-    .
-      intro f
-      unfold satisfiesPhi FreeMagma.evalInMagma
-      rfl
-    .
+    let hf: Finite G := Finite.of_fintype G
+    let hneq2: ¬Equation2 G := by
       unfold Equation2
       simp only [not_forall]
       exists 0, 1
-      simp only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
-  | ⟨FreeMagma.Leaf a, FreeMagma.Leaf b⟩ =>
-    by_cases h: a = b
-    .
-      rw [h]
-      -- an arbitrary magma with at least 2 elements
-      let G := Fin 2
-      let M: Magma G := Magma.mk fun x y => 0
-      exists G, M, Finite.of_fintype G
+    intro E
+    match E with
+    | ⟨FreeMagma.Fork w1 w2, FreeMagma.Fork w3 w4⟩ =>
+      exists G, M, hf
       split_ands
       .
         intro f
         unfold satisfiesPhi FreeMagma.evalInMagma
         rfl
       .
-        unfold Equation2
-        simp only [not_forall]
-        exists 0, 1
-        simp only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
-    .
-      sorry
-  | ⟨w ⋆ w', FreeMagma.Leaf x⟩
-  | ⟨FreeMagma.Leaf x, w ⋆ w'⟩ =>
-    suffices h: ∃ (G : Type) (_ : Magma G) (_ : Finite G), G ⊧ (Lf x ≃ w ⋆ w') ∧ ¬Equation2 G by
-      obtain ⟨G, ⟨M, ⟨hf, h⟩⟩⟩ := h
+        exact hneq2
+    | ⟨FreeMagma.Leaf a, FreeMagma.Leaf b⟩ =>
+      by_cases h: a = b
+      .
+        rw [h]
+        exists G, M, hf
+        split_ands
+        .
+          intro f
+          unfold satisfiesPhi FreeMagma.evalInMagma
+          rfl
+        .
+          exact hneq2
+      .
+        sorry
+    | ⟨w ⋆ w', FreeMagma.Leaf x⟩ =>
+      obtain ⟨G, ⟨M, ⟨hf, h⟩⟩⟩ := hs x (w ⋆ w')
       exists G, M, hf
-      try simp only [h, Law.satisfies_symm, not_false_eq_true, and_self]
-    sorry
-
-
+      simp only [h, Law.satisfies_symm, not_false_eq_true, and_self]
+    | ⟨FreeMagma.Leaf x, w ⋆ w'⟩ =>
+      exact hs x (w ⋆ w')
+  intros x w
+  sorry
 
 end InfModel
