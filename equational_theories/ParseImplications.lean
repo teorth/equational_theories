@@ -99,7 +99,7 @@ Iff.mpr (satisfies Nat G inst LawM) (EquationM.{0} G inst) (LawM.models_iff G in
      let some rhsName := getEquationLeanName rhs | failure
 
      -- Build the theorem type
-     let thmName : Name := Name.mkSimple s!"Law{lhsN}_leq_Law{rhsN}"
+     let lawThmName : Name := Name.mkSimple s!"Law{lhsN}_leq_Law{rhsN}"
      let lhslawName : Name := Name.mkSimple s!"Law{lhsN}"
      let rhslawName : Name := Name.mkSimple s!"Law{rhsN}"
      let lhslaw : Expr := mkConst lhslawName
@@ -116,43 +116,33 @@ Iff.mpr (satisfies Nat G inst LawM) (EquationM.{0} G inst) (LawM.models_iff G in
            Meta.withLocalDeclD `h satlhs fun h =>
              -- Build expressions in body of proof term (using binders)
              let satrhs : Expr := mkApp4 (mkConst ``satisfies) (mkConst ``Nat) G inst rhslaw
-             let eqnlhs : Expr := mkApp2 (mkConst lhsName) G inst
-             let eqnrhs : Expr := mkApp2 (mkConst rhsName) G inst
+             let eqnlhs : Expr := mkApp2 (mkConst lhsName (us :=[Lean.levelZero])) G inst
+             let eqnrhs : Expr := mkApp2 (mkConst rhsName (us :=[Lean.levelZero])) G inst
              let lhs_models_iff : Expr := mkApp2 (mkConst <| Name.str lhslawName "models_iff") G inst
              let rhs_models_iff : Expr := mkApp2 (mkConst <| Name.str rhslawName "models_iff") G inst
+             let impl : Expr := mkApp3 (mkConst thm_name (us :=[Lean.levelZero])) G inst
+               (mkApp4 (mkConst ``Iff.mp) satlhs eqnlhs lhs_models_iff h)
+             let proofBody : Expr := mkApp4 (mkConst ``Iff.mpr) satrhs eqnrhs rhs_models_iff impl
+             Meta.mkLambdaFVars #[G, inst, h] proofBody
 
-             -- Build the implication
-             let impl : Expr := mkApp3 (mkConst thm_name) G inst
-               (mkApp4 (mkConst ``Iff.mp) h eqnlhs lhs_models_iff G)
-
-             -- Build the final proof term
-             -- let proofTerm : Expr := --Meta.mkLambdaFVars #[gBinder, instBinder, hBinder] <|
-             --      .forallE `G type0 (binderInfo := .implicit) <|
-             --        .forallE `inst (binderInfo := .instImplicit) inst <|
-             --          .forallE `h (binderInfo := .default) h <|
-             let proofBody : Expr := mkApp5 (mkConst ``Iff.mpr) satrhs eqnrhs rhs_models_iff impl G
-             Meta.mkForallFVars #[G, inst, h] proofBody
-
-     logInfo s!"built term {proofTerm}: checking"
      -- Very important: typecheck the proof before adding it as a theorem!
      Meta.check proofTerm
-     logInfo "proof term type correct"
-
      let inferredType ← Meta.inferType proofTerm
      logInfo "type inferred"
-     if ← Meta.isDefEq inferredType thmTy then
-        -- only adds the theorem if it typechecks!
-        let decl := Declaration.thmDecl {
-          name := thmName,
-          levelParams := [],
-          type := thmTy,
-          value := proofTerm
-        }
-        addDecl decl
+     Meta.withTransparency .all do
+       if ← Meta.isDefEq inferredType thmTy then
+          -- only adds the theorem if it typechecks!
+          let decl := Declaration.thmDecl {
+            name := lawThmName,
+            levelParams := [],
+            type := thmTy,
+            value := proofTerm
+          }
+          addDecl decl
+       else
+         throwError (← Meta.mkHasTypeButIsExpectedMsg inferredType thmTy)
 
-     else
-       throwError (← Meta.mkHasTypeButIsExpectedMsg inferredType thmTy)
-
+#check Meta.isDefEq
 
 /--
 Attempts to parse an exisential statement of monoid facts from the type of a theorem.
