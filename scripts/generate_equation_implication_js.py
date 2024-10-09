@@ -25,7 +25,7 @@ ids = {x: i for i,x in enumerate(ids)}
 
 reorder = f['equations']
 order = [int(x[8:]) for x in reorder]
-            
+
 
 #print(ids)
 
@@ -97,7 +97,7 @@ def find_equivalence_classes_fast(implications):
 
 if not os.path.exists("home_page/implications"):
     os.mkdir("home_page/implications")
-        
+
 sys.stdout = open("home_page/implications/implications.js","w")
 
 flattened_list = [item for sublist in n for item in sublist]
@@ -106,10 +106,11 @@ print("var arr = ",encoded)
 
 eqs = []
 N = 0
-for line in open("equational_theories/AllEquations.lean"):
-    if ':=' in line:
-        N += 1
-        eqs.append("Equation"+str(N)+"["+line.split(":=")[1].strip()+"]")
+for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]:
+    for line in open(f"equational_theories/Equations/Eqns{file}.lean"):
+        if ':=' in line:
+            N += 1
+            eqs.append("Equation"+str(N)+"["+line.split(":=")[1].strip()+"]")
 print("var equations = ", eqs);
 
 special = []
