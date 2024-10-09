@@ -1,6 +1,7 @@
 import equational_theories.FreeMagma
 import equational_theories.AllEquations
 import equational_theories.FactsSyntax
+import Mathlib.Tactic.NthRewrite
 
 namespace FreeMagma
 
@@ -13,6 +14,12 @@ def Everywhere (P : FreeMagma α → Prop) : FreeMagma α → Prop
 theorem Everywhere.top {P : FreeMagma α → Prop} : {x : FreeMagma α} → Everywhere P x → P x
   | .Leaf _ => fun h => h
   | _ ⋆ _ => fun h => h.2.2
+
+theorem Everywhere.left {P : FreeMagma α → Prop} {x y : FreeMagma α} (h: Everywhere P (x ⋆ y)): Everywhere P x :=
+  h.1
+
+theorem Everywhere.right {P : FreeMagma α → Prop} {x y : FreeMagma α} (h: Everywhere P (x ⋆ y)): Everywhere P y :=
+  h.2.1
 
 @[simp]
 theorem Everywhere_idem {P : FreeMagma α → Prop} : Everywhere (Everywhere P) = Everywhere P := by
@@ -35,6 +42,16 @@ theorem SubtermOf.refl (x : FreeMagma α) : SubtermOf x x := by
   | Leaf => rfl
   | Fork x y => left; rfl
 
+lemma SubtermOf.left {x a b: FreeMagma α} (h : SubtermOf x a) : SubtermOf x (a ⋆ b) := by
+  right
+  left
+  exact h
+
+lemma SubtermOf.right {x a b: FreeMagma α} (h : SubtermOf x b) : SubtermOf x (a ⋆ b) := by
+  right
+  right
+  exact h
+
 theorem everywhere_of_subterm_of_everywhere {P : FreeMagma α → Prop} {x} (h : x.Everywhere P) {y}
     (hsub : SubtermOf y x) : y.Everywhere P := by
   induction x with
@@ -50,16 +67,38 @@ theorem everywhere_of_subterm_of_everywhere {P : FreeMagma α → Prop} {x} (h :
 theorem subterm_everywhere {P : FreeMagma α → Prop} {x} (h : x.Everywhere P) {y} (hsub : SubtermOf y x) : P y :=
   (everywhere_of_subterm_of_everywhere h hsub).top
 
-class IsProj (rw : FreeMagma α → FreeMagma α) : Prop where
+theorem length_le_of_subterm {x y: FreeMagma α} (h: SubtermOf x y) : x.length ≤ y.length := by
+  induction y with
+  | Leaf =>
+    rw [h]
+  | Fork x y ihx ihy =>
+    obtain (heq | hsub | hsub) := h
+    · rw [heq]
+    · rw [FreeMagma.length.eq_2]
+      exact Nat.le_add_right_of_le (ihx hsub)
+    · rw [FreeMagma.length.eq_2]
+      rw [Nat.add_comm]
+      exact Nat.le_add_right_of_le (ihy hsub)
+
+variable (rw : FreeMagma α → FreeMagma α)
+
+class IsProj : Prop where
   proj : ∀ x, SubtermOf (rw x) x
 
-theorem everywhere_of_projection_of_everywhere
-    (rw : FreeMagma α → FreeMagma α) [IsProj rw] P :
+variable [hproj: IsProj rw]
+
+@[simp]
+lemma projection_leaf (x): rw (.Leaf x) = x :=
+  hproj.proj (.Leaf x)
+
+lemma length_le_of_projection (x): (rw x).length ≤ x.length :=
+  length_le_of_subterm (hproj.proj x)
+
+theorem everywhere_of_projection_of_everywhere P:
     ∀ x, Everywhere P x → (rw x).Everywhere P :=
   fun x he ↦ everywhere_of_subterm_of_everywhere he (IsProj.proj x)
 
-theorem projection_everywhere
-    (rw : FreeMagma α → FreeMagma α) [IsProj rw] P :
+theorem projection_everywhere P :
     ∀ x, Everywhere P x → P (rw x) :=
   fun x he ↦ subterm_everywhere he (IsProj.proj x)
 
@@ -74,14 +113,55 @@ variable {α : Type}
 variable (rw : FreeMagma α → FreeMagma α)
 
 def bu : FreeMagma α → FreeMagma α
-  | .Leaf x => .Leaf x
+  | .Leaf x => rw x
   | x ⋆ y => rw (bu x ⋆ bu y)
 
 attribute [simp] bu.eq_1
 
-def NF (x : FreeMagma α) : Prop := x.Everywhere (fun y => bu rw y = y)
+abbrev buFixed x := bu rw x = x
 
-def bu_nf [hproj : IsProj rw] : ∀ x, NF rw (bu rw x) := by
+@[simp] theorem bu_op_eq_rw_op {x} {y}
+    (hx: buFixed rw x) (hy: buFixed rw y): bu rw (x ⋆ y) = rw (x ⋆ y) := by
+  nth_rw 2 [← hx, ← hy]
+  rw [← bu.eq_2 rw]
+
+lemma length_bu_le [hproj : IsProj rw] (x): (bu rw x).length ≤ x.length := by
+  induction x with
+  | Leaf =>
+    simp
+  | Fork x y ihx ihy  =>
+    rw [bu.eq_2]
+    apply Nat.le_trans (length_le_of_projection rw _) ?_
+    simp only [FreeMagma.length.eq_2]
+    exact Nat.add_le_add ihx ihy
+
+def NF (x : FreeMagma α) : Prop := x.Everywhere (fun y => rw y = y)
+
+def buNF (x : FreeMagma α) : Prop := x.Everywhere (fun y => bu rw y = y)
+
+lemma buNF_iff_NF {x}: buNF rw x ↔ NF rw x := by
+  induction x with
+  | Leaf =>
+    unfold NF buNF Everywhere
+    simp
+  | Fork x y ihx ihy =>
+    have ih  := and_congr ihx ihy
+    unfold NF buNF at ih ⊢
+    unfold Everywhere
+    simp only [← and_assoc, ← ih]
+    apply and_congr_right
+    intro ⟨hbx, hby⟩
+    simp only [bu, hbx.top, hby.top]
+
+lemma buFixed_of_NF {x : FreeMagma α} (h : NF rw x) : buFixed rw x := by
+  apply ((buNF_iff_NF rw).mpr h).top
+
+lemma rw_eq_self_of_NF {x} (h: NF rw x): rw x = x := by
+  apply h.top
+
+variable [hproj: IsProj rw]
+
+theorem bu_nf : ∀ x, NF rw (bu rw x) := by
   intro x
   induction x with
   | Leaf => simp [NF, bu, Everywhere]
@@ -94,22 +174,50 @@ def bu_nf [hproj : IsProj rw] : ∀ x, NF rw (bu rw x) := by
     · exact everywhere_of_subterm_of_everywhere ihx hsub
     · exact everywhere_of_subterm_of_everywhere ihy hsub
 
-theorem idem_of_NF {x : FreeMagma α} (h : NF rw x) : bu rw x = x := h.top
+lemma NF_iff_buFixed {x}: NF rw x ↔ buFixed rw x := by
+  constructor
+  · exact buFixed_of_NF rw
+  · intro h
+    rw [← h]
+    apply bu_nf
 
-variable [IsProj rw]
+@[simp] theorem bu_idem x : buFixed rw (bu rw x) := buFixed_of_NF rw (bu_nf rw x)
 
-@[simp] theorem bu_idem x : bu rw (bu rw x) = bu rw x := idem_of_NF rw (bu_nf rw x)
+@[simp] theorem buFixed_rw_op {x} {y}
+    (hx: bu rw x = x) (hy: bu rw y = y): buFixed rw (rw (x ⋆ y)) := by
+  rw [← hx, ← hy, ← bu.eq_2 rw]
+  exact bu_idem rw _
+
+theorem NF_rw_op_of_buFixed {x} {y}
+    (hx: bu rw x = x) (hy: bu rw y = y): NF rw (rw (x ⋆ y)) := by
+  apply (NF_iff_buFixed rw).mpr
+  exact buFixed_rw_op rw hx hy
+
+theorem NF_rw_op {x} {y}
+    (hx: NF rw x) (hy: NF rw y): NF rw (rw (x ⋆ y)) := by
+  rw [NF_iff_buFixed] at hx hy ⊢
+  exact buFixed_rw_op rw hx hy
+
+@[simp] theorem rw_op_idem {x} {y}
+  (hx: bu rw x = x) (hy: bu rw y = y): rw (rw (x ⋆ y)) = rw (x ⋆ y) := by
+  have := buFixed_rw_op rw hx hy
+  rw [← NF_iff_buFixed] at this
+  exact rw_eq_self_of_NF rw this
+
+theorem bu_rw_op_eq_rw_rw_op {x} {y}
+    (hx: bu rw x = x) (hy: bu rw y = y): bu rw (rw (x ⋆ y)) = rw (rw (x ⋆ y)) := by
+  rw [buFixed_rw_op rw hx hy, rw_op_idem rw hx hy]
 
 def ConfMagma := {x : FreeMagma α // bu rw x = x }
 
 instance : Coe α (ConfMagma rw) where
-  coe x := ⟨x, rfl⟩
+  coe x := ⟨bu rw x, bu_idem rw x⟩
 
 instance : Magma (ConfMagma rw) where
   op := fun x y ↦ ⟨bu rw (x.1 ◇ y.1), bu_idem rw _⟩
 
 instance [DecidableEq α] : DecidableEq (ConfMagma rw) :=
-  inferInstanceAs (DecidableEq {x : FreeMagma α // bu rw x = x })
+  inferInstanceAs (DecidableEq {x : FreeMagma α // buFixed rw x })
 
 /-- Refutation tactic for dedicable FreeMagma equations -/
 macro "refute" : tactic =>
