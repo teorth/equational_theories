@@ -1,0 +1,50 @@
+\chapter{The Asterix equation}\label{asterix-chapter}
+
+A \emph{translation-invariant magma} is a magma whose carrier $G$ is an abelian group $G = (G,+)$, and whose magma operation takes the form
+$$ y \op x = x + f(x-y)$$
+for some function $f: G \to G$.  Thus the translations on $G$ become magma isomorphisms.
+
+For translation-invariant magmas, an equational law simplifies to a univariate functional equation.  For instance, writing $x = y+h$, we have
+$$ y \op x = x + f(h)$$
+$$ x \op (y \op x) = x + f(h) + f^2(h)$$
+$$ y \op (x \op (y \op x)) = x + f(h) + f^2(h) + f( h + f(h) + f^2(h) )$$
+where $f^2 = f \circ f$, so the Asterix equation (\Cref{eq65}) for such magmas simplifies to the univariant functional equation
+\begin{equation}\label{fh}
+   f(h) + f^2(h) + f( h + f(h) + f^2(h) ) = 0
+\end{equation}
+for $h \in G$.
+
+This equation has some degenerate solutions, for instance we can take $f(h) = c$ for any constant $c$ of order $3$ in $G$.  It is challenging to construct more interesting solutions to this equation; however, we can do if $G$ is the free abelian group on countably many generators (concretely, one can think of $G$ as the space of formal finite integer linear combinations $a_1 e_1 + \dots + a_n e_n$ of some generators $e_1, e_2, \dots$) by a greedy algorithm.  We need the following technical definition.
+
+\begin{definition}\label{partial-solution}  Let $G$ be the free abelian group on countably many generators.  A \emph{partial solution} $(E_0, E_1, E_2, f)$ to \eqref{fh} consists of nested finite sets
+$$ E_0 \subset E_1 \subset E_2 \subset G$$ together with a function $f: E_1 \to E_2$ with the following properties:
+\begin{itemize}
+  \item[(a)] If $h \in E_0$, then $f(h) \in E_1$, so that $f^2(h)$ is well-defined as an element of $E_2$; furthermore, $h + f(h) + f^2(h)$ lies in $E_1$, so that the left-hand side of \eqref{fh} makes sense; and \eqref{fh} holds.
+  \item[(b)] If $k \in E_2 \backslash E_1$, then there is a unique $h \in E_1 \backslash E_0$ such that $f(h)=k$.
+\end{itemize}
+
+We partially order the space of partial solutions to \eqref{fh} by writing $(E_0, E_1, E_2, f) \leq (E'_0, E'_1, E'_2, f')$ if the following properties hold:
+\begin{itemize}
+  \item $E_i \subset E'_i$ for $i=0,1,2$.
+  \item $f$ agrees with $f'$ on $E_0$.
+\end{itemize}
+When this occurs we say that the partial solution $(E'_0, E'_1, E'_2, f')$ \emph{extends} the partial solution $(E_0, E_1, E_2, f)$.
+
+We define the \emph{empty partial solution} $(E_0,E_1,E_2,f)$ by setting $E_0=E_1=E_2$ to be the empty set, and $f$ to be the empty function; it is the minimal element of the above partial order.
+\end{definition}
+
+
+We have the following iterative construction:
+
+\begin{lemma}[Enlarging a partial solution]\label{iteration}\uses{partial-solution} Let $(E_0, E_1, E_2, f)$ be a partial solution to \eqref{fh}, and let $h_0$ be an element of $G$ that does not lie in $E_0$.  Then there exists a partial solution $(E'_2, E'_1, E'_0, f')$ to \eqref{fh} that extends $(E_2, E_1, E_0, f)$, such that $h \in E_2'$.
+\end{lemma}
+
+\begin{proof}  The element $h$ lies in either $G \backslash E_0$, $E_0 \backslash E_1$, or $E_1 \backslash E_2$.  We therefore divide into three cases.
+
+{\bf Case 1: $h \in G \backslash E_0$.}  We perform the following construction.
+
+\begin{itemize}
+  \item Choose elements $h_1, h_2 \in G$ such that $h_1, h_2, h_
+
+  \not \in E_0$; this is possible since $E_0$ is finite.
+  \item Choose an element $h_2 \in G$ such that
