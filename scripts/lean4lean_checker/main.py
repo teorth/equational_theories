@@ -44,8 +44,10 @@ class Lean4LeanChecker():
         os.chdir(self.l4lSubPath)
 
         # remove lake-manifest.json and ./.lake for lean4lean
-        os.remove(self.l4lManifest)
-        shutil.rmtree(self.l4lBuildPath)
+        if self.l4lManifest.exists():
+          os.remove(self.l4lManifest)
+        if self.l4lBuildPath.exists():
+          shutil.rmtree(self.l4lBuildPath)
 
         #get the project toolchain
         projectToolchain = self.repoToolchainPath.read_text()
@@ -61,8 +63,8 @@ class Lean4LeanChecker():
         else:
           print("There is a toolchain mismatch and lake cannot update lean4lean")
 
-    except Exception:
-      print("Failed to upgrade lean4lean.\n Cause: {Exception}\nCancelling lean4lean check and exiting")
+    except Exception as e:
+      print(f"Failed to upgrade lean4lean.\n Cause: {e.args}\nCancelling lean4lean check and exiting")
       exit(0)
 
   def remove_old_l4l(self):
@@ -86,9 +88,14 @@ class Lean4LeanChecker():
     try:
       print("Building lean4lean CLI")
       os.chdir(self.l4lSubPath)
-      subprocess.run([self.lakePath.as_posix(), "build", "lean4lean"])
-    except:
-      print("Error during build of lean4lean cli\n")
+      build_ret = subprocess.run([self.lakePath.as_posix(), "build", "lean4lean"]).returncode
+      if build_ret == 0:
+        print("Lean4lean was successfully built\n")
+      else:
+        print("Lean4lean build was not successful. Lean4lean check will not be run. Exiting gracefully")
+        raise Exception("lake build failure")
+
+    except Exception as e:
       print("Lean4lean check will exit gracefully")
       sys.exit(0)
 
@@ -108,9 +115,11 @@ class Lean4LeanChecker():
       self.lakePath,
       "env",
       self.l4lBinPath.as_posix(),
-      self.project_name]).returncode
+      "--verbose",
+      self.project_name
+      ]).returncode
     if check_ret == 0:
-      print("Lean4lean check was successful!!")
+      print("Lean4lean check was successful!!\n")
       self.remove_old_l4l()
       sys.exit(0)
     else:
