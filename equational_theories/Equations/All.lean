@@ -6,6 +6,7 @@ import equational_theories.Equations.Eqns1000_1999
 import equational_theories.Equations.Eqns2000_2999
 import equational_theories.Equations.Eqns3000_3999
 import equational_theories.Equations.Eqns4000_4694
+import equational_theories.EquationalResult
 
 /-! List of equational laws being studied -/
 
