@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # You should run this script before commit/push if you made changes to the
 # source code of the Finite Magma Explorer in the `src/` directory. It will
@@ -50,4 +50,3 @@ cp src/*.json dist/
 find dist/ -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" \) | while IFS= read -r file; do
   prepend_notice "$file"
 done
-
