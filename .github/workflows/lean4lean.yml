@@ -1,0 +1,45 @@
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.lean'
+      - '**/blueprint.yml'
+      - 'blueprint/**'
+      - 'home_page/**'
+      - 'home'
+      - '**/generate_dashboard.py'
+      - '**/generate_equation_implication_js.py'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**/*.lean'
+      - '**/blueprint.yml'
+      - 'blueprint/**'
+      - 'home_page/**'
+      - 'home'
+      - '**/generate_dashboard.py'
+      - '**/generate_equation_implication_js.py'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+  workflow_dispatch: # Allow manual triggering of the workflow from the GitHub Actions interface
+
+jobs:
+  lean4lean_check:
+    runs-on: ubuntu-latest
+    name: Lean4lean Check
+    steps:
+      - name: Install elan
+        run: curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
+      - name: Run lean4lean script
+        run: |
+          # Install necessary dependencies for python
+          python3 -m venv scripts/lean4lean_checker
+          source scripts/lean4lean_checker/bin/activate
+          ./scripts/lean4lean_checker/bin/pip3 install -r ./scripts/lean4lean_checker/requirements.txt
+          ./scripts/lean4lean_checker/bin/python3 ./scripts/lean4lean_checker/main.py
