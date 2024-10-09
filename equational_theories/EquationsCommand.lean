@@ -9,12 +9,10 @@ def mkNatMagmaLaw (declName : Name) : ImportM NatMagmaLaw := do
   let { env, opts, .. } ← read
   IO.ofExcept <| unsafe env.evalConstCheck NatMagmaLaw opts ``NatMagmaLaw declName
 
-initialize magmaLawExt : PersistentEnvExtension Name (Name × NatMagmaLaw) (Array (Name × NatMagmaLaw)) ←
-  registerPersistentEnvExtension {
-    mkInitial := pure .empty
-    addImportedFn := Array.concatMapM <| Array.mapM <| fun n ↦ do return (n, ← mkNatMagmaLaw n)
-    addEntryFn := Array.push
-    exportEntriesFn := .map Prod.fst
+initialize magmaLawExt : SimplePersistentEnvExtension (Name × NatMagmaLaw) (Array (Name × NatMagmaLaw)) ←
+  registerSimplePersistentEnvExtension {
+    addImportedFn := Array.concatMap id
+    addEntryFn    := Array.push
   }
 
 def getMagmaLaws {M} [Monad M] [MonadEnv M] : M (Array (Name × NatMagmaLaw)) := do
@@ -90,10 +88,8 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   elabCommand (← `(command| abbrev%$tk $thmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $lawIdent ↔ $eqIdent G :=
                     fun G _ ↦ Iff.trans (Law.satisfies_fin_satisfies_nat G $finLawIdent).symm ($finThmName G)))
   -- register the law
-  -- (The following two lines have been commented out because they cause the build to become very slow.
-  -- See https://github.com/teorth/equational_theories/issues/464.)
-  --modifyEnv (magmaLawExt.addEntry · (lawName, ← (mkNatMagmaLaw lawName).run
-  --  { env := (← getEnv), opts := (← getOptions) }))
+  modifyEnv (magmaLawExt.addEntry · (lawName, ← (mkNatMagmaLaw lawName).run
+    { env := (← getEnv), opts := (← getOptions) }))
   Command.liftTermElabM do
     -- TODO: This will go wrong if we are in a namespace. Is this really needed, or is there
     -- a way to pass the current position already to the `(command|` above?
