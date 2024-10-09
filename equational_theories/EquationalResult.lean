@@ -145,23 +145,6 @@ elab_rules : command
     | .facts ⟨satisfied, refuted⟩ => println! "{name}: {satisfied} // {refuted}"
     | .unconditional rhs => println! "{name}: {rhs} holds unconditionally"
 
-syntax (name := liftToLaws) "lift_equation_implications_to_laws" : command
-
--- elab_rules : command
--- | `(command| lift_equation_implications_to_laws) => do
---   let rs ← extractTheorems
---   for ⟨name, _filename, res, _⟩ in rs do
---     match res with
---     | .implication ⟨lhs, rhs⟩ =>
---         let decl := Declaration.thmDecl {
---                     name := theoremName,
---                     levelParams := [],
---                     type := ty,
---                     value := prf
---                   }
---     | .facts ⟨_, _⟩ => return ()
---     | .unconditional _ => return ()
-
 end Result
 
 namespace Conjecture
