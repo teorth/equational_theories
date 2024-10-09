@@ -64,8 +64,8 @@ theorem Law.MagmaLaw.SameCount.derive {α} [DecidableEq α] {Γ : Ctx α} {E : M
   (hE : Γ ⊢ E) (hΓ : ∀ E ∈ Γ, E.SameCount) : E.SameCount := by
   induction hE with
   | Ax E h => exact hΓ E h
-  | Ref t => intro a; rfl
-  | Sym t u _ ih => intro a; symm; exact ih a
-  | Trans t u v _ _ ihu ihv => intro a; exact ihu a |>.trans <| ihv a
+  | Ref t => exact fun _ ↦ rfl
+  | Sym t u _ ih => exact fun _ ↦ (ih _).symm
+  | Trans t u v _ _ ihu ihv => exact fun _ ↦ ihu _ |>.trans <| ihv _
   | Subst t u σ _ ih => intro a; simp [FreeMagma.count_subst, ih _, ih.vars_eq]
   | Cong t₁ t₂ u₁ u₂ _ _ ih₁ ih₂ => intro a; simp_rw [FreeMagma.count, ih₁ a, ih₂ a]
