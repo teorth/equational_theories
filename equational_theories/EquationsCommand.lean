@@ -1,8 +1,24 @@
 import Lean
 import equational_theories.Magma
 import equational_theories.MagmaLaw
+import equational_theories.EquationLawConversion
 
-open Lean Elab Command
+open Lean Elab Command Law
+
+def mkNatMagmaLaw (declName : Name) : ImportM NatMagmaLaw := do
+  let { env, opts, .. } ← read
+  IO.ofExcept <| unsafe env.evalConstCheck NatMagmaLaw opts ``NatMagmaLaw declName
+
+initialize magmaLawExt : PersistentEnvExtension Name (Name × NatMagmaLaw) (Array (Name × NatMagmaLaw)) ←
+  registerPersistentEnvExtension {
+    mkInitial := pure .empty
+    addImportedFn := Array.concatMapM <| Array.mapM <| fun n ↦ do return (n, ← mkNatMagmaLaw n)
+    addEntryFn := Array.push
+    exportEntriesFn := .map Prod.fst
+  }
+
+def getMagmaLaws {M} [Monad M] [MonadEnv M] : M (Array (Name × NatMagmaLaw)) := do
+  return magmaLawExt.getState (← getEnv)
 
 /--
 For a more concise syntax, but more importantly to speed up elaboration (where type inference
@@ -14,8 +30,12 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   let inst := mkIdent (← MonadQuotation.addMacroScope `inst)
   let eqName := .mkSimple s!"Equation{i.getNat}"
   let eqIdent := mkIdent eqName
+  let finLawName := .mkSimple s!"FinLaw{i.getNat}"
+  let finLawIdent := mkIdent finLawName
   let lawName := .mkSimple s!"Law{i.getNat}"
   let lawIdent := mkIdent lawName
+  let finThmName := mkIdent (.str finLawName "models_iff")
+  let thmName := mkIdent (.str lawName "models_iff")
   let mut is := #[]
   let t := tsyn.raw
   -- Collect all identifiers to introduce them as parameters
@@ -53,7 +73,20 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
       | some idx => `(FreeMagma.Leaf $(quote idx.val))
       | none => pure s
   let mut tl : Term := ⟨tl⟩
-  elabCommand (← `(command| abbrev%$tk $lawIdent : Law.MagmaLaw Nat := $tl))
+  let freeMagmaSize := Syntax.mkNumLit (toString is.size)
+  -- define law over `Fin n`
+  elabCommand (← `(command| abbrev%$tk $finLawIdent : Law.MagmaLaw (Fin $freeMagmaSize) := $tl))
+  -- compatibility between the `finLaw` and the original equation
+  let modelsIffLemma : Ident := mkIdent (.mkSimple s!"models_iff_{is.size}")
+  elabCommand (← `(command| abbrev%$tk $finThmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $finLawIdent ↔ $eqIdent G := $modelsIffLemma $finLawIdent))
+  -- define the actual law over `Nat`
+  elabCommand (← `(command| abbrev%$tk $lawIdent : Law.NatMagmaLaw := $tl))
+  -- compatibility between the law and the original equation
+  elabCommand (← `(command| abbrev%$tk $thmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $lawIdent ↔ $eqIdent G :=
+                    fun G _ ↦ Iff.trans (Law.satisfies_fin_satisfies_nat G $finLawIdent).symm ($finThmName G)))
+  -- register the law
+  modifyEnv (magmaLawExt.addEntry · (lawName, ← (mkNatMagmaLaw lawName).run
+    { env := (← getEnv), opts := (← getOptions) }))
   Command.liftTermElabM do
     -- TODO: This will go wrong if we are in a namespace. Is this really needed, or is there
     -- a way to pass the current position already to the `(command|` above?
