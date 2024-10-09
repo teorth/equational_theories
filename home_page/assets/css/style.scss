@@ -1,9 +1,17 @@
 ---
 ---
 
-/* In this file you can add css rules overriding rules defined by your Jekyll theme.  */
-
-/* Import the CSS from the specified theme */
 @import "{{ site.theme }}";
 
-/* Put your rules below this line */
+.page-header {
+  background-image: linear-gradient(120deg, #1c1c1c, #434343, #b2beb5);
+}
+
+.main-content h1,
+.main-content h2,
+.main-content h3,
+.main-content h4,
+.main-content h5,
+.main-content h6 {
+  color: #1c1c1c;
+}
