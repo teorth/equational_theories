@@ -106,11 +106,13 @@ initialize equationalResultAttr : Unit ←
        let entry := if is_conjecture then entry.toConjecture else entry
 
        -- Add law theorem as well
-       unless is_conjecture do
-       let _ ← match info with
-         | .thmInfo  (val : TheoremVal) =>
-            addLawImplicationThm val.type val.name
-         | _ => pure ()
+       match entry.variant with
+        | .implication  _ =>
+            let _ ← match info with
+              | .thmInfo  (val : TheoremVal) =>
+                 addLawImplicationThm val.type val.name
+              | _ => pure ()
+        | _ => pure ()
 
        modifyEnv fun env =>
          equationalResultsExtension.addEntry env entry
