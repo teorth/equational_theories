@@ -39,4 +39,4 @@ jobs:
       - name: Run lean4lean script
         run: |
           # Install necessary dependencies for python
-          python3 scripts/lean4lean_checker/main.py
+          python scripts/lean4lean_checker/main.py
