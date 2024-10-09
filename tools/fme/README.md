@@ -8,7 +8,7 @@ website.
 
 * You can enter an operation table for a finite magma in a variety of human- and machine-readable formats.
 * It can list all the equations your given magma satisfies, and gives counterexamples to all the equations
-  that it doesn't. You can filter the dispalyed equations by their number or by their structure.
+  that it doesn't. You can filter the displayed equations by their number or by their structure.
 * Double-clicking an equation takes you to corresponding page in the Equation Explorer.
 * If your magma refutes a previously unknown implication, it gives you instructions on how to
   contribute it to `All4x4Tables`.
