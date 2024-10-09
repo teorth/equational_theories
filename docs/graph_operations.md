@@ -4,7 +4,7 @@ The implication and non-implication graphs can be extracted from the current sou
 
 ## Transitive closure and transitive reduction
 
-The [transitive closure](https://en.wikipedia.org/wiki/Transitive_closure#In_graph_theory) of the implication graph calculates the maximum reachable set from a given node, and the [transitive reduction](https://en.wikipedia.org/wiki/Transitive_reduction) calculates the minimal set of edges required to maintain reachability on the graph. Various implemenentations exist in Python ([closure](/scripts/process_implications.py) [reduction](/equational_theories/Generated/SimpleRewrites/src/find_redundant.py)), Ruby ([closure](/scripts/transitive_closure.rb) [reduction](/scripts/transitive_reduction.rb)), and Lean ([closure](/equational_theories/Closure.lean)).
+The [transitive closure](https://en.wikipedia.org/wiki/Transitive_closure#In_graph_theory) of the implication graph calculates the maximum reachable set from a given node, and the [transitive reduction](https://en.wikipedia.org/wiki/Transitive_reduction) calculates the minimal set of edges required to maintain reachability on the graph. Various implementations exist in Python ([closure](/scripts/process_implications.py) [reduction](/equational_theories/Generated/SimpleRewrites/src/find_redundant.py)), Ruby ([closure](/scripts/transitive_closure.rb) [reduction](/scripts/transitive_reduction.rb)), and Lean ([closure](/equational_theories/Closure.lean)).
 
 ## Reducing automated proofs of implications
 
