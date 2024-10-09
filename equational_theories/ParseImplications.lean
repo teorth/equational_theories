@@ -35,6 +35,15 @@ def getEquationName (app : Expr) : Option String := do
     some ("" ++ name.toString)
   | _ => none
 
+def getEquationLeanName (app : Expr) : Option Lean.Name := do
+  match app with
+  | (.app (.app (.const name _) _) _) => some name
+  | _ => none
+
+def getEquationNumber (app : Expr) : Option Nat := do
+  let nm ← getEquationName app
+  nm.replace "Equation" "" |>.toNat?
+
 def isCoreEquationName (s : String) : Bool := Id.run do
   if !s.startsWith "Equation" then return false
   let some n := (s.toSubstring.drop 8).toNat? | return false
@@ -61,6 +70,79 @@ def parseImplication (thm_ty : Expr) : MetaM (Option Implication) := do
     let (.app (.const `Magma _) _) := ← Meta.inferType magma | return none
     let lhs ← Meta.inferType lhsv
     return implicationFromApps lhs rhs
+
+
+ def addLawImplicationThm (thm_ty : Expr) (thm_name : Name) : MetaM Unit := do
+   Meta.forallTelescope thm_ty fun fvars rhs => do
+     let #[g, magma, lhsv] := fvars | failure
+     if !(← Meta.isType g) then failure
+     let (.app (.const `Magma _) _) := ← Meta.inferType magma | failure
+     let lhs ← Meta.inferType lhsv
+     let lhsN := getEquationNumber lhs
+     let rhsN := getEquationNumber rhs
+     let thmName : Name := Name.mkSimple s!"Law{lhsN}_leq_Law{rhsN}"
+     let some lhsName := getEquationLeanName lhs | failure
+     let some rhsName := getEquationLeanName rhs | failure
+     let lhslawName : Name := Name.mkSimple s!"Law{lhsN}"
+     let rhslawName : Name := Name.mkSimple s!"Law{rhsN}"
+     let lhslaw : Expr := mkConst lhslawName
+     let rhslaw : Expr := mkConst rhslawName
+
+     -- Create binders for G and inst
+     let gBinder ←  Meta.mkFreshExprMVar (mkConst `Type)
+     let instBinder ← Meta.mkFreshExprMVar (mkApp (mkConst `Magma) gBinder)
+
+     -- Build the theorem type
+     let thmTy : Expr := mkApp3 (mkConst ``LE.le) (mkConst `Law.NatMagmaLaw) (mkConst lhslawName) (mkConst rhslawName)
+
+     -- Build expressions using binders
+     let satlhs : Expr := mkApp4 (mkConst `satisfies) (mkConst ``Nat) gBinder instBinder lhslaw
+     let satrhs : Expr := mkApp4 (mkConst `satisfies) (mkConst ``Nat) gBinder instBinder rhslaw
+     let eqnlhs : Expr := mkApp2 lhs gBinder instBinder
+     let eqnrhs : Expr := mkApp2 rhs gBinder instBinder
+     let lhs_models_iff : Expr := mkApp2 (mkConst <| lhslawName.appendAfter "models_iff") gBinder instBinder
+     let rhs_models_iff : Expr := mkApp2 (mkConst <| rhslawName.appendAfter "models_iff") gBinder instBinder
+
+     -- Build the implication
+     let impl : Expr := mkApp3 (mkConst thm_name) gBinder instBinder
+       (mkApp4 (mkConst ``Iff.mp) satlhs eqnlhs lhs_models_iff (mkBVar 0))
+
+     -- Build the final proof term
+     let proofTerm : Expr := mkLambda `G BinderInfo.default (mkConst `Type) $
+       mkLambda `inst BinderInfo.instImplicit (mkApp (mkConst `Magma) (mkBVar 0)) $
+       mkLambda `h BinderInfo.default satlhs $
+       mkApp5 (mkConst ``Iff.mpr) satrhs eqnrhs rhs_models_iff impl (mkBVar 0)
+
+     -- Wrap the proof term in forallE expressions
+     let wrappedProofTerm ← Meta.mkForallFVars #[gBinder, instBinder] proofTerm
+
+     -- Very important: typecheck the proof before adding it as a theorem!
+     Meta.check wrappedProofTerm
+     let inferredType ← Meta.inferType wrappedProofTerm
+     if ← Meta.isDefEq inferredType thmTy then
+        -- only adds the theorem if it typechecks!
+        let decl := Declaration.thmDecl {
+          name := thmName,
+          levelParams := [],
+          type := thmTy,
+          value := wrappedProofTerm
+        }
+        addDecl decl
+
+     else
+       let inferredTypeStr ← Meta.ppExpr inferredType
+       let expectedTypeStr ← Meta.ppExpr thmTy
+       IO.println s!"Type mismatch. Expected: {expectedTypeStr}, but got: {inferredTypeStr}"
+       failure
+/-
+LE.le.{0} Law.NatMagmaLaw (Law.MagmaLaw.instLE Nat) Law2 Law3 :=
+fun {G : Type} [inst : Magma.{0} G]
+(h : satisfies Nat G inst Law2) =>
+Iff.mpr (satisfies Nat G inst Law3) (Equation3.{0} G inst) (Law3.models_iff G inst)
+(Subgraph.Equation2_implies_Equation3.{0} G inst (Iff.mp (satisfies Nat G inst Law2)
+(Equation2.{0} G inst) (Law2.models_iff G inst) h))
+-/
+
 
 /--
 Attempts to parse an exisential statement of monoid facts from the type of a theorem.

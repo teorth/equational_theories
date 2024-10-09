@@ -104,6 +104,14 @@ initialize equationalResultAttr : Unit ←
                    | _ => throwError "@[equational_result] is only allowed on theorems"
 
        let entry := if is_conjecture then entry.toConjecture else entry
+
+       -- Add law theorem as well
+       unless is_conjecture do
+       let _ ← match info with
+         | .thmInfo  (val : TheoremVal) =>
+            addLawImplicationThm val.type val.name
+         | _ => pure ()
+
        modifyEnv fun env =>
          equationalResultsExtension.addEntry env entry
     erase := fun _declName =>
@@ -136,6 +144,23 @@ elab_rules : command
     | .implication ⟨lhs, rhs⟩ => println! "{name}: {lhs} → {rhs}"
     | .facts ⟨satisfied, refuted⟩ => println! "{name}: {satisfied} // {refuted}"
     | .unconditional rhs => println! "{name}: {rhs} holds unconditionally"
+
+syntax (name := liftToLaws) "lift_equation_implications_to_laws" : command
+
+-- elab_rules : command
+-- | `(command| lift_equation_implications_to_laws) => do
+--   let rs ← extractTheorems
+--   for ⟨name, _filename, res, _⟩ in rs do
+--     match res with
+--     | .implication ⟨lhs, rhs⟩ =>
+--         let decl := Declaration.thmDecl {
+--                     name := theoremName,
+--                     levelParams := [],
+--                     type := ty,
+--                     value := prf
+--                   }
+--     | .facts ⟨_, _⟩ => return ()
+--     | .unconditional _ => return ()
 
 end Result
 
