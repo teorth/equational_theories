@@ -23,10 +23,10 @@ theorem derive.PreservesOrder {α} (Γ : Ctx α) (n : Nat) (sizeBound : Ctx.IsOf
   rw [or_iff_not_imp_left, ← ne_eq]
   intro h2
   induction h with
-  | Ax E h => exact sizeBound E h
-  | Ref t => simp at h2
-  | Sym t u _ ih => simpa [MagmaLaw.order, min_comm] using ih h2.symm
-  | Trans t u v _ _ ih₁ ih₂ =>
+  | Ax h => exact sizeBound _ h
+  | Ref => simp at h2
+  | Sym _ ih => simpa [MagmaLaw.order, min_comm] using ih h2.symm
+  | @Trans t u v _ _ ih₁ ih₂ =>
     simp at ih₁ ih₂ h2 ⊢
     by_cases h : t = u
     · subst h
@@ -35,15 +35,16 @@ theorem derive.PreservesOrder {α} (Γ : Ctx α) (n : Nat) (sizeBound : Ctx.IsOf
     · subst h3
       exact ih₁ h2
     exact ⟨ih₁ h |>.1, ih₂ h3 |>.2⟩
-  | Subst t u σ _ ih =>
+  | @Subst t u σ _ ih =>
     simp at ih h2 ⊢
     specialize ih (by rintro rfl; contradiction)
     exact ⟨ih.1.trans <| t.orderLtSubst σ, ih.2.trans <| u.orderLtSubst σ⟩
-  | Cong t₁ t₂ u₁ u₂ _ _ ih₁ ih₂ =>
+  | @Cong t₁ t₂ u₁ u₂ _ _ ih₁ ih₂ =>
     simp at ih₁ ih₂ h2 ⊢
     by_cases h : t₁ = t₂ <;> [specialize ih₂ (h2 h); specialize ih₁ h] <;> omega
 
-theorem models.PreservesOrder {α} (Γ : Ctx α) (n : Nat)(sizeBound : Ctx.IsOfOrder Γ n) (E : MagmaLaw α)(h : Γ ⊧ E) :
-  E.lhs = E.rhs ∨ n ≤ MagmaLaw.order E := by
-  have ⟨ h ⟩ := Completeness _ _ h
+theorem models.PreservesOrder {α} (Γ : Ctx α) (n : Nat)
+    (sizeBound : Ctx.IsOfOrder Γ n) (E : MagmaLaw α) (h : Γ ⊧ E) :
+    E.lhs = E.rhs ∨ n ≤ MagmaLaw.order E := by
+  have ⟨h⟩ := Completeness h
   apply derive.PreservesOrder <;> trivial
