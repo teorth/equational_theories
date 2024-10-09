@@ -75,9 +75,18 @@ def parseImplication (thm_ty : Expr) : MetaM (Option Implication) := do
     let lhs ← Meta.inferType lhsv
     return implicationFromApps lhs rhs
 
-#check mkBVarEx
-#check mkBVar
+/--
+Builds an implication of Laws from the implication of theorems. It should look something like:
 
+```
+LE.le.{0} Law.NatMagmaLaw (Law.MagmaLaw.instLE Nat) LawN LawM :=
+fun {G : Type} [inst : Magma.{0} G]
+(h : satisfies Nat G inst LawN) =>
+Iff.mpr (satisfies Nat G inst LawM) (EquationM.{0} G inst) (LawM.models_iff G inst)
+(Subgraph.EquationN_implies_EquationM.{0} G inst (Iff.mp (satisfies Nat G inst LawN)
+(EquationN.{0} G inst) (LawN.models_iff G inst) h))
+```
+-/
  def addLawImplicationThm (thm_ty : Expr) (thm_name : Name) : MetaM Unit := do
    Meta.forallTelescope thm_ty fun fvars rhs => do
      let #[g, magma, lhsv] := fvars | failure
@@ -86,6 +95,8 @@ def parseImplication (thm_ty : Expr) : MetaM (Option Implication) := do
      let lhs ← Meta.inferType lhsv
      let some lhsN := getEquationNumber lhs | failure
      let some rhsN := getEquationNumber rhs | failure
+     let some lhsName := getEquationLeanName lhs | failure
+     let some rhsName := getEquationLeanName rhs | failure
 
      -- Build the theorem type
      let thmName : Name := Name.mkSimple s!"Law{lhsN}_leq_Law{rhsN}"
@@ -96,38 +107,38 @@ def parseImplication (thm_ty : Expr) : MetaM (Option Implication) := do
      let thmTy : Expr := mkApp3 (mkConst ``LE.le) (mkConst ``Law.NatMagmaLaw) (mkConst lhslawName) (mkConst rhslawName)
 
      -- Create binders for G and inst
-     let gBinder ← Meta.mkFreshExprMVar (Lean.mkSort Lean.levelOne)
-     let instBinder ← Meta.mkFreshExprMVar (mkApp (mkConst ``Magma (us:=[Lean.levelZero])) gBinder)
-     let satlhs : Expr := mkApp4 (mkConst ``satisfies) (mkConst ``Nat) gBinder instBinder lhslaw
-     let hBinder ← Meta.mkFreshExprMVar satlhs
+     let type0 := (Lean.mkSort Lean.levelOne)
+     let proofTerm : Expr ←
+       Meta.withLocalDeclD `G type0 fun G =>
+         let instType := mkApp (mkConst ``Magma (us:=[Lean.levelZero])) G
+         Meta.withLocalDeclD `inst instType fun inst =>
+           let satlhs : Expr := mkApp4 (mkConst ``satisfies) (mkConst ``Nat) G inst lhslaw
+           Meta.withLocalDeclD `h satlhs fun h =>
+             -- Build expressions in body of proof term (using binders)
+             let satrhs : Expr := mkApp4 (mkConst ``satisfies) (mkConst ``Nat) G inst rhslaw
+             let eqnlhs : Expr := mkApp2 (mkConst lhsName) G inst
+             let eqnrhs : Expr := mkApp2 (mkConst rhsName) G inst
+             let lhs_models_iff : Expr := mkApp2 (mkConst <| Name.str lhslawName "models_iff") G inst
+             let rhs_models_iff : Expr := mkApp2 (mkConst <| Name.str rhslawName "models_iff") G inst
 
-     -- Build expressions in body of proof term (using binders)
-     let satrhs : Expr := mkApp4 (mkConst ``satisfies) (mkConst ``Nat) gBinder instBinder rhslaw
-     let eqnlhs : Expr := mkApp2 lhs gBinder instBinder
-     let eqnrhs : Expr := mkApp2 rhs gBinder instBinder
-     let lhs_models_iff : Expr := mkApp2 (mkConst <| Name.str lhslawName "models_iff") gBinder instBinder
-     let rhs_models_iff : Expr := mkApp2 (mkConst <| Name.str rhslawName "models_iff") gBinder instBinder
+             -- Build the implication
+             let impl : Expr := mkApp3 (mkConst thm_name) G inst
+               (mkApp4 (mkConst ``Iff.mp) h eqnlhs lhs_models_iff G)
 
-     -- Build the implication
-     let impl : Expr := mkApp3 (mkConst thm_name) gBinder instBinder
-       (mkApp4 (mkConst ``Iff.mp) hBinder eqnlhs lhs_models_iff gBinder)
+             -- Build the final proof term
+             -- let proofTerm : Expr := --Meta.mkLambdaFVars #[gBinder, instBinder, hBinder] <|
+             --      .forallE `G type0 (binderInfo := .implicit) <|
+             --        .forallE `inst (binderInfo := .instImplicit) inst <|
+             --          .forallE `h (binderInfo := .default) h <|
+             let proofBody : Expr := mkApp5 (mkConst ``Iff.mpr) satrhs eqnrhs rhs_models_iff impl G
+             Meta.mkForallFVars #[G, inst, h] proofBody
 
-     -- Build the final proof term
-     let proofTerm : Expr := --Meta.mkLambdaFVars #[gBinder, instBinder, hBinder] <|
-          mkLambda `G BinderInfo.implicit gBinder <|
-          mkLambda `inst BinderInfo.instImplicit instBinder <|
-          mkLambda `h BinderInfo.default hBinder <|
-          mkApp5 (mkConst ``Iff.mpr) satrhs eqnrhs rhs_models_iff impl gBinder
-
-     -- Wrap the proof term in forallE expressions
-     let wrappedProofTerm ← Meta.mkForallFVars #[gBinder, instBinder] proofTerm
-
-     logInfo "built term : checking"
+     logInfo s!"built term {proofTerm}: checking"
      -- Very important: typecheck the proof before adding it as a theorem!
-     Meta.check wrappedProofTerm
+     Meta.check proofTerm
      logInfo "proof term type correct"
 
-     let inferredType ← Meta.inferType wrappedProofTerm
+     let inferredType ← Meta.inferType proofTerm
      logInfo "type inferred"
      if ← Meta.isDefEq inferredType thmTy then
         -- only adds the theorem if it typechecks!
@@ -135,20 +146,12 @@ def parseImplication (thm_ty : Expr) : MetaM (Option Implication) := do
           name := thmName,
           levelParams := [],
           type := thmTy,
-          value := wrappedProofTerm
+          value := proofTerm
         }
         addDecl decl
 
      else
        throwError (← Meta.mkHasTypeButIsExpectedMsg inferredType thmTy)
-/-
-LE.le.{0} Law.NatMagmaLaw (Law.MagmaLaw.instLE Nat) Law2 Law3 :=
-fun {G : Type} [inst : Magma.{0} G]
-(h : satisfies Nat G inst Law2) =>
-Iff.mpr (satisfies Nat G inst Law3) (Equation3.{0} G inst) (Law3.models_iff G inst)
-(Subgraph.Equation2_implies_Equation3.{0} G inst (Iff.mp (satisfies Nat G inst Law2)
-(Equation2.{0} G inst) (Law2.models_iff G inst) h))
--/
 
 
 /--
