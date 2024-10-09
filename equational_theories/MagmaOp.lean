@@ -58,10 +58,13 @@ theorem satisfiesPhi_op {α G} [Magma G] {l : MagmaLaw α} {φ : α → G}
 theorem satisfies_op_op {α G} [Magma G] {l : MagmaLaw α} (h : (Op G) ⊧ l) : G ⊧ l.op :=
   fun φ ↦ satisfiesPhi_op (h (Magma.opHom ∘ φ))
 
-theorem implies_op {α} {l₁ l₂ : MagmaLaw α} (h : l₁.implies l₂) : l₁.op.implies l₂.op := by
-  intro G inst hsat
-  refine satisfies_op_op (h (law_op_op l₁ ▸ satisfies_op_op hsat))
-
-theorem le_op {α} {l₁ l₂ : MagmaLaw α} (h : l₁ ≤ l₂) : l₁.op ≤ l₂.op := implies_op h
+theorem implies_iff_op {α} {l₁ l₂ : MagmaLaw α} : l₁.implies l₂ ↔ l₁.op.implies l₂.op := by
+  apply Iff.intro
+  · intro h G inst hsat
+    refine satisfies_op_op (h (law_op_op l₁ ▸ satisfies_op_op hsat))
+  · intro h G inst hsat
+    rw [← law_op_op l₂]
+    rw [← law_op_op l₁] at hsat
+    refine satisfies_op_op (h (law_op_op l₁ ▸ satisfies_op_op hsat))
 
 end Law.MagmaLaw
