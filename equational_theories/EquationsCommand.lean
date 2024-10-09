@@ -88,7 +88,7 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
   elabCommand (← `(command| abbrev%$tk $lawIdent : Law.NatMagmaLaw := $tl))
   -- compatibility between the law and the original equation
   elabCommand (← `(command| abbrev%$tk $thmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $lawIdent ↔ $eqIdent G :=
-                    fun G _ ↦ Iff.trans (Law.satisfies_fin_satisfies_nat G $finLawIdent).symm ($finThmName G)))
+                    fun G _ ↦ Iff.trans (Law.satisfies_fin_satisfies_nat G $finLawIdent) ($finThmName G)))
   -- register the law
   -- (The following two lines have been commented out because they cause the build to become very slow.
   -- See https://github.com/teorth/equational_theories/issues/464.)
