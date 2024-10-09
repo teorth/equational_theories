@@ -108,6 +108,7 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
     hints := .abbrev
     safety := .safe
   }
+  setReducibleAttribute eqName
   addMarkup eqName
   have eqConst : Q(∀ (G : Type u) [Magma G], Prop) := .const eqName [u]
 
