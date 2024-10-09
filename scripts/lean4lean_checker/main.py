@@ -8,7 +8,7 @@ import subprocess
 class Lean4LeanChecker():
   def __init__(self) -> None:
     self.project_name = "equational_theories"
-    self.l4l_repo_url = "git@github.com:digama0/lean4lean.git"
+    self.l4l_repo_url = "https://github.com/digama0/lean4lean.git"
     self.toolchain_filename = Path('lean-toolchain')
     self.topPath = Path(os.getcwd())
     self.l4lSubPath = self.topPath.joinpath("./lean4lean")
