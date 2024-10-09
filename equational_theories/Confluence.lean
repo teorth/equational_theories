@@ -17,15 +17,12 @@ theorem Everywhere.top {P : FreeMagma α → Prop} : {x : FreeMagma α} → Ever
 @[simp]
 theorem Everywhere_idem {P : FreeMagma α → Prop} : Everywhere (Everywhere P) = Everywhere P := by
   ext x
-  constructor
-  · intro h
-    induction x with
+  constructor <;> intro h
+  · induction x with
     | Leaf => exact h
     | Fork x y ihx ihy => exact ⟨ihx h.1, ihy h.2.1,  h.2.2.2.2⟩
-  · intro h
-    induction x with
-    | Leaf =>
-      exact h
+  · induction x with
+    | Leaf => exact h
     | Fork x y ihx ihy => exact ⟨ihx h.1, ihy h.2.1, h⟩
 
 def SubtermOf (x : FreeMagma α) : (y : FreeMagma α) → Prop
@@ -43,15 +40,15 @@ theorem everywhere_of_subterm_of_everywhere {P : FreeMagma α → Prop} {x} (h :
   induction x with
   | Leaf =>
     cases hsub
-    apply h.top
+    exact h.top
   | Fork x y ihx ihy =>
     obtain (rfl | hsub | hsub) := hsub
-    · apply h
-    · apply ihx h.1 hsub
-    · apply ihy h.2.1 hsub
+    · exact h
+    · exact ihx h.1 hsub
+    · exact ihy h.2.1 hsub
 
-theorem subterm_everywhere {P : FreeMagma α → Prop} {x} (h : x.Everywhere P) {y} (hsub : SubtermOf y x) : P y := by
-  apply (everywhere_of_subterm_of_everywhere h hsub).top
+theorem subterm_everywhere {P : FreeMagma α → Prop} {x} (h : x.Everywhere P) {y} (hsub : SubtermOf y x) : P y :=
+  (everywhere_of_subterm_of_everywhere h hsub).top
 
 class IsProj (rw : FreeMagma α → FreeMagma α) : Prop where
   proj : ∀ x, SubtermOf (rw x) x
@@ -65,7 +62,6 @@ theorem projection_everywhere
     (rw : FreeMagma α → FreeMagma α) [IsProj rw] P :
     ∀ x, Everywhere P x → P (rw x) :=
   fun x he ↦ subterm_everywhere he (IsProj.proj x)
-
 
 end FreeMagma
 
@@ -88,21 +84,17 @@ def NF (x : FreeMagma α) : Prop := x.Everywhere (fun y => bu rw y = y)
 def bu_nf [hproj : IsProj rw] : ∀ x, NF rw (bu rw x) := by
   intro x
   induction x with
-  | Leaf =>
-    simp [NF, bu, Everywhere]
+  | Leaf => simp [NF, bu, Everywhere]
   | Fork x y ihx ihy =>
     simp only [NF, bu]
     have hsub := hproj.proj (bu rw x ⋆ bu rw y)
     obtain (heq | hsub | hsub) := hsub
-    · apply everywhere_of_projection_of_everywhere
-      refine ⟨ihx, ihy, ?_⟩
-      dsimp
+    · refine everywhere_of_projection_of_everywhere _ _ _ ⟨ihx, ihy, ?_⟩
       simp [bu, Everywhere, *, ihx.top, ihy.top]
     · exact everywhere_of_subterm_of_everywhere ihx hsub
     · exact everywhere_of_subterm_of_everywhere ihy hsub
 
-theorem idem_of_NF {x : FreeMagma α} (h : NF rw x) : bu rw x = x := by
-  apply h.top
+theorem idem_of_NF {x : FreeMagma α} (h : NF rw x) : bu rw x = x := h.top
 
 variable [IsProj rw]
 
@@ -111,10 +103,10 @@ variable [IsProj rw]
 def ConfMagma := {x : FreeMagma α // bu rw x = x }
 
 instance : Coe α (ConfMagma rw) where
-  coe x := ⟨x, by rfl⟩
+  coe x := ⟨x, rfl⟩
 
 instance : Magma (ConfMagma rw) where
-  op := fun x y => ⟨bu rw (x.1 ◇ y.1), bu_idem rw _⟩
+  op := fun x y ↦ ⟨bu rw (x.1 ◇ y.1), bu_idem rw _⟩
 
 instance [DecidableEq α] : DecidableEq (ConfMagma rw) :=
   inferInstanceAs (DecidableEq {x : FreeMagma α // bu rw x = x })
