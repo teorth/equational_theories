@@ -10,7 +10,8 @@ import re
 import sys
 
 ALLOWED_SYMBOL_NAMES = "xyzuvw"
-EQUATIONS_FILENAMES = [f"../equational_theories/Equations/Eqns{file}.lean" for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]]
+EQUATIONS_FILENAMES = [f"../equational_theories/Equations/Eqns{file}.lean"
+                        for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]]
 EXAMPLE_MAGMA_TABLE = "[[2, 2, 0, 3], [2, 2, 1, 0], [2, 2, 0, 3], [2, 3, 1, 0]]"
 
 

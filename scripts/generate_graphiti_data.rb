@@ -14,7 +14,7 @@ end
 
 equations = {}
 ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"].each { |i|
-  File.read(File.join(__dir__, "../../../Equations/Eqns#{i}.lean")).split("\n").each { |s|
+  File.read(File.join(__dir__, "../equational_theories/Equations/Eqns#{i}.lean")).split("\n").each { |s|
     if s =~ /equation\s*(\d+)\s*:=\s*(.+)/
       equations[$1.to_i] = $2
     end
