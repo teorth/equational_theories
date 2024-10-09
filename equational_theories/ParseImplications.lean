@@ -5,6 +5,7 @@ import Lean.Util
 -- Imports for ensuring names are correct with ``
 import equational_theories.FreeMagma
 import equational_theories.MagmaLaw
+import equational_theories.Preorder
 
 open Lean
 
@@ -99,12 +100,12 @@ Iff.mpr (satisfies Nat G inst LawM) (EquationM.{0} G inst) (LawM.models_iff G in
      let some rhsName := getEquationLeanName rhs | failure
 
      -- Build the theorem type
-     let lawThmName : Name := Name.mkSimple s!"Law{lhsN}_leq_Law{rhsN}"
+     let lawThmName : Name := Name.mkSimple s!"Law{lhsN}_implies_Law{rhsN}"
      let lhslawName : Name := Name.mkSimple s!"Law{lhsN}"
      let rhslawName : Name := Name.mkSimple s!"Law{rhsN}"
      let lhslaw : Expr := mkConst lhslawName
      let rhslaw : Expr := mkConst rhslawName
-     let thmTy : Expr := mkApp3 (mkConst ``LE.le) (mkConst ``Law.NatMagmaLaw) (mkConst lhslawName) (mkConst rhslawName)
+     let lawThmTy : Expr := mkApp3 (mkConst ``Law.MagmaLaw.implies) (mkConst ``Nat) (mkConst lhslawName) (mkConst rhslawName)
 
      -- Create binders for G and inst
      let type0 := (Lean.mkSort Lean.levelOne)
@@ -128,21 +129,18 @@ Iff.mpr (satisfies Nat G inst LawM) (EquationM.{0} G inst) (LawM.models_iff G in
      -- Very important: typecheck the proof before adding it as a theorem!
      Meta.check proofTerm
      let inferredType ← Meta.inferType proofTerm
-     logInfo "type inferred"
      Meta.withTransparency .all do
-       if ← Meta.isDefEq inferredType thmTy then
+       if ← Meta.isDefEq inferredType lawThmTy then
           -- only adds the theorem if it typechecks!
           let decl := Declaration.thmDecl {
             name := lawThmName,
             levelParams := [],
-            type := thmTy,
+            type := lawThmTy,
             value := proofTerm
           }
           addDecl decl
        else
-         throwError (← Meta.mkHasTypeButIsExpectedMsg inferredType thmTy)
-
-#check Meta.isDefEq
+         throwError (← Meta.mkHasTypeButIsExpectedMsg inferredType lawThmTy)
 
 /--
 Attempts to parse an exisential statement of monoid facts from the type of a theorem.
