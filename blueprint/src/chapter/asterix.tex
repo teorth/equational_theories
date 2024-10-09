@@ -14,13 +14,13 @@ where $f^2 = f \circ f$, so the Asterix equation (\Cref{eq65}) for such magmas s
 \end{equation}
 for $h \in G$.
 
-This equation has some degenerate solutions, for instance we can take $f(h) = c$ for any constant $c$ of order $3$ in $G$.  It is challenging to construct more interesting solutions to this equation; however, we can do if $G$ is the free abelian group on countably many generators (concretely, one can think of $G$ as the space of formal finite integer linear combinations $a_1 e_1 + \dots + a_n e_n$ of some generators $e_1, e_2, \dots$) by a greedy algorithm.  We need the following technical definition.
+This equation has some degenerate solutions, for instance we can take $f(h) = c$ for any constant $c$ of order $3$ in $G$.  It is challenging to construct more interesting solutions to this equation; however, we can do this if $G=\Z$ by a greedy algorithm.  We need the following technical definition.
 
-\begin{definition}\label{partial-solution}  Let $G$ be the free abelian group on countably many generators.  A \emph{partial solution} $(E_0, E_1, E_2, f)$ to \eqref{fh} consists of nested finite sets
-$$ E_0 \subset E_1 \subset E_2 \subset G$$ together with a function $f: E_1 \to E_2$ with the following properties:
+\begin{definition}\label{partial-solution}  A \emph{partial solution} $(E_0, E_1, E_2, f)$ to \eqref{fh} consists of nested finite sets
+$$ E_0 \subset E_1 \subset E_2 \subset \Z$$ together with a function $f: E_1 \to E_2$ with the following properties:
 \begin{itemize}
   \item[(a)] If $h \in E_0$, then $f(h) \in E_1$, so that $f^2(h)$ is well-defined as an element of $E_2$; furthermore, $h + f(h) + f^2(h)$ lies in $E_1$, so that the left-hand side of \eqref{fh} makes sense; and \eqref{fh} holds.
-  \item[(b)] If $k \in E_2 \backslash E_1$, then there is a unique $h \in E_1 \backslash E_0$ such that $f(h)=k$.
+  \item[(b)] The function $f$ is a bijection from $E_1 \backslash E_0$ to $E_2 \backslash E_0$.
 \end{itemize}
 
 We partially order the space of partial solutions to \eqref{fh} by writing $(E_0, E_1, E_2, f) \leq (E'_0, E'_1, E'_2, f')$ if the following properties hold:
@@ -34,17 +34,118 @@ We define the \emph{empty partial solution} $(E_0,E_1,E_2,f)$ by setting $E_0=E_
 \end{definition}
 
 
-We have the following iterative construction:
+We have the following iterative construction, that lets us add arbitrary elements to the core domain $E_0$:
 
-\begin{lemma}[Enlarging a partial solution]\label{iteration}\uses{partial-solution} Let $(E_0, E_1, E_2, f)$ be a partial solution to \eqref{fh}, and let $h_0$ be an element of $G$ that does not lie in $E_0$.  Then there exists a partial solution $(E'_2, E'_1, E'_0, f')$ to \eqref{fh} that extends $(E_2, E_1, E_0, f)$, such that $h \in E_2'$.
+\begin{lemma}[Enlarging a partial solution]\label{iteration}\uses{partial-solution} Let $(E_0, E_1, E_2, f)$ be a partial solution to \eqref{fh}, and let $h$ be an element of $\Z$ that does not lie in $E_0$.  Then there exists a partial solution $(E'_0, E'_1, E'_2, f')$ to \eqref{fh} that extends $(E_0, E_1, E_2, f)$, such that $h \in E_0'$.
 \end{lemma}
 
-\begin{proof}  The element $h$ lies in either $G \backslash E_0$, $E_0 \backslash E_1$, or $E_1 \backslash E_2$.  We therefore divide into three cases.
+\begin{proof}  Because $f$ maps $E_1 \backslash E_0$ bijectively to $E_2 \backslash E_1$, there are three cases:
+\begin{itemize}
+  \item $h$ is equal to an element $h_0$ of $G \backslash E_2$.
+  \item $h$ is equal to an element $h_0$ of $E_1 \backslash E_0$.
+  \item $h$ is equal to $h_1 = f(h_0)$ for some $h_0 \in E_1 \backslash E_0$, so that $h_1 \in E_2 \backslash E_1$.
+\end{itemize}
 
-{\bf Case 1: $h \in G \backslash E_0$.}  We perform the following construction.
+We deal with these three cases in turn.
+
+First suppose that $h = h_0\in G \backslash E_2$.  We perform the following construction.
 
 \begin{itemize}
-  \item Choose elements $h_1, h_2 \in G$ such that $h_1, h_2, h_
+  \item Choose an element $h_1 \in \Z$ that does not lie in $E_2 \cup \{h_0\}$; this is possible because $E_2$ is finite.
+  \item Choose an element $h_2 \in \Z$ such that $h_2, h_0+h_1+h_2$, and $-h_1-h_2$ are all distinct from each other and lie outside of $E_2 \cup \{h_0, h_1\}$; this is possible because $E_2$ is finite.
+  \item Promote $h_0$ to $E_0$, promote $h_1, h_0+h_1+h_2$ to $E_1$, and promote $h_2, -h_1-h_2$ to $E_2$, creating new sets
+  \begin{align*}
+    E'_0 &:= E_0 \cup \{h_0\} \\
+    E'_1 &:= E_1 \cup \{h_0, h_1, h_0+h_1+h_2\} \\
+    E'_2 &:= E_2 \cup \{h_0, h_1, h_0+h_1+h_2, h_2, -h_1-h_2\}.
+  \end{align*}
+  Clearly we still have nested finite sets $E'_0 \subset E'_1 \subset E'_2$.
+  \item Extend $f : E_1 \to E_0$ to a function $f': E'_1 \to E'_0$ by defining
+  \begin{align*}
+    f'(h_0) &:= h_1 \\
+    f'(h_1) &:= h_2 \\
+    f'(h_0+h_1+h_2) &:= -h_1-h_2
+  \end{align*}
+  while keeping $f'(h)=f(h)$ for all $h \in E_1$.
+\end{itemize}
+It is then a routine matter to verify that $(E'_0,E'_1,E'_2,f')$ is a partial solution to \eqref{fh} extending $(E_0,E_1,E_2,f)$ and that $E'_0$ contains $h_0$, as required.
 
-  \not \in E_0$; this is possible since $E_0$ is finite.
-  \item Choose an element $h_2 \in G$ such that
+Now suppose that $h = h_0 \in E_1 \backslash E_0$, then the quantity $h_1 := f(h_0)$ lies in $E_2 \backslash E_1$.  We perform the following variant of the above construction:
+\begin{itemize}
+\item Choose an element $h_2 \in \Z$ such that $h_2, h_0+h_1+h_2$, and $-h_1-h_2$ are all distinct and lie outside of $E_2$.  This is possible because $E_2$ is finite.
+\item Promote $h_0$ to $E_0$, promote $h_1$ and $h_0+h_1+h_2$ to $E_1$, and promote $h_2, -h_1-h_2$ to $E_2$, thus creating new sets
+\begin{align*}
+  E'_0 &:= E_0 \cup \{h_0\} \\
+  E'_1 &:= E_1 \cup \{h_1, h_0+h_1+h_2\} \\
+  E'_2 &:= E_2 \cup \{h_0+h_1+h_2, h_2, -h_1-h_2\}.
+\end{align*}
+Clearly we still have nested finite sets $E'_0 \subset E'_1 \subset E'_2$.
+\item Extend $f : E_1 \to E_0$ to a function $f': E'_1 \to E'_0$ by defining
+\begin{align*}
+  f'(h_1) &:= h_2 \\
+  f'(h_0+h_1+h_2) &:= -h_1-h_2
+\end{align*}
+while keeping $f'(h)=f(h)$ for all $h \in E_1$.
+\end{itemize}
+It is then a routine matter to verify that $(E'_0,E'_1,E'_2,f')$ is a partial solution to \eqref{fh} extending $(E_0,E_1,E_2,f)$ and that $E'_0$ contains $h_0$, as required.
+
+Finally, suppose that $h = h_1 = f(h_0)$ for some $h_0 \in E_1 \backslash E_0$, so that $h_1 \in E_2 \backslash E_1$.  Then we perform the following algorithm.
+\begin{itemize}
+  \item Choose an element $h_2 \in \Z$ such that $h_2, h_0+h_1+h_2$, and $-h_1-h_2$ are all distinct and lie outside of $E_2$.  This is possible because $E_2$ is finite.
+  \item Choose an element $h_3 \in \Z$ such that $h_3, h_1+h_2+h_3$, and $-h_2-h_3$ are all distinct and lie outside of $E_2 \cup \{h_2, h_0+h_1+h_2,-h_1-h_2\}$.  This is possible because $E_2$ is finite.
+  \item Promote $h_0, h_1$ to $E_0$, promote $h_2, h_0+h_1+h_2, h_1+h_2+h_3$ to $E_1$, and promote $h_3, -h_1-h_2,-h_2-h_3$ to $E_2$, creating new sets
+\begin{align*}
+  E'_0 &:= E_0 \cup \{h_0, h_1 \}\\
+  E'_1 &:= E_1 \cup \{h_1, h_2, h_0+h_1+h_2, h_1+h_2+h_3 \}\\
+  E'_2 &:= E_2 \cup \{h_2, h_3, h_0+h_1+h_2, h_1+h_2+h_3, -h_1-h_2, -h_2-h_3\}.
+\end{align*}
+Clearly we still have nested finite sets $E'_0 \subset E'_1 \subset E'_2$.
+\item Extend $f : E_1 \to E_0$ to a function $f': E'_1 \to E'_0$ by defining
+\begin{align*}
+  f'(h_1) &:= h_2 \\
+  f'(h_0+h_1+h_2) &:= -h_1-h_2
+  f'(h_2) &:= h_3 \\
+  f'(h_1+h_2+h_3) &:= -h_2-h_3
+\end{align*}
+while keeping $f'(h)=f(h)$ for all $h \in E_1$.
+\end{itemize}
+It is then a routine matter to verify that $(E'_0,E'_1,E'_2,f')$ is a partial solution to \eqref{fh} extending $(E_0,E_1,E_2,f)$ and that $E'_0$ contains $h_0$, as required.
+\end{proof}
+
+\begin{corollary} \label{extend}\uses{partial-solution} Every partial solution $(E_0,E_1,E_2,f)$ to \eqref{fh} can be extended to a full solution $\tilde f: \Z \to \Z$.
+\end{corollary}
+
+\begin{proof}\uses{iteration}
+  If we arbitrarily well-order the integers, and iterate \Cref{iteration} to add the least element of $\Z \backslash E_0$ in this well-ordering to $E_0$, we obtain an increasing sequence $(E^{(n)}_0, E^{(n)}_1, E^{(n)}_2, f^{(n)})$ of partial solutions to \eqref{fh}, where the $E^{(n)}_0$ exhaust $\Z$: $\bigcup_{n=1}^\infty E^{(n)}_0 = \Z$.  Taking limits, we obtain a full solution $\tilde f$.
+\end{proof}
+
+\begin{corollary}\label{no-inject}  There exists a solution $f:\Z \to \Z$ to \eqref{fh} such that the map $h \mapsto h + f(h)$ is not injective.
+\end{corollary}
+
+\begin{proof}  Select integers $h_0,h_1,h_2,h'_0,h'_1,h'_2$ such that the quantities
+  $$ h_0, h_1, h_2, h_0+h_1+h_2, -h_1-h_2, h'_0, h'_1, h'_2, h'_0+h'_1+h'_2, -h'_1-h'_2$$
+  are all distinct, but such that
+  $$ h_0 + h_1 = h'_0 + h'_1$$
+  (there are many assignments of variables that accomplish this).  Then set
+\begin{align*}
+  E_0 &:= \{h_0, h'_0\}\\
+  E_1 &:= E_0 \cup \{ h_1, h'_1, h_0+h_1+h_2, h'_0+h'_1+h'_2\}\\
+  E_2 &:= E_2 \cup \{ -h_1-h_2, -h'_1-h'_2\}
+\end{align*}
+and define $f: E_1 \to E_2$ by the formulae
+\begin{align*}
+  f(h_0) &:= h_1 \\
+  f(h_1) &:= h_2 \\
+  f(h_0+h_1+h_2) &:= -h_1-h_2 \\
+  f(h'_0) &:= h'_1 \\
+  f(h'_1) &:= h'_2 \\
+  f(h'_0+h'_1+h'_2) &:= -h'_1-h'_2.
+\end{align*}
+One can then check that $(E_0, E_1, E_2, f)$ is a partial solution to \eqref{fh}, and by construction $h \mapsto h + f(h)$ is not injective on $E_1$.  Using \Cref{iteration} to extend this partial solution to a full solution, we obtain the claim.
+\end{proof}
+
+\begin{corollary}  There exists a magma obeying the Asterix law (\Cref{eq65}) with carrier $\Z$ such that the left-multiplication maps $L_y: x \mapsto y \op x$ are not injective for any $y \in \Z$.  In particular, it does not obey the Obelix law (\Cref{eq1491})
+\end{corollary}
+
+\begin{proof} Note that $L_y (y+h) = y + h + f(h)$, so the injectivity of the left-multiplication maps is equivalent to the injectivity of the map $h \mapsto h + f(h)$.  The non-injectivity then follows from \Cref{no-inject}. Note that the Obelix law clearly expresses $x$ as a function of $y$ and $L_y x = y \op x$, forcing injectivity of left-multiplication, so the Obelix law fails.
+\end{proof}
