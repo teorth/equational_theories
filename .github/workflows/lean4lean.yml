@@ -39,6 +39,4 @@ jobs:
       - name: Run lean4lean script
         run: |
           # Install necessary dependencies for python
-          python3 -m venv scripts/lean4lean_checker
-          source scripts/lean4lean_checker/bin/activate
-          # scripts/lean4lean_checker/bin/python3 scripts/lean4lean_checker/main.py
+          python3 scripts/lean4lean_checker/main.py
