@@ -548,8 +548,8 @@ theorem Equation3588_not_implies_Equation3944 : ∃ (G : Type) (_ : Magma G), Eq
   use 1, 1, 1
   simp [magN]
 
-theorem Finite.two_variables_laws {α: Type} [Fintype α] (_: Fintype.card α = 2) (E: Law.MagmaLaw α) :
-  ∃ (G : Type) (_ : Magma G) (_: Finite G), satisfies G E ∧ ¬Equation2 G := by
+theorem Finite.two_variables_laws {α: Type} [Fintype α] (_ : Fintype.card α = 2) (E : Law.MagmaLaw α) :
+  ∃ (G : Type) (_ : Magma G) (_ : Finite G), G ⊧ E ∧ ¬Equation2 G := by
   match E with
   | ⟨FreeMagma.Fork _ _, FreeMagma.Fork _ _⟩ =>
     -- an arbitrary magma with at least 2 elements satisfying the constant law
@@ -586,6 +586,15 @@ theorem Finite.two_variables_laws {α: Type} [Fintype α] (_: Fintype.card α = 
         simp only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
     .
       sorry
-  | _ => sorry
+  | ⟨w ⋆ w', FreeMagma.Leaf x⟩
+  | ⟨FreeMagma.Leaf x, w ⋆ w'⟩ =>
+    let G: Type := by sorry
+    let M: Magma G := by sorry
+    exists G, M, (by sorry)
+    suffices h: G ⊧ (Lf x ≃ w ⋆ w') ∧ ¬Equation2 G by
+      simp only [h, Law.satisfies_symm, not_false_eq_true, and_self]
+    sorry
+
+
 
 end InfModel
