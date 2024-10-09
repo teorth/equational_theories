@@ -588,11 +588,10 @@ theorem Finite.two_variables_laws {α: Type} [Fintype α] (_ : Fintype.card α =
       sorry
   | ⟨w ⋆ w', FreeMagma.Leaf x⟩
   | ⟨FreeMagma.Leaf x, w ⋆ w'⟩ =>
-    let G: Type := by sorry
-    let M: Magma G := by sorry
-    exists G, M, (by sorry)
-    suffices h: G ⊧ (Lf x ≃ w ⋆ w') ∧ ¬Equation2 G by
-      simp only [h, Law.satisfies_symm, not_false_eq_true, and_self]
+    suffices h: ∃ (G : Type) (_ : Magma G) (_ : Finite G), G ⊧ (Lf x ≃ w ⋆ w') ∧ ¬Equation2 G by
+      obtain ⟨G, ⟨M, ⟨hf, h⟩⟩⟩ := h
+      exists G, M, hf
+      try simp only [h, Law.satisfies_symm, not_false_eq_true, and_self]
     sorry
 
 
