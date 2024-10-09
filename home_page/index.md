@@ -9,7 +9,7 @@ usemathjax: true
 ![Hasse diagram of selected equations](https://github.com/teorth/equational_theories/blob/main/images/subgraph.png?raw=true)
 
 The purpose of this project, launched on Sep 25, 2024, is to explore the space of equational theories of [magmas](https://en.wikipedia.org/wiki/Magma_(algebra)), ordered by implication. To begin with we shall focus only on theories of a single equation, and specifically on the 4694 equational laws
-involving at most four magma operations, up to symmetry and relabeling (here is the list [in Lean](https://github.com/teorth/equational_theories/blob/main/equational_theories/AllEquations.lean) and in [plain text](https://github.com/teorth/equational_theories/blob/main/data/equations.txt)). This creates 4694*(4694-1) = 22,028,942 implications that need to be proven or disproven, creating both "implications" and "anti-implications".
+involving at most four magma operations, up to symmetry and relabeling (here is the list [in Lean](https://github.com/teorth/equational_theories/blob/main/equational_theories/Equations/All.lean) and in [plain text](https://github.com/teorth/equational_theories/blob/main/data/equations.txt)). This creates 4694*(4694-1) = 22,028,942 implications that need to be proven or disproven, creating both "implications" and "anti-implications".
 
 We will accumulate both "proven" and "conjectured" implications and anti-implications: proven assertions will be verified in the proof assistant language [Lean](https://www.lean-lang.org/), and "conjectured" assertions represent all claims (either human-generated or computer-generated) that have not yet been verified in Lean.  The current status of the project can be found on the [dashboard](https://teorth.github.io/equational_theories/dashboard/).
 
@@ -95,7 +95,7 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - Lean
         - [`extract_implications`](https://github.com/teorth/equational_theories/blob/main/scripts/extract_implications.lean) - extracts implications from one or more Lean files. This outputs the "ground truth" of implication data, for use by other scripts
     - Python
-        - [`explore_magma`](https://github.com/teorth/equational_theories/blob/main/scripts/explore_magma.py) - test a given magma table against all or a subset of the equations in [`AllEquations.lean`](https://github.com/teorth/equational_theories/blob/main/equational_theories/AllEquations.lean)
+        - [`explore_magma`](https://github.com/teorth/equational_theories/blob/main/scripts/explore_magma.py) - test a given magma table against all or a subset of the equations in [`Equations/All.lean`](https://github.com/teorth/equational_theories/blob/main/equational_theories/Equations/All.lean)
         - [`find_dual`](https://github.com/teorth/equational_theories/blob/main/scripts/find_dual.py) - finds the dual of an equation
         - [`find_equation_id`](https://github.com/teorth/equational_theories/blob/main/scripts/find_equation_id.py) - finds the equation number of an equation string
         - [`find_powerful_theorems.py`](https://github.com/teorth/equational_theories/blob/main/scripts/find_powerful_theorems.py) - finds theorems that, if proved, would imply many others

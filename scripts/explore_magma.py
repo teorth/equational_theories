@@ -10,7 +10,7 @@ import re
 import sys
 
 ALLOWED_SYMBOL_NAMES = "xyzuvw"
-EQUATIONS_FILENAME = "../equational_theories/AllEquations.lean"
+EQUATIONS_FILENAMES = [f"../equational_theories/Equations/Eqns{file}.lean" for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]]
 EXAMPLE_MAGMA_TABLE = "[[2, 2, 0, 3], [2, 2, 1, 0], [2, 2, 0, 3], [2, 3, 1, 0]]"
 
 
@@ -34,20 +34,21 @@ def is_expected_equation_format(equation_string):
 
 
 def read_equations_map():
-    filename = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),
-        EQUATIONS_FILENAME,
-    )
-    assert filename
     equations_map = {}
-    with open(filename, "r", encoding="utf-8") as equations_file:
-        for line in equations_file:
-            line = line.rstrip("\n")
-            equation_match = re.search(r"equation (\d+) := (.+?)$", line)
-            if equation_match:
-                equation_id, equation = equation_match.groups()
-                assert is_expected_equation_format(equation)
-                equations_map[int(equation_id)] = equation
+    for file in EQUATIONS_FILENAMES:
+        filename = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            file,
+        )
+        assert filename
+        with open(filename, "r", encoding="utf-8") as equations_file:
+            for line in equations_file:
+                line = line.rstrip("\n")
+                equation_match = re.search(r"equation (\d+) := (.+?)$", line)
+                if equation_match:
+                    equation_id, equation = equation_match.groups()
+                    assert is_expected_equation_format(equation)
+                    equations_map[int(equation_id)] = equation
     assert min(equations_map.keys()) == 1
     assert max(equations_map.keys()) == len(equations_map)
     return equations_map
@@ -224,7 +225,7 @@ def print_binary_operation_map(binary_operation_map):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Test a given magma table against all or a subset of the predefined equations in `AllEquations.lean`."
+        description="Test a given magma table against all or a subset of the predefined equations in `Equations/All.lean`."
     )
     parser.add_argument(
         "magma_table",
@@ -234,7 +235,7 @@ def main():
     parser.add_argument(
         "--ids",
         type=lambda s: [int(item) for item in s.split(",")],
-        help="A comma-separated list of equation IDs to test the magma table against. If omitted, all equations in `AllEquations.lean` will be tested by default.",
+        help="A comma-separated list of equation IDs to test the magma table against. If omitted, all equations in `Equations/All.lean` will be tested by default.",
     )
     parser.add_argument(
         "--print-only",

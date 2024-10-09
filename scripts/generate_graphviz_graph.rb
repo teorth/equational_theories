@@ -34,12 +34,14 @@ if ARGV.length != 1
 end
 
 $equations = {}
-File.read(File.join(__dir__, '../equational_theories/AllEquations.lean')).split("\n").each { |s|
-  if s =~ /equation (\d+) := (.+)/
-    $equations[$1.to_i] = $2
-  end
+["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"].each { |i|
+  File.read(File.join(__dir__, "../../../Equations/Eqns#{i}.lean")).split("\n").each { |s|
+    if s =~ /equation (\d+) := (.+)/
+      $equations[$1.to_i] = $2
+    end
+  }
 }
-File.read(File.join(__dir__, '../equational_theories/Equations.lean')).split("\n").each { |s|
+File.read(File.join(__dir__, '../equational_theories/Equations/Basic.lean')).split("\n").each { |s|
   if s =~ /abbrev Equation(\d+).*: G, (.+)/
     if !$equations[$1.to_i]
       $equations[$1.to_i] = $2

@@ -213,17 +213,19 @@ end
 
 $equations_num_to_str = {}
 $equations_str_to_num = {}
-equations_file = File.read(File.join(__dir__, "../../../AllEquations.lean"))
+equations_files = ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]
+equations_files.each { |i|
+  $equations_file = File.read(File.join(__dir__, "../../../Equations/Eqns#{i}.lean"))
+  $equations_file.split("\n").each { |s|
+    if s =~ /equation (\d+) := (.+)/
+      num = $1.to_i
+      eq = $2.gsub(/^\s+/, "").gsub(/\s+$/, "")
 
-equations_file.split("\n").each { |s|
-  if s =~ /equation (\d+) := (.+)/
-    num = $1.to_i
-    eq = $2.gsub(/^\s+/, "").gsub(/\s+$/, "")
-
-    # Whitespace could be bad, make sure we trim.
-    $equations_num_to_str[num] = eq
-    $equations_str_to_num[eq] = num
-  end
+      # Whitespace could be bad, make sure we trim.
+      $equations_num_to_str[num] = eq
+      $equations_str_to_num[eq] = num
+    end
+  }
 }
 
 $implies = Graph.from_csv(ARGV[0])
