@@ -26,3 +26,8 @@ name = "equational_theories"
 name = "extract_implications"
 root = "scripts.extract_implications"
 supportInterpreter = true
+
+[[lean_exe]]
+name = "export_equations"
+root = "scripts.export_equations"
+supportInterpreter = true

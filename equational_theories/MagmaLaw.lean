@@ -14,6 +14,10 @@ infix:60 " ≃ " => MagmaLaw.mk
 
 abbrev NatMagmaLaw := MagmaLaw Nat
 
+open Lean in
+instance {α} [ToJson α] : ToJson (MagmaLaw α) where
+  toJson := fun ⟨lhs, rhs⟩ => .mkObj [("lhs", Lean.toJson lhs), ("rhs", Lean.toJson rhs)]
+
 end Law
 
 open Law
