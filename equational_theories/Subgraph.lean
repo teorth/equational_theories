@@ -3,7 +3,6 @@ import Mathlib.Data.Nat.Defs
 import equational_theories.EquationalResult
 import equational_theories.Closure
 import equational_theories.Equations
-import equational_theories.AllEquations
 import equational_theories.FactsSyntax
 import equational_theories.FreeSemigroup
 import equational_theories.MagmaLaw
