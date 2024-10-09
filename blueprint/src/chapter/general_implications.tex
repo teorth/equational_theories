@@ -1,4 +1,4 @@
-\chapter{General implications}
+\chapter{General implications}\label{generla-implications-chapter}
 
 We will be interested in seeing which laws imply which other laws, in the sense that magmas obeying the former law automatically obey the latter.  We will also be interested in \emph{anti-implications} showing that one law does \emph{not} imply another, by producing examples of magmas that obey the former law but not the latter. Here is a formal definition.
 
@@ -15,11 +15,11 @@ Note that we view the stronger law as less than or equal to the weaker law.  Thi
 \begin{proof}\leanok Trivial.
 \end{proof}
 
-Implications between the laws from Chapter \ref{subgraph-eq} are depicted in Figure \ref{fig:implications}.
+Implications between the laws from \Cref{subgraph-eq} are depicted in \Cref{fig:implications}.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.5\linewidth]{../../images/implications.png}
+  \includegraphics[width=1\linewidth]{../../images/subgraph.png}
   \caption{Implications between the above equations, displayed as a Hasse diagram.}
   \label{fig:implications}
 \end{figure}
@@ -60,16 +60,16 @@ where $x'_1,\dots,x'_n$ are distinct from $x_1,\dots,x_n$
 In particular, if $G(y_1,\dots,y_m)$ can be viewed as a specialization of $F(x'_1,\dots,x'_n)$, then these two laws are equivalent.
 \end{theorem}
 
-\begin{proof}  From two applications of \eqref{prediag} one has
+\begin{proof}  From two applications of \Cref{prediag} one has
 $$ F(x_1,\dots,x_n) = G(y_1,\dots,y_m)$$
 and
 $$ F(x'_1,\dots,x'_n) = G(y_1,\dots,y_m)$$
 whence the claim.
 \end{proof}
 
-Thus for instance, Definition \ref{eq7} is equivalent to Definition \ref{eq2}.
+Thus for instance, \Cref{eq7} is equivalent to \Cref{eq2}.
 
-\begin{theorem}[Laws implied by the constant law]\label{constant-impl}\uses{impl,eq46}  If $w, w'$ each have order at least one, then the law $w \formaleq w'$ is implied by the constant law (Definition \ref{eq46}).  If exactly one of $w, w'$ has order zero, and the law $w \formaleq w'$ is not implied by the constant law.
+\begin{theorem}[Laws implied by the constant law]\label{constant-impl}\uses{impl,eq46}  If $w, w'$ each have order at least one, then the law $w \formaleq w'$ is implied by the constant law (\Cref{eq46}).  If exactly one of $w, w'$ has order zero, and the law $w \formaleq w'$ is not implied by the constant law.
 \end{theorem}
 
 \begin{proof} Routine.

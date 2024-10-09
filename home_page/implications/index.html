@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Equation Implication Table</title>
+    <title>Equation Explorer</title>
     <style>
       body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
       .page { display: none; }
@@ -97,7 +97,7 @@
   </head>
   <body>
     <div id="listPage" class="page active">
-      <h1>All Equations</h1>
+      <h1>Equation Explorer</h1>
 
 
       <input type="text" id="equationInput" placeholder="Enter an equation (e.g., x*y=y*x)">
@@ -112,6 +112,10 @@
         </div>
       </div>
 
+      <p>
+        Why not try proving a random unknown implication?
+        <button onclick="randomProof()">I'm Feeling Lucky</button>
+      </p>
 
 
       <div class="checkbox-container">
@@ -138,7 +142,8 @@
       <button id="backButton">Back to List</button>
       <h1>Equation Details</h1>
       <h2 id="selectedEquation"></h2>
-      <h3 id="selectedEquationDual"></h3>
+      <div id="equationCommentary"></div>
+      <h3><span id="selectedEquationDual"></span> <span id="selectedEquationGraphitiLinks"></span></h3>
       <div class="checkbox-container">
 	<label>
 	  <input checked="checked" type="checkbox" id="showEquivalences2"> Hide equivalent equations

@@ -12,6 +12,12 @@ deriving DecidableEq
 
 infix:60 " ≃ " => MagmaLaw.mk
 
+abbrev NatMagmaLaw := MagmaLaw Nat
+
+open Lean in
+instance {α} [ToJson α] : ToJson (MagmaLaw α) where
+  toJson := fun ⟨lhs, rhs⟩ => .mkObj [("lhs", Lean.toJson lhs), ("rhs", Lean.toJson rhs)]
+
 end Law
 
 open Law
@@ -179,7 +185,7 @@ theorem satisfiesPhi_attach {α G} [Magma G] {φ : α → G} {E : MagmaLaw α} :
 
 theorem satisfiesPhi_symm {α G} [Magma G] (φ : α → G) (w₁ w₂ : FreeMagma α)
     (h : satisfiesPhi φ (w₁ ≃ w₂)) : satisfiesPhi φ (w₂ ≃ w₁) :=
-  Law.satisfiesPhi_symm_law φ (w₁ ≃ w₂) h
+  satisfiesPhi_symm_law φ (w₁ ≃ w₂) h
 
 theorem equiv_satisfiesPhi {α G H} [Magma G] [Magma H] {φ : α → G} (e : G ≃◇ H) {E : MagmaLaw α} :
     satisfiesPhi (e ∘ φ) E ↔ satisfiesPhi φ E := by
@@ -291,5 +297,30 @@ theorem derive'_toFin_iff {α β} [DecidableEq β] {Γ : Ctx α} {E : MagmaLaw �
 theorem derive'_toNat_iff {α β} [DecidableEq β] {Γ : Ctx α} {E : MagmaLaw β} :
     Nonempty (Γ ⊢' E.toNat) ↔ Nonempty (Γ ⊢' E) :=
   (derive'_map_injective Fin.val_injective).trans derive'_toFin_iff
+
+def Fin.valHom {n} : FreeMagma (Fin n) →◇ FreeMagma ℕ := evalHom (Lf ∘ Fin.val)
+
+private def fin_split {n} {α} (hn : n ≠ 0) (f : Fin n → α) : ∃ g : ℕ → α, g ∘ Fin.val = f := by
+      let g := fun i : ℕ => if h : i < n then f ⟨i,h⟩ else f ⟨0, Nat.zero_lt_of_ne_zero hn⟩
+      use g
+      funext i
+      unfold g
+      simp
+
+theorem satisfies_fin_satisfies_nat {n : Nat} (G : Type) [Magma G] (E : MagmaLaw (Fin n))
+    : G ⊧ E ↔ G ⊧ E.map Fin.val := by
+    apply Iff.intro <;> intro h φ; simp only [ne_eq, satisfies, satisfiesPhi, MagmaLaw.map] at *
+    · repeat rw [evalInMagma_fmapHom]
+      exact h (φ ∘ Fin.val)
+    · simp only [ne_eq, satisfies, satisfiesPhi, MagmaLaw.map] at *
+      if hn:n=0 then
+        subst hn
+        have := FreeMagma.Fin0_impossible E.lhs
+        contradiction
+      else
+        obtain ⟨φ', hφ'_val_eq_phi⟩ := fin_split hn φ
+        have hφ' := h φ'
+        repeat rw [evalInMagma_fmapHom, hφ'_val_eq_phi] at hφ'
+        exact hφ'
 
 end Law

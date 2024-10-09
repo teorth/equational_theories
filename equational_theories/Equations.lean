@@ -90,6 +90,8 @@ equation 1689  :=  x = (y ◇ x) ◇ ((x ◇ z) ◇ z)
 
 equation 2662  :=  x = ((x ◇ y) ◇ (x ◇ y)) ◇ x
 
+abbrev Equation3167 (G: Type _) [Magma G] := ∀ x y z : G, x = (((y ◇ y) ◇ z) ◇ z) ◇ x
+
 /-- From Putnam 1978, Problem A4, part (a) -/
 equation 3722  :=  x ◇ y = (x ◇ y) ◇ (x ◇ y)
 
@@ -114,14 +116,17 @@ equation 4579  :=  x ◇ (y ◇ z) = (w ◇ u) ◇ z
 /-- all products of three values are the same, regardless bracketing -/
 equation 4582  :=  x ◇ (y ◇ z) = (w ◇ u) ◇ v
 
+abbrev Equation4656 (G: Type _) [Magma G] := ∀ x y z : G, (x ◇ y) ◇ y = (x ◇ z) ◇ z
 
 /- Some order 5 laws -/
 
 /-- Mentioned in a paper of Kisielewicz as a conjectural Austin law -/
 equation 5105  :=  x = y ◇ (y ◇ (y ◇ (x ◇ (z ◇ y))))
 
+equation 28381  :=  x = (((x ◇ x) ◇ x) ◇ y) ◇ (x ◇ z)
+
 /-- Kisielewicz's second Austin law -/
-equation 28393  :=  x = (((x ◇ x) ◇ x) ◇ y) ◇ (x ◇ z)
+equation 28770  :=  x = (((y ◇ y) ◇ y) ◇ x) ◇ (y ◇ z)
 
 /- Some order 6 laws -/
 

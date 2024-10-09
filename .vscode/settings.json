@@ -14,5 +14,7 @@
     // Trim final newlines at the end of files
     "files.trimFinalNewlines": true,
     // Remove any trailing whitespace on save
-    "files.trimTrailingWhitespace": true
+    "files.trimTrailingWhitespace": true,
+    // LaTeX Workshop: Ignore files in the blueprint directory
+    "latex-workshop.latex.watch.files.ignore": ["**/blueprint/**"]
 }

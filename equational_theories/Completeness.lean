@@ -48,9 +48,7 @@ theorem RelOfLaws.isEquivalence {α} (β) (Γ : Ctx α) : Equivalence (RelOfLaws
   case refl => intros x; constructor; apply derive'.Ref
   case symm =>
     intros x y h
-    constructor
-    apply derive'.Sym
-    assumption
+    exact ⟨derive'.Sym h⟩
   case trans =>
     intros x y z h₁ h₂
     constructor
@@ -85,7 +83,7 @@ theorem FreeMagmaWithLaws.evalInMagmaIsQuot {α β γ} (Γ : Ctx α)
   case Fork =>
     simp only [Magma.op, ForkWithLaws]
     repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot]
-    simp only [Quotient.lift₂]
+    rw [Quotient.lift₂]
     apply Quot.sound; rw [evalInMagma]
     exact ⟨derive'.Ref⟩
 
@@ -108,25 +106,23 @@ theorem FreeMagmaWithLaws.isDerives {α β} {Γ : Ctx α} {E : MagmaLaw β} :
 theorem PhiAsSubst_aux {α β γ} (Γ : Ctx α) (φ : β → FreeMagmaWithLaws γ Γ) :
     ∃ (σ : β → FreeMagma γ), ∀ x, φ x = embed Γ (σ x) := by
   apply Classical.axiomOfChoice (r := λ x y ↦ φ x = (embed Γ) y)
-  intros x
+  intro x
   have ⟨a, h⟩ := (Quotient.exists_rep (φ x))
-  exists a
-  symm; trivial
+  exact ⟨a, h.symm⟩
 
 theorem PhiAsSubst {α β γ} (Γ : Ctx α) (φ : β → FreeMagmaWithLaws γ Γ) :
   ∃ (σ : β → FreeMagma γ), φ = (embed Γ) ∘ σ := by
   have ⟨σ, h⟩ := PhiAsSubst_aux Γ φ
-  exact ⟨σ, funext fun x ↦ h x⟩
+  exact ⟨σ, funext fun _ ↦ h _⟩
 
 theorem FreeMagmaWithLaws.isModel {α} (β) (Γ : Ctx α) : FreeMagmaWithLaws β Γ ⊧ Γ := by
-  simp [satisfiesSet]
+  simp only [satisfiesSet]
   intros E mem φ
   simp [satisfiesPhi]
   have ⟨σ, eq_sig⟩ := (PhiAsSubst _ φ)
   rw [eq_sig]
   repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot]
-  apply Quotient.sound; simp [HasEquiv.Equiv, Setoid.r, RelOfLaws]
-  exact ⟨derive'.SubstAx mem _⟩
+  exact Quotient.sound ⟨derive'.SubstAx mem _⟩
 
 theorem FreeMagmaWithLaws.models_iff_u.{u} {α} {β : Type u} {Γ : Ctx α} {E : MagmaLaw β} :
     (∀ (G : Type u) [Magma G], G ⊧ Γ → G ⊧ E) ↔ FreeMagmaWithLaws β Γ ⊧ E := by

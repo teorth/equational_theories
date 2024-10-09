@@ -46,12 +46,15 @@ const mapped = mapThroughLUT(decoded);
 // Reshape to 2694x2694
 const implications = reshape(mapped, 4694, 4694);
 
+const GRAPHITI_BASE_URL = "https://teorth.github.io/equational_theories/graphiti/"
 
 const listPage = document.getElementById('listPage');
 const detailPage = document.getElementById('detailPage');
+const equationCommentary = document.getElementById('equationCommentary');
 const equationList = document.getElementById('equationList');
 const selectedEquation = document.getElementById('selectedEquation');
 const selectedEquationDual = document.getElementById('selectedEquationDual');
+const selectedEquationGraphitiLinks = document.getElementById('selectedEquationGraphitiLinks');
 const impliesList = document.getElementById('impliesList');
 const antiImpliesList = document.getElementById('antiImpliesList');
 const unknownImpliesList = document.getElementById('unknownImpliesList');
@@ -229,10 +232,11 @@ function renderImplications(index) {
 
     // Check if there's already a query string
     if (currentURL.indexOf('?') > -1) {
-	currentURL = currentURL.split('?')[0] + '?' + (index+1);
+	    currentURL = currentURL.split('?')[0] + '?' + (index+1);
     } else {
-	currentURL += '?' + (index+1);
+	    currentURL += '?' + (index+1);
     }
+
 
     // Update the URL without reloading the page
     history.pushState(null, '', currentURL);
@@ -243,26 +247,29 @@ function renderImplications(index) {
     }
 
     currentEquationIndex = index;
-    selectedEquation.textContent = equations[index];
     selectedEquation.dataset.index = index;
+    if (commentary[index+1] === undefined) {
+        selectedEquation.textContent = equations[index];
+    } else {
+        equationCommentary.innerHTML = commentary[index+1];
+    }
 
 
     function findDual(index, duals) {
-	for (let pair of duals) {
-	    if (pair[0] === index) return pair[1];
-	    if (pair[1] === index) return pair[0];
-	}
-	return null; // Return null if no dual is found
+	    for (let pair of duals) {
+	        if (pair[0] === index) return pair[1];
+	        if (pair[1] === index) return pair[0];
+	    }
+	    return null; // Return null if no dual is found
     }
 
     // Usage:
     let dualIndex = findDual(index+1, duals);
     if (dualIndex !== null) {
-	selectedEquationDual.innerHTML = "(Dual equation: <a class='link' onclick='renderImplications("+(dualIndex-1)+");'>" + equations[dualIndex-1] + "</a>)";
+	    selectedEquationDual.innerHTML = "(Dual equation: <a class='link' onclick='renderImplications("+(dualIndex-1)+");'>" + equations[dualIndex-1] + "</a>)";
     } else {
-	selectedEquationDual.innerHTML = "";
+	    selectedEquationDual.innerHTML = "";
     }
-
 
     // Add this section to display equivalent equations
     const equivalentClass = equiv.find(cls => cls.includes(index)) || [index];
@@ -284,9 +291,11 @@ function renderImplications(index) {
     const implies = [];
     const antiImplies = [];
     const unknownImplies = [];
+    const unknownImpliesEqNum = [];
     const impliedBy = [];
     const antiImpliedBy = [];
     const unknownImpliedBy = [];
+    const unknownImpliedByEqNum = [];
 
     let seenClasses = new Set();
     implications.forEach((row, i) => {
@@ -317,9 +326,20 @@ function renderImplications(index) {
 		statusIndex === 0 ? antiImpliedBy.push(item) : antiImplies.push(item);
             } else if (isUnknown(status, treatConjecturedAsUnknown)) {
 		statusIndex === 0 ? unknownImpliedBy.push(item) : unknownImplies.push(item);
+		statusIndex === 0 ? unknownImpliedByEqNum.push(i) : unknownImpliesEqNum.push(i);
             }
 	});
     });
+
+  selectedEquationGraphitiLinks.innerHTML = `<br>(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1}&highlight_red=${index+1}">implies</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1}&highlight_red=${index+1}">implied by</a> of the equation)`
+  if (unknownImpliesEqNum.length > 0) {
+    const implies = unknownImpliesEqNum.map(x => x + 1)
+    selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1},${implies.join(",")}&highlight_red=${index+1}&highlight_blue=${implies.join(",")}&show_unknowns_conjectures=on">implied</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1},${implies.join(",")}&highlight_red=${index+1}&highlight_blue=${implies.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknowns+conjectures</a>)`
+  }
+  if (unknownImpliedByEqNum.length > 0) {
+    const impliedby = unknownImpliedByEqNum.map(x => x + 1)
+    selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1},${impliedby.join(",")}&highlight_red=${index+1}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implied</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1},${impliedby.join(",")}&highlight_red=${index+1}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknown bys+conjectured bys</a>)`
+  }
 
     impliesList.innerHTML = implies.join('') || 'None';
     antiImpliesList.innerHTML = antiImplies.join('') || 'None';

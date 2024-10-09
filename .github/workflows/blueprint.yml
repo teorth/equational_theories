@@ -139,6 +139,7 @@ jobs:
       - name: Generate home_page/implications/implications.js
         run: |
           ~/.elan/bin/lake exe extract_implications outcomes > /tmp/out.json
+          pip install markdown
           python scripts/generate_equation_implication_js.py /tmp/out.json
 
       - name: Bundle dependencies
@@ -148,6 +149,12 @@ jobs:
           working-directory: home_page
           ruby-version: "3.0"  # Specify Ruby version
           bundler-cache: true  # Enable caching for bundler
+
+      - name: Generate home_page/graphiti/graph.json
+        run: |
+          ~/.elan/bin/lake exe extract_implications --json > /tmp/implications.json
+          ~/.elan/bin/lake exe extract_implications unknowns > /tmp/unknowns.json
+          ruby scripts/generate_graphiti_data.rb /tmp/implications.json /tmp/unknowns.json > home_page/graphiti/graph.json
 
       - name: Build website using Jekyll
         if: github.event_name == 'push' && env.HOME_PAGE_EXISTS == 'true'

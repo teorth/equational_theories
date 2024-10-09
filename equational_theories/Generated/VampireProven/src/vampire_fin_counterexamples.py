@@ -7,8 +7,14 @@ from collections import defaultdict
 
 random.seed(17)
 
-with open('rnt.csv') as fs:
-  problems = [{'lhs': 'Equation' + x.split(',')[0], 'rhs': 'Equation' + x.strip().split(',')[1]} for x in fs]
+# with open('rnt.csv') as fs:
+#   problems = [{'lhs': 'Equation' + x.split(',')[0], 'rhs': 'Equation' + x.strip().split(',')[1]} for x in fs]
+
+with open('conjectures.txt') as fs:
+  problems = []
+  for line in fs:
+    lhs, rhs = map(int, line.strip(' \n()').split(','))
+    problems.append({'lhs': f'Equation{lhs+1}', 'rhs': f'Equation{rhs+1}'})
 
 print(len(problems))
 
@@ -43,7 +49,7 @@ def table(model : dict):
   vals = list(model.keys())
   return [[vals.index(model[a][b]) for b in vals] for a in vals]
 
-dpind = 1
+dpind = 3
 disproofs = open(f'equational_theories/Generated/VampireProven/Disproofs{dpind}.lean', 'w')
 print('''import equational_theories.AllEquations
 import equational_theories.MemoFinOp
@@ -56,10 +62,15 @@ for problem in tqdm(problems):
   pr = encode_problem(problem)
 
   start_time = time.perf_counter()
-  out = subprocess.check_output(['~/Downloads/vampire', '-sa', 'fmb',
-                                 '-fmbswr', '0',
-                                '/proc/self/fd/0', '-t', '5'], input=pr.encode()).decode()
-  assert 'Termination reason: Satisfiable' in out
+  try:
+    out = subprocess.check_output(['~/Downloads/vampire', '--mode', 'portfolio',
+                                  '--schedule', 'file', '--schedule_file', 'finsched.sch',
+                                  '--cores', '0',
+                                  '/proc/self/fd/0', '-t', '30'], input=pr.encode()).decode()
+  except subprocess.CalledProcessError as e:
+    assert e.returncode == 1
+    continue
+  assert 'SZS output end FiniteModel' in out
   model = build_model(out)
   print('@[equational_result]', file=disproofs)
   print(f'theorem {problem["lhs"]}_not_implies_{problem["rhs"]} : ∃ (G: Type) (_: Magma G), '
@@ -67,15 +78,5 @@ for problem in tqdm(problems):
   print(f'  ⟨Fin {len(model)}, ⟨memoFinOp fun x y => {table(model)}[x.val]![y.val]!⟩, by decideFin!⟩', file=disproofs)
   print(file=disproofs)
   length += 4
-  if length >= 500:
-    length = 0
-    disproofs.close()
-    dpind += 1
-    disproofs = open(f'equational_theories/Generated/VampireProven/Disproofs{dpind}.lean', 'w')
-    print('''import equational_theories.AllEquations
-import equational_theories.MemoFinOp
-import equational_theories.DecideBang
-''', file=disproofs)
-  # print(model)
 
 json.dump(remaining, open('remaining.json', 'w'))

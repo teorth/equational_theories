@@ -34,7 +34,7 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 > - You might want to install the git pre-push hook by running:
 >
 >   ```bash
->   source scripts/install_pre-push.sh
+>   scripts/install_pre-push.sh
 >   ```
 >   This will automatically run checks before every push, reducing the risk of CI check failures.
 >
@@ -50,13 +50,13 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 ### 4. Submitting a Pull Request
 
 - When you are ready to submit your solution, create a PR from your working branch to the project’s `main` branch.
-- After submitting the PR, comment the single phrase `propose PR #PR_NUMBER` on the original issue. This links your PR to the task, and the task will move to the `In Progress` column on the dashboard.
+- After submitting the PR, comment `propose #PR_NUMBER` on the original issue. This links your PR to the task, and the task will move to the `In Progress` column on the dashboard.
 - A task can only move to `In Progress` if it has been claimed by the user proposing the PR.
 
 ### 5. Withdrawing or Updating a PR
 
 - If you need to withdraw your PR, comment the single phrase `withdraw PR #PR_NUMBER` on the issue. The task will return to the `Claimed Tasks` column, but you will remain assigned to the issue.
-- To submit an updated PR after withdrawal, comment the single phrase `propose PR #NEW_PR_NUMBER` following the same process outlined in step 4.
+- To submit an updated PR after withdrawal, comment `propose #NEW_PR_NUMBER` following the same process outlined in step 4.
 
 ### 6. Review Process
 
@@ -144,7 +144,7 @@ The blueprint is written in a special form of LaTeX that supports some integrati
 - The macro `\uses{ref1, ref2}` in the statement of a definition or theorem, or a proof of that theorem, will indicate that the relevant statement or proof uses the results in the blueprint that have the indicated `\label{}`s (in this case, `\label{ref1}` and `\label{ref2}`).  These will create edges in the [dependency graph](https://teorth.github.io/equational_theories/blueprint/dep_graph_document.html) of the blueprint.
 - The macro `\leanok` in the statement of a definition or theorem indicates that the statement has been formalized.  The macro `\leanok` in the proof of a theorem indicates that the proof has been formalized.  This will create various colors in the nodes of the [dependency graph](https://teorth.github.io/equational_theories/blueprint/dep_graph_document.html) of the blueprint, as explained in the legend.
 
-Contributors are welcome to make suggestions or additions to the blueprint, whose files can be found [here](blueprint/src/chapter).
+Contributors are welcome to make suggestions or additions to the blueprint, whose files can be found [here](blueprint/src/chapter). When adding a chapter, make sure to give the chapter a `\label` (to give that chapter a stable URLs, and not destabilize other chapter URLs), and add your chapter as an import to [`content.tex`](https://github.com/teorth/equational_theories/blob/main/blueprint/src/content.tex).
 
 Contributions to the blueprint will pass through continuous integration (CI) checks that ensure that the blueprint compiles.  You may first wish to test that the [print version of the blueprint](blueprint/src/print.tex) compiles locally before pushing changes to the blueprint.  Also, if using the `\lean{}` macro to link to results in the Lean files, make sure that any namespace that the Lean result is stored in is stated.  If your Lean file was recently added, you may wish to check that it is recognized by [`equational_theories.lean`](equational_theories.lean), otherwise the blueprint will not be able to locate the results in that file.
 

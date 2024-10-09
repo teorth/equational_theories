@@ -1,4 +1,3 @@
-import equational_theories.AllEquations
 import equational_theories.EquationalResult
 import equational_theories.Homomorphisms
 import Mathlib.Data.List.NodupEquivFin
@@ -19,6 +18,15 @@ instance (α : Type u) : Coe α (FreeMagma α) where
 
 instance {n : Nat} : OfNat (FreeMagma ℕ) n := ⟨FreeMagma.Leaf n⟩
 
+open Lean in
+def FreeMagma.toJson {α} [ToJson α] : FreeMagma α → Json
+  | FreeMagma.Leaf x => .mkObj [("leaf", Lean.toJson x)]
+  | FreeMagma.Fork x y => .mkObj [("left", toJson x), ("right", toJson y)]
+
+open Lean in
+instance {α} [ToJson α] : ToJson (FreeMagma α) where
+  toJson := FreeMagma.toJson
+
 infixl:65 " ⋆ " => FreeMagma.Fork
 
 @[simp]
@@ -36,7 +44,7 @@ def evalInMagma {α : Type u} {G : Type v} [Magma G] (f : α → G) : FreeMagma 
 
 def evalHom {α : Type u} {G : Type v} [Magma G] (f : α → G) : FreeMagma α →◇ G where
    toFun := evalInMagma f
-   map_op' := fun _ _ ↦ refl _
+   map_op' := fun _ _ ↦ rfl
 
 @[simp] theorem evalHom_apply {α G} [Magma G] (f : α → G) (m : FreeMagma α) :
     evalHom f m = evalInMagma f m := rfl
@@ -67,6 +75,10 @@ theorem evalInMagma_fmapHom {α β G} [Magma G] (f : α → β) (g : β → G) (
   show evalInMagma g (evalInMagma (Lf ∘ f) m) = evalInMagma (g ∘ f) m
   induction m <;> simp [evalInMagma, *]
 
+theorem evalInMagma_comp {α β} {G} [Magma G] (f : α → β) (g : β → G) (m : FreeMagma α) :
+    evalInMagma (g ∘ f) m = evalInMagma g (fmapFreeMagma f m) :=
+  (evalInMagma_fmapHom ..).symm
+
 theorem evalHom_comp_fmapHom {α β G} [Magma G] (f : α → β) (g : β → G) :
     (fmapHom f).comp (evalHom g) = evalHom (g ∘ f) := by
   ext m; apply evalInMagma_fmapHom
@@ -93,7 +105,7 @@ theorem fmapHom_id {α} (m : FreeMagma α) : fmapHom id m = m := evalInMagma_lea
          (Eq.symm $ g.map_op' txleft txright)
    exact (funext equiv)
 
- theorem FmapFreeMagmaUniversalProperty {α : Type u} [Magma α] {β : Type u} (f : α → β)
+ theorem FmapFreeMagmaUniversalProperty {α : Type u} {β : Type u} (f : α → β)
     : ∀ g : FreeMagma α →◇ FreeMagma β, g ∘ Lf = Lf ∘ f → fmapFreeMagma f = g :=
     EvalFreeMagmaUniversalProperty (Lf ∘ f)
 
@@ -108,6 +120,24 @@ def first {α} : FreeMagma α → α
 theorem first_mem {α} : ∀ m : FreeMagma α, Mem m.first m
   | Lf _ => rfl
   | lchild ⋆ _ => .inl lchild.first_mem
+
+lemma Fin0_impossible (x : FreeMagma (Fin 0)) : False := nomatch x.first
+
+def length {α : Type} : FreeMagma α → Nat
+  | .Leaf _ => 1
+  | .Fork m1 m2 => FreeMagma.length m1 + FreeMagma.length m2
+
+theorem length_pos {α : Type} : (x : FreeMagma α) → 0 < FreeMagma.length x
+  | .Leaf _ => by simp [FreeMagma.length]
+  | .Fork m1 m2 => by
+    have h1 := FreeMagma.length_pos m1
+    have h2 := FreeMagma.length_pos m2
+    simp [FreeMagma.length]
+    omega
+
+@[simp]
+theorem length_ne_0 {α : Type} (x : FreeMagma α) : FreeMagma.length x ≠ 0 :=
+  Nat.not_eq_zero_of_lt x.length_pos
 
 def elems {α} [DecidableEq α] : (m : FreeMagma α) → {l : List α // l.Nodup ∧ ∀ a, a ∈ l ↔ Mem a m}
   | Lf a => ⟨[a], List.nodup_singleton _, by simp [Mem]⟩
@@ -161,25 +191,3 @@ theorem pmap_eq_map {α β} (m : FreeMagma α)
   simp [fmapHom]; induction m <;> simp [evalInMagma, pmap, *]
 
 end FreeMagma
-
-theorem ExpressionEqualsAnything_implies_Equation2 (G: Type u) [Magma G] :
-    (∃ n : Nat, ∃ expr : FreeMagma (Fin n), ∀ x : G, ∀ sub : Fin n → G, x = expr.evalInMagma sub) → Equation2 G := by
-  intro ⟨n, expr, univ⟩ x y
-  let constx : Fin n → G := fun _ ↦ x
-  exact (univ x constx).trans (univ y constx).symm
-
-theorem Equation37_implies_Equation2 (G : Type u) [Magma G] :
-    (∀ x y z w : G, x = (y ◇ z) ◇ w) → Equation2 G :=
-  fun univ ↦ ExpressionEqualsAnything_implies_Equation2 G ⟨
-    3,
-    (Lf 0 ⋆ Lf 1) ⋆ Lf 2, -- The syntactic representation of (y ◇ z) ◇ w
-    fun k sub ↦ univ k (sub 0) (sub 1) (sub 2)
-  ⟩
-
-theorem Equation514_implies_Equation2 (G : Type u) [Magma G] :
-    (∀ x y : G, x = y ◇ (y ◇ (y ◇ y))) → Equation2 G :=
-  fun univ ↦ ExpressionEqualsAnything_implies_Equation2 G ⟨
-    1,
-    Lf 0 ⋆ (Lf 0 ⋆ (Lf 0 ⋆ Lf 0)), -- The syntactic representation of y ◇ (y ◇ (y ◇ y)))
-    fun k sub ↦ univ k (sub 0)
-  ⟩
