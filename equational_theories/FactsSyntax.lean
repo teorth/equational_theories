@@ -1,6 +1,6 @@
 import Lean
 import equational_theories.Magma
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 
 /-!
 This defines a compact way of saying “Magma G satisfies this list of equations, but refutes these

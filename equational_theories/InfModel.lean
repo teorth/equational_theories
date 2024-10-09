@@ -1,5 +1,5 @@
 import equational_theories.Equations
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import equational_theories.ForMathlib.Algebra.Group.Nat

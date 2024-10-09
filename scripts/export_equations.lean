@@ -1,5 +1,5 @@
 import equational_theories.Equations
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 
 open Lean Elab Command Meta
 
@@ -25,7 +25,7 @@ def main : IO Unit := do
   searchPathRef.set compile_time_search_path%
   let env ← importModules #[
     { module := `equational_theories.Equations },
-    { module := `equational_theories.AllEquations }] .empty
+    { module := `equational_theories.Equations.All }] .empty
   let laws := magmaLawExt.getState env
   let jsonOutput : Json := Json.arr <| laws.map fun ⟨lawName, law⟩ => .mkObj [
     ("equation", "Equation" ++ (lawName.toString.drop "Law".length)),

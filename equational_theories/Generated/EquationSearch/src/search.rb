@@ -541,7 +541,7 @@ puts <<-END
 /- SEARCH_MAX_EXPR_OPERATIONS_ALLOWED = #{SEARCH_MAX_EXPR_OPERATIONS_ALLOWED} -/
 END
 
-puts "import equational_theories.AllEquations"
+puts "import equational_theories.Equations.All"
 puts "import Mathlib.Tactic"
 
 $implies.scc.sort_by { |scc| scc.length }.reverse.each { |scc|
