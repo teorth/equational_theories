@@ -17,6 +17,15 @@ instance (α : Type u) : Coe α (FreeMagma α) where
 
 instance {n : Nat} : OfNat (FreeMagma ℕ) n := ⟨FreeMagma.Leaf n⟩
 
+open Lean in
+def FreeMagma.toJson {α} [ToJson α] : FreeMagma α → Json
+  | FreeMagma.Leaf x => .mkObj [("leaf", Lean.toJson x)]
+  | FreeMagma.Fork x y => .mkObj [("left", toJson x), ("right", toJson y)]
+
+open Lean in
+instance {α} [ToJson α] : ToJson (FreeMagma α) where
+  toJson := FreeMagma.toJson
+
 infixl:65 " ⋆ " => FreeMagma.Fork
 
 @[simp]
@@ -62,6 +71,12 @@ theorem evalInMagma_comp {α β} {G} [Magma G] (f : α → β) (g : β → G) :
   ∀ (x : FreeMagma α), evalInMagma (g ∘ f) x = evalInMagma g (fmapFreeMagma f x) := by
   intro x
   induction x <;> simp [fmapFreeMagma, evalInMagma, *]
+
+lemma Fin0_impossible (x : FreeMagma (Fin 0)) : False := by
+  induction x
+  case Leaf l =>
+    cases l; contradiction
+  case Fork => assumption
 
 def length {α : Type} : FreeMagma α → Nat
   | .Leaf _ => 1
