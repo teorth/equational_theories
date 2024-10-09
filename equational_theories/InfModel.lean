@@ -15,11 +15,8 @@ theorem Finite.Equation374794_implies_Equation2 (G : Type*) [Magma G] [Finite G]
     intro y
     let f (x : G) := ((y ◇ y) ◇ y) ◇ x
     let g (x : G) := x ◇ ((y ◇ y) ◇ y)
-    have : Function.RightInverse f g := by
-      intro x
-      simp [f, g, ← h]
-    intro z u
-    apply this.injective
+    have : Function.RightInverse f g := fun x ↦ by simp [f, g, ← h]
+    refine fun z u ↦ this.injective ?_
     obtain ⟨finv, hf⟩ := (Finite.surjective_of_injective this.injective).hasRightInverse
     let fy := finv ((y ◇ y) ◇ y)
     replace hf : ((y ◇ y) ◇ y) ◇ fy = (y ◇ y) ◇ y := hf _
@@ -39,8 +36,7 @@ theorem Equation374794_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equ
   letI : Magma ℕ+ := { op := fun a b ↦ if a = b then 2^a.val else
     if a = 1 then 3^b.val else
     if a = 3 ^ (padicValNat 3 a) then Nat.toPNat' (padicValNat 3 a) else 1}
-  refine ⟨ℕ+, this, ⟨?_, fun x ↦ nomatch (x 1 2)⟩⟩
-  intro x y z
+  refine ⟨ℕ+, this, ⟨fun x y z ↦ ?_, fun x ↦ nomatch (x 1 2)⟩⟩
   unfold Magma.op
   simp only [↓reduceIte, PNat.pow_coe, PNat.val_ofNat]
   have t1 (y : ℕ+) : 2 ^ (y : ℕ) ≠ y := by
@@ -95,31 +91,18 @@ theorem Finite.Equation5105_implies_Equation2 (G : Type*) [Magma G] [Finite G] (
       use (y ◇ (y ◇ (x ◇ (x ◇ y))))
       dsimp [f]
       rw [← h]
-    have f_inj : ∀ y : G, Function.Injective (f y) :=by
-      intro y
-      exact Finite.injective_iff_surjective.mpr (f_onto y)
+    have f_inj : ∀ y : G, Function.Injective (f y) :=
+      fun _ ↦ Finite.injective_iff_surjective.mpr (f_onto _)
     have hh: ∀ y z w : G, z ◇ y = w ◇ y := by
       intro y z w
       let g := f y
-      have h1 : g (y ◇ (y ◇ (x ◇ (z ◇ y)))) = g (y ◇ (y ◇ (x ◇ (w ◇ y)))):= by dsimp [g, f]; rw [← h, ← h]
-      have h2 : g (y ◇ (x ◇ (z ◇ y))) = g (y ◇ (x ◇ (w ◇ y))) := by
-        dsimp [g, f]
-        exact f_inj y h1
-      have h3 : g (x ◇ (z ◇ y)) = g (x ◇ (w ◇ y)) := by
-        dsimp [g, f]
-        exact f_inj y h2
-      have h4 : f x (z ◇ y) = f x (w ◇ y) := by
-        dsimp [f]
-        exact f_inj y h3
-      exact f_inj x h4
-    have hhh : ∀ a b c d: G, c ◇ (a ◇ b) = d ◇ (a ◇ b) := by
-      intro a b c d
-      exact hh (a ◇ b) c d
+      exact f_inj x (f_inj y (f_inj y (f_inj y (by dsimp [g, f]; rw [← h, ← h]))))
+    have hhh : ∀ a b c d: G, c ◇ (a ◇ b) = d ◇ (a ◇ b) := fun _ _ _ _  ↦ hh _ _ _
     have hhhh : ∀ a b: G, b ◇ (b ◇ (b ◇ (x ◇ (a ◇ b)))) = b ◇ (b ◇ (b ◇ (y ◇ (a ◇ b)))) := by
       intro a b
       rw [hhh a b _ _]
     calc
-      x = x ◇ (x ◇ (x ◇ (x ◇ (x ◇ x)))) := by exact h x x x
+      x = x ◇ (x ◇ (x ◇ (x ◇ (x ◇ x)))) := h x x x
       _= x ◇ (x ◇ (x ◇ (y ◇ (x ◇ x)))) := by rw [hhhh]
       _= y := by rw [←  h y x x]
 
@@ -223,22 +206,19 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
     unfold Magma.op
     simp
     rw [if_neg, if_neg, if_neg, if_neg]
-    .
-      intro hc
+    · intro hc
       apply PNat.ne_zero ((3: ℕ+)^y.val)
       calc ↑((3: ℕ+)^y.val)
         _ = padicValNat 2 ↑(2^3^y.val: ℕ+) := by simp
         _ = padicValNat 2 _ := by rw [hc]
         _ = 0 := by simp [padicValNat_prime_prime_pow]
-    .
-      intro hc
+    · intro hc
       apply PNat.ne_zero ((3: ℕ+)^y.val)
       calc ↑((3: ℕ+)^y.val)
         _ = padicValNat 2 ↑(2^3^y.val: ℕ+) := by simp
         _ = padicValNat 2 _ := by rw [hc]
         _ = 0 := by simp [padicValNat_prime_prime_pow]
-    .
-      intro hc
+    · intro hc
       apply hyz.1
       calc z
         _ = z.val.toPNat' := by simp
@@ -246,17 +226,14 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
         _ = (padicValNat 2 ↑(2^3^y.val: ℕ+)).toPNat' := by rw [←hc]
         _ = (3^y.val: ℕ).toPNat' := by simp
         _ = 3^↑y := by rw [←PNat.coe_inj]; simp
-    .
-      intro hc
+    · intro hc
       apply hyz.2
       simp [hc]
   rw [h1, h2]
   by_cases hx : x = 3^y.val
-  .
-    rw [hx, h1]
+  · rw [hx, h1]
     by_cases hyz : y ◇ z = 2^(3^y.val)
-    .
-      simp [hyz, h1]
+    · simp [hyz, h1]
       exfalso
       have : padicValNat 2 ↑(y ◇ z) = ↑(3^y.val) := by simp [hyz]
       unfold Magma.op at this
@@ -272,14 +249,11 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
       simp at this
       have this' : (0: ℕ) = (3: ℕ)^y.val ↔ False := by
         apply Iff.intro
-        .
-          simp
+        · simp
           intro h
           apply pow_ne_zero y.val (by simp: 3 ≠ 0)
           simp [h]
-        .
-          intro h
-          contradiction
+        · exact fun h ↦ False.elim h
       simp [this'] at this
       repeat simp [and_or_left, and_or_left] at this
       cases this with
