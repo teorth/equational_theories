@@ -317,8 +317,11 @@ function renderImplications(index) {
 	    [forwardStatus, backwardStatus].forEach((status, statusIndex) => {
             const isConjectured = status.includes('conjecture');
 	        let maybe_prove;
-            if (isUnknown(status, treatConjecturedAsUnknown)) {
+            if (isUnknown(status, false)) {
 	            let proofhref = gen_proof_url(index, i);
+                maybe_prove = ` <a href='${proofhref}'>Prove This!</a>`;
+            } else if (isUnknown(status, true)) { // conjectured
+	            let proofhref = gen_proof_url(index, i, isImplies(status, false, false) ? "yes" : "no");
                 maybe_prove = ` <a href='${proofhref}'>Prove This!</a>`;
             } else {
                 var does_implies = isImplies(status, false, false);
