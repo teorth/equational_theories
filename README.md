@@ -29,6 +29,7 @@ Current statistics and data files, updated automatically:
 
 Current visualizations, updated automatically:
 - [Equation Explorer](https://teorth.github.io/equational_theories/implications) is a tool for exploring the graph of equation implications.
+- [Finite Magma Explorer](https://teorth.github.io/equational_theories/fme) is a tool for exploring finite magmas and the equations they satisfy.
 - [Graphiti](https://teorth.github.io/equational_theories/graphiti) is a tool for visualizing the implication graph.
 
 For guidelines on how to contribute, see the [CONTRIBUTING.md](https://github.com/teorth/equational_theories/tree/main/CONTRIBUTING.md) file.  Participants are requested to abide by [our code of conduct](https://github.com/teorth/equational_theories/tree/main/CODE_OF_CONDUCT.md).
