@@ -92,7 +92,7 @@ equation 1689  :=  x = (y ◇ x) ◇ ((x ◇ z) ◇ z)
 
 equation 2662  :=  x = ((x ◇ y) ◇ (x ◇ y)) ◇ x
 
-abbrev Equation3167 (G: Type _) [Magma G] := ∀ x y z : G, x = (((y ◇ y) ◇ z) ◇ z) ◇ x
+equation 3167  :=  x = (((y ◇ y) ◇ z) ◇ z) ◇ x
 
 /-- From Putnam 1978, Problem A4, part (a) -/
 equation 3722  :=  x ◇ y = (x ◇ y) ◇ (x ◇ y)
