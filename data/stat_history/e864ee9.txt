@@ -1,0 +1,7 @@
+{"unknown": 741,
+ "implicit_proof_true": 8147260,
+ "implicit_proof_false": 13272271,
+ "implicit_conjecture_false": 15,
+ "explicit_proof_true": 31019,
+ "explicit_proof_false": 582104,
+ "explicit_conjecture_false": 226}
