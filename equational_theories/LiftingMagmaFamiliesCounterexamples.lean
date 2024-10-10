@@ -1,8 +1,6 @@
 import equational_theories.LiftingMagmaFamilies
-import equational_theories.EquationsCommand
 import equational_theories.Closure
-import equational_theories.Equations
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 
 open Law
 open Lean Elab Command Term
@@ -24,10 +22,12 @@ def liftingMagmaFamilyInstances : Array LiftingMagmaFamilyInstance := #[
 -- the non-implications from the environment are cached in a special datastructure for faster lookup
 def generateNonImplicationsTable : CoreM (Std.HashMap String (Array String)) := do
   let eqnThms ← Result.extractEquationalResults
+  IO.println s!"Extracted {eqnThms.size} equational results. Generating their closure ..."
   let closure ← Closure.closure <| eqnThms.map Entry.variant
   let nonImplications := closure.filterMap fun
     | .implication _ => none
     | .nonimplication e => some e
+  IO.println s!"Filtered to {nonImplications.size} non-implications ..."
   return nonImplications.foldl (init := {}) fun map ⟨lhs, rhs⟩ ↦
     match map[lhs]? with
     | some arr => map.insert lhs (arr.push rhs)
@@ -38,8 +38,8 @@ def containsImplication (table : Std.HashMap String (Array String)) (implication
    | some arr => arr.contains implication.rhs
    | none => false
 
-def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance) (nonImplications : Std.HashMap String (Array String)) : CoreM Unit := do
-  let laws ← getMagmaLaws
+def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
+    (nonImplications : Std.HashMap String (Array String)) (laws : Array (Name × NatMagmaLaw)) : CoreM Unit := do
   let mut positives : Array Name := #[]
   let mut negatives : Array Name := #[]
   for (lawName, law) in laws do
@@ -50,7 +50,8 @@ def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance) (non
       positives := positives.push lawName
     else
       negatives := negatives.push lawName
-  let mut output := "import equational_theories.LiftingMagmaFamilies\nimport equational_theories.EquationalResult\nimport equational_theories.AllEquations\n\n"
+  IO.println s!"Filtered laws into {positives.size} positives and {negatives.size} negatives ..."
+  let mut output := "import equational_theories.LiftingMagmaFamilies\nimport equational_theories.EquationalResult\nimport equational_theories.Equations.All\n\n"
   for (posLawName) in positives do
     for (negLawName) in negatives do
       let posEqnName := Name.mkSimple <| magmaLawNameToEquationName posLawName.toString
@@ -63,19 +64,27 @@ def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance) (non
         --     @proveNonimplication _ _ $(mkIdent inst.instName) _ _ _ _ $(mkIdent (posLawName ++ `models_iff)) $(mkIdent (negLawName ++ `models_iff))
         --     (by decide) (by decide))
         output := output ++ s!"\n\n@[equational_result]\nconjecture {resultName} : ∃ (G : Type _) (_ : Magma G), {posEqnName} G ∧ ¬{negEqnName} G"
+  IO.println "Writing to file ..."
   let filePath : System.FilePath := "." / "equational_theories" / "Generated" /
       "InvariantMetatheoremNonimplications" / s!"{inst.instName}_counterexamples.lean"
   IO.FS.writeFile filePath output
 
 def generateAllNonimplications : CoreM Unit := do
+  IO.println "Generating table of existing non-implications ..."
+  let table ← generateNonImplicationsTable
+  IO.println "Generated table of non-implications, retrieving laws ..."
+  let laws ← getMagmaLaws
+  IO.println s!"Retrieved {laws.size} laws from the environment ..."
   for inst in liftingMagmaFamilyInstances do
-    generateInvariantMetatheoremResults inst (← generateNonImplicationsTable)
+    IO.println s!"Generating non-implications for {inst.instName} ..."
+    generateInvariantMetatheoremResults inst table laws
 
 def main : IO Unit := do
+  IO.println "Generating counterexample files..."
+  IO.println "Loading environment..."
   searchPathRef.set compile_time_search_path%
   let env ← importModules #[
     { module := `equational_theories },
-    { module := `equational_theories.Equations },
-    { module := `equational_theories.AllEquations }] .empty
+    { module := `equational_theories.Equations.All }] .empty
   EIO.toIO (fun _ ↦ IO.userError "Failed to generate counterexample files.") <|
             generateAllNonimplications.run' { fileName := "", fileMap := default } { env := env }
