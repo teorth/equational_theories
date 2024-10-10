@@ -10,12 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if comment contains only 'claim' (ignoring white spaces)
+    - name: Check if comment contains only 'claim' (ignoring white spaces and newlines)
       id: check_claim
       run: |
-        TRIMMED_COMMENT=$(echo "${{ github.event.comment.body }}" | xargs)
+        # Remove leading/trailing spaces and newlines
+        TRIMMED_COMMENT=$(echo "${{ github.event.comment.body }}" | tr -d '\n' | xargs)
         if [ "$TRIMMED_COMMENT" != "claim" ]; then
-          echo "Comment does not contain only 'claim' modulo white spaces."
+          echo "Comment does not contain only 'claim' modulo white spaces and newlines."
           exit 1
         fi
         echo "Claim comment detected."
