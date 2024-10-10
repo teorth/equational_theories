@@ -1,5 +1,5 @@
 import Mathlib.Tactic
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 
 namespace NthRewrites
 @[equational_result]

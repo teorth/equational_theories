@@ -1,6 +1,9 @@
+import equational_theories.ConfluenceAttr
 import equational_theories.FreeMagma
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 import equational_theories.FactsSyntax
+import Mathlib.Tactic.NthRewrite
+import Mathlib.Tactic.CasesM
 
 namespace FreeMagma
 
@@ -13,6 +16,12 @@ def Everywhere (P : FreeMagma α → Prop) : FreeMagma α → Prop
 theorem Everywhere.top {P : FreeMagma α → Prop} : {x : FreeMagma α} → Everywhere P x → P x
   | .Leaf _ => fun h => h
   | _ ⋆ _ => fun h => h.2.2
+
+theorem Everywhere.left {P : FreeMagma α → Prop} {x y : FreeMagma α} (h: Everywhere P (x ⋆ y)): Everywhere P x :=
+  h.1
+
+theorem Everywhere.right {P : FreeMagma α → Prop} {x y : FreeMagma α} (h: Everywhere P (x ⋆ y)): Everywhere P y :=
+  h.2.1
 
 @[simp]
 theorem Everywhere_idem {P : FreeMagma α → Prop} : Everywhere (Everywhere P) = Everywhere P := by
@@ -35,6 +44,16 @@ theorem SubtermOf.refl (x : FreeMagma α) : SubtermOf x x := by
   | Leaf => rfl
   | Fork x y => left; rfl
 
+lemma SubtermOf.left {x a b: FreeMagma α} (h : SubtermOf x a) : SubtermOf x (a ⋆ b) := by
+  right
+  left
+  exact h
+
+lemma SubtermOf.right {x a b: FreeMagma α} (h : SubtermOf x b) : SubtermOf x (a ⋆ b) := by
+  right
+  right
+  exact h
+
 theorem everywhere_of_subterm_of_everywhere {P : FreeMagma α → Prop} {x} (h : x.Everywhere P) {y}
     (hsub : SubtermOf y x) : y.Everywhere P := by
   induction x with
@@ -50,16 +69,38 @@ theorem everywhere_of_subterm_of_everywhere {P : FreeMagma α → Prop} {x} (h :
 theorem subterm_everywhere {P : FreeMagma α → Prop} {x} (h : x.Everywhere P) {y} (hsub : SubtermOf y x) : P y :=
   (everywhere_of_subterm_of_everywhere h hsub).top
 
-class IsProj (rw : FreeMagma α → FreeMagma α) : Prop where
+theorem length_le_of_subterm {x y: FreeMagma α} (h: SubtermOf x y) : x.length ≤ y.length := by
+  induction y with
+  | Leaf =>
+    rw [h]
+  | Fork x y ihx ihy =>
+    obtain (heq | hsub | hsub) := h
+    · rw [heq]
+    · rw [FreeMagma.length.eq_2]
+      exact Nat.le_add_right_of_le (ihx hsub)
+    · rw [FreeMagma.length.eq_2]
+      rw [Nat.add_comm]
+      exact Nat.le_add_right_of_le (ihy hsub)
+
+variable (rw : FreeMagma α → FreeMagma α)
+
+class IsProj : Prop where
   proj : ∀ x, SubtermOf (rw x) x
 
-theorem everywhere_of_projection_of_everywhere
-    (rw : FreeMagma α → FreeMagma α) [IsProj rw] P :
+variable [hproj: IsProj rw]
+
+@[simp]
+lemma projection_leaf (x): rw (.Leaf x) = x :=
+  hproj.proj (.Leaf x)
+
+lemma length_le_of_projection (x): (rw x).length ≤ x.length :=
+  length_le_of_subterm (hproj.proj x)
+
+theorem everywhere_of_projection_of_everywhere P:
     ∀ x, Everywhere P x → (rw x).Everywhere P :=
   fun x he ↦ everywhere_of_subterm_of_everywhere he (IsProj.proj x)
 
-theorem projection_everywhere
-    (rw : FreeMagma α → FreeMagma α) [IsProj rw] P :
+theorem projection_everywhere P :
     ∀ x, Everywhere P x → P (rw x) :=
   fun x he ↦ subterm_everywhere he (IsProj.proj x)
 
@@ -74,14 +115,55 @@ variable {α : Type}
 variable (rw : FreeMagma α → FreeMagma α)
 
 def bu : FreeMagma α → FreeMagma α
-  | .Leaf x => .Leaf x
+  | .Leaf x => rw x
   | x ⋆ y => rw (bu x ⋆ bu y)
 
 attribute [simp] bu.eq_1
 
-def NF (x : FreeMagma α) : Prop := x.Everywhere (fun y => bu rw y = y)
+abbrev buFixed x := bu rw x = x
 
-def bu_nf [hproj : IsProj rw] : ∀ x, NF rw (bu rw x) := by
+@[simp] theorem bu_op_eq_rw_op {x} {y}
+    (hx: buFixed rw x) (hy: buFixed rw y): bu rw (x ⋆ y) = rw (x ⋆ y) := by
+  nth_rw 2 [← hx, ← hy]
+  rw [← bu.eq_2 rw]
+
+lemma length_bu_le [hproj : IsProj rw] (x): (bu rw x).length ≤ x.length := by
+  induction x with
+  | Leaf =>
+    simp
+  | Fork x y ihx ihy  =>
+    rw [bu.eq_2]
+    apply Nat.le_trans (length_le_of_projection rw _) ?_
+    simp only [FreeMagma.length.eq_2]
+    exact Nat.add_le_add ihx ihy
+
+def NF (x : FreeMagma α) : Prop := x.Everywhere (fun y => rw y = y)
+
+def buNF (x : FreeMagma α) : Prop := x.Everywhere (fun y => bu rw y = y)
+
+lemma buNF_iff_NF {x}: buNF rw x ↔ NF rw x := by
+  induction x with
+  | Leaf =>
+    unfold NF buNF Everywhere
+    simp
+  | Fork x y ihx ihy =>
+    have ih  := and_congr ihx ihy
+    unfold NF buNF at ih ⊢
+    unfold Everywhere
+    simp only [← and_assoc, ← ih]
+    apply and_congr_right
+    intro ⟨hbx, hby⟩
+    simp only [bu, hbx.top, hby.top]
+
+lemma buFixed_of_NF {x : FreeMagma α} (h : NF rw x) : buFixed rw x := by
+  apply ((buNF_iff_NF rw).mpr h).top
+
+lemma rw_eq_self_of_NF {x} (h: NF rw x): rw x = x := by
+  apply h.top
+
+variable [hproj: IsProj rw]
+
+theorem bu_nf : ∀ x, NF rw (bu rw x) := by
   intro x
   induction x with
   | Leaf => simp [NF, bu, Everywhere]
@@ -94,32 +176,64 @@ def bu_nf [hproj : IsProj rw] : ∀ x, NF rw (bu rw x) := by
     · exact everywhere_of_subterm_of_everywhere ihx hsub
     · exact everywhere_of_subterm_of_everywhere ihy hsub
 
-theorem idem_of_NF {x : FreeMagma α} (h : NF rw x) : bu rw x = x := h.top
+lemma NF_iff_buFixed {x}: NF rw x ↔ buFixed rw x := by
+  constructor
+  · exact buFixed_of_NF rw
+  · intro h
+    rw [← h]
+    apply bu_nf
 
-variable [IsProj rw]
+@[simp] theorem bu_idem x : buFixed rw (bu rw x) := buFixed_of_NF rw (bu_nf rw x)
 
-@[simp] theorem bu_idem x : bu rw (bu rw x) = bu rw x := idem_of_NF rw (bu_nf rw x)
+@[simp] theorem buFixed_rw_op {x} {y}
+    (hx: bu rw x = x) (hy: bu rw y = y): buFixed rw (rw (x ⋆ y)) := by
+  rw [← hx, ← hy, ← bu.eq_2 rw]
+  exact bu_idem rw _
+
+theorem NF_rw_op_of_buFixed {x} {y}
+    (hx: bu rw x = x) (hy: bu rw y = y): NF rw (rw (x ⋆ y)) := by
+  apply (NF_iff_buFixed rw).mpr
+  exact buFixed_rw_op rw hx hy
+
+theorem NF_rw_op {x} {y}
+    (hx: NF rw x) (hy: NF rw y): NF rw (rw (x ⋆ y)) := by
+  rw [NF_iff_buFixed] at hx hy ⊢
+  exact buFixed_rw_op rw hx hy
+
+@[simp] theorem rw_op_idem {x} {y}
+  (hx: bu rw x = x) (hy: bu rw y = y): rw (rw (x ⋆ y)) = rw (x ⋆ y) := by
+  have := buFixed_rw_op rw hx hy
+  rw [← NF_iff_buFixed] at this
+  exact rw_eq_self_of_NF rw this
+
+theorem bu_rw_op_eq_rw_rw_op {x} {y}
+    (hx: bu rw x = x) (hy: bu rw y = y): bu rw (rw (x ⋆ y)) = rw (rw (x ⋆ y)) := by
+  rw [buFixed_rw_op rw hx hy, rw_op_idem rw hx hy]
 
 def ConfMagma := {x : FreeMagma α // bu rw x = x }
 
 instance : Coe α (ConfMagma rw) where
-  coe x := ⟨x, rfl⟩
+  coe x := ⟨bu rw x, bu_idem rw x⟩
 
 instance : Magma (ConfMagma rw) where
   op := fun x y ↦ ⟨bu rw (x.1 ◇ y.1), bu_idem rw _⟩
 
 instance [DecidableEq α] : DecidableEq (ConfMagma rw) :=
-  inferInstanceAs (DecidableEq {x : FreeMagma α // bu rw x = x })
+  inferInstanceAs (DecidableEq {x : FreeMagma α // buFixed rw x })
 
 /-- Refutation tactic for dedicable FreeMagma equations -/
 macro "refute" : tactic =>
   `(tactic |(
     show (¬ ∀ _,_)
     push_neg
-    first | (use (0 : Nat); decide)
-          | (use (0 : Nat), (1 : Nat); decide)
+    first
+    | (use (0 : Nat); decide)
+    | (use (0 : Nat), (1 : Nat); decide)
+    | (use (0 : Nat), (1 : Nat), (2: Nat); decide)
+    | (use (0 : Nat), (1 : Nat), (2: Nat), (3: Nat); decide)
+    | (use (0 : Nat), (1 : Nat), (2: Nat), (3: Nat), (4: Nat); decide)
+    | (use (0 : Nat), (1 : Nat), (2: Nat), (3: Nat), (4: Nat), (5: Nat); decide)
     ))
-
 
 /-! This is the end of the setup, the rest is for concrete laws -/
 
@@ -902,5 +1016,311 @@ theorem «Facts» : ∃ (G : Type) (_ : Magma G), Facts G [1110] [8, 411, 1629, 
   all_goals refute
 
 end rw1110
+
+
+
+open Lean.Parser.Tactic
+
+attribute [confluence_simps] not_true_eq_false not_false_eq_true false_implies implies_true imp_false false_and and_true and_self not_and and_imp
+attribute [confluence_simps] ite_eq_right_iff
+attribute [confluence_simps] Option.or Option.getD Option.ite_none_right_eq_some Option.some.injEq
+attribute [confluence_simps] forall_apply_eq_imp_iff₂
+attribute [confluence_simps] Fork.injEq
+
+simproc [confluence_simps] confluenceReduceCtorEq (_) := reduceCtorEq
+
+-- for some reason if I try to use Not.eq_def directly from a tactic it can't find it!
+private def not_eq_def := Not.eq_def
+
+local macro "separate" : tactic => `(tactic| (
+  try intros
+  try simp only [not_eq_def]
+  try intros
+  try injections
+  try casesm* _ ∨ _, _ ∧ _, Exists _
+  try any_goals
+    try subst_eqs
+    try trivial
+))
+
+local macro "autosplit" : tactic => `(tactic| (
+  try any_goals separate
+  repeat'
+    split at *
+    try any_goals separate
+))
+
+local macro "prove_elim" : tactic => `(tactic| (
+  autosplit
+  all_goals simp_all only [confluence_simps, exists_and_right, exists_eq_right_right', exists_eq_right', false_iff, not_exists, true_and]
+  separate
+  try simp_all only [not_true_eq_false, imp_false]
+  try
+    constructor
+    · intro h
+      subst_eqs
+      repeat constructor
+    · autosplit
+))
+
+local macro "prove_elim_not" : tactic => `(tactic| (
+  autosplit
+  all_goals simp_all only [confluence_simps, false_iff, not_exists, not_and, true_iff, forall_eq', forall_apply_eq_imp_iff, true_iff, not_false_eq_true]
+  separate
+  try simp_all only [not_true_eq_false, imp_false]
+))
+
+local macro "prove_elim2" rule:simpLemma "," rule2:simpLemma : tactic => `(tactic| (
+  constructor
+  · intro h
+    simp only [$rule, Option.or, Option.getD] at h
+    autosplit
+    all_goals simp_all
+  · intro h
+    rcases h with h1 | h2 | ⟨h0, h1, h2⟩
+    next h1 => simp only [$rule, h1, Option.or, Option.getD]
+    next h2 => simp only [$rule2, h2, Option.or, Option.getD]
+    next h' => simp only [$rule, ← h0, h1, h2, Option.or, Option.getD]
+))
+
+local macro "prove_eq_rule21" rule:simpLemma "," rule1:simpLemma "," rule2:simpLemma : tactic => `(tactic| (
+  simp only [$rule, Option.or, Option.getD]
+  autosplit
+  try any_goals simp_all only [Option.some.injEq, reduceCtorEq]
+  exfalso
+  simp_all only [$rule1, $rule2]
+  autosplit
+))
+
+local syntax "subterm" : tactic
+
+local macro_rules
+| `(tactic| subterm) => `(tactic|
+  first
+  | apply SubtermOf.refl
+  | apply SubtermOf.left
+    subterm
+  | apply SubtermOf.right
+    subterm
+)
+
+local macro "compute" lemmus:simpLemma : tactic => `(tactic| (
+  simp only [$lemmus, ↓reduceIte, and_self]
+))
+
+namespace rw115
+
+variable [DecidableEq α]
+
+-- equation 115 := y ◇ ((x ◇ x) ◇ y)
+def rule1 : FreeMagma α → Option (FreeMagma α)
+  | y1 ⋆ ((x1 ⋆ x2) ⋆ y2) =>
+    if x1 = x2 ∧ y1 = y2 then
+      x1
+    else
+      none
+  | _ => none
+
+-- generated by Knuth-Bendix completion with Vampire or kbcv
+def rule2 : FreeMagma α → Option (FreeMagma α)
+  | ((y1 ⋆ y2) ⋆ (x1 ⋆ x2)) ⋆ y3 =>
+    if x1 = x2 ∧ y1 = y2 ∧ y1 = y3 then
+      x1
+    else
+      none
+  | _ => none
+
+def rule (x: FreeMagma α): FreeMagma α :=
+  ((rule1 x).or (rule2 x)).getD x
+
+def rule_eq_rule21' (x: FreeMagma α):
+  rule x = ((rule2 x).or (rule1 x)).getD x := by
+  prove_eq_rule21 rule, rule1, rule2
+
+def rule_eq_rule12 (x: FreeMagma α) := by
+  simpa [rule1, rule2, Option.or, Option.getD] using rule.eq_def x
+
+def rule_eq_rule21 {x: FreeMagma α} := by
+  simpa [rule1, rule2, Option.or, Option.getD] using rule_eq_rule21' x
+
+def rule1.elim (e x: FreeMagma α): rule1 e = some x ↔
+  ∃ y, e = y ⋆ ((x ⋆ x) ⋆ y) := by
+  simp only [rule1]
+  prove_elim
+
+def rule1.elim_not (e: FreeMagma α): rule1 e = none ↔
+  ¬∃ x y, e = y ⋆ ((x ⋆ x) ⋆ y) := by
+  simp only [rule1]
+  prove_elim_not
+
+def rule2.elim (e x: FreeMagma α): rule2 e = some x ↔
+  ∃ y, e = ((y ⋆ y) ⋆ (x ⋆ x)) ⋆ y := by
+  simp only [rule2]
+  prove_elim
+
+def rule2.elim_not (e: FreeMagma α): rule2 e = none ↔
+  ¬∃ x y, e = ((y ⋆ y) ⋆ (x ⋆ x)) ⋆ y := by
+  simp only [rule2]
+  prove_elim_not
+
+def rule.elim' (x y: FreeMagma α): rule x = y ↔
+  rule1 x = some y ∨ rule2 x = some y ∨ (x = y ∧ rule1 x = none ∧ rule2 x = none) := by
+  prove_elim2 rule, rule_eq_rule21'
+
+def rule.elim (e r: FreeMagma α) := by
+  simpa only [rule1.elim, rule2.elim, rule1.elim_not, rule2.elim_not] using rule.elim' e r
+
+instance rule_projection : IsProj (@rule α _) where
+  proj := by
+    intro x
+    simp only [rule, rule1, rule2, Option.or, Option.getD]
+    autosplit
+    all_goals subterm
+
+theorem comp1 {α} [DecidableEq α] {x y : FreeMagma α}:
+    rule (y ⋆ ((x ⋆ x) ⋆ y)) = x := by
+  compute rule_eq_rule12
+
+theorem comp2 {α} [DecidableEq α] {x y : FreeMagma α} (hx: NF rule x):
+    rule (y ⋆ rule (x ⋆ x ⋆ y)) = x := by
+  generalize h: rule (x ⋆ x ⋆ y) = e
+  simp only [rule.elim] at h
+  separate
+  · compute rule_eq_rule21
+  · apply rw_eq_self_of_NF rule hx
+  · exact comp1
+
+theorem comp3 {α} [DecidableEq α] {x y : FreeMagma α} (hx: NF rule x):
+    rule (y ⋆ rule (rule (x ⋆ x) ⋆ y)) = x := by
+  generalize h: rule (x ⋆ x) = e
+  simp only [rule.elim] at h
+  separate
+  exact comp2 hx
+
+@[equational_result]
+theorem «Facts» :
+  ∃ (G : Type) (_ : Magma G), Facts G [115] [2707, 4273, 4332] := by
+  use ConfMagma (@rule Nat _), inferInstance
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩
+    simp only [Magma.op, bu, hx, hy, buFixed_rw_op]
+    symm
+    congr! 1
+    apply comp3 ((NF_iff_buFixed rule).mpr hx)
+  all_goals refute
+
+end rw115
+
+namespace rw3588
+
+variable [DecidableEq α]
+
+-- equation 3588 := x ◇ y = z ◇ ((x ◇ y) ◇ z)
+def rule1 : FreeMagma α → Option (FreeMagma α)
+  | z1 ⋆ ((x ⋆ y) ⋆ z2) =>
+    if z1 = z2 then
+      x ⋆ y
+    else
+      none
+  | _ => none
+
+-- generated by Knuth-Bendix completion with Vampire or kbcv
+def rule2 : FreeMagma α → Option (FreeMagma α)
+  | ((z1 ⋆ w1) ⋆ (x ⋆ y)) ⋆ (z2 ⋆ w2) =>
+    if z1 = z2 ∧ w1 = w2 then
+      x ⋆ y
+    else
+      none
+  | _ => none
+
+def rule (x: FreeMagma α): FreeMagma α :=
+  ((rule1 x).or (rule2 x)).getD x
+
+def rule_eq_rule21' (x: FreeMagma α):
+  rule x = ((rule2 x).or (rule1 x)).getD x := by
+  prove_eq_rule21 rule, rule1, rule2
+
+def rule_eq_rule12 (x: FreeMagma α) := by
+  simpa [rule1, rule2, Option.or, Option.getD] using rule.eq_def x
+
+def rule_eq_rule21 {x: FreeMagma α} := by
+  simpa [rule1, rule2, Option.or, Option.getD] using rule_eq_rule21' x
+
+def rule2.elim (e r: FreeMagma α): rule2 e = some r ↔
+  ∃ x y z w, e = ((z ⋆ w) ⋆ (x ⋆ y)) ⋆ (z ⋆ w) ∧ r = x ⋆ y := by
+  simp only [rule2]
+  prove_elim
+
+def rule2.elim_not (e: FreeMagma α): rule2 e = none ↔
+  ¬∃ x y z w, e = ((z ⋆ w) ⋆ (x ⋆ y)) ⋆ (z ⋆ w) := by
+  simp only [rule2]
+  prove_elim_not
+
+def rule1.elim (e r: FreeMagma α): rule1 e = some r ↔
+  ∃ x y z, e = z ⋆ ((x ⋆ y) ⋆ z) ∧ r = x ⋆ y := by
+  simp only [rule1]
+  prove_elim
+
+def rule1.elim_not (e: FreeMagma α): rule1 e = none ↔
+  ¬∃ x y z, e = z ⋆ ((x ⋆ y) ⋆ z) := by
+  simp only [rule1]
+  prove_elim_not
+
+def rule.elim' (x y: FreeMagma α): rule x = y ↔
+  rule1 x = some y ∨ rule2 x = some y ∨ (x = y ∧ rule1 x = none ∧ rule2 x = none) := by
+  prove_elim2 rule, rule_eq_rule21'
+
+def rule.elim (e r: FreeMagma α) := by
+  simpa only [rule1.elim, rule2.elim, rule1.elim_not, rule2.elim_not] using rule.elim' e r
+
+instance rule_projection : IsProj (@rule α _) where
+  proj := by
+    intro x
+    simp only [rule, rule1, rule2, Option.or, Option.getD]
+    autosplit
+    all_goals subterm
+
+theorem comp1 {α} [DecidableEq α] {x y z : FreeMagma α}:
+    rule (z ⋆ (x ⋆ y ⋆ z)) = x ⋆ y := by
+  compute rule_eq_rule12
+
+theorem comp2 {α} [DecidableEq α] {x y z : FreeMagma α} (hxy: NF rule (x ⋆ y)):
+    rule (z ⋆ rule (x ⋆ y ⋆ z)) = x ⋆ y := by
+  generalize h: rule (x ⋆ y ⋆ z) = e
+  simp only [rule.elim] at h
+  separate
+  · compute rule_eq_rule21
+  · apply rw_eq_self_of_NF rule hxy
+  · exact comp1
+
+theorem comp3 {α} [DecidableEq α] {x y z : FreeMagma α} (hx: NF rule x) (hy: NF rule y):
+    rule (z ⋆ rule (rule (x ⋆ y) ⋆ z)) = rule (x ⋆ y) := by
+  generalize h: rule (x ⋆ y) = e
+  simp only [rule.elim] at h
+  separate
+  all_goals apply comp2
+  · apply Everywhere.left hy
+  · apply Everywhere.right hx
+  · rw [NF, Everywhere]
+    refine ⟨hx, hy, ?_⟩
+    simp only [rule.elim]
+    right
+    right
+    constructorm* _ ∧ _
+    all_goals trivial
+
+@[equational_result]
+theorem «Facts» :
+  ∃ (G : Type) (_ : Magma G), Facts G [3588] [3862, 3878, 3917, 3955] := by
+  use ConfMagma (@rule Nat _), inferInstance
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩ ⟨z, hz⟩
+    simp only [Magma.op, bu, hx, hy, hz, buFixed_rw_op]
+    symm
+    congr! 1
+    apply comp3 ((NF_iff_buFixed rule).mpr hx) ((NF_iff_buFixed rule).mpr hy)
+  all_goals refute
+
+end rw3588
 
 end Confluence
