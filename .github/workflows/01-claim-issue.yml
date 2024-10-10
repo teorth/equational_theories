@@ -16,7 +16,7 @@ jobs:
         TRIMMED_COMMENT=$(echo "${{ github.event.comment.body }}" | xargs)
         if [ "$TRIMMED_COMMENT" != "claim" ]; then
           echo "Comment does not contain only 'claim'."
-          exit 0
+          exit 1
         fi
         echo "Claim comment detected."
 
