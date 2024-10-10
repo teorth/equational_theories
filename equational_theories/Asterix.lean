@@ -450,45 +450,60 @@ lemma lemma73 (f : PartialSolution ℤ) :
     · apply (closureSeq f (Equiv.intEquivNat x + 1)).E0_subset_E1
       apply mem_closureSeq_e0
 
--- h0 h1 h2: 1, 4, 5. h0' h1' h2': 2, 3, 7
 def initial : PartialSolution ℤ where
-  E0 := {0, 1, 2}
-  E1 := {0, 1, 2, 3, 4, 10, 12}
-  E2 := {0, 1, 2, 3, 4, 5, 7, 10, 12, -9, -10} -- note, add h2 to blueprint
+  E0 := {-1, 0, 1}
+  E1 := {-2, -1, 0, 1}
+  E2 := {-2, -1, 0, 1}
   E0_subset_E1 := by decide
   E1_subset_E2 := by decide
-  f x := if x = 1 then 4 else if x = 2 then 3 else if x = 3 then 7 else if
-    x = 4 then 5 else if x = 10 then -9 else if x = 12 then -10 else 0
+  f x := if x = -1 then 1 else if x = 0 then 1 else if x = 1 then -2 else if x = -2 then 1 else 0
   zero_mem_E0 := by decide
   f_ne_neg := by decide
   eq_f_mem_E1 := by decide
   eq_f_eq_zero := by decide
   maps_E0_E1 := by decide
   maps_E1_E2 := by decide
-  f_bijOn := by rw [← Finset.coe_sdiff, ← Finset.coe_sdiff]; decide
+  f_bijOn := by sorry
 
-noncomputable def closure_initial : ℤ → ℤ := (lemma73 initial).choose
+-- h0 h1 h2: 1, 4, 5. h0' h1' h2': 2, 3, 7
+-- def initial : PartialSolution ℤ where
+--   E0 := {0, 1, 2}
+--   E1 := {0, 1, 2, 3, 4, 10, 12}
+--   E2 := {0, 1, 2, 3, 4, 5, 7, 10, 12, -9, -10} -- note, add h2 to blueprint
+--   E0_subset_E1 := by decide
+--   E1_subset_E2 := by decide
+--   f x := if x = 1 then 4 else if x = 2 then 3 else if x = 3 then 7 else if
+--     x = 4 then 5 else if x = 10 then -9 else if x = 12 then -10 else 0
+--   zero_mem_E0 := by decide
+--   f_ne_neg := by decide
+--   eq_f_mem_E1 := by decide
+--   eq_f_eq_zero := by decide
+--   maps_E0_E1 := by decide
+--   maps_E1_E2 := by decide
+--   f_bijOn := by rw [← Finset.coe_sdiff, ← Finset.coe_sdiff]; decide
 
-lemma closure_initial_prop1 : ∀ h,
-    closure_initial h + closure_initial (closure_initial h) +
-      closure_initial (h + closure_initial h + closure_initial (closure_initial h)) = 0 :=
-  (lemma73 initial).choose_spec.2
+-- noncomputable def closure_initial : ℤ → ℤ := (lemma73 initial).choose
 
-lemma closure_initial_prop2 :
-    ∀ x ∈ initial.E1, closure_initial x = initial.f x := (lemma73 initial).choose_spec.1
+-- lemma closure_initial_prop1 : ∀ h,
+--     closure_initial h + closure_initial (closure_initial h) +
+--       closure_initial (h + closure_initial h + closure_initial (closure_initial h)) = 0 :=
+--   (lemma73 initial).choose_spec.2
 
-lemma closure_initial_one : closure_initial 1 = 4 := closure_initial_prop2 1 (by decide)
+-- lemma closure_initial_prop2 :
+--     ∀ x ∈ initial.E1, closure_initial x = initial.f x := (lemma73 initial).choose_spec.1
 
-lemma closure_initial_two : closure_initial 2 = 3 := closure_initial_prop2 2 (by decide)
+-- lemma closure_initial_one : closure_initial 1 = 4 := closure_initial_prop2 1 (by decide)
 
-@[equational_result]
-theorem Equation65_not_implies_Equation1491 : ∃ (G: Type) (_: Magma G), Equation65 G ∧ ¬ Equation1491 G := by
-  use ℤ, translationInvariant closure_initial, ?_, ?_
-  rw [Equation65_translationInvariant_iff]
-  apply closure_initial_prop1
-  intro nh
-  have v1 := nh 1 0
-  simp [translationInvariant, closure_initial_one] at v1
-  have v2 := nh 2 0
-  simp [translationInvariant, closure_initial_two] at v2
-  omega
+-- lemma closure_initial_two : closure_initial 2 = 3 := closure_initial_prop2 2 (by decide)
+
+-- @[equational_result]
+-- theorem Equation65_not_implies_Equation1491 : ∃ (G: Type) (_: Magma G), Equation65 G ∧ ¬ Equation1491 G := by
+--   use ℤ, translationInvariant closure_initial, ?_, ?_
+--   rw [Equation65_translationInvariant_iff]
+--   apply closure_initial_prop1
+--   intro nh
+--   have v1 := nh 1 0
+--   simp [translationInvariant, closure_initial_one] at v1
+--   have v2 := nh 2 0
+--   simp [translationInvariant, closure_initial_two] at v2
+--   omega
