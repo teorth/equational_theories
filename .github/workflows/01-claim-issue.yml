@@ -54,10 +54,7 @@ jobs:
 
         ITEM_ID=$(echo "$ITEM_ID_RESPONSE" | jq -r '.data.repository.issue.projectItems.nodes[0].id')
         echo "Retrieved ITEM_ID: $ITEM_ID"
-        if [ -z "$ITEM_ID" ]; then
-          echo "Error: Could not retrieve the ITEM_ID for the issue"
-          exit 1
-        fi
+        echo "ITEM_ID=$ITEM_ID" >> $GITHUB_ENV
 
         FIELD_QUERY=$(cat <<EOF
         {
