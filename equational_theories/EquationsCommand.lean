@@ -3,100 +3,137 @@ import equational_theories.Magma
 import equational_theories.MagmaLaw
 import equational_theories.EquationLawConversion
 
-open Lean Elab Command Law
+open Lean Elab Command Law Qq
 
-def mkNatMagmaLaw (declName : Name) : ImportM NatMagmaLaw := do
-  let { env, opts, .. } ← read
-  IO.ofExcept <| unsafe env.evalConstCheck NatMagmaLaw opts ``NatMagmaLaw declName
+initialize magmaLawExt : TagDeclarationExtension ← mkTagDeclarationExtension
 
-initialize magmaLawExt : PersistentEnvExtension Name (Name × NatMagmaLaw) (Array (Name × NatMagmaLaw)) ←
-  registerPersistentEnvExtension {
-    mkInitial := pure .empty
-    addImportedFn := Array.concatMapM <| Array.mapM <| fun n ↦ do return (n, ← mkNatMagmaLaw n)
-    addEntryFn := Array.push
-    exportEntriesFn := .map Prod.fst
-  }
+def getMagmaLaws : CoreM (Array (Name × NatMagmaLaw)) := do
+  let mut out := #[]
+  for ns in (magmaLawExt.toEnvExtension.getState (← getEnv)).importedEntries do
+    for n in ns do
+      out := out.push (n, ← unsafe evalConstCheck NatMagmaLaw ``NatMagmaLaw n)
+  return out
 
-def getMagmaLaws {M} [Monad M] [MonadEnv M] : M (Array (Name × NatMagmaLaw)) := do
-  return magmaLawExt.getState (← getEnv)
+namespace EquationsCommand
+
+partial def parseFreeMagma : Term → StateT (Array Ident) Option (FreeMagma Nat)
+  | `(($a)) => parseFreeMagma a
+  | `($a ◇ $b) => return (← parseFreeMagma a) ◇ (← parseFreeMagma b)
+  | x => do
+    unless x.raw.isIdent do failure
+    let x : Ident := ⟨x.raw⟩
+    let ids ← get
+    if let some i := ids.findIdx? (· == x) then
+      pure (Lf i)
+    else
+      let i := ids.size
+      modify (·.push x)
+      pure (Lf i)
+
+def parseMagmaLaw : Term → StateT (Array Ident) Option NatMagmaLaw
+  | `($a = $b) => return { lhs := ← parseFreeMagma a, rhs := ← parseFreeMagma b }
+  | _ => failure
+
+def magmaToExpr {u : Level} {G : Q(Type u)} (inst : Q(Magma $G)) (xs : Array Q($G)) :
+    FreeMagma Nat → Q($G)
+  | a ⋆ b => q($(magmaToExpr inst xs a) ◇ $(magmaToExpr inst xs b))
+  | Lf i => xs[i]!
+
+def lawToExpr {u : Level} {G : Q(Type u)} (inst : Q(Magma $G)) (xs : Array Q($G)) :
+    MagmaLaw Nat → Q(Prop)
+  | ⟨a, b⟩ => q($(magmaToExpr inst xs a) = $(magmaToExpr inst xs b))
+
+section -- FIXME: "deriving instance ToExpr for FreeMagma" fails, this is the edited result
+universe u
+
+private def toExprFreeMagma {α} [Lean.ToExpr α] [ToLevel.{u}] : FreeMagma.{u} α → Expr
+  | .Leaf a =>
+    Expr.app (Expr.app (Expr.const `FreeMagma.Leaf [toLevel.{u}]) (toTypeExpr α)) (toExpr a)
+  | .Fork a1 a2 =>
+    Expr.app (Expr.app (Expr.app (Expr.const `FreeMagma.Fork [toLevel.{u}]) (toTypeExpr α))
+      (toExprFreeMagma a1)) (toExprFreeMagma a2)
+
+private instance {α} [Lean.ToExpr α] [ToLevel.{u}] : ToExpr (@FreeMagma.{u} α) where
+  toExpr := toExprFreeMagma.{u}
+  toTypeExpr := Expr.app (Expr.const `FreeMagma [toLevel.{u}]) (toTypeExpr α)
+
+private def toExprMagmaLaw {α} [Lean.ToExpr α] [ToLevel.{u}] : Law.MagmaLaw.{u} α → Expr
+  | ⟨a, a1⟩ =>
+    Expr.app (Expr.app (Expr.app (Expr.const `Law.MagmaLaw.mk [toLevel.{u}])
+      (toTypeExpr α)) (toExpr a)) (toExpr a1)
+
+instance {α} [Lean.ToExpr α] [ToLevel.{u}] : ToExpr (@Law.MagmaLaw.{u} α) where
+  toExpr := toExprMagmaLaw.{u}
+  toTypeExpr := Expr.app (Expr.const `Law.MagmaLaw [toLevel.{u}]) (toTypeExpr α)
+
+end
 
 /--
 For a more concise syntax, but more importantly to speed up elaboration (where type inference
 for each `◇` makes processing this file very slow) we defined custom syntax for defining
 equations, and a custom elaborator that instantiates the instante parameter of `◇`.
 -/
-elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => do
-  let G := mkIdent (← MonadQuotation.addMacroScope `G)
-  let inst := mkIdent (← MonadQuotation.addMacroScope `inst)
+elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Command.liftTermElabM do
+  -- TODO: This will go wrong if we are in a namespace.
   let eqName := .mkSimple s!"Equation{i.getNat}"
   let eqStx := mkNullNode #[tk, i]
-  let eqIdent := mkIdentFrom eqStx eqName (canonical := true)
-  let finLawName := .mkSimple s!"FinLaw{i.getNat}"
-  let finLawIdent := mkIdent finLawName
   let lawName := .mkSimple s!"Law{i.getNat}"
-  let lawIdent := mkIdent lawName
-  let finThmName := mkIdent (.str finLawName "models_iff")
-  let thmName := mkIdent (.str lawName "models_iff")
-  let mut is := #[]
-  let t := tsyn.raw
-  -- Collect all identifiers to introduce them as parameters
-  for s in t.topDown do
-    if s.isIdent && !is.contains s then
-      is := is.push s
-  -- Rewrite `◇` to `inst.op` to avoid type class inference
-  let t ← t.rewriteBottomUpM fun s => match s with
-    | `($a ◇ $b) => `($(inst).op $a $b)
-    | _ => pure s
-  -- Assemble term and command
-  let mut t : Term := ⟨t⟩
-  for i in is.reverse do
-    t ← `(∀ $(⟨i⟩) : $G, $t)
-  elabCommand (← `(command| abbrev%$tk $eqIdent ($G : Type _) [$inst : Magma $G] := $t))
-  Command.liftTermElabM do
-    let declMods ← elabModifiers mods
-    let docs := s!"```\nequation {i.getNat} := {← PrettyPrinter.formatTerm tsyn}\n```"
-    let docs := match declMods.docString? with
-      | none => docs
-      | some more => s!"{docs}\n\n---\n{more}"
-    addDocString' (TSyntax.getId eqIdent) docs
-    -- TODO: This will go wrong if we are in a namespace. Is this really needed, or is there
-    -- a way to pass the current position already to the `(command|` above?
-    Lean.addDeclarationRanges eqName {
-      range := ← getDeclarationRange (← getRef)
-      selectionRange := ← getDeclarationRange eqStx }
+  let thmName := .str lawName "models_iff"
+  let some (law, is) := (parseMagmaLaw tsyn).run #[] | throwError "invalid magma law"
+  let declMods ← elabModifiers mods
+  let docs := s!"```\nequation {i.getNat} := {← PrettyPrinter.formatTerm tsyn}\n```"
+  let docs := match declMods.docString? with
+    | none => docs
+    | some more => s!"{docs}\n\n---\n{more}"
+  let ranges := {
+    range := ← getDeclarationRange (← getRef)
+    selectionRange := ← getDeclarationRange eqStx }
+  let addMarkup name := do
+    addDocString' name docs
+    Lean.addDeclarationRanges name ranges
+    _ ← Term.addTermInfo eqStx (← mkConstWithLevelParams name) (isBinder := true)
 
+  -- define equation
+  let u : Level := .param `u
+  let value ← withLocalDeclDQ `G q(Type u) fun G : Q(Type u) => do
+    withLocalDeclQ `inst .instImplicit q(Magma $G) fun inst =>
+    Meta.withLocalDeclsD (is.map fun i => (i.getId, fun _ => pure G)) fun xs => do
+    let e ← Meta.mkForallFVars xs (lawToExpr (G := G) inst xs law)
+    Meta.mkLambdaFVars #[G, inst] e
+  addDecl <| .defnDecl {
+    name := eqName
+    levelParams := [`u]
+    type := q(∀ (G : Type u) [Magma G], Prop)
+    value := value
+    hints := .abbrev
+    safety := .safe
+  }
+  setReducibleAttribute eqName
+  addMarkup eqName
+  have eqConst : Q(∀ (G : Type u) [Magma G], Prop) := .const eqName [u]
 
-  -- Create law
-  let tl := tsyn.raw
-  let tl ← tl.rewriteBottomUpM fun s => match s with
-    | `($a ◇ $b) => `(FreeMagma.Fork $a $b)
-    | `($a = $b) => `(Law.MagmaLaw.mk $a $b)
-    | _ => pure s
-  -- replace identifier `i` with `idx`.
-  let tl ← tl.rewriteBottomUpM fun s =>
-    match is.indexOf? s with
-      | some idx => `(FreeMagma.Leaf $(quote idx.val))
-      | none => pure s
-  let mut tl : Term := ⟨tl⟩
-  let freeMagmaSize := Syntax.mkNumLit (toString is.size)
-  -- define law over `Fin n`
-  elabCommand (← `(command| abbrev%$tk $finLawIdent : Law.MagmaLaw (Fin $freeMagmaSize) := $tl))
-  -- compatibility between the `finLaw` and the original equation
-  let modelsIffLemma : Ident := mkIdent (.mkSimple s!"models_iff_{is.size}")
-  elabCommand (← `(command| abbrev%$tk $finThmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $finLawIdent ↔ $eqIdent G := $modelsIffLemma $finLawIdent))
-  -- define the actual law over `Nat`
-  elabCommand (← `(command| abbrev%$tk $lawIdent : Law.NatMagmaLaw := $tl))
+  -- define law over `Nat`
+  addDecl <| .defnDecl {
+    name := lawName
+    levelParams := []
+    type := q(Law.NatMagmaLaw)
+    value := toExpr law
+    hints := .opaque
+    safety := .safe
+  }
+  addMarkup lawName
+  have lawConst : Q(Law.NatMagmaLaw) := .const lawName []
+
   -- compatibility between the law and the original equation
-  elabCommand (← `(command| abbrev%$tk $thmName : ∀ (G : Type _) [$inst : Magma G], G ⊧ $lawIdent ↔ $eqIdent G :=
-                    fun G _ ↦ Iff.trans (Law.satisfies_fin_satisfies_nat G $finLawIdent) ($finThmName G)))
+  have n : ℕ := is.size
+  have : Q(MagmaLaw.bounded $n $lawConst = true) := (q(Eq.refl true) : Expr)
+  addDecl <| .thmDecl {
+    name := thmName
+    levelParams := [`u]
+    type := q(∀ (G : Type u) [Magma G], G ⊧ $lawConst ↔ $eqConst G)
+    value := q(models_iff_n.{u} $lawConst $n $this)
+  }
+  addMarkup thmName
+
   -- register the law
-  -- (The following two lines have been commented out because they cause the build to become very slow.
-  -- See https://github.com/teorth/equational_theories/issues/464.)
-  --modifyEnv (magmaLawExt.addEntry · (lawName, ← (mkNatMagmaLaw lawName).run
-  --  { env := (← getEnv), opts := (← getOptions) }))
-  Command.liftTermElabM do
-    -- TODO: This will go wrong if we are in a namespace. Is this really needed, or is there
-    -- a way to pass the current position already to the `(command|` above?
-    Lean.addDeclarationRanges lawName {
-      range := ← getDeclarationRange (← getRef)
-      selectionRange := ← getDeclarationRange (← getRef) }
+  modifyEnv (magmaLawExt.tag · lawName)

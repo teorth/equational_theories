@@ -178,9 +178,13 @@ theorem satisfiesPhi_pmap {α β G} [Magma G] {φ : β → G} {ψ : α → G}
   rw [evalInMagma_pmap _ fun a h => H a (.inl h),
       evalInMagma_pmap _ fun a h => H a (.inr h)]
 
-theorem satisfiesPhi_attach {α G} [Magma G] {φ : α → G} {E : MagmaLaw α} :
-    satisfiesPhi (φ ·.1) E.attach ↔ satisfiesPhi φ E := by
+theorem satisfiesPhi_pmap_mk {α G} [Magma G] {φ : α → G} {E : MagmaLaw α}
+    (P : α → Prop) (hp : ∀ a, E.Mem a → P a) :
+    satisfiesPhi (φ ·.1) (E.pmap fun a h => Subtype.mk a (hp a h)) ↔ satisfiesPhi φ E := by
   apply satisfiesPhi_pmap; intros; rfl
+
+theorem satisfiesPhi_attach {α G} [Magma G] {φ : α → G} {E : MagmaLaw α} :
+    satisfiesPhi (φ ·.1) E.attach ↔ satisfiesPhi φ E := satisfiesPhi_pmap_mk ..
 
 theorem satisfiesPhi_symm {α G} [Magma G] (φ : α → G) (w₁ w₂ : FreeMagma α)
     (h : satisfiesPhi φ (w₁ ≃ w₂)) : satisfiesPhi φ (w₂ ≃ w₁) :=
@@ -208,12 +212,16 @@ theorem satisfies_map_injective {α β G} [Magma G] (f : α → β) (hf : f.Inje
 theorem satisfies_map_equiv {α β G} [Magma G] (f : α ≃ β) {E : MagmaLaw α} :
     G ⊧ E.map f ↔ G ⊧ E := satisfies_map_injective _ f.injective
 
-theorem satisfies_attach {α G} [DecidableEq α] [Magma G] {E : MagmaLaw α} :
-    G ⊧ E.attach ↔ G ⊧ E := by
-  refine ⟨fun h φ => satisfiesPhi_attach.1 (h _), fun h φ => ?_⟩
-  have : Inhabited G := ⟨φ ⟨E.lhs.first, .inl E.lhs.first_mem⟩⟩
-  let ψ a := if h : E.Mem a then φ ⟨a, h⟩ else default
+theorem satisfies_pmap_mk {α G} [DecidableEq α] [Magma G] {E : MagmaLaw α}
+    (P : α → Prop) (hp : ∀ a, E.Mem a → P a) :
+    G ⊧ E.pmap (fun a h => Subtype.mk a (hp a h)) ↔ G ⊧ E := by
+  refine ⟨fun h φ => (satisfiesPhi_pmap_mk _ _).1 (h _), fun h φ => ?_⟩
+  have : Inhabited G := ⟨φ ⟨E.lhs.first, hp _ <| .inl E.lhs.first_mem⟩⟩
+  let ψ a := if h : E.Mem a then φ ⟨a, hp _ h⟩ else default
   exact (satisfiesPhi_pmap (ψ := ψ) _ _ (fun a h => by simp [ψ, h])).2 (h _)
+
+theorem satisfies_attach {α G} [DecidableEq α] [Magma G] {E : MagmaLaw α} :
+    G ⊧ E.attach ↔ G ⊧ E := satisfies_pmap_mk ..
 
 theorem satisfies_toFin {α G} [DecidableEq α] [Magma G] {E : MagmaLaw α} :
     G ⊧ E.toFin ↔ G ⊧ E :=
