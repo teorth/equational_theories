@@ -10,12 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if comment contains only 'claim' (ignoring white spaces and newlines)
+    - name: Check if comment contains only 'claim' (ignoring white spaces, newlines and case)
       id: check_claim
+      env:
+        COMMENT: ${{ github.event.comment.body }}
       run: |
-        TRIMMED_COMMENT=$(echo "${{ github.event.comment.body }}" | tr -d '\n' | xargs | tr '[:upper:]' '[:lower:]')
+        TRIMMED_COMMENT=$(echo "$COMMENT" | tr -d '\n' | xargs | tr '[:upper:]' '[:lower:]')
         if [ "$TRIMMED_COMMENT" != "claim" ]; then
-          echo "Comment does not contain only 'claim' modulo white spaces, newlines, and case."
+          echo "Comment does not contain only 'claim' modulo white spaces, newlines and case."
           exit 1
         fi
         echo "Claim comment detected."
