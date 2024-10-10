@@ -106,6 +106,15 @@ theorem Sheffer_Comm (G : Type*) [Magma G] (ax1 : ∀ x : G, (x ◇ x) ◇ (x �
   have := h3 (x ◇ x) y
   rwa [ax1] at this
 
+/- This would be very convenient for le_trans if possible. Should be true as its just associativity for OR:
+   sup (sup(x y) z) = sup((x ◇ x) ◇ (y ◇ y)) z
+                    = (((x ◇ x) ◇ (y ◇ y)) ◇ ((x ◇ x) ◇ (y ◇ y))) ◇ (z ◇ z)
+
+   sup (x (sup (y z))) = sup x ((y ◇ y) ◇ (z ◇ z))
+                     = (x ◇ x) ◇ (((y ◇ y) ◇ (z ◇ z)) ◇ ((y ◇ y) ◇ (z ◇ z)))
+-/ 
+theorem Sheffer_Sup_Assoc (G : Type*) [Magma G] (ax1 : ∀ x : G, (x ◇ x) ◇ (x ◇ x) = x) (ax2 : ∀ x y : G, x ◇ x = x ◇ (y ◇ (y ◇ y))) (ax3 : ∀ x y z : G, (x ◇ (y ◇ z)) ◇ (x ◇ (y ◇ z)) = ((y ◇ y) ◇ x) ◇ ((z ◇ z) ◇ x)) : ∀ x y z : G, (((x ◇ x) ◇ (y ◇ y)) ◇ ((x ◇ x) ◇ (y ◇ y))) ◇ (z ◇ z) = (x ◇ x) ◇ (((y ◇ y) ◇ (z ◇ z)) ◇ ((y ◇ y) ◇ (z ◇ z))) := by sorry
+
 /- Boolean algebra induced by magma satisfying the three Sheffer axioms. 
    The operations are defined in terms of Sheffer strokes:
    OR/SUP  = (A | A) | (B | B)
@@ -117,6 +126,8 @@ instance (G : Type*) [Magma G] (ax1 : ∀ x : G, (x ◇ x) ◇ (x ◇ x) = x) (a
   le_refl x := ax1 x
   le_trans x y z xley ylez := by
     simp at *
+    /- have : (x ◇ x) ◇ (((y ◇ y) ◇ (z ◇ z)) ◇ ((y ◇ y) ◇ (z ◇ z))) = z := by rwa [←xley, Sheffer_Sup_Assoc G ax1 ax2 ax3] at ylez
+    rwa [ylez] at this -/
     have comm := Sheffer_Comm G ax1 ax2 ax3 x y
     sorry
 
