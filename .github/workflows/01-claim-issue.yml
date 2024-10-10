@@ -57,10 +57,10 @@ jobs:
 
         ITEM_ID=$(echo "$ITEM_ID_RESPONSE" | jq -r '.data.repository.issue.projectItems.nodes[0].id')
 
-        # If ITEM_ID is null, post a comment and exit
-        if [ -z "$ITEM_ID" ]; then
+        # If ITEM_ID is "null" or empty, post a comment and exit
+        if [ "$ITEM_ID" == "null" ] || [ -z "$ITEM_ID" ]; then
           echo "Issue has not been added to the project board. Posting a comment."
-
+          # Post the comment and exit
           COMMENT_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
