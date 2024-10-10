@@ -78,7 +78,7 @@ if __name__ == '__main__':
     outfile.write("Our current counts of implications in each of those categories are:\n\n")
     outfile.write("| explicitly true | implicitly true | explicitly false | implicitly false | no proof |\n")
     outfile.write("| -- | -- | -- | -- | -- |\n")
-    outfile.write("| {} | {} | {} | {} | {} |\n".format(
+    outfile.write("| {:,} | {:,} | {:,} | {:,} | {:,} |\n".format(
         explicit_proof_true, implicit_proof_true, explicit_proof_false,
         implicit_proof_false, conjectured_total + unknown))
     outfile.write("\n")
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     outfile.write("Among the _no proof_ implications, we have the following conjecture counts:\n\n")
     outfile.write("| explicitly true | implicitly true | explicitly false | implicitly false | no conjecture |\n")
     outfile.write("| -- | -- | -- | -- | -- |\n")
-    outfile.write("| {} | {} | {} | {} | {} |\n".format(
+    outfile.write("| {:,} | {:,} | {:,} | {:,} | {:,} |\n".format(
         explicit_conjecture_true, implicit_conjecture_true, explicit_conjecture_false,
         implicit_conjecture_false, unknown))
     outfile.write("\n")
