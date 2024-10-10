@@ -52,7 +52,7 @@ class Lean4LeanChecker():
         #get the project toolchain
         projectToolchain = self.repoToolchainPath.read_text()
 
-        #write it to the lean-toolchain fiel of lean4lean
+        #write it to the lean-toolchain file of lean4lean
         self.l4lToolchainPath.write_text(projectToolchain)
 
         #run lake update
