@@ -54,8 +54,7 @@ def generateNonimplications (inst : LiftingMagmaFamilyInstance) : CoreM Unit := 
       "InvariantMetatheoremNonimplications" / s!"{inst.instName}_counterexamples.lean"
     IO.FS.writeFile filePath output
 
-
-def geenrateAllNonimplications : CoreM Unit := do
+def generateAllNonimplications : CoreM Unit := do
   for inst in liftingMagmaFamilyInstances do
     generateNonimplications inst
 
@@ -65,4 +64,4 @@ def main : IO Unit := do
     { module := `equational_theories.Equations },
     { module := `equational_theories.AllEquations }] .empty
   EIO.toIO (fun _ ↦ IO.userError "Failed to generate counterexample files.") <|
-            geenrateAllNonimplications.run' { fileName := "", fileMap := default } { env := env }
+            generateAllNonimplications.run' { fileName := "", fileMap := default } { env := env }
