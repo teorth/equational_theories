@@ -51,7 +51,7 @@ def table(model : dict):
 
 dpind = 3
 disproofs = open(f'equational_theories/Generated/VampireProven/Disproofs{dpind}.lean', 'w')
-print('''import equational_theories.AllEquations
+print('''import equational_theories.Equations.All
 import equational_theories.MemoFinOp
 import equational_theories.DecideBang
 ''', file=disproofs)

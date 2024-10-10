@@ -1,4 +1,4 @@
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 import equational_theories.Magma
 import Mathlib.Tactic.TypeStar
 @[equational_result] conjecture Equation2126_not_implies_Equation168 : ∃ (G: Type) (_: Magma G), Equation2126 G ∧ ¬ Equation168 G

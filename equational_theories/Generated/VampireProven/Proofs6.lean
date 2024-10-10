@@ -1,5 +1,5 @@
 import equational_theories.Superposition
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 import Mathlib.Tactic.TypeStar
 import Mathlib.Tactic.ByContra
 

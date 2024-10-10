@@ -1,6 +1,6 @@
 import Mathlib.Logic.Basic
 
-import equational_theories.Equations
+import equational_theories.Equations.Basic
 import equational_theories.FreeMagma
 import equational_theories.Homomorphisms
 import equational_theories.MagmaLaw

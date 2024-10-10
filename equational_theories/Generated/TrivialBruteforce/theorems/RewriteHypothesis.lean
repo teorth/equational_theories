@@ -1,4 +1,4 @@
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 
 namespace RewriteHypothesis
 @[equational_result]

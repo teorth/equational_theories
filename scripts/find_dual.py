@@ -166,13 +166,14 @@ def flip_top_most(node: ExprNode):
 
 def main():
     trees = []
-    for line in open("../equational_theories/AllEquations.lean"):
-        if "equation" in line and ":=" in line:
-            equation_number = line.split("equation")[1].split()[0]
-            trees.append((int(equation_number), make_tree(line.split(":=")[1].strip())))
+    for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]:
+        for line in open(f"../equational_theories/Equations/Eqns{file}.lean"):
+            if "equation" in line and ":=" in line:
+                equation_number = line.split("equation")[1].split()[0]
+                trees.append((int(equation_number), make_tree(line.split(":=")[1].strip())))
 
     seen = {}
-    
+
     for eq_num1, tree1 in trees:
         reversed_tree1 = tree1.reverse()
         for eq_num2, tree2 in trees:

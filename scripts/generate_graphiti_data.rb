@@ -13,12 +13,14 @@ end
 
 
 equations = {}
-File.read(File.join(__dir__, '../equational_theories/AllEquations.lean')).split("\n").each { |s|
-  if s =~ /equation\s*(\d+)\s*:=\s*(.+)/
-    equations[$1.to_i] = $2
-  end
+["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"].each { |i|
+  File.read(File.join(__dir__, "../equational_theories/Equations/Eqns#{i}.lean")).split("\n").each { |s|
+    if s =~ /equation\s*(\d+)\s*:=\s*(.+)/
+      equations[$1.to_i] = $2
+    end
+  }
 }
-File.read(File.join(__dir__, '../equational_theories/Equations.lean')).split("\n").each { |s|
+File.read(File.join(__dir__, '../equational_theories/Equations/Basic.lean')).split("\n").each { |s|
   if s =~ /abbrev Equation(\d+).*: G, (.+)/ || s =~ /equation\s*(\d+)\s*:=\s*(.+)/
     if !equations[$1.to_i]
       equations[$1.to_i] = $2
@@ -49,7 +51,7 @@ JSON.parse(File.read(ARGV[1])).each { |unknown|
     $stderr.puts "Unknown LHS/RHS mapping to SCC"
     exit 1
   end
-  
+
   unknowns[unknown_lhs_scc] ||= []
   unknowns[unknown_lhs_scc] << unknown_rhs_scc
 }

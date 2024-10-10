@@ -101,7 +101,7 @@ def leanify(proof, problem):
 dpind = 1
 proofs = open(f'equational_theories/Generated/VampireProven/Proofs{dpind}.lean', 'w')
 print('''import equational_theories.Superposition
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 import Mathlib.Tactic.TypeStar
 import Mathlib.Tactic.ByContra
 ''', file=proofs)
@@ -127,7 +127,7 @@ for problem in tqdm(problems):
     dpind += 1
     proofs = open(f'equational_theories/Generated/VampireProven/Proofs{dpind}.lean', 'w')
     print('''import equational_theories.Superposition
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 import Mathlib.Tactic.TypeStar
 import Mathlib.Tactic.ByContra
 ''', file=proofs)

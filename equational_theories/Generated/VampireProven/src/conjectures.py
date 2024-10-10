@@ -2,7 +2,7 @@ import json, random
 
 f = open(f'equational_theories/Generated/VampireProven/Conjectures.lean', 'w')
 
-print('import equational_theories.AllEquations', file=f)
+print('import equational_theories.Equations.All', file=f)
 print('import equational_theories.Magma', file=f)
 print('import Mathlib.Tactic.TypeStar', file=f)
 

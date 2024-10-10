@@ -1,6 +1,6 @@
 import equational_theories.ConfluenceAttr
 import equational_theories.FreeMagma
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 import Mathlib.Tactic.NthRewrite
 import Mathlib.Tactic.CasesM

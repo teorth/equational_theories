@@ -39,7 +39,7 @@ POSSIBLE_COMMANDS = [
 2.upto(4694) { |s1|
   File.open("#{dir}/bf_#{s1}.lean", "w") { |f|
     f.puts "import Mathlib.Tactic"
-    f.puts "import equational_theories.AllEquations"
+    f.puts "import equational_theories.Equations.All"
 
     candidates = 2.upto(4694).to_a
     if not_implies[s1]
