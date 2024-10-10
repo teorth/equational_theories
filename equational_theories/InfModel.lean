@@ -539,57 +539,30 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
   intros x w
   by_cases h: w.first = x ∨ w.last = x
   .
+    clear ht hc
     let G := Fin 2
-    have hf: Finite G := Finite.of_fintype G
     exists G
-    suffices hs: ∃ (hm: Magma G) (hf: Finite G), G ⊧ (Lf x ≃ w) by
-      obtain ⟨hm, hf, h⟩ := hs
-      exists hm, hf
+    suffices hs: ∃ (hm: Magma G), ∀ (f: α → G), f x = w ⬝ f by
+      clear h
+      obtain ⟨hm, h⟩ := hs
+      exists hm, Finite.of_fintype G
       refine' And.intro h _
       unfold Equation2
       simp only [not_forall]
       exists 0, 1
     cases h with
     | inl h =>
-      let M: Magma G := Magma.mk fun x y => x
-      exists M, hf
+      exists Magma.mk fun x y => x
       intro f
-      unfold satisfiesPhi
-      simp only
-      conv =>
-        lhs
-        unfold FreeMagma.evalInMagma
       subst h
       induction w
-      .
-        rename_i x
-        unfold FreeMagma.evalInMagma
-        simp only [FreeMagma.first]
-      .
-        rename_i w1 w2 h1 h2
-        unfold FreeMagma.evalInMagma
-        simp only [M, FreeMagma.first]
-        exact h1
-    | inr h' =>
-      let M: Magma G := Magma.mk fun x y => y
-      exists M, hf
+        <;> first | rfl | assumption
+    | inr h =>
+      exists Magma.mk fun x y => y
       intro f
-      unfold satisfiesPhi
-      simp only
-      conv =>
-        lhs
-        unfold FreeMagma.evalInMagma
-      subst h'
+      subst h
       induction w
-      .
-        rename_i x
-        unfold FreeMagma.evalInMagma
-        simp only [FreeMagma.last]
-      .
-        rename_i w1 w2 h1 h2
-        unfold FreeMagma.evalInMagma
-        simp only [M, FreeMagma.first]
-        exact h2
+        <;> first | rfl | assumption
   .
     by_cases h': ∃ (y: α), w = (y ⋆ x) ⋆ y
     .
