@@ -82,6 +82,8 @@ equation 381  :=  x ◇ y = (x ◇ z) ◇ y
 /-- from the mathoverflow post by paste bee -/
 equation 387  :=  x ◇ y = (y ◇ y) ◇ x
 
+equation 1491 := x = (y ◇ x) ◇ (y ◇ (y ◇ x))
+
 /-- From a paper of Mendelsohn & Padmanabhan, this law axiomatizes abelian groups of exponent 2 -/
 equation 1571  :=  x = (y ◇ z) ◇ (y ◇ (x ◇ z))
 -- x = (y ◇ z) ◇ (y ◇ (x ◇ z))
