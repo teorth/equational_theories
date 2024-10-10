@@ -539,77 +539,64 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
   intros x w
   by_cases h: w.first = x ∨ w.last = x
   .
+    let G := Fin 2
+    have hf: Finite G := Finite.of_fintype G
+    exists G
     cases h with
     | inl h =>
-      let G := Fin 2
       let M: Magma G := Magma.mk fun x y => x
-      let hf: Finite G := Finite.of_fintype G
-      exists G, M, hf
+      exists M, hf
       split_ands
       .
         intro f
-        unfold satisfiesPhi FreeMagma.evalInMagma
+        unfold satisfiesPhi
+        simp only
+        conv =>
+          lhs
+          unfold FreeMagma.evalInMagma
+        subst h
         induction w
         .
-          simp_all only [FreeMagma.first]
+          rename_i x
+          unfold FreeMagma.evalInMagma
+          simp only [FreeMagma.first]
         .
-          rename_i a_ih a_ih_1
-          subst h
-          simp_all only [G, M]
-          split at a_ih
-          next x x_1 =>
-            split at a_ih_1
-            next x_2 x_3 => rfl
-            next x_2 x_3 y => rfl
-          next x x_1 y =>
-            split at a_ih_1
-            next x_2 x_3 =>
-              apply a_ih
-              rfl
-            next x_2 x_3 y_1 =>
-              apply a_ih
-              rfl
+          rename_i w1 w2 h1 h2
+          unfold FreeMagma.evalInMagma
+          simp only [M, FreeMagma.first]
+          exact h1
       .
         unfold Equation2
         simp only [not_forall]
         exists 0, 1
-        simp_all only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
-
+        simp only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
     | inr h' =>
-      let G := Fin 2
       let M: Magma G := Magma.mk fun x y => y
-      let hf: Finite G := Finite.of_fintype G
-      exists G, M, hf
+      exists M, hf
       split_ands
       .
-        clear hf
         intro f
-        unfold satisfiesPhi FreeMagma.evalInMagma
+        unfold satisfiesPhi
+        simp only
+        conv =>
+          lhs
+          unfold FreeMagma.evalInMagma
+        subst h'
         induction w
         .
-          simp_all only [FreeMagma.last]
+          rename_i x
+          unfold FreeMagma.evalInMagma
+          simp only [FreeMagma.last]
         .
-          rename_i a_ih a_ih_1
-          subst h'
-          simp_all only [G, M]
-          split at a_ih
-          next x x_1 =>
-            split at a_ih_1
-            next x_2 x_3 => rfl
-            next x_2 x_3 y =>
-              apply a_ih_1
-              rfl
-          next x x_1 y =>
-            split at a_ih_1
-            next x_2 x_3 => rfl
-            next x_2 x_3 y_1 =>
-              apply a_ih_1
-              rfl
+          rename_i w1 w2 h1 h2
+          unfold FreeMagma.evalInMagma
+          simp only [M, FreeMagma.first]
+          exact h2
       .
         unfold Equation2
         simp only [not_forall]
         exists 0, 1
-        simp_all only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
+        simp only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
 
   .
     by_cases h': ∃ (y: α), w = (y ⋆ x) ⋆ y
