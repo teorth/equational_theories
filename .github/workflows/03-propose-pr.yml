@@ -70,6 +70,7 @@ jobs:
           -H "Content-Type: application/json" \
           --data "$QUERY" https://api.github.com/graphql)
 
+        echo "PR Node ID Response: $RESPONSE"
         PR_NODE_ID=$(echo "$RESPONSE" | jq -r '.data.repository.pullRequest.id')
 
         if [ -z "$PR_NODE_ID" ]; then
@@ -100,6 +101,7 @@ jobs:
           -H "Content-Type: application/json" \
           --data "$QUERY" https://api.github.com/graphql)
 
+        echo "Issue Node ID Response: $RESPONSE"
         ISSUE_NODE_ID=$(echo "$RESPONSE" | jq -r '.data.repository.issue.id')
 
         if [ -z "$ISSUE_NODE_ID" ]; then
@@ -130,7 +132,7 @@ jobs:
           -H "Content-Type: application/json" \
           --data "$QUERY" https://api.github.com/graphql)
 
-        echo "GraphQL Response: $RESPONSE"
+        echo "GraphQL Mutation Response: $RESPONSE"
 
     - name: Log PR and issue link result
       if: env.not_assigned == 'false'
