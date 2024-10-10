@@ -15,8 +15,8 @@ structure LiftingMagmaFamilyInstance where
   instName : Name
 
 def liftingMagmaFamilyInstances : Array LiftingMagmaFamilyInstance := #[
-  ⟨(List ·), _, inferInstance, ``instLiftingMagmaFamilyList⟩,
-  ⟨(Multiset ·), _, inferInstance, ``instLiftingMagmaFamilyMultiset⟩,
+  ⟨(List ·), _, instLiftingMagmaFamilyList, ``instLiftingMagmaFamilyList⟩,
+  ⟨(Multiset ·), _, instLiftingMagmaFamilyMultiset, ``instLiftingMagmaFamilyMultiset⟩,
   ⟨(Id ·), _, instLiftingMagmaFamilyLeftProj, ``instLiftingMagmaFamilyLeftProj⟩,
   ⟨(Id ·), _, instLiftingMagmaFamilyRightProj, ``instLiftingMagmaFamilyRightProj⟩
 ]
@@ -48,8 +48,7 @@ def generateNonimplications (inst : LiftingMagmaFamilyInstance) : CoreM Unit := 
         --   theorem $(mkIdent resultName) : ∃ (G : Type _) (_ : Magma G), $(mkIdent posEqnName) G ∧ $(mkIdent negEqnName) G :=
         --     @proveNonimplication _ _ $(mkIdent inst.instName) _ _ _ _ $(mkIdent (posLawName ++ `models_iff)) $(mkIdent (negLawName ++ `models_iff))
         --     (by decide) (by decide))
-        output := output ++ s!"\n@[equational_result]\ntheorem {resultName} : ∃ (G : Type _) (_ : Magma G), {posEqnName} G ∧ {negEqnName} G :=
-          @proveNonimplication _ _ {inst.instName} _ _ _ _ {posLawName ++ `models_iff} {negLawName ++ `models_iff} (by decide) (by decide)"
+        output := output ++ s!"\n@[equational_result]\nconjecture {resultName} : ∃ (G : Type _) (_ : Magma G), {posEqnName} G ∧ ¬{negEqnName} G"
   let filePath : System.FilePath := "." / "equational_theories" / "Generated" /
       "InvariantMetatheoremNonimplications" / s!"{inst.instName}_counterexamples.lean"
   IO.FS.writeFile filePath output

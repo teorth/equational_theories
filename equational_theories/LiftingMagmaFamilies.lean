@@ -12,7 +12,7 @@ class LiftingMagmaFamily (G : (α : Type) → [DecidableEq α] → Type) [∀ α
   lift : ∀ {α} [DecidableEq α], (α → G α) → (G α →◇ G α)
   lift_factors : ∀ {α} [DecidableEq α], ∀ f : α → G α, f = (lift f) ∘ ι
 
-variable {α : Type} [DecidableEq α] (G : (α : Type) → [DecidableEq α] → Type)
+variable {α : Type _} [DecidableEq α] (G : (α : Type _) → [DecidableEq α] → Type)
   [∀ α [DecidableEq α], Magma (G α)] [LiftingMagmaFamily G]
 
 instance [DecidableEq α] : DecidableEq (G α) :=
@@ -32,7 +32,7 @@ instance instDecidableSatisfies [DecidableEq α] (law : MagmaLaw α) : Decidable
   infer_instance
 
 set_option linter.unusedSectionVars false in
-lemma proveNonimplication {law law' : NatMagmaLaw} {P P' : (G : Type _) → Prop}
+lemma proveNonimplication {law law' : NatMagmaLaw} {P P' : (G : Type _) → [Magma G] → Prop}
   (models_law_iff : G Nat ⊧ law ↔ P (G Nat)) (models_law'_iff : G Nat ⊧ law' ↔ P' (G Nat))
   (hlaw : G Nat ⊧ law) (hlaw' : ¬(G Nat ⊧ law')) : ∃ (M : Type _) (_ : Magma M), P M ∧ ¬ (P' M) :=
   ⟨G Nat, inferInstance, models_law_iff.mp hlaw, ((not_iff_not).mpr models_law'_iff).mp hlaw'⟩
