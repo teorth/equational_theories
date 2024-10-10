@@ -190,6 +190,12 @@ theorem satisfiesPhi_symm {α G} [Magma G] (φ : α → G) (w₁ w₂ : FreeMagm
     (h : satisfiesPhi φ (w₁ ≃ w₂)) : satisfiesPhi φ (w₂ ≃ w₁) :=
   satisfiesPhi_symm_law φ (w₁ ≃ w₂) h
 
+
+theorem satisfiesPhi_evalHom {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) (f : G →◇ G) :
+    satisfiesPhi (f ∘ φ) E ↔ f (E.lhs ⬝ φ) = f (E.rhs ⬝ φ) := by
+  rw [satisfiesPhi]
+  rw [← @evalInMagma_hom, ← evalInMagma_hom]
+
 theorem equiv_satisfiesPhi {α G H} [Magma G] [Magma H] {φ : α → G} (e : G ≃◇ H) {E : MagmaLaw α} :
     satisfiesPhi (e ∘ φ) E ↔ satisfiesPhi φ E := by
   simp [satisfiesPhi, ← evalInMagma_equiv]
