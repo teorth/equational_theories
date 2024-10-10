@@ -50,9 +50,9 @@ def generateNonimplications (inst : LiftingMagmaFamilyInstance) : CoreM Unit := 
         --     (by decide) (by decide))
         output := output ++ s!"\n@[equational_result]\ntheorem {resultName} : ∃ (G : Type _) (_ : Magma G), {posEqnName} G ∧ {negEqnName} G :=
           @proveNonimplication _ _ {inst.instName} _ _ _ _ {posLawName ++ `models_iff} {negLawName ++ `models_iff} (by decide) (by decide)"
-    let filePath : System.FilePath := "." / "equational_theories" / "Generated" /
+  let filePath : System.FilePath := "." / "equational_theories" / "Generated" /
       "InvariantMetatheoremNonimplications" / s!"{inst.instName}_counterexamples.lean"
-    IO.FS.writeFile filePath output
+  IO.FS.writeFile filePath output
 
 def generateAllNonimplications : CoreM Unit := do
   for inst in liftingMagmaFamilyInstances do
