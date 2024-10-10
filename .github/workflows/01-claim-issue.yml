@@ -68,10 +68,10 @@ jobs:
           exit 1
         fi
 
-        # Query the current value of the Status field for this issue, using fragments to handle the union type
+        # Query the current value of the Status field for this issue handling the union type
         FIELD_QUERY=$(cat <<EOF
         {
-          "query": "{ node(id: \\"$ITEM_ID\\") { ... on ProjectV2Item { fieldValues(first: 10) { nodes { field { ... on ProjectV2FieldCommon { name } } value { ... on ProjectV2ItemFieldSingleSelectValue { name optionId } } } } } } }"
+          "query": "{ node(id: \\"$ITEM_ID\\") { ... on ProjectV2Item { fieldValues(first: 10) { nodes { ... on ProjectV2ItemFieldSingleSelectValue { field { id name } value { optionId } } } } } } }"
         }
         EOF
         )
