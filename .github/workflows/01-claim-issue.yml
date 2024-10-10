@@ -23,10 +23,7 @@ jobs:
     - name: Check if the issue is classified as 'Unclaimed Outstanding Tasks'
       id: check_unclaimed_tasks
       run: |
-        # Enable exit on any failure
-        set -e
-
-        # Step 1: Retrieve project fields for 'Status'
+        # Retrieve project fields for 'Status'
         QUERY=$(cat <<EOF
         {
           "query": "{ node(id: \\"PVT_kwHOAAMKjM4Ao-Sa\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name id options { id name } } } } } } }"
@@ -60,17 +57,25 @@ jobs:
 
         # If ITEM_ID is null, post a comment and exit
         if [ -z "$ITEM_ID" ]; then
-          echo "Issue has not been added to the project board."
-          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -d '{"body": "This issue cannot be assigned to @${{ github.event.comment.user.login }} because it has not been added to the project board by any of the project maintainers @teorth, @pitmonticone, and @Shreyas4991.\n\nPlease wait for this issue to be properly classified before claiming it."}' \
-          https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments
+          echo "Issue has not been added to the project board. Posting a comment."
+
+          COMMENT_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"body": "This issue cannot be assigned to @${{ github.event.comment.user.login }} because it has not been added to the project board by any of the project maintainers @teorth, @pitmonticone, and @Shreyas4991.\n\nPlease wait for this issue to be properly classified before claiming it."}' \
+            https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments)
+
+          if [ "$COMMENT_RESPONSE" -eq 201 ]; then
+            echo "Comment posted successfully."
+          else
+            echo "Failed to post comment. HTTP status: $COMMENT_RESPONSE"
+          fi
           exit 1
         fi
 
         echo "Retrieved ITEM_ID: $ITEM_ID"
         echo "ITEM_ID=$ITEM_ID" >> $GITHUB_ENV
 
-        # Check current status of the issue
         FIELD_QUERY=$(cat <<EOF
         {
           "query": "{ node(id: \\"$ITEM_ID\\") { ... on ProjectV2Item { fieldValues(first: 10) { nodes { ... on ProjectV2ItemFieldSingleSelectValue { field { ... on ProjectV2FieldCommon { name } } optionId } } } } } }"
