@@ -12,12 +12,13 @@ jobs:
     steps:
     - name: Check if the comment contains "propose #PR_NUMBER"
       id: check_propose
+      env:
+        COMMENT: ${{ github.event.comment.body }}
       run: |
-        COMMENT_BODY="${{ github.event.comment.body }}"
-        COMMENT_BODY_LOWER=$(echo "$COMMENT_BODY" | tr '[:upper:]' '[:lower:]')
+        COMMENT_LOWER=$(echo "$COMMENT" | tr '[:upper:]' '[:lower:]')
 
         # Use a refined regex with [[:space:]] to match any whitespace
-        if [[ "$COMMENT_BODY_LOWER" =~ propose[[:space:]]*(pr[[:space:]]*)?\#([0-9]+)[[:space:]]* ]]; then
+        if [[ "$COMMENT_LOWER" =~ propose[[:space:]]*(pr[[:space:]]*)?\#([0-9]+)[[:space:]]* ]]; then
           PR_NUMBER="${BASH_REMATCH[2]}"
           echo "pr_number=$PR_NUMBER" >> $GITHUB_ENV
         else
