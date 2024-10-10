@@ -114,7 +114,7 @@ for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]:
 print("var equations = ", eqs);
 
 special = []
-for line in open("equational_theories/Equations.lean"):
+for line in open("equational_theories/Equations/Basic.lean"):
     if line.startswith("equation") and ':=' in line:
         special.append(line.split()[1])
 print("var special = ", special)
