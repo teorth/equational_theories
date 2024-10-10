@@ -537,6 +537,45 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
     | ⟨FreeMagma.Leaf x, w ⋆ w'⟩ =>
       exact hs x (w ⋆ w')
   intros x w
-  sorry
+  let leftmost := w.first
+  by_cases h: leftmost = x
+  .
+    let G := Fin 2
+    let M: Magma G := Magma.mk fun x y => x
+    let hf: Finite G := Finite.of_fintype G
+    exists G, M, hf
+    split_ands
+    .
+      intro f
+      unfold satisfiesPhi FreeMagma.evalInMagma
+      induction w
+      .
+        subst h
+        simp_all only [G, leftmost]
+        rfl
+      .
+        rename_i a_ih a_ih_1
+        subst h
+        simp_all only [leftmost, G, M]
+        split at a_ih
+        next x x_1 =>
+          split at a_ih_1
+          next x_2 x_3 => rfl
+          next x_2 x_3 y => rfl
+        next x x_1 y =>
+          split at a_ih_1
+          next x_2 x_3 =>
+            apply a_ih
+            rfl
+          next x_2 x_3 y_1 =>
+            apply a_ih
+            rfl
+    .
+      unfold Equation2
+      simp only [not_forall]
+      exists 0, 1
+      simp_all only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
+  .
+    sorry
 
 end InfModel
