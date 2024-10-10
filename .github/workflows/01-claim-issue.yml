@@ -70,7 +70,7 @@ jobs:
         echo "Retrieved ITEM_ID: $ITEM_ID"
         echo "ITEM_ID=$ITEM_ID" >> $GITHUB_ENV
 
-        Check current status of the issue
+        # Check current status of the issue
         FIELD_QUERY=$(cat <<EOF
         {
           "query": "{ node(id: \\"$ITEM_ID\\") { ... on ProjectV2Item { fieldValues(first: 10) { nodes { ... on ProjectV2ItemFieldSingleSelectValue { field { ... on ProjectV2FieldCommon { name } } optionId } } } } } }"
