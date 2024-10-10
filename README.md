@@ -8,6 +8,7 @@
 [![Paper](https://img.shields.io/badge/Paper-WIP-blue)](https://teorth.github.io/equational_theories/blueprint.pdf)
 [![Zulip Channel](https://img.shields.io/badge/Zulip_Channel-Join-blue)](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational)
 
+
 ![Hasse diagram of selected equations](https://github.com/teorth/equational_theories/blob/main/images/subgraph.png?raw=true)
 
 The purpose of this project, launched on Sep 25, 2024, is to explore the space of equational theories of [magmas](https://en.wikipedia.org/wiki/Magma_(algebra)), ordered by implication. To begin with we shall focus only on theories of a single equation, and specifically on the 4694 equational laws
