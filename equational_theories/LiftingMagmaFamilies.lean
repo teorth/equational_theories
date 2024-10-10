@@ -31,6 +31,12 @@ instance instDecidableSatisfies [DecidableEq α] (law : MagmaLaw α) : Decidable
   rw [MagmaLaw.models_iff_satisfies_ι, satisfiesPhi]
   infer_instance
 
+set_option linter.unusedSectionVars false in
+lemma proveNonimplication {law law' : NatMagmaLaw} {P P' : (G : Type _) → Prop}
+  (models_law_iff : G Nat ⊧ law ↔ P (G Nat)) (models_law'_iff : G Nat ⊧ law' ↔ P' (G Nat))
+  (hlaw : G Nat ⊧ law) (hlaw' : ¬(G Nat ⊧ law')) : ∃ (M : Type _) (_ : Magma M), P M ∧ ¬ (P' M) :=
+  ⟨G Nat, inferInstance, models_law_iff.mp hlaw, ((not_iff_not).mpr models_law'_iff).mp hlaw'⟩
+
 section Instances
 
 instance instMagmaList {α : Type _} : Magma (List α) where
