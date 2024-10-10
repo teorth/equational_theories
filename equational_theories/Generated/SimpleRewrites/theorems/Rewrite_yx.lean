@@ -8,49 +8,19 @@ namespace SimpleRewrites
 
 
 @[equational_result]
-theorem Equation2_implies_Equation1 (G : Type*) [Magma G] (h : Equation2 G) : Equation1 G := λ x => h x x
-@[equational_result]
-theorem Equation4_implies_Equation3 (G : Type*) [Magma G] (h : Equation4 G) : Equation3 G := λ x => h x x
-@[equational_result]
-theorem Equation5_implies_Equation3 (G : Type*) [Magma G] (h : Equation5 G) : Equation3 G := λ x => h x x
-@[equational_result]
-theorem Equation6_implies_Equation3 (G : Type*) [Magma G] (h : Equation6 G) : Equation3 G := λ x => h x x
-@[equational_result]
 theorem Equation9_implies_Equation8 (G : Type*) [Magma G] (h : Equation9 G) : Equation8 G := λ x => h x x
-@[equational_result]
-theorem Equation10_implies_Equation8 (G : Type*) [Magma G] (h : Equation10 G) : Equation8 G := λ x => h x x
-@[equational_result]
-theorem Equation11_implies_Equation8 (G : Type*) [Magma G] (h : Equation11 G) : Equation8 G := λ x => h x x
-@[equational_result]
-theorem Equation13_implies_Equation8 (G : Type*) [Magma G] (h : Equation13 G) : Equation8 G := λ x => h x x
 @[equational_result]
 theorem Equation14_implies_Equation8 (G : Type*) [Magma G] (h : Equation14 G) : Equation8 G := λ x => h x x
 @[equational_result]
 theorem Equation16_implies_Equation8 (G : Type*) [Magma G] (h : Equation16 G) : Equation8 G := λ x => h x x
 @[equational_result]
-theorem Equation17_implies_Equation8 (G : Type*) [Magma G] (h : Equation17 G) : Equation8 G := λ x => h x x
-@[equational_result]
-theorem Equation24_implies_Equation23 (G : Type*) [Magma G] (h : Equation24 G) : Equation23 G := λ x => h x x
-@[equational_result]
 theorem Equation25_implies_Equation23 (G : Type*) [Magma G] (h : Equation25 G) : Equation23 G := λ x => h x x
 @[equational_result]
 theorem Equation26_implies_Equation23 (G : Type*) [Magma G] (h : Equation26 G) : Equation23 G := λ x => h x x
 @[equational_result]
-theorem Equation28_implies_Equation23 (G : Type*) [Magma G] (h : Equation28 G) : Equation23 G := λ x => h x x
-@[equational_result]
-theorem Equation29_implies_Equation23 (G : Type*) [Magma G] (h : Equation29 G) : Equation23 G := λ x => h x x
-@[equational_result]
-theorem Equation31_implies_Equation23 (G : Type*) [Magma G] (h : Equation31 G) : Equation23 G := λ x => h x x
-@[equational_result]
-theorem Equation32_implies_Equation23 (G : Type*) [Magma G] (h : Equation32 G) : Equation23 G := λ x => h x x
-@[equational_result]
 theorem Equation48_implies_Equation47 (G : Type*) [Magma G] (h : Equation48 G) : Equation47 G := λ x => h x x
 @[equational_result]
-theorem Equation49_implies_Equation47 (G : Type*) [Magma G] (h : Equation49 G) : Equation47 G := λ x => h x x
-@[equational_result]
 theorem Equation50_implies_Equation47 (G : Type*) [Magma G] (h : Equation50 G) : Equation47 G := λ x => h x x
-@[equational_result]
-theorem Equation52_implies_Equation47 (G : Type*) [Magma G] (h : Equation52 G) : Equation47 G := λ x => h x x
 @[equational_result]
 theorem Equation53_implies_Equation47 (G : Type*) [Magma G] (h : Equation53 G) : Equation47 G := λ x => h x x
 @[equational_result]
@@ -58,37 +28,19 @@ theorem Equation55_implies_Equation47 (G : Type*) [Magma G] (h : Equation55 G) :
 @[equational_result]
 theorem Equation56_implies_Equation47 (G : Type*) [Magma G] (h : Equation56 G) : Equation47 G := λ x => h x x
 @[equational_result]
-theorem Equation62_implies_Equation47 (G : Type*) [Magma G] (h : Equation62 G) : Equation47 G := λ x => h x x
-@[equational_result]
 theorem Equation63_implies_Equation47 (G : Type*) [Magma G] (h : Equation63 G) : Equation47 G := λ x => h x x
 @[equational_result]
 theorem Equation65_implies_Equation47 (G : Type*) [Magma G] (h : Equation65 G) : Equation47 G := λ x => h x x
 @[equational_result]
-theorem Equation66_implies_Equation47 (G : Type*) [Magma G] (h : Equation66 G) : Equation47 G := λ x => h x x
-@[equational_result]
-theorem Equation72_implies_Equation47 (G : Type*) [Magma G] (h : Equation72 G) : Equation47 G := λ x => h x x
-@[equational_result]
 theorem Equation73_implies_Equation47 (G : Type*) [Magma G] (h : Equation73 G) : Equation47 G := λ x => h x x
 @[equational_result]
 theorem Equation75_implies_Equation47 (G : Type*) [Magma G] (h : Equation75 G) : Equation47 G := λ x => h x x
-@[equational_result]
-theorem Equation76_implies_Equation47 (G : Type*) [Magma G] (h : Equation76 G) : Equation47 G := λ x => h x x
-@[equational_result]
-theorem Equation100_implies_Equation99 (G : Type*) [Magma G] (h : Equation100 G) : Equation99 G := λ x => h x x
-@[equational_result]
-theorem Equation101_implies_Equation99 (G : Type*) [Magma G] (h : Equation101 G) : Equation99 G := λ x => h x x
-@[equational_result]
-theorem Equation102_implies_Equation99 (G : Type*) [Magma G] (h : Equation102 G) : Equation99 G := λ x => h x x
-@[equational_result]
-theorem Equation104_implies_Equation99 (G : Type*) [Magma G] (h : Equation104 G) : Equation99 G := λ x => h x x
 @[equational_result]
 theorem Equation105_implies_Equation99 (G : Type*) [Magma G] (h : Equation105 G) : Equation99 G := λ x => h x x
 @[equational_result]
 theorem Equation107_implies_Equation99 (G : Type*) [Magma G] (h : Equation107 G) : Equation99 G := λ x => h x x
 @[equational_result]
 theorem Equation108_implies_Equation99 (G : Type*) [Magma G] (h : Equation108 G) : Equation99 G := λ x => h x x
-@[equational_result]
-theorem Equation114_implies_Equation99 (G : Type*) [Magma G] (h : Equation114 G) : Equation99 G := λ x => h x x
 @[equational_result]
 theorem Equation115_implies_Equation99 (G : Type*) [Magma G] (h : Equation115 G) : Equation99 G := λ x => h x x
 @[equational_result]
@@ -98,21 +50,11 @@ theorem Equation118_implies_Equation99 (G : Type*) [Magma G] (h : Equation118 G)
 @[equational_result]
 theorem Equation124_implies_Equation99 (G : Type*) [Magma G] (h : Equation124 G) : Equation99 G := λ x => h x x
 @[equational_result]
-theorem Equation125_implies_Equation99 (G : Type*) [Magma G] (h : Equation125 G) : Equation99 G := λ x => h x x
-@[equational_result]
-theorem Equation127_implies_Equation99 (G : Type*) [Magma G] (h : Equation127 G) : Equation99 G := λ x => h x x
-@[equational_result]
-theorem Equation128_implies_Equation99 (G : Type*) [Magma G] (h : Equation128 G) : Equation99 G := λ x => h x x
-@[equational_result]
 theorem Equation152_implies_Equation151 (G : Type*) [Magma G] (h : Equation152 G) : Equation151 G := λ x => h x x
 @[equational_result]
 theorem Equation153_implies_Equation151 (G : Type*) [Magma G] (h : Equation153 G) : Equation151 G := λ x => h x x
 @[equational_result]
-theorem Equation154_implies_Equation151 (G : Type*) [Magma G] (h : Equation154 G) : Equation151 G := λ x => h x x
-@[equational_result]
 theorem Equation156_implies_Equation151 (G : Type*) [Magma G] (h : Equation156 G) : Equation151 G := λ x => h x x
-@[equational_result]
-theorem Equation157_implies_Equation151 (G : Type*) [Magma G] (h : Equation157 G) : Equation151 G := λ x => h x x
 @[equational_result]
 theorem Equation159_implies_Equation151 (G : Type*) [Magma G] (h : Equation159 G) : Equation151 G := λ x => h x x
 @[equational_result]
@@ -122,25 +64,11 @@ theorem Equation166_implies_Equation151 (G : Type*) [Magma G] (h : Equation166 G
 @[equational_result]
 theorem Equation167_implies_Equation151 (G : Type*) [Magma G] (h : Equation167 G) : Equation151 G := λ x => h x x
 @[equational_result]
-theorem Equation169_implies_Equation151 (G : Type*) [Magma G] (h : Equation169 G) : Equation151 G := λ x => h x x
-@[equational_result]
-theorem Equation170_implies_Equation151 (G : Type*) [Magma G] (h : Equation170 G) : Equation151 G := λ x => h x x
-@[equational_result]
-theorem Equation176_implies_Equation151 (G : Type*) [Magma G] (h : Equation176 G) : Equation151 G := λ x => h x x
-@[equational_result]
 theorem Equation177_implies_Equation151 (G : Type*) [Magma G] (h : Equation177 G) : Equation151 G := λ x => h x x
 @[equational_result]
 theorem Equation179_implies_Equation151 (G : Type*) [Magma G] (h : Equation179 G) : Equation151 G := λ x => h x x
 @[equational_result]
-theorem Equation180_implies_Equation151 (G : Type*) [Magma G] (h : Equation180 G) : Equation151 G := λ x => h x x
-@[equational_result]
-theorem Equation204_implies_Equation203 (G : Type*) [Magma G] (h : Equation204 G) : Equation203 G := λ x => h x x
-@[equational_result]
-theorem Equation205_implies_Equation203 (G : Type*) [Magma G] (h : Equation205 G) : Equation203 G := λ x => h x x
-@[equational_result]
 theorem Equation206_implies_Equation203 (G : Type*) [Magma G] (h : Equation206 G) : Equation203 G := λ x => h x x
-@[equational_result]
-theorem Equation208_implies_Equation203 (G : Type*) [Magma G] (h : Equation208 G) : Equation203 G := λ x => h x x
 @[equational_result]
 theorem Equation209_implies_Equation203 (G : Type*) [Magma G] (h : Equation209 G) : Equation203 G := λ x => h x x
 @[equational_result]
@@ -148,29 +76,13 @@ theorem Equation211_implies_Equation203 (G : Type*) [Magma G] (h : Equation211 G
 @[equational_result]
 theorem Equation212_implies_Equation203 (G : Type*) [Magma G] (h : Equation212 G) : Equation203 G := λ x => h x x
 @[equational_result]
-theorem Equation218_implies_Equation203 (G : Type*) [Magma G] (h : Equation218 G) : Equation203 G := λ x => h x x
-@[equational_result]
 theorem Equation219_implies_Equation203 (G : Type*) [Magma G] (h : Equation219 G) : Equation203 G := λ x => h x x
 @[equational_result]
 theorem Equation221_implies_Equation203 (G : Type*) [Magma G] (h : Equation221 G) : Equation203 G := λ x => h x x
 @[equational_result]
-theorem Equation222_implies_Equation203 (G : Type*) [Magma G] (h : Equation222 G) : Equation203 G := λ x => h x x
-@[equational_result]
-theorem Equation228_implies_Equation203 (G : Type*) [Magma G] (h : Equation228 G) : Equation203 G := λ x => h x x
-@[equational_result]
 theorem Equation229_implies_Equation203 (G : Type*) [Magma G] (h : Equation229 G) : Equation203 G := λ x => h x x
 @[equational_result]
 theorem Equation231_implies_Equation203 (G : Type*) [Magma G] (h : Equation231 G) : Equation203 G := λ x => h x x
-@[equational_result]
-theorem Equation232_implies_Equation203 (G : Type*) [Magma G] (h : Equation232 G) : Equation203 G := λ x => h x x
-@[equational_result]
-theorem Equation256_implies_Equation255 (G : Type*) [Magma G] (h : Equation256 G) : Equation255 G := λ x => h x x
-@[equational_result]
-theorem Equation257_implies_Equation255 (G : Type*) [Magma G] (h : Equation257 G) : Equation255 G := λ x => h x x
-@[equational_result]
-theorem Equation258_implies_Equation255 (G : Type*) [Magma G] (h : Equation258 G) : Equation255 G := λ x => h x x
-@[equational_result]
-theorem Equation260_implies_Equation255 (G : Type*) [Magma G] (h : Equation260 G) : Equation255 G := λ x => h x x
 @[equational_result]
 theorem Equation261_implies_Equation255 (G : Type*) [Magma G] (h : Equation261 G) : Equation255 G := λ x => h x x
 @[equational_result]
@@ -192,8 +104,6 @@ theorem Equation281_implies_Equation255 (G : Type*) [Magma G] (h : Equation281 G
 @[equational_result]
 theorem Equation283_implies_Equation255 (G : Type*) [Magma G] (h : Equation283 G) : Equation255 G := λ x => h x x
 @[equational_result]
-theorem Equation284_implies_Equation255 (G : Type*) [Magma G] (h : Equation284 G) : Equation255 G := λ x => h x x
-@[equational_result]
 theorem Equation308_implies_Equation307 (G : Type*) [Magma G] (h : Equation308 G) : Equation307 G := λ x => h x x
 @[equational_result]
 theorem Equation309_implies_Equation307 (G : Type*) [Magma G] (h : Equation309 G) : Equation307 G := λ x => h x x
@@ -206,23 +116,15 @@ theorem Equation313_implies_Equation307 (G : Type*) [Magma G] (h : Equation313 G
 @[equational_result]
 theorem Equation315_implies_Equation307 (G : Type*) [Magma G] (h : Equation315 G) : Equation307 G := λ x => h x x
 @[equational_result]
-theorem Equation316_implies_Equation307 (G : Type*) [Magma G] (h : Equation316 G) : Equation307 G := λ x => h x x
-@[equational_result]
-theorem Equation322_implies_Equation307 (G : Type*) [Magma G] (h : Equation322 G) : Equation307 G := λ x => h x x
-@[equational_result]
 theorem Equation323_implies_Equation307 (G : Type*) [Magma G] (h : Equation323 G) : Equation307 G := λ x => h x x
 @[equational_result]
 theorem Equation325_implies_Equation307 (G : Type*) [Magma G] (h : Equation325 G) : Equation307 G := λ x => h x x
 @[equational_result]
 theorem Equation326_implies_Equation307 (G : Type*) [Magma G] (h : Equation326 G) : Equation307 G := λ x => h x x
 @[equational_result]
-theorem Equation332_implies_Equation307 (G : Type*) [Magma G] (h : Equation332 G) : Equation307 G := λ x => h x x
-@[equational_result]
 theorem Equation333_implies_Equation307 (G : Type*) [Magma G] (h : Equation333 G) : Equation307 G := λ x => h x x
 @[equational_result]
 theorem Equation335_implies_Equation307 (G : Type*) [Magma G] (h : Equation335 G) : Equation307 G := λ x => h x x
-@[equational_result]
-theorem Equation336_implies_Equation307 (G : Type*) [Magma G] (h : Equation336 G) : Equation307 G := λ x => h x x
 @[equational_result]
 theorem Equation360_implies_Equation359 (G : Type*) [Magma G] (h : Equation360 G) : Equation359 G := λ x => h x x
 @[equational_result]
@@ -236,10 +138,6 @@ theorem Equation365_implies_Equation359 (G : Type*) [Magma G] (h : Equation365 G
 @[equational_result]
 theorem Equation367_implies_Equation359 (G : Type*) [Magma G] (h : Equation367 G) : Equation359 G := λ x => h x x
 @[equational_result]
-theorem Equation368_implies_Equation359 (G : Type*) [Magma G] (h : Equation368 G) : Equation359 G := λ x => h x x
-@[equational_result]
-theorem Equation374_implies_Equation359 (G : Type*) [Magma G] (h : Equation374 G) : Equation359 G := λ x => h x x
-@[equational_result]
 theorem Equation375_implies_Equation359 (G : Type*) [Magma G] (h : Equation375 G) : Equation359 G := λ x => h x x
 @[equational_result]
 theorem Equation377_implies_Equation359 (G : Type*) [Magma G] (h : Equation377 G) : Equation359 G := λ x => h x x
@@ -251,8 +149,6 @@ theorem Equation384_implies_Equation359 (G : Type*) [Magma G] (h : Equation384 G
 theorem Equation385_implies_Equation359 (G : Type*) [Magma G] (h : Equation385 G) : Equation359 G := λ x => h x x
 @[equational_result]
 theorem Equation387_implies_Equation359 (G : Type*) [Magma G] (h : Equation387 G) : Equation359 G := λ x => h x x
-@[equational_result]
-theorem Equation388_implies_Equation359 (G : Type*) [Magma G] (h : Equation388 G) : Equation359 G := λ x => h x x
 @[equational_result]
 theorem Equation412_implies_Equation411 (G : Type*) [Magma G] (h : Equation412 G) : Equation411 G := λ x => h x x
 @[equational_result]
@@ -274,8 +170,6 @@ theorem Equation427_implies_Equation411 (G : Type*) [Magma G] (h : Equation427 G
 @[equational_result]
 theorem Equation429_implies_Equation411 (G : Type*) [Magma G] (h : Equation429 G) : Equation411 G := λ x => h x x
 @[equational_result]
-theorem Equation430_implies_Equation411 (G : Type*) [Magma G] (h : Equation430 G) : Equation411 G := λ x => h x x
-@[equational_result]
 theorem Equation436_implies_Equation411 (G : Type*) [Magma G] (h : Equation436 G) : Equation411 G := λ x => h x x
 @[equational_result]
 theorem Equation437_implies_Equation411 (G : Type*) [Magma G] (h : Equation437 G) : Equation411 G := λ x => h x x
@@ -283,8 +177,6 @@ theorem Equation437_implies_Equation411 (G : Type*) [Magma G] (h : Equation437 G
 theorem Equation439_implies_Equation411 (G : Type*) [Magma G] (h : Equation439 G) : Equation411 G := λ x => h x x
 @[equational_result]
 theorem Equation440_implies_Equation411 (G : Type*) [Magma G] (h : Equation440 G) : Equation411 G := λ x => h x x
-@[equational_result]
-theorem Equation463_implies_Equation411 (G : Type*) [Magma G] (h : Equation463 G) : Equation411 G := λ x => h x x
 @[equational_result]
 theorem Equation464_implies_Equation411 (G : Type*) [Magma G] (h : Equation464 G) : Equation411 G := λ x => h x x
 @[equational_result]
@@ -294,13 +186,9 @@ theorem Equation467_implies_Equation411 (G : Type*) [Magma G] (h : Equation467 G
 @[equational_result]
 theorem Equation473_implies_Equation411 (G : Type*) [Magma G] (h : Equation473 G) : Equation411 G := λ x => h x x
 @[equational_result]
-theorem Equation474_implies_Equation411 (G : Type*) [Magma G] (h : Equation474 G) : Equation411 G := λ x => h x x
-@[equational_result]
 theorem Equation476_implies_Equation411 (G : Type*) [Magma G] (h : Equation476 G) : Equation411 G := λ x => h x x
 @[equational_result]
 theorem Equation477_implies_Equation411 (G : Type*) [Magma G] (h : Equation477 G) : Equation411 G := λ x => h x x
-@[equational_result]
-theorem Equation500_implies_Equation411 (G : Type*) [Magma G] (h : Equation500 G) : Equation411 G := λ x => h x x
 @[equational_result]
 theorem Equation501_implies_Equation411 (G : Type*) [Magma G] (h : Equation501 G) : Equation411 G := λ x => h x x
 @[equational_result]
@@ -308,13 +196,9 @@ theorem Equation503_implies_Equation411 (G : Type*) [Magma G] (h : Equation503 G
 @[equational_result]
 theorem Equation504_implies_Equation411 (G : Type*) [Magma G] (h : Equation504 G) : Equation411 G := λ x => h x x
 @[equational_result]
-theorem Equation510_implies_Equation411 (G : Type*) [Magma G] (h : Equation510 G) : Equation411 G := λ x => h x x
-@[equational_result]
 theorem Equation511_implies_Equation411 (G : Type*) [Magma G] (h : Equation511 G) : Equation411 G := λ x => h x x
 @[equational_result]
 theorem Equation513_implies_Equation411 (G : Type*) [Magma G] (h : Equation513 G) : Equation411 G := λ x => h x x
-@[equational_result]
-theorem Equation514_implies_Equation411 (G : Type*) [Magma G] (h : Equation514 G) : Equation411 G := λ x => h x x
 @[equational_result]
 theorem Equation615_implies_Equation614 (G : Type*) [Magma G] (h : Equation615 G) : Equation614 G := λ x => h x x
 @[equational_result]
@@ -346,8 +230,6 @@ theorem Equation642_implies_Equation614 (G : Type*) [Magma G] (h : Equation642 G
 @[equational_result]
 theorem Equation643_implies_Equation614 (G : Type*) [Magma G] (h : Equation643 G) : Equation614 G := λ x => h x x
 @[equational_result]
-theorem Equation666_implies_Equation614 (G : Type*) [Magma G] (h : Equation666 G) : Equation614 G := λ x => h x x
-@[equational_result]
 theorem Equation667_implies_Equation614 (G : Type*) [Magma G] (h : Equation667 G) : Equation614 G := λ x => h x x
 @[equational_result]
 theorem Equation669_implies_Equation614 (G : Type*) [Magma G] (h : Equation669 G) : Equation614 G := λ x => h x x
@@ -372,11 +254,7 @@ theorem Equation707_implies_Equation614 (G : Type*) [Magma G] (h : Equation707 G
 @[equational_result]
 theorem Equation713_implies_Equation614 (G : Type*) [Magma G] (h : Equation713 G) : Equation614 G := λ x => h x x
 @[equational_result]
-theorem Equation714_implies_Equation614 (G : Type*) [Magma G] (h : Equation714 G) : Equation614 G := λ x => h x x
-@[equational_result]
 theorem Equation716_implies_Equation614 (G : Type*) [Magma G] (h : Equation716 G) : Equation614 G := λ x => h x x
-@[equational_result]
-theorem Equation717_implies_Equation614 (G : Type*) [Magma G] (h : Equation717 G) : Equation614 G := λ x => h x x
 @[equational_result]
 theorem Equation818_implies_Equation817 (G : Type*) [Magma G] (h : Equation818 G) : Equation817 G := λ x => h x x
 @[equational_result]
@@ -408,8 +286,6 @@ theorem Equation845_implies_Equation817 (G : Type*) [Magma G] (h : Equation845 G
 @[equational_result]
 theorem Equation846_implies_Equation817 (G : Type*) [Magma G] (h : Equation846 G) : Equation817 G := λ x => h x x
 @[equational_result]
-theorem Equation869_implies_Equation817 (G : Type*) [Magma G] (h : Equation869 G) : Equation817 G := λ x => h x x
-@[equational_result]
 theorem Equation870_implies_Equation817 (G : Type*) [Magma G] (h : Equation870 G) : Equation817 G := λ x => h x x
 @[equational_result]
 theorem Equation872_implies_Equation817 (G : Type*) [Magma G] (h : Equation872 G) : Equation817 G := λ x => h x x
@@ -417,8 +293,6 @@ theorem Equation872_implies_Equation817 (G : Type*) [Magma G] (h : Equation872 G
 theorem Equation873_implies_Equation817 (G : Type*) [Magma G] (h : Equation873 G) : Equation817 G := λ x => h x x
 @[equational_result]
 theorem Equation879_implies_Equation817 (G : Type*) [Magma G] (h : Equation879 G) : Equation817 G := λ x => h x x
-@[equational_result]
-theorem Equation880_implies_Equation817 (G : Type*) [Magma G] (h : Equation880 G) : Equation817 G := λ x => h x x
 @[equational_result]
 theorem Equation882_implies_Equation817 (G : Type*) [Magma G] (h : Equation882 G) : Equation817 G := λ x => h x x
 @[equational_result]
@@ -428,8 +302,6 @@ theorem Equation906_implies_Equation817 (G : Type*) [Magma G] (h : Equation906 G
 @[equational_result]
 theorem Equation907_implies_Equation817 (G : Type*) [Magma G] (h : Equation907 G) : Equation817 G := λ x => h x x
 @[equational_result]
-theorem Equation909_implies_Equation817 (G : Type*) [Magma G] (h : Equation909 G) : Equation817 G := λ x => h x x
-@[equational_result]
 theorem Equation910_implies_Equation817 (G : Type*) [Magma G] (h : Equation910 G) : Equation817 G := λ x => h x x
 @[equational_result]
 theorem Equation916_implies_Equation817 (G : Type*) [Magma G] (h : Equation916 G) : Equation817 G := λ x => h x x
@@ -438,15 +310,11 @@ theorem Equation917_implies_Equation817 (G : Type*) [Magma G] (h : Equation917 G
 @[equational_result]
 theorem Equation919_implies_Equation817 (G : Type*) [Magma G] (h : Equation919 G) : Equation817 G := λ x => h x x
 @[equational_result]
-theorem Equation920_implies_Equation817 (G : Type*) [Magma G] (h : Equation920 G) : Equation817 G := λ x => h x x
-@[equational_result]
 theorem Equation1021_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1021 G) : Equation1020 G := λ x => h x x
 @[equational_result]
 theorem Equation1022_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1022 G) : Equation1020 G := λ x => h x x
 @[equational_result]
 theorem Equation1023_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1023 G) : Equation1020 G := λ x => h x x
-@[equational_result]
-theorem Equation1025_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1025 G) : Equation1020 G := λ x => h x x
 @[equational_result]
 theorem Equation1026_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1026 G) : Equation1020 G := λ x => h x x
 @[equational_result]
@@ -470,10 +338,6 @@ theorem Equation1048_implies_Equation1020 (G : Type*) [Magma G] (h : Equation104
 @[equational_result]
 theorem Equation1049_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1049 G) : Equation1020 G := λ x => h x x
 @[equational_result]
-theorem Equation1072_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1072 G) : Equation1020 G := λ x => h x x
-@[equational_result]
-theorem Equation1073_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1073 G) : Equation1020 G := λ x => h x x
-@[equational_result]
 theorem Equation1075_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1075 G) : Equation1020 G := λ x => h x x
 @[equational_result]
 theorem Equation1076_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1076 G) : Equation1020 G := λ x => h x x
@@ -494,13 +358,7 @@ theorem Equation1112_implies_Equation1020 (G : Type*) [Magma G] (h : Equation111
 @[equational_result]
 theorem Equation1113_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1113 G) : Equation1020 G := λ x => h x x
 @[equational_result]
-theorem Equation1119_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1119 G) : Equation1020 G := λ x => h x x
-@[equational_result]
-theorem Equation1120_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1120 G) : Equation1020 G := λ x => h x x
-@[equational_result]
 theorem Equation1122_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1122 G) : Equation1020 G := λ x => h x x
-@[equational_result]
-theorem Equation1123_implies_Equation1020 (G : Type*) [Magma G] (h : Equation1123 G) : Equation1020 G := λ x => h x x
 @[equational_result]
 theorem Equation1224_implies_Equation1223 (G : Type*) [Magma G] (h : Equation1224 G) : Equation1223 G := λ x => h x x
 @[equational_result]
@@ -513,8 +371,6 @@ theorem Equation1228_implies_Equation1223 (G : Type*) [Magma G] (h : Equation122
 theorem Equation1229_implies_Equation1223 (G : Type*) [Magma G] (h : Equation1229 G) : Equation1223 G := λ x => h x x
 @[equational_result]
 theorem Equation1231_implies_Equation1223 (G : Type*) [Magma G] (h : Equation1231 G) : Equation1223 G := λ x => h x x
-@[equational_result]
-theorem Equation1232_implies_Equation1223 (G : Type*) [Magma G] (h : Equation1232 G) : Equation1223 G := λ x => h x x
 @[equational_result]
 theorem Equation1238_implies_Equation1223 (G : Type*) [Magma G] (h : Equation1238 G) : Equation1223 G := λ x => h x x
 @[equational_result]
@@ -531,8 +387,6 @@ theorem Equation1249_implies_Equation1223 (G : Type*) [Magma G] (h : Equation124
 theorem Equation1251_implies_Equation1223 (G : Type*) [Magma G] (h : Equation1251 G) : Equation1223 G := λ x => h x x
 @[equational_result]
 theorem Equation1252_implies_Equation1223 (G : Type*) [Magma G] (h : Equation1252 G) : Equation1223 G := λ x => h x x
-@[equational_result]
-theorem Equation1275_implies_Equation1223 (G : Type*) [Magma G] (h : Equation1275 G) : Equation1223 G := λ x => h x x
 @[equational_result]
 theorem Equation1276_implies_Equation1223 (G : Type*) [Magma G] (h : Equation1276 G) : Equation1223 G := λ x => h x x
 @[equational_result]
@@ -562,8 +416,6 @@ theorem Equation1323_implies_Equation1223 (G : Type*) [Magma G] (h : Equation132
 @[equational_result]
 theorem Equation1325_implies_Equation1223 (G : Type*) [Magma G] (h : Equation1325 G) : Equation1223 G := λ x => h x x
 @[equational_result]
-theorem Equation1326_implies_Equation1223 (G : Type*) [Magma G] (h : Equation1326 G) : Equation1223 G := λ x => h x x
-@[equational_result]
 theorem Equation1427_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1427 G) : Equation1426 G := λ x => h x x
 @[equational_result]
 theorem Equation1428_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1428 G) : Equation1426 G := λ x => h x x
@@ -588,8 +440,6 @@ theorem Equation1445_implies_Equation1426 (G : Type*) [Magma G] (h : Equation144
 @[equational_result]
 theorem Equation1451_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1451 G) : Equation1426 G := λ x => h x x
 @[equational_result]
-theorem Equation1452_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1452 G) : Equation1426 G := λ x => h x x
-@[equational_result]
 theorem Equation1454_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1454 G) : Equation1426 G := λ x => h x x
 @[equational_result]
 theorem Equation1455_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1455 G) : Equation1426 G := λ x => h x x
@@ -608,8 +458,6 @@ theorem Equation1489_implies_Equation1426 (G : Type*) [Magma G] (h : Equation148
 @[equational_result]
 theorem Equation1491_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1491 G) : Equation1426 G := λ x => h x x
 @[equational_result]
-theorem Equation1492_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1492 G) : Equation1426 G := λ x => h x x
-@[equational_result]
 theorem Equation1515_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1515 G) : Equation1426 G := λ x => h x x
 @[equational_result]
 theorem Equation1516_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1516 G) : Equation1426 G := λ x => h x x
@@ -623,10 +471,6 @@ theorem Equation1525_implies_Equation1426 (G : Type*) [Magma G] (h : Equation152
 theorem Equation1526_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1526 G) : Equation1426 G := λ x => h x x
 @[equational_result]
 theorem Equation1528_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1528 G) : Equation1426 G := λ x => h x x
-@[equational_result]
-theorem Equation1529_implies_Equation1426 (G : Type*) [Magma G] (h : Equation1529 G) : Equation1426 G := λ x => h x x
-@[equational_result]
-theorem Equation1630_implies_Equation1629 (G : Type*) [Magma G] (h : Equation1630 G) : Equation1629 G := λ x => h x x
 @[equational_result]
 theorem Equation1631_implies_Equation1629 (G : Type*) [Magma G] (h : Equation1631 G) : Equation1629 G := λ x => h x x
 @[equational_result]
@@ -670,10 +514,6 @@ theorem Equation1692_implies_Equation1629 (G : Type*) [Magma G] (h : Equation169
 @[equational_result]
 theorem Equation1694_implies_Equation1629 (G : Type*) [Magma G] (h : Equation1694 G) : Equation1629 G := λ x => h x x
 @[equational_result]
-theorem Equation1695_implies_Equation1629 (G : Type*) [Magma G] (h : Equation1695 G) : Equation1629 G := λ x => h x x
-@[equational_result]
-theorem Equation1718_implies_Equation1629 (G : Type*) [Magma G] (h : Equation1718 G) : Equation1629 G := λ x => h x x
-@[equational_result]
 theorem Equation1719_implies_Equation1629 (G : Type*) [Magma G] (h : Equation1719 G) : Equation1629 G := λ x => h x x
 @[equational_result]
 theorem Equation1721_implies_Equation1629 (G : Type*) [Magma G] (h : Equation1721 G) : Equation1629 G := λ x => h x x
@@ -685,8 +525,6 @@ theorem Equation1728_implies_Equation1629 (G : Type*) [Magma G] (h : Equation172
 theorem Equation1729_implies_Equation1629 (G : Type*) [Magma G] (h : Equation1729 G) : Equation1629 G := λ x => h x x
 @[equational_result]
 theorem Equation1731_implies_Equation1629 (G : Type*) [Magma G] (h : Equation1731 G) : Equation1629 G := λ x => h x x
-@[equational_result]
-theorem Equation1732_implies_Equation1629 (G : Type*) [Magma G] (h : Equation1732 G) : Equation1629 G := λ x => h x x
 @[equational_result]
 theorem Equation1833_implies_Equation1832 (G : Type*) [Magma G] (h : Equation1833 G) : Equation1832 G := λ x => h x x
 @[equational_result]
@@ -718,8 +556,6 @@ theorem Equation1860_implies_Equation1832 (G : Type*) [Magma G] (h : Equation186
 @[equational_result]
 theorem Equation1861_implies_Equation1832 (G : Type*) [Magma G] (h : Equation1861 G) : Equation1832 G := λ x => h x x
 @[equational_result]
-theorem Equation1884_implies_Equation1832 (G : Type*) [Magma G] (h : Equation1884 G) : Equation1832 G := λ x => h x x
-@[equational_result]
 theorem Equation1885_implies_Equation1832 (G : Type*) [Magma G] (h : Equation1885 G) : Equation1832 G := λ x => h x x
 @[equational_result]
 theorem Equation1887_implies_Equation1832 (G : Type*) [Magma G] (h : Equation1887 G) : Equation1832 G := λ x => h x x
@@ -747,8 +583,6 @@ theorem Equation1931_implies_Equation1832 (G : Type*) [Magma G] (h : Equation193
 theorem Equation1932_implies_Equation1832 (G : Type*) [Magma G] (h : Equation1932 G) : Equation1832 G := λ x => h x x
 @[equational_result]
 theorem Equation1934_implies_Equation1832 (G : Type*) [Magma G] (h : Equation1934 G) : Equation1832 G := λ x => h x x
-@[equational_result]
-theorem Equation1935_implies_Equation1832 (G : Type*) [Magma G] (h : Equation1935 G) : Equation1832 G := λ x => h x x
 @[equational_result]
 theorem Equation2036_implies_Equation2035 (G : Type*) [Magma G] (h : Equation2036 G) : Equation2035 G := λ x => h x x
 @[equational_result]
@@ -792,8 +626,6 @@ theorem Equation2097_implies_Equation2035 (G : Type*) [Magma G] (h : Equation209
 @[equational_result]
 theorem Equation2098_implies_Equation2035 (G : Type*) [Magma G] (h : Equation2098 G) : Equation2035 G := λ x => h x x
 @[equational_result]
-theorem Equation2100_implies_Equation2035 (G : Type*) [Magma G] (h : Equation2100 G) : Equation2035 G := λ x => h x x
-@[equational_result]
 theorem Equation2101_implies_Equation2035 (G : Type*) [Magma G] (h : Equation2101 G) : Equation2035 G := λ x => h x x
 @[equational_result]
 theorem Equation2124_implies_Equation2035 (G : Type*) [Magma G] (h : Equation2124 G) : Equation2035 G := λ x => h x x
@@ -806,13 +638,7 @@ theorem Equation2128_implies_Equation2035 (G : Type*) [Magma G] (h : Equation212
 @[equational_result]
 theorem Equation2134_implies_Equation2035 (G : Type*) [Magma G] (h : Equation2134 G) : Equation2035 G := λ x => h x x
 @[equational_result]
-theorem Equation2135_implies_Equation2035 (G : Type*) [Magma G] (h : Equation2135 G) : Equation2035 G := λ x => h x x
-@[equational_result]
 theorem Equation2137_implies_Equation2035 (G : Type*) [Magma G] (h : Equation2137 G) : Equation2035 G := λ x => h x x
-@[equational_result]
-theorem Equation2138_implies_Equation2035 (G : Type*) [Magma G] (h : Equation2138 G) : Equation2035 G := λ x => h x x
-@[equational_result]
-theorem Equation2239_implies_Equation2238 (G : Type*) [Magma G] (h : Equation2239 G) : Equation2238 G := λ x => h x x
 @[equational_result]
 theorem Equation2240_implies_Equation2238 (G : Type*) [Magma G] (h : Equation2240 G) : Equation2238 G := λ x => h x x
 @[equational_result]
@@ -866,27 +692,17 @@ theorem Equation2330_implies_Equation2238 (G : Type*) [Magma G] (h : Equation233
 @[equational_result]
 theorem Equation2331_implies_Equation2238 (G : Type*) [Magma G] (h : Equation2331 G) : Equation2238 G := λ x => h x x
 @[equational_result]
-theorem Equation2337_implies_Equation2238 (G : Type*) [Magma G] (h : Equation2337 G) : Equation2238 G := λ x => h x x
-@[equational_result]
 theorem Equation2338_implies_Equation2238 (G : Type*) [Magma G] (h : Equation2338 G) : Equation2238 G := λ x => h x x
 @[equational_result]
 theorem Equation2340_implies_Equation2238 (G : Type*) [Magma G] (h : Equation2340 G) : Equation2238 G := λ x => h x x
-@[equational_result]
-theorem Equation2341_implies_Equation2238 (G : Type*) [Magma G] (h : Equation2341 G) : Equation2238 G := λ x => h x x
-@[equational_result]
-theorem Equation2442_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2442 G) : Equation2441 G := λ x => h x x
 @[equational_result]
 theorem Equation2443_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2443 G) : Equation2441 G := λ x => h x x
 @[equational_result]
 theorem Equation2444_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2444 G) : Equation2441 G := λ x => h x x
 @[equational_result]
-theorem Equation2446_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2446 G) : Equation2441 G := λ x => h x x
-@[equational_result]
 theorem Equation2447_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2447 G) : Equation2441 G := λ x => h x x
 @[equational_result]
 theorem Equation2449_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2449 G) : Equation2441 G := λ x => h x x
-@[equational_result]
-theorem Equation2450_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2450 G) : Equation2441 G := λ x => h x x
 @[equational_result]
 theorem Equation2456_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2456 G) : Equation2441 G := λ x => h x x
 @[equational_result]
@@ -906,8 +722,6 @@ theorem Equation2470_implies_Equation2441 (G : Type*) [Magma G] (h : Equation247
 @[equational_result]
 theorem Equation2493_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2493 G) : Equation2441 G := λ x => h x x
 @[equational_result]
-theorem Equation2494_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2494 G) : Equation2441 G := λ x => h x x
-@[equational_result]
 theorem Equation2496_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2496 G) : Equation2441 G := λ x => h x x
 @[equational_result]
 theorem Equation2497_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2497 G) : Equation2441 G := λ x => h x x
@@ -917,8 +731,6 @@ theorem Equation2503_implies_Equation2441 (G : Type*) [Magma G] (h : Equation250
 theorem Equation2504_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2504 G) : Equation2441 G := λ x => h x x
 @[equational_result]
 theorem Equation2506_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2506 G) : Equation2441 G := λ x => h x x
-@[equational_result]
-theorem Equation2507_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2507 G) : Equation2441 G := λ x => h x x
 @[equational_result]
 theorem Equation2530_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2530 G) : Equation2441 G := λ x => h x x
 @[equational_result]
@@ -933,10 +745,6 @@ theorem Equation2540_implies_Equation2441 (G : Type*) [Magma G] (h : Equation254
 theorem Equation2541_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2541 G) : Equation2441 G := λ x => h x x
 @[equational_result]
 theorem Equation2543_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2543 G) : Equation2441 G := λ x => h x x
-@[equational_result]
-theorem Equation2544_implies_Equation2441 (G : Type*) [Magma G] (h : Equation2544 G) : Equation2441 G := λ x => h x x
-@[equational_result]
-theorem Equation2645_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2645 G) : Equation2644 G := λ x => h x x
 @[equational_result]
 theorem Equation2646_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2646 G) : Equation2644 G := λ x => h x x
 @[equational_result]
@@ -956,8 +764,6 @@ theorem Equation2660_implies_Equation2644 (G : Type*) [Magma G] (h : Equation266
 @[equational_result]
 theorem Equation2662_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2662 G) : Equation2644 G := λ x => h x x
 @[equational_result]
-theorem Equation2663_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2663 G) : Equation2644 G := λ x => h x x
-@[equational_result]
 theorem Equation2669_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2669 G) : Equation2644 G := λ x => h x x
 @[equational_result]
 theorem Equation2670_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2670 G) : Equation2644 G := λ x => h x x
@@ -976,8 +782,6 @@ theorem Equation2700_implies_Equation2644 (G : Type*) [Magma G] (h : Equation270
 @[equational_result]
 theorem Equation2706_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2706 G) : Equation2644 G := λ x => h x x
 @[equational_result]
-theorem Equation2707_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2707 G) : Equation2644 G := λ x => h x x
-@[equational_result]
 theorem Equation2709_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2709 G) : Equation2644 G := λ x => h x x
 @[equational_result]
 theorem Equation2710_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2710 G) : Equation2644 G := λ x => h x x
@@ -995,10 +799,6 @@ theorem Equation2743_implies_Equation2644 (G : Type*) [Magma G] (h : Equation274
 theorem Equation2744_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2744 G) : Equation2644 G := λ x => h x x
 @[equational_result]
 theorem Equation2746_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2746 G) : Equation2644 G := λ x => h x x
-@[equational_result]
-theorem Equation2747_implies_Equation2644 (G : Type*) [Magma G] (h : Equation2747 G) : Equation2644 G := λ x => h x x
-@[equational_result]
-theorem Equation2848_implies_Equation2847 (G : Type*) [Magma G] (h : Equation2848 G) : Equation2847 G := λ x => h x x
 @[equational_result]
 theorem Equation2849_implies_Equation2847 (G : Type*) [Magma G] (h : Equation2849 G) : Equation2847 G := λ x => h x x
 @[equational_result]
@@ -1042,8 +842,6 @@ theorem Equation2910_implies_Equation2847 (G : Type*) [Magma G] (h : Equation291
 @[equational_result]
 theorem Equation2912_implies_Equation2847 (G : Type*) [Magma G] (h : Equation2912 G) : Equation2847 G := λ x => h x x
 @[equational_result]
-theorem Equation2913_implies_Equation2847 (G : Type*) [Magma G] (h : Equation2913 G) : Equation2847 G := λ x => h x x
-@[equational_result]
 theorem Equation2936_implies_Equation2847 (G : Type*) [Magma G] (h : Equation2936 G) : Equation2847 G := λ x => h x x
 @[equational_result]
 theorem Equation2937_implies_Equation2847 (G : Type*) [Magma G] (h : Equation2937 G) : Equation2847 G := λ x => h x x
@@ -1058,10 +856,6 @@ theorem Equation2947_implies_Equation2847 (G : Type*) [Magma G] (h : Equation294
 @[equational_result]
 theorem Equation2949_implies_Equation2847 (G : Type*) [Magma G] (h : Equation2949 G) : Equation2847 G := λ x => h x x
 @[equational_result]
-theorem Equation2950_implies_Equation2847 (G : Type*) [Magma G] (h : Equation2950 G) : Equation2847 G := λ x => h x x
-@[equational_result]
-theorem Equation3051_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3051 G) : Equation3050 G := λ x => h x x
-@[equational_result]
 theorem Equation3052_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3052 G) : Equation3050 G := λ x => h x x
 @[equational_result]
 theorem Equation3053_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3053 G) : Equation3050 G := λ x => h x x
@@ -1071,8 +865,6 @@ theorem Equation3055_implies_Equation3050 (G : Type*) [Magma G] (h : Equation305
 theorem Equation3056_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3056 G) : Equation3050 G := λ x => h x x
 @[equational_result]
 theorem Equation3058_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3058 G) : Equation3050 G := λ x => h x x
-@[equational_result]
-theorem Equation3059_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3059 G) : Equation3050 G := λ x => h x x
 @[equational_result]
 theorem Equation3065_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3065 G) : Equation3050 G := λ x => h x x
 @[equational_result]
@@ -1090,8 +882,6 @@ theorem Equation3078_implies_Equation3050 (G : Type*) [Magma G] (h : Equation307
 @[equational_result]
 theorem Equation3079_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3079 G) : Equation3050 G := λ x => h x x
 @[equational_result]
-theorem Equation3102_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3102 G) : Equation3050 G := λ x => h x x
-@[equational_result]
 theorem Equation3103_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3103 G) : Equation3050 G := λ x => h x x
 @[equational_result]
 theorem Equation3105_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3105 G) : Equation3050 G := λ x => h x x
@@ -1099,8 +889,6 @@ theorem Equation3105_implies_Equation3050 (G : Type*) [Magma G] (h : Equation310
 theorem Equation3106_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3106 G) : Equation3050 G := λ x => h x x
 @[equational_result]
 theorem Equation3112_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3112 G) : Equation3050 G := λ x => h x x
-@[equational_result]
-theorem Equation3113_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3113 G) : Equation3050 G := λ x => h x x
 @[equational_result]
 theorem Equation3115_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3115 G) : Equation3050 G := λ x => h x x
 @[equational_result]
@@ -1110,8 +898,6 @@ theorem Equation3139_implies_Equation3050 (G : Type*) [Magma G] (h : Equation313
 @[equational_result]
 theorem Equation3140_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3140 G) : Equation3050 G := λ x => h x x
 @[equational_result]
-theorem Equation3142_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3142 G) : Equation3050 G := λ x => h x x
-@[equational_result]
 theorem Equation3143_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3143 G) : Equation3050 G := λ x => h x x
 @[equational_result]
 theorem Equation3149_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3149 G) : Equation3050 G := λ x => h x x
@@ -1119,8 +905,6 @@ theorem Equation3149_implies_Equation3050 (G : Type*) [Magma G] (h : Equation314
 theorem Equation3150_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3150 G) : Equation3050 G := λ x => h x x
 @[equational_result]
 theorem Equation3152_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3152 G) : Equation3050 G := λ x => h x x
-@[equational_result]
-theorem Equation3153_implies_Equation3050 (G : Type*) [Magma G] (h : Equation3153 G) : Equation3050 G := λ x => h x x
 @[equational_result]
 theorem Equation3254_implies_Equation3253 (G : Type*) [Magma G] (h : Equation3254 G) : Equation3253 G := λ x => h x x
 @[equational_result]
@@ -1150,10 +934,6 @@ theorem Equation3279_implies_Equation3253 (G : Type*) [Magma G] (h : Equation327
 @[equational_result]
 theorem Equation3281_implies_Equation3253 (G : Type*) [Magma G] (h : Equation3281 G) : Equation3253 G := λ x => h x x
 @[equational_result]
-theorem Equation3282_implies_Equation3253 (G : Type*) [Magma G] (h : Equation3282 G) : Equation3253 G := λ x => h x x
-@[equational_result]
-theorem Equation3305_implies_Equation3253 (G : Type*) [Magma G] (h : Equation3305 G) : Equation3253 G := λ x => h x x
-@[equational_result]
 theorem Equation3306_implies_Equation3253 (G : Type*) [Magma G] (h : Equation3306 G) : Equation3253 G := λ x => h x x
 @[equational_result]
 theorem Equation3308_implies_Equation3253 (G : Type*) [Magma G] (h : Equation3308 G) : Equation3253 G := λ x => h x x
@@ -1181,8 +961,6 @@ theorem Equation3352_implies_Equation3253 (G : Type*) [Magma G] (h : Equation335
 theorem Equation3353_implies_Equation3253 (G : Type*) [Magma G] (h : Equation3353 G) : Equation3253 G := λ x => h x x
 @[equational_result]
 theorem Equation3355_implies_Equation3253 (G : Type*) [Magma G] (h : Equation3355 G) : Equation3253 G := λ x => h x x
-@[equational_result]
-theorem Equation3356_implies_Equation3253 (G : Type*) [Magma G] (h : Equation3356 G) : Equation3253 G := λ x => h x x
 @[equational_result]
 theorem Equation3457_implies_Equation3456 (G : Type*) [Magma G] (h : Equation3457 G) : Equation3456 G := λ x => h x x
 @[equational_result]
@@ -1212,10 +990,6 @@ theorem Equation3482_implies_Equation3456 (G : Type*) [Magma G] (h : Equation348
 @[equational_result]
 theorem Equation3484_implies_Equation3456 (G : Type*) [Magma G] (h : Equation3484 G) : Equation3456 G := λ x => h x x
 @[equational_result]
-theorem Equation3485_implies_Equation3456 (G : Type*) [Magma G] (h : Equation3485 G) : Equation3456 G := λ x => h x x
-@[equational_result]
-theorem Equation3508_implies_Equation3456 (G : Type*) [Magma G] (h : Equation3508 G) : Equation3456 G := λ x => h x x
-@[equational_result]
 theorem Equation3509_implies_Equation3456 (G : Type*) [Magma G] (h : Equation3509 G) : Equation3456 G := λ x => h x x
 @[equational_result]
 theorem Equation3511_implies_Equation3456 (G : Type*) [Magma G] (h : Equation3511 G) : Equation3456 G := λ x => h x x
@@ -1243,8 +1017,6 @@ theorem Equation3555_implies_Equation3456 (G : Type*) [Magma G] (h : Equation355
 theorem Equation3556_implies_Equation3456 (G : Type*) [Magma G] (h : Equation3556 G) : Equation3456 G := λ x => h x x
 @[equational_result]
 theorem Equation3558_implies_Equation3456 (G : Type*) [Magma G] (h : Equation3558 G) : Equation3456 G := λ x => h x x
-@[equational_result]
-theorem Equation3559_implies_Equation3456 (G : Type*) [Magma G] (h : Equation3559 G) : Equation3456 G := λ x => h x x
 @[equational_result]
 theorem Equation3660_implies_Equation3659 (G : Type*) [Magma G] (h : Equation3660 G) : Equation3659 G := λ x => h x x
 @[equational_result]
@@ -1276,8 +1048,6 @@ theorem Equation3687_implies_Equation3659 (G : Type*) [Magma G] (h : Equation368
 @[equational_result]
 theorem Equation3688_implies_Equation3659 (G : Type*) [Magma G] (h : Equation3688 G) : Equation3659 G := λ x => h x x
 @[equational_result]
-theorem Equation3711_implies_Equation3659 (G : Type*) [Magma G] (h : Equation3711 G) : Equation3659 G := λ x => h x x
-@[equational_result]
 theorem Equation3712_implies_Equation3659 (G : Type*) [Magma G] (h : Equation3712 G) : Equation3659 G := λ x => h x x
 @[equational_result]
 theorem Equation3714_implies_Equation3659 (G : Type*) [Magma G] (h : Equation3714 G) : Equation3659 G := λ x => h x x
@@ -1296,17 +1066,11 @@ theorem Equation3748_implies_Equation3659 (G : Type*) [Magma G] (h : Equation374
 @[equational_result]
 theorem Equation3749_implies_Equation3659 (G : Type*) [Magma G] (h : Equation3749 G) : Equation3659 G := λ x => h x x
 @[equational_result]
-theorem Equation3751_implies_Equation3659 (G : Type*) [Magma G] (h : Equation3751 G) : Equation3659 G := λ x => h x x
-@[equational_result]
 theorem Equation3752_implies_Equation3659 (G : Type*) [Magma G] (h : Equation3752 G) : Equation3659 G := λ x => h x x
-@[equational_result]
-theorem Equation3758_implies_Equation3659 (G : Type*) [Magma G] (h : Equation3758 G) : Equation3659 G := λ x => h x x
 @[equational_result]
 theorem Equation3759_implies_Equation3659 (G : Type*) [Magma G] (h : Equation3759 G) : Equation3659 G := λ x => h x x
 @[equational_result]
 theorem Equation3761_implies_Equation3659 (G : Type*) [Magma G] (h : Equation3761 G) : Equation3659 G := λ x => h x x
-@[equational_result]
-theorem Equation3762_implies_Equation3659 (G : Type*) [Magma G] (h : Equation3762 G) : Equation3659 G := λ x => h x x
 @[equational_result]
 theorem Equation3863_implies_Equation3862 (G : Type*) [Magma G] (h : Equation3863 G) : Equation3862 G := λ x => h x x
 @[equational_result]
@@ -1336,10 +1100,6 @@ theorem Equation3888_implies_Equation3862 (G : Type*) [Magma G] (h : Equation388
 @[equational_result]
 theorem Equation3890_implies_Equation3862 (G : Type*) [Magma G] (h : Equation3890 G) : Equation3862 G := λ x => h x x
 @[equational_result]
-theorem Equation3891_implies_Equation3862 (G : Type*) [Magma G] (h : Equation3891 G) : Equation3862 G := λ x => h x x
-@[equational_result]
-theorem Equation3914_implies_Equation3862 (G : Type*) [Magma G] (h : Equation3914 G) : Equation3862 G := λ x => h x x
-@[equational_result]
 theorem Equation3915_implies_Equation3862 (G : Type*) [Magma G] (h : Equation3915 G) : Equation3862 G := λ x => h x x
 @[equational_result]
 theorem Equation3917_implies_Equation3862 (G : Type*) [Magma G] (h : Equation3917 G) : Equation3862 G := λ x => h x x
@@ -1368,8 +1128,6 @@ theorem Equation3962_implies_Equation3862 (G : Type*) [Magma G] (h : Equation396
 @[equational_result]
 theorem Equation3964_implies_Equation3862 (G : Type*) [Magma G] (h : Equation3964 G) : Equation3862 G := λ x => h x x
 @[equational_result]
-theorem Equation3965_implies_Equation3862 (G : Type*) [Magma G] (h : Equation3965 G) : Equation3862 G := λ x => h x x
-@[equational_result]
 theorem Equation4066_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4066 G) : Equation4065 G := λ x => h x x
 @[equational_result]
 theorem Equation4067_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4067 G) : Equation4065 G := λ x => h x x
@@ -1384,8 +1142,6 @@ theorem Equation4073_implies_Equation4065 (G : Type*) [Magma G] (h : Equation407
 @[equational_result]
 theorem Equation4074_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4074 G) : Equation4065 G := λ x => h x x
 @[equational_result]
-theorem Equation4080_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4080 G) : Equation4065 G := λ x => h x x
-@[equational_result]
 theorem Equation4081_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4081 G) : Equation4065 G := λ x => h x x
 @[equational_result]
 theorem Equation4083_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4083 G) : Equation4065 G := λ x => h x x
@@ -1397,10 +1153,6 @@ theorem Equation4090_implies_Equation4065 (G : Type*) [Magma G] (h : Equation409
 theorem Equation4091_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4091 G) : Equation4065 G := λ x => h x x
 @[equational_result]
 theorem Equation4093_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4093 G) : Equation4065 G := λ x => h x x
-@[equational_result]
-theorem Equation4094_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4094 G) : Equation4065 G := λ x => h x x
-@[equational_result]
-theorem Equation4117_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4117 G) : Equation4065 G := λ x => h x x
 @[equational_result]
 theorem Equation4118_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4118 G) : Equation4065 G := λ x => h x x
 @[equational_result]
@@ -1429,8 +1181,6 @@ theorem Equation4164_implies_Equation4065 (G : Type*) [Magma G] (h : Equation416
 theorem Equation4165_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4165 G) : Equation4065 G := λ x => h x x
 @[equational_result]
 theorem Equation4167_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4167 G) : Equation4065 G := λ x => h x x
-@[equational_result]
-theorem Equation4168_implies_Equation4065 (G : Type*) [Magma G] (h : Equation4168 G) : Equation4065 G := λ x => h x x
 @[equational_result]
 theorem Equation4381_implies_Equation4380 (G : Type*) [Magma G] (h : Equation4381 G) : Equation4380 G := λ x => h x x
 @[equational_result]

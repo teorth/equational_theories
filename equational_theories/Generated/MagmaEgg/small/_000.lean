@@ -10,10 +10,6 @@ private abbrev M := @Magma.op
 private abbrev C := @congr_op
 
 @[equational_result]
-theorem Equation4287_implies_Equation4360 (G: Type _) [Magma G] (h: Equation4287 G) : Equation4360 G := fun x y z w =>
-  T (S (h x z y)) (h x z w)
-
-@[equational_result]
 theorem Equation3102_implies_Equation3 (G: Type _) [Magma G] (h: Equation3102 G) : Equation3 G := fun x =>
   T (h x (M x x)) (C (S (h x x)) (R x))
 
@@ -81,11 +77,6 @@ theorem Equation1855_implies_Equation4318 (G: Type _) [Magma G] (h: Equation1855
 theorem Equation1929_implies_Equation4297 (G: Type _) [Magma G] (h: Equation1929 G) : Equation4297 G := fun x y z =>
   let v0 := M x (M x y)
   T (h v0 v0 z) (C (S (h y x v0)) (R (M z z)))
-
-@[equational_result]
-theorem Equation2074_implies_Equation3326 (G: Type _) [Magma G] (h: Equation2074 G) : Equation3326 G := fun x y z =>
-  let v0 := M x y
-  T (h v0 z (M y x)) (C (S (h x y z)) (R (M z v0)))
 
 @[equational_result]
 theorem Equation2761_implies_Equation31 (G: Type _) [Magma G] (h: Equation2761 G) : Equation31 G := fun x y =>
@@ -168,17 +159,9 @@ theorem Equation3704_implies_Equation3709 (G: Type _) [Magma G] (h: Equation3704
   T (h x y z) (C (R (M y z)) (T (h z x x) (S (h w x x))))
 
 @[equational_result]
-theorem Equation4097_implies_Equation4099 (G: Type _) [Magma G] (h: Equation4097 G) : Equation4099 G := fun x y z w =>
-  T (h x w z) (C (C (T (h w x x) (S (h y x x))) (R z)) (R w))
-
-@[equational_result]
 theorem Equation1224_implies_Equation99 (G: Type _) [Magma G] (h: Equation1224 G) : Equation99 G := fun x =>
   let v0 := M (M x x) x
   T (h x (M (M (M v0 v0) v0) x)) (C (R x) (S (h v0 x)))
-
-@[equational_result]
-theorem Equation3293_implies_Equation3303 (G: Type _) [Magma G] (h: Equation3293 G) : Equation3303 G := fun x y z w =>
-  T (h x y z) (C (R y) (C (R z) (T (h y x x) (S (h w x x)))))
 
 @[equational_result]
 theorem Equation820_implies_Equation8 (G: Type _) [Magma G] (h: Equation820 G) : Equation8 G := fun x =>
@@ -230,16 +213,6 @@ theorem Equation1250_implies_Equation107 (G: Type _) [Magma G] (h: Equation1250 
 theorem Equation1458_implies_Equation215 (G: Type _) [Magma G] (h: Equation1458 G) : Equation215 G := fun x y z =>
   let v0 := M y z
   T (h x v0 z) (C (R (M x v0)) (S (h y z y)))
-
-@[equational_result]
-theorem Equation1656_implies_Equation26 (G: Type _) [Magma G] (h: Equation1656 G) : Equation26 G := fun x y =>
-  let v0 := M x y
-  T (h x y (M v0 y)) (C (R v0) (S (h y x y)))
-
-@[equational_result]
-theorem Equation1912_implies_Equation16 (G: Type _) [Magma G] (h: Equation1912 G) : Equation16 G := fun x y =>
-  let v0 := M y x
-  T (h x (M y v0) y) (C (S (h y y x)) (R v0))
 
 @[equational_result]
 theorem Equation2161_implies_Equation166 (G: Type _) [Magma G] (h: Equation2161 G) : Equation166 G := fun x y =>
@@ -390,12 +363,6 @@ theorem Equation2446_implies_Equation23 (G: Type _) [Magma G] (h: Equation2446 G
   T (h x (M (M x x) x)) (C (C h0 (S (h x x))) h0)
 
 @[equational_result]
-theorem Equation2602_implies_Equation4620 (G: Type _) [Magma G] (h: Equation2602 G) : Equation4620 G := fun x y z =>
-  have h0 := R z
-  let v1 := M (M x x) y
-  T (h v1 z v1) (C (C h0 (S (h y v1 x))) h0)
-
-@[equational_result]
 theorem Equation2725_implies_Equation3500 (G: Type _) [Magma G] (h: Equation2725 G) : Equation3500 G := fun x y z =>
   let v0 := M z z
   let v1 := M v0 y
@@ -410,10 +377,6 @@ theorem Equation2739_implies_Equation25 (G: Type _) [Magma G] (h: Equation2739 G
 theorem Equation3485_implies_Equation3500 (G: Type _) [Magma G] (h: Equation3485 G) : Equation3500 G := fun x y z =>
   have h0 := R y
   T (h x y) (C h0 (C (T (h y x) (S (h z x))) h0))
-
-@[equational_result]
-theorem Equation3825_implies_Equation41 (G: Type _) [Magma G] (h: Equation3825 G) : Equation41 G := fun x y z =>
-  T (T (h x x y) (C (R (M y y)) (T (h x y x) (S (h z y x))))) (S (h y z y))
 
 @[equational_result]
 theorem Equation3891_implies_Equation3906 (G: Type _) [Magma G] (h: Equation3891 G) : Equation3906 G := fun x y z =>
@@ -494,11 +457,6 @@ theorem Equation1228_implies_Equation99 (G: Type _) [Magma G] (h: Equation1228 G
   T (h x (M (M (M x x) x) x)) (C h0 (C (C (S (h x x)) h0) h0))
 
 @[equational_result]
-theorem Equation1659_implies_Equation26 (G: Type _) [Magma G] (h: Equation1659 G) : Equation26 G := fun x y =>
-  let v0 := M y y
-  T (h x y y) (C (R (M x y)) (T (C (R v0) (h y y x)) (S (h y y (M v0 x)))))
-
-@[equational_result]
 theorem Equation1873_implies_Equation26 (G: Type _) [Magma G] (h: Equation1873 G) : Equation26 G := fun x y =>
   have h0 := S (h y x y)
   let v1 := M x y
@@ -510,18 +468,9 @@ theorem Equation2199_implies_Equation3997 (G: Type _) [Magma G] (h: Equation2199
   T (h (M x y) (M (M x x) x) v0) (C (C (S (h z x x)) (R v0)) (S (h y x x)))
 
 @[equational_result]
-theorem Equation3605_implies_Equation41 (G: Type _) [Magma G] (h: Equation3605 G) : Equation41 G := fun x y z =>
-  T (T (h x x y) (C (R y) (T (h (M x x) y x) (S (h (M z z) y x))))) (S (h y z y))
-
-@[equational_result]
 theorem Equation4026_implies_Equation4182 (G: Type _) [Magma G] (h: Equation4026 G) : Equation4182 G := fun x y z =>
   let v0 := M x (M x z)
   T (h x y v0) (C (T (C (R v0) (S (h y z x))) (S (h (M y z) z x))) (R x))
-
-@[equational_result]
-theorem Equation4030_implies_Equation41 (G: Type _) [Magma G] (h: Equation4030 G) : Equation41 G := fun x y z =>
-  let v0 := M x (M x x)
-  T (T (T (h x x x) (h v0 x x)) (S (h v0 y x))) (S (h y z x))
 
 @[equational_result]
 theorem Equation634_implies_Equation4 (G: Type _) [Magma G] (h: Equation634 G) : Equation4 G := fun x y =>
@@ -537,11 +486,6 @@ theorem Equation918_implies_Equation2 (G: Type _) [Magma G] (h: Equation918 G) :
 theorem Equation1026_implies_Equation411 (G: Type _) [Magma G] (h: Equation1026 G) : Equation411 G := fun x =>
   let v0 := M x (M x x)
   T (h x v0) (C (R x) (C (S (h x x)) (R v0)))
-
-@[equational_result]
-theorem Equation1465_implies_Equation4134 (G: Type _) [Magma G] (h: Equation1465 G) : Equation4134 G := fun x y z =>
-  let v0 := M x y
-  T (h v0 z (M y x)) (C (R (M v0 z)) (S (h y x z)))
 
 @[equational_result]
 theorem Equation1673_implies_Equation2474 (G: Type _) [Magma G] (h: Equation1673 G) : Equation2474 G := fun x y z =>
@@ -618,10 +562,6 @@ theorem Equation3690_implies_Equation3677 (G: Type _) [Magma G] (h: Equation3690
   let v0 := M y x
   let v1 := M v0 v0
   T (T (h x v0 x) (C (R v1) (h x v0 y))) (S (h v0 v0 v1))
-
-@[equational_result]
-theorem Equation3827_implies_Equation41 (G: Type _) [Magma G] (h: Equation3827 G) : Equation41 G := fun x y z =>
-  T (T (h x x y) (C (R (M y y)) (T (h y x x) (S (h y y x))))) (S (h y z y))
 
 @[equational_result]
 theorem Equation714_implies_Equation511 (G: Type _) [Magma G] (h: Equation714 G) : Equation511 G := fun x y =>
@@ -733,22 +673,6 @@ theorem Equation2805_implies_Equation1368 (G: Type _) [Magma G] (h: Equation2805
   T (h x v2 v0) (C (S (h y v1 z)) (R v2))
 
 @[equational_result]
-theorem Equation3559_implies_Equation355 (G: Type _) [Magma G] (h: Equation3559 G) : Equation355 G := fun x y z w =>
-  let v0 := M w y
-  T (T (T (h x y) (C (R y) (T (h (M y y) y) (S (h w y))))) (h y v0)) (S (h z v0))
-
-@[equational_result]
-theorem Equation3778_implies_Equation41 (G: Type _) [Magma G] (h: Equation3778 G) : Equation41 G := fun x y z =>
-  have h0 := h x x x
-  T (T h0 (C (T h0 (S (h z x x))) (R (M x x)))) (S (h y z x))
-
-@[equational_result]
-theorem Equation3812_implies_Equation41 (G: Type _) [Magma G] (h: Equation3812 G) : Equation41 G := fun x y z =>
-  let v0 := M x x
-  let v1 := M y y
-  T (T (T (h x x y) (h (M y x) v1 v0)) (S (h (M y z) v1 v0))) (S (h y z y))
-
-@[equational_result]
 theorem Equation1061_implies_Equation452 (G: Type _) [Magma G] (h: Equation1061 G) : Equation452 G := fun x y z =>
   let v0 := M z (M y z)
   T (h x y v0) (C (R x) (C (S (h y z y)) (R v0)))
@@ -810,12 +734,6 @@ theorem Equation3751_implies_Equation43 (G: Type _) [Magma G] (h: Equation3751 G
   T (T (T h0 (h v2 v2)) (C h1 h1)) (S (h y x))
 
 @[equational_result]
-theorem Equation3774_implies_Equation41 (G: Type _) [Magma G] (h: Equation3774 G) : Equation41 G := fun x y z =>
-  have h0 := S (h z x x)
-  let v1 := M x x
-  T (T (T (h x x x) (h v1 v1 v1)) (C h0 h0)) (S (h y z x))
-
-@[equational_result]
 theorem Equation625_implies_Equation49 (G: Type _) [Magma G] (h: Equation625 G) : Equation49 G := fun x y =>
   have h0 := R x
   T (h x y (M y (M (M x x) y))) (C h0 (C h0 (C (S (h y x x)) h0)))
@@ -857,11 +775,6 @@ theorem Equation2290_implies_Equation203 (G: Type _) [Magma G] (h: Equation2290 
   T (h x (M x (M v0 (M v0 v0)))) (C (S (h v0 x)) (R x))
 
 @[equational_result]
-theorem Equation2389_implies_Equation31 (G: Type _) [Magma G] (h: Equation2389 G) : Equation31 G := fun x y =>
-  let v0 := M x (M x (M x x))
-  T (h x v0 y) (C (T (C (R v0) (C (R y) (S (h y x x)))) (S (h (M y y) x x))) (R x))
-
-@[equational_result]
 theorem Equation2507_implies_Equation2913 (G: Type _) [Magma G] (h: Equation2507 G) : Equation2913 G := fun x y =>
   have h0 := R y
   have h1 := h x y
@@ -898,21 +811,6 @@ theorem Equation3553_implies_Equation3370 (G: Type _) [Magma G] (h: Equation3553
   let v0 := M z x
   let v1 := M v0 x
   T (h x y v1) (C (R y) (T (C (S (h z x x)) (R v1)) (S (h z v0 x))))
-
-@[equational_result]
-theorem Equation3766_implies_Equation41 (G: Type _) [Magma G] (h: Equation3766 G) : Equation41 G := fun x y z =>
-  let v0 := M x x
-  have h1 := h x x x
-  T (T (T h1 (C h1 (R v0))) (S (h (M z z) v0 x))) (S (h y z x))
-
-@[equational_result]
-theorem Equation3821_implies_Equation41 (G: Type _) [Magma G] (h: Equation3821 G) : Equation41 G := fun x y z =>
-  let v0 := M x x
-  T (T (T (h x x v0) (C (R (M v0 v0)) (h x v0 x))) (S (h v0 (M y x) v0))) (S (h y z x))
-
-@[equational_result]
-theorem Equation4322_implies_Equation4365 (G: Type _) [Magma G] (h: Equation4322 G) : Equation4365 G := fun x y z w =>
-  T (T (T (T (T (S (h y x z)) (h y x x)) (h x y (M z x))) (C (R y) (h x z y))) (S (h z y (M x y)))) (h z y w)
 
 @[equational_result]
 theorem Equation4344_implies_Equation4365 (G: Type _) [Magma G] (h: Equation4344 G) : Equation4365 G := fun x y z w =>
@@ -957,17 +855,6 @@ theorem Equation2741_implies_Equation1726 (G: Type _) [Magma G] (h: Equation2741
   T (T (h x x z) (C (C (R (M x x)) (h v0 y z)) (R z))) (S (h (M (M y y) (M v0 z)) x z))
 
 @[equational_result]
-theorem Equation3417_implies_Equation3994 (G: Type _) [Magma G] (h: Equation3417 G) : Equation3994 G := fun x y z =>
-  let v0 := M x y
-  have h1 := R v0
-  T (T (h x y v0) (C h1 (C h1 (h y x z)))) (S (h (M z v0) z v0))
-
-@[equational_result]
-theorem Equation895_implies_Equation11 (G: Type _) [Magma G] (h: Equation895 G) : Equation11 G := fun x y =>
-  have h0 := S (h y x x)
-  T (h x x (M (M y x) (M x x))) (C (R x) (C h0 h0))
-
-@[equational_result]
 theorem Equation1245_implies_Equation105 (G: Type _) [Magma G] (h: Equation1245 G) : Equation105 G := fun x y =>
   let v0 := M y x
   T (h x y (M (M (M x v0) x) x)) (C (R x) (C (S (h v0 x x)) (R y)))
@@ -987,10 +874,3 @@ theorem Equation2331_implies_Equation707 (G: Type _) [Magma G] (h: Equation2331 
   let v0 := M x y
   have h1 := R y
   T (T (h x y) (C (C h1 (C h1 (h v0 y))) h1)) (S (h (M y (M y (M v0 y))) y))
-
-@[equational_result]
-theorem Equation2402_implies_Equation31 (G: Type _) [Magma G] (h: Equation2402 G) : Equation31 G := fun x y =>
-  have h0 := S (h y x x)
-  let v1 := M x (M x (M x x))
-  T (h x y v1) (C (C (R y) (T (C (R v1) h0) h0)) (R x))
-

@@ -561,60 +561,6 @@ theorem Equation2307_implies_Equation705 (G : Type*) [Magma G] (h : Equation2307
 
 
 @[equational_result]
-theorem Equation2308_implies_Equation1764 (G : Type*) [Magma G] (h : Equation2308 G) : Equation1764 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ (X0 ◇ (X1 ◇ X2))) ◇ X2) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ ((sK1 ◇ sK2) ◇ ((sK0 ◇ sK2) ◇ sK1)) := mod_symm nh
-  have eq11 (X0 X1 X2 X3 : G) : (((X0 ◇ (X1 ◇ (X0 ◇ X2))) ◇ (X3 ◇ X1)) ◇ X2) = X3 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2.2 in 9
-  have eq12 (X0 X1 X2 X3 : G) : (X0 ◇ (X1 ◇ (X0 ◇ (X2 ◇ X3)))) = ((X2 ◇ X1) ◇ X3) := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2 in 9
-  have eq19 (X1 X2 : G) : (X1 ◇ (X2 ◇ X1)) = X2 := superpose eq9 eq11 -- superposition 11,9, 9 into 11, unify on (0).2 in 9 and (0).1.1 in 11
-  have eq50 (X0 X1 X2 : G) : (X0 ◇ (X1 ◇ (X0 ◇ X2))) = (X2 ◇ X1) := superpose eq9 eq19 -- superposition 19,9, 9 into 19, unify on (0).2 in 9 and (0).1.2 in 19
-  have eq54 (X0 X1 X2 : G) : (X0 ◇ (X2 ◇ X1)) = ((X1 ◇ X2) ◇ X0) := superpose eq19 eq12 -- superposition 12,19, 19 into 12, unify on (0).2 in 19 and (0).1.2.2 in 12
-  have eq55 (X0 X1 X2 : G) : (((X1 ◇ X1) ◇ (X2 ◇ X0)) ◇ X0) = X2 := superpose eq19 eq11 -- superposition 11,19, 19 into 11, unify on (0).2 in 19 and (0).1.1.1.2 in 11
-  have eq56 (X0 X1 : G) : ((X1 ◇ X1) ◇ X0) = X0 := superpose eq19 eq9 -- superposition 9,19, 19 into 9, unify on (0).2 in 19 and (0).1.1.2 in 9
-  have eq83 : sK0 ≠ ((sK1 ◇ sK2) ◇ (sK1 ◇ (sK2 ◇ sK0))) := superpose eq54 eq10 -- backward demodulation 10,54
-  have eq84 (X0 X2 : G) : ((X2 ◇ X0) ◇ X0) = X2 := superpose eq56 eq55 -- backward demodulation 55,56
-  have eq99 (X0 X1 X2 X3 : G) : ((X2 ◇ X1) ◇ X3) = (X1 ◇ ((X0 ◇ X0) ◇ (X2 ◇ X3))) := superpose eq12 eq56 -- superposition 56,12, 12 into 56, unify on (0).2 in 12 and (0).1 in 56
-  have eq103 (X0 X1 X2 X3 : G) : (X2 ◇ (X3 ◇ (X2 ◇ X1))) = (((X0 ◇ X0) ◇ X3) ◇ X1) := superpose eq56 eq12 -- superposition 12,56, 56 into 12, unify on (0).2 in 56 and (0).1.2.2.2 in 12
-  have eq108 (X1 X2 X3 : G) : ((X2 ◇ X1) ◇ X3) = (X1 ◇ (X2 ◇ X3)) := superpose eq56 eq99 -- forward demodulation 99,56
-  have eq109 (X0 X1 X2 X3 : G) : (X0 ◇ (X1 ◇ (X0 ◇ (X2 ◇ X3)))) = (X1 ◇ (X2 ◇ X3)) := superpose eq108 eq12 -- backward demodulation 12,108
-  have eq138 (X0 X1 X2 X3 : G) : (X2 ◇ (X3 ◇ (X2 ◇ X1))) = ((X0 ◇ (X0 ◇ X3)) ◇ X1) := superpose eq108 eq103 -- forward demodulation 103,108
-  have eq139 (X0 X1 X3 : G) : (X1 ◇ X3) = ((X0 ◇ (X0 ◇ X3)) ◇ X1) := superpose eq50 eq138 -- forward demodulation 138,50
-  have eq144 (X0 X1 : G) : (X1 ◇ (X1 ◇ X0)) = X0 := superpose eq19 eq84 -- superposition 84,19, 19 into 84, unify on (0).2 in 19 and (0).1.1 in 84
-  have eq149 (X1 X3 : G) : (X3 ◇ X1) = (X1 ◇ X3) := superpose eq144 eq139 -- backward demodulation 139,144
-  have eq151 : sK0 ≠ ((sK1 ◇ sK2) ◇ (sK1 ◇ (sK0 ◇ sK2))) := superpose eq149 eq83 -- backward demodulation 83,149
-  have eq170 (X0 X1 X2 : G) : (X0 ◇ (X2 ◇ X1)) = (X2 ◇ (X1 ◇ X0)) := superpose eq19 eq109 -- superposition 109,19, 19 into 109, unify on (0).2 in 19 and (0).1.2.2 in 109
-  have eq189 : sK0 ≠ ((sK1 ◇ sK2) ◇ (sK0 ◇ (sK2 ◇ sK1))) := superpose eq170 eq151 -- backward demodulation 151,170
-  have eq190 : sK0 ≠ ((sK1 ◇ sK2) ◇ (sK0 ◇ (sK1 ◇ sK2))) := superpose eq149 eq189 -- forward demodulation 189,149
-  subsumption eq190 eq19
-
-
-@[equational_result]
-theorem Equation2308_implies_Equation543 (G : Type*) [Magma G] (h : Equation2308 G) : Equation543 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ (X0 ◇ (X1 ◇ X2))) ◇ X2) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ (sK1 ◇ (sK2 ◇ (sK0 ◇ (sK1 ◇ sK2)))) := mod_symm nh
-  have eq11 (X0 X1 X2 X3 : G) : (((X0 ◇ (X1 ◇ (X0 ◇ X2))) ◇ (X3 ◇ X1)) ◇ X2) = X3 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2.2 in 9
-  have eq12 (X0 X1 X2 X3 : G) : (X0 ◇ (X1 ◇ (X0 ◇ (X2 ◇ X3)))) = ((X2 ◇ X1) ◇ X3) := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2 in 9
-  have eq19 (X1 X2 : G) : (X1 ◇ (X2 ◇ X1)) = X2 := superpose eq9 eq11 -- superposition 11,9, 9 into 11, unify on (0).2 in 9 and (0).1.1 in 11
-  have eq54 (X0 X1 X2 : G) : (X0 ◇ (X2 ◇ X1)) = ((X1 ◇ X2) ◇ X0) := superpose eq19 eq12 -- superposition 12,19, 19 into 12, unify on (0).2 in 19 and (0).1.2.2 in 12
-  have eq56 (X0 X1 : G) : ((X1 ◇ X1) ◇ X0) = X0 := superpose eq19 eq9 -- superposition 9,19, 19 into 9, unify on (0).2 in 19 and (0).1.1.2 in 9
-  have eq98 (X0 X1 X2 X3 : G) : ((X2 ◇ X1) ◇ X3) = (X1 ◇ ((X0 ◇ X0) ◇ (X2 ◇ X3))) := superpose eq12 eq56 -- superposition 56,12, 12 into 56, unify on (0).2 in 12 and (0).1 in 56
-  have eq107 (X1 X2 X3 : G) : ((X2 ◇ X1) ◇ X3) = (X1 ◇ (X2 ◇ X3)) := superpose eq56 eq98 -- forward demodulation 98,56
-  have eq108 (X0 X1 X2 X3 : G) : (X0 ◇ (X1 ◇ (X0 ◇ (X2 ◇ X3)))) = (X1 ◇ (X2 ◇ X3)) := superpose eq107 eq12 -- backward demodulation 12,107
-  have eq147 (X0 X1 X2 : G) : (X0 ◇ (X2 ◇ X1)) = (X2 ◇ (X1 ◇ X0)) := superpose eq19 eq108 -- superposition 108,19, 19 into 108, unify on (0).2 in 19 and (0).1.2.2 in 108
-  have eq159 : sK0 ≠ (sK1 ◇ (sK0 ◇ ((sK1 ◇ sK2) ◇ sK2))) := superpose eq147 eq10 -- backward demodulation 10,147
-  have eq160 : sK0 ≠ (sK1 ◇ (sK0 ◇ (sK2 ◇ (sK2 ◇ sK1)))) := superpose eq54 eq159 -- forward demodulation 159,54
-  have eq161 : sK0 ≠ (sK1 ◇ (sK0 ◇ (sK2 ◇ (sK1 ◇ sK2)))) := superpose eq147 eq160 -- forward demodulation 160,147
-  have eq162 : sK0 ≠ (sK1 ◇ (sK0 ◇ sK1)) := superpose eq19 eq161 -- forward demodulation 161,19
-  subsumption eq162 eq19
-
-
-@[equational_result]
 theorem Equation2311_implies_Equation724 (G : Type*) [Magma G] (h : Equation2311 G) : Equation724 G := by
   by_contra nh
   simp only [not_forall] at nh
@@ -645,18 +591,6 @@ theorem Equation2322_implies_Equation2333 (G : Type*) [Magma G] (h : Equation232
 
 
 @[equational_result]
-theorem Equation2322_implies_Equation2665 (G : Type*) [Magma G] (h : Equation2322 G) : Equation2665 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 X3 : G) : ((X1 ◇ (X0 ◇ (X2 ◇ X3))) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ (((sK0 ◇ sK1) ◇ (sK0 ◇ sK2)) ◇ sK0) := mod_symm nh
-  have eq11 (X1 X4 X5 : G) : ((X4 ◇ (X5 ◇ X1)) ◇ X5) = X5 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2.2 in 9
-  have eq18 : sK0 ≠ sK0 := superpose eq11 eq10 -- superposition 10,11, 11 into 10, unify on (0).2 in 11 and (0).2 in 10
-  subsumption eq18 rfl
-
-
-@[equational_result]
 theorem Equation2333_implies_Equation2376 (G : Type*) [Magma G] (h : Equation2333 G) : Equation2376 G := by
   by_contra nh
   simp only [not_forall] at nh
@@ -672,36 +606,6 @@ theorem Equation2333_implies_Equation2376 (G : Type*) [Magma G] (h : Equation233
   have eq58 (X0 X1 X2 X3 : G) : ((X3 ◇ (X0 ◇ (X1 ◇ X2))) ◇ X1) = X1 := superpose eq20 eq22 -- superposition 22,20, 20 into 22, unify on (0).2 in 20 and (0).1 in 22
   have eq109 : sK0 ≠ sK0 := superpose eq58 eq10 -- superposition 10,58, 58 into 10, unify on (0).2 in 58 and (0).2 in 10
   subsumption eq109 rfl
-
-
-@[equational_result]
-theorem Equation2333_implies_Equation2739 (G : Type*) [Magma G] (h : Equation2333 G) : Equation2739 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ (X1 ◇ (X0 ◇ X2))) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ (((sK1 ◇ sK1) ◇ (sK0 ◇ sK2)) ◇ sK0) := mod_symm nh
-  have eq12 (X0 X1 X2 X3 : G) : (((X0 ◇ (X0 ◇ ((X1 ◇ X2) ◇ X3))) ◇ (X1 ◇ X2)) ◇ X1) = X1 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2 in 9
-  have eq13 (X1 X2 : G) : ((X1 ◇ X2) ◇ X1) = X1 := superpose eq9 eq12 -- forward demodulation 12,9
-  have eq15 (X0 X1 : G) : (X0 ◇ X1) = (X0 ◇ (X0 ◇ X1)) := superpose eq13 eq13 -- superposition 13,13, 13 into 13, unify on (0).2 in 13 and (0).1.1 in 13
-  have eq20 (X0 X1 X2 : G) : ((X1 ◇ (X0 ◇ X2)) ◇ X0) = X0 := superpose eq15 eq9 -- backward demodulation 9,15
-  have eq27 : sK0 ≠ sK0 := superpose eq20 eq10 -- superposition 10,20, 20 into 10, unify on (0).2 in 20 and (0).2 in 10
-  subsumption eq27 rfl
-
-
-@[equational_result]
-theorem Equation2333_implies_Equation2778 (G : Type*) [Magma G] (h : Equation2333 G) : Equation2778 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ (X1 ◇ (X0 ◇ X2))) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ (((sK1 ◇ sK2) ◇ (sK0 ◇ sK2)) ◇ sK0) := mod_symm nh
-  have eq12 (X0 X1 X2 X3 : G) : (((X0 ◇ (X0 ◇ ((X1 ◇ X2) ◇ X3))) ◇ (X1 ◇ X2)) ◇ X1) = X1 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2 in 9
-  have eq13 (X1 X2 : G) : ((X1 ◇ X2) ◇ X1) = X1 := superpose eq9 eq12 -- forward demodulation 12,9
-  have eq15 (X0 X1 : G) : (X0 ◇ X1) = (X0 ◇ (X0 ◇ X1)) := superpose eq13 eq13 -- superposition 13,13, 13 into 13, unify on (0).2 in 13 and (0).1.1 in 13
-  have eq20 (X0 X1 X2 : G) : ((X1 ◇ (X0 ◇ X2)) ◇ X0) = X0 := superpose eq15 eq9 -- backward demodulation 9,15
-  have eq28 : sK0 ≠ sK0 := superpose eq20 eq10 -- superposition 10,20, 20 into 10, unify on (0).2 in 20 and (0).2 in 10
-  subsumption eq28 rfl
 
 
 @[equational_result]
@@ -908,18 +812,6 @@ theorem Equation2372_implies_Equation2266 (G : Type*) [Magma G] (h : Equation237
 
 
 @[equational_result]
-theorem Equation2376_implies_Equation2702 (G : Type*) [Magma G] (h : Equation2376 G) : Equation2702 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 X3 : G) : ((X1 ◇ (X2 ◇ (X0 ◇ X3))) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ (((sK1 ◇ sK0) ◇ (sK0 ◇ sK2)) ◇ sK0) := mod_symm nh
-  have eq12 (X2 X3 X5 : G) : ((X5 ◇ (X2 ◇ X3)) ◇ X2) = X2 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2 in 9
-  have eq18 : sK0 ≠ sK0 := superpose eq12 eq10 -- superposition 10,12, 12 into 10, unify on (0).2 in 12 and (0).2 in 10
-  subsumption eq18 rfl
-
-
-@[equational_result]
 theorem Equation2376_implies_Equation2782 (G : Type*) [Magma G] (h : Equation2376 G) : Equation2782 G := by
   by_contra nh
   simp only [not_forall] at nh
@@ -1112,54 +1004,6 @@ theorem Equation242_implies_Equation2425 (G : Type*) [Magma G] (h : Equation242 
   have eq12 (X0 X1 X2 X3 : G) : ((X2 ◇ (X0 ◇ (X1 ◇ X0))) ◇ X3) = X3 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
   have eq26 : sK0 ≠ sK0 := superpose eq12 eq10 -- superposition 10,12, 12 into 10, unify on (0).2 in 12 and (0).2 in 10
   subsumption eq26 rfl
-
-
-@[equational_result]
-theorem Equation2425_implies_Equation2517 (G : Type*) [Magma G] (h : Equation2425 G) : Equation2517 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 X3 : G) : ((X1 ◇ (X2 ◇ (X3 ◇ X2))) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ ((sK1 ◇ ((sK0 ◇ sK2) ◇ sK1)) ◇ sK0) := mod_symm nh
-  have eq13 (X3 X4 X5 : G) : ((X3 ◇ (X4 ◇ X3)) ◇ X5) = X5 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq27 : sK0 ≠ sK0 := superpose eq13 eq10 -- superposition 10,13, 13 into 10, unify on (0).2 in 13 and (0).2 in 10
-  subsumption eq27 rfl
-
-
-@[equational_result]
-theorem Equation2425_implies_Equation2554 (G : Type*) [Magma G] (h : Equation2425 G) : Equation2554 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 X3 : G) : ((X1 ◇ (X2 ◇ (X3 ◇ X2))) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ ((sK1 ◇ ((sK1 ◇ sK2) ◇ sK1)) ◇ sK0) := mod_symm nh
-  have eq13 (X3 X4 X5 : G) : ((X3 ◇ (X4 ◇ X3)) ◇ X5) = X5 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq27 : sK0 ≠ sK0 := superpose eq13 eq10 -- superposition 10,13, 13 into 10, unify on (0).2 in 13 and (0).2 in 10
-  subsumption eq27 rfl
-
-
-@[equational_result]
-theorem Equation2425_implies_Equation2571 (G : Type*) [Magma G] (h : Equation2425 G) : Equation2571 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 X3 : G) : ((X1 ◇ (X2 ◇ (X3 ◇ X2))) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ ((sK1 ◇ ((sK2 ◇ sK0) ◇ sK1)) ◇ sK0) := mod_symm nh
-  have eq13 (X3 X4 X5 : G) : ((X3 ◇ (X4 ◇ X3)) ◇ X5) = X5 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq27 : sK0 ≠ sK0 := superpose eq13 eq10 -- superposition 10,13, 13 into 10, unify on (0).2 in 13 and (0).2 in 10
-  subsumption eq27 rfl
-
-
-@[equational_result]
-theorem Equation2425_implies_Equation2588 (G : Type*) [Magma G] (h : Equation2425 G) : Equation2588 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 X3 : G) : ((X1 ◇ (X2 ◇ (X3 ◇ X2))) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ ((sK1 ◇ ((sK2 ◇ sK1) ◇ sK1)) ◇ sK0) := mod_symm nh
-  have eq13 (X3 X4 X5 : G) : ((X3 ◇ (X4 ◇ X3)) ◇ X5) = X5 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq32 : sK0 ≠ sK0 := superpose eq13 eq10 -- superposition 10,13, 13 into 10, unify on (0).2 in 13 and (0).2 in 10
-  subsumption eq32 rfl
 
 
 @[equational_result]
@@ -1623,18 +1467,6 @@ theorem Equation2478_implies_Equation164 (G : Type*) [Magma G] (h : Equation2478
 
 
 @[equational_result]
-theorem Equation2478_implies_Equation1855 (G : Type*) [Magma G] (h : Equation2478 G) : Equation1855 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X0 ◇ ((X1 ◇ X2) ◇ X0)) ◇ X2) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ ((sK0 ◇ (sK1 ◇ sK0)) ◇ (sK2 ◇ sK2)) := mod_symm nh
-  have eq11 (X0 X2 X3 : G) : ((X3 ◇ (X0 ◇ X3)) ◇ X2) = X3 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2.1 in 9
-  have eq16 : sK0 ≠ sK0 := superpose eq11 eq10 -- superposition 10,11, 11 into 10, unify on (0).2 in 11 and (0).2 in 10
-  subsumption eq16 rfl
-
-
-@[equational_result]
 theorem Equation2481_implies_Equation1655 (G : Type*) [Magma G] (h : Equation2481 G) : Equation1655 G := by
   by_contra nh
   simp only [not_forall] at nh
@@ -1695,32 +1527,6 @@ theorem Equation2484_implies_Equation211 (G : Type*) [Magma G] (h : Equation2484
   have eq11 (X0 X3 : G) : ((X3 ◇ (X0 ◇ X0)) ◇ X3) = X3 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2.1 in 9
   have eq16 : sK0 ≠ sK0 := superpose eq11 eq10 -- superposition 10,11, 11 into 10, unify on (0).2 in 11 and (0).2 in 10
   subsumption eq16 rfl
-
-
-@[equational_result]
-theorem Equation2485_implies_Equation1632 (G : Type*) [Magma G] (h : Equation2485 G) : Equation1632 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X0 ◇ ((X1 ◇ X2) ◇ X2)) ◇ X1) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ ((sK0 ◇ sK0) ◇ ((sK0 ◇ sK1) ◇ sK1)) := mod_symm nh
-  have eq12 (X0 X1 X2 X3 : G) : (X0 ◇ X1) = (X0 ◇ ((((X1 ◇ X2) ◇ X2) ◇ X3) ◇ X3)) := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq40 (X0 X1 X2 : G) : ((X0 ◇ X1) ◇ ((X1 ◇ X2) ◇ X2)) = X0 := superpose eq12 eq9 -- superposition 9,12, 12 into 9, unify on (0).2 in 12 and (0).1.1 in 9
-  have eq69 : sK0 ≠ sK0 := superpose eq40 eq10 -- superposition 10,40, 40 into 10, unify on (0).2 in 40 and (0).2 in 10
-  subsumption eq69 rfl
-
-
-@[equational_result]
-theorem Equation2485_implies_Equation1654 (G : Type*) [Magma G] (h : Equation2485 G) : Equation1654 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X0 ◇ ((X1 ◇ X2) ◇ X2)) ◇ X1) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ ((sK0 ◇ sK1) ◇ ((sK1 ◇ sK0) ◇ sK0)) := mod_symm nh
-  have eq12 (X0 X1 X2 X3 : G) : (X0 ◇ X1) = (X0 ◇ ((((X1 ◇ X2) ◇ X2) ◇ X3) ◇ X3)) := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq36 (X0 X1 X2 : G) : ((X0 ◇ X1) ◇ ((X1 ◇ X2) ◇ X2)) = X0 := superpose eq12 eq9 -- superposition 9,12, 12 into 9, unify on (0).2 in 12 and (0).1.1 in 9
-  have eq69 : sK0 ≠ sK0 := superpose eq36 eq10 -- superposition 10,36, 36 into 10, unify on (0).2 in 36 and (0).2 in 10
-  subsumption eq69 rfl
 
 
 @[equational_result]
@@ -1981,86 +1787,6 @@ theorem Equation2517_implies_Equation2687 (G : Type*) [Magma G] (h : Equation251
 
 
 @[equational_result]
-theorem Equation2521_implies_Equation2420 (G : Type*) [Magma G] (h : Equation2521 G) : Equation2420 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, sK3, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ ((X0 ◇ X2) ◇ X2)) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ ((sK1 ◇ (sK2 ◇ (sK3 ◇ sK1))) ◇ sK0) := mod_symm nh
-  have eq12 (X1 X2 : G) : (((X1 ◇ X2) ◇ X2) ◇ X1) = X1 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq15 (X0 : G) : (X0 ◇ X0) = (X0 ◇ (X0 ◇ X0)) := superpose eq12 eq12 -- superposition 12,12, 12 into 12, unify on (0).2 in 12 and (0).1.1 in 12
-  have eq16 (X0 X1 : G) : (X0 ◇ X0) = ((X1 ◇ X0) ◇ (X0 ◇ X0)) := superpose eq12 eq9 -- superposition 9,12, 12 into 9, unify on (0).2 in 12 and (0).1.1.2 in 9
-  have eq35 (X0 : G) : (((X0 ◇ X0) ◇ (X0 ◇ X0)) ◇ X0) = X0 := superpose eq15 eq12 -- superposition 12,15, 15 into 12, unify on (0).2 in 15 and (0).1.1.1 in 12
-  have eq39 (X0 : G) : ((X0 ◇ X0) ◇ X0) = X0 := superpose eq16 eq35 -- forward demodulation 35,16
-  have eq57 (X0 : G) : (X0 ◇ X0) = X0 := superpose eq39 eq12 -- superposition 12,39, 39 into 12, unify on (0).2 in 39 and (0).1.1 in 12
-  have eq70 (X0 X1 : G) : ((X1 ◇ X0) ◇ X0) = X0 := superpose eq57 eq16 -- backward demodulation 16,57
-  have eq83 (X1 X2 : G) : (X2 ◇ X1) = X1 := superpose eq70 eq12 -- backward demodulation 12,70
-  have eq89 : sK0 ≠ ((sK2 ◇ (sK3 ◇ sK1)) ◇ sK0) := superpose eq83 eq10 -- backward demodulation 10,83
-  subsumption eq89 eq83
-
-
-@[equational_result]
-theorem Equation2521_implies_Equation2808 (G : Type*) [Magma G] (h : Equation2521 G) : Equation2808 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ ((X0 ◇ X2) ◇ X2)) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ (((sK1 ◇ sK2) ◇ (sK2 ◇ sK1)) ◇ sK0) := mod_symm nh
-  have eq12 (X1 X2 : G) : (((X1 ◇ X2) ◇ X2) ◇ X1) = X1 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq15 (X0 : G) : (X0 ◇ X0) = (X0 ◇ (X0 ◇ X0)) := superpose eq12 eq12 -- superposition 12,12, 12 into 12, unify on (0).2 in 12 and (0).1.1 in 12
-  have eq16 (X0 X1 : G) : (X0 ◇ X0) = ((X1 ◇ X0) ◇ (X0 ◇ X0)) := superpose eq12 eq9 -- superposition 9,12, 12 into 9, unify on (0).2 in 12 and (0).1.1.2 in 9
-  have eq35 (X0 : G) : (((X0 ◇ X0) ◇ (X0 ◇ X0)) ◇ X0) = X0 := superpose eq15 eq12 -- superposition 12,15, 15 into 12, unify on (0).2 in 15 and (0).1.1.1 in 12
-  have eq39 (X0 : G) : ((X0 ◇ X0) ◇ X0) = X0 := superpose eq16 eq35 -- forward demodulation 35,16
-  have eq57 (X0 : G) : (X0 ◇ X0) = X0 := superpose eq39 eq12 -- superposition 12,39, 39 into 12, unify on (0).2 in 39 and (0).1.1 in 12
-  have eq70 (X0 X1 : G) : ((X1 ◇ X0) ◇ X0) = X0 := superpose eq57 eq16 -- backward demodulation 16,57
-  have eq82 (X0 X1 X2 : G) : ((X1 ◇ X2) ◇ X0) = X0 := superpose eq70 eq9 -- backward demodulation 9,70
-  have eq87 : sK0 ≠ ((sK2 ◇ sK1) ◇ sK0) := superpose eq82 eq10 -- backward demodulation 10,82
-  subsumption eq87 eq82
-
-
-@[equational_result]
-theorem Equation2521_implies_Equation2964 (G : Type*) [Magma G] (h : Equation2521 G) : Equation2964 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ ((X0 ◇ X2) ◇ X2)) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ (((sK1 ◇ (sK1 ◇ sK2)) ◇ sK2) ◇ sK0) := mod_symm nh
-  have eq12 (X1 X2 : G) : (((X1 ◇ X2) ◇ X2) ◇ X1) = X1 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq15 (X0 : G) : (X0 ◇ X0) = (X0 ◇ (X0 ◇ X0)) := superpose eq12 eq12 -- superposition 12,12, 12 into 12, unify on (0).2 in 12 and (0).1.1 in 12
-  have eq16 (X0 X1 : G) : (X0 ◇ X0) = ((X1 ◇ X0) ◇ (X0 ◇ X0)) := superpose eq12 eq9 -- superposition 9,12, 12 into 9, unify on (0).2 in 12 and (0).1.1.2 in 9
-  have eq35 (X0 : G) : (((X0 ◇ X0) ◇ (X0 ◇ X0)) ◇ X0) = X0 := superpose eq15 eq12 -- superposition 12,15, 15 into 12, unify on (0).2 in 15 and (0).1.1.1 in 12
-  have eq39 (X0 : G) : ((X0 ◇ X0) ◇ X0) = X0 := superpose eq16 eq35 -- forward demodulation 35,16
-  have eq57 (X0 : G) : (X0 ◇ X0) = X0 := superpose eq39 eq12 -- superposition 12,39, 39 into 12, unify on (0).2 in 39 and (0).1.1 in 12
-  have eq75 (X0 X1 : G) : ((X1 ◇ X0) ◇ X0) = X0 := superpose eq57 eq16 -- backward demodulation 16,57
-  have eq87 (X0 X1 X2 : G) : ((X1 ◇ X2) ◇ X0) = X0 := superpose eq75 eq9 -- backward demodulation 9,75
-  have eq88 (X1 X2 : G) : (X2 ◇ X1) = X1 := superpose eq75 eq12 -- backward demodulation 12,75
-  have eq95 : sK0 ≠ (sK2 ◇ sK0) := superpose eq87 eq10 -- backward demodulation 10,87
-  have eq99 : sK0 ≠ sK0 := superpose eq88 eq95 -- superposition 95,88, 88 into 95, unify on (0).2 in 88 and (0).2 in 95
-  subsumption eq99 rfl
-
-
-@[equational_result]
-theorem Equation2521_implies_Equation2998 (G : Type*) [Magma G] (h : Equation2521 G) : Equation2998 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ ((X0 ◇ X2) ◇ X2)) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ (((sK1 ◇ (sK2 ◇ sK1)) ◇ sK2) ◇ sK0) := mod_symm nh
-  have eq12 (X1 X2 : G) : (((X1 ◇ X2) ◇ X2) ◇ X1) = X1 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq15 (X0 : G) : (X0 ◇ X0) = (X0 ◇ (X0 ◇ X0)) := superpose eq12 eq12 -- superposition 12,12, 12 into 12, unify on (0).2 in 12 and (0).1.1 in 12
-  have eq16 (X0 X1 : G) : (X0 ◇ X0) = ((X1 ◇ X0) ◇ (X0 ◇ X0)) := superpose eq12 eq9 -- superposition 9,12, 12 into 9, unify on (0).2 in 12 and (0).1.1.2 in 9
-  have eq35 (X0 : G) : (((X0 ◇ X0) ◇ (X0 ◇ X0)) ◇ X0) = X0 := superpose eq15 eq12 -- superposition 12,15, 15 into 12, unify on (0).2 in 15 and (0).1.1.1 in 12
-  have eq39 (X0 : G) : ((X0 ◇ X0) ◇ X0) = X0 := superpose eq16 eq35 -- forward demodulation 35,16
-  have eq57 (X0 : G) : (X0 ◇ X0) = X0 := superpose eq39 eq12 -- superposition 12,39, 39 into 12, unify on (0).2 in 39 and (0).1.1 in 12
-  have eq70 (X0 X1 : G) : ((X1 ◇ X0) ◇ X0) = X0 := superpose eq57 eq16 -- backward demodulation 16,57
-  have eq82 (X0 X1 X2 : G) : ((X1 ◇ X2) ◇ X0) = X0 := superpose eq70 eq9 -- backward demodulation 9,70
-  have eq83 (X1 X2 : G) : (X2 ◇ X1) = X1 := superpose eq70 eq12 -- backward demodulation 12,70
-  have eq87 : sK0 ≠ (sK2 ◇ sK0) := superpose eq82 eq10 -- backward demodulation 10,82
-  have eq90 : sK0 ≠ sK0 := superpose eq83 eq87 -- superposition 87,83, 83 into 87, unify on (0).2 in 83 and (0).2 in 87
-  subsumption eq90 rfl
-
-
-@[equational_result]
 theorem Equation2521_implies_Equation3163 (G : Type*) [Magma G] (h : Equation2521 G) : Equation3163 G := by
   by_contra nh
   simp only [not_forall] at nh
@@ -2265,99 +1991,5 @@ theorem Equation256_implies_Equation2680 (G : Type*) [Magma G] (h : Equation256 
   have eq33 (X0 X1 X2 : G) : ((X0 ◇ X0) ◇ X0) = ((X0 ◇ X1) ◇ X2) := superpose eq17 eq11 -- superposition 11,17, 17 into 11, unify on (0).2 in 17 and (0).2.1 in 11
   have eq38 : sK0 ≠ (((sK0 ◇ sK0) ◇ sK0) ◇ sK1) := superpose eq33 eq10 -- backward demodulation 10,33
   subsumption eq38 eq9
-
-
-@[equational_result]
-theorem Equation2567_implies_Equation1035 (G : Type*) [Magma G] (h : Equation2567 G) : Equation1035 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ ((X2 ◇ X0) ◇ X0)) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ (sK0 ◇ ((sK1 ◇ (sK0 ◇ sK0)) ◇ sK0)) := mod_symm nh
-  have eq11 (X2 X3 : G) : ((X3 ◇ (X2 ◇ X2)) ◇ X2) = X2 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2.1 in 9
-  have eq12 (X2 X3 : G) : (((X2 ◇ X3) ◇ X3) ◇ X3) = X3 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq13 : sK0 ≠ (sK0 ◇ sK0) := superpose eq11 eq10 -- backward demodulation 10,11
-  have eq14 (X2 : G) : ((X2 ◇ X2) ◇ X2) = X2 := superpose eq9 eq11 -- superposition 11,9, 9 into 11, unify on (0).2 in 9 and (0).1.1 in 11
-  have eq18 (X0 X1 : G) : ((X1 ◇ X0) ◇ X0) = X0 := superpose eq14 eq9 -- superposition 9,14, 14 into 9, unify on (0).2 in 14 and (0).1.1.2 in 9
-  have eq22 (X3 : G) : (X3 ◇ X3) = X3 := superpose eq18 eq12 -- backward demodulation 12,18
-  have eq27 : sK0 ≠ sK0 := superpose eq22 eq13 -- superposition 13,22, 22 into 13, unify on (0).2 in 22 and (0).2 in 13
-  subsumption eq27 rfl
-
-
-@[equational_result]
-theorem Equation2567_implies_Equation1258 (G : Type*) [Magma G] (h : Equation2567 G) : Equation1258 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ ((X2 ◇ X0) ◇ X0)) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ (sK0 ◇ (((sK1 ◇ sK2) ◇ sK0) ◇ sK0)) := mod_symm nh
-  have eq11 (X2 X3 : G) : ((X3 ◇ (X2 ◇ X2)) ◇ X2) = X2 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2.1 in 9
-  have eq12 (X2 X3 : G) : (((X2 ◇ X3) ◇ X3) ◇ X3) = X3 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq20 (X1 : G) : (X1 ◇ X1) = X1 := superpose eq12 eq12 -- superposition 12,12, 12 into 12, unify on (0).2 in 12 and (0).1.1 in 12
-  have eq26 (X2 X3 : G) : ((X3 ◇ X2) ◇ X2) = X2 := superpose eq20 eq11 -- backward demodulation 11,20
-  have eq29 : sK0 ≠ (sK0 ◇ sK0) := superpose eq26 eq10 -- backward demodulation 10,26
-  subsumption eq29 eq20
-
-
-@[equational_result]
-theorem Equation2567_implies_Equation1478 (G : Type*) [Magma G] (h : Equation2567 G) : Equation1478 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ ((X2 ◇ X0) ◇ X0)) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ ((sK1 ◇ sK0) ◇ (sK0 ◇ (sK0 ◇ sK0))) := mod_symm nh
-  have eq11 (X2 X3 : G) : ((X3 ◇ (X2 ◇ X2)) ◇ X2) = X2 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2.1 in 9
-  have eq12 (X2 X3 : G) : (((X2 ◇ X3) ◇ X3) ◇ X3) = X3 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq20 (X1 : G) : (X1 ◇ X1) = X1 := superpose eq12 eq12 -- superposition 12,12, 12 into 12, unify on (0).2 in 12 and (0).1.1 in 12
-  have eq26 (X2 X3 : G) : ((X3 ◇ X2) ◇ X2) = X2 := superpose eq20 eq11 -- backward demodulation 11,20
-  have eq27 : sK0 ≠ ((sK1 ◇ sK0) ◇ (sK0 ◇ sK0)) := superpose eq20 eq10 -- backward demodulation 10,20
-  have eq30 : sK0 ≠ ((sK1 ◇ sK0) ◇ sK0) := superpose eq20 eq27 -- forward demodulation 27,20
-  subsumption eq30 eq26
-
-
-@[equational_result]
-theorem Equation2567_implies_Equation1701 (G : Type*) [Magma G] (h : Equation2567 G) : Equation1701 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ ((X2 ◇ X0) ◇ X0)) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ ((sK1 ◇ sK0) ◇ ((sK2 ◇ sK0) ◇ sK0)) := mod_symm nh
-  have eq11 (X2 X3 : G) : ((X3 ◇ (X2 ◇ X2)) ◇ X2) = X2 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2.1 in 9
-  have eq12 (X2 X3 : G) : (((X2 ◇ X3) ◇ X3) ◇ X3) = X3 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq20 (X1 : G) : (X1 ◇ X1) = X1 := superpose eq12 eq12 -- superposition 12,12, 12 into 12, unify on (0).2 in 12 and (0).1.1 in 12
-  have eq26 (X2 X3 : G) : ((X3 ◇ X2) ◇ X2) = X2 := superpose eq20 eq11 -- backward demodulation 11,20
-  have eq29 : sK0 ≠ ((sK1 ◇ sK0) ◇ sK0) := superpose eq26 eq10 -- backward demodulation 10,26
-  subsumption eq29 eq26
-
-
-@[equational_result]
-theorem Equation2567_implies_Equation2161 (G : Type*) [Magma G] (h : Equation2567 G) : Equation2161 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ ((X2 ◇ X0) ◇ X0)) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ (((sK1 ◇ sK2) ◇ sK0) ◇ (sK0 ◇ sK0)) := mod_symm nh
-  have eq11 (X2 X3 : G) : ((X3 ◇ (X2 ◇ X2)) ◇ X2) = X2 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2.1 in 9
-  have eq12 (X2 X3 : G) : (((X2 ◇ X3) ◇ X3) ◇ X3) = X3 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq20 (X1 : G) : (X1 ◇ X1) = X1 := superpose eq12 eq12 -- superposition 12,12, 12 into 12, unify on (0).2 in 12 and (0).1.1 in 12
-  have eq26 (X2 X3 : G) : ((X3 ◇ X2) ◇ X2) = X2 := superpose eq20 eq11 -- backward demodulation 11,20
-  have eq27 : sK0 ≠ (((sK1 ◇ sK2) ◇ sK0) ◇ sK0) := superpose eq20 eq10 -- backward demodulation 10,20
-  subsumption eq27 eq26
-
-
-@[equational_result]
-theorem Equation2567_implies_Equation2290 (G : Type*) [Magma G] (h : Equation2567 G) : Equation2290 G := by
-  by_contra nh
-  simp only [not_forall] at nh
-  obtain ⟨sK0, sK1, nh⟩ := nh
-  have eq9 (X0 X1 X2 : G) : ((X1 ◇ ((X2 ◇ X0) ◇ X0)) ◇ X0) = X0 := mod_symm (h ..)
-  have eq10 : sK0 ≠ ((sK1 ◇ (sK0 ◇ (sK0 ◇ sK0))) ◇ sK0) := mod_symm nh
-  have eq11 (X2 X3 : G) : ((X3 ◇ (X2 ◇ X2)) ◇ X2) = X2 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1.2.1 in 9
-  have eq12 (X2 X3 : G) : (((X2 ◇ X3) ◇ X3) ◇ X3) = X3 := superpose eq9 eq9 -- superposition 9,9, 9 into 9, unify on (0).2 in 9 and (0).1.1 in 9
-  have eq20 (X1 : G) : (X1 ◇ X1) = X1 := superpose eq12 eq12 -- superposition 12,12, 12 into 12, unify on (0).2 in 12 and (0).1.1 in 12
-  have eq26 (X2 X3 : G) : ((X3 ◇ X2) ◇ X2) = X2 := superpose eq20 eq11 -- backward demodulation 11,20
-  have eq27 : sK0 ≠ ((sK1 ◇ (sK0 ◇ sK0)) ◇ sK0) := superpose eq20 eq10 -- backward demodulation 10,20
-  have eq30 : sK0 ≠ ((sK1 ◇ sK0) ◇ sK0) := superpose eq20 eq27 -- forward demodulation 27,20
-  subsumption eq30 eq26
 
 
