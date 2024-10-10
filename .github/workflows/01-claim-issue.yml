@@ -50,24 +50,25 @@ jobs:
         # Retrieve the project item (issue) and check its current status
         ITEM_ID_QUERY=$(cat <<EOF
         {
-          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { id } } }"
+          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { projectItems(first: 1) { nodes { id } } } } }"
         }
         EOF
         )
-        echo "Sending query to get item ID: $ITEM_ID_QUERY"
+        echo "Sending query to get project item ID: $ITEM_ID_QUERY"
 
         ITEM_ID_RESPONSE=$(curl -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
           -H "Content-Type: application/json" \
           --data "$ITEM_ID_QUERY" https://api.github.com/graphql)
 
         echo "Item ID Response: $ITEM_ID_RESPONSE"
-        ITEM_ID=$(echo "$ITEM_ID_RESPONSE" | jq -r '.data.repository.issue.id')
+        ITEM_ID=$(echo "$ITEM_ID_RESPONSE" | jq -r '.data.repository.issue.projectItems.nodes[0].id')
 
         if [ -z "$ITEM_ID" ]; then
           echo "Error: Could not retrieve the ITEM_ID for the issue"
           exit 1
         fi
 
+        # Correctly handle union types and query the field values
         FIELD_QUERY=$(cat <<EOF
         {
           "query": "{ node(id: \\"$ITEM_ID\\") { ... on ProjectV2Item { fieldValues(first: 10) { nodes { ... on ProjectV2ItemFieldSingleSelectValue { field { ... on ProjectV2FieldCommon { name } } optionId } } } } } }"
