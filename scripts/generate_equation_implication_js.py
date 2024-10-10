@@ -110,6 +110,7 @@ for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]:
     for line in open(f"equational_theories/Equations/Eqns{file}.lean"):
         if ':=' in line:
             N += 1
+            assert str(N) in line
             eqs.append("Equation"+str(N)+"["+line.split(":=")[1].strip()+"]")
 print("var equations = ", eqs);
 
