@@ -542,62 +542,54 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
     let G := Fin 2
     have hf: Finite G := Finite.of_fintype G
     exists G
+    suffices hs: ∃ (hm: Magma G) (hf: Finite G), G ⊧ (Lf x ≃ w) by
+      obtain ⟨hm, hf, h⟩ := hs
+      exists hm, hf
+      refine' And.intro h _
+      unfold Equation2
+      simp only [not_forall]
+      exists 0, 1
     cases h with
     | inl h =>
       let M: Magma G := Magma.mk fun x y => x
       exists M, hf
-      split_ands
+      intro f
+      unfold satisfiesPhi
+      simp only
+      conv =>
+        lhs
+        unfold FreeMagma.evalInMagma
+      subst h
+      induction w
       .
-        intro f
-        unfold satisfiesPhi
-        simp only
-        conv =>
-          lhs
-          unfold FreeMagma.evalInMagma
-        subst h
-        induction w
-        .
-          rename_i x
-          unfold FreeMagma.evalInMagma
-          simp only [FreeMagma.first]
-        .
-          rename_i w1 w2 h1 h2
-          unfold FreeMagma.evalInMagma
-          simp only [M, FreeMagma.first]
-          exact h1
+        rename_i x
+        unfold FreeMagma.evalInMagma
+        simp only [FreeMagma.first]
       .
-        unfold Equation2
-        simp only [not_forall]
-        exists 0, 1
-        simp only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
+        rename_i w1 w2 h1 h2
+        unfold FreeMagma.evalInMagma
+        simp only [M, FreeMagma.first]
+        exact h1
     | inr h' =>
       let M: Magma G := Magma.mk fun x y => y
       exists M, hf
-      split_ands
+      intro f
+      unfold satisfiesPhi
+      simp only
+      conv =>
+        lhs
+        unfold FreeMagma.evalInMagma
+      subst h'
+      induction w
       .
-        intro f
-        unfold satisfiesPhi
-        simp only
-        conv =>
-          lhs
-          unfold FreeMagma.evalInMagma
-        subst h'
-        induction w
-        .
-          rename_i x
-          unfold FreeMagma.evalInMagma
-          simp only [FreeMagma.last]
-        .
-          rename_i w1 w2 h1 h2
-          unfold FreeMagma.evalInMagma
-          simp only [M, FreeMagma.first]
-          exact h2
+        rename_i x
+        unfold FreeMagma.evalInMagma
+        simp only [FreeMagma.last]
       .
-        unfold Equation2
-        simp only [not_forall]
-        exists 0, 1
-        simp only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
-
+        rename_i w1 w2 h1 h2
+        unfold FreeMagma.evalInMagma
+        simp only [M, FreeMagma.first]
+        exact h2
   .
     by_cases h': ∃ (y: α), w = (y ⋆ x) ⋆ y
     .
