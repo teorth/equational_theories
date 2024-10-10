@@ -71,6 +71,8 @@ equation 45  :=  x ◇ y = z ◇ y
 /-- The constant law -/
 equation 46  :=  x ◇ y = z ◇ w
 
+equation 65 := x = y ◇ (x ◇ (y ◇ x))
+
 /-- The central groupoid law -/
 equation 168  :=  x = (y ◇ x) ◇ (x ◇ z)
 
