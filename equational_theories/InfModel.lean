@@ -537,8 +537,7 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
     | ⟨FreeMagma.Leaf x, w ⋆ w'⟩ =>
       exact hs x (w ⋆ w')
   intros x w
-  let leftmost := w.first
-  by_cases h: leftmost = x
+  by_cases h: w.first = x
   .
     let G := Fin 2
     let M: Magma G := Magma.mk fun x y => x
@@ -550,13 +549,11 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
       unfold satisfiesPhi FreeMagma.evalInMagma
       induction w
       .
-        subst h
-        simp_all only [G, leftmost]
-        rfl
+        simp_all only [FreeMagma.first]
       .
         rename_i a_ih a_ih_1
         subst h
-        simp_all only [leftmost, G, M]
+        simp_all only [G, M]
         split at a_ih
         next x x_1 =>
           split at a_ih_1
@@ -576,6 +573,44 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
       exists 0, 1
       simp_all only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
   .
-    sorry
+    by_cases h': w.last = x
+    .
+      clear h
+      let G := Fin 2
+      let M: Magma G := Magma.mk fun x y => y
+      let hf: Finite G := Finite.of_fintype G
+      exists G, M, hf
+      split_ands
+      .
+        clear hf
+        intro f
+        unfold satisfiesPhi FreeMagma.evalInMagma
+        induction w
+        .
+          simp_all only [FreeMagma.last]
+        .
+          rename_i a_ih a_ih_1
+          subst h'
+          simp_all only [G, M]
+          split at a_ih
+          next x x_1 =>
+            split at a_ih_1
+            next x_2 x_3 => rfl
+            next x_2 x_3 y =>
+              apply a_ih_1
+              rfl
+          next x x_1 y =>
+            split at a_ih_1
+            next x_2 x_3 => rfl
+            next x_2 x_3 y_1 =>
+              apply a_ih_1
+              rfl
+      .
+        unfold Equation2
+        simp only [not_forall]
+        exists 0, 1
+        simp_all only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
+    .
+      sorry
 
 end InfModel
