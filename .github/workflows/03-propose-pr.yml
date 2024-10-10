@@ -52,7 +52,9 @@ jobs:
     - name: Get the PR node_id using GraphQL
       id: get_pr_node_id
       run: |
-        QUERY='{"query": "query { repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { pullRequest(number: ${{ env.pr_number }}) { id } } }"}'
+        QUERY=$(jq -n --arg owner "${{ github.repository_owner }}" --arg name "${{ github.event.repository.name }}" --arg number "${{ env.pr_number }}" \
+          '{"query": "query { repository(owner: \($owner), name: \($name)) { pullRequest(number: \($number)) { id } } }"}')
+
         echo "Sending query: $QUERY"
 
         RESPONSE=$(curl -s -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
@@ -72,7 +74,9 @@ jobs:
     - name: Get the Issue node_id using GraphQL
       id: get_issue_node_id
       run: |
-        QUERY='{"query": "query { repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { id } } }"}'
+        QUERY=$(jq -n --arg owner "${{ github.repository_owner }}" --arg name "${{ github.event.repository.name }}" --arg number "${{ github.event.issue.number }}" \
+          '{"query": "query { repository(owner: \($owner), name: \($name)) { issue(number: \($number)) { id } } }"}')
+
         echo "Sending query: $QUERY"
 
         RESPONSE=$(curl -s -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
@@ -90,9 +94,12 @@ jobs:
         fi
 
     - name: Link PR to the issue using GraphQL
+      id: link_pr_to_issue
       if: env.not_assigned == 'false'
       run: |
-        QUERY='{"query": "mutation { addPullRequestToIssue(input: {issueId: \\"${ISSUE_NODE_ID}\\", pullRequestId: \\"${PR_NODE_ID}\\"}) { issue { id } } }"}'
+        QUERY=$(jq -n --arg pr_id "${{ env.PR_NODE_ID }}" --arg issue_id "${{ env.ISSUE_NODE_ID }}" \
+          '{"query": "mutation { addPullRequestToIssue(input: {issueId: \($issue_id), pullRequestId: \($pr_id)}) { issue { id } } }"}')
+
         echo "Sending mutation: $QUERY"
 
         RESPONSE=$(curl -s -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
@@ -100,9 +107,15 @@ jobs:
           --data "$QUERY" https://api.github.com/graphql)
 
         echo "GraphQL Mutation Response: $RESPONSE"
+        SUCCESS=$(echo "$RESPONSE" | jq -r '.data.addPullRequestToIssue.issue.id')
+
+        if [ -z "$SUCCESS" ]; then
+          echo "Error: Linking PR to the issue failed."
+          exit 1
+        fi
 
     - name: Log PR and issue link result
-      if: env.not_assigned == 'false'
+      if: steps.link_pr_to_issue.outcome == 'success'
       run: echo "PR ${{ env.pr_number }} has been successfully linked to issue ${{ github.event.issue.number }}."
 
     - name: Retrieve the project ITEM_ID
