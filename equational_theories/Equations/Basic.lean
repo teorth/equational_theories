@@ -9,7 +9,7 @@ viewed and edited, without having to open a very large file.
 
 See `Equations/All.lean` for the remaining ones. Feel free to move individual equations here if
 you do manual proofs about them and you want to import just this file. But don't forget to comment
-out the corresponding copy of the equatoins in `Equations/All.lean` if you do so?
+out the corresponding copy of the equations in `Equations/All.lean` if you do so?
 
 The equations are marked as `abbrev` so that tactics like `decide` will look through the definition.
 -/
