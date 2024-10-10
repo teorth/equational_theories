@@ -20,30 +20,12 @@ jobs:
         fi
         echo "Claim comment detected."
 
-    - name: Check if issue is already assigned
-      id: check_assignee
-      run: |
-        ASSIGNEES_COUNT=$(echo "${{ toJson(github.event.issue.assignees) }}" | jq length)
-        if [ "$ASSIGNEES_COUNT" -gt 0 ]; then
-          echo "Issue is already assigned."
-          exit 0
-        fi
-
-    - name: Assign the issue to the commenter
-      run: |
-        curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        -d '{"assignees":["${{ github.event.comment.user.login }}"]}' \
-        https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
-
-    - name: Log the assignment result
-      run: echo "Issue successfully assigned to ${{ github.event.comment.user.login }}."
-
     - name: Retrieve the project ITEM_ID
       id: get_item_id
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { projectItems(first: 10) { nodes { id } } } } }"
+          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { projectItems(first: 10) { nodes { id fieldValues(first: 10) { nodes { field { name } value } } } } } } }"
         }
         EOF
         )
@@ -55,13 +37,43 @@ jobs:
 
         echo "GraphQL Response: $RESPONSE"
         ITEM_ID=$(echo "$RESPONSE" | jq -r '.data.repository.issue.projectItems.nodes[0].id')
+        STATUS=$(echo "$RESPONSE" | jq -r '.data.repository.issue.projectItems.nodes[0].fieldValues.nodes[] | select(.field.name == "Status").value')
 
         if [ -z "$ITEM_ID" ]; then
           echo "Error: Could not retrieve ITEM_ID"
           exit 1
-        else
-          echo "ITEM_ID=$ITEM_ID" >> $GITHUB_ENV
+        elif [ "$STATUS" != "Unclaimed Outstanding Tasks" ]; then
+          echo "Issue is not classified as 'Unclaimed Outstanding Tasks'."
+          echo "STATUS_CLASSIFIED=false" >> $GITHUB_ENV
+          exit 0
         fi
+        echo "ITEM_ID=$ITEM_ID" >> $GITHUB_ENV
+        echo "STATUS_CLASSIFIED=true" >> $GITHUB_ENV
+
+    - name: Post comment if issue is not classified as 'Unclaimed Outstanding Tasks'
+      run: |
+        curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -d '{"body": "This issue cannot be assigned to @${{ github.event.comment.user.login }} because it has not been classified as an \"Unclaimed Outstanding Task\" by any of the project maintainers @teorth, @pitmonticone, and @Shreyas4991.\n\nPlease wait for this issue to be properly classified before claiming it."}' \
+        https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments
+        exit 1
+
+    - name: Check if issue is already assigned
+      id: check_assignee
+      run: |
+        ASSIGNEES_COUNT=$(echo "${{ toJson(github.event.issue.assignees) }}" | jq length)
+        if [ "$ASSIGNEES_COUNT" -gt 0 ]; then
+          echo "Issue is already assigned."
+          exit 1
+        fi
+
+    - name: Assign the issue to the commenter
+      run: |
+        curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -d '{"assignees":["${{ github.event.comment.user.login }}"]}' \
+        https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
+
+    - name: Log the assignment result
+      run: echo "Issue successfully assigned to ${{ github.event.comment.user.login }}."
 
     - name: Retrieve the project FIELD_ID for "Status"
       id: get_field_id
