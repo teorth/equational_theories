@@ -26,7 +26,7 @@ jobs:
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { projectItems(first: 10) { nodes { id fieldValues(first: 10) { nodes { field { name } value } } } } } } }"
+          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { projectItems(first: 10) { nodes { id fieldValues(first: 10) { nodes { field { name } value { ... on ProjectV2ItemFieldSingleSelectValue { name } ... on ProjectV2ItemFieldTextValue { text } } } } } } } } }"
         }
         EOF
         )
@@ -38,7 +38,7 @@ jobs:
 
         echo "GraphQL Response: $RESPONSE"
         ITEM_ID=$(echo "$RESPONSE" | jq -r '.data.repository.issue.projectItems.nodes[0].id')
-        STATUS=$(echo "$RESPONSE" | jq -r '.data.repository.issue.projectItems.nodes[0].fieldValues.nodes[] | select(.field.name == "Status").value')
+        STATUS=$(echo "$RESPONSE" | jq -r '.data.repository.issue.projectItems.nodes[0].fieldValues.nodes[] | select(.field.name == "Status").value.name')
 
         if [ -z "$ITEM_ID" ]; then
           echo "Error: Could not retrieve ITEM_ID"
