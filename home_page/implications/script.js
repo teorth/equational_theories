@@ -317,20 +317,18 @@ function renderImplications(index) {
 	    [forwardStatus, backwardStatus].forEach((status, statusIndex) => {
             const isConjectured = status.includes('conjecture');
 	        let maybe_prove;
+            let forward = statusIndex == 1 ?  index : i;
+            let backward = statusIndex == 1 ?  i : index;
             if (isUnknown(status, false)) {
-	            let proofhref = gen_proof_url(index, i);
+	            let proofhref = gen_proof_url(forward, backward);
                 maybe_prove = ` <a href='${proofhref}'>Prove This!</a>`;
             } else if (isUnknown(status, true)) { // conjectured
-	            let proofhref = gen_proof_url(index, i, isImplies(status, false, false) ? "yes" : "no");
+	            let proofhref = gen_proof_url(forward, backward, isImplies(status, false, false) ? "yes" : "no");
                 maybe_prove = ` <a href='${proofhref}'>Prove This!</a>`;
             } else {
                 var does_implies = isImplies(status, false, false);
                 let proofhref;
-                if (statusIndex == 1) {
-	                proofhref = gen_proof_url(index, i, does_implies ? "yes" : "no");
-                } else {
-                    proofhref = gen_proof_url(i, index, does_implies ? "yes" : "no");
-                }
+                proofhref = gen_proof_url(forward, backward, does_implies ? "yes" : "no");
                 maybe_prove = ` <a href='${proofhref}'>Try This!</a>`;
             }
             const item = `<div uid=${i} class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}${maybe_prove}</div>`;
