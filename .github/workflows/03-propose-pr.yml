@@ -49,73 +49,31 @@ jobs:
         echo "User ${{ github.event.comment.user.login }} is not assigned to this issue, exiting."
         exit 0
 
-    - name: Get the PR node_id using GraphQL
-      id: get_pr_node_id
-      run: |
-        QUERY=$(jq -n --arg owner "${{ github.repository_owner }}" --arg name "${{ github.event.repository.name }}" --arg number "${{ env.pr_number }}" \
-          '{"query": "query { repository(owner: \($owner), name: \($name)) { pullRequest(number: \($number)) { id } } }"}')
-
-        echo "Sending query: $QUERY"
-
-        RESPONSE=$(curl -s -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          --data "$QUERY" https://api.github.com/graphql)
-
-        echo "PR Node ID Response: $RESPONSE"
-        PR_NODE_ID=$(echo "$RESPONSE" | jq -r '.data.repository.pullRequest.id')
-
-        if [ -z "$PR_NODE_ID" ]; then
-          echo "Error: Could not retrieve PR node_id"
-          exit 1
-        else
-          echo "PR_NODE_ID=$PR_NODE_ID" >> $GITHUB_ENV
-        fi
-
-    - name: Get the Issue node_id using GraphQL
-      id: get_issue_node_id
-      run: |
-        QUERY=$(jq -n --arg owner "${{ github.repository_owner }}" --arg name "${{ github.event.repository.name }}" --arg number "${{ github.event.issue.number }}" \
-          '{"query": "query { repository(owner: \($owner), name: \($name)) { issue(number: \($number)) { id } } }"}')
-
-        echo "Sending query: $QUERY"
-
-        RESPONSE=$(curl -s -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          --data "$QUERY" https://api.github.com/graphql)
-
-        echo "Issue Node ID Response: $RESPONSE"
-        ISSUE_NODE_ID=$(echo "$RESPONSE" | jq -r '.data.repository.issue.id')
-
-        if [ -z "$ISSUE_NODE_ID" ]; then
-          echo "Error: Could not retrieve issue node_id"
-          exit 1
-        else
-          echo "ISSUE_NODE_ID=$ISSUE_NODE_ID" >> $GITHUB_ENV
-        fi
-
-    - name: Link PR to the issue using GraphQL
-      id: link_pr_to_issue
+    - name: Link PR to the issue
       if: env.not_assigned == 'false'
       run: |
-        QUERY=$(jq -n --arg pr_id "${{ env.PR_NODE_ID }}" --arg issue_id "${{ env.ISSUE_NODE_ID }}" \
-          '{"query": "mutation { addPullRequestToIssue(input: {issueId: \($issue_id), pullRequestId: \($pr_id)}) { issue { id } } }"}')
+        # Capture the PR number from the environment variable
+        PR_NUMBER="${{ env.pr_number }}"
 
-        echo "Sending mutation: $QUERY"
-
-        RESPONSE=$(curl -s -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          --data "$QUERY" https://api.github.com/graphql)
-
-        echo "GraphQL Mutation Response: $RESPONSE"
-        SUCCESS=$(echo "$RESPONSE" | jq -r '.data.addPullRequestToIssue.issue.id')
-
-        if [ -z "$SUCCESS" ]; then
-          echo "Error: Linking PR to the issue failed."
+        if [ -z "$PR_NUMBER" ]; then
+          echo "Error: PR number is not set. Exiting."
           exit 1
         fi
 
+        # Get the current PR body
+        PR_BODY=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER} | jq -r '.body')
+
+        # Add the issue reference to the PR body (to close the issue when the PR is merged)
+        NEW_PR_BODY="$PR_BODY\n\nCloses #${{ github.event.issue.number }}"
+
+        # Update the PR body
+        curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -d "{\"body\": \"$NEW_PR_BODY\"}" \
+        https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}
+
     - name: Log PR and issue link result
-      if: steps.link_pr_to_issue.outcome == 'success'
+      if: env.not_assigned == 'false'
       run: echo "PR ${{ env.pr_number }} has been successfully linked to issue ${{ github.event.issue.number }}."
 
     - name: Retrieve the project ITEM_ID
