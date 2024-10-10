@@ -43,7 +43,7 @@ For instance, the dual of the law $0 \op 1 = 0 \op 2$ is $1 \op 0 = 2 \op 0$, wh
 
 The pre-ordering on laws has a duality symmetry:
 
-\begin{lemma}[Duality of laws]\lean{Law.MagmaLaw.implies_op}\leanok\label{duality}\uses{pre-order}  If $w  \formaleq  w'$ implies $w''  \formaleq  w'''$, then $w^{\mathrm{op}}  \formaleq  (w')^{\mathrm{op}}$ implies $w''^{\mathrm{op}}  \formaleq  (w''')^{\mathrm{op}}$.
+\begin{lemma}[Duality of laws]\lean{Law.MagmaLaw.implies_iff_op}\leanok\label{duality}\uses{pre-order}  The law $w  \formaleq  w'$ implies $w''  \formaleq  w'''$, if and only if $w^{\mathrm{op}}  \formaleq  (w')^{\mathrm{op}}$ implies $w''^{\mathrm{op}}  \formaleq  (w''')^{\mathrm{op}}$.
 \end{lemma}
 
 \begin{proof} This follows from the fact that a magma $G$ satisfies a law $w  \formaleq  w'$ if and only if $G^{\mathrm{op}}$ satisfies $w^{\mathrm{op}}  \formaleq  (w')^{\mathrm{op}}$.

@@ -72,7 +72,7 @@ processEntry handle entry = do
 
 emitImports :: Handle -> IO ()
 emitImports handle = do
-  hPutStrLn handle "import equational_theories.AllEquations"
+  hPutStrLn handle "import equational_theories.Equations.All"
   hPutStrLn handle "import equational_theories.FactsSyntax"
   hPutStrLn handle "import equational_theories.MemoFinOp"
   hPutStrLn handle "import equational_theories.DecideBang"

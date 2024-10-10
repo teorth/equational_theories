@@ -131,7 +131,7 @@ def generate_lean(data):
     refname= lambda i: f"{name} refutes Equation{i}"
 
     out = f"""
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 import equational_theories.MemoFinOp
 import equational_theories.DecideBang

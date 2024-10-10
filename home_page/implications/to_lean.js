@@ -9,12 +9,17 @@ abbrev EquationEQ1 (G: Type _) [Magma G] := ∀ CODE1
 
 abbrev EquationEQ2 (G: Type _) [Magma G] := ∀ CODE2
 
-theorem EquationEQ1_implies_EquationEQ2 (G: Type _) [Magma G] (h: EquationEQ1 G) : EquationEQ2 G := by
-  sorry
-
-theorem EquationEQ1_not_implies_EquationEQ2 : ∃ (G: Type) (_: Magma G), EquationEQ1 G ∧ ¬ EquationEQ2 G := by
-  sorry
 `;
+
+
+const TEMPLATE_YES = `theorem EquationEQ1_implies_EquationEQ2 (G: Type _) [Magma G] (h: EquationEQ1 G) : EquationEQ2 G := by
+  sorry`;
+
+const TEMPLATE_NO = `
+theorem EquationEQ1_not_implies_EquationEQ2 : ∃ (G: Type) (_: Magma G), EquationEQ1 G ∧ ¬ EquationEQ2 G := by
+  sorry`;
+
+
 
 function convertEquation(input) {
   // Extract the equation part from the input string
@@ -35,8 +40,17 @@ function convertEquation(input) {
   return latexOutput;
 }
 
-function gen_proof_url(eq1, eq2) {
-    let string = TEMPLATE.replace(/EQ1/g, eq1+1).replace(/EQ2/g, eq2+1);
+function gen_proof_url(eq1, eq2, direction) {
+    var template;
+    if (direction == 'yes') {
+        template = TEMPLATE + TEMPLATE_YES;
+    } else if (direction == 'no') {
+        template = TEMPLATE + TEMPLATE_NO;
+    } else {
+        template = TEMPLATE + TEMPLATE_YES + TEMPLATE_NO;
+    }
+        
+    let string = template.replace(/EQ1/g, eq1+1).replace(/EQ2/g, eq2+1);
     string = string.replace("CODE1", convertEquation(equations[eq1]))
     string = string.replace("CODE2", convertEquation(equations[eq2]))
     return "https://live.lean-lang.org/#codez=" + encode(string);

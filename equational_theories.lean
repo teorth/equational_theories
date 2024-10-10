@@ -4,7 +4,7 @@ import equational_theories.FreeMagmaImplications
 import equational_theories.FreeComm
 import equational_theories.MagmaOp
 import equational_theories.Subgraph
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 import equational_theories.InfModel
 import equational_theories.Generated
 import equational_theories.Counting
@@ -17,3 +17,4 @@ import equational_theories.CentralGroupoids
 import equational_theories.Z3Counterexamples
 import equational_theories.LinearOps
 import equational_theories.Confluence
+import equational_theories.FactsSyntaxExamples
