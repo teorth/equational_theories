@@ -6,10 +6,20 @@ on:
 
 jobs:
   claim_issue:
-    if: github.event.issue.pull_request == null && contains(github.event.comment.body, 'claim') && !contains(github.event.comment.body, 'disclaim')
+    if: github.event.issue.pull_request == null
     runs-on: ubuntu-latest
 
     steps:
+    - name: Check if comment contains only 'claim' (ignoring white spaces)
+      id: check_claim
+      run: |
+        TRIMMED_COMMENT=$(echo "${{ github.event.comment.body }}" | xargs)
+        if [ "$TRIMMED_COMMENT" != "claim" ]; then
+          echo "Comment does not contain only 'claim'."
+          exit 0
+        fi
+        echo "Claim comment detected."
+
     - name: Check if issue is already assigned
       id: check_assignee
       run: |
