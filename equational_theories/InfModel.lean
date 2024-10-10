@@ -537,45 +537,45 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
     | ⟨FreeMagma.Leaf x, w ⋆ w'⟩ =>
       exact hs x (w ⋆ w')
   intros x w
-  by_cases h: w.first = x
+  by_cases h: w.first = x ∨ w.last = x
   .
-    let G := Fin 2
-    let M: Magma G := Magma.mk fun x y => x
-    let hf: Finite G := Finite.of_fintype G
-    exists G, M, hf
-    split_ands
-    .
-      intro f
-      unfold satisfiesPhi FreeMagma.evalInMagma
-      induction w
+    cases h with
+    | inl h =>
+      let G := Fin 2
+      let M: Magma G := Magma.mk fun x y => x
+      let hf: Finite G := Finite.of_fintype G
+      exists G, M, hf
+      split_ands
       .
-        simp_all only [FreeMagma.first]
+        intro f
+        unfold satisfiesPhi FreeMagma.evalInMagma
+        induction w
+        .
+          simp_all only [FreeMagma.first]
+        .
+          rename_i a_ih a_ih_1
+          subst h
+          simp_all only [G, M]
+          split at a_ih
+          next x x_1 =>
+            split at a_ih_1
+            next x_2 x_3 => rfl
+            next x_2 x_3 y => rfl
+          next x x_1 y =>
+            split at a_ih_1
+            next x_2 x_3 =>
+              apply a_ih
+              rfl
+            next x_2 x_3 y_1 =>
+              apply a_ih
+              rfl
       .
-        rename_i a_ih a_ih_1
-        subst h
-        simp_all only [G, M]
-        split at a_ih
-        next x x_1 =>
-          split at a_ih_1
-          next x_2 x_3 => rfl
-          next x_2 x_3 y => rfl
-        next x x_1 y =>
-          split at a_ih_1
-          next x_2 x_3 =>
-            apply a_ih
-            rfl
-          next x_2 x_3 y_1 =>
-            apply a_ih
-            rfl
-    .
-      unfold Equation2
-      simp only [not_forall]
-      exists 0, 1
-      simp_all only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
-  .
-    by_cases h': w.last = x
-    .
-      clear h
+        unfold Equation2
+        simp only [not_forall]
+        exists 0, 1
+        simp_all only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
+
+    | inr h' =>
       let G := Fin 2
       let M: Magma G := Magma.mk fun x y => y
       let hf: Finite G := Finite.of_fintype G
@@ -610,7 +610,8 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
         simp only [not_forall]
         exists 0, 1
         simp_all only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
-    .
-      sorry
+
+  .
+    sorry
 
 end InfModel
