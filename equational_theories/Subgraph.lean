@@ -2,7 +2,7 @@ import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
 import equational_theories.EquationalResult
 import equational_theories.Closure
-import equational_theories.Equations
+import equational_theories.Equations.Basic
 import equational_theories.FactsSyntax
 import equational_theories.FreeSemigroup
 import equational_theories.MagmaLaw
@@ -103,8 +103,6 @@ theorem Equation2_implies_Equation4522 (G: Type*) [Magma G] (h: Equation2 G) : E
 @[equational_result]
 theorem Equation2_implies_Equation4582 (G: Type*) [Magma G] (h: Equation2 G) : Equation4582 G :=
   fun _ _ _ _ _ _ ↦ h _ _
-
-
 
 @[equational_result]
 theorem Equation3_implies_Equation8 (G: Type*) [Magma G] (h: Equation3 G) : Equation8 G :=
@@ -285,16 +283,16 @@ theorem Lemma_eq1689_implies_h8 (G: Type*) [Magma G] (h: Equation1689 G) : ∀ a
 /-- The below results for Equation1571 are out of order because early ones are lemmas for later ones -/
 @[equational_result]
 theorem Equation1571_implies_Equation2662 (G: Type _) [Magma G] (h: Equation1571 G) : Equation2662 G :=
-  fun x y ↦ Eq.trans (h x (x ◇ y) (x ◇ y)) (congrArg (fun z ↦ ((x ◇ y) ◇ (x ◇ y)) ◇ z)
-    (Eq.symm $ h x x y))
+  fun x y ↦ (h x (x ◇ y) (x ◇ y)).trans (congrArg (((x ◇ y) ◇ (x ◇ y)) ◇ ·) (h x x y).symm)
 
 @[equational_result]
 theorem Equation1571_implies_Equation40 (G: Type _) [Magma G] (h: Equation1571 G) : Equation40 G := by
   have sqRotate : ∀ x y z : G, (x ◇ y) ◇ (x ◇ y) = (y ◇ z) ◇ (y ◇ z) :=
-    fun x y z ↦ Eq.trans (congrArg (fun w ↦ (x ◇ y) ◇ (x ◇ w))
-      (Equation1571_implies_Equation2662 G h y z)) (Eq.symm $ h ((y ◇ z) ◇ (y ◇ z)) x y)
+    fun x y z ↦
+      (congrArg (fun w ↦ (x ◇ y) ◇ (x ◇ w)) (Equation1571_implies_Equation2662 G h y z)).trans
+        (h ((y ◇ z) ◇ (y ◇ z)) x y).symm
   have sqConstInImage : ∀ x y z w : G, (x ◇ y) ◇ (x ◇ y) = (z ◇ w) ◇ (z ◇ w) :=
-    fun x y z w ↦ Eq.trans (sqRotate x y z) (sqRotate y z w)
+    fun x y z w ↦ (sqRotate x y z).trans (sqRotate y z w)
   exact fun x y ↦ h x x x ▸ h y y y ▸ sqConstInImage (x ◇ x) (x ◇ (x ◇ x)) (y ◇ y) (y ◇ (y ◇ y))
 
 @[equational_result]
@@ -304,14 +302,14 @@ theorem Equation1571_implies_Equation23 (G: Type _) [Magma G] (h: Equation1571 G
 
 @[equational_result]
 theorem Equation1571_implies_Equation8 (G: Type _) [Magma G] (h: Equation1571 G) : Equation8 G :=
-  fun x ↦ Eq.trans (h x x x) (((congrArg (fun a ↦ a ◇ (x ◇ (x ◇ x))))
+  fun x ↦ (h x x x).trans (((congrArg (· ◇ (x ◇ (x ◇ x))))
     (Equation1571_implies_Equation40 G h x (x ◇ (x ◇ x)))).trans
       (((Equation1571_implies_Equation23 G h (x ◇ (x ◇ x))).symm).trans rfl))
 
 @[equational_result]
 theorem Equation1571_implies_Equation16 (G: Type _) [Magma G] (h: Equation1571 G) : Equation16 G :=
   fun x y ↦ ((congrArg (fun w ↦ y ◇ (y ◇ w)) (Equation1571_implies_Equation8 G h x)).trans
-    ((Equation1571_implies_Equation40 G h x y ▸ ((congrArg (fun w ↦ w ◇ (y ◇ (x ◇ (y ◇ y)))))
+    ((Equation1571_implies_Equation40 G h x y ▸ ((congrArg (· ◇ (y ◇ (x ◇ (y ◇ y)))))
       (Equation1571_implies_Equation8 G h y)).trans (h x y (y ◇ y)).symm))).symm
 
 @[equational_result]

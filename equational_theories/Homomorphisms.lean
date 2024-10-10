@@ -27,6 +27,10 @@ lemma MagmaHom.ext {G H : Type*} [Magma G] [Magma H] {f₁ f₂ : G →◇ H}
     f₁ = f₂ :=
   DFunLike.ext f₁ f₂ hf
 
+/-- The function preserves the operation. -/
+lemma MagmaHom.map_op {G H : Type*} [Magma G] [Magma H] (f : G →◇ H) (x y : G) :
+    f (x ◇ y) = f x ◇ f y := f.map_op' _ _
+
 /-- Composition of magma homomorphisms. -/
 def MagmaHom.comp {G H I : Type*} [Magma G] [Magma H] [Magma I] (f₁ : G →◇ H) (f₂ : H →◇ I) :
     G →◇ I where
@@ -117,11 +121,9 @@ def MagmaEquiv.comp {G H I : Type*} [Magma G] [Magma H] [Magma I] (e₁ : G ≃�
   toFun := e₂ ∘ e₁
   invFun := e₁.symm ∘ e₂.symm
   left_inv x := show e₁.symm (e₂.symm (e₂.toEquiv (e₁ x))) = x by
-    rw [Equiv.symm_apply_apply]
-    apply Equiv.symm_apply_apply
+    exact Equiv.symm_apply_apply _ _ ▸ Equiv.symm_apply_apply _ _
   right_inv x := show e₂ (e₁.toEquiv (e₁.symm (e₂.symm x))) = x by
-    rw [Equiv.apply_symm_apply]
-    apply Equiv.apply_symm_apply
+    exact Equiv.apply_symm_apply _ _ ▸ Equiv.apply_symm_apply _ _
   map_op' x y := by
     have hxy := e₂.map_op' (e₁.toFun x) (e₁.toFun y)
     rwa [←e₁.map_op'] at hxy
@@ -160,6 +162,18 @@ lemma MagmaEquiv.toMagmaEquiv_coe {F G H : Type*} [Magma G] [Magma H] [EquivLike
     [MagmaEquivClass F G H] (f : F) :
     ((f : G ≃◇ H) : G → H) = f :=
   rfl
+
+instance MagmaEquiv.toEquivLike {G H : Type*} [Magma G] [Magma H] :
+    EquivLike (G ≃◇ H) G H where
+  coe := (↑)
+  inv f := f.symm
+  coe_injective' _ _ h _ := DFunLike.coe_injective' h
+  left_inv _ := Equiv.symm_apply_apply _
+  right_inv _ := Equiv.apply_symm_apply _
+
+instance MagmaEquiv.toMagmaEquivClass {G H : Type*} [Magma G] [Magma H] :
+    MagmaEquivClass (G ≃◇ H) G H where
+  map_op := MagmaEquiv.map_op'
 
 instance (priority := 100) instMagmaHomClass (F : Type*) {G H : Type*} [Magma G] [Magma H]
     [EquivLike F G H] [FGH : MagmaEquivClass F G H] :
