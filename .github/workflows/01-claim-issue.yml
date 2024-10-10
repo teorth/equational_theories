@@ -21,12 +21,12 @@ jobs:
         fi
         echo "Claim comment detected."
 
-    - name: Retrieve the project ITEM_ID
-      id: get_item_id
+    - name: Retrieve the project ITEM_ID and STATUS
+      id: get_item_id_status
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { projectItems(first: 10) { nodes { id fieldValues(first: 10) { nodes { field { __typename ... on ProjectV2FieldCommon { name } } value { __typename ... on ProjectV2ItemFieldSingleSelectValue { name } ... on ProjectV2ItemFieldTextValue { text } ... on ProjectV2ItemFieldNumberValue { number } ... on ProjectV2ItemFieldDateValue { date } } } } } } } } } }"
+          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { projectItems(first: 10) { nodes { id fieldValues(first: 10) { nodes { field { name } value { ... on ProjectV2ItemFieldSingleSelectValue { name } } } } } } } } } }"
         }
         EOF
         )
