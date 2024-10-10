@@ -23,6 +23,10 @@ jobs:
     - name: Check if the issue is classified as 'Unclaimed Outstanding Tasks'
       id: check_unclaimed_tasks
       run: |
+        # Enable exit on any failure
+        set -e
+
+        # Step 1: Retrieve project fields for 'Status'
         QUERY=$(cat <<EOF
         {
           "query": "{ node(id: \\"PVT_kwHOAAMKjM4Ao-Sa\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name id options { id name } } } } } } }"
@@ -41,7 +45,7 @@ jobs:
           exit 1
         fi
 
-        # Retrieve the project item (issue) and check its current status
+        Retrieve the project item (issue) and check its status
         ITEM_ID_QUERY=$(cat <<EOF
         {
           "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { projectItems(first: 1) { nodes { id } } } } }"
@@ -54,6 +58,7 @@ jobs:
 
         ITEM_ID=$(echo "$ITEM_ID_RESPONSE" | jq -r '.data.repository.issue.projectItems.nodes[0].id')
 
+        # If ITEM_ID is null, post a comment and exit
         if [ -z "$ITEM_ID" ]; then
           echo "Issue has not been added to the project board."
           curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -65,6 +70,7 @@ jobs:
         echo "Retrieved ITEM_ID: $ITEM_ID"
         echo "ITEM_ID=$ITEM_ID" >> $GITHUB_ENV
 
+        Check current status of the issue
         FIELD_QUERY=$(cat <<EOF
         {
           "query": "{ node(id: \\"$ITEM_ID\\") { ... on ProjectV2Item { fieldValues(first: 10) { nodes { ... on ProjectV2ItemFieldSingleSelectValue { field { ... on ProjectV2FieldCommon { name } } optionId } } } } } }"
@@ -77,6 +83,7 @@ jobs:
 
         CURRENT_STATUS_ID=$(echo "$FIELD_RESPONSE" | jq -r '.data.node.fieldValues.nodes[] | select(.field.name == "Status").optionId')
 
+        # If the current status is not 'Unclaimed Outstanding Tasks', post a comment and exit
         if [ "$CURRENT_STATUS_ID" != "$UNCLAIMED_TASKS_ID" ]; then
           echo "Issue is not classified as 'Unclaimed Outstanding Tasks'. Posting comment."
           curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
