@@ -27,7 +27,7 @@ theorem MagmaLaw.models_iff_satisfies_ι (law : MagmaLaw α) :
     have := LiftingMagmaFamily.lift_factors f
     rw [this, satisfiesPhi_evalHom, h]
 
-instance [DecidableEq α] (law : MagmaLaw α) : Decidable (G α ⊧ law) := by
+instance instDecidableSatisfies [DecidableEq α] (law : MagmaLaw α) : Decidable (G α ⊧ law) := by
   rw [MagmaLaw.models_iff_satisfies_ι, satisfiesPhi]
   infer_instance
 
@@ -55,7 +55,7 @@ instance : LiftingMagmaFamily (List ·) where
 instance (priority := low) leftProj (α : Type _) : Magma α where
   op := fun a _ => a
 
-instance : @LiftingMagmaFamily (Id ·) (leftProj ·) where
+instance instLiftingMagmaFamilyLeftProj : @LiftingMagmaFamily (Id ·) (leftProj ·) where
   instMagmaDecidableEq := inferInstance
   ι := id
   lift f := {
@@ -72,7 +72,7 @@ instance : @LiftingMagmaFamily (Id ·) (leftProj ·) where
 instance (priority := low) rightProj (α : Type _) : Magma α where
   op := fun _ a => a
 
-instance : @LiftingMagmaFamily (Id ·) (rightProj ·) where
+instance instLiftingMagmaFamilyRightProj : @LiftingMagmaFamily (Id ·) (rightProj ·) where
   instMagmaDecidableEq := inferInstance
   ι := id
   lift f := {
