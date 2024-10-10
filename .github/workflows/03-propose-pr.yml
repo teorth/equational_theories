@@ -49,21 +49,10 @@ jobs:
         echo "User ${{ github.event.comment.user.login }} is not assigned to this issue, exiting."
         exit 0
 
-    - name: Get the PR node ID
+    - name: Get the PR node_id using GraphQL
       id: get_pr_node_id
       run: |
-        QUERY=$(cat <<EOF
-        {
-          "query": "{
-            repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") {
-              pullRequest(number: ${{ env.pr_number }}) {
-                id
-              }
-            }
-          }"
-        }
-        EOF
-        )
+        QUERY='{"query": "query { repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { pullRequest(number: ${{ env.pr_number }}) { id } } }"}'
         echo "Sending query: $QUERY"
 
         RESPONSE=$(curl -s -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
@@ -80,21 +69,10 @@ jobs:
           echo "PR_NODE_ID=$PR_NODE_ID" >> $GITHUB_ENV
         fi
 
-    - name: Get the Issue node ID
+    - name: Get the Issue node_id using GraphQL
       id: get_issue_node_id
       run: |
-        QUERY=$(cat <<EOF
-        {
-          "query": "{
-            repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") {
-              issue(number: ${{ github.event.issue.number }}) {
-                id
-              }
-            }
-          }"
-        }
-        EOF
-        )
+        QUERY='{"query": "query { repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { id } } }"}'
         echo "Sending query: $QUERY"
 
         RESPONSE=$(curl -s -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
@@ -111,21 +89,10 @@ jobs:
           echo "ISSUE_NODE_ID=$ISSUE_NODE_ID" >> $GITHUB_ENV
         fi
 
-    - name: Link PR to the issue
+    - name: Link PR to the issue using GraphQL
       if: env.not_assigned == 'false'
       run: |
-        QUERY=$(cat <<EOF
-        {
-          "query": "mutation {
-            addPullRequestToIssue(input: {issueId: \\"${ISSUE_NODE_ID}\\", pullRequestId: \\"${PR_NODE_ID}\\"}) {
-              issue {
-                id
-              }
-            }
-          }"
-        }
-        EOF
-        )
+        QUERY='{"query": "mutation { addPullRequestToIssue(input: {issueId: \\"${ISSUE_NODE_ID}\\", pullRequestId: \\"${PR_NODE_ID}\\"}) { issue { id } } }"}'
         echo "Sending mutation: $QUERY"
 
         RESPONSE=$(curl -s -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
