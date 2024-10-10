@@ -109,6 +109,7 @@ N = 0
 for line in open("equational_theories/AllEquations.lean"):
     if ':=' in line:
         N += 1
+        assert str(N) in line
         eqs.append("Equation"+str(N)+"["+line.split(":=")[1].strip()+"]")
 print("var equations = ", eqs);
 
