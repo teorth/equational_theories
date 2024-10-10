@@ -13,7 +13,7 @@ jobs:
     - name: Check if comment contains only 'claim' (ignoring white spaces and newlines)
       id: check_claim
       run: |
-        TRIMMED_COMMENT=$(echo "${{ github.event.comment.body }}" | tr -d '\n' | xargs)
+        TRIMMED_COMMENT=$(echo "${{ github.event.comment.body }}" | tr -d '\n' | xargs | tr '[:upper:]' '[:lower:]')
         if [ "$TRIMMED_COMMENT" != "claim" ]; then
           echo "Comment does not contain only 'claim' modulo white spaces and newlines."
           exit 1
