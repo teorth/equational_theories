@@ -98,12 +98,6 @@ theorem Equation345169_implies_Helper35 (G : Type*) [Magma G] (h : Equation34516
 /- 345169 implies third Sheffer axiom -/
 theorem Equation345169_implies_Axiom3 (G : Type*) [Magma G] (h : Equation345169 G) : ∀ x y z : G, (x ◇ (y ◇ z)) ◇ (x ◇ (y ◇ z)) = ((y ◇ y) ◇ x) ◇ ((z ◇ z) ◇ x):= λ x y z => ((Equation345169_implies_Helper35 G h x z y).symm).trans (Equation345169_implies_Helper6 G h x (z ◇ z) x (y ◇ y))
 
-/- Boolean algebra induced by magma satisfying the three Sheffer axioms. 
-   The operations are defined in terms of Sheffer strokes:
-   OR/SUP  = (A | A) | (B | B)
-   AND/INF = (A | B) | (A | B)
--/
-
 theorem Sheffer_Comm (G : Type*) [Magma G] (ax1 : ∀ x : G, (x ◇ x) ◇ (x ◇ x) = x) (ax2 : ∀ x y : G, x ◇ x = x ◇ (y ◇ (y ◇ y))) (ax3 : ∀ x y z : G, (x ◇ (y ◇ z)) ◇ (x ◇ (y ◇ z)) = ((y ◇ y) ◇ x) ◇ ((z ◇ z) ◇ x)) : ∀ x y : G, x ◇ y = y ◇ x := by
   intro x y
   have h1 : ∀ x y : G, (x ◇ x) ◇ (y ◇ (y ◇ y)) = x := by intro a b; have := (ax2 (a ◇ a) b).symm; rwa [ax1] at this
