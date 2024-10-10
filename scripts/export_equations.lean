@@ -28,7 +28,7 @@ def main : IO Unit := do
     { module := `equational_theories.AllEquations }] .empty
   let laws := magmaLawExt.getState env
   let jsonOutput : Json := Json.arr <| laws.map fun ⟨lawName, law⟩ => .mkObj [
-    ("equation", "Equation" ++ (lawName.toString.drop "Law".length)),
+    ("equation", magmaLawNameToEquationName lawName.toString),
     ("law", ToJson.toJson law)
   ]
   IO.FS.writeFile ("data" / "magma_equations.json") jsonOutput.pretty

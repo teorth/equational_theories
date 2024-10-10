@@ -14,6 +14,9 @@ def getMagmaLaws : CoreM (Array (Name × NatMagmaLaw)) := do
       out := out.push (n, ← unsafe evalConstCheck NatMagmaLaw ``NatMagmaLaw n)
   return out
 
+def magmaLawNameToEquationName (magmaLawName : String) : String :=
+  "Equation" ++ (magmaLawName.drop "Law".length)
+
 namespace EquationsCommand
 
 partial def parseFreeMagma : Term → StateT (Array Ident) Option (FreeMagma Nat)
