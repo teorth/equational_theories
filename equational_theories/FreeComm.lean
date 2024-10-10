@@ -41,7 +41,7 @@ lemma FreeMagma.count_subst' {ι : Type*} [DecidableEq ι] {t : FreeMagma ι} {�
   induction t with
   | Leaf b =>
     simp at hs
-    simp [substFreeMagma, hs]
+    simp [evalInMagma, hs]
   | Fork a b iha ihb =>
     simp at hs
     simp [iha (Multiset.Subset.trans Multiset.subset_add_left hs),
@@ -63,9 +63,9 @@ lemma Law.MagmaLaw.SameCount.vars_eq {α} [DecidableEq α] {E : MagmaLaw α} (h 
 theorem Law.MagmaLaw.SameCount.derive {α} [DecidableEq α] {Γ : Ctx α} {E : MagmaLaw α}
   (hE : Γ ⊢ E) (hΓ : ∀ E ∈ Γ, E.SameCount) : E.SameCount := by
   induction hE with
-  | Ax E h => exact hΓ E h
-  | Ref t => exact fun _ ↦ rfl
-  | Sym t u _ ih => exact fun _ ↦ (ih _).symm
-  | Trans t u v _ _ ihu ihv => exact fun _ ↦ ihu _ |>.trans <| ihv _
-  | Subst t u σ _ ih => intro a; simp [FreeMagma.count_subst, ih _, ih.vars_eq]
-  | Cong t₁ t₂ u₁ u₂ _ _ ih₁ ih₂ => intro a; simp_rw [FreeMagma.count, ih₁ a, ih₂ a]
+  | Ax h => exact hΓ _ h
+  | Ref => intro a; rfl
+  | Sym _ ih => intro a; symm; exact ih a
+  | Trans _ _ ihu ihv => intro a; exact ihu a |>.trans <| ihv a
+  | Subst σ _ ih => intro a; simp [FreeMagma.count_subst, ih _, ih.vars_eq]
+  | Cong _ _ ih₁ ih₂ => intro a; simp_rw [FreeMagma.count, ih₁ a, ih₂ a]
