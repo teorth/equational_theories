@@ -53,6 +53,15 @@ jobs:
           --data "$ITEM_ID_QUERY" https://api.github.com/graphql)
 
         ITEM_ID=$(echo "$ITEM_ID_RESPONSE" | jq -r '.data.repository.issue.projectItems.nodes[0].id')
+
+        if [ -z "$ITEM_ID" ]; then
+          echo "Issue has not been added to the project board."
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -d '{"body": "This issue cannot be assigned to @${{ github.event.comment.user.login }} because it has not been added to the project board by any of the project maintainers @teorth, @pitmonticone, and @Shreyas4991.\n\nPlease wait for this issue to be properly classified before claiming it."}' \
+          https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments
+          exit 1
+        fi
+
         echo "Retrieved ITEM_ID: $ITEM_ID"
         echo "ITEM_ID=$ITEM_ID" >> $GITHUB_ENV
 
@@ -67,12 +76,15 @@ jobs:
           --data "$FIELD_QUERY" https://api.github.com/graphql)
 
         CURRENT_STATUS_ID=$(echo "$FIELD_RESPONSE" | jq -r '.data.node.fieldValues.nodes[] | select(.field.name == "Status").optionId')
+
         if [ "$CURRENT_STATUS_ID" != "$UNCLAIMED_TASKS_ID" ]; then
+          echo "Issue is not classified as 'Unclaimed Outstanding Tasks'. Posting comment."
           curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -d '{"body": "This issue cannot be assigned to @${{ github.event.comment.user.login }} because it has not been classified as an \"Unclaimed Outstanding Task\" by any of the project maintainers @teorth, @pitmonticone, and @Shreyas4991.\n\nPlease wait for this issue to be properly classified before claiming it."}' \
           https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments
           exit 1
         fi
+
         echo "Issue is classified as 'Unclaimed Outstanding Tasks'."
 
     - name: Check if issue is already assigned
