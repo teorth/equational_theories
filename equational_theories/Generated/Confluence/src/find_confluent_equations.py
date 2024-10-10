@@ -210,17 +210,19 @@ def all_single_step_simplifications(pattern, expr):
 
 
 def full_simplifications(pattern, expr):
-    final_simplifications = set()
-    exprs = {expr}
-    while exprs:
-        next_step = set()
-        for expr in exprs:
+    final_simplifications = {}  # dictionary from expression to path
+    paths = {expr: (expr,)}
+    while paths:
+        next_step = {}
+        for expr, path in paths.items():
             simplifications = list(all_single_step_simplifications(pattern, expr))
             if not simplifications:
-                final_simplifications.add(expr)
+                if expr not in final_simplifications or len(path) < len(final_simplifications[expr]):
+                    final_simplifications[expr] = path
             else:
-                next_step.update(simplifications)
-        exprs = next_step
+                for simp in simplifications:
+                    next_step[simp] = path + (simp,)
+        paths = next_step
     return final_simplifications
 
 
@@ -241,6 +243,9 @@ def is_confluent(expr, show_egraphs=False):
             # expression might not confluent as it can be reduced in different ways.
             simplified_forms = full_simplifications(expr, refinement)
             if len(simplified_forms) > 1:
+                if show_egraphs:
+                    for path in simplified_forms.values():
+                        print('  -->  '.join(format_expr(expr) for expr in path))
                 # We found an expression with multiple fully-simplified forms, so not confluent
                 return False
             # TODO: Do we need some other check in the case len(simplified_forms) == 1?
@@ -259,6 +264,9 @@ def is_confluent(expr, show_egraphs=False):
 
 # Example: equation 13
 # print(is_confluent((1, (0, 0)), show_egraphs=True))
+
+# Example: equation 1447
+# print(is_confluent(((0, 1), (0, (2, 0))), show_egraphs=True))
 
 for i, eq in enumerate(eqs):
     if eq[0] == 0:  # Only equations with LHS = x
