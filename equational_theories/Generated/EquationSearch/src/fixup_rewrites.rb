@@ -9,7 +9,7 @@ def run(theorem)
   file = Tempfile.new('foo')
 
   file.puts "import Mathlib.Tactic.NthRewrite"
-  file.puts "import equational_theories.AllEquations"
+  file.puts "import equational_theories.Equations.All"
   file.puts theorem
   file.close
 
