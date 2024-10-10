@@ -45,7 +45,7 @@ jobs:
           exit 1
         fi
 
-        Retrieve the project item (issue) and check its status
+        # Retrieve the project item (issue) and check its status
         ITEM_ID_QUERY=$(cat <<EOF
         {
           "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { issue(number: ${{ github.event.issue.number }}) { projectItems(first: 1) { nodes { id } } } } }"
