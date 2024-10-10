@@ -1,5 +1,5 @@
 import equational_theories.Magma
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 import Mathlib.Tactic
 
 namespace Singleton
