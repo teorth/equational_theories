@@ -64,12 +64,16 @@ jobs:
         PR_BODY=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER} | jq -r '.body')
 
-        # Add the issue reference to the PR body (to close the issue when the PR is merged)
+        # Add the issue reference to the PR body to close the issue when the PR is merged
         NEW_PR_BODY="$PR_BODY\n\nCloses #${{ github.event.issue.number }}"
 
-        # Update the PR body
+        # Escape newlines and quotes for the JSON payload
+        NEW_PR_BODY_ESCAPED=$(echo "$NEW_PR_BODY" | sed ':a;N;$!ba;s/\n/\\n/g' | sed 's/"/\\"/g')
+
+        # Update the PR body using a properly escaped JSON payload
         curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        -d "{\"body\": \"$NEW_PR_BODY\"}" \
+        -H "Content-Type: application/json" \
+        -d "{\"body\": \"$NEW_PR_BODY_ESCAPED\"}" \
         https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}
 
     - name: Log PR and issue link result
