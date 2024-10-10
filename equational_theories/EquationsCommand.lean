@@ -116,7 +116,7 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
   have eqConst : Q(∀ (G : Type u) [Magma G], Prop) := .const eqName [u]
 
   -- define law over `Nat`
-  addDecl <| .defnDecl {
+  addAndCompile <| .defnDecl {
     name := lawName
     levelParams := []
     type := q(Law.NatMagmaLaw)
@@ -130,7 +130,7 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
   -- compatibility between the law and the original equation
   have n : ℕ := is.size
   have : Q(MagmaLaw.bounded $n $lawConst = true) := (q(Eq.refl true) : Expr)
-  addDecl <| .thmDecl {
+  addAndCompile <| .thmDecl {
     name := thmName
     levelParams := [`u]
     type := q(∀ (G : Type u) [Magma G], G ⊧ $lawConst ↔ $eqConst G)
