@@ -15,7 +15,7 @@ jobs:
       run: |
         TRIMMED_COMMENT=$(echo "${{ github.event.comment.body }}" | xargs)
         if [ "$TRIMMED_COMMENT" != "claim" ]; then
-          echo "Comment does not contain only 'claim'."
+          echo "Comment does not contain only 'claim' modulo white spaces."
           exit 1
         fi
         echo "Claim comment detected."
