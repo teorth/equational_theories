@@ -3,6 +3,8 @@ import equational_theories.Mathlib.Data.Set.Basic
 import equational_theories.Mathlib.Data.Set.Function
 import Mathlib.Tactic.Abel
 import Mathlib.Data.Fintype.Card
+import Mathlib.Algebra.Group.Pointwise.Finset.Basic
+import Mathlib.Logic.Equiv.Nat
 
 -- equation 65 := x = y ◇ (x ◇ (y ◇ x))
 
@@ -48,18 +50,24 @@ structure PartialSolution where
   f_bijOn : Set.BijOn f (E1 \ E0) (E2 \ E1)
 
 instance : Preorder (PartialSolution G) where
-  le a b := a.E0 ≤ b.E0 ∧ a.E1 ≤ b.E1 ∧ a.E2 ≤ b.E2 ∧ Set.EqOn a.f b.f a.E0
+  le a b := a.E0 ≤ b.E0 ∧ a.E1 ≤ b.E1 ∧ a.E2 ≤ b.E2 ∧ Set.EqOn a.f b.f a.E1 -- note: eqon E1
   le_refl := by simp [Set.EqOn]
   le_trans a b c hab hbc := by aesop (add forward subset_trans safe) (add simp [Set.EqOn])
 
 lemma le_def {a b : PartialSolution G} : a ≤ b ↔
-  a.E0 ≤ b.E0 ∧ a.E1 ≤ b.E1 ∧ a.E2 ≤ b.E2 ∧ Set.EqOn a.f b.f a.E0 := Iff.rfl
+  a.E0 ≤ b.E0 ∧ a.E1 ≤ b.E1 ∧ a.E2 ≤ b.E2 ∧ Set.EqOn a.f b.f a.E1 := Iff.rfl
 
 lemma PartialSolution.E0_subset_E2 (a : PartialSolution G) :
     a.E0 ⊆ a.E2 := a.E0_subset_E1.trans a.E1_subset_E2
 
 lemma PartialSolution.maps_E0_E2 (a : PartialSolution G) :
     Set.MapsTo a.f a.E0 a.E2 := a.maps_E0_E1.mono_right (a.E1_subset_E2)
+
+lemma PartialSolution.add_ne_zero (a : PartialSolution G) (x : G) (hx : x ∈ a.E1) (hx2 : x ∉ a.E0) :
+    x + a.f x ≠ 0 := by
+  rw [ne_eq, add_eq_zero_iff_eq_neg']
+  apply a.f_ne_neg
+  simp [hx, hx2]
 
 @[simp]
 lemma zero_mem_E0 (a : PartialSolution G) : 0 ∈ a.E0 := a.zero_mem_E0
@@ -70,11 +78,6 @@ lemma zero_mem_E2 (a : PartialSolution G) : 0 ∈ a.E2 := by
   exact a.zero_mem_E0
 
 end AddCommGroup
-
-private theorem exists_nice_triple (S : Finset ℤ) (h0 h1 : ℤ) (hh : h0 + h1 ≠ 0) :
-  ∃ h2, h2 ≠ -h1 -h2 ∧ h0 + h1 + h2 ≠ -h1 -h2 ∧
-    h2 ∉ S ∧ h0 + h1 + h2 ∉ S ∧ -h1 -h2 ∉ S := by
-  sorry
 
 def move_e1_e0 (f : PartialSolution ℤ) (h0 h2 : ℤ) (hE0 : h0 ∉ f.E0) (hE1 : h0 ∈ f.E1)
     (hne1 : h2 ≠ -f.f h0 - h2) (hne2 : h0 + f.f h0 + h2 ≠ -f.f h0 - h2)
@@ -172,8 +175,8 @@ def move_e1_e0 (f : PartialSolution ℤ) (h0 h2 : ℤ) (hE0 : h0 ∉ f.E0) (hE1 
       have v2 : x ≠ h1 := fun nh ↦ h1_not_in_E1 (f.E0_subset_E1 (nh ▸ hx))
       have v4 : f.f x ≠ h0 + h1 + h2 := fun nh ↦ hnotmem2 (nh ▸ f.maps_E0_E2 hx)
       have v3 : f.f x ≠ h1 := fun nh ↦ h1_not_in_E1 (nh ▸ f.maps_E0_E1 hx)
-      have v5 : x + f.f x + f.f (f.f x) ≠ h1 := sorry
-      have v6 : x + f.f x + f.f (f.f x) ≠ h0 + h1 + h2 := sorry
+      have v5 : x + f.f x + f.f (f.f x) ≠ h1 := fun nh ↦ h1_not_in_E1 (nh ▸ f.eq_f_mem_E1 x hx)
+      have v6 : x + f.f x + f.f (f.f x) ≠ h0 + h1 + h2 := fun nh ↦ hnotmem2 (f.E1_subset_E2 (nh ▸ f.eq_f_mem_E1 x hx))
       simp [v1, v2, v3, v4, v5, v6, f.eq_f_eq_zero x hx]
     · subst x
       simp only [h0_ne_h1, ↓reduceIte, h0_ne_sum, sum_ne_h1, h1]
@@ -209,10 +212,31 @@ def move_e1_e0 (f : PartialSolution ℤ) (h0 h2 : ℤ) (hE0 : h0 ∉ f.E0) (hE1 
     · simp only [Set.mem_insert_iff, hne2.symm, Finset.mem_coe, false_or, not_or]
       exact ⟨fun nh ↦ hnotmem3 (nh ▸ h1_in_E2), fun nh ↦ hnotmem3 (f.E1_subset_E2 nh)⟩
     · simp only [Set.mem_insert_iff, self_eq_add_left, Finset.mem_coe, not_or]
-      sorry
-    · sorry
-    · sorry
+      split_ands
+      · rintro rfl
+        contradiction
+      · exact f.add_ne_zero _ hE1 hE0
+      · exact fun nh ↦ hnotmem (f.E1_subset_E2 nh)
+    · simp only [Set.mem_insert_iff, h0_ne_sum.symm, Finset.mem_coe, false_or]
+      exact fun nh ↦ hnotmem2 (f.E0_subset_E2 nh)
+    · simp only [Set.mem_insert_iff, h0_ne_h1.symm, Finset.mem_coe, false_or]
+      exact fun nh ↦ h1_not_in_E1 (f.E0_subset_E1 nh)
   }
+
+lemma le_move_e1_e0 (f : PartialSolution ℤ) (h0 h2 : ℤ) (hE0 : h0 ∉ f.E0) (hE1 : h0 ∈ f.E1)
+    (hne1 : h2 ≠ -f.f h0 - h2) (hne2 : h0 + f.f h0 + h2 ≠ -f.f h0 - h2)
+    (hnotmem : h2 ∉ f.E2) (hnotmem2 : h0 + f.f h0 + h2 ∉ f.E2) (hnotmem3 : -f.f h0 - h2 ∉ f.E2) :
+    f ≤ move_e1_e0 f h0 h2 hE0 hE1 hne1 hne2 hnotmem hnotmem2 hnotmem3 := by
+  simp [move_e1_e0, le_def]
+  simp_all only [ne_eq, Finset.subset_iff, Finset.mem_union, Finset.mem_singleton, true_or, implies_true,
+    Finset.mem_insert, or_true, true_and]
+  intro x hx
+  dsimp only
+  rw [if_neg, if_neg]
+  · intro nh
+    exact hnotmem2 (f.E1_subset_E2 (nh ▸ hx))
+  · rintro rfl
+    exact (f.f_bijOn.mapsTo ⟨hE1, hE0⟩).2 hx
 
 def add_e1 (f : PartialSolution ℤ) (h0 h1 : ℤ) (hh0 : h0 ∉ f.E2) (hh1 : h1 ∉ f.E2)
     (hne : h0 ≠ h1) (hadd : h0 + h1 ≠ 0) : PartialSolution ℤ where
@@ -289,43 +313,146 @@ def add_e1 (f : PartialSolution ℤ) (h0 h1 : ℤ) (hh0 : h0 ∉ f.E2) (hh1 : h1
       exact hh1 ∘ (f.E1_subset_E2 ·)
     · exact hh0 ∘ (f.E0_subset_E2 ·)
 
+lemma le_add_e1 (f : PartialSolution ℤ) (h0 h1 : ℤ) (hh0 : h0 ∉ f.E2) (hh1 : h1 ∉ f.E2)
+    (hne : h0 ≠ h1) (hadd : h0 + h1 ≠ 0) :
+    f ≤ add_e1 f h0 h1 hh0 hh1 hne hadd := by
+  simp [add_e1, le_def]
+  simp_all only [ne_eq, Finset.subset_iff, Finset.mem_union, Finset.mem_singleton, true_or,
+    implies_true, Finset.mem_insert, or_true, true_and]
+  intro x hx
+  dsimp only
+  rw [if_neg]
+  rintro rfl
+  exact hh0 (f.E1_subset_E2 hx)
 
--- theorem lemma721 (f : PartialSolution G) (h0 : G) (hh : h0 ∉ f.E2) :
---     ∃ g ≥ f, h0 ∈ g.E0 := by classical
---   obtain ⟨h1, hh1⟩ := Infinite.exists_not_mem_finset (f.E2 ∪ {h0, -h0})
---   obtain ⟨h2, ne1, ne2, ne3, nin1, nin2, nin3⟩ := exists_nice_triple (f.E2 ∪ {h0, -h0, h1}) h0 h1 (by
---     rw [ne_eq, add_eq_zero_iff_eq_neg]
---     rintro rfl
---     simp at hh1
---   )
---   let f' := fun x ↦
---     if x = h0 then h1 else
---     if x = h1 then h2 else
---     if x = h0 + h1 + h2 then -h1-h2 else
---     f.f x
---   use ⟨f.E0 ∪ {h0}, f.E1 ∪ {h0, h1, h0+h1+h2}, f.E2 ∪ {h0, h1, h0+h1+h2, h2, -h1-h2}, f', ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
---   · simp only [ge_iff_le, le_def, Finset.le_eq_subset, Finset.subset_union_left, true_and,
---     Finset.mem_union, Finset.mem_singleton, or_true, and_true]
---     sorry
---   · simp [f.hE0]
---   · simp [f', f.f_zero]
---     sorry
---   · intro x hx
---     simp
---     sorry
---   · intro x hx
---     sorry
---   · sorry
---   · intro h hm
---     sorry
---   · simp
---     sorry
+open Pointwise
 
--- theorem lemma72 (f : PartialSolution G) (h0 : G) (hh : h0 ∉ f.E0) :
---     ∃ g ≥ f, h0 ∈ g.E0 := by classical
---   by_cases hE2 : h0 ∈ f.E2
---   · obtain ⟨h1, hh1⟩ := Infinite.exists_not_mem_finset (f.E2 ∪ {h0})
+private theorem exists_nice_triple (S : Finset ℤ) (h0 h1 : ℤ) :
+  ∃ h2, h2 ≠ -h1 -h2 ∧ h0 + h1 + h2 ≠ -h1 -h2 ∧
+    h2 ∉ S ∧ h0 + h1 + h2 ∉ S ∧ -h1 -h2 ∉ S := by
+  obtain ⟨h2, hh2⟩ := Infinite.exists_not_mem_finset (S ∪ {-h1/2, -h0/2-h1} ∪ (-h1 +ᵥ -S) ∪ ((-h0 + -h1) +ᵥ S))
+  use h2
+  simp only [Finset.union_assoc, Finset.mem_union, Finset.mem_insert, Finset.mem_singleton, Finset.mem_vadd_finset,
+    Finset.mem_neg', vadd_eq_add, not_or, not_exists, not_and] at hh2
+  split_ands
+  · omega
+  · omega
+  · exact hh2.1
+  · intro nh
+    replace hh2 := hh2.2.2.2 (h0 + h1 + h2) nh
+    omega
+  · intro nh
+    replace hh2 := hh2.2.2.1 (h1 + h2) (by simpa [add_comm])
+    omega
+
+theorem lemma720 (f : PartialSolution ℤ) (h0 : ℤ) (hh : h0 ∈ f.E0) :
+    ∃ g ≥ f, h0 ∈ g.E0 := by use f
+
+theorem lemma721 (f : PartialSolution ℤ) (h0 : ℤ) (hh : h0 ∈ f.E1) (hnh : h0 ∉ f.E0) :
+    ∃ g ≥ f, h0 ∈ g.E0 := by
+  obtain ⟨h2, ne1, ne2, m1, m2, m3⟩ := exists_nice_triple f.E2 h0 (f.f h0)
+  use move_e1_e0 f h0 h2 hnh hh ne1 ne2 m1 m2 m3, le_move_e1_e0 ..
+  simp [move_e1_e0]
 
 
---     sorry
---   · sorry
+theorem lemma722 (f : PartialSolution ℤ) (h0 : ℤ) (hnh : h0 ∉ f.E2) :
+    ∃ g ≥ f, h0 ∈ g.E0 := by
+  obtain ⟨h1, hh1⟩ := Infinite.exists_not_mem_finset (f.E2 ∪ {h0, -h0})
+  simp only [Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton,
+    not_or] at hh1
+  let f' := add_e1 f h0 h1 hnh hh1.2.1 (Ne.symm hh1.1) (by simp [add_eq_zero_iff_eq_neg', hh1])
+  obtain ⟨g, hg1, hg2⟩ := lemma721 f' h0 (by simp [f', add_e1])
+    (by simp only [add_e1, Finset.union_insert, f']; intro nh; exact hnh (f.E0_subset_E2 nh))
+  use g, (le_add_e1 ..).trans hg1, hg2
+
+theorem lemma723 (f : PartialSolution ℤ) (h0 : ℤ) (hh : h0 ∈ f.E2) (hnh : h0 ∉ f.E1) :
+    ∃ g ≥ f, h0 ∈ g.E0 := by
+  obtain ⟨x', hx'1, hx'2⟩ := f.f_bijOn.surjOn ⟨hh, hnh⟩
+  obtain ⟨f', hf'1, hf'2⟩ := lemma721 f x' hx'1.1 hx'1.2
+  replace hx'2 : f'.f x' = h0 := by
+    subst hx'2
+    apply hf'1.2.2.2.symm
+    exact hx'1.1
+  by_cases hh0 : h0 ∈ f'.E0
+  · use f'
+  obtain ⟨g, hg1, hg2⟩ := lemma721 f' h0 (hx'2 ▸ f'.maps_E0_E1 hf'2) hh0
+  use g, hf'1.trans hg1, hg2
+
+theorem lemma72 (f : PartialSolution ℤ) (h0 : ℤ) :
+    ∃ g ≥ f, h0 ∈ g.E0 := by
+  by_cases hE2 : h0 ∉ f.E2
+  · apply lemma722 _ _ hE2
+  by_cases hE1 : h0 ∉ f.E1
+  · apply lemma723 <;> simp_all
+  by_cases hE0 : h0 ∉ f.E0
+  · apply lemma721 <;> simp_all
+  · apply lemma720
+    simp_all
+
+noncomputable def closureSeq (f : PartialSolution ℤ) : ℕ → PartialSolution ℤ
+| 0 => f
+| n+1 => (lemma72 (closureSeq f n) (Equiv.intEquivNat.symm n)).choose
+
+lemma closureSeq_le_closureSeq_succ (f : PartialSolution ℤ) (n : ℕ) :
+    closureSeq f n ≤ closureSeq f (n + 1) :=
+  (Exists.choose_spec <| lemma72 (closureSeq f n) (Equiv.intEquivNat.symm n)).1
+
+lemma mem_closureSeq_e0 (f : PartialSolution ℤ) (n : ℤ) :
+    n ∈ (closureSeq f (Equiv.intEquivNat n + 1)).E0 := by
+  simp only [closureSeq, ge_iff_le, Equiv.symm_apply_apply]
+  generalize_proofs pf
+  exact pf.choose_spec.2
+
+lemma closureSeq_mono (f : PartialSolution ℤ) : Monotone (closureSeq f) := by
+  intro n m hnm
+  obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_le hnm
+  clear hnm
+  induction m
+  case zero => simp
+  case succ m hm =>
+    apply hm.trans
+    rw [← add_assoc]
+    apply closureSeq_le_closureSeq_succ
+
+lemma le_closureSeq (f : PartialSolution ℤ) (n : ℕ) :f ≤ closureSeq f n :=
+  closureSeq_mono f (Nat.zero_le n)
+
+noncomputable def closure (f : PartialSolution ℤ) : ℤ → ℤ :=
+  fun n ↦ (closureSeq f (Equiv.intEquivNat n + 1)).f n
+
+lemma closure_eq_of_mem_e1 (f : PartialSolution ℤ) (n : ℕ) (x : ℤ) (hn : x ∈ (closureSeq f n).E1) :
+    closure f x = (closureSeq f n).f x := by
+  simp [closure]
+  rcases le_total n (Equiv.intEquivNat x + 1) with h | h
+  · apply (closureSeq_mono f h).2.2.2.symm
+    apply hn
+  · apply (closureSeq_mono f h).2.2.2
+    apply PartialSolution.E0_subset_E1
+    exact mem_closureSeq_e0 f x
+
+lemma lemma73 (f : PartialSolution ℤ) :
+    ∃ g : ℤ → ℤ, Set.EqOn g f.f f.E1 ∧ ∀ h, g h + g (g h) + g (h + g h + g (g h)) = 0 := by
+  use closure f
+  constructor
+  · intro x hx
+    rw [closure, eq_comm]
+    apply (le_closureSeq f (Equiv.intEquivNat x + 1)).2.2.2 hx
+  · intro x
+    rw [closure_eq_of_mem_e1 f (Equiv.intEquivNat x + 1), closure_eq_of_mem_e1 f (Equiv.intEquivNat x + 1),
+      closure_eq_of_mem_e1 f (Equiv.intEquivNat x + 1)]
+    · apply (closureSeq f (Equiv.intEquivNat x + 1)).eq_f_eq_zero
+      apply mem_closureSeq_e0
+    · apply (closureSeq f (Equiv.intEquivNat x + 1)).eq_f_mem_E1
+      apply mem_closureSeq_e0
+    · apply (closureSeq f (Equiv.intEquivNat x + 1)).maps_E0_E1
+      apply mem_closureSeq_e0
+    · apply (closureSeq f (Equiv.intEquivNat x + 1)).E0_subset_E1
+      apply mem_closureSeq_e0
+
+def initial : PartialSolution ℤ where
+  E0 := {0, 1, 2}
+  E1 := {0, 1, 2, 3, 4, 10, 12}
+  E2 := {0, 1, 2, 3, 4, 5, 7, 10, 12, -9, -10} -- note, add h2 to blueprint
+  E0_subset_E1 := by decide
+  E1_subset_E2 := by decide
+  f x := if x = 1 then 1 else 0
