@@ -186,6 +186,11 @@ lemma MagmaEquiv.toMagmaHom_coe {F G H : Type*} [Magma G] [Magma H] [EquivLike F
     ((f : G →◇ H) : G → H) = f :=
   rfl
 
+@[simp] lemma toEquiv_eq_coe {G H : Type*} [Magma G] [Magma H] (f : G ≃◇ H) :
+    f.toEquiv = f := rfl
+@[simp] lemma toMagmaHom_eq_coe {G H : Type*} [Magma G] [Magma H] (f : G ≃◇ H) :
+    f.toMagmaHom = f := rfl
+
 /- Identity -/
 
 /-- The identity is a magma automorphism. -/
