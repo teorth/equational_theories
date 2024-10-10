@@ -140,6 +140,11 @@ jobs:
 
     - name: Move task to "Claimed Tasks" column
       run: |
+        echo "Moving task to 'Claimed Tasks'..."
+        echo "ITEM_ID: $ITEM_ID"
+        echo "FIELD_ID: $FIELD_ID"
+        echo "CLAIMED_TASKS_ID: $CLAIMED_TASKS_ID"
+
         QUERY=$(cat <<EOF
         {
           "query": "mutation { updateProjectV2ItemFieldValue(input: { projectId: \\"PVT_kwHOAAMKjM4Ao-Sa\\", itemId: \\"$ITEM_ID\\", fieldId: \\"$FIELD_ID\\", value: { singleSelectOptionId: \\"$CLAIMED_TASKS_ID\\" } }) { projectV2Item { id } } }"
