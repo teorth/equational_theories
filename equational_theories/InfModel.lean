@@ -612,6 +612,34 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
         simp_all only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
 
   .
-    sorry
+    by_cases h': ∃ (y: α), w = (y ⋆ x) ⋆ y
+    .
+      obtain ⟨y, h'⟩ := h'
+      let G := Fin 3
+      let M: Magma G := Magma.mk fun x y => (2 * x + 2 * y) % 3
+      let hf: Finite G := Finite.of_fintype G
+      exists G, M, hf
+      split_ands
+      .
+        rw [h']
+        intro f
+        unfold satisfiesPhi
+        repeat unfold FreeMagma.evalInMagma
+        unfold Magma.op
+        simp only [G]
+        generalize hfx: f x = fx
+        generalize hfy: f y = fy
+        fin_cases fx
+          <;> fin_cases fy
+          <;> simp_all only [not_or, ne_eq, Fin.zero_eta]
+          <;> clear h'
+          <;> simp only [Fin.isValue, Fin.reduceMul, Fin.zero_add, Fin.reduceMod, G, Fin.mk_one, Fin.reduceAdd, Fin.reduceFinMk]
+      .
+        unfold Equation2
+        simp only [not_forall]
+        exists 0, 1
+        simp_all only [Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, not_false_eq_true, G]
+    .
+      sorry
 
 end InfModel
