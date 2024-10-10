@@ -138,31 +138,129 @@ def subexprs(expr, proper=False):
         yield from subexprs(expr[1])
 
 
+def match_to_pattern(pattern, expr):
+    # Match the pattern to the expression, requiring that different occurences of the same
+    # terminal map to equal sub-expressions
+    env = {}
+    q = [(pattern, expr)]
+    while q:
+        (pattern, expr) = q.pop()
+        if isinstance(pattern, int):
+            if pattern in env:
+                if env[pattern] != expr:
+                    return None
+            else:
+                env[pattern] = expr
+        elif isinstance(expr, int):
+            return None
+        else:
+            q.append((pattern[0], expr[0]))
+            q.append((pattern[1], expr[1]))
+    return env
+
+
+def expression_from_egraph(egraph, node):
+    if egraph.nodes_data[node] == 'leaf':
+        return node
+    left, right = egraph.nodes_data[node]
+    return (expression_from_egraph(egraph, left), expression_from_egraph(egraph, right))
+
+
+def subst(expr, vars):
+    if isinstance(expr, int):
+        return vars[expr]
+    return (subst(expr[0], vars), subst(expr[1], vars))
+
+
+def construct_two_matches_expr(expr, subexpr, show_egraphs=False):
+    # Find an expression that is a common refinement in the sense that if subexpr = expr[path],
+    #   match_to_pattern(expr, refinement) and
+    #   match_to_pattern(expr, refinement[path])
+    # are both not None
+    egraph = EGraph()
+    root1 = expr_to_tree(expr, egraph, 'L')
+    root2 = expr_to_tree(subexpr, egraph, 'R')
+    egraph.impose_equality(root1, root2)
+    if show_egraphs:
+        print(f'Matching {format_expr(expr)} with {format_expr(subexpr)}:')
+        egraph.print()
+        print()
+    if egraph.has_cycle():
+        # The e-graph being cyclic means that there is no finite common refinement. (The infinite
+        # expression E = E ◇ E is always a solution)
+        return None
+    left_vars = sorted(int(name[1:]) for name in egraph.node_aliases if name.startswith('L'))
+    assert left_vars == list(range(len(left_vars)))
+    right_exprs = {
+        int(name[1:]): expression_from_egraph(egraph, node)
+        for name, node in egraph.node_aliases.items() if name.startswith('R')
+    }
+    vars = [right_exprs.get(var, -1 - var) for var in left_vars]  # Negative numbers to be distinct from nodes
+    return subst(expr, vars)
+
+
+def all_single_step_simplifications(pattern, expr):
+    if vars := match_to_pattern(pattern, expr):
+        yield vars[0]  # All reduction laws are of the form E -> x, and x is 0
+    if isinstance(expr, tuple):
+        for left in all_single_step_simplifications(pattern, expr[0]):
+            yield (left, expr[1])
+        for right in all_single_step_simplifications(pattern, expr[1]):
+            yield (expr[0], right)
+
+
+def full_simplifications(pattern, expr):
+    final_simplifications = set()
+    exprs = {expr}
+    while exprs:
+        next_step = set()
+        for expr in exprs:
+            simplifications = list(all_single_step_simplifications(pattern, expr))
+            if not simplifications:
+                final_simplifications.add(expr)
+            else:
+                next_step.update(simplifications)
+        exprs = next_step
+    return final_simplifications
+
+
+def contains_var_0(expr):
+    if isinstance(expr, int):
+        return expr == 0
+    return contains_var_0(expr[0]) or contains_var_0(expr[1])
+
+
 def is_confluent(expr, show_egraphs=False):
+    if not contains_var_0(expr):
+        # Of the laws without x in the RHS, only Equation2 is confluent.
+        # Being able to ignore this case simplifies the rest of the code.
+        return expr == 1
     for subexpr in subexprs(expr, proper=True):
-        if isinstance(subexpr, tuple):
-            egraph = EGraph()
-            root1 = expr_to_tree(expr, egraph, 'L')
-            root2 = expr_to_tree(subexpr, egraph, 'R')
-            egraph.impose_equality(root1, root2)
-            if show_egraphs:
-                print(f'Matching {format_expr(expr)} with {format_expr(subexpr)}:')
-                egraph.print()
-                print()
-            if not egraph.has_cycle():
-                # The e-graph being cyclic means that if we try to match the expression with the
-                # sub-expression, there is no finite solution. (The infinite expression E = E ◇ E
-                # is always a solution)
+        if refinement := construct_two_matches_expr(expr, subexpr, show_egraphs=show_egraphs):
+            # If there is an expression for which expr also matches on the sub-expression, the
+            # expression might not confluent as it can be reduced in different ways.
+            simplified_forms = full_simplifications(expr, refinement)
+            if len(simplified_forms) > 1:
+                # We found an expression with multiple fully-simplified forms, so not confluent
                 return False
+            # TODO: Do we need some other check in the case len(simplified_forms) == 1?
     # If the expression cannot be matched with any sub-expression, it means that the reduction
     # loci when applying the reduction law are far apart, so there is a unique simplified form.
+    # I think that if the refinements above always have a unique simplification, then there is
+    # a unique simplification in general. But I don't have a proof.
     return True
 
 
 # Example: equation 477
-# print(is_confluent((0, (1, (2, (0, 1)))), show_egraphs=True))
+# print(is_confluent((1, (0, (1, (1, 1)))), show_egraphs=True))
+
+# Example: equation 11
+# print(is_confluent((0, (1, 1)), show_egraphs=True))
+
+# Example: equation 13
+# print(is_confluent((1, (0, 0)), show_egraphs=True))
 
 for i, eq in enumerate(eqs):
-    if isinstance(eq[0], int) and isinstance(eq[1], tuple):
+    if eq[0] == 0:  # Only equations with LHS = x
         if is_confluent(eq[1]):
             print(format_expr(eq[0]), '=', format_expr(eq[1]), f'     ({i+1})')
