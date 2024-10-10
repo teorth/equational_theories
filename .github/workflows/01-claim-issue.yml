@@ -68,10 +68,10 @@ jobs:
           exit 1
         fi
 
-        # Query the current value of the Status field for this issue
+        # Query the current value of the Status field for this issue, using fragments to handle the union type
         FIELD_QUERY=$(cat <<EOF
         {
-          "query": "{ node(id: \\"$ITEM_ID\\") { ... on ProjectV2Item { fieldValues(first: 10) { nodes { ... on ProjectV2ItemFieldValue { field { id name } value } } } } } }"
+          "query": "{ node(id: \\"$ITEM_ID\\") { ... on ProjectV2Item { fieldValues(first: 10) { nodes { field { ... on ProjectV2FieldCommon { name } } value { ... on ProjectV2ItemFieldSingleSelectValue { name optionId } } } } } } }"
         }
         EOF
         )
@@ -82,7 +82,7 @@ jobs:
           --data "$FIELD_QUERY" https://api.github.com/graphql)
 
         echo "Field Response: $FIELD_RESPONSE"
-        CURRENT_STATUS_ID=$(echo "$FIELD_RESPONSE" | jq -r '.data.node.fieldValues.nodes[] | select(.field.name == "Status").value.singleSelectOptionId')
+        CURRENT_STATUS_ID=$(echo "$FIELD_RESPONSE" | jq -r '.data.node.fieldValues.nodes[] | select(.field.name == "Status").value.optionId')
 
         if [ "$CURRENT_STATUS_ID" != "$UNCLAIMED_TASKS_ID" ]; then
           echo "Issue is not classified as 'Unclaimed Outstanding Tasks'."
