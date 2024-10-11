@@ -26,7 +26,7 @@ git checkout "$toolchain_version"
 cp ../lean-toolchain .
 
 # build lean4checker and test lean4checker
-lake build
+~/.elan/bin/lake build
 ./test.sh
 )
 
