@@ -9,7 +9,7 @@ viewed and edited, without having to open a very large file.
 
 See `Equations/All.lean` for the remaining ones. Feel free to move individual equations here if
 you do manual proofs about them and you want to import just this file. But don't forget to comment
-out the corresponding copy of the equatoins in `Equations/All.lean` if you do so?
+out the corresponding copy of the equations in `Equations/All.lean` if you do so!
 
 The equations are marked as `abbrev` so that tactics like `decide` will look through the definition.
 -/
@@ -73,6 +73,9 @@ equation 45  :=  x ◇ y = z ◇ y
 /-- The constant law -/
 equation 46  :=  x ◇ y = z ◇ w
 
+/-- The ``Asterix law''.  -/
+equation 65  :=  x = y ◇ (x ◇ (y ◇ x))
+
 /-- The central groupoid law -/
 equation 168  :=  x = (y ◇ x) ◇ (x ◇ z)
 
@@ -82,25 +85,33 @@ equation 381  :=  x ◇ y = (x ◇ z) ◇ y
 /-- from the mathoverflow post by paste bee -/
 equation 387  :=  x ◇ y = (y ◇ y) ◇ x
 
-equation 953 := x = y ◇ ((z ◇ x) ◇ (z ◇ z))
+equation 953  :=  x = y ◇ ((z ◇ x) ◇ (z ◇ z))
+
+/-- The ``Obelix law'' -/
+equation 1491  :=  x = (y ◇ x) ◇ (y ◇ (y ◇ x))
 
 /-- From a paper of Mendelsohn & Padmanabhan, this law axiomatizes abelian groups of exponent 2 -/
 equation 1571  :=  x = (y ◇ z) ◇ (y ◇ (x ◇ z))
--- x = (y ◇ z) ◇ (y ◇ (x ◇ z))
--- x =
 
 /-- From a paper of Kisielewicz -/
 equation 1689  :=  x = (y ◇ x) ◇ ((x ◇ z) ◇ z)
 
+/-- From a paper of Mendelsohn & Padmanabhan -/
 equation 2662  :=  x = ((x ◇ y) ◇ (x ◇ y)) ◇ x
 
-abbrev Equation3167 (G: Type _) [Magma G] := ∀ x y z : G, x = (((y ◇ y) ◇ z) ◇ z) ◇ x
+equation 3167  :=  x = (((y ◇ y) ◇ z) ◇ z) ◇ x
+
+/-- Part of an Austin pair. -/
+equation 3588  :=  x ◇ y = z ◇ ((x ◇ y) ◇ z)
 
 /-- From Putnam 1978, Problem A4, part (a) -/
 equation 3722  :=  x ◇ y = (x ◇ y) ◇ (x ◇ y)
 
 /-- Putnam 1978, Problem A4 calls this a "bypass operation" -/
 equation 3744  :=  x ◇ y = (x ◇ z) ◇ (w ◇ y)
+
+/-- Part of an Austin pair. -/
+equation 3994 := x ◇ y = (z ◇ (x ◇ y)) ◇ z
 
 /-- The associative law -/
 equation 4512  :=  x ◇ (y ◇ z) = (x ◇ y) ◇ z
@@ -127,12 +138,16 @@ equation 4656  :=  (x ◇ y) ◇ y = (x ◇ z) ◇ z
 /-- Mentioned in a paper of Kisielewicz as a conjectural Austin law -/
 equation 5105  :=  x = y ◇ (y ◇ (y ◇ (x ◇ (z ◇ y))))
 
-equation 28381  :=  x = (((x ◇ x) ◇ x) ◇ y) ◇ (x ◇ z)
+/-- The natural central groupoid law. -/
+equation 26302  :=  x = (y ◇ ((z ◇ x) ◇ w)) ◇ (x ◇ w)
 
 /-- Kisielewicz's second Austin law -/
 equation 28770  :=  x = (((y ◇ y) ◇ y) ◇ x) ◇ (y ◇ z)
 
 /- Some order 6 laws -/
+
+/-- The Sheffer stroke law. -/
+equation 345169  :=  x = (y ◇ ((x ◇ y) ◇ y)) ◇ (x ◇ (z ◇ y))
 
 /-- Kisielewicz's first Austin law -/
 equation 374794  :=  x = (((y ◇ y) ◇ y) ◇ x) ◇ ((y ◇ y) ◇ z)

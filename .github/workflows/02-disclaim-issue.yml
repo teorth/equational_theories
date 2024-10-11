@@ -10,6 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Check if comment contains only 'disclaim' (ignoring white spaces, newlines and case)
+      id: check_disclaim
+      env:
+        COMMENT: ${{ github.event.comment.body }}
+      run: |
+        TRIMMED_COMMENT=$(echo "$COMMENT" | tr -d '\n' | xargs | tr '[:upper:]' '[:lower:]')
+        if [ "$TRIMMED_COMMENT" != "disclaim" ]; then
+          echo "Comment does not contain only 'disclaim' modulo white spaces, newlines and case."
+          exit 1
+        fi
+        echo "Disclaim comment detected."
+
     - name: Get issue details
       id: issue
       run: |
