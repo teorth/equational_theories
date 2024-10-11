@@ -1023,7 +1023,7 @@ open Lean.Parser.Tactic
 
 attribute [confluence_simps] not_true_eq_false not_false_eq_true false_implies implies_true imp_false false_and and_true and_self not_and and_imp
 attribute [confluence_simps] ite_eq_right_iff
-attribute [confluence_simps] Option.or Option.getD Option.ite_none_right_eq_some Option.some.injEq
+attribute [confluence_simps] Option.ite_none_right_eq_some Option.some.injEq
 attribute [confluence_simps] forall_apply_eq_imp_iff₂
 attribute [confluence_simps] Fork.injEq
 
@@ -1061,6 +1061,9 @@ local macro "prove_elim" : tactic => `(tactic| (
       subst_eqs
       repeat constructor
     · autosplit
+  try any_goals
+    try autosplit
+    try simp_all only [not_true_eq_false, imp_false]
 ))
 
 local macro "prove_elim_not" : tactic => `(tactic| (
@@ -1068,28 +1071,14 @@ local macro "prove_elim_not" : tactic => `(tactic| (
   all_goals simp_all only [confluence_simps, false_iff, not_exists, not_and, true_iff, forall_eq', forall_apply_eq_imp_iff, true_iff, not_false_eq_true]
   separate
   try simp_all only [not_true_eq_false, imp_false]
-))
 
-local macro "prove_elim2" rule:simpLemma "," rule2:simpLemma : tactic => `(tactic| (
-  constructor
-  · intro h
-    simp only [$rule, Option.or, Option.getD] at h
-    autosplit
-    all_goals simp_all
-  · intro h
-    rcases h with h1 | h2 | ⟨h0, h1, h2⟩
-    next h1 => simp only [$rule, h1, Option.or, Option.getD]
-    next h2 => simp only [$rule2, h2, Option.or, Option.getD]
-    next h' => simp only [$rule, ← h0, h1, h2, Option.or, Option.getD]
-))
-
-local macro "prove_eq_rule21" rule:simpLemma "," rule1:simpLemma "," rule2:simpLemma : tactic => `(tactic| (
-  simp only [$rule, Option.or, Option.getD]
-  autosplit
-  try any_goals simp_all only [Option.some.injEq, reduceCtorEq]
-  exfalso
-  simp_all only [$rule1, $rule2]
-  autosplit
+  try any_goals autosplit
+  try any_goals
+    try simp_all only [not_true_eq_false, imp_false]
+    try rename_i h
+    try apply h
+    try any_goals apply Eq.refl _
+    try trivial
 ))
 
 local syntax "subterm" : tactic
@@ -1104,109 +1093,219 @@ local macro_rules
     subterm
 )
 
-local macro "compute" lemmus:simpLemma : tactic => `(tactic| (
-  simp only [$lemmus, ↓reduceIte, and_self]
-))
+local syntax "everywhere" " at " ident : tactic
+
+local macro_rules
+| `(tactic| everywhere at $h:ident) => `(tactic|
+  first
+  | assumption
+  | apply Everywhere.left at $h
+    everywhere at $h
+  | apply Everywhere.right at $h
+    everywhere at $h
+)
+
+open Lean hiding HashMap
+open Meta Elab Command Term Parser Syntax
+open Std (HashMap)
+
+local syntax (name := ruleSystem) "rule_system " ident " {" ident* "}" (ppLine "|" term "=>" term)+ : command
+
+private partial def makePattern (inc: Nat) : Syntax → StateM (HashMap Name Nat) (TSyntax `term)
+| .node info kind args => do
+  pure <| TSyntax.mk <| Syntax.node info kind (← args.mapM (makePattern inc ·))
+| s@(.ident _ _ name _) =>
+  modifyGet (λ m ↦ match m[name]? with
+  | some n => ((mkIdentFrom s (.mkSimple s!"{name}{n}")), m.insert name (n + inc))
+  | _ => (TSyntax.mk s, m))
+| s@_ => pure <| TSyntax.mk s
+
+private partial def countVars : Syntax → StateM (HashMap Name Nat) Unit
+| .node _ _ args => args.forM countVars
+| .ident _ _ name _ => modify (λ m ↦ match m[name]? with
+  | some n => m.insert name (n + 1)
+  | _ => m)
+| _ => pure ()
+
+macro_rules
+| `(command| rule_system $system:ident {$vars:ident*} $[| $lhs:term => $rhs:term]*) => do
+  let mut decls := #[]
+
+  let mut ruleIdents := #[]
+  let mut ruleElims := #[]
+  let mut ruleElimNots := #[]
+  let mut ruleUsedVars := #[]
+
+  let systemName := system.getId
+  let numRules := lhs.size
+
+  decls := decls.push <| ← `(section $system)
+  decls := decls.push <| ← `(variable {α: Type _} [DecidableEq α])
+
+  for idx in [:numRules] do
+    let lhs := TSyntax.mk <| lhs[idx]!
+    let rhs := TSyntax.mk <| rhs[idx]!
+    let mut varSet := Std.HashMap.empty
+    for var in vars do
+      varSet := varSet.insert var.getId 0
+    let (_, varCounts) := StateT.run (countVars lhs) varSet
+
+    let mut varIdx := Std.HashMap.empty
+    for (name, count) in varCounts do
+      if count > 1 then
+        varIdx := varIdx.insert name 1
+
+    let (lhsP, _) := StateT.run (makePattern 1 lhs) varIdx
+    let (rhsP, _) := StateT.run (makePattern 0 rhs) varIdx
+
+    let mut cond := none
+    for var in vars.reverse do
+      let varName := var.getId
+      for n in (List.range <| (varCounts.getD varName 0) - 1).reverse do
+        let id1 := Lean.mkIdent <| .mkSimple s!"{varName}{n + 1}"
+        let id2 := Lean.mkIdent <| .mkSimple s!"{varName}{n + 2}"
+        let eq := mkCApp `Eq #[id1, id2]
+        cond := some <| match cond with
+        | none => eq
+        | some e => mkCApp `And #[eq, e]
+
+    let rhsP ← match cond with
+    | some cond' => `(if $cond' then $rhsP else none)
+    | none => pure rhsP
+
+    let ruleName := .str systemName s!"rule{idx+1}"
+    let ruleId := Lean.mkIdent ruleName
+    ruleIdents := ruleIdents.push ruleId
+    decls := decls.push <| ← `(
+      set_option linter.unusedVariables false in
+      def $ruleId : FreeMagma α → Option (FreeMagma α)
+      | $lhsP => $rhsP
+      | _ => none
+    )
+
+    let usedVars := vars.filter (λ v ↦ varCounts.getD (v.getId) 0 > 0)
+    ruleUsedVars := ruleUsedVars.push usedVars
+
+    let elim := Lean.mkIdent <| .str (ruleName) "elim"
+    ruleElims := ruleElims.push elim
+    decls := decls.push <| ← `(
+      def $elim (e r: FreeMagma α): $ruleId e = some r ↔
+          ∃ $[$usedVars:ident]*, e = $lhs ∧ r = $rhs := by
+        simp only [$ruleId:ident]
+        prove_elim
+    )
+
+    let elimNot := Lean.mkIdent <| .str (ruleName) "elim_not"
+    ruleElimNots := ruleElimNots.push elimNot
+    decls := decls.push <| ← `(
+      def $elimNot (e: FreeMagma α): $ruleId e = none ↔
+        ¬∃ $[$usedVars:ident]*, e = $lhs := by
+        simp only [$ruleId:ident]
+        prove_elim_not
+    )
+
+  let mut ruleEqs := #[]
+  let mut body := ← `(x)
+  for inner in (List.range numRules).reverse do
+    body := (← `(
+      match $(ruleIdents[inner]!):ident x with
+      | some x => x
+      | none => $body
+    ))
+
+  decls := decls.push <| ← `(
+    def $system (x: FreeMagma α): FreeMagma α :=
+      $body
+  )
+
+  for idx in [:numRules] do
+    let eq := Lean.mkIdent <| .str systemName s!"eq{idx+1}"
+    ruleEqs := ruleEqs.push eq
+    decls := decls.push <| ← `(
+      def $eq ($(ruleUsedVars[idx]!)*: FreeMagma α):
+        $system $(TSyntax.mk <| lhs[idx]!):term = $(TSyntax.mk <| rhs[idx]!):term := by
+        simp only [$system:ident, $[$ruleIdents:ident],*, and_self, ↓reduceIte]
+        autosplit
+    )
+
+  let or := (← ruleIdents.mapM (λ n ↦ `($n e = some r))).foldr (init := none) λ
+  | x, some s => mkCApp `Or #[x, s]
+  | x, none => x
+
+  let andNot := (← ruleIdents.mapM (λ n ↦ `($n e = none))).foldr (init := none) λ
+  | x, some s => mkCApp `And #[x, s]
+  | x, none => x
+
+  let elim' := Lean.mkIdent <| .str systemName "elim'"
+  let cases ← (ruleElims.zip ruleEqs).mapM (λ (l1, l2) ↦ `(tactic| · simp_all only [$l1:ident]; separate; simp_all only [$l2:ident]))
+  decls := decls.push <| ← `(
+    def $elim' (e r: FreeMagma α): $system e = r ↔
+        $(or.get!) ∨ (e = r ∧ $(andNot.get!)) := by
+      constructor
+      · intro h
+        simp only [$system:ident] at h
+        autosplit
+        all_goals simp_all only [or_self, and_self, or_true, true_or, and_true, true_and]
+      · intro h
+        separate
+        $[$cases];*
+        simp_all only [$system:ident]
+  )
+
+  let elim := Lean.mkIdent <| .str systemName "elim"
+  decls := decls.push <| ← `(
+    def $elim (e r: FreeMagma α) := by
+      simpa only [$[$ruleElims:ident],*, $[$ruleElimNots:ident],*] using $elim' e r
+  )
+
+  let instIsProj := Lean.mkIdent <| .str systemName "instIsProj"
+  decls := decls.push <| ← `(
+    instance $instIsProj:ident : IsProj (@$system α _) where
+      proj := by
+        intro x
+        simp only [$system:ident, $[$ruleIdents:ident],*]
+        autosplit
+        all_goals subterm
+  )
+
+  decls := decls.push <| ← `(end $system)
+
+  pure <| mkListNode decls
 
 namespace rw115
 
 variable [DecidableEq α]
 
--- equation 115 := y ◇ ((x ◇ x) ◇ y)
-def rule1 : FreeMagma α → Option (FreeMagma α)
-  | y1 ⋆ ((x1 ⋆ x2) ⋆ y2) =>
-    if x1 = x2 ∧ y1 = y2 then
-      x1
-    else
-      none
-  | _ => none
+rule_system rules {x y}
+| y ⋆ ((x ⋆ x) ⋆ y) => x
+| ((y ⋆ y) ⋆ (x ⋆ x)) ⋆ y => x
 
--- generated by Knuth-Bendix completion with Vampire or kbcv
-def rule2 : FreeMagma α → Option (FreeMagma α)
-  | ((y1 ⋆ y2) ⋆ (x1 ⋆ x2)) ⋆ y3 =>
-    if x1 = x2 ∧ y1 = y2 ∧ y1 = y3 then
-      x1
-    else
-      none
-  | _ => none
-
-def rule (x: FreeMagma α): FreeMagma α :=
-  ((rule1 x).or (rule2 x)).getD x
-
-def rule_eq_rule21' (x: FreeMagma α):
-  rule x = ((rule2 x).or (rule1 x)).getD x := by
-  prove_eq_rule21 rule, rule1, rule2
-
-def rule_eq_rule12 (x: FreeMagma α) := by
-  simpa [rule1, rule2, Option.or, Option.getD] using rule.eq_def x
-
-def rule_eq_rule21 {x: FreeMagma α} := by
-  simpa [rule1, rule2, Option.or, Option.getD] using rule_eq_rule21' x
-
-def rule1.elim (e x: FreeMagma α): rule1 e = some x ↔
-  ∃ y, e = y ⋆ ((x ⋆ x) ⋆ y) := by
-  simp only [rule1]
-  prove_elim
-
-def rule1.elim_not (e: FreeMagma α): rule1 e = none ↔
-  ¬∃ x y, e = y ⋆ ((x ⋆ x) ⋆ y) := by
-  simp only [rule1]
-  prove_elim_not
-
-def rule2.elim (e x: FreeMagma α): rule2 e = some x ↔
-  ∃ y, e = ((y ⋆ y) ⋆ (x ⋆ x)) ⋆ y := by
-  simp only [rule2]
-  prove_elim
-
-def rule2.elim_not (e: FreeMagma α): rule2 e = none ↔
-  ¬∃ x y, e = ((y ⋆ y) ⋆ (x ⋆ x)) ⋆ y := by
-  simp only [rule2]
-  prove_elim_not
-
-def rule.elim' (x y: FreeMagma α): rule x = y ↔
-  rule1 x = some y ∨ rule2 x = some y ∨ (x = y ∧ rule1 x = none ∧ rule2 x = none) := by
-  prove_elim2 rule, rule_eq_rule21'
-
-def rule.elim (e r: FreeMagma α) := by
-  simpa only [rule1.elim, rule2.elim, rule1.elim_not, rule2.elim_not] using rule.elim' e r
-
-instance rule_projection : IsProj (@rule α _) where
-  proj := by
-    intro x
-    simp only [rule, rule1, rule2, Option.or, Option.getD]
-    autosplit
-    all_goals subterm
-
-theorem comp1 {α} [DecidableEq α] {x y : FreeMagma α}:
-    rule (y ⋆ ((x ⋆ x) ⋆ y)) = x := by
-  compute rule_eq_rule12
-
-theorem comp2 {α} [DecidableEq α] {x y : FreeMagma α} (hx: NF rule x):
-    rule (y ⋆ rule (x ⋆ x ⋆ y)) = x := by
-  generalize h: rule (x ⋆ x ⋆ y) = e
-  simp only [rule.elim] at h
+theorem comp2 {α} [DecidableEq α] {x y : FreeMagma α} (hx: NF rules x):
+    rules (y ⋆ rules (x ⋆ x ⋆ y)) = x := by
+  generalize h: rules (x ⋆ x ⋆ y) = e
+  simp only [rules.elim] at h
   separate
-  · compute rule_eq_rule21
-  · apply rw_eq_self_of_NF rule hx
-  · exact comp1
+  · apply rules.eq2
+  · apply rw_eq_self_of_NF rules hx
+  · apply rules.eq1
 
-theorem comp3 {α} [DecidableEq α] {x y : FreeMagma α} (hx: NF rule x):
-    rule (y ⋆ rule (rule (x ⋆ x) ⋆ y)) = x := by
-  generalize h: rule (x ⋆ x) = e
-  simp only [rule.elim] at h
+theorem comp3 {α} [DecidableEq α] {x y : FreeMagma α} (hx: NF rules x):
+    rules (y ⋆ rules (rules (x ⋆ x) ⋆ y)) = x := by
+  generalize h: rules (x ⋆ x) = e
+  simp only [rules.elim] at h
   separate
   exact comp2 hx
 
 @[equational_result]
 theorem «Facts» :
   ∃ (G : Type) (_ : Magma G), Facts G [115] [2707, 4273, 4332] := by
-  use ConfMagma (@rule Nat _), inferInstance
+  use ConfMagma (@rules Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
     simp only [Magma.op, bu, hx, hy, buFixed_rw_op]
     symm
     congr! 1
-    apply comp3 ((NF_iff_buFixed rule).mpr hx)
+    apply comp3 ((NF_iff_buFixed rules).mpr hx)
   all_goals refute
 
 end rw115
@@ -1215,96 +1314,30 @@ namespace rw3588
 
 variable [DecidableEq α]
 
--- equation 3588 := x ◇ y = z ◇ ((x ◇ y) ◇ z)
-def rule1 : FreeMagma α → Option (FreeMagma α)
-  | z1 ⋆ ((x ⋆ y) ⋆ z2) =>
-    if z1 = z2 then
-      x ⋆ y
-    else
-      none
-  | _ => none
+rule_system rules {x y z w}
+| z ⋆ ((x ⋆ y) ⋆ z) => x ⋆ y
+| ((z ⋆ w) ⋆ (x ⋆ y)) ⋆ (z ⋆ w) => x ⋆ y
 
--- generated by Knuth-Bendix completion with Vampire or kbcv
-def rule2 : FreeMagma α → Option (FreeMagma α)
-  | ((z1 ⋆ w1) ⋆ (x ⋆ y)) ⋆ (z2 ⋆ w2) =>
-    if z1 = z2 ∧ w1 = w2 then
-      x ⋆ y
-    else
-      none
-  | _ => none
-
-def rule (x: FreeMagma α): FreeMagma α :=
-  ((rule1 x).or (rule2 x)).getD x
-
-def rule_eq_rule21' (x: FreeMagma α):
-  rule x = ((rule2 x).or (rule1 x)).getD x := by
-  prove_eq_rule21 rule, rule1, rule2
-
-def rule_eq_rule12 (x: FreeMagma α) := by
-  simpa [rule1, rule2, Option.or, Option.getD] using rule.eq_def x
-
-def rule_eq_rule21 {x: FreeMagma α} := by
-  simpa [rule1, rule2, Option.or, Option.getD] using rule_eq_rule21' x
-
-def rule2.elim (e r: FreeMagma α): rule2 e = some r ↔
-  ∃ x y z w, e = ((z ⋆ w) ⋆ (x ⋆ y)) ⋆ (z ⋆ w) ∧ r = x ⋆ y := by
-  simp only [rule2]
-  prove_elim
-
-def rule2.elim_not (e: FreeMagma α): rule2 e = none ↔
-  ¬∃ x y z w, e = ((z ⋆ w) ⋆ (x ⋆ y)) ⋆ (z ⋆ w) := by
-  simp only [rule2]
-  prove_elim_not
-
-def rule1.elim (e r: FreeMagma α): rule1 e = some r ↔
-  ∃ x y z, e = z ⋆ ((x ⋆ y) ⋆ z) ∧ r = x ⋆ y := by
-  simp only [rule1]
-  prove_elim
-
-def rule1.elim_not (e: FreeMagma α): rule1 e = none ↔
-  ¬∃ x y z, e = z ⋆ ((x ⋆ y) ⋆ z) := by
-  simp only [rule1]
-  prove_elim_not
-
-def rule.elim' (x y: FreeMagma α): rule x = y ↔
-  rule1 x = some y ∨ rule2 x = some y ∨ (x = y ∧ rule1 x = none ∧ rule2 x = none) := by
-  prove_elim2 rule, rule_eq_rule21'
-
-def rule.elim (e r: FreeMagma α) := by
-  simpa only [rule1.elim, rule2.elim, rule1.elim_not, rule2.elim_not] using rule.elim' e r
-
-instance rule_projection : IsProj (@rule α _) where
-  proj := by
-    intro x
-    simp only [rule, rule1, rule2, Option.or, Option.getD]
-    autosplit
-    all_goals subterm
-
-theorem comp1 {α} [DecidableEq α] {x y z : FreeMagma α}:
-    rule (z ⋆ (x ⋆ y ⋆ z)) = x ⋆ y := by
-  compute rule_eq_rule12
-
-theorem comp2 {α} [DecidableEq α] {x y z : FreeMagma α} (hxy: NF rule (x ⋆ y)):
-    rule (z ⋆ rule (x ⋆ y ⋆ z)) = x ⋆ y := by
-  generalize h: rule (x ⋆ y ⋆ z) = e
-  simp only [rule.elim] at h
+theorem comp2 {α} [DecidableEq α] {x y z : FreeMagma α} (hxy: NF rules (x ⋆ y)):
+    rules (z ⋆ rules (x ⋆ y ⋆ z)) = x ⋆ y := by
+  generalize h: rules (x ⋆ y ⋆ z) = e
+  simp only [rules.elim] at h
   separate
-  · compute rule_eq_rule21
-  · apply rw_eq_self_of_NF rule hxy
-  · exact comp1
+  · apply rules.eq2
+  · apply rw_eq_self_of_NF rules hxy
+  · apply rules.eq1
 
-theorem comp3 {α} [DecidableEq α] {x y z : FreeMagma α} (hx: NF rule x) (hy: NF rule y):
-    rule (z ⋆ rule (rule (x ⋆ y) ⋆ z)) = rule (x ⋆ y) := by
-  generalize h: rule (x ⋆ y) = e
-  simp only [rule.elim] at h
+theorem comp3 {α} [DecidableEq α] {x y z : FreeMagma α} (hx: NF rules x) (hy: NF rules y):
+    rules (z ⋆ rules (rules (x ⋆ y) ⋆ z)) = rules (x ⋆ y) := by
+  generalize h: rules (x ⋆ y) = e
+  simp only [rules.elim] at h
   separate
   all_goals apply comp2
   · apply Everywhere.left hy
   · apply Everywhere.right hx
   · rw [NF, Everywhere]
     refine ⟨hx, hy, ?_⟩
-    simp only [rule.elim]
-    right
+    simp only [rules.elim]
     right
     constructorm* _ ∧ _
     all_goals trivial
@@ -1312,13 +1345,13 @@ theorem comp3 {α} [DecidableEq α] {x y z : FreeMagma α} (hx: NF rule x) (hy: 
 @[equational_result]
 theorem «Facts» :
   ∃ (G : Type) (_ : Magma G), Facts G [3588] [3862, 3878, 3917, 3955] := by
-  use ConfMagma (@rule Nat _), inferInstance
+  use ConfMagma (@rules Nat _), inferInstance
   repeat' apply And.intro
   · rintro ⟨x, hx⟩ ⟨y, hy⟩ ⟨z, hz⟩
     simp only [Magma.op, bu, hx, hy, hz, buFixed_rw_op]
     symm
     congr! 1
-    apply comp3 ((NF_iff_buFixed rule).mpr hx) ((NF_iff_buFixed rule).mpr hy)
+    apply comp3 ((NF_iff_buFixed rules).mpr hx) ((NF_iff_buFixed rules).mpr hy)
   all_goals refute
 
 end rw3588
