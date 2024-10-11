@@ -56,20 +56,20 @@ jobs:
           exit 1
         fi
 
-        # Get the current PR body
+        # Get the current PR body (ensure newlines are treated properly)
         PR_BODY=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER} | jq -r '.body')
 
-        # Escape the PR body content for JSON
-        PR_BODY_ESCAPED=$(echo "$PR_BODY" | jq -R '.')
+        # Remove unnecessary carriage returns
+        PR_BODY_CLEAN=$(echo "$PR_BODY" | sed 's/\r//g')
 
         # Append the issue closing reference
-        NEW_PR_BODY=$(echo -e "$PR_BODY_ESCAPED\\n\\nCloses #${{ github.event.issue.number }}" | jq -R '.')
+        NEW_PR_BODY="${PR_BODY_CLEAN}\n\nCloses #${{ github.event.issue.number }}"
 
-        # Prepare the JSON payload
+        # Prepare the JSON payload (avoiding extra quotes)
         PAYLOAD=$(jq -n --arg body "$NEW_PR_BODY" '{body: $body}')
 
-        # Update the PR body with the escaped content
+        # Update the PR body with the properly formatted content
         curl -s -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         -H "Content-Type: application/json" \
         -d "$PAYLOAD" \
