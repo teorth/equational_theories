@@ -85,7 +85,16 @@ equation 381  :=  x ◇ y = (x ◇ z) ◇ y
 /-- from the mathoverflow post by paste bee -/
 equation 387  :=  x ◇ y = (y ◇ y) ◇ x
 
+/-- A hard to prove non-consequence of the ``Asterix law``. -/
+equation 614 := x = x ◇ (x ◇ ((x ◇ x) ◇ x))
+
+/-- A hard to prove non-consequence of the ``Asterix law``. -/
+equation 817 := x = x ◇ ((x ◇ x) ◇ (x ◇ x))
+
 equation 953  :=  x = y ◇ ((z ◇ x) ◇ (z ◇ z))
+
+/-- A hard to prove non-consequence of the ``Asterix law``. -/
+equation 1426 := x = (x ◇ x) ◇ (x ◇ (x ◇ x))
 
 /-- The ``Obelix law'' -/
 equation 1491  :=  x = (y ◇ x) ◇ (y ◇ (y ◇ x))
@@ -110,8 +119,14 @@ equation 3722  :=  x ◇ y = (x ◇ y) ◇ (x ◇ y)
 /-- Putnam 1978, Problem A4 calls this a "bypass operation" -/
 equation 3744  :=  x ◇ y = (x ◇ z) ◇ (w ◇ y)
 
+/-- A hard to prove non-consequence of the ``Asterix law``. -/
+equation 3862 := x ◇ x = (x ◇ (x ◇ x)) ◇ x
+
 /-- Part of an Austin pair. -/
 equation 3994 := x ◇ y = (z ◇ (x ◇ y)) ◇ z
+
+/-- A hard to prove non-consequence of the ``Asterix law``. -/
+equation 4065 := x ◇ x = ((x ◇ x) ◇ x) ◇ x
 
 /-- The associative law -/
 equation 4512  :=  x ◇ (y ◇ z) = (x ◇ y) ◇ z

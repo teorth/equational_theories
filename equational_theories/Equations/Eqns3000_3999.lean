@@ -865,7 +865,7 @@ equation 3858 := x ◇ y = (z ◇ w) ◇ (u ◇ z)
 equation 3859 := x ◇ y = (z ◇ w) ◇ (u ◇ w)
 equation 3860 := x ◇ y = (z ◇ w) ◇ (u ◇ u)
 equation 3861 := x ◇ y = (z ◇ w) ◇ (u ◇ v)
-equation 3862 := x ◇ x = (x ◇ (x ◇ x)) ◇ x
+-- equation 3862 := x ◇ x = (x ◇ (x ◇ x)) ◇ x
 equation 3863 := x ◇ x = (x ◇ (x ◇ x)) ◇ y
 equation 3864 := x ◇ x = (x ◇ (x ◇ y)) ◇ x
 equation 3865 := x ◇ x = (x ◇ (x ◇ y)) ◇ y

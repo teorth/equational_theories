@@ -1,3 +1,4 @@
+import equational_theories.Asterix
 import equational_theories.Completeness
 import equational_theories.Compactness
 import equational_theories.FreeMagmaImplications

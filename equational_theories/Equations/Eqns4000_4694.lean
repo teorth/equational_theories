@@ -68,7 +68,7 @@ equation 4061 := x ◇ y = (z ◇ (w ◇ u)) ◇ z
 equation 4062 := x ◇ y = (z ◇ (w ◇ u)) ◇ w
 equation 4063 := x ◇ y = (z ◇ (w ◇ u)) ◇ u
 equation 4064 := x ◇ y = (z ◇ (w ◇ u)) ◇ v
-equation 4065 := x ◇ x = ((x ◇ x) ◇ x) ◇ x
+-- equation 4065 := x ◇ x = ((x ◇ x) ◇ x) ◇ x
 equation 4066 := x ◇ x = ((x ◇ x) ◇ x) ◇ y
 equation 4067 := x ◇ x = ((x ◇ x) ◇ y) ◇ x
 equation 4068 := x ◇ x = ((x ◇ x) ◇ y) ◇ y
