@@ -1,12 +1,8 @@
-import equational_theories.Equations
-import equational_theories.Mathlib.Data.Set.Basic
-import equational_theories.Mathlib.Data.Set.Function
-import equational_theories.Mathlib.Data.Finset.Basic
-import Mathlib.Tactic.Abel
-import Mathlib.Data.Fintype.Card
-import Mathlib.Algebra.Group.Pointwise.Finset.Basic
-import Mathlib.Logic.Equiv.Nat
+import equational_theories.FactsSyntax
+import equational_theories.EquationalResult
+import Mathlib.Algebra.Order.Ring.Nat
 import Mathlib.Logic.Denumerable
+import equational_theories.Equations.Basic
 
 -- equation 65 := x = y ◇ (x ◇ (y ◇ x))
 
@@ -562,9 +558,16 @@ theorem closure_prop (f : PartialSolution G) : ∀ x y, closure f x (closure f y
     apply mem_closureSeq_e0
 
 def initial : PartialSolution ℕ where
-  E0 := {(1, 0)}
-  E1 := {(0, 0), (1, 0), (0, 2), (1, 3)}
-  f a b := if a = 0 then (if b = 0 then 1 else 3) else if a = 1 then (if b = 0 then 2 else 0) else 0
+  E0 := {(0, 0), (1, 0), (0, 1), (0, 8), (8, 8), (8, 0)}
+  E1 := {(0, 0), (1, 0), (0, 2), (1, 3), (0, 3), (1, 1), (0, 5), (1, 6), (0, 1), (0, 8), (8, 8),
+    (1, 8), (0, 9), (8, 0), (0, 10), (8, 10), (10, 10), (2, 0)}
+  f a b :=
+    if a = 0 then [1, 8, 3, 4, 100, 6, 100, 100, 0, 1, 8].getD b 0 else
+    if a = 1 then [2, 5, 100, 0, 100, 100, 7, 100, 9].getD b 0 else
+    if a = 2 then 11 else
+    if a = 8 then if b = 0 then 10 else if b = 10 then 8 else 0 else
+    if a = 10 then 8 else
+    0
   E0_subset_E1 := by decide
   t_mem_of_mem_E0' := by decide
   mem_2_of_mem_E0 := by decide
@@ -572,21 +575,20 @@ def initial : PartialSolution ℕ where
   undef_of_not_mem_E0' := by decide
   strange := by decide
 
-
-theorem Equation65_not_imlies_Equation359 : ∃ (G : Type) (_ : Magma G), Equation65 G ∧ ¬ Equation359 G := by
+@[equational_result]
+theorem Equation65_facts : ∃ (G : Type) (_ : Magma G), Facts G [65] [614, 817, 1426, 3862, 4065] := by
   use ℕ, ⟨closure initial⟩
   simp only [Equation65, closure_prop, implies_true, not_forall, true_and]
-  use 0
-  rw [closure_eq_of_mem_e1 _ 0, closure_eq_of_mem_e1 _ 0]
-  · decide
-  · decide
-  · decide
-
-theorem Equation65_not_imlies_Equation614 : ∃ (G : Type) (_ : Magma G), Equation65 G ∧ ¬ Equation614 G := by
-  use ℕ, ⟨closure initial⟩
-  simp only [Equation65, closure_prop, implies_true, not_forall, true_and]
-  use 0
-  rw [closure_eq_of_mem_e1 _ 0, closure_eq_of_mem_e1 _ 0]
-  · decide
-  · decide
-  · decide
+  split_ands
+  repeat {
+    use 0
+    nth_rw 4 [closure_eq_of_mem_e1 _ 0]
+    nth_rw 3 [closure_eq_of_mem_e1 _ 0]
+    nth_rw 2 [closure_eq_of_mem_e1 _ 0]
+    nth_rw 1 [closure_eq_of_mem_e1 _ 0]
+    · decide
+    · decide
+    · decide
+    · decide
+    · decide
+  }
