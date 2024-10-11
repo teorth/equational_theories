@@ -83,7 +83,7 @@ jobs:
       - name: Build project
         run: ~/.elan/bin/lake build equational_theories
 
-      - name: "Check with lean4checker"
+      - name: Check with lean4checker
         id: lean-action
         uses: leanprover/lean-action@v1
         with:
