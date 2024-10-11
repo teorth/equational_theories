@@ -735,3 +735,17 @@ theorem Equation1661_not_implies_Equation4268 :
   simp
   exists 3, 0
   simp [magN,op,op_1661_1657]
+
+@[equational_result]
+theorem Equation1661_not_implies_Equation4314 :
+  ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation4314 G := by
+  let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
+  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
+  use ℕ, magN
+  apply And.intro
+  simp [Equation1661]
+  simp [magN,op]
+  exact op_1661_1657_satisfies_1661
+  simp
+  exists 0, 3
+  simp [magN,op,op_1661_1657]
