@@ -591,7 +591,7 @@ equation 3584 := x ◇ y = z ◇ ((x ◇ x) ◇ z)
 equation 3585 := x ◇ y = z ◇ ((x ◇ x) ◇ w)
 equation 3586 := x ◇ y = z ◇ ((x ◇ y) ◇ x)
 equation 3587 := x ◇ y = z ◇ ((x ◇ y) ◇ y)
-equation 3588 := x ◇ y = z ◇ ((x ◇ y) ◇ z)
+-- equation 3588 := x ◇ y = z ◇ ((x ◇ y) ◇ z)
 equation 3589 := x ◇ y = z ◇ ((x ◇ y) ◇ w)
 equation 3590 := x ◇ y = z ◇ ((x ◇ z) ◇ x)
 equation 3591 := x ◇ y = z ◇ ((x ◇ z) ◇ y)
@@ -865,7 +865,7 @@ equation 3858 := x ◇ y = (z ◇ w) ◇ (u ◇ z)
 equation 3859 := x ◇ y = (z ◇ w) ◇ (u ◇ w)
 equation 3860 := x ◇ y = (z ◇ w) ◇ (u ◇ u)
 equation 3861 := x ◇ y = (z ◇ w) ◇ (u ◇ v)
-equation 3862 := x ◇ x = (x ◇ (x ◇ x)) ◇ x
+-- equation 3862 := x ◇ x = (x ◇ (x ◇ x)) ◇ x
 equation 3863 := x ◇ x = (x ◇ (x ◇ x)) ◇ y
 equation 3864 := x ◇ x = (x ◇ (x ◇ y)) ◇ x
 equation 3865 := x ◇ x = (x ◇ (x ◇ y)) ◇ y
@@ -997,7 +997,7 @@ equation 3990 := x ◇ y = (z ◇ (x ◇ x)) ◇ z
 equation 3991 := x ◇ y = (z ◇ (x ◇ x)) ◇ w
 equation 3992 := x ◇ y = (z ◇ (x ◇ y)) ◇ x
 equation 3993 := x ◇ y = (z ◇ (x ◇ y)) ◇ y
-equation 3994 := x ◇ y = (z ◇ (x ◇ y)) ◇ z
+-- equation 3994 := x ◇ y = (z ◇ (x ◇ y)) ◇ z
 equation 3995 := x ◇ y = (z ◇ (x ◇ y)) ◇ w
 equation 3996 := x ◇ y = (z ◇ (x ◇ z)) ◇ x
 equation 3997 := x ◇ y = (z ◇ (x ◇ z)) ◇ y
