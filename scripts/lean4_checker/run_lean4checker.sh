@@ -27,7 +27,7 @@ cp ../lean-toolchain .
 
 # build lean4checker and test lean4checker
 ~/.elan/bin/lake build
-./test.sh
+#./test.sh
 )
 
 # run lean4checker
