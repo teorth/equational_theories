@@ -146,5 +146,8 @@ equation 28770  :=  x = (((y ◇ y) ◇ y) ◇ x) ◇ (y ◇ z)
 
 /- Some order 6 laws -/
 
+/-- The Sheffer stroke law. -/
+equation 345169  :=  x = (y ◇ ((x ◇ y) ◇ y)) ◇ (x ◇ (z ◇ y))
+
 /-- Kisielewicz's first Austin law -/
 equation 374794  :=  x = (((y ◇ y) ◇ y) ◇ x) ◇ ((y ◇ y) ◇ z)
