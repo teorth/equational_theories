@@ -32,7 +32,7 @@ lake build
 
 # run lean4checker
 echo "Running lean4checker"
-lake env lean4checker/.lake/build/bin/lean4checker equational_theories
+~/.elan/bin/lake env lean4checker/.lake/build/bin/lean4checker equational_theories
 
 echo "::endgroup::"
 echo
