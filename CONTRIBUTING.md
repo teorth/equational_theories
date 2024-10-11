@@ -86,8 +86,8 @@ The core Lean files are as follows:
 - [`FreeMagma.lean`](equational_theories/FreeMagma.lean)  Contains the API for free Magmas.
 - [`Generated.lean`](equational_theories/Generated.lean)  This short file imports all the generated data sets.
 - [`Visualization.lean`](equational_theories/Visualization.lean) A tool to visualize the implications within the Lean infoview.
-- [`Equations.lean`](equational_theories/Equations.lean)  A list of selected equations of particular interest.
-- [`AllEquations.lean`](equational_theories/AllEquations.lean)  The complete set of 4692 equational laws involving at most four magma operations (up to symmetry and relabeling).  It was generated using [this script](scripts/generate_eqs_list.py).  The subgraph equations are included as an import.  If you find an equation here of particular interest to study, consider transferring it to `Equations.lean`.
+- [`Equations/Basic.lean`](equational_theories/Equations/Basic.lean)  A list of selected equations of particular interest.
+- [`Equations/All.lean`](equational_theories/Equations/All.lean)  The complete set of 4692 equational laws involving at most four magma operations (up to symmetry and relabeling).  It was generated using [this script](scripts/generate_eqs_list.py).  The subgraph equations are included as an import.  If you find an equation here of particular interest to study, consider transferring it to `Equations/Basic.lean`.  The equations are split up into five smaller files to assist compilation.
 - [`Subgraph.lean`](equational_theories/Subgraph.lean)  This is the file for all results concerning the specific laws of interest.
 - [`Homomorphisms.lean`](equational_theories/Homomorphisms.lean)  This file defines magma homomorphisms and magma isomorphisms and provides basic API for them.
 
@@ -97,13 +97,13 @@ Some technical Lean files:
 - [`ParseImplications.lean`](equational_theories/ParseImplications.lean)  Tools to help parse implications within Lean.
 - [`FactsSyntax.lean`](equational_theories/FactsSyntax.lean)  Support for assertions that a given magma obeys one set of laws but fails another.
 - [`DecideBang.lean`](equational_theories/DecideBang.lean) Variants of the `decide` tactic with various hacks to speed up elaboration.
-- [`EquationsCommand.lean`](equational_theories/EquationsCommand.lean)  Speeds up elaboration of equations.
+- [`Equations/Command.lean`](equational_theories/Equations/Command.lean)  Speeds up elaboration of equations.
 - [`MemoFinOp.lean`](equational_theories/MemoFinOp.lean) Defines the macro `memoFinOp` that memoizes a function `f : Fin n → Fin n → Fin n`.
 - [`Superposition.lean`](equational_theories/Superposition.lean) The `superpose` tactic, used in several automated proofs
 
 In addition to these files, contributors are welcome to add additional Lean files to the project in the [`equational_theories` folder](equational_theories) or one of its subfolders, to establish more facts about equations.  In order for your contributions to be easily detected by automated tools, please try to follow the following guidelines.
 
-- If possible, use `Equations.lean` or `AllEquations.lean` as an import, in order to use our standardized names for the equational laws.
+- If possible, use `Equations/Basic.lean` or `Equations/All.lean` as an import, in order to use our standardized names for the equational laws.
 - The standard form for an implication "Equation X implies Equation Y" is
 `theorem EquationX_implies_EquationY (G: Type*) [Magma G] (h: EquationX G) : EquationY G`
 - The standard form for an anti-implication "Equation X does not imply Equation Y" is `theorem EquationX_not_implies_EquationY : ∃ (G: Type) (_: Magma G), EquationX G ∧ ¬ EquationY G`.

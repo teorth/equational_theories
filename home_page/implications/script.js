@@ -314,21 +314,34 @@ function renderImplications(index) {
 	const forwardStatus = row[index];
 	const backwardStatus = implications[index][i];
 
-	[forwardStatus, backwardStatus].forEach((status, statusIndex) => {
+	    [forwardStatus, backwardStatus].forEach((status, statusIndex) => {
             const isConjectured = status.includes('conjecture');
-	    let proofhref = gen_proof_url(index, i);
-	    let maybe_prove = isUnknown(status, treatConjecturedAsUnknown) ? ` <a href='${proofhref}'>Prove This!</a>` : "";
+	        let maybe_prove;
+            let forward = statusIndex == 1 ?  index : i;
+            let backward = statusIndex == 1 ?  i : index;
+            if (isUnknown(status, false)) {
+	            let proofhref = gen_proof_url(forward, backward);
+                maybe_prove = ` <a href='${proofhref}'>Prove This!</a>`;
+            } else if (isUnknown(status, true)) { // conjectured
+	            let proofhref = gen_proof_url(forward, backward, isImplies(status, false, false) ? "yes" : "no");
+                maybe_prove = ` <a href='${proofhref}'>Prove This!</a>`;
+            } else {
+                var does_implies = isImplies(status, false, false);
+                let proofhref;
+                proofhref = gen_proof_url(forward, backward, does_implies ? "yes" : "no");
+                maybe_prove = ` <a href='${proofhref}'>Try This!</a>`;
+            }
             const item = `<div uid=${i} class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}${maybe_prove}</div>`;
 
             if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
-		statusIndex === 0 ? impliedBy.push(item) : implies.push(item);
+		        statusIndex === 0 ? impliedBy.push(item) : implies.push(item);
             } else if (isAntiImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
-		statusIndex === 0 ? antiImpliedBy.push(item) : antiImplies.push(item);
+		        statusIndex === 0 ? antiImpliedBy.push(item) : antiImplies.push(item);
             } else if (isUnknown(status, treatConjecturedAsUnknown)) {
-		statusIndex === 0 ? unknownImpliedBy.push(item) : unknownImplies.push(item);
-		statusIndex === 0 ? unknownImpliedByEqNum.push(i) : unknownImpliesEqNum.push(i);
+		        statusIndex === 0 ? unknownImpliedBy.push(item) : unknownImplies.push(item);
+		        statusIndex === 0 ? unknownImpliedByEqNum.push(i) : unknownImpliesEqNum.push(i);
             }
-	});
+	    });
     });
 
   selectedEquationGraphitiLinks.innerHTML = `<br>(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1}&highlight_red=${index+1}">implies</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1}&highlight_red=${index+1}">implied by</a> of the equation)`

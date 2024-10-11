@@ -12,11 +12,12 @@ jobs:
     steps:
     - name: Check if the comment contains "withdraw #PR_NUMBER"
       id: check_withdraw
+      env:
+        COMMENT: ${{ github.event.comment.body }}
       run: |
-        COMMENT_BODY="${{ github.event.comment.body }}"
-        COMMENT_BODY_LOWER=$(echo "$COMMENT_BODY" | tr '[:upper:]' '[:lower:]')
+        COMMENT_LOWER=$(echo "$COMMENT" | tr '[:upper:]' '[:lower:]')
 
-        if [[ "$COMMENT_BODY_LOWER" =~ withdraw[[:space:]]*(pr[[:space:]]*)?\#([0-9]+)[[:space:]]* ]]; then
+        if [[ "$COMMENT_LOWER" =~ withdraw[[:space:]]*(pr[[:space:]]*)?\#([0-9]+)[[:space:]]* ]]; then
           PR_NUMBER="${BASH_REMATCH[2]}"
           echo "pr_number=$PR_NUMBER" >> $GITHUB_ENV
         else
