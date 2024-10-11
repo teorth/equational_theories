@@ -6,6 +6,7 @@ import equational_theories.MagmaOp
 import equational_theories.Subgraph
 import equational_theories.Equations.All
 import equational_theories.InfModel
+import equational_theories.InfModel_1661
 import equational_theories.Generated
 import equational_theories.Counting
 import equational_theories.OrderMetatheorem
