@@ -3,8 +3,9 @@
 import os
 import json
 import re
-smallest_magma_examples_filename = "data/smallest_magma.txt"
-small_magma_examples_filename = "data/small_magma.txt"
+smallest_magma_filename = "data/smallest_magma.txt"
+smallest_magma_examples_filename = "data/smallest_magma_examples.txt"
+small_magma_examples_filename = "data/small_magma_examples.txt"
 data_folders = [
   "equational_theories/Generated/All4x4Tables/data",
   "equational_theories/Generated/VampireProven",
@@ -74,10 +75,12 @@ for data_file in get_data_files():
 
 with open(smallest_magma_examples_filename, "w") as smallest_magma_examples:
   with open(small_magma_examples_filename, "w") as small_magma_examples:
-    for eq_id in sorted(results):
-      table, is_smallest_size = results[eq_id]
-      line = f"{eq_id} {table}\n"
-      if is_smallest_size:
-        smallest_magma_examples.write(line)
-      else:
-        small_magma_examples.write(line)
+    with open(smallest_magma_filename, "w") as small_magma:
+      for eq_id in sorted(results):
+        table, is_smallest_size = results[eq_id]
+        line = f"{eq_id} {table}\n"
+        if is_smallest_size:
+          smallest_magma_examples.write(line)
+          small_magma.write(f"{eq_id} {len(table)}\n")
+        else:
+          small_magma_examples.write(line)
