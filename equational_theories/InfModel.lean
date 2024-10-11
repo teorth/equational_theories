@@ -629,7 +629,25 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           rw [h1, h2]
           unfold Magma.op
           ring_nf
-      have : eval_eq w (f 1) (f 1) = f 1 := sorry
+      have : eval_eq w (f 1) (f 1) = f 1 := by
+        clear hl hr this
+        clear this
+        simp only [eval_eq]
+        induction w
+        .
+          rename_i z
+          unfold FreeMagma.evalInMagma
+          fin_cases z
+          .
+            simp only [Fin.zero_eta, Fin.isValue, ↓reduceIte, sub_add_cancel]
+          .
+            simp_all only [ge_iff_le, Fin.isValue, Fin.mk_one, ite_self, one_ne_zero, ↓reduceIte, G, eval_eq, M, a0]
+        .
+          rename_i w1 w2 h1 h2
+          unfold FreeMagma.evalInMagma
+          rw [h1, h2]
+          unfold Magma.op
+          ring_nf
       have this2 : eval_eq w (f 0) (f 1) = f 0 := by
         simp_all only [Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, G, eval_eq, M]
       have : w ⬝ f = eval_eq w (f 0) (f 1) := by
