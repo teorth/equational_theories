@@ -147,7 +147,7 @@ jobs:
           cp -r tools/fme/dist/* home_page/fme
           ~/.elan/bin/lake exe extract_implications unknowns > home_page/fme/unknowns.json
           COMMIT_HASH=$(git rev-parse --short HEAD)
-          sed -i "s/VERSION_UNKNOWN/$COMMIT_HASH/g" home_page/fme/index.html
+          sed -i "s/UNKNOWN_VERSION/$COMMIT_HASH/g" home_page/fme/index.html
 
       - name: Bundle dependencies
         if: github.event_name == 'push'
