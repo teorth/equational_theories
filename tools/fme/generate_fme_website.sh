@@ -10,8 +10,8 @@ COMMIT_HASH=$(git rev-parse --short HEAD)
 # Cross-platform compatible `sed` command for in-place editing
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # macOS `sed` syntax
-  sed -i '' "s/VERSION_UNKNOWN/$COMMIT_HASH/g" home_page/fme/index.html
+  sed -i '' "s/UNKNOWN_VERSION/$COMMIT_HASH/g" home_page/fme/index.html
 else
   # Linux `sed` syntax
-  sed -i "s/VERSION_UNKNOWN/$COMMIT_HASH/g" home_page/fme/index.html
+  sed -i "s/UNKNOWN_VERSION/$COMMIT_HASH/g" home_page/fme/index.html
 fi
