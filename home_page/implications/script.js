@@ -76,6 +76,15 @@ function showPage(pageId) {
 let showEquivalences = false;
 let filteredCachedItems = [];
 
+function hideVisibility(elementId) {
+    const element = document.getElementById(elementId);
+    element.style.display = "none";
+}
+function showVisibility(elementId) {
+    const element = document.getElementById(elementId);
+    element.style.display = "block";
+}
+
 function filterEquations() {
     if (showEquivalences) {
         filteredCachedItems = cachedItems;
@@ -247,10 +256,14 @@ function renderImplications(index) {
     }
 
     currentEquationIndex = index;
+    selectedEquation.textContent = equations[index];
     selectedEquation.dataset.index = index;
+
     if (commentary[index+1] === undefined) {
-        selectedEquation.textContent = equations[index];
+        hideVisibility("equationCommentary")
+        equationCommentary.innerHTML = "";
     } else {
+        showVisibility("equationCommentary")
         equationCommentary.innerHTML = commentary[index+1];
     }
 
