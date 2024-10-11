@@ -76,6 +76,8 @@ equation 65 := x = y ◇ (x ◇ (y ◇ x))
 /-- The central groupoid law -/
 equation 168  :=  x = (y ◇ x) ◇ (x ◇ z)
 
+equation 359 := x ◇ x = (x ◇ x) ◇ x
+
 /-- From Putnam 1978, Problem A4, part (b) -/
 equation 381  :=  x ◇ y = (x ◇ z) ◇ y
 

@@ -377,7 +377,7 @@ equation 355 := x ◇ y = z ◇ (w ◇ y)
 equation 356 := x ◇ y = z ◇ (w ◇ z)
 equation 357 := x ◇ y = z ◇ (w ◇ w)
 equation 358 := x ◇ y = z ◇ (w ◇ u)
-equation 359 := x ◇ x = (x ◇ x) ◇ x
+-- equation 359 := x ◇ x = (x ◇ x) ◇ x
 equation 360 := x ◇ x = (x ◇ x) ◇ y
 equation 361 := x ◇ x = (x ◇ y) ◇ x
 equation 362 := x ◇ x = (x ◇ y) ◇ y
