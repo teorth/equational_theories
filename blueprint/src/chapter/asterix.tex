@@ -144,8 +144,22 @@ and define $f: E_1 \to E_2$ by the formulae
 One can then check that $(E_0, E_1, E_2, f)$ is a partial solution to \eqref{fh}, and by construction $h \mapsto h + f(h)$ is not injective on $E_1$.  Using \Cref{iteration} to extend this partial solution to a full solution, we obtain the claim.
 \end{proof}
 
-\begin{corollary}  There exists a magma obeying the Asterix law (\Cref{eq65}) with carrier $\Z$ such that the left-multiplication maps $L_y: x \mapsto y \op x$ are not injective for any $y \in \Z$.  In particular, it does not obey the Obelix law (\Cref{eq1491})
+\begin{corollary}[Asterix does not imply Oberlix]\label{asterix-oberlix}\uses{eq65,eq1491}  There exists a magma obeying the Asterix law (\Cref{eq65}) with carrier $\Z$ such that the left-multiplication maps $L_y: x \mapsto y \op x$ are not injective for any $y \in \Z$.  In particular, it does not obey the Obelix law (\Cref{eq1491}).
 \end{corollary}
 
-\begin{proof} Note that $L_y (y+h) = y + h + f(h)$, so the injectivity of the left-multiplication maps is equivalent to the injectivity of the map $h \mapsto h + f(h)$.  The non-injectivity then follows from \Cref{no-inject}. Note that the Obelix law clearly expresses $x$ as a function of $y$ and $L_y x = y \op x$, forcing injectivity of left-multiplication, so the Obelix law fails.
+\begin{proof}\uses{no-inject} Note that $L_y (y+h) = y + h + f(h)$, so the injectivity of the left-multiplication maps is equivalent to the injectivity of the map $h \mapsto h + f(h)$.  The non-injectivity then follows from \Cref{no-inject}. Note that the Obelix law clearly expresses $x$ as a function of $y$ and $L_y x = y \op x$, forcing injectivity of left-multiplication, so the Obelix law fails.
 \end{proof}
+
+On the other hand, for finite magmas the situation is different:
+
+\begin{proposition}[Asterix implies Oberlix for finite magmas]\label{asterix-oberlix-finite}\uses{eq65,eq1491}  Any finite magma obeying the Asterix law (\Cref{eq65}) also is left-cancellative and obeys the Obelix law (\Cref{eq1491}).
+\end{proposition}
+
+\begin{proof}  From \Cref{eq65} we see the map $z \mapsto y \op z$ is surjective, hence injective on a finite magma; thus the magma is left-cancellative.  Replacing $x$ by $y \op x$ in this law, we see that
+$$ y \op x = y \op ((y\op x) \op (y \op (y \op x)));$$
+using injectivity, we conclude
+$$ x = (y\op x) \op (y \op (y \op x))$$
+which is \Cref{eq1491}.
+\end{proof}
+
+We remark that a very similar argument shows that a finite magma that obeys the Oberlix law has $z \mapsto y \op z$ injective, hence surjective, and then obeys the Asterix law.
