@@ -706,8 +706,9 @@ digraph G {
             graph_json.unknowns[scc_name]
               .filter((x) => x in scc_to_node_map)
               .forEach((x) => {
-                dotFile += `  ${scc_name} -> ${x} [style="dotted"]\n`;
+                dotFile += `  ${scc_name} -> ${x} [style="dotted",constraint=false]\n`;
               });
+
           }
         }
 
