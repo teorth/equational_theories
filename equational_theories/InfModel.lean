@@ -381,7 +381,7 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
             _ ≥ 3 ^ (3 ^ padicValNat 3 y.val * 5 ^ padicValNat 5 y.val) := by simp [one_le_pow₀]
             _ = 3 ^ (5 ^ padicValNat 5 y.val * 3 ^ padicValNat 3 y.val) := by simp [mul_comm]
             _ = (3 ^ (5 ^ padicValNat 5 y.val)) ^ (3 ^ padicValNat 3 y.val) := by simp [pow_mul]
-            _ ≥ 3 ^ (5 ^ padicValNat 5 y.val) := by apply le_self_pow; simp [one_le_pow₀]; apply pow_ne_zero; simp
+            _ ≥ 3 ^ (5 ^ padicValNat 5 y.val) := by apply le_self_pow₀; simp [one_le_pow₀]; apply pow_ne_zero; simp
             _ > 5 ^ padicValNat 5 y.val := by simp [Nat.lt_pow_self (by simp: 1 < 3)]
             _ > padicValNat 5 y.val := by simp [Nat.lt_pow_self (by simp: 1 < 5)]
           exact (ne_of_gt this') (this.symm)
