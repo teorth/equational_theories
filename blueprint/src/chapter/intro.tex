@@ -95,12 +95,12 @@ for all $x, y \in G$. We refer to \Cref{comm-law-2} as the \emph{equation} assoc
   $\Gamma$ \emph{derives} $w\formaleq w'$, and write $\Gamma\vdash w\formaleq w'$, if the law can
   be obtained using a finite number of applications of the following rules:
   \begin{enumerate}
-    \item if $w\formaleq w' \in \Gamma, then \Gamma\vdash w\formaleq w'$.
-    \item \Gamma\vdash w\formaleq w for any word w.
-    \item if \Gamma\vdash w\formaleq w' then \Gamma\vdash w'\formaleq w.
-    \item if \Gamma\vdash w\formaleq w' and \Gamma\vdash w'\formaleq w'' then \Gamma\vdash w\formaleq w''.
-    \item if \Gamma\vdash w\formaleq w' then \Gamma\vdash \varphi_f w \formaleq \varphi_f w' for every f: X \to M_X.
-    \item if \Gamma\vdash w_1\formaleq w_2 and \Gamma\vdash w_3\formaleq w_4 then \Gamma\vdash w_1 \op w_3\formaleq w_2\op w_4
+    \item if $w\formaleq w' \in \Gamma$, then $\Gamma\vdash w\formaleq w'$.
+    \item $\Gamma\vdash w\formaleq w$ for any word $w$.
+    \item if $\Gamma\vdash w\formaleq w'$, then $\Gamma\vdash w'\formaleq w$.
+    \item if $\Gamma\vdash w\formaleq w'$ and $\Gamma\vdash w'\formaleq w''$, then $\Gamma\vdash w\formaleq w''$.
+    \item if $\Gamma\vdash w\formaleq w'$, then $\Gamma\vdash \varphi_f(w) \formaleq \varphi_f(w')$ for every $f: X \to M_X$.
+    \item if $\Gamma\vdash w_1\formaleq w_2$ and $\Gamma\vdash w_3\formaleq w_4$, then $\Gamma\vdash w_1 \op w_3\formaleq w_2\op w_4$.
   \end{enumerate}
 \end{definition}
 
@@ -191,7 +191,7 @@ We can also identify all laws of the form $w \formaleq w$ with the trivial law $
 \begin{lemma}[Counting laws up to relabeling, symmetry, and triviality]\label{law-count-triv}\uses{law-count-sym}
   Up to relabeling, symmetry, and triviality, the number of laws of total order $n$ is
   $$ C_{n+1} B_{n+2}/2$$
-  if $n$ is odd, $2$ if $n = 0, and
+  if $n$ is odd, $2$ if $n = 0$, and
   $$ (C_{n+1} B_{n+2} + C_{n/2} (2D_{n+2} - B_{n+2}))/2 - C_{n/2} B_{n/2+1}$$
   if $n \geq 2$ is even.
 \end{lemma}
