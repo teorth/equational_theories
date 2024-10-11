@@ -194,6 +194,13 @@ lemma PartialSolution.mem_move_rev_good (f : PartialSolution G) (x y : G) (z : G
     (y, x) ∈ (f.move_rev_good x y z h1 h2 hz1 hz2 hz3 hzx hzy).E1 := by
   simp [move_rev_good]
 
+lemma PartialSolution.mem_move_rev_good_of_app_eq (f : PartialSolution G) (x y : G) (z : G) (h1 : (y, x) ∉ f.E1)
+    (h2 : (x, y) ∈ f.E1 → f.f x y ≠ x) (hz1 : ∀ x ∈ f.E1, x.2 ≠ z)
+    (hz2 : ∀ x ∈ f.E1, f.f x.1 x.2 ≠ z) (hz3 : ∀ x ∈ f.E1, x.1 ≠ z)
+    (hzx : z ≠ x) (hzy : z ≠ y) (a : G) (hbm : (a, y) ∈ f.E1) (hp : f.f a y = x) :
+    (a, y) ∈ (f.move_rev_good x y z h1 h2 hz1 hz2 hz3 hzx hzy).E0 := by
+  simp [move_rev_good, hbm, hp]
+
 def PartialSolution.move_rev_bad (f : PartialSolution G) (x y : G) (z : G) (h1 : (y, x) ∉ f.E1)
     (h2 : (x, y) ∈ f.E1) (h22 : f.f x y = x) (hz1 : ∀ x ∈ f.E1, x.2 ≠ z)
     (hz2 : ∀ x ∈ f.E1, f.f x.1 x.2 ≠ z) (hz3 : ∀ x ∈ f.E1, x.1 ≠ z)
@@ -357,6 +364,14 @@ lemma PartialSolution.mem_move_rev_bad (f : PartialSolution G) (x y : G) (z : G)
     (y, x) ∈ (f.move_rev_bad x y z h1 h2 h22 hz1 hz2 hz3 hzx hzy).E1 := by
   simp [move_rev_bad]
 
+lemma PartialSolution.mem_move_rev_bad_of_app_eq (f : PartialSolution G) (x y : G) (z : G) (h1 : (y, x) ∉ f.E1)
+    (h2 : (x, y) ∈ f.E1) (h22 : f.f x y = x) (hz1 : ∀ x ∈ f.E1, x.2 ≠ z)
+    (hz2 : ∀ x ∈ f.E1, f.f x.1 x.2 ≠ z) (hz3 : ∀ x ∈ f.E1, x.1 ≠ z)
+    (hzx : z ≠ x) (hzy : z ≠ y) (a : G) (hbm : (a, y) ∈ f.E1) (hp : f.f a y = x) :
+    (a, y) ∈ (f.move_rev_bad x y z h1 h2 h22 hz1 hz2 hz3 hzx hzy).E0 := by
+  simp [move_rev_bad, hbm, hp]
+
+
 variable [Denumerable G]
 
 def Denumerable.notMemFinset (s : Finset G) : G :=
@@ -393,6 +408,11 @@ lemma PartialSolution.mem_move_rev_good' (f : PartialSolution G) (x y : G) (h1 :
     (h2 : (x, y) ∈ f.E1 → f.f x y ≠ x) : (y, x) ∈ (f.move_rev_good' x y h1 h2).E1 := by
   simp [move_rev_good', mem_move_rev_good]
 
+lemma PartialSolution.mem_move_rev_good'_of_app_eq (f : PartialSolution G) (x y : G) (h1 : (y, x) ∉ f.E1)
+    (h2 : (x, y) ∈ f.E1 → f.f x y ≠ x) (a : G) (hbm : (a, y) ∈ f.E1) (hp : f.f a y = x) :
+    (a, y) ∈ (f.move_rev_good' x y h1 h2).E0 := by
+  simp [move_rev_good', mem_move_rev_good_of_app_eq, hbm, hp]
+
 def PartialSolution.move_rev_bad' (f : PartialSolution G) (x y : G) (h1 : (y, x) ∉ f.E1)
     (h2 : (x, y) ∈ f.E1) (h22 : f.f x y = x) : PartialSolution G := by
   let z : G := Denumerable.notMemFinset (f.E1.image (·.1) ∪ f.E1.image (·.2) ∪ f.E1.image (fun ⟨a, b⟩ ↦ f.f a b) ∪ {x, y})
@@ -412,6 +432,11 @@ lemma PartialSolution.mem_move_rev_bad' (f : PartialSolution G) (x y : G) (h1 : 
     (h2 : (x, y) ∈ f.E1) (h22 : f.f x y = x) : (y, x) ∈ (f.move_rev_bad' x y h1 h2 h22).E1 := by
   simp [move_rev_bad', mem_move_rev_bad]
 
+lemma PartialSolution.mem_move_rev_bad'_of_app_eq (f : PartialSolution G) (x y : G) (h1 : (y, x) ∉ f.E1)
+    (h2 : (x, y) ∈ f.E1) (h22 : f.f x y = x) (a : G) (hbm : (a, y) ∈ f.E1) (hp : f.f a y = x) :
+    (a, y) ∈ (f.move_rev_bad' x y h1 h2 h22).E0 := by
+  simp [move_rev_bad', mem_move_rev_bad_of_app_eq, hbm, hp]
+
 def PartialSolution.act (f : PartialSolution G) (x y : G) (h1 : (y, x) ∉ f.E1) : PartialSolution G :=
     if h2 : (x, y) ∈ f.E1 → f.f x y ≠ x then f.move_rev_good' x y h1 h2 else f.move_rev_bad' x y h1 (by simp_all) (by simp_all)
 
@@ -428,6 +453,14 @@ lemma PartialSolution.mem_act (f : PartialSolution G) (x y : G) (h1 : (y, x) ∉
   split
   · apply mem_move_rev_good'
   · apply mem_move_rev_bad'
+
+lemma PartialSolution.mem_act_of_app_eq (f : PartialSolution G) (x y : G) (h1 : (y, x) ∉ f.E1)
+    (a : G) (hbm : (a, y) ∈ f.E1) (hp : f.f a y = x) :
+    (a, y) ∈ (f.act x y h1).E0 := by
+  unfold act
+  split
+  · apply mem_move_rev_good'_of_app_eq <;> assumption
+  · apply mem_move_rev_bad'_of_app_eq <;> assumption
 
 -- add (y, x)
 def PartialSolution.add_e1 (f : PartialSolution G) (x y : G) : PartialSolution G :=
@@ -447,6 +480,17 @@ lemma PartialSolution.mem_add_e1 (f : PartialSolution G) (x y : G) :
   · assumption
   · apply mem_act
 
+lemma PartialSolution.mem_add_e1_of_app_eq (f : PartialSolution G) (x y : G)
+    (a : G) (hbm : (a, y) ∈ f.E1) (hp : f.f a y = x) :
+    (a, y) ∈ (f.add_e1 x y).E0 := by
+  unfold add_e1
+  split
+  · by_contra! nh
+    have := f.undef_of_not_mem_E0 _ nh hbm
+    apply this
+    simpa [g, hp]
+  · apply mem_act_of_app_eq <;> assumption
+
 def PartialSolution.add_e0 (f : PartialSolution G) (x y : G) : PartialSolution G :=
   let f' := f.add_e1 x y
   f'.add_e1 (f'.f y x) x
@@ -458,4 +502,91 @@ lemma PartialSolution.le_add_e0 (f : PartialSolution G) (x y : G) :
   trans f.add_e1 x y <;>
     apply le_add_e1
 
-  -- simp [le_add_e1, le_trans]
+lemma PartialSolution.mem_add_e0 (f : PartialSolution G) (x y : G) :
+    (y, x) ∈ (f.add_e0 x y).E0 := by
+  unfold add_e0
+  simp only
+  apply mem_add_e1_of_app_eq
+  · apply mem_add_e1
+  · rfl
+
+def closureSeq (f : PartialSolution G) : ℕ → PartialSolution G
+| 0 => f
+| n+1 => (closureSeq f n).add_e0 (Denumerable.ofNat (G × G) n).2 (Denumerable.ofNat (G × G) n).1
+
+lemma closureSeq_le_closureSeq_succ (f : PartialSolution G) (n : ℕ) :
+    closureSeq f n ≤ closureSeq f (n + 1) :=
+  PartialSolution.le_add_e0 ..
+
+lemma mem_closureSeq_e0 (f : PartialSolution G) (a b : G) :
+    (a, b) ∈ (closureSeq f (Encodable.encode (a, b) + 1)).E0 := by
+  simp only [closureSeq, ge_iff_le, Equiv.symm_apply_apply, Denumerable.ofNat_encode]
+  apply PartialSolution.mem_add_e0
+
+lemma closureSeq_mono (f : PartialSolution G) : Monotone (closureSeq f) := by
+  intro n m hnm
+  obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_le hnm
+  clear hnm
+  induction m
+  case zero => simp
+  case succ m hm =>
+    apply hm.trans
+    rw [← add_assoc]
+    apply closureSeq_le_closureSeq_succ
+
+lemma le_closureSeq (f : PartialSolution G) (n : ℕ) : f ≤ closureSeq f n :=
+  closureSeq_mono f (Nat.zero_le n)
+
+def closure (f : PartialSolution G) : G → G → G :=
+  fun a b ↦ (closureSeq f (Encodable.encode (a, b) + 1)).f a b
+
+lemma closure_eq_of_mem_e1 (f : PartialSolution G) (n : ℕ) (a b : G) (hn : (a, b) ∈ (closureSeq f n).E1) :
+    closure f a b = (closureSeq f n).f a b := by
+  simp only [closure, Prod.mk.eta]
+  rcases le_total n (Encodable.encode (a, b) + 1) with h | h
+  · apply (closureSeq_mono f h).2.2.symm hn
+  · apply (closureSeq_mono f h).2.2 (PartialSolution.E0_subset_E1 _ (mem_closureSeq_e0 f a b))
+
+theorem closure_prop (f : PartialSolution G) : ∀ x y, closure f x (closure f y (closure f x y)) = y := by
+  intro x y
+  rw [closure_eq_of_mem_e1 f (Encodable.encode (x, y) + 1) x y,
+    closure_eq_of_mem_e1 f (Encodable.encode (x, y) + 1) y,
+    closure_eq_of_mem_e1 f (Encodable.encode (x, y) + 1)]
+  · apply PartialSolution.eq_of_mem_E0 _ (x, y)
+    apply mem_closureSeq_e0
+  · apply PartialSolution.mem_2_of_mem_E0 _ (x, y)
+    apply mem_closureSeq_e0
+  · apply PartialSolution.t_mem_of_mem_E0' _ (x, y)
+    apply mem_closureSeq_e0
+  · apply PartialSolution.E0_subset_E1
+    apply mem_closureSeq_e0
+
+def initial : PartialSolution ℕ where
+  E0 := {(1, 0)}
+  E1 := {(0, 0), (1, 0), (0, 2), (1, 3)}
+  f a b := if a = 0 then (if b = 0 then 1 else 3) else if a = 1 then (if b = 0 then 2 else 0) else 0
+  E0_subset_E1 := by decide
+  t_mem_of_mem_E0' := by decide
+  mem_2_of_mem_E0 := by decide
+  eq_of_mem_E0 := by decide
+  undef_of_not_mem_E0' := by decide
+  strange := by decide
+
+
+theorem Equation65_not_imlies_Equation359 : ∃ (G : Type) (_ : Magma G), Equation65 G ∧ ¬ Equation359 G := by
+  use ℕ, ⟨closure initial⟩
+  simp only [Equation65, closure_prop, implies_true, not_forall, true_and]
+  use 0
+  rw [closure_eq_of_mem_e1 _ 0, closure_eq_of_mem_e1 _ 0]
+  · decide
+  · decide
+  · decide
+
+theorem Equation65_not_imlies_Equation614 : ∃ (G : Type) (_ : Magma G), Equation65 G ∧ ¬ Equation614 G := by
+  use ℕ, ⟨closure initial⟩
+  simp only [Equation65, closure_prop, implies_true, not_forall, true_and]
+  use 0
+  rw [closure_eq_of_mem_e1 _ 0, closure_eq_of_mem_e1 _ 0]
+  · decide
+  · decide
+  · decide
