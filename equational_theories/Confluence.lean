@@ -1272,6 +1272,81 @@ macro_rules
 
   pure <| mkListNode decls
 
+namespace rw2126
+
+variable [DecidableEq α]
+
+rule_system rules {x y z w}
+| y ⋆ y ⋆ x ⋆ (x ⋆ z) => x
+| x ⋆ x ⋆ (x ⋆ x ⋆ y ⋆ z) => x ⋆ x ⋆ y
+| x ⋆ x ⋆ (y ⋆ y ⋆ z) ⋆ z => y ⋆ y ⋆ z
+| (x ⋆ x ⋆ y) ⋆ (x ⋆ x ⋆ y ⋆ z ⋆ w) => x ⋆ x ⋆ y ⋆ z
+
+theorem comp1_2 {α} [DecidableEq α] {x y z : FreeMagma α}:
+    rules (y ⋆ y ⋆ x ⋆ rules (x ⋆ z)) = x := by
+  generalize h: rules (x ⋆ z) = e
+  simp only [rules.elim] at h
+  separate
+  · apply rules.eq3
+  · apply rules.eq1
+  · apply rules.eq3
+  · apply rules.eq1
+  · apply rules.eq1
+
+theorem comp2_2 {α} [DecidableEq α] {x y z : FreeMagma α} (hxxy: NF rules (x ⋆ x ⋆ y)):
+    rules (x ⋆ x ⋆ rules (x ⋆ x ⋆ y ⋆ z)) = x ⋆ x ⋆ y := by
+  generalize h: rules (x ⋆ x ⋆ y ⋆ z) = e
+  simp only [rules.elim] at h
+  separate
+  · apply hxxy.top
+  · apply rules.eq2
+  · apply hxxy.top
+  · apply rules.eq2
+  · apply rules.eq2
+
+theorem comp4_2 {α} [DecidableEq α] {x y z w : FreeMagma α} (hxxyz: NF rules (x ⋆ x ⋆ y ⋆ z)):
+    rules (((x ⋆ x) ⋆ y) ⋆ rules ((((x ⋆ x) ⋆ y) ⋆ z) ⋆ w)) = (((x ⋆ x) ⋆ y) ⋆ z) := by
+  generalize h: rules ((((x ⋆ x) ⋆ y) ⋆ z) ⋆ w) = e
+  simp only [rules.elim] at h
+  separate
+  · apply hxxyz.top
+  · apply rules.eq4
+  · apply hxxyz.top
+  · apply rules.eq2
+  · apply rules.eq4
+
+theorem comp1_3 {α} [DecidableEq α] {x y z : FreeMagma α} (hx: NF rules x):
+    rules (rules (y ⋆ y ⋆ x) ⋆ rules (x ⋆ z)) = x := by
+  generalize h: rules (y ⋆ y ⋆ x) = e
+  simp only [rules.elim] at h
+  separate
+  · apply comp2_2 hx
+  · apply comp4_2 hx
+  · apply comp1_2
+  · apply comp4_2 hx
+  · apply comp1_2
+
+theorem comp1_4 {α} [DecidableEq α] {x y z : FreeMagma α} (hx: NF rules x):
+    rules (rules (rules (y ⋆ y) ⋆ x) ⋆ rules (x ⋆ z)) = x := by
+  generalize h: rules (y ⋆ y) = e
+  simp only [rules.elim] at h
+  separate
+  all_goals apply comp1_3 hx
+
+@[equational_result]
+theorem «Facts» :
+  ∃ (G : Type) (_ : Magma G), Facts G [2126] [151, 152, 167, 168, 1426, 1427, 1428, 1429, 1430, 1478, 1479, 1480, 1481, 1482, 1483, 1484, 1485, 1486, 2050, 2051, 2052, 2087, 2088, 2089, 2161, 2162, 2163, 3456, 3457, 3511, 3512, 3513, 3862, 3877, 3918, 3955, 3993] := by
+  use ConfMagma (@rules Nat _), inferInstance
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩ ⟨z, hz⟩
+    simp only [Magma.op, bu, hx, hy, hz, buFixed_rw_op]
+    symm
+    congr! 1
+    apply comp1_4 ((NF_iff_buFixed rules).mpr hx)
+  all_goals refute
+
+end rw2126
+
 namespace rw115
 
 variable [DecidableEq α]
