@@ -86,9 +86,9 @@ jobs:
       - name: check environment with lean4checker
         run: |
           : Check Environment with lean4checker
-          ${GITHUB_ACTION_PATH}/scripts/lean4_checker/run_lean4checker.sh
+          ./scripts/lean4_checker/run_lean4checker.sh
         shell: bash
-        working-directory: ${{ inputs.lake-package-directory }}
+
 
       - name: Build project API documentation
         run: ~/.elan/bin/lake -R -Kenv=dev build equational_theories:docs
