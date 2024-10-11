@@ -79,10 +79,17 @@ jobs:
             !.lake/build/doc/declarations/declaration-data-equational_theories*
           key: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}-${{ github.sha }}
           restore-keys: LakeBuild-
-
+      
       - name: Build project
         run: ~/.elan/bin/lake build equational_theories
 
+      - name: "Check with lean4checker"
+        id: lean-action
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          lean4checker: true
+          
       - name: Build project API documentation
         run: ~/.elan/bin/lake -R -Kenv=dev build equational_theories:docs
 
