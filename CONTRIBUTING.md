@@ -103,7 +103,7 @@ Some technical Lean files:
 
 In addition to these files, contributors are welcome to add additional Lean files to the project in the [`equational_theories` folder](equational_theories) or one of its subfolders, to establish more facts about equations.  In order for your contributions to be easily detected by automated tools, please try to follow the following guidelines.
 
-- If possible, use `Equations/Basic.lean` or `Equations/All.lean` as an import, in order to use our standardized names for the equational laws.
+- If possible, use `Equations/Basic.lean` or `Equations/All.lean` as an import, in order to use our standardized names for the equational laws.  If you transfer an equation from `Equations/All.lean` to `Equations/Basic.lean`, please add the corresponding definition in the ["selected laws" chapter of the blueprint](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html) to keep this chapter aligned with the Lean codebase.  (The Lean codebase is used as the source of ground truth of equation status, but keeping the blueprint aligned will reduce confusion.)
 - The standard form for an implication "Equation X implies Equation Y" is
 `theorem EquationX_implies_EquationY (G: Type*) [Magma G] (h: EquationX G) : EquationY G`
 - The standard form for an anti-implication "Equation X does not imply Equation Y" is `theorem EquationX_not_implies_EquationY : ∃ (G: Type) (_: Magma G), EquationX G ∧ ¬ EquationY G`.
