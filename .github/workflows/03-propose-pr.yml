@@ -64,9 +64,9 @@ jobs:
         PR_BODY_CLEAN=$(echo "$PR_BODY" | sed 's/\r//g')
 
         # Append the issue closing reference
-        NEW_PR_BODY="${PR_BODY_CLEAN}\n\nCloses #${{ github.event.issue.number }}"
+        NEW_PR_BODY=$(echo -e "${PR_BODY_CLEAN}\n\nCloses #${{ github.event.issue.number }}")
 
-        # Prepare the JSON payload (avoiding extra quotes)
+        # Prepare the JSON payload (properly escaped for newlines)
         PAYLOAD=$(jq -n --arg body "$NEW_PR_BODY" '{body: $body}')
 
         # Update the PR body with the properly formatted content
