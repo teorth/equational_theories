@@ -39,7 +39,7 @@ section Instances
 instance instMagmaList {α : Type _} : Magma (List α) where
   op := List.append
 
-instance : LiftingMagmaFamily (List ·) where
+instance : LiftingMagmaFamily List where
   instMagmaDecidableEq := inferInstance
   ι := fun a ↦ [a]
   lift f := {
@@ -58,7 +58,7 @@ instance : LiftingMagmaFamily (List ·) where
 instance (priority := high) instMagmaMultiset (α : Type _) [DecidableEq α] : Magma (Multiset α) where
   op := (· + ·)
 
-instance : LiftingMagmaFamily (Multiset ·) where
+instance : LiftingMagmaFamily Multiset where
   instMagma := instMagmaMultiset
   instMagmaDecidableEq := inferInstance
   ι := fun a ↦ {a}
@@ -80,7 +80,7 @@ def LeftProj (α : Type _) := α
 instance (priority := low) leftProj (α : Type _) : Magma (LeftProj α) where
   op := fun a _ => a
 
-instance instLiftingMagmaFamilyLeftProj : @LiftingMagmaFamily (LeftProj ·) where
+instance instLiftingMagmaFamilyLeftProj : LiftingMagmaFamily LeftProj where
   instMagma := (leftProj ·)
   instMagmaDecidableEq := inferInstance
   ι := id
@@ -100,7 +100,7 @@ def RightProj (α : Type _) := α
 instance (priority := low+1) rightProj (α : Type _) : Magma (RightProj α) where
   op := fun _ a => a
 
-instance instLiftingMagmaFamilyRightProj : @LiftingMagmaFamily (RightProj ·) where
+instance instLiftingMagmaFamilyRightProj : LiftingMagmaFamily RightProj where
   instMagma := (rightProj ·)
   instMagmaDecidableEq := inferInstance
   ι := id

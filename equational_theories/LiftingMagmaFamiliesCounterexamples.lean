@@ -7,16 +7,16 @@ open Lean Elab Command Term
 
 -- TODO: Automatically generate these structures when a lifting magma family is defined
 structure LiftingMagmaFamilyInstance where
-  G : (α : Type) → [DecidableEq α] → Type
+  G : Type → Type
   instDecidableEq : ∀ α [DecidableEq α], Magma (G α)
   instLiftingMagmaFamily : LiftingMagmaFamily G
   instName : Name
 
 def liftingMagmaFamilyInstances : Array LiftingMagmaFamilyInstance := #[
-  ⟨(List ·), _, instLiftingMagmaFamilyList, ``instLiftingMagmaFamilyList⟩,
-  ⟨(Multiset ·), _, instLiftingMagmaFamilyMultiset, ``instLiftingMagmaFamilyMultiset⟩,
-  ⟨(Id ·), _, instLiftingMagmaFamilyLeftProj, ``instLiftingMagmaFamilyLeftProj⟩,
-  ⟨(Id ·), _, instLiftingMagmaFamilyRightProj, ``instLiftingMagmaFamilyRightProj⟩
+  ⟨List, inferInstance, instLiftingMagmaFamilyList, ``instLiftingMagmaFamilyList⟩,
+  ⟨Multiset, instMagmaMultiset, instLiftingMagmaFamilyMultiset, ``instLiftingMagmaFamilyMultiset⟩,
+  ⟨LeftProj, inferInstance, instLiftingMagmaFamilyLeftProj, ``instLiftingMagmaFamilyLeftProj⟩,
+  ⟨RightProj, inferInstance, instLiftingMagmaFamilyRightProj, ``instLiftingMagmaFamilyRightProj⟩
 ]
 
 -- the non-implications from the environment are cached in a special datastructure for faster lookup
@@ -33,11 +33,6 @@ def generateNonImplicationsTable : CoreM (Std.HashMap String (Array String)) := 
     | some arr => map.insert lhs (arr.push rhs)
     | none => map.insert lhs #[rhs]
 
-def containsImplication (table : Std.HashMap String (Array String)) (implication : Implication) : Bool :=
-  match table[implication.lhs]? with
-   | some arr => arr.contains implication.rhs
-   | none => false
-
 def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
     (nonImplications : Std.HashMap String (Array String)) (laws : Array (Name × NatMagmaLaw)) : CoreM Unit := do
   let mut positives : Array Name := #[]
@@ -45,7 +40,7 @@ def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
   for (lawName, law) in laws do
     -- using `Lean.reduceBool` for a speed-up
     let result := Lean.reduceBool <| @decide _ <|
-      @instDecidableSatisfies Nat inst.G inst.instDecidableEq inst.instLiftingMagmaFamily _ law
+      @instDecidableSatisfiesLaw Nat inst.G inst.instLiftingMagmaFamily _ law
     if result then
       positives := positives.push lawName
     else
@@ -53,10 +48,11 @@ def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
   IO.println s!"Filtered laws into {positives.size} positives and {negatives.size} negatives ..."
   let mut output := "import equational_theories.LiftingMagmaFamilies\nimport equational_theories.EquationalResult\nimport equational_theories.Equations.All\n\n"
   for (posLawName) in positives do
+    let establishedConclusions := nonImplications[posLawName.toString]?.getD #[]
     for (negLawName) in negatives do
       let posEqnName := Name.mkSimple <| magmaLawNameToEquationName posLawName.toString
       let negEqnName := Name.mkSimple <| magmaLawNameToEquationName negLawName.toString
-      unless containsImplication nonImplications { lhs := posEqnName.toString, rhs := posEqnName.toString } do
+      unless establishedConclusions.contains negEqnName.toString do
         let resultName := Name.mkSimple <| s!"{posEqnName.toString}_not_implies_{negEqnName.toString}"
         -- let counterExample : TSyntax `command ← `(command|
         --   @[equational_result]
