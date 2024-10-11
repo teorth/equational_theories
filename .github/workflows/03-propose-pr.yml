@@ -12,12 +12,13 @@ jobs:
     steps:
     - name: Check if the comment contains "propose #PR_NUMBER"
       id: check_propose
+      env:
+        COMMENT: ${{ github.event.comment.body }}
       run: |
-        COMMENT_BODY="${{ github.event.comment.body }}"
-        COMMENT_BODY_LOWER=$(echo "$COMMENT_BODY" | tr '[:upper:]' '[:lower:]')
+        COMMENT_LOWER=$(echo "$COMMENT" | tr '[:upper:]' '[:lower:]')
 
         # Use a refined regex with [[:space:]] to match any whitespace
-        if [[ "$COMMENT_BODY_LOWER" =~ propose[[:space:]]*(pr[[:space:]]*)?\#([0-9]+)[[:space:]]* ]]; then
+        if [[ "$COMMENT_LOWER" =~ propose[[:space:]]*(pr[[:space:]]*)?\#([0-9]+)[[:space:]]* ]]; then
           PR_NUMBER="${BASH_REMATCH[2]}"
           echo "pr_number=$PR_NUMBER" >> $GITHUB_ENV
         else
@@ -55,14 +56,23 @@ jobs:
           exit 1
         fi
 
+        # Get the current PR body (ensure newlines are treated properly)
         PR_BODY=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER} | jq -r '.body')
 
-        NEW_PR_BODY="$PR_BODY\n\nCloses #${{ github.event.issue.number }}"
+        # Remove unnecessary carriage returns
+        PR_BODY_CLEAN=$(echo "$PR_BODY" | sed 's/\r//g')
 
+        # Append the issue closing reference
+        NEW_PR_BODY=$(echo -e "${PR_BODY_CLEAN}\n\nCloses #${{ github.event.issue.number }}")
+
+        # Prepare the JSON payload (properly escaped for newlines)
+        PAYLOAD=$(jq -n --arg body "$NEW_PR_BODY" '{body: $body}')
+
+        # Update the PR body with the properly formatted content
         curl -s -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         -H "Content-Type: application/json" \
-        -d "{\"body\": \"$NEW_PR_BODY\"}" \
+        -d "$PAYLOAD" \
         https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}
 
     - name: Retrieve the project ITEM_ID
