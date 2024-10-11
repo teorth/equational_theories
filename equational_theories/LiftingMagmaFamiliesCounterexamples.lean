@@ -1,7 +1,6 @@
 import equational_theories.LiftingMagmaFamilies
 import equational_theories.Closure
 import equational_theories.Equations.All
-
 open Law
 open Lean Elab Command Term
 
@@ -30,7 +29,9 @@ def generateNonImplicationsTable : CoreM (Std.HashMap String (Array String)) := 
   IO.println s!"Filtered to {nonImplications.size} non-implications ..."
   return nonImplications.foldl (init := {}) fun map ⟨lhs, rhs⟩ ↦
     match map[lhs]? with
-    | some arr => map.insert lhs (arr.push rhs)
+    | some arr =>
+      let map := map.erase lhs
+      map.insert lhs (arr.push rhs)
     | none => map.insert lhs #[rhs]
 
 def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
@@ -38,8 +39,7 @@ def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
   let mut positives : Array Name := #[]
   let mut negatives : Array Name := #[]
   for (lawName, law) in laws do
-    -- using `Lean.reduceBool` for a speed-up
-    let result := Lean.reduceBool <| @decide _ <|
+    let result := @decide _ <|
       @instDecidableSatisfiesLaw Nat inst.G inst.instLiftingMagmaFamily _ law
     if result then
       positives := positives.push lawName
@@ -47,10 +47,10 @@ def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
       negatives := negatives.push lawName
   IO.println s!"Filtered laws into {positives.size} positives and {negatives.size} negatives ..."
   let mut output := "import equational_theories.LiftingMagmaFamilies\nimport equational_theories.EquationalResult\nimport equational_theories.Equations.All\n\n"
-  for (posLawName) in positives do
-    let establishedConclusions := nonImplications[posLawName.toString]?.getD #[]
-    for (negLawName) in negatives do
-      let posEqnName := Name.mkSimple <| magmaLawNameToEquationName posLawName.toString
+  for posLawName in positives do
+    let posEqnName := Name.mkSimple <| magmaLawNameToEquationName posLawName.toString
+    let establishedConclusions := nonImplications[posEqnName.toString]?.getD #[]
+    for negLawName in negatives do
       let negEqnName := Name.mkSimple <| magmaLawNameToEquationName negLawName.toString
       unless establishedConclusions.contains negEqnName.toString do
         let resultName := Name.mkSimple <| s!"{posEqnName.toString}_not_implies_{negEqnName.toString}"
@@ -68,7 +68,7 @@ def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
 def generateAllNonimplications : CoreM Unit := do
   IO.println "Generating table of existing non-implications ..."
   let table ← generateNonImplicationsTable
-  IO.println "Generated table of non-implications, retrieving laws ..."
+  IO.println s!"Generated table of non-implications with {table.size} keys, retrieving laws ..."
   let laws ← getMagmaLaws
   IO.println s!"Retrieved {laws.size} laws from the environment ..."
   for inst in liftingMagmaFamilyInstances do

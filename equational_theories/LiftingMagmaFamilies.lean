@@ -6,14 +6,14 @@ import Mathlib.Data.Finsupp.Defs
 
 open Law
 
-class LiftingMagmaFamily (G : Type → Type) where
+class LiftingMagmaFamily (G : Type _ → Type _) where
   instMagma (α) [DecidableEq α] : Magma (G α)
   instMagmaDecidableEq {α} [DecidableEq α] : DecidableEq (G α)
   ι : ∀ {α}, α → G α
   lift : ∀ {α} [DecidableEq α], (α → G α) → (G α →◇ G α)
   lift_factors : ∀ {α} [DecidableEq α], ∀ f : α → G α, f = (lift f) ∘ ι
 
-variable {α : Type} [DecidableEq α] (G : Type → Type) [LiftingMagmaFamily G]
+variable {α : Type _} [DecidableEq α] (G : Type → Type) [family : LiftingMagmaFamily G]
 
 instance [LiftingMagmaFamily G] : Magma (G α) := LiftingMagmaFamily.instMagma α
 
@@ -30,9 +30,18 @@ theorem MagmaLaw.models_iff_satisfies_ι (law : MagmaLaw α) :
     have := LiftingMagmaFamily.lift_factors f
     rw [this, satisfiesPhi_evalHom, h]
 
+instance [DecidableEq α] (law : MagmaLaw α) :  Decidable (@satisfiesPhi α (G α) (LiftingMagmaFamily.instMagma α) LiftingMagmaFamily.ι law) :=
+  inferInstanceAs <| Decidable (law.lhs ⬝ LiftingMagmaFamily.ι = law.rhs ⬝ LiftingMagmaFamily.ι)
+
 instance instDecidableSatisfiesLaw [DecidableEq α] (law : MagmaLaw α) : Decidable (G α ⊧ law) := by
-  rw [MagmaLaw.models_iff_satisfies_ι, satisfiesPhi]
+  -- (MagmaLaw.models_iff_satisfies_ι G law) ▸ instDecidableSatisfiesPhiι
+  rw [MagmaLaw.models_iff_satisfies_ι G law]
   infer_instance
+
+lemma LiftingMagmaFamily.establishNonimplication {law law' : MagmaLaw Nat} {P P' : (M : Type _) → [Magma M] → Prop}
+  (hlaw_iff : G ℕ ⊧ law ↔ P (G ℕ)) (hlaw'_iff : G ℕ ⊧ law' ↔ P' (G ℕ)) (h : G ℕ ⊧ law) (h' : ¬ G ℕ ⊧ law') :
+    ∃ (G : Type) (_ : Magma G), P G ∧ ¬ P' G :=
+  ⟨G ℕ, inferInstance, hlaw_iff.mp h, (not_iff_not.mpr hlaw'_iff).mp h'⟩
 
 section Instances
 
