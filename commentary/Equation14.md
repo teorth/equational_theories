@@ -1,2 +1,3 @@
-## Equations [14 `x = y ◇ (x ◇ y)`](https://teorth.github.io/equational_theories/implications/?14), [29 `x = (y ◇ x) ◇ y`](https://teorth.github.io/equational_theories/implications/?29): 2001 Putnam laws
-Problem A1 of the 2001 Putnam asked to show (in our language) that [Equation 14 implies Equation 29](https://teorth.github.io/equational_theories/blueprint/implications-chapter.html#14_implies_29). In fact, the two laws are equivalent.
+## A 2001 Putnam law
+
+Problem A1 of the 2001 Putnam asked to show that [Equation 14 implies Equation 29](https://teorth.github.io/equational_theories/blueprint/implications-chapter.html#14_implies_29). In fact, this law is equivalent to [Equation 29](https://teorth.github.io/equational_theories/implications/?29).
