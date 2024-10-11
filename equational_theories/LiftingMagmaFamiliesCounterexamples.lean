@@ -35,7 +35,8 @@ def generateNonImplicationsTable : CoreM (Std.HashMap String (Array String)) := 
     | none => map.insert lhs #[rhs]
 
 def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
-    (nonImplications : Std.HashMap String (Array String)) (laws : Array (Name × NatMagmaLaw)) : CoreM Unit := do
+    (nonImplications : Std.HashMap String (Array String)) (laws : Array (Name × NatMagmaLaw))
+    (path : System.FilePath) : CoreM Unit := do
   let mut positives : Array Name := #[]
   let mut negatives : Array Name := #[]
   for (lawName, law) in laws do
@@ -46,34 +47,35 @@ def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
     else
       negatives := negatives.push lawName
   IO.println s!"Filtered laws into {positives.size} positives and {negatives.size} negatives ..."
-  let mut output := "import equational_theories.LiftingMagmaFamilies\nimport equational_theories.EquationalResult\nimport equational_theories.Equations.All\n\n"
+  let mut output := "import equational_theories.LiftingMagmaFamilies\nimport equational_theories.EquationalResult\nimport equational_theories.Equations.All"
   for posLawName in positives do
-    let posEqnName := Name.mkSimple <| magmaLawNameToEquationName posLawName.toString
-    let establishedConclusions := nonImplications[posEqnName.toString]?.getD #[]
+    let posEqnName := magmaLawNameToEquationName posLawName.toString
+    let establishedConclusions := nonImplications[posEqnName]?.getD #[]
     for negLawName in negatives do
-      let negEqnName := Name.mkSimple <| magmaLawNameToEquationName negLawName.toString
-      unless establishedConclusions.contains negEqnName.toString do
-        let resultName := Name.mkSimple <| s!"{posEqnName.toString}_not_implies_{negEqnName.toString}"
-        -- let counterExample : TSyntax `command ← `(command|
-        --   @[equational_result]
-        --   theorem $(mkIdent resultName) : ∃ (G : Type _) (_ : Magma G), $(mkIdent posEqnName) G ∧ $(mkIdent negEqnName) G :=
-        --     @proveNonimplication _ _ $(mkIdent inst.instName) _ _ _ _ $(mkIdent (posLawName ++ `models_iff)) $(mkIdent (negLawName ++ `models_iff))
-        --     (by decide) (by decide))
-        output := output ++ s!"\n\n@[equational_result]\nconjecture {resultName} : ∃ (G : Type _) (_ : Magma G), {posEqnName} G ∧ ¬{negEqnName} G"
+      let negEqnName := magmaLawNameToEquationName negLawName.toString
+      unless establishedConclusions.contains negEqnName do
+        output := output ++ generateEquationResult posEqnName negEqnName inst.instName
   IO.println "Writing to file ..."
-  let filePath : System.FilePath := "." / "equational_theories" / "Generated" /
-      "InvariantMetatheoremNonimplications" / s!"{inst.instName}_counterexamples.lean"
-  IO.FS.writeFile filePath output
+  IO.FS.writeFile path output
+where
+  generateEquationResult (pos neg : String) (instName : Name) : String :=
+    s!"\n\n@[equational_result]\ntheorem {pos}_not_implies_{neg} : ∃ (G : Type) (_ : Magma G), {pos} G ∧ ¬ {neg} G :=
+    LiftingMagmaFamily.establishNonimplication (family := {instName}) _ {pos}.models_iff {neg}.models_iff"
 
 def generateAllNonimplications : CoreM Unit := do
   IO.println "Generating table of existing non-implications ..."
   let table ← generateNonImplicationsTable
   IO.println s!"Generated table of non-implications with {table.size} keys, retrieving laws ..."
   let laws ← getMagmaLaws
+  let fileStem : System.FilePath := "." / "equational_theories" / "Generated"
   IO.println s!"Retrieved {laws.size} laws from the environment ..."
   for inst in liftingMagmaFamilyInstances do
     IO.println s!"Generating non-implications for {inst.instName} ..."
-    generateInvariantMetatheoremResults inst table laws
+    generateInvariantMetatheoremResults inst table laws <|
+      fileStem / "InvariantMetatheoremNonimplications" / s!"{inst.instName}_counterexamples.lean"
+  let mainFile := liftingMagmaFamilyInstances.foldl (init := "") fun acc inst ↦
+    acc ++ s!"import equational_theories.Generated.InvariantMetatheoremNonimplications.{inst.instName}_counterexamples\n"
+  IO.FS.writeFile (fileStem / "InvariantMetatheoremNonimplications.lean") mainFile
 
 def main : IO Unit := do
   IO.println "Generating counterexample files..."

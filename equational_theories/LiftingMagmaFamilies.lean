@@ -33,15 +33,14 @@ theorem MagmaLaw.models_iff_satisfies_ι (law : MagmaLaw α) :
 instance [DecidableEq α] (law : MagmaLaw α) :  Decidable (@satisfiesPhi α (G α) (LiftingMagmaFamily.instMagma α) LiftingMagmaFamily.ι law) :=
   inferInstanceAs <| Decidable (law.lhs ⬝ LiftingMagmaFamily.ι = law.rhs ⬝ LiftingMagmaFamily.ι)
 
-instance instDecidableSatisfiesLaw [DecidableEq α] (law : MagmaLaw α) : Decidable (G α ⊧ law) := by
-  -- (MagmaLaw.models_iff_satisfies_ι G law) ▸ instDecidableSatisfiesPhiι
-  rw [MagmaLaw.models_iff_satisfies_ι G law]
-  infer_instance
+instance instDecidableSatisfiesLaw [DecidableEq α] (law : MagmaLaw α) : Decidable (G α ⊧ law) :=
+  decidable_of_decidable_of_iff (MagmaLaw.models_iff_satisfies_ι G law).symm
 
 lemma LiftingMagmaFamily.establishNonimplication {law law' : MagmaLaw Nat} {P P' : (M : Type _) → [Magma M] → Prop}
-  (hlaw_iff : G ℕ ⊧ law ↔ P (G ℕ)) (hlaw'_iff : G ℕ ⊧ law' ↔ P' (G ℕ)) (h : G ℕ ⊧ law) (h' : ¬ G ℕ ⊧ law') :
+  (hlaw_iff : ∀ (G : Type _) [Magma G], G ⊧ law ↔ P G) (hlaw'_iff : ∀ (G : Type _) [Magma G], G ⊧ law' ↔ P' G)
+  (h : G ℕ ⊧ law := by decide) (h' : ¬ G ℕ ⊧ law' := by decide) :
     ∃ (G : Type) (_ : Magma G), P G ∧ ¬ P' G :=
-  ⟨G ℕ, inferInstance, hlaw_iff.mp h, (not_iff_not.mpr hlaw'_iff).mp h'⟩
+  ⟨G ℕ, inferInstance, (hlaw_iff _).mp h, (not_iff_not.mpr (hlaw'_iff _)).mp h'⟩
 
 section Instances
 
