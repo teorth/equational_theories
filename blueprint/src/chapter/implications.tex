@@ -152,13 +152,8 @@ for all $x,y$, from which one concludes $x=x'$ for any $x,x' \in G$, giving \Cre
 \end{proof}
 
 
-Some other notable equational laws are as follows.
-
-\begin{theorem}[Sheffer stroke axiom]\label{sheffer}  The law
-$$ 0 \formaleq (1 \op ((0 \op 1) \op 1)) \op (0 \op (2 \op 1))$$
-or in equation form
-$$ x = (y \op ((x \op y) \op y)) \op (x \op (z \op y)) $$
-axiomatizes the Sheffer stroke operation $x \op y = \overline{xy}$ in a Boolean algebra. {\bf TODO: locate the equation number for this law.}
+\begin{theorem}[Sheffer stroke axiom]\label{sheffer}\uses{eq345169}  Definition \ref{eq345169}
+axiomatizes the Sheffer stroke operation $x \op y = \overline{xy}$ in a Boolean algebra.
 \end{theorem}
 
 \begin{proof}
@@ -175,22 +170,16 @@ A \emph{natural central groupoid} is, up to isomorphism, a magma with carrier $S
 $$ (a,b) \op (c,d) = (b,c).$$
 These are examples of central groupoids (\Cref{eq168}).
 
-\begin{theorem}[Natural central groupoid axiom]\label{natural-central-groupoid}  The law
-$$ 0 \formaleq (1 \op ((2 \op 0) \op 3)) \op (0 \op 3)$$
-or in equation form
-\begin{equation}\label{26302}
-  x = (y \op ((z \op x) \op w)) \op (x \op w)
-\end{equation}
-(Equation 26302) characterizes natural central groupoids.
+\begin{theorem}[Natural central groupoid axiom]\label{natural-central-groupoid}\uses{eq26302}  Definition \ref{eq26302} characterizes natural central groupoids.
 \end{theorem}
 
 \begin{proof}
-  See \cite[Theorem 5]{knuth}.  The proof is quite lengthy; a sketch is as follows. It is easy to see that natural central groupoids obey \Cref{26302}.  Conversely, if this law holds, then
+  See \cite[Theorem 5]{knuth}.  The proof is quite lengthy; a sketch is as follows. It is easy to see that natural central groupoids obey \Cref{eq26302}.  Conversely, if this law holds, then
 \begin{align*}
   (y \op z) \op (z \op w) &= (( x \op ((w \op (y \op z)) \op w)) \op ((y \op z) \op w)) \op (z \op w)\\
   &= z
 \end{align*}
-so we have a central groupoid.  Setting $y = (t \op t) \op t$, $z = t \op (t \op t)$, $w = t \op t$ in \Cref{26302} we also obtain
+so we have a central groupoid.  Setting $y = (t \op t) \op t$, $z = t \op (t \op t)$, $w = t \op t$ in \Cref{eq26302} we also obtain
 $$ (x \op t) \op t = (t \op t) \op t.$$
 Using the notation
 $$ x^{(1)} := (x \op x) \op x, \quad x^{(2)} := x \op (x \op x)$$
