@@ -1,4 +1,6 @@
 import equational_theories.Equations.All
+import equational_theories.MagmaOp
+import Aesop
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import equational_theories.Mathlib.Algebra.Group.Nat
@@ -460,37 +462,15 @@ theorem Equation3994_not_implies_Equation3588 : ∃ (G : Type) (_ : Magma G), Eq
   simp [magN]
 
 /--
-Dual of the above, obtained by swapping x and y in the proof.
-TODO: find a way to avoid this kind of code duplication.
+Dual of the above.
 -/
 @[equational_result]
-theorem Equation3588_not_implies_Equation3944 : ∃ (G : Type) (_ : Magma G), Equation3588 G ∧ ¬ Equation3994 G := by
-  let magN : Magma ℕ := ⟨fun y x ↦ if Even x ∧ Even y then x ^^^ y else if Even y then y + 2
-    else if Even x then x - 2 else 0⟩
-  use ℕ, magN
-  have range : ∀ x y : ℕ, Even (x ◇ y : ℕ) := by
-    intro x y
-    simp only [magN]
-    split_ifs
-    · simp_all
-    · simpa [Nat.even_add]
-    · by_cases y < 2
-      · rw [Nat.sub_eq_zero_of_le]
-        simp
-        omega
-      rw [Nat.even_sub]
-      · simp_all
-      · omega
-    · exact even_zero
-  constructor
-  · intro x y z
-    generalize h : x ◇ y = v
-    have : Even v := by rw [← h]; apply range
-    by_cases hz : Even z
-    · simp [magN, this, hz, Nat.xor_comm, Nat.xor_cancel_left]
-    · simp [magN, hz, this, Nat.even_add]
-  simp only [not_forall]
-  use 1, 1, 1
-  simp [magN]
+theorem Equation3588_not_implies_Equation3994 : ∃ (G : Type) (_ : Magma G), Equation3588 G ∧ ¬ Equation3994 G := by
+  obtain ⟨G', G'Magma, h3994, h3588⟩ := Equation3994_not_implies_Equation3588
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h1 : Equation3994 G' ↔ Equation3588 (Op G') := forall_comm
+    rwa [h1] at h3994
+  · have h2 : Equation3994 (Op G') ↔ Equation3588 G' := forall_comm
+    rwa [←h2] at h3588
 
 end InfModel
