@@ -1,4 +1,6 @@
 import equational_theories.Equations.All
+import equational_theories.MagmaOp
+import Aesop
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import equational_theories.Mathlib.Algebra.Group.Nat
@@ -499,6 +501,16 @@ theorem Equation1661_not_implies_Equation1657 :
   exists 0, 1
   simp [magN,op,op_1661_1657]
 
+/-- Dual of the previous result -/
+@[equational_result]
+theorem Equation1979_not_implies_Equation1860 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation1860 G := by
+  obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation1657
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+    rwa [h3] at h1
+  · have h4 : Equation1657 G' ↔ Equation1860 (Op G') := by aesop
+    rwa [h4] at h2
+
 @[equational_result]
 theorem Equation1661_not_implies_Equation1630 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation1630 G := by
@@ -511,6 +523,16 @@ theorem Equation1661_not_implies_Equation1630 :
   simp only [not_forall]
   exists 1, 0
   simp [magN,op,op_1661_1657]
+
+/-- Dual of the previous result -/
+@[equational_result]
+theorem Equation1979_not_implies_Equation1884 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation1884 G := by
+  obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation1630
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+    rwa [h3] at h1
+  · have h4 : Equation1630 G' ↔ Equation1884 (Op G') := by aesop
+    rwa [h4] at h2
 
 @[equational_result]
 theorem Equation1661_not_implies_Equation1833 :
@@ -525,6 +547,16 @@ theorem Equation1661_not_implies_Equation1833 :
   exists 3, 0
   simp [magN,op,op_1661_1657]
 
+/-- Dual of the previous result -/
+@[equational_result]
+theorem Equation1979_not_implies_Equation1681 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation1681 G := by
+  obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation1833
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+    rwa [h3] at h1
+  · have h4 : Equation1833 G' ↔ Equation1681 (Op G') := by aesop
+    rwa [h4] at h2
+
 @[equational_result]
 theorem Equation1661_not_implies_Equation1837 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation1837 G := by
@@ -537,6 +569,16 @@ theorem Equation1661_not_implies_Equation1837 :
   simp only [not_forall]
   exists 3, 0
   simp [magN,op,op_1661_1657]
+
+/-- Dual of the previous result -/
+@[equational_result]
+theorem Equation1979_not_implies_Equation1634 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation1634 G := by
+  obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation1837
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+    rwa [h3] at h1
+  · have h4 : Equation1837 G' ↔ Equation1634 (Op G') := by aesop
+    rwa [h4] at h2
 
 @[equational_result]
 theorem Equation1661_not_implies_Equation1851 :
@@ -551,6 +593,16 @@ theorem Equation1661_not_implies_Equation1851 :
   exists 0, 3
   simp [magN,op,op_1661_1657]
 
+/-- Dual of the previous result -/
+@[equational_result]
+theorem Equation1979_not_implies_Equation1721 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation1721 G := by
+  obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation1851
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+    rwa [h3] at h1
+  · have h4 : Equation1851 G' ↔ Equation1721 (Op G') := by aesop
+    rwa [h4] at h2
+
 @[equational_result]
 theorem Equation1661_not_implies_Equation1860 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation1860 G := by
@@ -564,6 +616,15 @@ theorem Equation1661_not_implies_Equation1860 :
   exists 0, 3
   simp [magN,op,op_1661_1657]
 
+/-- Dual of the previous result -/
+@[equational_result]
+theorem Equation1979_not_implies_Equation1657 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation1657 G := by
+  obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation1860
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+    rwa [h3] at h1
+  · have h4 : Equation1860 G' ↔ Equation1657 (Op G') := by aesop
+    rwa [h4] at h2
 
 @[equational_result]
 theorem Equation1661_not_implies_Equation2443 :
@@ -578,6 +639,16 @@ theorem Equation1661_not_implies_Equation2443 :
   exists 1, 0
   simp [magN,op,op_1661_1657]
 
+/-- Dual of the previous result -/
+@[equational_result]
+theorem Equation1979_not_implies_Equation1035 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation1035 G := by
+  obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation2443
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+    rwa [h3] at h1
+  · have h4 : Equation2443 G' ↔ Equation1035 (Op G') := by aesop
+    rwa [h4] at h2
+
 @[equational_result]
 theorem Equation1661_not_implies_Equation2467 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation2467 G := by
@@ -590,6 +661,16 @@ theorem Equation1661_not_implies_Equation2467 :
   simp only [not_forall]
   exists 0, 1
   simp [magN,op,op_1661_1657]
+
+/-- Dual of the previous result -/
+@[equational_result]
+theorem Equation1979_not_implies_Equation1085 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation1085 G := by
+  obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation2467
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+    rwa [h3] at h1
+  · have h4 : Equation2467 G' ↔ Equation1085 (Op G') := by aesop
+    rwa [h4] at h2
 
 @[equational_result]
 theorem Equation1661_not_implies_Equation3457 :
@@ -604,6 +685,16 @@ theorem Equation1661_not_implies_Equation3457 :
   exists 1, 0
   simp [magN,op,op_1661_1657]
 
+/-- Dual of the previous result -/
+@[equational_result]
+theorem Equation1979_not_implies_Equation3877 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation3877 G := by
+  obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation3457
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+    rwa [h3] at h1
+  · have h4 : Equation3457 G' ↔ Equation3877 (Op G') := by aesop
+    rwa [h4] at h2
+
 @[equational_result]
 theorem Equation1661_not_implies_Equation3521 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation3521 G := by
@@ -616,6 +707,16 @@ theorem Equation1661_not_implies_Equation3521 :
   simp only [not_forall]
   exists 0, 1
   simp [magN,op,op_1661_1657]
+
+/-- Dual of the previous result -/
+@[equational_result]
+theorem Equation1979_not_implies_Equation3952 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation3952 G := by
+  obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation3521
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+    rwa [h3] at h1
+  · have h4 : Equation3521 G' ↔ Equation3952 (Op G') := forall_comm
+    rwa [h4] at h2
 
 @[equational_result]
 theorem Equation1661_not_implies_Equation4268 :
@@ -630,6 +731,16 @@ theorem Equation1661_not_implies_Equation4268 :
   exists 3, 0
   simp [magN,op,op_1661_1657]
 
+/-- Dual of the previous result -/
+@[equational_result]
+theorem Equation1979_not_implies_Equation4587 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation4587 G := by
+  obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation4268
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+    rwa [h3] at h1
+  · have h4 : Equation4268 G' ↔ Equation4587 (Op G') := by aesop
+    rwa [h4] at h2
+
 @[equational_result]
 theorem Equation1661_not_implies_Equation4314 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation4314 G := by
@@ -642,3 +753,15 @@ theorem Equation1661_not_implies_Equation4314 :
   simp only [not_forall]
   exists 0, 3
   simp [magN,op,op_1661_1657]
+
+/-- Dual of the previous result -/
+@[equational_result]
+theorem Equation1979_not_implies_Equation4606 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation4606 G := by
+  obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation4314
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+    rwa [h3] at h1
+  · have h4 : Equation4314 G' ↔ Equation4606 (Op G') := by
+      unfold Equation4314 Equation4606
+      aesop
+    rwa [h4] at h2
