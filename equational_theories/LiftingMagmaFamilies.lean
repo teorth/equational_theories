@@ -6,14 +6,16 @@ import Mathlib.Data.Finsupp.Defs
 
 open Law
 
-class LiftingMagmaFamily (G : (α : Type) → [DecidableEq α] → Type) [∀ α [DecidableEq α], Magma (G α)] where
+class LiftingMagmaFamily (G : Type → Type) where
+  instMagma (α) [DecidableEq α] : Magma (G α)
   instMagmaDecidableEq {α} [DecidableEq α] : DecidableEq (G α)
-  ι : ∀ {α} [DecidableEq α], α → G α
+  ι : ∀ {α}, α → G α
   lift : ∀ {α} [DecidableEq α], (α → G α) → (G α →◇ G α)
   lift_factors : ∀ {α} [DecidableEq α], ∀ f : α → G α, f = (lift f) ∘ ι
 
-variable {α : Type _} [DecidableEq α] (G : (α : Type _) → [DecidableEq α] → Type)
-  [∀ α [DecidableEq α], Magma (G α)] [LiftingMagmaFamily G]
+variable {α : Type} [DecidableEq α] (G : Type → Type) [LiftingMagmaFamily G]
+
+instance [LiftingMagmaFamily G] : Magma (G α) := LiftingMagmaFamily.instMagma α
 
 instance [DecidableEq α] : DecidableEq (G α) :=
   LiftingMagmaFamily.instMagmaDecidableEq
@@ -23,19 +25,14 @@ theorem MagmaLaw.models_iff_satisfies_ι (law : MagmaLaw α) :
   constructor
   · intro h
     apply h
-  · intro h f
+  · intro h
+    intro f
     have := LiftingMagmaFamily.lift_factors f
     rw [this, satisfiesPhi_evalHom, h]
 
-instance instDecidableSatisfies [DecidableEq α] (law : MagmaLaw α) : Decidable (G α ⊧ law) := by
+instance instDecidableSatisfiesLaw [DecidableEq α] (law : MagmaLaw α) : Decidable (G α ⊧ law) := by
   rw [MagmaLaw.models_iff_satisfies_ι, satisfiesPhi]
   infer_instance
-
-set_option linter.unusedSectionVars false in
-lemma proveNonimplication {law law' : NatMagmaLaw} {P P' : (G : Type _) → [Magma G] → Prop}
-  (models_law_iff : G Nat ⊧ law ↔ P (G Nat)) (models_law'_iff : G Nat ⊧ law' ↔ P' (G Nat))
-  (hlaw : G Nat ⊧ law) (hlaw' : ¬(G Nat ⊧ law')) : ∃ (M : Type _) (_ : Magma M), P M ∧ ¬ (P' M) :=
-  ⟨G Nat, inferInstance, models_law_iff.mp hlaw, ((not_iff_not).mpr models_law'_iff).mp hlaw'⟩
 
 section Instances
 
@@ -58,57 +55,65 @@ instance : LiftingMagmaFamily (List ·) where
     symm
     apply List.bind_singleton
 
-instance (priority := low) leftProj (α : Type _) : Magma α where
-  op := fun a _ => a
-
-instance instLiftingMagmaFamilyLeftProj : @LiftingMagmaFamily (Id ·) (leftProj ·) where
-  instMagmaDecidableEq := inferInstance
-  ι := id
-  lift f := {
-    toFun := f,
-    map_op' := by
-      intro x y
-      rfl
-  }
-  lift_factors := by
-    intro α _ f
-    funext x
-    rfl
-
-instance (priority := low) rightProj (α : Type _) : Magma α where
-  op := fun _ a => a
-
-instance instLiftingMagmaFamilyRightProj : @LiftingMagmaFamily (Id ·) (rightProj ·) where
-  instMagmaDecidableEq := inferInstance
-  ι := id
-  lift f := {
-    toFun := f,
-    map_op' := by
-      intro x y
-      rfl
-  }
-  lift_factors := by
-    intro α _ f
-    funext x
-    rfl
-
-instance instMagmaMultiset {α : Type _} [DecidableEq α] : Magma (Finset α) where
-  op := Union.union
+instance (priority := high) instMagmaMultiset (α : Type _) [DecidableEq α] : Magma (Multiset α) where
+  op := (· + ·)
 
 instance : LiftingMagmaFamily (Multiset ·) where
+  instMagma := instMagmaMultiset
   instMagmaDecidableEq := inferInstance
   ι := fun a ↦ {a}
   lift f := {
     toFun := (Multiset.bind · f),
     map_op' := by
       intro _ _
-      dsimp only [Magma.op]
+      dsimp [Magma.op, Multiset.bind]
+      rw [Multiset.map_add, Multiset.join_add]
     }
   lift_factors := by
     intro α _ f
     funext x
     symm
     apply Multiset.singleton_bind
+
+def LeftProj (α : Type _) := α
+
+instance (priority := low) leftProj (α : Type _) : Magma (LeftProj α) where
+  op := fun a _ => a
+
+instance instLiftingMagmaFamilyLeftProj : @LiftingMagmaFamily (LeftProj ·) where
+  instMagma := (leftProj ·)
+  instMagmaDecidableEq := inferInstance
+  ι := id
+  lift f := {
+    toFun := f,
+    map_op' := by
+      intro x y
+      rfl
+  }
+  lift_factors := by
+    intro α _ f
+    funext x
+    rfl
+
+def RightProj (α : Type _) := α
+
+instance (priority := low+1) rightProj (α : Type _) : Magma (RightProj α) where
+  op := fun _ a => a
+
+instance instLiftingMagmaFamilyRightProj : @LiftingMagmaFamily (RightProj ·) where
+  instMagma := (rightProj ·)
+  instMagmaDecidableEq := inferInstance
+  ι := id
+  lift f := {
+    toFun := f,
+    map_op' := by
+      intro x y
+      rfl
+  }
+  lift_factors := by
+    intro α _ f
+    funext x
+    rfl
 
 -- TODO: Lifting family FreeMagma
 
