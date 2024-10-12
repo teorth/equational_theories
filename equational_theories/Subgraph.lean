@@ -1,7 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
 import equational_theories.EquationalResult
-import equational_theories.Closure
 import equational_theories.Equations.Basic
 import equational_theories.FactsSyntax
 import equational_theories.FreeSemigroup
