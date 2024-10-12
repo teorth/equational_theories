@@ -736,7 +736,7 @@ theorem Equation1661_not_implies_Equation4268 :
 theorem Equation1979_not_implies_Equation4587 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation4587 G := by
   obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation4268
   refine ⟨Op G', opMagma, ?_, ?_⟩
-  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop?
     rwa [h3] at h1
   · have h4 : Equation4268 G' ↔ Equation4587 (Op G') := by aesop
     rwa [h4] at h2

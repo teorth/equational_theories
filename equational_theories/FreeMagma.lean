@@ -9,6 +9,9 @@ inductive FreeMagma (α : Type u)
   | Fork : FreeMagma α → FreeMagma α → FreeMagma α
   deriving DecidableEq
 
+instance (α : Type u) [Inhabited α] : Inhabited (FreeMagma α) where
+  default := .Leaf default
+
 instance (α : Type u) : Magma (FreeMagma α) where
   op := FreeMagma.Fork
 
