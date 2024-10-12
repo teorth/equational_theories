@@ -80,12 +80,11 @@ def parseImplication (thm_ty : Expr) : MetaM (Option Implication) := do
 Builds an implication of Laws from the implication of theorems. It should look something like:
 
 ```
-LE.le.{0} Law.NatMagmaLaw (Law.MagmaLaw.instLE Nat) LawN LawM :=
-fun {G : Type} [inst : Magma.{0} G]
-(h : satisfies Nat G inst LawN) =>
-Iff.mpr (satisfies Nat G inst LawM) (EquationM.{0} G inst) (LawM.models_iff G inst)
-(Subgraph.EquationN_implies_EquationM.{0} G inst (Iff.mp (satisfies Nat G inst LawN)
-(EquationN.{0} G inst) (LawN.models_iff G inst) h))
+theorem LawN_implies_LawM : @Law.MagmaLaw.implies.{0} Nat LawN LawM :=
+fun (G : Type) (inst : Magma.{0} G) (h : @satisfies.{0, 0} Nat G inst LawN) ↦
+  @Iff.mpr (@satisfies.{0, 0} Nat G inst LawM) (@Equation3.{0} G inst) (@LawM.models_iff.{0} G inst)
+    (@Subgraph.EquationN_implies_EquationM.{0} G inst
+      (@Iff.mp (@satisfies.{0, 0} Nat G inst Law2) (@EquationN.{0} G inst) (@LawN.models_iff.{0} G inst) h))
 ```
 -/
  def addLawImplicationThm (thm_ty : Expr) (thm_name : Name) : MetaM Unit := do
