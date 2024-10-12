@@ -65,7 +65,7 @@ class Lean4LeanChecker():
 
     except Exception as e:
       print(f"Failed to upgrade lean4lean.\n Cause: {e.args}\nCancelling lean4lean check and exiting")
-      exit(0)
+      sys.exit(0)
 
   def remove_old_l4l(self):
     try:
