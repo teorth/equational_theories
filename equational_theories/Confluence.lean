@@ -1055,13 +1055,6 @@ local macro "separate" : tactic => `(tactic| (
     try trivial
 ))
 
-local macro "autosplit" : tactic => `(tactic| (
-  try any_goals separate
-  repeat'
-    split at *
-    try any_goals separate
-))
-
 local macro "prove_elim" : tactic => `(tactic| (
   repeat' split
   all_goals simp_all only [confluence_simps, exists_and_right, exists_eq_right_right', exists_eq_right', false_iff, not_exists, true_and]
@@ -1072,9 +1065,9 @@ local macro "prove_elim" : tactic => `(tactic| (
     · intro h
       subst_eqs
       repeat constructor
-    · autosplit
+    · separate
   try any_goals
-    try autosplit
+    try separate
     try simp_all only [not_true_eq_false, imp_false]
 ))
 
@@ -1083,7 +1076,7 @@ local macro "prove_elim_not" : tactic => `(tactic| (
   all_goals simp_all only [confluence_simps, false_iff, not_exists, not_and, true_iff, forall_eq', forall_apply_eq_imp_iff, true_iff, not_false_eq_true]
   separate
   try simp_all only [not_true_eq_false, imp_false]
-  try any_goals autosplit
+  try any_goals separate
   try any_goals
     try simp_all only [not_true_eq_false, imp_false]
     try rename_i h
