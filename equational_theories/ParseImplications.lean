@@ -105,7 +105,7 @@ Iff.mpr (satisfies Nat G inst LawM) (EquationM.{0} G inst) (LawM.models_iff G in
      let rhslawName : Name := Name.mkSimple s!"Law{rhsN}"
      let lhslaw : Expr := mkConst lhslawName
      let rhslaw : Expr := mkConst rhslawName
-     let lawThmTy : Expr := mkApp3 (mkConst ``Law.MagmaLaw.implies) (mkConst ``Nat) (mkConst lhslawName) (mkConst rhslawName)
+     let lawThmTy : Expr := mkApp3 (mkConst ``Law.MagmaLaw.implies (us := [Lean.levelZero])) (mkConst ``Nat) (mkConst lhslawName) (mkConst rhslawName)
 
      -- Create binders for G and inst
      let type0 := (Lean.mkSort Lean.levelOne)
@@ -113,14 +113,14 @@ Iff.mpr (satisfies Nat G inst LawM) (EquationM.{0} G inst) (LawM.models_iff G in
        Meta.withLocalDeclD `G type0 fun G =>
          let instType := mkApp (mkConst ``Magma (us:=[Lean.levelZero])) G
          Meta.withLocalDeclD `inst instType fun inst =>
-           let satlhs : Expr := mkApp4 (mkConst ``satisfies) (mkConst ``Nat) G inst lhslaw
+           let satlhs : Expr := mkApp4 (mkConst ``satisfies (us:=[Lean.levelZero,Lean.levelZero])) (mkConst ``Nat) G inst lhslaw
            Meta.withLocalDeclD `h satlhs fun h =>
              -- Build expressions in body of proof term (using binders)
-             let satrhs : Expr := mkApp4 (mkConst ``satisfies) (mkConst ``Nat) G inst rhslaw
+             let satrhs : Expr := mkApp4 (mkConst ``satisfies (us:=[Lean.levelZero,Lean.levelZero])) (mkConst ``Nat) G inst rhslaw
              let eqnlhs : Expr := mkApp2 (mkConst lhsName (us :=[Lean.levelZero])) G inst
              let eqnrhs : Expr := mkApp2 (mkConst rhsName (us :=[Lean.levelZero])) G inst
-             let lhs_models_iff : Expr := mkApp2 (mkConst <| Name.str lhslawName "models_iff") G inst
-             let rhs_models_iff : Expr := mkApp2 (mkConst <| Name.str rhslawName "models_iff") G inst
+             let lhs_models_iff : Expr := mkApp2 (mkConst (us :=[Lean.levelZero]) <| Name.str lhslawName "models_iff" ) G inst
+             let rhs_models_iff : Expr := mkApp2 (mkConst (us :=[Lean.levelZero]) <| Name.str rhslawName "models_iff") G inst
              let impl : Expr := mkApp3 (mkConst thm_name (us :=[Lean.levelZero])) G inst
                (mkApp4 (mkConst ``Iff.mp) satlhs eqnlhs lhs_models_iff h)
              let proofBody : Expr := mkApp4 (mkConst ``Iff.mpr) satrhs eqnrhs rhs_models_iff impl
