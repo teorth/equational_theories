@@ -27,7 +27,7 @@ def generateNonImplicationsTable : CoreM (Std.HashMap String (Array String)) := 
     | .implication _ => none
     | .nonimplication e => some e
   IO.println s!"Filtered to {nonImplications.size} non-implications ..."
-  return nonImplications.foldl (init := {}) fun map ⟨lhs, rhs⟩ ↦
+  return nonImplications.foldl (init := Std.HashMap.empty (capacity := 8192)) fun map ⟨lhs, rhs⟩ ↦
     match map[lhs]? with
     | some arr =>
       let map := map.erase lhs
@@ -62,22 +62,27 @@ where
     s!"\n\n@[equational_result]\ntheorem {pos}_not_implies_{neg} : ∃ (G : Type) (_ : Magma G), {pos} G ∧ ¬ {neg} G :=
     LiftingMagmaFamily.establishNonimplication (family := {instName}) _ {pos}.models_iff {neg}.models_iff"
 
+def outputDir : System.FilePath := "." / "equational_theories" / "Generated"
+
 def generateAllNonimplications : CoreM Unit := do
   IO.println "Generating table of existing non-implications ..."
   let table ← generateNonImplicationsTable
   IO.println s!"Generated table of non-implications with {table.size} keys, retrieving laws ..."
   let laws ← getMagmaLaws
-  let fileStem : System.FilePath := "." / "equational_theories" / "Generated"
   IO.println s!"Retrieved {laws.size} laws from the environment ..."
   for inst in liftingMagmaFamilyInstances do
     IO.println s!"Generating non-implications for {inst.instName} ..."
     generateInvariantMetatheoremResults inst table laws <|
-      fileStem / "InvariantMetatheoremNonimplications" / s!"{inst.instName}_counterexamples.lean"
+      outputDir / "InvariantMetatheoremNonimplications" / s!"{inst.instName}_counterexamples.lean"
   let mainFile := liftingMagmaFamilyInstances.foldl (init := "") fun acc inst ↦
     acc ++ s!"import equational_theories.Generated.InvariantMetatheoremNonimplications.{inst.instName}_counterexamples\n"
-  IO.FS.writeFile (fileStem / "InvariantMetatheoremNonimplications.lean") mainFile
+  IO.FS.writeFile (outputDir / "InvariantMetatheoremNonimplications.lean") mainFile
 
 def main : IO Unit := do
+  -- this is to prevent previously generated results from accidentally shadowing the new ones
+  IO.println "Erasing previously generated files..."
+  for inst in liftingMagmaFamilyInstances do
+    IO.FS.writeFile (outputDir / "InvariantMetatheoremNonimplications" / s!"{inst.instName}_counterexamples.lean") ""
   IO.println "Generating counterexample files..."
   IO.println "Loading environment..."
   searchPathRef.set compile_time_search_path%
