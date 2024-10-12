@@ -1289,6 +1289,186 @@ macro_rules
 
   pure <| mkListNode decls
 
+namespace rw1633
+variable [DecidableEq α]
+
+rule_system rules {x y z: FreeMagma α}
+| ((x ⋆ x) ⋆ ((x ⋆ y) ⋆ z)) => x
+| ((x ⋆ x) ⋆ x) => x
+| (((x ⋆ x) ⋆ (x ⋆ x)) ⋆ (x ⋆ y)) => (x ⋆ x)
+| ((((x ⋆ x) ⋆ (x ⋆ x)) ⋆ ((x ⋆ x) ⋆ (x ⋆ x))) ⋆ x) => ((x ⋆ x) ⋆ (x ⋆ x))
+
+theorem comp1_2 {x y z : FreeMagma α}:
+    rules (x ⋆ x ⋆ rules (x ⋆ y ⋆ z)) = x := by
+  generalize h: rules (x ⋆ y ⋆ z) = e
+  simp only [rules.elim] at h
+  separate
+  · apply rules.eq2
+  · apply rules.eq2
+  · apply rules.eq2
+  · apply rules.eq2
+  · apply rules.eq1
+
+theorem comp3_2 {x y : FreeMagma α}:
+    rules (x ⋆ x ⋆ (x ⋆ x) ⋆ rules (x ⋆ y)) = x ⋆ x := by
+  generalize h: rules (x ⋆ y) = e
+  simp only [rules.elim] at h
+  separate
+  · apply rules.eq4
+  · apply rules.eq4
+  · apply rules.eq4
+  · apply rules.eq4
+  · apply rules.eq3
+
+theorem comp1_3 {x y z : FreeMagma α}:
+    rules (x ⋆ x ⋆ rules (rules (x ⋆ y) ⋆ z)) = x := by
+  generalize h: rules (x ⋆ y) = e
+  simp only [rules.elim] at h
+  separate
+  · apply comp3_2
+  · apply comp3_2
+  · apply comp3_2
+  · apply comp3_2
+  · apply comp1_2
+
+theorem comp1_4 {x y z : FreeMagma α}:
+    rules (rules (x ⋆ x) ⋆ rules (rules (x ⋆ y) ⋆ z)) = x := by
+  generalize h: rules (x ⋆ x) = e
+  simp only [rules.elim] at h
+  separate
+  apply comp1_3
+
+@[equational_result]
+theorem «Facts» :
+  ∃ (G : Type) (_ : Magma G), Facts G [1633] [4268, 4282] := by
+  use ConfMagma (@rules Nat _), inferInstance
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩ ⟨z, hz⟩
+    simp (disch := bufixed) only [Magma.op, bu, hx, hy, hz, buFixed_rw_op]
+    symm
+    congr! 1
+    apply comp1_4
+  all_goals refute
+
+end rw1633
+
+namespace rw1630
+variable [DecidableEq α]
+
+rule_system rules {x y: FreeMagma α}
+| ((x ⋆ x) ⋆ ((x ⋆ x) ⋆ y)) => x
+| ((x ⋆ x) ⋆ x) => x
+
+theorem comp1_2 {x y : FreeMagma α}:
+    rules (x ⋆ x ⋆ rules (x ⋆ x ⋆ y)) = x := by
+  generalize h: rules (x ⋆ x ⋆ y) = e
+  simp only [rules.elim] at h
+  separate
+  · apply rules.eq2
+  · apply rules.eq2
+  · apply rules.eq1
+
+theorem comp1_4 {x y : FreeMagma α}:
+    rules (rules (x ⋆ x) ⋆ rules (rules (x ⋆ x) ⋆ y)) = x := by
+  generalize h: rules (x ⋆ x) = e
+  simp only [rules.elim] at h
+  separate
+  apply comp1_2
+
+@[equational_result]
+theorem «Facts» :
+  ∃ (G : Type) (_ : Magma G), Facts G [1630] [4268, 4282] := by
+  use ConfMagma (@rules Nat _), inferInstance
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩
+    simp (disch := bufixed) only [Magma.op, bu, hx, hy, buFixed_rw_op]
+    symm
+    congr! 1
+    apply comp1_4
+  all_goals refute
+
+end rw1630
+
+namespace rw1519
+variable [DecidableEq α]
+
+rule_system rules {x y: FreeMagma α}
+| ((x ⋆ x) ⋆ (y ⋆ (x ⋆ x))) => y
+| (((x ⋆ x) ⋆ (x ⋆ x)) ⋆ (x ⋆ x)) => (x ⋆ x)
+
+theorem comp1_2 {x y : FreeMagma α} (hx: NF rules x):
+    rules (y ⋆ y ⋆ rules (x ⋆ (y ⋆ y))) = x := by
+  generalize h: rules (x ⋆ (y ⋆ y)) = e
+  simp only [rules.elim] at h
+  separate
+  · apply rules.eq2
+  · apply hx.top
+  · apply rules.eq1
+
+theorem comp1_4 {x y : FreeMagma α} (hx: NF rules x):
+    rules (rules (y ⋆ y) ⋆ rules (x ⋆ rules (y ⋆ y))) = x := by
+  generalize h: rules (y ⋆ y) = e
+  simp only [rules.elim] at h
+  separate
+  apply comp1_2 hx
+
+@[equational_result]
+theorem «Facts» :
+  ∃ (G : Type) (_ : Magma G), Facts G [1519] [2035, 2128] := by
+  use ConfMagma (@rules Nat _), inferInstance
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩
+    simp (disch := bufixed) only [Magma.op, bu, hx, hy, buFixed_rw_op]
+    symm
+    congr! 1
+    apply comp1_4  ((NF_iff_buFixed rules).mpr hx)
+  all_goals refute
+
+end rw1519
+
+namespace rw1276
+variable [DecidableEq α]
+
+rule_system rules {x y: FreeMagma α}
+| (x ⋆ (((y ⋆ y) ⋆ y) ⋆ x)) => y
+| ((((x ⋆ x) ⋆ x) ⋆ ((y ⋆ y) ⋆ y)) ⋆ x) => y
+
+theorem comp1_2 {x y : FreeMagma α}:
+    rules (y ⋆ rules (x ⋆ x ⋆ x ⋆ y)) = x := by
+  generalize h: rules (x ⋆ x ⋆ x ⋆ y) = e
+  simp only [rules.elim] at h
+  separate
+  · apply rules.eq2
+  · apply rules.eq1
+
+theorem comp1_3 {x y : FreeMagma α}:
+    rules (y ⋆ rules (rules (x ⋆ x ⋆ x) ⋆ y)) = x := by
+  generalize h: rules (x ⋆ x ⋆ x) = e
+  simp only [rules.elim] at h
+  separate
+  apply comp1_2
+
+theorem comp1_4 {x y : FreeMagma α}:
+    rules (y ⋆ rules (rules (rules (x ⋆ x) ⋆ x) ⋆ y)) = x := by
+  generalize h: rules (x ⋆ x) = e
+  simp only [rules.elim] at h
+  separate
+  apply comp1_3
+
+@[equational_result]
+theorem «Facts» :
+  ∃ (G : Type) (_ : Magma G), Facts G [1276] [4273, 4332] := by
+  use ConfMagma (@rules Nat _), inferInstance
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩
+    simp (disch := bufixed) only [Magma.op, bu, hx, hy, buFixed_rw_op]
+    symm
+    congr! 1
+    apply comp1_4
+  all_goals refute
+
+end rw1276
+
 namespace rw1431
 variable [DecidableEq α]
 
