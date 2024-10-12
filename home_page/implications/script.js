@@ -47,6 +47,7 @@ const mapped = mapThroughLUT(decoded);
 const implications = reshape(mapped, 4694, 4694);
 
 const GRAPHITI_BASE_URL = "https://teorth.github.io/equational_theories/graphiti/"
+const FME_BASE_URL = "https://teorth.github.io/equational_theories/fme/"
 
 const listPage = document.getElementById('listPage');
 const detailPage = document.getElementById('detailPage');
@@ -55,6 +56,7 @@ const equationList = document.getElementById('equationList');
 const selectedEquation = document.getElementById('selectedEquation');
 const selectedEquationDual = document.getElementById('selectedEquationDual');
 const selectedEquationGraphitiLinks = document.getElementById('selectedEquationGraphitiLinks');
+const smallestMagmaLink = document.getElementById('smallestMagmaLink');
 const impliesList = document.getElementById('impliesList');
 const antiImpliesList = document.getElementById('antiImpliesList');
 const unknownImpliesList = document.getElementById('unknownImpliesList');
@@ -366,6 +368,12 @@ function renderImplications(index) {
     const impliedby = unknownImpliedByEqNum.map(x => x + 1)
     selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1},${impliedby.join(",")}&highlight_red=${index+1}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implies</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1},${impliedby.join(",")}&highlight_red=${index+1}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknown bys+conjectured bys</a>)`
   }
+
+  smallest_magma = smallest_magma_data[index+1]
+  smallestMagmaLink.innerHTML = smallest_magma 
+    ? `<br />(Size of smallest non-trivial magma: ${smallest_magma.length} <a target="_blank" href="${FME_BASE_URL}?magma=${encodeURIComponent(JSON.stringify(smallest_magma))}">(Explore)</a>)`
+    : `<br />(Size of smallest non-trivial magma: N/A)`
+
 
     impliesList.innerHTML = implies.join('') || 'None';
     antiImpliesList.innerHTML = antiImplies.join('') || 'None';
