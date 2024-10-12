@@ -173,7 +173,7 @@ theorem bu_nf : ∀ x, NF rw (bu rw x) := by
   intro x
   induction x with
   | Leaf a =>
-    simp [NF, bu, Everywhere]
+    simp only [NF, bu, Everywhere]
     obtain (hsub | hnf) := hproj.proj_or_nf (a)
     · unfold SubtermOf at hsub
       unfold Everywhere
@@ -1307,7 +1307,7 @@ instance: IsProjOrNF (rules : FreeMagma α → _) where
     · left
       subterm
     · right
-      simp [NF, Everywhere]
+      simp only [NF, Everywhere, and_self_left]
       constructor
       · simp [rules, rules.rule1, rules.rule2]
       · apply rules.eq2
@@ -1476,7 +1476,7 @@ instance: IsProjOrNF (rules : FreeMagma α → _) where
     · left
       subterm
     · right
-      simp [NF, Everywhere]
+      simp only [NF, Everywhere, and_self_left]
       constructor
       · simp [rules, rules.rule1, rules.rule2, rules.rule3]
       · apply rules.eq3
