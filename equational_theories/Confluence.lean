@@ -1083,14 +1083,13 @@ local macro "prove_elim_not" : tactic => `(tactic| (
   all_goals simp_all only [confluence_simps, false_iff, not_exists, not_and, true_iff, forall_eq', forall_apply_eq_imp_iff, true_iff, not_false_eq_true]
   separate
   try simp_all only [not_true_eq_false, imp_false]
-
   try any_goals autosplit
   try any_goals
     try simp_all only [not_true_eq_false, imp_false]
     try rename_i h
     try apply h
     try any_goals apply Eq.refl _
-    try trivial
+    try any_goals trivial
 ))
 
 local syntax "subterm" : tactic
@@ -1289,6 +1288,77 @@ macro_rules
     )
 
   pure <| mkListNode decls
+
+namespace rw1443
+
+variable [DecidableEq α]
+
+rule_system rules {x y z: FreeMagma α}
+| ((x ⋆ y) ⋆ (x ⋆ (x ⋆ z))) => x
+| (x ⋆ ((x ⋆ y) ⋆ x)) => (x ⋆ y)
+| (x ⋆ ((x ⋆ y) ⋆ ((x ⋆ y) ⋆ z))) => (x ⋆ y)
+| (((x ⋆ y) ⋆ z) ⋆ ((x ⋆ y) ⋆ x)) => (x ⋆ y)
+
+theorem comp1_2 {x y z : FreeMagma α}:
+    rules (rules (x ⋆ y) ⋆ (x ⋆ (x ⋆ z))) = x := by
+  generalize h: rules (x ⋆ y) = e
+  simp only [rules.elim] at h
+  separate
+  · apply rules.eq3
+  · apply rules.eq1
+  · apply rules.eq1
+  · apply rules.eq3
+  · apply rules.eq1
+
+theorem comp1_3 {x y z : FreeMagma α}:
+    rules (rules (x ⋆ y) ⋆ rules (x ⋆ (x ⋆ z))) = x := by
+  generalize h: rules (x ⋆ (x ⋆ z)) = e
+  simp only [rules.elim] at h
+  separate
+  · apply comp1_2
+
+theorem comp4_2 {x y z : FreeMagma α}:
+    rules (rules (x ⋆ y ⋆ z) ⋆ (x ⋆ y ⋆ x)) = x ⋆ y := by
+  generalize h: rules (x ⋆ y ⋆ z) = e
+  simp only [rules.elim] at h
+  separate
+  · apply rules.eq2
+  · apply rules.eq4
+  · apply rules.eq4
+  · apply rules.eq2
+  · apply rules.eq4
+
+theorem comp4_3 {x y z : FreeMagma α}:
+    rules (rules (x ⋆ y ⋆ z) ⋆ rules (x ⋆ y ⋆ x)) = x ⋆ y := by
+  generalize h: rules (x ⋆ y ⋆ x) = e
+  simp only [rules.elim] at h
+  separate
+  apply comp4_2
+
+theorem comp1_4 {x y z : FreeMagma α}:
+    rules (rules (x ⋆ y) ⋆ rules (x ⋆ rules (x ⋆ z))) = x := by
+  generalize h: rules (x ⋆ z) = e
+  simp only [rules.elim] at h
+  separate
+  · apply comp4_3
+  · apply comp1_3
+  · apply comp1_3
+  · apply comp4_3
+  · apply comp1_3
+
+@[equational_result]
+theorem «Facts» :
+  ∃ (G : Type) (_ : Magma G), Facts G [1443] [23, 1629, 1630, 2441, 3050, 3055, 3522, 4065, 4067, 4118, 4268, 4282] := by
+  use ConfMagma (@rules Nat _), inferInstance
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩ ⟨z, hz⟩
+    simp (disch := bufixed) only [Magma.op, bu, hx, hy, hz, buFixed_rw_op]
+    symm
+    congr! 1
+    apply comp1_4
+  all_goals refute
+
+end rw1443
 
 namespace rw481
 
