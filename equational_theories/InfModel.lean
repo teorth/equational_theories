@@ -593,6 +593,15 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
       conv =>
         lhs
         unfold FreeMagma.evalInMagma
+      have : w ⬝ f = eval_eq w (f 0) (f 1) := by
+        unfold eval_eq
+        have : f = (fun z => if z = 0 then f 0 else f 1) := by
+          funext z
+          fin_cases z
+            <;> simp only [Fin.zero_eta, Fin.isValue, Fin.mk_one, one_ne_zero, ↓reduceIte]
+        simp only [←this]
+      rw [this]
+        ; clear this
       have : eval_eq w (f 0) (f 1) = eval_eq w (f 0 - f 1) 0 + eval_eq w (f 1) (f 1) := by
         clear hl hr
         simp only [eval_eq]
@@ -611,8 +620,10 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           rw [h1, h2]
           unfold Magma.op
           ring_nf
+      rw [this]
+        ; clear this
       have : eval_eq w (f 0 - f 1) 0 = f 0 - f 1 := by
-        clear hl hr this
+        clear hl hr
         simp only [eval_eq]
         induction w
         .
@@ -622,6 +633,7 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           .
             simp only [Fin.zero_eta, Fin.isValue, ↓reduceIte, sub_add_cancel]
           .
+            simp_all only [ge_iff_le, Fin.mk_one, Fin.isValue, one_ne_zero, ↓reduceIte, G]
             sorry
         .
           rename_i w1 w2 h1 h2
@@ -629,9 +641,13 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           rw [h1, h2]
           unfold Magma.op
           ring_nf
+      rw [this]
+        ; clear this hl hr
+      rw [←add_neg_eq_zero]
+      ring_nf
+      simp only [eval_eq]
+      simp only [Fin.isValue, ite_self]
       have : eval_eq w (f 1) (f 1) = f 1 := by
-        clear hl hr this
-        clear this
         simp only [eval_eq]
         induction w
         .
@@ -639,26 +655,17 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           unfold FreeMagma.evalInMagma
           fin_cases z
           .
-            simp only [Fin.zero_eta, Fin.isValue, ↓reduceIte, sub_add_cancel]
+            simp only [Fin.zero_eta, Fin.isValue, ↓reduceIte]
           .
-            simp_all only [ge_iff_le, Fin.isValue, Fin.mk_one, ite_self, one_ne_zero, ↓reduceIte, G, eval_eq, M, a0]
+            simp only [Fin.mk_one, Fin.isValue, one_ne_zero, ↓reduceIte]
         .
           rename_i w1 w2 h1 h2
           unfold FreeMagma.evalInMagma
           rw [h1, h2]
           unfold Magma.op
           ring_nf
-      have this2 : eval_eq w (f 0) (f 1) = f 0 := by
-        simp_all only [Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, G, eval_eq, M]
-      have : w ⬝ f = eval_eq w (f 0) (f 1) := by
-        unfold eval_eq
-        have : f = (fun z => if z = 0 then f 0 else f 1) := by
-          funext z
-          fin_cases z
-          simp_all only [Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, Fin.zero_eta, ↓reduceIte, G, eval_eq, M]
-          simp_all only [Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, Fin.mk_one, one_ne_zero, ↓reduceIte, G, eval_eq, M]
-        simp only [←this]
-      rw [this]
-      rw [this2]
+      rw [←this]
+        ; clear this
+      ring_nf
 
 end InfModel
