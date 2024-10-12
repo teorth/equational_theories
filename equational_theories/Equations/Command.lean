@@ -17,6 +17,9 @@ def getMagmaLaws : CoreM (Array (Name × NatMagmaLaw)) := do
 def magmaLawNameToEquationName (magmaLawName : String) : String :=
   "Equation" ++ (magmaLawName.drop "Law".length)
 
+def equationNameToMagmaLawName (equationName : String) : String :=
+  "Law" ++ (equationName.drop "Equation".length)
+
 namespace EquationsCommand
 
 partial def parseFreeMagma : Term → StateT (Array Ident) Option (FreeMagma Nat)
@@ -81,7 +84,7 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
   let eqName := .mkSimple s!"Equation{i.getNat}"
   let eqStx := mkNullNode #[tk, i]
   let lawName := .mkSimple s!"Law{i.getNat}"
-  let thmName := .str eqName "models_iff"
+  let thmName := .str lawName "models_iff"
   let some (law, is) := (parseMagmaLaw tsyn).run #[] | throwError "invalid magma law"
   let declMods ← elabModifiers mods
   let docs := s!"```\nequation {i.getNat} := {← PrettyPrinter.formatTerm tsyn}\n```"

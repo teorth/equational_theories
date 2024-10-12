@@ -60,7 +60,7 @@ def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
 where
   generateEquationResult (pos neg : String) (instName : Name) : String :=
     s!"\n\n@[equational_result]\ntheorem {pos}_not_implies_{neg} : ∃ (G : Type) (_ : Magma G), {pos} G ∧ ¬ {neg} G :=
-    LiftingMagmaFamily.establishNonimplication (family := {instName}) _ {pos}.models_iff {neg}.models_iff"
+    LiftingMagmaFamily.establishNonimplication (family := {instName}) _ {equationNameToMagmaLawName pos}.models_iff {equationNameToMagmaLawName neg}.models_iff"
 
 def outputDir : System.FilePath := "." / "equational_theories" / "Generated"
 
