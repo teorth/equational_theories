@@ -141,7 +141,7 @@ def subexprs(expr, proper=False):
 
 
 def match_to_pattern(pattern, expr):
-    # Match the pattern to the expression, requiring that different occurences of the same
+    # Match the pattern to the expression, requiring that different occurrences of the same
     # terminal map to equal sub-expressions
     env = {}
     q = [(pattern, expr)]
