@@ -5,6 +5,7 @@ import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import equational_theories.Mathlib.Algebra.Group.Nat
 import Mathlib.Data.ZMod.Defs
+import Mathlib.Data.ZMod.Basic
 import Mathlib.Algebra.Polynomial.Basic
 import Mathlib.Algebra.Polynomial.Degree.Definitions
 import Mathlib.Algebra.Polynomial.Eval
@@ -588,10 +589,10 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
       let n := r.natDegree
       have : ∃ (b0: Fin (2*n)), Polynomial.eval (b0: ℤ) (r * (r - 2)) ≠ 0 ∧ Polynomial.eval (b0: ℤ) (r * (r - 2)) ≠ 1 := sorry
       obtain ⟨b0, h0⟩ := this
-      have k: Nat := (Polynomial.eval (b0: ℤ) r - 1).natAbs
+      let k: Nat := (Polynomial.eval (b0: ℤ) r - 1).natAbs
       have geq_2_k : k ≥ 2 := sorry
       let G: Type := ZMod k
-      have b0: ZMod k := b0
+      let b0: ZMod k := b0
       rename_i b0_orig
       let a0: ZMod k := 1 - b0
       let M: Magma G := Magma.mk fun u v => a0 * u + b0 * v
@@ -604,6 +605,7 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
         lhs
         unfold FreeMagma.evalInMagma
       have : eval_eq w (f 0) (f 1) = eval_eq w (f 0 - f 1) 0 + eval_eq w (f 1) (f 1) := by
+        clear_value k b0
         clear * -
         simp only [eval_eq]
         induction w
@@ -622,24 +624,25 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           unfold Magma.op
           ring_nf
       have : eval_eq w (f 0 - f 1) 0 = f 0 - f 1 := by
-        clear * -
-        simp only [eval_eq]
-        induction w
-        .
-          rename_i z
-          unfold FreeMagma.evalInMagma
-          fin_cases z
-          .
-            simp only [Fin.zero_eta, Fin.isValue, ↓reduceIte, sub_add_cancel]
-          .
+        have : eval_eq w (f 0 - f 1) 0 = (Polynomial.eval (b0.val: ℤ) r) * (f 0 - f 1) := by
+          sorry
+        rw [this]
+        have : (Polynomial.eval (b0.val: ℤ) r) = (1: ZMod k) := by
+          suffices (Polynomial.eval (b0.val: ℤ) (r - 1)) = ((0: ℤ): ZMod k) by
             sorry
-        .
-          rename_i w1 w2 h1 h2
-          unfold FreeMagma.evalInMagma
-          rw [h1, h2]
-          unfold Magma.op
-          ring_nf
+          rename_i this'
+          clear this'
+          clear * -
+          simp only [ZMod.intCast_eq_intCast_iff']
+          norm_num
+          unfold k
+          rw [←Int.abs_eq_natAbs]
+          unfold b0
+          sorry
+        rw [this]
+        ring_nf
       have : eval_eq w (f 1) (f 1) = f 1 := by
+        clear_value k b0
         clear * -
         simp only [eval_eq]
         induction w
