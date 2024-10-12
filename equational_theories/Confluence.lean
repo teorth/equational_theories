@@ -1242,8 +1242,15 @@ macro_rules
     decls := decls.push <| ← `(
       def $eq ($(ruleUsedVars[idx]!)*: $type):
         $system $(TSyntax.mk <| lhs[idx]!):term = $(TSyntax.mk <| rhs[idx]!):term := by
-        simp only [$system:ident, $[$ruleIdents:ident],*, and_self, ↓reduceIte]
+        simp only [$system:ident]
         autosplit
+        $[· simp_all only [$ruleElims:ident]; separate]*
+        · have h : $(ruleIdents[idx]!):ident (?x : $type) = none := by
+            assumption
+          simp only [$(ruleElimNots[idx]!):ident, not_exists] at h
+          exfalso
+          apply h
+          separate
     )
 
   let or := (← ruleIdents.mapM (λ n ↦ `($n e = some r))).foldr (init := none) λ
@@ -1282,8 +1289,9 @@ macro_rules
       instance $instIsProj:ident : IsProj ($system : $type → $type) where
         proj := by
           intro x
-          simp only [$system:ident, $[$ruleIdents:ident],*]
-          autosplit
+          generalize h: $system x = e
+          simp only [$elim:ident] at h
+          separate
           all_goals subterm
     )
 
