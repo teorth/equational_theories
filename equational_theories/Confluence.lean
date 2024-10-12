@@ -1289,6 +1289,50 @@ macro_rules
 
   pure <| mkListNode decls
 
+namespace rw680
+
+variable [DecidableEq α]
+
+rule_system rules {x y: FreeMagma α}
+| (x ⋆ (y ⋆ ((x ⋆ x) ⋆ x))) => y
+| (((x ⋆ x) ⋆ x) ⋆ (((x ⋆ x) ⋆ x) ⋆ ((x ⋆ x) ⋆ x))) => x
+
+theorem comp1_2 {x y : FreeMagma α}:
+    rules (y ⋆ rules (x ⋆ (y ⋆ y ⋆ y))) = x := by
+  generalize h: rules (x ⋆ (y ⋆ y ⋆ y)) = e
+  simp only [rules.elim] at h
+  separate
+  · apply rules.eq2
+  · apply rules.eq1
+
+theorem comp1_3 {x y : FreeMagma α}:
+    rules (y ⋆ rules (x ⋆ rules (y ⋆ y ⋆ y))) = x := by
+  generalize h: rules (y ⋆ y ⋆ y) = e
+  simp only [rules.elim] at h
+  separate
+  apply comp1_2
+
+theorem comp1_4 {x y : FreeMagma α}:
+    rules (y ⋆ rules (x ⋆ rules (rules (y ⋆ y) ⋆ y))) = x := by
+  generalize h: rules (y ⋆ y) = e
+  simp only [rules.elim] at h
+  separate
+  apply comp1_3
+
+@[equational_result]
+theorem «Facts» :
+  ∃ (G : Type) (_ : Magma G), Facts G [680] [1629, 1695, 1832, 2847, 2947] := by
+  use ConfMagma (@rules Nat _), inferInstance
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩
+    simp (disch := bufixed) only [Magma.op, bu, hx, hy, buFixed_rw_op]
+    symm
+    congr! 1
+    apply comp1_4
+  all_goals refute
+
+end rw680
+
 namespace rw1443
 
 variable [DecidableEq α]
