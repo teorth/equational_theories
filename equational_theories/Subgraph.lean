@@ -2,7 +2,7 @@ import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
 import equational_theories.EquationalResult
 import equational_theories.Closure
-import equational_theories.Equations
+import equational_theories.Equations.Basic
 import equational_theories.FactsSyntax
 import equational_theories.FreeSemigroup
 import equational_theories.MagmaLaw
@@ -458,10 +458,6 @@ theorem Equation2_implies_Equation5105 (G: Type _) [Magma G] (h: Equation2 G) : 
   fun _ _ _ ↦ h _ _
 
 @[equational_result]
-theorem Equation2_implies_Equation28381 (G: Type _) [Magma G] (h: Equation2 G) : Equation28381 G :=
-  fun _ _ _ ↦ h _ _
-
-@[equational_result]
 theorem Equation2_implies_Equation374794 (G: Type _) [Magma G] (h: Equation2 G) : Equation374794 G :=
   fun _ _ _ ↦ h _ _
 
@@ -484,16 +480,6 @@ theorem Equation4_implies_Equation3744 (G: Type _) [Magma G] (h: Equation4 G) : 
     _ = (x ◇ z) ◇ y := by rw (config := {occs := .pos [1]}) [h x z]
     _ = x ◇ z := (h (x ◇ z) y).symm
     _ = (x ◇ z) ◇ (w ◇ y) := h (x ◇ z) (w ◇ y)
-
-@[equational_result]
-theorem Equation4_implies_Equation28381 (G: Type _) [Magma G] (h: Equation4 G) : Equation28381 G :=
-  fun x y z ↦
-    calc x
-    _ = x ◇ x := (h x x)
-    _ = (x ◇ x) ◇ x := by rw (config := {occs := .pos [1]}) [h x x]
-    _ = ((x ◇ x) ◇ x) ◇ y := (h ((x ◇ x) ◇ x) y)
-    _ = (((x ◇ x) ◇ x) ◇ y) ◇ x := (h (((x ◇ x) ◇ x) ◇ y) x)
-    _ = (((x ◇ x) ◇ x) ◇ y) ◇ (x ◇ z) := by rw (config := {occs := .pos [4]}) [h x z]
 
 @[equational_result]
 theorem Equation5_implies_Equation381 (G: Type _) [Magma G] (h: Equation5 G) : Equation381 G :=

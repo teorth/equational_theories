@@ -83,6 +83,14 @@ jobs:
       - name: Build project
         run: ~/.elan/bin/lake build equational_theories
 
+      - name: check environment with lean4checker
+        run: |
+          : Check Environment with lean4checker
+          chmod +x ./scripts/lean4_checker/run_lean4checker.sh
+          ./scripts/lean4_checker/run_lean4checker.sh
+        shell: bash
+
+
       - name: Build project API documentation
         run: ~/.elan/bin/lake -R -Kenv=dev build equational_theories:docs
 
@@ -122,6 +130,10 @@ jobs:
         run: |
             ~/.elan/bin/lake exe checkdecls blueprint/lean_decls
 
+      - name: Check with lean4lean
+        run: |
+            python scripts/lean4lean_checker/main.py
+
       - name: Copy API documentation to `home_page/docs`
         run: cp -r .lake/build/doc home_page/docs
 
@@ -147,7 +159,7 @@ jobs:
           cp -r tools/fme/dist/* home_page/fme
           ~/.elan/bin/lake exe extract_implications unknowns > home_page/fme/unknowns.json
           COMMIT_HASH=$(git rev-parse --short HEAD)
-          sed -i "s/VERSION_UNKNOWN/$COMMIT_HASH/g" home_page/fme/index.html
+          sed -i "s/UNKNOWN_VERSION/$COMMIT_HASH/g" home_page/fme/index.html
 
       - name: Bundle dependencies
         if: github.event_name == 'push'

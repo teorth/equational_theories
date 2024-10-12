@@ -2,7 +2,7 @@
 
 In this project we study the 4694 laws (up to symmetry and relabeling) of total order at most $4$.
 
-Selected laws of interest are listed below, as well as in \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Equations.lean}{this file}.
+Selected laws of interest are listed below, as well as in \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Equations/Basic.lean}{this file}.
 
 \begin{definition}[Equation 1]\label{eq1}\lean{Equation1}\leanok\uses{magma-def}  Equation 1 is the law $0 \formaleq 0$ (or the equation $x=x$).
 \end{definition}
@@ -46,7 +46,7 @@ This law is equivalent to the singleton law.
 \begin{definition}[Equation 14]\label{eq14}\lean{Equation14}\leanok\uses{magma-def}  Equation 14 is the law $0 \formaleq  1 \op (0 \op 1)$ (or the equation $x = y \op (x \op y))$.
 \end{definition}
 
-Appears in Problem A1 from Putnam 2001.
+Appears in Problem A1 from Putnam 2001.  See \Cref{29_equiv_14}.
 
 \begin{definition}[Equation 16]\label{eq16}\lean{Equation16}\leanok\uses{magma-def}  Equation 16 is the law $0 \formaleq  1 \op (1 \op 0)$ (or the equation $x = y \op (y \op x))$.
 \end{definition}
@@ -59,7 +59,7 @@ This is the dual of \Cref{eq8}.
 \begin{definition}[Equation 29]\label{eq29}\lean{Equation29}\leanok\uses{magma-def}  Equation 29 is the law $0 \formaleq  (1 \op 0) \op 1$ (or the equation $x = (y \op x) \op y)$.
 \end{definition}
 
-Appears in Problem A1 from Putnam 2001.  Dual to \Cref{eq14}.
+Appears in Problem A1 from Putnam 2001.  Dual to \Cref{eq14}.  See \Cref{29_equiv_14}.
 
 \begin{definition}[Equation 38]\label{eq38}\lean{Equation38}\leanok\uses{magma-def}  Equation 38 is the law $0 \op 0  \formaleq  0 \op 1$ (or the equation $x \op x = x \op y$).
 \end{definition}
@@ -104,7 +104,7 @@ The constant law: all products are constant. It is self-dual.
 \begin{definition}[Equation 65]\label{eq65}\lean{Equation65}\leanok\uses{magma-def}  Equation 65 is the law $0 \formaleq 1 \op (0 \op (1 \op 0))$ (or the equation $x = y \op (x \op (y \op x))$).
 \end{definition}
 
-The ``Asterix'' law.
+The ``Asterix'' law, studied further in Chapter \ref{asterix-chapter}.
 
 \begin{definition}[Equation 168]\label{eq168}\lean{Equation168}\leanok\uses{magma-def}  Equation 168 is the law $0  \formaleq  (1 \op 0) \op (0 \op 2)$ (or the equation $x = (y \op x) \op (x \op z)$).
 \end{definition}
@@ -119,33 +119,49 @@ Appears in Putnam 1978, Problem A4, part (b).
 \begin{definition}[Equation 387]\label{eq387}\lean{Equation387}\leanok\uses{magma-def}  Equation 387 is the law $0 \op 1  \formaleq  (1 \op 1) \op 0$ (or the equation $x \op y = (y \op y) \op x$).
 \end{definition}
 
-Introduced in \href{https://mathoverflow.net/a/450905/766}{MathOverflow}.
+Introduced in \href{https://mathoverflow.net/a/450905/766}{MathOverflow}. See \Cref{387_implies_43}
 
 \begin{definition}[Equation 477]\label{eq477}\lean{Equation477}\leanok\uses{magma-def}  Equation 477 is the law $0 \formaleq 1 \op (0 \op (1 \op (1 \op 1)))$ (or the equation $x = y \op (x \op (y \op (y \op y)))$).
 \end{definition}
 
+An example of a confluent law; see \Cref{477-confl}.
+
 \begin{definition}[Equation 953]\label{eq953}\lean{Equation953}\leanok\uses{magma-def}  Equation 953 is the law $0 = 1 \op ((2 \op 0) \op (2 \op 2))$ (or the equation $x = y \op ((z \op x) \op (z \op z))$).
 \end{definition}
 
-\begin{definition}[Equation 1571]\label{eq1571}\lean{Equation1571}\leanok\uses{magma-def}  Equation 1571 is the law $0 \formaleq  (1 \op 2) \op (1 \op (0 \op 2))$ (or the equation $x = (y \op z) \op (y \op (x \op z))$).
-\end{definition}
-
-Introduced in \cite{mendelsohn-padmanabhan}.
+An example of a trivial law; see \Cref{953_equiv_2}.
 
 \begin{definition}[Equation 1491]\label{eq1491}\lean{Equation1491}\leanok\uses{magma-def}  Equation 1491 is the law $0 \formaleq  (1 \op 0) \op (1 \op (1 \op 0))$ (or the equation $x = (y \op x) \op (y \op (y \op x))$).
 \end{definition}
 
-The ``Obelix'' law.
+The ``Obelix'' law, studied further in Chapter \ref{asterix-chapter}.
+
+\begin{definition}[Equation 1571]\label{eq1571}\lean{Equation1571}\leanok\uses{magma-def}  Equation 1571 is the law $0 \formaleq  (1 \op 2) \op (1 \op (0 \op 2))$ (or the equation $x = (y \op z) \op (y \op (x \op z))$).
+\end{definition}
+
+Introduced in \cite{mendelsohn-padmanabhan}.  As shown in \Cref{1571_impl}, this law characterizes abelian groups of exponent two.
 
 \begin{definition}[Equation 1689]\label{eq1689}\lean{Equation1689}\leanok\uses{magma-def}  Equation 1689 is the law $0 \formaleq  (1 \op 0) \op ((0 \op 2) \op 2)$ (or the equation $x = (y \op x) \op ((x \op z) \op z)$).
 \end{definition}
 
-Mentioned in \cite{Kisielewicz2}.
+Mentioned in \cite{Kisielewicz2}.  See \Cref{1689_equiv_2}.
+
 
 \begin{definition}[Equation 2662]\label{eq2662}\lean{Equation2662}\leanok\uses{magma-def}  Equation 2662 is the law $0 \formaleq  ((0 \op 1) \op (0 \op 1)) \op 0$ (or the equation $x = ((x \op y) \op (x \op y)) \op x$).
 \end{definition}
 
 Appears in \cite{mendelsohn-padmanabhan}.
+
+\begin{definition}[Equation 3167]\label{eq3167}\lean{Equation3167}\leanok\uses{magma-def}  Equation 3167 is the law $0 \formaleq  (((1 \op 1) \op 2) \op 2) \op 0$ (or the equation $x = (((y \op y) \op z) \op z) \op x$).
+\end{definition}
+
+
+\begin{definition}[Equation 3588]
+  \label{eq3588}\lean{Equation3588}\leanok\uses{magma-def}
+  Equation 3588 is the law $0 \op 1 \formaleq 2 \op ((0 \op 1) \op 2)$ (or the equation $x \op y = z \op ((x \op y) \op z)$).
+\end{definition}
+
+Our project located this law as one member of an ``Austin pair''; see Chapter \ref{infinite-model-chapter}.
 
 \begin{definition}[Equation 3722]\label{eq3722}\lean{Equation3722}\leanok\uses{magma-def}  Equation 3722 is the law $0 \op 1  \formaleq  (0 \op 1) \op (0 \op 1)$ (or the equation $x \op y = (x \op y) \op (x \op y)$).
 \end{definition}
@@ -155,7 +171,14 @@ Appears in Putnam 1978, Problem A4, part (a).  It is self-dual.
 \begin{definition}[Equation 3744]\label{eq3744}\lean{Equation3744}\leanok\uses{magma-def}  Equation 3744 is the law $0 \op 1  \formaleq  (0 \op 2) \op (3 \op 1)$ (or the equation $x \op y = (x \op z) \op (w \op y)$).
 \end{definition}
 
-This law is called a ``bypass operation'' in Putnam 1978, Problem A4. It is self-dual.
+This law is called a ``bypass operation'' in Putnam 1978, Problem A4. It is self-dual.  See \Cref{3744_implies_3722_381}.
+
+\begin{definition}[Equation 3994]
+  \label{eq3994}\uses{magma-def}
+  Equation 3994 is the law $0 \op 1 \formaleq (2 \op (0 \op 1)) \op 2$ (or the equation $x \op y = (z \op (x \op y)) \op z$).
+\end{definition}
+
+Our project located this law as one member of an ``Austin pair''; see Chapter \ref{infinite-model-chapter}.
 
 \begin{definition}[Equation 4512]\label{eq4512}\lean{Equation4512}\leanok\uses{magma-def}  Equation 4512 is the law $0 \op (1 \op 2)  \formaleq  (0 \op 1) \op 2$ (or the equation $x \op (y \op z) = (x \op y) \op z$).
 \end{definition}
@@ -184,3 +207,43 @@ Dual to \Cref{eq4522}.
 \end{definition}
 
 This law asserts that all triple constants (regardless of bracketing) are constant.
+
+\section{Equations of order greater than \texorpdfstring{$4$}{4}}
+
+We note some selected laws of order more than $5$, which are used in some later chapters of the blueprint.
+
+\begin{definition}[Equation 5105]
+  \label{eq5105}\uses{magma-def}\lean{Equation5105}\leanok
+  Equation 5105 is the law $0  \formaleq 1 \op (1 \op (1 \op (0 \op (2 \op 1))))$ (or the equation $x = y \op (y \op (y \op (x \op (z \op y))))$).
+\end{definition}
+
+This law of order $5$ was mentioned in \cite{Kisielewicz2}.  See \Cref{5105-nontrivial}.
+
+\begin{definition}[Equation 26302]
+  \label{eq26302}\uses{magma-def}
+  Equation 26302 is the law $0  \formaleq (1 \op ((2 \op 0) \op 3)) \op (0 \op 3)$ (or the equation $x = (y \op ((z \op x) \op w)) \op (x \op w)$).
+\end{definition}
+
+A law that characterizes natural central groupoids; see \Cref{natural-central-groupoid}.
+
+\begin{definition}[Equation 28770]
+  \label{eq28770}\uses{magma-def}\lean{Equation28770}\leanok
+  Equation 28770 is the law $0  \formaleq  (((1 \op 1) \op 1) \op 0) \op (1 \op 2)$ (or the equation $x = (((y \op y) \op y) \op x) \op (y \op z)$).
+\end{definition}
+
+This law of order $5$ was introduced by Kisielewicz \cite{Kisielewicz}. See \Cref{kis-thm2}.
+
+\begin{definition}[Equation 345169]
+  \label{eq345169}\uses{magma-def}
+  Equation 345169 is the law $0  \formaleq  (1 \op ((0 \op 1) \op 1)) \op (0 \op (2 \op 1))$ (or the equation $x = (y \op ((x \op y) \op y)) \op (x \op (z \op y))$).
+\end{definition}
+
+This law of order $6$ was shown in \cite{mccune_et_al} to characterize the Sheffer stroke in a boolean algebra; see \Cref{sheffer}.
+
+\begin{definition}[Equation 374794]
+  \lean{Equation374794}\leanok
+  \label{eq374794}\uses{magma-def}
+  Equation 374794 is the law $0  \formaleq  (((1 \op 1) \op 1) \op 0) \op ((1 \op 1) \op 2)$ (or the equation $x = (((y \op y) \op y) \op x) \op ((y \op y) \op z)$).
+\end{definition}
+
+This law of order $6$ was introduced by Kisielewicz \cite{Kisielewicz}; see \Cref{kis-thm}.

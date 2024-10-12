@@ -80,7 +80,7 @@ def get_val(model: ModelRef, f, a, b):
 
 def print_incs():
     return ("import equational_theories.Magma\n"
-            "import equational_theories.AllEquations\n"
+            "import equational_theories.Equations.All\n"
             "import Mathlib.Data.Fintype.Basic\n"
             "import Mathlib.Tactic.DeriveFintype\n\n")
 

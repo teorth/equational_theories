@@ -1,6 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 import equational_theories.Magma
 
 namespace SimpleRewrites
@@ -26,8 +26,6 @@ theorem Equation2034_implies_Equation2033 (G : Type*) [Magma G] (h : Equation203
 @[equational_result]
 theorem Equation2237_implies_Equation2236 (G : Type*) [Magma G] (h : Equation2237 G) : Equation2236 G := λ x y z w u => h x y z w u u
 @[equational_result]
-theorem Equation2440_implies_Equation2439 (G : Type*) [Magma G] (h : Equation2440 G) : Equation2439 G := λ x y z w u => h x y z w u u
-@[equational_result]
 theorem Equation2643_implies_Equation2642 (G : Type*) [Magma G] (h : Equation2643 G) : Equation2642 G := λ x y z w u => h x y z w u u
 @[equational_result]
 theorem Equation2846_implies_Equation2845 (G : Type*) [Magma G] (h : Equation2846 G) : Equation2845 G := λ x y z w u => h x y z w u u
@@ -35,16 +33,4 @@ theorem Equation2846_implies_Equation2845 (G : Type*) [Magma G] (h : Equation284
 theorem Equation3049_implies_Equation3048 (G : Type*) [Magma G] (h : Equation3049 G) : Equation3048 G := λ x y z w u => h x y z w u u
 @[equational_result]
 theorem Equation3252_implies_Equation3251 (G : Type*) [Magma G] (h : Equation3252 G) : Equation3251 G := λ x y z w u => h x y z w u u
-@[equational_result]
-theorem Equation3455_implies_Equation3454 (G : Type*) [Magma G] (h : Equation3455 G) : Equation3454 G := λ x y z w u => h x y z w u u
-@[equational_result]
-theorem Equation3658_implies_Equation3657 (G : Type*) [Magma G] (h : Equation3658 G) : Equation3657 G := λ x y z w u => h x y z w u u
-@[equational_result]
-theorem Equation3861_implies_Equation3860 (G : Type*) [Magma G] (h : Equation3861 G) : Equation3860 G := λ x y z w u => h x y z w u u
-@[equational_result]
-theorem Equation4064_implies_Equation4063 (G : Type*) [Magma G] (h : Equation4064 G) : Equation4063 G := λ x y z w u => h x y z w u u
-@[equational_result]
-theorem Equation4267_implies_Equation4266 (G : Type*) [Magma G] (h : Equation4267 G) : Equation4266 G := λ x y z w u => h x y z w u u
-@[equational_result]
-theorem Equation4582_implies_Equation4581 (G : Type*) [Magma G] (h : Equation4582 G) : Equation4581 G := λ x y z w u => h x y z w u u
 end SimpleRewrites
