@@ -1,5 +1,7 @@
 import equational_theories.Confluence
 
+namespace Confluence
+
 open Lean.Parser.Tactic
 
 attribute [confluence_simps] not_true_eq_false not_false_eq_true false_implies implies_true imp_false false_and and_true and_self not_and and_imp
@@ -13,7 +15,7 @@ simproc [confluence_simps] confluenceReduceCtorEq (_) := reduceCtorEq
 -- for some reason if I try to use Not.eq_def directly from a tactic it can't find it!
 private def not_eq_def := Not.eq_def
 
-macro "separate" : tactic => `(tactic| (
+scoped macro "separate" : tactic => `(tactic| (
   try simp only [not_eq_def]
   try intros
   try injections
@@ -23,7 +25,7 @@ macro "separate" : tactic => `(tactic| (
     try trivial
 ))
 
-macro "prove_elim" : tactic => `(tactic| (
+scoped macro "prove_elim" : tactic => `(tactic| (
   repeat' split
   all_goals simp_all only [confluence_simps, exists_and_right, exists_eq_right_right', exists_eq_right', false_iff, not_exists, true_and]
   separate
@@ -39,7 +41,7 @@ macro "prove_elim" : tactic => `(tactic| (
     try simp_all only [not_true_eq_false, imp_false]
 ))
 
-macro "prove_elim_not" : tactic => `(tactic| (
+scoped macro "prove_elim_not" : tactic => `(tactic| (
   repeat' split
   all_goals simp_all only [confluence_simps, false_iff, not_exists, not_and, true_iff, forall_eq', forall_apply_eq_imp_iff, true_iff, not_false_eq_true]
   separate
@@ -57,7 +59,7 @@ open Lean hiding HashMap
 open Meta Elab Command Term Parser Syntax
 open Std (HashMap)
 
-syntax (name := ruleSystem) "rule_system " ident " {" ident* " : " term "}" ("-" ident)* (ppLine "|" term "=>" term)+ : command
+scoped syntax (name := ruleSystem) "rule_system " ident " {" ident* " : " term "}" ("-" ident)* (ppLine "|" term "=>" term)+ : command
 
 private partial def makePattern (inc: Nat) : Syntax → StateM (HashMap Name Nat) (TSyntax `term)
 | .node info kind args => do
@@ -75,7 +77,7 @@ private partial def countVars : Syntax → StateM (HashMap Name Nat) Unit
   | _ => m)
 | _ => pure ()
 
-macro_rules
+scoped macro_rules
 | `(command| rule_system $system:ident {$vars:ident* : $type:term} $[-$disable:ident]* $[| $lhs:term => $rhs:term]*) => do
   let mut decls := #[]
 
@@ -213,6 +215,7 @@ macro_rules
   if ¬disable.any (·.getId == `IsProj) then
     let instIsProj := Lean.mkIdent <| .str systemName "instIsProj"
     decls := decls.push <| ← `(
+      open Confluence in
       instance $instIsProj:ident : FreeMagma.IsProj ($system : $type → $type) where
         proj := by
           intro x
@@ -223,3 +226,5 @@ macro_rules
     )
 
   pure <| mkListNode decls
+
+end Confluence
