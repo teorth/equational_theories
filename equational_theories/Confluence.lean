@@ -1243,7 +1243,7 @@ macro_rules
       def $eq ($(ruleUsedVars[idx]!)*: $type):
         $system $(TSyntax.mk <| lhs[idx]!):term = $(TSyntax.mk <| rhs[idx]!):term := by
         simp only [$system:ident]
-        autosplit
+        repeat' split
         $[· simp_all only [$ruleElims:ident]; separate]*
         · have h : $(ruleIdents[idx]!):ident (?x : $type) = none := by
             assumption
@@ -1269,7 +1269,7 @@ macro_rules
       constructor
       · intro h
         simp only [$system:ident] at h
-        autosplit
+        repeat' split at h
         all_goals simp_all only [or_self, and_self, or_true, true_or, and_true, true_and]
       · intro h
         separate
