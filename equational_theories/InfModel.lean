@@ -604,7 +604,7 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
         lhs
         unfold FreeMagma.evalInMagma
       have : eval_eq w (f 0) (f 1) = eval_eq w (f 0 - f 1) 0 + eval_eq w (f 1) (f 1) := by
-        clear hl hr
+        clear * -
         simp only [eval_eq]
         induction w
         .
@@ -621,9 +621,8 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           rw [h1, h2]
           unfold Magma.op
           ring_nf
-          repeat sorry
       have : eval_eq w (f 0 - f 1) 0 = f 0 - f 1 := by
-        clear hl hr this
+        clear * -
         simp only [eval_eq]
         induction w
         .
@@ -640,10 +639,8 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           rw [h1, h2]
           unfold Magma.op
           ring_nf
-          repeat sorry
       have : eval_eq w (f 1) (f 1) = f 1 := by
-        clear hl hr this
-        clear this
+        clear * -
         simp only [eval_eq]
         induction w
         .
@@ -660,7 +657,6 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           rw [h1, h2]
           unfold Magma.op
           ring_nf
-          repeat sorry
       have this2 : eval_eq w (f 0) (f 1) = f 0 := by
         simp_all only [Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, G, eval_eq, M]
       have : w ⬝ f = eval_eq w (f 0) (f 1) := by
