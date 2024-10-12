@@ -95,7 +95,7 @@ class Lean4LeanChecker():
         print("Lean4lean build was not successful. Lean4lean check will not be run. Exiting gracefully")
         raise Exception("lake build failure")
 
-    except Exception as e:
+    except Exception:
       print("Lean4lean check will exit gracefully")
       sys.exit(0)
 

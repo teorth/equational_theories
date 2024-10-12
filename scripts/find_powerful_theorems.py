@@ -4,7 +4,6 @@ import numpy as np
 import json
 import argparse
 import subprocess
-from collections import defaultdict
 from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import connected_components
 from itertools import permutations
@@ -14,7 +13,7 @@ def load_data_from_lean():
         result = subprocess.run(["lake", "exe", "extract_implications", "outcomes"],
                                 capture_output=True, text=True, check=True)
         return json.loads(result.stdout)
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         return None
 
 def preprocess_data(data):
@@ -43,7 +42,6 @@ def preprocess_data(data):
     return matrix
 
 def find_most_useful_implication(matrix, k, one_per_equiv_class=True):
-    n = matrix.shape[0]
     known_implications = csr_matrix((matrix == 1).astype(int))
     n_components, labels = connected_components(known_implications, directed=True, connection='strong')
     component_sizes = np.bincount(labels)
