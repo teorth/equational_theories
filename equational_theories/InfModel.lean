@@ -426,7 +426,7 @@ theorem Finite.Equation3994_implies_Equation3588 (G : Type*) [Magma G] [Finite G
     simp [← h]
   have t2 := this.surjOn m1
   rw [Set.Finite.surjOn_iff_bijOn_of_mapsTo (Set.toFinite _) m2] at t2
-  have hrio := Set.InjOn.rightInvOn_of_leftInvOn (s := S) t2.injOn this m2 m1
+  have hrio := Set.InjOn.rightInvOn_of_leftInvOn t2.injOn this m2 m1
   apply (hrio _).symm
   simp [S]
 
