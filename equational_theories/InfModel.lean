@@ -5,6 +5,9 @@ import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import equational_theories.Mathlib.Algebra.Group.Nat
 import Mathlib.Data.ZMod.Defs
+import Mathlib.Algebra.Polynomial.Basic
+import Mathlib.Algebra.Polynomial.Degree.Definitions
+import Mathlib.Algebra.Polynomial.Eval
 
 namespace InfModel
 
@@ -579,10 +582,17 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
         sorry
       intro w h
       obtain ⟨hl, hr⟩ := h
-      have k: Nat := sorry
+      let MPols: Magma (Polynomial ℤ) := Magma.mk fun x y => (1 - Polynomial.X) * x + Polynomial.X * y
+      let fPols: Fin 2 → Polynomial ℤ := fun z => if z = 0 then 1 else 0
+      let r: Polynomial ℤ := FreeMagma.evalInMagma fPols w
+      let n := r.natDegree
+      have : ∃ (b0: Fin (2*n)), Polynomial.eval (b0: ℤ) (r * (r - 2)) ≠ 0 ∧ Polynomial.eval (b0: ℤ) (r * (r - 2)) ≠ 1 := sorry
+      obtain ⟨b0, h0⟩ := this
+      have k: Nat := (Polynomial.eval (b0: ℤ) r - 1).natAbs
       have geq_2_k : k ≥ 2 := sorry
       let G: Type := ZMod k
-      have b0: ZMod k := sorry
+      have b0: ZMod k := b0
+      rename_i b0_orig
       let a0: ZMod k := 1 - b0
       let M: Magma G := Magma.mk fun u v => a0 * u + b0 * v
       exists G, M
@@ -611,6 +621,7 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           rw [h1, h2]
           unfold Magma.op
           ring_nf
+          repeat sorry
       have : eval_eq w (f 0 - f 1) 0 = f 0 - f 1 := by
         clear hl hr this
         simp only [eval_eq]
@@ -629,6 +640,7 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           rw [h1, h2]
           unfold Magma.op
           ring_nf
+          repeat sorry
       have : eval_eq w (f 1) (f 1) = f 1 := by
         clear hl hr this
         clear this
@@ -648,6 +660,7 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           rw [h1, h2]
           unfold Magma.op
           ring_nf
+          repeat sorry
       have this2 : eval_eq w (f 0) (f 1) = f 0 := by
         simp_all only [Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, G, eval_eq, M]
       have : w ⬝ f = eval_eq w (f 0) (f 1) := by
