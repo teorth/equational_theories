@@ -1,11 +1,9 @@
 import equational_theories.ConfluenceSystem
 
 open FreeMagma Confluence
-variable {α: Type}
+variable {α: Type} [DecidableEq α]
 
 namespace rw115
-
-variable [DecidableEq α]
 
 rule_system rules {x y: FreeMagma α}
 | y ⋆ ((x ⋆ x) ⋆ y) => x
@@ -42,8 +40,6 @@ theorem «Facts» :
 end rw115
 
 namespace rw680
-
-variable [DecidableEq α]
 
 rule_system rules {x y: FreeMagma α}
 | (x ⋆ (y ⋆ ((x ⋆ x) ⋆ x))) => y
@@ -86,7 +82,6 @@ theorem «Facts» :
 end rw680
 
 namespace rw1276
-variable [DecidableEq α]
 
 rule_system rules {x y: FreeMagma α}
 | (x ⋆ (((y ⋆ y) ⋆ y) ⋆ x)) => y
@@ -129,7 +124,6 @@ theorem «Facts» :
 end rw1276
 
 namespace rw1431
-variable [DecidableEq α]
 
 rule_system rules {x y: FreeMagma α}
 | ((x ⋆ x) ⋆ (y ⋆ (x ⋆ x))) => x
@@ -166,7 +160,6 @@ theorem «Facts» :
 end rw1431
 
 namespace rw1519
-variable [DecidableEq α]
 
 rule_system rules {x y: FreeMagma α}
 | ((x ⋆ x) ⋆ (y ⋆ (x ⋆ x))) => y
@@ -203,8 +196,7 @@ theorem «Facts» :
 end rw1519
 
 namespace rw1523
-
-variable [Inhabited α] [DecidableEq α]
+variable [Inhabited α]
 
 rule_system rules {x y z: FreeMagma α} -IsProj
 | (y ⋆ y) ⋆ (x ⋆ (y ⋆ y)) => x
@@ -254,7 +246,6 @@ theorem «Facts» :
 end rw1523
 
 namespace rw1630
-variable [DecidableEq α]
 
 rule_system rules {x y: FreeMagma α}
 | ((x ⋆ x) ⋆ ((x ⋆ x) ⋆ y)) => x
@@ -291,8 +282,6 @@ theorem «Facts» :
 end rw1630
 
 namespace rw3588
-
-variable [DecidableEq α]
 
 rule_system rules {x y z w: FreeMagma α}
 | z ⋆ ((x ⋆ y) ⋆ z) => x ⋆ y

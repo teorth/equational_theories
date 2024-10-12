@@ -1,11 +1,10 @@
 import equational_theories.ConfluenceSystem
 
 open FreeMagma Confluence
-variable {α: Type}
+variable {α: Type} [DecidableEq α]
 
 namespace rw481
-
-variable [Inhabited α] [DecidableEq α]
+variable [Inhabited α]
 
 rule_system rules {x y z: FreeMagma α} -IsProj
 | y ⋆ (x ⋆ (y ⋆ (z ⋆ z))) => x

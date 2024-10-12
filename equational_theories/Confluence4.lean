@@ -1,11 +1,9 @@
 import equational_theories.ConfluenceSystem
 
 open FreeMagma Confluence
-variable {α: Type}
+variable {α: Type} [DecidableEq α]
 
 namespace rw1443
-
-variable [DecidableEq α]
 
 rule_system rules {x y z: FreeMagma α}
 | ((x ⋆ y) ⋆ (x ⋆ (x ⋆ z))) => x
@@ -75,7 +73,6 @@ theorem «Facts» :
 end rw1443
 
 namespace rw1633
-variable [DecidableEq α]
 
 rule_system rules {x y z: FreeMagma α}
 | ((x ⋆ x) ⋆ ((x ⋆ y) ⋆ z)) => x
@@ -138,8 +135,6 @@ theorem «Facts» :
 end rw1633
 
 namespace rw2126
-
-variable [DecidableEq α]
 
 rule_system rules {x y z w: FreeMagma α}
 | y ⋆ y ⋆ x ⋆ (x ⋆ z) => x
