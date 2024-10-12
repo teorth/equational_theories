@@ -159,3 +159,13 @@ for eq in os.listdir("commentary/"):
 
 
 print("var commentary = ",json.dumps(commentary))
+
+smallest_magma_examples = {}
+with open("data/smallest_magma_examples.txt") as f:
+    for line in f:
+        line = line.strip()
+        if line:
+            eq, table = line.split(maxsplit=1)
+            smallest_magma_examples[int(eq)] = json.loads(table)
+
+print("var smallest_magma_data = ", json.dumps(smallest_magma_examples))
