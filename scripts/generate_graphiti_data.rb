@@ -31,37 +31,39 @@ File.read(File.join(__dir__, '../equational_theories/Equations/Basic.lean')).spl
   end
 }
 
-implications_graph = Graph.from_json(ARGV[0])
+implications_graph = Graph.from_json_array(JSON.parse(File.read(ARGV[0]))["implications"])
 condensed_graph, node_to_scc_map, scc_to_node_map = implications_graph.condensation
 
 condensed_closure = condensed_graph.transitive_closure
 
-condensed = {}
-condensed_closure.adj_list.each { |k, v| condensed[k] = v.to_a }
+unknowns = Graph.new
+Graph.from_json_array(JSON.parse(File.read(ARGV[1]))).adj_list.each { |v1, list|
+  list.each { |v2|
+    v1_scc = node_to_scc_map[v1]
+    v2_scc = node_to_scc_map[v2]
 
-unknowns = {}
-JSON.parse(File.read(ARGV[1])).each { |unknown|
-  unknown_lhs_eq = unknown["lhs"][8, unknown["lhs"].length].to_i
-  unknown_rhs_eq = unknown["rhs"][8, unknown["rhs"].length].to_i
+    if !v1_scc || !v2_scc
+      $stderr.puts "Unknown LHS/RHS mapping to SCC"
+      exit 1
+    end
 
-  unknown_lhs_scc = node_to_scc_map[unknown_lhs_eq]
-  unknown_rhs_scc = node_to_scc_map[unknown_rhs_eq]
-
-  if !unknown_lhs_scc || !unknown_rhs_scc
-    $stderr.puts "Unknown LHS/RHS mapping to SCC"
-    exit 1
-  end
-
-  unknowns[unknown_lhs_scc] ||= []
-  unknowns[unknown_lhs_scc] << unknown_rhs_scc
+    unknowns.add_edge(v1_scc, v2_scc)
+  }
 }
+
+def graph2map(g)
+  out = {}
+  g.adj_list.each { |k, v| out[k] = v.to_a }
+
+  out
+end
 
 puts JSON.generate({
   "timestamp" => Time.now.utc.to_i,
   "commit_hash" => `git rev-parse HEAD`.chomp,
-  "condensed_graph" => condensed,
+  "condensed_graph" => graph2map(condensed_closure),
   "scc_to_node_map" => scc_to_node_map,
   "node_to_scc_map" => node_to_scc_map,
   "equations" => equations,
-  "unknowns" => unknowns
+  "unknowns" => graph2map(unknowns)
 })
