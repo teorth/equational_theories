@@ -1045,7 +1045,6 @@ simproc [confluence_simps] confluenceReduceCtorEq (_) := reduceCtorEq
 private def not_eq_def := Not.eq_def
 
 local macro "separate" : tactic => `(tactic| (
-  try intros
   try simp only [not_eq_def]
   try intros
   try injections
