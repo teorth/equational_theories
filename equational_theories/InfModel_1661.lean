@@ -90,8 +90,7 @@ private def delta_right_odd (n : ℕ) : ℕ :=
 
 private theorem op_right_odd (y : ℕ) : (y + 5) % 2 ≠ 0 → ∀ (x : ℕ), op_1661_1657 (op_1661_1657 (y + 5) x) (y + 5) = y + delta_right_odd x := by
     intro y5o x
-    have y5o' : (y + 5) % 2 = 1 := by
-      simp_all only [↓reduceIte, ne_eq, Nat.mod_two_ne_zero]
+    have y5o' : (y + 5) % 2 = 1 := by simp_all only [ne_eq, Nat.mod_two_ne_zero]
     have y4e : (y + 4) % 2 = 0 := Nat.succ_mod_two_eq_one_iff.mp y5o'
     have y6e : (y + 6) % 2 = 0 := by omega
     match x with
@@ -114,7 +113,7 @@ private theorem op_right_eq (y z : ℕ) : (y + 5) % 2 = (z + 5) % 2 → op_1661_
 
 private theorem op_right_ne (y z : ℕ) : ¬ (y + 5) % 2 = (z + 5) % 2 → op_1661_1657 (op_1661_1657 (y + 5) (z + 5)) (y + 5) = y + 7 := by
   intro yz5
-  simp [op_1661_1657,yz5]
+  simp [op_1661_1657, yz5]
   have r : (y + 5) % 2 = (y + 5) % 2 := by simp
   exact (mod_two_ne_up_from _ _ r)
 
@@ -179,21 +178,14 @@ private theorem op_1661_1657_satisfies_1661 :
   | 4, 0, x+5 | 4, 1, x+5 | 4, 2, x+5 | 4, 3, x+5 | 4, 4, x+5 =>
     simp [op_1661_1657]
     by_cases hx5 : (x + 5) % 2 = 0
-    · have hx4 : (x + 4) % 2 = 1 :=
-        mod_two_pred_0_1_to (x + 4) hx5
-      have hx6 : (x + 6) % 2 = 1 :=
-        mod_two_succ_0_1_from (x + 5) hx5
-      have hx7 : (x + 7) % 2 = 0 :=
-        mod_two_succ_1_0_from (x + 6) hx6
+    · have hx4 : (x + 4) % 2 = 1 := mod_two_pred_0_1_to _ hx5
+      have hx6 : (x + 6) % 2 = 1 := mod_two_succ_0_1_from _ hx5
+      have hx7 : (x + 7) % 2 = 0 := mod_two_succ_1_0_from _ hx6
       simp [hx4, hx5, hx6, hx7]
-    · have hx5' : (x + 5) % 2 = 1 :=
-        Nat.mod_two_ne_zero.mp hx5
-      have hx4' : (x + 4) % 2 = 0 :=
-        mod_two_pred_1_0_to (x + 4) hx5'
-      have hx6' : (x + 6) % 2 = 0 :=
-        mod_two_succ_1_0_from (x + 5) hx5'
-      have hx7' : (x + 7) % 2 = 1 :=
-        mod_two_succ_0_1_from (x + 6) hx6'
+    · have hx5' : (x + 5) % 2 = 1 := Nat.mod_two_ne_zero.mp hx5
+      have hx4' : (x + 4) % 2 = 0 := mod_two_pred_1_0_to _ hx5'
+      have hx6' : (x + 6) % 2 = 0 := mod_two_succ_1_0_from _ hx5'
+      have hx7' : (x + 7) % 2 = 1 := mod_two_succ_0_1_from _ hx6'
       simp [hx4', hx5', hx6', hx7']
 
   | x+5, y+5, z+5 =>
@@ -201,28 +193,23 @@ private theorem op_1661_1657_satisfies_1661 :
     · rw [op_right_eq y z hyz5]
       by_cases hxy5 : (x + 5) % 2 = (y + 5) % 2
       · rw [op_left_eq x y hxy5]
-        have hxy4 : ¬ (x + 4) % 2 = (y + 5) % 2 :=
-          mod_two_ne_down_to (x + 4) (y + 5) hxy5
+        have hxy4 : ¬ (x + 4) % 2 = (y + 5) % 2 := mod_two_ne_down_to _ _ hxy5
         simp [op_1661_1657,hxy4]
       · rw [op_left_ne x y hxy5]
-        have hxy6 : (x + 6) % 2 = (y + 5) % 2 :=
-          mod_two_eq_up_from (x + 5) (y + 5) hxy5
+        have hxy6 : (x + 6) % 2 = (y + 5) % 2 := mod_two_eq_up_from _ _ hxy5
         simp [op_1661_1657,hxy6]
     · rw [op_right_ne y z hyz5]
       by_cases hxy5 : (x + 5) % 2 = (y + 5) % 2
       · rw [op_left_eq x y hxy5]
-        have hxy45 : (x + 4) % 2 ≠ (y + 5) % 2 :=
-          mod_two_ne_down_to (x + 4) (y + 5) hxy5
-        have hxy46 : (y + 6) % 2 = (x + 4) % 2 :=
-          mod_two_eq_up_from (y + 5) (x + 4) (Ne.symm hxy45)
-        have hxy43 : ¬ (x + 4) % 2 = (y + 7) % 2 :=
-          Ne.symm (mod_two_ne_up_from (y + 6) (x + 4) hxy46)
+        have hxy45 : (x + 4) % 2 ≠ (y + 5) % 2 := mod_two_ne_down_to _ _ hxy5
+        have hxy46 : (y + 6) % 2 = (x + 4) % 2 := mod_two_eq_up_from _ _ (Ne.symm hxy45)
+        have hxy43 : ¬ (x + 4) % 2 = (y + 7) % 2 := Ne.symm (mod_two_ne_up_from _ _ hxy46)
         simp [op_1661_1657,hxy43]
       · rw [op_left_ne x y hxy5]
         simp [op_1661_1657,]
-        have hxy56 : (x + 6) % 2 = (y + 5) % 2 := mod_two_eq_up_from (x + 5) (y + 5) hxy5
-        have hxy6 : (y + 6) % 2 ≠ (x + 6) % 2 := mod_two_ne_up_from (y + 5) (x + 6) hxy56.symm
-        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := (mod_two_eq_up_from (y + 6) (x + 6) hxy6).symm
+        have hxy56 : (x + 6) % 2 = (y + 5) % 2 := mod_two_eq_up_from _ _ hxy5
+        have hxy6 : (y + 6) % 2 ≠ (x + 6) % 2 := mod_two_ne_up_from _ _ hxy56.symm
+        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := (mod_two_eq_up_from _ _ hxy6).symm
         simp [op_1661_1657,hxy67]
 
   | x+5, y+5, 0 =>  -- also 2,4
@@ -231,29 +218,26 @@ private theorem op_1661_1657_satisfies_1661 :
       by_cases h5 : (y + 5) % 2 = 0
       · rw [op_right_even y h5 0]
         simp only [delta_right_even]
-        have hxy45 : ¬ (x + 4) % 2 = (y + 5) % 2 :=
-          mod_two_ne_down_to (x + 4) (y + 5) hxy5
+        have hxy45 : ¬ (x + 4) % 2 = (y + 5) % 2 := mod_two_ne_down_to _ _ hxy5
         simp [op_1661_1657,hxy45]
       · rw [op_right_odd y h5 0]
         simp only [delta_right_odd]
-        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 5) (x + 5) hxy5.symm
-        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from (y + 6) (x + 5) hxy56).symm
-        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 :=
-          mod_two_ne_down_to (x + 4) (y +7) hxy57
+        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from _ _ hxy5.symm
+        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from _ _ hxy56).symm
+        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 := mod_two_ne_down_to _ _ hxy57
         simp [op_1661_1657,hxy47]
     · rw [op_left_ne x y hxy5]
       by_cases h5 : (y + 5) % 2 = 0
       · rw [op_right_even y h5 0]
         simp only [delta_right_even]
-        have hxy65 : (x + 6) % 2 = (y + 5) % 2 :=
-          mod_two_eq_up_from (x + 5) (y + 5) hxy5
+        have hxy65 : (x + 6) % 2 = (y + 5) % 2 := mod_two_eq_up_from _ _ hxy5
         rw [op_left_eq (x+1) y]
         exact hxy65
       · rw [op_right_odd y h5 0]
         simp only [delta_right_odd]
-        have hxy56 : (y + 6) % 2 = (x + 5) % 2 := mod_two_eq_up_from (y + 5) (x + 5) (Ne.symm hxy5)
-        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 6) (x + 5) hxy56
-        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := mod_two_eq_up_from (x + 5) (y + 7) (Ne.symm hxy57)
+        have hxy56 : (y + 6) % 2 = (x + 5) % 2 := mod_two_eq_up_from _ _ (Ne.symm hxy5)
+        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from _ _ hxy56
+        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := mod_two_eq_up_from _ _ (Ne.symm hxy57)
         simp [op_1661_1657,hxy67]
 
   | x+5, y+5, 2 =>  -- also 0,4
@@ -262,27 +246,26 @@ private theorem op_1661_1657_satisfies_1661 :
       by_cases h5 : (y + 5) % 2 = 0
       · rw [op_right_even y h5 2]
         simp only [delta_right_even]
-        have hxy45 : ¬ (x + 4) % 2 = (y + 5) % 2 :=
-          mod_two_ne_down_to (x + 4) (y + 5) hxy5
+        have hxy45 : ¬ (x + 4) % 2 = (y + 5) % 2 := mod_two_ne_down_to _ _ hxy5
         simp [op_1661_1657,hxy45]
       · rw [op_right_odd y h5 2]
         simp only [delta_right_odd]
-        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 5) (x + 5) hxy5.symm
-        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from (y + 6) (x + 5) hxy56).symm
-        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 := mod_two_ne_down_to (x + 4) (y +7) hxy57
+        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from _ _ hxy5.symm
+        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from _ _ hxy56).symm
+        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 := mod_two_ne_down_to _ _ hxy57
         simp [op_1661_1657,hxy47]
     · rw [op_left_ne x y hxy5]
       by_cases h5 : (y + 5) % 2 = 0
       · rw [op_right_even y h5 2]
         simp only [delta_right_even]
-        have hxy65 : (x + 6) % 2 = (y + 5) % 2 := mod_two_eq_up_from (x + 5) (y + 5) hxy5
+        have hxy65 : (x + 6) % 2 = (y + 5) % 2 := mod_two_eq_up_from _ _ hxy5
         rw [op_left_eq (x+1) y]
         exact hxy65
       · rw [op_right_odd y h5 2]
         simp only [delta_right_odd]
-        have hxy56 : (y + 6) % 2 = (x + 5) % 2 := mod_two_eq_up_from (y + 5) (x + 5) (Ne.symm hxy5)
-        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 6) (x + 5) hxy56
-        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := mod_two_eq_up_from (x + 5) (y + 7) (Ne.symm hxy57)
+        have hxy56 : (y + 6) % 2 = (x + 5) % 2 := mod_two_eq_up_from _ _ (Ne.symm hxy5)
+        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from _ _ hxy56
+        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := mod_two_eq_up_from _ _ (Ne.symm hxy57)
         simp [op_1661_1657,hxy67]
 
   | x+5, y+5, 4 =>  -- also 0,2
@@ -291,28 +274,26 @@ private theorem op_1661_1657_satisfies_1661 :
       by_cases h5 : (y + 5) % 2 = 0
       · rw [op_right_even y h5 4]
         simp only [delta_right_even]
-        have hxy45 : ¬ (x + 4) % 2 = (y + 5) % 2 :=
-          mod_two_ne_down_to (x + 4) (y + 5) hxy5
+        have hxy45 : ¬ (x + 4) % 2 = (y + 5) % 2 := mod_two_ne_down_to _ _ hxy5
         simp [op_1661_1657,hxy45]
       · rw [op_right_odd y h5 4]
         simp only [delta_right_odd]
-        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 5) (x + 5) hxy5.symm
-        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from (y + 6) (x + 5) hxy56).symm
-        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 := mod_two_ne_down_to (x + 4) (y +7) hxy57
+        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from _ _ hxy5.symm
+        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from _ _ hxy56).symm
+        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 := mod_two_ne_down_to _ _ hxy57
         simp [op_1661_1657,hxy47]
     · rw [op_left_ne x y hxy5]
       by_cases h5 : (y + 5) % 2 = 0
       · rw [op_right_even y h5 4]
         simp only [delta_right_even]
-        have hxy65 : (x + 6) % 2 = (y + 5) % 2 :=
-          mod_two_eq_up_from (x + 5) (y + 5) hxy5
+        have hxy65 : (x + 6) % 2 = (y + 5) % 2 := mod_two_eq_up_from _ _ hxy5
         rw [op_left_eq (x+1) y]
         exact hxy65
       · rw [op_right_odd y h5 4]
         simp only [delta_right_odd]
-        have hxy56 : (y + 6) % 2 = (x + 5) % 2 := mod_two_eq_up_from (y + 5) (x + 5) (Ne.symm hxy5)
-        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 6) (x + 5) hxy56
-        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := mod_two_eq_up_from (x + 5) (y + 7) (Ne.symm hxy57)
+        have hxy56 : (y + 6) % 2 = (x + 5) % 2 := mod_two_eq_up_from _ _ (Ne.symm hxy5)
+        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from _ _ hxy56
+        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := mod_two_eq_up_from _ _ (Ne.symm hxy57)
         simp [op_1661_1657,hxy67]
 
   | x+5, y+5, 1 =>  -- also 3
@@ -321,30 +302,25 @@ private theorem op_1661_1657_satisfies_1661 :
       by_cases h5 : (y + 5) % 2 = 0
       · rw [op_right_even y h5 1]
         simp only [delta_right_even]
-        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 5) (x + 5) hxy5.symm
-        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from (y + 6) (x + 5) hxy56).symm
-        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 := mod_two_ne_down_to (x + 4) (y +7) hxy57
+        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from _ _ hxy5.symm
+        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from _ _ hxy56).symm
+        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 := mod_two_ne_down_to _ _ hxy57
         simp [op_1661_1657,hxy47]
       · rw [op_right_odd y h5 1]
         simp only [delta_right_odd]
-        have hxy45 : (x + 4) % 2 ≠ (y + 5) % 2 :=
-          mod_two_ne_down_to (x + 4) (y + 5) hxy5
+        have hxy45 : (x + 4) % 2 ≠ (y + 5) % 2 := mod_two_ne_down_to _ _ hxy5
         simp [op_1661_1657,hxy5,hxy45]
     · rw [op_left_ne x y hxy5]
       by_cases h5 : (y + 5) % 2 = 0
       · rw [op_right_even y h5 1]
         simp only [delta_right_even]
-        have hxy56 : (y + 6) % 2 = (x + 5) % 2 :=
-          mod_two_eq_up_from (y + 5) (x + 5) (Ne.symm hxy5)
-        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 :=
-          mod_two_ne_up_from (y + 6) (x + 5) hxy56
-        have hxy67 : (x + 6) % 2 = (y + 7) % 2 :=
-          mod_two_eq_up_from (x + 5) (y + 7) (Ne.symm hxy57)
+        have hxy56 : (y + 6) % 2 = (x + 5) % 2 := mod_two_eq_up_from _ _ (Ne.symm hxy5)
+        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from _ _ hxy56
+        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := mod_two_eq_up_from _ _ (Ne.symm hxy57)
         rw [op_left_eq (x+1) (y+2) hxy67]
       · rw [op_right_odd y h5 1]
         simp only [delta_right_odd]
-        have hxy56 : (x + 6) % 2 = (y + 5) % 2 :=
-          mod_two_eq_up_from (x + 5) (y + 5) hxy5
+        have hxy56 : (x + 6) % 2 = (y + 5) % 2 := mod_two_eq_up_from _ _ hxy5
         simp [op_1661_1657,hxy56]
 
   | x+5, y+5, 3 =>  -- also 1
@@ -355,13 +331,11 @@ private theorem op_1661_1657_satisfies_1661 :
         simp only [delta_right_even]
         have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from _ _ hxy5.symm
         have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from _ _ hxy56).symm
-        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 :=
-          mod_two_ne_down_to (x + 4) (y +7) hxy57
+        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 := mod_two_ne_down_to _ _ hxy57
         simp [op_1661_1657,hxy47]
       · rw [op_right_odd y h5 3]
         simp only [delta_right_odd]
-        have hxy45 : (x + 4) % 2 ≠ (y + 5) % 2 :=
-          mod_two_ne_down_to (x + 4) (y + 5) hxy5
+        have hxy45 : (x + 4) % 2 ≠ (y + 5) % 2 := mod_two_ne_down_to _ _ hxy5
         simp [op_1661_1657,hxy5,hxy45]
     · rw [op_left_ne x y hxy5]
       by_cases h5 : (y + 5) % 2 = 0
@@ -373,48 +347,31 @@ private theorem op_1661_1657_satisfies_1661 :
         rw [op_left_eq (x+1) (y+2) hxy67]
       · rw [op_right_odd y h5 3]
         simp only [delta_right_odd]
-        have hxy56 : (x + 6) % 2 = (y + 5) % 2 :=
-          mod_two_eq_up_from (x + 5) (y + 5) hxy5
+        have hxy56 : (x + 6) % 2 = (y + 5) % 2 := mod_two_eq_up_from _ _ hxy5
         simp [op_1661_1657,hxy56]
 
   | x+5, 0, y+5 | x+5, 1, y+5 | x+5, 2, y+5 | x+5, 3, y+5 | x+5, 4, y+5 =>
     by_cases hxy5 : (x + 5) % 2 = (y + 5) % 2
     · by_cases h5y: (y + 5) % 2 = 0
-      · have h5x : (x + 5) % 2 = 0 := by
-          rw [hxy5]
-          exact h5y
-        have h4x : (x + 4) % 2 = 1 :=
-          mod_two_pred_0_1_to (x + 4) h5x
-        have h6x : (x + 6) % 2 = 1 :=
-          mod_two_succ_0_1_from (x + 5) h5x
+      · have h5x : (x + 5) % 2 = 0 := hxy5 ▸ h5y
+        have h4x : (x + 4) % 2 = 1 := mod_two_pred_0_1_to _ h5x
+        have h6x : (x + 6) % 2 = 1 := mod_two_succ_0_1_from _ h5x
         simp [op_1661_1657,h5y]
         simp [h4x,h5x,h6x]
-      · have h5y' : (y + 5) % 2 = 1 :=
-          Nat.mod_two_ne_zero.mp h5y
-        have h5x : (x + 5) % 2 = 1 := by
-          rw [hxy5]
-          exact h5y'
-        have h4x : (x + 4) % 2 = 0 :=
-          mod_two_pred_1_0_to (x + 4) h5x
-        have h6x : (x + 6) % 2 = 0 :=
-          mod_two_succ_1_0_from (x + 5) h5x
+      · have h5y' : (y + 5) % 2 = 1 := Nat.mod_two_ne_zero.mp h5y
+        have h5x : (x + 5) % 2 = 1 := hxy5 ▸ h5y'
+        have h4x : (x + 4) % 2 = 0 := mod_two_pred_1_0_to _ h5x
+        have h6x : (x + 6) % 2 = 0 := mod_two_succ_1_0_from _ h5x
         simp [op_1661_1657,h5y',h4x,h5x,h6x]
     · by_cases h5y: (y + 5) % 2 = 0
-      · have h5x : (x + 5) % 2 = 1 := by
-          simp_all only [Nat.mod_two_ne_zero]
-        have h4x : (x + 4) % 2 = 0 :=
-          mod_two_pred_1_0_to (x + 4) h5x
-        have h6x : (x + 6) % 2 = 0 :=
-          mod_two_succ_1_0_from (x + 5) h5x
+      · have h5x : (x + 5) % 2 = 1 := by simp_all only [Nat.mod_two_ne_zero]
+        have h4x : (x + 4) % 2 = 0 := mod_two_pred_1_0_to _ h5x
+        have h6x : (x + 6) % 2 = 0 := mod_two_succ_1_0_from _ h5x
         simp [op_1661_1657,h5y,h4x,h5x,h6x]
-      · have h5y' : (y + 5) % 2 = 1 :=
-          Nat.mod_two_ne_zero.mp h5y
-        have h5x : (x + 5) % 2 = 0 := by
-          simp_all only [Nat.mod_two_ne_one, one_ne_zero, not_false_eq_true]
-        have h4x : (x + 4) % 2 = 1 :=
-          mod_two_pred_0_1_to (x + 4) h5x
-        have h6x : (x + 6) % 2 = 1 :=
-          mod_two_succ_0_1_from (x + 5) h5x
+      · have h5y' : (y + 5) % 2 = 1 := Nat.mod_two_ne_zero.mp h5y
+        have h5x : (x + 5) % 2 = 0 := by simp_all only [Nat.mod_two_ne_one]
+        have h4x : (x + 4) % 2 = 1 := mod_two_pred_0_1_to _ h5x
+        have h6x : (x + 6) % 2 = 1 := mod_two_succ_0_1_from _ h5x
         simp [op_1661_1657,h5y',h4x,h5x,h6x]
 
   | 0, x+5, y+5 | 1, x+5, y+5 | 2, x+5, y+5 | 3, x+5, y+5 | 4, x+5, y+5 =>
@@ -453,7 +410,6 @@ private theorem op_1661_1657_satisfies_1661 :
         have h7x : (x + 7) % 2 = 0 :=
           mod_two_succ_1_0_from (x + 6) h6x
         simp [op_1661_1657,h5x,h6x,h7x]
-
 
 @[equational_result]
 theorem Equation1661_not_implies_Equation1657 :
