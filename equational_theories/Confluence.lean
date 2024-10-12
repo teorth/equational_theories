@@ -1105,6 +1105,16 @@ local macro_rules
     everywhere at $h
 )
 
+local syntax "bufixed" : tactic
+
+local macro_rules
+| `(tactic| bufixed) => `(tactic|
+  first
+  | assumption
+  | apply buFixed_rw_op
+    all_goals bufixed
+)
+
 open Lean hiding HashMap
 open Meta Elab Command Term Parser Syntax
 open Std (HashMap)
