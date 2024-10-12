@@ -73,13 +73,11 @@ private theorem op_right_even (y : ℕ) : (y + 5) % 2 = 0 → ∀ (x : ℕ), op_
     have y4o : (y + 4) % 2 = 1 := Nat.succ_mod_two_eq_zero_iff.mp y5e
     have y6o : (y + 6) % 2 = 1 := Nat.succ_mod_two_eq_one_iff.mpr y5e
     match x with
-    | 0 | 1 | 2 | 3 | 4 =>
-      simp [op_1661_1657,y5e,y4o,y6o,delta_right_even]
+    | 0 | 1 | 2 | 3 | 4 => simp [op_1661_1657,y5e,y4o,y6o,delta_right_even]
     | n+5 =>
       by_cases n5eo : (n + 5) % 2 = 0
-      · simp [op_1661_1657,y5e,n5eo,y4o,delta_right_even]
-      · have n5o : (n + 5) % 2 = 1 := Nat.mod_two_ne_zero.mp n5eo
-        simp [op_1661_1657,y5e,y6o,n5o,delta_right_even]
+      · simp [op_1661_1657, y5e, n5eo, y4o, delta_right_even]
+      · simp [op_1661_1657, y5e, y6o, Nat.mod_two_ne_zero.mp n5eo, delta_right_even]
 
 private def delta_right_odd (n : ℕ) : ℕ :=
     match n with
@@ -101,9 +99,8 @@ private theorem op_right_odd (y : ℕ) : (y + 5) % 2 ≠ 0 → ∀ (x : ℕ), op
       simp [op_1661_1657,y5o',y4e,y6e,delta_right_odd]
     | n+5 =>
       by_cases n5eo : (n + 5) % 2 = 0
-      · simp [op_1661_1657,y5o',n5eo,y4e,y6e,delta_right_odd]
-      · have n5o : (n + 5) % 2 = 1 := Nat.mod_two_ne_zero.mp n5eo
-        simp [op_1661_1657,y5o',n5o,y4e,delta_right_odd]
+      · simp [op_1661_1657, y5o', n5eo, y4e, y6e, delta_right_odd]
+      · simp [op_1661_1657, y5o', Nat.mod_two_ne_zero.mp n5eo, y4e, delta_right_odd]
 
 private theorem op_left_eq (x y : ℕ) : (x + 5) % 2 = (y + 5) % 2 → op_1661_1657 (x + 5) (y + 5) = x + 4 := by
   simp [op_1661_1657]
@@ -113,14 +110,13 @@ private theorem op_left_ne (x y : ℕ) : ¬ ((x + 5) % 2 = (y + 5) % 2) → op_1
 
 private theorem op_right_eq (y z : ℕ) : (y + 5) % 2 = (z + 5) % 2 → op_1661_1657 (op_1661_1657 (y + 5) (z + 5)) (y + 5) = y + 5 := by
   intro yz5
-  have yz45 : ¬(y + 4) % 2 = (z + 5) % 2 := mod_two_ne_down_to (y + 4) (z + 5) yz5
-  simp [op_1661_1657,yz5, yz45]
+  simp [op_1661_1657,yz5, mod_two_ne_down_to _ _ yz5]
 
 private theorem op_right_ne (y z : ℕ) : ¬ (y + 5) % 2 = (z + 5) % 2 → op_1661_1657 (op_1661_1657 (y + 5) (z + 5)) (y + 5) = y + 7 := by
   intro yz5
   simp [op_1661_1657,yz5]
   have r : (y + 5) % 2 = (y + 5) % 2 := by simp
-  exact (mod_two_ne_up_from (y + 5) (y + 5) r)
+  exact (mod_two_ne_up_from _ _ r)
 
 
 /-
@@ -224,12 +220,9 @@ private theorem op_1661_1657_satisfies_1661 :
         simp [op_1661_1657,hxy43]
       · rw [op_left_ne x y hxy5]
         simp [op_1661_1657,]
-        have hxy56 : (x + 6) % 2 = (y + 5) % 2 :=
-          mod_two_eq_up_from (x + 5) (y + 5) hxy5
-        have hxy6 : (y + 6) % 2 ≠ (x + 6) % 2 :=
-          mod_two_ne_up_from (y + 5) (x + 6) (Eq.symm hxy56)
-        have hxy67 : (x + 6) % 2 = (y + 7) % 2 :=
-          Eq.symm (mod_two_eq_up_from (y + 6) (x + 6) hxy6)
+        have hxy56 : (x + 6) % 2 = (y + 5) % 2 := mod_two_eq_up_from (x + 5) (y + 5) hxy5
+        have hxy6 : (y + 6) % 2 ≠ (x + 6) % 2 := mod_two_ne_up_from (y + 5) (x + 6) hxy56.symm
+        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := (mod_two_eq_up_from (y + 6) (x + 6) hxy6).symm
         simp [op_1661_1657,hxy67]
 
   | x+5, y+5, 0 =>  -- also 2,4
@@ -243,10 +236,8 @@ private theorem op_1661_1657_satisfies_1661 :
         simp [op_1661_1657,hxy45]
       · rw [op_right_odd y h5 0]
         simp only [delta_right_odd]
-        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 :=
-          mod_two_ne_up_from (y + 5) (x + 5) (Eq.symm hxy5)
-        have hxy57 : (x + 5) % 2 = (y + 7) % 2 :=
-          Eq.symm (mod_two_eq_up_from (y + 6) (x + 5) hxy56)
+        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 5) (x + 5) hxy5.symm
+        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from (y + 6) (x + 5) hxy56).symm
         have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 :=
           mod_two_ne_down_to (x + 4) (y +7) hxy57
         simp [op_1661_1657,hxy47]
@@ -260,12 +251,9 @@ private theorem op_1661_1657_satisfies_1661 :
         exact hxy65
       · rw [op_right_odd y h5 0]
         simp only [delta_right_odd]
-        have hxy56 : (y + 6) % 2 = (x + 5) % 2 :=
-          mod_two_eq_up_from (y + 5) (x + 5) (Ne.symm hxy5)
-        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 :=
-          mod_two_ne_up_from (y + 6) (x + 5) hxy56
-        have hxy67 : (x + 6) % 2 = (y + 7) % 2 :=
-          mod_two_eq_up_from (x + 5) (y + 7) (Ne.symm hxy57)
+        have hxy56 : (y + 6) % 2 = (x + 5) % 2 := mod_two_eq_up_from (y + 5) (x + 5) (Ne.symm hxy5)
+        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 6) (x + 5) hxy56
+        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := mod_two_eq_up_from (x + 5) (y + 7) (Ne.symm hxy57)
         simp [op_1661_1657,hxy67]
 
   | x+5, y+5, 2 =>  -- also 0,4
@@ -279,29 +267,22 @@ private theorem op_1661_1657_satisfies_1661 :
         simp [op_1661_1657,hxy45]
       · rw [op_right_odd y h5 2]
         simp only [delta_right_odd]
-        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 :=
-          mod_two_ne_up_from (y + 5) (x + 5) (Eq.symm hxy5)
-        have hxy57 : (x + 5) % 2 = (y + 7) % 2 :=
-          Eq.symm (mod_two_eq_up_from (y + 6) (x + 5) hxy56)
-        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 :=
-          mod_two_ne_down_to (x + 4) (y +7) hxy57
+        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 5) (x + 5) hxy5.symm
+        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from (y + 6) (x + 5) hxy56).symm
+        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 := mod_two_ne_down_to (x + 4) (y +7) hxy57
         simp [op_1661_1657,hxy47]
     · rw [op_left_ne x y hxy5]
       by_cases h5 : (y + 5) % 2 = 0
       · rw [op_right_even y h5 2]
         simp only [delta_right_even]
-        have hxy65 : (x + 6) % 2 = (y + 5) % 2 :=
-          mod_two_eq_up_from (x + 5) (y + 5) hxy5
+        have hxy65 : (x + 6) % 2 = (y + 5) % 2 := mod_two_eq_up_from (x + 5) (y + 5) hxy5
         rw [op_left_eq (x+1) y]
         exact hxy65
       · rw [op_right_odd y h5 2]
         simp only [delta_right_odd]
-        have hxy56 : (y + 6) % 2 = (x + 5) % 2 :=
-          mod_two_eq_up_from (y + 5) (x + 5) (Ne.symm hxy5)
-        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 :=
-          mod_two_ne_up_from (y + 6) (x + 5) hxy56
-        have hxy67 : (x + 6) % 2 = (y + 7) % 2 :=
-          mod_two_eq_up_from (x + 5) (y + 7) (Ne.symm hxy57)
+        have hxy56 : (y + 6) % 2 = (x + 5) % 2 := mod_two_eq_up_from (y + 5) (x + 5) (Ne.symm hxy5)
+        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 6) (x + 5) hxy56
+        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := mod_two_eq_up_from (x + 5) (y + 7) (Ne.symm hxy57)
         simp [op_1661_1657,hxy67]
 
   | x+5, y+5, 4 =>  -- also 0,2
@@ -315,12 +296,9 @@ private theorem op_1661_1657_satisfies_1661 :
         simp [op_1661_1657,hxy45]
       · rw [op_right_odd y h5 4]
         simp only [delta_right_odd]
-        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 :=
-          mod_two_ne_up_from (y + 5) (x + 5) (Eq.symm hxy5)
-        have hxy57 : (x + 5) % 2 = (y + 7) % 2 :=
-          Eq.symm (mod_two_eq_up_from (y + 6) (x + 5) hxy56)
-        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 :=
-          mod_two_ne_down_to (x + 4) (y +7) hxy57
+        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 5) (x + 5) hxy5.symm
+        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from (y + 6) (x + 5) hxy56).symm
+        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 := mod_two_ne_down_to (x + 4) (y +7) hxy57
         simp [op_1661_1657,hxy47]
     · rw [op_left_ne x y hxy5]
       by_cases h5 : (y + 5) % 2 = 0
@@ -332,12 +310,9 @@ private theorem op_1661_1657_satisfies_1661 :
         exact hxy65
       · rw [op_right_odd y h5 4]
         simp only [delta_right_odd]
-        have hxy56 : (y + 6) % 2 = (x + 5) % 2 :=
-          mod_two_eq_up_from (y + 5) (x + 5) (Ne.symm hxy5)
-        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 :=
-          mod_two_ne_up_from (y + 6) (x + 5) hxy56
-        have hxy67 : (x + 6) % 2 = (y + 7) % 2 :=
-          mod_two_eq_up_from (x + 5) (y + 7) (Ne.symm hxy57)
+        have hxy56 : (y + 6) % 2 = (x + 5) % 2 := mod_two_eq_up_from (y + 5) (x + 5) (Ne.symm hxy5)
+        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 6) (x + 5) hxy56
+        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := mod_two_eq_up_from (x + 5) (y + 7) (Ne.symm hxy57)
         simp [op_1661_1657,hxy67]
 
   | x+5, y+5, 1 =>  -- also 3
@@ -346,12 +321,9 @@ private theorem op_1661_1657_satisfies_1661 :
       by_cases h5 : (y + 5) % 2 = 0
       · rw [op_right_even y h5 1]
         simp only [delta_right_even]
-        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 :=
-          mod_two_ne_up_from (y + 5) (x + 5) (Eq.symm hxy5)
-        have hxy57 : (x + 5) % 2 = (y + 7) % 2 :=
-          Eq.symm (mod_two_eq_up_from (y + 6) (x + 5) hxy56)
-        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 :=
-          mod_two_ne_down_to (x + 4) (y +7) hxy57
+        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from (y + 5) (x + 5) hxy5.symm
+        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from (y + 6) (x + 5) hxy56).symm
+        have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 := mod_two_ne_down_to (x + 4) (y +7) hxy57
         simp [op_1661_1657,hxy47]
       · rw [op_right_odd y h5 1]
         simp only [delta_right_odd]
@@ -381,10 +353,8 @@ private theorem op_1661_1657_satisfies_1661 :
       by_cases h5 : (y + 5) % 2 = 0
       · rw [op_right_even y h5 3]
         simp only [delta_right_even]
-        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 :=
-          mod_two_ne_up_from (y + 5) (x + 5) (Eq.symm hxy5)
-        have hxy57 : (x + 5) % 2 = (y + 7) % 2 :=
-          Eq.symm (mod_two_eq_up_from (y + 6) (x + 5) hxy56)
+        have hxy56 : (y + 6) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from _ _ hxy5.symm
+        have hxy57 : (x + 5) % 2 = (y + 7) % 2 := (mod_two_eq_up_from _ _ hxy56).symm
         have hxy47 : ¬ (x + 4) % 2 = (y + 7) % 2 :=
           mod_two_ne_down_to (x + 4) (y +7) hxy57
         simp [op_1661_1657,hxy47]
@@ -397,12 +367,9 @@ private theorem op_1661_1657_satisfies_1661 :
       by_cases h5 : (y + 5) % 2 = 0
       · rw [op_right_even y h5 3]
         simp only [delta_right_even]
-        have hxy56 : (y + 6) % 2 = (x + 5) % 2 :=
-          mod_two_eq_up_from (y + 5) (x + 5) (Ne.symm hxy5)
-        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 :=
-          mod_two_ne_up_from (y + 6) (x + 5) hxy56
-        have hxy67 : (x + 6) % 2 = (y + 7) % 2 :=
-          mod_two_eq_up_from (x + 5) (y + 7) (Ne.symm hxy57)
+        have hxy56 : (y + 6) % 2 = (x + 5) % 2 := mod_two_eq_up_from _ _ (Ne.symm hxy5)
+        have hxy57 : (y + 7) % 2 ≠ (x + 5) % 2 := mod_two_ne_up_from _ _ hxy56
+        have hxy67 : (x + 6) % 2 = (y + 7) % 2 := mod_two_eq_up_from _ _ (Ne.symm hxy57)
         rw [op_left_eq (x+1) (y+2) hxy67]
       · rw [op_right_odd y h5 3]
         simp only [delta_right_odd]
@@ -493,13 +460,12 @@ theorem Equation1661_not_implies_Equation1657 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation1657 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  apply And.intro
+  refine ⟨ℕ, magN, And.intro ?_ ?_⟩
   · simp only [Equation1661, magN, op]
     exact op_1661_1657_satisfies_1661
-  simp only [not_forall]
-  exists 0, 1
-  simp [magN,op,op_1661_1657]
+  · simp only [not_forall]
+    exists 0, 1
+    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -516,13 +482,12 @@ theorem Equation1661_not_implies_Equation1630 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation1630 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  apply And.intro
+  refine ⟨ℕ, magN, And.intro ?_ ?_⟩
   · simp only [Equation1661, magN, op]
     exact op_1661_1657_satisfies_1661
-  simp only [not_forall]
-  exists 1, 0
-  simp [magN,op,op_1661_1657]
+  · simp only [not_forall]
+    exists 1, 0
+    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -539,13 +504,12 @@ theorem Equation1661_not_implies_Equation1833 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation1833 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  apply And.intro
+  refine ⟨ℕ, magN, And.intro ?_ ?_⟩
   · simp only [Equation1661, magN, op]
     exact op_1661_1657_satisfies_1661
-  simp only [not_forall]
-  exists 3, 0
-  simp [magN,op,op_1661_1657]
+  · simp only [not_forall]
+    exists 3, 0
+    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -562,13 +526,12 @@ theorem Equation1661_not_implies_Equation1837 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation1837 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  apply And.intro
+  refine ⟨ℕ, magN, And.intro ?_ ?_⟩
   · simp [Equation1661, magN, op]
     exact op_1661_1657_satisfies_1661
-  simp only [not_forall]
-  exists 3, 0
-  simp [magN,op,op_1661_1657]
+  · simp only [not_forall]
+    exists 3, 0
+    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -585,13 +548,12 @@ theorem Equation1661_not_implies_Equation1851 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation1851 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  apply And.intro
+  refine ⟨ℕ, magN, And.intro ?_ ?_⟩
   · simp only [Equation1661, magN, op]
     exact op_1661_1657_satisfies_1661
-  simp only [not_forall]
-  exists 0, 3
-  simp [magN,op,op_1661_1657]
+  · simp only [not_forall]
+    exists 0, 3
+    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -608,8 +570,7 @@ theorem Equation1661_not_implies_Equation1860 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation1860 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  apply And.intro
+  refine ⟨ℕ, magN, And.intro ?_ ?_⟩
   · simp [Equation1661, magN, op]
     exact op_1661_1657_satisfies_1661
   simp only [not_forall]
@@ -631,13 +592,12 @@ theorem Equation1661_not_implies_Equation2443 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation2443 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  apply And.intro
+  refine ⟨ℕ, magN, And.intro ?_ ?_⟩
   · simp only [Equation1661,magN, op]
     exact op_1661_1657_satisfies_1661
-  simp only [not_forall]
-  exists 1, 0
-  simp [magN,op,op_1661_1657]
+  · simp only [not_forall]
+    exists 1, 0
+    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -654,13 +614,12 @@ theorem Equation1661_not_implies_Equation2467 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation2467 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  apply And.intro
+  refine ⟨ℕ, magN, And.intro ?_ ?_⟩
   · simp only [Equation1661, magN, op]
     exact op_1661_1657_satisfies_1661
-  simp only [not_forall]
-  exists 0, 1
-  simp [magN,op,op_1661_1657]
+  · simp only [not_forall]
+    exists 0, 1
+    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -677,13 +636,12 @@ theorem Equation1661_not_implies_Equation3457 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation3457 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  apply And.intro
+  refine ⟨ℕ, magN, And.intro ?_ ?_⟩
   · simp only [Equation1661, magN, op]
     exact op_1661_1657_satisfies_1661
-  simp only [not_forall]
-  exists 1, 0
-  simp [magN,op,op_1661_1657]
+  · simp only [not_forall]
+    exists 1, 0
+    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -700,13 +658,12 @@ theorem Equation1661_not_implies_Equation3521 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation3521 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  apply And.intro
+  refine ⟨ℕ, magN, And.intro ?_ ?_⟩
   · simp only [Equation1661, magN, op]
     exact op_1661_1657_satisfies_1661
-  simp only [not_forall]
-  exists 0, 1
-  simp [magN,op,op_1661_1657]
+  · simp only [not_forall]
+    exists 0, 1
+    simp [magN, op, op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -723,20 +680,19 @@ theorem Equation1661_not_implies_Equation4268 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation4268 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  apply And.intro
+  refine ⟨ℕ, magN, And.intro ?_ ?_⟩
   · simp only [Equation1661, magN, op]
     exact op_1661_1657_satisfies_1661
-  simp only [not_forall]
-  exists 3, 0
-  simp [magN,op,op_1661_1657]
+  · simp only [not_forall]
+    exists 3, 0
+    simp [magN, op, op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
 theorem Equation1979_not_implies_Equation4587 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation4587 G := by
   obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation4268
   refine ⟨Op G', opMagma, ?_, ?_⟩
-  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop?
+  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
     rwa [h3] at h1
   · have h4 : Equation4268 G' ↔ Equation4587 (Op G') := by aesop
     rwa [h4] at h2
@@ -746,13 +702,12 @@ theorem Equation1661_not_implies_Equation4314 :
   ∃ (G : Type) (_ : Magma G), Equation1661 G ∧ ¬ Equation4314 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1661_1657 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  apply And.intro
+  refine ⟨ℕ, magN, And.intro ?_ ?_⟩
   · simp only [Equation1661, magN, op]
     exact op_1661_1657_satisfies_1661
-  simp only [not_forall]
-  exists 0, 3
-  simp [magN,op,op_1661_1657]
+  · simp only [not_forall]
+    exists 0, 3
+    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
