@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from scripts.generate_eqs_list import eqs, format_expr
 
 
