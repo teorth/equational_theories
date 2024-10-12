@@ -53,40 +53,6 @@ macro "prove_elim_not" : tactic => `(tactic| (
     try any_goals trivial
 ))
 
-syntax "subterm" : tactic
-
-macro_rules
-| `(tactic| subterm) => `(tactic|
-  first
-  | apply FreeMagma.SubtermOf.refl
-  | apply FreeMagma.SubtermOf.left
-    subterm
-  | apply FreeMagma.SubtermOf.right
-    subterm
-)
-
-syntax "everywhere" " at " ident : tactic
-
-macro_rules
-| `(tactic| everywhere at $h:ident) => `(tactic|
-  first
-  | assumption
-  | apply FreeMagma.Everywhere.left at $h
-    everywhere at $h
-  | apply FreeMagma.Everywhere.right at $h
-    everywhere at $h
-)
-
-syntax "bufixed" : tactic
-
-macro_rules
-| `(tactic| bufixed) => `(tactic|
-  first
-  | assumption
-  | apply Confluence.buFixed_rw_op
-    all_goals bufixed
-)
-
 open Lean hiding HashMap
 open Meta Elab Command Term Parser Syntax
 open Std (HashMap)

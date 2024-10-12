@@ -250,4 +250,38 @@ macro "refute" : tactic =>
 -- doesn't work in the same file where it's declared
 register_simp_attr confluence_simps
 
+scoped syntax "subterm" : tactic
+
+scoped macro_rules
+| `(tactic| subterm) => `(tactic|
+  first
+  | apply FreeMagma.SubtermOf.refl
+  | apply FreeMagma.SubtermOf.left
+    subterm
+  | apply FreeMagma.SubtermOf.right
+    subterm
+)
+
+scoped syntax "everywhere" " at " ident : tactic
+
+scoped macro_rules
+| `(tactic| everywhere at $h:ident) => `(tactic|
+  first
+  | assumption
+  | apply FreeMagma.Everywhere.left at $h
+    everywhere at $h
+  | apply FreeMagma.Everywhere.right at $h
+    everywhere at $h
+)
+
+scoped syntax "bufixed" : tactic
+
+scoped macro_rules
+| `(tactic| bufixed) => `(tactic|
+  first
+  | assumption
+  | apply Confluence.buFixed_rw_op
+    all_goals bufixed
+)
+
 end Confluence
