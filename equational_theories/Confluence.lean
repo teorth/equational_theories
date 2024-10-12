@@ -1289,6 +1289,58 @@ macro_rules
 
   pure <| mkListNode decls
 
+
+namespace rw1523
+
+variable [Inhabited α] [DecidableEq α]
+
+rule_system rules {x y z: FreeMagma α} -IsProj
+| (y ⋆ y) ⋆ (x ⋆ (y ⋆ y)) => x
+| x ⋆ x => default ⋆ default
+
+instance: IsProjOrNF (rules : FreeMagma α → _) where
+  proj_or_nf := by
+    intro x
+    generalize h: rules x = e
+    simp only [rules.elim] at h
+    separate
+    · left
+      subterm
+    · right
+      simp [NF, Everywhere]
+      constructor
+      · simp [rules, rules.rule1, rules.rule2]
+      · apply rules.eq2
+    · left
+      rfl
+
+theorem comp1_2 {x : FreeMagma α}:
+    rules (default ⋆ default ⋆ rules (x ⋆ (default ⋆ default))) = x := by
+  generalize h: rules (x ⋆ (default ⋆ default)) = e
+  simp only [rules.elim] at h
+  separate
+  · apply rules.eq2
+  · apply rules.eq1
+
+theorem comp1_4 {x y z : FreeMagma α}:
+    rules (rules (y ⋆ y) ⋆ rules (x ⋆ rules (z ⋆ z))) = x := by
+  simp [rules.eq2]
+  apply comp1_2
+
+@[equational_result]
+theorem «Facts» :
+  ∃ (G : Type) (_ : Magma G), Facts G [1523] [2035, 2038, 2124, 2128, 2132] := by
+  use ConfMagma (@rules Nat _ _), inferInstance
+  repeat' apply And.intro
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩ ⟨z, hz⟩
+    simp (disch := bufixed) only [Magma.op, bu, hx, hy, hz, buFixed_rw_op]
+    symm
+    congr! 1
+    apply comp1_4
+  all_goals refute
+
+end rw1523
+
 namespace rw680
 
 variable [DecidableEq α]
