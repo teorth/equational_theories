@@ -48,9 +48,8 @@ def PartialSolution.move_rev_good (f : PartialSolution G) (x y : G) (z : G) (h1 
   have f'_of_mem_E1 {a b : G} (ha : (a, b) ∈ f.E1) : f' a b = f.f a b := by
     dsimp [f']
     rw [if_neg, if_neg]
-    · apply hz1 _ ha
-    · rintro ⟨rfl, rfl⟩
-      exact h1 ha
+    · exact hz1 _ ha
+    · rintro ⟨rfl, rfl⟩; exact h1 ha
   have f'_of_mem_E0 {a b : G} (ha : (a, b) ∈ f.E0) : f' a b = f.f a b := f'_of_mem_E1 (f.E0_subset_E1 ha)
   have f'_y_x : f' y x = z := by simp [f']
   have f'_z {a : G} : f' a z = y := by simp [f', hzx]
@@ -59,33 +58,24 @@ def PartialSolution.move_rev_good (f : PartialSolution G) (x y : G) (z : G) (h1 
   E1 := f.E1 ∪ {(y, x), (z, z)} ∪ (f.E1.filter fun ⟨y', x'⟩ ↦ x' = y ∧ f.f y' x' = x).image fun ⟨y', _⟩ ↦ (y', z)
   f := f'
   E0_subset_E1 := by
-    rw [Finset.union_assoc]
     trans f.E1
-    · apply Finset.union_subset
-      exact f.E0_subset_E1
-      apply Finset.filter_subset
-    · exact Finset.subset_union_left
+    · exact Finset.union_subset (f.E0_subset_E1) (Finset.filter_subset _ _)
+    · rw [Finset.union_assoc]; exact Finset.subset_union_left
   t_mem_of_mem_E0' := by
     rintro ⟨x', y'⟩ ha
     simp only [Finset.mem_union, Finset.mem_filter] at ha
     rcases ha with ha | ⟨ha, rfl, rfl⟩
-    · dsimp only
-      rw [f'_of_mem_E0 ha]
-      simp [f.t_mem_of_mem_E0 ha]
-    · dsimp only
-      rw [f'_of_mem_E1 ha]
-      simp
+    · rw [f'_of_mem_E0 ha]; simp [f.t_mem_of_mem_E0 ha]
+    · rw [f'_of_mem_E1 ha]; simp
   mem_2_of_mem_E0 := by
     rintro ⟨x', y'⟩ ha
     simp only [Finset.mem_union, Finset.mem_filter] at ha
     rcases ha with ha | ⟨ha, rfl, rfl⟩
-    · dsimp only
-      rw [f'_of_mem_E0 ha, f'_of_mem_E1 (f.t_mem_of_mem_E0 ha)]
+    · rw [f'_of_mem_E0 ha, f'_of_mem_E1 (f.t_mem_of_mem_E0 ha)]
       simp only [Finset.union_insert, Finset.insert_union, Finset.union_assoc, Finset.mem_insert,
         Prod.mk.injEq, Finset.mem_union, f.mem_2_of_mem_E0 _ ha, Finset.mem_singleton,
         Finset.mem_image, Finset.mem_filter, Prod.exists, exists_and_right, true_or, or_true]
-    · dsimp only
-      rw [f'_of_mem_E1 ha, f'_y_x]
+    · rw [f'_of_mem_E1 ha, f'_y_x]
       apply Finset.mem_union_right
       simp only [Finset.mem_image, Finset.mem_filter, Prod.mk.injEq, and_true, Prod.exists,
         exists_and_right, exists_eq_right]
@@ -94,14 +84,11 @@ def PartialSolution.move_rev_good (f : PartialSolution G) (x y : G) (z : G) (h1 
     rintro ⟨x', y'⟩ ha
     simp only [Finset.mem_union, Finset.mem_filter] at ha
     rcases ha with ha | ⟨ha, rfl, rfl⟩
-    · dsimp only
-      rw [f'_of_mem_E0 ha, f'_of_mem_E1 (f.t_mem_of_mem_E0 ha), f'_of_mem_E1 (f.mem_2_of_mem_E0 _ ha)]
+    · rw [f'_of_mem_E0 ha, f'_of_mem_E1 (f.t_mem_of_mem_E0 ha), f'_of_mem_E1 (f.mem_2_of_mem_E0 _ ha)]
       apply f.eq_of_mem_E0 _ ha
-    · dsimp only
-      rw [f'_of_mem_E1 ha, f'_y_x, f'_z]
+    · rw [f'_of_mem_E1 ha, f'_y_x, f'_z]
   undef_of_not_mem_E0' := by
     rintro ⟨x', y'⟩ ha
-    dsimp only
     simp only [Finset.union_insert, Finset.insert_union, Finset.union_assoc, Finset.mem_sdiff,
       Finset.mem_insert, Prod.mk.injEq, Finset.mem_union, Finset.mem_singleton, Finset.mem_image,
       Finset.mem_filter, Prod.exists, exists_and_right, not_or, not_and] at ha
@@ -234,9 +221,7 @@ def PartialSolution.move_rev_bad (f : PartialSolution G) (x y : G) (z : G) (h1 :
     simp only [Finset.union_assoc, Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq,
       Finset.mem_filter] at ha
     rcases ha with ha | ⟨rfl, rfl⟩ | ⟨ha, rfl, rfl⟩
-    · dsimp only
-      rw [f'_of_mem_E0 ha]
-      simp [f.t_mem_of_mem_E0 ha]
+    · rw [f'_of_mem_E0 ha]; simp [f.t_mem_of_mem_E0 ha]
     · simp only [Finset.union_insert, Finset.insert_union, Finset.union_assoc, Finset.mem_insert,
       Prod.mk.injEq, Finset.mem_union, Finset.mem_singleton, Finset.mem_image, Finset.mem_filter,
       Prod.exists, exists_and_right]
@@ -244,16 +229,13 @@ def PartialSolution.move_rev_bad (f : PartialSolution G) (x y : G) (z : G) (h1 :
       use y'
       simp only [f'_y_x, and_self, and_true]
       use x'
-    · dsimp only
-      rw [f'_of_mem_E1 ha]
-      simp
+    · rw [f'_of_mem_E1 ha]; simp
   mem_2_of_mem_E0 := by
     rintro ⟨x', y'⟩ ha
     simp only [Finset.union_assoc, Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq,
       Finset.mem_filter] at ha
     rcases ha with ha | ⟨rfl, rfl⟩ | ⟨ha, rfl, rfl⟩
-    · dsimp only
-      rw [f'_of_mem_E0 ha, f'_of_mem_E1 (f.t_mem_of_mem_E0 ha)]
+    · rw [f'_of_mem_E0 ha, f'_of_mem_E1 (f.t_mem_of_mem_E0 ha)]
       simp only [Finset.union_insert, Finset.insert_union, Finset.union_assoc, Finset.mem_insert,
         Prod.mk.injEq, Finset.mem_union, f.mem_2_of_mem_E0 _ ha, Finset.mem_singleton,
         Finset.mem_image, Finset.mem_filter, Prod.exists, exists_and_right, true_or, or_true]
@@ -261,8 +243,7 @@ def PartialSolution.move_rev_bad (f : PartialSolution G) (x y : G) (z : G) (h1 :
       Finset.mem_insert, Prod.mk.injEq, true_and, Finset.mem_union, f.strange _ h2 h22,
       Finset.mem_singleton, and_self, Finset.mem_image, Finset.mem_filter, Prod.exists,
       exists_and_right, true_or, or_true]
-    · dsimp only
-      rw [f'_of_mem_E1 ha, f'_y_x]
+    · rw [f'_of_mem_E1 ha, f'_y_x]
       apply Finset.mem_union_right
       simp only [Finset.mem_image, Finset.mem_filter, Prod.mk.injEq, and_true, Prod.exists,
         exists_and_right, exists_eq_right]
@@ -272,15 +253,12 @@ def PartialSolution.move_rev_bad (f : PartialSolution G) (x y : G) (z : G) (h1 :
     simp only [Finset.union_assoc, Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq,
       Finset.mem_filter] at ha
     rcases ha with ha | ⟨rfl, rfl⟩ | ⟨ha, rfl, rfl⟩
-    · dsimp only
-      rw [f'_of_mem_E0 ha, f'_of_mem_E1 (f.t_mem_of_mem_E0 ha), f'_of_mem_E1 (f.mem_2_of_mem_E0 _ ha)]
+    · rw [f'_of_mem_E0 ha, f'_of_mem_E1 (f.t_mem_of_mem_E0 ha), f'_of_mem_E1 (f.mem_2_of_mem_E0 _ ha)]
       apply f.eq_of_mem_E0 _ ha
     · simp only [f'_y_x, f'_z, f.strange _ h2 h22, f'_of_mem_E1]
-    · dsimp only
-      rw [f'_of_mem_E1 ha, f'_y_x, f'_z]
+    · rw [f'_of_mem_E1 ha, f'_y_x, f'_z]
   undef_of_not_mem_E0' := by
     rintro ⟨x', y'⟩ ha
-    dsimp only
     simp only [Finset.union_insert, Finset.insert_union, Finset.union_assoc, Finset.mem_sdiff,
       Finset.mem_insert, Prod.mk.injEq, Finset.mem_union, Finset.mem_singleton, Finset.mem_image,
       Finset.mem_filter, Prod.exists, exists_and_right, not_or, not_and] at ha
@@ -375,12 +353,12 @@ def Denumerable.notMemFinset (s : Finset G) : G :=
 
 omit [DecidableEq G] in
 theorem Denumerable.notMemFinset_prop (s : Finset G) : Denumerable.notMemFinset s ∉ s := by
-  simp [notMemFinset]
+  simp only [notMemFinset, Finset.mem_image, not_exists, not_and, Denumerable.decode_eq_ofNat,
+    Option.some.injEq]
   intro mem
   have : Nat.find (Infinite.exists_not_mem_finset (s.image Encodable.encode)) ∈ s.image Encodable.encode := by
-    simp only [Finset.mem_image, not_exists, not_and]
-    refine ⟨_, mem, ?_⟩
-    simp only [Denumerable.decode_eq_ofNat, Option.some.injEq, Denumerable.encode_ofNat]
+    rw [Finset.mem_image]
+    exact ⟨_, mem, by simp⟩
   have : Nat.find (Infinite.exists_not_mem_finset (s.image Encodable.encode)) ∉ s.image Encodable.encode :=
     Nat.find_spec (Infinite.exists_not_mem_finset (s.image Encodable.encode))
   contradiction
@@ -482,8 +460,7 @@ lemma PartialSolution.mem_add_e1_of_app_eq (f : PartialSolution G) (x y : G)
   unfold add_e1
   split
   · by_contra! nh
-    have := f.undef_of_not_mem_E0 _ nh hbm
-    apply this
+    apply f.undef_of_not_mem_E0 _ nh hbm
     simpa [g, hp]
   · apply mem_act_of_app_eq <;> assumption
 
@@ -495,8 +472,7 @@ lemma PartialSolution.le_add_e0 (f : PartialSolution G) (x y : G) :
     f ≤ f.add_e0 x y := by
   unfold add_e0
   dsimp only
-  trans f.add_e1 x y <;>
-    apply le_add_e1
+  trans f.add_e1 x y <;> apply le_add_e1
 
 lemma PartialSolution.mem_add_e0 (f : PartialSolution G) (x y : G) :
     (y, x) ∈ (f.add_e0 x y).E0 := by
@@ -548,14 +524,10 @@ theorem closure_prop (f : PartialSolution G) : ∀ x y, closure f x (closure f y
   rw [closure_eq_of_mem_e1 f (Encodable.encode (x, y) + 1) x y,
     closure_eq_of_mem_e1 f (Encodable.encode (x, y) + 1) y,
     closure_eq_of_mem_e1 f (Encodable.encode (x, y) + 1)]
-  · apply PartialSolution.eq_of_mem_E0 _ (x, y)
-    apply mem_closureSeq_e0
-  · apply PartialSolution.mem_2_of_mem_E0 _ (x, y)
-    apply mem_closureSeq_e0
-  · apply PartialSolution.t_mem_of_mem_E0' _ (x, y)
-    apply mem_closureSeq_e0
-  · apply PartialSolution.E0_subset_E1
-    apply mem_closureSeq_e0
+  · exact PartialSolution.eq_of_mem_E0 _ _ (mem_closureSeq_e0 _ _ _)
+  · exact PartialSolution.mem_2_of_mem_E0 _ _ (mem_closureSeq_e0 _ _ _)
+  · exact PartialSolution.t_mem_of_mem_E0' _ _ (mem_closureSeq_e0 _ _ _)
+  · exact PartialSolution.E0_subset_E1 _ (mem_closureSeq_e0 _ _ _)
 
 def initial : PartialSolution ℕ where
   E0 := {(0, 0), (1, 0), (0, 1), (0, 8), (8, 8), (8, 0)}
