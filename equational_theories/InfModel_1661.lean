@@ -378,37 +378,23 @@ private theorem op_1661_1657_satisfies_1661 :
     by_cases hxy5 : (x + 5) % 2 = (y + 5) % 2
     · try {rw [op_left_eq x y hxy5]}
       by_cases h5y : (y + 5) % 2 = 0
-      · have h5x : (x + 5) % 2 = 0 := by
-          rw [hxy5]
-          exact h5y
-        have h4x : (x + 4) % 2 = 1 :=
-          mod_two_pred_0_1_to (x + 4) h5x
+      · have h5x : (x + 5) % 2 = 0 := hxy5 ▸ h5y
+        have h4x : (x + 4) % 2 = 1 := mod_two_pred_0_1_to _ h5x
         simp [op_1661_1657,h4x,h5x,h5y]
-      · have h5y' : (y + 5) % 2 = 1 :=
-          Nat.mod_two_ne_zero.mp h5y
-        have h5x : (x + 5) % 2 = 1 := by
-          rw [hxy5]
-          exact h5y'
-        have h4x : (x + 4) % 2 = 0 :=
-          mod_two_pred_1_0_to (x + 4) h5x
+      · have h5y' : (y + 5) % 2 = 1 := Nat.mod_two_ne_zero.mp h5y
+        have h5x : (x + 5) % 2 = 1 := hxy5 ▸ h5y'
+        have h4x : (x + 4) % 2 = 0 := mod_two_pred_1_0_to _ h5x
         simp [op_1661_1657,h5x,h5y',h4x]
     · rw [op_left_ne x y hxy5]
       by_cases h5y : (y + 5) % 2 = 0
-      · have h5x : (x + 5) % 2 = 1 := by
-          simp_all only [Nat.mod_two_ne_zero]
-        have h6x : (x + 6) % 2 = 0 :=
-          mod_two_succ_1_0_from (x + 5) h5x
-        have h7x : (x + 7) % 2 = 1 :=
-          mod_two_succ_0_1_from (x + 6) h6x
+      · have h5x : (x + 5) % 2 = 1 := by simp_all only [Nat.mod_two_ne_zero]
+        have h6x : (x + 6) % 2 = 0 := mod_two_succ_1_0_from _ h5x
+        have h7x : (x + 7) % 2 = 1 := mod_two_succ_0_1_from _ h6x
         simp [op_1661_1657,h5x,h6x,h7x]
-      · have h5y' : (y + 5) % 2 = 1 :=
-          Nat.mod_two_ne_zero.mp h5y
-        have h5x : (x + 5) % 2 = 0 := by
-          simp_all only [Nat.mod_two_ne_one, one_ne_zero, not_false_eq_true]
-        have h6x : (x + 6) % 2 = 1 :=
-          mod_two_succ_0_1_from (x + 5) h5x
-        have h7x : (x + 7) % 2 = 0 :=
-          mod_two_succ_1_0_from (x + 6) h6x
+      · have h5y' : (y + 5) % 2 = 1 := Nat.mod_two_ne_zero.mp h5y
+        have h5x : (x + 5) % 2 = 0 := by simp_all only [Nat.mod_two_ne_one]
+        have h6x : (x + 6) % 2 = 1 := mod_two_succ_0_1_from (x + 5) h5x
+        have h7x : (x + 7) % 2 = 0 := mod_two_succ_1_0_from (x + 6) h6x
         simp [op_1661_1657,h5x,h6x,h7x]
 
 @[equational_result]
