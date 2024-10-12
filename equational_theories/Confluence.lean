@@ -1131,7 +1131,7 @@ open Lean hiding HashMap
 open Meta Elab Command Term Parser Syntax
 open Std (HashMap)
 
-local syntax (name := ruleSystem) "rule_system " ident " {" ident* "}" (ppLine "|" term "=>" term)+ : command
+local syntax (name := ruleSystem) "rule_system " ident " {" ident* " : " term "}" ("-" ident)* (ppLine "|" term "=>" term)+ : command
 
 private partial def makePattern (inc: Nat) : Syntax → StateM (HashMap Name Nat) (TSyntax `term)
 | .node info kind args => do
@@ -1150,7 +1150,7 @@ private partial def countVars : Syntax → StateM (HashMap Name Nat) Unit
 | _ => pure ()
 
 macro_rules
-| `(command| rule_system $system:ident {$vars:ident*} $[| $lhs:term => $rhs:term]*) => do
+| `(command| rule_system $system:ident {$vars:ident* : $type:term} $[-$disable:ident]* $[| $lhs:term => $rhs:term]*) => do
   let mut decls := #[]
 
   let mut ruleIdents := #[]
@@ -1160,9 +1160,6 @@ macro_rules
 
   let systemName := system.getId
   let numRules := lhs.size
-
-  decls := decls.push <| ← `(section $system)
-  decls := decls.push <| ← `(variable {α: Type _} [DecidableEq α])
 
   for idx in [:numRules] do
     let lhs := TSyntax.mk <| lhs[idx]!
@@ -1192,15 +1189,15 @@ macro_rules
         | some e => mkCApp `And #[eq, e]
 
     let rhsP ← match cond with
-    | some cond' => `(if $cond' then $rhsP else none)
-    | none => pure rhsP
+    | some cond' => `(if $cond' then some $rhsP else none)
+    | none => `(some $rhsP)
 
     let ruleName := .str systemName s!"rule{idx+1}"
     let ruleId := Lean.mkIdent ruleName
     ruleIdents := ruleIdents.push ruleId
     decls := decls.push <| ← `(
       set_option linter.unusedVariables false in
-      def $ruleId : FreeMagma α → Option (FreeMagma α)
+      def $ruleId : $type → Option ($type)
       | $lhsP => $rhsP
       | _ => none
     )
@@ -1211,7 +1208,7 @@ macro_rules
     let elim := Lean.mkIdent <| .str (ruleName) "elim"
     ruleElims := ruleElims.push elim
     decls := decls.push <| ← `(
-      def $elim (e r: FreeMagma α): $ruleId e = some r ↔
+      def $elim (e r: $type): $ruleId e = some r ↔
           ∃ $[$usedVars:ident]*, e = $lhs ∧ r = $rhs := by
         simp only [$ruleId:ident]
         prove_elim
@@ -1220,7 +1217,7 @@ macro_rules
     let elimNot := Lean.mkIdent <| .str (ruleName) "elim_not"
     ruleElimNots := ruleElimNots.push elimNot
     decls := decls.push <| ← `(
-      def $elimNot (e: FreeMagma α): $ruleId e = none ↔
+      def $elimNot (e: $type): $ruleId e = none ↔
         ¬∃ $[$usedVars:ident]*, e = $lhs := by
         simp only [$ruleId:ident]
         prove_elim_not
@@ -1236,7 +1233,7 @@ macro_rules
     ))
 
   decls := decls.push <| ← `(
-    def $system (x: FreeMagma α): FreeMagma α :=
+    def $system (x: $type): $type :=
       $body
   )
 
@@ -1244,7 +1241,7 @@ macro_rules
     let eq := Lean.mkIdent <| .str systemName s!"eq{idx+1}"
     ruleEqs := ruleEqs.push eq
     decls := decls.push <| ← `(
-      def $eq ($(ruleUsedVars[idx]!)*: FreeMagma α):
+      def $eq ($(ruleUsedVars[idx]!)*: $type):
         $system $(TSyntax.mk <| lhs[idx]!):term = $(TSyntax.mk <| rhs[idx]!):term := by
         simp only [$system:ident, $[$ruleIdents:ident],*, and_self, ↓reduceIte]
         autosplit
@@ -1261,7 +1258,7 @@ macro_rules
   let elim' := Lean.mkIdent <| .str systemName "elim'"
   let cases ← (ruleElims.zip ruleEqs).mapM (λ (l1, l2) ↦ `(tactic| · simp_all only [$l1:ident]; separate; simp_all only [$l2:ident]))
   decls := decls.push <| ← `(
-    def $elim' (e r: FreeMagma α): $system e = r ↔
+    def $elim' (e r: $type): $system e = r ↔
         $(or.get!) ∨ (e = r ∧ $(andNot.get!)) := by
       constructor
       · intro h
@@ -1276,21 +1273,20 @@ macro_rules
 
   let elim := Lean.mkIdent <| .str systemName "elim"
   decls := decls.push <| ← `(
-    def $elim (e r: FreeMagma α) := by
+    def $elim (e r: $type) := by
       simpa only [$[$ruleElims:ident],*, $[$ruleElimNots:ident],*] using $elim' e r
   )
 
-  let instIsProj := Lean.mkIdent <| .str systemName "instIsProj"
-  decls := decls.push <| ← `(
-    instance $instIsProj:ident : IsProj (@$system α _) where
-      proj := by
-        intro x
-        simp only [$system:ident, $[$ruleIdents:ident],*]
-        autosplit
-        all_goals subterm
-  )
-
-  decls := decls.push <| ← `(end $system)
+  if ¬disable.any (·.getId == `IsProj) then
+    let instIsProj := Lean.mkIdent <| .str systemName "instIsProj"
+    decls := decls.push <| ← `(
+      instance $instIsProj:ident : IsProj ($system : $type → $type) where
+        proj := by
+          intro x
+          simp only [$system:ident, $[$ruleIdents:ident],*]
+          autosplit
+          all_goals subterm
+    )
 
   pure <| mkListNode decls
 
@@ -1298,7 +1294,7 @@ namespace rw2126
 
 variable [DecidableEq α]
 
-rule_system rules {x y z w}
+rule_system rules {x y z w: FreeMagma α}
 | y ⋆ y ⋆ x ⋆ (x ⋆ z) => x
 | x ⋆ x ⋆ (x ⋆ x ⋆ y ⋆ z) => x ⋆ x ⋆ y
 | x ⋆ x ⋆ (y ⋆ y ⋆ z) ⋆ z => y ⋆ y ⋆ z
@@ -1373,7 +1369,7 @@ namespace rw115
 
 variable [DecidableEq α]
 
-rule_system rules {x y}
+rule_system rules {x y: FreeMagma α}
 | y ⋆ ((x ⋆ x) ⋆ y) => x
 | ((y ⋆ y) ⋆ (x ⋆ x)) ⋆ y => x
 
@@ -1411,7 +1407,7 @@ namespace rw3588
 
 variable [DecidableEq α]
 
-rule_system rules {x y z w}
+rule_system rules {x y z w: FreeMagma α}
 | z ⋆ ((x ⋆ y) ⋆ z) => x ⋆ y
 | ((z ⋆ w) ⋆ (x ⋆ y)) ⋆ (z ⋆ w) => x ⋆ y
 
