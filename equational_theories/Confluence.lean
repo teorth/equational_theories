@@ -1063,7 +1063,7 @@ local macro "autosplit" : tactic => `(tactic| (
 ))
 
 local macro "prove_elim" : tactic => `(tactic| (
-  autosplit
+  repeat' split
   all_goals simp_all only [confluence_simps, exists_and_right, exists_eq_right_right', exists_eq_right', false_iff, not_exists, true_and]
   separate
   try simp_all only [not_true_eq_false, imp_false]
@@ -1079,7 +1079,7 @@ local macro "prove_elim" : tactic => `(tactic| (
 ))
 
 local macro "prove_elim_not" : tactic => `(tactic| (
-  autosplit
+  repeat' split
   all_goals simp_all only [confluence_simps, false_iff, not_exists, not_and, true_iff, forall_eq', forall_apply_eq_imp_iff, true_iff, not_false_eq_true]
   separate
   try simp_all only [not_true_eq_false, imp_false]
