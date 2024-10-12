@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import json, random
 
 f = open(f'equational_theories/Generated/VampireProven/Conjectures.lean', 'w')
