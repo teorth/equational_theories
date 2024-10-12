@@ -153,6 +153,9 @@ def DenseNumbering.fromArray {α : Type} [BEq α] [Hashable α] (elts : Array α
   let index := Std.HashMap.ofList (elts.mapIdx (fun i x => (x, i.val))).toList
   ⟨elts, index⟩
 
+def DenseNumbering.map {α β : Type} [BEq α] [BEq β] [Hashable α] [Hashable β] (num : DenseNumbering α) (f : α → β) : DenseNumbering β :=
+  DenseNumbering.fromArray (num.in_order.map f)
+
 def ltEquationNames (a b : String) : Bool :=
   assert! a.startsWith "Equation"
   assert! b.startsWith "Equation"
@@ -194,10 +197,10 @@ def toEdges (inp : Array EntryVariant) : Array Edge := Id.run do
         for f2 in refuted do
           nonimplies := nonimplies.modify eqs[f1]! (fun x ↦ x.set eqs[f2]!)
     | _ => continue
-  for i in [:eqs.size] do
-    for j in [:eqs.size] do
+  for hi : i in [:eqs.size] do
+    for hj : j in [:eqs.size] do
       if nonimplies[i]!.get j then
-        edges := edges.push (.nonimplication ⟨eqs.in_order[i]!, eqs.in_order[j]!⟩)
+        edges := edges.push (.nonimplication ⟨eqs.in_order[i], eqs.in_order[j]⟩)
   return edges
 
 structure Reachability where
@@ -205,8 +208,7 @@ structure Reachability where
   reachable : Array Bitset
   components : Array (Array Nat)
 
-def closure_aux (inp : Array EntryVariant) (eqs : DenseNumbering String) : IO Reachability := do
-
+def closure_aux (inp : Array EntryVariant) (duals: Std.HashMap Nat Nat) (eqs : DenseNumbering String) : IO Reachability := do
   -- construct the implication/non-implication graph
   let n := eqs.size
   let mut graph_size := 2 * n
@@ -227,14 +229,33 @@ def closure_aux (inp : Array EntryVariant) (eqs : DenseNumbering String) : IO Re
             revgraph := revgraph.modify (eqs[rhs]! + n) (fun x => x.push eqs[lhs]!)
       else
         let dummy := graph_size
-        graph_size := graph_size + 1
+        graph_size := graph_size + 2
         graph := graph.push (refuted.map (eqs[·]! + n))
         revgraph := revgraph.push (satisfied.map (eqs[·]!))
+        -- this is for the dual implications
+        graph := graph.push #[]
+        revgraph := revgraph.push #[]
         for f1 in satisfied do
           graph := graph.modify eqs[f1]! (fun x ↦ x.push dummy)
         for f1 in refuted do
           revgraph := revgraph.modify (eqs[f1]! + n) (fun x ↦ x.push dummy)
     | _ => pure ()
+
+  let duals := Array.ofFn λ (i: Fin graph_size) ↦
+    if i < n then
+      duals.getD i i
+    else if i < 2 * n then
+      n + duals.getD (i - n) (i - n)
+    else
+      i ^^^ 1
+
+  for i in [0:graph_size], neighbors in graph do
+    let i' := duals[i]!
+    for j in neighbors do
+      let j' := duals[j]!
+      if i != i' ∨ j != j' then
+        graph := graph.modify i' (fun x => x.push j')
+        revgraph := revgraph.modify j' (fun x => x.push i')
 
   let mut vis : Array Bool := Array.mkArray graph_size false
   let mut order : Array Nat := Array.mkEmpty graph_size
@@ -248,7 +269,6 @@ def closure_aux (inp : Array EntryVariant) (eqs : DenseNumbering String) : IO Re
 
   let mut component : Array Nat := Array.mkArray graph_size 0
   let mut last_component : Nat := 0
-
 
   for i in order do
     if component[i]! == 0 then do
@@ -295,18 +315,21 @@ instance {m : Type → Type} : ForIn m Reachability (Nat × Nat × Bool) where
               | .yield a => v := a
     return v
 
+def number_duals (duals: Std.HashMap String String) (eqs: DenseNumbering String) :=
+  Std.HashMap.ofList <| duals.toList.map (λ (i, j) ↦ (eqs[i]!, eqs[j]!))
+
 /--
 This computes the closure of the implications/non-implications represented by `inp`.
 -/
-def closure (inp : Array EntryVariant) : IO (Array Edge) := do
+def closure (inp : Array EntryVariant) (duals: Std.HashMap String String) : IO (Array Edge) := do
   let eqs := number_equations inp
   let n := eqs.size
-
+  let duals := number_duals duals eqs
 
   -- extract the implications
   let mut ans : Array Edge := Array.mkEmpty (n*n)
 
-  for ⟨x, y, is_true⟩ in ← closure_aux inp eqs do
+  for ⟨x, y, is_true⟩ in ← closure_aux inp duals eqs do
     unless x == y do
       if is_true then
         ans := ans.push (.implication ⟨eqs.in_order[x]!, eqs.in_order[y]!⟩)
@@ -315,17 +338,18 @@ def closure (inp : Array EntryVariant) : IO (Array Edge) := do
 
   pure ans
 
-def list_outcomes (res : Array Entry) : IO (Array String × Array (Array Outcome)) := do
+def list_outcomes (res : Array Entry) (duals: Std.HashMap String String): IO (Array String × Array (Array Outcome)) := do
   let rs := res.map (·.variant)
   let prs := res.filter (·.proven) |>.map (·.variant)
   let eqs := number_equations rs
+  let duals := number_duals duals eqs
   let n := eqs.size
   let mut outcomes : Array (Array Outcome) := Array.mkArray n (Array.mkArray n .unknown)
   for edge in toEdges prs do
     outcomes := outcomes.modify eqs[edge.lhs]! (fun a ↦ a.set! eqs[edge.rhs]!
       (.explicit_theorem edge.isTrue))
 
-  for ⟨x, y, is_true⟩ in ← closure_aux prs eqs do
+  for ⟨x, y, is_true⟩ in ← closure_aux prs duals eqs do
     outcomes := outcomes.modify x (fun a ↦ a.modify y
                 fun y ↦ if y = .unknown then .implicit_theorem is_true else y)
 
@@ -333,35 +357,31 @@ def list_outcomes (res : Array Entry) : IO (Array String × Array (Array Outcome
     outcomes := outcomes.modify eqs[edge.lhs]! (fun a ↦ a.modify eqs[edge.rhs]!
       fun y ↦ if y = .unknown then .explicit_conjecture edge.isTrue else y)
 
-  for ⟨x, y, is_true⟩ in ← closure_aux rs eqs do
+  for ⟨x, y, is_true⟩ in ← closure_aux rs duals eqs do
     outcomes := outcomes.modify x (fun a ↦ a.modify y
                 fun y ↦ if y = .unknown then .implicit_conjecture is_true else y)
 
   return (eqs.in_order, outcomes)
 
-def outcomes_mod_equiv (inp : Array EntryVariant) : IO (Array String × Array (Array (Option Bool))) := do
+def outcomes_mod_equiv (inp : Array EntryVariant) (duals: Std.HashMap String String) : IO (DenseNumbering (Array String) × Array (Array (Option Bool))) := do
   let eqs := number_equations inp
   let n := eqs.size
-  let reachable ← closure_aux inp eqs
-  let mut reprs_id : Std.HashMap Nat Nat := {}
-  let mut reprs : Array String := Array.mkEmpty (reachable.components.size / 2)
-  for comp in reachable.components do
-    if comp[0]! < n then
-      reprs_id := reprs_id.insert comp[0]! reprs.size
-      reprs := reprs.push eqs.in_order[comp[0]!]!
+  let duals := number_duals duals eqs
+  let reachable ← closure_aux inp duals eqs
+  let comps := reachable.components.filter (·[0]! < n) |> DenseNumbering.fromArray
 
   let mut implies : Array (Array (Option Bool)) :=
-    Array.mkArray reprs.size (Array.mkArray reprs.size none)
+    Array.mkArray comps.size (Array.mkArray comps.size none)
 
   for i in reachable.components, i2 in reachable.reachable do
     if i[0]! >= reachable.size then continue
       for j in reachable.components, j2 in [:reachable.components.size] do
         if i2.get j2 then
           if j[0]! < n then
-            implies := implies.modify reprs_id[j[0]!]! (fun x ↦ x.set! reprs_id[i[0]!]! true)
+            implies := implies.modify comps[j]! (fun x ↦ x.set! comps[i]! true)
           else if j.back < 2*n then
-            implies := implies.modify reprs_id[i[0]!]! (fun x ↦ x.set! reprs_id[j[0]! - n]! false)
+            implies := implies.modify comps[i]! (fun x ↦ x.set! comps[j.map (·-n)]! false)
 
-  return (reprs, implies)
+  return (comps.map (fun ids => ids.map (eqs.in_order[·]!)), implies)
 
 end Closure

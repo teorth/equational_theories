@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 
 """
 Example usage:
@@ -7,7 +7,7 @@ Example usage:
 $ pip install pillow
 $ python scripts/generate_image.py equational_theories/Subgraph.lean --close --filter
 $ open equational_theories/Subgraph.png
-$ python scripts/generate_image.py equational_theories/Generated/TrivialBruteforce/theorems/Apply.lean --close --filter --equations equational_theories/Equations.lean
+$ python scripts/generate_image.py equational_theories/Generated/TrivialBruteforce/theorems/Apply.lean --close --filter --equations equational_theories/Equations/Basic.lean
 $ python scripts/generate_image.py equational_theories/Generated/ equational_theories/Subgraph.lean --output equational_theories/Subgraph.png
 ```
 """
@@ -56,12 +56,12 @@ def close(known_implies):
     return closure
 
 def print_usage():
-    print('Usage: python process_implications.py <file_name.lean> [--close] [--filter] [--output <filename.png>] [--equations <equations.lean>]')
+    print('Usage: python process_implications.py <file_name.lean> [--close] [--filter] [--output <filename.png>] [--equations <equations.lean> ...]')
 
 if __name__ == '__main__':
     close_implies = False
     filter_universe = False
-    equations_file = None
+    equations_files = []
     output_file = None
     files = []
     try:
@@ -75,7 +75,7 @@ if __name__ == '__main__':
                 filter_universe = True
                 i += 1
             elif '--equations' == current_arg:
-                equations_file = argv[i + 1]
+                equations_files.append(argv[i + 1])
                 i += 2
             elif '--output' == current_arg:
                 output_file = argv[i + 1]
@@ -103,7 +103,7 @@ if __name__ == '__main__':
         output_file = files[0].removesuffix('.lean') + '.png'
 
     print("Reading implications and contrimplications")
-    universe, known_implies, known_not_implies = parse_proofs_files(equations_file, files)
+    universe, known_implies, known_not_implies = parse_proofs_files(equations_files, files)
     print(f"Found {len(known_implies)} implications, and {len(known_not_implies)} contrimplications.")
     if close_implies:
         print("Calculating closure")

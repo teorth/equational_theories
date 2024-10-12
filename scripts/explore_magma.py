@@ -10,7 +10,8 @@ import re
 import sys
 
 ALLOWED_SYMBOL_NAMES = "xyzuvw"
-EQUATIONS_FILENAME = "../equational_theories/AllEquations.lean"
+EQUATIONS_FILENAMES = [f"../equational_theories/Equations/Eqns{file}.lean"
+                        for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]]
 EXAMPLE_MAGMA_TABLE = "[[2, 2, 0, 3], [2, 2, 1, 0], [2, 2, 0, 3], [2, 3, 1, 0]]"
 
 
@@ -34,20 +35,21 @@ def is_expected_equation_format(equation_string):
 
 
 def read_equations_map():
-    filename = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),
-        EQUATIONS_FILENAME,
-    )
-    assert filename
     equations_map = {}
-    with open(filename, "r", encoding="utf-8") as equations_file:
-        for line in equations_file:
-            line = line.rstrip("\n")
-            equation_match = re.search(r"equation (\d+) := (.+?)$", line)
-            if equation_match:
-                equation_id, equation = equation_match.groups()
-                assert is_expected_equation_format(equation)
-                equations_map[int(equation_id)] = equation
+    for file in EQUATIONS_FILENAMES:
+        filename = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            file,
+        )
+        assert filename
+        with open(filename, "r", encoding="utf-8") as equations_file:
+            for line in equations_file:
+                line = line.rstrip("\n")
+                equation_match = re.search(r"equation (\d+) := (.+?)$", line)
+                if equation_match:
+                    equation_id, equation = equation_match.groups()
+                    assert is_expected_equation_format(equation)
+                    equations_map[int(equation_id)] = equation
     assert min(equations_map.keys()) == 1
     assert max(equations_map.keys()) == len(equations_map)
     return equations_map
@@ -136,12 +138,37 @@ def test_equation_ids(equation_ids, binary_operation_map):
     return results
 
 
+def text_to_magma_table(text):
+    non_whitespace_tokens = re.sub(r"\W+", " ", text).strip().split(" ")
+    try:
+        entries = [int(token) for token in non_whitespace_tokens]
+    except ValueError:
+        return None
+    row_length = int(math.sqrt(len(entries)))
+    if len(entries) != row_length**2:
+        return None
+    table = []
+    for i in range(len(entries) // row_length):
+        row = entries[(i * row_length) : (i + 1) * row_length]
+        table.append(row)
+    return table
+
+
+def json_magma_table_to_short_text(json_magma_table):
+    return re.sub(r"[\[\],]", "", json_magma_table).replace(" ", ",")
+
+
 def parse_magma_table_string(magma_table_string):
     if not magma_table_string:
         return None, None
+    parsed_magma_table = None
     try:
         parsed_magma_table = json.loads(magma_table_string.strip("'\""))
     except json.decoder.JSONDecodeError:
+        pass
+    if not parsed_magma_table:
+        parsed_magma_table = text_to_magma_table(magma_table_string)
+    if not parsed_magma_table:
         return None, None
     if not isinstance(parsed_magma_table, list):
         return None, None
@@ -199,7 +226,7 @@ def print_binary_operation_map(binary_operation_map):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Test a given magma table against all or a subset of the predefined equations in `AllEquations.lean`."
+        description="Test a given magma table against all or a subset of the predefined equations in `Equations/All.lean`."
     )
     parser.add_argument(
         "magma_table",
@@ -209,7 +236,7 @@ def main():
     parser.add_argument(
         "--ids",
         type=lambda s: [int(item) for item in s.split(",")],
-        help="A comma-separated list of equation IDs to test the magma table against. If omitted, all equations in `AllEquations.lean` will be tested by default.",
+        help="A comma-separated list of equation IDs to test the magma table against. If omitted, all equations in `Equations/All.lean` will be tested by default.",
     )
     parser.add_argument(
         "--print-only",
@@ -232,9 +259,15 @@ def main():
         args.magma_table
     )
     if not parsed_magma_table:
+        print(f'ERROR: Unable to parse magma table "{args.magma_table}"')
+        print("")
         print(
-            f'ERROR: Unable to parse magma table (expecting an n×n table with 1 ≤ n ≤ 10 and symbols in the range [0, n-1]). Use the following format: "{EXAMPLE_MAGMA_TABLE}"'
+            "Expecting an n×n table (where 1 ≤ n ≤ 10) and symbols in the range [0, n-1]."
         )
+        print("")
+        print("Examples:")
+        print(f'  "{EXAMPLE_MAGMA_TABLE}"')
+        print(f'  "{json_magma_table_to_short_text(EXAMPLE_MAGMA_TABLE)}"')
         sys.exit(1)
 
     equations_map = read_equations_map()

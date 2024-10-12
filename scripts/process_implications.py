@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Example usage:
@@ -71,12 +71,12 @@ def get_unknown_implications(universe, known_implies, known_not_implies):
 
     return set((a, b) for a in universe for b in universe) - all_implications - all_negative_implications
 
-def parse_proofs_file_internal(universe, known_implies, known_not_implies, equations_file, file_name):
+def parse_proofs_file_internal(universe, known_implies, known_not_implies, equations_files, file_name):
     # This code is buggy: it doesn't verify that the proofs are correct.
     # It is also extremely sensitive to formatting of the proof types. There's
     # probably a way to get this directly from Lean.
-    if equations_file != None:
-        for line in open(equations_file):
+    for file in equations_files:
+        for line in open(file):
             if m := re.match(r'abbrev\s+(Equation\d+)\s+', line):
                 universe.add(m.group(1))
                 known_implies.add((m.group(1), m.group(1)))
@@ -100,17 +100,17 @@ def parse_proofs_file_internal(universe, known_implies, known_not_implies, equat
         print(f"File {file_name} encounter error: {err}")
         raise err
 
-def parse_proofs_file(equations_file, file_name):
+def parse_proofs_file(equations_files, file_name):
     universe = set()
     known_implies, known_not_implies = set(), set()
-    parse_proofs_file_internal(universe, known_implies, known_not_implies, equations_file, file_name)
+    parse_proofs_file_internal(universe, known_implies, known_not_implies, equations_files, file_name)
     return universe, known_implies, known_not_implies
 
-def parse_proofs_files(equations_file, files):
+def parse_proofs_files(equations_files, files):
     universe = set()
     known_implies, known_not_implies = set(), set()
     for file_name in files:
-        parse_proofs_file_internal(universe, known_implies, known_not_implies, equations_file, file_name)
+        parse_proofs_file_internal(universe, known_implies, known_not_implies, equations_files, file_name)
     return universe, known_implies, known_not_implies
 
 def parse_extracted_implications():
@@ -195,8 +195,8 @@ if __name__ == '__main__':
         print('Usage: python process_implications.py <file_name.lean>')
         exit(1)
 
-    equations_file = os.path.join(os.path.dirname(file_name), "Equations.lean")
-    universe, known_implies, known_not_implies = parse_proofs_file(None, file_name)
+    equations_file = os.path.join(os.path.dirname(file_name), "Equations/Basic.lean")
+    universe, known_implies, known_not_implies = parse_proofs_file([], file_name)
 
     all_unknown = get_unknown_implications(universe, known_implies, known_not_implies)
 

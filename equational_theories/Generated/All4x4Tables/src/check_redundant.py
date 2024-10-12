@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import numpy as np
 def parse_line(line):
     # Extract the list from the line using string manipulation
@@ -50,7 +52,7 @@ for fp1 in ['../data/refutations2x2.txt',
         matrix, useless = prune_rows(matrix, load(fp2))
         after_found = np.sum(matrix)
         print("When going from", fp1, "to", fp2)
-        print("The number of solved equtions goes from", init_found, "to", after_found,
+        print("The number of solved equations goes from", init_found, "to", after_found,
               "for a delta of", after_found-init_found)
         print("And", fp2, "has", useless, '/', len(load(fp2)), "already covered magmas")
         print()

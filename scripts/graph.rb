@@ -7,6 +7,13 @@ class Graph
     @adj_list = Hash.new { |hash, key| hash[key] = Set.new([]) }
   end
 
+  def vertices
+    retval = Set.new @adj_list.keys
+    @adj_list.each { |k, v| retval += v }
+
+    retval
+  end
+
   def self.from_csv(path)
     graph = Graph.new
     File.read(path).split("\n").each { |s|
@@ -17,8 +24,41 @@ class Graph
     graph
   end
 
+  def self.from_json_array(arr)
+    graph = Graph.new
+    arr.each { |e|
+      lhs_eq, rhs_eq = e["lhs"], e["rhs"]
+      graph.add_edge(lhs_eq[8, lhs_eq.length].to_i, rhs_eq[8, rhs_eq.length].to_i)
+    }
+
+    graph
+  end
+
   def add_edge(from, to)
     @adj_list[from] << to
+  end
+
+  def reachable_from(vertex)
+    visited = {}
+
+    def dfs(v, visited)
+      visited[v] = true
+      @adj_list[v].each { |w| dfs(w, visited) if !visited[w] }
+    end
+
+    dfs(vertex, visited)
+    return visited.keys
+  end
+
+  def spanning_tree(v, edges = [], visited = Set.new)
+    visited.add(v)
+    @adj_list[v].each do |neighbor|
+      unless visited.include?(neighbor)
+        edges << [v, neighbor]
+        spanning_tree(neighbor, edges, visited)
+      end
+    end
+    edges
   end
 
   # Single-elements are also counted as SCCs
@@ -30,11 +70,11 @@ class Graph
     on_stack = {}
     sccs = []
 
-    @adj_list.keys.each { |v|
+    vertices.each { |v|
       strongconnect(v, stack, lowlink, index_map, on_stack, sccs) unless index_map[v]
     }
 
-    (@adj_list.keys - index_map.keys).each { |v|
+    (vertices - index_map.keys).each { |v|
       sccs << [v] unless sccs.any? { |scc| scc.include?(v) }
     }
 
@@ -74,26 +114,28 @@ class Graph
   def condensation
     sccs = scc
     condensed_graph = Graph.new
-    scc_map = {}
+    node_to_scc_map = {}
+    scc_to_node_map = {}
 
     sccs.each_with_index { |scc, idx|
-      scc.each { |node| scc_map[node] = "SCC#{idx}" }
+      scc_to_node_map["SCC#{idx}"] = scc
+      scc.each { |node| node_to_scc_map[node] = "SCC#{idx}" }
     }
 
     @adj_list.each { |u, neighbors|
       neighbors.each { |v|
-        next if scc_map[u] == scc_map[v]  # Skip edges within the same SCC
-        condensed_graph.add_edge(scc_map[u], scc_map[v])
+        next if node_to_scc_map[u] == node_to_scc_map[v]  # Skip edges within the same SCC
+        condensed_graph.add_edge(node_to_scc_map[u], node_to_scc_map[v])
       }
     }
 
-    condensed_graph
+    [condensed_graph, node_to_scc_map, scc_to_node_map]
   end
 
-  def uncondensation(original_graph, scc_map)
+  def uncondensation(original_graph, scc_to_node_map)
     uncondensed_graph = Graph.new
 
-    scc_map.each { |scc_name, nodes|
+    scc_to_node_map.each { |scc_name, nodes|
       if nodes.length > 1
         failed = false
         # For SCCs with multiple nodes, try to add them in a naive hamiltonian cycle.
@@ -116,10 +158,22 @@ class Graph
         }
 
         if failed
+          nodeset = nodes.to_set
+          subgraph = Graph.new
+          subrevgraph = Graph.new
           nodes.each { |n1|
             original_graph.adj_list[n1].each { |n2|
-              uncondensed_graph.add_edge(n1, n2)
+              if nodeset.include?(n2)
+                subgraph.add_edge(n1, n2)
+                subrevgraph.add_edge(n2, n1)
+              end
             }
+          }
+          subgraph.spanning_tree(nodes[0]).each { |u, v|
+            uncondensed_graph.add_edge(u, v)
+          }
+          subrevgraph.spanning_tree(nodes[0]).each { |u, v|
+            uncondensed_graph.add_edge(v, u)
           }
         end
       end
@@ -130,8 +184,8 @@ class Graph
       neighbors.each { |v|
         # Find an edge from the original source SCC to the target SCC, and re-add it.
         found = false
-        scc_map[u].each { |source_node|
-          scc_map[v].each { |target_node|
+        scc_to_node_map[u].each { |source_node|
+          scc_to_node_map[v].each { |target_node|
             if original_graph.adj_list[source_node].include?(target_node)
               uncondensed_graph.add_edge(source_node, target_node)
               found = true
@@ -160,31 +214,26 @@ class Graph
   # requires finding a hamiltonian cycle (NP) during uncondensing, e.g. it only generates
   # the reduction actually reachable from the original data set. For the optimal reduction,
   # one must run reduce -> closure -> reduce.
-  def transitive_reduction 
-    condensed_graph = condensation
+  def transitive_reduction
+    condensed_graph, node_to_scc_map, scc_to_node_map = condensation
     $stderr.puts "Condensed vertices: #{condensed_graph.adj_list.size}"
     $stderr.puts "Condensed edges: #{condensed_graph.adj_list.values.map(&:size).inject(0, &:+)}"
     reduced_condensed = condensed_graph.step_reduction
 
-    sccs = scc
-    scc_map = {}
-    sccs.each_with_index { |scc, idx|
-      scc_map["SCC#{idx}"] = scc
-    }
+    uncondensed = reduced_condensed.uncondensation(self, scc_to_node_map)
 
-    uncondensed = condensed_graph.uncondensation(self, scc_map)
     $stderr.puts "Uncondensed vertices: #{uncondensed.adj_list.size}"
     $stderr.puts "Uncondensed edges: #{uncondensed.adj_list.values.map(&:size).inject(0, &:+)}"
-    uncondensed.step_reduction
+    uncondensed
   end
 
   def transitive_closure
     closure_graph = Graph.new
-    @adj_list.keys.each do |vertex|
+    vertices.each do |vertex|
       visited = Hash.new(false)
-      reachable = []
+      reachable = Set.new []
       closure_dfs(vertex, visited, reachable)
-      closure_graph.adj_list[vertex] = Set.new reachable
+      closure_graph.adj_list[vertex] = reachable
     end
     closure_graph
   end
@@ -199,10 +248,11 @@ class Graph
     end
   end
 
-  # Should only be used on condensed graphs
+  # Should only be used on acyclic graphs
   def step_reduction
     reduced_graph = Graph.new
 
+    # TODO: Optimize by copying the entire array at once using dup?
     @adj_list.each { |u, neighbors|
       neighbors.each { |v|
         reduced_graph.add_edge(u, v)
@@ -211,32 +261,31 @@ class Graph
 
     # For each edge, check if there is an alternative path
     @adj_list.each { |u, neighbors|
+      far = Set.new
+      neighbors.each { |v|
+        next if far.include?(v)
+        reduced_graph.adj_list[v].each { |v2|
+          step_reduction_dfs(v2, reduced_graph, far)
+        }
+      }
       neighbors.each { |v|
         next if u == v # Ignore self-loops
 
-        reduced_graph.adj_list[u].delete(v)
-
-        reachable = step_reduction_dfs(u, v, reduced_graph)
-        reduced_graph.add_edge(u, v) unless reachable # Re-add the edge if v is not reachable
+        reduced_graph.adj_list[u].delete(v) if far.include?(v)
       }
     }
 
     reduced_graph
   end
 
-  def step_reduction_dfs(start, goal, graph, visited = Set.new)
-    return true if start == goal
-    return false if visited.include?(start)
-
+  def step_reduction_dfs(start, graph, visited)
     visited.add(start)
     graph.adj_list[start].each { |neighbor|
-      return true if step_reduction_dfs(neighbor, goal, graph, visited)
+      step_reduction_dfs(neighbor, graph, visited) unless visited.include?(neighbor)
     }
-
-    false
   end
 
-  def print_graph
+  def print_csv
     adj_list.each do |u, neighbors|
       neighbors.each do |v|
         puts "#{u},#{v}" unless u == v
@@ -246,12 +295,6 @@ class Graph
 end
 
 if __FILE__ == $0
-  graph = Graph.new
-  File.read(ARGV[0]).split("\n").each { |s|
-    a,b = s.split(",")
-    graph.add_edge(a.to_i, b.to_i)
-  }
-
-  min_graph = graph.transitive_reduction
-  min_graph.print_graph
+  require 'pry'
+  binding.pry
 end

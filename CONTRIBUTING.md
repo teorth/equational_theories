@@ -34,14 +34,14 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 > - You might want to install the git pre-push hook by running:
 >
 >   ```bash
->   source scripts/install_pre-push.sh
+>   scripts/install_pre-push.sh
 >   ```
 >   This will automatically run checks before every push, reducing the risk of CI check failures.
 >
 > - You can manually run the following script before pushing, reducing the risk of CI check failures:
 >
 >   ```bash
->   source scripts/run_before_push.sh
+>   scripts/run_before_push.sh
 >   ```
 >   This requires manual execution and won't stop the push if skipped.
 >
@@ -50,13 +50,13 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 ### 4. Submitting a Pull Request
 
 - When you are ready to submit your solution, create a PR from your working branch to the project’s `main` branch.
-- After submitting the PR, comment the single phrase `propose PR #PR_NUMBER` on the original issue. This links your PR to the task, and the task will move to the `In Progress` column on the dashboard.
+- After submitting the PR, comment `propose #PR_NUMBER` on the original issue. This links your PR to the task, and the task will move to the `In Progress` column on the dashboard.
 - A task can only move to `In Progress` if it has been claimed by the user proposing the PR.
 
 ### 5. Withdrawing or Updating a PR
 
 - If you need to withdraw your PR, comment the single phrase `withdraw PR #PR_NUMBER` on the issue. The task will return to the `Claimed Tasks` column, but you will remain assigned to the issue.
-- To submit an updated PR after withdrawal, comment the single phrase `propose PR #NEW_PR_NUMBER` following the same process outlined in step 4.
+- To submit an updated PR after withdrawal, comment `propose #NEW_PR_NUMBER` following the same process outlined in step 4.
 
 ### 6. Review Process
 
@@ -86,8 +86,8 @@ The core Lean files are as follows:
 - [`FreeMagma.lean`](equational_theories/FreeMagma.lean)  Contains the API for free Magmas.
 - [`Generated.lean`](equational_theories/Generated.lean)  This short file imports all the generated data sets.
 - [`Visualization.lean`](equational_theories/Visualization.lean) A tool to visualize the implications within the Lean infoview.
-- [`Equations.lean`](equational_theories/Equations.lean)  A list of selected equations of particular interest.
-- [`AllEquations.lean`](equational_theories/AllEquations.lean)  The complete set of 4692 equational laws involving at most four magma operations (up to symmetry and relabeling).  It was generated using [this script](scripts/generate_eqs_list.py).  The subgraph equations are included as an import.  If you find an equation here of particular interest to study, consider transferring it to `Equations.lean`.
+- [`Equations/Basic.lean`](equational_theories/Equations/Basic.lean)  A list of selected equations of particular interest.
+- [`Equations/All.lean`](equational_theories/Equations/All.lean)  The complete set of 4692 equational laws involving at most four magma operations (up to symmetry and relabeling).  It was generated using [this script](scripts/generate_eqs_list.py).  The subgraph equations are included as an import.  If you find an equation here of particular interest to study, consider transferring it to `Equations/Basic.lean`.  The equations are split up into five smaller files to assist compilation.
 - [`Subgraph.lean`](equational_theories/Subgraph.lean)  This is the file for all results concerning the specific laws of interest.
 - [`Homomorphisms.lean`](equational_theories/Homomorphisms.lean)  This file defines magma homomorphisms and magma isomorphisms and provides basic API for them.
 
@@ -97,12 +97,13 @@ Some technical Lean files:
 - [`ParseImplications.lean`](equational_theories/ParseImplications.lean)  Tools to help parse implications within Lean.
 - [`FactsSyntax.lean`](equational_theories/FactsSyntax.lean)  Support for assertions that a given magma obeys one set of laws but fails another.
 - [`DecideBang.lean`](equational_theories/DecideBang.lean) Variants of the `decide` tactic with various hacks to speed up elaboration.
-- [`EquationsCommand.lean`](equational_theories/EquationsCommand.lean)  Speeds up elaboration of equations.
+- [`Equations/Command.lean`](equational_theories/Equations/Command.lean)  Speeds up elaboration of equations.
 - [`MemoFinOp.lean`](equational_theories/MemoFinOp.lean) Defines the macro `memoFinOp` that memoizes a function `f : Fin n → Fin n → Fin n`.
+- [`Superposition.lean`](equational_theories/Superposition.lean) The `superpose` tactic, used in several automated proofs
 
 In addition to these files, contributors are welcome to add additional Lean files to the project in the [`equational_theories` folder](equational_theories) or one of its subfolders, to establish more facts about equations.  In order for your contributions to be easily detected by automated tools, please try to follow the following guidelines.
 
-- If possible, use `Equations.lean` or `AllEquations.lean` as an import, in order to use our standardized names for the equational laws.
+- If possible, use `Equations/Basic.lean` or `Equations/All.lean` as an import, in order to use our standardized names for the equational laws.  If you transfer an equation from `Equations/All.lean` to `Equations/Basic.lean`, please add the corresponding definition in the ["selected laws" chapter of the blueprint](https://teorth.github.io/equational_theories/blueprint/subgraph-eq.html) to keep this chapter aligned with the Lean codebase.  (The Lean codebase is used as the source of ground truth of equation status, but keeping the blueprint aligned will reduce confusion.)
 - The standard form for an implication "Equation X implies Equation Y" is
 `theorem EquationX_implies_EquationY (G: Type*) [Magma G] (h: EquationX G) : EquationY G`
 - The standard form for an anti-implication "Equation X does not imply Equation Y" is `theorem EquationX_not_implies_EquationY : ∃ (G: Type) (_: Magma G), EquationX G ∧ ¬ EquationY G`.
@@ -114,6 +115,7 @@ In addition to these files, contributors are welcome to add additional Lean file
 - Consider adding a chapter to the blueprint corresponding to the Lean file, which can for instance detail the methodology used to generate the content of that file.  Also update [this CONTRIBUTING.md file](CONTRIBUTING.md) to add a link to your Lean file.
 - For computer-generated Lean files, see the "Automated Proofs" section below.
 - Lean files that are outside of the [`Generated`](equational_theories/Generated) folder are considered to be part of the human-curated Lean space; it is acceptable to put some auto-generated proofs outside of this folder, but they should be human-readable, and it is acceptable to have human editors optimize these proofs for readability, aesthetics, or other concerns.  On the other hand, Lean files within the [`Generated`](equational_theories/Generated) folder should be 100% computer generated, with no additional human curation.
+- Add your Lean file to the top level [`equational_theories.lean`](equational_theories.lean) file so that it gets picked by the CI and automated implication extraction tools.
 
 Contributions to the Lean codebase will pass through continuous integration (CI) checks that ensure that the Lean code compiles.  Contributors of Lean code are highly encouraged to interact with the [Lean Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/) to help coordinate their contributions and resolve technical issues.
 
@@ -124,6 +126,11 @@ Here is a list of human-contributed Lean files with mathematical content:
 - [`Counting.lean`](equational_theories/Counting.lean) Various theorems about counting laws.
 - [`MagmaOp.lean`](equational_theories/MagmaOp.lean) Magma duality.
 - [`Preorder.lean`](equational_theories/Preorder.lean) Preorder on magmas.
+- [`CentralGroupoids.lean`](equational_theories/CentralGroupoids.lean)  Facts about central groupoids.
+- [`OrderMetatheorem.lean`](equational_theories/OrderMetatheorem.lean) Metatheorems about the ordering relation on laws.
+- [`SmallMagmas.lean`](equational_theories/SmallMagmas.lean) Results about very small magmas
+- [`Z3Counterexamples.lean`](equational_theories/Z3Counterexamples.lean) Counterexamples generated automatically from the Z3 prover
+- [`StringMagmas.lean`](equational_theories/StringMagmas.lean) Studies specific specific string magmas for counterexamples.
 
 
 At present, the API for magmas only allows for theorems that study a finite number of individual equational laws at a time.  We plan to expand the API to also allow one to establish metatheorems about entire classes of equations.
@@ -137,7 +144,7 @@ The blueprint is written in a special form of LaTeX that supports some integrati
 - The macro `\uses{ref1, ref2}` in the statement of a definition or theorem, or a proof of that theorem, will indicate that the relevant statement or proof uses the results in the blueprint that have the indicated `\label{}`s (in this case, `\label{ref1}` and `\label{ref2}`).  These will create edges in the [dependency graph](https://teorth.github.io/equational_theories/blueprint/dep_graph_document.html) of the blueprint.
 - The macro `\leanok` in the statement of a definition or theorem indicates that the statement has been formalized.  The macro `\leanok` in the proof of a theorem indicates that the proof has been formalized.  This will create various colors in the nodes of the [dependency graph](https://teorth.github.io/equational_theories/blueprint/dep_graph_document.html) of the blueprint, as explained in the legend.
 
-Contributors are welcome to make suggestions or additions to the blueprint, whose files can be found [here](blueprint/src/chapter).
+Contributors are welcome to make suggestions or additions to the blueprint, whose files can be found [here](blueprint/src/chapter). When adding a chapter, make sure to give the chapter a `\label` (to give that chapter a stable URLs, and not destabilize other chapter URLs), and add your chapter as an import to [`content.tex`](https://github.com/teorth/equational_theories/blob/main/blueprint/src/content.tex).
 
 Contributions to the blueprint will pass through continuous integration (CI) checks that ensure that the blueprint compiles.  You may first wish to test that the [print version of the blueprint](blueprint/src/print.tex) compiles locally before pushing changes to the blueprint.  Also, if using the `\lean{}` macro to link to results in the Lean files, make sure that any namespace that the Lean result is stored in is stated.  If your Lean file was recently added, you may wish to check that it is recognized by [`equational_theories.lean`](equational_theories.lean), otherwise the blueprint will not be able to locate the results in that file.
 

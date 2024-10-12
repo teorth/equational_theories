@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import utils
 import os
 import re
@@ -55,7 +57,7 @@ for rule, outs in remap_to_rule.items():
     proofs = "\n".join(outs)
     proofs = """import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
-import equational_theories.AllEquations
+import equational_theories.Equations.All
 import equational_theories.Magma
 
 namespace SimpleRewrites

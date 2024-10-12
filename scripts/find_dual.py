@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from __future__ import annotations
 from typing import Optional, Set, Tuple, Dict, List
 import re
@@ -10,6 +12,7 @@ class ExprNode:
         self.left = left
         self.right = right
         self.node_count = 1 + (left.node_count if left else 0) + (right.node_count if right else 0)
+        self.leafs = self.get_leafs()
 
     def __repr__(self) -> str:
         """Return a string representation of the node."""
@@ -46,7 +49,7 @@ def is_same_under_rewriting(left: ExprNode, right: ExprNode):
     Check if two expression trees are equivalent under variable renaming.
     Returns mappings for left and right trees if they're the same, else None.
     """
-    if left.node_count != right.node_count:
+    if left.node_count != right.node_count or left.leafs != right.leafs:
         return None
 
     def traverse(node, mapping):
@@ -163,13 +166,14 @@ def flip_top_most(node: ExprNode):
 
 def main():
     trees = []
-    for line in open("../equational_theories/AllEquations.lean"):
-        if "equation" in line and ":=" in line:
-            equation_number = line.split("equation")[1].split()[0]
-            trees.append((int(equation_number), make_tree(line.split(":=")[1].strip())))
+    for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]:
+        for line in open(f"../equational_theories/Equations/Eqns{file}.lean"):
+            if "equation" in line and ":=" in line:
+                equation_number = line.split("equation")[1].split()[0]
+                trees.append((int(equation_number), make_tree(line.split(":=")[1].strip())))
 
     seen = {}
-    
+
     for eq_num1, tree1 in trees:
         reversed_tree1 = tree1.reverse()
         for eq_num2, tree2 in trees:

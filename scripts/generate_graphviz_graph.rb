@@ -3,20 +3,24 @@
 # dot -T svg -o graph.svg graph.dot
 #
 # Note: there are also options to limit the number of variables or operations in the generated graph,
-# or delete Equation 1 and the Equation 2 equivalence class.
+# delete Equation 1 and the Equation 2 equivalence class, or limit to the Subgraph.
 #
-# In order to reduce the cleanest looking graph, this tools generates a transitive closure and then
-# reduces it to get a graph with minimal edges. That causes generation to be slow.
+# In order to produce the cleanest looking graph, this tools generates a transitive closure and then
+# reduces it to get a graph with minimal edges (the minimum equivalent graph). That causes generation
+# to be slow.
 
 require 'optparse'
 require File.join(__dir__, 'graph')
 
+SUBGRAPH = [1, 2, 3, 4, 5, 6, 7, 8, 23, 38, 39, 40, 41, 42, 43, 45, 46, 168, 387, 4512, 4513, 4522, 4564, 4579, 4582]
+
 options = {}
 opt_parser= OptionParser.new do |opt|
-  opt.banner = "Usage: generate_graphviz_graph [options] <graph csv file>"
+  opt.banner = "Usage: generate_graphviz_graph [options] <implications csv file>"
 
   opt.on('--limit-variables NUM') { |o| options[:limit_variables] = o.to_i }
   opt.on('--limit-operations NUM') { |o| options[:limit_operations] = o.to_i }
+  opt.on('--limit-to-subgraph', 'Limit to Subgraph nodes') { |o| options[:limit_to_subgraph] = true }
   opt.on('--remove-eq1', 'Remove Equation1 from the output') { |o| options[:remove_eq1] = true }
   opt.on('--remove-eq2', 'Remove the entire Equation2 equivalence class from the output') { |o| options[:remove_eq2] = true }
 end
@@ -29,44 +33,60 @@ if ARGV.length != 1
   exit 1
 end
 
-equations_file = File.read(File.join(__dir__, '../equational_theories/AllEquations.lean'))
-
-equations = {}
-equations_file.split("\n").each { |s|
-  if s =~ /equation (\d+) := (.+)/
-    equations[$1.to_i] = $2
+$equations = {}
+["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"].each { |i|
+  File.read(File.join(__dir__, "../equational_theories/Equations/Eqns#{i}.lean")).split("\n").each { |s|
+    if s =~ /equation (\d+) := (.+)/
+      $equations[$1.to_i] = $2
+    end
+  }
+}
+File.read(File.join(__dir__, '../equational_theories/Equations/Basic.lean')).split("\n").each { |s|
+  if s =~ /abbrev Equation(\d+).*: G, (.+)/
+    if !$equations[$1.to_i]
+      $equations[$1.to_i] = $2
+    elsif $equations[$1.to_i] != $2
+      $stderr.puts "Equations don't match? #{$1} / #{$equations[$1.to_i]} / #{$2}"
+      exit 1
+    end
   end
 }
 
-graph = Graph.new
-File.read(ARGV[0]).split("\n").each { |s|
-  a,b = s.split(",")
-  graph.add_edge(a.to_i, b.to_i)
-}
+implications_graph = Graph.from_csv(ARGV[0])
 
-all_vertices = Set.new graph.adj_list.keys
-graph.adj_list.each { |k, v| all_vertices += v }
 vertices_to_delete = []
 if options[:limit_variables]
-  vertices_to_delete.concat all_vertices.filter { |k|
-    equations[k].scan(/[xyzwvu]/).uniq.length > options[:limit_variables]
+  vertices_to_delete.concat implications_graph.vertices.filter { |k|
+    if !$equations[k]
+      $stderr.puts "Did not see equation for #{k}?!"
+      exit 1
+    end
+    $equations[k].scan(/[xyzwvu]/).uniq.length > options[:limit_variables]
   }
 end
 if options[:limit_operations]
-  vertices_to_delete.concat all_vertices.filter { |k|
-    equations[k].count("◇") > options[:limit_operations]
+  vertices_to_delete.concat implications_graph.vertices.filter { |k|
+    if !$equations[k]
+      $stderr.puts "Did not see equation for #{k}?!"
+      exit 1
+    end
+    $equations[k].count("◇") > options[:limit_operations]
   }
 end
 if options[:remove_eq1]
   vertices_to_delete << 1
 end
 if options[:remove_eq2]
-  vertices_to_delete.concat graph.scc.filter { |scc| scc.include? 2 }[0]
+  vertices_to_delete.concat implications_graph.scc.filter { |scc| scc.include? 2 }[0]
+end
+if options[:limit_to_subgraph]
+  vertices_to_delete.concat (implications_graph.vertices.to_a - SUBGRAPH)
 end
 
 # Reducing first improves the speed of the closure
-graph = graph.transitive_reduction
-graph = graph.transitive_closure
+# Much faster to do this all over the condensed graph but the tool is deprecated now anyways.
+implications_graph = implications_graph.transitive_reduction
+implications_graph = implications_graph.transitive_closure
 if vertices_to_delete.length > 0
   vertices_to_delete = Set.new vertices_to_delete
 
@@ -74,72 +94,73 @@ if vertices_to_delete.length > 0
   # avoid breaking up SCCs and having to do DFS to discover all children of deleted vrtices
 
   # For every vertex we delete, we want to connect it's ancestors to it's children
-  vertices_to_delete.each { |v| graph.adj_list.delete(v) }
-  graph.adj_list.keys.each { |v| graph.adj_list[v] -= vertices_to_delete }
+  vertices_to_delete.each { |v| implications_graph.adj_list.delete(v) }
+  implications_graph.adj_list.keys.each { |v| implications_graph.adj_list[v] -= vertices_to_delete }
 end
 
-graph = graph.transitive_reduction
-
-# Manual Graph condensation
-sccs = graph.scc
-condensed_graph = Graph.new
-scc_map = {}
-scc_reverse_map = {}
-
-sccs.each_with_index { |scc, idx|
-  scc_reverse_map["SCC#{idx}"] = scc.sort
-  scc.each { |node|
-    scc.each { |node| scc_map[node] = "SCC#{idx}" }
-  }
-}
-
-graph.adj_list.each { |u, neighbors|
-  neighbors.each { |v|
-    next if scc_map[u] == scc_map[v]  # Skip edges within the same SCC
-    condensed_graph.add_edge(scc_map[u], scc_map[v])
-  }
-}
+condensed_graph, node_to_scc_map, scc_to_node_map = implications_graph.condensation
+condensed_graph = condensed_graph.transitive_reduction
 
 # Condensation finished, generate graphviz data
-
-puts "digraph G {"
-
-def name(nodes)
-  if nodes.length == 1
-    "Eq #{nodes[0]}"
-  else
-    "Eqs #{nodes[0]}, ..."
+reverse_map = {}
+condensed_graph.vertices.each { |node|
+  if condensed_graph.adj_list[node]
+    condensed_graph.adj_list[node].each { |v|
+      reverse_map[v] ||= Set.new []
+      reverse_map[v] << node
+    }
   end
+}
+
+roots = reverse_map.keys.filter { |v| condensed_graph.adj_list[v].length == 0 }
+if !roots || roots.length == 0
+  $stderr.puts "Failed to find a root in the graph?!"
+  exit 1
 end
 
-scc_reverse_map.each { |scc_name, nodes|
+puts <<-END
+graph G {
+  layout = dot
+  rankdir = TB
+  graph [ pad="0.2", ranksep="0.75", nodesep="0.35" ];
+  node [ shape="none" ]
+
+END
+
+def name(nodes)
+  nodes.sort!
+  equations = nodes.map { |n|
+    "#{$equations[n]} (#{n})"
+  }
+
+  if equations.length > 5
+    equations = equations[0,4] + ["... [#{nodes.length} total equations]"]
+  end
+
+  equations.join("\\n")
+end
+
+scc_to_node_map.each { |scc_name, nodes|
   print "  #{scc_name} ["
-  nodes
-
-    inbound = condensed_graph.adj_list.filter { |k, v| v.include? scc_name }.length
-    outbound = condensed_graph.adj_list[scc_name].length
-
-  if nodes.length == 1
-    print "shape=box, label=\"#{name(nodes)}\\n#{equations[nodes[0]]}\""
-
-    print ",tooltip=\"inbound edges: #{inbound}  outbound edges: #{outbound}\""
+  print "label=\"#{name(nodes)}\""
+  if nodes.length > 1
+    print ",shape=Mrecord"
   else
-    print "shape=circle, label=\"#{name(nodes)} (#{nodes.length} equations)\\n#{equations[nodes[0]]}\""
-    print ",tooltip=\"inbound edges: #{inbound}  outbound edges: #{outbound}\\n"
-    print "Equations " + nodes.map(&:to_s).join(', ') + "\\n"
-    nodes.each_with_index { |n, idx| print "\\n" if idx != 0; print "#{equations[n]}" }
-    print "\""
+    if !options[:limit_to_subgraph]
+      print ",shape=box"
+    end
   end
 
-  if ([2, 3, 4, 5, 6, 7, 8, 23, 38, 39, 40, 41, 42, 43, 45, 46, 168, 387, 4512, 4513, 4522, 4564, 4579, 4582] & nodes).length != 0
-    print ", style=filled, fillcolor=green, color=black"
+  if roots.include?(scc_name)
+    print ",root=true"
   end
-  puts "];"
+  puts "]"
 }
 
 condensed_graph.adj_list.each { |node, neighbors|
   neighbors.each { |neighbor|
-    puts "  #{neighbor} -> #{node} [tooltip=\"#{name(scc_reverse_map[neighbor])} -> #{name(scc_reverse_map[node])}\"];"
+
+    puts "  #{neighbor} -- #{node};"
   }
 }
 

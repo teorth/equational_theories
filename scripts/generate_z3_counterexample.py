@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # This scripts allows one, given a left_eqn and a right_eqn, to
 # generate a lean file which validates a Z3 counterexample.  This
 # script requires the Z3 python bindings and passing in the equation
@@ -78,7 +80,7 @@ def get_val(model: ModelRef, f, a, b):
 
 def print_incs():
     return ("import equational_theories.Magma\n"
-            "import equational_theories.AllEquations\n"
+            "import equational_theories.Equations.All\n"
             "import Mathlib.Data.Fintype.Basic\n"
             "import Mathlib.Tactic.DeriveFintype\n\n")
 
