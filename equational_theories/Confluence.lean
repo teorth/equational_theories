@@ -161,20 +161,32 @@ lemma buFixed_of_NF {x : FreeMagma α} (h : NF rw x) : buFixed rw x := by
 lemma rw_eq_self_of_NF {x} (h: NF rw x): rw x = x := by
   apply h.top
 
-variable [hproj: IsProj rw]
+class IsProjOrNF : Prop where
+  proj_or_nf : ∀ x, SubtermOf (rw x) x ∨ NF rw (rw x)
+
+instance [hproj: IsProj rw]: IsProjOrNF rw where
+  proj_or_nf x := .inl (hproj.proj x)
+
+variable [hproj: IsProjOrNF rw]
 
 theorem bu_nf : ∀ x, NF rw (bu rw x) := by
   intro x
   induction x with
-  | Leaf => simp [NF, bu, Everywhere]
+  | Leaf a =>
+    simp [NF, bu, Everywhere]
+    obtain (hsub | hnf) := hproj.proj_or_nf (a)
+    · unfold SubtermOf at hsub
+      unfold Everywhere
+      simp [hsub]
+    · exact hnf
   | Fork x y ihx ihy =>
     simp only [NF, bu]
-    have hsub := hproj.proj (bu rw x ⋆ bu rw y)
-    obtain (heq | hsub | hsub) := hsub
-    · refine everywhere_of_projection_of_everywhere _ _ _ ⟨ihx, ihy, ?_⟩
-      simp [bu, Everywhere, *, ihx.top, ihy.top]
+    obtain ((heq | hsub | hsub) | hnf) := hproj.proj_or_nf (bu rw x ⋆ bu rw y)
+    · simp only [Everywhere, heq, and_true]
+      exact ⟨ihx, ihy⟩
     · exact everywhere_of_subterm_of_everywhere ihx hsub
     · exact everywhere_of_subterm_of_everywhere ihy hsub
+    · exact hnf
 
 lemma NF_iff_buFixed {x}: NF rw x ↔ buFixed rw x := by
   constructor
