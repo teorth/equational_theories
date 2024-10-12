@@ -6,22 +6,6 @@ import equational_theories.Closure
 
 open Lean Core Elab Cli
 
-def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → IO Unit) : IO UInt32 := do
-  let mut some modules := imp.variableArgsAs? ModuleName |
-    imp.printHelp
-    return 1
-  if modules.isEmpty then
-    modules := #[`equational_theories]
-  searchPathRef.set compile_time_search_path%
-
-  unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
-    let ctx := {fileName := "", fileMap := default}
-    let state := {env}
-    Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
-      let rs ← Result.extractEquationalResults
-      action rs
-      pure 0
-
 structure DualityRelation where
   dualEquations : Std.HashMap String String
 
@@ -41,17 +25,34 @@ def DualityRelation.dual (rel : DualityRelation) (imp : Implication) : Option Im
   else
     none
 
+def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → DualityRelation → IO Unit) : IO UInt32 := do
+  let dualityRelation ← DualityRelation.ofFile "data/duals.json"
+  let mut some modules := imp.variableArgsAs? ModuleName |
+    imp.printHelp
+    return 1
+  if modules.isEmpty then
+    modules := #[`equational_theories]
+  searchPathRef.set compile_time_search_path%
+
+  unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
+    let ctx := {fileName := "", fileMap := default}
+    let state := {env}
+    Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
+      let rs ← Result.extractEquationalResults
+      action rs dualityRelation
+      pure 0
+
 def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
   let only_e_c := inp.hasFlag "equivalence_creators"
   let duality := inp.hasFlag "duality"
   let include_extra := inp.hasFlag "extra"
   if duality && include_extra then
     throw $ IO.userError "Cannot use both --duality and --extra"
-  withExtractedResults inp fun rs => do
+  withExtractedResults inp fun rs dualityRelation => do
     let rs := if include_extra then rs else rs.filterMap Entry.keepCore
     let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
     let rs := rs.map (·.variant)
-    let (components, outcomes) ← Closure.outcomes_mod_equiv rs
+    let (components, outcomes) ← Closure.outcomes_mod_equiv rs dualityRelation.dualEquations
     let sortedComponents := components.in_order.qsort (fun a b => Closure.ltEquationNames a[0]! b[0]!)
     let mut unknowns : Array Implication := #[]
     for c1 in sortedComponents do
@@ -65,7 +66,6 @@ def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
           else
             unknowns := unknowns.push ⟨c1[0]!, c2[0]!⟩
     if duality then
-      let dualityRelation ← DualityRelation.ofFile "data/duals.json"
       let mut allUnknowns : Std.HashSet Implication := {}
       for hi : i in [:components.size] do
         for hj : j in [:components.size] do
@@ -127,9 +127,9 @@ def Output.asJson (v : Output) : String :=
   s!"\{\"nonimplications\":[{",".intercalate (v.nonimplications.map Implication.asJson).toList}],\"implications\":[{",".intercalate (v.implications.map Implication.asJson).toList}]}"
 
 def generateOutcomes (inp : Cli.Parsed) : IO UInt32 := do
-  withExtractedResults inp fun rs => do
+  withExtractedResults inp fun rs dualityRelation => do
     let rs := if inp.hasFlag "extra" then rs else rs.filterMap Entry.keepCore
-    let (equations, outcomes) ← Closure.list_outcomes rs
+    let (equations, outcomes) ← Closure.list_outcomes rs dualityRelation.dualEquations
     if inp.hasFlag "hist" then
       let mut count : Std.HashMap Closure.Outcome Nat := {}
       for a in outcomes do
@@ -156,11 +156,11 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
   let include_conj := inp.hasFlag "conjecture"
   let include_impl := inp.hasFlag "closure"
   let only_implications := inp.hasFlag "only-implications"
-  withExtractedResults inp fun rs => do
+  withExtractedResults inp fun rs dualityRelation => do
     let rs := if include_conj then rs else rs.filter (·.proven)
     let rs := if only_implications then rs.filter (·.variant matches .implication ..) else rs
     let rs := rs.map (·.variant)
-    let rs ← if include_impl then Closure.closure rs else pure (Closure.toEdges rs)
+    let rs ← if include_impl then Closure.closure rs dualityRelation.dualEquations else pure (Closure.toEdges rs)
     if inp.hasFlag "json" then
       let implications := (rs.filter (·.isTrue)).map (·.get)
       let nonimplications := (rs.filter (!·.isTrue)).map (·.get)
@@ -171,7 +171,7 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
         else IO.println s!"¬ ({edge.lhs} → {edge.rhs})"
 
 def generateRaw (inp : Cli.Parsed) : IO UInt32 := do
-  withExtractedResults inp fun rs => do
+  withExtractedResults inp fun rs _dualityRelation => do
     let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
     let mut implications : Array Implication := #[]
     let mut facts : Array Facts := #[]
