@@ -104,6 +104,21 @@ initialize equationalResultAttr : Unit ←
                    | _ => throwError "@[equational_result] is only allowed on theorems"
 
        let entry := if is_conjecture then entry.toConjecture else entry
+
+       -- Add law theorem as well
+       match entry.variant with
+        | .implication  _ =>
+            let _ ← match info with
+              | .thmInfo  (val : TheoremVal) =>
+                 addLawImplicationThm val.type val.name
+              | _ => pure ()
+        | .unconditional _ =>
+            let _ ← match info with
+              | .thmInfo  (val : TheoremVal) =>
+                 addLawUnconditionalThm val.type val.name
+              | _ => pure ()
+        | _ => pure ()
+
        modifyEnv fun env =>
          equationalResultsExtension.addEntry env entry
     erase := fun _declName =>
