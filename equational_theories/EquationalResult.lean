@@ -112,6 +112,11 @@ initialize equationalResultAttr : Unit ←
               | .thmInfo  (val : TheoremVal) =>
                  addLawImplicationThm val.type val.name
               | _ => pure ()
+        | .unconditional _ =>
+            let _ ← match info with
+              | .thmInfo  (val : TheoremVal) =>
+                 addLawUnconditionalThm val.type val.name
+              | _ => pure ()
         | _ => pure ()
 
        modifyEnv fun env =>
