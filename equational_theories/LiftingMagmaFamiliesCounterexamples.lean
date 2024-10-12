@@ -18,27 +18,30 @@ def liftingMagmaFamilyInstances : Array LiftingMagmaFamilyInstance := #[
   ⟨RightProj, inferInstance, instLiftingMagmaFamilyRightProj, ``instLiftingMagmaFamilyRightProj⟩
 ]
 
+def Std.HashMap.push {α β} [BEq α] [Hashable α] (map : Std.HashMap α (Array β)) (a : α) (b : β) : Std.HashMap α (Array β) :=
+  match map[a]? with
+  | some arr => map.insert a (arr.push b)
+  | none => map.insert a #[b]
+
 -- the non-implications from the environment are cached in a special datastructure for faster lookup
-def generateNonImplicationsTable : CoreM (Std.HashMap String (Array String)) := do
+def generateNonImplicationsTable : CoreM (Std.HashMap String (Array String) × Std.HashMap String (Array String)) := do
   let eqnThms ← Result.extractEquationalResults
   IO.println s!"Extracted {eqnThms.size} equational results. Generating their closure ..."
   let closure ← Closure.closure <| eqnThms.map Entry.variant
-  let nonImplications := closure.filterMap fun
-    | .implication _ => none
-    | .nonimplication e => some e
-  IO.println s!"Filtered to {nonImplications.size} non-implications ..."
-  return nonImplications.foldl (init := Std.HashMap.empty (capacity := 8192)) fun map ⟨lhs, rhs⟩ ↦
-    match map[lhs]? with
-    | some arr =>
-      let map := map.erase lhs
-      map.insert lhs (arr.push rhs)
-    | none => map.insert lhs #[rhs]
+  IO.println s!"Generated the closure of size {closure.size} ..."
+  return closure.foldl (init := (.empty (capacity := 8192), .empty (capacity := 8192))) fun (implMap, nonImplMap) edge ↦
+    match edge with
+    | .implication ⟨lhs, rhs⟩ =>
+      (implMap.push lhs rhs, nonImplMap)
+    | .nonimplication ⟨lhs, rhs⟩ =>
+      (implMap, nonImplMap.push lhs rhs)
 
 def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
-    (nonImplications : Std.HashMap String (Array String)) (laws : Array (Name × NatMagmaLaw))
+    (implications nonImplications : Std.HashMap String (Array String)) (laws : Array (Name × NatMagmaLaw))
     (path : System.FilePath) : CoreM Unit := do
   let mut positives : Array Name := #[]
   let mut negatives : Array Name := #[]
+  let mut nonImplications := nonImplications
   for (lawName, law) in laws do
     let result := @decide _ <|
       @instDecidableSatisfiesLaw Nat inst.G inst.instLiftingMagmaFamily _ law
@@ -50,11 +53,14 @@ def generateInvariantMetatheoremResults (inst : LiftingMagmaFamilyInstance)
   let mut output := "import equational_theories.LiftingMagmaFamilies\nimport equational_theories.EquationalResult\nimport equational_theories.Equations.All"
   for posLawName in positives do
     let posEqnName := magmaLawNameToEquationName posLawName.toString
-    let establishedConclusions := nonImplications[posEqnName]?.getD #[]
+    let establishedNonConclusions := nonImplications[posEqnName]?.getD #[]
     for negLawName in negatives do
       let negEqnName := magmaLawNameToEquationName negLawName.toString
-      unless establishedConclusions.contains negEqnName do
+      unless establishedNonConclusions.contains negEqnName do
         output := output ++ generateEquationResult posEqnName negEqnName inst.instName
+        let establishedConclusions := implications[posEqnName]?.getD #[]
+        for posImplName in establishedConclusions do
+          nonImplications := nonImplications.push posImplName negEqnName
   IO.println "Writing to file ..."
   IO.FS.writeFile path output
 where
@@ -66,13 +72,13 @@ def outputDir : System.FilePath := "." / "equational_theories" / "Generated"
 
 def generateAllNonimplications : CoreM Unit := do
   IO.println "Generating table of existing non-implications ..."
-  let table ← generateNonImplicationsTable
-  IO.println s!"Generated table of non-implications with {table.size} keys, retrieving laws ..."
+  let (implTable, nonImplTable) ← generateNonImplicationsTable
+  IO.println s!"Generated tables of implications and non-implications, retrieving laws ..."
   let laws ← getMagmaLaws
   IO.println s!"Retrieved {laws.size} laws from the environment ..."
   for inst in liftingMagmaFamilyInstances do
     IO.println s!"Generating non-implications for {inst.instName} ..."
-    generateInvariantMetatheoremResults inst table laws <|
+    generateInvariantMetatheoremResults inst implTable nonImplTable laws <|
       outputDir / "InvariantMetatheoremNonimplications" / s!"{inst.instName}_counterexamples.lean"
   let mainFile := liftingMagmaFamilyInstances.foldl (init := "") fun acc inst ↦
     acc ++ s!"import equational_theories.Generated.InvariantMetatheoremNonimplications.{inst.instName}_counterexamples\n"
