@@ -10,17 +10,17 @@ import equational_theories.Preorder
 open FreeMagma
 open Law
 
-def FreeMagma.op {α} (w : FreeMagma α) : FreeMagma α :=
+def FreeMagma.dual {α} (w : FreeMagma α) : FreeMagma α :=
 match w with
 | .Leaf x => .Leaf x
-| .Fork w₁ w₂ => .Fork w₂.op w₁.op
+| .Fork w₁ w₂ => .Fork w₂.dual w₁.dual
 
 /--
 The dual is indeed dual (an involution).
 -/
 @[simp]
-theorem FreeMagma.op_op {α} (w : FreeMagma α) : w.op.op = w := by
- induction w <;> simp [op, *]
+theorem FreeMagma.dual_dual {α} (w : FreeMagma α) : w.dual.dual = w := by
+ induction w <;> simp [dual, *]
 
 @[simp]
 def Op (G : Type) : Type := G
@@ -31,12 +31,12 @@ instance opMagma {G : Type} [Magma G] : Magma (Op G) := { op := λ (x y : G) ↦
 def Magma.opHom {G} [Magma G] : G → Op G := fun x => x
 
 theorem evalInMagmaOp {α G} [Magma G] (φ : α → G) (w : FreeMagma α):
-  evalInMagma (G := Op G) φ w.op = evalInMagma (G := G) φ w := by
+  evalInMagma (G := Op G) φ w.dual = evalInMagma (G := G) φ w := by
   cases w; trivial
   case Fork w₁ w₂ => simp only [Op, evalInMagma, opMagma]; repeat rw [evalInMagmaOp]
 
 theorem models.Op {α} {G : Type} [Magma G] {w₁ w₂ : FreeMagma α} (h : G ⊧ w₁ ≃ w₂) :
-    (Op G) ⊧ w₁.op ≃ w₂.op := by
+    (Op G) ⊧ w₁.dual ≃ w₂.dual := by
   intros φ
   simp only [satisfiesPhi, _root_.Op, opMagma]
   repeat rw [@evalInMagmaOp]
@@ -44,15 +44,15 @@ theorem models.Op {α} {G : Type} [Magma G] {w₁ w₂ : FreeMagma α} (h : G �
 
 namespace Law.MagmaLaw
 
-def dual {α} (l : MagmaLaw α) : MagmaLaw α := { lhs := l.lhs.op, rhs := l.rhs.op}
+def dual {α} (l : MagmaLaw α) : MagmaLaw α := { lhs := l.lhs.dual, rhs := l.rhs.dual}
 
 theorem law_dual_dual {α} (l : MagmaLaw α) : l.dual.dual = l := by simp [dual]
 
 theorem satisfiesPhi_dual {α G} [Magma G] {l : MagmaLaw α} {φ : α → G}
   (h : satisfiesPhi (Magma.opHom ∘ φ) l) : satisfiesPhi φ l.dual := by
   simp only [satisfiesPhi, Op, opMagma, dual] at *
-  rw [← evalInMagmaOp φ l.lhs.op, ← evalInMagmaOp φ l.rhs.op]
-  simp only [Op, opMagma, op_op]
+  rw [← evalInMagmaOp φ l.lhs.dual, ← evalInMagmaOp φ l.rhs.dual]
+  simp only [Op, opMagma, dual_dual]
   exact h
 
 theorem satisfies_dual_dual {α G} [Magma G] {l : MagmaLaw α} (h : (Op G) ⊧ l) : G ⊧ l.dual :=
