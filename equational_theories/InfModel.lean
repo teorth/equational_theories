@@ -580,7 +580,25 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
       clear h'
       revert α
       suffices h: ∀ (w : FreeMagma (Fin 2)), w.first ≠ 0 ∧ w.last ≠ 0 → ∃ (G : Type) (M : Magma G) (hf: Finite G), G ⊧ (Lf 0 ≃ w) ∧ ¬Equation2 G by
-        sorry
+        intros α ht hc x w h'
+        replace h': w.first ≠ x ∧ w.last ≠ x := by
+          simp_all only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, not_or, not_false_eq_true, and_self]
+        have π := Fintype.equivFin α
+        let w': FreeMagma (Fin 2) := FreeMagma.evalInMagma (fun z => FreeMagma.Leaf (π.toFun z)) w
+        obtain ⟨G, ⟨M, ⟨hf, ⟨h1, h2⟩⟩⟩⟩ := h w' (by
+          induction w
+          rename_i z
+          split_ands
+          simp_all only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp]
+          simp only [FreeMagma.first, FreeMagma.last] at *
+          sorry
+          sorry)
+        exists G, M, hf
+        split_ands
+        .
+          sorry
+        .
+          assumption
       intro w h
       obtain ⟨hl, hr⟩ := h
       let MPols: Magma (Polynomial ℤ) := Magma.mk fun x y => (1 - Polynomial.X) * x + Polynomial.X * y
