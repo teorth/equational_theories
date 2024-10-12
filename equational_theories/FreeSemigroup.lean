@@ -134,19 +134,16 @@ theorem CommSgrImpliesInsertSortedFaithful {n : Nat} {G : Type _} [Magma G] (ass
   | j .+ => by
     have eqor := ite_eq_or_eq (i ≤ j) (i ,+ j .+) (j ,+ i .+)
     cases eqor with
-    | inl eq1 => apply Eq.trans (congrArg (evalInSgr f) eq1); exact Eq.refl _
-    | inr eq2 => apply Eq.trans (congrArg (evalInSgr f) eq2); exact comm (f j) (f i)
+    | inl eq1 => exact (congrArg (evalInSgr f) eq1).trans rfl
+    | inr eq2 => exact (congrArg (evalInSgr f) eq2).trans (comm _ _)
   | j ,+ lstail => by
     have eqor := ite_eq_or_eq (i ≤ j) (i ,+ j ,+ lstail) (j ,+ i ,+ lstail)
     cases eqor with
     | inl eq1 =>
-      apply Eq.trans (congrArg (evalInSgr f) eq1);
-      exact Eq.refl _
+      exact (congrArg (evalInSgr f) eq1).trans rfl
     | inr eq2 =>
-      apply Eq.trans (congrArg (evalInSgr f) eq2);
-      apply Eq.trans $ assoc (f j) (f i) _;
-      rw [comm (f j) (f i)];
-      exact Eq.symm $ assoc (f i) (f j) _
+      exact (congrArg (evalInSgr f) eq2).trans ((assoc (f j) (f i) _).trans
+        (comm (f j) (f i) ▸ (assoc (f i) (f j) _).symm))
 
 theorem CommSgrImpliesInsertionSortFaithful {n : Nat} {G : Type _} [Magma G] (assoc : Equation4512 G) (comm : Equation43 G) (f : Fin n → G)
   : ∀ ls : FreeSemigroup (Fin n), evalInSgr f ls = evalInSgr f (insertionSortSgr ls)
