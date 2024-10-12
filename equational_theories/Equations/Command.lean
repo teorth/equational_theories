@@ -14,6 +14,12 @@ def getMagmaLaws : CoreM (Array (Name × NatMagmaLaw)) := do
       out := out.push (n, ← unsafe evalConstCheck NatMagmaLaw ``NatMagmaLaw n)
   return out
 
+def magmaLawNameToEquationName (magmaLawName : String) : String :=
+  "Equation" ++ (magmaLawName.drop "Law".length)
+
+def equationNameToMagmaLawName (equationName : String) : String :=
+  "Law" ++ (equationName.drop "Equation".length)
+
 namespace EquationsCommand
 
 partial def parseFreeMagma : Term → StateT (Array Ident) Option (FreeMagma Nat)
@@ -127,7 +133,7 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
   -- compatibility between the law and the original equation
   have n : ℕ := is.size
   have : Q(MagmaLaw.bounded $n $lawConst = true) := (q(Eq.refl true) : Expr)
-  addDecl <| .thmDecl {
+  addAndCompile <| .thmDecl {
     name := thmName
     levelParams := [`u]
     type := q(∀ (G : Type u) [Magma G], G ⊧ $lawConst ↔ $eqConst G)

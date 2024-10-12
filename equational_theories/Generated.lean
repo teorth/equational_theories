@@ -10,3 +10,4 @@ import equational_theories.Generated.VampireProven
 import equational_theories.Generated.FinSearch
 import equational_theories.Generated.MagmaEgg.small
 import equational_theories.Generated.Confluence
+import equational_theories.Generated.InvariantMetatheoremNonimplications

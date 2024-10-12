@@ -111,7 +111,7 @@ For the rest of this chapter we readopt the convention of calling `theorem' an i
 
 An invariant is generally a \emph{syntactic} property of an expression. However, invariants can also be described and calculated \emph{semantically} through the notion of a \emph{lifting magma family}, described below. The general idea is that the value of an invariant for an expression can be computed by substituting specific values for the variables in the expression and evaluating the result in a certain magma in the lifting magma family; additional requirements ensure that the fundamental property of invariants is satisfied.
 
-\begin{definition}[Lifting Magma Family]\label{lifting-magma-family}
+\begin{definition}[Lifting Magma Family]\lean{LiftingMagmaFamily}\leanok\label{lifting-magma-family}
 	A \emph{lifting magma family} is a family of magmas $\{G_\alpha\}$, one for each type $\alpha$, satisfying the following properties:
 	\begin{itemize}
 		\item For each type $\alpha$, there is a function $\iota_\alpha : \alpha \to G_\alpha$.
@@ -129,7 +129,7 @@ An invariant is generally a \emph{syntactic} property of an expression. However,
 
 The key consequence of the \Cref{lifting-magma-family} is that it is significantly easier to check whether an equation is satisfied in a lifting magma family.
 
-\begin{theorem}[Evaluation theorem for lifting magma families]\label{lifting-magma-basis-evaluation}
+\begin{theorem}[Evaluation theorem for lifting magma families]\lean{MagmaLaw.models_iff_satisfies_ι}\leanok\label{lifting-magma-basis-evaluation}
 	Suppose $E$ is an equation involving a set of variables $X$, and let $G$ be a lifting magma family.
 
 	Determining whether $E$ is satisfied by $G_X$ is equivalent to checking that $E$ is true with the specific substitution $\iota_X$.

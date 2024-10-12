@@ -31,3 +31,8 @@ supportInterpreter = true
 name = "export_equations"
 root = "scripts.export_equations"
 supportInterpreter = true
+
+[[lean_exe]]
+name = "generate_lifting_magma_family_counterexamples"
+root = "equational_theories.LiftingMagmaFamiliesCounterexamples"
+supportInterpreter = true
