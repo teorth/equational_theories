@@ -1304,7 +1304,7 @@ rule_system rules {x y z w}
 | x ⋆ x ⋆ (y ⋆ y ⋆ z) ⋆ z => y ⋆ y ⋆ z
 | (x ⋆ x ⋆ y) ⋆ (x ⋆ x ⋆ y ⋆ z ⋆ w) => x ⋆ x ⋆ y ⋆ z
 
-theorem comp1_2 {α} [DecidableEq α] {x y z : FreeMagma α}:
+theorem comp1_2 {x y z : FreeMagma α}:
     rules (y ⋆ y ⋆ x ⋆ rules (x ⋆ z)) = x := by
   generalize h: rules (x ⋆ z) = e
   simp only [rules.elim] at h
@@ -1315,7 +1315,7 @@ theorem comp1_2 {α} [DecidableEq α] {x y z : FreeMagma α}:
   · apply rules.eq1
   · apply rules.eq1
 
-theorem comp2_2 {α} [DecidableEq α] {x y z : FreeMagma α} (hxxy: NF rules (x ⋆ x ⋆ y)):
+theorem comp2_2 {x y z : FreeMagma α} (hxxy: NF rules (x ⋆ x ⋆ y)):
     rules (x ⋆ x ⋆ rules (x ⋆ x ⋆ y ⋆ z)) = x ⋆ x ⋆ y := by
   generalize h: rules (x ⋆ x ⋆ y ⋆ z) = e
   simp only [rules.elim] at h
@@ -1326,7 +1326,7 @@ theorem comp2_2 {α} [DecidableEq α] {x y z : FreeMagma α} (hxxy: NF rules (x 
   · apply rules.eq2
   · apply rules.eq2
 
-theorem comp4_2 {α} [DecidableEq α] {x y z w : FreeMagma α} (hxxyz: NF rules (x ⋆ x ⋆ y ⋆ z)):
+theorem comp4_2 {x y z w : FreeMagma α} (hxxyz: NF rules (x ⋆ x ⋆ y ⋆ z)):
     rules (((x ⋆ x) ⋆ y) ⋆ rules ((((x ⋆ x) ⋆ y) ⋆ z) ⋆ w)) = (((x ⋆ x) ⋆ y) ⋆ z) := by
   generalize h: rules ((((x ⋆ x) ⋆ y) ⋆ z) ⋆ w) = e
   simp only [rules.elim] at h
@@ -1337,7 +1337,7 @@ theorem comp4_2 {α} [DecidableEq α] {x y z w : FreeMagma α} (hxxyz: NF rules 
   · apply rules.eq2
   · apply rules.eq4
 
-theorem comp1_3 {α} [DecidableEq α] {x y z : FreeMagma α} (hx: NF rules x):
+theorem comp1_3 {x y z : FreeMagma α} (hx: NF rules x):
     rules (rules (y ⋆ y ⋆ x) ⋆ rules (x ⋆ z)) = x := by
   generalize h: rules (y ⋆ y ⋆ x) = e
   simp only [rules.elim] at h
@@ -1348,7 +1348,7 @@ theorem comp1_3 {α} [DecidableEq α] {x y z : FreeMagma α} (hx: NF rules x):
   · apply comp4_2 hx
   · apply comp1_2
 
-theorem comp1_4 {α} [DecidableEq α] {x y z : FreeMagma α} (hx: NF rules x):
+theorem comp1_4 {x y z : FreeMagma α} (hx: NF rules x):
     rules (rules (rules (y ⋆ y) ⋆ x) ⋆ rules (x ⋆ z)) = x := by
   generalize h: rules (y ⋆ y) = e
   simp only [rules.elim] at h
@@ -1377,7 +1377,7 @@ rule_system rules {x y}
 | y ⋆ ((x ⋆ x) ⋆ y) => x
 | ((y ⋆ y) ⋆ (x ⋆ x)) ⋆ y => x
 
-theorem comp2 {α} [DecidableEq α] {x y : FreeMagma α} (hx: NF rules x):
+theorem comp2 {x y : FreeMagma α} (hx: NF rules x):
     rules (y ⋆ rules (x ⋆ x ⋆ y)) = x := by
   generalize h: rules (x ⋆ x ⋆ y) = e
   simp only [rules.elim] at h
@@ -1386,7 +1386,7 @@ theorem comp2 {α} [DecidableEq α] {x y : FreeMagma α} (hx: NF rules x):
   · apply rw_eq_self_of_NF rules hx
   · apply rules.eq1
 
-theorem comp3 {α} [DecidableEq α] {x y : FreeMagma α} (hx: NF rules x):
+theorem comp3 {x y : FreeMagma α} (hx: NF rules x):
     rules (y ⋆ rules (rules (x ⋆ x) ⋆ y)) = x := by
   generalize h: rules (x ⋆ x) = e
   simp only [rules.elim] at h
@@ -1415,7 +1415,7 @@ rule_system rules {x y z w}
 | z ⋆ ((x ⋆ y) ⋆ z) => x ⋆ y
 | ((z ⋆ w) ⋆ (x ⋆ y)) ⋆ (z ⋆ w) => x ⋆ y
 
-theorem comp2 {α} [DecidableEq α] {x y z : FreeMagma α} (hxy: NF rules (x ⋆ y)):
+theorem comp2 {x y z : FreeMagma α} (hxy: NF rules (x ⋆ y)):
     rules (z ⋆ rules (x ⋆ y ⋆ z)) = x ⋆ y := by
   generalize h: rules (x ⋆ y ⋆ z) = e
   simp only [rules.elim] at h
@@ -1424,7 +1424,7 @@ theorem comp2 {α} [DecidableEq α] {x y z : FreeMagma α} (hxy: NF rules (x ⋆
   · apply rw_eq_self_of_NF rules hxy
   · apply rules.eq1
 
-theorem comp3 {α} [DecidableEq α] {x y z : FreeMagma α} (hx: NF rules x) (hy: NF rules y):
+theorem comp3 {x y z : FreeMagma α} (hx: NF rules x) (hy: NF rules y):
     rules (z ⋆ rules (rules (x ⋆ y) ⋆ z)) = rules (x ⋆ y) := by
   generalize h: rules (x ⋆ y) = e
   simp only [rules.elim] at h
