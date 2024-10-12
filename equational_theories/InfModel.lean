@@ -587,17 +587,14 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
       let fPols: Fin 2 → Polynomial ℤ := fun z => if z = 0 then 1 else 0
       let r: Polynomial ℤ := FreeMagma.evalInMagma fPols w
       let n := r.natDegree
-      have : ∃ (b0: Fin (2*n)), Polynomial.eval (b0: ℤ) (r * (r - 2)) ≠ 0 ∧ Polynomial.eval (b0: ℤ) (r * (r - 2)) ≠ 1 := sorry
+      have : ∃ (b0: ℤ), Polynomial.eval b0 (r * (r - 2)) ≠ 0 ∧ Polynomial.eval b0 (r * (r - 2)) ≠ 1 := sorry
       obtain ⟨b0, h0⟩ := this
       let k: Nat := (Polynomial.eval (b0: ℤ) r - 1).natAbs
       have geq_2_k : k ≥ 2 := sorry
-      let G: Type := ZMod k
-      let b0: ZMod k := b0
-      rename_i b0_orig
-      let a0: ZMod k := 1 - b0
-      let M: Magma G := Magma.mk fun u v => a0 * u + b0 * v
-      exists G, M
-      let eval_eq: FreeMagma (Fin 2) → G → G → G := fun w u v => w ⬝ (fun z => if z = 0 then u else v)
+      let a0: ℤ := 1 - b0
+      let M: Magma (ZMod k) := Magma.mk fun u v => a0 * u + b0 * v
+      exists ZMod k, M
+      let eval_eq: FreeMagma (Fin 2) → ZMod k → ZMod k → ZMod k := fun w u v => w ⬝ (fun z => if z = 0 then u else v)
       intro f
       unfold satisfiesPhi
         ; simp only
@@ -605,7 +602,7 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
         lhs
         unfold FreeMagma.evalInMagma
       have : eval_eq w (f 0) (f 1) = eval_eq w (f 0 - f 1) 0 + eval_eq w (f 1) (f 1) := by
-        clear_value k b0
+        clear_value k
         clear * -
         simp only [eval_eq]
         induction w
@@ -624,12 +621,89 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           unfold Magma.op
           ring_nf
       have : eval_eq w (f 0 - f 1) 0 = f 0 - f 1 := by
-        have : eval_eq w (f 0 - f 1) 0 = (Polynomial.eval (b0.val: ℤ) r) * (f 0 - f 1) := by
-          sorry
+        have : eval_eq w (f 0 - f 1) 0 = (Polynomial.eval b0 r) * (f 0 - f 1) := by
+          generalize f 0 - f 1 = u
+          clear * -
+          unfold eval_eq
+          unfold r
+          unfold fPols
+          clear_value r k
+          clear * -
+          induction w
+          .
+            rename_i z
+            unfold FreeMagma.evalInMagma
+            split
+            next h =>
+              subst h
+              simp_all only [Polynomial.eval_one, Int.cast_one, one_mul]
+            next h => simp_all only [Polynomial.eval_zero, Int.cast_zero, zero_mul]
+          .
+            rename_i w1 w2 h1 h2
+            unfold FreeMagma.evalInMagma
+            rw [h1, h2]
+            unfold Magma.op
+              ; simp only
+            have : ∀ (n1 n2: ZMod k), n1 - n2 = 0 → n1 = n2 := by
+              intro n1 n2 h
+              apply_fun (fun x => x + n2) at h
+              simp_all only [sub_add_cancel, zero_add]
+            apply this
+              ; clear this
+            conv =>
+              lhs
+              conv =>
+                lhs
+                unfold Magma.op
+                simp only
+                conv =>
+                  lhs
+                  rw [←mul_assoc]
+                  simp only [←Int.coe_castRingHom, ←RingHom.map_mul]
+                  simp only [Int.coe_castRingHom]
+                  --
+                conv =>
+                  rhs
+                  rw [←mul_assoc]
+                  simp only [←Int.coe_castRingHom, ←RingHom.map_mul]
+                  simp only [Int.coe_castRingHom]
+                  --
+                simp only [←right_distrib]
+                simp only [←Int.coe_castRingHom]
+                simp only [←RingHom.map_add]
+                simp only [Int.coe_castRingHom]
+              conv =>
+                rw [sub_eq_add_neg]
+                rhs
+                rw [←neg_mul]
+                --
+            rw [←right_distrib]
+            have : ∀ (n1 n2: ZMod k), n1 = 0 → n1 * n2 = 0 := by
+              intro n1 n2 h
+              rw [h]
+              ring_nf
+            apply this
+              ; clear this
+            conv =>
+              lhs
+              rw [←sub_eq_add_neg]
+              simp only [←Int.coe_castRingHom]
+              simp only [←RingHom.map_sub]
+              simp only [Int.coe_castRingHom]
+            have : ∀ (n1: ℤ), n1 = 0 → (n1: ZMod k) = 0 := by
+              intro n1 h
+              rw [h]
+              simp_all only [Int.cast_sub, Int.cast_one, Fin.isValue, Int.cast_zero, M, a0, MPols]
+            apply this
+              ; clear this
+            simp_all only [Int.cast_sub, Int.cast_one, Fin.isValue, Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_one, Polynomial.eval_X, sub_self, M, a0, MPols]
         rw [this]
-        have : (Polynomial.eval (b0.val: ℤ) r) = (1: ZMod k) := by
-          suffices (Polynomial.eval (b0.val: ℤ) (r - 1)) = ((0: ℤ): ZMod k) by
-            sorry
+        have : (Polynomial.eval b0 r) = (1: ZMod k) := by
+          suffices h: (Polynomial.eval b0 (r - 1)) = ((0: ℤ): ZMod k) by
+            simp only [Polynomial.eval_sub, Polynomial.eval_one, Int.cast_sub, Int.cast_one, Int.cast_zero] at h
+            apply_fun (fun x => x + 1) at h
+            simp only [sub_add_cancel, zero_add] at h
+            assumption
           rename_i this'
           clear this'
           clear * -
@@ -637,12 +711,11 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           norm_num
           unfold k
           rw [←Int.abs_eq_natAbs]
-          unfold b0
-          sorry
+          simp_all only [Fin.isValue, Int.emod_abs, Int.emod_self, r, MPols, fPols]
         rw [this]
         ring_nf
       have : eval_eq w (f 1) (f 1) = f 1 := by
-        clear_value k b0
+        clear_value k
         clear * -
         simp only [eval_eq]
         induction w
@@ -653,22 +726,24 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           .
             simp only [Fin.zero_eta, Fin.isValue, ↓reduceIte, sub_add_cancel]
           .
-            simp_all only [ge_iff_le, Fin.isValue, Fin.mk_one, ite_self, one_ne_zero, ↓reduceIte, G, eval_eq, M, a0]
+            simp_all only [ge_iff_le, Fin.isValue, Fin.mk_one, ite_self, one_ne_zero, ↓reduceIte, eval_eq, M, a0]
         .
           rename_i w1 w2 h1 h2
           unfold FreeMagma.evalInMagma
           rw [h1, h2]
           unfold Magma.op
           ring_nf
+          zify
+          ring_nf
       have this2 : eval_eq w (f 0) (f 1) = f 0 := by
-        simp_all only [Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, G, eval_eq, M]
+        simp_all only [Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, eval_eq, M]
       have : w ⬝ f = eval_eq w (f 0) (f 1) := by
         unfold eval_eq
         have : f = (fun z => if z = 0 then f 0 else f 1) := by
           funext z
           fin_cases z
-          simp_all only [Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, Fin.zero_eta, ↓reduceIte, G, eval_eq, M]
-          simp_all only [Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, Fin.mk_one, one_ne_zero, ↓reduceIte, G, eval_eq, M]
+          simp_all only [Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, Fin.zero_eta, ↓reduceIte, eval_eq, M]
+          simp_all only [Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, Fin.mk_one, one_ne_zero, ↓reduceIte, eval_eq, M]
         simp only [←this]
       rw [this]
       rw [this2]
