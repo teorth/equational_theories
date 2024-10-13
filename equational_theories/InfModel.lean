@@ -9,6 +9,7 @@ import Mathlib.Data.ZMod.Basic
 import Mathlib.Algebra.Polynomial.Basic
 import Mathlib.Algebra.Polynomial.Degree.Definitions
 import Mathlib.Algebra.Polynomial.Eval
+import Mathlib.Algebra.Polynomial.RingDivision
 
 namespace InfModel
 
@@ -651,7 +652,26 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
       exists G, M, hf
       split_ands
       .
-        sorry
+        clear * - h1 hπ
+        intro f
+        replace h1 := h1 (f ∘ π.invFun)
+        simp only [satisfiesPhi, w', ←hπ] at *
+          ; clear w'
+        simp only [FreeMagma.evalInMagma] at *
+        simp only [Function.comp] at *
+        conv at h1 =>
+          lhs
+          simp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply]
+        rw [h1]
+          ; clear h1
+        induction w
+        .
+          rename_i z
+          simp only [FreeMagma.evalInMagma, Equiv.invFun_as_coe, Equiv.toFun_as_coe, Function.comp_apply, Equiv.symm_apply_apply]
+        .
+          rename_i w1 w2 h1 h2
+          simp [FreeMagma.evalInMagma]
+          simp_all only [Equiv.invFun_as_coe, Equiv.toFun_as_coe]
       .
         assumption
     intro w h
@@ -660,12 +680,41 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
     let fPols: Fin 2 → Polynomial ℤ := fun z => if z = 0 then 1 else 0
     let r: Polynomial ℤ := FreeMagma.evalInMagma fPols w
     let n := r.natDegree
-    have : ∃ (b0: ℤ), |Polynomial.eval b0 (r * (r - 2))| ≠ 1 := sorry
+    have : ∃ (b0: ℤ), Polynomial.eval b0 (r * (r - 2)) ≠ 0 := by
+      let r' := r * (r - 2)
+      have : r' ≠ 0 := sorry
+      have := Polynomial.exists_multiset_roots this
+      obtain ⟨s, hs⟩ := this
+      have : r'.natDegree = 2 * n := by
+        simp only [Polynomial.natDegree]
+        have : (r - 2).degree = r.degree := sorry
+        have this' : r.degree + r.degree = some (2 * r.natDegree) := sorry
+        simp only [r', Polynomial.degree_mul, this, this', WithBot.unbot', WithBot.recBotCoe]
+        simp only [id_eq]
+      obtain ⟨hs1, hs2⟩ := hs
+      have : ∃ (b0: ℤ), b0 ∉ s := sorry
+      obtain ⟨b0, hb0⟩ := this
+      have : Multiset.count b0 s = 0 := sorry
+      have : Polynomial.rootMultiplicity b0 r' = 0 := sorry
+      have : Polynomial.eval b0 r' ≠ 0 := sorry
+      simp only [r'] at this
+      exists b0
     obtain ⟨b0, h0⟩ := this
     let k: Nat := (Polynomial.eval (b0: ℤ) r - 1).natAbs
     let a0: ℤ := 1 - b0
     let M: Magma (ZMod k) := Magma.mk fun u v => a0 * u + b0 * v
-    have hf: Finite (ZMod k) := by sorry
+    have hf: Finite (ZMod k) := by
+      have : k ≠ 0 := sorry
+      have : ZMod k = Fin k := by
+        unfold ZMod
+        simp_all only [Fin.isValue, ne_eq, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_ofNat, mul_eq_zero, not_or, Int.natAbs_eq_zero, r, MPols, fPols, k]
+        obtain ⟨left, right⟩ := h0
+        split
+        next x heq => simp_all only [Fin.isValue, Int.natAbs_eq_zero]
+        next x n_1 heq => simp_all only [Fin.isValue, Nat.succ_eq_add_one]
+      rw [this]
+      apply Finite.intro
+      rfl
     exists ZMod k, M, hf
     let eval_eq: FreeMagma (Fin 2) → ZMod k → ZMod k → ZMod k := fun w u v => w ⬝ (fun z => if z = 0 then u else v)
     split_ands
@@ -673,7 +722,23 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
     .
       simp only [not_forall]
       exists 0, 1
-      have : k ≠ 1 := sorry
+      have : k ≠ 1 := by
+        simp only [k]
+        intro h
+        have := Int.natAbs_eq (Polynomial.eval b0 r - 1)
+        simp only [h] at this
+        cases this with
+        | inl h =>
+          apply_fun (fun x => x - 1) at h
+          simp only [Int.sub_sub] at h
+          norm_num at h
+          apply h0
+          simp_all only [Fin.isValue, ne_eq, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_ofNat, mul_zero, not_true_eq_false, r, MPols, fPols]
+        | inr h =>
+          apply_fun (fun x => x + 1) at h
+          norm_num at h
+          apply h0
+          simp_all only [Fin.isValue, ne_eq, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_ofNat, zero_sub, Int.reduceNeg, mul_neg, zero_mul, neg_zero, not_true_eq_false, r, MPols, fPols]
       intro h
       apply_fun (fun x => x.val) at h
       rw [ZMod.val_one'' this] at h
