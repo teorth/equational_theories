@@ -85,15 +85,16 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - [Code of conduct](https://github.com/teorth/equational_theories/tree/main/CODE_OF_CONDUCT.md)
     - [Wiki](https://github.com/teorth/equational_theories/wiki)
 - [A blog post describing the project.](https://terrytao.wordpress.com/2024/09/25/a-pilot-project-in-universal-algebra-to-explore-new-ways-to-collaborate-and-use-machine-assistance/), Sep 25, 2024.
+    - [The equational theories project: a brief tour](https://terrytao.wordpress.com/2024/10/12/the-equational-theories-project-a-brief-tour/), Oct 12, 2024 - a followup to the previous post.
 - [Initial discussion on Zulip](https://leanprover.zulipchat.com/#narrow/stream/113488-general/topic/Proposing.20a.20universal.20algebra.20exploration.20using.20Lean), Sep 26, 2024.
 - [Initial discussion on Mastodon](https://mathstodon.xyz/@tao/110736805384878353), Jul 18, 2023.
     - [Followup discussion on Mastodon](https://mathstodon.xyz/deck/@tao/113201989529992957), Sep 25, 2024.
 - [The MathOverflow post that inspired the project](https://mathoverflow.net/questions/450930/is-there-an-identity-between-the-associative-identity-and-the-constant-identity), Jul 17, 2023.
     - [A related MathOverflow post](https://mathoverflow.net/questions/450890/is-there-an-identity-between-the-commutative-identity-and-the-constant-identity), Jul 16, 2023.
 - [Data](https://github.com/teorth/equational_theories/tree/main/data)
-    - [Text list of equations](https://github.com/teorth/equational_theories/tree/main/data/equations.txt)
-    - [List of duals of equations](https://github.com/teorth/equational_theories/tree/main/data/dual_equations.md)
-    - [The smallest magma obeying a given equation (up to N=5)](https://github.com/teorth/equational_theories/blob/main/data/smallest_magma.txt), if it exists
+    - [Text list of equations](https://github.com/teorth/equational_theories/tree/main/data/equations.txt).  [Larger list with equations of up to five operations](https://github.com/teorth/equational_theories/blob/main/data/eq_size5.txt)
+    - [List of duals of equations](https://github.com/teorth/equational_theories/tree/main/data/dual_equations.md) ([JSON](https://github.com/teorth/equational_theories/blob/main/data/duals.json))
+    - [The smallest magma obeying a given equation (up to N=5)](https://github.com/teorth/equational_theories/blob/main/data/smallest_magma.txt), if it exists (and [the magmas themselves](https://github.com/teorth/equational_theories/blob/main/data/smallest_magma_examples.txt))
 - [Scripts](https://github.com/teorth/equational_theories/tree/main/scripts)
     - Shell
         - [`run_before_push`](https://github.com/teorth/equational_theories/tree/main/scripts/run_before_push.sh) - performs some of the CI checks, suitable for running just before pushing a new PR
