@@ -29,6 +29,15 @@ open Lean in
 instance {α} [ToJson α] : ToJson (FreeMagma α) where
   toJson := FreeMagma.toJson
 
+def FreeMagma.toString {α} [ToString α] (outermost : Bool) : FreeMagma α → String
+  | FreeMagma.Leaf x => s!"{x}"
+  | FreeMagma.Fork x y =>
+    let s := s!"{x.toString false} ◇ {y.toString false}"
+    if outermost then s else s!"({s})"
+
+instance {α} [ToString α] : ToString (FreeMagma α) where
+  toString := FreeMagma.toString true
+
 infixl:65 " ⋆ " => FreeMagma.Fork
 
 @[simp]
