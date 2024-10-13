@@ -8,7 +8,7 @@ import equational_theories.Equations.All
 
 namespace Conjectures
 
-/-  Some conjectures from https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1076.20!.3D.3E.203 -/
+/-  Some conjectures from https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1076.20!.3D.3E.203/near/476293108 -/
 
 /-- https://leanprover.zulipchat.com/user_uploads/3121/b-Usk-DH5Y8dALsaMWxIZxPJ/NonImplication-updated.pdf -/
 @[equational_result]
@@ -37,7 +37,7 @@ conjecture Equation229_facts : ∃ (G : Type) (_ : Magma G), Facts G [229] [73]
 
 
 
-/-- See https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Oberlix.3A.20joining.20two.20approaches -/
+/-- See https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Oberlix.3A.20joining.20two.20approaches/near/476555119 -/
 @[equational_result]
 conjecture Equation1491_facts : ∃ (G : Type) (_ : Magma G), Facts G [1491] [65]
 
