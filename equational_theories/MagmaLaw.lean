@@ -18,6 +18,9 @@ open Lean in
 instance {α} [ToJson α] : ToJson (MagmaLaw α) where
   toJson := fun ⟨lhs, rhs⟩ => .mkObj [("lhs", Lean.toJson lhs), ("rhs", Lean.toJson rhs)]
 
+instance {α} [ToString α] : ToString (MagmaLaw α) where
+  toString := fun ⟨lhs, rhs⟩ => s!"{lhs} ≃ {rhs}"
+
 end Law
 
 open Law
