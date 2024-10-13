@@ -14,6 +14,12 @@ def getMagmaLaws : CoreM (Array (Name × NatMagmaLaw)) := do
       out := out.push (n, ← unsafe evalConstCheck NatMagmaLaw ``NatMagmaLaw n)
   return out
 
+def magmaLawNameToEquationName (magmaLawName : String) : String :=
+  "Equation" ++ (magmaLawName.drop "Law".length)
+
+def equationNameToMagmaLawName (equationName : String) : String :=
+  "Law" ++ (equationName.drop "Equation".length)
+
 namespace EquationsCommand
 
 partial def parseFreeMagma : Term → StateT (Array Ident) Option (FreeMagma Nat)
@@ -74,11 +80,11 @@ for each `◇` makes processing this file very slow) we defined custom syntax fo
 equations, and a custom elaborator that instantiates the instante parameter of `◇`.
 -/
 elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Command.liftTermElabM do
-  -- TODO: This will go wrong if we are in a namespace.
-  let eqName := .mkSimple s!"Equation{i.getNat}"
+  let ns ← getCurrNamespace
+  let eqName := ns.str s!"Equation{i.getNat}"
   let eqStx := mkNullNode #[tk, i]
-  let lawName := .mkSimple s!"Law{i.getNat}"
-  let thmName := .str lawName "models_iff"
+  let lawName := ns.str s!"Law{i.getNat}"
+  let thmName := lawName.str "models_iff"
   let some (law, is) := (parseMagmaLaw tsyn).run #[] | throwError "invalid magma law"
   let declMods ← elabModifiers mods
   let docs := s!"```\nequation {i.getNat} := {← PrettyPrinter.formatTerm tsyn}\n```"
@@ -100,7 +106,7 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
     Meta.withLocalDeclsD (is.map fun i => (i.getId, fun _ => pure G)) fun xs => do
     let e ← Meta.mkForallFVars xs (lawToExpr (G := G) inst xs law)
     Meta.mkLambdaFVars #[G, inst] e
-  addDecl <| .defnDecl {
+  addAndCompile <| .defnDecl {
     name := eqName
     levelParams := [`u]
     type := q(∀ (G : Type u) [Magma G], Prop)
@@ -113,7 +119,7 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
   have eqConst : Q(∀ (G : Type u) [Magma G], Prop) := .const eqName [u]
 
   -- define law over `Nat`
-  addDecl <| .defnDecl {
+  addAndCompile <| .defnDecl {
     name := lawName
     levelParams := []
     type := q(Law.NatMagmaLaw)
@@ -127,7 +133,7 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
   -- compatibility between the law and the original equation
   have n : ℕ := is.size
   have : Q(MagmaLaw.bounded $n $lawConst = true) := (q(Eq.refl true) : Expr)
-  addDecl <| .thmDecl {
+  addAndCompile <| .thmDecl {
     name := thmName
     levelParams := [`u]
     type := q(∀ (G : Type u) [Magma G], G ⊧ $lawConst ↔ $eqConst G)

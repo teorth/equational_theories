@@ -1,7 +1,9 @@
 import equational_theories.Equations.All
+import equational_theories.MagmaOp
+import Aesop
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
-import equational_theories.ForMathlib.Algebra.Group.Nat
+import equational_theories.Mathlib.Algebra.Group.Nat
 
 namespace InfModel
 
@@ -26,7 +28,6 @@ theorem Finite.Equation374794_implies_Equation2 (G : Type*) [Magma G] [Finite G]
   have y := x
   have z := x
   rw [h x y z, this y y (y ◇ y), this (y ◇ y) x u, ← this y y (y ◇ y), ← h]
-
 
 /--
 However, `Equation374794` doesn't imply `Equation2`.
@@ -83,46 +84,46 @@ theorem Equation374794_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equ
 
 theorem Finite.Equation5105_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : Equation5105 G) :
     Equation2 G:= by
-    intro x y
-    let f (y w : G) := y ◇ w
-    have f_onto : ∀ y : G, Function.Surjective (f y) := by
-      intro y x
-      use (y ◇ (y ◇ (x ◇ (x ◇ y))))
-      dsimp [f]
-      rw [← h]
-    have f_inj : ∀ y : G, Function.Injective (f y) :=
-      fun _ ↦ Finite.injective_iff_surjective.mpr (f_onto _)
-    have hh: ∀ y z w : G, z ◇ y = w ◇ y := by
-      intro y z w
-      let g := f y
-      exact f_inj x (f_inj y (f_inj y (f_inj y (by dsimp [g, f]; rw [← h, ← h]))))
-    have hhh : ∀ a b c d: G, c ◇ (a ◇ b) = d ◇ (a ◇ b) := fun _ _ _ _  ↦ hh _ _ _
-    have hhhh : ∀ a b: G, b ◇ (b ◇ (b ◇ (x ◇ (a ◇ b)))) = b ◇ (b ◇ (b ◇ (y ◇ (a ◇ b)))) := by
-      intro a b
-      rw [hhh a b _ _]
-    calc
-      x = x ◇ (x ◇ (x ◇ (x ◇ (x ◇ x)))) := h x x x
-      _= x ◇ (x ◇ (x ◇ (y ◇ (x ◇ x)))) := by rw [hhhh]
-      _= y := by rw [←  h y x x]
+  intro x y
+  let f (y w : G) := y ◇ w
+  have f_onto : ∀ y : G, Function.Surjective (f y) := by
+    intro y x
+    use (y ◇ (y ◇ (x ◇ (x ◇ y))))
+    dsimp [f]
+    rw [← h]
+  have f_inj : ∀ y : G, Function.Injective (f y) :=
+    fun _ ↦ Finite.injective_iff_surjective.mpr (f_onto _)
+  have hh : ∀ y z w : G, z ◇ y = w ◇ y := by
+    intro y z w
+    let g := f y
+    exact f_inj x (f_inj y (f_inj y (f_inj y (by dsimp [g, f]; rw [← h, ← h]))))
+  have hhh : ∀ a b c d: G, c ◇ (a ◇ b) = d ◇ (a ◇ b) := fun _ _ _ _  ↦ hh _ _ _
+  have hhhh : ∀ a b: G, b ◇ (b ◇ (b ◇ (x ◇ (a ◇ b)))) = b ◇ (b ◇ (b ◇ (y ◇ (a ◇ b)))) := by
+    intro a b
+    rw [hhh a b]
+  calc
+    x = x ◇ (x ◇ (x ◇ (x ◇ (x ◇ x)))) := h x x x
+    _= x ◇ (x ◇ (x ◇ (y ◇ (x ◇ x)))) := by rw [hhhh]
+    _= y := by rw [← h y x x]
 
 theorem Finite.Equation28770_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : Equation28770 G) :
     Equation2 G := by
-    have : ∀ (y z u : G), y ◇ z = y ◇ u := by
-      intro y
-      let f (x : G) := ((y ◇ y) ◇ y) ◇ x
-      let g (x : G) := x ◇ (y ◇ y)
-      have : Function.RightInverse f g := fun _ ↦ by simp [f, g, ← h]
-      apply fun _ _ ↦ this.injective _
-      obtain ⟨finv, hf⟩ := (Finite.surjective_of_injective this.injective).hasRightInverse
-      let fy := finv ((y ◇ y) ◇ y)
-      replace hf : ((y ◇ y) ◇ y) ◇ fy = (y ◇ y) ◇ y := hf _
-      have := h fy y
-      simp only [hf] at this
-      simp [f, ← this]
-    intro x u
-    have y := x
-    have z := x
-    rw [h x y z, this ((y ◇ y) ◇ y)  x u, ← this ((y ◇ y) ◇ y) u u, ← h]
+  have : ∀ (y z u : G), y ◇ z = y ◇ u := by
+    intro y
+    let f (x : G) := ((y ◇ y) ◇ y) ◇ x
+    let g (x : G) := x ◇ (y ◇ y)
+    have : Function.RightInverse f g := fun _ ↦ by simp [f, g, ← h]
+    apply fun _ _ ↦ this.injective _
+    obtain ⟨finv, hf⟩ := (Finite.surjective_of_injective this.injective).hasRightInverse
+    let fy := finv ((y ◇ y) ◇ y)
+    replace hf : ((y ◇ y) ◇ y) ◇ fy = (y ◇ y) ◇ y := hf _
+    have := h fy y
+    simp only [hf] at this
+    simp [f, ← this]
+  intro x u
+  have y := x
+  have z := x
+  rw [h x y z, this ((y ◇ y) ◇ y)  x u, ← this ((y ◇ y) ◇ y) u u, ← h]
 
 theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equation28770 G ∧ ¬Equation2 G := by
   have : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
@@ -170,9 +171,9 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
     simp only [PNat.mul_coe, PNat.pow_coe, PNat.val_ofNat]
     rw [if_neg]
     case hnc =>
-        intro h'
-        apply hxyz
-        simp [h']
+      intro h'
+      apply hxyz
+      simp [h']
     rw [if_neg]
     case hnc =>
       apply_fun PNat.val
@@ -233,14 +234,14 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
         OfNat.ofNat_ne_zero, padicValNat.mul, add_zero, padicValNat.one, ite_self, ite_eq_iff,
         not_lt, nonpos_iff_eq_zero, padicValNat.eq_zero_iff, OfNat.ofNat_ne_one, false_or] at this
       have this' : (0: ℕ) = (3: ℕ)^y.val ↔ False :=
-        Iff.intro (fun h ↦ pow_ne_zero y.val (by simp: 3 ≠ 0) (id h.symm)) (fun h ↦ False.elim h)
+        Iff.intro (fun h ↦ pow_ne_zero y.val (by norm_num) h.symm) False.elim
       simp [this'] at this
       repeat simp [and_or_left, and_or_left] at this
       cases this with
       | inl h =>
         rw [h.1] at h
         simp only [true_and] at h
-        exact ne_of_gt (Nat.lt_pow_self (by simp: 1 < 3) z.val) h.symm
+        exact ne_of_gt (Nat.lt_pow_self (by norm_num) z.val) h.symm
       | inr this => _
       cases this with
       | inl h =>
@@ -250,8 +251,8 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
         simp at h2
         simp [padicValNat_prime_prime_pow] at h2
         have h2 := h2.symm
-        have := pow_ne_zero (3^padicValNat 3 y.val) (by simp: 3 ≠ 0)
-        apply pow_ne_zero y.val (by simp: 3 ≠ 0)
+        have := pow_ne_zero (3^padicValNat 3 y.val) (by norm_num: 3 ≠ 0)
+        apply pow_ne_zero y.val (by norm_num: 3 ≠ 0)
         contradiction
       | inr this => _
       have this' := this.2.2.2.2.2
@@ -298,7 +299,7 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
           have h1 := h1.symm
           apply_fun PNat.val at h1
           simp at h1
-          have this2 := Nat.lt_pow_self (by simp: 1 < 2) y.val
+          have this2 := Nat.lt_pow_self (by norm_num: 1 < 2) y.val
           have this3 := ne_of_gt this2
           exact this3 h1
         | inr this => _
@@ -310,7 +311,7 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
           have h1 := h1.symm
           apply_fun PNat.val at h1
           simp at h1
-          have this2 := Nat.lt_pow_self (by simp: 1 < 3) y.val
+          have this2 := Nat.lt_pow_self (by norm_num: 1 < 3) y.val
           have this3 := ne_of_gt this2
           exact this3 h1
         | inr this => _
@@ -361,7 +362,7 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
         have h' := h.2
         apply_fun padicValNat 3 at h'
         simp [padicValNat_prime_prime_pow, padicValNat.mul] at h'
-        have this2 := Nat.lt_pow_self (by simp: 1 < 3) (padicValNat 3 y.val)
+        have this2 := Nat.lt_pow_self (by norm_num: 1 < 3) (padicValNat 3 y.val)
         have this2 := ne_of_gt this2
         exact this2 (h'.symm)
       | inr hyz => _
@@ -381,9 +382,9 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
             _ ≥ 3 ^ (3 ^ padicValNat 3 y.val * 5 ^ padicValNat 5 y.val) := by simp [one_le_pow₀]
             _ = 3 ^ (5 ^ padicValNat 5 y.val * 3 ^ padicValNat 3 y.val) := by simp [mul_comm]
             _ = (3 ^ (5 ^ padicValNat 5 y.val)) ^ (3 ^ padicValNat 3 y.val) := by simp [pow_mul]
-            _ ≥ 3 ^ (5 ^ padicValNat 5 y.val) := by apply le_self_pow; simp [one_le_pow₀]; apply pow_ne_zero; simp
-            _ > 5 ^ padicValNat 5 y.val := by simp [Nat.lt_pow_self (by simp: 1 < 3)]
-            _ > padicValNat 5 y.val := by simp [Nat.lt_pow_self (by simp: 1 < 5)]
+            _ ≥ 3 ^ (5 ^ padicValNat 5 y.val) := by apply le_self_pow₀; simp [one_le_pow₀]; apply pow_ne_zero; simp
+            _ > 5 ^ padicValNat 5 y.val := by simp [Nat.lt_pow_self (by norm_num: 1 < 3)]
+            _ > padicValNat 5 y.val := by simp [Nat.lt_pow_self (by norm_num: 1 < 5)]
           exact (ne_of_gt this') (this.symm)
         | inr this =>
           have this := this.2.symm
@@ -425,8 +426,8 @@ theorem Finite.Equation3994_implies_Equation3588 (G : Type*) [Magma G] [Finite G
     simp [← h]
   have t2 := this.surjOn m1
   rw [Set.Finite.surjOn_iff_bijOn_of_mapsTo (Set.toFinite _) m2] at t2
-  replace this := Set.InjOn.rightInvOn_of_leftInvOn (s := S) t2.injOn this m2 m1
-  apply (this _).symm
+  have hrio := Set.InjOn.rightInvOn_of_leftInvOn t2.injOn this m2 m1
+  apply (hrio _).symm
   simp [S]
 
 @[equational_result]
@@ -460,37 +461,15 @@ theorem Equation3994_not_implies_Equation3588 : ∃ (G : Type) (_ : Magma G), Eq
   simp [magN]
 
 /--
-Dual of the above, obtained by swapping x and y in the proof.
-TODO: find a way to avoid this kind of code duplication.
+Dual of the above.
 -/
 @[equational_result]
-theorem Equation3588_not_implies_Equation3944 : ∃ (G : Type) (_ : Magma G), Equation3588 G ∧ ¬ Equation3994 G := by
-  let magN : Magma ℕ := ⟨fun y x ↦ if Even x ∧ Even y then x ^^^ y else if Even y then y + 2
-    else if Even x then x - 2 else 0⟩
-  use ℕ, magN
-  have range : ∀ x y : ℕ, Even (x ◇ y : ℕ) := by
-    intro x y
-    simp only [magN]
-    split_ifs
-    · simp_all
-    · simpa [Nat.even_add]
-    · by_cases y < 2
-      · rw [Nat.sub_eq_zero_of_le]
-        simp
-        omega
-      rw [Nat.even_sub]
-      · simp_all
-      · omega
-    · exact even_zero
-  constructor
-  · intro x y z
-    generalize h : x ◇ y = v
-    have : Even v := by rw [← h]; apply range
-    by_cases hz : Even z
-    · simp [magN, this, hz, Nat.xor_comm, Nat.xor_cancel_left]
-    · simp [magN, hz, this, Nat.even_add]
-  simp only [not_forall]
-  use 1, 1, 1
-  simp [magN]
+theorem Equation3588_not_implies_Equation3994 : ∃ (G : Type) (_ : Magma G), Equation3588 G ∧ ¬ Equation3994 G := by
+  obtain ⟨G', G'Magma, h3994, h3588⟩ := Equation3994_not_implies_Equation3588
+  refine ⟨Op G', opMagma, ?_, ?_⟩
+  · have h1 : Equation3994 G' ↔ Equation3588 (Op G') := forall_comm
+    rwa [h1] at h3994
+  · have h2 : Equation3994 (Op G') ↔ Equation3588 G' := forall_comm
+    rwa [←h2] at h3588
 
 end InfModel

@@ -1,4 +1,3 @@
-require 'json'
 require 'set'
 
 class Graph
@@ -25,11 +24,10 @@ class Graph
     graph
   end
 
-  def self.from_json(path)
+  def self.from_json_array(arr)
     graph = Graph.new
-    JSON.parse(File.read(path))["implications"].each { |e|
+    arr.each { |e|
       lhs_eq, rhs_eq = e["lhs"], e["rhs"]
-
       graph.add_edge(lhs_eq[8, lhs_eq.length].to_i, rhs_eq[8, rhs_eq.length].to_i)
     }
 
@@ -233,9 +231,9 @@ class Graph
     closure_graph = Graph.new
     vertices.each do |vertex|
       visited = Hash.new(false)
-      reachable = []
+      reachable = Set.new []
       closure_dfs(vertex, visited, reachable)
-      closure_graph.adj_list[vertex] = Set.new reachable
+      closure_graph.adj_list[vertex] = reachable
     end
     closure_graph
   end
