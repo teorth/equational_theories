@@ -85,7 +85,7 @@ theorem evalInMagma_comp {α β} {G} [Magma G] (f : α → β) (g : β → G) (m
 
 theorem evalHom_comp_fmapHom {α β G} [Magma G] (f : α → β) (g : β → G) :
     (fmapHom f).comp (evalHom g) = evalHom (g ∘ f) := by
-  ext m; apply evalInMagma_fmapHom
+  ext; apply evalInMagma_fmapHom
 
 theorem fmapHom_comp' {α β γ} (f : α → β) (g : β → γ) (m : FreeMagma α) :
     fmapHom g (fmapHom f m) = fmapHom (g ∘ f) m := by
@@ -93,12 +93,12 @@ theorem fmapHom_comp' {α β γ} (f : α → β) (g : β → γ) (m : FreeMagma 
 
 theorem fmapHom_comp {α β γ} (f : α → β) (g : β → γ) :
     (fmapHom f).comp (fmapHom g) = fmapHom (g ∘ f) := by
-  ext m; apply fmapHom_comp'
+  ext; apply fmapHom_comp'
 
 theorem fmapHom_id {α} (m : FreeMagma α) : fmapHom id m = m := evalInMagma_leaf _
 
- theorem EvalFreeMagmaUniversalProperty {α : Type u} {G : Type v} [Magma G] (f : α → G)
-    : ∀ g : FreeMagma α →◇ G, g.toFun ∘ Lf = f → evalInMagma f = g.toFun := by
+ theorem EvalFreeMagmaUniversalProperty {α : Type u} {G : Type v} [Magma G] (f : α → G) :
+    ∀ g : FreeMagma α →◇ G, g.toFun ∘ Lf = f → evalInMagma f = g.toFun := by
    intros g glift
    let rec equiv : ∀ tx : FreeMagma α, evalInMagma f tx = g.toFun tx := fun tx ↦
       match tx with
@@ -109,8 +109,8 @@ theorem fmapHom_id {α} (m : FreeMagma α) : fmapHom id m = m := evalInMagma_lea
          (g.map_op' txleft txright).symm
    exact (funext equiv)
 
- theorem FmapFreeMagmaUniversalProperty {α : Type u} {β : Type u} (f : α → β)
-    : ∀ g : FreeMagma α →◇ FreeMagma β, g ∘ Lf = Lf ∘ f → fmapFreeMagma f = g :=
+ theorem FmapFreeMagmaUniversalProperty {α : Type u} {β : Type u} (f : α → β) :
+      ∀ g : FreeMagma α →◇ FreeMagma β, g ∘ Lf = Lf ∘ f → fmapFreeMagma f = g :=
     EvalFreeMagmaUniversalProperty (Lf ∘ f)
 
 def Mem {α} (a : α) : FreeMagma α → Prop
