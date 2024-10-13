@@ -18,15 +18,15 @@ theorem Soundness'_u {α β G : Type*} [Magma G] {Γ : Ctx α} {E : MagmaLaw β}
   | Ref => exact fun _ ↦ congrFun rfl
   -- FIXME: try aesop here, might be a 1-liner
   | @Sym t u _ ih =>
-    intros φ mset
+    intro φ mset
     simp only [satisfiesPhi] at *
     symm; apply ih; trivial
   | Trans _ _ ih₁ ih₂ =>
-    intros φ mset
+    intro φ mset
     simp [models, satisfiesPhi] at *
     rw [ih₁, ih₂] <;> trivial
   | Cong _ _ ih₁ ih₂ =>
-    intros _ _
+    intro _ _
     simp [models, satisfiesPhi, evalInMagma] at *
     rw [ih₁, ih₂] <;> trivial
 
@@ -45,12 +45,12 @@ def RelOfLaws {α} (β) (Γ : Ctx α) : FreeMagma β → FreeMagma β → Prop :
 -- eazy peezy since we basically have exactly the axioms.
 theorem RelOfLaws.isEquivalence {α} (β) (Γ : Ctx α) : Equivalence (RelOfLaws β Γ) := by
   constructor <;> simp [RelOfLaws]
-  case refl => intros x; constructor; apply derive'.Ref
+  case refl => intro x; constructor; apply derive'.Ref
   case symm =>
-    intros x y h
+    intro x y h
     exact ⟨derive'.Sym h⟩
   case trans =>
-    intros x y z h₁ h₂
+    intro x y z h₁ h₂
     constructor
     apply derive'.Trans
       <;> trivial
@@ -67,10 +67,11 @@ def embed {α β} (Γ : Ctx α) (x : FreeMagma β) : FreeMagmaWithLaws β Γ := 
 def ForkWithLaws {α β} {Γ : Ctx α} :
     FreeMagmaWithLaws β Γ → FreeMagmaWithLaws β Γ → FreeMagmaWithLaws β Γ :=
   Quotient.lift₂ (λ x y ↦ embed Γ (x ⋆ y)) <| by
-    simp [HasEquiv.Equiv, Setoid.r, RelOfLaws]
-    intros x z y w d₁ d₂;
-    apply Quotient.sound; simp [HasEquiv.Equiv, Setoid.r, RelOfLaws]; constructor
-    apply derive'.Cong <;> trivial
+    simp only [HasEquiv.Equiv, Setoid.r, RelOfLaws, embed, Nonempty.forall]
+    intro x z y w d₁ d₂
+    apply Quotient.sound
+    simp only [HasEquiv.Equiv, Setoid.r, RelOfLaws]
+    exact ⟨derive'.Cong d₁ d₂⟩
 
 protected instance FreeMagmaWithLaws.Magma {α} (β) (Γ : Ctx α) : Magma (FreeMagmaWithLaws β Γ) :=
   { op := ForkWithLaws }
@@ -94,7 +95,7 @@ def LfEmbed {α β} (Γ : Ctx α) : β → FreeMagmaWithLaws β Γ := embed Γ �
 theorem FreeMagmaWithLaws.isDerives {α β} {Γ : Ctx α} {E : MagmaLaw β} :
     FreeMagmaWithLaws β Γ ⊧ E → Nonempty (Γ ⊢' E) := by
   simp [satisfies, satisfiesPhi, evalInMagma]
-  intros eq; have h := eq (LfEmbed Γ)
+  intro eq; have h := eq (LfEmbed Γ)
   simp only [LfEmbed] at h
   repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot] at h
   have h' := Quotient.exact h
@@ -170,7 +171,7 @@ def FreeMagmaWithLaws.evalHom {α G} {Γ : Ctx α} (φ : α → G) [ginst : Magm
   toFun := FreeMagmaWithLaws.eval φ modelsG
   map_op' := by
     simp only [eval, Magma.op, ForkWithLaws, embed]
-    intros x y
+    intro x y
     -- hmpf choice again.
     have ⟨ x_bar, eqx ⟩ := Quotient.exists_rep x
     have ⟨ y_bar, eqy ⟩ := Quotient.exists_rep y
@@ -183,12 +184,9 @@ lemma eq_app : ∀ α β (f g : α → β), f = g → ∀ x, f x = g x := fun _ 
 -- FIXME: does this exist in mathlib?
 lemma Quot.liftEq {α β} [s : Setoid α] (f g : Quotient s → β) (h : f ∘ (⟦.⟧) = g ∘ (⟦.⟧)) :
     f = g := by
-  apply funext
-  intros x
+  refine funext fun x => ?_
   let ⟨ x_bar, eq_x ⟩ := Quotient.exists_rep x
-  rw [← eq_x]
-  have h := congrFun h x_bar
-  trivial
+  exact eq_x ▸ congrFun h x_bar
 
 def FreeMagmaWithLaws.mkMor {α} (Γ : Ctx α) : FreeMagma α →◇ FreeMagmaWithLaws α Γ where
   toFun a := ⟦a⟧
