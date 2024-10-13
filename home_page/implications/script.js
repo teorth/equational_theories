@@ -438,13 +438,15 @@ showOnlyExplicitProofs.addEventListener('change', () => {
 });
 
 treatConjectedAsUnknownDetail.addEventListener('change', () => {
+    treatConjectedAsUnknownList.checked = treatConjectedAsUnknownDetail.checked;
+    updateEquationListStats();
     if (currentEquationIndex !== null) {
         renderImplications(currentEquationIndex);
     }
 });
 
-// Modify the event listener for the checkbox
 treatConjectedAsUnknownList.addEventListener('change', () => {
+    treatConjectedAsUnknownDetail.checked = treatConjectedAsUnknownList.checked;
     updateEquationListStats();
     renderEquationList();
 });
