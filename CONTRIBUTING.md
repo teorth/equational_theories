@@ -90,6 +90,8 @@ The core Lean files are as follows:
 - [`Equations/All.lean`](equational_theories/Equations/All.lean)  The complete set of 4692 equational laws involving at most four magma operations (up to symmetry and relabeling).  It was generated using [this script](scripts/generate_eqs_list.py).  The subgraph equations are included as an import.  If you find an equation here of particular interest to study, consider transferring it to `Equations/Basic.lean`.  The equations are split up into five smaller files to assist compilation.
 - [`Subgraph.lean`](equational_theories/Subgraph.lean)  This is the file for all results concerning the specific laws of interest.
 - [`Homomorphisms.lean`](equational_theories/Homomorphisms.lean)  This file defines magma homomorphisms and magma isomorphisms and provides basic API for them.
+- [`Conjectures.lean`](equational_theories/Conjectures.lean)  A file to store human-generated conjectures that have not yet been formalized in Lean.
+
 
 Some technical Lean files:
 - [`EquationalResult.lean`](equational_theories/EquationalResult.lean)  Introduces the `@[equational_result]` attribute, which adds metadata to allow for easier aggregation of implications. Also adds `conjecture` keyword, which is a variant of `proof_wanted` which keeps the metadata produced by `@[equational_result]` (but marking it as a conjecture).
@@ -107,6 +109,8 @@ In addition to these files, contributors are welcome to add additional Lean file
 - The standard form for an implication "Equation X implies Equation Y" is
 `theorem EquationX_implies_EquationY (G: Type*) [Magma G] (h: EquationX G) : EquationY G`
 - The standard form for an anti-implication "Equation X does not imply Equation Y" is `theorem EquationX_not_implies_EquationY : ∃ (G: Type) (_: Magma G), EquationX G ∧ ¬ EquationY G`.
+- To assert that a magma `G` obeys one set `X1, X2, ...` of laws but fails another set `Y1, Y2, ...`, use
+`theorem Theorem_Name : ∃ (G : Type) (_ : Magma G), Facts G [X1, X2, ...] [Y1, Y2, ...]`.
 - Add the `@[equational_result]` attribute to theorems of the above forms to make them visible to our analysis tools.
 - NOTE: We are potentially in the process of updating our base representation of equations, so that the above guidance may change in the future.  See [this Zulip thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Equations.20vs.20Laws/near/473472323) for some relevant discussion.
 - You are also encouraged to add `conjecture` versions of these theorems, for results that were obtained by hand or by some other automated tool whose output is not in the form of a Lean proof.  If you are creating such `conjecture` statements, consider adding a sketch of the proof as a comment in the Lean file.  We can then add tasks (via Github issues) to convert such `conjecture` statements into theorems. Note that you should add `@[equational_result]` to conjectures as well.  (Technical note: to avoid linter warnings, one can replace `h: EquationX G` with `_: EquationX G` in a `conjecture` implication.)
@@ -120,7 +124,7 @@ In addition to these files, contributors are welcome to add additional Lean file
 Contributions to the Lean codebase will pass through continuous integration (CI) checks that ensure that the Lean code compiles.  Contributors of Lean code are highly encouraged to interact with the [Lean Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/) to help coordinate their contributions and resolve technical issues.
 
 Here is a list of human-contributed Lean files with mathematical content:
-- [`InfModel.lean`](equational_theories/InfModel.lean)  Studies specific laws that are known to only have infinite non-trivial models.
+- [`InfModel.lean`](equational_theories/InfModel.lean)  Studies specific laws that are known to only have infinite non-trivial models, with some additional associated files.
 - [`Completeness.lean`](equational_theories/Completeness.lean)  The Birkhoff completeness theorem.
 - [`Compactness.lean`](equational_theories/Compactness.lean)  The compactness theorem.
 - [`Counting.lean`](equational_theories/Counting.lean) Various theorems about counting laws.
@@ -131,6 +135,10 @@ Here is a list of human-contributed Lean files with mathematical content:
 - [`SmallMagmas.lean`](equational_theories/SmallMagmas.lean) Results about very small magmas.
 - [`Z3Counterexamples.lean`](equational_theories/Z3Counterexamples.lean) Counterexamples generated automatically from the Z3 prover.
 - [`StringMagmas.lean`](equational_theories/StringMagmas.lean) Studies specific specific string magmas for counterexamples.
+- [`Asterix.lean`](equational_theories/Asterix.lean) Establishes results relating to Equation 65 (the "Asterix" equation).
+- [`Confluence.lean`](equational_theories/Confluence.lean) Results about confluent laws, with several associated additional files.
+- [`LiftingMagmaFamilies.lean`](equational_theories/LiftingMagmaFamilies.lean) Results about lifting magma families, with some associated additional files.
+
 
 
 At present, the API for magmas only allows for theorems that study a finite number of individual equational laws at a time.  We plan to expand the API to also allow one to establish metatheorems about entire classes of equations.
