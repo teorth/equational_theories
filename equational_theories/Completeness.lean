@@ -105,8 +105,7 @@ theorem FreeMagmaWithLaws.isDerives {α β} {Γ : Ctx α} {E : MagmaLaw β} :
 -- Sadly, we falter here and use choice. Somewhat confident it's not needed.
 theorem PhiAsSubst_aux {α β γ} (Γ : Ctx α) (φ : β → FreeMagmaWithLaws γ Γ) :
     ∃ (σ : β → FreeMagma γ), ∀ x, φ x = embed Γ (σ x) := by
-  apply Classical.axiomOfChoice (r := λ x y ↦ φ x = (embed Γ) y)
-  intro x
+  refine Classical.axiomOfChoice (r := λ x y ↦ φ x = (embed Γ) y) fun x ↦ ?_
   have ⟨a, h⟩ := (Quotient.exists_rep (φ x))
   exact ⟨a, h.symm⟩
 
@@ -116,9 +115,8 @@ theorem PhiAsSubst {α β γ} (Γ : Ctx α) (φ : β → FreeMagmaWithLaws γ Γ
   exact ⟨σ, funext fun _ ↦ h _⟩
 
 theorem FreeMagmaWithLaws.isModel {α} (β) (Γ : Ctx α) : FreeMagmaWithLaws β Γ ⊧ Γ := by
-  simp only [satisfiesSet]
-  intros E mem φ
-  simp [satisfiesPhi]
+  intro E mem φ
+  simp only [satisfiesPhi]
   have ⟨σ, eq_sig⟩ := (PhiAsSubst _ φ)
   rw [eq_sig]
   repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot]
@@ -156,3 +154,59 @@ theorem Completeness' {α β} {Γ : Ctx α} {E : MagmaLaw β} (h : Γ ⊧ E) : N
 theorem Completeness {α} {Γ : Ctx α} {E : MagmaLaw α} (h : Γ ⊧ E) : Nonempty (Γ ⊢ E) :=
   match Completeness' h with
   | .intro x => .intro (derive_of_derive' x)
+
+def FreeMagmaWithLaws.eval {α G} {Γ : Ctx α} (φ : α → G) [Magma G] (modelsG : G ⊧ Γ) :
+    FreeMagmaWithLaws α Γ → G :=
+  Quotient.lift (evalInMagma φ) (by
+    intro a b
+    simp only [HasEquiv.Equiv, SetoidOfLaws, RelOfLaws, Nonempty.forall]
+    intro h
+    apply (Soundness' (E := a ≃ b))
+    . exact h
+    . exact modelsG)
+
+def FreeMagmaWithLaws.evalHom {α G} {Γ : Ctx α} (φ : α → G) [ginst : Magma G] (modelsG : G ⊧ Γ) :
+    FreeMagmaWithLaws α Γ →◇ G where
+  toFun := FreeMagmaWithLaws.eval φ modelsG
+  map_op' := by
+    simp only [eval, Magma.op, ForkWithLaws, embed]
+    intros x y
+    -- hmpf choice again.
+    have ⟨ x_bar, eqx ⟩ := Quotient.exists_rep x
+    have ⟨ y_bar, eqy ⟩ := Quotient.exists_rep y
+    rw [← eqx, ← eqy, Quotient.lift₂_mk]
+    repeat rw [Quotient.lift_mk]
+    simp [evalInMagma]
+
+lemma eq_app : ∀ α β (f g : α → β), f = g → ∀ x, f x = g x := fun _ _ _ _ a x ↦ congrFun a x
+
+-- FIXME: does this exist in mathlib?
+lemma Quot.liftEq {α β} [s : Setoid α] (f g : Quotient s → β) (h : f ∘ (⟦.⟧) = g ∘ (⟦.⟧)) :
+    f = g := by
+  apply funext
+  intros x
+  let ⟨ x_bar, eq_x ⟩ := Quotient.exists_rep x
+  rw [← eq_x]
+  have h := congrFun h x_bar
+  trivial
+
+def FreeMagmaWithLaws.mkMor {α} (Γ : Ctx α) : FreeMagma α →◇ FreeMagmaWithLaws α Γ where
+  toFun a := ⟦a⟧
+  map_op' := by simp [Magma.op, ForkWithLaws]
+
+-- FIXME: golf this!
+theorem FreeMaga.EvalFreeMagmaWithLawsUniversalProperty {α G} {Γ : Ctx α}
+(φ : α → G) [ginst : Magma G] (modelsG : G ⊧ Γ)(ψ : FreeMagmaWithLaws α Γ →◇ G) :
+    ψ ∘ (⟦.⟧) ∘ Lf = φ → FreeMagmaWithLaws.eval φ modelsG = ψ := by
+  intro eq
+  let ψ' := (FreeMagmaWithLaws.mkMor Γ).comp ψ
+  let φ' := FreeMagmaWithLaws.eval φ modelsG ∘ (⟦.⟧)
+  have h : φ' = ψ' := by
+    simp only [DFunLike.coe]
+    rw [← EvalFreeMagmaUniversalProperty φ]
+    . simp only [FreeMagmaWithLaws.eval, φ']
+      exact funext fun x ↦ rfl
+    . rw [← eq]
+      simp only [MagmaHom.comp, FreeMagmaWithLaws.mkMor, ψ']
+      rfl
+  exact Quot.liftEq (s := _) _ _ h
