@@ -163,7 +163,7 @@ function initializeEquationList() {
         const element = document.createElement('div');
         element.className = 'equation-item';
         element.dataset.index = index;
-	const isspecial = special.indexOf(eq.split("[")[0]) !== -1 ? "special" : "";
+        const isspecial = commentary[index+1] == undefined ? "" : "special"; // issue #547
         element.innerHTML = `
             <div class="equation-name ${isspecial}">${eq}</div>
             <div class="equation-stat implies">${stats.implies}</div>
@@ -324,7 +324,7 @@ function renderImplications(index) {
 	let more_same = !showEquivalences && eqClass.length > 1 ? ` (+ ${eqClass.length-1} equiv.)` : "";
 
 	const eq = equations[i];
-	const isspecial = special.indexOf(eq.split("[")[0]) !== -1 ? "special" : "";
+	const isspecial = commentary[i+1] == undefined ? "" : "special"; // issue #547
 
 	const forwardStatus = row[index];
 	const backwardStatus = implications[index][i];
