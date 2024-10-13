@@ -9,6 +9,9 @@ inductive FreeMagma (α : Type u)
   | Fork : FreeMagma α → FreeMagma α → FreeMagma α
   deriving DecidableEq
 
+instance (α : Type u) [Inhabited α] : Inhabited (FreeMagma α) where
+  default := .Leaf default
+
 instance (α : Type u) : Magma (FreeMagma α) where
   op := FreeMagma.Fork
 
@@ -99,11 +102,11 @@ theorem fmapHom_id {α} (m : FreeMagma α) : fmapHom id m = m := evalInMagma_lea
    intros g glift
    let rec equiv : ∀ tx : FreeMagma α, evalInMagma f tx = g.toFun tx := fun tx ↦
       match tx with
-      | FreeMagma.Leaf x => Eq.symm $ congrFun glift x
+      | FreeMagma.Leaf x => (congrFun glift x).symm
       | FreeMagma.Fork txleft txright => Eq.trans
          (congrArg (fun t ↦ t ◇ evalInMagma f txright) (equiv txleft)) $ Eq.trans
          (congrArg (fun t ↦ g.toFun txleft ◇ t) (equiv txright))
-         (Eq.symm $ g.map_op' txleft txright)
+         (g.map_op' txleft txright).symm
    exact (funext equiv)
 
  theorem FmapFreeMagmaUniversalProperty {α : Type u} {β : Type u} (f : α → β)

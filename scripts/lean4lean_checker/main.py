@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import sys
 from pathlib import Path
@@ -65,7 +67,7 @@ class Lean4LeanChecker():
 
     except Exception as e:
       print(f"Failed to upgrade lean4lean.\n Cause: {e.args}\nCancelling lean4lean check and exiting")
-      exit(0)
+      sys.exit(0)
 
   def remove_old_l4l(self):
     try:
@@ -95,7 +97,7 @@ class Lean4LeanChecker():
         print("Lean4lean build was not successful. Lean4lean check will not be run. Exiting gracefully")
         raise Exception("lake build failure")
 
-    except Exception as e:
+    except Exception:
       print("Lean4lean check will exit gracefully")
       sys.exit(0)
 

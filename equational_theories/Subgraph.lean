@@ -1,7 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
 import equational_theories.EquationalResult
-import equational_theories.Closure
 import equational_theories.Equations.Basic
 import equational_theories.FactsSyntax
 import equational_theories.FreeSemigroup
@@ -417,11 +416,9 @@ theorem Equation4582_implies_Equation4579 (G: Type*) [Magma G] (h: Equation4582 
 @[equational_result]
 theorem Equation953_implies_Equation2 (G : Type _) [Magma G] (h: Equation953 G) : Equation2 G := by
   intro x y
-  let i := x ◇ x
-  let n := i ◇ i
-  have znx (z : G) : z ◇ n = x := (h x z x).symm
-  have hzzi := h x x i
-  have hyzi := h y x i
+  have znx (z : G) : z ◇ ((x ◇ x) ◇ (x ◇ x)) = x := (h x z x).symm
+  have hzzi := h x x (x ◇ x)
+  have hyzi := h y x (x ◇ x)
   rw [znx] at hzzi hyzi
   exact hzzi.trans hyzi.symm
 

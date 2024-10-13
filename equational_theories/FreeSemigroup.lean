@@ -134,26 +134,23 @@ theorem CommSgrImpliesInsertSortedFaithful {n : Nat} {G : Type _} [Magma G] (ass
   | j .+ => by
     have eqor := ite_eq_or_eq (i ≤ j) (i ,+ j .+) (j ,+ i .+)
     cases eqor with
-    | inl eq1 => apply Eq.trans (congrArg (evalInSgr f) eq1); exact Eq.refl _
-    | inr eq2 => apply Eq.trans (congrArg (evalInSgr f) eq2); exact comm (f j) (f i)
+    | inl eq1 => exact (congrArg (evalInSgr f) eq1).trans rfl
+    | inr eq2 => exact (congrArg (evalInSgr f) eq2).trans (comm _ _)
   | j ,+ lstail => by
     have eqor := ite_eq_or_eq (i ≤ j) (i ,+ j ,+ lstail) (j ,+ i ,+ lstail)
     cases eqor with
     | inl eq1 =>
-      apply Eq.trans (congrArg (evalInSgr f) eq1);
-      exact Eq.refl _
+      exact (congrArg (evalInSgr f) eq1).trans rfl
     | inr eq2 =>
-      apply Eq.trans (congrArg (evalInSgr f) eq2);
-      apply Eq.trans $ assoc (f j) (f i) _;
-      rw [comm (f j) (f i)];
-      exact Eq.symm $ assoc (f i) (f j) _
+      exact (congrArg (evalInSgr f) eq2).trans ((assoc (f j) (f i) _).trans
+        (comm (f j) (f i) ▸ (assoc (f i) (f j) _).symm))
 
 theorem CommSgrImpliesInsertionSortFaithful {n : Nat} {G : Type _} [Magma G] (assoc : Equation4512 G) (comm : Equation43 G) (f : Fin n → G)
   : ∀ ls : FreeSemigroup (Fin n), evalInSgr f ls = evalInSgr f (insertionSortSgr ls)
   | _ .+        => Eq.refl _
   | i ,+ lstail => Eq.trans
     (congrArg (fun s ↦ (f i) ◇ s) (CommSgrImpliesInsertionSortFaithful assoc comm f lstail))
-    (Eq.symm $ CommSgrImpliesInsertSortedFaithful assoc comm f i (insertionSortSgr lstail))
+    (CommSgrImpliesInsertSortedFaithful assoc comm f i (insertionSortSgr lstail)).symm
 
 def involutionReduce {α : Type _} [DecidableEq α] (ls : FreeSemigroup α) : FreeSemigroup α :=
   match ls with
@@ -170,14 +167,12 @@ def InvolutiveImpliesInvolutionReduceFaithful {α : Type _} [DecidableEq α] {G 
     have eqor := dite_eq_or_eq (P := a = b) (A := fun _ ↦ involutionReduce lstail) (B := fun _ ↦ a ,+ involutionReduce (b ,+ lstail))
     cases eqor with
     | inl eqcase =>
-      apply Eq.trans $ congrArg (fun s ↦ (f s) ◇ (f b ◇ (evalInSgr f lstail))) eqcase.1
-      apply Eq.trans $ Eq.symm $ invol (evalInSgr f lstail) (f b)
-      apply Eq.trans $ InvolutiveImpliesInvolutionReduceFaithful lstail invol f
-      exact Eq.symm $ congrArg (evalInSgr f) eqcase.2
+      exact (congrArg (fun s ↦ (f s) ◇ (f b ◇ (evalInSgr f lstail))) eqcase.1).trans
+        ((invol (evalInSgr f lstail) (f b)).symm.trans ((InvolutiveImpliesInvolutionReduceFaithful
+          lstail invol f).trans (congrArg (evalInSgr f) eqcase.2).symm))
     | inr neqcase =>
-      apply Eq.symm
-      apply Eq.trans $ congrArg (evalInSgr f) neqcase.2
-      exact congrArg (fun s ↦ f a ◇ s) $ Eq.symm $ InvolutiveImpliesInvolutionReduceFaithful (b ,+ lstail) invol f
+      exact((congrArg (evalInSgr f) neqcase.2).trans (congrArg (fun s ↦ f a ◇ s)
+        (InvolutiveImpliesInvolutionReduceFaithful (b ,+ lstail) invol f).symm)).symm
 
 def equation1571Reducer {n : Nat} (t : FreeMagma (Fin (n+1))) : FreeSemigroup (Fin (n+1)) :=
   involutionReduce $ insertionSortSgr $ freeMagmaToFreeSgr (t ⋆ (Lf (Fin.last n) ⋆ Lf (Fin.last n)))
