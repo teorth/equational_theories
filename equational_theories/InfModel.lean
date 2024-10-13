@@ -681,8 +681,41 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
     let r: Polynomial ℤ := FreeMagma.evalInMagma fPols w
     let n := r.natDegree
     have : ∃ (b0: ℤ), Polynomial.eval b0 (r * (r - 2)) ≠ 0 := by
+      have hrd : r.natDegree ≥ 1 := by
+        clear_value n
+        clear hl hr
+        simp only [r]
+        induction w
+        .
+          sorry
+        .
+          rename_i w1 w2 h1 h2
+          simp only [FreeMagma.evalInMagma, Magma.op]
+          norm_num
+          ring_nf
+          sorry
       let r' := r * (r - 2)
-      have : r' ≠ 0 := sorry
+      have : r' ≠ 0 := by
+        have hr2r : (r - 2).natDegree = r.natDegree := sorry
+        intro hct
+        apply_fun (fun x => x.degree) at hct
+        simp only [Polynomial.degree_zero, r', Polynomial.degree_mul, WithBot.add_eq_bot] at hct
+        cases hct with
+        | inl hct =>
+          have : r.natDegree = 0 := by
+            simp only [Polynomial.natDegree]
+            rw [hct]
+            norm_num
+          rw [this] at hrd
+          contradiction
+        | inr hct =>
+          have : (r - 2).natDegree = 0 := by
+            simp only [Polynomial.natDegree]
+            rw [hct]
+            norm_num
+          rw [hr2r] at this
+          rw [this] at hrd
+          contradiction
       have := Polynomial.exists_multiset_roots this
       obtain ⟨s, hs⟩ := this
       have : r'.natDegree = 2 * n := by
