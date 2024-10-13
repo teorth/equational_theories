@@ -5,8 +5,6 @@ import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import equational_theories.Mathlib.Algebra.Group.Nat
 
-
-
 /-
   The proof follows the general strategy set out in InfModel_1701. We start from
   a simple infinite model of 1701, then patch it to break consequents. The bulk is
@@ -244,16 +242,146 @@ theorem Equation1701_not_implies_Equation1884 :
 
 
 /-
-  We can refute 3862 using the small patch below.
-  TODO: PROVE THIS
+  We can refute 3862 using the small patch below with the same base model.
 -/
 
-private def op_1701_3862 (x : ℕ) (y : ℕ) : ℕ :=
+private def op_1701_3253 (x : ℕ) (y : ℕ) : ℕ :=
   match x, y with
   | 0, 1 | 1, 1 => 1
   | _, 0 | _, 1 => 0
-  | _, _ => op_1701_8 (x+1) (y+1)
+  | _, y+2 =>
+    if x % 2 = (y+2) % 2
+    then y + 1 else y + 3
 
+private theorem op_1701_3253_satisfies_1701 :
+  ∀ (x y z : ℕ), x = op_1701_3253 (op_1701_3253 y x) (op_1701_3253 (op_1701_3253 z x) x) := by
+    intro xo yo zo
+    match xo with
+    | 0     => simp [op_1701_3253]
+    | 1     =>
+      match yo,zo with
+      | 0, 0 | 0, 1 | 0, z+2
+      | 1, 0 | 1, 1 | 1, z+2
+      | y+2, 0 | y+2, 1 | y+2, z+2 =>
+        simp [op_1701_3253]
+    | (x+2) =>
+      match yo with
+      | 0 =>
+        by_cases x_cong_0 : x % 2 = 0
+        · have x1_cong_1 : (x+1) % 2 = 1 :=
+            mod_two_succ_0_1_from x x_cong_0
+          have x2_cong_0 : (x+2) % 2 = 0 :=
+            mod_two_succ_1_0_from (x+1) x1_cong_1
+          have x3_cong_1 : (x+3) % 2 = 1 :=
+            mod_two_succ_0_1_from (x+2) x2_cong_0
+          simp [op_1701_3253,x_cong_0]
+          by_cases zo_cong_0 : zo % 2 = 0
+          · simp [x_cong_0,x1_cong_1,zo_cong_0]
+          · have zo_cong_1 : zo % 2 = 1 :=
+              Nat.mod_two_ne_zero.mp zo_cong_0
+            simp [x_cong_0,x3_cong_1,zo_cong_1]
+        · have x_cong_1 : x % 2 = 1 :=
+            Nat.mod_two_ne_zero.mp x_cong_0
+          have x1_cong_0 : (x+1) % 2 = 0 :=
+            mod_two_succ_1_0_from x x_cong_1
+          have x2_cong_1 : (x+2) % 2 = 1 :=
+            mod_two_succ_0_1_from (x+1) x1_cong_0
+          have x3_cong_0 : (x+3) % 2 = 0 :=
+            mod_two_succ_1_0_from (x+2) x2_cong_1
+          simp [op_1701_3253,x_cong_1]
+          by_cases zo_cong_0 : zo % 2 = 0
+          · simp [x_cong_1,zo_cong_0,x1_cong_0,x3_cong_0]
+          · have zo_cong_1 : zo % 2 = 1 :=
+              Nat.mod_two_ne_zero.mp zo_cong_0
+            simp [x_cong_0,x1_cong_0,x3_cong_0,zo_cong_1]
+      | 1 =>
+        by_cases x_cong_0 : x % 2 = 0
+        · have x1_cong_1 : (x+1) % 2 = 1 :=
+            mod_two_succ_0_1_from x x_cong_0
+          have x2_cong_0 : (x+2) % 2 = 0 :=
+            mod_two_succ_1_0_from (x+1) x1_cong_1
+          have x3_cong_1 : (x+3) % 2 = 1 :=
+            mod_two_succ_0_1_from (x+2) x2_cong_0
+          simp [op_1701_3253,x_cong_0]
+          by_cases zo_cong_0 : zo % 2 = 0
+          · simp [x_cong_0,x1_cong_1,x3_cong_1,zo_cong_0]
+          · have zo_cong_1 : zo % 2 = 1 :=
+              Nat.mod_two_ne_zero.mp zo_cong_0
+            simp [x_cong_0,x1_cong_1,x3_cong_1,zo_cong_1]
+        · have x_cong_1 : x % 2 = 1 :=
+            Nat.mod_two_ne_zero.mp x_cong_0
+          have x1_cong_0 : (x+1) % 2 = 0 :=
+            mod_two_succ_1_0_from x x_cong_1
+          have x2_cong_1 : (x+2) % 2 = 1 :=
+            mod_two_succ_0_1_from (x+1) x1_cong_0
+          have x3_cong_0 : (x+3) % 2 = 0 :=
+            mod_two_succ_1_0_from (x+2) x2_cong_1
+          simp [op_1701_3253,x_cong_1]
+          by_cases zo_cong_0 : zo % 2 = 0
+          · simp [x_cong_1,zo_cong_0,x1_cong_0,x3_cong_0]
+          · have zo_cong_1 : zo % 2 = 1 :=
+              Nat.mod_two_ne_zero.mp zo_cong_0
+            simp [x_cong_0,x1_cong_0,x3_cong_0,zo_cong_1]
+      | y+2 =>
+        by_cases x_cong_0 : x % 2 = 0
+        · have x1_cong_1 : (x+1) % 2 = 1 :=
+            mod_two_succ_0_1_from x x_cong_0
+          have x2_cong_0 : (x+2) % 2 = 0 :=
+            mod_two_succ_1_0_from (x+1) x1_cong_1
+          have x3_cong_1 : (x+3) % 2 = 1 :=
+            mod_two_succ_0_1_from (x+2) x2_cong_0
+          simp [op_1701_3253,x_cong_0]
+          by_cases y_cong_0 : y % 2 = 0
+          · simp [y_cong_0,x1_cong_1]
+            by_cases zo_cong_0 : zo % 2 = 0
+            · simp [x_cong_0,x1_cong_1,x3_cong_1,zo_cong_0]
+            · have zo_cong_1 : zo % 2 = 1 :=
+                Nat.mod_two_ne_zero.mp zo_cong_0
+              simp [x_cong_0,x1_cong_1,x3_cong_1,zo_cong_1]
+          · have y_cong_1 : y % 2 = 1 :=
+              Nat.mod_two_ne_zero.mp y_cong_0
+            simp [y_cong_1,x3_cong_1]
+            by_cases zo_cong_0 : zo % 2 = 0
+            · simp [x_cong_0,x1_cong_1,x3_cong_1,zo_cong_0]
+            · have zo_cong_1 : zo % 2 = 1 :=
+                Nat.mod_two_ne_zero.mp zo_cong_0
+              simp [x_cong_0,x1_cong_1,x3_cong_1,zo_cong_1]
+        · have x_cong_1 : x % 2 = 1 :=
+            Nat.mod_two_ne_zero.mp x_cong_0
+          have x1_cong_0 : (x+1) % 2 = 0 :=
+            mod_two_succ_1_0_from x x_cong_1
+          have x2_cong_1 : (x+2) % 2 = 1 :=
+            mod_two_succ_0_1_from (x+1) x1_cong_0
+          have x3_cong_0 : (x+3) % 2 = 0 :=
+            mod_two_succ_1_0_from (x+2) x2_cong_1
+          simp [op_1701_3253,x_cong_1]
+          by_cases y_cong_0 : y % 2 = 0
+          · simp [y_cong_0,x1_cong_0]
+            by_cases zo_cong_0 : zo % 2 = 0
+            · simp [x_cong_1,x1_cong_0,x3_cong_0,zo_cong_0]
+            · have zo_cong_1 : zo % 2 = 1 :=
+                Nat.mod_two_ne_zero.mp zo_cong_0
+              simp [x_cong_1,x1_cong_0,x3_cong_0,zo_cong_1]
+          · have y_cong_1 : y % 2 = 1 :=
+              Nat.mod_two_ne_zero.mp y_cong_0
+            simp [y_cong_1,x3_cong_0]
+            by_cases zo_cong_0 : zo % 2 = 0
+            · simp [x_cong_1,x1_cong_0,x3_cong_0,zo_cong_0]
+            · have zo_cong_1 : zo % 2 = 1 :=
+                Nat.mod_two_ne_zero.mp zo_cong_0
+              simp [x_cong_1,x1_cong_0,x3_cong_0,zo_cong_1]
+
+
+@[equational_result]
+theorem Equation1701_not_implies_Equation3252 :
+  ∃ (G : Type) (_ : Magma G), Equation1701 G ∧ ¬ Equation3253 G := by
+  let op (x : ℕ) (y : ℕ) : ℕ := op_1701_3253 x y
+  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
+  use ℕ, magN
+  simp [Equation3253,magN,op]
+  apply And.intro
+  · exact op_1701_3253_satisfies_1701
+  exists 2
 
 /-
   Refuting 4587 requires an extraordinarily complicated patch on the
