@@ -99,7 +99,7 @@ Some technical Lean files:
 - [`DecideBang.lean`](equational_theories/DecideBang.lean) Variants of the `decide` tactic with various hacks to speed up elaboration.
 - [`Equations/Command.lean`](equational_theories/Equations/Command.lean)  Speeds up elaboration of equations.
 - [`MemoFinOp.lean`](equational_theories/MemoFinOp.lean) Defines the macro `memoFinOp` that memoizes a function `f : Fin n → Fin n → Fin n`.
-- [`Superposition.lean`](equational_theories/Superposition.lean) The `superpose` tactic, used in several automated proofs
+- [`Superposition.lean`](equational_theories/Superposition.lean) The `superpose` tactic, used in several automated proofs.
 
 In addition to these files, contributors are welcome to add additional Lean files to the project in the [`equational_theories` folder](equational_theories) or one of its subfolders, to establish more facts about equations.  In order for your contributions to be easily detected by automated tools, please try to follow the following guidelines.
 
@@ -128,8 +128,8 @@ Here is a list of human-contributed Lean files with mathematical content:
 - [`Preorder.lean`](equational_theories/Preorder.lean) Preorder on magmas.
 - [`CentralGroupoids.lean`](equational_theories/CentralGroupoids.lean)  Facts about central groupoids.
 - [`OrderMetatheorem.lean`](equational_theories/OrderMetatheorem.lean) Metatheorems about the ordering relation on laws.
-- [`SmallMagmas.lean`](equational_theories/SmallMagmas.lean) Results about very small magmas
-- [`Z3Counterexamples.lean`](equational_theories/Z3Counterexamples.lean) Counterexamples generated automatically from the Z3 prover
+- [`SmallMagmas.lean`](equational_theories/SmallMagmas.lean) Results about very small magmas.
+- [`Z3Counterexamples.lean`](equational_theories/Z3Counterexamples.lean) Counterexamples generated automatically from the Z3 prover.
 - [`StringMagmas.lean`](equational_theories/StringMagmas.lean) Studies specific specific string magmas for counterexamples.
 
 
