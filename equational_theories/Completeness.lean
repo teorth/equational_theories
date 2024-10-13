@@ -156,3 +156,71 @@ theorem Completeness' {α β} {Γ : Ctx α} {E : MagmaLaw β} (h : Γ ⊧ E) : N
 theorem Completeness {α} {Γ : Ctx α} {E : MagmaLaw α} (h : Γ ⊧ E) : Nonempty (Γ ⊢ E) :=
   match Completeness' h with
   | .intro x => .intro (derive_of_derive' x)
+
+#check ⟦3⟧
+
+#print Soundness'
+#print satisfiesPhi
+
+def FreeMagmaWithLaws.eval {α G} {Γ : Ctx α} (φ : α → G) [Magma G] (modelsG : G ⊧ Γ) :
+FreeMagmaWithLaws α Γ → G :=
+Quotient.lift (evalInMagma φ) (
+by
+  intros a b
+  simp [HasEquiv.Equiv, SetoidOfLaws, RelOfLaws]
+  intros h
+  apply (Soundness' (E := a ≃ b))
+  . apply h
+  . trivial
+)
+
+def FreeMagmaWithLaws.evalHom {α G} {Γ : Ctx α} (φ : α → G) [ginst : Magma G] (modelsG : G ⊧ Γ) :
+FreeMagmaWithLaws α Γ →◇ G where
+toFun := FreeMagmaWithLaws.eval φ modelsG
+map_op' :=
+by
+  simp [eval, Magma.op, ForkWithLaws]
+  intros x y
+  -- hmpf choice again.
+  have ⟨ x_bar, eqx ⟩ := Quotient.exists_rep x
+  have ⟨ y_bar, eqy ⟩ := Quotient.exists_rep y
+  rw [← eqx, ← eqy, Quotient.lift₂_mk]
+  repeat rw [Quotient.lift_mk]
+  simp [evalInMagma]
+
+lemma eq_app : ∀ α β (f g : α → β), f = g → ∀ x, f x = g x :=
+by
+  exact fun α β f g a x ↦ congrFun a x
+
+-- FIXME: does this exist in mathlib?
+lemma Quot.liftEq {α β} [s : Setoid α] (f g : Quotient s → β) (h : f ∘ (⟦.⟧) = g ∘ (⟦.⟧)) : f = g :=
+by
+  apply funext
+  intros x; let ⟨ x_bar, eq_x ⟩ := Quotient.exists_rep x
+  rw [← eq_x]
+  have h := congrFun h x_bar
+  trivial
+
+def FreeMagmaWithLaws.mkMor {α} (Γ : Ctx α) : FreeMagma α →◇ FreeMagmaWithLaws α Γ where
+toFun a := ⟦a⟧
+map_op' := by
+  simp [Magma.op, ForkWithLaws]
+
+-- FIXME: golf this!
+theorem FreeMaga.EvalFreeMagmaWithLawsUniversalProperty {α G} {Γ : Ctx α}
+(φ : α → G) [ginst : Magma G] (modelsG : G ⊧ Γ)(ψ : FreeMagmaWithLaws α Γ →◇ G) :
+ψ ∘ (⟦.⟧) ∘ Lf = φ → FreeMagmaWithLaws.eval φ modelsG = ψ :=
+by
+  intros eq
+  let ψ' := (FreeMagmaWithLaws.mkMor Γ).comp ψ
+  let φ' := FreeMagmaWithLaws.eval φ modelsG ∘ (⟦.⟧)
+  have h : φ' = ψ' := by
+    simp [DFunLike.coe]
+    rw [← EvalFreeMagmaUniversalProperty φ]
+    . simp [φ', FreeMagmaWithLaws.eval]
+      apply funext; intros x
+      simp
+    . rw [← eq]
+      simp [ψ', MagmaHom.comp, FreeMagmaWithLaws.mkMor]
+      trivial
+  apply Quot.liftEq (s := _); exact h
