@@ -37,14 +37,14 @@ theorem evalInMagmaOp {α G} [Magma G] (φ : α → G) (w : FreeMagma α):
 
 theorem models.Op {α} {G : Type} [Magma G] {w₁ w₂ : FreeMagma α} (h : G ⊧ w₁ ≃ w₂) :
     (Op G) ⊧ w₁.dual ≃ w₂.dual := by
-  intros φ
+  intro φ
   simp only [satisfiesPhi, _root_.Op, opMagma]
   repeat rw [@evalInMagmaOp]
   apply h
 
 namespace Law.MagmaLaw
 
-def dual {α} (l : MagmaLaw α) : MagmaLaw α := { lhs := l.lhs.dual, rhs := l.rhs.dual}
+def dual {α} (l : MagmaLaw α) : MagmaLaw α := { lhs := l.lhs.dual, rhs := l.rhs.dual }
 
 theorem law_dual_dual {α} (l : MagmaLaw α) : l.dual.dual = l := by simp [dual]
 
@@ -59,12 +59,12 @@ theorem satisfies_dual_dual {α G} [Magma G] {l : MagmaLaw α} (h : (Op G) ⊧ l
   fun φ ↦ satisfiesPhi_dual (h (Magma.opHom ∘ φ))
 
 theorem implies_iff_dual {α} {l₁ l₂ : MagmaLaw α} : l₁.implies l₂ ↔ l₁.dual.implies l₂.dual := by
-  apply Iff.intro
-  · intro h G inst hsat
-    refine satisfies_dual_dual (h (law_dual_dual l₁ ▸ satisfies_dual_dual hsat))
-  · intro h G inst hsat
+  constructor
+  · intro h G _ hsat
+    exact satisfies_dual_dual (h (law_dual_dual l₁ ▸ satisfies_dual_dual hsat))
+  · intro h G _ hsat
     rw [← law_dual_dual l₂]
     rw [← law_dual_dual l₁] at hsat
-    refine satisfies_dual_dual (h (law_dual_dual l₁ ▸ satisfies_dual_dual hsat))
+    exact satisfies_dual_dual (h (law_dual_dual l₁ ▸ satisfies_dual_dual hsat))
 
 end Law.MagmaLaw

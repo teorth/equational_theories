@@ -86,15 +86,15 @@ equation 381  :=  x ◇ y = (x ◇ z) ◇ y
 equation 387  :=  x ◇ y = (y ◇ y) ◇ x
 
 /-- A hard to prove non-consequence of the ``Asterix law``. -/
-equation 614 := x = x ◇ (x ◇ ((x ◇ x) ◇ x))
+equation 614  :=  x = x ◇ (x ◇ ((x ◇ x) ◇ x))
 
 /-- A hard to prove non-consequence of the ``Asterix law``. -/
-equation 817 := x = x ◇ ((x ◇ x) ◇ (x ◇ x))
+equation 817  :=  x = x ◇ ((x ◇ x) ◇ (x ◇ x))
 
 equation 953  :=  x = y ◇ ((z ◇ x) ◇ (z ◇ z))
 
 /-- A hard to prove non-consequence of the ``Asterix law``. -/
-equation 1426 := x = (x ◇ x) ◇ (x ◇ (x ◇ x))
+equation 1426  :=  x = (x ◇ x) ◇ (x ◇ (x ◇ x))
 
 /-- The ``Obelix law'' -/
 equation 1491  :=  x = (y ◇ x) ◇ (y ◇ (y ◇ x))
@@ -120,13 +120,13 @@ equation 3722  :=  x ◇ y = (x ◇ y) ◇ (x ◇ y)
 equation 3744  :=  x ◇ y = (x ◇ z) ◇ (w ◇ y)
 
 /-- A hard to prove non-consequence of the ``Asterix law``. -/
-equation 3862 := x ◇ x = (x ◇ (x ◇ x)) ◇ x
+equation 3862  :=  x ◇ x = (x ◇ (x ◇ x)) ◇ x
 
 /-- Part of an Austin pair. -/
-equation 3994 := x ◇ y = (z ◇ (x ◇ y)) ◇ z
+equation 3994  :=  x ◇ y = (z ◇ (x ◇ y)) ◇ z
 
 /-- A hard to prove non-consequence of the ``Asterix law``. -/
-equation 4065 := x ◇ x = ((x ◇ x) ◇ x) ◇ x
+equation 4065  :=  x ◇ x = ((x ◇ x) ◇ x) ◇ x
 
 /-- The associative law -/
 equation 4512  :=  x ◇ (y ◇ z) = (x ◇ y) ◇ z

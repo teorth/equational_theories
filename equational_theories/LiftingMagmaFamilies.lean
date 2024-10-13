@@ -27,8 +27,7 @@ theorem MagmaLaw.models_iff_satisfies_ι (law : MagmaLaw α) :
     apply h
   · intro h
     intro f
-    have := LiftingMagmaFamily.lift_factors f
-    rw [this, satisfiesPhi_evalHom, h]
+    rw [LiftingMagmaFamily.lift_factors f, satisfiesPhi_evalHom, h]
 
 instance [DecidableEq α] (law : MagmaLaw α) :  Decidable (@satisfiesPhi α (G α) (LiftingMagmaFamily.instMagma α) LiftingMagmaFamily.ι law) :=
   inferInstanceAs <| Decidable (law.lhs ⬝ LiftingMagmaFamily.ι = law.rhs ⬝ LiftingMagmaFamily.ι)

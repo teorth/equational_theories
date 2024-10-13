@@ -49,7 +49,7 @@ theorem Equation2_all_eq {G} [Magma G] (h : G ⊧ (0 ≃ 1 : MagmaLaw ℕ)) :
     | _ => x)
 
 theorem Equation2_implies (l : MagmaLaw ℕ) : (0 ≃ 1).implies l := by
-  intro G inst h φ
+  intro G _ h φ
   have hG := Equation2_all_eq h
   simp only [satisfiesPhi]
   induction l.lhs <;> induction l.rhs <;>
@@ -73,7 +73,7 @@ theorem implies_eq_singleton_models {l₁ l₂ : MagmaLaw α} : l₁ ≤ l₂ �
 
 theorem Law.implies_fin_implies_nat {n : Nat} {l₁ l₂ : MagmaLaw (Fin n)}
     (h : l₁.implies l₂) : (l₁.map Fin.val).implies (l₂.map Fin.val) := by
-  intro G inst hG
+  intro G _ hG
   rw [satisfies_fin_satisfies_nat G l₂]
   rw [satisfies_fin_satisfies_nat G l₁] at hG
   exact h hG
