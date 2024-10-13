@@ -1,0 +1,77 @@
+\chapter{Greedy algorithm constructions}\label{greedy-chapter}
+
+One way to construct magmas obeying specific laws (such as the Asterix law, \Cref{eq65}) is via a greedy algorithm construction.  Here, it is best to work with \emph{partially defined} magma operations on some carrier $G$.  This can be interpreted as a ternary relation $R(x,y,z)$ on three variables $x,y,z \in G$ which obeys the ``vertical line test'':
+
+\begin{itemize}
+  \item[(VLT)] If $R(x,y,z)$ and $R(x,y,z')$ both hold for some $x,y,z,z' \in G$, then $z=z'$.
+\end{itemize}
+
+Such an operation is then associated (via a one-to-one correspondence) to a partially defined operation $\op : S to G$ for some $S \subset G \times G$, with $R(x,y,z)$ holding if and only if $x \op y$ is well-defined (i.e., $(x,y) \in S$) and equal to $z$.  By abuse of notation, we shall also refer to $R$ as a partially defined magma operation.  Genuine magmas then correspond to the special case where $S = G \times G$, thta is to say $x \op y$ is well-defined for all $x,y \in G$.
+
+Given a word $w(x_1,\dots,x_n)$ in variables $x_1,\dots,x_n$ (so $w$ is an element of the free magma on $n$ generators), we can say that $w(x_1,\dots,x_n)$ is \emph{well-defined} with respect to a partially defined magma operation $R$ if it can be fully evaulated using $R$.  For instance, the word $(x \op y) \op z$ is well-defined if there exists $w,u \in G$ such that $R(x,y,w)$ and $R(w,z,u)$ both hold, in which case $(x \op y) \op z$ evaluates to $u$.  Note from the axiom (VLT) that this evaluation is unique, if it exists.  Of course, in a genuine magma, all expressions are well-defined.  We say that an expression $w(x_1,\dots,x_n)$ is \emph{almost well-defined} if all strict subexpressions of $w$ are well-defined.  For instance, $(x \op y) \op z$ is almost well-defined if there exists $w \in G$ such that $R(x,y,w)$ holds.
+
+An equational law $w_1 \formaleq w_2$ involving some variables $x_1,\dots,x_n$ is said to be \emph{locally obeyed} by $R$ if,  whenever $w_1(x_1,\dots,x_n)$, $w_2(x_1,\dots,x_n)$ are almost well-defined, and one of the two expressions is well-defined and evaluates to some output $y$, then the other expression is also well-defined and evaluates to the same output $y$.  For instance, in order for $R$ to locally obey the associative law $(x \op y) \op z = x \op (y \op z)$ (\Cref{eq4512}), we require the following two axioms:
+\begin{itemize}
+  \item[(4512-1)] If $R(x,y,w)$, $R(w,z,u)$, and $R(y,z,v)$, then $R(x,v,u)$.
+  \item[(4512-2)] If $R(y,z,w)$, $R(x,w,u)$, and $R(x,y,v)$, then $R(v,z,u)$.
+\end{itemize}
+If a law involves a single variable on one side, then we only need one axiom.  For instance, the Asterix law (\Cref{eq65}) is locally obeyed by $R$ if and only if the following axiom holds:
+\begin{itemize}
+  \item[(65)] If $R(y,x,z)$ and $R(x,z,u)$, then $R(y,u,x)$.
+\end{itemize}
+Note that if the relation $R$ is associated to a genuine magma operation $\op$, then it locally obeys a law $w_1 \formaleq w_2$ if and only if the magma operation $\op$ obeys the law $w_1 \formaleq w_2$.  For instance, the relation $R$ associated to a globally defined magma operation $\op$ obeys (4512-1) and (4512-2) if and only if the magma is associative.
+
+
+More generally, one can ask for a ternary relation $R$ to obey some theory $\Gamma$ of universal laws, using the language of one ternary relation $R$, the equality symbol $=$, and possibly some constants (we will shortly introduce three constants $a,b,c$ fo this purpose).
+
+Suppose we have a relation $R$ obeying some theory $\Gamma$ (for instance, (VLT) together with (65)), but which is only finitely supported (there are only finitely many triples $(x,y,z)$ for which $R(x,y,z)$ holds).  Then one can find $a,b \in G$ such that $a \op b$ is currently undefined.  If the carrier $G$ is infinite (e.g., if $G = \N$), one can then find another element $c$ which is \emph{novel}: it is not equal to $a, b$, or any of the $x,y,z$ for which $R(x,y,z)$ hold. In other words, the relation $R$ and the constants $a,b,c$ obey the following additional axioms:
+\begin{itemize}
+  \item[(novel-1)] $c \neq a$ and $c \neq b$.
+  \item[(novel-2)] If $R(x,y,z)$, then $c \neq x$, $c \neq y$, and $c \neq z$.
+  \item[(undefined)]  $R(a,b,x)$ does not hold for any $x$.
+\end{itemize}
+
+Let us say that a theory $\Gamma$ is \emph{greedily extensible} if, whenever $R$ is a finitely supported ternary relation obeying $\Gamma$, and $a,b,c$ are constants obeying (novel-1), (novel-2), (undefined), then there exists an extension $R'$ of $R$, thus
+\begin{itemize}
+  \item[(extend)] $R(x,y,z) \implies R'(x,y,z)$ for all $x,y,z$,
+\end{itemize}
+which is also finitely supported and obeys $\Gamma$, and which also obeys the additional axiom
+\begin{itemize}
+  \item[(define)] $R'(a,b,c)$.
+\end{itemize}
+Informally, $R'$ is formed from $R$ by ``forcing'' $a \op b = c$ and then adding other axioms as needed. (Indeed, our construction here can be viewed as a simple analogue of the forcing construction in set theory.)
+
+Observe that if a theory $\Gamma$ containing (VLT) is greedily extensible, then any finitely supported ternary relation $R$ obeying $\Gamma$ on a countably infinite carrier $G$ can be extended to a globally defined relation obeying $\Gamma$, by iteratively selecting the first $(a,b)$ (in some fixed enumeration of $G \times G$) for which $a \op b$ is undefined, and then selecting a novel element $c$ to define as $a \op b$, and applying the greedily extensible property, and then taking a direct limit of the countable sequence of relations thus produced.  This gives a flexible way to construct magmas that obey a given theory $\Gamma$, but which violate some other law $w_1 \formaleq w_2$, as the task then reduces to just finding a partial solution $R$ to $\Gamma$ and some constants $x_1,\dots,x_n$ for which the expressions $w_1(x_1,\dots,x_n), w_2(x_1,\dots,x_n)$ are already well-defined, but not equal to each other.
+
+Unfortunately, most theories are not greedily extensible without further modification.  Consider for instance the theory $\Gamma$ consisting of (VLT) and the Asterix law (65).  Given $a,b,c$ and a finitely suported $R$ obeying $\Gamma$ as well as (novel-1), (novel-2), (undefined), we would like to construct a finitely supported  $R'$ obeying $\Gamma$, (extend), (define).  The naive guess would just be to take the minimal construction
+$$ R'(x,y,z) \hbox{ iff } R(x,y,z) \hbox{ or } (x,y,z) = (a,b,c).$$
+This can work, but there is an obstruction: if $R(w,a,b)$ for some $w$, then (65) forces $R'(w,c,a)$.  So one would have to enlarge the definition of $R'(x,y,z)$, to hold true if one of the following statements holds:
+\begin{itemize}
+  \item $R(x,y,z)$ holds.
+  \item $(x,y,z) = (a,b,c)$.
+  \item $(x,y,z) = (w,c,a)$ for some $w$ with $R(w,a,b)$.
+\end{itemize}
+This works more often, but there is then a second obstruction: if $R(b,a,b)$, then we now have $R'(b,c,a)$, and (65) then forces $R'(a,a,b)$.  So we need to add a fourth item to the above list defining $R'$:
+\begin{itemize}
+  \item $(x,y,z) = (a,a,b)$, assuming $R(b,a,b)$ holds.
+\end{itemize}
+But now if we had $R(a,a,z)$ for some $z \neq b$, this would then create a violation of (VLT).  To fix this, we need to extend $\Gamma$ by adding an additional axiom:
+\begin{itemize}
+  \item (65') If $R(y,x,y)$, then $R(x,x,y)$.
+\end{itemize}
+With this modification to $\Gamma$, if we run the above analysis, we now see that if $R(b,a,b)$ hold (so that $R(a,a,b)$ also holds), then (65) will force $R'(a,c,a)$, $R'(b,c,a)$, and $R'(c,c,a)$.  So now the modified definition of $R'$ is that $R'(x,y,z)$ holds if one of the following statements holds:
+\begin{itemize}
+  \item $R(x,y,z)$ holds.
+  \item $(x,y,z) = (a,b,c)$.
+  \item $(x,y,z) = (w,c,a)$ for some $w$ with $R(w,a,b)$.
+  \item $(x,y,z) = (a,c,a)$, $(b,c,a)$, or $(c,c,a)$, assuming $R(b,a,b)$ holds.
+\end{itemize}
+One can then finally (for instance, with the assistance of a automated theorem prover) verify that if $R$ is finitely supported and obeys $\Gamma = (VLT) + (65) + (65')$ and $a,b,c$ obey (novel-1), (novel-2), (undefined), then the $R'$ defined above is also finitely supported and obeys $\Gamma$, (extend), (define).  This shows that the theory $\Gamma$ is greedily extensible.
+
+Using this, one can for instance find a magma obeying \Cref{eq65} that fails the left-cancellative property
+$$ y \op x = y \op x' \implies x=x'$$
+or in terms of ternary relations
+\begin{equation}\label{left-inject}
+   R(y,x,z) \hbox{ and } R(y,x',z) \implies x=x'
+\end{equation}
+simply by starting with a partial solution, say on the natural numbers in which (say) $R(1,2,0)$, $R(1,3,0)$ are the only situations in which $R$ holds.  One can easily verify that this obeys (VLT) and (65), (65'), but not \eqref{left-inject}, and so any magma constructed by the above greedy construction will not be left-cancellative.  Since the Obelix law \Cref{eq1491} forces left-cancellativity, this gives an alternate proof of \Cref{asterix-obelix}
