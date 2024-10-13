@@ -73,7 +73,7 @@ theorem elementsOfNumNodesEq_card_eq_catalan_mul_pow (n : ℕ) :
     ring
   · simp_rw [Finset.disjoint_left]
     rintro ⟨i, j⟩ _ ⟨i', j'⟩ _
-    intros h a
+    intro h a
     cases' a with a l r
     · intro h; simp at h
     · refine fun h1 h2 ↦ h ?_
