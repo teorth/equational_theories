@@ -553,15 +553,101 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
       intros α ht hc x w h'
       replace h': w.first ≠ x ∧ w.last ≠ x := by
         simp_all only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, not_or, not_false_eq_true, and_self]
-      have π := Fintype.equivFin α
+      have : ∃ (π: α ≃ Fin 2), π.toFun x = 0 := by
+        have π0 := Fintype.equivFin α
+        rw [hc] at π0
+        letI := Classical.decEq α
+        let y := if π0.invFun 0 = x then π0.invFun 1 else π0.invFun 0
+        let πfwd: α → Fin 2 := fun z => if z = x then 0 else 1
+        let πinv: Fin 2 → α := fun z => if z = 0 then x else y
+        have : Function.LeftInverse πinv πfwd := by
+          simp only [πfwd, πinv]
+          simp only [Function.LeftInverse]
+          intro z
+          simp only [Fin.isValue, ite_eq_left_iff, one_ne_zero, imp_false, Decidable.not_not]
+          rw [(by simp_all only [Fin.isValue, ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply]
+              : z = π0.invFun (π0.toFun z))]
+          generalize π0.toFun z = l
+          fin_cases l
+          simp_all only [Fin.isValue, ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Fin.zero_eta, Equiv.invFun_as_coe, ↓reduceIte, ite_eq_right_iff, implies_true, y]
+          simp_all only [Fin.isValue, ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Fin.zero_eta, Equiv.invFun_as_coe, ↓reduceIte, ite_eq_right_iff, implies_true, y]
+          simp_all only [Fin.isValue, Fin.mk_one]
+          obtain ⟨left, right⟩ := h'
+          split
+          next h_1 =>
+            subst h_1
+            simp_all only [Fin.isValue]
+          next
+            h_1 =>
+            simp_all only [Fin.isValue, ite_eq_left_iff, EmbeddingLike.apply_eq_iff_eq, zero_ne_one, imp_false, Decidable.not_not]
+            rw [(by simp_all only [Fin.isValue, ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply]
+                : x = π0.invFun (π0.toFun x))] at *
+            generalize π0.toFun x = m at *
+            fin_cases m
+            simp_all only [Fin.isValue, Fin.zero_eta, Equiv.invFun_as_coe, EmbeddingLike.apply_eq_iff_eq,
+              one_ne_zero, not_false_eq_true]
+            simp_all only [Fin.isValue, Fin.mk_one, Equiv.invFun_as_coe, not_true_eq_false]
+        have this' : Function.RightInverse πinv πfwd  := by
+          have := Function.LeftInverse.injective this
+          have : Function.Surjective πfwd := by
+            apply Function.Injective.surjective_of_fintype
+            .
+              simp_all only [Fin.isValue, ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp,
+                Equiv.invFun_as_coe, πinv, y, πfwd]
+              obtain ⟨left, right⟩ := h'
+              exact π0
+            .
+              simp_all only [Fin.isValue, ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Equiv.invFun_as_coe, πinv, y, πfwd]
+          apply Function.LeftInverse.rightInverse_of_surjective
+          assumption
+          assumption
+        let π: α ≃ Fin 2 := Equiv.mk
+          πfwd
+          πinv
+          this
+          this'
+        exists π
+        simp only [π, ite_true, πfwd]
+      obtain ⟨π, hπ⟩ := this
       let w': FreeMagma (Fin 2) := FreeMagma.evalInMagma (fun z => FreeMagma.Leaf (π.toFun z)) w
-      obtain ⟨G, ⟨M, ⟨hf, ⟨h1, h2⟩⟩⟩⟩ := h w' (by
-        induction w
-        rename_i z
+      have : w'.first ≠ 0 ∧ w'.last ≠ 0 := by
+        have : w'.first = π.toFun w.first := by
+          clear h'
+          induction w
+          .
+            simp_all only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, FreeMagma.first, Equiv.toFun_as_coe]
+          .
+            rename_i w1 w2 h1 h2
+            simp_all only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Equiv.toFun_as_coe, FreeMagma.first]
+        rw [this]
+          ; clear this
+        have : w'.last = π.toFun w.last := by
+          clear h'
+          induction w
+          .
+            simp only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, FreeMagma.last, Equiv.toFun_as_coe]
+          .
+            rename_i w1 w2 h1 h2
+            simp_all [FreeMagma.last]
+        rw [this]
+          ; clear this
+        obtain ⟨h1, h2⟩ := h'
+        apply_fun π.invFun at hπ
+        simp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply, Fin.isValue] at hπ
         split_ands
-        simp_all only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp]
-        simp only [FreeMagma.first, FreeMagma.last] at *
-        repeat sorry)
+        .
+          intro hct
+          apply_fun π.invFun at hct
+          simp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply, Fin.isValue] at hct
+          rw [←hπ] at hct
+          contradiction
+        .
+          intro hct
+          apply_fun π.invFun at hct
+          simp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply, Fin.isValue] at hct
+          rw [←hπ] at hct
+          contradiction
+      obtain ⟨G, ⟨M, ⟨hf, ⟨h1, h2⟩⟩⟩⟩ := h w' this
       exists G, M, hf
       split_ands
       .
