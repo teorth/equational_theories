@@ -18,6 +18,9 @@ open Lean in
 instance {α} [ToJson α] : ToJson (MagmaLaw α) where
   toJson := fun ⟨lhs, rhs⟩ => .mkObj [("lhs", Lean.toJson lhs), ("rhs", Lean.toJson rhs)]
 
+instance {α} [ToString α] : ToString (MagmaLaw α) where
+  toString := fun ⟨lhs, rhs⟩ => s!"{lhs} ≃ {rhs}"
+
 end Law
 
 open Law
@@ -113,8 +116,8 @@ namespace MagmaLaw
 def symm {α} (l : MagmaLaw α) : MagmaLaw α := {lhs := l.rhs, rhs:=l.lhs}
 
 @[simp]
-theorem symm_symm {α} (l : MagmaLaw α) : l.symm.symm = l := by
-  simp [symm]
+theorem symm_symm {α} (l : MagmaLaw α) : l.symm.symm = l :=
+  rfl
 
 def map {α β} (f : α → β) : MagmaLaw α → MagmaLaw β
   | ⟨lhs, rhs⟩ => ⟨fmapHom f lhs, fmapHom f rhs⟩
@@ -159,8 +162,7 @@ def toNat {α} [DecidableEq α] (m : MagmaLaw α) : MagmaLaw ℕ :=
 theorem pmap_eq_map {α β} (m : MagmaLaw α)
     (f : (a : α) → Mem a m → β) (g : α → β) (h : ∀ a h, f a h = g a) :
     m.pmap f = m.map g := by
-  simp [pmap, FreeMagma.pmap, map]; constructor <;> (apply FreeMagma.pmap_eq_map; intros; apply h)
-
+  simp only [pmap, map, mk.injEq]; constructor <;> exact FreeMagma.pmap_eq_map _ _ _ fun _ _ ↦ h _ _
 end MagmaLaw
 
 theorem satisfiesPhi_symm_law {α G} [Magma G] (φ : α → G) (E : MagmaLaw α)
@@ -192,8 +194,7 @@ theorem satisfiesPhi_symm {α G} [Magma G] (φ : α → G) (w₁ w₂ : FreeMagm
 
 theorem satisfiesPhi_evalHom {α G : Type} [Magma G] (φ : α → G) (E : MagmaLaw α) (f : G →◇ G) :
     satisfiesPhi (f ∘ φ) E ↔ f (E.lhs ⬝ φ) = f (E.rhs ⬝ φ) := by
-  rw [satisfiesPhi]
-  rw [← @evalInMagma_hom, ← evalInMagma_hom]
+  rw [satisfiesPhi, ← @evalInMagma_hom, ← evalInMagma_hom]
 
 theorem equiv_satisfiesPhi {α G H} [Magma G] [Magma H] {φ : α → G} (e : G ≃◇ H) {E : MagmaLaw α} :
     satisfiesPhi (e ∘ φ) E ↔ satisfiesPhi φ E := by

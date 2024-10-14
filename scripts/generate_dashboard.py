@@ -71,9 +71,9 @@ if __name__ == '__main__':
     outfile.write(f"The implication graph is **{ratio:.4%}** complete.\n\n")
 
     outfile.write(
-        """An implication is *explicitly true* or *explicitly false* if we directly have
-           a proof of the corresponding proposition in Lean. It is *implicitly true* or
-           *implicitly false* if the proposition follows by taking the reflexive transitive
+        """An implication is considered *explicitly true* or *explicitly false* if we have a proof
+           of the corresponding proposition formalised in Lean. It is *implicitly true* or
+           *implicitly false* if the proposition can be derived by taking the reflexive transitive
            closure of explicitly proven implications.\n\n""")
     outfile.write("Our current counts of implications in each of those categories are:\n\n")
     outfile.write("| explicitly true | implicitly true | explicitly false | implicitly false | no proof |\n")
@@ -94,7 +94,7 @@ if __name__ == '__main__':
     ratio = (proved_total + conjectured_total) / total
     outfile.write(f"The implication graph is **{ratio:.4%}** complete if we include conjectures.\n\n")
 
-    outfile.write('## progress visualization\n\n')
+    outfile.write('## Progress visualization\n\n')
     outfile.write('<img src="{{site.url}}/dashboard/outcomes.png" width="700"/>')
 
     open(args.badge_file, 'w').write(make_progress_badge(ratio))

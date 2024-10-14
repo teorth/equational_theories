@@ -67,16 +67,20 @@ const backButton = document.getElementById('backButton');
 const showOnlyExplicitProofs = document.getElementById('showOnlyExplicitProofs');
 const treatConjectedAsUnknownList = document.getElementById('treatConjectedAsUnknownList');
 const treatConjectedAsUnknownDetail = document.getElementById('treatConjectedAsUnknownDetail');
+const hideFullySolvedCheckbox = document.getElementById('hideFullySolved');
 
 let currentEquationIndex = null;
+
+let showEquivalences = false;
+let filteredCachedItems = [];
+
+let cachedItems = [];
+let cachedItemElements = [];
 
 function showPage(pageId) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
 }
-
-let showEquivalences = false;
-let filteredCachedItems = [];
 
 function hideVisibility(elementId) {
     const element = document.getElementById(elementId);
@@ -88,6 +92,7 @@ function showVisibility(elementId) {
 }
 
 function filterEquations() {
+    // First filter by whether to collapse by equivalence class
     if (showEquivalences) {
         filteredCachedItems = cachedItems;
     } else {
@@ -99,6 +104,13 @@ function filterEquations() {
                 return true;
             }
             return false;
+        });
+    }
+
+    if (hideFullySolvedCheckbox.checked) {
+        // Further filter by whether they are fully solved (e.g. they have any unknowns/conjectures remaining.)
+        filteredCachedItems = filteredCachedItems.filter(item => {
+            return item.stats.unknown != 0 || item.stats.unknownBy != 0
         });
     }
 }
@@ -152,9 +164,6 @@ function calculateStats(index, treatConjecturedAsUnknown = false) {
     return stats;
 }
 
-let cachedItems = [];
-let cachedItemElements = [];
-
 
 function initializeEquationList() {
     const treatConjecturedAsUnknown = treatConjectedAsUnknownList.checked;
@@ -163,7 +172,7 @@ function initializeEquationList() {
         const element = document.createElement('div');
         element.className = 'equation-item';
         element.dataset.index = index;
-	const isspecial = special.indexOf(eq.split("[")[0]) !== -1 ? "special" : "";
+        const isspecial = commentary[index+1] == undefined ? "" : "special"; // issue #547
         element.innerHTML = `
             <div class="equation-name ${isspecial}">${eq}</div>
             <div class="equation-stat implies">${stats.implies}</div>
@@ -324,7 +333,7 @@ function renderImplications(index) {
 	let more_same = !showEquivalences && eqClass.length > 1 ? ` (+ ${eqClass.length-1} equiv.)` : "";
 
 	const eq = equations[i];
-	const isspecial = special.indexOf(eq.split("[")[0]) !== -1 ? "special" : "";
+	const isspecial = commentary[i+1] == undefined ? "" : "special"; // issue #547
 
 	const forwardStatus = row[index];
 	const backwardStatus = implications[index][i];
@@ -438,17 +447,23 @@ showOnlyExplicitProofs.addEventListener('change', () => {
 });
 
 treatConjectedAsUnknownDetail.addEventListener('change', () => {
+    treatConjectedAsUnknownList.checked = treatConjectedAsUnknownDetail.checked;
+    updateEquationListStats();
     if (currentEquationIndex !== null) {
         renderImplications(currentEquationIndex);
     }
 });
 
-// Modify the event listener for the checkbox
 treatConjectedAsUnknownList.addEventListener('change', () => {
+    treatConjectedAsUnknownDetail.checked = treatConjectedAsUnknownList.checked;
     updateEquationListStats();
     renderEquationList();
 });
 
+hideFullySolvedCheckbox.addEventListener('change', () => {
+    filterEquations();
+    renderEquationList();
+});
 
 let currentURL = window.location.href;
 if (currentURL.indexOf('?') > -1) {
