@@ -5,7 +5,8 @@ import equational_theories.Equations.Eqns1000_1999
 def sign (x : ℤ) :=
   if x = 0 then 0 else if x < 0 then -1 else 1
 
-theorem Equation1648_not_implies_Equation206 : ∃ (G: Type) (_: Magma G), Equation1648 G ∧ ¬ Equation206 G := by
+theorem Equation1648_not_implies_Equation206 : ∃ (G: Type) (_: Magma G),
+  Equation1648 G ∧ ¬ Equation206 G := by
   let instMagmaInt : Magma ℤ := {
     op := fun x y => x - sign (y -x)
   }
@@ -19,3 +20,19 @@ theorem Equation1648_not_implies_Equation206 : ∃ (G: Type) (_: Magma G), Equat
       split <;> simp_all <;> split <;> split <;> simp_all <;> linarith
   · use 0,-1
     simp [instMagmaInt, sign]
+
+theorem Equation1648_not_implies_Equation151 : ∃ (G: Type) (_: Magma G),
+  Equation1648 G ∧ ¬ Equation151 G := by
+  let instMagmaInt : Magma ℤ := {
+    op := fun x y => if x > y then x + 1 else x - 1
+  }
+  use ℤ, instMagmaInt
+  simp [Equation1648, Equation151]
+
+  constructor
+  · intro x y
+    simp [instMagmaInt]
+    split <;> simp <;> split <;> simp_all <;> linarith
+  · simp [instMagmaInt]
+    use 0
+    simp
