@@ -696,7 +696,51 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           sorry
       let r' := r * (r - 2)
       have : r' ≠ 0 := by
-        have hr2r : (r - 2).natDegree = r.natDegree := sorry
+        have hr2r : (r - 2).natDegree = r.natDegree := by
+          have : (r - 2).natDegree ≤ r.natDegree := by
+            have := Polynomial.degree_sub_le r 2
+            have this' := Polynomial.degree_C (a := -2)
+            simp at this'
+            simp only [this'] at this
+            have this2 : r.degree ≥ 1 := by
+              have this' : r.degree = ↑r.natDegree := by
+                apply Polynomial.degree_eq_natDegree
+                simp_all only [Fin.isValue, ne_eq, ge_iff_le, le_max_iff, gt_iff_lt, r, MPols, fPols]
+                intro a
+                simp_all only [Fin.isValue, Polynomial.natDegree_zero, nonpos_iff_eq_zero, one_ne_zero]
+              rw [this']
+              simp_all only [Fin.isValue, ne_eq, ge_iff_le, Nat.cast_nonneg, max_eq_left, Nat.one_le_cast, r, MPols, fPols]
+            simp only [ge_iff_le] at this2
+            have this3 : max r.degree 0 = r.degree := by
+              simp only [max, Sup.sup]
+              cases h: r.degree
+              .
+                rw [h] at this2
+                contradiction
+              .
+                simp only [zero_le, max_eq_left]
+            rw [this3] at this
+            suffices (r - 2).degree ≤ r.degree by
+              apply Polynomial.natDegree_le_natDegree
+              assumption
+            assumption
+          have : (r - 2).natDegree ≥ r.natDegree := by
+            have : (r - 2).coeff (r.natDegree) = r.coeff (r.natDegree) := by
+              simp_all only [ne_eq, ge_iff_le, Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_eq_self]
+              apply Polynomial.coeff_C_ne_zero
+              simp_all only [Fin.isValue, ne_eq, r, MPols, fPols]
+              intro a
+              simp_all only [Fin.isValue, nonpos_iff_eq_zero, one_ne_zero]
+            suffices (r - 2).coeff (r.natDegree) ≠ 0 by
+              simp_all only [ne_eq, ge_iff_le, Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_eq_self, sub_zero, Polynomial.leadingCoeff_eq_zero]
+              apply Polynomial.le_natDegree_of_ne_zero
+              simp_all only [Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_zero, ne_eq, Polynomial.leadingCoeff_eq_zero, not_false_eq_true]
+            simp_all only [Fin.isValue, ne_eq, ge_iff_le, Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_eq_self, sub_zero, Polynomial.leadingCoeff_eq_zero, r, MPols, fPols]
+            apply Aesop.BuiltinRules.not_intro
+            intro a
+            simp_all only [Fin.isValue, Polynomial.natDegree_zero, nonpos_iff_eq_zero, one_ne_zero]
+          apply Nat.le_antisymm
+            <;> assumption
         intro hct
         apply_fun (fun x => x.degree) at hct
         simp only [Polynomial.degree_zero, r', Polynomial.degree_mul, WithBot.add_eq_bot] at hct
@@ -727,9 +771,17 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
       obtain ⟨hs1, hs2⟩ := hs
       have : ∃ (b0: ℤ), b0 ∉ s := sorry
       obtain ⟨b0, hb0⟩ := this
-      have : Multiset.count b0 s = 0 := sorry
-      have : Polynomial.rootMultiplicity b0 r' = 0 := sorry
-      have : Polynomial.eval b0 r' ≠ 0 := sorry
+      have : Multiset.count b0 s = 0 := by
+        apply Multiset.count_eq_zero_of_not_mem
+        assumption
+      have : Polynomial.rootMultiplicity b0 r' = 0 := by
+        simp only [←hs2]
+        assumption
+      have : Polynomial.eval b0 r' ≠ 0 := by
+        simp only [Polynomial.rootMultiplicity_eq_zero_iff, Polynomial.IsRoot.def] at this
+        intro h
+        have := this h
+        contradiction
       simp only [r'] at this
       exists b0
     obtain ⟨b0, h0⟩ := this
