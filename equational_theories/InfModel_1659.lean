@@ -1,9 +1,9 @@
 import equational_theories.Equations.All
 import equational_theories.MagmaOp
-import Aesop
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import equational_theories.Mathlib.Algebra.Group.Nat
+import equational_theories.FactsSyntax
 
 /-
   We build an infinite model of 1659 which does not satisfy 4315.
@@ -162,269 +162,28 @@ private theorem op_1659_4315_satisfies_1659 :
             mod_two_pred_1_0_to x x1_cong_1
           simp [op_1659_4315,y1_cong_0,y_cong_0,x1_cong_1,y1_cong_1,x_cong_0,z_cong_1]
 
-
 @[equational_result]
-theorem Equation1659_not_implies_Equation4315 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation4315 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
+theorem Equation1659_facts :
+  ∃ (G : Type) (_ : Magma G), Facts G [1659]
+    [1631,1655,1656,1660,1661,1833,1837,1839,1851,1860,2446,2452,2460,3458,3460,3519,3520,3524,3525,3527,4268,4314,4315] := by
+  let magN : Magma ℕ := { op := op_1659_4315 }
   use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 0, 1
 
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation4314 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation4314 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 1, 0
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation4268 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation4268 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation3527 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation3527 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 0, 1, 0
-
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation3525 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation3525 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 0, 1
-
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation3524 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation3524 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 0, 1
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation3520 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation3520 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1, 1
-
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation3519 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation3519 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation3460 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation3460 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1, 0
-
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation3458 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation3458 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 1, 0
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation2460 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation2460 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation2452 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation2452 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1, 0
-
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation2446 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation2446 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation1860 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation1860 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 1, 0
-
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation1851 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation1851 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 1, 0
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation1839 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation1839 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1, 0
-
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation1837 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation1837 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation1833 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation1833 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1
-
-
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation1661 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation1661 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1, 0
-
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation1660 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation1660 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 1, 1, 0
-
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation1656 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation1656 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1, 1
-
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation1655 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation1655 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1
-
-@[equational_result]
-theorem Equation1659_not_implies_Equation1631 :
-  ∃ (G : Type) (_ : Magma G), Equation1659 G ∧ ¬ Equation1631 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1659_4315 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp [Equation3253,magN,op]
-  apply And.intro
-  · exact op_1659_4315_satisfies_1659
-  exists 0, 1
+  constructor
+  · simp only [magN]
+    exact op_1659_4315_satisfies_1659
+  · repeat' apply And.intro
+    all_goals {
+      by_contra h
+      have h1 := h
+      have h2 := h
+      try specialize h 0 0 1 0
+      try specialize h 0 0 1
+      try specialize h1 0 1 0
+      try specialize h2 0 1 1
+      try specialize h 0 1
+      try specialize h1 1 0
+      try simp [magN,op_1659_4315] at h
+      try simp [magN,op_1659_4315] at h1
+      try simp [magN,op_1659_4315] at h2
+    }
