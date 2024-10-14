@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # set script to fail if we encounter an error
-# set -e
+set -e
 
 if ! [[ "$(python3 --version)" =~ Python\ 3\.11.* ]]; then
     echo "Warning! You are not using Python version 3.11"
