@@ -1,5 +1,7 @@
-# This file contains all top level packages for Python if you would like to use a package in a script
-# that is not one of these packages, add it with its version number to this file
+# This file contains all top level packages for Python. 
+
+# If you would like to use a package in a script that is not one of these packages, 
+# add it with its version number to this file
 
 # In order to generate a new requirements.txt file use the package pip-tools
 # > pip3 install pip-tools==7.4.1
