@@ -4,9 +4,9 @@
 # add it with its version number to this file
 
 # In order to generate a new requirements.txt file use the package pip-tools
-# > pip3 install pip-tools==7.4.1
+# > pip3 install uv==0.4.20
 # and then run 
-# > pip-compile
+# > uv pip compile requirements.in > requirements.txt
 
 # In order to install the requirements and subdependencies, just run
 # > pip3 install -r requirements.txt
