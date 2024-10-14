@@ -24,3 +24,4 @@ import equational_theories.Confluence2
 import equational_theories.Confluence3
 import equational_theories.Confluence4
 import equational_theories.Conjectures
+import equational_theories.ManuallyProved
