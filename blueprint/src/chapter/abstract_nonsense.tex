@@ -2,7 +2,7 @@
 
 This is an alternate presentation of the material of the previous section, where we use the ``abstract nonsense'' of free magmas in the presence of a theory as the conceptual foundation.
 
-\begin{definition}[Free magma relative to a theory]\label{free-theory}\uses{models-def}
+\begin{definition}[Free magma relative to a theory]\label{free-theory}\lean{FreeMagmaWithLaws}\leanok\uses{models-def}
   Let $\Gamma$ be a theory with an alphabet $X$. A \emph{free magma} with alphabet $X$ subject to the theory $\Gamma$ is a magma $M_{X,\Gamma}$ together with a function $\iota_{X,\Gamma} : X \to M_{X,\Gamma}$, with the following properties:
   \begin{itemize}
     \item[(i)] $M_{X,\Gamma}$ obeys the theory $\Gamma$: $M_{X,\Gamma} \models \Gamma$.

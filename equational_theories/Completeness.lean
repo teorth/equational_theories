@@ -193,7 +193,7 @@ def FreeMagmaWithLaws.mkMor {α} (Γ : Ctx α) : FreeMagma α →◇ FreeMagmaWi
   map_op' := by simp [Magma.op, ForkWithLaws]
 
 -- FIXME: golf this!
-theorem FreeMaga.EvalFreeMagmaWithLawsUniversalProperty {α G} {Γ : Ctx α}
+theorem FreeMagma.EvalFreeMagmaWithLawsUniversalProperty {α G} {Γ : Ctx α}
 (φ : α → G) [ginst : Magma G] (modelsG : G ⊧ Γ)(ψ : FreeMagmaWithLaws α Γ →◇ G) :
     ψ ∘ (⟦.⟧) ∘ Lf = φ → FreeMagmaWithLaws.eval φ modelsG = ψ := by
   intro eq
