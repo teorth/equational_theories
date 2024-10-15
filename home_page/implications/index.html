@@ -124,22 +124,25 @@
 
 
       <div class="checkbox-container">
-	<label>
-	  <input checked="checked" type="checkbox" id="showEquivalences"> Hide equivalent equations
-	</label>
+        <label>
+          <input type="checkbox" checked="checked" id="showEquivalences"> Hide equivalent equations
+        </label>
         <label>
           <input type="checkbox" checked="checked" id="treatConjectedAsUnknownList"> Treat conjectures as unknown
+        </label>
+        <label>
+          <input type="checkbox" id="hideFullySolved"> Hide fully-solved equations
         </label>
       </div>
       <div id="equationList" class="equation-list">
         <div class="equation-item header">
           <div class="equation-name" data-sort="index">Equation</div>
           <div class="equation-stat" data-sort="implies">Implies</div>
-          <div class="equation-stat" data-sort="impliedBy">Implied By</div>
-          <div class="equation-stat" data-sort="antiImplies">Anti-Implies</div>
-          <div class="equation-stat" data-sort="antiImpliedBy">Anti-Implied By</div>
+          <div class="equation-stat" data-sort="impliedBy">Implied by</div>
+          <div class="equation-stat" data-sort="antiImplies">Does not imply</div>
+          <div class="equation-stat" data-sort="antiImpliedBy">Not implied by</div>
           <div class="equation-stat" data-sort="unknown">Unknown</div>
-          <div class="equation-stat" data-sort="unknownBy">Unknown By</div>
+          <div class="equation-stat" data-sort="unknownBy">Unknown by</div>
         </div>
       </div>
     </div>
@@ -148,16 +151,16 @@
       <h1>Equation Details</h1>
       <h2 id="selectedEquation"></h2>
       <div id="equationCommentary"></div>
-      <h3><span id="selectedEquationDual"></span> <span id="selectedEquationGraphitiLinks"></span></h3>
+      <h3><span id="selectedEquationDual"></span> <span id="selectedEquationGraphitiLinks"></span> <span id="smallestMagmaLink"></span></h3>
       <div class="checkbox-container">
-	<label>
-	  <input checked="checked" type="checkbox" id="showEquivalences2"> Hide equivalent equations
-	</label>
+        <label>
+          <input type="checkbox" checked="checked" id="showEquivalences2"> Hide equivalent equations
+        </label>
         <label>
           <input type="checkbox" id="showOnlyExplicitProofs"> Show only explicit proofs
         </label>
         <label>
-          <input type="checkbox" id="treatConjectedAsUnknownDetail"> Treat conjectures as unknown
+          <input type="checkbox" checked="checked" id="treatConjectedAsUnknownDetail"> Treat conjectures as unknown
         </label>
 
       </div>
@@ -166,7 +169,7 @@
         <table class="implication-table">
           <tr>
             <th>Implies</th>
-            <th>Anti-Implies</th>
+            <th>Does not imply</th>
             <th>Unknown</th>
           </tr>
           <tr>
@@ -180,9 +183,9 @@
         <h3>This equation is implied by (&lt;=):</h3>
         <table class="implication-table">
           <tr>
-            <th>Implied By</th>
-            <th>Anti-Implied By</th>
-            <th>Unknown By</th>
+            <th>Implied by</th>
+            <th>Not implied by</th>
+            <th>Unknown by</th>
           </tr>
           <tr>
             <td><div id="impliedByList" class="implication-list"></div></td>

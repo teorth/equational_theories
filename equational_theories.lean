@@ -7,7 +7,6 @@ import equational_theories.MagmaOp
 import equational_theories.Subgraph
 import equational_theories.Equations.All
 import equational_theories.InfModel
-import equational_theories.InfModel_1661
 import equational_theories.Generated
 import equational_theories.Counting
 import equational_theories.OrderMetatheorem
@@ -18,5 +17,9 @@ import equational_theories.Homomorphisms
 import equational_theories.CentralGroupoids
 import equational_theories.Z3Counterexamples
 import equational_theories.LinearOps
-import equational_theories.Confluence
-import equational_theories.FactsSyntaxExamples
+import equational_theories.Confluence1
+import equational_theories.Confluence2
+import equational_theories.Confluence3
+import equational_theories.Confluence4
+import equational_theories.Conjectures
+import equational_theories.ManuallyProved

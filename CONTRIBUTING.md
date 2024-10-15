@@ -90,6 +90,8 @@ The core Lean files are as follows:
 - [`Equations/All.lean`](equational_theories/Equations/All.lean)  The complete set of 4692 equational laws involving at most four magma operations (up to symmetry and relabeling).  It was generated using [this script](scripts/generate_eqs_list.py).  The subgraph equations are included as an import.  If you find an equation here of particular interest to study, consider transferring it to `Equations/Basic.lean`.  The equations are split up into five smaller files to assist compilation.
 - [`Subgraph.lean`](equational_theories/Subgraph.lean)  This is the file for all results concerning the specific laws of interest.
 - [`Homomorphisms.lean`](equational_theories/Homomorphisms.lean)  This file defines magma homomorphisms and magma isomorphisms and provides basic API for them.
+- [`Conjectures.lean`](equational_theories/Conjectures.lean)  A file to store human-generated conjectures that have not yet been formalized in Lean.
+
 
 Some technical Lean files:
 - [`EquationalResult.lean`](equational_theories/EquationalResult.lean)  Introduces the `@[equational_result]` attribute, which adds metadata to allow for easier aggregation of implications. Also adds `conjecture` keyword, which is a variant of `proof_wanted` which keeps the metadata produced by `@[equational_result]` (but marking it as a conjecture).
@@ -99,7 +101,7 @@ Some technical Lean files:
 - [`DecideBang.lean`](equational_theories/DecideBang.lean) Variants of the `decide` tactic with various hacks to speed up elaboration.
 - [`Equations/Command.lean`](equational_theories/Equations/Command.lean)  Speeds up elaboration of equations.
 - [`MemoFinOp.lean`](equational_theories/MemoFinOp.lean) Defines the macro `memoFinOp` that memoizes a function `f : Fin n → Fin n → Fin n`.
-- [`Superposition.lean`](equational_theories/Superposition.lean) The `superpose` tactic, used in several automated proofs
+- [`Superposition.lean`](equational_theories/Superposition.lean) The `superpose` tactic, used in several automated proofs.
 
 In addition to these files, contributors are welcome to add additional Lean files to the project in the [`equational_theories` folder](equational_theories) or one of its subfolders, to establish more facts about equations.  In order for your contributions to be easily detected by automated tools, please try to follow the following guidelines.
 
@@ -107,20 +109,23 @@ In addition to these files, contributors are welcome to add additional Lean file
 - The standard form for an implication "Equation X implies Equation Y" is
 `theorem EquationX_implies_EquationY (G: Type*) [Magma G] (h: EquationX G) : EquationY G`
 - The standard form for an anti-implication "Equation X does not imply Equation Y" is `theorem EquationX_not_implies_EquationY : ∃ (G: Type) (_: Magma G), EquationX G ∧ ¬ EquationY G`.
+- To assert that a magma `G` obeys one set `X1, X2, ...` of laws but fails another set `Y1, Y2, ...`, use
+`theorem Theorem_Name : ∃ (G : Type) (_ : Magma G), Facts G [X1, X2, ...] [Y1, Y2, ...]`.
 - Add the `@[equational_result]` attribute to theorems of the above forms to make them visible to our analysis tools.
-- NOTE: We are potentially in the process of updating our base representation of equations, so that the above guidance may change in the future.  See [this Zulip thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Equations.20vs.20Laws) for some relevant discussion.
+- NOTE: We are potentially in the process of updating our base representation of equations, so that the above guidance may change in the future.  See [this Zulip thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Equations.20vs.20Laws/near/473472323) for some relevant discussion.
 - You are also encouraged to add `conjecture` versions of these theorems, for results that were obtained by hand or by some other automated tool whose output is not in the form of a Lean proof.  If you are creating such `conjecture` statements, consider adding a sketch of the proof as a comment in the Lean file.  We can then add tasks (via Github issues) to convert such `conjecture` statements into theorems. Note that you should add `@[equational_result]` to conjectures as well.  (Technical note: to avoid linter warnings, one can replace `h: EquationX G` with `_: EquationX G` in a `conjecture` implication.)
 - To establish an equivalence between two Equations X and Y, split it into two implications "Equation X implies Equation Y" and "Equation Y implies Equation X" as above.
 - To avoid collisions, implications and anti-implications should be placed inside a namespace specific to your Lean file.
 - Consider adding a chapter to the blueprint corresponding to the Lean file, which can for instance detail the methodology used to generate the content of that file.  Also update [this CONTRIBUTING.md file](CONTRIBUTING.md) to add a link to your Lean file.
 - For computer-generated Lean files, see the "Automated Proofs" section below.
 - Lean files that are outside of the [`Generated`](equational_theories/Generated) folder are considered to be part of the human-curated Lean space; it is acceptable to put some auto-generated proofs outside of this folder, but they should be human-readable, and it is acceptable to have human editors optimize these proofs for readability, aesthetics, or other concerns.  On the other hand, Lean files within the [`Generated`](equational_theories/Generated) folder should be 100% computer generated, with no additional human curation.
+- Lean files that mostly treat a single equation manually can be placed in the [`ManuallyProved`](equational_theories/ManuallyProved) folder.
 - Add your Lean file to the top level [`equational_theories.lean`](equational_theories.lean) file so that it gets picked by the CI and automated implication extraction tools.
 
 Contributions to the Lean codebase will pass through continuous integration (CI) checks that ensure that the Lean code compiles.  Contributors of Lean code are highly encouraged to interact with the [Lean Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/) to help coordinate their contributions and resolve technical issues.
 
 Here is a list of human-contributed Lean files with mathematical content:
-- [`InfModel.lean`](equational_theories/InfModel.lean)  Studies specific laws that are known to only have infinite non-trivial models.
+- [`InfModel.lean`](equational_theories/InfModel.lean)  Studies specific laws that are known to only have infinite non-trivial models, with some additional associated files.
 - [`Completeness.lean`](equational_theories/Completeness.lean)  The Birkhoff completeness theorem.
 - [`Compactness.lean`](equational_theories/Compactness.lean)  The compactness theorem.
 - [`Counting.lean`](equational_theories/Counting.lean) Various theorems about counting laws.
@@ -128,9 +133,13 @@ Here is a list of human-contributed Lean files with mathematical content:
 - [`Preorder.lean`](equational_theories/Preorder.lean) Preorder on magmas.
 - [`CentralGroupoids.lean`](equational_theories/CentralGroupoids.lean)  Facts about central groupoids.
 - [`OrderMetatheorem.lean`](equational_theories/OrderMetatheorem.lean) Metatheorems about the ordering relation on laws.
-- [`SmallMagmas.lean`](equational_theories/SmallMagmas.lean) Results about very small magmas
-- [`Z3Counterexamples.lean`](equational_theories/Z3Counterexamples.lean) Counterexamples generated automatically from the Z3 prover
+- [`SmallMagmas.lean`](equational_theories/SmallMagmas.lean) Results about very small magmas.
+- [`Z3Counterexamples.lean`](equational_theories/Z3Counterexamples.lean) Counterexamples generated automatically from the Z3 prover.
 - [`StringMagmas.lean`](equational_theories/StringMagmas.lean) Studies specific specific string magmas for counterexamples.
+- [`Asterix.lean`](equational_theories/Asterix.lean) Establishes results relating to Equation 65 (the "Asterix" equation).
+- [`Confluence.lean`](equational_theories/Confluence.lean) Results about confluent laws, with several associated additional files.
+- [`LiftingMagmaFamilies.lean`](equational_theories/LiftingMagmaFamilies.lean) Results about lifting magma families, with some associated additional files.
+
 
 
 At present, the API for magmas only allows for theorems that study a finite number of individual equational laws at a time.  We plan to expand the API to also allow one to establish metatheorems about entire classes of equations.
@@ -151,6 +160,9 @@ Contributions to the blueprint will pass through continuous integration (CI) che
 ## Scripts
 
 Contributions in programming languages other than Lean are very welcome; the code for such contributions can be placed in [this directory](scripts).  It would probably be a good idea to announce such scripts on the [Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational) for feedback and review.
+
+Should you want to use Python scripts developed by other contributors, install the necessary Python dependancies using the [`requirements.txt`](requirements.txt) file. You can automatically set up and use these packages in a virtual environment by utilizing the scripts inside of the [`python environment directory`](scripts/python_environment/). If you would like to write your
+own script that uses a new package, add the additional dependancy to [`requirements.in`](requirements.in)
 
 When PR'ing a new script, consider also adding a brief link and description to the script in the [README.md](README.md) file under "Scripts", according to the main language of the script.
 
@@ -175,7 +187,7 @@ Any images generated by the project can be placed in [this directory](images).
 
 ### Hasse diagrams
 
-A particular type of image that is suitable for inclusion of this project are [Hasse diagrams](https://en.wikipedia.org/wiki/Hasse_diagram) of the implication graph.  Here are our orientation conventions for such diagrams (as voted on [here](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Metatheory.3A.20meta-thread)):
+A particular type of image that is suitable for inclusion of this project are [Hasse diagrams](https://en.wikipedia.org/wiki/Hasse_diagram) of the implication graph.  Here are our orientation conventions for such diagrams (as voted on [here](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Metatheory.3A.20meta-thread/near/474084126)):
 
 - The pre-ordering `≤` on laws is given by implication.  That is to say, `LawX ≤ LawY` means that `LawX` implies `LawY`, i.e., every magma that obeys `LawX`, also obeys `LawY`.
 - The law `x=x` is a maximal element in this pre-ordering, and `x=y` is the minimal element.  Hence, in a Hasse diagram, `x=x` should be at the top, and `x=y` should be at the bottom.
@@ -185,6 +197,6 @@ Some of the legacy Hasse diagrams from the first few days of the project were or
 
 ## Other ways to contribute
 
-- Have an idea for some future directions that this project can go in?  Please contribute your thoughts to the [Future directions thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Future.20directions) on Zulip.
-- Want to share some feedback, impressions, or suggestions about the project?  You are encouraged to share them at the [Thoughts and impressions thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Thoughts.20and.20impressions.20thread) on the Zulip.
+- Have an idea for some future directions that this project can go in?  Please contribute your thoughts to the [Future directions thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Future.20directions/near/473388585) on Zulip.
+- Want to share some feedback, impressions, or suggestions about the project?  You are encouraged to share them at the [Thoughts and impressions thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Thoughts.20and.20impressions.20thread/near/472978470) on the Zulip.
 - Have a correction or remark on a specific component of the project?  Drop a comment in the [Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/), or on the relevant [PR](https://github.com/teorth/equational_theories/pulls) or [Issue](https://github.com/teorth/equational_theories/issues) on Github. Or implement the correction or remark directly as a pull request!

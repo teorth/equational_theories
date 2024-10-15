@@ -29,6 +29,15 @@ open Lean in
 instance {α} [ToJson α] : ToJson (FreeMagma α) where
   toJson := FreeMagma.toJson
 
+def FreeMagma.toString {α} [ToString α] (outermost : Bool) : FreeMagma α → String
+  | FreeMagma.Leaf x => s!"{x}"
+  | FreeMagma.Fork x y =>
+    let s := s!"{x.toString false} ◇ {y.toString false}"
+    if outermost then s else s!"({s})"
+
+instance {α} [ToString α] : ToString (FreeMagma α) where
+  toString := FreeMagma.toString true
+
 infixl:65 " ⋆ " => FreeMagma.Fork
 
 @[simp]
@@ -85,7 +94,7 @@ theorem evalInMagma_comp {α β} {G} [Magma G] (f : α → β) (g : β → G) (m
 
 theorem evalHom_comp_fmapHom {α β G} [Magma G] (f : α → β) (g : β → G) :
     (fmapHom f).comp (evalHom g) = evalHom (g ∘ f) := by
-  ext m; apply evalInMagma_fmapHom
+  ext; apply evalInMagma_fmapHom
 
 theorem fmapHom_comp' {α β γ} (f : α → β) (g : β → γ) (m : FreeMagma α) :
     fmapHom g (fmapHom f m) = fmapHom (g ∘ f) m := by
@@ -93,24 +102,24 @@ theorem fmapHom_comp' {α β γ} (f : α → β) (g : β → γ) (m : FreeMagma 
 
 theorem fmapHom_comp {α β γ} (f : α → β) (g : β → γ) :
     (fmapHom f).comp (fmapHom g) = fmapHom (g ∘ f) := by
-  ext m; apply fmapHom_comp'
+  ext; apply fmapHom_comp'
 
 theorem fmapHom_id {α} (m : FreeMagma α) : fmapHom id m = m := evalInMagma_leaf _
 
- theorem EvalFreeMagmaUniversalProperty {α : Type u} {G : Type v} [Magma G] (f : α → G)
-    : ∀ g : FreeMagma α →◇ G, g.toFun ∘ Lf = f → evalInMagma f = g.toFun := by
-   intros g glift
+ theorem EvalFreeMagmaUniversalProperty {α : Type u} {G : Type v} [Magma G] (f : α → G) :
+    ∀ g : FreeMagma α →◇ G, g.toFun ∘ Lf = f → evalInMagma f = g.toFun := by
+   intro g glift
    let rec equiv : ∀ tx : FreeMagma α, evalInMagma f tx = g.toFun tx := fun tx ↦
       match tx with
-      | FreeMagma.Leaf x => Eq.symm $ congrFun glift x
-      | FreeMagma.Fork txleft txright => Eq.trans
-         (congrArg (fun t ↦ t ◇ evalInMagma f txright) (equiv txleft)) $ Eq.trans
-         (congrArg (fun t ↦ g.toFun txleft ◇ t) (equiv txright))
-         (Eq.symm $ g.map_op' txleft txright)
+      | FreeMagma.Leaf x => (congrFun glift x).symm
+      | FreeMagma.Fork txleft txright =>
+        (congrArg (fun t ↦ t ◇ evalInMagma f txright) (equiv txleft)).trans
+          ((congrArg (fun t ↦ g.toFun txleft ◇ t) (equiv txright)).trans
+            (g.map_op' txleft txright).symm)
    exact (funext equiv)
 
- theorem FmapFreeMagmaUniversalProperty {α : Type u} {β : Type u} (f : α → β)
-    : ∀ g : FreeMagma α →◇ FreeMagma β, g ∘ Lf = Lf ∘ f → fmapFreeMagma f = g :=
+ theorem FmapFreeMagmaUniversalProperty {α : Type u} {β : Type u} (f : α → β) :
+      ∀ g : FreeMagma α →◇ FreeMagma β, g ∘ Lf = Lf ∘ f → fmapFreeMagma f = g :=
     EvalFreeMagmaUniversalProperty (Lf ∘ f)
 
 def Mem {α} (a : α) : FreeMagma α → Prop

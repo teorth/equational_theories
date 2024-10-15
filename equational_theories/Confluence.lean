@@ -42,17 +42,13 @@ def SubtermOf (x : FreeMagma α) : (y : FreeMagma α) → Prop
 theorem SubtermOf.refl (x : FreeMagma α) : SubtermOf x x := by
   cases x with
   | Leaf => rfl
-  | Fork x y => left; rfl
+  | Fork x y => exact Or.inl rfl
 
-lemma SubtermOf.left {x a b: FreeMagma α} (h : SubtermOf x a) : SubtermOf x (a ⋆ b) := by
-  right
-  left
-  exact h
+lemma SubtermOf.left {x a b: FreeMagma α} (h : SubtermOf x a) : SubtermOf x (a ⋆ b) :=
+  Or.inr (Or.inl h)
 
-lemma SubtermOf.right {x a b: FreeMagma α} (h : SubtermOf x b) : SubtermOf x (a ⋆ b) := by
-  right
-  right
-  exact h
+lemma SubtermOf.right {x a b: FreeMagma α} (h : SubtermOf x b) : SubtermOf x (a ⋆ b) :=
+  Or.inr (Or.inr h)
 
 theorem everywhere_of_subterm_of_everywhere {P : FreeMagma α → Prop} {x} (h : x.Everywhere P) {y}
     (hsub : SubtermOf y x) : y.Everywhere P := by
@@ -78,8 +74,7 @@ theorem length_le_of_subterm {x y: FreeMagma α} (h: SubtermOf x y) : x.length �
     · rw [heq]
     · rw [FreeMagma.length.eq_2]
       exact Nat.le_add_right_of_le (ihx hsub)
-    · rw [FreeMagma.length.eq_2]
-      rw [Nat.add_comm]
+    · rw [FreeMagma.length.eq_2, Nat.add_comm]
       exact Nat.le_add_right_of_le (ihy hsub)
 
 variable (rw : FreeMagma α → FreeMagma α)
@@ -155,11 +150,11 @@ lemma buNF_iff_NF {x}: buNF rw x ↔ NF rw x := by
     intro ⟨hbx, hby⟩
     simp only [bu, hbx.top, hby.top]
 
-lemma buFixed_of_NF {x : FreeMagma α} (h : NF rw x) : buFixed rw x := by
-  apply ((buNF_iff_NF rw).mpr h).top
+lemma buFixed_of_NF {x : FreeMagma α} (h : NF rw x) : buFixed rw x :=
+  ((buNF_iff_NF rw).mpr h).top
 
-lemma rw_eq_self_of_NF {x} (h: NF rw x): rw x = x := by
-  apply h.top
+lemma rw_eq_self_of_NF {x} (h: NF rw x): rw x = x :=
+  h.top
 
 class IsProjOrNF : Prop where
   proj_or_nf : ∀ x, SubtermOf (rw x) x ∨ NF rw (rw x)
@@ -203,9 +198,8 @@ lemma NF_iff_buFixed {x}: NF rw x ↔ buFixed rw x := by
   exact bu_idem rw _
 
 theorem NF_rw_op_of_buFixed {x} {y}
-    (hx: bu rw x = x) (hy: bu rw y = y): NF rw (rw (x ⋆ y)) := by
-  apply (NF_iff_buFixed rw).mpr
-  exact buFixed_rw_op rw hx hy
+    (hx: bu rw x = x) (hy: bu rw y = y): NF rw (rw (x ⋆ y)) :=
+  (NF_iff_buFixed rw).mpr (buFixed_rw_op rw hx hy)
 
 theorem NF_rw_op {x} {y}
     (hx: NF rw x) (hy: NF rw y): NF rw (rw (x ⋆ y)) := by
