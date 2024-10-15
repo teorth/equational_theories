@@ -197,7 +197,7 @@ if __name__ == "__main__":
                         ).decode()
                     except subprocess.CalledProcessError as e:
                         assert e.returncode == 1
-                        tqdm.write(f"Could'nt handle {problem}")
+                        tqdm.write(f"Couldn't handle {problem}")
                         givenupon.add(problem)
                         conj = open("unproven.txt", "a")
                         print(problem, file=conj)
