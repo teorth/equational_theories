@@ -478,19 +478,21 @@ theorem Equation3588_not_implies_Equation3994 : ∃ (G : Type) (_ : Magma G), Eq
   · have h2 : Equation3994 (Op G') ↔ Equation3588 G' := forall_comm
     rwa [←h2] at h3588
 
-theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.card α = 2) (E: Law.MagmaLaw α) :
+theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.card α = 2) (E: Law.MagmaLaw α)
+  (hE: ∃ (z: α), FreeMagma.Mem z E.rhs ∧ FreeMagma.Mem z E.lhs) :
   ∃ (G : Type) (hm : Magma G) (hf : Finite G), G ⊧ E ∧ ¬Equation2 G := by
   revert E
-  suffices hs: ∀ (x: α) (w: FreeMagma α), ∃ (G: Type) (hm: Magma G) (hf: Finite G), G ⊧ (Lf x ≃ w) ∧ ¬Equation2 G by
+  suffices hs: ∀ (x: α) (w: FreeMagma α), (hE: FreeMagma.Mem x w) → ∃ (G: Type) (hm: Magma G) (hf: Finite G), G ⊧ (Lf x ≃ w) ∧ ¬Equation2 G by
     -- an arbitrary magma with at least 2 elements satisfying the constant law
     let G := Fin 2
     let M: Magma G := Magma.mk fun x y => 0
     let hf: Finite G := Finite.of_fintype G
-    let hneq2: ¬Equation2 G := by
+    have hneq2: ¬Equation2 G := by
       unfold Equation2
       simp only [not_forall]
       exists 0, 1
-    intro E
+      simp only [zero_ne_one, not_false_eq_true]
+    intro E hE
     match E with
     | ⟨FreeMagma.Fork w1 w2, FreeMagma.Fork w3 w4⟩ =>
       exists G, M, hf
@@ -514,17 +516,26 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
         .
           exact hneq2
       .
-        sorry
+        obtain ⟨z, ⟨hz1, hz2⟩⟩ := hE
+        simp only [Law.MagmaLaw, FreeMagma.Mem] at hz1 hz2
+        rw [hz2] at hz1
+        contradiction
     | ⟨w ⋆ w', FreeMagma.Leaf x⟩ =>
-      obtain ⟨G, ⟨M, ⟨hf, h⟩⟩⟩ := hs x (w ⋆ w')
+      obtain ⟨z, ⟨hz1, hz2⟩⟩ := hE
+      simp only [Law.MagmaLaw] at hz1 hz2
+      simp only [FreeMagma.Mem] at hz1
+      rw [hz1] at hz2
+      obtain ⟨G, ⟨M, ⟨hf, h⟩⟩⟩ := hs x (w ⋆ w') hz2
       exists G, M, hf
       simp only [h, Law.satisfies_symm, not_false_eq_true, and_self]
     | ⟨FreeMagma.Leaf x, w ⋆ w'⟩ =>
-      exact hs x (w ⋆ w')
-  intros x w
+      apply hs x (w ⋆ w')
+      obtain ⟨z, ⟨hz1, hz2⟩⟩ := hE
+      simp_all only [not_forall, exists_and_left, exists_prop, exists_and_right, FreeMagma.Mem, exists_eq_right]
+  intros x w hw
   by_cases h: w.first = x ∨ w.last = x
   .
-    clear ht hc
+    clear * - h
     let G := Fin 2
     exists G
     suffices hs: ∃ (hm: Magma G), ∀ (f: α → G), f x = w ⬝ f by
@@ -550,8 +561,8 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
         <;> first | rfl | assumption
   .
     revert α
-    suffices h: ∀ (w : FreeMagma (Fin 2)), w.first ≠ 0 ∧ w.last ≠ 0 → ∃ (G : Type) (M : Magma G) (hf: Finite G), G ⊧ (Lf 0 ≃ w) ∧ ¬Equation2 G by
-      intros α ht hc x w h'
+    suffices h: ∀ (w : FreeMagma (Fin 2)), w.first ≠ 0 ∧ w.last ≠ 0 → FreeMagma.Mem 0 w → ∃ (G : Type) (M : Magma G) (hf: Finite G), G ⊧ (Lf 0 ≃ w) ∧ ¬Equation2 G by
+      intros α ht hc x w hw h'
       replace h': w.first ≠ x ∧ w.last ≠ x := by
         simp_all only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, not_or, not_false_eq_true, and_self]
       have : ∃ (π: α ≃ Fin 2), π.toFun x = 0 := by
@@ -620,6 +631,7 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           .
             rename_i w1 w2 h1 h2
             simp_all only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Equiv.toFun_as_coe, FreeMagma.first]
+            sorry
         rw [this]
           ; clear this
         have : w'.last = π.toFun w.last := by
@@ -630,6 +642,7 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           .
             rename_i w1 w2 h1 h2
             simp_all [FreeMagma.last]
+            sorry
         rw [this]
           ; clear this
         obtain ⟨h1, h2⟩ := h'
@@ -648,7 +661,7 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
           simp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply, Fin.isValue] at hct
           rw [←hπ] at hct
           contradiction
-      obtain ⟨G, ⟨M, ⟨hf, ⟨h1, h2⟩⟩⟩⟩ := h w' this
+      obtain ⟨G, ⟨M, ⟨hf, ⟨h1, h2⟩⟩⟩⟩ := h w' this sorry
       exists G, M, hf
       split_ands
       .
@@ -679,68 +692,58 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
     let MPols: Magma (Polynomial ℤ) := Magma.mk fun x y => (1 - Polynomial.X) * x + Polynomial.X * y
     let fPols: Fin 2 → Polynomial ℤ := fun z => if z = 0 then 1 else 0
     let r: Polynomial ℤ := FreeMagma.evalInMagma fPols w
+    have geq_deg_r_one : r.degree ≥ 1 := sorry
     let n := r.natDegree
     have : ∃ (b0: ℤ), Polynomial.eval b0 (r * (r - 2)) ≠ 0 := by
       have hrd : r.natDegree ≥ 1 := by
-        clear_value n
-        clear hl hr
-        simp only [r]
-        induction w
-        .
-          sorry
-        .
-          rename_i w1 w2 h1 h2
-          simp only [FreeMagma.evalInMagma, Magma.op]
-          norm_num
-          ring_nf
-          sorry
+        simp_all only [ne_eq, ge_iff_le, Nat.succ_le, Nat.WithBot.one_le_iff_zero_lt, Polynomial.natDegree_pos_iff_degree_pos]
+      have eq_deg_r_nat_deg_r : r.degree = ↑r.natDegree := by
+        apply Polynomial.degree_eq_natDegree
+        simp_all only [Fin.isValue, ne_eq, ge_iff_le, le_max_iff, gt_iff_lt, r, MPols, fPols]
+        intro a
+        simp_all only [Fin.isValue, Polynomial.natDegree_zero, nonpos_iff_eq_zero, one_ne_zero]
       let r' := r * (r - 2)
-      have : r' ≠ 0 := by
-        have hr2r : (r - 2).natDegree = r.natDegree := by
-          have : (r - 2).natDegree ≤ r.natDegree := by
-            have := Polynomial.degree_sub_le r 2
-            have this' := Polynomial.degree_C (a := -2)
-            simp at this'
-            simp only [this'] at this
-            have this2 : r.degree ≥ 1 := by
-              have this' : r.degree = ↑r.natDegree := by
-                apply Polynomial.degree_eq_natDegree
-                simp_all only [Fin.isValue, ne_eq, ge_iff_le, le_max_iff, gt_iff_lt, r, MPols, fPols]
-                intro a
-                simp_all only [Fin.isValue, Polynomial.natDegree_zero, nonpos_iff_eq_zero, one_ne_zero]
-              rw [this']
-              simp_all only [Fin.isValue, ne_eq, ge_iff_le, Nat.cast_nonneg, max_eq_left, Nat.one_le_cast, r, MPols, fPols]
-            simp only [ge_iff_le] at this2
-            have this3 : max r.degree 0 = r.degree := by
-              simp only [max, Sup.sup]
-              cases h: r.degree
-              .
-                rw [h] at this2
-                contradiction
-              .
-                simp only [zero_le, max_eq_left]
-            rw [this3] at this
-            suffices (r - 2).degree ≤ r.degree by
-              apply Polynomial.natDegree_le_natDegree
-              assumption
+      have hr2r : (r - 2).natDegree = r.natDegree := by
+        have : (r - 2).natDegree ≤ r.natDegree := by
+          have := Polynomial.degree_sub_le r 2
+          have this' := Polynomial.degree_C (a := -2)
+          simp at this'
+          simp only [this'] at this
+          have this2 : r.degree ≥ 1 := by
+            rw [eq_deg_r_nat_deg_r]
+            simp_all only [Fin.isValue, ne_eq, ge_iff_le, Nat.cast_nonneg, max_eq_left, Nat.one_le_cast, r, MPols, fPols]
+          simp only [ge_iff_le] at this2
+          have this3 : max r.degree 0 = r.degree := by
+            simp only [max, Sup.sup]
+            cases h: r.degree
+            .
+              rw [h] at this2
+              contradiction
+            .
+              simp only [zero_le, max_eq_left]
+          rw [this3] at this
+          suffices (r - 2).degree ≤ r.degree by
+            apply Polynomial.natDegree_le_natDegree
             assumption
-          have : (r - 2).natDegree ≥ r.natDegree := by
-            have : (r - 2).coeff (r.natDegree) = r.coeff (r.natDegree) := by
-              simp_all only [ne_eq, ge_iff_le, Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_eq_self]
-              apply Polynomial.coeff_C_ne_zero
-              simp_all only [Fin.isValue, ne_eq, r, MPols, fPols]
-              intro a
-              simp_all only [Fin.isValue, nonpos_iff_eq_zero, one_ne_zero]
-            suffices (r - 2).coeff (r.natDegree) ≠ 0 by
-              simp_all only [ne_eq, ge_iff_le, Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_eq_self, sub_zero, Polynomial.leadingCoeff_eq_zero]
-              apply Polynomial.le_natDegree_of_ne_zero
-              simp_all only [Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_zero, ne_eq, Polynomial.leadingCoeff_eq_zero, not_false_eq_true]
-            simp_all only [Fin.isValue, ne_eq, ge_iff_le, Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_eq_self, sub_zero, Polynomial.leadingCoeff_eq_zero, r, MPols, fPols]
-            apply Aesop.BuiltinRules.not_intro
+          assumption
+        have : (r - 2).natDegree ≥ r.natDegree := by
+          have : (r - 2).coeff (r.natDegree) = r.coeff (r.natDegree) := by
+            simp_all only [ne_eq, ge_iff_le, Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_eq_self]
+            apply Polynomial.coeff_C_ne_zero
+            simp_all only [Fin.isValue, ne_eq, r, MPols, fPols]
             intro a
-            simp_all only [Fin.isValue, Polynomial.natDegree_zero, nonpos_iff_eq_zero, one_ne_zero]
-          apply Nat.le_antisymm
-            <;> assumption
+            simp_all only [Fin.isValue, nonpos_iff_eq_zero, one_ne_zero]
+          suffices (r - 2).coeff (r.natDegree) ≠ 0 by
+            simp_all only [ne_eq, ge_iff_le, Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_eq_self, sub_zero, Polynomial.leadingCoeff_eq_zero]
+            apply Polynomial.le_natDegree_of_ne_zero
+            simp_all only [Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_zero, ne_eq, Polynomial.leadingCoeff_eq_zero, not_false_eq_true]
+          simp_all only [Fin.isValue, ne_eq, ge_iff_le, Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_eq_self, sub_zero, Polynomial.leadingCoeff_eq_zero, r, MPols, fPols]
+          apply Aesop.BuiltinRules.not_intro
+          intro a
+          simp_all only [Fin.isValue, Polynomial.natDegree_zero, nonpos_iff_eq_zero, one_ne_zero]
+        apply Nat.le_antisymm
+          <;> assumption
+      have : r' ≠ 0 := by
         intro hct
         apply_fun (fun x => x.degree) at hct
         simp only [Polynomial.degree_zero, r', Polynomial.degree_mul, WithBot.add_eq_bot] at hct
@@ -800,6 +803,7 @@ theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.car
       rw [this]
       apply Finite.intro
       rfl
+    intro hw
     exists ZMod k, M, hf
     let eval_eq: FreeMagma (Fin 2) → ZMod k → ZMod k → ZMod k := fun w u v => w ⬝ (fun z => if z = 0 then u else v)
     split_ands
