@@ -1,5 +1,5 @@
 astroid==3.3.5
-black==24.8.0
+black==24.10.0
 bliss-bind==0.2.0
 certifi==2024.8.30
 charset-normalizer==3.3.2
