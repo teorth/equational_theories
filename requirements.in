@@ -1,0 +1,18 @@
+# This file contains all top level packages for Python. 
+
+# If you would like to use a package in a script that is not one of these packages, 
+# add it with its version number to this file
+
+# In order to generate a new requirements.txt file use the package pip-tools
+# > pip3 install uv==0.4.20
+# and then run 
+# > uv pip compile requirements.in > requirements.txt
+
+# In order to install the requirements and subdependencies, just run
+# > pip3 install -r requirements.txt
+
+Markdown==3.7
+networkx==3.4
+numpy==2.1.2
+pillow==10.4.0
+z3==0.2.0
