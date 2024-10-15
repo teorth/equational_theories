@@ -1,1 +1,3 @@
-Discussed [here](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1648.20!.3D.3E.20206).  It implies [Equation 1648](https://teorth.github.io/equational_theories/implications/?1648) for finite magmas; the corresponding question for infinite magmas remains open, as does the question of whether 1648 implies 206 for finite magmas.
+Discussed [here](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1648.20!.3D.3E.20206).  It implies [Equation 1648](https://teorth.github.io/equational_theories/implications/?1648) for finite magmas.  For infinite magmas, the implication appears to be false, with [one construction based on the infinite 3-regular tree](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1648.20!.3D.3E.20206/near/476985846).
+
+It remains open whether 1648 implies 206 for finite magmas.
