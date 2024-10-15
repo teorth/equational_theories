@@ -9,7 +9,7 @@ if ! [[ "$(python3 --version)" =~ Python\ 3\.11.* ]]; then
 fi
 
 if [ ! -f requirements.txt ]; then
-    echo "requirments.txt not found! Are you sure you are in the root project directory?"
+    echo "requirements.txt not found! Are you sure you are in the root project directory?"
     return
 fi
 
