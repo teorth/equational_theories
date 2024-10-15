@@ -160,6 +160,9 @@ Contributions to the blueprint will pass through continuous integration (CI) che
 
 Contributions in programming languages other than Lean are very welcome; the code for such contributions can be placed in [this directory](scripts).  It would probably be a good idea to announce such scripts on the [Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational) for feedback and review.
 
+Should you want to use Python scripts developed by other contributors, install the necessary Python dependancies using the [`requirements.txt`](requirements.txt) file. You can automatically set up and use these packages in a virtual environment by utilizing the scripts inside of the [`python environment directory`](scripts/python_environment/). If you would like to write your
+own script that uses a new package, add the additional dependancy to [`requirements.in`](requirements.in)
+
 When PR'ing a new script, consider also adding a brief link and description to the script in the [README.md](README.md) file under "Scripts", according to the main language of the script.
 
 ## Data

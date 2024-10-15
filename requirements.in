@@ -12,9 +12,7 @@
 # > pip3 install -r requirements.txt
 
 Markdown==3.7
-matplotlib==3.9.2
 networkx==3.4
 numpy==2.1.2
-pandas==2.2.3
 pillow==10.4.0
 z3==0.2.0
