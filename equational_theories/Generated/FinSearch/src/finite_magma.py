@@ -1,12 +1,13 @@
 import random
 from parser import Equation
 
+
 def enumerate_assignments(num_elements, vars):
     N = len(vars)
     M = num_elements
     current = [0] * N
     while True:
-        yield {v:x for v,x in zip(vars, current)}
+        yield {v: x for v, x in zip(vars, current)}
 
         for i in range(N - 1, -1, -1):
             if current[i] < M - 1:
@@ -17,13 +18,14 @@ def enumerate_assignments(num_elements, vars):
         else:
             break
 
+
 class FiniteMagma:
     def __init__(self, num_elements: int, table):
         self.num_elements = num_elements
         self.table = table
 
     def op(self, x: int, y: int):
-        return self.table[x + self.num_elements*y]
+        return self.table[x + self.num_elements * y]
 
     def __str__(self):
         ret = "x | y | x ◇ y"
@@ -34,13 +36,33 @@ class FiniteMagma:
 
     @property
     def matrix(self):
-        #[ #[2,1,1,2], #[2,1,1,2], #[3,0,0,3], #[3,0,0,3] ]
-        return "#[ " + ", ".join("#[" + ",".join(str(self.op(i,j)) for j in range(self.num_elements)) + "]" for i in range(self.num_elements)) + " ]"
+        # [ #[2,1,1,2], #[2,1,1,2], #[3,0,0,3], #[3,0,0,3] ]
+        return (
+            "#[ "
+            + ", ".join(
+                "#["
+                + ",".join(str(self.op(i, j)) for j in range(self.num_elements))
+                + "]"
+                for i in range(self.num_elements)
+            )
+            + " ]"
+        )
 
     def to_data(self, all_equations: list[Equation]):
-        #Table [[2, 3, 2, 3], [3, 2, 3, 2], [1, 0, 1, 0], [0, 1, 0, 1]]
-        ret = "Table [" + ", ".join("[" + ",".join(str(self.op(i,j)) for j in range(self.num_elements)) + "]" for i in range(self.num_elements)) + "]\n"
-        ret += "Proves " + str(sorted(eq.equation_number for eq in all_equations if self.proves(eq)))
+        # Table [[2, 3, 2, 3], [3, 2, 3, 2], [1, 0, 1, 0], [0, 1, 0, 1]]
+        ret = (
+            "Table ["
+            + ", ".join(
+                "["
+                + ",".join(str(self.op(i, j)) for j in range(self.num_elements))
+                + "]"
+                for i in range(self.num_elements)
+            )
+            + "]\n"
+        )
+        ret += "Proves " + str(
+            sorted(eq.equation_number for eq in all_equations if self.proves(eq))
+        )
         return ret
 
     @property
@@ -53,12 +75,15 @@ class FiniteMagma:
         ret = 0
         for i in range(self.num_elements):
             for j in range(self.num_elements):
-                ret += factor*self.op(i,j)
+                ret += factor * self.op(i, j)
                 factor *= self.num_elements
         return ret
 
     def proves(self, eq: Equation):
-        return all(eq.eval(a, self.op) for a in enumerate_assignments(self.num_elements, eq.free_variables))
+        return all(
+            eq.eval(a, self.op)
+            for a in enumerate_assignments(self.num_elements, eq.free_variables)
+        )
 
 
 def enumerate_finite_magmas(num_elements):
@@ -78,9 +103,12 @@ def enumerate_finite_magmas(num_elements):
         else:
             break
 
-def random_finite_magma(num_elements):
-    return FiniteMagma(num_elements, [random.randint(0,num_elements-1) for _ in range(num_elements**2)])
 
+def random_finite_magma(num_elements):
+    return FiniteMagma(
+        num_elements,
+        [random.randint(0, num_elements - 1) for _ in range(num_elements**2)],
+    )
 
 
 class Theorem:

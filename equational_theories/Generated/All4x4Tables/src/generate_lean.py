@@ -18,13 +18,17 @@ from pathlib import Path
 dir = Path(__file__).parent.parent
 
 # we have 4694 equations
-full = range(1,4694+1)
+full = range(1, 4694 + 1)
 
 with open(f"{dir}/data/implications.json") as f:
-  implications = json.load(f)["implications"]
-implications = [ (int(i["lhs"].removeprefix("Equation")), int(i["rhs"].removeprefix("Equation"))) for i in implications ]
+    implications = json.load(f)["implications"]
+implications = [
+    (int(i["lhs"].removeprefix("Equation")), int(i["rhs"].removeprefix("Equation")))
+    for i in implications
+]
 
 print("Number of implications:", len(implications))
+
 
 def transitive_closure(pairs):
     pairs_idx = defaultdict(list)
@@ -33,22 +37,24 @@ def transitive_closure(pairs):
     closure = set()
     new_pairs = set(pairs)
     while new_pairs:
-        (a,b) = new_pairs.pop()
+        (a, b) = new_pairs.pop()
         closure.add((a, b))
         for c in pairs_idx[b]:
-          if (a, c) not in closure:
-            new_pairs.add((a, c))
+            if (a, c) not in closure:
+                new_pairs.add((a, c))
     return closure
+
 
 closure = transitive_closure(implications)
 print(f"Size of transitive closure: {len(closure)}")
 
-impliedBy = { i : set() for i in full }
-implying = { j : set() for j in full }
-for (a,b) in closure:
+impliedBy = {i: set() for i in full}
+implying = {j: set() for j in full}
+for a, b in closure:
     if a in full and b in full:
         impliedBy[a].add(b)
         implying[b].add(a)
+
 
 def parse_row(row):
     if len(row) == 2:
@@ -57,8 +63,8 @@ def parse_row(row):
         table = row[0].removeprefix("Table ").strip()
         assert row[1].startswith("Proves ")
         satisfied = set(ast.literal_eval(row[1].removeprefix("Proves ")))
-        refuted = {i for i in range(1,4694+1) if i not in satisfied}
-        div = 4 # hardcoded
+        refuted = {i for i in range(1, 4694 + 1) if i not in satisfied}
+        div = 4  # hardcoded
         return {"table": table, "div": div, "satisfied": satisfied, "refuted": refuted}
     elif len(row) == 3:
         # parse make-plan rows
@@ -76,13 +82,14 @@ def parse_row(row):
 
 
 stats = {
-  "total" : 0,
-  "removed_by_implication": 0,
-  "removed_by_covering": 0,
+    "total": 0,
+    "removed_by_implication": 0,
+    "removed_by_covering": 0,
 }
 
-notImpliedBy = { i : set() for i in full }
-notImplying = { j : set() for j in full }
+notImpliedBy = {i: set() for i in full}
+notImplying = {j: set() for j in full}
+
 
 def prune_row(data):
     stats["total"] += len(data["satisfied"]) + len(data["refuted"])
@@ -92,7 +99,7 @@ def prune_row(data):
     for i in data["satisfied"]:
         # already implied
         if implying[i].intersection(satisfied):
-          continue
+            continue
         # remove all implied by this
         satisfied = satisfied - impliedBy[i]
         satisfied.add(i)
@@ -100,27 +107,32 @@ def prune_row(data):
     for i in data["refuted"]:
         # already ruled out
         if impliedBy[i].intersection(refuted):
-          continue
+            continue
         # remove all that this is ruling out
         refuted = refuted - implying[i]
         refuted.add(i)
-    stats["removed_by_implication"] += len(data["satisfied"]) + len(data["refuted"]) - len(satisfied) - len(refuted)
+    stats["removed_by_implication"] += (
+        len(data["satisfied"]) + len(data["refuted"]) - len(satisfied) - len(refuted)
+    )
 
     # prune by earlier examples
-    satisfied_ = {i for i in satisfied if refuted - notImpliedBy[i] }
-    refuted_   = {j for j in refuted   if satisfied - notImplying[j] }
+    satisfied_ = {i for i in satisfied if refuted - notImpliedBy[i]}
+    refuted_ = {j for j in refuted if satisfied - notImplying[j]}
 
-    stats["removed_by_covering"] += len(satisfied) + len(refuted) - len(satisfied_) - len(refuted_)
+    stats["removed_by_covering"] += (
+        len(satisfied) + len(refuted) - len(satisfied_) - len(refuted_)
+    )
     satisfied, refuted = satisfied_, refuted_
 
     for i in satisfied:
-      for j in refuted:
-        notImpliedBy[i].add(j)
-        notImplying[j].add(i)
+        for j in refuted:
+            notImpliedBy[i].add(j)
+            notImplying[j].add(i)
 
     data["satisfied"] = sorted(satisfied)
     data["refuted"] = sorted(refuted)
     return data
+
 
 def generate_lean(data):
     table = data["table"]
@@ -131,8 +143,8 @@ def generate_lean(data):
     atable = table.replace("[", "#[")
 
     name = f"FinitePoly {table}"
-    satname= lambda i: f"{name} satisfies Equation{i}"
-    refname= lambda i: f"{name} refutes Equation{i}"
+    satname = lambda i: f"{name} satisfies Equation{i}"
+    refname = lambda i: f"{name} refutes Equation{i}"
 
     out = f"""
 import equational_theories.Equations.All
@@ -159,6 +171,7 @@ theorem «Facts from {name}» :
 """
     return out
 
+
 def create_rows(f):
     first_line = f.readline().strip()
     all_rows = []
@@ -180,33 +193,44 @@ def create_rows(f):
         print("Reading make-plan output...")
         for line in f:
             line = line.strip()
-            if line.startswith("Magma") or line.startswith("Satisfies") or line.startswith("Refutes"):
+            if (
+                line.startswith("Magma")
+                or line.startswith("Satisfies")
+                or line.startswith("Refutes")
+            ):
                 row.append(line)
             if len(row) == 3:
                 all_rows.append(row)
                 row = []
     return all_rows
 
+
 rows = create_rows(open(f"{dir}/data/plan.txt"))
 with open(f"{dir.parent}/All4x4Tables.lean", "w") as main:
-  for i, row in enumerate(rows):
-      leanfile = f"{dir}/Refutation{i}.lean"
-      data = parse_row(row)
-      if data:
-        data = prune_row(data)
-        print(f"Writing {leanfile}")
-        main.write(f"import equational_theories.Generated.All4x4Tables.Refutation{i}\n")
-        open(leanfile, "w").write(generate_lean(data))
+    for i, row in enumerate(rows):
+        leanfile = f"{dir}/Refutation{i}.lean"
+        data = parse_row(row)
+        if data:
+            data = prune_row(data)
+            print(f"Writing {leanfile}")
+            main.write(
+                f"import equational_theories.Generated.All4x4Tables.Refutation{i}\n"
+            )
+            open(leanfile, "w").write(generate_lean(data))
 
 total = stats["total"]
 removed_by_implication = stats["removed_by_implication"]
 removed_by_covering = stats["removed_by_covering"]
 remaining = total - removed_by_implication - removed_by_covering
 
-percentage_removed_by_implication = (removed_by_implication / total) * 100 if total > 0 else 0
+percentage_removed_by_implication = (
+    (removed_by_implication / total) * 100 if total > 0 else 0
+)
 percentage_removed_by_covering = (removed_by_covering / total) * 100 if total > 0 else 0
 
-print(f"Out of {total} facts to check, pruning by implication removed " +
-  f"{removed_by_implication} facts ({percentage_removed_by_implication:.2f}%) to check, " +
-  f"pruning by covering removed {removed_by_covering} facts ({percentage_removed_by_covering:.2f}%), " +
-  f"leaving {remaining} facts to check.")
+print(
+    f"Out of {total} facts to check, pruning by implication removed "
+    + f"{removed_by_implication} facts ({percentage_removed_by_implication:.2f}%) to check, "
+    + f"pruning by covering removed {removed_by_covering} facts ({percentage_removed_by_covering:.2f}%), "
+    + f"leaving {remaining} facts to check."
+)

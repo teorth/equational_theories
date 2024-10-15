@@ -1,6 +1,7 @@
 # Equational theories project
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-lightblue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Code Style: Black](https://img.shields.io/badge/Code%20Style-Black-000000.svg)](https://github.com/psf/black)
 [![Website](https://img.shields.io/badge/Website-Ready-green)](https://teorth.github.io/equational_theories/)
 [![Documentation](https://img.shields.io/badge/Documentation-Passing-green)](https://teorth.github.io/equational_theories/docs/)
 [![Blueprint](https://img.shields.io/badge/Blueprint-WIP-blue)](https://teorth.github.io/equational_theories/blueprint/)
@@ -65,6 +66,7 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - [Text list of equations](https://github.com/teorth/equational_theories/tree/main/data/equations.txt).  [Larger list with equations of up to five operations](https://github.com/teorth/equational_theories/blob/main/data/eq_size5.txt)
     - [List of duals of equations](https://github.com/teorth/equational_theories/tree/main/data/dual_equations.md) ([JSON](https://github.com/teorth/equational_theories/blob/main/data/duals.json))
     - [The smallest magma obeying a given equation (up to N=5)](https://github.com/teorth/equational_theories/blob/main/data/smallest_magma.txt), if it exists (and [the magmas themselves](https://github.com/teorth/equational_theories/blob/main/data/smallest_magma_examples.txt))
+    - To download the current state of the implication graph, see [this thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Database.20of.20implications).
 - [Scripts](https://github.com/teorth/equational_theories/tree/main/scripts)
     - Shell
         - [`run_before_push`](https://github.com/teorth/equational_theories/tree/main/scripts/run_before_push.sh) - performs some of the CI checks, suitable for running just before pushing a new PR
@@ -99,6 +101,10 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - ["Rewrite Rule Inference Using Equality Saturation"](https://arxiv.org/abs/2108.10436), Chandrakana Nandi, Max Willsey, Amy Zhu, Yisu Remy Wang, Brett Saiki, Adam Anderson, Adriana Schulz, Dan Grossman, Zachary Tatlock, 23 Aug, 2021.
 - Other tools
     - [egg - e-graphs good](https://egraphs-good.github.io/)
+    - [MiniZinc](https://www.minizinc.org/) - high-level constraint modeling language
+    - [nauty](https://pallini.di.uniroma1.it/) - graph automorphism tool
+    - [KBCV](http://cl-informatik.uibk.ac.at/software/kbcv/) - Knuth-Bendix completion visualizer
+    - [Instagraph](https://github.com/yoheinakajima/instagraph) - knowledge graph generator
 - Blog posts and media mentioning this project
     - "[We're Entering Uncharted Territory for Math"](https://www.theatlantic.com/technology/archive/2024/10/terence-tao-ai-interview/680153/), Matteo Wong, The Atlantic, Oct 4 2024.
     - "[On Math Platform](https://buildermath.substack.com/p/on-math-platform)", Michael Bucko, Substack von Michael, Oct 5 2024.
