@@ -9,10 +9,10 @@ A similar approach is being pursued in the MagmaEgg tool as well, which is a sta
 \subsection{Methodology}
 
 The basic methodology of equality saturation is based on E-Graphs, a data structure that can store equivalence classes of terms efficiently.
-We used the lean-egg tactic (\url{https://github.com/marcusrossel/lean-egg}), based on equality saturation as a tactic, which (re)constructs a proof from the E-graph~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24} in Lean.
+We used the \texttt{lean-egg} tactic (\url{https://github.com/marcusrossel/lean-egg}), based on equality saturation as a tactic, which (re)constructs a proof from the E-graph~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24} in Lean.
 This means that we do not have to trust either the egg tool nor the tactic: if something goes wrong, Lean will not accept the constructed proof. In fact, we found issues with the proof reconstruction from the examples in this project.
 
-The lean-egg tactic works for equational reasoning, i.e. proving equalities as consequences of other equalities (potentially universally quantified), which is exactly what we need to prove implications of laws in Magmas.
+The \texttt{lean-egg} tactic works for equational reasoning, i.e. proving equalities as consequences of other equalities (potentially universally quantified), which is exactly what we need to prove implications of laws in Magmas.
 In many cases, we have laws of the form $x = y$, where neither set of variables in the left- and right-hand-side of the law is a subset of each other.
 In this case the laws cannot be used as rewrite rules: it's not clear what it would be rewritten to, since there are unknowns on both sides of the equation.
 For these cases we used a simple heuristic, where we instantiate the variables with terms found in the (proof) context, as those are likely to be important for proving the equality.
@@ -52,7 +52,7 @@ Possible future work:
 	\item Fork egg and fix the buggy and slow length optimization of explanations
 	\item Maybe write Lean code directly instead of writing explanation sexps and converting to Lean code in a second run
 	\item Fix the generation of extra variable values so it doesn't take too much time in pathological cases (i.e. goals with 4-6 variables)
-	\item Determine whether it actually has some advantages compared to Vampire and lean-egg
+	\item Determine whether it actually has some advantages compared to Vampire and \texttt{lean-egg}
 	\item Support searching for multiple goal equations at once
 	\item Write a custom elaborator for Lean to speed up elaboration
 	\item If the Lean kernel turns out to be too slow for some large necessary proofs and thus the custom elaborator is not enough, write a custom verified typechecker
