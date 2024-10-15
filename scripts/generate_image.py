@@ -18,12 +18,15 @@ import glob
 
 ############################################
 
+
 def name_to_ind(name):
-    return int(name.removeprefix('Equation'))
+    return int(name.removeprefix("Equation"))
+
 
 UNKNOWN_COLOR = (0, 0, 0)
 KNOWN_IMPLIES_COLOR = (0, 255, 0)
 KNOWN_NOT_IMPLIES_COLOR = (255, 0, 0)
+
 
 def append_dict(d, a, b):
     if a in d:
@@ -36,29 +39,30 @@ def append_dict(d, a, b):
 def close(known_implies):
     # copilot wrote this
     closure2 = {}
-    for (a, b) in known_implies:
+    for a, b in known_implies:
         append_dict(closure2, a, b)
     new_pairs2 = {}
-    for (a, b) in known_implies:
+    for a, b in known_implies:
         append_dict(new_pairs2, b, a)
 
     new_pairs = closure = set(known_implies)
     while new_pairs:
         print(f"current closure is size {len(closure)}")
         new_pairs = {
-            (a, d)
-            for a, b in new_pairs
-            for c, d in known_implies
-            if b == c
+            (a, d) for a, b in new_pairs for c, d in known_implies if b == c
         } - closure
         print(f"found {len(new_pairs)} pairs for the closure")
         closure |= new_pairs
     return closure
 
-def print_usage():
-    print('Usage: python process_implications.py <file_name.lean> [--close] [--filter] [--output <filename.png>] [--equations <equations.lean> ...]')
 
-if __name__ == '__main__':
+def print_usage():
+    print(
+        "Usage: python process_implications.py <file_name.lean> [--close] [--filter] [--output <filename.png>] [--equations <equations.lean> ...]"
+    )
+
+
+if __name__ == "__main__":
     close_implies = False
     filter_universe = False
     equations_files = []
@@ -68,21 +72,23 @@ if __name__ == '__main__':
         i = 1
         while i < len(argv):
             current_arg = argv[i]
-            if '--close' == current_arg:
+            if "--close" == current_arg:
                 close_implies = True
                 i += 1
-            elif '--filter' == current_arg:
+            elif "--filter" == current_arg:
                 filter_universe = True
                 i += 1
-            elif '--equations' == current_arg:
+            elif "--equations" == current_arg:
                 equations_files.append(argv[i + 1])
                 i += 2
-            elif '--output' == current_arg:
+            elif "--output" == current_arg:
                 output_file = argv[i + 1]
                 i += 2
             else:
                 if os.path.isdir(current_arg):
-                    for file_name in glob.glob(current_arg + "/**/*.lean", recursive=True):
+                    for file_name in glob.glob(
+                        current_arg + "/**/*.lean", recursive=True
+                    ):
                         files.append(file_name)
                 elif os.path.isfile(current_arg):
                     files.append(current_arg)
@@ -100,11 +106,15 @@ if __name__ == '__main__':
         exit(1)
 
     if output_file == None:
-        output_file = files[0].removesuffix('.lean') + '.png'
+        output_file = files[0].removesuffix(".lean") + ".png"
 
     print("Reading implications and contrimplications")
-    universe, known_implies, known_not_implies = parse_proofs_files(equations_files, files)
-    print(f"Found {len(known_implies)} implications, and {len(known_not_implies)} contrimplications.")
+    universe, known_implies, known_not_implies = parse_proofs_files(
+        equations_files, files
+    )
+    print(
+        f"Found {len(known_implies)} implications, and {len(known_not_implies)} contrimplications."
+    )
     if close_implies:
         print("Calculating closure")
         known_implies = close(known_implies)
@@ -112,10 +122,13 @@ if __name__ == '__main__':
     inds = {e: name_to_ind(e) for e in universe}
     if filter_universe:
         print("Filtering to universe")
-        inds = {kv[0]: i for i, kv in enumerate(sorted(inds.items(), key=lambda kv: kv[1]))}
+        inds = {
+            kv[0]: i for i, kv in enumerate(sorted(inds.items(), key=lambda kv: kv[1]))
+        }
     min_ind = min(inds.values())
     max_ind = max(inds.values())
     size = max_ind - min_ind + 1
+
     def ind(name):
         return inds[name] - min_ind
 
@@ -128,6 +141,6 @@ if __name__ == '__main__':
         a, b = known
         data[ind(a) * size + ind(b)] = KNOWN_NOT_IMPLIES_COLOR
 
-    img = Image.new('RGB', (size, size))
+    img = Image.new("RGB", (size, size))
     img.putdata(data)
     img.save(output_file)
