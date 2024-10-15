@@ -4,14 +4,22 @@ from __future__ import annotations
 from typing import Optional, Set, Tuple, Dict, List
 import re
 
+
 class ExprNode:
     """Represents a node in an expression tree."""
 
-    def __init__(self, value: str, left: Optional[ExprNode] = None, right: Optional[ExprNode] = None):
+    def __init__(
+        self,
+        value: str,
+        left: Optional[ExprNode] = None,
+        right: Optional[ExprNode] = None,
+    ):
         self.value = value
         self.left = left
         self.right = right
-        self.node_count = 1 + (left.node_count if left else 0) + (right.node_count if right else 0)
+        self.node_count = (
+            1 + (left.node_count if left else 0) + (right.node_count if right else 0)
+        )
         self.leafs = self.get_leafs()
 
     def __repr__(self) -> str:
@@ -22,6 +30,7 @@ class ExprNode:
 
     def get_leafs(self) -> Set[str]:
         """Collect and return all leaf node values in the tree."""
+
         def traverse(node, leaves):
             if not node:
                 return
@@ -43,6 +52,7 @@ class ExprNode:
             new_left = self.right.reverse() if self.right else None
             new_right = self.left.reverse() if self.left else None
             return ExprNode(self.value, new_left, new_right)
+
 
 def is_same_under_rewriting(left: ExprNode, right: ExprNode):
     """
@@ -80,11 +90,12 @@ def is_same_under_rewriting(left: ExprNode, right: ExprNode):
         return {v: k for k, v in mapping1.items()}, {v: k for k, v in mapping2.items()}
     return None
 
+
 class Parser:
     """A simple parser for mathematical expressions."""
 
     def __init__(self, expression: str):
-        self.expression = expression.replace(' ', '')
+        self.expression = expression.replace(" ", "")
         self.index = 0
         self.length = len(self.expression)
 
@@ -96,7 +107,7 @@ class Parser:
         """Parse an expression, handling composition operators."""
         nodes = [self.parse_term()]
 
-        while self.current_char() in ['◇', '.']:
+        while self.current_char() in ["◇", "."]:
             op = self.current_char()
             self.advance()
             right = self.parse_term()
@@ -106,17 +117,17 @@ class Parser:
         # Build the tree (left-associative)
         node = nodes[0]
         for i in range(1, len(nodes), 2):
-            node = ExprNode(nodes[i], left=node, right=nodes[i+1])
+            node = ExprNode(nodes[i], left=node, right=nodes[i + 1])
 
         return node
 
     def parse_term(self):
         """Parse a term (variable or parenthesized expression)."""
         char = self.current_char()
-        if char == '(':
+        if char == "(":
             self.advance()
             node = self.parse_expression()
-            if self.current_char() != ')':
+            if self.current_char() != ")":
                 raise ValueError("Mismatched parentheses")
             self.advance()
             return node
@@ -125,7 +136,7 @@ class Parser:
 
     def parse_variable(self):
         """Parse a variable."""
-        match = re.match(r'[a-zA-Z_]\w*', self.expression[self.index:])
+        match = re.match(r"[a-zA-Z_]\w*", self.expression[self.index :])
         if not match:
             raise ValueError(f"Invalid character at index {self.index}")
         var = match.group(0)
@@ -140,18 +151,20 @@ class Parser:
         """Move to the next character."""
         self.index += 1
 
+
 def expr_to_prefix(node: ExprNode):
     """Convert an expression tree to prefix notation."""
-    if node.value == '◇':
+    if node.value == "◇":
         left = expr_to_prefix(node.left)
         right = expr_to_prefix(node.right)
         return f"f({left}, {right})"
     else:
         return node.value
 
+
 def make_tree(equation: str):
     """Create an expression tree from an equation string."""
-    lhs_expr, rhs_expr = equation.split('=')
+    lhs_expr, rhs_expr = equation.split("=")
     parser_lhs = Parser(lhs_expr)
     tree_lhs = parser_lhs.parse()
 
@@ -160,9 +173,11 @@ def make_tree(equation: str):
 
     return ExprNode("=", left=tree_lhs, right=tree_rhs)
 
+
 def flip_top_most(node: ExprNode):
     """Flip the left and right children of the root node."""
     return ExprNode(node.value, left=node.right, right=node.left)
+
 
 def main():
     trees = []
@@ -170,7 +185,9 @@ def main():
         for line in open(f"../equational_theories/Equations/Eqns{file}.lean"):
             if "equation" in line and ":=" in line:
                 equation_number = line.split("equation")[1].split()[0]
-                trees.append((int(equation_number), make_tree(line.split(":=")[1].strip())))
+                trees.append(
+                    (int(equation_number), make_tree(line.split(":=")[1].strip()))
+                )
 
     seen = {}
 
@@ -179,7 +196,9 @@ def main():
         for eq_num2, tree2 in trees:
             if eq_num1 >= eq_num2:
                 continue
-            if is_same_under_rewriting(reversed_tree1, tree2) or is_same_under_rewriting(reversed_tree1, flip_top_most(tree2)):
+            if is_same_under_rewriting(
+                reversed_tree1, tree2
+            ) or is_same_under_rewriting(reversed_tree1, flip_top_most(tree2)):
                 print(f"| Equation{eq_num1}[{tree1}] | Equation{eq_num2}[{tree2}] |")
                 seen[eq_num1] = True
                 seen[eq_num2] = True
@@ -188,6 +207,7 @@ def main():
     for eq_num, tree in trees:
         if eq_num not in seen:
             print(f"* Equation{eq_num}[{tree}]")
+
 
 if __name__ == "__main__":
     main()

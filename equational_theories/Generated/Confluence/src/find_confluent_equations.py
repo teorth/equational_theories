@@ -16,11 +16,11 @@ class EGraph:
         self.node_aliases = {}
 
     def new_node(self):
-        self.nodes_data.append('leaf')
+        self.nodes_data.append("leaf")
         return len(self.nodes_data) - 1
 
     def get_children(self, node):
-        if self.nodes_data[node] == 'leaf':
+        if self.nodes_data[node] == "leaf":
             self.nodes_data[node] = [self.new_node(), self.new_node()]
         return self.nodes_data[node]
 
@@ -57,9 +57,9 @@ class EGraph:
                     if child == node1:
                         node_data[j] = node2
 
-        if self.nodes_data[node2] == 'leaf':
+        if self.nodes_data[node2] == "leaf":
             self.nodes_data[node2] = self.nodes_data[node1]
-        elif self.nodes_data[node1] != 'leaf':
+        elif self.nodes_data[node1] != "leaf":
             for i in range(2):
                 child1 = self.nodes_data[node1][i]
                 child2 = self.nodes_data[node2][i]
@@ -81,7 +81,7 @@ class EGraph:
             while stack:
                 node = stack.pop()
                 visited[node] = True
-                if self.nodes_data[node] == 'leaf':
+                if self.nodes_data[node] == "leaf":
                     continue
                 assert isinstance(self.nodes_data[node], list)
                 for child in self.nodes_data[node]:
@@ -98,12 +98,16 @@ class EGraph:
             return False
 
     def print(self):
-        print(f'EGraph with {sum(not isinstance(node_data, int) for node_data in self.nodes_data)} nodes')
+        print(
+            f"EGraph with {sum(not isinstance(node_data, int) for node_data in self.nodes_data)} nodes"
+        )
         for node, node_data in enumerate(self.nodes_data):
             if isinstance(node_data, list):
                 left, right = node_data
-                print(f'  {self._format_node(node)} -> {left}, {right}')
-        print(f'  Leaves: {", ".join(self._format_node(node) for node, node_data in enumerate(self.nodes_data) if node_data == "leaf")}')
+                print(f"  {self._format_node(node)} -> {left}, {right}")
+        print(
+            f'  Leaves: {", ".join(self._format_node(node) for node, node_data in enumerate(self.nodes_data) if node_data == "leaf")}'
+        )
 
     def _format_node(self, node):
         names = [name for name, node_id in self.node_aliases.items() if node_id == node]
@@ -115,6 +119,7 @@ class EGraph:
 
 def expr_to_tree(expr, egraph, side):
     var_to_node = {}
+
     def descend(e, node):
         if isinstance(e, int):
             if e in var_to_node:
@@ -122,11 +127,12 @@ def expr_to_tree(expr, egraph, side):
                     egraph.impose_equality(node, var_to_node[e])
             else:
                 var_to_node[e] = node
-                egraph.node_aliases[f'{side}{e}'] = node
+                egraph.node_aliases[f"{side}{e}"] = node
         else:
             children = egraph.get_children(node)
             descend(e[0], children[0])
             descend(e[1], children[1])
+
     root = egraph.new_node()
     descend(expr, root)
     return root
@@ -162,7 +168,7 @@ def match_to_pattern(pattern, expr):
 
 
 def expression_from_egraph(egraph, node):
-    if egraph.nodes_data[node] == 'leaf':
+    if egraph.nodes_data[node] == "leaf":
         return node
     left, right = egraph.nodes_data[node]
     return (expression_from_egraph(egraph, left), expression_from_egraph(egraph, right))
@@ -180,24 +186,29 @@ def construct_two_matches_expr(expr, subexpr, show_egraphs=False):
     #   match_to_pattern(expr, refinement[path])
     # are both not None
     egraph = EGraph()
-    root1 = expr_to_tree(expr, egraph, 'L')
-    root2 = expr_to_tree(subexpr, egraph, 'R')
+    root1 = expr_to_tree(expr, egraph, "L")
+    root2 = expr_to_tree(subexpr, egraph, "R")
     egraph.impose_equality(root1, root2)
     if show_egraphs:
-        print(f'Matching {format_expr(expr)} with {format_expr(subexpr)}:')
+        print(f"Matching {format_expr(expr)} with {format_expr(subexpr)}:")
         egraph.print()
         print()
     if egraph.has_cycle():
         # The e-graph being cyclic means that there is no finite common refinement. (The infinite
         # expression E = E ◇ E is always a solution)
         return None
-    left_vars = sorted(int(name[1:]) for name in egraph.node_aliases if name.startswith('L'))
+    left_vars = sorted(
+        int(name[1:]) for name in egraph.node_aliases if name.startswith("L")
+    )
     assert left_vars == list(range(len(left_vars)))
     right_exprs = {
         int(name[1:]): expression_from_egraph(egraph, node)
-        for name, node in egraph.node_aliases.items() if name.startswith('R')
+        for name, node in egraph.node_aliases.items()
+        if name.startswith("R")
     }
-    vars = [right_exprs.get(var, -1 - var) for var in left_vars]  # Negative numbers to be distinct from nodes
+    vars = [
+        right_exprs.get(var, -1 - var) for var in left_vars
+    ]  # Negative numbers to be distinct from nodes
     return subst(expr, vars)
 
 
@@ -219,7 +230,9 @@ def full_simplifications(pattern, expr):
         for expr, path in paths.items():
             simplifications = list(all_single_step_simplifications(pattern, expr))
             if not simplifications:
-                if expr not in final_simplifications or len(path) < len(final_simplifications[expr]):
+                if expr not in final_simplifications or len(path) < len(
+                    final_simplifications[expr]
+                ):
                     final_simplifications[expr] = path
             else:
                 for simp in simplifications:
@@ -240,14 +253,16 @@ def is_confluent(expr, show_egraphs=False):
         # Being able to ignore this case simplifies the rest of the code.
         return expr == 1
     for subexpr in subexprs(expr, proper=True):
-        if refinement := construct_two_matches_expr(expr, subexpr, show_egraphs=show_egraphs):
+        if refinement := construct_two_matches_expr(
+            expr, subexpr, show_egraphs=show_egraphs
+        ):
             # If there is an expression for which expr also matches on the sub-expression, the
             # expression might not confluent as it can be reduced in different ways.
             simplified_forms = full_simplifications(expr, refinement)
             if len(simplified_forms) > 1:
                 if show_egraphs:
                     for path in simplified_forms.values():
-                        print('  -->  '.join(format_expr(expr) for expr in path))
+                        print("  -->  ".join(format_expr(expr) for expr in path))
                 # We found an expression with multiple fully-simplified forms, so not confluent
                 return False
             # TODO: Do we need some other check in the case len(simplified_forms) == 1?
@@ -273,4 +288,4 @@ def is_confluent(expr, show_egraphs=False):
 for i, eq in enumerate(eqs):
     if eq[0] == 0:  # Only equations with LHS = x
         if is_confluent(eq[1]):
-            print(format_expr(eq[0]), '=', format_expr(eq[1]), f'     ({i+1})')
+            print(format_expr(eq[0]), "=", format_expr(eq[1]), f"     ({i+1})")

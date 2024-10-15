@@ -11,10 +11,16 @@ import json
 #   ./generate_cadical.py -i -s 6 37 42   Attempt to disprove 37 -> 42 using finite models up to size 6
 #   ./generate_cadical.py -i -s 6         Attempt to disprove all unknowns using models up to size 6
 
+
 class ExprNode:
     """Represents a node in an expression tree."""
 
-    def __init__(self, value: str, left: Optional[ExprNode] = None, right: Optional[ExprNode] = None):
+    def __init__(
+        self,
+        value: str,
+        left: Optional[ExprNode] = None,
+        right: Optional[ExprNode] = None,
+    ):
         self.value = value
         self.left = left
         self.right = right
@@ -28,6 +34,7 @@ class ExprNode:
 
     def get_leafs(self) -> set[str]:
         """Collect and return all leaf node values in the tree."""
+
         def traverse(node, leaves):
             if not node.left and not node.right:
                 leaves.add(node.value)
@@ -39,11 +46,12 @@ class ExprNode:
         traverse(self, leaf_set)
         return leaf_set
 
+
 class Parser:
     """A simple parser for mathematical expressions."""
 
     def __init__(self, expression: str):
-        self.expression = expression.replace(' ', '')
+        self.expression = expression.replace(" ", "")
         self.index = 0
         self.length = len(self.expression)
 
@@ -55,7 +63,7 @@ class Parser:
         """Parse an expression, handling composition operators."""
         nodes = [self.parse_term()]
 
-        while self.current_char() in ['◇', '.']:
+        while self.current_char() in ["◇", "."]:
             op = self.current_char()
             self.advance()
             right = self.parse_term()
@@ -65,17 +73,17 @@ class Parser:
         # Build the tree (left-associative)
         node = nodes[0]
         for i in range(1, len(nodes), 2):
-            node = ExprNode(nodes[i], left=node, right=nodes[i+1])
+            node = ExprNode(nodes[i], left=node, right=nodes[i + 1])
 
         return node
 
     def parse_term(self):
         """Parse a term (variable or parenthesized expression)."""
         char = self.current_char()
-        if char == '(':
+        if char == "(":
             self.advance()
             node = self.parse_expression()
-            if self.current_char() != ')':
+            if self.current_char() != ")":
                 raise ValueError("Mismatched parentheses")
             self.advance()
             return node
@@ -84,7 +92,7 @@ class Parser:
 
     def parse_variable(self):
         """Parse a variable."""
-        match = re.match(r'[a-zA-Z_]\w*', self.expression[self.index:])
+        match = re.match(r"[a-zA-Z_]\w*", self.expression[self.index :])
         if not match:
             raise ValueError(f"Invalid character at index {self.index}")
         var = match.group(0)
@@ -99,18 +107,20 @@ class Parser:
         """Move to the next character."""
         self.index += 1
 
+
 def expr_to_prefix(node: ExprNode):
     """Convert an expression tree to prefix notation."""
-    if node.value == '◇':
+    if node.value == "◇":
         left = expr_to_prefix(node.left)
         right = expr_to_prefix(node.right)
         return f"f({left}, {right})"
     else:
         return node.value
 
+
 def make_tree(equation: str):
     """Create an expression tree from an equation string."""
-    lhs_expr, rhs_expr = equation.split('=')
+    lhs_expr, rhs_expr = equation.split("=")
     parser_lhs = Parser(lhs_expr)
     tree_lhs = parser_lhs.parse()
 
@@ -119,15 +129,22 @@ def make_tree(equation: str):
 
     return ExprNode("=", left=tree_lhs, right=tree_rhs)
 
+
 def flip_top_most(node: ExprNode):
     """Flip the left and right children of the root node."""
     return ExprNode(node.value, left=node.right, right=node.left)
 
+
 def run(n: int, first_tree: ExprNode, second_tree: ExprNode):
     encoding = modeler.Modeler()
     print("encoding...")
-    def var(i, j, k): return f"{i}*{j}={k}"
-    def neg(s): return f"-{s}"
+
+    def var(i, j, k):
+        return f"{i}*{j}={k}"
+
+    def neg(s):
+        return f"-{s}"
+
     for i in range(n):
         for j in range(n):
             for k in range(n):
@@ -147,6 +164,7 @@ def run(n: int, first_tree: ExprNode, second_tree: ExprNode):
             print(self.value)
 
     negative_law = []
+
     def go(vars: set[str], assn: dict[str, int] = {}):
         if vars:
             x = vars.pop()
@@ -157,6 +175,7 @@ def run(n: int, first_tree: ExprNode, second_tree: ExprNode):
         else:
             assn_name = str(assn)
             processed: dict[str, list[str]] = {}
+
             def process(tree: ExprNode) -> str:
                 name = str(tree)
                 if name not in processed:
@@ -170,8 +189,22 @@ def run(n: int, first_tree: ExprNode, second_tree: ExprNode):
                             for j in range(n):
                                 for k in range(n):
                                     # if left = i and right = j then (i*j = k <-> left*right = k)
-                                    encoding.add_clause([neg(l[i]), neg(r[j]), neg(var(i,j,k)), names[k]])
-                                    encoding.add_clause([neg(l[i]), neg(r[j]), neg(names[k]), var(i,j,k)])
+                                    encoding.add_clause(
+                                        [
+                                            neg(l[i]),
+                                            neg(r[j]),
+                                            neg(var(i, j, k)),
+                                            names[k],
+                                        ]
+                                    )
+                                    encoding.add_clause(
+                                        [
+                                            neg(l[i]),
+                                            neg(r[j]),
+                                            neg(names[k]),
+                                            var(i, j, k),
+                                        ]
+                                    )
 
                     else:
                         for k in range(n):
@@ -187,10 +220,16 @@ def run(n: int, first_tree: ExprNode, second_tree: ExprNode):
                 vname = f"{assn_name} |- {l} == {r}"
                 for k in range(n):
                     # if left = k and right = k then left == right
-                    encoding.add_clause([neg(processed[l][k]), neg(processed[r][k]), vname])
+                    encoding.add_clause(
+                        [neg(processed[l][k]), neg(processed[r][k]), vname]
+                    )
                     # if left == right then (left = k <-> right = k)
-                    encoding.add_clause([neg(vname), neg(processed[l][k]), processed[r][k]])
-                    encoding.add_clause([neg(vname), neg(processed[r][k]), processed[l][k]])
+                    encoding.add_clause(
+                        [neg(vname), neg(processed[l][k]), processed[r][k]]
+                    )
+                    encoding.add_clause(
+                        [neg(vname), neg(processed[r][k]), processed[l][k]]
+                    )
                 return vname
 
             encoding.add_clause([process_tree(first_tree)])
@@ -219,13 +258,21 @@ def run(n: int, first_tree: ExprNode, second_tree: ExprNode):
     for lit_name, (lit, _) in encoding._varmap.items():
         sem_valuation[lit_name] = lit_valuation[lit]
     print("success!")
-    print([[next(k for k in range(n) if sem_valuation[var(i,j,k)]) for j in range(n)] for i in range(n)])
+    print(
+        [
+            [next(k for k in range(n) if sem_valuation[var(i, j, k)]) for j in range(n)]
+            for i in range(n)
+        ]
+    )
     return True
+
 
 def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument("-s", "--size", required=True, type=int, help="Magma size")
-    argparser.add_argument("-i", "--incremental", action='store_true', help="Incremental up to size")
+    argparser.add_argument(
+        "-i", "--incremental", action="store_true", help="Incremental up to size"
+    )
     argparser.add_argument("args", nargs="*", type=int, help="Law to assume/refute")
 
     args = argparser.parse_args()
@@ -247,7 +294,7 @@ def main():
     if len(args.args) == 2:
         first_tree, second_tree = load_trees(args.args[0], args.args[1])
         if args.incremental:
-            for i in range(2, args.size+1):
+            for i in range(2, args.size + 1):
                 if run(i, first_tree, second_tree):
                     return
         else:
@@ -256,7 +303,7 @@ def main():
         with open("../../home_page/fme/unknowns.json", "r") as file:
             data = json.load(file)
         if args.incremental:
-            for i in range(2, args.size+1):
+            for i in range(2, args.size + 1):
                 for impl in data:
                     first = int(impl["lhs"].removeprefix("Equation"))
                     second = int(impl["rhs"].removeprefix("Equation"))
@@ -271,6 +318,7 @@ def main():
                 first_tree, second_tree = load_trees(first, second)
                 print(f"attempting {first} -> {second}")
                 run(args.size, first_tree, second_tree)
+
 
 if __name__ == "__main__":
     main()

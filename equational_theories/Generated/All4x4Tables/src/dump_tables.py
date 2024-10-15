@@ -8,6 +8,7 @@ if len(sys.argv) != 2:
     sys.exit(1)
 N = int(sys.argv[1])
 
+
 def to_table(packed_int):
     global N
     # Ensure the input is treated as an unsigned 64-bit integer
@@ -28,12 +29,13 @@ def to_table(packed_int):
 
 
 for line in open(f"data/covering_set_{N}x{N}.txt"):
-    if 'Table' not in line: continue
+    if "Table" not in line:
+        continue
     line = line.strip()
-    parts = line.split('[')
+    parts = line.split("[")
     table_num = int(parts[0].split()[1])
-    funcs_where_true = np.array(list(map(int, parts[1].strip(' ]').split(", "))))+1
-    
+    funcs_where_true = np.array(list(map(int, parts[1].strip(" ]").split(", ")))) + 1
+
     print("Table", to_table(table_num).tolist())
     print("Proves", list(funcs_where_true))
     print()

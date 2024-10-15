@@ -14,10 +14,12 @@ import json
 import os
 from PIL import Image  # pip install pillow
 
-def name_to_id(name):
-    return int(name.removeprefix('Equation'))
 
-def outcome_to_color(outcome) :
+def name_to_id(name):
+    return int(name.removeprefix("Equation"))
+
+
+def outcome_to_color(outcome):
     if outcome == "explicit_proof_true":
         return (0, 192, 255)
     elif outcome == "implicit_proof_true":
@@ -39,16 +41,15 @@ def outcome_to_color(outcome) :
     else:
         raise Exception("unknown outcome: " + outcome)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="render an image")
-    parser.add_argument("file",
-                        help="json file containing output of `lake exe extract_implications outcomes")
-    parser.add_argument("--outfile",
-                        type=str, default=None,
-                        help="name of output file")
-    parser.add_argument("--scale",
-                        type=int, default=1,
-                        help="integer scale factor")
+    parser.add_argument(
+        "file",
+        help="json file containing output of `lake exe extract_implications outcomes",
+    )
+    parser.add_argument("--outfile", type=str, default=None, help="name of output file")
+    parser.add_argument("--scale", type=int, default=1, help="integer scale factor")
 
     args = parser.parse_args()
 
@@ -56,7 +57,7 @@ if __name__ == '__main__':
     if outfile is None:
         outfile = os.path.splitext(args.file)[0] + ".png"
 
-    with open(args.file, 'r') as f:
+    with open(args.file, "r") as f:
         data = json.load(f)
 
     outcomes = data["outcomes"]
@@ -81,7 +82,7 @@ if __name__ == '__main__':
     for imageidx, eqid in enumerate(sorted(eqid_from_matrixidx)):
         imageidx_from_eqid[eqid] = imageidx
 
-    img = Image.new('RGB', (size, size))
+    img = Image.new("RGB", (size, size))
     pixels = img.load()
     for ii, row in enumerate(outcomes):
         for jj, outcome in enumerate(row):

@@ -5,11 +5,12 @@ import os
 from dataclasses import dataclass
 from typing import List, Union
 
+
 @dataclass
 class Node:
     value: str
-    left: Union['Node', None] = None
-    right: Union['Node', None] = None
+    left: Union["Node", None] = None
+    right: Union["Node", None] = None
 
     @property
     def is_op(self):
@@ -39,39 +40,41 @@ class Equation:
 
     def _parse_equation(self, equation_str: str):
         # Extract equation number
-        equation_number = re.search(r'Equation(\d+)', equation_str)
+        equation_number = re.search(r"Equation(\d+)", equation_str)
         if equation_number:
             self.equation_number = int(equation_number.group(1))
         else:
             raise ValueError("Equation number not found")
 
         # Extract free variables
-        variables_match = re.search(r'∀\s+([^:]+)\s*:', equation_str)
+        variables_match = re.search(r"∀\s+([^:]+)\s*:", equation_str)
         if variables_match:
-            self.free_variables = tuple(var.strip() for var in variables_match.group(1).split())
+            self.free_variables = tuple(
+                var.strip() for var in variables_match.group(1).split()
+            )
         else:
             raise ValueError("Free variables not found")
 
         # Extract the equation part
-        equation_parts = equation_str.split(",")[-1].split('=')
+        equation_parts = equation_str.split(",")[-1].split("=")
 
         # Parse the equation into an expression tree
         def parse_expression(expr: str) -> Node:
             expr = expr.strip()
-            if '◇' not in expr:
+            if "◇" not in expr:
                 return Node(expr)
 
             # Find the outermost ◇ operator
             bracket_count = 0
             for i, char in enumerate(expr):
-                if char == '(':
+                if char == "(":
                     bracket_count += 1
-                elif char == ')':
+                elif char == ")":
                     bracket_count -= 1
-                elif char == '◇' and bracket_count == 0:
+                elif char == "◇" and bracket_count == 0:
                     left = parse_expression(expr[:i])
-                    right = parse_expression(expr[i+1:])
-                    return Node('◇', left, right)
+                    right = parse_expression(expr[i + 1 :])
+                    return Node("◇", left, right)
 
             # If we get here, the expression is wrapped in brackets
             return parse_expression(expr[1:-1])
@@ -88,9 +91,11 @@ class Equation:
     def eval(self, assignment, op):
         return self.lhs.eval(assignment, op) == self.rhs.eval(assignment, op)
 
+
 def read_eqs():
     for line in open(os.path.join(os.path.dirname(__file__), "equations.txt")):
         yield Equation(line)
+
 
 if __name__ == "__main__":
     for result in read_eqs():
