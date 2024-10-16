@@ -22,7 +22,7 @@ jobs:
         fi
         echo "Claim comment detected."
 
-    - name: Retrieve project ID dynamically and log all project names
+    - name: Retrieve project ID
       id: get_project_id
       run: |
         QUERY=$(cat <<EOF
@@ -34,9 +34,6 @@ jobs:
         RESPONSE=$(curl -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
           -H "Content-Type: application/json" \
           --data "$QUERY" https://api.github.com/graphql)
-
-        echo "Available projects:"
-        echo "$RESPONSE" | jq -r '.data.repository.projectsV2.nodes[] | "\(.title) (ID: \(.id))"'
 
         PROJECT_ID=$(echo "$RESPONSE" | jq -r '.data.repository.projectsV2.nodes[] | select(.title == "Equational Theories Project").id')
 
