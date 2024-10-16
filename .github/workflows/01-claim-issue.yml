@@ -38,7 +38,7 @@ jobs:
         echo "Available projects:"
         echo "$RESPONSE" | jq -r '.data.repository.projectsV2.nodes[] | "\(.title) (ID: \(.id))"'
 
-        PROJECT_ID=$(echo "$RESPONSE" | jq -r '.data.repository.projectsV2.nodes[] | select(.title == "Your Project Name").id')
+        PROJECT_ID=$(echo "$RESPONSE" | jq -r '.data.repository.projectsV2.nodes[] | select(.title == "Equational Theories Project").id')
 
         if [ -z "$PROJECT_ID" ]; then
           echo "Error: Could not retrieve project ID"
