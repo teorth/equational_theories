@@ -7,6 +7,3 @@ curl -L https://raw.githubusercontent.com/leanprover-community/mathlib4/master/l
 rem Update the Mathlib dependencies and ensure doc-gen is also updated
 rem The `-R -Kenv=dev` flag ensures that the development environment is updated, including doc-gen
 lake -R -Kenv=dev update
-
-rem Retrieve and cache the latest Mathlib dependencies
-lake exe cache get

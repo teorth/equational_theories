@@ -478,6 +478,25 @@ theorem Equation3588_not_implies_Equation3994 : ∃ (G : Type) (_ : Magma G), Eq
   · have h2 : Equation3994 (Op G') ↔ Equation3588 G' := forall_comm
     rwa [←h2] at h3588
 
+-- Another Austin pair, this one with only two variables in both equations.
+-- https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1648.20!.3D.3E.20206/near/476842251
+theorem Finite.Equation206_implies_Equation1648 (G : Type*) [Magma G] [Finite G] (h : Equation206 G) : Equation1648 G := by
+  intro x y
+  let S : Set G := Set.univ
+  have m1 : S.MapsTo (· ◇ y) S := by
+    intro
+    simp [S]
+  have t : S.SurjOn (· ◇ y) S := by
+    intro x _
+    let z := x ◇ (x ◇ y)
+    use z
+    simp [S, z]
+    apply Eq.symm (h x y)
+  rw [Set.Finite.surjOn_iff_bijOn_of_mapsTo (Set.toFinite _) m1] at t
+  apply t.injOn (by simp [S]) (by simp [S])
+  simp
+  apply h (x ◇ y)
+
 theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.card α = 2) (E: Law.MagmaLaw α)
   (hE: ∃ (z: α), FreeMagma.Mem z E.rhs ∧ FreeMagma.Mem z E.lhs) :
   ∃ (G : Type) (hm : Magma G) (hf : Finite G), G ⊧ E ∧ ¬Equation2 G := by
