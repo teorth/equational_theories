@@ -1,6 +1,7 @@
 import equational_theories.Magma
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
+import equational_theories.EquationalResult
 
 /-!
 Bernhard Reinke writes:
@@ -375,6 +376,7 @@ theorem M.Refutes1684 : ¬ Equation1684 M := by
   use ⟨[1], by simp⟩, ⟨[2], by simp⟩
   decide
 
+@[equational_result]
 theorem Fact : ∃ (G : Type) (_ : Magma G), Facts G [206] [1684] :=
   ⟨_, _, M.Satisfies206, M.Refutes1684⟩
 
