@@ -497,215 +497,87 @@ theorem Finite.Equation206_implies_Equation1648 (G : Type*) [Magma G] [Finite G]
   simp
   apply h (x ◇ y)
 
-theorem Finite.two_variables_laws {α: Type} [ht : Fintype α] (hc : Fintype.card α = 2) (E: Law.MagmaLaw α)
-  (hE: ∃ (z: α), FreeMagma.Mem z E.rhs ∧ FreeMagma.Mem z E.lhs) :
-  ∃ (G : Type) (hm : Magma G) (hf : Finite G), G ⊧ E ∧ ¬Equation2 G := by
-  revert E
-  suffices hs: ∀ (x: α) (w: FreeMagma α), (hE: FreeMagma.Mem x w) → ∃ (G: Type) (hm: Magma G) (hf: Finite G), G ⊧ (Lf x ≃ w) ∧ ¬Equation2 G by
-    -- an arbitrary magma with at least 2 elements satisfying the constant law
-    let G := Fin 2
-    let M: Magma G := Magma.mk fun x y => 0
-    let hf: Finite G := Finite.of_fintype G
-    have hneq2: ¬Equation2 G := by
-      unfold Equation2
+theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card α = 2) (E: Law.MagmaLaw α) :
+  ∀ (z: α),
+  FreeMagma.Mem z E.lhs
+  → FreeMagma.Mem z E.rhs
+  → ∃ (G : Type) (hm : Magma G), Finite G ∧ ¬Equation2 G ∧ G ⊧ E := by
+  intro x mem_x_lhs mem_x_rhs
+  suffices hs: ∃ (k: ℕ), 1 < k ∧ (∃ (M: Magma (ZMod k)), ZMod k ⊧ E) by
+    obtain ⟨k, hk, M, hm⟩ := hs
+    exists ZMod k, M
+    split_ands
+    .
+      refine' @Finite.of_fintype (ZMod k) ?_
+      refine' @ZMod.fintype k ?_
+      simp_all only [neZero_iff, ne_eq]
+      omega
+    .
       simp only [not_forall]
-      exists 0, 1
-      simp only [zero_ne_one, not_false_eq_true]
-    intro E hE
+      refine' @Nontrivial.exists_pair_ne (ZMod k) ?_
+      rw [ZMod.nontrivial_iff]
+      omega
+    .
+      assumption
+  revert α
+  suffices hs: ∀ (E: Law.MagmaLaw (Fin 2)),
+               FreeMagma.Mem 0 E.lhs
+               → FreeMagma.Mem 0 E.rhs
+               → ∃ (k: ℕ), 1 < k ∧ (∃ (M: Magma (ZMod k)), ZMod k ⊧ E) by
+    intros α ht hc E x mem_x_lhs mem_x_rhs
+    have := Classical.typeDecidableEq α
+    let f : α → Fin 2 := fun z => if z = x then 0 else 1
+    let E' := Law.MagmaLaw.map f E
+    replace hs := hs E'
+    sorry
+  suffices hs: ∀ (w: FreeMagma (Fin 2)),
+               (hw: FreeMagma.Mem 0 w)
+               → ∃ (k: ℕ), 1 < k ∧ (∃ (M: Magma (ZMod k)), ZMod k ⊧ (Lf 0 ≃ w)) by
+    intro E hz1 hz2
     match E with
-    | ⟨FreeMagma.Fork w1 w2, FreeMagma.Fork w3 w4⟩ =>
-      exists G, M, hf
-      split_ands
-      .
-        intro f
-        unfold satisfiesPhi FreeMagma.evalInMagma
-        rfl
-      .
-        exact hneq2
+    | ⟨FreeMagma.Fork w1 w2, FreeMagma.Fork w3 w4⟩
     | ⟨FreeMagma.Leaf a, FreeMagma.Leaf b⟩ =>
-      by_cases h: a = b
-      .
-        rw [h]
-        exists G, M, hf
-        split_ands
-        .
-          intro f
-          unfold satisfiesPhi FreeMagma.evalInMagma
-          rfl
-        .
-          exact hneq2
-      .
-        obtain ⟨z, ⟨hz1, hz2⟩⟩ := hE
-        simp only [Law.MagmaLaw, FreeMagma.Mem] at hz1 hz2
-        rw [hz2] at hz1
-        contradiction
+      exists 2
+      simp_all only [Nat.one_lt_ofNat, true_and]
+      exists Magma.mk fun x y => 0
+      simp_all only [satisfies, satisfiesPhi, FreeMagma.Mem]
+      intro φ
+      simp_all only [FreeMagma.evalInMagma, Magma.op]
+    | ⟨FreeMagma.Leaf x, w ⋆ w'⟩
     | ⟨w ⋆ w', FreeMagma.Leaf x⟩ =>
-      obtain ⟨z, ⟨hz1, hz2⟩⟩ := hE
-      simp only [Law.MagmaLaw] at hz1 hz2
-      simp only [FreeMagma.Mem] at hz1
-      rw [hz1] at hz2
-      obtain ⟨G, ⟨M, ⟨hf, h⟩⟩⟩ := hs x (w ⋆ w') hz2
-      exists G, M, hf
-      simp only [h, Law.satisfies_symm, not_false_eq_true, and_self]
-    | ⟨FreeMagma.Leaf x, w ⋆ w'⟩ =>
-      apply hs x (w ⋆ w')
-      obtain ⟨z, ⟨hz1, hz2⟩⟩ := hE
-      simp_all only [not_forall, exists_and_left, exists_prop, exists_and_right, FreeMagma.Mem, exists_eq_right]
-  intros x w hw
-  by_cases h: w.first = x ∨ w.last = x
+      replace hs := hs (w ⋆ w')
+      simp_all only [(by simp_all only [FreeMagma.Mem]: x = 0)]
+      try
+        .
+          simp_all only [true_implies]
+          obtain ⟨G, hm, hf, hex⟩ := hs
+          exists G, hm, hf
+          simp_all only [satisfies, not_false_eq_true, true_and]
+          intro φ
+          replace hex := Law.satisfiesPhi_symm_law φ _ (hex φ)
+          simp_all only [Law.MagmaLaw.symm]
+  intros w hw
+  by_cases h: w.first = 0 ∨ w.last = 0
   .
-    clear * - h
-    let G := Fin 2
-    exists G
-    suffices hs: ∃ (hm: Magma G), ∀ (f: α → G), f x = w ⬝ f by
-      clear h
-      obtain ⟨hm, h⟩ := hs
-      exists hm, Finite.of_fintype G
-      refine' And.intro h _
-      unfold Equation2
-      simp only [not_forall]
-      exists 0, 1
+    clear hw
+    exists 2
+    simp_all only [Nat.one_lt_ofNat, true_and]
     cases h with
     | inl h =>
       exists Magma.mk fun x y => x
       intro f
-      subst h
+      simp_all only [←h]
       induction w
         <;> first | rfl | assumption
     | inr h =>
       exists Magma.mk fun x y => y
       intro f
-      subst h
+      simp_all only [←h]
       induction w
         <;> first | rfl | assumption
   .
-    revert α
     suffices h: ∀ (w : FreeMagma (Fin 2)), w.first ≠ 0 ∧ w.last ≠ 0 → FreeMagma.Mem 0 w → ∃ (G : Type) (M : Magma G) (hf: Finite G), G ⊧ (Lf 0 ≃ w) ∧ ¬Equation2 G by
-      intros α ht hc x w hw h'
-      replace h': w.first ≠ x ∧ w.last ≠ x := by
-        simp_all only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, not_or, not_false_eq_true, and_self]
-      have : ∃ (π: α ≃ Fin 2), π.toFun x = 0 := by
-        have π0 := Fintype.equivFin α
-        rw [hc] at π0
-        letI := Classical.decEq α
-        let y := if π0.invFun 0 = x then π0.invFun 1 else π0.invFun 0
-        let πfwd: α → Fin 2 := fun z => if z = x then 0 else 1
-        let πinv: Fin 2 → α := fun z => if z = 0 then x else y
-        have : Function.LeftInverse πinv πfwd := by
-          simp only [πfwd, πinv]
-          simp only [Function.LeftInverse]
-          intro z
-          simp only [Fin.isValue, ite_eq_left_iff, one_ne_zero, imp_false, Decidable.not_not]
-          rw [(by simp_all only [Fin.isValue, ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply]
-              : z = π0.invFun (π0.toFun z))]
-          generalize π0.toFun z = l
-          fin_cases l
-          simp_all only [Fin.isValue, ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Fin.zero_eta, Equiv.invFun_as_coe, ↓reduceIte, ite_eq_right_iff, implies_true, y]
-          simp_all only [Fin.isValue, ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Fin.zero_eta, Equiv.invFun_as_coe, ↓reduceIte, ite_eq_right_iff, implies_true, y]
-          simp_all only [Fin.isValue, Fin.mk_one]
-          obtain ⟨left, right⟩ := h'
-          split
-          next h_1 =>
-            subst h_1
-            simp_all only [Fin.isValue]
-          next
-            h_1 =>
-            simp_all only [Fin.isValue, ite_eq_left_iff, EmbeddingLike.apply_eq_iff_eq, zero_ne_one, imp_false, Decidable.not_not]
-            rw [(by simp_all only [Fin.isValue, ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply]
-                : x = π0.invFun (π0.toFun x))] at *
-            generalize π0.toFun x = m at *
-            fin_cases m
-            simp_all only [Fin.isValue, Fin.zero_eta, Equiv.invFun_as_coe, EmbeddingLike.apply_eq_iff_eq,
-              one_ne_zero, not_false_eq_true]
-            simp_all only [Fin.isValue, Fin.mk_one, Equiv.invFun_as_coe, not_true_eq_false]
-        have this' : Function.RightInverse πinv πfwd  := by
-          have := Function.LeftInverse.injective this
-          have : Function.Surjective πfwd := by
-            apply Function.Injective.surjective_of_fintype
-            .
-              simp_all only [Fin.isValue, ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp,
-                Equiv.invFun_as_coe, πinv, y, πfwd]
-              obtain ⟨left, right⟩ := h'
-              exact π0
-            .
-              simp_all only [Fin.isValue, ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Equiv.invFun_as_coe, πinv, y, πfwd]
-          apply Function.LeftInverse.rightInverse_of_surjective
-          assumption
-          assumption
-        let π: α ≃ Fin 2 := Equiv.mk
-          πfwd
-          πinv
-          this
-          this'
-        exists π
-        simp only [π, ite_true, πfwd]
-      obtain ⟨π, hπ⟩ := this
-      let w': FreeMagma (Fin 2) := FreeMagma.evalInMagma (fun z => FreeMagma.Leaf (π.toFun z)) w
-      have : w'.first ≠ 0 ∧ w'.last ≠ 0 := by
-        have : w'.first = π.toFun w.first := by
-          clear h'
-          induction w
-          .
-            simp_all only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, FreeMagma.first, Equiv.toFun_as_coe]
-          .
-            rename_i w1 w2 h1 h2
-            simp_all only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, Equiv.toFun_as_coe, FreeMagma.first]
-            sorry
-        rw [this]
-          ; clear this
-        have : w'.last = π.toFun w.last := by
-          clear h'
-          induction w
-          .
-            simp only [ne_eq, not_forall, exists_and_left, exists_prop, exists_and_right, and_imp, FreeMagma.last, Equiv.toFun_as_coe]
-          .
-            rename_i w1 w2 h1 h2
-            simp_all [FreeMagma.last]
-            sorry
-        rw [this]
-          ; clear this
-        obtain ⟨h1, h2⟩ := h'
-        apply_fun π.invFun at hπ
-        simp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply, Fin.isValue] at hπ
-        split_ands
-        .
-          intro hct
-          apply_fun π.invFun at hct
-          simp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply, Fin.isValue] at hct
-          rw [←hπ] at hct
-          contradiction
-        .
-          intro hct
-          apply_fun π.invFun at hct
-          simp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply, Fin.isValue] at hct
-          rw [←hπ] at hct
-          contradiction
-      obtain ⟨G, ⟨M, ⟨hf, ⟨h1, h2⟩⟩⟩⟩ := h w' this sorry
-      exists G, M, hf
-      split_ands
-      .
-        clear * - h1 hπ
-        intro f
-        replace h1 := h1 (f ∘ π.invFun)
-        simp only [satisfiesPhi, w', ←hπ] at *
-          ; clear w'
-        simp only [FreeMagma.evalInMagma] at *
-        simp only [Function.comp] at *
-        conv at h1 =>
-          lhs
-          simp only [Equiv.toFun_as_coe, Equiv.invFun_as_coe, Equiv.symm_apply_apply]
-        rw [h1]
-          ; clear h1
-        induction w
-        .
-          rename_i z
-          simp only [FreeMagma.evalInMagma, Equiv.invFun_as_coe, Equiv.toFun_as_coe, Function.comp_apply, Equiv.symm_apply_apply]
-        .
-          rename_i w1 w2 h1 h2
-          simp [FreeMagma.evalInMagma]
-          simp_all only [Equiv.invFun_as_coe, Equiv.toFun_as_coe]
-      .
-        assumption
+      sorry
     intro w h
     obtain ⟨hl, hr⟩ := h
     let MPols: Magma (Polynomial ℤ) := Magma.mk fun x y => (1 - Polynomial.X) * x + Polynomial.X * y
