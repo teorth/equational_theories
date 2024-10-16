@@ -56,7 +56,7 @@ this in Lean myself.
 
 ### Implementation notes
 
-This contians a self-contained development of the free product of three copies of the two-element
+This contains a self-contained development of the free product of three copies of the two-element
 group, by defining reduced words, a reduction function, and deriving enough API for it. In the
 end we define our magma of interest directly, so this free product group is not explicitly defined.
 
@@ -118,7 +118,7 @@ lemma IsRed_not_repeated {ys} {x} {xs} : ¬ IsRed (ys ++ x :: x :: xs) := by
   simp at h
 
 /-!
-The reduction function, nicely concrete and executabe (for `by decide` later) and somewhat
+The reduction function, nicely concrete and executable (for `by decide` later) and somewhat
 efficient (not that that matters).
 -/
 def red (w : W) : W := go [] w
