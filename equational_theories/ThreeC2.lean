@@ -370,15 +370,15 @@ theorem M.Satisfies206 : Equation206 M := by
   simpa [Magma.op, hw, hv, red_append_nil_iff] using
     ff_fff (red (w⁻¹ ++ v)) (red_IsRed _)
 
-theorem M.Refutes1684 : ¬ Equation1684 M := by
-  unfold Equation1684
+theorem M.Refutes1648 : ¬ Equation1648 M := by
+  unfold Equation1648
   push_neg
-  use ⟨[1], by simp⟩, ⟨[2], by simp⟩
+  use ⟨[1], by simp⟩, ⟨[3], by simp⟩
   decide
 
 @[equational_result]
-theorem Fact : ∃ (G : Type) (_ : Magma G), Facts G [206] [1684] :=
-  ⟨_, _, M.Satisfies206, M.Refutes1684⟩
+theorem Fact : ∃ (G : Type) (_ : Magma G), Facts G [206] [1648] :=
+  ⟨_, _, M.Satisfies206, M.Refutes1648⟩
 
 
 end ThreeC2
