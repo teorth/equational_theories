@@ -1,5 +1,6 @@
 import equational_theories.Magma
 import equational_theories.Equations.All
+import equational_theories.FactsSyntax
 
 /-!
 Bernhard Reinke writes:
@@ -50,7 +51,19 @@ this in Lean myself.
 
 -/
 
-namespace Planar3RegTree
+/-!
+
+### Implementation notes
+
+This contians a self-contained development of the free product of three copies of the two-element
+group, by defining reduced words, a reduction function, and deriving enough API for it. In the
+end we define our magma of interest directly, so this free product group is not explicitly defined.
+
+The development can easily be generalized to more than three copies if needed, just swap out `Fin 3`.
+
+-/
+
+namespace ThreeC2
 
 /-- Free words over three generators -/
 abbrev W := List (Fin 3)
@@ -109,9 +122,29 @@ efficient (not that that matters).
 -/
 def red (w : W) : W := go [] w
 where
-  go | ys, [] => ys.reverse
-     | [], x::xs => go [x] xs
-     | y::ys, x::xs => if x = y then go ys xs else go (x::y::ys) xs
+  -- A zipper processing helper function.
+  go : (ys xs : W) → W
+     | ys, []       => ys.reverse
+     | [],    x::xs => go [x] xs
+     | y::ys, x::xs =>
+      if x = y then
+        go ys xs
+      else
+        go (x::y::ys) xs
+
+  -- Neat trick: We define a copy of that function that passes through the `IsRed` assumption.
+  -- We do not use this function, but we can use its induction principle to do proofs about
+  -- `red.go` without having to thread through this assumption manually, if we need that.
+  go_aux : (ys xs : W) → (h : IsRed ys) → W
+     | ys, [], _       => ys.reverse
+     | [],    x::xs, _ => go_aux [x] xs (IsRed_singleton _)
+     | y::ys, x::xs, h =>
+      if heq : x = y then
+        go_aux ys xs (IsRed_uncons h)
+      else
+        go_aux (x::y::ys) xs (IsRed_cons heq h)
+
+def red.go_induct := @red.go_aux.induct
 
 @[simp] theorem red_nil : red [] = [] := rfl
 @[simp] theorem red_singleton (x : Fin 3) : red [x] = [x] := rfl
@@ -126,14 +159,14 @@ theorem red_duoton_succ_succ (x : Fin 3) : red [x + 1 + 1, x] = [x+1+1, x] := by
 
 @[simp]
 theorem red_IsRed (w : W) : IsRed (red w) :=
-  go [] w (by simp)
+  go [] w IsRed_nil
 where
   go (ys xs : W) (h : IsRed ys) : IsRed (red.go ys xs) := by
-    induction ys, xs using red.go.induct
-    next => simpa [red.go]
-    next ih => apply ih; simp
-    next ih => simpa [red.go] using ih (IsRed_uncons h)
-    next hne ih => simpa [red.go, hne] using ih (IsRed_cons hne h)
+    induction ys, xs, h using red.go_induct
+    next => simp [red.go, *]
+    next ih => apply ih
+    next ih => simpa [red.go] using ih
+    next hne _ ih => simpa [red.go, hne] using ih
 
 theorem red_length_le (w : W) : (red w).length ≤ w.length := by
   simpa using go [] w
@@ -149,7 +182,7 @@ theorem red.go_length_le (ys xs : W) :
 theorem red_eq_of_IsRed {w : W} (h : IsRed w) : red w = w :=
   go [] w h
 where
-  go ys xs (h : IsRed (ys⁻¹ ++ xs)) : red.go ys xs = ys ⁻¹ ++ xs := by
+  go ys xs  (h : IsRed (ys⁻¹ ++ xs)) : red.go ys xs = ys ⁻¹ ++ xs := by
     induction ys, xs using red.go.induct
     next => simp [red.go, h]
     next ih =>
@@ -170,77 +203,53 @@ theorem red_red (w : W) : red (red w) = red w := red_eq_of_IsRed (red_IsRed _)
 
 /-- We can reduce anywhere in a term. This is essentially a proof of confluence -/
 theorem red_reduce {ys} {x} {xs} : red (ys ++ x :: x :: xs) = red (ys ++ xs) :=
-  go [] ys (by simp)
+  go [] ys IsRed_nil
 where
   go zs ys (h : IsRed zs) : red.go zs (ys ++ x :: x :: xs) = red.go zs (ys ++ xs) := by
-    induction zs, ys using red.go.induct
-    next ys =>
+    induction zs, ys, h using red.go_induct
+    next ys _ _ =>
       cases ys
       next => simp [red.go]
-      next y ys =>
-        simp [red.go]
-        intro hx
-        subst y
+      next y ys h _  =>
+        simp [red.go, *]
+        intro he
+        subst he
         cases ys
         · simp [red.go]
         · simp [red.go]
-          intro hx
-          subst hx
+          intro he
+          subst he
           exfalso
           apply IsRed_not_repeated (ys := []) h
-    next ih => exact ih (IsRed_singleton _)
-    next ih =>
-      simp only [red.go, ↓reduceIte, List.append_eq]
-      exact ih (IsRed_uncons h)
-    next hne ih =>
-      simp [red.go, *]
-      simp [red.go, *] at ih
-      exact ih (IsRed_cons hne h)
+    next ih => exact ih
+    next => simp [red.go, *]
+    next => simp [red.go, *]
 
 @[simp]
 theorem rev_red (w : W) : (red w)⁻¹ = red (w⁻¹) := by
   simpa [red] using go [] w (by simp)
 where
   go ys xs (h : IsRed ys) : (red.go ys xs)⁻¹ = red (xs⁻¹ ++ ys) := by
-    induction ys, xs using red.go.induct
-    next ys => simp [red.go, red_eq_of_IsRed, h]
-    next x xs ih =>
-      simp [red.go]
-      apply ih
-      simp
-    next ys x xs ih =>
-      simp [red.go]
-      rw [ih]
-      rotate_left; apply IsRed_uncons h
-      rw [red_reduce]
-    next ys y x xs hne ih =>
-      simp [red.go, hne]
-      apply ih
-      apply IsRed_cons hne h
+    induction ys, xs, h using red.go_induct
+      <;> simp [red.go, red_eq_of_IsRed, red_reduce, *]
 
 @[simp]
-theorem red_append_red (w v : W) : red (w ++ red v) = red (w ++ v) := by
+theorem red_append_red_right (w v : W) : red (w ++ red v) = red (w ++ v) := by
   simpa [red] using go [] v
 where
   go ys xs : red (w ++ red.go ys xs) = red (w ++ (ys⁻¹) ++ xs) := by
     induction ys, xs using red.go.induct
     next ys => simp [red.go]
-    next x xs ih =>
-      simp [red.go]
-      simp at ih
-      apply ih
+    next x xs ih => simpa [red.go] using ih
     next ys x xs ih =>
       simp [red.go]
       rw [ih]; clear ih
       symm
       simpa [List.append_assoc] using @red_reduce (w ++ (ys⁻¹)) x xs
-    next ys y x xs hne ih =>
-      simp [red.go, hne]
-      simp at ih
-      apply ih
+    next ys y x xs hne ih => simpa [red.go, hne] using ih
 
 @[simp]
-theorem red_append_red' (w v : W) : red (red w ++ v) = red (w ++ v) := by
+theorem red_append_red_left (w v : W) : red (red w ++ v) = red (w ++ v) := by
   apply List.reverse_injective; simp
 
 @[simp]
@@ -251,13 +260,17 @@ theorem red_append_inv (w v : W) : red (w⁻¹ ++ (w ++ v)) = red v := by
 theorem red_rev_self (w : W) : red (w⁻¹ ++ w) = [] := by
   simpa using red_append_inv w []
 
-theorem red_append_nil_iff_of_IsRed (w v : W) (hw : IsRed w) (hv : IsRed v) :
+/--
+The crucial step towards cancellation.
+-/
+theorem red_append_nil_iff_eq_inv (w v : W) (hw : IsRed w) (hv : IsRed v) :
     red (w ++ v) = [] ↔ w = v⁻¹ := by
   constructor
   · exact go [] w hw
   · intro h
     simp [h]
 where
+  -- This loop/induction moves `w` to the left argument of `red.go`. No reduction can happen.
   go ys xs (hxs : IsRed (ys⁻¹ ++ xs)) : red.go ys (xs ++ v) = [] → (ys⁻¹ ++ xs) = v⁻¹ := by
     induction ys, xs using red.go.induct
     next ys =>
@@ -268,14 +281,14 @@ where
       simpa using hxs
     next ys x xs _ =>
       exfalso
-      simp at hxs
-      apply IsRed_not_repeated hxs
+      simp [IsRed_not_repeated] at hxs
     next ys y x xs hne ih =>
       simp [red.go, hne]
       simp at ih
       apply ih
       simpa using hxs
-  go2 ys xs  (hxs : IsRed xs) : red.go ys xs = [] → ys = xs := by
+  -- This loop/induction now cancels the elements. Now the last case is impossible.
+  go2 ys xs (hxs : IsRed xs) : red.go ys xs = [] → ys = xs := by
     intro h
     induction ys, xs using red.go.induct
     next ys => simpa [red.go] using h
@@ -292,48 +305,32 @@ where
     next y ys x xs hne ih =>
       exfalso
       simp [red.go, hne] at h
-      specialize ih  (IsRed_uncons hxs) h
-      subst ih
-      have := @IsRed_not_repeated [] x (y :: ys)
-      contradiction
+      rw [← ih (IsRed_uncons hxs) h] at hxs
+      apply @IsRed_not_repeated [] x (y :: ys) hxs
 
-
-
--- @[simp]
 theorem red_append_nil_iff (w v : W) :
     red (w ++ v) = [] ↔ red w = red v⁻¹ := by
-  rw [← red_append_red, ← red_append_red']
-  apply red_append_nil_iff_of_IsRed
+  rw [← red_append_red_right, ← red_append_red_left]
+  apply red_append_nil_iff_eq_inv
   exact red_IsRed w
   exact red_IsRed v
 
-theorem red_append_nil_iff' (w v : W) :
-  red (w⁻¹ ++ v) = [] ↔ red w = red v := by simp [← rev_red, red_append_nil_iff]
+theorem red_eq_red_iff_red_append_nil (w v : W) :
+  red w = red v ↔ red (w⁻¹ ++ v) = [] := by simp [← rev_red, red_append_nil_iff]
 
 @[simp]
 theorem red_append_inj (w v : W) (h : IsRed w):
     w = red (w ++ v) ↔ red v = [] := by
-  constructor
-  · intro heq
-    rw [← red_eq_of_IsRed h] at heq
-    rw [red_append_red'] at heq
-    symm at heq
-    rw [← red_append_nil_iff'] at heq
-    rw [List.reverse_append] at heq
-    induction w
-    case nil => simpa [← rev_red] using heq
-    case cons x xs ih =>
-      apply ih (IsRed_uncons h)
-      simp at heq
-      have := @red_reduce ((xs ++ v)⁻¹) x xs
-      simp_all
-  · intro heq
-    rw [← red_append_red, heq, List.append_nil]
-    simp [h]
-
+  rw [← red_eq_of_IsRed h]
+  rw [red_append_red_left]
+  rw [red_eq_red_iff_red_append_nil]
+  rw [← List.append_assoc]
+  rw [red_append_nil_iff]
+  simp [-rev_red]
 
 attribute [simp] List.reverse_append
 
+/-- The `f` function that we use to define the monoid of interest -/
 def f : W → W
   | [] => []
   | [x] => [x+1]
@@ -349,6 +346,7 @@ theorem red_f (w : W) : red (f w) = f w := by
 theorem rev_f (w : W) : (f w)⁻¹ = f w := by
   unfold f; split <;> simp
 
+/-- The crucial relation of that function -/
 theorem ff_fff (z : W) (h : IsRed z) : f (f z) = f (red (f (f z) ++ z)) := by
   match z with
   | [] => simp
@@ -357,10 +355,12 @@ theorem ff_fff (z : W) (h : IsRed z) : f (f z) = f (red (f (f z) ++ z)) := by
     have : IsRed ((x + 1) :: x :: y :: zs) := IsRed_cons (by simp; omega) h
     simp [f.eq_3, this]
 
+/-- The carrier for our magma: reduced words -/
 abbrev M := {x : W // IsRed x}
 
+/-- The magma instance -/
 instance inst : Magma M where
-  op := fun ⟨x, _hx⟩ ⟨y, _hy⟩ =>
+  op := fun ⟨x, _⟩ ⟨y, _⟩ =>
     ⟨red (x ++ f (red (x.reverse ++ y))), red_IsRed _⟩
 
 theorem M.Satisfies206 : Equation206 M := by
@@ -374,3 +374,9 @@ theorem M.Refutes1684 : ¬ Equation1684 M := by
   push_neg
   use ⟨[1], by simp⟩, ⟨[2], by simp⟩
   decide
+
+theorem Fact : ∃ (G : Type) (_ : Magma G), Facts G [206] [1684] :=
+  ⟨_, _, M.Satisfies206, M.Refutes1684⟩
+
+
+end ThreeC2
