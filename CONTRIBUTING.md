@@ -55,7 +55,7 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 
 ### 5. Withdrawing or Updating a PR
 
-- If you need to withdraw your PR, comment the single phrase `withdraw PR #PR_NUMBER` on the issue. The task will return to the `Claimed Tasks` column, but you will remain assigned to the issue.
+- If you need to withdraw your PR, comment `withdraw #PR_NUMBER` on the issue. The task will return to the `Claimed Tasks` column, but you will remain assigned to the issue.
 - To submit an updated PR after withdrawal, comment `propose #NEW_PR_NUMBER` following the same process outlined in step 4.
 
 ### 6. Review Process
