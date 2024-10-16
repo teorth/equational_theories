@@ -1,13 +1,65 @@
 import equational_theories.Magma
 import equational_theories.Equations.All
 
+/-!
+Bernhard Reinke writes:
+
+I think I have a sketch for an example of a magma satisfying 206 but not 1648. I use the translation
+invariant approach, but for a non-commutative group: let $$ G $$ the free product of three cyclic
+groups of order 2. If we have the alphabet $$ A = \{a,b,c\} $$ then we can identify $$ G $$ with the
+reduced words in $$ A $$ that have no subwords of the form $$ aa, bb, cc $$.
+
+Our magma will be defined on G and will satisfy
+```math
+x ◇ y = x f(x^{-1}y)
+```
+where $$ f \colon G \rightarrow \{1, a, b, c\} $$.
+
+Then the RHS of 206 is
+```math
+(x ◇ (x ◇ y)) ◇ y = (x ◇ (x f(x^{-1}y)) ◇ y = (x f(f(x^{-1} y))) ◇ y = x  f(f(x^{-1} y)) f( (f(f(x^{-1} y))^{-1} x^{-1} y)
+```
+Setting $$ z = x^{-1} y $$, we get that 206 is equivalent to
+$$ f(f(z)) f ( f(f(z))^{-1} z) = 1 $$. Under the assumption that $$f$$ maps to $$\{1, a, b, c\}$$
+(so $$ f(z) = f(z)^{-1} $$), this simplifies to
+```math
+f(f(z)) = f( f(f(z)) z)
+```
+ I claim the following f satisfies this: we set
+```math
+f(1) = 1, f(a) = b, f(b) = c, f(c) = a
+```
+now, if $$w$$ is a nonempty reduced word not starting in $$a$$, we set $$ f(aw) = a $$, cyclically
+symmetric for reduced words starting in b and and c. Let us check that this satisfies $$f(f(z)) = f(
+f(f(z)) z)$$:
+
+It is clear that $$ f(f(1)) = f( f(f(1)) 1) = 1 $$.
+
+We have $$ f(f(a)) = f(b) = c$$, and $$f(f(f(a))a) = f(ca) = c$$.
+
+For $$w$$ is a nonempty reduced word not starting in $$a$$, we have
+$$ f(f(aw)) = f(a) = b, so f( f(f(aw)) aw) = f(baw) = b$$. The rest follows by symmetry.
+
+I think 1648 translates to
+$$ f(z)f(f((f(z))^{-1} z)) = 1 $$
+this is not satisfied, as $$ f(a) f(f( (f(a))^{-1} a) = b f(f(ba)) = b f(b) = bc \not= 1 $$.
+
+I hope I haven't made any computational mistakes (this is in fact my second try, :sweat_smile: ),
+would someone like to check whether this makes sense? I don't think I would be able to formalize
+this in Lean myself.
+
+-/
+
 namespace Planar3RegTree
 
-abbrev F := List (Fin 3)
+/-- Free words over three generators -/
+abbrev W := List (Fin 3)
 
+/-- List reversal is going to be our inverse, so let's introduce convenient notation. -/
 local notation x "⁻¹" => List.reverse x
 
-def IsRed (w : F) : Prop := ∀ i, (h : i + 1 < w.length) → w[i] ≠ w[i+1]
+/-- Reduced words do not have the same element adjacent to each other -/
+def IsRed (w : W) : Prop := ∀ i, (h : i + 1 < w.length) → w[i] ≠ w[i+1]
 
 @[simp]
 theorem IsRed_nil : IsRed [] := by simp [IsRed]
@@ -15,16 +67,16 @@ theorem IsRed_nil : IsRed [] := by simp [IsRed]
 @[simp]
 theorem IsRed_singleton x : IsRed [x] := by simp [IsRed]
 
-theorem IsRed_reverse (w : F) : IsRed (w ⁻¹) → IsRed w := by
+theorem IsRed_reverse (w : W) : IsRed (w ⁻¹) → IsRed w := by
   intro h i hi
-  specialize h (w.length - (i+2)) (by simp; omega)
-  simp at h
   symm
+  specialize h (w.length - (i+2)) (by simp; omega)
+  simp only [List.getElem_reverse, ne_eq] at h
   show ¬_
   convert h using 3 <;> omega
 
 @[simp]
-theorem IsRed_reverse_iff (w : F) : IsRed (w ⁻¹) ↔ IsRed w := by
+theorem IsRed_reverse_iff (w : W) : IsRed (w ⁻¹) ↔ IsRed w := by
   constructor
   · intro h; apply IsRed_reverse; apply h
   · intro h; apply IsRed_reverse; rw [List.reverse_reverse]; apply h
@@ -36,23 +88,26 @@ theorem IsRed_uncons {x} {ys} (h : IsRed (x :: ys)) : IsRed ys := by
 
 theorem IsRed_cons {y} {x} {ys} (hne : y ≠ x) (h : IsRed (x :: ys)) : IsRed (y :: x :: ys) := by
   intro i hi
-  simp [List.length_append] at hi
   match i with
   | 0 => simpa
   | i+1 =>
-    specialize h i (by simp [hi])
+    specialize h i (by simpa [List.length_append] using hi)
     simpa
 
 lemma IsRed_not_repeated {ys} {x} {xs} : ¬ IsRed (ys ++ x :: x :: xs) := by
   intro h
   specialize h ys.length (by simp)
   rw [List.getElem_append_right] at h
-  rotate_left; simp
+  rotate_left; · simp
   rw [List.getElem_append_right] at h
-  rotate_left; simp
+  rotate_left; · simp
   simp at h
 
-def red (w : F) : F := go [] w
+/-!
+The reduction function, nicely concrete and executabe (for `by decide` later) and somewhat
+efficient (not that that matters).
+-/
+def red (w : W) : W := go [] w
 where
   go | ys, [] => ys.reverse
      | [], x::xs => go [x] xs
@@ -70,37 +125,28 @@ theorem red_duoton_succ_succ (x : Fin 3) : red [x + 1 + 1, x] = [x+1+1, x] := by
   simp! [red]; omega
 
 @[simp]
-theorem red_IsRed (w : F) : IsRed (red w) :=
+theorem red_IsRed (w : W) : IsRed (red w) :=
   go [] w (by simp)
 where
-  go (ys xs : F) (h : IsRed ys) : IsRed (red.go ys xs) := by
+  go (ys xs : W) (h : IsRed ys) : IsRed (red.go ys xs) := by
     induction ys, xs using red.go.induct
     next => simpa [red.go]
     next ih => apply ih; simp
-    next ih =>
-      simp [red.go]
-      apply ih
-      apply IsRed_uncons
-      apply h
-    next hne ih =>
-      simp [red.go, hne]
-      apply ih
-      apply IsRed_cons hne h
+    next ih => simpa [red.go] using ih (IsRed_uncons h)
+    next hne ih => simpa [red.go, hne] using ih (IsRed_cons hne h)
 
-theorem red_length_le (w : F) : (red w).length ≤ w.length := by
+theorem red_length_le (w : W) : (red w).length ≤ w.length := by
   simpa using go [] w
 where
   go (w v) : (red.go w v).length ≤ w.length + v.length := by
-    induction w, v using red.go.induct <;>
-      (simp_all [red.go] <;> omega)
+    induction w, v using red.go.induct <;> simp_all [red.go] <;> omega
 
-theorem red.go_length_le (ys xs : F) :
+theorem red.go_length_le (ys xs : W) :
     ys.length ≤ (red.go ys xs).length + xs.length := by
-  induction ys, xs using red.go.induct <;>
-    (simp_all [red.go] <;> omega)
+  induction ys, xs using red.go.induct <;> simp_all [red.go] <;> omega
 
 @[simp]
-theorem red_eq_of_IsRed {w : F} (h : IsRed w) : red w = w :=
+theorem red_eq_of_IsRed {w : W} (h : IsRed w) : red w = w :=
   go [] w h
 where
   go ys xs (h : IsRed (ys⁻¹ ++ xs)) : red.go ys xs = ys ⁻¹ ++ xs := by
@@ -110,9 +156,9 @@ where
       apply ih
       simpa
     next ih =>
-      exfalso; clear ih
-      simp at h
-      apply IsRed_not_repeated h
+      exfalso; clear ih -- cannot happen
+      apply IsRed_not_repeated
+      simpa [List.reverse_cons, List.append_assoc, List.singleton_append] using h
     next ih =>
       simp [red.go, *]
       simp [red.go, *] at ih
@@ -120,8 +166,9 @@ where
       simpa using h
 
 @[simp]
-theorem red_red (w : F) : red (red w) = red w := red_eq_of_IsRed (red_IsRed _)
+theorem red_red (w : W) : red (red w) = red w := red_eq_of_IsRed (red_IsRed _)
 
+/-- We can reduce anywhere in a term. This is essentially a proof of confluence -/
 theorem red_reduce {ys} {x} {xs} : red (ys ++ x :: x :: xs) = red (ys ++ xs) :=
   go [] ys (by simp)
 where
@@ -141,22 +188,17 @@ where
           subst hx
           exfalso
           apply IsRed_not_repeated (ys := []) h
+    next ih => exact ih (IsRed_singleton _)
     next ih =>
-      apply ih
-      simp
-    next ih =>
-      simp [red.go]
-      apply ih
-      apply IsRed_uncons
-      assumption
+      simp only [red.go, ↓reduceIte, List.append_eq]
+      exact ih (IsRed_uncons h)
     next hne ih =>
       simp [red.go, *]
       simp [red.go, *] at ih
-      apply ih
-      apply IsRed_cons hne h
+      exact ih (IsRed_cons hne h)
 
 @[simp]
-theorem rev_red (w : F) : (red w)⁻¹ = red (w⁻¹) := by
+theorem rev_red (w : W) : (red w)⁻¹ = red (w⁻¹) := by
   simpa [red] using go [] w (by simp)
 where
   go ys xs (h : IsRed ys) : (red.go ys xs)⁻¹ = red (xs⁻¹ ++ ys) := by
@@ -177,7 +219,7 @@ where
       apply IsRed_cons hne h
 
 @[simp]
-theorem red_append_red (w v : F) : red (w ++ red v) = red (w ++ v) := by
+theorem red_append_red (w v : W) : red (w ++ red v) = red (w ++ v) := by
   simpa [red] using go [] v
 where
   go ys xs : red (w ++ red.go ys xs) = red (w ++ (ys⁻¹) ++ xs) := by
@@ -198,18 +240,18 @@ where
       apply ih
 
 @[simp]
-theorem red_append_red' (w v : F) : red (red w ++ v) = red (w ++ v) := by
+theorem red_append_red' (w v : W) : red (red w ++ v) = red (w ++ v) := by
   apply List.reverse_injective; simp
 
 @[simp]
-theorem red_append_inv (w v : F) : red (w⁻¹ ++ (w ++ v)) = red v := by
+theorem red_append_inv (w v : W) : red (w⁻¹ ++ (w ++ v)) = red v := by
   induction w <;> simp [red_reduce, *]
 
 @[simp]
-theorem red_rev_self (w : F) : red (w⁻¹ ++ w) = [] := by
+theorem red_rev_self (w : W) : red (w⁻¹ ++ w) = [] := by
   simpa using red_append_inv w []
 
-theorem red_append_nil_iff_of_IsRed (w v : F) (hw : IsRed w) (hv : IsRed v) :
+theorem red_append_nil_iff_of_IsRed (w v : W) (hw : IsRed w) (hv : IsRed v) :
     red (w ++ v) = [] ↔ w = v⁻¹ := by
   constructor
   · exact go [] w hw
@@ -258,18 +300,18 @@ where
 
 
 -- @[simp]
-theorem red_append_nil_iff (w v : F) :
+theorem red_append_nil_iff (w v : W) :
     red (w ++ v) = [] ↔ red w = red v⁻¹ := by
   rw [← red_append_red, ← red_append_red']
   apply red_append_nil_iff_of_IsRed
   exact red_IsRed w
   exact red_IsRed v
 
-theorem red_append_nil_iff' (w v : F) :
+theorem red_append_nil_iff' (w v : W) :
   red (w⁻¹ ++ v) = [] ↔ red w = red v := by simp [← rev_red, red_append_nil_iff]
 
 @[simp]
-theorem red_append_inj (w v : F) (h : IsRed w):
+theorem red_append_inj (w v : W) (h : IsRed w):
     w = red (w ++ v) ↔ red v = [] := by
   constructor
   · intro heq
@@ -292,7 +334,7 @@ theorem red_append_inj (w v : F) (h : IsRed w):
 
 attribute [simp] List.reverse_append
 
-def f : F → F
+def f : W → W
   | [] => []
   | [x] => [x+1]
   | x::_::_ => [x]
@@ -300,14 +342,14 @@ def f : F → F
 attribute [simp] f.eq_1 f.eq_2
 
 @[simp]
-theorem red_f (w : F) : red (f w) = f w := by
+theorem red_f (w : W) : red (f w) = f w := by
   unfold f; split <;> simp
 
 @[simp]
-theorem rev_f (w : F) : (f w)⁻¹ = f w := by
+theorem rev_f (w : W) : (f w)⁻¹ = f w := by
   unfold f; split <;> simp
 
-theorem ff_fff (z : F) (h : IsRed z) : f (f z) = f (red (f (f z) ++ z)) := by
+theorem ff_fff (z : W) (h : IsRed z) : f (f z) = f (red (f (f z) ++ z)) := by
   match z with
   | [] => simp
   | [x] => simp [f]
@@ -315,7 +357,7 @@ theorem ff_fff (z : F) (h : IsRed z) : f (f z) = f (red (f (f z) ++ z)) := by
     have : IsRed ((x + 1) :: x :: y :: zs) := IsRed_cons (by simp; omega) h
     simp [f.eq_3, this]
 
-abbrev M := {x : F // IsRed x}
+abbrev M := {x : W // IsRed x}
 
 instance inst : Magma M where
   op := fun ⟨x, _hx⟩ ⟨y, _hy⟩ =>
