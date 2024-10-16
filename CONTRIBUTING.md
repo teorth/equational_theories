@@ -140,8 +140,6 @@ Here is a list of human-contributed Lean files with mathematical content:
 - [`Confluence.lean`](equational_theories/Confluence.lean) Results about confluent laws, with several associated additional files.
 - [`LiftingMagmaFamilies.lean`](equational_theories/LiftingMagmaFamilies.lean) Results about lifting magma families, with some associated additional files.
 
-
-
 At present, the API for magmas only allows for theorems that study a finite number of individual equational laws at a time.  We plan to expand the API to also allow one to establish metatheorems about entire classes of equations.
 
 ## Blueprint
