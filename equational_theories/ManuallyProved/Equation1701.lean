@@ -1,5 +1,6 @@
 import equational_theories.Equations.All
 import equational_theories.MagmaOp
+import equational_theories.FactsSyntax
 import Aesop
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
@@ -130,85 +131,23 @@ private theorem op_1701_8_satisfies_1701 :
    | 0, 0, 0 => simp [op_1701_8]
 
 @[equational_result]
-theorem Equation1701_not_implies_Equation8 :
-  ∃ (G : Type) (_ : Magma G), Equation1701 G ∧ ¬ Equation8 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1701_8 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp only [Equation1701, not_forall, magN, op]
-  apply And.intro op_1701_8_satisfies_1701
-  exists 1
+theorem Equation1701_facts : ∃ (G : Type) (_ : Magma G), Facts G [1701] [8, 411, 1020, 1832, 3862] := by
+  use ℕ, ⟨op_1701_8⟩
+  simp only [Equation1701, not_forall]
+  constructor
+  · exact op_1701_8_satisfies_1701
+  · repeat' apply And.intro
+    all_goals exact ⟨1, by decide⟩
 
 @[equational_result]
-theorem Equation1701_not_implies_Equation411 :
-  ∃ (G : Type) (_ : Magma G), Equation1701 G ∧ ¬ Equation411 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1701_8 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp only [Equation1701, not_forall, magN, op]
-  apply And.intro op_1701_8_satisfies_1701
-  exists 1
-
-@[equational_result]
-theorem Equation1701_not_implies_Equation1020 :
-  ∃ (G : Type) (_ : Magma G), Equation1701 G ∧ ¬ Equation1020 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1701_8 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp only [Equation1701, not_forall, magN, op]
-  apply And.intro op_1701_8_satisfies_1701
-  exists 1
-
-@[equational_result]
-theorem Equation1701_not_implies_Equation1035 :
-  ∃ (G : Type) (_ : Magma G), Equation1701 G ∧ ¬ Equation1035 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1701_8 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp only [Equation1701, not_forall, magN, op]
-  apply And.intro op_1701_8_satisfies_1701
-  exists 1, 1
-
-@[equational_result]
-theorem Equation1701_not_implies_Equation1832 :
-  ∃ (G : Type) (_ : Magma G), Equation1701 G ∧ ¬ Equation1832 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1701_8 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp only [Equation1701, not_forall, magN, op]
-  apply And.intro op_1701_8_satisfies_1701
-  exists 1
-
-@[equational_result]
-theorem Equation1701_not_implies_Equation3319 :
-  ∃ (G : Type) (_ : Magma G), Equation1701 G ∧ ¬ Equation3319 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1701_8 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp only [Equation1701, not_forall, magN, op]
-  apply And.intro op_1701_8_satisfies_1701
-  exists 0, 1
-
-@[equational_result]
-theorem Equation1701_not_implies_Equation3862 :
-  ∃ (G : Type) (_ : Magma G), Equation1701 G ∧ ¬ Equation3862 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1701_8 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp only [Equation1701, not_forall, magN, op]
-  apply And.intro op_1701_8_satisfies_1701
-  exists 1
-
-@[equational_result]
-theorem Equation1701_not_implies_Equation1884 :
-  ∃ (G : Type) (_ : Magma G), Equation1701 G ∧ ¬ Equation1884 G := by
-  let op (x : ℕ) (y : ℕ) : ℕ := op_1701_8 x y
-  let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩
-  use ℕ, magN
-  simp only [Equation1701, not_forall, magN, op]
-  apply And.intro op_1701_8_satisfies_1701
-  exists 1, 1
-
+theorem Equation1701_facts' : ∃ (G : Type) (_ : Magma G), Facts G [1701] [1035, 1884, 3319] := by
+  use ℕ, ⟨op_1701_8⟩
+  simp only [Equation1701, not_forall]
+  repeat' apply And.intro
+  · exact op_1701_8_satisfies_1701
+  · exists 1, 1
+  · exists 1, 1
+  · exists 0, 1
 
 /-
   We can refute 3862 using the small patch below with the same base model.
@@ -226,8 +165,8 @@ private theorem op_1701_3253_satisfies_1701 :
   ∀ (x y z : ℕ), x = op_1701_3253 (op_1701_3253 y x) (op_1701_3253 (op_1701_3253 z x) x) := by
     intro xo yo zo
     match xo with
-    | 0     => simp [op_1701_3253]
-    | 1     =>
+    | 0 => simp [op_1701_3253]
+    | 1 =>
       match yo,zo with
       | 0, 0 | 0, 1 | 0, z+2
       | 1, 0 | 1, 1 | 1, z+2
@@ -320,8 +259,7 @@ theorem Equation1701_not_implies_Equation3252 :
   exists 2
 
 /-
-  Refuting 4587 requires an extraordinarily complicated patch on the
-  same base model.
+  Refuting 4587 requires an extraordinarily complicated patch on the same base model.
 
   Lean seems to struggle a lot with these case distinctions unless we increase
   maxHeartbeats. I already tried to use the strategy of InfModel_1661 where I
@@ -329,8 +267,8 @@ theorem Equation1701_not_implies_Equation3252 :
   sketch of the argument. But that failed here: at some point, Lean gave up
   on rewrites too, not just simp.
 
-  There's surely a better way to do proofs like these, maybe with macros or
-  custom tactics. If you know a solution, feel free to try.
+  There's surely a better way to do proofs like these, maybe with macros or custom tactics.
+  If you know a solution, feel free to try.
 -/
 
 private def op_1701_4587 (x : ℕ) (y : ℕ) : ℕ :=
@@ -430,7 +368,6 @@ private theorem op_1701_4587_satisfies_1701 :
         have x4_cong_0 : (x + 4) % 2 = 0 := mod_two_pred_1_0_to _ x5_cong_1
         have x6_cong_0 : (x + 6) % 2 = 0 := mod_two_succ_1_0_from _ x5_cong_1
         simp [op_1701_4587,x5_cong_1,x4_cong_0,x6_cong_0]
-
 
     | x+5, y+5, 0 | x+5, y+5, 1 | x+5, y+5, 2 | x+5, y+5, 3 | x+5, y+5, 4
     | x+5, 0, y+5 | x+5, 1, y+5 | x+5, 2, y+5 | x+5, 3, y+5 | x+5, 4, y+5
