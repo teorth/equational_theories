@@ -12,7 +12,7 @@ namespace Conjectures
 
 /-- See https://leanprover.zulipchat.com/user_uploads/3121/b-Usk-DH5Y8dALsaMWxIZxPJ/NonImplication-updated.pdf and https://leanprover.zulipchat.com/user_uploads/3121/BhQY4EgOsd2sQ7uWCWJwDR5d/Equation1076.pdf -/
 @[equational_result]
-conjecture Equation1076_facts : ∃ (G : Type) (_ : Magma G), Facts G [1076] [3, 47, 151, 203, 255, 1426, 1629, 1832, 2035, 2238, 2441, 2644, 2847, 3050, 3253, 3456, 3659, 3862, 4065, 4380 ]
+conjecture Equation1076_facts : ∃ (G : Type) (_ : Magma G), Facts G [1076] [3, 47, 99, 151, 203, 255, 411, 614, 817, 1223, 1426, 1629, 1832, 2035, 2238, 2441, 2644, 2847, 3050, 3253, 3456, 3659, 3862, 4065, 4380 ]
 
 /-- See https://leanprover.zulipchat.com/user_uploads/3121/zGPTzX7J0AkJcQdPdh_xoCTe/Equation_73-updated.pdf -/
 @[equational_result]
