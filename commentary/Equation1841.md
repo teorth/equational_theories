@@ -1,1 +1,1 @@
-The implication of this equation to [Equation 203](https://teorth.github.io/equational_theories/implications/?203) is currently open.  See [this discussion](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1841.20.3F.3D.3E.20203).
+The anti-implication of this equation to [Equation 203](https://teorth.github.io/equational_theories/implications/?203) can be established by an infinite tree construction.  See [this discussion](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1841.20.3F.3D.3E.20203).
