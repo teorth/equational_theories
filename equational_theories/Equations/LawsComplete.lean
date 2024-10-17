@@ -78,6 +78,36 @@ def Law.MagmaLaw.is_canonical (l : Law.MagmaLaw Nat) : Bool :=
   ((l.lhs.is_canonical 0).bind (fun n => l.rhs.is_canonical n)).isSome
 
 /--
+A decision procedure for checking a predicate for all canonical magma laws of a certain size.
+-/
+
+def testVars (n : Nat) (P : Nat → Nat → Bool) :=
+  (List.range n).all (fun i => P n i) && P (n+1) n
+
+def testAllSplits (s : Nat) (P : Nat → Nat → Bool) : Bool :=
+  (List.range (s+1)).all fun s' => P s' (s-s')
+
+partial def testFreeMagmas (s n : Nat) (P : Nat → FreeMagma Nat → Bool) :=
+  match s with
+  | 0 =>
+    testVars n fun n' i => P n' (.Leaf i)
+  | s+1 =>
+    testAllSplits s fun s1 s2 =>
+      assert! s1 + s2 = s
+      testFreeMagmas s1 n fun n' l =>
+        testFreeMagmas s2 n' fun n'' r =>
+          P n'' (.Fork l r)
+
+def testLaws (s : Nat) (P : Law.NatMagmaLaw → Bool) :=
+  testAllSplits s fun s1 s2 =>
+      testFreeMagmas s1 0 fun n' l =>
+        testFreeMagmas s2 n' fun _ r =>
+          P ⟨l, r⟩
+
+#eval testLaws 2 (fun l => l.forks = 2)
+
+
+/--
 This would be the compleness theorem.
 
 But in order to prove this one probably has to define a verified generator
@@ -86,3 +116,5 @@ for canonical magmas up to a given size.
 theorem laws_complete :
   ∀ l : Law.MagmaLaw Nat, l.forks ≤ 4 → l.is_canonical →
   ∃ (i : Nat), l = laws[i] := by sorry
+
+#eval testLaws 1 (fun l => dbg_trace l; laws[findMagmaLaw l] = l)
