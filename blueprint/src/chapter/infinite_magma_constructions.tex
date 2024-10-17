@@ -7,7 +7,7 @@ infinite magma obeys $P$ without also obeying $Q$. Examples are given in Chapter
 
 Here we survey techniques for constructing infinite magmas that serve as counterexamples for implications
 between laws. Many of the techniques presented trace their origins to the first analysis of the Asterix equation
-(\Cref{eq65}), so we will begin by reviewing that analysis.
+(\Cref{eq65}), reviewed in Section~\ref{asterix-section}.
 
 \section{Translation-invariant magmas}
 
@@ -358,10 +358,10 @@ However, since $f$ takes finitely many values in the base model, the breakage is
 by considering what happens if $x \neq 0$ and $y \neq 1$, we see that all new counterexamples to \Cref{eq4315}
 have this form. The calculation now suggests defining yet another $\op'''$, where setting
 $0 \op''' 3 = 0$ would eliminate
-this counterexample. But doing that just moves the issue one level higher: one then
+this counterexample. But doing that just moves the issue one level higher: one then has
 $$ (0 \op''' 3) \op''' ((3 \op''' 3) \op''' z) = 0 \op''' (4 \op''' z)$$ which equals $0 \op''' 3 = 0$ as desired for even $z$, but equals $0 \op''' 5 = -1 \neq 0$ for odd $z$.
 
-One sees that the infinitely many counterexamples arising from the iterated redefinition can be eliminated
+Instead, the infinitely many counterexamples arising from the iterated redefinition can be eliminated
 all at once by setting:
 
 $x \op' y = \begin{cases} 0 & \text{if } x=0,\: x,y \text{ have the same parity} \\  x+1 & \text{if } x\neq 0,\: x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases}$
