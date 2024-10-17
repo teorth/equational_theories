@@ -141,6 +141,88 @@ fun (G : Type) (inst : Magma.{0} G) (h : @satisfies.{0, 0} Nat G inst LawN) ↦
        else
          throwError (← Meta.mkHasTypeButIsExpectedMsg inferredType lawThmTy)
 
+
+/--
+Builds non-implication of Laws from the non-implication counterexamples of equations.
+The result should look something like:
+
+```
+theorem Subgraph.LawN_not_implies_LawM : Not (@Law.MagmaLaw.implies.{0} Nat LawN LawM) :=
+Subgraph.Law3_not_implies_LawM.match_1
+  (fun
+      (x :
+        @Exists.{2} Type fun (G : Type) ↦
+          @Exists.{1} (Magma.{0} G) fun (x : Magma.{0} G) ↦ And (@EquationN.{0} G x) (Not (@Equation39.{0} G x))) ↦
+    Not (@Law.MagmaLaw.implies.{0} Nat LawN LawM))
+  Subgraph.EquationN_not_implies_EquationM
+  fun (G : Type) (inst : Magma.{0} G) (hlhs : @EquationN.{0} G inst) (hrhs : Not (@EquationM.{0} G inst))
+    (h : @Law.MagmaLaw.implies.{0} Nat Law3 Law39) ↦
+  @letFun.{0, 0} (@satisfies.{0, 0} Nat G inst Law3) (fun (hlhslaw : @satisfies.{0, 0} Nat G inst Law3) ↦ False)
+    (@Iff.mpr (@satisfies.{0, 0} Nat G inst Law3) (@Equation3.{0} G inst) (@Law3.models_iff.{0} G inst) hlhs)
+    fun (hlhslaw : @satisfies.{0, 0} Nat G inst Law3) ↦
+    @letFun.{0, 0} (@satisfies.{0, 0} Nat G inst Law39) (fun (hrhslaw : @satisfies.{0, 0} Nat G inst Law39) ↦ False)
+      (@h G inst hlhslaw) fun (hrhslaw : @satisfies.{0, 0} Nat G inst Law39) ↦
+      hrhs
+        (@Iff.mp (@satisfies.{0, 0} Nat G inst Law39) (@Equation39.{0} G inst) (@Law39.models_iff.{0} G inst) hrhslaw)
+```
+-/
+def addLawNonImplicationThm (thm_ty : Expr) (thm_name : Name) : MetaM Unit := do
+   Meta.forallTelescope thm_ty fun fvars rhs => do
+     let #[g, magma, lhsv] := fvars | failure
+     if !(← Meta.isType g) then failure
+     let (.app (.const ``Magma _) _) := ← Meta.inferType magma | failure
+     let lhs ← Meta.inferType lhsv
+     let some lhsN := getEquationNumber lhs | failure
+     let some rhsN := getEquationNumber rhs | failure
+     let some lhsName := getEquationLeanName lhs | failure
+     let some rhsName := getEquationLeanName rhs | failure
+
+     -- Build the theorem type
+     let lawThmName : Name := Name.mkSimple s!"Law{lhsN}_not_implies_Law{rhsN}"
+     let lhslawName : Name := Name.mkSimple s!"Law{lhsN}"
+     let rhslawName : Name := Name.mkSimple s!"Law{rhsN}"
+     let lhslaw : Expr := mkConst lhslawName
+     let rhslaw : Expr := mkConst rhslawName
+     let lawThmTy : Expr := mkApp4 (mkConst ``Not)
+       (mkConst ``Law.MagmaLaw.implies (us := [Lean.levelZero]))
+       (mkConst ``Nat) (mkConst lhslawName) (mkConst rhslawName)
+
+     -- Create binders for G and inst
+     let type0 := (Lean.mkSort Lean.levelOne)
+     let proofTerm : Expr ←
+       Meta.withLocalDeclD `G type0 fun G =>
+         let instType := mkApp (mkConst ``Magma (us:=[Lean.levelZero])) G
+         Meta.withLocalDeclD `inst instType fun inst =>
+           let satlhs : Expr := mkApp4 (mkConst ``satisfies (us:=[Lean.levelZero,Lean.levelZero])) (mkConst ``Nat) G inst lhslaw
+           Meta.withLocalDeclD `h satlhs fun h =>
+             -- Build expressions in body of proof term (using binders)
+             let satrhs : Expr := mkApp4 (mkConst ``satisfies (us:=[Lean.levelZero,Lean.levelZero])) (mkConst ``Nat) G inst rhslaw
+             let eqnlhs : Expr := mkApp2 (mkConst lhsName (us :=[Lean.levelZero])) G inst
+             let eqnrhs : Expr := mkApp2 (mkConst rhsName (us :=[Lean.levelZero])) G inst
+             let lhs_models_iff : Expr := mkApp2 (mkConst (us :=[Lean.levelZero]) <| Name.str lhslawName "models_iff" ) G inst
+             let rhs_models_iff : Expr := mkApp2 (mkConst (us :=[Lean.levelZero]) <| Name.str rhslawName "models_iff") G inst
+             let impl : Expr := mkApp3 (mkConst thm_name (us :=[Lean.levelZero])) G inst
+               (mkApp4 (mkConst ``Iff.mp) satlhs eqnlhs lhs_models_iff h)
+             let proofBody : Expr := mkApp4 (mkConst ``Iff.mpr) satrhs eqnrhs rhs_models_iff impl
+             Meta.mkLambdaFVars #[G, inst, h] proofBody
+
+     -- Very important: typecheck the proof before adding it as a theorem!
+     Meta.check proofTerm
+     let inferredType ← Meta.inferType proofTerm
+     Meta.withTransparency .all do
+       if ← Meta.isDefEq inferredType lawThmTy then
+          -- only adds the theorem if it typechecks!
+          let decl := Declaration.thmDecl {
+            name := lawThmName,
+            levelParams := [],
+            type := lawThmTy,
+            value := proofTerm
+          }
+          addDecl decl
+       else
+         throwError (← Meta.mkHasTypeButIsExpectedMsg inferredType lawThmTy)
+
+
 /--
 Attempts to parse an exisential statement of monoid facts from the type of a theorem.
 -/
