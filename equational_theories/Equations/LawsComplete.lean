@@ -170,6 +170,54 @@ def testLaws (s : Nat) (P : Law.NatMagmaLaw → Bool) :=
 #guard_msgs in
 #eval testLaws 4 (fun l => l.forks = 4 ∧ l.is_canonical)
 
+theorem testVars_spec (n : Nat) P :
+  testVars n P = true ↔ P (n+1) n ∧ ∀ i < n, P n i :=
+  sorry
+
+@[simp]
+theorem FreeMagmas.forks_eq_0_iff (m : FreeMagma Nat) :
+  m.forks = 0 ↔ ∃ v, m = .Leaf v := by sorry
+
+@[simp]
+theorem FreeMagmas.forks_eq_succ_iff (m : FreeMagma Nat) n :
+  m.forks = n+1 ↔ ∃ l r, m = .Fork l r ∧ l.forks + r.forks = n := by sorry
+
+theorem testAllSplits_spec (n : Nat) P :
+  testAllSplits n P = true ↔ ∀ s1 s2, s1 + s2 = n → P s1 s2 := sorry
+
+theorem testFreeMagmas_spec (s n : Nat) P :
+  testFreeMagmas s n P = true ↔ ∀ m n', m.forks = s → m.is_canonical n = some n' → P n' m = true := by
+  induction s, n, P using testFreeMagmas.induct
+  next n P =>
+    simp (config := {contextual := true}) [testFreeMagmas, testVars_spec, FreeMagma.is_canonical]
+    constructor
+    · intro h
+      rintro _ n' x rfl heq
+      split at heq
+      next => simp_all
+      next =>
+        split at heq
+        next => simp_all
+        next  => simp_all
+    · intro h
+      constructor
+      · simp_all
+      · simp_all
+  next n P s ih2 ih1 =>
+    simp (config := {contextual := true}) [testFreeMagmas, testVars_spec, FreeMagma.is_canonical,
+      testAllSplits_spec, Option.bind_eq_some]
+    constructor
+    · rintro h _ n' l r rfl hadd n'' hcan1 hcan2
+      specialize ih1 _ _ hadd
+      specialize ih2 _ _ hadd
+      sorry
+#exit
+
+theorem testLaws_spec (s : Nat) P :
+  testLaws s P = true ↔ ∀ l : Law.MagmaLaw Nat, l.forks ≤ 4 → l.is_canonical → P l = true := by
+  unfold testLaws
+  sorry
+
 /--
 This would be the compleness theorem.
 
