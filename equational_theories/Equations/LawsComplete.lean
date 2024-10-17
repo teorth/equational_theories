@@ -106,6 +106,23 @@ where
     let rhs' ← FreeMagma.canonicalize.go l.rhs
     return ⟨lhs', rhs'⟩
 
+theorem FreeMagma.canonicalize_is_canonical (m : FreeMagma Nat) (xs : Array Nat) :
+  (FreeMagma.canonicalize.go m xs).run.1.is_canonical xs.size = some (FreeMagma.canonicalize.go m xs).run.2.size := by
+  induction m generalizing xs with
+  | Leaf v =>
+    simp only [Id.run, canonicalize.go, bind, StateT.bind, get, getThe, MonadStateOf.get,
+      StateT.get, pure, set]
+    cases xs.indexOf? v
+    case none =>
+      simp [StateT.bind, pure, StateT.pure, set, StateT.set, is_canonical]
+    case some =>
+      simp [StateT.bind, pure, StateT.pure, set, StateT.set, is_canonical]
+  | Fork l r ih1 ih2 =>
+    specialize ih1 xs
+    specialize ih2 (canonicalize.go l xs).2
+    simp_all [canonicalize.go, bind, StateT.run, Id.run, StateT.bind, pure, StateT.pure, set, StateT.set, is_canonical,
+      bind, StateT.bind]
+    rfl
 
 def Law.MagmaLaw.is_canonical (l : Law.MagmaLaw Nat) : Bool :=
   ((l.lhs.is_canonical 0).bind (fun n => l.rhs.is_canonical n)).isSome &&
@@ -168,5 +185,4 @@ theorem laws_complete :
 /-- info: true -/
 #guard_msgs in
 #eval (List.range 5).all fun i => testLaws i fun l =>
-  -- dbg_trace l; dbg_trace findMagmaLaw l;
   laws[findMagmaLaw l] = l
