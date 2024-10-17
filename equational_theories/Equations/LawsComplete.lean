@@ -61,27 +61,60 @@ where
           go mid (w-w') fuel (by omega)
   termination_by structural fuel
 
+def FreeMagma.max : FreeMagma Nat → Nat
+  | .Leaf i => i
+  | .Fork l r => Nat.max l.max r.max
+
+def Law.MagmaLaw.max (l : Law.MagmaLaw Nat) : Nat := Nat.max l.lhs.max l.rhs.max
+
 /-- Checks whether variables are canonically ordered -/
 def FreeMagma.is_canonical (next : Nat) : FreeMagma Nat → Option Nat
   | .Leaf i => do
-    guard (i ≤ next)
-    if i = next then
+    if i < next then
+      return next
+    else if i = next then
       return next + 1
     else
-      return next
+      none
   | .Fork l r => do
     let next' ← l.is_canonical next
     let next'' ← r.is_canonical next'
     return next''
 
+/-- Canonically reorders variables -/
+def FreeMagma.canonicalize (m : FreeMagma Nat) : FreeMagma Nat :=
+  ((go m).run #[]).run.1
+where
+  go : FreeMagma Nat → StateM (Array Nat) (FreeMagma Nat)
+  | .Leaf v => do
+    let xs ← get
+    match xs.indexOf? v with
+    | some i => return .Leaf i
+    | none =>
+      set (xs.push v)
+      return .Leaf xs.size
+  | .Fork l r => do
+    let l ← go l
+    let r ← go r
+    return .Fork l r
+
+def Law.MagmaLaw.canonicalize (l : Law.MagmaLaw Nat) : Law.MagmaLaw Nat :=
+  (go.run #[]).run.1
+where
+  go : StateM (Array Nat) Law.NatMagmaLaw := do
+    let lhs' ← FreeMagma.canonicalize.go l.lhs
+    let rhs' ← FreeMagma.canonicalize.go l.rhs
+    return ⟨lhs', rhs'⟩
+
+
 def Law.MagmaLaw.is_canonical (l : Law.MagmaLaw Nat) : Bool :=
   ((l.lhs.is_canonical 0).bind (fun n => l.rhs.is_canonical n)).isSome &&
-  (l.lhs.comp l.rhs = .lt || l.lhs = .Leaf 0)
+  (l.lhs.comp l.rhs = .lt || l.lhs = .Leaf 0) &&
+  !(l.symm.canonicalize.comp l = .lt)
 
-/--
+/-
 A decision procedure for checking a predicate for all canonical magma laws of a certain size.
 -/
-
 def testVars (n : Nat) (P : Nat → Nat → Bool) :=
   (List.range n).all (fun i => P n i) && P (n+1) n
 
@@ -104,13 +137,17 @@ def testLaws (s : Nat) (P : Law.NatMagmaLaw → Bool) :=
       testFreeMagmas s1 0 fun n' l =>
         testFreeMagmas s2 n' fun _ r =>
           if l = .Leaf 0 || l.comp r = .lt then
-            P ⟨l, r⟩
+            let law := ⟨l, r⟩
+            if law.symm.canonicalize.comp law = .lt then
+              true
+            else
+              P law
           else
             true
 
 /-- info: true -/
 #guard_msgs in
-#reduce testLaws 2 (fun l => l.forks = 2 ∧ l.is_canonical)
+#eval testLaws 2 (fun l => l.forks = 2 ∧ l.is_canonical)
 
 /-- info: true -/
 #guard_msgs in
@@ -126,4 +163,10 @@ theorem laws_complete :
   ∀ l : Law.MagmaLaw Nat, l.forks ≤ 4 → l.is_canonical →
   ∃ (i : Nat), l = laws[i] := by sorry
 
-#eval testLaws 2 (fun l => dbg_trace l; dbg_trace findMagmaLaw l; laws[findMagmaLaw l] = l)
+-- TODO: Prove that testLaw tests all laws. Until then:
+
+/-- info: true -/
+#guard_msgs in
+#eval (List.range 5).all fun i => testLaws i fun l =>
+  -- dbg_trace l; dbg_trace findMagmaLaw l;
+  laws[findMagmaLaw l] = l
