@@ -5,7 +5,7 @@ This file defines the macro `memoFinOp` that memoizes a function `f : Fin n → 
 its docstring for more info.
 -/
 
-namespace MemeFinOp
+namespace MemoFinOp
 
 open Lean Meta Elab Term
 
@@ -80,4 +80,4 @@ example :
     memoFinOp f = f := by
   funext a b; revert a b; decide
 
-end MemeFinOp
+end MemoFinOp
