@@ -23,7 +23,7 @@ However in general, we cannot deduce the converse, so it may be the case that $a
 The following properties are going to be very useful to deduce exactly such a converse.
 
 \begin{definition}
-  We say that $R$ is \emph{Church-Rosser} if whever $a\leftrightarrow^* b$, there exists some $c$ such that
+  We say that $R$ is \emph{Church-Rosser} if whenever $a\leftrightarrow^* b$, there exists some $c$ such that
   \[a\rightarrow^* c{}^*\leftarrow b\]
   We say that $R$ is \emph{confluent} if whenever $b_1{}^*\leftarrow a\rightarrow^* b_2$ there exists some $c$ such that $b_1\rightarrow^* c{}^*\leftarrow b_2$.
   
@@ -50,17 +50,23 @@ This means that, in this situation, $a$ and $b$ reduce to an identical normal fo
 
 Note that weak normalization doe not change much here except at step 1, where we need to pick reductions which eventually bring the elements to normal forms.
 
-The strategy is therefore, for a given $\approx$ to find an $R$ which is (strongly) normalizing and Church-Rosser, and such that $\leftrightarrow^* = \approx$. This is roughly the goal of the entire field of \emph{completion}.
+The strategy is therefore, for a given $\approx$ to find an $R$ which is (strongly) normalizing and Church-Rosser, and such that $\leftrightarrow^* = \approx$. This is roughly the goal of the entire field of \emph{completion}. We call such an $R$ \emph{complete for} $\approx$.
 
 The task is helped by the following facts, which we state here also without proof.
 
 \begin{theorem}
   \begin{itemize}
   \item $R$ is Church-Rosser iff it is confluent.
-  \item (Newmann's lemma) if $R$ is strongly normalizing, then $R$ is confluent iff it is weakly confluent.
+  \item (Newman's lemma) if $R$ is strongly normalizing, then $R$ is confluent iff it is weakly confluent.
   \end{itemize}
 \end{theorem}
 
-This can be leveraged by looking at the particulars of the equivalence relation of interest, namely quantified equations over syntactic trees.
+This can be leveraged by looking at the particulars of the equivalence relation of interest, namely quantified equations over syntactic trees as in \Cref{abstract-nonsense-chapter}, and a theory $\Gamma$, which we will usually take to be finite (usually it will have a single equation!).
 
-%% TODO: Explain orienting equations, congruence, and critical pairs (with the critical pair lemma).
+We will therefore consider relations over the set of elements of the free magma $M_{X}$, and the aim is to find a rewrite system $R$ is complete for $\formaleq$.
+
+Certainly $\formaleq$ is closed over substitutions, and be a \emph{congruence}: if $a\formaleq a'$ and $b\formaleq b'$ under $\Gamma$, then $a\op b\formaleq a'\op b'$ under $\Gamma$ as well.
+
+We therefore consider $R$ to be both closed under substitutions and a congruence. A convenient way to represent this is via a \emph{rewrite system}: simply a set of pairs of words $(l, r) \in M_{X}$ (we typically write $l\rightarrow r$) which represents the smallest congruence, closed by substitutions that contains those pairs.
+
+Naturally, a set of laws $w \formaleq w'$ can be seen, given a choice of orientation (left-to-right or right-to-left) for each law as such a rewrite system. In this case, it is very clear that the reflexive transitive closure $\leftrightarrow^*$ recovers the original equational theory $\Gamma\models \cdot\formaleq\cdot$.
