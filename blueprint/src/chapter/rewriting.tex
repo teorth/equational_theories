@@ -11,7 +11,7 @@ We first work in the abstract taking an arbitrary set $A$, with a given equivale
   \item $\leftrightarrow^*$ as the reflexive transitive and symmetric closure of $R$
   \end{itemize}
   
-  we sometimes write $b\leftarrow a$, (resp. $b{}^*\leftarrow a$ etc) to mean $a\rightarrow b$ (resp. $a\rightarrow^*b$ ect), and chain notations, e.g. $b_1\leftarrow a\rightarrow b_2$.
+  we sometimes write $b\leftarrow a$, (resp. $b{}^*\leftarrow a$ etc) to mean $a\rightarrow b$ (resp. $a\rightarrow^*b$ etc), and chain notations, e.g. $b_1\leftarrow a\rightarrow b_2$.
 \end{definition}
 
 Note that $\leftrightarrow^*$ is an equivalence relation and the hope is for it to be equal to $\approx$, in order to deduce properties of the latter.
@@ -27,7 +27,7 @@ The following properties are going to be very useful to deduce exactly such a co
   \[a\rightarrow^* c{}^*\leftarrow b\]
   We say that $R$ is \emph{confluent} if whenever $b_1{}^*\leftarrow a\rightarrow^* b_2$ there exists some $c$ such that $b_1\rightarrow^* c{}^*\leftarrow b_2$.
   
-  We say that $R$ is \emph{weakly confluent} if whenever $b_1\leftarrow a\rightarrow b_2$ there exists some $c$ such that $b_1\rightarrow^* c{}^*\leftarrow b_2$.
+  We say that $R$ is \emph{locally confluent} if whenever $b_1\leftarrow a\rightarrow b_2$ there exists some $c$ such that $b_1\rightarrow^* c{}^*\leftarrow b_2$.
   
   We say that (an arbitrary) $a$ is in \emph{normal form} (or $a$ is a normal form) if there is no $a' \neq a$ such that $a \rightarrow a'$, and that $R$ is \emph{weakly normalizing} if for every $a$, there is some $a'$ such that $a\rightarrow^*a'$ and $a'$ is in normal form.
 
@@ -57,7 +57,7 @@ The task is helped by the following facts, which we state here also without proo
 \begin{theorem}
   \begin{itemize}
   \item $R$ is Church-Rosser iff it is confluent.
-  \item (Newman's lemma) if $R$ is strongly normalizing, then $R$ is confluent iff it is weakly confluent.
+  \item (Newman's lemma) if $R$ is strongly normalizing, then $R$ is confluent iff it is locally confluent.
   \end{itemize}
 \end{theorem}
 
@@ -69,4 +69,29 @@ Certainly $\formaleq$ is closed over substitutions, and be a \emph{congruence}: 
 
 We therefore consider $R$ to be both closed under substitutions and a congruence. A convenient way to represent this is via a \emph{rewrite system}: simply a set of pairs of words $(l, r) \in M_{X}$ (we typically write $l\rightarrow r$) which represents the smallest congruence, closed by substitutions that contains those pairs.
 
-Naturally, a set of laws $w \formaleq w'$ can be seen, given a choice of orientation (left-to-right or right-to-left) for each law as such a rewrite system. In this case, it is very clear that the reflexive transitive closure $\leftrightarrow^*$ recovers the original equational theory $\Gamma\models \cdot\formaleq\cdot$.
+Naturally, a set of laws $w \formaleq w'$ can be seen, given a choice of orientation (left-to-right or right-to-left) for each law as such a rewrite system. In this case, it is very clear that the reflexive transitive closure $\leftrightarrow^*$ recovers the original equational theory $\Gamma\models \cdot\formaleq\cdot$. However, it's clear that sometimes these systems will either be not strongly normalizing, or confluent, or both.
+
+For example, it's clear that commutativity (the rule $x\cdot y\formaleq y\cdot x$ cannot possibly be oriented. Here is a non-confluent example:
+
+\[ x \cdot (y \cdot z) \rightarrow y \]
+We have $a\cdot (b \cdot (c \cdot d)) \rightarrow* b$, but also $a\cdot (b\cdot (c\cdot d))\rightarrow* a\cdot c$ for any $a, b, c, d$ (which are both in normal form).
+
+Knuth and Bendix \cite{knuth-bendix} described a technique by which a theory or set of equations $\Gamma$ could be turned into a complete system. The crucial idea is the observation that the non-local-confluence of a rewrite system can be reduced to a finite (if the system is finite) set of ``worst offenders'' for confluence. If these pairs can be \emph{joined} (reduced to the same term) then the system is confluent. It is possible to compute such pairs.
+
+The high-level idea is therefore to identify such pairs, and add them as an unoriented equation, to be oriented if possible, and repeating until no un-joinable pairs exist. If this procedure succeeds and terminates, the system is successfully completed, and as a result the theory $\Gamma$ is decidable, via the completed system as described above.
+
+We use the intuitive notions of ``position in a word'' and ``word at a position $p$''. We denote by $w[w']_p$ the word $w$ with $w'$ inserted at position $p$.
+
+\begin{definition}  
+  Given a rewrite system $R$ and two rules $\rho_1: l_1\rightarrow r_1$ and $\rho_2: l_2\rightarrow r_2$ in $R$, we say that $(t, u)$ is a \emph{critical pair} for $\rho_1$ and $\rho_2$ if there is some non-variable position $p$ in $l_1$ such that $l_2$ unifies with the term at that position. We denote by $\sigma$ the most general unifier thus obtained and have $t = r_1\sigma$ and $u = l_1\sigma[r_2\sigma]_p$
+\end{definition}
+
+Note that, in the above setting, $t\leftarrow l_1\sigma\rightarrow u$, giving us a candidate for non-local-confluence. The next lemma states that these candidates are the most general ones.
+
+\begin{theorem}
+  Given a rewrite system $R$, if for every critical pair $(t, u)$ of $R$, there is a term $v$ such that $t\rightarrow^* v{}^*\leftarrow u$, then $R$ is locally confluent.
+\end{theorem}
+
+note that building critical pairs of a finite system is computable. Therefore the only step of the completion process which require genuine creativity is the choice of the orientation of the equations, along with the proof that that orientation is strongly normalizing.
+
+As a capper to this section we can note that even in the event that such an orientation is not found, one can still partially apply the completion procedure, using any well-founded order on terms that is stable by substitution and congruence, to obtain a semi-decision procedure for equality. This process is sometimes called \emph{unfailing completion} and is at the core of the \emph{superposition calculus} used in Vampire.
