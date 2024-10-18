@@ -69,7 +69,7 @@
           background-color: rgba(0, 0, 0, 0.5);
           z-index: 1000;
       }
-      .error-popup {
+      .popup {
           position: fixed;
           top: 50%;
           left: 50%;
@@ -110,10 +110,18 @@
       <div id="result"></div>
 
       <div id="errorOverlay" class="overlay">
-        <div class="error-popup">
-          <span class="close-btn" onclick="closeErrorPopup()">&times;</span>
+        <div class="popup">
+          <span class="close-btn" onclick="closePopup('errorOverlay')">&times;</span>
           <h2>Oops! There's an issue with your equation</h2>
           <p id="errorMessage"></p>
+        </div>
+      </div>
+
+      <div id="downloadOverlay" class="overlay">
+        <div class="popup">
+          <span class="close-btn" onclick="closePopup('downloadOverlay')">&times;</span>
+          <h2>Please wait</h2>
+          <p>Your download is being processed...</p>
         </div>
       </div>
 
@@ -124,6 +132,10 @@
       <p>
         Download this table as a CSV File
         <button onclick="downloadEquationListCSV()">Download</button>
+      </p>
+      <p>
+        Download raw implications table
+        <button onclick="downloadRawImplicationsCSV()">Download</button>
       </p>
 
 
