@@ -90,23 +90,17 @@ theorem IsRed_reverse (w : W) : IsRed (w ⁻¹) → IsRed w := by
   convert h using 3 <;> omega
 
 @[simp]
-theorem IsRed_reverse_iff (w : W) : IsRed (w ⁻¹) ↔ IsRed w := by
-  constructor
-  · intro h; apply IsRed_reverse; apply h
-  · intro h; apply IsRed_reverse; rw [List.reverse_reverse]; apply h
+theorem IsRed_reverse_iff (w : W) : IsRed (w ⁻¹) ↔ IsRed w :=
+  ⟨fun h ↦ IsRed_reverse _ h, fun h ↦ IsRed_reverse _ (by simp [h])⟩
 
-theorem IsRed_uncons {x} {ys} (h : IsRed (x :: ys)) : IsRed ys := by
-    intro i hi
-    specialize h (i+1) (by simp; omega)
-    simpa
+theorem IsRed_uncons {x} {ys} (h : IsRed (x :: ys)) : IsRed ys :=
+  fun _ hh ↦ h _ (Nat.add_lt_of_lt_sub hh)
 
 theorem IsRed_cons {y} {x} {ys} (hne : y ≠ x) (h : IsRed (x :: ys)) : IsRed (y :: x :: ys) := by
   intro i hi
   match i with
-  | 0 => simpa
-  | i+1 =>
-    specialize h i (by simpa [List.length_append] using hi)
-    simpa
+  | 0 => exact hne
+  | i+1 => exact h i (Nat.succ_lt_succ_iff.mp hi)
 
 lemma IsRed_not_repeated {ys} {x} {xs} : ¬ IsRed (ys ++ x :: x :: xs) := by
   intro h
@@ -165,7 +159,7 @@ where
   go (ys xs : W) (h : IsRed ys) : IsRed (red.go ys xs) := by
     induction ys, xs, h using red.go_induct
     next => simp [red.go, *]
-    next ih => apply ih
+    next ih => exact ih
     next ih => simpa [red.go] using ih
     next hne _ ih => simpa [red.go, hne] using ih
 
@@ -217,11 +211,11 @@ where
         subst he
         cases ys
         · simp [red.go]
-        · simp [red.go]
+        · simp only [red.go, ite_eq_right_iff]
           intro he
           subst he
           exfalso
-          apply IsRed_not_repeated (ys := []) h
+          exact IsRed_not_repeated (ys := []) h
     next ih => exact ih
     next => simp [red.go, *]
     next => simp [red.go, *]
@@ -275,17 +269,15 @@ where
   go ys xs (hxs : IsRed (ys⁻¹ ++ xs)) : red.go ys (xs ++ v) = [] → (ys⁻¹ ++ xs) = v⁻¹ := by
     induction ys, xs using red.go.induct
     next ys =>
-      simp
-      apply go2 ys v hv
-    next x xs ih =>
-      apply ih
-      simpa using hxs
+      rw [List.nil_append, List.append_nil, List.reverse_inj]
+      exact go2 ys v hv
+    next x xs ih => exact ih hxs
     next ys x xs _ =>
       exfalso
       simp [IsRed_not_repeated] at hxs
     next ys y x xs hne ih =>
-      simp [red.go, hne]
-      simp at ih
+      simp only [red.go, hne, List.reverse_cons, List.append_assoc]
+      simp only [List.reverse_cons, List.append_assoc] at ih
       apply ih
       simpa using hxs
   -- This loop/induction now cancels the elements. Now the last case is impossible.
@@ -300,8 +292,8 @@ where
       rw [red_eq_of_IsRed hxs] at h
       contradiction
     next ys x xs ih =>
-      simp
-      simp [red.go] at h
+      simp only [List.cons.injEq, true_and]
+      simp only [red.go] at h
       apply ih (IsRed_uncons hxs) h
     next y ys x xs hne ih =>
       exfalso
@@ -313,21 +305,17 @@ theorem red_append_nil_iff (w v : W) :
     red (w ++ v) = [] ↔ red w = red v⁻¹ := by
   rw [← red_append_red_right, ← red_append_red_left]
   apply red_append_nil_iff_eq_inv
-  exact red_IsRed w
-  exact red_IsRed v
+  · exact red_IsRed w
+  · exact red_IsRed v
 
 theorem red_eq_red_iff_red_append_nil (w v : W) :
-  red w = red v ↔ red (w⁻¹ ++ v) = [] := by simp [← rev_red, red_append_nil_iff]
+  red w = red v ↔ red (w⁻¹ ++ v) = [] := by rw [red_append_nil_iff, ← rev_red, List.reverse_inj]
 
 @[simp]
 theorem red_append_inj (w v : W) (h : IsRed w):
     w = red (w ++ v) ↔ red v = [] := by
-  rw [← red_eq_of_IsRed h]
-  rw [red_append_red_left]
-  rw [red_eq_red_iff_red_append_nil]
-  rw [← List.append_assoc]
-  rw [red_append_nil_iff]
-  simp [-rev_red]
+  rw [← red_eq_of_IsRed h, red_append_red_left, red_eq_red_iff_red_append_nil, ← List.append_assoc,
+    red_append_nil_iff, red_rev_self, List.nil_eq, List.reverse_eq_nil_iff]
 
 attribute [simp] List.reverse_append
 
@@ -365,7 +353,6 @@ instance inst : Magma M where
     ⟨red (x ++ f (red (x.reverse ++ y))), red_IsRed _⟩
 
 theorem M.Satisfies206 : Equation206 M := by
-  unfold Equation206
   intro ⟨w, hw⟩ ⟨v, hv⟩
   simpa [Magma.op, hw, hv, red_append_nil_iff] using
     ff_fff (red (w⁻¹ ++ v)) (red_IsRed _)

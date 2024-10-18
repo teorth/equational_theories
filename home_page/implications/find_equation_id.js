@@ -230,10 +230,17 @@ function findEquationNumber(inputEq) {
 function findEquation() {
     const inputEq = document.getElementById('equationInput').value;
     const resultDiv = document.getElementById('result');
-    
+    let eqNum = 0;
+
     try {
-        const eqNum = findEquationNumber(inputEq)-1;
-        
+        // Determine if user entered integer input or equation input
+        if (!isNaN(inputEq) && (eqNum === parseInt(eqNum, 10))){
+            eqNum = parseInt(eqNum, 10) - 1;
+        }
+        else{
+            eqNum = findEquationNumber(inputEq)-1;
+        }
+
         if (eqNum) {
             renderImplications(eqNum);
             showPage('detailPage');
