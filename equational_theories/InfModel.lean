@@ -4,6 +4,12 @@ import Aesop
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import equational_theories.Mathlib.Algebra.Group.Nat
+import Mathlib.Data.ZMod.Defs
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Algebra.Polynomial.Basic
+import Mathlib.Algebra.Polynomial.Degree.Definitions
+import Mathlib.Algebra.Polynomial.Eval
+import Mathlib.Algebra.Polynomial.RingDivision
 
 namespace InfModel
 
@@ -490,5 +496,326 @@ theorem Finite.Equation206_implies_Equation1648 (G : Type*) [Magma G] [Finite G]
   apply t.injOn (by simp [S]) (by simp [S])
   simp
   apply h (x ◇ y)
+
+theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card α = 2) (E: Law.MagmaLaw α) :
+  ∀ (z: α),
+  FreeMagma.Mem z E.lhs
+  → FreeMagma.Mem z E.rhs
+  → ∃ (G : Type) (hm : Magma G), Finite G ∧ ¬Equation2 G ∧ G ⊧ E := by
+  intro x mem_x_lhs mem_x_rhs
+  suffices hs: ∃ (k: ℕ), 1 < k ∧ (∃ (M: Magma (ZMod k)), ZMod k ⊧ E) by
+    obtain ⟨k, hk, M, hm⟩ := hs
+    exists ZMod k, M
+    split_ands
+    .
+      refine' @Finite.of_fintype (ZMod k) ?_
+      refine' @ZMod.fintype k ?_
+      simp_all only [neZero_iff, ne_eq]
+      omega
+    .
+      simp only [not_forall]
+      refine' @Nontrivial.exists_pair_ne (ZMod k) ?_
+      rw [ZMod.nontrivial_iff]
+      omega
+    .
+      assumption
+  revert α
+  suffices hs: ∀ (E: Law.MagmaLaw (Fin 2)),
+               FreeMagma.Mem 0 E.lhs
+               → FreeMagma.Mem 0 E.rhs
+               → ∃ (k: ℕ), 1 < k ∧ (∃ (M: Magma (ZMod k)), ZMod k ⊧ E) by
+    intros α ht hc E x mem_x_lhs mem_x_rhs
+    have := Classical.typeDecidableEq α
+    let f : α → Fin 2 := fun z => if z = x then 0 else 1
+    let E' := Law.MagmaLaw.map f E
+    replace hs := hs E'
+    sorry
+  suffices hs: ∀ (w: FreeMagma (Fin 2)),
+               (hw: FreeMagma.Mem 0 w)
+               → ∃ (k: ℕ), 1 < k ∧ (∃ (M: Magma (ZMod k)), ZMod k ⊧ (Lf 0 ≃ w)) by
+    intro E hz1 hz2
+    match E with
+    | ⟨FreeMagma.Fork w1 w2, FreeMagma.Fork w3 w4⟩
+    | ⟨FreeMagma.Leaf a, FreeMagma.Leaf b⟩ =>
+      exists 2
+      simp_all only [Nat.one_lt_ofNat, true_and]
+      exists Magma.mk fun x y => 0
+      simp_all only [satisfies, satisfiesPhi, FreeMagma.Mem]
+      intro φ
+      simp_all only [FreeMagma.evalInMagma, Magma.op]
+    | ⟨FreeMagma.Leaf x, w ⋆ w'⟩
+    | ⟨w ⋆ w', FreeMagma.Leaf x⟩ =>
+      replace hs := hs (w ⋆ w')
+      simp_all only [(by simp_all only [FreeMagma.Mem]: x = 0)]
+      try
+        .
+          simp_all only [true_implies]
+          obtain ⟨G, hm, hf, hex⟩ := hs
+          exists G, hm, hf
+          simp_all only [satisfies, not_false_eq_true, true_and]
+          intro φ
+          replace hex := Law.satisfiesPhi_symm_law φ _ (hex φ)
+          simp_all only [Law.MagmaLaw.symm]
+  intros w hw
+  by_cases h: w.first = 0 ∨ w.last = 0
+  .
+    clear hw
+    exists 2
+    simp_all only [Nat.one_lt_ofNat, true_and]
+    cases h with
+    | inl h =>
+      exists Magma.mk fun x y => x
+      intro f
+      simp_all only [←h]
+      induction w
+        <;> first | rfl | assumption
+    | inr h =>
+      exists Magma.mk fun x y => y
+      intro f
+      simp_all only [←h]
+      induction w
+        <;> first | rfl | assumption
+  .
+    suffices h: ∀ (w : FreeMagma (Fin 2)), w.first ≠ 0 ∧ w.last ≠ 0 → FreeMagma.Mem 0 w → ∃ (G : Type) (M : Magma G) (hf: Finite G), G ⊧ (Lf 0 ≃ w) ∧ ¬Equation2 G by
+      sorry
+    intro w h
+    obtain ⟨hl, hr⟩ := h
+    let MPols: Magma (Polynomial ℤ) := Magma.mk fun x y => (1 - Polynomial.X) * x + Polynomial.X * y
+    let fPols: Fin 2 → Polynomial ℤ := fun z => if z = 0 then 1 else 0
+    let r: Polynomial ℤ := FreeMagma.evalInMagma fPols w
+    have geq_deg_r_one : r.degree ≥ 1 := sorry
+    let n := r.natDegree
+    have : ∃ (b0: ℤ), Polynomial.eval b0 (r * (r - 2)) ≠ 0 := by
+      have hrd : r.natDegree ≥ 1 := by
+        simp_all only [ne_eq, ge_iff_le, Nat.succ_le, Nat.WithBot.one_le_iff_zero_lt, Polynomial.natDegree_pos_iff_degree_pos]
+      have eq_deg_r_nat_deg_r : r.degree = ↑r.natDegree := by
+        apply Polynomial.degree_eq_natDegree
+        simp_all only [Fin.isValue, ne_eq, ge_iff_le, le_max_iff, gt_iff_lt, r, MPols, fPols]
+        intro a
+        simp_all only [Fin.isValue, Polynomial.natDegree_zero, nonpos_iff_eq_zero, one_ne_zero]
+      let r' := r * (r - 2)
+      have hr2r : (r - 2).natDegree = r.natDegree := by
+        have : (r - 2).natDegree ≤ r.natDegree := by
+          have := Polynomial.degree_sub_le r 2
+          have this' := Polynomial.degree_C (a := -2)
+          simp at this'
+          simp only [this'] at this
+          have this2 : r.degree ≥ 1 := by
+            rw [eq_deg_r_nat_deg_r]
+            simp_all only [Fin.isValue, ne_eq, ge_iff_le, Nat.cast_nonneg, max_eq_left, Nat.one_le_cast, r, MPols, fPols]
+          simp only [ge_iff_le] at this2
+          have this3 : max r.degree 0 = r.degree := by
+            simp only [max, Sup.sup]
+            cases h: r.degree
+            .
+              rw [h] at this2
+              contradiction
+            .
+              simp only [zero_le, max_eq_left]
+          rw [this3] at this
+          suffices (r - 2).degree ≤ r.degree by
+            apply Polynomial.natDegree_le_natDegree
+            assumption
+          assumption
+        have : (r - 2).natDegree ≥ r.natDegree := by
+          have : (r - 2).coeff (r.natDegree) = r.coeff (r.natDegree) := by
+            simp_all only [ne_eq, ge_iff_le, Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_eq_self]
+            apply Polynomial.coeff_C_ne_zero
+            simp_all only [Fin.isValue, ne_eq, r, MPols, fPols]
+            intro a
+            simp_all only [Fin.isValue, nonpos_iff_eq_zero, one_ne_zero]
+          suffices (r - 2).coeff (r.natDegree) ≠ 0 by
+            simp_all only [ne_eq, ge_iff_le, Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_eq_self, sub_zero, Polynomial.leadingCoeff_eq_zero]
+            apply Polynomial.le_natDegree_of_ne_zero
+            simp_all only [Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_zero, ne_eq, Polynomial.leadingCoeff_eq_zero, not_false_eq_true]
+          simp_all only [Fin.isValue, ne_eq, ge_iff_le, Polynomial.coeff_sub, Polynomial.coeff_natDegree, sub_eq_self, sub_zero, Polynomial.leadingCoeff_eq_zero, r, MPols, fPols]
+          apply Aesop.BuiltinRules.not_intro
+          intro a
+          simp_all only [Fin.isValue, Polynomial.natDegree_zero, nonpos_iff_eq_zero, one_ne_zero]
+        apply Nat.le_antisymm
+          <;> assumption
+      have : r' ≠ 0 := by
+        intro hct
+        apply_fun (fun x => x.degree) at hct
+        simp only [Polynomial.degree_zero, r', Polynomial.degree_mul, WithBot.add_eq_bot] at hct
+        cases hct with
+        | inl hct =>
+          have : r.natDegree = 0 := by
+            simp only [Polynomial.natDegree]
+            rw [hct]
+            norm_num
+          rw [this] at hrd
+          contradiction
+        | inr hct =>
+          have : (r - 2).natDegree = 0 := by
+            simp only [Polynomial.natDegree]
+            rw [hct]
+            norm_num
+          rw [hr2r] at this
+          rw [this] at hrd
+          contradiction
+      have := Polynomial.exists_multiset_roots this
+      obtain ⟨s, hs⟩ := this
+      have : r'.natDegree = 2 * n := by
+        simp only [Polynomial.natDegree]
+        have : (r - 2).degree = r.degree := sorry
+        have this' : r.degree + r.degree = some (2 * r.natDegree) := sorry
+        simp only [r', Polynomial.degree_mul, this, this', WithBot.unbot', WithBot.recBotCoe]
+        simp only [id_eq]
+      obtain ⟨hs1, hs2⟩ := hs
+      have : ∃ (b0: ℤ), b0 ∉ s := sorry
+      obtain ⟨b0, hb0⟩ := this
+      have : Multiset.count b0 s = 0 := by
+        apply Multiset.count_eq_zero_of_not_mem
+        assumption
+      have : Polynomial.rootMultiplicity b0 r' = 0 := by
+        simp only [←hs2]
+        assumption
+      have : Polynomial.eval b0 r' ≠ 0 := by
+        simp only [Polynomial.rootMultiplicity_eq_zero_iff, Polynomial.IsRoot.def] at this
+        intro h
+        have := this h
+        contradiction
+      simp only [r'] at this
+      exists b0
+    obtain ⟨b0, h0⟩ := this
+    let k: Nat := (Polynomial.eval (b0: ℤ) r - 1).natAbs
+    let a0: ℤ := 1 - b0
+    let M: Magma (ZMod k) := Magma.mk fun u v => a0 * u + b0 * v
+    have hf: Finite (ZMod k) := by
+      have : k ≠ 0 := sorry
+      have : ZMod k = Fin k := by
+        unfold ZMod
+        simp_all only [Fin.isValue, ne_eq, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_ofNat, mul_eq_zero, not_or, Int.natAbs_eq_zero, r, MPols, fPols, k]
+        obtain ⟨left, right⟩ := h0
+        split
+        next x heq => simp_all only [Fin.isValue, Int.natAbs_eq_zero]
+        next x n_1 heq => simp_all only [Fin.isValue, Nat.succ_eq_add_one]
+      rw [this]
+      apply Finite.intro
+      rfl
+    intro hw
+    exists ZMod k, M, hf
+    let eval_eq: FreeMagma (Fin 2) → ZMod k → ZMod k → ZMod k := fun w u v => w ⬝ (fun z => if z = 0 then u else v)
+    split_ands
+    rotate_right
+    .
+      simp only [not_forall]
+      exists 0, 1
+      have : k ≠ 1 := by
+        simp only [k]
+        intro h
+        have := Int.natAbs_eq (Polynomial.eval b0 r - 1)
+        simp only [h] at this
+        cases this with
+        | inl h =>
+          apply_fun (fun x => x - 1) at h
+          simp only [Int.sub_sub] at h
+          norm_num at h
+          apply h0
+          simp_all only [Fin.isValue, ne_eq, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_ofNat, mul_zero, not_true_eq_false, r, MPols, fPols]
+        | inr h =>
+          apply_fun (fun x => x + 1) at h
+          norm_num at h
+          apply h0
+          simp_all only [Fin.isValue, ne_eq, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_ofNat, zero_sub, Int.reduceNeg, mul_neg, zero_mul, neg_zero, not_true_eq_false, r, MPols, fPols]
+      intro h
+      apply_fun (fun x => x.val) at h
+      rw [ZMod.val_one'' this] at h
+      simp only [ZMod.val_zero, zero_ne_one] at h
+    .
+      intro f
+      unfold satisfiesPhi
+        ; simp only
+      conv =>
+        lhs
+        unfold FreeMagma.evalInMagma
+      have : w ⬝ f = eval_eq w (f 0) (f 1) := by
+        unfold eval_eq
+        have : ∀ (f g: Fin 2 → ZMod k), f = g → w ⬝ f = w ⬝ g := by
+          simp only [forall_eq', implies_true]
+        apply this
+        funext z
+        fin_cases z
+          <;> simp_all only [M, eval_eq, Fin.isValue, ne_eq, ge_iff_le, ite_self, sub_add_cancel, Fin.zero_eta, ↓reduceIte, Fin.mk_one, one_ne_zero]
+      rw [this]
+        ; clear this
+      have : ∀ (u v), eval_eq w u v = eval_eq w (u - v) 0 + eval_eq w v v := by
+        intro u v
+        clear_value k
+        clear * -
+        simp only [eval_eq]
+        induction w
+        .
+          rename_i z
+          unfold FreeMagma.evalInMagma
+          fin_cases z
+          .
+            simp only [Fin.zero_eta, Fin.isValue, ↓reduceIte, sub_add_cancel]
+          .
+            simp only [Fin.mk_one, Fin.isValue, one_ne_zero, ↓reduceIte, zero_add]
+        .
+          rename_i w1 w2 h1 h2
+          unfold FreeMagma.evalInMagma
+          rw [h1, h2]
+          unfold Magma.op
+          ring_nf
+      rw [this]
+        ; clear this
+      have : ∀ u, eval_eq w u 0 = (Polynomial.eval b0 r) * u := by
+        intro u
+        simp only [eval_eq, r, fPols]
+        clear_value r
+        clear * -
+        induction w
+        .
+          simp only [FreeMagma.evalInMagma]
+          split_ifs
+            <;> simp only [Polynomial.eval_zero, Polynomial.eval_one]
+            <;> ring_nf
+        .
+          rename_i w1 w2 h1 h2
+          simp only [FreeMagma.evalInMagma,
+                    Magma.op,
+                    h1,
+                    h2,
+                     ←mul_assoc (c := u),
+                     ←right_distrib (c := u),
+                     ←Int.coe_castRingHom,
+                     ←RingHom.map_add,
+                     ←RingHom.map_mul]
+          simp only [Int.coe_castRingHom, Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_one, Polynomial.eval_X]
+      rw [this]
+        ; clear this
+      have : (Polynomial.eval b0 r) = (1: ZMod k) := by
+        apply eq_of_sub_eq_zero
+        rw [←Int.cast_one]
+        simp only [←Int.coe_castRingHom, ←RingHom.map_sub]
+        simp only [Int.coe_castRingHom]
+        rw [←Int.cast_zero]
+        simp only [ZMod.intCast_eq_intCast_iff']
+        norm_num
+        simp only [k, ←Int.dvd_iff_emod_eq_zero, Int.natAbs_dvd, dvd_refl]
+      rw [this]
+        ; clear this
+        ; ring_nf
+      have : ∀ u, eval_eq w u u = u := by
+        intro u
+        clear_value k
+        clear * -
+        simp only [eval_eq]
+        induction w
+        .
+          rename_i z
+          fin_cases z
+            <;> simp only [FreeMagma.evalInMagma, Fin.zero_eta, Fin.isValue, ↓reduceIte, Fin.mk_one, Fin.isValue, one_ne_zero]
+        .
+          rename_i w1 w2 h1 h2
+          simp only [FreeMagma.evalInMagma, Magma.op, h1, h2, a0]
+          zify
+          ring_nf
+      rw [this]
+        ; clear this
+      ring_nf
 
 end InfModel
