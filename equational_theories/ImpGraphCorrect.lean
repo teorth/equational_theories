@@ -50,7 +50,7 @@ theorem Graph.union_models (g1 g2 : Graph) (P : (i j : Nat) → Prop) :
 open Lean Elab in
 elab "defineImpGraph%" : term => do
   let rs ← Result.extractTheorems
-  let rs := rs[:20] -- use this to speed up testing
+  -- let rs := rs[:20] -- use this to speed up testing
   let mut pairs := #[]
   let mut graph : Graph := .empty
   for r in rs do
@@ -96,7 +96,7 @@ def ImpEntries.graph : ImpEntries → Graph
 open Lean Elab in
 elab "defineImpEntries%" : term => do
   let rs ← Result.extractTheorems
-  let rs := rs[:20] -- use this to speed up testing
+  -- let rs := rs[:20] -- use this to speed up testing
   let mut entries : Array Expr := #[]
   for r in rs do
     if let .implication ⟨lhs, rhs⟩ := r.variant then
