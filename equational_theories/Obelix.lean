@@ -1,5 +1,5 @@
 import Mathlib.Algebra.Order.Ring.Nat
-import Mathlib.Data.Finsupp.Notation
+import Mathlib.Data.DFinsupp.Notation
 import Mathlib.Data.ZMod.Defs
 import Mathlib.Logic.Denumerable
 import Mathlib.Tactic
@@ -15,14 +15,16 @@ namespace Obelix
 
 
 --The particular group that we'll work on: (ℕ×ℕ)-indexed functions to ℤ with finite support.
+--To ensure that this is computable (so that we can get the first few elements and verify
+--that our non-Astericity), we use DFinsupp, the computable (and dependent) friend of Finsupp.
 --The ℕ×ℕ lets us easily get "fresh" generators to keep extending the function. Finite support means
 --that the group is still countable, so we can denumerate every element and eventually add it
 --to the domain. We could easily use ℚ or Fin p instead of ℤ if we wanted.
 --Significant amounts of the construction -- even defining the invariants of the partial function --
 --depend on this, so we use it explicitly instead of making PartialSolution depend on a group G.
-abbrev A : Type := (ℕ × ℕ) →₀ ℤ
+abbrev A : Type := Π₀ _ : ℕ × ℕ, ℤ
 
-noncomputable instance A_group : AddCommGroup A := Finsupp.instAddCommGroup
+noncomputable instance A_group : AddCommGroup A := inferInstance
 
 @[ext]
 structure PartialSolution where
@@ -49,7 +51,7 @@ namespace PartialSolution
 The encoding is seq 0 for the root (a,·), and node i has children 2i+1 and 2i+2 for entries
  (f(x),·) and (f(f(x))-f(x),·) respectively.
 -/
-noncomputable def bifurcationTree (f : PartialSolution) {a : A} (ha : a ∉ f.Supp) (n : ℕ) : A × A :=
+def bifurcationTree (f : PartialSolution) {a : A} (ha : a ∉ f.Supp) (n : ℕ) : A × A :=
   if n = 0 then
     (a, fun₀ | (f.n, f.m+n+1) => 1)
   else if Odd n then
@@ -72,7 +74,8 @@ theorem bifurcationTreeUnique (f : PartialSolution) {a : A} (ha : a ∉ f.Supp) 
     (f.bifurcationTree ha n₁).1 ≠ (f.bifurcationTree ha n₂).1 := by
   sorry
 
---Something like this must already exist.
+--Something like this must already exist, surely?
+--No, it seems unpopular: https://leanprover.zulipchat.com/#narrow/channel/217875-Is-there-code-for-X.3F/topic/Join.20functions.20on.20disjoint.20subsets/near/477516295
 def combineSetFuncs {α β : Type*} {s t : Set α} [DecidablePred (· ∈ s)] (f : s → β) (g : t → β) :
     (s.union t) → β :=
   fun ⟨x,hx⟩ ↦ if h₂ : x ∈ s then f ⟨x, h₂⟩ else g ⟨x, Or.resolve_left hx h₂⟩
@@ -89,6 +92,7 @@ noncomputable def add (f : PartialSolution) {x : A} (hx : x ∉ f.Supp) : Partia
       apply f.Closed_f
     · apply Or.inr
       obtain ⟨n,hn⟩ := h
+      beta_reduce at hn
       have := f.bifurcationTreeDisjoint hx n
       simp only [hn] at this
       simp only [combineSetFuncs, dif_neg this, Set.mem_range]
@@ -101,6 +105,7 @@ noncomputable def add (f : PartialSolution) {x : A} (hx : x ∉ f.Supp) : Partia
       apply f.Closed_sub
     · apply Or.inr
       obtain ⟨n,hn⟩ := h
+      beta_reduce at hn
       have := (f.bifurcationTreeDisjoint hx n)
       simp only [hn] at this
       simp only [combineSetFuncs, dif_neg this, Set.mem_range]
@@ -189,21 +194,85 @@ noncomputable def closure (f : PartialSolution) : A → A → A :=
 theorem closure_prop (f : PartialSolution) : ∀ x y, x = closure f (closure f y x) (closure f y (closure f y x)) :=
   fun x y ↦ by simp [closure, closureLinear_funeq f (x - y)]
 
-/-- An initial solution -/
-def initial : PartialSolution := --where
-  -- Supp := {0, fun₀ | 1 => 1, fun₀ | 1 => 1 | 2 => 1, fun₀ | 1 => 1 | 3 => 1}
-  -- f a b :=
-  --   if a = 0 then 0 else
-  --   if a = fun₀ | 1 => 1 then fun₀ | 2 => 1 else
-  --   if a = fun₀ | 1 => 1 | 2 => 1 then fun₀ | 3 => 1 else
-  --   if a = fun₀ | 1 => 1 | 3 => 1 then fun₀ | 4 => 1 else
-  --   0
+/-- An initial solution, given by the empty partial function. -/
+def initial : PartialSolution where
+  Supp := ∅
+  f a := a.2.elim
+  Closed_f ha := ha.elim
+  Closed_sub ha := ha.elim
+  Valid ha := ha.elim
+  n := 0
+  m := 0
+  noSuppN _ _ := id
+  noSuppM _ _ := id
+
+/-- The first element to add to the empty solution is "0". -/
+theorem nextElemToAdd_initial_zero : initial.nextElemToAdd = (0:A) := by
   sorry
 
+#eval initial.bifurcationTree (show 0 ∉ ∅ from id) 5
+
+open Classical in
 -- @[equational_result]
 theorem Equation1491_facts : ∃ (G : Type) (_ : Magma G), Facts G [1491] [65] := by
   use A, ⟨initial.closure⟩
   simp only [Equation1491, closure_prop, implies_true, not_forall, true_and]
   constructor
   · exact closure_prop initial
-  · sorry
+  · --Pick two elements for the counterexample, x and y. We'll also need their difference.
+    let x : A := 0
+    let y : A := fun₀ | (0, 1) => 1
+    let my : A := fun₀ | (0, 1) => -1
+    have x_m_y_eq_my : x - y = my := by simp [x, y, my]
+    --Provide the data
+    use x, y
+    --We'll need to prove that they occur at positions 0 and 1, respectively, in order to get
+    --their values from f. No elements are at step 0 (empty function).
+    have hz : ∀ (z:A), ¬Nat.find (initial.closureSeq_eventually_total z) = 0 := by
+      simp [Nat.find_eq_zero, initial, closure, closureSeq]
+    --x occurs at step 1 (first tree), at position 0.
+    have h_pos_x : ((initial.closureSeq 0).bifurcationTree
+        (closureSeq.proof_2 initial 0) 0).1 = x := by
+      simpa [bifurcationTree, closureSeq, initial] using nextElemToAdd_initial_zero
+    have h_find_x : Nat.find (initial.closureSeq_eventually_total x) = 1 := by
+      suffices Nat.find (initial.closureSeq_eventually_total x) ≤ 1 by
+        have := hz x; omega
+      apply Nat.find_le
+      apply Or.inr
+      use 0
+    --y occurs at step 1 (first tree), at position 1.
+    have h_pos_y : ((initial.closureSeq 0).bifurcationTree
+        (closureSeq.proof_2 initial 0) 1).1 = y := by
+      simp [bifurcationTree, closureSeq, initial]
+    have h_find_y : Nat.find (initial.closureSeq_eventually_total y) = 1 := by
+      suffices Nat.find (initial.closureSeq_eventually_total y) ≤ 1 by
+        have := hz y; omega
+      apply Nat.find_le
+      apply Or.inr
+      use 1
+    --my occurs at step 1 (first tree), at position 5.
+    have h_pos_y : ((initial.closureSeq 0).bifurcationTree
+        (closureSeq.proof_2 initial 0) 5).1 = y := by
+      simp [bifurcationTree, closureSeq, initial]
+      sorry
+    have h_find_my : Nat.find (initial.closureSeq_eventually_total my) = 1 := by
+      suffices Nat.find (initial.closureSeq_eventually_total my) ≤ 1 by
+        have := hz my; omega
+      apply Nat.find_le
+      apply Or.inr
+      use 5
+    unfold closure
+    unfold closureLinear
+    -- unfold initial
+    rw [← x_m_y_eq_my] at h_find_my
+    simp [h_find_x, h_find_y, h_find_my]
+    conv =>
+      arg 1; arg 2; arg 2; arg 2; arg 1; arg 1; arg 2; arg 2; arg 1
+      arg 1; arg 2;
+      simp [h_find_my]
+    have := closureSeq.eq_def initial 0
+    set i₀ := initial.bifurcationTree (show 0 ∉ ∅ from id) 0 with hi₀
+    set i₁ := initial.bifurcationTree (show 0 ∉ ∅ from id) 1 with hi₁
+    set i₂ := initial.bifurcationTree (show 0 ∉ ∅ from id) 2 with hi₂
+    simp [initial, bifurcationTree, ← Nat.not_even_iff_odd] at hi₀ hi₁ hi₂
+    sorry
