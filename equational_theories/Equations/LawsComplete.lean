@@ -2,24 +2,39 @@ import equational_theories.RArray
 import equational_theories.MagmaLaw
 import equational_theories.Equations.All
 
-open Lean Elab
+/-!
+This module proves that are actually looking at at the laws we claim to be looking at.
 
+See `laws_complete` for the main result.
+-/
+
+
+open Lean Elab in
+/--
+An elaborator to assemble all the separate `Law{n}` definitions into one data structure.
+-/
 elab "defineLaws%" : term => do
   let consts : RArray Expr := RArray.ofFn (h := by omega) fun (⟨i, _⟩ : Fin 4694) =>
     mkConst (.mkSimple s!"Law{i+1}")
   return consts.toExpr (mkConst ``Law.NatMagmaLaw) id
 
+/--
+All the separte `Law{n}` definitions in one data structure.
+
+```
+example : laws[1000] = Law1001 := rfl
+```
+-/
 def laws : RArray Law.NatMagmaLaw := defineLaws%
 
 example : laws[1000] = Law1001 := rfl
 
 /-!
 The laws are in order, so we can use binary search to find it.
-
-Unclear if this is fast enough to be used with kernel reduction to go
-through all magmas.
 -/
 
+
+/-- An ordering on `FreeMagma` that coincides with the order we put the laws in.  -/
 def FreeMagma.comp (m1 m2 : FreeMagma Nat) : Ordering :=
   if m1.forks < m2.forks then
     .lt
@@ -31,9 +46,11 @@ def FreeMagma.comp (m1 m2 : FreeMagma Nat) : Ordering :=
     | .Fork _ _,   .Leaf _     => .gt
     | .Fork l1 r1, .Fork l2 r2 => (l1.comp l2).then (r1.comp r2)
 
+/-- The number of forks in a magma law. -/
 def Law.MagmaLaw.forks {α} (l : Law.MagmaLaw α) : Nat :=
   l.lhs.forks + l.rhs.forks
 
+/-- An ordering on `NatMagmaLaw` that coincides with the order we put the laws in.  -/
 def Law.MagmaLaw.comp (l1 l2 : Law.NatMagmaLaw) : Ordering :=
   let l1' := l1.map (fun _ => 0)
   let l2' := l2.map (fun _ => 0)
@@ -43,6 +60,10 @@ def Law.MagmaLaw.comp (l1 l2 : Law.NatMagmaLaw) : Ordering :=
   Ordering.then (FreeMagma.comp l1.lhs l2.lhs) <|
   (FreeMagma.comp l1.rhs l2.rhs)
 
+/--
+Binary search on `laws` for a given law. If the given law is not in `laws`, an arbitrary value is
+returned.
+-/
 def findMagmaLaw (l : Law.NatMagmaLaw) : Nat :=
   go 0 laws.size (laws.size+1) (by omega)
 where
@@ -61,25 +82,13 @@ where
           go mid (w-w') fuel (by omega)
   termination_by structural fuel
 
+/-- The largest used variable. -/
 def FreeMagma.max : FreeMagma Nat → Nat
   | .Leaf i => i
   | .Fork l r => Nat.max l.max r.max
 
+/-- The largest used variable. -/
 def Law.MagmaLaw.max (l : Law.MagmaLaw Nat) : Nat := Nat.max l.lhs.max l.rhs.max
-
-/-- Checks whether variables are canonically ordered -/
-def FreeMagma.is_canonical (next : Nat) : FreeMagma Nat → Option Nat
-  | .Leaf i => do
-    if i < next then
-      return next
-    else if i = next then
-      return next + 1
-    else
-      none
-  | .Fork l r => do
-    let next' ← l.is_canonical next
-    let next'' ← r.is_canonical next'
-    return next''
 
 /-- Canonically reorders variables -/
 def FreeMagma.canonicalize (m : FreeMagma Nat) : FreeMagma Nat :=
@@ -98,6 +107,7 @@ where
     let r ← go r
     return .Fork l r
 
+/-- Canonically reorders variables -/
 def Law.MagmaLaw.canonicalize (l : Law.MagmaLaw Nat) : Law.MagmaLaw Nat :=
   (go.run #[]).run.1
 where
@@ -105,6 +115,31 @@ where
     let lhs' ← FreeMagma.canonicalize.go l.lhs
     let rhs' ← FreeMagma.canonicalize.go l.rhs
     return ⟨lhs', rhs'⟩
+
+/-- Checks whether variables are canonically ordered -/
+def FreeMagma.is_canonical (next : Nat) : FreeMagma Nat → Option Nat
+  | .Leaf i => do
+    if i < next then
+      return next
+    else if i = next then
+      return next + 1
+    else
+      none
+  | .Fork l r => do
+    let next' ← l.is_canonical next
+    let next'' ← r.is_canonical next'
+    return next''
+
+/--
+Checks whether a magma law is canonical:
+* Variables are canonically labeled
+* `lhs < rhs` (with the exception of `0 ≃ 0`)
+* The symetric law did not come first
+-/
+def Law.MagmaLaw.is_canonical (l : Law.MagmaLaw Nat) : Bool :=
+  ((l.lhs.is_canonical 0).bind (fun n => l.rhs.is_canonical n)).isSome &&
+  (l.lhs.comp l.rhs = .lt || l.lhs = .Leaf 0) &&
+  !(l.symm.canonicalize.comp l = .lt)
 
 theorem FreeMagma.canonicalize_is_canonical (m : FreeMagma Nat) (xs : Array Nat) :
   (FreeMagma.canonicalize.go m xs).run.1.is_canonical xs.size = some (FreeMagma.canonicalize.go m xs).run.2.size := by
@@ -124,13 +159,11 @@ theorem FreeMagma.canonicalize_is_canonical (m : FreeMagma Nat) (xs : Array Nat)
       bind, StateT.bind]
     rfl
 
-def Law.MagmaLaw.is_canonical (l : Law.MagmaLaw Nat) : Bool :=
-  ((l.lhs.is_canonical 0).bind (fun n => l.rhs.is_canonical n)).isSome &&
-  (l.lhs.comp l.rhs = .lt || l.lhs = .Leaf 0) &&
-  !(l.symm.canonicalize.comp l = .lt)
-
 /-!
 A decision procedure for checking a predicate for all canonical magma laws of a certain size.
+
+The proofs are rather unpretty; maybe phrasing everything in terms of `Decidable` would
+have made that easier. But what works works.
 -/
 
 def testNat : Nat → (P : Nat → Bool) → Bool
@@ -147,7 +180,7 @@ def testFreeMagmas (s n : Nat) (P : Nat → FreeMagma Nat → Bool) :=
       P (if i < n then n else n+1) (.Leaf i)
   | s+1 =>
     testAllSplits s fun s1 s2 =>
-      assert! s1 + s2 = s
+      assert! s1 + s2 = s -- Cunning trick to ensure termination!
       testFreeMagmas s1 n fun n' l =>
         testFreeMagmas s2 n' fun n'' r =>
           P n'' (.Fork l r)
@@ -291,8 +324,8 @@ theorem testLawsUpto_spec (s : Nat) P :
     apply h _ his hcanon
 
 /--
-Here we do the actual computation. For now using `native_decide`, more engineering
-is necessary to use `by decide` here.
+Here we do the actual computation. For now using `native_decide`, more serious
+engineering is necessary if we insist on using `by decide` here.
 -/
 theorem testLawsUpto4_computation :
   testLawsUpto 4 (fun l => laws[findMagmaLaw l] = l) = true := by native_decide
@@ -303,13 +336,9 @@ theorem laws_complete' :
     using (testLawsUpto_spec 4 (fun l => laws[findMagmaLaw l] = l)).mp testLawsUpto4_computation
 
 /--
-This would be the compleness theorem.
-
-But in order to prove this one probably has to define a verified generator
-for canonical magmas up to a given size.
+This theorem demonstrates that `laws`, the list of laws considered in this project, indeed
+contains all (canonically represented) magma laws up to 4 operations.
 -/
 theorem laws_complete :
-    ∀ l : Law.MagmaLaw Nat, l.forks ≤ 4 → l.is_canonical → ∃ (i : Nat), laws[i] = l := by
-  intro l hl hcan
-  use findMagmaLaw l
-  exact laws_complete' l hl hcan
+    ∀ l : Law.MagmaLaw Nat, l.forks ≤ 4 → l.is_canonical → ∃ (i : Nat), laws[i] = l :=
+  fun l hl hcan => ⟨findMagmaLaw l, laws_complete' l hl hcan⟩
