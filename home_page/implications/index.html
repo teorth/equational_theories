@@ -105,7 +105,7 @@
       <h1>Equation Explorer</h1>
 
 
-      <input type="text" id="equationInput" placeholder="Enter an equation (e.g., x*y=y*x)">
+      <input type="text" id="equationInput" placeholder="Enter equation (e.g. x*y=y*x) or equation number">
       <button onclick="findEquation()">Jump to Equation</button>
       <div id="result"></div>
 
@@ -120,6 +120,10 @@
       <p>
         Why not try proving a random unknown implication?
         <button onclick="randomProof()">I'm Feeling Lucky</button>
+      </p>
+      <p>
+        Download this table as a CSV File
+        <button onclick="downloadEquationListCSV()">Download</button>
       </p>
 
 
