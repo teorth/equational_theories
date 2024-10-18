@@ -30,13 +30,13 @@ noncomputable instance A_group : AddCommGroup A := inferInstance
 structure PartialSolution where
   --A partial solution is a function f : A → A satisfying certain invariants, with support Supp.
   Supp : Set A
-  f : Supp → A
+  f : A → A
   --If x is in the domain, so is f(x).
-  Closed_f : ∀ {a}, (ha : a ∈ Supp) → f ⟨a,ha⟩ ∈ Supp
+  Closed_f : ∀ {a}, (ha : a ∈ Supp) → f a ∈ Supp
   --If x is in the domain, so is f (f x) - f(x).
-  Closed_sub : ∀ {a}, (ha : a ∈ Supp) → f ⟨_, Closed_f ha⟩ - f ⟨a,ha⟩ ∈ Supp
+  Closed_sub : ∀ {a}, (ha : a ∈ Supp) → f (f a) - f a ∈ Supp
   --For all x where it's defined, f( f(f(x)) - f(x) ) = x - f(x).
-  Valid : ∀ {a}, (ha : a ∈ Supp) → f ⟨_, Closed_sub ha⟩ = a - f ⟨_, Closed_f ha⟩
+  Valid : ∀ {a}, (ha : a ∈ Supp) → f (f (f a) - f a) = a - f a
   --There are nats n and m such that...
   n : ℕ
   m : ℕ
@@ -69,47 +69,49 @@ theorem bifurcationTreeDisjoint (f : PartialSolution) {a : A} (ha : a ∉ f.Supp
     (f.bifurcationTree ha n).1 ∉ f.Supp := by
   sorry
 
+/-- The elements in the bifurcation tree do not overlap with the existing domain. -/
+theorem bifurcationTreeDisjoint' (f : PartialSolution) {a b : A} (ha : a ∉ f.Supp)
+    (hb : b ∈ f.Supp) : b ∉ Set.range (fun n ↦ (f.bifurcationTree ha n).1) :=
+  fun ⟨n,hn⟩ ↦ f.bifurcationTreeDisjoint ha n ((by dsimp at hn; exact hn) ▸ hb)
+
 /-- The elements in the bifurcation tree never have the same domain, the same fst. -/
 theorem bifurcationTreeUnique (f : PartialSolution) {a : A} (ha : a ∉ f.Supp) (n₁ n₂ : ℕ) (hn : n₁ ≠ n₂) :
     (f.bifurcationTree ha n₁).1 ≠ (f.bifurcationTree ha n₂).1 := by
   sorry
 
---Something like this must already exist, surely?
---No, it seems unpopular: https://leanprover.zulipchat.com/#narrow/channel/217875-Is-there-code-for-X.3F/topic/Join.20functions.20on.20disjoint.20subsets/near/477516295
-def combineSetFuncs {α β : Type*} {s t : Set α} [DecidablePred (· ∈ s)] (f : s → β) (g : t → β) :
-    (s.union t) → β :=
-  fun ⟨x,hx⟩ ↦ if h₂ : x ∈ s then f ⟨x, h₂⟩ else g ⟨x, Or.resolve_left hx h₂⟩
-
 open Classical in
 /-- Extend a partial solution with an element not in its support, adding the full bifurcation tree. -/
 noncomputable def add (f : PartialSolution) {x : A} (hx : x ∉ f.Supp) : PartialSolution where
   Supp := f.Supp ∪ Set.range (fun n ↦ (f.bifurcationTree hx n).1)
-  f := combineSetFuncs f.f (fun x ↦ (f.bifurcationTree hx (Nat.find x.2)).2)
+  f a := if h : a ∈ Set.range (fun n ↦ (f.bifurcationTree hx n).1) then
+      (f.bifurcationTree hx (Nat.find h)).2
+    else
+      f.f a
   Closed_f := by
     rintro a (h|h)
     · apply Or.inl
-      simp only [combineSetFuncs, dif_pos h]
-      apply f.Closed_f
+      simp only [dif_neg (f.bifurcationTreeDisjoint' hx h)]
+      exact f.Closed_f h
     · apply Or.inr
       obtain ⟨n,hn⟩ := h
       beta_reduce at hn
-      have := f.bifurcationTreeDisjoint hx n
-      simp only [hn] at this
-      simp only [combineSetFuncs, dif_neg this, Set.mem_range]
+      simp
+      rw [dif_pos ?_]
       use 2*n + 1
       sorry
+      use n
   Closed_sub := by
     rintro a (h|h)
     · apply Or.inl
-      simp [combineSetFuncs, dif_pos h, dif_pos (f.Closed_f h)]
-      apply f.Closed_sub
+      simp only [dif_neg (f.bifurcationTreeDisjoint' hx h),
+        dif_neg (f.bifurcationTreeDisjoint' hx  (f.Closed_f h))]
+      exact f.Closed_sub h
     · apply Or.inr
+      simp only [dif_pos h]
       obtain ⟨n,hn⟩ := h
       beta_reduce at hn
-      have := (f.bifurcationTreeDisjoint hx n)
-      simp only [hn] at this
-      simp only [combineSetFuncs, dif_neg this, Set.mem_range]
       use 2*n + 2
+      simp only [Set.mem_range, exists_apply_eq_apply, ↓reduceDIte]
       sorry
   Valid := by
     sorry
@@ -141,8 +143,8 @@ theorem extends_supp (f : PartialSolution) {x y : A} (hx : x ∉ f.Supp) (hy : y
 
 /-- The extended partial solution agrees with the old partial solution on its domain. -/
 theorem agrees_supp (f : PartialSolution) {x y : A} (hx : x ∉ f.Supp) (hy : y ∈ f.Supp) :
-    f.f ⟨y,hy⟩ = (f.add hx).f ⟨y, f.extends_supp hx hy⟩ := by
-  simp [add, combineSetFuncs, dif_pos hy]
+    f.f y = (f.add hx).f y := by
+  simp [add, dif_neg (f.bifurcationTreeDisjoint' hx hy)]
 
 open Classical in
 /-- Pick the next element to add, using a denumeration of everything in the group. -/
@@ -173,8 +175,7 @@ theorem closureSeq_eventually_total (f : PartialSolution) (x : A) :
 open Classical in
 /-- Make the linearizing function f from the closure. -/
 noncomputable def closureLinear (f : PartialSolution) : A → A :=
-  fun a ↦ (f.closureSeq (Nat.find (f.closureSeq_eventually_total a))).f
-    ⟨a, Nat.find_spec (f.closureSeq_eventually_total a)⟩
+  fun a ↦ (f.closureSeq (Nat.find (f.closureSeq_eventually_total a))).f a
 
 /-- The linearizing function satisfies the functional equation, f( f(f(x)) - f(x) ) = x - f(x). -/
 theorem closureLinear_funeq (f₀ : PartialSolution) :
@@ -183,7 +184,7 @@ theorem closureLinear_funeq (f₀ : PartialSolution) :
 
 /-- The linearizing function agrees with the initial PartialSolution on its support. -/
 theorem closureLinear_extends (f₀ : PartialSolution) :
-    ∀ x, (h : x ∈ f₀.Supp) → closureLinear f₀ x = f₀.f ⟨x,h⟩ := by
+    ∀ x, (h : x ∈ f₀.Supp) → closureLinear f₀ x = f₀.f x := by
   sorry
 
 /-- Define the magma from the linearizing function. -/
@@ -191,13 +192,14 @@ noncomputable def closure (f : PartialSolution) : A → A → A :=
   fun a b ↦ a + (closureLinear f) (b - a)
 
 /-- The resulting magma obeys the Obelix rule. -/
-theorem closure_prop (f : PartialSolution) : ∀ x y, x = closure f (closure f y x) (closure f y (closure f y x)) :=
+theorem closure_prop (f : PartialSolution) : ∀ x y,
+    x = closure f (closure f y x) (closure f y (closure f y x)) :=
   fun x y ↦ by simp [closure, closureLinear_funeq f (x - y)]
 
 /-- An initial solution, given by the empty partial function. -/
 def initial : PartialSolution where
   Supp := ∅
-  f a := a.2.elim
+  f _ := 0
   Closed_f ha := ha.elim
   Closed_sub ha := ha.elim
   Valid ha := ha.elim
@@ -208,7 +210,87 @@ def initial : PartialSolution where
 
 /-- The first element to add to the empty solution is "0". -/
 theorem nextElemToAdd_initial_zero : initial.nextElemToAdd = (0:A) := by
+  unfold nextElemToAdd
+  simp
+  have : (fun a ↦ Classical.propDecidable (∃ x : { x // x ∉ initial.Supp },
+      @Encodable.decode { x // x ∉ initial.Supp } (open Classical in Subtype.encodable) a = some x)) =
+      (fun a ↦ Decidable.isTrue (by
+        simp
+      )) := by
+    funext
+    ext
   sorry
+
+/--
+--Pick two elements for the counterexample, x and y. We'll also need their difference.
+-/
+def x : A := 0
+def y : A := fun₀ | (0, 1) => 1
+def my : A := fun₀ | (0, 1) => -1
+def z : A := fun₀ | (0, 6) => 1
+
+open Classical
+
+theorem x_sub_y_eq_my : x - y = my := by simp [x, y, my]
+
+--We'll need to prove that they occur at positions 0 and 1, respectively, in order to get
+--their values from f. No elements are at step 0 (empty function).
+theorem none_in_initial : ∀ (z:A), ¬Nat.find (initial.closureSeq_eventually_total z) = 0 := by
+  simp [Nat.find_eq_zero, initial, closure, closureSeq]
+
+--x occurs at step 1 (first tree), at position 0. f(x) = y.
+theorem h_pos_x : ((initial.closureSeq 0).bifurcationTree
+    (closureSeq.proof_2 initial 0) 0) = (x,y) := by
+  simpa [bifurcationTree, closureSeq, initial, y] using nextElemToAdd_initial_zero
+
+theorem h_pos_my : ((initial.closureSeq 0).bifurcationTree
+    (closureSeq.proof_2 initial 0) 5) = (my,z) := by
+  simp [my, closureSeq, nextElemToAdd_initial_zero]
+  native_decide
+
+theorem h_find_x : Nat.find (initial.closureSeq_eventually_total x) = 1 := by
+  suffices Nat.find (initial.closureSeq_eventually_total x) ≤ 1 by
+    have := none_in_initial x; omega
+  apply Nat.find_le
+  apply Or.inr
+  use 0
+  simp [h_pos_x]
+
+theorem h_find_my : Nat.find (initial.closureSeq_eventually_total my) = 1 := by
+  suffices Nat.find (initial.closureSeq_eventually_total my) ≤ 1 by
+    have := none_in_initial my; omega
+  apply Nat.find_le
+  apply Or.inr
+  use 5
+  simp [h_pos_my]
+
+theorem h_fx_eq_y : initial.closureLinear x = y := by
+  have : ((initial.closureSeq 0).bifurcationTree (closureSeq.proof_2 initial 0) 0).2 = y := by
+    rw [h_pos_x]
+  convert this
+  let this : ∃ y, ((initial.closureSeq 0).bifurcationTree (closureSeq.proof_2 initial 0) y).1 = x := by
+    use 0
+    simp [h_pos_x]
+  simp [closureLinear, add, h_find_x]
+  rw [closureSeq, add]
+  simp only [Set.mem_range, dif_pos this]
+  simp only [closureSeq, nextElemToAdd_initial_zero]
+  unfold this
+  native_decide
+
+theorem h_fmy_eq_z : initial.closureLinear my = z := by
+  have : ((initial.closureSeq 0).bifurcationTree (closureSeq.proof_2 initial 0) 5).2 = z := by
+    rw [h_pos_my]
+  convert this
+  let this : ∃ y, ((initial.closureSeq 0).bifurcationTree (closureSeq.proof_2 initial 0) y).1 = my := by
+    use 5
+    simp [h_pos_my]
+  simp [closureLinear, add, h_find_my]
+  rw [closureSeq, add]
+  simp only [Set.mem_range, dif_pos this]
+  simp only [closureSeq, nextElemToAdd_initial_zero]
+  unfold this
+  native_decide
 
 #eval initial.bifurcationTree (show 0 ∉ ∅ from id) 5
 
@@ -219,57 +301,39 @@ theorem Equation1491_facts : ∃ (G : Type) (_ : Magma G), Facts G [1491] [65] :
   simp only [Equation1491, closure_prop, implies_true, not_forall, true_and]
   constructor
   · exact closure_prop initial
-  · --Pick two elements for the counterexample, x and y. We'll also need their difference.
-    let x : A := 0
-    let y : A := fun₀ | (0, 1) => 1
-    let my : A := fun₀ | (0, 1) => -1
-    have x_m_y_eq_my : x - y = my := by simp [x, y, my]
-    --Provide the data
+  · --Provide the data
     use x, y
-    --We'll need to prove that they occur at positions 0 and 1, respectively, in order to get
-    --their values from f. No elements are at step 0 (empty function).
-    have hz : ∀ (z:A), ¬Nat.find (initial.closureSeq_eventually_total z) = 0 := by
-      simp [Nat.find_eq_zero, initial, closure, closureSeq]
-    --x occurs at step 1 (first tree), at position 0.
-    have h_pos_x : ((initial.closureSeq 0).bifurcationTree
-        (closureSeq.proof_2 initial 0) 0).1 = x := by
-      simpa [bifurcationTree, closureSeq, initial] using nextElemToAdd_initial_zero
-    have h_find_x : Nat.find (initial.closureSeq_eventually_total x) = 1 := by
-      suffices Nat.find (initial.closureSeq_eventually_total x) ≤ 1 by
-        have := hz x; omega
-      apply Nat.find_le
-      apply Or.inr
-      use 0
     --y occurs at step 1 (first tree), at position 1.
     have h_pos_y : ((initial.closureSeq 0).bifurcationTree
         (closureSeq.proof_2 initial 0) 1).1 = y := by
       simp [bifurcationTree, closureSeq, initial]
     have h_find_y : Nat.find (initial.closureSeq_eventually_total y) = 1 := by
       suffices Nat.find (initial.closureSeq_eventually_total y) ≤ 1 by
-        have := hz y; omega
+        have := none_in_initial y; omega
       apply Nat.find_le
       apply Or.inr
       use 1
     --my occurs at step 1 (first tree), at position 5.
-    have h_pos_y : ((initial.closureSeq 0).bifurcationTree
-        (closureSeq.proof_2 initial 0) 5).1 = y := by
-      simp [bifurcationTree, closureSeq, initial]
-      sorry
+    have h_pos_my : ((initial.closureSeq 0).bifurcationTree
+        (closureSeq.proof_2 initial 0) 5).1 = my := by
+      simp [my, closureSeq, nextElemToAdd_initial_zero]
+      native_decide
     have h_find_my : Nat.find (initial.closureSeq_eventually_total my) = 1 := by
       suffices Nat.find (initial.closureSeq_eventually_total my) ≤ 1 by
-        have := hz my; omega
+        have := none_in_initial my; omega
       apply Nat.find_le
       apply Or.inr
       use 5
-    unfold closure
+
+    nth_rewrite 3 [closure]
+    rw [x_sub_y_eq_my]
     unfold closureLinear
+    -- unfold_let x y my at *
+    -- clear x y my
+    rw [h_find_my]
     -- unfold initial
     rw [← x_m_y_eq_my] at h_find_my
     simp [h_find_x, h_find_y, h_find_my]
-    conv =>
-      arg 1; arg 2; arg 2; arg 2; arg 1; arg 1; arg 2; arg 2; arg 1
-      arg 1; arg 2;
-      simp [h_find_my]
     have := closureSeq.eq_def initial 0
     set i₀ := initial.bifurcationTree (show 0 ∉ ∅ from id) 0 with hi₀
     set i₁ := initial.bifurcationTree (show 0 ∉ ∅ from id) 1 with hi₁
