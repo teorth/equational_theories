@@ -651,6 +651,7 @@ digraph G {
   rankdir = BT
   graph [ pad="0.2", ranksep="0.75", nodesep="0.35" ];
   node [ shape="none" ]
+
 `;
 
         let scc_to_node_map;
@@ -689,18 +690,52 @@ digraph G {
           }
         }
 
-        document.getElementById("message").innerHTML +=
-          "Running transitive reduction...<br />";
         reduced_graph = transitive_reduction_of_closure(graph);
 
         let highlight_red = parseCommaSeparatedNumbers(params.highlight_red);
         let highlight_blue = parseCommaSeparatedNumbers(params.highlight_blue);
 
-        for (const [scc_name, scc] of Object.entries(scc_to_node_map)) {
-          sorted_scc = [...scc].sort((a, b) => a - b);
-          eq_pretty_strs = sorted_scc.map(
-            (v) => `${graph_json.equations[v]} (${v})`,
+        const hasDual = new Set(graph_json.duals.flat());
+        const dualMap = Object.fromEntries(graph_json.duals);
+
+        function dualNormalizeEqNum(eqnum) {
+          if (!hasDual.has(eqnum)) {
+            return eqnum;
+          } else if (dualMap[eqnum]) {
+            return dualMap[eqnum];
+          }
+
+          return eqnum;
+        }
+        function vertexType(v) {
+          eqnum = scc_to_node_map[v][0];
+          if (!hasDual.has(eqnum)) {
+            return 0;
+          } else if (!dualMap[eqnum]) {
+            return 1;
+          }
+
+          return -1;
+        }
+
+        // Sort SCCs by duality, this _slightly_ improves their graphical symmetry.
+        sccs = Object.keys(scc_to_node_map);
+        sccs.sort((a, b) => {
+          let at = vertexType(a);
+          let bt = vertexType(b);
+          if (at != bt) {
+            return bt - at;
+          }
+
+          return (
+            dualNormalizeEqNum(scc_to_node_map[b][0]) -
+            dualNormalizeEqNum(scc_to_node_map[a][0])
           );
+        });
+
+        for (const scc_name of sccs) {
+          let scc = scc_to_node_map[scc_name];
+          eq_pretty_strs = scc.map((v) => `${graph_json.equations[v]} (${v})`);
           let vertex_name;
           if (eq_pretty_strs.length > 5) {
             vertex_name = eq_pretty_strs.slice(0, 4).join("\\n");
@@ -723,9 +758,7 @@ digraph G {
             dotFile += `,style=filled,fillcolor="#ADD8E6"`;
           }
 
-          dotFile += `,href="${EQUATION_EXPLORER_URL}${sorted_scc[0]}"`;
-
-          dotFile += `]\n`;
+          dotFile += `,href="${EQUATION_EXPLORER_URL}${scc[0]}"]\n`;
         }
 
         let implication_edges = 0;
