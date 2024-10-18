@@ -129,11 +129,13 @@ def Law.MagmaLaw.is_canonical (l : Law.MagmaLaw Nat) : Bool :=
   (l.lhs.comp l.rhs = .lt || l.lhs = .Leaf 0) &&
   !(l.symm.canonicalize.comp l = .lt)
 
-/-
+/-!
 A decision procedure for checking a predicate for all canonical magma laws of a certain size.
 -/
-def testVars (n : Nat) (P : Nat → Nat → Bool) :=
-  (List.range n).all (fun i => P n i) && P (n+1) n
+
+def testNat : Nat → (P : Nat → Bool) → Bool
+  | 0, _   => true
+  | n+1, P => P n && testNat n P
 
 def testAllSplits (s : Nat) (P : Nat → Nat → Bool) : Bool :=
   (List.range (s+1)).all fun s' => P s' (s-s')
@@ -141,7 +143,8 @@ def testAllSplits (s : Nat) (P : Nat → Nat → Bool) : Bool :=
 def testFreeMagmas (s n : Nat) (P : Nat → FreeMagma Nat → Bool) :=
   match s with
   | 0 =>
-    testVars n fun n' i => P n' (.Leaf i)
+    testNat (n+1) fun i =>
+      P (if i = n then n+1 else n) (.Leaf i)
   | s+1 =>
     testAllSplits s fun s1 s2 =>
       assert! s1 + s2 = s
@@ -169,10 +172,6 @@ def testLaws (s : Nat) (P : Law.NatMagmaLaw → Bool) :=
 /-- info: true -/
 #guard_msgs in
 #eval testLaws 4 (fun l => l.forks = 4 ∧ l.is_canonical)
-
-theorem testVars_spec (n : Nat) P :
-  testVars n P = true ↔ P (n+1) n ∧ ∀ i < n, P n i :=
-  sorry
 
 @[simp]
 theorem FreeMagmas.forks_eq_0_iff (m : FreeMagma Nat) :
@@ -208,15 +207,47 @@ theorem testFreeMagmas_spec (s n : Nat) P :
       testAllSplits_spec, Option.bind_eq_some]
     constructor
     · rintro h _ n' l r rfl hadd n'' hcan1 hcan2
+      specialize h _ _ hadd
       specialize ih1 _ _ hadd
       specialize ih2 _ _ hadd
-      sorry
-#exit
+      dsimp at *
+      apply (ih2 _ l).mp _ _ _ rfl hcan2
+      apply ih1.mp h _ _ rfl hcan1
+    · intro h s1 s2 hadd
+      specialize ih1 _ _ hadd
+      specialize ih2 _ _ hadd
+      rw [ih1]
+      intro l n' hl hcan1
+      rw [ih2]
+      intro r n'' hr hcan2
+      apply h _ n'' l r rfl (by simp [*])
+      apply hcan1
+      apply hcan2
 
 theorem testLaws_spec (s : Nat) P :
-  testLaws s P = true ↔ ∀ l : Law.MagmaLaw Nat, l.forks ≤ 4 → l.is_canonical → P l = true := by
+  testLaws s P = true ↔ ∀ l : Law.MagmaLaw Nat, l.forks = s → l.is_canonical → P l = true := by
   unfold testLaws
-  sorry
+  simp [testAllSplits_spec, testFreeMagmas_spec, Decidable.or_iff_not_imp_left]
+  constructor
+  · rintro h ⟨l, r⟩ hs hcan
+    simp [Law.MagmaLaw.is_canonical] at hcan
+    obtain ⟨⟨hcan, hcomp⟩, hsymm⟩ := hcan
+    cases hcan1 : (FreeMagma.is_canonical 0 l)
+    case none => simp [hcan1] at hcan
+    case some n' =>
+      cases hcan2 : (FreeMagma.is_canonical n' r)
+      case none => simp [hcan1, hcan2] at hcan
+      case some n'' =>
+        apply h l.forks r.forks hs l _ rfl hcan1 _ _ rfl hcan2
+        · intro hnLf0; simp_all
+        · assumption
+  · rintro h s1 s2 hs12 l n' hl hcan1 r n'' hr hcan2 hcomp hsymm
+    apply h
+    · simp [Law.MagmaLaw.forks, hs12, hl, hr]
+    · simp [Law.MagmaLaw.is_canonical, hcan1, hcan2, hsymm]
+      tauto
+
+#exit
 
 /--
 This would be the compleness theorem.
