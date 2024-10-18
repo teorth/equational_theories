@@ -160,6 +160,13 @@
           >
         </div>
 
+        <div class="checkbox-container">
+          <input type="checkbox" id="collapse_duals" name="collapse_duals" />
+          <label for="collapse_duals"
+            >Collapse duals into equivalence classes</label
+          >
+        </div>
+
         <button type="submit">Submit</button>
       </form>
 
@@ -565,13 +572,56 @@
 
         let vertices_to_delete = new Set();
 
+        let node_to_scc_map = { ...graph_json.node_to_scc_map };
+        let scc_to_node_map = { ...graph_json.scc_to_node_map };
+        let graph = graph_json.condensed_graph;
+
         if (params.show_sporadic_equations != "on") {
-          for (const key of Object.keys(graph_json.node_to_scc_map)) {
+          for (const key of Object.keys(node_to_scc_map)) {
             let eq_num = parseInt(key, 10);
             if (eq_num > 4694) {
               vertices_to_delete.add(eq_num);
             }
           }
+        }
+
+        if (params.collapse_duals == "on") {
+          collapse = {};
+          for (const [l, r] of graph_json.duals) {
+            const lscc = node_to_scc_map[l];
+            const rscc = node_to_scc_map[r];
+            if (lscc == rscc) continue;
+
+            collapse[`${lscc},${rscc}`] ||= new Set();
+            collapse[`${lscc},${rscc}`].add(r);
+          }
+
+          let sccs_to_delete = new Set();
+          for (const [key, rs] of Object.entries(collapse)) {
+            let [lscc, rscc] = key.split(",");
+            for (const r of rs) {
+              scc_to_node_map[lscc].push(r);
+              node_to_scc_map[r] = lscc;
+            }
+
+            scc_to_node_map[rscc] = scc_to_node_map[rscc].filter(
+              (item) => !rs.has(item),
+            );
+            graph[lscc] = [...new Set(graph[lscc].concat(graph[rscc]))];
+
+            if (scc_to_node_map[rscc].length == 0) {
+              delete scc_to_node_map[rscc];
+              sccs_to_delete.add(rscc);
+            }
+          }
+
+          copy = {};
+          for (let [v, neighbors] of Object.entries(graph)) {
+            if (!sccs_to_delete.has(v)) {
+              copy[v] = neighbors.filter((x) => !sccs_to_delete.has(x));
+            }
+          }
+          graph = copy;
         }
 
         if (params.max_variables) {
@@ -597,41 +647,30 @@
         if (params.implies) {
           let sources = parseCommaSeparatedNumbers(params.implies);
           let source_sccs = new Set([
-            ...sources.map((s) => graph_json.node_to_scc_map[s]),
+            ...sources.map((s) => node_to_scc_map[s]),
           ]);
           let implied_sccs = new Set(source_sccs);
 
           for (const src of source_sccs) {
-            if (graph_json.condensed_graph[src]) {
-              graph_json.condensed_graph[src].forEach((n) =>
-                implied_sccs.add(n),
-              );
+            if (graph[src]) {
+              graph[src].forEach((n) => implied_sccs.add(n));
             }
           }
 
-          for (const scc of vertices(graph_json.condensed_graph)) {
+          for (const scc of vertices(graph)) {
             if (!implied_sccs.has(scc)) {
-              graph_json.scc_to_node_map[scc].forEach((x) =>
-                vertices_to_delete.add(x),
-              );
+              scc_to_node_map[scc].forEach((x) => vertices_to_delete.add(x));
             }
           }
         }
         if (params.implied_by) {
           let sinks = parseCommaSeparatedNumbers(params.implied_by);
-          let sink_sccs = new Set([
-            ...sinks.map((s) => graph_json.node_to_scc_map[s]),
-          ]);
+          let sink_sccs = new Set([...sinks.map((s) => node_to_scc_map[s])]);
 
-          for (const scc of vertices(graph_json.condensed_graph)) {
+          for (const scc of vertices(graph)) {
             if (sink_sccs.has(scc)) continue;
-            if (
-              !graph_json.condensed_graph[scc] ||
-              !graph_json.condensed_graph[scc].some((x) => sink_sccs.has(x))
-            ) {
-              graph_json.scc_to_node_map[scc].forEach((x) =>
-                vertices_to_delete.add(x),
-              );
+            if (!graph[scc] || !graph[scc].some((x) => sink_sccs.has(x))) {
+              scc_to_node_map[scc].forEach((x) => vertices_to_delete.add(x));
             }
           }
         }
@@ -654,40 +693,29 @@ digraph G {
 
 `;
 
-        let scc_to_node_map;
-        let graph;
-        if (vertices_to_delete.length == 0) {
-          scc_to_node_map = graph_json.scc_to_node_map;
-          graph = graph_json.condensed_graph;
-        } else {
+        if (vertices_to_delete.length != 0) {
           let sccs_to_delete = new Set();
-          for (const [scc_name, scc] of Object.entries(
-            graph_json.scc_to_node_map,
-          )) {
+          for (const [scc_name, scc] of Object.entries(scc_to_node_map)) {
             if (scc.every((x) => vertices_to_delete.has(x))) {
               sccs_to_delete.add(scc_name);
             }
           }
 
-          graph = {};
-          for (let [v, neighbors] of Object.entries(
-            graph_json.condensed_graph,
-          )) {
+          copy = {};
+          for (let [v, neighbors] of Object.entries(graph)) {
             if (!sccs_to_delete.has(v)) {
-              graph[v] = neighbors.filter((x) => !sccs_to_delete.has(x));
+              copy[v] = neighbors.filter((x) => !sccs_to_delete.has(x));
             }
           }
+          graph = copy;
 
-          scc_to_node_map = {};
-          for (const [scc_name, scc] of Object.entries(
-            graph_json.scc_to_node_map,
-          )) {
+          copy = {};
+          for (const [scc_name, scc] of Object.entries(scc_to_node_map)) {
             if (!sccs_to_delete.has(scc_name)) {
-              scc_to_node_map[scc_name] = scc.filter(
-                (x) => !vertices_to_delete.has(x),
-              );
+              copy[scc_name] = scc.filter((x) => !vertices_to_delete.has(x));
             }
           }
+          scc_to_node_map = copy;
         }
 
         reduced_graph = transitive_reduction_of_closure(graph);
@@ -760,6 +788,7 @@ digraph G {
 
           dotFile += `,href="${EQUATION_EXPLORER_URL}${scc[0]}"]\n`;
         }
+        console.log(`Vertices: ${sccs.length}`);
 
         let implication_edges = 0;
         for (const [v, neighbors] of Object.entries(reduced_graph)) {
