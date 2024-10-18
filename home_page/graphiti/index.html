@@ -223,6 +223,10 @@
           >Download PNG</a
         >
         ◇
+        <a href="#" id="download-link" onclick="downloadDOT(event)"
+          >Download DOT</a
+        >
+        ◇
         <a
           href="https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Graphiti/near/475120080"
           >Leave feedback</a
@@ -244,6 +248,7 @@
     <script>
       const EQUATION_EXPLORER_URL =
         "https://teorth.github.io/equational_theories/implications/?";
+      let dotFile = "";
 
       function hideVisibility(elementId) {
         const element = document.getElementById(elementId);
@@ -456,6 +461,23 @@
         };
 
         img.src = url;
+      }
+
+      function downloadDOT(event) {
+        event.preventDefault();
+
+        var blob = new Blob([dotFile], { type: "text/plain" });
+        var url = URL.createObjectURL(blob);
+
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "graph.dot";
+        a.style.display = "none"; // Hide the anchor
+
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
       }
 
       function onGraphRender() {
