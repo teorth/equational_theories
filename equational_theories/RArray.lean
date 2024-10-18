@@ -37,7 +37,7 @@ theorem RArray.get_eq_getImpl : @RArray.get = @RArray.getImpl := by
   | leaf _ => rfl
   | branch p l r ihl ihr =>
     rw [RArray.getImpl, RArray.get_eq_def]
-    simp [ihl, ihr]
+    simp only [ihl, ihr]
     cases hnp : Nat.ble p n
     · replace hnp := ne_true_of_eq_false hnp
       simp at hnp

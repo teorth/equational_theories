@@ -219,7 +219,7 @@ theorem FreeMagmas.forks_eq_succ_iff (m : FreeMagma Nat) n :
   cases m
   case Leaf => simp [FreeMagma.forks]
   case Fork l r =>
-    simp [FreeMagma.forks]
+    simp only [FreeMagma.forks, Nat.succ_eq_add_one, Nat.add_right_cancel_iff]
     constructor
     · intro h; use l, r
     · rintro ⟨_, _, ⟨rfl, rfl⟩, _⟩; assumption
@@ -232,13 +232,10 @@ theorem testNat_spec (n : Nat) P :
     simp_all [testNat, Nat.lt_succ_iff_lt_or_eq]; clear ih
     constructor
     · rintro ⟨h1,h2⟩ i ⟨h2|h3⟩
-      · apply h2 i (Nat.lt_add_one i)
-      · apply h2 i (Nat.lt_succ_of_lt h3)
+      · exact h2 i (Nat.lt_add_one i)
+      · exact h2 i (Nat.lt_succ_of_lt h3)
       · subst i; assumption
-    · intro h
-      constructor
-      · apply h; right; rfl
-      · intro i h2; apply h; left; assumption
+    · exact fun h ↦ ⟨h _ (Or.inr rfl), fun i h2 ↦ h _ (Or.inl h2)⟩
 
 theorem testAllSplits_spec (n : Nat) P :
     testAllSplits n P = true ↔ ∀ s1 s2, s1 + s2 = n → P s1 s2 := by
@@ -274,22 +271,15 @@ theorem testFreeMagmas_spec (s n : Nat) P :
       testAllSplits_spec, Option.bind_eq_some]
     constructor
     · rintro h _ n' l r rfl hadd n'' hcan1 hcan2
-      specialize h _ _ hadd
-      specialize ih1 _ _ hadd
-      specialize ih2 _ _ hadd
-      dsimp at *
-      apply (ih2 _ l).mp _ _ _ rfl hcan2
-      apply ih1.mp h _ _ rfl hcan1
+      exact ((ih2 _ _ hadd) _ l).mp ((ih1 _ _ hadd).mp (h _ _ hadd) _ _ rfl hcan1) _ _ rfl hcan2
     · intro h s1 s2 hadd
-      specialize ih1 _ _ hadd
-      specialize ih2 _ _ hadd
-      rw [ih1]
+      rw [ih1 _ _ hadd]
       intro l n' hl hcan1
-      rw [ih2]
+      rw [ih2 _ _ hadd]
       intro r n'' hr hcan2
       apply h _ n'' l r rfl (by simp [*])
-      apply hcan1
-      apply hcan2
+      · exact hcan1
+      · exact hcan2
 
 theorem testLaws_spec (s : Nat) P :
   testLaws s P = true ↔ ∀ l : Law.MagmaLaw Nat, l.forks = s → l.is_canonical → P l = true := by
