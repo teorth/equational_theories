@@ -1,16 +1,17 @@
 # lake exe extract_implications --json equational_theories > /tmp/implications.json
 # lake exe extract_implications unknowns > /tmp/unknowns.json
-# ruby scripts/generate_graphiti_data.rb /tmp/implications.json /tmp/unknowns.json > home_page/graphiti/graph.json
+# ruby scripts/generate_graphiti_data.rb /tmp/implications.json /tmp/unknowns.json data/duals.json > home_page/graphiti/graph.json
 # python -m http.server 8000 --directory home_page/graphiti
 
 require 'json'
 require File.join(__dir__, 'graph')
 
-if ARGV.length != 2
-  $stderr.puts "Usage: scripts/generate_graphiti_data.rb <implications json> <unknowns json>"
+if ARGV.length != 3
+  $stderr.puts "Usage: scripts/generate_graphiti_data.rb <implications json> <unknowns json> <duals json>"
   exit 1
 end
 
+duals = JSON.parse(File.read(ARGV[2]))
 
 equations = {}
 ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"].each { |i|
@@ -53,10 +54,12 @@ Graph.from_json_array(JSON.parse(File.read(ARGV[1]))).adj_list.each { |v1, list|
 
 def graph2map(g)
   out = {}
-  g.adj_list.each { |k, v| out[k] = v.to_a }
+  g.adj_list.each { |k, v| out[k] = v.to_a.sort }
 
   out
 end
+
+scc_to_node_map.keys.each { |k| scc_to_node_map[k].sort! }
 
 puts JSON.generate({
   "timestamp" => Time.now.utc.to_i,
@@ -65,5 +68,6 @@ puts JSON.generate({
   "scc_to_node_map" => scc_to_node_map,
   "node_to_scc_map" => node_to_scc_map,
   "equations" => equations,
-  "unknowns" => graph2map(unknowns)
+  "unknowns" => graph2map(unknowns),
+  "duals" => duals
 })
