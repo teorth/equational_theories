@@ -27,7 +27,7 @@ def Std.HashMap.push {α β} [BEq α] [Hashable α] (map : Std.HashMap α (Array
 def generateNonImplicationsTable : CoreM (Std.HashMap String (Array String) × Std.HashMap String (Array String)) := do
   let eqnThms ← Result.extractEquationalResults
   IO.println s!"Extracted {eqnThms.size} equational results. Generating their closure ..."
-  let closure ← Closure.closure <| eqnThms.map Entry.variant
+  let closure ← Closure.closure (eqnThms.map Entry.variant) (← Closure.getStoredDualityRelations).dualEquations
   IO.println s!"Generated the closure of size {closure.size} ..."
   return closure.foldl (init := (.empty (capacity := 8192), .empty (capacity := 8192))) fun (implMap, nonImplMap) edge ↦
     match edge with

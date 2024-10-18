@@ -2,7 +2,7 @@ import equational_theories.MagmaLaw
 import equational_theories.Homomorphisms
 import Mathlib.Data.Finset.Basic
 import Mathlib.Data.Finsupp.Defs
--- import Mathlib.Algebra.Free
+import equational_theories.Completeness
 
 open Law
 
@@ -104,6 +104,14 @@ instance instLiftingMagmaFamilyRightProj : LiftingMagmaFamily RightProj where
     map_op' := fun _ _ ↦ rfl
   }
   lift_factors := by intros; rfl
+
+instance instLiftingMagmaFamilyFreeMagmaWithLaws {α} (Γ : Ctx α)
+    [∀ α [DecidableEq α], DecidableEq (FreeMagmaWithLaws α Γ)] : LiftingMagmaFamily (FreeMagmaWithLaws · Γ) where
+  instMagma := inferInstance
+  instMagmaDecidableEq := inferInstance
+  ι := fun a ↦ embed Γ (.Leaf a)
+  lift {α} _ f := FreeMagmaWithLaws.evalHom (G := FreeMagmaWithLaws α Γ) f (FreeMagmaWithLaws.isModel α Γ)
+  lift_factors := by intros; ext; rfl
 
 -- TODO: Lifting family FreeMagma
 
