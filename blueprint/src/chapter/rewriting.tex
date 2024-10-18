@@ -1,24 +1,23 @@
 \chapter{Rewriting theory}\label{rewriting-chapter}
-
 We briefly recall the basics of rewrite theory necessary to our exposition, following mostly Baader and Nipkow \cite{traat}, and generally omitting proofs when they can be found there.
 
 We first work in the abstract taking an arbitrary set $A$, with a given equivalence relation over it which we denote $\approx$. We consider a relation $R$ over $A$.
+
 \begin{definition}
   We write $a \rightarrow b$ if $a\ R\ b$ holds in $A$, and say that $a$ \emph{rewrites to} (or \emph{reduces to}) $b$. We further define
   \begin{itemize}
-  \item $\rightarrow^+$ as the transitive closure of $R$.
-  \item $\rightarrow^*$ as the reflexive transitive closure of $R$.
-  \item $\leftrightarrow^*$ as the reflexive transitive and symmetric closure of $R$
+    \item $\rightarrow^+$ as the transitive closure of $R$.
+    \item $\rightarrow^*$ as the reflexive transitive closure of $R$.
+    \item $\leftrightarrow^*$ as the reflexive transitive and symmetric closure of $R$.
   \end{itemize}
-
-  we sometimes write $b\leftarrow a$, (resp. $b\ {}^*\leftarrow a$ etc) to mean $a\rightarrow b$ (resp. $a\rightarrow^*b$ etc), and chain notations, e.g. $b_1\leftarrow a\rightarrow b_2$.
+  We sometimes write $b\leftarrow a$, (resp. $b\ {}^*\leftarrow a$ etc) to mean $a\rightarrow b$ (resp. $a\rightarrow^*b$ etc), and chain notations, e.g. $b_1\leftarrow a\rightarrow b_2$.
 \end{definition}
 
 Note that $\leftrightarrow^*$ is an equivalence relation and the hope is for it to be equal to $\approx$, in order to deduce properties of the latter.
 
 One should first note that if even $R$ is contained in $\approx$, then so are $\rightarrow^+, \rightarrow^*$ and $\leftrightarrow^*$ (as it is an equivalence relation), so we will focus on that case. Generally $a \rightarrow^* b$ can be seen as a way to \emph{compute} the $\approx$ relation, as it is directed, in a way to constrain our search space.
 
-However in general, we cannot deduce the converse, so it may be the case that $a\approx b$ but neither $a\rightarrow^*b$ nor $b\rightarrow^*a$ nor even is there a single $c$ such that $a\rightarrow^* c\ {}^*\leftarrow b$, as the number of ``left-right alternations'' may be arbitrarily large.
+However, in general, we cannot deduce the converse, so it may be the case that $a\approx b$ but neither $a\rightarrow^*b$ nor $b\rightarrow^*a$ nor even is there a single $c$ such that $a\rightarrow^* c\ {}^*\leftarrow b$, as the number of ``left-right alternations'' may be arbitrarily large.
 
 The following properties are going to be very useful to deduce exactly such a converse.
 
@@ -42,23 +41,22 @@ It turns out that if $R$ is strongly normalizing and Church-Rosser, and effectiv
 
 This means that, in this situation, $a$ and $b$ reduce to an identical normal form $c$ \emph{if and only if} $a\leftrightarrow^* b$! This means that we have the following algorithm to decide $a\leftrightarrow^* b$ (and therefore $a\approx b$ if these relations coincide):
 \begin{enumerate}
-\item Repeatedly apply $R$ to $a$ and $b$ until normal forms $a'$ and $b'$ are found for them (this is possible because $R$ is strongly normalizing).
-\item Compare $a'$ and $b'$ for exact equality (sometimes called ``syntactic equality'').
-\item If $a' = b'$, we can conclude $a\leftrightarrow^* b$
-\item If $a' \neq b'$ can can conclude that they are \emph{not} equivalent due to the lemma.
+  \item Repeatedly apply $R$ to $a$ and $b$ until normal forms $a'$ and $b'$ are found for them (this is possible because $R$ is strongly normalizing).
+  \item Compare $a'$ and $b'$ for exact equality (sometimes called ``syntactic equality'').
+  \item If $a' = b'$, we can conclude $a\leftrightarrow^* b$.
+  \item If $a' \neq b'$ can can conclude that they are \emph{not} equivalent due to the lemma.
 \end{enumerate}
 
-Note that weak normalization doe not change much here except at step 1, where we need to pick reductions which eventually bring the elements to normal forms.
+Note that weak normalization does not change much here except at step 1, where we need to pick reductions which eventually bring the elements to normal forms.
 
 The strategy is therefore, for a given $\approx$ to find an $R$ which is (strongly) normalizing and Church-Rosser, and such that $\leftrightarrow^*\ =\ \approx$. This is roughly the goal of the entire field of \emph{completion}. We call such an $R$ \emph{complete for} $\approx$.
 
 The task is helped by the following facts, which we state here also without proof.
 
 \begin{theorem}
-
   \begin{enumerate}
-  \item $R$ is Church-Rosser iff it is confluent.
-  \item (Newman's lemma) if $R$ is strongly normalizing, then $R$ is confluent iff it is locally confluent.
+    \item $R$ is Church-Rosser iff it is confluent.
+    \item (Newman's lemma) if $R$ is strongly normalizing, then $R$ is confluent iff it is locally confluent.
   \end{enumerate}
 \end{theorem}
 
