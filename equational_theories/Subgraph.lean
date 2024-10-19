@@ -639,7 +639,7 @@ theorem Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Facts G [
 @[equational_result]
 theorem Equation8_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation8 G ∧ ¬ Equation3 G := by
   simp only [not_forall]
-  exact ⟨Fin 2, ⟨(. + .)⟩, by decide, 1, one_ne_zero⟩
+  exact ⟨Fin 2, ⟨(· + ·)⟩, by decide, 1, one_ne_zero⟩
 
 @[equational_result]
 theorem Equation23_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation23 G ∧ ¬ Equation3 G := by
