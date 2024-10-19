@@ -525,10 +525,10 @@ theorem closure_prop (f : PartialSolution G) : ∀ x y, closure f x (closure f y
   rw [closure_eq_of_mem_e1 f (Encodable.encode (x, y) + 1) x y,
     closure_eq_of_mem_e1 f (Encodable.encode (x, y) + 1) y,
     closure_eq_of_mem_e1 f (Encodable.encode (x, y) + 1)]
-  · exact PartialSolution.eq_of_mem_E0 _ _ (mem_closureSeq_e0 _ _ _)
-  · exact PartialSolution.mem_2_of_mem_E0 _ _ (mem_closureSeq_e0 _ _ _)
-  · exact PartialSolution.t_mem_of_mem_E0' _ _ (mem_closureSeq_e0 _ _ _)
-  · exact PartialSolution.E0_subset_E1 _ (mem_closureSeq_e0 _ _ _)
+  · exact PartialSolution.eq_of_mem_E0 _ _ (mem_closureSeq_e0 ..)
+  · exact PartialSolution.mem_2_of_mem_E0 _ _ (mem_closureSeq_e0 ..)
+  · exact PartialSolution.t_mem_of_mem_E0' _ _ (mem_closureSeq_e0 ..)
+  · exact PartialSolution.E0_subset_E1 _ (mem_closureSeq_e0 ..)
 
 def initial : PartialSolution ℕ where
   E0 := {(0, 0), (1, 0), (0, 1), (0, 8), (8, 8), (8, 0)}
