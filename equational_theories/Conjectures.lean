@@ -112,7 +112,7 @@ conjecture Equation879_facts : ∃ (G : Type) (_ : Magma G), Facts G [879] [4065
 @[equational_result]
 conjecture Equation63_facts : ∃ (G : Type) (_ : Magma G), Facts G [63] [1692]
 
-
+/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/477846456 -/
 @[equational_result]
 conjecture Equation3308_facts : ∃ (G : Type) (_ : Magma G), Facts G [3308] [3456, 3511]
 
