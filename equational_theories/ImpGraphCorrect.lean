@@ -79,12 +79,12 @@ theorem Graph.union_models (g1 g2 : Graph) (P : (i j : Nat) → Prop) :
   simp [models]; tauto
 
 /-- While developing, only look at the first n results. -/
-def handBreak : Nat := 20
+def handBreak : Nat := 2000
 
 open Lean Elab in
 elab "defineImpGraph%" : term => do
   let rs ← Result.extractTheorems
-  let mut pairs := #[]
+  let mut n := 0
   let mut graph : Graph := .empty
   for r in rs do
     if let .implication ⟨lhs, rhs⟩ := r.variant then
@@ -95,12 +95,13 @@ elab "defineImpGraph%" : term => do
       unless n2 ≤ 4694 do continue
       let i := n1-1
       let j := n2-1
-      pairs := pairs.push (n1-1,n2-1)
+      n := n + 1
       graph := graph ||| .singleton i j
-      if pairs.size = handBreak then break
+      if n = handBreak then break
 
   return mkNatLit graph
 
+#time
 def impGraph : Graph := defineImpGraph%
 
 /-
