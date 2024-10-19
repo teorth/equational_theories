@@ -156,8 +156,8 @@ theorem Completeness {α} {Γ : Ctx α} {E : MagmaLaw α} (h : Γ ⊧ E) : Nonem
   match Completeness' h with
   | .intro x => .intro (derive_of_derive' x)
 
-def FreeMagmaWithLaws.eval {α G} {Γ : Ctx α} (φ : α → G) [Magma G] (modelsG : G ⊧ Γ) :
-    FreeMagmaWithLaws α Γ → G :=
+def FreeMagmaWithLaws.eval {α β G} {Γ : Ctx α} (φ : β → G) [Magma G] (modelsG : G ⊧ Γ) :
+    FreeMagmaWithLaws β Γ → G :=
   Quotient.lift (evalInMagma φ) (by
     intro a b
     simp only [HasEquiv.Equiv, SetoidOfLaws, RelOfLaws, Nonempty.forall]
@@ -166,8 +166,8 @@ def FreeMagmaWithLaws.eval {α G} {Γ : Ctx α} (φ : α → G) [Magma G] (model
     . exact h
     . exact modelsG)
 
-def FreeMagmaWithLaws.evalHom {α G} {Γ : Ctx α} (φ : α → G) [ginst : Magma G] (modelsG : G ⊧ Γ) :
-    FreeMagmaWithLaws α Γ →◇ G where
+def FreeMagmaWithLaws.evalHom {α β G} {Γ : Ctx α} (φ : β → G) [ginst : Magma G] (modelsG : G ⊧ Γ) :
+    FreeMagmaWithLaws β Γ →◇ G where
   toFun := FreeMagmaWithLaws.eval φ modelsG
   map_op' := by
     simp only [eval, Magma.op, ForkWithLaws, embed]
