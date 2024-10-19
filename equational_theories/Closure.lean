@@ -384,4 +384,30 @@ def outcomes_mod_equiv (inp : Array EntryVariant) (duals: Std.HashMap String Str
 
   return (comps.map (fun ids => ids.map (eqs.in_order[·]!)), implies)
 
+section DualityRelation
+
+structure DualityRelation where
+  dualEquations : Std.HashMap String String
+
+def DualityRelation.ofFile (path : String) : IO DualityRelation := do
+  let dualsJson := Json.parse (←IO.FS.readFile path) |>.toOption.get!
+  let mut dualEquations : Std.HashMap String String := {}
+  for pair in dualsJson.getArr?.toOption.get! do
+    let a := s!"Equation{pair.getArr?.toOption.get![0]!.getNat?.toOption.get!}"
+    let b := s!"Equation{pair.getArr?.toOption.get![1]!.getNat?.toOption.get!}"
+    dualEquations := dualEquations.insert a b
+    dualEquations := dualEquations.insert b a
+  pure ⟨dualEquations⟩
+
+def DualityRelation.dual (rel : DualityRelation) (imp : Implication) : Option Implication :=
+  if isCoreEquationName imp.lhs && isCoreEquationName imp.rhs then
+    some ⟨rel.dualEquations.getD imp.lhs imp.lhs, rel.dualEquations.getD imp.rhs imp.rhs⟩
+  else
+    none
+
+def getStoredDualityRelations :=
+  DualityRelation.ofFile "data/duals.json"
+
+end DualityRelation
+
 end Closure
