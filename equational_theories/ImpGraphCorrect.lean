@@ -34,23 +34,33 @@ def Graph.models (g : Graph) (P : (i j : Nat) → Prop) :=
   ∀ i j, g.get i j → P i j
 
 @[simp]
-theorem Graph.empty_models (P : (i j : Nat) → Prop) : Graph.empty.models P :=
-  sorry
+theorem Graph.empty_isEmpty : Graph.empty.isEmpty := rfl
 
 @[simp]
-theorem Graph.singleton_models (P : (i j : Nat) → Prop) (i j : Fin 4694)  :
-    (Graph.singleton i j).models P ↔ P i j := by
-  simp [models, singleton, get]
+theorem Graph.empty_models (P : (i j : Nat) → Prop) : Graph.empty.models P := by
+  simp [Graph, models, empty, get, isEmpty]
+
+theorem Graph.singleton_and (i j i' j' : Fin 4694) :
+  (singleton i j &&& singleton i' j') = (if i = i' ∧ j = j' then singleton i j else empty) := by
   sorry
+
+theorem Graph.singleton_models (P : (i j : Nat) → Prop) (i j : Fin 4694) (h : P i j) :
+    (Graph.singleton i j).models P := by
+  intro i' j'
+  simp [Graph, models, get, empty]
+  rw [Graph.singleton_and]
+  split <;> simp_all
 
 theorem Graph.union_models (g1 g2 : Graph) (P : (i j : Nat) → Prop) :
     g1.models P → g2.models P → (g1 ||| g2).models P := by
   simp [models]; tauto
 
+/-- While developing, only look at the first n results. -/
+def handBreak : Nat := 20
+
 open Lean Elab in
 elab "defineImpGraph%" : term => do
   let rs ← Result.extractTheorems
-  let rs := rs[:20] -- use this to speed up testing
   let mut pairs := #[]
   let mut graph : Graph := .empty
   for r in rs do
@@ -64,6 +74,7 @@ elab "defineImpGraph%" : term => do
       let j := n2-1
       pairs := pairs.push (n1-1,n2-1)
       graph := graph ||| .singleton i j
+      if pairs.size = handBreak then break
 
   return mkNatLit graph
 
@@ -96,7 +107,6 @@ def ImpEntries.graph : ImpEntries → Graph
 open Lean Elab in
 elab "defineImpEntries%" : term => do
   let rs ← Result.extractTheorems
-  let rs := rs[:20] -- use this to speed up testing
   let mut entries : Array Expr := #[]
   for r in rs do
     if let .implication ⟨lhs, rhs⟩ := r.variant then
@@ -109,6 +119,7 @@ elab "defineImpEntries%" : term => do
       let lawThmName : Name := Name.mkSimple s!"Law{n1}_implies_Law{n2}"
       entries := entries.push <|
         mkApp3 (mkConst ``ImpEntries.leaf) (toExpr i) (toExpr j) (mkConst lawThmName)
+      if entries.size = handBreak then break
 
   let rec go (lb ub : Nat) (h1 : lb < ub) (h2 : ub ≤ entries.size) : Lean.Expr :=
     if h : lb + 1 = ub then
@@ -133,7 +144,7 @@ theorem ImpEntries.graph_correct (ie : ImpEntries) : ie.graph.models lawImplicat
   · simp [graph]
   · simp [graph]
     apply Graph.union_models <;> assumption
-  · simp_all [graph, Nat.mod_eq_of_lt]
+  · simp_all [graph, Nat.mod_eq_of_lt, Graph.singleton_models]
   · simp [graph, Nat.mod_eq_of_lt, *]
 
 
