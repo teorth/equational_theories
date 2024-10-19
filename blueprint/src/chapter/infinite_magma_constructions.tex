@@ -225,7 +225,7 @@ If a law involves a single variable on one side, then we only need one axiom.  F
 \end{itemize}
 Note that if the relation $R$ is associated to a genuine magma operation $\op$, then it locally obeys a law $w_1 \formaleq w_2$ if and only if the magma operation $\op$ obeys the law $w_1 \formaleq w_2$.  For instance, the relation $R$ associated to a globally defined magma operation $\op$ obeys (4512-1) and (4512-2) if and only if the magma is associative.
 
-More generally, one can ask for a ternary relation $R$ to obey some theory $\Gamma$ of universal laws, using the language of one ternary relation $R$, the equality symbol $=$, and possibly some constants (we will shortly introduce three constants $a,b,c$ fo this purpose).
+More generally, one can ask for a ternary relation $R$ to obey some theory $\Gamma$ of universal laws, using the language of one ternary relation $R$, the equality symbol $=$, and possibly some constants (we will shortly introduce three constants $a,b,c$ for this purpose).
 
 Suppose we have a relation $R$ obeying some theory $\Gamma$ (for instance, (VLT) together with (65)), but which is only finitely supported (there are only finitely many triples $(x,y,z)$ for which $R(x,y,z)$ holds).  Then one can find $a,b \in G$ such that $a \op b$ is currently undefined.  If the carrier $G$ is infinite (e.g., if $G = \N$), one can then find another element $c$ which is \emph{novel}: it is not equal to $a, b$, or any of the $x,y,z$ for which $R(x,y,z)$ hold. In other words, the relation $R$ and the constants $a,b,c$ obey the following additional axioms:
 \begin{itemize}
@@ -298,7 +298,7 @@ The resulting magma satisfies Equation 1648: one can show this by a case analysi
 $$(x \op y) \op ((x \op y) \op y) = (x + 1) \op ((x + 1) \op y) = (x + 1) \op (x + 2) = (x + 1) - 1 = x.$$
 Similar computations verify the other two cases.
 
-However, setting $x=0$ and $y=-1$, we get
+However, setting $x=0$ and $y=-1$ in Equation 206, we get
 $$(x \op (x \op y)) \op y = (x \op 1) \op y = (-1) \op y = -1 \neq x$$
 so the magma does not obey \Cref{eq206}. We can conclude
 
@@ -363,7 +363,7 @@ $$ (0 \op''' 3) \op''' ((3 \op''' 3) \op''' z) = 0 \op''' (4 \op''' z)$$ which e
 Instead, the infinitely many counterexamples arising from the iterated redefinition can be eliminated
 all at once by setting:
 
-$x \op' y = \begin{cases} 0 & \text{if } x=0,\: x,y \text{ have the same parity} \\  x+1 & \text{if } x\neq 0,\: x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases}$
+$$x \op' y = \begin{cases} 0 & \text{if } x=0,\: x,y \text{ do not have the same parity} \\  x+1 & \text{if } x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases}$$
 
 At this point one might as well truncate the model to $\mathbb{N}$ since the result of the $\op'$
 operation is nonnegative whenever the operands are nonnegative. This finishes the construction and proves
