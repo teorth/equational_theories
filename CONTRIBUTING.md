@@ -17,6 +17,7 @@ The following instructions detail the process for claiming and completing tasks.
 
 - Tasks are posted as GitHub issues and can be found in the `Unclaimed Outstanding Tasks` column of the project dashboard.
 - Each issue represents a specific task to be completed. The issue title and description contain relevant details and requirements.
+- Only maintainers can convert an issue into a project task. If you wish to propose a task of your own, create a github issue and start a discussion in a new thread on the [equational theories channel of the Lean Zulipchat](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/). Depending on the outcome of the dicussion, the task may be converted into a project task by one of the maintainers. 
 
 ### 2. Claiming a Task
 
@@ -55,12 +56,12 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 
 ### 5. Withdrawing or Updating a PR
 
-- If you need to withdraw your PR, comment the single phrase `withdraw PR #PR_NUMBER` on the issue. The task will return to the `Claimed Tasks` column, but you will remain assigned to the issue.
+- If you need to withdraw your PR, comment `withdraw #PR_NUMBER` on the issue. The task will return to the `Claimed Tasks` column, but you will remain assigned to the issue.
 - To submit an updated PR after withdrawal, comment `propose #NEW_PR_NUMBER` following the same process outlined in step 4.
 
 ### 6. Review Process
 
-- After finishing the task and ensuring your PR is ready for review, comment the single word `awaiting-review` on the PR. This will add the `awaiting-review` label to your PR and move the task from `In Progress` to the `PRs in Review` column of the dashboard.
+- After finishing the task and ensuring your PR is ready for review, comment `awaiting-review` on the PR. This will add the `awaiting-review` label to your PR and move the task from `In Progress` to the `PRs in Review` column of the dashboard.
 - The project maintainers will review the PR. They may request changes, approve the PR, or provide feedback.
 
 ### 7. Task Completion
