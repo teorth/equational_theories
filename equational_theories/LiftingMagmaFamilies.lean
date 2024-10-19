@@ -2,7 +2,6 @@ import equational_theories.MagmaLaw
 import equational_theories.Homomorphisms
 import Mathlib.Data.Finset.Basic
 import Mathlib.Data.Finsupp.Defs
--- import Mathlib.Algebra.Free
 
 open Law
 
