@@ -48,10 +48,10 @@ This equation has some degenerate solutions, for instance we can take $f(h) = c$
 
 \begin{definition}\label{partial-solution}  A \emph{partial solution} $(E_0, E_1, E_2, f)$ to \eqref{fh} consists of nested finite sets
 $$ E_0 \subset E_1 \subset E_2 \subset \Z$$ together with a function $f: E_1 \to E_2$ with the following properties:
-\begin{itemize}
+\begin{description}
   \item[(a)] If $h \in E_0$, then $f(h) \in E_1$, so that $f^2(h)$ is well-defined as an element of $E_2$; furthermore, $h + f(h) + f^2(h)$ lies in $E_1$, so that the left-hand side of \eqref{fh} makes sense; and \eqref{fh} holds.
   \item[(b)] The function $f$ is a bijection from $E_1 \backslash E_0$ to $E_2 \backslash E_1$.
-\end{itemize}
+\end{description}
 
 We partially order the space of partial solutions to \eqref{fh} by writing $(E_0, E_1, E_2, f) \leq (E'_0, E'_1, E'_2, f')$ if the following properties hold:
 \begin{itemize}
@@ -215,33 +215,33 @@ Such an operation is then associated (via a one-to-one correspondence) to a part
 Given a word $w(x_1,\dots,x_n)$ in variables $x_1,\dots,x_n$ (so $w$ is an element of the free magma on $n$ generators), we can say that $w(x_1,\dots,x_n)$ is \emph{well-defined} with respect to a partially defined magma operation $R$ if it can be fully evaluated using $R$.  For instance, the word $(x \op y) \op z$ is well-defined if there exists $w,u \in G$ such that $R(x,y,w)$ and $R(w,z,u)$ both hold, in which case $(x \op y) \op z$ evaluates to $u$.  Note from the axiom (VLT) that this evaluation is unique, if it exists.  Of course, in a genuine magma, all expressions are well-defined.  We say that an expression $w(x_1,\dots,x_n)$ is \emph{almost well-defined} if all strict subexpressions of $w$ are well-defined.  For instance, $(x \op y) \op z$ is almost well-defined if there exists $w \in G$ such that $R(x,y,w)$ holds.
 
 An equational law $w_1 \formaleq w_2$ involving some variables $x_1,\dots,x_n$ is said to be \emph{locally obeyed} by $R$ if,  whenever $w_1(x_1,\dots,x_n)$, $w_2(x_1,\dots,x_n)$ are almost well-defined, and one of the two expressions is well-defined and evaluates to some output $y$, then the other expression is also well-defined and evaluates to the same output $y$.  For instance, in order for $R$ to locally obey the associative law $(x \op y) \op z = x \op (y \op z)$ (\Cref{eq4512}), we require the following two axioms:
-\begin{itemize}
+\begin{description}
   \item[(4512-1)] If $R(x,y,w)$, $R(w,z,u)$, and $R(y,z,v)$, then $R(x,v,u)$.
   \item[(4512-2)] If $R(y,z,w)$, $R(x,w,u)$, and $R(x,y,v)$, then $R(v,z,u)$.
-\end{itemize}
+\end{description}
 If a law involves a single variable on one side, then we only need one axiom.  For instance, the Asterix law (\Cref{eq65}) is locally obeyed by $R$ if and only if the following axiom holds:
-\begin{itemize}
+\begin{description}
   \item[(65)] If $R(y,x,z)$ and $R(x,z,u)$, then $R(y,u,x)$.
-\end{itemize}
+\end{description}
 Note that if the relation $R$ is associated to a genuine magma operation $\op$, then it locally obeys a law $w_1 \formaleq w_2$ if and only if the magma operation $\op$ obeys the law $w_1 \formaleq w_2$.  For instance, the relation $R$ associated to a globally defined magma operation $\op$ obeys (4512-1) and (4512-2) if and only if the magma is associative.
 
 More generally, one can ask for a ternary relation $R$ to obey some theory $\Gamma$ of universal laws, using the language of one ternary relation $R$, the equality symbol $=$, and possibly some constants (we will shortly introduce three constants $a,b,c$ for this purpose).
 
 Suppose we have a relation $R$ obeying some theory $\Gamma$ (for instance, (VLT) together with (65)), but which is only finitely supported (there are only finitely many triples $(x,y,z)$ for which $R(x,y,z)$ holds).  Then one can find $a,b \in G$ such that $a \op b$ is currently undefined.  If the carrier $G$ is infinite (e.g., if $G = \N$), one can then find another element $c$ which is \emph{novel}: it is not equal to $a, b$, or any of the $x,y,z$ for which $R(x,y,z)$ hold. In other words, the relation $R$ and the constants $a,b,c$ obey the following additional axioms:
-\begin{itemize}
+\begin{description}
   \item[(novel-1)] $c \neq a$ and $c \neq b$.
   \item[(novel-2)] If $R(x,y,z)$, then $c \neq x$, $c \neq y$, and $c \neq z$.
   \item[(undefined)]  $R(a,b,x)$ does not hold for any $x$.
-\end{itemize}
+\end{description}
 
 Let us say that a theory $\Gamma$ is \emph{greedily extensible} if, whenever $R$ is a finitely supported ternary relation obeying $\Gamma$, and $a,b,c$ are constants obeying (novel-1), (novel-2), (undefined), then there exists an extension $R'$ of $R$, thus
-\begin{itemize}
+\begin{description}
   \item[(extend)] $R(x,y,z) \implies R'(x,y,z)$ for all $x,y,z$,
-\end{itemize}
+\end{description}
 which is also finitely supported and obeys $\Gamma$, and which also obeys the additional axiom
-\begin{itemize}
+\begin{description}
   \item[(define)] $R'(a,b,c)$.
-\end{itemize}
+\end{description}
 Informally, $R'$ is formed from $R$ by ``forcing'' $a \op b = c$ and then adding other axioms as needed. (Indeed, our construction here can be viewed as a simple analogue of the forcing construction in set theory.)
 
 Observe that if a theory $\Gamma$ containing (VLT) is greedily extensible, then any finitely supported ternary relation $R$ obeying $\Gamma$ on a countably infinite carrier $G$ can be extended to a globally defined relation obeying $\Gamma$, by iteratively selecting the first $(a,b)$ (in some fixed enumeration of $G \times G$) for which $a \op b$ is undefined, and then selecting a novel element $c$ to define as $a \op b$, and applying the greedily extensible property, and then taking a direct limit of the countable sequence of relations thus produced.  This gives a flexible way to construct magmas that obey a given theory $\Gamma$, but which violate some other law $w_1 \formaleq w_2$, as the task then reduces to just finding a partial solution $R$ to $\Gamma$ and some constants $x_1,\dots,x_n$ for which the expressions $w_1(x_1,\dots,x_n), w_2(x_1,\dots,x_n)$ are already well-defined, but not equal to each other.
@@ -405,13 +405,13 @@ then one can just take $f(h) = T(h)$.  For instance, if $G = \Z^3$, one can take
 $$ T(x,y,z) := (-z,x+z,y).$$
 
 We now extend this greedily to $\Z^3 \times \Z$ as follows.  Define a \emph{partial solution} $(E_1,E_2,f)$ to be a pair $\Z^3 \subset E_1 \subset E_2 \subset \Z^3 \times \Z$, and a function $f: E_2 \to E_1$ obeying the folowing axioms.
-\begin{itemize}
+\begin{description}
   \item[(a)] The set $E_2 \backslash \Z^3$ is finite.
   \item[(b)] For $h \in \Z^3$, $f(h) = Th$; in particular, $f$ is a bijection on $\Z^3$.
   \item[(c)] For $h \in E_1 \backslash \Z^3$, $f(h) \in E_1$.  Also, $-h + f^2(h) \in E_1$ and $f(-h + f^2(h)) = -h$. Note that this (and (b)) implies that $-h \in E_1$, thus $E_1$ is symmetric around the origin.
   \item[(d)] For $h \in E_2 \backslash E_1$, $f(h) \in E_1$.
   \item[(e)] The elements $-h$, $h - f^2(h)$, and $f^2(h) - h$ for $h \in E_2 \backslash E_1$ are all distinct from each other, and all lie outside of $E_2$.  In particular this forces $f^2(h) \neq 0$, hence $f(h) \neq 0$. It also forces $f^2(h) \neq h$, hence $f(h) \neq h$.
-\end{itemize}
+\end{description}
 Thus for instance one can take $(\Z^3,\Z^3,T)$ as a partial solution.  We say that a partial solution $(E'_1, E'_2, f')$ is an \emph{extension} of $(E_1,E_2,f)$ if $E_1 \subset E'_1$, $E'_2 \subset E_2$, and $f'$ agrees with $f$ on $E_2$.
 
 Informally, $E_1$ represents the portion of $\Z^3 \times \Z$ where we have completely resolved the Dupont equation; the set $E_2 \backslash E_1$ represents the portion for which $f$ (and all forward iterates of $f$) have been defined, but the Dupont equation has not yet been verified; and the elements $-h$, $h - f^2(h)$, and $f^2(h) - h$ for $h \in E_2 \backslash E_1$ are the portion where $f$ is not yet defined, but for which one is ready to ``promote'' these elements to $E_2$ or $E_1$ by defining $f$ appropriately.
