@@ -206,9 +206,9 @@ one-variable functional equation, but on the operation table of the magma itself
 
 Here, it is best to work with \emph{partially defined magma operations} on some carrier $G$.  These can be interpreted as ternary relations $R(x,y,z)$ in three variables $x,y,z \in G$ which pass the following ``vertical line test'':
 
-\begin{itemize}
+\begin{description}
   \item[(VLT)] If $R(x,y,z)$ and $R(x,y,z')$ both hold for some $x,y,z,z' \in G$, then $z=z'$.
-\end{itemize}
+\end{description}
 
 Such an operation is then associated (via a one-to-one correspondence) to a partially defined operation $\op : S \to G$ for some $S \subset G \times G$, with $R(x,y,z)$ holding if and only if $x \op y$ is well-defined (i.e., $(x,y) \in S$) and equal to $z$.  By abuse of notation, we shall also refer to $R$ as a partially defined magma operation.  Genuine magmas then correspond to the special case where $S = G \times G$, that is to say $x \op y$ is well-defined for all $x,y \in G$.
 
