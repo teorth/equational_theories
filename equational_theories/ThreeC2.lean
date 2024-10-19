@@ -403,7 +403,7 @@ match w with
 | [x] => by simp
 | x::_::_ => by simp [f]
 
-/-- two variants of the main crutial relation -/
+/-- two variants of the main crucial relation -/
 theorem ff_gff (z : W) (h : IsRed z) (ineq : z ≠ []) : f (f z) = g (red (f (f z) ++ z)) := by
   match z with
   | [] => tauto
