@@ -64,7 +64,7 @@ img {
   height: auto;
 }
 
-/* Eliminate text shadows */
+/* Apply a subtle text shadow */
 .toc ul a {
-  text-shadow: none;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
