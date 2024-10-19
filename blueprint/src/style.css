@@ -4,7 +4,7 @@
  * and proofs.
  * */
 
- div.theorem_thmcontent {
+div.theorem_thmcontent {
 	border-left: .15rem solid black;
 }
 
@@ -56,4 +56,15 @@ nav.local_toc ul {
 
 body, h1, h2, h3, h4, h5, h6, p, text {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+/* Limit Hasse diagram to bounding box size */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Eliminate text shadows */
+.toc ul a {
+  text-shadow: none;
 }
