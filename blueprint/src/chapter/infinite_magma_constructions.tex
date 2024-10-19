@@ -490,3 +490,81 @@ Iterating these lemmas in the usual fashion, we can conclude that any partial so
 Among other things, this permits one to generate models in which the function $f$ is not injective.  To see this, let $a$ be a non-zero element of $\Z^3$, let $x$ be an element of $\Z^3 \times \Z$ outside of $\Z^3$, and consider the partial solution $(\Z^3, \Z^3 \cup \{x\}, f)$ where $f(h) = Th$ for $h \in \Z^3$ and $f(x) = a$.  One can check that this is a partial solution and is not injective, since $f(x) = f(T^{-1} a)$.  This non-injectivity implies in particular that the model is not left-cancellative, and hence does not obey the law
 $$ x = (y \op x) \op ((y \op x) \op y)$$
 (equation 1692).
+
+\subsection{Second construction}
+
+We now give a second construction, with works on the integers $G = \Z$.
+
+We first define a seed solution $f_0: E_0 \to \Z$ defined on the set $E_0 := \{-7, -3, -2, -1, 0, 1, 3, 4, 6 \}$ with
+$$ f(-7)=-4, f(-3) = 4, f(-2)=-3, f(-1)=-1, f(0) = 1, f(1) = 3, f(3)=0, f(4) = -2, f(6) = 2.$$
+
+In this construction, we define a partial solution to be a function $f: E \to \Z$ defined on a finite subset of $E$ obeying the following axioms:
+\begin{itemize}
+\item[(i)] $E$ contains $E_0$, and $f$ agrees with $f_0$ on $E_0$.
+\item[(ii)] If $h \in E$ and $f(h) \in E$, then $f^2(h)-h$ is also in $E$, and $f(f^2(h)-h) = -h$.
+\item[(iii)] If $h \in E$ and $h \neq 3$, then $f(h) \neq 0$.
+\item[(iv)]  If $a \neq a'$ are distinct elements of $E$ with $f(a)=f(a')$, and $-a \in E$, then $a' \neq a + f(-a)$.
+\item[(v)]  If $a \neq a'$ are distinct elements of $E$ with $f(a)=f(a')$, and $-a, -a' \in E$, then $a' + f(-a') \neq a + f(-a)$.
+\end{itemize}
+We say that a partial solution $f': E' \to \Z$ \emph{extends} another $f: E \to \Z$ if $E'$ contains $E$ and $f'$ agrees with $f$ on $E$.
+
+\begin{lemma}[Seed solution]\label{finite-check} $f_0: E_0 \to \Z$ is a partial solution.
+\end{lemma}
+
+\begin{proof} Finite check.
+\end{proof}
+
+\begin{lemma}[Extension]\label{extension-lemma} If $f: E \to \Z$ is a partial solution and $h_0 \in \Z$, then there exists an extension $f': E' \to \Z$ for which axiom (ii) applies, i.e., $h_0 \in E'$, $f'(h_0) \in E'$, $(f')^2(h_0)-h_0 \in E'$, and $f'((f')^2(h_0)-h_0) = -h_0$.
+\end{lemma}
+
+\begin{proof}  We divide into cases.
+
+  {\bf Case 1:} $h_0 \in E$ and $f(h_0) \in E$.  In this case we are already done thanks to axiom (ii).
+
+  {\bf Case 2:} $h_0 \in E$ but $f(h_0) \not \in E$.  This is the main case.  Let $H$ be the set of all $h \in E$ such that $f(h) = f(h_0)$; this is a finite set containing $h_0$.  Let $H' \subset H$ be the set of all $h' \in H$ such that $-h' \in E$.  We make the following observations:
+  \begin{itemize}
+  \item[(a)] All elements $h$ of $H$ are non-zero.  For if $h=0$ then $f(h_0)=f(h)=1 \in E$, contradicting the hypothesis $f(h_0) \not \in E$.
+  \item[(b)]  If $h' \in H'$ then $h' \neq h'+f(-h')$.  Otherwise we would have $f(-h')=0$, then by axiom (iii) we have $h' = -3$, hence $f(h_0) = f(h') = 4 \in E$ by axiom (i).  But this again contradicts the hypothesis $f(h_0) \not \in E$. (This is the main reason we take $E_0$ to be so large.)
+  \item[(c)]  If $h_1 \in H$ and $h_2 \in H'$ are distinct then $h_1 \neq h_2+f(-h_2)$.  This follows from axiom (iv).
+  \item[(d)]  If $h_1, h_2\in H'$ are distinct then $h_1+f(-h_1) \neq h_2+f(-h_2)$. This follows from axiom (v).
+  \end{itemize}
+
+  From these observations, we see that if we take $c$ to be a sufficiently large integer, the following claims hold:
+  \begin{itemize}
+  \item[1.]  The expressions $\pm c$, $\pm(c - h)$ for $h \in H$, and $\pm(c-h'-f(-h'))$ for $h \in H'$ are all distinct from each other.
+  \item[2.]  $c$ is not expressible as the sum of four or fewer elements of $\pm (E \cup f(E))$.
+  \end{itemize}
+
+  We select such a $c$.  We then promote $f(h_0)$, $c - h$ for $h \in H$, and $-c+h'+f(-h')$ for $h' \in H'$, thus setting
+  $$ E' := E \cup \{f(h_0)\} \cup \{ c-h: h \in H\} \cup \{ -c+h'+f(-h'): h' \in H'\}.$$
+We then extend $f$ to $f': E' \to \Z$ by setting
+\begin{align*}
+  f(f(h_0)) &:= c \\
+  f(c-h) &:= -h \\
+  f(-c+h'+f(-h')) &:= h' - c
+\end{align*}
+for all $h \in H$ and $h' \in H'$.  Axiom (i) is then obvious.  Axiom (ii) needs to be verified for the new elements $h_0$ and $c-h'$, $h' \in H'$ of $E'$ (the other elements will not obey the hypotheses of this axiom), but this is routine.  In particular $h_0$ obeys the required conclusion of this lemma.
+
+We need to verify (iii) for the new elements of $E'$, but this is clear from property (a) and claim 2.
+
+Now we need to verify (iv).  It suffices to do so when at least one of $a,a',-a$ are new elements of $E'$.  If neither of $a$, $-a$ are new, then the only new elements $a'$ for which $f(a')$ could equal $f(a)$ take the form $c-h$ (thanks to claim 2), but then $a'$ cannot equal $a+f(-a)$, again thanks to claim 2.  If instead one of $a, -a$ is new, then from claim 1 the new element must be $f(h_0)$.  There is no old element $a'$ with $f(a') = c = f(f(h_0))$, so we must have $a = -f(h_0)$, but then $a + f(-a) = -f(h_0)+c$ will not equal $a'$, again thanks to claim 2.
+
+Finally, we need verify to (v).  We may assume that at least one of $a,a',-a,-a'$ are new elements of $E'$.  As before, this forces the new element to be $f(h_0)$, and this cannot be $a$ or $a'$, so without loss of generality we have $a = -f(h_0)$ and $a' \in E$.  But then $a + f(-a) = -f(h_0)+c$ will not equal $a' + f(-a')$, again thanks to claim 2.
+
+{\bf Case 3:} $h_0 \not \in E$ but $h_0 \in f(E)$.  Here we can write $h_0 = f(h_1)$ where $h_1$ is of the form in Case 2.  Applying the Case 2 construction, we can pass to an extension in which $f(h_1) = h_0$ lies in $E$, and so we are now in either Case 1 or Case 2, and so we can again conclude.
+
+{\bf Case 4:} $h_0 \not \in E$ and $h_0 \not \in f(E)$.  We let $c$ be an integer so large that it is not expressible as the sum of four or fewer elements of $\pm (E \cup f(E))$.  We then promote $h_0$ to $E$ by setting
+$$E' := E \cup \{h_0\}$$
+and define an extension $f': E' \to \Z$ by setting $f'(h_0) := c$.  Axioms (i)-(iii) are obvious.  For axiom (iv), since $f'(h_0)$ is not equal to any other value of $f'$, the only new case introduced is if $-a = h_0$, but then $a+f(-a) = -h_0+c$ is distinct from $a'$ by choice of $c$.  A similar argument yields axiom (v).  With this extension, we are now in Case 2, and so we repeat the previous analysis to conclude.
+\end{proof}
+
+Iterating this lemma, we conclude
+
+\begin{corollary}[Greedy completion of Dupont]\label{dupont-iter} Every partial solution $f: E \to \Z$ can be extended to a global solution $f': \Z \to\Z$ of \eqref{dupont-eq}.
+\end{corollary}
+
+\begin{corollary}[Non-injective Dupont solution]\label{non-inject} The Dupont equation admits non-injective solutions, and hence can violate Equation 1692.
+\end{corollary}
+
+\begin{proof} It suffices to find a partial solution that violates injectivity.  This can be done for instance by adjoining $\{-13, 10\}$ to $E_0$ and defining $f(10)=-2 = f(4)$, $f(-13)=-10$, and performing a finite check to verify that this is still a partial solution.
+\end{proof}
