@@ -10,8 +10,12 @@ function showErrorPopup(message) {
     document.getElementById('errorOverlay').style.display = 'block';
 }
 
-function closeErrorPopup() {
-    document.getElementById('errorOverlay').style.display = 'none';
+function showDownloadPopup() {
+    document.getElementById('downloadOverlay').style.display = 'block';
+}
+
+function closePopup(element_id) {
+    document.getElementById(element_id).style.display = 'none';
 }
 
 function tokenize(expr) {
@@ -230,10 +234,17 @@ function findEquationNumber(inputEq) {
 function findEquation() {
     const inputEq = document.getElementById('equationInput').value;
     const resultDiv = document.getElementById('result');
-    
+    let eqNum = 0;
+
     try {
-        const eqNum = findEquationNumber(inputEq)-1;
-        
+        // Determine if user entered integer input or equation input
+        if (!isNaN(inputEq) && (/^\d+$/.test(inputEq))){
+            eqNum = parseInt(inputEq, 10) - 1;
+        }
+        else{
+            eqNum = findEquationNumber(inputEq)-1;
+        }
+
         if (eqNum) {
             renderImplications(eqNum);
             showPage('detailPage');
