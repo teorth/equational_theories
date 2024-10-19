@@ -4,29 +4,10 @@ import Cli.Basic
 import Lean.Util.SearchPath
 import equational_theories.Closure
 
-open Lean Core Elab Cli
-
-structure DualityRelation where
-  dualEquations : Std.HashMap String String
-
-def DualityRelation.ofFile (path : String) : IO DualityRelation := do
-  let dualsJson := Json.parse (←IO.FS.readFile path) |>.toOption.get!
-  let mut dualEquations : Std.HashMap String String := {}
-  for pair in dualsJson.getArr?.toOption.get! do
-    let a := s!"Equation{pair.getArr?.toOption.get![0]!.getNat?.toOption.get!}"
-    let b := s!"Equation{pair.getArr?.toOption.get![1]!.getNat?.toOption.get!}"
-    dualEquations := dualEquations.insert a b
-    dualEquations := dualEquations.insert b a
-  pure ⟨dualEquations⟩
-
-def DualityRelation.dual (rel : DualityRelation) (imp : Implication) : Option Implication :=
-  if isCoreEquationName imp.lhs && isCoreEquationName imp.rhs then
-    some ⟨rel.dualEquations.getD imp.lhs imp.lhs, rel.dualEquations.getD imp.rhs imp.rhs⟩
-  else
-    none
+open Lean Core Elab Cli Closure
 
 def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → DualityRelation → IO Unit) : IO UInt32 := do
-  let dualityRelation ← DualityRelation.ofFile "data/duals.json"
+  let dualityRelation ← getStoredDualityRelations
   let mut some modules := imp.variableArgsAs? ModuleName |
     imp.printHelp
     return 1

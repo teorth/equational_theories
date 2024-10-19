@@ -255,6 +255,11 @@ theorem red_append_inv (w v : W) : red (w⁻¹ ++ (w ++ v)) = red v := by
 theorem red_rev_self (w : W) : red (w⁻¹ ++ w) = [] := by
   simpa using red_append_inv w []
 
+@[simp]
+theorem red_append_inv_right (w v : W) : red (w ++ (v⁻¹ ++ v)) = red w := by
+  rw [← red_append_red_right]
+  simp
+
 /--
 The crucial step towards cancellation.
 -/
@@ -367,5 +372,94 @@ theorem M.Refutes1648 : ¬ Equation1648 M := by
 theorem Fact : ∃ (G : Type) (_ : Magma G), Facts G [206] [1648] :=
   ⟨_, _, M.Satisfies206, M.Refutes1648⟩
 
+/-- We use a variant of the above construction to show that 1841 does not imply 203. We use as the
+underlying magma M × Bool -/
+
+def g : W → W
+  | [] => [1]
+  | x::__ => [x]
+
+@[simp]
+theorem g_nil : g [] = [1] := rfl
+
+@[simp]
+theorem gg_nil : g (g []) = [1] := rfl
+
+theorem g_ne_nil (w : W) : g w ≠ [] := by
+  induction w <;> simp [g]
+
+@[simp]
+theorem red_g (w : W) : red (g w) = g w := by
+  unfold g; split <;> simp
+
+@[simp]
+theorem rev_g (w : W) : (g w)⁻¹ = g w := by
+  unfold g; split <;> simp
+
+@[simp]
+theorem f_nil_iff (w : W) : f w = [] ↔ w = [] :=
+match w with
+| [] => by simp
+| [x] => by simp
+| x::_::_ => by simp [f]
+
+/-- two variants of the main crutial relation -/
+theorem ff_gff (z : W) (h : IsRed z) (ineq : z ≠ []) : f (f z) = g (red (f (f z) ++ z)) := by
+  match z with
+  | [] => tauto
+  | [x] => simp [f, g]
+  | x::y::zs =>
+    have : IsRed ((x + 1) :: x :: y :: zs) := IsRed_cons (by simp; omega) h
+    simp [f.eq_3, this, g]
+
+theorem fg_gfg (z : W) (h : IsRed z) : f (g z) = g (red (f (g z) ++ z)) := by
+  match z with
+  | [] => tauto
+  | [x] =>
+    have : IsRed [x+1,x] := IsRed_cons (by simp; omega) h
+    simp [f, g, this]
+  | x::y::zs =>
+    have : IsRed ((x + 1) :: x :: y :: zs) := IsRed_cons (by simp; omega) h
+    simp [f.eq_3, this, g]
+
+abbrev M2 := {x : W × Bool // IsRed x.1 }
+
+instance inst2 : Magma M2 where
+  op x y := match x, y with
+  | ⟨(x, true), hx⟩ , _ => ⟨(x, true), hx⟩
+  | ⟨(x, false), _⟩, ⟨(y, true), _⟩ => ⟨(red (x ++ g (red (x.reverse ++ y))),  false), red_IsRed _⟩
+  | ⟨(x, false), hx⟩, ⟨(y,false), _⟩ =>
+    if x = y then ⟨(x, true), hx⟩ else ⟨(red (x ++ f (red (x.reverse ++ y))), false), red_IsRed _⟩
+
+theorem M2.Satisfies1841 : Equation1841 M2 := by
+  intro ⟨(w,fw), hw⟩ ⟨(v,fv), hv⟩
+  cases fw with
+  | false =>
+    cases fv with
+    | false =>
+      by_cases h : w = v
+      · simp only [h, Magma.op, ↓reduceIte, red_rev_self, rev_red, List.reverse_append, rev_g,
+        red_append_red_left, List.append_assoc, red_append_inv_right, red_g, Prod.mk.injEq,
+        Subtype.mk.injEq, red_append_inj _ _ hv, and_true]
+        decide
+      · simpa [Magma.op, hw, hv, red_append_nil_iff, h] using
+        ff_gff (red (w⁻¹ ++ v)) (red_IsRed _)
+    | true =>
+      simp only [Magma.op, hw, red_append_inj, red_g, red_append_red_right, red_append_inv]
+      rw [ite_cond_eq_false _ _]
+      simpa [Magma.op, hw, hv, red_append_nil_iff] using
+        fg_gfg (red (w⁻¹ ++ v)) (red_IsRed _)
+      simp [g_ne_nil]
+  | true => simp only [Magma.op]
+
+theorem M2.Refutes203 : ¬ Equation203 M2 := by
+  unfold Equation203
+  push_neg
+  use ⟨([], false), by simp⟩
+  decide
+
+@[equational_result]
+theorem Fact2 : ∃ (G : Type) (_ : Magma G), Facts G [1841] [203] :=
+  ⟨_, _, M2.Satisfies1841, M2.Refutes203⟩
 
 end ThreeC2

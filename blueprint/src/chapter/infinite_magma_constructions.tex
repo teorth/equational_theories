@@ -17,7 +17,7 @@ for some function $f: G \to G$.  Thus the translations on $G$ become magma isomo
 
 \begin{example}
   A magma $G$ satisfying the left (\Cref{eq4}) or right (\Cref{eq5}) absorption laws is translation-invariant.
-  Equip the carrier $G$ with an Abelian group structure $(G,+,-,0)$ and define $f: G \to G$ as either $f(x) = x$ or $f(x) = -x$.
+  Equip the carrier $G$ with an Abelian group structure $(G,+,-,0)$ and define $f: G \to G$ as either $f(x) = -x$ or $f(x) = 0$.
 \end{example}
 
 \begin{example}
@@ -282,7 +282,7 @@ simply by starting with a partial solution, say on the natural numbers in which 
 
 \section{A survey of examples}\label{infinite-examples-section}
 
-\bf{Translation-invariant models}
+\subsection{Translation-invariant models}
 
 The implication between the laws \Cref{eq1648} and \Cref{eq206} can be refuted by a translation-invariant
 magma on the integers. Define the function $f: \mathbb{Z} \to \mathbb{Z}$ by
@@ -311,7 +311,7 @@ There are variation of the translation-invariant constructions refuting implicat
 similar constructions are carried out starting with a non-Abelian group. Translation-invariant models
 are also useful building blocks for the \emph{modified base model} constructions explained below.
 
-\bf{Modified base models}
+\subsection{Modified base models}
 
 For some pairs of laws $P$ and $Q$, it is possible to start with an infinite model $(M,\op)$ obeying both $P$ and $Q$,
 then modify the operation $\op$ in a limited way, resulting in a model $(M,\op')$ of $P$ that does not obey $Q$.
@@ -326,8 +326,7 @@ consequent $Q$. This generally yields one or more counterexamples to the anteced
 antecedent.
 
 A model refuting the implication between the laws \Cref{eq1659} and \Cref{eq4315} can be constructed using
-the modified base model technique. Start with the infinite model $(\mathbb{Z},\op)$ of \Cref{eq1659}
-$\mathbb{Z}$ given by the following operation:
+the modified base model technique. Start with the infinite model $(\mathbb{Z},\op)$ of \Cref{eq1659} given by the following operation:
 $$ x\op y = \begin{cases} x+1 & \text{if } x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases} $$
 A case analysis shows that the magma $(\mathbb{Z},\op)$  satisfies both \Cref{eq1659} and \Cref{eq4315}.
 We will eventually \emph{modify} it by setting
@@ -347,7 +346,7 @@ $0 \op'' 1$ to something other than $-1$. One seemingly has many choices here: s
 $0 \op'' 1 =0$, $0 \op'' 1 = 1$, $0 \op'' 1 = 2$, or perhaps even $0 \op'' 1 = -1$?
 
 It's easy to rule out some of the possibilities. For instance, setting $0 \op'' 1 = 1$ would
-yield $0 \op'' (0 \op'' 0) = 0 \op'' 1 = \op'' (0 \op'' 1)$ again. The simplest possibility which results in
+yield $0 \op'' (0 \op'' 0) = 0 \op'' 1 = 0 \op'' (0 \op'' 1)$ again. The simplest possibility which results in
 a counterexample to \Cref{eq4315} sets $0 \op'' 1 = 0$ and $x \op'' y = x \op y$ for any $x \neq 0, y \neq 1$.
 
 Unfortunately, the resulting $(M,\op'')$ would not then obey \Cref{eq1659}. For any $z \in M$, one would have
@@ -369,7 +368,7 @@ $x \op' y = \begin{cases} 0 & \text{if } x=0,\: x,y \text{ have the same parity}
 At this point one might as well truncate the model to $\mathbb{N}$ since the result of the $\op'$
 operation is nonnegative whenever the operands are nonnegative. This finishes the construction and proves
 
-\begin{theorem}[1659 does not imply 4315]\label{non_imp_1659_4315_thm}\uses{eq16459,eq4315,models-def}
+\begin{theorem}[1659 does not imply 4315]\label{non_imp_1659_4315_thm}\uses{eq1659,eq4315,models-def}
   \lean{Equation1659_facts}\leanok
   There exists a magma which satisfies \Cref{eq1659} and not \Cref{eq4315}.
 \end{theorem}
@@ -381,6 +380,113 @@ modified model could also have been obtained using the same greedy construction.
 more difficult refutations using this construction tend to require the latter sort of modification.
 
 
-\bf{Greedy constructions}
+\subsection{Greedy constructions}
 
 {\bf add a description of the greedy counterexample for 1703,3 here once issue 506 is resolved}
+
+
+\section{The Dupont equation}\label{dupont-section}
+
+Now we consider the Dupont equation, \Cref{eq63}, which can be treated by a greedy translation invariant construction that is more complicated than the one considered for the Asterix law in \Cref{asterix-section}.
+
+If we adopt a translation-invariant model
+$$ x \op y = x + f(y-x)$$
+on some abelian group $G$, then with $y = x+h$, we have
+$$ x \op y = x + f(h)$$
+$$ x \op (x \op y) = x + f^2(h)$$
+$$ y \op (x \op (x \op y)) = y + f(f^2(h)-h)$$
+and so the Dupont law $x = y \op (x \op (x \op y))$ becomes the functional equation
+\begin{equation}\label{dupont-eq}
+  f(f^2(h)-h) = -h.
+\end{equation}
+One way to solve this equation is to have an automorphism $T: G \to G$ that obeys the identity
+$$ T^3 - T = -I,$$
+then one can just take $f(h) = T(h)$.  For instance, if $G = \Z^3$, one can take the automorphism $T: \Z^3 \to \Z^3$ defined by
+$$ T(x,y,z) := (-z,x+z,y).$$
+
+We now extend this greedily to $\Z^3 \times \Z$ as follows.  Define a \emph{partial solution} $(E_1,E_2,f)$ to be a pair $\Z^3 \subset E_1 \subset E_2 \subset \Z^3 \times \Z$, and a function $f: E_2 \to E_1$ obeying the folowing axioms.
+\begin{itemize}
+  \item[(a)] The set $E_2 \backslash \Z^3$ is finite.
+  \item[(b)] For $h \in \Z^3$, $f(h) = Th$; in particular, $f$ is a bijection on $\Z^3$.
+  \item[(c)] For $h \in E_1 \backslash \Z^3$, $f(h) \in E_1$.  Also, $-h + f^2(h) \in E_1$ and $f(-h + f^2(h)) = -h$. Note that this (and (b)) implies that $-h \in E_1$, thus $E_1$ is symmetric around the origin.
+  \item[(d)] For $h \in E_2 \backslash E_1$, $f(h) \in E_1$.
+  \item[(e)] The elements $-h$, $h - f^2(h)$, and $f^2(h) - h$ for $h \in E_2 \backslash E_1$ are all distinct from each other, and all lie outside of $E_2$.  In particular this forces $f^2(h) \neq 0$, hence $f(h) \neq 0$. It also forces $f^2(h) \neq h$, hence $f(h) \neq h$.
+\end{itemize}
+Thus for instance one can take $(\Z^3,\Z^3,T)$ as a partial solution.  We say that a partial solution $(E'_1, E'_2, f')$ is an \emph{extension} of $(E_1,E_2,f)$ if $E_1 \subset E'_1$, $E'_2 \subset E_2$, and $f'$ agrees with $f$ on $E_2$.
+
+Informally, $E_1$ represents the portion of $\Z^3 \times \Z$ where we have completely resolved the Dupont equation; the set $E_2 \backslash E_1$ represents the portion for which $f$ (and all forward iterates of $f$) have been defined, but the Dupont equation has not yet been verified; and the elements $-h$, $h - f^2(h)$, and $f^2(h) - h$ for $h \in E_2 \backslash E_1$ are the portion where $f$ is not yet defined, but for which one is ready to ``promote'' these elements to $E_2$ or $E_1$ by defining $f$ appropriately.
+
+The key lemmas are then
+
+\begin{lemma}[Promoting to $E_1$]\label{add-E1}  If $(E_1,E_2,f)$ is a partial solution and $h \in E_2 \backslash E_1$, then there exists an extension $(E'_1,E'_2,f')$ of $(E_1,E_2,f)$ such that $h \in E'_1$.
+\end{lemma}
+
+\begin{proof} This will be a greedy construction, but we have to introduce a rather large number of additional elements to ensure that certain non-degeneracy conditions are maintained (in particular, the new elements $h'$ introduced have to be such that $f^2(h') - h'$ avoids $E_2$ and hence $\Z^3$, which requires a certain amount of complexity in the construction).
+
+  Let $\tilde E_2$ denote the set $E_2$ together with all the elements of the form $-h'$, $h' - f^2(h')$, and $f^2(h') - h'$ for $h' \in E_2 \backslash E_1$; this is $\Z^3$ with a finite number of additional elements.
+
+Let $a$ be an element of $\Z^3$ such that the quantities
+$$ \pm Ta, \pm(Ta + a)$$
+are distinct from each other and from
+$$0, \pm h, \pm (h - f(h)), \pm (f^2(h)-h);$$
+this is possible since $T, T+1$ are invertible.
+
+Next, we pick an $x \in \Z^3 \times \Z$ such that the quantities
+$$ \pm x, \pm x + Ta, \pm x - Ta, \pm 2 x + Ta, \pm x + Ta + a, \pm (h + x), \pm (h - f(h) + x), \pm (f^2(h)-h + x + Ta)$$
+are all distinct from each other and from $\tilde E_2$; indeed, from the choice of $a$ (and the non-zero nature of $h$, $f(h)$, $h-f(h)$, and $f^2(h)-h$) there are only finitely many $x$ for which a collision can occur between any pair of these expressions.
+
+We now promote $\pm h, \pm x, \pm x + Ta, \pm x - Ta$ to $E_1$, and also promote $h+x$, $h - f^2(h)$, $\pm 2x + Ta$, $\pm x + Ta + a$ to $E_2$.  That is to say, we define
+$$ E'_1 := E_1 \cup \{\pm h, \pm x, \pm x + Ta, \pm x - Ta\}$$
+and
+$$ E'_2 := E_2 \cup \{ -h, \pm x, \pm x + Ta, \pm x - Ta, h + x, h - f^2(h), \pm 2x + Ta \}.$$
+We then define an extension $f'$ of $f$ to $E'_2$ by setting
+\begin{align*}
+ f'(\pm x) &:= a \\
+ f'(\pm x + Ta) &:= \pm x \\
+ f'(\pm x - Ta) &:= \mp x + Ta \\
+ f'(\pm x + Ta + a) &:= \pm x - Ta \\
+ f'(\pm 2x + Ta) &:= \pm x + Ta \\
+ f'(\pm x + Ta + a) &:= \pm x - Ta \\
+ f'(-h) &:= x + Ta \\
+ f'(h+x) &:= h \\
+ f'(h - f^2(h)) &:= -h.
+\end{align*}
+It is easy to see that $(E'_1,E'_2,f')$ obeys properties (a), (b), (d).  By construction, we have
+$$ f'( (f')^2(h') - h') = -h'$$
+for
+$$ h' = \pm h, \pm x, \pm x+Ta, \pm x-Ta$$
+giving property (c).  By construction, the quantities
+$$ -h', h' - f^2(h'), f^2(h') - h'$$
+are distinct from each other and lie outside of $\tilde E_2 \cup E'_2$ for
+$$ h' = h+x, h - f^2(h), \pm 2x + Ta, \pm x + Ta + a$$
+while these quantities are distinct from each other and lie in $\tilde E_2 \backslash E'_2$ for $h' \in E_2 \backslash E'_1$ (note that this forces $h' \neq \pm h$).  This gives property (e).
+\end{proof}
+
+
+\begin{lemma}[Promoting to $E_2$]\label{add-E2}  If $(E_1,E_2,f)$ is a partial solution and $h \in (\Z^3 \times \Z) \backslash E_2$, then there exists an extension $(E'_1,E'_2,f')$ of $(E_1,E_2,f)$ such that $h \in E'_2$.
+\end{lemma}
+
+\begin{proof}  Let $\tilde E_2$ denote the set $E_2$ together with all elements of the form
+\begin{equation}\label{hp-form}
+ -h', h' - f^2(h'), f^2(h') - h'
+\end{equation}
+for some $h' \in E_2 \backslash E_1$; this is $\Z^3$ with a finite number of elements attached, and is symmetric aroudn the origin.
+
+First suppose that $h$ lies outside of $\tilde E_2$.  Then we can find $a \in \Z^3$ such that the quantities
+$$ -h, \pm (h - Ta)$$
+are distinct from each other, and lie outside of $\tilde E_2$.  We now promote $h$ to $E_2$, thus setting
+$$ E'_1 := E_1$$
+and
+$$ E'_2 := E_2 \cup \{h\}$$
+and define an extension $f'$ of $f$ to $E'_2$ by setting
+$$ f'(h) := a.$$
+It is then a routine matter to check that $(E'_1,E'_2,f')$ is an extension of $(E_1,E_2,f)$.
+
+Now suppose that $h$ lies in $\tilde E_2$.  Then $h$ is of one of the forms \eqref{hp-form} for some $h' \in E_2 \backslash E_1$.  Suppose it is of the form $-h'$ or $f^2(h') - h'$.  We invoke \Cref{add-E1} to promote $h'$ to $E_1$ by using a suitable extension $(E'_1,E'_2,f')$; and now $h$ will lie in $E'_2$, giving the claim.  If instead $h$ is of the form $h'-f^2(h')$, then this procedure might not place $h$ in $E'_2$; but if it does not, it will be of the form $-h''$ for $h'' = f^2(h')-h' \in E'_2 \backslash E'_1$.  Applying \Cref{add-E1} one more time to now promote $h''$ to $E_1$, we will obtain a larger extension $(E''_1,E''_2,f'')$ with $h \in E''_2$, giving the claim.
+\end{proof}
+
+Iterating these lemmas in the usual fashion, we can conclude that any partial solution can be completed to a global model of \Cref{eq63}.
+
+Among other things, this permits one to generate models in which the function $f$ is not injective.  To see this, let $a$ be a non-zero element of $\Z^3$, let $x$ be an element of $\Z^3 \times \Z$ outside of $\Z^3$, and consider the partial solution $(\Z^3, \Z^3 \cup \{x\}, f)$ where $f(h) = Th$ for $h \in \Z^3$ and $f(x) = a$.  One can check that this is a partial solution and is not injective, since $f(x) = f(T^{-1} a)$.  This non-injectivity implies in particular that the model is not left-cancellative, and hence does not obey the law
+$$ x = (y \op x) \op ((y \op x) \op y)$$
+(equation 1692).

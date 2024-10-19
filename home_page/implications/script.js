@@ -78,6 +78,7 @@ let cachedItems = [];
 let cachedItemElements = [];
 
 function downloadEquationListCSV() {
+    showDownloadPopup();
     const rows = Array.from(equationList.children);
     const csv = "\uFEFF" + rows.map((row) => (
         Array.from(row.children).map(
@@ -85,8 +86,23 @@ function downloadEquationListCSV() {
         ).join(",")))
         .join("\n");
 
-        const filename = 'export_explorer_' + new Date().toLocaleDateString() + '.csv';
-        downloadStringAsCSV(csv, filename)
+    const filename = 'export_explorer_' + new Date().toLocaleDateString() + '.csv';
+    downloadStringAsCSV(csv, filename);
+}
+
+function downloadRawImplicationsCSV() {
+    const text_to_number = {"explicit_proof_true":4, "implicit_proof_true":3,
+        "explicit_conjecture_true":2, "implicit_conjecture_true":1, "unknown":0,
+        "explicit_proof_false":-4, "implicit_proof_false":-3,
+        "explicit_conjecture_false":-2, "implicit_conjecture_false":-1,
+    }
+    showDownloadPopup();
+    const csv = implications.map(
+        (equation) => equation.map(
+            (status) => text_to_number[status]
+        ).join(",")
+    ).join("\n")
+    downloadStringAsCSV(csv, 'export_raw_implications_' + new Date().toLocaleDateString() + '.csv');
 }
 
 function downloadStringAsCSV(string, filename) {

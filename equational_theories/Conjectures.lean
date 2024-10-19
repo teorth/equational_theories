@@ -112,4 +112,13 @@ conjecture Equation511_facts : ∃ (G : Type) (_ : Magma G), Facts G [511] [614,
 conjecture Equation1841_facts : ∃ (G : Type) (_ : Magma G), Facts G [1841] [203]
 
 
+/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Equation.20879.20!.3D.3E.204065/near/477684558 -/
+@[equational_result]
+conjecture Equation879_facts : ∃ (G : Type) (_ : Magma G), Facts G [879] [4065]
+
+
+/-- https://teorth.github.io/equational_theories/blueprint/infinite-magma-constructions-chapter.html#dupont-section -/
+@[equational_result]
+conjecture Equation63_facts : ∃ (G : Type) (_ : Magma G), Facts G [63] [1692]
+
 end Conjectures
