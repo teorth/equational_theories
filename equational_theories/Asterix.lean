@@ -2,9 +2,10 @@ import equational_theories.FactsSyntax
 import equational_theories.EquationalResult
 import Mathlib.Algebra.Order.Ring.Nat
 import Mathlib.Logic.Denumerable
+import Mathlib.Tactic.Recall
 import equational_theories.Equations.Basic
 
--- equation 65 := x = y ◇ (x ◇ (y ◇ x))
+recall Equation65 (G : Type _) [Magma G] := ∀ x y : G, x = y ◇ (x ◇ (y ◇ x))
 
 namespace Asterix
 
