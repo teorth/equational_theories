@@ -41,10 +41,10 @@ concluding our proof that this magma is a model of \Cref{eq374794}
 
 An even shorter law (order $5$) was obtained by the same author in a follow-up paper \cite{Kisielewicz2}:
 
-\begin{theorem}[Kisielewicz's second Austin law]\label{kis-thm2}\uses{eq2, eq28770} \Cref{eq28770} is an Austin law.
+\begin{theorem}[Kisielewicz's second Austin law]\label{kis-thm2}\uses{eq2, eq28770}\lean{InfModel.Finite.Equation28770_implies_Equation2}\lean{InfModel.Equation28770_not_implies_Equation2}\leanok \Cref{eq28770} is an Austin law.
 \end{theorem}
 
-\begin{proof} Using the $y^2$ and $y^3$ notation as before, the law reads
+\begin{proof} \leanok Using the $y^2$ and $y^3$ notation as before, the law reads
 \begin{equation}\label{kis2-law}
    x = (y^3 \op x) \op (y \op z).
   \end{equation}
@@ -105,8 +105,8 @@ We also have such a non-implication involving two laws of order $4$:
 
 The following result was established in \cite{austin_finite}:
 
-\begin{theorem}[Austin's finite model theorem]\label{austin-two}\uses{models-def} Any law with at most two variables has a non-trivial finite model.
+\begin{theorem}[Austin's finite model theorem]\label{austin-two}\uses{models-def}\lean{InfModel.Finite.two_variable_laws}\leanok Any law with at most two variables has a non-trivial finite model.
 \end{theorem}
 
-\begin{proof}  If neither side of the law is a single variable then the zero law $x \op y = 0$ will work, so one can assume the law takes the form $x = f(x,y)$.  Consider a finite field $F$ with the operation $x \op y := ax+by$ for some coefficients $a,b \in F$.  Then the law becomes a pair of equations $P(a,b)=0$, $Q(a,b)=1$ in the coefficients for some polynomials $P,Q$ with integer coefficients, which one can verify to not divide each other (they have the same degree, and do not have the same set of non-zero monomials).  From Bezout's theorem, this equation has a solution in some field, and hence by the Lefschetz principle it has a solution in a finite field.
+\begin{proof} \leanok  If neither side of the law is a single variable then the zero law $x \op y = 0$ will work, so one can assume the law takes the form $x = f(x,y)$.  Consider a finite field $F$ with the operation $x \op y := ax+by$ for some coefficients $a,b \in F$.  Then the law becomes a pair of equations $P(a,b)=0$, $Q(a,b)=1$ in the coefficients for some polynomials $P,Q$ with integer coefficients, which one can verify to not divide each other (they have the same degree, and do not have the same set of non-zero monomials).  From Bezout's theorem, this equation has a solution in some field, and hence by the Lefschetz principle it has a solution in a finite field.
 \end{proof}
