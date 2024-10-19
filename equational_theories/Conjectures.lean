@@ -112,4 +112,9 @@ conjecture Equation879_facts : ∃ (G : Type) (_ : Magma G), Facts G [879] [4065
 @[equational_result]
 conjecture Equation63_facts : ∃ (G : Type) (_ : Magma G), Facts G [63] [1692]
 
+
+@[equational_result]
+conjecture Equation3308_facts : ∃ (G : Type) (_ : Magma G), Facts G [3308] [3456, 3511]
+
+
 end Conjectures
