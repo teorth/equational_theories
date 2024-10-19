@@ -17,7 +17,7 @@ for some function $f: G \to G$.  Thus the translations on $G$ become magma isomo
 
 \begin{example}
   A magma $G$ satisfying the left (\Cref{eq4}) or right (\Cref{eq5}) absorption laws is translation-invariant.
-  Equip the carrier $G$ with an Abelian group structure $(G,+,-,0)$ and define $f: G \to G$ as either $f(x) = x$ or $f(x) = -x$.
+  Equip the carrier $G$ with an Abelian group structure $(G,+,-,0)$ and define $f: G \to G$ as either $f(x) = -x$ or $f(x) = 0$.
 \end{example}
 
 \begin{example}
@@ -326,8 +326,7 @@ consequent $Q$. This generally yields one or more counterexamples to the anteced
 antecedent.
 
 A model refuting the implication between the laws \Cref{eq1659} and \Cref{eq4315} can be constructed using
-the modified base model technique. Start with the infinite model $(\mathbb{Z},\op)$ of \Cref{eq1659}
-$\mathbb{Z}$ given by the following operation:
+the modified base model technique. Start with the infinite model $(\mathbb{Z},\op)$ of \Cref{eq1659} given by the following operation:
 $$ x\op y = \begin{cases} x+1 & \text{if } x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases} $$
 A case analysis shows that the magma $(\mathbb{Z},\op)$  satisfies both \Cref{eq1659} and \Cref{eq4315}.
 We will eventually \emph{modify} it by setting
@@ -347,7 +346,7 @@ $0 \op'' 1$ to something other than $-1$. One seemingly has many choices here: s
 $0 \op'' 1 =0$, $0 \op'' 1 = 1$, $0 \op'' 1 = 2$, or perhaps even $0 \op'' 1 = -1$?
 
 It's easy to rule out some of the possibilities. For instance, setting $0 \op'' 1 = 1$ would
-yield $0 \op'' (0 \op'' 0) = 0 \op'' 1 = \op'' (0 \op'' 1)$ again. The simplest possibility which results in
+yield $0 \op'' (0 \op'' 0) = 0 \op'' 1 = 0 \op'' (0 \op'' 1)$ again. The simplest possibility which results in
 a counterexample to \Cref{eq4315} sets $0 \op'' 1 = 0$ and $x \op'' y = x \op y$ for any $x \neq 0, y \neq 1$.
 
 Unfortunately, the resulting $(M,\op'')$ would not then obey \Cref{eq1659}. For any $z \in M$, one would have
