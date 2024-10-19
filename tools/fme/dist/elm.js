@@ -6082,14 +6082,18 @@ var $author$project$Main$viewModelInfo = F3(
 	function (table, matcher, mi) {
 		var tmatcher = A3(
 			$elm$core$String$replace,
-			'+',
+			'*',
 			'◇',
-			A2(
-				$elm$core$String$filter,
-				function (x) {
-					return x !== ' ';
-				},
-				matcher));
+			A3(
+				$elm$core$String$replace,
+				'+',
+				'◇',
+				A2(
+					$elm$core$String$filter,
+					function (x) {
+						return x !== ' ';
+					},
+					matcher)));
 		var matching = function (xs) {
 			return (tmatcher === '') ? xs : A2(
 				$elm$core$List$filter,
