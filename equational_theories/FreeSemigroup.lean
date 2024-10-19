@@ -204,4 +204,4 @@ theorem AbGrpPow2ImpliesEquation1571ReducerFaithful {n : Nat} {G : Type _} [Magm
   (((InvolutiveImpliesInvolutionReduceFaithful _ invol f).symm).trans
     (((CommSgrImpliesInsertionSortFaithful assoc comm f _).symm).trans
       (((AssocImpliesSgrProjFaithful assoc f _).symm).trans
-        ((comm _ _).trans (((assoc _ _ _).symm).trans ((invol _ (f _)).symm)))))).symm
+        ((comm ..).trans (((assoc ..).symm).trans ((invol _ (f _)).symm)))))).symm
