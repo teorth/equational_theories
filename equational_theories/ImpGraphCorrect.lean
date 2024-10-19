@@ -24,7 +24,20 @@ def Graph.get (g : Graph) (i j : Fin 4694) : Bool :=
   !(g &&& (Graph.singleton i j)).isEmpty
 
 theorem Nat_or_eq_zero (n m : Nat) : ((n ||| m) == 0) = (n == 0 && m == 0) := by
-  sorry
+  apply Bool.coe_iff_coe.mp
+  simp
+  constructor
+  · intro h
+    constructor
+    · apply Nat.eq_of_testBit_eq
+      intro i
+      replace h : (n ||| m).testBit i = Nat.testBit 0 i := by simp [h]
+      simp_all
+    · apply Nat.eq_of_testBit_eq
+      intro i
+      replace h : (n ||| m).testBit i = Nat.testBit 0 i := by simp [h]
+      simp_all
+  · simp_all
 
 @[simp] theorem Graph.union_get (g1 g2 : Graph) (i j : Fin 4694) :
   (g1 ||| g2).get i j = (g1.get i j || g2.get i j) := by
@@ -40,9 +53,19 @@ theorem Graph.empty_isEmpty : Graph.empty.isEmpty := rfl
 theorem Graph.empty_models (P : (i j : Nat) → Prop) : Graph.empty.models P := by
   simp [Graph, models, empty, get, isEmpty]
 
+/-- `testBit 1 i` is false iff the index `i` does not equal 0. -/
+theorem testBit_one_eq_true_iff_self_eq_zero {i : Nat} :
+    Nat.testBit 1 i = false ↔ i ≠ 0 := by
+  rw [← Bool.bool_iff_false , Nat.testBit_one_eq_true_iff_self_eq_zero,]
+
 theorem Graph.singleton_and (i j i' j' : Fin 4694) :
-  (singleton i j &&& singleton i' j') = (if i = i' ∧ j = j' then singleton i j else empty) := by
-  sorry
+   (singleton i j &&& singleton i' j') = (if i = i' ∧ j = j' then singleton i j else empty) := by
+  apply Nat.eq_of_testBit_eq
+  intro b
+  split <;> simp_all [Graph, empty, singleton,
+    Nat.testBit_one_eq_true_iff_self_eq_zero, testBit_one_eq_true_iff_self_eq_zero]
+  omega
+
 
 theorem Graph.singleton_models (P : (i j : Nat) → Prop) (i j : Fin 4694) (h : P i j) :
     (Graph.singleton i j).models P := by
@@ -80,9 +103,11 @@ elab "defineImpGraph%" : term => do
 
 def impGraph : Graph := defineImpGraph%
 
+/-
 /-- info: 2 -/
 #guard_msgs in
 #eval Nat.log2 impGraph / (8*1024*1024) -- size in MB
+-/
 
 /-- info: true -/
 #guard_msgs in
@@ -135,6 +160,7 @@ elab "defineImpEntries%" : term => do
 
 def impEntries : ImpEntries := defineImpEntries%
 
+#time
 theorem impGraph_from_impEntries : impGraph = impEntries.graph := by
   native_decide
 
