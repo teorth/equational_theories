@@ -232,7 +232,8 @@ viewModelInfo table matcher mi =
     tmatcher =
       matcher |>
       String.filter (\x -> x /= ' ') |>
-      String.replace "+" "◇"
+      String.replace "+" "◇" |>
+      String.replace "*" "◇"
     matching xs =
       if tmatcher == ""
         then xs
