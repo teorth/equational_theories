@@ -79,7 +79,7 @@ theorem Graph.union_models (g1 g2 : Graph) (P : (i j : Nat) → Prop) :
   simp [models]; tauto
 
 /-- While developing, only look at the first n results. -/
-def handBreak : Nat := 2000
+def handBreak : Nat := 20
 
 open Lean Elab in
 elab "defineImpGraph%" : term => do
