@@ -19,7 +19,7 @@ elab "defineLaws%" : term => do
   return consts.toExpr (mkConst ``Law.NatMagmaLaw) id
 
 /--
-All the separte `Law{n}` definitions in one data structure.
+All the separate `Law{n}` definitions in one data structure.
 
 ```
 example : laws[1000] = Law1001 := rfl
@@ -134,7 +134,7 @@ def FreeMagma.is_canonical (next : Nat) : FreeMagma Nat → Option Nat
 Checks whether a magma law is canonical:
 * Variables are canonically labeled
 * `lhs < rhs` (with the exception of `0 ≃ 0`)
-* The symetric law did not come first
+* The symmetric law did not come first
 -/
 def Law.MagmaLaw.is_canonical (l : Law.MagmaLaw Nat) : Bool :=
   ((l.lhs.is_canonical 0).bind (fun n => l.rhs.is_canonical n)).isSome &&
