@@ -12,6 +12,9 @@ attribute [confluence_simps] FreeMagma.Fork.injEq
 
 simproc [confluence_simps] confluenceReduceCtorEq (_) := reduceCtorEq
 
+-- for some reason if I try to use Not.eq_def directly from a tactic it can't find it!
+private def not_eq_def := Not.eq_def
+
 scoped macro "separate" : tactic => `(tactic| (
   try simp only [Not.eq_def]
   try intros
