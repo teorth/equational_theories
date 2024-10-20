@@ -611,11 +611,18 @@ This is of course non-surjective. The magma operation will be constructed as fol
 It is a routine matter to verify \eqref{fdef} and \eqref{xop}, so that equation 3342 holds.  However, one can check that the four laws in the conclusion fail with $x=y=1$.
 \end{proof}
 
-Another ad hoc construction concerns equation 3475,
+\begin{theorem}[3475 construction]\label{3475-construct}
+There exists a magma that obeys equation 3475,
 $$ x \op x = y \op ((x \op y) \op y),$$
-which we write as
+but does not obey equation 3659,
+$$x \op x = (x \op x) \op (x \op x)$$
+\end{theorem}
+
+\begin{proof} We will give a construction where $x \op x$ takes on only two values (and depends on the ``sign'' of $x$), while $x \op y$ depends primarily on $y$ and the sign of $x$.
+
+We can rewrite 3475 as
 $$ x^2 = L_y R_y^2 x$$
-where $x^2 = x \op x$, $L_y x = y \op x$, and $R_y x = x \op y$.
+where $x^2 = x \op x$, $L_y x = y \op x$, and $R_y x = x \op y$. Similarly, 3659 can be rewritten as $x^2 \op x^2 = x^2$.
 
 For our model, we take $G$ to be the non-zero integers $\Z^\times$.  The operation $R_y x = x \op y$ is defined to equal
 \begin{itemize}
@@ -630,3 +637,4 @@ $$ x^2 \op x^2 = -\mathrm{sgn}(x^2) = \mathrm{sgn}(x) \neq - \mathrm{sgn}(x) = x
 so that equation 3659, $x^2 = x^2 \op x^2$, fails.
 
 Now we verify 3475.  A routine case check shows that when $x$ has the opposite sign to $y$, $R_y^2 x = 3y$; and when $x$ has the same sign to $y$, $R_y^2 x$ is equal to $2y$ or $5y$.  But then $L_y R_y^2 x$ is equal to $\mathrm{sgn}(y)$ if $x$ has the opposite sign to $y$, and $-\mathrm{sgn}(y)$ if $x$ has the same sign to $y$, giving 3475.
+\end{proof}
