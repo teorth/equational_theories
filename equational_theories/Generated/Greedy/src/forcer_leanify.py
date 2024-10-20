@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from collections import Counter
 from generate_eqs_list import count_vars
 
