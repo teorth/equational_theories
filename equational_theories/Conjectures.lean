@@ -14,19 +14,7 @@ conjecture Equation1076_facts : ∃ (G : Type) (_ : Magma G), Facts G [1076] [3,
 
 /-- See https://leanprover.zulipchat.com/user_uploads/3121/zGPTzX7J0AkJcQdPdh_xoCTe/Equation_73-updated.pdf -/
 @[equational_result]
-conjecture Equation73_facts : ∃ (G : Type) (_ : Magma G), Facts G [73] [99]
-
-/-- See https://leanprover.zulipchat.com/user_uploads/3121/zGPTzX7J0AkJcQdPdh_xoCTe/Equation_73-updated.pdf -/
-@[equational_result]
-conjecture Equation73_facts' : ∃ (G : Type) (_ : Magma G), Facts G [73] [203]
-
-/-- See https://leanprover.zulipchat.com/user_uploads/3121/zGPTzX7J0AkJcQdPdh_xoCTe/Equation_73-updated.pdf -/
-@[equational_result]
-conjecture Equation73_facts'' : ∃ (G : Type) (_ : Magma G), Facts G [73] [255]
-
-/-- See https://leanprover.zulipchat.com/user_uploads/3121/zGPTzX7J0AkJcQdPdh_xoCTe/Equation_73-updated.pdf -/
-@[equational_result]
-conjecture Equation73_facts''' : ∃ (G : Type) (_ : Magma G), Facts G [73] [4380]
+conjecture Equation73_facts : ∃ (G : Type) (_ : Magma G), Facts G [73] [99, 203, 255, 4380]
 
 /-- See https://leanprover.zulipchat.com/user_uploads/3121/zGPTzX7J0AkJcQdPdh_xoCTe/Equation_73-updated.pdf -/
 @[equational_result]
@@ -52,10 +40,6 @@ conjecture Equation1447_facts : ∃ (G : Type) (_ : Magma G), Facts G [1447] [14
 @[equational_result]
 conjecture Equation1692_facts : ∃ (G : Type) (_ : Magma G), Facts G [1692] [23, 47, 1832, 2441, 3050, 3456, 4065]
 
-/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1841.20.3F.3D.3E.20203/near/477517055 -/
-@[equational_result]
-conjecture Equation1841_facts : ∃ (G : Type) (_ : Magma G), Facts G [1841] [203]
-
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Equation.20879.20!.3D.3E.204065/near/477684558 -/
 @[equational_result]
 conjecture Equation879_facts : ∃ (G : Type) (_ : Magma G), Facts G [879] [4065]
@@ -76,7 +60,7 @@ conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G), Facts G [1516] [14
 @[equational_result]
 conjecture Equation917_facts : ∃ (G : Type) (_ : Magma G), Facts G [917] [1629, 1729, 2441, 2541]
 
-/-- See "Ad hoc model" section of blueprint -/
+/-- https://teorth.github.io/equational_theories/blueprint/infinite-magma-constructions-chapter.html#adhoc-model -/
 @[equational_result]
 conjecture Equation3342_facts : ∃ (G : Type) (_ : Magma G), Facts G [3342] [3456, 3522, 4065, 4118]
 
