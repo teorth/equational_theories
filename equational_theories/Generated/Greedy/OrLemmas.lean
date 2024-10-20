@@ -22,13 +22,3 @@ open scoped Classical in
 theorem trans_resol.{u} {α : Type u} (a b c : α) : a ≠ b ∨ b ≠ c ∨ a = c := by
   simp [← Decidable.imp_iff_not_or]
   exact Eq.trans
-
-theorem forall_prop_or {p p' : Prop} {q : p → Prop} {q' : p' → Prop} :
-    ((∀ (h : p), q h) ∨ ∀ (h : p'), q' h) ↔ ∀ (h : p ∧ p'), q h.1 ∨ q' h.2 := by
-  by_cases hp : p
-  · by_cases hp' : p'
-    · simp [forall_prop_of_true, hp, hp']
-    · simp [hp, hp']
-  · simp [hp]
-
--- theorem Fin.val_inj_rev {n : Nat} {a : Fin n} {b : Fin n} : ↑a = ↑b ↔ a = b
