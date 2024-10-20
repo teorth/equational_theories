@@ -14,7 +14,7 @@ def flatten_eq2(eq, ecache, preconds):
     l, r = eq
     l = flatten_eq2(l, ecache, preconds)
     r = flatten_eq2(r, ecache, preconds)
-    tv = f't{len(preconds)}'
+    tv = f"t{len(preconds)}"
     preconds.append((l, r, tv))
     ecache[eq] = tv
     return tv
@@ -27,225 +27,304 @@ def rulify_eq2(eq):
     r = flatten_eq2(eq[1], ecache, preconds)
     return Rule(preconds, (l, r))
 
+
 def natural_sort(l):
     convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+    alphanum_key = lambda key: [convert(c) for c in re.split("([0-9]+)", key)]
     return sorted(l, key=alphanum_key)
 
-def proof_maker(proof, rule_id, lean_type, var_num, assump_count, def_types, types, do_clear = False):
-    lean_proof = f'set_option linter.all false in\nset_option maxHeartbeats 4000000 in\ntheorem rule_{rule_id}_preserved'
+
+def proof_maker(
+    proof, rule_id, lean_type, var_num, assump_count, def_types, types, do_clear=False
+):
+    lean_proof = f"set_option linter.all false in\nset_option maxHeartbeats 4000000 in\ntheorem rule_{rule_id}_preserved"
     proof_steps = []
     my_reqs = []
     eq_name = {}
     clause_count = {}
     typeof = {}
     eq_use_cnt = Counter()
-    for line in proof.split('\n'):
-        if line.strip() == '' or line.startswith('%'):
+    for line in proof.split("\n"):
+        if line.strip() == "" or line.startswith("%"):
             continue
-        eqnum = line.split('.')[0]
-        m = re.search(r'\[input (\w+)]', line)
+        eqnum = line.split(".")[0]
+        m = re.search(r"\[input (\w+)]", line)
         if m is not None:
             eq_name[eqnum] = m[1]
             continue
-        m = re.search(r'\[(?:rectify|cnf transformation) (\d+)]', line)
+        m = re.search(r"\[(?:rectify|cnf transformation) (\d+)]", line)
         if m is not None:
             eq_name[eqnum] = eq_name[m[1]]
             continue
-        eq_name[eqnum] = f'eq{eqnum}'
-        m = re.match(r'\d+\. ([^[]+) \[([^\]]+)\]', line)
+        eq_name[eqnum] = f"eq{eqnum}"
+        m = re.match(r"\d+\. ([^[]+) \[([^\]]+)\]", line)
         statement, cproof = m[1], m[2]
         m = re.match(
-            r'(?:(?:subsumption )?resolution|superposition|backward demodulation|forward demodulation) (\d+),(\d+)',
-            cproof)
+            r"(?:(?:subsumption )?resolution|superposition|backward demodulation|forward demodulation) (\d+),(\d+)",
+            cproof,
+        )
         if m is not None:
             eq_use_cnt[eq_name[m[1]]] += 1
             eq_use_cnt[eq_name[m[2]]] += 1
             continue
         m = re.match(
-            r'(?:duplicate literal removal|equality resolution|trivial inequality removal|equality factoring) (\d+)',
-            cproof)
+            r"(?:duplicate literal removal|equality resolution|trivial inequality removal|equality factoring) (\d+)",
+            cproof,
+        )
         if m is not None:
             eq_use_cnt[eq_name[m[1]]] += 1
             continue
     for a, t in def_types:
         my_reqs.append(a)
-        lean_proof += f' ({a} : {t})'
+        lean_proof += f" ({a} : {t})"
     for a, t in types:
         if a in eq_use_cnt:
             my_reqs.append(a)
-            lean_proof += f' ({a} : {t})'
-    lean_proof += f''' : {lean_type} := by
+            lean_proof += f" ({a} : {t})"
+    lean_proof += f""" : {lean_type} := by
   by_contra! nh
   obtain ⟨{", ".join(f"sk{i}" for i in range(var_num))}, {", ".join(f"preserve_{i}" for i in range(assump_count))}⟩ := nh
-  '''
-    for line in proof.split('\n'):
-        if line.strip() == '' or line.startswith('%'):
+  """
+    for line in proof.split("\n"):
+        if line.strip() == "" or line.startswith("%"):
             continue
-        if re.search(r'\[(?:rectify|cnf transformation|input) (\w+)]', line) is not None:
+        if (
+            re.search(r"\[(?:rectify|cnf transformation|input) (\w+)]", line)
+            is not None
+        ):
             continue
-        eqnum = line.split('.')[0]
-        m = re.match(r'\d+\. ([^[]+) \[([^\]]+)\]', line)
+        eqnum = line.split(".")[0]
+        m = re.match(r"\d+\. ([^[]+) \[([^\]]+)\]", line)
         if m is None:
             print(line)
         statement, proof = m[1], m[2]
-        if statement == '$false':
-            m = re.match(r'(?:subsumption )?resolution (\d+),(\d+)', proof)
+        if statement == "$false":
+            m = re.match(r"(?:subsumption )?resolution (\d+),(\d+)", proof)
             if m is not None:
                 l, r = m[1], m[2]
-                proof_steps.append(
-                    f'subsumption {eq_name[r]} {eq_name[l]} -- {proof}')
+                proof_steps.append(f"subsumption {eq_name[r]} {eq_name[l]} -- {proof}")
                 continue
-            proof_steps.append(f'-- {proof}')
+            proof_steps.append(f"-- {proof}")
             continue
 
-        clause_count[eqnum] = statement.count('|')
+        clause_count[eqnum] = statement.count("|")
         lean_statement = statement
 
-        old = ''
+        old = ""
         while old != lean_statement:
             old = lean_statement
-            lean_statement = re.sub(r'(\w+)\(([^,]+),([^,]+),([^,]+)\)', r'(\1 \2 \3 \4)', lean_statement, count=1)
-        lean_statement = re.sub(r'\|', '∨', lean_statement)
-        lean_statement = re.sub('!=', '≠', lean_statement)
-        lean_statement = re.sub('~', '¬', lean_statement)
-        lean_statement = re.sub(r'memold\((\w+)\)', r'memold \1', lean_statement)
+            lean_statement = re.sub(
+                r"(\w+)\(([^,]+),([^,]+),([^,]+)\)",
+                r"(\1 \2 \3 \4)",
+                lean_statement,
+                count=1,
+            )
+        lean_statement = re.sub(r"\|", "∨", lean_statement)
+        lean_statement = re.sub("!=", "≠", lean_statement)
+        lean_statement = re.sub("~", "¬", lean_statement)
+        lean_statement = re.sub(r"memold\((\w+)\)", r"memold \1", lean_statement)
         typeof[eqnum] = lean_statement
-        variables = natural_sort({x for x in re.findall(r'[.\w]+', lean_statement) if x[0].isupper()})
-        variables = f'({" ".join(variables)} : G) ' if variables else ''
-        m = re.match(r'(?:subsumption )?resolution (\d+),(\d+)', proof)
+        variables = natural_sort(
+            {x for x in re.findall(r"[.\w]+", lean_statement) if x[0].isupper()}
+        )
+        variables = f'({" ".join(variables)} : G) ' if variables else ""
+        m = re.match(r"(?:subsumption )?resolution (\d+),(\d+)", proof)
         if m is not None:
             l, r = m[1], m[2]
             proof_steps.append(
-                f'have eq{eqnum} {variables}: {lean_statement} := resolve {eq_name[l]} {eq_name[r]} -- {proof}')
+                f"have eq{eqnum} {variables}: {lean_statement} := resolve {eq_name[l]} {eq_name[r]} -- {proof}"
+            )
             eq_use_cnt[eq_name[l]] -= 1
             eq_use_cnt[eq_name[r]] -= 1
-            if do_clear and (eq_use_cnt[eq_name[l]] == 0 or eq_use_cnt[eq_name[r]] == 0):
-                proof_steps.append(f'clear')
-                if eq_use_cnt[eq_name[l]] == 0: proof_steps[-1] += f' {eq_name[l]}'
-                if eq_use_cnt[eq_name[r]] == 0: proof_steps[-1] += f' {eq_name[r]}'
+            if do_clear and (
+                eq_use_cnt[eq_name[l]] == 0 or eq_use_cnt[eq_name[r]] == 0
+            ):
+                proof_steps.append(f"clear")
+                if eq_use_cnt[eq_name[l]] == 0:
+                    proof_steps[-1] += f" {eq_name[l]}"
+                if eq_use_cnt[eq_name[r]] == 0:
+                    proof_steps[-1] += f" {eq_name[r]}"
             continue
-        m = re.match(r'superposition (\d+),(\d+)', proof)
+        m = re.match(r"superposition (\d+),(\d+)", proof)
         if m is not None:
             l, r = m[1], m[2]
             an = clause_count[eqnum] - clause_count[r] + 1
-            if '∨' in typeof[r]:
-                eqtype = typeof[r].split(' ∨')[0]
+            if "∨" in typeof[r]:
+                eqtype = typeof[r].split(" ∨")[0]
                 if an > 1:
                     proof_steps.append(
-                        f'have eq{eqnum} {variables}: {lean_statement} := Or.assoc{an} ({eq_name[r]}.imp_left (fun h : {eqtype} ↦ superpose h {eq_name[l]})) -- {proof}')
+                        f"have eq{eqnum} {variables}: {lean_statement} := Or.assoc{an} ({eq_name[r]}.imp_left (fun h : {eqtype} ↦ superpose h {eq_name[l]})) -- {proof}"
+                    )
                 else:
                     proof_steps.append(
-                        f'have eq{eqnum} {variables}: {lean_statement} := {eq_name[r]}.imp_left (fun h : {eqtype} ↦ superpose h {eq_name[l]}) -- {proof}')
+                        f"have eq{eqnum} {variables}: {lean_statement} := {eq_name[r]}.imp_left (fun h : {eqtype} ↦ superpose h {eq_name[l]}) -- {proof}"
+                    )
             else:
                 proof_steps.append(
-                    f'have eq{eqnum} {variables}: {lean_statement} := superpose {eq_name[r]} {eq_name[l]} -- {proof}')
+                    f"have eq{eqnum} {variables}: {lean_statement} := superpose {eq_name[r]} {eq_name[l]} -- {proof}"
+                )
             eq_use_cnt[eq_name[l]] -= 1
             eq_use_cnt[eq_name[r]] -= 1
-            if do_clear and (eq_use_cnt[eq_name[l]] == 0 or eq_use_cnt[eq_name[r]] == 0):
-                proof_steps.append(f'clear')
-                if eq_use_cnt[eq_name[l]] == 0: proof_steps[-1] += f' {eq_name[l]}'
-                if eq_use_cnt[eq_name[r]] == 0: proof_steps[-1] += f' {eq_name[r]}'
+            if do_clear and (
+                eq_use_cnt[eq_name[l]] == 0 or eq_use_cnt[eq_name[r]] == 0
+            ):
+                proof_steps.append(f"clear")
+                if eq_use_cnt[eq_name[l]] == 0:
+                    proof_steps[-1] += f" {eq_name[l]}"
+                if eq_use_cnt[eq_name[r]] == 0:
+                    proof_steps[-1] += f" {eq_name[r]}"
             continue
-        m = re.match(r'(?:backward demodulation|forward demodulation) (\d+),(\d+)', proof)
+        m = re.match(
+            r"(?:backward demodulation|forward demodulation) (\d+),(\d+)", proof
+        )
         if m is not None:
             l, r = m[1], m[2]
-            if variables == '':
+            if variables == "":
                 proof_steps.append(
-                    f'have eq{eqnum} : {lean_statement} := Eq.mp (by simp only [{eq_name[r]}, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) {eq_name[l]} -- {proof}')
+                    f"have eq{eqnum} : {lean_statement} := Eq.mp (by simp only [{eq_name[r]}, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) {eq_name[l]} -- {proof}"
+                )
             else:
                 proof_steps.append(
-                    f'have eq{eqnum} : ∀ {variables}, {lean_statement} := Eq.mp (by simp only [{eq_name[r]}, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) {eq_name[l]} -- {proof}')
+                    f"have eq{eqnum} : ∀ {variables}, {lean_statement} := Eq.mp (by simp only [{eq_name[r]}, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) {eq_name[l]} -- {proof}"
+                )
             eq_use_cnt[eq_name[l]] -= 1
             eq_use_cnt[eq_name[r]] -= 1
-            if do_clear and (eq_use_cnt[eq_name[l]] == 0 or eq_use_cnt[eq_name[r]] == 0):
-                proof_steps.append(f'clear')
-                if eq_use_cnt[eq_name[l]] == 0: proof_steps[-1] += f' {eq_name[l]}'
-                if eq_use_cnt[eq_name[r]] == 0: proof_steps[-1] += f' {eq_name[r]}'
+            if do_clear and (
+                eq_use_cnt[eq_name[l]] == 0 or eq_use_cnt[eq_name[r]] == 0
+            ):
+                proof_steps.append(f"clear")
+                if eq_use_cnt[eq_name[l]] == 0:
+                    proof_steps[-1] += f" {eq_name[l]}"
+                if eq_use_cnt[eq_name[r]] == 0:
+                    proof_steps[-1] += f" {eq_name[r]}"
             continue
-        m = re.match(r'(?:duplicate literal removal|equality resolution|trivial inequality removal) (\d+)', proof)
+        m = re.match(
+            r"(?:duplicate literal removal|equality resolution|trivial inequality removal) (\d+)",
+            proof,
+        )
         if m is not None:
             e = m[1]
             proof_steps.append(
-                f'have eq{eqnum} {variables}: {lean_statement} := resolve {eq_name[e]} rfl -- {proof}')
+                f"have eq{eqnum} {variables}: {lean_statement} := resolve {eq_name[e]} rfl -- {proof}"
+            )
             eq_use_cnt[eq_name[e]] -= 1
-            if do_clear and eq_use_cnt[eq_name[e]] == 0: proof_steps.append(f'clear {eq_name[e]}')
+            if do_clear and eq_use_cnt[eq_name[e]] == 0:
+                proof_steps.append(f"clear {eq_name[e]}")
             continue
-        m = re.match(r'equality factoring (\d+)', proof)
+        m = re.match(r"equality factoring (\d+)", proof)
         if m is not None:
             e = m[1]
             proof_steps.append(
-                f'have eq{eqnum} {variables}: {lean_statement} := resolve {eq_name[e]} trans_resol -- {proof}')
+                f"have eq{eqnum} {variables}: {lean_statement} := resolve {eq_name[e]} trans_resol -- {proof}"
+            )
             eq_use_cnt[eq_name[e]] -= 1
-            if do_clear and eq_use_cnt[eq_name[e]] == 0: proof_steps.append(f'clear {eq_name[e]}')
+            if do_clear and eq_use_cnt[eq_name[e]] == 0:
+                proof_steps.append(f"clear {eq_name[e]}")
             continue
         proof_steps.append(
-            f'have eq{eqnum} {variables}: {lean_statement} := sorry -- {proof}')
-        print('Not implemented', proof)
-    return lean_proof + '\n  '.join(proof_steps), my_reqs
+            f"have eq{eqnum} {variables}: {lean_statement} := sorry -- {proof}"
+        )
+        print("Not implemented", proof)
+    return lean_proof + "\n  ".join(proof_steps), my_reqs
 
 
 def main():
     eqid = input()
     eq = eqs[int(eqid) - 1]
 
-    rules = load_file(f'data/forcing_rules/{eqid}.rules')
+    rules = load_file(f"data/forcing_rules/{eqid}.rules")
     for i, rule in enumerate(rulify_eq(eq)):
         rules[i + 1] = rule
 
     tptp = construct_tptp(rules)
 
-    newline_two_spaces = '\n  '
-    newline_four_spaces = '\n    '
-    newline2 = '\n\n'
+    newline_two_spaces = "\n  "
+    newline_four_spaces = "\n    "
+    newline2 = "\n\n"
 
     #
-    def_types = [('G', 'Type*'), ('a b c', 'G'), ('old', 'G → G → G → Prop'), ('new', 'G → G → G → Prop')]
-    types = [('ac', 'a ≠ c'), ('bc', 'c ≠ b'), ('p3', '∀ X0, ¬ old a b X0'), ('p4XY', '∀ X1 X2, ¬ old X1 X2 c'),
-                ('p4XZ', '∀ X1 X2, ¬ old X1 c X2'), ('p4YZ', '∀ X1 X2, ¬ old c X1 X2'), ('new_new', 'new a b c')]
+    def_types = [
+        ("G", "Type*"),
+        ("a b c", "G"),
+        ("old", "G → G → G → Prop"),
+        ("new", "G → G → G → Prop"),
+    ]
+    types = [
+        ("ac", "a ≠ c"),
+        ("bc", "c ≠ b"),
+        ("p3", "∀ X0, ¬ old a b X0"),
+        ("p4XY", "∀ X1 X2, ¬ old X1 X2 c"),
+        ("p4XZ", "∀ X1 X2, ¬ old X1 c X2"),
+        ("p4YZ", "∀ X1 X2, ¬ old c X1 X2"),
+        ("new_new", "new a b c"),
+    ]
 
     for i, x in enumerate(rules):
-        types.append((f'old_{i}', x.to_lean('old')))
-        types.append((f'prev_{i}', x.to_lean('new')))
-
+        types.append((f"old_{i}", x.to_lean("old")))
+        types.append((f"prev_{i}", x.to_lean("new")))
 
     leandefs = []
 
-    defs = [((), [('a', 'X'), ('b', 'Y'), ('c', 'Z')])] + [y for x in rules for y in
-                                                                                    x.to_defs()]
+    defs = [((), [("a", "X"), ("b", "Y"), ("c", "Z")])] + [
+        y for x in rules for y in x.to_defs()
+    ]
     skolem_index = 0
     def_index = 0
     for i, (vars, d) in enumerate(defs):
-        types.append((f'imp_new_{i+1}', f'∀ {" ".join(["X", "Y", "Z", *vars])}, {" ∨ ".join(lean_single_negated("old", x) for x in d)} ∨ new X Y Z'))
+        types.append(
+            (
+                f"imp_new_{i+1}",
+                f'∀ {" ".join(["X", "Y", "Z", *vars])}, {" ∨ ".join(lean_single_negated("old", x) for x in d)} ∨ new X Y Z',
+            )
+        )
         skolemification = {}
         last_skolem = skolem_index
         for v in vars:
-            skolemification[v] = f'sF{skolem_index}'
-            def_types.append((f'sF{skolem_index}', 'G → G → G → G'))
+            skolemification[v] = f"sF{skolem_index}"
+            def_types.append((f"sF{skolem_index}", "G → G → G → G"))
             skolem_index += 1
-        ld = f'let sP{def_index} (X Y Z) := '
+        ld = f"let sP{def_index} (X Y Z) := "
         if vars:
-            ld += '∃ ' + ' '.join(f'sF{i}' for i in range(last_skolem, skolem_index)) + ', '
-        def_types.append((f'sP{def_index}', 'G → G → G → Prop'))
-        thingy = ' ∧ '.join(lean_single('ps.R', [skolemification.get(x, x) for x in sk]) for sk in d)
+            ld += (
+                "∃ "
+                + " ".join(f"sF{i}" for i in range(last_skolem, skolem_index))
+                + ", "
+            )
+        def_types.append((f"sP{def_index}", "G → G → G → Prop"))
+        thingy = " ∧ ".join(
+            lean_single("ps.R", [skolemification.get(x, x) for x in sk]) for sk in d
+        )
         ld += thingy
         ld += newline_two_spaces
         if vars:
             ld += f'choose! {" ".join(f"sF{i}" for i in range(last_skolem, skolem_index))} hsP{def_index} using fun (X Y Z) (h : sP{def_index} X Y Z) ↦ h{newline_two_spaces}'
         else:
-            ld += f'have hsP{def_index} (X Y Z) (h : sP{def_index} X Y Z) : {thingy} := h{newline_two_spaces}'
-        ld += f'simp only [imp_and, imp_iff_not_or, forall_and] at hsP{def_index}{newline_two_spaces}'
+            ld += f"have hsP{def_index} (X Y Z) (h : sP{def_index} X Y Z) : {thingy} := h{newline_two_spaces}"
+        ld += f"simp only [imp_and, imp_iff_not_or, forall_and] at hsP{def_index}{newline_two_spaces}"
         ld += f'obtain ⟨{", ".join(f"rule_def_{def_index}_{i}" for i in range(len(d)))}⟩ := hsP{def_index}{newline_two_spaces}'
         ld += f'simp_rw [or_comm] at {" ".join(f"rule_def_{def_index}_{i}" for i in range(len(d)))}'
         for i, x in enumerate(d):
-            x = [f'({skolemification[y]} X Y Z)' if y in skolemification else y for y in x]
-            types.append((f'rule_def_{def_index}_{i}', f'∀ (X Y Z : G), {lean_single("old", x)} ∨ ¬sP{def_index} X Y Z'))
+            x = [
+                f"({skolemification[y]} X Y Z)" if y in skolemification else y
+                for y in x
+            ]
+            types.append(
+                (
+                    f"rule_def_{def_index}_{i}",
+                    f'∀ (X Y Z : G), {lean_single("old", x)} ∨ ¬sP{def_index} X Y Z',
+                )
+            )
 
         leandefs.append(ld)
         def_index += 1
 
-    types.append(('new_imp', f'∀ (X Y Z), ¬ new X Y Z ∨ old X Y Z ∨ {" ∨ ".join(f"sP{i} X Y Z" for i in range(len(leandefs)))}'))
-    types.append(('imp_new_0', f'∀ (X Y Z), ¬ old X Y Z ∨ new X Y Z'))
+    types.append(
+        (
+            "new_imp",
+            f'∀ (X Y Z), ¬ new X Y Z ∨ old X Y Z ∨ {" ∨ ".join(f"sP{i} X Y Z" for i in range(len(leandefs)))}',
+        )
+    )
+    types.append(("imp_new_0", f"∀ (X Y Z), ¬ old X Y Z ∨ new X Y Z"))
 
     # print(def_types)
     # print(types)
@@ -257,49 +336,96 @@ def main():
         inp = tptp
         for j in range(i):
             inp += f'fof(prev_{j}, axiom, {rules[j].to_tptp("new")}).'
-        for j, v in enumerate(rule.to_tptp_negated('new')):
-            inp += f'fof(preserve_{j}, negated_conjecture, {v}).\n'
-        proof : str = subprocess.check_output(['~/Downloads/vampire', '--proof_extra', 'full', '-av', 'off',
-                                                   '--output_axiom_names', 'on',
-                                                   '/proc/self/fd/0', '-t', '300'], input=inp.encode()).decode()
-        lean_proof, my_reqs = proof_maker(proof, i, rule.to_lean('new'), rule.vars, len(rule.preconditions) + 1, def_types, types)
+        for j, v in enumerate(rule.to_tptp_negated("new")):
+            inp += f"fof(preserve_{j}, negated_conjecture, {v}).\n"
+        proof: str = subprocess.check_output(
+            [
+                "~/Downloads/vampire",
+                "--proof_extra",
+                "full",
+                "-av",
+                "off",
+                "--output_axiom_names",
+                "on",
+                "/proc/self/fd/0",
+                "-t",
+                "300",
+            ],
+            input=inp.encode(),
+        ).decode()
+        lean_proof, my_reqs = proof_maker(
+            proof,
+            i,
+            rule.to_lean("new"),
+            rule.vars,
+            len(rule.preconditions) + 1,
+            def_types,
+            types,
+        )
         proof_reqs[i] = my_reqs
 
         leanproofs.append(lean_proof)
 
-    def_types.append(('memold', 'G → Prop'))
-    types.extend([('old_mem1', '∀ (X Y Z), ¬old X Y Z ∨ memold X'),
-                  ('old_mem2', '∀ (X Y Z), ¬old X Y Z ∨ memold Y'),
-                  ('old_mem3', '∀ (X Y Z), ¬old X Y Z ∨ memold Z')])
+    def_types.append(("memold", "G → Prop"))
+    types.extend(
+        [
+            ("old_mem1", "∀ (X Y Z), ¬old X Y Z ∨ memold X"),
+            ("old_mem2", "∀ (X Y Z), ¬old X Y Z ∨ memold Y"),
+            ("old_mem3", "∀ (X Y Z), ¬old X Y Z ∨ memold Z"),
+        ]
+    )
 
     for memv in range(3):
         inp = tptp
-        inp += f'fof(old_mem1, axiom, ! [X, Y, Z] : (~old(X, Y, Z) | memold(X))).\n'
-        inp += f'fof(old_mem2, axiom, ! [X, Y, Z] : (~old(X, Y, Z) | memold(Y))).\n'
-        inp += f'fof(old_mem3, axiom, ! [X, Y, Z] : (~old(X, Y, Z) | memold(Z))).\n'
-        inp += f'fof(preserve_0, negated_conjecture, new(sk0, sk1, sk2)).\n'
-        inp += f'fof(preserve_1, negated_conjecture, sk{memv} != a).\n'
-        inp += f'fof(preserve_2, negated_conjecture, sk{memv} != b).\n'
-        inp += f'fof(preserve_3, negated_conjecture, ~memold(sk{memv})).\n'
-        inp += f'fof(preserve_4, negated_conjecture, sk{memv} != c).\n'
+        inp += f"fof(old_mem1, axiom, ! [X, Y, Z] : (~old(X, Y, Z) | memold(X))).\n"
+        inp += f"fof(old_mem2, axiom, ! [X, Y, Z] : (~old(X, Y, Z) | memold(Y))).\n"
+        inp += f"fof(old_mem3, axiom, ! [X, Y, Z] : (~old(X, Y, Z) | memold(Z))).\n"
+        inp += f"fof(preserve_0, negated_conjecture, new(sk0, sk1, sk2)).\n"
+        inp += f"fof(preserve_1, negated_conjecture, sk{memv} != a).\n"
+        inp += f"fof(preserve_2, negated_conjecture, sk{memv} != b).\n"
+        inp += f"fof(preserve_3, negated_conjecture, ~memold(sk{memv})).\n"
+        inp += f"fof(preserve_4, negated_conjecture, sk{memv} != c).\n"
         # for j, v in enumerate(rule.to_tptp_negated('new')):
         #     inp += f'fof(preserve_{j}, negated_conjecture, {v}).\n'
         proof: str = subprocess.check_output(
-            ['~/Downloads/vampire', '--proof_extra', 'full', '-av', 'off',
-             '--output_axiom_names', 'on',
-             '/proc/self/fd/0', '-t', '60'], input=inp.encode()).decode()
-        lean_proof, my_reqs = proof_maker(proof, f'finite_{memv}', f'∀ (X Y Z : G), ¬new X Y Z ∨ {"XYZ"[memv]} = a ∨ {"XYZ"[memv]} = b ∨ memold {"XYZ"[memv]} ∨ {"XYZ"[memv]} = c',
-                                          3, 5, def_types, types)
-        proof_reqs[f'finite_{memv}'] = my_reqs
+            [
+                "~/Downloads/vampire",
+                "--proof_extra",
+                "full",
+                "-av",
+                "off",
+                "--output_axiom_names",
+                "on",
+                "/proc/self/fd/0",
+                "-t",
+                "60",
+            ],
+            input=inp.encode(),
+        ).decode()
+        lean_proof, my_reqs = proof_maker(
+            proof,
+            f"finite_{memv}",
+            f'∀ (X Y Z : G), ¬new X Y Z ∨ {"XYZ"[memv]} = a ∨ {"XYZ"[memv]} = b ∨ memold {"XYZ"[memv]} ∨ {"XYZ"[memv]} = c',
+            3,
+            5,
+            def_types,
+            types,
+        )
+        proof_reqs[f"finite_{memv}"] = my_reqs
 
         leanproofs.append(lean_proof)
 
-    replacements = {'old': 'ps.R', 'memold': '(· ∈ ps.finsupp)', 'old_mem1': 'ps.mem_1', 'old_mem2': 'ps.mem_2',
-                    'old_mem3': 'ps.mem_3'}
+    replacements = {
+        "old": "ps.R",
+        "memold": "(· ∈ ps.finsupp)",
+        "old_mem1": "ps.mem_1",
+        "old_mem2": "ps.mem_2",
+        "old_mem3": "ps.mem_3",
+    }
     for i in range(len(rules)):
-        replacements[f'old_{i}'] = f'ps.rule_{i}'
+        replacements[f"old_{i}"] = f"ps.rule_{i}"
 
-    lean = f'''import equational_theories.Equations.All
+    lean = f"""import equational_theories.Equations.All
 import equational_theories.Generated.Greedy.OrLemmas
 import equational_theories.Superposition
 import Mathlib.Data.Fintype.Card
@@ -464,27 +590,29 @@ theorem PartialSolution.toMagma_equation{eqid} :
   simpa [← PartialSolution.complFun_eq_iff, eq_comm] using
     ps.compl_rule1 {rules[1].to_fun_app('ps.complFun')}
 
-'''
+"""
 
-    with open('unknowns.json', 'r') as fs:
+    with open("unknowns.json", "r") as fs:
         data = json.load(fs)
 
     # print(tptp)
 
     for rel in data:
-        if rel['lhs'] == f'Equation{eqid}':
-            rhs_id = rel['rhs'][len('Equation'):]
+        if rel["lhs"] == f"Equation{eqid}":
+            rhs_id = rel["rhs"][len("Equation") :]
             rhs = eqs[int(rhs_id) - 1]
-            inp = f''
+            inp = f""
             for i, rule in enumerate(rules):
                 inp += f'fof(old_{i}, axiom, {rule.to_tptp("old")}).\n'
             ort = rulify_eq2(rhs)
             inp += f'fof(test, conjecture, {ort.to_tptp("old")}).\n'
             print(rules, inp)
-            out = subprocess.check_output(['~/Downloads/vampire', '-sa', 'fmb',
-                                           '/proc/self/fd/0', '-t', '30'], input=inp.encode()).decode()
-            old = re.findall(r'(?<!~)old\(([\w\'$]+),([\w\'$]+),([\w\'$]+)\)', out)
-            old = [[int(x.split('_')[-1][:-1]) for x in y] for y in old]
+            out = subprocess.check_output(
+                ["~/Downloads/vampire", "-sa", "fmb", "/proc/self/fd/0", "-t", "30"],
+                input=inp.encode(),
+            ).decode()
+            old = re.findall(r"(?<!~)old\(([\w\'$]+),([\w\'$]+),([\w\'$]+)\)", out)
+            old = [[int(x.split("_")[-1][:-1]) for x in y] for y in old]
             print(old)
             print(out)
             mp = {}
@@ -497,11 +625,13 @@ theorem PartialSolution.toMagma_equation{eqid} :
                 if ort.precond(assignment, mp):
                     v = ort.conc(assignment, mp)
                     if v is not None and not (len(v) == 2 and v[0] == v[1]):
-                        enda = [assignment[ort.varmap[i]] for i in range(count_vars(rhs))]
+                        enda = [
+                            assignment[ort.varmap[i]] for i in range(count_vars(rhs))
+                        ]
                         print(v, enda, assignment)
                         break
 
-            lean += f'''
+            lean += f"""
 set_option maxRecDepth 1000 in
 noncomputable def PartialSolution.counter{rhs_id} : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({{{", ".join(f'{tuple(x)}' for x in old)}}} : Finset _)
@@ -519,15 +649,15 @@ theorem _root_.Equation{eqid}_not_implies_Equation{rhs_id} : ∃ (G : Type) (_ :
   repeat (first | {' | '.join(f'rw [PartialSolution.counter{rhs_id}.of_R {a} {b} {c}]' for a, b, c in old)})
   all_goals simp [PartialSolution.counter{rhs_id}]
 
-'''
+"""
 
-    lean += f'end Eq{eqid}'
+    lean += f"end Eq{eqid}"
 
     # print(lean)
 
-    with open(f'equational_theories/Generated/Greedy/Eq{eqid}.lean', 'w') as f:
+    with open(f"equational_theories/Generated/Greedy/Eq{eqid}.lean", "w") as f:
         f.write(lean)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
