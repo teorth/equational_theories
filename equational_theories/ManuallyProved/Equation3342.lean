@@ -13,6 +13,7 @@ def op (a b : Option (ℕ × ℕ)) : Option (ℕ × ℕ) :=
     none
   | _, _ => none
 
+@[equational_result]
 theorem Equation3342_facts : ∃ (G : Type) (_ : Magma G), Facts G [3342] [3456, 3522, 4065, 4118] := by
   use Option (ℕ × ℕ), ⟨op⟩
   split_ands
