@@ -1,5 +1,6 @@
 import Mathlib.Algebra.Group.Nat
 
+-- Mathlib PR: https://github.com/leanprover-community/mathlib4/pull/17977
 @[simp]
 theorem Nat.xor_mod_two_eq (a b : ℕ) : (a ^^^ b) % 2 = (a + b) % 2 := by
   by_cases h : (a + b) % 2 = 0
@@ -10,6 +11,7 @@ theorem Nat.xor_mod_two_eq (a b : ℕ) : (a ^^^ b) % 2 = (a + b) % 2 := by
     simp [h]
     omega
 
+-- Mathlib PR: https://github.com/leanprover-community/mathlib4/pull/17977
 @[simp]
 theorem Nat.even_xor (a b : ℕ) : Even (a ^^^ b) ↔ (Even a ↔ Even b) := by
   simp only [even_iff, xor_mod_two_eq]
