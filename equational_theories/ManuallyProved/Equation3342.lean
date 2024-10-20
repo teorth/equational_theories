@@ -32,7 +32,7 @@ theorem Equation3342_facts : ∃ (G : Type) (_ : Magma G), Facts G [3342] [3456,
       · omega
       · simp_all
       · omega
-      · simp only [not_and, not_or, not_le, Option.some.injEq, Prod.mk.injEq, and_true]
+      · simp only [Option.some.injEq, Prod.mk.injEq, and_true]
         omega
       · omega
       · omega
