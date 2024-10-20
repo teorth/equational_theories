@@ -26,11 +26,12 @@ Example:
 import json
 import csv
 
+
 def load_json_file(file_path):
     """Load a JSON file from the specified path."""
     print(f"Loading JSON data from: {file_path}")
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             data = json.load(file)
         print("JSON file loaded successfully.")
         return data
@@ -41,31 +42,34 @@ def load_json_file(file_path):
         print(f"Error: The file at {file_path} is not valid JSON.")
         raise
 
+
 def generate_edge_list(data):
     """Generate an edge list from the given dataset."""
     print("Generating edge list from equations and outcomes...")
     edge_list = []
 
-    for i, equation_x in enumerate(data['equations']):
-        for j, outcome in enumerate(data['outcomes'][i]):
-            equation_y = data['equations'][j]
+    for i, equation_x in enumerate(data["equations"]):
+        for j, outcome in enumerate(data["outcomes"][i]):
+            equation_y = data["equations"][j]
             edge_list.append((equation_x, equation_y, outcome))
 
     print(f"Edge list generated with {len(edge_list)} entries.")
     return edge_list
 
+
 def save_edge_list_to_csv(edge_list, output_file_path):
     """Save the edge list to a CSV file."""
     print(f"Saving edge list to CSV file: {output_file_path}")
     try:
-        with open(output_file_path, mode='w', newline='', encoding='utf-8') as file:
+        with open(output_file_path, mode="w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
-            writer.writerow(['Source', 'Target', 'Outcome'])
+            writer.writerow(["Source", "Target", "Outcome"])
             writer.writerows(edge_list)
         print(f"Edge list successfully saved to {output_file_path}")
     except Exception as e:
         print(f"Error while saving to CSV: {e}")
         raise
+
 
 def main():
     """Main function to load data, generate the edge list, and save it to a CSV file."""
@@ -77,6 +81,7 @@ def main():
     data = load_json_file(input_data_path)
     edge_list = generate_edge_list(data)
     save_edge_list_to_csv(edge_list, output_data_path)
+
 
 if __name__ == "__main__":
     # Execute the script
