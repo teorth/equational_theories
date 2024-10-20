@@ -257,7 +257,7 @@ def main():
             inp += f'fof(prev_{j}, axiom, {rules[j].to_tptp("new")}).'
         for j, v in enumerate(rule.to_tptp_negated('new')):
             inp += f'fof(preserve_{j}, negated_conjecture, {v}).\n'
-        proof : str = subprocess.check_output(['/home/commandmaster/Downloads/vampire', '--proof_extra', 'full', '-av', 'off',
+        proof : str = subprocess.check_output(['~/Downloads/vampire', '--proof_extra', 'full', '-av', 'off',
                                                    '--output_axiom_names', 'on',
                                                    '/proc/self/fd/0', '-t', '300'], input=inp.encode()).decode()
         lean_proof, my_reqs = proof_maker(proof, i, rule.to_lean('new'), rule.vars, len(rule.preconditions) + 1, def_types, types)
@@ -283,7 +283,7 @@ def main():
         # for j, v in enumerate(rule.to_tptp_negated('new')):
         #     inp += f'fof(preserve_{j}, negated_conjecture, {v}).\n'
         proof: str = subprocess.check_output(
-            ['/home/commandmaster/Downloads/vampire', '--proof_extra', 'full', '-av', 'off',
+            ['~/Downloads/vampire', '--proof_extra', 'full', '-av', 'off',
              '--output_axiom_names', 'on',
              '/proc/self/fd/0', '-t', '60'], input=inp.encode()).decode()
         lean_proof, my_reqs = proof_maker(proof, f'finite_{memv}', f'∀ (X Y Z : G), ¬new X Y Z ∨ {"XYZ"[memv]} = a ∨ {"XYZ"[memv]} = b ∨ memold {"XYZ"[memv]} ∨ {"XYZ"[memv]} = c',
@@ -313,7 +313,7 @@ structure PartialSolution (G : Type*) where
   finsupp : Finset G
   mem_1 : ∀ X Y Z, ¬R X Y Z ∨ X ∈ finsupp
   mem_2 : ∀ X Y Z, ¬R X Y Z ∨ Y ∈ finsupp
-  mem_3 : ∀ X Y Z, ¬R X Y Z ∨ Z ∈ finsupp  
+  mem_3 : ∀ X Y Z, ¬R X Y Z ∨ Z ∈ finsupp
 
 variable {{G : Type*}} (ps : PartialSolution G)
 
@@ -479,7 +479,7 @@ theorem PartialSolution.toMagma_equation{eqid} :
             ort = rulify_eq2(rhs)
             inp += f'fof(test, conjecture, {ort.to_tptp("old")}).\n'
             print(rules, inp)
-            out = subprocess.check_output(['/home/commandmaster/Downloads/vampire', '-sa', 'fmb',
+            out = subprocess.check_output(['~/Downloads/vampire', '-sa', 'fmb',
                                            '/proc/self/fd/0', '-t', '30'], input=inp.encode()).decode()
             old = re.findall(r'(?<!~)old\(([\w\'$]+),([\w\'$]+),([\w\'$]+)\)', out)
             old = [[int(x.split('_')[-1][:-1]) for x in y] for y in old]

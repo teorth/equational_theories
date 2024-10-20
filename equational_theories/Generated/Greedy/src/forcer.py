@@ -101,7 +101,7 @@ class Rule:
             tptp_r += f'fof(test, conjecture, mul(sk{self.conclusion[0]}, sk{self.conclusion[1]}) = sk{self.conclusion[2]}).\n'
         try:
             st = time.perf_counter()
-            out = subprocess.check_output(['/home/commandmaster/Downloads/vampire', '-t', '0.1', '/proc/self/fd/0'],
+            out = subprocess.check_output(['~/Downloads/vampire', '-t', '0.1', '/proc/self/fd/0'],
                                           input=tptp_r.encode()).decode()
             if 'Termination reason: Refutation' in out:
                 print(f'Confirmed in {time.perf_counter() - st:.3}s')
@@ -381,7 +381,7 @@ def main(timeout, find_rules):
         try:
             if not find_rules:
                 raise CalledProcessError(1, 'not testing')
-            out = subprocess.check_output(['/home/commandmaster/Downloads/vampire', '--mode', 'portfolio',
+            out = subprocess.check_output(['~/Downloads/vampire', '--mode', 'portfolio',
                                   '--schedule', 'file', '--schedule_file', 'finsched.sch',
                                   '--cores', '0', '/proc/self/fd/0', '-t', '600'], input=inp.encode()).decode()
             if 'Termination reason: Refutation' in out:
@@ -415,7 +415,7 @@ def main(timeout, find_rules):
                 for j, v in enumerate(rule.to_tptp_negated('new')):
                     inp += f'fof(preserve_{j}, negated_conjecture, {v}).\n'
                 try:
-                    out = subprocess.check_output(['/home/commandmaster/Downloads/vampire', '--mode', 'casc', '--cores', '0',
+                    out = subprocess.check_output(['~/Downloads/vampire', '--mode', 'casc', '--cores', '0',
                                                    '/proc/self/fd/0', '-t', '60'], input=inp.encode()).decode()
                     with open(f'data/forcing_rules/{eqid}_{i+1}.proof', 'w') as f:
                         f.write(inp)
