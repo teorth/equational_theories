@@ -130,6 +130,10 @@ def first {α} : FreeMagma α → α
   | Lf a => a
   | lchild ⋆ _ => lchild.first
 
+def last {α} : FreeMagma α → α
+  | Lf a => a
+  | _ ⋆ rchild => rchild.last
+
 theorem first_mem {α} : ∀ m : FreeMagma α, Mem m.first m
   | Lf _ => rfl
   | lchild ⋆ _ => .inl lchild.first_mem
