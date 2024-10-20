@@ -11,8 +11,7 @@ def op (a b : Option (ℕ × ℕ)) : Option (ℕ × ℕ) :=
     if b + 1 = d ∧ a ≥ c then (a-c+1, b) else
     if b = d + 1 ∧ a < c then (c-a, d) else
     none
-  | none, _ => none
-  | _, none => none
+  | _, _ => none
 
 theorem Equation3342_facts : ∃ (G : Type) (_ : Magma G), Facts G [3342] [3456, 3522, 4065, 4118] := by
   use Option (ℕ × ℕ), ⟨op⟩
@@ -23,7 +22,7 @@ theorem Equation3342_facts : ∃ (G : Type) (_ : Magma G), Facts G [3342] [3456,
     · rfl
     · rfl
     cases y
-    · simp [op]
+    · rfl
     · simp [op]
       split_ifs
       · simp_all
