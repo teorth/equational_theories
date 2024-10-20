@@ -1,20 +1,61 @@
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
-import Mathlib.Algebra.Polynomial.RingDivision
-
-open Polynomial
+import equational_theories.FactsSyntax
 
 namespace Eq3342
 
-noncomputable section
+def op (a b : Option (ℕ × ℕ)) : Option (ℕ × ℕ) :=
+  match a, b with
+  | some (a, b),  some (c, d) =>
+    if b = d ∧ (a = c ∨ a + 1 = c) then (0, b + 1) else
+    if b + 1 = d ∧ a ≥ c then (a-c+1, b) else
+    if b = d + 1 ∧ a < c then (c-a, d) else
+    none
+  | none, _ => none
+  | _, none => none
 
-open scoped Classical in
-def op (a b : ℤ[X]) : ℤ[X] :=
-  if a = b ∨ a * X = b then 2 * a /ₘ X ^ a.natTrailingDegree else
-  if ∃ m, 2 * a = b * X^m then X * a /ₘ X ^ a.natTrailingDegree else
-  if ∃ m, 2 * b = a * X^(m+1) then X * b /ₘ X ^ b.natTrailingDegree else
-  0
+theorem Equation3342_facts : ∃ (G : Type) (_ : Magma G), Facts G [3342] [3456, 3522, 4065, 4118] := by
+  use Option (ℕ × ℕ), ⟨op⟩
+  split_ands
+  · intro x y
+    cases x
+    cases y
+    · rfl
+    · rfl
+    cases y
+    · simp [op]
+    · simp [op]
+      split_ifs
+      · simp_all
+      · simp_all
+      · simp_all
+      · omega
+      · simp_all
+      · omega
+      · simp only [not_and, not_or, not_le, Option.some.injEq, Prod.mk.injEq, and_true]
+        omega
+      · omega
+      · omega
+      · simp only [Option.some.injEq, Prod.mk.injEq, and_true]
+        omega
+      · simp only [Option.some.injEq, Prod.mk.injEq]
+        omega
+      · omega
+      · omega
+      · omega
+      · omega
+      · rfl
+  · simp only [not_forall]
+    use (0, 0)
+    decide
+  · simp only [not_forall]
+    use (0, 0), (0, 0)
+    decide
+  · simp only [not_forall]
+    use (0, 0)
+    decide
+  · simp only [not_forall]
+    use (0, 0), (0, 0)
+    decide
 
-
-
-end
+end Eq3342
