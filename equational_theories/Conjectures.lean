@@ -62,7 +62,7 @@ conjecture Equation917_facts : ∃ (G : Type) (_ : Magma G), Facts G [917] [1629
 
 /-- https://teorth.github.io/equational_theories/blueprint/infinite-magma-constructions-chapter.html#adhoc-model -/
 @[equational_result]
-conjecture Equation3342_facts : ∃ (G : Type) (_ : Magma G), Facts G [3342] [3456, 3522, 4065, 4118]
+conjecture Equation3475_facts : ∃ (G : Type) (_ : Magma G), Facts G [3475] [3659]
 
 
 end Conjectures
