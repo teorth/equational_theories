@@ -208,135 +208,103 @@ def initial : PartialSolution where
   noSuppN _ _ := id
   noSuppM _ _ := id
 
-/-- The first element to add to the empty solution is "0". -/
-theorem nextElemToAdd_initial_zero : initial.nextElemToAdd = (0:A) := by
-  unfold nextElemToAdd
-  simp
-  have : (fun a ↦ Classical.propDecidable (∃ x : { x // x ∉ initial.Supp },
-      @Encodable.decode { x // x ∉ initial.Supp } (open Classical in Subtype.encodable) a = some x)) =
-      (fun a ↦ Decidable.isTrue (by
-        simp
-      )) := by
-    funext
-    ext
-  sorry
+noncomputable def initial' : PartialSolution := initial.add (x := 0) (by simp [initial])
 
 /--
---Pick two elements for the counterexample, x and y. We'll also need their difference.
+--Pick two elements for the counterexample, x and y. We'll also elements generated from them.
 -/
-def x : A := 0
-def y : A := fun₀ | (0, 1) => 1
-def my : A := fun₀ | (0, 1) => -1
-def z : A := fun₀ | (0, 6) => 1
+abbrev x : A := 0
+abbrev y : A := fun₀ | (0, 1) => 1
+abbrev my : A := fun₀ | (0, 1) => -1
+abbrev z : A := fun₀ | (0, 6) => 1
+abbrev w : A := fun₀ | (0, 6) => 1 | (0, 1) => 1
+abbrev fw : A := fun₀ | (0, 2) => 1
+abbrev v : A := fun₀ | (0, 2) => 1 | (0, 1) => -1
+-- abbrev v : A := fun₀ | (0, 1) => 1
 
 open Classical
 
-theorem x_sub_y_eq_my : x - y = my := by simp [x, y, my]
+theorem x_sub_y_eq_my : x - y = my := by decide
+theorem w_def : y + z - x = w := by decide
+theorem v_def : fw - y = v := by decide
 
---We'll need to prove that they occur at positions 0 and 1, respectively, in order to get
---their values from f. No elements are at step 0 (empty function).
-theorem none_in_initial : ∀ (z:A), ¬Nat.find (initial.closureSeq_eventually_total z) = 0 := by
-  simp [Nat.find_eq_zero, initial, closure, closureSeq]
+theorem h_pos_x : x ∈ initial'.Supp := Or.inr ⟨0, by native_decide⟩
+theorem h_pos_y : y ∈ initial'.Supp := Or.inr ⟨1, by native_decide⟩
+theorem h_pos_my : my ∈ initial'.Supp := Or.inr ⟨5, by native_decide⟩
+theorem h_pos_z : z ∈ initial'.Supp := Or.inr ⟨11, by native_decide⟩
+theorem h_pos_w : w ∈ initial'.Supp := Or.inr ⟨6, by native_decide⟩
+theorem h_pos_fw : fw ∈ initial'.Supp := Or.inr ⟨13, by native_decide⟩
+theorem h_pos_v : v ∈ initial'.Supp := Or.inr ⟨2, by native_decide⟩
 
---x occurs at step 1 (first tree), at position 0. f(x) = y.
-theorem h_pos_x : ((initial.closureSeq 0).bifurcationTree
-    (closureSeq.proof_2 initial 0) 0) = (x,y) := by
-  simpa [bifurcationTree, closureSeq, initial, y] using nextElemToAdd_initial_zero
+theorem h_pos_x' : x ∈ Set.range fun n ↦ (initial.bifurcationTree initial'.proof_1 n).1 :=
+  h_pos_x.casesOn (fun h ↦ h.elim) id
 
-theorem h_pos_my : ((initial.closureSeq 0).bifurcationTree
-    (closureSeq.proof_2 initial 0) 5) = (my,z) := by
-  simp [my, closureSeq, nextElemToAdd_initial_zero]
+theorem h_pos_y' : y ∈ Set.range fun n ↦ (initial.bifurcationTree initial'.proof_1 n).1 :=
+  h_pos_y.casesOn (fun h ↦ h.elim) id
+
+theorem h_pos_my' : my ∈ Set.range fun n ↦ (initial.bifurcationTree initial'.proof_1 n).1 :=
+  h_pos_my.casesOn (fun h ↦ h.elim) id
+
+theorem h_pos_w' : w ∈ Set.range fun n ↦ (initial.bifurcationTree initial'.proof_1 n).1 :=
+  h_pos_w.casesOn (fun h ↦ h.elim) id
+
+theorem h_fx : initial'.f x = y := by
+  simp only [initial', x, y]
+  rw [add]
+  simp only [dif_pos (h_pos_x')]
   native_decide
 
-theorem h_find_x : Nat.find (initial.closureSeq_eventually_total x) = 1 := by
-  suffices Nat.find (initial.closureSeq_eventually_total x) ≤ 1 by
-    have := none_in_initial x; omega
-  apply Nat.find_le
-  apply Or.inr
-  use 0
-  simp [h_pos_x]
+-- theorem h_fy : initial'.f y = w := by
+--   simp only [initial', x, y]
+--   rw [add]
+--   simp only [dif_pos (h_pos_y')]
+--   native_decide
 
-theorem h_find_my : Nat.find (initial.closureSeq_eventually_total my) = 1 := by
-  suffices Nat.find (initial.closureSeq_eventually_total my) ≤ 1 by
-    have := none_in_initial my; omega
-  apply Nat.find_le
-  apply Or.inr
-  use 5
-  simp [h_pos_my]
-
-theorem h_fx_eq_y : initial.closureLinear x = y := by
-  have : ((initial.closureSeq 0).bifurcationTree (closureSeq.proof_2 initial 0) 0).2 = y := by
-    rw [h_pos_x]
-  convert this
-  let this : ∃ y, ((initial.closureSeq 0).bifurcationTree (closureSeq.proof_2 initial 0) y).1 = x := by
-    use 0
-    simp [h_pos_x]
-  simp [closureLinear, add, h_find_x]
-  rw [closureSeq, add]
-  simp only [Set.mem_range, dif_pos this]
-  simp only [closureSeq, nextElemToAdd_initial_zero]
-  unfold this
+theorem h_fmy : initial'.f my = z := by
+  simp only [initial', my, z]
+  rw [add]
+  simp only [dif_pos (h_pos_my')]
   native_decide
 
-theorem h_fmy_eq_z : initial.closureLinear my = z := by
-  have : ((initial.closureSeq 0).bifurcationTree (closureSeq.proof_2 initial 0) 5).2 = z := by
-    rw [h_pos_my]
-  convert this
-  let this : ∃ y, ((initial.closureSeq 0).bifurcationTree (closureSeq.proof_2 initial 0) y).1 = my := by
-    use 5
-    simp [h_pos_my]
-  simp [closureLinear, add, h_find_my]
-  rw [closureSeq, add]
-  simp only [Set.mem_range, dif_pos this]
-  simp only [closureSeq, nextElemToAdd_initial_zero]
-  unfold this
+theorem h_fw : initial'.f w = fw := by
+  simp only [initial', w, fw]
+  rw [add]
+  simp only [dif_pos (h_pos_w')]
   native_decide
 
-#eval initial.bifurcationTree (show 0 ∉ ∅ from id) 5
+theorem h_find_x : Nat.find (initial'.closureSeq_eventually_total x) = 0 := by
+  simp [closureSeq, h_pos_x]
+
+theorem h_find_y : Nat.find (initial'.closureSeq_eventually_total y) = 0 := by
+  simp [closureSeq, h_pos_y]
+
+#eval (List.range 30).map (fun n ↦ (n, initial.bifurcationTree (show 0 ∉ ∅ from id) n))
+
+#eval x + fw
 
 open Classical in
 -- @[equational_result]
 theorem Equation1491_facts : ∃ (G : Type) (_ : Magma G), Facts G [1491] [65] := by
-  use A, ⟨initial.closure⟩
+  use A, ⟨initial'.closure⟩
   simp only [Equation1491, closure_prop, implies_true, not_forall, true_and]
   constructor
-  · exact closure_prop initial
+  · exact closure_prop initial'
   · --Provide the data
-    use x, y
-    --y occurs at step 1 (first tree), at position 1.
-    have h_pos_y : ((initial.closureSeq 0).bifurcationTree
-        (closureSeq.proof_2 initial 0) 1).1 = y := by
-      simp [bifurcationTree, closureSeq, initial]
-    have h_find_y : Nat.find (initial.closureSeq_eventually_total y) = 1 := by
-      suffices Nat.find (initial.closureSeq_eventually_total y) ≤ 1 by
-        have := none_in_initial y; omega
-      apply Nat.find_le
-      apply Or.inr
-      use 1
-    --my occurs at step 1 (first tree), at position 5.
-    have h_pos_my : ((initial.closureSeq 0).bifurcationTree
-        (closureSeq.proof_2 initial 0) 5).1 = my := by
-      simp [my, closureSeq, nextElemToAdd_initial_zero]
-      native_decide
-    have h_find_my : Nat.find (initial.closureSeq_eventually_total my) = 1 := by
-      suffices Nat.find (initial.closureSeq_eventually_total my) ≤ 1 by
-        have := none_in_initial my; omega
-      apply Nat.find_le
-      apply Or.inr
-      use 5
-
+    use y, x
     nth_rewrite 3 [closure]
-    rw [x_sub_y_eq_my]
-    unfold closureLinear
-    -- unfold_let x y my at *
-    -- clear x y my
-    rw [h_find_my]
-    -- unfold initial
-    rw [← x_m_y_eq_my] at h_find_my
-    simp [h_find_x, h_find_y, h_find_my]
-    have := closureSeq.eq_def initial 0
-    set i₀ := initial.bifurcationTree (show 0 ∉ ∅ from id) 0 with hi₀
-    set i₁ := initial.bifurcationTree (show 0 ∉ ∅ from id) 1 with hi₁
-    set i₂ := initial.bifurcationTree (show 0 ∉ ∅ from id) 2 with hi₂
-    simp [initial, bifurcationTree, ← Nat.not_even_iff_odd] at hi₀ hi₁ hi₂
+    rw [x_sub_y_eq_my, closureLinear_extends initial' my h_pos_my, h_fmy]
+    nth_rewrite 2 [closure]
+    rw [w_def, closureLinear_extends initial' w h_pos_w, h_fw, x, closure, zero_add]
+    rw [v_def, closureLinear_extends initial' v h_pos_v]
+    -- -- unfold_let x y my at *
+    -- -- clear x y my
+    -- rw [h_find_my]
+    -- -- unfold initial
+    -- rw [← x_m_y_eq_my] at h_find_my
+    -- simp [h_find_x, h_find_y, h_find_my]
+    -- have := closureSeq.eq_def initial 0
+    -- set i₀ := initial.bifurcationTree (show 0 ∉ ∅ from id) 0 with hi₀
+    -- set i₁ := initial.bifurcationTree (show 0 ∉ ∅ from id) 1 with hi₁
+    -- set i₂ := initial.bifurcationTree (show 0 ∉ ∅ from id) 2 with hi₂
+    -- simp [initial, bifurcationTree, ← Nat.not_even_iff_odd] at hi₀ hi₁ hi₂
     sorry
