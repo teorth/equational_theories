@@ -1,6 +1,5 @@
 import Mathlib.Data.Finset.Basic
 import equational_theories.Completeness
-import equational_theories.MagmaLaw
 
 open Law
 
@@ -19,9 +18,7 @@ def ToCtx {α} (S : Finset (MagmaLaw α)) : Ctx α := S
 
 instance Ctx.hasSubset {α} : HasSubset (Ctx α) := Set.instHasSubset
 
-theorem foo (S T : Set Nat) : S ⊆ S ∪ T := Set.subset_union_left
-
-def derive.Weak {α} {Γ Δ : Ctx α}{E : MagmaLaw α}(inc : Γ ⊆ Δ) (h : Γ ⊢ E) :
+def derive.Weak {α} {Γ Δ : Ctx α} {E : MagmaLaw α} (inc : Γ ⊆ Δ) (h : Γ ⊢ E) :
     Δ ⊢ E := by
   cases h
   case Ax => refine derive.Ax (inc ?_); assumption

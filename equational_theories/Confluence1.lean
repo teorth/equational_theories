@@ -27,8 +27,8 @@ namespace rw477
 
 -- equation 477 := x = y ◇ (x ◇ (y ◇ (y ◇ y)))
 def rule : FreeMagma α → FreeMagma α
-  | m@(y1 ⋆ (x ⋆ (y2 ⋆ (y3 ⋆ y4)))) =>
-      if y1 = y2 ∧ y1 = y3 ∧ y1 = y4 then
+  | m@(y₁ ⋆ (x ⋆ (y₂ ⋆ (y₃ ⋆ y₄)))) =>
+      if y₁ = y₂ ∧ y₁ = y₃ ∧ y₁ = y₄ then
         x
       else
         m
@@ -72,8 +72,8 @@ namespace rw467
 
 -- equation 467 := x = y ◇ (x ◇ (x ◇ (y ◇ y)))
 def rule : FreeMagma α → FreeMagma α
-  | m@(y1 ⋆ (x ⋆ (x2 ⋆ (y2 ⋆ y3)))) =>
-      if y1 = y2 ∧ y1 = y3 ∧ x = x2 then
+  | m@(y₁ ⋆ (x ⋆ (x₂ ⋆ (y₂ ⋆ y₃)))) =>
+      if y₁ = y₂ ∧ y₁ = y₃ ∧ x = x₂ then
         x
       else
         m
@@ -116,8 +116,8 @@ namespace rw504
 
 -- equation 504 := x = y ◇ (y ◇ (x ◇ (y ◇ y)))
 def rule : FreeMagma α → FreeMagma α
-  | m@(y1 ⋆ (y2 ⋆ (x ⋆ (y3 ⋆ y4)))) =>
-      if y1 = y2 ∧ y1 = y3 ∧ y1 = y4 then
+  | m@(y₁ ⋆ (y₂ ⋆ (x ⋆ (y₃ ⋆ y₄)))) =>
+      if y₁ = y₂ ∧ y₁ = y₃ ∧ y₁ = y₄ then
         x
       else
         m
@@ -160,8 +160,8 @@ namespace rw1515
 
 -- equation 1515 := x = (y ◇ y) ◇ (x ◇ (x ◇ x))
 def rule : FreeMagma α → FreeMagma α
-  | m@((y1 ⋆ y2) ⋆ (x ⋆ (x1 ⋆ x2))) =>
-      if y1 = y2 ∧ x = x1 ∧ x = x2 then
+  | m@((y₁ ⋆ y₂) ⋆ (x ⋆ (x₁ ⋆ x₂))) =>
+      if y₁ = y₂ ∧ x = x₁ ∧ x = x₂ then
         x
       else
         m
@@ -199,8 +199,8 @@ namespace rw2038
 
 -- equation 2038 := x = ((x ◇ x) ◇ x) ◇ (y ◇ y)
 def rule : FreeMagma α → FreeMagma α
-  | m@(((x ⋆ x1) ⋆ x2) ⋆ (y1 ⋆ y2)) =>
-      if y1 = y2 ∧ x = x1 ∧ x = x2 then
+  | m@(((x ⋆ x₁) ⋆ x₂) ⋆ (y₁ ⋆ y₂)) =>
+      if y₁ = y₂ ∧ x = x₁ ∧ x = x₂ then
         x
       else
         m
@@ -238,8 +238,8 @@ namespace rw3140
 
 -- equation 3140 := x = (((y ◇ y) ◇ x) ◇ x) ◇ y
 def rule : FreeMagma α → FreeMagma α
-  | m@((((y1 ⋆ y2) ⋆ x) ⋆ x1) ⋆ y3) =>
-      if y1 = y2 ∧ y1 = y3 ∧ x = x1 then
+  | m@((((y₁ ⋆ y₂) ⋆ x) ⋆ x₁) ⋆ y₃) =>
+      if y₁ = y₂ ∧ y₁ = y₃ ∧ x = x₁ then
         x
       else
         m
@@ -282,8 +282,8 @@ namespace rw3143
 
 -- equation 3143 := x = (((y ◇ y) ◇ x) ◇ y) ◇ y
 def rule : FreeMagma α → FreeMagma α
-  | m@((((y1 ⋆ y2) ⋆ x) ⋆ y3) ⋆ y4) =>
-      if y1 = y2 ∧ y1 = y3 ∧ y1 = y4 then
+  | m@((((y₁ ⋆ y₂) ⋆ x) ⋆ y₃) ⋆ y₄) =>
+      if y₁ = y₂ ∧ y₁ = y₃ ∧ y₁ = y₄ then
         x
       else
         m
@@ -326,8 +326,8 @@ namespace rw3150
 
 -- equation 3150 := x = (((y ◇ y) ◇ y) ◇ x) ◇ y
 def rule : FreeMagma α → FreeMagma α
-  | m@((((y1 ⋆ y2) ⋆ y3) ⋆ x) ⋆ y4) =>
-      if y1 = y2 ∧ y1 = y3 ∧ y1 = y4 then
+  | m@((((y₁ ⋆ y₂) ⋆ y₃) ⋆ x) ⋆ y₄) =>
+      if y₁ = y₂ ∧ y₁ = y₃ ∧ y₁ = y₄ then
         x
       else
         m
@@ -370,8 +370,8 @@ namespace rw1110
 
 -- equation 1110 := x = y ◇ ((y ◇ (x ◇ x)) ◇ y)
 def rule : FreeMagma α → FreeMagma α
-  | m@(y1 ⋆ ((y2 ⋆ (x ⋆ x1)) ⋆ y3)) =>
-      if y1 = y2 ∧ y1 = y3 ∧ x = x1 then
+  | m@(y₁ ⋆ ((y₂ ⋆ (x ⋆ x₁)) ⋆ y₃)) =>
+      if y₁ = y₂ ∧ y₁ = y₃ ∧ x = x₁ then
         x
       else
         m
@@ -414,8 +414,8 @@ namespace rw1086
 
 -- equation 1086 := x = y ◇ ((x ◇ (y ◇ y)) ◇ y)
 def rule : FreeMagma α → FreeMagma α
-  | m@(y1 ⋆ ((x ⋆ (y2 ⋆ y3)) ⋆ y4)) =>
-      if y1 = y2 ∧ y1 = y3 ∧ y1 = y4 then
+  | m@(y₁ ⋆ ((x ⋆ (y₂ ⋆ y₃)) ⋆ y₄)) =>
+      if y₁ = y₂ ∧ y₁ = y₃ ∧ y₁ = y₄ then
         x
       else
         m
@@ -458,8 +458,8 @@ namespace rw2497
 
 -- equation 2497 := x = (y ◇ ((x ◇ x) ◇ y)) ◇ y
 def rule : FreeMagma α → FreeMagma α
-  | m@((y1 ⋆ (((x ⋆ x1) ⋆ y2))) ⋆ y3) =>
-      if y1 = y2 ∧ y1 = y3 ∧ x = x1 then
+  | m@((y₁ ⋆ (((x ⋆ x₁) ⋆ y₂))) ⋆ y₃) =>
+      if y₁ = y₂ ∧ y₁ = y₃ ∧ x = x₁ then
         x
       else
         m
@@ -502,8 +502,8 @@ namespace rw2541
 
 -- equation 2541 := x = (y ◇ ((y ◇ y) ◇ x)) ◇ y
 def rule : FreeMagma α → FreeMagma α
-  | m@((y1 ⋆ (((y2 ⋆ y3) ⋆ x))) ⋆ y4) =>
-      if y1 = y2 ∧ y1 = y3 ∧ y1 = y4 then
+  | m@((y₁ ⋆ (((y₂ ⋆ y₃) ⋆ x))) ⋆ y₄) =>
+      if y₁ = y₂ ∧ y₁ = y₃ ∧ y₁ = y₄ then
         x
       else
         m

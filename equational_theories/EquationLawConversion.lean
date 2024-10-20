@@ -35,7 +35,7 @@ theorem models_iff_n (law : NatMagmaLaw) (n) (h : law.bounded n) (G : Type _) [M
       G ⊧ law ↔ ∀ xs (h' : xs.length = k), ModelsIffType G law n xs (h' ▸ h) by
     refine (this n 0 h).trans ?_
     exact ⟨fun H => H [] rfl, fun H xs h => by cases List.length_eq_zero.1 h; assumption⟩
-  intros n k h
+  intro n k h
   induction n generalizing k with
   | succ n ih =>
     refine (ih (k+1) (by rwa [Nat.succ_add] at h)).trans ?_

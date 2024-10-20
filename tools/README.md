@@ -1,3 +1,3 @@
 # Tools
 
-- [Finite Magma Explorer](tools/fme)
+- [Finite Magma Explorer](https://teorth.github.io/equational_theories/fme/)

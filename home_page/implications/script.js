@@ -77,6 +77,46 @@ let filteredCachedItems = [];
 let cachedItems = [];
 let cachedItemElements = [];
 
+function downloadEquationListCSV() {
+    showDownloadPopup();
+    const rows = Array.from(equationList.children);
+    const csv = "\uFEFF" + rows.map((row) => (
+        Array.from(row.children).map(
+            (element) => element.textContent
+        ).join(",")))
+        .join("\n");
+
+    const filename = 'export_explorer_' + new Date().toLocaleDateString() + '.csv';
+    downloadStringAsCSV(csv, filename);
+}
+
+function downloadRawImplicationsCSV() {
+    const text_to_number = {"explicit_proof_true":4, "implicit_proof_true":3,
+        "explicit_conjecture_true":2, "implicit_conjecture_true":1, "unknown":0,
+        "explicit_proof_false":-4, "implicit_proof_false":-3,
+        "explicit_conjecture_false":-2, "implicit_conjecture_false":-1,
+    }
+    showDownloadPopup();
+    const csv = implications.map(
+        (equation) => equation.map(
+            (status) => text_to_number[status]
+        ).join(",")
+    ).join("\n")
+    downloadStringAsCSV(csv, 'export_raw_implications_' + new Date().toLocaleDateString() + '.csv');
+}
+
+function downloadStringAsCSV(string, filename) {
+        // Export code gathered from https://stackoverflow.com/a/56370447/7059087
+        var link = document.createElement('a');
+        link.style.display = 'none';
+        link.setAttribute('target', '_blank');
+        link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(string));
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+}
+
 function showPage(pageId) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
@@ -379,7 +419,7 @@ function renderImplications(index) {
   }
 
   smallest_magma = smallest_magma_data[index+1]
-  smallestMagmaLink.innerHTML = smallest_magma 
+  smallestMagmaLink.innerHTML = smallest_magma
     ? `<br />(Size of smallest non-trivial magma: ${smallest_magma.length} <a target="_blank" href="${FME_BASE_URL}?magma=${encodeURIComponent(JSON.stringify(smallest_magma))}">(Explore)</a>)`
     : `<br />(Size of smallest non-trivial magma: N/A)`
 
@@ -492,10 +532,10 @@ window.addEventListener('popstate', handleUrlChange);
 document.addEventListener('DOMContentLoaded', function() {
     const timestamp = last_updated.timestamp * 1000; // Convert to milliseconds
     const commitHash = last_updated.commit_hash;
-    
+
     const localDate = new Date(timestamp);
     document.getElementById('lastUpdated').textContent = localDate.toLocaleString();
-    
+
     const commitLink = document.getElementById('commitLink');
     commitLink.href = `https://github.com/teorth/equational_theories/tree/${commitHash}`;
     commitLink.textContent = commitHash.substring(0, 7); // Display first 7 characters of the hash

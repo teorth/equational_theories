@@ -9,15 +9,17 @@ from utils import get_fns
 
 fns = get_fns()
 
+
 def check_rule(nvar, check, S, op):
     for args in product(S, repeat=nvar):
         if not check(op, *args):
             return False
     return True
 
+
 def doall(S, op):
     ok = []
-    for i,(eqn, nvar, fn) in enumerate(fns):
+    for i, (eqn, nvar, fn) in enumerate(fns):
         if check_rule(nvar, fn, S, op):
             ok.append(i)
     return ok
@@ -38,5 +40,3 @@ while True:
     if ok not in seen:
         print(repr(src), ok)
     seen[ok] = True
-
-

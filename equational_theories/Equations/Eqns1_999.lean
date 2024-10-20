@@ -205,7 +205,7 @@ equation 199 := x = (y ◇ z) ◇ (w ◇ y)
 equation 200 := x = (y ◇ z) ◇ (w ◇ z)
 equation 201 := x = (y ◇ z) ◇ (w ◇ w)
 equation 202 := x = (y ◇ z) ◇ (w ◇ u)
-equation 203 := x = (x ◇ (x ◇ x)) ◇ x
+-- equation 203 := x = (x ◇ (x ◇ x)) ◇ x
 equation 204 := x = (x ◇ (x ◇ x)) ◇ y
 equation 205 := x = (x ◇ (x ◇ y)) ◇ x
 equation 206 := x = (x ◇ (x ◇ y)) ◇ y

@@ -108,14 +108,14 @@ theorem fmapHom_id {α} (m : FreeMagma α) : fmapHom id m = m := evalInMagma_lea
 
  theorem EvalFreeMagmaUniversalProperty {α : Type u} {G : Type v} [Magma G] (f : α → G) :
     ∀ g : FreeMagma α →◇ G, g.toFun ∘ Lf = f → evalInMagma f = g.toFun := by
-   intros g glift
+   intro g glift
    let rec equiv : ∀ tx : FreeMagma α, evalInMagma f tx = g.toFun tx := fun tx ↦
       match tx with
       | FreeMagma.Leaf x => (congrFun glift x).symm
-      | FreeMagma.Fork txleft txright => Eq.trans
-         (congrArg (fun t ↦ t ◇ evalInMagma f txright) (equiv txleft)) $ Eq.trans
-         (congrArg (fun t ↦ g.toFun txleft ◇ t) (equiv txright))
-         (g.map_op' txleft txright).symm
+      | FreeMagma.Fork txleft txright =>
+        (congrArg (fun t ↦ t ◇ evalInMagma f txright) (equiv txleft)).trans
+          ((congrArg (fun t ↦ g.toFun txleft ◇ t) (equiv txright)).trans
+            (g.map_op' txleft txright).symm)
    exact (funext equiv)
 
  theorem FmapFreeMagmaUniversalProperty {α : Type u} {β : Type u} (f : α → β) :
@@ -129,6 +129,10 @@ def Mem {α} (a : α) : FreeMagma α → Prop
 def first {α} : FreeMagma α → α
   | Lf a => a
   | lchild ⋆ _ => lchild.first
+
+def last {α} : FreeMagma α → α
+  | Lf a => a
+  | _ ⋆ rchild => rchild.last
 
 theorem first_mem {α} : ∀ m : FreeMagma α, Mem m.first m
   | Lf _ => rfl

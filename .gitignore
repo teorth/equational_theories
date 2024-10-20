@@ -39,6 +39,9 @@ home_page/_site
 *.pdfsync
 ## Python
 **/venv
+**/.venv
 **/*.pyc
 #TypeScript
 widget/node_modules/*
+## Data
+**/tmp
