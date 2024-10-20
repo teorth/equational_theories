@@ -638,3 +638,23 @@ so that equation 3659, $x^2 = x^2 \op x^2$, fails.
 
 Now we verify 3475.  A routine case check shows that when $x$ has the opposite sign to $y$, $R_y^2 x = 3y$; and when $x$ has the same sign to $y$, $R_y^2 x$ is equal to $2y$ or $5y$.  But then $L_y R_y^2 x$ is equal to $\mathrm{sgn}(y)$ if $x$ has the opposite sign to $y$, and $-\mathrm{sgn}(y)$ if $x$ has the same sign to $y$, giving 3475.
 \end{proof}
+
+
+\begin{theorem}[1437 example]\label{1437-thm}  There exists a magma that obeys Equation 1437,
+  $$ x = (x \op x) \op (y \op (z \op x)),$$
+but does not obey equation 4269,
+$$ x \op (x \op x) = x \op (y \op x).$$
+\end{theorem}
+
+\begin{proof} A first attempt would be the operation $i \op j := j+1$ on $\Z/3\Z$; this obeys 1437, but unfortunately also obeys 4269.  However, an "extension" of this operation will work. Namely, we take the carrier $G = \N \times \Z/3\Z$ and define $(a,i) \op (b,j)$ to equal
+  \begin{itemize}
+    \item $(a-1,j+1)$ if $i=j+2$ and $a>0$;
+    \item $(b,j+1)$ if $i=j+2$ and $a=0$;
+    \item $(a+1,j+1)$ otherwise.
+  \end{itemize}
+Note that $(a,i) \op (a,i) = (a+1,i+1)$, and that $(b,j) \op ((c,k) \op (a,i))$ will be of the form $(d,i+2)$ for some $d$.  Hence
+$$ ((a,i) \op (a,i)) \op ((b,j) \op ((c,k) \op (a,i))) = (a+1-1, i+3) = (a,i),$$
+giving 1437.  On the other hand,
+$$ (0,i) \op ((b,i) \op (0,i)) = (0,i) \op (b+1,i+1) = (b+1,i+2)$$
+and so equation 4269 fails.
+\end{proof}
