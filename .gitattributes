@@ -11,3 +11,5 @@ equational_theories/Generated/MagmaEgg/*/*.lean linguist-generated
 equational_theories/Generated/MagmaEgg/*.lean linguist-generated
 equational_theories/Generated/VampireProven.lean linguist-generated
 equational_theories/Generated/VampireProven/*.lean linguist-generated
+equational_theories/Generated/Greedy/*.lean linguist-generated
+data/forcing_rules/* linguist-generated
