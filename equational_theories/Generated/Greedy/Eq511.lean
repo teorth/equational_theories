@@ -2502,7 +2502,7 @@ structure PartialSolution (G : Type*) where
   finsupp : Finset G
   mem_1 : ∀ X Y Z, ¬R X Y Z ∨ X ∈ finsupp
   mem_2 : ∀ X Y Z, ¬R X Y Z ∨ Y ∈ finsupp
-  mem_3 : ∀ X Y Z, ¬R X Y Z ∨ Z ∈ finsupp  
+  mem_3 : ∀ X Y Z, ¬R X Y Z ∨ Z ∈ finsupp
 
 variable {G : Type*} (ps : PartialSolution G)
 
@@ -2715,6 +2715,7 @@ theorem PartialSolution.toMagma_equation511 :
 
 
 set_option maxRecDepth 1000 in
+set_option maxHeartbeats 400000 in
 noncomputable def PartialSolution.counter614 : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({(1, 1, 2), (1, 3, 4), (1, 4, 5), (1, 5, 2), (2, 1, 3)} : Finset _)
   rule_0 := by simp only [← imp_iff_not_or]; aesop
