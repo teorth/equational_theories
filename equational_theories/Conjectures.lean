@@ -124,4 +124,9 @@ conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G), Facts G [1516] [14
 @[equational_result]
 conjecture Equation917_facts : ∃ (G : Type) (_ : Magma G), Facts G [917] [1629, 1729, 2441, 2541]
 
+/-- See "Ad hoc model" section of blueprint -/
+@[equational_result]
+conjecture Equation3342_facts : ∃ (G : Type) (_ : Magma G), Facts G [3342] [3456, 3522, 4065, 4118]
+
+
 end Conjectures
