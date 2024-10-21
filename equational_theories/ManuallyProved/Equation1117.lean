@@ -10,7 +10,7 @@ theorem _root_.Equation1117_not_implies_Equation2441 : ∃ (G : Type) (_ : Magma
   use ℤ, ⟨op⟩
   constructor
   · intro x y z
-    simp [op]
+    simp only [op]
     omega
   · simp only [not_forall, op]
     use 1
