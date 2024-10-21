@@ -330,7 +330,7 @@ the modified base model technique. Start with the infinite model $(\mathbb{Z},\o
 $$ x\op y = \begin{cases} x+1 & \text{if } x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases} $$
 A case analysis shows that the magma $(\mathbb{Z},\op)$  satisfies both \Cref{eq1659} and \Cref{eq4315}.
 We will eventually \emph{modify} it by setting
-$$ x \op' y = \begin{cases} 0 & \text{if } x=0,\: x,y \text{ have the same parity} \\  x+1 & \text{if } x\neq 0,\: x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases} $$
+$$x \op' y = \begin{cases} 0 & \text{if } x=0,\: x,y \text{ do not have the same parity} \\  x+1 & \text{if } x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases}$$
 and checking that $(\mathbb{N}, \op' )$ satisfies \Cref{eq1659} but refutes \Cref{eq4315}.
 
 One finds these modifications using the following strategy:
