@@ -1,7 +1,7 @@
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
 
-namespace Eq3342
+namespace Eq1117
 
 def op (a b : ℤ) : ℤ := 2 * a - b / 2
 
@@ -16,4 +16,4 @@ theorem _root_.Equation1117_not_implies_Equation2441 : ∃ (G : Type) (_ : Magma
     use 1
     decide
 
-end Eq3342
+end Eq1117
