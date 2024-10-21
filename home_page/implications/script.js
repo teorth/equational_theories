@@ -43,7 +43,7 @@ const decoded = decodeRLE(arr);
 // Map through LUT
 const mapped = mapThroughLUT(decoded);
 
-// Reshape to 2694x2694
+// Reshape to 4694x4694
 const implications = reshape(mapped, 4694, 4694);
 
 const GRAPHITI_BASE_URL = "https://teorth.github.io/equational_theories/graphiti/"
@@ -186,29 +186,45 @@ function isUnknown(status, treatConjecturedAsUnknown = false) {
     return status === 'unknown' || (treatConjecturedAsUnknown && status.includes('conjecture'));
 }
 
-function calculateStats(index, treatConjecturedAsUnknown = false) {
-    const stats = {implies: 0, impliedBy: 0, antiImplies: 0, antiImpliedBy: 0, unknown: 0, unknownBy: 0};
-    for (let i = 0; i < implications.length; i++) {
-        if (i === index) continue;
-        const forwardStatus = implications[index][i];
-        const backwardStatus = implications[i][index];
+function calculateStats(treatConjecturedAsUnknown = false) {
+    let sccStats = []
+    for (let i = 0; i < equiv.length; i++) {
+        let stats = {implies: 0, impliedBy: 0, antiImplies: 0, antiImpliedBy: 0, unknown: 0, unknownBy: 0};
+        for (let j = 0; j < equiv.length; j++) {
+            let adjustment = 0;
+            if (i == j) {
+                adjustment = 1;
+            }
 
-        if (isImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.implies++;
-        else if (isAntiImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.antiImplies++;
-        else stats.unknown++;
+            const forwardStatus = implications[equiv[i][0]][equiv[j][0]];
+            const backwardStatus = implications[equiv[j][0]][equiv[i][0]];
 
-        if (isImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.impliedBy++;
-        else if (isAntiImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.antiImpliedBy++;
-        else stats.unknownBy++;
+            if (isImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.implies += equiv[j].length - adjustment;
+            else if (isAntiImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.antiImplies += equiv[j].length - adjustment;
+            else stats.unknown += equiv[j].length - adjustment;
+
+            if (isImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.impliedBy += equiv[j].length - adjustment;
+            else if (isAntiImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.antiImpliedBy += equiv[j].length - adjustment;
+            else stats.unknownBy += equiv[j].length - adjustment;
+        }
+        sccStats.push(stats)
     }
-    return stats;
-}
 
+    let overallStats = []
+    for (let i = 0; i < equiv.length; i++) {
+        for (const subidx of equiv[i]) {
+            overallStats[subidx] = sccStats[i]
+        }
+    }
+
+    return overallStats
+}
 
 function initializeEquationList() {
     const treatConjecturedAsUnknown = treatConjectedAsUnknownList.checked;
+    const overallStats = calculateStats(treatConjecturedAsUnknown)
     cachedItems = equations.map((eq, index) => {
-        const stats = calculateStats(index, treatConjecturedAsUnknown);
+        const stats = overallStats[index];
         const element = document.createElement('div');
         element.className = 'equation-item';
         element.dataset.index = index;
@@ -244,8 +260,9 @@ function initializeEquationList() {
 
 function updateEquationListStats() {
     const treatConjecturedAsUnknown = treatConjectedAsUnknownList.checked;
+    const overallStats = calculateStats(treatConjecturedAsUnknown)
     cachedItems.forEach((item) => {
-        const stats = calculateStats(item.index, treatConjecturedAsUnknown);
+        const stats = overallStats[item.index];
         item.stats = stats;
         item.statElements.implies.textContent = stats.implies;
         item.statElements.impliedBy.textContent = stats.impliedBy;
