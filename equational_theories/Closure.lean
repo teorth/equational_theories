@@ -170,7 +170,7 @@ def equationSet (inp : Array EntryVariant) : Std.HashSet String := Id.run do
     | .implication ⟨lhs, rhs⟩ =>
       eqs := eqs.insert lhs
       eqs := eqs.insert rhs
-    | .facts ⟨satisfied, refuted⟩ =>
+    | .facts ⟨satisfied, refuted, _⟩ =>
       for eq in satisfied ++ refuted do
         eqs := eqs.insert eq
     | .unconditional eq =>
@@ -192,7 +192,7 @@ def toEdges (inp : Array EntryVariant) : Array Edge := Id.run do
     match imp with
     | .implication ⟨lhs, rhs⟩ =>
       edges := edges.push (.implication ⟨lhs, rhs⟩)
-    | .facts ⟨satisfied, refuted⟩ =>
+    | .facts ⟨satisfied, refuted, _⟩ =>
       for f1 in satisfied do
         for f2 in refuted do
           nonimplies := nonimplies.modify eqs[f1]! (fun x ↦ x.set eqs[f2]!)
@@ -221,7 +221,7 @@ def closure_aux (inp : Array EntryVariant) (duals: Std.HashMap Nat Nat) (eqs : D
       graph := graph.modify (eqs[imp.rhs]! + n) (fun x => x.push (eqs[imp.lhs]! + n))
       revgraph := revgraph.modify (eqs[imp.lhs]!) (fun x => x.push eqs[imp.rhs]!)
       revgraph := revgraph.modify (eqs[imp.lhs]! + n) (fun x => x.push (eqs[imp.rhs]! + n))
-    | .facts ⟨satisfied, refuted⟩ =>
+    | .facts ⟨satisfied, refuted, _⟩ =>
       if satisfied.size * refuted.size < satisfied.size + refuted.size + 1 then
         for lhs in satisfied do
           for rhs in refuted do
