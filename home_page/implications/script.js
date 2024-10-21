@@ -40,11 +40,8 @@ function reshape(array, rows, cols) {
 // Decode RLE
 const decoded = decodeRLE(arr);
 
-// Map through LUT
-const mapped = mapThroughLUT(decoded);
-
 // Reshape to 4694x4694
-const implications = reshape(mapped, 4694, 4694);
+const implications = reshape(mapThroughLUT(decoded), 4694, 4694);
 
 const GRAPHITI_BASE_URL = "https://teorth.github.io/equational_theories/graphiti/"
 const FME_BASE_URL = "https://teorth.github.io/equational_theories/fme/"
