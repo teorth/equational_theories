@@ -17,6 +17,7 @@ The following instructions detail the process for claiming and completing tasks.
 
 - Tasks are posted as GitHub issues and can be found in the `Unclaimed Outstanding Tasks` column of the project dashboard.
 - Each issue represents a specific task to be completed. The issue title and description contain relevant details and requirements.
+- Only maintainers can convert an issue into a project task. If you wish to propose a task of your own, create a github issue and start a discussion in a new thread on the [equational theories channel of the Lean Zulipchat](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/). Depending on the outcome of the discussion, the task may be converted into a project task by one of the maintainers.
 
 ### 2. Claiming a Task
 

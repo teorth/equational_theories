@@ -43,3 +43,5 @@ home_page/_site
 **/*.pyc
 #TypeScript
 widget/node_modules/*
+## Data
+**/tmp
