@@ -64,5 +64,12 @@ conjecture Equation917_facts : ∃ (G : Type) (_ : Magma G), Facts G [917] [1629
 @[equational_result]
 conjecture Equation3475_facts : ∃ (G : Type) (_ : Magma G), Facts G [3475] [3659]
 
+/-- https://teorth.github.io/equational_theories/blueprint/infinite-magma-constructions-chapter.html#adhoc-model -/
+@[equational_result]
+conjecture Equation1437_facts : ∃ (G : Type) (_ : Magma G), Facts G [1437] [4269]
+
+/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/477928995.2E01 -/
+@[equational_result]
+conjecture Equation1117_facts : ∃ (G : Type) (_ : Magma G), Facts G [1117] [2441]
 
 end Conjectures
