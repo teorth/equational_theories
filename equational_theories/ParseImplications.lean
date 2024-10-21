@@ -27,6 +27,7 @@ the four antiimplications `¬ 1→4`, `¬ 1→5`, `¬ 2→4`, `¬ 2→5`.
 structure Facts where
   satisfied : Array String
   refuted : Array String
+  finite : Bool
 deriving Lean.ToJson, Lean.FromJson, Inhabited
 
 /--
@@ -37,7 +38,11 @@ def getEquationName (app : Expr) : Option String := do
   | (.app (.app (.const name _) _) _) =>
     -- Copy the string to allow it to safely escape from `Lean.withImportModules`.
     -- Otherwise, segfaults are possible.
-    some ("" ++ name.toString)
+    let copy := name.toString
+    if copy.startsWith "Equation" then
+      some ("" ++ copy)
+    else
+      none
   | _ => none
 
 def getEquationLeanName (app : Expr) : Option Lean.Name := do
@@ -157,17 +162,27 @@ partial def parseFacts (thm_ty : Expr) : MetaM (Option Facts) := do
         Meta.lambdaTelescope body1 fun fvars1 ty1 => do
           let #[magma] := fvars1 | return none
           let (.app (.const `Magma _) _) := ← Meta.inferType magma | return none
-          let some facts := go #[ty1] #[] #[] | return none
-          if facts.satisfied.isEmpty && facts.refuted.isEmpty then return none
-          return .some facts
+          match_expr ty1 with
+          | Exists b2 body2 =>
+            let (.app (.const `Finite _) _) := b2 | return none
+            Meta.lambdaTelescope body2 fun _ ty2 => do
+              return ← parseList ty2 true
+          | _ => return ← parseList ty1 false
       | _ => return none
   | _ => return none
 where
+  parseList (ty : Expr) (finite : Bool) : MetaM (Option Facts) := do
+    let some facts := go #[ty] #[] #[] | return none
+    if facts.satisfied.isEmpty && facts.refuted.isEmpty then return none
+    if facts.satisfied.isEmpty || facts.refuted.isEmpty then
+      Lean.logWarning "Warning: Facts statement has empty satisfied or refuted list"
+    return .some { facts with finite := finite }
+
   -- NB: This is written as a tail-recursive function, else some large facts statements
   -- cause this to blow the stack
   go (todo : Array Expr) (satisfied refuted : Array String) : Option Facts := do
     if todo.isEmpty then
-      return ⟨satisfied, refuted⟩
+      return ⟨satisfied, refuted, false⟩
     else
       let e := todo.back
       let todo := todo.pop
