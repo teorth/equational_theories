@@ -1,0 +1,1 @@
+This equation [admits an unusually large finite magma](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/478094170) (of order 12), that can be used to disprove some implications. This phenomenon remains poorly understood.
