@@ -61,11 +61,11 @@ def Entry.keepCore (e : Entry) : Option Entry :=
       if isCoreEquationName lhs && isCoreEquationName rhs
       then some e
       else none
-  | .facts { satisfied, refuted } =>
+  | .facts { satisfied, refuted, finite } =>
       let sat1 := satisfied.filterMap filterCoreEquationName
       let ref1 := refuted.filterMap filterCoreEquationName
       if sat1.isEmpty || ref1.isEmpty then none
-      else some <| {e with variant := .facts {satisfied := sat1, refuted := ref1}}
+      else some <| {e with variant := .facts {satisfied := sat1, refuted := ref1, finite := finite}}
   | .unconditional eq => if isCoreEquationName eq then some e else none
 
 namespace Result
@@ -149,7 +149,7 @@ elab_rules : command
   for ⟨name, _filename, res, _⟩ in rs do
     match res with
     | .implication ⟨lhs, rhs⟩ => println! "{name}: {lhs} → {rhs}"
-    | .facts ⟨satisfied, refuted⟩ => println! "{name}: {satisfied} // {refuted}"
+    | .facts ⟨satisfied, refuted, _⟩ => println! "{name}: {satisfied} // {refuted}"
     | .unconditional rhs => println! "{name}: {rhs} holds unconditionally"
 
 end Result
