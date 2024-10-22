@@ -56,7 +56,7 @@ by
     _      = (b ◇ b′)′′ := by rw [sh₂]
     _      = b ◇ b′     := by rw [sh₁]
 
-instance ShefferIsBool : BooleanRing α where
+instance ShefferToBooleanRing : BooleanRing α where
 mul := (.′ ◇ .′)
 add := λ a b ↦ (a ◇ b)′
 zero := z e

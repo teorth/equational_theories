@@ -1,4 +1,4 @@
-import equational_theories.Equations
+import equational_theories.Equations.All
 import equational_theories.Superposition
 
 namespace Sheffer
@@ -725,7 +725,7 @@ theorem Equation345169_implies_Helper10 (G : Type*) [Magma G] (h : Equation34516
   have eq10626 : (sK0 ◇ sK0) ≠ (sK0 ◇ (sK1 ◇ (sK0 ◇ sK0))) := superpose eq10625 eq8 -- backward demodulation 8,10625
   subsumption eq10626 eq2318
 
-theorem Equation345169_implies_Helper11Helper (G : Type*) [Magma G] (h : Equation345169 G) (eq10 : ∀ (x y z : G), (x ◇ (y ◇ z)) ◇ (y ◇ x) = x) (eq11 : ∀ (x y : G), x ◇ (y ◇ (x ◇ y)) = x ◇ x) : 
+theorem Equation345169_implies_Helper11Helper (G : Type*) [Magma G] (h : Equation345169 G) (eq10 : ∀ (x y z : G), (x ◇ (y ◇ z)) ◇ (y ◇ x) = x) (eq11 : ∀ (x y : G), x ◇ (y ◇ (x ◇ y)) = x ◇ x) :
 ∀ x y z : G, (x ◇ (y ◇ z)) ◇ ((y ◇ x) ◇ x) = (x ◇ (y ◇ z)) ◇ (x ◇ (y ◇ z)) := by
   by_contra nh
   simp only [not_forall] at nh
@@ -1468,9 +1468,9 @@ theorem Equation345169_implies_Helper21 (G : Type*) [Magma G] (h : Equation34516
   have eq3045672 (X0 X1 X2 : G) : ((((X0 ◇ X2) ◇ X1) ◇ X1) ◇ (X0 ◇ X0)) = X0 := superpose eq5074 eq3035012 -- superposition 3035012,5074, 5074 into 3035012, unify on (0).2 in 5074 and (0).1.1.2 in 3035012
   have eq3047074 (X0 X1 X2 : G) : ((X1 ◇ (X1 ◇ (X0 ◇ X2))) ◇ (X0 ◇ X0)) = X0 := superpose eq30310 eq3045672 -- forward demodulation 3045672,30310
   have eq3076381 : sK0 ≠ sK0 := superpose eq3047074 eq3675 -- superposition 3675,3047074, 3047074 into 3675, unify on (0).2 in 3047074 and (0).2 in 3675
-  subsumption eq3076381 rfl  
+  subsumption eq3076381 rfl
 
-theorem Equation345169_implies_Helper24Helper (G : Type*) [Magma G] (_ : Equation345169 G) (eq10 : ∀ (x y z : G), x = (x ◇ (y ◇ z)) ◇ (x ◇ z)) (eq11 : ∀ (y x z : G), y = (x ◇ ((y ◇ z) ◇ x)) ◇ (y ◇ y)) : 
+theorem Equation345169_implies_Helper24Helper (G : Type*) [Magma G] (_ : Equation345169 G) (eq10 : ∀ (x y z : G), x = (x ◇ (y ◇ z)) ◇ (x ◇ z)) (eq11 : ∀ (y x z : G), y = (x ◇ ((y ◇ z) ◇ x)) ◇ (y ◇ y)) :
 ∀ x y z : G, x ◇ ((y ◇ ((x ◇ z) ◇ y)) ◇ x) = y ◇ ((x ◇ z) ◇ y) := by
   by_contra nh
   simp only [not_forall] at nh
@@ -1486,4 +1486,3 @@ theorem Equation345169_implies_Helper24Helper (G : Type*) [Magma G] (_ : Equatio
   have eq272 (X0 X1 X2 : G) : (X0 ◇ ((X1 ◇ X2) ◇ X0)) = (X1 ◇ (X1 ◇ (X0 ◇ ((X1 ◇ X2) ◇ X0)))) := superpose eq239 eq20 -- backward demodulation 20,239
   have eq274 : (sK1 ◇ ((sK0 ◇ sK2) ◇ sK1)) ≠ (sK0 ◇ (sK0 ◇ (sK1 ◇ ((sK0 ◇ sK2) ◇ sK1)))) := superpose eq239 eq12 -- backward demodulation 12,239
   subsumption eq274 eq272
-

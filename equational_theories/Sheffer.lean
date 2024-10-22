@@ -1,4 +1,6 @@
 import equational_theories.Generated.VampireProven.Sheffer
+import equational_theories.BooleanMagma
+import equational_theories.BooleanRing
 import Mathlib.Order.BooleanAlgebra
 
 namespace Sheffer
@@ -98,37 +100,19 @@ theorem Equation345169_implies_Helper35 (G : Type*) [Magma G] (h : Equation34516
 /- 345169 implies third Sheffer axiom -/
 theorem Equation345169_implies_Axiom3 (G : Type*) [Magma G] (h : Equation345169 G) : ∀ x y z : G, (x ◇ (y ◇ z)) ◇ (x ◇ (y ◇ z)) = ((y ◇ y) ◇ x) ◇ ((z ◇ z) ◇ x):= λ x y z => ((Equation345169_implies_Helper35 G h x z y).symm).trans (Equation345169_implies_Helper6 G h x (z ◇ z) x (y ◇ y))
 
-theorem Sheffer_Comm (G : Type*) [Magma G] (ax1 : ∀ x : G, (x ◇ x) ◇ (x ◇ x) = x) (ax2 : ∀ x y : G, x ◇ x = x ◇ (y ◇ (y ◇ y))) (ax3 : ∀ x y z : G, (x ◇ (y ◇ z)) ◇ (x ◇ (y ◇ z)) = ((y ◇ y) ◇ x) ◇ ((z ◇ z) ◇ x)) : ∀ x y : G, x ◇ y = y ◇ x := by
-  intro x y
-  have h1 : ∀ x y : G, (x ◇ x) ◇ (y ◇ (y ◇ y)) = x := by intro a b; have := (ax2 (a ◇ a) b).symm; rwa [ax1] at this
-  have h2 : ∀ x y z : G, ((y ◇ (x ◇ x)) ◇ (y ◇ (x ◇ x))) ◇ (z ◇ (z ◇ z)) = (x ◇ x) ◇ y := by intro a b c; have := h1 ((a ◇ a) ◇ b) c; rwa [←ax3] at this
-  have h3 : ∀ x y : G, (x ◇ x) ◇ y = y ◇ (x ◇ x) := by intro a b; have := h1 (b ◇ (a ◇ a)) x; rwa [h2] at this
-  have := h3 (x ◇ x) y
-  rwa [ax1] at this
-
-/- This would be very convenient for le_trans if possible. Should be true as its just associativity for OR:
-   sup (sup(x y) z) = sup((x ◇ x) ◇ (y ◇ y)) z
-                    = (((x ◇ x) ◇ (y ◇ y)) ◇ ((x ◇ x) ◇ (y ◇ y))) ◇ (z ◇ z)
-
-   sup (x (sup (y z))) = sup x ((y ◇ y) ◇ (z ◇ z))
-                     = (x ◇ x) ◇ (((y ◇ y) ◇ (z ◇ z)) ◇ ((y ◇ y) ◇ (z ◇ z)))
--/ 
-theorem Sheffer_Sup_Assoc (G : Type*) [Magma G] (ax1 : ∀ x : G, (x ◇ x) ◇ (x ◇ x) = x) (ax2 : ∀ x y : G, x ◇ x = x ◇ (y ◇ (y ◇ y))) (ax3 : ∀ x y z : G, (x ◇ (y ◇ z)) ◇ (x ◇ (y ◇ z)) = ((y ◇ y) ◇ x) ◇ ((z ◇ z) ◇ x)) : ∀ x y z : G, (((x ◇ x) ◇ (y ◇ y)) ◇ ((x ◇ x) ◇ (y ◇ y))) ◇ (z ◇ z) = (x ◇ x) ◇ (((y ◇ y) ◇ (z ◇ z)) ◇ ((y ◇ y) ◇ (z ◇ z))) := by sorry
-
-/- Boolean algebra induced by magma satisfying the three Sheffer axioms. 
+/- Boolean algebra induced by magma satisfying the three Sheffer axioms.
    The operations are defined in terms of Sheffer strokes:
    OR/SUP  = (A | A) | (B | B)
    AND/INF = (A | B) | (A | B)
 -/
-instance (G : Type*) [Magma G] (ax1 : ∀ x : G, (x ◇ x) ◇ (x ◇ x) = x) (ax2 : ∀ x y : G, x ◇ x = x ◇ (y ◇ (y ◇ y))) (ax3 : ∀ x y z : G, (x ◇ (y ◇ z)) ◇ (x ◇ (y ◇ z)) = ((y ◇ y) ◇ x) ◇ ((z ◇ z) ◇ x)) : BooleanAlgebra G where
-  sup x y := (x ◇ x) ◇ (y ◇ y)
-  le x y := (x ◇ x) ◇ (y ◇ y) = y
-  le_refl x := ax1 x
-  le_trans x y z xley ylez := by
-    simp at *
-    /- have : (x ◇ x) ◇ (((y ◇ y) ◇ (z ◇ z)) ◇ ((y ◇ y) ◇ (z ◇ z))) = z := by rwa [←xley, Sheffer_Sup_Assoc G ax1 ax2 ax3] at ylez
-    rwa [ylez] at this -/
-    have comm := Sheffer_Comm G ax1 ax2 ax3 x y
-    sorry
+instance Equation345169_is_Boolean (G : Type*) [Magma G]
+  (h : Equation345169 G) [Inhabited G] :
+    BooleanAlgebra G :=
+  let sh₁ x := x |> Equation345169_implies_Axiom1 G h |> Eq.symm
+  let sh₂ x y := Equation345169_implies_Axiom2 G h x y |> Eq.symm
+  let sh₃ := Equation345169_implies_Axiom3 G h
+  let bRing := @ShefferToBooleanRing G _ sh₁ sh₂ sh₃ default
+  @BooleanRingToBooleanAlg G bRing
+
 
 end Sheffer
