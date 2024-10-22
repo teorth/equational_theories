@@ -1,4 +1,5 @@
 
+import Mathlib.Data.Finite.Basic
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 import equational_theories.MemoFinOp
@@ -18,5 +19,5 @@ def «FinitePoly [[1,2,3,4,5,0],[5,0,1,2,3,4],[1,2,3,4,5,0],[5,0,1,2,3,4],[1,2,3
 /-! The facts -/
 @[equational_result]
 theorem «Facts from FinitePoly [[1,2,3,4,5,0],[5,0,1,2,3,4],[1,2,3,4,5,0],[5,0,1,2,3,4],[1,2,3,4,5,0],[5,0,1,2,3,4]]» :
-  ∃ (G : Type) (_ : Magma G), Facts G [194] [411, 4275] :=
-    ⟨Fin 6, «FinitePoly [[1,2,3,4,5,0],[5,0,1,2,3,4],[1,2,3,4,5,0],[5,0,1,2,3,4],[1,2,3,4,5,0],[5,0,1,2,3,4]]», by decideFin!⟩
+  ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [194] [411, 4275] :=
+    ⟨Fin 6, «FinitePoly [[1,2,3,4,5,0],[5,0,1,2,3,4],[1,2,3,4,5,0],[5,0,1,2,3,4],[1,2,3,4,5,0],[5,0,1,2,3,4]]», Finite.of_fintype _, by decideFin!⟩
