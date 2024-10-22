@@ -166,7 +166,7 @@ equation 4656  :=  (x ◇ y) ◇ y = (x ◇ z) ◇ z
 /- Some order 5 laws -/
 
 /-- Mentioned in a paper of Kisielewicz as a conjectural Austin law -/
-equation 5105  :=  x = y ◇ (y ◇ (y ◇ (x ◇ (z ◇ y))))
+equation 5093  :=  x = y ◇ (y ◇ (y ◇ (x ◇ (z ◇ y))))
 
 /-- The natural central groupoid law. -/
 equation 26302  :=  x = (y ◇ ((z ◇ x) ◇ w)) ◇ (x ◇ w)
