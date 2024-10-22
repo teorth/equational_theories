@@ -90,7 +90,7 @@ theorem Equation374794_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equ
     · apply t4
     · convert t4 _ 0
 
-theorem Finite.Equation5105_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : Equation5105 G) :
+theorem Finite.Equation5093_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : Equation5093 G) :
     Equation2 G:= by
   intro x y
   let f (y w : G) := y ◇ w

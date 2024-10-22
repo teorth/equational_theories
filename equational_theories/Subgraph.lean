@@ -464,7 +464,7 @@ theorem Equation2_implies_Equation3744 (G: Type _) [Magma G] (h: Equation2 G) : 
   fun _ _ _ _ ↦ h ..
 
 @[equational_result]
-theorem Equation2_implies_Equation5105 (G: Type _) [Magma G] (h: Equation2 G) : Equation5105 G :=
+theorem Equation2_implies_Equation5093 (G: Type _) [Magma G] (h: Equation2 G) : Equation5093 G :=
   fun _ _ _ ↦ h ..
 
 @[equational_result]
