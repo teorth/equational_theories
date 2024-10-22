@@ -1,4 +1,5 @@
 
+import Mathlib.Data.Finite.Basic
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 import equational_theories.MemoFinOp
@@ -19,5 +20,5 @@ def «FinitePoly 4 * x² + 4 * y² + 3 * x + 2 * y + 3 * x * y % 5» : Magma (Fi
 /-! The facts -/
 @[equational_result]
 theorem «Facts from FinitePoly 4 * x² + 4 * y² + 3 * x + 2 * y + 3 * x * y % 5» :
-  ∃ (G : Type) (_ : Magma G), Facts G [104, 1038] [3253] :=
-    ⟨Fin 5, «FinitePoly 4 * x² + 4 * y² + 3 * x + 2 * y + 3 * x * y % 5», by decideFin!⟩
+  ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [104, 1038] [3253] :=
+    ⟨Fin 5, «FinitePoly 4 * x² + 4 * y² + 3 * x + 2 * y + 3 * x * y % 5», Finite.of_fintype _, by decideFin!⟩
