@@ -526,7 +526,11 @@ let currentURL = window.location.href;
 if (currentURL.indexOf('?') > -1) {
     renderImplications(currentURL.split('?')[1]-1);
     showPage('detailPage');
+    requestIdleCallback(() => {
+        initializeEquationList();
+    })
 } else {
+    initializeEquationList();
     renderEquationList();
 }
 
