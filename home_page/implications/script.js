@@ -12,6 +12,16 @@ const ids = [
     "unknown"
 ];
 
+const EXPLICIT_CONJECTURE_FALSE = 0;
+const EXPLICIT_CONJECTURE_TRUE = 1;
+const EXPLICIT_PROOF_FALSE = 2;
+const EXPLICIT_PROOF_TRUE = 3;
+const IMPLICIT_CONJECTURE_FALSE = 4;
+const IMPLICIT_CONJECTURE_TRUE = 5;
+const IMPLICIT_PROOF_FALSE = 6;
+const IMPLICIT_PROOF_TRUE = 7;
+const UNKNOWN = 8;
+
 // Assuming arr is already defined
 // const arr = [...];  // Your RLE encoded array
 
@@ -23,10 +33,6 @@ function decodeRLE(arr) {
 	decoded.push(...Array(count).fill(value));
     }
     return decoded;
-}
-
-function mapThroughLUT(decoded) {
-    return decoded.map(index => ids[index]);
 }
 
 function reshape(array, rows, cols) {
@@ -41,7 +47,7 @@ function reshape(array, rows, cols) {
 const decoded = decodeRLE(arr);
 
 // Reshape to 4694x4694
-const implications = reshape(mapThroughLUT(decoded), 4694, 4694);
+const implications = reshape(decoded, 4694, 4694);
 
 const GRAPHITI_BASE_URL = "https://teorth.github.io/equational_theories/graphiti/"
 const FME_BASE_URL = "https://teorth.github.io/equational_theories/fme/"
@@ -88,11 +94,7 @@ function downloadEquationListCSV() {
 }
 
 function downloadRawImplicationsCSV() {
-    const text_to_number = {"explicit_proof_true":4, "implicit_proof_true":3,
-        "explicit_conjecture_true":2, "implicit_conjecture_true":1, "unknown":0,
-        "explicit_proof_false":-4, "implicit_proof_false":-3,
-        "explicit_conjecture_false":-2, "implicit_conjecture_false":-1,
-    }
+    const text_to_number=[-2, 2, -4, 4, -1, 1, -3, 3, 0];
     showDownloadPopup();
     const csv = implications.map(
         (equation) => equation.map(
@@ -154,17 +156,17 @@ function filterEquations() {
 
 
 // Pre-compute boolean flags for each status
-const statusFlags = {
-    explicit_conjecture_false: { explicit: true, conjecture: true, isTrue: false },
-    explicit_conjecture_true: { explicit: true, conjecture: true, isTrue: true },
-    explicit_proof_false: { explicit: true, conjecture: false, isTrue: false },
-    explicit_proof_true: { explicit: true, conjecture: false, isTrue: true },
-    implicit_conjecture_false: { explicit: false, conjecture: true, isTrue: false },
-    implicit_conjecture_true: { explicit: false, conjecture: true, isTrue: true },
-    implicit_proof_false: { explicit: false, conjecture: false, isTrue: false },
-    implicit_proof_true: { explicit: false, conjecture: false, isTrue: true },
-    unknown: { explicit: false, conjecture: false, isTrue: false }
-};
+const statusFlags = [
+    { explicit: true, conjecture: true, isTrue: false },
+    { explicit: true, conjecture: true, isTrue: true },
+    { explicit: true, conjecture: false, isTrue: false },
+    { explicit: true, conjecture: false, isTrue: true },
+    { explicit: false, conjecture: true, isTrue: false },
+    { explicit: false, conjecture: true, isTrue: true },
+    { explicit: false, conjecture: false, isTrue: false },
+    { explicit: false, conjecture: false, isTrue: true },
+    { explicit: false, conjecture: false, isTrue: false }
+];
 
 function isImplies(status, onlyExplicit = false, treatConjecturedAsUnknown = false) {
     const flags = statusFlags[status];
@@ -177,10 +179,11 @@ function isAntiImplies(status, onlyExplicit = false, treatConjecturedAsUnknown =
     const flags = statusFlags[status];
     if (onlyExplicit && !flags.explicit) return false;
     if (treatConjecturedAsUnknown && flags.conjecture) return false;
-    return !flags.isTrue && status !== 'unknown';
+    return !flags.isTrue && status != UNKNOWN;
 }
 function isUnknown(status, treatConjecturedAsUnknown = false) {
-    return status === 'unknown' || (treatConjecturedAsUnknown && status.includes('conjecture'));
+    const flags = statusFlags[status];
+    return status == UNKNOWN || (treatConjecturedAsUnknown && flags.conjecture);
 }
 
 function calculateStats(treatConjecturedAsUnknown = false) {
@@ -393,7 +396,7 @@ function renderImplications(index) {
 	const backwardStatus = implications[index][i];
 
 	    [forwardStatus, backwardStatus].forEach((status, statusIndex) => {
-            const isConjectured = status.includes('conjecture');
+            const isConjectured = statusFlags[status].conjecture
 	        let maybe_prove;
             let forward = statusIndex == 1 ?  index : i;
             let backward = statusIndex == 1 ?  i : index;
@@ -409,7 +412,7 @@ function renderImplications(index) {
                 proofhref = gen_proof_url(forward, backward, does_implies ? "yes" : "no");
                 maybe_prove = ` <a href='${proofhref}'>Try This!</a>`;
             }
-            const item = `<div uid=${i} class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}${maybe_prove}</div>`;
+            const item = `<div uid=${i} class="implication-item ${isspecial} ${ids[status]} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}${maybe_prove}</div>`;
 
             if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
 		        statusIndex === 0 ? impliedBy.push(item) : implies.push(item);
