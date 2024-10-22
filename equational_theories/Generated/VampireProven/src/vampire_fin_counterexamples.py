@@ -66,7 +66,8 @@ disproofs = open(
     f"equational_theories/Generated/VampireProven/Disproofs{dpind}.lean", "w"
 )
 print(
-    """import equational_theories.Equations.All
+    """import Mathlib.Data.Finite.Basic
+import equational_theories.Equations.All
 import equational_theories.MemoFinOp
 import equational_theories.DecideBang
 """,
@@ -104,12 +105,12 @@ for problem in tqdm(problems):
     model = build_model(out)
     print("@[equational_result]", file=disproofs)
     print(
-        f'theorem {problem["lhs"]}_not_implies_{problem["rhs"]} : ∃ (G: Type) (_: Magma G), '
+        f'theorem {problem["lhs"]}_not_implies_{problem["rhs"]} : ∃ (G: Type) (_: Magma G) (_: Finite G), '
         f'{problem["lhs"]} G ∧ ¬ {problem["rhs"]} G :=',
         file=disproofs,
     )
     print(
-        f"  ⟨Fin {len(model)}, ⟨memoFinOp fun x y => {table(model)}[x.val]![y.val]!⟩, by decideFin!⟩",
+        f"  ⟨Fin {len(model)}, ⟨memoFinOp fun x y => {table(model)}[x.val]![y.val]!⟩, Finite.of_fintype _, by decideFin!⟩",
         file=disproofs,
     )
     print(file=disproofs)
