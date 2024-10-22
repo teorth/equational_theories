@@ -118,7 +118,7 @@ lemma fresh_ne_0 : f.freshGenerator a ≠ 0 := by
 lemma fresh_ne_1 : f.freshGenerator a ≠ a := by
   sorry
 
-lemma fresh_ne_2 (h : x ∈ f.Dom) : f.f x ≠ f.freshGenerator a := by
+lemma fresh_ne_2 (h : x ∈ f.Dom) : f.freshGenerator a ≠ f.f x := by
   sorry
 
 lemma fresh_ne_4 (h : x ∈ f.Dom) (h : y ∈ f.Dom) : f.f x + f.f y ≠ f.freshGenerator a := by
@@ -152,73 +152,117 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
     have hb : b ∉ f.Dom := hb
     have hb₀ : b ≠ 0 := fun h ↦ hb (h ▸ f.Dom0)
     have hc₀ : c ≠ 0 := f.fresh_ne_0
-    have hbc : b ≠ c := f.fresh_ne_2 _ hx
+    have hbc : c ≠ b := f.fresh_ne_2 _ hx
     have h2bc : b + b ≠ c := f.fresh_ne_4 _ hx hx
     have hcbb : c - b ≠ b := by
       intro h
       nth_rewrite 1 [←h] at h2bc
       simp at h2bc
-    have hcbcb : c ≠ b - (c - b) := by
-      sorry
-    have hzcb : ∀ z ∈ f.Dom, z ≠ c - b := by
-      sorry
+    have hcb0 : c - b ≠ 0 := sub_ne_zero_of_ne hbc
+    have hcd : c ∉ f.Dom := f.freshGenerator_not_dom
+    have hcbcb : c ≠ b - (c - b) := by sorry
+    have hccb : c ≠ c - b := by sorry
+    have hcbc : c ≠ b - c := by sorry
+    have hbccb : b - c ≠ c - b := by sorry
+    have hbcd : b - c ∉ f.Dom := by sorry
+    have hzcb : ∀ z ∈ f.Dom, z ≠ c - b := by sorry
+    have hfzcb : ∀ z ∈ f.Dom, f.f z ≠ c - b := by sorry
+    have hczfz : ∀ z ∈ f.Dom, c ≠ z - f.f z := by sorry
+    have hzfzcb : ∀ z ∈ f.Dom, z - f.f z ≠ c - b := by sorry
+    have hfzbc : ∀ z ∈ f.Dom, f.f z ≠ b - c := by sorry
+    have hbcbfz : ∀ z ∈ f.Dom, b - (c - b) ≠ f.f z := by sorry
+    have hfzcbbcb : ∀ z ∈ f.Dom, f.f z ≠ c - b - (b - (c - b)) := by sorry
+    have hbcbzfz : ∀ z ∈ f.Dom, b - (c - b) ≠ z - f.f z := by sorry
+    have hbcbzb : ∀ z ∈ f.Dom, b - (c - b) ≠ z - b := by sorry
+    have hffzcb : ∀ z ∈ f.Dom, f.f z ∈ f.Dom → f.f (f.f z) - f.f z ≠ c - b := by sorry
+    have hcbbcb : c - b - (b - (c - b)) ≠ b := by sorry
+    have hbcb0 : b - (c - b) ≠ 0 := by sorry
+    have hcbbcbd : c - b - (b - (c - b)) ∉ f.Dom := by sorry
+    have hccbbcb : c ≠ c - b - (b - (c - b)) := by sorry
+    have hbcbcbbcb : b - (c - b) ≠ c - b - (b - (c - b)) := by sorry
+    have hbcbcb : b - (c - b) ≠ c - b := by sorry
+    have hbcbd : b - (c - b) ∉ f.Dom := by sorry
   {
     Dom := insert b <| insert (c - b) f.Dom
-    f := fun x ↦
-      if x = b then c
-      else if x = c - b then b - x
-      else f.f x
+    f := fun y ↦
+      if y = b then c
+      else if y = c - b then x - b
+      else f.f y
     Inj := by
       intro x hx y hy
       simp at hx hy
-      rcases hx with (hx|hx|hx) <;>
-      rcases hy with (hy|hy|hy)
-      all_goals try simp only [hx, hy, ↓reduceIte, imp_self, hcbb]
-      all_goals try (have hyb : y ≠ b := fun h ↦ hb (h ▸ hy); simp [hyb])
-      all_goals try (have hxb : x ≠ b := fun h ↦ hb (h ▸ hx); simp [hxb])
-      all_goals try (have hycb := hzcb y hy; simp [hycb])
-      all_goals try (have hxcb := hzcb x hx; simp [hxcb])
-      all_goals try clear x hx
-      all_goals try clear y hy
+      rcases hx with hx|hx|hx
+      <;> rcases hy with hy|hy|hy
+      <;> (try simp only [hx, hy, ↓reduceIte, imp_self, hcbb])
+      <;> (try have hxb : x ≠ b := fun h ↦ hb (h ▸ hx); simp [hxb])
+      <;> (try have hyb : y ≠ b := fun h ↦ hb (h ▸ hy); simp [hyb])
+      <;> (try simp only [hzcb x hx, ↓reduceIte])
+      <;> (try simp only [hzcb y hy, ↓reduceIte])
       · exact fun h ↦ (hcbcb h).elim
-      · sorry
+      · exact fun h ↦ (f.fresh_ne_2 _ hy h).elim
       · exact hcbcb.symm
-      · sorry
-      · intro h2
-        apply f.freshGenerator_not_img
-        use x, hx
-      · sorry
+      · exact fun h ↦ (hbcbfz y hy h).elim
+      · exact fun h ↦ (f.fresh_ne_2 _ hx h.symm).elim
+      · exact fun h ↦ (hbcbfz x hx h.symm).elim
       · exact f.Inj hx hy
     Dom0 := by simp [f.Dom0]
-    Id := by simpa [hb₀.symm, Ne.symm (sub_ne_zero_of_ne hbc.symm)] using f.Id
-    Closed_sub := by sorry
-    Valid := by sorry
+    Id := by simpa [hb₀.symm, (sub_ne_zero_of_ne hbc).symm] using f.Id
+    Closed_sub := by
+      intro y hy
+      simp at hy
+      rcases hy with rfl|rfl|hy
+      · simp [hbc, hcd, hccb]
+      · simp [hcbb, hcb0, hbcbcb, hbcbd]
+      · have hyb : y ≠ b := fun h ↦ hb (h ▸ hy)
+        simp [hyb, hzcb y hy, hfzcb y hy]
+        rintro (hfyb|hfyd)
+        · simp [hfyb]
+        · have hfyb : f.f y ≠ b := fun h ↦ hb (h ▸ hfyd)
+          have hffyb : f.f (f.f y) - f.f y ≠ b := fun h ↦ hb (h ▸ f.Closed_sub hy hfyd)
+          simp [hfyb, hfzcb y hy, hffyb, hffzcb y hy hfyd]
+          exact f.Closed_sub hy hfyd
+    Valid := by
+      intro y hy
+      simp at hy
+      rcases hy with rfl|rfl|hy
+      · simp [hbc, hcd, hccb]
+      · simp [hcbb, hcb0, hbcbcb, hbcbd]
+      · have hyb : y ≠ b := fun h ↦ hb (h ▸ hy)
+        simp [hyb, hzcb y hy, hfzcb y hy]
+        rintro (hfyb|hfyd)
+        · simp [hfyb, hcbb, hbcbzb y hy]
+          exact f.Inj hx hy hfyb.symm
+        · have hfyb : f.f y ≠ b := fun h ↦ hb (h ▸ hfyd)
+          have hffyb : f.f (f.f y) - f.f y ≠ b := fun h ↦ hb (h ▸ f.Closed_sub hy hfyd)
+          simp [hfyb, hfzcb y hy, hffyb, hffzcb y hy hfyd]
+          exact f.Valid hy hfyd
     SubInj := by sorry
     ExtendDom := by
       intro y hy
       simp at hy
-      rcases hy with (hy|hy|hy)
-      · simp [hy, hc₀]
-        intro h1 h2 h3
-        constructor
-        · sorry
-        · sorry
-      · simp [hy, hc₀, hcbb]
-        intro h1 h2 h3
-        constructor
-        · sorry
-        · constructor
-          · sorry
-          · sorry
+      rcases hy with rfl|rfl|hy
+      · simp [hc₀, hbccb, hbcd]
+      · simp [hcbb, hcbbcb, hbcb0, hcbbcbd]
       · have hyb : y ≠ b := fun h ↦ hb (h ▸ hy)
-        simp [hyb, hzcb y hy]
-        intro h1 h2 h3
+        simp [hyb, hzcb y hy, hzfzcb y hy]
+        intro _ _ h3
         constructor
-        · sorry
-        · constructor
-          · sorry
-          · sorry
-    ExtendImg := by sorry
+        · intro h
+          apply h ▸ f.ExtendImg hy h3
+          use x, hx
+        · exact f.ExtendDom hy h3
+    ExtendImg := by
+      intro y hy
+      simp at hy
+      rcases hy with rfl|rfl|hy
+      <;> simp [hcbb, hcbc, hb₀, hccbbcb, hbcbcbbcb]
+      <;> (try intro _ _ _ y hy)
+      <;> have hyb : y ≠ b := fun h ↦ hb (h ▸ hy)
+      <;> simp [hyb, hzcb y hy, hfzbc y hy, hfzcbbcb y hy, hzfzcb y hy, hczfz y hy, hbcbzfz y hy]
+      intro _ _ h3 z hz
+      have hzb : z ≠ b := fun h ↦ hb (h ▸ hz)
+      have := by simpa using f.ExtendImg hy h3
+      simpa [hzb, hzcb z hz] using this z hz
   }
 
 /-- Extend preserves the function on its support -/
