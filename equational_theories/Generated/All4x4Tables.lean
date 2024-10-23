@@ -923,3 +923,4 @@ import equational_theories.Generated.All4x4Tables.Refutation921
 import equational_theories.Generated.All4x4Tables.Refutation922
 import equational_theories.Generated.All4x4Tables.Refutation923
 import equational_theories.Generated.All4x4Tables.Refutation924
+import equational_theories.Generated.All4x4Tables.Refutation925
