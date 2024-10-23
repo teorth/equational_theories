@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 
-import numpy as np
 import collections
-import ast
 from itertools import product
 
-from itertools import product
 import re
-from typing import List, Callable
 
-import re
 
 DEBUG = True
 
@@ -123,7 +118,7 @@ def convert(vars_list, equation):
             lambda_func = None
 
         # Store with a name
-        lambda_name = f"lambda"
+        lambda_name = "lambda"
         # print(ctr, lambda_str)
         ctr += 1
 

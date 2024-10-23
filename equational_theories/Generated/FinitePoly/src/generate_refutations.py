@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import re
-import inspect
 import random
 import numpy as np
 from itertools import product

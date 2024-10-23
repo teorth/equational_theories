@@ -2,8 +2,6 @@
 
 import utils
 import os
-import re
-import itertools
 
 equations_txt = open("equations.txt", "r").read().split("\n")[:-1]
 

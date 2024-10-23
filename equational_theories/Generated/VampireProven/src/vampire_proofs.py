@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
-import subprocess, json, random
+import subprocess
+import random
 from tqdm import tqdm
 import time
 from generate_eqs_list import *
 import re
-from collections import defaultdict
 
 random.seed(17)
 
@@ -129,7 +129,7 @@ import Mathlib.Tactic.ByContra
     file=proofs,
 )
 length = 0
-proof_list = open(f"equational_theories/Generated/VampireProven.lean", "a")
+proof_list = open("equational_theories/Generated/VampireProven.lean", "a")
 print(
     f"import equational_theories.Generated.VampireProven.Proofs{dpind}", file=proof_list
 )
