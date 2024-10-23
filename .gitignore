@@ -45,3 +45,4 @@ home_page/_site
 widget/node_modules/*
 ## Data
 **/tmp
+.idea
