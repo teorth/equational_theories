@@ -25,7 +25,7 @@ for filename in 'equational_theories/Generated/VampireProven/Disproofs1.lean', '
     satisfies = []
     for i, eq in enumerate(eqs):
       if satisfies_eq(eq, m):
-        satisfies.append(i)
+        satisfies.append(i+1)
     print('Table', json.dumps(m, separators=(',', ':')))
     print('Proves', json.dumps(satisfies, separators=(',', ':')))
     print()
