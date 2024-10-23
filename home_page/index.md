@@ -102,7 +102,9 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - [nauty](https://pallini.di.uniroma1.it/) - graph automorphism tool
     - [KBCV](http://cl-informatik.uibk.ac.at/software/kbcv/) - Knuth-Bendix completion visualizer
     - [Instagraph](https://github.com/yoheinakajima/instagraph) - knowledge graph generator
-    - [Logic Programming in F#](https://github.com/jack-pappas/fsharp-logic-examples/tree/master) - Code and Examples from John Harrison's "Handbook of Practical Logic and Automated Reasoning"
+    - [Logic Programming in F#](https://github.com/jack-pappas/fsharp-logic-examples/tree/master) - Code and Examples from John Harrison's "Handbook of Practical Logic and Automated Reasoning", translated to F#
+      - [Original code](https://www.cl.cam.ac.uk/~jrh13/atp/), written in OCaml
+      - [Validated Knuth-Bendix code](https://www.cl.cam.ac.uk/~jrh13/atp/OCaml/completion.ml), written in OCaml
 - Blog posts and media mentioning this project
     - "[We're Entering Uncharted Territory for Math"](https://www.theatlantic.com/technology/archive/2024/10/terence-tao-ai-interview/680153/), Matteo Wong, The Atlantic, Oct 4 2024.
     - "[On Math Platform](https://buildermath.substack.com/p/on-math-platform)", Michael Bucko, Substack von Michael, Oct 5 2024.

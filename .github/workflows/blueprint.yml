@@ -174,11 +174,13 @@ jobs:
         run: |
           ~/.elan/bin/lake exe extract_implications --json > /tmp/implications.json
           ~/.elan/bin/lake exe extract_implications unknowns > /tmp/unknowns.json
-          ruby scripts/generate_graphiti_data.rb /tmp/implications.json /tmp/unknowns.json > home_page/graphiti/graph.json
+          ruby scripts/generate_graphiti_data.rb /tmp/implications.json /tmp/unknowns.json data/duals.json > home_page/graphiti/graph.json
 
       - name: Build website using Jekyll
         if: github.event_name == 'push' && env.HOME_PAGE_EXISTS == 'true'
         working-directory: home_page
+        env:
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: JEKYLL_ENV=production bundle exec jekyll build  # Note this will also copy the blueprint and API doc into home_page/_site
 
       - name: "Upload website (API documentation, blueprint and any home page)"

@@ -16,7 +16,7 @@ simproc [confluence_simps] confluenceReduceCtorEq (_) := reduceCtorEq
 private def not_eq_def := Not.eq_def
 
 scoped macro "separate" : tactic => `(tactic| (
-  try simp only [not_eq_def]
+  try simp only [Not.eq_def]
   try intros
   try injections
   try casesm* _ ∨ _, _ ∧ _, Exists _

@@ -4,20 +4,20 @@ This is an alternate presentation of the material of the previous section, where
 
 \begin{definition}[Free magma relative to a theory]\label{free-theory}\lean{FreeMagmaWithLaws}\leanok\uses{models-def}
   Let $\Gamma$ be a theory with an alphabet $X$. A \emph{free magma} with alphabet $X$ subject to the theory $\Gamma$ is a magma $M_{X,\Gamma}$ together with a function $\iota_{X,\Gamma} : X \to M_{X,\Gamma}$, with the following properties:
-  \begin{itemize}
+  \begin{description}
     \item[(i)] $M_{X,\Gamma}$ obeys the theory $\Gamma$: $M_{X,\Gamma} \models \Gamma$.
     \item[(ii)] For any magma $M$ obeying the theory $\Gamma$ and any function $f: X \to M$, there exists a unique magma homomorphism $\tilde{f}: M_{X,\Gamma} \to M$ such that $\tilde{f} \circ \iota_{X,\Gamma} = f$.
-  \end{itemize}
+  \end{description}
 \end{definition}
 
 Such magmas exist and are unique up to a suitable isomorphism:
 
 \begin{theorem}[Existence and uniqueness of free magmas]\label{freemag-exist}\uses{free-theory}\lean{FreeMagma.EvalFreeMagmaWithLawsUniversalProperty}\leanok
   Let $\Gamma$ be a theory with alphabet $X$.
-  \begin{itemize}
+  \begin{description}
     \item[(i)] There exists a free magma $M_{X,\Gamma}$ with alphabet $X$ subject to the theory $\Gamma$.
     \item[(ii)] If $M_{X,\Gamma}$ and $M'_{X,\Gamma}$ are two free magmas with alphabet $X$ subject to the theory $\Gamma$, then there exists a unique magma isomorphism $\phi: M_{X,\Gamma} \to M'_{X,\Gamma}$ such that $\phi \circ \iota_{X,\Gamma} = \iota'_{X,\Gamma}$.
-  \end{itemize}
+  \end{description}
 \end{theorem}
 
 We remark that the ordinary free magma $M_X$ corresponds to the case when $\Gamma$ is the empty theory.

@@ -223,7 +223,7 @@ viewExportNovel table satisfies novel =
                 , div [class "code-container"] [pre [] [text (magmaLine ++ sat ++ ref)]]
                 , text "Then add the following to extra.txt in `All4x4Tables/data`:"
                 , div [class "code-container"] [pre [] [text (tableLine ++ prov)]]
-                , text "Finally, re-run `python3 generate-lean.py`!"
+                , text "Finally, re-run `python3 equational_theories/Generated/FinSearch/src/generate_lean.py`!"
                 ]
 
 viewModelInfo : String -> String -> ModelInfoSuccess -> Html Msg
@@ -232,7 +232,8 @@ viewModelInfo table matcher mi =
     tmatcher =
       matcher |>
       String.filter (\x -> x /= ' ') |>
-      String.replace "+" "◇"
+      String.replace "+" "◇" |>
+      String.replace "*" "◇"
     matching xs =
       if tmatcher == ""
         then xs
@@ -329,4 +330,3 @@ main =
     , onUrlChange = UrlChanged
     , onUrlRequest = UrlRequested
     }
-

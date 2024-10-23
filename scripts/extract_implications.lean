@@ -4,29 +4,10 @@ import Cli.Basic
 import Lean.Util.SearchPath
 import equational_theories.Closure
 
-open Lean Core Elab Cli
-
-structure DualityRelation where
-  dualEquations : Std.HashMap String String
-
-def DualityRelation.ofFile (path : String) : IO DualityRelation := do
-  let dualsJson := Json.parse (←IO.FS.readFile path) |>.toOption.get!
-  let mut dualEquations : Std.HashMap String String := {}
-  for pair in dualsJson.getArr?.toOption.get! do
-    let a := s!"Equation{pair.getArr?.toOption.get![0]!.getNat?.toOption.get!}"
-    let b := s!"Equation{pair.getArr?.toOption.get![1]!.getNat?.toOption.get!}"
-    dualEquations := dualEquations.insert a b
-    dualEquations := dualEquations.insert b a
-  pure ⟨dualEquations⟩
-
-def DualityRelation.dual (rel : DualityRelation) (imp : Implication) : Option Implication :=
-  if isCoreEquationName imp.lhs && isCoreEquationName imp.rhs then
-    some ⟨rel.dualEquations.getD imp.lhs imp.lhs, rel.dualEquations.getD imp.rhs imp.rhs⟩
-  else
-    none
+open Lean Core Elab Cli Closure
 
 def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → DualityRelation → IO Unit) : IO UInt32 := do
-  let dualityRelation ← DualityRelation.ofFile "data/duals.json"
+  let dualityRelation ← getStoredDualityRelations
   let mut some modules := imp.variableArgsAs? ModuleName |
     imp.printHelp
     return 1
@@ -45,12 +26,16 @@ def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → DualityRel
 def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
   let only_e_c := inp.hasFlag "equivalence_creators"
   let duality := inp.hasFlag "duality"
+  let finite_only := inp.hasFlag "finite-only"
   let include_extra := inp.hasFlag "extra"
   if duality && include_extra then
     throw $ IO.userError "Cannot use both --duality and --extra"
   withExtractedResults inp fun rs dualityRelation => do
     let rs := if include_extra then rs else rs.filterMap Entry.keepCore
     let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
+    let rs := if !finite_only then rs else rs.filter (fun r =>
+      r.variant matches .implication .. || r.variant matches .facts { finite := true, .. }
+    )
     let rs := rs.map (·.variant)
     let (components, outcomes) ← Closure.outcomes_mod_equiv rs dualityRelation.dualEquations
     let sortedComponents := components.in_order.qsort (fun a b => Closure.ltEquationNames a[0]! b[0]!)
@@ -98,6 +83,7 @@ def unknowns : Cmd := `[Cli|
     equivalence_creators; "Output only implications whose converse is known to be true"
     extra; "Include extra equations that are not in the core set"
     duality; "Only include one implication of each dual pair"
+    "finite-only"; "Only report finite results"
 
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"
@@ -112,7 +98,7 @@ structure Output where
 structure OutputOutcomes where
   equations : Array String
   outcomes : Array (Array Closure.Outcome)
-  deriving Lean.ToJson
+deriving Lean.ToJson
 
 --- Output of the extract_implications raw subcommand.
 structure OutputRaw where
@@ -155,9 +141,13 @@ def outcomes : Cmd := `[Cli|
 def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
   let include_conj := inp.hasFlag "conjecture"
   let include_impl := inp.hasFlag "closure"
+  let finite_only := inp.hasFlag "finite-only"
   let only_implications := inp.hasFlag "only-implications"
   withExtractedResults inp fun rs dualityRelation => do
     let rs := if include_conj then rs else rs.filter (·.proven)
+    let rs := if !finite_only then rs else rs.filter (fun r =>
+      r.variant matches .implication .. || r.variant matches .facts { finite := true, .. }
+    )
     let rs := if only_implications then rs.filter (·.variant matches .implication ..) else rs
     let rs := rs.map (·.variant)
     let rs ← if include_impl then Closure.closure rs dualityRelation.dualEquations else pure (Closure.toEdges rs)
@@ -204,6 +194,7 @@ def extract_implications : Cmd := `[Cli|
     closure; "Compute the transitive closure"
     json; "Output the data as JSON"
     "only-implications"; "Only consider implications"
+    "finite-only"; "Only report finite results"
 
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"

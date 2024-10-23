@@ -79,6 +79,9 @@ equation 65  :=  x = y ◇ (x ◇ (y ◇ x))
 /-- The central groupoid law -/
 equation 168  :=  x = (y ◇ x) ◇ (x ◇ z)
 
+/-- Part of an Austin pair. -/
+equation 203 := x = (x ◇ (x ◇ x)) ◇ x
+
 /-- From Putnam 1978, Problem A4, part (b) -/
 equation 381  :=  x ◇ y = (x ◇ z) ◇ y
 
@@ -102,8 +105,17 @@ equation 1491  :=  x = (y ◇ x) ◇ (y ◇ (y ◇ x))
 /-- From a paper of Mendelsohn & Padmanabhan, this law axiomatizes abelian groups of exponent 2 -/
 equation 1571  :=  x = (y ◇ z) ◇ (y ◇ (x ◇ z))
 
+/-- A law with a modified translation-invariant model. -/
+equation 1659 := x = (x ◇ y) ◇ ((y ◇ y) ◇ z)
+
+/-- A law with a modified translation-invariant model. -/
+equation 1661 := x = (x ◇ y) ◇ ((y ◇ z) ◇ y)
+
 /-- From a paper of Kisielewicz -/
 equation 1689  :=  x = (y ◇ x) ◇ ((x ◇ z) ◇ z)
+
+/-- A law with a modified translation-invariant model. -/
+equation 1701 := x = (y ◇ x) ◇ ((z ◇ x) ◇ x)
 
 /-- From a paper of Mendelsohn & Padmanabhan -/
 equation 2662  :=  x = ((x ◇ y) ◇ (x ◇ y)) ◇ x
@@ -128,6 +140,9 @@ equation 3994  :=  x ◇ y = (z ◇ (x ◇ y)) ◇ z
 /-- A hard to prove non-consequence of the ``Asterix law``. -/
 equation 4065  :=  x ◇ x = ((x ◇ x) ◇ x) ◇ x
 
+/-- A hard to prove consequence of several laws. -/
+equation 4315 := x ◇ (y ◇ x) = x ◇ (y ◇ z)
+
 /-- The associative law -/
 equation 4512  :=  x ◇ (y ◇ z) = (x ◇ y) ◇ z
 
@@ -151,7 +166,7 @@ equation 4656  :=  (x ◇ y) ◇ y = (x ◇ z) ◇ z
 /- Some order 5 laws -/
 
 /-- Mentioned in a paper of Kisielewicz as a conjectural Austin law -/
-equation 5105  :=  x = y ◇ (y ◇ (y ◇ (x ◇ (z ◇ y))))
+equation 5093  :=  x = y ◇ (y ◇ (y ◇ (x ◇ (z ◇ y))))
 
 /-- The natural central groupoid law. -/
 equation 26302  :=  x = (y ◇ ((z ◇ x) ◇ w)) ◇ (x ◇ w)
