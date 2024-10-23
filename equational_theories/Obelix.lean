@@ -150,7 +150,17 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
     let b := f.f x;
     let c := f.freshGenerator;
     have hb : b ∉ f.Dom := hb
+    have hx₀ : x ≠ 0 := fun h ↦ hb (h ▸ f.Id.symm ▸ f.Dom0 : f.f x ∈ f.Dom)
     have hb₀ : b ≠ 0 := fun h ↦ hb (h ▸ f.Dom0)
+    have hbx : b ≠ x := fun h ↦ hb (h ▸ hx)
+    have hccb : c ≠ c - b := fun h ↦ hb₀ (sub_eq_self.mp h.symm)
+    have hccx : c ≠ c - x := fun h ↦ hx₀ (sub_eq_self.mp h.symm)
+    have hxbb : x - b ≠ b := by
+      intro h
+      have : x - b ∉ f.f '' f.Dom := f.ExtendImg hx hb
+      simp only [Set.mem_image, Finset.mem_coe, not_exists, not_and] at this
+      exact this x hx h.symm
+
     have hc₀ : c ≠ 0 := f.fresh_ne_0
     have hbc : c ≠ b := f.fresh_ne_2 _ hx
     have h2bc : b + b ≠ c := f.fresh_ne_4 _ hx hx
@@ -160,28 +170,27 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
       simp at h2bc
     have hcb0 : c - b ≠ 0 := sub_ne_zero_of_ne hbc
     have hcd : c ∉ f.Dom := f.freshGenerator_not_dom
-    have hcbcb : c ≠ b - (c - b) := by sorry
-    have hccb : c ≠ c - b := by sorry
+    have hcx : c ≠ x := fun h ↦ hcd (h ▸ hx)
+
+    --Definitely needed
     have hcbc : c ≠ b - c := by sorry
-    have hbccb : b - c ≠ c - b := by sorry
     have hbcd : b - c ∉ f.Dom := by sorry
+    have hbccb : b - c ≠ c - b := by sorry
     have hzcb : ∀ z ∈ f.Dom, z ≠ c - b := by sorry
+    have hczb : ∀ z ∈ f.Dom, c - z ≠ b := by sorry
+    have hbccbxb : b - c ≠ c - b - (x - b) := by sorry
+    have hczd : ∀ z ∈ f.Dom, c - z ∉ f.Dom := by sorry
+    have hfzcx : ∀ z ∈ f.Dom, f.f z ≠ c - x := by sorry
     have hfzcb : ∀ z ∈ f.Dom, f.f z ≠ c - b := by sorry
     have hczfz : ∀ z ∈ f.Dom, c ≠ z - f.f z := by sorry
-    have hzfzcb : ∀ z ∈ f.Dom, z - f.f z ≠ c - b := by sorry
     have hfzbc : ∀ z ∈ f.Dom, f.f z ≠ b - c := by sorry
-    have hbcbfz : ∀ z ∈ f.Dom, b - (c - b) ≠ f.f z := by sorry
-    have hfzcbbcb : ∀ z ∈ f.Dom, f.f z ≠ c - b - (b - (c - b)) := by sorry
-    have hbcbzfz : ∀ z ∈ f.Dom, b - (c - b) ≠ z - f.f z := by sorry
-    have hbcbzb : ∀ z ∈ f.Dom, b - (c - b) ≠ z - b := by sorry
+    have hzbbc : ∀ z ∈ f.Dom, z - b ≠ b - c := by sorry
+    have hzbcz : ∀ z ∈ f.Dom, z - b ≠ c - z := by sorry
+    have hzfzcb : ∀ z ∈ f.Dom, z - f.f z ≠ c - b := by sorry
+    have hcxzfz : ∀ z ∈ f.Dom, c - x ≠ z - f.f z := by sorry
+    have hbczfz : ∀ z ∈ f.Dom, b - c ≠ z - f.f z := by sorry
     have hffzcb : ∀ z ∈ f.Dom, f.f z ∈ f.Dom → f.f (f.f z) - f.f z ≠ c - b := by sorry
-    have hcbbcb : c - b - (b - (c - b)) ≠ b := by sorry
-    have hbcb0 : b - (c - b) ≠ 0 := by sorry
-    have hcbbcbd : c - b - (b - (c - b)) ∉ f.Dom := by sorry
-    have hccbbcb : c ≠ c - b - (b - (c - b)) := by sorry
-    have hbcbcbbcb : b - (c - b) ≠ c - b - (b - (c - b)) := by sorry
-    have hbcbcb : b - (c - b) ≠ c - b := by sorry
-    have hbcbd : b - (c - b) ∉ f.Dom := by sorry
+
   {
     Dom := insert b <| insert (c - b) f.Dom
     f := fun y ↦
@@ -189,22 +198,25 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
       else if y = c - b then x - b
       else f.f y
     Inj := by
-      intro x hx y hy
-      simp at hx hy
-      rcases hx with hx|hx|hx
-      <;> rcases hy with hy|hy|hy
-      <;> (try simp only [hx, hy, ↓reduceIte, imp_self, hcbb])
-      <;> (try have hxb : x ≠ b := fun h ↦ hb (h ▸ hx); simp [hxb])
+      intro y hy z hz
+      simp at hy hz
+      rcases hy with hy|hy|hy
+      <;> rcases hz with hz|hz|hz
+      <;> (try simp only [hy, hz, ↓reduceIte, imp_self, hcbb])
       <;> (try have hyb : y ≠ b := fun h ↦ hb (h ▸ hy); simp [hyb])
-      <;> (try simp only [hzcb x hx, ↓reduceIte])
-      <;> (try simp only [hzcb y hy, ↓reduceIte])
-      · exact fun h ↦ (hcbcb h).elim
-      · exact fun h ↦ (f.fresh_ne_2 _ hy h).elim
-      · exact hcbcb.symm
-      · exact fun h ↦ (hbcbfz y hy h).elim
-      · exact fun h ↦ (f.fresh_ne_2 _ hx h.symm).elim
-      · exact fun h ↦ (hbcbfz x hx h.symm).elim
-      · exact f.Inj hx hy
+      <;> (try have hzb : z ≠ b := fun h ↦ hb (h ▸ hz); simp [hzb])
+      <;> (try simp only [hzcb y hy, ↓reduceIte,
+        not_false_eq_true, true_implies, imp_false, ne_eq])
+      <;> (try simp only [hzcb z hz, ↓reduceIte])
+      · exact fun h ↦ (hczfz x hx h).elim
+      · exact fun h ↦ (f.fresh_ne_2 _ hz h).elim
+      · exact (hczfz x hx).symm
+      · have := by simpa using f.ExtendImg hx hb
+        exact fun h ↦ (this z hz h.symm).elim
+      · exact fun h ↦ (f.fresh_ne_2 _ hy h.symm).elim
+      · have := by simpa using f.ExtendImg hx hb
+        exact fun h ↦ (this y hy h).elim
+      · exact f.Inj hy hz
     Dom0 := by simp [f.Dom0]
     Id := by simpa [hb₀.symm, (sub_ne_zero_of_ne hbc).symm] using f.Id
     Closed_sub := by
@@ -212,7 +224,7 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
       simp at hy
       rcases hy with rfl|rfl|hy
       · simp [hbc, hcd, hccb]
-      · simp [hcbb, hcb0, hbcbcb, hbcbd]
+      · simpa [hcbb, f.ExtendDom hx hb, hcx.symm] using (by simp [·])
       · have hyb : y ≠ b := fun h ↦ hb (h ▸ hy)
         simp [hyb, hzcb y hy, hfzcb y hy]
         rintro (hfyb|hfyd)
@@ -226,23 +238,40 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
       simp at hy
       rcases hy with rfl|rfl|hy
       · simp [hbc, hcd, hccb]
-      · simp [hcbb, hcb0, hbcbcb, hbcbd]
+      · simp [hcbb, f.ExtendDom hx hb, hcx.symm, hxbb]
       · have hyb : y ≠ b := fun h ↦ hb (h ▸ hy)
         simp [hyb, hzcb y hy, hfzcb y hy]
         rintro (hfyb|hfyd)
-        · simp [hfyb, hcbb, hbcbzb y hy]
+        · simp [hfyb, hcbb]
           exact f.Inj hx hy hfyb.symm
         · have hfyb : f.f y ≠ b := fun h ↦ hb (h ▸ hfyd)
           have hffyb : f.f (f.f y) - f.f y ≠ b := fun h ↦ hb (h ▸ f.Closed_sub hy hfyd)
           simp [hfyb, hfzcb y hy, hffyb, hffzcb y hy hfyd]
           exact f.Valid hy hfyd
-    SubInj := by sorry
+    SubInj := by
+      intro y z hy hz
+      simp at hy hz
+      rcases hy with hy|hy|hy
+      <;> rcases hz with hz|hz|hz
+      <;> (try simp only [hy, hz, ↓reduceIte, imp_self, hcbb])
+      <;> (try have hyb : y ≠ b := fun h ↦ hb (h ▸ hy); simp [hyb])
+      <;> (try have hzb : z ≠ b := fun h ↦ hb (h ▸ hz); simp [hzb])
+      <;> (try simp only [hzcb y hy, ↓reduceIte,
+        not_false_eq_true, true_implies, imp_false, ne_eq])
+      <;> (try simp only [hzcb z hz, ↓reduceIte])
+      · exact fun h ↦ (hbccbxb h).elim
+      · exact fun h ↦ (hbczfz z hz h).elim
+      · exact hbccbxb.symm
+      · exact fun h ↦ (hcxzfz z hz h).elim
+      · exact (hbczfz y hy).symm
+      · exact (hcxzfz y hy).symm
+      · exact f.SubInj hy hz
     ExtendDom := by
       intro y hy
       simp at hy
       rcases hy with rfl|rfl|hy
       · simp [hc₀, hbccb, hbcd]
-      · simp [hcbb, hcbbcb, hbcb0, hcbbcbd]
+      · simp [hcbb, hczb x hx, hbx.symm, hczd x hx]
       · have hyb : y ≠ b := fun h ↦ hb (h ▸ hy)
         simp [hyb, hzcb y hy, hzfzcb y hy]
         intro _ _ h3
@@ -255,14 +284,24 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
       intro y hy
       simp at hy
       rcases hy with rfl|rfl|hy
-      <;> simp [hcbb, hcbc, hb₀, hccbbcb, hbcbcbbcb]
-      <;> (try intro _ _ _ y hy)
-      <;> have hyb : y ≠ b := fun h ↦ hb (h ▸ hy)
-      <;> simp [hyb, hzcb y hy, hfzbc y hy, hfzcbbcb y hy, hzfzcb y hy, hczfz y hy, hbcbzfz y hy]
-      intro _ _ h3 z hz
-      have hzb : z ≠ b := fun h ↦ hb (h ▸ hz)
-      have := by simpa using f.ExtendImg hy h3
-      simpa [hzb, hzcb z hz] using this z hz
+      · simp [hcbc, hcbb, hzbbc x hx]
+        intro _ _ _ y hy
+        have hyb : y ≠ b := fun h ↦ hb (h ▸ hy)
+        simp [hyb, hzcb y hy, hfzbc y hy]
+      · simp [hcbb, hccx, hzbcz x hx]
+        intro _ _ _ y hy
+        have hyb : y ≠ b := fun h ↦ hb (h ▸ hy)
+        simp [hyb, hzcb y hy, hfzcx y hy]
+      · have hyb : y ≠ b := fun h ↦ hb (h ▸ hy)
+        simp [hyb, hzcb y hy, hczfz y hy, hcbb]
+        intro hfyb
+        have hyx : y ≠ x := fun h ↦ hfyb (congrArg f.f h)
+        have hxbyfy : x - b ≠ y - f.f y := fun h ↦ hyx.symm (f.SubInj hx hy h)
+        simp [hxbyfy]
+        intro _ hy2 z hz
+        have hzb : z ≠ b := fun h ↦ hb (h ▸ hz)
+        have := by simpa using f.ExtendImg hy hy2
+        simpa [hzb, hzcb z hz] using this z hz
   }
 
 /-- Extend preserves the function on its support -/
