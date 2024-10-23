@@ -1,4 +1,6 @@
-import re, json, itertools
+import re
+import json
+import itertools
 from generate_eqs_list import *
 
 

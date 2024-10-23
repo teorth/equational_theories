@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import ast
-import re
 
 # we have 4694 equations
 full = set(list(range(4694)))
@@ -29,5 +28,5 @@ def gen(refutation_line):
 with open("refutations.txt") as f:
     lines = f.readlines()
     for i, line in enumerate(lines):
-        if not "seen" in line:
+        if "seen" not in line:
             gen(line)

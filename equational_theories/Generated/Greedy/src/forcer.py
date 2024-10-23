@@ -90,9 +90,9 @@ class Rule:
                     f"var{v}"
                 ].get("ind", 0) | (1 << j)
         for j, v in enumerate(self.conclusion):
-            self.graph.add_node(f"conclusion", type=2)
-            self.graph.add_edge(f"conclusion", f"var{v}")
-            self.graph[f"conclusion"][f"var{v}"]["ind"] = self.graph[f"conclusion"][
+            self.graph.add_node("conclusion", type=2)
+            self.graph.add_edge("conclusion", f"var{v}")
+            self.graph["conclusion"][f"var{v}"]["ind"] = self.graph["conclusion"][
                 f"var{v}"
             ].get("ind", 0) | (1 << j)
         self.ghash = nx.weisfeiler_lehman_graph_hash(
@@ -223,7 +223,7 @@ class Rule:
                 f"R({varnames[a]}, {varnames[b]}, {varnames[c]})"
                 for a, b, c in self.preconditions
             )
-            + f" \\to "
+            + " \\to "
         )
         if len(self.conclusion) == 2:
             word += f"{varnames[self.conclusion[0]]} = {varnames[self.conclusion[1]]}"
@@ -394,7 +394,7 @@ fof(p4YZ, axiom, ! [Y, Z] : ~old(c, Y, Z)).
         for j, sk in enumerate(d):
             default_rules += f'fof(rule_def_{def_index}_{j}, axiom, ! [X, Y, Z] : (~sP{def_index}(X, Y, Z) | {tptp_single("old", [skolemification.get(x, x) for x in sk])})).\n'
         def_index += 1
-    default_rules += f"fof(new_new, axiom, new(a, b, c)).\n"
+    default_rules += "fof(new_new, axiom, new(a, b, c)).\n"
 
     default_rules += f'fof(new_imp, axiom, ! [X, Y, Z] : (~new(X, Y, Z) | old(X, Y, Z) | {" | ".join(f"sP{i}(X, Y, Z)" for i in range(def_index))})).\n'
 
@@ -428,7 +428,7 @@ def main(timeout, find_rules):
             default_rules
             + f'fof(preserve, conjecture, {" & ".join(rule.to_tptp("new") for rule in rules)}).\n'
         )
-        inp += f"fof(new_def2, axiom, new(X, Y, Z) | ~new(X, Y, Z)).\n"
+        inp += "fof(new_def2, axiom, new(X, Y, Z) | ~new(X, Y, Z)).\n"
         try:
             if not find_rules:
                 raise CalledProcessError(1, "not testing")
@@ -451,7 +451,7 @@ def main(timeout, find_rules):
             ).decode()
             if "Termination reason: Refutation" in out:
                 raise CalledProcessError(1, "proved valid")
-            print(f"Rules are't preserved.")
+            print("Rules are't preserved.")
             # print(out)
             old = re.findall(r"(?<!~)old\(([\w\'$]+),([\w\'$]+),([\w\'$]+)\)", out)
             aeqb = "b = a" in out
@@ -473,7 +473,7 @@ def main(timeout, find_rules):
                     rules.append(Rule(old + [("a", "ba"[aeqb], "c")], prb).minimize())
             else:
                 rules.append(Rule(old, prb).minimize())
-        except subprocess.CalledProcessError as e:
+        except subprocess.CalledProcessError:
             print("Timed out (300s)")
             for i, rule in enumerate(rules):
                 inp = default_rules

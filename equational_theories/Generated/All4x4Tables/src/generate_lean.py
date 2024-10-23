@@ -2,9 +2,7 @@
 
 from collections import defaultdict
 import ast
-import re
 import json
-import itertools
 from pathlib import Path
 
 #

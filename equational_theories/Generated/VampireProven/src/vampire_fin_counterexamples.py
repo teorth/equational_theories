@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-import subprocess, json, random
+import subprocess
+import json
+import random
 from tqdm import tqdm
 import time
 from generate_eqs_list import *
