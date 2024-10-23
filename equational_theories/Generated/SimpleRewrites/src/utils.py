@@ -1,7 +1,6 @@
 import re
 
 
-
 # Define the expression node
 class ExprNode:
     def __init__(self, value, left=None, right=None):
