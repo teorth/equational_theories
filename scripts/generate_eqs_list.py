@@ -109,12 +109,12 @@ if __name__ == "__main__":
         print(
             f"    Generates all equations up to {EQ_SIZE} operations and sends them to the standard output."
         )
-        print(f"    To output to a file use the > operator of your shell.")
+        print("    To output to a file use the > operator of your shell.")
         print(
-            f"    If the --shapes option is present, the shapes of the equations are printed instead."
+            "    If the --shapes option is present, the shapes of the equations are printed instead."
         )
         print(
-            f"    If the --lean option is present, the equations are printed in the format of https://github.com/teorth/equational"
+            "    If the --lean option is present, the equations are printed in the format of https://github.com/teorth/equational"
         )
         exit(1)
 

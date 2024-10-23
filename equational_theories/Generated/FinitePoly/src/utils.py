@@ -1,8 +1,5 @@
-from itertools import product
 import re
-from typing import List, Callable
 
-import re
 
 
 # Define the expression node
@@ -114,7 +111,7 @@ def convert(vars_list, equation):
             lambda_func = None
 
         # Store with a name
-        lambda_name = f"lambda"
+        lambda_name = "lambda"
         # print(ctr, lambda_str)
         ctr += 1
 

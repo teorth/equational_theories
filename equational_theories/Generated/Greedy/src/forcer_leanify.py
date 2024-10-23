@@ -139,7 +139,7 @@ def proof_maker(
             if do_clear and (
                 eq_use_cnt[eq_name[l]] == 0 or eq_use_cnt[eq_name[r]] == 0
             ):
-                proof_steps.append(f"clear")
+                proof_steps.append("clear")
                 if eq_use_cnt[eq_name[l]] == 0:
                     proof_steps[-1] += f" {eq_name[l]}"
                 if eq_use_cnt[eq_name[r]] == 0:
@@ -168,7 +168,7 @@ def proof_maker(
             if do_clear and (
                 eq_use_cnt[eq_name[l]] == 0 or eq_use_cnt[eq_name[r]] == 0
             ):
-                proof_steps.append(f"clear")
+                proof_steps.append("clear")
                 if eq_use_cnt[eq_name[l]] == 0:
                     proof_steps[-1] += f" {eq_name[l]}"
                 if eq_use_cnt[eq_name[r]] == 0:
@@ -192,7 +192,7 @@ def proof_maker(
             if do_clear and (
                 eq_use_cnt[eq_name[l]] == 0 or eq_use_cnt[eq_name[r]] == 0
             ):
-                proof_steps.append(f"clear")
+                proof_steps.append("clear")
                 if eq_use_cnt[eq_name[l]] == 0:
                     proof_steps[-1] += f" {eq_name[l]}"
                 if eq_use_cnt[eq_name[r]] == 0:
@@ -324,7 +324,7 @@ def main():
             f'∀ (X Y Z), ¬ new X Y Z ∨ old X Y Z ∨ {" ∨ ".join(f"sP{i} X Y Z" for i in range(len(leandefs)))}',
         )
     )
-    types.append(("imp_new_0", f"∀ (X Y Z), ¬ old X Y Z ∨ new X Y Z"))
+    types.append(("imp_new_0", "∀ (X Y Z), ¬ old X Y Z ∨ new X Y Z"))
 
     # print(def_types)
     # print(types)
@@ -377,10 +377,10 @@ def main():
 
     for memv in range(3):
         inp = tptp
-        inp += f"fof(old_mem1, axiom, ! [X, Y, Z] : (~old(X, Y, Z) | memold(X))).\n"
-        inp += f"fof(old_mem2, axiom, ! [X, Y, Z] : (~old(X, Y, Z) | memold(Y))).\n"
-        inp += f"fof(old_mem3, axiom, ! [X, Y, Z] : (~old(X, Y, Z) | memold(Z))).\n"
-        inp += f"fof(preserve_0, negated_conjecture, new(sk0, sk1, sk2)).\n"
+        inp += "fof(old_mem1, axiom, ! [X, Y, Z] : (~old(X, Y, Z) | memold(X))).\n"
+        inp += "fof(old_mem2, axiom, ! [X, Y, Z] : (~old(X, Y, Z) | memold(Y))).\n"
+        inp += "fof(old_mem3, axiom, ! [X, Y, Z] : (~old(X, Y, Z) | memold(Z))).\n"
+        inp += "fof(preserve_0, negated_conjecture, new(sk0, sk1, sk2)).\n"
         inp += f"fof(preserve_1, negated_conjecture, sk{memv} != a).\n"
         inp += f"fof(preserve_2, negated_conjecture, sk{memv} != b).\n"
         inp += f"fof(preserve_3, negated_conjecture, ~memold(sk{memv})).\n"
@@ -601,7 +601,7 @@ theorem PartialSolution.toMagma_equation{eqid} :
         if rel["lhs"] == f"Equation{eqid}":
             rhs_id = rel["rhs"][len("Equation") :]
             rhs = eqs[int(rhs_id) - 1]
-            inp = f""
+            inp = ""
             for i, rule in enumerate(rules):
                 inp += f'fof(old_{i}, axiom, {rule.to_tptp("old")}).\n'
             ort = rulify_eq2(rhs)
