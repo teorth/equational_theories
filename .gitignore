@@ -45,3 +45,6 @@ home_page/_site
 widget/node_modules/*
 ## Data
 **/tmp
+.idea
+equational_theories/Generated/All4x4Tables/src/finite_magma_tools/bin
+equational_theories/Generated/All4x4Tables/src/finite_magma_tools/dist-newstyle
