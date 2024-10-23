@@ -147,8 +147,6 @@ def generate_lean(data):
     refuted = data["refuted"]
 
     name = f"FinitePoly {pretty_eq} % {div}"
-    satname = lambda i: f"{name} satisfies Equation{i}"
-    refname = lambda i: f"{name} refutes Equation{i}"
 
     out = f"""
 import Mathlib.Data.Finite.Basic

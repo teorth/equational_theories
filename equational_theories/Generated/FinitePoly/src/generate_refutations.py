@@ -32,7 +32,8 @@ while True:
     S = set(range(N))
     a, b, c, d, e, f = np.random.randint(0, N, 6)
     src = f"({a} * x**2 + {b} * y**2 + {c} * x + {d} * y + {e} * x * y) % {N}"
-    op = lambda x, y: (a * x**2 + b * y**2 + c * x + d * y + e * x * y) % N
+    def op(x, y):
+        return (a * x ** 2 + b * y ** 2 + c * x + d * y + e * x * y) % N
 
     ok = tuple(doall(S, op))
     if ok not in seen:

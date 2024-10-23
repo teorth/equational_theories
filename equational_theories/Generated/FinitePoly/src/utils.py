@@ -110,7 +110,6 @@ def convert(vars_list, equation):
             lambda_func = None
 
         # Store with a name
-        lambda_name = "lambda"
         # print(ctr, lambda_str)
         ctr += 1
 
