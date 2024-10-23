@@ -24,4 +24,4 @@ import equational_theories.Confluence4
 import equational_theories.Conjectures
 import equational_theories.ManuallyProved
 import equational_theories.ThreeC2
-import equational_theories.Obelisk
+import equational_theories.Obelix
