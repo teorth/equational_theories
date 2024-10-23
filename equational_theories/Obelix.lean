@@ -3,6 +3,8 @@ import Mathlib.Data.DFinsupp.Notation
 import Mathlib.Data.ZMod.Defs
 import Mathlib.Logic.Denumerable
 import Mathlib.GroupTheory.FiniteAbelian
+import Mathlib.LinearAlgebra.Finsupp
+import Mathlib.LinearAlgebra.Dimension.Localization
 import Mathlib.Tactic
 
 import equational_theories.FactsSyntax
@@ -15,17 +17,19 @@ import equational_theories.Equations.Basic
 namespace Obelix
 noncomputable section
 
---The particular group that we'll work on: ℕ-indexed functions to ℤ with finite support.
+--The particular group that we'll work on: ℕ-indexed functions to ℚ with finite support.
 --To ensure that this is computable (so that we can get the first few elements and verify
 --that our non-Astericity), we use DFinsupp, the computable (and dependent) friend of Finsupp.
 --The ℕ lets us easily get "fresh" generators to keep extending the function. Finite support means
 --that the group is still countable, so we can denumerate every element and eventually add it
---to the domain. We could easily use ℚ or Fin p instead of ℤ if we wanted.
+--to the domain. We use ℚ so that simply picking anything outside the Module.span of the existing
+--elements suffices, because we need guarantees like `3•fresh ≠ a + 2•b`; simply taking elements
+--outside the group closure would not suffice for this. #TODO
 --Significant amounts of the construction -- even defining the invariants of the partial function --
 --depend on this, so we use it explicitly instead of making PartialSolution depend on a group G.
 abbrev A : Type := Π₀ _ : ℕ, ℤ
 
-instance A_group : AddCommGroup A := inferInstance
+instance A_module : Module.Free ℤ A := inferInstance
 
 @[ext]
 structure PartialSolution where
@@ -61,17 +65,35 @@ theorem ExtendImg' (f : PartialSolution) : ∀ {a}, a ∈ f.Dom → f.f a ∉ f.
   funext x
   simp only [Im, Finset.mem_image, Set.mem_image, Finset.mem_coe]
 
-/-- The group Π₀ : ℕ → ℤ is not finitely generated. -/
-theorem A_not_FG : ¬(AddGroup.FG A) :=
-  have h : ¬(AddGroup.FG (Π₀ _ : ℕ, Fin 1064)) := fun _ ↦ DFinsupp.infinite_of_left.not_finite
-    <| AddCommGroup.finite_of_fg_torsion (Π₀ _ : ℕ, Fin 1064) (fun _ ↦ by
+/-- The group Π₀ : T → ℤ is not finitely generated when T is infinite -/
+theorem DFinsuppInfiniteInt_not_FG {T : Type*} [Infinite T] : ¬(AddGroup.FG (Π₀ _ : T, ℤ)) :=
+  have h : ¬(AddGroup.FG (Π₀ _ : T, Fin 1064)) := fun _ ↦ DFinsupp.infinite_of_left.not_finite
+    <| AddCommGroup.finite_of_fg_torsion (Π₀ _ : T, Fin 1064) (fun _ ↦ by
     rw [isOfFinAddOrder_iff_nsmul_eq_zero]
     exact ⟨1064, by simp, by ext; simp [show (1064:Fin 1064) = 0 by rfl]⟩
   )
-  let f : A →+ (Π₀ _ : ℕ, Fin 1064) := DFinsupp.mapRange.addMonoidHom fun _ ↦ Int.castAddHom _
+  let f : (Π₀ _ : T, ℤ) →+ (Π₀ _ : T, Fin 1064) := DFinsupp.mapRange.addMonoidHom fun _ ↦ Int.castAddHom _
   have : Function.Surjective f := Function.HasRightInverse.surjective
     ⟨DFinsupp.mapRange (fun _ x ↦ x) (by simp), fun _ ↦ by ext; simp [DFinsupp.mapRange, f]⟩
   fun _ ↦ h (AddGroup.fg_of_surjective this)
+
+/-- The module Π₀ _ : ℕ, ℤ is not a finite rank module over ℤ -/
+theorem DFinsuppInfinite_not_Finite : ¬(Module.Finite ℤ A) := by
+  /- Prove by giving a series of Module equivalences (LinearEquiv's) between DFinsupp,
+  Finsupp, and finally Polynomial, where we can appeal to Polynomial.not_finite to do the
+  lifting for us. -/
+  have f : (Polynomial ℤ) ≃ₗ[ℤ] (Finsupp ℕ ℤ) := {
+    toFun := Polynomial.toFinsupp
+    invFun := Polynomial.ofFinsupp
+    map_add' := by simp
+    map_smul' := by
+      intros
+      rw [zsmul_eq_mul, eq_intCast, Int.cast_id, ← Polynomial.toFinsupp_smul, zsmul_eq_mul]
+    left_inv := by simp [Function.LeftInverse]
+    right_inv := by simp [Function.RightInverse, Function.LeftInverse]
+  }
+  rw [← Module.Finite.equiv_iff (finsuppLequivDFinsupp ℤ), ← Module.Finite.equiv_iff f]
+  exact Polynomial.not_finite
 
 instance instADenumerable : Denumerable A :=
   Denumerable.ofEncodableOfInfinite A
@@ -83,64 +105,71 @@ attribute [-instance] instEncodableDFinsuppOfDecidableNeOfNat
  so far, and a new value x. (If x isn't needed, we can just provide 0.) -/
 @[irreducible]
 def freshGenerator (f : PartialSolution) (x : A := 0) : A := by
-  have : ∃ y, y ∉ AddSubgroup.closure (f.Dom ∪ f.Im ∪ {x} : Set A) := by
-    by_contra h
-    apply AddGroup.fg_iff.mpr.mt A_not_FG
-    push_neg at h
-    use (f.Dom ∪ f.Im ∪ {x} : Set A)
-    simpa [AddSubgroup.eq_top_iff'] using h
+  have : ∃ y, ∀ (k : ℤ), k ≠ 0 → k • y ∉ Submodule.span ℤ (f.Dom ∪ f.Im ∪ {x} : Set A) := by
+    have hRankFin := rank_span_of_finset (R := ℤ) (f.Dom ∪ f.Im ∪ {x} : Finset A)
+    rw [Finset.coe_union, Finset.coe_union, Finset.coe_singleton] at hRankFin
+    have hRankInfinite : Cardinal.aleph0 ≤ Module.rank ℤ A := by
+      by_contra! h
+      rw [Module.rank_lt_aleph0_iff] at h
+      exact DFinsuppInfinite_not_Finite h
+    apply exists_smul_not_mem_of_rank_lt (R := ℤ)
+    exact lt_of_lt_of_le hRankFin hRankInfinite
   exact Classical.choose this
 
-theorem freshGenerator_not_subgroup (f : PartialSolution) (x : A) :
-    f.freshGenerator x ∉ AddSubgroup.closure (f.Dom ∪ f.Im ∪ {x}) := by
+theorem freshGenerator_not_smul_span (f : PartialSolution) (x : A) {k : ℤ} (hk : k ≠ 0) :
+    k • f.freshGenerator x ∉ Submodule.span ℤ (f.Dom ∪ f.Im ∪ {x}) := by
   rw [freshGenerator]
-  exact Classical.choose_spec (freshGenerator.proof_1 f x )
+  exact Classical.choose_spec (freshGenerator.proof_1 f x) k hk
+
+theorem freshGenerator_not_span (f : PartialSolution) (x : A) :
+    f.freshGenerator x ∉ Submodule.span ℤ (f.Dom ∪ f.Im ∪ {x}) := by
+  simpa using f.freshGenerator_not_smul_span x (one_ne_zero)
 
 section freshGenerator_lemmas
 
 variable (f : PartialSolution) {x y : A} (a : A := 0)
 
-theorem freshGenerator_not_dom : f.freshGenerator a ∉ f.Dom := by
-  have := AddSubgroup.not_mem_of_not_mem_closure (f.freshGenerator_not_subgroup a)
-  rw [Set.union_assoc] at this
+lemma freshGenerator_not_dom : f.freshGenerator a ∉ f.Dom := by
+  have := f.freshGenerator_not_span a
   contrapose! this
-  exact Set.mem_union_left _ this
+  rw [mem_span_set']
+  use 1, fun _ ↦ 1, fun _ ↦ ⟨f.freshGenerator a, by simp [this]⟩
+  simp
 
-lemma freshGenerator_not_img : f.freshGenerator a ∉ f.f '' f.Dom := by
-  sorry
+lemma fresh_ne_sum (hx : x ∈ f.Dom) (hy : y ∈ f.Dom) (h i j k l m : ℤ := 0) (hh : h ≠ 0 := by decide):
+    h • f.freshGenerator a ≠ i • a + j • x + k • y + l • f.f x + m • f.f y := by
+  have := f.freshGenerator_not_smul_span a hh
+  contrapose! this
+  rw [mem_span_set']
+  use 5
+  use fun n ↦ if n = 0 then i else if n = 1 then j else if n = 2 then k
+    else if n = 3 then l else m
+  use fun n ↦
+    if n = 0 then ⟨a, by simp⟩
+    else if n = 1 then ⟨x, by simp [hx]⟩
+    else if n = 2 then ⟨y, by simp [hy]⟩
+    else if n = 3 then ⟨f.f x, by simp [show f.f x ∈ f.Im by simp [Im]; use x]⟩
+    else ⟨f.f y, by simp [show f.f y ∈ f.Im by simp [Im]; use y]⟩
+  simp [this, Fin.sum_univ_def, List.finRange_succ_eq_map]
+  abel
 
-lemma freshGenerator_not_Im : f.freshGenerator a ∉ f.Im := by
-  sorry
+lemma fresh_sum_ne_sum (hx : x ∈ f.Dom) (hy : y ∈ f.Dom)
+    (h₁ i₁ j₁ k₁ l₁ m₁ h₂ i₂ j₂ k₂ l₂ m₂ : ℤ := 0) (hh : h₁ ≠ h₂ := by decide) :
+  h₁ • f.freshGenerator a + i₁ • a + j₁ • x + k₁ • y + l₁ • f.f x + m₁ • f.f y ≠
+  h₂ • f.freshGenerator a + i₂ • a + j₂ • x + k₂ • y + l₂ • f.f x + m₂ • f.f y := by
+  have := (f.fresh_ne_sum a hx hy (h₂ - h₁) (i₁ - i₂) (j₁ - j₂) (k₁ - k₂) (l₁ - l₂) (m₁ - m₂)
+    (sub_ne_zero_of_ne hh.symm)).symm
+  contrapose! this
+  rw [← neg_add_eq_zero] at this ⊢
+  rw [← this, ← neg_add_eq_zero]
+  simp [sub_smul]
+  abel
 
-lemma fresh_ne_0 : f.freshGenerator a ≠ 0 := by
-  sorry
+lemma fresh_ne_f (hx : x ∈ f.Dom) : f.freshGenerator a ≠ f.f x := by
+  simpa using f.fresh_ne_sum a hx f.Dom0 1 0 0 0 1
 
-lemma fresh_ne_1 : f.freshGenerator a ≠ a := by
-  sorry
-
-lemma fresh_ne_2 (h : x ∈ f.Dom) : f.freshGenerator a ≠ f.f x := by
-  sorry
-
-lemma fresh_ne_4 (h : x ∈ f.Dom) (h : y ∈ f.Dom) : f.f x + f.f y ≠ f.freshGenerator a := by
-  sorry
-
-lemma fresh_ne_5 (hx : x ∈ f.Dom) (hy : y ∈ f.Dom) : f.freshGenerator a ≠ y + f.f x := by
-  sorry
-
-lemma fresh_ne_6 (hx : x ∈ f.Dom) : a - f.freshGenerator a ≠ x - f.f x := by
-  sorry
-
-lemma fresh_ne_7 : a - f.freshGenerator a ∉ f.Dom := by
-  sorry
-
-lemma fresh_ne_8 : f.freshGenerator a ≠ a - f.freshGenerator a := by
-  sorry
-
-lemma fresh_ne_9 (h : x ∈ f.Dom) : f.f x ≠ a - f.freshGenerator a := by
-  sorry
-
-lemma fresh_ne_10 (h : x ∈ f.Dom) : f.freshGenerator a ≠ x - f.f x:= by
-  sorry
+lemma fresh_ne_add_f (hx : x ∈ f.Dom) (hy : y ∈ f.Dom) : f.freshGenerator a ≠ x + f.f y := by
+  simpa using f.fresh_ne_sum a hx hy 1 0 1 0 0 1
 
 end freshGenerator_lemmas
 
@@ -155,41 +184,68 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
     have hbx : b ≠ x := fun h ↦ hb (h ▸ hx)
     have hccb : c ≠ c - b := fun h ↦ hb₀ (sub_eq_self.mp h.symm)
     have hccx : c ≠ c - x := fun h ↦ hx₀ (sub_eq_self.mp h.symm)
-    have hxbb : x - b ≠ b := by
-      intro h
-      have : x - b ∉ f.f '' f.Dom := f.ExtendImg hx hb
-      simp only [Set.mem_image, Finset.mem_coe, not_exists, not_and] at this
-      exact this x hx h.symm
-
-    have hc₀ : c ≠ 0 := f.fresh_ne_0
-    have hbc : c ≠ b := f.fresh_ne_2 _ hx
-    have h2bc : b + b ≠ c := f.fresh_ne_4 _ hx hx
-    have hcbb : c - b ≠ b := by
-      intro h
-      nth_rewrite 1 [←h] at h2bc
-      simp at h2bc
-    have hcb0 : c - b ≠ 0 := sub_ne_zero_of_ne hbc
+    have hxbb : x - b ≠ b :=
+      have : ∀ z ∈ f.Dom, f.f z ≠ x - b := by simpa using f.ExtendImg hx hb
+      (this x hx).symm
+    --All of these are various versions of "the fresh generator is not in the span".
     have hcd : c ∉ f.Dom := f.freshGenerator_not_dom
+    have hc₀ : c ≠ 0 := by
+      simpa using f.fresh_ne_sum _ f.Dom0 f.Dom0 1
+    have hbc : c ≠ b := f.fresh_ne_f _ hx
     have hcx : c ≠ x := fun h ↦ hcd (h ▸ hx)
-
-    --Definitely needed
-    have hcbc : c ≠ b - c := by sorry
-    have hbcd : b - c ∉ f.Dom := by sorry
-    have hbccb : b - c ≠ c - b := by sorry
-    have hzcb : ∀ z ∈ f.Dom, z ≠ c - b := by sorry
-    have hczb : ∀ z ∈ f.Dom, c - z ≠ b := by sorry
-    have hbccbxb : b - c ≠ c - b - (x - b) := by sorry
-    have hczd : ∀ z ∈ f.Dom, c - z ∉ f.Dom := by sorry
-    have hfzcx : ∀ z ∈ f.Dom, f.f z ≠ c - x := by sorry
-    have hfzcb : ∀ z ∈ f.Dom, f.f z ≠ c - b := by sorry
-    have hczfz : ∀ z ∈ f.Dom, c ≠ z - f.f z := by sorry
-    have hfzbc : ∀ z ∈ f.Dom, f.f z ≠ b - c := by sorry
-    have hzbbc : ∀ z ∈ f.Dom, z - b ≠ b - c := by sorry
-    have hzbcz : ∀ z ∈ f.Dom, z - b ≠ c - z := by sorry
-    have hzfzcb : ∀ z ∈ f.Dom, z - f.f z ≠ c - b := by sorry
-    have hcxzfz : ∀ z ∈ f.Dom, c - x ≠ z - f.f z := by sorry
-    have hbczfz : ∀ z ∈ f.Dom, b - c ≠ z - f.f z := by sorry
-    have hffzcb : ∀ z ∈ f.Dom, f.f z ∈ f.Dom → f.f (f.f z) - f.f z ≠ c - b := by sorry
+    have hczd : ∀ z ∈ f.Dom, c - z ∉ f.Dom := fun z hz h ↦
+      (show _ ≠ (c - z) + z by simpa using f.fresh_ne_sum 0 h hz 1 0 1 1)
+        (eq_add_of_sub_eq rfl)
+    have hfzcx : ∀ z ∈ f.Dom, f.f z ≠ c - x := fun z hz h ↦
+      f.fresh_ne_add_f 0 hx hz (add_eq_of_eq_sub' h).symm
+    have hczb : ∀ z ∈ f.Dom, c - z ≠ b := fun _ hz h ↦
+      (f.fresh_ne_add_f 0 hz hx) (add_comm b _ ▸ eq_add_of_sub_eq h)
+    have hbcd : b - c ∉ f.Dom := fun h ↦
+      (show b - c ≠ b - c by
+        simpa [add_comm, ← sub_eq_add_neg] using
+          f.fresh_sum_ne_sum 0 hx h (-1) 0 0 0 1 0 0 0 0 1) rfl
+    have hcbb : c - b ≠ b := by
+      simpa [← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum _ hx f.Dom0 1 0 0 0 (-1) 0 0 0 0 0 1
+    have hcbc : c ≠ b - c := by
+      simpa [add_comm, ← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum _ hx f.Dom0 1 0 0 0 0 0 (-1) 0 0 0 1
+    have hbccb : b - c ≠ c - b := by
+      simpa [add_comm _ b, ← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum _ hx f.Dom0 (-1) 0 0 0 1 0 1 0 0 0 (-1)
+    have hzcb : ∀ z ∈ f.Dom, z ≠ c - b := fun _ hz ↦ by
+      simpa [← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum _ hx hz 0 0 0 1 0 0 1 0 0 0 (-1)
+    have hbccbxb : b - c ≠ c - b - (x - b) := by
+      simpa [add_comm _ b, ← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum _ hx hx (-1) 0 0 0 1 0 1 0 0 (-1)
+    have hfzcb : ∀ z ∈ f.Dom, f.f z ≠ c - b := fun z hz ↦ by
+      simpa [← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum _ hx hz 0 0 0 0 0 1 1 0 0 0 (-1)
+    have hczfz : ∀ z ∈ f.Dom, c ≠ z - f.f z := fun _ hz ↦ by
+      simpa [sub_eq_add_neg] using
+        f.fresh_ne_sum _ hz f.Dom0 1 0 1 0 (-1)
+    have hfzbc : ∀ z ∈ f.Dom, f.f z ≠ b - c := fun z hz ↦ by
+      simpa [add_comm, ← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum _ hx hz 0 0 0 0 0 1 (-1) 0 0 0 1
+    have hzbbc : ∀ z ∈ f.Dom, z - b ≠ b - c := fun z hz ↦ by
+      simpa [add_comm _ b, ← sub_eq_add_neg] using
+      f.fresh_sum_ne_sum _ hx hz 0 0 0 1 (-1) 0 (-1) 0 0 0 1
+    have hzbcz : ∀ z ∈ f.Dom, z - b ≠ c - z := fun z hz ↦ by
+      simpa [← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum _ hx hz 0 0 0 1 (-1) 0 1 0 0 (-1)
+    have hzfzcb : ∀ z ∈ f.Dom, z - f.f z ≠ c - b := fun z hz ↦ by
+      simpa [← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum _ hx hz 0 0 0 1 0 (-1) 1 0 0 0 (-1)
+    have hcxzfz : ∀ z ∈ f.Dom, c - x ≠ z - f.f z := fun z hz ↦ by
+      simpa [← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum _ hx hz 1 0 (-1) 0 0 0 0 0 0 1 0 (-1)
+    have hbczfz : ∀ z ∈ f.Dom, b - c ≠ z - f.f z := fun z hz ↦ by
+      simpa [add_comm _ b, ← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum _ hx hz (-1) 0 0 0 1 0 0 0 0 1 0 (-1)
+    have hffzcb : ∀ z ∈ f.Dom, f.f z ∈ f.Dom → f.f (f.f z) - f.f z ≠ c - b := fun z _ hfz ↦ by
+      simpa [add_comm (-f.f z), ← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum _ hx hfz 0 0 0 (-1) 0 1 1 0 0 0 (-1)
 
   {
     Dom := insert b <| insert (c - b) f.Dom
@@ -209,11 +265,11 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
         not_false_eq_true, true_implies, imp_false, ne_eq])
       <;> (try simp only [hzcb z hz, ↓reduceIte])
       · exact fun h ↦ (hczfz x hx h).elim
-      · exact fun h ↦ (f.fresh_ne_2 _ hz h).elim
+      · exact fun h ↦ (f.fresh_ne_f _ hz h).elim
       · exact (hczfz x hx).symm
       · have := by simpa using f.ExtendImg hx hb
         exact fun h ↦ (this z hz h.symm).elim
-      · exact fun h ↦ (f.fresh_ne_2 _ hy h.symm).elim
+      · exact fun h ↦ (f.fresh_ne_f _ hy h.symm).elim
       · have := by simpa using f.ExtendImg hx hb
         exact fun h ↦ (this y hy h).elim
       · exact f.Inj hy hz
@@ -313,7 +369,7 @@ theorem extend_mono (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) :
   · simp [extend, hf]
     by_cases hyf : y = f.f x
     · exact (hf (hyf ▸ hy)).elim
-    · have : y ≠ f.freshGenerator - f.f x := (f.fresh_ne_5 _ hx hy).symm ∘ add_eq_of_eq_sub
+    · have : y ≠ f.freshGenerator - f.f x := (f.fresh_ne_add_f _ hy hx).symm ∘ add_eq_of_eq_sub
       simp [hyf, hy, this]
 
 theorem extend_mono_dom (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) :
@@ -332,7 +388,7 @@ theorem extend_dom (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) :
   · simp [extend, hf]
     by_cases hxf : x = f.f x
     · exact (hf (hxf ▸ hx)).elim
-    · have : x ≠ f.freshGenerator - f.f x := (f.fresh_ne_5 _ hx hx).symm ∘ add_eq_of_eq_sub
+    · have : x ≠ f.freshGenerator - f.f x := (f.fresh_ne_add_f _ hx hx).symm ∘ add_eq_of_eq_sub
       simp [hxf, this]
 
 /-- Extend makes sure that x obeys the functional equation -/
@@ -344,17 +400,31 @@ theorem extend_valid (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) :
 def add (f : PartialSolution) {x : A} (hx : x ∉ f.Dom) (hxi : x ∉ f.Im)
     (hxs : ¬∃ w, w ∈ f.Dom ∧ w - f.f w = x)
     : PartialSolution :=
-  let b := f.freshGenerator x;
   have hx₀ : x ≠ 0 := fun h ↦ hx (h ▸ f.Dom0 : x ∈ f.Dom)
-  have hb₀ : b ≠ 0 := f.fresh_ne_0 x
-  have hbx : b ≠ x := f.fresh_ne_1 x
+  let b := f.freshGenerator x;
+  --Facts about the fresh generators not being in the domain
   have hbdom : b ∉ f.Dom := f.freshGenerator_not_dom x
-  have hbimg : b ∉ f.Im := f.freshGenerator_not_Im x
-  have hb2 : ∀ z, z ∈ f.Dom → x - b ≠ z - f.f z := fun _ ↦ f.fresh_ne_6 x
-  have hxb : x - b ∉ f.Dom := f.fresh_ne_7 x
-  have hbxb : b ≠ x - b := f.fresh_ne_8 x
-  have hb3 : ∀ z, z ∈ f.Dom → f.f z ≠ x - b:= fun _ ↦ f.fresh_ne_9 x
-  have hb4 : ∀ z, z ∈ f.Dom → b ≠ z - f.f z := fun _ ↦ f.fresh_ne_10 x
+  have hxb : x - b ∉ f.Dom := fun h ↦
+    (show x - f.freshGenerator x ≠ x - b
+      by simpa [add_comm _ x, ← sub_eq_add_neg] using
+        f.fresh_sum_ne_sum x h f.Dom0 (-1) 1 0 0 0 0 0 0 1 0 0) rfl
+  have hb₀ : b ≠ 0 := by
+    simpa using
+      f.fresh_ne_sum x f.Dom0 f.Dom0 1
+  have hbx : b ≠ x := by
+    simpa using f.fresh_ne_sum x f.Dom0 f.Dom0 1 1
+  have hb2 : ∀ z ∈ f.Dom, x - b ≠ z - f.f z := fun _ hz ↦ by
+    simpa [add_comm, ← sub_eq_add_neg] using
+      f.fresh_sum_ne_sum x hz f.Dom0 (-1) 1 0 0 0 0 0 0 1 0 (-1)
+  have hbxb : b ≠ x - b := by
+    simpa [add_comm, ← sub_eq_add_neg] using
+      f.fresh_sum_ne_sum x f.Dom0 f.Dom0 1 0 0 0 0 0 (-1) 1
+  have hb3 : ∀ z ∈ f.Dom, f.f z ≠ x - b := fun _ hz ↦ by
+    simpa [add_comm, ← sub_eq_add_neg] using
+      f.fresh_sum_ne_sum x hz f.Dom0 0 0 0 0 1 0 (-1) 1
+  have hb4 : ∀ z ∈ f.Dom, b ≠ z - f.f z := fun _ hz ↦ by
+    simpa [sub_eq_add_neg] using
+      f.fresh_ne_sum x hz f.Dom0 1 0 1 0 (-1)
   {
     Dom := insert x f.Dom
     f := fun y ↦ if x = y then b else f.f y
@@ -366,10 +436,10 @@ def add (f : PartialSolution) {x : A} (hx : x ∉ f.Dom) (hxi : x ∉ f.Im)
       · have hyz : y ≠ z := fun h ↦ hx (h ▸ hz)
         simp only [hyz, ↓reduceIte, imp_false, ← ne_eq]
         symm
-        exact fun h ↦ hbimg (by simp [Im]; use z)
+        exact (f.fresh_ne_f y hz).symm
       · have hyz : y ≠ z := fun h ↦ hx (h ▸ hy)
         simp only [hyz.symm, hyz, ↓reduceIte, imp_false, ← ne_eq]
-        exact fun h ↦ hbimg (by simp [Im]; use y)
+        exact (f.fresh_ne_f z hy).symm
       · have hxy : x ≠ y := fun h ↦ hx (h ▸ hy)
         have hxz : x ≠ z := fun h ↦ hx (h ▸ hz)
         simp only [hxy, hxz, ↓reduceIte]
@@ -657,18 +727,17 @@ set_option maxHeartbeats 800000 in
 theorem closureLinear_funeq (f₀ : PartialSolution) :
     let f := closureLinear f₀;
     ∀ x, f (f (f x) - f x) = x - f x := by
-  sorry
-  -- dsimp
-  -- intro x
-  -- have hx₁ : x ∈ (f₀.closureSeq (Encodable.encode x + 1)).Dom :=
-  --   f₀.mem_closureSeq x
-  -- have hx₂ : (f₀.closureSeq (Encodable.encode x + 1)).f x ∈ (f₀.closureSeq (Encodable.encode x + 1)).Dom :=
-  --   f₀.mem_f_closureSeq x
-  -- rw [f₀.closureLinear_eq_closureSeq (Encodable.encode x + 1) x hx₁]
-  -- rw [f₀.closureLinear_eq_closureSeq (Encodable.encode x + 1) _ hx₂]
-  -- rw [f₀.closureLinear_eq_closureSeq (Encodable.encode x + 1)]
-  -- · apply PartialSolution.Valid _ hx₁ hx₂
-  -- · apply PartialSolution.Closed_sub _ hx₁ hx₂
+  dsimp
+  intro x
+  have hx₁ : x ∈ (f₀.closureSeq (Encodable.encode x + 1)).Dom :=
+    f₀.mem_closureSeq x
+  have hx₂ : (f₀.closureSeq (Encodable.encode x + 1)).f x ∈ (f₀.closureSeq (Encodable.encode x + 1)).Dom :=
+    f₀.mem_f_closureSeq x
+  rw [f₀.closureLinear_eq_closureSeq (Encodable.encode x + 1) x hx₁]
+  rw [f₀.closureLinear_eq_closureSeq (Encodable.encode x + 1) _ hx₂]
+  rw [f₀.closureLinear_eq_closureSeq (Encodable.encode x + 1)]
+  · apply PartialSolution.Valid _ hx₁ hx₂
+  · apply PartialSolution.Closed_sub _ hx₁ hx₂
 
 /-- The linearizing function agrees with the initial PartialSolution on its support. -/
 theorem closureLinear_extends (f₀ : PartialSolution) :
@@ -715,8 +784,7 @@ def initial : PartialSolution where
     simp only [Finset.mem_insert, Finset.mem_singleton, ← Finset.coe_image]
     rintro (rfl|rfl|rfl|rfl) <;> decide
 
-open Classical in
--- @[equational_result]
+@[equational_result]
 theorem Equation1491_facts : ∃ (G : Type) (_ : Magma G), Facts G [1491] [65] := by
   use A, ⟨initial.closure⟩
   simp only [Equation1491, closure_prop, implies_true, not_forall, true_and]
@@ -732,4 +800,4 @@ theorem Equation1491_facts : ∃ (G : Type) (_ : Magma G), Facts G [1491] [65] :
     rw [closure]
     rw [sub_neg_eq_add, add_comm x₃, initial.closureLinear_extends (x₁+x₃) (by decide)]
     rw [show initial.f (x₁+x₃) = x₄ by decide]
-    trivial
+    decide
