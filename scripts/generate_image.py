@@ -105,7 +105,7 @@ if __name__ == "__main__":
         print_usage()
         exit(1)
 
-    if output_file == None:
+    if output_file is None:
         output_file = files[0].removesuffix(".lean") + ".png"
 
     print("Reading implications and contrimplications")

@@ -12,7 +12,6 @@ def get_eq():
     """
     fns = []
     for eq in equations_txt:
-        oeq = eq
         eq = eq.split("∀")[1]
         variables, eq = eq.split(":")
         variables = variables.strip().split()

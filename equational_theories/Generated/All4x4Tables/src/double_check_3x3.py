@@ -38,9 +38,8 @@ for table in tables:
     # src = f"({a} * x**2 + {b} * y**2 + {c} * x + {d} * y + {e} * x * y) % {N}"
     # op = lambda x, y: (a * x**2 + b * y**2 + c * x + d * y + e * x * y) % N
     src = str(table.tolist())
-    op = lambda x, y: table[x][y]
 
-    ok = tuple(doall(S, op))
+    ok = tuple(doall(S, lambda x, y: table[x][y]))
     if ok not in seen:
         print(repr(src), ok)
     seen[ok] = True

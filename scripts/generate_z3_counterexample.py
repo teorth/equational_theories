@@ -174,11 +174,11 @@ def print_file(left, right):
     goal = mk_goal(l, r)
     model = prove(goal)
     s = ""
-    if model == True:
+    if model is True:
         s += "For {} -> {}\n".format(pretty_eqn(tup_l), pretty_eqn(tup_r))
         s += "No countermodel was generated because the implication is true!"
         return s
-    elif model == None:
+    elif model is None:
         s += "For {} -> {}\n".format(pretty_eqn(tup_l), pretty_eqn(tup_r))
         s += "No countermodel was generated because the implication could not be refuted by Z3."
         return s

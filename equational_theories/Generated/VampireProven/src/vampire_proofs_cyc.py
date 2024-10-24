@@ -43,8 +43,10 @@ def encode_problem(problem):
 
 
 def natural_sort(l):
-    convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanum_key = lambda key: [convert(c) for c in re.split("([0-9]+)", key)]
+    def convert(text):
+        return int(text) if text.isdigit() else text.lower()
+    def alphanum_key(key):
+        return [convert(c) for c in re.split("([0-9]+)", key)]
     return sorted(l, key=alphanum_key)
 
 
@@ -71,7 +73,7 @@ def leanifyP(proof):
 
 
 def leanify(proof, problem):
-    assumption, goal = eqs[problem[0]], eqs[problem[1]]
+    goal = eqs[problem[1]]
     output = (
         f'@[equational_result]\ntheorem {problem["lhs"]}_implies_{problem["rhs"]} '
         f'(G : Type*) [Magma G] (h : {problem["lhs"]} G) : {problem["rhs"]} G := by\n'
