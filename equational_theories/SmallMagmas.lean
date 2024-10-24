@@ -29,22 +29,22 @@ All magmas of size 2, up to isomorphism and look at the dual operation.
 -/
 
 /-- `x ◇ y => ⊥` -/
-def Magma2a : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[0, 0] ])
+@[reducible] def Magma2a : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[0, 0] ])
 
 /-- `x ◇ y => x ∧ y` -/
-def Magma2b : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[0, 1] ])
+@[reducible] def Magma2b : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[0, 1] ])
 
 /-- `x ◇ y => x ∧ ¬ y` -/
-def Magma2c : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[1, 0] ])
+@[reducible] def Magma2c : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[1, 0] ])
 
 /-- `x ◇ y => x` -/
-def Magma2d : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[1, 1] ])
+@[reducible] def Magma2d : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[1, 1] ])
 
 /-- `x ◇ y => x ^ y` -/
-def Magma2e : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 1], #[1, 0] ])
+@[reducible] def Magma2e : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 1], #[1, 0] ])
 
 /-- `x ◇ y = x || y` -/
-def Magma2f : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 1], #[1, 1] ])
+@[reducible] def Magma2f : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 1], #[1, 1] ])
 
 
 /-- The facts about the first of the magmas (constant 0) -/
