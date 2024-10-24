@@ -138,11 +138,9 @@ def generate_lean(data):
     satisfied = data["satisfied"]
     refuted = data["refuted"]
 
-    atable = table.replace("[", "#[")
+    table.replace("[", "#[")
 
     name = f"FinitePoly {table}"
-    satname = lambda i: f"{name} satisfies Equation{i}"
-    refname = lambda i: f"{name} refutes Equation{i}"
 
     out = f"""
 import Mathlib.Data.Finite.Basic
