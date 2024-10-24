@@ -109,7 +109,6 @@ def convert(vars_list, equation):
             print(f"Error compiling lambda{idx}: {e}")
             lambda_func = None
 
-        # Store with a name
         # print(ctr, lambda_str)
         ctr += 1
 
