@@ -39,7 +39,7 @@ def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
     let rs := rs.map (·.variant)
     let (components, outcomes) ← Closure.outcomes_mod_equiv rs dualityRelation.dualEquations
     let sortedComponents := components.in_order.qsort (fun a b => Closure.ltEquationNames a[0]! b[0]!)
-    let mut unknowns : Array Implication := #[]
+    let mut unknowns : Array GraphEdge := #[]
     for c1 in sortedComponents do
       let i := components[c1]!
       for c2 in sortedComponents do
@@ -51,7 +51,7 @@ def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
           else
             unknowns := unknowns.push ⟨c1[0]!, c2[0]!⟩
     if duality then
-      let mut allUnknowns : Std.HashSet Implication := {}
+      let mut allUnknowns : Std.HashSet GraphEdge := {}
       for hi : i in [:components.size] do
         for hj : j in [:components.size] do
           if outcomes[i]![j]!.isNone then
@@ -59,8 +59,8 @@ def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
               for rhs in components.in_order[j] do
                 allUnknowns := allUnknowns.insert ⟨lhs, rhs⟩
       let eqsToComponent := components.in_order.map (fun comp => (comp[0]!, comp)) |>.toList |> Std.HashMap.ofList
-      let mut unknownsSet : Std.HashSet Implication := {}
-      let mut uniqueUnknowns : Array Implication := #[]
+      let mut unknownsSet : Std.HashSet GraphEdge := {}
+      let mut uniqueUnknowns : Array GraphEdge := #[]
       for imp in unknowns do
         match dualityRelation.dual imp with
           | none => throw $ IO.userError "No dual found"
@@ -91,8 +91,8 @@ def unknowns : Cmd := `[Cli|
 
 --- Output of the extract_implications executable.
 structure Output where
-  implications : Array Implication
-  nonimplications : Array Implication
+  implications : Array GraphEdge
+  nonimplications : Array GraphEdge
 
 --- Output of the extract_implications outcomes subcommand.
 structure OutputOutcomes where
@@ -107,10 +107,10 @@ structure OutputRaw where
   unconditionals : Array String
 deriving Lean.ToJson, Lean.FromJson
 
-def Implication.asJson (v : Implication) : String := s!"\{\"rhs\":\"{v.rhs}\", \"lhs\":\"{v.lhs}\"}"
+def GraphEdge.asJson (v : GraphEdge) : String := s!"\{\"rhs\":\"{v.rhs}\", \"lhs\":\"{v.lhs}\"}"
 
 def Output.asJson (v : Output) : String :=
-  s!"\{\"nonimplications\":[{",".intercalate (v.nonimplications.map Implication.asJson).toList}],\"implications\":[{",".intercalate (v.implications.map Implication.asJson).toList}]}"
+  s!"\{\"nonimplications\":[{",".intercalate (v.nonimplications.map GraphEdge.asJson).toList}],\"implications\":[{",".intercalate (v.implications.map GraphEdge.asJson).toList}]}"
 
 def generateOutcomes (inp : Cli.Parsed) : IO UInt32 := do
   withExtractedResults inp fun rs dualityRelation => do
