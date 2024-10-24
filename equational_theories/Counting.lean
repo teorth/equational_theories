@@ -3,7 +3,11 @@ Copyright (c) 2022 Julian Kuelshammer. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import equational_theories.FreeMagma
+import equational_theories.MagmaLaw
 import Mathlib.Combinatorics.Enumerative.Catalan
+import Mathlib.SetTheory.Cardinal.Basic
+import Mathlib.GroupTheory.GroupAction.Basic
+import Mathlib.Logic.Equiv.TransferInstance
 
 variable {X : Type*}
 
@@ -81,5 +85,66 @@ theorem elementsOfNumNodesEq_card_eq_catalan_mul_pow (n : ℕ) :
       · simp at h1; simp [h1]
       · simp at h2; simp [h2]
 
+end FreeMagma
+
+namespace FreeMagma
+
+instance : MulAction (Equiv.Perm X) (FreeMagma X) where
+  smul π w := fmapHom π w
+  one_smul := fmapHom_id
+  mul_smul :=
+    fun π1 π2 w => by symm; apply fmapHom_comp'
 
 end FreeMagma
+
+namespace Law
+
+@[simp]
+def order : MagmaLaw X → ℕ :=
+  fun E => FreeMagma.order E.lhs + FreeMagma.order E.rhs
+
+instance : MulAction (Equiv.Perm X) (MagmaLaw X) := by
+  refine' Equiv.mulAction (Equiv.Perm X) (_: _ ≃ FreeMagma X × FreeMagma X)
+  constructor
+    <;> try exact fun ⟨lhs, rhs⟩ => ⟨lhs, rhs⟩
+  all_goals intro; rfl
+
+namespace UpToRelabelling
+
+def rel : Setoid (MagmaLaw X) :=
+  MulAction.orbitRel (Equiv.Perm X) (MagmaLaw X)
+def MagmaLaw (α: Type*) := Quotient (rel: Setoid (Law.MagmaLaw α))
+
+def order : MagmaLaw X → ℕ := by
+  refine' Quotient.lift Law.order _
+  rintro ⟨w1, w2⟩ ⟨w1', w2'⟩ ⟨π, smul_π_E'_eq_E⟩
+  simp_all [HSMul.hSMul, SMul.smul]
+  rcases smul_π_E'_eq_E with ⟨smul_π_w1_eq_w1', smul_π_w2_eq_w2'⟩
+  revert w1 w2 w1' w2'
+  suffices ∀ w w', w' = FreeMagma.fmapHom π w → w'.order = w.order by
+    intros
+    congr 1
+    all_goals {
+      apply this
+      simp_all [this]
+    }
+  intros w w' smul_π_w_eq_w'
+  subst smul_π_w_eq_w'
+  induction w
+  .
+    simp_all [FreeMagma.order]
+  .
+    rename_i w1 w2 order_smul_π_w1_eq_order_w1 order_smul_π_w2_eq_order_w2
+    simp_all [FreeMagma.fmapHom, FreeMagma.order]
+
+def bell : ℕ → ℕ
+  | 0 => 1
+  | n + 1 => ∑ k : Fin n.succ, (n.choose k) * bell k
+
+theorem card_subtype_laws_of_order_eq (n: ℕ) :
+  Cardinal.mk { x : MagmaLaw ℕ // order x = n } = ↑(catalan (n+1) * bell (n+2): ℕ) := by
+  sorry
+
+end UpToRelabelling
+
+end Law
