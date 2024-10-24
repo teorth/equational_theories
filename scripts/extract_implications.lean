@@ -23,6 +23,12 @@ def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → DualityRel
       action rs dualityRelation
       pure 0
 
+def matchFinite (rs : Array Entry) (finite : Bool) : Array Entry :=
+  if finite then
+    rs.filter (fun r => r.variant matches .implication .. || r.variant matches .facts { finite := true, .. })
+  else
+    rs.filter (fun r => r.variant matches .implication { finite := false, .. } || r.variant matches .facts .. )
+
 def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
   let only_e_c := inp.hasFlag "equivalence_creators"
   let duality := inp.hasFlag "duality"
@@ -33,9 +39,7 @@ def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
   withExtractedResults inp fun rs dualityRelation => do
     let rs := if include_extra then rs else rs.filterMap Entry.keepCore
     let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
-    let rs := if !finite_only then rs else rs.filter (fun r =>
-      r.variant matches .implication .. || r.variant matches .facts { finite := true, .. }
-    )
+    let rs := matchFinite rs finite_only
     let rs := rs.map (·.variant)
     let (components, outcomes) ← Closure.outcomes_mod_equiv rs dualityRelation.dualEquations
     let sortedComponents := components.in_order.qsort (fun a b => Closure.ltEquationNames a[0]! b[0]!)
@@ -115,6 +119,7 @@ def Output.asJson (v : Output) : String :=
 def generateOutcomes (inp : Cli.Parsed) : IO UInt32 := do
   withExtractedResults inp fun rs dualityRelation => do
     let rs := if inp.hasFlag "extra" then rs else rs.filterMap Entry.keepCore
+    let rs := matchFinite rs (inp.hasFlag "finite-only")
     let (equations, outcomes) ← Closure.list_outcomes rs dualityRelation.dualEquations
     if inp.hasFlag "hist" then
       let mut count : Std.HashMap Closure.Outcome Nat := {}
@@ -133,6 +138,7 @@ def outcomes : Cmd := `[Cli|
   FLAGS:
     hist; "Create a histogram instead of outputting all outcomes"
     extra; "Include extra equations that are not in the core set"
+    "finite-only"; "Only report finite results"
 
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"
@@ -145,9 +151,7 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
   let only_implications := inp.hasFlag "only-implications"
   withExtractedResults inp fun rs dualityRelation => do
     let rs := if include_conj then rs else rs.filter (·.proven)
-    let rs := if !finite_only then rs else rs.filter (fun r =>
-      r.variant matches .implication .. || r.variant matches .facts { finite := true, .. }
-    )
+    let rs := matchFinite rs finite_only
     let rs := if only_implications then rs.filter (·.variant matches .implication ..) else rs
     let rs := rs.map (·.variant)
     let rs ← if include_impl then Closure.closure rs dualityRelation.dualEquations else pure (Closure.toEdges rs)
@@ -163,6 +167,7 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
 def generateRaw (inp : Cli.Parsed) : IO UInt32 := do
   withExtractedResults inp fun rs _dualityRelation => do
     let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
+    let rs := matchFinite rs (inp.hasFlag "finite-only")
     let mut implications : Array Implication := #[]
     let mut facts : Array Facts := #[]
     let mut unconditionals : Array String := #[]
@@ -180,6 +185,7 @@ def raw : Cmd := `[Cli|
 
   FLAGS:
     proven; "Only consider proven results"
+    "finite-only"; "Only report finite results"
 
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"

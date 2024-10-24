@@ -172,7 +172,7 @@ def equationSet (inp : Array EntryVariant) : Std.HashSet String := Id.run do
   let mut eqs : Std.HashSet String := {}
   for imp in inp do
     match imp with
-    | .implication ⟨lhs, rhs⟩ =>
+    | .implication ⟨lhs, rhs, _⟩ =>
       eqs := eqs.insert lhs
       eqs := eqs.insert rhs
     | .facts ⟨satisfied, refuted, _⟩ =>
@@ -195,7 +195,7 @@ def toEdges (inp : Array EntryVariant) : Array Edge := Id.run do
   let mut nonimplies : Array Bitset := Array.mkArray eqs.size (Bitset.mk eqs.size)
   for imp in inp do
     match imp with
-    | .implication ⟨lhs, rhs⟩ =>
+    | .implication ⟨lhs, rhs, _⟩ =>
       edges := edges.push (.implication ⟨lhs, rhs⟩)
     | .facts ⟨satisfied, refuted, _⟩ =>
       for f1 in satisfied do
