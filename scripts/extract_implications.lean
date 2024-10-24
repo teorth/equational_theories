@@ -23,6 +23,12 @@ def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → DualityRel
       action rs dualityRelation
       pure 0
 
+def matchFinite (rs : Array Entry) (finite : Bool) : Array Entry :=
+  if finite then
+    rs.filter (fun r => r.variant matches .implication .. || r.variant matches .facts { finite := true, .. })
+  else
+    rs.filter (fun r => r.variant matches .implication { finite := false, .. } || r.variant matches .facts .. )
+
 def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
   let only_e_c := inp.hasFlag "equivalence_creators"
   let duality := inp.hasFlag "duality"
@@ -33,13 +39,11 @@ def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
   withExtractedResults inp fun rs dualityRelation => do
     let rs := if include_extra then rs else rs.filterMap Entry.keepCore
     let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
-    let rs := if !finite_only then rs else rs.filter (fun r =>
-      r.variant matches .implication .. || r.variant matches .facts { finite := true, .. }
-    )
+    let rs := matchFinite rs finite_only
     let rs := rs.map (·.variant)
     let (components, outcomes) ← Closure.outcomes_mod_equiv rs dualityRelation.dualEquations
     let sortedComponents := components.in_order.qsort (fun a b => Closure.ltEquationNames a[0]! b[0]!)
-    let mut unknowns : Array Implication := #[]
+    let mut unknowns : Array GraphEdge := #[]
     for c1 in sortedComponents do
       let i := components[c1]!
       for c2 in sortedComponents do
@@ -51,7 +55,7 @@ def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
           else
             unknowns := unknowns.push ⟨c1[0]!, c2[0]!⟩
     if duality then
-      let mut allUnknowns : Std.HashSet Implication := {}
+      let mut allUnknowns : Std.HashSet GraphEdge := {}
       for hi : i in [:components.size] do
         for hj : j in [:components.size] do
           if outcomes[i]![j]!.isNone then
@@ -59,8 +63,8 @@ def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
               for rhs in components.in_order[j] do
                 allUnknowns := allUnknowns.insert ⟨lhs, rhs⟩
       let eqsToComponent := components.in_order.map (fun comp => (comp[0]!, comp)) |>.toList |> Std.HashMap.ofList
-      let mut unknownsSet : Std.HashSet Implication := {}
-      let mut uniqueUnknowns : Array Implication := #[]
+      let mut unknownsSet : Std.HashSet GraphEdge := {}
+      let mut uniqueUnknowns : Array GraphEdge := #[]
       for imp in unknowns do
         match dualityRelation.dual imp with
           | none => throw $ IO.userError "No dual found"
@@ -91,8 +95,8 @@ def unknowns : Cmd := `[Cli|
 
 --- Output of the extract_implications executable.
 structure Output where
-  implications : Array Implication
-  nonimplications : Array Implication
+  implications : Array GraphEdge
+  nonimplications : Array GraphEdge
 
 --- Output of the extract_implications outcomes subcommand.
 structure OutputOutcomes where
@@ -107,14 +111,15 @@ structure OutputRaw where
   unconditionals : Array String
 deriving Lean.ToJson, Lean.FromJson
 
-def Implication.asJson (v : Implication) : String := s!"\{\"rhs\":\"{v.rhs}\", \"lhs\":\"{v.lhs}\"}"
+def GraphEdge.asJson (v : GraphEdge) : String := s!"\{\"rhs\":\"{v.rhs}\", \"lhs\":\"{v.lhs}\"}"
 
 def Output.asJson (v : Output) : String :=
-  s!"\{\"nonimplications\":[{",".intercalate (v.nonimplications.map Implication.asJson).toList}],\"implications\":[{",".intercalate (v.implications.map Implication.asJson).toList}]}"
+  s!"\{\"nonimplications\":[{",".intercalate (v.nonimplications.map GraphEdge.asJson).toList}],\"implications\":[{",".intercalate (v.implications.map GraphEdge.asJson).toList}]}"
 
 def generateOutcomes (inp : Cli.Parsed) : IO UInt32 := do
   withExtractedResults inp fun rs dualityRelation => do
     let rs := if inp.hasFlag "extra" then rs else rs.filterMap Entry.keepCore
+    let rs := matchFinite rs (inp.hasFlag "finite-only")
     let (equations, outcomes) ← Closure.list_outcomes rs dualityRelation.dualEquations
     if inp.hasFlag "hist" then
       let mut count : Std.HashMap Closure.Outcome Nat := {}
@@ -133,6 +138,7 @@ def outcomes : Cmd := `[Cli|
   FLAGS:
     hist; "Create a histogram instead of outputting all outcomes"
     extra; "Include extra equations that are not in the core set"
+    "finite-only"; "Only report finite results"
 
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"
@@ -145,9 +151,7 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
   let only_implications := inp.hasFlag "only-implications"
   withExtractedResults inp fun rs dualityRelation => do
     let rs := if include_conj then rs else rs.filter (·.proven)
-    let rs := if !finite_only then rs else rs.filter (fun r =>
-      r.variant matches .implication .. || r.variant matches .facts { finite := true, .. }
-    )
+    let rs := matchFinite rs finite_only
     let rs := if only_implications then rs.filter (·.variant matches .implication ..) else rs
     let rs := rs.map (·.variant)
     let rs ← if include_impl then Closure.closure rs dualityRelation.dualEquations else pure (Closure.toEdges rs)
@@ -163,6 +167,7 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
 def generateRaw (inp : Cli.Parsed) : IO UInt32 := do
   withExtractedResults inp fun rs _dualityRelation => do
     let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
+    let rs := matchFinite rs (inp.hasFlag "finite-only")
     let mut implications : Array Implication := #[]
     let mut facts : Array Facts := #[]
     let mut unconditionals : Array String := #[]
@@ -180,6 +185,7 @@ def raw : Cmd := `[Cli|
 
   FLAGS:
     proven; "Only consider proven results"
+    "finite-only"; "Only report finite results"
 
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"
