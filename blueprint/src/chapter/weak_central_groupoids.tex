@@ -1,0 +1,115 @@
+\chapter{Weak central groupoids}\label{weak-central-groupoids-chapter}
+
+In this chapter we study weak central groupoids \Cref{eq1485},
+\begin{equation}\label{1485}
+   x = (y \op x) \op (x \op (z \op y)).
+\end{equation}
+
+The first observation is that this law is equivalent to its dual:
+
+\begin{lemma}[1485 equivalent to 2162]\label{1485-dual}  \Cref{eq1485} is equivalent to the dual law
+\begin{equation}\label{2162} x = ((y \op z) \op x) \op (x \op y)
+\end{equation}
+(equation 2162).
+\end{lemma}
+
+\begin{proof}  It suffices to prove that \eqref{1485} implies \eqref{2162}.  Write $w = y \op z$, then from \eqref{1485} we can write $z = z_1 \op z_2$ with $z_1 = z \op z$ and $z_2 = z \op (z \op z)$, and then by \eqref{1485}
+  $$ y = (z_2 \op y) \op (y \op (z_1 \op z_2)) = (z_2 \op y) \op w.$$
+From another application of \eqref{1485} we have
+$$ x = (w \op x) \op (x \op ((z_2 \op y) \op w)) = ((y \op z) \op x) \op (x \op y)$$
+as required.
+\end{proof}
+
+Given a weak central groupoid $G$, define a directed graph with vertices in $G$ by declaring $x \to y$ if and only if $y = x \op z$ for some $z$.  There is an equivalent characterization of this graph:
+
+\begin{lemma}[Equivalent characterization of graph]\label{graph-dual}  One has $x \to y$ if and only if $x = w \op y$ for some $w$.
+\end{lemma}
+
+\begin{proof}  If $x \to y$ then $y = x \op z$, then writing $z = z_1 \op z_2$ as before we obtain
+$$ x = (z_2 \op x) \op (x \op (z_1 \op z_2)) = (z_2 \op x) \op y$$
+giving the forward implication.  The backwards implication follows by duality.
+\end{proof}
+
+Define a \emph{good path} in $G$ to be a path of the form $$x \to x \op y \to y$$ for some $x,y \in G$ (we allow loops).  By the above lemma, this is a path in $G$.  The following claims are clear from definition and the above lemma:
+\begin{itemize}
+\item[Claim 1:]  If $x,y \in G$ then there is exactly one good path $x \to z \to y$ from $x$ to $y$.
+\item[Claim 2:] Any edge $x \to y$ in the directed graph is the initial segment of some good path $x \to y \to z$.
+\item[Claim 3:] Any edge $x \to y$ in the directed graph is the final segment of some good path $w \to x \to y$.
+\end{itemize}
+Slightly more non-trivial is
+
+\begin{lemma}[Claim 4]\label{claim-4}  If $a \to b \to c \to d \to e \to a$ is a 5-cycle in the directed graph, and $a \to b \to c$ and $c \to d \to e$ are good paths, then $b \to c \to d$ is also good.
+\end{lemma}
+
+\begin{proof}  If $a \to b \to c$ is good then $b = a \op c$; if $c \to d \to e$ is good then $d = c \op e$; and if $e \to a$ then $a = e \op z$ for some $z$ by definition.  By \eqref{2162} we then have
+  $$ c = ((e \op z) \op c) \op (c \op e) = b \op d$$
+  so $b \to c \to d$ is good.
+\end{proof}
+
+Conversely, we have
+
+\begin{lemma}[Reversing the claims]\label{rev-claim} Let $G$ be a directed graph, with some paths of length two in the graph designated as ``good'', in such a way that Claims 1-3 hold.  Then there is a weak central groupoid structure on the vertices of $G$ such that the good paths are precisely the paths of the form $x \to x \op y \to y$.
+\end{lemma}
+
+\begin{proof}  This is a routine matter of reversing all the above arguments.
+\end{proof}
+
+This gives us a graph-theoretical route to construct weak central groupoids.  We first introduce a weaker version of Claim 1:
+
+\begin{itemize}
+\item[Claim 1':]  If $x,y \in G$ then there is at least one good path $x \to z \to y$ from $x$ to $y$.
+\end{itemize}
+
+Let us call a \emph{relaxed weak central groupoid} a directed graph with some paths of length 2 designated as ``good'' that obeys Claims 1', 2, 3, 4.
+
+We also define a \emph{partial weak central groupoid} to be a directed graph with some paths of length 2 that obeys Claim 4 as well as the following opposite weakening of Claim 1:
+
+\begin{itemize}
+  \item[Claim 1'':]  If $x,y \in G$ then there is at most one good path $x \to z \to y$ from $x$ to $y$.
+\end{itemize}
+
+If we can upgrade Claim 1'' to Claim 1, and we also have Claim 2 and Claim 3, then we call this a \emph{complete weak central groupoid}, and by the previous proposition this is in correspondence with \Cref{1485}.
+
+Let $G_0$ be a relaxed weak central groupoid.  A \emph{partial extension} of $G_0$ is a partial weak central groupoid $G$ with a ``projection map'' $\pi: G \to G_0$, which is a homomorphism in the sense that the image $\pi(x) \to \pi(y)$ of any edge $x \to y$ in $G$ is an edge in $G_0$, the image $\pi(x) \to \pi(y) \to \pi(z)$ of any good path $x \to y \to z$ in $G$ is a good path in $G_0$, and the image $\pi(x) \to \pi(y) \to \pi(z)$ of any bad path $x \to y \to z$ in $G$ is a bad path in $G_0$.  Note that Claim 4 for $G$ is then automatic from Claim 4 of the base $G_0$.  The extension is \emph{complete} if the partial weak central groupoid is complete.
+
+We have the following convenient completion property:
+
+\begin{proposition}[Completion property]\label{greedy-prop}  Let $G_0$ be a directed graph obeying claims 1', 2, 3, 4.  Then any finite partial extension of $G_0$ with carrier $G_0 \times \N$ (and projection map $\pi(a,n) = a$) can be completed to a complete extension.
+\end{proposition}
+
+\begin{proof}  By the previous comments, we can ignore Claim 4 as it is automatic, and focus on completing the partial weak central groupoid on $G$ to a complete weak central groupoid by ensuring Claims 1, 2, 3 hold.  By the usual greedy algorithm, it suffices to show that any individual failure of Claim 1, 2 or 3 can be resolved by adding some finite number of edges to the graph.
+
+  Suppose first that Claim 2 fails, that is to say the partial weak central groupoid contains an edge $(a,n) \to (b,m)$ that is not the initial segment of any good path.  Since the base relaxed weak central groupoid $G_0$ obeys Claim 2, we can find a good path $a \to b \to c$ in the base.  We then pick a natural number $l$ not previously occuring in the partial weak central groupoid, and adjoin the edge $(b,m) \to (c,l)$ to that partial weak central groupoid.  All new paths created in this way are declared good or bad depending on whether their images in $G_0$ are good or bad, in particular $(a,n) \to (b,m) \to (c,l)$ is good.  This can be checked to still be a partial extension of $G_0$ (no violation of Claim 1'' is created), and now Claim 2 is resolved at for the edge $(a,n) \to (b,m)$.  A similar argument permits one to resolve any violations of Claim 3.
+
+If Claim 1 is violated, then there is a pair $(a,n), (b,m)$ that currently has no good path of length two in the partial weak central groupoid.  As the base relaxed weak central groupoid $G_0$ obeys Claim 1'', we can find a good path $a \to c \to b$ in $G_0$.  We then pick a natural number $l$ not previously occuring, and adjoin the edges $(a,n) \to (c,l) \to (b,m)$. All new paths created in this way are declared good or bad depending on whether their images in $G_0$ are good or bad, in particular $(a,n) \to (c,l) \to (b,m) \to (c,l)$.  One can check that this is still a partial extension of $G_0$ (no violation of Claim 1'' is created), and now Claim 1 is resolved at the pair $(a,n), (b,m)$.
+\end{proof}
+
+Now we can show that 1485 does not imply equation 1483, which is
+\begin{equation}\label{1483}
+  x = (y \op x) \op (x \op (y \op z)).
+\end{equation}
+We need an additional axiom to refute this implication:
+\begin{itemize}
+\item[Claim anti-1483:] There exists a modified 5-cycle $a \to b \to c \to d \to e$, $a \to e$ in the directed graph, with $a \to b \to c$ and $c \to d \to e$ good paths, but $b \to c \to d$ not good.
+\end{itemize}
+
+\begin{theorem}[1485 does not imply 1483]\label{1485-not-1483}  \Cref{eq1485} does not imply Equation \eqref{1483}.
+\end{theorem}
+
+\begin{proof}  We first claim that there is a relaxed weak central groupoid $G_0$ that does not obey Claim anti-1483.  Computer search reveals that one can take a carrier $G_0\{0,1,\dots,7\}$ with incidence matrix
+$$
+\begin{pmatrix}
+  0 & 1 & 0 & 1 & 0 & 0 & 1 \\
+  0 & 0 & 1 & 0 & 0 & 1 & 1\\
+  1 & 0 & 0 & 0 & 1 & 0 & 1\\
+  1 & 0 & 0 & 1 & 1 & 0 & 0\\
+  0 & 0 & 1 & 0 & 1 & 1 & 0\\
+  0 & 1 & 0 & 1 & 0 & 1 & 0\\
+  1 & 1 & 1 & 0 & 0 & 0 & 0
+\end{pmatrix}.
+$$
+In this case, the specific counterexample to Claim anti-1483 comes from the modified 5-cycle $3 \to 0 \to 1 \to 2 \to 4, 3 \to 4$.  Embedding $G_0$ into $G_0 \times \{0\}$, this 5-cycle gives a partial extension of $G_0$ that also obeys Claim anti-1483.  Applying \Cref{greedy-prop}, we can extend this to a complete extension that still obeys Claim anti-1483, thus creating a weak central groupoid $G$ with a modified $5$-cycle $a \to b \to c \to d \to e$, $a \to e$ with $a \to b \to c$ and $c \to d \to e$ good paths, but $b \to c \to d$ not good.  By the relation between the groupoid law and paths, we have $b = a \op c$ and $c = d \op e$, and also
+$e = a \op y$ for some $a$.  Since $b \to c \to d$ is not good, we have
+$$ c \neq b \op d = (a \op c) \op (c \op (a \op y))$$
+thus contradicting \eqref{1483} as required.
+\end{proof}
