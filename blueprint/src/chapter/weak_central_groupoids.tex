@@ -48,10 +48,12 @@ Slightly more non-trivial is
 
 Conversely, we have
 
-\begin{lemma}[Reversing the claims]\label{rev-claim} Let $G$ be a directed graph, with some paths of length two in the graph designated as ``good'', in such a way that Claims 1-3 hold.  Then there is a weak central groupoid structure on the vertices of $G$ such that the good paths are precisely the paths of the form $x \to x \op y \to y$.
+\begin{lemma}[Reversing the claims]\label{rev-claim} Let $G$ be a directed graph, with some paths of length two in the graph designated as ``good'', in such a way that Claims 1-4 hold.  Then there is a weak central groupoid structure on the vertices of $G$ such that the good paths are precisely the paths of the form $x \to x \op y \to y$.
 \end{lemma}
 
-\begin{proof}  This is a routine matter of reversing all the above arguments.
+\begin{proof}  Define an operation $\op: G \times G \to G$ by defining $x \op y$ to be the unique vertex $z$ for which one has a good path $x \to z \to y$; this is well-defined by Claim 1, and by Claims 2-3, the property $x \to y$ holds if and only if $y = x \op z$ for some $z$, and also if and only if $x = w \op y$ for some $w$. In particular, for all $x,y,z$, we have a $5$-cycle
+$$ y \to y \op x \to x \to x \op (z \op y) \to (z \op y) \to y$$
+with $y \to y \op x \to x$ and $x \to x \op (z \op y) \to (z \op y)$ good, hence by Claim 4 we have \eqref{1485} as required.
 \end{proof}
 
 This gives us a graph-theoretical route to construct weak central groupoids.  We first introduce a weaker version of Claim 1:
@@ -96,7 +98,7 @@ We need an additional axiom to refute this implication:
 \begin{theorem}[1485 does not imply 1483]\label{1485-not-1483}  \Cref{eq1485} does not imply Equation \eqref{1483}.
 \end{theorem}
 
-\begin{proof}  We first claim that there is a relaxed weak central groupoid $G_0$ that does not obey Claim anti-1483.  Computer search reveals that one can take a carrier $G_0\{0,1,\dots,7\}$ with incidence matrix
+\begin{proof}  We first claim that there is a relaxed weak central groupoid $G_0$ that does not obey Claim anti-1483.  Computer search reveals that one can take a carrier $G_0=\{0,1,\dots,6\}$ with incidence matrix
 $$
 \begin{pmatrix}
   0 & 1 & 0 & 1 & 0 & 0 & 1 \\
@@ -106,8 +108,11 @@ $$
   0 & 0 & 1 & 0 & 1 & 1 & 0\\
   0 & 1 & 0 & 1 & 0 & 1 & 0\\
   1 & 1 & 1 & 0 & 0 & 0 & 0
-\end{pmatrix}.
+\end{pmatrix},
 $$
+with a path $a \to b \to c$ considered ``bad'' if $a,b,c \in \{0,1,2\}$ and ``good'' otherwise.
+
+
 In this case, the specific counterexample to Claim anti-1483 comes from the modified 5-cycle $3 \to 0 \to 1 \to 2 \to 4, 3 \to 4$.  Embedding $G_0$ into $G_0 \times \{0\}$, this 5-cycle gives a partial extension of $G_0$ that also obeys Claim anti-1483.  Applying \Cref{greedy-prop}, we can extend this to a complete extension that still obeys Claim anti-1483, thus creating a weak central groupoid $G$ with a modified $5$-cycle $a \to b \to c \to d \to e$, $a \to e$ with $a \to b \to c$ and $c \to d \to e$ good paths, but $b \to c \to d$ not good.  By the relation between the groupoid law and paths, we have $b = a \op c$ and $c = d \op e$, and also
 $e = a \op y$ for some $a$.  Since $b \to c \to d$ is not good, we have
 $$ c \neq b \op d = (a \op c) \op (c \op (a \op y))$$
