@@ -477,7 +477,7 @@ theorem Equation3_implies_Equation3722 (G: Type _) [Magma G] (h: Equation3 G) : 
 
 @[equational_result]
 theorem Equation4_implies_Equation381 (G: Type _) [Magma G] (h: Equation4 G) : Equation381 G :=
-  fun x y z ↦ by rw (config := {occs := .pos [1]}) [h x z]
+  fun x y z ↦ by nth_rw 1 [h x z]
 
 @[equational_result]
 theorem Equation4_implies_Equation3722 (G: Type _) [Magma G] (h: Equation4 G) : Equation3722 G :=
@@ -487,7 +487,7 @@ theorem Equation4_implies_Equation3722 (G: Type _) [Magma G] (h: Equation4 G) : 
 theorem Equation4_implies_Equation3744 (G: Type _) [Magma G] (h: Equation4 G) : Equation3744 G :=
   fun x y z w ↦
     calc x ◇ y
-    _ = (x ◇ z) ◇ y := by rw (config := {occs := .pos [1]}) [h x z]
+    _ = (x ◇ z) ◇ y := by nth_rw 1 [h x z]
     _ = x ◇ z := (h (x ◇ z) y).symm
     _ = (x ◇ z) ◇ (w ◇ y) := h (x ◇ z) (w ◇ y)
 
@@ -508,15 +508,15 @@ theorem Equation5_implies_Equation3744 (G: Type _) [Magma G] (h: Equation5 G) : 
     calc x ◇ y
     _ = y := (h y x).symm
     _ = (x ◇ z) ◇ y := (h y (x ◇ z))
-    _ = (x ◇ z) ◇ (w ◇ y) := by rw (config := {occs := .pos [1]}) [h y w]
+    _ = (x ◇ z) ◇ (w ◇ y) := by nth_rw 1 [h y w]
 
 @[equational_result]
 theorem Equation5_implies_Equation4564 (G: Type _) [Magma G] (h: Equation5 G) : Equation4564 G :=
   fun x y z w ↦
     calc x ◇ (y ◇ z)
     _ = y ◇ (x ◇ (y ◇ z)) := (h (x ◇ (y ◇ z)) y)
-    _ = (w ◇ y) ◇ (x ◇ (y ◇ z)) := by rw (config := {occs := .pos [1]}) [h y w]
-    _ = (w ◇ y) ◇ (x ◇ z) := by rw (config := {occs := .pos [2]}) [h z y]
+    _ = (w ◇ y) ◇ (x ◇ (y ◇ z)) := by nth_rw 1 [h y w]
+    _ = (w ◇ y) ◇ (x ◇ z) := by nth_rw 2 [h z y]
     _ = (w ◇ y) ◇ z := by rw [← h z x]
 
 @[equational_result]
@@ -563,10 +563,10 @@ theorem Equation3744_implies_Equation4512 (G: Type _) [Magma G] (h: Equation3744
   fun x y z ↦
     calc x ◇ (y ◇ z)
     _ = (x ◇ y) ◇ (x ◇ (y ◇ z)) := (h x (y ◇ z) y x)
-    _ = ((x ◇ y) ◇ (x ◇ y)) ◇ (x ◇ (y ◇ z)) := by rw (config := {occs := .pos [1]}) [h x y y x]
+    _ = ((x ◇ y) ◇ (x ◇ y)) ◇ (x ◇ (y ◇ z)) := by nth_rw 1 [h x y y x]
     _ = (x ◇ y) ◇ (y ◇ z) := (h (x ◇ y) (y ◇ z) (x ◇ y) x).symm
     _ = ((x ◇ y) ◇ x) ◇ ((y ◇ x) ◇ (y ◇ z)) := (h (x ◇ y) (y ◇ z) x (y ◇ x))
-    _ = ((x ◇ y) ◇ x) ◇ (y ◇ z) := by rw (config := {occs := .pos [1]}) [← h y z x y]
+    _ = ((x ◇ y) ◇ x) ◇ (y ◇ z) := by nth_rw 1 [← h y z x y]
     _ = (x ◇ y) ◇ z := (h (x ◇ y) z x y).symm
 
 @[equational_result]
