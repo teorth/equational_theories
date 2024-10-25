@@ -7,7 +7,8 @@ In this chapter we study weak central groupoids \Cref{eq1485},
 
 The first observation is that this law is equivalent to its dual:
 
-\begin{lemma}[1485 equivalent to 2162]\label{1485-dual}  \Cref{eq1485} is equivalent to the dual law
+\begin{lemma}[1485 equivalent to 2162]\label{1485-dual}\leanok\lean{WeakCentralGroupoid.dual_eqn}
+    \Cref{eq1485} is equivalent to the dual law
 \begin{equation}\label{2162} x = ((y \op z) \op x) \op (x \op y)
 \end{equation}
 (equation 2162).
@@ -22,7 +23,8 @@ as required.
 
 Given a weak central groupoid $G$, define a directed graph with vertices in $G$ by declaring $x \to y$ if and only if $y = x \op z$ for some $z$.  There is an equivalent characterization of this graph:
 
-\begin{lemma}[Equivalent characterization of graph]\label{graph-dual}  One has $x \to y$ if and only if $x = w \op y$ for some $w$.
+\begin{lemma}[Equivalent characterization of graph]\label{graph-dual}\leanok\lean{WeakCentralGroupoid.Path.def'}
+  One has $x \to y$ if and only if $x = w \op y$ for some $w$.
 \end{lemma}
 
 \begin{proof}  If $x \to y$ then $y = x \op z$, then writing $z = z_1 \op z_2$ as before we obtain
@@ -38,7 +40,8 @@ Define a \emph{good path} in $G$ to be a path of the form $$x \to x \op y \to y$
 \end{itemize}
 Slightly more non-trivial is
 
-\begin{lemma}[Claim 4]\label{claim-4}  If $a \to b \to c \to d \to e \to a$ is a 5-cycle in the directed graph, and $a \to b \to c$ and $c \to d \to e$ are good paths, then $b \to c \to d$ is also good.
+\begin{lemma}[Claim 4]\label{claim-4}\leanok\lean{WeakCentralGroupoid.isGood_five}
+  If $a \to b \to c \to d \to e \to a$ is a 5-cycle in the directed graph, and $a \to b \to c$ and $c \to d \to e$ are good paths, then $b \to c \to d$ is also good.
 \end{lemma}
 
 \begin{proof}  If $a \to b \to c$ is good then $b = a \op c$; if $c \to d \to e$ is good then $d = c \op e$; and if $e \to a$ then $a = e \op z$ for some $z$ by definition.  By \eqref{2162} we then have
@@ -48,7 +51,8 @@ Slightly more non-trivial is
 
 Conversely, we have
 
-\begin{lemma}[Reversing the claims]\label{rev-claim} Let $G$ be a directed graph, with some paths of length two in the graph designated as ``good'', in such a way that Claims 1-4 hold.  Then there is a weak central groupoid structure on the vertices of $G$ such that the good paths are precisely the paths of the form $x \to x \op y \to y$.
+\begin{lemma}[Reversing the claims]\label{rev-claim}\leanok\lean{WeakCentralDigraph.toGroupoid}
+  Let $G$ be a directed graph, with some paths of length two in the graph designated as ``good'', in such a way that Claims 1-4 hold.  Then there is a weak central groupoid structure on the vertices of $G$ such that the good paths are precisely the paths of the form $x \to x \op y \to y$.
 \end{lemma}
 
 \begin{proof}  Define an operation $\op: G \times G \to G$ by defining $x \op y$ to be the unique vertex $z$ for which one has a good path $x \to z \to y$; this is well-defined by Claim 1, and by Claims 2-3, the property $x \to y$ holds if and only if $y = x \op z$ for some $z$, and also if and only if $x = w \op y$ for some $w$. In particular, for all $x,y,z$, we have a $5$-cycle

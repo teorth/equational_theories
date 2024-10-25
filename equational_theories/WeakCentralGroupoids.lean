@@ -31,6 +31,9 @@ theorem Path.def' {x y : G} : Path x y ↔ ∃ z, x ◇ z = y := by
 
 def IsGood (x y z : G) : Prop := y = x ◇ z
 
+theorem isGood_five {a b c d e : G} : IsGood a b c → IsGood c d e → Path e a → IsGood b c d := by
+  rintro rfl rfl ⟨_, rfl⟩; exact (eqn ..).symm
+
 variable (G) in
 def toDigraph : WeakCentralDigraph G where
   Path := Path
@@ -40,7 +43,7 @@ def toDigraph : WeakCentralDigraph G where
     ⟨⟨⟨x ◇ y, rfl⟩⟩, fun ⟨z, (h : _ = _)⟩ => by simp [h]⟩
   isGood_left h := h
   isGood_right h := (Path.def'.1 h).imp fun z h => h.symm
-  isGood_five {a b c d e} := by rintro rfl rfl ⟨_, rfl⟩; exact (eqn ..).symm
+  isGood_five := isGood_five
 
 end WeakCentralGroupoid
 
