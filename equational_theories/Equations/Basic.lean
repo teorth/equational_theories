@@ -99,6 +99,9 @@ equation 953  :=  x = y ◇ ((z ◇ x) ◇ (z ◇ z))
 /-- A hard to prove non-consequence of the ``Asterix law``. -/
 equation 1426  :=  x = (x ◇ x) ◇ (x ◇ (x ◇ x))
 
+/-- The weak central groupoid law -/
+equation 1485 := x = (y ◇ x) ◇ (x ◇ (z ◇ y))
+
 /-- The ``Obelix law'' -/
 equation 1491  :=  x = (y ◇ x) ◇ (y ◇ (y ◇ x))
 
@@ -116,6 +119,9 @@ equation 1689  :=  x = (y ◇ x) ◇ ((x ◇ z) ◇ z)
 
 /-- A law with a modified translation-invariant model. -/
 equation 1701 := x = (y ◇ x) ◇ ((z ◇ x) ◇ x)
+
+/-- The dual weak central groupoid law -/
+equation 2162 := x = ((y ◇ z) ◇ x) ◇ (x ◇ y)
 
 /-- From a paper of Mendelsohn & Padmanabhan -/
 equation 2662  :=  x = ((x ◇ y) ◇ (x ◇ y)) ◇ x
