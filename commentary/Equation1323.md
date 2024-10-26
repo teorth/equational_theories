@@ -1,0 +1,1 @@
+A "mirror image" of "Ramanujan" [1729](https://teorth.github.io/equational_theories/implications/?1729), discussed [here](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1323).  The outstanding implication is immune to linear models, translation-invariant models, and finite models.
