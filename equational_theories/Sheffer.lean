@@ -1,6 +1,6 @@
 import equational_theories.Generated.VampireProven.Sheffer
-import equational_theories.BooleanMagma
-import equational_theories.BooleanRing
+import equational_theories.ShefferAlgebra
+import equational_theories.BooleanAlternate
 import Mathlib.Order.BooleanAlgebra
 
 namespace Sheffer
@@ -100,18 +100,25 @@ theorem Equation345169_implies_Helper35 (G : Type*) [Magma G] (h : Equation34516
 /- 345169 implies third Sheffer axiom -/
 theorem Equation345169_implies_Axiom3 (G : Type*) [Magma G] (h : Equation345169 G) : ∀ x y z : G, (x ◇ (y ◇ z)) ◇ (x ◇ (y ◇ z)) = ((y ◇ y) ◇ x) ◇ ((z ◇ z) ◇ x):= λ x y z => ((Equation345169_implies_Helper35 G h x z y).symm).trans (Equation345169_implies_Helper6 G h x (z ◇ z) x (y ◇ y))
 
+instance Equation345169_is_Sheffer (G : Type*) [m : Magma G]
+  (h : Equation345169 G) [Inhabited G] :
+    Sheffer G :=
+  let sh₁ x := x |> Equation345169_implies_Axiom1 G h |> Eq.symm
+  let sh₂ x y := Equation345169_implies_Axiom2 G h x y |> Eq.symm
+  let sh₃ x y z := Equation345169_implies_Axiom3 G h x y z
+  let _ : Stroke G := ⟨ m.op ⟩
+  Sheffer.mk default sh₁ sh₂ sh₃
+
 /- Boolean algebra induced by magma satisfying the three Sheffer axioms.
    The operations are defined in terms of Sheffer strokes:
    OR/SUP  = (A | A) | (B | B)
    AND/INF = (A | B) | (A | B)
 -/
-instance Equation345169_is_Boolean (G : Type*) [Magma G]
+instance Equation345169_is_Boolean (G : Type*) [m : Magma G]
   (h : Equation345169 G) [Inhabited G] :
     BooleanAlgebra G :=
-  let sh₁ x := x |> Equation345169_implies_Axiom1 G h |> Eq.symm
-  let sh₂ x y := Equation345169_implies_Axiom2 G h x y |> Eq.symm
-  let sh₃ := Equation345169_implies_Axiom3 G h
-  let bRing := @ShefferToBooleanRing G _ sh₁ sh₂ sh₃ default
+  let _ := Equation345169_is_Sheffer G h
+  let bRing := @ShefferToBooleanRing G
   @BooleanRingToBooleanAlg G bRing
 
 
