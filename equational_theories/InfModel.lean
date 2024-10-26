@@ -19,6 +19,7 @@ namespace InfModel
 /--
 In a finite model `Equation374794` implies `Equation2`, that the model is a subsingleton.
 -/
+@[equational_result]
 theorem Finite.Equation374794_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : Equation374794 G) :
     Equation2 G := by
   have : ∀ (y z u : G), (y ◇ y) ◇ z = (y ◇ y) ◇ u := by
@@ -41,6 +42,7 @@ theorem Finite.Equation374794_implies_Equation2 (G : Type*) [Magma G] [Finite G]
 /--
 However, `Equation374794` doesn't imply `Equation2`.
 -/
+@[equational_result]
 theorem Equation374794_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equation374794 G ∧ ¬Equation2 G := by
   letI : Magma ℕ+ := { op := fun a b ↦ if a = b then 2^a.val else
     if a = 1 then 3^b.val else
@@ -91,6 +93,7 @@ theorem Equation374794_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equ
     · apply t4
     · convert t4 _ 0
 
+@[equational_result]
 theorem Finite.Equation5093_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : Equation5093 G) :
     Equation2 G:= by
   intro x y
@@ -115,6 +118,7 @@ theorem Finite.Equation5093_implies_Equation2 (G : Type*) [Magma G] [Finite G] (
     _= x ◇ (x ◇ (x ◇ (y ◇ (x ◇ x)))) := by rw [hhhh]
     _= y := by rw [← h y x x]
 
+@[equational_result]
 theorem Finite.Equation28770_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h : Equation28770 G) :
     Equation2 G := by
   have : ∀ (y z u : G), y ◇ z = y ◇ u := by
@@ -134,6 +138,7 @@ theorem Finite.Equation28770_implies_Equation2 (G : Type*) [Magma G] [Finite G] 
   have z := x
   rw [h x y z, this ((y ◇ y) ◇ y)  x u, ← this ((y ◇ y) ◇ y) u u, ← h]
 
+@[equational_result]
 theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equation28770 G ∧ ¬Equation2 G := by
   have : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
   have : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
@@ -418,6 +423,7 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
       simp [padicValNat_prime_prime_pow, padicValNat.mul, Nat.pow_mul] at h
     · rw [h4 x y (y ◇ z) hyz]
 
+@[equational_result]
 theorem Finite.Equation3994_implies_Equation3588 (G : Type*) [Magma G] [Finite G] (h : Equation3994 G) :
     Equation3588 G := by
   intro x y z
@@ -483,6 +489,7 @@ theorem Equation3588_not_implies_Equation3994 : ∃ (G : Type) (_ : Magma G), Eq
 
 -- Another Austin pair, this one with only two variables in both equations.
 -- https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1648.20!.3D.3E.20206/near/476842251
+@[equational_result]
 theorem Finite.Equation206_implies_Equation1648 (G : Type*) [Magma G] [Finite G] (h : Equation206 G) : Equation1648 G := by
   intro x y
   let S : Set G := Set.univ

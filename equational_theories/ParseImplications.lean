@@ -15,6 +15,8 @@ open Lean
 structure Implication where
   lhs : String
   rhs : String
+  /-- Is this result marked with the Finite typeclass? -/
+  finite : Bool
 deriving Lean.ToJson, Lean.FromJson, DecidableEq, Hashable
 
 /--
@@ -27,6 +29,7 @@ the four antiimplications `¬ 1→4`, `¬ 1→5`, `¬ 2→4`, `¬ 2→5`.
 structure Facts where
   satisfied : Array String
   refuted : Array String
+  /-- Is this result marked with the Finite typeclass? -/
   finite : Bool
 deriving Lean.ToJson, Lean.FromJson, Inhabited
 
@@ -65,21 +68,28 @@ def filterCoreEquationName (s : String) : Option String :=
 /--
 Extracts an `Implication` from two expressions of the form `EquationN G inst`.
 -/
-def implicationFromApps (lhs rhs : Expr) : Option Implication := do
+def implicationFromApps (lhs rhs : Expr) (finite : Bool) : Option Implication := do
   let lhsName ← getEquationName lhs
   let rhsName ← getEquationName rhs
-  return ⟨lhsName, rhsName⟩
+  return ⟨lhsName, rhsName, finite⟩
 
 /--
 Attempts to parse an `Implication` from the type of a theorem.
 -/
 def parseImplication (thm_ty : Expr) : MetaM (Option Implication) := do
   Meta.forallTelescope thm_ty fun fvars rhs => do
-    let #[g, magma, lhsv] := fvars | return none
+    match fvars with
+    | #[g, magma, lhsv] =>parse rhs g magma lhsv false
+    | #[g, magma, finite, lhsv] =>
+      let (.app (.const `Finite _) _) := ← Meta.inferType finite | return none
+      parse rhs g magma lhsv true
+    | _ => return none
+where
+  parse (rhs g magma lhsv : Expr) (finite : Bool) : MetaM (Option Implication) := do
     if !(← Meta.isType g) then return none
     let (.app (.const ``Magma _) _) := ← Meta.inferType magma | return none
     let lhs ← Meta.inferType lhsv
-    return implicationFromApps lhs rhs
+    return implicationFromApps lhs rhs finite
 
 /--
 Builds an implication of Laws from the implication of theorems. It should look something like:
