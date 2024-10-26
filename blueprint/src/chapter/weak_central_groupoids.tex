@@ -109,23 +109,19 @@ $$
   0 & 1 & 1 & 0 & 0 \\
   \end{pmatrix}
 $$
-is a relaxed weak central groupoid if we declare the paths $0 \to 0 \to 0$, $0 \to 0 \to 1$, $0 \to 1 \to 1$, $1 \to 0 \to 0$, $1 \to 1 \to 0$, $1 \to 1 \to 1$ to be bad, and all other paths in the directed graph to be good.  Another way of thinking about this relaxed weak central groupoid is via the relaxed multiplication table
-$$
-\begin{matrix}
-1 & 4 & 4 & 1 & 0\\
-3 & 0 & 3 & 1 & 0\\
-3 & 4 & 3,4 & 2 & 2 \\
-0 & 0 & 2 & 2 & 0,2 \\
-1 & 1 & 2 & 1,2 & 2
-\end{matrix}
-$$
-where some entries of the table have multiplicity due to multiple good paths.  For instance, because of the good paths $2 \to 3 \to 2$ and $2 \to 4 \to 2$, $2 \op 2$ is ``permitted'' to be either $3$ or $4$.
-
-Observe that the directed graph consisting of a single bidirectional edge $(2,0) \leftrightarrow (4,0)$ (i.e., the directed edges $(2,0) \to (4,0)$ and $(4,0) \to (2,0)$) is a partial extension of $G$.  Applying \Cref{greedy-prop}, we can complete this to a complete weak central groupoid $G$ with carrier $\{0,1,2,3,4\} \times \N$, such that $(2,0) \op (2,0) = (4,0)$.  The first coordinates of this law will act in a fashion consistent with the above table.  For instance, $(0,n) \op (1,m)$ will lie in $\{4\} \times \N$ for any $n,m$, while $(2,n) \op (2,m)$ will lie in $\{3,4\} \times \N$.  Now we can check the violations:
+is a relaxed weak central groupoid if we declare the paths $0 \to 0 \to 0$, $0 \to 0 \to 1$, $0 \to 1 \to 1$, $1 \to 0 \to 0$, $1 \to 1 \to 0$, $1 \to 1 \to 1$ to be bad, and all other paths in the directed graph to be good.  We can also check the following axioms:
 \begin{itemize}
-\item Violation of 3457:  Take $x = (1,0)$, $y = (4,0)$.  Then $x \op x$ must be in $\{0\} \times \N$, but $x \op ((x \op x) \op y)$ can be checked to be in $\{3\} \times \N$.
-\item Violation of 2087:  Take $x = (1,0)$, $y = (2,0)$.  Then $x \op y$ must be in $\{1\} \times \N$, but $((y \op x) \op x) \op (x \op x)$ can be checked to be in $\{3\} \times \N$.
-\item Violation of 2124:  Take $x = (1,0)$, $y = (2,0)$.  Then $x \op y$ must be in $\{1\} \times \N$, but $((y \op y) \op x) \op (x \op x)$ can be checked to be in $\{3\} \times \N$.
-\item Violation of 3511:  Take $x = (1,0)$, $y = (3,0)$.  Then $x \op y$ must be in $\{1\} \times \N$, but $x \op ((x \op y) \op x)$ can be checked to be in $\{3\} \times \N$.
+  \item Anti-3457: There exist $x,y,z,w$ with $x \to z \to x$,  $z \to w \to y$ both good, and $x \to z \to w$ bad. (One can take $x=1$, $y=4$, $z = 0$, $w = 0$.)
+  \item Anti-2087: There exist $x,y,z,w,u$ with $y \to z \to x$, $z \to w \to x$, and $x \to u \to x$ good, and $w \to x \to u$ is bad. (One can take $x=1, y=2$, $z=4$, $w=1$, $u=0$.)
+  \item Anti-2124: There exists $x,y,z,w,u$ with $y \to z \to y$, $z \to w \to x$ and $x \to u \to x$ good, and $w \to x \to u$  bad. (One can take $x=1$, $y=2$, $z=4$, $w = 1$, $u=0$.)
+  \item Anti-3511: There exists $x,y,z,w$ with $x \to z \to y$ and $z \to w \to x$ good, and $x \to z \to w$ bad. (One can take $x=1$, $y=3$, $z = 1$, $w=0$.)
+\end{itemize}
+
+Let $G_*$ be a finite partial extension of $G_0$ to be chosen later.  By \Cref{greedy-prop}, we can complete this to a complete weak central groupoid $G$ with carrier $G_0 \times \N$.  Depending on how we choose $G_*$, we can ensure that this $G$ refutes one of the four laws 3457, 2087, 2124, 3511:
+\begin{itemize}
+  \item Refuting 3457: Let $x,y,z,w$ be as in the claim Anti-3457, then select $G_*$ to be the directed graph with edges $(x,0) \to (z,2) \to (x,0) \to (z,2) \to (w,3) \to (y,1)$.  One can check that this is a partial extension, and that $G$ will refute 3457 with $x,y$ replaced by $(x,0),(y,1)$.
+  \item Refuting 2087: Let $x,y,z,w,u$ be as in the claim Anti-2087, then select $G_*$ to be the directed graph with edges $(y,1) \to (z,2) \to (x,0)$ and $(z,2) \to (w,3) \to (x,0) \to (u,4) \to (x,0)$.  One can check that this is a partial extension, and that $G$ will refute 2087 with $x,y$ replaced by $(x,0),(y,1)$.
+  \item Refuting 2124: Let $x,y,z,w,u$ be as in the claim Anti-2124, then select $G_*$ to be the directed graph with edges $(y,1) \to (z,2) \to (y,1)$ and $(z,2) \to (w,3) \to (x,0) \to (u,4) \to (x,0)$.  One can check that this is a partial extension, and that $G$ will refute 2124 with $x,y$ replaced by $(x,0),(y,1)$.
+  \item Refuting 3511: Let $x,y,z,w$ be as in the claim Anti-3511, then select $G_*$ to be the directed graph with edges $(x,0) \to (z,2) \to (y,1)$ and $(z,2) \to (w,3) \to (x,0)$.  One can check that this is a partial extension, and that $G$ will refute 3511 with $x,y$ replaced by $(x,0),(y,1)$.
 \end{itemize}
 \end{proof}
