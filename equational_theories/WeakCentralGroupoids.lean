@@ -67,60 +67,66 @@ def strictify (H : IsStrict G) : WeakCentralGroupoid G where
 
 end RelaxedWeakCentralGroupoid
 
-namespace Refutation_1485_1483
+namespace Refutation_1485
 
 inductive G0 where
-  | hub
-  | mid (i : Fin 3)
-  | spoke (i : Fin 3)
+  | A
+  | B (i : Bool)
+  | C (i : Bool)
 
 inductive Path : G0 → G0 → Prop where
-  | hm {i} : Path .hub (.mid i)
-  | mh {i} : Path (.mid i) .hub
-  | mm {i} : Path (.mid i) (.mid (i+1))
-  | ms {i} : Path (.mid i) (.spoke i)
-  | sm {i} : Path (.spoke i) (.mid i)
-  | ss i : Path (.spoke (i+1)) (.spoke i)
-  | rfl {i} : Path (.spoke i) (.spoke i)
+  | aa : Path .A .A
+  | ab {i} : Path .A (.B i)
+  | ba {i} : Path (.B i) .A
+  | bc {i} : Path (.B i) (.C !i)
+  | cb {i} : Path (.C i) (.B i)
+  | cc {i j} : Path (.C i) (.C j)
+
+def Path.bc' {i} : Path (.B !i) (.C i) := by simpa using bc (i := !i)
+
+inductive IsGood' : Bool → Bool → Bool → Prop where
+  | mk {i} : IsGood' i (!i) i
+
+theorem isGood'_iff {i j k} : IsGood' i j k ↔ k = i ∧ j = !i :=
+  ⟨fun ⟨⟩ => by simp, by rintro ⟨rfl, rfl⟩; constructor⟩
+
+instance {i j k} : Decidable (IsGood' i j k) := decidable_of_iff' _ isGood'_iff
 
 inductive IsBad : G0 → G0 → G0 → Prop where
-  | mk {i j k} : IsBad (.mid i) (.mid j) (.mid k)
+  | mk {i j k} : ¬IsGood' i j k → IsBad (.C i) (.C j) (.C k)
 
 def IsGood (a b c : G0) : Prop :=
   Path a b ∧ Path b c ∧ ¬IsBad a b c
 
-theorem anti_1483 : ∃ a b c d e, IsGood a b c ∧ IsGood c d e ∧ Path a e ∧ ¬IsGood b c d :=
-  ⟨.spoke 0, .mid 0, .mid 1, .mid 2, .spoke 2, ⟨.sm, .mm, nofun⟩, ⟨.mm, .ms, nofun⟩,
-    .ss (i := 2), fun h => h.2.2 .mk⟩
+theorem IsGood.mk' {i j k} (h : IsGood' i j k) : IsGood (.C i) (.C j) (.C k) :=
+  ⟨.cc, .cc, fun ⟨h'⟩ => h' h⟩
 
-def mod3 (i j : Fin 3) : {k // i = j+k} :=
-  ⟨i - j, (add_sub_cancel ..).symm⟩
+theorem anti_3457 : ∃ x y z w, IsGood x z x ∧ IsGood z w y ∧ ¬IsGood x z w :=
+  ⟨.C true, .B false, .C false, .C false, .mk' ⟨⟩, ⟨.cc, .cb, nofun⟩, (·.2.2 ⟨nofun⟩)⟩
 
-def mod3' (i j : Fin 3) : i = j ⊕' i = j+1 ⊕' i+1 = j :=
-  match mod3 i j with
-  | ⟨0, e⟩ => .inl (add_zero j ▸ e)
-  | ⟨1, e⟩ => .inr <| .inl e
-  | ⟨2, e⟩ => .inr <| .inr <| by rw [e, add_assoc]; apply add_zero
+theorem anti_2087_and_anti_2124 : ∃ x y z w u,
+    IsGood y z x ∧ IsGood y z y ∧ IsGood z w x ∧ IsGood x u x ∧ ¬IsGood w x u :=
+  ⟨.C true, .A, .B false, .C true, .C false,
+    ⟨.ab, .bc, nofun⟩, ⟨.ab, .ba, nofun⟩, ⟨.bc, .cc, nofun⟩, .mk' ⟨⟩, (·.2.2 ⟨nofun⟩)⟩
+
+theorem anti_2124 : ∃ x y z w, IsGood x z y ∧ IsGood z w x ∧ ¬IsGood x z w :=
+  ⟨.C true, .B true, .C true, .C false, ⟨.cc, .cb, nofun⟩, .mk' ⟨⟩, (·.2.2 ⟨nofun⟩)⟩
+
+def mod2 (i j : Bool) : {k // i = (j ^^ k)} :=
+  ⟨i != j, by revert i j; decide⟩
 
 def isGood_exists : ∀ x y : G0, {z // IsGood x z y}
-  | .hub, .hub => ⟨.mid 0, .hm, .mh, nofun⟩
-  | .hub, .mid j => ⟨.mid (j-1), .hm, by simpa using Path.mm (i := j - 1), nofun⟩
-  | .hub, .spoke j => ⟨_, .hm, .ms, nofun⟩
-  | .mid i, .hub => ⟨_, .mm, .mh, nofun⟩
-  | .mid i, .mid j => ⟨_, .mh, .hm, nofun⟩
-  | .mid i, .spoke j => match i, j, mod3' i j with
-    | _, i, .inl rfl => ⟨_, .ms, .rfl, nofun⟩
-    | _, i, .inr <| .inl rfl => ⟨_, .ms, .ss _, nofun⟩
-    | i, _, .inr <| .inr rfl => ⟨_, .mm, .ms, nofun⟩
-  | .spoke i, .hub => ⟨_, .sm, .mh, nofun⟩
-  | .spoke i, .mid j => match i, j, mod3' i j with
-    | _, i, .inl rfl => ⟨_, .rfl, .sm, nofun⟩
-    | _, i, .inr <| .inl rfl => ⟨_, .ss _, .sm, nofun⟩
-    | i, _, .inr <| .inr rfl => ⟨_, .sm, .mm, nofun⟩
-  | .spoke i, .spoke j => match i, mod3 i j with
-    | _, ⟨0, rfl⟩ => ⟨_, (add_zero j).symm ▸ .rfl, .rfl, nofun⟩
-    | _, ⟨1, rfl⟩ => ⟨_, .ss _, .rfl, nofun⟩
-    | _, ⟨2, rfl⟩ => ⟨_, add_assoc j 1 1 ▸ .ss _, .ss _, nofun⟩
+  | .A, .A => ⟨.A, .aa, .aa, nofun⟩
+  | .A, .B j => ⟨.A, .aa, .ab, nofun⟩
+  | .A, .C j => ⟨.B !j, .ab, .bc', nofun⟩
+  | .B i, .A => ⟨.A, .ba, .aa, nofun⟩
+  | .B i, .B j => ⟨.A, .ba, .ab, nofun⟩
+  | .B i, .C j => ⟨.C !i, .bc, .cc, nofun⟩
+  | .C i, .A => ⟨.B i, .cb, .ba, nofun⟩
+  | .C i, .B j => ⟨.C j, .cc, .cb, nofun⟩
+  | .C i, .C j => match i, mod2 i j with
+    | _, ⟨false, rfl⟩ => ⟨.C !j, .cc, .cc, fun ⟨h⟩ => h (by simp; constructor)⟩
+    | _, ⟨true, rfl⟩ => ⟨.B _, .cb, by simpa using Path.bc', nofun⟩
 
 instance : RelaxedWeakCentralGroupoid G0 where
   op x y := (isGood_exists x y).1
@@ -129,25 +135,26 @@ instance : RelaxedWeakCentralGroupoid G0 where
   op_isGood x y := (isGood_exists x y).2
   isGood_path := fun ⟨h1, h2, _⟩ => ⟨h1, h2⟩
   isGood_left
-    | .hm => ⟨.mid 0, .mh, .hm, nofun⟩
-    | .mh => ⟨_, .hm, .mh, nofun⟩
-    | .mm => ⟨_, .hm, .mm, nofun⟩
-    | .ms => ⟨_, .hm, .ms, nofun⟩
-    | .sm => ⟨_, .ms, .sm, nofun⟩
-    | .ss i => ⟨_, .ms, .ss i, nofun⟩
-    | .rfl => ⟨_, .rfl, .rfl, nofun⟩
+    | .aa => ⟨_, .aa, .aa, nofun⟩
+    | .ab => ⟨_, .aa, .ab, nofun⟩
+    | .ba => ⟨_, .ab, .ba, nofun⟩
+    | .bc => ⟨_, .ab, .bc, nofun⟩
+    | .cb => ⟨_, .bc', .cb, nofun⟩
+    | .cc => ⟨_, .bc', .cc, nofun⟩
   isGood_right
-    | .hm => ⟨_, .hm, .mh, nofun⟩
-    | .mh => ⟨.mid 0, .mh, .hm, nofun⟩
-    | .mm => ⟨_, .mm, .mh, nofun⟩
-    | .ms => ⟨_, .ms, .sm, nofun⟩
-    | .sm => ⟨_, .sm, .mh, nofun⟩
-    | .ss i => ⟨_, .ss i, .sm, nofun⟩
-    | .rfl => ⟨_, .rfl, .sm, nofun⟩
+    | .aa => ⟨_, .aa, .aa, nofun⟩
+    | .ab => ⟨_, .ab, .ba, nofun⟩
+    | .ba => ⟨_, .ba, .aa, nofun⟩
+    | .bc => ⟨_, .bc, .cb, nofun⟩
+    | .cb => ⟨_, .cb, .ba, nofun⟩
+    | .cc => ⟨_, .cc, .cb, nofun⟩
   isGood_five := fun ⟨ab, bc, abc⟩ ⟨cd, de, cde⟩ ea => by
-    use bc, cd; rintro @⟨i⟩; cases bc; cases cd
-    generalize eq : i+1+1 = k at de
-    match ea with
-    | .hm | .mm | .sm => nomatch abc ⟨⟩
-    | .mh | .ms => nomatch cde ⟨⟩
-    | .ss j | .rfl (i := j) => cases ab; cases de; simp [add_assoc] at eq
+    use bc, cd; rintro @⟨i, j, k, ijk⟩
+    rename_i a e x1 x2; clear bc cd x1 x2
+    match (generalizing := true) ab, de, ea with
+    | .bc, .cc, .cb => exact cde ⟨fun ⟨⟩ => ijk (by simpa using IsGood'.mk (i := !j))⟩
+    | .cc, .cb, .bc => exact abc ⟨fun ⟨⟩ => ijk (by simpa using IsGood'.mk (i := k))⟩
+    | .cc (i := u) (j := w), .cc (i := v) (j := v'), .cc =>
+      if abc' : IsGood' u w j then ?_ else exact abc ⟨abc'⟩
+      if cde' : IsGood' j v v' then ?_ else exact cde ⟨cde'⟩
+      cases abc'; cases cde'; exact ijk (by simpa using IsGood'.mk (i := !j))
