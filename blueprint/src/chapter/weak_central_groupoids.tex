@@ -7,7 +7,7 @@ In this chapter we study weak central groupoids \Cref{eq1485},
 
 The first observation is that this law is equivalent to its dual:
 
-\begin{lemma}[1485 equivalent to 2162]\label{1485-dual}  \Cref{eq1485} is equivalent to the dual law
+\begin{lemma}[1485 equivalent to 2162]\label{1485-dual}\uses{eq1485}  \Cref{eq1485} is equivalent to the dual law
 \begin{equation}\label{2162} x = ((y \op z) \op x) \op (x \op y)
 \end{equation}
 (equation 2162).
@@ -22,10 +22,10 @@ as required.
 
 Given a weak central groupoid $G$, define a directed graph with vertices in $G$ by declaring $x \to y$ if and only if $y = x \op z$ for some $z$.  There is an equivalent characterization of this graph:
 
-\begin{lemma}[Equivalent characterization of graph]\label{graph-dual}  One has $x \to y$ if and only if $x = w \op y$ for some $w$.
+\begin{lemma}[Equivalent characterization of graph]\label{graph-dual}\uses{eq1485}  One has $x \to y$ if and only if $x = w \op y$ for some $w$.
 \end{lemma}
 
-\begin{proof}  If $x \to y$ then $y = x \op z$, then writing $z = z_1 \op z_2$ as before we obtain
+\begin{proof}\uses{1485-dual}  If $x \to y$ then $y = x \op z$, then writing $z = z_1 \op z_2$ as before we obtain
 $$ x = (z_2 \op x) \op (x \op (z_1 \op z_2)) = (z_2 \op x) \op y$$
 giving the forward implication.  The backwards implication follows by duality.
 \end{proof}
@@ -38,17 +38,17 @@ Define a \emph{good path} in $G$ to be a path of the form $$x \to x \op y \to y$
 \end{itemize}
 Slightly more non-trivial is
 
-\begin{lemma}[Claim 4]\label{claim-4}  If $a \to b \to c \to d \to e \to a$ is a 5-cycle in the directed graph, and $a \to b \to c$ and $c \to d \to e$ are good paths, then $b \to c \to d$ is also good.
+\begin{lemma}[Claim 4]\label{claim-4}\uses{eq1485}  If $a \to b \to c \to d \to e \to a$ is a 5-cycle in the directed graph, and $a \to b \to c$ and $c \to d \to e$ are good paths, then $b \to c \to d$ is also good.
 \end{lemma}
 
-\begin{proof}  If $a \to b \to c$ is good then $b = a \op c$; if $c \to d \to e$ is good then $d = c \op e$; and if $e \to a$ then $a = e \op z$ for some $z$ by definition.  By \eqref{2162} we then have
+\begin{proof}\uses{graph-dual}  If $a \to b \to c$ is good then $b = a \op c$; if $c \to d \to e$ is good then $d = c \op e$; and if $e \to a$ then $a = e \op z$ for some $z$ by definition.  By \eqref{2162} we then have
   $$ c = ((e \op z) \op c) \op (c \op e) = b \op d$$
   so $b \to c \to d$ is good.
 \end{proof}
 
 Conversely, we have
 
-\begin{lemma}[Reversing the claims]\label{rev-claim} Let $G$ be a directed graph, with some paths of length two in the graph designated as ``good'', in such a way that Claims 1-4 hold.  Then there is a weak central groupoid structure on the vertices of $G$ such that the good paths are precisely the paths of the form $x \to x \op y \to y$.
+\begin{lemma}[Reversing the claims]\label{rev-claim}\uses{claim-4} Let $G$ be a directed graph, with some paths of length two in the graph designated as ``good'', in such a way that Claims 1-4 hold.  Then there is a weak central groupoid structure on the vertices of $G$ such that the good paths are precisely the paths of the form $x \to x \op y \to y$.
 \end{lemma}
 
 \begin{proof}  Define an operation $\op: G \times G \to G$ by defining $x \op y$ to be the unique vertex $z$ for which one has a good path $x \to z \to y$; this is well-defined by Claim 1, and by Claims 2-3, the property $x \to y$ holds if and only if $y = x \op z$ for some $z$, and also if and only if $x = w \op y$ for some $w$. In particular, for all $x,y,z$, we have a $5$-cycle
@@ -76,7 +76,7 @@ Let $G_0$ be a relaxed weak central groupoid.  A \emph{partial extension} of $G_
 
 We have the following convenient completion property:
 
-\begin{proposition}[Completion property]\label{greedy-prop}  Let $G_0$ be a directed graph obeying claims 1', 2, 3, 4.  Then any finite partial extension of $G_0$ with carrier $G_0 \times \N$ (and projection map $\pi(a,n) = a$) can be completed to a complete extension.
+\begin{proposition}[Completion property]\label{greedy-prop}\uses{eq1485}  Let $G_0$ be a directed graph obeying claims 1', 2, 3, 4.  Then any finite partial extension of $G_0$ with carrier $G_0 \times \N$ (and projection map $\pi(a,n) = a$) can be completed to a complete extension.
 \end{proposition}
 
 \begin{proof}  By the previous comments, we can ignore Claim 4 as it is automatic, and focus on completing the partial weak central groupoid on $G$ to a complete weak central groupoid by ensuring Claims 1, 2, 3 hold.  By the usual greedy algorithm, it suffices to show that any individual failure of Claim 1, 2 or 3 can be resolved by adding some finite number of edges to the graph.
@@ -95,10 +95,10 @@ We need an additional axiom to refute this implication:
 \item[Claim anti-1483:] There exists a modified 5-cycle $a \to b \to c \to d \to e$, $a \to e$ in the directed graph, with $a \to b \to c$ and $c \to d \to e$ good paths, but $b \to c \to d$ not good.
 \end{itemize}
 
-\begin{theorem}[1485 does not imply 1483]\label{1485-not-1483}  \Cref{eq1485} does not imply Equation \eqref{1483}.
+\begin{theorem}[1485 does not imply 1483]\label{1485-not-1483}\uses{eq1485}  \Cref{eq1485} does not imply Equation \eqref{1483}.
 \end{theorem}
 
-\begin{proof}  We first claim that there is a relaxed weak central groupoid $G_0$ that does not obey Claim anti-1483.  Computer search reveals that one can take a carrier $G_0=\{0,1,\dots,6\}$ with incidence matrix
+\begin{proof}\uses{greedy-prop, rev-claim}  We first claim that there is a relaxed weak central groupoid $G_0$ that does not obey Claim anti-1483.  Computer search reveals that one can take a carrier $G_0=\{0,1,\dots,6\}$ with incidence matrix
 $$
 \begin{pmatrix}
   0 & 1 & 0 & 1 & 0 & 0 & 1 \\
@@ -118,3 +118,4 @@ $e = a \op y$ for some $a$.  Since $b \to c \to d$ is not good, we have
 $$ c \neq b \op d = (a \op c) \op (c \op (a \op y))$$
 thus contradicting \eqref{1483} as required.
 \end{proof}
+

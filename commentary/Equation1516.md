@@ -1,0 +1,1 @@
+A challenging equation, discussed [here](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1516.20-.3E.20255).  The outstanding implication is immune to linear models, translation-invariant models, and finite models.
