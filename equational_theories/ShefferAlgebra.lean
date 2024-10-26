@@ -1,4 +1,4 @@
-import equational_theories.BooleanRing
+import equational_theories.BooleanAlternate
 import equational_theories.Magma
 
 section ShafferLaws
