@@ -10,6 +10,8 @@
 /blueprint/src/web.bbl
 /blueprint/print/
 /blueprint/lean_decls
+**/print.pdf
+**/web.pdf
 ## Homepage
 home_page/_site
 ## TeX
