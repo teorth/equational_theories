@@ -112,7 +112,7 @@ def freshGenerator (f : PartialSolution) (x : A := 0) : A := by
       by_contra! h
       rw [Module.rank_lt_aleph0_iff] at h
       exact DFinsuppInfinite_not_Finite h
-    apply exists_smul_not_mem_of_rank_lt (R := ℤ)
+    apply Submodule.exists_smul_not_mem_of_rank_lt (R := ℤ)
     exact lt_of_lt_of_le hRankFin hRankInfinite
   exact Classical.choose this
 
