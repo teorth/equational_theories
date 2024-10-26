@@ -166,6 +166,9 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
 
 def generateRaw (inp : Cli.Parsed) : IO UInt32 := do
   withExtractedResults inp fun rs _dualityRelation => do
+    if inp.hasFlag "full-entries" then
+      IO.println (toJson rs).compress
+      return
     let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
     let rs := matchFinite rs (inp.hasFlag "finite-only")
     let mut implications : Array Implication := #[]
@@ -186,6 +189,7 @@ def raw : Cmd := `[Cli|
   FLAGS:
     proven; "Only consider proven results"
     "finite-only"; "Only report finite results"
+    "full-entries"; "Print out the full data for each entry, including source information"
 
   ARGS:
     ...files : Array ModuleName; "The files to extract the implications from"
