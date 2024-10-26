@@ -3,12 +3,14 @@
 import argparse
 import itertools
 import json
-import os
+import os, io
 import re
 import subprocess
+import sys
 import time
-from collections import defaultdict
+from collections import defaultdict, Counter
 from subprocess import CalledProcessError
+from typing import Tuple, List
 
 import networkx as nx
 
@@ -67,6 +69,20 @@ def format_eq(eq):
     return f"{format_expr2(eq[0])} = {format_expr2(eq[1])}"
 
 
+models = []
+
+
+def parse_model(out):
+    model = defaultdict(dict)
+    for a, b, c in re.findall(r"mul\(([$\w\']+),([$\w\']+)\) = ([$\w\']+)", out):
+        model[a][b] = c
+    vals = list(model.keys())
+    return [[vals.index(model[a][b]) for b in vals] for a in vals]
+
+
+failed = 0
+
+
 class Rule:
     def __init__(self, preconditions, conclusion):
         vars = {}
@@ -89,12 +105,15 @@ class Rule:
                 self.graph[f"pc{i}"][f"var{v}"]["ind"] = self.graph[f"pc{i}"][
                     f"var{v}"
                 ].get("ind", 0) | (1 << j)
+        self.graph.add_node("conclusion", type=2)
         for j, v in enumerate(self.conclusion):
-            self.graph.add_node("conclusion", type=2)
             self.graph.add_edge("conclusion", f"var{v}")
-            self.graph["conclusion"][f"var{v}"]["ind"] = self.graph["conclusion"][
-                f"var{v}"
-            ].get("ind", 0) | (1 << j)
+            if len(self.conclusion) == 3:
+                self.graph["conclusion"][f"var{v}"]["ind"] = self.graph["conclusion"][
+                    f"var{v}"
+                ].get("ind", 0) | (1 << j)
+            else:
+                self.graph["conclusion"][f"var{v}"]["ind"] = 1
         self.ghash = nx.weisfeiler_lehman_graph_hash(
             self.graph, node_attr="type", edge_attr="ind"
         )
@@ -111,6 +130,11 @@ class Rule:
         return hash(self.ghash)
 
     def check(self):
+        global failed
+        for model in models:
+            if not self.check_model(model):
+                print("Quickly ruled out")
+                return False
         tptp_r = f"fof(eq, axiom, {format_eq(eq)}).\n"
         for i, (a, b, c) in enumerate(self.preconditions):
             tptp_r += f"fof(pc_{i}, axiom, mul(sk{a}, sk{b}) = sk{c}).\n"
@@ -121,14 +145,37 @@ class Rule:
         try:
             st = time.perf_counter()
             out = subprocess.check_output(
-                ["~/Downloads/vampire", "-t", "0.1", "/proc/self/fd/0"],
+                ["~/Downloads/vampire", "-t", "2", "/proc/self/fd/0"],
                 input=tptp_r.encode(),
             ).decode()
             if "Termination reason: Refutation" in out:
                 print(f"Confirmed in {time.perf_counter() - st:.3}s")
                 return True
-            return False
         except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
+            pass
+        if failed > 20:
+            return False
+        try:
+            print("Looking for counterexample")
+            out = subprocess.check_output(
+                [
+                    "~/Downloads/vampire",
+                    "-sa",
+                    "fmb",
+                    "-t",
+                    "1",
+                    "/proc/self/fd/0",
+                ],
+                input=tptp_r.encode(),
+            ).decode()
+            models.append(parse_model(out))
+            print("Found counterexample")
+            with open(f"data/forcing_rules/{eqid}.models", "w") as f:
+                json.dump(models, f)
+            return False
+        except subprocess.CalledProcessError as e:
+            print("Couldn't find counterexample", self)
+            failed += 1
             return False
 
     def generalizations(self):
@@ -172,6 +219,14 @@ class Rule:
             print("Weird!!!", self)
         print("Found", self)
         return self
+
+    def dualize(self):
+        nc = (
+            self.conclusion
+            if len(self.conclusion) == 2
+            else (self.conclusion[1], self.conclusion[0], self.conclusion[2])
+        )
+        return Rule([(b, a, c) for a, b, c in self.preconditions], nc)
 
     def to_tptp(self, op):
         return (
@@ -277,6 +332,31 @@ class Rule:
     def __str__(self):
         return repr(self)
 
+    def find_var_assignemnts(self) -> Tuple[List[int], List[Tuple[int, int, int]]]:
+        nvars = []
+        then = []
+        unassigned = set(range(self.vars))
+        while unassigned:
+            cnt = Counter()
+            found = False
+            for a, b, c in self.preconditions:
+                if a not in unassigned and b not in unassigned and c in unassigned:
+                    then.append((a, b, c))
+                    unassigned.remove(c)
+                    found = True
+                    break
+                cnt[a] += 1
+                if a != b:
+                    cnt[b] += 1
+                cnt[c] -= 2
+            if found:
+                continue
+            chosen = max(unassigned, key=lambda x: cnt[x])
+            nvars.append(chosen)
+            unassigned.remove(chosen)
+
+        return nvars, then
+
     def precond(self, assn, mulm):
         for a, b, c in self.preconditions:
             if (assn[a], assn[b]) not in mulm or mulm[(assn[a], assn[b])] != assn[c]:
@@ -299,6 +379,36 @@ class Rule:
                     assn[self.conclusion[1]],
                     assn[self.conclusion[2]],
                 )
+
+    def precond2(self, assn, model):
+        for a, b, c in self.preconditions:
+            if model[assn[a]][assn[b]] != assn[c]:
+                return False
+        return True
+
+    def conc2(self, assn, model):
+        if len(self.conclusion) == 2:
+            return assn[self.conclusion[0]] == assn[self.conclusion[1]]
+        else:
+            return (
+                model[assn[self.conclusion[0]]][assn[self.conclusion[1]]]
+                == assn[self.conclusion[2]]
+            )
+
+    def check_model(self, model):
+        nvars, then = self.find_var_assignemnts()
+        for assignment in itertools.islice(
+            itertools.product(range(len(model)), repeat=len(nvars)), 2 * 10**5
+        ):
+            nassignment = [0] * self.vars
+            for i, j in enumerate(nvars):
+                nassignment[j] = assignment[i]
+            for a, b, c in then:
+                nassignment[c] = model[nassignment[a]][nassignment[b]]
+
+            if self.precond2(nassignment, model) and not self.conc2(nassignment, model):
+                return False
+        return True
 
 
 def flatten_eq(eq, ecache, preconds, predetermined):
@@ -355,15 +465,25 @@ def find_problems(model, aeqb):
         vars.update((a, b, c))
 
     for rule in rules:
-        for assignment in itertools.product(vars, repeat=rule.vars):
-            if rule.precond(assignment, mp):
-                v = rule.conc(assignment, mp)
+        nvars, then = rule.find_var_assignemnts()
+        for assignment in itertools.product(vars, repeat=len(nvars)):
+            nassignment = [0] * rule.vars
+            for i, j in enumerate(nvars):
+                nassignment[j] = assignment[i]
+            for a, b, c in then:
+                if (nassignment[a], nassignment[b]) not in mp:
+                    continue
+                nassignment[c] = mp[(nassignment[a], nassignment[b])]
+
+            if rule.precond(nassignment, mp):
+                v = rule.conc(nassignment, mp)
                 if v is not None and not (len(v) == 2 and v[0] == v[1]):
                     if len(v) == 2:
                         return normalize_eq(v[0], v[1], aeqb)
                     elif len(v) == 3:
                         return v
-    assert False
+
+    raise RuntimeError(f"Couldn't find problem with model {model}")
 
 
 def construct_tptp(rules):
@@ -374,6 +494,10 @@ fof(p4XY, axiom, ! [X, Y] : ~old(X, Y, c)).
 fof(p4XZ, axiom, ! [X, Z] : ~old(X, c, Z)).
 fof(p4YZ, axiom, ! [Y, Z] : ~old(c, Y, Z)).
 """
+
+    if False:  # idempotent
+        default_rules += f"fof(aaa, axiom, old(a, a, a)).\n"
+        default_rules += f"fof(bbb, axiom, old(b, b, b)).\n"
 
     for i, rule in enumerate(rules):
         default_rules += f'fof(old_{i}, axiom, {rule.to_tptp("old")}).\n'
@@ -402,7 +526,6 @@ fof(p4YZ, axiom, ! [Y, Z] : ~old(c, Y, Z)).
 
 
 def load_file(filename):
-    rules = []
     if not os.path.isfile(filename):
         return None
     with open(filename, "r") as f:
@@ -414,7 +537,14 @@ def load_file(filename):
     return rules
 
 
-def main(timeout, find_rules):
+def load_models(filename):
+    if not os.path.isfile(filename):
+        return []
+    with open(filename, "r") as f:
+        return json.load(f)
+
+
+def main(timeout, find_rules, self_dual):
     startt = time.perf_counter()
     while time.perf_counter() - startt < timeout:
         print("Trying again, rules:")
@@ -428,24 +558,19 @@ def main(timeout, find_rules):
             default_rules
             + f'fof(preserve, conjecture, {" & ".join(rule.to_tptp("new") for rule in rules)}).\n'
         )
-        inp += "fof(new_def2, axiom, new(X, Y, Z) | ~new(X, Y, Z)).\n"
+        inp += f"fof(new_def2, axiom, new(X, Y, Z) | ~new(X, Y, Z)).\n"
         try:
             if not find_rules:
                 raise CalledProcessError(1, "not testing")
+            # print(inp)
             out = subprocess.check_output(
                 [
                     "~/Downloads/vampire",
-                    "--mode",
-                    "portfolio",
-                    "--schedule",
-                    "file",
-                    "--schedule_file",
-                    "finsched.sch",
-                    "--cores",
-                    "0",
+                    "-sa",
+                    "fmb",
                     "/proc/self/fd/0",
                     "-t",
-                    "600",
+                    "1200",
                 ],
                 input=inp.encode(),
             ).decode()
@@ -466,14 +591,20 @@ def main(timeout, find_rules):
                 if len(prb) == 2:
                     assert prb[0] != prb[1]
                     if prb[0] == "c":
-                        rules.append(Rule(old, ("a", "ba"[aeqb], prb[1])).minimize())
+                        rule = Rule(old, ("a", "ba"[aeqb], prb[1]))
                     else:
-                        rules.append(Rule(old, ("a", "ba"[aeqb], prb[0])).minimize())
+                        rule = Rule(old, ("a", "ba"[aeqb], prb[0]))
                 else:
-                    rules.append(Rule(old + [("a", "ba"[aeqb], "c")], prb).minimize())
+                    rule = Rule(old + [("a", "ba"[aeqb], "c")], prb)
             else:
-                rules.append(Rule(old, prb).minimize())
-        except subprocess.CalledProcessError:
+                rule = Rule(old, prb)
+            rule = rule.minimize()
+            rules.append(rule)
+            if self_dual:  # equation is self dual
+                dr = rule.dualize()
+                if dr != rule:
+                    rules.append(dr)
+        except subprocess.CalledProcessError as e:
             print("Timed out (300s)")
             for i, rule in enumerate(rules):
                 inp = default_rules
@@ -493,21 +624,23 @@ def main(timeout, find_rules):
                         ],
                         input=inp.encode(),
                     ).decode()
-                    with open(f"data/forcing_rules/{eqid}_{i+1}.proof", "w") as f:
+                    with open(f"data/forcing_rules/{eqid}_{i + 1}.proof", "w") as f:
                         f.write(inp)
                         f.write(out)
                 except subprocess.CalledProcessError as e:
-                    print(f"Couldn't prove rule {i+1}")
+                    print(f"Couldn't prove rule {i + 1}")
                     print(e)
             return True
     return False
 
 
 if __name__ == "__main__":
+    sys.stdout.reconfigure(line_buffering=True)
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--prove", help="produce proofs for existing rules", action="store_true"
+        "--prove", help="Produce proofs for existing rules", action="store_true"
     )
+    parser.add_argument("--fresh", help="Don't use existing rules", action="store_true")
     args = parser.parse_args()
     timeout = 1 if args.prove else int(input())
 
@@ -515,15 +648,25 @@ if __name__ == "__main__":
 
     eq = eqs[int(eqid) - 1]
     print(eq)
-    if rules is None:
+    self_dual = int(eqid) == 1485  # TODO
+
+    if not args.fresh:
+        models = load_models(f"data/forcing_rules/{eqid}.models")
+    if not args.fresh and rules is None:
         rules = load_file(f"data/forcing_rules/{eqid}.rules")
-    if rules is None:
+    if not args.fresh and rules is None:
         rules = load_file(f"data/forcing_rules/{eqid}.rules_wip")
     if rules is None:
-        rule = [Rule([(0, 1, 2), (0, 1, 3)], (2, 3)), *rulify_eq(eq)]
+        rules = [Rule([(0, 1, 2), (0, 1, 3)], (2, 3))]
+        for r in rulify_eq(eq):
+            rules.append(r)
+            dr = r.dualize()
+            if self_dual and dr not in rules:
+                rules.append(dr)
+    print("Loaded rules", rules)
     good = False
     try:
-        good = main(timeout, not args.prove)
+        good = main(timeout, not args.prove, self_dual)
     finally:
         print(rules)
         if good:
