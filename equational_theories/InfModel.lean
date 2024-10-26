@@ -2,6 +2,7 @@ import equational_theories.Equations.All
 import equational_theories.MagmaOp
 import Aesop
 import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Nat.Bitwise
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import equational_theories.Mathlib.Algebra.Group.Nat
 import Mathlib.Data.ZMod.Defs
