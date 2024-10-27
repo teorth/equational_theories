@@ -252,6 +252,9 @@ theorem satisfiesSet_symm {α G} [Magma G] {Γ : Ctx α}
   (h :  G ⊧ Γ) : G ⊧ (·.symm) '' Γ :=
   fun _ ⟨_, ⟨hEsymm, hEsymmE⟩⟩ ↦ hEsymmE ▸ Law.satisfies_symm (h _ hEsymm)
 
+theorem satisfiesSet_singleton {α G} [Magma G] {E : MagmaLaw α} : G ⊧ {E} ↔ G ⊧ E := by
+  simp [satisfiesSet]
+
 theorem satisfiesSet_equiv {α G H} [Magma G] [Magma H] (e : G ≃◇ H) {Γ : Ctx α} :
     G ⊧ Γ ↔ H ⊧ Γ :=
   forall_congr' fun _ => forall_congr' fun _ => satisfies_equiv e
