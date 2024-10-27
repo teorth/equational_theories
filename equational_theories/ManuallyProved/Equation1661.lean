@@ -3,7 +3,6 @@ import equational_theories.MagmaOp
 import Aesop
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
-import equational_theories.Mathlib.Algebra.Group.Nat
 
 /- Infinite models showing anti-implications 1661 → ⋯ -/
 

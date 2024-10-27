@@ -4,7 +4,6 @@ import Aesop
 import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Nat.Bitwise
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
-import equational_theories.Mathlib.Algebra.Group.Nat
 import Mathlib.Data.ZMod.Defs
 import Mathlib.Data.ZMod.Basic
 import Mathlib.Algebra.Polynomial.Basic
@@ -763,9 +762,9 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
     | ⟨FreeMagma.Leaf a, FreeMagma.Leaf b⟩ =>
       exists 2
       simp_all only [Nat.one_lt_ofNat, true_and]
-      exists Magma.mk fun x y => 0
+      exists Magma.mk fun _ _ => 0
       simp_all only [satisfies, satisfiesPhi, FreeMagma.Mem]
-      intro φ
+      intro _
       simp_all only [FreeMagma.evalInMagma, Magma.op]
     | ⟨FreeMagma.Leaf x, w ⋆ w'⟩
     | ⟨w ⋆ w', FreeMagma.Leaf x⟩ =>
