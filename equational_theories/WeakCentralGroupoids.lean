@@ -10,16 +10,17 @@ class WeakCentralGroupoid (G : Type*) extends Magma G where
   /-- equation 1485 -/
   eqn (x y z : G) : (y ◇ x) ◇ (x ◇ (z ◇ y)) = x
 
-class RelaxedWeakCentralGroupoid (G : Type*) extends Magma G where
+class RelaxedVeryWeakCentralGroupoid (G : Type*) extends Magma G where
   Path : G → G → Prop
   IsGood : G → G → G → Prop
   op_isGood (x y : G) : IsGood x (x ◇ y) y
   isGood_path {x y z : G} : IsGood x y z → Path x y ∧ Path y z
-  isGood_left {x y : G} : Path x y → ∃ z, IsGood z x y
-  isGood_right {x y : G} : Path x y → ∃ z, IsGood x y z
+
+class RelaxedVeryWeakCentralGroupoid.IsWeak (G : Type*)
+    [RelaxedVeryWeakCentralGroupoid G] : Prop where
   isGood_five {a b c d e : G} : IsGood a b c → IsGood c d e → Path e a → IsGood b c d
 
-def RelaxedWeakCentralGroupoid.IsStrict (G : Type*) [RelaxedWeakCentralGroupoid G] : Prop :=
+def RelaxedVeryWeakCentralGroupoid.IsStrict (G : Type*) [RelaxedVeryWeakCentralGroupoid G] : Prop :=
   ∀ {{x y z : G}}, IsGood x y z → y = x ◇ z
 
 namespace WeakCentralGroupoid
@@ -46,29 +47,35 @@ theorem isGood_five {a b c d e : G} : IsGood a b c → IsGood c d e → Path e a
   rintro rfl rfl ⟨_, rfl⟩; exact (eqn ..).symm
 
 variable (G) in
-def toRelaxed : RelaxedWeakCentralGroupoid G where
+instance toRelaxed : RelaxedVeryWeakCentralGroupoid G where
   Path := Path
   IsGood := IsGood
   isGood_path := fun h => ⟨Path.def'.2 ⟨_, h.symm⟩, ⟨_, h⟩⟩
   op_isGood _ _ := rfl
-  isGood_left h := h
-  isGood_right h := (Path.def'.1 h).imp fun _ h => h.symm
+
+instance : (toRelaxed G).IsWeak where
   isGood_five := isGood_five
 
 variable (G) in
-theorem toRelaxed.isStrict : (toRelaxed G).IsStrict := by rintro _ _ _ rfl; rfl
+theorem toRelaxed.isStrict : (toRelaxed G).IsStrict := by
+  rintro _ _ _ rfl; rfl
 
 end WeakCentralGroupoid
 
 namespace RelaxedWeakCentralGroupoid
-universe u
-variable {G : Type u} [RelaxedWeakCentralGroupoid G]
+open RelaxedVeryWeakCentralGroupoid
 
-def strictify (H : IsStrict G) : WeakCentralGroupoid G where
+def strictify {G : Type*} [inst : RelaxedVeryWeakCentralGroupoid G] [inst.IsWeak]
+    (H : IsStrict G) : WeakCentralGroupoid G where
   eqn _ _ _ := .symm <| H <|
-    isGood_five (op_isGood ..) (op_isGood ..) ((isGood_path (op_isGood ..)).2)
+    IsWeak.isGood_five (op_isGood ..) (op_isGood ..) ((isGood_path (op_isGood ..)).2)
 
+end RelaxedWeakCentralGroupoid
+
+namespace RelaxedVeryWeakCentralGroupoid
 namespace Greedy
+universe u
+variable {G : Type u} [RelaxedVeryWeakCentralGroupoid G]
 
 variable (G) in
 def ExtBase := G × Nat
@@ -184,15 +191,17 @@ theorem Extension.base : ∀ {a b}, (a, b) ∈ e₀.1 → e₀.edge a b :=
 theorem Extension.path : ∀ {a b}, e₀.edge a b → Path a.1 b.1 :=
   @(exists_extension e₀).choose_spec.choose_spec.2.2
 
-noncomputable instance : WeakCentralGroupoid (GreedyMagma e₀) where
+noncomputable instance [RelaxedVeryWeakCentralGroupoid.IsWeak G] :
+    WeakCentralGroupoid (GreedyMagma e₀) where
   eqn _ _ _ := by
     refine .symm <| e₀.induced.2 ⟨?_, ?_⟩
-    · exact isGood_five (e₀.induced.1 rfl).1 (e₀.induced.1 rfl).1 (e₀.path (e₀.induced.1 rfl).2.2)
+    · exact IsWeak.isGood_five
+        (e₀.induced.1 rfl).1 (e₀.induced.1 rfl).1 (e₀.path (e₀.induced.1 rfl).2.2)
     · exact ⟨(e₀.induced.1 rfl).2.2, (e₀.induced.1 rfl).2.1⟩
 
 end Greedy
 
-end RelaxedWeakCentralGroupoid
+end RelaxedVeryWeakCentralGroupoid
 
 namespace Refutation_1485
 
@@ -248,26 +257,14 @@ def isGood_exists : ∀ x y : G0, {z // IsGood x z y}
     | _, ⟨false, rfl⟩ => ⟨.C !j, .cc, .cc, fun ⟨h⟩ => h (by simp; constructor)⟩
     | _, ⟨true, rfl⟩ => ⟨.B _, .cb, by simpa using Path.bc', nofun⟩
 
-instance : RelaxedWeakCentralGroupoid G0 where
+instance : RelaxedVeryWeakCentralGroupoid G0 where
   op x y := (isGood_exists x y).1
   Path := Path
   IsGood := IsGood
   op_isGood x y := (isGood_exists x y).2
   isGood_path := fun ⟨h1, h2, _⟩ => ⟨h1, h2⟩
-  isGood_left
-    | .aa => ⟨_, .aa, .aa, nofun⟩
-    | .ab => ⟨_, .aa, .ab, nofun⟩
-    | .ba => ⟨_, .ab, .ba, nofun⟩
-    | .bc => ⟨_, .ab, .bc, nofun⟩
-    | .cb => ⟨_, .bc', .cb, nofun⟩
-    | .cc => ⟨_, .bc', .cc, nofun⟩
-  isGood_right
-    | .aa => ⟨_, .aa, .aa, nofun⟩
-    | .ab => ⟨_, .ab, .ba, nofun⟩
-    | .ba => ⟨_, .ba, .aa, nofun⟩
-    | .bc => ⟨_, .bc, .cb, nofun⟩
-    | .cb => ⟨_, .cb, .ba, nofun⟩
-    | .cc => ⟨_, .cc, .cb, nofun⟩
+
+instance : RelaxedVeryWeakCentralGroupoid.IsWeak G0 where
   isGood_five := fun ⟨ab, bc, abc⟩ ⟨cd, de, cde⟩ ea => by
     use bc, cd; rintro @⟨i, j, k, ijk⟩
     rename_i a e x1 x2; clear bc cd x1 x2
@@ -279,7 +276,7 @@ instance : RelaxedWeakCentralGroupoid G0 where
       if cde' : IsGood' j v v' then ?_ else exact cde ⟨cde'⟩
       cases abc'; cases cde'; exact ijk (by simpa using IsGood'.mk (i := !j))
 
-open RelaxedWeakCentralGroupoid Greedy
+open RelaxedVeryWeakCentralGroupoid Greedy
 
 @[equational_result]
 theorem not_3457 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3457] := by
@@ -340,12 +337,8 @@ theorem not_2087_2124 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [2087, 2124
         | _, _ => (x, 0)
       refine Set.subsingleton_of_forall_eq (a := f a.2 b.2) fun u ⟨hu1, hu2, hu3⟩ => ?_
       simp only [Finset.mem_insert, Finset.mem_singleton, S] at hu2 hu3
-      refine (or_iff_left_of_imp (b := a = (z, 2)) ?_).1 ?_
-      · rintro rfl
-        obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ := hu2 <;>
-        obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ := hu3 <;> rfl
-      · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ := hu2 <;>
-        first | right; rfl | left; rfl
+      obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ := hu2 <;> (try rfl) <;>
+      obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ := hu3 <;> rfl
   refine ⟨GreedyMagma e, inferInstance, WeakCentralGroupoid.eqn1485, fun h => ?_, fun h => ?_⟩
   · have := h (x, 0) (y, 1)
     rw [← (e.induced' (y,1) (x,0) (z,2)).2 ⟨h1, e.base (by simp), e.base (by simp)⟩,
