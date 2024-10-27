@@ -61,8 +61,16 @@ instance SetoidOfLaws {α} (β) (Γ : Ctx α) : Setoid (FreeMagma β) :=
 -- This is the quotient type we care about: it will be a model of Γ.
 def FreeMagmaWithLaws.{u} {α} (β : Type u) (Γ : Ctx α) : Type u := Quotient (SetoidOfLaws β Γ)
 
-@[simp]
 def embed {α β} (Γ : Ctx α) (x : FreeMagma β) : FreeMagmaWithLaws β Γ := Quotient.mk _ x
+
+@[elab_as_elim]
+theorem FreeMagmaWithLaws.inductionOn {α β} {Γ : Ctx α} {motive : FreeMagmaWithLaws β Γ → Prop}
+    (q : FreeMagmaWithLaws β Γ)
+    (h : (a : FreeMagma β) → motive (embed _ a))
+    : motive q := Quotient.inductionOn q h
+
+theorem FreeMagmaWithLaws.eq {α β} {Γ : Ctx α} {x y : FreeMagma β} :
+    embed Γ x = embed Γ y ↔ Nonempty (Γ ⊢' x ≃ y) := Quotient.eq
 
 def ForkWithLaws {α β} {Γ : Ctx α} :
     FreeMagmaWithLaws β Γ → FreeMagmaWithLaws β Γ → FreeMagmaWithLaws β Γ :=
@@ -75,6 +83,9 @@ def ForkWithLaws {α β} {Γ : Ctx α} :
 
 protected instance FreeMagmaWithLaws.Magma {α} (β) (Γ : Ctx α) : Magma (FreeMagmaWithLaws β Γ) :=
   { op := ForkWithLaws }
+
+theorem embed_fork {α β} (Γ : Ctx α) (a b : FreeMagma β) :
+    embed Γ (a ◇ b) = embed Γ a ◇ embed Γ b := rfl
 
 theorem FreeMagmaWithLaws.evalInMagmaIsQuot {α β γ} (Γ : Ctx α)
     (t : FreeMagma β) (σ : β → FreeMagma γ) :
@@ -179,6 +190,9 @@ def FreeMagmaWithLaws.evalHom {α β G} {Γ : Ctx α} (φ : β → G) [ginst : M
     repeat rw [Quotient.lift_mk]
     simp [evalInMagma]
 
+@[simp] theorem FreeMagmaWithLaws.evalHom_leaf {α β G} {Γ : Ctx α} (φ : β → G) [Magma G]
+    (modelsG : G ⊧ Γ) (a : β) : evalHom φ modelsG (embed _ (Leaf a)) = φ a := rfl
+
 lemma eq_app : ∀ α β (f g : α → β), f = g → ∀ x, f x = g x := fun _ _ _ _ a x ↦ congrFun a x
 
 -- FIXME: does this exist in mathlib?
@@ -190,11 +204,11 @@ lemma Quot.liftEq {α β} [s : Setoid α] (f g : Quotient s → β) (h : f ∘ (
 
 def FreeMagmaWithLaws.mkMor {α} (Γ : Ctx α) : FreeMagma α →◇ FreeMagmaWithLaws α Γ where
   toFun a := ⟦a⟧
-  map_op' := by simp [Magma.op, ForkWithLaws]
+  map_op' := by simp [Magma.op, ForkWithLaws, embed]
 
 -- FIXME: golf this!
 theorem FreeMagma.EvalFreeMagmaWithLawsUniversalProperty {α G} {Γ : Ctx α}
-(φ : α → G) [ginst : Magma G] (modelsG : G ⊧ Γ)(ψ : FreeMagmaWithLaws α Γ →◇ G) :
+(φ : α → G) [ginst : Magma G] (modelsG : G ⊧ Γ) (ψ : FreeMagmaWithLaws α Γ →◇ G) :
     ψ ∘ (⟦.⟧) ∘ Lf = φ → FreeMagmaWithLaws.eval φ modelsG = ψ := by
   intro eq
   let ψ' := (FreeMagmaWithLaws.mkMor Γ).comp ψ
