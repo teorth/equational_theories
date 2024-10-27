@@ -46,11 +46,34 @@ def build_graph(entries, duals):
         if impl := variant.get("implication"):
             all_equations.add(impl["lhs"])
             all_equations.add(impl["rhs"])
-            add_edge(G, impl["rhs"], impl["lhs"], Weights.implication, dual=False, **attrs)
-            add_edge(G, neg(impl["rhs"]), neg(impl["lhs"]), Weights.implication, dual=False, **attrs)
+            add_edge(
+                G, impl["rhs"], impl["lhs"], Weights.implication, dual=False, **attrs
+            )
+            add_edge(
+                G,
+                neg(impl["rhs"]),
+                neg(impl["lhs"]),
+                Weights.implication,
+                dual=False,
+                **attrs,
+            )
             if impl["lhs"] in duals and impl["rhs"] in duals:
-                add_edge(G, duals[impl["rhs"]], duals[impl["lhs"]], Weights.implication, dual=True, **attrs)
-                add_edge(G, neg(duals[impl["rhs"]]), neg(duals[impl["lhs"]]), Weights.implication, dual=True, **attrs)
+                add_edge(
+                    G,
+                    duals[impl["rhs"]],
+                    duals[impl["lhs"]],
+                    Weights.implication,
+                    dual=True,
+                    **attrs,
+                )
+                add_edge(
+                    G,
+                    neg(duals[impl["rhs"]]),
+                    neg(duals[impl["lhs"]]),
+                    Weights.implication,
+                    dual=True,
+                    **attrs,
+                )
         if facts := variant.get("facts"):
             all_equations.update(facts["satisfied"])
             all_equations.update(facts["refuted"])
@@ -64,14 +87,37 @@ def build_graph(entries, duals):
             for eq in facts["refuted"]:
                 add_edge(G, node, neg(eq), Weights.facts, dual=False, **attrs)
                 if eq in duals:
-                    add_edge(G, node_dual, neg(duals[eq]), Weights.facts, dual=True, **attrs)
+                    add_edge(
+                        G, node_dual, neg(duals[eq]), Weights.facts, dual=True, **attrs
+                    )
     for unconditional, attrs in unconditionals:
         for eq in all_equations:
             add_edge(G, unconditional, eq, Weights.unconditional, dual=False, **attrs)
-            add_edge(G, neg(unconditional), neg(eq), Weights.unconditional, dual=False, **attrs)
+            add_edge(
+                G,
+                neg(unconditional),
+                neg(eq),
+                Weights.unconditional,
+                dual=False,
+                **attrs,
+            )
             if unconditional in duals:
-                add_edge(G, duals[unconditional], eq, Weights.unconditional, dual=True, **attrs)
-                add_edge(G, neg(duals[unconditional]), neg(eq), Weights.unconditional, dual=True, **attrs)
+                add_edge(
+                    G,
+                    duals[unconditional],
+                    eq,
+                    Weights.unconditional,
+                    dual=True,
+                    **attrs,
+                )
+                add_edge(
+                    G,
+                    neg(duals[unconditional]),
+                    neg(eq),
+                    Weights.unconditional,
+                    dual=True,
+                    **attrs,
+                )
     return G
 
 
@@ -85,7 +131,12 @@ def print_detailed_path(G, path, duals):
         if path[i].startswith("Facts"):
             lhs = path[i - 1].replace("_neg", "")
             rhs = path[i + 1].replace("_neg", "")
-            print(lhs, " has a model that does not satisfy ", rhs, "" if attrs["proven"] else " (conjecture)")
+            print(
+                lhs,
+                " has a model that does not satisfy ",
+                rhs,
+                "" if attrs["proven"] else " (conjecture)",
+            )
             if attrs["dual"]:
                 print(f"    proved for the dual: {duals[lhs]} =/=> {duals[rhs]}")
             print(f"    {attrs['name']}  in  {attrs['filename']}")
@@ -99,10 +150,15 @@ def print_detailed_path(G, path, duals):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="List the inference steps showing that one "
-                                                 "equation implies or does not imply another.")
-    parser.add_argument("--entries-file", default="full_entries.json",
-                        help="The output of extract_implications raw --full-entries")
+    parser = argparse.ArgumentParser(
+        description="List the inference steps showing that one "
+        "equation implies or does not imply another."
+    )
+    parser.add_argument(
+        "--entries-file",
+        default="full_entries.json",
+        help="The output of extract_implications raw --full-entries",
+    )
     parser.add_argument("--duals-file", default="data/duals.json")
     parser.add_argument("lhs", help="Left-hand side equation")
     parser.add_argument("rhs", help="Right-hand side equation")
