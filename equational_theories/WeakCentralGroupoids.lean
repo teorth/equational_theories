@@ -154,7 +154,7 @@ variable [Countable G]
 
 variable (e₀ : Extension G)
 
-private theorem exists_extension :
+theorem exists_extension :
     ∃ op : ExtBase G → ExtBase G → ExtBase G, ∃ E : ExtBase G → ExtBase G → Prop,
     (∀ a b c, c = op a b ↔ IsGood a.1 c.1 b.1 ∧ E a c ∧ E c b) ∧
     (∀ a b, (a, b) ∈ e₀.1 → E a b) ∧
