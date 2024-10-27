@@ -1,7 +1,3 @@
-from itertools import product
-import re
-from typing import List, Callable
-
 import re
 
 
@@ -113,8 +109,6 @@ def convert(vars_list, equation):
             print(f"Error compiling lambda{idx}: {e}")
             lambda_func = None
 
-        # Store with a name
-        lambda_name = f"lambda"
         # print(ctr, lambda_str)
         ctr += 1
 

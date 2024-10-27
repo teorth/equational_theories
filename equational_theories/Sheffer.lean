@@ -114,7 +114,7 @@ instance Equation345169_is_Sheffer (G : Type*) [m : Magma G]
    OR/SUP  = (A | A) | (B | B)
    AND/INF = (A | B) | (A | B)
 -/
-instance Equation345169_is_Boolean (G : Type*) [m : Magma G]
+instance Equation345169_is_Boolean (G : Type*) [Magma G]
   (h : Equation345169 G) [Inhabited G] :
     BooleanAlgebra G :=
   let _ := Equation345169_is_Sheffer G h
