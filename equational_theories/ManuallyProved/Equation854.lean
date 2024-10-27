@@ -1,6 +1,8 @@
 import equational_theories.Completeness
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
+import equational_theories.Generated.All4x4Tables.Refutation870
+import equational_theories.Generated.FinitePoly.Refutation82
 
 namespace Refutation_854
 
@@ -19,9 +21,14 @@ local infix:50 " ⇝ " => Rel
 
 theorem rel_iff {x y} : x ⇝ y ↔ y = y ◇ x := ⟨fun ⟨_, H⟩ => H ▸ l378 .., fun H => ⟨_, H⟩⟩
 
-theorem not_l4' : ∃ (G : Type*) (_ : Magma G), Equation854 G ∧ ¬Equation4 G := sorry
-theorem not_l10' : ∃ (G : Type*) (_ : Magma G), Equation854 G ∧ ¬Equation10 G := sorry
-theorem not_l325' : ∃ (G : Type*) (_ : Magma G), Equation854 G ∧ ¬Equation325 G := sorry
+theorem not_l1038' : ∃ (G : Type) (_ : Magma G), Equation854 G ∧ ¬Equation1038 G :=
+  let ⟨G, _, _, h⟩ := «Facts from FinitePoly [[2,3,0,4,0,10,0,10,0,7,7],[1,5,6,1,8,1,8,8,6,1,6],[2,9,6,2,2,2,2,2,9,2,6],[2,3,3,2,3,9,3,9,3,7,7],[4,5,4,4,8,4,5,8,4,4,4],[2,5,5,2,5,9,5,2,5,5,5],[6,5,6,6,8,6,5,8,6,6,6],[4,3,7,4,5,4,5,8,7,7,7],[8,9,6,8,8,8,8,8,9,8,6],[2,9,9,2,9,9,9,9,9,4,4],[2,9,9,2,10,10,10,10,9,2,6]]»
+  ⟨G, _, h.1, h.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.1⟩
+
+theorem not_l307' : ∃ (G : Type) (_ : Magma G), Equation854 G ∧ ¬Equation307 G :=
+  let ⟨G, _, _, h⟩ := «Facts from FinitePoly x² + x * y % 2»
+  have h := h.2.2.2.2.2.2.2.2.2.2.2
+  ⟨G, _, h.1, h.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.1⟩
 
 prefix:max "↟" => embed (singleton Law854)
 
@@ -29,20 +36,20 @@ def X : G := ↟(.Leaf 0)
 def Y : G := ↟(.Leaf 1)
 
 theorem not_l4 : X ≠ X ◇ Y := by
-  refine fun h => let ⟨G, _, h1, h2⟩ := not_l4'; h2 fun x y => ?_
-  let φ := FreeMagmaWithLaws.evalHom (fun | 0 => x | _ => y) <|
+  refine fun h => let ⟨G, _, h1, h2⟩ := not_l1038'; h2 fun x y => ?_
+  let φ := FreeMagmaWithLaws.evalHom (fun | 0 => x | _ => (y ◇ (x ◇ y)) ◇ x) <|
     Law.satisfiesSet_singleton.2 <| (Law854.models_iff _).2 h1
   simpa [MagmaHom.map_op, X, Y, φ] using congrArg φ h
 
 theorem not_l10 : X ≠ X ◇ (Y ◇ X) := by
-  refine fun h => let ⟨G, _, h1, h2⟩ := not_l10'; h2 fun x y => ?_
-  let φ := FreeMagmaWithLaws.evalHom (fun | 0 => x | _ => y) <|
+  refine fun h => let ⟨G, _, h1, h2⟩ := not_l1038'; h2 fun x y => ?_
+  let φ := FreeMagmaWithLaws.evalHom (fun | 0 => x | _ => y ◇ (x ◇ y)) <|
     Law.satisfiesSet_singleton.2 <| (Law854.models_iff _).2 h1
   simpa [MagmaHom.map_op, X, Y, φ] using congrArg φ h
 
 theorem not_l325 : X ◇ Y ≠ X ◇ (Y ◇ X) := by
-  refine fun h => let ⟨G, _, h1, h2⟩ := not_l325'; h2 fun x y => ?_
-  let φ := FreeMagmaWithLaws.evalHom (fun | 0 => x | _ => y) <|
+  refine fun h => let ⟨G, _, h1, h2⟩ := not_l307'; h2 fun x => ?_
+  let φ := FreeMagmaWithLaws.evalHom (fun _:ℕ => x) <|
     Law.satisfiesSet_singleton.2 <| (Law854.models_iff _).2 h1
   simpa [MagmaHom.map_op, X, Y, φ] using congrArg φ h
 
@@ -87,6 +94,7 @@ theorem unique_factorization {a b c d : G}
   | base h1 h2 => exact ⟨h1, h2⟩
   | succ h1 h2 => cases h3 h1
 
+@[equational_result]
 theorem not_3925 : ∃ (G : Type) (_ : Magma G), Facts G [854] [3925] := by
   refine ⟨G, inferInstance, law, fun h => ?_⟩
   have := h X Y
