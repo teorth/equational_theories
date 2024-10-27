@@ -3,7 +3,7 @@
 import argparse
 import itertools
 import json
-import os, io
+import os
 import re
 import subprocess
 import sys
@@ -173,7 +173,7 @@ class Rule:
             with open(f"data/forcing_rules/{eqid}.models", "w") as f:
                 json.dump(models, f)
             return False
-        except subprocess.CalledProcessError as e:
+        except subprocess.CalledProcessError:
             print("Couldn't find counterexample", self)
             failed += 1
             return False
@@ -496,8 +496,8 @@ fof(p4YZ, axiom, ! [Y, Z] : ~old(c, Y, Z)).
 """
 
     if False:  # idempotent
-        default_rules += f"fof(aaa, axiom, old(a, a, a)).\n"
-        default_rules += f"fof(bbb, axiom, old(b, b, b)).\n"
+        default_rules += "fof(aaa, axiom, old(a, a, a)).\n"
+        default_rules += "fof(bbb, axiom, old(b, b, b)).\n"
 
     for i, rule in enumerate(rules):
         default_rules += f'fof(old_{i}, axiom, {rule.to_tptp("old")}).\n'
@@ -558,7 +558,7 @@ def main(timeout, find_rules, self_dual):
             default_rules
             + f'fof(preserve, conjecture, {" & ".join(rule.to_tptp("new") for rule in rules)}).\n'
         )
-        inp += f"fof(new_def2, axiom, new(X, Y, Z) | ~new(X, Y, Z)).\n"
+        inp += "fof(new_def2, axiom, new(X, Y, Z) | ~new(X, Y, Z)).\n"
         try:
             if not find_rules:
                 raise CalledProcessError(1, "not testing")
@@ -604,7 +604,7 @@ def main(timeout, find_rules, self_dual):
                 dr = rule.dualize()
                 if dr != rule:
                     rules.append(dr)
-        except subprocess.CalledProcessError as e:
+        except subprocess.CalledProcessError:
             print("Timed out (300s)")
             for i, rule in enumerate(rules):
                 inp = default_rules
