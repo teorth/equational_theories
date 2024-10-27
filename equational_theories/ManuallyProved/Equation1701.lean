@@ -1,9 +1,5 @@
 import equational_theories.Equations.All
-import equational_theories.MagmaOp
 import equational_theories.FactsSyntax
-import Aesop
-import Mathlib.Data.Fintype.Card
-import Mathlib.NumberTheory.Padics.PadicVal.Basic
 
 /-
   The proof follows the general strategy set out in InfModel_1701. We start from
