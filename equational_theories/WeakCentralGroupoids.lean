@@ -1,3 +1,4 @@
+import equational_theories.Mathlib.Order.Greedy
 import equational_theories.Equations.Basic
 import Mathlib.Data.ZMod.Defs
 import Mathlib.Data.PFun
@@ -59,11 +60,88 @@ end WeakCentralGroupoid
 
 namespace RelaxedWeakCentralGroupoid
 universe u
-variable (G : Type u) [RelaxedWeakCentralGroupoid G]
+variable {G : Type u} [RelaxedWeakCentralGroupoid G]
 
 def strictify (H : IsStrict G) : WeakCentralGroupoid G where
   eqn _ _ _ := .symm <| H <|
     isGood_five (op_isGood ..) (op_isGood ..) ((isGood_path (op_isGood ..)).2)
+
+namespace Greedy
+
+variable (G) in
+def ExtBase := G × Nat
+
+instance [Countable G] : Countable (ExtBase G) := inferInstanceAs (Countable (_ × _))
+
+variable (G) in
+abbrev PreExtension := Finset (ExtBase G × ExtBase G)
+
+def PreExtension.induced (E : PreExtension G) (x y : ExtBase G) : Set (ExtBase G) :=
+  {z | IsGood x.1 z.1 y.1 ∧ (x, z) ∈ E ∧ (z, y) ∈ E}
+
+theorem PreExtension.induced_mono {E E' : PreExtension G} (H : E ≤ E') {x y : ExtBase G} :
+    E.induced x y ⊆ E'.induced x y :=
+  fun _ ⟨h1, h2, h3⟩ => ⟨h1, H h2, H h3⟩
+
+structure PreExtension.OK (E : PreExtension G) : Prop where
+  path x y : (x, y) ∈ E → Path x.1 y.1
+  consistent x y : Set.Subsingleton (E.induced x y)
+
+variable (G) in
+abbrev Extension := {E : PreExtension G // E.OK}
+
+variable (G) in
+structure GreedyArgs where
+  [ct : Countable G]
+  e₀ : Extension G
+  H E x y : ∃ E' : Extension G, E ≤ E' ∧ (E'.1.induced x y).Nonempty
+
+variable (A : GreedyArgs G)
+
+private theorem exists_extension :
+    ∃ op : ExtBase G → ExtBase G → ExtBase G, ∃ E : ExtBase G → ExtBase G → Prop,
+    (∀ a b c, c = op a b ↔ IsGood a.1 c.1 b.1 ∧ E a c ∧ E c b) ∧
+    (∀ a b, (a, b) ∈ A.e₀.1 → E a b) ∧
+    (∀ a b, E a b → Path a.1 b.1) := by
+  obtain ⟨e₀, H⟩ := A
+  have ⟨c, hc, h1, _, h3⟩ := exists_greedy_chain
+    (task := fun x : ExtBase G × ExtBase G => {e : Extension G | (e.1.induced x.1 x.2).Nonempty})
+    (fun a ⟨b1, b2⟩ => H a b1 b2) e₀
+  simp only [Subtype.exists, Prod.forall] at h3
+  choose f hf1 hf2 op hop using h3
+  refine ⟨op, fun a b => ∃ e ∈ c, (a, b) ∈ e.1, ?_, fun a b H => ⟨_, h1, H⟩, ?_⟩
+  · refine fun a b c => ⟨fun H => ?_, fun ⟨h1, ⟨i, hi, h2⟩, ⟨j, hj, h3⟩⟩ => ?_⟩
+    · exact let ⟨h1, h2, h3⟩ := hop a b; H ▸ ⟨h1, ⟨_, hf2 _ _, h2⟩, ⟨_, hf2 _ _, h3⟩⟩
+    · have ⟨k, hk, ik, jk⟩ := hc.directedOn _ hi _ hj
+      have ⟨l, _, kl, fl⟩ := hc.directedOn _ hk _ (hf2 a b)
+      exact l.2.2 _ _ ⟨h1, le_trans ik kl h2, le_trans jk kl h3⟩ ((f ..).induced_mono fl (hop a b))
+  · exact fun a b ⟨i, _, hi⟩ => i.2.1 a b hi
+
+def GreedyMagma (_ : GreedyArgs G) := ExtBase G
+
+noncomputable instance : Magma (GreedyMagma A) where
+  op := (exists_extension A).choose
+
+noncomputable def GreedyArgs.edge : GreedyMagma A → GreedyMagma A → Prop :=
+  (exists_extension A).choose_spec.choose
+
+theorem GreedyArgs.induced :
+    ∀ {a b c}, c = a ◇ b ↔ IsGood a.1 c.1 b.1 ∧ A.edge a c ∧ A.edge c b :=
+  @(exists_extension A).choose_spec.choose_spec.1
+
+theorem GreedyArgs.base : ∀ {a b}, (a, b) ∈ A.e₀.1 → A.edge a b :=
+  @(exists_extension A).choose_spec.choose_spec.2.1
+
+theorem GreedyArgs.path : ∀ {a b}, A.edge a b → Path a.1 b.1 :=
+  @(exists_extension A).choose_spec.choose_spec.2.2
+
+noncomputable instance : WeakCentralGroupoid (GreedyMagma A) where
+  eqn _ _ _ := by
+    refine .symm <| A.induced.2 ⟨?_, ?_⟩
+    · exact isGood_five (A.induced.1 rfl).1 (A.induced.1 rfl).1 (A.path (A.induced.1 rfl).2.2)
+    · exact ⟨(A.induced.1 rfl).2.2, (A.induced.1 rfl).2.1⟩
+
+end Greedy
 
 end RelaxedWeakCentralGroupoid
 
