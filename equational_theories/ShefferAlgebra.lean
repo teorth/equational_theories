@@ -3,9 +3,6 @@ import equational_theories.Magma
 
 section ShefferLaws
 
-open HuntingtonAlgebra
-
-
 -- Taking notations from https://www.cs.unm.edu/~mccune/papers/basax/v12.pdf and
 -- the original Sheffer paper, "A set of five independent postulates for Boolean algebras,
 -- with application to logical constants"
@@ -20,7 +17,7 @@ postfix:max " ′ " => prime
 
 -- The three laws axiomatize the Sheffer stroke, or NAND, entirely.
 -- The remainder of this file is dedicated to that proof.
-class Sheffer (α : Type*) extends Stroke α where
+class ShefferAlgebra (α : Type*) extends Stroke α where
 -- We need to assume α is nonempty
 elt : α
 sh₁ : ∀ a : α, a′′ = a
@@ -29,9 +26,9 @@ sh₃ : ∀ a b c : α, (a | (b | c))′ = (b′ | a) | (c′ | a)
 
 variable {α : Type*}
 
-variable [Sheffer α]
+variable [ShefferAlgebra α]
 
-open Sheffer
+open ShefferAlgebra
 
 def z : α := elt | elt′
 
@@ -40,7 +37,7 @@ def u : α := z′
 lemma commut (a b : α) : a | b = b | a :=
 by
   calc
-    a | b = (a | b)′′ := by rw [sh₁] -- exact Eq.symm (sh₁ _)
+    a | b = (a | b)′′ := by rw [sh₁]
     _     = (a | (b′′))′′ := by rw [sh₁ b]
     _     = (b′′ | a)′′ := by conv => left; arg 1; arg 1; simp [prime]
                               conv => left; arg 1; rw [sh₃]
@@ -116,7 +113,9 @@ section BooleanToSheffer
 variable {α : Type*}
 variable [BooleanAlgebra α]
 
-instance BooleanAlgToSheffer : Sheffer α where
+-- This is intentionally not an instance to avoid creating an instance cycle
+-- Boolean Algebra -> Sheffer Algebra -> Huntington Algebra -> Boolean Algebra.
+def BooleanAlgToSheffer : ShefferAlgebra α where
 stroke x y := (x ⊓ y)ᶜ
 elt := ⊥
 sh₁ := by intros a; simp [prime]

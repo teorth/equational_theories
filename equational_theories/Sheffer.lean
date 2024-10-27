@@ -102,12 +102,12 @@ theorem Equation345169_implies_Axiom3 (G : Type*) [Magma G] (h : Equation345169 
 
 instance Equation345169_is_Sheffer (G : Type*) [m : Magma G]
   (h : Equation345169 G) [Inhabited G] :
-    Sheffer G :=
+    ShefferAlgebra G :=
   let sh₁ x := x |> Equation345169_implies_Axiom1 G h |> Eq.symm
   let sh₂ x y := Equation345169_implies_Axiom2 G h x y |> Eq.symm
   let sh₃ x y z := Equation345169_implies_Axiom3 G h x y z
   let _ : Stroke G := ⟨ m.op ⟩
-  Sheffer.mk default sh₁ sh₂ sh₃
+  ShefferAlgebra.mk default sh₁ sh₂ sh₃
 
 /- Boolean algebra induced by magma satisfying the three Sheffer axioms.
    The operations are defined in terms of Sheffer strokes:
