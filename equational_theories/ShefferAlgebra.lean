@@ -3,7 +3,7 @@ import equational_theories.Magma
 
 section ShafferLaws
 
-open BooleanRing
+open HuntingtonAlgebra
 
 
 -- Taking notations from https://www.cs.unm.edu/~mccune/papers/basax/v12.pdf and
@@ -56,9 +56,10 @@ by
     _      = (b | b′)′′ := by rw [sh₂]
     _      = b | b′     := by rw [sh₁]
 
-instance ShefferToBooleanRing : BooleanRing α where
-mul := (.′ | .′)
-add := λ a b ↦ (a | b)′
+
+instance ShefferToHuntingtonAlg : HuntingtonAlgebra α where
+inf := (.′ | .′)
+sup := λ a b ↦ (a | b)′
 zero := z
 one := u
 compl := (.′)

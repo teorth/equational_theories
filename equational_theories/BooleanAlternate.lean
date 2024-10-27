@@ -1,13 +1,11 @@
 import Mathlib.Order.BooleanAlgebra
 
-section BooleanRingDef
+section HuntingtonAlgebraDef
 
 -- We could use a bunch of things from mathlib, e.g.: Boolean rings are rings, of course, in sevral ways.
 -- Any integration into mathlib should create such an instance, to enable tactic goodies.
 -- we follow https://en.wikipedia.org/wiki/Boolean_algebra_(structure)
-class BooleanRing (α : Type*) extends Inf α, Sup α, Zero α, One α, HasCompl α where
-  -- assoc₁ : ∀ a b c : α, a ⊔ (b ⊔ c) = (a ⊔ b) ⊔ c
-  -- assoc₂ : ∀ a b c : α, a ⊓ (b ⊓ c) = (a ⊓ b) ⊓ c
+class HuntingtonAlgebra (α : Type*) extends Inf α, Sup α, Zero α, One α, HasCompl α where
   commut₁ : ∀ a b : α, a ⊔ b = b ⊔ a
   commut₂ : ∀ a b : α, a ⊓ b = b ⊓ a
   ident₁ : ∀ a : α, a ⊔ 0 = a
@@ -17,10 +15,10 @@ class BooleanRing (α : Type*) extends Inf α, Sup α, Zero α, One α, HasCompl
   compl₁ : ∀ a : α, a ⊔ aᶜ = 1
   compl₂ : ∀ a : α, a ⊓ aᶜ = 0
 
-open BooleanRing
+open HuntingtonAlgebra
 
 variable {α : Type*}
-variable [BooleanRing α]
+variable [HuntingtonAlgebra α]
 
 @[simp]
 lemma bound₁ (a : α) : a ⊔ 1 = 1 :=
@@ -108,7 +106,7 @@ by
   have h : bᶜ = aᶜ := by apply inv <;> trivial
   apply inv_elim; symm; trivial
 
-attribute [simp] BooleanRing.compl₁ BooleanRing.compl₂ BooleanRing.ident₁ BooleanRing.ident₂
+attribute [simp] HuntingtonAlgebra.compl₁ HuntingtonAlgebra.compl₂ HuntingtonAlgebra.ident₁ HuntingtonAlgebra.ident₂
 
 @[simp]
 lemma A₁ (a b : α) : a ⊔ (aᶜ ⊔ b) = 1 :=
@@ -243,17 +241,17 @@ lemma assoc₂ (a b c : α) : a ⊓ (b ⊓ c) = (a ⊓ b) ⊓ c :=
 by
   apply inv_elim; simp
 
-instance BooleanRingLE : LE α :=
+instance HuntingtonAlgebraLE : LE α :=
   ⟨ λ a b ↦ a = b ⊓ a ⟩
 
-lemma BooleanRing.le_refl (a : α) : a ≤ a :=
+lemma HuntingtonAlgebra.le_refl (a : α) : a ≤ a :=
 by
-  simp [BooleanRingLE]
+  simp [HuntingtonAlgebraLE]
 
-lemma BooleanRing.le_trans (a b c : α) :
+lemma HuntingtonAlgebra.le_trans (a b c : α) :
   a ≤ b → b ≤ c → a ≤ c :=
 by
-  simp [BooleanRingLE]
+  simp [HuntingtonAlgebraLE]
   intros h₁ h₂
   calc
     a = b ⊓ a       := by trivial
@@ -261,33 +259,33 @@ by
     _ = c ⊓ (b ⊓ a) := by exact Eq.symm (assoc₂ c b a)
     _ = c ⊓ a       := by rw [← h₁]
 
-lemma BooleanRing.le_antisymm (a b : α) :
+lemma HuntingtonAlgebra.le_antisymm (a b : α) :
   a ≤ b → b ≤ a → a = b :=
 by
-  simp [BooleanRingLE]
+  simp [HuntingtonAlgebraLE]
   intros h₁ h₂
   calc
     a = b ⊓ a := by exact h₁
     _ = a ⊓ b := by exact commut₂ b a
     _ = b     := by exact id (Eq.symm h₂)
 
-instance BooleanRingToBooleanAlg :
+instance HuntingtonAlgebraToBooleanAlg :
   BooleanAlgebra α where
 sup := (. ⊔ .)
-le_refl := by exact fun a ↦ BooleanRing.le_refl a
-le_trans := by exact fun a b c a_1 a_2 ↦ BooleanRing.le_trans a b c a_1 a_2
-le_antisymm := by apply BooleanRing.le_antisymm
+le_refl := by exact fun a ↦ HuntingtonAlgebra.le_refl a
+le_trans := by exact fun a b c a_1 a_2 ↦ HuntingtonAlgebra.le_trans a b c a_1 a_2
+le_antisymm := by apply HuntingtonAlgebra.le_antisymm
 le_sup_left := by
   intros a b
-  simp [Sup.sup, BooleanRingLE]
+  simp [Sup.sup, HuntingtonAlgebraLE]
   rw [commut₂]; exact Eq.symm (absorb₂ a b)
 le_sup_right := by
   intros a b
-  simp [Sup.sup, BooleanRingLE]
+  simp [Sup.sup, HuntingtonAlgebraLE]
   rw [commut₂, commut₁]; exact Eq.symm (absorb₂ b a)
 sup_le := by
   intros a b c
-  simp [BooleanRingLE, Sup.sup]
+  simp [HuntingtonAlgebraLE, Sup.sup]
   intros h₁ h₂
   calc
     a ⊔ b = (c ⊓ a) ⊔ b       := by conv => left; left; rw [h₁]
@@ -295,16 +293,16 @@ sup_le := by
     _     = c ⊓ (a ⊔ b)       := by exact Eq.symm (distrib₂ c a b)
 inf := (. ⊓ .)
 inf_le_left := by
-  intros a b; simp [Sup.sup, BooleanRingLE]
+  intros a b; simp [Sup.sup, HuntingtonAlgebraLE]
 inf_le_right := by
-  intros a b; simp only [Sup.sup, BooleanRingLE]
+  intros a b; simp only [Sup.sup, HuntingtonAlgebraLE]
   calc
     a ⊓ b = a ⊓ (b ⊓ b) := by simp
     _     = a ⊓ b ⊓ b   := by exact assoc₂ a b b
     _     = b ⊓ a ⊓ b   := by conv => left; left; rw [commut₂]
     _     = b ⊓ (a ⊓ b) := by exact Eq.symm (assoc₂ b a b)
 le_inf := by
-  intros a b c; simp [Sup.sup, BooleanRingLE]
+  intros a b c; simp [Sup.sup, HuntingtonAlgebraLE]
   intros h₁ h₂
   calc
     a = b ⊓ a       := by exact h₁
@@ -313,13 +311,13 @@ le_inf := by
 le_sup_inf := by
   intros a b c; simp [Sup.sup, Inf.inf]
   rw [distrib₁]
-  exact BooleanRing.le_refl ((a ⊔ b) ⊓ (a ⊔ c))
+  exact HuntingtonAlgebra.le_refl ((a ⊔ b) ⊓ (a ⊔ c))
 top := 1
 bot := 0
-inf_compl_le_bot := by intros a; simp; apply BooleanRing.le_refl
-top_le_sup_compl := by intros a; simp; apply BooleanRing.le_refl
-le_top := by intros a; simp [BooleanRingLE]; rw [commut₂]; exact Eq.symm (ident₂ a)
+inf_compl_le_bot := by intros a; simp; apply HuntingtonAlgebra.le_refl
+top_le_sup_compl := by intros a; simp; apply HuntingtonAlgebra.le_refl
+le_top := by intros a; simp [HuntingtonAlgebraLE]; rw [commut₂]; exact Eq.symm (ident₂ a)
 bot_le := by
-  intros a; simp [BooleanRingLE]
+  intros a; simp [HuntingtonAlgebraLE]
 
-end BooleanRingDef
+end HuntingtonAlgebraDef

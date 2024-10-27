@@ -118,8 +118,8 @@ instance Equation345169_is_Boolean (G : Type*) [m : Magma G]
   (h : Equation345169 G) [Inhabited G] :
     BooleanAlgebra G :=
   let _ := Equation345169_is_Sheffer G h
-  let bRing := @ShefferToBooleanRing G
-  @BooleanRingToBooleanAlg G bRing
+  let bRing := @ShefferToHuntingtonAlg G
+  @HuntingtonAlgebraToBooleanAlg G bRing
 
 
 end Sheffer
