@@ -62,10 +62,10 @@ and after some relabeling we are again of the required form (now incrementing $n
 
 We have two useful corollaries:
 
-\begin{corollary}[Unique factorization]\label{unique factorization}  Two irreducible words $w, w'$ are equivalent if and only if they are either the same generator of $X$, or are of the form $w = w_1 \op w_2$, $w' = w'_1 \op w'_2$ with $w_1 \sim w'_1$ and $w_2 \sim w'_2$.
+\begin{corollary}[Unique factorization]\label{unique factorization}\leanok\lean{Refutation_854.unique_factorization}  Two irreducible words $w, w'$ are equivalent if and only if they are either the same generator of $X$, or are of the form $w = w_1 \op w_2$, $w' = w'_1 \op w'_2$ with $w_1 \sim w'_1$ and $w_2 \sim w'_2$.
 \end{corollary}
 
-\begin{proof}\uses{irred-desc}  Immediate from \Cref{irred-desc}.
+\begin{proof}\uses{irred-desc}\leanok  Immediate from \Cref{irred-desc}.
 \end{proof}
 
 \begin{corollary}[Description of graph]\label{graph-desc}  If $w,w'$ are words, then $w' \to w$ holds if and only if $w' \sim (Y \op Z) \op (w \op Z)$ for some words $Y,Z$.
@@ -78,7 +78,7 @@ We have two useful corollaries:
 
 We can now prove some anti-implications.
 
-\begin{theorem}[854 does not imply 3316, 3925]  The laws
+\begin{theorem}[854 does not imply 3316, 3925]\label{854-anti}\leanok\lean{Refutation_854.not_3925}  The laws
 \begin{equation}\label{3316}
   x \op y = x \op (y \op (x \op y))
 \end{equation}
