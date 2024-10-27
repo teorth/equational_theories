@@ -1,7 +1,7 @@
 import equational_theories.BooleanAlternate
 import equational_theories.Magma
 
-section ShafferLaws
+section ShefferLaws
 
 open HuntingtonAlgebra
 
@@ -109,4 +109,20 @@ by
   rw [sh₁, commut]
   exact all_bot a elt
 
-end ShafferLaws
+end ShefferLaws
+
+section BooleanToSheffer
+
+variable {α : Type*}
+variable [BooleanAlgebra α]
+
+instance BooleanAlgToSheffer : Sheffer α where
+stroke x y := (x ⊓ y)ᶜ
+elt := ⊥
+sh₁ := by intros a; simp [prime]
+sh₂ := by intros a b; simp [prime]
+sh₃ := by intros a b c; simp [prime]; rw [inf_sup_left]
+          conv => left; left; rw [inf_comm]
+          conv => left; right; rw [inf_comm]
+
+end BooleanToSheffer
