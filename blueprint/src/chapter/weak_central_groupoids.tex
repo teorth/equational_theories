@@ -80,7 +80,8 @@ Let $G_0$ be a relaxed weak central groupoid.  A \emph{partial extension} of $G_
 
 We have the following convenient completion property:
 
-\begin{proposition}[Completion property]\label{greedy-prop}\uses{eq1485}  Let $G_0$ be a directed graph obeying claims 1', 2, 3, 4.  Then any finite partial extension of $G_0$ with carrier $G_0 \times \N$ (and projection map $\pi(a,n) = a$) can be completed to a complete extension.
+\begin{proposition}[Completion property]\label{greedy-prop}\uses{eq1485}\leanok\lean{RelaxedVeryWeakCentralGroupoid.Greedy.exists_extension}
+  Let $G_0$ be a directed graph obeying claims 1', 2, 3, 4.  Then any finite partial extension of $G_0$ with carrier $G_0 \times \N$ (and projection map $\pi(a,n) = a$) can be completed to a complete extension.
 \end{proposition}
 
 \begin{proof}  By the previous comments, we can ignore Claim 4 as it is automatic, and focus on completing the partial weak central groupoid on $G$ to a complete weak central groupoid by ensuring Claims 1, 2, 3 hold.  By the usual greedy algorithm, it suffices to show that any individual failure of Claim 1, 2 or 3 can be resolved by adding some finite number of edges to the graph.
@@ -90,7 +91,8 @@ We have the following convenient completion property:
 If Claim 1 is violated, then there is a pair $(a,n), (b,m)$ that currently has no good path of length two in the partial weak central groupoid.  As the base relaxed weak central groupoid $G_0$ obeys Claim 1', we can find a good path $a \to c \to b$ in $G_0$.  We then pick a natural number $l$ not previously occuring, and adjoin the edges $(a,n) \to (c,l) \to (b,m)$. All new paths created in this way are declared good or bad depending on whether their images in $G_0$ are good or bad, in particular $(a,n) \to (c,l) \to (b,m) \to (c,l)$.  One can check that this is still a partial extension of $G_0$ (no violation of Claim 1'' is created), and now Claim 1 is resolved at the pair $(a,n), (b,m)$.
 \end{proof}
 
-\begin{theorem}[1485 does not imply 1483]\label{1485-refutes}\uses{eq1485}  \Cref{eq1485} does not imply any of the following laws:
+\begin{theorem}[1485 does not imply 1483]\label{1485-refutes}\uses{eq1485}\leanok\lean{Refutation_1485.not_3457,Refutation_1485.not_3511,Refutation_1485.not_2087_2124}
+\Cref{eq1485} does not imply any of the following laws:
 \begin{itemize}
 \item Equation 3457: $x \op x = x \op ((x \op x) \op y)$.
 \item Equation 2087: $x = ((y \op x) \op x) \op (x \op x)$.
