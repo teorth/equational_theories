@@ -4,7 +4,6 @@ import equational_theories.FactsSyntax
 import Aesop
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
-import equational_theories.Mathlib.Algebra.Group.Nat
 
 /-
   The proof follows the general strategy set out in InfModel_1701. We start from

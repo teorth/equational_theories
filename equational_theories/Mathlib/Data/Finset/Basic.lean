@@ -1,5 +1,4 @@
 import Mathlib.Data.Finset.Basic
-import equational_theories.Mathlib.Data.Set.Function
 
 variable {α β : Type*} {f : α → β} {s : Finset α} {t : Set β} {t' : Finset β}
 
