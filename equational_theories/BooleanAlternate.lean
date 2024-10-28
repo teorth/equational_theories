@@ -321,3 +321,17 @@ bot_le := by
   intros a; simp [HuntingtonAlgebraLE]
 
 end HuntingtonAlgebraDef
+
+-- Alternate definition of a boolean algebra
+def BooleanAlgebra.mk' {α : Type*} [Inf α] [Sup α] [Zero α] [One α] [HasCompl α]
+(commut₁ : ∀ a b : α, a ⊔ b = b ⊔ a)
+(commut₂ : ∀ a b : α, a ⊓ b = b ⊓ a)
+(ident₁ : ∀ a : α, a ⊔ 0 = a)
+(ident₂ : ∀ a : α, a ⊓ 1 = a)
+(distrib₁ : ∀ a b c : α, a ⊔ (b ⊓ c) = (a ⊔ b) ⊓ (a ⊔ c))
+(distrib₂ : ∀ a b c : α, a ⊓ (b ⊔ c) = (a ⊓ b) ⊔ (a ⊓ c))
+(compl₁ : ∀ a : α, a ⊔ aᶜ = 1)
+(compl₂ : ∀ a : α, a ⊓ aᶜ = 0)
+: BooleanAlgebra α :=
+let H : HuntingtonAlgebra α := HuntingtonAlgebra.mk commut₁ commut₂ ident₁ ident₂ distrib₁ distrib₂ compl₁ compl₂
+@HuntingtonAlgebraToBooleanAlg α H
