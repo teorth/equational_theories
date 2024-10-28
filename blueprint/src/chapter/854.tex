@@ -1,0 +1,122 @@
+\chapter{Equation 854}\label{854-chapter}
+
+In this chapter we study magmas that obey \Cref{eq854}, thus
+\begin{equation}\label{854}
+  x = x \op ((y \op z) \op (x \op z))
+\end{equation}
+for all $x,y,z$.  In particular we have
+$$ x = x \op (x \op z)^2;$$
+substituting $z  = (x \op x)^2$ we have in particular that
+$$ x = x \op x^2.$$
+We then have
+\begin{align*}
+  y &= y \op ((x \op y) \op y^2) \\
+  & = (y \op y^2) \op ((x \op y) \op y^2)
+\end{align*}
+and thus by another application of \eqref{854} we conclude the useful law
+\begin{equation}\label{378}
+   (x \op y) \op y = x \op y
+\end{equation}
+(equation 378).  We introduce the notation $y \to x$ to denote the relation that $x = z \op y$ for some $z$, then from \eqref{378} we see that
+\begin{equation}\label{yx}
+  y \to x \iff x = x \op y.
+\end{equation}
+From \eqref{854} we have
+\begin{equation}\label{854-alt}
+  (y \op z) \op (x \op z) \to x
+\end{equation}
+for all $x,y,z$.
+
+Now let $X$ be an alphabet, and $M_X$ the free magma.  We let $\Gamma$ be the theory consisting just of the law \eqref{854}, then as in \Cref{freemag-exist} we have the equivalence relation $\sim$ on $M_X$ defined by setting $w \sim w'$ iff $\Gamma \models w \formaleq w'$, then $M_X/\sim$ is a free magma for $\Gamma$.  We can then also define a directed graph on $M_X$ by declaring $w \to w'$ if $w \sim w'' \op w'$ for some $w''$, or equivalently (by applying \eqref{yx} to $M_X/\sim$) that $w \sim w \op w'$.
+
+Call a word $w$ \emph{irreducible} if it is not of the form $w = w_1 \op w_2$ with $w_2 \to w_1$, and \emph{reducible} otherwise.  Clearly if a word $w = w_1 \op w_2$ is reducible, then it is equivalent to the shorter word $w_1$.  Iterating, we conclude that every word is equivalent to an irreducible word.  Such a word is either a generator in $X$, or else a product $w_1 \to w_2$ with $w_2 \not \to w_1$.
+
+We can describe the words equivalent to an irreducible word as follows.
+
+\begin{theorem}[Description of equivalence]\label{irred-desc}\uses{eq854}  Let $w$ be an irreducible word, and let $w'$ be a word equivalent to $w$.
+  \begin{itemize}
+    \item[(i)] If $w$ is a product $w = w_1 \op w_2$, then $w'$ takes the form
+$$ w' = (((w'_1 \op w'_2) \op v_1) \op \dots \op v_n)$$
+for some $w'_1 \sim w_1$, $w'_2 \sim w_2$, some $n \geq 0$, and some words $v_1, \dots, v_n$ such that for all $0 \leq i < n$, $v_{i+1}$ is of the form
+$$ v_{i+1} \sim (y_i \op z_i) \op (x_i \op z_i)$$
+for some $x_i, y_i, z_i$ with
+$$ x_i \sim (((w'_1 \op w'_2) \op v_1) \op \dots \op v_i).$$
+In particular, $v_{i+1} \to x_i$.
+    \item[(ii)] Similarly, if $w$ is a generator, then $w'$ takes the form
+$$ w' = ((w \op v_1) \op \dots \op v_n)$$
+for some $n \geq 0$, and some words $v_1, \dots, v_n$ such that for all $0 \leq i < n$, $v_{i+1}$ is of the form
+$$ v_{i+1} \sim (y_i \op z_i) \op (x_i \op z_i)$$
+for some $x_i, y_i, z_i$ with
+$$ x_i \sim ((w \op v_1) \op \dots \op v_i).$$
+In particular, $v_{i+1} \to x_i$.
+\end{itemize}
+Conversely, any word of the above forms is equivalent to $w$.
+\end{theorem}
+
+\begin{proof}  We just verify claim (i), as claim (ii) is similar.  The converse direction is clear from \eqref{854-alt} (after quotienting down to $M_X/\sim$), so it suffices to prove the forward claim. By Theorem \ref{sound-complete}, it suffices to prove that the class of words described by (i) is preserved by any term rewriting operation, in which a term in the word is replaced by an equivalent term using \eqref{854}.  Clearly the term is in $w'_1$ or $w'_2$ then the form of the word is preserved, and similarly if the term is in one of the $v_i$.  The only remaining case is if we are rewriting a term of the form
+$$ x_i = (((w'_1 \op w'_2) \op v_1) \op \dots \op v_i).$$
+If $i>0$ we can rewrite this term down to $x_{i-1}$, and this still preserves the required form (decrementing $n$ by one).  If $i=0$ then we cannot perform such a rewriting because of the irreducibility of $w_1 \op w_2$ and hence $w'_1 \op w'_2$.  Finally, we can rewrite $x_i$ to $x_i \op v$ where $v$ is of the form
+$$ v_i = (y \op z) \op (x_i \op z),$$
+and after some relabeling we are again of the required form (now incrementing $n$ by one).
+\end{proof}
+
+We have two useful corollaries:
+
+\begin{corollary}[Unique factorization]\label{unique factorization}\leanok\lean{Refutation_854.unique_factorization}  Two irreducible words $w, w'$ are equivalent if and only if they are either the same generator of $X$, or are of the form $w = w_1 \op w_2$, $w' = w'_1 \op w'_2$ with $w_1 \sim w'_1$ and $w_2 \sim w'_2$.
+\end{corollary}
+
+\begin{proof}\uses{irred-desc}\leanok  Immediate from \Cref{irred-desc}.
+\end{proof}
+
+\begin{corollary}[Description of graph]\label{graph-desc}  If $w,w'$ are words, then $w' \to w$ holds if and only if $w' \sim (Y \op Z) \op (w \op Z)$ for some words $Y,Z$.
+\end{corollary}
+
+\begin{proof}\uses{irred-desc}  By replacing $w,w'$ with irreducible equivalents, we may assume without loss of generality that $w,w'$ are irreducible.  By hypothesis, $w$ is equivalent to $w \op w'$.  The claim now follows from \Cref{irred-desc}.
+\end{proof}
+
+
+
+We can now prove some anti-implications.
+
+\begin{theorem}[854 does not imply 3316, 3925]\label{854-anti}\leanok\lean{Refutation_854.not_3316_3925}  The laws
+\begin{equation}\label{3316}
+  x \op y = x \op (y \op (x \op y))
+\end{equation}
+and
+\begin{equation}\label{3925}
+  x \op y = (x \op (y \op x)) \op y
+\end{equation}
+are not implied by \Cref{eq854}.
+\end{theorem}
+
+\begin{proof}
+  We work in the free group $M_X$ on two generators $X = \{x,y\}$.  It suffices to show that
+$$  x \op y \not \sim x \op (y \op (x \op y))$$
+and
+$$
+x \op y \not \sim (x \op (y \op x)) \op y.$$
+We begin with the first claim.  Suppose this were not the case, then by \Cref{unique factorization} one of the following statements must hold:
+\begin{itemize}
+\item (i) $$y \to x$$.
+\item (ii) $$(y \op (x \op y)) \to x$$.
+\item (iii) $$y \op (x \op y) \sim y.$$
+\end{itemize}
+If (i) holds, then we have $x \op y = x$ (Equation 4) in $M_X/\sim$, hence in every magma obeying \Cref{eq854}.  But we have examples of such magmas in which this fails.
+
+Similarly, if (iii) holds, then $y \op (x \op y) = y$ (Equation 10) holds in $M_X/\sim$, hence in every magma obeying \Cref{eq854}.  But we have examples of such magmas in which this fails.
+
+Finally, if (ii) holds, then the claim
+$$  x \op y \sim x \op (y \op (x \op y))$$
+to refute simplifies to
+$$  x \op y \sim x$$
+and we are back to (i), which we already know not to be the case.
+\begin{itemize}
+  \item (iv) $$y \to x$$.
+  \item (v) $$y \to x \op (y \op x)$$.
+  \item (vi) $$x \sim x \op (y \op x).$$
+  \end{itemize}
+(iv) is (i), which was already ruled out, and (vi) is similarly a relabeled version of (iii). In case (v) holds, the claim to refute simplifies to
+$$
+x \op y \sim x \op (y \op x)$$
+and using \Cref{unique factorization} we reduce to either $y \sim y \op x$, $y \to x$, or $y \op x \to x$, and each of these is already known to fail.
+\end{proof}
