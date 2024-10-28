@@ -47,13 +47,17 @@ theorem not_l10 : X ≠ X ◇ (Y ◇ X) := by
     Law.satisfiesSet_singleton.2 <| (Law854.models_iff _).2 h1
   simpa [MagmaHom.map_op, X, Y, φ] using congrArg φ h
 
+theorem not_l10_2 : Y ≠ Y ◇ (X ◇ Y) := by
+  refine fun h => let ⟨G, _, h1, h2⟩ := not_l1038'; h2 fun x y => ?_
+  let φ := FreeMagmaWithLaws.evalHom (fun | 1 => x | _ => y ◇ (x ◇ y)) <|
+    Law.satisfiesSet_singleton.2 <| (Law854.models_iff _).2 h1
+  simpa [MagmaHom.map_op, X, Y, φ] using congrArg φ h
+
 theorem not_l325 : X ◇ Y ≠ X ◇ (Y ◇ X) := by
   refine fun h => let ⟨G, _, h1, h2⟩ := not_l307'; h2 fun x => ?_
   let φ := FreeMagmaWithLaws.evalHom (fun _:ℕ => x) <|
     Law.satisfiesSet_singleton.2 <| (Law854.models_iff _).2 h1
   simpa [MagmaHom.map_op, X, Y, φ] using congrArg φ h
-
-theorem not_yx : ¬Y ◇ X ⇝ X := mt rel_iff.1 not_l10
 
 inductive Invariant (a b : G) : FreeMagma ℕ → Prop
   | base {a' b'} : a = ↟a' → b = ↟b' → Invariant a b (a' ◇ b')
@@ -95,9 +99,13 @@ theorem unique_factorization {a b c d : G}
   | succ h1 h2 => cases h3 h1
 
 @[equational_result]
-theorem not_3925 : ∃ (G : Type) (_ : Magma G), Facts G [854] [3925] := by
-  refine ⟨G, inferInstance, law, fun h => ?_⟩
-  have := h X Y
-  refine not_l10 (unique_factorization this (fun h => ?_) (fun h => ?_)).1
-  · exact not_l4 (rel_iff.1 h)
-  · exact not_l325 (this.trans (rel_iff.1 h).symm)
+theorem not_3316_3925 : ∃ (G : Type) (_ : Magma G), Facts G [854] [3316, 3925] := by
+  refine ⟨G, inferInstance, law, fun h => ?_, fun h => ?_⟩
+  · have := h X Y
+    refine not_l10_2 (unique_factorization this (fun h => ?_) (fun h => ?_)).2
+    · exact not_l4 (rel_iff.1 h)
+    · exact not_l4 ((rel_iff.1 h).trans this.symm)
+  · have := h X Y
+    refine not_l10 (unique_factorization this (fun h => ?_) (fun h => ?_)).1
+    · exact not_l4 (rel_iff.1 h)
+    · exact not_l325 (this.trans (rel_iff.1 h).symm)
