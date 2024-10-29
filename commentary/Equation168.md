@@ -5,3 +5,5 @@ This law defines [central groupoids](https://en.wikipedia.org/wiki/Central_group
 A sample result from Knuth's paper: a finite central groupoid of order `n` exists if and only if `n` is a perfect square.
 
 A special type of central groupoid is a natural central groupoid, characterized by Equation 26302.
+
+This [paper of Kundgen, Leander, and Thomassen](https://www.sciencedirect.com/science/article/pii/S0097316511000616) discusses a number of ways to generate new central groupoids from old, including "switchings" and "extensions".
