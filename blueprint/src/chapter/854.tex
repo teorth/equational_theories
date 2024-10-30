@@ -7,7 +7,9 @@ In this chapter we study magmas that obey \Cref{eq854}, thus
 for all $x,y,z$.  In particular we have
 $$ x = x \op (x \op z)^2;$$
 substituting $z  = (x \op x)^2$ we have in particular that
-$$ x = x \op x^2.$$
+\begin{equation}\label{8}
+  x = x \op x^2.
+\end{equation}
 We then have
 \begin{align*}
   y &= y \op ((x \op y) \op y^2) \\
@@ -120,3 +122,48 @@ $$
 x \op y \sim x \op (y \op x)$$
 and using \Cref{unique factorization} we reduce to either $y \sim y \op x$, $y \to x$, or $y \op x \to x$, and each of these is already known to fail.
 \end{proof}
+
+\section{Some further properties of 854 magmas}
+
+As in the previous section, we write $y \to x$ if $x = x \op y$.
+
+\begin{lemma}[854 equivalences, I]\label{854-equiv}  For $x, y$ in a 854 magma, the following are equivalent.
+  \begin{itemize}
+  \item (i) $y \to x$.
+  \item (ii) $x = x \op y$.
+  \item (iii) $x = z \op y$ for some $z$.
+  \item (iv) $z, x \op z \to y$ for some $z$.
+  \item (v) $x \op y^2 \to y$.
+  \item (vi) $y \op (x \op y^2) = y$.
+  \item (vii) $y = (w \op z) \op (x \op z)$ for some $w,z$.
+  \item (viii) $y \to x \op y^2$.
+  \end{itemize}
+\end{lemma}
+
+\begin{proof} The equivalence of (i) and (ii), or (v) and (vi), is by definition.  (iii) trivially implies (ii), and the converse comes from \eqref{378}.  Using \eqref{8} we see that (v) implies (iv).  If (iv) is true, then $y = (y \op z) \op (x \op z)$, giving (vii).  From \eqref{854} we see that (vii) implies (ii).  If (ii) is true, then $y \op (x \op y^2) = y \op ((x \op y) \op (y \op y)) = y$, giving (vi).  Finally, to show the equivalence of (i) and (viii), use the already estalbished equivalence of (i) and (v), toegether with \eqref{378} which gives $(x \op y^2) \op y^2 = x \op y^2$.
+\end{proof}
+
+Introduce the notation $y \leq x$ for $x \op y \to y$.
+
+\begin{lemma}[854 equivalences, II]\label{854-equiv-2}  For $x,y$ in a 854 magma, the following are equivalent.
+  \begin{itemize}
+  \item (i) $y \leq x$.
+  \item (ii) $x \op y \to y$.
+  \item (iii)  For all $z$, $y \to z$ implies $x \to z$.
+  \item (iv) $y \to x \op y$.
+  \end{itemize}
+\end{lemma}
+
+\begin{proof}  The equivalence of (i) and (ii) is by definition.  If (ii) holds and $y \to z$, then by  Lemma \ref{854-equiv} we have $x = u \op (x \op y)$ and $z = v \op y$ for some $u,v$, hence
+  $$ z \op x = z \op (x \op ((v \op y) \op (x \op y))) = z \op (u \op (x \op y) \op (z \op (x \op y))) = z,$$
+giving the desired claim $x \to z$.  Now if (iii) holds, note from Lemma \ref{854-equiv} that $y \to x \op y$, hence $x \to x \op y$ by (iii), so that $(x \op y) \op x = x \op y$, giving (iv).  Finally, if (iv) holds, note that
+\begin{align*}
+  x \op ((x \op y) \op x) &= x \op ( ((x \op y) \op ((y \op y) \op ((x \op y) \op y))) \op x) \\
+  &= x \op (((x \op y) \op ((y \op y) \op (x \op y))) \op (x \op ((y \op y) \op (x \op y)))) \\
+  &= x
+\end{align*}
+and hence by (iv) $x \op (x \op y) = x$, giving (ii).
+\end{proof}
+
+\begin{corollary}  The relation $\leq$ is a pre-order, and for each $z$, the sets $\{ x: x \to z \}$ are upward closed in this preorder.
+\end{corollary}
