@@ -9,7 +9,8 @@
     body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
     a { text-decoration: inherit; color: inherit; }
     div { margin: 0.5em; font-size: large; }
-    .implication, .nonimplication { margin-left: 2em; }
+    .arrow { font-size: x-large; }
+    .implication, .nonimplication { margin-left: 2em; display: flex; align-items: center; gap: 0.5em; }
   </style>
 </head>
 <body>
@@ -90,7 +91,7 @@ for (const {eq: unconditional, filename, line, name, isConjecture} of unconditio
 }
 
 function find_lowest_weight_path(src, dst) {
-  // Weights are small integers, the heap from
+  // Weights are small integers, so the heap from
   //     https://arxiv.org/abs/1505.05033
   // is pretty good (and easy to implement)
   let heap = [[src]];
@@ -125,6 +126,7 @@ function find_lowest_weight_path(src, dst) {
       }
     }
   }
+  // Keeping more standard Dijkstra code, in case of bugs in the above
   // let visited = new Set(), queue = [{node: src, path: [src], weight: 0}];
   // while (queue.length > 0) {
   //   const {node, path, weight} = queue.shift();
@@ -157,7 +159,7 @@ function render_equation(node) {
   `;
 }
 
-function render_implication(node1, node2) {
+function render_implication(node1, node2, reversed) {
   const {filename, line, name, isConjecture, isDual} = graph[node2][node1];
   const url = `https://github.com/teorth/equational_theories/blob/main/${filename}#L${line}`;
   let extra_text = '';
@@ -167,13 +169,14 @@ function render_implication(node1, node2) {
     extra_text += ` (proved for duals ${dual(eq1)}, ${dual(eq2)})`;
   }
   if (isConjecture) extra_text += " (conjecture)";
+  const arrow = reversed ? "⇑" : "⇓";
   document.body.innerHTML += `
-    <div class="implication">⇒ <a href="${url}" target="_blank">${name}</a>${extra_text}</div>
+    <div class="implication"><span class="arrow">${arrow}</span><a href="${url}" target="_blank">${name}</a>${extra_text}</div>
   `;
 }
 
 function render_non_implication(node1, facts, node2) {
-  const {filename, line, name, isConjecture, isDual} = graph[facts][node1];
+  const {filename, line, name, isConjecture, isDual} = graph[node1][facts];
   const url = `https://github.com/teorth/equational_theories/blob/main/${filename}#L${line}`;
   let extra_text = '';
   if (isDual) {
@@ -183,7 +186,7 @@ function render_non_implication(node1, facts, node2) {
   }
   if (isConjecture) extra_text += " (conjecture)";
   document.body.innerHTML += `
-    <div class="nonimplication">⇏ <a href="${url}" target="_blank">${name}</a>${extra_text}</div>
+    <div class="nonimplication"><span class="arrow">⇓̸</span><a href="${url}" target="_blank">${name}</a>${extra_text}</div>
   `;
 }
 
@@ -204,14 +207,33 @@ function render_path(path) {
 }
 
 if (implies_path) {
+  console.log(implies_path);
   document.title = `${eq1} ⇒ ${eq2} | Proof`;
   document.body.innerHTML += `<h1>Proof of ${eq1} ⇒ ${eq2}</h1>`;
-  render_path(implies_path);
+  render_equation(implies_path[0]);
+  for (let i = 1; i < implies_path.length; i++) {
+    render_implication(implies_path[i - 1], implies_path[i], false);
+    render_equation(implies_path[i]);
+  }
 }
+
 if (not_implies_path) {
+  not_implies_path = not_implies_path.reverse();
+  console.log(not_implies_path);
   document.title = `${eq1} ⇏ ${eq2} | Proof`;
   document.body.innerHTML += `<h1>Proof of ${eq1} ⇏ ${eq2}</h1>`;
-  render_path(not_implies_path);
+  render_equation(not_implies_path[0]);
+  for (let i = 1; i < not_implies_path.length; i++) {
+    if (not_implies_path[i-1].startsWith("Facts"))
+      continue;
+    if (not_implies_path[i].startsWith("Facts")) {
+      render_non_implication(not_implies_path[i - 1], not_implies_path[i], not_implies_path[i + 1]);
+      render_equation(not_implies_path[i + 1]);
+    } else {
+      render_implication(not_implies_path[i], not_implies_path[i - 1], true);
+      render_equation(not_implies_path[i]);
+    }
+  }
 }
 </script>
 </body>
