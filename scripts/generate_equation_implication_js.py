@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
+from collections import defaultdict
 import json
 import os
+import re
 import sys
 import markdown
 
@@ -107,7 +109,7 @@ sys.stdout = open("home_page/implications/implications.js", "w")
 
 flattened_list = [item for sublist in n for item in sublist]
 encoded = rle_encode(flattened_list)
-print("var arr = ", encoded)
+print("var arr = [", ",".join(map(str, encoded)), "]")
 
 eqs = []
 N = 0
@@ -178,3 +180,28 @@ with open("data/smallest_magma_examples.txt") as f:
             smallest_magma_examples[int(eq)] = json.loads(table)
 
 print("var smallest_magma_data = ", json.dumps(smallest_magma_examples))
+
+full_entries = json.load(open(sys.argv[2]))
+
+def convert_entry(entry):
+    variant = entry["variant"]
+    line = entry["line"]
+    name = entry["name"]
+    conjecture = "" if entry["proven"] else "?"
+    if eq := variant.get("unconditional"):
+        return f"u{conjecture}|{line}|{name}|{eq[8:]}"
+    if impl := variant.get("implication"):
+        lhs, rhs = impl["lhs"], impl["rhs"]
+        return f"i{conjecture}|{line}|{name}|{lhs[8:]}|{rhs[8:]}"
+    if facts := variant.get("facts"):
+        satisfied = ",".join(eq[8:] for eq in facts["satisfied"])
+        refuted = ",".join(eq[8:] for eq in facts["refuted"])
+        return f"f{conjecture}|{line}|{name}|[{satisfied}]|[{refuted}]"
+
+entries_per_file = defaultdict(list)
+for entry in full_entries:
+    filename = re.sub(r"^(\./)+", "", entry["filename"])
+    if converted := convert_entry(entry):
+        entries_per_file[filename].append(converted)
+
+print("var full_entries = ", json.dumps(entries_per_file))
