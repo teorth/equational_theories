@@ -3,21 +3,26 @@ import equational_theories.EquationalResult
 namespace Closure
 open Lean Parser Elab Command
 
+structure GraphEdge where
+  lhs : String
+  rhs : String
+deriving DecidableEq, Hashable, Lean.ToJson, Lean.FromJson
+
 inductive Edge
-  | implication : Implication → Edge
-  | nonimplication : Implication → Edge
-  deriving DecidableEq, Hashable
+  | implication : GraphEdge → Edge
+  | nonimplication : GraphEdge → Edge
+deriving DecidableEq, Hashable
 
 def Edge.isTrue : Edge → Bool
   | .implication _ => true
   | .nonimplication _ => false
 
-def Edge.get : Edge → Implication
+def Edge.get : Edge → GraphEdge
   | .nonimplication x | .implication x => x
 
-def Edge.lhs : Edge → String := Implication.lhs ∘ get
+def Edge.lhs : Edge → String := GraphEdge.lhs ∘ get
 
-def Edge.rhs : Edge → String := Implication.rhs ∘ get
+def Edge.rhs : Edge → String := GraphEdge.rhs ∘ get
 
 inductive Outcome
   /-- the implication has an explicit proof -/
@@ -167,10 +172,10 @@ def equationSet (inp : Array EntryVariant) : Std.HashSet String := Id.run do
   let mut eqs : Std.HashSet String := {}
   for imp in inp do
     match imp with
-    | .implication ⟨lhs, rhs⟩ =>
+    | .implication ⟨lhs, rhs, _⟩ =>
       eqs := eqs.insert lhs
       eqs := eqs.insert rhs
-    | .facts ⟨satisfied, refuted⟩ =>
+    | .facts ⟨satisfied, refuted, _⟩ =>
       for eq in satisfied ++ refuted do
         eqs := eqs.insert eq
     | .unconditional eq =>
@@ -190,9 +195,9 @@ def toEdges (inp : Array EntryVariant) : Array Edge := Id.run do
   let mut nonimplies : Array Bitset := Array.mkArray eqs.size (Bitset.mk eqs.size)
   for imp in inp do
     match imp with
-    | .implication ⟨lhs, rhs⟩ =>
+    | .implication ⟨lhs, rhs, _⟩ =>
       edges := edges.push (.implication ⟨lhs, rhs⟩)
-    | .facts ⟨satisfied, refuted⟩ =>
+    | .facts ⟨satisfied, refuted, _⟩ =>
       for f1 in satisfied do
         for f2 in refuted do
           nonimplies := nonimplies.modify eqs[f1]! (fun x ↦ x.set eqs[f2]!)
@@ -221,7 +226,7 @@ def closure_aux (inp : Array EntryVariant) (duals: Std.HashMap Nat Nat) (eqs : D
       graph := graph.modify (eqs[imp.rhs]! + n) (fun x => x.push (eqs[imp.lhs]! + n))
       revgraph := revgraph.modify (eqs[imp.lhs]!) (fun x => x.push eqs[imp.rhs]!)
       revgraph := revgraph.modify (eqs[imp.lhs]! + n) (fun x => x.push (eqs[imp.rhs]! + n))
-    | .facts ⟨satisfied, refuted⟩ =>
+    | .facts ⟨satisfied, refuted, _⟩ =>
       if satisfied.size * refuted.size < satisfied.size + refuted.size + 1 then
         for lhs in satisfied do
           for rhs in refuted do
@@ -383,5 +388,31 @@ def outcomes_mod_equiv (inp : Array EntryVariant) (duals: Std.HashMap String Str
             implies := implies.modify comps[i]! (fun x ↦ x.set! comps[j.map (·-n)]! false)
 
   return (comps.map (fun ids => ids.map (eqs.in_order[·]!)), implies)
+
+section DualityRelation
+
+structure DualityRelation where
+  dualEquations : Std.HashMap String String
+
+def DualityRelation.ofFile (path : String) : IO DualityRelation := do
+  let dualsJson := Json.parse (←IO.FS.readFile path) |>.toOption.get!
+  let mut dualEquations : Std.HashMap String String := {}
+  for pair in dualsJson.getArr?.toOption.get! do
+    let a := s!"Equation{pair.getArr?.toOption.get![0]!.getNat?.toOption.get!}"
+    let b := s!"Equation{pair.getArr?.toOption.get![1]!.getNat?.toOption.get!}"
+    dualEquations := dualEquations.insert a b
+    dualEquations := dualEquations.insert b a
+  pure ⟨dualEquations⟩
+
+def DualityRelation.dual (rel : DualityRelation) (imp : GraphEdge) : Option GraphEdge :=
+  if isCoreEquationName imp.lhs && isCoreEquationName imp.rhs then
+    some ⟨rel.dualEquations.getD imp.lhs imp.lhs, rel.dualEquations.getD imp.rhs imp.rhs⟩
+  else
+    none
+
+def getStoredDualityRelations :=
+  DualityRelation.ofFile "data/duals.json"
+
+end DualityRelation
 
 end Closure

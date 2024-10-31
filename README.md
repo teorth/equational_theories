@@ -1,6 +1,7 @@
 # Equational theories project
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-lightblue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Code Style: Black](https://img.shields.io/badge/Code%20Style-Black-000000.svg)](https://github.com/psf/black)
 [![Website](https://img.shields.io/badge/Website-Ready-green)](https://teorth.github.io/equational_theories/)
 [![Documentation](https://img.shields.io/badge/Documentation-Passing-green)](https://teorth.github.io/equational_theories/docs/)
 [![Blueprint](https://img.shields.io/badge/Blueprint-WIP-blue)](https://teorth.github.io/equational_theories/blueprint/)
@@ -65,29 +66,30 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - [Text list of equations](https://github.com/teorth/equational_theories/tree/main/data/equations.txt).  [Larger list with equations of up to five operations](https://github.com/teorth/equational_theories/blob/main/data/eq_size5.txt)
     - [List of duals of equations](https://github.com/teorth/equational_theories/tree/main/data/dual_equations.md) ([JSON](https://github.com/teorth/equational_theories/blob/main/data/duals.json))
     - [The smallest magma obeying a given equation (up to N=5)](https://github.com/teorth/equational_theories/blob/main/data/smallest_magma.txt), if it exists (and [the magmas themselves](https://github.com/teorth/equational_theories/blob/main/data/smallest_magma_examples.txt))
+    - To download the current state of the implication graph, see [this thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Database.20of.20implications).
 - [Scripts](https://github.com/teorth/equational_theories/tree/main/scripts)
     - Shell
-        - [`run_before_push`](https://github.com/teorth/equational_theories/tree/main/scripts/run_before_push.sh) - performs some of the CI checks, suitable for running just before pushing a new PR
+        - [`run_before_push`](https://github.com/teorth/equational_theories/tree/main/scripts/run_before_push.sh) – performs some of the CI checks, suitable for running just before pushing a new PR
     - Lean
-        - [`extract_implications`](https://github.com/teorth/equational_theories/tree/main/scripts/extract_implications.lean) - extracts implications from one or more Lean files. This outputs the "ground truth" of implication data, for use by other scripts
+        - [`extract_implications`](https://github.com/teorth/equational_theories/tree/main/scripts/extract_implications.lean) – extracts implications from one or more Lean files. This outputs the "ground truth" of implication data, for use by other scripts
     - Python
-        - [`explore_magma`](https://github.com/teorth/equational_theories/tree/main/scripts/explore_magma.py) - test a given magma table against all or a subset of the equations in [`Equations/All.lean`](https://github.com/teorth/equational_theories/tree/main/equational_theories/Equations/All.lean)
-        - [`find_dual`](https://github.com/teorth/equational_theories/tree/main/scripts/find_dual.py) - finds the dual of an equation
-        - [`find_equation_id`](https://github.com/teorth/equational_theories/tree/main/scripts/find_equation_id.py) - finds the equation number of an equation string
-        - [`find_powerful_theorems.py`](https://github.com/teorth/equational_theories/tree/main/scripts/find_powerful_theorems.py) - finds theorems that, if proved, would imply many others
-        - [`generate_eqs_list`](https://github.com/teorth/equational_theories/tree/main/scripts/generate_eqs_list.py) - generates a list of equations
-        - [`generate_image`](https://github.com/teorth/equational_theories/tree/main/scripts/generate_image.py) - generates an image of implications
-        - [`generate_most_wanted_list`](https://github.com/teorth/equational_theories/tree/main/scripts/generate_most_wanted_list.py) - generates the "most wanted" implications
-        - [`generate_z3_counterexample`](https://github.com/teorth/equational_theories/tree/main/scripts/generate_z3_counterexample.py) - given an implication statement between two equations, calls Z3 to try to generate a counterexample
-        - [`process_implications`](https://github.com/teorth/equational_theories/tree/main/scripts/process_implications.py) - processes implications from one or more Lean files
+        - [`explore_magma`](https://github.com/teorth/equational_theories/tree/main/scripts/explore_magma.py) – test a given magma table against all or a subset of the equations in [`Equations/All.lean`](https://github.com/teorth/equational_theories/tree/main/equational_theories/Equations/All.lean)
+        - [`find_dual`](https://github.com/teorth/equational_theories/tree/main/scripts/find_dual.py) – finds the dual of an equation
+        - [`find_equation_id`](https://github.com/teorth/equational_theories/tree/main/scripts/find_equation_id.py) – finds the equation number of an equation string
+        - [`find_powerful_theorems.py`](https://github.com/teorth/equational_theories/tree/main/scripts/find_powerful_theorems.py) – finds theorems that, if proved, would imply many others
+        - [`generate_eqs_list`](https://github.com/teorth/equational_theories/tree/main/scripts/generate_eqs_list.py) – generates a list of equations
+        - [`generate_image`](https://github.com/teorth/equational_theories/tree/main/scripts/generate_image.py) – generates an image of implications
+        - [`generate_most_wanted_list`](https://github.com/teorth/equational_theories/tree/main/scripts/generate_most_wanted_list.py) – generates the "most wanted" implications
+        - [`generate_z3_counterexample`](https://github.com/teorth/equational_theories/tree/main/scripts/generate_z3_counterexample.py) – given an implication statement between two equations, calls Z3 to try to generate a counterexample
+        - [`process_implications`](https://github.com/teorth/equational_theories/tree/main/scripts/process_implications.py) – processes implications from one or more Lean files
     - Ruby
-        - [`generate_graphviz_graph`](https://github.com/teorth/equational_theories/tree/main/scripts/generate_graphviz_graph.rb) - creates a graphviz graph
-        - [`transitive_closure`](https://github.com/teorth/equational_theories/tree/main/scripts/transitive_closure.rb) - computes the transitive closure of a set of implications
-        - [`transitive_reduction`](https://github.com/teorth/equational_theories/tree/main/scripts/transitive_reduction.rb) - finds a transitive reduction of a set of implications
-        - [`graph`](https://github.com/teorth/equational_theories/tree/main/scripts/graph.rb) - graph library
+        - [`generate_graphviz_graph`](https://github.com/teorth/equational_theories/tree/main/scripts/generate_graphviz_graph.rb) – creates a graphviz graph
+        - [`transitive_closure`](https://github.com/teorth/equational_theories/tree/main/scripts/transitive_closure.rb) – computes the transitive closure of a set of implications
+        - [`transitive_reduction`](https://github.com/teorth/equational_theories/tree/main/scripts/transitive_reduction.rb) – finds a transitive reduction of a set of implications
+        - [`graph`](https://github.com/teorth/equational_theories/tree/main/scripts/graph.rb) – graph library
 - Automated provers for equational theories
     - [Prover9 and Mace4](https://www.cs.unm.edu/~mccune/prover9/)
-        - [aa](https://github.com/gsfk/aa) - a project to use Prover9/Mace4 to brute force axioms for finite mathematical domains
+        - [aa](https://github.com/gsfk/aa) – a project to use Prover9/Mace4 to brute force axioms for finite mathematical domains
     - [Vampire](https://en.wikipedia.org/wiki/Vampire_(theorem_prover))
     - [eprover](https://github.com/eprover/eprover)
     - [twee](https://nick8325.github.io/twee/)
@@ -99,6 +101,11 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - ["Rewrite Rule Inference Using Equality Saturation"](https://arxiv.org/abs/2108.10436), Chandrakana Nandi, Max Willsey, Amy Zhu, Yisu Remy Wang, Brett Saiki, Adam Anderson, Adriana Schulz, Dan Grossman, Zachary Tatlock, 23 Aug, 2021.
 - Other tools
     - [egg - e-graphs good](https://egraphs-good.github.io/)
+    - [MiniZinc](https://www.minizinc.org/) – high-level constraint modeling language
+    - [nauty](https://pallini.di.uniroma1.it/) – graph automorphism tool
+    - [KBCV](http://cl-informatik.uibk.ac.at/software/kbcv/) – Knuth-Bendix completion visualizer
+    - [Instagraph](https://github.com/yoheinakajima/instagraph) – knowledge graph generator
+    - [Logic Programming in F#](https://github.com/jack-pappas/fsharp-logic-examples/tree/master) – Code and Examples from John Harrison's "Handbook of Practical Logic and Automated Reasoning"
 - Blog posts and media mentioning this project
     - "[We're Entering Uncharted Territory for Math"](https://www.theatlantic.com/technology/archive/2024/10/terence-tao-ai-interview/680153/), Matteo Wong, The Atlantic, Oct 4 2024.
     - "[On Math Platform](https://buildermath.substack.com/p/on-math-platform)", Michael Bucko, Substack von Michael, Oct 5 2024.

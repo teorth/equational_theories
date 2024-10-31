@@ -17,6 +17,7 @@ The following instructions detail the process for claiming and completing tasks.
 
 - Tasks are posted as GitHub issues and can be found in the `Unclaimed Outstanding Tasks` column of the project dashboard.
 - Each issue represents a specific task to be completed. The issue title and description contain relevant details and requirements.
+- Only maintainers can convert an issue into a project task. If you wish to propose a task of your own, create a GitHub issue and start a discussion in a new thread on the [Equational Theories channel on Zulip](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/). Depending on the outcome of the discussion, the task may be converted into a project task by one of the maintainers.
 
 ### 2. Claiming a Task
 
@@ -55,12 +56,12 @@ Once you are assigned to an issue, begin working on the corresponding task. You 
 
 ### 5. Withdrawing or Updating a PR
 
-- If you need to withdraw your PR, comment the single phrase `withdraw PR #PR_NUMBER` on the issue. The task will return to the `Claimed Tasks` column, but you will remain assigned to the issue.
+- If you need to withdraw your PR, comment `withdraw #PR_NUMBER` on the issue. The task will return to the `Claimed Tasks` column, but you will remain assigned to the issue.
 - To submit an updated PR after withdrawal, comment `propose #NEW_PR_NUMBER` following the same process outlined in step 4.
 
 ### 6. Review Process
 
-- After finishing the task and ensuring your PR is ready for review, comment the single word `awaiting-review` on the PR. This will add the `awaiting-review` label to your PR and move the task from `In Progress` to the `PRs in Review` column of the dashboard.
+- After finishing the task and ensuring your PR is ready for review, comment `awaiting-review` on the PR. This will add the `awaiting-review` label to your PR and move the task from `In Progress` to the `PRs in Review` column of the dashboard.
 - The project maintainers will review the PR. They may request changes, approve the PR, or provide feedback.
 
 ### 7. Task Completion
@@ -119,6 +120,7 @@ In addition to these files, contributors are welcome to add additional Lean file
 - Consider adding a chapter to the blueprint corresponding to the Lean file, which can for instance detail the methodology used to generate the content of that file.  Also update [this CONTRIBUTING.md file](CONTRIBUTING.md) to add a link to your Lean file.
 - For computer-generated Lean files, see the "Automated Proofs" section below.
 - Lean files that are outside of the [`Generated`](equational_theories/Generated) folder are considered to be part of the human-curated Lean space; it is acceptable to put some auto-generated proofs outside of this folder, but they should be human-readable, and it is acceptable to have human editors optimize these proofs for readability, aesthetics, or other concerns.  On the other hand, Lean files within the [`Generated`](equational_theories/Generated) folder should be 100% computer generated, with no additional human curation.
+- Lean files that mostly treat a single equation manually can be placed in the [`ManuallyProved`](equational_theories/ManuallyProved) folder.
 - Add your Lean file to the top level [`equational_theories.lean`](equational_theories.lean) file so that it gets picked by the CI and automated implication extraction tools.
 
 Contributions to the Lean codebase will pass through continuous integration (CI) checks that ensure that the Lean code compiles.  Contributors of Lean code are highly encouraged to interact with the [Lean Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/) to help coordinate their contributions and resolve technical issues.
@@ -139,8 +141,6 @@ Here is a list of human-contributed Lean files with mathematical content:
 - [`Confluence.lean`](equational_theories/Confluence.lean) Results about confluent laws, with several associated additional files.
 - [`LiftingMagmaFamilies.lean`](equational_theories/LiftingMagmaFamilies.lean) Results about lifting magma families, with some associated additional files.
 
-
-
 At present, the API for magmas only allows for theorems that study a finite number of individual equational laws at a time.  We plan to expand the API to also allow one to establish metatheorems about entire classes of equations.
 
 ## Blueprint
@@ -159,6 +159,9 @@ Contributions to the blueprint will pass through continuous integration (CI) che
 ## Scripts
 
 Contributions in programming languages other than Lean are very welcome; the code for such contributions can be placed in [this directory](scripts).  It would probably be a good idea to announce such scripts on the [Zulip channel](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational) for feedback and review.
+
+Should you want to use Python scripts developed by other contributors, install the necessary Python dependencies using the [`requirements.txt`](requirements.txt) file. You can automatically set up and use these packages in a virtual environment by utilizing the scripts inside of the [`python environment directory`](scripts/python_environment/). If you would like to write your
+own script that uses a new package, add the additional dependency to [`requirements.in`](requirements.in)
 
 When PR'ing a new script, consider also adding a brief link and description to the script in the [README.md](README.md) file under "Scripts", according to the main language of the script.
 

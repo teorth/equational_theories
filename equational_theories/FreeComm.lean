@@ -13,7 +13,7 @@ import equational_theories.MagmaLaw
 open Law
 variable {α : Type*}
 
-instance Multiset.isMagma : Magma (Multiset α) := { op := (. + .) }
+instance Multiset.isMagma : Magma (Multiset α) := { op := (· + ·) }
 
 def FreeMagma.vars (w : FreeMagma α) : Multiset α :=
   evalInMagma (fun x ↦ ({x} : Multiset α)) w

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import sys
 import re
 import os
 from collections import defaultdict, deque
+
 
 def read_implications(f):
     implications = []
@@ -13,18 +13,20 @@ def read_implications(f):
             line = line.strip()
             if not line:
                 continue
-            if '_implies_' not in line:
+            if "_implies_" not in line:
                 continue  # Skip invalid lines
-            lhs, rhs = line.split('_implies_')
+            lhs, rhs = line.split("_implies_")
             implications.append((lhs, rhs))
             nodes.update([lhs, rhs])
         return implications, nodes
+
 
 def build_graph(implications):
     graph = defaultdict(set)
     for src, dst in implications:
         graph[src].add(dst)
     return graph
+
 
 def find_alternative_path(graph, src, dst, removed_edge):
     visited = set()
@@ -42,6 +44,7 @@ def find_alternative_path(graph, src, dst, removed_edge):
                 queue.append((neighbor, path + [neighbor]))
     return None
 
+
 def find_unnecessary_implications(implications, graph):
     unnecessary = []
     for src, dst in implications:
@@ -58,9 +61,12 @@ def find_unnecessary_implications(implications, graph):
             unnecessary.append(((src, dst), implication_path))
     return unnecessary
 
+
 def main():
     # hey, it works, ok?
-    implies = os.popen('cat theorems/* | grep -o "Equation[0-9]*_implies_Equation[0-9]*"').readlines()
+    implies = os.popen(
+        'cat theorems/* | grep -o "Equation[0-9]*_implies_Equation[0-9]*"'
+    ).readlines()
     implications, nodes = read_implications(implies)
     graph = build_graph(implications)
     unnecessary_implications = find_unnecessary_implications(implications, graph)
@@ -75,18 +81,17 @@ def main():
             found = re.findall("(Equation[0-9]*)_implies_(Equation[0-9]*)", line)
             if len(found) != 0:
                 (src, dst) = found[0]
-                if (src,dst) in rejects:
+                if (src, dst) in rejects:
                     continue
                 else:
                     remaining_lines.append(line)
             else:
                 remaining_lines.append(line)
-        if 'theorem' in "".join(remaining_lines):
+        if "theorem" in "".join(remaining_lines):
             open(os.path.join("theorems", f), "w").write("".join(remaining_lines))
         else:
             os.remove(os.path.join("theorems", f))
-                
-    
+
+
 if __name__ == "__main__":
     main()
-

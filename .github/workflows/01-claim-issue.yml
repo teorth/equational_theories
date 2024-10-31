@@ -6,21 +6,43 @@ on:
 
 jobs:
   claim_issue:
-    if: github.event.issue.pull_request == null && contains(github.event.comment.body, 'claim')
+    if: github.event.issue.pull_request == null && contains(github.event.comment.body, 'claim') && !contains(github.event.comment.body, 'disclaim')
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if comment contains only 'claim' (ignoring white spaces, newlines and case)
+    - name: Check if comment contains only 'claim' (ignoring white spaces, newlines, and case)
       id: check_claim
       env:
         COMMENT: ${{ github.event.comment.body }}
       run: |
         TRIMMED_COMMENT=$(echo "$COMMENT" | tr -d '\n' | xargs | tr '[:upper:]' '[:lower:]')
         if [ "$TRIMMED_COMMENT" != "claim" ]; then
-          echo "Comment does not contain only 'claim' modulo white spaces, newlines and case."
+          echo "Comment does not contain only 'claim' modulo white spaces, newlines, and case."
           exit 1
         fi
         echo "Claim comment detected."
+
+    - name: Retrieve project ID
+      id: get_project_id
+      run: |
+        QUERY=$(cat <<EOF
+        {
+          "query": "{ repository(owner: \\"${{ github.repository_owner }}\\", name: \\"${{ github.event.repository.name }}\\") { projectsV2(first: 10) { nodes { id title } } } }"
+        }
+        EOF
+        )
+        RESPONSE=$(curl -X POST -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data "$QUERY" https://api.github.com/graphql)
+
+        PROJECT_ID=$(echo "$RESPONSE" | jq -r '.data.repository.projectsV2.nodes[] | select(.title == "Equational Theories Project").id')
+
+        if [ -z "$PROJECT_ID" ]; then
+          echo "Error: Could not retrieve project ID"
+          exit 1
+        else
+          echo "PROJECT_ID=$PROJECT_ID" >> $GITHUB_ENV
+        fi
 
     - name: Check if the issue is classified as 'Unclaimed Outstanding Tasks'
       id: check_unclaimed_tasks
@@ -28,7 +50,7 @@ jobs:
         # Retrieve project fields for 'Status'
         QUERY=$(cat <<EOF
         {
-          "query": "{ node(id: \\"PVT_kwHOAAMKjM4Ao-Sa\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name id options { id name } } } } } } }"
+          "query": "{ node(id: \\"${{ env.PROJECT_ID }}\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name id options { id name } } } } } } }"
         }
         EOF
         )
@@ -57,10 +79,8 @@ jobs:
 
         ITEM_ID=$(echo "$ITEM_ID_RESPONSE" | jq -r '.data.repository.issue.projectItems.nodes[0].id')
 
-        # If ITEM_ID is "null" or empty, post a comment and exit
         if [ "$ITEM_ID" == "null" ] || [ -z "$ITEM_ID" ]; then
           echo "Issue has not been added to the project board. Posting a comment."
-          # Post the comment and exit
           COMMENT_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
@@ -90,7 +110,6 @@ jobs:
 
         CURRENT_STATUS_ID=$(echo "$FIELD_RESPONSE" | jq -r '.data.node.fieldValues.nodes[] | select(.field.name == "Status").optionId')
 
-        # If the current status is not 'Unclaimed Outstanding Tasks', post a comment and exit
         if [ "$CURRENT_STATUS_ID" != "$UNCLAIMED_TASKS_ID" ]; then
           echo "Issue is not classified as 'Unclaimed Outstanding Tasks'. Posting comment."
           curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -124,7 +143,7 @@ jobs:
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "{ node(id: \\"PVT_kwHOAAMKjM4Ao-Sa\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name id } } } } } }"
+          "query": "{ node(id: \\"${{ env.PROJECT_ID }}\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name id } } } } } }"
         }
         EOF
         )
@@ -145,7 +164,7 @@ jobs:
       run: |
         QUERY=$(cat <<EOF
         {
-          "query": "{ node(id: \\"PVT_kwHOAAMKjM4Ao-Sa\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name options { id name } } } } } } }"
+          "query": "{ node(id: \\"${{ env.PROJECT_ID }}\\") { ... on ProjectV2 { fields(first: 10) { nodes { ... on ProjectV2SingleSelectField { name options { id name } } } } } } }"
         }
         EOF
         )
@@ -170,7 +189,7 @@ jobs:
 
         QUERY=$(cat <<EOF
         {
-          "query": "mutation { updateProjectV2ItemFieldValue(input: { projectId: \\"PVT_kwHOAAMKjM4Ao-Sa\\", itemId: \\"$ITEM_ID\\", fieldId: \\"$FIELD_ID\\", value: { singleSelectOptionId: \\"$CLAIMED_TASKS_ID\\" } }) { projectV2Item { id } } }"
+          "query": "mutation { updateProjectV2ItemFieldValue(input: { projectId: \\"${{ env.PROJECT_ID }}\\", itemId: \\"$ITEM_ID\\", fieldId: \\"$FIELD_ID\\", value: { singleSelectOptionId: \\"$CLAIMED_TASKS_ID\\" } }) { projectV2Item { id } } }"
         }
         EOF
         )

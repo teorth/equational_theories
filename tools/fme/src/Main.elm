@@ -2,7 +2,7 @@ port module Main exposing (..)
 
 import Browser
 import Browser.Navigation
-import Html exposing (Html, div, text, input, button, textarea, p, h1, h3, span, ul, li, pre, label)
+import Html exposing (Html, div, text, input, button, textarea, p, a, h1, h3, span, ul, li, pre, label)
 import Html.Attributes exposing (placeholder, value, id, class, rows)
 import Html.Events exposing (onClick, onInput)
 import Url exposing (Url, percentEncode, percentDecode)
@@ -11,6 +11,9 @@ import Maybe exposing (withDefault)
 import Set
 
 import Parsing exposing (parseInput)
+import Html.Attributes exposing (href)
+import Html exposing (Attribute)
+import Debug exposing (toString)
 
 
 {- MODEL -}
@@ -147,6 +150,13 @@ viewEquationTags tags =
   div [ class "scrollable-container" ]
     [ul [] (List.map viewEquationTag tags)]
 
+graphitiEq : (Int, String) -> String
+graphitiEq (a, _) = String.fromInt a ++ ","
+
+graphitiLink : List (Int, String) -> String
+graphitiLink tags = "/equational_theories/graphiti/?render=true&limit_equations=" ++
+  (String.join "+" (List.map graphitiEq tags))
+
 matchInput : String -> (Int, String) -> Bool
 matchInput matcher tag =
   case tag of
@@ -223,7 +233,7 @@ viewExportNovel table satisfies novel =
                 , div [class "code-container"] [pre [] [text (magmaLine ++ sat ++ ref)]]
                 , text "Then add the following to extra.txt in `All4x4Tables/data`:"
                 , div [class "code-container"] [pre [] [text (tableLine ++ prov)]]
-                , text "Finally, re-run `python3 generate-lean.py`!"
+                , text "Finally, re-run `python3 equational_theories/Generated/FinSearch/src/generate_lean.py`!"
                 ]
 
 viewModelInfo : String -> String -> ModelInfoSuccess -> Html Msg
@@ -232,14 +242,15 @@ viewModelInfo table matcher mi =
     tmatcher =
       matcher |>
       String.filter (\x -> x /= ' ') |>
-      String.replace "+" "◇"
+      String.replace "+" "◇" |>
+      String.replace "*" "◇"
     matching xs =
       if tmatcher == ""
         then xs
         else List.filter (matchInput tmatcher) xs
   in
     div []
-      [ h3 [] [text "Satisfies: "]
+      [ h3 [] [a [ href (graphitiLink (matching mi.satisfied))] [ text "Satisfies"], text ": "]
       , viewEquationTags (matching mi.satisfied)
       , h3 [] [text "Refutes: "]
       , viewEquationTags (matching mi.refuted)
@@ -329,4 +340,3 @@ main =
     , onUrlChange = UrlChanged
     , onUrlRequest = UrlRequested
     }
-

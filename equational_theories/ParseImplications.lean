@@ -15,6 +15,8 @@ open Lean
 structure Implication where
   lhs : String
   rhs : String
+  /-- Is this result marked with the Finite typeclass? -/
+  finite : Bool
 deriving Lean.ToJson, Lean.FromJson, DecidableEq, Hashable
 
 /--
@@ -27,6 +29,8 @@ the four antiimplications `¬ 1→4`, `¬ 1→5`, `¬ 2→4`, `¬ 2→5`.
 structure Facts where
   satisfied : Array String
   refuted : Array String
+  /-- Is this result marked with the Finite typeclass? -/
+  finite : Bool
 deriving Lean.ToJson, Lean.FromJson, Inhabited
 
 /--
@@ -37,7 +41,11 @@ def getEquationName (app : Expr) : Option String := do
   | (.app (.app (.const name _) _) _) =>
     -- Copy the string to allow it to safely escape from `Lean.withImportModules`.
     -- Otherwise, segfaults are possible.
-    some ("" ++ name.toString)
+    let copy := name.toString
+    if copy.startsWith "Equation" then
+      some ("" ++ copy)
+    else
+      none
   | _ => none
 
 def getEquationLeanName (app : Expr) : Option Lean.Name := do
@@ -60,21 +68,28 @@ def filterCoreEquationName (s : String) : Option String :=
 /--
 Extracts an `Implication` from two expressions of the form `EquationN G inst`.
 -/
-def implicationFromApps (lhs rhs : Expr) : Option Implication := do
+def implicationFromApps (lhs rhs : Expr) (finite : Bool) : Option Implication := do
   let lhsName ← getEquationName lhs
   let rhsName ← getEquationName rhs
-  return ⟨lhsName, rhsName⟩
+  return ⟨lhsName, rhsName, finite⟩
 
 /--
 Attempts to parse an `Implication` from the type of a theorem.
 -/
 def parseImplication (thm_ty : Expr) : MetaM (Option Implication) := do
   Meta.forallTelescope thm_ty fun fvars rhs => do
-    let #[g, magma, lhsv] := fvars | return none
+    match fvars with
+    | #[g, magma, lhsv] =>parse rhs g magma lhsv false
+    | #[g, magma, finite, lhsv] =>
+      let (.app (.const `Finite _) _) := ← Meta.inferType finite | return none
+      parse rhs g magma lhsv true
+    | _ => return none
+where
+  parse (rhs g magma lhsv : Expr) (finite : Bool) : MetaM (Option Implication) := do
     if !(← Meta.isType g) then return none
     let (.app (.const ``Magma _) _) := ← Meta.inferType magma | return none
     let lhs ← Meta.inferType lhsv
-    return implicationFromApps lhs rhs
+    return implicationFromApps lhs rhs finite
 
 /--
 Builds an implication of Laws from the implication of theorems. It should look something like:
@@ -157,17 +172,27 @@ partial def parseFacts (thm_ty : Expr) : MetaM (Option Facts) := do
         Meta.lambdaTelescope body1 fun fvars1 ty1 => do
           let #[magma] := fvars1 | return none
           let (.app (.const `Magma _) _) := ← Meta.inferType magma | return none
-          let some facts := go #[ty1] #[] #[] | return none
-          if facts.satisfied.isEmpty && facts.refuted.isEmpty then return none
-          return .some facts
+          match_expr ty1 with
+          | Exists b2 body2 =>
+            let (.app (.const `Finite _) _) := b2 | return none
+            Meta.lambdaTelescope body2 fun _ ty2 => do
+              return ← parseList ty2 true
+          | _ => return ← parseList ty1 false
       | _ => return none
   | _ => return none
 where
+  parseList (ty : Expr) (finite : Bool) : MetaM (Option Facts) := do
+    let some facts := go #[ty] #[] #[] | return none
+    if facts.satisfied.isEmpty && facts.refuted.isEmpty then return none
+    if facts.satisfied.isEmpty || facts.refuted.isEmpty then
+      Lean.logWarning "Warning: Facts statement has empty satisfied or refuted list"
+    return .some { facts with finite := finite }
+
   -- NB: This is written as a tail-recursive function, else some large facts statements
   -- cause this to blow the stack
   go (todo : Array Expr) (satisfied refuted : Array String) : Option Facts := do
     if todo.isEmpty then
-      return ⟨satisfied, refuted⟩
+      return ⟨satisfied, refuted, false⟩
     else
       let e := todo.back
       let todo := todo.pop

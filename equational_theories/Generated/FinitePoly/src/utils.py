@@ -1,8 +1,5 @@
-from itertools import product
 import re
-from typing import List, Callable
 
-import re
 
 # Define the expression node
 class ExprNode:
@@ -16,10 +13,11 @@ class ExprNode:
             return f"({self.left} {self.value} {self.right})"
         return self.value
 
+
 # Parser implementation
 class Parser:
     def __init__(self, expression):
-        self.expression = expression.replace(' ', '')
+        self.expression = expression.replace(" ", "")
         self.index = 0
         self.length = len(self.expression)
 
@@ -29,7 +27,7 @@ class Parser:
     def parse_expression(self):
         nodes = [self.parse_term()]
 
-        while self.current_char() == '◇':
+        while self.current_char() == "◇":
             op = self.current_char()
             self.advance()
             right = self.parse_term()
@@ -39,16 +37,16 @@ class Parser:
         # Build the tree (left-associative)
         node = nodes[0]
         for i in range(1, len(nodes), 2):
-            node = ExprNode(nodes[i], left=node, right=nodes[i+1])
+            node = ExprNode(nodes[i], left=node, right=nodes[i + 1])
 
         return node
 
     def parse_term(self):
         char = self.current_char()
-        if char == '(':
+        if char == "(":
             self.advance()
             node = self.parse_expression()
-            if self.current_char() != ')':
+            if self.current_char() != ")":
                 raise ValueError("Mismatched parentheses")
             self.advance()
             return node
@@ -56,7 +54,7 @@ class Parser:
             return self.parse_variable()
 
     def parse_variable(self):
-        match = re.match(r'[a-zA-Z_]\w*', self.expression[self.index:])
+        match = re.match(r"[a-zA-Z_]\w*", self.expression[self.index :])
         if not match:
             raise ValueError(f"Invalid character at index {self.index}")
         var = match.group(0)
@@ -71,21 +69,25 @@ class Parser:
     def advance(self):
         self.index += 1
 
+
 # Function to convert expression tree to prefix notation
 def expr_to_prefix(node):
-    if node.value == '◇':
+    if node.value == "◇":
         left = expr_to_prefix(node.left)
         right = expr_to_prefix(node.right)
         return f"f({left}, {right})"
     else:
         return node.value
 
+
 # Function to convert equations to lambdas
 ctr = 0
+
+
 def convert(vars_list, equation):
     global ctr
     if True:
-        lhs_expr, rhs_expr = equation.split('=')
+        lhs_expr, rhs_expr = equation.split("=")
 
         # Parse LHS
         parser_lhs = Parser(lhs_expr)
@@ -107,12 +109,11 @@ def convert(vars_list, equation):
             print(f"Error compiling lambda{idx}: {e}")
             lambda_func = None
 
-        # Store with a name
-        lambda_name = f"lambda"
-        #print(ctr, lambda_str)
+        # print(ctr, lambda_str)
         ctr += 1
 
         return lambda_func
+
 
 def get_fns():
     equations = open("equations.txt", "r").read().split("\n")[:-1]
@@ -124,5 +125,5 @@ def get_fns():
         variables = variables.strip().split()
         rule = eq.split(",")[1]
         fns.append((oeq, len(variables), convert(variables, rule)))
-    
+
     return fns

@@ -57,15 +57,15 @@ initialize equationalResultsExtension : SimplePersistentEnvExtension Entry (Arra
 
 def Entry.keepCore (e : Entry) : Option Entry :=
   match e.variant with
-  | .implication { lhs, rhs } =>
+  | .implication ⟨lhs, rhs, _⟩  =>
       if isCoreEquationName lhs && isCoreEquationName rhs
       then some e
       else none
-  | .facts { satisfied, refuted } =>
+  | .facts ⟨satisfied, refuted, finite⟩ =>
       let sat1 := satisfied.filterMap filterCoreEquationName
       let ref1 := refuted.filterMap filterCoreEquationName
       if sat1.isEmpty || ref1.isEmpty then none
-      else some <| {e with variant := .facts {satisfied := sat1, refuted := ref1}}
+      else some <| {e with variant := .facts {satisfied := sat1, refuted := ref1, finite := finite}}
   | .unconditional eq => if isCoreEquationName eq then some e else none
 
 namespace Result
@@ -107,10 +107,10 @@ initialize equationalResultAttr : Unit ←
 
        -- Add law theorem as well
        match entry.variant with
-        | .implication  _ =>
+        | .implication imp =>
             let _ ← match info with
               | .thmInfo  (val : TheoremVal) =>
-                 addLawImplicationThm val.type val.name
+                 if !imp.finite then addLawImplicationThm val.type val.name
               | _ => pure ()
         | .unconditional _ =>
             let _ ← match info with
@@ -148,8 +148,8 @@ elab_rules : command
   let rs ← extractTheorems
   for ⟨name, _filename, res, _⟩ in rs do
     match res with
-    | .implication ⟨lhs, rhs⟩ => println! "{name}: {lhs} → {rhs}"
-    | .facts ⟨satisfied, refuted⟩ => println! "{name}: {satisfied} // {refuted}"
+    | .implication ⟨lhs, rhs, _⟩ => println! "{name}: {lhs} → {rhs}"
+    | .facts ⟨satisfied, refuted, _⟩ => println! "{name}: {satisfied} // {refuted}"
     | .unconditional rhs => println! "{name}: {rhs} holds unconditionally"
 
 end Result

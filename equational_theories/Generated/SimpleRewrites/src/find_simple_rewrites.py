@@ -2,10 +2,9 @@
 
 import utils
 import os
-import re
-import itertools
 
 equations_txt = open("equations.txt", "r").read().split("\n")[:-1]
+
 
 def get_eq():
     """
@@ -13,7 +12,6 @@ def get_eq():
     """
     fns = []
     for eq in equations_txt:
-        oeq = eq
         eq = eq.split("∀")[1]
         variables, eq = eq.split(":")
         variables = variables.strip().split()
@@ -22,21 +20,24 @@ def get_eq():
 
     return fns
 
+
 equations = get_eq()
 
 did = {}
 remap_to_rule = {}
 
-for i,(v_a, a) in enumerate(equations):
+for i, (v_a, a) in enumerate(equations):
     print(i)
-    for j,(v_b, b) in enumerate(equations):
-        if i == j: continue
+    for j, (v_b, b) in enumerate(equations):
+        if i == j:
+            continue
 
         remap = {}
         for chr1, chr2 in zip(str(a), str(b)):
             if chr1 != chr2:
                 remap[chr1] = chr2
-        if '(' in remap or ' ' in remap or ')' in remap: continue
+        if "(" in remap or " " in remap or ")" in remap:
+            continue
 
         a_rename = a.rename(remap)
         if not utils.is_same_under_rewriting(a_rename, b):
@@ -45,7 +46,12 @@ for i,(v_a, a) in enumerate(equations):
         remapk = tuple(sorted(remap.items()))
         if remapk not in remap_to_rule:
             remap_to_rule[remapk] = []
-        oo = (f"@[equational_result]\ntheorem Equation{i+1}_implies_Equation{j+1} (G : Type*) [Magma G] (h : Equation{i+1} G) : Equation{j+1} G := λ " + " ".join(v_b) + " => h " + " ".join([remap.get(x) or x for x in v_a]))
+        oo = (
+            f"@[equational_result]\ntheorem Equation{i+1}_implies_Equation{j+1} (G : Type*) [Magma G] (h : Equation{i+1} G) : Equation{j+1} G := λ "
+            + " ".join(v_b)
+            + " => h "
+            + " ".join([remap.get(x) or x for x in v_a])
+        )
         remap_to_rule[remapk].append(oo)
 
 
@@ -53,9 +59,10 @@ if not os.path.exists("theorems"):
     os.makedirs("theorems")
 
 for rule, outs in remap_to_rule.items():
-    fname = "theorems/Rewrite_" + "_".join([f"{k}{v}" for k,v in rule]) + ".lean"
+    fname = "theorems/Rewrite_" + "_".join([f"{k}{v}" for k, v in rule]) + ".lean"
     proofs = "\n".join(outs)
-    proofs = """import Mathlib.Tactic
+    proofs = (
+        """import Mathlib.Tactic
 import Mathlib.Data.Nat.Defs
 import equational_theories.Equations.All
 import equational_theories.Magma
@@ -64,5 +71,8 @@ namespace SimpleRewrites
 
 
 
-""" + proofs + "\nend SimpleRewrites"
+"""
+        + proofs
+        + "\nend SimpleRewrites"
+    )
     open(fname, "w").write(proofs)

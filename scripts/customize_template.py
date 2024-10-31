@@ -3,6 +3,7 @@
 import os
 import sys
 
+
 def replace_text_in_file(filepath, old_text, new_text):
     """
     Replace all occurrences of old_text with new_text in the specified file.
@@ -12,13 +13,14 @@ def replace_text_in_file(filepath, old_text, new_text):
         old_text (str): The text to be replaced.
         new_text (str): The text to replace with.
     """
-    with open(filepath, 'r') as file:
+    with open(filepath, "r") as file:
         filedata = file.read()
 
     filedata = filedata.replace(old_text, new_text)
 
-    with open(filepath, 'w') as file:
+    with open(filepath, "w") as file:
         file.write(filedata)
+
 
 def rename_directory(old_name, new_name):
     """
@@ -31,6 +33,7 @@ def rename_directory(old_name, new_name):
     if os.path.exists(old_name):
         os.rename(old_name, new_name)
 
+
 # def remove_file(filepath):
 #     """
 #     Remove the specified file.
@@ -41,6 +44,7 @@ def rename_directory(old_name, new_name):
 #     if os.path.exists(filepath):
 #         os.remove(filepath)
 
+
 def main(project_name):
     """
     Perform all the customization steps for the template.
@@ -49,27 +53,30 @@ def main(project_name):
         project_name (str): The name of the new project.
     """
     # Define paths to the files and directories to be modified
-    lint_yml_path = '.github/workflows/lint.yml'
-    project_folder = 'Project'
-    contributing_md = 'CONTRIBUTING.md'
-    lakefile_toml = 'lakefile.toml'
-    project_lean = 'Project.lean'
+    lint_yml_path = ".github/workflows/lint.yml"
+    project_folder = "Project"
+    contributing_md = "CONTRIBUTING.md"
+    lakefile_toml = "lakefile.toml"
+    project_lean = "Project.lean"
 
     # Replace 'Project' with the actual project name in the necessary files
-    replace_text_in_file(lint_yml_path, 'Project', project_name)
-    replace_text_in_file(lakefile_toml, 'Project', project_name)
+    replace_text_in_file(lint_yml_path, "Project", project_name)
+    replace_text_in_file(lakefile_toml, "Project", project_name)
 
     # Rename 'Project' folder to match the project name
     rename_directory(project_folder, project_name)
 
     # Notify the user to customize 'CONTRIBUTING.md' manually
-    print(f"Please customize {contributing_md} manually to set up the contribution guidelines for your project.")
+    print(
+        f"Please customize {contributing_md} manually to set up the contribution guidelines for your project."
+    )
 
     # Rename 'Project.lean' to match the project name and update imports
     if os.path.exists(project_lean):
         new_project_lean = f"{project_name}.lean"
         os.rename(project_lean, new_project_lean)
-        replace_text_in_file(new_project_lean, 'Project', project_name)
+        replace_text_in_file(new_project_lean, "Project", project_name)
+
 
 if __name__ == "__main__":
     # Check if the script is executed with the correct number of command-line arguments

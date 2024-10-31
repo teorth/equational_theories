@@ -12,6 +12,16 @@ const ids = [
     "unknown"
 ];
 
+const EXPLICIT_CONJECTURE_FALSE = 0;
+const EXPLICIT_CONJECTURE_TRUE = 1;
+const EXPLICIT_PROOF_FALSE = 2;
+const EXPLICIT_PROOF_TRUE = 3;
+const IMPLICIT_CONJECTURE_FALSE = 4;
+const IMPLICIT_CONJECTURE_TRUE = 5;
+const IMPLICIT_PROOF_FALSE = 6;
+const IMPLICIT_PROOF_TRUE = 7;
+const UNKNOWN = 8;
+
 // Assuming arr is already defined
 // const arr = [...];  // Your RLE encoded array
 
@@ -25,10 +35,6 @@ function decodeRLE(arr) {
     return decoded;
 }
 
-function mapThroughLUT(decoded) {
-    return decoded.map(index => ids[index]);
-}
-
 function reshape(array, rows, cols) {
     const result = [];
     for (let i = 0; i < rows; i++) {
@@ -40,11 +46,8 @@ function reshape(array, rows, cols) {
 // Decode RLE
 const decoded = decodeRLE(arr);
 
-// Map through LUT
-const mapped = mapThroughLUT(decoded);
-
-// Reshape to 2694x2694
-const implications = reshape(mapped, 4694, 4694);
+// Reshape to 4694x4694
+const implications = reshape(decoded, 4694, 4694);
 
 const GRAPHITI_BASE_URL = "https://teorth.github.io/equational_theories/graphiti/"
 const FME_BASE_URL = "https://teorth.github.io/equational_theories/fme/"
@@ -76,6 +79,42 @@ let filteredCachedItems = [];
 
 let cachedItems = [];
 let cachedItemElements = [];
+
+function downloadEquationListCSV() {
+    showDownloadPopup();
+    const rows = Array.from(equationList.children);
+    const csv = "\uFEFF" + rows.map((row) => (
+        Array.from(row.children).map(
+            (element) => element.textContent
+        ).join(",")))
+        .join("\n");
+
+    const filename = 'export_explorer_' + new Date().toLocaleDateString() + '.csv';
+    downloadStringAsCSV(csv, filename);
+}
+
+function downloadRawImplicationsCSV() {
+    const text_to_number=[-2, 2, -4, 4, -1, 1, -3, 3, 0];
+    showDownloadPopup();
+    const csv = implications.map(
+        (equation) => equation.map(
+            (status) => text_to_number[status]
+        ).join(",")
+    ).join("\n")
+    downloadStringAsCSV(csv, 'export_raw_implications_' + new Date().toLocaleDateString() + '.csv');
+}
+
+function downloadStringAsCSV(string, filename) {
+        // Export code gathered from https://stackoverflow.com/a/56370447/7059087
+        var link = document.createElement('a');
+        link.style.display = 'none';
+        link.setAttribute('target', '_blank');
+        link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(string));
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+}
 
 function showPage(pageId) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
@@ -117,17 +156,17 @@ function filterEquations() {
 
 
 // Pre-compute boolean flags for each status
-const statusFlags = {
-    explicit_conjecture_false: { explicit: true, conjecture: true, isTrue: false },
-    explicit_conjecture_true: { explicit: true, conjecture: true, isTrue: true },
-    explicit_proof_false: { explicit: true, conjecture: false, isTrue: false },
-    explicit_proof_true: { explicit: true, conjecture: false, isTrue: true },
-    implicit_conjecture_false: { explicit: false, conjecture: true, isTrue: false },
-    implicit_conjecture_true: { explicit: false, conjecture: true, isTrue: true },
-    implicit_proof_false: { explicit: false, conjecture: false, isTrue: false },
-    implicit_proof_true: { explicit: false, conjecture: false, isTrue: true },
-    unknown: { explicit: false, conjecture: false, isTrue: false }
-};
+const statusFlags = [
+    { explicit: true, conjecture: true, isTrue: false },
+    { explicit: true, conjecture: true, isTrue: true },
+    { explicit: true, conjecture: false, isTrue: false },
+    { explicit: true, conjecture: false, isTrue: true },
+    { explicit: false, conjecture: true, isTrue: false },
+    { explicit: false, conjecture: true, isTrue: true },
+    { explicit: false, conjecture: false, isTrue: false },
+    { explicit: false, conjecture: false, isTrue: true },
+    { explicit: false, conjecture: false, isTrue: false }
+];
 
 function isImplies(status, onlyExplicit = false, treatConjecturedAsUnknown = false) {
     const flags = statusFlags[status];
@@ -140,35 +179,52 @@ function isAntiImplies(status, onlyExplicit = false, treatConjecturedAsUnknown =
     const flags = statusFlags[status];
     if (onlyExplicit && !flags.explicit) return false;
     if (treatConjecturedAsUnknown && flags.conjecture) return false;
-    return !flags.isTrue && status !== 'unknown';
+    return !flags.isTrue && status != UNKNOWN;
 }
 function isUnknown(status, treatConjecturedAsUnknown = false) {
-    return status === 'unknown' || (treatConjecturedAsUnknown && status.includes('conjecture'));
+    const flags = statusFlags[status];
+    return status == UNKNOWN || (treatConjecturedAsUnknown && flags.conjecture);
 }
 
-function calculateStats(index, treatConjecturedAsUnknown = false) {
-    const stats = {implies: 0, impliedBy: 0, antiImplies: 0, antiImpliedBy: 0, unknown: 0, unknownBy: 0};
-    for (let i = 0; i < implications.length; i++) {
-        if (i === index) continue;
-        const forwardStatus = implications[index][i];
-        const backwardStatus = implications[i][index];
+function calculateStats(treatConjecturedAsUnknown = false) {
+    let sccStats = []
+    for (let i = 0; i < equiv.length; i++) {
+        let stats = {implies: 0, impliedBy: 0, antiImplies: 0, antiImpliedBy: 0, unknown: 0, unknownBy: 0};
+        for (let j = 0; j < equiv.length; j++) {
+            let adjustment = 0;
+            if (i == j) {
+                adjustment = 1;
+            }
 
-        if (isImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.implies++;
-        else if (isAntiImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.antiImplies++;
-        else stats.unknown++;
+            const forwardStatus = implications[equiv[i][0]][equiv[j][0]];
+            const backwardStatus = implications[equiv[j][0]][equiv[i][0]];
 
-        if (isImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.impliedBy++;
-        else if (isAntiImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.antiImpliedBy++;
-        else stats.unknownBy++;
+            if (isImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.implies += equiv[j].length - adjustment;
+            else if (isAntiImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.antiImplies += equiv[j].length - adjustment;
+            else stats.unknown += equiv[j].length - adjustment;
+
+            if (isImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.impliedBy += equiv[j].length - adjustment;
+            else if (isAntiImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.antiImpliedBy += equiv[j].length - adjustment;
+            else stats.unknownBy += equiv[j].length - adjustment;
+        }
+        sccStats.push(stats)
     }
-    return stats;
-}
 
+    let overallStats = []
+    for (let i = 0; i < equiv.length; i++) {
+        for (const subidx of equiv[i]) {
+            overallStats[subidx] = sccStats[i]
+        }
+    }
+
+    return overallStats
+}
 
 function initializeEquationList() {
     const treatConjecturedAsUnknown = treatConjectedAsUnknownList.checked;
+    const overallStats = calculateStats(treatConjecturedAsUnknown)
     cachedItems = equations.map((eq, index) => {
-        const stats = calculateStats(index, treatConjecturedAsUnknown);
+        const stats = overallStats[index];
         const element = document.createElement('div');
         element.className = 'equation-item';
         element.dataset.index = index;
@@ -204,8 +260,9 @@ function initializeEquationList() {
 
 function updateEquationListStats() {
     const treatConjecturedAsUnknown = treatConjectedAsUnknownList.checked;
+    const overallStats = calculateStats(treatConjecturedAsUnknown)
     cachedItems.forEach((item) => {
-        const stats = calculateStats(item.index, treatConjecturedAsUnknown);
+        const stats = overallStats[item.index];
         item.stats = stats;
         item.statElements.implies.textContent = stats.implies;
         item.statElements.impliedBy.textContent = stats.impliedBy;
@@ -339,7 +396,7 @@ function renderImplications(index) {
 	const backwardStatus = implications[index][i];
 
 	    [forwardStatus, backwardStatus].forEach((status, statusIndex) => {
-            const isConjectured = status.includes('conjecture');
+            const isConjectured = statusFlags[status].conjecture
 	        let maybe_prove;
             let forward = statusIndex == 1 ?  index : i;
             let backward = statusIndex == 1 ?  i : index;
@@ -355,7 +412,7 @@ function renderImplications(index) {
                 proofhref = gen_proof_url(forward, backward, does_implies ? "yes" : "no");
                 maybe_prove = ` <a href='${proofhref}'>Try This!</a>`;
             }
-            const item = `<div uid=${i} class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}${maybe_prove}</div>`;
+            const item = `<div uid=${i} class="implication-item ${isspecial} ${ids[status]} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}${maybe_prove}</div>`;
 
             if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
 		        statusIndex === 0 ? impliedBy.push(item) : implies.push(item);
@@ -379,7 +436,7 @@ function renderImplications(index) {
   }
 
   smallest_magma = smallest_magma_data[index+1]
-  smallestMagmaLink.innerHTML = smallest_magma 
+  smallestMagmaLink.innerHTML = smallest_magma
     ? `<br />(Size of smallest non-trivial magma: ${smallest_magma.length} <a target="_blank" href="${FME_BASE_URL}?magma=${encodeURIComponent(JSON.stringify(smallest_magma))}">(Explore)</a>)`
     : `<br />(Size of smallest non-trivial magma: N/A)`
 
@@ -469,7 +526,11 @@ let currentURL = window.location.href;
 if (currentURL.indexOf('?') > -1) {
     renderImplications(currentURL.split('?')[1]-1);
     showPage('detailPage');
+    requestIdleCallback(() => {
+        initializeEquationList();
+    })
 } else {
+    initializeEquationList();
     renderEquationList();
 }
 
@@ -492,10 +553,10 @@ window.addEventListener('popstate', handleUrlChange);
 document.addEventListener('DOMContentLoaded', function() {
     const timestamp = last_updated.timestamp * 1000; // Convert to milliseconds
     const commitHash = last_updated.commit_hash;
-    
+
     const localDate = new Date(timestamp);
     document.getElementById('lastUpdated').textContent = localDate.toLocaleString();
-    
+
     const commitLink = document.getElementById('commitLink');
     commitLink.href = `https://github.com/teorth/equational_theories/tree/${commitHash}`;
     commitLink.textContent = commitHash.substring(0, 7); // Display first 7 characters of the hash

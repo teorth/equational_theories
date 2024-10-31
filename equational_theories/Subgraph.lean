@@ -23,86 +23,86 @@ theorem Equation1_true (G: Type*) [Magma G] : Equation1 G :=
 
 @[equational_result]
 theorem Equation2_implies_Equation3 (G: Type*) [Magma G] (h: Equation2 G) : Equation3 G :=
-  fun _ ↦ h _ _
+  fun _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation4 (G: Type*) [Magma G] (h: Equation2 G) : Equation4 G :=
-  fun _ _ ↦ h _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation5 (G: Type*) [Magma G] (h: Equation2 G) : Equation5 G :=
-  fun _ _ ↦ h _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation6 (G: Type*) [Magma G] (h: Equation2 G) : Equation6 G :=
-  fun _ _ ↦ h _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation7 (G: Type*) [Magma G] (h: Equation2 G) : Equation7 G :=
-  fun _ _ _ ↦ h _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation8 (G: Type*) [Magma G] (h: Equation2 G) : Equation8 G :=
-  fun _ ↦ h _ _
+  fun _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation23 (G: Type*) [Magma G] (h: Equation2 G) : Equation23 G :=
-  fun _ ↦ h _ _
+  fun _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation38 (G: Type*) [Magma G] (h: Equation2 G) : Equation38 G :=
-  fun _ _ ↦ h _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation39 (G: Type*) [Magma G] (h: Equation2 G) : Equation39 G :=
-  fun _ _ ↦ h _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation40 (G: Type*) [Magma G] (h: Equation2 G) : Equation40 G :=
-  fun _ _ ↦ h _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation41 (G: Type*) [Magma G] (h: Equation2 G) : Equation41 G :=
-  fun _ _ _ ↦ h _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation42 (G: Type*) [Magma G] (h: Equation2 G) : Equation42 G :=
-  fun _ _ _ ↦ h _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation43 (G: Type*) [Magma G] (h: Equation2 G) : Equation43 G :=
-  fun _ _ ↦ h _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation46 (G: Type*) [Magma G] (h: Equation2 G) : Equation46 G :=
-  fun _ _ _ _ ↦ h _ _
+  fun _ _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation168 (G: Type*) [Magma G] (h: Equation2 G) : Equation168 G :=
-  fun _ _ _ ↦ h _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation387 (G: Type*) [Magma G] (h: Equation2 G) : Equation387 G :=
-  fun _ _ ↦ h _ _
+  fun _ _ ↦ h ..
 
 theorem Equation2_implies_Equation1689 (G: Type*) [Magma G] (h: Equation2 G) : Equation1689 G:=
-  fun _ _ _ ↦ h _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation4512 (G: Type*) [Magma G] (h: Equation2 G) : Equation4512 G :=
-  fun _ _ _ ↦ h _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation4513 (G: Type*) [Magma G] (h: Equation2 G) : Equation4513 G :=
-  fun _ _ _ _ ↦ h _ _
+  fun _ _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation4522 (G: Type*) [Magma G] (h: Equation2 G) : Equation4522 G :=
-  fun _ _ _ _ _ ↦ h _ _
+  fun _ _ _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation4582 (G: Type*) [Magma G] (h: Equation2 G) : Equation4582 G :=
-  fun _ _ _ _ _ _ ↦ h _ _
+  fun _ _ _ _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation3_implies_Equation8 (G: Type*) [Magma G] (h: Equation3 G) : Equation8 G :=
@@ -118,11 +118,11 @@ theorem Equation4_implies_Equation3 (G: Type*) [Magma G] (h: Equation4 G) : Equa
 
 @[equational_result]
 theorem Equation4_implies_Equation8 (G: Type*) [Magma G] (h: Equation4 G) : Equation8 G :=
-  fun _ ↦ h _ _
+  fun _ ↦ h ..
 
 @[equational_result]
 theorem Equation4_implies_Equation23 (G: Type*) [Magma G] (h: Equation4 G) : Equation23 G :=
-  Equation3_implies_Equation23 G fun _ ↦ h _ _
+  Equation3_implies_Equation23 G fun _ ↦ h ..
 
 @[equational_result]
 theorem Equation4_implies_Equation42 (G: Type*) [Magma G] (h: Equation4 G) : Equation42 G :=
@@ -134,7 +134,7 @@ theorem Equation4_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4 G) : E
 
 @[equational_result]
 theorem Equation5_implies_Equation3 (G: Type*) [Magma G] (h: Equation5 G) : Equation3 G :=
-  fun _ ↦ h _ _
+  fun _ ↦ h ..
 
 @[equational_result]
 theorem Equation5_implies_Equation8 (G: Type*) [Magma G] (h: Equation5 G) : Equation8 G :=
@@ -158,7 +158,7 @@ theorem Equation6_implies_Equation2 (G: Type*) [Magma G] (h: Equation6 G) : Equa
 
 @[equational_result]
 theorem Equation6_implies_Equation3 (G: Type*) [Magma G] (h: Equation6 G) : Equation3 G :=
-  fun _ ↦ h _ _
+  fun _ ↦ h ..
 
 @[equational_result]
 theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equation2 G :=
@@ -166,11 +166,11 @@ theorem Equation7_implies_Equation2 (G: Type*) [Magma G] (h: Equation7 G) : Equa
 
 @[equational_result]
 theorem Equation7_implies_Equation3 (G: Type*) [Magma G] (h: Equation7 G) : Equation3 G :=
-  fun _ ↦ h _ _ _
+  fun _ ↦ h ..
 
 @[equational_result]
 theorem Equation7_implies_Equation41 (G: Type*) [Magma G] (h: Equation7 G) : Equation41 G :=
-  fun _ _ _ ↦ h _ _ _
+  fun _ _ _ ↦ h ..
 
 /-- Dual to Problem A1 from Putnam 2001 -/
 @[equational_result]
@@ -192,11 +192,11 @@ theorem Equation39_implies_Equation45 (G: Type*) [Magma G] (h: Equation39 G) : E
 
 @[equational_result]
 theorem Equation41_implies_Equation39 (G: Type*) [Magma G] (h: Equation41 G) : Equation39 G :=
-  fun _ _ ↦ h _ _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation41_implies_Equation40 (G: Type*) [Magma G] (h: Equation41 G) : Equation40 G :=
-  fun _ _ ↦ h _ _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : Equation46 G :=
@@ -204,35 +204,35 @@ theorem Equation41_implies_Equation46 (G: Type*) [Magma G] (h: Equation41 G) : E
 
 @[equational_result]
 theorem Equation42_implies_Equation38 (G: Type*) [Magma G] (h: Equation42 G) : Equation38 G :=
-  fun _ _ ↦ h _ _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation45_implies_Equation39 (G: Type*) [Magma G] (h: Equation45 G) : Equation39 G :=
-  fun _ _ ↦ h _ _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation46_implies_Equation39 (G: Type*) [Magma G] (h: Equation46 G) : Equation39 G :=
-  fun _ _ ↦ h _ _ _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation46_implies_Equation40 (G: Type*) [Magma G] (h: Equation46 G) : Equation40 G :=
-  fun _ _ ↦ h _ _ _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation46_implies_Equation41 (G: Type*) [Magma G] (h: Equation46 G) : Equation41 G :=
-  fun _ _ _ ↦ h _ _ _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation46_implies_Equation42 (G: Type*) [Magma G] (h: Equation46 G) : Equation42 G :=
-  fun _ _ _ ↦ h _ _ _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation46_implies_Equation387 (G: Type*) [Magma G] (h: Equation46 G) : Equation387 G :=
-  fun _ _ ↦ h _ _ _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation46_implies_Equation4582 (G: Type*) [Magma G] (h: Equation46 G) : Equation4582 G :=
-  fun _ _ _ _ _ _ ↦ h _ _ _ _
+  fun _ _ _ _ _ _ ↦ h ..
 
 /-- This proof is from https://mathoverflow.net/a/450905/766 -/
 @[equational_result]
@@ -404,27 +404,27 @@ theorem Equation3744_implies_Equation381 (G : Type*) [Magma G] (h: Equation3744 
 /-- Putnam 1978, problem A4, part (a) -/
 @[equational_result]
 theorem Equation3744_implies_Equation3722 (G: Type*) [Magma G] (h: Equation3744 G) : Equation3722 G :=
-  fun _ _ ↦ h _ _ _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation4513_implies_Equation4512 (G: Type*) [Magma G] (h: Equation4513 G) : Equation4512 G :=
-  fun _ _ _ ↦ h _ _ _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation4522_implies_Equation4513 (G: Type*) [Magma G] (h: Equation4522 G) : Equation4513 G :=
-  fun _ _ _ _ ↦ h _ _ _ _ _
+  fun _ _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation4582_implies_Equation4522 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4522 G :=
-  fun _ _ _ _ _ ↦ h _ _ _ _ _ _
+  fun _ _ _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation4582_implies_Equation4564 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4564 G :=
-  fun _ _ _ _ ↦ h _ _ _ _ _ _
+  fun _ _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation4582_implies_Equation4579 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4579 G :=
-  fun _ _ _ _ _ ↦ h _ _ _ _ _ _
+  fun _ _ _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation953_implies_Equation2 (G : Type _) [Magma G] (h: Equation953 G) : Equation2 G := by
@@ -445,31 +445,31 @@ theorem Equation14_implies_Equation23 (G: Type*) [Magma G] (h: Equation14 G) : E
 
 @[equational_result]
 theorem Equation14_implies_Equation8 (G: Type*) [Magma G] (h: Equation14 G) : Equation8 G :=
-  fun _ ↦ h _ _
+  fun _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation14 (G: Type*) [Magma G] (h: Equation2 G) : Equation14 G :=
-  fun _ _ ↦ h _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation381 (G: Type _) [Magma G] (h: Equation2 G) : Equation381 G :=
-  fun _ _ _ ↦ h _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation3722 (G: Type _) [Magma G] (h: Equation2 G) : Equation3722 G :=
-  fun _ _ ↦ h _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation3744 (G: Type _) [Magma G] (h: Equation2 G) : Equation3744 G :=
-  fun _ _ _ _ ↦ h _ _
+  fun _ _ _ _ ↦ h ..
 
 @[equational_result]
-theorem Equation2_implies_Equation5105 (G: Type _) [Magma G] (h: Equation2 G) : Equation5105 G :=
-  fun _ _ _ ↦ h _ _
+theorem Equation2_implies_Equation5093 (G: Type _) [Magma G] (h: Equation2 G) : Equation5093 G :=
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation2_implies_Equation374794 (G: Type _) [Magma G] (h: Equation2 G) : Equation374794 G :=
-  fun _ _ _ ↦ h _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation3_implies_Equation3722 (G: Type _) [Magma G] (h: Equation3 G) : Equation3722 G :=
@@ -477,17 +477,17 @@ theorem Equation3_implies_Equation3722 (G: Type _) [Magma G] (h: Equation3 G) : 
 
 @[equational_result]
 theorem Equation4_implies_Equation381 (G: Type _) [Magma G] (h: Equation4 G) : Equation381 G :=
-  fun x y z ↦ by rw (config := {occs := .pos [1]}) [h x z]
+  fun x y z ↦ by nth_rw 1 [h x z]
 
 @[equational_result]
 theorem Equation4_implies_Equation3722 (G: Type _) [Magma G] (h: Equation4 G) : Equation3722 G :=
-  fun _ _ ↦ h _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation4_implies_Equation3744 (G: Type _) [Magma G] (h: Equation4 G) : Equation3744 G :=
   fun x y z w ↦
     calc x ◇ y
-    _ = (x ◇ z) ◇ y := by rw (config := {occs := .pos [1]}) [h x z]
+    _ = (x ◇ z) ◇ y := by nth_rw 1 [h x z]
     _ = x ◇ z := (h (x ◇ z) y).symm
     _ = (x ◇ z) ◇ (w ◇ y) := h (x ◇ z) (w ◇ y)
 
@@ -500,7 +500,7 @@ theorem Equation5_implies_Equation381 (G: Type _) [Magma G] (h: Equation5 G) : E
 
 @[equational_result]
 theorem Equation5_implies_Equation3722 (G: Type _) [Magma G] (h: Equation5 G) : Equation3722 G :=
-  fun _ _ ↦ h _ _
+  fun _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation5_implies_Equation3744 (G: Type _) [Magma G] (h: Equation5 G) : Equation3744 G :=
@@ -508,15 +508,15 @@ theorem Equation5_implies_Equation3744 (G: Type _) [Magma G] (h: Equation5 G) : 
     calc x ◇ y
     _ = y := (h y x).symm
     _ = (x ◇ z) ◇ y := (h y (x ◇ z))
-    _ = (x ◇ z) ◇ (w ◇ y) := by rw (config := {occs := .pos [1]}) [h y w]
+    _ = (x ◇ z) ◇ (w ◇ y) := by nth_rw 1 [h y w]
 
 @[equational_result]
 theorem Equation5_implies_Equation4564 (G: Type _) [Magma G] (h: Equation5 G) : Equation4564 G :=
   fun x y z w ↦
     calc x ◇ (y ◇ z)
     _ = y ◇ (x ◇ (y ◇ z)) := (h (x ◇ (y ◇ z)) y)
-    _ = (w ◇ y) ◇ (x ◇ (y ◇ z)) := by rw (config := {occs := .pos [1]}) [h y w]
-    _ = (w ◇ y) ◇ (x ◇ z) := by rw (config := {occs := .pos [2]}) [h z y]
+    _ = (w ◇ y) ◇ (x ◇ (y ◇ z)) := by nth_rw 1 [h y w]
+    _ = (w ◇ y) ◇ (x ◇ z) := by nth_rw 2 [h z y]
     _ = (w ◇ y) ◇ z := by rw [← h z x]
 
 @[equational_result]
@@ -536,7 +536,7 @@ theorem Equation41_implies_Equation381 (G: Type _) [Magma G] (h: Equation41 G) :
 
 @[equational_result]
 theorem Equation41_implies_Equation3722 (G: Type _) [Magma G] (h: Equation41 G) : Equation3722 G :=
-  fun _ _ ↦ (h _ _ _).symm
+  fun _ _ ↦ (h ..).symm
 
 @[equational_result]
 theorem Equation41_implies_Equation3744 (G: Type _) [Magma G] (h: Equation41 G) : Equation3744 G :=
@@ -544,42 +544,42 @@ theorem Equation41_implies_Equation3744 (G: Type _) [Magma G] (h: Equation41 G) 
 
 @[equational_result]
 theorem Equation45_implies_Equation381 (G: Type _) [Magma G] (h: Equation45 G) : Equation381 G :=
-  fun _ _ _ ↦ (h _ _ _).symm
+  fun _ _ _ ↦ (h ..).symm
 
 @[equational_result]
 theorem Equation46_implies_Equation381 (G: Type _) [Magma G] (h: Equation46 G) : Equation381 G :=
-  fun _ _ _ ↦ (h _ _ _ _).symm
+  fun _ _ _ ↦ (h ..).symm
 
 @[equational_result]
 theorem Equation46_implies_Equation3722 (G: Type _) [Magma G] (h: Equation46 G) : Equation3722 G :=
-  fun _ _ ↦ (h _ _ _ _).symm
+  fun _ _ ↦ (h ..).symm
 
 @[equational_result]
 theorem Equation46_implies_Equation3744 (G: Type _) [Magma G] (h: Equation46 G) : Equation3744 G :=
-  fun _ _ _ _ ↦ (h _ _ _ _).symm
+  fun _ _ _ _ ↦ (h ..).symm
 
 @[equational_result]
 theorem Equation3744_implies_Equation4512 (G: Type _) [Magma G] (h: Equation3744 G) : Equation4512 G :=
   fun x y z ↦
     calc x ◇ (y ◇ z)
     _ = (x ◇ y) ◇ (x ◇ (y ◇ z)) := (h x (y ◇ z) y x)
-    _ = ((x ◇ y) ◇ (x ◇ y)) ◇ (x ◇ (y ◇ z)) := by rw (config := {occs := .pos [1]}) [h x y y x]
+    _ = ((x ◇ y) ◇ (x ◇ y)) ◇ (x ◇ (y ◇ z)) := by nth_rw 1 [h x y y x]
     _ = (x ◇ y) ◇ (y ◇ z) := (h (x ◇ y) (y ◇ z) (x ◇ y) x).symm
     _ = ((x ◇ y) ◇ x) ◇ ((y ◇ x) ◇ (y ◇ z)) := (h (x ◇ y) (y ◇ z) x (y ◇ x))
-    _ = ((x ◇ y) ◇ x) ◇ (y ◇ z) := by rw (config := {occs := .pos [1]}) [← h y z x y]
+    _ = ((x ◇ y) ◇ x) ◇ (y ◇ z) := by nth_rw 1 [← h y z x y]
     _ = (x ◇ y) ◇ z := (h (x ◇ y) z x y).symm
 
 @[equational_result]
 theorem Equation4564_implies_Equation4512 (G: Type _) [Magma G] (h: Equation4564 G) : Equation4512 G :=
-  fun _ _ _ ↦ h _ _ _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation4579_implies_Equation4512 (G: Type _) [Magma G] (h: Equation4579 G) : Equation4512 G :=
-  fun _ _ _ ↦ h _ _ _ _ _
+  fun _ _ _ ↦ h ..
 
 @[equational_result]
 theorem Equation4579_implies_Equation4564 (G: Type _) [Magma G] (h: Equation4579 G) : Equation4564 G :=
-  fun _ _ _ _ ↦ h _ _ _ _ _
+  fun _ _ _ _ ↦ h ..
 
 /- Counterexamples -/
 
@@ -639,7 +639,7 @@ theorem Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Facts G [
 @[equational_result]
 theorem Equation8_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation8 G ∧ ¬ Equation3 G := by
   simp only [not_forall]
-  exact ⟨Fin 2, ⟨(. + .)⟩, by decide, 1, one_ne_zero⟩
+  exact ⟨Fin 2, ⟨(· + ·)⟩, by decide, 1, one_ne_zero⟩
 
 @[equational_result]
 theorem Equation23_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation23 G ∧ ¬ Equation3 G := by

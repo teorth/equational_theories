@@ -7,8 +7,8 @@ theorem Equation1_not_implies_Equation26302 : ∃ (G : Type) (_ : Magma G), Equa
     LiftingMagmaFamily.establishNonimplication (family := instLiftingMagmaFamilyList) _ Law1.models_iff Law26302.models_iff
 
 @[equational_result]
-theorem Equation1_not_implies_Equation5105 : ∃ (G : Type) (_ : Magma G), Equation1 G ∧ ¬ Equation5105 G :=
-    LiftingMagmaFamily.establishNonimplication (family := instLiftingMagmaFamilyList) _ Law1.models_iff Law5105.models_iff
+theorem Equation1_not_implies_Equation5093 : ∃ (G : Type) (_ : Magma G), Equation1 G ∧ ¬ Equation5093 G :=
+    LiftingMagmaFamily.establishNonimplication (family := instLiftingMagmaFamilyList) _ Law1.models_iff Law5093.models_iff
 
 @[equational_result]
 theorem Equation1_not_implies_Equation374794 : ∃ (G : Type) (_ : Magma G), Equation1 G ∧ ¬ Equation374794 G :=
@@ -27,8 +27,8 @@ theorem Equation4512_not_implies_Equation26302 : ∃ (G : Type) (_ : Magma G), E
     LiftingMagmaFamily.establishNonimplication (family := instLiftingMagmaFamilyList) _ Law4512.models_iff Law26302.models_iff
 
 @[equational_result]
-theorem Equation4512_not_implies_Equation5105 : ∃ (G : Type) (_ : Magma G), Equation4512 G ∧ ¬ Equation5105 G :=
-    LiftingMagmaFamily.establishNonimplication (family := instLiftingMagmaFamilyList) _ Law4512.models_iff Law5105.models_iff
+theorem Equation4512_not_implies_Equation5093 : ∃ (G : Type) (_ : Magma G), Equation4512 G ∧ ¬ Equation5093 G :=
+    LiftingMagmaFamily.establishNonimplication (family := instLiftingMagmaFamilyList) _ Law4512.models_iff Law5093.models_iff
 
 @[equational_result]
 theorem Equation4512_not_implies_Equation374794 : ∃ (G : Type) (_ : Magma G), Equation4512 G ∧ ¬ Equation374794 G :=
