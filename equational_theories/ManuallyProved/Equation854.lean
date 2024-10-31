@@ -1,8 +1,8 @@
+import equational_theories.Mathlib.Order.Greedy
 import equational_theories.Completeness
-import equational_theories.Equations.All
-import equational_theories.FactsSyntax
 import equational_theories.Generated.All4x4Tables.Refutation870
 import equational_theories.Generated.FinitePoly.Refutation82
+import Mathlib.Data.Finset.Order
 
 namespace Refutation_854
 
@@ -109,3 +109,326 @@ theorem not_3316_3925 : ∃ (G : Type) (_ : Magma G), Facts G [854] [3316, 3925]
     refine not_l10 (unique_factorization this (fun h => ?_) (fun h => ?_)).1
     · exact not_l4 (rel_iff.1 h)
     · exact not_l325 (this.trans (rel_iff.1 h).symm)
+
+namespace Greedy
+noncomputable section
+
+variable (G) in
+abbrev PreExtension := ℕ → ℕ → Set ℕ
+
+structure PreExtension.OK (E : PreExtension) : Prop where
+  finite : Set.Finite {x : (ℕ × ℕ) × ℕ | x.2 ∈ E x.1.1 x.1.2}
+  func {x y} : Set.Subsingleton (E x y)
+  eq854 {x y z xz yz yzxz} : xz ∈ E x z → yz ∈ E y z → yzxz ∈ E yz xz → x ∈ E x yzxz
+  eq8 {x xx} : xx ∈ E x x → x ∈ E x xx
+  eq101 {x y xy xyx} : xy ∈ E x y → xyx ∈ E xy x → x ∈ E x xyx
+  eq46155 {x y xy xxy} : xy ∈ E x y → xxy ∈ E x xy → xy ∈ E xy xxy
+  eq378 {x y xy} : xy ∈ E x y → xy ∈ E xy y
+  no_idem {x} : x ∉ E x x
+  aux {x y xy} : xy ∈ E x y → x ∈ E x xy → x = y
+  uniq_fac {x y x' y' xy} : xy ∈ E x y → xy ∈ E x' y' → xy = x ∨ xy = x' ∨ (x, y) = (x', y')
+  mono {x y xy} : xy ∈ E x y → xy = x ∨ x < xy ∧ y < xy
+
+variable (G) in
+abbrev Extension := {E : PreExtension // E.OK}
+
+class Extension1 where
+  E : PreExtension
+  ok : E.OK
+  a : ℕ
+  b : ℕ
+  not_def {c} : c ∉ E a b
+
+namespace Extension1
+variable [Extension1]
+local infix:80 " ◯ " => E
+def dom : Finset Nat :=
+  insert a <| insert b <| ok.finite.toFinset.biUnion fun ((a, b), c) => {a, b, c}
+
+theorem mem_dom {a b c x}
+    (h1 : c ∈ a ◯ b) (h2 : x ∈ ({a, b, c} : Finset ℕ)) : x ∈ dom := by
+  refine Finset.mem_insert_of_mem <| Finset.mem_insert_of_mem ?_
+  simp only [dom, Finset.mem_biUnion, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Prod.exists]
+  exact ⟨_, _, _, h1, h2⟩
+
+theorem dom_l {a b c} (h : c ∈ a ◯ b) : a ∈ dom := mem_dom h (by simp)
+theorem dom_r {a b c} (h : c ∈ a ◯ b) : b ∈ dom := mem_dom h (by simp)
+theorem dom_o {a b c} (h : c ∈ a ◯ b) : c ∈ dom := mem_dom h (by simp)
+
+theorem dom_a : a ∈ dom := Finset.mem_insert_self ..
+theorem dom_b : b ∈ dom := Finset.mem_insert_of_mem <| Finset.mem_insert_self ..
+
+def c : Nat := dom.sup id + 1
+
+theorem lt_c {x} (h : x ∈ dom) : x < c := Nat.lt_succ.2 <| dom.le_sup (f := id) h
+
+local notation x:51 " ≫ " y:51 => y ∈ y ◯ x
+
+inductive Relevant : ℕ → Prop
+  | mk {b1 b2} : b ∈ b1 ◯ b2 → b1 ≠ b → b2 ≫ a → Relevant b1
+
+theorem Relevant.unique : ∀ {b1 b1'}, Relevant b1 → Relevant b1' → b1 = b1'
+  | _, _, .mk h1 h2 _, .mk h1' h2' _ => by
+    cases ok.uniq_fac h1 h1' |>.resolve_left h2.symm |>.resolve_left h2'.symm; rfl
+
+theorem Relevant.lt_b : ∀ {b1}, Relevant b1 → b1 < b
+  | _, .mk h1 h2 _ => ((ok.mono h1).resolve_left h2.symm).1
+
+theorem Relevant.ne_a : ∀ {b1}, Relevant b1 → b1 ≠ a
+  | _, .mk h1 h2 h3, rfl => h2 (ok.func h3 h1)
+
+inductive Target (p : Prop) : ℕ → Prop
+  | protected b : Target p b
+  | rel {b1} : p → Relevant b1 → Target p b1
+
+theorem Target.dom {p x} : Target p x → x ∈ dom
+  | .b => dom_b
+  | .rel _ ⟨h, _, _⟩ => dom_l h
+
+theorem Target.b_nlt {p} : ∀ {x}, Target p x → ¬b < x
+  | _, .b => lt_irrefl _
+  | _, .rel _ h => h.lt_b.asymm
+
+@[mk_iff]
+inductive Extra : ℕ → ℕ → Prop
+  | left {b1} : Target (b ≫ b1) b1 → Extra c b1
+  | right {x} : Target True x → Extra x c
+
+inductive Next : ℕ → ℕ → ℕ → Prop
+  | base {x y z} : z ∈ x ◯ y → Next x y z
+  | new : Next a b c
+  | extra {x y} : Extra x y → Next x y x
+
+abbrev next : PreExtension := fun a b => {c | Next a b c}
+
+theorem Next.eq8 {x xx : ℕ} (h : Next x x xx) : Next x xx x := by
+  let ⟨x', eq, h⟩ : ∃ x', x = x' ∧ Next x x' xx := ⟨_, rfl, h⟩
+  match h with
+  | .base h => exact .base (ok.eq8 (eq ▸ h))
+  | .extra h => assumption
+  | .new => exact .extra (eq ▸ .right .b)
+
+theorem Next.ne_c {x y z} : Next x y z → x = c → y ≠ c
+  | .base h, h1, _ => (lt_c (dom_l h)).ne h1
+  | .new, h1, _ => (lt_c dom_a).ne h1
+  | .extra (.left h), _, h1
+  | .extra (.right h), h1, _ => (lt_c h.dom).ne h1
+
+theorem Next.no_idem {x} : ¬Next x x x := by
+  suffices ∀ y z, Next x y z → x = y → z ≠ x from (this _ _ · rfl rfl)
+  rintro y z (h|_|h|h) e1 e2
+  · exact ok.no_idem (e1 ▸ e2 ▸ h)
+  · cases (lt_c dom_a).ne' e2
+  · cases (lt_c h.dom).ne' e1
+  · cases (lt_c h.dom).ne e1
+
+theorem next_ok : next.OK where
+  finite := by
+    have : {b | Relevant b}.Subsingleton := fun _ h1 _ h2 => h1.unique h2
+    have : {b | ∃ p, Target p b}.Finite :=
+      (this.finite.insert b).subset fun b => by simp; rintro _ ⟨⟩ <;> simp [*]
+    refine (ok.finite.union <| .insert ((a, b), c) (this.biUnion fun b _ =>
+      Finset.finite_toSet {((b, c), b), ((c, b), c)})).subset fun ((x,y),z) hx => ?_
+    simp at hx ⊢; cases hx with
+    | extra hx => right; right; cases hx <;> exact ⟨_, ⟨_, ‹_›⟩, by simp⟩
+    | _ => simp [*]
+  func {x y xy} hxy {xy'} hxy' := by
+    match hxy, hxy' with
+    | .base hxy, .base hxy' => exact ok.func hxy hxy'
+    | .new, .new | .extra _, .extra _ => rfl
+    | .new, .base h | .base h, .new => cases not_def h
+    | .new, .extra h | .extra h, .new =>
+      obtain ⟨_, h⟩ | ⟨_, h⟩ := (extra_iff ..).1 h
+      · cases (lt_c dom_a).ne h
+      · cases (lt_c dom_b).ne h
+    | .base h1, .extra h2 | .extra h2, .base h1 =>
+      obtain ⟨_, h2⟩ | ⟨_, h2⟩ := (extra_iff ..).1 h2
+      · cases (lt_c (dom_l h1)).ne h2
+      · cases (lt_c (dom_r h1)).ne h2
+  mono := by
+    rintro _ _ _ (h|_|h)
+    · exact ok.mono h
+    · exact .inr ⟨lt_c dom_a, lt_c dom_b⟩
+    · exact .inl rfl
+  uniq_fac {x y x' y' xy} h h' := by
+    match h, h' with
+    | .base h, .base h' => exact ok.uniq_fac h h'
+    | .base h, .new | .new, .base h => cases (lt_c (dom_o h)).ne rfl
+    | .new, .new => exact .inr <| .inr rfl
+    | .extra h, _ => exact .inl rfl
+    | _, .extra h => exact .inr <| .inl rfl
+  no_idem := Next.no_idem
+  eq8 := Next.eq8
+  eq101 {x y xy xyx} h1 h2 := by
+    obtain h1 | _ | h1 := h1
+    · obtain h2 | _ | _ | _ := h2
+      · exact .base (ok.eq101 h1 h2)
+      · exact .extra (.right .b)
+      · cases (lt_c (dom_o h1)).ne rfl
+      · cases (lt_c (dom_l h1)).ne rfl
+    · generalize ec : c = c', ea : a = a' at h2
+      obtain h | _ | (_ | ⟨_, h⟩) | h := h2
+      · cases (lt_c (dom_l h)).ne' ec
+      · exact .extra (.right .b)
+      · exact .extra (.right .b)
+      · cases h.ne_a ea.symm
+      · cases (lt_c h.dom).ne' ec
+    · exact h2.eq8
+  eq46155 {x y xy xxy} h1 h2 := by
+    obtain h1 | _ | h1 := h1
+    · obtain h2 | _ | _ | _ := h2
+      · exact .base (ok.eq46155 h1 h2)
+      · exact .extra (.right .b)
+      · cases (lt_c (dom_l h1)).ne rfl
+      · cases (lt_c (dom_o h1)).ne rfl
+    · generalize ec : c = c', ea : a = a' at h2
+      obtain h | _ | (_ | h) | _ | ⟨-, h⟩ := h2
+      · cases (lt_c (dom_r h)).ne' ec
+      · exact .extra (.right .b)
+      · cases (lt_c dom_a).ne ea
+      · cases (lt_c (dom_o h)).ne' ec
+      · exact .extra (.left .b)
+      · cases h.ne_a ea.symm
+    · exact h2.eq8
+  eq378 {x y xy} h := by
+    obtain h | _ | h := h
+    · exact .base (ok.eq378 h)
+    · exact .extra (.left .b)
+    · exact .extra h
+  aux {x y xy} h1 h2 := by
+    obtain ⟨x₁, x₂, xy', ex₁, ex₂, exy, h2'⟩ :
+      ∃ x₁ x₂ xy', x = x₁ ∧ x = x₂ ∧ xy = xy' ∧ Next x₂ xy' x₁ := ⟨_, _, _, rfl, rfl, rfl, h2⟩
+    obtain h1 | _ | h1 | h1 := h1
+    · obtain h2 | _ | h2 | h2 := h2'
+      · exact ok.aux h1 (ex₁.symm ▸ ex₂ ▸ exy ▸ h2 :)
+      · cases (lt_c (dom_l h1)).ne ex₁
+      · cases (lt_c (dom_l h1)).ne ex₁
+      · cases (lt_c (dom_o h1)).ne exy
+    · obtain h2 | _ | h2 | _ | ⟨-, h2⟩ := h2'
+      · cases (lt_c (dom_r h2)).ne' exy
+      · cases (lt_c dom_b).ne' exy
+      · cases (lt_c dom_a).ne ex₁
+      · exact ex₁
+      · cases h2.ne_a ex₁.symm
+    · cases h2.ne_c rfl rfl
+    · cases h2.no_idem
+  eq854 {x y z xz yz yzxz} h1 h2 h3 := by
+    obtain h1 | _ | h1 | h1 := h1
+    · obtain h2 | _ | h2 | h2 := h2
+      · obtain h3 | _ | h3 | h3 := h3
+        · exact .base (ok.eq854 h1 h2 h3)
+        · by_cases h : x = b
+          · exact .extra (.right (h ▸ .b))
+          · exact .extra (.right (.rel trivial ⟨h1, h, ok.eq378 h2⟩))
+        · cases (lt_c (dom_o h2)).ne rfl
+        · cases (lt_c (dom_o h1)).ne rfl
+      · generalize ec : c = c' at h3
+        obtain h3 | _ | (_ | ⟨h3, h4⟩) | h3 := h3
+        · cases (lt_c (dom_l h3)).ne' ec
+        · cases (lt_c dom_a).ne' ec
+        · cases ok.no_idem (ok.eq378 h1)
+        · cases (ok.mono h1).resolve_right (h4.lt_b.asymm ·.2)
+          exact .extra (.right (.rel trivial h4))
+        · cases (lt_c (dom_o h1)).ne rfl
+      · generalize ec : c = c' at h3
+        obtain h3 | _ | (_ | ⟨h3, h4⟩) | h3 := h3
+        · cases (lt_c (dom_l h3)).ne' ec
+        · cases (lt_c dom_a).ne' ec
+        · have := ok.eq378 h1
+          obtain _ | ⟨h21, h22, h23, h24⟩ := h2
+          · cases ok.no_idem this
+          · obtain rfl | h5 := ok.uniq_fac h1 h22
+            · exact .extra (.right .b)
+            · cases h5.resolve_left h23.symm
+              exact .extra (.right (.rel trivial ⟨h22, h23, h24⟩))
+        · obtain rfl | ⟨_, hl⟩ := ok.mono h1
+          · exact .extra (.right (.rel trivial h4))
+          · obtain _ | ⟨_, h2⟩ := h2
+            · cases h4.lt_b.asymm hl
+            · cases hl.ne (h2.unique h4)
+        · cases (lt_c (dom_o h1)).ne rfl
+      · cases (lt_c (dom_r h1)).ne rfl
+    · obtain h2 | _ | h2 := h2
+      · generalize ec : c = c' at h3
+        obtain h3 | _ | h3 | h3 := h3
+        · cases (lt_c (dom_r h3)).ne' ec
+        · cases (lt_c dom_b).ne' ec
+        · cases (lt_c h3.dom).ne' ec
+        · cases (ok.mono h2).resolve_right (h3.b_nlt ·.2)
+          obtain h3 | ⟨-, h31, _, h33⟩ := h3
+          · cases ok.no_idem h2
+          · cases ok.aux h31 h2; exact .base h33
+      · cases h3.ne_c rfl rfl
+      · generalize ec : b = b' at h2
+        obtain h2 | h2 := h2
+        · cases h3.ne_c rfl rfl
+        · cases (lt_c dom_b).ne ec
+    · obtain h2 | _ | h2 | h2 := h2
+      · generalize ec : c = c' at h3
+        obtain h3 | _ | h3 | _ | ⟨-, h3⟩ := h3
+        · cases (lt_c (dom_r h3)).ne' ec
+        · cases (lt_c dom_b).ne' ec
+        · cases (lt_c (dom_o h2)).ne rfl
+        · exact .extra (.left .b)
+        · have := ok.eq378 h2
+          obtain _ | ⟨_, h1⟩ := h1
+          · exact .extra (.left (.rel this h3))
+          · cases h1.unique h3; cases ok.no_idem this
+      · cases h3.ne_c rfl rfl
+      · cases h3.ne_c rfl rfl
+      · cases (lt_c h1.dom).ne rfl
+    · generalize ec : c = c' at h2
+      obtain h2 | _ | h2 | h2 := h2
+      · cases (lt_c (dom_r h2)).ne' ec
+      · cases (lt_c dom_b).ne' ec
+      · cases (lt_c h2.dom).ne' ec
+      · obtain h3 | _ | h3 | h3 := h3
+        · match h1, h2 with
+          | .b, .b => exact .base (ok.eq8 h3)
+          | .rel _ h1, .rel _ h2 => cases h1.unique h2; exact .base (ok.eq8 h3)
+          | .rel _ ⟨h1, _, _⟩, .b => exact .base (ok.eq101 h1 h3)
+          | .b, .rel _ ⟨h2, _, _⟩ => exact .base (ok.eq46155 h2 h3)
+        · exact .extra (.right .b)
+        · cases (lt_c h2.dom).ne' ec
+        · cases (lt_c h1.dom).ne' ec
+
+end Extension1
+
+variable (e₀ : Extension)
+
+theorem exists_extension :
+    ∃ op : ℕ → ℕ → ℕ,
+    (∀ x y z, x = op x (op (op y z) (op x z))) ∧
+    (∀ {x y z}, z ∈ e₀.1 x y → z = op x y) := by
+  classical
+  have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain (a := e₀)
+    (task := fun x : _ × _ => {e | (e.1 x.1 x.2).Nonempty}) fun ⟨E, ok⟩ ⟨a, b⟩ => by
+      if h : (E a b).Nonempty then exact ⟨_, le_rfl, h⟩ else
+      let E1 : Extension1 := { E, ok, a, b, not_def := fun h' => h ⟨_, h'⟩ }
+      exact ⟨⟨E1.next, E1.next_ok⟩, fun _ _ _ => (.base ·), _, .new⟩
+  simp only [Subtype.exists, Prod.forall] at h3
+  choose f hf1 hf2 op hop using h3
+  refine ⟨op, fun x y z => ?_, fun {x y z} H => ?_⟩
+  · classical
+    let S : Finset _ := {(x,z), (y,z), (op y z, op x z), (x, op (op y z) (op x z))}
+    have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
+      (S.image fun (a, b) => ⟨⟨f a b, hf1 a b⟩, hf2 a b⟩)
+    replace le a ha := Finset.forall_image.1 le a ha _ _ (hop a.1 a.2)
+    simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
+    obtain ⟨xz, yz, yzxz, xyzxz⟩ := le
+    exact e.2.func (e.2.eq854 xz yz yzxz) xyzxz
+  · exact (hf1 ..).func (h2 _ (hf2 x y) _ _ H) (hop ..)
+
+def GreedyMagma (_ : Extension) := ℕ
+
+noncomputable instance : Magma (GreedyMagma e₀) where
+  op := (exists_extension e₀).choose
+
+theorem Extension.eq854 : Equation854 (GreedyMagma e₀) :=
+  (exists_extension e₀).choose_spec.1
+
+theorem Extension.base : ∀ {x y z : GreedyMagma e₀}, z ∈ e₀.1 x y → z = x ◇ y :=
+  (exists_extension e₀).choose_spec.2
+
+end
+end Greedy

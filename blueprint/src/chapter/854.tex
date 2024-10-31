@@ -190,7 +190,7 @@ The first five laws are known consequences of 854.  The no idempotence law was k
 
 The following observation is key.
 
-\begin{proposition}[Greedy construction]\label{854-extend}  Suppose one has a partial 854 magma on $\N$ that is only finitely defined, and let $a,b \in G$ be such that $a \op b$ is currently undefined.  Then it is possible to extend the magma to a larger partial 854 magma, such that $a \op b$ is now defined.
+\begin{proposition}[Greedy construction]\label{854-extend}\leanok\lean{Refutation_854.Greedy.Extension1.next_ok}  Suppose one has a partial 854 magma on $\N$ that is only finitely defined, and let $a,b \in G$ be such that $a \op b$ is currently undefined.  Then it is possible to extend the magma to a larger partial 854 magma, such that $a \op b$ is now defined.
 \end{proposition}
 
 \begin{proof}  Define a directed graph by writing $x \to y$ if $y \op x$ is defined and equal to $y$.  By Equation 378, we see that $x \to y$ if and only if $z \op x$ is well-defined and equal to $y$ for some $z$.
@@ -226,7 +226,7 @@ Now we tackle the most difficult verification, which is 854.  This splits into a
 
 Iterating this in the usual fashion, we obtain
 
-\begin{corollary}[854 extension]\label{extend-854}
+\begin{corollary}[854 extension]\label{extend-854}\leanok\lean{Refutation_854.Greedy.exists_extension}
 Suppose one has a partial 854 magma on $\N$ that is only finitely defined.  Then it can be extended to a complete 854 magma that additionally obeys the no idempotence law, the monotonicity law, the auxiliary law, and the unique factorization law.
 \end{corollary}
 
