@@ -8,9 +8,9 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
     a { text-decoration: inherit; color: inherit; }
-    div { margin: 0.5em; font-size: large; }
-    .arrow { font-size: x-large; }
-    .implication, .nonimplication { margin-left: 2em; display: flex; align-items: center; gap: 0.5em; }
+    div { margin: 0.5em; }
+    .arrow { font-size: x-large; margin-right: 0.5em; }
+    .implication, .nonimplication { margin-left: 2em; display: flex; align-items: center; }
   </style>
 </head>
 <body>
@@ -171,7 +171,7 @@ function render_implication(node1, node2, reversed) {
   if (isConjecture) extra_text += " (conjecture)";
   const arrow = reversed ? "⇑" : "⇓";
   document.body.innerHTML += `
-    <div class="implication"><span class="arrow">${arrow}</span><a href="${url}" target="_blank">${name}</a>${extra_text}</div>
+    <div class="implication"><span class="arrow">${arrow}</span><a href="${url}" target="_blank">${name}${extra_text}</a></div>
   `;
 }
 
@@ -186,7 +186,7 @@ function render_non_implication(node1, facts, node2) {
   }
   if (isConjecture) extra_text += " (conjecture)";
   document.body.innerHTML += `
-    <div class="nonimplication"><span class="arrow">⇓̸</span><a href="${url}" target="_blank">${name}</a>${extra_text}</div>
+    <div class="nonimplication"><span class="arrow" style="transform:rotate(0.25turn)">⇏</span><a href="${url}" target="_blank">${name}${extra_text}</a></div>
   `;
 }
 
