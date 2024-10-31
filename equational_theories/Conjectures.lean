@@ -72,12 +72,12 @@ conjecture Equation1722_facts : ∃ (G : Type) (_ : Magma G), Facts G [1722] [26
 @[equational_result]
 conjecture Equation1518_facts : ∃ (G : Type) (_ : Magma G), Facts G [1518] [47, 614, 817, 3862]
 
-/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1485/near/478967428 -/
-@[equational_result]
-conjecture Equation1485_facts : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3457, 2124, 2087, 3511]
+-- /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1485/near/478967428 -/
+-- @[equational_result]
+-- conjecture Equation1485_facts : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3457, 2124, 2087, 3511]
 
 /-- https://teorth.github.io/equational_theories/blueprint/854-chapter.html#a0000000041 -/
 @[equational_result]
-conjecture Equation854_facts : ∃ (G : Type) (_ : Magma G), Facts G [854] [413]
+conjecture Equation854_facts : ∃ (G : Type) (_ : Magma G), Facts G [854] [413, 1045]
 
 end Conjectures
