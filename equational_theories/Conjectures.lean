@@ -76,4 +76,8 @@ conjecture Equation1518_facts : ∃ (G : Type) (_ : Magma G), Facts G [1518] [47
 @[equational_result]
 conjecture Equation1485_facts : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3457, 2124, 2087, 3511]
 
+/-- https://teorth.github.io/equational_theories/blueprint/854-chapter.html#a0000000041 -/
+@[equational_result]
+conjecture Equation854_facts : ∃ (G : Type) (_ : Magma G), Facts G [854] [413]
+
 end Conjectures
