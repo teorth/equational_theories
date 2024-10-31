@@ -1,8 +1,11 @@
+import equational_theories.Mathlib.Data.List.Defs
 import equational_theories.Mathlib.Order.Greedy
 import equational_theories.Completeness
 import equational_theories.Generated.All4x4Tables.Refutation870
 import equational_theories.Generated.FinitePoly.Refutation82
 import Mathlib.Data.Finset.Order
+import Mathlib.Data.List.AList
+import Mathlib.Data.Prod.Lex
 
 namespace Refutation_854
 
@@ -399,6 +402,7 @@ variable (e₀ : Extension)
 theorem exists_extension :
     ∃ op : ℕ → ℕ → ℕ,
     (∀ x y z, x = op x (op (op y z) (op x z))) ∧
+    (∀ {x y}, op x (op x y) = x → x = y) ∧
     (∀ {x y z}, z ∈ e₀.1 x y → z = op x y) := by
   classical
   have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain (a := e₀)
@@ -407,28 +411,93 @@ theorem exists_extension :
       let E1 : Extension1 := { E, ok, a, b, not_def := fun h' => h ⟨_, h'⟩ }
       exact ⟨⟨E1.next, E1.next_ok⟩, fun _ _ _ => (.base ·), _, .new⟩
   simp only [Subtype.exists, Prod.forall] at h3
+  classical
   choose f hf1 hf2 op hop using h3
-  refine ⟨op, fun x y z => ?_, fun {x y z} H => ?_⟩
-  · classical
-    let S : Finset _ := {(x,z), (y,z), (op y z, op x z), (x, op (op y z) (op x z))}
+  refine ⟨op, fun x y z => ?_, fun {x y} h => ?_, fun {x y z} H => ?_⟩
+  · let S : Finset _ := {(x,z), (y,z), (op y z, op x z), (x, op (op y z) (op x z))}
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (S.image fun (a, b) => ⟨⟨f a b, hf1 a b⟩, hf2 a b⟩)
     replace le a ha := Finset.forall_image.1 le a ha _ _ (hop a.1 a.2)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
     obtain ⟨xz, yz, yzxz, xyzxz⟩ := le
     exact e.2.func (e.2.eq854 xz yz yzxz) xyzxz
+  · let S : Finset _ := {(x,y), (x, op x y)}
+    have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
+      (S.image fun (a, b) => ⟨⟨f a b, hf1 a b⟩, hf2 a b⟩)
+    replace le a ha := Finset.forall_image.1 le a ha _ _ (hop a.1 a.2)
+    simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
+    obtain ⟨xy, xxy⟩ := le
+    rw [h] at xxy
+    exact e.2.aux xy xxy
   · exact (hf1 ..).func (h2 _ (hf2 x y) _ _ H) (hop ..)
 
 def GreedyMagma (_ : Extension) := ℕ
 
-noncomputable instance : Magma (GreedyMagma e₀) where
+instance (n) : OfNat (GreedyMagma e₀) n := inferInstanceAs (OfNat Nat n)
+
+noncomputable instance instMagma : Magma (GreedyMagma e₀) where
   op := (exists_extension e₀).choose
 
 theorem Extension.eq854 : Equation854 (GreedyMagma e₀) :=
   (exists_extension e₀).choose_spec.1
 
+theorem Extension.aux : ∀ {x y : GreedyMagma e₀}, x ◇ (x ◇ y) = x → x = y :=
+  (exists_extension e₀).choose_spec.2.1
+
 theorem Extension.base : ∀ {x y z : GreedyMagma e₀}, z ∈ e₀.1 x y → z = x ◇ y :=
-  (exists_extension e₀).choose_spec.2
+  (exists_extension e₀).choose_spec.2.2
+
+def fromList (S : List ((Nat × Nat) × Nat)) : PreExtension := fun a b => {c | ((a, b), c) ∈ S}
+
+theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
+    (sorted : S.Chain' (fun a b => a.1 < b.1) := by decide)
+    (eq854 : ∀ a ∈ S, ∀ b ∈ S, a.1.2 = b.1.2 →
+      ∀ c ∈ S, c.1 = (b.2, a.2) → ((a.1.1, c.2), a.1.1) ∈ S := by decide)
+    (eq8 : ∀ a ∈ S, a.1.1 = a.1.2 → ((a.1.1, a.2), a.1.1) ∈ S := by decide)
+    (eq101 : ∀ a ∈ S, ∀ b ∈ S, a.2 = b.1.1 → a.1.1 = b.1.2 → ((a.1.1, b.2), a.1.1) ∈ S := by decide)
+    (eq46155 : ∀ a ∈ S, ∀ b ∈ S, a.1.1 = b.1.1 → a.2 = b.1.2 → ((a.2, b.2), a.2) ∈ S := by decide)
+    (eq378 : ∀ a ∈ S, ((a.2, a.1.2), a.2) ∈ S := by decide)
+    (no_idem : ∀ a ∈ S, a.1.1 = a.2 → a.1.2 ≠ a.2 := by decide)
+    (aux : ∀ a ∈ S, a.1.1 ≠ a.1.2 → ((a.1.1, a.2), a.1.1) ∉ S := by decide)
+    (uniq_fac : ∀ a ∈ S, a.2 ≠ a.1.1 → ∀ b ∈ S, a.2 = b.2 → a.2 = b.1.1 ∨ a.1 = b.1 := by decide)
+    (mono : ∀ a ∈ S, a.2 = a.1.1 ∨ a.1.1 < a.2 ∧ a.1.2 < a.2 := by decide) :
+    (fromList S).OK where
+  finite := List.finite_toSet S
+  func h1 _ h2 := Decidable.by_contra fun h =>
+    have : IsTrans ((ℕ ×ₗ ℕ) × ℕ) (·.1 < ·.1) := ⟨fun _ _ _ => lt_trans⟩
+    (List.chain'_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
+      |>.forall (fun _ _ => (·.symm)) h1 h2 (by rintro ⟨⟩; exact h rfl) rfl
+  eq854 h1 h2 h3 := eq854 _ h1 _ h2 rfl _ h3 rfl
+  eq8 h1 := eq8 _ h1 rfl
+  eq101 h1 h2 := eq101 _ h1 _ h2 rfl rfl
+  eq46155 h1 h2 := eq46155 _ h1 _ h2 rfl rfl
+  eq378 h1 := eq378 _ h1
+  no_idem h1 := no_idem _ h1 rfl rfl
+  aux h1 h2 := Decidable.by_contra (aux _ h1 · h2)
+  uniq_fac h1 h2 := Decidable.or_iff_not_imp_left.2 fun h => uniq_fac _ h1 h _ h2 rfl
+  mono h1 := mono _ h1
+
+
+theorem fromList_eval {e : Extension} {S : List ((Nat × Nat) × Nat)} (hS : e.1 = fromList S)
+    (a b c : Nat) (h : ((a, b), c) ∈ S := by decide) :
+    haveI : Magma Nat := instMagma e; a ◇ b = c :=
+  (Extension.base e (hS ▸ h)).symm
 
 end
 end Greedy
+
+open Greedy
+
+@[equational_result]
+theorem not_413_1045 : ∃ (G : Type) (_ : Magma G), Facts G [854] [413, 1045] := by
+  have ⟨e, he⟩ : ∃ e : Extension, e.1 = fromList
+    [((0,0),2), ((0,1),0), ((0,2),0), ((1,2),3), ((2,0),2), ((2,1),2), ((2,3),2), ((3,2),3)] :=
+    ⟨⟨_, fromList_ok⟩, rfl⟩
+  refine ⟨GreedyMagma e, inferInstance, e.eq854, fun h => ?_, fun h => ?_⟩
+  · have := h 1 2
+    rw [fromList_eval he 2 1 2, fromList_eval he 1 2 3] at this
+    cases e.aux this.symm
+  · have := h 1 0
+    rw [fromList_eval he 0 1 0, fromList_eval he 0 0 2,
+        fromList_eval he 2 1 2, fromList_eval he 1 2 3] at this
+    cases this
