@@ -11,10 +11,9 @@ open FreeMagma
 
 variable {α : Type _}
 
-def FreeMagma.dual (w : FreeMagma α) : FreeMagma α :=
-match w with
-| .Leaf x => .Leaf x
-| .Fork w₁ w₂ => .Fork w₂.dual w₁.dual
+def FreeMagma.dual : FreeMagma α → FreeMagma α
+  | .Leaf x => .Leaf x
+  | .Fork w₁ w₂ => .Fork w₂.dual w₁.dual
 
 /--
 `FreeMagma.dual` is indeed a dual (an involution).
@@ -24,12 +23,11 @@ theorem FreeMagma.dual_dual (w : FreeMagma α) : w.dual.dual = w := by
  induction w <;> simp [dual, *]
 
 @[simp]
-def Op (G : Type) : Type := G
+def Op.{u} (G : Type u) : Type u := G
 
-variable {G : Type} [Magma G]
+variable {G : Type*} [Magma G]
 
-@[simp]
-instance opMagma : Magma (Op G) := { op := λ (x y : G) ↦ (y ◇ x : G) }
+instance opMagma : Magma (Op G) where op x y := (y ◇ x : G)
 
 def Magma.opHom : G → Op G := fun x => x
 
@@ -50,6 +48,7 @@ namespace Law.MagmaLaw
 def dual (l : MagmaLaw α) : MagmaLaw α := { lhs := l.lhs.dual, rhs := l.rhs.dual }
 
 theorem law_dual_dual (l : MagmaLaw α) : l.dual.dual = l := by simp [dual]
+theorem dual_symm (l : MagmaLaw α) : l.dual.symm = l.symm.dual := rfl
 
 theorem satisfiesPhi_dual {l : MagmaLaw α} {φ : α → G}
   (h : satisfiesPhi (Magma.opHom ∘ φ) l) : satisfiesPhi φ l.dual := by
@@ -69,5 +68,14 @@ theorem implies_iff_dual {l₁ l₂ : MagmaLaw α} : l₁.implies l₂ ↔ l₁.
     rw [← law_dual_dual l₂]
     rw [← law_dual_dual l₁] at hsat
     exact satisfies_dual_dual (h (law_dual_dual l₁ ▸ satisfies_dual_dual hsat))
+
+theorem iff_iff_dual {l₁ l₂ : MagmaLaw α} : l₁.iff l₂ ↔ l₁.dual.iff l₂.dual :=
+  ⟨fun H _ _ => ⟨(implies_iff_dual.1 H.mp ·), (implies_iff_dual.1 H.mpr ·)⟩,
+   fun H _ _ => ⟨(implies_iff_dual.2 H.mp ·), (implies_iff_dual.2 H.mpr ·)⟩⟩
+
+def IsDual {α} (Law1 Law2 : MagmaLaw α) := Law1.iff Law2.dual
+
+theorem IsDual.symm {Law1 Law2 : MagmaLaw α} (H : IsDual Law1 Law2) : IsDual Law2 Law1 :=
+  (MagmaLaw.law_dual_dual _ ▸ MagmaLaw.iff_iff_dual.1 H :).symm
 
 end Law.MagmaLaw
