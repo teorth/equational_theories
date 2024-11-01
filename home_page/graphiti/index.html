@@ -117,6 +117,33 @@
         >
         <input type="text" id="implied_by" name="implied_by" /><br />
 
+        <label for="neighborhood_of"
+          >Equation implies/implied by, number of edges away (numeric,
+          comma-separated):</label
+        >
+        <span style="width: 100%; display: flex">
+          <select name="neighborhood_of_distance" id="neighborhood_of_distance">
+            <option value="" selected disabled hidden></option>
+            <option value=""></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+          <input
+            type="text"
+            id="neighborhood_of"
+            name="neighborhood_of"
+            style="margin-left: 8px; width: 50%; flex: 1"
+          /> </span
+        ><br />
+
         <label for="limit_equations"
           >Limit search to equations (numeric, comma-separated):</label
         >
@@ -195,8 +222,15 @@
         <li>
           <a
             href="#"
-            onclick="fillForm({implies: '43', max_variables: '3', highlight_red: '43'})"
-            >Equations up to 3 variables implied by the commutative law</a
+            onclick="fillForm({implies: '43', max_variables: '2', highlight_red: '43'})"
+            >Equations up to 2 variables implied by the commutative law</a
+          >
+        </li>
+        <li>
+          <a
+            href="#"
+            onclick="fillForm({neighborhood_of: '43', neighborhood_of_distance: '2', highlight_red: '43'})"
+            >Implies/implied by of the commutative law up to 2 edges away</a
           >
         </li>
         <li>
@@ -282,6 +316,11 @@
           }
         }
 
+        const selects = form.getElementsByTagName("select");
+        for (let select of selects) {
+          select.selectedIndex = 0;
+        }
+
         // Loop over the keys of the params object and fill the corresponding form fields
         Object.keys(params).forEach((key) => {
           const inputField = form.querySelector(`input[name="${key}"]`);
@@ -290,6 +329,15 @@
               inputField.checked = params[key]; // Set checkbox value
             } else {
               inputField.value = params[key];
+            }
+          } else {
+            // If no input found, attempt to find a select element with the given name
+            const selectField = form.querySelector(`select[name="${key}"]`);
+
+            if (selectField) {
+              if (!selectField.hasAttribute("multiple")) {
+                selectField.value = params[key];
+              }
             }
           }
         });
@@ -508,6 +556,18 @@
         return Array.from(vertices);
       }
 
+      function reverse_graph(adj_list) {
+        let reversed_graph = {};
+        for (let [u, neighbors] of Object.entries(adj_list)) {
+          for (let v of neighbors) {
+            if (reversed_graph[v] === undefined) reversed_graph[v] = [];
+            reversed_graph[v].push(u);
+          }
+        }
+
+        return reversed_graph;
+      }
+
       // Transitive reduction making use of the fact we already have all reachability info for every vertex
       function transitive_reduction_of_closure(adj_list) {
         let reduced_graph = {};
@@ -670,6 +730,64 @@
           for (const scc of vertices(graph)) {
             if (sink_sccs.has(scc)) continue;
             if (!graph[scc] || !graph[scc].some((x) => sink_sccs.has(x))) {
+              scc_to_node_map[scc].forEach((x) => vertices_to_delete.add(x));
+            }
+          }
+        }
+        if (params.neighborhood_of) {
+          let distance = new Number(params.neighborhood_of_distance);
+          if (!params.neighborhood_of_distance) {
+            distance = 100;
+          }
+
+          let targets = parseCommaSeparatedNumbers(params.neighborhood_of);
+          let target_sccs = new Set([
+            ...targets.map((s) => node_to_scc_map[s]),
+          ]);
+
+          // As we only have the graph closure, to do BFS we first make a reduced graph.
+          reduced_graph = transitive_reduction_of_closure(graph);
+
+          function bfs(graph, start_nodes, maxSteps) {
+            const queue = [];
+            const visited = new Set();
+
+            for (n of start_nodes) {
+              queue.push({ node: n, level: 0 });
+              visited.add(n);
+            }
+
+            while (queue.length > 0) {
+              const { node, level } = queue.shift();
+
+              if (level >= maxSteps) {
+                continue;
+              }
+
+              // Iterate through all adjacent nodes
+              const neighbors = graph[node] || [];
+              for (const neighbor of neighbors) {
+                if (!visited.has(neighbor)) {
+                  visited.add(neighbor);
+                  queue.push({ node: neighbor, level: level + 1 });
+                }
+              }
+            }
+
+            return visited;
+          }
+
+          let keep_forward = bfs(reduced_graph, target_sccs, distance);
+          let keep_backward = bfs(
+            reverse_graph(reduced_graph),
+            target_sccs,
+            distance,
+          );
+
+          let keep = new Set([...keep_forward, ...keep_backward]);
+
+          for (const scc of vertices(graph)) {
+            if (!keep.has(scc)) {
               scc_to_node_map[scc].forEach((x) => vertices_to_delete.add(x));
             }
           }
