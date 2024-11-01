@@ -172,7 +172,7 @@ jobs:
 
       - name: Generate home_page/graphiti/graph.json
         run: |
-          ~/.elan/bin/lake exe extract_implications --json > /tmp/implications.json
+          ~/.elan/bin/lake exe extract_implications --json --only-implications --closure equational_theories > /tmp/implications.json
           ~/.elan/bin/lake exe extract_implications unknowns > /tmp/unknowns.json
           ruby scripts/generate_graphiti_data.rb /tmp/implications.json /tmp/unknowns.json data/duals.json > home_page/graphiti/graph.json
 
