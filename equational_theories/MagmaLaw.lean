@@ -113,7 +113,7 @@ namespace Law
 
 namespace MagmaLaw
 
-def symm {α} (l : MagmaLaw α) : MagmaLaw α := {lhs := l.rhs, rhs:=l.lhs}
+def symm {α} (l : MagmaLaw α) : MagmaLaw α := {lhs := l.rhs, rhs := l.lhs}
 
 @[simp]
 theorem symm_symm {α} (l : MagmaLaw α) : l.symm.symm = l :=
