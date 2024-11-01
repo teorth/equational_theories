@@ -654,10 +654,4 @@ theorem Equation1661_not_implies_Equation4314 :
 @[equational_result]
 theorem Equation1979_not_implies_Equation4606 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation4606 G := by
   obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation4314
-  refine ⟨Op G', opMagma, ?_, ?_⟩
-  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
-    rwa [h3] at h1
-  · have h4 : Equation4314 G' ↔ Equation4606 (Op G') := by
-      unfold Equation4314 Equation4606
-      aesop
-    rwa [h4] at h2
+  exact ⟨Op G', opMagma, fun _ _ _ => h1 _ _ _, fun H => h2 fun _ _ => (H _ _).symm⟩
