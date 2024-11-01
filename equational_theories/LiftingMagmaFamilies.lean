@@ -31,10 +31,10 @@ instance instDecidableSatisfiesLaw [DecidableEq α] (law : MagmaLaw α) : Decida
   decidable_of_decidable_of_iff (MagmaLaw.models_iff_satisfies_ι G law).symm
 
 lemma LiftingMagmaFamily.establishNonimplication {law law' : MagmaLaw Nat} {P P' : (M : Type _) → [Magma M] → Prop}
-  (hlaw_iff : ∀ (G : Type _) [Magma G], G ⊧ law ↔ P G) (hlaw'_iff : ∀ (G : Type _) [Magma G], G ⊧ law' ↔ P' G)
+  (hlaw_iff : ∀ {G} [Magma G], G ⊧ law ↔ P G) (hlaw'_iff : ∀ {G} [Magma G], G ⊧ law' ↔ P' G)
   (h : G ℕ ⊧ law := by decide) (h' : ¬ G ℕ ⊧ law' := by decide) :
     ∃ (G : Type) (_ : Magma G), P G ∧ ¬ P' G :=
-  ⟨G ℕ, inferInstance, (hlaw_iff _).mp h, (not_iff_not.mpr (hlaw'_iff _)).mp h'⟩
+  ⟨G ℕ, inferInstance, hlaw_iff.mp h, (not_iff_not.mpr hlaw'_iff).mp h'⟩
 
 section Instances
 

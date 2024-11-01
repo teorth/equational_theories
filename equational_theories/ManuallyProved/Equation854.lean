@@ -13,7 +13,7 @@ def G := FreeMagmaWithLaws ℕ {Law854}
 instance : Magma G := inferInstanceAs (Magma (FreeMagmaWithLaws ..))
 
 theorem law : ∀ (x y z : G), x = x ◇ ((y ◇ z) ◇ (x ◇ z)) :=
-  (Law854.models_iff _).1 <| FreeMagmaWithLaws.isModel _ _ _ rfl
+  Law854.models_iff.1 <| FreeMagmaWithLaws.isModel _ _ _ rfl
 
 theorem l378 (x y : G) : x ◇ y = (x ◇ y) ◇ y := by
   have yy := (law y y ((y ◇ y) ◇ (y ◇ y))).symm; rw [← law y y y] at yy
@@ -41,25 +41,25 @@ def Y : G := ↟(.Leaf 1)
 theorem not_l4 : X ≠ X ◇ Y := by
   refine fun h => let ⟨G, _, h1, h2⟩ := not_l1038'; h2 fun x y => ?_
   let φ := FreeMagmaWithLaws.evalHom (fun | 0 => x | _ => (y ◇ (x ◇ y)) ◇ x) <|
-    Law.satisfiesSet_singleton.2 <| (Law854.models_iff _).2 h1
+    Law.satisfiesSet_singleton.2 <| Law854.models_iff.2 h1
   simpa [MagmaHom.map_op, X, Y, φ] using congrArg φ h
 
 theorem not_l10 : X ≠ X ◇ (Y ◇ X) := by
   refine fun h => let ⟨G, _, h1, h2⟩ := not_l1038'; h2 fun x y => ?_
   let φ := FreeMagmaWithLaws.evalHom (fun | 0 => x | _ => y ◇ (x ◇ y)) <|
-    Law.satisfiesSet_singleton.2 <| (Law854.models_iff _).2 h1
+    Law.satisfiesSet_singleton.2 <| Law854.models_iff.2 h1
   simpa [MagmaHom.map_op, X, Y, φ] using congrArg φ h
 
 theorem not_l10_2 : Y ≠ Y ◇ (X ◇ Y) := by
   refine fun h => let ⟨G, _, h1, h2⟩ := not_l1038'; h2 fun x y => ?_
   let φ := FreeMagmaWithLaws.evalHom (fun | 1 => x | _ => y ◇ (x ◇ y)) <|
-    Law.satisfiesSet_singleton.2 <| (Law854.models_iff _).2 h1
+    Law.satisfiesSet_singleton.2 <| Law854.models_iff.2 h1
   simpa [MagmaHom.map_op, X, Y, φ] using congrArg φ h
 
 theorem not_l325 : X ◇ Y ≠ X ◇ (Y ◇ X) := by
   refine fun h => let ⟨G, _, h1, h2⟩ := not_l307'; h2 fun x => ?_
   let φ := FreeMagmaWithLaws.evalHom (fun _:ℕ => x) <|
-    Law.satisfiesSet_singleton.2 <| (Law854.models_iff _).2 h1
+    Law.satisfiesSet_singleton.2 <| Law854.models_iff.2 h1
   simpa [MagmaHom.map_op, X, Y, φ] using congrArg φ h
 
 inductive Invariant (a b : G) : FreeMagma ℕ → Prop
