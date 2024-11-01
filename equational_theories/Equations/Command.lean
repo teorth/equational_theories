@@ -139,7 +139,7 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
   addAndCompile <| .thmDecl {
     name := thmName
     levelParams := [`u]
-    type := q(∀ (G : Type u) [Magma G], G ⊧ $lawConst ↔ $eqConst G)
+    type := q(∀ {G : Type u} [Magma G], G ⊧ $lawConst ↔ $eqConst G)
     value := q(models_iff_n.{u} $lawConst $n $this)
   }
   addMarkup thmName

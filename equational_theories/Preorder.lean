@@ -95,8 +95,7 @@ theorem Law.leq_fin_leq_nat {n : Nat} {l₁ l₂ : MagmaLaw (Fin n)} (h : l₁ �
   implies_fin_implies_nat h
 
 theorem reindex_iff {α β} {Law1 : MagmaLaw α} {Law2 : MagmaLaw β} (f g)
-    (h1 : Law1.map f = Law2)
-    (h2 : Law2.map g = Law1) :
-    Law1.iff Law2 := fun _ _ => ⟨h1 ▸ satisfies_map _, h2 ▸ satisfies_map _⟩
+    (h1 : Law1.map f = Law2) (h2 : Law2.map g = Law1) : Law1.iff Law2 :=
+  fun _ _ => ⟨h1 ▸ satisfies_map _, h2 ▸ satisfies_map _⟩
 
 end Law.MagmaLaw
