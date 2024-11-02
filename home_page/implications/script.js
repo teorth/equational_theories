@@ -405,12 +405,12 @@ function renderImplications(index) {
                 maybe_prove = ` <a href='${proofhref}'>Prove This!</a>`;
             } else if (isUnknown(status, true)) { // conjectured
 	            let proofhref = gen_proof_url(forward, backward, isImplies(status, false, false) ? "yes" : "no");
-                maybe_prove = ` <a href='${proofhref}'>Prove This!</a>`;
+                maybe_prove = ` <a href='${proofhref}'>Prove This!</a> <a href="show_proof.html?${forward+1},${backward+1}" target="_blank">Show Proof</a>`;
             } else {
                 var does_implies = isImplies(status, false, false);
                 let proofhref;
                 proofhref = gen_proof_url(forward, backward, does_implies ? "yes" : "no");
-                maybe_prove = ` <a href='${proofhref}'>Try This!</a>`;
+                maybe_prove = ` <a href='${proofhref}'>Try This!</a> <a href="show_proof.html?${forward+1},${backward+1}" target="_blank">Show Proof</a>`;
             }
             const item = `<div uid=${i} class="implication-item ${isspecial} ${ids[status]} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}${maybe_prove}</div>`;
 
