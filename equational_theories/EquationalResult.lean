@@ -39,6 +39,8 @@ structure Entry where
   name : Name
   /-- Name of the file where this declaration was found. -/
   filename : String
+  /-- Line number of the declaration, if available -/
+  line : Option Nat
   /-- Which kind of result is it? -/
   variant : EntryVariant
   /-- Is it proven? -/
@@ -46,7 +48,7 @@ structure Entry where
 deriving Lean.ToJson, Lean.FromJson, Inhabited
 
 def Entry.toConjecture : Entry → Entry
-  | .mk n f v _ => ⟨n, f, v, false⟩
+  | .mk n f l v _ => ⟨n, f, l, v, false⟩
 
 initialize equationalResultsExtension : SimplePersistentEnvExtension Entry (Array Entry) ←
   registerSimplePersistentEnvExtension {
@@ -79,8 +81,10 @@ initialize equationalResultAttr : Unit ←
     name  := `equational_result
     descr := equationalResultHelpString
     applicationTime := AttributeApplicationTime.afterCompilation
-    add   := fun declName _stx _attrKind => do
-       let filename := (←read).fileName
+    add   := fun declName stx _attrKind => do
+       let ctx ← read
+       let filename := ctx.fileName
+       let line := stx.getPos?.map λ pos => ctx.fileMap.toPosition pos |>.line
        discard <| Meta.MetaM.run do
        let mut is_conjecture := false
        let axioms ← Lean.collectAxioms declName
@@ -94,11 +98,11 @@ initialize equationalResultAttr : Unit ←
        let entry ← match info with
                    | .thmInfo  (val : TheoremVal) =>
                      if let some imp ← parseImplication val.type then
-                       pure <| ⟨val.name, filename, .implication imp, true⟩
+                       pure <| ⟨val.name, filename, line, .implication imp, true⟩
                      else if let some facts ← parseFacts val.type then
-                       pure <| ⟨val.name, filename, .facts facts, true⟩
+                       pure <| ⟨val.name, filename, line, .facts facts, true⟩
                      else if let some uncond ← parseUnconditionalEquation val.type then
-                       pure <| ⟨val.name, filename, .unconditional uncond, true⟩
+                       pure <| ⟨val.name, filename, line, .unconditional uncond, true⟩
                      else
                        throwError "failed to match type of @[equational_result] theorem"
                    | _ => throwError "@[equational_result] is only allowed on theorems"
@@ -146,7 +150,7 @@ syntax (name := printEquationalResults) "#print_equational_results" : command
 elab_rules : command
 | `(command| #print_equational_results) => do
   let rs ← extractTheorems
-  for ⟨name, _filename, res, _⟩ in rs do
+  for ⟨name, _filename, _line, res, _⟩ in rs do
     match res with
     | .implication ⟨lhs, rhs, _⟩ => println! "{name}: {lhs} → {rhs}"
     | .facts ⟨satisfied, refuted, _⟩ => println! "{name}: {satisfied} // {refuted}"

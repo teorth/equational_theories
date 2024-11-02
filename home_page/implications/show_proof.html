@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Show Proof</title>
+  <script src="implications.js?6"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+    a { text-decoration: inherit; color: inherit; }
+    div { margin: 0.5em; }
+    .arrow { font-size: x-large; margin-right: 0.5em; }
+    .implication, .nonimplication { margin-left: 2em; display: flex; align-items: center; }
+  </style>
+</head>
+<body>
+<script>
+"use strict";
+
+let t1 = Date.now();
+const [eq1, eq2] = window.location.search.substring(1).split(",");
+
+const dualsIndex = {};
+for (let pair of duals) {
+  dualsIndex[pair[0]] = pair[1];
+  dualsIndex[pair[1]] = pair[0];
+}
+function dual(index) {
+  return dualsIndex[index] || index;
+}
+
+function neg(x) {
+  return `${x}_neg`;
+}
+
+let graph = {};
+function addEdge(lhs, rhs, weight, filename, line, name, isConjecture, isDual) {
+  if (!graph[lhs]) graph[lhs] = {};
+  if (isDual) weight *= 3;
+  if (isConjecture) weight *= 1000;
+  if (graph[lhs].hasOwnProperty(rhs) && graph[lhs][rhs].weight <= weight)
+    return;
+  graph[lhs][rhs] = {weight, filename, line, name, isConjecture, isDual};
+}
+
+let unconditionals = new Set(), all_eqs = new Set();
+let ctr = 0;
+for (const [filename, entries] of Object.entries(full_entries)) {
+  for (const entry of entries) {
+    const isConjecture = entry[1] === "?";
+    const fields = entry.split("|");
+    const line = fields[1], name = fields[2];
+    switch (entry[0]) {
+      case "u":
+        all_eqs.add(fields[3]);
+        unconditionals.add({eq: fields[3], filename, line, name, isConjecture});
+        break;
+      case "i":
+        const lhs = fields[3], rhs = fields[4];
+        all_eqs.add(lhs); all_eqs.add(rhs);
+        addEdge(rhs, lhs, 1, filename, line, name, isConjecture, false);
+        addEdge(neg(rhs), neg(lhs), 1, filename, line, name, isConjecture, false);
+        addEdge(dual(rhs), dual(lhs), 1, filename, line, name, isConjecture, true);
+        addEdge(neg(dual(rhs)), neg(dual(lhs)), 1, filename, line, name, isConjecture, true);
+        break;
+      case "f":
+        const satisfied = JSON.parse(fields[3]), refuted = JSON.parse(fields[4]);
+        const node = `Facts${ctr}`; ctr++;
+        const node_dual = `Facts${ctr}`; ctr++;
+        for (const eq of satisfied) {
+          all_eqs.add(eq.toString());
+          addEdge(eq, node, 1, filename, line, name, isConjecture, false);
+          addEdge(dual(eq), node_dual, 1, filename, line, name, isConjecture, true);
+        }
+        for (const eq of refuted) {
+          all_eqs.add(eq.toString());
+          addEdge(node, neg(eq), 1, filename, line, name, isConjecture, false);
+          addEdge(node_dual, neg(dual(eq)), 1, filename, line, name, isConjecture, true);
+        }
+        break;
+    }
+  }
+}
+for (const {eq: unconditional, filename, line, name, isConjecture} of unconditionals) {
+  for (const eq of all_eqs) {
+    addEdge(unconditional, eq, 2, filename, line, name, isConjecture, false);
+    addEdge(neg(unconditional), neg(eq), 2, filename, line, name, isConjecture, false);
+    addEdge(dual(unconditional), dual(eq), 2, filename, line, name, isConjecture, true);
+    addEdge(neg(dual(unconditional)), neg(dual(eq)), 2, filename, line, name, isConjecture, true);
+  }
+}
+
+function find_lowest_weight_path(src, dst) {
+  // Weights are small integers, so the heap from
+  //     https://arxiv.org/abs/1505.05033
+  // is pretty good (and easy to implement)
+  let heap = [[src]];
+  let shortest = {}; shortest[src] = 0;
+  let back_pointers = {};
+
+  for (let weight = 0; weight < heap.length; weight++) {
+    if (heap[weight] === undefined)
+      continue;
+    for (let node of heap[weight]) {
+      if (node === dst) {
+        let path = [node];
+        while (back_pointers[node] !== undefined) {
+          path.push(back_pointers[node]);
+          node = back_pointers[node];
+        }
+        return path;
+      }
+      if (shortest[node] < weight)
+        continue;
+      if (!graph.hasOwnProperty(node))
+        continue;
+      for (let [next, {weight: next_weight}] of Object.entries(graph[node])) {
+        next_weight += weight;
+        if (shortest[next] !== undefined && shortest[next] <= next_weight)
+          continue;
+        shortest[next] = next_weight;
+        back_pointers[next] = node;
+        if (heap[next_weight] === undefined)
+          heap[next_weight] = [];
+        heap[next_weight].push(next);
+      }
+    }
+  }
+  // Keeping more standard Dijkstra code, in case of bugs in the above
+  // let visited = new Set(), queue = [{node: src, path: [src], weight: 0}];
+  // while (queue.length > 0) {
+  //   const {node, path, weight} = queue.shift();
+  //   if (node === dst) return path;
+  //   if (visited.has(node)) continue;
+  //   visited.add(node);
+  //   for (const [next, {weight: next_weight}] of Object.entries(graph[node] || {})) {
+  //     queue.push({node: next, path: [...path, next], weight: weight + next_weight});
+  //   }
+  //   queue.sort((a, b) => a.weight - b.weight);
+  // }
+  // return null;
+}
+
+let t2 = Date.now();
+
+let implies_path = find_lowest_weight_path(eq2, eq1);
+let not_implies_path = find_lowest_weight_path(eq1, neg(eq2));
+
+let t3 = Date.now();
+console.log(`${t2 - t1}ms to build graph, ${t3 - t2}ms to find paths`);
+
+function render_equation(node) {
+  const eq = parseInt(node.toString().replace("_neg", ""));
+  const url = `./?${eq}`;
+  document.body.innerHTML += `
+    <div class="equation">
+      <a href="${url}" target="_blank">${equations[eq - 1]}</a>
+    </div>
+  `;
+}
+
+function render_implication(node1, node2, reversed) {
+  const {filename, line, name, isConjecture, isDual} = graph[node2][node1];
+  const url = `https://github.com/teorth/equational_theories/blob/main/${filename}#L${line}`;
+  let extra_text = '';
+  if (isDual) {
+    const eq1 = parseInt(node1.toString().replace("_neg", ""));
+    const eq2 = parseInt(node2.toString().replace("_neg", ""));
+    extra_text += ` (proved for duals ${dual(eq1)}, ${dual(eq2)})`;
+  }
+  if (isConjecture) extra_text += " (conjecture)";
+  const arrow = reversed ? "⇑" : "⇓";
+  document.body.innerHTML += `
+    <div class="implication"><span class="arrow">${arrow}</span><a href="${url}" target="_blank">${name}${extra_text}</a></div>
+  `;
+}
+
+function render_non_implication(node1, facts, node2) {
+  const {filename, line, name, isConjecture, isDual} = graph[node1][facts];
+  const url = `https://github.com/teorth/equational_theories/blob/main/${filename}#L${line}`;
+  let extra_text = '';
+  if (isDual) {
+    const eq1 = parseInt(node1.toString().replace("_neg", ""));
+    const eq2 = parseInt(node2.toString().replace("_neg", ""));
+    extra_text += ` (proved for duals ${dual(eq1)}, ${dual(eq2)})`;
+  }
+  if (isConjecture) extra_text += " (conjecture)";
+  document.body.innerHTML += `
+    <div class="nonimplication"><span class="arrow" style="transform:rotate(0.25turn)">⇏</span><a href="${url}" target="_blank">${name}${extra_text}</a></div>
+  `;
+}
+
+function render_path(path) {
+  console.log(path);
+  render_equation(path[0]);
+  for (let i = 1; i < path.length; i++) {
+    if (path[i-1].startsWith("Facts"))
+      continue;
+    if (path[i].startsWith("Facts")) {
+      render_non_implication(path[i - 1], path[i], path[i + 1]);
+      render_equation(path[i + 1]);
+    } else {
+      render_implication(path[i - 1], path[i]);
+      render_equation(path[i]);
+    }
+  }
+}
+
+if (implies_path) {
+  console.log(implies_path);
+  document.title = `${eq1} ⇒ ${eq2} | Proof`;
+  document.body.innerHTML += `<h1>Proof of ${eq1} ⇒ ${eq2}</h1>`;
+  render_equation(implies_path[0]);
+  for (let i = 1; i < implies_path.length; i++) {
+    render_implication(implies_path[i - 1], implies_path[i], false);
+    render_equation(implies_path[i]);
+  }
+}
+
+if (not_implies_path) {
+  not_implies_path = not_implies_path.reverse();
+  console.log(not_implies_path);
+  document.title = `${eq1} ⇏ ${eq2} | Proof`;
+  document.body.innerHTML += `<h1>Proof of ${eq1} ⇏ ${eq2}</h1>`;
+  render_equation(not_implies_path[0]);
+  for (let i = 1; i < not_implies_path.length; i++) {
+    if (not_implies_path[i-1].startsWith("Facts"))
+      continue;
+    if (not_implies_path[i].startsWith("Facts")) {
+      render_non_implication(not_implies_path[i - 1], not_implies_path[i], not_implies_path[i + 1]);
+      render_equation(not_implies_path[i + 1]);
+    } else {
+      render_implication(not_implies_path[i], not_implies_path[i - 1], true);
+      render_equation(not_implies_path[i]);
+    }
+  }
+}
+</script>
+</body>
+</html>

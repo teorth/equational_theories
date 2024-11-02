@@ -151,8 +151,9 @@ jobs:
       - name: Generate home_page/implications/implications.js
         run: |
           ~/.elan/bin/lake exe extract_implications outcomes > /tmp/out.json
+          ~/.elan/bin/lake exe extract_implications raw --full-entries > /tmp/out2.json
           pip install markdown
-          python scripts/generate_equation_implication_js.py /tmp/out.json
+          python scripts/generate_equation_implication_js.py /tmp/out.json /tmp/out2.json
 
       - name: Generate the Finite Magma Explorer website
         run: |
