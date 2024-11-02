@@ -233,7 +233,7 @@ Suppose one has a partial 854 magma on $\N$ that is only finitely defined.  Then
 \begin{proof}  Apply the usual greedy algorithm.
 \end{proof}
 
-\begin{corollary}[854 does not not imply 413]\leanok\lean{Refutation_854.not_413_1045}  There is an 854 magma which does not obey the 413 law $x = x \op (x \op (x \op (y \op x)))$.
+\begin{corollary}[854 does not not imply 413]\leanok\lean{Refutation_854.not_413_1045}\label{854-413}  There is an 854 magma which does not obey the 413 law $x = x \op (x \op (x \op (y \op x)))$.
 \end{corollary}
 
 \begin{proof} Create a partial magma by imposing the laws $1 \op 0 = 2$, $0 \op 2 = 3$, $2 \op 0 = 2$, $3 \op 2 = 3$.  One can check that this is a partial magma.  We then extend it to a global magma using \Cref{extend-854}.  We claim that we have the 413 violation
@@ -243,10 +243,135 @@ Suppose one has a partial 854 magma on $\N$ that is only finitely defined.  Then
 Indeed this is immediate from the auxiliary law.
 \end{proof}
 
-\begin{corollary}[854 does not not imply 1045]\leanok\lean{Refutation_854.not_413_1045}  There is an 854 magma which does not obey the 1045 law $x = x \op ((y \op (y \op x)) \op x)$.
+\begin{corollary}[854 does not not imply 1045]\leanok\lean{Refutation_854.not_413_1045}\label{854-1045}  There is an 854 magma which does not obey the 1045 law $x = x \op ((y \op (y \op x)) \op x)$.
 \end{corollary}
 
 \begin{proof} Similar to previous, but start with the seed
 $$ 0 \op 0 = 2; 0 \op 1 = 0 \op 2 = 0; 1 \op 2 = 3; 2 \op 0 = 2 \op 1 = 2 \op 3 = 2; 3 \op 2 = 3$$
 which already violates the law with $x=1,y=0$, and can be verified to be a partial 854 magma.
 \end{proof}
+
+\section{The free 854 magma}
+
+In this section we explicitly describe the free magma $M_{X, 854}$ on some set $X$ of generators relative to the 854 law.
+
+We recall the free magma $M_X$ from \Cref{free-magma-def}, though to avoid confusion we will denote the magma operation on $M_X$ by $*$ rather than $\op$.  Recall that every word $w$ in $M_X$ has a length in $\N$, which is zero if $w$ is a generator in $X$, and is the sum of the lengths of $w_L$ and $w_R$ plus one if instead $w$ is of the form $w_L * w_R$ for the left and right components $w_L, w_R$ of $w$ (which are uniquely defined by $w$).  We iterate this notation, for instance $w_{RL}$ is the left-component of $w_R$ (if it exists), thus $w = w_L * (w_{RL} * w_{RR})$ in this case.
+
+We shall shortly define a relation $\to$ on $M_X$.  To motivate this relation, we make the following observation about 854 magmas:
+
+\begin{lemma}[The 854 relation]\label{854-relation}  Let $M$ be an $854$ magma, and let $\to$ be the associated operation, thus $x \to y$ if $y \op x = y$.  Then $x \to y$ holds under any of the following assumptions:
+  \begin{itemize}
+  \item (i) $y = a \op x$ for some $a$.
+  \item (ii) $x = a \op (y \op b)$ for some $a,b$ with $b \to a$.
+  \item (iii) $y = a \op (x \op b)$ for some $a,b$ with $b \to a$ and $x \op b \to x$.
+  \item (iv) $x = a \op y$ for some $a,z$ with $z \to a, y$.
+  \item (v) $x = a \op y$ for some $a$, with either $a=y$, $a = y \op z$, or $y = a \op z$ for some $z$.
+  \end{itemize}
+\end{lemma}
+
+\begin{proof}  Case (i) follows from \eqref{378}.  For (ii), we observe
+$$ y \op x = y \op ((a \op b) \op (y \op b)) = y$$
+as required.  For (iii), we see from (ii) that $y \to x$, and from (i) we have $x \op b \to y$, and then
+$$ y \op x = y \op ((x \op (x \op b)) \op (y \op (x \op b))) = y$$
+as required.  For (iv), we have
+$$ y \op x = y \op ((a \op z) \op (y \op z)) = y$$
+as required.  Finally, for (v), in the $a=y$ case we have from \eqref{8} that
+$$ y \op x = y \op ((y \op y^2) \op (y \op y^2)) = y,$$
+in the $a = y \op z$ case we have from \eqref{8} that
+$$ y \op x = y \op (((y \op z) \op (y \op z)^2) \op (y \op (y \op z)^2)) = y,$$
+and finally in the $y = a \op z$ case we have from \eqref{8} that
+$$ y \op x = y \op ( (a \op (a \op z)^2) \op ((a \op z) \op (a \op z)^2)) = y,$$
+so the claim follows in all cases.
+\end{proof}
+
+Now we define the operation $\to$ on $M_X$ by the following rule.
+
+\begin{definition}[Relation on the free group]\label{free-relate} For $x,y \in M_X$, we have $x \to y$ if and only if one of the following holds:
+\begin{itemize}
+\item (i) $x = y_R$.
+\item (ii) $y = x_{RL}$ and $x_{RR} \to x_L$.
+\item (iii) $x = y_{RL}$, $y_{RR} \to y_L$, and $y_R \to y_{RL}$.
+\item (iv) $y = x_R$, and there exists $z \in \{ x_{LR}, x_{LRL}, x_{RR}, x_{RRL} \}$ such that $z \to x_L$ and $z \to x_R$.
+\item (v)  $y = x_R$, and one of the claims $x_L = x_R$, $x_L = x_{RL}$, or $x_R = x_{LL}$ holds.
+\end{itemize}
+Here we adopt the convention that a claim can only hold if all terms in it are well-defined, for instance claim (ii) can only hold if $x_{RL}$ is well-defined.
+\end{definition}
+
+If we define the ``max-length'' of a claim $x \to y$ to be the maximum of the length of $x$ and the length of $y$, we see that the verification of a claim $x \to y$ only involves claims $x' \to y'$ of strictly smaller max-length.  Thus this definition is well-defined.  We also see that if $x \to y$, then exactly one of
+\begin{equation}\label{one}
+  x=y_R, x=y_{RL}, y = x_R, y=x_{RL}
+\end{equation}
+hold; in particular, we cannot have $x \to x$ for any $x$.
+
+We then define a new operation $\diamond$ on $M_X$ by the rule $x \diamond y = x$ if $y \to x$, and $x \diamond y = x*y$ otherwise. Thus, by definition, $y \to x$ if and only if $x \diamond y = x$.  We then define $M_{X,854}$ to be the magma generated by $X$ with the operation $\diamond$; thus, $w \in M_{X,854}$ if and only if either $w \in X$, or else $w_L, w_R \in M_{X,854}$ and $w_R \not \to w_L$.
+
+\begin{theorem}[Free 854 magma]\label{free-854}  The magma $M_{X,854}$ is a free 854 magma on $X$.
+\end{theorem}
+
+\begin{proof}  Let  $f: X \to M$ be a function from $X$ to an $854$ magma $M$, then $\varphi_f$ is a homomorphism from $M_X$ (with the operation $*$) to $M$.  We claim that the restriction of $\varphi_f$ to $M_{X,854}$ is a homomorphism from $M_{X,854}$ (with operation $\diamond$) to $M$.  Since $\varphi_f$ was already a homomorphism for $*$, it suffices to show that $\varphi_f$ preserves $\to$: that is to say, for any $x,y \in M_{X,854}$, that $x \to y$ implies $\varphi_f(x) \to \varphi_f(y)$.  By definition, one of the five scenarios (i)-(v) in \Cref{free-relate} holds, and in each case one can establish the claim from the corresponding claim of Lemma \ref{854-relation} and an induction on the max-length of the claim $x \to y$.
+
+It remains to show that $M_{854}$ actually obeys 854, that is to say that
+$$ (y \op z) \op (x \op z) \to x$$
+for all $x,y,z \in M_{854}$.  Writing $w = y \op z$, we have $z \to w$ by \Cref{free-relate}(i), and we need to show that $w \op (x \op z) \to x$.  We divide into four cases.
+
+Case 1: $x \op z \to w$, $z \to x$.  Here we have $x \op z = x$ and $w \op (x \op z) = w$.  We now have $z \to x,w$ and $x \to w$, and we need to show that $w \to x$.
+
+From \eqref{one} we know that one of
+\begin{equation}\label{one-1}
+  z = x_R, z = x_{RL}, x = z_R, x = z_{RL}
+\end{equation}
+holds, one of
+\begin{equation}\label{one-2}
+  z = w_R, z = w_{RL}, w = z_R, w = z_{RL}
+\end{equation}
+holds, and one of
+\begin{equation}\label{one-3}
+  x = w_R, x = w_{RL}, w = x_R, w = x_{RL}
+\end{equation}
+holds.
+
+We split into subcases using \eqref{one-3}.
+\begin{itemize}
+  \item If $x = w_R$ then the claim follows from \Cref{free-relate}(i).
+  \item If $w = x_{RL}$ then from \Cref{free-relate}(iii) we have $x_{RR} \to x_L$, and then the claim follows from \Cref{free-relate}(ii).
+  \item If $x = w_{RL}$, then $w_{RR} \to w_L$ by \Cref{free-relate}(ii) and from \Cref{free-relate}(iii) we will be done if we can show that $w_R \to w_{RL}$.  If $z = w_R$ then this follows from $z \to x$.  The claim $z = w_{RL}$ is not compatible with \eqref{one-1}, since $z=x$ in that case. If $w = z_R$ then $x = z_{RRL}$, and this is only compatible with \eqref{one-1} if $x = z_{RL}$, thus $z = a * (x * (x * b))$ and $w = x  * (x * b)$ for some $a,b$.  In order to have $x = w_{RL}$ in \eqref{one-3}, we must have $b \to x$ by \Cref{free-relate}(iii), but then $x*b$ would not lie in $M_{854}$, a contradiction.
+  \item If $w = x_R$, then we cannot then have $z = x_R$ as then $z=w$ which is incompatible with \eqref{one-2}.  If $z = x_{RL} = w_L$ then $x_{RR} \to x_L$ by \Cref{free-relate}(ii), and the only available options from \eqref{one-2} are $z = w_R$ and $z = w_{RL}$.  For $z=w_R$ we have $w = z * z$ and $x = a * (z * z)$ for some $a$ with $z \to a = x_L$.  Since $z \to z*z = x_R$ as well by \Cref{free-relate}(i), and $z = x_{RR}$, we obtain $w \to x$ as required from \Cref{free-relate}(iv).
+\end{itemize}
+
+Case 2: $x \op z \to w$, $z \not \to x$.  We now have $x * z, z \to w$, and we need to show that $w \to x$.  From \eqref{one} we know that one of
+\begin{equation}\label{wz-1}
+ w = (x * z)_R, w = (x * z)_{RL}, x * z = w_R, x * z = w_{RL}
+\end{equation}
+holds, and that one of
+\begin{equation}\label{wz}
+  w =  z_R, w = z_{RL}, z = w_R, z = w_{RL}
+\end{equation}
+holds.
+
+We split into cases depending on \eqref{wz-1}.
+\begin{itemize}
+\item If $w = (x*z)_R$ then $w=z$, which is incompatible with \eqref{wz}.
+\item If $w = (x*z)_{RL}$ then $w = z_L$ and $z_R \to x$ by \Cref{free-relate}(ii). Only the first two possibilities of \eqref{wz} are compatible with $w=z_L$.  In the first case we are done since $z_R \to x$ and $w = z_R$.  In the second case, we have $z = w * (w * a)$ for some $a$ with $a \to w$ (from \Cref{free-relate}(ii) and $z \to w$), but then $w * a$ will not lie in $M_{854}$, contradiction.
+\item If $x*z = w_R$  then $w$ is longer than $z$ and $z \neq w_R$.  Comparing this with \eqref{wz} we see that the only compatible option is $z = w_{RL}$, thus $x=z$, and then $w = a * (x * x)$ and $x \to a$ by \Cref{free-relate}(iii), and the claim follows from \Cref{free-relate}(ii).
+\item If $x * z = w_{RL}$, then $w = a * ((x *z) * b)$ for some $a,b$.  Then $w$, $w_R$, and $w_{RL}$ are all longer than $z$ and none of the options in \eqref{wz} can hold, a contradiction.
+\end{itemize}
+
+
+
+Case 3: $x \op z \not \to w$, $z \to x$.  We now have $z \to x, w$, and we need to show that $w * x \to x$.
+
+If $z \in \{ w_R, w_{RL}, x_R, x_{RL} \}$, then the claim follows from \Cref{free-relate}(iv), so we may assume that this is not the case.
+By \eqref{one}, we then know that one of
+$$ x = z_R, x = z_{RL}$$
+holds, and also one of
+$$
+ w =  z_R, w = z_{RL}$$
+ holds. Thus, we either have one of
+$$ w = x, w = x_L, x = w_L.$$
+But in any of these three cases the claim follows from \Cref{free-relate}(v).
+
+Case 4: $x \op z \not \to w$, $z \not \to x$.  Then $x = (w \op (x \op z))_{RL}$ and $z \to w$, so the claim follows from \Cref{free-relate}(ii).
+
+\end{proof}
+
+With the explicit description of $M_{X,854}$ we can now refute various laws.  Suppose for instance that $x,y$ are generators in $X$.  We cannot have $y \to x$ (as none of \eqref{one} hold), so $y * x \in M_{X,854}$.  We also cannot have $y * x \to x$ (by inspection of the cases in \Cref{free-relate}(iv), \Cref{free-relate}(v)), so $x * (y * x)$ lies in $M_{X,854}$.  Then $x * (y * x) \not \to x$ (by \eqref{one}), so $x * (x * (y * x))$ lies in $M_{X,854}$; finally, $x * (x * (y * x)) \not \to x$ (this follows from \Cref{free-relate}(ii) since $y * x \not \to x$), so $x * (x * (x * (y * x)))$ lies in $M_{X,854}$.  This gives an alternate proof of \Cref{854-413}.  One can similarly establish \Cref{854-1045}.
