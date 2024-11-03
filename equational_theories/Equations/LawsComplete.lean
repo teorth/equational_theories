@@ -348,8 +348,6 @@ engineering is necessary if we insist on using `by decide` here.
 theorem testLawsUpto4_computation :
   testLawsUpto 4 (fun l => laws[findMagmaLaw l] = l) = true := by rsimp_decide
 
-#exit
-
 theorem laws_complete' :
     ∀ l : Law.MagmaLaw Nat, l.forks ≤ 4 → l.is_canonical → laws[findMagmaLaw l] = l := by
   simpa [decide_eq_true_eq]
