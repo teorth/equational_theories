@@ -67,22 +67,19 @@ Binary search on `laws` for a given law. If the given law is not in `laws`, an a
 returned.
 -/
 def findMagmaLaw (l : Law.NatMagmaLaw) : Nat :=
-  go 0 laws.size (laws.size+1) (by omega)
+  go 0 laws.size
 where
-  go lb w fuel (hfuel : w < fuel) := match fuel with
-    | 0 => by contradiction
-    | fuel+1 =>
-      if _ : w ≤ 1 then
-        lb
+  go lb w :=
+    if w ≤ 1 then
+      lb
+    else
+      let w' := w/2
+      let mid := lb + w'
+      let l' := laws[mid]
+      if l.comp l' = .lt then
+        go lb w'
       else
-        let w' := w/2
-        let mid := lb + w'
-        let l' := laws[mid]
-        if l.comp l' = .lt then
-          go lb w' fuel (by omega)
-        else
-          go mid (w-w') fuel (by omega)
-  termination_by structural fuel
+        go mid (w-w')
 
 /-- The largest used variable. -/
 def FreeMagma.max : FreeMagma Nat → Nat
