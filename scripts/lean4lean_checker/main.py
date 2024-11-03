@@ -123,7 +123,7 @@ class Lean4LeanChecker:
 
         os.chdir(self.topPath)
         print("Lean4lean check begins!\n")
-        check_ret = subprocess.run(
+        return subprocess.run(
             [
                 "env",
                 "LEAN_NUM_THREADS=2",
@@ -134,13 +134,13 @@ class Lean4LeanChecker:
                 self.project_name,
             ]
         ).returncode
-        if check_ret == 0:
-            print("Lean4lean check was successful!!\n")
-            self.remove_old_l4l()
-            sys.exit(0)
-        else:
-            self.remove_old_l4l()
-            sys.exit(1)
+        # if check_ret == 0:
+        #    print("Lean4lean check was successful!!\n")
+        #    self.remove_old_l4l()
+        #    sys.exit(0)
+        #else:
+        #    self.remove_old_l4l()
+        #    sys.exit(1)
 
 
 if __name__ == "__main__":
