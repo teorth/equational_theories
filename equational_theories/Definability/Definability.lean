@@ -477,7 +477,7 @@ theorem Structural.trans (h₁₂ : L₂.StructuralFrom L₁) (h₂₃ : L₃.St
 
 @[simp]
 theorem TermStructural.refl : L₁.TermStructuralFrom L₁ :=
-  termStructural_of_implies id
+  termStructural_of_implies L₁.implies_refl
 
 @[simp]
 theorem TermDefinable.refl : L₁.TermDefinableFrom L₁ :=
