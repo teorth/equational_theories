@@ -129,6 +129,8 @@ theorem map_comp {α β γ} (f : α → β) (g : β → γ) (m : MagmaLaw α) :
     (m.map f).map g = m.map (g ∘ f) := by
   simp [map, fmapHom_comp']
 
+theorem map_symm {α β} (f : α → β) (m : MagmaLaw α) : m.symm.map f = (m.map f).symm := rfl
+
 def Mem {α} (a : α) (m : MagmaLaw α) : Prop :=
   m.lhs.Mem a ∨ m.rhs.Mem a
 
