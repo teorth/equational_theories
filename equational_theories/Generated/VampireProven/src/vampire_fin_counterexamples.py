@@ -68,7 +68,7 @@ disproofs = open(
     f"equational_theories/Generated/VampireProven/Disproofs{dpind}.lean", "w"
 )
 print(
-    """import Mathlib.Data.Finite.Basic
+    """import Mathlib.Data.Finite.Prod
 import equational_theories.Equations.All
 import equational_theories.MemoFinOp
 import equational_theories.DecideBang
