@@ -133,3 +133,21 @@ We have the following convenient completion property:
    \item Refuting 3511: Let $x,y,z,w$ be as in the claim Anti-3511, then select $G_*$ to be the directed graph with edges $(x,0) \to (z,2) \to (y,1)$ and $(z,2) \to (w,3) \to (x,0)$. One can check that this is a partial extension, and that $G$ will refute 3511 with $x,y$ replaced by $(x,0),(y,1)$.
   \end{itemize}
 \end{proof}
+
+
+\section{Twisting a weak central groupoid}\label{twist-sec}
+
+Occasionally, an equational law is preserved under a ``twist'' operation in which one replaces the magma operation $x \op y$ by $x \op' y := Tx \op Uy$ for some automorphisms $T,U$ of the magma $G$ that obey additional relations.  In the case of the weak central groupoid law \eqref{1485}, we see that
+$$
+(y \op' x) \op' (x \op' (z \op' y))= (T^2 y \op TUx) \op (UTx \op (UTUz \op U^3y))$$
+so if $T$ is an automorphism of order $5$ and $U = T^{-1}$ (so that $T^2 = U^3$), we conclude that this twisted magma is also a weak central groupoid.  This can be used to generate further counterexamples.  For instance, let $M_2$ be the order two weak central groupoid with carrier ${\mathbb F}_2$ and with the NAND operation $x \diamond y := 1 - xy$; this can easily be verified to be a weak central groupoid.  It does not have any nontrivial automorphisms, but its fifth power $M_2^{\otimes 5}$ has a cyclic shift $T$ of order $5$: $T( (x_i)_{i\in \Z/5\Z} ) = (x_{i+1})_{i \in \Z/5\Z}$.  If we twist $M_2^{\otimes 5}$ by $T$ and $T^{-1}$, we obtain a weak central groupoid $M$ with carrier ${\mathbb F}_2^5$ and magma operation
+$$(x_i)_{i\in \Z/5\Z} \op (y_i)_{i\in \Z/5\Z} = (1 - x_{i+1} y_{i-1})_{i \in \Z/5\Z}.$$
+In particular, if $x = (x_i)_{i\in \Z/5\Z}$, then
+$$ x \op x = (1 - x_{i+1} x_{i-1})_{i \in \Z/5\Z}$$
+and
+$$ (x \op x) \op (x \op x) = (1 - (1 - x_{i+2} x_{i}) (1 - x_i x_{i-2}) )_{i \in \Z/5\Z}$$
+which by the laws of boolean algebra simplify to
+$$ (x \op x) \op (x \op x) = (x_i (x_{i-2} + x_i + x_{i+2}))_{i \in \Z/5\Z}$$
+from which one can easily refute equation 151,
+$$ x = (x \op x) \op (x \op x).$$
+Informally, the reason for this is that equation 151 has a different semigroup twist symmetries: $T^2 = 1, T = U^{-1}$ instead of $T^5 = 1, T = U^{-1}$.

@@ -28,6 +28,7 @@ on:
       - '**/generate_dashboard.py'
       - '**/generate_equation_implication_js.py'
       - '**/generate_graphiti_data.rb'
+      - './scripts/**'
       - 'lean-toolchain'
       - 'lakefile.toml'
       - 'lake-manifest.json'
@@ -79,7 +80,7 @@ jobs:
             .lake/build
             !.lake/build/doc-data
             !.lake/build/doc/declarations/declaration-data-equational_theories*
-          key: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}-${{ github.sha }}
+          key: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}
           restore-keys: LakeBuild-
 
       - name: Build project
@@ -151,8 +152,9 @@ jobs:
       - name: Generate home_page/implications/implications.js
         run: |
           ~/.elan/bin/lake exe extract_implications outcomes > /tmp/out.json
+          ~/.elan/bin/lake exe extract_implications raw --full-entries > /tmp/out2.json
           pip install markdown
-          python scripts/generate_equation_implication_js.py /tmp/out.json
+          python scripts/generate_equation_implication_js.py /tmp/out.json /tmp/out2.json
 
       - name: Generate the Finite Magma Explorer website
         run: |
