@@ -1,4 +1,4 @@
-import Mathlib.Data.Finite.Basic
+import Mathlib.Data.Finite.Prod
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 import equational_theories.MemoFinOp
