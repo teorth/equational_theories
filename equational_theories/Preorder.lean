@@ -6,7 +6,7 @@ open Law
 
 namespace Law.MagmaLaw
 
-variable {α β : Type*}
+variable {α β γ : Type*}
 
 /--
 A magma law `l₁` implies a law `l₂` if in any Magma `G` where `l₁` holds, `l₂` also holds.
@@ -22,6 +22,9 @@ protected def iff (l₁ : MagmaLaw α) (l₂ : MagmaLaw β) := ∀ (G : Type) [M
 
 theorem iff.symm {l₁ : MagmaLaw α} {l₂ : MagmaLaw β} (h : l₁.iff l₂) :
     l₂.iff l₁ := fun G => (h G).symm
+
+theorem iff.trans {l₁ : MagmaLaw α} {l₂ : MagmaLaw β} {l₃ : MagmaLaw γ}
+    (h1 : l₁.iff l₂) (h2 : l₂.iff l₃) : l₁.iff l₃ := fun G => (h1 G).trans (h2 G)
 
 theorem iff.mp {l₁ : MagmaLaw α} {l₂ : MagmaLaw β} (h : l₁.iff l₂) :
     l₁.implies l₂ := fun G => (h G).1
@@ -93,6 +96,9 @@ theorem Law.implies_fin_implies_nat {n : Nat} {l₁ l₂ : MagmaLaw (Fin n)}
 theorem Law.leq_fin_leq_nat {n : Nat} {l₁ l₂ : MagmaLaw (Fin n)} (h : l₁ ≤ l₂) :
     l₁.map Fin.val ≤ l₂.map Fin.val :=
   implies_fin_implies_nat h
+
+theorem symm_iff {α} (Law : MagmaLaw α) : Law.symm.iff Law :=
+  fun _ _ => ⟨satisfies_symm_law, satisfies_symm_law⟩
 
 theorem reindex_iff {α β} {Law1 : MagmaLaw α} {Law2 : MagmaLaw β} (f g)
     (h1 : Law1.map f = Law2) (h2 : Law2.map g = Law1) : Law1.iff Law2 :=
