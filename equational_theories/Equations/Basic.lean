@@ -187,3 +187,21 @@ equation 345169  :=  x = (y ◇ ((x ◇ y) ◇ y)) ◇ (x ◇ (z ◇ y))
 
 /-- Kisielewicz's first Austin law -/
 equation 374794  :=  x = (((y ◇ y) ◇ y) ◇ x) ◇ ((y ◇ y) ◇ z)
+
+/-- The left Bol loop law -/
+equation 100000001  :=  x ◇ (y ◇ (x ◇ z)) = (x ◇ (y ◇ x)) ◇ z
+
+/-- The right Bol loop law -/
+equation 100000002  :=  x ◇ ((y ◇ z) ◇ y) = ((x ◇ y) ◇ z) ◇ y
+
+/-- The first Moufang law (of four, which are equivalent for loops) -/
+equation 100000003  :=  x ◇ (y ◇ (x ◇ z)) = ((x ◇ y) ◇ x) ◇ z
+
+/-- The second Moufang law -/
+equation 100000004  :=  x ◇ (y ◇ (z ◇ y)) = ((x ◇ y) ◇ z) ◇ y
+
+/-- The third Moufang law -/
+equation 100000005  :=  (x ◇ y) ◇ (z ◇ x) = (x ◇ (y ◇ z)) ◇ x
+
+/-- The fourth Moufang law -/
+equation 100000006  :=  x ◇ ((y ◇ z) ◇ x) = (x ◇ y) ◇ (z ◇ x)
