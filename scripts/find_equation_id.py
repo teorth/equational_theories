@@ -203,6 +203,26 @@ def generate_all_eqs() -> Iterator[Equation]:
                         yield Equation(lhs_shape, rhs_shape, leaves)
 
 
+def wrap_tqdm(iterable):
+    try:
+        from tqdm import tqdm
+    except ImportError:
+        return iterable
+    return tqdm(iterable, delay=2, unit=" eqs", leave=False)
+
+
+def find_equation_id(input_eq: Equation) -> Tuple[int, Equation]:
+    for eq_num, eq in enumerate(wrap_tqdm(generate_all_eqs()), 1):
+        if eq == input_eq:
+            return eq_num, eq
+
+
+def get_equation_by_id(input_eq: int) -> Equation:
+    for eq_num, eq in enumerate(wrap_tqdm(generate_all_eqs()), 1):
+        if eq_num == input_eq:
+            return eq
+
+
 def process_equation(eq_str: str) -> None:
     """Process a given equation, finding its number and canonical form."""
     try:
@@ -211,15 +231,11 @@ def process_equation(eq_str: str) -> None:
         input_eq = canonicalize_equation(eq_str)
 
     if isinstance(input_eq, Equation):
-        for eq_num, eq in enumerate(generate_all_eqs(), 1):
-            if eq == input_eq:
-                print(f"The equation '{eq_str}' is Equation {eq_num}: {eq}")
-                break
+        eq_num, eq = find_equation_id(input_eq)
+        print(f"The equation '{eq_str}' is Equation {eq_num}: {eq}")
     if isinstance(input_eq, int):
-        for eq_num, eq in enumerate(generate_all_eqs(), 1):
-            if eq_num == input_eq:
-                print(f"Equation {eq_num}: {eq}")
-                break
+        eq = get_equation_by_id(input_eq)
+        print(f"Equation {input_eq}: {eq}")
 
 
 def main():
