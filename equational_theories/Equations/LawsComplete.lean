@@ -1,6 +1,7 @@
 import equational_theories.RArray
 import equational_theories.MagmaLaw
 import equational_theories.Equations.All
+import equational_theories.RSimp
 
 /-!
 This module proves that are actually looking at at the laws we claim to be looking at.
@@ -65,22 +66,20 @@ Binary search on `laws` for a given law. If the given law is not in `laws`, an a
 returned.
 -/
 def findMagmaLaw (l : Law.NatMagmaLaw) : Nat :=
-  go 0 laws.size (laws.size+1) (by omega)
+  go 0 laws.size
 where
-  go lb w fuel (hfuel : w < fuel) := match fuel with
-    | 0 => by contradiction
-    | fuel+1 =>
-      if _ : w ≤ 1 then
-        lb
+  go lb w :=
+    if w ≤ 1 then
+      lb
+    else
+      let w' := w/2
+      let mid := lb + w'
+      let l' := laws[mid]
+      if l.comp l' = .lt then
+        go lb w'
       else
-        let w' := w/2
-        let mid := lb + w'
-        let l' := laws[mid]
-        if l.comp l' = .lt then
-          go lb w' fuel (by omega)
-        else
-          go mid (w-w') fuel (by omega)
-  termination_by structural fuel
+        go mid (w-w')
+  termination_by w
 
 /-- The largest used variable. -/
 def FreeMagma.max : FreeMagma Nat → Nat
@@ -313,12 +312,41 @@ theorem testLawsUpto_spec (s : Nat) P :
   · rintro h i his l rfl hcanon
     apply h _ his hcanon
 
+-- set_option trace.tactic.rsimp_optimize true
+-- set_option trace.tactic.rsimp_decide true
+
+attribute [rsimp] Std.Tactic.BVDecide.Normalize.Bool.decide_eq_true
+attribute [rsimp] testNat.match_1
+attribute [rsimp] StateT.run Id.run bind StateT.bind.eq_unfold pure get getThe
+  StateT.pure.eq_unfold MonadStateOf.get StateT.get set StateT.set
+@[rsimp] def Nat.add_eq_symm := fun a b => (@Nat.add_eq a b).symm
+@[rsimp] def Nat.sub_eq_symm := fun a b => (@Nat.sub_eq a b).symm
+@[rsimp] def Nat.div_eq_symm := fun a b => (@Nat.div_eq a b).symm
+@[rsimp] def Nat.ble_eq_symm := fun a b => (@Nat.ble_eq a b).symm
+attribute [rsimp] FreeMagma.evalHom FreeMagma.fmapHom DFunLike.coe
+attribute [rsimp_optimize] Law.MagmaLaw.map
+attribute [rsimp_optimize] Law.MagmaLaw.comp
+attribute [rsimp_optimize] FreeMagma.canonicalize.go
+attribute [rsimp_optimize] FreeMagma.canonicalize
+attribute [rsimp_optimize] Law.MagmaLaw.canonicalize.go
+attribute [rsimp_optimize] Law.MagmaLaw.canonicalize
+attribute [rsimp_optimize] testNat
+attribute [rsimp] Law.MagmaLaw.symm
+attribute [rsimp] testAllSplits
+attribute [rsimp] panicWithPosWithDecl panic panicCore
+attribute [rsimp] GetElem.getElem
+attribute [rsimp_optimize] testFreeMagmas
+attribute [rsimp_optimize] testLaws
+attribute [rsimp_optimize] testLawsUpto
+attribute [rsimp_optimize] findMagmaLaw.go
+attribute [rsimp_optimize] findMagmaLaw
+
 /--
 Here we do the actual computation. For now using `native_decide`, more serious
 engineering is necessary if we insist on using `by decide` here.
 -/
 theorem testLawsUpto4_computation :
-  testLawsUpto 4 (fun l => laws[findMagmaLaw l] = l) = true := by native_decide
+  testLawsUpto 4 (fun l => laws[findMagmaLaw l] = l) = true := by rsimp_decide
 
 theorem laws_complete' :
     ∀ l : Law.MagmaLaw Nat, l.forks ≤ 4 → l.is_canonical → laws[findMagmaLaw l] = l := by
