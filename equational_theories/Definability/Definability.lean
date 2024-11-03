@@ -83,6 +83,18 @@ open FirstOrder FirstOrder.Language FirstOrder.Language.Structure
 
 variable {α : Type u₁} {β : Type*}
 
+/-- Definable is transitive. Given a structure S on L and T on L', if:
+  * the arityGraph of f is Definable in a structure S on L,
+  * the realizations of all L.Functions have arityGraph that's Definable on S,
+  * the realizations of all L.Relations are Definable on S,
+then the arityGraph of f is Definable on T, as well.
+-/
+theorem Definable.trans {f : (β → M) → M} [inst₂ : L'.Structure M] (h₁ : A.Definable L f.arityGraph)
+    (h₂ : ∀ {n} (g : L[[A]].Functions n), A.Definable L' (fun v ↦ g.term.realize v).arityGraph)
+    (h₃ : ∀ {n} (g : L[[A]].Relations n), A.Definable L' (RelMap g))
+    : A.Definable L' f.arityGraph := by
+  sorry
+
 /-- A function from a Cartesian power of a structure to that structure is term-definable over
   a set `A` when the value of the function is given by a term with constants `A`. -/
 def TermDefinable (f : (α → M) → M) : Prop :=
@@ -409,6 +421,94 @@ theorem TermStructural.trans (h₁₂ : L₂.TermStructuralFrom L₁) (h₂₃ :
   constructor
   · exact TermDefinable.trans_aux hA1 hB1
   · exact TermDefinable.trans_aux hB2 hA2
+
+theorem Definable.trans_aux {G : Type} {M M₂ M₃ : Magma G}
+    (h₁ : @Set.Definable _ (∅:Set _) MagmaLanguage M.FOStructure _ M₂.FinArityOp.arityGraph)
+    (h₂ : @Set.Definable _ (∅:Set _) MagmaLanguage M₂.FOStructure _ M₃.FinArityOp.arityGraph) :
+    @Set.Definable _ (∅:Set _) MagmaLanguage M.FOStructure _ M₃.FinArityOp.arityGraph := by
+  apply h₂.trans (inst := M₂.FOStructure) (inst₂ := M.FOStructure); swap
+  · simp [MagmaLanguage, Language.withConstants]
+  intro n f
+  by_cases hn : n = 2
+  · subst hn
+    simp
+    eta_reduce
+    convert h₁
+    rw [Magma.FOStructure_funMap']
+  by_cases hn₂ : n = 0
+  · subst hn₂
+    simp [MagmaLanguage, Language.withConstants, Language.sum] at f
+    exact (isEmptyElim f)
+  · exact isEmptyElim (show _ by
+      simp [MagmaLanguage, hn, hn₂, Language.withConstants, Language.sum] at f
+      exact f.elim id fun h ↦ (Equiv.equivEmpty _) ((Nat.succ_pred_eq_of_ne_zero hn₂) ▸ h)
+    )
+
+theorem Definable.trans (h₁₂ : L₂.DefinableFrom L₁) (h₂₃ : L₃.DefinableFrom L₂) :
+    L₃.DefinableFrom L₁ := by
+  intro G M hGL₁
+  obtain ⟨M₂,hGL₂,hA⟩ := h₁₂ M hGL₁
+  obtain ⟨M₃,hGL₃,hB⟩ := h₂₃ M₂ hGL₂
+  use M₃, hGL₃
+  exact trans_aux hA hB
+
+theorem Structural.trans (h₁₂ : L₂.StructuralFrom L₁) (h₂₃ : L₃.StructuralFrom L₂) :
+    L₃.StructuralFrom L₁ := by
+  intro G M hGL₁
+  obtain ⟨M₂,hGL₂,hA1,hA2⟩ := h₁₂ M hGL₁
+  obtain ⟨M₃,hGL₃,hB1,hB2⟩ := h₂₃ M₂ hGL₂
+  use M₃, hGL₃
+  constructor
+  · exact Definable.trans_aux hA1 hB1
+  · exact Definable.trans_aux hB2 hA2
+
+@[simp]
+theorem TermStructural.refl : L₁.TermStructuralFrom L₁ :=
+  termStructural_of_implies id
+
+@[simp]
+theorem TermDefinable.refl : L₁.TermDefinableFrom L₁ :=
+  termDefinable_of_termStructural TermStructural.refl
+
+@[simp]
+theorem Structural.refl : L₁.StructuralFrom L₁ :=
+  structural_of_termStructural TermStructural.refl
+
+@[simp]
+theorem Definable.refl : L₁.DefinableFrom L₁ :=
+  definable_of_structural Structural.refl
+
+attribute [-instance] Law.MagmaLaw.instPreorder
+
+--We make preorder as scoped instances so they don't all collide
+
+namespace TermDefinablePreorder
+scoped instance : Preorder (Law.MagmaLaw β) where
+  le l₁ l₂ := l₂.TermDefinableFrom l₁
+  le_refl := fun _ ↦ TermDefinable.refl
+  le_trans := fun _ _ _ ↦ TermDefinable.trans
+end TermDefinablePreorder
+
+namespace TermStructuralPreorder
+scoped instance : Preorder (Law.MagmaLaw β) where
+  le l₁ l₂ := l₂.TermStructuralFrom l₁
+  le_refl := fun _ ↦ TermStructural.refl
+  le_trans := fun _ _ _ ↦ TermStructural.trans
+end TermStructuralPreorder
+
+namespace StructuralPreorder
+scoped instance : Preorder (Law.MagmaLaw β) where
+  le l₁ l₂ := l₂.StructuralFrom l₁
+  le_refl := fun _ ↦ Structural.refl
+  le_trans := fun _ _ _ ↦ Structural.trans
+end StructuralPreorder
+
+namespace DefinablePreorder
+scoped instance : Preorder (Law.MagmaLaw β) where
+  le l₁ l₂ := l₂.DefinableFrom l₁
+  le_refl := fun _ ↦ Definable.refl
+  le_trans := fun _ _ _ ↦ Definable.trans
+end DefinablePreorder
 
 end preorder
 
