@@ -3,6 +3,19 @@ import equational_theories.Preorder
 import Mathlib.ModelTheory.Definability
 import Mathlib.Data.Rel
 
+/-!
+While the main purpose of the Equational Theories project is exploring which magma equations directly
+imply each other, another interesting question is which equations simply imply the *existence* of
+another. The example prompting this is that any magma satisfying equation 543,
+  `x = y ◇ (z ◇ (x ◇ (y ◇ z)))`,
+automatically has an abelian group structure given by `x+y := x ◇ ((y ◇ y) ◇ y)`. In this case,
+the `◇` operation is subtraction in the group. This was proved by Tarski.
+
+There are a few distinct ways one can look to generalize this, depending on what precisely one counts
+as "having the structure". These each induce a preorder, which include the "implies" preorder as a
+subset (because you can just take the same operation again, and it now obeys the implied equation).
+-/
+
 --The notion of term-definable expressions in FO logic. Could go in Mathlib
 section TermDef
 namespace Function
