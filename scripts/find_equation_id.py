@@ -2,18 +2,87 @@
 
 import argparse
 import itertools
-from typing import List, Tuple, Union, Iterator
+from typing import List, NamedTuple, Tuple, Union, Iterator
 
-EQ_SIZE = 4
-VAR_NAMES = "xyzwuv"
+VAR_NAMES = "xyzwuvrst"
 
 ExprType = Union[str, Tuple["ExprType", str, "ExprType"]]
+ShapeType = Union[None, Tuple["ShapeType", "ShapeType"]]
+
+
+class Equation(NamedTuple):
+    lhs_shape: ShapeType
+    rhs_shape: ShapeType
+    leaves: List[int]
+
+    @classmethod
+    def from_trees(cls, lhs_tree: ExprType, rhs_tree: ExprType) -> "Equation":
+        lhs_shape, lhs_leaves = cls._deconstruct_tree(lhs_tree)
+        rhs_shape, rhs_leaves = cls._deconstruct_tree(rhs_tree)
+        return cls(lhs_shape, rhs_shape, lhs_leaves + rhs_leaves)
+
+    @classmethod
+    def _deconstruct_tree(cls, tree: ExprType) -> Tuple[ShapeType, List[int]]:
+        if isinstance(tree, str):
+            return (None, [VAR_NAMES.index(tree)])
+        left, _op, right = tree
+        left_shape, left_leaves = cls._deconstruct_tree(left)
+        right_shape, right_leaves = cls._deconstruct_tree(right)
+        return ((left_shape, right_shape), left_leaves + right_leaves)
+
+    def __str__(self) -> str:
+        leaves_iter = iter(self.leaves)
+        lhs_str = Equation._expr_str(self.lhs_shape, leaves_iter, False)
+        rhs_str = Equation._expr_str(self.rhs_shape, leaves_iter, False)
+        return f"{lhs_str} = {rhs_str}"
+
+    @classmethod
+    def _expr_str(cls, shape: ShapeType, leaves_iter: Iterator[int], parenthesize: bool) -> str:
+        if shape is None:
+            return VAR_NAMES[next(leaves_iter)]
+        left_str = cls._expr_str(shape[0], leaves_iter, True)
+        right_str = cls._expr_str(shape[1], leaves_iter, True)
+        if parenthesize:
+            return f"({left_str} ◇ {right_str})"
+        return f"{left_str} ◇ {right_str}"
+
+
+def shape_order(shape: ShapeType) -> int:
+    if shape is None:
+        return 0
+    return 1 + shape_order(shape[0]) + shape_order(shape[1])
+
+
+def shape_treecmp(shape1: ShapeType, shape2: ShapeType) -> int:
+    if shape1 is None and shape2 is None:
+        return 0
+    if shape1 is None and isinstance(shape2, tuple):
+        return -1
+    if isinstance(shape1, tuple) and shape2 is None:
+        return 1
+    left_cmp = shape_treecmp(shape1[0], shape2[0])
+    if left_cmp != 0:
+        return left_cmp
+    return shape_treecmp(shape1[1], shape2[1])
+
+
+def shape_lt(shape1: ShapeType, shape2: ShapeType) -> bool:
+    shape1_order = shape_order(shape1)
+    shape2_order = shape_order(shape2)
+    if shape1_order < shape2_order:
+        return True
+    if shape1_order > shape2_order:
+        return False
+    if shape_treecmp(shape1, shape2) < 0:
+        return True
+    return False
 
 
 def tokenize(expr: str) -> List[str]:
     """Convert an expression string into a list of tokens."""
     expr = (
         expr.replace(".", "◇")
+        .replace("*", "◇")
         .replace("(", " ( ")
         .replace(")", " ) ")
         .replace("◇", " ◇ ")
@@ -56,157 +125,117 @@ def parse_expr(tokens: List[str]) -> ExprType:
     return result
 
 
-def canonicalize_equation(eq_str: str) -> str:
+def canonicalize_partition(partition: List[int]) -> List[int]:
+    """Canonicalize the partition to increasing order."""
+    result, elts = [], []
+    for x in partition:
+        if x not in elts:
+            elts.append(x)
+        result.append(elts.index(x))
+    return result
+
+
+def canonicalize_equation(eq_str: str) -> Equation:
     """Canonicalize an equation string."""
-    eq_str = _canonicalize_equation_help(eq_str)
-    left, right = eq_str.split("=")
-    eq_str_flip = _canonicalize_equation_help(right + "=" + left)
-
-    if len(left) == len(right) and _reorder(eq_str_flip) < _reorder(eq_str):
-        return eq_str_flip
-    return eq_str
-
-
-def _canonicalize_equation_help(eq_str: str) -> str:
-    """Helper function for canonicalize_equation."""
     try:
         lhs, rhs = eq_str.split("=")
     except ValueError:
         raise ValueError("No '=' found in the equation.")
-    lhs, rhs = lhs.strip(), rhs.strip()
 
-    lhs_tokens = tokenize(lhs)
-    rhs_tokens = tokenize(rhs)
-    lhs_parsed = parse_expr(lhs_tokens)
-    rhs_parsed = parse_expr(rhs_tokens)
+    lhs = parse_expr(tokenize(lhs))
+    rhs = parse_expr(tokenize(rhs))
 
-    var_map = {}
-    next_var = iter(VAR_NAMES)
+    eq = Equation.from_trees(lhs, rhs)
 
-    def rewrite_expr(expr: ExprType) -> ExprType:
-        if isinstance(expr, str):
-            if expr == "◇":
-                return expr
-            if expr not in var_map:
-                var_map[expr] = next(next_var)
-            return var_map[expr]
-        left, op, right = expr
-        return (rewrite_expr(left), op, rewrite_expr(right))
+    if shape_lt(eq.rhs_shape, eq.lhs_shape):
+        eq = Equation.from_trees(rhs, lhs)
 
-    canon_lhs = rewrite_expr(lhs_parsed)
-    canon_rhs = rewrite_expr(rhs_parsed)
+    leaves = canonicalize_partition(eq.leaves)
 
-    def expr_to_str(expr: ExprType) -> str:
-        if isinstance(expr, str):
-            return expr
-        left, op, right = expr
-        return f"({expr_to_str(left)} {op} {expr_to_str(right)})"
-
-    if len(expr_to_str(canon_lhs)) > len(expr_to_str(canon_rhs)):
-        canon_lhs, canon_rhs = canon_rhs, canon_lhs
-
-    return f"{expr_to_str(canon_lhs)} = {expr_to_str(canon_rhs)}"
+    return Equation(eq.lhs_shape, eq.rhs_shape, leaves)
 
 
-def _reorder(expr: str) -> str:
-    """Replace variables with their index in VAR_NAMES."""
-    for i, x in enumerate(VAR_NAMES):
-        expr = expr.replace(x, str(i))
-    return expr
-
-
-def generate_shapes(size: int) -> Iterator[Union[str, Tuple]]:
-    """Generate all possible shapes for expressions of a given size."""
-    if size == 0:
-        yield "."
-    for i in range(size):
+def generate_shapes(order: int) -> Iterator[ShapeType]:
+    """Generate all possible shapes for expressions with a given number of forks."""
+    if order == 0:
+        yield None
+    for i in range(order):
         for left in generate_shapes(i):
-            for right in generate_shapes(size - 1 - i):
+            for right in generate_shapes(order - 1 - i):
                 yield (left, right)
 
 
-def exprs_with_shape(
-    shape: Union[str, Tuple], used_vars: int
-) -> Iterator[Tuple[Union[int, Tuple], int]]:
-    """Generate all expressions with a given shape."""
-    if shape == ".":
-        for var in range(used_vars + 1):
-            yield var, max(var + 1, used_vars)
-    else:
-        left, right = shape
-        for left_expr, used_vars in exprs_with_shape(left, used_vars):
-            for right_expr, used_vars in exprs_with_shape(right, used_vars):
-                yield (left_expr, right_expr), used_vars
+def _partitions_help(n: int, max_used: int) -> Iterator[List[int]]:
+    if n == 0:
+        yield []
+        return
+    for x in range(max_used + 2):
+        for next in _partitions_help(n - 1, max(max_used, x)):
+            yield [x] + next
 
 
-def rename_vars(expr: Union[int, Tuple], perm: List[int]) -> Union[int, Tuple]:
-    """Rename variables in an expression according to a permutation."""
-    if isinstance(expr, int):
-        return perm[expr]
-    left, right = expr
-    return (rename_vars(left, perm), rename_vars(right, perm))
+def partitions(n: int) -> Iterator[List[int]]:
+    """Generate all partitions of a given number."""
+    if n == 0:
+        yield []
+        return
+    for next in _partitions_help(n, 0):
+        yield [0] + next
 
 
-def eq_symmetries(
-    lhs: Union[int, Tuple], rhs: Union[int, Tuple], n_vars: int
-) -> Iterator[Tuple[Union[int, Tuple], Union[int, Tuple]]]:
-    """Generate all symmetries of an equation."""
-    for renaming in itertools.permutations(range(n_vars)):
-        yield rename_vars(lhs, renaming), rename_vars(rhs, renaming)
-    for renaming in itertools.permutations(range(n_vars)):
-        yield rename_vars(rhs, renaming), rename_vars(lhs, renaming)
-
-
-def generate_all_eqs() -> Iterator[Tuple[Union[int, Tuple], Union[int, Tuple]]]:
+def generate_all_eqs() -> Iterator[Equation]:
     """Generate all unique equations up to symmetry."""
-    all_eqs = set()
-    for size in range(EQ_SIZE + 1):
-        for lhs_size in range(size + 1):
-            for lhs_shape in generate_shapes(lhs_size):
-                for rhs_shape in generate_shapes(size - lhs_size):
-                    for lhs, used_vars in exprs_with_shape(lhs_shape, 0):
-                        for rhs, all_used_vars in exprs_with_shape(
-                            rhs_shape, used_vars
-                        ):
-                            if all(
-                                symmetry not in all_eqs
-                                for symmetry in eq_symmetries(lhs, rhs, all_used_vars)
-                            ):
-                                if lhs == rhs and not isinstance(lhs, int):
-                                    continue
-                                all_eqs.add((lhs, rhs))
-                                yield lhs, rhs
+    for order in itertools.count():
+        half = order // 2 + 1
+        for lhs_order in range(half):
+            for lhs_shape in generate_shapes(lhs_order):
+                for rhs_shape in generate_shapes(order - lhs_order):
+                    if order == lhs_order * 2 and shape_lt(rhs_shape, lhs_shape):
+                        continue
+                    symmetric_shape = lhs_shape == rhs_shape
+                    for leaves in partitions(order + 1):
+                        if symmetric_shape:
+                            flipped = leaves[half:] + leaves[:half]
+                            if canonicalize_partition(flipped) < leaves:
+                                continue
+                            if leaves == flipped and order > 0:
+                                continue
+                        yield Equation(lhs_shape, rhs_shape, leaves)
 
 
-def format_expr(expr: Union[int, Tuple], outermost: bool = True) -> str:
-    """Format an expression as a string."""
-    if isinstance(expr, int):
-        return VAR_NAMES[expr]
-    s = f"{format_expr(expr[0], outermost=False)} ◇ {format_expr(expr[1], outermost=False)}"
-    if not outermost:
-        return f"({s})"
-    return s
+def wrap_tqdm(iterable):
+    try:
+        from tqdm import tqdm
+    except ImportError:
+        return iterable
+    return tqdm(iterable, delay=2, unit=" eqs", leave=False)
 
 
-def find_equation_number(input_eq: str) -> Union[int, None]:
-    """Find the number of a given equation in the generated list."""
-    canonical_input = canonicalize_equation(input_eq)
-    for eq_num, (lhs, rhs) in enumerate(generate_all_eqs(), 1):
-        eq_str = f"{format_expr(lhs)} = {format_expr(rhs)}"
-        if canonicalize_equation(eq_str) == canonical_input:
-            return eq_num
-    return None
+def find_equation_id(input_eq: Equation) -> Tuple[int, Equation]:
+    for eq_num, eq in enumerate(wrap_tqdm(generate_all_eqs()), 1):
+        if eq == input_eq:
+            return eq_num, eq
 
 
-def process_equation(eq: str) -> None:
+def get_equation_by_id(input_eq: int) -> Equation:
+    for eq_num, eq in enumerate(wrap_tqdm(generate_all_eqs()), 1):
+        if eq_num == input_eq:
+            return eq
+
+
+def process_equation(eq_str: str) -> None:
     """Process a given equation, finding its number and canonical form."""
-    eq_num = find_equation_number(eq)
-    if eq_num:
-        print(f"The equation '{eq}' is Equation {eq_num}: {canonicalize_equation(eq)}")
-    else:
-        print(
-            f"The equation '{eq}' (canonicalized as '{canonicalize_equation(eq)}') was not found in the generated list"
-        )
+    try:
+        input_eq = int(eq_str)
+    except ValueError:
+        input_eq = canonicalize_equation(eq_str)
+
+    if isinstance(input_eq, Equation):
+        eq_num, eq = find_equation_id(input_eq)
+        print(f"The equation '{eq_str}' is Equation {eq_num}: {eq}")
+    if isinstance(input_eq, int):
+        eq = get_equation_by_id(input_eq)
+        print(f"Equation {input_eq}: {eq}")
 
 
 def main():
