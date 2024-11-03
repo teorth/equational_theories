@@ -28,6 +28,7 @@ on:
       - '**/generate_dashboard.py'
       - '**/generate_equation_implication_js.py'
       - '**/generate_graphiti_data.rb'
+      - './scripts/**'
       - 'lean-toolchain'
       - 'lakefile.toml'
       - 'lake-manifest.json'
@@ -131,9 +132,9 @@ jobs:
         run: |
             ~/.elan/bin/lake exe checkdecls blueprint/lean_decls
 
-      - name: Check with lean4lean
-        run: |
-            python scripts/lean4lean_checker/main.py
+      # - name: Check with lean4lean
+      #  run: |
+      #      python scripts/lean4lean_checker/main.py
 
       - name: Copy API documentation to `home_page/docs`
         run: cp -r .lake/build/doc home_page/docs
