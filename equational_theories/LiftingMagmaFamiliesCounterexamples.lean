@@ -15,7 +15,8 @@ def liftingMagmaFamilyInstances : Array LiftingMagmaFamilyInstance := #[
   ⟨List, inferInstance, instLiftingMagmaFamilyList, ``instLiftingMagmaFamilyList⟩,
   ⟨Multiset, instMagmaMultiset, instLiftingMagmaFamilyMultiset, ``instLiftingMagmaFamilyMultiset⟩,
   ⟨LeftProj, inferInstance, instLiftingMagmaFamilyLeftProj, ``instLiftingMagmaFamilyLeftProj⟩,
-  ⟨RightProj, inferInstance, instLiftingMagmaFamilyRightProj, ``instLiftingMagmaFamilyRightProj⟩
+  ⟨RightProj, inferInstance, instLiftingMagmaFamilyRightProj, ``instLiftingMagmaFamilyRightProj⟩,
+  ⟨Finset, instMagmaFinset, instLiftingMagmaFamilyFinset, ``instLiftingMagmaFamilyFinset⟩
 ]
 
 def Std.HashMap.push {α β} [BEq α] [Hashable α] (map : Std.HashMap α (Array β)) (a : α) (b : β) : Std.HashMap α (Array β) :=

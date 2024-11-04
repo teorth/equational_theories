@@ -113,6 +113,29 @@ instance instLiftingMagmaFamilyFreeMagmaWithLaws {α} (Γ : Ctx α)
   lift {α} _ f := FreeMagmaWithLaws.evalHom (G := FreeMagmaWithLaws α Γ) f (FreeMagmaWithLaws.isModel α Γ)
   lift_factors := by intros; ext; rfl
 
+instance (priority := high) instMagmaFinset (α : Type _) [DecidableEq α] : Magma (Finset α) where
+  op := (· ∪ ·)
+
+instance : LiftingMagmaFamily Finset where
+  instMagma := instMagmaFinset
+  instMagmaDecidableEq := inferInstance
+  ι := fun a ↦ {a}
+  lift f := {
+    toFun := (Finset.biUnion · f),
+    map_op' := by
+      intro x _
+      dsimp [Magma.op]
+      induction x using Finset.induction
+      · simp
+      · simp only [Finset.insert_union, Finset.biUnion_insert, Finset.union_assoc]
+        congr
+    }
+  lift_factors := by
+    intro α _ f
+    funext x
+    symm
+    apply Finset.singleton_biUnion
+
 -- TODO: Lifting family FreeMagma
 
 end Instances
