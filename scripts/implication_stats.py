@@ -209,6 +209,10 @@ def construct_equivalence_class_data(
                 column=EquationDataColumn.STATEMENT.value,
                 aggfunc="first",
             ),
+            EquivalenceClassDataColumn.CLASS_SIZE.value: pd.NamedAgg(
+                column=EquationDataColumn.STATEMENT.value,
+                aggfunc="count",
+            ),
             EquivalenceClassDataColumn.MINIMUM_DISTINCT_VARIABLE_COUNT.value: pd.NamedAgg(
                 column=EquationDataColumn.DISTINCT_VARIABLE_COUNT.value,
                 aggfunc="min",
@@ -263,11 +267,35 @@ def make_scatter(equivalence_class_data: pd.DataFrame) -> go.Figure:
         x=EquivalenceClassDataColumn.IMPLICATION_COUNT.value,
         y=EquivalenceClassDataColumn.IMPLIED_BY_COUNT.value,
         color=color_col,
-        hover_name=EquivalenceClassDataColumn.STATEMENT.value,
+        hover_name=[
+            f"Equivalence class of Equation {n}"
+            for n in equivalence_class_data[
+                EquivalenceClassDataColumn.CLASS_NUMBER.value
+            ]
+        ],
+        hover_data={
+            EquivalenceClassDataColumn.STATEMENT.value: True,
+            "count_str": [
+                f"... [{n} total equations]<br>" if n > 1 else ""
+                for n in equivalence_class_data[
+                    EquivalenceClassDataColumn.CLASS_SIZE.value
+                ]
+            ],
+        },
         title="Implication Statistics",
         log_y=True,
         log_x=True,
     )
+
+    for data in figure.data:
+        # Customize hover template to look more like the info you get in Graphiti
+        data.hovertemplate = (
+            "<b>%{hovertext}</b><br>"
+            "%{customdata[0]}<br>"
+            "%{customdata[1]}<br>"
+            "Implication Count: %{x}<br>"
+            "Implied By Count: %{y}<extra></extra>"
+        )
 
     LOGGER.info("Scatter plot created.")
 
@@ -292,6 +320,8 @@ def main() -> None:
     )
 
     fig = make_scatter(equivalence_class_data)
+    fig.show()
+    return
 
     LOGGER.info("Saving scatter plot to %s...", args.outfile)
     fig.write_html(file=args.outfile)
