@@ -581,6 +581,31 @@ theorem Equation4579_implies_Equation4512 (G: Type _) [Magma G] (h: Equation4579
 theorem Equation4579_implies_Equation4564 (G: Type _) [Magma G] (h: Equation4579 G) : Equation4564 G :=
   fun _ _ _ _ ↦ h ..
 
+/-- The Bol loop and Moufang loop identities are all weakenings of t-/
+@[equational_result]
+theorem Equation4512_implies_Equation910472 (G: Type _) [Magma G] (h: Equation4512 G) : Equation910472 G :=
+  fun _ _ _ ↦ by simp only [h]
+
+@[equational_result]
+theorem Equation4512_implies_Equation930594 (G: Type _) [Magma G] (h: Equation4512 G) : Equation930594 G :=
+  fun _ _ _ ↦ by simp only [h]
+
+@[equational_result]
+theorem Equation4512_implies_Equation914612 (G: Type _) [Magma G] (h: Equation4512 G) : Equation914612 G :=
+  fun _ _ _ ↦ by simp only [h]
+
+@[equational_result]
+theorem Equation4512_implies_Equation916037 (G: Type _) [Magma G] (h: Equation4512 G) : Equation916037 G :=
+  fun _ _ _ ↦ by simp only [h]
+
+@[equational_result]
+theorem Equation4512_implies_Equation936498 (G: Type _) [Magma G] (h: Equation4512 G) : Equation936498 G :=
+  fun _ _ _ ↦ by simp only [h]
+
+@[equational_result]
+theorem Equation4512_implies_Equation921941 (G: Type _) [Magma G] (h: Equation4512 G) : Equation921941 G :=
+  fun _ _ _ ↦ by simp only [h]
+
 /- Counterexamples -/
 
 @[equational_result]
@@ -895,5 +920,53 @@ theorem Equation4582_not_implies_Equation46 : ∃ (G: Type) (_: Magma G), Equati
   refine ⟨Fin 3, hG, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
   · dsimp [hG]; split_ifs <;> simp_all
   · simpa [hG] using h 0 0 2 2
+
+@[equational_result]
+theorem Equation43_not_implies_Equation910472 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation910472 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation3_not_implies_Equation910472 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation910472 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation43_not_implies_Equation930594 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation930594 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation3_not_implies_Equation930594 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation930594 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation43_not_implies_Equation914612 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation914612 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation3_not_implies_Equation914612 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation914612 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation43_not_implies_Equation916037 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation916037 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation3_not_implies_Equation916037 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation916037 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation43_not_implies_Equation936498 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation936498 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation3_not_implies_Equation936498 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation936498 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation3_not_implies_Equation921941 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation921941 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation43_not_implies_Equation921941 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation921941 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
 
 end Subgraph
