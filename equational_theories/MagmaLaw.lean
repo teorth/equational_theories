@@ -5,7 +5,7 @@ open FreeMagma
 
 namespace Law
 
-structure MagmaLaw (α : Type*) where
+@[ext] structure MagmaLaw (α : Type*) where
   lhs : FreeMagma α
   rhs : FreeMagma α
 deriving DecidableEq
@@ -133,6 +133,11 @@ theorem map_symm {α β} (f : α → β) (m : MagmaLaw α) : m.symm.map f = (m.m
 
 def Mem {α} (a : α) (m : MagmaLaw α) : Prop :=
   m.lhs.Mem a ∨ m.rhs.Mem a
+
+def toList {α} (m : MagmaLaw α) : List α := m.lhs.toList ++ m.rhs.toList
+
+@[simp] def map_toList {α β} (m : MagmaLaw α) (f : α → β) :
+    (m.map f).toList = m.toList.map f := by simp [map, toList]
 
 def elems {α} [DecidableEq α] (m : MagmaLaw α) :
     {l : List α // l.Nodup ∧ ∀ a, a ∈ l ↔ Mem a m} := by
