@@ -211,7 +211,7 @@ where
     | some i => let (l', xs) := go l xs; (i::l', xs)
     | none => let (l', xs') := go l (xs ++ [v]); (xs.length :: l', xs')
 
-def List.canonicalize.go_append {α} [DecidableEq α]
+theorem List.canonicalize.go_append {α} [DecidableEq α]
     {l₁ l₂ : List α} {l₁' l₂' xs₁ xs₂ xs₃}
     (H₁ : go l₁ xs₁ = (l₁', xs₂)) (H₂ : go l₂ xs₂ = (l₂', xs₃)) :
     go (l₁ ++ l₂) xs₁ = (l₁' ++ l₂', xs₃) := by
