@@ -320,8 +320,6 @@ def main() -> None:
     )
 
     fig = make_scatter(equivalence_class_data)
-    fig.show()
-    return
 
     LOGGER.info("Saving scatter plot to %s...", args.outfile)
     fig.write_html(file=args.outfile)
