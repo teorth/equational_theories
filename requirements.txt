@@ -2,8 +2,6 @@
 #    uv pip compile requirements.in
 boto==2.49.0
     # via z3
-colorama==0.4.6
-    # via tqdm
 eznf==0.78.2
     # via -r requirements.in
 highspy==1.7.2
@@ -16,10 +14,30 @@ numpy==2.1.2
     # via
     #   -r requirements.in
     #   highspy
+    #   pandas
+    #   scipy
+packaging==24.1
+    # via plotly
+pandas==2.2.3
+    # via -r requirements.in
 pillow==10.4.0
     # via -r requirements.in
+plotly==5.24.1
+    # via -r requirements.in
+python-dateutil==2.9.0.post0
+    # via pandas
+pytz==2024.2
+    # via pandas
+scipy==1.14.1
+    # via -r requirements.in
+six==1.16.0
+    # via python-dateutil
+tenacity==9.0.0
+    # via plotly
 tqdm==4.66.5
     # via -r requirements.in
+tzdata==2024.2
+    # via pandas
 uv==0.4.22
     # via -r requirements.in
 z3==0.2.0
