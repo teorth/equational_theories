@@ -308,7 +308,7 @@ instance {m : Type → Type} : ForIn m Reachability (Nat × Nat × Bool) where
       (f : (Nat × Nat × Bool) → β → m (ForInStep β)) := do
     let mut v := state
     for i in reachability.components, i2 in reachability.reachable do
-      if i.back >= reachability.size then continue
+      if i.back! >= reachability.size then continue
       for j in reachability.components, j2 in [:reachability.components.size] do
         if i2.get j2 then
           for x in i do
@@ -384,7 +384,7 @@ def outcomes_mod_equiv (inp : Array EntryVariant) (duals: Std.HashMap String Str
         if i2.get j2 then
           if j[0]! < n then
             implies := implies.modify comps[j]! (fun x ↦ x.set! comps[i]! true)
-          else if j.back < 2*n then
+          else if j.back! < 2*n then
             implies := implies.modify comps[i]! (fun x ↦ x.set! comps[j.map (·-n)]! false)
 
   return (comps.map (fun ids => ids.map (eqs.in_order[·]!)), implies)

@@ -39,7 +39,7 @@ elab "decide!" : tactic => do
       let s := d.appArg!
       let rflPrf ← mkEqRefl (toExpr true)
       return mkApp3 (Lean.mkConst ``of_decide_eq_true) expectedType s rflPrf
-    let proof ← proofs.pop.foldrM (mkAppM ``And.intro #[·, ·]) proofs.back
+    let proof ← proofs.pop.foldrM (mkAppM ``And.intro #[·, ·]) proofs.back!
     return proof
 
 private partial def inferDecideFin (p : Expr) : MetaM Expr := do
@@ -84,5 +84,5 @@ elab "decideFin!" : tactic => do
       let s ← inferDecideFin expectedType
       let rflPrf ← mkEqRefl (toExpr true)
       return mkApp3 (Lean.mkConst ``of_decide_eq_true) expectedType s rflPrf
-    let proof ← proofs.pop.foldrM (mkAppM ``And.intro #[·, ·]) proofs.back
+    let proof ← proofs.pop.foldrM (mkAppM ``And.intro #[·, ·]) proofs.back!
     return proof

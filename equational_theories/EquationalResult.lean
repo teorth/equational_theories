@@ -53,7 +53,7 @@ def Entry.toConjecture : Entry → Entry
 initialize equationalResultsExtension : SimplePersistentEnvExtension Entry (Array Entry) ←
   registerSimplePersistentEnvExtension {
     name := `equational_result
-    addImportedFn := Array.concatMap id
+    addImportedFn := Array.flatMap id
     addEntryFn    := Array.push
   }
 
@@ -185,7 +185,7 @@ def elabConjecture : CommandElab
 
       -- If we add a new entry to the equational results list
       if original_length < (equationalResultsExtension.getState (← getEnv)).size then
-        return some (equationalResultsExtension.getState (← getEnv)).back
+        return some (equationalResultsExtension.getState (← getEnv)).back!
       return none
 
     if let some entry := maybe_entry then
