@@ -29,7 +29,7 @@ time, and just assumes it is true.  This is useful in generated lean code, where
 succeed, and we really just want the check done once, in the kernel.
 -/
 elab "decide!" : tactic => do
-  closeMainGoalUsing `decide fun expectedType => do
+  closeMainGoalUsing `decide fun expectedType _ => do
     let expectedType ← preprocessPropToDecide expectedType
     let expectedTypes := splitConjs expectedType
     let proofs ← expectedTypes.mapM fun expectedType => do
@@ -77,7 +77,7 @@ Using type class synthesis to infer the decidability instances can be very slow,
 actual proof checking, so this tactic constructs the instances very directly.
 -/
 elab "decideFin!" : tactic => do
-  closeMainGoalUsing `decideFin fun expectedType => do
+  closeMainGoalUsing `decideFin fun expectedType _ => do
     let expectedType ← preprocessPropToDecide expectedType
     let expectedTypes := splitConjs expectedType
     let proofs ← expectedTypes.mapM fun expectedType => do
