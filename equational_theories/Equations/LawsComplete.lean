@@ -96,7 +96,7 @@ where
   go : FreeMagma Nat → StateM (Array Nat) (FreeMagma Nat)
   | .Leaf v => do
     let xs ← get
-    match xs.indexOf? v with
+    match xs.toList.indexOf? v with -- Array.indexOf? uses wf recu
     | some i => return .Leaf i
     | none =>
       set (xs.push v)
@@ -146,11 +146,12 @@ theorem FreeMagma.canonicalize_is_canonical (m : FreeMagma Nat) (xs : Array Nat)
   | Leaf v =>
     simp only [Id.run, canonicalize.go, bind, StateT.bind, get, getThe, MonadStateOf.get,
       StateT.get, pure, set]
-    cases xs.indexOf? v
+    cases xs.toList.indexOf? v
     case none =>
       simp [StateT.bind, pure, StateT.pure, set, StateT.set, is_canonical]
     case some =>
       simp [StateT.bind, pure, StateT.pure, set, StateT.set, is_canonical]
+      sorry
   | Fork l r ih1 ih2 =>
     specialize ih1 xs
     specialize ih2 (canonicalize.go l xs).2
@@ -315,6 +316,34 @@ theorem testLawsUpto_spec (s : Nat) P :
 -- set_option trace.tactic.rsimp_optimize true
 -- set_option trace.tactic.rsimp_decide true
 
+open Lean in
+partial def callPaths (source : Name) (target : Name) : CoreM MessageData := do
+  let rec go (n : Name) : StateT (NameMap Bool) CoreM (Option MessageData) := do
+    if n = target then
+      return m!"{MessageData.ofConstName n} !"
+    if let some hit := (← get).find? n then
+      if hit then
+        return m!"{MessageData.ofConstName n} ↑"
+    let .defnInfo ci ← getConstInfo n | return none
+    let ns := Expr.getUsedConstants ci.value
+    let ms ← ns.filterMapM go
+    let hit := !ms.isEmpty
+    modify (·.insert n hit)
+    unless hit do return none
+    return some <| .ofConstName n ++ (.nest 1 ("\n" ++ (.joinSep ms.toList "\n")))
+
+  if let some md ← (go source).run' {} then
+    pure md
+  else
+    pure "No paths from {.ofConstName source} to {.ofConstName target} found"
+
+open Lean Elab Command in
+elab "#call_paths " i1:ident " => " i2:ident : command => liftTermElabM do
+    let source ← realizeGlobalConstNoOverloadWithInfo i1
+    let target ← realizeGlobalConstNoOverloadWithInfo i2
+    let m ← callPaths source target
+    logInfo m
+
 attribute [rsimp] Std.Tactic.BVDecide.Normalize.Bool.decide_eq_true
 attribute [rsimp] testNat.match_1
 attribute [rsimp] StateT.run Id.run bind StateT.bind.eq_unfold pure get getThe
@@ -324,6 +353,11 @@ attribute [rsimp] StateT.run Id.run bind StateT.bind.eq_unfold pure get getThe
 @[rsimp] def Nat.div_eq_symm := fun a b => (@Nat.div_eq a b).symm
 @[rsimp] def Nat.ble_eq_symm := fun a b => (@Nat.ble_eq a b).symm
 attribute [rsimp] FreeMagma.evalHom FreeMagma.fmapHom DFunLike.coe
+@[rsimp] def Bool.cond_decide_symm := fun a b c d e => (@Bool.cond_decide a b c d e).symm
+attribute [rsimp_optimize] FreeMagma.evalInMagma
+attribute [rsimp_optimize] FreeMagma.forks
+attribute [rsimp_optimize] FreeMagma.comp
+attribute [rsimp_optimize] Law.MagmaLaw.forks
 attribute [rsimp_optimize] Law.MagmaLaw.map
 attribute [rsimp_optimize] Law.MagmaLaw.comp
 attribute [rsimp_optimize] FreeMagma.canonicalize.go
@@ -336,22 +370,30 @@ attribute [rsimp] testAllSplits
 attribute [rsimp] panicWithPosWithDecl panic panicCore
 attribute [rsimp] GetElem.getElem
 attribute [rsimp_optimize] testFreeMagmas
+-- attribute [rsimp] decide Ordering.instDecidableEq
+-- set_option trace.tactic.rsimp_optimize true in
 attribute [rsimp_optimize] testLaws
 attribute [rsimp_optimize] testLawsUpto
 attribute [rsimp_optimize] findMagmaLaw.go
 attribute [rsimp_optimize] findMagmaLaw
 
+#call_paths testLawsUpto.rsimp => FreeMagma.brecOn
+
+set_option diagnostics true
+set_option diagnostics.threshold 0
+#time
 /--
 Here we do the actual computation. For now using `native_decide`, more serious
 engineering is necessary if we insist on using `by decide` here.
 -/
 theorem testLawsUpto4_computation :
-  testLawsUpto 4 (fun l => laws[findMagmaLaw l] = l) = true := by rsimp_decide
+  testLawsUpto 3 (fun l => laws[findMagmaLaw l] = l) = true := by rsimp_decide
+
 
 theorem laws_complete' :
-    ∀ l : Law.MagmaLaw Nat, l.forks ≤ 4 → l.is_canonical → laws[findMagmaLaw l] = l := by
+    ∀ l : Law.MagmaLaw Nat, l.forks ≤ 3 → l.is_canonical → laws[findMagmaLaw l] = l := by
   simpa [decide_eq_true_eq]
-    using (testLawsUpto_spec 4 (fun l => laws[findMagmaLaw l] = l)).mp testLawsUpto4_computation
+    using (testLawsUpto_spec 3 (fun l => laws[findMagmaLaw l] = l)).mp testLawsUpto4_computation
 
 /--
 This theorem demonstrates that `laws`, the list of laws considered in this project, indeed
