@@ -155,7 +155,7 @@ instance {α : Type} [BEq α] [Hashable α] : GetElem? (DenseNumbering α) α Na
   getElem? num a := num.index[a]?
 
 def DenseNumbering.fromArray {α : Type} [BEq α] [Hashable α] (elts : Array α) : DenseNumbering α :=
-  let index := Std.HashMap.ofList (elts.mapIdx (fun i x => (x, i.val))).toList
+  let index := Std.HashMap.ofList (elts.mapIdx (fun i x => (x, i))).toList
   ⟨elts, index⟩
 
 def DenseNumbering.map {α β : Type} [BEq α] [BEq β] [Hashable α] [Hashable β] (num : DenseNumbering α) (f : α → β) : DenseNumbering β :=
