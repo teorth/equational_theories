@@ -45,16 +45,16 @@ instance : LiftingMagmaFamily List where
   instMagmaDecidableEq := inferInstance
   ι := fun a ↦ [a]
   lift f := {
-    toFun := (List.bind · f),
+    toFun := (List.flatMap · f),
     map_op' := by
       intro x y
-      dsimp [Magma.op, List.bind]
-      rw [← List.join_append, List.map_append]
+      dsimp [Magma.op, List.flatMap]
+      rw [← List.flatten_append, List.map_append]
   }
   lift_factors := by
     intro α _ f
     funext x
-    exact (List.bind_singleton _ _).symm
+    exact (List.flatMap_singleton _ _).symm
 
 instance (priority := high) instMagmaMultiset (α : Type _) [DecidableEq α] : Magma (Multiset α) where
   op := (· + ·)

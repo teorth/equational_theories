@@ -29,7 +29,7 @@ time, and just assumes it is true.  This is useful in generated lean code, where
 succeed, and we really just want the check done once, in the kernel.
 -/
 elab "decide!" : tactic => do
-  closeMainGoalUsing `decide fun expectedType => do
+  closeMainGoalUsing `decide fun expectedType _ => do
     let expectedType ← preprocessPropToDecide expectedType
     let expectedTypes := splitConjs expectedType
     let proofs ← expectedTypes.mapM fun expectedType => do
@@ -39,7 +39,7 @@ elab "decide!" : tactic => do
       let s := d.appArg!
       let rflPrf ← mkEqRefl (toExpr true)
       return mkApp3 (Lean.mkConst ``of_decide_eq_true) expectedType s rflPrf
-    let proof ← proofs.pop.foldrM (mkAppM ``And.intro #[·, ·]) proofs.back
+    let proof ← proofs.pop.foldrM (mkAppM ``And.intro #[·, ·]) proofs.back!
     return proof
 
 private partial def inferDecideFin (p : Expr) : MetaM Expr := do
@@ -77,12 +77,12 @@ Using type class synthesis to infer the decidability instances can be very slow,
 actual proof checking, so this tactic constructs the instances very directly.
 -/
 elab "decideFin!" : tactic => do
-  closeMainGoalUsing `decideFin fun expectedType => do
+  closeMainGoalUsing `decideFin fun expectedType _ => do
     let expectedType ← preprocessPropToDecide expectedType
     let expectedTypes := splitConjs expectedType
     let proofs ← expectedTypes.mapM fun expectedType => do
       let s ← inferDecideFin expectedType
       let rflPrf ← mkEqRefl (toExpr true)
       return mkApp3 (Lean.mkConst ``of_decide_eq_true) expectedType s rflPrf
-    let proof ← proofs.pop.foldrM (mkAppM ``And.intro #[·, ·]) proofs.back
+    let proof ← proofs.pop.foldrM (mkAppM ``And.intro #[·, ·]) proofs.back!
     return proof

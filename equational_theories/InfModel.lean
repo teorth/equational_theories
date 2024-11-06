@@ -662,7 +662,7 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
   ∀ (z: α),
   FreeMagma.Mem z E.lhs
   → FreeMagma.Mem z E.rhs
-  → ∃ (G : Type) (hm : Magma G), Finite G ∧ ¬Equation2 G ∧ G ⊧ E := by
+  → ∃ (G : Type) (_ : Magma G), Finite G ∧ ¬Equation2 G ∧ G ⊧ E := by
   intro x mem_x_lhs mem_x_rhs
   suffices hs: ∃ (k: ℕ), 1 < k ∧ (∃ (M: Magma (ZMod k)), ZMod k ⊧ E) by
     obtain ⟨k, hk, M, hm⟩ := hs

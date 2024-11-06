@@ -43,7 +43,7 @@ local infix:50 " ⊢ " =>  derive
 -- We keep this in type, because we're going to want to gather
 -- the (finite!) set of required axioms later.
 /-- Definition for derivability -/
-inductive derive.{u} {α : Type u} (Γ : Ctx α) : MagmaLaw α → Type u :=
+inductive derive.{u} {α : Type u} (Γ : Ctx α) : MagmaLaw α → Type u where
   | Ax {E} (h : E ∈ Γ) : Γ ⊢ E
   | Ref {t} : Γ ⊢ t ≃ t
   | Sym {t u} : Γ ⊢ t ≃ u → Γ ⊢ u ≃ t
@@ -55,7 +55,7 @@ inductive derive.{u} {α : Type u} (Γ : Ctx α) : MagmaLaw α → Type u :=
 local infix:50 " ⊢' " =>  derive'
 
 /-- Definition for derivability where Subst can only be applied to Ax -/
-inductive derive'.{u, v} {α : Type u} {β : Type v} (Γ : Ctx α) : MagmaLaw β → Type (max u v) :=
+inductive derive'.{u, v} {α : Type u} {β : Type v} (Γ : Ctx α) : MagmaLaw β → Type (max u v) where
   | SubstAx {E} (h : E ∈ Γ) (σ) : Γ ⊢' E.lhs ⬝ σ ≃ E.rhs ⬝ σ
   | Ref {t} : Γ ⊢' t ≃ t
   | Sym {t u} : Γ ⊢' t ≃ u → Γ ⊢' u ≃ t

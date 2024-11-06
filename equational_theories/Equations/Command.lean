@@ -95,8 +95,8 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
     | none => docs
     | some more => s!"{docs}\n\n---\n{more}"
   let ranges := {
-    range := ← getDeclarationRange (← getRef)
-    selectionRange := ← getDeclarationRange eqStx }
+    range := (← getDeclarationRange? (← getRef)).getD default
+    selectionRange := (← getDeclarationRange? eqStx).getD default}
   let addMarkup name := do
     addDocString' name docs
     Lean.addDeclarationRanges name ranges

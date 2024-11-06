@@ -43,8 +43,8 @@ elab tk:"duals " i:num " ↔ " j:num : command => Command.liftTermElabM do
   let thmName := ns.str s!"dual_{i.getNat}"
   let some (map, flip) := checkDualLaw law1 law2.dual | throwError "not duals"
   let ranges := {
-    range := ← getDeclarationRange (← getRef)
-    selectionRange := ← getDeclarationRange tk }
+    range := (← getDeclarationRange? (← getRef)).getD default
+    selectionRange := (← getDeclarationRange? tk).getD default}
   let addMarkup name := do
     Lean.addDeclarationRanges name ranges
     _ ← Term.addTermInfo tk (← mkConstWithLevelParams name) (isBinder := true)
