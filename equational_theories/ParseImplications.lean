@@ -185,7 +185,7 @@ where
     if todo.isEmpty then
       return ⟨satisfied, refuted, false⟩
     else
-      let e := todo.back
+      let e := todo.back!
       let todo := todo.pop
       if e.isAppOfArity ``And 2 then
         go ((todo.push e.appFn!.appArg!).push e.appArg!) satisfied refuted

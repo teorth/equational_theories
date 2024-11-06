@@ -202,14 +202,14 @@ elab "subsumption " eq1:term:arg eq2:term:arg : tactic => do
       guard (← isDefEq _e2 goalType)
     let s ← saveState
     try
-      guard (← isDefEq args1.back eq2)
+      guard (← isDefEq args1.back! eq2)
       let expr ← instantiateMVars eq1
       for mvar in ← getMVarsNoDelayed expr do
         mvar.assumption
       goal.assign expr
     catch _ =>
       restoreState s
-      guard (← isDefEq args1.back (← mkEqSymm eq2))
+      guard (← isDefEq args1.back! (← mkEqSymm eq2))
       let expr ← instantiateMVars eq1
       for mvar in ← getMVarsNoDelayed expr do
         mvar.assumption
