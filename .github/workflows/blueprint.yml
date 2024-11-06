@@ -81,7 +81,7 @@ jobs:
             !.lake/build/doc-data
             !.lake/build/doc/declarations/declaration-data-equational_theories*
           key: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}
-          restore-keys: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}
+          #restore-keys: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}
 
       - name: Build project
         run: ~/.elan/bin/lake build equational_theories
