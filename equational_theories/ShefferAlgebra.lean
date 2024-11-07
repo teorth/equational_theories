@@ -157,7 +157,7 @@ lemma idemp₂ (a : α) : a ⊓ a = a :=
 by
   symm
   calc
-    a = a ⊓ (a ⊔ z) := by exact Eq.symm (absorb₂ a 0)
+    a = a ⊓ (a ⊔ z) := by exact Eq.symm (absorb₂ a z)
     _ = a ⊓ a       := by rw [ident₁]
 
 lemma inv (a a' : α) : a ⊔ a' = u → a ⊓ a' = z → a' = aᶜ :=
