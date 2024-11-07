@@ -64,9 +64,6 @@ instance : HasCompl α where
 
 lemma comple (a : α) : aᶜ = a′ := rfl
 
-instance : Zero α where
-  zero := elt | elt′
-
 def z : α := elt | elt′
 
 def u : α := z′
