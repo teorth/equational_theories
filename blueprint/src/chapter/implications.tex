@@ -152,11 +152,11 @@ for all $x,y$, from which one concludes $x=x'$ for any $x,x' \in G$, giving \Cre
 \end{proof}
 
 
-\begin{theorem}[Sheffer stroke axiom]\label{sheffer}\uses{eq345169}  Definition \ref{eq345169}
+\begin{theorem}[Sheffer stroke axiom]\label{sheffer}\uses{eq345169}\lean{Sheffer.Equation345169_is_Boolean}\leanok  Definition \ref{eq345169}
 axiomatizes the Sheffer stroke operation $x \op y = \overline{xy}$ in a Boolean algebra.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
 See \cite{mccune_et_al}.  In fact this is the shortest law with this property.
 
 A sketch of proof follows.  One can easily verify that the Sheffer stroke operation obeys this law.  Conversely, if this law holds, then automated theorem provers can show that the three Sheffer axioms
