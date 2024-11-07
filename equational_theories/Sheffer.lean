@@ -1,7 +1,5 @@
 import equational_theories.Generated.VampireProven.Sheffer
 import equational_theories.ShefferAlgebra
-import equational_theories.BooleanAlternate
-import Mathlib.Order.BooleanAlgebra
 
 namespace Sheffer
 
@@ -118,8 +116,6 @@ instance Equation345169_is_Boolean (G : Type*) [Magma G]
   (h : Equation345169 G) [Inhabited G] :
     BooleanAlgebra G :=
   let _ := Equation345169_is_Sheffer G h
-  let bRing := @ShefferToHuntingtonAlg G
-  @HuntingtonAlgebraToBooleanAlg G bRing
-
+  @ShefferToBooleanAlg G _
 
 end Sheffer
