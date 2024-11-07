@@ -405,12 +405,12 @@ function renderImplications(index) {
                 maybe_prove = ` <a href='${proofhref}'>Prove This!</a>`;
             } else if (isUnknown(status, true)) { // conjectured
 	            let proofhref = gen_proof_url(forward, backward, isImplies(status, false, false) ? "yes" : "no");
-                maybe_prove = ` <a href='${proofhref}'>Prove This!</a>`;
+                maybe_prove = ` <a href='${proofhref}'>Prove This!</a> <a href="show_proof.html?${forward+1},${backward+1}" target="_blank">Show Proof</a>`;
             } else {
                 var does_implies = isImplies(status, false, false);
                 let proofhref;
                 proofhref = gen_proof_url(forward, backward, does_implies ? "yes" : "no");
-                maybe_prove = ` <a href='${proofhref}'>Try This!</a>`;
+                maybe_prove = ` <a href='${proofhref}'>Try This!</a> <a href="show_proof.html?${forward+1},${backward+1}" target="_blank">Show Proof</a>`;
             }
             const item = `<div uid=${i} class="implication-item ${isspecial} ${ids[status]} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}${maybe_prove}</div>`;
 
@@ -425,14 +425,15 @@ function renderImplications(index) {
 	    });
     });
 
-  selectedEquationGraphitiLinks.innerHTML = `<br>(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1}&highlight_red=${index+1}">implies</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1}&highlight_red=${index+1}">implied by</a> of the equation)`
+  const graphiti_url = `${GRAPHITI_BASE_URL}?render=true&highlight_red=${index+1}`
+  selectedEquationGraphitiLinks.innerHTML = `<br>(Visualize <a target="_blank" href="${graphiti_url}&implies=${index+1}">implies</a> and <a target="_blank" href="${graphiti_url}&implied_by=${index+1}">implied by</a> of the equation, or see <a target="_blank" href="${graphiti_url}&neighborhood_of=${index+1}&neighborhood_of_distance=1">1</a>, <a target="_blank" href="${graphiti_url}&neighborhood_of=${index+1}&neighborhood_of_distance=2">2</a>, <a target="_blank" href="${graphiti_url}&neighborhood_of=${index+1}&neighborhood_of_distance=3">3</a> graph edges away)`
   if (unknownImpliesEqNum.length > 0) {
     const implies = unknownImpliesEqNum.map(x => x + 1)
-    selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1},${implies.join(",")}&highlight_red=${index+1}&highlight_blue=${implies.join(",")}&show_unknowns_conjectures=on">implies</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1},${implies.join(",")}&highlight_red=${index+1}&highlight_blue=${implies.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknowns+conjectures</a>)`
+    selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${graphiti_url}&implies=${index+1},${implies.join(",")}&highlight_blue=${implies.join(",")}&show_unknowns_conjectures=on">implies</a> and <a target="_blank" href="${graphiti_url}&implied_by=${index+1},${implies.join(",")}&highlight_blue=${implies.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknowns+conjectures</a>)`
   }
   if (unknownImpliedByEqNum.length > 0) {
     const impliedby = unknownImpliedByEqNum.map(x => x + 1)
-    selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1},${impliedby.join(",")}&highlight_red=${index+1}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implies</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1},${impliedby.join(",")}&highlight_red=${index+1}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknown bys+conjectured bys</a>)`
+    selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${graphiti_url}&implies=${index+1},${impliedby.join(",")}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implies</a> and <a target="_blank" href="${graphiti_url}&implied_by=${index+1},${impliedby.join(",")}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknown bys+conjectured bys</a>)`
   }
 
   smallest_magma = smallest_magma_data[index+1]

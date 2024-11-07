@@ -1,4 +1,5 @@
 import equational_theories.Asterix
+import equational_theories.Closure
 import equational_theories.Completeness
 import equational_theories.Compactness
 import equational_theories.FreeMagmaImplications
@@ -7,6 +8,7 @@ import equational_theories.MagmaOp
 import equational_theories.Subgraph
 import equational_theories.Equations.All
 import equational_theories.Equations.LawsComplete
+import equational_theories.Duals.All
 import equational_theories.InfModel
 import equational_theories.Generated
 import equational_theories.Counting

@@ -406,7 +406,6 @@ theorem Equation1661_not_implies_Equation1657 :
     exact op_1661_1657_satisfies_1661
   · simp only [not_forall]
     exists 0, 1
-    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -428,7 +427,6 @@ theorem Equation1661_not_implies_Equation1630 :
     exact op_1661_1657_satisfies_1661
   · simp only [not_forall]
     exists 1, 0
-    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -450,7 +448,6 @@ theorem Equation1661_not_implies_Equation1833 :
     exact op_1661_1657_satisfies_1661
   · simp only [not_forall]
     exists 3, 0
-    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -472,7 +469,6 @@ theorem Equation1661_not_implies_Equation1837 :
     exact op_1661_1657_satisfies_1661
   · simp only [not_forall]
     exists 3, 0
-    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -494,7 +490,6 @@ theorem Equation1661_not_implies_Equation1851 :
     exact op_1661_1657_satisfies_1661
   · simp only [not_forall]
     exists 0, 3
-    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -516,7 +511,6 @@ theorem Equation1661_not_implies_Equation1860 :
     exact op_1661_1657_satisfies_1661
   simp only [not_forall]
   exists 0, 3
-  simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -538,7 +532,6 @@ theorem Equation1661_not_implies_Equation2443 :
     exact op_1661_1657_satisfies_1661
   · simp only [not_forall]
     exists 1, 0
-    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -560,7 +553,6 @@ theorem Equation1661_not_implies_Equation2467 :
     exact op_1661_1657_satisfies_1661
   · simp only [not_forall]
     exists 0, 1
-    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -582,7 +574,6 @@ theorem Equation1661_not_implies_Equation3457 :
     exact op_1661_1657_satisfies_1661
   · simp only [not_forall]
     exists 1, 0
-    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -604,7 +595,6 @@ theorem Equation1661_not_implies_Equation3521 :
     exact op_1661_1657_satisfies_1661
   · simp only [not_forall]
     exists 0, 1
-    simp [magN, op, op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -626,7 +616,6 @@ theorem Equation1661_not_implies_Equation4268 :
     exact op_1661_1657_satisfies_1661
   · simp only [not_forall]
     exists 3, 0
-    simp [magN, op, op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
@@ -648,16 +637,9 @@ theorem Equation1661_not_implies_Equation4314 :
     exact op_1661_1657_satisfies_1661
   · simp only [not_forall]
     exists 0, 3
-    simp [magN,op,op_1661_1657]
 
 /-- Dual of the previous result -/
 @[equational_result]
 theorem Equation1979_not_implies_Equation4606 : ∃ (G : Type) (_ : Magma G), Equation1979 G ∧ ¬ Equation4606 G := by
   obtain ⟨G', G'Magma, h1, h2⟩ := Equation1661_not_implies_Equation4314
-  refine ⟨Op G', opMagma, ?_, ?_⟩
-  · have h3 : Equation1661 G' ↔ Equation1979 (Op G') := by aesop
-    rwa [h3] at h1
-  · have h4 : Equation4314 G' ↔ Equation4606 (Op G') := by
-      unfold Equation4314 Equation4606
-      aesop
-    rwa [h4] at h2
+  exact ⟨Op G', opMagma, fun _ _ _ => h1 _ _ _, fun H => h2 fun _ _ => (H _ _).symm⟩

@@ -5,7 +5,7 @@ open FreeMagma
 
 namespace Law
 
-structure MagmaLaw (α : Type*) where
+@[ext] structure MagmaLaw (α : Type*) where
   lhs : FreeMagma α
   rhs : FreeMagma α
 deriving DecidableEq
@@ -43,7 +43,7 @@ local infix:50 " ⊢ " =>  derive
 -- We keep this in type, because we're going to want to gather
 -- the (finite!) set of required axioms later.
 /-- Definition for derivability -/
-inductive derive.{u} {α : Type u} (Γ : Ctx α) : MagmaLaw α → Type u :=
+inductive derive.{u} {α : Type u} (Γ : Ctx α) : MagmaLaw α → Type u where
   | Ax {E} (h : E ∈ Γ) : Γ ⊢ E
   | Ref {t} : Γ ⊢ t ≃ t
   | Sym {t u} : Γ ⊢ t ≃ u → Γ ⊢ u ≃ t
@@ -55,7 +55,7 @@ inductive derive.{u} {α : Type u} (Γ : Ctx α) : MagmaLaw α → Type u :=
 local infix:50 " ⊢' " =>  derive'
 
 /-- Definition for derivability where Subst can only be applied to Ax -/
-inductive derive'.{u, v} {α : Type u} {β : Type v} (Γ : Ctx α) : MagmaLaw β → Type (max u v) :=
+inductive derive'.{u, v} {α : Type u} {β : Type v} (Γ : Ctx α) : MagmaLaw β → Type (max u v) where
   | SubstAx {E} (h : E ∈ Γ) (σ) : Γ ⊢' E.lhs ⬝ σ ≃ E.rhs ⬝ σ
   | Ref {t} : Γ ⊢' t ≃ t
   | Sym {t u} : Γ ⊢' t ≃ u → Γ ⊢' u ≃ t
@@ -113,7 +113,7 @@ namespace Law
 
 namespace MagmaLaw
 
-def symm {α} (l : MagmaLaw α) : MagmaLaw α := {lhs := l.rhs, rhs:=l.lhs}
+def symm {α} (l : MagmaLaw α) : MagmaLaw α := {lhs := l.rhs, rhs := l.lhs}
 
 @[simp]
 theorem symm_symm {α} (l : MagmaLaw α) : l.symm.symm = l :=
@@ -129,8 +129,15 @@ theorem map_comp {α β γ} (f : α → β) (g : β → γ) (m : MagmaLaw α) :
     (m.map f).map g = m.map (g ∘ f) := by
   simp [map, fmapHom_comp']
 
+theorem map_symm {α β} (f : α → β) (m : MagmaLaw α) : m.symm.map f = (m.map f).symm := rfl
+
 def Mem {α} (a : α) (m : MagmaLaw α) : Prop :=
   m.lhs.Mem a ∨ m.rhs.Mem a
+
+def toList {α} (m : MagmaLaw α) : List α := m.lhs.toList ++ m.rhs.toList
+
+@[simp] def map_toList {α β} (m : MagmaLaw α) (f : α → β) :
+    (m.map f).toList = m.toList.map f := by simp [map, toList]
 
 def elems {α} [DecidableEq α] (m : MagmaLaw α) :
     {l : List α // l.Nodup ∧ ∀ a, a ∈ l ↔ Mem a m} := by

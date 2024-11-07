@@ -7,7 +7,9 @@ In this chapter we study magmas that obey \Cref{eq854}, thus
 for all $x,y,z$.  In particular we have
 $$ x = x \op (x \op z)^2;$$
 substituting $z  = (x \op x)^2$ we have in particular that
-$$ x = x \op x^2.$$
+\begin{equation}\label{8}
+  x = x \op x^2.
+\end{equation}
 We then have
 \begin{align*}
   y &= y \op ((x \op y) \op y^2) \\
@@ -120,3 +122,256 @@ $$
 x \op y \sim x \op (y \op x)$$
 and using \Cref{unique factorization} we reduce to either $y \sim y \op x$, $y \to x$, or $y \op x \to x$, and each of these is already known to fail.
 \end{proof}
+
+\section{Some further properties of 854 magmas}
+
+As in the previous section, we write $y \to x$ if $x = x \op y$.
+
+\begin{lemma}[854 equivalences, I]\label{854-equiv}  For $x, y$ in a 854 magma, the following are equivalent.
+  \begin{itemize}
+  \item (i) $y \to x$.
+  \item (ii) $x = x \op y$.
+  \item (iii) $x = z \op y$ for some $z$.
+  \item (iv) $z, x \op z \to y$ for some $z$.
+  \item (v) $x \op y^2 \to y$.
+  \item (vi) $y \op (x \op y^2) = y$.
+  \item (vii) $y = (w \op z) \op (x \op z)$ for some $w,z$.
+  \item (viii) $y \to x \op y^2$.
+  \end{itemize}
+\end{lemma}
+
+\begin{proof} The equivalence of (i) and (ii), or (v) and (vi), is by definition.  (iii) trivially implies (ii), and the converse comes from \eqref{378}.  Using \eqref{8} we see that (v) implies (iv).  If (iv) is true, then $y = (y \op z) \op (x \op z)$, giving (vii).  From \eqref{854} we see that (vii) implies (ii).  If (ii) is true, then $y \op (x \op y^2) = y \op ((x \op y) \op (y \op y)) = y$, giving (vi).  Finally, to show the equivalence of (i) and (viii), use the already estalbished equivalence of (i) and (v), toegether with \eqref{378} which gives $(x \op y^2) \op y^2 = x \op y^2$.
+\end{proof}
+
+Introduce the notation $y \leq x$ for $x \op y \to y$.
+
+\begin{lemma}[854 equivalences, II]\label{854-equiv-2}  For $x,y$ in a 854 magma, the following are equivalent.
+  \begin{itemize}
+  \item (i) $y \leq x$.
+  \item (ii) $x \op y \to y$.
+  \item (iii)  For all $z$, $y \to z$ implies $x \to z$.
+  \item (iv) $y \to x \op y$.
+  \end{itemize}
+\end{lemma}
+
+\begin{proof}  The equivalence of (i) and (ii) is by definition.  If (ii) holds and $y \to z$, then by  Lemma \ref{854-equiv} we have $x = u \op (x \op y)$ and $z = v \op y$ for some $u,v$, hence
+  $$ z \op x = z \op (x \op ((v \op y) \op (x \op y))) = z \op (u \op (x \op y) \op (z \op (x \op y))) = z,$$
+giving the desired claim $x \to z$.  Now if (iii) holds, note from Lemma \ref{854-equiv} that $y \to x \op y$, hence $x \to x \op y$ by (iii), so that $(x \op y) \op x = x \op y$, giving (iv).  Finally, if (iv) holds, note that
+\begin{align*}
+  x \op ((x \op y) \op x) &= x \op ( ((x \op y) \op ((y \op y) \op ((x \op y) \op y))) \op x) \\
+  &= x \op (((x \op y) \op ((y \op y) \op (x \op y))) \op (x \op ((y \op y) \op (x \op y)))) \\
+  &= x
+\end{align*}
+and hence by (iv) $x \op (x \op y) = x$, giving (ii).
+\end{proof}
+
+\begin{corollary}  The relation $\leq$ is a pre-order, and for each $z$, the sets $\{ x: x \to z \}$ are upward closed in this preorder.
+\end{corollary}
+
+
+
+\section{Running a greedy algorithm}
+
+Define a \emph{partial 854 magma} to be a partial function $\op: \N \times \N \to \N$ obeying the following axioms:
+
+\begin{itemize}
+  \item (Equation 854)  If $x,y,z \in \N$ are such that $(y \op z) \op (x \op z)$ is well-defined, then $x \op ((y \op z) \op (x \op z))$ is well-defined and equal to $x$.
+  \item (Equation 8) If $x \in \N$ are such that $x \op x$ is well-defined, then $x \op (x \op x)$ is well-defined and equal to $x$.
+  \item (Equation 101)  If $x,y \in \N$ are such that $(x \op y) \op x$ is well-defined, then $x \op ((x \op y) \op x)$ is well-defined and equal to $x$.
+  \item (Equation 46155) If $x,y \in \N$ are such that $x \op (x \op y)$ is well-defined, then $(x \op y) \op (x \op (x \op y))$ is well-defined and equal to $x \op y$.
+  \item (Equation 378) If $x,y \in \N$ is such that $x \op y$ is well-defined, then $(x \op y) \op y$ is well-defined and equal to $x \op y$.
+  \item (No idempotence)  If $x \in \N$ is such that $x \op x$ is well-defined, then $x \op x \neq x$.
+  \item (Auxiliary law)  If $x,y \in \N$ are such that $x \op (x \op y)$ is well-defined and equal to $x$, then $x=y$.
+  \item (Unique factorization)  If $x,y,x',y' \in \N$ are such that $x \op y$, $x' \op y'$ are well-defined and equal to each other, then at least one of the assertions $x \op y = x$, $x' \op y' = x'$, or $(x,y) = (x',y')$ is true.
+  \item (Monotonicity)  If $x,y \in \N$ is such that $x \op y$ is defined, then either $x \op y = x$ or $x \op y > x, y$.
+\end{itemize}
+
+The first five laws are known consequences of 854.  The no idempotence law was known for the free magma $M_{854}$ because it maps to finite magmas without idempotents, such as $\Z/3\Z$ with law $x \op y = x - 1_{x=y}$.  The unique factorization law is also known for the free magma by \Cref{unique factorization}.  The auxiliary law is a ``leap of faith'' that helped close the greedy argument, and the monotonicity property is a technical consequence of the greedy construction that will also help close the argument.
+
+The following observation is key.
+
+\begin{proposition}[Greedy construction]\label{854-extend}\leanok\lean{Refutation_854.Greedy.Extension1.next_ok}  Suppose one has a partial 854 magma on $\N$ that is only finitely defined, and let $a,b \in G$ be such that $a \op b$ is currently undefined.  Then it is possible to extend the magma to a larger partial 854 magma, such that $a \op b$ is now defined.
+\end{proposition}
+
+\begin{proof}  Define a directed graph by writing $x \to y$ if $y \op x$ is defined and equal to $y$.  By Equation 378, we see that $x \to y$ if and only if $z \op x$ is well-defined and equal to $y$ for some $z$.
+
+  From unique factorization, we see that $b$ has at most one representation of the form $b = b_1 \op b_2$ with $b_1 \neq b$, or equivalently $b_2 \not \to b_1$.  We define $b_1, b_2$ accordingly if such a representation exists, otherwise we leave $b_1, b_2$ undefined.  We say that $b_1$ is \emph{relevant} if $b_2 \to a$. Note that this forces $a \neq b_1$ since $b_2 \not \to b_1$.  Also, if $b_1,b_2$ exist, we see from monotonicity that $b = b_1 \op b_2 > b_1, b_2$.
+
+  Let $c$ be a natural number that is larger than any number appearing in anywhere in the partial 854 magma multiplication table (in particular it is larger than $a,b$, as well as $b_1,b_2$ if they are defined).  We then extend the multiplication table by  defining $a \diamond b = c$, $b \diamond c = b$, and $c \diamond b = c$.  If $b_1$ exists and is relevant, we also define $b_1 \diamond c = b_1$.  Finally, if $b_1$ exists and is relevant, and additionally $b \to b_1$, then we also define $c \diamond b_1 = c$.  We remark that all new entries added are of the left absorptive form $x \diamond y = x$, except for $a \diamond b = c$.
+
+We now verify that all of the axioms of a partial 854 magma continue to hold.  We begin with all the axioms except for 854:
+
+\begin{itemize}
+  \item Monotonicity: Observe that all the new values $x \diamond y$ of the multiplication table introduced are either equal to $x$, or larger than both $x$ and $y$, so the monotonicity property is preserved.
+  \item Unique factorization: the only way unique factorization breaks is if there is an element $z$ that has two distinct factorizations $z = x \op y = x' \op y'$ with neither $x \op y$ nor $x' \op y'$ a left absorptive product.  Since the only non-left-absorptive product introduced is $a \op b = c$, and $c$ has no prior representation as a product, we see that the unique factorization property is preserved.
+  \item No idempotence: The only possible product $x \op x$ that could be introduced here is $a \op b$ if $x=a=b$, but in that case $x \op x = a \op b = c$ is clearly not equal to $x$, so the no idempotence property is preserved.
+  \item Equation 8: If $x \op x$ were already defined in the previous magma, the claim would already be established, so $x \op x$ must be one of the new products $a \op b$, $b \diamond c$, $c \diamond b$, $b_1 \diamond c$, or $c \diamond b_1$.  As $c \neq a,b,b_1$, the only option is $x = a = b$, but then $x \op (x \op x) = b \op c = b = x$, as required.
+  \item Equation 101: By Equation 8, we may assume $x \op y \neq x$, which implies $y \neq c$ since $x \op c = x$ whenever the left-hand side is defined.  We can also assume $x \neq c$, since we have $c \op z = c$ whenever the left-hand side is defined.  If $x \op y = c$, then $(x,y) = (a,b)$; as $(x \op y) \op x = c \op x$ is well-defined, $x=a$ is then either equal to $b$, or equal to $b_1$ if the latter exists and is relevant.  But the second case cannot occur since $a \neq b_1$, so we have $x = b$, and then $x \op ((x \op y) \op x) = b \op (c \op b) = b = x$, giving the claim.  So we may assume $x \op y \neq c$.  If $(x \op y, x) \neq (a,b)$, then $(x \op y) \op x$ was already defined in the original partial magma, and the claim follows from Equation 101; hence we may assume $(x \op y, x) = (a,b)$, then $x \op ((x \op y) \op x) = b \op c = b = x$, giving the claim.
+  \item Equation 46155: By Equation 8, we may assume $x \op y \neq x$ and hence $y \neq c$ as before.  The case $x=c$ is not possible, as this forces $x \op y = c$ and then $x \op (x \op y)$ is undefined.  If $x \op y = c$, then $(x,y) = (a,b)$; in order for $x \op (x \op y) = a \op c$ to be defined, either $a=b$ or $a=b_1$ with $b_1$ relevant, but the latter is impossible since $a \neq b_1$; thus $x=y=a=b$ and $(x \op y) \op (x \op (x \op y)) = c \op (b \op c) = c = (x \op y)$, giving the claim.  Thus we may assume $x \op y \neq c$.  If $(x, x \op y) \neq (a,b)$ then $x \op (x \op y)$ was already defined in the original partial magma, and the claim follows from Equation 46155; hence we may assume $(x, x \op y) = (a,b)$, and we have $(x \op y) \op (x \op (x \op y)) = b \op c = b = x \op y$, giving the claim.
+  \item Equation 378:  We can assume $x \op y \neq x$, since the claim is trivial otherwise.  This rules out the $y=c$ and $x=c$ cases.  The only new case is then if $x \op y = c$, but forces $(x,y) = (a,b)$, and then $(x \op y) \op y = c \op b = c = x \op y$, giving the claim.
+  \item Auxiliary law: if $x=c$, then the only possible value for $x \op y$ is $c$, and $c \op c$ is undefined, contradiction; thus $x \neq c$.  If $y = c$, then the only possible value for $x \op y$ is $x$, and then $x \op (x \op y)$ cannot equal $x$ by the no idempotence law.  Thus $y \neq c$.  Since $x \op (x \op y) = x$ is not equal to $c$, $(x,x \op y)$ is not equal to $(a,b)$.  If $(x,y) \neq (a,b)$, then both $x \op y$ and $x \op (x \op y)$ were already defined in the original partial magma, and the claim follows from the auxiliary law for that magma.  Thus we may assume $(x,y) = (a,b)$, in which case $a \op c = a$, hence by construction either $a=b$ or $a=b_1$.  If $a=b$ then we are done.  If $a = b_1$, then $b_1$ cannot be relevant, and then $a \op c = b_1 \op c$ remains undefined, a contradiction.
+\end{itemize}
+
+Now we tackle the most difficult verification, which is 854.  This splits into a large number of cases.
+\begin{itemize}
+  \item Case 1: $x=c$.  Then $x \op z$ can only equal $c$, hence $z$ equals $b$ or $b_1$; and $y \op z$ can also only equal $b$ or $b_1$, and $(y \op z) \op (x \op z)$ is equal to $y \op z$.  If $y \op z = b$, then we are done since $c \op b = c$.  If $y \op z = b_1$, then $b_1 \op c$ needs to be defined, so $b_1$ is relevant.  Furthermore, from equation 378 we have $b_1 \op z = b_1$, hence by the no idempotence property $z$ must equal $b$, so $b \to b_1$, and hence $c \op b_1 = c$, giving the claim.
+  \item Case 2: $x \neq c$, $z = c$.  This forces $x,y=b,b_1$ with $y \op z = y$ and $x \op z = x$, thus $y \op x$ is well-defined and we need $x \op (y \op x)$ well-defined and equal to $x$.  If $x=y$, this follows from Equation 8; otherwise, either $x = b_1 \op b_2$ and $y = b_1$ or $x = b_1$ and $y = b_1 \op b_2$, and the claim follows from Equation 101 or Equation 46155 respectively.
+  \item Case 3: $x, z \neq c$, $y = c$.  Then $z$ must equal $b$ or $b_1$, $y \op z$ must equal $c$, and $x \op z$ must equal $b$ or $b_1$, and $(y \op z) \op (x \op z)$ must equal $c$, with the $b_1$ options only available if $b_1$ is relevant.  If $x \op z = z$ then by equation 378, $z \op z = z$, contradicting the no idempotence law.  Thus we either have $z=b_1, x \op z = b$ or $z = b, x \op z = b_1$, and in either case $b_1$ must be relevant.  If $z \to x$, then either have $x=b$, or $x = b_1$ and $b_1$ is relevant, and in either case we have $x \op c = x$ as required.  So we may assume $z \not \to x$.  In the case $z = b_1, x \op z = b = b_1 \op b_2$ we may then apply unique factorization to conclude that $z = b_2$ and $x = b_1$, thus $x \op c = x$ as required.  In the opposite case $z = b$, $x \op z = b_1$ with $z \not \to x$, we see from monotonicity that $b_1 = x \op z > z = b$; but from monotonicity again $b = b_1 \op b_2 > b_1$, a contradiction.
+  \item Case 4: $x,y,z \neq c$, $(y,z) = (a,b)$.  Here, $y \op z$ and $(y \op z) \op (x \op z)$ must equal $c$, and $x \op z$ must then equal $b$ or $b_1$, with the latter an option only if $b_1$ is relevant.  If $x \op z = b$, then by Equation 378, $b \op b = b$, contradicting idempotence, thus $x \op z = b_1$ and $b_1$ is relevant, and then $b \to b_1$ by Equation 378 again.  If $z \to x$, then $x = b_1$, and the claim follows since $b_1 \op c = c$, so we may assume $z \not \to x$.  By monotonicity, this forces $b_1 = x \op z > z = b$ and $b = b_1 \op b_2 > b_1$, a contradiction.
+  \item Case 5: $x,y,z \neq c$, $(y,z) \neq (a,b)$, $(x,z) = (a,b)$.  Now $x \op z = c$, and $y \op z$ must equal $b$ or $b_1$.  If $y \op z = b$, then by Equation 378, $b \op b = b$, contradicting idempotence, thus $y \op z = b_1$ and $b_1$ is relevant, and then $b \to b_1$ by Equation 378 again, so $b_1 \op (b_1 \op b_2) = b_1$.  By the auxiliary law, this forces $b_1 = b_2$, so $x = b_1$, and then we are done since $b_1 \op c = b_1$.
+  \item Case 6: $x,y,z \neq c$, $(y,z), (x,z) \neq (a,b)$, $(y \op z, x \op z) = (a,b)$.  Here $x \op z = b$ and $(y \op z) \op (x \op z) = c$.  If $z \to x$, then $x=b$ and we are done since $b \op c = b$.  If $z \not \to x$, then by unique factorization applied to $x \op z = b_1 \op b_2$ we have $(x,z) = (b_1,b_2)$.  By Equation 378, we have $z \to y \op z$, hence $b_2 \to a$, so $b_1$ is relevant.  We are now done since $b_1 \op c = b_1$.
+  \item Case 7: $x,y,z \neq c$, $(y,z), (x,z) \neq (a,b), (y \op z, x \op z) \neq (a,b)$.  In this case $x \op ((y \op z) \op (x \op z))$ would already have been defined and equal to $x$ in the previous partial magma, thanks to Equation 854.
+\end{itemize}
+\end{proof}
+
+Iterating this in the usual fashion, we obtain
+
+\begin{corollary}[854 extension]\label{extend-854}\leanok\lean{Refutation_854.Greedy.exists_extension}
+Suppose one has a partial 854 magma on $\N$ that is only finitely defined.  Then it can be extended to a complete 854 magma that additionally obeys the no idempotence law, the monotonicity law, the auxiliary law, and the unique factorization law.
+\end{corollary}
+
+\begin{proof}  Apply the usual greedy algorithm.
+\end{proof}
+
+\begin{corollary}[854 does not not imply 413]\leanok\lean{Refutation_854.not_413_1045}\label{854-413}  There is an 854 magma which does not obey the 413 law $x = x \op (x \op (x \op (y \op x)))$.
+\end{corollary}
+
+\begin{proof} Create a partial magma by imposing the laws $1 \op 0 = 2$, $0 \op 2 = 3$, $2 \op 0 = 2$, $3 \op 2 = 3$.  One can check that this is a partial magma.  We then extend it to a global magma using \Cref{extend-854}.  We claim that we have the 413 violation
+  $$ 0 \op (0 \op (0 \op (1 \op 0))) = 0$$
+  or equivalently
+  $$ 0 \op (0 \op 3) = 0.$$
+Indeed this is immediate from the auxiliary law.
+\end{proof}
+
+\begin{corollary}[854 does not not imply 1045]\leanok\lean{Refutation_854.not_413_1045}\label{854-1045}  There is an 854 magma which does not obey the 1045 law $x = x \op ((y \op (y \op x)) \op x)$.
+\end{corollary}
+
+\begin{proof} Similar to previous, but start with the seed
+$$ 0 \op 0 = 2; 0 \op 1 = 0 \op 2 = 0; 1 \op 2 = 3; 2 \op 0 = 2 \op 1 = 2 \op 3 = 2; 3 \op 2 = 3$$
+which already violates the law with $x=1,y=0$, and can be verified to be a partial 854 magma.
+\end{proof}
+
+\section{The free 854 magma}
+
+In this section we explicitly describe the free magma $M_{X, 854}$ on some set $X$ of generators relative to the 854 law.
+
+We recall the free magma $M_X$ from \Cref{free-magma-def}, though to avoid confusion we will denote the magma operation on $M_X$ by $*$ rather than $\op$.  Recall that every word $w$ in $M_X$ has a length in $\N$, which is zero if $w$ is a generator in $X$, and is the sum of the lengths of $w_L$ and $w_R$ plus one if instead $w$ is of the form $w_L * w_R$ for the left and right components $w_L, w_R$ of $w$ (which are uniquely defined by $w$).  We iterate this notation, for instance $w_{RL}$ is the left-component of $w_R$ (if it exists), thus $w = w_L * (w_{RL} * w_{RR})$ in this case.
+
+We shall shortly define a relation $\to$ on $M_X$.  To motivate this relation, we make the following observation about 854 magmas:
+
+\begin{lemma}[The 854 relation]\label{854-relation}  Let $M$ be an $854$ magma, and let $\to$ be the associated operation, thus $x \to y$ if $y \op x = y$.  Then $x \to y$ holds under any of the following assumptions:
+  \begin{itemize}
+  \item (i) $y = a \op x$ for some $a$.
+  \item (ii) $x = a \op (y \op b)$ for some $a,b$ with $b \to a$.
+  \item (iii) $y = a \op (x \op b)$ for some $a,b$ with $b \to a$ and $x \op b \to x$.
+  \item (iv) $x = a \op y$ for some $a,z$ with $z \to a, y$.
+  \item (v) $x = a \op y$ for some $a$, with either $a=y$, $a = y \op z$, or $y = a \op z$ for some $z$.
+  \end{itemize}
+\end{lemma}
+
+\begin{proof}  Case (i) follows from \eqref{378}.  For (ii), we observe
+$$ y \op x = y \op ((a \op b) \op (y \op b)) = y$$
+as required.  For (iii), we see from (ii) that $y \to x$, and from (i) we have $x \op b \to y$, and then
+$$ y \op x = y \op ((x \op (x \op b)) \op (y \op (x \op b))) = y$$
+as required.  For (iv), we have
+$$ y \op x = y \op ((a \op z) \op (y \op z)) = y$$
+as required.  Finally, for (v), in the $a=y$ case we have from \eqref{8} that
+$$ y \op x = y \op ((y \op y^2) \op (y \op y^2)) = y,$$
+in the $a = y \op z$ case we have from \eqref{8} that
+$$ y \op x = y \op (((y \op z) \op (y \op z)^2) \op (y \op (y \op z)^2)) = y,$$
+and finally in the $y = a \op z$ case we have from \eqref{8} that
+$$ y \op x = y \op ( (a \op (a \op z)^2) \op ((a \op z) \op (a \op z)^2)) = y,$$
+so the claim follows in all cases.
+\end{proof}
+
+Now we define the operation $\to$ on $M_X$ by the following rule.
+
+\begin{definition}[Relation on the free group]\label{free-relate} For $x,y \in M_X$, we have $x \to y$ if and only if one of the following holds:
+\begin{itemize}
+\item (i) $x = y_R$.
+\item (ii) $y = x_{RL}$ and $x_{RR} \to x_L$.
+\item (iii) $x = y_{RL}$, $y_{RR} \to y_L$, and $y_R \to y_{RL}$.
+\item (iv) $y = x_R$, and there exists $z \in \{ x_{LR}, x_{LRL}, x_{RR}, x_{RRL} \}$ such that $z \to x_L$ and $z \to x_R$.
+\item (v)  $y = x_R$, and one of the claims $x_L = x_R$, $x_L = x_{RL}$, or $x_R = x_{LL}$ holds.
+\end{itemize}
+Here we adopt the convention that a claim can only hold if all terms in it are well-defined, for instance claim (ii) can only hold if $x_{RL}$ is well-defined.
+\end{definition}
+
+If we define the ``max-length'' of a claim $x \to y$ to be the maximum of the length of $x$ and the length of $y$, we see that the verification of a claim $x \to y$ only involves claims $x' \to y'$ of strictly smaller max-length.  Thus this definition is well-defined.  We also see that if $x \to y$, then exactly one of
+\begin{equation}\label{one}
+  x=y_R, x=y_{RL}, y = x_R, y=x_{RL}
+\end{equation}
+hold; in particular, we cannot have $x \to x$ for any $x$.
+
+We then define a new operation $\diamond$ on $M_X$ by the rule $x \diamond y = x$ if $y \to x$, and $x \diamond y = x*y$ otherwise. Thus, by definition, $y \to x$ if and only if $x \diamond y = x$.  We then define $M_{X,854}$ to be the magma generated by $X$ with the operation $\diamond$; thus, $w \in M_{X,854}$ if and only if either $w \in X$, or else $w_L, w_R \in M_{X,854}$ and $w_R \not \to w_L$.
+
+\begin{theorem}[Free 854 magma]\label{free-854}  The magma $M_{X,854}$ is a free 854 magma on $X$.
+\end{theorem}
+
+\begin{proof}  Let  $f: X \to M$ be a function from $X$ to an $854$ magma $M$, then $\varphi_f$ is a homomorphism from $M_X$ (with the operation $*$) to $M$.  We claim that the restriction of $\varphi_f$ to $M_{X,854}$ is a homomorphism from $M_{X,854}$ (with operation $\diamond$) to $M$.  Since $\varphi_f$ was already a homomorphism for $*$, it suffices to show that $\varphi_f$ preserves $\to$: that is to say, for any $x,y \in M_{X,854}$, that $x \to y$ implies $\varphi_f(x) \to \varphi_f(y)$.  By definition, one of the five scenarios (i)-(v) in \Cref{free-relate} holds, and in each case one can establish the claim from the corresponding claim of Lemma \ref{854-relation} and an induction on the max-length of the claim $x \to y$.
+
+It remains to show that $M_{854}$ actually obeys 854, that is to say that
+$$ (y \op z) \op (x \op z) \to x$$
+for all $x,y,z \in M_{854}$.  Writing $w = y \op z$, we have $z \to w$ by \Cref{free-relate}(i), and we need to show that $w \op (x \op z) \to x$.  We divide into four cases.
+
+Case 1: $x \op z \to w$, $z \to x$.  Here we have $x \op z = x$ and $w \op (x \op z) = w$.  We now have $z \to x,w$ and $x \to w$, and we need to show that $w \to x$.
+
+From \eqref{one} we know that one of
+\begin{equation}\label{one-1}
+  z = x_R, z = x_{RL}, x = z_R, x = z_{RL}
+\end{equation}
+holds, one of
+\begin{equation}\label{one-2}
+  z = w_R, z = w_{RL}, w = z_R, w = z_{RL}
+\end{equation}
+holds, and one of
+\begin{equation}\label{one-3}
+  x = w_R, x = w_{RL}, w = x_R, w = x_{RL}
+\end{equation}
+holds.
+
+We split into subcases using \eqref{one-3}.
+\begin{itemize}
+  \item If $x = w_R$ then the claim follows from \Cref{free-relate}(i).
+  \item If $w = x_{RL}$ then from \Cref{free-relate}(iii) we have $x_{RR} \to x_L$, and then the claim follows from \Cref{free-relate}(ii).
+  \item If $x = w_{RL}$, then $w_{RR} \to w_L$ by \Cref{free-relate}(ii) and from \Cref{free-relate}(iii) we will be done if we can show that $w_R \to w_{RL}$.  If $z = w_R$ then this follows from $z \to x$.  The claim $z = w_{RL}$ is not compatible with \eqref{one-1}, since $z=x$ in that case. If $w = z_R$ then $x = z_{RRL}$, and this is only compatible with \eqref{one-1} if $x = z_{RL}$, thus $z = a * (x * (x * b))$ and $w = x  * (x * b)$ for some $a,b$.  In order to have $x = w_{RL}$ in \eqref{one-3}, we must have $b \to x$ by \Cref{free-relate}(iii), but then $x*b$ would not lie in $M_{854}$, a contradiction.
+  \item If $w = x_R$, then we cannot then have $z = x_R$ as then $z=w$ which is incompatible with \eqref{one-2}.  If $z = x_{RL} = w_L$ then $x_{RR} \to x_L$ by \Cref{free-relate}(ii), and the only available options from \eqref{one-2} are $z = w_R$ and $z = w_{RL}$.  For $z=w_R$ we have $w = z * z$ and $x = a * (z * z)$ for some $a$ with $z \to a = x_L$.  Since $z \to z*z = x_R$ as well by \Cref{free-relate}(i), and $z = x_{RR}$, we obtain $w \to x$ as required from \Cref{free-relate}(iv).
+\end{itemize}
+
+Case 2: $x \op z \to w$, $z \not \to x$.  We now have $x * z, z \to w$, and we need to show that $w \to x$.  From \eqref{one} we know that one of
+\begin{equation}\label{wz-1}
+ w = (x * z)_R, w = (x * z)_{RL}, x * z = w_R, x * z = w_{RL}
+\end{equation}
+holds, and that one of
+\begin{equation}\label{wz}
+  w =  z_R, w = z_{RL}, z = w_R, z = w_{RL}
+\end{equation}
+holds.
+
+We split into cases depending on \eqref{wz-1}.
+\begin{itemize}
+\item If $w = (x*z)_R$ then $w=z$, which is incompatible with \eqref{wz}.
+\item If $w = (x*z)_{RL}$ then $w = z_L$ and $z_R \to x$ by \Cref{free-relate}(ii). Only the first two possibilities of \eqref{wz} are compatible with $w=z_L$.  In the first case we are done since $z_R \to x$ and $w = z_R$.  In the second case, we have $z = w * (w * a)$ for some $a$ with $a \to w$ (from \Cref{free-relate}(ii) and $z \to w$), but then $w * a$ will not lie in $M_{854}$, contradiction.
+\item If $x*z = w_R$  then $w$ is longer than $z$ and $z \neq w_R$.  Comparing this with \eqref{wz} we see that the only compatible option is $z = w_{RL}$, thus $x=z$, and then $w = a * (x * x)$ and $x \to a$ by \Cref{free-relate}(iii), and the claim follows from \Cref{free-relate}(ii).
+\item If $x * z = w_{RL}$, then $w = a * ((x *z) * b)$ for some $a,b$.  Then $w$, $w_R$, and $w_{RL}$ are all longer than $z$ and none of the options in \eqref{wz} can hold, a contradiction.
+\end{itemize}
+
+
+
+Case 3: $x \op z \not \to w$, $z \to x$.  We now have $z \to x, w$, and we need to show that $w * x \to x$.
+
+If $z \in \{ w_R, w_{RL}, x_R, x_{RL} \}$, then the claim follows from \Cref{free-relate}(iv), so we may assume that this is not the case.
+By \eqref{one}, we then know that one of
+$$ x = z_R, x = z_{RL}$$
+holds, and also one of
+$$
+ w =  z_R, w = z_{RL}$$
+ holds. Thus, we either have one of
+$$ w = x, w = x_L, x = w_L.$$
+But in any of these three cases the claim follows from \Cref{free-relate}(v).
+
+Case 4: $x \op z \not \to w$, $z \not \to x$.  Then $x = (w \op (x \op z))_{RL}$ and $z \to w$, so the claim follows from \Cref{free-relate}(ii).
+
+\end{proof}
+
+With the explicit description of $M_{X,854}$ we can now refute various laws.  Suppose for instance that $x,y$ are generators in $X$.  We cannot have $y \to x$ (as none of \eqref{one} hold), so $y * x \in M_{X,854}$.  We also cannot have $y * x \to x$ (by inspection of the cases in \Cref{free-relate}(iv), \Cref{free-relate}(v)), so $x * (y * x)$ lies in $M_{X,854}$.  Then $x * (y * x) \not \to x$ (by \eqref{one}), so $x * (x * (y * x))$ lies in $M_{X,854}$; finally, $x * (x * (y * x)) \not \to x$ (this follows from \Cref{free-relate}(ii) since $y * x \not \to x$), so $x * (x * (x * (y * x)))$ lies in $M_{X,854}$.  This gives an alternate proof of \Cref{854-413}.  One can similarly establish \Cref{854-1045}.

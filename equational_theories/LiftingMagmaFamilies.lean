@@ -31,10 +31,10 @@ instance instDecidableSatisfiesLaw [DecidableEq α] (law : MagmaLaw α) : Decida
   decidable_of_decidable_of_iff (MagmaLaw.models_iff_satisfies_ι G law).symm
 
 lemma LiftingMagmaFamily.establishNonimplication {law law' : MagmaLaw Nat} {P P' : (M : Type _) → [Magma M] → Prop}
-  (hlaw_iff : ∀ (G : Type _) [Magma G], G ⊧ law ↔ P G) (hlaw'_iff : ∀ (G : Type _) [Magma G], G ⊧ law' ↔ P' G)
+  (hlaw_iff : ∀ {G} [Magma G], G ⊧ law ↔ P G) (hlaw'_iff : ∀ {G} [Magma G], G ⊧ law' ↔ P' G)
   (h : G ℕ ⊧ law := by decide) (h' : ¬ G ℕ ⊧ law' := by decide) :
     ∃ (G : Type) (_ : Magma G), P G ∧ ¬ P' G :=
-  ⟨G ℕ, inferInstance, (hlaw_iff _).mp h, (not_iff_not.mpr (hlaw'_iff _)).mp h'⟩
+  ⟨G ℕ, inferInstance, hlaw_iff.mp h, (not_iff_not.mpr hlaw'_iff).mp h'⟩
 
 section Instances
 
@@ -45,16 +45,16 @@ instance : LiftingMagmaFamily List where
   instMagmaDecidableEq := inferInstance
   ι := fun a ↦ [a]
   lift f := {
-    toFun := (List.bind · f),
+    toFun := (List.flatMap · f),
     map_op' := by
       intro x y
-      dsimp [Magma.op, List.bind]
-      rw [← List.join_append, List.map_append]
+      dsimp [Magma.op, List.flatMap]
+      rw [← List.flatten_append, List.map_append]
   }
   lift_factors := by
     intro α _ f
     funext x
-    exact (List.bind_singleton _ _).symm
+    exact (List.flatMap_singleton _ _).symm
 
 instance (priority := high) instMagmaMultiset (α : Type _) [DecidableEq α] : Magma (Multiset α) where
   op := (· + ·)
@@ -112,6 +112,29 @@ instance instLiftingMagmaFamilyFreeMagmaWithLaws {α} (Γ : Ctx α)
   ι := fun a ↦ embed Γ (.Leaf a)
   lift {α} _ f := FreeMagmaWithLaws.evalHom (G := FreeMagmaWithLaws α Γ) f (FreeMagmaWithLaws.isModel α Γ)
   lift_factors := by intros; ext; rfl
+
+instance (priority := high) instMagmaFinset (α : Type _) [DecidableEq α] : Magma (Finset α) where
+  op := (· ∪ ·)
+
+instance : LiftingMagmaFamily Finset where
+  instMagma := instMagmaFinset
+  instMagmaDecidableEq := inferInstance
+  ι := fun a ↦ {a}
+  lift f := {
+    toFun := (Finset.biUnion · f),
+    map_op' := by
+      intro x _
+      dsimp [Magma.op]
+      induction x using Finset.induction
+      · simp
+      · simp only [Finset.insert_union, Finset.biUnion_insert, Finset.union_assoc]
+        congr
+    }
+  lift_factors := by
+    intro α _ f
+    funext x
+    symm
+    apply Finset.singleton_biUnion
 
 -- TODO: Lifting family FreeMagma
 

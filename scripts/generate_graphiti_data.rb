@@ -1,4 +1,4 @@
-# lake exe extract_implications --json equational_theories > /tmp/implications.json
+# lake exe extract_implications --json --only-implications --closure equational_theories > /tmp/implications.json
 # lake exe extract_implications unknowns > /tmp/unknowns.json
 # ruby scripts/generate_graphiti_data.rb /tmp/implications.json /tmp/unknowns.json data/duals.json > home_page/graphiti/graph.json
 # python -m http.server 8000 --directory home_page/graphiti
@@ -35,8 +35,6 @@ File.read(File.join(__dir__, '../equational_theories/Equations/Basic.lean')).spl
 implications_graph = Graph.from_json_array(JSON.parse(File.read(ARGV[0]))["implications"])
 condensed_graph, node_to_scc_map, scc_to_node_map = implications_graph.condensation
 
-condensed_closure = condensed_graph.transitive_closure
-
 unknowns = Graph.new
 Graph.from_json_array(JSON.parse(File.read(ARGV[1]))).adj_list.each { |v1, list|
   list.each { |v2|
@@ -64,7 +62,7 @@ scc_to_node_map.keys.each { |k| scc_to_node_map[k].sort! }
 puts JSON.generate({
   "timestamp" => Time.now.utc.to_i,
   "commit_hash" => `git rev-parse HEAD`.chomp,
-  "condensed_graph" => graph2map(condensed_closure),
+  "condensed_graph" => graph2map(condensed_graph),
   "scc_to_node_map" => scc_to_node_map,
   "node_to_scc_map" => node_to_scc_map,
   "equations" => equations,
