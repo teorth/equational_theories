@@ -5725,7 +5725,7 @@ var $author$project$Main$graphitiEq = function (_v0) {
 	return $elm$core$String$fromInt(a) + ',';
 };
 var $author$project$Main$graphitiLink = function (tags) {
-	return '/graphiti/?render=true&limit_equations=' + A2(
+	return '/equational_theories/graphiti/?render=true&limit_equations=' + A2(
 		$elm$core$String$join,
 		'+',
 		A2($elm$core$List$map, $author$project$Main$graphitiEq, tags));
