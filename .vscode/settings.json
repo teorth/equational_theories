@@ -16,5 +16,10 @@
     // Remove any trailing whitespace on save
     "files.trimTrailingWhitespace": true,
     // LaTeX Workshop: Ignore files in the blueprint directory
-    "latex-workshop.latex.watch.files.ignore": ["**/blueprint/**"]
+    "latex-workshop.latex.watch.files.ignore": ["**/blueprint/**"],
+    // Select read-only files
+    "files.readonlyInclude": {
+        "**/.elan/**": true,
+        "**/.lake/**": true
+    }
 }
