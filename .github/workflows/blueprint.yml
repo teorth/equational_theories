@@ -13,6 +13,7 @@ on:
       - 'tools/fme/**'
       - '**/generate_dashboard.py'
       - '**/generate_equation_implication_js.py'
+      - '**/generate_equation_explorer_graph.py'
       - '**/generate_graphiti_data.rb'
       - 'lean-toolchain'
       - 'lakefile.toml'
@@ -29,6 +30,7 @@ on:
       - 'tools/fme/**'
       - '**/generate_dashboard.py'
       - '**/generate_equation_implication_js.py'
+      - '**/generate_equation_explorer_graph.py'
       - '**/generate_graphiti_data.rb'
       - './scripts/**'
       - 'lean-toolchain'
@@ -151,12 +153,13 @@ jobs:
           pip install pillow
           python scripts/generate_dashboard.py
 
-      - name: Generate home_page/implications/implications.js
+      - name: Generate equation explorer data
         run: |
+          pip install markdown
+          python scripts/generate_equation_implication_js.py > home_page/implications/implications.js
           ~/.elan/bin/lake exe extract_implications outcomes > /tmp/out.json
           ~/.elan/bin/lake exe extract_implications raw --full-entries > /tmp/out2.json
-          pip install markdown
-          python scripts/generate_equation_implication_js.py /tmp/out.json /tmp/out2.json
+          python scripts/generate_equation_explorer_graph.py /tmp/out.json /tmp/out2.json > home_page/implications/graph.json
 
       - name: Generate the Finite Magma Explorer website
         run: |
