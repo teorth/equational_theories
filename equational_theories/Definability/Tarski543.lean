@@ -1,4 +1,4 @@
-import equational_theories.Definability.Definability
+import equational_theories.Definability.Basic
 import equational_theories.Equations.All
 import equational_theories.Generated.MagmaEgg.small
 
