@@ -254,11 +254,13 @@ def FOStructure (M : Magma G) : MagmaLanguage.Structure G where
   RelMap a :=
     isEmptyElim (show Empty from a)
 
+@[simp]
 theorem FOStructure_funMap {M : Magma G} (f : MagmaLanguage.Functions 2) :
     M.FOStructure.funMap f = M.FinArityOp := by
   rfl
 
 /-- Like `FOStructure_funMap` but with empty constants set -/
+@[simp]
 theorem FOStructure_funMap' {M : Magma G} (f : MagmaLanguage[[(∅:Set _)]].Functions 2) :
     (@FirstOrder.Language.withConstantsStructure MagmaLanguage G M.FOStructure (∅:Set _)
       (FirstOrder.Language.paramsStructure G ∅)).funMap
@@ -407,7 +409,6 @@ theorem TermDefinable.trans_aux {G : Type} {M M₂ M₃ : Magma G}
     simp
     eta_reduce
     convert h₁
-    rw [Magma.FOStructure_funMap']
   by_cases hn₂ : n = 0
   · subst hn₂
     simp [MagmaLanguage, Language.withConstants, Language.sum] at f
@@ -447,7 +448,6 @@ theorem Definable.trans_aux {G : Type} {M M₂ M₃ : Magma G}
     simp
     eta_reduce
     convert h₁
-    rw [Magma.FOStructure_funMap']
   by_cases hn₂ : n = 0
   · subst hn₂
     simp [MagmaLanguage, Language.withConstants, Language.sum] at f
