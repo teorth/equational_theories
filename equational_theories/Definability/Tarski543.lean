@@ -101,6 +101,19 @@ theorem Equation4512_termDefinableFrom_Equation543 : Law4512.TermDefinableFrom L
   · --The group operation is term definable
     exact termDef he543
 
+/-- Commuative structure, Equation 43, is given by a term from any magma obeying Tarski's
+one-equation abelian group subtraction law, Equation 543. -/
+theorem Equation4512_termDefinableFrom_Equation43 : Law43.TermDefinableFrom Law543 := by
+  intro M op hl543
+  have he543 : Equation543 M := Law543.models_iff.mp hl543
+  use ⟨(CommSemigroupOf543 he543).mul⟩
+  constructor
+  · --The defined operation is associative
+    rw [@Law43.models_iff]
+    exact fun x y ↦ (CommSemigroupOf543 he543).mul_comm x y
+  · --The group operation is term definable
+    exact termDef he543
+
 /-- Associative structure, Equation 4512, is a structural definition from any magma obeying Tarski's
 one-equation abelian group subtraction law, Equation 543. -/
 theorem Equation4512_StructuralFrom_Equation543 : Law4512.StructuralFrom Law543 := by
@@ -111,6 +124,22 @@ theorem Equation4512_StructuralFrom_Equation543 : Law4512.StructuralFrom Law543 
   · --The defined operation is associative
     rw [@Law4512.models_iff]
     exact fun x y z ↦ ((CommSemigroupOf543 he543).mul_assoc x y z).symm
+  constructor
+  · --The group operation is definable
+    exact (termDef he543).Definable (inst := op.FOStructure)
+  · --The subtraction operation can be recovered from the group operation, in FO logic
+    sorry
+
+/-- Commutative structure, Equation 4512, is a structural definition from any magma obeying Tarski's
+one-equation abelian group subtraction law, Equation 543. -/
+theorem Equation43_StructuralFrom_Equation543 : Law43.StructuralFrom Law543 := by
+  intro M op hl543
+  have he543 : Equation543 M := Law543.models_iff.mp hl543
+  use ⟨(CommSemigroupOf543 he543).mul⟩
+  constructor
+  · --The defined operation is associative
+    rw [@Law43.models_iff]
+    exact fun x y ↦ (CommSemigroupOf543 he543).mul_comm x y
   constructor
   · --The group operation is definable
     exact (termDef he543).Definable (inst := op.FOStructure)
