@@ -1,6 +1,7 @@
 import equational_theories.FactsSyntax
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
+import Mathlib.Data.Set.Finite
 
 /- This file is for results currently conjectured from project discussion, but not yet formalized. -/
 
@@ -63,5 +64,60 @@ conjecture Equation1722_facts : ∃ (G : Type) (_ : Magma G), Facts G [1722] [26
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/478083079 -/
 @[equational_result]
 conjecture Equation1518_facts : ∃ (G : Type) (_ : Magma G), Facts G [1518] [47, 614, 817, 3862]
+
+
+/- Finite conjectures follow -/
+
+/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/480601897 -/
+@[equational_result]
+conjecture Finite.Equation3308_implies_Equation3511 (G : Type) [Magma G] [Finite G] (_ : Equation3308 G) : Equation3511 G
+@[equational_result]
+conjecture Finite.Equation3549_implies_Equation3955 (G : Type) [Magma G] [Finite G] (_ : Equation3549 G) : Equation3955 G
+
+/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/481257624 -/
+@[equational_result]
+conjecture Finite.Equation467_implies_Equation2847 (G : Type) [Magma G] [Finite G] (_ : Equation467 G) : Equation2847 G
+@[equational_result]
+conjecture Finite.Equation1133_implies_Equation1167 (G : Type) [Magma G] [Finite G] (_ : Equation1133 G) : Equation1167 G
+@[equational_result]
+conjecture Finite.Equation1167_implies_Equation1055 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1055 G
+@[equational_result]
+conjecture Finite.Equation1167_implies_Equation1096 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1096 G
+@[equational_result]
+conjecture Finite.Equation1167_implies_Equation1112 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1112 G
+@[equational_result]
+conjecture Finite.Equation1167_implies_Equation1133 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1133 G
+@[equational_result]
+conjecture Finite.Equation1167_implies_Equation1721 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1721 G
+@[equational_result]
+conjecture Finite.Equation1167_implies_Equation1897 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1897 G
+@[equational_result]
+conjecture Finite.Equation1167_implies_Equation1668 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1668 G
+@[equational_result]
+conjecture Finite.Equation1167_implies_Equation1701 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1701 G
+@[equational_result]
+conjecture Finite.Equation1167_implies_Equation1958 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1958 G
+@[equational_result]
+conjecture Finite.Equation1167_implies_Equation4615 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation4615 G
+@[equational_result]
+conjecture Finite.Equation1441_implies_Equation4067 (G : Type) [Magma G] [Finite G] (_ : Equation1441 G) : Equation4067 G
+@[equational_result]
+conjecture Finite.Equation1443_implies_Equation1630 (G : Type) [Magma G] [Finite G] (_ : Equation1443 G) : Equation1630 G
+@[equational_result]
+conjecture Finite.Equation1443_implies_Equation3055 (G : Type) [Magma G] [Finite G] (_ : Equation1443 G) : Equation3055 G
+@[equational_result]
+conjecture Finite.Equation1443_implies_Equation4268 (G : Type) [Magma G] [Finite G] (_ : Equation1443 G) : Equation4268 G
+@[equational_result]
+conjecture Finite.Equation1447_implies_Equation1431 (G : Type) [Magma G] [Finite G] (_ : Equation1447 G) : Equation1431 G
+@[equational_result]
+conjecture Finite.Equation1447_implies_Equation4269 (G : Type) [Magma G] [Finite G] (_ : Equation1447 G) : Equation4269 G
+@[equational_result]
+conjecture Finite.Equation1681_implies_Equation3877 (G : Type) [Magma G] [Finite G] (_ : Equation1681 G) : Equation3877 G
+@[equational_result]
+conjecture Finite.Equation1701_implies_Equation1035 (G : Type) [Magma G] [Finite G] (_ : Equation1701 G) : Equation1035 G
+@[equational_result]
+conjecture Finite.Equation1701_implies_Equation1884 (G : Type) [Magma G] [Finite G] (_ : Equation1701 G) : Equation1884 G
+@[equational_result]
+conjecture Finite.Equation1701_implies_Equation4587 (G : Type) [Magma G] [Finite G] (_ : Equation1701 G) : Equation4587 G
 
 end Conjectures
