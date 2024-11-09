@@ -2,6 +2,8 @@ import equational_theories.Completeness
 import equational_theories.Equations.All
 import equational_theories.Homomorphisms
 
+namespace M4512
+
 variable {α : Type}
 
 @[simp] def NonEmptyList α := {x : List α | x ≠ []}

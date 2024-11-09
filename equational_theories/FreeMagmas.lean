@@ -1,1 +1,4 @@
+import equational_theories.FreeMagmas.M1
+import equational_theories.FreeMagmas.M2
+import equational_theories.FreeMagmas.M4
 import equational_theories.FreeMagmas.M4512

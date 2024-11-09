@@ -2,6 +2,8 @@ import equational_theories.Completeness
 import equational_theories.Equations.All
 import equational_theories.Homomorphisms
 
+namespace M2
+
 variable {α : Type} [Inhabited α]
 
 instance : Magma Unit where

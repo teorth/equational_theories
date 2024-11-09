@@ -2,6 +2,8 @@ import equational_theories.Completeness
 import equational_theories.Equations.All
 import equational_theories.Homomorphisms
 
+namespace M4
+
 variable {α : Type}
 
 def Left (α : Type) := α

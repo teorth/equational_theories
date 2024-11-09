@@ -2,6 +2,8 @@ import equational_theories.Completeness
 import equational_theories.Equations.All
 import equational_theories.Homomorphisms
 
+namespace M1
+
 variable {α : Type}
 
 theorem models1 : FreeMagma α ⊧ Law1 := by intro ; rfl
