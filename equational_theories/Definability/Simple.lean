@@ -1,0 +1,68 @@
+import equational_theories.Definability.Basic
+import equational_theories.Equations.Basic
+import equational_theories.Duals.Basic
+import equational_theories.Preorder
+import equational_theories.MagmaOp
+
+/-!
+Proofs of some simple cases of definability.
+-/
+
+open FirstOrder.Language
+open Law
+open Law.MagmaLaw
+
+/-- Every law is TermStructural from its dual. -/
+theorem TermStructural_dual (L : NatMagmaLaw) : L.TermStructuralFrom L.dual := by
+  intro G M hGL
+  use ⟨fun x y ↦ M.op y x⟩
+  constructor
+  · rw [← law_dual_dual L]
+    exact @satisfies_dual_dual _ _ ⟨_⟩ _ hGL
+  constructor <;>
+  {
+    use Functions.apply₂ (Sum.inl ()) (Term.var 1) (Term.var 0)
+    funext
+    rfl
+  }
+
+/-- The identity law x=x is TermDefinable from anything. This is a direct consequence of the
+fact that anything implies Eq1. -/
+theorem Equation1_termDefinableFrom_all (L : NatMagmaLaw) : Law1.TermDefinableFrom L := by
+  apply termDefinable_of_termStructural
+  apply termStructural_of_implies
+  intro
+  simp [Law1.models_iff, Equation1]
+
+/-- Anything is TermDefinable from Eq2. This is a direct consequence of the fact that Eq2 implies
+anything. -/
+theorem all_termDefinableFrom_Equation2 (L : NatMagmaLaw) : L.TermDefinableFrom Law2 := by
+  apply termDefinable_of_termStructural
+  apply termStructural_of_implies
+  simpa [implies] using Equation2_implies L
+
+/-- The left projection law is TermDefinable from anything. -/
+theorem Equation4_termDefinableFrom_all (L : NatMagmaLaw) : Law4.TermDefinableFrom L := by
+  intro G M hGL
+  use ⟨fun x _ ↦ x⟩
+  constructor
+  · rw [@Law4.models_iff]
+    intro x y
+    rfl
+  · use Term.var 0
+    funext
+    rfl
+
+/-- The right projection law is TermDefinable from anything. -/
+theorem Equation5_termDefinableFrom_all (L : NatMagmaLaw) : Law5.TermDefinableFrom L :=
+  TermDefinable.trans (Equation4_termDefinableFrom_all L)
+  <| termDefinable_of_termStructural (TermStructural_dual Law5)
+
+/-- The associative law is TermDefinable from anything. -/
+theorem Equation4512_termDefinableFrom_all (L : NatMagmaLaw) : Law4512.TermDefinableFrom L :=
+  have : Law4.implies Law4512 := by
+    intro _ _ h
+    simp only [Law4.models_iff, Law4512.models_iff, Equation4512] at h ⊢
+    simp [← h]
+  TermDefinable.trans (Equation4_termDefinableFrom_all L)
+  <| termDefinable_of_termStructural (termStructural_of_implies (this))
