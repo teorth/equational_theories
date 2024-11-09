@@ -5753,6 +5753,7 @@ var $author$project$Main$matchInput = F2(
 				},
 				eqn));
 	});
+var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $author$project$Main$ExploreEquation = function (a) {
 	return {$: 6, a: a};
@@ -6133,7 +6134,8 @@ var $author$project$Main$viewModelInfo = F3(
 								[
 									$elm$html$Html$Attributes$href(
 									$author$project$Main$graphitiLink(
-										matching(mi.G)))
+										matching(mi.G))),
+									$elm$html$Html$Attributes$target('_blank')
 								]),
 							_List_fromArray(
 								[
