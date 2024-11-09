@@ -11,7 +11,7 @@ import Maybe exposing (withDefault)
 import Set
 
 import Parsing exposing (parseInput)
-import Html.Attributes exposing (href)
+import Html.Attributes exposing (href, target)
 import Html exposing (Attribute)
 import Debug exposing (toString)
 
@@ -250,7 +250,7 @@ viewModelInfo table matcher mi =
         else List.filter (matchInput tmatcher) xs
   in
     div []
-      [ h3 [] [a [ href (graphitiLink (matching mi.satisfied))] [ text "Satisfies"], text ": "]
+      [ h3 [] [a [ href (graphitiLink (matching mi.satisfied)), target "_blank"] [ text "Satisfies"], text ": "]
       , viewEquationTags (matching mi.satisfied)
       , h3 [] [text "Refutes: "]
       , viewEquationTags (matching mi.refuted)
