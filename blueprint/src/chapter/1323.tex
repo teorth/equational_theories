@@ -74,3 +74,9 @@ So now we can run a greedy algorithm!  Define a \emph{seed} to be a finite colle
 
 \begin{proof}\uses{create-1323} It suffices to produce a model in which $L_y$ is not injective. Pick $(x,a), (y,b), (y',b'), (z,c)$ with $a,b,b',c$ linearly independent (and $x,y,y',z$ arbitrary) and impose the twelve equations associated iterating the Axiom to both $(x,a) \op (y,b) = (z,c)$ and $(x,a) \op (y',b') = (z,c)$.  One can check that no collisions occur and so we get a seed for \Cref{create-1323} for which $L_{(x,a)}$ is guaranteed to be non-injective.
 \end{proof}
+
+\begin{corollary}[1898 does not imply 2710]\label{1898-refute-1729}  There exists a magma which obeys the 1898 law $R_{Sy} L_y R_y x = x$ but not the 2710 law $R_y R_{Sy} L_y = x$.
+\end{corollary}
+
+\begin{proof}\uses{1323-refute-2744}  We use the construction from \Cref{1323-refute-2744}.  By construction we have $L_{Sy} = R_{Sy}$ invertible, so it obeys 1898; and the non-injectivity of $L_y$ refutes 2710.
+\end{proof}
