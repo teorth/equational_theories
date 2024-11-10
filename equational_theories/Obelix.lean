@@ -1,3 +1,7 @@
+-- import Mathlib.Algebra.Order.Ring.Nat
+import Mathlib.Data.DFinsupp.Notation
+import Mathlib.Logic.Denumerable
+import Mathlib.LinearAlgebra.Finsupp
 import Mathlib.GroupTheory.FiniteAbelian.Basic
 import Mathlib.LinearAlgebra.Dimension.Localization
 import equational_theories.Equations.Basic
