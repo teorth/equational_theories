@@ -69,6 +69,11 @@ conjecture Equation1518_facts : ∃ (G : Type) (_ : Magma G), Facts G [1518] [47
 @[equational_result]
 conjecture Equation1323_facts : ∃ (G : Type) (_ : Magma G), Facts G [1323, 1898] [2744, 2710]
 
+/--  https://teorth.github.io/equational_theories/blueprint/1516-chapter.html -/
+@[equational_result]
+conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G), Facts G [1516] [255]
+
+
 /- Finite conjectures follow -/
 
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/480601897 -/
