@@ -1,15 +1,9 @@
-import Mathlib.Algebra.Order.Ring.Nat
 import Mathlib.Data.DFinsupp.Notation
-import Mathlib.Data.ZMod.Defs
-import Mathlib.Logic.Denumerable
-import Mathlib.GroupTheory.FiniteAbelian
-import Mathlib.LinearAlgebra.Finsupp
+import Mathlib.GroupTheory.FiniteAbelian.Basic
 import Mathlib.LinearAlgebra.Dimension.Localization
-import Mathlib.Tactic
-
-import equational_theories.FactsSyntax
-import equational_theories.EquationalResult
 import equational_theories.Equations.Basic
+import equational_theories.EquationalResult
+import equational_theories.FactsSyntax
 
 -- The ``Obelix law''
 -- equation 1491 := x = (y ◇ x) ◇ (y ◇ (y ◇ x))
