@@ -140,6 +140,27 @@ def subst_definitions (t : L.Term α) (Fs : ∀ {n} (_ : L.Functions n), L'.Form
         (subExprs i).2.2.map (Formula.relabel remapper)
       ⟨cTot + 1, thisVar, thisCond :: subConds⟩
 
+/-- `Term.subst_definitions` agrees with the original formula once realized, assuming all the side
+conditions are met. -/
+theorem subst_definitions_eq {k : ℕ} (t : L.Term α)
+  [inst : L.Structure M] [inst' : L'.Structure M]
+  {Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit)}
+  (hFs : ∀ {n} (g : L.Functions n),
+    (Function.arityGraph fun v ↦ g.term.realize v) = ((Fs g).Realize : Set (_ → M)))
+  {sideVals : Fin (t.subst_definitions Fs).1 → M}
+  (hSideVals : ∀ s ∈ (t.subst_definitions Fs).2.2, ∀ v, s.Realize (Sum.elim v sideVals))
+  : ∀ v, (t.subst_definitions Fs).2.1.realize (Sum.elim v sideVals) = t.realize v := by
+    induction t
+    next a =>
+      simp [subst_definitions]
+    next f args ih =>
+      replace hFs := hFs f
+      simp [Function.arityGraph] at hFs
+      intro v
+      simp [subst_definitions] at hSideVals ⊢
+      replace ⟨hOutput, hSideVals⟩ := hSideVals
+      sorry
+
 end Term
 
 namespace BoundedFormula
@@ -178,6 +199,29 @@ def subst_definitions {k : ℕ} (f : L.BoundedFormula α k)
     let fullConds := (List.ofFn sideConds).flatten.foldl BoundedFormula.imp newRel
     BoundedFormula.relabel id fullConds.alls
 
+/-- `BoundedFormula.subst_definitions` agrees with the original formula once realized. -/
+theorem subst_definitions_eq {k : ℕ} (f : L.BoundedFormula α k)
+  [inst : L.Structure M] [inst' : L'.Structure M]
+  {Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit)}
+  (hFs : ∀ {n} (g : L.Functions n),
+    (Function.arityGraph fun v ↦ g.term.realize v) = ((Fs g).Realize : Set (_ → M)))
+  {Rs : ∀ {n} (_ : L.Relations n), L'.Formula (Fin n)}
+  (hRs : ∀ {n} (g : L.Relations n), inst.RelMap g = (Rs g).Realize)
+  : ∀ vL vR, (f.subst_definitions Fs Rs).Realize (M := M) vL vR = f.Realize vL vR := by
+    induction f
+    next =>
+      simp [Realize.eq_1, subst_definitions.eq_1]
+    next =>
+      simp [Realize.eq_2, subst_definitions.eq_2]
+      sorry
+    next =>
+      simp [Realize.eq_3, subst_definitions.eq_5]
+      sorry
+    next ih₁ ih₂ =>
+      simp [Realize.eq_5, subst_definitions.eq_3, ih₁, ih₂]
+    next ih =>
+      simp [Realize.eq_4, subst_definitions.eq_4, ih]
+
 end BoundedFormula
 
 namespace Formula
@@ -193,7 +237,7 @@ def subst_definitions (f : L.Formula α)
     : (L'.Formula α) :=
   BoundedFormula.subst_definitions f Fs Rs
 
-/-- `subst_definitions` agrees with the original formula once realized. -/
+/-- `Formula.subst_definitions` agrees with the original formula once realized. -/
 theorem subst_definitions_eq (f : L.Formula α) [inst : L.Structure M] [inst' : L'.Structure M]
   {Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit)}
   (hFs : ∀ {n} (g : L.Functions n),
@@ -201,7 +245,7 @@ theorem subst_definitions_eq (f : L.Formula α) [inst : L.Structure M] [inst' : 
   {Rs : ∀ {n} (_ : L.Relations n), L'.Formula (Fin n)}
   (hRs : ∀ {n} (g : L.Relations n), inst.RelMap g = (Rs g).Realize)
   : ∀ v, (f.subst_definitions Fs Rs).Realize (M := M) v = f.Realize v := by
-    sorry
+    simpa [Realize.eq_1] using BoundedFormula.subst_definitions_eq f hFs hRs
 
 end Formula
 

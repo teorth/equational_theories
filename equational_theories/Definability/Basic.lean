@@ -219,7 +219,7 @@ theorem TermDefinable.trans_aux {G : Type} {M M₂ M₃ : Magma G}
     (h₁ : (∅:Set _).TermDefinable MagmaLanguage (inst := M.FOStructure) M₂.FinArityOp)
     (h₂ : (∅:Set _).TermDefinable MagmaLanguage (inst := M₂.FOStructure) M₃.FinArityOp) :
     (∅:Set _).TermDefinable MagmaLanguage (inst := M.FOStructure) M₃.FinArityOp := by
-  apply h₂.trans (inst := M₂.FOStructure) (inst₂ := M.FOStructure)
+  apply h₂.trans (inst := M₂.FOStructure) (inst' := M.FOStructure)
   intro n f
   by_cases hn : n = 2
   · subst hn
