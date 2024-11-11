@@ -4,6 +4,7 @@ import Mathlib.LinearAlgebra.Dimension.Localization
 import equational_theories.Equations.Basic
 import equational_theories.EquationalResult
 import equational_theories.FactsSyntax
+import Mathlib.Data.DFinsupp.FiniteInfinite
 
 -- The ``Obelix law''
 -- equation 1491 := x = (y ◇ x) ◇ (y ◇ (y ◇ x))
