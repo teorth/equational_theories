@@ -1,4 +1,6 @@
 import equational_theories.ForMathlib.Definability
+import equational_theories.MagmaLaw
+import equational_theories.Preorder
 
 /-!
 While the main purpose of the Equational Theories project is exploring which magma equations directly
@@ -255,7 +257,7 @@ theorem Definable.trans_aux {G : Type} {M M₂ M₃ : Magma G}
     (h₁ : @Set.Definable _ (∅:Set _) MagmaLanguage M.FOStructure _ M₂.FinArityOp.arityGraph)
     (h₂ : @Set.Definable _ (∅:Set _) MagmaLanguage M₂.FOStructure _ M₃.FinArityOp.arityGraph) :
     @Set.Definable _ (∅:Set _) MagmaLanguage M.FOStructure _ M₃.FinArityOp.arityGraph := by
-  apply h₂.trans (inst := M₂.FOStructure) (inst₂ := M.FOStructure); swap
+  apply h₂.trans (inst := M₂.FOStructure) (inst' := M.FOStructure); swap
   · simp [MagmaLanguage, Language.withConstants]
   intro n f
   by_cases hn : n = 2

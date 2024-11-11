@@ -1,7 +1,7 @@
-import equational_theories.MagmaLaw
-import equational_theories.Preorder
 import Mathlib.ModelTheory.Definability
 import Mathlib.Data.Rel
+import Mathlib.Data.Set.Card
+import Mathlib.Algebra.BigOperators.Fin
 
 --The notion of term-definable expressions in FO logic, as well other useful lemmas about
 --FO logic
@@ -75,13 +75,123 @@ theorem realize_functions {n : ℕ} {f : L.Functions n} {v : Fin n → M} :
 
 end Semantics
 
+namespace Term
+variable {L L' : Language} {α M : Type*}
+
+/-- Given a term in language L, and a set of formulas that define L in terms of another language L'
+on a structure M, this produces a term in L' that will evaluate to the same value on that structure. It
+comes with a type `β` of extra variables to use, and a list of side conditions that must be fulfilled.
+-/
+def subst_definitions (t : L.Term α) (Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit))
+    : (β : Type) × (L'.Term (α ⊕ β)) × List (L'.Formula (α ⊕ β)) :=
+  match t with
+  | var a => ⟨Empty, var (Sum.inl a), []⟩
+  | @func _ _ n f args =>
+      --Map all subexpressions
+      let subExprs := fun i ↦ subst_definitions (args i) Fs
+      --The function that will re-map the subexpressions to the new side-type α ⊕ β
+      let remapper {i} : (α ⊕ (subExprs i).1) → _ := (Sum.map id fun βi ↦ Sum.inl ⟨i,βi⟩)
+      --The side-type is the union of all the subexpression side-types, plus one new symbol
+      let β := ((i:Fin _) × (subExprs i).1) ⊕ Unit
+      --We represent the output of the function with the new symbol
+      let thisVar := var (Sum.inr (Sum.inr ()))
+      --We have our own side condition to express that we're the output of this function
+      let thisCond : L'.Formula (α ⊕ β) :=
+        (Fs f).subst (Sum.elim (fun i ↦ (subExprs i).2.1.relabel remapper) (fun () ↦ thisVar))
+      --And we add all of the subexpressions' side conditions,
+      --appropriately re-indexed to use the new side-type β
+      let subConds := (List.finRange n).flatMap fun i ↦
+        (subExprs i).2.2.map (Formula.relabel remapper)
+      ⟨β, thisVar, thisCond :: subConds⟩
+
+--Gives a witness to the finiteness of the side-type, the first part β of the tuple that
+--subst_definitions returns, in the form of a
+private def Fin_subst_definitions_sidetype (f : L.Term α)
+    (Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit)) :
+    (c : ℕ) × ((f.subst_definitions Fs).1 ≃ Fin c) := by
+  sorry
+
+end Term
+
+/-- Equivalence between `(i : Fin m) × Fin (n i)` and `Fin (∑ i : Fin m, n i)`. Compare with finPiFinEquiv. -/
+def _root_.finSigmaFinEquiv {m : ℕ} {n : Fin m → ℕ} : (i : Fin m) × Fin (n i) ≃ Fin (∑ i : Fin m, n i) :=
+  sorry
+
+namespace BoundedFormula
+
+variable {L L' : Language} {α M : Type*}
+
+def subst_definitions {k : ℕ} (f : L.BoundedFormula α k)
+    (Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit))
+    (Rs : ∀ {n} (_ : L.Relations n), L'.Formula (Fin n))
+    : (L'.BoundedFormula α k) :=
+  match f with
+  | falsum => falsum
+  | equal t₁ t₂ =>
+    let t₁s := t₁.subst_definitions Fs
+    let t₂s := t₂.subst_definitions Fs
+    let ec₁ := (t₁.Fin_subst_definitions_sidetype Fs).2
+    let ec₂ := (t₂.Fin_subst_definitions_sidetype Fs).2
+    let relabel₁ := Sum.elim Sum.inl fun j ↦ Sum.inr $ finSumFinEquiv $ Sum.inl $ ec₁ j
+    let relabel₂ := Sum.elim Sum.inl fun j ↦ Sum.inr $ finSumFinEquiv $ Sum.inr $ ec₂ j
+    let t₁r := t₁s.2.1.relabel relabel₁
+    let t₂r := t₂s.2.1.relabel relabel₂
+    let feq := equal t₁r t₂r
+    let sideConds₁ := t₁s.2.2.map (relabel relabel₁)
+    let sideConds₂ := t₂s.2.2.map (relabel relabel₂)
+    let fullConds := (sideConds₁ ++ sideConds₂).foldl BoundedFormula.imp feq
+    BoundedFormula.relabel id fullConds.alls
+  | imp f₁ f₂ =>
+      imp (f₁.subst_definitions Fs Rs) (f₂.subst_definitions Fs Rs)
+  | all f =>
+      all (f.subst_definitions Fs Rs)
+  | rel R ts =>
+    let tss := fun i ↦ (ts i).subst_definitions Fs
+    let cs := fun i ↦ ((ts i).Fin_subst_definitions_sidetype Fs).1
+    let ecs := fun i ↦ ((ts i).Fin_subst_definitions_sidetype Fs).2
+    let relabels := fun i ↦ Sum.elim Sum.inl fun j ↦ Sum.inr $ finSigmaFinEquiv ⟨i,ecs i j⟩
+    let tsr : (i : Fin _) → L'.Term ((α ⊕ Fin k) ⊕ Fin (∑ i, cs i)) :=
+      fun i ↦ (tss i).2.1.relabel (relabels i)
+    let newRel := ((Rs R).subst tsr).relabel id
+    let sideConds := fun i ↦ (tss i).2.2.map (relabel (relabels i))
+    let fullConds := (List.ofFn sideConds).flatten.foldl BoundedFormula.imp newRel
+    BoundedFormula.relabel id fullConds.alls
+
+end BoundedFormula
+
+namespace Formula
+
+variable {L L' : Language} {α M : Type*}
+
+/-- Given a formula in language L, and a set of formulas that define L in terms of another language L'
+on a structure M, this produces a formula in L' that will evaluate to the same value on that structure.
+-/
+def subst_definitions (f : L.Formula α)
+    (Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit))
+    (Rs : ∀ {n} (_ : L.Relations n), L'.Formula (Fin n))
+    : (L'.Formula α) :=
+  BoundedFormula.subst_definitions f Fs Rs
+
+/-- `subst_definitions` agrees with the original formula once realized. -/
+theorem subst_definitions_eq (f : L.Formula α) [inst : L.Structure M] [inst' : L'.Structure M]
+  {Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit)}
+  (hFs : ∀ {n} (g : L.Functions n),
+    (Function.arityGraph fun v ↦ g.term.realize v) = ((Fs g).Realize : Set (_ → M)))
+  {Rs : ∀ {n} (_ : L.Relations n), L'.Formula (Fin n)}
+  (hRs : ∀ {n} (g : L.Relations n), inst.RelMap g = (Rs g).Realize)
+  : ∀ v, (f.subst_definitions Fs Rs).Realize (M := M) v = f.Realize v := by
+    sorry
+
+end Formula
+
 end Language
 end FirstOrder
 
 namespace Set
 universe u v w u₁
 
-variable {M : Type w} (A B : Set M) (L L' : FirstOrder.Language.{u, v}) [inst : L.Structure M]
+variable {M : Type w} (A B : Set M) (L L' : FirstOrder.Language.{u, v})
+variable [inst : L.Structure M] [inst' : L'.Structure M]
 
 open FirstOrder FirstOrder.Language FirstOrder.Language.Structure
 
@@ -93,11 +203,13 @@ variable {α : Type u₁} {β : Type*}
   * the realizations of all L.Relations are Definable on S,
 then the arityGraph of f is Definable on T, as well.
 -/
-theorem Definable.trans {f : (β → M) → M} [inst₂ : L'.Structure M] (h₁ : A.Definable L f.arityGraph)
+theorem Definable.trans {f : (β → M) → M} (h₁ : A.Definable L f.arityGraph)
     (h₂ : ∀ {n} (g : L[[A]].Functions n), A.Definable L' (fun v ↦ g.term.realize v).arityGraph)
     (h₃ : ∀ {n} (g : L[[A]].Relations n), A.Definable L' (RelMap g))
-    : A.Definable L' f.arityGraph := by
-  sorry
+    : A.Definable L' f.arityGraph :=
+  h₁.elim fun φ₁ hφ₁ ↦
+    ⟨_, hφ₁.trans $ funext fun v ↦ (φ₁.subst_definitions_eq
+      (fun g ↦ (h₂ g).choose_spec) (fun g ↦ (h₃ g).choose_spec) v).symm⟩
 
 /-- A function from a Cartesian power of a structure to that structure is term-definable over
   a set `A` when the value of the function is given by a term with constants `A`. -/
@@ -139,7 +251,7 @@ theorem empty_termDefinable_iff :
 /-- TermDefinable is transitive. If f is TermDefinable in a structure S on L, and all of the functions'
   realizations on S are TermDefinable on a structure T on L', then f is TermDefinable on T in L'.
 -/
-theorem TermDefinable.trans {f : (β → M) → M} [inst₂ : L'.Structure M] (h₁ : A.TermDefinable L f)
+theorem TermDefinable.trans {f : (β → M) → M} (h₁ : A.TermDefinable L f)
     (h₂ : ∀ {n} (g : L[[A]].Functions n), A.TermDefinable L' g.term.realize)
     : A.TermDefinable L' f := by
   obtain ⟨x,rfl⟩ := h₁
