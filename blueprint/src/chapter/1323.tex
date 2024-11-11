@@ -15,7 +15,7 @@ that is to say $R_{Sy}$ is the inverse of $L_{Sy}$, then the law \eqref{1323} si
   L_{y} R_{y} = R_{Sy}.
  \end{equation}
 
- So now we would like to construct a magma satisfying \eqref{lr} and \eqref{lr-simp}.  Let $G$ be an abelian group of order $2$, and work on a carrier $G \times G$.  We partially define the operation by setting
+ So now we would like to construct a magma satisfying \eqref{lr} and \eqref{lr-simp}.  Let $G$ be a countably infinite abelian group of order $2$, and work on a carrier $G \times G$.  We partially define the operation by setting
 \begin{equation}\label{op-1}
  (x,a) \op (y,b) := (x+y, a+b)
 \end{equation}
@@ -23,9 +23,9 @@ if $a=0$ or $b=0$, and
 \begin{equation}\label{op-2}
   (x,a) \op (y,b) = (x+y+a, 0)
 \end{equation}
-if $a=b$ (note that this is consistent with the previous rule).   The remaining operations $(x,a) \op (y,b)$ for $a,b,0$ distinct we leave undefined for now.  We remark that if we take $G = {\mathbf F}_2^{\mathbb N}$, these laws agree with the operation
+if $a=b$ (note that this is consistent with the previous rule).   The remaining operations $(x,a) \op (y,b)$ for $a,b,0$ distinct we leave undefined for now.  We remark that if we take $G = {\mathbf F}_2^{\omega}$ (the finitely supported functions from ${\mathbb N}$ to ${\mathbf F}_2$), these laws agree with the operation
 $$ (x,a) \tilde \op (y,b) := (x+y+ab, a+b)$$
-where $$ab$$ is the pointwise product on ${\mathbf F}_2^{\mathbb N}$. This operation can be observed to verify 1323.
+where $$ab$$ is the pointwise product on ${\mathbf F}_2^{\omega}$. This operation can be observed to verify 1323.
 
 With these rules, $(0,0)$ is a unit, and the squaring operator is $S(x,a) = (a,0)$, so the set of squares is $G \times \{0\}$.  We now have $L_{S(y,b)} (x,a) = R_{S(y,b)} (x,a) = (x+b, a)$, so \eqref{op-2} is now automatically satisfied.
 
