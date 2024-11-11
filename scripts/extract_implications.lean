@@ -166,11 +166,11 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
 
 def generateRaw (inp : Cli.Parsed) : IO UInt32 := do
   withExtractedResults inp fun rs _dualityRelation => do
+    let rs := matchFinite rs (inp.hasFlag "finite-only")
     if inp.hasFlag "full-entries" then
       IO.println (toJson rs).compress
       return
     let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
-    let rs := matchFinite rs (inp.hasFlag "finite-only")
     let mut implications : Array Implication := #[]
     let mut facts : Array Facts := #[]
     let mut unconditionals : Array String := #[]
