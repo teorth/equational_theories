@@ -6,6 +6,41 @@ import Mathlib.Algebra.BigOperators.Fin
 --The notion of term-definable expressions in FO logic, as well other useful lemmas about
 --FO logic
 
+/-- Any `Unique` type is a left identity for type sigma up to equivalence. Compare with `uniqueProd`
+which is non-dependent. -/
+@[simps]
+def Equiv.uniqueSigma {α} (β : α → Type*) [Unique α] : (i:α) × β i ≃ β default :=
+  ⟨fun p ↦ Unique.eq_default p.1 ▸ p.2,
+  fun b ↦ ⟨default, b⟩,
+  by intro; ext; exact Unique.default_eq _; simp,
+  by intro; rfl⟩
+
+/-- A type indexed by  disjoint sums of types is equivalent to the sum of the sums. Compare with
+`Equiv.sigmaSumDistrib`. -/
+@[simps]
+def Equiv.sumSigmaDistrib {α β} (t : α ⊕ β → Type*) :
+    (Σ i, t i) ≃ (Σ i, t (Sum.inl i)) ⊕ (Σ i, t (Sum.inr i)) :=
+  ⟨(match · with
+   | .mk (.inl x) y => .inl ⟨x, y⟩
+   | .mk (.inr x) y => .inr ⟨x, y⟩),
+  Sum.elim (fun a ↦ ⟨.inl a.1, a.2⟩) (fun b ↦ ⟨.inr b.1, b.2⟩),
+  by rintro ⟨x|x,y⟩ <;> simp,
+  by rintro (⟨x,y⟩|⟨x,y⟩) <;> simp⟩
+
+/-- Equivalence between `(i : Fin m) × Fin (n i)` and `Fin (∑ i : Fin m, n i)`. Compare with `finPiFinEquiv`. -/
+def finSigmaFinEquiv {m : ℕ} {n : Fin m → ℕ} : (i : Fin m) × Fin (n i) ≃ Fin (∑ i : Fin m, n i) :=
+  match m with
+  | 0 => @Equiv.equivOfIsEmpty _ _ _ (by simp; exact Fin.isEmpty')
+  | Nat.succ m =>
+    calc _ ≃ _ := (@finSumFinEquiv m 1).sigmaCongrLeft.symm
+      _ ≃ _ := Equiv.sumSigmaDistrib _
+      _ ≃ _ := Equiv.sumCongr
+        (Equiv.sigmaCongrRight fun _ ↦ Equiv.refl _)
+        ((Equiv.uniqueSigma _).trans (Equiv.refl _))
+      _ ≃ _ := finSigmaFinEquiv.sumCongr (Equiv.refl _)
+      _ ≃ _ := finSumFinEquiv
+      _ ≃ _ := finCongr (Fin.sum_univ_castSucc n).symm
+
 section TermDef
 namespace Function
 
@@ -83,39 +118,29 @@ on a structure M, this produces a term in L' that will evaluate to the same valu
 comes with a type `β` of extra variables to use, and a list of side conditions that must be fulfilled.
 -/
 def subst_definitions (t : L.Term α) (Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit))
-    : (β : Type) × (L'.Term (α ⊕ β)) × List (L'.Formula (α ⊕ β)) :=
+    : (c : ℕ) × (L'.Term (α ⊕ Fin c)) × List (L'.Formula (α ⊕ Fin c)) :=
   match t with
-  | var a => ⟨Empty, var (Sum.inl a), []⟩
+  | var a => ⟨0, var (Sum.inl a), []⟩
   | @func _ _ n f args =>
       --Map all subexpressions
       let subExprs := fun i ↦ subst_definitions (args i) Fs
-      --The function that will re-map the subexpressions to the new side-type α ⊕ β
-      let remapper {i} : (α ⊕ (subExprs i).1) → _ := (Sum.map id fun βi ↦ Sum.inl ⟨i,βi⟩)
       --The side-type is the union of all the subexpression side-types, plus one new symbol
-      let β := ((i:Fin _) × (subExprs i).1) ⊕ Unit
+      let cTot := ∑ i, (subExprs i).1
+      --The function that will re-map the subexpressions to the new side-type α ⊕ β
+      let remapper {i} : (α ⊕ Fin (subExprs i).1) → (α ⊕ Fin _) :=
+        Sum.map id fun βi ↦ finSumFinEquiv (Sum.inl (finSigmaFinEquiv ⟨i,βi⟩))
       --We represent the output of the function with the new symbol
-      let thisVar := var (Sum.inr (Sum.inr ()))
+      let thisVar := var (Sum.inr (Fin.last cTot))
       --We have our own side condition to express that we're the output of this function
-      let thisCond : L'.Formula (α ⊕ β) :=
+      let thisCond : L'.Formula (α ⊕ Fin (cTot + 1)) :=
         (Fs f).subst (Sum.elim (fun i ↦ (subExprs i).2.1.relabel remapper) (fun () ↦ thisVar))
       --And we add all of the subexpressions' side conditions,
       --appropriately re-indexed to use the new side-type β
       let subConds := (List.finRange n).flatMap fun i ↦
         (subExprs i).2.2.map (Formula.relabel remapper)
-      ⟨β, thisVar, thisCond :: subConds⟩
-
---Gives a witness to the finiteness of the side-type, the first part β of the tuple that
---subst_definitions returns, in the form of a
-private def Fin_subst_definitions_sidetype (f : L.Term α)
-    (Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit)) :
-    (c : ℕ) × ((f.subst_definitions Fs).1 ≃ Fin c) := by
-  sorry
+      ⟨cTot + 1, thisVar, thisCond :: subConds⟩
 
 end Term
-
-/-- Equivalence between `(i : Fin m) × Fin (n i)` and `Fin (∑ i : Fin m, n i)`. Compare with finPiFinEquiv. -/
-def _root_.finSigmaFinEquiv {m : ℕ} {n : Fin m → ℕ} : (i : Fin m) × Fin (n i) ≃ Fin (∑ i : Fin m, n i) :=
-  sorry
 
 namespace BoundedFormula
 
@@ -130,10 +155,8 @@ def subst_definitions {k : ℕ} (f : L.BoundedFormula α k)
   | equal t₁ t₂ =>
     let t₁s := t₁.subst_definitions Fs
     let t₂s := t₂.subst_definitions Fs
-    let ec₁ := (t₁.Fin_subst_definitions_sidetype Fs).2
-    let ec₂ := (t₂.Fin_subst_definitions_sidetype Fs).2
-    let relabel₁ := Sum.elim Sum.inl fun j ↦ Sum.inr $ finSumFinEquiv $ Sum.inl $ ec₁ j
-    let relabel₂ := Sum.elim Sum.inl fun j ↦ Sum.inr $ finSumFinEquiv $ Sum.inr $ ec₂ j
+    let relabel₁ := Sum.elim Sum.inl fun j ↦ Sum.inr $ finSumFinEquiv $ Sum.inl j
+    let relabel₂ := Sum.elim Sum.inl fun j ↦ Sum.inr $ finSumFinEquiv $ Sum.inr j
     let t₁r := t₁s.2.1.relabel relabel₁
     let t₂r := t₂s.2.1.relabel relabel₂
     let feq := equal t₁r t₂r
@@ -147,10 +170,8 @@ def subst_definitions {k : ℕ} (f : L.BoundedFormula α k)
       all (f.subst_definitions Fs Rs)
   | rel R ts =>
     let tss := fun i ↦ (ts i).subst_definitions Fs
-    let cs := fun i ↦ ((ts i).Fin_subst_definitions_sidetype Fs).1
-    let ecs := fun i ↦ ((ts i).Fin_subst_definitions_sidetype Fs).2
-    let relabels := fun i ↦ Sum.elim Sum.inl fun j ↦ Sum.inr $ finSigmaFinEquiv ⟨i,ecs i j⟩
-    let tsr : (i : Fin _) → L'.Term ((α ⊕ Fin k) ⊕ Fin (∑ i, cs i)) :=
+    let relabels := fun i ↦ Sum.elim Sum.inl fun j ↦ Sum.inr $ finSigmaFinEquiv ⟨i,j⟩
+    let tsr : (i : Fin _) → L'.Term ((α ⊕ Fin k) ⊕ Fin (∑ i, (tss i).1)) :=
       fun i ↦ (tss i).2.1.relabel (relabels i)
     let newRel := ((Rs R).subst tsr).relabel id
     let sideConds := fun i ↦ (tss i).2.2.map (relabel (relabels i))
