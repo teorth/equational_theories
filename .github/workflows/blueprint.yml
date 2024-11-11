@@ -107,6 +107,7 @@ jobs:
         shell: bash
 
       - name: Build project API documentation
+        working-directory: docbuild
         run: |
           ~/.elan/bin/lake exe cache get || true
           ~/.elan/bin/lake build equational_theories:docs
