@@ -81,14 +81,23 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            .lake/build
-            !.lake/build/doc-data
-            !.lake/build/doc/declarations/declaration-data-equational_theories*
+            docbuild/.lake/build
+            !docbuild/.lake/build/doc-data
+            !docbuild/.lake/build/doc/declarations/declaration-data-equational_theories*
           key: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}
-          #restore-keys: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}
+          restore-keys: LakeBuild-
 
       - name: Build project
         run: ~/.elan/bin/lake build equational_theories
+
+      - name: Setup symlinks between project and docbuild
+        working-directory: docbuild
+        run: |
+          mkdir -p .lake/packages
+          for package_path in ../.lake/packages/*; do
+            package=$(basename $package_path)
+            ln -s ../../../.lake/packages/$package .lake/packages/$package
+          done
 
       - name: Check environment with lean4checker
         run: |
@@ -98,7 +107,9 @@ jobs:
         shell: bash
 
       - name: Build project API documentation
-        run: ~/.elan/bin/lake -R -Kenv=dev build equational_theories:docs
+        run: |
+          ~/.elan/bin/lake exe cache get || true
+          ~/.elan/bin/lake build equational_theories:docs
 
       - name: Check for `home_page` folder
         id: check_home_page
@@ -141,12 +152,7 @@ jobs:
             python scripts/lean4lean_checker/main.py
 
       - name: Copy API documentation to `home_page/docs`
-        run: cp -r .lake/build/doc home_page/docs
-
-      - name: Remove unnecessary lake files from documentation in `home_page/docs`
-        run: |
-          find home_page/docs -name "*.trace" -delete
-          find home_page/docs -name "*.hash" -delete
+        run: cp -r docbuild/.lake/build/doc home_page/docs
 
       - name: Generate home_page/dashboard.md
         run: |

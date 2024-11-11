@@ -1,0 +1,13 @@
+name = "docbuild"
+version = "0.1.0"
+defaultTargets = ["docbuild"]
+
+[[require]]
+name = "equational_theories"
+path = "../"
+
+[[require]]
+scope = "leanprover"
+name = "doc-gen4"
+# Use revision v4.x if you are developing against a stable Lean version.
+rev = "main"
