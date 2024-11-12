@@ -8,17 +8,47 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
     a { text-decoration: inherit; color: inherit; }
-    div { margin: 0.5em; }
     .arrow { font-size: x-large; margin-right: 0.5em; }
+    .implication, .nonimplication, .equation { margin: 0.5em; }
     .implication, .nonimplication { margin-left: 2em; display: flex; align-items: center; }
+    #finiteGreenBand {
+      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 15px;
+      background-color: green;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      writing-mode: vertical-rl;
+      text-align: center;
+      padding-top: 10px;
+      transform: rotate(180deg);
+    }
   </style>
 </head>
 <body>
+<div id="finiteGreenBand">Finite Graph</div>
 <script>
 "use strict";
 
+const params = Object.fromEntries(
+    new URLSearchParams(window.location.search).entries(),
+);
+
+const eqStr = params.pair || window.location.search.substring(1);
+const [eq1, eq2] = eqStr.split(',');
+
+const isFiniteGraph = params.finite !== undefined;
+
+if (isFiniteGraph) {
+    document.getElementById("finiteGreenBand").style.display = "block";
+}
+
 (async () => {
-  const response = await fetch('graph.json');
+  const response = await fetch(isFiniteGraph ? 'finite_graph.json' : 'graph.json');
   if (!response.ok) {
     console.error(`HTTP error! Status: ${response.status}`);
     return;
@@ -27,7 +57,6 @@
   const full_entries = jsondata["full_entries"];
 
   let t1 = Date.now();
-  const [eq1, eq2] = window.location.search.substring(1).split(",");
 
   const dualsIndex = {};
   for (let pair of duals) {
@@ -160,7 +189,8 @@
 
   function render_equation(node) {
     const eq = parseInt(node.toString().replace("_neg", ""));
-    const url = `./?${eq}`;
+    let url = `./?${eq}`;
+    if (isFiniteGraph) url += "&finite";
     document.body.innerHTML += `
       <div class="equation">
         <a href="${url}" target="_blank">${equations[eq - 1]}</a>

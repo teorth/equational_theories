@@ -9,6 +9,7 @@
     <style>
       body {
         font-family: Arial, sans-serif;
+        padding: 20px;
         margin: 0;
         margin-top: 25px; /* Adjust this value to match the height of your top bar */
       }
@@ -91,6 +92,23 @@
       .top-bar a:hover {
         text-decoration: underline;
       }
+
+      #finiteGreenBand {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 15px;
+        background-color: green;
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+        writing-mode: vertical-rl;
+        text-align: center;
+        padding-top: 10px;
+        transform: rotate(180deg);
+      }
     </style>
 
     <script src="https://d3js.org/d3.v7.js"></script>
@@ -99,6 +117,8 @@
   </head>
 
   <body>
+    <div id="finiteGreenBand">Finite Graph</div>
+
     <div class="container" id="container" style="display: none">
       <img
         src="logo.png"
@@ -164,6 +184,15 @@
           >Highlight equations in blue (numeric, comma-separated):</label
         >
         <input type="text" id="highlight_blue" name="highlight_blue" /><br />
+
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            id="show_finite_graph"
+            name="show_finite_graph"
+          />
+          <label for="show_finite_graph">Show finite graph</label>
+        </div>
 
         <div class="checkbox-container">
           <input
@@ -288,8 +317,9 @@
 
     <script>
       const EQUATION_EXPLORER_URL =
-        "https://teorth.github.io/equational_theories/implications/?";
+        "https://teorth.github.io/equational_theories/implications/";
       let dotFile = "";
+      let graph_json;
 
       function hideVisibility(elementId) {
         const element = document.getElementById(elementId);
@@ -428,6 +458,8 @@
 
         // Use history.replaceState to modify the URL without reloading the page
         history.replaceState(null, "", url);
+
+        document.getElementById("finiteGreenBand").style.display = "none";
       }
 
       function downloadSVG(event) {
@@ -543,8 +575,6 @@
         d3.selectAll(".node").selectAll("a").attr("target", "_blank");
       }
 
-      var graph_json = undefined;
-
       function vertices(adj_list) {
         let vertices = new Set();
 
@@ -630,11 +660,21 @@
           new URLSearchParams(window.location.search).entries(),
         );
 
+        if (params.show_finite_graph) {
+          document.getElementById("finiteGreenBand").style.display = "block";
+        } else {
+          document.getElementById("finiteGreenBand").style.display = "none";
+        }
+
+        let graph_idx = params.show_finite_graph
+          ? "finite_graph"
+          : "general_graph";
+
         let vertices_to_delete = new Set();
 
-        let node_to_scc_map = { ...graph_json.node_to_scc_map };
-        let scc_to_node_map = { ...graph_json.scc_to_node_map };
-        let graph = graph_json.condensed_graph;
+        let node_to_scc_map = { ...graph_json[graph_idx].node_to_scc_map };
+        let scc_to_node_map = { ...graph_json[graph_idx].scc_to_node_map };
+        let graph = graph_json[graph_idx].condensed_graph;
 
         if (params.show_sporadic_equations != "on") {
           for (const key of Object.keys(node_to_scc_map)) {
@@ -904,7 +944,9 @@ digraph G {
             dotFile += `,style=filled,fillcolor="#ADD8E6"`;
           }
 
-          dotFile += `,href="${EQUATION_EXPLORER_URL}${scc[0]}"]\n`;
+          let finite = params.show_finite_graph ? "&finite" : "";
+
+          dotFile += `,href="${EQUATION_EXPLORER_URL}?${scc[0]}${finite}"]\n`;
         }
         console.log(`Vertices: ${sccs.length}`);
 
@@ -920,11 +962,11 @@ digraph G {
         if (params.show_unknowns_conjectures == "on") {
           let unknown_edges = 0;
           for (const scc_name of Object.keys(scc_to_node_map)) {
-            if (!graph_json.unknowns[scc_name]) {
+            if (!graph_json[graph_idx].unknowns[scc_name]) {
               continue;
             }
 
-            graph_json.unknowns[scc_name]
+            graph_json[graph_idx].unknowns[scc_name]
               .filter((x) => x in scc_to_node_map)
               .forEach((x) => {
                 dotFile += `  ${scc_name} -> ${x} [style="dotted",constraint=false]\n`;
