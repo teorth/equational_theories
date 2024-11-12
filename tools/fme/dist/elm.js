@@ -5725,7 +5725,7 @@ var $author$project$Main$graphitiEq = function (_v0) {
 	return $elm$core$String$fromInt(a) + ',';
 };
 var $author$project$Main$graphitiLink = function (tags) {
-	return '/graphiti/?render=true&limit_equations=' + A2(
+	return '/equational_theories/graphiti/?render=true&limit_equations=' + A2(
 		$elm$core$String$join,
 		'+',
 		A2($elm$core$List$map, $author$project$Main$graphitiEq, tags));
@@ -5753,6 +5753,7 @@ var $author$project$Main$matchInput = F2(
 				},
 				eqn));
 	});
+var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $author$project$Main$ExploreEquation = function (a) {
 	return {$: 6, a: a};
@@ -6133,7 +6134,8 @@ var $author$project$Main$viewModelInfo = F3(
 								[
 									$elm$html$Html$Attributes$href(
 									$author$project$Main$graphitiLink(
-										matching(mi.G)))
+										matching(mi.G))),
+									$elm$html$Html$Attributes$target('_blank')
 								]),
 							_List_fromArray(
 								[

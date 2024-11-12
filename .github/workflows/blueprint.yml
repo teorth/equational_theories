@@ -10,8 +10,10 @@ on:
       - 'blueprint/**'
       - 'commentary/**'
       - 'home_page/**'
+      - 'tools/fme/**'
       - '**/generate_dashboard.py'
       - '**/generate_equation_implication_js.py'
+      - '**/generate_equation_explorer_graph.py'
       - '**/generate_graphiti_data.rb'
       - 'lean-toolchain'
       - 'lakefile.toml'
@@ -25,9 +27,12 @@ on:
       - 'blueprint/**'
       - 'commentary/**'
       - 'home_page/**'
+      - 'tools/fme/**'
       - '**/generate_dashboard.py'
       - '**/generate_equation_implication_js.py'
+      - '**/generate_equation_explorer_graph.py'
       - '**/generate_graphiti_data.rb'
+      - './scripts/**'
       - 'lean-toolchain'
       - 'lakefile.toml'
       - 'lake-manifest.json'
@@ -79,13 +84,13 @@ jobs:
             .lake/build
             !.lake/build/doc-data
             !.lake/build/doc/declarations/declaration-data-equational_theories*
-          key: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}-${{ github.sha }}
-          restore-keys: LakeBuild-
+          key: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}
+          #restore-keys: LakeBuild-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}
 
       - name: Build project
         run: ~/.elan/bin/lake build equational_theories
 
-      - name: check environment with lean4checker
+      - name: Check environment with lean4checker
         run: |
           : Check Environment with lean4checker
           chmod +x ./scripts/lean4_checker/run_lean4checker.sh
@@ -148,11 +153,13 @@ jobs:
           pip install pillow
           python scripts/generate_dashboard.py
 
-      - name: Generate home_page/implications/implications.js
+      - name: Generate equation explorer data
         run: |
-          ~/.elan/bin/lake exe extract_implications outcomes > /tmp/out.json
           pip install markdown
-          python scripts/generate_equation_implication_js.py /tmp/out.json
+          python scripts/generate_equation_implication_js.py > home_page/implications/implications.js
+          ~/.elan/bin/lake exe extract_implications outcomes > /tmp/out.json
+          ~/.elan/bin/lake exe extract_implications raw --full-entries > /tmp/out2.json
+          python scripts/generate_equation_explorer_graph.py /tmp/out.json /tmp/out2.json > home_page/implications/graph.json
 
       - name: Generate the Finite Magma Explorer website
         run: |

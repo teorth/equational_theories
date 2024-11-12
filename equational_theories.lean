@@ -1,4 +1,5 @@
 import equational_theories.Asterix
+import equational_theories.Closure
 import equational_theories.Completeness
 import equational_theories.Compactness
 import equational_theories.FreeMagmaImplications
@@ -27,4 +28,5 @@ import equational_theories.Confluence4
 import equational_theories.Conjectures
 import equational_theories.ManuallyProved
 import equational_theories.ThreeC2
+import equational_theories.Sheffer
 import equational_theories.Obelix
