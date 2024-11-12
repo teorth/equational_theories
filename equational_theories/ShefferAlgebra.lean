@@ -47,13 +47,13 @@ lemma all_bot (a b : α) : a | a′ = b | b′ := by
     _      = (b | b′)′′ := by rw [sh₂]
     _      = b | b′     := by rw [sh₁]
 
-instance : Inf α where
-  inf a b := (a′ | b′)
+instance : Min α where
+  min a b := (a′ | b′)
 
 lemma inf (a b : α) : a ⊓ b = (a′ | b′) := rfl
 
-instance : Sup α where
-  sup a b := (a | b)′
+instance : Max α where
+ max a b := (a | b)′
 
 lemma sup (a b : α) : a ⊔ b = (a | b)′ := rfl
 
