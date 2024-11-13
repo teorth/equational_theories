@@ -13,21 +13,20 @@ theorem Soundness'_u {α β G : Type*} [Magma G] {Γ : Ctx α} {E : MagmaLaw β}
   induction h with
   | @SubstAx E mem σ =>
     intro H φ
-    simp [satisfiesPhi, SubstEval]
+    simp only [satisfiesPhi, SubstEval]
     exact H E mem _
   | Ref => exact fun _ ↦ congrFun rfl
   -- FIXME: try aesop here, might be a 1-liner
   | @Sym t u _ ih =>
     intro φ mset
-    simp only [satisfiesPhi] at *
+    rw [satisfiesPhi]
     symm; apply ih; trivial
   | Trans _ _ ih₁ ih₂ =>
     intro φ mset
-    simp [models, satisfiesPhi] at *
-    rw [ih₁, ih₂] <;> trivial
+    rw [satisfiesPhi, ih₁, ih₂] <;> trivial
   | Cong _ _ ih₁ ih₂ =>
     intro _ _
-    simp [models, satisfiesPhi, evalInMagma] at *
+    rw [satisfiesPhi, evalInMagma]
     rw [ih₁, ih₂] <;> trivial
 
 theorem Soundness' {α β : Type*} {Γ : Ctx α} {E : MagmaLaw β} (h : Γ ⊢' E) : Γ ⊧ E :=
@@ -45,15 +44,9 @@ def RelOfLaws {α} (β) (Γ : Ctx α) : FreeMagma β → FreeMagma β → Prop :
 -- eazy peezy since we basically have exactly the axioms.
 theorem RelOfLaws.isEquivalence {α} (β) (Γ : Ctx α) : Equivalence (RelOfLaws β Γ) := by
   constructor <;> simp [RelOfLaws]
-  case refl => intro x; constructor; apply derive'.Ref
-  case symm =>
-    intro x y h
-    exact ⟨derive'.Sym h⟩
-  case trans =>
-    intro x y z h₁ h₂
-    constructor
-    apply derive'.Trans
-      <;> trivial
+  case refl => exact fun _ ↦ ⟨derive'.Ref⟩
+  case symm => exact fun h ↦ ⟨derive'.Sym h⟩
+  case trans => exact fun h₁ h₂ ↦ ⟨derive'.Trans h₁ h₂⟩
 
 instance SetoidOfLaws {α} (β) (Γ : Ctx α) : Setoid (FreeMagma β) :=
   ⟨ RelOfLaws β Γ, RelOfLaws.isEquivalence β Γ ⟩
@@ -76,10 +69,7 @@ def ForkWithLaws {α β} {Γ : Ctx α} :
     FreeMagmaWithLaws β Γ → FreeMagmaWithLaws β Γ → FreeMagmaWithLaws β Γ :=
   Quotient.lift₂ (λ x y ↦ embed Γ (x ⋆ y)) <| by
     simp only [HasEquiv.Equiv, Setoid.r, RelOfLaws, embed, Nonempty.forall]
-    intro x z y w d₁ d₂
-    apply Quotient.sound
-    simp only [HasEquiv.Equiv, Setoid.r, RelOfLaws]
-    exact ⟨derive'.Cong d₁ d₂⟩
+    exact fun x₁ x₂ y₁ y₂ d₁ d₂ ↦ (Quotient.sound ⟨derive'.Cong d₁ d₂⟩)
 
 protected instance FreeMagmaWithLaws.Magma {α} (β) (Γ : Ctx α) : Magma (FreeMagmaWithLaws β Γ) :=
   { op := ForkWithLaws }
@@ -173,7 +163,7 @@ def FreeMagmaWithLaws.eval {α β G} {Γ : Ctx α} (φ : β → G) [Magma G] (mo
     intro a b
     simp only [HasEquiv.Equiv, SetoidOfLaws, RelOfLaws, Nonempty.forall]
     intro h
-    apply (Soundness' (E := a ≃ b))
+    apply Soundness' (E := a ≃ b)
     . exact h
     . exact modelsG)
 
