@@ -45,6 +45,58 @@ instance : Preorder PartialSolution where
   le_refl := by simp
   le_trans := by simp_all
 
+-- The heart of the proof, Lemma 1.1 in
+--    https://leanprover.zulipchat.com/user_uploads/3121/-Y2DILKZP-OuhxcU0HS-EHge/Equation879.pdf
+def extend (sol : PartialSolution) (x : G) : { sol' // sol ≤ sol' ∧ ∃ y, sol'.E x y } :=
+  sorry
+
+theorem exists_full_solution (seed : PartialSolution) :
+    ∃ f : G → G, func_eq879 f ∧ ∀ a b, seed.E a b → f a = b := by
+  have ⟨c, hc, h1, _, h3⟩ := exists_greedy_chain
+    (fun x => {sol : PartialSolution | ∃ y, sol.E x y})
+    (fun sol x => let ⟨sol', h⟩ := extend sol x; ⟨sol', by simp [h]⟩)
+    seed
+  let E a b := ∃ sol ∈ c, sol.E a b
+
+  have isFun : ∀ x y z, E x y → E x z → y = z := by
+    intro x y z ⟨sxy, hsxy, hxy⟩ ⟨sxz, hsxz, hxz⟩
+    have : ∃ s, sxy ≤ s ∧ sxz ≤ s := by
+      cases hc.total hsxy hsxz; use sxz; use sxy
+    let ⟨s, sy, sz⟩ := this
+    exact s.isFun x y z (sy x y hxy) (sz x z hxz)
+
+  have hdom x : ∃ y, E x y := by choose step _ y _ using h3 x; use y, step
+  let f x := (hdom x).choose
+  have hf {x y} : E x y → f x = y := isFun x (f x) y (hdom x).choose_spec
+  have hf' {x y} (fxy : f x = y) : E x y := by
+    let ⟨s, _, h⟩ := (hdom x).choose_spec
+    unfold f at fxy
+    rw [fxy] at h
+    use s
+
+  have cond6 : ∀ x y z, E x y → E (f 1 * y⁻¹) z → E (z * y * x⁻¹) x⁻¹ := by
+    intro x y z ⟨sxy, hsxy, hxy⟩ ⟨swz, hswz, hwz⟩
+    have : ∃ s ∈ c, sxy ≤ s ∧ swz ≤ s := by
+      cases hc.total hsxy hswz; use swz; use sxy
+    let ⟨s, hs, hsab, hswz⟩ := this
+    have : f 1 = s.x₁ := by apply hf; use s, hs, s.atOne
+    rw [this] at hwz
+    have c6 := s.cond6 x y z (hsab _ _ hxy) (hswz _ _ hwz)
+    use s
+
+  have : func_eq879 f := by
+    intro x
+    apply hf
+    apply cond6 x (f x) (f (f 1 * (f x)⁻¹))
+    repeat simp [hf']
+
+  have : ∀ a b, seed.E a b → f a = b := by
+    intro a b h
+    apply hf
+    use seed
+
+  use f
+
 def g₁ : G := FreeGroup.of 1
 def g₂ : G := FreeGroup.of 2
 def g₃ : G := FreeGroup.of 3
@@ -61,67 +113,18 @@ def seed : PartialSolution where
   cond5 := by sorry
   cond6 := by sorry
 
--- The heart of the proof, Lemma 1.1 in
---    https://leanprover.zulipchat.com/user_uploads/3121/-Y2DILKZP-OuhxcU0HS-EHge/Equation879.pdf
-def extend (sol : PartialSolution) (x : G) : { sol' // sol ≤ sol' ∧ ∃ y, sol'.E x y } :=
-  sorry
-
-theorem exists_full_solution : ∃ f : G → G, func_eq879 f ∧ ¬func_eq4065 f := by
-  have ⟨c, hc, h1, _, h3⟩ := exists_greedy_chain
-    (fun x => {sol : PartialSolution | ∃ y, sol.E x y})
-    (fun sol x => let ⟨sol', h⟩ := extend sol x; ⟨sol', by simp [h]⟩)
-    seed
-  let E a b := ∃ sol ∈ c, sol.E a b
-
-  have isFun : ∀ x y z, E x y → E x z → y = z := by
-    intro x y z ⟨sxy, hsxy, hxy⟩ ⟨sxz, hsxz, hxz⟩
-    have : ∃ s, sxy ≤ s ∧ sxz ≤ s := by
-      cases hc.total hsxy hsxz; use sxz; use sxy
-    let ⟨s, sy, sz⟩ := this
-    exact s.isFun x y z (sy x y hxy) (sz x z hxz)
-
-  have hdom x : ∃ y, E x y := by
-    choose step _ y _ using h3 x
-    use y, step
-  let f x := (hdom x).choose
-  have hf {x y} : E x y → f x = y := by apply isFun x (f x) y (hdom x).choose_spec
-  have hf' {x y} : f x = y → E x y := by
-    let ⟨s, _, h⟩ := (hdom x).choose_spec
-    intro fx_y
-    unfold f at fx_y
-    rw [fx_y] at h
-    use s
-
-  have cond6 : ∀ x y z, E x y → E (f 1 * y⁻¹) z → E (z * y * x⁻¹) x⁻¹ := by
-    intro x y z ⟨sxy, hsxy, hxy⟩ ⟨swz, hswz, hwz⟩
-    have : ∃ s ∈ c, sxy ≤ s ∧ swz ≤ s := by
-      cases hc.total hsxy hswz; use swz; use sxy
-    let ⟨s, hs, hsab, hswz⟩ := this
-    have : f 1 = s.x₁ := by apply hf; use s, hs, s.atOne
-    rw [this] at hwz
-    have c6 := s.cond6 x y z (hsab _ _ hxy) (hswz _ _ hwz)
-    use s
-
-  have h879 : func_eq879 f := by
-    intro x
-    apply hf
-    apply cond6 x (f x) (f (f 1 * (f x)⁻¹))
-    repeat simp [hf']
+-- @[equational_result]
+theorem Equation879_not_implies_Equation4065 :
+    ∃ (G: Type) (_: Magma G), Equation879 G ∧ ¬ Equation4065 G := by
+  let ⟨f, h879, h⟩ := exists_full_solution seed
+  use G, {op := fun x y => f (y * x⁻¹) * x}
 
   have values : f 1 = g₁ ∧ f g₁⁻¹ = g₂ ∧ f (g₁⁻¹ * g₂⁻¹) = g₃ := by
     repeat first
     | constructor
-    | apply hf; simp [E]; exact ⟨seed, h1, by simp [seed]⟩
+    | apply h; simp [seed]
   have h4065 : ¬func_eq4065 f := by simp [func_eq4065, values]; decide
 
-  use f
-
-@[equational_result]
-theorem Equation879_not_implies_Equation4065 : ∃ (G: Type) (_: Magma G),
-    Equation879 G ∧ ¬ Equation4065 G := by
-  let f := exists_full_solution.choose
-  let ⟨h879, h4065⟩ := exists_full_solution.choose_spec
-  use G, {op := fun x y => f (y * x⁻¹) * x}
   constructor
   · intro x y
     have h := congrArg (· * y) <| h879 (y * x⁻¹)
@@ -129,5 +132,4 @@ theorem Equation879_not_implies_Equation4065 : ∃ (G: Type) (_: Magma G),
   · by_contra h
     let h := congrArg (· * (f 1)⁻¹) <| h 1
     simp [mul_assoc] at h
-    simp [func_eq4065, mul_assoc] at h4065
     contradiction
