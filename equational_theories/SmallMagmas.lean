@@ -151,7 +151,7 @@ def Magma2_List :=
   [Magma2a, Magma2b, Magma2c, Magma2d, Magma2e, Magma2f, Magma2g, Magma2c', Magma2d', Magma2g']
 
 /-- The magmas in `Magma2_List` are an exhaustive list. -/
-theorem all_Magma_Fin2 (M : Magma (Fin 2)) : MagmaUpToIso.mk M ∈
+unsafe def all_Magma_Fin2 (M : Magma (Fin 2)) : MagmaUpToIso.mk M ∈
     Magma2_List.map MagmaUpToIso.mk := by
   revert M
   simp only [MagmaUpToIso.mk, Magma2_List, List.map_cons, List.map_nil,
