@@ -1,6 +1,7 @@
 import Mathlib.Data.DFinsupp.Notation
 import Mathlib.GroupTheory.FiniteAbelian.Basic
 import Mathlib.LinearAlgebra.Dimension.Localization
+import Mathlib.Data.DFinsupp.FiniteInfinite
 import equational_theories.Equations.Basic
 import equational_theories.EquationalResult
 import equational_theories.FactsSyntax
