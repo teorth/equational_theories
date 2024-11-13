@@ -207,7 +207,7 @@ $$2, 5, 39, 364, 4284, 57882, 888365, \dots$$
 In particular, up to relabeling, symmetry, and triviality, there are exactly $2+5+39+364+4284=4694$ laws of total order at most $4$. A list can be found \href{https://github.com/teorth/equational_theories/blob/main/data/equations.txt}{here}. A script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}. The ordering of these equations is according to the following rules.  First, an ordering on expressions (such as $0 \op (1 \op 0)$):
 \begin{itemize}
 \item (i)  Expressions of lower order come before expressions of higher order.
-\item (ii) Expressions $w_L \op w_R$ of a given total order that is at least one are ordered lexicographically first by the orderig on the left component $w_L$, and then by the ordering on the right component $w_R$ if the left components agree.
+\item (ii) Expressions $w_L \op w_R$ of a given total order that is at least one are ordered lexicographically first by the ordering on the left component $w_L$, and then by the ordering on the right component $w_R$ if the left components agree.
 \item (iii) Among single variables, $0, 1, \dots$, we order numerically.
 \end{itemize}
 Then, we order equations such as $w \formaleq w'$:
