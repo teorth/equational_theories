@@ -1,0 +1,84 @@
+\chapter{Equation 1323}\label{1323-chapter}
+
+In this chapter we study magmas that obey equation 1323,
+\begin{equation}\label{1323}
+  x = y \op (((y \op y) \op x) \op y)
+\end{equation}
+for all $x,y$.  Using the squaring operator $Sy := y \op y$ and the left and right multiplication operators $L_y x := y \op x$ and $R_y x = x \op y$, this law can be written as
+$$ L_y R_y L_{Sy} x = x.$$
+Among other things, this implies that $L_{Sy}$ is injective and $L_y$ is surjective, hence $L_{Sy}$ is invertible.  It is convenient to impose an additional axiom
+\begin{equation}\label{lr}
+ L_{Sy} R_{Sy} = 1
+\end{equation}
+that is to say $R_{Sy}$ is the inverse of $L_{Sy}$, then the law \eqref{1323} simplifies to
+\begin{equation}\label{lr-simp}
+  L_{y} R_{y} = R_{Sy}.
+ \end{equation}
+
+ So now we would like to construct a magma satisfying \eqref{lr} and \eqref{lr-simp}.  Let $G$ be a countably infinite abelian group of order $2$, and work on a carrier $G \times G$.  We partially define the operation by setting
+\begin{equation}\label{op-1}
+ (x,a) \op (y,b) := (x+y, a+b)
+\end{equation}
+if $a=0$ or $b=0$, and
+\begin{equation}\label{op-2}
+  (x,a) \op (y,b) = (x+y+a, 0)
+\end{equation}
+if $a=b$ (note that this is consistent with the previous rule).   The remaining operations $(x,a) \op (y,b)$ for $a,b,0$ distinct we leave undefined for now.  We remark that if we take $G = {\mathbf F}_2^{\omega}$ (the finitely supported functions from ${\mathbb N}$ to ${\mathbf F}_2$), these laws agree with the operation
+$$ (x,a) \tilde \op (y,b) := (x+y+ab, a+b)$$
+where $$ab$$ is the pointwise product on ${\mathbf F}_2^{\omega}$. This operation can be observed to verify 1323.
+
+With these rules, $(0,0)$ is a unit, and the squaring operator is $S(x,a) = (a,0)$, so the set of squares is $G \times \{0\}$.  We now have $L_{S(y,b)} (x,a) = R_{S(y,b)} (x,a) = (x+b, a)$, so \eqref{op-2} is now automatically satisfied.
+
+With our ansatz, the remaining axiom \eqref{lr-simp} can be rewritten as
+
+\begin{itemize}
+\item {\bf Axiom}: If $(x,a) \op (y,b) = (z,c)$, then $(y,b) \op (z,c) = R_{S(y,b)} (x,a) = (x+b,a)$.
+\end{itemize}
+
+Several cases of this axiom are already verified:
+\begin{itemize}
+\item If $b=0$, then $(z,c) = (x,a) \op (y,0) = (x+y,a)$ and $(y,0) \op (z,c) = (y+x+y+a) = (x+b,a)$ as required.
+\item If $a=0$, then $(z,c) = (x,a) \op (y,b) = (x+y,b)$ and $(y,b) \op (z,c) = (y+x+y+b,0) = (x+b,a)$ as required.
+\item If $a=b$, then $(z,c) = (x,a) \op (y,b) = (x+y+a,0)$ and $(y,b) \op (z,c) = (y+x+y+a,b) = (x+b,a)$ as required.
+\end{itemize}
+
+So we just need to define $(x,a) \op (y,b)$ for $a,b,0$ distinct so that the Axiom is obeyed for such $a,b$.
+
+Suppose we have $(x,a) \op (y,b) = (z,c)$ with $a,b,c,0$ distinct.  Applying the Axiom repeatedly, we obtain a cycle of order $6$:
+\begin{enumerate}
+  \item $(x,a) \op (y,b) = (z,c)$
+  \item $ (y,b) \op (z,c) = (x+b,a)$
+  \item $ (z,c) \op (x+b,a) = (y+c,b)$
+  \item $ (x+b,a) \op (y+c,b) = (z+a,c)$
+  \item $ (y+c,b) \op (z+b,c) = (x,a)$
+  \item $ (z+b,c) \op (x,a) = (y,b)$.
+\end{enumerate}
+
+Note for $a,b,c,0$ distinct that there are no collisions between these six identities, or with the previously defined values of $\op$.
+
+So now we can run a greedy algorithm!  Define a \emph{seed} to be a finite collection of triples $(x,a) \op (y,b) = (z,c)$ with $a,b,c,0$ distinct that obey the Axiom, as well as the property that each $(x,a) \op (y,b)$ is defined at most once.
+
+\begin{proposition}[Enlarging the 1323 seed]\label{enlarge-1323-seed}  Given a seed, and an undefined operation $(x,a) \op (y,b)$ with $a,b,0$ distinct, it is possible to extend the seed to a larger seed in which $(x,a) \op (y,b)$ is now defined.
+\end{proposition}
+
+\begin{proof}  Choose a $c$ that lies outside of the linear span of all components of all elements of the seed, and select $z$ arbitrarily.  Then one can verify that the six equations above do not collide with any element of the seed (or with each other), and so can be added to the seed to give the claim.
+\end{proof}
+
+
+\begin{corollary}[Creating 1323 magmas]\label{create-1323} Any seed can be extended to a 1323 magma.
+\end{corollary}
+
+\begin{proof}\uses{enlarge-1323-seed}  Apply \Cref{enlarge-1323-seed} repeatedly until no more operations can be defined.
+\end{proof}
+
+\begin{corollary}[1323 does not imply 2744]\label{1323-refute-2744}  There exists a 1323 magma which does not obey the 2744 equation $R_y L_{Sy} L_y x = x$.
+\end{corollary}
+
+\begin{proof}\uses{create-1323} It suffices to produce a model in which $L_y$ is not injective. Pick $(x,a), (y,b), (y',b'), (z,c)$ with $a,b,b',c$ linearly independent (and $x,y,y',z$ arbitrary) and impose the twelve equations associated iterating the Axiom to both $(x,a) \op (y,b) = (z,c)$ and $(x,a) \op (y',b') = (z,c)$.  One can check that no collisions occur and so we get a seed for \Cref{create-1323} for which $L_{(x,a)}$ is guaranteed to be non-injective.
+\end{proof}
+
+\begin{corollary}[1898 does not imply 2710]\label{1898-refute-1729}  There exists a magma which obeys the 1898 law $R_{Sy} L_y R_y x = x$ but not the 2710 law $R_y R_{Sy} L_y = x$.
+\end{corollary}
+
+\begin{proof}\uses{1323-refute-2744}  We use the construction from \Cref{1323-refute-2744}.  By construction we have $L_{Sy} = R_{Sy}$ invertible, so it obeys 1898; and the non-injectivity of $L_y$ refutes 2710.
+\end{proof}

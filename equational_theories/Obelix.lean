@@ -1,15 +1,18 @@
-import Mathlib.Algebra.Order.Ring.Nat
+import Mathlib.Algebra.Lie.OfAssociative
+import Mathlib.Analysis.Normed.Field.Lemmas
+import Mathlib.Computability.Primrec
+import Mathlib.Data.DFinsupp.Encodable
+import Mathlib.Data.DFinsupp.FiniteInfinite
+import Mathlib.Data.DFinsupp.Multiset
 import Mathlib.Data.DFinsupp.Notation
-import Mathlib.Data.ZMod.Defs
-import Mathlib.Logic.Denumerable
-import Mathlib.GroupTheory.FiniteAbelian
-import Mathlib.LinearAlgebra.Finsupp
+import Mathlib.Data.Int.Star
+import Mathlib.GroupTheory.FiniteAbelian.Basic
 import Mathlib.LinearAlgebra.Dimension.Localization
-import Mathlib.Tactic
+import Mathlib.LinearAlgebra.FreeModule.StrongRankCondition
 
-import equational_theories.FactsSyntax
-import equational_theories.EquationalResult
 import equational_theories.Equations.Basic
+import equational_theories.EquationalResult
+import equational_theories.FactsSyntax
 
 -- The ``Obelix law''
 -- equation 1491 := x = (y ◇ x) ◇ (y ◇ (y ◇ x))
@@ -130,16 +133,16 @@ section freshGenerator_lemmas
 variable (f : PartialSolution) {x y : A} (a : A := 0)
 
 lemma freshGenerator_not_dom : f.freshGenerator a ∉ f.Dom := by
-  have := f.freshGenerator_not_span a
-  contrapose! this
+  have hf := f.freshGenerator_not_span a
+  contrapose! hf
   rw [mem_span_set']
-  use 1, fun _ ↦ 1, fun _ ↦ ⟨f.freshGenerator a, by simp [this]⟩
+  use 1, fun _ ↦ 1, fun _ ↦ ⟨f.freshGenerator a, by simp [hf]⟩
   simp
 
 lemma fresh_ne_sum (hx : x ∈ f.Dom) (hy : y ∈ f.Dom) (h i j k l m : ℤ := 0) (hh : h ≠ 0 := by decide):
     h • f.freshGenerator a ≠ i • a + j • x + k • y + l • f.f x + m • f.f y := by
-  have := f.freshGenerator_not_smul_span a hh
-  contrapose! this
+  have hf := f.freshGenerator_not_smul_span a hh
+  contrapose! hf
   rw [mem_span_set']
   use 5
   use fun n ↦ if n = 0 then i else if n = 1 then j else if n = 2 then k
@@ -150,18 +153,18 @@ lemma fresh_ne_sum (hx : x ∈ f.Dom) (hy : y ∈ f.Dom) (h i j k l m : ℤ := 0
     else if n = 2 then ⟨y, by simp [hy]⟩
     else if n = 3 then ⟨f.f x, by simp [show f.f x ∈ f.Im by simp [Im]; use x]⟩
     else ⟨f.f y, by simp [show f.f y ∈ f.Im by simp [Im]; use y]⟩
-  simp [this, Fin.sum_univ_def, List.finRange_succ_eq_map]
+  simp [hf, Fin.sum_univ_def, List.finRange_succ_eq_map]
   abel
 
 lemma fresh_sum_ne_sum (hx : x ∈ f.Dom) (hy : y ∈ f.Dom)
     (h₁ i₁ j₁ k₁ l₁ m₁ h₂ i₂ j₂ k₂ l₂ m₂ : ℤ := 0) (hh : h₁ ≠ h₂ := by decide) :
   h₁ • f.freshGenerator a + i₁ • a + j₁ • x + k₁ • y + l₁ • f.f x + m₁ • f.f y ≠
   h₂ • f.freshGenerator a + i₂ • a + j₂ • x + k₂ • y + l₂ • f.f x + m₂ • f.f y := by
-  have := (f.fresh_ne_sum a hx hy (h₂ - h₁) (i₁ - i₂) (j₁ - j₂) (k₁ - k₂) (l₁ - l₂) (m₁ - m₂)
+  have hf := (f.fresh_ne_sum a hx hy (h₂ - h₁) (i₁ - i₂) (j₁ - j₂) (k₁ - k₂) (l₁ - l₂) (m₁ - m₂)
     (sub_ne_zero_of_ne hh.symm)).symm
-  contrapose! this
-  rw [← neg_add_eq_zero] at this ⊢
-  rw [← this, ← neg_add_eq_zero]
+  contrapose! hf
+  rw [← neg_add_eq_zero] at hf ⊢
+  rw [← hf, ← neg_add_eq_zero]
   simp [sub_smul]
   abel
 

@@ -143,17 +143,10 @@ def PartialSolution.move_rev_good (f : PartialSolution G) (x y : G) (z : G) (h1 
     obtain ⟨rfl, rfl⟩ | ha | ⟨rfl, rfl⟩ | ⟨a, ⟨⟨x, -, rfl, rfl⟩, rfl, rfl⟩⟩ := ha
     · exact (hzy (f'_y_x ▸ heq)).elim
     · rw [f'_of_mem_E1 ha] at heq
-      have v := f.strange _ ha heq
-      dsimp at v
-      simp only [Finset.union_insert, Finset.insert_union, Finset.union_assoc, Finset.mem_insert,
-        Prod.mk.injEq, Finset.mem_union, v, Finset.mem_singleton, and_self, Finset.mem_image,
-        Finset.mem_filter, Prod.exists, exists_and_right, true_or, or_true, f'_of_mem_E1]
-    · simp only [Finset.union_insert, Finset.insert_union, Finset.union_assoc, Finset.mem_insert,
-      Prod.mk.injEq, Finset.mem_union, Finset.mem_singleton, Finset.mem_image, Finset.mem_filter,
-      and_true, Prod.exists, exists_and_right, exists_eq_right, true_or, or_true, heq, and_self]
-    · simp only [Finset.union_insert, Finset.insert_union, Finset.union_assoc, Finset.mem_insert,
-      Prod.mk.injEq, Finset.mem_union, Finset.mem_singleton, Finset.mem_image, Finset.mem_filter,
-      and_true, Prod.exists, exists_and_right, exists_eq_right, true_or, or_true, f'_z, true_and]
+      simp [f.strange _ ha heq, f'_of_mem_E1]
+    · simp [heq]
+    · simp only [Finset.mem_insert, Prod.mk.injEq, Finset.mem_union, Finset.mem_singleton,
+        true_or, or_true, f'_z, true_and]
       rw [← heq, f'_z]
   }
 
@@ -193,7 +186,7 @@ def PartialSolution.move_rev_bad (f : PartialSolution G) (x y : G) (z : G) (h1 :
   have f'_of_mem_E1 {a b : G} (ha : (a, b) ∈ f.E1) : f' a b = f.f a b := by
     dsimp [f']
     rw [if_neg, if_neg]
-    · apply hz1 _ ha
+    · exact hz1 _ ha
     · rintro ⟨rfl, rfl⟩
       exact h1 ha
   have f'_of_mem_E0 {a b : G} (ha : (a, b) ∈ f.E0) : f' a b = f.f a b := f'_of_mem_E1 (f.E0_subset_E1 ha)
@@ -304,17 +297,10 @@ def PartialSolution.move_rev_bad (f : PartialSolution G) (x y : G) (z : G) (h1 :
     obtain ⟨rfl, rfl⟩ | ha | ⟨rfl, rfl⟩ | ⟨a, ⟨⟨x, -, rfl, rfl⟩, rfl, rfl⟩⟩ := ha
     · exact (hzy (f'_y_x ▸ heq)).elim
     · rw [f'_of_mem_E1 ha] at heq
-      have v := f.strange _ ha heq
-      dsimp at v
-      simp only [Finset.union_insert, Finset.insert_union, Finset.union_assoc, Finset.mem_insert,
-        Prod.mk.injEq, Finset.mem_union, v, Finset.mem_singleton, and_self, Finset.mem_image,
-        Finset.mem_filter, Prod.exists, exists_and_right, true_or, or_true, f'_of_mem_E1]
-    · simp only [Finset.union_insert, Finset.insert_union, Finset.union_assoc, Finset.mem_insert,
-      Prod.mk.injEq, Finset.mem_union, Finset.mem_singleton, Finset.mem_image, Finset.mem_filter,
-      and_true, Prod.exists, exists_and_right, exists_eq_right, true_or, or_true, heq, and_self]
-    · simp only [Finset.union_insert, Finset.insert_union, Finset.union_assoc, Finset.mem_insert,
-      Prod.mk.injEq, Finset.mem_union, Finset.mem_singleton, Finset.mem_image, Finset.mem_filter,
-      and_true, Prod.exists, exists_and_right, exists_eq_right, true_or, or_true, f'_z, true_and]
+      simp [f.strange _ ha heq, f'_of_mem_E1]
+    · simp [heq]
+    · simp only [Finset.mem_insert, Finset.mem_union, Finset.mem_singleton, true_or, or_true, f'_z,
+        true_and]
       rw [← heq, f'_z]
   }
 
@@ -413,7 +399,8 @@ lemma PartialSolution.mem_move_rev_bad'_of_app_eq (f : PartialSolution G) (x y :
   simp [move_rev_bad', mem_move_rev_bad_of_app_eq, hbm, hp]
 
 def PartialSolution.act (f : PartialSolution G) (x y : G) (h1 : (y, x) ∉ f.E1) : PartialSolution G :=
-    if h2 : (x, y) ∈ f.E1 → f.f x y ≠ x then f.move_rev_good' x y h1 h2 else f.move_rev_bad' x y h1 (by simp_all) (by simp_all)
+    if h2 : (x, y) ∈ f.E1 → f.f x y ≠ x then f.move_rev_good' x y h1 h2
+      else f.move_rev_bad' x y h1 (by simp_all) (by simp_all)
 
 lemma PartialSolution.le_act (f : PartialSolution G) (x y : G) (h1 : (y, x) ∉ f.E1) :
     f ≤ f.act x y h1 := by
@@ -472,7 +459,6 @@ def PartialSolution.add_e0 (f : PartialSolution G) (x y : G) : PartialSolution G
 lemma PartialSolution.le_add_e0 (f : PartialSolution G) (x y : G) :
     f ≤ f.add_e0 x y := by
   unfold add_e0
-  dsimp only
   trans f.add_e1 x y <;> apply le_add_e1
 
 lemma PartialSolution.mem_add_e0 (f : PartialSolution G) (x y : G) :

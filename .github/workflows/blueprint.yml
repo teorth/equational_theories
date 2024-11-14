@@ -10,8 +10,10 @@ on:
       - 'blueprint/**'
       - 'commentary/**'
       - 'home_page/**'
+      - 'tools/fme/**'
       - '**/generate_dashboard.py'
       - '**/generate_equation_implication_js.py'
+      - '**/generate_equation_explorer_graph.py'
       - '**/generate_graphiti_data.rb'
       - 'lean-toolchain'
       - 'lakefile.toml'
@@ -25,8 +27,10 @@ on:
       - 'blueprint/**'
       - 'commentary/**'
       - 'home_page/**'
+      - 'tools/fme/**'
       - '**/generate_dashboard.py'
       - '**/generate_equation_implication_js.py'
+      - '**/generate_equation_explorer_graph.py'
       - '**/generate_graphiti_data.rb'
       - './scripts/**'
       - 'lean-toolchain'
@@ -149,12 +153,16 @@ jobs:
           pip install pillow
           python scripts/generate_dashboard.py
 
-      - name: Generate home_page/implications/implications.js
+      - name: Generate equation explorer data
         run: |
+          pip install markdown
+          python scripts/generate_equation_implication_js.py > home_page/implications/implications.js
           ~/.elan/bin/lake exe extract_implications outcomes > /tmp/out.json
           ~/.elan/bin/lake exe extract_implications raw --full-entries > /tmp/out2.json
-          pip install markdown
-          python scripts/generate_equation_implication_js.py /tmp/out.json /tmp/out2.json
+          python scripts/generate_equation_explorer_graph.py /tmp/out.json /tmp/out2.json > home_page/implications/graph.json
+          ~/.elan/bin/lake exe extract_implications outcomes --finite-only > /tmp/out.finite.json
+          ~/.elan/bin/lake exe extract_implications raw --full-entries --finite-only > /tmp/out2.finite.json
+          python scripts/generate_equation_explorer_graph.py /tmp/out.finite.json /tmp/out2.finite.json > home_page/implications/finite_graph.json
 
       - name: Generate the Finite Magma Explorer website
         run: |
@@ -174,9 +182,11 @@ jobs:
 
       - name: Generate home_page/graphiti/graph.json
         run: |
-          ~/.elan/bin/lake exe extract_implications --json --only-implications --closure equational_theories > /tmp/implications.json
+          ~/.elan/bin/lake exe extract_implications --json --only-implications --closure > /tmp/implications.json
           ~/.elan/bin/lake exe extract_implications unknowns > /tmp/unknowns.json
-          ruby scripts/generate_graphiti_data.rb /tmp/implications.json /tmp/unknowns.json data/duals.json > home_page/graphiti/graph.json
+          ~/.elan/bin/lake exe extract_implications --json --only-implications --closure --finite-only > /tmp/implications.fin.json
+          ~/.elan/bin/lake exe extract_implications unknowns --finite-only > /tmp/unknowns.fin.json
+          ruby scripts/generate_graphiti_data.rb data/duals.json /tmp/implications.json /tmp/unknowns.json /tmp/implications.fin.json /tmp/unknowns.fin.json > home_page/graphiti/graph.json
 
       - name: Build website using Jekyll
         if: github.event_name == 'push' && env.HOME_PAGE_EXISTS == 'true'
