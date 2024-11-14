@@ -81,7 +81,7 @@ theorem Equation374794_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equ
     split_ifs
     · apply ne_of_lt
       simp only [← PNat.coe_lt_coe, PNat.val_ofNat, PNat.pow_coe]
-      apply lt_self_pow (by simp only [Nat.one_lt_ofNat])
+      apply lt_self_pow₀ (by simp only [Nat.one_lt_ofNat])
       apply one_lt_pow₀ (by simp only [Nat.one_lt_ofNat]) (by simp)
     · trivial
   simp only [Ne.symm hx, ↓reduceIte, PNat.pow_coe, PNat.val_ofNat, padicValNat.prime_pow,
