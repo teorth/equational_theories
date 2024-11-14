@@ -123,17 +123,16 @@ def MagmaUpToIso (T : Type*) := Quotient (MagmaIsoSetoid T)
 def MagmaUpToIso.mk {T : Type*} (M : Magma T) := Quotient.mk (MagmaIsoSetoid T) M
 
 instance magmaIsoSetoidDecidable {T : Type*} [DecidableEq T] [Fintype T] :
-    DecidableRel (MagmaIsoSetoid T) := by
-  intro a b
-  simp_rw [MagmaIsoSetoid, MagmaIso, ← exists_true_iff_nonempty]
-  refine @Fintype.decidableExistsFintype _ _ _
-    (Fintype.ofEquiv (Subtype (α := T ≃ T) (fun f ↦ ∀ x y : T, f (a.op x y) = b.op (f x) (f y))) ?_)
-  exact {
-    toFun := fun ⟨f,h⟩ ↦ @MagmaEquiv.mk _ _ a b f h
-    invFun := fun f ↦ ⟨f, @MagmaEquiv.map_op' _ _ a b f⟩
-    left_inv := fun _ ↦ rfl
-    right_inv := fun _ ↦ rfl
-  }
+    DecidableRel (MagmaIsoSetoid T) :=
+  fun a b ↦
+    let _ : Fintype (@MagmaEquiv T T a b) := Fintype.ofEquiv
+        (Subtype (α := T ≃ T) _) {
+          toFun := fun ⟨f,h⟩ ↦ @MagmaEquiv.mk _ _ a b f h
+          invFun := fun f ↦ ⟨f, @MagmaEquiv.map_op' _ _ a b f⟩
+          left_inv := fun _ ↦ rfl
+          right_inv := fun _ ↦ rfl }
+    decidable_of_iff' _ (show _ ↔ @Exists (@MagmaEquiv T T a b) fun _ ↦ True by
+      simp_rw [MagmaIsoSetoid, MagmaIso, exists_true_iff_nonempty])
 
 instance (k : ℕ) : Fintype (MagmaUpToIso (Fin k)) :=
   @Quotient.fintype _ _ _ magmaIsoSetoidDecidable
@@ -151,10 +150,9 @@ def Magma2_List :=
   [Magma2a, Magma2b, Magma2c, Magma2d, Magma2e, Magma2f, Magma2g, Magma2c', Magma2d', Magma2g']
 
 /-- The magmas in `Magma2_List` are an exhaustive list. -/
-unsafe def all_Magma_Fin2 (M : Magma (Fin 2)) : MagmaUpToIso.mk M ∈
+theorem all_Magma_Fin2 (M : Magma (Fin 2)) : MagmaUpToIso.mk M ∈
     Magma2_List.map MagmaUpToIso.mk := by
   revert M
   simp only [MagmaUpToIso.mk, Magma2_List, List.map_cons, List.map_nil,
     List.mem_cons, Quotient.eq, List.not_mem_nil]
-  native_decide --FIXME: `decide` is totally fast enough here (there's only ~16×4 cases to check), but
-  --it doesn't work because of the bad Decidable instance `Multiset.decidableForallMultiset`.
+  decide
