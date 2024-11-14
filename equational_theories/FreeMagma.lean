@@ -1,5 +1,6 @@
 import equational_theories.Homomorphisms
 import Mathlib.Data.List.NodupEquivFin
+import Mathlib.Data.Finset.Basic
 
 universe u
 universe v

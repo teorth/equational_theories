@@ -27,6 +27,12 @@ def MagmaLanguage : Language where
   Functions n := if n = 2 then Unit else Empty
   Relations _ := Empty
 
+open FirstOrder.Language in
+/-- Convert a `FreeMagma` expression to a `Term` in the FO language of magmas. -/
+def FreeMagma.toTerm {α} : FreeMagma α → MagmaLanguage.Term α
+  | .Leaf a => var a
+  | .Fork m1 m2 => Functions.apply₂ () m1.toTerm m2.toTerm
+
 instance instMagmaLanguageUniq : Unique (MagmaLanguage.Functions 2) := by
   simpa [MagmaLanguage] using PUnit.unique
 

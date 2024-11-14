@@ -183,7 +183,7 @@ def subst_definitions {k : ℕ} (f : L.BoundedFormula α k)
     let feq := equal t₁r t₂r
     let sideConds₁ := t₁s.2.2.map (relabel relabel₁)
     let sideConds₂ := t₂s.2.2.map (relabel relabel₂)
-    let fullConds := (sideConds₁ ++ sideConds₂).foldl BoundedFormula.imp feq
+    let fullConds := (sideConds₁ ++ sideConds₂).foldr BoundedFormula.imp feq
     BoundedFormula.relabel id fullConds.alls
   | imp f₁ f₂ =>
       imp (f₁.subst_definitions Fs Rs) (f₂.subst_definitions Fs Rs)
@@ -196,7 +196,7 @@ def subst_definitions {k : ℕ} (f : L.BoundedFormula α k)
       fun i ↦ (tss i).2.1.relabel (relabels i)
     let newRel := ((Rs R).subst tsr).relabel id
     let sideConds := fun i ↦ (tss i).2.2.map (relabel (relabels i))
-    let fullConds := (List.ofFn sideConds).flatten.foldl BoundedFormula.imp newRel
+    let fullConds := (List.ofFn sideConds).flatten.foldr BoundedFormula.imp newRel
     BoundedFormula.relabel id fullConds.alls
 
 /-- `BoundedFormula.subst_definitions` agrees with the original formula once realized. -/

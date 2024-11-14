@@ -1,5 +1,6 @@
+import Batteries.Data.List.Basic
 import equational_theories.Definability.Basic
-import equational_theories.Equations.Basic
+import equational_theories.Equations.All
 import equational_theories.Duals.Basic
 import equational_theories.Preorder
 import equational_theories.MagmaOp
@@ -11,6 +12,15 @@ Proofs of some simple cases of definability.
 open FirstOrder.Language
 open Law
 open Law.MagmaLaw
+
+@[simp]
+theorem FreeMagma.toTerm_realize {α M} (t : FreeMagma α)
+    [inst : Magma M] (v : α → M) :
+    @Term.realize _ _ inst.FOStructure _ v t.toTerm = t.evalInMagma v :=
+  match t with
+  | .Leaf a => by simp only [Term.realize, evalInMagma]
+  | .Fork m1 m2 => by
+    simp [Term.realize, Magma.FinArityOp, evalInMagma, m1.toTerm_realize v, m2.toTerm_realize v]
 
 /-- Every law is TermStructural from its dual. -/
 theorem TermStructural_dual (L : NatMagmaLaw) : L.TermStructuralFrom L.dual := by
