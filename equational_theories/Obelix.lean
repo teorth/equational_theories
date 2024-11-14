@@ -1,7 +1,15 @@
+import Mathlib.Algebra.Lie.OfAssociative
+import Mathlib.Analysis.Normed.Field.Lemmas
+import Mathlib.Computability.Primrec
+import Mathlib.Data.DFinsupp.Encodable
+import Mathlib.Data.DFinsupp.FiniteInfinite
+import Mathlib.Data.DFinsupp.Multiset
 import Mathlib.Data.DFinsupp.Notation
+import Mathlib.Data.Int.Star
 import Mathlib.GroupTheory.FiniteAbelian.Basic
 import Mathlib.LinearAlgebra.Dimension.Localization
-import Mathlib.Data.DFinsupp.FiniteInfinite
+import Mathlib.LinearAlgebra.FreeModule.StrongRankCondition
+
 import equational_theories.Equations.Basic
 import equational_theories.EquationalResult
 import equational_theories.FactsSyntax
