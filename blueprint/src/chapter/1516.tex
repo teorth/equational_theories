@@ -38,47 +38,72 @@ This definition has an extension property:
 
 For technical reasons (which will be helpful later when we expand the magma) we also give a variant that will ensure a useful ``double surjectivity'' property:
 
-\begin{lemma}[1516 extension variant]\label{1516-ext-var}  Let $E$ be a 1516 seed, and let $h \in \Z$.  Then there exists an extension $E'$ of $E$ that contains $(a,a+h)$, $(a',a'+h)$ for some distinct $a,a'$.
+\begin{lemma}[1516 extension variant]\label{1516-ext-var}  Let $E$ be a 1516 seed, and let $h \in \Z$ be non-zero.  Then there exists an extension $E'$ of $E$ that contains $(a,a+h)$, $(a',a'+h)$, $(a'',a''+h)$ for some distinct $a,a',a''$.
 \end{lemma}
 
-\begin{proof}  If we choose $a$ sufficiently large, and set $a' = 2a$ (say), the claim simply follows by adding $(a,a+h)$ and $(a',a'+h)$ to $E$ and verifying that none of the axioms are violated.
+\begin{proof}  If we choose $a$ sufficiently large, and set $a' = 2a$ and $a''=3a$ (say), the claim simply follows by adding $(a,a+h)$, $(a',a'+h)$ and $(a'',a''+h)$ to $E$ and verifying that none of the axioms are violated.
 \end{proof}
 
 
-\begin{corollary}[Base magma]\label{1516-base} There exists a 1516 magma with carrier $\Z$ with the property that $Sa=a$ for all $a$, and such that for any $a,b \in \Z$, the equation $R_a c = b$ has at least two solutions $c$.
+\begin{corollary}[Base magma]\label{1516-base} There exists a 1516 magma with carrier $\Z$ with the property that $Sa=a$ for all $a$, and such that for any distinct $a,b \in \Z$, the equation $R_a c = b$ has at least three solutions $c$.  Furthermore, for each $a \in \Z$, there exists $b \neq a$ such that $L_a R_a b = b$.
 \end{corollary}
 
-\begin{proof}  By \Cref{1516-ext}, \Cref{1516-ext-var} and the greedy algorithm starting with the seed consisting just of $(0,0)$, we obtain a graph $\{ (a,f(a)): a \in \Z \}$ of a function $f:\Z \to \Z$ with $f(0)=0$ and the property that if $f(a)=b$ and $f(b)=c$, then $f(c-a)=-a$, and also with the property that for every $h$ there are distinct $a_h, a'_h$ with $f(a_h)=a_h+h$ and $f(a'_h) = a'_h+h$.  We then have \eqref{1516-f} holds.  If we then define the magma operation $\op$ by \eqref{xy-1516}, we obtain \eqref{1516}.  Also, from construction we see that $R_d (d - a_h) = R_d (d - a'_h) = d+h$ for any $d,h$, giving the second claim.
+Note from \eqref{1516} and the hypothesis $Sa=a$ that $R_a c = a$ if and only if $c=a$.  Thus the requirement that $a,b$ be distinct is necessary.
+
+\begin{proof}  By \Cref{1516-ext}, \Cref{1516-ext-var} and the greedy algorithm starting with the seed consisting of $(0,0)$, $(-1,2)$, $(3,1)$, we obtain a graph $\{ (a,f(a)): a \in \Z \}$ of a function $f:\Z \to \Z$ with $f(0)=0$, $f(-1)=2$, $f(3)=1$ and the property that if $f(a)=b$ and $f(b)=c$, then $f(c-a)=-a$, and also with the property that for every non-zero $h$ there are distinct $a_h, a'_h, a''_h$ with $f(a_h)=a_h+h$, $f(a'_h) = a'_h+h$, and $f(a''_h) = a''_h+h$.  We then have \eqref{1516-f} holds.  If we then define the magma operation $\op$ by \eqref{xy-1516}, we obtain \eqref{1516}.  Also, from construction we see that $R_d (d - a_h) = R_d (d - a'_h) = R_d (d - a''_h) = d+h$ for any $d,h$, giving the second claim.  Finally, from constructio we have $R_a (a+1) = a+1+f(-1) = a+3$, so $L_a R_a (a+1) = a + f(3) = a+1$, giving the final claim.
 \end{proof}
 
-Now we construct a more complex 1516 magma, whose carrier $G$ is $\Z \cup (\Z \times \Z \times \N)$.  The first component $\Z$ will represent the squares, and the second component will represent the non-squares.  The 1516 magma constructed in \Cref{1516-base} will be the restriction of $G$ to $\Z$; thus $a \op b$ is already defined in $G$ for $a,b \in \Z$, but the rest of the multiplication table is not currently defined.  By construction, $S$ is already defined and equal to the identity on $\Z$, and we have the 1516 equation
+Now we construct a more complex 1516 magma, whose carrier $G$ is $\Z \cup G'$, where
+$$G' := \{ (a,c,n) \in \Z \times \Z \times \N : a \neq c\}.$$
+The first component $\Z$ will represent the squares, and the second component $G'$ will represent the non-squares, and the third component is a technical label needed to ensure a certain infinite surjectivity property.  The 1516 magma constructed in \Cref{1516-base} will be the restriction of $G$ to $\Z$; thus $a \op b$ is already defined in $G$ for $a,b \in \Z$, but the rest of the multiplication table is not currently defined.  By construction, $S$ is already defined and equal to the identity on $\Z$, and we have the 1516 equation
 $$ L_{Sa} L_b L_b a = b$$
 for $a,b \in \Z$, with the left multiplication operators $L_b$ currently only defined as maps from $\Z$ to $\Z$.  Among other things, this means that $L_a = L_{Sa}$ is surjective as a map from $\Z$ to $\Z$ for any $a \in \Z$.
 
-We extend the squaring map $S$ to all of $G$ by declaring $S(a,b,n) := a$, thus $S$ maps $G$ to $\Z$.  To create a 1516 magma structure on all of $G$, we need to extend the left multiplication operators $L_b$, $b \in \Z$ as maps from $G$ to $G$, and also introduce additional maps $L_x: G \to G$ for $x \in (\Z \times \Z \times \N)$, obeying the following axioms:
+We extend the squaring map $S$ to all of $G$ by declaring $S(a,b,n_1,n_2) := a$, thus $S$ maps $G$ to $\Z$.  To create a 1516 magma structure on all of $G$, we need to extend the left multiplication operators $L_b$, $b \in \Z$ as maps from $G$ to $G$, and also introduce additional maps $L_x: G \to G$ for $x \in G'$, obeying the following axioms:
 \begin{itemize}
-\item Axiom A: For any $x \in \Z \times \Z \times \N$, $L_x x = Sx$.
-\item Axiom B: For any $x \in \Z \times \Z \times \N$ and $b \in \Z$, $L_{Sx} L_b L_b x = b$.
-\item Axiom C: For any $x \in G$ and $y \in \Z \times \Z \times \N$, $L_{Sx} L_y L_y x = y$.
+\item Axiom A: For any $x \in G'$, $L_x x = Sx$.
+\item Axiom B: For any $x \in G'$ and $b \in \Z$, $L_{Sx} L_b L_b x = b$.
+\item Axiom C: For any $x \in G$ and $y \in G'$, $L_{Sx} L_y L_y x = y$.
 \end{itemize}
 
 We first address Axiom B, which purely concerns how to extend the $L_b$ operators for $b \in \Z$, and also impose an additional technical ``infinitely surjective'' requirement that will help us satisfy Axiom C later.
 
-\begin{proposition}[Obtaining Axiom B]\label{axiom-b}  There exists a way to extend $L_b: \Z \to \Z$ to $L_b: G \to G$ for all $b \in \Z$, in such a way that Axiom B holds, and furthermore for each $b \in \Z$ and $x \in \Z \times \Z \times \N$, the set $\{ y \in \Z \times \Z \times \N: L_b y = x \}$ is infinite. Also we can ensure that $L_b x \neq x$ for any $b \in \Z$ and $x \in \Z \times \Z \times \N$.
+\begin{proposition}[Obtaining Axiom B]\label{axiom-b}  There exists a way to extend $L_b: \Z \to \Z$ to $L_b: G \to G$ for all $b \in \Z$, in such a way that Axiom B holds, and furthermore for each $b \in \Z$ and $x \in G'$, the set $\{ y \in G': L_b y = x \}$ is infinite. Also we can ensure that $L_b x \neq x$ for any $b \in \Z$ and $x \in G'$.
 \end{proposition}
 
-\begin{proof}  Let $y = (a,c,n)$ be a ``non-square'' in $G \backslash \Z$.  By \Cref{1516-base}, for each $b \in \Z$, we can find
-$c_{y,b} \in \Z$ distinct from $c$ such that $R_a c_{y,b} = b$; clearly the $c_{y,b}$ are distinct as $b$ varies.  We now have $ L_a L_{c_{y,b}} b = L_{Sa} L_{c_{y,b}} L_{c_{y,b}} a = c_{y,b}$.  So if we define $L_{c_{y,b}} y := b$, then we have $L_{Sy} L_{c'} L_{c'} y = c'$ whenever $c'$ is of the form $c' = c_{y,b}$ for some $b \in \Z$.  But we still have $L_{c'} y$ undefined if $c'$ is not of this form, in particular, $L_c y$ is currently not defined.
+\begin{proof}  Let $y = (a,c,n)$ be a ``non-square'' in $G'$, thus $a \neq c$ and $Sy = a$.  We first define the operation $L_a$ on $y$ as follows:
+\begin{itemize}
+  \item If $n \neq 0$, we set $L_a y := (a,c,0)$.
+  \item If $n=0$, we set $L_a y = a$.
+\end{itemize}
+In particular, we obtain the special case $L_{Sy} L_a L_a y = a$ of Axiom B.  We also see that the the preimage $\{ z \in G': L_a z = y \}$ is already infinite if $n = 0$, but this has not yet been established in the $n \neq 0$ case.
 
-Now we greedily fill in the rest of the $L_{c'}$ functions.  Suppose at some stage of this process, we have a non-square element $y = (a,c,n)$ for which $L_{c'} y$ is not yet defined for some $c'$, we can use the surjectivity of $L_a: \Z \to \Z$ to write $c' = L_a b$ for some $b \in \Z$, then set $L_{c'} y = b$; then we have $L_{Sy} L_{c'} L_{c'} y = c'$.  Also, if we want to write $y$ as $L_{c'} z$ for some $z$ where $L_{c'}$ is not defined, we can perform the previous construction if necessary to have $L_{c'} y  = b$ for some $b \in SM$, then find $a'$ such that $R_b a' = c'$, and set $z = (a', c', n')$ where $n'$ is large enough that $L_{c'} z$ has not yet been assigned.  Then set $L_{c'} z = y$, then $L_{Sz} L_{c'} L_{c'} z = c'$, and we have created a preimage in $\{ z \in M \backslash SM: L_{c'} z = y\}$.  Iterating these procedures over a well-ordering of $(\Z \times \Z \times \N) \times \Z \times \N$, we can show that for any finite initial segment in this well-ordering, we can create a partially defined extension of all the $L_b$, such that if $(x,c',m)$ is in this initial segment, then $L_{Sx} L_{c'} L_{c'} x$ is well-defined and equal to $x$,  and $\{ y \in \Z \times \Z \times \N: L_b y = x \}$ has at least $m$ elements.  Running this iteration over the entire well-ordering, we obtain the claim.
+We still need to define $L_c y$ for other $c \in \Z$.  We claim that for each $b \in \Z$ we can find $c_{y,b} \in \Z$, which are distinct as $b$ varies, such that
+$L_a L_{c_{y,b}} b = c_{y,b}$.  For $b=a$, we can write $L_a L_{c_{y,b}} b = L_a R_a c_{y,b}$ and invoke the final property of \Cref{1516-base}.  For $b \neq a$, we apply \Cref{1516-base} to find $c_{y,b} \in \Z$ distinct from $b, c_{y,a}$ such that $R_a c_{y,b} = b$; note that $c_{y,b}$ is also distinct from $a$ since $R_a a = a \neq b$.  Clearly the $c_{y,b}$ are distinct as $b$ varies.  We now have $L_a L_{c_{y,b}} b = L_{Sa} L_{c_{y,b}} L_{c_{y,b}} a = c_{y,b}$ as desired.
+
+So if we define $L_{c_{y,b}} y := b$ for all $b \in \Z$, then we have $L_{Sy} L_{c'} L_{c'} y = c'$ whenever $c'$ is of the form $c' = c_{y,b}$ for some $b \in \Z$.  But we still have $L_{c'} y$ undefined if $c'$ is not of this form or equal to $a$, in particular, $L_c y$ is currently not defined.
+
+We also note that with our construction so far, that $L_c y \neq c$ whenever $y \in G'$ and $c \in \Z$ is distinct from $Sy$.  This proeprty will be preserved in the construction below (because all future assignments of $L_c y$ will take values in $G'$ rather than $\Z$).
+
+Now we greedily fill in the rest of the $L_{c'}$ functions.  Suppose at some stage of this process, we have a non-square element $y = (a,c,n)$ for which $L_{c'} y$ is not yet defined for some $c'$, then $c' \neq a$. We can use the surjectivity of $L_a: \Z \to \Z$ to write $c' = L_a b$ for some $b \in \Z$, then set $L_{c'} y = b$; then we have $L_{Sy} L_{c'} L_{c'} y = c'$.
+
+Next, suppose we want to write $y$ as $L_{c'} z$ for some $z$ where $L_{c'}$ is not currently defined, in such a way that $L_{Sz} L_{c'} L_{c'} z = c'$.  There are several cases:
+\begin{itemize}
+\item Case 1: $L_{c'} y = w$ for some $w \in G'$.  By construction, $c_{w,c'}$ is distinct from $c'$ and $L_{c_{w,c'}} w = c'$.  Set $z = (c_{w,c'}, c', n', 0)$ where $n'$ is large enough that $L_{c'} z$ has not yet been assigned.  Then set $L_{c'} z = y$, so that we have $L_{Sz} L_{c'} L_{c'} z = c'$ as required.
+\item Case 2: $c' \neq Sy$ and $L_{c'} y = b$ for some $b \in \Z$. By the previous property, $c' \neq b$.  By \Cref{1516-base}, we can find $a'$ such that $R_b a' = c'$ and $a' \neq c'$.  Then set $z = (a', c', n', 0)$ where $n'$ is large enough that $L_{c'} z$ has not yet been assigned.  Then set $L_{c'} z = y$, so that we have $L_{Sz} L_{c'} L_{c'} z = c'$ as required.
+\item Case 3: $c' \neq Sy$ and $L_{c'} y$ is currently undefined.  Use the previous procedure to set $L_{c'} y$ equal to some $b \in \Z$, then apply the Case 2 analysis.
+\item Case 4: $c' = Sy$.  We can assume $n=0$, since otherwise we are in Case 1 by construction.  But then we do not need to locate any $z$ because, as previously mentioned, the set $\{ z \in G': L_{c'} z = y \}$ is already infinite.
+\end{itemize}
+
+Iterating these procedures over a well-ordering of $G' \times \Z \times \N$, we can show that for any finite initial segment in this well-ordering, we can create a partially defined extension of all the $L_b$, such that if $(x,c',m)$ is in this initial segment, then $L_{Sx} L_{c'} L_{c'} x$ is well-defined and equal to $x$,  and $\{ y \in G': L_b y = x \}$ has at least $m$ elements.  Running this iteration over the entire well-ordering, we obtain the claim.
 \end{proof}
 
 Finally, we construct the remaining $L_x$.
 
-\begin{proposition}[Obtaining Axioms A, C]\label{axiom-c} One can find maps $L_x: G \to G$ for each ``non-square'' $x \in \Z \times \Z \times \N$, such that Axioms A, C hold.
+\begin{proposition}[Obtaining Axioms A, C]\label{axiom-c} One can find maps $L_x: G \to G$ for each ``non-square'' $x \in G'$, such that Axioms A, C hold.
 \end{proposition}
 
-\begin{proof}  We can work with a single $x \in \Z \times \Z \times \N$.  Our task is to find a function $L_x$ for which
+\begin{proof}  We can work with a single $x \in G'$.  Our task is to find a function $L_x$ for which
 \begin{equation}\label{axioma-again}
    L_x x = Sx
 \end{equation}
@@ -88,11 +113,11 @@ and
 \end{equation}
 for all $y \in G$ (note that $L_{Sy}$ is already fully constructed).
 
-Define a \emph{seed} to be an injective partial function $L_x$ defined on finitely many values and obeying \eqref{axioma-again}, as well as \eqref{axiomb-again} whenever $L_x L_x y$ is defined.  If there is a $y \in G$ for which $L_x y$ is currently undefined, then by construction $y$ is equal to $L_x z$ for at most one $z$.  If such a $z$ exists, we set $L_x y$ to be an element of $\{ w: L_{Sz} w = x \}$ that is not already in the domain or range of $L_x$; if no such $z$ exists, we set $L_x y$ to be arbitrary element of $G$ not already in the domain or range.  In either case, we see that the seed property is preserved.  Starting from the seed in which $L_x$ is only defined on $x$ and maps it to $Sx$, we obtain the claim.
+Define a \emph{seed} to be an injective partial function $L_x$ defined on finitely many values and obeying \eqref{axioma-again}, as well as \eqref{axiomb-again} whenever $L_x L_x y$ is defined.  If there is a $y \in G$ for which $L_x y$ is currently undefined, then by hypothesis $y$ is equal to $L_x z$ for at most one $z$.  If such a $z$ exists, we set $L_x y$ to be an element of $\{ w: L_{Sz} w = x \}$ that is not already in the domain or range of $L_x$; if no such $z$ exists, we set $L_x y$ to be arbitrary element of $G$ not already in the domain or range.  In either case, we see that the seed property is preserved.  Starting from the seed in which $L_x$ is only defined on $x$ and maps it to $Sx$, we obtain the claim.
 \end{proof}
 
 \begin{corollary}\label{1516-no-255}  There exists a 1516 magma that does not obey the 255 equation $$x = ((x \op x) \op x) \op x$$.
 \end{corollary}
 
-\begin{proof}  We perform the above construction, but with one refinement.  Pick some $x \in \Z \times \Z \times \N$.  Then after the constructions in \Cref{axiom-b}, $L_{Sx} x$ is defined and equal to some element $y$ distinct from $x$. If $y \in \Z$ then $L_y x \neq x$ by construction and we are done, so suppose $y \in \Z \times \Z \times \N$.  It is then a routine matter to modify the construction in \Cref{axiom-c} to ensure that $L_y x \neq x$, by adding one more element to the seed for $L_y$ to set $L_y x$ to some arbitrary value not equal to $x, y, Sy$.
+\begin{proof}  We perform the above construction, but with one refinement.  Pick some $x \in G'$.  Then after the constructions in \Cref{axiom-b}, $L_{Sx} x$ is defined and equal to some element $y$ distinct from $x$. If $y \in \Z$ then $L_y x \neq x$ by construction and we are done, so suppose $y \in G'$.  It is then a routine matter to modify the construction in \Cref{axiom-c} to ensure that $L_y x \neq x$, by adding one more element to the seed for $L_y$ to set $L_y x$ to some arbitrary value not equal to $x, y, Sy$.
 \end{proof}
