@@ -6,6 +6,7 @@ import Mathlib.Data.Finset.Order
 
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
+import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
 import equational_theories.Mathlib.Order.Greedy
 
 
@@ -13,92 +14,12 @@ import equational_theories.Mathlib.Order.Greedy
 
 namespace Eq1516
 
+open FreeGroup
+
 abbrev A := FreeGroup Nat
 
 instance : Countable A := by
   apply Function.Surjective.countable (Quot.mk_surjective)
-
-theorem List.append_cancel_right_length {α : Type} (as : List α) (bs : List α) (bs' : List α) (cs : List α) (eq_length : bs.length = bs'.length) :
-(as ++ bs = cs ++ bs') → (as = cs) := by
-intro eq
-apply_fun List.reverse at eq
-apply_fun List.drop bs.length at eq
-simp only [List.reverse_append, List.length_reverse, List.drop_left'] at eq
-rw [eq_length] at eq
-simp only [List.length_reverse, List.drop_left', List.reverse_inj] at eq
-apply eq
-
-
-theorem invRev_append (w w' : List (Nat × Bool)) : FreeGroup.invRev (w ++ w') = FreeGroup.invRev w' ++ FreeGroup.invRev w := by
-unfold FreeGroup.invRev
-simp
-
-theorem invRev_cons (a : (Nat × Bool)) (w : List (Nat × Bool)) : FreeGroup.invRev (a:: w) = FreeGroup.invRev w ++ FreeGroup.invRev [a] := by
-unfold FreeGroup.invRev
-simp
-
-theorem toWord_mul (x y : A) : (FreeGroup.toWord (x*y)) = FreeGroup.reduce ((FreeGroup.toWord x) ++ (FreeGroup.toWord y)) := by
-rw [← FreeGroup.mk_toWord (x:= x), ← FreeGroup.mk_toWord (x:= y)]
-rw [FreeGroup.mul_mk]
-simp
-
-theorem reduce_append (w w' : List (Nat × Bool)) : (FreeGroup.reduce (w ++ w')) = FreeGroup.reduce ((FreeGroup.reduce w) ++ (FreeGroup.reduce w')) := by
-rw [← FreeGroup.toWord_mk, ← FreeGroup.mul_mk, toWord_mul, FreeGroup.toWord_mk, FreeGroup.toWord_mk]
-
-theorem reduce_cons (a : Nat × Bool) (w : List (Nat × Bool)) : FreeGroup.reduce (a :: w) = FreeGroup.reduce (a :: FreeGroup.reduce w) := by
-simp only [FreeGroup.reduce.cons, FreeGroup.reduce.idem]
-
-theorem reduce_singleton (a : Nat × Bool) : FreeGroup.reduce [a] = [a] := rfl
-
-theorem eq_invRev_not_reduced (w : List (Nat × Bool)) : w = FreeGroup.invRev w → w = [] ∨ (FreeGroup.reduce w).length < w.length := by
-  induction w using List.bidirectionalRec
-  · tauto
-  case singleton a =>
-    cases a
-    intro eq
-    unfold FreeGroup.invRev at eq
-    simp at eq
-  case cons_append a l b ih =>
-    intro eq
-    have ih' : l = FreeGroup.invRev l := by
-      simp only [FreeGroup.invRev, List.map_cons, List.map_append, List.map_nil, List.reverse_cons,
-        List.reverse_append, List.reverse_nil, List.nil_append, List.singleton_append,
-        List.cons_append, List.cons.injEq] at eq
-      apply List.append_cancel_right_length _ _ _ _ (by simp) eq.2
-    specialize ih ih'
-    cases ih with
-    | inl h =>
-      rw [h] at eq
-      rw [h]
-      right
-      simp [FreeGroup.invRev] at eq
-      simp [FreeGroup.reduce, eq.1]
-    | inr h =>
-      right
-      rw [reduce_cons, reduce_append]
-      calc
-        (FreeGroup.reduce (a :: FreeGroup.reduce (FreeGroup.reduce l ++ FreeGroup.reduce [b]))).length
-        _ ≤  (a :: FreeGroup.reduce (FreeGroup.reduce l ++ FreeGroup.reduce [b])).length := by
-            apply FreeGroup.Red.length_le (FreeGroup.reduce.red)
-        _ ≤ (FreeGroup.reduce l ++ FreeGroup.reduce [b]).length + 1 := by
-            rw [List.length_cons, Nat.add_le_add_iff_right]
-            apply FreeGroup.Red.length_le (FreeGroup.reduce.red)
-        _ < (a :: (l ++ [b])).length := by
-            rw [List.length_cons, List.length_append, reduce_singleton, List.length_append]
-            omega
-
-
--- This is a proof by hand, probably better proofs are possible using NielsenSchreier
-theorem eq_inv_eq_one (a : A) :  a ≠ 1 → a ≠ a⁻¹  := by
-  intro ineq
-  apply_fun FreeGroup.toWord
-  intro eq
-  rw [FreeGroup.toWord_inv] at eq
-  apply eq_invRev_not_reduced at eq
-  rw [FreeGroup.toWord_eq_nil_iff, FreeGroup.reduce_toWord] at eq
-  cases eq
-  · trivial
-  · omega
 
 
 def maxIndex' : (List (Nat × Bool)) → Nat
@@ -107,9 +28,9 @@ def maxIndex' : (List (Nat × Bool)) → Nat
 
 def maxIndex (a : A) : Nat := (maxIndex' $ FreeGroup.toWord a)
 
-def freshIndex (old : Multiset A) : Nat := Nat.succ $ (Multiset.map maxIndex old).toFinset.max.unbot' 0
+def freshIndex (old : Finset A) : Nat := Nat.succ $ (Finset.image maxIndex old).max.unbot' 0
 
-def freshGenerator (old : Multiset A) := FreeGroup.of (freshIndex old)
+def freshGenerator (old : Finset A) := FreeGroup.of (freshIndex old)
 
 theorem maxIndex'_sublist (L₁ L₂ : List (Nat × Bool)) (H : L₁.Sublist L₂) : maxIndex' L₁ ≤ maxIndex' L₂ := by
 induction H with
@@ -143,23 +64,19 @@ unfold maxIndex
 rw [FreeGroup.toWord_inv]
 apply maxIndex'_invRev
 
-theorem maxIndex_subgroup_lt_freshIndex (old : Multiset A) (g : A) : g ∈ Subgroup.closure old.toFinset →
-  maxIndex g < freshIndex old := by
+theorem maxIndex_subgroup_lt_freshIndex (old : Finset A) (g : A) : g ∈ Subgroup.closure old →
+  maxIndex g < freshIndex old := set_option pp.all true in by
   apply Subgroup.closure_induction
-  · simp only [Finset.mem_coe, Multiset.mem_toFinset]
+  · simp only [Finset.mem_coe]
     unfold freshIndex
     intro x h
-    have this : maxIndex x ≤ (Multiset.map maxIndex old).toFinset.max := by
-      apply Finset.le_max
-      simp only [Multiset.mem_toFinset, Multiset.mem_map]
-      exists x
-    -- Here something weird happens if we import Math.Tactic.Group
-    rw [WithBot.coe_le_iff (a := maxIndex x) (x := (Multiset.map maxIndex old).toFinset.max)] at this
-    match this with
-    | ⟨w, h, q⟩  =>
-      rw [h]
-      simp only [WithBot.unbot'_coe, Nat.succ_eq_add_one, gt_iff_lt]
-      omega
+    have : maxIndex x ≤ (Finset.image maxIndex old).max.unbot' 0 := by
+      rw [← Finset.coe_max']
+      simp only [WithBot.unbot'_coe]
+      apply Finset.le_max'
+      simp only [Finset.mem_image]
+      use x, h
+    omega
   · unfold maxIndex
     simp [maxIndex']
     unfold freshIndex
@@ -171,17 +88,17 @@ theorem maxIndex_subgroup_lt_freshIndex (old : Multiset A) (g : A) : g ∈ Subgr
     have this := maxIndex_inv x
     omega
 
-theorem maxIndex_fresh (old : Multiset A) : maxIndex (freshGenerator old) = freshIndex old := by
+theorem maxIndex_fresh (old : Finset A) : maxIndex (freshGenerator old) = freshIndex old := by
 unfold freshGenerator
 simp [maxIndex,maxIndex']
 
-theorem freshGenerator_not_in_span (old : Multiset A) : freshGenerator old ∉ Subgroup.closure old.toFinset := by
+theorem freshGenerator_not_in_span (old : Finset A) : freshGenerator old ∉ Subgroup.closure old := by
 intro contra
 have this := maxIndex_subgroup_lt_freshIndex _ _ contra
 have that := maxIndex_fresh old
 omega
 
-theorem fresh_ineq (old : Multiset A) (x y : A) (x_mem : x ∈ Subgroup.closure old.toFinset) (y_mem : y ∈ Subgroup.closure old.toFinset) (eq : x = freshGenerator old * y)
+theorem fresh_ineq (old : Finset A) (x y : A) (x_mem : x ∈ Subgroup.closure old) (y_mem : y ∈ Subgroup.closure old) (eq : x = freshGenerator old * y)
 : False := by
 have eq' : x * y⁻¹ = freshGenerator old := by
   rw [eq]
@@ -190,7 +107,7 @@ apply freshGenerator_not_in_span
 rw [← eq']
 exact Subgroup.mul_mem _ x_mem (Subgroup.inv_mem _ y_mem)
 
-theorem fresh_ineq' (old : Multiset A) (x y : A) (x_mem :  x ∈ Subgroup.closure old.toFinset) (y_mem : y ∈ Subgroup.closure old.toFinset)
+theorem fresh_ineq' (old : Finset A) (x y : A) (x_mem :  x ∈ Subgroup.closure old) (y_mem : y ∈ Subgroup.closure old)
 (eq : x * (freshGenerator old)⁻¹ =  y) : False := by
 have eq' : y⁻¹ * x = freshGenerator old := by
   rw [← eq]
@@ -210,17 +127,15 @@ cases FreeGroup.toWord x
   omega
 
 
-
+@[simp]
+theorem freshGenerator_toWord (old : Finset A) : FreeGroup.toWord (freshGenerator old) = [(freshIndex old, true)] := rfl
 
 @[simp]
-theorem freshGenerator_toWord (old : Multiset A) : FreeGroup.toWord (freshGenerator old) = [(freshIndex old, true)] := rfl
-
-@[simp]
-theorem freshGenerator_inv_toWord (old : Multiset A) : FreeGroup.toWord (freshGenerator old)⁻¹ = [(freshIndex old, false)] := rfl
+theorem freshGenerator_inv_toWord (old : Finset A) : FreeGroup.toWord (freshGenerator old)⁻¹ = [(freshIndex old, false)] := rfl
 
 
--- TODO: It might be better to go via CoprodI
-theorem fresh_old_no_cancellation (old : Multiset A) (x : A) : x ∈ Subgroup.closure old.toFinset →
+-- TODO: It might be better to go via CoprodI (or now with the reduced lemmas)
+theorem fresh_old_no_cancellation (old : Finset A) (x : A) : x ∈ Subgroup.closure old →
   FreeGroup.toWord (freshGenerator old * x) = FreeGroup.toWord (freshGenerator old) ++ FreeGroup.toWord x := by
   intro x_mem
   rw [toWord_mul]
@@ -239,7 +154,7 @@ theorem fresh_old_no_cancellation (old : Multiset A) (x : A) : x ∈ Subgroup.cl
       trivial
     omega
 
-theorem fresh_old_inv_no_cancellation (old : Multiset A) (x : A) : x ∈ Subgroup.closure old.toFinset →
+theorem fresh_old_inv_no_cancellation (old : Finset A) (x : A) : x ∈ Subgroup.closure old →
   FreeGroup.toWord (x * (freshGenerator old)⁻¹) = FreeGroup.toWord x ++ (FreeGroup.toWord (freshGenerator old)⁻¹) := by
   intro x_mem
   have eq : x * (freshGenerator old)⁻¹ = ((freshGenerator old) * x⁻¹)⁻¹ := by simp
@@ -247,7 +162,7 @@ theorem fresh_old_inv_no_cancellation (old : Multiset A) (x : A) : x ∈ Subgrou
   invRev_append, ← FreeGroup.toWord_inv]
   simp [FreeGroup.invRev]
 
-theorem fresh_ineq'' (old : Multiset A) (x y : A) (x_mem : x ∈ Subgroup.closure old.toFinset) (y_mem : y ∈ Subgroup.closure old.toFinset)
+theorem fresh_ineq'' (old : Finset A) (x y : A) (x_mem : x ∈ Subgroup.closure old) (y_mem : y ∈ Subgroup.closure old)
 (eq : x * (freshGenerator old)⁻¹ = (freshGenerator old) * y) : False := by
 apply_fun FreeGroup.toWord at eq
 revert eq
@@ -456,50 +371,41 @@ theorem s_preimages_of_b : t.s ⊆ t.preimages_of_b := Finset.filter_subset _ _
 
 theorem s_Dom : t.s ⊆ t.ps.E.keys := by trans <;> apply Finset.filter_subset
 
-def old := (t.ps.E.keys.1 ∪ t.ps.Im.1).cons t.b
+def old := (t.ps.E.keys ∪ t.ps.Im) ∪ {t.b}
 
 theorem dom_old (x : A) (h : x ∈ t.ps.E) : x ∈ t.old := by
   unfold old
-  simp only [Multiset.mem_cons, Multiset.mem_union, Finset.mem_val]
-  right
-  left
-  apply h
+  simp [Finmap.mem_keys,h]
 
-theorem dom_old_subgroup {t : ExtensionTask} {x : A} (h : x ∈ t.ps.E) : x ∈ Subgroup.closure t.old.toFinset := by
+theorem dom_old_subgroup {t : ExtensionTask} {x : A} (h : x ∈ t.ps.E) : x ∈ Subgroup.closure t.old := by
   apply Subgroup.subset_closure
   simp [dom_old (h:=h)]
 
 theorem dom_old' (x y : A) (h : y ∈ t.ps.E ⬝ x ) : x ∈ t.old := by
-unfold old
-simp only [Multiset.mem_cons, Multiset.mem_union, Finset.mem_val]
-right
-left
-apply Finmap.mem_of_lookup_eq_some h
+  unfold old
+  simp [Finmap.mem_keys, Finmap.mem_of_lookup_eq_some h]
 
-theorem dom_old'_subgroup {t : ExtensionTask} {x y : A} (h : y ∈ t.ps.E ⬝ x) : x ∈ Subgroup.closure t.old.toFinset := by
+
+theorem dom_old'_subgroup {t : ExtensionTask} {x y : A} (h : y ∈ t.ps.E ⬝ x) : x ∈ Subgroup.closure t.old := by
   apply Subgroup.subset_closure
   simp [dom_old' (h:=h)]
 
 theorem im_old (x y : A) (h : y ∈ t.ps.E ⬝ x) : y ∈ t.old := by
-unfold old
-simp only [Multiset.mem_cons, Multiset.mem_union, Finset.mem_val]
-right
-right
-unfold PartialSolution.Im
-simp only [Multiset.mem_toFinset, Multiset.mem_map, Sigma.exists, exists_eq_right]
-use x
-rw [← Finmap.mem_lookup_iff]
-apply h
+  unfold old
+  simp only [PartialSolution.Im, Finset.union_assoc, Finset.mem_union, Multiset.mem_toFinset,
+    Multiset.mem_map, Finmap.mem_lookup_iff.symm, Sigma.exists, exists_eq_right,
+    Finset.mem_singleton]
+  tauto
 
-theorem im_old_subgroup {t : ExtensionTask} {x y : A} (h : y ∈ t.ps.E ⬝ x) : y ∈ Subgroup.closure t.old.toFinset := by
+theorem im_old_subgroup {t : ExtensionTask} {x y : A} (h : y ∈ t.ps.E ⬝ x) : y ∈ Subgroup.closure t.old := by
   apply Subgroup.subset_closure
   simp [im_old (h:=h)]
 
 theorem b_old : t.b ∈ t.old := by
-unfold old
-simp [Multiset.mem_cons]
+  unfold old
+  simp
 
-theorem b_old_subgroup : t.b ∈ Subgroup.closure t.old.toFinset := by
+theorem b_old_subgroup : t.b ∈ Subgroup.closure t.old := by
   apply Subgroup.subset_closure
   simp [b_old]
 
@@ -829,7 +735,7 @@ theorem newE_dom_and_inv' : ∀ x y, y ∈ t.newE ⬝ x → x⁻¹ ∈ t.newE �
     · rw [e_x_inv_d, old']
       simp [e0]
     · exfalso
-      apply eq_inv_eq_one t.b t.b_ne_1
+      apply ne_inv_of_ne_one t.b_ne_1
       nth_rw 1 [← e0.1, ← e0'.1]
       simp
 
@@ -939,7 +845,7 @@ theorem extension_cond4 : ∀ a ∈ t.newE, ∀ b ∈ t.newE ⬝ a, ∀ c ∈ t.
         apply Subgroup.subset_closure
         simp [dom_old' (h := e_a'_b)]
   · rcases e2 with ⟨a', d', e_a'_b, e_a'_inv_d', _, eq⟩
-    have a'_mem : a' ∈ Subgroup.closure t.old.toFinset := by
+    have a'_mem : a' ∈ Subgroup.closure t.old := by
       apply dom_old'_subgroup e_a'_b
     rcases e_y_z with ⟨⟨old' | e0'⟩ | e1'⟩ | e2'
     · exfalso
@@ -1289,10 +1195,6 @@ theorem _root_.Equation1516_not_implies_Equation1489 : ∃ (G : Type) (_ : Magma
       fromList_eval x₁ x₂, fromList_eval (x₄ * x₂⁻¹) x₅]
     decide
 
-
-
 end extension
-
-
 
 end Eq1516
