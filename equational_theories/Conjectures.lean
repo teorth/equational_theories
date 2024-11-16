@@ -128,4 +128,12 @@ conjecture Finite.Equation1701_implies_Equation1884 (G : Type) [Magma G] [Finite
 @[equational_result]
 conjecture Finite.Equation1701_implies_Equation4587 (G : Type) [Magma G] [Finite G] (_ : Equation1701 G) : Equation4587 G
 
+/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/482525422 -/
+@[equational_result]
+conjecture Finite.Equation3342_implies_Equation3522 (G : Type) [Magma G] [Finite G] (_ : Equation3342 G) : Equation3522 G
+@[equational_result]
+conjecture Finite.Equation3342_implies_Equation4118 (G : Type) [Magma G] [Finite G] (_ : Equation3342 G) : Equation4118 G
+@[equational_result]
+conjecture Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] (_ : Equation1516 G) : Equation255 G
+
 end Conjectures
