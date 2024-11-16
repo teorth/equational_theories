@@ -183,9 +183,14 @@ cases h : FreeGroup.toWord x with
     trivial
   omega
 
-
-
-
+theorem fresh_ineq''' (old : Finset A) (x y : A) (x_mem : x ∈ Subgroup.closure old) (y_mem : y ∈ Subgroup.closure old) (eq : x = y * freshGenerator old)
+: False := by
+have eq' : y⁻¹ * x = freshGenerator old := by
+  rw [eq]
+  simp
+apply freshGenerator_not_in_span
+rw [← eq']
+exact Subgroup.mul_mem _ (Subgroup.inv_mem _ y_mem) x_mem
 
 private abbrev x : Nat -> A := FreeGroup.of
 private abbrev x₁ := x 1
@@ -193,6 +198,8 @@ private abbrev x₂ := x 2
 private abbrev x₃ := x 3
 private abbrev x₄ := x 4
 private abbrev x₅ := x 5
+private abbrev x₆ := x 6
+
 
 /-- We will use `Finmap (fun _ : A => A)` to model the set E. There is no nondependent version of Finmap, so we have
 to use a trivial Sigma type. -/
@@ -201,7 +208,7 @@ private abbrev TE := Finmap (fun _ : A => A)
 notation:63 f:63 " ⬝ " a:64 => Finmap.lookup a f
 
 instance inst_LE_TE: PartialOrder TE where
-  le := fun E E' => ∀ a a', a' ∈ E ⬝ a → a' ∈ E' ⬝ a
+  le := fun E E' => ∀ {a a'}, a' ∈ E ⬝ a → a' ∈ E' ⬝ a
   le_refl := by tauto
   le_trans := by tauto
   le_antisymm := by
@@ -210,13 +217,13 @@ instance inst_LE_TE: PartialOrder TE where
     intro x
     cases ex: E ⬝ x <;> cases ex' : E' ⬝ x
     · rfl
-    · have := le2 _ _ ex'
+    · have := le2 ex'
       rw [this] at ex
       injection ex
-    . have := le1 _ _ ex
+    . have := le1 ex
       rw [this] at ex'
       injection ex'
-    · have := le1 _ _ ex
+    · have := le1 ex
       rw [← this, ex']
 
 theorem TE_le_iff (E E' : TE) : E ≤ E' ↔ (∀ a a', a' ∈ E ⬝ a → a' ∈ E' ⬝ a) := by rfl
@@ -251,6 +258,20 @@ constructor
       rfl
     use Finmap.Disjoint.symm _ _ h a a_in_s2
 
+theorem TE_mem_singleton' : ∀ {x y z w : A},  y ∈ ((Finmap.singleton w z : TE) ⬝ x) ↔ x = w ∧ y = z := by
+  intro x y z w
+  constructor
+  · intro h
+    have x_mem := Finmap.mem_of_lookup_eq_some h
+    rw [Finmap.mem_singleton] at x_mem
+    use x_mem
+    rw [x_mem] at h
+    simp only [Finmap.lookup_singleton_eq, Option.mem_def, Option.some.injEq] at h
+    tauto
+  · intro ⟨eq1, eq2⟩
+    rw [eq1, eq2]
+    simp
+
 @[ext]
 structure PartialSolution where
   E : TE
@@ -266,12 +287,14 @@ structure PartialSolution where
 
 instance inst_LE_PartialSolution: PartialOrder PartialSolution where
   le x y := x.E ≤ y.E
-  le_refl x := le_refl x.E
+  le_refl x := by apply le_refl x.E
   le_trans a b c := by apply le_trans (α := TE)
   le_antisymm a b := by
     intros
     apply PartialSolution.ext
     apply le_antisymm <;> assumption
+
+theorem PartialSolution.le_iff (ps ps': PartialSolution) : ps ≤ ps' ↔ ps.E ≤ ps'.E := by rfl
 
 def PartialSolution.DomId (ps : PartialSolution) : 1 ∈ ps.E := by
   apply TE_lookup_isSome.mp
@@ -282,12 +305,7 @@ def PartialSolution.DomId (ps : PartialSolution) : 1 ∈ ps.E := by
 def PartialSolution.Im (ps : PartialSolution) : Finset A :=
   (ps.E.entries.map Sigma.snd).toFinset
 
-def E0 : List (A × A) := [(1, 1), (x₁, x₂), (x₁⁻¹,x₃), (x₃ * x₁, x₄), (x₄ * x₂⁻¹, x₅)]
 
-def f0 (a : A) : A := (List.lookup a E0).getD 1
-
-def initial : PartialSolution := by
-  use List.toFinmap (E0.map Prod.toSigma) <;> decide
 
 def helper {α β γ} (g : α -> β) (f : ∀ b : α, γ (g b)) (h_g : Function.Injective g) (s : Finset α)
 : Finmap γ where
@@ -332,18 +350,16 @@ section extension
 structure ExtensionTask where
   ps : PartialSolution
   b : A
-  b_not_in_dom : b ∉ ps.E
 
 namespace ExtensionTask
 
 variable (t : ExtensionTask)
 
-
-theorem b_ne_1 : t.b ≠ 1 := by
+theorem b_ne_1 [b_not_in_dom : Fact (t.b ∉ t.ps.E)] : t.b ≠ 1 := by
   intro eq
-  have h := t.b_not_in_dom
+  have h := b_not_in_dom
   rw [eq] at h
-  apply h t.ps.DomId
+  apply h.out t.ps.DomId
 
 def preimages_of_b := t.ps.E.keys.filter (fun a' => t.b ∈ t.ps.E ⬝ a')
 
@@ -421,6 +437,15 @@ macro "triv_subgroup" : tactic => `(tactic|
 
 def c := freshGenerator t.old
 
+theorem c_not_old_subgroup : t.c ∉ Subgroup.closure t.old := by
+  apply freshGenerator_not_in_span
+
+theorem c_not_old : t.c ∉ t.old := by
+  intro h
+  apply t.c_not_old_subgroup
+  apply Subgroup.subset_closure
+  simp [h]
+
 def e0 : TE := Finmap.singleton t.b t.c
 
 def e1 : TE := helper (fun a' => t.c * a'⁻¹) (fun a' => a'⁻¹) (by intro x y ; simp) t.preimages_of_b
@@ -441,18 +466,7 @@ def e2 : TE := helper' (fun a' => (t.ps.E ⬝ (a'⁻¹)).iget * a' * t.c⁻¹) (
 theorem e0_spec : ∀ x y,  y ∈ t.e0 ⬝ x ↔ x = t.b ∧ y = t.c := by
   intro x y
   unfold e0
-  constructor
-  · intro h
-    have x_mem : x ∈ t.e0 := Finmap.mem_of_lookup_eq_some h
-    unfold e0 at x_mem
-    rw [Finmap.mem_singleton] at x_mem
-    use x_mem
-    rw [x_mem] at h
-    simp only [Finmap.lookup_singleton_eq, Option.mem_def, Option.some.injEq] at h
-    tauto
-  · intro ⟨eq1, eq2⟩
-    rw [eq1, eq2]
-    simp
+  apply TE_mem_singleton'
 
 theorem e1_spec : ∀ x y, y ∈ t.e1 ⬝ x ↔ ∃ a', t.b ∈ t.ps.E ⬝ a' ∧ t.c * a'⁻¹ = x ∧ a'⁻¹ = y := by
 intro x y
@@ -491,7 +505,7 @@ use eq2, eq3
 
 def newE : TE := t.ps.E ∪ t.e0 ∪ t.e1 ∪ t.e2
 
-theorem disjoint_old_e0 : t.ps.E.Disjoint t.e0 := by
+theorem disjoint_old_e0 [b_not_in_dom : Fact (t.b ∉ t.ps.E)]: t.ps.E.Disjoint t.e0 := by
   intro x hold he0
   have := TE_lookup_exists.mpr he0
   cases this with
@@ -500,7 +514,7 @@ theorem disjoint_old_e0 : t.ps.E.Disjoint t.e0 := by
     cases h with
     | intro left right =>
       rw [left] at hold
-      apply t.b_not_in_dom hold
+      apply b_not_in_dom.out hold
 
 theorem disjoint_old_e1 : t.ps.E.Disjoint t.e1 := by
   intro x hold he1
@@ -586,7 +600,9 @@ theorem disjoint_e1_e2 : t.e1.Disjoint t.e2 := by
     apply Subgroup.subset_closure
     simp [dom_old' _ _ _ e_a'_b]
 
-theorem newE_spec : ∀ x y,  y ∈ t.newE ⬝ x ↔ ((((y ∈ t.ps.E ⬝ x) ∨ (x = t.b ∧ y = t.c)) ∨ (∃ a', t.b ∈ t.ps.E ⬝ a' ∧ t.c * a'⁻¹ = x ∧ a'⁻¹ = y))
+variable [b_not_in_dom : Fact (t.b ∉ t.ps.E)]
+
+theorem newE_spec  : ∀ x y,  y ∈ t.newE ⬝ x ↔ ((((y ∈ t.ps.E ⬝ x) ∨ (x = t.b ∧ y = t.c)) ∨ (∃ a', t.b ∈ t.ps.E ⬝ a' ∧ t.c * a'⁻¹ = x ∧ a'⁻¹ = y))
 ∨ ∃ a' d', t.b ∈ t.ps.E ⬝ a' ∧ d' ∈ t.ps.E ⬝ (a'⁻¹) ∧  d' * a' * t.c⁻¹ = x ∧ a' * t.c⁻¹ = y) := by
   intro x y
   unfold newE
@@ -596,7 +612,7 @@ theorem newE_spec : ∀ x y,  y ∈ t.newE ⬝ x ↔ ((((y ∈ t.ps.E ⬝ x) ∨
   · simp [Finmap.disjoint_union_left, disjoint_old_e1, disjoint_e0_e1]
   · simp [Finmap.disjoint_union_left, disjoint_old_e2, disjoint_e0_e2, disjoint_e1_e2]
 
-theorem newE_spec_old_imp : ∀ x y, y ∈ t.ps.E ⬝ x → y ∈ t.newE ⬝ x := by
+theorem newE_spec_old_imp : ∀ {x y}, y ∈ t.ps.E ⬝ x → y ∈ t.newE ⬝ x := by
   intros
   rw [newE_spec]
   tauto
@@ -978,7 +994,7 @@ theorem extension_cond5 : ∀ a ∈ t.newE, ∀ a' ∈ t.newE, ∀ d ∈ t.newE 
     · rw [inv_inv] at *
       rw [new2.2.1, new2'.2.1]
 
-theorem extension_cond6 (t : ExtensionTask) (a : A) : a ∈ t.newE → a⁻¹ ∈ t.newE ⬝ a → a = 1 := by
+theorem extension_cond6 (a : A) : a ∈ t.newE → a⁻¹ ∈ t.newE ⬝ a → a = 1 := by
   intro a_mem eq
   rw [newE_spec] at eq
   rcases eq with ⟨⟨old | e0⟩ | e1⟩ | e2
@@ -1005,7 +1021,7 @@ theorem extension_cond6 (t : ExtensionTask) (a : A) : a ∈ t.newE → a⁻¹ �
       · simp [dom_old'_subgroup e_a'_b]
       · simp [im_old_subgroup e_a'_inv_d']
 
-theorem extension_cond7 (t : ExtensionTask) (a : A) :
+theorem extension_cond7  (a : A) :
   a ∈ t.newE → ∀ a' ∈ t.newE, ∀ d ∈ t.newE ⬝ a⁻¹, t.newE ⬝ a = t.newE ⬝ a' → a ≠ a' → d * a ≠ a' := by
   intro a_mem a' a'_mem d e_a_inv_d eq_e_a_e_a' ineq_a_a'
   rw [← TE_lookup_exists] at a'_mem
@@ -1014,12 +1030,12 @@ theorem extension_cond7 (t : ExtensionTask) (a : A) :
   rcases inv_inv a ▸ newE_dom_and_inv' t a⁻¹ d e_a_inv_d (by simp [a_mem]) with old | new1 | new2
   · rcases e_a'_d' with ⟨⟨old' | e0'⟩ | e1'⟩ | e2'
     · apply t.ps.cond7
-      · have old'' := newE_spec_old_imp _ _ _ old'
+      · have old'' := newE_spec_old_imp _ old'
         rw [old'',← old.2] at eq_e_a_e_a'
         apply TE_lookup_mem' eq_e_a_e_a'
       · apply TE_lookup_mem' old'
       · apply old.1
-      · have old'' := newE_spec_old_imp _ _ _ old'
+      · have old'' := newE_spec_old_imp _  old'
         rw [old', old.2, eq_e_a_e_a',old'']
       · assumption
     · rw [e0'.1, newE_b, ← old.2] at eq_e_a_e_a'
@@ -1057,7 +1073,7 @@ theorem extension_cond7 (t : ExtensionTask) (a : A) :
       simp only [ne_eq, mul_right_inj, inv_inj]
       intro eq
       rw [← eq] at e_a''_b
-      apply t.b_not_in_dom
+      apply b_not_in_dom.out
       apply TE_lookup_mem' e_a''_b
     · rcases e2' with ⟨a'', d'', e_a''_b, e_a''_inv_d', eq, eq''⟩
       rw [← eq]
@@ -1073,7 +1089,7 @@ theorem extension_cond7 (t : ExtensionTask) (a : A) :
     tauto
     tauto
 
-theorem extension_cond8 (t : ExtensionTask) (a : A) : a ∈ t.newE → 1 ∈ t.newE ⬝ a → a = 1 := by
+theorem extension_cond8  (a : A) : a ∈ t.newE → 1 ∈ t.newE ⬝ a → a = 1 := by
   intro a_mem e_a_1
   rw [newE_spec] at e_a_1
   rcases e_a_1 with ⟨⟨old | e0⟩ | e1⟩ | e2
@@ -1104,12 +1120,179 @@ def extension : PartialSolution := by
   case cond7 => apply extension_cond7
   case cond8 => apply extension_cond8
 
-theorem extension_spec (t : ExtensionTask) : t.ps.E ≤ t.newE ∧ ∃ c, c ∈ t.newE ⬝ t.b := by
+theorem extension_spec : t.ps.E ≤ t.newE ∧ ∃ c, c ∈ t.newE ⬝ t.b := by
   use newE_spec_old_imp t
   use t.c
   apply t.newE_b
 
 end ExtensionTask
+
+section extension2
+namespace ExtensionTask
+
+variable (t : ExtensionTask)
+
+def newE2 := t.ps.E ∪ (Finmap.singleton t.c (t.b*t.c))
+
+theorem old_ne_c (x : A) : x ∈ t.old → x ≠ t.c := by
+  intro mem h
+  rw [h] at mem
+  apply freshGenerator_not_in_span (old := t.old)
+  apply Subgroup.subset_closure
+  apply mem
+
+theorem newE2_disjoint : Finmap.Disjoint t.ps.E (Finmap.singleton t.c (t.b*t.c)) := by
+  intro x x_mem
+  simp only [Finmap.mem_singleton]
+  apply old_ne_c
+  apply dom_old
+  assumption
+
+theorem newE2_spec {x y : A} : y ∈ t.newE2 ⬝ x ↔ y ∈ t.ps.E ⬝ x ∨ x = t.c ∧ y = t.b*t.c:= by
+  unfold newE2
+  repeat rw [Finmap.mem_lookup_disjoint_union]
+  repeat rw [TE_mem_singleton']
+  · unfold Finmap.Disjoint
+    simp only [Finmap.mem_singleton]
+    intro x h
+    apply old_ne_c
+    apply dom_old
+    exact h
+
+theorem newE2_of_old {x y : A} : y ∈ t.ps.E ⬝ x → y ∈ t.newE2 ⬝ x := by
+  rw [newE2_spec]
+  tauto
+
+
+theorem newE2_comp {x y z : A} [b_ne_1 : Fact (t.b ≠ 1)] :  y ∈ t.newE2 ⬝ x → z ∈ t.newE2 ⬝ y → y ∈ t.ps.E ⬝ x ∧ z ∈ t.ps.E ⬝ y := by
+  repeat rw [newE2_spec]
+  rintro (old | new) (old' | new')
+  · tauto
+  · exfalso
+    apply t.old_ne_c
+    apply im_old
+    exact old
+    tauto
+  · exfalso
+    apply fresh_ineq''' (eq:=new.2) <;> triv_subgroup
+  · exfalso
+    apply b_ne_1.out
+    have : t.b * t.c = t.c := by rw [← new.2, new'.1]
+    simp only [mul_left_eq_self] at this
+    assumption
+
+theorem newE2_dom_and_inv {x y z :A } : y ∈ t.newE2 ⬝ x → z ∈ t.newE2 ⬝ x⁻¹ → y ∈ t.ps.E ⬝ x ∧ z ∈ t.ps.E ⬝ x⁻¹  := by
+  repeat rw [newE2_spec]
+  rintro (old | new) (old' | new')
+  · tauto
+  · exfalso
+    apply freshGenerator_not_in_span (old := t.old)
+    unfold c at new'
+    rw [← new'.1]
+    simp only [inv_mem_iff]
+    triv_subgroup
+  · exfalso
+    apply freshGenerator_not_in_span (old := t.old)
+    unfold c at new
+    rw [← new.1]
+    triv_subgroup
+  · exfalso
+    have : t.c * 1 = 1 * (t.c)⁻¹ := by nth_rw 1 [← new.1] ; rw [← new'.1] ; simp
+    apply fresh_ineq'' (eq:= this.symm) <;> apply Subgroup.one_mem
+
+def extension2 [b_ne_1 : Fact (t.b ≠ 1)] : PartialSolution where
+  E := t.newE2
+  fId := by
+    rw [newE2_spec]
+    simp [t.ps.fId]
+  cond4 := by
+    intro a a_mem b b_mem c c_mem
+    apply newE2_of_old
+    have this := newE2_comp t b_mem c_mem
+    apply t.ps.cond4 a (TE_lookup_mem' this.1) b this.1 c this.2
+  cond5 := by
+    intro a a_mem a' a'_mem d e_a_inv_d d' e_a'_inv_d' eq
+    rw [← TE_lookup_exists] at a_mem
+    rcases a_mem with ⟨b, e_a_b⟩
+    have e_a'_b : b ∈ t.newE2 ⬝ a' := eq ▸ e_a_b
+    obtain ⟨e_a_b, e_a_inv_d⟩ := t.newE2_dom_and_inv e_a_b e_a_inv_d
+    obtain ⟨e_a'_b,e_a'_inv_d'⟩ := t.newE2_dom_and_inv e_a'_b e_a'_inv_d'
+    apply t.ps.cond5 a (TE_lookup_mem' e_a_b) a' (TE_lookup_mem' e_a'_b) d e_a_inv_d d' e_a'_inv_d'
+    rw [e_a_b,e_a'_b]
+  cond6 := by
+    intro a a_mem
+    rw [newE2_spec]
+    rintro (old | new)
+    · apply t.ps.cond6
+      apply TE_lookup_mem' old
+      apply old
+    · exfalso
+      have : t.b⁻¹ * t.c⁻¹ = t.c * 1 := by rw [← new.1,new.2,new.1] ; simp
+      apply fresh_ineq'' (eq := this)
+      · triv_subgroup
+      · apply Subgroup.one_mem
+  cond7 := by
+    intro a a_mem a' a'_mem d e_a_inv_d eq
+    rw [← TE_lookup_exists] at a_mem
+    rcases a_mem with ⟨b, e_a_b⟩
+    obtain ⟨e'_a_b, e_a_inv_d⟩ := t.newE2_dom_and_inv e_a_b e_a_inv_d
+    have e_a'_b : b ∈ t.newE2 ⬝ a' := eq ▸ e_a_b
+    rw [newE2_spec] at e_a'_b
+    cases e_a'_b with
+    | inl e_a'_b =>
+      apply t.ps.cond7 a (TE_lookup_mem' e'_a_b) a' (TE_lookup_mem' e_a'_b) d e_a_inv_d
+      rw [e_a'_b, e'_a_b]
+    | inr h =>
+      exfalso
+      apply fresh_ineq''' (eq := h.2) <;> triv_subgroup
+  cond8 := by
+    intro a a_mem
+    rw [newE2_spec]
+    rintro (old | new)
+    · apply t.ps.cond8 a (TE_lookup_mem' old) old
+    · exfalso
+      apply fresh_ineq''' (eq := new.2)
+      · apply Subgroup.one_mem
+      · triv_subgroup
+
+theorem extension2_E [b_ne_1 : Fact (t.b ≠ 1)] : t.extension2.E = t.newE2 := rfl
+
+theorem extension2_spec : t.ps.E ≤ t.newE2 ∧
+Finset.card {c ∈ t.newE2.keys | (t.b*c) ∈ t.newE2 ⬝ c } =
+Finset.card {c ∈ t.ps.E.keys | (t.b*c) ∈ t.ps.E ⬝ c } + 1 := by
+  use newE2_of_old t
+  have : {c ∈ t.ps.E.keys | (t.b*c) ∈ t.newE2 ⬝ c } =
+         {c ∈ t.ps.E.keys | (t.b*c) ∈ t.ps.E ⬝ c } := by
+    apply Finset.filter_congr
+    intro x x_mem
+    rw [newE2_spec]
+    constructor
+    · rintro (old | new)
+      · assumption
+      · exfalso
+        apply freshGenerator_not_in_span (old := t.old)
+        unfold c at new
+        rw [← new.1]
+        rw [Finmap.mem_keys] at x_mem
+        apply Subgroup.subset_closure
+        simp [dom_old (h := x_mem)]
+    · tauto
+  unfold newE2 at *
+  simp only [Finmap.keys_union, Finset.filter_union] at *
+  rw [this]
+  simp only [Option.mem_def, Finmap.mem_lookup_disjoint_union t.newE2_disjoint,
+    Finmap.keys_singleton, Finset.filter_singleton, Finmap.lookup_singleton_eq, or_true, ↓reduceIte]
+  rw [Finset.card_union_eq_card_add_card.mpr]
+  · simp
+  · simp only [Finset.disjoint_singleton_right, Finset.mem_filter, not_and]
+    intro c_mem
+    exfalso
+    apply c_not_old
+    apply t.dom_old
+    apply c_mem
+
+end ExtensionTask
+end extension2
 
 theorem extension_or_nop  : ∀ (ps : PartialSolution) (b : A), ∃ ps', ps ≤ ps' ∧ ∃ c, c ∈ ps'.E ⬝ b := by
   intro ps b
@@ -1119,21 +1302,52 @@ theorem extension_or_nop  : ∀ (ps : PartialSolution) (b : A), ∃ ps', ps ≤ 
     rw [TE_lookup_exists]
     assumption
   case neg =>
-    let t : ExtensionTask := { ps := ps, b := b, b_not_in_dom := h}
+    let t : ExtensionTask := { ps := ps, b := b}
+    have : Fact (t.b ∉ t.ps.E) := by use h
     use t.extension
     apply t.extension_spec
 
+theorem extension2 (ps : PartialSolution) (b : A) (h : b ≠ 1) (n : Nat) :
+∃ ps', ps ≤ ps' ∧ Finset.card {c ∈ ps'.E.keys | (b*c) ∈ ps'.E ⬝ c } ≥ n := by
+  induction n with
+  | zero => use ps ; simp
+  | succ n ih =>
+    obtain ⟨ps', le, ineq⟩ := ih
+    let t : ExtensionTask := { ps := ps', b := b}
+    have : Fact (t.b ≠ 1) := by use h
+    use t.extension2
+    have := t.extension2_spec
+    constructor
+    · rw [PartialSolution.le_iff]
+      apply le_trans (α := TE) (b := ps'.E)
+      · apply le
+      · exact this.1
+    · rw [t.extension2_E]
+      have def_t_ps : t.ps = ps' := rfl
+      have def_b : t.b = b := rfl
+      rw [def_t_ps] at this
+      rw [def_b] at this
+      omega
+
 def translation_invariant_1516 (f : A → A) : Prop := ∀ (x : A), (f ( f ( f x )* x⁻¹ * (f 1)⁻¹)) = x⁻¹ * (f 1)⁻¹
 
-theorem completion (ps : PartialSolution) : ∃ (f : A → A), translation_invariant_1516 f ∧ ∀ x y, y ∈ ps.E ⬝ x -> f x = y := by
-  have ⟨c, hc, h1, h2, h3⟩  := exists_greedy_chain (α := PartialSolution) (β := A) (task := fun b ps => ∃ c, c ∈ ps.E ⬝ b) extension_or_nop ps
+theorem completion (ps : PartialSolution) : ∃ (f : A → A), translation_invariant_1516 f ∧ (∀ x y, y ∈ ps.E ⬝ x -> f x = y)
+∧ ∀ b, (b ≠ 1) → Set.encard {c | b*c = f c } ≥ 3 := by
+  have ⟨c, hc, h1, h2, h3⟩  := exists_greedy_chain (α := PartialSolution) (β := A ⊕ {b : A // b ≠ 1})
+    (task := fun b ps => match b with
+      | .inl b => ∃ c, c ∈ ps.E ⬝ b
+      | .inr ⟨b, _⟩   => Finset.card {c ∈ ps.E.keys | (b*c) ∈ ps.E ⬝ c } ≥ 3)
+    ( fun ps b => match b with
+      | .inl b => extension_or_nop ps b
+      | .inr ⟨b, h⟩   => extension2 ps b h 3) ps
   classical
-  choose g hg1 f hf using h3
-  refine ⟨f, fun x => ?_, fun x y => ?_⟩
+  simp only [Sum.forall, Subtype.forall] at h3
+  choose g hg1 f hf using h3.1
+  refine ⟨f, fun x => ?_, fun x y => ?_, fun b h => ?_⟩
   · let S : Finset _ := {x, 1, f x, (f (f x) * x⁻¹ * (f 1)⁻¹)}
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (S.image fun a => ⟨g a, hg1 a⟩)
-    replace le a ha := Finset.forall_image.1 le a ha _ _ (hf a)
+    replace le a ha := Finset.forall_image.1 le a ha (hf a)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
     obtain ⟨fx, f1, ffx, fffx⟩ := le
     rw [e.fId] at f1
@@ -1146,15 +1360,38 @@ theorem completion (ps : PartialSolution) : ∃ (f : A → A), translation_invar
     rw [inv_one, mul_one]
     exact Option.some_injective A
   · intro h
-    specialize h2 (g x) (hg1 x) x y h
+    specialize h2 (g x) (hg1 x) h
     specialize hf x
     rw [hf] at h2
     injection h2
+  · obtain ⟨ps, ps_in_c, card_ps⟩ := h3.2 b h
+    let S : Finset _ := ps.E.keys
+    have : ∀ x ∈ S, b* x ∈ ps.E ⬝ x → b * x = f x := by
+      intro x x_mem hyp
+      obtain ⟨⟨ps', ps'_in_c⟩, hps'1, hps'2⟩ := hc.directed ⟨ps, ps_in_c⟩ ⟨g x, hg1 x⟩
+      simp only at hps'1 hps'2
+      apply Option.some_injective
+      rw [← hps'1 hyp, ← hps'2 (hf x)]
+    trans {c ∈ S | b * c ∈ ps.E ⬝ c}.toSet.encard
+    · apply Set.encard_le_card
+      simp only [Option.mem_def, Finset.coe_filter, Set.setOf_subset_setOf, and_imp]
+      apply this
+    · rw [Set.encard_coe_eq_coe_finsetCard]
+      simp only [ge_iff_le, Nat.ofNat_le_cast]
+      apply card_ps
+
+def E0 : List (A × A) := [(1, 1), (x₁, x₂), (x₁⁻¹,x₃), (x₃ * x₁, x₄), (x₄ * x₂⁻¹, x₅), (x₆⁻¹, x₆^2), (x₆^3, x₆)]
+
+def f0 (a : A) : A := (List.lookup a E0).getD 1
+
+def initial : PartialSolution := by
+  use List.toFinmap (E0.map Prod.toSigma) <;> decide
 
 noncomputable def f := (completion initial).choose
+end extension
 
 theorem fromList_eval (a b: A) (h : (a,b) ∈ E0 := by decide) : f a = b := by
-  apply (completion initial).choose_spec.2
+  apply (completion initial).choose_spec.2.1
   unfold initial
   simp only [Finmap.dlookup_list_toFinmap]
   rw [List.mem_dlookup_iff, List.mem_map]
@@ -1163,17 +1400,66 @@ theorem fromList_eval (a b: A) (h : (a,b) ∈ E0 := by decide) : f a = b := by
   · unfold List.NodupKeys
     decide
 
-
 theorem f_translation_invariant_1516 : translation_invariant_1516 f := by
   unfold f
   apply (completion initial).choose_spec.1
 
-theorem f_extends_initial : ∀ a b : A, b ∈ initial.E ⬝ a → f a = b := (completion initial).choose_spec.2
+theorem f_extends_initial : ∀ a b : A, b ∈ initial.E ⬝ a → f a = b := (completion initial).choose_spec.2.1
 
-noncomputable def magA : Magma A := { op := fun x y => f (y*x⁻¹) * x  }
+noncomputable scoped instance magA : Magma A := { op := fun x y => f (y*x⁻¹) * x  }
 
-theorem magA_op_def (x y : A) : magA.op x y = f (y*x⁻¹) * x   := rfl
+theorem magA_op_def (x y : A) : magA.op x y = f (y*x⁻¹) * x := rfl
 
+theorem A_satisfies_Equation1516 : Equation1516 A := by
+  unfold Equation1516
+  intro x y
+  repeat rw [magA_op_def]
+  simp only [mul_inv_cancel_right, mul_inv_cancel, mul_inv_rev]
+  have := f_translation_invariant_1516 (y*x⁻¹)
+  apply_fun fun a => a * (f 1) * y at this
+  simp only [mul_inv_rev, inv_inv, inv_mul_cancel_right] at this
+  repeat rw [mul_assoc] at *
+  exact this.symm
+
+theorem A_idempotent (x : A) : x ◇ x = x := by
+  rw [magA_op_def]
+  simp [fromList_eval 1 1]
+
+theorem base1 (a b : A) (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 3 := by
+  have eq1 : {c | c ◇ a = b} =  {c | f (a*c⁻¹) *  c = b} := by
+    ext
+    simp [magA_op_def]
+  let bij : A ≃ A := ⟨fun (c :A ) => a * c⁻¹, fun (c :A ) => c⁻¹ * a, fun _ => by simp, fun _ => by simp⟩
+  have eq2 :  {c| (b * a⁻¹) *c = f c} ≃ {c| f (a*c⁻¹) *  c = b} := by
+    simp only [Set.coe_setOf]
+    trans
+    · apply (Equiv.subtypeEquivOfSubtype bij).symm
+    · apply Equiv.subtypeEquivRight
+      intro x
+      unfold bij
+      simp only [Equiv.coe_fn_mk]
+      group
+      constructor
+      · intro h ; rw [←h] ; group
+      · intro h ; rw [←h] ; group
+  rw [eq1, ← (Set.encard_congr eq2)]
+  have := (completion initial).choose_spec.2.2 (b * a⁻¹)
+  apply this
+  apply_fun (fun x => x * a)
+  simp [ineq.symm]
+
+theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
+  intro a
+  use x₆ * a
+  constructor
+  · simp
+  · repeat rw [magA_op_def]
+    group
+    rw [fromList_eval (x₆^(-1)) (x₆^2), fromList_eval (x₆^2 * x₆) (x₆^1)]
+    simp
+
+
+@[equational_result]
 theorem _root_.Equation1516_not_implies_Equation1489 : ∃ (G : Type) (_ : Magma G), Equation1516 G ∧ ¬ Equation1489 G := by
   let magA : Magma A := { op := fun x y => f (y*x⁻¹) * x  }
   use A, magA
@@ -1195,6 +1481,6 @@ theorem _root_.Equation1516_not_implies_Equation1489 : ∃ (G : Type) (_ : Magma
       fromList_eval x₁ x₂, fromList_eval (x₄ * x₂⁻¹) x₅]
     decide
 
-end extension
+
 
 end Eq1516
