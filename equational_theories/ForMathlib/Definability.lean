@@ -128,12 +128,12 @@ def subst_definitions (t : L.Term α) (Fs : ∀ {n} (_ : L.Functions n), L'.Form
       let cTot := ∑ i, (subExprs i).1
       --The function that will re-map the subexpressions to the new side-type α ⊕ β
       let remapper {i} : (α ⊕ Fin (subExprs i).1) → (α ⊕ Fin _) :=
-        Sum.map id fun βi ↦ finSumFinEquiv (Sum.inl (finSigmaFinEquiv ⟨i,βi⟩))
+        Sum.map id fun βi ↦ finSumFinEquiv $ Sum.inl $ finSigmaFinEquiv ⟨i,βi⟩
       --We represent the output of the function with the new symbol
-      let thisVar := var (Sum.inr (Fin.last cTot))
+      let thisVar := var $ Sum.inr $ finSumFinEquiv $ Sum.inr 0
       --We have our own side condition to express that we're the output of this function
       let thisCond : L'.Formula (α ⊕ Fin (cTot + 1)) :=
-        (Fs f).subst (Sum.elim (fun i ↦ (subExprs i).2.1.relabel remapper) (fun () ↦ thisVar))
+        (Fs f).subst $ Sum.elim (fun i ↦ (subExprs i).2.1.relabel remapper) (fun () ↦ thisVar)
       --And we add all of the subexpressions' side conditions,
       --appropriately re-indexed to use the new side-type β
       let subConds := (List.finRange n).flatMap fun i ↦
@@ -142,24 +142,100 @@ def subst_definitions (t : L.Term α) (Fs : ∀ {n} (_ : L.Functions n), L'.Form
 
 /-- `Term.subst_definitions` agrees with the original formula once realized, assuming all the side
 conditions are met. -/
-theorem subst_definitions_eq {k : ℕ} (t : L.Term α)
+theorem subst_definitions_eq (t : L.Term α)
   [inst : L.Structure M] [inst' : L'.Structure M]
   {Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit)}
   (hFs : ∀ {n} (g : L.Functions n),
     (Function.arityGraph fun v ↦ g.term.realize v) = ((Fs g).Realize : Set (_ → M)))
   {sideVals : Fin (t.subst_definitions Fs).1 → M}
-  (hSideVals : ∀ s ∈ (t.subst_definitions Fs).2.2, ∀ v, s.Realize (Sum.elim v sideVals))
-  : ∀ v, (t.subst_definitions Fs).2.1.realize (Sum.elim v sideVals) = t.realize v := by
+  (v : _)
+  (hSideVals : ∀ s ∈ (t.subst_definitions Fs).2.2, s.Realize (Sum.elim v sideVals))
+  : (t.subst_definitions Fs).2.1.realize (Sum.elim v sideVals) = t.realize v := by
     induction t
     next a =>
       simp [subst_definitions]
     next f args ih =>
-      replace hFs := hFs f
-      simp [Function.arityGraph] at hFs
-      intro v
-      simp [subst_definitions] at hSideVals ⊢
+      simp [subst_definitions] at hSideVals
+
+      --Break the "hSideVals" hypothesis list into the hypothesis on the function output,
+      -- and the hypotheses on the function inputs
       replace ⟨hOutput, hSideVals⟩ := hSideVals
-      sorry
+      -- replace hOutput := hOutput v
+      simp [Formula.Realize, BoundedFormula.realize_subst] at hOutput
+
+      --We use hFs to simplify the function output condition
+      unfold Formula.Realize at hFs
+      replace hFs := funext_iff.mp (hFs f)
+      simp only [Function.arityGraph, realize_functions] at hFs
+      simp_rw [← hFs] at hOutput
+      clear hFs
+
+      --This gives us the left hand side of the goal
+      simp only [setOf, Sum.elim_inr] at hOutput
+      simp only [subst_definitions, finSumFinEquiv_apply_right,  Sum.elim_inr, realize_func]
+      rw [← hOutput]
+      clear hOutput
+
+      --Congruence inward + reduce
+      congr! with i
+      simp only [Function.comp_apply, Sum.elim_inl, realize_relabel]
+
+      --Apply the inductive hypothesis, with the appropriate arguments plugged in
+      replace ih : ∀ (i : Fin _), _ := fun i ↦ ih i
+        (sideVals := fun j ↦ sideVals $ finSumFinEquiv $ Sum.inl $ finSigmaFinEquiv ⟨i,j⟩)
+        (by
+          intro s hs
+          replace hSideVals := hSideVals
+            (s.relabel $ Sum.map id fun βi ↦ finSumFinEquiv $ Sum.inl $ finSigmaFinEquiv ⟨i,βi⟩)
+            i s hs rfl
+          rw [FirstOrder.Language.Formula.realize_relabel] at hSideVals
+          convert hSideVals
+          rw [Sum.elim_comp_map]; rfl
+        )
+      simp_rw [← ih]
+      clear ih
+
+      --Completes the proof
+      rw [Sum.elim_comp_map]; rfl
+
+/-- The side variables produced by subst_definitions always have a satisfying assignment. -/
+def subst_definitions_extraVals (t : L.Term α)
+  [inst : L.Structure M] [inst' : L'.Structure M]
+  {Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit)}
+  (hFs : ∀ {n} (g : L.Functions n),
+    (Function.arityGraph fun v ↦ g.term.realize v) = ((Fs g).Realize : Set (_ → M)))
+    (v : _)
+  : { xs : Fin (t.subst_definitions Fs).1 → M //
+    ∀ s ∈ (t.subst_definitions Fs).2.2, s.Realize (Sum.elim v xs)} :=
+  match t with
+  | var a => by
+    simp only [subst_definitions, List.not_mem_nil, IsEmpty.forall_iff, implies_true]
+    use default
+  | func f args =>
+    let u := fun a ↦
+        (finSumFinEquiv.symm a).rec (fun a₁ ↦
+            (finSigmaFinEquiv.symm a₁).rec fun ai aj ↦
+            ((args ai).subst_definitions_extraVals hFs v).val aj
+        ) (fun _ ↦ t.realize v)
+    ⟨u, by
+      simp only [subst_definitions,
+      Fin.isValue, finSumFinEquiv_apply_right,
+        finSumFinEquiv_apply_left, List.mem_cons, List.mem_flatMap, List.mem_finRange, List.mem_map,
+        true_and, forall_eq_or_imp, forall_exists_index
+      ]
+      constructor
+      · simp [u]
+        have : ∀ (val : Fin (∑ i : Fin _, ((args i).subst_definitions fun {n} ↦ Fs).fst)), _ :=
+          fun val ↦
+            (subst_definitions_extraVals (args (finSigmaFinEquiv.symm val).fst) hFs v).2
+        have := t.subst_definitions_eq hFs (sideVals := sorry) v sorry
+        simp [Formula.Realize]
+        sorry
+      · intro a x b hb
+        clear x b hb
+        have := t.subst_definitions_eq hFs (sideVals := sorry) v sorry
+        sorry
+      ⟩
 
 end Term
 
@@ -199,6 +275,18 @@ def subst_definitions {k : ℕ} (f : L.BoundedFormula α k)
     let fullConds := (List.ofFn sideConds).flatten.foldr BoundedFormula.imp newRel
     BoundedFormula.relabel id fullConds.alls
 
+--TODO belongs elsewhere, like .Basic or something
+/-- List.foldr on BoundedFormula.imp gives a big "And" of input conditions. -/
+theorem Realize_foldr_imp {k : ℕ} (l : List (L.BoundedFormula α k))
+    (f : L.BoundedFormula α k) [inst : L.Structure M] :
+    ∀ (v : α → M) xs,
+      (l.foldr BoundedFormula.imp f).Realize v xs =
+      ((∀ i ∈ l, i.Realize v xs) → f.Realize v xs) := by
+  intro v xs
+  induction l
+  next => simp
+  next f' _ _ => by_cases f'.Realize v xs <;> simp [*]
+
 /-- `BoundedFormula.subst_definitions` agrees with the original formula once realized. -/
 theorem subst_definitions_eq {k : ℕ} (f : L.BoundedFormula α k)
   [inst : L.Structure M] [inst' : L'.Structure M]
@@ -211,12 +299,136 @@ theorem subst_definitions_eq {k : ℕ} (f : L.BoundedFormula α k)
     induction f
     next =>
       simp [Realize.eq_1, subst_definitions.eq_1]
-    next =>
-      simp [Realize.eq_2, subst_definitions.eq_2]
-      sorry
-    next =>
+    next n t₁ t₂ =>
+      simp [-List.foldr_append, Realize.eq_2, subst_definitions.eq_2]
+      intro vL vR
+      rw [show (vR ∘ @Fin.natAdd 0 n) = default from Unique.eq_default _]
+      rw [← Formula.Realize, realize_alls]
+      simp_rw [Realize_foldr_imp]
+      simp_rw [BoundedFormula.Realize.eq_2]
+      constructor
+      · intro h
+        have ⟨xs₁, hxs₁⟩ := t₁.subst_definitions_extraVals hFs (Sum.elim vL vR)
+        have ⟨xs₂, hxs₂⟩ := t₂.subst_definitions_extraVals hFs (Sum.elim vL vR)
+        have ht₁ := t₁.subst_definitions_eq hFs (Sum.elim vL vR) hxs₁
+        have ht₂ := t₂.subst_definitions_eq hFs (Sum.elim vL vR) hxs₂
+        rw [← ht₁, ← ht₂]
+        clear ht₁ ht₂
+        replace h := h (Fin.appendEquiv _ _ ⟨xs₁,xs₂⟩) (by
+          intro i hi
+          simp only [List.mem_append, List.mem_map] at hi
+          rcases hi with (⟨w,hiw,rfl⟩|⟨w,hiw,rfl⟩) <;> {
+            try have := hxs₁ w hiw
+            try have := hxs₂ w hiw
+            rw [Formula.Realize] at this
+            rw [realize_relabel]
+            convert this
+            funext sum
+            cases sum <;> simp
+          }
+        )
+        convert h using 1 <;> {
+          rw [Term.realize_relabel]
+          congr
+          funext sum
+          cases sum <;> simp
+        }
+      · intro h xs is
+        have ht₁ := t₁.subst_definitions_eq hFs _ (by
+          simp at is
+          intro s hs
+          replace is := is (BoundedFormula.relabel (n := _ + _)
+            (g := Sum.elim Sum.inl (Sum.inr ∘ _)) s) (Or.inl ⟨s, ⟨hs, rfl⟩⟩)
+          simp only [realize_relabel] at is
+          simp only [Formula.Realize]
+          convert is
+          funext sum
+          cases sum <;> rfl
+        )
+        have ht₂ := t₂.subst_definitions_eq hFs _ (by
+          simp at is
+          intro s hs
+          replace is := is (BoundedFormula.relabel (n := _ + _)
+            (g := Sum.elim Sum.inl (Sum.inr ∘ _)) s) (Or.inr ⟨s, ⟨hs, rfl⟩⟩)
+          simp only [realize_relabel] at is
+          simp only [Formula.Realize]
+          convert is
+          funext sum
+          cases sum <;> rfl
+        )
+        rw [← ht₁, ← ht₂] at h
+        simp_rw [Term.realize_relabel]
+        convert h
+        <;> funext s
+        <;> cases s
+        <;> rfl
+    next n m R ts =>
+      intro vL vR
       simp [Realize.eq_3, subst_definitions.eq_5]
-      sorry
+      rw [show (vR ∘ @Fin.natAdd 0 n) = default from Unique.eq_default _]
+      rw [← Formula.Realize, realize_alls]
+      simp_rw [Realize_foldr_imp]
+      constructor
+      · intro h
+        rw [hRs R]
+        let xs : Fin (∑ i : Fin m, ((ts i).subst_definitions fun {n} ↦ Fs).fst) → M :=
+          fun ij ↦
+            let ⟨i,j⟩ := finSigmaFinEquiv.symm ij;
+            ((ts i).subst_definitions_extraVals hFs (Sum.elim vL vR)).1 j
+        let hxs := fun i ↦ ((ts i).subst_definitions_extraVals hFs (Sum.elim vL vR)).2
+        replace h := h xs (by
+          intro i hi
+          simp at hi
+          rcases hi with ⟨w,hiw,hiw₂⟩
+          rw [List.mem_ofFn] at hiw
+          obtain ⟨j,rfl⟩ := hiw
+          simp at hiw₂
+          obtain ⟨a,ha₁,rfl⟩ := hiw₂
+          have := hxs j a ha₁
+          rw [Formula.Realize] at this
+          rw [realize_relabel]
+          convert this
+          funext sum
+          cases sum <;> simp [xs]
+          rw [Equiv.leftInverse_symm]
+        )
+        simp at h
+        rw [Formula.Realize]
+        convert h with i
+        have := (ts i).subst_definitions_eq hFs (Sum.elim vL vR)
+          (sideVals := xs ∘ fun j ↦ (finSigmaFinEquiv ⟨i, j⟩)) (by
+          unfold xs
+          simp
+          convert hxs i
+          funext v
+          simp
+          rw [Equiv.leftInverse_symm]
+        )
+        convert this.symm
+        funext sum
+        cases sum <;> rfl
+
+      · intro h xs is
+        simp only [realize_relabel, Nat.add_zero, Fin.castAdd_zero, Fin.cast_refl, Function.comp_id,
+          realize_subst, Term.realize_relabel]
+        rw [hRs R, Formula.Realize.eq_1] at h
+        rw [show (xs ∘ @Fin.natAdd 0 (∑ i : Fin m, _)) = default from Unique.eq_default _]
+        convert h with i
+        have hti := (ts i).subst_definitions_eq hFs
+          (sideVals := xs ∘ fun j ↦ (finSigmaFinEquiv ⟨i, j⟩)) (Sum.elim vL vR) (by
+            simp at is
+            intro s hs
+            replace is := is (BoundedFormula.relabel (k := 0)
+              (g := Sum.elim Sum.inl fun j ↦ Sum.inr (finSigmaFinEquiv ⟨i,j⟩)) s) i s hs rfl
+            simp only [realize_relabel] at is
+            simp only [Formula.Realize]
+            convert is
+            funext sum
+            cases sum <;> rfl
+        )
+        convert hti
+        funext sum
+        cases sum <;> rfl
     next ih₁ ih₂ =>
       simp [Realize.eq_5, subst_definitions.eq_3, ih₁, ih₂]
     next ih =>
