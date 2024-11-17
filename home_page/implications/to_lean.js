@@ -67,7 +67,7 @@ function findRandom8(implications) {
 
   for (let i = 0; i < implications.length; i++) {
     for (let j = 0; j < implications[i].length; j++) {
-      if (implications[i][j] === "unknown") {
+      if (implications[i][j] === 8) {
         eights.push([i, j]);
       }
     }
