@@ -64,7 +64,7 @@ for some arbitrary $z \in \Q^\times$ (e.g., one could take $z=1$ if desired).  T
 $$ (\phi_a(b)^n x,a) \op (\phi_b(c)^n y,b) = (\phi_c(a)^n z,c)$$
 $$ (\phi_b(c)^n y,b) \op (\phi_c(a)^n z,c) = (\phi_a(b)^{n+1} x, a)$$
 $$ (\phi_c(a)^n z,c) \op (\phi_a(b)^{n+1} x, a) = (\phi_b(c)^{n+1} y,b)$$
-for all natural numbers $n$.  As the $a,b,c$ are distinct, the $\phi_a(b), \phi_b(c), \phi_c(a)$ are not equal to $\pm 1$, and the members of this infinite sequence do not collide with each other.  If we arrange matters so that $\phi_b(c)$ involves primes in the numerator or denominator that do not appear in any previous $\phi_a(b), \phi_b(c), \phi_c(a), x, y, z$ used by the greedy algorithm, or the current $x,y,z$, then we also see that this infinite sequence does not collide with any previously assigned value of $\op$ either.  If we then add all these assignments to the multiplication table, we maintain the desired axiom.  Iterating this a countable number of times, we obtain a magma that obeys \eqref{lr} and \eqref{lr-simp}, and hence 1323.
+for all natural numbers $n$.  As the $a,b,c$ are distinct, the $\phi_a(b), \phi_b(c), \phi_c(a)$ are not equal to $\pm 1$, and the members of this infinite sequence do not collide with each other.  The second and third equations in this family cannot collide with previous assignments because $c$ is novel.  If we arrange matters so that $\phi_b(c)$ involves primes in the numerator or denominator that do not appear in any previous $\phi_a(b), \phi_b(c), \phi_c(a), x, y, z$ used by the greedy algorithm, or the current $x,y,z$, then we also see that the first infinite sequence does not collide with any previously assigned value of $\op$ either.  If we then add all these assignments to the multiplication table, we maintain the desired axiom.  Iterating this a countable number of times, we obtain a magma that obeys \eqref{lr} and \eqref{lr-simp}, and hence 1323.
 
 \begin{corollary}[1323 does not imply 2744]\label{1323-refute-2744}  There exists a 1323 magma which does not obey the 2744 equation $R_y L_{Sy} L_y x = x$.
 \end{corollary}
@@ -75,8 +75,8 @@ $$ (\phi_b(c)^n,b) \op (\phi_c(a)^n,c) = (\phi_a(b)^{n+1}, a)$$
 $$ (\phi_c(a)^n,c) \op (\phi_a(b)^{n+1}, a) = (\phi_b(c)^{n+1},b)$$
 and
 $$ (\phi_a(b)^n,a) \op (\phi_{b'}(c)^n,b') = (\phi_c(a)^n,c)$$
-$$ (\phi_b(c)^n,b) \op (\phi_c(a)^n,c) = (\phi_a(b')^{n+1}, a)$$
-$$ (\phi_c(a)^n,c) \op (\phi_{a'}(b)^{n+1}, a) = (\phi_b(c)^{n+1},b')$$
+$$ (\phi_{b'}(c)^n,b') \op (\phi_c(a)^n,c) = (\phi_a(b')^{n+1}, a)$$
+$$ (\phi_c(a)^n,c) \op (\phi_{a}(b')^{n+1}, a) = (\phi_b(c)^{n+1},b')$$
 then no collisions occur, and the required axiom is obeyed; on the other hand, as $L_{(1,a)} (1,b) = L_{(1,a)} (1,b') = (1,c)$, we already have a violation of left injectivity.  Completing this seed to a full magma, we obtain the claim.
 \end{proof}
 
