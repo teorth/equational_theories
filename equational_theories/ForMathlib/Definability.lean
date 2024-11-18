@@ -198,6 +198,63 @@ theorem subst_definitions_eq (t : L.Term α)
       --Completes the proof
       rw [Sum.elim_comp_map]; rfl
 
+def subst_definitions_extraVals_X (t : L.Term α) [inst : L.Structure M]
+  (Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit)) (v : α → M)
+  : Fin (t.subst_definitions Fs).1 → M :=
+  match t with
+  | var a => by
+    rw [subst_definitions]
+    exact default
+  | func f args => fun a ↦
+      (finSumFinEquiv.symm a).rec (fun a₁ ↦
+        (finSigmaFinEquiv.symm a₁).rec fun ai aj ↦
+        (args ai).subst_definitions_extraVals_X Fs v aj
+      ) (fun _ ↦ (func f args).realize v)
+
+theorem subst_definitions_extraVals_spec (t : L.Term α)
+  [inst : L.Structure M] [inst' : L'.Structure M]
+  {Fs : ∀ {n} (_ : L.Functions n), L'.Formula (Fin n ⊕ Unit)}
+  (hFs : ∀ {n} (g : L.Functions n),
+    (Function.arityGraph fun v ↦ g.term.realize v) = ((Fs g).Realize : Set (_ → M)))
+    (v : α → M)
+  : ∀ s ∈ (t.subst_definitions Fs).2.2, s.Realize (Sum.elim v
+      (t.subst_definitions_extraVals_X Fs v)) := by
+  induction t
+  next =>
+    simp [subst_definitions_extraVals_X, subst_definitions]
+  next f args ih =>
+    simp only [subst_definitions]
+    simp only [
+        Fin.isValue, finSumFinEquiv_apply_right,
+        finSumFinEquiv_apply_left, List.mem_cons, List.mem_flatMap, List.mem_finRange,
+        List.mem_map, true_and, forall_eq_or_imp, forall_exists_index
+      ]
+    constructor
+    · have hFs' := congrFun (hFs f)
+      simp only [Function.arityGraph, realize_functions, Formula.Realize] at hFs'
+      simp only [Formula.Realize, BoundedFormula.realize_subst,
+        ← hFs', setOf, Sum.elim_inr, realize_var,
+        Fin.isValue]
+      unfold Function.comp
+      simp only [
+        subst_definitions_extraVals_X,
+        ← fun x ↦ (args x).subst_definitions_eq hFs v (ih x),
+        realize_func, Sum.elim_inl, realize_relabel, finSumFinEquiv_symm_apply_natAdd]
+      congr! with x
+      funext sum
+      cases sum
+      · rfl
+      · simp
+        rw [Equiv.leftInverse_symm finSigmaFinEquiv]
+    · intro a i b ⟨hb,rfl⟩
+      simp only [subst_definitions_extraVals_X, Formula.realize_relabel]
+      convert ih i b hb
+      funext sum
+      cases sum
+      · rfl
+      · simp
+        rw [Equiv.leftInverse_symm finSigmaFinEquiv]
+
 /-- The side variables produced by subst_definitions always have a satisfying assignment. -/
 def subst_definitions_extraVals (t : L.Term α)
   [inst : L.Structure M] [inst' : L'.Structure M]
@@ -207,35 +264,7 @@ def subst_definitions_extraVals (t : L.Term α)
     (v : _)
   : { xs : Fin (t.subst_definitions Fs).1 → M //
     ∀ s ∈ (t.subst_definitions Fs).2.2, s.Realize (Sum.elim v xs)} :=
-  match t with
-  | var a => by
-    simp only [subst_definitions, List.not_mem_nil, IsEmpty.forall_iff, implies_true]
-    use default
-  | func f args =>
-    let u := fun a ↦
-        (finSumFinEquiv.symm a).rec (fun a₁ ↦
-            (finSigmaFinEquiv.symm a₁).rec fun ai aj ↦
-            ((args ai).subst_definitions_extraVals hFs v).val aj
-        ) (fun _ ↦ t.realize v)
-    ⟨u, by
-      simp only [subst_definitions,
-      Fin.isValue, finSumFinEquiv_apply_right,
-        finSumFinEquiv_apply_left, List.mem_cons, List.mem_flatMap, List.mem_finRange, List.mem_map,
-        true_and, forall_eq_or_imp, forall_exists_index
-      ]
-      constructor
-      · simp [u]
-        have : ∀ (val : Fin (∑ i : Fin _, ((args i).subst_definitions fun {n} ↦ Fs).fst)), _ :=
-          fun val ↦
-            (subst_definitions_extraVals (args (finSigmaFinEquiv.symm val).fst) hFs v).2
-        have := t.subst_definitions_eq hFs (sideVals := sorry) v sorry
-        simp [Formula.Realize]
-        sorry
-      · intro a x b hb
-        clear x b hb
-        have := t.subst_definitions_eq hFs (sideVals := sorry) v sorry
-        sorry
-      ⟩
+  ⟨t.subst_definitions_extraVals_X Fs v, t.subst_definitions_extraVals_spec hFs v⟩
 
 end Term
 
