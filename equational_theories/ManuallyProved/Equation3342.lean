@@ -67,17 +67,17 @@ theorem Equation3342_facts : ∃ (G : Type) (_ : Magma G), Facts G [3342] [3456,
 
 lemma Finite.fn_periodic (G : Type*) [Finite G] (f : G -> G) : ∃ p : ℕ, p > 0 ∧ f^[p] = f^[2*p] := by
   have Finite.fn_eventually_periodic : ∃ s p : ℕ, p > 0 ∧ f^[s] = f^[s+p] := by
-    obtain ⟨p1, p2, lt, heq⟩ : ∃ p1 p2 : ℕ, p1 < p2 ∧ f^[p1] = f^[p2] := by
-      obtain ⟨p1, p2, ne, heq⟩ := Finite.exists_ne_map_eq_of_infinite (Nat.iterate f ·)
-      rcases le_total p1 p2 with h_le | h_le
-      . refine ⟨p1, p2, Ne.lt_of_le ne h_le, heq⟩
-      . refine ⟨p2, p1, Ne.lt_of_le (Ne.symm ne) h_le, Eq.symm heq⟩
-    let p := p2 - p1
-    have : f^[p1] = f^[p1 + p] := by
+    obtain ⟨p₁, p₂, lt, heq⟩ : ∃ p₁ p₂ : ℕ, p₁ < p₂ ∧ f^[p₁] = f^[p₂] := by
+      obtain ⟨p₁, p₂, ne, heq⟩ := Finite.exists_ne_map_eq_of_infinite (Nat.iterate f ·)
+      rcases le_total p₁ p₂ with h_le | h_le
+      . exact ⟨p₁, p₂, Ne.lt_of_le ne h_le, heq⟩
+      . exact ⟨p₂, p₁, Ne.lt_of_le (Ne.symm ne) h_le, Eq.symm heq⟩
+    let p := p₂ - p₁
+    have : f^[p₁] = f^[p₁ + p] := by
       unfold p
       rw [← Nat.add_sub_assoc (by linarith)]
       simp only [heq, add_tsub_cancel_left]
-    refine ⟨p1, p, by simp only [gt_iff_lt, tsub_pos_iff_lt, lt, p], this⟩
+    exact ⟨p₁, p, by simp only [gt_iff_lt, tsub_pos_iff_lt, lt, p], this⟩
   obtain ⟨s, p, hpgt, hp⟩ := Finite.fn_eventually_periodic
   have hmod (n j : ℕ) : f^[s + j] = f^[s + j + n*p] := by
     induction n with
@@ -88,7 +88,7 @@ lemma Finite.fn_periodic (G : Type*) [Finite G] (f : G -> G) : ∃ p : ℕ, p > 
   rcases eq_zero_or_pos s with h | h
   . simp [h] at hmod
     have : f^[p] = f^[2*p] := by simp_arith only [hmod 1 p]
-    refine ⟨p, hpgt, this⟩
+    exact ⟨p, hpgt, this⟩
   . let n := s * p
     have : f^[n] = f^[2*n] := by
       unfold n
@@ -97,7 +97,7 @@ lemma Finite.fn_periodic (G : Type*) [Finite G] (f : G -> G) : ∃ p : ℕ, p > 
       have : 2 * (s + s * ppred) = s + s * ppred + s * p := by simp_arith only [hppred,  Nat.mul_succ]
       rw [this, ← hmod]
     have ngt : n > 0 := by apply Nat.mul_pos h hpgt
-    refine ⟨n, ngt, this⟩
+    exact ⟨n, ngt, this⟩
 
 lemma main_result (G : Type*) [Magma G] [Finite G] (h : Equation3342 G) : Equation3522 G ∧ Equation4118 G := by
   let S (x : G) := x ◇ x
