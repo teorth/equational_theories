@@ -99,7 +99,8 @@ lemma Finite.fn_periodic (G : Type*) [Finite G] (f : G -> G) : ∃ p : ℕ, p > 
     have ngt : n > 0 := by apply Nat.mul_pos h hpgt
     exact ⟨n, ngt, this⟩
 
-lemma main_result (G : Type*) [Magma G] [Finite G] (h : Equation3342 G) : Equation3522 G ∧ Equation4118 G := by
+private lemma main_result (G : Type*) [Magma G] [Finite G] (h : Equation3342 G) :
+    Equation3522 G ∧ Equation4118 G := by
   let S (x : G) := x ◇ x
   let f (x : G) := x ◇ (S x)
   let C (x : G) := (S x) ◇ x
@@ -133,7 +134,7 @@ lemma main_result (G : Type*) [Magma G] [Finite G] (h : Equation3342 G) : Equati
       _ = f^[p - 1] x ◇ (S x) := by
         have : 2*p - 1 = p + (p - 1) := by omega
         rw [this, Function.iterate_add_apply, ← fnx_fny p]
-      _ = f (f^[p-1] x) := by rwa [Sx_Sfx (p-1)]
+      _ = f (f^[p - 1] x) := by rwa [Sx_Sfx (p - 1)]
       _ = f^[p] x := by
         rw [Function.Commute.self_iterate f, ← Function.iterate_succ_apply, Nat.succ_eq_add_one, Nat.sub_one_add_one]
         linarith
