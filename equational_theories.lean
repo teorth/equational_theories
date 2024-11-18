@@ -29,3 +29,4 @@ import equational_theories.Conjectures
 import equational_theories.ManuallyProved
 import equational_theories.ThreeC2
 import equational_theories.Obelix
+import equational_theories.Definability
