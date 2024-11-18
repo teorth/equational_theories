@@ -65,7 +65,7 @@ theorem Equation3342_facts : ∃ (G : Type) (_ : Magma G), Facts G [3342] [3456,
 
 -- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/482525422
 
-lemma Finite.fn_periodic (G : Type*) [Finite G] (f : G -> G) : ∃ p : ℕ, p > 0 ∧ f^[p] = f^[2*p] := by
+lemma Finite.fn_periodic {G : Type*} [Finite G] (f : G → G) : ∃ p : ℕ, p > 0 ∧ f^[p] = f^[2*p] := by
   have Finite.fn_eventually_periodic : ∃ s p : ℕ, p > 0 ∧ f^[s] = f^[s+p] := by
     obtain ⟨p₁, p₂, lt, heq⟩ : ∃ p₁ p₂ : ℕ, p₁ < p₂ ∧ f^[p₁] = f^[p₂] := by
       obtain ⟨p₁, p₂, ne, heq⟩ := Finite.exists_ne_map_eq_of_infinite (Nat.iterate f ·)
@@ -104,7 +104,7 @@ private theorem main_result (G : Type*) [Magma G] [Finite G] (h : Equation3342 G
   let S (x : G) := x ◇ x
   let f (x : G) := x ◇ (S x)
   let C (x : G) := (S x) ◇ x
-  obtain ⟨p, hpgt, hperiodic⟩ := Finite.fn_periodic G f
+  obtain ⟨p, hpgt, hperiodic⟩ := Finite.fn_periodic f
   have fx_fy (x y : G) : x ◇ y = f x ◇ f y := by rw [h, h]
   have fnx_fny (n : ℕ) (x y : G) : x ◇ y = f^[n] x ◇ f^[n] y := by
     induction n with

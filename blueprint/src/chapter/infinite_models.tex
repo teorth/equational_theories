@@ -127,8 +127,7 @@ Many implications for finite magmas rely on the fact that if $f, g:X \to X$ are 
 
 This can be used to obtain a few positive finite magma implications, for instance by setting $f,g$ to be left and right multiplication operators.  Another useful lemma is
 
-\begin{lemma}[Eventual period]\label{period}  Let $X$ be finite and $f: X \to X$.  Then there exists $n \geq 1$ such that $f^{2n} = f^n$.
-  \lean{Eq3342.Finite.fn_periodic}\leanok
+\begin{lemma}[Eventual period]\label{period} \lean{Eq3342.Finite.fn_periodic} \leanok  Let $X$ be finite and $f: X \to X$.  Then there exists $n \geq 1$ such that $f^{2n} = f^n$.
 \end{lemma}
 
 \begin{proof} \leanok By the pigeonhole principle, there exists $n \geq 1$, $m \geq 0$ such that $f^{m+n} = f^m$, which implies on iteration that $f^{m+mn} = f^m$ and hence $f^{2mn} = f^{mn}$, giving the claim.
@@ -136,9 +135,8 @@ This can be used to obtain a few positive finite magma implications, for instanc
 
 As a sample application, we have
 
-\begin{corollary}[3342]\label{3342}  On a finite magma $M$, equation 3342, $x \op y= y \op (x \op (x \op x))$, implies
-  \lean{Eq3342.Finite.Equation3342_implies_Equation3522,Eq3342.Finite.Equation3342_implies_Equation4118}\leanok
-equation 3522, $x \op y = x \op ((y \op y) \op y)$, as well as equation 4118, $x \op y = ((x \op x) \op x) \op y$.
+\begin{corollary}[3342]\label{3342} \lean{Eq3342.Finite.Equation3342_implies_Equation3522,Eq3342.Finite.Equation3342_implies_Equation4118} \leanok  On a finite magma $M$, equation 3342, $x \op y= y \op (x \op (x \op x))$, implies
+  equation 3522, $x \op y = x \op ((y \op y) \op y)$, as well as equation 4118, $x \op y = ((x \op x) \op x) \op y$.
 \end{corollary}
 
 \begin{proof}\uses{period} \leanok Write $Sx := x \op$, $fx := x \op Sx$ and $Cx = Sx \op x$, then we have $x \op y= y \op fx$, and our task is to show $x \op y = Cx \op y$ and $x \op y = x \op Cy$ for finite magmas, giving the four open implications.
