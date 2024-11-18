@@ -2,6 +2,9 @@ import equational_theories.Mathlib.Data.List.Defs
 import equational_theories.Mathlib.Order.Greedy
 import Mathlib.Data.Finset.Order
 import Mathlib.Data.List.AList
+import Mathlib.Data.Set.Finite.Lattice
+import Mathlib.Data.Set.Basic
+import Mathlib.Data.Set.Functor
 import Mathlib.GroupTheory.FreeGroup.Basic
 
 import equational_theories.FreshGenerator
@@ -182,12 +185,12 @@ theorem next_ok : next.OK where
     simp only [Set.mem_setOf_eq] at hx
     match hx with
     | .extra h rfl rfl =>
-      simp only [Set.fmap_eq_image, Set.union_insert, Set.mem_insert_iff,
-      Prod.mk.injEq, mul_right_eq_self, Set.mem_union, Set.mem_setOf_eq, Set.mem_image, Prod.exists,
-      exists_and_right]
+      simp only [Set.union_insert, Set.mem_insert_iff, Prod.mk.injEq, Set.mem_union,
+        Set.mem_setOf_eq]
       right
       right
-      simp only [mul_left_inj, mul_right_inj, and_self, exists_eq_right]
+      simp only [Set.fmap_eq_image, Set.mem_image, Set.mem_setOf_eq, Prod.mk.injEq, mul_left_inj,
+        mul_right_inj, and_self, Prod.exists, exists_and_right, exists_eq_right]
       exact ⟨_, h⟩
     | .new rfl rfl => tauto
     | .base h => simp [h]
