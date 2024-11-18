@@ -1,17 +1,12 @@
 import equational_theories.Equations.All
 import equational_theories.MagmaOp
-import Aesop
-import Mathlib.Data.Fintype.Card
-import Mathlib.Data.Nat.Bitwise
-import Mathlib.NumberTheory.Padics.PadicVal.Basic
-import Mathlib.Data.ZMod.Defs
-import Mathlib.Data.ZMod.Basic
-import Mathlib.Algebra.Polynomial.Basic
-import Mathlib.Algebra.Polynomial.Degree.Definitions
-import Mathlib.Algebra.Polynomial.Eval
+
 import Mathlib.Algebra.Polynomial.Roots
-import Mathlib.Algebra.Polynomial.RingDivision
+import Mathlib.Data.Nat.Bitwise
+import Mathlib.Data.ZMod.Basic
+import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import Mathlib.Tactic.ComputeDegree
+
 
 namespace InfModel
 

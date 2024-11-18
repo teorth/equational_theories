@@ -1,11 +1,11 @@
-import equational_theories.Mathlib.Data.List.Defs
-import equational_theories.Mathlib.Order.Greedy
+import Mathlib.Data.Finset.Order
+import Mathlib.Data.Prod.Lex
+import Mathlib.Data.Set.Finite.Lattice
 import equational_theories.Completeness
 import equational_theories.Generated.All4x4Tables.Refutation870
 import equational_theories.Generated.FinitePoly.Refutation82
-import Mathlib.Data.Finset.Order
-import Mathlib.Data.List.AList
-import Mathlib.Data.Prod.Lex
+import equational_theories.Mathlib.Data.List.Defs
+import equational_theories.Mathlib.Order.Greedy
 
 namespace Refutation_854
 
