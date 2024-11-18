@@ -57,10 +57,6 @@ conjecture Equation1526_facts : ∃ (G : Type) (_ : Magma G), Facts G [1526] [12
 @[equational_result]
 conjecture Equation1722_facts : ∃ (G : Type) (_ : Magma G), Facts G [1722] [2644, 3050, 1832]
 
-/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/478083079 -/
-@[equational_result]
-conjecture Equation1518_facts : ∃ (G : Type) (_ : Magma G), Facts G [1518] [47, 614, 817, 3862]
-
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1323/near/481475622 -/
 @[equational_result]
 conjecture Equation1323_facts : ∃ (G : Type) (_ : Magma G), Facts G [1323, 1898] [2744, 2710]
