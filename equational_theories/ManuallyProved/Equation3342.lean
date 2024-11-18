@@ -99,7 +99,7 @@ lemma Finite.fn_periodic (G : Type*) [Finite G] (f : G -> G) : ∃ p : ℕ, p > 
     have ngt : n > 0 := by apply Nat.mul_pos h hpgt
     exact ⟨n, ngt, this⟩
 
-private lemma main_result (G : Type*) [Magma G] [Finite G] (h : Equation3342 G) :
+private theorem main_result (G : Type*) [Magma G] [Finite G] (h : Equation3342 G) :
     Equation3522 G ∧ Equation4118 G := by
   let S (x : G) := x ◇ x
   let f (x : G) := x ◇ (S x)
