@@ -73,7 +73,7 @@ theorem maxIndex_lt_freshIndex (old : Finset A) (g : A)  (h : g ∈ old) : maxIn
   use g, h
 
 theorem maxIndex_subgroup_lt_freshIndex (old : Finset A) (g : A) : g ∈ Subgroup.closure old →
-  maxIndex g < freshIndex old := set_option pp.all true in by
+  maxIndex g < freshIndex old := by
   apply Subgroup.closure_induction
   · simp only [Finset.mem_coe]
     apply maxIndex_lt_freshIndex
