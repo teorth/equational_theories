@@ -168,7 +168,7 @@ jobs:
         run: |
           mkdir -p home_page/fme
           cp -r tools/fme/dist/* home_page/fme
-          ~/.elan/bin/lake exe extract_implications unknowns > home_page/fme/unknowns.json
+          ~/.elan/bin/lake exe extract_implications unknowns --finite-only > home_page/fme/unknowns.json
           COMMIT_HASH=$(git rev-parse --short HEAD)
           sed -i "s/UNKNOWN_VERSION/$COMMIT_HASH/g" home_page/fme/index.html
 
