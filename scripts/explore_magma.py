@@ -9,7 +9,7 @@ import random
 import re
 import sys
 
-ALLOWED_SYMBOL_NAMES = "xyzuvw"
+ALLOWED_SYMBOL_NAMES = "xyzwuvrst"
 EQUATIONS_FILENAMES = [
     f"../equational_theories/Equations/Eqns{file}.lean"
     for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]
@@ -69,7 +69,7 @@ def get_binary_operation_map(parsed_magma_table):
 
 def remove_redundant_parentheses(string):
     assert string
-    return re.sub(r"\(([0-9])\)", "\\1", string)
+    return re.sub(r"\(([0-9]+)\)", "\\1", string)
 
 
 def test_equation_with_values(equation, variable_value_map, binary_operation_map):
@@ -87,17 +87,25 @@ def test_equation_with_values(equation, variable_value_map, binary_operation_map
     )
     assert equation.count(" ◇ ") == equation.count("◇")
     for _ in range(equation.count(" ◇ ") + 1):
-        for (left, right), value in binary_operation_map.items():
-            reduced_equation = remove_redundant_parentheses(
-                equation.replace(f"{left} ◇ {right}", str(value))
-            )
+        m = re.search(r"\(([0-9]+) ◇ ([0-9]+)\)", equation)
+        if m:
+            value = binary_operation_map[(int(m[1]), int(m[2]))]
+            reduced_equation = equation.replace(f"({m[1]} ◇ {m[2]})", str(value))
             if reduced_equation != equation:
                 transformations.append(reduced_equation)
                 equation = reduced_equation
-            if "◇" not in equation:
-                assert len(equation) == 5 and " = " in equation
-                lhs, rhs = equation.split(" = ", 1)
-                return lhs == rhs, transformations, distinct_values
+        else:
+            m = re.search(r"([0-9]+) ◇ ([0-9]+)", equation)
+            if m:
+                value = binary_operation_map[(int(m[1]), int(m[2]))]
+                reduced_equation = equation.replace(f"{m[1]} ◇ {m[2]}", str(value))
+                if reduced_equation != equation:
+                    transformations.append(reduced_equation)
+                    equation = reduced_equation
+        if "◇" not in equation:
+            assert " = " in equation
+            lhs, rhs = equation.split(" = ", 1)
+            return lhs == rhs, transformations, distinct_values
     assert False
 
 
@@ -182,8 +190,6 @@ def parse_magma_table_string(magma_table_string):
     n_cols = len(parsed_magma_table[0])
     if n_rows != n_cols:
         return None, None
-    if not 1 <= n_rows <= 10:
-        return None, None
     for row in parsed_magma_table:
         for mapped_to in row:
             if not isinstance(mapped_to, int):
@@ -264,7 +270,7 @@ def main():
         print(f'ERROR: Unable to parse magma table "{args.magma_table}"')
         print("")
         print(
-            "Expecting an n×n table (where 1 ≤ n ≤ 10) and symbols in the range [0, n-1]."
+            "Expecting an n×n table with symbols in the range [0, n-1]."
         )
         print("")
         print("Examples:")
