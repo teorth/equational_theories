@@ -1,9 +1,8 @@
+import Mathlib.Data.List.Sublists
 import Mathlib.GroupTheory.FreeGroup.Basic
 import equational_theories.Mathlib.Data.List.Chain
 import equational_theories.Mathlib.Data.List.Lemmas
 import equational_theories.Mathlib.GroupTheory.OrderOfElement
-
-import Mathlib.Data.List.Sublists
 
 /-!
 This file defines some extra lemmas for free groups, in particular about (cyclically) reduced words.
@@ -15,7 +14,7 @@ This file defines some extra lemmas for free groups, in particular about (cyclic
 -/
 open List
 
-universe u v w
+universe u
 
 variable {α : Type u}
 namespace FreeGroup
@@ -35,13 +34,14 @@ namespace Red
 def reduced (L : List (α × Bool)) : Prop := List.Chain' (fun a b => ¬(a.1 = b.1 ∧ (!a.2) = b.2)) L
 
 @[simp]
-theorem reduced_nil {α}: reduced ([] : List (α × Bool)) := List.chain'_nil
+theorem reduced_nil : reduced ([] : List (α × Bool)) := List.chain'_nil
 
 @[simp]
-theorem reduced_singleton {a : (α × Bool )} : reduced [a] := List.chain'_singleton a
+theorem reduced_singleton {a : (α × Bool)} : reduced [a] := List.chain'_singleton a
 
-theorem reduced_cons {a b: (α × Bool)} : reduced (a :: b :: L) ↔ ¬(a.1 = b.1 ∧ (!a.2) = b.2) ∧ reduced
-(b :: L) := List.chain'_cons
+theorem reduced_cons {a b: (α × Bool)} :
+    reduced (a :: b :: L) ↔ ¬(a.1 = b.1 ∧ (!a.2) = b.2) ∧ reduced (b :: L) :=
+  List.chain'_cons
 
 theorem not_step_reduced : reduced L₁ → ¬ Step L₁ L₂ := by
   intro red step
@@ -53,25 +53,25 @@ theorem not_step_reduced : reduced L₁ → ¬ Step L₁ L₂ := by
 theorem not_step_reduced_iff : reduced L₁ ↔ ∀ L₂, ¬ Step L₁ L₂ := by
   constructor
   · exact fun h L₂ => not_step_reduced h
-  · intro h
+  · intro hL
     induction L₁ with
     | nil => exact reduced_nil
-    | cons x tail ih =>
-      cases tail with
+    | cons x l ih =>
+      cases l with
       | nil => exact reduced_singleton
-      | cons y tail =>
+      | cons y l' =>
         rw [reduced_cons]
         constructor
         · intro ⟨eq1, eq2⟩
           obtain ⟨x1, x2⟩ := x
           obtain ⟨y1, y2⟩ := y
           simp only at eq1 eq2
-          apply h tail
+          apply hL l'
           rw [eq1, ← eq2]
           apply Step.cons_not
         · apply ih
           intro L₂ step
-          apply h (x :: L₂)
+          apply hL (x :: L₂)
           exact Step.cons step
 
 theorem reduced_infix : reduced L₂ → L₁ <:+: L₂ → reduced L₁ := Chain'.infix
@@ -79,11 +79,11 @@ theorem reduced_infix : reduced L₂ → L₁ <:+: L₂ → reduced L₁ := Chai
 theorem reduced_min (h : reduced L₁) : Red L₁ L₂ ↔ L₂ = L₁ :=
   Relation.reflTransGen_iff_eq fun _ => not_step_reduced h
 
-def cyclicallyReduced (L : List (α × Bool)) : Prop := reduced L ∧ ∀ a ∈ L.getLast?, ∀ b ∈ L.head?,
-¬(a.1 = b.1 ∧ (!a.2) = b.2)
+def cyclicallyReduced (L : List (α × Bool)) : Prop :=
+  reduced L ∧ ∀ a ∈ L.getLast?, ∀ b ∈ L.head?, ¬(a.1 = b.1 ∧ (!a.2) = b.2)
 
 @[simp]
-theorem cyclicallyReduced_nil {α} : cyclicallyReduced ([] : List (α × Bool)) := by
+theorem cyclicallyReduced_nil : cyclicallyReduced ([] : List (α × Bool)) := by
   simp [cyclicallyReduced]
 
 @[simp]
@@ -93,13 +93,14 @@ theorem cyclicallyReduced_singleton {x : (α × Bool )} : cyclicallyReduced [x] 
 theorem cyclicallyReduced_iff : cyclicallyReduced L ↔ reduced L ∧ ∀ a ∈ L.getLast?, ∀ b ∈ L.head?,
 ¬(a.1 = b.1 ∧ (!a.2) = b.2) := by rfl
 
-theorem cyclicallyReduced_cons_append {a b} : cyclicallyReduced (b :: L ++ [a]) ↔ reduced (b :: L ++ [a]) ∧ ¬(a.1 = b.1 ∧ (!a.2) = b.2) := by
+theorem cyclicallyReduced_cons_append {a b : α × Bool} :
+    cyclicallyReduced (b :: L ++ [a]) ↔
+    reduced (b :: L ++ [a]) ∧ ¬(a.1 = b.1 ∧ (!a.2) = b.2) := by
   rw [cyclicallyReduced_iff,List.getLast?_concat]
   simp
 
-
-theorem reduced_of_cyclicallyReduced (L : List (α × Bool)) : cyclicallyReduced L → reduced L := fun
-  h => h.1
+theorem reduced_of_cyclicallyReduced (L : List (α × Bool)) : cyclicallyReduced L → reduced L :=
+  fun h => h.1
 
 theorem cyclicallyReduced_flatten_replicate (n : ℕ) (L : List (α × Bool)) (h : cyclicallyReduced L):
 cyclicallyReduced (List.replicate n L).flatten := by match n, L with
@@ -131,12 +132,10 @@ theorem reduced_iff_eq_reduce : reduced L ↔ reduce L = L := by
   · intro h
     unfold reduced
     rw [List.chain'_iff_all_append_cons_cons]
-    intro x y l₁ l₂ eq1 eq2
-    obtain ⟨x1, x2⟩ := x
-    obtain ⟨y1, y2⟩ := y
-    simp only at eq1 eq2
-    rw [eq2.1, ← eq2.2] at eq1
-    nth_rw 2 [eq1] at h
+    intro ⟨x₁, x₂⟩ ⟨y₁, y₂⟩ l₁ l₂ hl hx
+    simp only at hl hx
+    rw [hx.1, ← hx.2] at hl
+    nth_rw 2 [hl] at h
     apply reduce.not h
 
 end Red
@@ -148,22 +147,23 @@ theorem reduced_toWord {x : FreeGroup α} : Red.reduced (x.toWord) := by
   simp
 
 theorem toWord_mul {x y : FreeGroup α} : (toWord (x*y)) = reduce (toWord x ++ toWord y) := by
-  rw [← mk_toWord (x:= x), ← mk_toWord (x:= y)]
-  rw [mul_mk]
+  rw [← mk_toWord (x:= x), ← mk_toWord (x:= y), mul_mk]
   simp
 
 theorem reduce_append: (reduce (L₁ ++ L₂)) = reduce (reduce L₁ ++ reduce L₂) := by
 rw [← FreeGroup.toWord_mk, ← FreeGroup.mul_mk, toWord_mul, FreeGroup.toWord_mk, FreeGroup.toWord_mk]
 
-theorem reduce_cons (a : α × Bool) (w : List (α × Bool)) : FreeGroup.reduce (a :: w) = FreeGroup.reduce (a :: FreeGroup.reduce w) := by
-simp only [FreeGroup.reduce.cons, FreeGroup.reduce.idem]
+theorem reduce_cons (a : α × Bool) (w : List (α × Bool)) :
+    FreeGroup.reduce (a :: w) = FreeGroup.reduce (a :: FreeGroup.reduce w) := by
+  simp only [FreeGroup.reduce.cons, FreeGroup.reduce.idem]
 
 theorem reduce_singleton (a : α × Bool) : FreeGroup.reduce [a] = [a] := rfl
 
-def reduceCyclically : List (α × Bool) → List (α × Bool) := List.bidirectionalRec
-  (nil := [])
-  (singleton := fun x => [x])
-  (cons_append := fun a l b rC => if (b.1 = a.1 ∧ (!b.2) = a.2) then rC else (a :: l ++ [b]) )
+def reduceCyclically : List (α × Bool) → List (α × Bool) :=
+  List.bidirectionalRec
+    (nil := [])
+    (singleton := fun x => [x])
+    (cons_append := fun a l b rC => if (b.1 = a.1 ∧ (!b.2) = a.2) then rC else (a :: l ++ [b]))
 
 def reduceCyclicallyConjugator : List (α × Bool) → List (α × Bool) := List.bidirectionalRec
   (nil := [])
@@ -188,17 +188,19 @@ theorem reduceCyclicallyConjugator_singleton {a : α × Bool} : reduceCyclically
 
 
 theorem reduceCyclically_cons_append {a b : α × Bool} (l : List (α × Bool)) :
-  reduceCyclically (a :: (l ++ [b])) = if (b.1 = a.1 ∧ (!b.2) = a.2) then reduceCyclically l else (a :: l ++ [b]) := by
+    reduceCyclically (a :: (l ++ [b])) =
+    if (b.1 = a.1 ∧ (!b.2) = a.2) then reduceCyclically l else (a :: l ++ [b]) := by
   unfold reduceCyclically
   simp
 
 theorem reduceCyclicallyConjugator_cons_append {a b : α × Bool} (l : List (α × Bool)) :
-  reduceCyclicallyConjugator (a :: (l ++ [b])) = if (b.1 = a.1 ∧ (!b.2) = a.2) then a :: reduceCyclicallyConjugator l else [] := by
+    reduceCyclicallyConjugator (a :: (l ++ [b])) =
+    if (b.1 = a.1 ∧ (!b.2) = a.2) then a :: reduceCyclicallyConjugator l else [] := by
   unfold reduceCyclicallyConjugator
   simp
 
 theorem reduceCyclically_conjugation (w : List (α × Bool)) :
-  w = reduceCyclicallyConjugator w ++ reduceCyclically w ++ invRev (reduceCyclicallyConjugator w) := by
+    w = reduceCyclicallyConjugator w ++ reduceCyclically w ++ invRev (reduceCyclicallyConjugator w) := by
   induction w using List.bidirectionalRec
   case nil => simp
   case singleton => simp
@@ -210,7 +212,8 @@ theorem reduceCyclically_conjugation (w : List (α × Bool)) :
       simp [invRev, h.1.symm, h.2.symm]
     case isFalse => simp
 
-theorem reduceCyclically_sound (w : List (α × Bool)) : Red.reduced w → Red.cyclicallyReduced (reduceCyclically w) := by
+theorem reduceCyclically_sound (w : List (α × Bool)) :
+    Red.reduced w → Red.cyclicallyReduced (reduceCyclically w) := by
   induction w using List.bidirectionalRec
   case nil => simp
   case singleton => simp
@@ -234,7 +237,8 @@ theorem infinite_order (x : FreeGroup α) (x_ne_1 : x ≠ 1) : ¬IsOfFinOrder x 
     nth_rw 3 [← FreeGroup.mk_toWord (x := x), reduceCyclically_conjugation (w := x.toWord)]
     rw [FreeGroup.mul_mk,FreeGroup.inv_mk, FreeGroup.mul_mk]
   intro c
-  obtain ⟨n, n_gt_0, eq'⟩ := isOfFinOrder_iff_pow_eq_one.mp $ isOfFinOrder_of_isConj (IsConj.symm conj) c
+  obtain ⟨n, n_gt_0, eq'⟩ :=
+    isOfFinOrder_iff_pow_eq_one.mp $ isOfFinOrder_of_isConj (IsConj.symm conj) c
   have x'_ne_1 : x' ≠ 1 := by
     intro eq
     rw [eq] at conj
