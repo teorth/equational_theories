@@ -1,7 +1,7 @@
 import equational_theories.Equations.All
 import equational_theories.MagmaOp
 import equational_theories.Superposition
-import Mathlib.Data.Set.Finite
+import Mathlib.Data.Set.Finite.Basic
 import Mathlib.Tactic.TypeStar
 import Mathlib.Tactic.ByContra
 
