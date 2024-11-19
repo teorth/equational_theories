@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
-import subprocess, json, random
+import subprocess
+import random
 from tqdm import tqdm
 import time
 from generate_eqs_list import *
 import re
-from collections import defaultdict
 
 random.seed(17)
 
@@ -50,8 +50,12 @@ def encode_problem(problem):
 
 
 def natural_sort(l):
-    convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanum_key = lambda key: [convert(c) for c in re.split("([0-9]+)", key)]
+    def convert(text):
+        return int(text) if text.isdigit() else text.lower()
+
+    def alphanum_key(key):
+        return [convert(c) for c in re.split("([0-9]+)", key)]
+
     return sorted(l, key=alphanum_key)
 
 
@@ -78,10 +82,7 @@ def leanifyP(proof):
 
 
 def leanify(proof, problem):
-    assumption, goal = (
-        eqs[int(problem["lhs"].split("n")[1]) - 1],
-        eqs[int(problem["rhs"].split("n")[1]) - 1],
-    )
+    goal = eqs[int(problem["rhs"].split("n")[1]) - 1]
     output = (
         f'@[equational_result]\ntheorem {problem["lhs"]}_implies_{problem["rhs"]} '
         f'(G : Type*) [Magma G] (h : {problem["lhs"]} G) : {problem["rhs"]} G := by\n'
@@ -129,7 +130,7 @@ import Mathlib.Tactic.ByContra
     file=proofs,
 )
 length = 0
-proof_list = open(f"equational_theories/Generated/VampireProven.lean", "a")
+proof_list = open("equational_theories/Generated/VampireProven.lean", "a")
 print(
     f"import equational_theories.Generated.VampireProven.Proofs{dpind}", file=proof_list
 )

@@ -255,4 +255,5 @@ function findEquation() {
         showErrorPopup(error.message);
         resultDiv.innerHTML = '';
     }
+    return false;
 }

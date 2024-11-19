@@ -65,13 +65,13 @@ for $z \neq 3^y, 2^{3^y}$.  All other assignments of $\op$ may be made arbitrari
 
 In that paper a computer search was also used to show that no law of order four or less is an Austin law.
 
-An open question is whether \Cref{eq5105} is an Austin law.  We have the following partial result from \cite{Kisielewicz2}:
+An open question is whether \Cref{eq5093} is an Austin law.  We have the following partial result from \cite{Kisielewicz2}:
 
-\begin{theorem}[Equation 5105 has no non-trivial finite models]\lean{InfModel.Finite.Equation5105_implies_Equation2}\leanok\label{5105-nontrivial}\uses{eq5105, models-def} \Cref{eq5105} has no non-trivial finite models.
+\begin{theorem}[Equation 5093 has no non-trivial finite models]\lean{InfModel.Finite.Equation5093_implies_Equation2}\leanok\label{5093-nontrivial}\uses{eq5093, models-def} \Cref{eq5093} has no non-trivial finite models.
 \end{theorem}
 
-\begin{proof} \leanok From \Cref{eq5105} we see that the map $w \mapsto y \op w$ is onto, hence injective in a finite model.  Using this injectivity four times in \Cref{eq5105}, we see that $z \op y$ does not depend on $z$, hence the expression
-$x \op (z \op y)$ does not depend on $x$.  By \Cref{eq5105} again, this means that $x$ does not depend on $x$, which is absurd in a non-trivial model.
+\begin{proof} \leanok From \Cref{eq5093} we see that the map $w \mapsto y \op w$ is onto, hence injective in a finite model.  Using this injectivity four times in \Cref{eq5093}, we see that $z \op y$ does not depend on $z$, hence the expression
+$x \op (z \op y)$ does not depend on $x$.  By \Cref{eq5093} again, this means that $x$ does not depend on $x$, which is absurd in a non-trivial model.
 \end{proof}
 
 We also have such a non-implication involving two laws of order $4$:
@@ -109,4 +109,39 @@ The following result was established in \cite{austin_finite}:
 \end{theorem}
 
 \begin{proof} \leanok  If neither side of the law is a single variable then the zero law $x \op y = 0$ will work, so one can assume the law takes the form $x = f(x,y)$.  Consider a finite field $F$ with the operation $x \op y := ax+by$ for some coefficients $a,b \in F$.  Then the law becomes a pair of equations $P(a,b)=0$, $Q(a,b)=1$ in the coefficients for some polynomials $P,Q$ with integer coefficients, which one can verify to not divide each other (they have the same degree, and do not have the same set of non-zero monomials).  From Bezout's theorem, this equation has a solution in some field, and hence by the Lefschetz principle it has a solution in a finite field.
+\end{proof}
+
+Many implications for finite magmas rely on the fact that if $f, g:X \to X$ are functions on a finite set $X$, then $f \circ g = I$ if and only if $g \circ f = I$.  Two more complicated variants of this are as follows.
+
+\begin{lemma}\label{ffg}  Let $X$ be finite, and let $f, g: X \to X$ be such that $f = f \circ f \circ g$.  Then $f = f \circ g \circ f$.
+\end{lemma}
+
+\begin{proof} Call a point $x \in X$ \emph{periodic} if $f^n(x) = x$ for some $n>0$.  Because the forward orbit $x, f(x), f^2(x), \dots$ in a finite space $X$ must repeat, we see that for each $x$ there exists an $n$ such that $f^n(x)$ is periodic.  Let $n_x$ be the first $n$ for which this occurs.  If $n_x > 1$, then $g(x), f(g(x)), f(f(g(x))$ cannot be periodic (as this would imply $f(x)$ periodic), and then we can see that $n_{g(x)} = n_x + 1$.  Hence the maximal value of $n_x$ is at most $1$, which implies that $f(x)$ is periodic for every $x$.  Thus there is an $n > 1$ such that $f^n = f$.  Since $f = f^2 \circ g$, we have $f^n = f^{n-2} \circ f \circ f = f^{n-2} \circ (f^2 \circ g) \circ f = f^n \circ g \circ f = f \circ g \circ f$, as desired.
+\end{proof}
+
+\begin{lemma}\label{gff} Let $X$ be finite, and let $f, g: X \to X$ be such that $f = g \circ f \circ f$.  Then $f = f \circ g \circ f$.
+\end{lemma}
+
+\begin{proof} By hypothesis, $f^2(x)$ uniquely determines $f(x)$.  This prevents $n_x = 2$ for any $x$ (because if $n>2$ is such that $f^{n+2}(x) = f^2(x)$, then $f^{n+1}(x) \neq f(x)$), and hence also prevents $n_x > 2$ for any $x$.   So again we have $f(x)$ periodic for all $x$, so $f^n = f$ for some $n>1$.  Then $f = f^n = f \circ (g \circ f^2) \circ f^{n-2} = f \circ g \circ f^n = f \circ g \circ f$ as required.
+\end{proof}
+
+This can be used to obtain a few positive finite magma implications, for instance by setting $f,g$ to be left and right multiplication operators.  Another useful lemma is
+
+\begin{lemma}[Eventual period]\label{period} \lean{Eq3342.Finite.fn_periodic} \leanok  Let $X$ be finite and $f: X \to X$.  Then there exists $n \geq 1$ such that $f^{2n} = f^n$.
+\end{lemma}
+
+\begin{proof} \leanok By the pigeonhole principle, there exists $n \geq 1$, $m \geq 0$ such that $f^{m+n} = f^m$, which implies on iteration that $f^{m+mn} = f^m$ and hence $f^{2mn} = f^{mn}$, giving the claim.
+\end{proof}
+
+As a sample application, we have
+
+\begin{corollary}[3342]\label{3342} \lean{Eq3342.Finite.Equation3342_implies_Equation3522,Eq3342.Finite.Equation3342_implies_Equation4118} \leanok  On a finite magma $M$, equation 3342, $x \op y= y \op (x \op (x \op x))$, implies
+  equation 3522, $x \op y = x \op ((y \op y) \op y)$, as well as equation 4118, $x \op y = ((x \op x) \op x) \op y$.
+\end{corollary}
+
+\begin{proof}\uses{period} \leanok Write $Sx := x \op$, $fx := x \op Sx$ and $Cx = Sx \op x$, then we have $x \op y= y \op fx$, and our task is to show $x \op y = Cx \op y$ and $x \op y = x \op Cy$ for finite magmas, giving the four open implications.
+
+Note that $x \op y= y \op fx = fx \op fy$, hence $f$ is a homomorphism.  By \Cref{period}, there is $n \geq 1$ with $f^n = f^{2n}$.  From 3342 we have $Sx = S fx$ and $Cx = Sx \op x = f^n Sx \op f^n x = f^n Sx \op f^{2n} x = f^{2n-1} x \op f^n Sx = f^{n-1} x \op S x = f(f^{n-1} x) = f^n x$.  Then
+$$ Cx \op y = f^n x \op y = f^{2n} x \op f^n y = f^n x \op f^n y = x \op y$$
+and a similar argument gives $x \op Cy = x \op y$.
 \end{proof}

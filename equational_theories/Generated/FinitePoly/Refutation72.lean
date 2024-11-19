@@ -1,4 +1,5 @@
 
+import Mathlib.Data.Finite.Prod
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 import equational_theories.MemoFinOp
@@ -19,5 +20,5 @@ def «FinitePoly y² + y % 3» : Magma (Fin 3) where
 /-! The facts -/
 @[equational_result]
 theorem «Facts from FinitePoly y² + y % 3» :
-  ∃ (G : Type) (_ : Magma G), Facts G [39, 4274] [47, 99, 151, 203, 255, 411, 614, 817, 1020, 1223, 1426, 1629, 1832, 2035, 2238, 2441, 2644, 2847, 3050, 3253, 3456, 3659, 3865, 3868, 3871, 3878, 3881, 3888, 3917, 3927, 3951, 3954, 3961, 3964, 4066, 4068, 4071, 4074, 4084, 4091, 4120, 4127, 4130, 4157, 4164, 4167, 4380, 4583, 4585, 4588, 4591, 4598, 4605, 4608, 4629, 4636, 4658] :=
-    ⟨Fin 3, «FinitePoly y² + y % 3», by decideFin!⟩
+  ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [39, 4274] [47, 99, 151, 203, 255, 411, 614, 817, 1020, 1223, 1426, 1629, 1832, 2035, 2238, 2441, 2644, 2847, 3050, 3253, 3456, 3659, 3865, 3868, 3871, 3878, 3881, 3888, 3917, 3927, 3951, 3954, 3961, 3964, 4066, 4068, 4071, 4074, 4084, 4091, 4120, 4127, 4130, 4157, 4164, 4167, 4380, 4583, 4585, 4588, 4591, 4598, 4605, 4608, 4629, 4636, 4658] :=
+    ⟨Fin 3, «FinitePoly y² + y % 3», Finite.of_fintype _, by decideFin!⟩

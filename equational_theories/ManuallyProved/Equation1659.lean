@@ -2,7 +2,6 @@ import equational_theories.Equations.All
 import equational_theories.MagmaOp
 import Mathlib.Data.Fintype.Card
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
-import equational_theories.Mathlib.Algebra.Group.Nat
 import equational_theories.FactsSyntax
 
 /-

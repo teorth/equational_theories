@@ -1,0 +1,86 @@
+\chapter{Equation 1323}\label{1323-chapter}
+
+In this chapter we study magmas that obey equation 1323,
+\begin{equation}\label{1323}
+  x = y \op (((y \op y) \op x) \op y)
+\end{equation}
+for all $x,y$.  Using the squaring operator $Sy := y \op y$ and the left and right multiplication operators $L_y x := y \op x$ and $R_y x = x \op y$, this law can be written as
+$$ L_y R_y L_{Sy} x = x.$$
+Among other things, this implies that $L_{Sy}$ is injective and $L_y$ is surjective, hence $L_{Sy}$ is invertible.  It is convenient to impose an additional axiom
+\begin{equation}\label{lr}
+ L_{Sy} R_{Sy} = 1
+\end{equation}
+that is to say $R_{Sy}$ is the inverse of $L_{Sy}$, then the law \eqref{1323} simplifies to
+\begin{equation}\label{lr-simp}
+  L_{y} R_{y} = R_{Sy}.
+\end{equation}
+
+ So now we would like to construct a magma satisfying \eqref{lr} and \eqref{lr-simp}.  Let $G$ be a countably infinite abelian group of order $2$, and work on a carrier $G \uplus N$, where $N$ is the set of pairs $(x,a)$ with $x \in \Q^\times$ and $a \in G \backslash \{0\}$.  For each $a \in G \backslash \{0\}$, we let $\phi_a: G \to \Q^\times$ be a bijection such that
+ $\phi_a(0) = 1$ and $\phi_a(a+b) = -1/\phi_a(b)$ for all $b \in G$, so in particular $\phi_a(a)=-1$; such a bijection can be easily constructed from the axiom of choice and a greedy algorithm, defining $\phi_a$ one pair $\{b,a+b\}$ at a time. We then partially define an operation $\op$ on $(G \times N) \times (G \times N)$ by setting
+\begin{equation}\label{op-0}
+  a \op b = a+b
+\end{equation}
+for $a,b \in G$, and
+ \begin{equation}\label{op-1}
+ (x,a) \op b = (\phi_a(b) x, a)
+\end{equation}
+\begin{equation}\label{op-2}
+  b \op (x,a) = (x / \phi_a(b), a)
+\end{equation}
+and
+\begin{equation}\label{op-3}
+  (\phi_a(b) x,a) \op (x,a) = a+b
+\end{equation}
+for $x \in \Q^\times$, $b \in G$, and $a \in G \backslash \{0\}$.  This defines $\op$ except for $(x,a) \op (y,b)$ with $x,y \in \Q^\times$ and $a,b,0$ distinct.
+
+With these rules, $0$ is a unit, and the squaring operator is given by $Sa = 0$ and $S(x,a) = a$, so the set of squares is $G$.  If $a \in G$ is a square number, we have
+$$ L_a b = R_a b = a+b$$
+and
+$$ L_a (x,b) = (x/\phi_b(a), b); \quad R_a (x,b) = (x \phi_b(a), b)$$
+so \eqref{lr-simp} is satisfied.
+
+We can also verify some cases of \eqref{lr-simp}.  If $y$ is a square, then the claim already follows from \eqref{lr} since $Sy=0$ is a unit.  Otherwise, for $y \in \Q^\times$ and $b \in G \backslash \{0\}$, we have to show that
+$$ L_{(y,b)} R_{(y,b)} a = R_b a = a+b$$
+for $a \in G$ and
+$$ L_{(y,b)} R_{(y,b)} (x,a) = R_b (x,a) = (\phi_a(b) x, a) $$
+for $x \in \Q^\times$ and $a \in G \backslash \{0\}$.  In the first case, we have from \eqref{op-2} that
+$$ R_{(y,b)} a = (y/\phi_a(b), b)$$
+and then from \eqref{op-3} we have
+$$L_{(y,b)} R_{(y,b)} a = a+b$$
+as required.  In the second case, if $a=b$, then by the bijective nature of $\phi_a$, we can write $x = \phi_a(c) y$ for some $c \in G$, then from \eqref{op-3} we have
+$$ R_{(y,b)} (x,a) = a+c$$
+and then by \eqref{op-1}
+$$ L_{(y,b)} R_{(y,b)} (x,a) = (\phi_a(a+c) y, a)$$
+but from construction we have $\phi_a(a+c)=-1/\phi_a(c) = \phi_a(b)/\phi_a(c)$ and hence $\phi_a(a+c) y = \phi_a(b) x$ as required.
+
+It remains to handle the case when $a,b$ are distinct elements of $G \backslash \{0\}$.  Here we will set $(x,a) \op (y,b)$ to some $(z,c)$ with $c$ distinct from $a,b,0$ to be determined.  The axiom to verify is then
+\begin{itemize}
+\item {\bf Axiom}: If $(x,a) \op (y,b) = (z,c)$, then $(y,b) \op (z,c) = (\phi_a(b) x,a)$.
+\end{itemize}
+
+To do this we perform a greedy algorithm.  Suppose that $(x,a) \op (y,b)$ is undefined for some $x,y \in \Q^\times$ and distinct $a,b \in G \backslash \{0\}$.  We select a $c \in G \backslash \{0\}$ that has not previously been used by the greedy algorithm, and set
+$$ (x,a) \op (y,b) = (z,c)$$
+for some arbitrary $z \in \Q^\times$ (e.g., one could take $z=1$ if desired).  To verify the axiom, we then also need to make an infinite number of other assignments, namely
+$$ (\phi_a(b)^n x,a) \op (\phi_b(c)^n y,b) = (\phi_c(a)^n z,c)$$
+$$ (\phi_b(c)^n y,b) \op (\phi_c(a)^n z,c) = (\phi_a(b)^{n+1} x, a)$$
+$$ (\phi_c(a)^n z,c) \op (\phi_a(b)^{n+1} x, a) = (\phi_b(c)^{n+1} y,b)$$
+for all natural numbers $n$.  As the $a,b,c$ are distinct, the $\phi_a(b), \phi_b(c), \phi_c(a)$ are not equal to $\pm 1$, and the members of this infinite sequence do not collide with each other.  The second and third equations in this family cannot collide with previous assignments because $c$ is novel.  If we arrange matters so that $\phi_b(c)$ involves primes in the numerator or denominator that do not appear in any previous $\phi_a(b), \phi_b(c), \phi_c(a), x, y, z$ used by the greedy algorithm, or the current $x,y,z$, then we also see that the first infinite sequence does not collide with any previously assigned value of $\op$ either.  If we then add all these assignments to the multiplication table, we maintain the desired axiom.  Iterating this a countable number of times, we obtain a magma that obeys \eqref{lr} and \eqref{lr-simp}, and hence 1323.
+
+\begin{corollary}[1323 does not imply 2744]\label{1323-refute-2744}  There exists a 1323 magma which does not obey the 2744 equation $R_y L_{Sy} L_y x = x$.
+\end{corollary}
+
+\begin{proof} It suffices to produce a model in which $L_y$ is not injective. Pick distinct $a, b, b', c$ with $\phi_a(b)$, $\phi_a(b')$ having no prime factors in common in the numerator or denominator.  If we impose the conditions
+$$ (\phi_a(b)^n,a) \op (\phi_b(c)^n,b) = (\phi_c(a)^n,c)$$
+$$ (\phi_b(c)^n,b) \op (\phi_c(a)^n,c) = (\phi_a(b)^{n+1}, a)$$
+$$ (\phi_c(a)^n,c) \op (\phi_a(b)^{n+1}, a) = (\phi_b(c)^{n+1},b)$$
+and
+$$ (\phi_a(b)^n,a) \op (\phi_{b'}(c)^n,b') = (\phi_c(a)^n,c)$$
+$$ (\phi_{b'}(c)^n,b') \op (\phi_c(a)^n,c) = (\phi_a(b')^{n+1}, a)$$
+$$ (\phi_c(a)^n,c) \op (\phi_{a}(b')^{n+1}, a) = (\phi_b(c)^{n+1},b')$$
+then no collisions occur, and the required axiom is obeyed; on the other hand, as $L_{(1,a)} (1,b) = L_{(1,a)} (1,b') = (1,c)$, we already have a violation of left injectivity.  Completing this seed to a full magma, we obtain the claim.
+\end{proof}
+
+A very similar construction gives
+
+\begin{corollary}[1898 does not imply 2710]\label{1898-refute-1729}  There exists a magma which obeys the 1898 law $R_{Sy} L_y R_y x = x$ but not the 2710 law $R_y R_{Sy} L_y = x$.
+\end{corollary}

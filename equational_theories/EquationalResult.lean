@@ -39,6 +39,8 @@ structure Entry where
   name : Name
   /-- Name of the file where this declaration was found. -/
   filename : String
+  /-- Line number of the declaration, if available -/
+  line : Option Nat
   /-- Which kind of result is it? -/
   variant : EntryVariant
   /-- Is it proven? -/
@@ -46,26 +48,26 @@ structure Entry where
 deriving Lean.ToJson, Lean.FromJson, Inhabited
 
 def Entry.toConjecture : Entry → Entry
-  | .mk n f v _ => ⟨n, f, v, false⟩
+  | .mk n f l v _ => ⟨n, f, l, v, false⟩
 
 initialize equationalResultsExtension : SimplePersistentEnvExtension Entry (Array Entry) ←
   registerSimplePersistentEnvExtension {
     name := `equational_result
-    addImportedFn := Array.concatMap id
+    addImportedFn := Array.flatMap id
     addEntryFn    := Array.push
   }
 
 def Entry.keepCore (e : Entry) : Option Entry :=
   match e.variant with
-  | .implication { lhs, rhs } =>
+  | .implication ⟨lhs, rhs, _⟩  =>
       if isCoreEquationName lhs && isCoreEquationName rhs
       then some e
       else none
-  | .facts { satisfied, refuted } =>
+  | .facts ⟨satisfied, refuted, finite⟩ =>
       let sat1 := satisfied.filterMap filterCoreEquationName
       let ref1 := refuted.filterMap filterCoreEquationName
       if sat1.isEmpty || ref1.isEmpty then none
-      else some <| {e with variant := .facts {satisfied := sat1, refuted := ref1}}
+      else some <| {e with variant := .facts {satisfied := sat1, refuted := ref1, finite := finite}}
   | .unconditional eq => if isCoreEquationName eq then some e else none
 
 namespace Result
@@ -79,8 +81,10 @@ initialize equationalResultAttr : Unit ←
     name  := `equational_result
     descr := equationalResultHelpString
     applicationTime := AttributeApplicationTime.afterCompilation
-    add   := fun declName _stx _attrKind => do
-       let filename := (←read).fileName
+    add   := fun declName stx _attrKind => do
+       let ctx ← read
+       let filename := ctx.fileName
+       let line := stx.getPos?.map λ pos => ctx.fileMap.toPosition pos |>.line
        discard <| Meta.MetaM.run do
        let mut is_conjecture := false
        let axioms ← Lean.collectAxioms declName
@@ -94,11 +98,11 @@ initialize equationalResultAttr : Unit ←
        let entry ← match info with
                    | .thmInfo  (val : TheoremVal) =>
                      if let some imp ← parseImplication val.type then
-                       pure <| ⟨val.name, filename, .implication imp, true⟩
+                       pure <| ⟨val.name, filename, line, .implication imp, true⟩
                      else if let some facts ← parseFacts val.type then
-                       pure <| ⟨val.name, filename, .facts facts, true⟩
+                       pure <| ⟨val.name, filename, line, .facts facts, true⟩
                      else if let some uncond ← parseUnconditionalEquation val.type then
-                       pure <| ⟨val.name, filename, .unconditional uncond, true⟩
+                       pure <| ⟨val.name, filename, line, .unconditional uncond, true⟩
                      else
                        throwError "failed to match type of @[equational_result] theorem"
                    | _ => throwError "@[equational_result] is only allowed on theorems"
@@ -107,10 +111,10 @@ initialize equationalResultAttr : Unit ←
 
        -- Add law theorem as well
        match entry.variant with
-        | .implication  _ =>
+        | .implication imp =>
             let _ ← match info with
               | .thmInfo  (val : TheoremVal) =>
-                 addLawImplicationThm val.type val.name
+                 if !imp.finite then addLawImplicationThm val.type val.name
               | _ => pure ()
         | .unconditional _ =>
             let _ ← match info with
@@ -146,10 +150,10 @@ syntax (name := printEquationalResults) "#print_equational_results" : command
 elab_rules : command
 | `(command| #print_equational_results) => do
   let rs ← extractTheorems
-  for ⟨name, _filename, res, _⟩ in rs do
+  for ⟨name, _filename, _line, res, _⟩ in rs do
     match res with
-    | .implication ⟨lhs, rhs⟩ => println! "{name}: {lhs} → {rhs}"
-    | .facts ⟨satisfied, refuted⟩ => println! "{name}: {satisfied} // {refuted}"
+    | .implication ⟨lhs, rhs, _⟩ => println! "{name}: {lhs} → {rhs}"
+    | .facts ⟨satisfied, refuted, _⟩ => println! "{name}: {satisfied} // {refuted}"
     | .unconditional rhs => println! "{name}: {rhs} holds unconditionally"
 
 end Result
@@ -181,7 +185,7 @@ def elabConjecture : CommandElab
 
       -- If we add a new entry to the equational results list
       if original_length < (equationalResultsExtension.getState (← getEnv)).size then
-        return some (equationalResultsExtension.getState (← getEnv)).back
+        return some (equationalResultsExtension.getState (← getEnv)).back!
       return none
 
     if let some entry := maybe_entry then

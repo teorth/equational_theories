@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
-import json, random
 
-f = open(f"equational_theories/Generated/VampireProven/Conjectures.lean", "w")
+f = open("equational_theories/Generated/VampireProven/Conjectures.lean", "w")
 
 print("import equational_theories.Equations.All", file=f)
 print("import equational_theories.Magma", file=f)

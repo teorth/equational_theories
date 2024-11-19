@@ -1,3 +1,4 @@
+import Mathlib.Data.Finite.Prod
 import Mathlib.Tactic
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
@@ -40,16 +41,16 @@ def Magma834_10 : Magma (Fin 8)
 -- TODO use calculate_facts to find more places where this magma helps.
 
 @[equational_result]
-theorem Equation834_not_implies_Equation10 : ∃ (G: Type) (_: Magma G), Facts G [834] [10] :=
-  ⟨Fin 8, Magma834_10, by decide!⟩
+theorem Equation834_not_implies_Equation10 : ∃ (G: Type) (_: Magma G) (_: Finite G), Facts G [834] [10] :=
+  ⟨Fin 8, Magma834_10, Finite.of_fintype _, by decide!⟩
 
 -- dual of the above
 def Magma_2702_25 : Magma (Fin 8)
   where op := fun x y => (matrix_834_10.get! y.val).get! x.val
 
 @[equational_result]
-theorem Equation2702_not_implies_Equation25 : ∃ (G: Type) (_: Magma G), Facts G [2702] [25] :=
-  ⟨Fin 8, Magma_2702_25, by decide!⟩
+theorem Equation2702_not_implies_Equation25 : ∃ (G: Type) (_: Magma G) (_: Finite G), Facts G [2702] [25] :=
+  ⟨Fin 8, Magma_2702_25, Finite.of_fintype _, by decide!⟩
 
 
 def matrix_1460_3050 : List (List (Fin 8)) :=
@@ -66,13 +67,13 @@ def Magma_1460_3050 : Magma (Fin 8)
   where op := fun x y => (matrix_1460_3050.get! x.val).get! y.val
 
 @[equational_result]
-theorem Equation1460_not_implies_Equation3050 : ∃ (G: Type) (_: Magma G), Facts G [1460] [3050] :=
-  ⟨Fin 8, Magma_1460_3050, by decide!⟩
+theorem Equation1460_not_implies_Equation3050 : ∃ (G: Type) (_: Magma G) (_: Finite G), Facts G [1460] [3050] :=
+  ⟨Fin 8, Magma_1460_3050, Finite.of_fintype _, by decide!⟩
 
 -- dual of the above
 def Magma_2227_411 : Magma (Fin 8)
   where op := fun x y => (matrix_1460_3050.get! y.val).get! x.val
 
 @[equational_result]
-theorem Equation2227_not_implies_Equation411 : ∃ (G: Type) (_: Magma G), Facts G [2227] [411] :=
-  ⟨Fin 8, Magma_2227_411, by decide!⟩
+theorem Equation2227_not_implies_Equation411 : ∃ (G: Type) (_: Magma G) (_: Finite G), Facts G [2227] [411] :=
+  ⟨Fin 8, Magma_2227_411, Finite.of_fintype _, by decide!⟩

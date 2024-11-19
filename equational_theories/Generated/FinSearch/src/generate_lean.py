@@ -2,9 +2,7 @@
 
 from collections import defaultdict
 import ast
-import re
 import json
-import itertools
 from pathlib import Path
 
 #
@@ -128,13 +126,12 @@ def generate_lean(data):
     satisfied = data["satisfied"]
     refuted = data["refuted"]
 
-    atable = table.replace("[", "#[")
+    table.replace("[", "#[")
 
     name = f"FinitePoly {table}"
-    satname = lambda i: f"{name} satisfies Equation{i}"
-    refname = lambda i: f"{name} refutes Equation{i}"
 
     out = f"""
+import Mathlib.Data.Finite.Prod
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 import equational_theories.MemoFinOp
@@ -154,8 +151,8 @@ def «{name}» : Magma (Fin {div}) where
 /-! The facts -/
 @[equational_result]
 theorem «Facts from {name}» :
-  ∃ (G : Type) (_ : Magma G), Facts G {satisfied} {refuted} :=
-    ⟨Fin {div}, «{name}», by decideFin!⟩
+  ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G {satisfied} {refuted} :=
+    ⟨Fin {div}, «{name}», Finite.of_fintype _, by decideFin!⟩
 """
     return out
 

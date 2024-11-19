@@ -99,6 +99,9 @@ equation 953  :=  x = y ◇ ((z ◇ x) ◇ (z ◇ z))
 /-- A hard to prove non-consequence of the ``Asterix law``. -/
 equation 1426  :=  x = (x ◇ x) ◇ (x ◇ (x ◇ x))
 
+/-- The weak central groupoid law -/
+equation 1485 := x = (y ◇ x) ◇ (x ◇ (z ◇ y))
+
 /-- The ``Obelix law'' -/
 equation 1491  :=  x = (y ◇ x) ◇ (y ◇ (y ◇ x))
 
@@ -116,6 +119,9 @@ equation 1689  :=  x = (y ◇ x) ◇ ((x ◇ z) ◇ z)
 
 /-- A law with a modified translation-invariant model. -/
 equation 1701 := x = (y ◇ x) ◇ ((z ◇ x) ◇ x)
+
+/-- The dual weak central groupoid law -/
+equation 2162 := x = ((y ◇ z) ◇ x) ◇ (x ◇ y)
 
 /-- From a paper of Mendelsohn & Padmanabhan -/
 equation 2662  :=  x = ((x ◇ y) ◇ (x ◇ y)) ◇ x
@@ -166,7 +172,7 @@ equation 4656  :=  (x ◇ y) ◇ y = (x ◇ z) ◇ z
 /- Some order 5 laws -/
 
 /-- Mentioned in a paper of Kisielewicz as a conjectural Austin law -/
-equation 5105  :=  x = y ◇ (y ◇ (y ◇ (x ◇ (z ◇ y))))
+equation 5093  :=  x = y ◇ (y ◇ (y ◇ (x ◇ (z ◇ y))))
 
 /-- The natural central groupoid law. -/
 equation 26302  :=  x = (y ◇ ((z ◇ x) ◇ w)) ◇ (x ◇ w)
@@ -181,3 +187,21 @@ equation 345169  :=  x = (y ◇ ((x ◇ y) ◇ y)) ◇ (x ◇ (z ◇ y))
 
 /-- Kisielewicz's first Austin law -/
 equation 374794  :=  x = (((y ◇ y) ◇ y) ◇ x) ◇ ((y ◇ y) ◇ z)
+
+/-- The left Bol loop law -/
+equation 910472  :=  x ◇ (y ◇ (x ◇ z)) = (x ◇ (y ◇ x)) ◇ z
+
+/-- The right Bol loop law -/
+equation 930594  :=  x ◇ ((y ◇ z) ◇ y) = ((x ◇ y) ◇ z) ◇ y
+
+/-- The first Moufang law (of four, which are equivalent for loops) -/
+equation 914612  := x ◇ (y ◇ (x ◇ z)) = ((x ◇ y) ◇ x) ◇ z
+
+/-- The second Moufang law -/
+equation 916037  :=  x ◇ (y ◇ (z ◇ y)) = ((x ◇ y) ◇ z) ◇ y
+
+/-- The third Moufang law -/
+equation 936498  :=  (x ◇ y) ◇ (z ◇ x) = (x ◇ (y ◇ z)) ◇ x
+
+/-- The fourth Moufang law -/
+equation 921941  :=  x ◇ ((y ◇ z) ◇ x) = (x ◇ y) ◇ (z ◇ x)

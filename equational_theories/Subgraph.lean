@@ -464,7 +464,7 @@ theorem Equation2_implies_Equation3744 (G: Type _) [Magma G] (h: Equation2 G) : 
   fun _ _ _ _ ↦ h ..
 
 @[equational_result]
-theorem Equation2_implies_Equation5105 (G: Type _) [Magma G] (h: Equation2 G) : Equation5105 G :=
+theorem Equation2_implies_Equation5093 (G: Type _) [Magma G] (h: Equation2 G) : Equation5093 G :=
   fun _ _ _ ↦ h ..
 
 @[equational_result]
@@ -477,7 +477,7 @@ theorem Equation3_implies_Equation3722 (G: Type _) [Magma G] (h: Equation3 G) : 
 
 @[equational_result]
 theorem Equation4_implies_Equation381 (G: Type _) [Magma G] (h: Equation4 G) : Equation381 G :=
-  fun x y z ↦ by rw (config := {occs := .pos [1]}) [h x z]
+  fun x y z ↦ by nth_rw 1 [h x z]
 
 @[equational_result]
 theorem Equation4_implies_Equation3722 (G: Type _) [Magma G] (h: Equation4 G) : Equation3722 G :=
@@ -487,7 +487,7 @@ theorem Equation4_implies_Equation3722 (G: Type _) [Magma G] (h: Equation4 G) : 
 theorem Equation4_implies_Equation3744 (G: Type _) [Magma G] (h: Equation4 G) : Equation3744 G :=
   fun x y z w ↦
     calc x ◇ y
-    _ = (x ◇ z) ◇ y := by rw (config := {occs := .pos [1]}) [h x z]
+    _ = (x ◇ z) ◇ y := by nth_rw 1 [h x z]
     _ = x ◇ z := (h (x ◇ z) y).symm
     _ = (x ◇ z) ◇ (w ◇ y) := h (x ◇ z) (w ◇ y)
 
@@ -508,15 +508,15 @@ theorem Equation5_implies_Equation3744 (G: Type _) [Magma G] (h: Equation5 G) : 
     calc x ◇ y
     _ = y := (h y x).symm
     _ = (x ◇ z) ◇ y := (h y (x ◇ z))
-    _ = (x ◇ z) ◇ (w ◇ y) := by rw (config := {occs := .pos [1]}) [h y w]
+    _ = (x ◇ z) ◇ (w ◇ y) := by nth_rw 1 [h y w]
 
 @[equational_result]
 theorem Equation5_implies_Equation4564 (G: Type _) [Magma G] (h: Equation5 G) : Equation4564 G :=
   fun x y z w ↦
     calc x ◇ (y ◇ z)
     _ = y ◇ (x ◇ (y ◇ z)) := (h (x ◇ (y ◇ z)) y)
-    _ = (w ◇ y) ◇ (x ◇ (y ◇ z)) := by rw (config := {occs := .pos [1]}) [h y w]
-    _ = (w ◇ y) ◇ (x ◇ z) := by rw (config := {occs := .pos [2]}) [h z y]
+    _ = (w ◇ y) ◇ (x ◇ (y ◇ z)) := by nth_rw 1 [h y w]
+    _ = (w ◇ y) ◇ (x ◇ z) := by nth_rw 2 [h z y]
     _ = (w ◇ y) ◇ z := by rw [← h z x]
 
 @[equational_result]
@@ -563,10 +563,10 @@ theorem Equation3744_implies_Equation4512 (G: Type _) [Magma G] (h: Equation3744
   fun x y z ↦
     calc x ◇ (y ◇ z)
     _ = (x ◇ y) ◇ (x ◇ (y ◇ z)) := (h x (y ◇ z) y x)
-    _ = ((x ◇ y) ◇ (x ◇ y)) ◇ (x ◇ (y ◇ z)) := by rw (config := {occs := .pos [1]}) [h x y y x]
+    _ = ((x ◇ y) ◇ (x ◇ y)) ◇ (x ◇ (y ◇ z)) := by nth_rw 1 [h x y y x]
     _ = (x ◇ y) ◇ (y ◇ z) := (h (x ◇ y) (y ◇ z) (x ◇ y) x).symm
     _ = ((x ◇ y) ◇ x) ◇ ((y ◇ x) ◇ (y ◇ z)) := (h (x ◇ y) (y ◇ z) x (y ◇ x))
-    _ = ((x ◇ y) ◇ x) ◇ (y ◇ z) := by rw (config := {occs := .pos [1]}) [← h y z x y]
+    _ = ((x ◇ y) ◇ x) ◇ (y ◇ z) := by nth_rw 1 [← h y z x y]
     _ = (x ◇ y) ◇ z := (h (x ◇ y) z x y).symm
 
 @[equational_result]
@@ -581,6 +581,31 @@ theorem Equation4579_implies_Equation4512 (G: Type _) [Magma G] (h: Equation4579
 theorem Equation4579_implies_Equation4564 (G: Type _) [Magma G] (h: Equation4579 G) : Equation4564 G :=
   fun _ _ _ _ ↦ h ..
 
+/-- The Bol loop and Moufang loop identities are all weakenings of t-/
+@[equational_result]
+theorem Equation4512_implies_Equation910472 (G: Type _) [Magma G] (h: Equation4512 G) : Equation910472 G :=
+  fun _ _ _ ↦ by simp only [h]
+
+@[equational_result]
+theorem Equation4512_implies_Equation930594 (G: Type _) [Magma G] (h: Equation4512 G) : Equation930594 G :=
+  fun _ _ _ ↦ by simp only [h]
+
+@[equational_result]
+theorem Equation4512_implies_Equation914612 (G: Type _) [Magma G] (h: Equation4512 G) : Equation914612 G :=
+  fun _ _ _ ↦ by simp only [h]
+
+@[equational_result]
+theorem Equation4512_implies_Equation916037 (G: Type _) [Magma G] (h: Equation4512 G) : Equation916037 G :=
+  fun _ _ _ ↦ by simp only [h]
+
+@[equational_result]
+theorem Equation4512_implies_Equation936498 (G: Type _) [Magma G] (h: Equation4512 G) : Equation936498 G :=
+  fun _ _ _ ↦ by simp only [h]
+
+@[equational_result]
+theorem Equation4512_implies_Equation921941 (G: Type _) [Magma G] (h: Equation4512 G) : Equation921941 G :=
+  fun _ _ _ ↦ by simp only [h]
+
 /- Counterexamples -/
 
 @[equational_result]
@@ -588,16 +613,12 @@ theorem Equation3_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation3
   ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
 
 @[equational_result]
-theorem Equation3_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation42 G := by
-  let hG : Magma ℕ := { op := fun _ y ↦ y }
-  refine ⟨ℕ, hG, fun _ ↦ rfl, fun h ↦ ?_⟩
-  simpa [hG] using h 0 1 2
+theorem Equation3_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation42 G :=
+  ⟨ℕ, ⟨fun _ y ↦ y⟩, fun _ ↦ rfl, fun h ↦ by simpa using h 0 1 2⟩
 
 @[equational_result]
-theorem Equation3_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation4512 G := by
-  let hG : Magma ℕ := { op := fun x y ↦ if x = y then x else x + 1 }
-  refine ⟨ℕ, hG, fun _ ↦ by simp [hG], fun h ↦ ?_⟩
-  simpa [hG] using h 1 2 3
+theorem Equation3_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation4512 G :=
+  ⟨ℕ, ⟨fun x y ↦ if x = y then x else x + 1⟩, fun _ ↦ by simp, fun h ↦ by simpa using h 1 2 3⟩
 
 @[equational_result]
 theorem Equation4_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation39 G :=
@@ -605,22 +626,16 @@ theorem Equation4_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation4
 
 -- The 2 element magma that satisfies 4 does not satisfy 40.
 @[equational_result]
-theorem Equation4_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation40 G := by
-  let hG : Magma (Fin 2) := { op := fun x _ ↦ x }
-  refine ⟨Fin 2, hG, fun _ ↦ by simp [hG], fun h ↦ ?_⟩
-  simpa [hG] using h 0 1
+theorem Equation4_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation40 G :=
+  ⟨Fin 2, ⟨fun x _ ↦ x⟩, by decide⟩
 
 @[equational_result]
-theorem Equation4_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation43 G := by
-  let hG : Magma ℕ := { op := fun x _ ↦ x }
-  refine ⟨ℕ, hG, fun _ _ ↦ rfl, fun h ↦ ?_⟩
-  simpa [hG] using h 1 0
+theorem Equation4_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation43 G :=
+  ⟨ℕ, ⟨fun x _ ↦ x⟩, fun _ _ ↦ rfl, fun h ↦ by simpa using h 1 0⟩
 
 @[equational_result]
-theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation4582 G := by
-  let hG : Magma ℕ := { op := fun x _ ↦ x }
-  refine ⟨ℕ, hG, fun _ _ ↦ rfl, fun h ↦ ?_⟩
-  simpa [hG] using h 0 0 0 1 0 0
+theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation4582 G :=
+  ⟨ℕ, ⟨fun x _ ↦ x⟩, fun _ _ ↦ rfl, fun h ↦ by simpa using h 0 0 0 1 0 0⟩
 
 -- The magma with 2 elements a and b which satisfies equation 5 serves as counterexamples here. For
 -- 43, a * b = b, but b * a = a. For 4513, a * (a * a) = a, but (a * a) * b = b.
@@ -629,12 +644,11 @@ theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equatio
 
 @[equational_result]
 theorem Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Facts G [5] [42, 43, 4513] := by
-  let hG : Magma (Fin 2) := { op := fun _ x ↦ x }
-  refine ⟨Fin 2, hG, fun _ ↦ ?_, fun h ↦ ?_, fun h ↦ ?_, fun h ↦ ?_⟩
-  · simp [Equation5, hG]
-  · simpa [hG] using h 0 1 0
-  · simpa [hG] using h 0 1
-  · simpa [hG] using h 0 0 0 1
+  refine ⟨Fin 2, ⟨fun _ x ↦ x⟩, fun _ ↦ ?_, fun h ↦ ?_, fun h ↦ ?_, fun h ↦ ?_⟩
+  · simp [Equation5]
+  · simpa using h 0 1 0
+  · simpa using h 0 1
+  · simpa using h 0 0 0 1
 
 @[equational_result]
 theorem Equation8_not_implies_Equation3 : ∃ (G : Type) (_ : Magma G), Equation8 G ∧ ¬ Equation3 G := by
@@ -705,8 +719,7 @@ theorem Equation39_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equati
 
 @[equational_result]
 theorem Equation40_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation3 G := by
-  let hG : Magma Bool := { op := fun x y ↦ ¬ x ∨ y }
-  exact ⟨Bool, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
+  exact ⟨Bool, ⟨fun x y ↦ ¬ x ∨ y⟩, by decide⟩
 
 @[equational_result]
 theorem Equation40_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation39 G :=
@@ -714,85 +727,63 @@ theorem Equation40_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation
 
 @[equational_result]
 theorem Equation40_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation42 G := by
-  let hG : Magma Bool := { op := fun x y ↦ ¬ x ∨ y }
-  exact ⟨Bool, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
+  exact ⟨Bool, ⟨fun x y ↦ ¬ x ∨ y⟩, by decide⟩
 
 @[equational_result]
 theorem Equation40_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation43 G := by
-  let hG : Magma Bool := { op := fun x y ↦ ¬ x ∨ y }
-  exact ⟨Bool, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
+  exact ⟨Bool, ⟨fun x y ↦ ¬ x ∨ y⟩, by decide⟩
 
 @[equational_result]
 theorem Equation40_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation40 G ∧ ¬ Equation4512 G := by
-  let hG : Magma Bool := { op := fun x y ↦ ¬ x ∨ y }
-  exact ⟨Bool, hG, fun _ ↦ by simp [hG], of_decide_eq_false rfl⟩
+  exact ⟨Bool, ⟨fun x y ↦ ¬ x ∨ y⟩, by decide⟩
 
 @[equational_result]
-theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation43 G := by
-  let hG : Magma ℕ := { op := fun x _ ↦ x }
-  refine ⟨ℕ, hG, fun _ _ _ ↦ rfl, fun h ↦ ?_⟩
-  simpa [hG] using h 0 1
+theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation43 G :=
+  ⟨ℕ, ⟨fun x _ ↦ x⟩, fun _ _ _ ↦ rfl, fun h ↦ by simpa using h 0 1⟩
 
 @[equational_result]
-theorem Equation42_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation4512 G := by
-  let hG : Magma ℕ := { op := fun x _ ↦ x + 1 }
-  refine ⟨ℕ, hG, fun _ _ _ ↦ rfl, fun h ↦ ?_⟩
-  simpa [hG] using h 0 0 0
+theorem Equation42_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation4512 G :=
+  ⟨ℕ, ⟨fun x _ ↦ x + 1⟩, fun _ _ _ ↦ rfl, fun h ↦ by simpa using h 0 0 0⟩
 
 @[equational_result]
-theorem Equation43_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation3 G := by
-  let hG : Magma ℕ := { op := fun x y ↦ x+y }
-  refine ⟨ℕ, hG, fun _ _ ↦ Nat.add_comm _ _, fun h ↦ ?_⟩
-  simpa [hG] using h 1
+theorem Equation43_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation3 G :=
+  ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ ↦ Nat.add_comm _ _, fun h ↦ by simpa using h 1⟩
 
 @[equational_result]
-theorem Equation43_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation3 G := by
-  let hG : Magma ℕ := { op := fun x y ↦ x+y }
-  refine ⟨ℕ, hG, fun _ _ ↦ Nat.add_comm _ _, fun h ↦ ?_⟩
-  simpa [hG] using h 1
+theorem Equation43_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation3 G :=
+  ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ ↦ Nat.add_comm _ _, fun h ↦ by simpa using h 1⟩
 
 @[equational_result]
-theorem Equation43_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation42 G := by
-  let hG : Magma ℕ := { op := fun x y ↦ x+y }
-  refine ⟨ℕ, hG, fun _ _ ↦ Nat.add_comm _ _, fun h ↦ ?_⟩
-  simpa [hG] using h 0 0 1
+theorem Equation43_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation42 G :=
+  ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ ↦ Nat.add_comm _ _, fun h ↦ by simpa using h 0 0 1⟩
 
 @[equational_result]
-theorem Equation43_not_implies_Equation387 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation387 G := by
-  let hG : Magma ℕ := { op := fun x y ↦ x + y }
-  refine ⟨ℕ, hG, fun _ _ ↦ Nat.add_comm _ _, fun h ↦ ?_⟩
-  simpa [hG] using h 0 1
+theorem Equation43_not_implies_Equation387 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation387 G :=
+  ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ ↦ Nat.add_comm _ _, fun h ↦ by simpa using h 0 1⟩
 
 @[equational_result]
-theorem Equation43_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation4512 G := by
-  let hG : Magma ℕ := { op := fun x y ↦ x * y + 1 }
-  refine ⟨ℕ, hG, fun _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]; ring
-  · simpa [hG] using h 0 0 1
+theorem Equation43_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation4512 G :=
+  ⟨ℕ, ⟨fun x y ↦ x * y + 1⟩, fun _ _ ↦ by ring_nf, fun h ↦ by simpa using h 0 0 1⟩
 
 @[equational_result]
-theorem Equation46_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation46 G ∧ ¬ Equation3 G := by
-  let hG : Magma ℕ := { op := fun _ _ ↦ 0 }
-  refine ⟨ℕ, hG, fun _ _ _ _ ↦ rfl, fun h ↦ ?_⟩
-  simpa [hG] using h 1
+theorem Equation46_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation46 G ∧ ¬ Equation3 G :=
+  ⟨ℕ, ⟨0⟩, fun _ _ _ _ ↦ rfl, fun h ↦ by simpa using h 1⟩
 
 @[equational_result]
-theorem Equation46_not_implies_Equation4 : ∃ (G: Type) (_: Magma G), Equation46 G ∧ ¬ Equation4 G := by
-  let hG : Magma ℕ := { op := fun _ _ ↦ 0 }
-  refine ⟨ℕ, hG, fun _ _ _ _ ↦ rfl, fun h ↦ ?_⟩
-  simpa [hG] using h 1 0
+theorem Equation46_not_implies_Equation4 : ∃ (G: Type) (_: Magma G), Equation46 G ∧ ¬ Equation4 G :=
+  ⟨ℕ, ⟨0⟩, fun _ _ _ _ ↦ rfl, fun h ↦ by simpa using h 1⟩
 
 @[equational_result]
 theorem Equation168_not_implies_Equation8 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation8 G :=
-  ⟨Bool × Bool, ⟨fun x y ↦ ⟨x.snd,y.fst⟩⟩, fun _ _ _ ↦ rfl, of_decide_eq_false rfl⟩
+  ⟨Bool × Bool, ⟨fun x y ↦ ⟨x.snd, y.fst⟩⟩, fun _ _ _ ↦ rfl, of_decide_eq_false rfl⟩
 
 @[equational_result]
 theorem Equation168_not_implies_Equation23 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation23 G :=
-  ⟨Bool × Bool, ⟨fun x y ↦ ⟨x.snd,y.fst⟩⟩, fun _ _ _ ↦ rfl, of_decide_eq_false rfl⟩
+  ⟨Bool × Bool, ⟨fun x y ↦ ⟨x.snd, y.fst⟩⟩, fun _ _ _ ↦ rfl, of_decide_eq_false rfl⟩
 
 @[equational_result]
 theorem Equation168_not_implies_Equation39 : ∃ (G : Type) (_ : Magma G), Equation168 G ∧ ¬ Equation39 G :=
-  ⟨Bool × Bool, ⟨fun x y ↦ ⟨x.snd,y.fst⟩⟩, by decide⟩
+  ⟨Bool × Bool, ⟨fun x y ↦ ⟨x.snd, y.fst⟩⟩, by decide⟩
 
 @[equational_result]
 theorem Equation387_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation39 G :=
@@ -801,41 +792,29 @@ theorem Equation387_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equatio
 -- The "and" magma on the two element set of booleans satisfies 387, but does not satisfy 40.
 @[equational_result]
 theorem Equation387_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation40 G := by
-  let hG : Magma Bool := { op := fun x y ↦ x && y }
-  exact ⟨Bool, hG, fun _ _ ↦ by simp [hG, Bool.and_comm], of_decide_eq_false rfl⟩
+  exact ⟨Bool, ⟨fun x y ↦ x && y⟩, fun _ _ ↦ by simp [Bool.and_comm], of_decide_eq_false rfl⟩
 
 @[equational_result]
 theorem Equation387_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation42 G := by
-  let hG : Magma Bool := { op := fun x y ↦ x || y }
-  exact ⟨Bool, hG, fun _ _ ↦ by simp [hG, Bool.or_comm], of_decide_eq_false rfl⟩
+  exact ⟨Bool, ⟨fun x y ↦ x || y⟩, fun _ _ ↦ by simp [Bool.or_comm], of_decide_eq_false rfl⟩
 
 @[equational_result]
-theorem Equation387_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation4512 G := by
-  let hG : Magma Real := { op := fun x y ↦ (x + y) / 2 }
-  refine ⟨ℝ, hG, fun _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]; ring
-  · specialize h 0 0 1; field_simp [hG] at h
+theorem Equation387_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation4512 G :=
+  ⟨ℝ, ⟨fun x y ↦ (x + y) / 2⟩, fun _ _ ↦ by ring_nf, fun h ↦ by specialize h 0 0 1; field_simp at h⟩
 
 @[equational_result]
-theorem Equation4512_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation42 G := by
-  let hG : Magma ℕ := { op := fun x y ↦ x + y }
-  refine ⟨ℕ, hG, fun _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]; abel
-  · simpa [hG] using h 0 0 1
+theorem Equation4512_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation42 G :=
+  ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ _ ↦ by abel_nf, fun h ↦ by simpa using h 0 0 1⟩
 
 @[equational_result]
-theorem Equation4512_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation4513 G := by
-  let hG : Magma ℕ := { op := fun x y ↦ x + y }
-  refine ⟨ℕ, hG, fun _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]; abel
-  · simpa [hG] using h 0 0 0 1
+theorem Equation4512_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation4513 G :=
+  ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ _ ↦ by abel_nf, fun h ↦ by simpa using h 0 0 0 1⟩
 
 @[equational_result]
 theorem Equation4513_not_implies_Equation4522 : ∃ (G: Type) (_: Magma G), Equation4513 G ∧ ¬ Equation4522 G := by
-  let hG : Magma ℕ := { op := fun x y ↦ if x = 0 then (if y ≤ 2 then 1 else 2) else x }
-  refine ⟨ℕ, hG, fun _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]; split_ifs <;> simp_all
-  · simpa [hG] using h 0 0 0 3 3
+  refine ⟨ℕ, ⟨fun x y ↦ if x = 0 then (if y ≤ 2 then 1 else 2) else x⟩, fun _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
+  · dsimp; split_ifs <;> simp_all
+  · simpa using h 0 0 0 3 3
 
 -- use "saturating addition" on the set {1, 2, 3}, where we add in the normal way but cap the result at 3 (x*y = min(3, x+y)).
 
@@ -861,10 +840,9 @@ theorem add3_ (a b c : Th) : add a (add b c) = Th.t3 := by
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation39 G := by
-  let hG : Magma ℕ := { op := fun x y ↦ if x = 1 ∧ y = 2 then 3 else 4 }
-  refine ⟨ℕ, hG, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]; split_ifs <;> simp_all
-  · simpa [hG] using h 2 1
+  refine ⟨ℕ, ⟨fun x y ↦ if x = 1 ∧ y = 2 then 3 else 4⟩, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
+  · dsimp; split_ifs <;> simp_all
+  · simpa using h 2 1
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation40 G := by
@@ -877,23 +855,68 @@ theorem Equation4582_not_implies_Equation40 : ∃ (G: Type) (_: Magma G), Equati
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation42 G := by
-  let hG : Magma ℕ := { op := fun x y ↦ if x = 0 ∧ y = 0 then 1 else 2 }
-  refine ⟨ℕ, hG, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]; split_ifs <;> simp_all
-  · simpa [hG] using h 0 0 1
+  refine ⟨ℕ, ⟨fun x y ↦ if x = 0 ∧ y = 0 then 1 else 2⟩, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
+  · dsimp; split_ifs <;> simp_all
+  · simpa using h 0 0 1
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation43 G := by
-  let hG : Magma ℕ := { op := fun x y ↦ if x = 1 ∧ y = 2 then 3 else 4 }
-  refine ⟨ℕ, hG, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]; split_ifs <;> simp_all
-  · simpa [hG] using h 1 2
+  refine ⟨ℕ, ⟨fun x y ↦ if x = 1 ∧ y = 2 then 3 else 4⟩, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
+  · dsimp; split_ifs <;> simp_all
+  · simpa using h 1 2
 
 @[equational_result]
 theorem Equation4582_not_implies_Equation46 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation46 G := by
-  let hG : Magma (Fin 3) := { op := fun x y ↦ if x = 2 ∧ y = 2 then 1 else 0 }
-  refine ⟨Fin 3, hG, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
-  · dsimp [hG]; split_ifs <;> simp_all
-  · simpa [hG] using h 0 0 2 2
+  refine ⟨Fin 3, ⟨fun x y ↦ if x = 2 ∧ y = 2 then 1 else 0⟩, fun _ _ _ _ _ _ ↦ ?_, fun h ↦ ?_⟩
+  · dsimp; split_ifs <;> simp_all
+  · simpa using h 0 0 2 2
+
+@[equational_result]
+theorem Equation43_not_implies_Equation910472 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation910472 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation3_not_implies_Equation910472 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation910472 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation43_not_implies_Equation930594 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation930594 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation3_not_implies_Equation930594 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation930594 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation43_not_implies_Equation914612 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation914612 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation3_not_implies_Equation914612 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation914612 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation43_not_implies_Equation916037 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation916037 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation3_not_implies_Equation916037 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation916037 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation43_not_implies_Equation936498 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation936498 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation3_not_implies_Equation936498 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation936498 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation3_not_implies_Equation921941 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation921941 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
+
+@[equational_result]
+theorem Equation43_not_implies_Equation921941 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation921941 G :=
+  ⟨Fin 3, ⟨fun x y ↦ 2 * x - y⟩, by decide⟩
 
 end Subgraph

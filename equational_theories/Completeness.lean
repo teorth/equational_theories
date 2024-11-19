@@ -13,21 +13,20 @@ theorem Soundness'_u {α β G : Type*} [Magma G] {Γ : Ctx α} {E : MagmaLaw β}
   induction h with
   | @SubstAx E mem σ =>
     intro H φ
-    simp [satisfiesPhi, SubstEval]
+    simp only [satisfiesPhi, SubstEval]
     exact H E mem _
   | Ref => exact fun _ ↦ congrFun rfl
   -- FIXME: try aesop here, might be a 1-liner
   | @Sym t u _ ih =>
     intro φ mset
-    simp only [satisfiesPhi] at *
+    rw [satisfiesPhi]
     symm; apply ih; trivial
   | Trans _ _ ih₁ ih₂ =>
     intro φ mset
-    simp [models, satisfiesPhi] at *
-    rw [ih₁, ih₂] <;> trivial
+    rw [satisfiesPhi, ih₁, ih₂] <;> trivial
   | Cong _ _ ih₁ ih₂ =>
     intro _ _
-    simp [models, satisfiesPhi, evalInMagma] at *
+    rw [satisfiesPhi, evalInMagma]
     rw [ih₁, ih₂] <;> trivial
 
 theorem Soundness' {α β : Type*} {Γ : Ctx α} {E : MagmaLaw β} (h : Γ ⊢' E) : Γ ⊧ E :=
@@ -45,15 +44,9 @@ def RelOfLaws {α} (β) (Γ : Ctx α) : FreeMagma β → FreeMagma β → Prop :
 -- eazy peezy since we basically have exactly the axioms.
 theorem RelOfLaws.isEquivalence {α} (β) (Γ : Ctx α) : Equivalence (RelOfLaws β Γ) := by
   constructor <;> simp [RelOfLaws]
-  case refl => intro x; constructor; apply derive'.Ref
-  case symm =>
-    intro x y h
-    exact ⟨derive'.Sym h⟩
-  case trans =>
-    intro x y z h₁ h₂
-    constructor
-    apply derive'.Trans
-      <;> trivial
+  case refl => exact fun _ ↦ ⟨derive'.Ref⟩
+  case symm => exact fun h ↦ ⟨derive'.Sym h⟩
+  case trans => exact fun h₁ h₂ ↦ ⟨derive'.Trans h₁ h₂⟩
 
 instance SetoidOfLaws {α} (β) (Γ : Ctx α) : Setoid (FreeMagma β) :=
   ⟨ RelOfLaws β Γ, RelOfLaws.isEquivalence β Γ ⟩
@@ -61,20 +54,28 @@ instance SetoidOfLaws {α} (β) (Γ : Ctx α) : Setoid (FreeMagma β) :=
 -- This is the quotient type we care about: it will be a model of Γ.
 def FreeMagmaWithLaws.{u} {α} (β : Type u) (Γ : Ctx α) : Type u := Quotient (SetoidOfLaws β Γ)
 
-@[simp]
 def embed {α β} (Γ : Ctx α) (x : FreeMagma β) : FreeMagmaWithLaws β Γ := Quotient.mk _ x
+
+@[elab_as_elim]
+theorem FreeMagmaWithLaws.inductionOn {α β} {Γ : Ctx α} {motive : FreeMagmaWithLaws β Γ → Prop}
+    (q : FreeMagmaWithLaws β Γ)
+    (h : (a : FreeMagma β) → motive (embed _ a))
+    : motive q := Quotient.inductionOn q h
+
+theorem FreeMagmaWithLaws.eq {α β} {Γ : Ctx α} {x y : FreeMagma β} :
+    embed Γ x = embed Γ y ↔ Nonempty (Γ ⊢' x ≃ y) := Quotient.eq
 
 def ForkWithLaws {α β} {Γ : Ctx α} :
     FreeMagmaWithLaws β Γ → FreeMagmaWithLaws β Γ → FreeMagmaWithLaws β Γ :=
   Quotient.lift₂ (λ x y ↦ embed Γ (x ⋆ y)) <| by
     simp only [HasEquiv.Equiv, Setoid.r, RelOfLaws, embed, Nonempty.forall]
-    intro x z y w d₁ d₂
-    apply Quotient.sound
-    simp only [HasEquiv.Equiv, Setoid.r, RelOfLaws]
-    exact ⟨derive'.Cong d₁ d₂⟩
+    exact fun x₁ x₂ y₁ y₂ d₁ d₂ ↦ (Quotient.sound ⟨derive'.Cong d₁ d₂⟩)
 
 protected instance FreeMagmaWithLaws.Magma {α} (β) (Γ : Ctx α) : Magma (FreeMagmaWithLaws β Γ) :=
   { op := ForkWithLaws }
+
+theorem embed_fork {α β} (Γ : Ctx α) (a b : FreeMagma β) :
+    embed Γ (a ◇ b) = embed Γ a ◇ embed Γ b := rfl
 
 theorem FreeMagmaWithLaws.evalInMagmaIsQuot {α β γ} (Γ : Ctx α)
     (t : FreeMagma β) (σ : β → FreeMagma γ) :
@@ -162,7 +163,7 @@ def FreeMagmaWithLaws.eval {α β G} {Γ : Ctx α} (φ : β → G) [Magma G] (mo
     intro a b
     simp only [HasEquiv.Equiv, SetoidOfLaws, RelOfLaws, Nonempty.forall]
     intro h
-    apply (Soundness' (E := a ≃ b))
+    apply Soundness' (E := a ≃ b)
     . exact h
     . exact modelsG)
 
@@ -179,6 +180,9 @@ def FreeMagmaWithLaws.evalHom {α β G} {Γ : Ctx α} (φ : β → G) [ginst : M
     repeat rw [Quotient.lift_mk]
     simp [evalInMagma]
 
+@[simp] theorem FreeMagmaWithLaws.evalHom_leaf {α β G} {Γ : Ctx α} (φ : β → G) [Magma G]
+    (modelsG : G ⊧ Γ) (a : β) : evalHom φ modelsG (embed _ (Leaf a)) = φ a := rfl
+
 lemma eq_app : ∀ α β (f g : α → β), f = g → ∀ x, f x = g x := fun _ _ _ _ a x ↦ congrFun a x
 
 -- FIXME: does this exist in mathlib?
@@ -190,11 +194,11 @@ lemma Quot.liftEq {α β} [s : Setoid α] (f g : Quotient s → β) (h : f ∘ (
 
 def FreeMagmaWithLaws.mkMor {α} (Γ : Ctx α) : FreeMagma α →◇ FreeMagmaWithLaws α Γ where
   toFun a := ⟦a⟧
-  map_op' := by simp [Magma.op, ForkWithLaws]
+  map_op' := by simp [Magma.op, ForkWithLaws, embed]
 
 -- FIXME: golf this!
 theorem FreeMagma.EvalFreeMagmaWithLawsUniversalProperty {α G} {Γ : Ctx α}
-(φ : α → G) [ginst : Magma G] (modelsG : G ⊧ Γ)(ψ : FreeMagmaWithLaws α Γ →◇ G) :
+(φ : α → G) [ginst : Magma G] (modelsG : G ⊧ Γ) (ψ : FreeMagmaWithLaws α Γ →◇ G) :
     ψ ∘ (⟦.⟧) ∘ Lf = φ → FreeMagmaWithLaws.eval φ modelsG = ψ := by
   intro eq
   let ψ' := (FreeMagmaWithLaws.mkMor Γ).comp ψ

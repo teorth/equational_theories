@@ -147,9 +147,9 @@ def find_counter_example(
         h.addConstr(eq2_solved_var <= sum(assignment_satisfied_vars))
 
     if eq2_list:
-        status = h.maximize(sum(eq2_solved_vars))
+        h.maximize(sum(eq2_solved_vars))
     else:
-        status = h.run()
+        h.run()
     if h.getModelStatus() != highspy.HighsModelStatus.kOptimal:
         return None
     if debug_output:

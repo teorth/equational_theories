@@ -1,5 +1,3 @@
-// Generate sample equations
-
 const ids = [
     "explicit_conjecture_false",
     "explicit_conjecture_true",
@@ -12,39 +10,15 @@ const ids = [
     "unknown"
 ];
 
-// Assuming arr is already defined
-// const arr = [...];  // Your RLE encoded array
-
-function decodeRLE(arr) {
-    const decoded = [];
-    for (let i = 0; i < arr.length; i += 2) {
-	const value = arr[i];
-	const count = arr[i + 1];
-	decoded.push(...Array(count).fill(value));
-    }
-    return decoded;
-}
-
-function mapThroughLUT(decoded) {
-    return decoded.map(index => ids[index]);
-}
-
-function reshape(array, rows, cols) {
-    const result = [];
-    for (let i = 0; i < rows; i++) {
-	result.push(array.slice(i * cols, (i + 1) * cols));
-    }
-    return result;
-}
-
-// Decode RLE
-const decoded = decodeRLE(arr);
-
-// Map through LUT
-const mapped = mapThroughLUT(decoded);
-
-// Reshape to 2694x2694
-const implications = reshape(mapped, 4694, 4694);
+const EXPLICIT_CONJECTURE_FALSE = 0;
+const EXPLICIT_CONJECTURE_TRUE = 1;
+const EXPLICIT_PROOF_FALSE = 2;
+const EXPLICIT_PROOF_TRUE = 3;
+const IMPLICIT_CONJECTURE_FALSE = 4;
+const IMPLICIT_CONJECTURE_TRUE = 5;
+const IMPLICIT_PROOF_FALSE = 6;
+const IMPLICIT_PROOF_TRUE = 7;
+const UNKNOWN = 8;
 
 const GRAPHITI_BASE_URL = "https://teorth.github.io/equational_theories/graphiti/"
 const FME_BASE_URL = "https://teorth.github.io/equational_theories/fme/"
@@ -67,6 +41,8 @@ const backButton = document.getElementById('backButton');
 const showOnlyExplicitProofs = document.getElementById('showOnlyExplicitProofs');
 const treatConjectedAsUnknownList = document.getElementById('treatConjectedAsUnknownList');
 const treatConjectedAsUnknownDetail = document.getElementById('treatConjectedAsUnknownDetail');
+const showFiniteGraphList = document.getElementById('showFiniteGraphList');
+const showFiniteGraphDetail = document.getElementById('showFiniteGraphDetail');
 const hideFullySolvedCheckbox = document.getElementById('hideFullySolved');
 
 let currentEquationIndex = null;
@@ -74,8 +50,33 @@ let currentEquationIndex = null;
 let showEquivalences = false;
 let filteredCachedItems = [];
 
+let isFiniteGraph = false;
 let cachedItems = [];
 let cachedItemElements = [];
+
+let arr = [];
+let equiv = [];
+
+let decoded = [];
+let implications = [];
+
+function decodeRLE(arr) {
+    const decoded = [];
+    for (let i = 0; i < arr.length; i += 2) {
+        const value = arr[i];
+        const count = arr[i + 1];
+        decoded.push(...Array(count).fill(value));
+    }
+    return decoded;
+}
+
+function reshape(array, rows, cols) {
+    const result = [];
+    for (let i = 0; i < rows; i++) {
+        result.push(array.slice(i * cols, (i + 1) * cols));
+    }
+    return result;
+}
 
 function downloadEquationListCSV() {
     showDownloadPopup();
@@ -91,11 +92,7 @@ function downloadEquationListCSV() {
 }
 
 function downloadRawImplicationsCSV() {
-    const text_to_number = {"explicit_proof_true":4, "implicit_proof_true":3,
-        "explicit_conjecture_true":2, "implicit_conjecture_true":1, "unknown":0,
-        "explicit_proof_false":-4, "implicit_proof_false":-3,
-        "explicit_conjecture_false":-2, "implicit_conjecture_false":-1,
-    }
+    const text_to_number=[-2, 2, -4, 4, -1, 1, -3, 3, 0];
     showDownloadPopup();
     const csv = implications.map(
         (equation) => equation.map(
@@ -157,17 +154,17 @@ function filterEquations() {
 
 
 // Pre-compute boolean flags for each status
-const statusFlags = {
-    explicit_conjecture_false: { explicit: true, conjecture: true, isTrue: false },
-    explicit_conjecture_true: { explicit: true, conjecture: true, isTrue: true },
-    explicit_proof_false: { explicit: true, conjecture: false, isTrue: false },
-    explicit_proof_true: { explicit: true, conjecture: false, isTrue: true },
-    implicit_conjecture_false: { explicit: false, conjecture: true, isTrue: false },
-    implicit_conjecture_true: { explicit: false, conjecture: true, isTrue: true },
-    implicit_proof_false: { explicit: false, conjecture: false, isTrue: false },
-    implicit_proof_true: { explicit: false, conjecture: false, isTrue: true },
-    unknown: { explicit: false, conjecture: false, isTrue: false }
-};
+const statusFlags = [
+    { explicit: true, conjecture: true, isTrue: false },
+    { explicit: true, conjecture: true, isTrue: true },
+    { explicit: true, conjecture: false, isTrue: false },
+    { explicit: true, conjecture: false, isTrue: true },
+    { explicit: false, conjecture: true, isTrue: false },
+    { explicit: false, conjecture: true, isTrue: true },
+    { explicit: false, conjecture: false, isTrue: false },
+    { explicit: false, conjecture: false, isTrue: true },
+    { explicit: false, conjecture: false, isTrue: false }
+];
 
 function isImplies(status, onlyExplicit = false, treatConjecturedAsUnknown = false) {
     const flags = statusFlags[status];
@@ -180,35 +177,52 @@ function isAntiImplies(status, onlyExplicit = false, treatConjecturedAsUnknown =
     const flags = statusFlags[status];
     if (onlyExplicit && !flags.explicit) return false;
     if (treatConjecturedAsUnknown && flags.conjecture) return false;
-    return !flags.isTrue && status !== 'unknown';
+    return !flags.isTrue && status != UNKNOWN;
 }
 function isUnknown(status, treatConjecturedAsUnknown = false) {
-    return status === 'unknown' || (treatConjecturedAsUnknown && status.includes('conjecture'));
+    const flags = statusFlags[status];
+    return status == UNKNOWN || (treatConjecturedAsUnknown && flags.conjecture);
 }
 
-function calculateStats(index, treatConjecturedAsUnknown = false) {
-    const stats = {implies: 0, impliedBy: 0, antiImplies: 0, antiImpliedBy: 0, unknown: 0, unknownBy: 0};
-    for (let i = 0; i < implications.length; i++) {
-        if (i === index) continue;
-        const forwardStatus = implications[index][i];
-        const backwardStatus = implications[i][index];
+function calculateStats(treatConjecturedAsUnknown = false) {
+    let sccStats = []
+    for (let i = 0; i < equiv.length; i++) {
+        let stats = {implies: 0, impliedBy: 0, antiImplies: 0, antiImpliedBy: 0, unknown: 0, unknownBy: 0};
+        for (let j = 0; j < equiv.length; j++) {
+            let adjustment = 0;
+            if (i == j) {
+                adjustment = 1;
+            }
 
-        if (isImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.implies++;
-        else if (isAntiImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.antiImplies++;
-        else stats.unknown++;
+            const forwardStatus = implications[equiv[i][0]][equiv[j][0]];
+            const backwardStatus = implications[equiv[j][0]][equiv[i][0]];
 
-        if (isImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.impliedBy++;
-        else if (isAntiImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.antiImpliedBy++;
-        else stats.unknownBy++;
+            if (isImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.implies += equiv[j].length - adjustment;
+            else if (isAntiImplies(forwardStatus, false, treatConjecturedAsUnknown)) stats.antiImplies += equiv[j].length - adjustment;
+            else stats.unknown += equiv[j].length - adjustment;
+
+            if (isImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.impliedBy += equiv[j].length - adjustment;
+            else if (isAntiImplies(backwardStatus, false, treatConjecturedAsUnknown)) stats.antiImpliedBy += equiv[j].length - adjustment;
+            else stats.unknownBy += equiv[j].length - adjustment;
+        }
+        sccStats.push(stats)
     }
-    return stats;
-}
 
+    let overallStats = []
+    for (let i = 0; i < equiv.length; i++) {
+        for (const subidx of equiv[i]) {
+            overallStats[subidx] = sccStats[i]
+        }
+    }
+
+    return overallStats
+}
 
 function initializeEquationList() {
     const treatConjecturedAsUnknown = treatConjectedAsUnknownList.checked;
+    const overallStats = calculateStats(treatConjecturedAsUnknown)
     cachedItems = equations.map((eq, index) => {
-        const stats = calculateStats(index, treatConjecturedAsUnknown);
+        const stats = overallStats[index];
         const element = document.createElement('div');
         element.className = 'equation-item';
         element.dataset.index = index;
@@ -244,8 +258,9 @@ function initializeEquationList() {
 
 function updateEquationListStats() {
     const treatConjecturedAsUnknown = treatConjectedAsUnknownList.checked;
+    const overallStats = calculateStats(treatConjecturedAsUnknown)
     cachedItems.forEach((item) => {
-        const stats = calculateStats(item.index, treatConjecturedAsUnknown);
+        const stats = overallStats[item.index];
         item.stats = stats;
         item.statElements.implies.textContent = stats.implies;
         item.statElements.impliedBy.textContent = stats.impliedBy;
@@ -258,12 +273,24 @@ function updateEquationListStats() {
     filterEquations();
 }
 
-function renderEquationList(sortBy = 'index', sortOrder = 'asc') {
+function updateUrl(queryString) {
+    queries = []
+    if (queryString !== undefined) {
+        queries.push(String(queryString));
+    }
+    if (isFiniteGraph) {
+        queries.push("finite");
+    }
 
-    // Get the current URL
-    let currentURL = window.location.href;
-    // Update the URL without reloading the page
-    history.pushState(null, '', currentURL.split("?")[0]);
+    let nextUrl = window.location.href.split("?")[0];
+    if (queries.length > 0) {
+        nextUrl += "?" + queries.join("&");
+    }
+    history.pushState(null, '', nextUrl);
+}
+
+function renderEquationList(sortBy = 'index', sortOrder = 'asc') {
+    updateUrl(undefined);
 
     const header = equationList.querySelector('.header');
 
@@ -282,24 +309,9 @@ function renderEquationList(sortBy = 'index', sortOrder = 'asc') {
     equationList.appendChild(fragment);
 }
 
-// Call this function once when the page loads
-initializeEquationList();
-
 
 function renderImplications(index) {
-    // Get the current URL
-    let currentURL = window.location.href;
-
-    // Check if there's already a query string
-    if (currentURL.indexOf('?') > -1) {
-	    currentURL = currentURL.split('?')[0] + '?' + (index+1);
-    } else {
-	    currentURL += '?' + (index+1);
-    }
-
-
-    // Update the URL without reloading the page
-    history.pushState(null, '', currentURL);
+    updateUrl(index+1);
 
     if (index === null || index < 0 || index >= equations.length) {
         console.error('Invalid equation index:', index);
@@ -379,23 +391,24 @@ function renderImplications(index) {
 	const backwardStatus = implications[index][i];
 
 	    [forwardStatus, backwardStatus].forEach((status, statusIndex) => {
-            const isConjectured = status.includes('conjecture');
+            const isConjectured = statusFlags[status].conjecture
 	        let maybe_prove;
             let forward = statusIndex == 1 ?  index : i;
             let backward = statusIndex == 1 ?  i : index;
+            let finite = isFiniteGraph ? "&finite" : "";
             if (isUnknown(status, false)) {
 	            let proofhref = gen_proof_url(forward, backward);
                 maybe_prove = ` <a href='${proofhref}'>Prove This!</a>`;
             } else if (isUnknown(status, true)) { // conjectured
 	            let proofhref = gen_proof_url(forward, backward, isImplies(status, false, false) ? "yes" : "no");
-                maybe_prove = ` <a href='${proofhref}'>Prove This!</a>`;
+                maybe_prove = ` <a href='${proofhref}'>Prove This!</a> <a href="show_proof.html?pair=${forward+1},${backward+1}${finite}" target="_blank">Show Proof</a>`;
             } else {
                 var does_implies = isImplies(status, false, false);
                 let proofhref;
                 proofhref = gen_proof_url(forward, backward, does_implies ? "yes" : "no");
-                maybe_prove = ` <a href='${proofhref}'>Try This!</a>`;
+                maybe_prove = ` <a href='${proofhref}'>Try This!</a> <a href="show_proof.html?pair=${forward+1},${backward+1}${finite}" target="_blank">Show Proof</a>`;
             }
-            const item = `<div uid=${i} class="implication-item ${isspecial} ${status} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}${maybe_prove}</div>`;
+            const item = `<div uid=${i} class="implication-item ${isspecial} ${ids[status]} ${isConjectured ? 'conjectured' : ''}">${eq}${more_same}${maybe_prove}</div>`;
 
             if (isImplies(status, onlyExplicit, treatConjecturedAsUnknown)) {
 		        statusIndex === 0 ? impliedBy.push(item) : implies.push(item);
@@ -408,14 +421,18 @@ function renderImplications(index) {
 	    });
     });
 
-  selectedEquationGraphitiLinks.innerHTML = `<br>(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1}&highlight_red=${index+1}">implies</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1}&highlight_red=${index+1}">implied by</a> of the equation)`
+  let graphiti_url = `${GRAPHITI_BASE_URL}?render=true&highlight_red=${index+1}`
+  if (isFiniteGraph) {
+      graphiti_url += "&show_finite_graph=on";
+  }
+  selectedEquationGraphitiLinks.innerHTML = `<br>(Visualize <a target="_blank" href="${graphiti_url}&implies=${index+1}">implies</a> and <a target="_blank" href="${graphiti_url}&implied_by=${index+1}">implied by</a> of the equation, or see <a target="_blank" href="${graphiti_url}&neighborhood_of=${index+1}&neighborhood_of_distance=1">1</a>, <a target="_blank" href="${graphiti_url}&neighborhood_of=${index+1}&neighborhood_of_distance=2">2</a>, <a target="_blank" href="${graphiti_url}&neighborhood_of=${index+1}&neighborhood_of_distance=3">3</a> graph edges away)`
   if (unknownImpliesEqNum.length > 0) {
     const implies = unknownImpliesEqNum.map(x => x + 1)
-    selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1},${implies.join(",")}&highlight_red=${index+1}&highlight_blue=${implies.join(",")}&show_unknowns_conjectures=on">implies</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1},${implies.join(",")}&highlight_red=${index+1}&highlight_blue=${implies.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknowns+conjectures</a>)`
+    selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${graphiti_url}&implies=${index+1},${implies.join(",")}&highlight_blue=${implies.join(",")}&show_unknowns_conjectures=on">implies</a> and <a target="_blank" href="${graphiti_url}&implied_by=${index+1},${implies.join(",")}&highlight_blue=${implies.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknowns+conjectures</a>)`
   }
   if (unknownImpliedByEqNum.length > 0) {
     const impliedby = unknownImpliedByEqNum.map(x => x + 1)
-    selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implies=${index+1},${impliedby.join(",")}&highlight_red=${index+1}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implies</a> and <a target="_blank" href="${GRAPHITI_BASE_URL}?render=true&implied_by=${index+1},${impliedby.join(",")}&highlight_red=${index+1}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknown bys+conjectured bys</a>)`
+    selectedEquationGraphitiLinks.innerHTML += `<br />(Visualize <a target="_blank" href="${graphiti_url}&implies=${index+1},${impliedby.join(",")}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implies</a> and <a target="_blank" href="${graphiti_url}&implied_by=${index+1},${impliedby.join(",")}&highlight_blue=${impliedby.join(",")}&show_unknowns_conjectures=on">implied by</a> of the equation+unknown bys+conjectured bys</a>)`
   }
 
   smallest_magma = smallest_magma_data[index+1]
@@ -440,7 +457,48 @@ function renderImplications(index) {
             window.scrollTo(0, 0);  // Scroll to the top of the page
         });
     });
+}
 
+function urlParams() {
+    function isNumber(str) {
+        return /^[+-]?(\d+(\.\d*)?|\.\d+)$/.test(str);
+    }
+
+    const params = Object.fromEntries(
+        new URLSearchParams(window.location.search).entries(),
+    );
+
+    if (params == {}) return {};
+    for (p of Object.keys(params)) {
+        if (isNumber(p) ) {
+            params.equation = p;
+        }
+    }
+
+    return params;
+}
+
+function loadGraphAndRender(jsondata) {
+    arr = jsondata["rle_encoded_array"]
+    equiv = jsondata["equivalence_classes"]
+
+    // Decode RLE
+    decoded = decodeRLE(arr);
+
+    // Reshape to 4694x4694
+    implications = reshape(decoded, 4694, 4694);
+
+    let params = urlParams();
+    if (params.equation) {
+        renderImplications(params.equation - 1);
+        showPage('detailPage');
+        requestIdleCallback(() => {
+            initializeEquationList();
+        })
+    } else {
+        initializeEquationList();
+        renderEquationList();
+    }
 }
 
 equationList.addEventListener('click', (e) => {
@@ -500,34 +558,78 @@ treatConjectedAsUnknownList.addEventListener('change', () => {
     renderEquationList();
 });
 
+function loadAndDisplayGraph(file) {
+    return fetch(file)
+        .then(async (response) => {
+            if (!response.ok) {
+                //console.error(`HTTP error! Status: ${response.status}`);
+                throw(`HTTP error! Status: ${response.status}`);
+            }
+
+            const jsondata = await response.json();
+
+            loadGraphAndRender(jsondata)
+        })
+}
+
+function toggleFinite(is_finite) {
+    if (is_finite) {
+        document.getElementById("finiteGreenBand").style.display = "block";
+        isFiniteGraph = true;
+    } else {
+        document.getElementById("finiteGreenBand").style.display = "none";
+        isFiniteGraph = false;
+    }
+    showFiniteGraphList.checked = showFiniteGraphDetail.checked = isFiniteGraph;
+}
+
+showFiniteGraphDetail.addEventListener('change', () => {
+    toggleFinite(showFiniteGraphDetail.checked)
+    let graph_file = showFiniteGraphDetail.checked ? "finite_graph.json" : "graph.json";
+    loadAndDisplayGraph(graph_file).catch((e) => {
+        alert(e);
+        showFiniteGraphList.checked ^= 1;
+        showFiniteGraphDetail.checked ^= 1;
+        toggleFinite(showFiniteGraphDetail.checked)
+    });
+});
+
+showFiniteGraphList.addEventListener('change', () => {
+    toggleFinite(showFiniteGraphList.checked)
+    let graph_file = showFiniteGraphDetail.checked ? "finite_graph.json" : "graph.json";
+    loadAndDisplayGraph(graph_file).catch((e) => {
+        alert(e);
+        showFiniteGraphList.checked ^= 1;
+        showFiniteGraphDetail.checked ^= 1;
+        toggleFinite(showFiniteGraphDetail.checked)
+    });
+});
+
 hideFullySolvedCheckbox.addEventListener('change', () => {
     filterEquations();
     renderEquationList();
 });
 
-let currentURL = window.location.href;
-if (currentURL.indexOf('?') > -1) {
-    renderImplications(currentURL.split('?')[1]-1);
-    showPage('detailPage');
-} else {
-    renderEquationList();
-}
-
-
 // Function to handle URL changes (including back/forward navigation)
 function handleUrlChange() {
-    let currentURL = window.location.href;
-    if (currentURL.indexOf('?') > -1) {
-        renderImplications(currentURL.split('?')[1]-1);
+    let params = urlParams();
+    if (params.equation) {
+        renderImplications(params.equation-1);
         showPage('detailPage');
     } else {
-	renderEquationList();
+        renderEquationList();
         showPage('listPage');
     }
 }
 
 window.addEventListener('popstate', handleUrlChange);
 
+if (urlParams().finite !== undefined) {
+    toggleFinite(true);
+    loadAndDisplayGraph('finite_graph.json').catch((e) => alert(e));
+} else {
+    loadAndDisplayGraph('graph.json').catch((e) => alert(e));
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     const timestamp = last_updated.timestamp * 1000; // Convert to milliseconds

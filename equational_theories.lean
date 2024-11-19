@@ -1,4 +1,5 @@
 import equational_theories.Asterix
+import equational_theories.Closure
 import equational_theories.Completeness
 import equational_theories.Compactness
 import equational_theories.FreeMagmaImplications
@@ -7,6 +8,7 @@ import equational_theories.MagmaOp
 import equational_theories.Subgraph
 import equational_theories.Equations.All
 import equational_theories.Equations.LawsComplete
+import equational_theories.Duals.All
 import equational_theories.InfModel
 import equational_theories.Generated
 import equational_theories.Counting
@@ -15,6 +17,7 @@ import equational_theories.Preorder
 import equational_theories.SmallMagmas
 import equational_theories.StringMagmas
 import equational_theories.Homomorphisms
+import equational_theories.WeakCentralGroupoids
 import equational_theories.CentralGroupoids
 import equational_theories.Z3Counterexamples
 import equational_theories.LinearOps
@@ -25,3 +28,5 @@ import equational_theories.Confluence4
 import equational_theories.Conjectures
 import equational_theories.ManuallyProved
 import equational_theories.ThreeC2
+import equational_theories.Obelix
+import equational_theories.Definability

@@ -74,6 +74,8 @@ instance {α} [Lean.ToExpr α] [ToLevel.{u}] : ToExpr (@Law.MagmaLaw.{u} α) whe
 
 end
 
+def equationsNamespace : Name := .anonymous
+
 /--
 For a more concise syntax, but more importantly to speed up elaboration (where type inference
 for each `◇` makes processing this file very slow) we defined custom syntax for defining
@@ -81,6 +83,7 @@ equations, and a custom elaborator that instantiates the instante parameter of `
 -/
 elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Command.liftTermElabM do
   let ns ← getCurrNamespace
+  unless ns = equationsNamespace do throwError "equation must be in namespace {equationsNamespace}"
   let eqName := ns.str s!"Equation{i.getNat}"
   let eqStx := mkNullNode #[tk, i]
   let lawName := ns.str s!"Law{i.getNat}"
@@ -92,8 +95,8 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
     | none => docs
     | some more => s!"{docs}\n\n---\n{more}"
   let ranges := {
-    range := ← getDeclarationRange (← getRef)
-    selectionRange := ← getDeclarationRange eqStx }
+    range := (← getDeclarationRange? (← getRef)).getD default
+    selectionRange := (← getDeclarationRange? eqStx).getD default}
   let addMarkup name := do
     addDocString' name docs
     Lean.addDeclarationRanges name ranges
@@ -136,7 +139,7 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
   addAndCompile <| .thmDecl {
     name := thmName
     levelParams := [`u]
-    type := q(∀ (G : Type u) [Magma G], G ⊧ $lawConst ↔ $eqConst G)
+    type := q(∀ {G : Type u} [Magma G], G ⊧ $lawConst ↔ $eqConst G)
     value := q(models_iff_n.{u} $lawConst $n $this)
   }
   addMarkup thmName

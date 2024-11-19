@@ -5226,7 +5226,7 @@ var $author$project$Main$init = F3(
 		var maybeMagma = $author$project$Main$parseQuery(url);
 		var magma = A2($elm$core$Maybe$withDefault, '', maybeMagma);
 		return _Utils_Tuple2(
-			{K: url, L: key, M: '', B: $author$project$Main$ModelInfoNone, t: magma, Z: version},
+			{L: url, M: key, N: '', B: $author$project$Main$ModelInfoNone, t: magma, Z: version},
 			$elm$core$Platform$Cmd$none);
 	});
 var $elm$json$Json$Decode$string = _Json_decodeString;
@@ -5253,7 +5253,7 @@ var $author$project$Main$checkMagmaListener = _Platform_incomingPort(
 						$elm$json$Json$Decode$andThen,
 						function (novel) {
 							return $elm$json$Json$Decode$succeed(
-								{R: novel, U: refuted, N: satisfied});
+								{R: novel, U: refuted, G: satisfied});
 						},
 						A2(
 							$elm$json$Json$Decode$field,
@@ -5514,7 +5514,7 @@ var $author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{K: url, t: magma}),
+							{L: url, t: magma}),
 						$elm$core$Platform$Cmd$none);
 				case 1:
 					var urlRequest = msg.a;
@@ -5524,7 +5524,7 @@ var $author$project$Main$update = F2(
 							model,
 							A2(
 								$elm$browser$Browser$Navigation$pushUrl,
-								model.L,
+								model.M,
 								$elm$url$Url$toString(url)));
 					} else {
 						var href = urlRequest.a;
@@ -5544,15 +5544,15 @@ var $author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{M: newInput}),
+							{N: newInput}),
 						$elm$core$Platform$Cmd$none);
 				case 2:
 					var encodedInput = $elm$url$Url$percentEncode(model.t);
-					var currentPath = model.K.bc;
+					var currentPath = model.L.bc;
 					var newUrl = currentPath + ('?magma=' + encodedInput);
 					return _Utils_Tuple2(
 						model,
-						A2($elm$browser$Browser$Navigation$pushUrl, model.L, newUrl));
+						A2($elm$browser$Browser$Navigation$pushUrl, model.M, newUrl));
 				case 5:
 					var _v2 = $author$project$Parsing$parseInput(model.t);
 					if (_v2.$ === 1) {
@@ -5718,7 +5718,24 @@ var $author$project$Main$viewLeftPanel = function (model) {
 };
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$html$Html$pre = _VirtualDom_node('pre');
+var $elm$html$Html$a = _VirtualDom_node('a');
 var $elm$core$String$filter = _String_filter;
+var $author$project$Main$graphitiEq = function (_v0) {
+	var a = _v0.a;
+	return $elm$core$String$fromInt(a) + ',';
+};
+var $author$project$Main$graphitiLink = function (tags) {
+	return '/equational_theories/graphiti/?render=true&limit_equations=' + A2(
+		$elm$core$String$join,
+		'+',
+		A2($elm$core$List$map, $author$project$Main$graphitiEq, tags));
+};
+var $elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
 var $author$project$Main$matchInput = F2(
 	function (matcher, tag) {
 		var num = tag.a;
@@ -5736,6 +5753,7 @@ var $author$project$Main$matchInput = F2(
 				},
 				eqn));
 	});
+var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $author$project$Main$ExploreEquation = function (a) {
 	return {$: 6, a: a};
@@ -6040,7 +6058,7 @@ var $author$project$Main$viewExportNovel = F3(
 											_Utils_ap(tableLine, prov))
 										]))
 								])),
-							$elm$html$Html$text('Finally, re-run `python3 generate-lean.py`!')
+							$elm$html$Html$text('Finally, re-run `python3 equational_theories/Generated/FinSearch/src/generate_lean.py`!')
 						]));
 			}
 		}
@@ -6110,10 +6128,23 @@ var $author$project$Main$viewModelInfo = F3(
 					_List_Nil,
 					_List_fromArray(
 						[
-							$elm$html$Html$text('Satisfies: ')
+							A2(
+							$elm$html$Html$a,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$href(
+									$author$project$Main$graphitiLink(
+										matching(mi.G))),
+									$elm$html$Html$Attributes$target('_blank')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Satisfies')
+								])),
+							$elm$html$Html$text(': ')
 						])),
 					$author$project$Main$viewEquationTags(
-					matching(mi.N)),
+					matching(mi.G)),
 					A2(
 					$elm$html$Html$h3,
 					_List_Nil,
@@ -6124,7 +6155,7 @@ var $author$project$Main$viewModelInfo = F3(
 					$author$project$Main$viewEquationTags(
 					matching(mi.U)),
 					$author$project$Main$viewMatchingFilter(matcher),
-					A3($author$project$Main$viewExportNovel, table, mi.N, mi.R)
+					A3($author$project$Main$viewExportNovel, table, mi.G, mi.R)
 				]));
 	});
 var $author$project$Main$viewSpinner = A2(
@@ -6243,7 +6274,7 @@ var $author$project$Main$viewRightPanel = function (model) {
 					]),
 				_List_fromArray(
 					[
-						A3($author$project$Main$viewModelInfo, model.t, model.M, mi)
+						A3($author$project$Main$viewModelInfo, model.t, model.N, mi)
 					]));
 	}
 };

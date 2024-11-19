@@ -22,7 +22,7 @@ for some function $f: G \to G$.  Thus the translations on $G$ become magma isomo
 
 \begin{example}
   Linear magmas $x\op y = ax+by$ on a field $(\mathbb{F},+,-,\cdot,0,1)$ are translation-invariant if $a + b = 1$,
-  since $(\mathbb{F},+,-,0)$ forms an Abelian group, and one can set $f(x) = bx$.
+  since $(\mathbb{F},+,-,0)$ forms an Abelian group, and one can set $f(x) = -ax$.
 \end{example}
 
 Note that if an example of the latter sort suffices to refute the implication between $P$ and $Q$ then
@@ -38,7 +38,7 @@ For instance, writing $x = y+h$, we have
 $$ y \op x = x + f(h)$$
 $$ x \op (y \op x) = x + f(h) + f^2(h)$$
 $$ y \op (x \op (y \op x)) = x + f(h) + f^2(h) + f( h + f(h) + f^2(h) )$$
-where $f^2 = f \circ f$, so the Asterix equation for such magmas simplifies to the univariant functional equation
+where $f^2 = f \circ f$, so the Asterix equation (\Cref{eq65}) for such magmas simplifies to the univariant functional equation
 \begin{equation}\label{fh}
    f(h) + f^2(h) + f( h + f(h) + f^2(h) ) = 0
 \end{equation}
@@ -194,6 +194,70 @@ which is \Cref{eq1491}.
 
 A very similar argument shows that a finite magma that obeys the Obelix law has $z \mapsto y \op z$ injective, hence surjective, and then obeys the Asterix law.
 
+\section{Obelix}
+Obelix magmas are those obeying equation 1491, \Cref{eq1491}:
+$$x = (y \op x) \op (y \op (y \op x))$$
+Obelix is not particularly {\em structurally} similar to an Asterix, besides their shared resistance
+to small counterexamples. A related set of ideas can be used to construct an Obelix that does not
+obey some given other equations. The common idea is to define the magma operation
+$$ x \op y = x + f(y-x) = x + f(h)$$
+on some underlying Abelan group. For the case of Obelix, the resulting functional equation is
+\begin{equation}\label{fh2}
+  f(f^{2}(h) - f(h)) = h - f(h)
+\end{equation}
+What differs is how we must proceed in order to satisfy this equation. We again start with a partial function $f$,
+picking some initial support that will suffice to invalidate the other equation we want to show a nonimplication for.
+We will progressively add more elements to the support (assuming our group is countable) until the function
+is total, and we will maintain some invariants:
+\begin{definition}\label{partial-solution2}  A \emph{partial solution} for an Obelix is a partial function $f : G \to G$
+with the properties:
+\begin{itemize}
+  \item $f$ has finite domain.
+  \item $f$ is injective.
+  \item $f$ maps the identity (of $G$, so, 0) to the identity.
+  \item If $x$ is in the domain of $f$, and $f(x)$ is in the domain, then so is $f^2(x) - f(x)$.
+  \item If $x$ is in the domain of $f$, and $f(x)$ is in the domain, then $f(f^2(x) - f(x)) = f(x) - x$. This is well-defined by property (4).
+  \item The function $x - f(x)$, which is defined on the same domain as $f$, is injective.
+  \item If $x$ is in the domain of $f$ but $f(x)$ isn't in the domain, then $x - f(x)$ isn't in the domain or image of $f$.
+\end{itemize}
+\end{definition}
+It's easiest to work over the group of finitely supported functions from $\mathbb{N}$ (or any other
+countable set) to $\mathbb{Z}$. When picking fresh elements, it's important not only to take something
+outside of the group closure of the elements already in $f$, but actually out of their $\mathbb{Q}$-span,
+because we need guarantees that the fresh element $g$ doesn't obey relations like $2g = x$ as well.
+
+Any partial solution can be extended to a complete solution.
+\begin{lemma}\label{obelix-extend}\uses{partial-solution2}
+For any $E\in \mathscr{E}$ and any $a\in G$, there is an extension $E\subseteq E'\in \mathscr{E}$ where the functional equation holds for $a$.
+\end{lemma}
+\begin{proof}
+{\bf Case 1}: Assume $(a,b)\in E$ for some $b\in G$.
+
+If $b\in {\rm dom}(E)$, then by condition (4) we are already done.  So reduce to the case when $b\notin {\rm dom}(E)$.  In particular, by (2) and (3) we know $a,b\neq 1$, and also by (6) we know that $ab^{-1}\notin {\rm dom}(E)\cup{\rm im}(E)$ (and is not $1$).
+
+Take $c$ to be a generator of $G$ not appearing in the reduced form of any entry in $E$, and set $E':=E\cup\{(b,c),(cb^{-1},ab^{-1}\}$.  Conditions (1), (3), and (5) are immediate.  Condition (2) is also clear, where injectivity needs $ab^{-1}\notin {\rm im}(E)$.   Condition (4) is also easy to check, using the fact that $E$ is injective, $cb^{-1}\neq c$, and $ab^{-1}\notin {\rm dom}(E)$.
+
+Finally, for condition (6), a finite check works.  The main case is checking that $ca^{-1}\notin {\rm dom}(E')\cup {\rm im}(E')$.  This is clear since $a\neq 1$ and $a\neq b$ (by condition (5) for $E$).  One should also note that by condition (5) (and the fact that $E$ is a function), there is no pair $(x,y)\in E$ with $(x,y)\neq (a,b)$ and  $xy^{-1}=ab^{-1}$, so we don't ruin condition (6) for pairs already in $E$.
+
+{\bf Case 2}: Assume $a\notin {\rm dom}(E)$.  If $(x,a)\in E$ for some (unique by (2)) $x\in G$, then applying Case 1 to $x$, we reduce to the case when $a\in {\rm dom}(E)$.
+
+Thus, we may consider the case when $a\notin {\rm dom}(E)\cup {\rm im}(E)$.  If $(x,y)\in E$ with $xy^{-1}=a$, then by applying Case 1 to $x$, we get $a\in {\rm im}(E)$, and reduce to a previously considered case.  So, we may assume there is no such pair $(x,y)$.  Fixing $b$ to be a generator of $G$ not appearing in the reduced forms for the entries in $E$, nor in $a$, then after passing to $E\cup\{(a,b)\}\in \mathscr{E}$ we again reduce to Case 1.
+\end{proof}
+The actual mechanical proof requires checking roughly a few dozen statements of the form "the fresh
+element is not related linearly to the existing elements". Each is individually obvious, and easily
+discharged.
+
+By picking an appropriate partial solution, we can then show that there are Obelix magmas that are not Asterix.
+\begin{corollary}\uses{eq65,eq1491,obelix-extend}
+There is an Obelix magma that is not Asterix (equation 65).
+\end{corollary}
+\begin{proof}
+This requires picking an initial set that still obeys the correct initial closure properties. Letting
+$x_1$, $x_2$, $x_3$ and $x_4$ be independent elements, then taking the function
+$$\{(0,0), (x_1,x_2), (x_2-x_1, x_3), (x_1+x_3, x_4)\}$$
+already has elements that contradict the Asterix equation, and it's a valid partial solution. By extending
+it, we can get an Obelix that does not obey the Asterix equation.
+\end{proof}
 
 \section{Greedy algorithm constructions}\label{greedy-section}
 
@@ -330,7 +394,7 @@ the modified base model technique. Start with the infinite model $(\mathbb{Z},\o
 $$ x\op y = \begin{cases} x+1 & \text{if } x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases} $$
 A case analysis shows that the magma $(\mathbb{Z},\op)$  satisfies both \Cref{eq1659} and \Cref{eq4315}.
 We will eventually \emph{modify} it by setting
-$$ x \op' y = \begin{cases} 0 & \text{if } x=0,\: x,y \text{ have the same parity} \\  x+1 & \text{if } x\neq 0,\: x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases} $$
+$$x \op' y = \begin{cases} 0 & \text{if } x=0,\: x,y \text{ do not have the same parity} \\  x+1 & \text{if } x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases}$$
 and checking that $(\mathbb{N}, \op' )$ satisfies \Cref{eq1659} but refutes \Cref{eq4315}.
 
 One finds these modifications using the following strategy:
@@ -373,16 +437,11 @@ operation is nonnegative whenever the operands are nonnegative. This finishes th
   There exists a magma which satisfies \Cref{eq1659} and not \Cref{eq4315}.
 \end{theorem}
 
-The result of a modified base model construction can be a finite modification (when $\op$ and $\op'$
+The result of a modified base model construcblution can be a finite modification (when $\op$ and $\op'$
 differ in finitely many inputs) or one in which they differ in infinitely many coefficients. Note that if the base
 model $(M,\op)$ was obtained by a greedy construction, and $(M,\op')$ is a finite modification, then the
 modified model could also have been obtained using the same greedy construction. It is not surprising that
 more difficult refutations using this construction tend to require the latter sort of modification.
-
-
-\subsection{Greedy constructions}
-
-{\bf add a description of the greedy counterexample for 1703,3 here once issue 506 is resolved}
 
 
 \section{The Dupont equation}\label{dupont-section}
@@ -611,22 +670,50 @@ This is of course non-surjective. The magma operation will be constructed as fol
 It is a routine matter to verify \eqref{fdef} and \eqref{xop}, so that equation 3342 holds.  However, one can check that the four laws in the conclusion fail with $x=y=1$.
 \end{proof}
 
-Another ad hoc construction concerns equation 3475,
-$$ x \op x = y \op ((x \op y) \op y),$$
-which we write as
-$$ x^2 = L_y R_y^2 x$$
-where $x^2 = x \op x$, $L_y x = y \op x$, and $R_y x = x \op y$.
+%\begin{theorem}[3475 construction]\label{3475-construct}
+%There exists a magma that obeys equation 3475,
+%$$ x \op x = y \op ((x \op y) \op y),$$
+%but does not obey equation 3659,
+%$$x \op x = (x \op x) \op (x \op x)$$
+%\end{theorem}
+%
+%\begin{proof} We will give a construction where $x \op x$ takes on only two values (and depends on the ``sign'' of $x$), while $x \op y$ depends primarily on $y$ and the sign of $x$.
+%
+%We can rewrite 3475 as
+%$$ x^2 = L_y R_y^2 x$$
+%where $x^2 = x \op x$, $L_y x = y \op x$, and $R_y x = x \op y$. Similarly, 3659 can be rewritten as $x^2 \op x^2 = x^2$.
+%
+%For our model, we take $G$ to be the non-zero integers $\Z^\times$.  The operation $R_y x = x \op y$ is defined to equal
+%\begin{itemize}
+%\item $2y$ if $x$ has the opposite sign to $y$,
+%\item $\mathrm{sgn}(x)$ if $y = 3x$,
+%\item $-\mathrm{sgn}(x)$ if $y = x, 2x, 5x$,
+%\item $3y$ if $x=2y$,
+%\item $5y$ otherwise.
+%\end{itemize}
+%One can then see that $x^2$ is equal to $-\mathrm{sgn}(x)$ %for all $x$.  In particular,
+%$$ x^2 \op x^2 = -\mathrm{sgn}(x^2) = \mathrm{sgn}(x) \neq %- \mathrm{sgn}(x) = x^2$$
+%so that equation 3659, $x^2 = x^2 \op x^2$, fails.
 
-For our model, we take $G$ to be the non-zero integers $\Z^\times$.  The operation $R_y x = x \op y$ is defined to equal
-\begin{itemize}
-\item $2y$ if $x$ has the opposite sign to $y$,
-\item $\mathrm{sgn}(x)$ if $y = 3x$,
-\item $-\mathrm{sgn}(x)$ if $y = x, 2x, 5x$,
-\item $3y$ if $x=2y$,
-\item $5y$ otherwise.
-\end{itemize}
-One can then see that $x^2$ is equal to $-\mathrm{sgn}(x)$ for all $x$.  In particular,
-$$ x^2 \op x^2 = -\mathrm{sgn}(x^2) = \mathrm{sgn}(x) \neq - \mathrm{sgn}(x) = x^2$$
-so that equation 3659, $x^2 = x^2 \op x^2$, fails.
+%Now we verify 3475.  A routine case check shows that when $x$ has the opposite sign to $y$, $R_y^2 x = 3y$; and when $x$ has the same sign to $y$, $R_y^2 x$ is equal to $2y$ or $5y$.  But then $L_y R_y^2 x$ is equal to $\mathrm{sgn}(y)$ if $x$ has the opposite sign to $y$, and $-\mathrm{sgn}(y)$ if $x$ has the same sign to $y$, giving 3475.
+%\end{proof}
 
-Now we verify 3475.  A routine case check shows that when $x$ has the opposite sign to $y$, $R_y^2 x = 3y$; and when $x$ has the same sign to $y$, $R_y^2 x$ is equal to $2y$ or $5y$.  But then $L_y R_y^2 x$ is equal to $\mathrm{sgn}(y)$ if $x$ has the opposite sign to $y$, and $-\mathrm{sgn}(y)$ if $x$ has the same sign to $y$, giving 3475.
+
+\begin{theorem}[1437 example]\label{1437-thm}  There exists a magma that obeys Equation 1437,
+  $$ x = (x \op x) \op (y \op (z \op x)),$$
+but does not obey equation 4269,
+$$ x \op (x \op x) = x \op (y \op x).$$
+\end{theorem}
+
+\begin{proof} A first attempt would be the operation $i \op j := j+1$ on $\Z/3\Z$; this obeys 1437, but unfortunately also obeys 4269.  However, an "extension" of this operation will work. Namely, we take the carrier $G = \N \times \Z/3\Z$ and define $(a,i) \op (b,j)$ to equal
+  \begin{itemize}
+    \item $(a-1,j+1)$ if $i=j+2$ and $a>0$;
+    \item $(b,j+1)$ if $i=j+2$ and $a=0$;
+    \item $(a+1,j+1)$ otherwise.
+  \end{itemize}
+Note that $(a,i) \op (a,i) = (a+1,i+1)$, and that $(b,j) \op ((c,k) \op (a,i))$ will be of the form $(d,i+2)$ for some $d$.  Hence
+$$ ((a,i) \op (a,i)) \op ((b,j) \op ((c,k) \op (a,i))) = (a+1-1, i+3) = (a,i),$$
+giving 1437.  On the other hand,
+$$ (0,i) \op ((b,i) \op (0,i)) = (0,i) \op (b+1,i+1) = (b+1,i+2)$$
+and so equation 4269 fails.
+\end{proof}
