@@ -367,10 +367,12 @@ Now suppose that $a \op b$ is undefined for some $a \neq b$.  By applying the pr
 
 It is routine to check that $\op'$ obeys Laws 2,3.  Now we case check Law 1.
 
-Case 1.  $x=c$ or $x \op' y = c$.  Not possible since no left multiplication by $c$ is defined.
-Case 2.  $y=c$.  This would force $x = Sb$ and $d = Sb$, but this is not possible since $d$ is different from $Sb$.
-Case 3: $(x \op' y) \op' y = c$. This forces $x=d$ and $y=b$, and the claim follows from construction.
-Case 4: None of the terms in $(x \op' y) \op' y$ are equal to $c$.  Then the claim follows from Law 1 applied to $\op$.
+\begin{itemize}
+\item Case 1.  $x=c$ or $x \op' y = c$.  Not possible since no left multiplication by $c$ is defined.
+\item Case 2.  $y=c$.  This would force $x = Sb$ and $d = Sb$, but this is not possible since $d$ is different from $Sb$.
+\item Case 3: $(x \op' y) \op' y = c$. This forces $x=d$ and $y=b$, and the claim follows from construction.
+\item Case 4: None of the terms in $(x \op' y) \op' y$ are equal to $c$.  Then the claim follows from Law 1 applied to $\op$.
+\end{itemize}
 \end{proof}
 
 By the greedy algorithm, this implies that any partial solution can be extended to a 1722 magma on $\N$.  We can now refute the implication to equation 1832
