@@ -34,17 +34,20 @@ def leanifyS(statement):
 def leanifyP(proof):
     sr = re.match(r"superposition (\d+),(\d+)", proof)
     if sr is not None:
-        return f"superpose eq{sr[2]} eq{sr[1]}"
+        return f"superpose step{sr[2]} step{sr[1]}"
     sr = re.match(r"backward demodulation (\d+),(\d+)", proof)
     if sr is not None:
-        return f"superpose eq{sr[2]} eq{sr[1]}"
+        return f"superpose step{sr[2]} step{sr[1]}"
     sr = re.match(r"forward demodulation (\d+),(\d+)", proof)
     if sr is not None:
-        return f"superpose eq{sr[2]} eq{sr[1]}"
+        return f"superpose step{sr[2]} step{sr[1]}"
     raise NotImplementedError(proof)
 
 def leanify(json, vampire_output):
-    output = f'@[equational_result]\ntheorem Finite.Equation{json["hypothesis_num"]}_implies_Equation{json["goal_num"]} (G : Type*) [Magma G]'
+    output = '@[equational_result]\ntheorem '
+    if json["finite"]:
+        output += "Finite."
+    output += f'Equation{json["hypothesis_num"]}_implies_Equation{json["goal_num"]} (G : Type*) [Magma G]'
     if json["finite"]:
         output += " [Finite G]"
 
@@ -64,15 +67,16 @@ def leanify(json, vampire_output):
         if proof.startswith("negated conjecture") or proof.startswith("ennf transformation") or proof.startswith("choice axiom"):
             continue
 
-        if proof.startswith("rectify"):
-            sr = re.match(r"rectify (\d+)", proof)
+        if proof.startswith("rectify") or proof.startswith("closure"):
+            sr = re.match(r"(rectify|closure) (\d+)", proof)
             if sr is None:
                 raise Exception("Unexpected")
-            eqnum_to_axiom[eqnum] = eqnum_to_axiom[sr[1]]
+            if sr[2] in eqnum_to_axiom:
+                eqnum_to_axiom[eqnum] = eqnum_to_axiom[sr[2]]
             continue
         if proof.startswith("cnf transformation"):
             if "!=" in statement:
-                output += f"  have eq{eqnum} {leanifyS(statement)} := mod_symm nh\n"
+                output += f"  have step{eqnum} {leanifyS(statement)} := mod_symm nh\n"
             else:
                 sr = re.match(r"cnf transformation (\d+)", proof)
                 if sr is None:
@@ -82,27 +86,27 @@ def leanify(json, vampire_output):
                     raise Exception("Failed to map cnf transformation to axiom")
 
                 if axiom_name == "hypothesis":
-                    output += f"  have eq{eqnum} {leanifyS(statement)} := mod_symm (h ..)\n"
+                    output += f"  have step{eqnum} {leanifyS(statement)} := mod_symm (h ..)\n"
                 else:
-                    output += json["axioms"][axiom_name]["proof"].replace("REPLACE", f"eq{eqnum}")
+                    output += json["axioms"][axiom_name]["proof"].replace("REPLACE", f"step{eqnum}")
             continue
         if statement == "$false":
             sr = re.match(r"subsumption resolution (\d+),(\d+)", proof)
             if sr is not None:
-                output += f"  subsumption eq{sr[1]} eq{sr[2]}\n\n"
+                output += f"  subsumption step{sr[1]} step{sr[2]}\n\n"
                 continue
             sr = re.match(r"trivial inequality removal (\d+)", proof)
             if sr is not None:
-                output += f"  subsumption eq{sr[1]} rfl\n\n"
+                output += f"  subsumption step{sr[1]} rfl\n\n"
                 continue
             sr = re.match(r"equality resolution (\d+)", proof)
             if sr is not None:
-                output += f"  subsumption eq{sr[1]} rfl\n\n"
+                output += f"  subsumption step{sr[1]} rfl\n\n"
                 continue
             print(output)
             raise NotImplementedError(proof)
         else:
-            output += f"  have eq{eqnum} {leanifyS(statement)} := {leanifyP(proof)}\n" #  -- {proof}\n"
+            output += f"  have step{eqnum} {leanifyS(statement)} := {leanifyP(proof)}\n" #  -- {proof}\n"
     return output
 
 if len(sys.argv) < 2:
@@ -112,7 +116,7 @@ if len(sys.argv) < 2:
 print("""import equational_theories.Equations.All
 import equational_theories.MagmaOp
 import equational_theories.Superposition
-import Mathlib.Data.Set.Finite
+import Mathlib.Data.Set.Finite.Basic
 import Mathlib.Tactic.TypeStar
 import Mathlib.Tactic.ByContra
 
@@ -134,7 +138,7 @@ for arg in sys.argv[1:]:
 
                 sr = re.search(r"Termination reason: (.+)", out)
                 if sr is None:
-                    raise Exception("No termination reason in output?")
+                    raise Exception(f"No termination reason in output? {arg}")
 
                 if sr[1] == "Refutation":
                     print(leanify(json_data, out))
