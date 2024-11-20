@@ -341,8 +341,48 @@ or in terms of ternary relations
 \begin{equation}\label{left-inject}
    R(y,x,z) \hbox{ and } R(y,x',z) \implies x=x'
 \end{equation}
-simply by starting with a partial solution, say on the natural numbers in which (e.g.) $R(1,2,0)$, $R(1,3,0)$ are the only situations in which $R$ holds.  One can easily verify that this obeys (VLT) and (65), (65'), but not \eqref{left-inject}, and so any magma constructed by the above greedy construction will not be left-cancellative.  Since the Obelix law \Cref{eq1491} forces left-cancellativity, this gives an alternate proof of \Cref{asterix-obelix}
+simply by starting with a partial solution, say on the natural numbers in which (e.g.) $R(1,2,0)$, $R(1,3,0)$ are the only situations in which $R$ holds.  One can easily verify that this obeys (VLT) and (65), (65'), but not \eqref{left-inject}, and so any magma constructed by the above greedy construction will not be left-cancellative.  Since the Obelix law \Cref{eq1491} forces left-cancellativity, this gives an alternate proof of \Cref{asterix-obelix}.
 
+\subsection{Equation 1722}
+
+We illustrate the above technique by constructing solutions to equation 1722,
+\begin{equation}\label{1722}
+  (y \op y) \op ((x \op y) \op y) = x.
+\end{equation}
+We abbreviate $Sy := y \op y$.
+
+Define a \emph{partial solution} to be a partial function $\op: E \to \N$ on some finite subset $E$ of $\N \times \N$ (which one can also think of as a finitely supported ternary relation $R(x,y,z)$ obeying VLT) obeying the following axioms:
+\begin{itemize}
+\item (Law 1) If $(x \op y) \op y$ is defined, then $Sy \op ((x \op y) \op y)$ is defined and equal to $x$.
+\item (Law 2) If  If $x \op y$ and $z \op y$ are defined and equal to each other, then $x=z$.
+\item (Law 3) If $Sx$ is defined, then $(Sx \diamond x) \diamond x$ is defined.
+\end{itemize}
+
+\begin{lemma}[1722 extension]\label{1722-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
+\end{lemma}
+
+\begin{proof}  Suppose first that $b=a$, so $a \op a$ is undefined. Set $a_0=a$ and find seven distinct elements $a_1,a_2,a_3,b_0,b_1,b_2,b_3$ not previously appearing in the domain or range of $\op$ with the indices extended periodically, and define $a_i \op' a_i = a_{i+1}$ (so $a_i = S^i a$), $a_{i+1} \op' a_i = b_i$, $b_i \op' a_i = a_{i+2}$, $a_{i+2} \op' a_i = a_i$, $a_i \op' a_{i+1} = a_i$, $a_{i+1} \op' b_i = a_i$.  We also define $x \op' y = x \op y$ whenever the right-hand side is defined. A (slightly tedious) case check shows that Laws 1, 2, 3 are preserved.
+
+Now suppose that $a \op b$ is undefined for some $a \neq b$.  By applying the previous construction, we may assume without loss of generality that $Sb$ is defined.  We may assume that $a \op b$ remains undefined after doing so, since we are done otherwise.  By Law 3, $a \neq Sb \op b$.  By Law 2, we have $d \op b = a$ for at most one $d$, which is necessarily different from $Sb$.  Choose a $c$ not previously appearing in the domain of range of $\op$, and set $a \op' b = c$.  If a $d$ exists as before, we additionally set $Sb \op' c = d$.  Finally we define $x \op' y = x \op y$ whenever the right-hand side is defined.
+
+It is routine to check that $\op'$ obeys Laws 2,3.  Now we case check Law 1.
+
+Case 1.  $x=c$ or $x \op' y = c$.  Not possible since no left multiplication by $c$ is defined.
+Case 2.  $y=c$.  This would force $x = Sb$ and $d = Sb$, but this is not possible since $d$ is different from $Sb$.
+Case 3: $(x \op' y) \op' y = c$. This forces $x=d$ and $y=b$, and the claim follows from construction.
+Case 4: None of the terms in $(x \op' y) \op' y$ are equal to $c$.  Then the claim follows from Law 1 applied to $\op$.
+\end{proof}
+
+By the greedy algorithm, this implies that any partial solution can be extended to a 1722 magma on $\N$.  We can now refute the implication to equation 1832
+$$ x = (x \op Sx) \op Sx,$$
+equation 2644
+$$ x = S^2 x \diamond x,$$
+and equation 3050,
+$$ x = ((Sx \op x) \op x) \op x$$
+by using the partial solution
+$$ 0 \op 0 = 1, 0 \op 1 = 2, 1 \op 0 = 2, 1 \op 1 = 3, 1 \op 2 = 0, 1 \op 3 = 1, 1 \op 4 = 2$$
+$$ 2 \op 0 = 3, 2 \op 1 = 4, 3 \op 0 = 4, 3 \op 1 = 1, 3 \op 3 = 3, 3 \op 4 = 0$$
+which violates all three equations at $x=0$.
 
 \section{A survey of examples}\label{infinite-examples-section}
 
