@@ -1,0 +1,105 @@
+\chapter{Equation 1729}\label{1729-chapter}
+
+In this chapter we study magmas that obey equation 1729,
+\begin{equation}\label{1729}
+  x = (y \op y) \op ((y \op x) \op y).
+\end{equation}
+for all $x,y$.  Using the squaring operator $Sy := y \op y$ and the left and right multiplication operators $L_y x := y \op x$ and $R_y x = x \op y$, this law can be written as
+$$ L_{Sy} R_y L_{y} x = x.$$
+This implies that $L_y$ is injective and $L_{Sy}$ is surjective, hence $L_{Sy}$ is invertible.  If $y$ is a square (i.e., $y \in SM$), then $L_y$ and $L_{Sy}$ are both invertible, hence now $R_y$ is also invertible, with inverse $R_y^{-1} = L_y L_{Sy}$.  We rewrite this as
+\begin{equation}\label{lys}
+  L_y = R_y^{-1} L_{Sy}^{-1}
+\end{equation}
+for all $y \in SM$.
+
+We have the following procedure for extending a small magma $SM$ obeying \eqref{1729} to a larger one $M$:
+
+\begin{theorem}[Extending a 1729 magma]\label{mag}  Let $SM$ be a magma obeying 1729, and let $N$ be another set disjoint from $SM$, and set $M := SM \uplus N$.  Suppose that we have a squaring map $S: N \to SM$, and bijections $L_a, R_a: N \to N$ for all $a \in SM$ (which, by abuse of notation, we will denote with the same symbols as the squaring map $S$ and left and right multiplication oeprators $L_a,R_a$ on $SM$), obeying the following axioms:
+  \begin{itemize}
+  \item (i) For all $a \in SM$, we have $L_a = R_a^{-1} L_{Sa}^{-1}$.
+  \item (ii) For all $y \in N$, the elements $R_a y \in N$ are distinct from each other and from $y$ as $a \in SM$ varies.
+  \item (iii)  If $R_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $L_{Sy} L_{R_{Sx}^{-1} a} y = x$.
+  \item (iv)  For all $x \in N$, we have $L_{Sx}^2 x = x$.
+  \end{itemize}
+Suppose also that we have an operation $\op': N \times N \to M$ obeying the following axioms:
+\begin{itemize}
+  \item (v)  For all $x \in N$, we have $x \op' x = Sx$.
+  \item (vi)  For all $y \in N$ and $a \in SM$, we have $R_a y \op' y = L_{Sy}^{-1} a$.
+  \item (vii)  For all $x,y \in N$ with $x \op' y$ not already covered by rules (iv) or (v), we have $x \op' y = z$ for some $z \in N$.  Furthermore, $z \op' x = L_{Sx}^{-1} y$.
+\end{itemize}
+Then one can endow $M$ with an operation $\op'': M \times M \to M$ obeying 1729 defined as follows:
+\begin{itemize}
+\item  If $a,b \in SM$, then $a \op'' b = a \op b$.
+\item  If $a \in SM$ and $x \in N$, then $a \op'' b := L_a b$.
+\item  If $x \in N$ and $a \in SM$, then $b \op'' a := R_a b$.
+\item  If $x,y \in N$, then $x \op'' y := x \op' y$.
+\end{itemize}
+Furthermore, the 817 law $S^2 x \op'' x = x$ fails for any $x \in N$.
+\end{theorem}
+
+\begin{proof}  We need to show that $\op''$ verifies the law \eqref{1729}.  In the case when $x,y \in SM$, then the claim follows from the fact that $SM$ already obeyed this equation.  If $x$ was equal to an element $a \in SM$ and $y \in N$, then by construction the law is equivalent to $L_{Sa} R_a S_a y = y$, which follows from axiom (i).
+
+Now suppose that $x \in N$ and $y$ is equal to some element $a$ of $SM$.  From axiom (v) we have $x \op'' x = Sx$, and then this case of \eqref{1729} becomes
+$$L_{Sx} ( R_a x \op' x ) = a$$
+which follows from axiom (vi).  So the only remaining case is when $x,y \in N$.  Using axiom (ii), we can divide into cases:
+\begin{itemize}
+\item Case 1: $x=y$.  Then by (v) we need to show that $L_{Sx} L_{Sx} x = x$, which follows from axiom (iv).
+\item Case 2: $y = R_a x$ for some $a \in SM$.  Then by axiom (vi), we need to show that $L_{Sy} L_{L_{Sx}^{-1} a} y = x$, which follows from axiom (iii).
+\item Case 3: We are not in case 1 or case 2.  Then by axiom (vii), we have $y \op'' x = z$ for some $z \in N$ with $z \op'' y = L_{Sy}^{-1} x$.  But this implies $L_{Sy} (z \op'' y) = x$, which is \eqref{1729}.
+\end{itemize}
+
+We have now verified that $\op''$ obeys 1729.  For any $x \in N$, we have $x \op'' S^2 x = R_{S^2 x} x$, and so the final claim follows from axiom (ii).
+\end{proof}
+
+To build a magma obeying 1729 but not 817, it thus suffices to produce
+\begin{itemize}
+  \item a 1729 magma $SM$;
+  \item a set $N$ of ``non-squares'';
+  \item a squaring map $S: N \to SM$;
+  \item bijections $L_a, R_a: N \to N$ for all $a \in SM$ obeying the axioms (i)-(iv); and
+  \item an operation $\op': N \times N \to M$ obeying the axioms (v)-(vii).
+\end{itemize}
+
+We will take $SM$ to be a countably infinite abelian group of exponent $4$, for instance the additive group $\bigcup_{n=0}^\infty (\Z/4\Z)^n$ of infinite sequences in $\Z/4\Z$ with only finitely many non-zero entries.  Here the squaring operation $S$ is just the doubling map $Sa = 2a$, and the double squaring map is constant: $S^2 a = 0$.
+
+We take $N$ to be the free non-abelian group with one generator $e_a$ for each $a \in SM$, then this is a countable set that we view as disjoint from $SM$.  We do not attempt to define the squaring map $S: N \to SM$ at this point, but we define the right multiplication operators $R_a$ using the group action, setting
+$$ R_a x = e_a x$$
+for all $a \in SM$ and $x \in N$.  Note that this automatically satisfies axiom (ii).
+
+What about left multiplication?  From two applications of \eqref{lys} and the exponent 4 hypothesis we have
+$$ L_a = R_a^{-1} L_{2a}^{-1} = R_a L_0 R_{2a}^{-1}.$$
+Thus, once $L_0$ is specified, we can \emph{define} $L_a$ for all other $a \in SM$ by the rule
+\begin{equation}\label{la0}
+  L_a := R_a L_0 R_{2a}^{-1}.
+\end{equation}
+Furthermore, from the $a=0$ case of \eqref{lys} we must also have the axiom
+\begin{itemize}
+  \item (i') $L_0^2 = R_0^{-1}$,
+\end{itemize}
+which also implies the $a=0$ case of \eqref{la0} (note that it implies $L_0$ commutes with $R_0$); note also that this axiom and the bijectivity of $R_0$ forces $L_0$ to be a bijection, and hence by \eqref{la0} all of the $L_a$ are bijections, so we can now drop the bijectivity requirements here.  We leave the function $L_0: N \to N$ unspecified for now, but observe that if axiom (i') is obeyed, one can use \eqref{la0} as a definition of $L_a$ for all other $a$, so that axiom (i) is now a consequence of axiom (i').  We also observe from \eqref{la0} and (i') that
+\begin{equation}\label{la1}
+  L_a^{-1} := R_{2a} L_0 R_0 R_{a}^{-1}.
+\end{equation}
+
+We now write the other remaining axioms in terms of $L_0$ rather than $L_a$ using \eqref{la0}, \eqref{la1}:
+\begin{itemize}
+\item (iii')  If $R_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $R_{Sy} L_0 R_{2Sy}^{-1} R_{R_{Sx}^{-1} a} L_0 R_{2(R_{Sx}^{-1} a)}^{-1} y = x$.
+\item (iv')  For all $x \in N$, we have $R_{Sx} L_0 R_{2Sx}^{-1} R_{Sx} L_0 R_{2Sx} x = x$.
+\item (v)  For all $x \in N$, we have $x \op' x = Sx$.
+\item (vi')  For all $y \in N$ and $a \in SM$, we have $R_a y \op' y = R_{2Sy} L_0 R_0 R_{Sy} a$.
+\item (vii')  For all $x,y \in N$ with $x \op' y$ not already covered by rules (iv) or (v), we have $x \op' y = z$ for some $z \in N$.  Furthermore, $z \op' x = R_{2Sx} L_0 R_0 R_{Sx} y$.
+\end{itemize}
+
+Our task is now to find a function $L_0: N \to N$ and an operation $\op': N \times N \to M$ obeying axioms (i'), (iii'), (iv'), (v), (vi'), (vii').
+
+We will again use a greedy construction for this, but with some modifications.  Firstly, the axiom (i') means that we cannot restrict $L_0$ to be partially defined on just finitely many values: any relation of the form
+$$ L_0 x = y$$
+for some $x,y \in N$ would automatically imply that
+\begin{equation}\label{itero}
+ L_0 R_0^n x = R_0^n y
+\end{equation}
+and also
+$$ L_0 R_0^n y = R_0^{n-1} x$$
+for all $n \in \Z$.  Thus, $L_0$ becomes defined on two right cosets $\langle R_0 \rangle x$, $\langle R_0 \rangle y$ of $N$, where $\langle R_0 \rangle := \{ R_0^n: n \in \Z\}$ is an infinite cyclic subgroup of $N$.  In general, we will require that $L_0$ is defined on a finite union of cosets of $\langle R_0\rangle$.
+
+In a somewhat similar vein, axiom (vii'), if iterated naively, would mean that a given entry $x \op' y = z$ of the multiplication table could potentially generate an infinite sequence of further entries, which unfortunately do not have as regular a pattern as the iterations
