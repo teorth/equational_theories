@@ -1,0 +1,24 @@
+
+\section{Automated Theorem Proving}
+
+\note{TODO: expand this sketch}
+
+Describe various automated theorem provers deployed in the project, with some statistics on performance:
+
+\begin{itemize}
+    \item Z3 prover
+    \item Vampire
+    \item More elementary substitutions
+    \item egg
+    \item duper
+\end{itemize}
+
+Any comparative study of semi-automated methods with fully automated ones? In principle the semi-automated approach could be more automated using a script or "agent" to call various theorem provers. See this discussion.
+
+Draw upon the discussion here on the various ways of integrating ATPs with Lean. This project primarily used the least integrated approach, "Option 3", as it was fastest and required no dependencies on the other contributors, but it also has drawbacks.
+
+Note: when evaluating the performance of any particular automated implication tool, we should do a fresh run on the entire base of implications, rather than rely on whatever implications produced by the tool remain in the Lean codebase by the time of writing the paper. This is because (a) many of the previous runs focused only on those implications that were not already ruled out by earlier contributions, and (b) some pruning has been applied subsequent to the initial runs to improve compilation performance. Of course, these runs would not need to be added to the (presumably optimized) codebase at that point, but would be purely for the purpose of gathering performance statistics. More discussion here.
+
+See this discussion on the value of using different ATPs and setting run time parameters etc. at different values.
+
+Make a note of the possible alternate strategy to prove implications outlined here.
