@@ -1,17 +1,12 @@
 import equational_theories.Equations.All
 import equational_theories.MagmaOp
-import Aesop
-import Mathlib.Data.Fintype.Card
-import Mathlib.Data.Nat.Bitwise
-import Mathlib.NumberTheory.Padics.PadicVal.Basic
-import Mathlib.Data.ZMod.Defs
-import Mathlib.Data.ZMod.Basic
-import Mathlib.Algebra.Polynomial.Basic
-import Mathlib.Algebra.Polynomial.Degree.Definitions
-import Mathlib.Algebra.Polynomial.Eval
+
 import Mathlib.Algebra.Polynomial.Roots
-import Mathlib.Algebra.Polynomial.RingDivision
+import Mathlib.Data.Nat.Bitwise
+import Mathlib.Data.ZMod.Basic
+import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import Mathlib.Tactic.ComputeDegree
+
 
 namespace InfModel
 
@@ -81,7 +76,7 @@ theorem Equation374794_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equ
     split_ifs
     · apply ne_of_lt
       simp only [← PNat.coe_lt_coe, PNat.val_ofNat, PNat.pow_coe]
-      apply lt_self_pow (by simp only [Nat.one_lt_ofNat])
+      apply lt_self_pow₀ (by simp only [Nat.one_lt_ofNat])
       apply one_lt_pow₀ (by simp only [Nat.one_lt_ofNat]) (by simp)
     · trivial
   simp only [Ne.symm hx, ↓reduceIte, PNat.pow_coe, PNat.val_ofNat, padicValNat.prime_pow,
@@ -240,16 +235,13 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
     · simp [hyz, h1]
       exfalso
       have : padicValNat 2 ↑(y ◇ z) = ↑(3^y.val) := by simp [hyz]
-      unfold Magma.op at this
-      simp only [apply_ite PNat.val, PNat.pow_coe, PNat.val_ofNat, PNat.mul_coe, Nat.toPNat'_coe,
-        apply_ite (padicValNat 2), padicValNat.prime_pow, ne_eq, Nat.reduceEqDiff,
+      simp only [Magma.op, apply_ite PNat.val, PNat.pow_coe, PNat.val_ofNat, PNat.mul_coe,
+        Nat.toPNat'_coe, apply_ite (padicValNat 2), padicValNat.prime_pow, ne_eq, Nat.reduceEqDiff,
         not_false_eq_true, padicValNat_prime_prime_pow, PNat.ne_zero, pow_eq_zero_iff,
         OfNat.ofNat_ne_zero, padicValNat.mul, add_zero, padicValNat.one, ite_self, ite_eq_iff,
         not_lt, nonpos_iff_eq_zero, padicValNat.eq_zero_iff, OfNat.ofNat_ne_one, false_or] at this
-      have this' : (0: ℕ) = (3: ℕ)^y.val ↔ False :=
-        Iff.intro (fun h ↦ pow_ne_zero y.val (by norm_num) h.symm) False.elim
-      simp [this'] at this
-      repeat simp [and_or_left, and_or_left] at this
+      have zero_neq : 0 ≠ 3^y.val := (fun h ↦ pow_ne_zero y.val (by norm_num) h.symm)
+      simp [zero_neq, and_or_left, and_or_left] at this
       cases this with
       | inl h =>
         rw [h.1] at h
@@ -268,19 +260,17 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
         apply pow_ne_zero y.val (by norm_num: 3 ≠ 0)
         contradiction
       | inr this => _
-      have this' := this.2.2.2.2.2
-      apply_fun padicValNat 3 at this'
-      simp [padicValNat.prime_pow] at this'
-      have this' := this'.symm
-      have this2 := calc y.val
+      have h3 := this.2.2.2.2.2
+      apply_fun padicValNat 3 at h3
+      simp [padicValNat.prime_pow] at h3
+      have hy := calc y.val
         _ > Nat.log 5 y.val := by simp [Nat.log_lt_self]
         _ ≥ padicValNat 5 y.val := by simp [padicValNat_le_nat_log]
         _ ≥ Nat.log 2 (padicValNat 5 y.val) := by simp [Nat.log_le_self]
         _ ≥ padicValNat 2 (padicValNat 5 y.val) := by simp [padicValNat_le_nat_log]
         _ ≥ Nat.log 3 (padicValNat 2 (padicValNat 5 y.val)) := by simp [Nat.log_le_self]
         _ ≥ padicValNat 3 (padicValNat 2 (padicValNat 5 y.val)) := by simp [padicValNat_le_nat_log]
-      have this3 := ne_of_gt this2
-      exact this3 this'
+      exact ne_of_gt hy h3.symm
     · by_cases hyz' : y ◇ z = 3^y.val
       · rw [←hyz', h2, hyz']
         exfalso
@@ -296,13 +286,13 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
         simp [padicValNat.mul, padicValNat_prime_prime_pow] at this
         repeat simp only [ite_eq_iff] at this
         simp at this
-        have this' : ((0: ℕ) = y.val) ↔ False := by
+        have zero_neq : 0 ≠ y.val := by
           simp [false_iff]
           intro hc
           have hc := hc.symm
           have hc' := PNat.ne_zero y
           contradiction
-        simp [this'] at this
+        simp [zero_neq] at this
         repeat simp [and_or_left, and_or_left] at this
         cases this with
         | inl h =>
@@ -312,9 +302,8 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
           have h1 := h1.symm
           apply_fun PNat.val at h1
           simp at h1
-          have this2 := Nat.lt_pow_self (by norm_num: 1 < 2) y.val
-          have this3 := ne_of_gt this2
-          exact this3 h1
+          have h2 := Nat.lt_pow_self (by norm_num: 1 < 2) y.val
+          exact ne_of_gt h2 h1
         | inr this => _
         cases this with
         | inl h =>
@@ -324,9 +313,8 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
           have h1 := h1.symm
           apply_fun PNat.val at h1
           simp at h1
-          have this2 := Nat.lt_pow_self (by norm_num: 1 < 3) y.val
-          have this3 := ne_of_gt this2
-          exact this3 h1
+          have h3 := Nat.lt_pow_self (by norm_num: 1 < 3) y.val
+          exact ne_of_gt h3 h1
         | inr this => _
         cases this with
         | inl h =>
@@ -338,13 +326,12 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
             _ ≥ padicValNat 3 (padicValNat 5 y.val) := by simp [padicValNat_le_nat_log]
           exact (ne_of_gt h') h
         | inr this => _
-        have this := this.2.2.2.2.2.symm
-        have this' := calc y.val
+        have hy := calc y.val
           _ > Nat.log 2 y.val := by simp [Nat.log_lt_self]
           _ ≥ padicValNat 2 y.val := by simp [padicValNat_le_nat_log]
           _ ≥ Nat.log 3 (padicValNat 2 y.val) := by simp [Nat.log_le_self]
           _ ≥ padicValNat 3 (padicValNat 2 y.val) := by simp [padicValNat_le_nat_log]
-        exact (ne_of_gt this') this
+        exact ne_of_gt hy this.2.2.2.2.2.symm
       · have : (y ◇ z) ≠ 3^y.val ∧ (y ◇ z) ≠ 2^(3^y.val)  := And.intro hyz' hyz
         simp [h5 y (y ◇ z) this]
   · rw [h3 x y hx]
@@ -375,9 +362,8 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
         have h' := h.2
         apply_fun padicValNat 3 at h'
         simp [padicValNat_prime_prime_pow, padicValNat.mul] at h'
-        have this2 := Nat.lt_pow_self (by norm_num: 1 < 3) (padicValNat 3 y.val)
-        have this2 := ne_of_gt this2
-        exact this2 (h'.symm)
+        have h3 := Nat.lt_pow_self (by norm_num: 1 < 3) (padicValNat 3 y.val)
+        exact ne_of_gt h3 h'.symm
       | inr hyz => _
       have hyz := hyz.2
       cases hyz with
@@ -390,19 +376,18 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
         repeat simp only [ite_eq_iff] at h'
         cases h' with
         | inl this =>
-          have this := this.2
-          have this' := calc 3 ^ (3 ^ padicValNat 3 y.val * 5 ^ padicValNat 5 y.val) * 5 ^ x.val
+          have h3 := calc 3 ^ (3 ^ padicValNat 3 y.val * 5 ^ padicValNat 5 y.val) * 5 ^ x.val
             _ ≥ 3 ^ (3 ^ padicValNat 3 y.val * 5 ^ padicValNat 5 y.val) := by simp [one_le_pow₀]
             _ = 3 ^ (5 ^ padicValNat 5 y.val * 3 ^ padicValNat 3 y.val) := by simp [mul_comm]
             _ = (3 ^ (5 ^ padicValNat 5 y.val)) ^ (3 ^ padicValNat 3 y.val) := by simp [pow_mul]
             _ ≥ 3 ^ (5 ^ padicValNat 5 y.val) := by apply le_self_pow₀; simp [one_le_pow₀]; apply pow_ne_zero; simp
             _ > 5 ^ padicValNat 5 y.val := by simp [Nat.lt_pow_self (by norm_num: 1 < 3)]
             _ > padicValNat 5 y.val := by simp [Nat.lt_pow_self (by norm_num: 1 < 5)]
-          exact (ne_of_gt this') (this.symm)
+          exact ne_of_gt h3 (this.2.symm)
         | inr this =>
-          have this := this.2.symm
-          apply_fun padicValNat 5 at this
-          simp [padicValNat_prime_prime_pow, padicValNat.mul] at this
+          have hpadic := this.2.symm
+          apply_fun padicValNat 5 at hpadic
+          simp [padicValNat_prime_prime_pow, padicValNat.mul] at hpadic
       | inr hyz => _
       have hyz := hyz.2
       cases hyz with
@@ -410,12 +395,12 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
         have h := h.2.symm
         apply_fun padicValNat 3 at h
         simp [padicValNat_prime_prime_pow, padicValNat.mul, Nat.pow_mul] at h
-        have this' := calc y.val
+        have hy := calc y.val
           _ > Nat.log 2 y.val := by simp [Nat.log_lt_self]
           _ ≥ padicValNat 2 y.val := by simp [padicValNat_le_nat_log]
           _ ≥ Nat.log 3 (padicValNat 2 y.val) := by simp [Nat.log_le_self]
           _ ≥ padicValNat 3 (padicValNat 2 y.val) := by simp [padicValNat_le_nat_log]
-        exact (ne_of_gt this') h
+        exact ne_of_gt hy h
       | inr hyz => _
       have h := hyz.2.symm
       apply_fun padicValNat 3 at h
@@ -525,8 +510,7 @@ theorem zero_lt_degree_word_polynomial (w: FreeMagma (Fin 2)) :
     apply Polynomial.degree_le_of_dvd
       <;> first | exact h1 | exact h2
   split_ands
-  .
-    clear * - zero_mem_w
+  · clear * - zero_mem_w
     let r' := Polynomial.map (Int.castRingHom ℚ) (word_polynomial w)
     suffices ∀ (q: ℚ), 0 < q → q < 1 → 0 < Polynomial.eval q r' by
       unfold r' at *
@@ -545,8 +529,7 @@ theorem zero_lt_degree_word_polynomial (w: FreeMagma (Fin 2)) :
                 (FreeMagma.Mem 0 w → 0 < Polynomial.eval q r')) by
       simp_all only [implies_true]
     induction w
-    .
-      rename_i z
+    · rename_i z
       fin_cases z
       all_goals {
         simp_all only [word_polynomial, CharP.cast_eq_zero, sub_zero,
@@ -558,67 +541,52 @@ theorem zero_lt_degree_word_polynomial (w: FreeMagma (Fin 2)) :
                       zero_ne_one, lt_self_iff_false, false_implies, and_self,
                       implies_true, r']
       }
-    .
-      rename_i w1 w2 h1 h2
+    · rename_i w1 w2 h1 h2
       intros q zero_lt_q q_lt_one
       replace h1 := h1 q zero_lt_q q_lt_one
       replace h2 := h2 q zero_lt_q q_lt_one
       simp_all [r', word_polynomial]
       split_ands
-      .
-        replace h1 := h1.1
+      · replace h1 := h1.1
         replace h2 := h2.1
         generalize Polynomial.eval q (Polynomial.map (Int.castRingHom ℚ)
                                       (word_polynomial w1)) = q1 at *
         generalize Polynomial.eval q (Polynomial.map (Int.castRingHom ℚ)
                                       (word_polynomial w2)) = q2 at *
-        apply add_nonneg
-          <;> apply mul_nonneg
+        apply add_nonneg <;> apply mul_nonneg
         all_goals {
           try simp_all only [sub_nonneg]
           try { apply le_of_lt; assumption }
         }
-      .
-        have h12 := h1.2
+      · have h12 := h1.2
         have h22 := h2.2
         intro mem_zero_w
         simp_all [FreeMagma.Mem]
         cases mem_zero_w
-        .
-          rename_i mem_zero_w1
+        · rename_i mem_zero_w1
           replace h12 := h12 mem_zero_w1
           apply add_pos_of_pos_of_nonneg
-          .
-            apply mul_pos
-              <;> simp_all only [sub_pos]
-          .
-            simp_all only [mul_nonneg_iff_of_pos_left]
-        .
-          rename_i mem_zero_w2
+          · apply mul_pos <;> simp_all only [sub_pos]
+          · simp_all only [mul_nonneg_iff_of_pos_left]
+        · rename_i mem_zero_w2
           replace h22 := h22 mem_zero_w2
           apply add_pos_of_nonneg_of_pos
-          .
-            simp_all only [sub_pos, mul_nonneg_iff_of_pos_left]
-          .
-            apply mul_pos
-              <;> simp_all only [sub_pos]
-  .
-    clear * - first_w_eq_one last_w_eq_one
+          · simp_all only [sub_pos, mul_nonneg_iff_of_pos_left]
+          · apply mul_pos <;> simp_all only [sub_pos]
+  · clear * - first_w_eq_one last_w_eq_one
     revert w
     suffices (∀ (w: FreeMagma (Fin 2)), w.first = 1 → Polynomial.X ∣ word_polynomial w)
              ∧ (∀ (w: FreeMagma (Fin 2)), w.last = 1 → (1 - Polynomial.X) ∣ word_polynomial w) by
       obtain ⟨h1, h2⟩ := this
       intros w first_w_eq_one last_w_eq_one
       cases w
-      .
-        rename_i z
+      · rename_i z
         fin_cases z
         all_goals {
           simp_all only [Fin.zero_eta, word_polynomial, CharP.cast_eq_zero, sub_zero, Fin.mk_one, Nat.cast_one, sub_self, dvd_zero, FreeMagma.first, FreeMagma.last]
           try contradiction
         }
-      .
-        rename_i w1 w2
+      · rename_i w1 w2
         simp_all only [FreeMagma.first, FreeMagma.last, word_polynomial]
         replace h1 := h1 w1 first_w_eq_one
         replace h2 := h2 w2 last_w_eq_one
@@ -627,30 +595,23 @@ theorem zero_lt_degree_word_polynomial (w: FreeMagma (Fin 2)) :
         exists q1 + q2
         simp only [hq1, hq2]
         ring_nf
-    split_ands
-      <;> intros w h
-    .
-      induction w
-      .
-        rename_i z
+    split_ands <;> intros w h
+    · induction w
+      · rename_i z
         simp_all only [FreeMagma.first, word_polynomial]
         norm_num
-      .
-        rename_i w1 w2 h1 _
+      · rename_i w1 w2 h1 _
         simp_all only [FreeMagma.first, word_polynomial, true_implies]
         clear * - h1
         obtain ⟨q1, hq1⟩ := h1
         simp_all only
         exists q1 * (1 - Polynomial.X) + (word_polynomial w2)
         ring_nf
-    .
-      induction w
-      .
-        rename_i z
+    · induction w
+      · rename_i z
         simp_all only [FreeMagma.last, word_polynomial]
         norm_num
-      .
-        rename_i w1 w2 _ h2
+      · rename_i w1 w2 _ h2
         simp_all only [FreeMagma.last, word_polynomial, true_implies]
         clear * - h2
         obtain ⟨q2, hq2⟩ := h2
@@ -668,18 +629,15 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
     obtain ⟨k, hk, M, hm⟩ := hs
     exists ZMod k, M
     split_ands
-    .
-      refine' @Finite.of_fintype (ZMod k) ?_
+    · refine' @Finite.of_fintype (ZMod k) ?_
       refine' @ZMod.fintype k ?_
       simp_all only [neZero_iff, ne_eq]
       omega
-    .
-      simp only [not_forall]
+    · simp only [not_forall]
       refine' @Nontrivial.exists_pair_ne (ZMod k) ?_
       rw [ZMod.nontrivial_iff]
       omega
-    .
-      assumption
+    · assumption
   revert α
   suffices hs: ∀ (E: Law.MagmaLaw (Fin 2)),
                FreeMagma.Mem 0 E.lhs
@@ -707,20 +665,16 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
           <;> assumption
       simp only [lt_self_iff_false] at this
     simp only [Law.satisfies_map_injective f this] at hs
-    apply hs
-      <;> simp only [Law.MagmaLaw.lhs, Law.MagmaLaw.rhs, Law.MagmaLaw.map]
-    .
-      clear * - mem_x_lhs
+    apply hs <;> simp only [Law.MagmaLaw.lhs, Law.MagmaLaw.rhs, Law.MagmaLaw.map]
+    · clear * - mem_x_lhs
       generalize E.lhs = w at *
       revert mem_x_lhs
       induction w
         <;> simp_all only [FreeMagma.fmapHom, FreeMagma.evalHom, FreeMagma.evalInMagma, FreeMagma.Mem]
-      .
-        have : 0 = f x := by simp_all only [Fin.isValue, ↓reduceIte, f]
+      · have : 0 = f x := by simp_all only [Fin.isValue, ↓reduceIte, f]
         rw [this]
         simp_all only [implies_true]
-      .
-        rename_i w1 w2 h1 h2
+      · rename_i w1 w2 h1 h2
         intro h
         cases h with
         | inl h =>
@@ -731,18 +685,15 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
           replace h2 := h2 h
           apply Or.inr
           assumption
-    .
-      clear * - mem_x_rhs
+    · clear * - mem_x_rhs
       generalize E.rhs = w at *
       revert mem_x_rhs
       induction w
         <;> simp_all only [FreeMagma.fmapHom, FreeMagma.evalHom, FreeMagma.evalInMagma, FreeMagma.Mem]
-      .
-        have : 0 = f x := by simp_all only [Fin.isValue, ↓reduceIte, f]
+      · have : 0 = f x := by simp_all only [Fin.isValue, ↓reduceIte, f]
         rw [this]
         simp_all only [implies_true]
-      .
-        rename_i w1 w2 h1 h2
+      · rename_i w1 w2 h1 h2
         intro h
         cases h with
         | inl h =>
@@ -781,8 +732,7 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
           simp_all only [Law.MagmaLaw.symm]
   intros w hw
   by_cases h: w.first = 0 ∨ w.last = 0
-  .
-    clear hw
+  · clear hw
     exists 2
     simp_all only [Nat.one_lt_ofNat, true_and]
     cases h with
@@ -798,8 +748,7 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
       simp_all only [←h]
       induction w
         <;> first | rfl | assumption
-  .
-    simp only [Fin.isValue, not_or] at h
+  · simp only [Fin.isValue, not_or] at h
     obtain ⟨hl, hr⟩ := h
     replace hl: w.first = 1 := by omega
     replace hr: w.last = 1 := by omega
@@ -820,22 +769,20 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
         }
       suffices 0 < r.degree by
         replace this : 0 < (r * (r - 2)).degree := by
-          suffices this': r.degree ≤ (r * (r - 2)).degree from
-            Trans.trans this this'
+          suffices hr : r.degree ≤ (r * (r - 2)).degree from
+            Trans.trans this hr
           simp only [Polynomial.degree_mul]
           suffices 0 < (r - 2).degree by
             have' := WithBot.add_lt_add_left (a := r.degree) _ this
-            .
-              simp_all only [add_zero, ge_iff_le]
+            · simp_all only [add_zero, ge_iff_le]
               apply le_of_lt
               assumption
-            .
-              rename_i this'
-              revert this'
+            · rename_i hr
+              revert hr
               apply Function.mtr
               simp only [ne_eq, Polynomial.degree_eq_bot, Decidable.not_not, not_lt]
-              intro this'
-              rw [this']
+              intro hr0
+              rw [hr0]
               simp only [Polynomial.degree_zero, bot_le]
           suffices (r - 2).degree = r.degree by simp_all only
           apply Polynomial.degree_sub_C
@@ -852,8 +799,7 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
         simp_all only [Set.setOf_true]
         rw [Set.infinite_univ_iff]
         exact Int.infinite
-      apply zero_lt_degree_word_polynomial
-        <;> assumption
+      apply zero_lt_degree_word_polynomial <;> assumption
     suffices ∃ (k: ℕ), 1 < k ∧ Polynomial.eval b0 r = (1: ZMod k) by
       obtain ⟨k, ⟨one_lt_k, hk⟩⟩ := this
       exists k
@@ -868,15 +814,11 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
         _ = (w ⬝ g1) + (w ⬝ g2) := by
           clear * -
           simp only [Fin.isValue, ite_self, FreeMagma.evalInMagma, g1, g2]
-          induction w
-            <;> simp only [FreeMagma.evalInMagma, Fin.isValue]
-          .
-            rename_i z
-            fin_cases z
-              <;> simp only [Fin.zero_eta, Fin.isValue, ↓reduceIte, sub_add_cancel,
-                              Fin.mk_one, one_ne_zero, zero_add]
-          .
-            rename_i w1 w2 h1 h2
+          induction w <;> simp only [FreeMagma.evalInMagma, Fin.isValue]
+          · rename_i z
+            fin_cases z <;> simp only [Fin.zero_eta, Fin.isValue, ↓reduceIte, sub_add_cancel,
+                                       Fin.mk_one, one_ne_zero, zero_add]
+          · rename_i w1 w2 h1 h2
             simp only [h1, h2, Magma.op, Fin.isValue]
             ring_nf
         _ = (Polynomial.eval b0 r) * g1 0 + (w ⬝ g2) := by
@@ -887,15 +829,12 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
           clear * -
           induction w
             <;> simp only [FreeMagma.evalInMagma, Magma.op, word_polynomial]
-          .
-            rename_i z
-            fin_cases z
-              <;> simp_all only [Fin.zero_eta, ite_true, CharP.cast_eq_zero,
-                                sub_zero, Polynomial.eval_one, Int.cast_one, one_mul, Fin.mk_one,
-                                one_ne_zero, ite_false, Nat.cast_one, sub_self, Polynomial.eval_zero,
-                                Int.cast_zero, zero_mul]
-          .
-            rename_i w1 w2 h1 h2
+          · rename_i z
+            fin_cases z <;> simp_all only [Fin.zero_eta, ite_true, CharP.cast_eq_zero,
+                              sub_zero, Polynomial.eval_one, Int.cast_one, one_mul, Fin.mk_one,
+                              one_ne_zero, ite_false, Nat.cast_one, sub_self, Polynomial.eval_zero,
+                              Int.cast_zero, zero_mul]
+          · rename_i w1 w2 h1 h2
             simp only [h1,
                       h2,
                       ←mul_assoc (c := u),
@@ -918,21 +857,17 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
           clear * -
           simp only [FreeMagma.evalInMagma, g2, if_true]
           induction w
-          .
-            rename_i z
-            fin_cases z
-              <;> simp only [FreeMagma.evalInMagma, Fin.zero_eta, Fin.isValue,
-                            ↓reduceIte, Fin.mk_one, Fin.isValue, one_ne_zero]
-          .
-            rename_i w1 w2 h1 h2
+          · rename_i z
+            fin_cases z <;> simp only [FreeMagma.evalInMagma, Fin.zero_eta, Fin.isValue,
+                                       ↓reduceIte, Fin.mk_one, Fin.isValue, one_ne_zero]
+          · rename_i w1 w2 h1 h2
             simp only [FreeMagma.evalInMagma, Magma.op, h1, h2, mul_sub_right_distrib]
             ring_nf
         _ = f 0 := by
           simp_all only [ne_eq, Int.natAbs_eq_zero, ite_true, ite_self,
                         sub_add_cancel, g1, g2]
     by_cases (Polynomial.eval b0 r - 1).natAbs = 0
-    .
-      exists 2
+    · exists 2
       simp only [Nat.one_lt_ofNat, Fin.isValue, true_and]
       apply eq_of_sub_eq_zero
       rw [←Int.cast_one]
@@ -943,11 +878,10 @@ theorem Finite.two_variable_laws {α: Type} [ht : Fintype α] (hc : Fintype.card
       norm_num
       rename_i h
       simp_all only [ne_eq, zero_ne_one, not_false_eq_true, Int.natAbs_eq_zero, Int.zero_emod]
-    .
-      let k: ℕ := (Polynomial.eval b0 r - 1).natAbs
+    · let k: ℕ := (Polynomial.eval b0 r - 1).natAbs
       exists k
       split_ands
-      . omega
+      · omega
       apply eq_of_sub_eq_zero
       rw [←Int.cast_one]
       simp only [←Int.coe_castRingHom, ←RingHom.map_sub]

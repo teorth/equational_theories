@@ -1,7 +1,7 @@
 import equational_theories.FactsSyntax
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
-import Mathlib.Data.Set.Finite
+import Mathlib.Data.Set.Finite.Basic
 
 /- This file is for results currently conjectured from project discussion, but not yet formalized. -/
 
@@ -45,25 +45,9 @@ conjecture Equation63_facts : ∃ (G : Type) (_ : Magma G), Facts G [63] [1692]
 @[equational_result]
 conjecture Equation3308_facts : ∃ (G : Type) (_ : Magma G), Facts G [3308] [3456]
 
-/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/477860423 -/
-@[equational_result]
-conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G), Facts G [1516] [1489]
-
-/--https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/477865209 -/
-@[equational_result]
-conjecture Equation917_facts : ∃ (G : Type) (_ : Magma G), Facts G [917] [1629, 1729, 2441, 2541]
-
-/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/478046392 -/
-@[equational_result]
-conjecture Equation1526_facts : ∃ (G : Type) (_ : Magma G), Facts G [1526] [1223, 2744]
-
-/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/478054537 -/
+/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/482084613.2E01 -/
 @[equational_result]
 conjecture Equation1722_facts : ∃ (G : Type) (_ : Magma G), Facts G [1722] [2644, 3050, 1832]
-
-/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/478083079 -/
-@[equational_result]
-conjecture Equation1518_facts : ∃ (G : Type) (_ : Magma G), Facts G [1518] [47, 614, 817, 3862]
 
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1323/near/481475622 -/
 @[equational_result]
@@ -72,6 +56,10 @@ conjecture Equation1323_facts : ∃ (G : Type) (_ : Magma G), Facts G [1323, 189
 /--  https://teorth.github.io/equational_theories/blueprint/1516-chapter.html -/
 @[equational_result]
 conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G), Facts G [1516] [255]
+
+/--  https://teorth.github.io/equational_theories/blueprint/1729-chapter.html -/
+@[equational_result]
+conjecture Equation1729_facts : ∃ (G : Type) (_ : Magma G), Facts G [1729] [817]
 
 
 /- Finite conjectures follow -/
@@ -127,5 +115,16 @@ conjecture Finite.Equation1701_implies_Equation1035 (G : Type) [Magma G] [Finite
 conjecture Finite.Equation1701_implies_Equation1884 (G : Type) [Magma G] [Finite G] (_ : Equation1701 G) : Equation1884 G
 @[equational_result]
 conjecture Finite.Equation1701_implies_Equation4587 (G : Type) [Magma G] [Finite G] (_ : Equation1701 G) : Equation4587 G
+
+/- The below is also reachable using the method of bijections from above -/
+/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/482525422 -/
+@[equational_result]
+conjecture Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] (_ : Equation1516 G) : Equation255 G
+
+/--  https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/483160464 -/
+@[equational_result]
+conjecture Equation503_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [503] [4065, 3862]
+@[equational_result]
+conjecture Equation503_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [476] [359, 4065]
 
 end Conjectures
