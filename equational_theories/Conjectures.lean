@@ -98,23 +98,11 @@ conjecture Finite.Equation1167_implies_Equation4615 (G : Type) [Magma G] [Finite
 @[equational_result]
 conjecture Finite.Equation1441_implies_Equation4067 (G : Type) [Magma G] [Finite G] (_ : Equation1441 G) : Equation4067 G
 @[equational_result]
-conjecture Finite.Equation1443_implies_Equation1630 (G : Type) [Magma G] [Finite G] (_ : Equation1443 G) : Equation1630 G
-@[equational_result]
 conjecture Finite.Equation1443_implies_Equation3055 (G : Type) [Magma G] [Finite G] (_ : Equation1443 G) : Equation3055 G
-@[equational_result]
-conjecture Finite.Equation1443_implies_Equation4268 (G : Type) [Magma G] [Finite G] (_ : Equation1443 G) : Equation4268 G
-@[equational_result]
-conjecture Finite.Equation1447_implies_Equation1431 (G : Type) [Magma G] [Finite G] (_ : Equation1447 G) : Equation1431 G
-@[equational_result]
-conjecture Finite.Equation1447_implies_Equation4269 (G : Type) [Magma G] [Finite G] (_ : Equation1447 G) : Equation4269 G
 @[equational_result]
 conjecture Finite.Equation1681_implies_Equation3877 (G : Type) [Magma G] [Finite G] (_ : Equation1681 G) : Equation3877 G
 @[equational_result]
 conjecture Finite.Equation1701_implies_Equation1035 (G : Type) [Magma G] [Finite G] (_ : Equation1701 G) : Equation1035 G
-@[equational_result]
-conjecture Finite.Equation1701_implies_Equation1884 (G : Type) [Magma G] [Finite G] (_ : Equation1701 G) : Equation1884 G
-@[equational_result]
-conjecture Finite.Equation1701_implies_Equation4587 (G : Type) [Magma G] [Finite G] (_ : Equation1701 G) : Equation4587 G
 
 /- The below is also reachable using the method of bijections from above -/
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/482525422 -/
@@ -125,6 +113,6 @@ conjecture Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite 
 @[equational_result]
 conjecture Equation503_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [503] [4065, 3862]
 @[equational_result]
-conjecture Equation503_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [476] [359, 4065]
+conjecture Equation476_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [476] [359, 4065]
 
 end Conjectures
