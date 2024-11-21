@@ -30,7 +30,7 @@ noncomputable section
 --outside the group closure would not suffice for this. #TODO
 --Significant amounts of the construction -- even defining the invariants of the partial function --
 --depend on this, so we use it explicitly instead of making PartialSolution depend on a group G.
-abbrev A : Type := Π₀ _ : ℕ, ℤ
+private abbrev A : Type := Π₀ _ : ℕ, ℤ
 
 instance A_module : Module.Free ℤ A := inferInstance
 

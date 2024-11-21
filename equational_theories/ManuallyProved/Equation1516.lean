@@ -16,7 +16,7 @@ namespace Eq1516
 
 open FreeGroup
 
-abbrev A := FreeGroup Nat
+private abbrev A := FreeGroup Nat
 
 instance : Countable A := by
   apply Function.Surjective.countable (Quot.mk_surjective)
