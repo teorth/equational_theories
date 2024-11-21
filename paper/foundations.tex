@@ -1,0 +1,26 @@
+\section{Mathematical Foundations}
+
+\note{This section covers topics like free magmas (including those relative to theories), a completeness theorem, and confluence (unique simplification).}
+
+
+\section{Formal Foundations}
+
+\note{TODO: expand this sketch.}
+
+    Here we describe the Lean framework used to formalize the project, covering technical issues such as:
+
+\begin{itemize}
+    \item Magma operation symbol issues
+    \item Syntax (`LawX`) versus semantics (`EquationX`)
+    \item "Universe hell" issues
+    \item Additional verification (axiom checking, Leanchecker, etc.)
+    \item Use of the `conjecture` keyword
+    \item Use of namespaces to avoid collisions between contributions. (Note: we messed up with this with FreeMagma! Should have namespaced back end results as well as front end ones.)
+    \item Use of Facts command to efficiently handle large numbers of anti-implications at once
+\end{itemize}
+
+Upstream contributions:
+\begin{itemize}
+    \item Mathlib \url{https://github.com/leanprover-community/mathlib4/pulls?q=is%3Apr+is%3Abody+EquationalTheories+}
+    \item LeanBlueprint \url{https://github.com/PatrickMassot/leanblueprint/pulls?q=is%3Apr+in%3Abody+EquationalTheories+}
+\end{itemize}
