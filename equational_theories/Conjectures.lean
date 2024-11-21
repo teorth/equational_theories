@@ -57,6 +57,10 @@ conjecture Equation1323_facts : ∃ (G : Type) (_ : Magma G), Facts G [1323, 189
 @[equational_result]
 conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G), Facts G [1516] [255]
 
+/--  https://teorth.github.io/equational_theories/blueprint/1729-chapter.html -/
+@[equational_result]
+conjecture Equation1729_facts : ∃ (G : Type) (_ : Magma G), Facts G [1729] [817]
+
 
 /- Finite conjectures follow -/
 
