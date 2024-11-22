@@ -1,4 +1,3 @@
-
 \section{Project Management}\label{project-sec}
 
 \note{TODO: expand this sketch.}
@@ -17,7 +16,7 @@ Discuss topics such as:
 
 Maybe give some usage statistics, e.g. drawing from \url{https://github.com/teorth/equational_theories/actions/metrics/usage}
 
-Mention that FLT is also using a similar workflow
+Mention that FLT is also using a similar workflow.
 
 \subsection{Handling Scaling Issues}
 
@@ -27,30 +26,30 @@ Mention that some forethought in setting up a Github organizational structure wi
 
 Use of transitive reduction etc. to keep the Lean codebase manageable. Note that the project is large enough that one cannot simply accept arbitrary amounts of Lean code into the codebase, as this could make compilation times explode. Also note somewhere that transitive completion can be viewed as directed graph completion on a doubled graph consisting of laws and their formal negations.
 
-Technical debt issues, e.g., complications stemming from an early decision to make Equations.lean and AllEquations.lean the ground truth of equations for other analysis and visualization tools, leading to the need to refactor when AllEquations.lean had to be split up for performance reasons
+Technical debt issues, e.g., complications stemming from an early decision to make Equations.lean and AllEquations.lean the ground truth of equations for other analysis and visualization tools, leading to the need to refactor when AllEquations.lean had to be split up for performance reasons.
 
 Note that the "blueprint" that is now standard for guiding proof formalization projects is a bit too slow to keep up with this sort of project that is oriented instead about proving new results. Often new results are stated and formalized without passing through the blueprint, which is then either updated after the fact, or not at all. So the blueprint is more of an optional auxiliary guiding tool than an essential component of the workflow.
 
 \subsection{Other Design Considerations}
 
-Explain what "trusting" lean really means in a large project. Highlight the kind of human issues that can interfere with this and how use of tools like external checkers and PR reviews by people maintaining the projects still matters. Provide guidelines on good practices (such as branch protection or watching out for spurious modifications in PRs, for example to the CI). Highlight the importance of following a proper process for discussing and accepting new tasks, avoiding overlaps etc. These issues are less likely to arise in projects with one clearly defined decision maker as in this case, and more likely to arise when the decision making has to be delegated to many maintainers.
+Explain what "trusting" Lean really means in a large project. Highlight the kind of human issues that can interfere with this and how use of tools like external checkers and PR reviews by people maintaining the projects still matters. Provide guidelines on good practices (such as branch protection or watching out for spurious modifications in PRs, for example to the CI). Highlight the importance of following a proper process for discussing and accepting new tasks, avoiding overlaps etc. These issues are less likely to arise in projects with one clearly defined decision maker as in this case, and more likely to arise when the decision making has to be delegated to many maintainers.
 
-Note that despite the guarantees provided by Lean, non-Lean components still contained bugs. For instance an off-by-one error in an ATP run created a large number of spurious conjectures, and some early implementations of duality reductions (external to Lean) were similarly buggy. "Unit tests", e.g., checking conjectured outputs against Lean-validated outputs, or by theoretical results such as duality symmetry, were helpful, and the Equation Explorer visualization tool also helped human collaborators detect bugs.
+Note that despite the guarantees provided by Lean, non-Lean components still contained bugs. For instance, an off-by-one error in an ATP run created a large number of spurious conjectures, and some early implementations of duality reductions (external to Lean) were similarly buggy. "Unit tests", e.g., checking conjectured outputs against Lean-validated outputs, or by theoretical results such as duality symmetry, were helpful, and the Equation Explorer visualization tool also helped human collaborators detect bugs.
 
 Meta: documenting thoughts for the future record is quite valuable. It would be extremely tedious to try to reconstruct real-time impressions long after the fact just from the github commit history and Zulip chat archive.
 
 \subsection{Maintenance}
 
-Describe the role of maintainers and explain why they need to be conversant in the mathematics being formalised, as well as lean. As such the role of maintainers is often akin to postdocs or assistant profs in a research group who do some research of their own, but spend much of their time to guide others in performing their tasks, the key difference being that contributors are volunteers who choose their own tasks. Explain the tasks maintainers must perform. Examples:
+Describe the role of maintainers and explain why they need to be conversant in the mathematics being formalised, as well as Lean. As such, the role of maintainers is often akin to postdocs or assistant profs in a research group who do some research of their own, but spend much of their time to guide others in performing their tasks, the key difference being that contributors are volunteers who choose their own tasks. Explain the tasks maintainers must perform. Examples:
 
 \begin{itemize}
-\item reviewing proofs,
-\item helping with proofs and theorem statements when people get stuck,
-\item Offering suggestions and guidance on how to produce shorter or more elegant proofs,
-\item ensuring some basic standards are met in proof blocks that make proofs robust to upstream changes,
-\item Creating and maintaining CI processes.
-\item responding to task requests,
-\item evaluating theorem and definition formulations (for example unifying many theorem statements into one using FactsSyntax).
-\item suggesting better ones where possible,
-\item ensuring that there is no excessive and pointless overlap of content in different contributions (TODO: elaborate on what level of overlap was permissible and what we consider excessive).
+    \item Reviewing proofs,
+    \item Helping with proofs and theorem statements when people get stuck,
+    \item Offering suggestions and guidance on how to produce shorter or more elegant proofs,
+    \item Ensuring some basic standards are met in proof blocks that make proofs robust to upstream changes,
+    \item Creating and maintaining CI processes,
+    \item Responding to task requests,
+    \item Evaluating theorem and definition formulations (for example unifying many theorem statements into one using FactsSyntax),
+    \item Suggesting better ones where possible,
+    \item Ensuring that there is no excessive and pointless overlap of content in different contributions (TODO: elaborate on what level of overlap was permissible and what we consider excessive).
 \end{itemize}
