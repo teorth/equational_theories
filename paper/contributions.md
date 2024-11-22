@@ -25,6 +25,12 @@ accordingly via a PR filling a simple table with a checkmark (✅).
 We could have a longer, less schematic description too written below the table to make sure that
 some major not-easily-classifiable contribution is not left out.
 
+## Extended Categories
+
+...
+
+## Contributions Table
+
 | Contributor | Conceptualization | Data Curation | Formal Analysis | Funding Acquisition | Investigation | Methodology | Project Administration | Resources | Software | Supervision | Validation | Visualization | Writing - Original Draft Preparation | Writing – Review and Editing |
 |-------------|-------------------|---------------|-----------------|---------------------|---------------|-------------|------------------------|-----------|----------|-------------|------------|---------------|-------------------------------------|-----------------------------|
 |             |                   |               |                 |                     |               |             |                        |           |          |             |            |               |                                     |                             |
