@@ -66,7 +66,34 @@ was equivalent to the singleton law \eqref{eq2}, but all known proofs are comput
 
 \subsection{The Equational Theories Project}
 
-As noted in \Cref{numbering-app}, there are $4694$ equational laws of order at most $4$.  In September of 2024, we launched the \emph{Equational Theories Project} (ETP)\footnote{\url{https://teorth.github.io/equational_theories/}} to completely determine the implication pre-ordering $\leq$ for this set of laws.  Ostensibly, this determining the truth or falsity of $4694 \times 4693 = 22028942$ implications; while one can use properties such as the transitivity of the pre-ordering to reduce the work somewhat, this is clearly a task that requires significant automation.
+As noted in \Cref{numbering-app}, there are $4694$ equational laws of order at most $4$.  In September of 2024, we launched the \emph{Equational Theories Project} (ETP)\footnote{\url{https://teorth.github.io/equational_theories/}} to completely determine the implication pre-ordering $\leq$ for this set of laws.  Ostensibly, this determining the truth or falsity of $4694^2 = 22033636$ implications; while one can use properties such as the transitivity of the pre-ordering to reduce the work somewhat, this is clearly a task that requires significant automation.  It was also a project highly amenable to crowdsourcing, in which different participants could work on developing a different techniques, each of which could be used to fill out a different part of the implication graph.
+
+The project achieved this primary objective, with all of the implications formalized in the proof assistant language \emph{Lean}, and can be found on the ETP github repository.  The experience of running such a large collaborative research project introduced several challenges, which we report upon in \Cref{project-sec}.  Also, a variety of methods with varying degrees of automation or computer-assistance had to be developed to resolve all the implications, which had quite a variety of difficulty levels.
+
+Of the $22033636$ possible implications $E \vdash E'$, $8178279$ (or $37.12\%$) would end up being true. To establish such positive implications $E \vdash E'$, the main techniques used were as follows:
+
+\begin{itemize}
+\item A very small number of positive implications were established and formalized by hand, mostly through direct rewriting of the laws; but this approach would not scale to the full project.
+\item  Simple rewriting rules, for instance based on the observation that any law of the form $x = f(y,z,\dots)$ was necessarily equivalent to the trivial law \eqref{eq2}, could already reduce the size of potential equivalence classes by a significant fraction.  We discuss this method in ???.
+\item The preorder axioms for $\vdash$, as well as the ``duality'' symmetry of the preorder with respect to replacing a magma operation $x \op y$ with its reflection $x \op^* y := y \op x$, can be used to significantly cut down on the number of implications that need to be proven explicitly; ultimately, only $10657$ ($0.05\%$) of the positive implications needed a direct proof.
+\item  Automated Theorem Provers (ATP) could be deployed at acceptable compute cost to establish this generating set of positive implications, as discussed in \Cref{automated-sec}.
+\end{itemize}
+
+More challenging were the $13855357$ ($62.88\%$) implications that were false, $E \not \vdash E'$.  Here, the range of techniques needed to refute such implications were quite varied.
+\begin{itemize}
+    \item Syntactic methods, such as observing an ``invariant'' of the law $E$ that was not shared by the law $E'$, could be used to obtain some refutations.  For instance, if both sides of $E$ had the same order, but both sides of $E'$ did not, this could be used to syntactically refute $E \vdash E'$.  Similarly, if the law $E$ was confluent, enjoyed a complete rewriting system, or otherwise permitted some understanding of the free magma associated to that law, one could decide the assertions $E \vdash E'$ for all possible laws $E'$, or at least a significant fraction of such laws.  We discuss these methods, and the extent to which they can be automated in ???.  One novel such invariant we introduce here is the ``twisting semigroup'' of an equational theory, which gave simple refutations of some otherwise very challenging implications.
+    \item Small finite magmas, which can be described explicitly by multiplication tables, could be tested by brute force computaions to provide a large number of counterexamples to implications, or by ATP-assisted methods. See ???.
+    \item Linear models, in which the magma operation took the form $x \op y = ax + by$ for some (commuting or non-commuting) coefficients $a,b$, allowed for another large class of counterexamples to implications, which could be automatically scanned for either by brute force or by Grobner basis type calculations.  See ???.
+    \item Translation invariant models, in which the magma operation took the form $x \op y = x + f(y-x)$ on an additive group, or $x \op y = x f(x^{-1} y)$ on a non-commutative group, reduce matters to analyzing certain functional equations; see ???.
+    \item Greedy methods, in which either the multiplication table $(x,y) \mapsto x \op y$ or the function $f$ determining a translation-invariant model are iteratively constructed by a greedy algorithm subject to a well-chosen ruleset, were effective in resolving many implications not easily disposed of by preceding methods.  See ???.
+    \item Starting with a simple base magma $M$ obeying both $E$ and $E'$, and either enlarging it to a larger magma $M' \supset M$, extending it to a magma $N$ with a projection homomorphism $\pi: N \to M$, or modifying the multiplication table on a small number of values, also proved effective when combined with greedy methods.  See ???.
+    \item Some \emph{ad hoc} models based on existing mathematical objects, such as infinite trees, rings of polynomials, or ``Kisielewicz models'' utilizing the prime factorization of the natural numbers, could also handle some otherwise difficult cases.  In some cases, the magma law induced some relevant and familiar structures, such as a directed graph or a partial order, which also helped guide counterexample constructions.  See ???.
+    \item Automated theorem provers were helpful in identifying which simplifying axioms could be added to the magma without jeapordizing the ability to refute the desired implication $E \vdash E'$.
+\end{itemize}
+
+
+
+
 
 \note{
 Describe the initial aims and history of the project. Also discuss extension to finite magma implications (refer to Austin pair section).
