@@ -239,21 +239,41 @@ end Construction
 
 section ConcreteRefutations
 
-noncomputable abbrev iota : ℝ → UnitAddCircle := fun x => ↑x
+def _root_.UnitAddCircle.Irrational : UnitAddCircle → Prop := fun x =>
+  ∃ x' : ℝ, x = ↑x' ∧ _root_.Irrational x'
 
-def M := Set.image iota {x : ℝ | Irrational x}
+def M := {x : UnitAddCircle | x.Irrational }
 
-def S : M → M := fun ⟨x,h⟩ =>
-  ⟨x*2, Irrational.mul_rat h (by decide)⟩
+lemma S.well_def {x : UnitAddCircle} (hirr : x.Irrational) : (x + x).Irrational := by
+  simp_all [UnitAddCircle.Irrational]
+  obtain ⟨x', ⟨hxx', hirr'⟩⟩ := hirr
+  exists (x'+ x')
+  constructor
+  · simp [hxx']
+  ·  have hmul : x' + x' = x' * (2 : ℚ) := by ring
+     rw [hmul]
+     apply Irrational.mul_rat hirr'
+     simp
+
+noncomputable def S : M → M
+ | ⟨x,hx⟩ => ⟨x + x, S.well_def hx⟩
+
 theorem S.surjective : Function.Surjective S := by
   simp [Function.Surjective, M]
-  intro a ha
-  have ha12  := Irrational.mul_rat ha (q := 1/2) (by simp)
+  intro a ⟨a', ⟨ha', hirra'⟩⟩
+  have ha12  := Irrational.mul_rat hirra' (q := 1/2) (by simp)
   have h12 : @Rat.cast ℝ Real.instRatCast (1 / 2)  = @HDiv.hDiv ℝ ℝ ℝ instHDiv 1 2  := by simp
-  have hprod : S ⟨a * ↑(1 / 2), h12 ▸ ha12⟩ = ⟨a,ha⟩ := by
+  have hirr : UnitAddCircle.Irrational ↑(a' * (1/2)) := by
+    unfold UnitAddCircle.Irrational
+    use (a' * (1/2))
+    constructor
+    · simp
+    · exact h12 ▸ ha12
+  have hprod : S ⟨↑(a' * (1 / 2)), hirr⟩ = ⟨a,⟨a', ⟨ha', hirra'⟩⟩⟩ := by
     simp [S]
-  exists a * ↑(1 / 2)
-  exists h12 ▸ ha12
+    sorry
+  exists ↑(a' * (1 / 2))
+  exists hirr
 
 theorem S.nofix : no_fixed_points S := by
   simp [no_fixed_points, S]
