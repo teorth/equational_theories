@@ -11,3 +11,4 @@ import equational_theories.ManuallyProved.Equation1661
 import equational_theories.ManuallyProved.Equation1701
 import equational_theories.ManuallyProved.Equation1722
 import equational_theories.ManuallyProved.Equation3342
+import equational_theories.ManuallyProved.Equation1447
