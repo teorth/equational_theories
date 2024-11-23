@@ -237,61 +237,110 @@ theorem M_satisfies_Equation1447 : @Equation1447 M (instMagma S hsurj) := by
 
 end Construction
 
+
+
 section ConcreteRefutations
 
-def _root_.UnitAddCircle.Irrational : UnitAddCircle → Prop := fun x =>
-  ∃ x' : ℝ, x = ↑x' ∧ _root_.Irrational x'
+def M := PNat
 
-def M := {x : UnitAddCircle | x.Irrational }
+-- This feels unnecessarily tedious
+lemma S.well_def (n : PNat) (hn : n.val ≠ 1) : 0 < n.val / (2 : Nat) := by
+  obtain ⟨n',hn'⟩ := n
+  have hn : n' > 1 := by
+    simp at hn
+    omega
+  simp
+  omega
 
-lemma S.well_def {x : UnitAddCircle} (hirr : x.Irrational) : (x + x).Irrational := by
-  simp_all [UnitAddCircle.Irrational]
-  obtain ⟨x', ⟨hxx', hirr'⟩⟩ := hirr
-  exists (x'+ x')
-  constructor
-  · simp [hxx']
-  ·  have hmul : x' + x' = x' * (2 : ℚ) := by ring
-     rw [hmul]
-     apply Irrational.mul_rat hirr'
-     simp
-
-noncomputable def S : M → M
- | ⟨x,hx⟩ => ⟨x + x, S.well_def hx⟩
+def S : PNat → PNat := fun n =>
+  if h : n.val = 1 then 8 else ⟨n.val / (2 : Nat), S.well_def n h⟩
 
 theorem S.surjective : Function.Surjective S := by
-  simp [Function.Surjective, M]
-  intro a ⟨a', ⟨ha', hirra'⟩⟩
-  have ha12  := Irrational.mul_rat hirra' (q := 1/2) (by simp)
-  have h12 : @Rat.cast ℝ Real.instRatCast (1 / 2)  = @HDiv.hDiv ℝ ℝ ℝ instHDiv 1 2  := by simp
-  have hirr : UnitAddCircle.Irrational ↑(a' * (1/2)) := by
-    unfold UnitAddCircle.Irrational
-    use (a' * (1/2))
-    constructor
-    · simp
-    · exact h12 ▸ ha12
-  have hprod : S ⟨↑(a' * (1 / 2)), hirr⟩ = ⟨a,⟨a', ⟨ha', hirra'⟩⟩⟩ := by
-    simp [S]
-    sorry
-  exists ↑(a' * (1 / 2))
-  exists hirr
+  intro ⟨n,hn⟩
+  exists ⟨n*2, by omega⟩
+  have hneq1 : n*2 ≠ 1 := by omega
+  simp [S]
+
+theorem pval_eq_val_eq (m n : PNat) : m = n ↔ m.val = n.val := by simp
+
+lemma n_gt_1_s_eq_div_2 (n : PNat) (hn : n.val > 1) : S n = n.val / 2 := by
+  simp [S]
+  aesop
+
+lemma n_gt_3_s_s_eq_div_4 (n : PNat) (hn : n.val > 3) : S (S n) = n.val / 4 := by
+  have hn2 := n_gt_1_s_eq_div_2 n (by omega)
+  have hn2' : S n = ⟨(n / 2), by omega⟩ := by
+    apply (pval_eq_val_eq _ _).2
+    exact hn2
+  have hn2gt1 : n.val / 2 > 1 := by omega
+  rw [hn2']
+  rw [n_gt_1_s_eq_div_2 ⟨(n / 2), by omega⟩ hn2gt1]
+  simp
+  omega
+
+lemma n_gt_7_s_s_s_eq_div_8 (n : PNat) (hn : n.val > 7) : S (S (S n)) = n.val / 8 := by
+  have hn2 := n_gt_1_s_eq_div_2 n (by omega)
+  have hn2' : S n = ⟨(n / 2), by omega⟩ := by
+    apply (pval_eq_val_eq _ _).2
+    exact hn2
+  have hn2gt1 : n.val / 2 > 3 := by omega
+  rw [hn2']
+  rw [n_gt_3_s_s_eq_div_4 ⟨(n / 2), by omega⟩ hn2gt1]
+  simp
+  omega
+
+-- TODO: golf this, there should be a nicer way...
+lemma S.nofix_le_7 (n : PNat) (hn : n.val ≤ 7) : S n ≠ n ∧ S (S n) ≠ n ∧ S (S (S n)) ≠ n := by
+  have hnzero : n.val > 0 := n.prop
+  have casesplit : n.val = 1 ∨ n.val = 2 ∨ n.val = 3 ∨ n.val = 4 ∨ n.val = 5 ∨ n.val = 6 ∨ n.val = 7 := by omega
+  simp [Ne]
+  repeat rw [pval_eq_val_eq ]
+  cases casesplit
+  · case inl h => simp [S,h]
+  · case inr caseplit =>
+      cases caseplit
+      · case inl h => simp [S,h]
+      · case inr caseplit =>
+          cases caseplit
+          · case inl h => simp [S,h]
+          · case inr caseplit =>
+              cases caseplit
+              · case inl h => simp [S,h]
+              · case inr caseplit =>
+                  cases caseplit
+                  · case inl h => simp [S,h]
+                  · case inr caseplit =>
+                      cases caseplit
+                      · case inl h => simp [S,h]
+                      · case inr h => simp [S,h]
+
+lemma S.nofix_gt_7 (n : PNat) (hn : n.val > 7) : S n ≠ n ∧ S (S n) ≠ n ∧ S (S (S n)) ≠ n := by
+  have hgt1 : n.val > 1 := by omega
+  have hgt3 : n.val > 3 := by omega
+  have hs := n_gt_1_s_eq_div_2 n hgt1
+  have hs_s := n_gt_3_s_s_eq_div_4  n hgt3
+  have hs_s_s := n_gt_7_s_s_s_eq_div_8 n hn
+  simp_all [pval_eq_val_eq]
+  omega
 
 theorem S.nofix : no_fixed_points S := by
-  simp [no_fixed_points, S]
-  intro a ha
-  push_neg
-  constructor <;> try constructor
-  · sorry
-  · sorry
-  · sorry
+  intro ⟨n,hn⟩
+  by_cases n > 7
+  · case pos h =>
+      apply S.nofix_gt_7 ⟨n,hn⟩ h
+  · case neg h =>
+      have hleq : n ≤ 7 := by omega
+      apply S.nofix_le_7 ⟨n,hn⟩ hleq
 
-theorem M_1_satisfies_Equation1447 : @Equation1447 M (instMagma S S.surjective) :=
+theorem PNat_S_satisfies_Equation1447 : @Equation1447 PNat (instMagma S S.surjective) :=
   M_satisfies_Equation1447 S S.surjective S.nofix
 
-#check M_satisfies_Equation1447
-#print Equation1431
-#print Equation4269
+theorem PNat_S_refutes_Equation1431 : ¬ @Equation1431 PNat (instMagma S S.surjective) := by
+  simp [Equation1431]
+  exists 1
+  exists 3
+  simp [S, Magma.op, magmaOp]
+  split_ifs
 
 end ConcreteRefutations
-#synth Coe Real UnitAddCircle
-
 end Equation1447
