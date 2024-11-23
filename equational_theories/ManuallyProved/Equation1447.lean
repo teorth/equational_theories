@@ -239,11 +239,7 @@ theorem M_satisfies_Equation1447 : @Equation1447 M (instMagma S arbitraryRoot) :
 
 end Construction
 
-
-
 section ConcreteRefutations
-
-def M := PNat
 
 -- This feels unnecessarily tedious
 lemma S.well_def (n : PNat) (hn : n.val ≠ 1) : 0 < n.val / (2 : Nat) := by
@@ -256,12 +252,6 @@ lemma S.well_def (n : PNat) (hn : n.val ≠ 1) : 0 < n.val / (2 : Nat) := by
 
 def S : PNat → PNat := fun n =>
   if h : n.val = 1 then 8 else ⟨n.val / (2 : Nat), S.well_def n h⟩
-
-theorem S.surjective : Function.Surjective S := by
-  intro ⟨n,hn⟩
-  exists ⟨n*2, by omega⟩
-  have hneq1 : n*2 ≠ 1 := by omega
-  simp [S]
 
 theorem pval_eq_val_eq (m n : PNat) : m = n ↔ m.val = n.val := by simp
 
