@@ -1,0 +1,72 @@
+
+\section{Counterexample constructions}
+
+In this section we collect the various techniques developed in the ETP to construct counterexamples to various implications $E \vdash E'$.
+
+\subsection{Finite magmas}\label{finite-sec}
+
+\note{TODO: Expand this sketch}
+
+Discuss semi-automated creation of finite counterexamples (as discussed here)
+Describe various sources of example magmas used in counterexamples, including the ones listed here.
+
+Also note some ``negative results'' - classes of finite magmas that did not yield many additional refutations, e.g. commutative 5x5 magmas.
+
+Mention finite immunity
+
+Using SAT solvers to find medium sized finite magmas obeying a given law? See this discussion.
+
+Discuss computational and memory efficiencies needed to brute force over extremely large sets of magmas. SAT solving may be a better approach past a certain size!
+
+\subsection{Linear models}\label{linear-sec}
+
+A fruitful source of counterexamples is the class of \emph{linear magmas}, where the carrier $M$ is a ring (which may be commutative or non-commutative, finite or infinite), and the operation $\op$ is given by $x \op y = ax + by$ for some coefficients $a,b \in M$; one can also generalize this slightly to \emph{affine magmas}, in which the operation is given by $x \op y = ax + by + c$, but for simplicity we shall focus on linear magmas here.  It is easy to see that in a linear magma, any word $w(x_1,\dots,x_n)$ of $n$ indeterminates also takes the linear form
+$$ w(x_1,\dots,x_n) = \sum_{i=1}^n P_{w,i}(a,b) x_i$$
+for some (possibly non-commutative) polynomial $P_{w,i}$ in $a,b$ with integer coefficients.  Thus, a linear magma will obey an equational law $w_1 \formaleq w_2$ if and only if the pair $(a,b)$ lies in the (possibly non-commutative) variety
+\begin{equation}\label{variety}
+  \{ (a,b) \in M \times M: P_{w_1,i}(a,b) = P_{w_2,i}(a,b) \hbox{ for all } i \}.
+\end{equation}
+As such, a necessary condition for such a law $w_1 \formaleq w_2$ to entail another law $w'_1 \formaleq w'_2$ is that one has the inclusion
+$$ \{ (a,b) \in M \times M: P_{w_1,i}(a,b) = P_{w_2,i}(a,b) \hbox{ for all } i \} \subset
+\{ (a,b) \in M \times M: P_{w'_1,i}(a,b) = P_{w'_2,i}(a,b) \hbox{ for all } i \} $$
+for all rings $M$.  For commutative rings, this criterion can be checked by standard Grobner basis techniques; in the noncommutative case one can use methods such as the diamond lemma \cite{diamond-lemma}.
+
+\begin{example}[Commutative counterexample] For the law $x = y \op (((x \op y) \op x) \op y)$ \eqref{eq1286}, the variety \eqref{variety} can be computed to be
+$$ \{ (a,b) \in M \times M: 1 = a+ba^3+bab, 0 = a + ba^2 b + b^2 \}$$
+while the variety for the idempotent law \eqref{eq3} is
+$$ \{ (a,b) \in M: a+b=1 \}.$$
+Thus to show that \eqref{eq1286} does not entail \eqref{eq3}, it suffices to locate elements $a,b$ of a ring $M$ for one has $1 = a+ba^3+bab$, $0 = a + ba^2 b + b^2$, and $a+b \neq 1$.  Here one can take a commutative example, for instance when $M = \Z/p\Z$ and $(p,a,b) = (11,1,7)$.
+\end{example}
+
+\begin{example}[Noncommutative counterexample]\label{1117-ex} For the law $x = y \op ((y \op (x \op z)) \op z)$ \eqref{eq1117}, the variety \eqref{variety} can be computed to be
+$$ \{ (a,b) \in M \times M: 1 = baba, 0 = a+ba^2, 0 = bab^2 + b^2 \}$$
+while the variety for $x = (x \op ((x \op x) \op x)) \op x$ \eqref{eq2441} is
+$$ \{ (a,b) \in M \times M: a^2 + aba^2 + abab + ab^2 + b = 1 \}.$$
+Observe that if $ba = -1$, then $(a,b)$ automatically lies in the first set, and lies in the second set if and only if $(ab+1)(b-1) = 0$.  One can then show that \eqref{eq1117} does not imply \eqref{eq2441} by setting $a = L$, $b = -R$ where $L, R$ are the left and right shift operators respectively on the ring of integer-valued sequences $\Z^\N$.  With some \emph{ad hoc} effort one can convert this example into a less linear, but simpler (and easier to formalize) example, namely the magma with carrier $\Z$ and operation $x \op y = 2x - \lfloor y/2 \rfloor$.
+\end{example}
+
+\begin{remark} As essentially observed in \cite{austin}, if there is a commutative linear counterexample to an implication $E \vdash E'$, then by the Lefschetz principle this counterexample can be realized in a finite field ${\mathbb F}_q$ for some prime power $q$ (and by the Chebotarev density theorem one can in fact take $q$ to be a prime, so that the carrier is of the form $\Z/p\Z$ for some prime $p$).  As such, we have found that an effective way to refute implications by the commutative linear magma method is to simply perform a brute force search over linear magmas $x \op y = ax + by$ in $\Z/p\Z$ for various triples $(p,a,b)$. \note{Discuss performance of this method.}
+
+On the other hand, the refutations obtained by non-commutative linear constructions need not have a finite model.  For instance, consider the refutation $E1117 \not \vdash E2441$ from \Cref{1117-ex}.  The law \eqref{eq1117} can be rewritten as $L_y R_z L_y R_z x = x$.  This implies that $R_z$ is injective and $L_y$ is surjective for all $y,z$.  For finite magmas $M$, this then implies that the $L_y, R_z$ are in fact invertible, and hence we have also $R_z L_y R_z L_y x = x$, which implies \eqref{eq2441} by setting $x=y=z$.  Thus the refutation $E1117 \not \vdash E2441$ is ``immune'' to finite counterexamples.
+\end{remark}
+
+\begin{remark}  One can also consider nonlinear magma models, such as quadratic models $x \op y = ax^2 + bxy + cy^2 + dx + ey + f$ in a cyclic group $\Z/N\Z$.  For small values of $N$, we have found such models somewhat useful in providing additional refutations of implications $E \vdash E'$ beyond what can be achieved by the linear or affine models.  However, as the polynomials associated to a word $w(x_1,\dots,x_n)$ tend to be of high degree (exponential in the order of the word), it becomes quite rare for such models to obey a given equation $E$ when $N$ is large.
+\end{remark}
+
+\begin{remark} One can also consider the seemingly more general linear model $x \op y = ax + by$, where the carrier $M$ is now an abelian group, and $a,b$ act on $M$ by homomorphisms, that is to say that they are elements of the endomorphism ring $\mathrm{End}(M)$.  However, this leads to exactly the same varieties \eqref{variety} (where $M$ is now replaced by the endomorphism ring $\mathrm{End}(M)$) and so does not increase the power of the linear model for the purposes of refuting implications.
+\end{remark}
+
+\subsection{Translation-invariant models}\label{translation-sec}
+
+Translation-invariant magmas (see e.g., this thread for a nice example). Note: any magma with a transitive symmetry will lift to a translation-invariant model, so this helps explain why these are common examples. Also symmetric models could be slightly more likely to obey various laws than general models due to degree of freedom considerations.
+
+Mention translation-invariant immunity
+
+\subsection{Ad hoc constructions}\label{adhoc-sec}
+
+Tree based constructions, see here.
+
+\subsection{Greedy constructions}\label{greedy-sec}
+
+
+\subsection{Modifying base models}\label{modify-base}
