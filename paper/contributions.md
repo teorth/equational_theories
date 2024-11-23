@@ -4,7 +4,7 @@ We will proceed systematically by discussing, interpreting, and extending each o
 the [CReDiT categories](https://credit.niso.org/):
 
 - **Conceptualization**: Ideas; formulation or evolution of overarching research goals and aims.
-- **Data Curation**: Management activities to annotate (produce metadata), scrub data and maintain research data (including software code, where it is necessary for interpreting the data itself) for initial use and later reuse.  [This includes contributions to, or maintainance of, the blueprint for the project.]
+- **Data Curation**: Management activities to annotate (produce metadata), scrub data and maintain research data (including software code, where it is necessary for interpreting the data itself) for initial use and later reuse.  [This includes contributions to, or maintenance of, the blueprint for the project.]
 - **Formal Analysis**: Application of statistical, mathematical, computational, or other formal techniques to analyze or synthesize study data.  [This encompasses any efforts to analyze the implication graph, for instance using machine learning tools or statistical analysis.]
 - **Funding Acquisition**: Acquisition of the financial support for the project leading to this publication.
 - **Investigation**: Conducting a research and investigation process, specifically performing the experiments, or data/evidence collection. [This includes producing any mathematical investigation of a given implication between equational laws.]
