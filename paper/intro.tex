@@ -77,7 +77,15 @@ Secondary aims of the ETP included the possibility of discovering unusually inte
 
 \subsection{Outcomes}
 
-The ETP achieved its primary objective, with all of the implications formalized in the proof assistant language \emph{Lean}, and can be found on the ETP GitHub repository. The experience of running such a large collaborative research project introduced several challenges, which we report upon in \Cref{project-sec}. Also, a variety of methods with varying degrees of automation or computer-assistance had to be developed to resolve all the implications, which had quite a variety of difficulty levels.
+The ETP achieved its primary objective, with all of the implications formalized in the proof assistant language \emph{Lean}, and can be found on the ETP GitHub repository.  See \Cref{fig:854} for a small fragment of the implication graph produced. The experience of running such a large collaborative research project introduced several challenges, which we report upon in \Cref{project-sec}. Also, a variety of methods with varying degrees of automation or computer-assistance had to be developed to resolve all the implications, which had quite a variety of difficulty levels.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.85\textwidth]{854.png}
+\caption{A Hasse diagram of all the equational laws implied by Equation 854, $x = x \op ((y \op z) \op (x \op z))$.  An edge in this diagram indicates that the lower equation implies the higher one. Rounded rectangles indicate groups of equivalent laws.  This graph was produced by the visualization tool \emph{Graphiti}, which was developed for this project.}
+\label{fig:854}
+\end{figure}
+
 
 Of the $22033636$ possible implications $E \vdash E'$, $8178279$ (or $37.12\%$) would end up being true. To establish such positive implications $E \vdash E'$, the main techniques used were as follows:
 
