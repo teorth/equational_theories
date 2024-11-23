@@ -1,12 +1,26 @@
 
 \section{Syntactic arguments}\label{syntactic-sec}
 
-\note{TODO: Expand this sketch}
+Many proofs or refutations of implications (or equivalences) between two equational laws $E,E'$ can be obtained from the syntactic form of the equation.  We discuss some techniques here that were useful in the ETP.
 
 \subsection{Simple rewrites}\label{rewrite-sec}
 
+Many equational laws $E'$ can be formally deduced from a given law $E$ by applying the Lean `rw' tactic to rewrite $E'$ repeatedly by some forward or backward application of $E$ applied to arguments that match some portion of $E$.  For instance, the commutative law \eqref{eq43} clearly implies Equation 4531
+\begin{equation}\label{eq4531}\tag{E4531}
+    x \op (y \op z) = (y \op z) \op x
+\end{equation}
+by a single such rewrite.  A brute force application of such rewrite methods is already able to directly generate about $15,000$ such implications, including many equivalences to the singleton law \eqref{eq2} and the constant law \eqref{eq46}.  After applying transitive closure, this generates about four million further such implications.
+
+A simple observation that already generates many equivalences is that any equation of the form $x = f(y,z,\dots)$ necessarily is equivalent to the trivial law $x = y$; similarly, an equation of the form $f(x,y) = g(z,w,\dots)$ implies $f(x,y) = f(x',y')$; and so forth.
 
 \subsection{Invariants}
+
+Fix an alphabet $X$. An \emph{invariant} is an assignment of an object $I(w)$ to each word $w \in M_X$ with the property that if an equational law $w_1 \formaleq w_2$ has the property that $I(w_1)=I(w_2)$, then the same property $I(w'_1) = I(w'_2)$ holds for any consequence $w'_1 \formaleq w'_2$.  In particular, if one law $I(w_1)=I(w_2)$ and $I(w'_1) \neq I(w'_2)$, then the law $w_1 \formaleq w_2$ does not imply the law $w'_1 \formaleq w'_2$.
+
+A simple example of an invariant is the order of a word: if $w_1,w_2$ have the same order, then any rewriting of a word $w$ using the law $w_1 \formaleq w_2$ will preserve its order.  Hence, if $w'_1, w'_2$ are of different orders, then $w_1 \formaleq w_2$ cannot imply $w'_1 \formaleq w'_2$.  Another example
+
+
+
 
 Mention free magmas as one source of invariants
 
