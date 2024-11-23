@@ -1,18 +1,57 @@
 
 \section{Syntactic arguments}\label{syntactic-sec}
 
-\note{TODO: Expand this sketch}
+Many proofs or refutations of implications (or equivalences) between two equational laws $E,E'$ can be obtained from the syntactic form of the equation.  We discuss some techniques here that were useful in the ETP.
 
 \subsection{Simple rewrites}\label{rewrite-sec}
 
+Many equational laws $E'$ can be formally deduced from a given law $E$ by applying the Lean `rw' tactic to rewrite $E'$ repeatedly by some forward or backward application of $E$ applied to arguments that match some portion of $E$.  For instance, the commutative law \eqref{eq43} clearly implies $x \op (y \op z) = (y \op z) \op x$ \eqref{eq4531}
+by a single such rewrite.  A brute force application of such rewrite methods is already able to directly generate about $15,000$ such implications, including many equivalences to the singleton law \eqref{eq2} and the constant law \eqref{eq46}.  After applying transitive closure, this generates about four million further such implications.
 
-\subsection{Invariants}
+A simple observation that already generates many equivalences is that any equation of the form $x = f(y,z,\dots)$ necessarily is equivalent to the trivial law $x = y$; similarly, an equation of the form $f(x,y) = g(z,w,\dots)$ implies $f(x,y) = f(x',y')$; and so forth.
 
-Mention free magmas as one source of invariants
+\subsection{Matching invariants}
+
+Fix an alphabet $X$. An \emph{matching invariant} is an assignment $I \colon M_X \to {\mathcal I}$ of an object $I(w) \in {\mathcal I}$ in some space ${\mathcal I}$ to each word $w \in M_X$ with the property that if an equational law $w_1 \formaleq w_2$ has matching invariants $I(w_1)=I(w_2)$, then the same matching $I(w'_1) = I(w'_2)$ holds for any consequence $w'_1 \formaleq w'_2$.  In particular, if one law $I(w_1)=I(w_2)$ and $I(w'_1) \neq I(w'_2)$, then the law $w_1 \formaleq w_2$ does not imply the law $w'_1 \formaleq w'_2$.
+
+A simple example of a matching invariant is the order of a word: if $w_1,w_2$ have the same order, then any rewriting of a word $w$ using the law $w_1 \formaleq w_2$ will preserve its order.  Hence, if $w'_1, w'_2$ are of different orders, then $w_1 \formaleq w_2$ cannot imply $w'_1 \formaleq w'_2$.  For instance, the commutative law \eqref{eq43} cannot imply the left-absorptive law \eqref{eq4}.
+
+One source of matching invariants comes from the free magma $M_X$ of a theory:
+
+\begin{proposition}[Free magmas and matching invariants]\label{free-inv}  Let $\Gamma$ be a theory, and let $\iota_{X,\Gamma} \colon X \to M_{X,\Gamma}$ be the map associated to the free magma $M_{X,\Gamma}$ for that theory.  Then the map $I \colon M_X \to M_{X,\Gamma}$ defined by $I(w) \coloneqq \varphi_{\iota_{X,\Gamma}}(w)$ is an invariant.
+\end{proposition}
+
+\begin{proof}  Suppose that $w_1 \formaleq w_2$ entails $w'_1 \formaleq w'_2$, and that $I(w_1) = I(w_2)$.  For any $f \colon X \to M_{X,\Gamma}$, the two maps $\varphi_f, \varphi_{f,\Gamma} \circ \varphi_{\iota_{X,\Gamma}} \colon M_X \to M_{X,\Gamma}$ are both homomorphisms that extend $f$, hence agree by the universal property of $M_X$, as displayed by the following commutative diagram:
+\[\begin{tikzcd}
+	&& X \\
+	\\
+	{M_X} && {M_{X,\Gamma}} && {M_{X,\Gamma}}
+	\arrow[hook, from=1-3, to=3-1]
+	\arrow["{\iota_{X,\Gamma}}"', from=1-3, to=3-3]
+	\arrow["f", from=1-3, to=3-5]
+	\arrow["{I = \varphi_{\iota_{X,\Gamma}}}", from=3-1, to=3-3]
+	\arrow["{\varphi_f}"', curve={height=18pt}, from=3-1, to=3-5]
+	\arrow["{\varphi_{f,\Gamma}}", from=3-3, to=3-5]
+\end{tikzcd}\]
+In particular, the hypothesis $I(w_1)=I(w_2)$ implies that $\varphi_f(w_1) = \varphi_f(w_2)$ for all $f \colon X \to M_{X,\Gamma}$; that is to say, the magma $M_{X,\Gamma}$ obeys the law $w_1 \formaleq w_2$, and hence also $w'_1 \formaleq w'_2$ by hypothesis.  In particular, $\varphi_{\iota_{X,\Gamma}}(w'_1) = \varphi_{\iota_{X,\Gamma}}(w'_2)$, which gives $I(w'_1) = I(w'_2)$ as required.
+\end{proof}
+
+\begin{example}  If we take $\Gamma = \{E4\}$ to be the theory of the left-absorptive law \eqref{eq4} as described in \Cref{left-absorb}, then the matching invariant $I(w)$ produced by \Cref{free-inv} is the left-most letter of the alphabet $X$ appearing in the word; for instance $I((x \op y) \op z) = x$.  Thus, for example, the left-absorptive law \eqref{eq4} cannot imply the right-absorptive law $x = y \op x$ \eqref{eq5}
+\end{example}
+
+\begin{example}  Let $n \geq 1$ be a positive integer, and consider the theory $\Gamma = \{E43, E4512, E_n\}$ consisting of the commutative law \eqref{eq43}, the associative law \eqref{eq4512}, together with the order $n$ law $L_x^n x = x$.  One can check that the free magma $M_{X,\Gamma}$ can be described as the free group of exponent $n$ with generators $e_x, x \in X$, with associated map $\iota_{X,\Gamma} \colon x \mapsto e_x$.  The associated matching invariant $I(w)$ essentially counts the number of times each letter $x \in X$ appears in the word $w$, modulo $n$; for instance, $I(x \op (y \op x)) = 2e_x + e_y$.  For example, the cubic idempotent law $x = (x \op x) \op x$ \eqref{eq23}
+has matching invariants $e_x = 3e_x$ in the $n=2$ case, and hence does not imply the idempotent law $x = x \op x$ \eqref{E3} since $e_x \neq 2e_x$ in the $n=2$ case.
+\end{example}
+
+\note{Give some statistics on how many refutations can be established by these methods.}
 
 \subsection{Confluence}
 
+\note{Define a confluent law and give some examples.}
+
 \subsection{Complete rewriting systems}
+
+\note{Define a complete rewriting system and give some examples.}
 
 \subsection{Unique factorization}
 
