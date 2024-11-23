@@ -28,7 +28,6 @@ some major not-easily-classifiable contribution is not left out.
 ## Extended Categories
 
 ...
-
 ## Contributions Table
 
 | Contributor | Conceptualization | Data Curation | Formal Analysis | Funding Acquisition | Investigation | Methodology | Project Administration | Resources | Software | Supervision | Validation | Visualization | Writing - Original Draft Preparation | Writing – Review and Editing |
@@ -37,9 +36,9 @@ some major not-easily-classifiable contribution is not left out.
 | Mario Carneiro            |                   |               |                 |                     |               |             |                        |           |          |             |            |               |                                     |                             |
 | Zoltan Kocsis            |                   |               |                 |                     |               |             |                        |           |          |             |            |               |                                     |                             |
 | Alex Meiburg            |                   |               |                 |                     |               |             |                        |           |          |             |            |               |                                     |                             |
-| Pietro Monticone            |                   |               |                 |                     |               |             |                        |           |          |             |            |               |                                     |                             |
+| Pietro Monticone            |                   |    ✅             |    ✅             |                     |               |             |       ✅                 |           |    ✅      |             |    ✅        |               |     ✅                                |    ✅                         |
 | Shreyas Srinivas            |                   |               |                 |                     |               |             |                        |           |          |             |            |               |                                     |                             |
-|Terence Tao             |   ✅                |    ✅             |                 |                     |     ✅          |    ✅         |       ✅                 |           |          |             |            |               |     ✅                                |    ✅                         |
+| Terence Tao             |   ✅                |    ✅             |                 |                     |     ✅          |    ✅         |       ✅                 |           |          |             |            |               |     ✅                                |    ✅                         |
 | Vlad Tsyrklevich            |                   |               |                 |                     |               |             |                        |           |          |             |            |               |                                     |                             |
 | Fan Zheng            |                   |               |                      |                   |               |                 |                     |               |             |                        |           |          |             |            |               |                                     |                             |
 |             |                   |               |                 |                     |               |             |                        |           |          |             |            |               |                                     |                             |
