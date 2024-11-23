@@ -2,10 +2,14 @@
 -- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/482236139
 import Mathlib.Logic.Function.Defs
 import Mathlib.Data.Set.Basic
+import Mathlib.Data.Real.Irrational
+import Mathlib.Topology.Instances.AddCircle
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
 
 namespace Equation1447
+
+section Construction
 universe u
 
 -- Select a surjective map `S : M → M` as the candidate squaring map
@@ -138,7 +142,7 @@ lemma square_times_square_root_eq_elem' (x : M) :
 
 -- By construction, `S x ⋄ √x = x`
 omit hnofix in
-theorem square_times_square_root_eq_elem {x y : M} (hsq : y ∈ √ S x):
+theorem square_times_square_root_eq_elem {x y : M} (hsq : y ∈ square_roots S x):
   Magma.op (self:= instMagma S hsurj) (S x) y = x := by
     have hsy : S y = x := by exact hsq
     rw [← hsy]
@@ -146,7 +150,7 @@ theorem square_times_square_root_eq_elem {x y : M} (hsq : y ∈ √ S x):
 
 -- and `√x ⋄ √x = x`
 omit hnofix in
-theorem square_root_times_square_root_eq_elem {x y z : M} (hsqy : y ∈ √ S x) (hsqz : z ∈ √ S x):
+theorem square_root_times_square_root_eq_elem {x y z : M} (hsqy : y ∈ square_roots S x) (hsqz : z ∈ square_roots S x):
   Magma.op (self:= instMagma S hsurj) y z = x := by
     have hsy : S y = x := by exact hsqy
     have hsz : S z = x := by exact hsqz
@@ -174,7 +178,7 @@ By construction, we just need to rule out the possibility that `S (z ⋄ x) = S 
 
 -/
 theorem elem_mul_other_mul_elem_square_root (x z : M) :
-  Magma.op (self:= instMagma S hsurj) x (Magma.op (self:= instMagma S hsurj) z x) ∈ √ S x := by
+  Magma.op (self:= instMagma S hsurj) x (Magma.op (self:= instMagma S hsurj) z x) ∈ square_roots S x := by
     have hsq' := square_root_or_square S hsurj hnofix x (Magma.op z x (self:=instMagma S hsurj))
     cases hsq'
     · case inl h => exact h
@@ -230,5 +234,44 @@ theorem M_satisfies_Equation1447 : @Equation1447 M (instMagma S hsurj) := by
   · case inr h =>
       rw [h]
       apply square_times_square_root_eq_elem S hsurj hsqrt
+
+end Construction
+
+section ConcreteRefutations
+
+noncomputable abbrev iota : ℝ → UnitAddCircle := fun x => ↑x
+
+def M := Set.image iota {x : ℝ | Irrational x}
+
+def S : M → M := fun ⟨x,h⟩ =>
+  ⟨x*2, Irrational.mul_rat h (by decide)⟩
+theorem S.surjective : Function.Surjective S := by
+  simp [Function.Surjective, M]
+  intro a ha
+  have ha12  := Irrational.mul_rat ha (q := 1/2) (by simp)
+  have h12 : @Rat.cast ℝ Real.instRatCast (1 / 2)  = @HDiv.hDiv ℝ ℝ ℝ instHDiv 1 2  := by simp
+  have hprod : S ⟨a * ↑(1 / 2), h12 ▸ ha12⟩ = ⟨a,ha⟩ := by
+    simp [S]
+  exists a * ↑(1 / 2)
+  exists h12 ▸ ha12
+
+theorem S.nofix : no_fixed_points S := by
+  simp [no_fixed_points, S]
+  intro a ha
+  push_neg
+  constructor <;> try constructor
+  · sorry
+  · sorry
+  · sorry
+
+theorem M_1_satisfies_Equation1447 : @Equation1447 M (instMagma S S.surjective) :=
+  M_satisfies_Equation1447 S S.surjective S.nofix
+
+#check M_satisfies_Equation1447
+#print Equation1431
+#print Equation4269
+
+end ConcreteRefutations
+#synth Coe Real UnitAddCircle
 
 end Equation1447
