@@ -355,7 +355,7 @@ Define a \emph{partial solution} to be a partial function $\op: E \to \N$ on som
 \begin{itemize}
 \item (Law 1) If $(x \op y) \op y$ is defined, then $Sy \op ((x \op y) \op y)$ is defined and equal to $x$.
 \item (Law 2) If  If $x \op y$ and $z \op y$ are defined and equal to each other, then $x=z$.
-\item (Law 3) If $Sx$ is defined, then $(Sx \diamond x) \diamond x$ is defined.
+\item (Law 3) If $Sx$ is defined, then $(Sx \op x) \op x$ is defined.
 \end{itemize}
 
 \begin{lemma}[1722 extension]\label{1722-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
@@ -378,13 +378,106 @@ It is routine to check that $\op'$ obeys Laws 2,3.  Now we case check Law 1.
 By the greedy algorithm, this implies that any partial solution can be extended to a 1722 magma on $\N$.  We can now refute the implication to equation 1832
 $$ x = (x \op Sx) \op Sx,$$
 equation 2644
-$$ x = S^2 x \diamond x,$$
+$$ x = S^2 x \op x,$$
 and equation 3050,
 $$ x = ((Sx \op x) \op x) \op x$$
 by using the partial solution
 $$ 0 \op 0 = 1, 0 \op 1 = 2, 1 \op 0 = 2, 1 \op 1 = 3, 1 \op 2 = 0, 1 \op 3 = 1, 1 \op 4 = 2$$
 $$ 2 \op 0 = 3, 2 \op 1 = 4, 3 \op 0 = 4, 3 \op 1 = 1, 3 \op 3 = 3, 3 \op 4 = 0$$
 which violates all three equations at $x=0$.
+
+\subsection{Equation 713}
+
+Similar arguments can actually handle 713: $x = y \op (y \op ((y \op x) \op x))$. Here, the laws defining a partial solution are
+\begin{itemize}
+\item (Law 1) If $(y \op x) \op x$ is defined, then $y \op (y \op ((y \op x) \op x))$ is defined and equal to $x$.
+\item (Law 2) $x \op y \neq y$ for all $x,y$.
+\item (Law 3) If $Sx$ is defined, then so is $Sx \op x$.
+
+\begin{lemma}[713 extension]\label{713-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
+\end{lemma}
+
+\begin{proof}  First suppose that $a \op a$ is not defined.  Set $a_0 := a$ and select three new elements $a_1,a_2,a_3$.  Define $a_0 \op a_0 = a_1$, $a_1 \op a_0 = a_2$, $a_0 \op a_2 = a_3$, $a_0 \op a_1 = a_3$, $a_0 \op a_3 = a_0$.  It is a routine but tedious matter to check that Laws 1,2,3 are preserved by these operations.  (The trickiest case is the $x=a_0$ case of Law 1; here we need Law 2 to prevent $y \op a_0$ from equalling $a_0$.)
+
+Now suppose that $a \op b$ is undefined for some $a \neq b$.  Let $d_1,d_2,\dots,d_n$ be all the elements with $d_i \op b = a$.  Note from Law 3 that none of the $d_i$ can be equal to $b$.  Choose a new element $c$, as well as $c_i$ for each $d_i$, and set $a \op b = c$, $d_i \op c = c_i$, and $d_i \op c_i = b$.  It is easy to see that this preserves Laws 2,3.  For Law 1 ,we do the usual case analysis:
+\begin{itemize}
+\item Case 1: $y = c$, $y = c_i$, $y \op x = c$, or $y \op x = c_i$.  This case cannot occur because we have not defined left multiplication with $c$ or $c_i$.
+\item Case 2: $x = c$ or $x = c_i$.  Because $d_i \neq b$, it is easy to see that $(y \op x) \op x$ is not defined for any $x$.
+\item Case 3: $(y \op x) \op x = c$ or $(y \op x) \op x = c_i$.  This is only possible if $x=b$ and $y = d_j$ for some $j$, and the claim then follows from construction.
+\item Case 4: None of the terms in $(y \op x) \op x$ are equal to $c$ or $c_i$.  This follows from the previous seed.
+\end{itemize}
+\end{proof}
+
+One can now refute the implications of the equations $x = x \op ((x \op x) \op (x \op x))$ (817), $x = (x \op x) \op (x \op (x \op x))$ (1426), $x \op x = (x \op (x \op x)) \op x$ (3862), $x \op x = ((x \op x) \op x) \op x$ (4065) by using the partial solution
+$$ 0 \op 0 = 1, 0 \op 1 = 3, 0 \op 2 = 3, 0 \op 3 = 0$$
+$$1\op 0 = 2, 1 \op 1 = 0, 1 \op 2 = 1, 1 \op 3 =2 , 1 \op 4 = 3$$
+$$ 2 \op 0 = 2, 2 \op 2 = 4, 2 \op 4 = 0$$
+$$ 4 \op 1 = 2, 4 \op 2 = 4, 4 \op 3 = 2, 4 \op 4 = 1.$$
+
+\subsection{Equation 1289}
+
+For $x = y \op (((x \op y) \op y) \op y)$ (1289), one can similarly argue using the rules
+\begin{itemize}
+\item (Law 1) If $((x \op y) \op y) \op y$ is already defined, then $y \op (((x \op y) \op y) \op y)$ is also defined and equals $$x$$.
+\item (Law 2) $R_x$ is injective for all $x$ currently in the table.
+\item (Law 3) $x\op x=x$ for all $$x$$ currently in the table.
+\end{itemize}
+
+\begin{lemma}[1289 extension]\label{1289-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
+\end{lemma}
+
+\begin{proof}
+If $a \op b$ is currently undefined, introduce a new element $c$ and define $a \op b = c$ and $ c \op c = c.$ If furthermore $a = (d \op b) \op b$ for some d, then also define $b \op c = d$ (This last step is well defined by injectivity of $R_b$).
+
+We now check that the three axioms still hold. Law 3 is obvious, law 2 follows since $d \not = c$. For law 1, we first make the observation that $a \not = b$, for otherwise $a \op b$ would have been defined. This has the consequence that if $d$ exists, then $d \not = b$, for otherwise $a = (b \op b) \op b = b.$ In particular, the product $d \op c$ remains undefined after running the algorithm once.
+
+We now work by cases on the values of the variables $x,y$ appearing in law 1:
+\begin{itemize}
+\item Case 1: $y=c$. In this case, for the product $x \op y$ to be defined, we require $x =b$ or $x = c$. In the former case either $b \op c$ or $(b \op c) \op c = d \op c$ is not defined. In the latter case, law 1 holds as $c$ is idempotent.
+\item Case 2: $y=b$. For $((x \op b) \op b) \op b$ to be defined now but not have been defined before, we require one of $x= a, (x \op b) = a, ((x \op b) \op b) = a.$ The first two cases are eliminated as $c \op b$ is not yet defined. The last case holds as then $d$ exists and equals $x$, so $b \op (((x \op b) \op b) \op b) = b \op (a \op b) = b \op c = x.$
+\item Case 3: $y \not = c, y \not = b$. We have introduced no new products with a righthand side other than $c$ or $b$, so if $((x \op y) \op y) \op y$ was undefined before it remains undefined now.
+\end{itemize}
+\end{proof}
+
+To refute $x \op (y \op x) = (x \op y) \op x$ (4435) and $x = (((y \op x) \op y) \op y) \op y$ (3316) we use the partial solution
+$$ 0 \op 0 = 0; 0 \op 1 = 2; 0 \op 2 = 1; 0 \op 4 = 1$$
+$$ 1 \op 0 = 2; 1 \op 1 = 1$$
+$$ 2 \op 0 = 2; 2 \op 2 = 2$$
+$$ 3 \op 0 = 4; 3 \op 3 = 3$$
+$$ 4 \op 4 = 4.$$
+
+\subsection{Equation 73}
+
+For $x = y \op (y \op (x \op y))$ (73), we argue similarly, now with laws
+\begin{itemize}
+\item Law 1.  If $y \op (x \op y)$ is defined, then $y \op (y \op (x \op y))$ is defined and equal to $x$.
+\item Law 2.  $R_y$ is injective for all $y$ currently in the table.
+\item Law 3.  $x \op y \neq y$ for all $x,y$ currently in the table.
+\end{itemize}
+
+\begin{lemma}[73 extension]\label{73-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
+\end{lemma}
+
+\begin{proof} If $a \op b$ is undefined, set it equal to a new element $c$.  If we also have $b = d \op a$ for some $d$ (unique by Law 2, and only possible for $a \neq b$ by Law 3), set $a \op c = d$.
+
+It is obvious that Laws 2, 3 are preserved.   Now we case check Law 1:
+\begin{itemize}
+\item Case 1: $x=c$ or $y=c$.  Not possible since no left multiplication with $c$ is defined.
+\item Case 2: $x \op y = c$.  Only possible when $x = a$, $y = b$, but then $y \op (x \op y)$ is undefined since $y = b \neq a$ if $d$ is defined.
+\item Case 3. $y \op (x \op y) = c$.  Only possible when $y=a$ and $x=d$, and holds in this case.
+\item Case 4: $x, y, x \op y, y \op (x \op y) \neq c$: this case is already covered by the previous seed.
+\end{itemize}
+
+One can obtain various refutations by using the countermodels \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/483735768}{here}.
+
+\subsection{Equation 63}
+
+Again similar: see \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/482011878}{here} and \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/483735768}{here}.
+
+\subsection{Equation 1076}
+
+Again similar: see \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/481875069}{here} and \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/483735768}{here}.
+
 
 \section{A survey of examples}\label{infinite-examples-section}
 
