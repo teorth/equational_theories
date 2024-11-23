@@ -29,7 +29,7 @@ From \eqref{854} we have
 \end{equation}
 for all $x,y,z$.
 
-Now let $X$ be an alphabet, and $M_X$ the free magma.  We let $\Gamma$ be the theory consisting just of the law \eqref{854}, then as in \Cref{freemag-exist} we have the equivalence relation $\sim$ on $M_X$ defined by setting $w \sim w'$ iff $\Gamma \models w \formaleq w'$, then $M_X/\sim$ is a free magma for $\Gamma$.  We can then also define a directed graph on $M_X$ by declaring $w \to w'$ if $w \sim w'' \op w'$ for some $w''$, or equivalently (by applying \eqref{yx} to $M_X/\sim$) that $w \sim w \op w'$.
+Now let $X$ be an alphabet, and $M_X$ the free magma.  We let $\Gamma$ be the theory consisting just of the law \eqref{854}, then as in \Cref{freemag-exist} we have the equivalence relation $\sim$ on $M_X$ defined by setting $w \sim w'$ iff $\Gamma \models w \formaleq w'$, then $M_X/\sim$ is a free magma for $\Gamma$.  We can then also define a directed graph on $M_X$ by declaring $w' \to w$ if $w \sim w'' \op w'$ for some $w''$, or equivalently (by applying \eqref{yx} to $M_X/\sim$) that $w \sim w \op w'$.
 
 Call a word $w$ \emph{irreducible} if it is not of the form $w = w_1 \op w_2$ with $w_2 \to w_1$, and \emph{reducible} otherwise.  Clearly if a word $w = w_1 \op w_2$ is reducible, then it is equivalent to the shorter word $w_1$.  Iterating, we conclude that every word is equivalent to an irreducible word.  Such a word is either a generator in $X$, or else a product $w_1 \to w_2$ with $w_2 \not \to w_1$.
 
@@ -112,6 +112,8 @@ $$  x \op y \sim x \op (y \op (x \op y))$$
 to refute simplifies to
 $$  x \op y \sim x$$
 and we are back to (i), which we already know not to be the case.
+
+For the latter equation, we similarly have the cases
 \begin{itemize}
   \item (iv) $$y \to x$$.
   \item (v) $$y \to x \op (y \op x)$$.

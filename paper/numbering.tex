@@ -35,30 +35,33 @@ if $n > 2$ is even, where $C_n, B_n$ are the Catalan and Bell numbers, and $D_n$
 $$ 1, 1, 2, 4, 11, 32, 117, \dots$$
 (\url{https://oeis.org/A103293}).  A proof of this claim can be found in the ETP blueprint.  In particular, there are $4694$ equations of order at most $4$.
 
-Below we record some specific equations appearing in this paper, using the alphabet $x,y,z,w,u,v$ in place of $0,1,2,3,4,5,\dots$ for readability.
+Below we record some specific equations appearing in this paper, using the alphabet $\x,\y,\z,\w,\uu,\vv$ in place of $0,1,2,3,4,5,\dots$ for readability.
 \begin{align}
-        x &= x & \hbox{(Trivial law)} \label{eq1}\tag{E1} \\
-        x &= y & \hbox{(Singleton law)} \label{eq2}\tag{E2} \\
-        x &= x \op x & \hbox{(Idempotent law)} \label{eq3}\tag{E3} \\
-        x &= x \op y & \hbox{(Left-absorptive law)} \label{eq4}\tag{E4} \\
-        x &= y \op x & \hbox{(Right-absorptive law)} \label{eq5}\tag{E5} \\
-        x &= (x \op x) \op x \label{eq23}\tag{E23} \\
-        x \op x &= y \op z \label{eq41}\tag{E41} \\
-        x \op y &= y \op x & \hbox{(Commutative law)} \label{eq43}\tag{E43} \\
-        x \op y &= z \op w & \hbox{(Constant law)} \label{eq46}\tag{E46} \\
-        x &= (y \op x) \op (x \op z) & \hbox{(Central groupoid law)} \label{eq168}\tag{E168} \\
-        x \op y &= x \op (y \op z) \label{eq327}\tag{E327} \\
-        x \op y &= (z \op x) \op y \label{eq395}\tag{E395} \\
-        x &= y \op ( (z \op (x \op (y \op z)))) & \hbox{(Tarski's axiom)} \label{eq543}\tag{E543} \\
-        x &= x \op ((y \op z) \op (x \op z)) \label{eq854}\tag{E854}\\
-        x &= y \op ((y \op (x \op z)) \op z) \label{eq1117}\tag{E1117} \\
-        x &= y \op (((x \op y) \op x) \op y) \label{eq1286}\tag{E1286} \\
-        x &= (y \op z) \op (y \op (x \op z)) & \hbox{(Exp. $2$ abelian groups)} \label{eq1571}\tag{E1571} \\
-        x &= (y \op x) \op ((x \op z) \op z) \label{eq1689}\tag{E1689} \\
-        x &= (x \op ((x \op x) \op x)) \op x \label{eq2441}\tag{E2441} \\
-        (x \op y) \op z &= x \op (y \op z) &\hbox{(Associative law)} \label{eq4512}\tag{E4512}\\
-        x \op (y \op z) &= (y \op z) \op x \label{eq4531}\tag{E4531} \\
-        x &= (y \op ((x \op y) \op y)) \op (x \op (z \op y)) & \hbox{(Sheffer stroke)} \label{eq345169}\tag{E345169} \\
-        x &= y \op ((((y \op y) \op x) \op z) & \hbox{(Division in groups)} \label{eq42323216}\tag{E42323216} \\
-        & \quad  \op (((y \op y) \op y) \op z)) \nonumber
+        \x &\formaleq \x & \hbox{(Trivial law)} \label{eq1}\tag{E1} \\
+        \x &\formaleq \y & \hbox{(Singleton law)} \label{eq2}\tag{E2} \\
+        \x &\formaleq \x \op \x & \hbox{(Idempotent law)} \label{eq3}\tag{E3} \\
+        \x &\formaleq \x \op \y & \hbox{(Left-absorptive law)} \label{eq4}\tag{E4} \\
+        \x &\formaleq \y \op \x & \hbox{(Right-absorptive law)} \label{eq5}\tag{E5} \\
+        \x &\formaleq \x \op (\y \op \x) \label{eq10}\tag{E10} \\
+        \x &\formaleq (\x \op \x) \op \x \label{eq23}\tag{E23} \\
+        \x \op \x &\formaleq \y \op\ z \label{eq41}\tag{E41} \\
+        \x \op \y &\formaleq \y \op \x & \hbox{(Commutative law)} \label{eq43}\tag{E43} \\
+        \x \op \y &\formaleq \z \op \w & \hbox{(Constant law)} \label{eq46}\tag{E46} \\
+        \x &\formaleq (\y \op \x) \op (\x \op \z) & \hbox{(Central groupoid law)} \label{eq168}\tag{E168} \\
+        \x \op \y &\formaleq \x \op (\y \op \z) \label{eq327}\tag{E327} \\
+        \x &\formaleq (\x \op \y) \op \y \label{eq378}\tag{E378} \\
+        \x \op \y &\formaleq (\z \op \x) \op \y \label{eq395}\tag{E395} \\
+        \x &\formaleq \y \op ( (\z \op (\x \op (\y \op \z)))) & \hbox{(Tarski's axiom)} \label{eq543}\tag{E543} \\
+        \x &\formaleq \x \op ((\y \op \z) \op (\x \op \z)) \label{eq854}\tag{E854}\\
+        \x &\formaleq \y \op ((\y \op (\x \op \z)) \op \z) \label{eq1117}\tag{E1117} \\
+        \x &\formaleq \y \op (((\x \op \y) \op \x) \op \y) \label{eq1286}\tag{E1286} \\
+        \x &\formaleq (\y \op \z) \op (\y \op (\x \op \z)) & \hbox{(Exp. $2$ abelian groups)} \label{eq1571}\tag{E1571} \\
+        \x &\formaleq (\y \op \x) \op ((\x \op \z) \op \z) \label{eq1689}\tag{E1689} \\
+        \x &\formaleq (\x \op ((\x \op \x) \op \x)) \op \x \label{eq2441}\tag{E2441} \\
+        \x \op \y &\formaleq \x \op (\y \op (\x \op \y)) \label{eq3316}\tag{E3316} \\
+        (\x \op \y) \op \z &\formaleq \x \op (\y \op \z) &\hbox{(Associative law)} \label{eq4512}\tag{E4512}\\
+        \x \op (\y \op \z) &\formaleq (\y \op \z) \op \x \label{eq4531}\tag{E4531} \\
+        \x &\formaleq (\y \op ((\x \op \y) \op \y)) \op (\x \op (\z \op \y)) & \hbox{(Sheffer stroke)} \label{eq345169}\tag{E345169} \\
+        \x &\formaleq \y \op ((((\y \op \y) \op \x) \op \z) & \hbox{(Division in groups)} \label{eq42323216}\tag{E42323216} \\
+        & \quad  \op (((\y \op \y) \op \y) \op \z)) \nonumber
 \end{align}
