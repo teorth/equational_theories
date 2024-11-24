@@ -1,1 +1,2 @@
-import equational_theories.Generated.FiniteImplicationSearch.theorems.Proofs1
+import equational_theories.Generated.FiniteImplicationSearch.theorems.Inverses1
+import equational_theories.Generated.FiniteImplicationSearch.theorems.InversesManual
