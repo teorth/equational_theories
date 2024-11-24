@@ -55,7 +55,7 @@ In particular, $v_{i+1} \to x_i$.
 Conversely, any word of the above forms is equivalent to $w$.
 \end{theorem}
 
-\begin{proof}  We just verify claim (i), as claim (ii) is similar.  The converse direction is clear from \Cref{854-alt} (after quotienting down to $M_X/\sim$), so it suffices to prove the forward claim. By Theorem \ref{sound-complete}, it suffices to prove that the class of words described by (i) is preserved by any term rewriting operation, in which a term in the word is replaced by an equivalent term using \Cref{854}.  Clearly the term is in $w'_1$ or $w'_2$ then the form of the word is preserved, and similarly if the term is in one of the $v_i$.  The only remaining case is if we are rewriting a term of the form
+\begin{proof}  We just verify claim (i), as claim (ii) is similar.  The converse direction is clear from \Cref{854-alt} (after quotienting down to $M_X/\sim$), so it suffices to prove the forward claim. By \Cref{sound-complete}, it suffices to prove that the class of words described by (i) is preserved by any term rewriting operation, in which a term in the word is replaced by an equivalent term using \Cref{854}.  Clearly the term is in $w'_1$ or $w'_2$ then the form of the word is preserved, and similarly if the term is in one of the $v_i$.  The only remaining case is if we are rewriting a term of the form
 $$ x_i = (((w'_1 \op w'_2) \op v_1) \op \dots \op v_i).$$
 If $i>0$ we can rewrite this term down to $x_{i-1}$, and this still preserves the required form (decrementing $n$ by one).  If $i=0$ then we cannot perform such a rewriting because of the irreducibility of $w_1 \op w_2$ and hence $w'_1 \op w'_2$.  Finally, we can rewrite $x_i$ to $x_i \op v$ where $v$ is of the form
 $$ v_i = (y \op z) \op (x_i \op z),$$
@@ -156,9 +156,9 @@ Introduce the notation $y \leq x$ for $x \op y \to y$.
   \end{itemize}
 \end{lemma}
 
-\begin{proof}  The equivalence of (i) and (ii) is by definition.  If (ii) holds and $y \to z$, then by  Lemma \ref{854-equiv} we have $x = u \op (x \op y)$ and $z = v \op y$ for some $u,v$, hence
+\begin{proof}  The equivalence of (i) and (ii) is by definition.  If (ii) holds and $y \to z$, then by \Cref{854-equiv} we have $x = u \op (x \op y)$ and $z = v \op y$ for some $u,v$, hence
   $$ z \op x = z \op (x \op ((v \op y) \op (x \op y))) = z \op (u \op (x \op y) \op (z \op (x \op y))) = z,$$
-giving the desired claim $x \to z$.  Now if (iii) holds, note from Lemma \ref{854-equiv} that $y \to x \op y$, hence $x \to x \op y$ by (iii), so that $(x \op y) \op x = x \op y$, giving (iv).  Finally, if (iv) holds, note that
+giving the desired claim $x \to z$.  Now if (iii) holds, note from \Cref{854-equiv} that $y \to x \op y$, hence $x \to x \op y$ by (iii), so that $(x \op y) \op x = x \op y$, giving (iv).  Finally, if (iv) holds, note that
 \begin{align*}
   x \op ((x \op y) \op x) &= x \op ( ((x \op y) \op ((y \op y) \op ((x \op y) \op y))) \op x) \\
   &= x \op (((x \op y) \op ((y \op y) \op (x \op y))) \op (x \op ((y \op y) \op (x \op y)))) \\
@@ -310,7 +310,7 @@ We then define a new operation $\diamond$ on $M_X$ by the rule $x \diamond y = x
 \begin{theorem}[Free 854 magma]\label{free-854}  The magma $M_{X,854}$ is a free 854 magma on $X$.
 \end{theorem}
 
-\begin{proof}  Let  $f: X \to M$ be a function from $X$ to an $854$ magma $M$, then $\varphi_f$ is a homomorphism from $M_X$ (with the operation $*$) to $M$.  We claim that the restriction of $\varphi_f$ to $M_{X,854}$ is a homomorphism from $M_{X,854}$ (with operation $\diamond$) to $M$.  Since $\varphi_f$ was already a homomorphism for $*$, it suffices to show that $\varphi_f$ preserves $\to$: that is to say, for any $x,y \in M_{X,854}$, that $x \to y$ implies $\varphi_f(x) \to \varphi_f(y)$.  By definition, one of the five scenarios (i)-(v) in \Cref{free-relate} holds, and in each case one can establish the claim from the corresponding claim of Lemma \ref{854-relation} and an induction on the max-length of the claim $x \to y$.
+\begin{proof}  Let  $f: X \to M$ be a function from $X$ to an $854$ magma $M$, then $\varphi_f$ is a homomorphism from $M_X$ (with the operation $*$) to $M$.  We claim that the restriction of $\varphi_f$ to $M_{X,854}$ is a homomorphism from $M_{X,854}$ (with operation $\diamond$) to $M$.  Since $\varphi_f$ was already a homomorphism for $*$, it suffices to show that $\varphi_f$ preserves $\to$: that is to say, for any $x,y \in M_{X,854}$, that $x \to y$ implies $\varphi_f(x) \to \varphi_f(y)$.  By definition, one of the five scenarios (i)-(v) in \Cref{free-relate} holds, and in each case one can establish the claim from the corresponding claim of \Cref{854-relation} and an induction on the max-length of the claim $x \to y$.
 
 It remains to show that $M_{854}$ actually obeys 854, that is to say that
 $$ (y \op z) \op (x \op z) \to x$$
