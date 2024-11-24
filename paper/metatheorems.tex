@@ -8,7 +8,7 @@ Many proofs or refutations of implications (or equivalences) between two equatio
 Many equational laws $E'$ can be formally deduced from a given law $E$ by applying the Lean `rw' tactic to rewrite $E'$ repeatedly by some forward or backward application of $E$ applied to arguments that match some portion of $E$.  For instance, the commutative law \eqref{eq43} clearly implies $\x \op (\y \op \z) \formaleq (\y \op \z) \op \x$ \eqref{eq4531}
 by a single such rewrite.  A brute force application of such rewrite methods is already able to directly generate about $15,000$ such implications, including many equivalences to the singleton law \eqref{eq2} and the constant law \eqref{eq46}.  After applying transitive closure, this generates about four million further such implications.
 
-A simple observation that already generates many equivalences is that any equation of the form $\x \formaleq f(\y,\z,\dots)$ necessarily is equivalent to the trivial law $\x \formaleq \y$; similarly, an equation of the form $f(\x,\y) \formaleq g(\z,\w,\dots)$ implies $f(\x,\y) \formaleq f(\x',\y')$; and so forth.
+A simple observation that already generates many equivalences is that any equation of the form $\x \formaleq f(\y,\z,\dots)$ necessarily is equivalent to the trivial law $\x \formaleq \y$; similarly, an equation of the form $f(\x,\y) \formaleq g(\z,\w,\dots)$ implies $f(\x,\y) \formaleq f(\x',\y')$; and so forth. \note{Give some stats on how effective this is.}
 
 \subsection{Matching invariants}
 
@@ -47,6 +47,9 @@ has matching invariants $e_x = 3e_x$ in the $n=2$ case, and hence does not imply
 \end{example}
 
 \note{Give some statistics on how many refutations can be established by these methods.}
+
+\begin{remark}  One can also obtain matching invariants from the free objects associated to theories that involve additional operations beyond the magma operation $\op$, such as an identity element or an inverse operation.  We leave the precise generalization of \Cref{free-inv} to such theories to the interested reader.
+\end{remark}
 
 \subsection{Confluence}
 
@@ -149,5 +152,3 @@ $$  x \op y \sim x$$
 and we are back to (i), which we already know not to be the case.
 \end{proof}
 
-
-\note{Discuss 854 example}
