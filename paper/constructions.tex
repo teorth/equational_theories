@@ -7,14 +7,15 @@ In this section we collect the various techniques developed in the ETP to constr
 
 \note{TODO: Expand this sketch}
 
-Discuss semi-automated creation of finite counterexamples (as discussed here)
+Discuss semi-automated creation of finite counterexamples (as discussed \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Counterexamples.20by.20Enumerating.20Words.20in.20Quotient.20Magma}{here})
+
 Describe various sources of example magmas used in counterexamples, including the ones listed here.
 
 Also note some ``negative results'' - classes of finite magmas that did not yield many additional refutations, e.g. commutative 5x5 magmas.
 
-Mention finite immunity
+Mention that many refutations are ``immune'' to finite models, point to \Cref{austin-sec} for details.
 
-Using SAT solvers to find medium sized finite magmas obeying a given law? See this discussion.
+Using SAT solvers to find medium sized finite magmas obeying a given law? See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Using.20SAT.20solvers.20for.20model.20generation}{this discussion}.
 
 Discuss computational and memory efficiencies needed to brute force over extremely large sets of magmas. SAT solving may be a better approach past a certain size!
 
@@ -56,17 +57,102 @@ On the other hand, the refutations obtained by non-commutative linear constructi
 \begin{remark} One can also consider the seemingly more general linear model $x \op y = ax + by$, where the carrier $M$ is now an abelian group, and $a,b$ act on $M$ by homomorphisms, that is to say that they are elements of the endomorphism ring $\mathrm{End}(M)$.  However, this leads to exactly the same varieties \eqref{variety} (where $M$ is now replaced by the endomorphism ring $\mathrm{End}(M)$) and so does not increase the power of the linear model for the purposes of refuting implications.
 \end{remark}
 
+\note{Give some statistics of what proportion of refutations can be resolved by linear models.}
+
+On the other hand, there are certainly some refutations $E \not \vdash E'$ of implications that are ``immune'' to both commutative and non-commutative models, in the sense that all such models that obey $E$, also obey $E'$.  One such example is the refutation $E1485 \vdash E151$, which we discuss further in \Cref{twisting-sec} below.
+
 \subsection{Translation-invariant models}\label{translation-sec}
 
-Translation-invariant magmas (see e.g., this thread for a nice example). Note: any magma with a transitive symmetry will lift to a translation-invariant model, so this helps explain why these are common examples. Also symmetric models could be slightly more likely to obey various laws than general models due to degree of freedom considerations.
+It is natural to look for counterexamples amongst magmas that obey a large number of symmetries.  One such class of counterexamples are \emph{translation-invariant models}, in which the carrier $M$ is a group, and the left translations of this group form isomorphisms of the magma $M$.  In the case of an abelian group $M = (M,+)$, such models take the form
+\begin{equation}\label{xop-add}
+  x \op y = x + f(y-x)
+\end{equation}
+for some function $f \colon M \to M$; in the case of a non-abelian group $M = (M,\cdot)$, such models instead take the form
+\begin{equation}\label{xop-mul}
+x \op y = x f(x^{-1} y).
+\end{equation}
+For such models, the verification of an equational law in $n$ variables corresponds to a functional equation for $f$ in $n-1$ variables, as the translation symmetry allows one to normalize one variable to be the identity (say). This can simplify an implication to the point where an explicit counterexample can be found.
 
-Mention translation-invariant immunity
+\begin{example}[Abelian example]\label{abex}  For the law $\x \formaleq (\x \op \y) \op ((\x \op \y) \op \y)$ \eqref{eq1648}, we apply the abelian translation-invariant model \eqref{xop-add} with $y=x+h$ to obtain
+\begin{align*}
+  x \op y &= x + f(h) \\
+  (x \op y) \op y &= x + f(h) + f(h-f(h)) \\
+  (x \op y) \op ((x \op y) \op y) &= x + f(h) + f(f(h-f(h)))
+\end{align*}
+so that this law obeys \eqref{eq1648} if and only if the functional equation
+$$f(h) + f(f(h-f(h))) = 0$$
+holds for all $h \in M$.  Similarly, the law $\x \formaleq (\x \op (\x \op \y)) \op \y$ \eqref{eq206} is obeyed if and only if
+$$ f(f(h)) + f(h - f(f(h))) = 0$$
+for all $h \in M$.  One can now check that the function $f \colon \Z \to \Z$ defined by $f(h) \coloneqq - \mathrm{sgn}(h)$ (thus $f(h)$ equals $-1$ when $h$ is positive, $+1$ when $h$ is negative, and $0$ when $h$ is zero) obeys the first functional equation but not the second, thus establishing that $E1648 \not \vdash E206$.
+\end{example}
 
-\subsection{Ad hoc constructions}\label{adhoc-sec}
+\begin{example}[Non-abelian example]\label{trans-nonab}  We now obtain the opposite refutation $E206 \not \vdash E1648$ to \Cref{abex} using the non-abelian translation-invariant model.  By similar calculations to before, we now seek to find a function $f \colon M \to M$ on a non-abelian group $(M,\cdot)$ that obeys the functional equation
+\begin{equation}\label{206-eq}
+ f(f(h)) f(f(f(h))^{-1} h) = 1
+\end{equation}
+for all $h \in M$, but fails to obey the functional equation
+\begin{equation}\label{1648-eq}
+   f(h) f(f(f(h)^{-1} h)) = 1
+\end{equation}
+for at least one $h \in M$.  Now take $M$ to be the group generated by three generators $a,b,c$ subject to the relations $a^2=b^2=c^2=1$, or equivalently the group of reduced words in $a,b,c$ with no adjacent letters in the word equal.  We define
+$$ f(1) = 1, f(a)=b, f(b) = c, f(c) = a$$
+and then $f(aw)=a$ for any non-empty reduced word $w$ not starting with $a$, and similarly for $b$ and $c$.  The equation \eqref{206-eq} can be checked directly for $h=1,a,b,c$.  If $h=aw$ with $w$ non-empty, reduced, and not starting with $a$, then $f(f(h))^{-1} = f(f(h)) = b$ and $f(f(f(h))^{-1} h) = f(baw) = b$, giving \eqref{206-eq} in this case, and similarly for cyclic permutations. Meanwhile, \eqref{1648-eq} can be checked to fail for $h=a$.
+\end{example}
 
-Tree based constructions, see here.
+\begin{remark}  The construction in \Cref{trans-nonab}
+\end{remark}
+
+  Some refutations $E \not \vdash E'$ are ``immune'' by translation-invariant models, in that any translation-invariant model that obeys $E$, also obeys $E'$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes make the implication $E \vdash E'$.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \eqref{eq4482} for a square and an arbitrary element will imply the full commutative law \eqref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
+
+\subsection{The twisting semigroup}\label{twisting-sec}
+
+Suppose one has a magma $M$ obeying a law $E$, that also enjoys some endomorphisms $T, U \colon M \to M$.  Then one can ``twist'' the operation $\op$ by $T,U$ to obtain a new magma operation
+\begin{equation}\label{twist} x \op' y := Tx \op Uy.
+\end{equation}
+If one then tests whether this new operation $\op'$ obeys the same law $E$ as the original operation $\op$, one will find that this will be the case provided that $T,U$ obey a certain set of relations.  The semigroup generated by formal generators $\mathrm{T}, \mathrm{U}$ with these relations will be called the \emph{twisting semigroup} $\operatorname{Twist}_E$ of $E$.  This can be best illustrated with some examples.
+
+\begin{example}  We compute the twisting semigroup of $\x \formaleq (\y \op \x) \op (\x \op (\z \op \y))$ \eqref{eq1485}.  We test this law on the operation \eqref{twist}, thus we consider whether
+$$x = (y \op' x) \op' (x \op' (z \op' y))$$
+holds for all $x,y,z \in M$.  Substituting in \eqref{twist} and using the homomorphism property repeatedly, this reduces to
+$$x = (T^2y \op TUx) \op (UTx \op (U^2T z \op U^3y)).$$
+If we impose the conditions $TU=UT$, $T^2 = U^3$, then this equation would follow from \eqref{eq1485} (with $x,y,z$ replaced with $TUx$, $T^2 y$, $U^2 Tz$ respectively).  Thus the twisting semigroup $\operatorname{Twist}_{E1485}$ of \eqref{eq1485} is generated by two generators $\mathrm{T}, \mathrm{U}$ subject to the relations $\mathrm{T} \mathrm{U}=\mathrm{U} \mathrm{T} = 1$, $\mathrm{T}^2 = \mathrm{U}^3$.  This is a cyclic group of order $5$, since the relations can be rewritten as $\mathrm{T}^5 = 1$, $\mathrm{U} = \mathrm{T}^{-1}$.
+
+Now consider $\x \formaleq (\x \op \x) \op (\x \op \x)$ \eqref{eq151}.  Applying the same procedure, we arrive at
+$$x = (T^2 x \op TUx) \op (UT x \op U^2 x)$$
+so the twisting group $\operatorname{Twist}_{E151}$ is generated by two generators $\mathrm{T}, \mathrm{U}$ subject to the relations $\mathrm{T} \mathrm{U}=\mathrm{U} \mathrm{T} = \mathrm{T}^2 = \mathrm{U}^2 = 1$.  This is a cyclic group of order $2$, since the relations can be rewritten as $\mathrm{T}^2 = 1$, $\mathrm{U} = \mathrm{T}$.
+\end{example}
+
+Suppose the twisting semigroup $\operatorname{Twist}_E$ is not a quotient of $\operatorname{Twist}_{E'}$, in the sense that the relations that define $\operatorname{Twist}_{E'}$ are not obeyed by the generators of $\operatorname{Twist}_E$.  Then one can often disprove the implication $E \vdash E'$ by attempting the following procedure.
+\begin{itemize}
+\item First, locate a non-trivial magma $M$ obeying the law $E$.  Then the Cartesian power $M^{\operatorname{Twist}_E}$ of tuples $(x_W)_{W \in \operatorname{Twist}_E}$, with the pointwise magma operation, will also obey $E$.
+\item Furthermore, this Cartesian power admits two endomorphisms $T, U$ defined by
+$$ T (x_W)_{W \in \operatorname{Twist}_E} = (x_{W \mathrm{T}})_{W \in \operatorname{Twist}_E};
+U (x_W)_{W \in \operatorname{Twist}_E} = (x_{W \mathrm{U}})_{W \in \operatorname{Twist}_E},$$
+which obey the relations defining $\operatorname{Twist}_E$.
+\item We now twist the magma operation $\op$ on $M^{\operatorname{Twist}_E}$ by $T,U$ to obtain a new magma operation $\op'$ defined by \eqref{twist}, that will still obey law $E$.
+\item Because $T, U$ will not obey the relations defining $\operatorname{Twist}_{E'}$, it is highly likely that this twisted operation will not obey $E'$, thus refuting the implication $E \vdash E'$.
+\end{itemize}
+
+For instance, a non-trivial finite model for \eqref{eq1485} is given by the finite field $\mathbb{F}_2$ of two elements with the NAND operation $x \op y \coloneqq 1-xy$.  If we twist $\mathbb{F}_2^5$ by the left shift $T(x_i)_{i=1}^5 = (x_{i+1})_{i=1}^5$ and right shift $U(x_i)_{i=1}^5 = (x_{i-1})_{i=1}^5$, where we extend the indices periodically modulo $5$, then the resulting operation
+$$ (x_i)_{i=1}^5 \op' (y_i)_{i=1}^5 \coloneqq (1 - x_{i+1} y_{i-1})_{i=1}^5$$
+on $\mathbb{F}_2^5$ will still obey \eqref{eq1485}, but will not obey \eqref{eq151}, thus showing that $E1485 \not \vdash E151$.  This particular implication does not seem to be easily establishable by any of the other methods discussed in this paper.
+
+\note{Report on how large the twisting semigroups are in practice, and how many implications can be refuted by this method.}
+
 
 \subsection{Greedy constructions}\label{greedy-sec}
 
+\note{TODO: Expand this sketch}
+
+Discuss the greedy method in both translation-invariant and non-translation-invariant settings.  Mention how ATPs and other automated techniques play an important role, as human-generated case analysis here can be quite error-prone.
 
 \subsection{Modifying base models}\label{modify-base}
+
+\note{TODO: Expand this sketch}
+
+
+\subsection{Ad hoc constructions}\label{adhoc-sec}
+
+\note{TODO: Expand this sketch}
+
+Tree based constructions, see here.
