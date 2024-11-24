@@ -7,14 +7,15 @@ In this section we collect the various techniques developed in the ETP to constr
 
 \note{TODO: Expand this sketch}
 
-Discuss semi-automated creation of finite counterexamples (as discussed here)
+Discuss semi-automated creation of finite counterexamples (as discussed \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Counterexamples.20by.20Enumerating.20Words.20in.20Quotient.20Magma}{here})
+
 Describe various sources of example magmas used in counterexamples, including the ones listed here.
 
 Also note some ``negative results'' - classes of finite magmas that did not yield many additional refutations, e.g. commutative 5x5 magmas.
 
-Mention finite immunity
+Mention that many refutations are ``immune'' to finite models, point to \Cref{austin-sec} for details.
 
-Using SAT solvers to find medium sized finite magmas obeying a given law? See this discussion.
+Using SAT solvers to find medium sized finite magmas obeying a given law? See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Using.20SAT.20solvers.20for.20model.20generation}{this discussion}.
 
 Discuss computational and memory efficiencies needed to brute force over extremely large sets of magmas. SAT solving may be a better approach past a certain size!
 
@@ -56,7 +57,9 @@ On the other hand, the refutations obtained by non-commutative linear constructi
 \begin{remark} One can also consider the seemingly more general linear model $x \op y = ax + by$, where the carrier $M$ is now an abelian group, and $a,b$ act on $M$ by homomorphisms, that is to say that they are elements of the endomorphism ring $\mathrm{End}(M)$.  However, this leads to exactly the same varieties \eqref{variety} (where $M$ is now replaced by the endomorphism ring $\mathrm{End}(M)$) and so does not increase the power of the linear model for the purposes of refuting implications.
 \end{remark}
 
-\note{Mention linear immunities}
+\note{Give some statistics of what proportion of refutations can be resolved by linear models.}
+
+On the other hand, there are certainly some refutations $E \not \vdash E'$ of implications that are ``immune'' to both commutative and non-commutative models, in the sense that all such models that obey $E$, also obey $E'$.  One such example is the refutation $E1485 \vdash E151$, which we discuss further in \Cref{twisting-sec} below.
 
 \subsection{Translation-invariant models}\label{translation-sec}
 
@@ -83,7 +86,7 @@ $$ f(f(h)) + f(h - f(f(h))) = 0$$
 for all $h \in M$.  One can now check that the function $f \colon \Z \to \Z$ defined by $f(h) \coloneqq - \mathrm{sgn}(h)$ (thus $f(h)$ equals $-1$ when $h$ is positive, $+1$ when $h$ is negative, and $0$ when $h$ is zero) obeys the first functional equation but not the second, thus establishing that $E1648 \not \vdash E206$.
 \end{example}
 
-\begin{example}[Non-abelian example]  We now obtain the opposite refutation $E206 \not \vdash E1648$ to \Cref{abex} using the non-abelian translation-invariant model.  By similar calculations to before, we now seek to find a function $f \colon M \to M$ on a non-abelian group $(M,\cdot)$ that obeys the functional equation
+\begin{example}[Non-abelian example]\label{trans-nonab}  We now obtain the opposite refutation $E206 \not \vdash E1648$ to \Cref{abex} using the non-abelian translation-invariant model.  By similar calculations to before, we now seek to find a function $f \colon M \to M$ on a non-abelian group $(M,\cdot)$ that obeys the functional equation
 \begin{equation}\label{206-eq}
  f(f(h)) f(f(f(h))^{-1} h) = 1
 \end{equation}
@@ -96,7 +99,10 @@ $$ f(1) = 1, f(a)=b, f(b) = c, f(c) = a$$
 and then $f(aw)=a$ for any non-empty reduced word $w$ not starting with $a$, and similarly for $b$ and $c$.  The equation \eqref{206-eq} can be checked directly for $h=1,a,b,c$.  If $h=aw$ with $w$ non-empty, reduced, and not starting with $a$, then $f(f(h))^{-1} = f(f(h)) = b$ and $f(f(f(h))^{-1} h) = f(baw) = b$, giving \eqref{206-eq} in this case, and similarly for cyclic permutations. Meanwhile, \eqref{1648-eq} can be checked to fail for $h=a$.
 \end{example}
 
-\note{Mention translation-invariant immunity}
+\begin{remark}  The construction in \Cref{trans-nonab}
+\end{remark}
+
+  Some refutations $E \not \vdash E'$ are ``immune'' by translation-invariant models, in that any translation-invariant model that obeys $E$, also obeys $E'$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes make the implication $E \vdash E'$.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \eqref{eq4482} for a square and an arbitrary element will imply the full commutative law \eqref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
 
 \subsection{The twisting semigroup}\label{twisting-sec}
 
@@ -133,18 +139,20 @@ on $\mathbb{F}_2^5$ will still obey \eqref{eq1485}, but will not obey \eqref{eq1
 
 \note{Report on how large the twisting semigroups are in practice, and how many implications can be refuted by this method.}
 
-\subsection{Ad hoc constructions}\label{adhoc-sec}
-
-\note{TODO: Expand this sketch}
-
-Tree based constructions, see here.
 
 \subsection{Greedy constructions}\label{greedy-sec}
 
 \note{TODO: Expand this sketch}
 
-Discuss the greedy method in both translation-invariant and non-translation-invariant settings.  Mention how ATPs can be used.
+Discuss the greedy method in both translation-invariant and non-translation-invariant settings.  Mention how ATPs and other automated techniques play an important role, as human-generated case analysis here can be quite error-prone.
 
 \subsection{Modifying base models}\label{modify-base}
 
 \note{TODO: Expand this sketch}
+
+
+\subsection{Ad hoc constructions}\label{adhoc-sec}
+
+\note{TODO: Expand this sketch}
+
+Tree based constructions, see here.
