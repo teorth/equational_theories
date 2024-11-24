@@ -15,7 +15,7 @@ import equational_theories.FactsSyntax
 
 namespace Eq917
 
-abbrev A := FreeGroup Nat
+private abbrev A := FreeGroup Nat
 
 /- Follows
 https://leanprover.zulipchat.com/user_uploads/3121/VR_KgPk0rQaGpgjsi24OECXm/1526.pdf
@@ -129,7 +129,7 @@ theorem next_eq917 {a b c} : b ∈ next a → c ∈ next (b * a⁻¹ * x₁⁻¹
   | .base h1, .new e rfl => .extra ⟨h1, e.symm⟩ rfl rfl
   | .new rfl rfl, .base he => by
     exfalso
-    have  := forgetOld_old (old_dom he)
+    have := forgetOld_old (old_dom he)
     aesop
   | .new rfl rfl, .extra (.mk h q) he rfl => by
     simp only [mul_assoc, mul_right_inj] at he
