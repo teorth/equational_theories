@@ -15,7 +15,7 @@ import equational_theories.FactsSyntax
 
 namespace Eq1722
 
-abbrev A := FreeGroup Nat
+private abbrev A := FreeGroup Nat
 
 /- Follows
 https://leanprover.zulipchat.com/user_uploads/3121/VR_KgPk0rQaGpgjsi24OECXm/1526.pdf

@@ -1,0 +1,27 @@
+\section{Automated Theorem Proving}\label{automated-sec}
+
+\note{TODO: expand this sketch}
+
+Describe various automated theorem provers deployed in the project, with some statistics on performance:
+
+\begin{itemize}
+    \item Z3 prover
+    \item Vampire
+    \item More elementary substitutions
+    \item egg
+    \item \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/479643838}{duper}
+\end{itemize}
+
+Any comparative study of semi-automated methods with fully automated ones? In principle, the semi-automated approach could be more automated using a script or "agent" to call various theorem provers. See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/A.20magma.20of.20order.20.3C.2013.20-.20for.20Equation2531.3F}{this discussion}.
+
+Draw upon the discussion \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Future.20of.20Using.20ATPs}{here} on the various ways of integrating ATPs with Lean. This project primarily used the least integrated approach, "Option 3", as it was fastest and required no dependencies on the other contributors, but it also has drawbacks.
+
+Note: when evaluating the performance of any particular automated implication tool, we should do a fresh run on the entire base of implications, rather than rely on whatever implications produced by the tool remain in the Lean codebase by the time of writing the paper. This is because (a) many of the previous runs focused only on those implications that were not already ruled out by earlier contributions, and (b) some pruning has been applied subsequent to the initial runs to improve compilation performance. Of course, these runs would not need to be added to the (presumably optimized) codebase at that point, but would be purely for the purpose of gathering performance statistics. More discussion \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/RECORDS.20REQUEST.3A.20data.20and.20performance.20automated.20run.20metrics}{here}.
+
+See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1516.20-.3E.20255/near/481547543}{this discussion} on the value of using different ATPs and setting run time parameters etc. at different values.
+
+What are the hardest implications to prove?  See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/What.20are.20the.20hardest.20positive.20implications.20for.20an.20ATP.3F}{this discussion}.
+
+Make a note of the possible alternate strategy to prove implications outlined \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Ideas.20for.20unknown.20implications}{here}.
+
+Talk about how ATPs have been important to guide counterexample strategy by testing what simplifying hypotheses can be safely added without eliminating the possibility of a refutation.

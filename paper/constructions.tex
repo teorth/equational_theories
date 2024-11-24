@@ -1,0 +1,199 @@
+
+\section{Counterexample constructions}
+
+In this section we collect the various techniques developed in the ETP to construct counterexamples to various implications $E \vdash E'$.
+
+\subsection{Finite magmas}\label{finite-sec}
+
+\note{TODO: Expand this sketch}
+
+Discuss semi-automated creation of finite counterexamples (as discussed \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Counterexamples.20by.20Enumerating.20Words.20in.20Quotient.20Magma}{here})
+
+Describe various sources of example magmas used in counterexamples, including the ones listed here.
+
+Also note some ``negative results'' - classes of finite magmas that did not yield many additional refutations, e.g. commutative 5x5 magmas.
+
+Mention that many refutations are ``immune'' to finite models, point to \Cref{austin-sec} for details.
+
+Using SAT solvers to find medium sized finite magmas obeying a given law? See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Using.20SAT.20solvers.20for.20model.20generation}{this discussion}.
+
+Discuss computational and memory efficiencies needed to brute force over extremely large sets of magmas. SAT solving may be a better approach past a certain size!
+
+\subsection{Linear models}\label{linear-sec}
+
+A fruitful source of counterexamples is the class of \emph{linear magmas}, where the carrier $M$ is a ring (which may be commutative or non-commutative, finite or infinite), and the operation $\op$ is given by $x \op y = ax + by$ for some coefficients $a,b \in M$; one can also generalize this slightly to \emph{affine magmas}, in which the operation is given by $x \op y = ax + by + c$, but for simplicity we shall focus on linear magmas here.  It is easy to see that in a linear magma, any word $w(x_1,\dots,x_n)$ of $n$ indeterminates also takes the linear form
+$$ w(x_1,\dots,x_n) = \sum_{i=1}^n P_{w,i}(a,b) x_i$$
+for some (possibly non-commutative) polynomial $P_{w,i}$ in $a,b$ with integer coefficients.  Thus, a linear magma will obey an equational law $w_1 \formaleq w_2$ if and only if the pair $(a,b)$ lies in the (possibly non-commutative) variety
+\begin{equation}\label{variety}
+  \{ (a,b) \in M \times M: P_{w_1,i}(a,b) = P_{w_2,i}(a,b) \hbox{ for all } i \}.
+\end{equation}
+As such, a necessary condition for such a law $w_1 \formaleq w_2$ to entail another law $w'_1 \formaleq w'_2$ is that one has the inclusion
+$$ \{ (a,b) \in M \times M: P_{w_1,i}(a,b) = P_{w_2,i}(a,b) \hbox{ for all } i \} \subset
+\{ (a,b) \in M \times M: P_{w'_1,i}(a,b) = P_{w'_2,i}(a,b) \hbox{ for all } i \} $$
+for all rings $M$.  For commutative rings, this criterion can be checked by standard Grobner basis techniques; in the noncommutative case one can use methods such as the diamond lemma \cite{diamond-lemma}.
+
+\begin{example}[Commutative counterexample] For the law $x = y \op (((x \op y) \op x) \op y)$ \eqref{eq1286}, the variety \eqref{variety} can be computed to be
+$$ \{ (a,b) \in M \times M: 1 = a+ba^3+bab, 0 = a + ba^2 b + b^2 \}$$
+while the variety for the idempotent law \eqref{eq3} is
+$$ \{ (a,b) \in M: a+b=1 \}.$$
+Thus to show that \eqref{eq1286} does not entail \eqref{eq3}, it suffices to locate elements $a,b$ of a ring $M$ for one has $1 = a+ba^3+bab$, $0 = a + ba^2 b + b^2$, and $a+b \neq 1$.  Here one can take a commutative example, for instance when $M = \Z/p\Z$ and $(p,a,b) = (11,1,7)$.
+\end{example}
+
+\begin{example}[Noncommutative counterexample]\label{1117-ex} For the law $x = y \op ((y \op (x \op z)) \op z)$ \eqref{eq1117}, the variety \eqref{variety} can be computed to be
+$$ \{ (a,b) \in M \times M: 1 = baba, 0 = a+ba^2, 0 = bab^2 + b^2 \}$$
+while the variety for $x = (x \op ((x \op x) \op x)) \op x$ \eqref{eq2441} is
+$$ \{ (a,b) \in M \times M: a^2 + aba^2 + abab + ab^2 + b = 1 \}.$$
+Observe that if $ba = -1$, then $(a,b)$ automatically lies in the first set, and lies in the second set if and only if $(ab+1)(b-1) = 0$.  One can then show that \eqref{eq1117} does not imply \eqref{eq2441} by setting $a = L$, $b = -R$ where $L, R$ are the left and right shift operators respectively on the ring of integer-valued sequences $\Z^\N$.  With some \emph{ad hoc} effort one can convert this example into a less linear, but simpler (and easier to formalize) example, namely the magma with carrier $\Z$ and operation $x \op y = 2x - \lfloor y/2 \rfloor$.
+\end{example}
+
+\begin{remark} As essentially observed in \cite{austin}, if there is a commutative linear counterexample to an implication $E \vdash E'$, then by the Lefschetz principle this counterexample can be realized in a finite field ${\mathbb F}_q$ for some prime power $q$ (and by the Chebotarev density theorem one can in fact take $q$ to be a prime, so that the carrier is of the form $\Z/p\Z$ for some prime $p$).  As such, we have found that an effective way to refute implications by the commutative linear magma method is to simply perform a brute force search over linear magmas $x \op y = ax + by$ in $\Z/p\Z$ for various triples $(p,a,b)$. \note{Discuss performance of this method.}
+
+On the other hand, the refutations obtained by non-commutative linear constructions need not have a finite model.  For instance, consider the refutation $E1117 \not \vdash E2441$ from \Cref{1117-ex}.  The law \eqref{eq1117} can be rewritten as $L_y R_z L_y R_z x = x$.  This implies that $R_z$ is injective and $L_y$ is surjective for all $y,z$.  For finite magmas $M$, this then implies that the $L_y, R_z$ are in fact invertible, and hence we have also $R_z L_y R_z L_y x = x$, which implies \eqref{eq2441} by setting $x=y=z$.  Thus the refutation $E1117 \not \vdash E2441$ is ``immune'' to finite counterexamples.
+\end{remark}
+
+\begin{remark}  One can also consider nonlinear magma models, such as quadratic models $x \op y = ax^2 + bxy + cy^2 + dx + ey + f$ in a cyclic group $\Z/N\Z$.  For small values of $N$, we have found such models somewhat useful in providing additional refutations of implications $E \vdash E'$ beyond what can be achieved by the linear or affine models.  However, as the polynomials associated to a word $w(x_1,\dots,x_n)$ tend to be of high degree (exponential in the order of the word), it becomes quite rare for such models to obey a given equation $E$ when $N$ is large.
+\end{remark}
+
+\begin{remark} One can also consider the seemingly more general linear model $x \op y = ax + by$, where the carrier $M$ is now an abelian group, and $a,b$ act on $M$ by homomorphisms, that is to say that they are elements of the endomorphism ring $\mathrm{End}(M)$.  However, this leads to exactly the same varieties \eqref{variety} (where $M$ is now replaced by the endomorphism ring $\mathrm{End}(M)$) and so does not increase the power of the linear model for the purposes of refuting implications.
+\end{remark}
+
+\note{Give some statistics of what proportion of refutations can be resolved by linear models.}
+
+On the other hand, there are certainly some refutations $E \not \vdash E'$ of implications that are ``immune'' to both commutative and non-commutative models, in the sense that all such models that obey $E$, also obey $E'$.  One such example is the refutation $E1485 \vdash E151$, which we discuss further in \Cref{twisting-sec} below.
+
+\subsection{Translation-invariant models}\label{translation-sec}
+
+It is natural to look for counterexamples amongst magmas that obey a large number of symmetries.  One such class of counterexamples are \emph{translation-invariant models}, in which the carrier $M$ is a group, and the left translations of this group form isomorphisms of the magma $M$.  In the case of an abelian group $M = (M,+)$, such models take the form
+\begin{equation}\label{xop-add}
+  x \op y = x + f(y-x)
+\end{equation}
+for some function $f \colon M \to M$; in the case of a non-abelian group $M = (M,\cdot)$, such models instead take the form
+\begin{equation}\label{xop-mul}
+x \op y = x f(x^{-1} y).
+\end{equation}
+For such models, the verification of an equational law in $n$ variables corresponds to a functional equation for $f$ in $n-1$ variables, as the translation symmetry allows one to normalize one variable to be the identity (say). This can simplify an implication to the point where an explicit counterexample can be found.  These functional equations are trivial to analyze when $n=1$.  For $n=2$, they are not as trivial, but still quite tractable, and has led to several refutations in practice.  The method does not appear to be particularly effective for $n>2$ due to the complexity of the functional equations.
+
+\begin{example}[Abelian example]\label{abex}  For the law $\x \formaleq (\x \op \y) \op ((\x \op \y) \op \y)$ \eqref{eq1648}, we apply the abelian translation-invariant model \eqref{xop-add} with $y=x+h$ to obtain
+\begin{align*}
+  x \op y &= x + f(h) \\
+  (x \op y) \op y &= x + f(h) + f(h-f(h)) \\
+  (x \op y) \op ((x \op y) \op y) &= x + f(h) + f(f(h-f(h)))
+\end{align*}
+so that this law obeys \eqref{eq1648} if and only if the functional equation
+$$f(h) + f(f(h-f(h))) = 0$$
+holds for all $h \in M$.  Similarly, the law $\x \formaleq (\x \op (\x \op \y)) \op \y$ \eqref{eq206} is obeyed if and only if
+$$ f(f(h)) + f(h - f(f(h))) = 0$$
+for all $h \in M$.  One can now check that the function $f \colon \Z \to \Z$ defined by $f(h) \coloneqq - \mathrm{sgn}(h)$ (thus $f(h)$ equals $-1$ when $h$ is positive, $+1$ when $h$ is negative, and $0$ when $h$ is zero) obeys the first functional equation but not the second, thus establishing that $E1648 \not \vdash E206$.
+\end{example}
+
+\begin{example}[Non-abelian example]\label{trans-nonab}  We now obtain the opposite refutation $E206 \not \vdash E1648$ to \Cref{abex} using the non-abelian translation-invariant model.  By similar calculations to before, we now seek to find a function $f \colon M \to M$ on a non-abelian group $(M,\cdot)$ that obeys the functional equation
+\begin{equation}\label{206-eq}
+ f(f(h)) f(f(f(h))^{-1} h) = 1
+\end{equation}
+for all $h \in M$, but fails to obey the functional equation
+\begin{equation}\label{1648-eq}
+   f(h) f(f(f(h)^{-1} h)) = 1
+\end{equation}
+for at least one $h \in M$.  Now take $M$ to be the group generated by three generators $a,b,c$ subject to the relations $a^2=b^2=c^2=1$, or equivalently the group of reduced words in $a,b,c$ with no adjacent letters in the word equal.  We define
+$$ f(1) = 1, f(a)=b, f(b) = c, f(c) = a$$
+and then $f(aw)=a$ for any non-empty reduced word $w$ not starting with $a$, and similarly for $b$ and $c$.  The equation \eqref{206-eq} can be checked directly for $h=1,a,b,c$.  If $h=aw$ with $w$ non-empty, reduced, and not starting with $a$, then $f(f(h))^{-1} = f(f(h)) = b$ and $f(f(f(h))^{-1} h) = f(baw) = b$, giving \eqref{206-eq} in this case, and similarly for cyclic permutations. Meanwhile, \eqref{1648-eq} can be checked to fail for $h=a$.
+\end{example}
+
+\begin{remark}  The construction in \Cref{trans-nonab} also has the following more ``geometric'' interpretation.  The carrier $M$ can be viewed as the infinite $3$-regular tree, in which every vertex imposes a cyclic ordering on its $3$ neighbors (for instance, if we embed $M$ as a planar graph, we can use the clockwise ordering).  For $x,y \in M$, we then define $x \op y$ to equal $x$ if $x=y$.  If $y$ is instead a neighbor of $x$, we define $x \op y$ to be the next neighbor of $x$ in the cyclic ordering.  Finally, if $y$ is distance two or more from $x$, we define $x \op y$ to be the neighbor of $x$ that is closest to $y$.  One can then check that this model obeys \eqref{206-eq} but not \eqref{1648-eq}.
+\end{remark}
+
+  Some refutations $E \not \vdash E'$ are ``immune'' by translation-invariant models, in that any translation-invariant model that obeys $E$, also obeys $E'$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes make the implication $E \vdash E'$.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \eqref{eq4482} for a square and an arbitrary element will imply the full commutative law \eqref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
+
+\subsection{The twisting semigroup}\label{twisting-sec}
+
+Suppose one has a magma $M$ obeying a law $E$, that also enjoys some endomorphisms $T, U \colon M \to M$.  Then one can ``twist'' the operation $\op$ by $T,U$ to obtain a new magma operation
+\begin{equation}\label{twist} x \op' y := Tx \op Uy.
+\end{equation}
+If one then tests whether this new operation $\op'$ obeys the same law $E$ as the original operation $\op$, one will find that this will be the case provided that $T,U$ obey a certain set of relations.  The semigroup generated by formal generators $\mathrm{T}, \mathrm{U}$ with these relations will be called the \emph{twisting semigroup} $\operatorname{Twist}_E$ of $E$.  This can be best illustrated with some examples.
+
+\begin{example}  We compute the twisting semigroup of $\x \formaleq (\y \op \x) \op (\x \op (\z \op \y))$ \eqref{eq1485}.  We test this law on the operation \eqref{twist}, thus we consider whether
+$$x = (y \op' x) \op' (x \op' (z \op' y))$$
+holds for all $x,y,z \in M$.  Substituting in \eqref{twist} and using the homomorphism property repeatedly, this reduces to
+$$x = (T^2y \op TUx) \op (UTx \op (U^2T z \op U^3y)).$$
+If we impose the conditions $TU=UT$, $T^2 = U^3$, then this equation would follow from \eqref{eq1485} (with $x,y,z$ replaced with $TUx$, $T^2 y$, $U^2 Tz$ respectively).  Thus the twisting semigroup $\operatorname{Twist}_{E1485}$ of \eqref{eq1485} is generated by two generators $\mathrm{T}, \mathrm{U}$ subject to the relations $\mathrm{T} \mathrm{U}=\mathrm{U} \mathrm{T} = 1$, $\mathrm{T}^2 = \mathrm{U}^3$.  This is a cyclic group of order $5$, since the relations can be rewritten as $\mathrm{T}^5 = 1$, $\mathrm{U} = \mathrm{T}^{-1}$.
+
+Now consider $\x \formaleq (\x \op \x) \op (\x \op \x)$ \eqref{eq151}.  Applying the same procedure, we arrive at
+$$x = (T^2 x \op TUx) \op (UT x \op U^2 x)$$
+so the twisting group $\operatorname{Twist}_{E151}$ is generated by two generators $\mathrm{T}, \mathrm{U}$ subject to the relations $\mathrm{T} \mathrm{U}=\mathrm{U} \mathrm{T} = \mathrm{T}^2 = \mathrm{U}^2 = 1$.  This is a cyclic group of order $2$, since the relations can be rewritten as $\mathrm{T}^2 = 1$, $\mathrm{U} = \mathrm{T}$.
+\end{example}
+
+Suppose the twisting semigroup $\operatorname{Twist}_E$ is not a quotient of $\operatorname{Twist}_{E'}$, in the sense that the relations that define $\operatorname{Twist}_{E'}$ are not obeyed by the generators of $\operatorname{Twist}_E$.  Then one can often disprove the implication $E \vdash E'$ by attempting the following procedure.
+\begin{itemize}
+\item First, locate a non-trivial magma $M$ obeying the law $E$.  Then the Cartesian power $M^{\operatorname{Twist}_E}$ of tuples $(x_W)_{W \in \operatorname{Twist}_E}$, with the pointwise magma operation, will also obey $E$.
+\item Furthermore, this Cartesian power admits two endomorphisms $T, U$ defined by
+$$ T (x_W)_{W \in \operatorname{Twist}_E} = (x_{W \mathrm{T}})_{W \in \operatorname{Twist}_E};
+U (x_W)_{W \in \operatorname{Twist}_E} = (x_{W \mathrm{U}})_{W \in \operatorname{Twist}_E},$$
+which obey the relations defining $\operatorname{Twist}_E$.
+\item We now twist the magma operation $\op$ on $M^{\operatorname{Twist}_E}$ by $T,U$ to obtain a new magma operation $\op'$ defined by \eqref{twist}, that will still obey law $E$.
+\item Because $T, U$ will not obey the relations defining $\operatorname{Twist}_{E'}$, it is highly likely that this twisted operation will not obey $E'$, thus refuting the implication $E \vdash E'$.
+\end{itemize}
+
+For instance, a non-trivial finite model for \eqref{eq1485} is given by the finite field $\mathbb{F}_2$ of two elements with the NAND operation $x \op y \coloneqq 1-xy$.  If we twist $\mathbb{F}_2^5$ by the left shift $T(x_i)_{i=1}^5 = (x_{i+1})_{i=1}^5$ and right shift $U(x_i)_{i=1}^5 = (x_{i-1})_{i=1}^5$, where we extend the indices periodically modulo $5$, then the resulting operation
+$$ (x_i)_{i=1}^5 \op' (y_i)_{i=1}^5 \coloneqq (1 - x_{i+1} y_{i-1})_{i=1}^5$$
+on $\mathbb{F}_2^5$ will still obey \eqref{eq1485}, but will not obey \eqref{eq151}, thus showing that $E1485 \not \vdash E151$.  This particular implication does not seem to be easily establishable by any of the other methods discussed in this paper.
+
+\note{Report on how large the twisting semigroups are in practice, and how many implications can be refuted by this method.}
+
+
+\subsection{Greedy constructions}\label{greedy-sec}
+
+We have found \emph{greedy extension methods}, or \emph{greedy methods} for short, are a powerful way to refute implications, especially when the carrier $M$ is allowed to be infinite.  A basic implementation of this method is as follows.  To build a magma operation $\op \colon M \times M \to M$ that obeys one law $E$ but not another $E'$, one can first consider \emph{partial magma operations} $\op \colon \Omega \to M$, defined on some subset $\Omega$ of $M \times M$. Thus $x \op y$ is defined if and only if $(x,y) \in \Omega$. A magma operation is then simply a partial operation which is \emph{total} in the sense that $\Omega = M \times M$.  We say that a partial magma operation is \emph{finitely supported} if $\Omega$ is finite.
+
+In the language of first-order logic, a partial magma operation can also be viewed as a ternary relation $R(x,y,z)$ on $M$ with the axiom that $R(x,y,z) \and R(x,y,z') \implies z=z'$ for all $x,y,z \in M$.  The support $\Omega$ is then the set of $(x,y)$ for which $R(x,y,z)$ holds for some (necessarily unique) $z$, which one can then take to be the definition of $z = x \op y$.
+
+We say that one partial operation $\op' \colon \Omega' \to M$ \emph{extends} another $\op \colon \Omega \to M$ if $\Omega'$ contains $\Omega$, and $x \op y = x \op' y$ whenever $x \op y$ (and hence $x \op' y$) are defined. Given a sequence $\op_n \colon \Omega_n \to M$ of partial operations, each of which is an extension of the previous, we can define the \emph{direct limit} $\op_\infty \colon \bigcup_n \Omega_n \to M$ to be the partial operation defined by $x \op_\infty y \coloneqq x \op_n y$ whenever $(x,y) \in \Omega_n$.
+
+Abstractly, the greedy algorithm strategy can now be described as follows.
+
+\begin{theorem}[Abstract greedy algorithm]\label{greedy-abstract} Let $E,E'$ be equational laws, and let $\Gamma$ be a theory of first-order sentences regarding a  partial magma operations $\op \colon \Omega \to M$ on a carrier $M$.  Assume the following axioms:
+\begin{itemize}
+  \item[(i)] (Seed) There exists a finitely supported partial magma operation $\op_0 \colon \Omega_0 \to M$ satisfying $\Gamma$ that contradicts $E'$, in the sense that there is some assignment of variables in $E'$ in $M$ such that both sides of $E'$ are defined using $\op_0$, but not equal to each other.
+  \item[(ii)]  (Soundness)  If $\op_n \colon \Omega_n \to M$ is a sequence of partial magma operations obeying $\Gamma$ with each $\op_{n+1}$ an extension of $\op_n$, and the direct limit $\op_\infty$ is total, then this limit obeys $E$.
+  \item[(iii)] (Greedy extension)  If $\op \colon \Omega \to M$ is a finitely supported partial magma operation obeying $\Gamma$, and $a,b \in M$, then there exists a finitely supported extension $\op' \colon \Omega' \to M'$ of $\op$ to a possibly larger carrier $M'$ such that $a \op' b$ is defined.
+\end{itemize}
+Then $E \not \vdash E'$.
+\end{theorem}
+
+\begin{proof}  We work on the countably infinite carrier $\N$.  By embedding the finitely supported operation $\op_0$ from axiom (i) into $\N$, we can assume without loss of generality that $\op_0$ has carrier $\N$.  By similar relabeling, we can assume in (iii) that $M' = M$ when $M=\N$, since any elements of $M' \backslash \N$ that
+appear in $\Omega'$ can simply be reassigned to natural numbers that did not previously appear in $\Omega$.  We well-order the pairs in $\N \times \N$ by $(a_n,b_n)$ for $n=1,2,\dots$.  Iterating (iii) starting from $\op_0$, we can thus create a sequence of finitely supported magma operations $\op_0, \op_1, \dots$ on $\N$ obeying $\Gamma$, with each $\op_{n+1}$ an extension of $\op_n$, and $a_n \op_n b_n$ defined for all $n \geq 1$.  Then the direct limit $\op_\infty$ of these operations is total, and does not obey $E'$ thanks to axiom (i).  On the other hand, by axiom (ii) it obeys $E$, and the claim follows.
+\end{proof}
+
+We refer to $\Gamma$ as the \emph{rule set} for the greedy extension method. To apply \Cref{greedy-abstract} to obtain a refutation $E \vdash E'$, we have found the following trial-and-error method to work well in practice:
+\begin{itemize}
+\item[1.] Start with a minimal rule set $\Gamma$ that has just enough axioms to imply the soundness property for the given hypothesis $E$.
+\item[2.] Attempt to establish the greedy extension property for this rule set by setting $a \op' b$ equal to a new element $c \not \in M$, and then defining additional values of $\op'$ as necessary to recover the axioms of $\Gamma'$.
+\item[3.]  If this can be done in all cases, then locate a seed $\op_0$ refuting the given target $E'$, and STOP.
+\item[4.]  If there is an obstruction (often due to a ``collision'' in which a given operation $x \op' y$ is required to equal two different values), add one or more rules to $\Gamma$ to avoid this obstruction, and return to Step 2.
+\end{itemize}
+
+This method is not guaranteed to halt in finite time, as there may be increasingly lengthy sets of rules one has to add to $\Gamma$ to avoid collisions.  However, in practice we have found many of the refutations that could not be resolved by simpler techniques to be amenable to this method (or variants thereof, as discussed below).
+
+One can automate the above procedure by using ATPs (or SAT solvers) to locate new rules that are necessary and sufficient resolve any potential collision (and which, \emph{a posteriori}, can be seen to be necessarily consequences of the law $E$).  \note{Describe performance of this automated method.  Discuss the issue that some implications required a large SAT solver calculation that was difficult to formalize efficiently in Lean, prompting human-generated simplified proofs using smaller rulesets.}
+
+However, in some cases we have found it necessary to add ``inspired'' choices of rules that were not forced by the initial hypothesis $E$, but which simplified the analysis by removing problematic classes of collisions from consideration.  We were unable to fully automate the process of guessing such choices; however, we found ATPs very useful for testing any proposed such guess.  In particular, if an ATP was able to show that the existing ruleset, together with a proposed new rule $A$, implied $E'$, then this clearly indicated that one should not add $A$ to the rule set $\Gamma$.  Conversely, if an ATP failed to establish such an implication, this was evidence that this was a ``safe'' rule to impose.
+
+We also found that human verification of the greedy extension property was a highly error-prone process, as the case analysis often included many delicate edge cases that were easy to overlook.  Both ATPs and the Lean formalization therefore played a crucial role in verifying the human-written greedy arguments, often revealing important gaps in those arguments that required either minor or major revisions to the rule set.
+
+
+\note{Give examples}
+
+\note{Discuss translation-invariant analogues}
+
+\note{Discuss variants in which instead of using a single partial operation $\op: \Omega \to M$ or partial function $f$ to capture the state of a greedy process, some more complicated structure is used instead.  E.g. the Asterix construction.}
+
+\note{Discuss the 1692 case in which one had to add an infinite tree of new values rather than a finite number.}
+
+
+\subsection{Modifying base models}\label{modify-base}
+
+\note{TODO: Expand this sketch}
+
+
+\subsection{Ad hoc constructions}\label{adhoc-sec}
+
+\note{TODO: Expand this sketch}
