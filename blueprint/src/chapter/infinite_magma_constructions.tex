@@ -3,11 +3,11 @@
 The need to construct infinite magmas primarily arises in the context of \emph{Austin laws} and \emph{Austin pairs}.
 An Austin law admits infinite models but no nontrivial finite ones, while an Austin pair consists of
 laws $P$ and $Q$ such that every finite model obeying the law $P$ also obeys $Q$, but some
-infinite magma obeys $P$ without also obeying $Q$. Examples are given in Chapter~\ref{infinite-model-chapter}.
+infinite magma obeys $P$ without also obeying $Q$. Examples are given in \Cref{infinite-model-chapter}.
 
 Here we survey techniques for constructing infinite magmas that serve as counterexamples for implications
 between laws. Many of the techniques presented trace their origins to the first analysis of the Asterix equation
-(\Cref{eq65}), reviewed in Section~\ref{asterix-section}.
+(\Cref{eq65}), reviewed in \Cref{asterix-section}.
 
 \section{Translation-invariant magmas}
 
@@ -28,7 +28,7 @@ for some function $f: G \to G$.  Thus the translations on $G$ become magma isomo
 Note that if an example of the latter sort suffices to refute the implication between $P$ and $Q$ then
 by the Lefschetz principle one can construct a counterexample where the field $\mathbb{F}$ is finite.
 Consequently, $P$ and $Q$ cannot constitute an Austin pair. However, these linear magmas can still serve
-as starting points for the \emph{modified translation-invariant} models studied in Section~\ref{infinite-examples-section}.
+as starting points for the \emph{modified translation-invariant} models studied in \Cref{infinite-examples-section}.
 
 \section{The Asterix equation}\label{asterix-section}
 
@@ -46,14 +46,14 @@ for $h \in G$.
 
 This equation has some degenerate solutions, for instance we can take $f(h) = c$ for any constant $c$ of order $3$ in $G$.  It is challenging to construct more interesting solutions to this equation; however, we can do this if $G=\Z$ by a greedy algorithm.  We need the following technical definition.
 
-\begin{definition}\label{partial-solution}  A \emph{partial solution} $(E_0, E_1, E_2, f)$ to \eqref{fh} consists of nested finite sets
+\begin{definition}\label{partial-solution}  A \emph{partial solution} $(E_0, E_1, E_2, f)$ to \Cref{fh} consists of nested finite sets
 $$ E_0 \subset E_1 \subset E_2 \subset \Z$$ together with a function $f: E_1 \to E_2$ with the following properties:
 \begin{description}
-  \item[(a)] If $h \in E_0$, then $f(h) \in E_1$, so that $f^2(h)$ is well-defined as an element of $E_2$; furthermore, $h + f(h) + f^2(h)$ lies in $E_1$, so that the left-hand side of \eqref{fh} makes sense; and \eqref{fh} holds.
+  \item[(a)] If $h \in E_0$, then $f(h) \in E_1$, so that $f^2(h)$ is well-defined as an element of $E_2$; furthermore, $h + f(h) + f^2(h)$ lies in $E_1$, so that the left-hand side of \Cref{fh} makes sense; and \Cref{fh} holds.
   \item[(b)] The function $f$ is a bijection from $E_1 \backslash E_0$ to $E_2 \backslash E_1$.
 \end{description}
 
-We partially order the space of partial solutions to \eqref{fh} by writing $(E_0, E_1, E_2, f) \leq (E'_0, E'_1, E'_2, f')$ if the following properties hold:
+We partially order the space of partial solutions to \Cref{fh} by writing $(E_0, E_1, E_2, f) \leq (E'_0, E'_1, E'_2, f')$ if the following properties hold:
 \begin{itemize}
   \item $E_i \subset E'_i$ for $i=0,1,2$.
   \item $f$ agrees with $f'$ on $E_0$.
@@ -66,7 +66,7 @@ We define the \emph{empty partial solution} $(E_0,E_1,E_2,f)$ by setting $E_0=E_
 
 We have the following iterative construction, that lets us add arbitrary elements to the core domain $E_0$:
 
-\begin{lemma}[Enlarging a partial solution]\label{iteration}\uses{partial-solution} Let $(E_0, E_1, E_2, f)$ be a partial solution to \eqref{fh}, and let $h$ be an element of $\Z$ that does not lie in $E_0$.  Then there exists a partial solution $(E'_0, E'_1, E'_2, f')$ to \eqref{fh} that extends $(E_0, E_1, E_2, f)$, such that $h \in E_0'$.
+\begin{lemma}[Enlarging a partial solution]\label{iteration}\uses{partial-solution} Let $(E_0, E_1, E_2, f)$ be a partial solution to \Cref{fh}, and let $h$ be an element of $\Z$ that does not lie in $E_0$.  Then there exists a partial solution $(E'_0, E'_1, E'_2, f')$ to \Cref{fh} that extends $(E_0, E_1, E_2, f)$, such that $h \in E_0'$.
 \end{lemma}
 
 \begin{proof}  Because $f$ maps $E_1 \backslash E_0$ bijectively to $E_2 \backslash E_1$, there are three cases:
@@ -98,7 +98,7 @@ First suppose that $h = h_0\in G \backslash E_2$.  We perform the following cons
   \end{align*}
   while keeping $f'(h)=f(h)$ for all $h \in E_1$.
 \end{itemize}
-It is then a routine matter to verify that $(E'_0,E'_1,E'_2,f')$ is a partial solution to \eqref{fh} extending $(E_0,E_1,E_2,f)$ and that $E'_0$ contains $h_0$, as required.
+It is then a routine matter to verify that $(E'_0,E'_1,E'_2,f')$ is a partial solution to \Cref{fh} extending $(E_0,E_1,E_2,f)$ and that $E'_0$ contains $h_0$, as required.
 
 Now suppose that $h = h_0 \in E_1 \backslash E_0$, then the quantity $h_1 := f(h_0)$ lies in $E_2 \backslash E_1$.  We perform the following variant of the above construction:
 \begin{itemize}
@@ -117,7 +117,7 @@ Clearly we still have nested finite sets $E'_0 \subset E'_1 \subset E'_2$.
 \end{align*}
 while keeping $f'(h)=f(h)$ for all $h \in E_1$.
 \end{itemize}
-It is then a routine matter to verify that $(E'_0,E'_1,E'_2,f')$ is a partial solution to \eqref{fh} extending $(E_0,E_1,E_2,f)$ and that $E'_0$ contains $h_0$, as required.
+It is then a routine matter to verify that $(E'_0,E'_1,E'_2,f')$ is a partial solution to \Cref{fh} extending $(E_0,E_1,E_2,f)$ and that $E'_0$ contains $h_0$, as required.
 
 Finally, suppose that $h = h_1 = f(h_0)$ for some $h_0 \in E_1 \backslash E_0$, so that $h_1 \in E_2 \backslash E_1$.  Then we perform the following algorithm.
 \begin{itemize}
@@ -139,17 +139,17 @@ Clearly we still have nested finite sets $E'_0 \subset E'_1 \subset E'_2$.
 \end{align*}
 while keeping $f'(h)=f(h)$ for all $h \in E_1$.
 \end{itemize}
-It is then a routine matter to verify that $(E'_0,E'_1,E'_2,f')$ is a partial solution to \eqref{fh} extending $(E_0,E_1,E_2,f)$ and that $E'_0$ contains $h_0$, as required.
+It is then a routine matter to verify that $(E'_0,E'_1,E'_2,f')$ is a partial solution to \Cref{fh} extending $(E_0,E_1,E_2,f)$ and that $E'_0$ contains $h_0$, as required.
 \end{proof}
 
-\begin{corollary} \label{extend}\uses{partial-solution} Every partial solution $(E_0,E_1,E_2,f)$ to \eqref{fh} can be extended to a full solution $\tilde f: \Z \to \Z$.
+\begin{corollary} \label{extend}\uses{partial-solution} Every partial solution $(E_0,E_1,E_2,f)$ to \Cref{fh} can be extended to a full solution $\tilde f: \Z \to \Z$.
 \end{corollary}
 
 \begin{proof}\uses{iteration}
-  If we arbitrarily well-order the integers, and iterate \Cref{iteration} to add the least element of $\Z \backslash E_0$ in this well-ordering to $E_0$, we obtain an increasing sequence $(E^{(n)}_0, E^{(n)}_1, E^{(n)}_2, f^{(n)})$ of partial solutions to \eqref{fh}, where the $E^{(n)}_0$ exhaust $\Z$: $\bigcup_{n=1}^\infty E^{(n)}_0 = \Z$.  Taking limits, we obtain a full solution $\tilde f$.
+  If we arbitrarily well-order the integers, and iterate \Cref{iteration} to add the least element of $\Z \backslash E_0$ in this well-ordering to $E_0$, we obtain an increasing sequence $(E^{(n)}_0, E^{(n)}_1, E^{(n)}_2, f^{(n)})$ of partial solutions to \Cref{fh}, where the $E^{(n)}_0$ exhaust $\Z$: $\bigcup_{n=1}^\infty E^{(n)}_0 = \Z$.  Taking limits, we obtain a full solution $\tilde f$.
 \end{proof}
 
-\begin{corollary}\label{no-inject}  There exists a solution $f:\Z \to \Z$ to \eqref{fh} such that the map $h \mapsto h + f(h)$ is not injective.
+\begin{corollary}\label{no-inject}  There exists a solution $f:\Z \to \Z$ to \Cref{fh} such that the map $h \mapsto h + f(h)$ is not injective.
 \end{corollary}
 
 \begin{proof}  Select integers $h_0,h_1,h_2,h'_0,h'_1,h'_2$ such that the quantities
@@ -171,7 +171,7 @@ and define $f: E_1 \to E_2$ by the formulae
   f(h'_1) &:= h'_2 \\
   f(h'_0+h'_1+h'_2) &:= -h'_1-h'_2.
 \end{align*}
-One can then check that $(E_0, E_1, E_2, f)$ is a partial solution to \eqref{fh}, and by construction $h \mapsto h + f(h)$ is not injective on $E_1$.  Using \Cref{iteration} to extend this partial solution to a full solution, we obtain the claim.
+One can then check that $(E_0, E_1, E_2, f)$ is a partial solution to \Cref{fh}, and by construction $h \mapsto h + f(h)$ is not injective on $E_1$.  Using \Cref{iteration} to extend this partial solution to a full solution, we obtain the claim.
 \end{proof}
 
 \begin{corollary}[Asterix does not imply Obelix]\label{asterix-obelix}\uses{eq65,eq1491}  There exists a magma obeying the Asterix law (\Cref{eq65}) with carrier $\Z$ such that the left-multiplication maps $L_y: x \mapsto y \op x$ are not injective for any $y \in \Z$.  In particular, it does not obey the Obelix law (\Cref{eq1491}).
@@ -261,7 +261,7 @@ it, we can get an Obelix that does not obey the Asterix equation.
 
 \section{Greedy algorithm constructions}\label{greedy-section}
 
-In Section~\ref{asterix-section} a magma obeying one law and refuting another was obtained by using the
+In \Cref{asterix-section} a magma obeying one law and refuting another was obtained by using the
 fact that over translation-invariant magmas, equational laws simplify to univariate functional equations,
 and solving the resulting equation using a greedy algorithm.
 
@@ -341,7 +341,7 @@ or in terms of ternary relations
 \begin{equation}\label{left-inject}
    R(y,x,z) \hbox{ and } R(y,x',z) \implies x=x'
 \end{equation}
-simply by starting with a partial solution, say on the natural numbers in which (e.g.) $R(1,2,0)$, $R(1,3,0)$ are the only situations in which $R$ holds.  One can easily verify that this obeys (VLT) and (65), (65'), but not \eqref{left-inject}, and so any magma constructed by the above greedy construction will not be left-cancellative.  Since the Obelix law \Cref{eq1491} forces left-cancellativity, this gives an alternate proof of \Cref{asterix-obelix}.
+simply by starting with a partial solution, say on the natural numbers in which (e.g.) $R(1,2,0)$, $R(1,3,0)$ are the only situations in which $R$ holds.  One can easily verify that this obeys (VLT) and (65), (65'), but not \Cref{left-inject}, and so any magma constructed by the above greedy construction will not be left-cancellative.  Since the Obelix law \Cref{eq1491} forces left-cancellativity, this gives an alternate proof of \Cref{asterix-obelix}.
 
 \subsection{Equation 1722}
 
@@ -682,7 +682,7 @@ and define an extension $f'$ of $f$ to $E'_2$ by setting
 $$ f'(h) := a.$$
 It is then a routine matter to check that $(E'_1,E'_2,f')$ is an extension of $(E_1,E_2,f)$.
 
-Now suppose that $h$ lies in $\tilde E_2$.  Then $h$ is of one of the forms \eqref{hp-form} for some $h' \in E_2 \backslash E_1$.  Suppose it is of the form $-h'$ or $f^2(h') - h'$.  We invoke \Cref{add-E1} to promote $h'$ to $E_1$ by using a suitable extension $(E'_1,E'_2,f')$; and now $h$ will lie in $E'_2$, giving the claim.  If instead $h$ is of the form $h'-f^2(h')$, then this procedure might not place $h$ in $E'_2$; but if it does not, it will be of the form $-h''$ for $h'' = f^2(h')-h' \in E'_2 \backslash E'_1$.  Applying \Cref{add-E1} one more time to now promote $h''$ to $E_1$, we will obtain a larger extension $(E''_1,E''_2,f'')$ with $h \in E''_2$, giving the claim.
+Now suppose that $h$ lies in $\tilde E_2$.  Then $h$ is of one of the forms \Cref{hp-form} for some $h' \in E_2 \backslash E_1$.  Suppose it is of the form $-h'$ or $f^2(h') - h'$.  We invoke \Cref{add-E1} to promote $h'$ to $E_1$ by using a suitable extension $(E'_1,E'_2,f')$; and now $h$ will lie in $E'_2$, giving the claim.  If instead $h$ is of the form $h'-f^2(h')$, then this procedure might not place $h$ in $E'_2$; but if it does not, it will be of the form $-h''$ for $h'' = f^2(h')-h' \in E'_2 \backslash E'_1$.  Applying \Cref{add-E1} one more time to now promote $h''$ to $E_1$, we will obtain a larger extension $(E''_1,E''_2,f'')$ with $h \in E''_2$, giving the claim.
 \end{proof}
 
 Iterating these lemmas in the usual fashion, we can conclude that any partial solution can be completed to a global model of \Cref{eq63}.
@@ -760,7 +760,7 @@ and define an extension $f': E' \to \Z$ by setting $f'(h_0) := c$.  Axioms (i)-(
 
 Iterating this lemma, we conclude
 
-\begin{corollary}[Greedy completion of Dupont]\label{dupont-iter} Every partial solution $f: E \to \Z$ can be extended to a global solution $f': \Z \to\Z$ of \eqref{dupont-eq}.
+\begin{corollary}[Greedy completion of Dupont]\label{dupont-iter} Every partial solution $f: E \to \Z$ can be extended to a global solution $f': \Z \to\Z$ of \Cref{dupont-eq}.
 \end{corollary}
 
 \begin{corollary}[Non-injective Dupont solution]\label{non-inject} The Dupont equation admits non-injective solutions, and hence can violate Equation 1692.
@@ -808,7 +808,7 @@ This is of course non-surjective. The magma operation will be constructed as fol
   \item We define $P \op Q = 0$ if not covered by the above laws.
 \end{itemize}
 
-It is a routine matter to verify \eqref{fdef} and \eqref{xop}, so that equation 3342 holds.  However, one can check that the four laws in the conclusion fail with $x=y=1$.
+It is a routine matter to verify \Cref{fdef} and \Cref{xop}, so that equation 3342 holds.  However, one can check that the four laws in the conclusion fail with $x=y=1$.
 \end{proof}
 
 %\begin{theorem}[3475 construction]\label{3475-construct}

@@ -12,7 +12,7 @@ This implies that $L_y$ is injective and $L_{Sy}$ is surjective, hence $L_{Sy}$ 
 \end{equation}
 for all $y \in SM$.
 
-We have the following procedure for extending a small magma $SM$ obeying \eqref{1729} to a larger one $M$:
+We have the following procedure for extending a small magma $SM$ obeying \Cref{1729} to a larger one $M$:
 
 \begin{theorem}[Extending a 1729 magma]\label{mag}  Let $SM$ be a magma obeying 1729, and let $N$ be another set disjoint from $SM$, and set $M := SM \uplus N$.  Suppose that we have a squaring map $S: N \to SM$, and bijections $L_a, R_a: N \to N$ for all $a \in SM$ (which, by abuse of notation, we will denote with the same symbols as the squaring map $S$ and left and right multiplication oeprators $L_a,R_a$ on $SM$), obeying the following axioms:
   \begin{itemize}
@@ -37,15 +37,15 @@ Then one can endow $M$ with an operation $\op'': M \times M \to M$ obeying 1729 
 Furthermore, the 817 law $S^2 x \op'' x = x$ fails for any $x \in N$.
 \end{theorem}
 
-\begin{proof}  We need to show that $\op''$ verifies the law \eqref{1729}.  In the case when $x,y \in SM$, then the claim follows from the fact that $SM$ already obeyed this equation.  If $x$ was equal to an element $a \in SM$ and $y \in N$, then by construction the law is equivalent to $L_{Sa} R_a S_a y = y$, which follows from axiom (i).
+\begin{proof}  We need to show that $\op''$ verifies the law \Cref{1729}.  In the case when $x,y \in SM$, then the claim follows from the fact that $SM$ already obeyed this equation.  If $x$ was equal to an element $a \in SM$ and $y \in N$, then by construction the law is equivalent to $L_{Sa} R_a S_a y = y$, which follows from axiom (i).
 
-Now suppose that $x \in N$ and $y$ is equal to some element $a$ of $SM$.  From axiom (v) we have $x \op'' x = Sx$, and then this case of \eqref{1729} becomes
+Now suppose that $x \in N$ and $y$ is equal to some element $a$ of $SM$.  From axiom (v) we have $x \op'' x = Sx$, and then this case of \Cref{1729} becomes
 $$L_{Sx} ( R_a x \op' x ) = a$$
 which follows from axiom (vi).  So the only remaining case is when $x,y \in N$.  Using axiom (ii), we can divide into cases:
 \begin{itemize}
 \item Case 1: $x=y$.  Then by (v) we need to show that $L_{Sx} L_{Sx} x = x$, which follows from axiom (iv).
 \item Case 2: $y = R_a x$ for some $a \in SM$.  Then by axiom (vi), we need to show that $L_{Sy} L_{L_{Sx}^{-1} a} y = x$, which follows from axiom (iii).
-\item Case 3: We are not in case 1 or case 2.  Then by axiom (vii), we have $y \op'' x = z$ for some $z \in N$ with $z \op'' y = L_{Sy}^{-1} x$.  But this implies $L_{Sy} (z \op'' y) = x$, which is \eqref{1729}.
+\item Case 3: We are not in case 1 or case 2.  Then by axiom (vii), we have $y \op'' x = z$ for some $z \in N$ with $z \op'' y = L_{Sy}^{-1} x$.  But this implies $L_{Sy} (z \op'' y) = x$, which is \Cref{1729}.
 \end{itemize}
 
 We have now verified that $\op''$ obeys 1729.  For any $x \in N$, we have $x \op'' S^2 x = R_{S^2 x} x$, and so the final claim follows from axiom (ii).
@@ -68,22 +68,22 @@ We take $N$ to be the free non-abelian group with one generator $e_a$ for each $
 \end{equation}
 for all $a \in SM$ and $x \in N$.  Note that this automatically satisfies axiom (ii).  We view $N$ as an infinite Cayley graph rooted at the identity $1$, with all other elements of $N$ obtainable uniquely from $1$ by a finite path with edges $x \mapsto e_a x$.
 
-What about left multiplication?  From two applications of \eqref{lys} and the exponent 4 hypothesis we have
+What about left multiplication?  From two applications of \Cref{lys} and the exponent 4 hypothesis we have
 $$ L_a = e_a^{-1} L_{2a}^{-1} = e_a L_0 e_{2a}^{-1}.$$
 (Here we abuse notation by identifying $e_a$ with the operation of left-multiplication by $e_a$.) Thus, once $L_0$ is specified, we can \emph{define} $L_a$ for all other $a \in SM$ by the rule
 \begin{equation}\label{la0}
   L_a := e_a L_0 e_{2a}^{-1}.
 \end{equation}
-Furthermore, from the $a=0$ case of \eqref{lys} we must also have the axiom
+Furthermore, from the $a=0$ case of \Cref{lys} we must also have the axiom
 \begin{itemize}
   \item (i') $L_0^2 = e_0^{-1}$,
 \end{itemize}
-which also implies the $a=0$ case of \eqref{la0} (note that it implies $L_0$ commutes with $e_0$); note also that this axiom and the bijectivity of $e_0$ forces $L_0$ to be a bijection, and hence by \eqref{la0} all of the $L_a$ are bijections, so we can now drop the bijectivity requirements here.  We leave the function $L_0: N \to N$ unspecified for now, but observe that if axiom (i') is obeyed, one can use \eqref{la0} as a definition of $L_a$ for all other $a$, so that axiom (i) is now a consequence of axiom (i').  We also observe from \eqref{la0} and (i') that
+which also implies the $a=0$ case of \Cref{la0} (note that it implies $L_0$ commutes with $e_0$); note also that this axiom and the bijectivity of $e_0$ forces $L_0$ to be a bijection, and hence by \Cref{la0} all of the $L_a$ are bijections, so we can now drop the bijectivity requirements here.  We leave the function $L_0: N \to N$ unspecified for now, but observe that if axiom (i') is obeyed, one can use \Cref{la0} as a definition of $L_a$ for all other $a$, so that axiom (i) is now a consequence of axiom (i').  We also observe from \Cref{la0} and (i') that
 \begin{equation}\label{la1}
   L_a^{-1} := e_{2a} L_0 e_0 e_{a}^{-1}.
 \end{equation}
 
-We now write the other remaining axioms in terms of $L_0$ rather than $L_a$ using \eqref{la0}, \eqref{la1}, \eqref{ra-def}, and the magma law on $SM$:
+We now write the other remaining axioms in terms of $L_0$ rather than $L_a$ using \Cref{la0}, \Cref{la1}, \Cref{ra-def}, and the magma law on $SM$:
 \begin{itemize}
 \item (iii')  If $e_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $e_{Sy} L_0 e_{2Sy}^{-1} e_{a - Sx} L_0 e_{2(R_{Sx}^{-1} a)}^{-1} y = x$.
 \item (iv')  For all $x \in N$, we have $e_{Sx} L_0 e_{2Sx}^{-1} e_{Sx} L_0 e_{2Sx} x = x$.
@@ -106,7 +106,7 @@ and also
 \end{equation}
 for all $n \in \Z$.  Thus, $L_0$ becomes defined on two right cosets $\langle e_0 \rangle x$, $\langle e_0 \rangle y$ of $N$, where $\langle e_0 \rangle := \{ e_0^n: n \in \Z\}$ is an infinite cyclic subgroup of $N$.  In general, we will require that $L_0$ is defined on a finite union of cosets of $\langle e_0\rangle$.
 
-In a somewhat similar vein, axiom (vii'), if iterated naively, would mean that a given entry $x \op' y = z$ of the multiplication table could potentially generate an infinite sequence of further entries, which unfortunately do not have as regular a pattern as the iterations \eqref{itero}, \eqref{itero-2} of axiom (i').  So we will need to truncate this iteration by creating an addition category of ``pending'' identities of the form ``$z \op' x = e_{2Sx} L_0 e_0 e_{Sx} y$'' for some $x,y,z \in N$, which will be temporarily undefined because $Sx$ is undefined.
+In a somewhat similar vein, axiom (vii'), if iterated naively, would mean that a given entry $x \op' y = z$ of the multiplication table could potentially generate an infinite sequence of further entries, which unfortunately do not have as regular a pattern as the iterations \Cref{itero}, \Cref{itero-2} of axiom (i').  So we will need to truncate this iteration by creating an addition category of ``pending'' identities of the form ``$z \op' x = e_{2Sx} L_0 e_0 e_{Sx} y$'' for some $x,y,z \in N$, which will be temporarily undefined because $Sx$ is undefined.
 
 More precisely, we define a \emph{partial solution} to consist of the following data:
 \begin{itemize}
@@ -118,7 +118,7 @@ More precisely, we define a \emph{partial solution} to consist of the following 
 
 Furthermore, the following axioms are satisfied:
 \begin{itemize}
-  \item (i'')  $L_0 x$ is defined and equal to $y$, then we have the identities \eqref{itero}, \eqref{itero-2} for all $n\in \Z$.
+  \item (i'')  $L_0 x$ is defined and equal to $y$, then we have the identities \Cref{itero}, \Cref{itero-2} for all $n\in \Z$.
   \item (S) If $Sx$ is defined for some $x \in N$, then $Sy$ is defined for all $y$ on the path in the Cayley graph connecting $1$ to $x$.
   \item (iii'') If $e_a x = y$ for some $a \in SM$ and some $x,y \in N$, and $Sx, Sy$ are defined, then $e_{Sy} L_0 e_{2Sy}^{-1} e_{a-Sx} L_0 e_{2(a-Sx)}^{-1} y$ is defined and equal to $x$.
   \item (iv'') If $x \in N$ is such that $Sx$ is defined, then $e_{Sx} L_0 e_{2Sx}^{-1} e_{Sx} L_0 e_{2Sx} x$ is defined and equal to $x$.
@@ -135,7 +135,7 @@ Now we seek to enlarge a partial solution. We first make an easy observation:
 \begin{proposition}[Enlarging $L_0$]\label{enlarge-l0}  Suppose one has a partial solution in which $L_0 x$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $L_0 x$ is now defined.
 \end{proposition}
 
-\begin{proof}  By axiom (i''), $L_0 e_0^n x$ is undefined for every integer $n$.  Let $d = E_m$ be a generator of $SM$ that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in teh partial solution; such a $d$ exists due to the finiteness hypotheses.  We set $L_0 x := e_d$, and then extend by \eqref{itero}, \eqref{itero-2}, thus
+\begin{proof}  By axiom (i''), $L_0 e_0^n x$ is undefined for every integer $n$.  Let $d = E_m$ be a generator of $SM$ that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in teh partial solution; such a $d$ exists due to the finiteness hypotheses.  We set $L_0 x := e_d$, and then extend by \Cref{itero}, \Cref{itero-2}, thus
 $$L_0 e_0^n x := e_0^n e_d$$
 and
 $$L_0 e_0^n e_d := e_0^{n-1} x.$$
@@ -152,16 +152,16 @@ Next, we provide a tool for enlarging the domain of definition of $S$:
 Let $d_0, d_1, d_2 \in SM$ be distinct generators $E_{n_0}, E_{n_1}, E_{n_2}$ of $SM$ that do not appear in the index $a$ of any $e_a$ that currently appears in the partial solution (of which there are only finitely many).  We also set some further distinct generators $d'_{y,z}, d''_{y,z} \in SM$ for $y,z \in SM$ that are distinct from each other and all previous generators (this is possible as we have infinitely many generators).  We set $Sx := e_{d_0}$; this preserves axiom (S).  In order to retain axiom (iv''), we now also set
 $$ L_0 e_{2d_0} x := e_{d_1}$$
 $$ L_0 e_{2e_{d_0}}^{-1} e_{Sx} e_{d_1} := e_{-d_0} x$$
-and then extend these choices using \eqref{itero}, \eqref{itero-2} to recover axiom (i'), thus for instance
+and then extend these choices using \Cref{itero}, \Cref{itero-2} to recover axiom (i'), thus for instance
 $$ L_0 e_0^n e_{2d_0} x := e_0^n e_{d_1}$$
 and
 $$ L_0 e_0^n e_{d_1} x := e_0^{n-1} e_{2d_0}$$
 for all $n \in \Z$.  To retain axiom (iii''), we perform the following actions:
 \begin{itemize}
 \item If $y_0$ is undefined, do nothing.
-\item If $e_a x = y_0$ for some $a \in SM$, set $L_0 e_{2(a-d_0)}^{-1} y_0 := e_{d_2}$ and $L_0 e_{2Sy_0}^{-1} e_{a-d_0} e_{d_2} := e_{Sy_0}^{-1} x$.  Then extend using \eqref{itero}, \eqref{itero-2}.
-\item If $x = e_a y_0$ for some $a \in SM$, and $L_0 e_{2(a-Sy_0)}^{-1} x$ is already defined, set $L_0 e_{2d_0}^{-1} e_{a-Sy_0} L_0 e_{2(a-Sy_0)}^{-1} x :=e_{d_0}^{-1} x$, and extend using \eqref{itero}, \eqref{itero-2}.
-\item If $x = e_a y_0$ for some $a \in SM$, and $L_0 e_{2(a-Sy_0)}^{-1} x$ is not yet defined, set $L_0 e_{2(a-Sy_0)}^{-1} x := e_{d_2}$ and $L_0 e_{2d_0}^{-1} e_{a-Sy_0} e_{d_2} := e_{d_0}^{-1} x$, and extend using \eqref{itero}, \eqref{itero-2}.
+\item If $e_a x = y_0$ for some $a \in SM$, set $L_0 e_{2(a-d_0)}^{-1} y_0 := e_{d_2}$ and $L_0 e_{2Sy_0}^{-1} e_{a-d_0} e_{d_2} := e_{Sy_0}^{-1} x$.  Then extend using \Cref{itero}, \Cref{itero-2}.
+\item If $x = e_a y_0$ for some $a \in SM$, and $L_0 e_{2(a-Sy_0)}^{-1} x$ is already defined, set $L_0 e_{2d_0}^{-1} e_{a-Sy_0} L_0 e_{2(a-Sy_0)}^{-1} x :=e_{d_0}^{-1} x$, and extend using \Cref{itero}, \Cref{itero-2}.
+\item If $x = e_a y_0$ for some $a \in SM$, and $L_0 e_{2(a-Sy_0)}^{-1} x$ is not yet defined, set $L_0 e_{2(a-Sy_0)}^{-1} x := e_{d_2}$ and $L_0 e_{2d_0}^{-1} e_{a-Sy_0} e_{d_2} := e_{d_0}^{-1} x$, and extend using \Cref{itero}, \Cref{itero-2}.
 \end{itemize}
 To retain axiom (P), we perform the following actions for each pending identity of the form ``$z \op' x = e_{2Sx} L_0 e_0 e_{Sx} y$'' for some $y,z$, executed in some arbitrary order.
 \begin{itemize}
@@ -170,7 +170,7 @@ To retain axiom (P), we perform the following actions for each pending identity 
 \item If $Sx'$ is undefined, add ``$z' \op' x' = e_{2Sx'} L_0 e_0 e_{Sx'} y'$'' as a pending identity.
 \item If instead $Sx'$ is defined, but $L_0 e_0 e_{Sx'} y'$ is undefined, set $L_0 e_0 e_{Sx'} y' = e_{d''_{y,z}}$.  Then set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', e_{2Sx'} e_{d''_{y,z}})$.  Then add ``$z'' \op' x'' = e_{2Sx''} L_0 e_0 e_{Sx''} y''$'' as a pending identity.
 \item If instead $L_0 e_0 e_{Sx'} y'$ is defined, set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', e_{2Sx'} L_0 e_0 e_{Sx'} y')$.  Then add ``$z'' \op' x'' = e_{2Sx''} L_0 e_0 e_{Sx''} y''$'' as a pending identity.
-\item Extend all the new definitions of $L_0$ using \eqref{itero}, \eqref{itero-2}.
+\item Extend all the new definitions of $L_0$ using \Cref{itero}, \Cref{itero-2}.
 \end{itemize}
 One can check that these definitions do not cause any collisions in the partial function $L_0$, and that axioms (i'), (iii'), (iv''), (vii'), (P) are preserved; the remaining axioms (v''), (vi') are unaffected by this extension.
 \end{proof}
@@ -180,7 +180,7 @@ Finally, we give a tool for enlarging $\op$:
 \begin{proposition}[Enlarging $\op$]\label{enlarge-op}  Suppose one has a partial solution in which $x \op' y$ is undefined for some $x,y \in N$.  Then one can extend the partial solution so that $x \op' y$ is now defined.
 \end{proposition}
 
-\begin{proof}  By applying Proposition \ref{enlarge-S} as needed, we may assume without loss of generality that $Sx$ and $Sy$ are already defined (among other things, this removes the possibility that $x \op' y$ is part of a pending identity).  If this makes $x \op' y$ defined, then we are done, so we may assume that this is not the case.
+\begin{proof}  By applying \Cref{enlarge-S} as needed, we may assume without loss of generality that $Sx$ and $Sy$ are already defined (among other things, this removes the possibility that $x \op' y$ is part of a pending identity).  If this makes $x \op' y$ defined, then we are done, so we may assume that this is not the case.
 
 We now divide into cases:
 
@@ -192,7 +192,7 @@ Case 3: If $x$ is not equal to $y$ or $e_a y$ for any $a \in SM$.  Let $d_0, d_1
 
 This temporarily disrupts axiom (vii'').  To recover it, we perform the following actions.
 \begin{itemize}
-  \item If $L_0 e_0 e_{Sx} y$ is not currently defined, we set it equal to $e_{d_1}$, and extend by \eqref{itero}, \eqref{itero-2}.
+  \item If $L_0 e_0 e_{Sx} y$ is not currently defined, we set it equal to $e_{d_1}$, and extend by \Cref{itero}, \Cref{itero-2}.
   \item Set $x' \op y' = z'$, where $(x',y',z') := (z, x, e_{2Sx} L_0 e_0 e_{Sx} y)$.
   \item Add ``$z' \op' x' = e_{2Sx'} L_0 e_0 e_{Sx'} y'$'' as a pending identity.
 \end{itemize}
@@ -205,5 +205,5 @@ One can check that these definitions do not cause any collisions in the partial 
 \end{theorem}
 
 \begin{proof}
-  Applying the above propositions alternatingly, we can end up with a situation in which $S, \op', L_0$ are all total functions, which by axiom (P) ensures that no pending identities remain.  Invoking Theorem \ref{mag}, we conclude the claim.
+  Applying the above propositions alternatingly, we can end up with a situation in which $S, \op', L_0$ are all total functions, which by axiom (P) ensures that no pending identities remain.  Invoking \Cref{mag}, we conclude the claim.
 \end{proof}
