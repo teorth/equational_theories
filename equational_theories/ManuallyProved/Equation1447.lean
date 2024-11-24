@@ -14,9 +14,7 @@ section Construction
 universe u
 
 -- Select a surjective map `S : M → M` as the candidate squaring map
-variable {M : Type u} (S : M → M) (hsurj : Function.Surjective S)
-
-include hsurj
+variable {M : Type u} (S : M → M)
 
 -- with the property that S, S^2, S^3 have no fixed points
 def no_fixed_points : Prop := ∀ (m : M), S m ≠ m ∧ S (S m) ≠ m ∧ S (S (S m)) ≠ m
@@ -28,27 +26,14 @@ def square_roots (x : M) : Set M := { y : M | S y = x }
 
 notation "√" => square_roots
 
-omit hsurj hnofix in
+omit hnofix in
 lemma square_roots_elem_iff_square_root (x y : M) :
   y ∈ square_roots S x ↔ S y = x := by exact Set.mem_def
 
--- Thus, every element `x ∈ M` has a non-empty set of square roots
-omit hnofix in
-theorem non_empty_square_roots (x : M) : square_roots S x ≠ ∅ :=  by
-  simp [square_roots,Set.eq_empty_iff_forall_not_mem]
-  apply hsurj
-
-omit hnofix in
-theorem nonempty_square_roots ( x : M) : (square_roots S x).Nonempty :=  by
-  rw [Set.nonempty_iff_ne_empty]
-  exact (non_empty_square_roots S hsurj x)
-
 -- which is disjoint from both `x` and `S x`.
-omit hsurj in
 theorem elem_notin_square (x : M) : x ∉ square_roots S x := by
   exact (hnofix x).1
 
-omit hsurj in
 theorem s_elem_notin_square (x : M) : S x ∉ square_roots S x := by
   exact (hnofix x).2.1
 
@@ -79,7 +64,6 @@ noncomputable instance instMagma : Magma M where
 -- Observe that `x ⋄ y` is either the square of `x` or a square root of `x`,
 -- with the former possibility occurring if and only if `S x = S y` or `x = S y`
 -- (i.e. `x` is a parent or sibling of `y`).
-omit hsurj in
 theorem square_iff_eq (x y : M) :
  Magma.op (self:= instMagma S arbitraryRoot) x y = S x
  ↔ (S x = S y ∨ x = S y) := by
@@ -101,7 +85,6 @@ theorem square_iff_eq (x y : M) :
       intro h
       cases h <;> split_ifs <;> aesop
 
-omit hsurj in
 theorem square_root_iff_neq (x y : M) :
  Magma.op (self:= instMagma S arbitraryRoot) x y ∈ square_roots S x
  ↔ ¬(S x = S y ∨ x = S y) := by
@@ -123,7 +106,6 @@ theorem square_root_iff_neq (x y : M) :
           exact h3.symm
       . case neg _ _ _ => exact arbitraryRoot_root x
 
-omit hsurj in
 theorem square_root_or_square (x y : M) :
  Magma.op (self:= instMagma S arbitraryRoot) x y ∈ square_roots S x ∨
  Magma.op (self:= instMagma S arbitraryRoot) x y = S x := by
@@ -132,18 +114,18 @@ theorem square_root_or_square (x y : M) :
    · case neg => left; exact (square_root_iff_neq S hnofix arbitraryRoot arbitraryRoot_root x y).mpr h
 
 -- Also we have `x ⋄ x = S x`, justifying the interpretation of `S` as a squaring map.
-omit hnofix hsurj arbitraryRoot_root in
+omit hnofix arbitraryRoot_root in
 theorem squaring_map (x : M) : Magma.op (self:= instMagma S arbitraryRoot) x x = S x := by
    simp [Magma.op, magmaOp]
 
-omit hnofix hsurj arbitraryRoot_root in
+omit hnofix arbitraryRoot_root in
 lemma square_times_square_root_eq_elem' (x : M) :
   Magma.op (self:= instMagma S arbitraryRoot) (S (S x)) x = S x := by
    simp [Magma.op, magmaOp]
    split_ifs <;> aesop
 
 -- By construction, `S x ⋄ √x = x`
-omit hnofix hsurj arbitraryRoot_root in
+omit hnofix arbitraryRoot_root in
 theorem square_times_square_root_eq_elem {x y : M} (hsq : y ∈ square_roots S x):
   Magma.op (self:= instMagma S arbitraryRoot) (S x) y = x := by
     have hsy : S y = x := by exact hsq
@@ -151,22 +133,20 @@ theorem square_times_square_root_eq_elem {x y : M} (hsq : y ∈ square_roots S x
     exact square_times_square_root_eq_elem' S arbitraryRoot y
 
 -- and `√x ⋄ √x = x`
-omit hnofix hsurj arbitraryRoot_root in
+omit hnofix arbitraryRoot_root in
 theorem square_root_times_square_root_eq_elem {x y z : M} (hsqy : y ∈ square_roots S x) (hsqz : z ∈ square_roots S x):
   Magma.op (self:= instMagma S arbitraryRoot) y z = x := by
     have hsy : S y = x := by exact hsqy
     have hsz : S z = x := by exact hsqz
     simp only [Magma.op, magmaOp]
     split_ifs <;> try aesop
+    · case pos  => exact hsqy
+    · case pos => exact hsqz
 
-omit hnofix hsurj arbitraryRoot_root in
+omit hnofix arbitraryRoot_root in
 lemma S_times_eq_S_squared (x : M) :
   Magma.op (self := instMagma S arbitraryRoot) (S x) x = S (S x) := by
    simp [Magma.op, magmaOp]
-
---lemma times_S_squared_eq_S_cubed (x : M) :
---  Magma.op (self := instMagma S hsurj) x (S (S x)) = S (S (S x)) := by
---   simp [Magma.op, magmaOp]
 
 /-
 By construction, we just need to rule out the possibility that `S (z ⋄ x) = S x` or `S (z ⋄ x) = x`. There are four cases:
@@ -177,7 +157,6 @@ By construction, we just need to rule out the possibility that `S (z ⋄ x) = S 
     If `S (z ⋄ x) = x` and `z ⋄ x = S z` then `S z = S x` or `z = S x`, but then `x = S^2 x` or `x = S^3 x`, contradiction.
 
 -/
-omit hsurj in
 theorem elem_mul_other_mul_elem_square_root (x z : M) :
   Magma.op (self:= instMagma S arbitraryRoot) x (Magma.op (self:= instMagma S arbitraryRoot) z x) ∈ square_roots S x := by
     have hsq' := square_root_or_square S hnofix arbitraryRoot arbitraryRoot_root x (Magma.op z x (self:=instMagma S arbitraryRoot))
@@ -224,7 +203,6 @@ theorem elem_mul_other_mul_elem_square_root (x z : M) :
                 exact h1.symm
 
 -- so it suffices to show that `x ⋄ (z ⋄ x) ∈ √x`
-omit hsurj in
 theorem M_satisfies_Equation1447 : @Equation1447 M (instMagma S arbitraryRoot) := by
   intro x y z
   have hsq := square_root_or_square S hnofix arbitraryRoot arbitraryRoot_root x y
