@@ -150,14 +150,14 @@ Introduce the notation $y \leq x$ for $x \op y \to y$.
 \begin{lemma}[854 equivalences, II]\label{854-equiv-2}  For $x,y$ in a 854 magma, the following are equivalent.
   \begin{itemize}
   \item (i) $y \leq x$.
-  \item (ii) $x \op y \to y$.
+  \item (ii) $x \op y \to x$.
   \item (iii)  For all $z$, $y \to z$ implies $x \to z$.
-  \item (iv) $y \to x \op y$.
+  \item (iv) $x \to x \op y$.
   \end{itemize}
 \end{lemma}
 
 \begin{proof}  The equivalence of (i) and (ii) is by definition.  If (ii) holds and $y \to z$, then by \Cref{854-equiv} we have $x = u \op (x \op y)$ and $z = v \op y$ for some $u,v$, hence
-  $$ z \op x = z \op (x \op ((v \op y) \op (x \op y))) = z \op (u \op (x \op y) \op (z \op (x \op y))) = z,$$
+  $$ z \op x = z \op (x \op ((v \op y) \op (x \op y))) = z \op ((u \op (x \op y)) \op (z \op (x \op y))) = z,$$
 giving the desired claim $x \to z$.  Now if (iii) holds, note from \Cref{854-equiv} that $y \to x \op y$, hence $x \to x \op y$ by (iii), so that $(x \op y) \op x = x \op y$, giving (iv).  Finally, if (iv) holds, note that
 \begin{align*}
   x \op ((x \op y) \op x) &= x \op ( ((x \op y) \op ((y \op y) \op ((x \op y) \op y))) \op x) \\
