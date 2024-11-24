@@ -15,21 +15,21 @@ We then have
   y &= y \op ((x \op y) \op y^2) \\
   & = (y \op y^2) \op ((x \op y) \op y^2)
 \end{align*}
-and thus by another application of \eqref{854} we conclude the useful law
+and thus by another application of \Cref{854} we conclude the useful law
 \begin{equation}\label{378}
    (x \op y) \op y = x \op y
 \end{equation}
-(equation 378).  We introduce the notation $y \to x$ to denote the relation that $x = z \op y$ for some $z$, then from \eqref{378} we see that
+(equation 378).  We introduce the notation $y \to x$ to denote the relation that $x = z \op y$ for some $z$, then from \Cref{378} we see that
 \begin{equation}\label{yx}
   y \to x \iff x = x \op y.
 \end{equation}
-From \eqref{854} we have
+From \Cref{854} we have
 \begin{equation}\label{854-alt}
   (y \op z) \op (x \op z) \to x
 \end{equation}
 for all $x,y,z$.
 
-Now let $X$ be an alphabet, and $M_X$ the free magma.  We let $\Gamma$ be the theory consisting just of the law \eqref{854}, then as in \Cref{freemag-exist} we have the equivalence relation $\sim$ on $M_X$ defined by setting $w \sim w'$ iff $\Gamma \models w \formaleq w'$, then $M_X/\sim$ is a free magma for $\Gamma$.  We can then also define a directed graph on $M_X$ by declaring $w' \to w$ if $w \sim w'' \op w'$ for some $w''$, or equivalently (by applying \eqref{yx} to $M_X/\sim$) that $w \sim w \op w'$.
+Now let $X$ be an alphabet, and $M_X$ the free magma.  We let $\Gamma$ be the theory consisting just of the law \Cref{854}, then as in \Cref{freemag-exist} we have the equivalence relation $\sim$ on $M_X$ defined by setting $w \sim w'$ iff $\Gamma \models w \formaleq w'$, then $M_X/\sim$ is a free magma for $\Gamma$.  We can then also define a directed graph on $M_X$ by declaring $w' \to w$ if $w \sim w'' \op w'$ for some $w''$, or equivalently (by applying \Cref{yx} to $M_X/\sim$) that $w \sim w \op w'$.
 
 Call a word $w$ \emph{irreducible} if it is not of the form $w = w_1 \op w_2$ with $w_2 \to w_1$, and \emph{reducible} otherwise.  Clearly if a word $w = w_1 \op w_2$ is reducible, then it is equivalent to the shorter word $w_1$.  Iterating, we conclude that every word is equivalent to an irreducible word.  Such a word is either a generator in $X$, or else a product $w_1 \to w_2$ with $w_2 \not \to w_1$.
 
@@ -55,7 +55,7 @@ In particular, $v_{i+1} \to x_i$.
 Conversely, any word of the above forms is equivalent to $w$.
 \end{theorem}
 
-\begin{proof}  We just verify claim (i), as claim (ii) is similar.  The converse direction is clear from \eqref{854-alt} (after quotienting down to $M_X/\sim$), so it suffices to prove the forward claim. By \Cref{sound-complete}, it suffices to prove that the class of words described by (i) is preserved by any term rewriting operation, in which a term in the word is replaced by an equivalent term using \eqref{854}.  Clearly the term is in $w'_1$ or $w'_2$ then the form of the word is preserved, and similarly if the term is in one of the $v_i$.  The only remaining case is if we are rewriting a term of the form
+\begin{proof}  We just verify claim (i), as claim (ii) is similar.  The converse direction is clear from \Cref{854-alt} (after quotienting down to $M_X/\sim$), so it suffices to prove the forward claim. By \Cref{sound-complete}, it suffices to prove that the class of words described by (i) is preserved by any term rewriting operation, in which a term in the word is replaced by an equivalent term using \Cref{854}.  Clearly the term is in $w'_1$ or $w'_2$ then the form of the word is preserved, and similarly if the term is in one of the $v_i$.  The only remaining case is if we are rewriting a term of the form
 $$ x_i = (((w'_1 \op w'_2) \op v_1) \op \dots \op v_i).$$
 If $i>0$ we can rewrite this term down to $x_{i-1}$, and this still preserves the required form (decrementing $n$ by one).  If $i=0$ then we cannot perform such a rewriting because of the irreducibility of $w_1 \op w_2$ and hence $w'_1 \op w'_2$.  Finally, we can rewrite $x_i$ to $x_i \op v$ where $v$ is of the form
 $$ v_i = (y \op z) \op (x_i \op z),$$
@@ -142,7 +142,7 @@ As in the previous section, we write $y \to x$ if $x = x \op y$.
   \end{itemize}
 \end{lemma}
 
-\begin{proof} The equivalence of (i) and (ii), or (v) and (vi), is by definition.  (iii) trivially implies (ii), and the converse comes from \eqref{378}.  Using \eqref{8} we see that (v) implies (iv).  If (iv) is true, then $y = (y \op z) \op (x \op z)$, giving (vii).  From \eqref{854} we see that (vii) implies (ii).  If (ii) is true, then $y \op (x \op y^2) = y \op ((x \op y) \op (y \op y)) = y$, giving (vi).  Finally, to show the equivalence of (i) and (viii), use the already established equivalence of (i) and (v), together with \eqref{378} which gives $(x \op y^2) \op y^2 = x \op y^2$.
+\begin{proof} The equivalence of (i) and (ii), or (v) and (vi), is by definition.  (iii) trivially implies (ii), and the converse comes from \Cref{378}.  Using \Cref{8} we see that (v) implies (iv).  If (iv) is true, then $y = (y \op z) \op (x \op z)$, giving (vii).  From \Cref{854} we see that (vii) implies (ii).  If (ii) is true, then $y \op (x \op y^2) = y \op ((x \op y) \op (y \op y)) = y$, giving (vi).  Finally, to show the equivalence of (i) and (viii), use the already established equivalence of (i) and (v), together with \Cref{378} which gives $(x \op y^2) \op y^2 = x \op y^2$.
 \end{proof}
 
 Introduce the notation $y \leq x$ for $x \op y \to y$.
@@ -271,17 +271,17 @@ We shall shortly define a relation $\to$ on $M_X$.  To motivate this relation, w
   \end{itemize}
 \end{lemma}
 
-\begin{proof}  Case (i) follows from \eqref{378}.  For (ii), we observe
+\begin{proof}  Case (i) follows from \Cref{378}.  For (ii), we observe
 $$ y \op x = y \op ((a \op b) \op (y \op b)) = y$$
 as required.  For (iii), we see from (ii) that $y \to x$, and from (i) we have $x \op b \to y$, and then
 $$ y \op x = y \op ((x \op (x \op b)) \op (y \op (x \op b))) = y$$
 as required.  For (iv), we have
 $$ y \op x = y \op ((a \op z) \op (y \op z)) = y$$
-as required.  Finally, for (v), in the $a=y$ case we have from \eqref{8} that
+as required.  Finally, for (v), in the $a=y$ case we have from \Cref{8} that
 $$ y \op x = y \op ((y \op y^2) \op (y \op y^2)) = y,$$
-in the $a = y \op z$ case we have from \eqref{8} that
+in the $a = y \op z$ case we have from \Cref{8} that
 $$ y \op x = y \op (((y \op z) \op (y \op z)^2) \op (y \op (y \op z)^2)) = y,$$
-and finally in the $y = a \op z$ case we have from \eqref{8} that
+and finally in the $y = a \op z$ case we have from \Cref{8} that
 $$ y \op x = y \op ( (a \op (a \op z)^2) \op ((a \op z) \op (a \op z)^2)) = y,$$
 so the claim follows in all cases.
 \end{proof}
@@ -318,7 +318,7 @@ for all $x,y,z \in M_{854}$.  Writing $w = y \op z$, we have $z \to w$ by \Cref{
 
 Case 1: $x \op z \to w$, $z \to x$.  Here we have $x \op z = x$ and $w \op (x \op z) = w$.  We now have $z \to x,w$ and $x \to w$, and we need to show that $w \to x$.
 
-From \eqref{one} we know that one of
+From \Cref{one} we know that one of
 \begin{equation}\label{one-1}
   z = x_R, z = x_{RL}, x = z_R, x = z_{RL}
 \end{equation}
@@ -332,15 +332,15 @@ holds, and one of
 \end{equation}
 holds.
 
-We split into subcases using \eqref{one-3}.
+We split into subcases using \Cref{one-3}.
 \begin{itemize}
   \item If $x = w_R$ then the claim follows from \Cref{free-relate}(i).
   \item If $w = x_{RL}$ then from \Cref{free-relate}(iii) we have $x_{RR} \to x_L$, and then the claim follows from \Cref{free-relate}(ii).
-  \item If $x = w_{RL}$, then $w_{RR} \to w_L$ by \Cref{free-relate}(ii) and from \Cref{free-relate}(iii) we will be done if we can show that $w_R \to w_{RL}$.  If $z = w_R$ then this follows from $z \to x$.  The claim $z = w_{RL}$ is not compatible with \eqref{one-1}, since $z=x$ in that case. If $w = z_R$ then $x = z_{RRL}$, and this is only compatible with \eqref{one-1} if $x = z_{RL}$, thus $z = a * (x * (x * b))$ and $w = x  * (x * b)$ for some $a,b$.  In order to have $x = w_{RL}$ in \eqref{one-3}, we must have $b \to x$ by \Cref{free-relate}(iii), but then $x*b$ would not lie in $M_{854}$, a contradiction.
-  \item If $w = x_R$, then we cannot then have $z = x_R$ as then $z=w$ which is incompatible with \eqref{one-2}.  If $z = x_{RL} = w_L$ then $x_{RR} \to x_L$ by \Cref{free-relate}(ii), and the only available options from \eqref{one-2} are $z = w_R$ and $z = w_{RL}$.  For $z=w_R$ we have $w = z * z$ and $x = a * (z * z)$ for some $a$ with $z \to a = x_L$.  Since $z \to z*z = x_R$ as well by \Cref{free-relate}(i), and $z = x_{RR}$, we obtain $w \to x$ as required from \Cref{free-relate}(iv).
+  \item If $x = w_{RL}$, then $w_{RR} \to w_L$ by \Cref{free-relate}(ii) and from \Cref{free-relate}(iii) we will be done if we can show that $w_R \to w_{RL}$.  If $z = w_R$ then this follows from $z \to x$.  The claim $z = w_{RL}$ is not compatible with \Cref{one-1}, since $z=x$ in that case. If $w = z_R$ then $x = z_{RRL}$, and this is only compatible with \Cref{one-1} if $x = z_{RL}$, thus $z = a * (x * (x * b))$ and $w = x  * (x * b)$ for some $a,b$.  In order to have $x = w_{RL}$ in \Cref{one-3}, we must have $b \to x$ by \Cref{free-relate}(iii), but then $x*b$ would not lie in $M_{854}$, a contradiction.
+  \item If $w = x_R$, then we cannot then have $z = x_R$ as then $z=w$ which is incompatible with \Cref{one-2}.  If $z = x_{RL} = w_L$ then $x_{RR} \to x_L$ by \Cref{free-relate}(ii), and the only available options from \Cref{one-2} are $z = w_R$ and $z = w_{RL}$.  For $z=w_R$ we have $w = z * z$ and $x = a * (z * z)$ for some $a$ with $z \to a = x_L$.  Since $z \to z*z = x_R$ as well by \Cref{free-relate}(i), and $z = x_{RR}$, we obtain $w \to x$ as required from \Cref{free-relate}(iv).
 \end{itemize}
 
-Case 2: $x \op z \to w$, $z \not \to x$.  We now have $x * z, z \to w$, and we need to show that $w \to x$.  From \eqref{one} we know that one of
+Case 2: $x \op z \to w$, $z \not \to x$.  We now have $x * z, z \to w$, and we need to show that $w \to x$.  From \Cref{one} we know that one of
 \begin{equation}\label{wz-1}
  w = (x * z)_R, w = (x * z)_{RL}, x * z = w_R, x * z = w_{RL}
 \end{equation}
@@ -350,12 +350,12 @@ holds, and that one of
 \end{equation}
 holds.
 
-We split into cases depending on \eqref{wz-1}.
+We split into cases depending on \Cref{wz-1}.
 \begin{itemize}
-\item If $w = (x*z)_R$ then $w=z$, which is incompatible with \eqref{wz}.
-\item If $w = (x*z)_{RL}$ then $w = z_L$ and $z_R \to x$ by \Cref{free-relate}(ii). Only the first two possibilities of \eqref{wz} are compatible with $w=z_L$.  In the first case we are done since $z_R \to x$ and $w = z_R$.  In the second case, we have $z = w * (w * a)$ for some $a$ with $a \to w$ (from \Cref{free-relate}(ii) and $z \to w$), but then $w * a$ will not lie in $M_{854}$, contradiction.
-\item If $x*z = w_R$  then $w$ is longer than $z$ and $z \neq w_R$.  Comparing this with \eqref{wz} we see that the only compatible option is $z = w_{RL}$, thus $x=z$, and then $w = a * (x * x)$ and $x \to a$ by \Cref{free-relate}(iii), and the claim follows from \Cref{free-relate}(ii).
-\item If $x * z = w_{RL}$, then $w = a * ((x *z) * b)$ for some $a,b$.  Then $w$, $w_R$, and $w_{RL}$ are all longer than $z$ and none of the options in \eqref{wz} can hold, a contradiction.
+\item If $w = (x*z)_R$ then $w=z$, which is incompatible with \Cref{wz}.
+\item If $w = (x*z)_{RL}$ then $w = z_L$ and $z_R \to x$ by \Cref{free-relate}(ii). Only the first two possibilities of \Cref{wz} are compatible with $w=z_L$.  In the first case we are done since $z_R \to x$ and $w = z_R$.  In the second case, we have $z = w * (w * a)$ for some $a$ with $a \to w$ (from \Cref{free-relate}(ii) and $z \to w$), but then $w * a$ will not lie in $M_{854}$, contradiction.
+\item If $x*z = w_R$  then $w$ is longer than $z$ and $z \neq w_R$.  Comparing this with \Cref{wz} we see that the only compatible option is $z = w_{RL}$, thus $x=z$, and then $w = a * (x * x)$ and $x \to a$ by \Cref{free-relate}(iii), and the claim follows from \Cref{free-relate}(ii).
+\item If $x * z = w_{RL}$, then $w = a * ((x *z) * b)$ for some $a,b$.  Then $w$, $w_R$, and $w_{RL}$ are all longer than $z$ and none of the options in \Cref{wz} can hold, a contradiction.
 \end{itemize}
 
 
@@ -363,7 +363,7 @@ We split into cases depending on \eqref{wz-1}.
 Case 3: $x \op z \not \to w$, $z \to x$.  We now have $z \to x, w$, and we need to show that $w * x \to x$.
 
 If $z \in \{ w_R, w_{RL}, x_R, x_{RL} \}$, then the claim follows from \Cref{free-relate}(iv), so we may assume that this is not the case.
-By \eqref{one}, we then know that one of
+By \Cref{one}, we then know that one of
 $$ x = z_R, x = z_{RL}$$
 holds, and also one of
 $$
@@ -376,4 +376,4 @@ Case 4: $x \op z \not \to w$, $z \not \to x$.  Then $x = (w \op (x \op z))_{RL}$
 
 \end{proof}
 
-With the explicit description of $M_{X,854}$ we can now refute various laws.  Suppose for instance that $x,y$ are generators in $X$.  We cannot have $y \to x$ (as none of \eqref{one} hold), so $y * x \in M_{X,854}$.  We also cannot have $y * x \to x$ (by inspection of the cases in \Cref{free-relate}(iv), \Cref{free-relate}(v)), so $x * (y * x)$ lies in $M_{X,854}$.  Then $x * (y * x) \not \to x$ (by \eqref{one}), so $x * (x * (y * x))$ lies in $M_{X,854}$; finally, $x * (x * (y * x)) \not \to x$ (this follows from \Cref{free-relate}(ii) since $y * x \not \to x$), so $x * (x * (x * (y * x)))$ lies in $M_{X,854}$.  This gives an alternate proof of \Cref{854-413}.  One can similarly establish \Cref{854-1045}.
+With the explicit description of $M_{X,854}$ we can now refute various laws.  Suppose for instance that $x,y$ are generators in $X$.  We cannot have $y \to x$ (as none of \Cref{one} hold), so $y * x \in M_{X,854}$.  We also cannot have $y * x \to x$ (by inspection of the cases in \Cref{free-relate}(iv), \Cref{free-relate}(v)), so $x * (y * x)$ lies in $M_{X,854}$.  Then $x * (y * x) \not \to x$ (by \Cref{one}), so $x * (x * (y * x))$ lies in $M_{X,854}$; finally, $x * (x * (y * x)) \not \to x$ (this follows from \Cref{free-relate}(ii) since $y * x \not \to x$), so $x * (x * (x * (y * x)))$ lies in $M_{X,854}$.  This gives an alternate proof of \Cref{854-413}.  One can similarly establish \Cref{854-1045}.
