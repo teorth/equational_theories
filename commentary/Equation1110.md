@@ -1,0 +1,3 @@
+Finite models of this equation are left and right cancellative, and the squaring map `S` is invertible; see [this discussion](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/484334184).  Other notable identites here include `x ◇ Sx = x`, `S(x ◇ Cx) = x`, and `SCx = CSx`, where `Cx = Sx ◇ x` is the cubing map.  [Equation 1629](https://teorth.github.io/equational_theories/implications/?1629) (whose implication from 1110 is currently unknown for finite models) is then equivalent to the assertion that cubes are idempotent.
+
+Models include the linear translation-invariant model `x ◇ y = x + a(y-x)` where `a(1-a)^2 = 1`, or the linear model `x ◇ y = ϕ x - y` where `ϕ^2 = ϕ + 1`.
