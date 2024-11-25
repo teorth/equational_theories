@@ -356,16 +356,22 @@ Define a \emph{partial solution} to be a partial function $\op: E \to \N$ on som
 \item (Law 1) If $(x \op y) \op y$ is defined, then $Sy \op ((x \op y) \op y)$ is defined and equal to $x$.
 \item (Law 2) If  If $x \op y$ and $z \op y$ are defined and equal to each other, then $x=z$.
 \item (Law 3) If $Sx$ is defined, then $(Sx \op x) \op x$ is defined.
+\item (Law 4) If there exists a $z$ such that $z \op x = x$ then $x \op x$ is defined.
 \end{itemize}
 
 \begin{lemma}[1722 extension]\label{1722-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
 \end{lemma}
 
-\begin{proof}  Suppose first that $b=a$, so $a \op a$ is undefined. Set $a_0=a$ and find seven distinct elements $a_1,a_2,a_3,b_0,b_1,b_2,b_3$ not previously appearing in the domain or range of $\op$ with the indices extended periodically, and define $a_i \op' a_i = a_{i+1}$ (so $a_i = S^i a$), $a_{i+1} \op' a_i = b_i$, $b_i \op' a_i = a_{i+2}$, $a_{i+2} \op' a_i = a_i$, $a_i \op' a_{i+1} = a_i$, $a_{i+1} \op' b_i = a_i$.  We also define $x \op' y = x \op y$ whenever the right-hand side is defined. A (slightly tedious) case check shows that Laws 1, 2, 3 are preserved.
+\begin{proof}  Suppose first that $b=a$, so $a \op a$ is undefined, then by Law 4 we have $d \op a \neq a$ for all $d$ with $d \op a$ defined. Set $a_0=a$ and find nine distinct elements $a_1,a_2,a_3,a_4,b_0,b_1,b_2,b_3,b_4$ not previously appearing in the domain or range of $\op$. Extend the indices periodically by setting $a_{i+4} = a_i,b_{i+4} = b_i$ for $i \ge 1$, and define $a_i \op' a_i = a_{i+1}$ (so $a_i = S^i a$), $a_{i+1} \op' a_i = b_i$, $b_i \op' a_i = a_{i+2}$, $a_{i+3} \op' a_{i+1} = a_{i+1}$, $a_{i+1} \op' a_{i+2} = a_{i+1}$, $a_{i+1} \op' b_i = a_i$.  We also define $x \op' y = x \op y$ whenever the right-hand side is defined. It is easy to see that laws 2,3,4 are preserved (though for law 2 note that we have not defined $a_2 \op' a_0$ due to the way indices are extended). Now we case check Law 1.  \begin{itemize}
+    \item Case 1. $y$ is fresh, that is $y \in \{a_1,a_2,a_3,a_4,b_0,b_1,b_2,b_3,b_4\}$. If $x \op' y$ is not defined, we are done, so assume this is so. In particular, $x  \in \{a_1,a_2,a_3,a_4,b_0,b_1,b_2,b_3,b_4\}$. If $x,y \in \{a_1,a_2,a_3,a_4\}$ we are done by construction. If $x = b_i$ for some $i$, then $y = a_i$ and we are again done by construction. Finally, if $y = b_i$ for some $i$, then $x = a_{i+1}$ and $(x \op' y) \op' y$ is undefined.
+    \item Case 2. $x$ is fresh, that is $x \in \{a_1,a_2,a_3,a_4,b_0,b_1,b_2,b_3,b_4\}$. If we are not in Case 1 and $x \op' y$ is defined, we must have $y = a_0$ and $x \in \{a_1, b_0\}$. The case $x = a_1$ holds by construction, and the case $x = b_0$ holds as $a_2 \op' a_0$ is not defined.
+    \item Case 3. $x,y \not \in  \{a_1,a_2,a_3,a_4,b_0,b_1,b_2,b_3,b_4\}$ and $x \op y$ was undefined. Then $x \op' y$ is undefined unless $x=y=a_0$, in which case Law 1 holds by construction.
+    \item Case 4. $x,y \not \in  \{a_1,a_2,a_3,a_4,b_0,b_1,b_2,b_3,b_4\}$, $x \op y$ was defined, and $(x \op y) \op y$ was not defined. Then $(x \op' y) \op' y$ is undefined unless $(x \op y) = a = y$, but this is impossible by Law $4$ as already observed.
+    \item Case 5. $x,y \not \in  \{a_1,a_2,a_3,a_4,b_0,b_1,b_2,b_3,b_4\}$ and $x \op y$ and $(x \op y) \op y$ were defined. Then the claim follows from Law 1 applied to $\op$.
+\end{itemize}
 
-Now suppose that $a \op b$ is undefined for some $a \neq b$.  By applying the previous construction, we may assume without loss of generality that $Sb$ is defined.  We may assume that $a \op b$ remains undefined after doing so, since we are done otherwise.  By Law 3, $a \neq Sb \op b$.  By Law 2, we have $d \op b = a$ for at most one $d$, which is necessarily different from $Sb$.  Choose a $c$ not previously appearing in the domain of range of $\op$, and set $a \op' b = c$.  If a $d$ exists as before, we additionally set $Sb \op' c = d$.  Finally we define $x \op' y = x \op y$ whenever the right-hand side is defined.
-
-It is routine to check that $\op'$ obeys Laws 2,3.  Now we case check Law 1.
+Now suppose that $a \op b$ is undefined for some $a \neq b$.  By applying the previous construction, we may assume without loss of generality that $Sb$ is defined.  We may assume that $a \op b$ remains undefined after doing so, since we are done otherwise.  By Law 3, $a \neq Sb \op b$.  By Law 2, we have $d \op b = a$ for at most one $d$, which is necessarily different from $Sb$.  Choose a $c$ not previously appearing in the domain or range of $\op$, and set $a \op' b = c$.  If a $d$ exists as before, we additionally set $Sb \op' c = d$.  Finally we define $x \op' y = x \op y$ whenever the right-hand side is defined.
+It is again routine to check that $\op'$ obeys Laws 2,3,4.  Now we case check Law 1.
 
 \begin{itemize}
 \item Case 1.  $x=c$ or $x \op' y = c$.  Not possible since no left multiplication by $c$ is defined.
@@ -414,14 +420,15 @@ $$ 0 \op 0 = 1, 0 \op 1 = 3, 0 \op 2 = 3, 0 \op 3 = 0$$
 $$1\op 0 = 2, 1 \op 1 = 0, 1 \op 2 = 1, 1 \op 3 =2 , 1 \op 4 = 3$$
 $$ 2 \op 0 = 2, 2 \op 2 = 4, 2 \op 4 = 0$$
 $$ 4 \op 1 = 2, 4 \op 2 = 4, 4 \op 3 = 2, 4 \op 4 = 1.$$
+which violates 3862 at $x=2$ and the other three laws at $x=0.$
 
 \subsection{Equation 1289}
 
 For $x = y \op (((x \op y) \op y) \op y)$ (1289), one can similarly argue using the rules
 \begin{itemize}
-\item (Law 1) If $((x \op y) \op y) \op y$ is already defined, then $y \op (((x \op y) \op y) \op y)$ is also defined and equals $$x$$.
+\item (Law 1) If $((x \op y) \op y) \op y$ is already defined, then $y \op (((x \op y) \op y) \op y)$ is also defined and equals $x$.
 \item (Law 2) $R_x$ is injective for all $x$ currently in the table.
-\item (Law 3) $x\op x=x$ for all $$x$$ currently in the table.
+\item (Law 3) $x\op x=x$ for all $x$ currently in the table.
 \end{itemize}
 
 \begin{lemma}[1289 extension]\label{1289-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
@@ -445,7 +452,8 @@ $$ 0 \op 0 = 0; 0 \op 1 = 2; 0 \op 2 = 1; 0 \op 4 = 1$$
 $$ 1 \op 0 = 2; 1 \op 1 = 1$$
 $$ 2 \op 0 = 2; 2 \op 2 = 2$$
 $$ 3 \op 0 = 4; 3 \op 3 = 3$$
-$$ 4 \op 4 = 4.$$
+$$ 4 \op 4 = 4$$
+which violates 4435 at $(x,y)=(0,1)$ and 3116 at $(x,y)=(2,0).$
 
 \subsection{Equation 73}
 
@@ -474,15 +482,89 @@ One can obtain various refutations by using the countermodels \href{https://lean
 
 \subsection{Equation 63}
 
-Again similar: see \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/482011878}{here} and \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/483735768}{here}.
+
+For $x = y \op (x \op (x \op y))$ (63), we argue similarly, now with laws
+\begin{itemize}
+  \item Law 1.  If $x \diamond (x \diamond y)$ is defined, then $y \diamond (x \diamond (x \diamond y))$ is defined and equal to $x$.
+  \item Law 2.  If $x \diamond y = x \diamond z$ with $y,z$ distinct, then $y \diamond x$ (if defined) is not equal to $z$ or to $z \diamond x$ (if defined).
+  \item Law 3: If $x \diamond x$ is defined, it is equal to $x$.
+  \item Law 4: If $x \neq y$, then $x \diamond y$ is not equal to $x$.
+\end{itemize}
+\begin{lemma}[63 extension]\label{63-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
+\end{lemma}
+\begin{proof}
+
+
+If $a = b$, set $a \diamond' a = a$.  This clearly does not destroy Laws 3 or 4, and because of Law 4, Law 2 will also be retained.
+Finally, using Law 4, we can check that this addition does not break Law 1.
+
+Now suppose $a \neq b$.
+Let $d_1,d_2,..., d_n$ be all the elements with $b = a \diamond d_i$, and note from Law 3 and $a \neq b $ that we have the crucial inequality $d_i \neq a$ for all $i$.  If $d_i \diamond a$ is defined, let $e_i = d_i \diamond a.$ From Law 4 and $d_i \neq a$, we have $e_i \neq d_i$. From Law 2 and $a \diamond d_i = a \diamond d_j$, we further have $e_i \neq e_j$ and $e_i \neq d_j$ for $i \neq j$.
+
+ For the algorithm, we set $a \diamond' b = c$ for some new $c$, $d_i \diamond' c = a$, and $c \diamond' e_i = d_i$ (This is well defined as we have just argued $e_i \neq e_j$ for $i \neq j$).
+
+This creates a new partial function.  Law 2 is verified as follows:
+The case $x=c$ cannot occur because $c \diamond' e_i \neq c \diamond' e_j$ for $i \neq j$.
+If $y=c$, then $x = d_i$ for some $i$, but then $y \diamond' x = c \diamond' d_i$ is undefined as $d_i \neq e_j$, so this case is vacuous.
+If $z=c$ and $x,y \neq c$, then similarly $z \diamond' x$ is undefined, and $y \diamond' x$ is not equal to
+$c = z$, so we are ok in this case also.
+
+Law 3 is clearly unaffected, and it is also straightforward to check that Law 4 is also not invalidated
+(here it is essential that $d_i \neq a$).
+
+Now we verify Law 1.
+\begin{itemize}
+  \item Case 1: $x=c$.  Then for $x \diamond' y$ to be defined we must have $y=e_i$ for some $i$, but then
+$x \diamond' (x \diamond' y) = c \op' d_i$ is undefined as $d_i \neq e_j$ for all $j$.
+\item Case 2: $y=c$. Then for $x \diamond' y$ to be defined we must have $x = d_i$ for some $i$. Then $d_i \op' (d_i \op' c)$ is either undefined or is equal to $e_i$, in which case Law 1 holds as $c \op' e_i = d_i$.
+\item Case 3: $x \diamond' y = c$.  Then $x=a$ and $y=b$.  Since $d_i \neq a$ for all $i$, $x \diamond (x \diamond y)$ is undefined.
+\item Case 4: $x \op' (x \op' y) = c$. Then $x = a$ and $y = d_i$ for some $i$, and Law 1 holds as $d_i \op' c = a$.
+\item Case 5: None of $x, y, x \diamond' y, x \op' (x \op' y)$ are equal to $c$.  Then this case is covered by the previous seed.
+\end{itemize}
+\end{proof}
+One can obtain various refutations by using the countermodels \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/483735768}{here}.
 
 \subsection{Equation 1076}
+For $x = y \op ((x \op (x \op y)) \op y)$ (1076), we argue similarly. There are just two laws:
+\begin{itemize}
+    \item Law 1.  If $x \diamond (x \diamond y)$ is defined and equal to some $z$,
+then $y \diamond (z \diamond y)$ is defined and equal to $x$.
+    \item Law 2.  $x \diamond x$ is not equal to $x$.
+\end{itemize}
 
-Again similar: see \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/481875069}{here} and \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/483735768}{here}.
+\begin{lemma}[1076 extension]\label{1076-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
+\end{lemma}
+\begin{proof}
+Set $a \diamond' b = c$ for some new element $c$. If $d_1,d_2,...,d_n$ are the elements for which $a \diamond d_i = b$, set $c \diamond' d_i = c'_i$ for some new element $c'_i$, and also set
+$d_i \diamond' c'_i = a$. If $d_i \diamond a$ is equal to some $e_i$, set $e_i \diamond' c'_i = c''_i$ and $c'_i \diamond' c''_i = d_i$,
+where $c''_i$ is equal to $a$ if $e_i = d_i$, or is some new element otherwise.
 
+One can verify that no collisions are caused by this construction (this is why we have to take $c''_i=a$ when $e_i=d_i$),
+ and that Law 2 is preserved.
+
+We need to verify that these constructions preserve Law 1.  There are several cases:
+\begin{itemize}
+
+  \item $y=c$.  Not possible since there are no right multiplications by $c$ defined.
+  \item $x=c$.  Not possible since it forces $y = d_i$, $x \diamond y = c'_i$ for some $i$.
+  \item $y=c'_i$, $x = d_i$.  True by construction.
+  \item $y=c'_i$, $x \neq d_i$.  This forces $x = e_i \neq d_i$ and $x \diamond' y = c''_i$, but then $x \diamond' (x \diamond' y)$ is undefined.
+  \item $x=c'_i$.  Not possible because this forces $x \diamond' y = d_i$, and $x \diamond' (x \diamond' y)$ will be undefined.
+ (Here we use the fact that $e_i=d_i$ can only occur when $d_i \neq a$, by Law 2.)
+ \item  $x = c''_i$ is new.  Not possible as no left multiplications by $c''_i$ are defined.
+ \item $y=c''_i$ is new.  This forces $x = c'_i$ and $x \diamond' y = d_i$, but then $x \diamond' (x \diamond' y)$ is undefined.
+ \item $x$ and $y$ are not new and $x \diamond y$ was undefined. This requires $x=a, y=b$, but then $x \diamond' (x \diamond' y)$
+is undefined since right multiplication by $c$ is undefined.
+\item $x$, $y$ are not new and $x \diamond y$ was defined, but $x \diamond (x \diamond y)$ was undefined.
+This requires $x=a$, $x \diamond y = b$, and hence $y = d_i$ for some $i$.  The claim now follows from construction.
+\item  $x$, $y$, are not new and $x \diamond y$, $x \diamond (x \diamond y)$ were defined. This then follows from the previous seed.
+\end{itemize}
+\end{proof}
+
+One can obtain various refutations by using the countermodels \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/483735768}{here}.
 \subsection{Equation 3308}
 
-Again similar: see \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/482066500}{here} and \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/483735768}{here}.
+Similar: see \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/482066500}{here} and \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/483735768}{here}.
 
 
 \section{A survey of examples}\label{infinite-examples-section}
