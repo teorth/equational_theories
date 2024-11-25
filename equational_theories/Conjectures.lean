@@ -13,10 +13,6 @@ namespace Conjectures
 @[equational_result]
 conjecture Equation1076_facts : ∃ (G : Type) (_ : Magma G), Facts G [1076] [47, 99, 151, 203, 255, 411, 614, 817, 1223, 1426, 1629, 1832, 2035, 2238, 2441, 2644, 2847, 3050, 3253, 3456, 3659, 3862, 4065, 4380]
 
-/-- See https://leanprover.zulipchat.com/user_uploads/3121/zGPTzX7J0AkJcQdPdh_xoCTe/Equation_73-updated.pdf as well as an alternate construction at https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/481762466 -/
-@[equational_result]
-conjecture Equation73_facts : ∃ (G : Type) (_ : Magma G), Facts G [73] [99, 203, 255, 4380]
-
 /-- See https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1076.20!.3D.3E.203/near/477009119 as well as an alternate construction at https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/482096595 -/
 @[equational_result]
 conjecture Equation713_facts : ∃ (G : Type) (_ : Magma G), Facts G [713] [817, 1426, 3862, 4065]
