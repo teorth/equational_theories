@@ -48,12 +48,6 @@ conjecture Equation1729_facts : ∃ (G : Type) (_ : Magma G), Facts G [1729] [81
 
 /- Finite conjectures follow -/
 
-/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/480601897 -/
-@[equational_result]
-conjecture Finite.Equation3308_implies_Equation3511 (G : Type) [Magma G] [Finite G] (_ : Equation3308 G) : Equation3511 G
-@[equational_result]
-conjecture Finite.Equation3549_implies_Equation3955 (G : Type) [Magma G] [Finite G] (_ : Equation3549 G) : Equation3955 G
-
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/481257624 -/
 @[equational_result]
 conjecture Finite.Equation467_implies_Equation2847 (G : Type) [Magma G] [Finite G] (_ : Equation467 G) : Equation2847 G
