@@ -532,7 +532,7 @@ then $y \diamond (z \diamond y)$ is defined and equal to $x$.
     \item Law 2.  $x \diamond x$ is not equal to $x$.
 \end{itemize}
 
-\begin{lemma}[1076 extension]\label{1076-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
+\begin{lemma}[1076 extension]\label{1076-extension}\leanok\lean{Eq1076.Greedy.lift}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
 \end{lemma}
 \begin{proof}
 Set $a \diamond' b = c$ for some new element $c$. If $d_1,d_2,...,d_n$ are the elements for which $a \diamond d_i = b$, set $c \diamond' d_i = c'_i$ for some new element $c'_i$, and also set
