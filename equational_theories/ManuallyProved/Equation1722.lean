@@ -1,14 +1,14 @@
 import equational_theories.Mathlib.Data.List.Defs
 import equational_theories.Mathlib.Order.Greedy
 import Mathlib.Data.Finset.Order
+import Mathlib.Data.Prod.Lex
 import Mathlib.Data.List.AList
 import Mathlib.Data.Set.Finite.Lattice
 import Mathlib.Data.Set.Basic
 import Mathlib.Data.Set.Functor
 import Mathlib.Tactic.DeriveFintype
-import Mathlib.GroupTheory.FreeGroup.Basic
 
-import equational_theories.FreshGenerator
+import equational_theories.AdjoinFresh
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 
@@ -17,77 +17,8 @@ import Mathlib.Data.FinEnum
 namespace Eq1722
 namespace Greedy
 noncomputable section
-
+open AdjoinFresh
 --TODO: find better name
-def adjoinFresh' {F : Type} [fE: FinEnum F]: ℕ ≃ ℕ ⊕ F where
-  toFun n := if h: n < fE.card then .inr $ fE.equiv.symm ⟨n,h⟩ else .inl $ n - fE.card
-  invFun a := match a with
-  | .inl n => n + fE.card
-  | .inr f => fE.equiv f
-  left_inv n := by
-    simp only
-    split
-    case h_1 h =>
-      split at h
-      · injection h
-      · injection h
-        omega
-    case h_2 h =>
-      split at h
-      · injection h with h
-        rw [← h]
-        simp
-      · injection h
-  right_inv a := by cases a <;> simp
-
-def adjoinFresh {F : Type} (e : ℕ ≃ ℕ ⊕ F) (m : ℕ) : ℕ ≃ ℕ ⊕ F where
-  toFun n := if n < m then .inl n else match e (n - m) with
-    | .inl k => .inl (k + m)
-    | .inr c => .inr c
-  invFun
-    | .inl k => if k < m then k else e.symm (.inl (k-m)) + m
-    | .inr c => e.symm (.inr c) + m
-  left_inv n := by
-    dsimp
-    by_cases h : n < m
-    · simp [h]
-    · simp [h]
-      split
-      cases h' : e (n -m)
-      next k' eq' k'' =>
-        rw [h'] at eq'
-        simp only [Sum.inl.injEq] at eq'
-        rw [← eq']
-        have  : ¬ k'' + m < m := by omega
-        simp only [this, ↓reduceIte, Nat.add_sub_cancel]
-        rw [← h']
-        simp only [Equiv.symm_apply_apply]
-        omega
-      · simp_all
-      next h' =>
-        split at h'
-        · simp_all
-        next h'' =>
-          rw [← h',← h'']
-          simp only [Equiv.symm_apply_apply]
-          omega
-  right_inv a := by
-    cases a
-    case inl n =>
-      simp only
-      by_cases h : n < m
-      · simp [h]
-      · simp only [h, ↓reduceIte, Nat.add_sub_cancel, Equiv.apply_symm_apply]
-        have : ¬ (e.symm (Sum.inl (n - m)) + m < m) := by omega
-        simp only [this, ↓reduceIte, Sum.inl.injEq]
-        omega
-    case inr => simp
-
-theorem adjoinFresh_fixed {F : Type} {e : ℕ ≃ ℕ ⊕ F} {m k: ℕ} (h : k  < m) :
-  adjoinFresh e m k = .inl k := by unfold adjoinFresh ; simp [h]
-
-theorem adjoinFresh_fixed' {F : Type} {e : ℕ ≃ ℕ ⊕ F} {m k: ℕ} (h : k  < m) :
-  (adjoinFresh e m).symm (.inl k) = k := by unfold adjoinFresh ; simp [h]
 
 abbrev PreExtension (α : Type) := α → α → Set α
 
@@ -181,13 +112,13 @@ theorem lt_dom_bound {x} (h : x ∈ dom) : x < dom_bound := Nat.lt_succ.2 <| dom
 
 namespace FreshExtension
 
-variable {F : Type} [FinEnum F] (E' : FreshExtension F)
+variable {F : Type} [Countable F] (E' : FreshExtension F)
 
 def adjoin : PreExtension ℕ :=
-  Equiv.movePreExtension (adjoinFresh adjoinFresh' dom_bound) E'.1
+  Equiv.movePreExtension (adjoinFresh dom_bound) E'.1
 
 theorem adjoin_ok : E'.adjoin.OK :=
-  Equiv.movePreExtensionOK (adjoinFresh adjoinFresh' dom_bound) E'.1 E'.2.ok
+  Equiv.movePreExtensionOK (adjoinFresh dom_bound) E'.1 E'.2.ok
 
 theorem adjoin_le : E ≤ E'.adjoin := by
   intro a b c h
@@ -201,7 +132,7 @@ theorem adjoin_le : E ≤ E'.adjoin := by
 theorem adjoin_ab_def :
   E'.adjoin ∈ { e : (PreExtension ℕ) | Nonempty (e a b)} := by
   obtain ⟨c, c_mem⟩ := E'.2.ab_def
-  use ((adjoinFresh adjoinFresh' dom_bound).symm c)
+  use ((adjoinFresh dom_bound).symm c)
   unfold adjoin Equiv.movePreExtension
   simp only [Set.mem_setOf_eq, Equiv.apply_symm_apply]
   unfold adjoinFresh
@@ -220,7 +151,6 @@ inductive F
   | bi : Fin 4 → F -- same
   deriving DecidableEq, Fintype
 open F
-instance : FinEnum F := FinEnum.ofList [ai 0, ai 1, ai 2, ai 3, b₀, bi 0, bi 1, bi 2, bi 3] (by decide)
 
 open ExtensionBase
 --unfold constructors to get better pattern matching

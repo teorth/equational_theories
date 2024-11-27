@@ -6,81 +6,20 @@ import Mathlib.Data.ZMod.Defs
 import Mathlib.Order.OmegaCompletePartialOrder
 import equational_theories.Equations.Eqns3000_3999
 import Mathlib.Tactic.FinCases
-
 import equational_theories.Mathlib.Data.List.Defs
 import equational_theories.Mathlib.Order.Greedy
-
-import equational_theories.Equations.All
+import equational_theories.AdjoinFresh
+import equational_theories.EquationalResult
 import equational_theories.FactsSyntax
 
 namespace Refutation_3308
 
 namespace Greedy
 noncomputable section
+open AdjoinFresh
 abbrev Fresh := Fin 10
 
 private abbrev A := ℕ ⊕ Fresh
-
-def adjoinFresh': ℕ ≃ A where
-  toFun n := match n with
-    | k + 10 => .inl k
-    | x => .inr x
-  invFun
-    | .inl n => n + 10
-    | .inr x => x
-  left_inv n := match n with
-    | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 => rfl
-    | k + 10 => rfl
-  right_inv n := by
-    cases n with
-    | inl val =>
-        rfl
-    | inr val =>
-        fin_cases val <;> rfl
-
-
-def adjoinFresh (m : ℕ) : ℕ ≃ A where
-  toFun n := if n < m then .inl n else match adjoinFresh' (n - m) with
-    | .inl k => .inl (k + m)
-    | .inr c => .inr c
-  invFun
-    | .inl k => if k < m then k else adjoinFresh'.symm (.inl (k-m)) + m
-    | .inr c => adjoinFresh'.symm (.inr c) + m
-  left_inv n := by
-    dsimp
-    by_cases h : n < m
-    · simp [h]
-    · simp [h]
-      split
-      cases h' : adjoinFresh' (n -m)
-      next k' eq' k'' =>
-        rw [h'] at eq'
-        simp only [Sum.inl.injEq] at eq'
-        rw [← eq']
-        have  : ¬ k'' + m < m := by omega
-        simp only [this, ↓reduceIte, Nat.add_sub_cancel]
-        rw [← h']
-        simp only [Equiv.symm_apply_apply]
-        omega
-      · simp_all
-      next h' =>
-        split at h'
-        · simp_all
-        next h'' =>
-          rw [← h',← h'']
-          simp only [Equiv.symm_apply_apply]
-          omega
-  right_inv a := by
-    cases a
-    case inl n =>
-      simp only
-      by_cases h : n < m
-      · simp [h]
-      · simp only [h, ↓reduceIte, Nat.add_sub_cancel, Equiv.apply_symm_apply]
-        have : ¬ (adjoinFresh'.symm (Sum.inl (n - m)) + m < m) := by omega
-        simp only [this, ↓reduceIte, Sum.inl.injEq]
-        omega
-    case inr => simp
 
 abbrev PreExtension (α : Type) := α → α → Set α
 
@@ -150,7 +89,7 @@ variable [ExtensionBase]
 structure FreshSolution (E' : PreExtension A) : Prop where
   base {a b c} : c ∈ E a b → (.inl c) ∈ E' (.inl a) (.inl b)
   ok : E'.OK
-  ab_def : (.inr 0) ∈ E' (.inl a) (.inl b)
+  ab_def : (E' (.inl a) (.inl b)).Nonempty
 
 abbrev FreshExtension:= {E' : PreExtension A // FreshSolution E'}
 
@@ -200,12 +139,12 @@ theorem adjoin_le (E' : FreshExtension) : E ≤ E'.adjoin := by
 
 theorem adjoin_ab_def (E' : FreshExtension) :
   E'.adjoin ∈ { e : (PreExtension ℕ) | Nonempty (e a b)} := by
-  exists ((adjoinFresh dom_bound).symm (.inr 0))
+  obtain ⟨c, c_mem⟩ := E'.2.ab_def
+  use ((adjoinFresh dom_bound).symm c)
   unfold adjoin Equiv.movePreExtension
   simp only [Set.mem_setOf_eq, Equiv.apply_symm_apply]
   unfold adjoinFresh
-  simp [lt_dom_bound dom_a, lt_dom_bound dom_b]
-  exact E'.2.ab_def
+  simp [lt_dom_bound dom_a, lt_dom_bound dom_b, c_mem]
 end FreshExtension
 
 
@@ -346,7 +285,7 @@ theorem next_ok : next.OK where
 def next_freshSolution : FreshSolution Next where
   base := Next.base
   ok := next_ok
-  ab_def := b_eq_a ▸ Next.new
+  ab_def := ⟨.inr 0, b_eq_a ▸ Next.new⟩
 
 
 end Extension1
@@ -557,7 +496,7 @@ theorem next_ok : next.OK where
 def next_freshSolution : FreshSolution Next where
   base := Next.base
   ok := next_ok
-  ab_def := Next.new
+  ab_def := ⟨_, Next.new⟩
 
 end Extension2
 
@@ -717,7 +656,7 @@ theorem next_ok : next.OK where
 def next_freshSolution : FreshSolution Next where
   base := Next.base
   ok := next_ok
-  ab_def := Next.new
+  ab_def := ⟨_, Next.new⟩
 
 end Extension3
 open ExtensionBase
