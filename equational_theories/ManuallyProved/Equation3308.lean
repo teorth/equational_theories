@@ -1,8 +1,11 @@
+import Mathlib.Algebra.Order.Ring.Nat
 import Mathlib.Data.Finset.Order
+import Mathlib.Data.Nat.Lattice
 import Mathlib.Data.Prod.Lex
-import Mathlib.Data.Set.Finite.Lattice
-import Mathlib.Tactic.DeriveFintype
-import Mathlib.Data.Set.Basic
+import Mathlib.Data.ZMod.Defs
+import Mathlib.Order.OmegaCompletePartialOrder
+import equational_theories.Equations.Eqns3000_3999
+import Mathlib.Tactic.FinCases
 
 import equational_theories.Mathlib.Data.List.Defs
 import equational_theories.Mathlib.Order.Greedy
@@ -14,53 +17,27 @@ namespace Refutation_3308
 
 namespace Greedy
 noncomputable section
-inductive Fresh
-  | c₀ : Fresh
-  | c₁ : Fresh
-  | c₂ : Fresh
-  | c₃ : Fresh
-  | c₄ : Fresh
-  | c₅ : Fresh
-  | c₆ : Fresh
-  | c₇ : Fresh
-  | c₈ : Fresh
-  | c₉ : Fresh
-  deriving DecidableEq, Fintype
-open Fresh
+abbrev Fresh := Fin 10
+
 private abbrev A := ℕ ⊕ Fresh
 
 def adjoinFresh': ℕ ≃ A where
   toFun n := match n with
-    | 0 => .inr c₀
-    | 1 => .inr c₁
-    | 2 => .inr c₂
-    | 3 => .inr c₃
-    | 4 => .inr c₄
-    | 5 => .inr c₅
-    | 6 => .inr c₆
-    | 7 => .inr c₇
-    | 8 => .inr c₈
-    | 9 => .inr c₉
     | k + 10 => .inl k
+    | x => .inr x
   invFun
     | .inl n => n + 10
-    | .inr c₀ => 0
-    | .inr c₁ => 1
-    | .inr c₂ => 2
-    | .inr c₃ => 3
-    | .inr c₄ => 4
-    | .inr c₅ => 5
-    | .inr c₆ => 6
-    | .inr c₇ => 7
-    | .inr c₈ => 8
-    | .inr c₉ => 9
+    | .inr x => x
   left_inv n := match n with
     | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 => rfl
     | k + 10 => rfl
-  right_inv a := by
-    cases a
-    case inl => rfl
-    case inr a => cases a <;> rfl
+  right_inv n := by
+    cases n with
+    | inl val =>
+        rfl
+    | inr val =>
+        fin_cases val <;> rfl
+
 
 def adjoinFresh (m : ℕ) : ℕ ≃ A where
   toFun n := if n < m then .inl n else match adjoinFresh' (n - m) with
@@ -173,7 +150,7 @@ variable [ExtensionBase]
 structure FreshSolution (E' : PreExtension A) : Prop where
   base {a b c} : c ∈ E a b → (.inl c) ∈ E' (.inl a) (.inl b)
   ok : E'.OK
-  ab_def : (.inr .c₀) ∈ E' (.inl a) (.inl b)
+  ab_def : (.inr 0) ∈ E' (.inl a) (.inl b)
 
 abbrev FreshExtension:= {E' : PreExtension A // FreshSolution E'}
 
@@ -223,7 +200,7 @@ theorem adjoin_le (E' : FreshExtension) : E ≤ E'.adjoin := by
 
 theorem adjoin_ab_def (E' : FreshExtension) :
   E'.adjoin ∈ { e : (PreExtension ℕ) | Nonempty (e a b)} := by
-  exists ((adjoinFresh dom_bound).symm (.inr .c₀))
+  exists ((adjoinFresh dom_bound).symm (.inr 0))
   unfold adjoin Equiv.movePreExtension
   simp only [Set.mem_setOf_eq, Equiv.apply_symm_apply]
   unfold adjoinFresh
@@ -252,23 +229,23 @@ open ExtensionBase
 @[scoped aesop unsafe 50% [constructors]]
 inductive Next : A → A → A → Prop
   | base {x y z} : z ∈ x ◯ y → Next (.inl x) (.inl y) (.inl z)
-  | new : Next (.inl a) (.inl a) (.inr c₀)
-  | extra0 : Next (.inl a) (.inr c₀) (.inr c₁)
-  | extra1 : Next (.inl a) (.inr c₁) (.inr c₀)
-  | extra2 : Next (.inr c₀) (.inl a) (.inr c₂)
-  | extra3 : Next (.inl a) (.inr c₂) (.inr c₃)
-  | extra4 : Next (.inl a) (.inr c₃) (.inr c₁)
-  | extra5 : Next (.inr c₀) (.inr c₁) (.inr c₄)
-  | extra6 : Next (.inr c₀) (.inr c₄) (.inr c₂)
-  | extra7 : Next (.inr c₁) (.inl a) (.inr c₅)
-  | extra8 : Next (.inl a) (.inr c₅) (.inr c₆)
-  | extra9 : Next (.inl a) (.inr c₆) (.inr c₀)
-  | extra10 : Next (.inr c₁) (.inr c₀) (.inr c₇)
-  | extra11 : Next (.inr c₁) (.inr c₇) (.inr c₅)
-  | extra12 : Next (.inr c₁) (.inr c₄) (.inr c₈)
-  | extra13 : Next (.inr c₁) (.inr c₈) (.inr c₇)
-  | extra14 : Next (.inr c₀) (.inr c₇) (.inr c₉)
-  | extra15 : Next (.inr c₀) (.inr c₉) (.inr c₄)
+  | new : Next (.inl a) (.inl a) (.inr 0)
+  | extra0 : Next (.inl a) (.inr 0) (.inr 1)
+  | extra1 : Next (.inl a) (.inr 1) (.inr 0)
+  | extra2 : Next (.inr 0) (.inl a) (.inr 2)
+  | extra3 : Next (.inl a) (.inr 2) (.inr 3)
+  | extra4 : Next (.inl a) (.inr 3) (.inr 1)
+  | extra5 : Next (.inr 0) (.inr 1) (.inr 4)
+  | extra6 : Next (.inr 0) (.inr 4) (.inr 2)
+  | extra7 : Next (.inr 1) (.inl a) (.inr 5)
+  | extra8 : Next (.inl a) (.inr 5) (.inr 6)
+  | extra9 : Next (.inl a) (.inr 6) (.inr 0)
+  | extra10 : Next (.inr 1) (.inr 0) (.inr 7)
+  | extra11 : Next (.inr 1) (.inr 7) (.inr 5)
+  | extra12 : Next (.inr 1) (.inr 4) (.inr 8)
+  | extra13 : Next (.inr 1) (.inr 8) (.inr 7)
+  | extra14 : Next (.inr 0) (.inr 7) (.inr 9)
+  | extra15 : Next (.inr 0) (.inr 9) (.inr 4)
 
 @[scoped aesop safe destruct]
 theorem not_def' {c} : c ∉ E a a := b_eq_a ▸ not_def (c:= c)
@@ -328,6 +305,7 @@ theorem next_law3' {x y xy xyy} : xy ∈ next x y → xyy ∈ next xy y → ∃ 
     exfalso
     exact ok.not_right c rfl
   all_goals aesop
+
 
 theorem next_right_cancel {x x' y xy} : xy ∈ next x y → xy ∈ next x' y → x = x' := by
   intro xy_mem xy_mem'
@@ -416,11 +394,11 @@ open ExtensionBase
 @[scoped aesop unsafe 50% [constructors]]
 inductive Next : A → A → A → Prop
   | base {x y z} : z ∈ x ◯ y → Next (.inl x) (.inl y) (.inl z)
-  | new :  Next (.inl a) (.inl b) (.inr c₀)
-  | extra0 : Next (.inl b) (.inr c₀) (.inr c₁)
-  | extra1 : Next (.inl b) (.inr c₁) (.inl d)
-  | extra2 : Next (.inl a) (.inl d) (.inr c₂)
-  | extra3 : Next (.inl a) (.inr c₂) (.inr c₀)
+  | new :  Next (.inl a) (.inl b) (.inr 0)
+  | extra0 : Next (.inl b) (.inr 0) (.inr 1)
+  | extra1 : Next (.inl b) (.inr 1) (.inl d)
+  | extra2 : Next (.inl a) (.inl d) (.inr 2)
+  | extra3 : Next (.inl a) (.inr 2) (.inr 0)
 
 abbrev next : PreExtension A := fun a b => {c | Next a b c}
 
@@ -457,10 +435,10 @@ theorem next_eq3308 {x y xy yx} : xy ∈ next x y → yx ∈ next y x → ∃ xy
     exact ⟨.inl xyx, .base xyx_mem, .base eq⟩
   case base.new yx yx_mem =>
     have yx_eq_d := ok.func yx_mem ba_def
-    exact ⟨.inr c₁, .extra0, yx_eq_d ▸ .extra1⟩
+    exact ⟨.inr 1, .extra0, yx_eq_d ▸ .extra1⟩
   case new.base yx yx_mem =>
     have yx_eq_d := ok.func yx_mem ba_def
-    exact ⟨.inr c₂, yx_eq_d ▸ .extra2, .extra3⟩
+    exact ⟨.inr 2, yx_eq_d ▸ .extra2, .extra3⟩
   case extra2.base | base.extra2 =>
     exfalso
     apply da_not_def
@@ -506,7 +484,7 @@ theorem next_law3 {x y xy yxy} : xy ∈ next x y → yxy ∈ next y xy → ∃ y
   case base.extra2 x h =>
     have x_eq_b : x = b := ok.right_cancel h ba_def
     rw [x_eq_b]
-    exact ⟨.inr c₀, .new⟩
+    exact ⟨.inr 0, .new⟩
   case new.extra0 =>
     exact ⟨.inl d, .base ba_def⟩
 
@@ -609,12 +587,12 @@ attribute [scoped aesop safe destruct] b_not_im_a
 @[scoped aesop unsafe 50% [constructors]]
 inductive Next : A → A → A → Prop
   | base {x y z} : z ∈ x ◯ y → Next (.inl x) (.inl y) (.inl z)
-  | new :  Next (.inl a) (.inl b) (.inr c₀)
-  | extra0 : Next (.inl b) (.inr c₀) (.inr c₁)
-  | extra1 : Next (.inl b) (.inr c₁) (.inr c₂)
-  | extra2 : Next (.inl b) (.inl a) (.inr c₂)
-  | extra3 : Next (.inl a) (.inr c₂) (.inr c₃)
-  | extra4 : Next (.inl a) (.inr c₃) (.inr c₀)
+  | new :  Next (.inl a) (.inl b) (.inr 0)
+  | extra0 : Next (.inl b) (.inr 0) (.inr 1)
+  | extra1 : Next (.inl b) (.inr 1) (.inr 2)
+  | extra2 : Next (.inl b) (.inl a) (.inr 2)
+  | extra3 : Next (.inl a) (.inr 2) (.inr 3)
+  | extra4 : Next (.inl a) (.inr 3) (.inr 0)
 
 abbrev next : PreExtension A := fun a b => {c | Next a b c}
 
