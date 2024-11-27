@@ -5,19 +5,13 @@ In this section we collect the various techniques developed in the ETP to constr
 
 \subsection{Finite magmas}\label{finite-sec}
 
-\note{TODO: Expand this sketch}
+A finite magma $M$ of order $n$ can be labeled by $\{1,\dots,n\}$ and described by specifying the multiplication table $\op \colon\{1,\dots,n\} \times \{1,\dots,n\} \to \{1,\dots,n\}$.  By generating a list of all the equational laws $En$, $n=1,\dots,4694$ obeyed by this magma, one can create refutations: if $M \models En$ and $M \not \models Em$, then clearly $E_n \not \vdash E_m$.  It is feasible to brute force over all $\sum__{n=2}^4 n^{n^2} \approx 4.3 \times 10^9$ non-trivial magmas of order at most $4$ to obtain many refutations of this type.  \note{Report on how many implications that can be obtained in this way.}
 
-Discuss semi-automated creation of finite counterexamples (as discussed \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Counterexamples.20by.20Enumerating.20Words.20in.20Quotient.20Magma}{here})
+However, it is not feasible to exhaustively search over the $5^{5^2} \approx 3 \times 10^{17}$ magmas of order $5$, even after quotienting out by isomorphism and symmetry (which roughly saves a factor of $5! \times 2 = 240$).  Randomly sampling such magmas did not produce significant refutations, as random magmas of order $5$ tended to obey few laws, and the set of laws covered were usually also exhibited by smaller magmas.  A more fruitful approach was to randomly sample from magmas with additional properties that encouraged satisfiability of a greater set of laws.  These included linear and quadratic magmas (discussed below), and cancellative magmas.  On the other hand, some classes of magmas, such as commutative magmas, ended up producing a disappointingly small number of additional refutations.
 
-Describe various sources of example magmas used in counterexamples, including the ones listed here.
+For specific refutations, it was sometimes possible to locate a finite example with an ATP, particularly if one also imposed additional axioms (e.g., an idempotence axiom $x = x \op x$) that one suspected would be useful.  For medium-sized magmas (of order $n=5,6,7,8$), this appeared to be a more efficient approach than brute force exhaustion of all such magmas.  \note{Discuss this further, perhaps give an example, or refer to the ATP section.  See also \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Counterexamples.20by.20Enumerating.20Words.20in.20Quotient.20Magma}{this discussion} and \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Using.20SAT.20solvers.20for.20model.20generation}{this discussion}.}
 
-Also note some ``negative results'' - classes of finite magmas that did not yield many additional refutations, e.g. commutative 5x5 magmas.
-
-Mention that many refutations are ``immune'' to finite models, point to \Cref{austin-sec} for details.
-
-Using SAT solvers to find medium sized finite magmas obeying a given law? See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Using.20SAT.20solvers.20for.20model.20generation}{this discussion}.
-
-Discuss computational and memory efficiencies needed to brute force over extremely large sets of magmas. SAT solving may be a better approach past a certain size!
+It is a result of Kisielewicz \cite{Kisielewicz} that every law $En$ with $n \leq 4692$ is either equivalent to the singleton law $E2$, or else has a non-trivial finite model.  In fact our brute force search revealed that in the latter case there is always a model of order $2 \leq n \leq 4$, with the lone exception of \Cref{eq1286} (and its dual \Cref{eq2301}), for which the smallest non-trivial finite model was of order $7$, as presented in \Cref{1286-ex} below.
 
 \subsection{Linear models}\label{linear-sec}
 
@@ -32,11 +26,11 @@ $$ \{ (a,b) \in M \times M: P_{w_1,i}(a,b) = P_{w_2,i}(a,b) \hbox{ for all } i \
 \{ (a,b) \in M \times M: P_{w'_1,i}(a,b) = P_{w'_2,i}(a,b) \hbox{ for all } i \} $$
 for all rings $M$.  For commutative rings, this criterion can be checked by standard Grobner basis techniques; in the noncommutative case one can use methods such as the diamond lemma \cite{diamond-lemma}.
 
-\begin{example}[Commutative counterexample] For the law $x = y \op (((x \op y) \op x) \op y)$ \Cref{eq1286}, the variety \Cref{variety} can be computed to be
+\begin{example}[Commutative counterexample]\label{1286-ex} For the law $x = y \op (((x \op y) \op x) \op y)$ \Cref{eq1286}, the variety \Cref{variety} can be computed to be
 $$ \{ (a,b) \in M \times M: 1 = a+ba^3+bab, 0 = a + ba^2 b + b^2 \}$$
 while the variety for the idempotent law \Cref{eq3} is
 $$ \{ (a,b) \in M: a+b=1 \}.$$
-Thus to show that \Cref{eq1286} does not entail \Cref{eq3}, it suffices to locate elements $a,b$ of a ring $M$ for one has $1 = a+ba^3+bab$, $0 = a + ba^2 b + b^2$, and $a+b \neq 1$.  Here one can take a commutative example, for instance when $M = \Z/p\Z$ and $(p,a,b) = (11,1,7)$.
+Thus to show that \Cref{eq1286} does not entail \Cref{eq3}, it suffices to locate elements $a,b$ of a ring $M$ for one has $1 = a+ba^3+bab$, $0 = a + ba^2 b + b^2$, and $a+b \neq 1$.  Here one can take a commutative example, for instance when $M = \Z/p\Z$ and $(p,a,b) = (11,1,7)$ or $(p,a,b)=(7,6,2)$.
 \end{example}
 
 \begin{example}[Noncommutative counterexample]\label{1117-ex} For the law $x = y \op ((y \op (x \op z)) \op z)$ \Cref{eq1117}, the variety \Cref{variety} can be computed to be
