@@ -1,9 +1,57 @@
 \section{Proof Automation}\label{automated-sec}
 
-In this project we used proof automation in two ways: automated theorem provers (ATPs) and Lean tactics. In general, ATPs are stand-alone tools that
+In this project we used proof automation in two ways: automated theorem provers (ATPs) and Lean tactics.
+ATPs are generally stand-alone tools that implement a (semi-) decision procedure for a given formal language or related set of languages.
+For example, Vampire~\cite{DBLP:conf/cav/KovacsV13} is an ATP focused primarily on first-order logic using supperposition, which we used extensively in this project.
+ATPs are generally complex pieces of software, and can often have bugs.
+While we could choose to trust the results of an ATP, and in this project we don't do so either.
+Instead, we use proof certificates, which many ATPs can produce, to reconstruct a proof in Lean.
+This process depends on the proof certificate and the ATP, and we describe it for the main recunstruction we've done.
+
+Tactics in Lean, on the other hand, are meta-programs~\cite{DBLP:journals/pacmpl/EbnerURAM17} that builds proofs.
+In other words, tactics are programs that operate at the meta-level of Lean code: they essentially take in Lean code as input and produce Lean code as output.
+In this manner, they look like another keyword in the language, and are tightly integrated by producing proofs directly.
+Under the hood, they can implement essentially anything, from syntactic sugar to full decision procedures.
+The \texttt{duper} tactic~\cite{DBLP:conf/itp/CluneQBA24}, for example, implements a superposition calculus, similar Vampire's, but for dependent types --- Lean's underlying logical foundation.
+
+In the rest of this section we describe the different proof automation techniques and ATPs/tactics we used.
+We first discuss the different proof methods used: primarily superposition and equational reasoning, we then discuss the integration in Lean, and finally we report some basic empirical results from this project.
+
+\subsection{Proof Techniques}
+
+The main two families of ATPs and tactics we used here are superposition/saturation-based and equational reasoning ones.
+In this context we also include SMT solvers, which combine specific decision procedures for theories, like congruence closure for equational reasoning, with satisfiability (SAT) solving~\cite{}.
+Finally, we also used \texttt{aesop}~\cite{DBLP:conf/cpp/LimpergF23}, which implements a version of tableau search.
+This was used mainly to help specific constructions in refutations, and is not specific to proving or disproving magma implications in this sense.
+We will describe our use of \texttt{aesop} more in Section~\sec{sec:proof-reconstruction} below.
+
+\paragraph{Superposition}
+Most of the ATPs we used extensively in this project rely primarily on saturation procdures in the superposition calculus.
+This is the case for Vampire~\cite{DBLP:conf/cav/KovacsV13}, and the paper alo gives a more in-depth explanation of this.
+See also~\cite{DBLP:journals/cacm/BentkampBNTVW23} for a gentler exposition.
+The core idea of these provers is that they take a set of assumptions and conjecture, expressed in --- say --- first-order logic.
+They take the conjecture and negate it, adding this negation to the set of assumptions, which are all put in some normal form.
+The ATP then try to refute the negation by applying rules of the underlying calculus, until they find a proof of false (a contradiction).
+In this case, the conjecture was (classicaly) true, and the ATP has found a proof by contradiction, often called a ``refutation'' or ``saturation'' proof.
+
+The underlying calculus varies from system to system, but they often have a variant of a resolution clause, a clause of a form:
+\infer{$C \lor D$}{$C \lor L \quad D \lor \neg L$}
+This can also be read as $C \lor L \quad D \lor \neg L$ implies $C \lor D$, where $C, D, L$ are formulas in e.g. first-order logic.
+Superposition calculi have a variant of this rule that deals with equality directly, and thus are more efficient at reasoning about equality.
+
+\paragraph{Equational Reasoning}
 
 
-\note{TODO: expand this sketch}
+\subsection{Proof Reconstruction and Integration}
+\label{sec:proof-reconstruction}
+
+Draw upon the discussion \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Future.20of.20Using.20ATPs}{here} on the various ways of integrating ATPs with Lean. This project primarily used the least integrated approach, "Option 3", as it was fastest and required no dependencies on the other contributors, but it also has drawbacks.
+
+Talk about how ATPs have been important to guide counterexample strategy by testing what simplifying hypotheses can be safely added without eliminating the possibility of a refutation.
+
+\subsection{Empirical Results}
+
+Framing: as we likely do not have experts in carefully evaluating and benchmarking ATP performance, do not present our work as definitively establishing performance of ATPs on ETP problems; instead, present our work as a more informal ``field report'' documenting our experiences but not necessarily drawing firm conclusions.  To quote from Jose Brox: ``center on what we can contribute to novice ATP users, algebra (or perhaps general) researchers who, as some of us at the start of this project, want to use ATPs for the first time on problems that need them, and may be at a loss of what to use, what parameters may be important... in summary, what may make a difference. Here we can be more informal, throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''.  Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.
 
 Describe various automated theorem provers deployed in the project, with some statistics on performance:
 
@@ -17,8 +65,6 @@ Describe various automated theorem provers deployed in the project, with some st
 
 Any comparative study of semi-automated methods with fully automated ones? In principle, the semi-automated approach could be more automated using a script or "agent" to call various theorem provers. See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/A.20magma.20of.20order.20.3C.2013.20-.20for.20Equation2531.3F}{this discussion}.
 
-Draw upon the discussion \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Future.20of.20Using.20ATPs}{here} on the various ways of integrating ATPs with Lean. This project primarily used the least integrated approach, "Option 3", as it was fastest and required no dependencies on the other contributors, but it also has drawbacks.
-
 Note: when evaluating the performance of any particular automated implication tool, we should do a fresh run on the entire base of implications, rather than rely on whatever implications produced by the tool remain in the Lean codebase by the time of writing the paper. This is because (a) many of the previous runs focused only on those implications that were not already ruled out by earlier contributions, and (b) some pruning has been applied subsequent to the initial runs to improve compilation performance. Of course, these runs would not need to be added to the (presumably optimized) codebase at that point, but would be purely for the purpose of gathering performance statistics. More discussion \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/RECORDS.20REQUEST.3A.20data.20and.20performance.20automated.20run.20metrics}{here}.
 
 See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1516.20-.3E.20255/near/481547543}{this discussion} on the value of using different ATPs and setting run time parameters etc. at different values.
@@ -26,7 +72,3 @@ See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/top
 What are the hardest implications to prove?  See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/What.20are.20the.20hardest.20positive.20implications.20for.20an.20ATP.3F}{this discussion}.
 
 Make a note of the possible alternate strategy to prove implications outlined \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Ideas.20for.20unknown.20implications}{here}.
-
-Talk about how ATPs have been important to guide counterexample strategy by testing what simplifying hypotheses can be safely added without eliminating the possibility of a refutation.
-
-Framing: as we likely do not have experts in carefully evaluating and benchmarking ATP performance, do not present our work as definitively establishing performance of ATPs on ETP problems; instead, present our work as a more informal ``field report'' documenting our experiences but not necessarily drawing firm conclusions.  To quote from Jose Brox: ``center on what we can contribute to novice ATP users, algebra (or perhaps general) researchers who, as some of us at the start of this project, want to use ATPs for the first time on problems that need them, and may be at a loss of what to use, what parameters may be important... in summary, what may make a difference. Here we can be more informal, throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''.  Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.
