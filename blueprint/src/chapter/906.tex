@@ -1,0 +1,35 @@
+\chapter{Equation 906}\label{906-chapter}
+
+In this chapter we study finite magmas that obey equation 906,
+\begin{equation}\label{906}
+  x = y \op ((y \op x) \op (x \op x))
+\end{equation}
+for all $x,y$.  We can write this as
+\begin{equation}\label{906-a}
+  L_y (L_y x \op Sx) = x.
+\end{equation}
+This implies that $L_y$ is surjective, hence invertible by finiteness, so
+\begin{equation}\label{906-b}
+   L_y x \op Sx = L_y^{-1} x.
+\end{equation}
+One corollary of this is that
+$$ L_y x = L_z x \implies L_y^{-1} x = L_z^{-1} x.$$
+By induction this implies
+$$ L_y x = L_z x \implies L_y^{-n} x = L_z^{-n} x$$
+for any $n \geq 1$.  Setting $n = N-2$ for $N>2$ a common period of $L_y,L_z$ (which exists by finiteness) we conclude that
+\begin{equation}\label{lyzx}
+  L_y x = L_z x \implies L_y^2 x = L_z^2 x.
+\end{equation}
+
+To use this, observe from \eqref{906-a} that
+$$ L_x S^2 x = L_x (L_x x \op Sx) = x$$
+while from \eqref{906-b} we have
+$$ L_{L_x Sx} S^2 x = L_x Sx \op S S x = L_x^{-1} Sx = x.$$
+Thus
+$$ L_x S^2 x = L_{L_x Sx} S^2 x = x$$
+and hence by \eqref{lyzx}
+$$ L_x x = L_{L_x Sx} x$$
+giving equation 3862,
+\begin{equation}\label{3862}
+  (x \op (x \op x)) \op x = x \op x.
+\end{equation}
