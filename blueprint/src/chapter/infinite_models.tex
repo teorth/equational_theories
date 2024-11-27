@@ -113,21 +113,21 @@ The following result was established in \cite{austin_finite}:
 
 Many implications for finite magmas rely on the fact that if $f, g:X \to X$ are functions on a finite set $X$, then $f \circ g = I$ if and only if $g \circ f = I$.  Two more complicated variants of this are as follows.
 
-\begin{lemma}\label{ffg}  Let $X$ be finite, and let $f, g: X \to X$ be such that $f = f \circ f \circ g$.  Then $f = f \circ g \circ f$.
+\begin{lemma}\label{ffg} \lean{FiniteModel.Finite.f_ffg_implies_f_fgf} \leanok Let $X$ be finite, and let $f, g: X \to X$ be such that $f = f \circ f \circ g$.  Then $f = f \circ g \circ f$.
 \end{lemma}
 
-\begin{proof} Call a point $x \in X$ \emph{periodic} if $f^n(x) = x$ for some $n>0$.  Because the forward orbit $x, f(x), f^2(x), \dots$ in a finite space $X$ must repeat, we see that for each $x$ there exists an $n$ such that $f^n(x)$ is periodic.  Let $n_x$ be the first $n$ for which this occurs.  If $n_x > 1$, then $g(x), f(g(x)), f(f(g(x))$ cannot be periodic (as this would imply $f(x)$ periodic), and then we can see that $n_{g(x)} = n_x + 1$.  Hence the maximal value of $n_x$ is at most $1$, which implies that $f(x)$ is periodic for every $x$.  Thus there is an $n > 1$ such that $f^n = f$.  Since $f = f^2 \circ g$, we have $f^n = f^{n-2} \circ f \circ f = f^{n-2} \circ (f^2 \circ g) \circ f = f^n \circ g \circ f = f \circ g \circ f$, as desired.
+\begin{proof} \leanok Call a point $x \in X$ \emph{periodic} if $f^n(x) = x$ for some $n>0$.  Because the forward orbit $x, f(x), f^2(x), \dots$ in a finite space $X$ must repeat, we see that for each $x$ there exists an $n$ such that $f^n(x)$ is periodic.  Let $n_x$ be the first $n$ for which this occurs.  If $n_x > 1$, then $g(x), f(g(x)), f(f(g(x))$ cannot be periodic (as this would imply $f(x)$ periodic), and then we can see that $n_{g(x)} = n_x + 1$.  Hence the maximal value of $n_x$ is at most $1$, which implies that $f(x)$ is periodic for every $x$.  Thus there is an $n > 1$ such that $f^n = f$.  Since $f = f^2 \circ g$, we have $f^n = f^{n-2} \circ f \circ f = f^{n-2} \circ (f^2 \circ g) \circ f = f^n \circ g \circ f = f \circ g \circ f$, as desired.
 \end{proof}
 
-\begin{lemma}\label{gff} Let $X$ be finite, and let $f, g: X \to X$ be such that $f = g \circ f \circ f$.  Then $f = f \circ g \circ f$.
+\begin{lemma}\label{gff} \lean{FiniteModel.Finite.f_gff_implies_f_fgf} \leanok Let $X$ be finite, and let $f, g: X \to X$ be such that $f = g \circ f \circ f$.  Then $f = f \circ g \circ f$.
 \end{lemma}
 
-\begin{proof} By hypothesis, $f^2(x)$ uniquely determines $f(x)$.  This prevents $n_x = 2$ for any $x$ (because if $n>2$ is such that $f^{n+2}(x) = f^2(x)$, then $f^{n+1}(x) \neq f(x)$), and hence also prevents $n_x > 2$ for any $x$.   So again we have $f(x)$ periodic for all $x$, so $f^n = f$ for some $n>1$.  Then $f = f^n = f \circ (g \circ f^2) \circ f^{n-2} = f \circ g \circ f^n = f \circ g \circ f$ as required.
+\begin{proof} \leanok By hypothesis, $f^2(x)$ uniquely determines $f(x)$.  This prevents $n_x = 2$ for any $x$ (because if $n>2$ is such that $f^{n+2}(x) = f^2(x)$, then $f^{n+1}(x) \neq f(x)$), and hence also prevents $n_x > 2$ for any $x$.   So again we have $f(x)$ periodic for all $x$, so $f^n = f$ for some $n>1$.  Then $f = f^n = f \circ (g \circ f^2) \circ f^{n-2} = f \circ g \circ f^n = f \circ g \circ f$ as required.
 \end{proof}
 
 This can be used to obtain a few positive finite magma implications, for instance by setting $f,g$ to be left and right multiplication operators.  Another useful lemma is
 
-\begin{lemma}[Eventual period]\label{period} \lean{Eq3342.Finite.fn_periodic} \leanok  Let $X$ be finite and $f: X \to X$.  Then there exists $n \geq 1$ such that $f^{2n} = f^n$.
+\begin{lemma}[Eventual period]\label{period} \lean{FiniteModel.Finite.fn_periodic} \leanok  Let $X$ be finite and $f: X \to X$.  Then there exists $n \geq 1$ such that $f^{2n} = f^n$.
 \end{lemma}
 
 \begin{proof} \leanok By the pigeonhole principle, there exists $n \geq 1$, $m \geq 0$ such that $f^{m+n} = f^m$, which implies on iteration that $f^{m+mn} = f^m$ and hence $f^{2mn} = f^{mn}$, giving the claim.
