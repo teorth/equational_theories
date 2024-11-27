@@ -1,5 +1,4 @@
-import Mathlib.Data.List.Sublists
-import Mathlib.GroupTheory.FreeGroup.Basic
+import Mathlib.GroupTheory.FreeGroup.Reduce
 import equational_theories.Mathlib.Data.List.Chain
 import equational_theories.Mathlib.Data.List.Lemmas
 import equational_theories.Mathlib.GroupTheory.OrderOfElement
