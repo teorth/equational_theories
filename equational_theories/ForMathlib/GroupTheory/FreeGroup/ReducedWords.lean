@@ -157,7 +157,7 @@ theorem reduce_cons (a : α × Bool) (w : List (α × Bool)) :
     FreeGroup.reduce (a :: w) = FreeGroup.reduce (a :: FreeGroup.reduce w) := by
   simp only [FreeGroup.reduce.cons, FreeGroup.reduce.idem]
 
-theorem reduce_singleton (a : α × Bool) : FreeGroup.reduce [a] = [a] := rfl
+-- theorem reduce_singleton (a : α × Bool) : FreeGroup.reduce [a] = [a] := rfl
 
 def reduceCyclically : List (α × Bool) → List (α × Bool) :=
   List.bidirectionalRec
