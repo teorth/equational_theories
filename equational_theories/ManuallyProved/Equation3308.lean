@@ -1,4 +1,11 @@
-import Mathlib.Tactic
+import Mathlib.Algebra.Order.Ring.Nat
+import Mathlib.Data.Finset.Order
+import Mathlib.Data.Nat.Lattice
+import Mathlib.Data.Prod.Lex
+import Mathlib.Data.ZMod.Defs
+import Mathlib.Order.OmegaCompletePartialOrder
+import equational_theories.Equations.Eqns3000_3999
+import Mathlib.Tactic.FinCases
 
 import equational_theories.Mathlib.Data.List.Defs
 import equational_theories.Mathlib.Order.Greedy
