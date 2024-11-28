@@ -394,7 +394,7 @@ def seed : List ((Nat × Nat) × Nat) := [
   ((3,3),3),
   ((3,4),0),
 ]
-#check Extension.eq1722
+
 @[equational_result]
 theorem not_1832_2644_3050 : ∃ (G : Type) (_ : Magma G), Facts G [1722] [1832,2644,3050] := by
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed :=
