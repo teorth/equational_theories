@@ -188,7 +188,7 @@ theorem fresh_ineq'' (S : Finset (FreeGroup α)) (x y : FreeGroup α) (x_mem : x
   rw [fresh_old_no_cancellation y_mem]
   rw [fresh_old_inv_no_cancellation x_mem]
   cases h : FreeGroup.toWord x with
-  | nil => simp
+  | nil => simp [invRev]
   | cons head tail =>
     simp only [freshGenerator_inv_toWord, List.cons_append, freshGenerator_toWord,
     List.singleton_append, ne_eq, List.cons.injEq, not_and]
