@@ -1,0 +1,43 @@
+\chapter{Equation 906}\label{906-chapter}
+
+In this chapter we study finite magmas that obey equation 906,
+\begin{equation}\label{906}
+  x = y \op ((y \op x) \op (x \op x))
+\end{equation}
+for all $x,y$.  We can write this as
+\begin{equation}\label{906-a}
+  L_y (L_y x \op Sx) = x.
+\end{equation}
+This implies that $L_y$ is surjective, hence invertible by finiteness, so
+\begin{equation}\label{906-b}
+   L_y x \op Sx = L_y^{-1} x.
+\end{equation}
+
+\begin{corollary}[Edge disjointness of left cycles]\label{edge-disjoint}  For any integer $n$,
+$$ L_y x = L_z x \implies L_y^{n} x = L_z^{n} x.$$
+\end{corollary}
+
+\begin{proof}  This is trivial for $n=0,1$, and $n=-1$ follows from \Cref{906-b}.  Observe that if the claim holds for $n=0,-1,\dots,-m$ for any $m \geq 1$ then it also holds for $n=-m-1$.  Finally, since there is a common period to all the $L_y$ by finiteness (or Legendre's theorem), the set of $n$ for which the claim holds is periodic.  The claim follows.
+\end{proof}
+Setting $n = N-2$ for $N>2$ a common period of $L_y,L_z$ (which exists by finiteness) we conclude that
+\begin{equation}\label{lyzx}
+  L_y x = L_z x \implies L_y^2 x = L_z^2 x.
+\end{equation}
+
+\begin{theorem}\label{906-3862} For finite magmas, equation 906 implies
+equation 3862,
+\begin{equation}\label{3862}
+    (x \op (x \op x)) \op x = x \op x.
+\end{equation}
+\end{theorem}
+
+\begin{proof}\uses{edge-disjoint} Observe from \Cref{906-a} that
+$$ L_x S^2 x = L_x (L_x x \op Sx) = x$$
+while from \Cref{906-b} we have
+$$ L_{L_x Sx} S^2 x = L_x Sx \op S S x = L_x^{-1} Sx = x.$$
+Thus
+$$ L_x S^2 x = L_{L_x Sx} S^2 x = x$$
+and hence by the $n=2$ case of \Cref{edge-disjoint}
+$$ L_x x = L_{L_x Sx} x$$
+giving the claim.
+\end{proof}

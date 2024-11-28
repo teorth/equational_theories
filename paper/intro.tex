@@ -1,6 +1,6 @@
 \section{Introduction}
 
-The purpose of this paper is to report on the \emph{Equational Theories Project} (ETP)\footnote{\url{https://teorth.github.io/equational_theories/}}, a pilot project launched\footnote{\url{https://terrytao.wordpress.com/2024/09/25}} in September 2024 to explore new ways to collaboratively work on mathematical research projects using machine assistance. The project goal, in the area of universal algebra, was selected to be particularly amenable to crowdsourced and computer-assisted techniques, while still being of mathematical research interest. \note{Describe outcomes}
+The purpose of this paper is to report on the \emph{Equational Theories Project} (ETP)\footnote{\url{https://teorth.github.io/equational_theories/}}, a pilot project launched\footnote{\url{https://terrytao.wordpress.com/2024/09/25}} in September 2024 to explore new ways to collaboratively work on mathematical research projects using machine assistance. The project goal, in the area of universal algebra, was selected\footnote{The specific mathematical goal was inspired by \href{https://mathoverflow.net/questions/450930}{a MathOverflow question}.} to be particularly amenable to crowdsourced and computer-assisted techniques, while still being of mathematical research interest. \note{Describe outcomes}
 
 \subsection{Magmas and Equational Laws}
 
@@ -8,7 +8,7 @@ In order to describe the mathematical goals of the ETP, we need some notation. A
 
 In the ETP, a unique number was assigned to each equational law, via a numbering system that we describe in \Cref{numbering-app}.  For instance, the \emph{commutative law} $\x \op \y \formaleq \y \op \x$ is assigned the equation number \Cref{eq43}, while the \emph{associative law} $(\x \op \y) \op \z \formaleq \x \op (\y \op \z)$ is assigned the equation number \Cref{eq4512}.  A list of all equations referred to by number in this paper is provided in \Cref{numbering-app}.
 
-A magma $M$ obeys a law $E$ if the law $E$ holds for all possible assignments of the indeterminate to $M$, in which case we write $M \models E$. Thus for instance $M \models E43$ if one has $x \op y = y \op x$ for all $x,y \in M$.
+A magma $M$ obeys a law $E$ if the law $E$ holds for all possible assignments of the indeterminate to $M$, in which case we write $M \models E$. Thus for instance $M \models E43$ if one has $x \op y = y \op x$ for all $x,y \in M$.  Note that the formal indeterminate symbols $\x, \y$ in $E43$ are now replaced by concrete elements $x,y$ of the carrier $M$.
 
 We say that a law $E$ \emph{entails} or \emph{implies} another law $E'$ if every magma that obeys $E$, also implies $E'$: $(M \models E) \implies (M \models E')$.  We write this relation as $E \vdash E'$. We say that two laws are \emph{equivalent} if they entail each other. For instance, the constant law $\x \op \y \formaleq \z \op \w$ \Cref{eq46} can easily be seen to be equivalent to the law $\x \op \x \formaleq \y \op \z$ \Cref{eq41}.  It is easy to see that $\vdash$ is a pre-order, that is to say a partial order after one quotients by equivalence.
 
@@ -67,6 +67,11 @@ More challenging were the $13855357$ ($62.88\%$) implications that were false, $
         \item Some \emph{ad hoc} models based on existing mathematical objects, such as infinite trees, rings of polynomials, or ``Kisielewicz models'' utilizing the prime factorization of the natural numbers, could also handle some otherwise difficult cases.  In some cases, the magma law induced some relevant and familiar structures, such as a directed graph or a partial order, which also helped guide counterexample constructions. See \Cref{adhoc-sec}.
         \item Automated theorem provers were helpful in identifying which simplifying axioms could be added to the magma without jeopardizing the ability to refute the desired implication $E \vdash E'$.
 \end{itemize}
+
+In the course of completing the implication graph, some interesting new algebraic structures were discovered.  One such example concerns the magmas obeying \eqref{eq1485}, which we refer to as \emph{weak central groupoids} as they contain the central groupoids (obeying \eqref{eq168}) as a subclass.  In \cite{knuth} it was observed that all finite central groupoids have order equal to a perfect square $n^2$; empirically, we have found that finite weak central groupoids always have order $n^2$ or $2n^2$, although we have no rigorous proof of this claim; they also have a graph-theoretic interpretation analogous to the interpretation of central groupoids as digraphs with the unique path property.  For these and other observations we refer the reader to \href{https://teorth.github.io/equational_theories/blueprint/weak-central-groupoids-chapter.html}{the blueprint of the ETP}.
+
+The objective of using the data from the ETP to establish well-calibrated benchmarks to evaluate ATPs remains an interesting open problem; the participants of this project did not have the required expertise to develop and test such benchmarks to the standards expected in the area.  However, in \Cref{automated-sec} we present a more informal ``field report'' of our experiences using ATPs in the project, in the hope that this will provide some useful guidance to other researchers seeking to incorporate ATPs into their own research.
+
 
 \subsection{Extensions}
 

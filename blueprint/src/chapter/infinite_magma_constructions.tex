@@ -359,7 +359,7 @@ Define a \emph{partial solution} to be a partial function $\op: E \to \N$ on som
 \item (Law 4) If there exists a $z$ such that $z \op x = x$ then $x \op x$ is defined.
 \end{itemize}
 
-\begin{lemma}[1722 extension]\label{1722-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
+\begin{lemma}[1722 extension]\label{1722-extension}\leanok\lean{Eq1722.Greedy.lift}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
 \end{lemma}
 
 \begin{proof}  Suppose first that $b=a$, so $a \op a$ is undefined, then by Law 4 we have $d \op a \neq a$ for all $d$ with $d \op a$ defined. Set $a_0=a$ and find nine distinct elements $a_1,a_2,a_3,a_4,b_0,b_1,b_2,b_3,b_4$ not previously appearing in the domain or range of $\op$. Extend the indices periodically by setting $a_{i+4} = a_i,b_{i+4} = b_i$ for $i \ge 1$, and define $a_i \op' a_i = a_{i+1}$ (so $a_i = S^i a$), $a_{i+1} \op' a_i = b_i$, $b_i \op' a_i = a_{i+2}$, $a_{i+3} \op' a_{i+1} = a_{i+1}$, $a_{i+1} \op' a_{i+2} = a_{i+1}$, $a_{i+1} \op' b_i = a_i$.  We also define $x \op' y = x \op y$ whenever the right-hand side is defined. It is easy to see that laws 2,3,4 are preserved (though for law 2 note that we have not defined $a_2 \op' a_0$ due to the way indices are extended). Now we case check Law 1.  \begin{itemize}
@@ -532,7 +532,11 @@ then $y \diamond (z \diamond y)$ is defined and equal to $x$.
     \item Law 2.  $x \diamond x$ is not equal to $x$.
 \end{itemize}
 
+<<<<<<< HEAD
 \begin{lemma}[1076 extension]\label{1076-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
+=======
+\begin{lemma}[1076 extension]\label{1076-extension}\leanok\lean{Eq1076.Greedy.lift}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
+>>>>>>> ada2764881bb72216e1399a106b8a3155df59c6f
 \end{lemma}
 \begin{proof}
 Set $a \diamond' b = c$ for some new element $c$. If $d_1,d_2,...,d_n$ are the elements for which $a \diamond d_i = b$, set $c \diamond' d_i = c'_i$ for some new element $c'_i$, and also set
