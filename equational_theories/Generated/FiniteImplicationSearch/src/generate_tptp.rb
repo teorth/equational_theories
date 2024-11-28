@@ -5,9 +5,9 @@ require 'set'
 
 FIND_EQUATION_ID = File.join(__dir__, '..', '..', '..', '..', 'scripts', 'find_equation_id.py')
 
-# A fairly minimal set that I computed that were required to solve different finite implications
-# up to order 4.
 SIMPLE_BIJECTIONS = [
+  # A fairly minimal set that I computed that were required to solve different finite implications
+  # up to order 4.
   ["eq3_surj_inj", "![X] : ?[T] : ( X = mul(T, T) ) => ![T1,T2] : ( (mul(T1, T1) = mul(T2, T2) ) => T1 = T2 )"],
   ["eq3_inj_surj", "![T1,T2] : ( (mul(T1, T1) = mul(T2, T2) ) => T1 = T2 ) => ![X] : ?[T] : ( X = mul(T, T) )"],
   ["eq4_surj_inj", "![X,Y] : ?[T] : ( X = mul(T, Y) ) => ![Y,T1,T2] : ( (mul(T1, Y) = mul(T2, Y) ) => T1 = T2 )"],
@@ -22,6 +22,18 @@ SIMPLE_BIJECTIONS = [
   ["eq23_inj_surj", "![T1,T2] : ( (mul(mul(T1, T1), T1) = mul(mul(T2, T2), T2) ) => T1 = T2 ) => ![X] : ?[T] : ( X = mul(mul(T, T), T) )"],
   ["eq31_surj_inj", "![X,Y] : ?[T] : ( X = mul(mul(Y, Y), T) ) => ![Y,T1,T2] : ( (mul(mul(Y, Y), T1) = mul(mul(Y, Y), T2) ) => T1 = T2 )"],
   ["eq31_inj_surj", "![Y,T1,T2] : ( (mul(mul(Y, Y), T1) = mul(mul(Y, Y), T2) ) => T1 = T2 ) => ![X,Y] : ?[T] : ( X = mul(mul(Y, Y), T) )"],
+
+  # Additional hits in order 5
+  ["eq9_surj_inj", "![X,Y] : ?[T] : ( X = mul(T, mul(T, Y)) ) => ![T1,T2,Y] : ( (mul(T1, mul(T1, Y)) = mul(T2, mul(T2, Y)) ) => T1 = T2 )"],
+  ["eq9_inj_surj", "![T1,T2,Y] : ( (mul(T1, mul(T1, Y)) = mul(T2, mul(T2, Y)) ) => T1 = T2 ) => ![X,Y] : ?[T] : ( X = mul(T, mul(T, Y)) )"],
+  ["eq28_surj_inj", "![X,Y] : ?[T] : ( X = mul(mul(Y, T), T) ) => ![T1,T2,Y] : ( (mul(mul(Y, T1), T1) = mul(mul(Y, T2), T2) ) => T1 = T2 )"],
+  ["eq28_inj_surj", "![T1,T2,Y] : ( (mul(mul(Y, T1), T1) = mul(mul(Y, T2), T2) ) => T1 = T2 ) => ![X,Y] : ?[T] : ( X = mul(mul(Y, T), T) )"],
+
+  # Remaining disjoint set of bijectivity formulas in order 2.
+  #["eq10_surj_inj", "![X,Y] : ?[T] : ( X = mul(T, mul(Y, T)) ) => ![T1,T2,Y] : ( (mul(T1, mul(Y, T1)) = mul(T2, mul(Y, T2)) ) => T1 = T2 )"],
+  #["eq10_inj_surj", "![T1,T2,Y] : ( (mul(T1, mul(Y, T1)) = mul(T2, mul(Y, T2)) ) => T1 = T2 ) => ![X,Y] : ?[T] : ( X = mul(T, mul(Y, T)) )"],
+  #["eq25_surj_inj", "![X,Y] : ?[T] : ( X = mul(mul(T, Y), T) ) => ![T1,T2,Y] : ( (mul(mul(T1, Y), T1) = mul(mul(T2, Y), T2) ) => T1 = T2 )"],
+  #["eq25_inj_surj", "![T1,T2,Y] : ( (mul(mul(T1, Y), T1) = mul(mul(T2, Y), T2) ) => T1 = T2 ) => ![X,Y] : ?[T] : ( X = mul(mul(T, Y), T) )"],
 ]
 
 VARS = "XYZWUVRSTABCDEFGHIJKLMNOPQ"
@@ -410,6 +422,7 @@ opt_parser= OptionParser.new do |opt|
 
   opt.on('--simple-bijections', 'Include simple bijective axioms')
   opt.on('--bruteforce-bijections1 LHS,RHS', 'Bruteforce bijections by number of terms on LHS/RHS')
+  opt.on('--bruteforce-bijections2 NUM_SAMPLES', 'Bruteforce the order and subset of the "simple" bijections')
 
   opt.on('--bruteforce-periodicity-heuristic', 'Generates axioms to test if this implication may be subject to proof using a periodicity heuristic as mentioned here: https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/483445305')
 end
@@ -535,6 +548,35 @@ END
             f.puts "fof(try, axiom, #{bf_fof} )."
           }
         end
+      }
+    elsif options[:"bruteforce-bijections2"]
+      if options[:"simple-bijections"]
+        $stderr.puts "--bruteforce-bijections2 should not be used in combination with --simple-bijections"
+        exit 1
+      end
+
+      num_samples = options[:"bruteforce-bijections2"].to_i
+      seen = {}
+      num_samples.times { |i|
+        sample = nil
+        loop {
+          num_axioms = rand(SIMPLE_BIJECTIONS.length)
+          sample = SIMPLE_BIJECTIONS.sample(num_axioms)
+          if !seen[sample]
+            seen[sample] = true
+            break
+          end
+        }
+
+        File.open(File.join(ARGV[0], "#{src_eq}_#{dst_eq}_sample_#{i+1}_axioms_#{sample.length}.p"), "w") { |f|
+          f.puts base_tptp
+          axioms_tptp.each { |name, tptp|
+            f.puts "fof(#{name}, axiom, " + tptp + ")."
+          }
+          sample.each { |name, tptp|
+            f.puts "fof(#{name}, axiom, " + tptp + ")."
+          }
+        }
       }
     elsif options[:"bruteforce-periodicity-heuristic"]
       expr_idx = 1
