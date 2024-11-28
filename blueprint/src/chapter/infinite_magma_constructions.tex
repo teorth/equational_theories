@@ -401,7 +401,7 @@ Similar arguments can actually handle 713: $x = y \op (y \op ((y \op x) \op x))$
 \item (Law 3) If $Sx$ is defined, then so is $Sx \op x$.
 \end{itemize}
 
-\begin{lemma}[713 extension]\label{713-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
+\begin{lemma}[713 extension]\label{713-extension}\leanok\lean{Eq1722.Greedy.lift}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
 \end{lemma}
 
 \begin{proof}  First suppose that $a \op a$ is not defined.  Set $a_0 := a$ and select three new elements $a_1,a_2,a_3$.  Define $a_0 \op a_0 = a_1$, $a_1 \op a_0 = a_2$, $a_0 \op a_2 = a_3$, $a_0 \op a_1 = a_3$, $a_0 \op a_3 = a_0$.  It is a routine but tedious matter to check that Laws 1,2,3 are preserved by these operations.  (The trickiest case is the $x=a_0$ case of Law 1; here we need Law 2 to prevent $y \op a_0$ from equalling $a_0$.)
