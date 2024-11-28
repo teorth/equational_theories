@@ -412,7 +412,7 @@ def seed1 : List ((Nat × Nat) × Nat) := [
 ]
 
 @[equational_result]
-theorem refute_seed1 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [3, 23, 99, 203, 307, 375, 1223, 2441, 3050, 3456, 3722, 3915, 4118, 4435] := by
+theorem refute_seed1 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [3, 23, 99, 203, 307, 375, 1223, 2441, 3050, 3456, 3722, 3915, 4118, 4380, 4435] := by
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed1 :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq1076, ?_⟩
@@ -540,14 +540,15 @@ def seed6 : List ((Nat × Nat) × Nat) := [
 ]
 
 @[equational_result]
-theorem refute_seed6 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [359] := by
+theorem refute_seed6 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [359,614] := by
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed6 :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq1076, ?_⟩
   have rules := fromList_eval' he
   simp [seed6, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
     forall_eq] at rules
-  intro h ; have := h 0 ; simp [rules] at this; cases this
+  split_ands
+  all_goals intro h ; have := h 0 ; simp [rules] at this; try cases this
 
 def seed7 : List ((Nat × Nat) × Nat) := [
   ((0,0),1),
