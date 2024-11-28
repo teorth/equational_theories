@@ -10,126 +10,31 @@ import Mathlib.Tactic.DeriveFintype
 import equational_theories.AdjoinFresh
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
+import equational_theories.PartialMagma
 
 import Mathlib.Data.FinEnum
 
 namespace Eq1076
 namespace Greedy
 noncomputable section
-open AdjoinFresh
-abbrev PreExtension (α : Type) := α → α → Set α
+open AdjoinFresh PartialMagma
 
-structure PreExtension.OK {α : Type} (E : PreExtension α) : Prop where
-  finite : Set.Finite {x : (α × α) × α | x.2 ∈ E x.1.1 x.1.2}
-  func {x y} : Set.Subsingleton (E x y)
+
+structure Laws {α : Type} (E : PreExtension α) : Prop where
   eq1076 {x y xy xxy} : xy ∈ E x y → xxy ∈ E x xy → ∃xxyy, xxyy ∈ E xxy y ∧ x ∈ E y xxyy
   not_idempotent {x} : x ∉ E x x
 
-private abbrev Equiv.movePreExtension {α β : Type} (e : α ≃ β) (E : PreExtension β) : PreExtension α :=
-  fun a b => { c | e c ∈ E (e a) (e b) }
 
-def Equiv.movePreExtensionOK {α β : Type} (e : α ≃ β) (E : PreExtension β) (ok : E.OK) :
-  (Equiv.movePreExtension e E).OK where
-  finite := by
-    apply ok.finite.of_equiv
-    constructor
-    case toFun =>
-      refine fun ⟨((a,b),c),h⟩ => ⟨((e.symm a, e.symm b),e.symm c),?_⟩
-      simp_all
-    case invFun =>
-      refine fun ⟨((a,b),c),h⟩ => ⟨((e a, e b),e c),?_⟩
-      simp_all
-    case left_inv =>
-      refine fun ⟨((a,b),c),h⟩ => ?_
-      simp_all
-    case right_inv =>
-      refine fun ⟨((a,b),c),h⟩ => ?_
-      simp_all
-  func {x y} z z_mem z' z'_mem := by
-    have := ok.func z_mem z'_mem
-    simpa
+def Laws_equiv {α β : Type} (e : α ≃ β) (E : PreExtension β) (ok : Laws E) :
+  Laws (Equiv.movePreExtension e E) where
   eq1076 xy_mem xxy_mem := by
     obtain ⟨xxyy, xxyy_mem, eq⟩ := ok.eq1076 xy_mem xxy_mem
     exact ⟨e.symm xxyy, by simpa using xxyy_mem, by simpa using eq⟩
   not_idempotent h := by simpa using ok.not_idempotent (by simpa using h)
 
-
-
-abbrev Extension α:= {E : PreExtension α // E.OK}
-
-class ExtensionBase where
-  E : PreExtension ℕ
-  ok : E.OK
-  a : ℕ
-  b : ℕ
-  not_def {c} : c ∉ E a b
-
-namespace ExtensionBase
-variable [ExtensionBase]
-
--- Not show how to call this
-structure FreshSolution (F : Type) (E' : PreExtension (ℕ ⊕ F)) : Prop where
-  base {a b c} : c ∈ E a b → (.inl c) ∈ E' (.inl a) (.inl b)
-  ok : E'.OK
-  ab_def : (E' (.inl a) (.inl b)).Nonempty
-
-abbrev FreshExtension (F : Type) := {E' : PreExtension (ℕ ⊕ F) // FreshSolution F E'}
-
-scoped infix:80 " ◯ " => E
-def dom : Finset ℕ :=
-  insert a <| insert b <| ok.finite.toFinset.biUnion fun ((a, b), c) => {a, b, c}
-
-theorem mem_dom {a b c x}
-    (h1 : c ∈ a ◯ b) (h2 : x ∈ ({a, b, c} : Finset ℕ)) : x ∈ dom := by
-  refine Finset.mem_insert_of_mem <| Finset.mem_insert_of_mem ?_
-  simp only [dom, Finset.mem_biUnion, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Prod.exists]
-  exact ⟨_, _, _, h1, h2⟩
-
-@[scoped aesop safe forward]
-theorem dom_l {a b c} (h : c ∈ a ◯ b) : a ∈ dom := mem_dom h (by simp)
-@[scoped aesop safe forward]
-theorem dom_r {a b c} (h : c ∈ a ◯ b) : b ∈ dom := mem_dom h (by simp)
-@[scoped aesop safe forward]
-theorem dom_o {a b c} (h : c ∈ a ◯ b) : c ∈ dom := mem_dom h (by simp)
-@[scoped aesop safe forward]
-theorem dom_a : a ∈ dom := Finset.mem_insert_self ..
-@[scoped aesop safe forward]
-theorem dom_b : b ∈ dom := Finset.mem_insert_of_mem <| Finset.mem_insert_self ..
-
-def dom_bound := dom.sup id + 1
-
-theorem lt_dom_bound {x} (h : x ∈ dom) : x < dom_bound := Nat.lt_succ.2 <| dom.le_sup (f := id) h
-
-namespace FreshExtension
-
-variable {F : Type} [FinEnum F] (E' : FreshExtension F)
-
-def adjoin : PreExtension ℕ :=
-  Equiv.movePreExtension (adjoinFresh dom_bound) E'.1
-
-theorem adjoin_ok : E'.adjoin.OK :=
-  Equiv.movePreExtensionOK (adjoinFresh dom_bound) E'.1 E'.2.ok
-
-theorem adjoin_le : E ≤ E'.adjoin := by
-  intro a b c h
-  unfold adjoin Equiv.movePreExtension
-  simp only [Set.mem_setOf_eq]
-  unfold adjoinFresh
-  simp only [Equiv.coe_fn_mk, lt_dom_bound (dom_l h), ↓reduceIte, lt_dom_bound (dom_r h),
-    lt_dom_bound (dom_o h)]
-  exact E'.2.base h
-
-theorem adjoin_ab_def :
-  E'.adjoin ∈ { e : (PreExtension ℕ) | Nonempty (e a b)} := by
-  obtain ⟨c, c_mem⟩ := E'.2.ab_def
-  use ((adjoinFresh dom_bound).symm c)
-  unfold adjoin Equiv.movePreExtension
-  simp only [Set.mem_setOf_eq, Equiv.apply_symm_apply]
-  unfold adjoinFresh
-  simp [lt_dom_bound dom_a, lt_dom_bound dom_b, c_mem]
-
-end FreshExtension
-end ExtensionBase
+scoped instance : ExtensionRules where
+  laws := Laws
+  laws_equiv := Laws_equiv
 
 --no extra assumptions, keep this to be consistent with other methods
 class Extension1 extends ExtensionBase where
@@ -184,9 +89,9 @@ theorem next_not_idempotent {x y} : x = y → x ∉ next x y := by
   case base h =>
     simp only [Sum.inl.injEq] at eq
     rw [eq] at h
-    apply ok.not_idempotent h
+    apply ok.laws.not_idempotent h
   case extra4_2 h =>
-    apply ok.not_idempotent h
+    apply ok.laws.not_idempotent h
   case extra2 => injection eq
 
 theorem next_eq1076 {x y xy xxy} : xy ∈ next x y → xxy ∈ next x xy → ∃xxyy, xxyy ∈ next xxy y ∧ x ∈ next y xxyy := by
@@ -196,7 +101,7 @@ theorem next_eq1076 {x y xy xxy} : xy ∈ next x y → xxy ∈ next x xy → ∃
     <;> generalize hb : b = b' at *
     <;> cases xxy_mem
   case base.base xy_mem _ xxy_mem =>
-    obtain ⟨xxyy, xxyy_mem, eq⟩ := ok.eq1076 xy_mem xxy_mem
+    obtain ⟨xxyy, xxyy_mem, eq⟩ := ok.laws.eq1076 xy_mem xxy_mem
     exact ⟨.inl xxyy, .base xxyy_mem, .base eq⟩
   case base.new h =>
     exact ⟨_, .extra1 h, .extra2 h⟩
@@ -207,9 +112,9 @@ theorem next_eq1076 {x y xy xxy} : xy ∈ next x y → xxy ∈ next x xy → ∃
     · exact ⟨_, .extra3_2 h eq h', .extra3_1 h eq h'⟩
   case extra2.new h =>
     rw [ha, hb] at h
-    exact (ok.not_idempotent h).elim
-  case extra3_1.extra4_1 h => exact (ok.not_idempotent h).elim
-  case extra4_1.extra4_1 h => exact (ok.not_idempotent h).elim
+    exact (ok.laws.not_idempotent h).elim
+  case extra3_1.extra4_1 h => exact (ok.laws.not_idempotent h).elim
+  case extra4_1.extra4_1 h => exact (ok.laws.not_idempotent h).elim
   case extra4_2.new h _ => exact (not_def h).elim
   case extra4_2.base d d_mem h e h' =>
     have eq : d = e := ok.func d_mem h'
@@ -230,9 +135,10 @@ theorem next_ok : next.OK where
     | extra3_2 h _ h' => simp [dom_a, dom_b, dom_r h, dom_o h']
     | _ h => simp [dom_a, dom_b, dom_r h]
   func {x y xy} hxy {xy'} hxy' := next_func hxy hxy'
+  laws := {
   not_idempotent := next_not_idempotent rfl
   eq1076 := next_eq1076
-
+  }
 def next_freshSolution : FreshSolution F Next where
   base := Next.base
   ok := next_ok
@@ -270,7 +176,7 @@ theorem exists_extension :
     replace le a ha := Finset.forall_image.1 le a ha _ _ (hop a.1 a.2)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
     obtain ⟨xy, xxy, xxyy, final⟩ := le
-    obtain ⟨xxyy', xxyy'_def, eq⟩ := (e.2.eq1076 xy xxy)
+    obtain ⟨xxyy', xxyy'_def, eq⟩ := (e.2.laws.eq1076 xy xxy)
     exact e.2.func eq ((e.2.func xxyy xxyy'_def) ▸ final)
   · exact (hf1 ..).func (h2 _ (hf2 x y) _ _ H) (hop ..)
 
@@ -281,9 +187,8 @@ instance (n) : OfNat (GreedyMagma e₀) n := inferInstanceAs (OfNat Nat n)
 noncomputable instance instMagma : Magma (GreedyMagma e₀) where
   op := (exists_extension e₀).choose
 
-theorem Extension.eq1076 : Equation1076 (GreedyMagma e₀) :=
+theorem _root_.PartialMagma.Extension.eq1076 : Equation1076 (GreedyMagma e₀) :=
   (exists_extension e₀).choose_spec.1
-
 
 theorem Extension.base : ∀ {x y z : GreedyMagma e₀}, z ∈ e₀.1 x y → z = x ◇ y :=
   (exists_extension e₀).choose_spec.2
@@ -301,7 +206,8 @@ theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
     have : IsTrans ((ℕ ×ₗ ℕ) × ℕ) (·.1 < ·.1) := ⟨fun _ _ _ => lt_trans⟩
     (List.chain'_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
       |>.forall (fun _ _ => (·.symm)) h1 h2 (by rintro ⟨⟩; exact h rfl) rfl
-  eq1076 h1 h2 := by -- variable names are off, copy pase from 1722 just worked
+  laws := {
+  eq1076 := fun h1 h2 => by -- variable names are off, copy pase from 1722 just worked
     obtain ⟨⟨⟨y, y'⟩,yy⟩, yy_mem, ⟨⟨yy', xyy⟩,x⟩, eq_mem, y_def,
     y'_def, yy'_def, xyy_def, x_def⟩ := eq1076 _ h1 _ h2 rfl rfl
     simp only at yy_mem eq_mem y_def y'_def yy_mem yy'_def xyy_def x_def
@@ -309,8 +215,8 @@ theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
     rewrite [y_def, y'_def] at yy_mem
     use yy_mem
     use yy'_def ▸xyy_def ▸ x_def ▸ eq_mem
-  not_idempotent h := not_idempotent _ h rfl rfl
-
+  not_idempotent := fun h => not_idempotent _ h rfl rfl
+  }
 
 theorem fromList_eval {e : Extension ℕ} {S : List ((Nat × Nat) × Nat)} (hS : e.1 = fromList S)
     (a b c : Nat) (h : ((a, b), c) ∈ S := by decide) :
@@ -324,7 +230,7 @@ theorem fromList_eval' {e : Extension ℕ} {S : List ((Nat × Nat) × Nat)} (hS 
 
 end
 end Greedy
-open Greedy
+open Greedy PartialMagma
 /-- see https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/483735768
 for the seed data -/
 

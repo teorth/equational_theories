@@ -13,13 +13,10 @@ import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 import equational_theories.PartialMagma
 
-import Mathlib.Data.FinEnum
-
 namespace Eq1722
 namespace Greedy
 noncomputable section
 open AdjoinFresh PartialMagma
---TODO: find better name
 
 structure Laws {α : Type} (E : PreExtension α) : Prop where
   eq1722 {x y xy xyy} : xy ∈ E x y → xyy ∈ E xy y → ∃yy, yy ∈ E y y ∧ x ∈ E yy xyy
@@ -332,7 +329,7 @@ instance (n) : OfNat (GreedyMagma e₀) n := inferInstanceAs (OfNat Nat n)
 noncomputable instance instMagma : Magma (GreedyMagma e₀) where
   op := (exists_extension e₀).choose
 
-theorem Extension.eq1722 : Equation1722 (GreedyMagma e₀) :=
+theorem _root_.PartialMagma.Extension.eq1722 : Equation1722 (GreedyMagma e₀) :=
   (exists_extension e₀).choose_spec.1
 
 
@@ -402,7 +399,7 @@ def seed : List ((Nat × Nat) × Nat) := [
 theorem not_1832_2644_3050 : ∃ (G : Type) (_ : Magma G), Facts G [1722] [1832,2644,3050] := by
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
-  refine ⟨GreedyMagma e, inferInstance, Extension.eq1722 e, fun h => ?_, fun h => ?_, fun h => ?_⟩
+  refine ⟨GreedyMagma e, inferInstance, e.eq1722, fun h => ?_, fun h => ?_, fun h => ?_⟩
   · have := h 0
     simp [fromList_eval he 0 0 1,fromList_eval he 0 1 2,fromList_eval he 2 1 4] at this
   · have := h 0

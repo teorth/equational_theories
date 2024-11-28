@@ -11,21 +11,16 @@ import equational_theories.Mathlib.Order.Greedy
 import equational_theories.AdjoinFresh
 import equational_theories.EquationalResult
 import equational_theories.FactsSyntax
+import equational_theories.PartialMagma
 
 namespace Refutation_3308
 
 namespace Greedy
 noncomputable section
-open AdjoinFresh
+open AdjoinFresh PartialMagma ExtensionBase
 abbrev Fresh := Fin 10
 
-private abbrev A := ℕ ⊕ Fresh
-
-abbrev PreExtension (α : Type) := α → α → Set α
-
-structure PreExtension.OK {α : Type} (E : PreExtension α) : Prop where
-  finite : Set.Finite {x : (α × α) × α | x.2 ∈ E x.1.1 x.1.2}
-  func {x y} : Set.Subsingleton (E x y)
+structure Laws {α : Type} (E : PreExtension α) : Prop where
   eq3308 {x y xy yx} : xy ∈ E x y → yx ∈ E y x → ∃ xyx ∈ E x yx, xy ∈ E x xyx
   not_left {x y z} : z ∈ E x y → x ≠ z
   not_right {x y z} : z ∈ E x y → y ≠ z
@@ -34,29 +29,8 @@ structure PreExtension.OK {α : Type} (E : PreExtension α) : Prop where
   law3' {x y xy xyy} : xy ∈ E x y → xyy ∈ E xy y → ∃ yx, yx ∈ E y x
   law5 {x y w z} : z ∈ E x y → y ∈ E w z → y ≠ z → ∃ yx, yx ∈ E y x
 
-private abbrev Equiv.movePreExtension {α β : Type} (e : α ≃ β) (E : PreExtension β) : PreExtension α :=
-  fun a b => { c | e c ∈ E (e a) (e b) }
-
-def Equiv.movePreExtensionOK {α β : Type} (e : α ≃ β) (E : PreExtension β) (ok : E.OK) :
-  (Equiv.movePreExtension e E).OK where
-  finite := by
-    apply ok.finite.of_equiv
-    constructor
-    case toFun =>
-      refine fun ⟨((a,b),c),h⟩ => ⟨((e.symm a, e.symm b),e.symm c),?_⟩
-      simp_all
-    case invFun =>
-      refine fun ⟨((a,b),c),h⟩ => ⟨((e a, e b),e c),?_⟩
-      simp_all
-    case left_inv =>
-      refine fun ⟨((a,b),c),h⟩ => ?_
-      simp_all
-    case right_inv =>
-      refine fun ⟨((a,b),c),h⟩ => ?_
-      simp_all
-  func {x y} z z_mem z' z'_mem := by
-    have := ok.func z_mem z'_mem
-    simpa
+def Laws_equiv {α β : Type} (e : α ≃ β) (E : PreExtension β) (ok : Laws E) :
+  Laws (Equiv.movePreExtension e E) where
   eq3308 xy_mem yx_mem := by
     obtain ⟨xyx, xyx_mem, eq⟩ := ok.eq3308 xy_mem yx_mem
     exact ⟨e.symm xyx, by simpa using xyx_mem, by simpa using eq⟩
@@ -73,89 +47,16 @@ def Equiv.movePreExtensionOK {α β : Type} (e : α ≃ β) (E : PreExtension β
     obtain ⟨yx, yx_mem⟩ := ok.law5 xy_mem wz_mem (by simpa using ineq)
     exact ⟨e.symm yx, by simpa using yx_mem⟩
 
-abbrev Extension α:= {E : PreExtension α // E.OK}
+scoped instance : ExtensionRules where
+  laws := Laws
+  laws_equiv := Laws_equiv
 
-class ExtensionBase where
-  E : PreExtension ℕ
-  ok : E.OK
-  a : ℕ
-  b : ℕ
-  not_def {c} : c ∉ E a b
-
-namespace ExtensionBase
-variable [ExtensionBase]
-
--- Not show how to call this
-structure FreshSolution (E' : PreExtension A) : Prop where
-  base {a b c} : c ∈ E a b → (.inl c) ∈ E' (.inl a) (.inl b)
-  ok : E'.OK
-  ab_def : (E' (.inl a) (.inl b)).Nonempty
-
-abbrev FreshExtension:= {E' : PreExtension A // FreshSolution E'}
-
-scoped infix:80 " ◯ " => E
-def dom : Finset ℕ :=
-  insert a <| insert b <| ok.finite.toFinset.biUnion fun ((a, b), c) => {a, b, c}
-
-theorem mem_dom {a b c x}
-    (h1 : c ∈ a ◯ b) (h2 : x ∈ ({a, b, c} : Finset ℕ)) : x ∈ dom := by
-  refine Finset.mem_insert_of_mem <| Finset.mem_insert_of_mem ?_
-  simp only [dom, Finset.mem_biUnion, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Prod.exists]
-  exact ⟨_, _, _, h1, h2⟩
-
-@[scoped aesop safe forward]
-theorem dom_l {a b c} (h : c ∈ a ◯ b) : a ∈ dom := mem_dom h (by simp)
-@[scoped aesop safe forward]
-theorem dom_r {a b c} (h : c ∈ a ◯ b) : b ∈ dom := mem_dom h (by simp)
-@[scoped aesop safe forward]
-theorem dom_o {a b c} (h : c ∈ a ◯ b) : c ∈ dom := mem_dom h (by simp)
-@[scoped aesop safe forward]
-theorem dom_a : a ∈ dom := Finset.mem_insert_self ..
-@[scoped aesop safe forward]
-theorem dom_b : b ∈ dom := Finset.mem_insert_of_mem <| Finset.mem_insert_self ..
-
-def dom_bound := dom.sup id + 1
-
-theorem lt_dom_bound {x} (h : x ∈ dom) : x < dom_bound := Nat.lt_succ.2 <| dom.le_sup (f := id) h
-
-namespace FreshExtension
-
-variable (E' : FreshExtension)
-
-def adjoin (E' : FreshExtension) : PreExtension ℕ :=
-  Equiv.movePreExtension (adjoinFresh dom_bound) E'.1
-
-theorem adjoin_ok (E' : FreshExtension) : E'.adjoin.OK :=
-  Equiv.movePreExtensionOK (adjoinFresh dom_bound) E'.1 E'.2.ok
-
-theorem adjoin_le (E' : FreshExtension) : E ≤ E'.adjoin := by
-  intro a b c h
-  unfold adjoin Equiv.movePreExtension
-  simp only [Set.mem_setOf_eq]
-  unfold adjoinFresh
-  simp only [Equiv.coe_fn_mk, lt_dom_bound (dom_l h), ↓reduceIte, lt_dom_bound (dom_r h),
-    lt_dom_bound (dom_o h)]
-  exact E'.2.base h
-
-theorem adjoin_ab_def (E' : FreshExtension) :
-  E'.adjoin ∈ { e : (PreExtension ℕ) | Nonempty (e a b)} := by
-  obtain ⟨c, c_mem⟩ := E'.2.ab_def
-  use ((adjoinFresh dom_bound).symm c)
-  unfold adjoin Equiv.movePreExtension
-  simp only [Set.mem_setOf_eq, Equiv.apply_symm_apply]
-  unfold adjoinFresh
-  simp [lt_dom_bound dom_a, lt_dom_bound dom_b, c_mem]
-end FreshExtension
-
-
-attribute [scoped aesop safe destruct] not_def
-attribute [scoped aesop safe forward] ok
+attribute [scoped aesop safe forward] not_def
 attribute [scoped aesop safe forward] PreExtension.OK.func
-attribute [scoped aesop safe forward] PreExtension.OK.eq3308
-attribute [scoped aesop safe destruct] PreExtension.OK.not_right
-attribute [scoped aesop safe destruct] PreExtension.OK.not_left
+attribute [scoped aesop safe forward] Laws.eq3308
+attribute [scoped aesop safe destruct] Laws.not_right
+attribute [scoped aesop safe destruct] Laws.not_left
 
-end ExtensionBase
 class Extension1 extends ExtensionBase where
   b_eq_a : b = a
 
@@ -166,7 +67,7 @@ variable [Extension1]
 
 open ExtensionBase
 @[scoped aesop unsafe 50% [constructors]]
-inductive Next : A → A → A → Prop
+inductive Next : ℕ ⊕ Fresh → ℕ ⊕ Fresh → ℕ ⊕ Fresh → Prop
   | base {x y z} : z ∈ x ◯ y → Next (.inl x) (.inl y) (.inl z)
   | new : Next (.inl a) (.inl a) (.inr 0)
   | extra0 : Next (.inl a) (.inr 0) (.inr 1)
@@ -189,7 +90,7 @@ inductive Next : A → A → A → Prop
 @[scoped aesop safe destruct]
 theorem not_def' {c} : c ∉ E a a := b_eq_a ▸ not_def (c:= c)
 
-abbrev next : PreExtension A := fun a b => {c | Next a b c}
+abbrev next : PreExtension (ℕ ⊕ Fresh) := fun a b => {c | Next a b c}
 
 theorem next_func : ∀ {x y}, Set.Subsingleton (next x y) := by
   intro x y z z_mem z' z'_mem
@@ -205,7 +106,7 @@ theorem next_eq3308 {x y xy yx} : xy ∈ next x y → yx ∈ next y x → ∃ xy
   intro xy_mem yx_mem
   cases xy_mem <;> cases yx_mem
   case base.base xy_mem yx yx_mem =>
-    obtain ⟨xyx, xyx_mem, eq⟩ := ok.eq3308 xy_mem yx_mem
+    obtain ⟨xyx, xyx_mem, eq⟩ := ok.laws.eq3308 xy_mem yx_mem
     exact ⟨.inl xyx, .base xyx_mem, .base eq⟩
   all_goals aesop
 
@@ -214,35 +115,35 @@ theorem next_not_left {x y z} : z ∈ next x y → x ≠ z := by
   rw [h] at xy_mem
   cases xy_mem
   case base xy_mem =>
-    exact ok.not_left xy_mem rfl
+    exact ok.laws.not_left xy_mem rfl
 
 theorem next_not_right {x y z} : z ∈ next x y → y ≠ z := by
   intro xy_mem h
   rw [h] at xy_mem
   cases xy_mem
   case base xy_mem =>
-    exact ok.not_right xy_mem rfl
+    exact ok.laws.not_right xy_mem rfl
 
 theorem next_law3 {x y xy yxy} : xy ∈ next x y → yxy ∈ next y xy → ∃ yx, yx ∈ next y x := by
   intro xy_mem yxy_mem
   cases xy_mem <;> cases yxy_mem
   case base.base xy_mem _ yxy_mem =>
-    obtain ⟨yx, yx_mem⟩ := ok.law3 xy_mem yxy_mem
+    obtain ⟨yx, yx_mem⟩ := ok.laws.law3 xy_mem yxy_mem
     exact ⟨.inl yx, .base yx_mem⟩
   case base.new _ c =>
     exfalso
-    exact ok.not_right c rfl
+    exact ok.laws.not_right c rfl
   all_goals aesop
 
 theorem next_law3' {x y xy xyy} : xy ∈ next x y → xyy ∈ next xy y → ∃ yx, yx ∈ next y x := by
   intro xy_mem xyy_mem
   cases xy_mem <;> cases xyy_mem
   case base.base xy_mem _ xyy_mem =>
-    obtain ⟨yx, yx_mem⟩ := ok.law3' xy_mem xyy_mem
+    obtain ⟨yx, yx_mem⟩ := ok.laws.law3' xy_mem xyy_mem
     exact ⟨.inl yx, .base yx_mem⟩
   case base.new _ c =>
     exfalso
-    exact ok.not_right c rfl
+    exact ok.laws.not_right c rfl
   all_goals aesop
 
 
@@ -251,7 +152,7 @@ theorem next_right_cancel {x x' y xy} : xy ∈ next x y → xy ∈ next x' y →
   cases xy_mem <;> cases xy_mem'
   case base.base xy_mem _ xy_mem' =>
     congr
-    exact ok.right_cancel xy_mem xy_mem'
+    exact ok.laws.right_cancel xy_mem xy_mem'
   all_goals rfl
 
 theorem next_law5 {x y w z} : z ∈ next x y → y ∈ next w z → y ≠ z → ∃ yx, yx ∈ next y x := by
@@ -259,11 +160,11 @@ theorem next_law5 {x y w z} : z ∈ next x y → y ∈ next w z → y ≠ z → 
   cases xy_mem <;> cases wz_mem
   case base.base xy_mem _ wz_mem =>
     intro h
-    obtain ⟨yx, yx_mem⟩ := ok.law5 xy_mem wz_mem (by simpa using h)
+    obtain ⟨yx, yx_mem⟩ := ok.laws.law5 xy_mem wz_mem (by simpa using h)
     exact ⟨.inl yx, .base yx_mem⟩
   all_goals aesop
 
-def domFresh : Finset A := Finset.image (.inl) dom ∪ Finset.image (.inr) Finset.univ
+def domFresh : Finset (ℕ ⊕ Fresh) := Finset.image (.inl) dom ∪ Finset.image (.inr) Finset.univ
 
 theorem next_ok : next.OK where
   finite := by
@@ -274,6 +175,7 @@ theorem next_ok : next.OK where
     | base h => simp [dom_o h, dom_l h, dom_r h]
     | _ => simp [dom_a]
   func {x y xy} hxy {xy'} hxy' := next_func hxy hxy'
+  laws := {
   eq3308 := next_eq3308
   not_left := next_not_left
   not_right := next_not_right
@@ -281,8 +183,9 @@ theorem next_ok : next.OK where
   law3' := next_law3'
   right_cancel := next_right_cancel
   law5 := next_law5
+  }
 
-def next_freshSolution : FreshSolution Next where
+def next_freshSolution : FreshSolution Fresh Next where
   base := Next.base
   ok := next_ok
   ab_def := ⟨.inr 0, b_eq_a ▸ Next.new⟩
@@ -297,7 +200,7 @@ class Extension2 extends ExtensionBase where
 namespace Extension2
 variable [Extension2]
 --attribute [scoped aesop safe forward] ba_def
-open ExtensionBase
+open ExtensionBase PartialMagma
 @[scoped aesop safe forward]
 theorem dom_d : d ∈ dom := dom_o ba_def
 
@@ -308,30 +211,30 @@ theorem b_ne_a (h : b = a) : False :=  a_ne_b h.symm
 theorem a_ne_b' (h : a = b) : False :=  a_ne_b h
 
 @[scoped aesop safe destruct]
-theorem d_ne_a (h : d = a) : False :=  ok.not_right (h ▸ ba_def) rfl
+theorem d_ne_a (h : d = a) : False :=  ok.laws.not_right (h ▸ ba_def) rfl
 
 @[scoped aesop safe destruct]
-theorem a_ne_d (h : a = d) : False :=  ok.not_right (h ▸ ba_def) rfl
+theorem a_ne_d (h : a = d) : False :=  ok.laws.not_right (h ▸ ba_def) rfl
 
 @[scoped aesop safe destruct]
-theorem d_ne_b (h : d = b) : False :=  ok.not_left (h ▸ ba_def) rfl
+theorem d_ne_b (h : d = b) : False :=  ok.laws.not_left (h ▸ ba_def) rfl
 
 @[scoped aesop safe destruct]
-theorem b_ne_d (h : b = d) : False :=  ok.not_left (h ▸ ba_def) rfl
+theorem b_ne_d (h : b = d) : False :=  ok.laws.not_left (h ▸ ba_def) rfl
 
 @[scoped aesop safe destruct]
 theorem ad_not_def {x} (h : x ∈ a ◯ d) : False := by
-  obtain ⟨x, ab_def⟩ := ok.law3 ba_def h
+  obtain ⟨x, ab_def⟩ := ok.laws.law3 ba_def h
   exact not_def ab_def
 
 @[scoped aesop safe destruct]
 theorem da_not_def {x} (h : x ∈ d ◯ a) : False := by
-  obtain ⟨x, ab_def⟩ := ok.law3' ba_def h
+  obtain ⟨x, ab_def⟩ := ok.laws.law3' ba_def h
   exact not_def ab_def
 
 open ExtensionBase
 @[scoped aesop unsafe 50% [constructors]]
-inductive Next : A → A → A → Prop
+inductive Next : ℕ ⊕ Fresh → ℕ ⊕ Fresh → ℕ ⊕ Fresh → Prop
   | base {x y z} : z ∈ x ◯ y → Next (.inl x) (.inl y) (.inl z)
   | new :  Next (.inl a) (.inl b) (.inr 0)
   | extra0 : Next (.inl b) (.inr 0) (.inr 1)
@@ -339,7 +242,7 @@ inductive Next : A → A → A → Prop
   | extra2 : Next (.inl a) (.inl d) (.inr 2)
   | extra3 : Next (.inl a) (.inr 2) (.inr 0)
 
-abbrev next : PreExtension A := fun a b => {c | Next a b c}
+abbrev next : PreExtension (ℕ ⊕ Fresh) := fun a b => {c | Next a b c}
 
 theorem next_func : ∀ {x y}, Set.Subsingleton (next x y) := by
   intro x y z z_mem z' z'_mem
@@ -348,7 +251,10 @@ theorem next_func : ∀ {x y}, Set.Subsingleton (next x y) := by
     <;> generalize hb : b = b' at *
     <;> generalize hd : d = d' at *
     <;> cases z'_mem
-    <;> aesop
+  case base.base x y z z_mem z' z'_mem =>
+    congr
+    exact ok.func z_mem z'_mem
+  all_goals aesop
 
 theorem next_eq3308 {x y xy yx} : xy ∈ next x y → yx ∈ next y x → ∃ xyx ∈ next x yx,
   xy ∈ next x xyx := by
@@ -370,7 +276,7 @@ theorem next_eq3308 {x y xy yx} : xy ∈ next x y → yx ∈ next y x → ∃ xy
     rw [← ha, ← hb, ← hd] at *
     clear a' b' d' ha hb hd
   case base.base xy_mem yx yx_mem =>
-    obtain ⟨xyx, xyx_mem, eq⟩ := ok.eq3308 xy_mem yx_mem
+    obtain ⟨xyx, xyx_mem, eq⟩ := ok.laws.eq3308 xy_mem yx_mem
     exact ⟨.inl xyx, .base xyx_mem, .base eq⟩
   case base.new yx yx_mem =>
     have yx_eq_d := ok.func yx_mem ba_def
@@ -389,7 +295,7 @@ theorem next_not_left {x y z} : z ∈ next x y → x ≠ z := by
   case base h =>
     intro eq
     simp only [Sum.inl.injEq] at eq
-    exact ok.not_left h eq
+    exact ok.laws.not_left h eq
   all_goals aesop
 
 theorem next_not_right {x y z} : z ∈ next x y → y ≠ z := by
@@ -398,7 +304,7 @@ theorem next_not_right {x y z} : z ∈ next x y → y ≠ z := by
   case base h =>
     intro eq
     simp only [Sum.inl.injEq] at eq
-    exact ok.not_right h eq
+    exact ok.laws.not_right h eq
   all_goals aesop
 
 theorem next_law3 {x y xy yxy} : xy ∈ next x y → yxy ∈ next y xy → ∃ yx, yx ∈ next y x := by
@@ -415,13 +321,13 @@ theorem next_law3 {x y xy yxy} : xy ∈ next x y → yxy ∈ next y xy → ∃ y
     clear a' d' ha hb hd
     try clear b'
   case base.base xy_mem _ yxy_mem =>
-    obtain ⟨yx, yx_mem⟩ := ok.law3 xy_mem yxy_mem
+    obtain ⟨yx, yx_mem⟩ := ok.laws.law3 xy_mem yxy_mem
     exact ⟨.inl yx, .base yx_mem⟩
   case base.new h =>
-    obtain ⟨yx, yx_mem⟩ := ok.law3' h ba_def
+    obtain ⟨yx, yx_mem⟩ := ok.laws.law3' h ba_def
     exact ⟨.inl yx, .base yx_mem⟩
   case base.extra2 x h =>
-    have x_eq_b : x = b := ok.right_cancel h ba_def
+    have x_eq_b : x = b := ok.laws.right_cancel h ba_def
     rw [x_eq_b]
     exact ⟨.inr 0, .new⟩
   case new.extra0 =>
@@ -441,13 +347,13 @@ theorem next_law3' {x y xy xyy} : xy ∈ next x y → xyy ∈ next xy y → ∃ 
     rw [← ha, ← hb, ← hd] at *
     clear a' b' d' ha hb hd
   case base.base xy_mem _ xyy_mem =>
-    obtain ⟨yx, yx_mem⟩ := ok.law3' xy_mem xyy_mem
+    obtain ⟨yx, yx_mem⟩ := ok.laws.law3' xy_mem xyy_mem
     exact ⟨.inl yx, .base yx_mem⟩
   case base.new h =>
-    obtain ⟨yx, yx_mem⟩ := ok.law3 h ba_def
+    obtain ⟨yx, yx_mem⟩ := ok.laws.law3 h ba_def
     exact ⟨.inl yx, .base yx_mem⟩
   case base.extra2 h =>
-    obtain ⟨yx, yx_mem⟩ := ok.law5 h ba_def d_ne_a
+    obtain ⟨yx, yx_mem⟩ := ok.laws.law5 h ba_def d_ne_a
     exact ⟨.inl yx, .base yx_mem⟩
 
 theorem next_right_cancel {x x' y xy} : xy ∈ next x y → xy ∈ next x' y → x = x' := by
@@ -459,7 +365,7 @@ theorem next_right_cancel {x x' y xy} : xy ∈ next x y → xy ∈ next x' y →
     <;> cases xy_mem'
   case base.base xy_mem _ xy_mem' =>
     congr
-    exact ok.right_cancel xy_mem xy_mem'
+    exact ok.laws.right_cancel xy_mem xy_mem'
   all_goals rw [← ha, ← hb, ← hd] at *
 
 theorem next_law5 {x y w z} : z ∈ next x y → y ∈ next w z → y ≠ z → ∃ yx, yx ∈ next y x := by
@@ -471,10 +377,10 @@ theorem next_law5 {x y w z} : z ∈ next x y → y ∈ next w z → y ≠ z → 
     <;> cases wz_mem
   case base.base xy_mem _ wz_mem =>
     intro h
-    obtain ⟨yx, yx_mem⟩ := ok.law5 xy_mem wz_mem (by simpa using h)
+    obtain ⟨yx, yx_mem⟩ := ok.laws.law5 xy_mem wz_mem (by simpa using h)
     exact ⟨.inl yx, .base yx_mem⟩
 
-def domFresh : Finset A := Finset.image (.inl) dom ∪ Finset.image (.inr) Finset.univ
+def domFresh : Finset (ℕ ⊕ Fresh) := Finset.image (.inl) dom ∪ Finset.image (.inr) Finset.univ
 
 theorem next_ok : next.OK where
   finite := by
@@ -485,6 +391,7 @@ theorem next_ok : next.OK where
     | base h => simp [dom_o h, dom_l h, dom_r h]
     | _ => simp [dom_a, dom_b, dom_d]
   func {x y xy} hxy {xy'} hxy' := next_func hxy hxy'
+  laws := {
   eq3308 := next_eq3308
   not_left := next_not_left
   not_right := next_not_right
@@ -492,8 +399,9 @@ theorem next_ok : next.OK where
   law3' := next_law3'
   right_cancel := next_right_cancel
   law5 := next_law5
+  }
 
-def next_freshSolution : FreshSolution Next where
+def next_freshSolution : FreshSolution Fresh Next where
   base := Next.base
   ok := next_ok
   ab_def := ⟨_, Next.new⟩
@@ -524,7 +432,7 @@ attribute [scoped aesop safe destruct] b_not_im_a
 
 
 @[scoped aesop unsafe 50% [constructors]]
-inductive Next : A → A → A → Prop
+inductive Next : ℕ ⊕ Fresh → ℕ ⊕ Fresh → ℕ ⊕ Fresh → Prop
   | base {x y z} : z ∈ x ◯ y → Next (.inl x) (.inl y) (.inl z)
   | new :  Next (.inl a) (.inl b) (.inr 0)
   | extra0 : Next (.inl b) (.inr 0) (.inr 1)
@@ -533,7 +441,7 @@ inductive Next : A → A → A → Prop
   | extra3 : Next (.inl a) (.inr 2) (.inr 3)
   | extra4 : Next (.inl a) (.inr 3) (.inr 0)
 
-abbrev next : PreExtension A := fun a b => {c | Next a b c}
+abbrev next : PreExtension (ℕ ⊕ Fresh) := fun a b => {c | Next a b c}
 
 theorem next_func : ∀ {x y}, Set.Subsingleton (next x y) := by
   intro x y z z_mem z' z'_mem
@@ -541,7 +449,10 @@ theorem next_func : ∀ {x y}, Set.Subsingleton (next x y) := by
     <;> generalize ha : a = a' at *
     <;> generalize hb : b = b' at *
     <;> cases z'_mem
-    <;> aesop
+  case base.base x y z z_mem z' z'_mem =>
+    congr
+    exact ok.func z_mem z'_mem
+  all_goals aesop
 
 theorem next_eq3308 {x y xy yx} : xy ∈ next x y → yx ∈ next y x → ∃ xyx ∈ next x yx,
   xy ∈ next x xyx := by
@@ -550,6 +461,9 @@ theorem next_eq3308 {x y xy yx} : xy ∈ next x y → yx ∈ next y x → ∃ xy
     <;> generalize ha : a = a' at *
     <;> generalize hb : b = b' at *
     <;> cases yx_mem
+  case base.base xy_mem yx yx_mem =>
+    obtain ⟨xyx, xyx_mem, eq⟩ := ok.laws.eq3308 xy_mem yx_mem
+    exact ⟨.inl xyx, .base xyx_mem, .base eq⟩
   case new.new | extra2.extra2 =>
     exact (a_ne_b ha).elim
   all_goals
@@ -566,7 +480,7 @@ theorem next_not_left {x y z} : z ∈ next x y → x ≠ z := by
   case base h =>
     intro eq
     simp only [Sum.inl.injEq] at eq
-    exact ok.not_left h eq
+    exact ok.laws.not_left h eq
   all_goals aesop
 
 theorem next_not_right {x y z} : z ∈ next x y → y ≠ z := by
@@ -575,7 +489,7 @@ theorem next_not_right {x y z} : z ∈ next x y → y ≠ z := by
   case base h =>
     intro eq
     simp only [Sum.inl.injEq] at eq
-    exact ok.not_right h eq
+    exact ok.laws.not_right h eq
   all_goals aesop
 
 theorem next_law3 {x y xy yxy} : xy ∈ next x y → yxy ∈ next y xy → ∃ yx, yx ∈ next y x := by
@@ -590,7 +504,7 @@ theorem next_law3 {x y xy yxy} : xy ∈ next x y → yxy ∈ next y xy → ∃ y
     try clear a'
     try clear b'
   case base.base xy_mem _ yxy_mem =>
-    obtain ⟨yx, yx_mem⟩ := ok.law3 xy_mem yxy_mem
+    obtain ⟨yx, yx_mem⟩ := ok.laws.law3 xy_mem yxy_mem
     exact ⟨.inl yx, .base yx_mem⟩
   all_goals aesop
 
@@ -608,7 +522,7 @@ theorem next_law3' {x y xy xyy} : xy ∈ next x y → xyy ∈ next xy y → ∃ 
     try clear a'
     try clear b'
   case base.base xy_mem _ xyy_mem =>
-    obtain ⟨yx, yx_mem⟩ := ok.law3' xy_mem xyy_mem
+    obtain ⟨yx, yx_mem⟩ := ok.laws.law3' xy_mem xyy_mem
     exact ⟨.inl yx, .base yx_mem⟩
   all_goals aesop
 
@@ -620,7 +534,7 @@ theorem next_right_cancel {x x' y xy} : xy ∈ next x y → xy ∈ next x' y →
     <;> cases xy_mem'
   case base.base xy_mem _ xy_mem' =>
     congr
-    exact ok.right_cancel xy_mem xy_mem'
+    exact ok.laws.right_cancel xy_mem xy_mem'
   all_goals rw [← ha, ← hb] at *
 
 theorem next_law5 {x y w z} : z ∈ next x y → y ∈ next w z → y ≠ z → ∃ yx, yx ∈ next y x := by
@@ -631,10 +545,10 @@ theorem next_law5 {x y w z} : z ∈ next x y → y ∈ next w z → y ≠ z → 
     <;> cases wz_mem
   case base.base xy_mem _ wz_mem =>
     intro h
-    obtain ⟨yx, yx_mem⟩ := ok.law5 xy_mem wz_mem (by simpa using h)
+    obtain ⟨yx, yx_mem⟩ := ok.laws.law5 xy_mem wz_mem (by simpa using h)
     exact ⟨.inl yx, .base yx_mem⟩
 
-def domFresh : Finset A := Finset.image (.inl) dom ∪ Finset.image (.inr) Finset.univ
+def domFresh : Finset (ℕ ⊕ Fresh) := Finset.image (.inl) dom ∪ Finset.image (.inr) Finset.univ
 
 theorem next_ok : next.OK where
   finite := by
@@ -645,6 +559,7 @@ theorem next_ok : next.OK where
     | base h => simp [dom_o h, dom_l h, dom_r h]
     | _ => simp [dom_a, dom_b]
   func {x y xy} hxy {xy'} hxy' := next_func hxy hxy'
+  laws := {
   eq3308 := next_eq3308
   not_left := next_not_left
   not_right := next_not_right
@@ -652,8 +567,9 @@ theorem next_ok : next.OK where
   law3' := next_law3'
   right_cancel := next_right_cancel
   law5 := next_law5
+  }
 
-def next_freshSolution : FreshSolution Next where
+def next_freshSolution : FreshSolution Fresh Next where
   base := Next.base
   ok := next_ok
   ab_def := ⟨_, Next.new⟩
@@ -669,7 +585,7 @@ theorem lift2 : ∀ (E : Extension ℕ) (a b : ℕ), (E.1 b a).Nonempty →
     let ba_def := s.choose_spec
     let E2 : Extension2 :=
       { E, ok, a, b, not_def := (fun h' => h ⟨_, h'⟩), a_ne_b := by tauto, d, ba_def }
-    let FE : FreshExtension := ⟨_, E2.next_freshSolution⟩
+    let FE : FreshExtension Fresh := ⟨_, E2.next_freshSolution⟩
     exact ⟨⟨FE.adjoin,FE.adjoin_ok⟩,FE.adjoin_le, by simpa using FE.adjoin_ab_def⟩
 
 theorem lift : ∀ (E : Extension ℕ) (a b : ℕ),
@@ -677,26 +593,26 @@ theorem lift : ∀ (E : Extension ℕ) (a b : ℕ),
   if h : (E a b).Nonempty then exact ⟨_, le_rfl, h⟩ else
   if b_eq_a : b = a then
     let E1 : Extension1 := { E, ok, a, b, not_def := (fun h' => h ⟨_, h'⟩), b_eq_a }
-    let FE : FreshExtension := ⟨_, E1.next_freshSolution⟩
+    let FE : FreshExtension Fresh := ⟨_, E1.next_freshSolution⟩
     exact ⟨⟨FE.adjoin,FE.adjoin_ok⟩,FE.adjoin_le, by simpa using FE.adjoin_ab_def⟩
   else if h' : (E b a).Nonempty then
     apply lift2 ; assumption
   else if a_im_b : ∃ x, a ∈ E x b then
     rcases a_im_b with ⟨x, xb_def⟩
     obtain ⟨E',le,⟨y, bx_def⟩⟩ := lift2 ⟨E, ok⟩ b x ⟨a, xb_def⟩
-    obtain ⟨ba, ba_def, _⟩ := E'.2.eq3308 bx_def (le _ _ xb_def)
+    obtain ⟨ba, ba_def, _⟩ := E'.2.laws.eq3308 bx_def (le _ _ xb_def)
     obtain ⟨E'',le',⟨ab, ab_def⟩⟩ := lift2 E' a b ⟨ba, ba_def⟩
     exact ⟨E'', le_trans le le', ⟨ab, ab_def⟩⟩
   else if b_im_a : ∃ x, b ∈ E x a then
     rcases b_im_a with ⟨x, xa_def⟩
     obtain ⟨E',le,⟨y, ax_def⟩⟩ := lift2 ⟨E, ok⟩ a x ⟨b, xa_def⟩
-    obtain ⟨ab, ab_def, _⟩ := E'.2.eq3308 ax_def (le _ _ xa_def)
+    obtain ⟨ab, ab_def, _⟩ := E'.2.laws.eq3308 ax_def (le _ _ xa_def)
     exact ⟨E',le,⟨ab, ab_def⟩⟩
   else
     let E3 : Extension3 :=
     { E, ok, a, b, not_def := (fun h' => h ⟨_, h'⟩),
       a_ne_b := by tauto, ba_not_def := by tauto, a_not_im_b := by tauto, b_not_im_a := by tauto}
-    let FE : FreshExtension := ⟨_, E3.next_freshSolution⟩
+    let FE : FreshExtension Fresh := ⟨_, E3.next_freshSolution⟩
     exact ⟨⟨FE.adjoin,FE.adjoin_ok⟩,FE.adjoin_le, by simpa using FE.adjoin_ab_def⟩
 
 
@@ -720,7 +636,7 @@ theorem exists_extension :
     replace le a ha := Finset.forall_image.1 le a ha _ _ (hop a.1 a.2)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
     obtain ⟨xy, yx, xyx, xxyx⟩ := le
-    obtain ⟨xyx', xyx'_def, eq⟩ := (e.2.eq3308 xy yx)
+    obtain ⟨xyx', xyx'_def, eq⟩ := (e.2.laws.eq3308 xy yx)
     exact e.2.func eq (e.2.func xyx'_def xyx ▸ xxyx)
   · exact (hf1 ..).func (h2 _ (hf2 x y) _ _ H) (hop ..)
 
@@ -731,7 +647,7 @@ instance (n) : OfNat (GreedyMagma e₀) n := inferInstanceAs (OfNat Nat n)
 noncomputable instance instMagma : Magma (GreedyMagma e₀) where
   op := (exists_extension e₀).choose
 
-theorem Extension.eq3308 : Equation3308 (GreedyMagma e₀) :=
+theorem _root_.PartialMagma.Extension.eq3308 : Equation3308 (GreedyMagma e₀) :=
   (exists_extension e₀).choose_spec.1
 
 
@@ -759,28 +675,30 @@ theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
     have : IsTrans ((ℕ ×ₗ ℕ) × ℕ) (·.1 < ·.1) := ⟨fun _ _ _ => lt_trans⟩
     (List.chain'_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
       |>.forall (fun _ _ => (·.symm)) h1 h2 (by rintro ⟨⟩; exact h rfl) rfl
-  eq3308 h1 h2 := by
+  laws := {
+  eq3308 := fun h1 h2 => by
     obtain ⟨⟨⟨x, y⟩,xyx⟩, xyx_mem, xyx_def1, xyx_def2,
     ⟨⟨x', xyx'⟩,xy'⟩, xy'_mem, xy'_def1, xy'_def2, xy'_def3⟩ := eq3308 _ h1 _ h2 rfl rfl
     simp only at xyx_def1 xyx_def2 xy'_def1 xy'_def2 xy'_def3
     exists xyx
     use xyx_def2 ▸ xyx_def1 ▸ xyx_mem
     use xy'_def1 ▸ xy'_def2 ▸ xy'_def3 ▸ xy'_mem
-  not_left h := not_left _ h
-  not_right h := not_right _ h
-  right_cancel h h':= right_cancel _ h _ h' rfl rfl
-  law3 h h':= by
+  not_left := not_left _
+  not_right := not_right _
+  right_cancel := fun h h' => right_cancel _ h _ h' rfl rfl
+  law3 := fun h h' => by
     obtain ⟨⟨⟨y, x⟩,yx⟩, yx_mem, yx_def1, yx_def2⟩ := law3 _ h _ h' rfl rfl
     simp only at yx_def1 yx_def2
     exact ⟨yx, yx_def1 ▸ yx_def2 ▸ yx_mem⟩
-  law3' h h':= by
+  law3' := fun h h' => by
     obtain ⟨⟨⟨y, x⟩,yx⟩, yx_mem, yx_def1, yx_def2⟩ := law3' _ h _ h' rfl rfl
     simp only at yx_def1 yx_def2
     exact ⟨yx, yx_def1 ▸ yx_def2 ▸ yx_mem⟩
-  law5 h h' ineq := by
+  law5 := fun h h' ineq => by
     obtain ⟨⟨⟨y, x⟩,yx⟩, yx_mem, yx_def1, yx_def2⟩ := law5 _ h _ h' rfl rfl ineq
     simp only at yx_def1 yx_def2
     exact ⟨yx, yx_def1 ▸ yx_def2 ▸ yx_mem⟩
+  }
 
 theorem fromList_eval {e : Extension ℕ} {S : List ((Nat × Nat) × Nat)} (hS : e.1 = fromList S)
     (a b c : Nat) (h : ((a, b), c) ∈ S := by decide) :
@@ -790,7 +708,7 @@ theorem fromList_eval {e : Extension ℕ} {S : List ((Nat × Nat) × Nat)} (hS :
 end
 end Greedy
 
-open Greedy
+open Greedy PartialMagma
 def seed : List ((Nat × Nat) × Nat) := [
   ((0,0),1),
   ((0,1),3),
