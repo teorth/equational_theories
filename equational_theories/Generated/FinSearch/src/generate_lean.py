@@ -19,7 +19,7 @@ parent_name = dir.name
 # we have 4694 equations
 full = range(1, 4694 + 1)
 
-with open(f"{dir}/../All4x4Tables/data/implications.json") as f:
+with open(f"{dir}/../All4x4Tables/data/implications.json", encoding='utf-8') as f:
     implications = json.load(f)["implications"]
 implications = [
     (int(i["lhs"].removeprefix("Equation")), int(i["rhs"].removeprefix("Equation")))
@@ -157,8 +157,8 @@ theorem «Facts from {name}» :
     return out
 
 
-with open(f"{dir}/data/refutations.txt") as f:
-    with open(f"{dir.parent}/FinSearch.lean", "w") as main:
+with open(f"{dir}/data/refutations.txt", encoding='utf-8') as f:
+    with open(f"{dir.parent}/FinSearch.lean", "w", encoding='utf-8') as main:
         lines = [line for line in f.readlines() if not line.startswith("--")]
         # the format is groups-of-three-lines-based
         lines = [lines[i : i + 3] for i in range(0, len(lines), 3)]
@@ -173,7 +173,7 @@ with open(f"{dir}/data/refutations.txt") as f:
                 main.write(
                     f"import equational_theories.Generated.{parent_name}.theorems.Refutation{refutation_id}\n"
                 )
-                with open(leanfile, "w") as f:
+                with open(leanfile, "w", encoding='utf-8') as f:
                     f.write(generate_lean(data))
                 refutation_id += 1
 
