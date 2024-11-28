@@ -9,10 +9,6 @@ namespace Conjectures
 
 /- Some conjectures from https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1076.20!.3D.3E.203/near/476293108 -/
 
-/-- See https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1076.20!.3D.3E.203/near/477009119 as well as an alternate construction at https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/482096595 -/
-@[equational_result]
-conjecture Equation713_facts : ∃ (G : Type) (_ : Magma G), Facts G [713] [817, 1426, 3862, 4065]
-
 /-- See https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1076.20!.3D.3E.203/near/477009119 as well as an alternate construction https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/481758653 -/
 @[equational_result]
 conjecture Equation1289_facts : ∃ (G : Type) (_ : Magma G), Facts G [1289] [3116, 4435]
