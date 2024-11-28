@@ -3,6 +3,28 @@ import Mathlib.Data.Set.Basic
 import Mathlib.Data.Set.Finite.Lattice
 
 import equational_theories.AdjoinFresh
+
+/-!
+  This file is part of the framework for the greedy construction of magmas, see
+  https://teorth.github.io/equational_theories/blueprint/infinite-magma-constructions-chapter.html#greedy-section
+
+  We want to encapsule the following construction: suppose we have a partial magma defined
+  on `ℕ` for which `a ◇ b` is not defined for a given pair `a b : ℕ`, but we can extend our
+  partial mamga to a larger type `ℕ ⊕ F` such that `a ◇ b` becomes defined. Then by an appropriate
+  identification of `ℕ` and `ℕ ⊕ F`, we can in fact find an extension that is defined on `ℕ`.
+
+  For this, we model a partial magma on a type `α` by an element of `PreExtension α := α → α → Set α`
+  For a given equation, we are only interested in partial magmas satisfying some laws.
+  We encapsulate this in a class `ExtensionRules`. For each greedy construction, we give
+  an instance of `ExtensionRules`. Depedingin on this instance, we define the class `ExtensionBase`
+  that collects our extension problem. For each diffierent case in a greedy construction, we extend
+  `ExtensionBase` reflecting additional properties that `a` and `b` should satisfy (for example,
+  we often treat the cases `a = b` and `a ≠ b` differently). For each such extension problem,
+  we manually define a term of `FreshSolution`.
+
+  Given a fresh solution `E'`, we show in this file that `E'.adjoin` is an extension of the original partial magma
+  defined over `ℕ`.
+-/
 namespace PartialMagma
 abbrev PreExtension (α : Type) := α → α → Set α
 

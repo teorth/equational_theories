@@ -1,16 +1,21 @@
 import Mathlib.Data.Countable.Defs
 import Mathlib.Data.Sum.Basic
 import Mathlib.SetTheory.Cardinal.Arithmetic
+
+/-!
+  In this file we construct (using choice) for a given countable type `α` and an natural number `m`
+  an equivalence `adjoinFresh m : ℕ ≃ ℕ ⊕ α` that agrees with the inclusion `Sum.inl` on the numbers
+  smaller than `m`.
+-/
+
 namespace AdjoinFresh
 universe u
 
 variable {α : Type u} [Countable α]
 
-noncomputable section
+private noncomputable def e : ℕ ≃ ℕ ⊕ α := Classical.choice (inferInstance : Nonempty (ℕ ≃ ℕ ⊕ α))
 
-private def e : ℕ ≃ ℕ ⊕ α := Classical.choice (inferInstance : Nonempty (ℕ ≃ ℕ ⊕ α))
-
-def adjoinFresh (m : ℕ) : ℕ ≃ ℕ ⊕ α where
+noncomputable def adjoinFresh (m : ℕ) : ℕ ≃ ℕ ⊕ α where
   toFun n := if n < m then .inl n else match e (n - m) with
     | .inl k => .inl (k + m)
     | .inr c => .inr c
