@@ -229,9 +229,46 @@ $f^2(h^{-1} f(h)) =h^{-1}$ and $f^2(1) = f(1) f(f(1)^{-1})$ respectively.  We ap
 Axiom (ii) is clear.  To verify axiom (iii), we can assume $f(h)$ is undefined, then adjoin an element $c$ freely to $G$ to create a larger group $G'$, and set $f'(h) = c$.  If $h = k^{-1} f(k)$ for some $k$ (which is unique by Rule 2, and only possible for $h \neq 1$ by Rule 3), then also set $f'(c) = k^{-1}$.  One can then check that axiom (iii) is obeyed.  For axiom (i), take $G$ to be a free cyclic group with one generator $a$, and set $f(1) = a$, $f(a) = a^3$, $f(a^3) = 1$, $f(a^{-1}) = a^3$ (say).
 \end{proof}
 
-More complex variants of the greedy algorithm are possible.  In some cases, we were not able to preserve the finitely supported nature of the partial operation or partial function, and needed to extend that partial object at an infinite number of values at each step.  In other cases, one also had to add additional temporary data during the greedy process to record tasks that one wished to attend to at a later stage of the process, but could not handle immediately because it was awaiting some other operation to become well-defined.  We will not attempt to survey all possible variants of this method here, but refer the reader to the ETP blueprint for further examples.
+More complex (and \emph{ad hoc}) variants of the greedy algorithm are possible.  In some cases, we were not able to preserve the finitely supported nature of the partial operation or partial function, and needed to extend that partial object at an infinite number of values at each step.  In other cases, one also had to add additional temporary data during the greedy process to record tasks that one wished to attend to at a later stage of the process, but could not handle immediately because it was awaiting some other operation to become well-defined.  We will not attempt to survey all possible variants of this method here, but refer the reader to the ETP blueprint for further examples.
 
 \subsection{Modifying base models}\label{modify-base}
+
+A general technique that we have found useful in obtaining a refutation such as $E \not \vdash E'$ is to start with a simple base model $M$ that obeys both $E$ and $E'$, and modify it in various ways to preserve $E$, but create a violation of $E'$.  There are many such possible modifications, but three general ways that have proven effective are as follows:
+
+\begin{itemize}
+  \item[(i)]  Modify the magma operation $\op \colon M \times M \to M$ on a small set in order to violate $E'$, and then make further modifications as needed to recover $E$.
+  \item[(ii)]  Construct an \emph{extension} $N$ of $M$, equipped with a surjective magma homomorphism $\pi: N \to M$, and defined in terms of some additional data.  Then solve for that data in such a way that $N$ obeys $E$ but not $E'$.
+  \item[(iii)]  Construct an \emph{enlargement} $M'$ of $M$, which is a magma that contains $M$ as a submagma.  One needs to construct the multiplication table $\op$ on $(M' \times M') \backslash (M \times M)$ in order to retain $E$ but disprove $E'$.
+\end{itemize}
+
+One appealing case of (ii), involving a ``magma cohomology'' analogous to (abelian) group cohomology, is that of an \emph{affine} extension of $M$ by another magma $G$ which is an abelian group $G$ with a linear magma operation $s \op t \coloneqq as + bt$ for some endomorphisms $a,b \in \mathrm{End}(G)$.  One can then consider extensions with carrier $M \times G$ and magma operation
+\begin{equation}\label{xsyt}
+ (x, s) \op (y, t) \coloneqq (x \op y, s \op t + f(x,y))
+\end{equation}
+for some function $f \colon G \times G \to M$.  If $M$ and $G$ already obey a law $E$, then this extension will also obey $E$ if and only if $f$ obeys a certain ``cocycle equation'', which is a linear equation on $f$.  One can then sometimes use linear algebra to locate an $f$ that obeys the cocycle equation for one law $E$ but not another $E'$, thus refuting the implication $E \vdash E'$.  An example is as follows:
+
+\begin{proposition}[1110 does not imply 1629]\label{1110-1629} The law $\x \formaleq \y \op ((\y \op (\x \op \x)) \op \y)$ \Cref{eq1110} does not imply $\x \formaleq (\x \op \x) \formaleq ((\x \op \x) \op \x)$ \Cref{eq1629}.
+\end{proposition}
+
+\begin{proof}  (Sketch) Using the linear ansatz, we find that \Cref{eq1110} has a model $M$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xyst} with $G=M$.  One then finds that this operation obeys \eqref{eq1110} if $f \colon \F_5 \times \F_5 \to \F_5$ obeys the cocycle equation
+  $$3f(x,x) - 3f(y,2x) - f(3y-2x,y) + f(y,3y-x) = 0$$
+for all $x,y \in \F_5$, and obeys \eqref{eq1629} if $f$ obeys the cocycle equation
+$$ f(2x,0) - f(2x,2x) = 0$$
+for all $x \in \F_5$.  A routine symbolic algebra package computation reveals that the space of $f$ that obeys the former equation is a six-dimensional vector space over $\F_5$, which is not contained in the solution space of the latter equation, giving the claim.
+\end{proof}
+
+Now we give an example of how this method (ii) can be combined with method (i).
+
+\begin{proposition}[1659 does not imply 4315]\label{1659-4315} $\x \formaleq (\x \op \y) \op ((\y \op \y) \op \z)$ \eqref{eq1659} does not imply $\x \op (\y \op \x) \formaleq \x \op (\y \op \z)$ \eqref{eq4315}.
+\end{proposition}
+
+\begin{proof}  There are two simple models for \eqref{eq1659}: the model $G = \Z/2\Z$ with $x \op y = x+1$, and the model $M = \Z$ with model $x \op y = x$.  Using the ansatz \eqref{xyst}, one can soon discover that one obtains a magma operation $\op: (G \times M) \times (G \times M) \to G \times M$ with $f(0,0)=f(1,0)=0$, $f(0,1)=-1$, and $f(1,1)=1$.  This model still obeys \eqref{eq4315}. However we can create a modification $\op'$ of $\op$ as follows.  We will seek to violate \eqref{eq4315} at $x = (0,0)$, $y = (0,0)$, $z = (1,0)$, thus we want
+$$ (0,0) \op' ((0,0) \op' (0,0)) \neq (0,0) \op' ((0,0) \op' (1,0)).$$
+We have $(0,0) \op (0,0) = (1,0)$ and $(0,0) \op (1,0) = (1,-1)$.  One can try to force the counterexample by setting $(0,0) \op' (1,0)$ to equal $(0,0)$ instead of $(1,-1)$. However, if this is the only change we make, then we no longer obey \eqref{eq1659}, since
+$$ (1,0) \neq ((0,0) \op' (1,0)) \op' (((1,0) \op' (1,0)) \op (1,t))$$
+for any $t \in \Z \backslash \{0\}$. But these are the only counterexamples created; and if one then sets $(0,0) \op' (1,t) = (0,0)$ for \emph{all} $t \in \Z$, then one can check that the modified operation $\op'$ now obeys \eqref{eq1659} but not \eqref{eq4315} as required.
+\end{proof}
+
 
 \note{TODO: Expand this sketch}
 
