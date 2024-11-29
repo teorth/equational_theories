@@ -250,19 +250,21 @@ for some function $f \colon G \times G \to M$.  If $M$ and $G$ already obey a la
 \begin{proposition}[1110 does not imply 1629]\label{1110-1629} The law $\x \formaleq \y \op ((\y \op (\x \op \x)) \op \y)$ \eqref{eq1110} does not imply $\x \formaleq (\x \op \x) \formaleq ((\x \op \x) \op \x)$ \eqref{eq1629}.
 \end{proposition}
 
-\begin{proof}  (Sketch) Using the linear ansatz, we find that \eqref{eq1110} has a model $M$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xyst} with $G=M$.  One then finds that this operation obeys \eqref{eq1110} if $f \colon \F_5 \times \F_5 \to \F_5$ obeys the cocycle equation
+\begin{proof}  (Sketch) Using the linear ansatz, we find that \eqref{eq1110} has a model $M$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xsyt} with $G=M$.  One then finds that this operation obeys \eqref{eq1110} if $f \colon \F_5 \times \F_5 \to \F_5$ obeys the cocycle equation
   $$3f(x,x) - 3f(y,2x) - f(3y-2x,y) + f(y,3y-x) = 0$$
 for all $x,y \in \F_5$, and obeys \eqref{eq1629} if $f$ obeys the cocycle equation
 $$ f(2x,0) - f(2x,2x) = 0$$
 for all $x \in \F_5$.  A routine symbolic algebra package computation reveals that the space of $f$ that obeys the former equation is a six-dimensional vector space over $\F_5$, which is not contained in the solution space of the latter equation, giving the claim.
 \end{proof}
 
-Now we give an example of how this method (ii) can be combined with method (i).
+It may be of interest to develop this theory of ``magma cohomology'' further, for instance by defining higher order magma cohomology groups.
+
+Now we give an example of how method (ii) can be combined with method (i).
 
 \begin{proposition}[1659 does not imply 4315]\label{1659-4315} $\x \formaleq (\x \op \y) \op ((\y \op \y) \op \z)$ \eqref{eq1659} does not imply $\x \op (\y \op \x) \formaleq \x \op (\y \op \z)$ \eqref{eq4315}.
 \end{proposition}
 
-\begin{proof}  There are two simple models for \eqref{eq1659}: the model $G = \Z/2\Z$ with $x \op y = x+1$, and the model $M = \Z$ with model $x \op y = x$.  Using the ansatz \eqref{xyst}, one can soon discover that one obtains a magma operation $\op: (G \times M) \times (G \times M) \to G \times M$ with $f(0,0)=f(1,0)=0$, $f(0,1)=-1$, and $f(1,1)=1$.  This model still obeys \eqref{eq4315}. However we can create a modification $\op'$ of $\op$ as follows.  We will seek to violate \eqref{eq4315} at $x = (0,0)$, $y = (0,0)$, $z = (1,0)$, thus we want
+\begin{proof}  There are two simple models for \eqref{eq1659}: the model $G = \Z/2\Z$ with $x \op y = x+1$, and the model $M = \Z$ with model $x \op y = x$.  Using the ansatz \eqref{xsyt}, one can soon discover that one obtains a magma operation $\op: (G \times M) \times (G \times M) \to G \times M$ with $f(0,0)=f(1,0)=0$, $f(0,1)=-1$, and $f(1,1)=1$.  This model still obeys \eqref{eq4315}. However we can create a modification $\op'$ of $\op$ as follows.  We will seek to violate \eqref{eq4315} at $x = (0,0)$, $y = (0,0)$, $z = (1,0)$, thus we want
 $$ (0,0) \op' ((0,0) \op' (0,0)) \neq (0,0) \op' ((0,0) \op' (1,0)).$$
 We have $(0,0) \op (0,0) = (1,0)$ and $(0,0) \op (1,0) = (1,-1)$.  One can try to force the counterexample by setting $(0,0) \op' (1,0)$ to equal $(0,0)$ instead of $(1,-1)$. However, if this is the only change we make, then we no longer obey \eqref{eq1659}, since
 $$ (1,0) \neq ((0,0) \op' (1,0)) \op' (((1,0) \op' (1,0)) \op (1,t))$$
