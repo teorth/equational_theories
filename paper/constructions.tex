@@ -13,7 +13,7 @@ For specific refutations, it was sometimes possible to locate a finite example w
 
 \note{Discuss this further, perhaps give an example, or refer to the ATP section.  See also the discussion threads ``Counterexamples by enumerating words in quotient magmas'' and ``Using SAT solvers for model generation'' threads (sorry, LaTeX is choking on the URLs for some reason).}
 
-It is a result of Kisielewicz \cite{Kisielewicz} that every law $En$ with $n \leq 4692$ is either equivalent to the singleton law $E2$, or else has a non-trivial finite model.  In fact our brute force search revealed that in the latter case there is always a model of order $2 \leq n \leq 4$, with the lone exception of \Cref{eq1286} (and its dual \Cref{eq2301}), for which the smallest non-trivial finite model was of order $7$, as presented in \Cref{1286-ex} below.
+It is a result of Kisielewicz \cite{Kisielewicz} that every law $En$ with $n \leq 4692$ is either equivalent to the singleton law $E2$, or else has a non-trivial finite model.  In fact our brute force search revealed that in the latter case there is always a model of order $2 \leq n \leq 4$, with the lone exception of \eqref{eq1286} (and its dual \eqref{eq2301}), for which the smallest non-trivial finite model was of order $7$, as presented in \Cref{1286-ex} below.
 
 \subsection{Linear models}\label{linear-sec}
 
@@ -28,23 +28,23 @@ $$ \{ (a,b) \in M \times M: P_{w_1,i}(a,b) = P_{w_2,i}(a,b) \hbox{ for all } i \
 \{ (a,b) \in M \times M: P_{w'_1,i}(a,b) = P_{w'_2,i}(a,b) \hbox{ for all } i \} $$
 for all rings $M$.  For commutative rings, this criterion can be checked by standard Grobner basis techniques; in the noncommutative case one can use methods such as the diamond lemma \cite{diamond-lemma}.
 
-\begin{example}[Commutative counterexample]\label{1286-ex} For the law $x = y \op (((x \op y) \op x) \op y)$ \Cref{eq1286}, the variety \Cref{variety} can be computed to be
+\begin{example}[Commutative counterexample]\label{1286-ex} For the law $x = y \op (((x \op y) \op x) \op y)$ \eqref{eq1286}, the variety \Cref{variety} can be computed to be
 $$ \{ (a,b) \in M \times M: 1 = a+ba^3+bab, 0 = a + ba^2 b + b^2 \}$$
-while the variety for the idempotent law \Cref{eq3} is
+while the variety for the idempotent law \eqref{eq3} is
 $$ \{ (a,b) \in M: a+b=1 \}.$$
-Thus to show that \Cref{eq1286} does not entail \Cref{eq3}, it suffices to locate elements $a,b$ of a ring $M$ for one has $1 = a+ba^3+bab$, $0 = a + ba^2 b + b^2$, and $a+b \neq 1$.  Here one can take a commutative example, for instance when $M = \Z/p\Z$ and $(p,a,b) = (11,1,7)$ or $(p,a,b)=(7,6,2)$.
+Thus to show that \eqref{eq1286} does not entail \eqref{eq3}, it suffices to locate elements $a,b$ of a ring $M$ for one has $1 = a+ba^3+bab$, $0 = a + ba^2 b + b^2$, and $a+b \neq 1$.  Here one can take a commutative example, for instance when $M = \Z/p\Z$ and $(p,a,b) = (11,1,7)$ or $(p,a,b)=(7,6,2)$.
 \end{example}
 
-\begin{example}[Noncommutative counterexample]\label{1117-ex} For the law $x = y \op ((y \op (x \op z)) \op z)$ \Cref{eq1117}, the variety \Cref{variety} can be computed to be
+\begin{example}[Noncommutative counterexample]\label{1117-ex} For the law $x = y \op ((y \op (x \op z)) \op z)$ \eqref{eq1117}, the variety \Cref{variety} can be computed to be
 $$ \{ (a,b) \in M \times M: 1 = baba, 0 = a+ba^2, 0 = bab^2 + b^2 \}$$
-while the variety for $x = (x \op ((x \op x) \op x)) \op x$ \Cref{eq2441} is
+while the variety for $x = (x \op ((x \op x) \op x)) \op x$ \eqref{eq2441} is
 $$ \{ (a,b) \in M \times M: a^2 + aba^2 + abab + ab^2 + b = 1 \}.$$
-Observe that if $ba = -1$, then $(a,b)$ automatically lies in the first set, and lies in the second set if and only if $(ab+1)(b-1) = 0$.  One can then show that \Cref{eq1117} does not imply \Cref{eq2441} by setting $a = L$, $b = -R$ where $L, R$ are the left and right shift operators respectively on the ring of integer-valued sequences $\Z^\N$.  With some \emph{ad hoc} effort one can convert this example into a less linear, but simpler (and easier to formalize) example, namely the magma with carrier $\Z$ and operation $x \op y = 2x - \lfloor y/2 \rfloor$.
+Observe that if $ba = -1$, then $(a,b)$ automatically lies in the first set, and lies in the second set if and only if $(ab+1)(b-1) = 0$.  One can then show that \eqref{eq1117} does not imply \eqref{eq2441} by setting $a = L$, $b = -R$ where $L, R$ are the left and right shift operators respectively on the ring of integer-valued sequences $\Z^\N$.  With some \emph{ad hoc} effort one can convert this example into a less linear, but simpler (and easier to formalize) example, namely the magma with carrier $\Z$ and operation $x \op y = 2x - \lfloor y/2 \rfloor$.
 \end{example}
 
 \begin{remark} As essentially observed in \cite{austin}, if there is a commutative linear counterexample to an implication $E \vdash E'$, then by the Lefschetz principle this counterexample can be realized in a finite field ${\mathbb F}_q$ for some prime power $q$ (and by the Chebotarev density theorem one can in fact take $q$ to be a prime, so that the carrier is of the form $\Z/p\Z$ for some prime $p$).  As such, we have found that an effective way to refute implications by the commutative linear magma method is to simply perform a brute force search over linear magmas $x \op y = ax + by$ in $\Z/p\Z$ for various triples $(p,a,b)$. \note{Discuss performance of this method.}
 
-On the other hand, the refutations obtained by non-commutative linear constructions need not have a finite model.  For instance, consider the refutation $E1117 \not \vdash E2441$ from \Cref{1117-ex}.  The law \Cref{eq1117} can be rewritten as $L_y R_z L_y R_z x = x$.  This implies that $R_z$ is injective and $L_y$ is surjective for all $y,z$.  For finite magmas $M$, this then implies that the $L_y, R_z$ are in fact invertible, and hence we have also $R_z L_y R_z L_y x = x$, which implies \Cref{eq2441} by setting $x=y=z$.  Thus the refutation $E1117 \not \vdash E2441$ is ``immune'' to finite counterexamples.
+On the other hand, the refutations obtained by non-commutative linear constructions need not have a finite model.  For instance, consider the refutation $E1117 \not \vdash E2441$ from \Cref{1117-ex}.  The law \eqref{eq1117} can be rewritten as $L_y R_z L_y R_z x = x$.  This implies that $R_z$ is injective and $L_y$ is surjective for all $y,z$.  For finite magmas $M$, this then implies that the $L_y, R_z$ are in fact invertible, and hence we have also $R_z L_y R_z L_y x = x$, which implies \eqref{eq2441} by setting $x=y=z$.  Thus the refutation $E1117 \not \vdash E2441$ is ``immune'' to finite counterexamples.
 \end{remark}
 
 \begin{remark}  One can also consider nonlinear magma models, such as quadratic models $x \op y = ax^2 + bxy + cy^2 + dx + ey + f$ in a cyclic group $\Z/N\Z$.  For small values of $N$, we have found such models somewhat useful in providing additional refutations of implications $E \vdash E'$ beyond what can be achieved by the linear or affine models.  However, as the polynomials associated to a word $w(x_1,\dots,x_n)$ tend to be of high degree (exponential in the order of the word), it becomes quite rare for such models to obey a given equation $E$ when $N$ is large.
@@ -69,15 +69,15 @@ x \op y = x f(x^{-1} y).
 \end{equation}
 For such models, the verification of an equational law in $n$ variables corresponds to a functional equation for $f$ in $n-1$ variables, as the translation symmetry allows one to normalize one variable to be the identity (say). This can simplify an implication to the point where an explicit counterexample can be found.  These functional equations are trivial to analyze when $n=1$.  For $n=2$, they are not as trivial, but still quite tractable, and has led to several refutations in practice.  The method does not appear to be particularly effective for $n>2$ due to the complexity of the functional equations.
 
-\begin{example}[Abelian example]\label{abex}  For the law $\x \formaleq (\x \op \y) \op ((\x \op \y) \op \y)$ \Cref{eq1648}, we apply the abelian translation-invariant model \Cref{xop-add} with $y=x+h$ to obtain
+\begin{example}[Abelian example]\label{abex}  For the law $\x \formaleq (\x \op \y) \op ((\x \op \y) \op \y)$ \eqref{eq1648}, we apply the abelian translation-invariant model \Cref{xop-add} with $y=x+h$ to obtain
 \begin{align*}
   x \op y &= x + f(h) \\
   (x \op y) \op y &= x + f(h) + f(h-f(h)) \\
   (x \op y) \op ((x \op y) \op y) &= x + f(h) + f(f(h-f(h)))
 \end{align*}
-so that this law obeys \Cref{eq1648} if and only if the functional equation
+so that this law obeys \eqref{eq1648} if and only if the functional equation
 $$f(h) + f(f(h-f(h))) = 0$$
-holds for all $h \in M$.  Similarly, the law $\x \formaleq (\x \op (\x \op \y)) \op \y$ \Cref{eq206} is obeyed if and only if
+holds for all $h \in M$.  Similarly, the law $\x \formaleq (\x \op (\x \op \y)) \op \y$ \eqref{eq206} is obeyed if and only if
 $$ f(f(h)) + f(h - f(f(h))) = 0$$
 for all $h \in M$.  One can now check that the function $f \colon \Z \to \Z$ defined by $f(h) \coloneqq - \mathrm{sgn}(h)$ (thus $f(h)$ equals $-1$ when $h$ is positive, $+1$ when $h$ is negative, and $0$ when $h$ is zero) obeys the first functional equation but not the second, thus establishing that $E1648 \not \vdash E206$.
 \end{example}
@@ -98,7 +98,7 @@ and then $f(aw)=a$ for any non-empty reduced word $w$ not starting with $a$, and
 \begin{remark}  The construction in \Cref{trans-nonab} also has the following more ``geometric'' interpretation.  The carrier $M$ can be viewed as the infinite $3$-regular tree, in which every vertex imposes a cyclic ordering on its $3$ neighbors (for instance, if we embed $M$ as a planar graph, we can use the clockwise ordering).  For $x,y \in M$, we then define $x \op y$ to equal $x$ if $x=y$.  If $y$ is instead a neighbor of $x$, we define $x \op y$ to be the next neighbor of $x$ in the cyclic ordering.  Finally, if $y$ is distance two or more from $x$, we define $x \op y$ to be the neighbor of $x$ that is closest to $y$.  One can then check that this model obeys \Cref{206-eq} but not \Cref{1648-eq}.
 \end{remark}
 
-  Some refutations $E \not \vdash E'$ are ``immune'' by translation-invariant models, in that any translation-invariant model that obeys $E$, also obeys $E'$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes make the implication $E \vdash E'$.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \Cref{eq4482} for a square and an arbitrary element will imply the full commutative law \Cref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
+  Some refutations $E \not \vdash E'$ are ``immune'' by translation-invariant models, in that any translation-invariant model that obeys $E$, also obeys $E'$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes make the implication $E \vdash E'$.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \eqref{eq4482} for a square and an arbitrary element will imply the full commutative law \eqref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
 
 \subsection{The twisting semigroup}\label{twisting-sec}
 
@@ -107,13 +107,13 @@ Suppose one has a magma $M$ obeying a law $E$, that also enjoys some endomorphis
 \end{equation}
 If one then tests whether this new operation $\op'$ obeys the same law $E$ as the original operation $\op$, one will find that this will be the case provided that $T,U$ obey a certain set of relations.  The semigroup generated by formal generators $\mathrm{T}, \mathrm{U}$ with these relations will be called the \emph{twisting semigroup} $\operatorname{Twist}_E$ of $E$.  This can be best illustrated with some examples.
 
-\begin{example}  We compute the twisting semigroup of $\x \formaleq (\y \op \x) \op (\x \op (\z \op \y))$ \Cref{eq1485}.  We test this law on the operation \Cref{twist}, thus we consider whether
+\begin{example}  We compute the twisting semigroup of $\x \formaleq (\y \op \x) \op (\x \op (\z \op \y))$ \eqref{eq1485}.  We test this law on the operation \Cref{twist}, thus we consider whether
 $$x = (y \op' x) \op' (x \op' (z \op' y))$$
 holds for all $x,y,z \in M$.  Substituting in \Cref{twist} and using the homomorphism property repeatedly, this reduces to
 $$x = (T^2y \op TUx) \op (UTx \op (U^2T z \op U^3y)).$$
-If we impose the conditions $TU=UT$, $T^2 = U^3$, then this equation would follow from \Cref{eq1485} (with $x,y,z$ replaced with $TUx$, $T^2 y$, $U^2 Tz$ respectively).  Thus the twisting semigroup $\operatorname{Twist}_{E1485}$ of \Cref{eq1485} is generated by two generators $\mathrm{T}, \mathrm{U}$ subject to the relations $\mathrm{T} \mathrm{U}=\mathrm{U} \mathrm{T} = 1$, $\mathrm{T}^2 = \mathrm{U}^3$.  This is a cyclic group of order $5$, since the relations can be rewritten as $\mathrm{T}^5 = 1$, $\mathrm{U} = \mathrm{T}^{-1}$.
+If we impose the conditions $TU=UT$, $T^2 = U^3$, then this equation would follow from \eqref{eq1485} (with $x,y,z$ replaced with $TUx$, $T^2 y$, $U^2 Tz$ respectively).  Thus the twisting semigroup $\operatorname{Twist}_{E1485}$ of \eqref{eq1485} is generated by two generators $\mathrm{T}, \mathrm{U}$ subject to the relations $\mathrm{T} \mathrm{U}=\mathrm{U} \mathrm{T} = 1$, $\mathrm{T}^2 = \mathrm{U}^3$.  This is a cyclic group of order $5$, since the relations can be rewritten as $\mathrm{T}^5 = 1$, $\mathrm{U} = \mathrm{T}^{-1}$.
 
-Now consider $\x \formaleq (\x \op \x) \op (\x \op \x)$ \Cref{eq151}.  Applying the same procedure, we arrive at
+Now consider $\x \formaleq (\x \op \x) \op (\x \op \x)$ \eqref{eq151}.  Applying the same procedure, we arrive at
 $$x = (T^2 x \op TUx) \op (UT x \op U^2 x)$$
 so the twisting group $\operatorname{Twist}_{E151}$ is generated by two generators $\mathrm{T}, \mathrm{U}$ subject to the relations $\mathrm{T} \mathrm{U}=\mathrm{U} \mathrm{T} = \mathrm{T}^2 = \mathrm{U}^2 = 1$.  This is a cyclic group of order $2$, since the relations can be rewritten as $\mathrm{T}^2 = 1$, $\mathrm{U} = \mathrm{T}$.
 \end{example}
@@ -129,9 +129,9 @@ which obey the relations defining $\operatorname{Twist}_E$.
 \item Because $T, U$ will not obey the relations defining $\operatorname{Twist}_{E'}$, it is highly likely that this twisted operation will not obey $E'$, thus refuting the implication $E \vdash E'$.
 \end{itemize}
 
-For instance, a non-trivial finite model for \Cref{eq1485} is given by the finite field $\mathbb{F}_2$ of two elements with the NAND operation $x \op y \coloneqq 1-xy$.  If we twist $\mathbb{F}_2^5$ by the left shift $T(x_i)_{i=1}^5 = (x_{i+1})_{i=1}^5$ and right shift $U(x_i)_{i=1}^5 = (x_{i-1})_{i=1}^5$, where we extend the indices periodically modulo $5$, then the resulting operation
+For instance, a non-trivial finite model for \eqref{eq1485} is given by the finite field $\mathbb{F}_2$ of two elements with the NAND operation $x \op y \coloneqq 1-xy$.  If we twist $\mathbb{F}_2^5$ by the left shift $T(x_i)_{i=1}^5 = (x_{i+1})_{i=1}^5$ and right shift $U(x_i)_{i=1}^5 = (x_{i-1})_{i=1}^5$, where we extend the indices periodically modulo $5$, then the resulting operation
 $$ (x_i)_{i=1}^5 \op' (y_i)_{i=1}^5 \coloneqq (1 - x_{i+1} y_{i-1})_{i=1}^5$$
-on $\mathbb{F}_2^5$ will still obey \Cref{eq1485}, but will not obey \Cref{eq151}, thus showing that $E1485 \not \vdash E151$.  This particular implication does not seem to be easily establishable by any of the other methods discussed in this paper.
+on $\mathbb{F}_2^5$ will still obey \eqref{eq1485}, but will not obey \eqref{eq151}, thus showing that $E1485 \not \vdash E151$.  This particular implication does not seem to be easily establishable by any of the other methods discussed in this paper.
 
 \note{Report on how large the twisting semigroups are in practice, and how many implications can be refuted by this method.}
 
@@ -247,10 +247,10 @@ One appealing case of (ii), involving a ``magma cohomology'' analogous to (abeli
 \end{equation}
 for some function $f \colon G \times G \to M$.  If $M$ and $G$ already obey a law $E$, then this extension will also obey $E$ if and only if $f$ obeys a certain ``cocycle equation'', which is a linear equation on $f$.  One can then sometimes use linear algebra to locate an $f$ that obeys the cocycle equation for one law $E$ but not another $E'$, thus refuting the implication $E \vdash E'$.  An example is as follows:
 
-\begin{proposition}[1110 does not imply 1629]\label{1110-1629} The law $\x \formaleq \y \op ((\y \op (\x \op \x)) \op \y)$ \Cref{eq1110} does not imply $\x \formaleq (\x \op \x) \formaleq ((\x \op \x) \op \x)$ \Cref{eq1629}.
+\begin{proposition}[1110 does not imply 1629]\label{1110-1629} The law $\x \formaleq \y \op ((\y \op (\x \op \x)) \op \y)$ \eqref{eq1110} does not imply $\x \formaleq (\x \op \x) \formaleq ((\x \op \x) \op \x)$ \eqref{eq1629}.
 \end{proposition}
 
-\begin{proof}  (Sketch) Using the linear ansatz, we find that \Cref{eq1110} has a model $M$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xyst} with $G=M$.  One then finds that this operation obeys \eqref{eq1110} if $f \colon \F_5 \times \F_5 \to \F_5$ obeys the cocycle equation
+\begin{proof}  (Sketch) Using the linear ansatz, we find that \eqref{eq1110} has a model $M$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xyst} with $G=M$.  One then finds that this operation obeys \eqref{eq1110} if $f \colon \F_5 \times \F_5 \to \F_5$ obeys the cocycle equation
   $$3f(x,x) - 3f(y,2x) - f(3y-2x,y) + f(y,3y-x) = 0$$
 for all $x,y \in \F_5$, and obeys \eqref{eq1629} if $f$ obeys the cocycle equation
 $$ f(2x,0) - f(2x,2x) = 0$$
@@ -269,6 +269,6 @@ $$ (1,0) \neq ((0,0) \op' (1,0)) \op' (((1,0) \op' (1,0)) \op (1,t))$$
 for any $t \in \Z \backslash \{0\}$. But these are the only counterexamples created; and if one then sets $(0,0) \op' (1,t) = (0,0)$ for \emph{all} $t \in \Z$, then one can check that the modified operation $\op'$ now obeys \eqref{eq1659} but not \eqref{eq4315} as required.
 \end{proof}
 
+The law $\x \formaleq \x \op ((\y \op \z) \op (\x \op \z))$ \eqref{eq854}
 
 \note{TODO: Talk about 854 constructions, squares-first constructions}
-
