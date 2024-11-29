@@ -376,40 +376,31 @@ end
 end Greedy
 open Greedy PartialMagma
 def seed : List ((Nat × Nat) × Nat) := [
-  ((0,0),1),
-  ((0,1),3),
-  ((0,2),3),
-  ((0,3),0),
+  ((0,0),0),
+  ((0,1),2),
+  ((0,2),1),
+  ((0,4),1),
   ((1,0),2),
-  ((1,1),0),
-  ((1,2),1),
-  ((1,3),2),
-  ((1,4),3),
-  ((2,0),2),
-  ((2,2),4),
-  ((2,4),0),
-  ((4,1),2),
-  ((4,2),4),
-  ((4,3),2),
-  ((4,4),1),
+  ((1,1),1),
+  ((2,0),3),
+  ((2,2),2),
+  ((3,0),4),
+  ((3,3),3),
+  ((4,4),4),
 ]
 
 @[equational_result]
-theorem not_817_1426_3862_4065 : ∃ (G : Type) (_ : Magma G), Facts G [1289] [817,1426,3862,4065] := by
+theorem not_3116_4435 : ∃ (G : Type) (_ : Magma G), Facts G [1289] [3116, 4435] := by
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   have rules := fromList_eval' he
   simp [seed, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
     forall_eq] at rules
-  refine ⟨GreedyMagma e, inferInstance, e.eq1289, fun h => ?_, fun h => ?_, fun h => ?_, fun h => ?_⟩
-  · have := h 0
-    simp [rules] at this
-  · have := h 0
-    simp [rules] at this
-  · have := h 2
+  refine ⟨GreedyMagma e, inferInstance, e.eq1289, fun h => ?_, fun h => ?_⟩
+  · have := h 2 0
     simp [rules] at this
     cases this
-  · have := h 0
+  · have := h 0 1
     simp [rules] at this
     cases this
 
