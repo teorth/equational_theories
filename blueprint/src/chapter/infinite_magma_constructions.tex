@@ -431,7 +431,7 @@ For $x = y \op (((x \op y) \op y) \op y)$ (1289), one can similarly argue using 
 \item (Law 3) $x\op x=x$ for all $x$ currently in the table.
 \end{itemize}
 
-\begin{lemma}[1289 extension]\label{1289-extension}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
+\begin{lemma}[1289 extension]\label{1289-extension}\leanok\lean{Eq1076.Greedy.lift}  Suppose that $\op$ is a partial solution, and $a \op b$ is currently undefined.  Then there exists an extension $\op'$ of $\op$ for which $a \op' b$ is defined.
 \end{lemma}
 
 \begin{proof}
@@ -450,7 +450,7 @@ We now work by cases on the values of the variables $x,y$ appearing in law 1:
 To refute $x \op (y \op x) = (x \op y) \op x$ (4435) and $x = (((y \op x) \op y) \op y) \op y$ (3316) we use the partial solution
 $$ 0 \op 0 = 0; 0 \op 1 = 2; 0 \op 2 = 1; 0 \op 4 = 1$$
 $$ 1 \op 0 = 2; 1 \op 1 = 1$$
-$$ 2 \op 0 = 2; 2 \op 2 = 2$$
+$$ 2 \op 0 = 3; 2 \op 2 = 2$$
 $$ 3 \op 0 = 4; 3 \op 3 = 3$$
 $$ 4 \op 4 = 4$$
 which violates 4435 at $(x,y)=(0,1)$ and 3116 at $(x,y)=(2,0).$
