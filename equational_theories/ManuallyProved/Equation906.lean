@@ -1,11 +1,7 @@
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
-import equational_theories.FactsSyntax
 import equational_theories.FiniteModel
-import Mathlib.Data.Finite.Prod
 import Mathlib.Data.Fintype.Card
-import Mathlib.Data.Fintype.Units
-import Mathlib.Data.Nat.ModEq
 import Mathlib.Logic.Function.Iterate
 import Mathlib.Tactic.Linarith
 
