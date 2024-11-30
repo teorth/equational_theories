@@ -1,7 +1,7 @@
 import equational_theories.ManuallyProved.Equation73
 import equational_theories.ManuallyProved.Equation713
-/- commenting out 854 as it is superseded by finite counterexamples -/
--- import equational_theories.ManuallyProved.Equation854
+/- The 854 import is redundant for the implication graphs due to finite counterexamples, but we retain it so that it remains checked by CI -/
+import equational_theories.ManuallyProved.Equation854
 import equational_theories.ManuallyProved.Equation917
 import equational_theories.ManuallyProved.Equation1076
 import equational_theories.ManuallyProved.Equation1117
