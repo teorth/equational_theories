@@ -1,6 +1,6 @@
 import equational_theories.ManuallyProved.Equation73
 import equational_theories.ManuallyProved.Equation713
-/-- commenting out 854 as it is superseded by finite counterexamples -/
+/- commenting out 854 as it is superseded by finite counterexamples -/
 -- import equational_theories.ManuallyProved.Equation854
 import equational_theories.ManuallyProved.Equation917
 import equational_theories.ManuallyProved.Equation1076
