@@ -205,3 +205,6 @@ equation 936498  :=  (x ◇ y) ◇ (z ◇ x) = (x ◇ (y ◇ z)) ◇ x
 
 /-- The fourth Moufang law -/
 equation 921941  :=  x ◇ ((y ◇ z) ◇ x) = (x ◇ y) ◇ (z ◇ x)
+
+/- A. K. Austin's law that permits infinite models, but no finite ones -/
+equation 1875916474  :=  x = (((y ◇ y) ◇ y) ◇ x) ◇ (((y ◇ y) ◇ ((y ◇ y) ◇ y)) ◇ z)
