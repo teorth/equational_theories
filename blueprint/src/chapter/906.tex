@@ -24,14 +24,14 @@ Setting $n = N-2$ for $N>2$ a common period of $L_y,L_z$ (which exists by finite
   L_y x = L_z x \implies L_y^2 x = L_z^2 x.
 \end{equation}
 
-\begin{theorem}\label{906-3862} For finite magmas, equation 906 implies
+\begin{theorem}\label{906-3862} \lean{Eq906.Finite.Equation906_implies_Equation3862} \leanok For finite magmas, equation 906 implies
 equation 3862,
 \begin{equation}\label{3862}
     (x \op (x \op x)) \op x = x \op x.
 \end{equation}
 \end{theorem}
 
-\begin{proof}\uses{edge-disjoint} Observe from \Cref{906-a} that
+\begin{proof}\uses{edge-disjoint} \leanok Observe from \Cref{906-a} that
 $$ L_x S^2 x = L_x (L_x x \op Sx) = x$$
 while from \Cref{906-b} we have
 $$ L_{L_x Sx} S^2 x = L_x Sx \op S S x = L_x^{-1} Sx = x.$$
