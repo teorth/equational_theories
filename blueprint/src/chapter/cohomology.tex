@@ -21,7 +21,7 @@ would be obeyed if one has
 \end{equation}
 A solution here would be provided by $(a,b) = (\phi,-1)$, where $\phi$ solves the golden ratio equation $\phi^2 = \phi + 1$.
 
-We consider \emph{extensions} of $G$ by $M$, which are magmas with carrier $G \times M$ with a law of the form
+We consider \emph{extensions} of $G$ by $M$, which are magmas with carrier $G \times M$ with an operation of the form
 \begin{equation}\label{extension}
   (x,s) \op (y,t) = (x \op y, as + bt + f(x,y))
 \end{equation}
@@ -43,7 +43,7 @@ for all $x_1,\dots,x_n \in G$.  We call $f$ a \emph{$E$-cocycle} if this equatio
 
 Given any function $g: G \to M$, one can define a bijection $(x,s) \mapsto (x,s+g(x))$ on $G \times M$, which conjugates the law \Cref{extension} to the law
 $$ (x,s) \op (y,t) = (x \op y, as + bt + f(x,y) + g(x \op y) - ag(x) - bg(y)).$$
-Being conjugate, this new operation will obey $E$ if and only if the original law does.
+Being conjugate, this new operation will obey $E$ if and only if the original operation does.
 Thus if one defines a \emph{coboundary} to be a function $f: G \times G \to M$ of the form $f(x,y) =g(x \op y) - g(x) - g(y)$ for some $g: G \to M$, we can add a coboundary to an $E$-cocycle and still obtain a $E$-cocycle.  So if we let $B^2(G,M)$ be the space of coboundaries, we see that $B^2(G,M)$ is a subgroup of $Z^2_E(G,M)$.  We define the \emph{$E$-cohomology} $H^2_E(G,M)$ to be the quotient
 $$ H^2_E(G,M) := Z^2_E(G,M) / B^2(G,M).$$
 Observe that if $E$ implies $E'$, then $H^2_E(G,M)$ is a subgroup of $H^2_{E'}(G,M)$.  Thus, to refute an implication $E \implies E'$, it suffices to locate a magma $G$ and a linear magma $M$ obeying both $E$ and $E'$ such that
