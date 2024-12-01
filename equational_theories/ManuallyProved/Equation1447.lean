@@ -140,8 +140,8 @@ theorem square_root_times_square_root_eq_elem {x y z : M} (hsqy : y ∈ square_r
     have hsz : S z = x := by exact hsqz
     simp only [Magma.op, magmaOp]
     split_ifs <;> try aesop
-    · case pos  => exact hsqy
-    · case pos => exact hsqz
+    -- · case pos  => exact hsqy
+    -- · case pos => exact hsqz
 
 omit hnofix arbitraryRoot_root in
 lemma S_times_eq_S_squared (x : M) :
