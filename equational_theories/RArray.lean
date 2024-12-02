@@ -88,7 +88,7 @@ where
       .branch (mid - lb) (go lb mid (by omega) (by omega)) (go mid ub (by omega) h2)
 
 def ofArray (xs : Array α) (h : 0 < xs.size) : RArray α :=
-  .ofFn (fun i => xs.get i) h
+  .ofFn (fun i => xs.get i i.isLt) h
 
 theorem RArray.ofFn_correct {n : Nat} (f : Fin n → α) (h : 0 < n) (i : Fin n):
     RArray.get (.ofFn f h) i = f i :=
@@ -116,14 +116,14 @@ def RArray.toArray : RArray α → (out : Array α := #[]) → Array α
 section Meta
 open Lean
 
-def RArray.toExpr (ty : Expr) (f : α → Expr) : RArray α → Expr
+def RArray.toExpr (ty : Expr) (f : α → Expr) :  _root_.RArray α → Expr
   | .leaf x       =>
     mkApp2 (mkConst ``RArray.leaf) ty (f x)
   | .branch p l r =>
     mkApp4 (mkConst ``RArray.branch) ty (.lit (.natVal p)) (l.toExpr ty f) (r.toExpr ty f)
 
-instance [ToExpr α] : ToExpr (RArray α) where
+instance [ToExpr α] : ToExpr ( _root_.RArray α) where
   toExpr a := a.toExpr (toTypeExpr α) (toExpr ·)
-  toTypeExpr := mkApp (mkConst ``RArray) (toTypeExpr α)
+  toTypeExpr := mkApp (mkConst ``_root_.RArray) (toTypeExpr α)
 
 end Meta

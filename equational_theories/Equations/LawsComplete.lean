@@ -14,7 +14,7 @@ open Lean Elab in
 An elaborator to assemble all the separate `Law{n}` definitions into one data structure.
 -/
 elab "defineLaws%" : term => do
-  let consts : RArray Expr := RArray.ofFn (h := by omega) fun (⟨i, _⟩ : Fin 4694) =>
+  let consts : _root_.RArray Expr := RArray.ofFn (h := by omega) fun (⟨i, _⟩ : Fin 4694) =>
     mkConst (.mkSimple s!"Law{i+1}")
   return consts.toExpr (mkConst ``Law.NatMagmaLaw) id
 
@@ -289,7 +289,7 @@ theorem List.getElem?_of_indexOf? {α} [DecidableEq α] {v : α} {xs i} :
   · rintro _ e rfl; simp [ih e]
 
 theorem List.lt_len_of_getElem? {α} {v : α} {xs i} (H : xs[i]? = some v) : i < length xs :=
-  lt_of_not_le fun h => by simp [getElem?_len_le h] at H
+  lt_of_not_le fun h => by simp [List.getElem?_eq_none h] at H
 
 theorem FreeMagma.canonicalize_prop {α} [DecidableEq α]
     {m : FreeMagma α} {xs : List α}
@@ -305,7 +305,7 @@ theorem FreeMagma.canonicalize_prop {α} [DecidableEq α]
     simp [canonicalize.go_leaf, bind, StateT.bind, get, getThe, MonadStateOf.get, StateT.get] at H
     revert H; cases' e : xs.indexOf? v with i <;> rintro ⟨⟩ <;>
       simp only [isCanonical, Array.size_toArray, lt_self_iff_false, ↓reduceIte, pure, Array.size,
-        List.length_append, List.length_singleton, Fin.getElem_fin, Array.getElem_mk, true_and,
+        List.length_append, List.length_singleton, Fin.getElem_fin, List.getElem_toArray, true_and,
         ite_eq_left_iff, not_lt, Option.ite_none_right_eq_some, Option.some.injEq,
         Nat.succ_ne_self, and_false, imp_false, not_le, Fin.is_lt, exists_const, implies_true]
     · refine ⟨?_, fun H => ?_, fun i a h => ?_, ?_⟩
@@ -341,7 +341,7 @@ theorem FreeMagma.canonicalize_self
         simp at this; rw [if_neg]
         exact fun h => this _ h rfl
       · have := List.getElem?_of_indexOf? e
-        have ⟨hi, e⟩ := List.getElem?_eq_some.1 this
+        have ⟨hi, e⟩ := List.getElem?_eq_some_iff.1 this
         simp [List.getElem_range] at e; simp_all
     simp [isCanonical] at can; split at can
     · cases can; rw [this]; split_ifs; simp [pure, StateT.pure]
