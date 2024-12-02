@@ -345,8 +345,13 @@ theorem FreeMagma.canonicalize_self
         simp [List.getElem_range] at e; simp_all
     simp [isCanonical] at can; split at can
     · cases can; rw [this]; split_ifs; simp [pure, StateT.pure]
-    · simp at can; obtain ⟨rfl, rfl⟩ := can
-      simp [this]; congr 2; simp; exact (Array.toList_range _).symm
+    · simp at can
+      obtain ⟨rfl, rfl⟩ := can
+      simp only [this, lt_self_iff_false, ↓reduceIte, List.length_range, Prod.mk.injEq, true_and]
+      ext n h₁ h₂
+      · simp
+      · simp [List.getElem_append] at h₁ ⊢
+        omega
   | Fork l r ihl ihr =>
     simp [isCanonical, Option.bind_eq_some] at can
     obtain ⟨n', h1, h2⟩ := can
