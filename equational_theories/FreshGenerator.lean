@@ -56,17 +56,17 @@ theorem generatorNames_mk_le (L : List (α × Bool)) : generatorNames (FreeGroup
 
 omit [Infinite α] in
 theorem generatorNames'_append (L₁ L₂ : List (α × Bool)) :
-    generatorNames' (L₁ ++ L₂) = max (generatorNames' L₁) (generatorNames' L₂) := by
+    generatorNames' (L₁ ++ L₂) = generatorNames' L₁ ∪ generatorNames' L₂ := by
   induction L₁ with
   | nil => simp [generatorNames']
   | cons _ _ ih => simp [generatorNames', List.append_eq, ih]
 
 omit [Infinite α] in
-theorem generatorNames_mul_le (x y : FreeGroup α) : generatorNames (x * y) ⊆ max (generatorNames x) (generatorNames y) := by
+theorem generatorNames_mul_le (x y : FreeGroup α) : generatorNames (x * y) ⊆ generatorNames x ∪ generatorNames y := by
   calc
     generatorNames (x * y) = generatorNames (FreeGroup.mk (x.toWord ++ y.toWord)) := by rw [← FreeGroup.mul_mk, FreeGroup.mk_toWord, FreeGroup.mk_toWord]
     _ ⊆ generatorNames' (x.toWord ++ y.toWord) := generatorNames_mk_le _
-    _ = max (generatorNames x) (generatorNames y) := generatorNames'_append _ _
+    _ = generatorNames x ∪ generatorNames y := generatorNames'_append _ _
 
 omit [Infinite α] in
 theorem generatorNames'_invRev (L : List (α × Bool)) : generatorNames' (FreeGroup.invRev L) = generatorNames' L := by
@@ -74,7 +74,7 @@ theorem generatorNames'_invRev (L : List (α × Bool)) : generatorNames' (FreeGr
   | nil => rfl
   | cons _ _ ih =>
     unfold FreeGroup.invRev at *
-    simp [generatorNames', generatorNames'_append, ih, max_comm, FreeGroup.invRev, Finset.union_comm]
+    simp [generatorNames', generatorNames'_append, ih, FreeGroup.invRev, Finset.union_comm]
 
 omit [Infinite α] in
 theorem generatorNames_inv (x : FreeGroup α) : generatorNames x⁻¹ = generatorNames x := by
@@ -222,7 +222,7 @@ theorem dropGenerators_generatorNames' (S : Finset α) (a : List (α × Bool)) :
   case cons head _ ih =>
     rw [← List.singleton_append]
     intro hn
-    simp only [generatorNames', List.singleton_append, sup_le_iff] at hn
+    simp only [generatorNames', List.singleton_append] at hn
     rw [← mul_mk, MonoidHom.map_mul, ih]
     · suffices head.1 ∈ S by simp [dropGenerators, this]
       simp [generatorNames'] at hn
