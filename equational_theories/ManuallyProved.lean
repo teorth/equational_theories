@@ -1,3 +1,4 @@
+import equational_theories.ManuallyProved.Equation63
 import equational_theories.ManuallyProved.Equation73
 import equational_theories.ManuallyProved.Equation713
 /- The 854 import is redundant for the implication graphs due to finite counterexamples, but we retain it so that it remains checked by CI -/
