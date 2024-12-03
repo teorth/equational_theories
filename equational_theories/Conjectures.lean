@@ -84,4 +84,8 @@ conjecture Equation1076_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Fact
 conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [1516] [1489]
 
 
+/-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/485736949.2E01 -/
+@[equational_result]
+conjecture Equation1518_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [1518] [47,614,817,3862]
+
 end Conjectures
