@@ -150,7 +150,7 @@ jobs:
 
       - name: Generate home_page/dashboard.md
         run: |
-          ulimit -s 16000
+          ulimit -s 32000
           pip install pillow
           python scripts/generate_dashboard.py
 
