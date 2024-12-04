@@ -14,6 +14,17 @@ class Graph
     retval
   end
 
+  def edges
+    retval = []
+    @adj_list.each { |v1, list|
+      list.each { |v2|
+        retval << [v1, v2]
+      }
+    }
+
+    retval
+  end
+
   def self.from_csv(path)
     graph = Graph.new
     File.read(path).split("\n").each { |s|
@@ -36,6 +47,20 @@ class Graph
 
   def add_edge(from, to)
     @adj_list[from] << to
+  end
+
+  def filter!
+    delete = Set.new []
+    vertices.each { |v|
+      if !yield(v)
+        @adj_list.delete(v)
+        delete << v
+      end
+    }
+
+    @adj_list.keys.each { |k|
+      @adj_list[k] -= delete
+    }
   end
 
   def reachable_from(vertex)
@@ -216,14 +241,14 @@ class Graph
   # one must run reduce -> closure -> reduce.
   def transitive_reduction
     condensed_graph, node_to_scc_map, scc_to_node_map = condensation
-    $stderr.puts "Condensed vertices: #{condensed_graph.adj_list.size}"
-    $stderr.puts "Condensed edges: #{condensed_graph.adj_list.values.map(&:size).inject(0, &:+)}"
+    #$stderr.puts "Condensed vertices: #{condensed_graph.adj_list.size}"
+    #$stderr.puts "Condensed edges: #{condensed_graph.adj_list.values.map(&:size).inject(0, &:+)}"
     reduced_condensed = condensed_graph.step_reduction
 
     uncondensed = reduced_condensed.uncondensation(self, scc_to_node_map)
 
-    $stderr.puts "Uncondensed vertices: #{uncondensed.adj_list.size}"
-    $stderr.puts "Uncondensed edges: #{uncondensed.adj_list.values.map(&:size).inject(0, &:+)}"
+    #$stderr.puts "Uncondensed vertices: #{uncondensed.adj_list.size}"
+    #$stderr.puts "Uncondensed edges: #{uncondensed.adj_list.values.map(&:size).inject(0, &:+)}"
     uncondensed
   end
 
