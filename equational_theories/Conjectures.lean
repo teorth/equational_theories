@@ -70,8 +70,6 @@ conjecture Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite 
 /--  https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/485020474  -/
 @[equational_result]
 conjecture Equation1076_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [1076] [2294, 4435]
-@[equational_result]
-conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [1516] [1489]
 
 
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/485736949.2E01 -/
