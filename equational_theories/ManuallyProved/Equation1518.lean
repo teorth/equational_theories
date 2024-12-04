@@ -6,6 +6,8 @@ import Mathlib.Data.Set.Finite.Lattice
 import Mathlib.Data.Set.Basic
 import Mathlib.Data.Set.Functor
 import Mathlib.GroupTheory.FreeGroup.Basic
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Tactic.DeriveFintype
 
 import equational_theories.FreshGenerator
 import equational_theories.Equations.All
@@ -338,6 +340,320 @@ theorem not_3862 : ∃ (G : Type) (_ : Magma G), Facts G [1518] [3862] := by
     unfold GreedyMagma
     decide
 
+namespace Finite
 
+abbrev J := 5
+
+abbrev O := ZMod 7
+
+inductive K where
+  | special
+  | nonIdem (s : Bool)
+  | reg (k : O) (j : ZMod J) (s : Bool)
+  deriving Fintype
+
+def K.flip : K → K
+  | .special => .special
+  | .nonIdem s => .nonIdem !s
+  | .reg k j s => .reg k j !s
+
+structure G where
+  kind : K
+  i : ZMod 6
+  deriving Fintype
+
+def G.flip : G → G
+  | ⟨k, i⟩ => ⟨k.flip, i⟩
+
+def G.shift : G → ZMod 6 → G
+  | ⟨k, i⟩, j => ⟨k, i + j⟩
+
+@[simp] theorem shift_zero (g : G) : g.shift 0 = g := by simp [G.shift]
+@[simp] theorem shift_add (g : G) (i j) : (g.shift i).shift j = g.shift (i + j) := by
+  simp [G.shift, add_assoc]
+
+theorem eq_shift (g : G) (i) : ∃ g' : G, g = g'.shift i := ⟨g.shift (-i), by simp⟩
+theorem shift_eq_self {g : G} {i} (H : g.shift i = g) : i = 0 := by
+  simpa [G.shift] using congr_arg (·.2) H
+
+def K.isIdem : K → Bool
+  | .nonIdem _ => false
+  | _ => true
+
+def G.sq : G → G
+  | ⟨.nonIdem s, k⟩ => ⟨.nonIdem s, k + 1⟩
+  | g => g
+
+theorem G.sq_n {g : G} (n) (H : sq g = g) : sq^[n] g = g := by induction n <;> simp [H, *]
+
+theorem G.sq_6 (g : G) : sq^[6] g = g := by
+  obtain h | ⟨s, k, rfl⟩ : sq g = g ∨ ∃ s k, g = ⟨.nonIdem s, k⟩ := by unfold sq; split <;> simp
+  · exact G.sq_n _ h
+  · simp [sq, add_assoc]; rfl
+
+inductive MkCycle : (cycle : ZMod 6 → G) → (y : G) → G → G → G → Prop
+  | zero {cycle z} : MkCycle cycle z z (cycle 0) (cycle 1)
+  | succ {cycle z a b c} : MkCycle (fun x => cycle (x - 1)) z.sq a b c → MkCycle cycle z a b c
+
+theorem MkCycle.inv {cycle k a b c} (H : MkCycle cycle k a b c) :
+    ∃ i : ZMod 6, a = G.sq^[i.1] k ∧ b = cycle (-i) ∧ c = cycle (1 - i) := by
+  induction H with
+  | zero => exact ⟨0, rfl, rfl, rfl⟩
+  | @succ _ z _ _ _ _ ih =>
+    obtain ⟨i, rfl, rfl, rfl⟩ := ih
+    refine ⟨i + 1, ?_, by simp [sub_eq_add_neg, add_comm]⟩
+    obtain hi | rfl := Fin.lt_or_eq_of_le (Fin.le_last i)
+    · simp [Fin.val_add_one_of_lt hi]
+    · simpa using G.sq_6 z
+
+theorem MkCycle.inv' {cycle k a b c} (H : MkCycle cycle k a b c) :
+    ∃ i : ZMod 6, a = G.sq^[(-i).1] k ∧ b = cycle i ∧ c = cycle (i + 1) := by
+  obtain ⟨i, rfl, rfl, rfl⟩ := H.inv
+  exact ⟨-i, by simp [sub_eq_neg_add]⟩
+
+inductive IsReflectingPair' : O → O → ZMod J → Prop
+  | zm : IsReflectingPair' 0 (-1) 1
+  | zp : IsReflectingPair' 0 1 1
+  | p1 : IsReflectingPair' 1 2 0
+  | p2 : IsReflectingPair' 2 3 0
+  | p3 : IsReflectingPair' 3 1 0
+  | m1 : IsReflectingPair' (-1) (-3) 0
+  | m2 : IsReflectingPair' (-2) (-1) 0
+  | m3 : IsReflectingPair' (-3) (-2) 0
+
+inductive IsReflectingPair : K → K → K → Prop
+  | mk {a b c j s} : IsReflectingPair' a b c →
+    IsReflectingPair (.reg a j s) (.reg b j s) (.reg (-b) (j + c) s)
+
+def cycle1' (s : Bool) : Fin 6 → K
+  | 0 => .nonIdem s
+  | 1 => .reg (-1) 0 s
+  | 2 => .reg 1 1 s
+  | 3 => .reg 0 0 s
+  | 4 => .reg (-1) 1 s
+  | 5 => .reg 1 0 s
+def cycle1 (s : Bool) (i : ZMod 6) : G := ⟨cycle1' s i, 0⟩
+
+theorem cycle1'_inj {i i' s s'} (h1 : cycle1' s i = cycle1' s' i') : (i, s) = (i', s') := by
+  fin_cases i <;> fin_cases i' <;> cases h1 <;> rfl
+
+theorem cycle1_inj' {i i' m s s'} (h1 : (cycle1 s i).shift m = cycle1 s' i') :
+    (i, s, m) = (i', s', 0) := by
+  simp [cycle1, G.shift] at h1; cases cycle1'_inj h1.1; cases h1.2; rfl
+
+def Is05 (i : Fin 6) : Prop := i = 0 ∨ i = 5
+
+inductive ToCycle1 (s : Bool) : G → Prop
+  | ni2 : ToCycle1 s ⟨.nonIdem s, 2⟩
+  | ni3 : ToCycle1 s ⟨.nonIdem s, 3⟩
+  | ni05 {i} : Is05 i → ToCycle1 s ⟨.nonIdem (!s), i⟩
+  | r1 : ToCycle1 s ⟨.reg (-1) 0 (!s), 1⟩
+  | r5 : ToCycle1 s ⟨.reg 1 0 (!s), 5⟩
+  | sp {i} : ¬Is05 i → ToCycle1 s ⟨.special, i⟩
+
+def cycle2 (s : Bool) : ZMod 6 → G
+  | 0 => ⟨.nonIdem (!s), 0⟩
+  | 1 => ⟨.nonIdem s, 1⟩
+  | 2 => ⟨.reg 1 0 (!s), 0⟩
+  | 3 => ⟨.reg 1 0 s, 1⟩
+  | 4 => ⟨.reg (-1) 0 (!s), 0⟩
+  | 5 => ⟨.reg (-1) 0 s, 1⟩
+
+def K.split_sign : K → K × Bool
+  | .special => (.special, false)
+  | .nonIdem s => (.nonIdem false, s)
+  | .reg k j s => (.reg k j false, s)
+
+theorem cycle2_inj {i i' s s'} (h1 : cycle2 s i = cycle2 s' i') : (i, s) = (i', s') := by
+  have h2 := congr_arg (·.1.split_sign.1) h1
+  have h3 := congr_arg (·.2) h1
+  fin_cases i <;> fin_cases i' <;> cases h3 <;> cases h2 <;>
+  · have := congr_arg (·.1.split_sign.2) h1
+    try replace := Bool.not_inj this
+    cases this; rfl
+
+inductive ToCycle3 : Bool → ZMod 6 → Prop
+  | _0 : ToCycle3 true 0
+  | _1 : ToCycle3 true 1
+  | _3 : ToCycle3 false 3
+  | _4 : ToCycle3 false 4
+
+def cycle3 : ZMod 6 → G
+  | 0 => ⟨.nonIdem true, 0⟩
+  | 1 => ⟨.nonIdem true, 1⟩
+  | 2 => ⟨.special, 0⟩
+  | 3 => ⟨.nonIdem false, 0⟩
+  | 4 => ⟨.nonIdem false, 1⟩
+  | 5 => ⟨.special, 0⟩
+
+def cycle4' : ZMod 6 → O
+  | 0 => -1
+  | 1 => 1
+  | 2 => -2
+  | 3 => 2
+  | 4 => -3
+  | 5 => 3
+def cycle4 (j : ZMod J) (s : Bool) (i : ZMod 6) : G := ⟨.reg (cycle4' i) j s, 0⟩
+
+theorem cycle4'_inj {i i'} (h1 : cycle4' i = cycle4' i') : i = i' := by
+  fin_cases i <;> fin_cases i' <;> cases h1 <;> rfl
+
+theorem cycle4_inj' {j j' s s' i i' m} (h1 : (cycle4 j s i).shift m = cycle4 j' s' i') :
+    (j, s, i, m) = (j', s', i', 0) := by
+  simp [cycle4, G.shift] at h1; simp [h1, cycle4'_inj h1.1.1]
+
+inductive ToCycle4 (j : ZMod J) (s : Bool) : G → Prop
+  | _0 : ToCycle4 j s ⟨.nonIdem s, 0⟩
+  | _1 : ToCycle4 j s ⟨.reg 0 (j-1) s, 0⟩
+  | _2 : ToCycle4 j s ⟨.reg 1 j (!s), 1⟩
+  | _3 : ToCycle4 j s ⟨.reg (-1) j (!s), (-1)⟩
+
+def cycle5' (j : ZMod J) (s : Bool) : ZMod 6 → K
+  | 0 => .nonIdem s
+  | 1 => .reg (-1) j s
+  | 2 => .reg 1 (j+1) s
+  | 3 => .reg 0 j s
+  | 4 => .reg (-1) (j+1) s
+  | 5 => .reg 1 j s
+def cycle5 (j : ZMod J) (s : Bool) (i : ZMod 6) : G := ⟨cycle5' j s i, 0⟩
+
+def K.split_j : K → K × ZMod J
+  | .special => (.special, 0)
+  | .nonIdem s => (.nonIdem s, 0)
+  | .reg k j s => (.reg k 0 s, j)
+
+theorem cycle5'_inj {j s s' i i'} (h1 : cycle5' j s i = cycle5' j s' i') :
+    (s, i) = (s', i') := by
+  have h2 := congr_arg (·.split_j.1) h1
+  have : (1 : ZMod J) ≠ 0 := nofun
+  fin_cases i <;> fin_cases i' <;> cases h2 <;> first | rfl | simp [cycle5', this] at h1
+
+theorem cycle5_inj' {j s s' i i' m} (h1 : (cycle5 j s i).shift m = cycle5 j s' i') :
+    (s, i, m) = (s', i', 0) := by
+  simp [cycle5, G.shift] at h1; cases cycle5'_inj h1.1; simp [h1]
+
+def ToCycle5 (k : O) : Prop := k = 1 ∨ k = -1
+
+inductive IsCycle : (ZMod 6 → G) → G → Prop
+  | cycle1 {s k} : ToCycle1 s k → IsCycle (cycle1 s) k
+  | cycle2 {s} : IsCycle (cycle2 s) ⟨.special, 0⟩
+  | cycle3 {s i} : ToCycle3 s i → IsCycle cycle3 ⟨.nonIdem s, i⟩
+  | cycle4 {j s k} : ToCycle4 j s k → IsCycle (cycle4 j s) k
+  | cycle5 {j s k} : ToCycle5 k → IsCycle (cycle5 j s) ⟨.reg k (j - 1) s, 0⟩
+
+inductive Seed : G → G → G → Prop
+  | shift1 {k} : k.isIdem → Seed ⟨k, 1⟩ ⟨k, 2⟩ ⟨k, 0⟩
+  | shift2 {k} : k.isIdem → Seed ⟨k, 1⟩ ⟨k, 0⟩ ⟨k, 2⟩
+  | unshift {x y} : x.1.isIdem → y.1.isIdem → Seed x y ⟨y.1, y.2 - 1⟩
+  | reflectL {x y z} : IsReflectingPair x y z → Seed ⟨z, 0⟩ ⟨x, 0⟩ ⟨y, 0⟩
+  | reflectR {x y z} : IsReflectingPair x y z → Seed ⟨z, 0⟩ ⟨y, 0⟩ ⟨x, 0⟩
+  | cycle {cycle k a b c} : IsCycle cycle k → MkCycle cycle k a b c → Seed a b c
+
+abbrev PreExtension := G → G → Set G
+
+inductive Shift (E : G → G → G → Prop) : G → G → G → Prop
+  | mk {a b c i} : E a b c → Shift E (a.shift i) (b.shift i) (c.shift i)
+
+theorem Shift.id {E a b c} : E a b c → Shift E a b c := by simpa using Shift.mk (i := 0)
+
+theorem Shift.shift {E a b c i} : Shift E a b c → Shift E (a.shift i) (b.shift i) (c.shift i) := by
+  rintro ⟨⟩; simp; constructor; assumption
+
+theorem Shift.shift_iff {E a b c i} :
+    Shift E (a.shift i) (b.shift i) (c.shift i) ↔ Shift E a b c :=
+  ⟨fun H => by simpa using H.shift (i := -i), Shift.shift⟩
+
+theorem Shift.idem {E a b c} : Shift (Shift E) a b c ↔ Shift E a b c :=
+  ⟨fun ⟨H⟩ => H.shift, fun H => (Shift.shift_iff (i := 0)).1 ⟨H⟩⟩
+
+structure PreExtension.OK (E : PreExtension) : Prop where
+  func {a b c c'} : c ∈ E a b → c' ∈ E a b → c = c'
+  shift {a b c} : Shift E a b c → c ∈ E a b
+
+structure Task where
+  i : ZMod 6
+  j : ZMod J
+  s : Bool
+  k : O
+  t : Bool
+  deriving Fintype
+
+def Task.base (T : Task) : G := ⟨.reg T.k (T.j - 3) T.t, T.i⟩
+def Task.cycle (T : Task) : Fin 6 → G := cycle5 T.j T.s
+
+theorem Task.sq_n_base (T : Task) (n) : G.sq^[n] T.base = T.base := G.sq_n _ rfl
+
+def Task.Done (E : PreExtension) (T : Task) : Prop :=
+  {x | E T.base (T.cycle 0) x}.Nonempty
+
+class Extension1 where
+  E : PreExtension
+  ok : E.OK
+  T : Task
+  not_done : ¬T.Done E
+
+namespace Extension1
+variable [Extension1]
+local infix:80 " ◯ " => E
+
+def next : PreExtension := fun a b => {c | c ∈ a ◯ b ∨ Shift (MkCycle T.cycle T.base) a b c}
+
+theorem next_ok : next.OK where
+  func {x y u v} hu hv := by
+    have {x y u v}
+        (hu : Shift (MkCycle T.cycle T.base) x y u) (hv : v ∈ x ◯ y) : u = v := by
+      obtain @⟨x, y, u, i, hu⟩ := hu
+      obtain ⟨v, rfl⟩ := eq_shift v i
+      replace hv := ok.shift (Shift.shift_iff.1 (Shift.id hv)); congr
+      obtain ⟨i', rfl, rfl, rfl⟩ := hu.inv'; clear hu
+      rw [Task.sq_n_base] at hv
+      sorry
+    obtain hu | hu := hu <;> obtain hv | hv := hv
+    · exact ok.func hu hv
+    · exact (this hv hu).symm
+    · exact this hu hv
+    · obtain @⟨x, y, v, i, hv⟩ := hv
+      obtain ⟨u, rfl⟩ := eq_shift u i
+      rw [Shift.shift_iff] at hu; congr
+      obtain @⟨x, y, u, i, hu⟩ := hu
+      obtain ⟨i₁, rfl, rfl, rfl⟩ := hu.inv'
+      obtain ⟨i₂, ex, ey, rfl⟩ := hv.inv'; clear hu hv
+      cases shift_eq_self (by simpa [Task.sq_n_base] using ex)
+      cases cycle5_inj' ey; simp
+  shift := by
+    rintro _ _ _ ⟨H | H⟩
+    · exact .inl (ok.shift ⟨H⟩)
+    · exact .inr (.shift H)
+
+end Extension1
+
+abbrev Extension := {E : PreExtension // E.OK}
+
+def seed : Extension where
+  val a b := {c | Shift Seed a b c}
+  property := {
+    func := sorry
+    shift := Shift.idem.1
+  }
+
+theorem exists_extension : ∃ E : Extension, seed ≤ E ∧ ∀ T : Task, T.Done E := by
+  have ⟨c, hc, h1, _, h3⟩ := exists_greedy_chain (a := seed)
+    (task := fun T => {e | Task.Done e.1 T}) fun ⟨E, ok⟩ T => by
+      if h : T.Done E then exact ⟨_, le_rfl, h⟩ else
+      let E1 : Extension1 := { E, ok, T, not_done := h }
+      exact ⟨⟨E1.next, E1.next_ok⟩, fun _ _ _ => (.inl ·), _, .inr (.id .zero)⟩
+  refine ⟨⟨sSup (Subtype.val '' c), ?_, ?_⟩, ?_, fun T => ?_⟩
+  · rintro x y u v
+      ⟨_, ⟨⟨_, ⟨_, _, he₁, rfl⟩, rfl⟩, rfl⟩, hu⟩ ⟨_, ⟨⟨_, ⟨_, _, he₂, rfl⟩, rfl⟩, rfl⟩, hv⟩
+    dsimp at hu hv
+    have ⟨e, _, ee₁, ee₂⟩ := hc.directedOn _ he₁ _ he₂
+    exact e.2.func (ee₁ _ _ hu) (ee₂ _ _ hv)
+  · rintro _ _ _ ⟨⟨_, ⟨⟨_, ⟨_, e, he, rfl⟩, rfl⟩, rfl⟩, hu⟩⟩
+    exact le_sSup (s := Subtype.val '' c) ⟨_, he, rfl⟩ _ _ (e.2.shift ⟨hu⟩)
+  · exact le_sSup (s := Subtype.val '' c) ⟨_, h1, rfl⟩
+  · have ⟨e, he, z, hz⟩ := h3 T
+    exact ⟨z, le_sSup (s := Subtype.val '' c) ⟨_, he, rfl⟩ _ _ hz⟩
+
+end Finite
 
 end Eq1518

@@ -411,7 +411,6 @@ theorem exists_extension :
       let E1 : Extension1 := { E, ok, a, b, not_def := fun h' => h ⟨_, h'⟩ }
       exact ⟨⟨E1.next, E1.next_ok⟩, fun _ _ _ => (.base ·), _, .new⟩
   simp only [Subtype.exists, Prod.forall] at h3
-  classical
   choose f hf1 hf2 op hop using h3
   refine ⟨op, fun x y z => ?_, fun {x y} h => ?_, fun {x y z} H => ?_⟩
   · let S : Finset _ := {(x,z), (y,z), (op y z, op x z), (x, op (op y z) (op x z))}
