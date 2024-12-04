@@ -13,10 +13,6 @@ namespace Conjectures
 @[equational_result]
 conjecture Equation1692_facts : ∃ (G : Type) (_ : Magma G), Facts G [1692] [47, 1832, 2441, 3050, 3456, 4065]
 
-/-- https://teorth.github.io/equational_theories/blueprint/infinite-magma-constructions-chapter.html#dupont-section as well as an alternate construction at https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/482011293.2E01 -/
-@[equational_result]
-conjecture Equation63_facts : ∃ (G : Type) (_ : Magma G), Facts G [63] [1692]
-
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1323/near/481475622 -/
 @[equational_result]
 conjecture Equation1323_facts : ∃ (G : Type) (_ : Magma G), Facts G [1323, 1898] [2744, 2710]
