@@ -25,7 +25,7 @@ Finally, we also used \texttt{aesop}~\cite{DBLP:conf/cpp/LimpergF23}, which impl
 This was used mainly to help specific constructions in refutations, and is not specific to proving or disproving magma implications in this sense.
 We will describe our use of \texttt{aesop} more in Section~\sec{sec:proof-reconstruction} below.
 
-\paragraph{Superposition}
+\paragraph{Saturation}
 Most of the ATPs we used extensively in this project rely primarily on saturation procdures in the superposition calculus.
 This is the case for Vampire~\cite{DBLP:conf/cav/KovacsV13}, and the paper alo gives a more in-depth explanation of this.
 See also~\cite{DBLP:journals/cacm/BentkampBNTVW23} for a gentler exposition.
@@ -39,31 +39,70 @@ The underlying calculus varies from system to system, but they often have a vari
 This can also be read as $C \lor L \quad D \lor \neg L$ implies $C \lor D$, where $C, D, L$ are formulas in e.g. first-order logic.
 Superposition calculi have a variant of this rule that deals with equality directly, and thus are more efficient at reasoning about equality.
 
+In this project we used Vampire~\cite{DBLP:conf/cav/KovacsV13}, Duper~\cite{DBLP:conf/itp/CluneQBA24} and Prover9 and Mace4~\cite{prover9-mace4} which are all based on variants of saturation for proving.
+
 \paragraph{Equational Reasoning}
 
+Equational reasoning is a type of reasoning based on equational logic and rewriting with congruence~\cite{term-rewriting}, see Chapter~\ref{todo} for a discussion of its foundations in universal algebra.
+In general, it takes a series of equations and determines wether another equation can be deduced from it.
+A core tool in equational reasoning are e-graphs, a data structure used to represent equivalence classes of terms.
+The procedure of congruence closure that can be used to decide ground equational problems (i.e. problems without variables) and as a semi-decision procedure in general.
+
+SMT solvers like Z3~\cite{DBLP:conf/tacas/MouraB08} use equational reasoning for deciding the theory of equality with uninterpreted functions~\cite{DBLP:series/txtcs/KroeningS16,DBLP:conf/cade/MouraB07}.
+On the other hand, equality saturation~\cite{DBLP:journals/pacmpl/WillseyNWFTP21} uses e-graphs by extending congruence closure to a more controlled search, enabling optimization and conditional rewriting.
+One of the main advantages of using equational reasoning to reason about implications of magma laws is that we get very explicit proofs: a proof that $l \vdash l'$ is given by a sequence of rewrites that starts at the left-hand side of $l'$ and arrives at the right-hand side through applications of $l$.
+
+In this project we used Z3~\cite{DBLP:conf/tacas/MouraB08}, Prover9 and Mace4~\cite{prover9-mace4}, a custom ATP for magmas based on egg~\cite{DBLP:journals/pacmpl/WillseyNWFTP21}, and the Lean egg tactic~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24,rossel2024bridging}, which all work with equational logic. We have also reasoned with manual (custom written) heuristics about simple rewrites.
 
 \subsection{Proof Reconstruction and Integration}
 \label{sec:proof-reconstruction}
 
-Draw upon the discussion \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Future.20of.20Using.20ATPs}{here} on the various ways of integrating ATPs with Lean. This project primarily used the least integrated approach, "Option 3", as it was fastest and required no dependencies on the other contributors, but it also has drawbacks.
+While ATPs are very useful to solve questions for this project, they generally don't integrate well with Lean (except for Lean tactics like \texttt{duper}, \texttt{aesop} and \texttt{egg}).
+A bug in an ATP could lead to an unsound proof, or worse, an incorrect result.
+To avoid this, and having to trust large codebases from ATPs, we take results found by the different provers and (re-)construct proofs in Lean.
 
-Talk about how ATPs have been important to guide counterexample strategy by testing what simplifying hypotheses can be safely added without eliminating the possibility of a refutation.
+Integration implies two steps: invoking the decision procedures/ATPs (translating the problem from Lean into the languages and logics they use), and conversely, (re-)constructing the results from the decision procedure as a (persistent) Lean proof.
+These two aspect present different challenges, and require different strategies, depending mostly on the kind of proof strategy the decision procedure uses.
+
+For saturation proofs $\ldots$ (TODO: add explanations from \url{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Vampire.20-.3E.20Lean/near/478147138})
+
+For equational proofs from external provers (e.g. MagmaEgg), we used also a simple version of reconstruction by (re-)constructing the proofs of equality from an explanation, using congruence lemmas from Lean.
+In the case of equational proofs from the \texttt{egg} tactic, these could be converted into a series of \texttt{calc} steps, documenting the explicit calculation, using the \texttt{calcify} tactic\footnote{\url{https://github.com/nomeata/lean-calcify/}}.
+
+In general, we've observed that there are multiple ways of integrating decisions procedures within Lean, with different levels of integration.
+\begin{enumerate}
+    \item Using a Lean tactic, which calls a decision procedure written in Lean (like \texttt{aesop} or \texttt{duper}).
+    \item Using a Lean tactic, which calls an existing (external) ATP and reconstructs a proof term from the ATP's result (like \texttt{bv\__decide} or \texttt{egg}).
+    \item\label{external} Using an external script which calls an existing ATP and generates a source file \exttt{.lean} which captures the result explicitly.
+\end{enumerate}
+
+
+This project primarily used the least integrated approach, (Option \ref{external}), as it was fastest and required no dependencies on the other contributors.
+This also has drawbacks: primarily, while the upfront effort is lower, the effort to use is higher than with a tactic, once the tactic is developed.
+It also makes integration with larger code bases more difficult: in this project the (mathematical) dependencies were by design very minimal, Magmas are simple, and we built our own definitions for them.
+For example, integration with the typeclass system become much more difficult when working with more complex mathematical objects that build upon many layers of structure.
+
+\paragraph{Semi-Automated Counterexample Guidance}
+
+Another use of ATPs has been in a semi-automatic fashion, to find counter-examples.
+The general strategy was to use ATPs to find counter-examples to implications by building magmas iteratively.
+If we want to build a counterexample to $l \vdash l'$, we want to build construct a magma where $l$ holds but $l'$ doesn't.
+In this method, we iteratively strengthen a construction with additional hypotheses, and use the ATP to check wether these hypotheses are not too strong (to imply $l'$) or unsound (to disallow $l$).
+
+TODO: this should also be expanded more, at least with references to some of the constructions in other chapters.
+
+While equational theories can also be used in a semi-automatic fashion to prove equations~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24}, the positive implications in this project were all simple enough that we did not need a semi-automatic approach for them.
 
 \subsection{Empirical Results}
 
-Framing: as we likely do not have experts in carefully evaluating and benchmarking ATP performance, do not present our work as definitively establishing performance of ATPs on ETP problems; instead, present our work as a more informal ``field report'' documenting our experiences but not necessarily drawing firm conclusions.  To quote from Jose Brox: ``center on what we can contribute to novice ATP users, algebra (or perhaps general) researchers who, as some of us at the start of this project, want to use ATPs for the first time on problems that need them, and may be at a loss of what to use, what parameters may be important... in summary, what may make a difference. Here we can be more informal, throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''.  Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.
+Finally, we report some empirical results from use of ATPs for this project, in terms of performance.
+The aim of this section is not to be a careful evaluation and benchmark comparison of the different ATPs; instead, we present our work here as a more informal ``field report'' documenting our experiences.
+In particular, we don't believe we can draw firm conclusions about the overal capatiblities of the different ATPs.
+Rather, this serves as a use-case documenting the experience of (mostly) novice users.
 
-Describe various automated theorem provers deployed in the project, with some statistics on performance:
+TODO: throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''.  Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.
 
-\begin{itemize}
-    \item Z3 prover
-    \item Vampire
-    \item More elementary substitutions
-    \item egg
-    \item \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/479643838}{duper}
-\end{itemize}
-
-Any comparative study of semi-automated methods with fully automated ones? In principle, the semi-automated approach could be more automated using a script or "agent" to call various theorem provers. See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/A.20magma.20of.20order.20.3C.2013.20-.20for.20Equation2531.3F}{this discussion}.
+TODO: Any comparative study of semi-automated methods with fully automated ones? In principle, the semi-automated approach could be more automated using a script or "agent" to call various theorem provers. See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/A.20magma.20of.20order.20.3C.2013.20-.20for.20Equation2531.3F}{this discussion}.
 
 Note: when evaluating the performance of any particular automated implication tool, we should do a fresh run on the entire base of implications, rather than rely on whatever implications produced by the tool remain in the Lean codebase by the time of writing the paper. This is because (a) many of the previous runs focused only on those implications that were not already ruled out by earlier contributions, and (b) some pruning has been applied subsequent to the initial runs to improve compilation performance. Of course, these runs would not need to be added to the (presumably optimized) codebase at that point, but would be purely for the purpose of gathering performance statistics. More discussion \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/RECORDS.20REQUEST.3A.20data.20and.20performance.20automated.20run.20metrics}{here}.
 
