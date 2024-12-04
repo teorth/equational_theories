@@ -23,7 +23,7 @@ The main two families of ATPs and tactics we used here are superposition/saturat
 In this context we also include SMT solvers, which combine specific decision procedures for theories, like congruence closure for equational reasoning, with satisfiability (SAT) solving~\cite{}.
 Finally, we also used \texttt{aesop}~\cite{DBLP:conf/cpp/LimpergF23}, which implements a version of tableau search.
 This was used mainly to help specific constructions in refutations, and is not specific to proving or disproving magma implications in this sense.
-We will describe our use of \texttt{aesop} more in Section~\sec{sec:proof-reconstruction} below.
+We will describe our use of \texttt{aesop} more in Section~\ref{sec:proof-reconstruction} below.
 
 \paragraph{Saturation}
 Most of the ATPs we used extensively in this project rely primarily on saturation procdures in the superposition calculus.
@@ -35,7 +35,7 @@ The ATP then try to refute the negation by applying rules of the underlying calc
 In this case, the conjecture was (classicaly) true, and the ATP has found a proof by contradiction, often called a ``refutation'' or ``saturation'' proof.
 
 The underlying calculus varies from system to system, but they often have a variant of a resolution clause, a clause of a form:
-\infer{$C \lor D$}{$C \lor L \quad D \lor \neg L$}
+\[\infer{C \lor D}{C \lor L \quad D \lor \neg L} \]
 This can also be read as $C \lor L \quad D \lor \neg L$ implies $C \lor D$, where $C, D, L$ are formulas in e.g. first-order logic.
 Superposition calculi have a variant of this rule that deals with equality directly, and thus are more efficient at reasoning about equality.
 
@@ -72,8 +72,8 @@ In the case of equational proofs from the \texttt{egg} tactic, these could be co
 In general, we've observed that there are multiple ways of integrating decisions procedures within Lean, with different levels of integration.
 \begin{enumerate}
     \item Using a Lean tactic, which calls a decision procedure written in Lean (like \texttt{aesop} or \texttt{duper}).
-    \item Using a Lean tactic, which calls an existing (external) ATP and reconstructs a proof term from the ATP's result (like \texttt{bv\__decide} or \texttt{egg}).
-    \item\label{external} Using an external script which calls an existing ATP and generates a source file \exttt{.lean} which captures the result explicitly.
+    \item Using a Lean tactic, which calls an existing (external) ATP and reconstructs a proof term from the ATP's result (like \texttt{bv\_decide} or \texttt{egg}).
+    \item\label{external} Using an external script which calls an existing ATP and generates a source file \texttt{.lean} which captures the result explicitly.
 \end{enumerate}
 
 
