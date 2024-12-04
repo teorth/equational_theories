@@ -30,3 +30,4 @@ import equational_theories.ManuallyProved
 import equational_theories.ThreeC2
 import equational_theories.Obelix
 import equational_theories.Definability
+import equational_theories.FiniteModel

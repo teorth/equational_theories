@@ -6058,7 +6058,7 @@ var $author$project$Main$viewExportNovel = F3(
 											_Utils_ap(tableLine, prov))
 										]))
 								])),
-							$elm$html$Html$text('Finally, re-run `python3 equational_theories/Generated/FinSearch/src/generate_lean.py`!')
+							$elm$html$Html$text('Finally, re-run `python3 equational_theories/Generated/All4x4Tables/src/generate_lean.py`!')
 						]));
 			}
 		}

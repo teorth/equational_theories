@@ -1,6 +1,7 @@
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
+import equational_theories.FiniteModel
 import Mathlib.Data.Finite.Prod
 import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Fintype.Units
@@ -66,46 +67,12 @@ theorem Equation3342_facts : ∃ (G : Type) (_ : Magma G), Facts G [3342] [3456,
 
 -- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/482525422
 
-lemma Finite.fn_periodic {G : Type*} [Finite G] (f : G → G) : ∃ p : ℕ, p > 0 ∧ f^[p] = f^[2*p] := by
-  have Finite.fn_eventually_periodic : ∃ s p : ℕ, p > 0 ∧ f^[s] = f^[s+p] := by
-    obtain ⟨p₁, p₂, lt, heq⟩ : ∃ p₁ p₂ : ℕ, p₁ < p₂ ∧ f^[p₁] = f^[p₂] := by
-      obtain ⟨p₁, p₂, ne, heq⟩ := Finite.exists_ne_map_eq_of_infinite (Nat.iterate f ·)
-      rcases le_total p₁ p₂ with h_le | h_le
-      . exact ⟨p₁, p₂, Ne.lt_of_le ne h_le, heq⟩
-      . exact ⟨p₂, p₁, Ne.lt_of_le (Ne.symm ne) h_le, Eq.symm heq⟩
-    let p := p₂ - p₁
-    have : f^[p₁] = f^[p₁ + p] := by
-      unfold p
-      rw [← Nat.add_sub_assoc (by linarith)]
-      simp only [heq, add_tsub_cancel_left]
-    exact ⟨p₁, p, by simp only [gt_iff_lt, tsub_pos_iff_lt, lt, p], this⟩
-  obtain ⟨s, p, hpgt, hp⟩ := Finite.fn_eventually_periodic
-  have hmod (n j : ℕ) : f^[s + j] = f^[s + j + n*p] := by
-    induction n with
-    | zero => simp only [zero_mul, add_zero]
-    | succ i ih =>
-      have : s + j + (i + 1) * p = s + p + (j + i * p) := by simp_arith only [Nat.succ_mul]
-      rw [this, Function.iterate_add f (s + p), ← hp, ← Function.iterate_add, ← Nat.add_assoc, ih]
-  rcases eq_zero_or_pos s with h | h
-  . simp [h] at hmod
-    have : f^[p] = f^[2*p] := by simp_arith only [hmod 1 p]
-    exact ⟨p, hpgt, this⟩
-  . let n := s * p
-    have : f^[n] = f^[2*n] := by
-      unfold n
-      obtain ⟨ppred, hppred⟩ := Nat.exists_eq_succ_of_ne_zero (by linarith)
-      rw [hppred, Nat.succ_eq_add_one, Nat.mul_succ, Nat.add_comm]
-      have : 2 * (s + s * ppred) = s + s * ppred + s * p := by simp_arith only [hppred,  Nat.mul_succ]
-      rw [this, ← hmod]
-    have ngt : n > 0 := by apply Nat.mul_pos h hpgt
-    exact ⟨n, ngt, this⟩
-
 private theorem main_result (G : Type*) [Magma G] [Finite G] (h : Equation3342 G) :
     Equation3522 G ∧ Equation4118 G := by
   let S (x : G) := x ◇ x
   let f (x : G) := x ◇ (S x)
   let C (x : G) := (S x) ◇ x
-  obtain ⟨p, hpgt, hperiodic⟩ := Finite.fn_periodic f
+  obtain ⟨p, hpgt, hperiodic⟩ := FiniteModel.Finite.fn_periodic f
   have fx_fy (x y : G) : x ◇ y = f x ◇ f y := by rw [h, h]
   have fnx_fny (n : ℕ) (x y : G) : x ◇ y = f^[n] x ◇ f^[n] y := by
     induction n with

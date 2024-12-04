@@ -1,0 +1,69 @@
+\chapter{Magma cohomology}\label{cohomology-chapter}
+
+Let $G$ be a magma obeying some equation $E$ of the form $w_{E,1}(x_1,\dots,x_n) = w_{E,2}(x_1,\dots,x_n)$.  We let $M = (M,+)$ be an abelian group that also has a linear magma operation
+$$ s \op t = as + bt$$
+obeying $E$ for some $a,b \in \mathrm{End}(M)$ in the endomorphism ring of $M$.  Note that in such a linear magma, any word $w(s_1,\dots,s_n)$ takes the form
+$$ w(s_1,\dots,s_n) = \sum_{i=1}^n P_{w,i}(a,b) s_i$$
+for some (non-commutative) polynomials $P_{w,i}(a,b)$ in $a,b$ with natural number coefficients.  For instance,
+$$ s \op s = (a+b) s$$
+$$ t \op (s \op s) = (ba+b^2) s + at$$
+$$ (t \op (s \op s)) \op t = (aba+ab^2) s + (a^2+b)t$$
+$$ t \op ((t \op (s \op s)) \op t) = (baba+bab^2) s + (ba^2+b^2+a)t.$$
+The law $E$ is then obeyed when
+$$ P_{w_{E,1},i}(a,b)= P_{w_{E,2},i}(a,b)$$
+for $i=1,\dots,n$.  For instance, the law 1110,
+\begin{equation}\label{1110}
+  x = y \op ((y \op (x \op x)) \op y)
+\end{equation}
+would be obeyed if one has
+\begin{equation}\label{baba}
+ baba+bab^2 = 1; \quad ba^2+b^2+a = 0.
+\end{equation}
+A solution here would be provided by $(a,b) = (\phi,-1)$, where $\phi$ solves the golden ratio equation $\phi^2 = \phi + 1$.
+
+We consider \emph{extensions} of $G$ by $M$, which are magmas with carrier $G \times M$ with an operation of the form
+\begin{equation}\label{extension}
+  (x,s) \op (y,t) = (x \op y, as + bt + f(x,y))
+\end{equation}
+for some function $f: G \times G \to M$.  An easy induction then shows that for any word $w(x_1,\dots,w_n)$, one has
+$$ w((x_1,s_1),\dots,(x_n,s_n)) = (w(x_1,\dots,x_n), \sum_{i=1}^n P_{w,i}(a,b) x_i + \sum_{w_1 \op w_2 \leq w} Q_{w,w_1 \op w_2}(a,b) f(w_1(x_1,\dots,x_n)) f(w_2(x_1,\dots,x_n)))$$
+where $w_1 \op w_2$ ranges over all subterms of $w$ that are not single variables, and $Q_{w,w_1 \op w_2}(a,b)$ is a suitable (noncommutative) monomial in $a,b$.  For instance
+$$ (x,s) \op (x,s) = (x \op x, (a+b) s + f(x,x))$$
+$$ (y,t) \op ((x,s) \op (x,s)) = (y \op (x \op x), (ba+b^2) s + at + b f(x,x) + f(y, x \op x))$$
+$$ ((y,t) \op ((x,s) \op (x,s))) \op (y \op t) = ((y \op (x \op x)) \op y, (aba+ab^2) s + (a^2+b)t + ab f(x,x) + a f(y, x \op x) + f(y \op (x \op x), y))$$
+$$ (y \op t) \op (((y,t) \op ((x,s) \op (x,s))) \op (y \op t)) = (y \op ((y \op (x \op x)) \op y), (baba+bab^2) s + (ba^2+b^2+a)t + bab f(x,x) + ba f(y, x \op x) + bf(y \op (x \op x), y) + f( y, (y \op (x \op x)) \op y)).$$
+Assuming \Cref{baba}, we conclude that this extension obeys the law \Cref{1110} if and only if one has
+\begin{equation}\label{cocycle-1110}
+  bab f(x,x) + ba f(y, x \op x) + bf(y \op (x \op x), y) + f( y, (y \op (x \op x)) \op y) = 0
+\end{equation}
+for all $x,y \in G$.  More generally, an extension obeys a law $E$ provided that
+$$ \sum_{w_1 \op w_2 \leq w_{E,1}} Q_{w_{E,1},w_1 \op w_2}(a,b) f(w_1(x_1,\dots,x_n)) f(w_2(x_1,\dots,x_n))
+\sum_{w_1 \op w_2 \leq w_{E,2}} Q_{w_{E,2},w_1 \op w_2}(a,b) f(w_1(x_1,\dots,x_n)) f(w_2(x_1,\dots,x_n))$$
+for all $x_1,\dots,x_n \in G$.  We call $f$ a \emph{$E$-cocycle} if this equation holds, and denote the space of such $E$-cocycles as $Z^2_E(G,M)$.  This is an abelian group, and each $E$-cocycle defines a magma on $G \times M$ obeying $E$.  For instance, when $f=0$ we obtain the direct product of the $G$ and $M$ magmas.
+
+Given any function $g: G \to M$, one can define a bijection $(x,s) \mapsto (x,s+g(x))$ on $G \times M$, which conjugates the law \Cref{extension} to the law
+$$ (x,s) \op (y,t) = (x \op y, as + bt + f(x,y) + g(x \op y) - ag(x) - bg(y)).$$
+Being conjugate, this new operation will obey $E$ if and only if the original operation does.
+Thus if one defines a \emph{coboundary} to be a function $f: G \times G \to M$ of the form $f(x,y) =g(x \op y) - ag(x) - bg(y)$ for some $g: G \to M$, we can add a coboundary to an $E$-cocycle and still obtain a $E$-cocycle.  So if we let $B^2(G,M)$ be the space of coboundaries, we see that $B^2(G,M)$ is a subgroup of $Z^2_E(G,M)$.  We define the \emph{$E$-cohomology} $H^2_E(G,M)$ to be the quotient
+$$ H^2_E(G,M) := Z^2_E(G,M) / B^2(G,M).$$
+Observe that if $E$ implies $E'$, then $H^2_E(G,M)$ is a subgroup of $H^2_{E'}(G,M)$.  Thus, to refute an implication $E \implies E'$, it suffices to locate a magma $G$ and a linear magma $M$ obeying both $E$ and $E'$ such that
+\begin{equation}\label{hgm}
+  H^2_E(G,M) \not\subset H^2_{E'}(G,M).
+\end{equation}
+
+This leads to a computational approach to refutations, as these groups can be computed by linear algebra.
+
+For instance, let us consider the law \Cref{1110} together with a putative consequence, equation 1629:
+\begin{equation}\label{1629}
+  x = (x \op x) \op ((x \op x) \op x).
+\end{equation}
+A simultaneous (linear) model for both \Cref{1110} and \Cref{1629} is given by carrier $G=M={\mathbb F}_5$ with $x \op y = 3x-y$.  Then the coboundaries $f: {\mathbb F}_5 \times {\mathbb F}_5 \to {\mathbb F}_5$ are of the form $f(x,y) = g(3x-y) - 3g(x) + g(y)$ for $g: {\mathbb F}_5 \to {\mathbb F}_5$, the $1110$-cocycles solve the equation
+$$3 f(x,x) - 3 f(y, 2x) - f(3y - 2x, y) + f( y, 3y - x) = 0$$
+for $x,y \in {\mathbb F}_5$, and the $1629$-cocycles solve the equation
+$$ f(2x,0) - f(2x,x) = 0.$$
+A function $g:{\mathbb F}_5 \to {\mathbb F}_5$ has vanishing derivative, $g(3x-y) - 3g(x) + g(y) = 0$, if and only if $g$ is linear, which is a one-dimensional space; so, by the rank-nullity theorem, the space $B^1(G,M)$ of coboundaries is four-dimensional.  One can check computationally that the space $Z^1_{1110}(G,M)$ is six-dimensional, so $H^1_{1110}(G,M)$ is two-dimensional.  One can check numerically that it contains an element not in $H^1_{1629}(G,M)$, leading to a finite counterexample on the 25-element carrier $G \times M$ to the implication of 1629 from 1110.
+
+\begin{remark} In the case the associative law (and taking $a=b=1$), the cocycle law becomes the familiar
+  $$ f(x,y) + f(x \op y, z) = f(x, y \op z) + f(y,z)$$
+and we recover the usual group cohomology (if $G$ is a group).
+\end{remark}

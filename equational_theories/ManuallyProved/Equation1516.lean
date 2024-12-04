@@ -7,6 +7,7 @@ import Mathlib.Data.Finset.Order
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
 import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
+import equational_theories.FreshGenerator
 import equational_theories.Mathlib.Order.Greedy
 
 
@@ -15,182 +16,10 @@ import equational_theories.Mathlib.Order.Greedy
 namespace Eq1516
 
 open FreeGroup
+open FreshGenerator
 
 private abbrev A := FreeGroup Nat
 
-instance : Countable A := by
-  apply Function.Surjective.countable (Quot.mk_surjective)
-
-
-def maxIndex' : (List (Nat × Bool)) → Nat
-| [] => 0
-| ((x,_) :: l) => max x $ maxIndex' l
-
-def maxIndex (a : A) : Nat := (maxIndex' $ FreeGroup.toWord a)
-
-def freshIndex (old : Finset A) : Nat := Nat.succ $ (Finset.image maxIndex old).max.unbot' 0
-
-def freshGenerator (old : Finset A) := FreeGroup.of (freshIndex old)
-
-theorem maxIndex'_sublist (L₁ L₂ : List (Nat × Bool)) (H : L₁.Sublist L₂) : maxIndex' L₁ ≤ maxIndex' L₂ := by
-induction H with
-| slnil => rfl
-| cons a _ _ => simp only [maxIndex', le_max_iff] ; tauto
-| cons₂ a _ _ => simp only [maxIndex', le_max_iff] ; omega
-
-theorem maxIndex_mk_le (L : List (Nat × Bool)) : maxIndex (FreeGroup.mk L) ≤ maxIndex' L :=
-  maxIndex'_sublist _ _ (FreeGroup.reduce.red (L := L)).sublist
-
-theorem maxIndex'_append (L₁ L₂ : List (Nat × Bool)) : maxIndex' (L₁ ++ L₂) = max (maxIndex' L₁) (maxIndex' L₂) := by
-induction L₁ with
-| nil => simp [maxIndex']
-| cons head tail ih => simp [maxIndex',ih] ; omega
-
-theorem maxIndex_mul_le (x y : A) : maxIndex (x * y) ≤ max (maxIndex x) (maxIndex y) := by
-  calc
-    maxIndex (x * y) = maxIndex (FreeGroup.mk (x.toWord ++ y.toWord)) := by rw [← FreeGroup.mul_mk, FreeGroup.mk_toWord, FreeGroup.mk_toWord]
-    _ ≤ maxIndex' (x.toWord ++ y.toWord) := maxIndex_mk_le _
-    _ = max (maxIndex x) (maxIndex y) := maxIndex'_append _ _
-
-theorem maxIndex'_invRev (L : List (Nat × Bool)) : maxIndex' (FreeGroup.invRev L) = maxIndex' L := by
-induction L with
-| nil => rfl
-| cons head tail ih =>
-  unfold FreeGroup.invRev at *
-  simp [maxIndex',maxIndex'_append,ih,max_comm]
-
-theorem maxIndex_inv (x : A) : maxIndex x⁻¹ = maxIndex x := by
-unfold maxIndex
-rw [FreeGroup.toWord_inv]
-apply maxIndex'_invRev
-
-theorem maxIndex_subgroup_lt_freshIndex (old : Finset A) (g : A) : g ∈ Subgroup.closure old →
-  maxIndex g < freshIndex old := set_option pp.all true in by
-  apply Subgroup.closure_induction
-  · simp only [Finset.mem_coe]
-    unfold freshIndex
-    intro x h
-    have : maxIndex x ≤ (Finset.image maxIndex old).max.unbot' 0 := by
-      rw [← Finset.coe_max']
-      simp only [WithBot.unbot'_coe]
-      apply Finset.le_max'
-      simp only [Finset.mem_image]
-      use x, h
-    omega
-  · unfold maxIndex
-    simp [maxIndex']
-    unfold freshIndex
-    omega
-  · intro x y _ _ ineqx ineqy
-    have this := maxIndex_mul_le x y
-    omega
-  · intro x _ ineqx
-    have this := maxIndex_inv x
-    omega
-
-theorem maxIndex_fresh (old : Finset A) : maxIndex (freshGenerator old) = freshIndex old := by
-unfold freshGenerator
-simp [maxIndex,maxIndex']
-
-theorem freshGenerator_not_in_span (old : Finset A) : freshGenerator old ∉ Subgroup.closure old := by
-intro contra
-have this := maxIndex_subgroup_lt_freshIndex _ _ contra
-have that := maxIndex_fresh old
-omega
-
-theorem fresh_ineq (old : Finset A) (x y : A) (x_mem : x ∈ Subgroup.closure old) (y_mem : y ∈ Subgroup.closure old) (eq : x = freshGenerator old * y)
-: False := by
-have eq' : x * y⁻¹ = freshGenerator old := by
-  rw [eq]
-  simp only [mul_inv_cancel_right]
-apply freshGenerator_not_in_span
-rw [← eq']
-exact Subgroup.mul_mem _ x_mem (Subgroup.inv_mem _ y_mem)
-
-theorem fresh_ineq' (old : Finset A) (x y : A) (x_mem :  x ∈ Subgroup.closure old) (y_mem : y ∈ Subgroup.closure old)
-(eq : x * (freshGenerator old)⁻¹ =  y) : False := by
-have eq' : y⁻¹ * x = freshGenerator old := by
-  rw [← eq]
-  simp only [mul_inv_rev, inv_inv, inv_mul_cancel_right]
-apply freshGenerator_not_in_span
-rw [← eq']
-exact Subgroup.mul_mem _ (Subgroup.inv_mem _ y_mem) x_mem
-
-theorem head_maxIndex (x : A) (m : Nat) (f : Bool) : (m,f) ∈ (FreeGroup.toWord x).head? → m ≤ maxIndex x := by
-unfold maxIndex
-cases FreeGroup.toWord x
-· tauto
-· intro h
-  injection h with eq
-  rw [eq]
-  simp only [maxIndex']
-  omega
-
-
-@[simp]
-theorem freshGenerator_toWord (old : Finset A) : FreeGroup.toWord (freshGenerator old) = [(freshIndex old, true)] := rfl
-
-@[simp]
-theorem freshGenerator_inv_toWord (old : Finset A) : FreeGroup.toWord (freshGenerator old)⁻¹ = [(freshIndex old, false)] := rfl
-
-
--- TODO: It might be better to go via CoprodI (or now with the reduced lemmas)
-theorem fresh_old_no_cancellation (old : Finset A) (x : A) : x ∈ Subgroup.closure old →
-  FreeGroup.toWord (freshGenerator old * x) = FreeGroup.toWord (freshGenerator old) ++ FreeGroup.toWord x := by
-  intro x_mem
-  rw [toWord_mul]
-  simp only [freshGenerator_toWord, List.singleton_append, FreeGroup.reduce.cons, Bool.true_eq,
-    Bool.not_eq_eq_eq_not, Bool.not_true, FreeGroup.reduce_toWord]
-  cases h : FreeGroup.toWord x
-  case nil => rfl
-  case cons head tail =>
-    simp only [ite_eq_right_iff, and_imp]
-    intro eq1 eq2
-    exfalso
-    have ineq1 := maxIndex_subgroup_lt_freshIndex old x x_mem
-    have ineq2 : freshIndex old ≤ maxIndex x := by
-      apply head_maxIndex
-      rw [h, eq1]
-      trivial
-    omega
-
-theorem fresh_old_inv_no_cancellation (old : Finset A) (x : A) : x ∈ Subgroup.closure old →
-  FreeGroup.toWord (x * (freshGenerator old)⁻¹) = FreeGroup.toWord x ++ (FreeGroup.toWord (freshGenerator old)⁻¹) := by
-  intro x_mem
-  have eq : x * (freshGenerator old)⁻¹ = ((freshGenerator old) * x⁻¹)⁻¹ := by simp
-  rw [eq, FreeGroup.toWord_inv, fresh_old_no_cancellation old _ (Subgroup.inv_mem _ x_mem),
-  invRev_append, ← FreeGroup.toWord_inv]
-  simp [FreeGroup.invRev]
-
-theorem fresh_ineq'' (old : Finset A) (x y : A) (x_mem : x ∈ Subgroup.closure old) (y_mem : y ∈ Subgroup.closure old)
-(eq : x * (freshGenerator old)⁻¹ = (freshGenerator old) * y) : False := by
-apply_fun FreeGroup.toWord at eq
-revert eq
-rw [fresh_old_no_cancellation _ _ y_mem]
-rw [fresh_old_inv_no_cancellation _ _ x_mem]
-cases h : FreeGroup.toWord x with
-| nil => simp
-| cons head tail =>
-  simp only [freshGenerator_inv_toWord, List.cons_append, freshGenerator_toWord,
-  List.singleton_append, ne_eq, List.cons.injEq, not_and]
-  intro eq'
-  -- TODO: proof here very similar to fresh_old_no_cancellation
-  exfalso
-  have ineq1 := maxIndex_subgroup_lt_freshIndex old x x_mem
-  have ineq2 : freshIndex old ≤ maxIndex x := by
-    apply head_maxIndex
-    rw [h, eq'.1]
-    trivial
-  omega
-
-theorem fresh_ineq''' (old : Finset A) (x y : A) (x_mem : x ∈ Subgroup.closure old) (y_mem : y ∈ Subgroup.closure old) (eq : x = y * freshGenerator old)
-: False := by
-have eq' : y⁻¹ * x = freshGenerator old := by
-  rw [eq]
-  simp
-apply freshGenerator_not_in_span
-rw [← eq']
-exact Subgroup.mul_mem _ (Subgroup.inv_mem _ y_mem) x_mem
 
 private abbrev x : Nat -> A := FreeGroup.of
 private abbrev x₁ := x 1
@@ -435,7 +264,7 @@ macro "triv_subgroup" : tactic => `(tactic|
     (rw [Subgroup.inv_mem_iff] ; apply b_old_subgroup)
     )
 
-def c := freshGenerator t.old
+noncomputable def c := freshGenerator t.old
 
 theorem c_not_old_subgroup : t.c ∉ Subgroup.closure t.old := by
   apply freshGenerator_not_in_span
@@ -446,11 +275,11 @@ theorem c_not_old : t.c ∉ t.old := by
   apply Subgroup.subset_closure
   simp [h]
 
-def e0 : TE := Finmap.singleton t.b t.c
+noncomputable def e0 : TE := Finmap.singleton t.b t.c
 
-def e1 : TE := helper (fun a' => t.c * a'⁻¹) (fun a' => a'⁻¹) (by intro x y ; simp) t.preimages_of_b
+noncomputable def e1 : TE := helper (fun a' => t.c * a'⁻¹) (fun a' => a'⁻¹) (by intro x y ; simp) t.preimages_of_b
 
-def e2 : TE := helper' (fun a' => (t.ps.E ⬝ (a'⁻¹)).iget * a' * t.c⁻¹) (fun a' => a' *  t.c⁻¹) t.s (by
+noncomputable def e2 : TE := helper' (fun a' => (t.ps.E ⬝ (a'⁻¹)).iget * a' * t.c⁻¹) (fun a' => a' *  t.c⁻¹) t.s (by
     simp only [mul_left_inj]
     intro a' a'_mem_s a'' a''_mem_s
     eapply t.ps.cond5 a' (t.s_Dom a'_mem_s) a'' (t.s_Dom a''_mem_s) ((t.ps.E ⬝ a'⁻¹).iget) _ ((t.ps.E ⬝ a''⁻¹).iget) _
@@ -503,7 +332,7 @@ use ⟨eq1, d', eqd'⟩
 rw [eqd']
 use eq2, eq3
 
-def newE : TE := t.ps.E ∪ t.e0 ∪ t.e1 ∪ t.e2
+noncomputable def newE : TE := t.ps.E ∪ t.e0 ∪ t.e1 ∪ t.e2
 
 theorem disjoint_old_e0 [b_not_in_dom : Fact (t.b ∉ t.ps.E)]: t.ps.E.Disjoint t.e0 := by
   intro x hold he0
@@ -624,7 +453,7 @@ theorem newE_eq_c : ∀ x, t.c ∈ t.newE ⬝ x → x = t.b := by
   rw [newE_spec] at e_x_c
   rcases e_x_c  with ⟨⟨old | e0⟩ | e1⟩ | e2
   · exfalso
-    apply freshGenerator_not_in_span (old := t.old)
+    apply freshGenerator_not_in_span (S := t.old)
     triv_subgroup
   · tauto
   · exfalso
@@ -632,7 +461,7 @@ theorem newE_eq_c : ∀ x, t.c ∈ t.newE ⬝ x → x = t.b := by
     apply_fun Inv.inv at eq'
     rw [inv_inv] at eq'
     rw [eq'] at e_a'_b
-    apply freshGenerator_not_in_span (old := t.old)
+    apply freshGenerator_not_in_span (S := t.old)
     triv_subgroup
   · exfalso
     rcases e2 with ⟨a', d', e_a'_b, e_a'_inv_d', eq, right⟩
@@ -786,13 +615,13 @@ theorem extension_cond4 : ∀ a ∈ t.newE, ∀ b ∈ t.newE ⬝ a, ∀ c ∈ t.
         simp [im_old _ _ _ old]
   · rcases e_y_z with ⟨⟨old' | e0'⟩ | e1'⟩ | e2'
     · exfalso
-      apply freshGenerator_not_in_span (old := t.old)
+      apply freshGenerator_not_in_span (S := t.old)
       unfold c at e0
       rw [← e0.2 ]
       apply Subgroup.subset_closure
       simp [dom_old' _ _ _ old']
     · exfalso
-      apply freshGenerator_not_in_span (old := t.old)
+      apply freshGenerator_not_in_span (S := t.old)
       unfold c at *
       rw [← e0.2, e0'.1]
       apply Subgroup.subset_closure
@@ -942,7 +771,7 @@ theorem extension_cond5_old_new2 (t : ExtensionTask) (a' : A) (a'' : A)
   (new3 : t.c ∈ t.newE ⬝ a''⁻¹⁻¹) : False := by
   rw [inv_inv] at *
   rw [← eq1, ← old2] at new3
-  apply freshGenerator_not_in_span
+  apply freshGenerator_not_in_span (α := Nat)
   apply im_old_subgroup
   exact new3
 
@@ -1000,7 +829,7 @@ theorem extension_cond6 (a : A) : a ∈ t.newE → a⁻¹ ∈ t.newE ⬝ a → a
   rcases eq with ⟨⟨old | e0⟩ | e1⟩ | e2
   · apply t.ps.cond6 a (TE_lookup_mem' old) old
   · exfalso
-    apply freshGenerator_not_in_span (old := t.old)
+    apply freshGenerator_not_in_span (S := t.old)
     unfold c at *
     rw [← e0.2, e0.1]
     simp [b_old_subgroup]
@@ -1040,7 +869,7 @@ theorem extension_cond7  (a : A) :
       · assumption
     · rw [e0'.1, newE_b, ← old.2] at eq_e_a_e_a'
       exfalso
-      apply freshGenerator_not_in_span (old := t.old)
+      apply freshGenerator_not_in_span (S := t.old)
       apply im_old_subgroup eq_e_a_e_a'
     · rcases e1' with ⟨a'', e_a''_b, eq', eq_a''_inv_d⟩
       intro eq
@@ -1109,7 +938,7 @@ theorem extension_cond8  (a : A) : a ∈ t.newE → 1 ∈ t.newE ⬝ a → a = 1
     · apply dom_old'_subgroup e_a'_b
     · apply Subgroup.one_mem
 
-def extension : PartialSolution := by
+noncomputable def extension : PartialSolution := by
   use t.newE
   case fId =>
     rw [newE_spec]
@@ -1132,12 +961,12 @@ namespace ExtensionTask
 
 variable (t : ExtensionTask)
 
-def newE2 := t.ps.E ∪ (Finmap.singleton t.c (t.b*t.c))
+noncomputable def newE2 := t.ps.E ∪ (Finmap.singleton t.c (t.b*t.c))
 
 theorem old_ne_c (x : A) : x ∈ t.old → x ≠ t.c := by
   intro mem h
   rw [h] at mem
-  apply freshGenerator_not_in_span (old := t.old)
+  apply freshGenerator_not_in_span (S := t.old)
   apply Subgroup.subset_closure
   apply mem
 
@@ -1186,13 +1015,13 @@ theorem newE2_dom_and_inv {x y z :A } : y ∈ t.newE2 ⬝ x → z ∈ t.newE2 �
   rintro (old | new) (old' | new')
   · tauto
   · exfalso
-    apply freshGenerator_not_in_span (old := t.old)
+    apply freshGenerator_not_in_span (S := t.old)
     unfold c at new'
     rw [← new'.1]
     simp only [inv_mem_iff]
     triv_subgroup
   · exfalso
-    apply freshGenerator_not_in_span (old := t.old)
+    apply freshGenerator_not_in_span (S := t.old)
     unfold c at new
     rw [← new.1]
     triv_subgroup
@@ -1200,7 +1029,7 @@ theorem newE2_dom_and_inv {x y z :A } : y ∈ t.newE2 ⬝ x → z ∈ t.newE2 �
     have : t.c * 1 = 1 * (t.c)⁻¹ := by nth_rw 1 [← new.1] ; rw [← new'.1] ; simp
     apply fresh_ineq'' (eq:= this.symm) <;> apply Subgroup.one_mem
 
-def extension2 [b_ne_1 : Fact (t.b ≠ 1)] : PartialSolution where
+noncomputable def extension2 [b_ne_1 : Fact (t.b ≠ 1)] : PartialSolution where
   E := t.newE2
   fId := by
     rw [newE2_spec]
@@ -1270,7 +1099,7 @@ Finset.card {c ∈ t.ps.E.keys | (t.b*c) ∈ t.ps.E ⬝ c } + 1 := by
     · rintro (old | new)
       · assumption
       · exfalso
-        apply freshGenerator_not_in_span (old := t.old)
+        apply freshGenerator_not_in_span (S := t.old)
         unfold c at new
         rw [← new.1]
         rw [Finmap.mem_keys] at x_mem
