@@ -9,15 +9,21 @@ Describe various automated theorem provers deployed in the project, with some st
     \item Vampire
     \item More elementary substitutions
     \item egg
-    \item duper
+    \item \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/479643838}{duper}
 \end{itemize}
 
-Any comparative study of semi-automated methods with fully automated ones? In principle, the semi-automated approach could be more automated using a script or "agent" to call various theorem provers. See this discussion.
+Any comparative study of semi-automated methods with fully automated ones? In principle, the semi-automated approach could be more automated using a script or "agent" to call various theorem provers. See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/A.20magma.20of.20order.20.3C.2013.20-.20for.20Equation2531.3F}{this discussion}.
 
-Draw upon the discussion here on the various ways of integrating ATPs with Lean. This project primarily used the least integrated approach, "Option 3", as it was fastest and required no dependencies on the other contributors, but it also has drawbacks.
+Draw upon the discussion \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Future.20of.20Using.20ATPs}{here} on the various ways of integrating ATPs with Lean. This project primarily used the least integrated approach, "Option 3", as it was fastest and required no dependencies on the other contributors, but it also has drawbacks.
 
-Note: when evaluating the performance of any particular automated implication tool, we should do a fresh run on the entire base of implications, rather than rely on whatever implications produced by the tool remain in the Lean codebase by the time of writing the paper. This is because (a) many of the previous runs focused only on those implications that were not already ruled out by earlier contributions, and (b) some pruning has been applied subsequent to the initial runs to improve compilation performance. Of course, these runs would not need to be added to the (presumably optimized) codebase at that point, but would be purely for the purpose of gathering performance statistics. More discussion here.
+Note: when evaluating the performance of any particular automated implication tool, we should do a fresh run on the entire base of implications, rather than rely on whatever implications produced by the tool remain in the Lean codebase by the time of writing the paper. This is because (a) many of the previous runs focused only on those implications that were not already ruled out by earlier contributions, and (b) some pruning has been applied subsequent to the initial runs to improve compilation performance. Of course, these runs would not need to be added to the (presumably optimized) codebase at that point, but would be purely for the purpose of gathering performance statistics. More discussion \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/RECORDS.20REQUEST.3A.20data.20and.20performance.20automated.20run.20metrics}{here}.
 
-See this discussion on the value of using different ATPs and setting run time parameters etc. at different values.
+See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1516.20-.3E.20255/near/481547543}{this discussion} on the value of using different ATPs and setting run time parameters etc. at different values.
 
-Make a note of the possible alternate strategy to prove implications outlined here.
+What are the hardest implications to prove?  See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/What.20are.20the.20hardest.20positive.20implications.20for.20an.20ATP.3F}{this discussion}.
+
+Make a note of the possible alternate strategy to prove implications outlined \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Ideas.20for.20unknown.20implications}{here}.
+
+Talk about how ATPs have been important to guide counterexample strategy by testing what simplifying hypotheses can be safely added without eliminating the possibility of a refutation.
+
+Framing: as we likely do not have experts in carefully evaluating and benchmarking ATP performance, do not present our work as definitively establishing performance of ATPs on ETP problems; instead, present our work as a more informal ``field report'' documenting our experiences but not necessarily drawing firm conclusions.  To quote from Jose Brox: ``center on what we can contribute to novice ATP users, algebra (or perhaps general) researchers who, as some of us at the start of this project, want to use ATPs for the first time on problems that need them, and may be at a loss of what to use, what parameters may be important... in summary, what may make a difference. Here we can be more informal, throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''.  Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.

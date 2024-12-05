@@ -8,7 +8,7 @@ Many proofs or refutations of implications (or equivalences) between two equatio
 Many equational laws $E'$ can be formally deduced from a given law $E$ by applying the Lean `rw' tactic to rewrite $E'$ repeatedly by some forward or backward application of $E$ applied to arguments that match some portion of $E$.  For instance, the commutative law \eqref{eq43} clearly implies $\x \op (\y \op \z) \formaleq (\y \op \z) \op \x$ \eqref{eq4531}
 by a single such rewrite.  A brute force application of such rewrite methods is already able to directly generate about $15,000$ such implications, including many equivalences to the singleton law \eqref{eq2} and the constant law \eqref{eq46}.  After applying transitive closure, this generates about four million further such implications.
 
-A simple observation that already generates many equivalences is that any equation of the form $\x \formaleq f(\y,\z,\dots)$ necessarily is equivalent to the trivial law $\x \formaleq \y$; similarly, an equation of the form $f(\x,\y) \formaleq g(\z,\w,\dots)$ implies $f(\x,\y) \formaleq f(\x',\y')$; and so forth.
+A simple observation that already generates many equivalences is that any equation of the form $\x \formaleq f(\y,\z,\dots)$ necessarily is equivalent to the trivial law $\x \formaleq \y$; similarly, an equation of the form $f(\x,\y) \formaleq g(\z,\w,\dots)$ implies $f(\x,\y) \formaleq f(\x',\y')$; and so forth. \note{Give some stats on how effective this is.}
 
 \subsection{Matching invariants}
 
@@ -48,6 +48,9 @@ has matching invariants $e_x = 3e_x$ in the $n=2$ case, and hence does not imply
 
 \note{Give some statistics on how many refutations can be established by these methods.}
 
+\begin{remark}  One can also obtain matching invariants from the free objects associated to theories that involve additional operations beyond the magma operation $\op$, such as an identity element or an inverse operation.  We leave the precise generalization of \Cref{free-inv} to such theories to the interested reader.
+\end{remark}
+
 \subsection{Confluence}
 
 \note{Define a confluent law and give some examples.}
@@ -71,28 +74,28 @@ An illustrative example is the law \eqref{eq854} depicted in Figure \ref{fig:854
 \begin{figure}
   \centering
   \includegraphics[width=0.85\textwidth]{854-like.png}
-  \caption{Equations similar to \eqref{eq854} that are of the form \eqref{left-absorptive} (possibly involving a fourth indeterminate $\w$) and imply \eqref{eq378}.  For brevity, 70 equations equivalent to \eqref{eq4} have been omitted.}
+  \caption{Equations similar to \eqref{eq854} that are of the form \Cref{left-absorptive} (possibly involving a fourth indeterminate $\w$) and imply \eqref{eq378}.  For brevity, 70 equations equivalent to \eqref{eq4} have been omitted.}
   \label{fig:854-like}
   \end{figure}
 
 
-\begin{lemma}\label{854} Equation \eqref{eq854} is of the form \eqref{left-absorptive} and implies \eqref{eq378}.
+\begin{lemma}\label{854} Equation \eqref{eq854} is of the form \Cref{left-absorptive} and implies \eqref{eq378}.
 \end{lemma}
 
-\begin{proof}  Clearly we have \eqref{left-absorptive} with $f(\x,\y,\z) \coloneqq (\y \op \z) \op (\x \op \z)$.  From \eqref{left-absorptive} we have in any magma obeying \eqref{eq854} that
+\begin{proof}  Clearly we have \Cref{left-absorptive} with $f(\x,\y,\z) \coloneqq (\y \op \z) \op (\x \op \z)$.  From \Cref{left-absorptive} we have in any magma obeying \eqref{eq854} that
 $$x = x \op f(x,S^2 x,x) = x \op S(x \op S^2 x) = x \op S(x \op f(x,x,x)) = x \op Sx.$$
-This implies from a further application of \eqref{left-absorptive} that
+This implies from a further application of \Cref{left-absorptive} that
 $$ y = y \op f(y,x,y) = (y \op Sy) \op ((x \op y) \op Sy) = f(x \op y, y, Sy)$$
-and hence by \eqref{left-absorptive} again
+and hence by \Cref{left-absorptive} again
 $$ (x \op y) \op y = x \op y$$
 giving \eqref{eq378}.
 \end{proof}
 
-Let $E$ be a law of the form \eqref{left-absorptive} that implies \eqref{eq378}. We define a directed graph $\to_E$ on words in $M_X$ by declaring $w' \to_E w$ if $w \sim_E w'' \op w'$ for some $w' \in M_X$.  By \eqref{eq378} (applied to the quotient magma $M_{X,E} = M_X/\sim_E$), this is equivalent to requiring that $w \sim_E w \op w'$. In particular, from \eqref{left-absorptive} we have $f(x,y,z) \to x$ for all $x,y,z$.  Furthermore, the relation $\to_E$ factors through $\sim_E$: if $w \sim_E \tilde w$ and $w' \sim_E \tilde w'$, then $w' \to_E w$ if and only if $\tilde w \to_E \tilde w$.
+Let $E$ be a law of the form \Cref{left-absorptive} that implies \eqref{eq378}. We define a directed graph $\to_E$ on words in $M_X$ by declaring $w' \to_E w$ if $w \sim_E w'' \op w'$ for some $w' \in M_X$.  By \eqref{eq378} (applied to the quotient magma $M_{X,E} = M_X/\sim_E$), this is equivalent to requiring that $w \sim_E w \op w'$. In particular, from \Cref{left-absorptive} we have $f(x,y,z) \to x$ for all $x,y,z$.  Furthermore, the relation $\to_E$ factors through $\sim_E$: if $w \sim_E \tilde w$ and $w' \sim_E \tilde w'$, then $w' \to_E w$ if and only if $\tilde w \to_E \tilde w$.
 
 Call a word $w \in M_X$ \emph{irreducible} if it is not of the form $w = w_1 \op w_2$ with $w_2 \to_E w_1$.  We can partially understand the equivalence relation $\sim_E$ on irreducible words:
 
-\begin{theorem}[Description of equivalence]\label{irred-desc}  Let $E$ be an equation of the form \eqref{left-absorptive}.  Let $w$ be an irreducible word, and let $w'$ be a word with $w \sim_E w'$.
+\begin{theorem}[Description of equivalence]\label{irred-desc}  Let $E$ be an equation of the form \Cref{left-absorptive}.  Let $w$ be an irreducible word, and let $w'$ be a word with $w \sim_E w'$.
   \begin{itemize}
     \item[(i)] If $w$ is a product $w = w_1 \op w_2$, then $w'$ takes the form
 $$ w' = (((w'_1 \op w'_2) \op v_1) \op \dots \op v_n)$$
@@ -112,7 +115,7 @@ In particular, $v_{i+1} \to_E x_i$.
 Conversely, any word of the above forms is equivalent to $w$.
 \end{theorem}
 
-\begin{proof}  We just verify claim (i), as claim (ii) is similar.  The converse direction is clear from \eqref{left-absorptive} (after quotienting by $\sim_E$), so it suffices to prove the forward claim. By the Birkhoff completeness theorem, it suffices to prove that the class of words described by (i) is preserved by any term rewriting operation, in which a term in the word is replaced by an equivalent term using \eqref{left-absorptive}.  Clearly the term being rewritten is in $w'_1$ or $w'_2$ then the form of the word is preserved, and similarly if the term being rewritten is in one of the $v_i$.  The only remaining case is if we are rewriting a term of the form
+\begin{proof}  We just verify claim (i), as claim (ii) is similar.  The converse direction is clear from \Cref{left-absorptive} (after quotienting by $\sim_E$), so it suffices to prove the forward claim. By the Birkhoff completeness theorem, it suffices to prove that the class of words described by (i) is preserved by any term rewriting operation, in which a term in the word is replaced by an equivalent term using \Cref{left-absorptive}.  Clearly the term being rewritten is in $w'_1$ or $w'_2$ then the form of the word is preserved, and similarly if the term being rewritten is in one of the $v_i$.  The only remaining case is if we are rewriting a term of the form
 $$ x_i = (((w'_1 \op w'_2) \op v_1) \op \dots \op v_i).$$
 If $i>0$ we can rewrite this term down to $x_{i-1}$, and this still preserves the required form (decrementing $n$ by one).  If $i=0$ then we cannot perform such a rewriting because of the irreducibility of $w_1 \op w_2$ and hence $w'_1 \op w'_2$.  Finally, we can rewrite $x_i$ to $x_i \op v$ where $v$ is of the form
 $$ v_i = f(x_i,y,z),$$
@@ -138,9 +141,9 @@ Suppose this were not the case, then by \Cref{unique factorization} one of the f
 \item[(ii)] $(y \op (x \op y)) \to_{E854} x$.
 \item[(iii)] $y \op (x \op y) \sim_{E854} y$.
 \end{itemize}
-If (i) holds, then we have $x \op y = x$ must hold in $M_X/\sim_E$, hence \Cref{eq854} would imply \Cref{eq4}.  However, it is possible to refute this implication by a finite counterexample.
+If (i) holds, then we have $x \op y = x$ must hold in $M_X/\sim_E$, hence \eqref{eq854} would imply \eqref{eq4}.  However, it is possible to refute this implication by a finite counterexample.
 
-Similarly, if (iii) held, then \Cref{eq854} would have to imply \Cref{eq10}, but this can also be refuted in a finite magma.
+Similarly, if (iii) held, then \eqref{eq854} would have to imply \eqref{eq10}, but this can also be refuted in a finite magma.
 
 Finally, if (ii) held, then the claim
 $$  x \op y \sim x \op (y \op (x \op y))$$
@@ -148,6 +151,3 @@ to refute simplifies to
 $$  x \op y \sim x$$
 and we are back to (i), which we already know not to be the case.
 \end{proof}
-
-
-\note{Discuss 854 example}

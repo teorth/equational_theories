@@ -15,7 +15,7 @@ import equational_theories.FactsSyntax
 
 namespace Eq1518
 
-abbrev A := FreeGroup Nat
+private abbrev A := FreeGroup Nat
 
 /- Follows https://leanprover.zulipchat.com/user_uploads/3121/euHPpWREgokUUJA6B_2UtHGs/Equation1518-corrected.pdf
 -/
@@ -34,8 +34,8 @@ abbrev PreExtension := A → Set A
 
 abbrev fromList (S : List (A × A)) : PreExtension := fun a => {b | (a, b) ∈ S}
 
-def E0List : List (A × A) := [(1, x₁), (x₁, x₂), (x₂ * x₁⁻¹,x₁⁻¹), (x₁⁻¹, 1),
-  (x₂ * x₁⁻¹ * x₁⁻¹,x₁⁻¹ * x₁⁻¹), (x₁^2,x₃), (x₃*x₁^(-2 : ℤ), x₁⁻¹)]
+def E0List : List (A × A) := [(1, x₁), (x₁, x₂), (x₂ * x₁⁻¹, x₁⁻¹), (x₁⁻¹, 1),
+  (x₂ * x₁⁻¹ * x₁⁻¹, x₁⁻¹ * x₁⁻¹), (x₁^2, x₃), (x₃ * x₁^(-2 : ℤ), x₁⁻¹)]
 
 abbrev E0 := fromList E0List
 
