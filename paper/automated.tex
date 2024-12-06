@@ -79,7 +79,7 @@ In general, we've observed that there are multiple ways of integrating decisions
 
 This project primarily used the least integrated approach, (Option \ref{external}), as it was fastest and required no dependencies on the other contributors.
 This also has drawbacks: primarily, while the upfront effort is lower, the effort to use is higher than with a tactic, once the tactic is developed.
-It also makes integration with larger code bases more difficult: in this project the (mathematical) dependencies were by design very minimal, Magmas are simple, and we built our own definitions for them.
+It also makes integration with larger code bases more difficult: in this project the (mathematical) dependencies were by design very minimal, magmas are simple, and we built our own definitions for them.
 For example, integration with the typeclass system become much more difficult when working with more complex mathematical objects that build upon many layers of structure.
 
 \paragraph{Semi-Automated Counterexample Guidance}
@@ -87,7 +87,7 @@ For example, integration with the typeclass system become much more difficult wh
 Another use of ATPs has been in a semi-automatic fashion, to find counter-examples.
 The general strategy was to use ATPs to find counter-examples to implications by building magmas iteratively.
 If we want to build a counterexample to $l \vdash l'$, we want to build construct a magma where $l$ holds but $l'$ doesn't.
-In this method, we iteratively strengthen a construction with additional hypotheses, and use the ATP to check wether these hypotheses are not too strong (to imply $l'$) or unsound (to disallow $l$).
+In this method, we iteratively strengthen a construction with additional hypotheses, and use the ATP to check whether these hypotheses are not too strong (to imply $l'$) or unsound (to disallow $l$).
 
 TODO: this should also be expanded more, at least with references to some of the constructions in other chapters.
 
