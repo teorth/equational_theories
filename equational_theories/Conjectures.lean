@@ -34,25 +34,7 @@ conjecture Finite.Equation467_implies_Equation2847 (G : Type) [Magma G] [Finite 
 @[equational_result]
 conjecture Finite.Equation1133_implies_Equation1167 (G : Type) [Magma G] [Finite G] (_ : Equation1133 G) : Equation1167 G
 @[equational_result]
-conjecture Finite.Equation1167_implies_Equation1055 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1055 G
-@[equational_result]
 conjecture Finite.Equation1167_implies_Equation1096 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1096 G
-@[equational_result]
-conjecture Finite.Equation1167_implies_Equation1112 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1112 G
-@[equational_result]
-conjecture Finite.Equation1167_implies_Equation1133 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1133 G
-@[equational_result]
-conjecture Finite.Equation1167_implies_Equation1721 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1721 G
-@[equational_result]
-conjecture Finite.Equation1167_implies_Equation1897 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1897 G
-@[equational_result]
-conjecture Finite.Equation1167_implies_Equation1668 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1668 G
-@[equational_result]
-conjecture Finite.Equation1167_implies_Equation1701 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1701 G
-@[equational_result]
-conjecture Finite.Equation1167_implies_Equation1958 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation1958 G
-@[equational_result]
-conjecture Finite.Equation1167_implies_Equation4615 (G : Type) [Magma G] [Finite G] (_ : Equation1167 G) : Equation4615 G
 @[equational_result]
 conjecture Finite.Equation1441_implies_Equation4067 (G : Type) [Magma G] [Finite G] (_ : Equation1441 G) : Equation4067 G
 @[equational_result]
@@ -70,8 +52,6 @@ conjecture Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite 
 /--  https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/485020474  -/
 @[equational_result]
 conjecture Equation1076_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [1076] [2294, 4435]
-@[equational_result]
-conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [1516] [1489]
 
 
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/485736949.2E01 -/
