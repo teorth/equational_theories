@@ -31,7 +31,7 @@ This is the case for Vampire~\cite{DBLP:conf/cav/KovacsV13}, and the paper also 
 See also~\cite{DBLP:journals/cacm/BentkampBNTVW23} for a gentler exposition.
 The core idea of these provers is that they take a set of assumptions and conjecture, expressed in --- say --- first-order logic.
 They take the conjecture and negate it, adding this negation to the set of assumptions, which are all put in some normal form.
-The ATP then try to refute the negation by applying rules of the underlying calculus, until they find a proof of false (a contradiction).
+The ATP then tries to refute the negation by applying rules of the underlying calculus, until they find a proof of false (a contradiction).
 In this case, the conjecture was (classically) true, and the ATP has found a proof by contradiction, often called a ``refutation'' or ``saturation'' proof.
 
 The underlying calculus varies from system to system, but they often have a variant of a resolution clause, a clause of a form:
