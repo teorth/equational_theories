@@ -1,4 +1,4 @@
-name: Compile blueprint
+name: Compile blueprint and paper
 
 on:
   push:
@@ -19,6 +19,7 @@ on:
       - 'lean-toolchain'
       - 'lakefile.toml'
       - 'lake-manifest.json'
+      - 'paper/**'
   pull_request:
     branches:
       - main
@@ -38,6 +39,7 @@ on:
       - 'lean-toolchain'
       - 'lakefile.toml'
       - 'lake-manifest.json'
+      - 'paper/**'
   workflow_dispatch: # Allow manual triggering of the workflow from the GitHub Actions interface
 
 # Cancel previous runs if a new commit is pushed to the same PR or branch
@@ -128,11 +130,19 @@ jobs:
             pip install --upgrade pip requests wheel
             pip install pygraphviz --global-option=build_ext --global-option="-L/usr/lib/graphviz/" --global-option="-R/usr/lib/graphviz/"
             pip install leanblueprint
+
+            # Build the blueprint and copy it to `home_page`
             leanblueprint pdf
             mkdir -p home_page
             cp blueprint/print/print.pdf home_page/blueprint.pdf
             leanblueprint web
             cp -r blueprint/web home_page/blueprint
+
+            # Compile the paper and copy it to `home_page`
+            cd paper
+            latexmk -pdf main.tex
+            cd ..
+            cp paper/main.pdf home_page/paper.pdf
 
       - name: Check declarations mentioned in the blueprint exist in Lean code
         run: |
@@ -213,7 +223,7 @@ jobs:
           JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: JEKYLL_ENV=production bundle exec jekyll build  # Note this will also copy the blueprint and API doc into home_page/_site
 
-      - name: "Upload website (API documentation, blueprint and any home page)"
+      - name: "Upload website (API documentation, blueprint, paper and any home page)"
         if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v3
         with:
