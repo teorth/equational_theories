@@ -12,7 +12,7 @@ Tactics in Lean, on the other hand, are meta-programs~\cite{DBLP:journals/pacmpl
 In other words, tactics are programs that operate at the meta-level of Lean code: they essentially take in Lean code as input and produce Lean code as output.
 In this manner, they look like another keyword in the language, and are tightly integrated by producing proofs directly.
 Under the hood, they can implement essentially anything, from syntactic sugar to full decision procedures.
-The \texttt{duper} tactic~\cite{DBLP:conf/itp/CluneQBA24}, for example, implements a superposition calculus, similar Vampire's, but for dependent types --- Lean's underlying logical foundation.
+The \texttt{duper} tactic~\cite{DBLP:conf/itp/CluneQBA24}, for example, implements a superposition calculus, similar to Vampire's, but for dependent types --- Lean's underlying logical foundation.
 
 In the rest of this section we describe the different proof automation techniques and ATPs/tactics we used.
 We first discuss the different proof methods used: primarily superposition and equational reasoning, we then discuss the integration in Lean, and finally we report some basic empirical results from this project.
