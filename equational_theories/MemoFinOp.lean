@@ -3,9 +3,12 @@ import Lean
 /-!
 This file defines the macro `memoFinOp` that memoizes a function `f : Fin n → Fin n → Fin n`; see
 its docstring for more info.
+
+The `finOpTable` macro is intended to replace `memoFinOp` as it's faster for large tables, but
+FinitePoly still requires the `memoFinOp` style.
 -/
 
-namespace MemeFinOp
+namespace MemoFinOp
 
 open Lean Meta Elab Term
 
@@ -80,4 +83,53 @@ example :
     memoFinOp f = f := by
   funext a b; revert a b; decide
 
-end MemeFinOp
+-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/486226698
+
+-- assume each nat is ≤ 256
+def rowToNat (row : List Nat) : Nat :=
+  match row with
+  | [] => 0
+  | n :: ns => n + 256 * rowToNat ns
+
+def extract (matrix : List Nat) (row col : Nat) : Nat :=
+  255 &&& ((List.get! matrix row) >>> (col * 8))
+
+def IsTable (n : Nat) (matrix : List Nat) : Prop :=
+  ∀ x y : Fin n, extract matrix x y < n
+
+instance decidableIsTable {n matrix} : Decidable (IsTable n matrix) := by
+  unfold IsTable
+  infer_instance
+
+def extractWrapper (n : Nat) (matrix : List Nat) (h : IsTable n matrix) (row col : Fin n) : Fin n :=
+  ⟨extract matrix row.val col.val, h row col⟩
+
+open Std.Internal.Parsec
+open Std.Internal.Parsec.String
+
+def parseArray {α : Type} (p : Parser α) : Parser (List α) := do
+  ws *> skipChar '['
+  let arr ← many (ws *> p <* optional (ws *> skipChar ','))
+  ws *> skipChar ']'
+  return arr.toList
+
+def parseData (data : String) : IO (List (List Nat)) := do
+  match parseArray (parseArray digits) (String.mkIterator data) with
+  | .success _ v => return v
+  | .error _ err => throw <| IO.userError err
+
+/-
+`finOpTable "[[0,1],[1,0]"` returns a method to compute the operation encoded by a given table, in
+a method specifically intended to be efficient for large tables.
+-/
+elab "finOpTable" str:str :term => do
+  let matrix ← parseData str.getString
+  guard <| matrix.length < 256
+  guard <| matrix.all (·.length == matrix.length)
+  let table := toExpr (matrix.map rowToNat)
+  let istable := mkApp2 (mkConst ``IsTable) (mkLit (.natVal matrix.length)) table
+  let mv ← mkFreshExprMVar istable
+  discard <| withCurrHeartbeats <| Tactic.run mv.mvarId! do Lean.Elab.Tactic.evalTactic (← `(tactic| decide!))
+  return mkApp3 (mkConst ``extractWrapper) (mkLit (.natVal matrix.length)) table (← instantiateMVars mv)
+
+end MemoFinOp
