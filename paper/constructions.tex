@@ -13,8 +13,23 @@ For specific refutations, it was sometimes possible to locate a finite example w
 
 \note{Discuss this further, perhaps give an example, or refer to the ATP section.  See also the discussion threads ``Counterexamples by enumerating words in quotient magmas'' and ``Using SAT solvers for model generation'' threads (sorry, LaTeX is choking on the URLs for some reason).}
 
-It is a result of Kisielewicz \cite{Kisielewicz} that every law $En$ with $n \leq 4692$ is either equivalent to the singleton law $E2$, or else has a non-trivial finite model.  In fact our brute force search revealed that in the latter case there is always a model of order $2 \leq n \leq 5$, with the lone exception of \eqref{eq1286} (and its dual \eqref{eq2301}), for which the smallest non-trivial finite model was of order $7$, as presented in \Cref{1286-ex} below.
-
+It is a result of Kisielewicz \cite{Kisielewicz} that every law $En$ with $n \leq 4694$ is either equivalent to the singleton law $E2$, or else has a non-trivial finite model.  In fact our brute force search revealed that in the latter case there is always a model of order $2 \leq n \leq 5$, with the lone exception of \eqref{eq1286} (and its dual \eqref{eq2301}), for which the smallest non-trivial finite model was of order $7$, as presented in \Cref{1286-ex} below.  In fact, most of the 4694 laws either only had trivial models, or had a order 2 model, as shown in \Cref{size-table}.
+\begin{table}
+\centering
+\begin{tabular}{ll}
+  \hline
+Order of smallest non-trivial model & Number of laws \\
+\hline
+Trivial only & $1496$ \\
+$2$ & $3136$ \\
+$3$ & $32$ \\
+$4$ & $14$ \\
+$5$ & $14$ \\
+$7$ & $2$\\
+\hline
+\end{tabular}
+\caption{Number of laws of order at most $4$ whose smallest non-trivial model is of a given size.}\label{size-table}
+\end{table}
 \subsection{Linear models}\label{linear-sec}
 
 A fruitful source of counterexamples is the class of \emph{linear magmas}, where the carrier $M$ is a ring (which may be commutative or non-commutative, finite or infinite), and the operation $\op$ is given by $x \op y = ax + by$ for some coefficients $a,b \in M$; one can also generalize this slightly to \emph{affine magmas}, in which the operation is given by $x \op y = ax + by + c$, but for simplicity we shall focus on linear magmas here.  It is easy to see that in a linear magma, any word $w(x_1,\dots,x_n)$ of $n$ indeterminates also takes the linear form
@@ -255,6 +270,7 @@ for some function $f \colon G \times G \to M$.  If $M$ and $G$ already obey a la
 for all $x,y \in \F_5$, and obeys \eqref{eq1629} if $f$ obeys the cocycle equation
 $$ f(2x,0) - f(2x,2x) = 0$$
 for all $x \in \F_5$.  A routine symbolic algebra package computation reveals that the space of $f$ that obeys the former equation is a six-dimensional vector space over $\F_5$, which is not contained in the solution space of the latter equation, giving the claim.
+In fact, since these equations preserve the space of homogeneous polynomials of a fixed degree, one can use linear algebra to locate an example that is a homogeneous polynomial; one explicit choice is $$f(x,y) = y^5 +xy^4 + x^2y^3 +3x^3 y^2 + 3x^4 y_1$$.
 \end{proof}
 
 It may be of interest to develop this theory of ``magma cohomology'' further, for instance by defining higher order magma cohomology groups.

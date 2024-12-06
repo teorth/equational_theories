@@ -1,4 +1,4 @@
-name: Compile blueprint
+name: Compile blueprint and paper
 
 on:
   push:
@@ -12,12 +12,14 @@ on:
       - 'home_page/**'
       - 'tools/fme/**'
       - '**/generate_dashboard.py'
+      - '**/generate_dashboard_graph_info.rb'
       - '**/generate_equation_implication_js.py'
       - '**/generate_equation_explorer_graph.py'
       - '**/generate_graphiti_data.rb'
       - 'lean-toolchain'
       - 'lakefile.toml'
       - 'lake-manifest.json'
+      - 'paper/**'
   pull_request:
     branches:
       - main
@@ -29,6 +31,7 @@ on:
       - 'home_page/**'
       - 'tools/fme/**'
       - '**/generate_dashboard.py'
+      - '**/generate_dashboard_graph_info.rb'
       - '**/generate_equation_implication_js.py'
       - '**/generate_equation_explorer_graph.py'
       - '**/generate_graphiti_data.rb'
@@ -36,6 +39,7 @@ on:
       - 'lean-toolchain'
       - 'lakefile.toml'
       - 'lake-manifest.json'
+      - 'paper/**'
   workflow_dispatch: # Allow manual triggering of the workflow from the GitHub Actions interface
 
 # Cancel previous runs if a new commit is pushed to the same PR or branch
@@ -126,11 +130,19 @@ jobs:
             pip install --upgrade pip requests wheel
             pip install pygraphviz --global-option=build_ext --global-option="-L/usr/lib/graphviz/" --global-option="-R/usr/lib/graphviz/"
             pip install leanblueprint
+
+            # Build the blueprint and copy it to `home_page`
             leanblueprint pdf
             mkdir -p home_page
             cp blueprint/print/print.pdf home_page/blueprint.pdf
             leanblueprint web
             cp -r blueprint/web home_page/blueprint
+
+            # Compile the paper and copy it to `home_page`
+            cd paper
+            latexmk -pdf main.tex
+            cd ..
+            cp paper/main.pdf home_page/paper.pdf
 
       - name: Check declarations mentioned in the blueprint exist in Lean code
         run: |
@@ -148,21 +160,39 @@ jobs:
           find home_page/docs -name "*.trace" -delete
           find home_page/docs -name "*.hash" -delete
 
+      - name: Generate graph data
+        run: |
+          mkdir /tmp/raw_data
+          ~/.elan/bin/lake exe extract_implications --json > /tmp/raw_data/general.json
+          ~/.elan/bin/lake exe extract_implications --json --closure --only-implications > /tmp/raw_data/general_implications_closure.json
+          ~/.elan/bin/lake exe extract_implications raw --full-entries > /tmp/raw_data/general_raw_full_entries.json
+          ~/.elan/bin/lake exe extract_implications outcomes > /tmp/raw_data/general_outcomes.json
+
+          ~/.elan/bin/lake exe extract_implications --json --finite-only > /tmp/raw_data/finite.json
+          ~/.elan/bin/lake exe extract_implications --json --finite-only --closure --only-implications > /tmp/raw_data/finite_implications_closure.json
+          ~/.elan/bin/lake exe extract_implications raw --full-entries --finite-only > /tmp/raw_data/finite_raw_full_entries.json
+          ~/.elan/bin/lake exe extract_implications outcomes --finite-only > /tmp/raw_data/finite_outcomes.json
+
+      - name: Generate compressed home_page/raw_data files
+        if: github.event_name == 'push'
+        run: |
+          mkdir home_page/raw_data
+          gzip -k /tmp/raw_data/*.json
+          mv /tmp/raw_data/*.gz home_page/raw_data
+
       - name: Generate home_page/dashboard.md
         run: |
           pip install pillow
-          python scripts/generate_dashboard.py
+          ruby scripts/generate_dashboard_graph_info.rb > /tmp/graph_info.md
+          python scripts/generate_dashboard.py /tmp/graph_info.md
+          python scripts/outcomes_to_image.py /tmp/raw_data/general_outcomes.json --out home_page/dashboard/outcomes.png
 
       - name: Generate equation explorer data
         run: |
           pip install markdown
           python scripts/generate_equation_implication_js.py > home_page/implications/implications.js
-          ~/.elan/bin/lake exe extract_implications outcomes > /tmp/out.json
-          ~/.elan/bin/lake exe extract_implications raw --full-entries > /tmp/out2.json
-          python scripts/generate_equation_explorer_graph.py /tmp/out.json /tmp/out2.json > home_page/implications/graph.json
-          ~/.elan/bin/lake exe extract_implications outcomes --finite-only > /tmp/out.finite.json
-          ~/.elan/bin/lake exe extract_implications raw --full-entries --finite-only > /tmp/out2.finite.json
-          python scripts/generate_equation_explorer_graph.py /tmp/out.finite.json /tmp/out2.finite.json > home_page/implications/finite_graph.json
+          python scripts/generate_equation_explorer_graph.py /tmp/raw_data/general_outcomes.json /tmp/raw_data/general_raw_full_entries.json > home_page/implications/graph.json
+          python scripts/generate_equation_explorer_graph.py /tmp/raw_data/finite_outcomes.json /tmp/raw_data/finite_raw_full_entries.json > home_page/implications/finite_graph.json
 
       - name: Generate the Finite Magma Explorer website
         run: |
@@ -182,11 +212,9 @@ jobs:
 
       - name: Generate home_page/graphiti/graph.json
         run: |
-          ~/.elan/bin/lake exe extract_implications --json --only-implications --closure > /tmp/implications.json
           ~/.elan/bin/lake exe extract_implications unknowns > /tmp/unknowns.json
-          ~/.elan/bin/lake exe extract_implications --json --only-implications --closure --finite-only > /tmp/implications.fin.json
           ~/.elan/bin/lake exe extract_implications unknowns --finite-only > /tmp/unknowns.fin.json
-          ruby scripts/generate_graphiti_data.rb data/duals.json /tmp/implications.json /tmp/unknowns.json /tmp/implications.fin.json /tmp/unknowns.fin.json > home_page/graphiti/graph.json
+          ruby scripts/generate_graphiti_data.rb data/duals.json /tmp/raw_data/general_implications_closure.json /tmp/unknowns.json /tmp/raw_data/finite_implications_closure.json /tmp/unknowns.fin.json > home_page/graphiti/graph.json
 
       - name: Build website using Jekyll
         if: github.event_name == 'push' && env.HOME_PAGE_EXISTS == 'true'
@@ -195,7 +223,7 @@ jobs:
           JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: JEKYLL_ENV=production bundle exec jekyll build  # Note this will also copy the blueprint and API doc into home_page/_site
 
-      - name: "Upload website (API documentation, blueprint and any home page)"
+      - name: "Upload website (API documentation, blueprint, paper and any home page)"
         if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v3
         with:
