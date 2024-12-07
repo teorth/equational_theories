@@ -13,11 +13,11 @@ This file is generated from the following operator table:
 set_option linter.unusedVariables false
 
 /-! The magma definition -/
-def «FinitePoly [[1,1,2,3],[1,1,2,3],[0,0,2,3],[2,1,2,3]]» : Magma (Fin 4) where
-  op := memoFinOp fun x y => [[1,1,2,3],[1,1,2,3],[0,0,2,3],[2,1,2,3]][x.val]![y.val]!
+def «All4x4Tables [[1,1,2,3],[1,1,2,3],[0,0,2,3],[2,1,2,3]]» : Magma (Fin 4) where
+  op := finOpTable "[[1,1,2,3],[1,1,2,3],[0,0,2,3],[2,1,2,3]]"
 
 /-! The facts -/
 @[equational_result]
-theorem «Facts from FinitePoly [[1,1,2,3],[1,1,2,3],[0,0,2,3],[2,1,2,3]]» :
+theorem «Facts from All4x4Tables [[1,1,2,3],[1,1,2,3],[0,0,2,3],[2,1,2,3]]» :
   ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [4209] [3887] :=
-    ⟨Fin 4, «FinitePoly [[1,1,2,3],[1,1,2,3],[0,0,2,3],[2,1,2,3]]», Finite.of_fintype _, by decideFin!⟩
+    ⟨Fin 4, «All4x4Tables [[1,1,2,3],[1,1,2,3],[0,0,2,3],[2,1,2,3]]», Finite.of_fintype _, by decideFin!⟩
