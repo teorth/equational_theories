@@ -3,10 +3,10 @@
 In this project we used proof automation in two ways: automated theorem provers (ATPs) and Lean tactics.
 ATPs are generally stand-alone tools that implement a (semi-) decision procedure for a given formal language or related set of languages.
 For example, Vampire~\cite{DBLP:conf/cav/KovacsV13} is an ATP focused primarily on first-order logic using superposition, which we used extensively in this project.
-ATPs are generally complex pieces of software, and can often have bugs.
-While we could choose to trust the results of an ATP, and in this project we don't do so either.
-Instead, we use proof certificates, which many ATPs can produce, to reconstruct a proof in Lean.
-This process depends on the proof certificate and the ATP, and we describe it for the main reconstruction we've done.
+
+ATPs are complex software that can contain bugs.
+Instead of trusting ATP output, we used proof certificates, which many ATPs can produce, to reconstruct a proof in Lean.
+This process depends on the proof certificate and the ATP, and we describe it for the main reconstruction we have done.
 
 Tactics in Lean, on the other hand, are meta-programs~\cite{DBLP:journals/pacmpl/EbnerURAM17} that builds proofs.
 In other words, tactics are programs that operate at the meta-level of Lean code: they essentially take in Lean code as input and produce Lean code as output.
@@ -27,7 +27,7 @@ We will describe our use of \texttt{aesop} more in Section~\ref{sec:proof-recons
 
 \paragraph{Saturation}
 Most of the ATPs we used extensively in this project rely primarily on saturation procedures in the superposition calculus.
-This is the case for Vampire~\cite{DBLP:conf/cav/KovacsV13}, and the paper also gives a more in-depth explanation of this.
+This is the case for Vampire~\cite{DBLP:conf/cav/KovacsV13}.
 See also~\cite{DBLP:journals/cacm/BentkampBNTVW23} for a gentler exposition.
 The core idea of these provers is that they take a set of assumptions and conjecture, expressed in --- say --- first-order logic.
 They take the conjecture and negate it, adding this negation to the set of assumptions, which are all put in some normal form.
@@ -69,7 +69,7 @@ For saturation proofs $\ldots$ (TODO: add explanations from \url{https://leanpro
 For equational proofs from external provers (e.g. MagmaEgg), we used also a simple version of reconstruction by (re-)constructing the proofs of equality from an explanation, using congruence lemmas from Lean.
 In the case of equational proofs from the \texttt{egg} tactic, these could be converted into a series of \texttt{calc} steps, documenting the explicit calculation, using the \texttt{calcify} tactic\footnote{\url{https://github.com/nomeata/lean-calcify/}}.
 
-In general, we've observed that there are multiple ways of integrating decisions procedures within Lean, with different levels of integration.
+In general, we have observed that there are multiple ways of integrating decisions procedures within Lean, with different levels of integration.
 \begin{enumerate}
     \item Using a Lean tactic, which calls a decision procedure written in Lean (like \texttt{aesop} or \texttt{duper}).
     \item Using a Lean tactic, which calls an existing (external) ATP and reconstructs a proof term from the ATP's result (like \texttt{bv\_decide} or \texttt{egg}).
@@ -80,7 +80,8 @@ In general, we've observed that there are multiple ways of integrating decisions
 This project primarily used the least integrated approach, (Option \ref{external}), as it was fastest and required no dependencies on the other contributors.
 This also has drawbacks: primarily, while the upfront effort is lower, the effort to use is higher than with a tactic, once the tactic is developed.
 It also makes integration with larger code bases more difficult: in this project the (mathematical) dependencies were by design very minimal, magmas are simple, and we built our own definitions for them.
-For example, integration with the typeclass system becomes much more difficult when working with more complex mathematical objects that build upon many layers of structure.
+For example, integration with the typeclass system becomes much more difficult when working with more complex mathematical objects that build on multiple, nested layers of structure in non-trivial ways.
+In that case, for example, tactics need to synthesize typeclass instances, deal with diamonds and different notions of equivalence~\cite{DBLP:conf/mkm/Wieser23}.
 
 \paragraph{Semi-Automated Counterexample Guidance}
 
@@ -91,7 +92,8 @@ In this method, we iteratively strengthen a construction with additional hypothe
 
 TODO: this should also be expanded more, at least with references to some of the constructions in other chapters.
 
-While equational theories can also be used in a semi-automatic fashion to prove equations~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24}, the positive implications in this project were all simple enough that we did not need a semi-automatic approach for them.
+While equational reasoning can also be used in a semi-automatic fashion to prove equations~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24}, the positive implications in the main implication graph of project were all simple enough that we did not need a semi-automatic approach for them.
+TODO: discuss guided search in the finite implications or the Higman-Neumann work Jose Brox has done.
 
 \subsection{Empirical Results}
 
