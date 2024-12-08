@@ -79,13 +79,13 @@ $x = y \op (z \op (x \op (y \op z)))$.
 \end{remark}
 
 \begin{remark}  One can interpret the above cohomology group in terms of a partial chain complex
-$$ 0 \to C^1(G,M) \stackrel{d}{\to} C^2(G,M) \stackrel{d_E}{\to} C^n(G,M)$$
-where the first coboundary map $d: C^1(G,M) \to C^2(G,M)$ (which does not depend on the equation $E$) is defined by the formula
-$$ df(x,y) := f(x \op y) - (f(x) \op f(y)) = f(x \op y) - af(x) - bf(y)$$
-and the second coboundary map $d_E: C^2(G,M) \to C^n(G,M)$ (which does depend on $E$) is defined by the formula
-$$ df(x_1,\dots,x_n) := \sum_{w_1 \op w_2 \leq w_{E,1}} Q_{w_{E,1},w_1 \op w_2}(a,b) f(w_1(x_1,\dots,x_n), w_2(x_1,\dots,x_n))$$
+$$ 0 \to C^0(G,M) \stackrel{d^0}{\to} C^1(G,M) \stackrel{d^1}{\to} C^2(G,M) \stackrel{d^2_E}{\to} C^n(G,M)$$
+where the zeroth coboundary map $d^0: C^0(G,M) \to C^1(G,M)$ is the zero map, the first coboundary map $d: C^1(G,M) \to C^2(G,M)$ (which does not depend on the equation $E$) is defined by the formula
+$$ d^1 vf(x,y) := f(x \op y) - (f(x) \op f(y)) = f(x \op y) - af(x) - bf(y)$$
+and the second coboundary map $d^2_E: C^2(G,M) \to C^n(G,M)$ (which does depend on $E$) is defined by the formula
+$$ d^2_E f(x_1,\dots,x_n) := \sum_{w_1 \op w_2 \leq w_{E,1}} Q_{w_{E,1},w_1 \op w_2}(a,b) f(w_1(x_1,\dots,x_n), w_2(x_1,\dots,x_n))$$
 $$ - \sum_{w_1 \op w_2 \leq w_{E,2}} Q_{w_{E,2},w_1 \op w_2}(a,b) f(w_1(x_1,\dots,x_n), w_2(x_1,\dots,x_n)).$$
-The fact that coboundaries are cocycles can then be rewritten as the chain complex relation $d_E d = 0$.  The group $H^2_E(G,M)$ is then just the second cohomology group of this chain complex.  The first cohomology group $H^1_E(G,M)$ is the kernel of $d$, or equivalently the abelian group of magma homomorphisms from the magma $G$ to the linear magma $M$.
+The fact that coboundaries are cocycles can then be rewritten as the chain complex relations $d^1 d^0=0$, $d^2_E d^1 = 0$.  The group $H^2_E(G,M)$ is then just the second cohomology group of this chain complex.  The first cohomology group $H^1_E(G,M)$ is the kernel of $d^1$, or equivalently the abelian group of magma homomorphisms from the magma $G$ to the linear magma $M$.
 
 When $E$ is the associative law, this partial chain complex can be extended to the usual group cohomology chain complex; however, it is not clear if any such extension exists for a general law $E$.
 \end{remark}
