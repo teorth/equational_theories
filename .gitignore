@@ -39,6 +39,7 @@ home_page/_site
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
+*.pdf
 ## Python
 **/venv
 **/.venv
