@@ -3,13 +3,14 @@ import Mathlib.Data.Finmap
 import Mathlib.Data.Finset.Max
 import Mathlib.Data.List.Basic
 import Mathlib.Data.Finset.Order
+import Mathlib.Data.Set.Finite.Basic
+import Mathlib.Order.CompletePartialOrder
 
+import equational_theories.FreshGenerator
+import equational_theories.Mathlib.Order.Greedy
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
 import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
-import equational_theories.FreshGenerator
-import equational_theories.Mathlib.Order.Greedy
-
 
 --import Mathlib.Tactic.Group --This breaks some instance, I haven't understood why exactly
 
@@ -1319,7 +1320,6 @@ theorem _root_.Equation1516_not_implies_Equation1489 : ∃ (G : Type) (_ : Magma
 -/
 
 @[equational_result]
-conjecture Equation1516_implies_Equation255 : (G : Type) [Magma G] [Finite G] (_ : Equation1516 G) : Equation255 G
-
+conjecture Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] (_ : Equation1516 G) : Equation255 G
 
 end Eq1516
