@@ -17,3 +17,4 @@ namespace Eq1323
 conjecture Equation1323_facts : ∃ (G : Type) (_ : Magma G), Facts G [1323, 1898] [2744, 2710]
 
 end Eq1323
+
