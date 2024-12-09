@@ -182,6 +182,7 @@ jobs:
 
       - name: Generate home_page/dashboard.md
         run: |
+          ulimit -s 32000
           pip install pillow
           ruby scripts/generate_dashboard_graph_info.rb > /tmp/graph_info.md
           python scripts/generate_dashboard.py /tmp/graph_info.md
