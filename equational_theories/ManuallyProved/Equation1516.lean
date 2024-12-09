@@ -1311,5 +1311,16 @@ theorem _root_.Equation1516_not_implies_Equation1489 : ∃ (G : Type) (_ : Magma
     decide
 
 
+/- Proof sketch:
+* From 1516, $L_{S x}$ is surjective, hence bijective.
+* From 1516 again, $Sx = L_{Sx}^3 x$, hence $x = L_{Sx}^{-3} Sx$, hence $S$ is injective, hence surjective.
+* On the other hand, from 1516 we have $$Sx = SC . L_{Sx}^2 Cx = SCx . Sx$$ (where $$Cx = Sx.x$$), hence $$SCx = S^2 x . L_{SCx}^2 Sx = CSx$$.
+* Hence $$Sx = CSx . Sx$$, hence by surjectivity of $S$$, $$x = Cx . x$$ which is 255.
+
+When done formalizing, update `Conjectures.lean` accordingly. -/
+
+@[equational_result]
+theorem Equation1516_implies_Equation255 : (G : Type) [Magma G] [Finite G] (_ : Equation1516 G) : Equation255 G := by sorry
+
 
 end Eq1516
