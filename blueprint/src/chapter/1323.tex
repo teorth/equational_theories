@@ -90,14 +90,21 @@ but from construction we have $\phi_a(a+c)=-1/\phi_a(c) = \phi_a(b)/\phi_a(c)$ a
 It remains to handle the case when $a,b$ are distinct elements of $G \backslash \{0\}$.  But this follows from (iii).
 \end{proof}
 
-To use this, define a \emph{partial solution} to be a finite family ${\mathcal F}$ of tuples $(x,y,z,a,b,c) \in (\Q^\times)^3 \times G^6$ with $a,b,c,0$ distinct, such that one can define a partial operation $\op$ on $M$ that is defined by rules (i) and (ii), as well as requiring that
+\begin{definition}[Partial solution]\label{partial-1323} A \emph{partial solution} is a finite family ${\mathcal F}$ of tuples $(x,y,z,a,b,c) \in (\Q^\times)^3 \times G^6$ with $a,b,c,0$ distinct, such that the tuples
+$(\phi_a(b)^n x,a, \phi_b(c)^n y,b)$, $(\phi_b(c)^n y,b,\phi_c(a)^n z,c)$, $(\phi_c(a)^n z,c,\phi_a(b)^{n+1} x, a)$ for $(x,y,z,a,b,c) \in {\mathcal F}$ and $n \geq 0$ are all distinct.
+\end{definition}
+
+\begin{lemma}[Soundness]\label{partial-1323-sound}\uses{partial-1323}  Let ${\mathcal F}$ be a parital solution.  Then if one defines a partial operation $\op$ on $M$ by requiring axioms (i), (ii), imposing the additional operations
 $$ (\phi_a(b)^n x,a) \op (\phi_b(c)^n y,b) = (\phi_c(a)^n z,c)$$
 $$ (\phi_b(c)^n y,b) \op (\phi_c(a)^n z,c) = (\phi_a(b)^{n+1} x, a)$$
 $$ (\phi_c(a)^n z,c) \op (\phi_a(b)^{n+1} x, a) = (\phi_b(c)^{n+1} y,b)$$
-for all $n \geq 0$ and $(x,y,z,a,b,c) \in {\mathcal F}$, without any collisions. From construction we see that this operation obeys rule (iii) whenever it is defined.
+for all $n \geq 0$ and $(x,y,z,a,b,c) \in {\mathcal F}$, and no other operations, then this is a well-defined partial operation that obeys axiom (iii) whenever it is defined.
+\end{lemma}
 
+\begin{proof} Routine.
+\end{proof}
 
-\begin{lemma}[Greedy extension]\label{greedy-1323}  If $\op$ is defined by a partial solution, and $(x,a) \op (y,b)$ is undefined for some $x,y \in \Q^\times$ and distinct $a,b \in G \backslash \{0\}$, then it is possible to extend the partial solution so that $(x,a) \op (y,b)$ is now defined.
+\begin{lemma}[Greedy extension]\label{greedy-1323}\uses{partial-1323-sound}  If $\op$ is defined by a partial solution, and $(x,a) \op (y,b)$ is undefined for some $x,y \in \Q^\times$ and distinct $a,b \in G \backslash \{0\}$, then it is possible to extend the partial solution so that $(x,a) \op (y,b)$ is now defined.
 \end{lemma}
 
 \begin{proof} We select a $c \in G \backslash \{0\}$ that has not previously been used by the partial solution, let $z \in \Q^\times$ be arbitrary, (e.g., one could take $z=1$ if desired), and add $(x,y,z,a,b,c)$ to ${\mathcal F}$, thus we now also assign
@@ -110,7 +117,7 @@ for all natural numbers $n$.  As the $a,b,c$ are distinct, the $\phi_a(b), \phi_
 \begin{corollary}[Iterated greedy extension]\label{greedy-iterate}  Every partial solution can be extended to a complete solution that obeys \Cref{lr} and \Cref{lr-simp}, and hence 1323.
 \end{corollary}
 
-\begin{proof}\uses{greedy-1323, build-magma} Apply the usual greedy algorithm.
+\begin{proof}\uses{greedy-1323, build-magma, partial-1323-sound} Apply the usual greedy algorithm.
 \end{proof}
 
 \begin{corollary}[1323 does not imply 2744]\label{1323-refute-2744}  There exists a 1323 magma which does not obey the 2744 equation $R_y L_{Sy} L_y x = x$.
