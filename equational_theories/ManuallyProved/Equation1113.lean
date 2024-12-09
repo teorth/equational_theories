@@ -4,6 +4,8 @@ import equational_theories.EquationalResult
 import equational_theories.Equations.All
 
 /- Proves the implications clustered around the equation 1113.
+
+When the proof is done, update the blueprint with \lean and \leanok tags as appropriate.
 -/
 
 
