@@ -20,10 +20,10 @@ We first discuss the different proof methods used: primarily superposition and e
 \subsection{Proof Techniques}
 
 The main two families of ATPs and tactics we used here are superposition/saturation-based and equational reasoning ones.
-In this context we also include SMT solvers, which combine specific decision procedures for theories, like congruence closure for equational reasoning, with satisfiability (SAT) solving~\cite{}.
+In this context we also include SMT solvers, which combine specific decision procedures for theories, like congruence closure for equational reasoning, with satisfiability (SAT) solving \note{Give citation}.
 Finally, we also used \texttt{aesop}~\cite{DBLP:conf/cpp/LimpergF23}, which implements a version of tableau search.
 This was used mainly to help specific constructions in refutations, and is not specific to proving or disproving magma implications in this sense.
-We will describe our use of \texttt{aesop} more in Section~\ref{sec:proof-reconstruction} below.
+We will describe our use of \texttt{aesop} more in \Cref{sec:proof-reconstruction} below.
 
 \paragraph{Saturation}
 Most of the ATPs we used extensively in this project rely primarily on saturation procedures in the superposition calculus.
@@ -44,7 +44,7 @@ TODO: here we could add a screenshot of using vampire or prover9.
 
 \paragraph{Equational Reasoning}
 
-Equational reasoning is a type of reasoning based on equational logic and rewriting with congruence~\cite{term-rewriting}, see Chapter~\ref{todo} for a discussion of its foundations in universal algebra.
+Equational reasoning is a type of reasoning based on equational logic and rewriting with congruence~\cite{term-rewriting}, see Chapter ??? for a discussion of its foundations in universal algebra.
 In general, it takes a series of equations and determines wether another equation can be deduced from it.
 A core tool in equational reasoning are e-graphs, a data structure used to represent equivalence classes of terms.
 The procedure of congruence closure that can be used to decide ground equational problems (i.e. problems without variables) and as a semi-decision procedure in general.
