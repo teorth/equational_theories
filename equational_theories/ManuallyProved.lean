@@ -10,6 +10,7 @@ import equational_theories.ManuallyProved.Equation1076
 import equational_theories.ManuallyProved.Equation1113
 import equational_theories.ManuallyProved.Equation1117
 import equational_theories.ManuallyProved.Equation1289
+import equational_theories.ManuallyProved.Equation1323
 import equational_theories.ManuallyProved.Equation1437
 import equational_theories.ManuallyProved.Equation1441
 import equational_theories.ManuallyProved.Equation1516
