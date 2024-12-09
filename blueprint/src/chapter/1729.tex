@@ -14,7 +14,7 @@ for all $y \in SM$.
 
 We have the following procedure for extending a small magma $SM$ obeying \Cref{1729} to a larger one $M$:
 
-\begin{theorem}[Extending a 1729 magma]\label{mag}  Let $SM$ be a magma obeying 1729, and let $N$ be another set disjoint from $SM$, and set $M := SM \uplus N$.  Suppose that we have a squaring map $S: N \to SM$, and bijections $L_a, R_a: N \to N$ for all $a \in SM$ (which, by abuse of notation, we will denote with the same symbols as the squaring map $S$ and left and right multiplication oeprators $L_a,R_a$ on $SM$), obeying the following axioms:
+\begin{theorem}[Extending a 1729 magma]\label{mag}  Let $SM$ be a magma obeying 1729, and let $N$ be another set disjoint from $SM$, and set $M := SM \uplus N$.  Suppose that we have a squaring map $S: N \to SM$, and bijections $L_a, R_a: N \to N$ for all $a \in SM$ (which, by abuse of notation, we will denote with the same symbols as the squaring map $S$ and left and right multiplication operators $L_a,R_a$ on $SM$), obeying the following axioms:
   \begin{itemize}
   \item (i) For all $a \in SM$, we have $L_a = R_a^{-1} L_{Sa}^{-1}$.
   \item (ii) For all $y \in N$, the elements $R_a y \in N$ are distinct from each other and from $y$ as $a \in SM$ varies.
@@ -135,7 +135,7 @@ Now we seek to enlarge a partial solution. We first make an easy observation:
 \begin{proposition}[Enlarging $L_0$]\label{enlarge-l0}  Suppose one has a partial solution in which $L_0 x$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $L_0 x$ is now defined.
 \end{proposition}
 
-\begin{proof}  By axiom (i''), $L_0 e_0^n x$ is undefined for every integer $n$.  Let $d = E_m$ be a generator of $SM$ that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in teh partial solution; such a $d$ exists due to the finiteness hypotheses.  We set $L_0 x := e_d$, and then extend by \Cref{itero}, \Cref{itero-2}, thus
+\begin{proof}  By axiom (i''), $L_0 e_0^n x$ is undefined for every integer $n$.  Let $d = E_m$ be a generator of $SM$ that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution; such a $d$ exists due to the finiteness hypotheses.  We set $L_0 x := e_d$, and then extend by \Cref{itero}, \Cref{itero-2}, thus
 $$L_0 e_0^n x := e_0^n e_d$$
 and
 $$L_0 e_0^n e_d := e_0^{n-1} x.$$
