@@ -6,6 +6,7 @@ import Mathlib.Data.Finset.Order
 import Mathlib.Data.Set.Finite.Basic
 import Mathlib.Order.CompletePartialOrder
 
+import equational_theories.FactsSyntax
 import equational_theories.FreshGenerator
 import equational_theories.Mathlib.Order.Greedy
 import equational_theories.EquationalResult
