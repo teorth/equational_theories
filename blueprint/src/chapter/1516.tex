@@ -50,7 +50,7 @@ For technical reasons (which will be helpful later when we expand the magma) we 
 
 Note from \Cref{1516} and the hypothesis $Sa=a$ that $R_a c = a$ if and only if $c=a$.  Thus the requirement that $a,b$ be distinct is necessary.
 
-\begin{proof}  By \Cref{1516-ext}, \Cref{1516-ext-var} and the greedy algorithm starting with the seed consisting of $(0,0)$, $(-1,2)$, $(3,1)$, we obtain a graph $\{ (a,f(a)): a \in \Z \}$ of a function $f:\Z \to \Z$ with $f(0)=0$, $f(-1)=2$, $f(3)=1$ and the property that if $f(a)=b$ and $f(b)=c$, then $f(c-a)=-a$, and also with the property that for every non-zero $h$ there are distinct $a_h, a'_h, a''_h$ with $f(a_h)=a_h+h$, $f(a'_h) = a'_h+h$, and $f(a''_h) = a''_h+h$.  We then have \Cref{1516-f} holds.  If we then define the magma operation $\op$ by \Cref{xy-1516}, we obtain \Cref{1516}.  Also, from construction we see that $R_d (d - a_h) = R_d (d - a'_h) = R_d (d - a''_h) = d+h$ for any $d,h$, giving the second claim.  Finally, from constructio we have $R_a (a+1) = a+1+f(-1) = a+3$, so $L_a R_a (a+1) = a + f(3) = a+1$, giving the final claim.
+\begin{proof}  By \Cref{1516-ext}, \Cref{1516-ext-var} and the greedy algorithm starting with the seed consisting of $(0,0)$, $(-1,2)$, $(3,1)$, we obtain a graph $\{ (a,f(a)): a \in \Z \}$ of a function $f:\Z \to \Z$ with $f(0)=0$, $f(-1)=2$, $f(3)=1$ and the property that if $f(a)=b$ and $f(b)=c$, then $f(c-a)=-a$, and also with the property that for every non-zero $h$ there are distinct $a_h, a'_h, a''_h$ with $f(a_h)=a_h+h$, $f(a'_h) = a'_h+h$, and $f(a''_h) = a''_h+h$.  We then have \Cref{1516-f} holds.  If we then define the magma operation $\op$ by \Cref{xy-1516}, we obtain \Cref{1516}.  Also, from construction we see that $R_d (d - a_h) = R_d (d - a'_h) = R_d (d - a''_h) = d+h$ for any $d,h$, giving the second claim.  Finally, from construction we have $R_a (a+1) = a+1+f(-1) = a+3$, so $L_a R_a (a+1) = a + f(3) = a+1$, giving the final claim.
 \end{proof}
 
 Now we construct a more complex 1516 magma, whose carrier $G$ is $\Z \cup G'$, where
@@ -83,7 +83,7 @@ $L_a L_{c_{y,b}} b = c_{y,b}$.  For $b=a$, we can write $L_a L_{c_{y,b}} b = L_a
 
 So if we define $L_{c_{y,b}} y := b$ for all $b \in \Z$, then we have $L_{Sy} L_{c'} L_{c'} y = c'$ whenever $c'$ is of the form $c' = c_{y,b}$ for some $b \in \Z$.  But we still have $L_{c'} y$ undefined if $c'$ is not of this form or equal to $a$, in particular, $L_c y$ is currently not defined.
 
-We also note that with our construction so far, that $L_c y \neq c$ whenever $y \in G'$ and $c \in \Z$ is distinct from $Sy$.  This proeprty will be preserved in the construction below (because all future assignments of $L_c y$ will take values in $G'$ rather than $\Z$).
+We also note that with our construction so far, that $L_c y \neq c$ whenever $y \in G'$ and $c \in \Z$ is distinct from $Sy$.  This property will be preserved in the construction below (because all future assignments of $L_c y$ will take values in $G'$ rather than $\Z$).
 
 Now we greedily fill in the rest of the $L_{c'}$ functions.  Suppose at some stage of this process, we have a non-square element $y = (a,c,n)$ for which $L_{c'} y$ is not yet defined for some $c'$, then $c' \neq a$. We can use the surjectivity of $L_a: \Z \to \Z$ to write $c' = L_a b$ for some $b \in \Z$, then set $L_{c'} y = b$; then we have $L_{Sy} L_{c'} L_{c'} y = c'$.
 
