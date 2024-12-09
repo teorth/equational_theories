@@ -128,7 +128,7 @@ def generate_lean(data):
 
     table.replace("[", "#[")
 
-    name = f"FinitePoly {table}"
+    name = f"FinSearch {table}"
 
     out = f"""
 import Mathlib.Data.Finite.Prod
@@ -146,7 +146,7 @@ set_option linter.unusedVariables false
 
 /-! The magma definition -/
 def «{name}» : Magma (Fin {div}) where
-  op := memoFinOp fun x y => {table}[x.val]![y.val]!
+  op := finOpTable "{table}"
 
 /-! The facts -/
 @[equational_result]
