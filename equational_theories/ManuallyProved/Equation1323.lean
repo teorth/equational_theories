@@ -1,5 +1,6 @@
 import Mathlib.Data.Set.Finite.Basic
 
+import equational_theories.FactsSyntax
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
 
