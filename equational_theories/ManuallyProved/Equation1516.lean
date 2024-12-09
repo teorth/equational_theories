@@ -3,6 +3,7 @@ import Mathlib.Data.Finmap
 import Mathlib.Data.Finset.Max
 import Mathlib.Data.List.Basic
 import Mathlib.Data.Finset.Order
+import Mathlib.Data.Set.Finite.Basic
 
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
