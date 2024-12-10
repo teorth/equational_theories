@@ -72,7 +72,7 @@ private theorem main_result (G : Type*) [Magma G] [Finite G] (h : Equation3342 G
   let S (x : G) := x ◇ x
   let f (x : G) := x ◇ (S x)
   let C (x : G) := (S x) ◇ x
-  obtain ⟨p, hpgt, hperiodic⟩ := FiniteModel.Finite.fn_periodic f
+  obtain ⟨p, hpgt, hperiodic⟩ := FiniteModel.Finite.fn_eventually_periodic' f
   have fx_fy (x y : G) : x ◇ y = f x ◇ f y := by rw [h, h]
   have fnx_fny (n : ℕ) (x y : G) : x ◇ y = f^[n] x ◇ f^[n] y := by
     induction n with
