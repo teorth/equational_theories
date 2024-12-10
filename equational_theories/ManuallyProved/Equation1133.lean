@@ -10,7 +10,7 @@ When the proof is done, update the blueprint with \lean and \leanok tags as appr
 -/
 
 
-namespace Eq1113
+namespace Eq1133
 
 
 theorem Function.LeftInverse_eq_RightInverse {α : Type*} {β : Type*} {g g' : β → α} {f : α → β} (h : Function.LeftInverse f g) (h' : Function.RightInverse f g') : g = g' := by
@@ -19,7 +19,7 @@ theorem Function.LeftInverse_eq_RightInverse {α : Type*} {β : Type*} {g g' : �
   exact (h' (g x)).symm
 
 @[equational_result]
-theorem Equation1133_implies_Equation1167 (G : Type) [Magma G] [Finite G] (h : Equation1133 G) : Equation1167 G := by
+theorem Finite.Equation1133_implies_Equation1167 (G : Type) [Magma G] [Finite G] (h : Equation1133 G) : Equation1167 G := by
   let L (y x: G) := y ◇ x
   let R (y x: G) := x ◇ y
   let S (x: G) := x ◇ x
@@ -94,4 +94,4 @@ theorem Finite.Equation1167_implies_Equation1096 (G : Type) [Magma G] [Finite G]
   change L (y ◇ (y ◇ y)) x = L (x ◇ (z ◇ y)) x
   rw [this x y z, this y y y]
 
-end Eq1113
+end Eq1133
