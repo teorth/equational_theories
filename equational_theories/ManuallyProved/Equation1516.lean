@@ -1315,7 +1315,7 @@ theorem _root_.Equation1516_not_implies_Equation1489 : ∃ (G : Type) (_ : Magma
 
 
 @[equational_result]
-theorem Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] (h : Equation1516 G) : Equation255 G := by
+theorem Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] (h : Equation1516 G) : Equation255 G := by
   let S (x:G) := x ◇ x
   let C (x:G) := (S x) ◇ x
   let L (y x:G) := y ◇ x

@@ -15,7 +15,7 @@ namespace Eq467
  -/
 
 @[equational_result]
-theorem Equation467_implies_Equation2847 (G : Type) [Magma G] [Finite G] (h : Equation467 G) : Equation2847 G := by
+theorem Finite.Equation467_implies_Equation2847 (G : Type) [Magma G] [Finite G] (h : Equation467 G) : Equation2847 G := by
   let L (y x: G) := y ◇ x
   let S (x: G) := x ◇ x
   let T (x: G) := x ◇ (S x)
