@@ -146,29 +146,29 @@ $$ Cx \op y = f^n x \op y = f^{2n} x \op f^n y = f^n x \op f^n y = x \op y$$
 and a similar argument gives $x \op Cy = x \op y$.
 \end{proof}
 
-\begin{proposition}[1167 implies 1096]\label{1167-1096}
+\begin{proposition}[1167 implies 1096]\label{1167-1096}\leanok\lean{Eq1133.Finite.Equation1167_implies_Equation1096}
   For finite magmas, Equation 1167,
   $$ x = y \op ((z \op (y \op y)) \op x)$$
 implies Equation 1096,
 $$ x = y \op ((x \op (z \op y)) \op x).$$
 \end{proposition}
 
-\begin{proof} We write 1167 as
+\begin{proof}\leanok We write 1167 as
   $$ L_y L_{z \op Sy} = I,$$
 hence $L_y$ is invertible and $L_{z \op Sy} L_y = I$.  In particular $L_{z \op Sy} Sy = y$, hence squaring is injective, hence surjective.  So 1167 can be rewritten as $L_{S^{-1} y} L_{z \op y} = I$, hence $L_{z \op y}$ is independent of $z$.  In particular
 $$ L_{x \op (z \op y)} = L_{S^{-2} z \op (z \op y)} = L_{L_{S^{-2} z} L_{S^{-1} z \op S S^{-2} z} y} = L_y$$
 by 1167, hence the right-hand side of 1096 is independent of $z$.  Replacing $z$ with $y$, the claim now follows from 1167.
 \end{proof}
 
-\begin{proposition}[1113 implies 1167]\label{1113-1167}
-  For finite magmas, Equation 1113,
+\begin{proposition}[1133 implies 1167]\label{1133-1167}\leanok\lean{Eq1133.Finite.Equation1133_implies_Equation1167}
+  For finite magmas, Equation 1133,
 $$ x = y \op ((y \op (z \op y)) \op x)$$
 implies Equation 1167,
   $$ x = y \op ((z \op (y \op y)) \op x).$$
 \end{proposition}
 
-\begin{proof}
-1113 asserts that $L_y L_{y \op (z \op y)} = I$, hence $L_y$ is invertible and $L_{y \op (z \op y)} = L_y^{-1}$ does not depend on $z$.  Setting $z = y \op Sy$ we see from 1113 that $y \op (z \op y) = y$ and hence we have left-involution: $L_y = L_y^{-1}$. Replacing $y$ with $L_z y$ in 1113 we now get $L_{L_z y} L_{L_z y \op y} = I$, which since $L_{L_z y}$ is its own inverse gives
+\begin{proof}\leanok
+1133 asserts that $L_y L_{y \op (z \op y)} = I$, hence $L_y$ is invertible and $L_{y \op (z \op y)} = L_y^{-1}$ does not depend on $z$.  Setting $z = y \op Sy$ we see from 1133 that $y \op (z \op y) = y$ and hence we have left-involution: $L_y = L_y^{-1}$. Replacing $y$ with $L_z y$ in 1133 we now get $L_{L_z y} L_{L_z y \op y} = I$, which since $L_{L_z y}$ is its own inverse gives
 \begin{equation}\label{intermediate}
   L_{L_z y \op y} = L_{L_z y}.
 \end{equation}
