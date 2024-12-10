@@ -6,6 +6,7 @@ import Mathlib.Data.Finset.Order
 import Mathlib.Data.Set.Finite.Basic
 import Mathlib.Order.CompletePartialOrder
 
+import Mathlib.Data.Fintype.Card
 import equational_theories.FactsSyntax
 import equational_theories.FreshGenerator
 import equational_theories.Mathlib.Order.Greedy
@@ -1313,15 +1314,40 @@ theorem _root_.Equation1516_not_implies_Equation1489 : ∃ (G : Type) (_ : Magma
     decide
 
 
-/- Proof sketch:
-* From 1516, $L_{S x}$ is surjective, hence bijective.
-* From 1516 again, $Sx = L_{Sx}^3 x$, hence $x = L_{Sx}^{-3} Sx$, hence $S$ is injective, hence surjective.
-* On the other hand, from 1516 we have $Sx = SC . L_{Sx}^2 Cx = SCx . Sx$ (where $Cx = Sx.x$), hence $SCx = S^2 x . L_{SCx}^2 Sx = CSx$.
-* Hence $Sx = CSx . Sx$, hence by surjectivity of $S$, $x = Cx . x$ which is 255.
--/
-
 @[equational_result]
-conjecture Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] (_ : Equation1516 G) : Equation255 G
+theorem Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] (h : Equation1516 G) : Equation255 G := by
+  let S (x:G) := x ◇ x
+  let C (x:G) := (S x) ◇ x
+  let L (y x:G) := y ◇ x
+  have inv_LS : ∀ y, Function.Injective (L (S y)) := by
+    intro y
+    rw [Finite.injective_iff_surjective]
+    intro x
+    use x ◇ (x ◇ y)
+    dsimp [L, S]
+    rw [<-(h x y)]
+  have inv_S : Function.Surjective S := by
+    rw [<-Finite.injective_iff_surjective]
+    intro x y hxy
+    have hS x : S x = (L (S x) <| L (S x) <| L (S x) <| x) := by
+      dsimp [L]
+      convert h (S x) x
+    have hSy := hS y
+    rw [<-hxy] at hSy
+    nth_rewrite 1 [hS x] at hSy
+    exact inv_LS x <| inv_LS x <| inv_LS x <| hSy
+  have SC_id x : S x = (S (C x)) ◇ S x := by
+    convert h (S x) (C x) using 2
+    dsimp [C]
+    convert h (S x) x
+  have SC_CS_id x : S (C x) = C (S x) := by
+    rw [h (S (C x)) (S x), <-SC_id x, <-SC_id x]
+  intro x
+  obtain ⟨ y, hy ⟩ := inv_S x
+  rw [<- hy]
+  nth_rewrite 1 [SC_id y]
+  rw [SC_CS_id y]
+
 
 
 /--  https://teorth.github.io/equational_theories/blueprint/1516-chapter.html -/
