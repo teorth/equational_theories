@@ -127,7 +127,7 @@ Many implications for finite magmas rely on the fact that if $f, g:X \to X$ are 
 
 This can be used to obtain a few positive finite magma implications, for instance by setting $f,g$ to be left and right multiplication operators.  Another useful lemma is
 
-\begin{lemma}[Eventual period]\label{period} \lean{FiniteModel.Finite.fn_periodic} \leanok  Let $X$ be finite and $f: X \to X$.  Then there exists $n \geq 1$ such that $f^{2n} = f^n$.
+\begin{lemma}[Eventual period]\label{period} \lean{FiniteModel.Finite.fn_eventually_periodic'} \leanok  Let $X$ be finite and $f: X \to X$.  Then there exists $n \geq 1$ such that $f^{2n} = f^n$.
 \end{lemma}
 
 \begin{proof} \leanok By the pigeonhole principle, there exists $n \geq 1$, $m \geq 0$ such that $f^{m+n} = f^m$, which implies on iteration that $f^{m+mn} = f^m$ and hence $f^{2mn} = f^{mn}$, giving the claim.
