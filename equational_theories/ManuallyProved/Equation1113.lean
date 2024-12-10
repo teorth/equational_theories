@@ -11,15 +11,54 @@ When the proof is done, update the blueprint with \lean and \leanok tags as appr
 
 
 namespace Eq1113
-/- Proof can be found at https://teorth.github.io/equational_theories/blueprint/infinite-model-chapter.html#1167-1096
- -/
-@[equational_result]
-conjecture Equation1133_implies_Equation1167 (G : Type) [Magma G] [Finite G] (_ : Equation1133 G) : Equation1167 G
+
 
 theorem Function.LeftInverse_eq_RightInverse {α : Type*} {β : Type*} {g g' : β → α} {f : α → β} (h : Function.LeftInverse f g) (h' : Function.RightInverse f g') : g = g' := by
   ext x
   nth_rewrite 2 [<-h x]
   exact (h' (g x)).symm
+
+@[equational_result]
+theorem Equation1133_implies_Equation1167 (G : Type) [Magma G] [Finite G] (h : Equation1133 G) : Equation1167 G := by
+  let L (y x: G) := y ◇ x
+  let R (y x: G) := x ◇ y
+  let S (x: G) := x ◇ x
+  have Ly_left_inv (y z: G) : Function.LeftInverse (L y) (L (y ◇ (z ◇ y))) := by
+    intro x
+    exact (h x y z).symm
+  have Ly_right_inv (y z: G) : Function.RightInverse (L y) (L (y ◇ (z ◇ y))) := Function.rightInverse_of_injective_of_leftInverse
+    (Finite.injective_iff_surjective.mpr (Ly_left_inv y z).surjective) (Ly_left_inv y z)
+  have Ly_invol (y : G) : Function.LeftInverse (L y) (L y) := by
+    convert Ly_left_inv y (y ◇ S y)
+    exact h y y y
+  have Ly_invol_right (y : G) : Function.RightInverse (L y) (L y) := by
+    convert Ly_right_inv y (y ◇ S y)
+    exact h y y y
+
+  have Lzyy_Lzy (y z:G): L ((z ◇ y) ◇ y) = L (z ◇ y) := by
+    apply Function.LeftInverse_eq_RightInverse _ (Ly_invol_right (z ◇ y))
+    convert Ly_left_inv (z ◇ y) z
+    exact (Ly_invol z y).symm
+
+  have S_inj : Function.Injective S := by
+    rw [Finite.injective_iff_surjective]
+    intro y
+    use S y ◇ y
+    convert Ly_invol (S y ◇ y) y using 1
+    change L (S y ◇ y) (L (y ◇ y) y) = L (S y ◇ y) (L ((y ◇ y) ◇ y) y)
+    congr 1
+    rw [Lzyy_Lzy y y]
+
+  intro x y z
+  change x = (L y) (L (z ◇ S y) x)
+  rw [<- Lzyy_Lzy (S y) z]
+  convert (Ly_invol y x).symm
+  set w := (z ◇ S y) ◇ S y
+  apply S_inj
+  rw [<-Ly_invol w (S y)]
+  change L w w = L w (L ((z ◇ S y) ◇ S y) (S y))
+  congr
+  rw [Lzyy_Lzy (S y) z]
 
 @[equational_result]
 theorem Finite.Equation1167_implies_Equation1096 (G : Type) [Magma G] [Finite G] (h : Equation1167 G) : Equation1096 G := by
