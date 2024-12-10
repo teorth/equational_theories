@@ -10,7 +10,7 @@ and
 $$ R_{Sy} L_y R_y x = x$$
 respectively.  In particular, this gives a way to construct these magmas:
 
-\begin{lemma}[Construction of 1323 and 1898 magmas]\label{1323-1898-construct}  Suppose that $M$ is a magma such that
+\begin{lemma}[Construction of 1323 magmas]\label{1323-construct}  Suppose that $M$ is a magma such that
   \begin{equation}\label{lr}
     L_{Sy} R_{Sy} = 1
    \end{equation}
@@ -18,21 +18,17 @@ and
 \begin{equation}\label{lr-simp}
   L_{y} R_{y} = R_{Sy}
 \end{equation}
-hold.  Then the magma obeys 1323.  If instead \eqref{lr} and
-\begin{equation}\label{lr-simp-dual}
-  L_{y} R_{y} = L_{Sy}
-\end{equation}
-hold, then the magma obeys 1898.
+hold.  Then the magma obeys 1323.
 \end{lemma}
 
 \begin{proof} Trivial.
 \end{proof}
 
- So now we would like to construct magmas satisfying \Cref{lr} and either \Cref{lr-simp} or \eqref{lr-simp-dual}.  We need some bijections:
+ So now we would like to construct magmas satisfying \Cref{lr} and \Cref{lr-simp}.  We need some bijections:
 
  \begin{lemma}[Bijections]\label{bij}
   Let $G$ be a countably infinite abelian group of order $2$.  Then there exists a bijection $\phi_a: G \to \Q^\times$ for each $a \in G \backslash \{0\}$ such that
- $\phi_a(0) = 1$ and $\phi_a(a+b) = -1/\phi_a(b)$ for all $b \in G$, so in particular $\phi_a(a)=-1$.
+ $\phi_a(0) = 1$ and $\phi_a(a+b) = -\phi_a(b)$ for all $b \in G$, so in particular $\phi_a(a)=-1$.
  \end{lemma}
 
  \begin{proof}
@@ -85,7 +81,7 @@ as required.  In the second case, if $a=b$, then by the bijective nature of $\ph
 $$ R_{(y,b)} (x,a) = a+c$$
 and then by \Cref{op-1}
 $$ L_{(y,b)} R_{(y,b)} (x,a) = (\phi_a(a+c) y, a)$$
-but from construction we have $\phi_a(a+c)=-1/\phi_a(c) = \phi_a(b)/\phi_a(c)$ and hence $\phi_a(a+c) y = \phi_a(b) x$ as required.
+but from construction we have $\phi_a(a+c)=-\phi_a(c) = \phi_a(b)\phi_a(c)$ and hence $\phi_a(a+c) y = \phi_a(b) x$ as required.
 
 It remains to handle the case when $a,b$ are distinct elements of $G \backslash \{0\}$.  But this follows from (iii).
 \end{proof}
