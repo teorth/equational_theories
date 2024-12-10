@@ -14,7 +14,6 @@ namespace Eq1323
 
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1323/near/481475622 -/
 @[equational_result]
-conjecture Equation1323_facts : ∃ (G : Type) (_ : Magma G), Facts G [1323, 1898] [2744, 2710]
+conjecture Equation1323_facts : ∃ (G : Type) (_ : Magma G), Facts G [1323] [2744]
 
 end Eq1323
-
