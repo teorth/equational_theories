@@ -7,7 +7,7 @@ import equational_theories.ManuallyProved.Equation854
 import equational_theories.ManuallyProved.Equation906
 import equational_theories.ManuallyProved.Equation917
 import equational_theories.ManuallyProved.Equation1076
-import equational_theories.ManuallyProved.Equation1113
+import equational_theories.ManuallyProved.Equation1133
 import equational_theories.ManuallyProved.Equation1117
 import equational_theories.ManuallyProved.Equation1289
 import equational_theories.ManuallyProved.Equation1323
