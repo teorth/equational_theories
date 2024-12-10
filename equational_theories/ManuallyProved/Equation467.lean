@@ -1,5 +1,6 @@
 import Mathlib.Data.Set.Finite.Basic
 
+import Mathlib.Data.Fintype.Card
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
 
@@ -14,7 +15,33 @@ namespace Eq467
  -/
 
 @[equational_result]
-conjecture Equation467_implies_Equation2847 (G : Type) [Magma G] [Finite G] (_ : Equation467 G) : Equation2847 G
+theorem Equation467_implies_Equation2847 (G : Type) [Magma G] [Finite G] (h : Equation467 G) : Equation2847 G := by
+  let L (y x: G) := y ◇ x
+  let S (x: G) := x ◇ x
+  let T (x: G) := x ◇ (S x)
+  have L_inj y : Function.Injective (L y) := by
+    rw [Finite.injective_iff_surjective]
+    intro x
+    use (x ◇ (x ◇ (y ◇ y)))
+    dsimp [L]
+    rw [<-h x y]
+  have ST_inv_right : Function.RightInverse S T := by
+    intro y
+    apply L_inj y
+    symm
+    dsimp [L, T, S]
+    exact h (y ◇ y) y
+  have ST_inv_left : Function.LeftInverse S T := Function.leftInverse_of_surjective_of_rightInverse
+    (Finite.surjective_of_injective ST_inv_right.injective) ST_inv_right
+  intro x
+  change x = (T x ◇ x) ◇ x
+  rw [<- ST_inv_left x]
+  set y := T x
+  rw [ST_inv_right y]
+  convert h (S y) (T y) using 2
+  convert h (S y) (S y) using 3
+  change S (T y) = T (S y)
+  rw [ST_inv_right y, ST_inv_left y]
 
 
 end Eq467
