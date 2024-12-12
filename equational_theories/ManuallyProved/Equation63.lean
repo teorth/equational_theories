@@ -296,7 +296,6 @@ theorem exists_extension (seed : PartialSolution) :
       if h : ∃ y, E d y then exact ⟨_, le_rfl, h⟩ else
       let E1 : Extension := { E, ok, d, not_def := fun h' => h ⟨_, h'⟩ }
       exact ⟨E1.next, fun _ _ => (.base ·), _, .new rfl rfl⟩
-  classical
   choose e he f hf using h3
   refine ⟨f, fun x => ?_, fun {x y} h => ?_,⟩
   · let S : Finset G := {x, f x, x⁻¹ * f (f x)}
