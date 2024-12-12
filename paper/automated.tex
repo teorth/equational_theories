@@ -29,7 +29,7 @@ We will describe our use of \texttt{aesop} more in \Cref{sec:proof-reconstructio
 Most of the ATPs we used extensively in this project rely primarily on saturation procedures in the superposition calculus.
 This is the case for Vampire~\cite{DBLP:conf/cav/KovacsV13}.
 See also~\cite{DBLP:journals/cacm/BentkampBNTVW23} for a gentler exposition.
-The core idea of these provers is that they take a set of assumptions and conjecture, expressed in --- say --- first-order logic.
+The core idea of these provers is that they take a set of assumptions with a conjecture, expressed in --- say --- first-order logic.
 They take the conjecture and negate it, adding this negation to the set of assumptions, which are all put in some normal form.
 The ATP then tries to refute the negation by applying rules of the underlying calculus, until they find a proof of false (a contradiction).
 In this case, the conjecture was (classically) true, and the ATP has found a proof by contradiction, often called a ``refutation'' or ``saturation'' proof.
@@ -45,7 +45,7 @@ TODO: here we could add a screenshot of using vampire or prover9.
 \paragraph{Equational Reasoning}
 
 Equational reasoning is a type of reasoning based on equational logic and rewriting with congruence~\cite{term-rewriting}, see Chapter ??? for a discussion of its foundations in universal algebra.
-In general, it takes a series of equations and determines wether another equation can be deduced from it.
+In general, it takes a series of equations and determines whether another equation can be deduced from it.
 A core tool in equational reasoning are e-graphs, a data structure used to represent equivalence classes of terms.
 The procedure of congruence closure that can be used to decide ground equational problems (i.e. problems without variables) and as a semi-decision procedure in general.
 
@@ -60,9 +60,9 @@ In this project we used Z3~\cite{DBLP:conf/tacas/MouraB08}, Prover9 and Mace4~\c
 
 While ATPs are very useful to solve questions for this project, they generally don't integrate well with Lean .
 A bug in an ATP could lead to an unsound proof, or worse, an incorrect result.
-To avoid this, and having to trust large codebases from ATPs, we take results found by the different provers and (re-)construct proofs in Lean.
+To avoid having to trust ATP's large codebases, we take results found by the different provers and (re-)construct their proofs in Lean.
 
-An exception for this are tactics like \texttt{duper}, \texttt{aesop} and \texttt{egg}). Figure~\ref{fig:screenshot-egg} shows an example of the \texttt{egg} tactic as used in this project. It integrates directly in Lean, generating a Lean proof directly. With the variant \texttt{egg?}, depicted in the screenshot, it uses an auxilariy tactic \texttt{calcify}\footnote{\url{https://github.com/nomeata/lean-calcify}} to generate a human-readable proof as a series of calculation steps, which can be incorporated into the file with a single click.
+An exception for this are tactics like \texttt{duper}, \texttt{aesop} and \texttt{egg}. Figure~\ref{fig:screenshot-egg} shows an example of the \texttt{egg} tactic as used in this project. It integrates directly in Lean, generating a Lean proof directly. With the variant \texttt{egg?}, depicted in the screenshot, it uses an auxilariy tactic \texttt{calcify}\footnote{\url{https://github.com/nomeata/lean-calcify}} to generate a human-readable proof as a series of calculation steps, which can be incorporated into the file with a single click.
 
 \begin{figure}
   \centering
@@ -72,12 +72,12 @@ An exception for this are tactics like \texttt{duper}, \texttt{aesop} and \textt
 \end{figure}
 
 In general, integration implies two steps: invoking the decision procedures/ATPs (translating the problem from Lean into the languages and logics they use), and conversely, (re-)constructing the results from the decision procedure as a (persistent) Lean proof.
-These two aspect present different challenges, and require different strategies, depending mostly on the kind of proof strategy the decision procedure uses.
+These two aspects present different challenges, and require different strategies, depending mostly on the kind of proof strategy the decision procedure uses.
 
 For saturation proofs $\ldots$ (TODO: add explanations from \url{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Vampire.20-.3E.20Lean/near/478147138})
 
 For equational proofs from external provers (e.g. MagmaEgg), we used also a simple version of reconstruction by (re-)constructing the proofs of equality from an explanation, using congruence lemmas from Lean.
-In the case of equational proofs from the \texttt{egg} tactic, these could be converted into a series of \texttt{calc} steps, documenting the explicit calculation, using the \texttt{calcify} tactic\footnote{\url{https://github.com/nomeata/lean-calcify/}}.
+In the case of equational proofs from the \texttt{egg} tactic, these could be converted into a series of \texttt{calc} steps, documenting the explicit calculation, using the \texttt{calcify} tactic\footnote{\url{https://github.com/nomeata/lean-calcify}}.
 
 In general, we have observed that there are multiple ways of integrating decisions procedures within Lean, with different levels of integration.
 \begin{enumerate}
@@ -96,7 +96,7 @@ In that case, for example, tactics need to synthesize typeclass instances, deal 
 
 Another use of ATPs has been in a semi-automatic fashion, to find counter-examples.
 The general strategy was to use ATPs to find counter-examples to implications by building magmas iteratively.
-If we want to build a counterexample to $l \vdash l'$, we want to build construct a magma where $l$ holds but $l'$ doesn't.
+If we want to build a counterexample to $l \vdash l'$, we want to construct a magma where $l$ holds but $l'$ does not.
 In this method, we iteratively strengthen a construction with additional hypotheses, and use the ATP to check whether these hypotheses are not too strong (to imply $l'$) or unsound (to disallow $l$).
 
 TODO: this should also be expanded more, at least with references to some of the constructions in other chapters.

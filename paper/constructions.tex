@@ -14,7 +14,7 @@ For specific refutations, it was sometimes possible to locate a finite example w
 
 \note{Discuss this further, perhaps give an example, or refer to the ATP section.  See also the discussion threads ``Counterexamples by enumerating words in quotient magmas'' and ``Using SAT solvers for model generation'' threads (sorry, LaTeX is choking on the URLs for some reason).}
 
-It is a result of Kisielewicz \cite{Kisielewicz} that every law $En$ with $n \leq 4694$ is either equivalent to the singleton law $E2$, or else has a non-trivial finite model; in other words, the implications $En \vdash E2$ and $En \vdashfin E2$ are equivalent for $n \leq 4694$.  In fact our brute force search revealed that in the latter case there is always a model of order $2 \leq n \leq 5$, with the lone exception of \eqref{eq1286} (and its dual \eqref{eq2301}), for which the smallest non-trivial finite model was of order $7$, as presented in \Cref{1286-ex} below.  In fact, most of the 4694 laws either only had trivial models, or had a order 2 model, as shown in \Cref{size-table}.
+It is a result of Kisielewicz \cite{Kisielewicz} that every law $En$ with $n \leq 4694$ is either equivalent to the singleton law $E2$, or else has a non-trivial finite model; in other words, the implications $En \vdash E2$ and $En \vdashfin E2$ are equivalent for $n \leq 4694$.  In fact our brute force search revealed that in the latter case there is always a model of order $2 \leq n \leq 5$, with the lone exception of \eqref{eq1286} (and its dual \eqref{eq2301}), for which the smallest non-trivial finite model was of order $7$, as presented in \Cref{1286-ex} below.  In fact, most of the 4694 laws either only had trivial models, or had an order 2 model, as shown in \Cref{size-table}.
 \begin{table}
 \centering
 \begin{tabular}{ll}
@@ -232,7 +232,7 @@ The greedy method can also combined with the translation-invariant method, both 
 \begin{theorem}[Non-commutative translation-invariant greedy algorithm]\label{nc-greedy-abstract} Let $F,F'$ be functional equations on groups, and let $\Gamma$ be a theory of first-order sentences regarding a partial function $f \colon \Omega \to G$ on a group $G = (G,\cdot)$.  Assume the following axioms:
   \begin{itemize}
     \item[(i)] (Seed) There exists a finitely supported partial function $f_0 \colon \Omega_0 \to G$ satisfying $\Gamma$ that contradicts $F'$, in the sense that there is some assignment of variables in $F'$ in $G$ such that both sides of $F'$ are defined using $f_0$, but not equal to each other.
-    \item[(ii)]  (Soundness)  If $f_n \colon \Omega_n \to G$ is a sequence of partial functions obeying $\Gamma$ with each $f_{n+1}$ an extension of $f_n$, and the direct limit $f_\infty$ is total, then this limit obeys $E$.
+    \item[(ii)]  (Soundness)  If $f_n \colon \Omega_n \to G$ is a sequence of partial functions obeying $\Gamma$ with each $f_{n+1}$ an extension of $f_n$, and the direct limit $f_\infty$ is total, then this limit obeys $F$.
     \item[(iii)] (Greedy extension)  If $f \colon \Omega \to G$ is a finitely supported partial function obeying $\Gamma$, and $a,b \in G$, then there exists a finitely supported extension $f' \colon \Omega' \to G'$ of $f$ to a possibly larger group $G'$ such that $a \op' b$ is defined.
   \end{itemize}
   Then $F \not \vdash F'$.
@@ -268,7 +268,7 @@ One appealing case of (ii), involving a ``magma cohomology'' analogous to (abeli
 \end{equation}
 for some function $f \colon G \times G \to M$.  If $(M,\op_M)$ and $(G,\op_G)$ already obey a law $E$, then this extension will also obey $E$ if and only if $f$ obeys a certain ``cocycle equation'', which is a linear equation on $f$.  One can then sometimes use linear algebra to locate an $f$ that obeys the cocycle equation for one law $E$ but not another $E'$, thus refuting the implication $E \vdash E'$.  An example is as follows:
 
-\begin{proposition}[1110 does not imply 1629]\label{1110-1629} The law $\x \formaleq \y \op ((\y \op (\x \op \x)) \op \y)$ \eqref{eq1110} does not imply $\x \formaleq (\x \op \x) \formaleq ((\x \op \x) \op \x)$ \eqref{eq1629}, even for finite magmas.
+\begin{proposition}[1110 does not imply 1629]\label{1110-1629} The law $\x \formaleq \y \op ((\y \op (\x \op \x)) \op \y)$ \eqref{eq1110} does not imply $\x \formaleq (\x \op \x) \op ((\x \op \x) \op \x)$ \eqref{eq1629}, even for finite magmas.
 \end{proposition}
 
 \begin{proof}  (Sketch) Using the linear ansatz, we find that \eqref{eq1110} has a model $\Magma$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xsyt} with $G=M$.  One then finds that this operation obeys \eqref{eq1110} if $f \colon \F_5 \times \F_5 \to \F_5$ obeys the cocycle equation
