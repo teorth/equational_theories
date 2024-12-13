@@ -143,103 +143,84 @@ def offset (x y : Rt) (n : Nat) : Rt := (x.1 * (ϕ x.2 y.2)^n, x.2)
 @[simp] theorem offset_0 (x y : Rt) : offset x y 0 = x := by simp [offset]
 @[simp] theorem offset_2 (x y : Rt) (n : Nat) : (offset x y n).2 = x.2 := by simp [offset]
 
-def related (x y z : Rt) : Set (Rt × Rt × Rt) :=
-  ⋃ n : Nat, {
-    (offset x y n, offset y z n, offset z x n),
-    (offset y z n, offset z x n, offset x y (n+1)),
-    (offset z x n, offset x y (n+1), offset y z (n+1))
-  }
-def related' : Rt × Rt × Rt → Set (Rt × Rt × Rt) | (x, y, z) => related x y z
+def related x y z x' y' z' :=
+  ∃ n : Nat,
+    (x, y, z) = (offset x' y' n, offset y' z' n, offset z' x' n) ∨
+    (x, y, z) = (offset y' z' n, offset z' x' n, offset x' y' (n+1)) ∨
+    (x, y, z) = (offset z' x' n, offset x' y' (n+1), offset y' z' (n+1))
 
-theorem self_in_related {x y z : Rt} : (x, y, z) ∈ related x y z :=
-  Set.mem_iUnion.mpr ⟨0, by simp⟩
+theorem self_is_related {x y z : Rt} : related x y z x y z := ⟨0, by simp⟩
 
-def PartialFunction.graph (F : PartialFunction) : Set (Rt × Rt × Rt) := {(x, y, z) | F x y z}
-
-def PartialFunction.closureSet (F : PartialFunction) : Set (Rt × Rt × Rt) :=
-  ⋃ x : F.graph, related' x.val
+theorem related_isFunc x y z1 z2 x' y' z' (h1 : related x y z1 x' y' z')
+    (h2 : related x y z2 x' y' z') : z1 = z2 := by
+  sorry
 
 def PartialFunction.closure (F : PartialFunction) : PartialFunction :=
-  fun x y z => (x, y, z) ∈ F.closureSet
-
-theorem PartialFunction.closure_graph_eq_closureSet (F : PartialFunction) :
-  F.closure.graph = F.closureSet := rfl
-
-def PartialFunction.isFunc (F : PartialFunction) : Prop := ∀ x y z z', F x y z → F x y z' → z = z'
+  fun x y z => ∃ x' y' z', F x' y' z' ∧ related x y z x' y' z'
 
 theorem PartialFunction.le_closure (F : PartialFunction) : F ≤ F.closure := by
   intro x y z h
-  apply Set.mem_iUnion.mpr
-  exact ⟨⟨(x, y, z), h⟩, self_in_related⟩
-
-theorem PartialFunction.graph_mono (F1 F2 : PartialFunction) (h : F1 ≤ F2) : F1.graph ⊆ F2.graph := by
-  solve_by_elim [h]
+  exact ⟨x, y, z, h, self_is_related⟩
 
 theorem PartialFunction.closure_mono (F1 F2 : PartialFunction) (h : F1 ≤ F2) :
     F1.closure ≤ F2.closure := by
-  unfold closure closureSet
-  simp
-  intro x y z h
+  unfold closure
+  intro _ _ _ ⟨_, _, _, h1, h2⟩
+  exact ⟨_, _, _, h _ _ _ h1, h2⟩
+
+theorem PartialFunction.closure_LyRy (x y z w : Rt) (F : PartialFunction) (h1 : F.closure x y z)
+    (h2 : F.closure y z w) (hne : y.2 ≠ z.2) : w = (x.1 * ϕ x.2 ↑y.2, x.2) := by
   sorry
 
-theorem PartialFunction.closure_idem (F : PartialFunction) : F.closure.closure = F.closure := by
-  ext x y z
-  sorry
-
-theorem PartialFunction.closure_LyRy (x y z w : Rt) (F : PartialFunction) (hc : F = F.closure)
-    (h1 : F x y z) (h2 : F y z w) (hne : z.2 ≠ y.2) : w = (x.1 * ϕ x.2 ↑y.2, x.2) := by
-  sorry
-
-def PartialFunction.squares (F : PartialFunction) : Set Sq' :=
-  ⋃₀ F.graph.image fun (x, y, z) => {x.2, y.2, z.2}
-
-def PartialFunction.aux_cond (F : PartialFunction) := ∀ x y z, F.closure x y z → z.2 ≠ y.2
+def PartialFunction.isFinite (F : PartialFunction) : Prop := {(x, y, z) | F x y z}.Finite
+def PartialFunction.isFunc (F : PartialFunction) : Prop := ∀ x y z z', F x y z → F x y z' → z = z'
+def PartialFunction.aux_cond (F : PartialFunction) := ∀ x y z, F.closure x y z → y.2 ≠ z.2
 
 structure Extension where
   core : PartialFunction
-  finite : core.graph.Finite
+  finite : core.isFinite
   func : core.closure.isFunc
   aux : core.aux_cond
   u : Rt
   v : Rt
   not_def : ∀ z, ¬core.closure u v z
 
-def tupleSquares : Rt × Rt × Rt → Finset Sq' | (x, y, z) => {x.2, y.2, z.2}
-
-def Extension.oldSquares (E : Extension) : Set Sq' :=
-  {E.u.2, E.v.2} ∪ ⋃ x ∈ E.core.closure.graph, tupleSquares x
-
-theorem Extension.oldSquares_direct (E : Extension) :
-    ⋃ x ∈ E.core.closure.graph, tupleSquares x = (E.finite.toFinset.biUnion tupleSquares).toSet := by
-  apply Set.ext
-  intro x
-  constructor
-  · sorry
-  · intro h
-    sorry
-
-theorem Extension.oldSquaresFinite (E : Extension) : (E.oldSquares).Finite := by
-  simp [oldSquares]
-  rw [oldSquares_direct E]
-  apply Finset.finite_toSet
-
 noncomputable def Extension.squares (E : Extension) : Finset Sq' :=
-  {E.u.2, E.v.2} ∪ E.oldSquaresFinite.toFinset
+  {E.u.2, E.v.2} ∪ E.finite.toFinset.biUnion fun (x, y, z) => {x.2, y.2, z.2}
+
+theorem Extension.squares_closure {x y z : Rt} (E : Extension) (h : E.core.closure x y z) :
+    {x.2, y.2, z.2} ⊆ E.squares := by
+  rintro _ hsq
+  simp at hsq
+  simp only [squares, Finset.mem_union, Finset.mem_biUnion]
+  obtain ⟨_, _, _, h', h⟩ := h
+  obtain ⟨_, ⟨_, _, _⟩ | ⟨_, _, _⟩ | ⟨_, _, _⟩⟩ := h
+  repeat exact .inr ⟨(_, _, _), by simp [h']; tauto⟩
 
 def Extension.freshSquare (E : Extension) : ∃ s : Sq', s ∉ E.squares := Finset.exists_not_mem _
 
 noncomputable def Extension.freshRoot (E : Extension) : Rt := (1, E.freshSquare.choose)
 
 def Extension.next (E : Extension) : PartialFunction :=
-  fun x y z => E.core x y z ∨ x = E.u ∧ y = E.v ∧ z = E.freshRoot
+  fun x y z => E.core x y z ∨ (x, y, z) = (E.u, E.v, E.freshRoot)
 
-theorem Extension.next_finite (E : Extension) : E.next.graph.Finite := by
-  unfold PartialFunction.graph Extension.next
+theorem Extension.next_finite (E : Extension) : E.next.isFinite := by
+  unfold PartialFunction.isFinite Extension.next
   simp only [Set.setOf_or, Set.finite_union]
   exact ⟨E.finite, by simp [←Prod.mk.injEq]⟩
 
-theorem Extension.next_func (E : Extension) : E.next.closure.isFunc := by
+theorem new_related_disjoint (E : Extension) {x y z x2 y2 z2 x' y' z'} (h1 : E.core x' y' z')
+    (h2 : related x y z x' y' z') (h3 : related x2 y2 z2 E.u E.v E.freshRoot) : (x, y) ≠ (x2, y2) := by
   sorry
+
+theorem Extension.next_func (E : Extension) : E.next.closure.isFunc := by
+  simp only [PartialFunction.isFunc, PartialFunction.closure]
+  intro x y z z'
+  rintro ⟨x1, y1, z1, (hn1 | ⟨rfl, rfl, rfl⟩), hr1⟩ ⟨x2, y2, z2, (hn2 | ⟨rfl, rfl, rfl⟩), hr2⟩
+  · exact E.func _ _ _ _ ⟨_, _, _, hn1, hr1⟩ ⟨_, _, _, hn2, hr2⟩
+  · solve_by_elim [new_related_disjoint]
+  · solve_by_elim [new_related_disjoint]
+  · apply related_isFunc _ _ _ _ _ _ _ hr1 hr2
 
 theorem Extension.next_aux (E : Extension) : E.next.aux_cond := by
   sorry
@@ -249,7 +230,7 @@ end Iteration
 
 section Greedy
 
-def PartialSolution := {core : PartialFunction | core.graph.Finite ∧ core.closure.isFunc ∧ core.aux_cond }
+def PartialSolution := {core : PartialFunction | core.isFinite ∧ core.closure.isFunc ∧ core.aux_cond }
 
 theorem extend (S : PartialSolution) (u v : Rt) : ∃ S', S ≤ S' ∧ ∃ z, S'.val.closure u v z := by
   by_cases h : ∃ z, S.val.closure u v z
@@ -264,7 +245,7 @@ theorem extend (S : PartialSolution) (u v : Rt) : ∃ S', S ≤ S' ∧ ∃ z, S'
     tauto
 
 def Fn1323 (f : Rt → Rt → Rt) : Prop := ∀ x y,
-  x.2 ≠ y.2 → (f x y).2 ≠ y.2 ∧ f y (f x y) = (x.1 * ϕ x.2 y.2, x.2)
+  x.2 ≠ y.2 → y.2 ≠ (f x y).2 ∧ f y (f x y) = (x.1 * ϕ x.2 y.2, x.2)
 
 theorem exists_complete_function (seed : PartialSolution) :
     ∃ f, Fn1323 f ∧ (∀ {x y z}, seed.val x y z → f x y = z) := by
@@ -279,7 +260,7 @@ theorem exists_complete_function (seed : PartialSolution) :
     · exact S.prop.2.2 _ _ (f ..) ((F ..).val.closure_mono _ hS1 _ _ _ (hf ..))
     · have val1 := (F ..).val.closure_mono _ hS1 _ _ _ (hf ..)
       have val2 := (F ..).val.closure_mono _ hS2 _ _ _ (hf ..)
-      exact S.val.closure.closure_LyRy _ _ _ _ S.val.closure_idem.symm val1 val2 (S.2.2.2 _ _ _ val1)
+      exact S.val.closure_LyRy _ _ _ _ val1 val2 (S.2.2.2 _ _ _ val1)
   · exact (F ..).2.2.1 _ _ _ _ (hf ..) ((F ..).1.le_closure _ _ _ (h2 _ (hF ..) _ _ _ h))
 
 end Greedy
