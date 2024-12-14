@@ -12,7 +12,6 @@ import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 
 
-
 namespace Eq73
 
 private abbrev A := FreeGroup Nat
@@ -115,9 +114,6 @@ inductive Next : A → A → Prop
   | new {a b} : a = d → b = c → Next a b
   | extra {a e f} : Relevant a → e = c → f = a⁻¹ →  Next e f -- Nicer for pattern matching
 
-
-
-
 abbrev next : PreExtension := fun a => {b | Next a b}
 
 theorem next_func : ∀ {a}, (next a).Subsingleton
@@ -130,7 +126,6 @@ theorem next_func : ∀ {a}, (next a).Subsingleton
     apply_fun forgetOld old at he
     aesop
   | _, _, .extra h1 _ rfl, _, .extra h2 _ rfl => by rw [h1.unique h2]
-
 
 theorem next_eq73 {a b c'} : b ∈ next a → c' ∈ next (b * a⁻¹) → a⁻¹ ∈ next c'
   | .base h1, .base h2 => .base $ ok.eq73 h1 h2
