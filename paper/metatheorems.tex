@@ -12,20 +12,20 @@ A simple observation that already generates many equivalences is that any equati
 
 \subsection{Matching invariants}
 
-Fix an alphabet $X$. An \emph{matching invariant} is an assignment $I \colon M_X \to {\mathcal I}$ of an object $I(w) \in {\mathcal I}$ in some space ${\mathcal I}$ to each word $w \in M_X$ with the property that if an equational law $w_1 \formaleq w_2$ has matching invariants $I(w_1)=I(w_2)$, then the same matching $I(w'_1) = I(w'_2)$ holds for any consequence $w'_1 \formaleq w'_2$.  In particular, if one law $I(w_1)=I(w_2)$ and $I(w'_1) \neq I(w'_2)$, then the law $w_1 \formaleq w_2$ does not imply the law $w'_1 \formaleq w'_2$.
+Fix an alphabet $X$. A \emph{matching invariant} is an assignment $I \colon \Magma_X \to {\mathcal I}$ of an object $I(w) \in {\mathcal I}$ in some space ${\mathcal I}$ to each word $w \in \Magma_X$ with the property that if an equational law $w_1 \formaleq w_2$ has matching invariants $I(w_1)=I(w_2)$, then the same matching $I(w'_1) = I(w'_2)$ holds for any consequence $w'_1 \formaleq w'_2$.  In particular, if one law $I(w_1)=I(w_2)$ and $I(w'_1) \neq I(w'_2)$, then the law $w_1 \formaleq w_2$ does not imply the law $w'_1 \formaleq w'_2$.
 
-A simple example of a matching invariant is the multiplicity $(n_x)_{x \in X}$ of variables of a word: if $w_1,w_2$ have all variables $x$ appear the same number of times $n_x$ in both words, then any rewriting of a word $w$ using the law $w_1 \formaleq w_2$ will preserve this property.  Hence, if $w'_1, w'_2$ do not have the each variable appear the same number of times in both words, then $w_1 \formaleq w_2$ cannot imply $w'_1 \formaleq w'_2$.  For instance, the commutative law \eqref{eq43} cannot imply the left-absorptive law \eqref{eq4}.
+A simple example of a matching invariant is the multiplicity $(n_x)_{x \in X}$ of variables of a word: if $w_1,w_2$ have all variables $x$ appear the same number of times $n_x$ in both words, then any rewriting of a word $w$ using the law $w_1 \formaleq w_2$ will preserve this property.  Hence, if $w'_1, w'_2$ do not have that each variable appear the same number of times in both words, then $w_1 \formaleq w_2$ cannot imply $w'_1 \formaleq w'_2$.  For instance, the commutative law \eqref{eq43} cannot imply the left-absorptive law \eqref{eq4}.
 
-One source of matching invariants comes from the free magma $M_X$ of a theory:
+One source of matching invariants comes from the free magma $\Magma_{X,\Gamma}$ of a theory:
 
-\begin{proposition}[Free magmas and matching invariants]\label{free-inv}  Let $\Gamma$ be a theory, and let $\iota_{X,\Gamma} \colon X \to M_{X,\Gamma}$ be the map associated to the free magma $M_{X,\Gamma}$ for that theory.  Then the map $I \colon M_X \to M_{X,\Gamma}$ defined by $I(w) \coloneqq \varphi_{\iota_{X,\Gamma}}(w)$ is an invariant.
+\begin{proposition}[Free magmas and matching invariants]\label{free-inv}  Let $\Gamma$ be a theory, and let $\iota_{X,\Gamma} \colon X \to \Magma_{X,\Gamma}$ be the map associated to the free magma $\Magma_{X,\Gamma}$ for that theory.  Then the map $I \colon \Magma_X \to \Magma_{X,\Gamma}$ defined by $I(w) \coloneqq \varphi_{\iota_{X,\Gamma}}(w)$ is an invariant.
 \end{proposition}
 
-\begin{proof}  Suppose that $w_1 \formaleq w_2$ entails $w'_1 \formaleq w'_2$, and that $I(w_1) = I(w_2)$.  For any $f \colon X \to M_{X,\Gamma}$, the two maps $\varphi_f, \varphi_{f,\Gamma} \circ \varphi_{\iota_{X,\Gamma}} \colon M_X \to M_{X,\Gamma}$ are both homomorphisms that extend $f$, hence agree by the universal property of $M_X$, as displayed by the following commutative diagram:
+\begin{proof}  Suppose that $w_1 \formaleq w_2$ entails $w'_1 \formaleq w'_2$, and that $I(w_1) = I(w_2)$.  For any $f \colon X \to \Magma_{X,\Gamma}$, the two maps $\varphi_f, \varphi_{f,\Gamma} \circ \varphi_{\iota_{X,\Gamma}} \colon \Magma_X \to \Magma_{X,\Gamma}$ are both homomorphisms that extend $f$, hence agree by the universal property of $\Magma_X$, as displayed by the following commutative diagram:
 \[\begin{tikzcd}
 	&& X \\
 	\\
-	{M_X} && {M_{X,\Gamma}} && {M_{X,\Gamma}}
+	{\Magma_X} && {\Magma_{X,\Gamma}} && {\Magma_{X,\Gamma}}
 	\arrow[hook, from=1-3, to=3-1]
 	\arrow["{\iota_{X,\Gamma}}"', from=1-3, to=3-3]
 	\arrow["f", from=1-3, to=3-5]
@@ -33,7 +33,7 @@ One source of matching invariants comes from the free magma $M_X$ of a theory:
 	\arrow["{\varphi_f}"', curve={height=18pt}, from=3-1, to=3-5]
 	\arrow["{\varphi_{f,\Gamma}}", from=3-3, to=3-5]
 \end{tikzcd}\]
-In particular, the hypothesis $I(w_1)=I(w_2)$ implies that $\varphi_f(w_1) = \varphi_f(w_2)$ for all $f \colon X \to M_{X,\Gamma}$; that is to say, the magma $M_{X,\Gamma}$ obeys the law $w_1 \formaleq w_2$, and hence also $w'_1 \formaleq w'_2$ by hypothesis.  In particular, $\varphi_{\iota_{X,\Gamma}}(w'_1) = \varphi_{\iota_{X,\Gamma}}(w'_2)$, which gives $I(w'_1) = I(w'_2)$ as required.
+In particular, the hypothesis $I(w_1)=I(w_2)$ implies that $\varphi_f(w_1) = \varphi_f(w_2)$ for all $f \colon X \to \Magma_{X,\Gamma}$; that is to say, the magma $\Magma_{X,\Gamma}$ obeys the law $w_1 \formaleq w_2$, and hence also $w'_1 \formaleq w'_2$ by hypothesis.  In particular, $\varphi_{\iota_{X,\Gamma}}(w'_1) = \varphi_{\iota_{X,\Gamma}}(w'_2)$, which gives $I(w'_1) = I(w'_2)$ as required.
 \end{proof}
 
 \begin{example}  If we take $\Gamma = \{E4\}$ to be the theory of the left-absorptive law \eqref{eq4} as described in \Cref{left-absorb}, then the matching invariant $I(w)$ produced by \Cref{free-inv} is the left-most letter of the alphabet $X$ appearing in the word; for instance $I((\x \op \y) \op \z) = \x$.  Thus, for example, the left-absorptive law \eqref{eq4} cannot imply the right-absorptive law \eqref{eq5}.
@@ -42,7 +42,7 @@ In particular, the hypothesis $I(w_1)=I(w_2)$ implies that $\varphi_f(w_1) = \va
 \begin{example}  If we take $\Gamma = \{E43, E4512\}$ to be the theory of the commutative law \eqref{eq43} and the associative law \eqref{eq4512}, then by \Cref{semi-group}, the associated invariant $I(w) = \sum_{x \in X} n_x e_x$ is the formal sum of all the generators $e_x$ appearing in the word $w$, in the free abelian semigroup generated by those generators.  This recovers the preceding observation that the multiplicities $(n_x)_{x \in X}$ form a matching invariant.
 \end{example}
 
-\begin{example}  Let $n \geq 1$ be a positive integer, and consider the theory $\Gamma = \{E43, E4512, E_n\}$ consisting of the previous theory $\{E43, E4512\}$ together with the order $n$ law $L_x^y x = y$.  One can check that the free magma $M_{X,\Gamma}$ can be described as the free group of exponent $n$ with generators $e_x, x \in X$, with associated map $\iota_{X,\Gamma} \colon x \mapsto e_x$.  The associated matching invariant $I(w) = \sum_{x \in X} n_x e_x$ is essentially the multiplicities $(n_x \hbox{ mod } n)_{x \in X}$ modulo $n$, which gives a slightly stronger criterion than the preceding matching invariant for refuting implications.  For example, the cubic idempotent law $\x \formaleq (\x \op x) \op \x$ \eqref{eq23}
+\begin{example}  Let $n \geq 1$ be a positive integer, and consider the theory $\Gamma = \{E43, E4512, E_n\}$ consisting of the previous theory $\{E43, E4512\}$ together with the order-$n$ law $L_x^y x = y$.  One can check that the free magma $\Magma_{X,\Gamma}$ can be described as the free group of exponent $n$ with generators $e_x, x \in X$, with associated map $\iota_{X,\Gamma} \colon x \mapsto e_x$.  The associated matching invariant $I(w) = \sum_{x \in X} n_x e_x$ is essentially the multiplicities $(n_x \hbox{ mod } n)_{x \in X}$ modulo $n$, which gives a slightly stronger criterion than the preceding matching invariant for refuting implications.  For example, the cubic idempotent law $\x \formaleq (\x \op x) \op \x$ \eqref{eq23}
 has matching invariants $e_x = 3e_x$ in the $n=2$ case, and hence does not imply the idempotent law $\x \formaleq \x \op \x$ \eqref{eq3} since $e_x \neq 2e_x$ in the $n=2$ case.
 \end{example}
 
@@ -61,7 +61,7 @@ has matching invariants $e_x = 3e_x$ in the $n=2$ case, and hence does not imply
 
 \subsection{Unique factorization}
 
-In general, the free magma $M_{X,E}$ for a given equational law $E$, which we can canonically define as $M_X / \sim_E$, is hard to descibe explicitly; indeed, from the undecidability of implications, such a magma cannot be computably described for arbitrary $E$.  Nevertheless, for some laws it is possible to obtain some partial understanding of $M_{X,E}$ from a syntactic perspective.  For instance, if we can refute the equivalence $w'_1 \sim_E w'_2$ by constructing a counterexample magma $M$ that obeys $E$ but not $w'_1 \formaleq w'_2$, then this implies that the representatives $\iota_{X,E}(w'_1), \iota_{X,E}(w'_2)$ of  $w'_1, w'_2$ in $M_{X,E}$ are distinct.
+In general, the free magma $\Magma_{X,E}$ for a given equational law $E$, which we can canonically define as $\Magma_X / \sim_E$, is hard to describe explicitly; indeed, from the undecidability of implications between equational laws, such a magma cannot be computably described for arbitrary $E$.  Nevertheless, for some laws it is possible to obtain some partial understanding of $\Magma_{X,E}$ from a syntactic perspective.  For instance, if we can refute the equivalence $w'_1 \sim_E w'_2$ by constructing a counterexample magma $M$ that obeys $E$ but not $w'_1 \formaleq w'_2$, then this implies that the representatives $\iota_{X,E}(w'_1), \iota_{X,E}(w'_2)$ of  $w'_1, w'_2$ in $\Magma_{X,E}$ are distinct.
 
 We illustrate this approach with equations $E$ of a left-absorptive form
 \begin{equation}\label{left-absorptive}
@@ -91,7 +91,7 @@ $$ (x \op y) \op y = x \op y$$
 giving \eqref{eq378}.
 \end{proof}
 
-Let $E$ be a law of the form \Cref{left-absorptive} that implies \eqref{eq378}. We define a directed graph $\to_E$ on words in $M_X$ by declaring $w' \to_E w$ if $w \sim_E w'' \op w'$ for some $w' \in M_X$.  By \eqref{eq378} (applied to the quotient magma $M_{X,E} = M_X/\sim_E$), this is equivalent to requiring that $w \sim_E w \op w'$. In particular, from \Cref{left-absorptive} we have $f(x,y,z) \to x$ for all $x,y,z$.  Furthermore, the relation $\to_E$ factors through $\sim_E$: if $w \sim_E \tilde w$ and $w' \sim_E \tilde w'$, then $w' \to_E w$ if and only if $\tilde w \to_E \tilde w$.
+Let $E$ be a law of the form \Cref{left-absorptive} that implies \eqref{eq378}. We define a directed graph $\to_E$ on words in $\Magma_X$ by declaring $w' \to_E w$ if $w \sim_E w'' \op w'$ for some $w' \in \Magma_X$.  By \eqref{eq378} (applied to the quotient magma $\Magma_{X,E} = \Magma_X/\sim_E$), this is equivalent to requiring that $w \sim_E w \op w'$. In particular, from \Cref{left-absorptive} we have $f(x,y,z) \to x$ for all $x,y,z$.  Furthermore, the relation $\to_E$ factors through $\sim_E$: if $w \sim_E \tilde w$ and $w' \sim_E \tilde w'$, then $w' \to_E w$ if and only if $\tilde w \to_E \tilde w$.
 
 Call a word $w \in M_X$ \emph{irreducible} if it is not of the form $w = w_1 \op w_2$ with $w_2 \to_E w_1$.  We can partially understand the equivalence relation $\sim_E$ on irreducible words:
 
@@ -133,7 +133,7 @@ As an application of this corollary, we establish
 \end{proposition}
 
 \begin{proof}(Sketch)
-  We work in the free group $M_X$ on two generators $X = \{\x,\y\}$.  It suffices to show that
+  We work in the free group $\Magma_X$ on two generators $X = \{\x,\y\}$.  It suffices to show that
 $$  \x \op \y \not \sim_{E854} \x \op (\y \op (\x \op \y)).$$
 Suppose this were not the case, then by \Cref{unique factorization} one of the following statements must hold:
 \begin{itemize}
@@ -141,9 +141,9 @@ Suppose this were not the case, then by \Cref{unique factorization} one of the f
 \item[(ii)] $(y \op (x \op y)) \to_{E854} x$.
 \item[(iii)] $y \op (x \op y) \sim_{E854} y$.
 \end{itemize}
-If (i) holds, then we have $x \op y = x$ must hold in $M_X/\sim_E$, hence \eqref{eq854} would imply \eqref{eq4}.  However, it is possible to refute this implication by a finite counterexample.
+If (i) holds, then we have $x \op y = x$ must hold in $\Magma_X/\sim_E$, hence \eqref{eq854} would imply \eqref{eq4}.  However, it is possible to refute this implication by a finite counterexample.
 
-Similarly, if (iii) held, then \eqref{eq854} would have to imply \eqref{eq10}, but this can also be refuted in a finite magma.
+Similarly, if (iii) held, then \eqref{eq854} would have to imply \eqref{eq10}, but this can also be refuted by a finite magma.
 
 Finally, if (ii) held, then the claim
 $$  x \op y \sim x \op (y \op (x \op y))$$

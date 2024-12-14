@@ -8,7 +8,7 @@ suggest associativity, whereas most of the Magmas in our application will not be
 associative.) -/
 
 class Magma (α : Type _) where
-  /-- `a ◇ b` computes a binary operation of `a` and `b`. -/
+  /-- `a ◇ b` denotes a binary operation of `a` and `b`. -/
   op : α → α → α
 
 @[inherit_doc] infix:65 " ◇ " => Magma.op

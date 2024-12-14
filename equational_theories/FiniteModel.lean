@@ -9,6 +9,9 @@ import Mathlib.Tactic.Linarith
 
 namespace FiniteModel
 
+-- Note that if f is injective, it's trivial to turn an eventually periodic hypothesis into an
+-- immediately periodic one using Function.iterate_cancel
+
 lemma Finite.fn_eventually_periodic {G : Type*} [Finite G] (f : G → G) :
     ∃ s p : ℕ, p > 0 ∧ f^[s] = f^[s+p] := by
   obtain ⟨p₁, p₂, lt, heq⟩ : ∃ p₁ p₂ : ℕ, p₁ < p₂ ∧ f^[p₁] = f^[p₂] := by
@@ -19,11 +22,11 @@ lemma Finite.fn_eventually_periodic {G : Type*} [Finite G] (f : G → G) :
   let p := p₂ - p₁
   have : f^[p₁] = f^[p₁ + p] := by
     unfold p
-    rw [← Nat.add_sub_assoc (by linarith)]
-    simp only [heq, add_tsub_cancel_left]
+    rw [← Nat.add_sub_assoc (by linarith), heq, add_tsub_cancel_left]
   exact ⟨p₁, p, by simp only [gt_iff_lt, tsub_pos_iff_lt, lt, p], this⟩
 
-lemma Finite.fn_periodic {G : Type*} [Finite G] (f : G → G) : ∃ p : ℕ, p > 0 ∧ f^[p] = f^[2*p] := by
+lemma Finite.fn_eventually_periodic' {G : Type*} [Finite G] (f : G → G) :
+    ∃ p : ℕ, p > 0 ∧ f^[p] = f^[2*p] := by
   obtain ⟨s, p, hpgt, hp⟩ := Finite.fn_eventually_periodic f
   have hmod (n j : ℕ) : f^[s + j] = f^[s + j + n*p] := by
     induction n with
@@ -39,7 +42,7 @@ lemma Finite.fn_periodic {G : Type*} [Finite G] (f : G → G) : ∃ p : ℕ, p >
     have : f^[n] = f^[2*n] := by
       unfold n
       obtain ⟨ppred, hppred⟩ := Nat.exists_eq_succ_of_ne_zero (by linarith)
-      rw [hppred, Nat.succ_eq_add_one, Nat.mul_succ, Nat.add_comm]
+      rw [hppred, Nat.mul_add_one, Nat.add_comm]
       have : 2 * (s + s * ppred) = s + s * ppred + s * p := by simp_arith only [hppred, Nat.mul_succ]
       rw [this, ← hmod]
     have ngt : n > 0 := by apply Nat.mul_pos h hpgt
@@ -47,8 +50,8 @@ lemma Finite.fn_periodic {G : Type*} [Finite G] (f : G → G) : ∃ p : ℕ, p >
 
 lemma Finite.fn_mutually_eventually_periodic {G : Type*} [Finite G] (f g : G → G) :
     ∃ p : ℕ, p > 0 ∧ f^[p] = f^[2*p] ∧ g^[p] = g^[2*p] := by
-  obtain ⟨p₁, hpgt₁, hp₁⟩ := Finite.fn_periodic f
-  obtain ⟨p₂, hpgt₂, hp₂⟩ := Finite.fn_periodic g
+  obtain ⟨p₁, hpgt₁, hp₁⟩ := Finite.fn_eventually_periodic' f
+  obtain ⟨p₂, hpgt₂, hp₂⟩ := Finite.fn_eventually_periodic' g
   let p := p₁ * p₂
   have hpgt : p > 0 := by simp only [gt_iff_lt, mul_pos_iff_of_pos_left, p, hpgt₁, hpgt₂]
   have periodic_dvd' {f : G → G} (p n : ℕ) (hperiod : f^[p] = f^[2*p]) : f^[p + p*n] = f^[p] := by
@@ -60,19 +63,17 @@ lemma Finite.fn_mutually_eventually_periodic {G : Type*} [Finite G] (f g : G →
   have periodic_dvd {f : G → G} (p n : ℕ) (hperiod : f^[p] = f^[2*p]) (hngt : n > 0) :
       f^[n*p] = f^[p] := by
     obtain ⟨np, hnp⟩ := @Nat.exists_eq_succ_of_ne_zero n (by linarith)
-    rw [hnp, Nat.succ_eq_one_add, Nat.add_mul, Nat.one_mul, Nat.mul_comm, periodic_dvd' _ _ hperiod]
+    rw [hnp, Nat.succ_mul, Nat.mul_comm, Nat.add_comm, periodic_dvd' _ _ hperiod]
   have fperiodic : f^[p] = f^[2*p] := by
     unfold p
     rw [Nat.mul_comm, periodic_dvd p₁ _ hp₁ hpgt₂]
     symm
-    have : 2 * (p₂ * p₁) = 2 * p₂ * p₁ := by linarith
-    rw [this, periodic_dvd p₁ _ hp₁ (by linarith)]
+    rw [← Nat.mul_assoc, periodic_dvd p₁ _ hp₁ (by linarith)]
   have gperiodic : g^[p] = g^[2*p] := by
     unfold p
     rw [periodic_dvd p₂ _ hp₂ hpgt₁]
     symm
-    have : 2 * (p₁ * p₂) = 2 * p₁ * p₂ := by linarith
-    rw [this, periodic_dvd p₂ _ hp₂ (by linarith)]
+    rw [← Nat.mul_assoc, periodic_dvd p₂ _ hp₂ (by linarith)]
   exact ⟨p, hpgt, fperiodic, gperiodic⟩
 
 -- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/480601897
@@ -106,8 +107,7 @@ lemma Finite.f_ffg_implies_f_fgf {G: Type*} [Finite G] (f g : G -> G) (h : f = f
           ← hpred2, Nat.add_assoc p, ← hpred]
         simp only [n_mem, Nat.add_comm]
       have : f^[n - 1] ≠ f^[n + p-1] := by
-        have : n + p - 1 = n - 1 + p := by omega
-        rw [this]
+        rw [Nat.sub_add_comm (by linarith)]
         by_contra nh2
         have t1 : n - 1 ∈ S := by simp only [Set.mem_setOf_eq, nh2, S]
         have t2 : n - 1 < n := by omega
@@ -161,8 +161,7 @@ lemma Finite.f_gff_implies_f_fgf {G: Type*} [Finite G] (f g : G -> G) (h : f = g
           ← hpred2, Nat.add_assoc p, ← hpred]
         simp only [n_mem, Nat.add_comm]
       have : f^[n - 1] ≠ f^[n + p-1] := by
-        have : n + p - 1 = n - 1 + p := by omega
-        rw [this]
+        rw [Nat.sub_add_comm (by linarith)]
         by_contra nh2
         have t1 : n - 1 ∈ S := by simp only [Set.mem_setOf_eq, nh2, S]
         have t2 : n - 1 < n := by omega

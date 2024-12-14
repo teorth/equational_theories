@@ -127,7 +127,7 @@ Many implications for finite magmas rely on the fact that if $f, g:X \to X$ are 
 
 This can be used to obtain a few positive finite magma implications, for instance by setting $f,g$ to be left and right multiplication operators.  Another useful lemma is
 
-\begin{lemma}[Eventual period]\label{period} \lean{FiniteModel.Finite.fn_periodic} \leanok  Let $X$ be finite and $f: X \to X$.  Then there exists $n \geq 1$ such that $f^{2n} = f^n$.
+\begin{lemma}[Eventual period]\label{period} \lean{FiniteModel.Finite.fn_eventually_periodic'} \leanok  Let $X$ be finite and $f: X \to X$.  Then there exists $n \geq 1$ such that $f^{2n} = f^n$.
 \end{lemma}
 
 \begin{proof} \leanok By the pigeonhole principle, there exists $n \geq 1$, $m \geq 0$ such that $f^{m+n} = f^m$, which implies on iteration that $f^{m+mn} = f^m$ and hence $f^{2mn} = f^{mn}$, giving the claim.
@@ -146,29 +146,29 @@ $$ Cx \op y = f^n x \op y = f^{2n} x \op f^n y = f^n x \op f^n y = x \op y$$
 and a similar argument gives $x \op Cy = x \op y$.
 \end{proof}
 
-\begin{proposition}[1167 implies 1096]\label{1167-1096}
+\begin{proposition}[1167 implies 1096]\label{1167-1096}\leanok\lean{Eq1133.Finite.Equation1167_implies_Equation1096}
   For finite magmas, Equation 1167,
   $$ x = y \op ((z \op (y \op y)) \op x)$$
 implies Equation 1096,
 $$ x = y \op ((x \op (z \op y)) \op x).$$
 \end{proposition}
 
-\begin{proof} We write 1167 as
+\begin{proof}\leanok We write 1167 as
   $$ L_y L_{z \op Sy} = I,$$
 hence $L_y$ is invertible and $L_{z \op Sy} L_y = I$.  In particular $L_{z \op Sy} Sy = y$, hence squaring is injective, hence surjective.  So 1167 can be rewritten as $L_{S^{-1} y} L_{z \op y} = I$, hence $L_{z \op y}$ is independent of $z$.  In particular
 $$ L_{x \op (z \op y)} = L_{S^{-2} z \op (z \op y)} = L_{L_{S^{-2} z} L_{S^{-1} z \op S S^{-2} z} y} = L_y$$
 by 1167, hence the right-hand side of 1096 is independent of $z$.  Replacing $z$ with $y$, the claim now follows from 1167.
 \end{proof}
 
-\begin{proposition}[1113 implies 1167]\label{1113-1167}
-  For finite magmas, Equation 1113,
+\begin{proposition}[1133 implies 1167]\label{1133-1167}\leanok\lean{Eq1133.Finite.Equation1133_implies_Equation1167}
+  For finite magmas, Equation 1133,
 $$ x = y \op ((y \op (z \op y)) \op x)$$
 implies Equation 1167,
   $$ x = y \op ((z \op (y \op y)) \op x).$$
 \end{proposition}
 
-\begin{proof}
-1113 asserts that $L_y L_{y \op (z \op y)} = I$, hence $L_y$ is invertible and $L_{y \op (z \op y)} = L_y^{-1}$ does not depend on $z$.  Setting $z = y \op Sy$ we see from 1113 that $y \op (z \op y) = y$ and hence we have left-involution: $L_y = L_y^{-1}$. Replacing $y$ with $L_z y$ in 1113 we now get $L_{L_z y} L_{L_z y \op y} = I$, which since $L_{L_z y}$ is its own inverse gives
+\begin{proof}\leanok
+1133 asserts that $L_y L_{y \op (z \op y)} = I$, hence $L_y$ is invertible and $L_{y \op (z \op y)} = L_y^{-1}$ does not depend on $z$.  Setting $z = y \op Sy$ we see from 1133 that $y \op (z \op y) = y$ and hence we have left-involution: $L_y = L_y^{-1}$. Replacing $y$ with $L_z y$ in 1133 we now get $L_{L_z y} L_{L_z y \op y} = I$, which since $L_{L_z y}$ is its own inverse gives
 \begin{equation}\label{intermediate}
   L_{L_z y \op y} = L_{L_z y}.
 \end{equation}
@@ -184,7 +184,7 @@ $$ L_w^2 w = w = L_{z \op Sy} Sy =L_w Sy,$$
 hence $Sw = L_w w = Sy$.  As $S$ is injective, we have $L_w = L_y$, and then $L_y L_{z \op Sy} = L_y^2 = I$, giving 1167.
 \end{proof}
 
-\begin{proposition}[1441 implies 4067, 1443 implies 3055]\label{1441-4067-1443-3055}
+\begin{proposition}[1441 implies 4067, 1443 implies 3055]\label{1441-4067-1443-3055}\leanok\lean{Eq1441.Finite.Equation1441_implies_Equation4067,Eq1441.Finite.Equation1443_implies_Equation3055}
   For finite magmas, Equation 1441,
 $$ x = (x \op y) \op (x \op (x \op x))$$
 implies Equation 4067,
@@ -195,13 +195,13 @@ implies Equation 3055,
 $$ x = (((x \op x) \op y) \op x) \op x.$$
 \end{proposition}
 
-\begin{proof}
+\begin{proof}\leanok
   Write $\tilde C x = x \op Sx$, then 1441 asserts that $R_{\tilde Cx} R_y x = x$.  Setting $$y=Sx$$ we get $x = S\tilde Cx$, so by finiteness $\tilde C Sx = x$.  Replacing $x$ with $Sx$ in 1441 we conclude $R_x R_y Sx = Sx$ which is 4067.
 
-  Clearly 1443 implies 1441, hence 4067 by the previous implication, so that 3055 simplifies to $x = Sx \op x$.  Meanwhile, 1443 also implies $x = S(x \op (x \op z))$.  On taking square roots and using $S \tilde C = x$, we obtain $x \op (x \op z) = \tilde Cx$.  Appying this with $z = Sx$ we conclude $L_x \tilde Cx = \tilde Cx$, hence on replacing $x$ with $Sx$ we get $L_{Sx} x = x$ as required.
+  Clearly 1443 implies 1441, hence 4067 by the previous implication, so that 3055 simplifies to $x = Sx \op x$.  Meanwhile, 1443 also implies $x = S(x \op (x \op z))$.  On taking square roots and using $S \tilde C = x$, we obtain $x \op (x \op z) = \tilde Cx$.  Applying this with $z = Sx$ we conclude $L_x \tilde Cx = \tilde Cx$, hence on replacing $x$ with $Sx$ we get $L_{Sx} x = x$ as required.
 \end{proof}
 
-\begin{proposition}[1681 implies 3877, 1701 implies 1035]\label{1681-3877-1701-1035}
+\begin{proposition}[1681 implies 3877, 1701 implies 1035]\label{1681-3877-1701-1035}\leanok\lean{Eq1441.Finite.Equation1681_implies_Equation3877,Eq1441.Finite.Equation1701_implies_Equation1035}
   For finite magmas, Equation 1681,
 $$ x = (y \op x) \op ((x \op x) \op x)$$
 implies Equation 3877,
@@ -212,7 +212,7 @@ implies Equation 1035,
 $$ x = x \op ((y \op (x \op x)) \op x).$$
 \end{proposition}
 
-\begin{proof} This is very similar to the previous proof.
+\begin{proof}\leanok This is very similar to the previous proof.
   Write $Cx = Sx \op x$, then 1681 asserts $R_{Cx} L_y x = x$.  Again setting $y=Sx$ yields $x=SCx$ hence $x = CSx$, and on replacing $x$ with $Sx$ in 1681 one obtains 3877.
 
 For the second part, we simplify to $x = x \op Sx$, while 1701 gives $x = S((z \op x) \op x)$ hence $(z \op x) \op x = Cx$, so $R_x Cx = Cx$, so $R_{Sx} x = x$ as required.

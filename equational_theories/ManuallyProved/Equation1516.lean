@@ -3,13 +3,16 @@ import Mathlib.Data.Finmap
 import Mathlib.Data.Finset.Max
 import Mathlib.Data.List.Basic
 import Mathlib.Data.Finset.Order
+import Mathlib.Data.Set.Finite.Basic
+import Mathlib.Order.CompletePartialOrder
 
+import Mathlib.Data.Fintype.Card
+import equational_theories.FactsSyntax
+import equational_theories.FreshGenerator
+import equational_theories.Mathlib.Order.Greedy
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
 import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
-import equational_theories.FreshGenerator
-import equational_theories.Mathlib.Order.Greedy
-
 
 --import Mathlib.Tactic.Group --This breaks some instance, I haven't understood why exactly
 
@@ -1310,6 +1313,46 @@ theorem _root_.Equation1516_not_implies_Equation1489 : ∃ (G : Type) (_ : Magma
       fromList_eval x₁ x₂, fromList_eval (x₄ * x₂⁻¹) x₅]
     decide
 
+
+@[equational_result]
+theorem Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] (h : Equation1516 G) : Equation255 G := by
+  let S (x:G) := x ◇ x
+  let C (x:G) := (S x) ◇ x
+  let L (y x:G) := y ◇ x
+  have inv_LS : ∀ y, Function.Injective (L (S y)) := by
+    intro y
+    rw [Finite.injective_iff_surjective]
+    intro x
+    use x ◇ (x ◇ y)
+    dsimp [L, S]
+    rw [<-(h x y)]
+  have inv_S : Function.Surjective S := by
+    rw [<-Finite.injective_iff_surjective]
+    intro x y hxy
+    have hS x : S x = (L (S x) <| L (S x) <| L (S x) <| x) := by
+      dsimp [L]
+      convert h (S x) x
+    have hSy := hS y
+    rw [<-hxy] at hSy
+    nth_rewrite 1 [hS x] at hSy
+    exact inv_LS x <| inv_LS x <| inv_LS x <| hSy
+  have SC_id x : S x = (S (C x)) ◇ S x := by
+    convert h (S x) (C x) using 2
+    dsimp [C]
+    convert h (S x) x
+  have SC_CS_id x : S (C x) = C (S x) := by
+    rw [h (S (C x)) (S x), <-SC_id x, <-SC_id x]
+  intro x
+  obtain ⟨ y, hy ⟩ := inv_S x
+  rw [<- hy]
+  nth_rewrite 1 [SC_id y]
+  rw [SC_CS_id y]
+
+
+
+/--  https://teorth.github.io/equational_theories/blueprint/1516-chapter.html -/
+@[equational_result]
+conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G), Facts G [1516] [255]
 
 
 end Eq1516
