@@ -62,7 +62,7 @@ While ATPs are very useful to solve questions for this project, they generally d
 A bug in an ATP could lead to an unsound proof, or worse, an incorrect result.
 To avoid having to trust ATP's large codebases, we take results found by the different provers and (re-)construct their proofs in Lean.
 
-An exception for this are tactics like \texttt{duper}, \texttt{aesop} and \texttt{egg}. Figure~\ref{fig:screenshot-egg} shows an example of the \texttt{egg} tactic as used in this project. It integrates directly in Lean, generating a Lean proof directly. With the variant \texttt{egg?}, depicted in the screenshot, it uses an auxilariy tactic \texttt{calcify}\footnote{\url{https://github.com/nomeata/lean-calcify}} to generate a human-readable proof as a series of calculation steps, which can be incorporated into the file with a single click.
+An exception for this are tactics like \texttt{duper}, \texttt{aesop} and \texttt{egg}. Figure~\ref{fig:screenshot-egg} shows an example of the \texttt{egg} tactic as used in this project. It integrates directly in Lean, generating a Lean proof directly. With the variant \texttt{egg?}, depicted in the screenshot, it uses an auxiliary tactic \texttt{calcify}\footnote{\url{https://github.com/nomeata/lean-calcify}} to generate a human-readable proof as a series of calculation steps, which can be incorporated into the file with a single click.
 
 \begin{figure}
   \centering
