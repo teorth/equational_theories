@@ -77,30 +77,27 @@ def project (g : G) : ℤ := Multiplicative.toAdd (FreeGroup.lift project' g)
 @[simp] theorem project_inv {x} : project x⁻¹ = -project x := by simp [project]
 
 @[simp] theorem project_c : project c = 1 := by
-  simp [project, project', FreeGroup.lift.of_eq, c]
-  decide
+  simp only [project, c, FreeGroup.lift.of, project']
+  rfl
 
 theorem project_old' (a : List (Nat × Bool)) :
     generatorNames' a ⊆ old.biUnion generatorNames → project (FreeGroup.mk a) = 0 := by
   induction a
-  case nil => simp [generatorNames', ←FreeGroup.one_eq_mk]
+  case nil => simp [generatorNames', ← FreeGroup.one_eq_mk]
   case cons head _ ih =>
     rw [← List.singleton_append]
     intro hn
     simp only [generatorNames', List.singleton_append] at hn
-    rw [←FreeGroup.mul_mk, project, MonoidHom.map_mul, toAdd_mul, ←project, ←project, ih]
+    rw [← FreeGroup.mul_mk, project, MonoidHom.map_mul, toAdd_mul, ← project, ← project, ih]
     · have : head.1 ∈ old.biUnion generatorNames :=
         Finset.singleton_subset_iff.mp $ Finset.union_subset_left hn
       have : c' ∉ old.biUnion generatorNames := (existsFreshGeneratorName old).choose_spec
-      simp [project, project']
+      simp only [project, FreeGroup.lift.mk, project']
       by_cases head.2 <;> aesop
-    · apply subset_trans _ hn; simp
+    · exact Finset.union_subset_right hn
 
-theorem project_old {x} (h : x ∈ old) : project x = 0 := by
-  rw [←FreeGroup.mk_toWord (x := x)]
-  apply project_old'
-  intro _ h'
-  apply Finset.mem_biUnion.mpr ⟨x, h, h'⟩
+theorem project_old {x} (h : x ∈ old) : project x = 0 :=
+  FreeGroup.mk_toWord (x := x) ▸ project_old' _ fun _ h' ↦ Finset.mem_biUnion.mpr ⟨x, h, h'⟩
 
 @[simp] theorem project_d : project d = 0 := project_old (by simp [old])
 
@@ -108,15 +105,13 @@ theorem project_old {x} (h : x ∈ old) : project x = 0 := by
 theorem project_E {x y} (h : E x y) : project x = 0 ∧ project y = 0 := by
   constructor <;> (apply project_old; apply mem_old h; simp)
 
-
 theorem aux3' {x x' z} : E x d → E x' d → E x⁻¹ z → x' ≠ x * z := by
   intro h1 h2 h3 h4
-  simp [ok.aux3 h1 h2 h3 h4] at h4
+  simp only [ok.aux3 h1 h2 h3 h4, self_eq_mul_right] at h4
   have := inv_eq_iff_eq_inv.1 $ ok.aux1 (h4 ▸ h3)
   rw [this] at h1
   have values : E g₂⁻¹ (g₁ * g₂) ∧ E (g₁ * g₂) (g₂⁻¹ * g₁) := by simp [ok.base]
   exact not_def $ ok.func h1 values.left ▸ values.right
-
 
 @[mk_iff]
 inductive Next : G → G → Prop
@@ -125,16 +120,15 @@ inductive Next : G → G → Prop
   | fromH {h a b} : E h d → a = h⁻¹ * c → b = h⁻¹ → Next a b
   | fromH' {h f a b} : E h d → E h⁻¹ f → a = c⁻¹ * h * f → b = c⁻¹ * h → Next a b
 
-
 theorem inv_in_E_means_d {x y z} : Next x y → Next x⁻¹ z → x = d ∨ x = d⁻¹ ∨ E x y ∧ E x⁻¹ z
   | .base _, .base _ | .new rfl rfl, _ => by tauto
   | _, .new h _ => by rw [inv_eq_iff_eq_inv] at h; tauto
   | .fromH _ rfl rfl, .fromH' _ _ he _ => by
-    simp [mul_assoc] at he
+    simp only [mul_inv_rev, inv_inv, mul_assoc, mul_right_inj] at he
     solve_by_elim [aux3']
   | .fromH' _ _ rfl rfl, .fromH _ he _ => by
     apply_fun Inv.inv at he
-    simp [mul_assoc] at he
+    simp only [mul_assoc, mul_inv_rev, inv_inv, mul_right_inj] at he
     solve_by_elim [aux3']
   | .base hb, .fromH _ he _ | .base hb, .fromH' _ _ he _ | .fromH _ he _, .base _
   | .fromH .., .fromH _ he _ | .fromH' _ _ he _, .base _ | .fromH' _ _ rfl rfl, .fromH' _ _ he rfl => by
@@ -151,29 +145,26 @@ theorem prev_c_is_d {x} : Next x c → x = d
   | .new h _ => h
   | .fromH _ _ he | .fromH' _ _ _ he => by apply_fun project at he; aesop
 
-
 def next_finite : Set.Finite {(x, y) : G × G | Next x y} := by
   simp [next_iff, Set.setOf_or]
   split_ands
   · exact ok.finite
-  · simp [←Prod.mk.injEq]
+  · simp [← Prod.mk.injEq]
   · apply Set.Finite.subset (ok.finite.image fun (x, y) => (x⁻¹ * c, x⁻¹))
     intro (a, b) ⟨x, h⟩
-    simp at *
+    simp only [Set.mem_image, Set.mem_setOf_eq, Prod.mk.injEq, Prod.exists, exists_and_right] at *
     use x; simp [h]
     use d; simp [h]
   · apply Set.Finite.subset ((ok.finite.prod ok.finite).image fun ((x, _), (_, y)) => (c⁻¹ * x * y, c⁻¹ * x))
     intro (a, b) ⟨x, h1, y, h2, h3, h4⟩
-    simp at *
-    use x, d, x⁻¹, y
-    simp [*]
-
+    simp only [Set.mem_image, Set.mem_prod, Set.mem_setOf_eq, Prod.mk.injEq, Prod.exists] at *
+    exact ⟨x, d, x⁻¹, y, by simp [*]⟩
 
 def next_func {x y y'} : Next x y → Next x y' → y = y'
   | .base hb, .base hb' => ok.func hb hb'
   | .new rfl rfl, .new rfl rfl => rfl
   | .fromH h1 h2 h3, .fromH h1' h2' h3' => by
-    simp [h2'] at h2
+    rw [h2', mul_left_inj, inv_inj] at h2
     exact h3' ▸ h2 ▸ h3
   | .base hb, .new rfl rfl | .new rfl rfl, .base hb => (not_def hb).elim
   | .base .., .fromH _ he _ | .fromH _ he _, .base ..| .new .., .fromH _ he _ | .fromH _ he _, .new ..
@@ -182,12 +173,11 @@ def next_func {x y y'} : Next x y → Next x y' → y = y'
     apply_fun project at he
     aesop
   | .fromH' h1 h2 h3 rfl, .fromH' h1' h2' rfl rfl => by
-    simp [mul_assoc, mul_assoc] at h3
+    simp only [mul_assoc, mul_right_inj] at h3
     simp [ok.aux4 h1 h1' h2 h2' h3]
 
 def next_base : Next 1 g₁ ∧ Next g₁ g₂ ∧ Next g₂⁻¹ (g₁ * g₂) ∧ Next (g₁ * g₂) (g₂⁻¹ * g₁) := by
   simp [Next.base, ok.base]
-
 
 def next_eq63 {x y z} : Next x y → Next y z → Next (x⁻¹ * z) x⁻¹
   | .base hb, .base hb' => .base $ ok.eq63 hb hb'
@@ -200,14 +190,13 @@ def next_eq63 {x y z} : Next x y → Next y z → Next (x⁻¹ * z) x⁻¹
     have values : E 1 g₁ ∧ E g₁ g₂ := by simp [ok.base]
     exact not_def $ ok.func (h2 ▸ h1) values.left ▸ values.right
   | .fromH' _ _ rfl rfl, .fromH' _ _ he rfl => by
-    simp [mul_assoc] at he
+    simp only [mul_assoc, mul_right_inj] at he
     solve_by_elim [aux3']
   | .base .., .fromH .. | .base .., .fromH' .. | .new .., .base .. | .fromH' .., .base .. => by aesop
   | .new .., .new he _ | .new .., .fromH' _ _ he _ | .fromH _ _ he, .fromH ..
   | .fromH _ _ he, .fromH' .. | .fromH' .., .new he _ | .fromH' .., .fromH _ he _ => by
     apply_fun project at he
     aesop
-
 
 def next_aux1 {x} : Next x 1 → x = g₂
   | .base hb => ok.aux1 hb
@@ -226,7 +215,6 @@ def next_aux2 {x} : ¬Next x x⁻¹
   | .new _ he | .fromH _ he _ | .fromH' _ _ _ he => by
     apply_fun project at he
     aesop
-
 
 def next_aux3 {x x' y z} : Next x y → Next x' y → Next x⁻¹ z → x' = x * z → x' = x := by
   intro h1 h2 h3 h4
@@ -248,14 +236,13 @@ def next_aux3 {x x' y z} : Next x y → Next x' y → Next x⁻¹ z → x' = x *
       apply_fun project at h4
       aesop
 
-
 def next_aux4 {x x' y z z'} : Next x y → Next x' y → Next x⁻¹ z → Next x'⁻¹ z' → x' * z' = x * z → x = x' := by
   intro h1 h2 h3 h4 h5
   match inv_in_E_means_d h1 h3 with
   | .inl h => exact h ▸ prev_c_is_d (next_d_is_c (h ▸ h1) ▸ h2) |>.symm
   | .inr (.inl h) =>
     rw [h] at h1 h3 h5
-    simp at h3
+    rw [inv_inv] at h3
     rw [next_d_is_c h3] at h5
     match h4 with
     | .new h' rfl => exact h ▸ inv_eq_iff_eq_inv.2 h'.symm
@@ -313,7 +300,6 @@ end Greedy
 
 open Greedy
 
-
 def seed' : List (G × G) := [
   (1, g₁), (g₁, g₂), (g₂, 1), (g₁⁻¹, g₁⁻¹), (g₂⁻¹ * g₁, g₂⁻¹), (g₂⁻¹, g₁ * g₂),
   (g₁⁻¹ * g₂ * g₁ * g₂, g₁⁻¹ * g₂), (g₁ * g₂, g₂⁻¹ * g₁), (g₂⁻¹ * g₁⁻¹ * g₂⁻¹, g₂⁻¹ * g₁⁻¹),
@@ -345,19 +331,15 @@ theorem seed_ok : OK seed where
       from this _ h1 _ h2 _ h3 _ h4 rfl rfl rfl h5
     decide
 
-
 @[equational_result]
 theorem Equation63_not_implies_Equation1692 :
     ∃ (G: Type) (_: Magma G), Equation63 G ∧ ¬ Equation1692 G := by
-
   let ⟨f, h63, hf⟩ := exists_extension ⟨seed, seed_ok⟩
   use G, {op := fun x y => x * f (x⁻¹ * y)}
-
   have values : f g₃ = g₄⁻¹ ∧ f g₄ = g₃ := by
     repeat first | constructor | apply hf; simp [seed]
   have h1692 : ¬thompson f :=
-    by simp [thompson]; use g₃; simp [values]; decide
-
+    by rw [thompson, not_forall]; use g₃; simp only [values, inv_inv]; decide
   constructor
   · intro x y
     group
@@ -365,7 +347,8 @@ theorem Equation63_not_implies_Equation1692 :
     group at this
     exact this.symm
   · have ⟨x, h⟩ := Classical.exists_not_of_not_forall h1692
-    simp; use x, 1; simp
+    simp only [not_forall]
+    use x, 1; simp
     exact (h ·.symm)
 
 end Eq63
