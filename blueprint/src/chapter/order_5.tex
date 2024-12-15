@@ -1,0 +1,123 @@
+\chapter{Order 5 Austin laws}\label{order-5-austin-laws}
+
+\Cref{infinite-model-chapter} has useful background context for this chapter.
+As noted in \Cref{infinite-model-chapter}: an \emph{Austin law} is a law which admits infinite models, but no nontrivial finite models. Austin laws have order 5 or greater \cite{Kisielewicz2}.
+In this chapter we report partial results of a classification of laws of order 5 on whether they do or do not allow non-trivial finite or infinite models, with a particular interest in finding Austin laws.
+This work is also discussed in \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Some.20results.20from.20order.205/near/482118667}{this Zulip thread} with results saved on \href{https://github.com/vlad902/equational_theories/tree/order5}{this git branch}.
+
+There are 57,882 equations of order 5 (not including the 4,694 equations of order $\le 4$).
+\begin{itemize}
+  \item 19,392 (33.5\%) admit only trivial models.
+  \item 38,360 (66.2\%) have known satisfying finite models (and hence, also infinite models).
+  \item 106 allow only trivial finite models. Of these, 10 are Austin laws, and it is unknown whether the remaining 96 admit infinite models.
+  \item In 24 cases it is unknown whether they allow nontrivial finite models.
+\end{itemize}
+
+Of the equations with known satisfying finite models, a few had a minimum satisfying model size of order 17 (the largest minimum satisfying model size in order $\le 4$ is 7.) One equation was found with a satisfying model of order 26, but the smaller orders were not exhaustively searched so it cannot be established that the order is minimal.
+
+\subsection*{Equations with trivial finite models}
+
+106 equations were found that admitted only trivial finite models. Of these, Vampire's decision procedure finished without finding an implication to Equation 2 for 10 equations, allowing us to establish that they are inequivalent, e.g. they allow non-trivial infinite models.
+Hence, they must be Austin laws.
+The set of 10 Austin laws includes \Cref{eq28770}, an Austin law established in \cite{Kisielewicz2}.
+Note that Vampire's decision procedure also establishes that all 10 Austin laws are inequivalent to each other.
+These laws are listed in \Cref{table1}.
+
+\begin{table}[h]
+\begin{tabular}{|c|c|}
+\hline
+$x = y \op (x \op (x \op (y \op (z \op z))))$ (4916) & $x = ((((y \op y) \op z) \op x) \op x) \op z$ (41082) \\ \hline
+$x = y \op (((x \op (z \op z)) \op y) \op y)$ (15535) & $x = (y \op (y \op ((z \op z) \op x))) \op y$ (30591) \\ \hline
+$x = (y \op z) \op (x \op (z \op (z \op z)))$ (17522) & $x = (((y \op y) \op y) \op x) \op (y \op z)$ (28770) \\ \hline
+$x = (y \op y) \op ((z \op (x \op x)) \op z)$ (20034) & $x = (y \op ((x \op x) \op y)) \op (z \op z)$ (25964) \\ \hline
+$x = (y \op (x \op x)) \op ((y \op z) \op y)$ (22455) & $x = (y \op (z \op y)) \op ((x \op x) \op y)$ (22818) \\ \hline
+\end{tabular}
+\caption{Austin laws}
+\label{table1}
+\end{table}
+
+Of the 96 remaining equations, Vampire did not establish any implications between equations in this set. No effort was made to build infinite models for these equations.
+This set includes \Cref{eq5093}, another equation mentioned in \cite{Kisielewicz2} as having only trivial finite models, and it being unknown whether it allows infinite models.
+These laws are listed in \Cref{table2}.
+
+\begin{table}[h]
+\begin{tabular}{|c|c|}
+\hline
+$x = y \op (x \op (y \op (y \op (z \op y))))$ (4952) & $x = ((((y \op z) \op y) \op y) \op x) \op y$ (41252) \\ \hline
+$x = y \op (x \op (y \op (z \op (x \op z))))$ (4957) & $x = ((((y \op x) \op y) \op z) \op x) \op z$ (40914) \\ \hline
+$x = y \op (x \op (z \op (z \op (y \op z))))$ (5012) & $x = ((((y \op z) \op y) \op y) \op x) \op z$ (41253) \\ \hline
+$x = y \op (y \op (x \op (y \op (z \op y))))$ (5066) & $x = ((((y \op z) \op y) \op x) \op y) \op y$ (41239) \\ \hline
+$x = y \op (y \op (y \op (x \op (z \op y))))$ (5093) & $x = ((((y \op z) \op x) \op y) \op y) \op y$ (41179) \\ \hline
+$x = y \op (y \op (y \op (z \op (x \op y))))$ (5107) & $x = ((((y \op x) \op z) \op y) \op y) \op y$ (40951) \\ \hline
+$x = y \op (y \op (z \op (y \op (x \op y))))$ (5141) & $x = ((((y \op x) \op y) \op z) \op y) \op y$ (40917) \\ \hline
+$x = y \op (z \op (y \op (y \op (x \op y))))$ (5295) & $x = ((((y \op x) \op y) \op y) \op z) \op y$ (40909) \\ \hline
+$x = y \op (x \op (y \op ((z \op x) \op y)))$ (5833) & $x = (((y \op (x \op z)) \op y) \op x) \op y$ (40070) \\ \hline
+$x = y \op (x \op (y \op ((z \op x) \op z)))$ (5834) & $x = (((y \op (x \op y)) \op z) \op x) \op z$ (40037) \\ \hline
+$x = y \op (x \op (y \op ((z \op y) \op y)))$ (5837) & $x = (((y \op (y \op z)) \op y) \op x) \op y$ (40221) \\ \hline
+$x = y \op (y \op (x \op ((z \op x) \op y)))$ (5947) & $x = (((y \op (x \op z)) \op x) \op y) \op y$ (40057) \\ \hline
+$x = y \op (y \op (x \op ((z \op y) \op y)))$ (5951) & $x = (((y \op (y \op z)) \op x) \op y) \op y$ (40208) \\ \hline
+$x = y \op (y \op ((x \op y) \op (z \op y)))$ (6820) & $x = (((y \op z) \op (y \op x)) \op y) \op y$ (39485) \\ \hline
+$x = y \op (y \op ((z \op x) \op (x \op y)))$ (6878) & $x = (((y \op x) \op (x \op z)) \op y) \op y$ (39126) \\ \hline
+$x = y \op (y \op ((z \op y) \op (x \op y)))$ (6895) & $x = (((y \op x) \op (y \op z)) \op y) \op y$ (39163) \\ \hline
+$x = y \op (y \op ((z \op z) \op (x \op y)))$ (6912) & $x = (((y \op x) \op (z \op z)) \op y) \op y$ (39214) \\ \hline
+$x = y \op (x \op ((y \op (z \op x)) \op y))$ (7587) & $x = ((y \op ((x \op z) \op y)) \op x) \op y$ (38316) \\ \hline
+$x = y \op (y \op ((x \op (z \op x)) \op y))$ (7701) & $x = ((y \op ((x \op z) \op x)) \op y) \op y$ (38303) \\ \hline
+$x = y \op (y \op ((z \op (x \op x)) \op y))$ (7755) & $x = ((y \op ((x \op x) \op z)) \op y) \op y$ (38249) \\ \hline
+$x = y \op (y \op ((z \op (x \op z)) \op y))$ (7763) & $x = ((y \op ((z \op x) \op z)) \op y) \op y$ (38565) \\ \hline
+$x = y \op (x \op (((z \op x) \op y) \op y))$ (8485) & $x = ((y \op (y \op (x \op z))) \op x) \op y$ (37519) \\ \hline
+$x = y \op ((x \op y) \op (y \op (z \op y)))$ (9337) & $x = (((y \op z) \op y) \op (y \op x)) \op y$ (36867) \\ \hline
+$x = y \op ((x \op y) \op (z \op (y \op y)))$ (9345) & $x = (((y \op y) \op z) \op (y \op x)) \op y$ (36713) \\ \hline
+$x = y \op ((x \op z) \op (y \op (z \op z)))$ (9384) & $x = (((y \op y) \op z) \op (y \op x)) \op z$ (36714) \\ \hline
+$x = y \op ((z \op x) \op (y \op (x \op y)))$ (9603) & $x = (((y \op x) \op y) \op (x \op z)) \op y$ (36514) \\ \hline
+$x = y \op ((z \op y) \op (x \op (x \op y)))$ (9663) & $x = (((y \op x) \op x) \op (y \op z)) \op y$ (36487) \\ \hline
+$x = y \op ((z \op y) \op (x \op (y \op y)))$ (9667) & $x = (((y \op y) \op x) \op (y \op z)) \op y$ (36638) \\ \hline
+$x = y \op ((z \op y) \op (y \op (x \op y)))$ (9680) & $x = (((y \op x) \op y) \op (y \op z)) \op y$ (36524) \\ \hline
+$x = y \op ((x \op y) \op ((z \op x) \op y))$ (10218) & $x = ((y \op (x \op z)) \op (y \op x)) \op y$ (35685) \\ \hline
+$x = y \op ((x \op y) \op ((z \op y) \op y))$ (10222) & $x = ((y \op (y \op z)) \op (y \op x)) \op y$ (35836) \\ \hline
+$x = y \op ((x \op (y \op x)) \op (z \op y))$ (11081) & $x = ((y \op z) \op ((x \op y) \op x)) \op y$ (35036) \\ \hline
+$x = y \op ((x \op (y \op x)) \op (z \op z))$ (11082) & $x = ((y \op y) \op ((x \op z) \op x)) \op z$ (34889) \\ \hline
+$x = y \op ((x \op (z \op x)) \op (y \op y))$ (11116) & $x = ((y \op y) \op ((x \op z) \op x)) \op y$ (34888) \\ \hline
+$x = y \op ((y \op (x \op y)) \op (z \op y))$ (11205) & $x = ((y \op z) \op ((y \op x) \op y)) \op y$ (35100) \\ \hline
+$x = y \op ((y \op (z \op y)) \op (x \op y))$ (11280) & $x = ((y \op x) \op ((y \op z) \op y)) \op y$ (34778) \\ \hline
+$x = y \op (((y \op x) \op x) \op (z \op z))$ (12073) & $x = ((y \op y) \op (x \op (x \op z))) \op z$ (33998) \\ \hline
+$x = y \op (((y \op x) \op z) \op (x \op z))$ (12087) & $x = ((y \op x) \op (y \op (x \op z))) \op z$ (33884) \\ \hline
+$x = y \op (((z \op x) \op y) \op (x \op y))$ (12234) & $x = ((y \op x) \op (y \op (x \op z))) \op y$ (33883) \\ \hline
+$x = y \op ((x \op (y \op (z \op z))) \op y)$ (12857) & $x = (y \op (((z \op z) \op y) \op x)) \op y$ (33436) \\ \hline
+$x = y \op ((x \op (z \op (y \op x))) \op y)$ (12883) & $x = (y \op (((x \op y) \op z) \op x)) \op y$ (33020) \\ \hline
+$x = y \op ((x \op ((z \op y) \op y)) \op y)$ (13764) & $x = (y \op ((y \op (y \op z)) \op x)) \op y$ (32294) \\ \hline
+$x = y \op ((y \op ((x \op z) \op z)) \op z)$ (13849) & $x = (y \op ((y \op (y \op x)) \op z)) \op z$ (32281) \\ \hline
+$x = y \op ((z \op ((x \op y) \op y)) \op y)$ (13992) & $x = (y \op ((y \op (y \op x)) \op z)) \op y$ (32280) \\ \hline
+$x = (y \op x) \op (z \op ((x \op z) \op z))$ (18137) & $x = ((y \op (y \op x)) \op y) \op (x \op z)$ (27863) \\ \hline
+$x = (y \op y) \op (x \op ((x \op z) \op z))$ (18212) & $x = ((y \op (y \op x)) \op x) \op (z \op z)$ (27859) \\ \hline
+$x = (y \op y) \op ((x \op (x \op z)) \op z)$ (19966) & $x = (y \op ((y \op x) \op x)) \op (z \op z)$ (26105) \\ \hline
+$x = (y \op (y \op x)) \op ((z \op z) \op z)$ (22619) & $x = (y \op (y \op y)) \op ((x \op z) \op z)$ (22634) \\ \hline
+\end{tabular}
+\caption{Trivial finite models, unknown infinite models}
+\label{table2}
+\end{table}
+
+\subsection*{Remaining unknown equations}
+
+There are 24 (12 modulo duality) remaining equations, for which we did not establish whether they do or do not admit nontrivial finite models.
+For one equation, Equation 17260 below, Vampire's decision procedure indicates that it admits nontrivial models, though it is unclear whether it admits nontrivial finite models.
+These laws are listed in \Cref{table3}.
+
+\begin{table}[h]
+\begin{tabular}{|c|c|}
+\hline
+$x = y \op (((z \op y) \op x) \op (x \op y))$ (12294) & $x = ((y \op x) \op (x \op (y \op z))) \op y$ (33856) \\ \hline
+$x = y \op ((z \op (x \op (x \op z))) \op y)$ (13102) & $x = (y \op (((z \op x) \op x) \op z)) \op y$ (33273) \\ \hline
+$x = (y \op x) \op (z \op (x \op (z \op z)))$ (17260) & $x = (((y \op y) \op x) \op y) \op (x \op z)$ (28740) \\ \hline
+$x = (y \op x) \op (z \op (z \op (x \op z)))$ (17286) & $x = (((y \op x) \op y) \op y) \op (x \op z)$ (28626) \\ \hline
+$x = (y \op y) \op (((z \op x) \op x) \op z)$ (20911) & $x = (y \op (x \op (x \op y))) \op (z \op z)$ (25087) \\ \hline
+$x = (y \op (y \op x)) \op (x \op (x \op z))$ (21714) & $x = ((y \op x) \op x) \op ((x \op z) \op z)$ (24200) \\ \hline
+$x = (y \op (z \op x)) \op (x \op (x \op y))$ (21864) & $x = ((y \op x) \op x) \op ((x \op z) \op y)$ (24199) \\ \hline
+$x = (y \op (z \op x)) \op (x \op (x \op z))$ (21865) & $x = ((y \op x) \op x) \op ((x \op y) \op z)$ (24197) \\ \hline
+$x = (y \op (z \op x)) \op (x \op (x \op w))$ (21866) & $x = ((y \op x) \op x) \op ((x \op z) \op w)$ (24201) \\ \hline
+$x = (y \op (x \op x)) \op ((x \op z) \op z)$ (22446) & $x = (y \op (y \op x)) \op ((x \op x) \op z)$ (22591) \\ \hline
+$x = ((y \op x) \op x) \op (z \op (x \op z))$ (23337) & $x = ((y \op x) \op y) \op (x \op (x \op z))$ (23354) \\ \hline
+$x = ((y \op x) \op y) \op (x \op (y \op z))$ (23357) & $x = ((y \op z) \op x) \op (z \op (x \op z))$ (23653) \\ \hline
+\end{tabular}
+\caption{Unknown whether they admit finite models}
+\label{table3}
+\end{table}
