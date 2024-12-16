@@ -1,0 +1,65 @@
+\chapter{Equation 677}\label{677-chapter}
+
+In this chapter we study finite magmas that obey equation 677,
+\begin{equation}\label{677}
+  x = y \op (x \op ((y \op x) \op y))
+\end{equation}
+for all $x,y$, and whether this implies equation 255,
+\begin{equation}\label{255}
+  x = ((x \op x) \op x) \op x.
+\end{equation}
+Using the usual notation $L_y x = y \op x$, $R_y x = x \op y$, $Sx = x \op x$, we can rewrite equation 677 as
+\begin{equation}\label{677-alt}
+  x = L_y L_x L_{L_y x} y
+\end{equation}
+and 255 as
+$$ x = (Sx \op x) \op x.$$
+
+\begin{lemma}[Basic properties of 677 magma]\label{677-basic} Let $M$ be a finite magma obeying \eqref{677}.
+  \begin{itemize}
+  \item (i)  The left multiplication operators $L_y: M \to M$ are all invertible.
+  \item (ii) If $x,y \in M$ and $y \op x = x$, then $x = Sx \op x$.  In particular, 255 holds if and only if the equation $y \op x = x$ is solvable for every $x$.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}  From \eqref{677-alt} we see that $L_y$ is surjective, hence invertible on finite magmas, giving (i).  For (ii), we apply \eqref{677} to conclude that
+  $$ y \op x = x = y \op (x \op (x \op y))$$
+  and hence by left invertibility
+  $$ x = x \op (x \op y).$$
+  On the other hand, from \eqref{677} with $y$ replaced by $x$ we have
+  $$ x = x \op (x \op (Sx \op x))$$
+  and the claim then follows by left invertibility.
+\end{proof}
+
+This for instance gives the implication for linear magmas:
+
+\begin{lemma}[No linear counterexamples]\label{linear-obstruction}  Suppose we have a finite magma $M$ obeying 677 which is linear in the sense that $M$ is an abelian group and $x \op y = \alpha x + \beta y + c$ for some endomorhpisms $\alpha,\beta: M \to M$ and constant $c$.  Then $M$ obeys 255.
+\end{lemma}
+
+\begin{proof}  By the previous lemma, it suffices to show that right multiplication $R_x$ is surjective, or equivalently injective by finiteness.  If this is not the case, then we can find distinct $y,y'$ such that $R_x y = R_x y'$, hence $L_y x = L_{y'} x$. But in this linear model, $L_y$ and $L_{y'}$ differ by a constant, hence we have $L_y = L_{y'}$.  Applying \eqref{677-alt} we have
+$$  L_y L_x L_{L_y x} y = x =  L_y L_x L_{L_y x} y'$$
+and hence by left-invertiblity $y=y'$, a contradiction.
+\end{proof}
+
+In fact the argument gives a stronger obstruction to refuting 255:
+
+\begin{lemma}[No counterexamples via linear extension]\label{linear-2} Suppose that we have a magma with carrier $G \times M$ obeying 677, where $G$ already is a magma obeying 677 and 255, $M$ is an abelian group, and the multiplication operation on $G \times M$ is of the form
+  $$ (x,s) \op (y,t) = (x \op y, \alpha_{x,y} s + \beta_{x,y} t + c_{x,y})$$
+for some endomorphisms $\alpha_{x,y},\beta_{x,y}: M \to M$ and constants $c_{x,y}$.  Then $G \times M$ obeys 255.
+\end{lemma}
+
+\begin{proof}  By \Cref{677-basic}, it suffices to show that for any $(y,t)$, the equation $(x,s) \op (y,t) = (y,t)$ is solvable.  Since $G$ already obeys 255, we know that we can find $x$ such that $x \op y = y$, so it suffices to show that the operation $s \mapsto \alpha_{x,y} s + \beta_{x,y} t + c_{x,y}$ is surjective, or equivalently injective.  If this were not the case, then we could find $s,s'$ such that $\alpha_{x,y} s = \alpha_{x,y} s'$, and hence $L_{(x,s)} (y,t') = L_{(x,s')} (y,t')$ for all $t' \in M$.  Since
+  $$ x \op y = y = x \op (y \op ((x \op y) \op x))$$
+  from \eqref{677}, we have $y = y \op ((x \op y) \op x)$, and hence $L_{(y,t)} L_{L_{(x,s)} (y,t)} (x,s)$ is of the form $(y,t')$ for some $t'$, and similarly with $(x,s)$ replaced by $(x,s')$.  We conclude that
+$$ L_{(x,s)} L_{(y,t)} L_{L_{(x,s)} (y,t)} (x,s) = (y,t) =
+L_{(x,s)} L_{(y,t)} L_{L_{(x,s)} (y,t)} (x,s')$$
+and hence by left invertibliity $s=s'$, a contradiction.
+\end{proof}
+
+Linear models $x \op y = \alpha x + \beta y + c$ on the finite field $F_p$ turn out to be classified into two types:
+\begin{itemize}
+\item (Type 1) $\alpha=1-\beta$, $\beta$ is a primitive tenth root of unity, and $c=0$.  (These models are also translation-invariant.)
+\item (Type 2) $\alpha$ is a primitive third root of unity, $c$ is arbitrary, and $\beta$ solves $\beta^3+\beta+1=-\alpha$ and $\beta^4+\beta^3+2\beta^2+2\beta+1=0$.
+\end{itemize}
+An example of a Type I model is $x \op y = 2x-y$ on $F_5$.  Examples of Type II models include $x \op y = 4x+3y$ and $x \op y = 4x+y$ on $F_7$.  An exceptional class of Type II models are $x \op y = 5x-4y+c$ on $F_{31}$, these are the only Type II models that are translation-invariant and do not have idempotents (if $c \neq 0$).
+
