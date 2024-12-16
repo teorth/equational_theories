@@ -24,7 +24,7 @@ open FreshGenerator
 private abbrev A := FreeGroup Nat
 
 
-private abbrev x : Nat -> A := FreeGroup.of
+private abbrev x : Nat → A := FreeGroup.of
 private abbrev x₁ := x 1
 private abbrev x₂ := x 2
 private abbrev x₃ := x 3
@@ -133,13 +133,10 @@ def PartialSolution.DomId (ps : PartialSolution) : 1 ∈ ps.E := by
   rw [ps.fId]
   rfl
 
-
 def PartialSolution.Im (ps : PartialSolution) : Finset A :=
   (ps.E.entries.map Sigma.snd).toFinset
 
-
-
-def helper {α β γ} (g : α -> β) (f : ∀ b : α, γ (g b)) (h_g : Function.Injective g) (s : Finset α)
+def helper {α β γ} (g : α → β) (f : ∀ b : α, γ (g b)) (h_g : Function.Injective g) (s : Finset α)
 : Finmap γ where
   entries := Multiset.map (fun a => ⟨g a, f a⟩) s.1
   nodupKeys := by
@@ -150,7 +147,7 @@ def helper {α β γ} (g : α -> β) (f : ∀ b : α, γ (g b)) (h_g : Function.
     exact s.2
     exact h_g
 
-theorem helper_mem {α β} {γ : β -> Type} [DecidableEq β] (g : α -> β) (f : ∀ b : α, γ (g b))
+theorem helper_mem {α β} {γ : β → Type} [DecidableEq β] (g : α → β) (f : ∀ b : α, γ (g b))
 (h_g : Function.Injective g) (s : Finset α) (b : β) (c : γ b) :
 c ∈ Finmap.lookup b (helper g f h_g s) ↔ ∃ a ∈ s, g a = b ∧ HEq (f a) c := by
   unfold helper
@@ -158,7 +155,7 @@ c ∈ Finmap.lookup b (helper g f h_g s) ↔ ∃ a ∈ s, g a = b ∧ HEq (f a) 
   simp
 
 
-def helper' {α β γ} (g : α -> β) (f : ∀ b : α, γ (g b)) (s : Finset α) (d : ∀ x ∈ s, ∀ y ∈ s, g x = g y → x = y)
+def helper' {α β γ} (g : α → β) (f : ∀ b : α, γ (g b)) (s : Finset α) (d : ∀ x ∈ s, ∀ y ∈ s, g x = g y → x = y)
 : Finmap γ where
   entries := Multiset.map (fun a => ⟨g a, f a⟩) s.1
   nodupKeys := by
@@ -169,7 +166,7 @@ def helper' {α β γ} (g : α -> β) (f : ∀ b : α, γ (g b)) (s : Finset α)
     exact s.2
     exact d
 
-theorem helper'_mem {α β} {γ : β -> Type} [DecidableEq β] (g : α -> β) (f : ∀ b : α, γ (g b))
+theorem helper'_mem {α β} {γ : β → Type} [DecidableEq β] (g : α → β) (f : ∀ b : α, γ (g b))
 (s : Finset α) (d : ∀ x ∈ s, ∀ y ∈ s, g x = g y → x = y) (b : β) (c : γ b) :
 c ∈ Finmap.lookup b (helper' g f s d) ↔ ∃ a ∈ s, g a = b ∧ HEq (f a) c := by
   unfold helper'
@@ -1163,7 +1160,7 @@ theorem extension2 (ps : PartialSolution) (b : A) (h : b ≠ 1) (n : Nat) :
 
 def translation_invariant_1516 (f : A → A) : Prop := ∀ (x : A), (f ( f ( f x )* x⁻¹ * (f 1)⁻¹)) = x⁻¹ * (f 1)⁻¹
 
-theorem completion (ps : PartialSolution) : ∃ (f : A → A), translation_invariant_1516 f ∧ (∀ x y, y ∈ ps.E ⬝ x -> f x = y)
+theorem completion (ps : PartialSolution) : ∃ (f : A → A), translation_invariant_1516 f ∧ (∀ x y, y ∈ ps.E ⬝ x → f x = y)
 ∧ ∀ b, (b ≠ 1) → Set.encard {c | b*c = f c } ≥ 3 := by
   have ⟨c, hc, h1, h2, h3⟩  := exists_greedy_chain (α := PartialSolution) (β := A ⊕ {b : A // b ≠ 1})
     (task := fun b ps => match b with
@@ -1294,25 +1291,21 @@ theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
 @[equational_result]
 theorem _root_.Equation1516_not_implies_Equation1489 : ∃ (G : Type) (_ : Magma G), Equation1516 G ∧ ¬ Equation1489 G := by
   let magA : Magma A := { op := fun x y => f (y*x⁻¹) * x  }
-  use A, magA
-  constructor
-  · unfold Equation1516
-    intro x y
+  refine ⟨A, magA, ?_, ?_⟩
+  · intro x y
     repeat rw [magA_op_def]
     simp only [mul_inv_cancel_right, mul_inv_cancel, mul_inv_rev]
-    have := f_translation_invariant_1516 (y*x⁻¹)
-    apply_fun fun a => a * (f 1) * y at this
+    have := f_translation_invariant_1516 (y * x⁻¹)
+    apply_fun fun a ↦ a * (f 1) * y at this
     simp only [mul_inv_rev, inv_inv, inv_mul_cancel_right] at this
     repeat rw [mul_assoc] at *
     exact this.symm
-  · unfold Equation1489
-    simp only [not_forall]
+  · simp only [not_forall]
     exists x₁, 1
     repeat rw [magA_op_def]
     simp only [one_mul, fromList_eval x₁⁻¹ x₃, inv_one, mul_one, fromList_eval (x₃ * x₁) x₄,
       fromList_eval x₁ x₂, fromList_eval (x₄ * x₂⁻¹) x₅]
     decide
-
 
 @[equational_result]
 theorem Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] (h : Equation1516 G) : Equation255 G := by
@@ -1325,34 +1318,56 @@ theorem Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] 
     intro x
     use x ◇ (x ◇ y)
     dsimp [L, S]
-    rw [<-(h x y)]
+    rw [← h]
   have inv_S : Function.Surjective S := by
-    rw [<-Finite.injective_iff_surjective]
+    rw [← Finite.injective_iff_surjective]
     intro x y hxy
-    have hS x : S x = (L (S x) <| L (S x) <| L (S x) <| x) := by
-      dsimp [L]
-      convert h (S x) x
+    have hS x : S x = (L (S x) <| L (S x) <| L (S x) <| x) := h (S x) x
     have hSy := hS y
-    rw [<-hxy] at hSy
+    rw [← hxy] at hSy
     nth_rewrite 1 [hS x] at hSy
     exact inv_LS x <| inv_LS x <| inv_LS x <| hSy
   have SC_id x : S x = (S (C x)) ◇ S x := by
-    convert h (S x) (C x) using 2
-    dsimp [C]
-    convert h (S x) x
-  have SC_CS_id x : S (C x) = C (S x) := by
-    rw [h (S (C x)) (S x), <-SC_id x, <-SC_id x]
+    convert h .. using 2
+    exact h ..
+  have SC_CS_id x : S (C x) = C (S x) := by rw [h (S (C x)) (S x), ← SC_id x, ← SC_id x]
   intro x
-  obtain ⟨ y, hy ⟩ := inv_S x
-  rw [<- hy]
+  obtain ⟨y, hy⟩ := inv_S x
+  rw [← hy]
   nth_rewrite 1 [SC_id y]
   rw [SC_CS_id y]
 
 
 
-/--  https://teorth.github.io/equational_theories/blueprint/1516-chapter.html -/
-@[equational_result]
-conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G), Facts G [1516] [255]
+-- @[equational_result]
+theorem _root_.Equation1516_not_implies_Equation255 :
+    ∃ (G : Type) (_ : Magma G), Equation1516 G ∧ ¬ Equation255 G := by
+  sorry
 
+
+  -- let magA : Magma A := { op := fun x y => f (y*x⁻¹) * x  }
+  -- use A, magA
+  -- constructor
+  -- · unfold Equation1516
+  --   intro x y
+  --   repeat rw [magA_op_def]
+  --   simp only [mul_inv_cancel_right, mul_inv_cancel, mul_inv_rev]
+  --   have := f_translation_invariant_1516 (y*x⁻¹)
+  --   apply_fun fun a => a * (f 1) * y at this
+  --   simp only [mul_inv_rev, inv_inv, inv_mul_cancel_right] at this
+  --   repeat rw [mul_assoc] at *
+  --   exact this.symm
+  -- · unfold Equation1489
+  --   simp only [not_forall]
+  --   exists x₁, 1
+  --   repeat rw [magA_op_def]
+  --   simp only [one_mul, fromList_eval x₁⁻¹ x₃, inv_one, mul_one, fromList_eval (x₃ * x₁) x₄,
+  --     fromList_eval x₁ x₂, fromList_eval (x₄ * x₂⁻¹) x₅]
+  --   decide
+
+
+-- /--  https://teorth.github.io/equational_theories/blueprint/1516-chapter.html -/
+-- @[equational_result]
+-- conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G), Facts G [1516] [255]
 
 end Eq1516
