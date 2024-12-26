@@ -14,6 +14,10 @@ import equational_theories.EquationalResult
 import equational_theories.Equations.All
 import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
 
+
+import Mathlib.Data.Rel
+
+
 --import Mathlib.Tactic.Group --This breaks some instance, I haven't understood why exactly
 
 namespace Eq1516
@@ -1287,6 +1291,484 @@ theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
     rw [fromList_eval (x₆^(-1)) (x₆^2), fromList_eval (x₆^2 * x₆) (x₆^1)]
     simp
 
+section Refutation255
+
+-- Follows https://teorth.github.io/equational_theories/blueprint/1516-chapter.html
+-- We try to mimick the proof structure from Equation63 for the greedy construction parts. For now we are focusing on the second greedy construction (the one to prove axioms A and C) as it looks to be simpler than the other one. There are still big chunks of copy pasted and commented code. We will try to uncomment and adapt it as we go.
+-- There are some sorries marked with `doable`, those can be tackled with relatively limited effort, without having to first understand all the greedy construction.
+-- Current big task: build `next` for the second greedy construction
+
+
+def G' := {(a, b, _) : A × A × ℕ | a ≠ b}
+
+-- G is the disjoint union of A and G'
+def G := A ⊕ G'
+
+instance : Countable G' := inferInstance
+
+instance : Countable G := inferInstanceAs (Countable (_ ⊕ _))
+
+-- coercion from A to G
+instance : Coe A G := ⟨.inl⟩
+
+-- coercion from G' to G
+instance : Coe G' G := ⟨.inr⟩
+
+-- square function: on A it is the identity, on G' it is (a, b, n) ↦ a
+def S : G → A
+  | .inl a => a
+  | .inr g => g.1.1
+
+namespace GreedyB
+-- Greedy construction to extend the operation from A×A to A×G' in order to satisfy Axiom B
+
+-- universe u
+-- variable {G : Type u} [RelaxedVeryWeakCentralGroupoid G]
+
+
+-- variable (G) in
+-- def ExtBase := G × Nat
+
+instance [Countable G] : Countable G := inferInstance -- maybe not needed
+
+abbrev PreExtension := Finset G'
+
+-- def PreExtension.induced (E : PreExtension G) (x y : ExtBase G) : Set (ExtBase G) :=
+--   {z | IsGood x.1 z.1 y.1 ∧ (x, z) ∈ E ∧ (z, y) ∈ E}
+
+-- theorem PreExtension.induced_mono {E E' : PreExtension G} (H : E ≤ E') {x y : ExtBase G} :
+--     E.induced x y ⊆ E'.induced x y :=
+--   fun _ ⟨h1, h2, h3⟩ => ⟨h1, H h2, H h3⟩
+
+structure PreExtension.OK (E : PreExtension) : Prop where
+  -- path x y : (x, y) ∈ E → Path x.1 y.1
+  -- consistent x y : Set.Subsingleton (E.induced x y)
+
+  --todo: identify the correct body for this structure, it should include all the properties that we want a seed to have in this greedy construction, see the proof of Prop 17.5
+
+abbrev Extension := {E : PreExtension // E.OK}
+
+-- theorem Extension.next (E : Extension G) (a b) :
+--     ∃ E' : Extension G, E ≤ E' ∧ (E'.1.induced a b).Nonempty := by
+--   classical if h : (E.1.induced a b).Nonempty then exact ⟨_, le_rfl, h⟩ else
+--   let ⟨l, hl⟩ := Infinite.exists_not_mem_finset <|
+--     (insert a <| insert b <| E.1.image (·.1) ∪ E.1.image (·.2)).image (·.2)
+--   let c : ExtBase G := (a.1 ◇ b.1, l)
+--   refine ⟨⟨insert (a, c) (insert (c, b) E.1), ?_, fun x y z hz w hw => ?_⟩,
+--     fun _ => (by simp [·]), c, op_isGood .., by simp⟩
+--   · simp only [Finset.mem_insert, Prod.mk.injEq, or_imp, and_imp, forall_and,
+--       forall_eq_apply_imp_iff, forall_eq]
+--     exact have ⟨h1, h2⟩ := (isGood_path (op_isGood ..)); ⟨h1, h2, E.2.1⟩
+--   · simp only [PreExtension.induced, Finset.mem_insert, Set.mem_setOf_eq] at hz hw
+--     have ⟨hl1, hl2, hl3⟩ : a ≠ c ∧ b ≠ c ∧ ∀ {x y} (h : (x, y) ∈ E.1), x ≠ c ∧ y ≠ c := by
+--       simp only [Finset.image_insert, Finset.mem_insert, Finset.mem_image, Finset.mem_union,
+--         Prod.exists, exists_and_right, exists_eq_right, not_or, not_exists, not_and, or_imp,
+--         forall_exists_index, forall_and] at hl
+--       exact ⟨mt (congrArg (·.2)) (Ne.symm hl.1), mt (congrArg (·.2)) (Ne.symm hl.2.1),
+--         fun h => ⟨fun e => hl.2.2.1 _ _ h (e ▸ rfl), fun e => hl.2.2.2 _ _ h (e ▸ rfl)⟩⟩
+--     clear_value c; clear l hl
+--     obtain ⟨hz1, ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz2, hz3⟩ := hz <;> obtain ⟨hw1, ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw2, hw3⟩ := hw
+--     · rfl
+--     · cases hl1 rfl
+--     · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz3 := hz3
+--       · cases hl1 rfl
+--       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
+--         · cases hl2 rfl
+--         · cases (hl3 hw2).2 rfl
+--         · cases h ⟨_, hw1, hw2, hw3⟩
+--       · cases (hl3 hz3).1 rfl
+--     · cases hl1 rfl
+--     · rfl
+--     · cases (hl3 hw2).1 rfl
+--     · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
+--       · cases hl1 rfl
+--       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz3 := hz3
+--         · cases hl2 rfl
+--         · cases (hl3 hz2).2 rfl
+--         · cases h ⟨_, hz1, hz2, hz3⟩
+--       · cases (hl3 hw3).1 rfl
+--     · cases (hl3 hz2).1 rfl
+--     · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz3 := hz3
+--       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
+--         · rfl
+--         · cases hl2 rfl
+--         · cases (hl3 hw3).2 rfl
+--       · cases (hl3 hz2).2 rfl
+--       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
+--         · cases (hl3 hz3).2 rfl
+--         · cases (hl3 hw2).2 rfl
+--         · exact E.2.2 _ _ ⟨hz1, hz2, hz3⟩ ⟨hw1, hw2, hw3⟩
+
+-- variable [Countable G]
+
+-- variable (e₀ : Extension G)
+
+-- part of the proof of Prop 17.5, 3rd paragraph
+lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A, a ◇ ((c b) ◇ b) = c b := by
+  --doable
+  sorry
+
+--maybe in  this part of the prof we can actually avoid using the greedy construction, at first glance it seems to me that we actually explicitely define the function at each
+theorem exists_extension :
+    ∃ L : A → G → G,
+    (∀ a b : A, L b a = b ◇ a) ∧ -- Lb extends a : A ↦ b ◇ a
+    (∀ b : A, ∀ x : G', (L (S x) <| L b <| L b x) = b) ∧ -- Axiom B
+    (∀ b : A, ∀ x : G', {y : G' | L b y = x}.Infinite) ∧ -- infinite surjectivity
+    (∀ b : A, ∀ x : G', L b x ≠ x) := by sorry
+    -- ∃ op : ExtBase G → ExtBase G → ExtBase G, ∃ E : ExtBase G → ExtBase G → Prop,
+    -- (∀ a b c, c = op a b ↔ IsGood a.1 c.1 b.1 ∧ E a c ∧ E c b) ∧
+    -- (∀ a b, (a, b) ∈ e₀.1 → E a b) ∧
+    -- (∀ a b, E a b → Path a.1 b.1) := by
+  -- have ⟨c, hc, h1, _, h3⟩ := exists_greedy_chain
+  --   (task := fun x : _ × _ => {e | (e.1.induced x.1 x.2).Nonempty}) (fun E ⟨a, b⟩ => E.next a b) e₀
+  -- simp only [Subtype.exists, Prod.forall] at h3
+  -- choose f hf1 hf2 op hop using h3
+  -- refine ⟨op, fun a b => ∃ e ∈ c, (a, b) ∈ e.1, ?_, fun a b H => ⟨_, h1, H⟩, ?_⟩
+  -- · refine fun a b c => ⟨fun H => ?_, fun ⟨h1, ⟨i, hi, h2⟩, ⟨j, hj, h3⟩⟩ => ?_⟩
+  --   · exact let ⟨h1, h2, h3⟩ := hop a b; H ▸ ⟨h1, ⟨_, hf2 _ _, h2⟩, ⟨_, hf2 _ _, h3⟩⟩
+  --   · have ⟨k, hk, ik, jk⟩ := hc.directedOn _ hi _ hj
+  --     have ⟨l, _, kl, fl⟩ := hc.directedOn _ hk _ (hf2 a b)
+  --     exact l.2.2 _ _ ⟨h1, le_trans ik kl h2, le_trans jk kl h3⟩ ((f ..).induced_mono fl (hop a b))
+  -- · exact fun a b ⟨i, _, hi⟩ => i.2.1 a b hi
+
+noncomputable def L : A → G → G := exists_extension.choose
+
+theorem L_extends (a b : A) : L b a = b ◇ a := exists_extension.choose_spec.1 a b
+
+theorem L_1516 (b : A) (x : G') : (L (S x) <| L b <| L b x) = b := exists_extension.choose_spec.2.1 b x
+
+theorem L_surjective (b : A) (x : G') : {y : G' | L b y = x}.Infinite := exists_extension.choose_spec.2.2.1 b x
+
+theorem L_ne (b : A) (x : G') : L b x ≠ x := exists_extension.choose_spec.2.2.2 b x
+
+
+end GreedyB
+
+namespace GreedyAC
+open GreedyB
+
+variable (x : G')
+
+structure OK (E : Rel G G) : Prop where
+  finite : Set.Finite {(x, y) : G × G | E x y}
+  func {x y y'} : E x y → E x y' → y = y'
+  aux1 : E x (S x) --Eq4 in the dim
+  aux2 (y z w) : E y z → E z w → L (S y) w = x --Eq5 in the dim, we are renaming L x y = z, L x z = w, so we are saying that (L (S y) <| L x <| L x y) = x, which is equation 1516
+
+abbrev PartialSolution := {E : Rel G G // OK x E}
+
+class Extension where
+  E : Rel G G
+  ok : OK x E
+  d : G
+  not_def {y} : ¬E d y
+
+
+-- namespace Extension
+
+-- variable [Extension x]
+
+-- def old : Finset G :=
+--   insert d <| ok.finite.toFinset.biUnion fun (a, b) => {a, b}
+
+-- theorem mem_old {a b x}
+--     (h1 : E a b) (h2 : x ∈ ({a, b} : Finset G)) : x ∈ old := by
+--   refine Finset.mem_insert_of_mem ?_
+--   simp only [old, Finset.mem_biUnion, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Prod.exists]
+--   exact ⟨_, _, h1, h2⟩
+
+-- def c' := freshGeneratorName old
+-- def c := FreeGroup.of c'
+
+-- def project' (i : Nat) : Multiplicative ℤ := if i = c' then (1 : ℤ) else (0 : ℤ)
+-- def project (g : G) : ℤ := Multiplicative.toAdd (FreeGroup.lift project' g)
+
+-- @[simp] theorem project_1 : project 1 = 0 := by simp [project]
+-- @[simp] theorem project_mul {x y} : project (x * y) = project x + project y := by simp [project]
+-- @[simp] theorem project_inv {x} : project x⁻¹ = -project x := by simp [project]
+
+-- @[simp] theorem project_c : project c = 1 := by
+--   simp only [project, c, FreeGroup.lift.of, project']
+--   rfl
+
+-- theorem project_old' (a : List (Nat × Bool)) :
+--     generatorNames' a ⊆ old.biUnion generatorNames → project (FreeGroup.mk a) = 0 := by
+--   induction a
+--   case nil => simp [generatorNames', ← FreeGroup.one_eq_mk]
+--   case cons head _ ih =>
+--     rw [← List.singleton_append]
+--     intro hn
+--     simp only [generatorNames', List.singleton_append] at hn
+--     rw [← FreeGroup.mul_mk, project, MonoidHom.map_mul, toAdd_mul, ← project, ← project, ih]
+--     · have : head.1 ∈ old.biUnion generatorNames :=
+--         Finset.singleton_subset_iff.mp $ Finset.union_subset_left hn
+--       have : c' ∉ old.biUnion generatorNames := (existsFreshGeneratorName old).choose_spec
+--       simp only [project, FreeGroup.lift.mk, project']
+--       by_cases head.2 <;> aesop
+--     · exact Finset.union_subset_right hn
+
+-- theorem project_old {x} (h : x ∈ old) : project x = 0 :=
+--   FreeGroup.mk_toWord (x := x) ▸ project_old' _ fun _ h' ↦ Finset.mem_biUnion.mpr ⟨x, h, h'⟩
+
+-- @[simp] theorem project_d : project d = 0 := project_old (by simp [old])
+
+-- @[local aesop safe destruct]
+-- theorem project_E {x y} (h : E x y) : project x = 0 ∧ project y = 0 := by
+--   constructor <;> (apply project_old; apply mem_old h; simp)
+
+-- theorem aux3' {x x' z} : E x d → E x' d → E x⁻¹ z → x' ≠ x * z := by
+--   intro h1 h2 h3 h4
+--   simp only [ok.aux3 h1 h2 h3 h4, self_eq_mul_right] at h4
+--   have := inv_eq_iff_eq_inv.1 $ ok.aux1 (h4 ▸ h3)
+--   rw [this] at h1
+--   have values : E g₂⁻¹ (g₁ * g₂) ∧ E (g₁ * g₂) (g₂⁻¹ * g₁) := by simp [ok.base]
+--   exact not_def $ ok.func h1 values.left ▸ values.right
+
+-- @[mk_iff]
+-- inductive Next : G → G → Prop
+--   | base {a b} : E a b → Next a b
+--   | new {a b} : a = d → b = c → Next a b
+--   | fromH {h a b} : E h d → a = h⁻¹ * c → b = h⁻¹ → Next a b
+--   | fromH' {h f a b} : E h d → E h⁻¹ f → a = c⁻¹ * h * f → b = c⁻¹ * h → Next a b
+
+-- theorem inv_in_E_means_d {x y z} : Next x y → Next x⁻¹ z → x = d ∨ x = d⁻¹ ∨ E x y ∧ E x⁻¹ z
+--   | .base _, .base _ | .new rfl rfl, _ => by tauto
+--   | _, .new h _ => by rw [inv_eq_iff_eq_inv] at h; tauto
+--   | .fromH _ rfl rfl, .fromH' _ _ he _ => by
+--     simp only [mul_inv_rev, inv_inv, mul_assoc, mul_right_inj] at he
+--     solve_by_elim [aux3']
+--   | .fromH' _ _ rfl rfl, .fromH _ he _ => by
+--     apply_fun Inv.inv at he
+--     simp only [mul_assoc, mul_inv_rev, inv_inv, mul_right_inj] at he
+--     solve_by_elim [aux3']
+--   | .base hb, .fromH _ he _ | .base hb, .fromH' _ _ he _ | .fromH _ he _, .base _
+--   | .fromH .., .fromH _ he _ | .fromH' _ _ he _, .base _ | .fromH' _ _ rfl rfl, .fromH' _ _ he rfl => by
+--     apply_fun project at he
+--     aesop
+
+-- theorem next_d_is_c {y} : Next d y → y = c
+--   | .base hb => False.elim $ not_def hb
+--   | .new _ h => h
+--   | .fromH _ he _ | .fromH' _ _ he _ => by apply_fun project at he; aesop
+
+-- theorem prev_c_is_d {x} : Next x c → x = d
+--   | .base _ => by aesop
+--   | .new h _ => h
+--   | .fromH _ _ he | .fromH' _ _ _ he => by apply_fun project at he; aesop
+
+-- def next_finite : Set.Finite {(x, y) : G × G | Next x y} := by
+--   simp [next_iff, Set.setOf_or]
+--   split_ands
+--   · exact ok.finite
+--   · simp [← Prod.mk.injEq]
+--   · apply Set.Finite.subset (ok.finite.image fun (x, y) => (x⁻¹ * c, x⁻¹))
+--     intro (a, b) ⟨x, h⟩
+--     simp only [Set.mem_image, Set.mem_setOf_eq, Prod.mk.injEq, Prod.exists, exists_and_right] at *
+--     use x; simp [h]
+--     use d; simp [h]
+--   · apply Set.Finite.subset ((ok.finite.prod ok.finite).image fun ((x, _), (_, y)) => (c⁻¹ * x * y, c⁻¹ * x))
+--     intro (a, b) ⟨x, h1, y, h2, h3, h4⟩
+--     simp only [Set.mem_image, Set.mem_prod, Set.mem_setOf_eq, Prod.mk.injEq, Prod.exists] at *
+--     exact ⟨x, d, x⁻¹, y, by simp [*]⟩
+
+-- def next_func {x y y'} : Next x y → Next x y' → y = y'
+--   | .base hb, .base hb' => ok.func hb hb'
+--   | .new rfl rfl, .new rfl rfl => rfl
+--   | .fromH h1 h2 h3, .fromH h1' h2' h3' => by
+--     rw [h2', mul_left_inj, inv_inj] at h2
+--     exact h3' ▸ h2 ▸ h3
+--   | .base hb, .new rfl rfl | .new rfl rfl, .base hb => (not_def hb).elim
+--   | .base .., .fromH _ he _ | .fromH _ he _, .base ..| .new .., .fromH _ he _ | .fromH _ he _, .new ..
+--   | .base .., .fromH' _ _ he _ | .new .., .fromH' _ _ he _ | .fromH .., .fromH' _ _ he _
+--   | .fromH' _ _ he _, .base .. | .fromH' _ _ he _, .new .. | .fromH' _ _ he _, .fromH .. => by
+--     apply_fun project at he
+--     aesop
+--   | .fromH' h1 h2 h3 rfl, .fromH' h1' h2' rfl rfl => by
+--     simp only [mul_assoc, mul_right_inj] at h3
+--     simp [ok.aux4 h1 h1' h2 h2' h3]
+
+-- def next_base : Next 1 g₁ ∧ Next g₁ g₂ ∧ Next g₂⁻¹ (g₁ * g₂) ∧ Next (g₁ * g₂) (g₂⁻¹ * g₁) := by
+--   simp [Next.base, ok.base]
+
+-- def next_eq63 {x y z} : Next x y → Next y z → Next (x⁻¹ * z) x⁻¹
+--   | .base hb, .base hb' => .base $ ok.eq63 hb hb'
+--   | .base hb, .new rfl rfl => .fromH hb rfl rfl
+--   | .fromH h rfl h', .base hb => by apply Next.fromH' h (h' ▸ hb); group
+--   | .fromH h rfl h', .new rfl rfl => False.elim $ ok.aux2 (h' ▸ h)
+--   | .new rfl rfl, .fromH h1 h2 rfl => by
+--     exfalso
+--     apply congr_arg (c * ·⁻¹) at h2; simp at h2
+--     have values : E 1 g₁ ∧ E g₁ g₂ := by simp [ok.base]
+--     exact not_def $ ok.func (h2 ▸ h1) values.left ▸ values.right
+--   | .fromH' _ _ rfl rfl, .fromH' _ _ he rfl => by
+--     simp only [mul_assoc, mul_right_inj] at he
+--     solve_by_elim [aux3']
+--   | .base .., .fromH .. | .base .., .fromH' .. | .new .., .base .. | .fromH' .., .base .. => by aesop
+--   | .new .., .new he _ | .new .., .fromH' _ _ he _ | .fromH _ _ he, .fromH ..
+--   | .fromH _ _ he, .fromH' .. | .fromH' .., .new he _ | .fromH' .., .fromH _ he _ => by
+--     apply_fun project at he
+--     aesop
+
+-- def next_aux1 {x} : Next x 1 → x = g₂
+--   | .base hb => ok.aux1 hb
+--   | .new rfl h => by apply_fun project at h; simp at h
+--   | .fromH h1 rfl h2 => by
+--     exfalso
+--     have values : E 1 g₁ ∧ E g₁ g₂ := by simp [ok.base]
+--     have := ok.func values.left $ inv_eq_one.1 h2.symm ▸ h1
+--     exact not_def (this ▸ values.right)
+--   | .fromH' _ _ rfl he => by
+--     apply_fun project at he
+--     aesop
+
+-- def next_aux2 {x} : ¬Next x x⁻¹
+--   | .base hb => ok.aux2 hb
+--   | .new _ he | .fromH _ he _ | .fromH' _ _ _ he => by
+--     apply_fun project at he
+--     aesop
+
+-- def next_aux3 {x x' y z} : Next x y → Next x' y → Next x⁻¹ z → x' = x * z → x' = x := by
+--   intro h1 h2 h3 h4
+--   match inv_in_E_means_d h1 h3 with
+--   | .inl h => exact h ▸ prev_c_is_d $ (next_d_is_c (h ▸ h1)) ▸ h2
+--   | .inr (.inl h) =>
+--     have h5 := next_d_is_c (inv_eq_iff_eq_inv.2 h ▸ h3)
+--     match h2 with
+--     | .fromH h6 rfl rfl =>
+--       simp [h, h5] at h4
+--       simp [h4, not_def] at h6
+--     | .base .. | .new .. | .fromH' .. =>
+--       apply_fun project at h4
+--       aesop
+--   | .inr (.inr ⟨h5, h6⟩) =>
+--     match h2 with
+--     | .base h7 => exact ok.aux3 h5 h7 h6 h4
+--     | .new .. | .fromH .. | .fromH' .. =>
+--       apply_fun project at h4
+--       aesop
+
+-- def next_aux4 {x x' y z z'} : Next x y → Next x' y → Next x⁻¹ z → Next x'⁻¹ z' → x' * z' = x * z → x = x' := by
+--   intro h1 h2 h3 h4 h5
+--   match inv_in_E_means_d h1 h3 with
+--   | .inl h => exact h ▸ prev_c_is_d (next_d_is_c (h ▸ h1) ▸ h2) |>.symm
+--   | .inr (.inl h) =>
+--     rw [h] at h1 h3 h5
+--     rw [inv_inv] at h3
+--     rw [next_d_is_c h3] at h5
+--     match h4 with
+--     | .new h' rfl => exact h ▸ inv_eq_iff_eq_inv.2 h'.symm
+--     | .base h6 | .fromH _ h6 rfl | .fromH' _ _ h6 rfl =>
+--       apply_fun project at h5
+--       try apply_fun project at h6
+--       aesop
+--   | .inr (.inr ⟨h6, h7⟩) =>
+--     rw [next_func (.base h6) h1] at h6
+--     rw [next_func (.base h7) h3] at h7
+--     match h2, h4 with
+--     | .base hb, .base hb' => exact ok.aux4 h6 hb h7 hb' h5
+--     | .new rfl rfl, _ => exact prev_c_is_d (.base h6)
+--     | .base hb, .fromH _ h8 rfl | .base hb, .fromH' _ _ h8 _ | _, .new h8 rfl =>
+--       apply_fun project at h5 h8
+--       aesop
+--     | .fromH .., .base .. | .fromH .., .fromH .. =>
+--       apply_fun project at h5
+--       aesop
+--     | .fromH h8 rfl rfl, .fromH' h9 h10 h11 rfl =>
+--       simp [mul_assoc] at h11
+--       solve_by_elim [aux3']
+--     | .fromH' h8 h9 rfl rfl, _ => aesop
+
+
+-- def next : PartialSolution x :=
+--   ⟨Next, next_finite, fun {_} => next_func, next_base, next_eq63, next_aux1, next_aux2, next_aux3, next_aux4⟩
+
+-- end Extension
+
+
+theorem exists_extension (x : G') (seed : PartialSolution x) :
+    ∃ Lₓ : G → G,
+    Lₓ x = S x ∧ -- Axiom A
+    (∀ y : G, (L (S y) <| Lₓ <| Lₓ y) = x) -- Axiom C
+    := by
+  classical
+  have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain (a := seed)
+    (task := fun x' : _  => {e | ∃ y, e.1 x' y}) fun ⟨E, ok⟩ d => by
+      if h : ∃ y, E d y then exact ⟨_, le_rfl, h⟩ else
+      let E1 : Extension x := { E, ok, d, not_def := fun h' => h ⟨_, h'⟩ }
+      -- to proceed here we have to define `next`
+      -- exact ⟨E1.next, fun _ _ => (.base ·), _, .new rfl rfl⟩
+      sorry
+  classical
+  choose e he Lₓ hLₓ using h3
+
+  refine ⟨Lₓ, (e x).2.func (e x).2.aux1 (hLₓ x) |>.symm, fun y ↦ ?_⟩
+
+  -- We have a chain of partial solutions (i.e. partial functions Lₓ : G → G) that saturates the space, which means that if we have a finite number of elements of G we can find a single partial solution of the chain that captures all the elements, here we state this with `y` and `Lₓ y`
+  let T : Finset G := {y, Lₓ y}
+  have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
+    (T.image fun a => ⟨e a, he a⟩)
+  replace le a ha := Finset.forall_image.mp le a ha _ _ (hLₓ a)
+  simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at le
+  obtain ⟨ey, eLₓy⟩ := le
+
+  exact e.2.aux2 y (Lₓ y) (Lₓ ((Lₓ y))) ey eLₓy
+
+end GreedyAC
+
+open GreedyAC GreedyB
+
+def seed (x : G') : Rel G G := fun a b => a = x ∧ b = S x
+
+theorem seed_ok (x : G') : OK x (seed x) where
+  finite := by sorry --doable
+  func h1 h2 := by rw [h1.2, h2.2]
+  aux1 := by simp [seed]
+  aux2 h1 h2 := by simp_all [seed]
+
+noncomputable def L' (x : G') : G → G := (exists_extension x ⟨seed x, seed_ok x⟩).choose
+
+lemma L'_self (x : G') : L' x x = S x := (exists_extension x ⟨seed x, seed_ok x⟩).choose_spec.1
+
+lemma L'_1516 (x : G') (y : G) : (L (S y) <| L' x <| L' x y) = x :=
+  (exists_extension x ⟨seed x, seed_ok x⟩).choose_spec.2 y
+
+noncomputable scoped instance magG : Magma G := {
+    op := fun x y =>
+      match x with
+      | .inl a => L a y
+      | .inr g => L' g y
+    }
+
+theorem magG_op_def_A (a : A) (g : G) : magG.op a g = L a g := rfl
+
+theorem magG_op_def_G (g g' : G') : magG.op g g' = L' g g' := rfl
+
+theorem G_satisfies_Equation1516 : Equation1516 G := by
+  unfold Equation1516
+  intro x y
+  rcases x with (a | g)
+  · --doable
+    sorry
+  · --doable
+    sorry
+
+-- we take a special x = (*, 0, 0) ∈ G', where * is the identity of A, i.e. the empty word
+-- this is needed for Corollary 17.7, note that by doing this we are taking a sligthly different route from the proof of the corollary in the blueprint, in particular we make an explicit example of an element that does not verify eq 255
+def x₀ : G := .inr ⟨⟨1, x 0, 0⟩, fun h ↦ one_ne_of 0 h⟩
+
+--we may need to add some additional thesis to the theorem about the construction of L, so that the way L is defined is explicited
+lemma op_x₀_self : x₀ ◇ x₀ = (1 : A) := by
+  sorry
+
+lemma op_1_x₀ : (.inl (1 : A)) ◇ x₀ = (1 : A) := by
+  sorry
+
+lemma x₀_255_rhs : ((x₀ ◇ x₀) ◇ x₀) ◇ x₀ = (1 : A) := by
+  simp_rw [op_x₀_self, op_1_x₀]
+
+lemma x₀_ne_1 : x₀ ≠ (1 : A) := Sum.inr_ne_inl
+
+end Refutation255
 
 @[equational_result]
 theorem _root_.Equation1516_not_implies_Equation1489 : ∃ (G : Type) (_ : Magma G), Equation1516 G ∧ ¬ Equation1489 G := by
@@ -1337,37 +1819,17 @@ theorem Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] 
   nth_rewrite 1 [SC_id y]
   rw [SC_CS_id y]
 
-
-
 -- @[equational_result]
-theorem _root_.Equation1516_not_implies_Equation255 :
-    ∃ (G : Type) (_ : Magma G), Equation1516 G ∧ ¬ Equation255 G := by
-  sorry
+theorem _root_.Equation1516_not_implies_Equation255 : ∃ (G : Type) (_ : Magma G), Equation1516 G ∧ ¬ Equation255 G := by
+  use G, magG
+  refine ⟨G_satisfies_Equation1516, ?_⟩
+  unfold Equation255
+  push_neg
+  exact ⟨x₀, x₀_255_rhs ▸ x₀_ne_1⟩
 
+/--  https://teorth.github.io/equational_theories/blueprint/1516-chapter.html -/
+@[equational_result]
+conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G), Facts G [1516] [255]
 
-  -- let magA : Magma A := { op := fun x y => f (y*x⁻¹) * x  }
-  -- use A, magA
-  -- constructor
-  -- · unfold Equation1516
-  --   intro x y
-  --   repeat rw [magA_op_def]
-  --   simp only [mul_inv_cancel_right, mul_inv_cancel, mul_inv_rev]
-  --   have := f_translation_invariant_1516 (y*x⁻¹)
-  --   apply_fun fun a => a * (f 1) * y at this
-  --   simp only [mul_inv_rev, inv_inv, inv_mul_cancel_right] at this
-  --   repeat rw [mul_assoc] at *
-  --   exact this.symm
-  -- · unfold Equation1489
-  --   simp only [not_forall]
-  --   exists x₁, 1
-  --   repeat rw [magA_op_def]
-  --   simp only [one_mul, fromList_eval x₁⁻¹ x₃, inv_one, mul_one, fromList_eval (x₃ * x₁) x₄,
-  --     fromList_eval x₁ x₂, fromList_eval (x₄ * x₂⁻¹) x₅]
-  --   decide
-
-
--- /--  https://teorth.github.io/equational_theories/blueprint/1516-chapter.html -/
--- @[equational_result]
--- conjecture Equation1516_facts : ∃ (G : Type) (_ : Magma G), Facts G [1516] [255]
 
 end Eq1516
