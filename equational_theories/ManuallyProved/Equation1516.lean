@@ -1464,9 +1464,39 @@ class Extension where
   not_def {y} : ¬E d y
 
 
--- namespace Extension
+namespace Extension
 
--- variable [Extension x]
+variable [Extension x]
+
+def partial_domain' : Set G := (E x).dom
+
+instance : Fintype (partial_domain' x) := by
+  -- doable
+  -- this set should be some kind of slice of {(x, y) : G × G | E x y}, which we already know to be finite (OK.finite)
+  -- find the right definition of slice, then there will probably already be an instance proving the finiteness of a slice given the finiteness of the initial set
+  sorry
+
+def partial_domain : Finset G := (partial_domain' x).toFinset
+
+
+def partial_range' : Set G := (E x).codom
+
+instance : Fintype (partial_range' x) := by
+  -- doable, same as above for the domain
+  sorry
+
+def partial_image : Finset G := (partial_range' x).toFinset
+
+
+lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ partial_image x := by
+  -- doable
+  -- we know that the domain and the image are finite while G is infinite, so we can just take an element that is not in either
+  sorry
+
+lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧ w ∉ partial_domain x ∧ w ∉ partial_image x := by
+  -- doable
+  -- use the infinite surjectivity of L, then proceed like in the previous lemma
+  sorry
 
 -- def old : Finset G :=
 --   insert d <| ok.finite.toFinset.biUnion fun (a, b) => {a, b}
@@ -1682,7 +1712,7 @@ class Extension where
 -- def next : PartialSolution x :=
 --   ⟨Next, next_finite, fun {_} => next_func, next_base, next_eq63, next_aux1, next_aux2, next_aux3, next_aux4⟩
 
--- end Extension
+end Extension
 
 
 theorem exists_extension (x : G') (seed : PartialSolution x) :
