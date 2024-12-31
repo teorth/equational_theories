@@ -62,7 +62,7 @@ There is an invariant lurking behind: it is the (ordered) list of variables appe
 	Let $w = w'$ be an equation such that the variables appearing in $w$, taking into account order and repetitions, are the same ones that appear in $w'$. Then $w = w'$ cannot imply an equation that does not have the property from the last sentence.
 \end{metatheorem}
 
-If we were coding a computer program that computes $I(w)$ given $w$, one could take the string of symbols that is $w$, ignore all parentheses, replace all symbols $\op$ by commas, and surround with an appropriate delimiter. (I imagine one could easily do this using \href{https://en.wikipedia.org/wiki/Regular_expression}{regular expressions}.
+If we were coding a computer program that computes $I(w)$ given $w$, one could take the string of symbols that is $w$, ignore all parentheses, replace all symbols $\op$ by commas, and surround with an appropriate delimiter. (I imagine one could easily do this using \href{https://en.wikipedia.org/wiki/Regular_expression}{regular expressions}.)
 
 We can compute other examples, but the invariant can get complicated even for simple equations. Exercise: what is the invariant for commutativity? Answer: To compute $I(w)$ from $w$ replace all parentheses with curly braces and all symbols $\op$ with commas, and interpret the result as nested sets.
 
