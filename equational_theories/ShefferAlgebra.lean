@@ -1,5 +1,31 @@
+/-
+Copyright (c) 2024 Cody Roux. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Cody Roux, Judah Towery
+-/
 import equational_theories.Magma
 import Mathlib.Order.BooleanAlgebra
+
+/-!
+In this file we introduce "Sheffer Algebras", which are simply a presentation of Boolean Algebras,
+but with a single operation, the Sheffer stroke, or NAND, as the only primitive operation.
+This operation satisfies 3 laws, the Sheffer axioms.
+
+The structure of the development roughly follows the original Sheffer paper, "A set of five
+independent postulates for Boolean algebras, with application to logical constants".
+
+The main result of this file is that the Sheffer stroke is a complete axiomatization of Boolean
+Algebras, and vice versa. The latter is done by showing that the Sheffer stroke
+(defined as `a | b = (a ∧ b)ᶜ`) satisfies the three Sheffer axioms.
+
+The other direction is a bit more fiddly, and requires a careful set of lemmas, which give a
+structure involving `⊔` and `⊓` which is similar but distinct from the ring structure of a Boolean
+Ring. The final tie in with actual Boolean algebras follows the surprisingly detailed Wikipedia
+article found here: https://en.wikipedia.org/wiki/Boolean_algebra_(structure)#Axiomatics
+
+We also introduce a class for the Sheffer stroke notation, for convenience.
+
+-/
 
 section ShefferLaws
 
@@ -173,6 +199,10 @@ lemma cancel (a b : α) : a ⊔ bᶜ = u → a ⊓ bᶜ = z → a = b := by
   have h : bᶜ = aᶜ := by apply inv <;> trivial
   apply inv_elim; symm; trivial
 
+/-
+From here on, we temporarily depart from standard Mathlib naming conventions to conform to
+https://en.wikipedia.org/wiki/Boolean_algebra_(structure)#Axiomatics
+-/
 @[simp]
 lemma A₁ (a b : α) : a ⊔ (aᶜ ⊔ b) = u := by
   calc
@@ -273,14 +303,16 @@ lemma J₁ (a b c : α) : (a ⊔ b ⊔ c)ᶜ ⊓ c = z := by
 lemma assoc₁ (a b c : α) : a ⊔ (b ⊔ c) = (a ⊔ b) ⊔ c := by
   apply cancel; simp
   . calc
-      (a ⊔ (b ⊔ c)) ⊔ (aᶜ ⊓ bᶜ ⊓ cᶜ) = ((a ⊔ (b ⊔ c)) ⊔ (aᶜ ⊓ bᶜ)) ⊓ ((a ⊔ (b ⊔ c)) ⊔ cᶜ) := by rw [distrib₁]
+      (a ⊔ (b ⊔ c)) ⊔ (aᶜ ⊓ bᶜ ⊓ cᶜ) = ((a ⊔ (b ⊔ c)) ⊔ (aᶜ ⊓ bᶜ)) ⊓ ((a ⊔ (b ⊔ c)) ⊔ cᶜ) :=
+        by rw [distrib₁]
       _ = ((a ⊔ (b ⊔ c) ⊔ aᶜ) ⊓ ((a ⊔ (b ⊔ c) ⊔ bᶜ))) ⊓ ((a ⊔ (b ⊔ c)) ⊔ cᶜ) := by rw [distrib₁]
       _ = (u ⊓ u) ⊓ u := by rw [D₁, F₁, G₁]
       _ = u := by simp
   . rw [commut₂]
     rw [distrib₂]; rw [distrib₂]
     calc
-      (a ⊔ b ⊔ c)ᶜ ⊓ a ⊔ ((a ⊔ b ⊔ c)ᶜ ⊓ b ⊔ (a ⊔ b ⊔ c)ᶜ ⊓ c) = z ⊔ (z ⊔ z) := by rw [H₁, I₁, J₁]
+      (a ⊔ b ⊔ c)ᶜ ⊓ a ⊔ ((a ⊔ b ⊔ c)ᶜ ⊓ b ⊔ (a ⊔ b ⊔ c)ᶜ ⊓ c) = z ⊔ (z ⊔ z) :=
+        by rw [H₁, I₁, J₁]
       _ = z := by repeat rw [ident₁]
 
 -- We don't try to dualize the proof here, that's too painful, we apply de Morgan liberally
