@@ -1,4 +1,5 @@
 import equational_theories.Equations.All
+import Init.Data.Int.DivModLemmas
 import equational_theories.MagmaOp
 import Mathlib.Algebra.Order.GroupWithZero.Canonical
 import Mathlib.Data.ZMod.Defs
@@ -10,10 +11,11 @@ https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Equatio
 
 This file proves that 7 equations are full spectrum and 32 are not: this should be a complete result
 for all order 4 equations through transitivity and duality. (All equations that are implied by a
-full spectrum must be full spectrum and all equations that imply a not-full-spectrum equation, must
-not be full spectrum.)
+full spectrum equation must be full spectrum and all equations that imply a not-full-spectrum
+equation, must not be full spectrum.)
 
-Some automatically generated proofs are in `Generated/FullSpectrum.lean`.
+Some automatically generated proofs are in `Generated/FullSpectrum.lean`, for equations that are not
+full spectrum that have models of size 2 but not 3.
 
 TODO: Prove that the 7+32 equations above are actually complete.
 -/
@@ -55,7 +57,7 @@ theorem full_spectrum_left_absorptive : HasFullSpectrum [4] := by
   use ⟨fun x y => x⟩
   simp [Equation4]
 
-theorem full_spectrum_lhs_multiple_operations : HasFullSpectrum [41] := by
+theorem full_spectrum_constant : HasFullSpectrum [41] := by
   intro n
   if h : 0 < n then
     let op (x y : Fin n) : Fin n := ⟨0, h⟩
@@ -77,7 +79,7 @@ theorem full_spectrum_square_cancellative : HasFullSpectrum [1523] := by
         all_goals simp [h]
     ⟩
     use ⟨op⟩
-    intro x y
+    intro x _
     rcases eq_or_ne x.1 0 with h | h
     . simp [op, h, Fin.eq_mk_iff_val_eq]
     . simp [op, h, h.symm, Fin.eq_mk_iff_val_eq]
@@ -85,36 +87,29 @@ theorem full_spectrum_square_cancellative : HasFullSpectrum [1523] := by
     use ⟨fun x y => x⟩
     omega
 
-@[simp] private theorem emod_sub_emod (m n k : Int) : (m % n - k) % n = (m - k) % n := by
-  apply (Int.emod_add_cancel_right k).mp
-  rw [Int.sub_add_cancel, Int.sub_add_cancel, Int.emod_emod]
+@[simp] private theorem emod_sub_emod (m n k : Int) : (m % n - k) % n = (m - k) % n :=
+  Int.emod_add_emod m n (-k)
 
 @[simp] private theorem sub_emod_emod (m n k : Int) : (m - n % k) % k = (m - n) % k := by
   apply (Int.emod_add_cancel_right (n % k)).mp
   rw [Int.sub_add_cancel, Int.add_emod_emod, Int.sub_add_cancel]
 
-private lemma linear1 {a n : Int} (h : n ≠ 0) : a % n ⊔ 0 = a % n := by
+private lemma linear₁ {a n : Int} (h : n ≠ 0) : a % n ⊔ 0 = a % n := by
   have : 0 ≤ a % n := (Int.emod_nonneg a) h
   exact Int.max_eq_left this
-private lemma linear2 {a n : Nat} (h : a < n) : ((a : Int) % (n : Int)).toNat = a := by
+private lemma linear₂ {a n : Nat} (h : a < n) : ((a : Int) % (n : Int)).toNat = a := by
   simp [Int.toNat, Int.ofNat_mod_ofNat, Nat.mod_eq_of_lt h]
 
 theorem full_spectrum_linear_cancellative1 : HasFullSpectrum [492] := by
   intro n
   if h : n > 0 then
-    let op (x y : Fin n) : Fin n := ⟨((n : ℤ) - (x : ℤ) + (n : ℤ) - (y : ℤ)).natMod (n : ℤ),
-      by exact Int.natMod_lt (ne_of_gt h)⟩
+    let op (x y : Fin n) : Fin n := ⟨((n : ℤ) - ↑x + ↑n - ↑y).natMod ↑n, Int.natMod_lt (ne_of_gt h)⟩
     use ⟨op⟩
-    dsimp [Equation492]
-    intros
+    intro _ _ _
     apply Fin.eq_mk_iff_val_eq.mpr
-    have (k l m n o : Int) : (k - m % n + l - o) % n = (k - m + l - o) % n := by
-      apply (Int.emod_add_cancel_right (o)).mp
-      apply (Int.emod_add_cancel_right (-l)).mp
-      simp
     zify at h
-    simp [Int.natMod, Int.ofNat_toNat, linear1 (ne_of_gt h), sub_emod_emod, this]
-    simp [Int.add_sub_assoc, ←Int.sub_sub, linear2]
+    simp only [Int.natMod, Int.ofNat_toNat, linear₁ (ne_of_gt h), sub_emod_emod]
+    simp [Int.add_sub_assoc, ←Int.sub_sub, linear₂]
   else
     use ⟨fun x y => x⟩
     omega
@@ -122,18 +117,16 @@ theorem full_spectrum_linear_cancellative1 : HasFullSpectrum [492] := by
 theorem full_spectrum_linear_cancellative2 : HasFullSpectrum [1090] := by
   intro n
   if h : n > 0 then
-    let op (x y : Fin n) : Fin n := ⟨((n : ℤ) - (x : ℤ) + (y : ℤ)).natMod (n : ℤ),
-      by exact Int.natMod_lt (ne_of_gt h)⟩
+    let op (x y : Fin n) : Fin n := ⟨((n : ℤ) - ↑x + ↑y).natMod ↑n, Int.natMod_lt (ne_of_gt h)⟩
     use ⟨op⟩
-    dsimp [Equation1090]
-    intros
+    intro _ _ _
     apply Fin.eq_mk_iff_val_eq.mpr
     have (m n o k : Int) : (k - m % n + o) % n = (k - m + o) % n := by
       apply (Int.emod_add_cancel_right (-o)).mp
       simp
     zify at h
-    simp only [Int.natMod, Int.ofNat_toNat, linear1 (ne_of_gt h), Int.add_emod_emod, this]
-    simp [Int.add_sub_assoc, ←Int.sub_sub, linear2]
+    simp only [Int.natMod, Int.ofNat_toNat, linear₁ (ne_of_gt h), Int.add_emod_emod, this]
+    simp [Int.add_sub_assoc, ←Int.sub_sub, linear₂]
   else
     use ⟨fun x y => x⟩
     omega
@@ -152,7 +145,7 @@ theorem full_spectrum_Equation1482 : HasFullSpectrum [1482] := by
         repeat' split
         all_goals simp only [x.2, y.2, h, Nat.zero_lt_of_lt h]⟩
     use ⟨op⟩
-    intro x y
+    intro x _
     apply Fin.eq_mk_iff_val_eq.mpr
     simp only [Bool.and_self, decide_eq_true_eq, gt_iff_lt, Bool.and_eq_true]
     split
@@ -194,7 +187,6 @@ theorem full_spectrum_Equation1682 : HasFullSpectrum [1682] := by
         else if x.1 = 0 && y.1 ≥ 3 then 2
         else 0,
       by
-        simp
         repeat' split
         all_goals try simp [show 0 < n ∧ 1 < n ∧ 2 < n by omega]
         . simp [show x.1 + 1 < n by omega]
@@ -237,8 +229,8 @@ theorem full_spectrum_Equation1682 : HasFullSpectrum [1682] := by
   else if h : n = 2 then
     let op (x y : Fin n) : Fin n := ⟨(x.1 + y.1) % 2, by omega⟩
     use ⟨op⟩
-    simp [Equation1682, op]
-    intro x y
+    simp only [Equation1682, op]
+    intros
     apply Fin.eq_mk_iff_val_eq.mpr
     omega
   else
@@ -259,19 +251,19 @@ theorem not_full_spectrum_card2_2var : NotFullSpectrum [66, 73, 118, 167, 467, 4
     all_goals try {
       try {
         use 1, 0
-        simp_all only [zero_ne_one, one_ne_zero, not_false_eq_true]
+        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
       }
       try {
         use 0, 1
-        simp_all only [zero_ne_one, one_ne_zero, not_false_eq_true]
+        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
       }
       try {
         use 0, 0
-        simp_all only [zero_ne_one, one_ne_zero, not_false_eq_true]
+        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
       }
       try {
         use 1, 1
-        simp_all only [zero_ne_one, one_ne_zero, not_false_eq_true]
+        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
       }
     }
   }
@@ -287,15 +279,15 @@ theorem not_full_spectrum_card2_3var : NotFullSpectrum [1480, 1486] := by
     all_goals {
       try {
         use 1, 0, 0
-        simp_all only [zero_ne_one, one_ne_zero, not_false_eq_true]
+        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
       }
       try {
         use 0, 1, 0
-        simp_all only [zero_ne_one, one_ne_zero, not_false_eq_true]
+        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
       }
       try {
         use 1, 0, 1
-        simp_all only [zero_ne_one, one_ne_zero, not_false_eq_true]
+        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
       }
     }
   }
