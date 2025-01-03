@@ -1600,9 +1600,7 @@ theorem exists_extension (x : G') (seed : PartialSolution x) :
     (task := fun x' : _  => {e | ∃ y, e.1 x' y}) fun ⟨E, ok⟩ d => by
       if h : ∃ y, E d y then exact ⟨_, le_rfl, h⟩ else
       let E1 : Extension x := { E, ok, d, not_def := fun h' => h ⟨_, h'⟩ }
-      -- to proceed here we have to define `next`
-      -- exact ⟨E1.next, fun _ _ => (.base ·), _, .new rfl rfl⟩
-      sorry
+      exact ⟨E1.next, fun _ _ => (.base ·), _, .new rfl rfl⟩
   classical
   choose e he Lₓ hLₓ using h3
 
