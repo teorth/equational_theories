@@ -1498,6 +1498,29 @@ lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧ w ∉ parti
   -- use the infinite surjectivity of L, then proceed like in the previous lemma
   sorry
 
+noncomputable def w : G := by
+  classical
+  exact if h : (∃ (z : G), E x z (d x)) then (exists_not_in_domain_range' x h.choose).choose else (exists_not_in_domain_range x).choose
+
+-- set_option pp.proofs true
+lemma w_not_in_domain : w x ∉ partial_domain x := by
+  by_cases h : (∃ (z : G), E x z (d x))
+  · simp only [w, h, ↓reduceDIte]
+    exact (exists_not_in_domain_range' x _).choose_spec.2.1
+  · simp only [w, h, ↓reduceDIte]
+    exact (exists_not_in_domain_range x).choose_spec.1
+
+lemma w_not_in_range : w x ∉ partial_range x := by
+  by_cases h : (∃ (z : G), E x z (d x))
+  · simp only [w, h, ↓reduceDIte]
+    exact (w.proof_1 x _).choose_spec.2.2
+  · simp only [w, h, ↓reduceDIte]
+    exact (exists_not_in_domain_range x).choose_spec.2
+
+lemma w_equation (h : (∃ (z : G), E x z (d x))) : L (S h.choose) (w x) = x := by
+  simp only [w, h, ↓reduceDIte]
+  exact (exists_not_in_domain_range' x _).choose_spec.1
+
 -- def old : Finset G :=
 --   insert d <| ok.finite.toFinset.biUnion fun (a, b) => {a, b}
 
