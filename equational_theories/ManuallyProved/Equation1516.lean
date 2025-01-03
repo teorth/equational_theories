@@ -1485,15 +1485,15 @@ instance : Fintype (partial_range' x) := by
   -- doable, same as above for the domain
   sorry
 
-def partial_image : Finset G := (partial_range' x).toFinset
+def partial_range : Finset G := (partial_range' x).toFinset
 
 
-lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ partial_image x := by
+lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ partial_range x := by
   -- doable
   -- we know that the domain and the image are finite while G is infinite, so we can just take an element that is not in either
   sorry
 
-lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧ w ∉ partial_domain x ∧ w ∉ partial_image x := by
+lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧ w ∉ partial_domain x ∧ w ∉ partial_range x := by
   -- doable
   -- use the infinite surjectivity of L, then proceed like in the previous lemma
   sorry
