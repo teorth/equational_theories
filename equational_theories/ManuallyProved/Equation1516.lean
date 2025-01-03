@@ -1488,13 +1488,13 @@ instance : Fintype (partial_range' x) := by
 
 def partial_range : Finset G := (partial_range' x).toFinset
 
-
-lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ partial_range x := by
+-- NOTE: I added the requirement that w ≠ d for technical reasons, consider adding it to the blueprint
+lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
   -- doable
   -- we know that the domain and the image are finite while G is infinite, so we can just take an element that is not in either
   sorry
 
-lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧ w ∉ partial_domain x ∧ w ∉ partial_range x := by
+lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧ w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
   -- doable
   -- use the infinite surjectivity of L, then proceed like in the previous lemma
   sorry
@@ -1519,6 +1519,13 @@ lemma w_not_in_range : w x ∉ partial_range x := by
     exact (w.proof_1 x _).choose_spec.2.2.1
   · simp only [w, h, ↓reduceDIte]
     exact (exists_not_in_domain_range x).choose_spec.2.1
+
+lemma w_ne_d : w x ≠ d x := by
+  by_cases h : (∃ (z : G), E x z (d x))
+  · simp only [w, h, ↓reduceDIte]
+    exact (exists_not_in_domain_range' x _).choose_spec.2.2.2
+  · simp only [w, h, ↓reduceDIte]
+    exact (exists_not_in_domain_range x).choose_spec.2.2
 
 lemma w_equation (h : (∃ (z : G), E x z (d x))) : L (S h.choose) (w x) = x := by
   simp only [w, h, ↓reduceDIte]
