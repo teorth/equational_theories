@@ -1452,8 +1452,9 @@ variable (x : G')
 structure OK (E : Rel G G) : Prop where
   finite : Set.Finite {(x, y) : G × G | E x y}
   func {x y y'} : E x y → E x y' → y = y'
+  inj {x x' y} : E x y → E x' y → x = x'
   aux1 : E x (S x) --Eq4 in the dim
-  aux2 (y z w) : E y z → E z w → L (S y) w = x --Eq5 in the dim, we are renaming L x y = z, L x z = w, so we are saying that (L (S y) <| L x <| L x y) = x, which is equation 1516
+  aux2 {y z w} : E y z → E z w → L (S y) w = x --Eq5 in the dim, we are renaming L x y = z, L x z = w, so we are saying that (L (S y) <| L x <| L x y) = x, which is equation 1516
 
 abbrev PartialSolution := {E : Rel G G // OK x E}
 
@@ -1515,9 +1516,9 @@ lemma w_not_in_domain : w x ∉ partial_domain x := by
 lemma w_not_in_range : w x ∉ partial_range x := by
   by_cases h : (∃ (z : G), E x z (d x))
   · simp only [w, h, ↓reduceDIte]
-    exact (w.proof_1 x _).choose_spec.2.2
+    exact (w.proof_1 x _).choose_spec.2.2.1
   · simp only [w, h, ↓reduceDIte]
-    exact (exists_not_in_domain_range x).choose_spec.2
+    exact (exists_not_in_domain_range x).choose_spec.2.1
 
 lemma w_equation (h : (∃ (z : G), E x z (d x))) : L (S h.choose) (w x) = x := by
   simp only [w, h, ↓reduceDIte]
@@ -1766,7 +1767,7 @@ theorem exists_extension (x : G') (seed : PartialSolution x) :
   simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at le
   obtain ⟨ey, eLₓy⟩ := le
 
-  exact e.2.aux2 y (Lₓ y) (Lₓ ((Lₓ y))) ey eLₓy
+  exact e.2.aux2 ey eLₓy
 
 end GreedyAC
 
@@ -1776,6 +1777,7 @@ def seed (x : G') : Rel G G := fun a b => a = x ∧ b = S x
 
 theorem seed_ok (x : G') : OK x (seed x) where
   finite := by sorry --doable
+  inj x₁ x₂ := by simp_all [seed]
   func h1 h2 := by rw [h1.2, h2.2]
   aux1 := by simp [seed]
   aux2 h1 h2 := by simp_all [seed]
