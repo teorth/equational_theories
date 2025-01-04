@@ -16,7 +16,6 @@ namespace Eq1323
 
 
 section Ingredients
--- Define the direct sum of copies of Z/2, the sign group, type for roots, and ϕ
 
 open symmDiff
 
@@ -44,6 +43,11 @@ theorem FreeAbGrpExp2.zero_def : (Zero.zero : FreeAbGrpExp2 α) = ⟨∅, by sim
 theorem FreeAbGrpExp2.neg_def (a : FreeAbGrpExp2 α) : -a = a := rfl
 @[simp] theorem FreeAbGrpExp2.coords_0 : (0 : FreeAbGrpExp2 α).coords = ∅ := rfl
 @[simp] theorem FreeAbGrpExp2.mk_empty : (FreeAbGrpExp2.mk ∅ : FreeAbGrpExp2 α) = 0 := rfl
+theorem FreeAbGrpExp2.of_nonzero (x : α) : FreeAbGrpExp2.of x ≠ 0 := Finset.singleton_ne_empty _
+theorem FreeAbGrpExp2.of_injective : Function.Injective (FreeAbGrpExp2.of : α → FreeAbGrpExp2 α) :=
+  Finset.singleton_injective
+theorem FreeAbGrpExp2.add_coords [DecidableEq α] (a b : FreeAbGrpExp2 α) : (a + b).coords = a.coords ∆ b.coords :=
+  by dsimp [FreeAbGrpExp2.add_def]
 
 instance [DecidableEq α] : AddCommGroup (FreeAbGrpExp2 α) where
   add_zero x := by simp [FreeAbGrpExp2.add_def, symmDiff_def]
@@ -60,7 +64,13 @@ instance [DecidableEq α] : AddCommGroup (FreeAbGrpExp2 α) where
 abbrev Sq := FreeAbGrpExp2 Nat
 
 abbrev Sq' := {g : Sq // g ≠ 0}
-instance : Infinite Sq' := sorry
+
+theorem sq'_infinite : {g : Sq | g ≠ 0}.Infinite := by
+  apply Set.infinite_of_finite_compl
+  rw [Set.compl_ne_eq_singleton]
+  exact Set.finite_singleton _
+
+instance : Infinite Sq' := ⟨sq'_infinite⟩
 
 inductive Sign where | plus | minus deriving Inhabited, DecidableEq
 instance : Countable Sign where
@@ -97,18 +107,47 @@ abbrev Rt := Rt' × Sq'
 instance : DecidableEq Rt' := inferInstanceAs (DecidableEq (Sign × FreeGroup Nat))
 instance : DecidableEq Rt := inferInstance
 instance : Countable Rt' := inferInstanceAs (Countable (Sign × FreeGroup Nat))
--- def Rt.square (x : Rt) : Sq := x.2.val
 
 instance : Group Rt' := inferInstanceAs (Group (Sign × FreeGroup Nat))
 instance : Neg Rt' where neg x := ⟨.minus, 1⟩ * x
 @[simp] theorem RtId_neg {x : Rt'} : -x = ⟨.minus, 1⟩ * x := rfl
 theorem RtId_mul_eta {x y : Rt'} : (x * y) = (x.1 * y.1, x.2 * y.2) := rfl
 theorem RtId_inv_eta {x : Rt'} : x⁻¹ = (x.1⁻¹, x.2⁻¹) := rfl
+theorem RtId_pow_eta {x : Rt'} {n : ℤ} : x ^ n = (x.1 ^ n, x.2 ^ n) := rfl
 
 theorem RtId_mul_fst (x y : Rt') : (x * y).1 = x.1 * y.1 := rfl
 theorem RtId_mul_snd (x y : Rt') : (x * y).2 = x.2 * y.2 := rfl
 theorem RtId_inv_fst (x : Rt') : x⁻¹.1 = x.1⁻¹ := rfl
 theorem RtId_inv_snd (x : Rt') : x⁻¹.2 = x.2⁻¹ := rfl
+theorem RtId_pow_fst (x : Rt') (n : ℤ) : (x ^ n).1 = x.1 ^ n := rfl
+theorem RtId_pow_snd (x : Rt') (n : ℤ) : (x ^ n).2 = x.2 ^ n := rfl
+
+inductive Mod3 (n : ℤ) : Prop
+  | rem0 : (k : ℤ) → n = 3 * k → Mod3 n
+  | rem1 : (k : ℤ) → n = 3 * k + 1 → Mod3 n
+  | rem2 : (k : ℤ) → n = 3 * k + 2 → Mod3 n
+
+theorem Mod3.of (n : ℤ) : Mod3 n :=
+  let q := n / 3
+  let r := n % 3
+  let ⟨decomp, hl, hu⟩ := (Int.ediv_emod_unique (by simp)).mp ⟨Eq.refl q, Eq.refl r⟩
+  let decomp : n = 3 * q + r := by simp [decomp, add_comm]
+  if heq : r = 0 then .rem0 q (by simp [heq, decomp]) else
+  let hl := Int.le_of_sub_one_lt <| lt_of_le_of_ne hl <| Ne.symm heq
+  if heq : r = 1 then .rem1 q (by simp [heq, decomp]) else
+  let hl := Int.le_of_sub_one_lt <| lt_of_le_of_ne hl <| Ne.symm heq
+  if heq : r = 2 then .rem2 q (by simp [heq, decomp]) else
+  let hl := Int.le_of_sub_one_lt <| lt_of_le_of_ne hl <| Ne.symm heq
+  False.elim <| Int.not_le_of_gt hu hl
+
+theorem Finset.eq_rot3 {α : Type} [DecidableEq α] {a b c : α} : {a, b, c} = ({b, c, a} : Finset α) := by
+  simp [Finset.insert_eq]
+  rw [Finset.union_comm, Finset.union_assoc]
+
+end Ingredients
+
+
+section Phi
 
 def ϕ (a : Sq') (b : Sq) : Rt' := sorry
 
@@ -129,139 +168,441 @@ theorem ϕ_invϕ {a : Sq'} {x : Rt'} : ϕ a (invϕ a x) = x := sorry
 theorem invϕ_ϕ {a : Sq'} {b : Sq} : invϕ a (ϕ a b) = b := sorry
 
 @[simp]
-theorem invϕ_0 {a : Sq'} : invϕ a 1 = 0 := sorry
+theorem invϕ_0 {a : Sq'} : invϕ a 1 = 0 := ϕ_0 ▸ invϕ_ϕ
 
-end Ingredients
+theorem ϕ_unit_0_or_a {a : Sq'} {b : Sq} (h : (ϕ a b).2 = 1) : b = 0 ∨ b = a := by
+  match h1 : (ϕ a b).1 with
+  | .plus =>
+    have : ϕ a b = 1 := Prod.ext h1 h
+    apply_fun invϕ a at this
+    simp at this
+    tauto
+  | .minus =>
+    have : invϕ a (-1) = a := ϕ_self ▸ invϕ_ϕ
+    have : ϕ a b = -1 := Prod.ext h1 h
+    apply_fun invϕ a at this
+    simp_all
+
+end Phi
+
+
+section Relations
+
+structure Relation where
+  x : Rt
+  y : Rt
+  z : Rt
+  nonDiag : x.2 ≠ y.2 ∧ y.2 ≠ z.2 ∧ z.2 ≠ x.2
+
+variable {rel : Relation}
+variable {n m : ℤ}
+
+def Relation.next (rel : Relation) : Relation :=
+  ⟨rel.y, rel.z, ⟨rel.x.1 * ϕ rel.x.2 rel.y.2, rel.x.2⟩, by have := rel.nonDiag; tauto⟩
+def Relation.prev (rel : Relation) : Relation := ⟨
+  ⟨rel.z.1 / ϕ rel.z.2 rel.x.2, rel.z.2⟩, rel.x, rel.y, by have := rel.nonDiag; tauto⟩
+
+@[simp] theorem Relation.next_prev : rel.next.prev = rel := by have ⟨_, _, _, _⟩ := rel; simp [next, prev]
+@[simp] theorem Relation.prev_next : rel.prev.next = rel := by have ⟨_, _, _, _⟩ := rel; simp [next, prev]
+
+def Relation.skip (rel : Relation) : ℤ → Relation
+  | .ofNat n => Nat.rec rel (fun _ b => b.next) n
+  | .negSucc n => Nat.rec rel (fun _ b => b.prev) (n + 1)
+
+@[simp] theorem Relation.skip_0 : rel.skip 0 = rel := rfl
+
+theorem Relation.skip_3 :
+    rel.skip 3 = ⟨⟨rel.x.1 * ϕ rel.x.2 rel.y.2, rel.x.2⟩,
+                  ⟨rel.y.1 * ϕ rel.y.2 rel.z.2, rel.y.2⟩,
+                  ⟨rel.z.1 * ϕ rel.z.2 rel.x.2, rel.z.2⟩, rel.nonDiag⟩ := rfl
+
+theorem Relation.skip_minus_3 :
+    rel.skip (-3) = ⟨⟨rel.x.1 / ϕ rel.x.2 rel.y.2, rel.x.2⟩,
+                     ⟨rel.y.1 / ϕ rel.y.2 rel.z.2, rel.y.2⟩,
+                     ⟨rel.z.1 / ϕ rel.z.2 rel.x.2, rel.z.2⟩, rel.nonDiag⟩ := rfl
+
+@[simp] theorem Relation.skip_next : rel.skip (n + 1) = (rel.skip n).next := by
+  match n with
+  | .ofNat n =>
+    have : (Int.ofNat n) + 1 = Int.ofNat (n + 1) := Int.ofNat_add_one_out n
+    rw [this]
+    dsimp [skip]
+  | .negSucc .zero => simp [skip, Int.succ]
+  | .negSucc (.succ n) =>
+    have : (Int.negSucc (n + 1)) + 1 = Int.negSucc n := by simp [Int.negSucc_coe, Int.succ]
+    simp [skip, this]
+
+@[simp] theorem Relation.skip_next_next : rel.skip (n + 2) = (rel.skip n).next.next := by
+  have : (2 : ℤ) = 1 + 1 := rfl
+  rw [this, ←add_assoc, skip_next, skip_next]
+
+@[simp] theorem Relation.skip_prev : rel.skip (n - 1) = (rel.skip n).prev := by
+  match n with
+  | .ofNat .zero =>
+    simp [Int.pred, skip]
+    have : (-1 : ℤ) = Int.negSucc 0 := rfl
+    rw [this]
+    simp
+  | .ofNat (.succ n) => simp [Int.pred, skip]
+  | .negSucc n => simp [Int.pred, skip]
+
+@[simp] theorem Relation.skip_skip : (rel.skip n).skip m = rel.skip (n + m) := by
+  induction m using Int.induction_on
+  case hz => simp
+  case hp _ hi => simp [←add_assoc, hi]
+  case hn _ hi => simp [←add_sub_assoc, hi]
+
+@[simp] theorem Relation.skip_3_n :
+    rel.skip (3 * n) = ⟨⟨rel.x.1 * ϕ rel.x.2 rel.y.2 ^ n, rel.x.2⟩,
+                        ⟨rel.y.1 * ϕ rel.y.2 rel.z.2 ^ n, rel.y.2⟩,
+                        ⟨rel.z.1 * ϕ rel.z.2 rel.x.2 ^ n, rel.z.2⟩, rel.nonDiag⟩ := by
+  induction n using Int.induction_on
+  case hz => simp
+  case hp _ hi =>
+    apply_fun (·.skip 3) at hi; simp at hi
+    simp [skip_3] at hi
+    group at hi; group
+    simp [mul_add, hi]
+  case hn _ hi =>
+    apply_fun (·.skip (-3)) at hi; simp at hi
+    simp [skip_minus_3, div_eq_mul_inv] at hi
+    group at hi; group
+    simp [mul_sub, hi]
+
+def Relation.orbit : Set Relation := { rel.skip n | n : ℤ }
+
+theorem Relation.orbit_self : rel ∈ rel.orbit := ⟨0, by simp⟩
+
+theorem Relation.orbit_next : rel.next ∈ rel.orbit := ⟨1, by simp [skip]⟩
+
+theorem Relation.orbit_translate {a b : Relation} (h : b ∈ a.orbit) : b.orbit = a.orbit := by
+  replace ⟨n, h⟩ := h
+  ext x; constructor
+  · intro ⟨n', hx⟩
+    simp [←h] at hx
+    use n + n'
+  · intro ⟨n', hx⟩
+    apply_fun (·.skip (-n)) at h
+    simp at h
+    simp [h] at hx
+    use -n + n'
+
+theorem Relation.orbit_trans {a b c : Relation} : a ∈ b.orbit → b ∈ c.orbit → a ∈ c.orbit :=
+  fun h1 h2 => orbit_translate h2 ▸ h1
+
+theorem Relation.orbit_symm' {a b : Relation} : a ∈ b.orbit → b ∈ a.orbit := by
+  intro ⟨n, h⟩
+  apply_fun (·.skip (-n)) at h
+  simp at h
+  exact ⟨-n, h.symm⟩
+theorem Relation.orbit_symm {a b : Relation} : a ∈ b.orbit ↔ b ∈ a.orbit := ⟨orbit_symm', orbit_symm'⟩
+
+theorem Relation.orbits_disjoint {a b : Relation} : a.orbit = b.orbit ∨ a.orbit ∩ b.orbit = ∅ := by
+  rw [or_iff_not_imp_right]
+  intro h
+  have ⟨_, ha, hb⟩ := Set.nonempty_iff_ne_empty.mpr h
+  exact Relation.orbit_translate ha ▸ Relation.orbit_translate hb
+
+def isFunc (A : Set Relation) : Prop :=
+  ∀ rel rel' : Relation, rel ∈ A → rel' ∈ A → rel.x = rel'.x → rel.y = rel'.y → rel.z = rel'.z
+
+theorem Relation.orbit_func : isFunc rel.orbit := by
+  intro rel rel' ⟨n, hrel⟩ ⟨n', hrel'⟩ hx hy
+  apply_fun (·.skip (-n)) at hrel
+  simp at hrel
+  rw [hrel] at hrel'
+  simp at hrel'
+  match Mod3.of (-n + n') with
+  | .rem0 k hk =>
+    suffices h0 : k = 0 by rw [←hrel', hk, h0]; simp
+    by_contra h0
+    apply_fun fun a => (rel'.x.1⁻¹ * a.x.1).2 at hrel'
+    simp [hk, ←hx, RtId_pow_eta] at hrel'
+    have : (ϕ rel.x.2 rel.y.2).2 ≠ 1 := fun hc => by
+      cases ϕ_unit_0_or_a hc
+      case inl hc => exact rel.y.2.prop hc
+      case inr hc => exact rel.nonDiag.1 (Subtype.eq hc.symm)
+    apply FreeGroup.infinite_order _ this
+    apply isOfFinOrder_iff_pow_eq_one.mpr
+    rw [←pow_natAbs_eq_one] at hrel'
+    have : 0 < k.natAbs := Nat.zero_lt_of_ne_zero (Int.natAbs_ne_zero.mpr h0)
+    use k.natAbs
+  | .rem1 k hk =>
+    exfalso
+    apply_fun (·.x.2) at hrel'
+    simp [hk, next] at hrel'
+    exact rel.nonDiag.1 (hx ▸ hrel'.symm)
+  | .rem2 k hk =>
+    exfalso
+    apply_fun (·.x.2) at hrel'
+    simp [hk, next] at hrel'
+    exact rel.nonDiag.2.2 (hx ▸ hrel')
+
+def Relation.squares : Finset Sq' := {rel.x.2, rel.y.2, rel.z.2}
+
+theorem Relation.orbit_squares {rel'} (h : rel' ∈ rel.orbit) : rel'.squares = rel.squares := by
+  obtain ⟨n, h⟩ := h
+  apply_fun (·.squares) at h
+  match Mod3.of n with
+  | .rem0 k hk => simp [hk, squares] at h; simp [h, squares]
+  | .rem1 k hk => simp [hk, squares, next] at h; rw [←Finset.eq_rot3] at h; simp [h, squares]
+  | .rem2 k hk => simp [hk, squares, next] at h; rw [Finset.eq_rot3] at h; simp [h, squares]
+
+end Relations
 
 
 section Iteration
 
-abbrev PartialFunction := Rt → Rt → Rt → Prop
-
-def offset (x y : Rt) (n : Nat) : Rt := (x.1 * (ϕ x.2 y.2)^n, x.2)
-
-@[simp] theorem offset_0 (x y : Rt) : offset x y 0 = x := by simp [offset]
-@[simp] theorem offset_2 (x y : Rt) (n : Nat) : (offset x y n).2 = x.2 := by simp [offset]
-
-def related x y z x' y' z' :=
-  ∃ n : Nat,
-    (x, y, z) = (offset x' y' n, offset y' z' n, offset z' x' n) ∨
-    (x, y, z) = (offset y' z' n, offset z' x' n, offset x' y' (n+1)) ∨
-    (x, y, z) = (offset z' x' n, offset x' y' (n+1), offset y' z' (n+1))
-
-theorem self_is_related {x y z : Rt} : related x y z x y z := ⟨0, by simp⟩
-
-theorem related_isFunc x y z1 z2 x' y' z' (h1 : related x y z1 x' y' z')
-    (h2 : related x y z2 x' y' z') : z1 = z2 := by
-  sorry
+abbrev PartialFunction := Set Relation
 
 def PartialFunction.closure (F : PartialFunction) : PartialFunction :=
-  fun x y z => ∃ x' y' z', F x' y' z' ∧ related x y z x' y' z'
+  { rel | (F ∩ rel.orbit).Nonempty }
 
 theorem PartialFunction.le_closure (F : PartialFunction) : F ≤ F.closure := by
-  intro x y z h
-  exact ⟨x, y, z, h, self_is_related⟩
+  intro rel h
+  exact ⟨rel, h, rel.orbit_self⟩
 
 theorem PartialFunction.closure_mono (F1 F2 : PartialFunction) (h : F1 ≤ F2) :
     F1.closure ≤ F2.closure := by
   unfold closure
-  intro _ _ _ ⟨_, _, _, h1, h2⟩
-  exact ⟨_, _, _, h _ _ _ h1, h2⟩
+  intro _ ⟨_, h1, h2⟩
+  exact ⟨_, h h1, h2⟩
 
-theorem PartialFunction.closure_LyRy (x y z w : Rt) (F : PartialFunction) (h1 : F.closure x y z)
-    (h2 : F.closure y z w) (hne : y.2 ≠ z.2) : w = (x.1 * ϕ x.2 ↑y.2, x.2) := by
-  sorry
+def PartialFunction.isSparse (F : PartialFunction) : Prop :=
+  ∀ rel : Relation, (rel.orbit ∩ F).Subsingleton
 
-def PartialFunction.isFinite (F : PartialFunction) : Prop := {(x, y, z) | F x y z}.Finite
-def PartialFunction.isFunc (F : PartialFunction) : Prop := ∀ x y z z', F x y z → F x y z' → z = z'
-def PartialFunction.aux_cond (F : PartialFunction) := ∀ x y z, F.closure x y z → y.2 ≠ z.2
+def PartialFunction.definedAt (F : PartialFunction) (u v : Rt) : Prop :=
+  ∃ rel ∈ F, rel.x = u ∧ rel.y = v
+
+theorem PartialFunction.sparse_closure_singleton (F : PartialFunction) (h : F.isSparse)
+    (rel : Relation) (hr : rel ∈ F.closure) : ∃ base, F ∩ rel.orbit = {base} := by
+  replace ⟨base, _, _⟩ := hr
+  use base
+  ext; constructor
+  · intro ⟨_, _⟩
+    apply h <;> tauto
+  · simp_all
+
+theorem PartialFunction.closure_LyRy (F : PartialFunction) {rel rel' : Relation} (h : isFunc F.closure)
+    (hrel : rel ∈ F.closure) (hrel' : rel' ∈ F.closure) (hxy : rel'.x = rel.y) (hyz : rel'.y = rel.z)
+    : rel'.z = ⟨rel.x.1 * ϕ rel.x.2 rel.y.2, rel.x.2⟩ := by
+  suffices rel.next ∈ F.closure by
+    symm
+    apply h rel.next rel' this hrel' <;> simp [Relation.next, hxy, hyz]
+  replace ⟨base, hbase, hrel⟩ := hrel
+  rw [Relation.orbit_symm] at hrel
+  apply Relation.orbit_trans rel.orbit_next at hrel
+  rw [Relation.orbit_symm] at hrel
+  exact ⟨base, hbase, hrel⟩
 
 structure Extension where
   core : PartialFunction
-  finite : core.isFinite
-  func : core.closure.isFunc
-  aux : core.aux_cond
+  finite : core.Finite
+  func : isFunc core.closure
+  sparse : core.isSparse
   u : Rt
   v : Rt
-  not_def : ∀ z, ¬core.closure u v z
+  u_neq_v : u.2 ≠ v.2
+  not_def : ¬core.closure.definedAt u v
 
-noncomputable def Extension.squares (E : Extension) : Finset Sq' :=
-  {E.u.2, E.v.2} ∪ E.finite.toFinset.biUnion fun (x, y, z) => {x.2, y.2, z.2}
+variable (E : Extension)
 
-theorem Extension.squares_closure {x y z : Rt} (E : Extension) (h : E.core.closure x y z) :
-    {x.2, y.2, z.2} ⊆ E.squares := by
-  rintro _ hsq
-  simp at hsq
-  simp only [squares, Finset.mem_union, Finset.mem_biUnion]
-  obtain ⟨_, _, _, h', h⟩ := h
-  obtain ⟨_, ⟨_, _, _⟩ | ⟨_, _, _⟩ | ⟨_, _, _⟩⟩ := h
-  repeat exact .inr ⟨(_, _, _), by simp [h']; tauto⟩
+noncomputable def Extension.oldSquares : Finset Sq' :=
+  {E.u.2, E.v.2} ∪ E.finite.toFinset.biUnion fun a => {a.x.2, a.y.2, a.z.2}
 
-def Extension.freshSquare (E : Extension) : ∃ s : Sq', s ∉ E.squares := Finset.exists_not_mem _
+noncomputable def Extension.oldRtIds : Finset Rt' :=
+  let fromValues := {E.u.1, E.v.1} ∪ E.finite.toFinset.biUnion fun a => {a.x.1, a.y.1, a.z.1}
+  let fromPhis := E.finite.toFinset.biUnion fun rel => (rel.squares).image fun x => ϕ E.v.2 x.val
+  fromValues ∪ fromPhis
 
-noncomputable def Extension.freshRoot (E : Extension) : Rt := (1, E.freshSquare.choose)
+theorem Extension.v_1_old : E.v.1 ∈ E.oldRtIds := by simp [oldRtIds]
 
-def Extension.next (E : Extension) : PartialFunction :=
-  fun x y z => E.core x y z ∨ (x, y, z) = (E.u, E.v, E.freshRoot)
+theorem Extension.phi_square_old {rel x} (h : rel ∈ E.core) {h2 : x ∈ rel.squares} : ϕ E.v.2 x ∈ E.oldRtIds := by
+  simp [oldRtIds]
+  repeat right
+  exact ⟨_, h, _, ⟨x.prop, h2⟩, rfl⟩
 
-theorem Extension.next_finite (E : Extension) : E.next.isFinite := by
-  unfold PartialFunction.isFinite Extension.next
-  simp only [Set.setOf_or, Set.finite_union]
-  exact ⟨E.finite, by simp [←Prod.mk.injEq]⟩
+theorem Extension.y_old' {rel} (h : rel ∈ E.core) : rel.y.1 ∈ E.oldRtIds := by
+  simp [oldRtIds]
+  right; right; left
+  exact ⟨_, h, by tauto⟩
+theorem Extension.y_old {rel} (h : rel ∈ E.core.closure) : rel.y.1 ∈ E.oldRtIds := by
+  simp [oldRtIds]
+  right; right; left
+  obtain ⟨base, hb, hr⟩ := h
+  refine ⟨base, hb, ?_⟩
+  right; left
 
-theorem new_related_disjoint (E : Extension) {x y z x2 y2 z2 x' y' z'} (h1 : E.core x' y' z')
-    (h2 : related x y z x' y' z') (h3 : related x2 y2 z2 E.u E.v E.freshRoot) : (x, y) ≠ (x2, y2) := by
-  sorry
+noncomputable def Extension.freshGeneratorName : Nat :=
+  FreshGenerator.freshGeneratorName <| E.oldRtIds.image Prod.snd
 
-theorem Extension.next_func (E : Extension) : E.next.closure.isFunc := by
-  simp only [PartialFunction.isFunc, PartialFunction.closure]
-  intro x y z z'
-  rintro ⟨x1, y1, z1, (hn1 | ⟨rfl, rfl, rfl⟩), hr1⟩ ⟨x2, y2, z2, (hn2 | ⟨rfl, rfl, rfl⟩), hr2⟩
-  · exact E.func _ _ _ _ ⟨_, _, _, hn1, hr1⟩ ⟨_, _, _, hn2, hr2⟩
-  · solve_by_elim [new_related_disjoint]
-  · solve_by_elim [new_related_disjoint]
-  · apply related_isFunc _ _ _ _ _ _ _ hr1 hr2
+noncomputable def Extension.freshRtId : Rt' :=
+  (.plus, FreeGroup.of E.freshGeneratorName)
 
-theorem Extension.next_aux (E : Extension) : E.next.aux_cond := by
-  sorry
+noncomputable def Extension.freshSquare : Sq' :=
+  let c := invϕ E.v.2 E.freshRtId
+  have : c ≠ 0 := fun hc => by
+    apply_fun ϕ E.v.2 at hc
+    apply_fun Prod.snd at hc
+    simp [c, Extension.freshRtId] at hc
+  ⟨c, this⟩
+
+noncomputable def Extension.projectFresh (x : Rt') : ℤ :=
+  FreshGenerator.projectFresh (E.oldRtIds.image Prod.snd) x.2
+
+@[simp] theorem Extension.projectFresh_1 : E.projectFresh 1 = 0 := rfl
+@[simp] theorem Extension.projectFresh_minus_1 : E.projectFresh (-1) = 0 := rfl
+@[simp] theorem Extension.projectFresh_mul {x y} : E.projectFresh (x * y) = E.projectFresh x + E.projectFresh y := by simp [projectFresh, RtId_mul_snd]; rfl
+@[simp] theorem Extension.projectFresh_inv {x} : E.projectFresh x⁻¹ = -E.projectFresh x := by simp [projectFresh, RtId_inv_snd]; rfl
+@[simp] theorem Extension.projectFresh_pow {x n} : E.projectFresh (x ^ n) = n * E.projectFresh x := by simp [projectFresh, RtId_pow_snd]; rfl
+@[simp] theorem Extension.projectFresh_freshRtId : E.projectFresh E.freshRtId = 1 := by simp [projectFresh, freshRtId, freshGeneratorName, ←FreshGenerator.freshGenerator.eq_1]
+
+@[simp] theorem Extension.projectFresh_old_eq_0 {r : Rt'} (h : r ∈ E.oldRtIds) : E.projectFresh r = 0 := by
+  simp [projectFresh]
+  apply FreshGenerator.projectFresh_old
+  simp [h]
+
+@[simp] theorem Extension.phi_v_freshRoot : ϕ E.v.2 E.freshSquare = E.freshRtId := by
+  simp [freshSquare]
+
+noncomputable def Extension.w : Rt := ⟨1, E.freshSquare⟩
+noncomputable def Extension.newRelation : Relation := ⟨E.u, E.v, E.w, by sorry⟩
+
+theorem Extension.closure_x_not_w {rel} (h : rel ∈ E.core.closure) : rel.x.2 ≠ E.freshSquare := by
+  suffices ϕ E.v.2 rel.x.2 ∈ E.oldRtIds by
+    by_contra hc
+    apply_fun fun x => E.projectFresh (ϕ E.v.2 x) at hc
+    simp [freshSquare, this] at hc
+  obtain ⟨_, hb, hr⟩ := h
+  apply E.phi_square_old hb
+  rw [Relation.orbit_squares hr]
+  simp [Relation.squares]
+
+theorem Extension.closure_y_not_w {rel} (h : rel ∈ E.core.closure) : rel.y.2 ≠ E.freshSquare := by
+  suffices ϕ E.v.2 rel.y.2 ∈ E.oldRtIds by
+    by_contra hc
+    apply_fun fun x => E.projectFresh (ϕ E.v.2 x) at hc
+    simp [freshSquare, this] at hc
+  obtain ⟨_, hb, hr⟩ := h
+  apply E.phi_square_old hb
+  rw [Relation.orbit_squares hr]
+  simp [Relation.squares]
+
+theorem Extension.new_unrelated_inp {rel} (h : rel ∈ E.newRelation.orbit)
+    : ¬∃ rel' ∈ E.core.closure, rel'.x = rel.x ∧ rel'.y = rel.y := by
+  intro ⟨rel', hc, hx, hy⟩
+  replace ⟨n, h⟩ := h
+  match Mod3.of n with
+  | .rem0 k hk =>
+    by_cases h0 : k = 0
+    · simp [hk, h0] at h
+      rw [←h] at hx hy
+      exact E.not_def ⟨rel', hc, hx, hy⟩
+    · simp [hk, newRelation] at h
+      apply_fun fun x => E.projectFresh (x.y.1) at h
+      simp [w, E.v_1_old, ←hy, E.y_old hc] at h
+      exact h0 h
+  | .rem1 k hk =>
+    simp [hk, newRelation, Relation.next] at h
+    apply_fun (·.y.2) at h
+    simp [w] at h
+    exact E.closure_y_not_w hc (hy ▸ h).symm
+  | .rem2 k hk =>
+    simp [hk, newRelation, Relation.next] at h
+    apply_fun (·.x.2) at h
+    simp [w] at h
+    exact E.closure_x_not_w hc (hx ▸ h).symm
+
+theorem Extension.new_unrelated : E.newRelation.orbit ∩ E.core.closure = ∅ := by
+  apply Set.eq_empty_of_forall_not_mem
+  intro rel ⟨h1, h2⟩
+  exact E.new_unrelated_inp h1 ⟨rel, h2, rfl, rfl⟩
+
+def Extension.next : PartialFunction := E.core ∪ {E.newRelation}
+
+theorem Extension.next_finite : E.next.Finite := by simp [next, finite]
+
+theorem Extension.next_func : isFunc E.next.closure := by
+  simp only [isFunc, PartialFunction.closure]
+  intro rel rel' ⟨base, base_next, base_rel⟩ ⟨base', base'_next, base'_rel'⟩ hx hy
+  rcases base_next, base'_next with ⟨hrel | hrel, hrel' | hrel'⟩
+  · apply E.func <;> tauto
+  · exfalso
+    rw [hrel', Relation.orbit_symm] at base'_rel'
+    exact E.new_unrelated_inp base'_rel' ⟨rel, ⟨base, hrel, base_rel⟩, hx, hy⟩
+  · exfalso
+    rw [hrel, Relation.orbit_symm] at base_rel
+    exact E.new_unrelated_inp base_rel ⟨rel', ⟨base', hrel', base'_rel'⟩, hx.symm, hy.symm⟩
+  · rw [Relation.orbit_symm, Set.eq_of_mem_singleton hrel] at base_rel
+    rw [Relation.orbit_symm, Set.eq_of_mem_singleton hrel'] at base'_rel'
+    exact E.newRelation.orbit_func rel rel' base_rel base'_rel' hx hy
+
+theorem Extension.next_sparse : E.next.isSparse := by
+  intro c a ⟨hca, ha⟩ b ⟨hcb, hb⟩
+  rcases ha, hb with ⟨ha | ha, hb | hb⟩
+  · exact E.sparse _ ⟨hca, ha⟩ ⟨hcb, hb⟩
+  · exfalso
+    apply E.new_unrelated.symm ▸ Set.not_nonempty_empty
+    rw [hb, Relation.orbit_symm] at hcb
+    exact ⟨c, hcb, ⟨a, ha, hca⟩⟩
+  · exfalso
+    apply E.new_unrelated.symm ▸ Set.not_nonempty_empty
+    rw [ha, Relation.orbit_symm] at hca
+    exact ⟨c, hca, ⟨b, hb, hcb⟩⟩
+  · simp_all
 
 end Iteration
 
 
 section Greedy
 
-def PartialSolution := {core : PartialFunction | core.isFinite ∧ core.closure.isFunc ∧ core.aux_cond }
+def PartialSolution := {core : PartialFunction | core.Finite ∧ isFunc core.closure ∧ core.isSparse}
 
-theorem extend (S : PartialSolution) (u v : Rt) : ∃ S', S ≤ S' ∧ ∃ z, S'.val.closure u v z := by
-  by_cases h : ∃ z, S.val.closure u v z
-  · use S
-  have ⟨core, finite, func, aux⟩ := S
-  let E : Extension := {core, finite, func, aux, u, v, not_def := forall_not_of_not_exists h}
-  use ⟨E.next, E.next_finite, E.next_func, E.next_aux⟩
+theorem extend (S : PartialSolution) (u v : Rt) (heq : u.2 ≠ v.2) : ∃ S', S ≤ S' ∧ S'.val.closure.definedAt u v := by
+  if not_def : S.val.closure.definedAt u v then use S else
+  have ⟨core, finite, func, sparse⟩ := S
+  let E : Extension := {core, finite, func, sparse, u, v, u_neq_v := heq, not_def}
+  use ⟨E.next, E.next_finite, E.next_func, E.next_sparse⟩
   split_ands
   · tauto
-  · use E.freshRoot
-    apply PartialFunction.le_closure
-    tauto
+  · exact ⟨E.newRelation, by apply PartialFunction.le_closure; tauto, rfl, rfl⟩
 
 def Fn1323 (f : Rt → Rt → Rt) : Prop := ∀ x y,
   x.2 ≠ y.2 → y.2 ≠ (f x y).2 ∧ f y (f x y) = (x.1 * ϕ x.2 y.2, x.2)
 
+abbrev GreedyPair := {x : Rt × Rt // x.1.2 ≠ x.2.2}
+
+def Relation.input (rel : Relation) : GreedyPair := ⟨⟨rel.x, rel.y⟩, rel.nonDiag.1⟩
+
 theorem exists_complete_function (seed : PartialSolution) :
-    ∃ f, Fn1323 f ∧ (∀ {x y z}, seed.val x y z → f x y = z) := by
+    ∃ f, Fn1323 f ∧ (∀ rel, rel ∈ seed.val → f rel.x rel.y = rel.z) := by
   have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain
-    (fun (x, y) => {S | ∃ z, S.val.closure x y z}) (fun S (u, v) => extend S u v) seed
-  replace h3 : ∀ x y, _ := fun x y => h3 (x, y)
+    (fun ⟨⟨u, v⟩, _⟩ => {S | S.val.closure.definedAt u v})
+    (fun S (⟨⟨u, v⟩, u_neq_v⟩ : GreedyPair) => by exact extend S u v u_neq_v)
+    seed
+  -- replace h3 : ∀ x y, _ := fun x y : Rt => if h : x.2 ≠ y.2 then h3 ⟨(x, y), h⟩ else sorry
   choose F hF f hf using h3
-  refine ⟨f, fun {x y} h => ?_, fun {x y z} h => ?_⟩
-  · let F' x y : {S // S ∈ c} := ⟨F x y, hF x y⟩
-    obtain ⟨⟨S, hS⟩, hS1, hS2⟩ := hc.directed (F' x y) (F' y (f x y))
+  let f' (x y : Rt) : Rt := if h : x.2 ≠ y.2 then (f ⟨⟨x, y⟩, h⟩).z else x
+  have hf' {x y} (h : x.2 ≠ y.2) : (f' x y).2 ≠ x.2 ∧ (f' x y).2 ≠ y.2 := by
+    have ⟨_, h1, h2⟩ := (f ⟨(x, y), h⟩).nonDiag
+    simp [hf ⟨(x, y), h⟩] at h1 h2
+    simp [f', h, mt Eq.symm h1, h2]
+  refine ⟨f', fun {x y} h => ?_, fun {rel} h => ?_⟩
+  · let F' x y h : {S // S ∈ c} := ⟨F ⟨⟨x, y⟩, h⟩, hF ⟨⟨x, y⟩, h⟩⟩
+    let p : GreedyPair := ⟨(x, y), h⟩
+    obtain ⟨⟨⟨S, finite, func, _⟩, hS⟩, hS1, hS2⟩ := hc.directed (F' x y h) (F' y (f' x y) (hf' ..).2.symm)
     split_ands
-    · exact S.prop.2.2 _ _ (f ..) ((F ..).val.closure_mono _ hS1 _ _ _ (hf ..))
-    · have val1 := (F ..).val.closure_mono _ hS1 _ _ _ (hf ..)
-      have val2 := (F ..).val.closure_mono _ hS2 _ _ _ (hf ..)
-      exact S.val.closure_LyRy _ _ _ _ val1 val2 (S.2.2.2 _ _ _ val1)
-  · exact (F ..).2.2.1 _ _ _ _ (hf ..) ((F ..).1.le_closure _ _ _ (h2 _ (hF ..) _ _ _ h))
+    · exact (hf' h).2.symm
+    · have := mt Eq.symm (hf' h).2
+      simp [f', h] at this
+      have ⟨_, h2, h3⟩ := hf ⟨(x, y), h⟩
+      simp [f', h, this]
+      have val1 := (F ..).val.closure_mono _ hS1 (hf ..).1
+      have val2 := (F ..).val.closure_mono _ hS2 (hf ..).1
+      -- TODO: use S.closure_LyRy here
+      sorry
+  · simp [f', rel.nonDiag]
+    exact (F ..).2.2.1 _ _ (hf ..).1 ((F ..).1.le_closure (h2 (F ..) (hF ..) h)) (hf ..).2.1 (hf ..).2.2
 
 end Greedy
 
@@ -317,6 +658,11 @@ theorem eq1323_if_conditions (G : Type) (_ : Magma G) (h1 : ∀ x y : G, ((y ◇
   -- λ x y => (h2 ((y ◇ y) ◇ x) y ▸ h1 x y).symm
 
 
+def g₁ := FreeGroup.of 1
+def g₂ := FreeGroup.of 2
+def g₃ := FreeGroup.of 3
+
+def seed' : PartialFunction := sorry
 def seed : PartialSolution := sorry
 
 
