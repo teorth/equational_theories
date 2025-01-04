@@ -26,6 +26,12 @@ instance [Nonempty α] : Infinite (FreeGroup α) :=
   Infinite.of_injective (FreeGroup.of a ^ ·) <| by
     simp [FreeGroup.norm_of_pow, infinite_order]
 
+instance [DecidableEq α] : DecidableEq (FreeGroup α) :=
+  fun a b =>
+    if h : a.toWord = b.toWord
+      then isTrue (FreeGroup.toWord_inj.mp h)
+      else isFalse (mt FreeGroup.toWord_inj.mpr h)
+
 
 def generatorNames' : List (α × Bool) → Finset α
   | [] => ∅
@@ -246,5 +252,28 @@ omit [Infinite α] in
 theorem forgetOld_old {S : Finset (FreeGroup α)} {x : FreeGroup α} (hxS : x ∈ S) : forgetOld S x = 1 := by
   apply dropGenerators_generatorNames
   exact Finset.subset_biUnion_of_mem _ hxS
+
+noncomputable section
+
+/- This is a simpler version of the above, that only projects into a single dimension - of the
+freshGenerator. Calculation with numbers works a bit better with `simp` so this is easier to use
+if it's suitable. -/
+
+def projectFresh' (S : Finset (FreeGroup α)) (a : α) : Multiplicative ℤ :=
+  if a = freshGeneratorName S then (1 : ℤ) else (0 : ℤ)
+
+def projectFresh (S : Finset (FreeGroup α)) : FreeGroup α →* Multiplicative ℤ where
+  toFun x := Multiplicative.toAdd (FreeGroup.lift (projectFresh' S) x)
+  map_one' := rfl
+  map_mul' := by intros; simp; rfl
+
+@[simp] theorem projectFresh_fresh {S : Finset (FreeGroup α)} : projectFresh S (freshGenerator S) = (1 : ℤ) := by
+  simp [projectFresh, projectFresh', freshGenerator]
+  rfl
+
+@[simp] theorem projectFresh_old {S : Finset (FreeGroup α)} {x : FreeGroup α} (hxS : x ∈ S) : projectFresh S x = (0 : ℤ) := by
+  sorry
+
+end
 
 end FreshGenerator
