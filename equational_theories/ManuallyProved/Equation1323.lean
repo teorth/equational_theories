@@ -340,6 +340,10 @@ theorem Relation.orbit_func : isFunc rel.orbit := by
 
 def Relation.squares : Finset Sq' := {rel.x.2, rel.y.2, rel.z.2}
 
+theorem Relation.x_square : rel.x.2 ∈ rel.squares := by simp [squares]
+theorem Relation.y_square : rel.y.2 ∈ rel.squares := by simp [squares]
+theorem Relation.z_square : rel.z.2 ∈ rel.squares := by simp [squares]
+
 theorem Relation.orbit_squares {rel'} (h : rel' ∈ rel.orbit) : rel'.squares = rel.squares := by
   obtain ⟨n, h⟩ := h
   apply_fun (·.squares) at h
@@ -408,30 +412,40 @@ structure Extension where
 variable (E : Extension)
 
 noncomputable def Extension.oldSquares : Finset Sq' :=
-  {E.u.2, E.v.2} ∪ E.finite.toFinset.biUnion fun a => {a.x.2, a.y.2, a.z.2}
+  {E.u.2, E.v.2} ∪ E.finite.toFinset.biUnion (·.squares)
 
 noncomputable def Extension.oldRtIds : Finset Rt' :=
   let fromValues := {E.u.1, E.v.1} ∪ E.finite.toFinset.biUnion fun a => {a.x.1, a.y.1, a.z.1}
-  let fromPhis := E.finite.toFinset.biUnion fun rel => (rel.squares).image fun x => ϕ E.v.2 x.val
+  let fromPhis := (E.oldSquares ×ˢ E.oldSquares).image fun (x, y) => ϕ x y
   fromValues ∪ fromPhis
 
-theorem Extension.v_1_old : E.v.1 ∈ E.oldRtIds := by simp [oldRtIds]
+theorem Extension.oldSquares_u_2 : E.u.2 ∈ E.oldSquares := by simp [oldSquares]
+theorem Extension.oldSquares_v_2 : E.v.2 ∈ E.oldSquares := by simp [oldSquares]
 
-theorem Extension.phi_square_old {rel x} (h : rel ∈ E.core) {h2 : x ∈ rel.squares} : ϕ E.v.2 x ∈ E.oldRtIds := by
+theorem Extension.oldSquares_core_squares {rel x} (h : rel ∈ E.core) (h2 : x ∈ rel.squares)
+    : x ∈ E.oldSquares := by
+  simp [oldSquares]
+  repeat right
+  use rel
+
+theorem Extension.oldRtIds_v_1 : E.v.1 ∈ E.oldRtIds := by simp [oldRtIds]
+
+theorem Extension.oldRtIds_phi_v_2_u2 : ϕ E.v.2 E.u.2 ∈ E.oldRtIds := by
   simp [oldRtIds]
   repeat right
-  exact ⟨_, h, _, ⟨x.prop, h2⟩, rfl⟩
+  exact ⟨_, E.v.2.prop, _, ⟨E.oldSquares_v_2, E.u.2.prop, E.oldSquares_u_2⟩, rfl⟩
 
-theorem Extension.y_old' {rel} (h : rel ∈ E.core) : rel.y.1 ∈ E.oldRtIds := by
+theorem Extension.oldRtIds_phi_v_2_square {rel x} (h : rel ∈ E.core) (h2 : x ∈ rel.squares)
+    : ϕ E.v.2 x ∈ E.oldRtIds := by
   simp [oldRtIds]
-  right; right; left
-  exact ⟨_, h, by tauto⟩
-theorem Extension.y_old {rel} (h : rel ∈ E.core.closure) : rel.y.1 ∈ E.oldRtIds := by
+  repeat right
+  exact ⟨_, E.v.2.prop, _, ⟨E.oldSquares_v_2, x.prop, E.oldSquares_core_squares h h2⟩, rfl⟩
+
+theorem Extension.oldRtIds_phi_square_square {rel x y} (h : rel ∈ E.core) (h2 : x ∈ rel.squares)
+     (h3 : y ∈ rel.squares) : ϕ x y ∈ E.oldRtIds := by
   simp [oldRtIds]
-  right; right; left
-  obtain ⟨base, hb, hr⟩ := h
-  refine ⟨base, hb, ?_⟩
-  right; left
+  repeat right
+  exact ⟨_, x.prop, _, ⟨E.oldSquares_core_squares h h2, y.prop, E.oldSquares_core_squares h h3⟩, rfl⟩
 
 noncomputable def Extension.freshGeneratorName : Nat :=
   FreshGenerator.freshGeneratorName <| E.oldRtIds.image Prod.snd
@@ -447,26 +461,52 @@ noncomputable def Extension.freshSquare : Sq' :=
     simp [c, Extension.freshRtId] at hc
   ⟨c, this⟩
 
+@[simp] theorem Extension.phi_v_2_freshRoot : ϕ E.v.2 E.freshSquare = E.freshRtId := by
+  simp [freshSquare]
+
 noncomputable def Extension.projectFresh (x : Rt') : ℤ :=
   FreshGenerator.projectFresh (E.oldRtIds.image Prod.snd) x.2
 
-@[simp] theorem Extension.projectFresh_1 : E.projectFresh 1 = 0 := rfl
-@[simp] theorem Extension.projectFresh_minus_1 : E.projectFresh (-1) = 0 := rfl
 @[simp] theorem Extension.projectFresh_mul {x y} : E.projectFresh (x * y) = E.projectFresh x + E.projectFresh y := by simp [projectFresh, RtId_mul_snd]; rfl
-@[simp] theorem Extension.projectFresh_inv {x} : E.projectFresh x⁻¹ = -E.projectFresh x := by simp [projectFresh, RtId_inv_snd]; rfl
 @[simp] theorem Extension.projectFresh_pow {x n} : E.projectFresh (x ^ n) = n * E.projectFresh x := by simp [projectFresh, RtId_pow_snd]; rfl
 @[simp] theorem Extension.projectFresh_freshRtId : E.projectFresh E.freshRtId = 1 := by simp [projectFresh, freshRtId, freshGeneratorName, ←FreshGenerator.freshGenerator.eq_1]
 
-@[simp] theorem Extension.projectFresh_old_eq_0 {r : Rt'} (h : r ∈ E.oldRtIds) : E.projectFresh r = 0 := by
+@[simp] theorem Extension.projectFresh_old {r : Rt'} (h : r ∈ E.oldRtIds) : E.projectFresh r = 0 := by
   simp [projectFresh]
   apply FreshGenerator.projectFresh_old
-  simp [h]
+  rw [Finset.mem_image]
+  use r
 
-@[simp] theorem Extension.phi_v_freshRoot : ϕ E.v.2 E.freshSquare = E.freshRtId := by
-  simp [freshSquare]
+theorem Extension.projectFresh_closure_y_1 {rel} (h : rel ∈ E.core.closure) : E.projectFresh rel.y.1 = 0 := by
+  obtain ⟨base, hb, ⟨n, hr⟩⟩ := h
+  apply_fun fun a => (a.skip (-n)).y at hr
+  simp at hr
+  cases Mod3.of (-n)
+  repeat {
+    rename_i hk
+    simp [hk, Relation.next] at hr
+    simp only [hr]
+    simp [projectFresh_mul, projectFresh_pow,
+          E.oldRtIds_phi_square_square hb base.y_square base.z_square,
+          E.oldRtIds_phi_square_square hb base.z_square base.x_square,
+          E.oldRtIds_phi_square_square hb base.x_square base.y_square]
+    apply E.projectFresh_old
+    simp [oldRtIds]
+    right; right; left
+    exact ⟨_, hb, by tauto⟩
+  }
 
 noncomputable def Extension.w : Rt := ⟨1, E.freshSquare⟩
-noncomputable def Extension.newRelation : Relation := ⟨E.u, E.v, E.w, by sorry⟩
+
+noncomputable def Extension.newRelation : Relation := .mk E.u E.v E.w <| by
+  split_ands
+  exact E.u_neq_v
+  by_contra hc
+  apply_fun fun x => (ϕ E.v.2 x).1 at hc
+  simp [w, freshSquare, freshRtId] at hc
+  by_contra hc
+  apply_fun fun x => E.projectFresh (ϕ E.v.2 x) at hc
+  simp [w, oldRtIds_phi_v_2_u2] at hc
 
 theorem Extension.closure_x_not_w {rel} (h : rel ∈ E.core.closure) : rel.x.2 ≠ E.freshSquare := by
   suffices ϕ E.v.2 rel.x.2 ∈ E.oldRtIds by
@@ -474,7 +514,7 @@ theorem Extension.closure_x_not_w {rel} (h : rel ∈ E.core.closure) : rel.x.2 �
     apply_fun fun x => E.projectFresh (ϕ E.v.2 x) at hc
     simp [freshSquare, this] at hc
   obtain ⟨_, hb, hr⟩ := h
-  apply E.phi_square_old hb
+  apply E.oldRtIds_phi_v_2_square hb
   rw [Relation.orbit_squares hr]
   simp [Relation.squares]
 
@@ -484,7 +524,7 @@ theorem Extension.closure_y_not_w {rel} (h : rel ∈ E.core.closure) : rel.y.2 �
     apply_fun fun x => E.projectFresh (ϕ E.v.2 x) at hc
     simp [freshSquare, this] at hc
   obtain ⟨_, hb, hr⟩ := h
-  apply E.phi_square_old hb
+  apply E.oldRtIds_phi_v_2_square hb
   rw [Relation.orbit_squares hr]
   simp [Relation.squares]
 
@@ -500,7 +540,7 @@ theorem Extension.new_unrelated_inp {rel} (h : rel ∈ E.newRelation.orbit)
       exact E.not_def ⟨rel', hc, hx, hy⟩
     · simp [hk, newRelation] at h
       apply_fun fun x => E.projectFresh (x.y.1) at h
-      simp [w, E.v_1_old, ←hy, E.y_old hc] at h
+      simp [w, E.oldRtIds_v_1, ←hy, E.projectFresh_closure_y_1 hc] at h
       exact h0 h
   | .rem1 k hk =>
     simp [hk, newRelation, Relation.next] at h
@@ -586,20 +626,20 @@ theorem exists_complete_function (seed : PartialSolution) :
   have hf' {x y} (h : x.2 ≠ y.2) : (f' x y).2 ≠ x.2 ∧ (f' x y).2 ≠ y.2 := by
     have ⟨_, h1, h2⟩ := (f ⟨(x, y), h⟩).nonDiag
     simp [hf ⟨(x, y), h⟩] at h1 h2
-    simp [f', h, mt Eq.symm h1, h2]
+    simp [f', h, Ne.symm h1, h2]
   refine ⟨f', fun {x y} h => ?_, fun {rel} h => ?_⟩
   · let F' x y h : {S // S ∈ c} := ⟨F ⟨⟨x, y⟩, h⟩, hF ⟨⟨x, y⟩, h⟩⟩
     let p : GreedyPair := ⟨(x, y), h⟩
     obtain ⟨⟨⟨S, finite, func, _⟩, hS⟩, hS1, hS2⟩ := hc.directed (F' x y h) (F' y (f' x y) (hf' ..).2.symm)
     split_ands
     · exact (hf' h).2.symm
-    · have := mt Eq.symm (hf' h).2
-      simp [f', h] at this
-      have ⟨_, h2, h3⟩ := hf ⟨(x, y), h⟩
-      simp [f', h, this]
-      have val1 := (F ..).val.closure_mono _ hS1 (hf ..).1
-      have val2 := (F ..).val.closure_mono _ hS2 (hf ..).1
-      -- TODO: use S.closure_LyRy here
+    · let ⟨hrel1, hrel1x, hrel1y⟩ := hf ⟨(x, y), h⟩
+      have hrel1z : (f ⟨(x, y), h⟩).z = f' x y := by simp [f', h]
+      simp at hrel1x hrel1y hrel1z
+      let ⟨hrel2, hrel2x, hrel2y⟩ := hf ⟨(y, f' x y), Ne.symm (hf' h).2⟩
+      have hrel2z : (f ⟨(y, f' x y), Ne.symm (hf' h).2⟩).z = f' y (f' x y) := by simp [f', h]; simp [hrel1z, Ne.symm (hf' h).2]
+      simp at hrel2x hrel2y hrel2z
+      have := S.closure_LyRy func (hS1 hrel1) (hS2 hrel2) (Eq.trans hrel2x hrel1y.symm) (Eq.trans hrel2y hrel1z.symm)
       sorry
   · simp [f', rel.nonDiag]
     exact (F ..).2.2.1 _ _ (hf ..).1 ((F ..).1.le_closure (h2 (F ..) (hF ..) h)) (hf ..).2.1 (hf ..).2.2

@@ -263,16 +263,34 @@ def projectFresh' (S : Finset (FreeGroup α)) (a : α) : Multiplicative ℤ :=
   if a = freshGeneratorName S then (1 : ℤ) else (0 : ℤ)
 
 def projectFresh (S : Finset (FreeGroup α)) : FreeGroup α →* Multiplicative ℤ where
-  toFun x := Multiplicative.toAdd (FreeGroup.lift (projectFresh' S) x)
+  toFun x := FreeGroup.lift (projectFresh' S) x
   map_one' := rfl
-  map_mul' := by intros; simp; rfl
+  map_mul' := by intros; simp
 
 @[simp] theorem projectFresh_fresh {S : Finset (FreeGroup α)} : projectFresh S (freshGenerator S) = (1 : ℤ) := by
   simp [projectFresh, projectFresh', freshGenerator]
-  rfl
+
+theorem projectFresh_old' {S : Finset (FreeGroup α)} {a : List (α × Bool)} :
+    generatorNames' a ⊆ S.biUnion generatorNames → projectFresh S (.mk a) = (0 : ℤ) := by
+  induction a
+  case nil => simp [generatorNames']; rfl
+  case cons head _ ih =>
+    rw [←List.singleton_append]
+    intro hn
+    simp only [generatorNames', List.singleton_append] at hn
+    rw [←mul_mk, projectFresh, MonoidHom.map_mul, ←projectFresh, ih]
+    · have : head.1 ∈ S.biUnion generatorNames :=
+        Finset.singleton_subset_iff.mp $ Finset.union_subset_left hn
+      have : freshGeneratorName S ∉ S.biUnion generatorNames := (existsFreshGeneratorName S).choose_spec
+      simp [projectFresh, projectFresh']
+      by_cases head.2 <;> aesop
+    · apply subset_trans _ hn; simp
 
 @[simp] theorem projectFresh_old {S : Finset (FreeGroup α)} {x : FreeGroup α} (hxS : x ∈ S) : projectFresh S x = (0 : ℤ) := by
-  sorry
+  rw [←mk_toWord (x := x)]
+  apply projectFresh_old'
+  intro _ hw
+  apply Finset.mem_biUnion.mpr ⟨x, hxS, hw⟩
 
 end
 
