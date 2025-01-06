@@ -194,16 +194,29 @@ structure Relation where
   z : Rt
   nonDiag : x.2 ≠ y.2 ∧ y.2 ≠ z.2 ∧ z.2 ≠ x.2
 
+structure NePair where
+  x : Rt
+  y : Rt
+  nonDiag : x.2 ≠ y.2
+
+def NePair.toPair (p : NePair) := (p.x, p.y)
+theorem NePair.toPair.inj : Function.Injective NePair.toPair
+  | ⟨x1, y1, h1⟩, ⟨x2, y2, h2⟩ => by simp [toPair]
+
+instance : Countable NePair := Function.Injective.countable NePair.toPair.inj
+
 variable {rel : Relation}
 variable {n m : ℤ}
 
-def Relation.next (rel : Relation) : Relation :=
-  ⟨rel.y, rel.z, ⟨rel.x.1 * ϕ rel.x.2 rel.y.2, rel.x.2⟩, by have := rel.nonDiag; tauto⟩
-def Relation.prev (rel : Relation) : Relation := ⟨
-  ⟨rel.z.1 / ϕ rel.z.2 rel.x.2, rel.z.2⟩, rel.x, rel.y, by have := rel.nonDiag; tauto⟩
+def Relation.lhs : NePair := ⟨rel.x, rel.y, rel.nonDiag.1⟩
 
-@[simp] theorem Relation.next_prev : rel.next.prev = rel := by have ⟨_, _, _, _⟩ := rel; simp [next, prev]
-@[simp] theorem Relation.prev_next : rel.prev.next = rel := by have ⟨_, _, _, _⟩ := rel; simp [next, prev]
+@[simp] def Relation.next (rel : Relation) : Relation :=
+  ⟨rel.y, rel.z, ⟨rel.x.1 * ϕ rel.x.2 rel.y.2, rel.x.2⟩, by have := rel.nonDiag; tauto⟩
+@[simp] def Relation.prev (rel : Relation) : Relation :=
+  ⟨(rel.z.1 / ϕ rel.z.2 rel.x.2, rel.z.2), rel.x, rel.y, by have := rel.nonDiag; tauto⟩
+
+@[simp] theorem Relation.next_prev : rel.next.prev = rel := by have ⟨_, _, _, _⟩ := rel; simp
+@[simp] theorem Relation.prev_next : rel.prev.next = rel := by have ⟨_, _, _, _⟩ := rel; simp
 
 def Relation.skip (rel : Relation) : ℤ → Relation
   | .ofNat n => Nat.rec rel (fun _ b => b.next) n
@@ -304,7 +317,7 @@ theorem Relation.orbits_disjoint {a b : Relation} : a.orbit = b.orbit ∨ a.orbi
   exact Relation.orbit_translate ha ▸ Relation.orbit_translate hb
 
 def isFunc (A : Set Relation) : Prop :=
-  ∀ rel rel' : Relation, rel ∈ A → rel' ∈ A → rel.x = rel'.x → rel.y = rel'.y → rel.z = rel'.z
+  ∀ {rel rel' : Relation}, rel ∈ A → rel' ∈ A → rel.x = rel'.x → rel.y = rel'.y → rel.z = rel'.z
 
 theorem Relation.orbit_func : isFunc rel.orbit := by
   intro rel rel' ⟨n, hrel⟩ ⟨n', hrel'⟩ hx hy
@@ -330,12 +343,12 @@ theorem Relation.orbit_func : isFunc rel.orbit := by
   | .rem1 k hk =>
     exfalso
     apply_fun (·.x.2) at hrel'
-    simp [hk, next] at hrel'
+    simp [hk] at hrel'
     exact rel.nonDiag.1 (hx ▸ hrel'.symm)
   | .rem2 k hk =>
     exfalso
     apply_fun (·.x.2) at hrel'
-    simp [hk, next] at hrel'
+    simp [hk] at hrel'
     exact rel.nonDiag.2.2 (hx ▸ hrel')
 
 def Relation.squares : Finset Sq' := {rel.x.2, rel.y.2, rel.z.2}
@@ -349,8 +362,8 @@ theorem Relation.orbit_squares {rel'} (h : rel' ∈ rel.orbit) : rel'.squares = 
   apply_fun (·.squares) at h
   match Mod3.of n with
   | .rem0 k hk => simp [hk, squares] at h; simp [h, squares]
-  | .rem1 k hk => simp [hk, squares, next] at h; rw [←Finset.eq_rot3] at h; simp [h, squares]
-  | .rem2 k hk => simp [hk, squares, next] at h; rw [Finset.eq_rot3] at h; simp [h, squares]
+  | .rem1 k hk => simp [hk, squares] at h; rw [←Finset.eq_rot3] at h; simp [h, squares]
+  | .rem2 k hk => simp [hk, squares] at h; rw [Finset.eq_rot3] at h; simp [h, squares]
 
 end Relations
 
@@ -366,7 +379,7 @@ theorem PartialFunction.le_closure (F : PartialFunction) : F ≤ F.closure := by
   intro rel h
   exact ⟨rel, h, rel.orbit_self⟩
 
-theorem PartialFunction.closure_mono (F1 F2 : PartialFunction) (h : F1 ≤ F2) :
+theorem PartialFunction.closure_mono {F1 F2 : PartialFunction} (h : F1 ≤ F2) :
     F1.closure ≤ F2.closure := by
   unfold closure
   intro _ ⟨_, h1, h2⟩
@@ -387,12 +400,20 @@ theorem PartialFunction.sparse_closure_singleton (F : PartialFunction) (h : F.is
     apply h <;> tauto
   · simp_all
 
+theorem PartialFunction.closure_next (F : PartialFunction) {rel : Relation}
+    (h : rel ∈ F.closure) : rel.next ∈ F.closure := by
+  obtain ⟨base, hb, hr⟩ := h
+  apply Relation.orbit_symm' at hr
+  apply Relation.orbit_trans rel.orbit_next at hr
+  apply Relation.orbit_symm' at hr
+  exact ⟨base, hb, hr⟩
+
 theorem PartialFunction.closure_LyRy (F : PartialFunction) {rel rel' : Relation} (h : isFunc F.closure)
     (hrel : rel ∈ F.closure) (hrel' : rel' ∈ F.closure) (hxy : rel'.x = rel.y) (hyz : rel'.y = rel.z)
     : rel'.z = ⟨rel.x.1 * ϕ rel.x.2 rel.y.2, rel.x.2⟩ := by
   suffices rel.next ∈ F.closure by
     symm
-    apply h rel.next rel' this hrel' <;> simp [Relation.next, hxy, hyz]
+    apply h this hrel' <;> simp [hxy, hyz]
   replace ⟨base, hbase, hrel⟩ := hrel
   rw [Relation.orbit_symm] at hrel
   apply Relation.orbit_trans rel.orbit_next at hrel
@@ -575,7 +596,7 @@ theorem Extension.next_func : isFunc E.next.closure := by
     exact E.new_unrelated_inp base_rel ⟨rel', ⟨base', hrel', base'_rel'⟩, hx.symm, hy.symm⟩
   · rw [Relation.orbit_symm, Set.eq_of_mem_singleton hrel] at base_rel
     rw [Relation.orbit_symm, Set.eq_of_mem_singleton hrel'] at base'_rel'
-    exact E.newRelation.orbit_func rel rel' base_rel base'_rel' hx hy
+    exact E.newRelation.orbit_func base_rel base'_rel' hx hy
 
 theorem Extension.next_sparse : E.next.isSparse := by
   intro c a ⟨hca, ha⟩ b ⟨hcb, hb⟩
@@ -607,42 +628,42 @@ theorem extend (S : PartialSolution) (u v : Rt) (heq : u.2 ≠ v.2) : ∃ S', S 
   · tauto
   · exact ⟨E.newRelation, by apply PartialFunction.le_closure; tauto, rfl, rfl⟩
 
-def Fn1323 (f : Rt → Rt → Rt) : Prop := ∀ x y,
-  x.2 ≠ y.2 → y.2 ≠ (f x y).2 ∧ f y (f x y) = (x.1 * ϕ x.2 y.2, x.2)
-
-abbrev GreedyPair := {x : Rt × Rt // x.1.2 ≠ x.2.2}
-
-def Relation.input (rel : Relation) : GreedyPair := ⟨⟨rel.x, rel.y⟩, rel.nonDiag.1⟩
+def Fn1323 (f : NePair → Rt) : Prop := ∀ p : NePair,
+  ∃ p' : NePair, p'.x = p.y ∧ p'.y = f p ∧ f p' = (p.x.1 * ϕ p.x.2 p.y.2, p.x.2)
 
 theorem exists_complete_function (seed : PartialSolution) :
-    ∃ f, Fn1323 f ∧ (∀ rel, rel ∈ seed.val → f rel.x rel.y = rel.z) := by
+    ∃ f, Fn1323 f ∧ (∀ rel, rel ∈ seed.val → f rel.lhs = rel.z) := by
   have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain
-    (fun ⟨⟨u, v⟩, _⟩ => {S | S.val.closure.definedAt u v})
-    (fun S (⟨⟨u, v⟩, u_neq_v⟩ : GreedyPair) => by exact extend S u v u_neq_v)
+    (fun ⟨u, v, _⟩ => {S | S.val.closure.definedAt u v})
+    (fun S (⟨u, v, nonDiag⟩ : NePair) => by exact extend S u v nonDiag)
     seed
-  -- replace h3 : ∀ x y, _ := fun x y : Rt => if h : x.2 ≠ y.2 then h3 ⟨(x, y), h⟩ else sorry
   choose F hF f hf using h3
-  let f' (x y : Rt) : Rt := if h : x.2 ≠ y.2 then (f ⟨⟨x, y⟩, h⟩).z else x
-  have hf' {x y} (h : x.2 ≠ y.2) : (f' x y).2 ≠ x.2 ∧ (f' x y).2 ≠ y.2 := by
-    have ⟨_, h1, h2⟩ := (f ⟨(x, y), h⟩).nonDiag
-    simp [hf ⟨(x, y), h⟩] at h1 h2
-    simp [f', h, Ne.symm h1, h2]
-  refine ⟨f', fun {x y} h => ?_, fun {rel} h => ?_⟩
-  · let F' x y h : {S // S ∈ c} := ⟨F ⟨⟨x, y⟩, h⟩, hF ⟨⟨x, y⟩, h⟩⟩
-    let p : GreedyPair := ⟨(x, y), h⟩
-    obtain ⟨⟨⟨S, finite, func, _⟩, hS⟩, hS1, hS2⟩ := hc.directed (F' x y h) (F' y (f' x y) (hf' ..).2.symm)
-    split_ands
-    · exact (hf' h).2.symm
-    · let ⟨hrel1, hrel1x, hrel1y⟩ := hf ⟨(x, y), h⟩
-      have hrel1z : (f ⟨(x, y), h⟩).z = f' x y := by simp [f', h]
-      simp at hrel1x hrel1y hrel1z
-      let ⟨hrel2, hrel2x, hrel2y⟩ := hf ⟨(y, f' x y), Ne.symm (hf' h).2⟩
-      have hrel2z : (f ⟨(y, f' x y), Ne.symm (hf' h).2⟩).z = f' y (f' x y) := by simp [f', h]; simp [hrel1z, Ne.symm (hf' h).2]
-      simp at hrel2x hrel2y hrel2z
-      have := S.closure_LyRy func (hS1 hrel1) (hS2 hrel2) (Eq.trans hrel2x hrel1y.symm) (Eq.trans hrel2y hrel1z.symm)
-      sorry
-  · simp [f', rel.nonDiag]
-    exact (F ..).2.2.1 _ _ (hf ..).1 ((F ..).1.le_closure (h2 (F ..) (hF ..) h)) (hf ..).2.1 (hf ..).2.2
+  let inF rel := f rel.lhs = rel
+  have hInF p : inF (f p) := by simp [inF, Relation.lhs, hf]
+  have hf' {rel} (h : inF rel) : inF rel.next := by
+    simp [Relation.lhs, Relation.next, inF]
+    rw [Relation.mk.injEq]
+    simp [hf]
+    simp [Relation.lhs, Relation.next, inF] at h
+    have hn := (hf rel.lhs).1
+    apply PartialFunction.closure_next at hn
+    simp [Relation.lhs, Relation.next, hf, h] at hn
+    let p' : NePair := ⟨rel.y, rel.z, rel.nonDiag.2.1⟩
+    let F' p : {S // S ∈ c} := ⟨F p, hF p⟩
+    obtain ⟨⟨⟨S, finite, func, _⟩, hS⟩, hS1, hS2⟩ := hc.directed (F' rel.lhs) (F' p')
+    have hSn := PartialFunction.closure_mono hS1 hn
+    have hSfp' := PartialFunction.closure_mono hS2 (hf p').1
+    exact func hSfp' hSn (by simp [hf]) (by simp [hf])
+  use fun p => (f p).z
+  split_ands
+  · intro p
+    use (f p).next.lhs
+    have := congr_arg (·.z) <| hf' (hInF p)
+    simp [Relation.lhs, Relation.next, hf] at this
+    simp [Relation.lhs, Relation.next, hf, this]
+  · intro rel h
+    obtain ⟨hc, hx, hy⟩ := hf rel.lhs
+    exact (F _).2.2.1 hc ((F _).1.le_closure <| h2 _ (hF _) h) hx hy
 
 end Greedy
 
@@ -651,14 +672,14 @@ inductive G where
   | square : Sq → G
   | root : Rt → G
 
-def op (f : Rt → Rt → Rt) : G → G → G
+def op (f : NePair → Rt) : G → G → G
   | .square a, .square b => .square (a + b)
   | .root x, .square b => .root (x.1 * ϕ x.2 b, x.2)
   | .square b, .root x => .root (x.1 * (ϕ x.2 b)⁻¹, x.2)
   | .root x, .root y =>
-    if x.2 = y.2
+    if h : x.2 = y.2
       then .square (x.2 + invϕ x.2 (y.1⁻¹ * x.1))
-      else .root (f x y)
+      else .root (f ⟨x, y, h⟩)
 
 
 theorem op_RSy_LSy_eq_Id f : (x : G) → (y : G) → op f (op f (op f y y) x) (op f y y) = x
@@ -668,10 +689,19 @@ theorem op_RSy_LSy_eq_Id f : (x : G) → (y : G) → op f (op f (op f y y) x) (o
   | .root (x, a), .root (y, b) => by simp [op]
 
 
+@[simp] theorem f_y {f p} (h : Fn1323 f) : (f p).2 ≠ p.y.2 := by
+  have ⟨p', h1, h2, h3⟩ := h p
+  rw [←h1, ←h2]
+  exact Ne.symm p'.nonDiag
+
 theorem roots_LyRy {x y a b f} (h : a ≠ b) (proper : Fn1323 f) :
     op f (.root (y, b)) (op f (.root (x, a)) (.root (y, b))) = .root (x * ϕ a b, a) := by
-  replace proper := proper (x, a) (y, b) h
-  simp [op, h, proper, proper.1.symm]
+  have : b ≠ (f ⟨(x,a), (y,b), h⟩).2 := Ne.symm (f_y proper)
+  simp [op, h, this]
+  replace ⟨_, hx, hy, proper⟩ := proper ⟨(x, a), (y, b), h⟩
+  rw [←proper]
+  congr <;> simp [hx, hy]
+
 
 theorem op_Ly_Ry_eq_LSy f (proper : Fn1323 f) : (x : G) → (y : G) → op f y (op f x y) = op f x (op f y y)
   | .square a, .square b => by simp [op]; rw [add_comm, add_assoc]; simp
@@ -695,7 +725,6 @@ theorem eq1323_if_conditions (G : Type) (_ : Magma G) (h1 : ∀ x y : G, ((y ◇
     (h2 : ∀ x y : G, y ◇ (x ◇ y) = x ◇ (y ◇ y)) : Equation1323 G := by
   intro x y
   rw [h2, h1]
-  -- λ x y => (h2 ((y ◇ y) ◇ x) y ▸ h1 x y).symm
 
 
 def g₁ := FreeGroup.of 1
@@ -707,7 +736,7 @@ def seed : PartialSolution := sorry
 
 
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1323/near/481475622 -/
--- @[equational_result]
+@[equational_result]
 theorem Equation1323_not_implies_Equation2744 :
     ∃ (G: Type) (_: Magma G), Equation1323 G ∧ ¬ Equation2744 G := by
 
