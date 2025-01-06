@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - '**/*.lean'
-      - '**/blueprint.yml'
+      - '**/blueprint-paper.yml'
       - 'blueprint/**'
       - 'commentary/**'
       - 'home_page/**'
@@ -25,7 +25,7 @@ on:
       - main
     paths:
       - '**/*.lean'
-      - '**/blueprint.yml'
+      - '**/blueprint-paper.yml'
       - 'blueprint/**'
       - 'commentary/**'
       - 'home_page/**'
