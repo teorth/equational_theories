@@ -6,7 +6,7 @@ It can be used a script, with a (space-separated) list of ids or of
 equations (in which the operation can be ".", "*", or "◇"), optionally
 preceeded by "*" to dualize the equation, or used in interactive mode:
 
-    python find_equation_id.py 1234 "(w*u)=t*(u*x)" 4567 "*89" "*67" "x1=x2"
+    python find_equation_id.py 1234 "(w*u)=t*(u*x)" 4567 "*89" "*67" "0=(1*2)*(0*1)"
 
     python find_equation_id.py -i
 
@@ -31,7 +31,6 @@ import math
 import string
 
 VAR_NAMES = "xyzwuvrst"
-ALLOWED_VARS = string.ascii_lowercase + string.ascii_uppercase + "".join(map(chr, range(0x3b1, 0x3ca)))
 
 ExprType = typing.Union[str, int, typing.Tuple["ExprType", str, "ExprType"]]
 ShapeType = typing.Union[None, typing.Tuple["ShapeType", "ShapeType"]]
@@ -139,14 +138,10 @@ def _parse_expr(tokens: typing.List[str]) -> ExprType:
                 raise ValueError("Missing closing parenthesis")
             tokens.pop(0)  # Remove closing parenthesis
             return (left, "◇", right)
-        if len(tokens[0]) == 1 and tokens[0] in ALLOWED_VARS:
+        if (tokens[0].isidentifier() or tokens[0] == "0" or
+            (tokens[0][0] in "123456789" and
+             all(c in "0123456789" for c in tokens[0][1:]))):
             return tokens.pop(0)
-        if tokens[0][0] in ALLOWED_VARS: # Allows x123 but not x-1 or xyz
-            try:
-                if int(tokens[0][1:]) >= 0:
-                    return tokens.pop(0)
-            except ValueError:
-                pass
         raise ValueError(f"Unexpected token: {tokens[0]}")
 
     result = parse_element()
