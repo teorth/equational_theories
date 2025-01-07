@@ -276,7 +276,7 @@ def all_eqs(order: int) -> typing.Iterator[Equation]:
 
 # Counting equations of some order, based on https://oeis.org/A103293, refactored to access intermediate results.
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def num_eqs(n: int) -> int:
     """Sequence https://oeis.org/A376640 of the number of magma equations"""
     if n % 2 == 1:
@@ -287,7 +287,7 @@ def num_eqs(n: int) -> int:
                 + catalan(n // 2) * bell_same_shape(n))
 
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def bell_same_shape(n: int) -> int:
     """Number of rhymes when lhs and rhs have the same (n//2)-operations shape"""
     if n == 0:
@@ -296,7 +296,7 @@ def bell_same_shape(n: int) -> int:
             - 2 * bell(1 + n // 2)) // 2
 
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def stirling_sym(n: int, k: int) -> int:
     """Number of symmetric k-partitions of range(n), see https://oeis.org/A103293"""
     if n < 2:
@@ -340,7 +340,7 @@ def shape_from_id(nodes: int, tree_num: int) -> ShapeType:
 
 # Map from rhyme to id and back
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def _num_rhyme_help(n: int, max_used: int) -> int:
     """Number of rhymes of n slots whose minimum number is at most max_used + 1"""
     if n==0:
@@ -373,7 +373,7 @@ def get_rhyme_by_id(n: int, rhyme_num: int, max_used: int = 0) -> typing.List[in
 
 # Map from equation to id and back.
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def _num_eqs_unbalanced(n: int) -> int:
     """Counts magma equations that have strictly fewer operations on the left than on the right"""
     return ((catalan(n + 1) - (0 if n % 2 == 1 else catalan(n // 2) ** 2))
