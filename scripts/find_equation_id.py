@@ -3,10 +3,10 @@
 """This module maps magma equations from/to their id
 
 It can be used a script, with a (space-separated) list of ids or of
-equations (in which the operation can be ".", "*", or "◇"), or used in
-interactive mode:
+equations (in which the operation can be ".", "*", or "◇"), optionally
+preceeded by "*" to dualize the equation, or used in interactive mode:
 
-    python find_equation_id.py 1234 "(w*u)=t*(u*x)" 4567 89 67 "x1=x2"
+    python find_equation_id.py 1234 "(w*u)=t*(u*x)" 4567 "*89" "*67" "x1=x2"
 
     python find_equation_id.py -i
 
@@ -15,6 +15,7 @@ When used as a module imported in python code, one can use
 - eq = Equation.from_str(string)
 - eq.id()
 - all_eqs(integer order)
+- eq.dual()
 
 The theory of magma operations and their labeling is explained in
 https://teorth.github.io/equational_theories/blueprint/basic-theory-chapter.html
@@ -90,7 +91,20 @@ class Equation(typing.NamedTuple):
         """Number of distinct variables in the equation."""
         return max(self.rhyme) + 1
 
-
+    def dual(self) -> "Equation":
+        """Swap all left and right operands, swap lhs and rhs if needed."""
+        lhs_shape = _shape_dual(self.lhs_shape)
+        rhs_shape = _shape_dual(self.rhs_shape)
+        lhs_order = _shape_order(self.lhs_shape)
+        lhs_rhyme = list(reversed(self.rhyme[:lhs_order + 1]))
+        rhs_rhyme = list(reversed(self.rhyme[lhs_order + 1:]))
+        if _shape_lt(rhs_shape, lhs_shape):
+            lhs_shape, rhs_shape = rhs_shape, lhs_shape
+            lhs_rhyme, rhs_rhyme = rhs_rhyme, lhs_rhyme
+        rhyme = canonicalize_rhyme(lhs_rhyme + rhs_rhyme)
+        if lhs_shape == rhs_shape:
+            rhyme = min(rhyme, canonicalize_rhyme(rhs_rhyme + lhs_rhyme))
+        return Equation(lhs_shape, rhs_shape, rhyme)
 
 ##### Parsing an equation string
 
@@ -177,6 +191,11 @@ def _equation_from_str(eq_str: str) -> Equation:
 
 
 ##### On shapes
+
+def _shape_dual(shape: ShapeType) -> ShapeType:
+    if shape is None:
+        return None
+    return (_shape_dual(shape[1]), _shape_dual(shape[0]))
 
 def _shape_order(shape: ShapeType) -> int:
     if shape is None:
@@ -470,18 +489,33 @@ def _equation_from_id(input_eq: int) -> Equation:
 
 def process_equation(eq_str: str) -> None:
     """Process a given equation, printing its id and canonical form."""
+    eq_str = eq_str.strip("[,]")
+    if eq_str.startswith("*"):
+        dual = True
+        eq_str = eq_str[1:]
+    else:
+        dual = False
     try:
         input_eq = int(eq_str)
     except ValueError:
         input_eq = None
     if isinstance(input_eq, int):
         eq = Equation.from_id(input_eq)
-        print(f"Equation {input_eq}: {eq}")
+        if dual:
+            eq = eq.dual()
+            eq_num = eq.id
+            print(f"The dual of Equation {input_eq} is Equation {eq_num}: {eq}")
+        else:
+            print(f"Equation {input_eq}: {eq}")
     else:
         input_eq = Equation.from_str(eq_str)
-        eq_num = input_eq.id
-        print(f"The equation '{eq_str}' is Equation {eq_num}: {input_eq}")
-
+        if dual:
+            dual_eq = input_eq.dual()
+            dual_num = dual_eq.id
+            print(f"The dual of '{eq_str}' is Equation {dual_num}: {dual_eq}")
+        else:
+            eq_num = input_eq.id
+            print(f"The equation '{eq_str}' is Equation {eq_num}: {input_eq}")
 
 def main():
     """Main function to run the program."""
