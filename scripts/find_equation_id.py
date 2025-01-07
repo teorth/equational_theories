@@ -204,12 +204,14 @@ def _shape_order(shape: ShapeType) -> int:
 
 
 def _shape_cmp(shape1: ShapeType, shape2: ShapeType) -> int:
+    shape1_order = _shape_order(shape1)
+    shape2_order = _shape_order(shape2)
+    if shape1_order < shape2_order:
+        return -1
+    if shape1_order > shape2_order:
+        return 1
     if shape1 is None and shape2 is None:
         return 0
-    if shape1 is None and isinstance(shape2, tuple):
-        return -1
-    if isinstance(shape1, tuple) and shape2 is None:
-        return 1
     left_cmp = _shape_cmp(shape1[0], shape2[0])
     if left_cmp != 0:
         return left_cmp
@@ -217,15 +219,7 @@ def _shape_cmp(shape1: ShapeType, shape2: ShapeType) -> int:
 
 
 def _shape_lt(shape1: ShapeType, shape2: ShapeType) -> bool:
-    shape1_order = _shape_order(shape1)
-    shape2_order = _shape_order(shape2)
-    if shape1_order < shape2_order:
-        return True
-    if shape1_order > shape2_order:
-        return False
-    if _shape_cmp(shape1, shape2) < 0:
-        return True
-    return False
+    return _shape_cmp(shape1, shape2) < 0
 
 
 ##### Generating all rhymes, all shapes, all equations
