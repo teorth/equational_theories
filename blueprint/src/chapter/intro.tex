@@ -204,6 +204,7 @@ This sequence is
 $$2, 5, 39, 364, 4284, 57882, 888365, \dots$$
 (\href{https://oeis.org/A376640}{OEIS A376640}).
 
+
 In particular, up to relabeling, symmetry, and triviality, there are exactly $2+5+39+364+4284=4694$ laws of total order at most $4$. A list can be found \href{https://github.com/teorth/equational_theories/blob/main/data/equations.txt}{here}. A script for generating them may be found \href{https://github.com/teorth/equational_theories/blob/main/scripts/generate_eqs_list.py}{here}. The ordering of these equations is according to the following rules.
 First, an ordering on expressions with placeholder variables $\ast$ (such as $\ast \op (\ast \op \ast)$):
 \begin{itemize}
@@ -222,8 +223,7 @@ For instance, $\ast \op \ast \formaleq \ast \op (\ast \op \ast)$ is less than $\
 Finally, we order (and reduce) equations of the form $w \formaleq w'$ as follows. Define the \emph{shape} of an equation to be the equation in which all variables are replaced by placeholders $\ast$.
 \begin{itemize}
   \item (i) Equations of lower shape will be of lower order.  For instance, any equation of shape $\ast \op \ast \formaleq \ast \op (\ast \op \ast)$ is less than any equation $\ast \op \ast \formaleq (\ast \op \ast) \op \ast$.
-  \item (ii) Among equations of equations of equal shape, equations whose variables are first in the lexicographical ordering will be lower. For instance, $0 \ast 0 \formaleq 0 \op (0 \op 0)$ is less than $0 \ast 0 \formaleq 1 \op (1 \op 1)$, which is in turn less than $0 \ast 1 \formaleq 0 \op (0 \op 0)$.
+  \item (ii) Among equations of equal shape, equations whose variables are first in the lexicographical ordering will be lower. For instance, $0 \ast 0 \formaleq 0 \op (0 \op 0)$ is less than $0 \ast 0 \formaleq 1 \op (1 \op 1)$, which is in turn less than $0 \ast 1 \formaleq 0 \op (0 \op 0)$.
   \item (iii) Only the arrangement of the equation (up to relabeling and symmetry) which is minimal in this ordering is retained in the list.  For instance, we do not retain $1 \op 2 \formaleq 1$ because it can be replaced by $0 \formaleq 0 \op 1$, which is earlier in the ordering.
 \item (iv) Any trivial equation $w \formaleq w$, other than the order zero law $0 \formaleq 0$, is discarded.
 \end{itemize}
-
