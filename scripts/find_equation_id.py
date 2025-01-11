@@ -2,13 +2,16 @@
 
 """This module maps magma equations from/to their id
 
-It can be used a script, with a (space-separated) list of ids or of
-equations (in which the operation can be ".", "*", or "◇"), optionally
-preceeded by "*" to dualize the equation, or used in interactive mode:
-
-    python find_equation_id.py 1234 "(w*u)=t*(u*x)" 4567 "*89" "*67" "0=(1*2)*(0*1)"
+It can be used as a script in interactive mode (with the -i switch), as
 
     python find_equation_id.py -i
+
+or by passing arguments to it from stdin or as arguments: a (space-separated)
+list of ids or of equations (in which the operation can be ".", "*", or "◇"),
+optionally preceeded by "*" to dualize the equation (and characters "[,]" are
+ignored):
+
+    python find_equation_id.py [12, 34] "(w*u)=t*(u*x)" 4567 "*89" "*67" "0=(1*2)*(0*1)"
 
 When used as a module imported in python code, one can use
 - eq = Equation.from_id(integer id)
@@ -22,6 +25,7 @@ https://teorth.github.io/equational_theories/blueprint/basic-theory-chapter.html
 
 """
 
+import sys
 import argparse
 import itertools
 import typing
@@ -531,11 +535,14 @@ def main():
                 print("Goodbye!")
                 break
             process_equation(eq)
-    elif args.equations:
-        for eq in args.equations:
-            process_equation(eq)
     else:
-        parser.print_help()
+        if not sys.stdin.isatty():
+            args.equations = [eq for l in sys.stdin for eq in l.split()] + args.equations
+        if args.equations:
+            for eq in args.equations:
+                process_equation(eq)
+        else:
+            parser.print_help()
 
 
 if __name__ == "__main__":
