@@ -84,7 +84,7 @@ class Equation(typing.NamedTuple):
 
     def orders(self) -> typing.Tuple[int, int]:
         """Number of operations on the lhs and rhs as a tuple."""
-        return (_shape_order(self.lhs_shape), _shape_order(self.rhs_shape))
+        return (shape_order(self.lhs_shape), shape_order(self.rhs_shape))
 
     def num_vars(self) -> int:
         """Number of distinct variables in the equation."""
@@ -92,12 +92,12 @@ class Equation(typing.NamedTuple):
 
     def dual(self) -> "Equation":
         """Swap all left and right operands, swap lhs and rhs if needed."""
-        lhs_shape = _shape_dual(self.lhs_shape)
-        rhs_shape = _shape_dual(self.rhs_shape)
-        lhs_order = _shape_order(self.lhs_shape)
+        lhs_shape = shape_dual(self.lhs_shape)
+        rhs_shape = shape_dual(self.rhs_shape)
+        lhs_order = shape_order(self.lhs_shape)
         lhs_rhyme = list(reversed(self.rhyme[:lhs_order + 1]))
         rhs_rhyme = list(reversed(self.rhyme[lhs_order + 1:]))
-        if _shape_lt(rhs_shape, lhs_shape):
+        if shape_lt(rhs_shape, lhs_shape):
             lhs_shape, rhs_shape = rhs_shape, lhs_shape
             lhs_rhyme, rhs_rhyme = rhs_rhyme, lhs_rhyme
         rhyme = canonicalize_rhyme(lhs_rhyme + rhs_rhyme)
@@ -176,7 +176,7 @@ def _equation_from_str(eq_str: str) -> Equation:
     rhs = _parse_expr(_tokenize(rhs))
     lhs_shape, lhs_rhyme = _deconstruct_tree(lhs)
     rhs_shape, rhs_rhyme = _deconstruct_tree(rhs)
-    if _shape_lt(rhs_shape, lhs_shape):
+    if shape_lt(rhs_shape, lhs_shape):
         lhs_shape, rhs_shape = rhs_shape, lhs_shape
         lhs_rhyme, rhs_rhyme = rhs_rhyme, lhs_rhyme
     rhyme = canonicalize_rhyme(lhs_rhyme + rhs_rhyme)
@@ -187,34 +187,34 @@ def _equation_from_str(eq_str: str) -> Equation:
 
 ##### On shapes
 
-def _shape_dual(shape: ShapeType) -> ShapeType:
+def shape_dual(shape: ShapeType) -> ShapeType:
     if shape is None:
         return None
-    return (_shape_dual(shape[1]), _shape_dual(shape[0]))
+    return (shape_dual(shape[1]), shape_dual(shape[0]))
 
-def _shape_order(shape: ShapeType) -> int:
+def shape_order(shape: ShapeType) -> int:
     if shape is None:
         return 0
-    return 1 + _shape_order(shape[0]) + _shape_order(shape[1])
+    return 1 + shape_order(shape[0]) + shape_order(shape[1])
 
 
-def _shape_cmp(shape1: ShapeType, shape2: ShapeType) -> int:
-    shape1_order = _shape_order(shape1)
-    shape2_order = _shape_order(shape2)
+def shape_cmp(shape1: ShapeType, shape2: ShapeType) -> int:
+    shape1_order = shape_order(shape1)
+    shape2_order = shape_order(shape2)
     if shape1_order < shape2_order:
         return -1
     if shape1_order > shape2_order:
         return 1
     if shape1 is None and shape2 is None:
         return 0
-    left_cmp = _shape_cmp(shape1[0], shape2[0])
+    left_cmp = shape_cmp(shape1[0], shape2[0])
     if left_cmp != 0:
         return left_cmp
-    return _shape_cmp(shape1[1], shape2[1])
+    return shape_cmp(shape1[1], shape2[1])
 
 
-def _shape_lt(shape1: ShapeType, shape2: ShapeType) -> bool:
-    return _shape_cmp(shape1, shape2) < 0
+def shape_lt(shape1: ShapeType, shape2: ShapeType) -> bool:
+    return shape_cmp(shape1, shape2) < 0
 
 
 ##### Generating all rhymes, all shapes, all equations
@@ -267,7 +267,7 @@ def all_eqs(order: int) -> typing.Iterator[Equation]:
     for lhs_order in range(half):
         for lhs_shape in all_shapes(lhs_order):
             for rhs_shape in all_shapes(order - lhs_order):
-                if order == lhs_order * 2 and _shape_lt(rhs_shape, lhs_shape):
+                if order == lhs_order * 2 and shape_lt(rhs_shape, lhs_shape):
                     continue
                 symmetric_shape = lhs_shape == rhs_shape
                 for rhyme in all_rhymes(order + 1):
@@ -316,14 +316,14 @@ def stirling_sym(n: int, k: int) -> int:
 
 def shape_id(shape: ShapeType) -> int:
     """Gives the shape id (zero-based) among shapes of a given order"""
-    return _shape_id_help(shape, _shape_order(shape))
+    return _shape_id_help(shape, shape_order(shape))
 
 
 def _shape_id_help(shape: ShapeType, n: int) -> int:
     if n == 0:
         return 0
     lhs_shape, rhs_shape = shape
-    lhs_n = _shape_order(lhs_shape)
+    lhs_n = shape_order(lhs_shape)
     rhs_n = n - 1 - lhs_n
     return (sum(catalan(n1) * catalan(n - n1 - 1) for n1 in range(lhs_n))
             + _shape_id_help(lhs_shape, lhs_n) * catalan(rhs_n)
@@ -399,8 +399,8 @@ def _equation_id(input_eq: Equation) -> typing.Tuple[int, Equation]:
     """Equation id from a processed Equation"""
     lhs_shape = input_eq.lhs_shape
     rhs_shape = input_eq.rhs_shape
-    n_lhs = _shape_order(lhs_shape)
-    n_rhs = _shape_order(rhs_shape)
+    n_lhs = shape_order(lhs_shape)
+    n_rhs = shape_order(rhs_shape)
     n = n_lhs + n_rhs
     if n_lhs != n_rhs:
         return (1 + sum(num_eqs(i) for i in range(n))
