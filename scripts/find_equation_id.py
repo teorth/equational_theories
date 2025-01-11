@@ -40,13 +40,13 @@ class Equation(typing.NamedTuple):
     """Equation(lhs_shape, rhs_shape, rhyme) denotes an equation
 
     lhs_shape and rhs_shape are nested pairs (tuples) of None giving how
-    the operation is nested, and rhyme a list of int (starting with 0)
+    the operation is nested, and rhyme a tuple of int (starting with 0)
     giving the rhyme scheme (variable names, as numbers).  For instance,
-    Equation(None, ((None, None), None), [0, 1, 0, 2]) is x=(y*x)*z.
+    Equation(None, ((None, None), None), (0, 1, 0, 2)) is x=(y*x)*z.
     """
     lhs_shape: ShapeType
     rhs_shape: ShapeType
-    rhyme: typing.List[int]
+    rhyme: typing.Tuple[int]
 
     @classmethod
     def from_id(cls, eq_id: int) -> "Equation":
@@ -95,8 +95,8 @@ class Equation(typing.NamedTuple):
         lhs_shape = shape_dual(self.lhs_shape)
         rhs_shape = shape_dual(self.rhs_shape)
         lhs_order = shape_order(self.lhs_shape)
-        lhs_rhyme = list(reversed(self.rhyme[:lhs_order + 1]))
-        rhs_rhyme = list(reversed(self.rhyme[lhs_order + 1:]))
+        lhs_rhyme = tuple(reversed(self.rhyme[:lhs_order + 1]))
+        rhs_rhyme = tuple(reversed(self.rhyme[lhs_order + 1:]))
         if shape_lt(rhs_shape, lhs_shape):
             lhs_shape, rhs_shape = rhs_shape, lhs_shape
             lhs_rhyme, rhs_rhyme = rhs_rhyme, lhs_rhyme
@@ -219,32 +219,32 @@ def shape_lt(shape1: ShapeType, shape2: ShapeType) -> bool:
 
 ##### Generating all rhymes, all shapes, all equations
 
-def canonicalize_rhyme(rhyme: typing.List[int]) -> typing.List[int]:
+def canonicalize_rhyme(rhyme: typing.Tuple[int]) -> typing.Tuple[int]:
     """Canonicalize the rhyme to increasing order."""
     variables = {}
     for x in rhyme:
         if x not in variables:
             variables[x] = len(variables)
-    return [variables[x] for x in rhyme]
+    return tuple(variables[x] for x in rhyme)
 
 
-def all_rhymes(n: int) -> typing.Iterator[typing.List[int]]:
+def all_rhymes(n: int) -> typing.Iterator[typing.Tuple[int]]:
     """Generate all rhymes of a given length."""
     if n == 0:
-        yield []
+        yield ()
         return
     for next in _all_rhymes_help(n, 0):
-        yield [0] + next
+        yield (0,) + next
 
 
-def _all_rhymes_help(n: int, max_used: int) -> typing.Iterator[typing.List[int]]:
+def _all_rhymes_help(n: int, max_used: int) -> typing.Iterator[typing.Tuple[int]]:
     """Generates all rhymes whose minimum is at most max_used + 1"""
     if n == 0:
-        yield []
+        yield ()
         return
     for x in range(max_used + 2):
         for next in _all_rhymes_help(n - 1, max(max_used, x)):
-            yield [x] + next
+            yield (x,) + next
 
 
 def all_shapes(order: int) -> typing.Iterator[ShapeType]:
@@ -356,23 +356,23 @@ def _num_rhyme_help(n: int, max_used: int) -> int:
     return (max_used + 1) * _num_rhyme_help(n - 1, max_used) + _num_rhyme_help(n - 1, max_used + 1)
 
 
-def find_rhyme_id(p: typing.List[int]) -> int:
+def find_rhyme_id(p: typing.Tuple[int]) -> int:
     """Gives the rhyme id (zero-based) among rhymes with a given number of variables"""
     if (not p) or p[0]:
-        raise ValueError(f"Argument of find_rhyme_id should be [0,...] not {p}")
+        raise ValueError(f"Argument of find_rhyme_id should be (0,...) not {p}")
     return _find_rhyme_id_help(p[1:], 0)
 
 
-def _find_rhyme_id_help(p: typing.List[int], max_used: int) -> int:
+def _find_rhyme_id_help(p: typing.Tuple[int], max_used: int) -> int:
     return p[0] * _num_rhyme_help(len(p)-1, max_used) + _find_rhyme_id_help(p[1:], max(p[0], max_used)) if p else 0
 
 
-def get_rhyme_by_id(n: int, rhyme_num: int, max_used: int = 0) -> typing.List[int]:
+def get_rhyme_by_id(n: int, rhyme_num: int, max_used: int = 0) -> typing.Tuple[int]:
     """Find a rhyme scheme for n slots by its number (zero-indexed)."""
-    result = [0]
+    result = (0,)
     while n > 0:
         var1 = min(max_used + 1, rhyme_num // _num_rhyme_help(n - 1, max_used))
-        result += [var1]
+        result += (var1,)
         rhyme_num -= var1 * _num_rhyme_help(n - 1, max_used)
         max_used = max(max_used, var1)
         n -= 1
