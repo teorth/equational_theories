@@ -19,6 +19,7 @@ $$ x = (Sx \op x) \op x.$$
   \begin{itemize}
   \item (i)  The left multiplication operators $L_y: M \to M$ are all invertible.
   \item (ii) If $x,y \in M$ and $y \op x = x$, then $x = Sx \op x$.  In particular, 255 holds if and only if the equation $y \op x = x$ is solvable for every $x$.
+  \item (iii)  For all $x,y \in M$, we have $x = L_y x \op R_y L_y^2 x$.
 \end{itemize}
 \end{lemma}
 
@@ -29,11 +30,15 @@ $$ x = (Sx \op x) \op x.$$
   On the other hand, from \eqref{677} with $y$ replaced by $x$ we have
   $$ x = x \op (x \op (Sx \op x))$$
   and the claim then follows by left invertibility.
+
+  For (iii), we apply \eqref{677-alt} with $x$ replaced by $L_y x$ to conclude
+  $$ L_y x = L_y L_{L_y x} L_{L^2_y x} y;$$
+  cancelling the $L_y$ and rearranging, one obtains the claim.
 \end{proof}
 
 This for instance gives the implication for linear magmas:
 
-\begin{lemma}[No linear counterexamples]\label{linear-obstruction}  Suppose we have a finite magma $M$ obeying 677 which is linear in the sense that $M$ is an abelian group and $x \op y = \alpha x + \beta y + c$ for some endomorhpisms $\alpha,\beta: M \to M$ and constant $c$.  Then $M$ obeys 255.
+\begin{lemma}[No linear counterexamples]\label{linear-obstruction}  Suppose we have a finite magma $M$ obeying 677 which is linear in the sense that $M$ is an abelian group and $x \op y = \alpha x + \beta y + c$ for some endomorphisms $\alpha,\beta: M \to M$ and constant $c$.  Then $M$ obeys 255.
 \end{lemma}
 
 \begin{proof}  By the previous lemma, it suffices to show that right multiplication $R_x$ is surjective, or equivalently injective by finiteness.  If this is not the case, then we can find distinct $y,y'$ such that $R_x y = R_x y'$, hence $L_y x = L_{y'} x$. But in this linear model, $L_y$ and $L_{y'}$ differ by a constant, hence we have $L_y = L_{y'}$.  Applying \eqref{677-alt} we have
