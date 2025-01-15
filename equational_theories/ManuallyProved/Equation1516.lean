@@ -1291,6 +1291,13 @@ theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
     rw [fromList_eval (x₆^(-1)) (x₆^2), fromList_eval (x₆^2 * x₆) (x₆^1)]
     simp
 
+theorem A_op_surj_right (a b : A) : ∃ c : A, a ◇ c = b := by
+  --doable, first check if there is already a proof in some lemma around here, I did a quick search and didn't find one. The proof of this is:
+  /-By construction, $S$ is already defined and equal to the identity on $\Z$, and we have the 1516 equation
+$$ L_{Sa} L_b L_b a = b$$
+for $a,b \in \Z$, with the left multiplication operators $L_b$ currently only defined as maps from $\Z$ to $\Z$.  Among other things, this means that $L_a = L_{Sa}$ is surjective as a map from $\Z$ to $\Z$ for any $a \in \Z$.-/
+  sorry
+
 section Refutation255
 
 -- Follows https://teorth.github.io/equational_theories/blueprint/1516-chapter.html
@@ -1321,6 +1328,78 @@ def S : G → A
 
 namespace GreedyB
 -- Greedy construction to extend the operation from A×A to A×G' in order to satisfy Axiom B
+
+-- part of the proof of Prop 17.5, 3rd paragraph
+lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A, a ◇ ((c b) ◇ b) = c b := by
+  --doable, this should already be done by Marco but still not committed
+  sorry
+
+noncomputable abbrev c (a : A) : A → A := (exists_extension_aux a).choose
+
+lemma c_injective (a : A) : (c a).Injective := (exists_extension_aux a).choose_spec.1
+
+lemma c_spec (a b : A) : a ◇ ((c a b) ◇ b) = c a b := (exists_extension_aux a).choose_spec.2 b
+
+--- here I try to mimic the structure of GreedyAC below
+
+structure OK (E : Rel (A × G) G) : Prop where
+  finite : Set.Finite {(ax, y) : (A × G) × G | E ax y}
+  func {ax y y'} : E ax y → E ax y' → y = y'
+  -- inj {ax ax' y} : E ax y → E ax' y → ax = ax'
+  -- aux1 : E x (S x) --Eq4 in the dim
+  -- aux2 {y z w} : E y z → E z w → L (S y) w = x
+
+abbrev PartialSolution := {E : Rel (A × G) G // OK E}
+
+class Extension where
+  E : Rel (A × G) G
+  ok : OK E
+  dy : A × G
+  not_def {z} : ¬E dy z
+
+namespace Extension
+
+variable [Extension]
+
+-- set_option diagnostics true
+-- define the element that should be the image of `L_c y`
+noncomputable def partL (d : A) (y : G) : G := by
+  rcases y with (a | ⟨⟨a, b, n⟩, habn⟩)
+  · exact .inl (d ◇ a)
+  · by_cases ha : a = d
+    · by_cases hn : n = 0
+      · exact .inl a
+      · exact .inr ⟨(a, b, 0), habn⟩
+    by_cases hb : ∃ b', d = c a b'
+    · exact .inl hb.choose
+    · exact .inl (A_op_surj_right a d).choose
+
+
+lemma partL_of_inl (d : A) (a : A) : partL d a = d ◇ a := rfl
+
+lemma partL_of_inr_same_of_zero {a b : A} (hab : a ≠ b) : partL a (.inr ⟨(a, b, 0), hab⟩) = a := by
+  simp only [partL, ↓reduceDIte]
+
+lemma partL_of_inr_same_of_ne_zero {a b : A} (hab : a ≠ b) {n : ℕ} (hn : n ≠ 0) :
+    partL a (.inr ⟨(a, b, n), hab⟩) = .inr ⟨(a, b, 0), hab⟩ := by
+  simp only [partL, ↓reduceDIte, hn]
+
+lemma partL_of_inr_of_exists {d a b b' : A} (n : ℕ) (had : a ≠ d) (hab : a ≠ b) (hdab' : d = c a b') :
+    partL d (.inr ⟨(a, b, n), hab⟩) = b' := by
+  simp only [partL, had, ↓reduceDIte]
+  rw [dif_pos ⟨b', hdab'⟩]
+  congr
+  refine c_injective a ?_
+  rw [← hdab']
+  exact (⟨b', hdab'⟩ : ∃ b', d = c a b').choose_spec.symm
+
+lemma partL_of_inr_of_not_exists {d a b : A} (n : ℕ) (had : a ≠ d) (hab : a ≠ b) (h : ¬∃ b', d = c a b') :
+    partL d (.inr ⟨(a, b, n), hab⟩) = (A_op_surj_right a d).choose := by
+  simp [partL, had, ↓reduceDIte, h]
+
+end Extension
+
+---
 
 -- universe u
 -- variable {G : Type u} [RelaxedVeryWeakCentralGroupoid G]
