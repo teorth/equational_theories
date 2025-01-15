@@ -1592,8 +1592,8 @@ end Extension
 
 theorem exists_extension (x : G') (seed : PartialSolution x) :
     ∃ Lₓ : G → G,
-    Lₓ x = S x ∧ -- Axiom A
-    (∀ y : G, (L (S y) <| Lₓ <| Lₓ y) = x) -- Axiom C
+      Lₓ x = S x ∧ -- Axiom A
+      (∀ y : G, (L (S y) <| Lₓ <| Lₓ y) = x) -- Axiom C
     := by
   classical
   have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain (a := seed)
