@@ -1291,6 +1291,13 @@ theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
     rw [fromList_eval (x₆^(-1)) (x₆^2), fromList_eval (x₆^2 * x₆) (x₆^1)]
     simp
 
+theorem A_op_surj_right (a b : A) : ∃ c : A, a ◇ c = b := by
+  --doable, first check if there is already a proof in some lemma around here, I did a quick search and didn't find one. The proof of this is:
+  /-By construction, $S$ is already defined and equal to the identity on $\Z$, and we have the 1516 equation
+$$ L_{Sa} L_b L_b a = b$$
+for $a,b \in \Z$, with the left multiplication operators $L_b$ currently only defined as maps from $\Z$ to $\Z$.  Among other things, this means that $L_a = L_{Sa}$ is surjective as a map from $\Z$ to $\Z$ for any $a \in \Z$.-/
+  sorry
+
 section Refutation255
 
 -- Follows https://teorth.github.io/equational_theories/blueprint/1516-chapter.html
@@ -1321,6 +1328,78 @@ def S : G → A
 
 namespace GreedyB
 -- Greedy construction to extend the operation from A×A to A×G' in order to satisfy Axiom B
+
+-- part of the proof of Prop 17.5, 3rd paragraph
+lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A, a ◇ ((c b) ◇ b) = c b := by
+  --doable, this should already be done by Marco but still not committed
+  sorry
+
+noncomputable abbrev c (a : A) : A → A := (exists_extension_aux a).choose
+
+lemma c_injective (a : A) : (c a).Injective := (exists_extension_aux a).choose_spec.1
+
+lemma c_spec (a b : A) : a ◇ ((c a b) ◇ b) = c a b := (exists_extension_aux a).choose_spec.2 b
+
+--- here I try to mimic the structure of GreedyAC below
+
+structure OK (E : Rel (A × G) G) : Prop where
+  finite : Set.Finite {(ax, y) : (A × G) × G | E ax y}
+  func {ax y y'} : E ax y → E ax y' → y = y'
+  -- inj {ax ax' y} : E ax y → E ax' y → ax = ax'
+  -- aux1 : E x (S x) --Eq4 in the dim
+  -- aux2 {y z w} : E y z → E z w → L (S y) w = x
+
+abbrev PartialSolution := {E : Rel (A × G) G // OK E}
+
+class Extension where
+  E : Rel (A × G) G
+  ok : OK E
+  dy : A × G
+  not_def {z} : ¬E dy z
+
+namespace Extension
+
+variable [Extension]
+
+-- set_option diagnostics true
+-- define the element that should be the image of `L_c y`
+noncomputable def partL (d : A) (y : G) : G := by
+  rcases y with (a | ⟨⟨a, b, n⟩, habn⟩)
+  · exact .inl (d ◇ a)
+  · by_cases ha : a = d
+    · by_cases hn : n = 0
+      · exact .inl a
+      · exact .inr ⟨(a, b, 0), habn⟩
+    by_cases hb : ∃ b', d = c a b'
+    · exact .inl hb.choose
+    · exact .inl (A_op_surj_right a d).choose
+
+
+lemma partL_of_inl (d : A) (a : A) : partL d a = d ◇ a := rfl
+
+lemma partL_of_inr_same_of_zero {a b : A} (hab : a ≠ b) : partL a (.inr ⟨(a, b, 0), hab⟩) = a := by
+  simp only [partL, ↓reduceDIte]
+
+lemma partL_of_inr_same_of_ne_zero {a b : A} (hab : a ≠ b) {n : ℕ} (hn : n ≠ 0) :
+    partL a (.inr ⟨(a, b, n), hab⟩) = .inr ⟨(a, b, 0), hab⟩ := by
+  simp only [partL, ↓reduceDIte, hn]
+
+lemma partL_of_inr_of_exists {d a b b' : A} (n : ℕ) (had : a ≠ d) (hab : a ≠ b) (hdab' : d = c a b') :
+    partL d (.inr ⟨(a, b, n), hab⟩) = b' := by
+  simp only [partL, had, ↓reduceDIte]
+  rw [dif_pos ⟨b', hdab'⟩]
+  congr
+  refine c_injective a ?_
+  rw [← hdab']
+  exact (⟨b', hdab'⟩ : ∃ b', d = c a b').choose_spec.symm
+
+lemma partL_of_inr_of_not_exists {d a b : A} (n : ℕ) (had : a ≠ d) (hab : a ≠ b) (h : ¬∃ b', d = c a b') :
+    partL d (.inr ⟨(a, b, n), hab⟩) = (A_op_surj_right a d).choose := by
+  simp [partL, had, ↓reduceDIte, h]
+
+end Extension
+
+---
 
 -- universe u
 -- variable {G : Type u} [RelaxedVeryWeakCentralGroupoid G]
@@ -1551,8 +1630,9 @@ variable (x : G')
 structure OK (E : Rel G G) : Prop where
   finite : Set.Finite {(x, y) : G × G | E x y}
   func {x y y'} : E x y → E x y' → y = y'
+  inj {x x' y} : E x y → E x' y → x = x'
   aux1 : E x (S x) --Eq4 in the dim
-  aux2 (y z w) : E y z → E z w → L (S y) w = x --Eq5 in the dim, we are renaming L x y = z, L x z = w, so we are saying that (L (S y) <| L x <| L x y) = x, which is equation 1516
+  aux2 {y z w} : E y z → E z w → L (S y) w = x --Eq5 in the dim, we are renaming L x y = z, L x z = w, so we are saying that (L (S y) <| L x <| L x y) = x, which is equation 1516
 
 abbrev PartialSolution := {E : Rel G G // OK x E}
 
@@ -1563,240 +1643,142 @@ class Extension where
   not_def {y} : ¬E d y
 
 
--- namespace Extension
+namespace Extension
 
--- variable [Extension x]
+variable [Extension x]
 
--- def old : Finset G :=
---   insert d <| ok.finite.toFinset.biUnion fun (a, b) => {a, b}
+def partial_domain' : Set G := (E x).dom
 
--- theorem mem_old {a b x}
---     (h1 : E a b) (h2 : x ∈ ({a, b} : Finset G)) : x ∈ old := by
---   refine Finset.mem_insert_of_mem ?_
---   simp only [old, Finset.mem_biUnion, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Prod.exists]
---   exact ⟨_, _, h1, h2⟩
+instance : Fintype (partial_domain' x) := by
+  -- doable
+  -- this set should be some kind of slice of {(x, y) : G × G | E x y}, which we already know to be finite (OK.finite)
+  -- find the right definition of slice, then there will probably already be an instance proving the finiteness of a slice given the finiteness of the initial set
+  sorry
 
--- def c' := freshGeneratorName old
--- def c := FreeGroup.of c'
-
--- def project' (i : Nat) : Multiplicative ℤ := if i = c' then (1 : ℤ) else (0 : ℤ)
--- def project (g : G) : ℤ := Multiplicative.toAdd (FreeGroup.lift project' g)
-
--- @[simp] theorem project_1 : project 1 = 0 := by simp [project]
--- @[simp] theorem project_mul {x y} : project (x * y) = project x + project y := by simp [project]
--- @[simp] theorem project_inv {x} : project x⁻¹ = -project x := by simp [project]
-
--- @[simp] theorem project_c : project c = 1 := by
---   simp only [project, c, FreeGroup.lift.of, project']
---   rfl
-
--- theorem project_old' (a : List (Nat × Bool)) :
---     generatorNames' a ⊆ old.biUnion generatorNames → project (FreeGroup.mk a) = 0 := by
---   induction a
---   case nil => simp [generatorNames', ← FreeGroup.one_eq_mk]
---   case cons head _ ih =>
---     rw [← List.singleton_append]
---     intro hn
---     simp only [generatorNames', List.singleton_append] at hn
---     rw [← FreeGroup.mul_mk, project, MonoidHom.map_mul, toAdd_mul, ← project, ← project, ih]
---     · have : head.1 ∈ old.biUnion generatorNames :=
---         Finset.singleton_subset_iff.mp $ Finset.union_subset_left hn
---       have : c' ∉ old.biUnion generatorNames := (existsFreshGeneratorName old).choose_spec
---       simp only [project, FreeGroup.lift.mk, project']
---       by_cases head.2 <;> aesop
---     · exact Finset.union_subset_right hn
-
--- theorem project_old {x} (h : x ∈ old) : project x = 0 :=
---   FreeGroup.mk_toWord (x := x) ▸ project_old' _ fun _ h' ↦ Finset.mem_biUnion.mpr ⟨x, h, h'⟩
-
--- @[simp] theorem project_d : project d = 0 := project_old (by simp [old])
-
--- @[local aesop safe destruct]
--- theorem project_E {x y} (h : E x y) : project x = 0 ∧ project y = 0 := by
---   constructor <;> (apply project_old; apply mem_old h; simp)
-
--- theorem aux3' {x x' z} : E x d → E x' d → E x⁻¹ z → x' ≠ x * z := by
---   intro h1 h2 h3 h4
---   simp only [ok.aux3 h1 h2 h3 h4, self_eq_mul_right] at h4
---   have := inv_eq_iff_eq_inv.1 $ ok.aux1 (h4 ▸ h3)
---   rw [this] at h1
---   have values : E g₂⁻¹ (g₁ * g₂) ∧ E (g₁ * g₂) (g₂⁻¹ * g₁) := by simp [ok.base]
---   exact not_def $ ok.func h1 values.left ▸ values.right
-
--- @[mk_iff]
--- inductive Next : G → G → Prop
---   | base {a b} : E a b → Next a b
---   | new {a b} : a = d → b = c → Next a b
---   | fromH {h a b} : E h d → a = h⁻¹ * c → b = h⁻¹ → Next a b
---   | fromH' {h f a b} : E h d → E h⁻¹ f → a = c⁻¹ * h * f → b = c⁻¹ * h → Next a b
-
--- theorem inv_in_E_means_d {x y z} : Next x y → Next x⁻¹ z → x = d ∨ x = d⁻¹ ∨ E x y ∧ E x⁻¹ z
---   | .base _, .base _ | .new rfl rfl, _ => by tauto
---   | _, .new h _ => by rw [inv_eq_iff_eq_inv] at h; tauto
---   | .fromH _ rfl rfl, .fromH' _ _ he _ => by
---     simp only [mul_inv_rev, inv_inv, mul_assoc, mul_right_inj] at he
---     solve_by_elim [aux3']
---   | .fromH' _ _ rfl rfl, .fromH _ he _ => by
---     apply_fun Inv.inv at he
---     simp only [mul_assoc, mul_inv_rev, inv_inv, mul_right_inj] at he
---     solve_by_elim [aux3']
---   | .base hb, .fromH _ he _ | .base hb, .fromH' _ _ he _ | .fromH _ he _, .base _
---   | .fromH .., .fromH _ he _ | .fromH' _ _ he _, .base _ | .fromH' _ _ rfl rfl, .fromH' _ _ he rfl => by
---     apply_fun project at he
---     aesop
-
--- theorem next_d_is_c {y} : Next d y → y = c
---   | .base hb => False.elim $ not_def hb
---   | .new _ h => h
---   | .fromH _ he _ | .fromH' _ _ he _ => by apply_fun project at he; aesop
-
--- theorem prev_c_is_d {x} : Next x c → x = d
---   | .base _ => by aesop
---   | .new h _ => h
---   | .fromH _ _ he | .fromH' _ _ _ he => by apply_fun project at he; aesop
-
--- def next_finite : Set.Finite {(x, y) : G × G | Next x y} := by
---   simp [next_iff, Set.setOf_or]
---   split_ands
---   · exact ok.finite
---   · simp [← Prod.mk.injEq]
---   · apply Set.Finite.subset (ok.finite.image fun (x, y) => (x⁻¹ * c, x⁻¹))
---     intro (a, b) ⟨x, h⟩
---     simp only [Set.mem_image, Set.mem_setOf_eq, Prod.mk.injEq, Prod.exists, exists_and_right] at *
---     use x; simp [h]
---     use d; simp [h]
---   · apply Set.Finite.subset ((ok.finite.prod ok.finite).image fun ((x, _), (_, y)) => (c⁻¹ * x * y, c⁻¹ * x))
---     intro (a, b) ⟨x, h1, y, h2, h3, h4⟩
---     simp only [Set.mem_image, Set.mem_prod, Set.mem_setOf_eq, Prod.mk.injEq, Prod.exists] at *
---     exact ⟨x, d, x⁻¹, y, by simp [*]⟩
-
--- def next_func {x y y'} : Next x y → Next x y' → y = y'
---   | .base hb, .base hb' => ok.func hb hb'
---   | .new rfl rfl, .new rfl rfl => rfl
---   | .fromH h1 h2 h3, .fromH h1' h2' h3' => by
---     rw [h2', mul_left_inj, inv_inj] at h2
---     exact h3' ▸ h2 ▸ h3
---   | .base hb, .new rfl rfl | .new rfl rfl, .base hb => (not_def hb).elim
---   | .base .., .fromH _ he _ | .fromH _ he _, .base ..| .new .., .fromH _ he _ | .fromH _ he _, .new ..
---   | .base .., .fromH' _ _ he _ | .new .., .fromH' _ _ he _ | .fromH .., .fromH' _ _ he _
---   | .fromH' _ _ he _, .base .. | .fromH' _ _ he _, .new .. | .fromH' _ _ he _, .fromH .. => by
---     apply_fun project at he
---     aesop
---   | .fromH' h1 h2 h3 rfl, .fromH' h1' h2' rfl rfl => by
---     simp only [mul_assoc, mul_right_inj] at h3
---     simp [ok.aux4 h1 h1' h2 h2' h3]
-
--- def next_base : Next 1 g₁ ∧ Next g₁ g₂ ∧ Next g₂⁻¹ (g₁ * g₂) ∧ Next (g₁ * g₂) (g₂⁻¹ * g₁) := by
---   simp [Next.base, ok.base]
-
--- def next_eq63 {x y z} : Next x y → Next y z → Next (x⁻¹ * z) x⁻¹
---   | .base hb, .base hb' => .base $ ok.eq63 hb hb'
---   | .base hb, .new rfl rfl => .fromH hb rfl rfl
---   | .fromH h rfl h', .base hb => by apply Next.fromH' h (h' ▸ hb); group
---   | .fromH h rfl h', .new rfl rfl => False.elim $ ok.aux2 (h' ▸ h)
---   | .new rfl rfl, .fromH h1 h2 rfl => by
---     exfalso
---     apply congr_arg (c * ·⁻¹) at h2; simp at h2
---     have values : E 1 g₁ ∧ E g₁ g₂ := by simp [ok.base]
---     exact not_def $ ok.func (h2 ▸ h1) values.left ▸ values.right
---   | .fromH' _ _ rfl rfl, .fromH' _ _ he rfl => by
---     simp only [mul_assoc, mul_right_inj] at he
---     solve_by_elim [aux3']
---   | .base .., .fromH .. | .base .., .fromH' .. | .new .., .base .. | .fromH' .., .base .. => by aesop
---   | .new .., .new he _ | .new .., .fromH' _ _ he _ | .fromH _ _ he, .fromH ..
---   | .fromH _ _ he, .fromH' .. | .fromH' .., .new he _ | .fromH' .., .fromH _ he _ => by
---     apply_fun project at he
---     aesop
-
--- def next_aux1 {x} : Next x 1 → x = g₂
---   | .base hb => ok.aux1 hb
---   | .new rfl h => by apply_fun project at h; simp at h
---   | .fromH h1 rfl h2 => by
---     exfalso
---     have values : E 1 g₁ ∧ E g₁ g₂ := by simp [ok.base]
---     have := ok.func values.left $ inv_eq_one.1 h2.symm ▸ h1
---     exact not_def (this ▸ values.right)
---   | .fromH' _ _ rfl he => by
---     apply_fun project at he
---     aesop
-
--- def next_aux2 {x} : ¬Next x x⁻¹
---   | .base hb => ok.aux2 hb
---   | .new _ he | .fromH _ he _ | .fromH' _ _ _ he => by
---     apply_fun project at he
---     aesop
-
--- def next_aux3 {x x' y z} : Next x y → Next x' y → Next x⁻¹ z → x' = x * z → x' = x := by
---   intro h1 h2 h3 h4
---   match inv_in_E_means_d h1 h3 with
---   | .inl h => exact h ▸ prev_c_is_d $ (next_d_is_c (h ▸ h1)) ▸ h2
---   | .inr (.inl h) =>
---     have h5 := next_d_is_c (inv_eq_iff_eq_inv.2 h ▸ h3)
---     match h2 with
---     | .fromH h6 rfl rfl =>
---       simp [h, h5] at h4
---       simp [h4, not_def] at h6
---     | .base .. | .new .. | .fromH' .. =>
---       apply_fun project at h4
---       aesop
---   | .inr (.inr ⟨h5, h6⟩) =>
---     match h2 with
---     | .base h7 => exact ok.aux3 h5 h7 h6 h4
---     | .new .. | .fromH .. | .fromH' .. =>
---       apply_fun project at h4
---       aesop
-
--- def next_aux4 {x x' y z z'} : Next x y → Next x' y → Next x⁻¹ z → Next x'⁻¹ z' → x' * z' = x * z → x = x' := by
---   intro h1 h2 h3 h4 h5
---   match inv_in_E_means_d h1 h3 with
---   | .inl h => exact h ▸ prev_c_is_d (next_d_is_c (h ▸ h1) ▸ h2) |>.symm
---   | .inr (.inl h) =>
---     rw [h] at h1 h3 h5
---     rw [inv_inv] at h3
---     rw [next_d_is_c h3] at h5
---     match h4 with
---     | .new h' rfl => exact h ▸ inv_eq_iff_eq_inv.2 h'.symm
---     | .base h6 | .fromH _ h6 rfl | .fromH' _ _ h6 rfl =>
---       apply_fun project at h5
---       try apply_fun project at h6
---       aesop
---   | .inr (.inr ⟨h6, h7⟩) =>
---     rw [next_func (.base h6) h1] at h6
---     rw [next_func (.base h7) h3] at h7
---     match h2, h4 with
---     | .base hb, .base hb' => exact ok.aux4 h6 hb h7 hb' h5
---     | .new rfl rfl, _ => exact prev_c_is_d (.base h6)
---     | .base hb, .fromH _ h8 rfl | .base hb, .fromH' _ _ h8 _ | _, .new h8 rfl =>
---       apply_fun project at h5 h8
---       aesop
---     | .fromH .., .base .. | .fromH .., .fromH .. =>
---       apply_fun project at h5
---       aesop
---     | .fromH h8 rfl rfl, .fromH' h9 h10 h11 rfl =>
---       simp [mul_assoc] at h11
---       solve_by_elim [aux3']
---     | .fromH' h8 h9 rfl rfl, _ => aesop
+def partial_domain : Finset G := (partial_domain' x).toFinset
 
 
--- def next : PartialSolution x :=
---   ⟨Next, next_finite, fun {_} => next_func, next_base, next_eq63, next_aux1, next_aux2, next_aux3, next_aux4⟩
+def partial_range' : Set G := (E x).codom
 
--- end Extension
+instance : Fintype (partial_range' x) := by
+  -- doable, same as above for the domain
+  sorry
+
+def partial_range : Finset G := (partial_range' x).toFinset
+
+-- NOTE: I added the requirement that w ≠ d for technical reasons, consider adding it to the blueprint
+lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
+  -- doable
+  -- we know that the domain and the image are finite while G is infinite, so we can just take an element that is not in either
+  sorry
+
+lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧ w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
+  -- doable
+  -- use the infinite surjectivity of L, then proceed like in the previous lemma
+  sorry
+
+-- Given an extension, which is a partial solution with an undefined element of the domain called `d`, we define a new element `w` that represents the image of `d` (`Lₓ d`).
+noncomputable def w : G := by
+  classical
+  exact if h : (∃ (z : G), E x z (d x)) then (exists_not_in_domain_range' x h.choose).choose
+    else (exists_not_in_domain_range x).choose
+
+-- set_option pp.proofs true
+lemma w_not_in_domain : w x ∉ partial_domain x := by
+  by_cases h : (∃ (z : G), E x z (d x))
+  · simp only [w, h, ↓reduceDIte]
+    exact (exists_not_in_domain_range' x _).choose_spec.2.1
+  · simp only [w, h, ↓reduceDIte]
+    exact (exists_not_in_domain_range x).choose_spec.1
+
+lemma w_not_in_range : w x ∉ partial_range x := by
+  by_cases h : (∃ (z : G), E x z (d x))
+  · simp only [w, h, ↓reduceDIte]
+    exact (w.proof_1 x _).choose_spec.2.2.1
+  · simp only [w, h, ↓reduceDIte]
+    exact (exists_not_in_domain_range x).choose_spec.2.1
+
+lemma w_ne_d : w x ≠ d x := by
+  by_cases h : (∃ (z : G), E x z (d x))
+  · simp only [w, h, ↓reduceDIte]
+    exact (exists_not_in_domain_range' x _).choose_spec.2.2.2
+  · simp only [w, h, ↓reduceDIte]
+    exact (exists_not_in_domain_range x).choose_spec.2.2
+
+lemma w_equation (h : (∃ (z : G), E x z (d x))) : L (S h.choose) (w x) = x := by
+  simp only [w, h, ↓reduceDIte]
+  exact (exists_not_in_domain_range' x _).choose_spec.1
+
+lemma z_unique {z z' : G} (hz : E x z (d x)) (hz' : E x z' (d x)) : z = z' := ok.inj hz hz'
+
+lemma w_equation' {z : G} (hz : E x z (d x)) : L (S z) (w x) = x := by
+  have hh : ∃ z, E x z (d x) := ⟨z, hz⟩
+  convert w_equation x hh
+  exact z_unique x hz hh.choose_spec
+
+@[mk_iff]
+inductive Next : G → G → Prop
+  | base {a b} : E x a b → Next a b
+  | new {a b} : a = (d x) → b = (w x) → Next a b
+
+theorem next_d_is_w {y} : Next x (d x) y → y = w x
+  | .base hb => False.elim $ not_def hb
+  | .new _ h => h
+
+theorem prev_w_is_d {y} : Next x y (w x) → y = d x
+  | .base h => by
+    have := w_not_in_range x
+    simp only [partial_range, partial_range', Rel.codom, Set.mem_toFinset, Set.mem_setOf_eq,
+      not_exists] at this
+    exact (this y h).elim
+  | .new h _ => h
+
+def next_finite : Set.Finite {(z, y) : G × G | Next x z y} := by
+  simp [next_iff, Set.setOf_or, ← Prod.mk.injEq, ok.finite]
+
+def next_func {z y y'} : Next x z y → Next x z y' → y = y'
+  | .base hb, .base hb' => ok.func hb hb'
+  | .new _ h, .new _ h' => h' ▸ h
+  | .base hb, .new h _ | .new h _, .base hb => (not_def (h ▸ hb)).elim
+
+def next_inj {z z' y} : Next x z y → Next x z' y → z = z'
+  | .base hb, .base hb' => ok.inj hb hb'
+  | .new h _, .new h' _ => h' ▸ h
+  | .base hz, .new hz' hy => hz' ▸ prev_w_is_d _ (.base (hy ▸ hz))
+  | .new hz hy, .base hz' => hz ▸ (prev_w_is_d _ (.base (hy ▸ hz'))).symm
+
+def next_aux1 : Next x x (S x) := Next.base ok.aux1
+
+def next_aux2 {y z t} : Next x y z → Next x z t → L (S y) t = x
+  | .base hb, .base hb' => ok.aux2 hb hb'
+  | .new hy hz, .new hz' ht => (w_ne_d x (hz ▸ hz')).elim
+  | .base hyz, .new hzd htw => by
+    rw [hzd] at hyz
+    rw [htw]
+    exact w_equation' x hyz
+  | .new hyd hzw, .base hzt => by
+    rw [hzw] at hzt
+    have := w_not_in_domain x
+    simp [partial_domain, partial_domain', Rel.dom] at this
+    exact (this t hzt).elim
+
+def next : PartialSolution x :=
+  ⟨Next x, next_finite x, next_func x, next_inj x, next_aux1 x, next_aux2 x⟩
+
+end Extension
 
 
 theorem exists_extension (x : G') (seed : PartialSolution x) :
     ∃ Lₓ : G → G,
-    Lₓ x = S x ∧ -- Axiom A
-    (∀ y : G, (L (S y) <| Lₓ <| Lₓ y) = x) -- Axiom C
+      Lₓ x = S x ∧ -- Axiom A
+      (∀ y : G, (L (S y) <| Lₓ <| Lₓ y) = x) -- Axiom C
     := by
   classical
   have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain (a := seed)
     (task := fun x' : _  => {e | ∃ y, e.1 x' y}) fun ⟨E, ok⟩ d => by
       if h : ∃ y, E d y then exact ⟨_, le_rfl, h⟩ else
       let E1 : Extension x := { E, ok, d, not_def := fun h' => h ⟨_, h'⟩ }
-      -- to proceed here we have to define `next`
-      -- exact ⟨E1.next, fun _ _ => (.base ·), _, .new rfl rfl⟩
-      sorry
+      exact ⟨E1.next, fun _ _ => (.base ·), _, .new rfl rfl⟩
   classical
   choose e he Lₓ hLₓ using h3
 
@@ -1810,7 +1792,7 @@ theorem exists_extension (x : G') (seed : PartialSolution x) :
   simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at le
   obtain ⟨ey, eLₓy⟩ := le
 
-  exact e.2.aux2 y (Lₓ y) (Lₓ ((Lₓ y))) ey eLₓy
+  exact e.2.aux2 ey eLₓy
 
 end GreedyAC
 
