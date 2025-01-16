@@ -16,8 +16,8 @@ import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
 
 
 import Mathlib.Data.Rel
-
-
+import Mathlib.Tactic.Linarith.Frontend
+import Init.Core
 --import Mathlib.Tactic.Group --This breaks some instance, I haven't understood why exactly
 
 namespace Eq1516
@@ -1404,9 +1404,105 @@ abbrev Extension := {E : PreExtension // E.OK}
 -- variable (e₀ : Extension G)
 
 -- part of the proof of Prop 17.5, 3rd paragraph
+set_option pp.proofs true
+
+--done
 lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A, a ◇ ((c b) ◇ b) = c b := by
   --doable
-  sorry
+  rcases base2 a with ⟨c₁,hc1a, hc1b⟩
+  have c_aux (b : A) (h : a ≠ b) : ∃ c, c ◇ a = b ∧ c ≠ c₁ := by
+    have enc := base1 a b h
+    have noempty := (Set.encard_ne_zero (s := {c | c ◇ a = b}) ).mp   (by --serve veramente o basta noempty' ??
+      have easy : (0 : ENat ) < 3 := by norm_num
+      apply lt_of_lt_of_le easy at enc
+      exact Ne.symm (ne_of_lt enc) )
+    have noempty' : ({c | c ◇ a = b} \ {c₁}).Nonempty := by
+      apply Set.encard_ne_zero.mp
+      have := Set.encard_tsub_one_le_encard_diff_singleton {c | c ◇ a = b} c₁
+      have easy2 : (0 : ENat ) < 3 - 1  := by norm_num
+      have dis1 : (3 : ENat) - (1 : ENat) ≤ {c | c ◇ a = b}.encard - 1 := by
+        apply tsub_le_tsub_right enc 1
+      apply le_trans dis1 at this
+      apply lt_of_lt_of_le easy2 at this
+      exact Ne.symm (ne_of_lt this)
+      -----------------------
+    --obtain ⟨c, hc1, hc2 ⟩ := noempty'
+    rcases noempty' with ⟨c, hc1, hc2⟩
+    use c
+    simp_all
+
+  let c := fun b : A ↦ if h : a = b then c₁ else (c_aux b h ).choose
+  use c
+  constructor
+  · unfold Function.Injective
+    intro x y
+    unfold c
+    rcases ne_or_eq a x  with hx | ha <;> rcases ne_or_eq a y  with hy | ha'
+
+    · --unfold c
+      rw[dif_neg hx,dif_neg hy]
+      intro hind
+      have prop : (c_aux x hx).choose ◇ a = (c_aux y hy).choose ◇ a := by rw[hind]
+      have h_aux : (c_aux x hx).choose ◇ a = x := by
+        apply (c_aux x hx).choose_spec.1
+      have h_aux2 : (c_aux y hy).choose ◇ a = y := by
+        apply (c_aux y hy).choose_spec.1
+      rw[h_aux,h_aux2] at prop
+      exact prop
+
+    · --unfold c
+      rw[dif_neg hx, dif_pos ha']
+      intro hind
+      exfalso
+      have h_aux : (c_aux x hx).choose ≠  c₁ := by
+        apply (c_aux x hx).choose_spec.2
+      tauto
+
+    · --unfold c
+      rw[dif_pos ha,dif_neg hy]
+      intro hind
+      exfalso
+      have h_aux : (c_aux y hy).choose ≠  c₁ := by
+        apply (c_aux y hy).choose_spec.2
+      tauto
+
+    · intro h
+      rw[← ha, ← ha']
+
+
+  · intro b
+    rcases ne_or_eq a b with h1 | h2
+    · unfold c
+      rw[dif_neg h1]
+      --let c₂ := (c_aux b h1 ).choose
+      have h_aux : (c_aux b h1).choose ◇ a = b := by  -- R_a c_(y,b) = b
+        apply (c_aux b h1).choose_spec.1   -- è la dim che (c_aux b h1).choose soddisfa la p: _ ◇ a = b
+      have idem : a ◇ a = a := by
+        apply A_idempotent a
+      nth_rw 1 [ ← idem]
+      nth_rw 3 [← h_aux]
+      symm
+      apply A_satisfies_Equation1516
+
+    · rw[ ← h2]
+      have easy : a = a := by rfl
+      unfold c
+      rw [dif_pos easy]
+      exact hc1b
+  --------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 --maybe in  this part of the prof we can actually avoid using the greedy construction, at first glance it seems to me that we actually explicitely define the function at each
 theorem exists_extension :
@@ -1441,6 +1537,9 @@ theorem L_surjective (b : A) (x : G') : {y : G' | L b y = x}.Infinite := exists_
 
 theorem L_ne (b : A) (x : G') : L b x ≠ x := exists_extension.choose_spec.2.2.2 b x
 
+theorem L_self (a : A) : L a a = S a := by  --TO DO: da controllare
+  rw[L_extends a a, A_idempotent]
+  rfl  -- by def of S
 
 end GreedyB
 
@@ -1720,7 +1819,25 @@ open GreedyAC GreedyB
 def seed (x : G') : Rel G G := fun a b => a = x ∧ b = S x
 
 theorem seed_ok (x : G') : OK x (seed x) where
-  finite := by sorry --doable
+  finite := by   -- x = (a, b, _), so the only element in the set is (x, y = a)
+    --have h1 : (Sum.inr x, Sum.inl x.1.1) ∈ {(x_2, y) | seed x x_2 y} := by
+    --have h2 (z w : G) : (z, w) ∈ {(x_2, y) | seed x x_2 y} → z = x ∧ w = x.1.1 := by
+    have h' : S (Sum.inr x) = x.1.1 := by
+      rfl
+    have final : {(Sum.inr x, Sum.inl x.1.1)} = {(x_2, y) | seed x x_2 y} := by
+      have incl1 : {(Sum.inr x, Sum.inl x.1.1)} ⊆ {(x_2, y) | seed x x_2 y}:= by
+        simp
+        tauto   -- by h
+      have incl2 : {(x_2, y) | seed x x_2 y} ⊆ {(Sum.inr x, Sum.inl x.1.1)} := by
+        simp
+        unfold seed
+        rw[h']
+        tauto
+      apply Set.Subset.antisymm incl1 incl2
+
+    rw[← final]
+    exact Set.finite_singleton (Sum.inr x, Sum.inl x.1.1)
+   --doable
   func h1 h2 := by rw [h1.2, h2.2]
   aux1 := by simp [seed]
   aux2 h1 h2 := by simp_all [seed]
@@ -1743,14 +1860,32 @@ theorem magG_op_def_A (a : A) (g : G) : magG.op a g = L a g := rfl
 
 theorem magG_op_def_G (g g' : G') : magG.op g g' = L' g g' := rfl
 
+theorem magG_op_def_G_new (g' : G') (g : G) : magG.op g' g = L' g' g := by rfl  -- TO DO : DA CONTROLLARE
+
 theorem G_satisfies_Equation1516 : Equation1516 G := by
   unfold Equation1516
   intro x y
-  rcases x with (a | g)
+  rcases x with (a | g) <;> rcases y with (a' | g')
   · --doable
-    sorry
+    simp_rw[magG_op_def_A,L_extends]
+    rw[magG_op_def_A (a' ◇ a'),L_extends,← A_satisfies_Equation1516]
+
+
   · --doable
-    sorry
+    simp_rw [magG_op_def_G, magG_op_def_A]
+    rw[L'_self, magG_op_def_A, L_1516 a g'] -- uso l'Ax B per concludere
+
+
+
+  · simp_rw[magG_op_def_A]
+    rw[L_self,magG_op_def_A]
+    simp_rw [magG_op_def_G_new, L'_1516]
+
+
+  · simp_rw[magG_op_def_G,L'_self,magG_op_def_A,magG_op_def_G_new]
+    rw[L'_1516]
+
+
 
 -- we take a special x = (*, 0, 0) ∈ G', where * is the identity of A, i.e. the empty word
 -- this is needed for Corollary 17.7, note that by doing this we are taking a sligthly different route from the proof of the corollary in the blueprint, in particular we make an explicit example of an element that does not verify eq 255
