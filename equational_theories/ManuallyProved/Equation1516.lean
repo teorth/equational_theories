@@ -1822,10 +1822,11 @@ theorem G_satisfies_Equation1516 : Equation1516 G := by
 
 --we may need to add some additional thesis to the theorem about the construction of L, so that the way L is defined is explicited
 lemma op_x₀_self : x₀ ◇ x₀ = (1 : A) := by
-  sorry
+  unfold x₀
+  rw [magG_op_def_G, L'_self]
+  simp [S]
 
-lemma op_1_x₀ : (.inl (1 : A)) ◇ x₀ = (1 : A) := by
-  sorry
+lemma op_1_x₀ : (.inl (1 : A)) ◇ x₀ = (1 : A) := L_x₀
 
 lemma x₀_255_rhs : ((x₀ ◇ x₀) ◇ x₀) ◇ x₀ = (1 : A) := by
   simp_rw [op_x₀_self, op_1_x₀]
