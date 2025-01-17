@@ -1329,163 +1329,6 @@ def S : G → A
 namespace GreedyB
 -- Greedy construction to extend the operation from A×A to A×G' in order to satisfy Axiom B
 
--- part of the proof of Prop 17.5, 3rd paragraph
-lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A, a ◇ ((c b) ◇ b) = c b := by
-  --doable, this should already be done by Marco but still not committed
-  sorry
-
-noncomputable abbrev c (a : A) : A → A := (exists_extension_aux a).choose
-
-lemma c_injective (a : A) : (c a).Injective := (exists_extension_aux a).choose_spec.1
-
-lemma c_spec (a b : A) : a ◇ ((c a b) ◇ b) = c a b := (exists_extension_aux a).choose_spec.2 b
-
---- here I try to mimic the structure of GreedyAC below
-
-structure OK (E : Rel (A × G) G) : Prop where
-  finite : Set.Finite {(ax, y) : (A × G) × G | E ax y}
-  func {ax y y'} : E ax y → E ax y' → y = y'
-  -- inj {ax ax' y} : E ax y → E ax' y → ax = ax'
-  -- aux1 : E x (S x) --Eq4 in the dim
-  -- aux2 {y z w} : E y z → E z w → L (S y) w = x
-
-abbrev PartialSolution := {E : Rel (A × G) G // OK E}
-
-class Extension where
-  E : Rel (A × G) G
-  ok : OK E
-  dy : A × G
-  not_def {z} : ¬E dy z
-
-namespace Extension
-
-variable [Extension]
-
--- set_option diagnostics true
--- define the element that should be the image of `L_c y`
-noncomputable def partL (d : A) (y : G) : G := by
-  rcases y with (a | ⟨⟨a, b, n⟩, habn⟩)
-  · exact .inl (d ◇ a)
-  · by_cases ha : a = d
-    · by_cases hn : n = 0
-      · exact .inl a
-      · exact .inr ⟨(a, b, 0), habn⟩
-    by_cases hb : ∃ b', d = c a b'
-    · exact .inl hb.choose
-    · exact .inl (A_op_surj_right a d).choose
-
-
-lemma partL_of_inl (d : A) (a : A) : partL d a = d ◇ a := rfl
-
-lemma partL_of_inr_same_of_zero {a b : A} (hab : a ≠ b) : partL a (.inr ⟨(a, b, 0), hab⟩) = a := by
-  simp only [partL, ↓reduceDIte]
-
-lemma partL_of_inr_same_of_ne_zero {a b : A} (hab : a ≠ b) {n : ℕ} (hn : n ≠ 0) :
-    partL a (.inr ⟨(a, b, n), hab⟩) = .inr ⟨(a, b, 0), hab⟩ := by
-  simp only [partL, ↓reduceDIte, hn]
-
-lemma partL_of_inr_of_exists {d a b b' : A} (n : ℕ) (had : a ≠ d) (hab : a ≠ b) (hdab' : d = c a b') :
-    partL d (.inr ⟨(a, b, n), hab⟩) = b' := by
-  simp only [partL, had, ↓reduceDIte]
-  rw [dif_pos ⟨b', hdab'⟩]
-  congr
-  refine c_injective a ?_
-  rw [← hdab']
-  exact (⟨b', hdab'⟩ : ∃ b', d = c a b').choose_spec.symm
-
-lemma partL_of_inr_of_not_exists {d a b : A} (n : ℕ) (had : a ≠ d) (hab : a ≠ b) (h : ¬∃ b', d = c a b') :
-    partL d (.inr ⟨(a, b, n), hab⟩) = (A_op_surj_right a d).choose := by
-  simp [partL, had, ↓reduceDIte, h]
-
-end Extension
-
----
-
--- universe u
--- variable {G : Type u} [RelaxedVeryWeakCentralGroupoid G]
-
-
--- variable (G) in
--- def ExtBase := G × Nat
-
-instance [Countable G] : Countable G := inferInstance -- maybe not needed
-
-abbrev PreExtension := Finset G'
-
--- def PreExtension.induced (E : PreExtension G) (x y : ExtBase G) : Set (ExtBase G) :=
---   {z | IsGood x.1 z.1 y.1 ∧ (x, z) ∈ E ∧ (z, y) ∈ E}
-
--- theorem PreExtension.induced_mono {E E' : PreExtension G} (H : E ≤ E') {x y : ExtBase G} :
---     E.induced x y ⊆ E'.induced x y :=
---   fun _ ⟨h1, h2, h3⟩ => ⟨h1, H h2, H h3⟩
-
-structure PreExtension.OK (E : PreExtension) : Prop where
-  -- path x y : (x, y) ∈ E → Path x.1 y.1
-  -- consistent x y : Set.Subsingleton (E.induced x y)
-
-  --todo: identify the correct body for this structure, it should include all the properties that we want a seed to have in this greedy construction, see the proof of Prop 17.5
-
-abbrev Extension := {E : PreExtension // E.OK}
-
--- theorem Extension.next (E : Extension G) (a b) :
---     ∃ E' : Extension G, E ≤ E' ∧ (E'.1.induced a b).Nonempty := by
---   classical if h : (E.1.induced a b).Nonempty then exact ⟨_, le_rfl, h⟩ else
---   let ⟨l, hl⟩ := Infinite.exists_not_mem_finset <|
---     (insert a <| insert b <| E.1.image (·.1) ∪ E.1.image (·.2)).image (·.2)
---   let c : ExtBase G := (a.1 ◇ b.1, l)
---   refine ⟨⟨insert (a, c) (insert (c, b) E.1), ?_, fun x y z hz w hw => ?_⟩,
---     fun _ => (by simp [·]), c, op_isGood .., by simp⟩
---   · simp only [Finset.mem_insert, Prod.mk.injEq, or_imp, and_imp, forall_and,
---       forall_eq_apply_imp_iff, forall_eq]
---     exact have ⟨h1, h2⟩ := (isGood_path (op_isGood ..)); ⟨h1, h2, E.2.1⟩
---   · simp only [PreExtension.induced, Finset.mem_insert, Set.mem_setOf_eq] at hz hw
---     have ⟨hl1, hl2, hl3⟩ : a ≠ c ∧ b ≠ c ∧ ∀ {x y} (h : (x, y) ∈ E.1), x ≠ c ∧ y ≠ c := by
---       simp only [Finset.image_insert, Finset.mem_insert, Finset.mem_image, Finset.mem_union,
---         Prod.exists, exists_and_right, exists_eq_right, not_or, not_exists, not_and, or_imp,
---         forall_exists_index, forall_and] at hl
---       exact ⟨mt (congrArg (·.2)) (Ne.symm hl.1), mt (congrArg (·.2)) (Ne.symm hl.2.1),
---         fun h => ⟨fun e => hl.2.2.1 _ _ h (e ▸ rfl), fun e => hl.2.2.2 _ _ h (e ▸ rfl)⟩⟩
---     clear_value c; clear l hl
---     obtain ⟨hz1, ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz2, hz3⟩ := hz <;> obtain ⟨hw1, ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw2, hw3⟩ := hw
---     · rfl
---     · cases hl1 rfl
---     · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz3 := hz3
---       · cases hl1 rfl
---       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
---         · cases hl2 rfl
---         · cases (hl3 hw2).2 rfl
---         · cases h ⟨_, hw1, hw2, hw3⟩
---       · cases (hl3 hz3).1 rfl
---     · cases hl1 rfl
---     · rfl
---     · cases (hl3 hw2).1 rfl
---     · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
---       · cases hl1 rfl
---       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz3 := hz3
---         · cases hl2 rfl
---         · cases (hl3 hz2).2 rfl
---         · cases h ⟨_, hz1, hz2, hz3⟩
---       · cases (hl3 hw3).1 rfl
---     · cases (hl3 hz2).1 rfl
---     · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz3 := hz3
---       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
---         · rfl
---         · cases hl2 rfl
---         · cases (hl3 hw3).2 rfl
---       · cases (hl3 hz2).2 rfl
---       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
---         · cases (hl3 hz3).2 rfl
---         · cases (hl3 hw2).2 rfl
---         · exact E.2.2 _ _ ⟨hz1, hz2, hz3⟩ ⟨hw1, hw2, hw3⟩
-
--- variable [Countable G]
-
--- variable (e₀ : Extension G)
-
--- part of the proof of Prop 17.5, 3rd paragraph
-set_option pp.proofs true
-
---done
 lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A, a ◇ ((c b) ◇ b) = c b := by
   --doable
   rcases base2 a with ⟨c₁,hc1a, hc1b⟩
@@ -1568,20 +1411,154 @@ lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A,
       unfold c
       rw [dif_pos easy]
       exact hc1b
-  --------
+
+noncomputable abbrev c (a : A) : A → A := (exists_extension_aux a).choose
+
+lemma c_injective (a : A) : (c a).Injective := (exists_extension_aux a).choose_spec.1
+
+lemma c_spec (a b : A) : a ◇ ((c a b) ◇ b) = c a b := (exists_extension_aux a).choose_spec.2 b
+
+--- here I try to mimic the structure of GreedyAC below
+
+structure OK (E : Rel (A × G) G) : Prop where
+  finite : Set.Finite {(ax, y) : (A × G) × G | E ax y}
+  func {ax y y'} : E ax y → E ax y' → y = y'
+  -- inj {ax ax' y} : E ax y → E ax' y → ax = ax'
+  -- aux1 : E x (S x) --Eq4 in the dim
+  -- aux2 {y z w} : E y z → E z w → L (S y) w = x
+
+abbrev PartialSolution := {E : Rel (A × G) G // OK E}
+
+class Extension where
+  E : Rel (A × G) G
+  ok : OK E
+  dy : A × G
+  not_def {z} : ¬E dy z
+
+namespace Extension
+
+variable [Extension]
+
+-- set_option diagnostics true
+-- define the element that should be the image of `L_c y`
+noncomputable def partL (d : A) (y : G) : G := by
+  rcases y with (a | ⟨⟨a, b, n⟩, habn⟩)
+  · exact .inl (d ◇ a)
+  · by_cases ha : a = d
+    · by_cases hn : n = 0
+      · exact .inl a
+      · exact .inr ⟨(a, b, 0), habn⟩
+    by_cases hb : ∃ b', d = c a b'
+    · exact .inl hb.choose
+    · exact .inl (A_op_surj_right a d).choose
 
 
+lemma partL_of_inl (d : A) (a : A) : partL d a = d ◇ a := rfl
+
+lemma partL_of_inr_same_of_zero {a b : A} (hab : a ≠ b) : partL a (.inr ⟨(a, b, 0), hab⟩) = a := by
+  simp only [partL, ↓reduceDIte]
+
+lemma partL_of_inr_same_of_ne_zero {a b : A} (hab : a ≠ b) {n : ℕ} (hn : n ≠ 0) :
+    partL a (.inr ⟨(a, b, n), hab⟩) = .inr ⟨(a, b, 0), hab⟩ := by
+  simp only [partL, ↓reduceDIte, hn]
+
+lemma partL_of_inr_of_exists {d a b b' : A} (n : ℕ) (had : a ≠ d) (hab : a ≠ b) (hdab' : d = c a b') :
+    partL d (.inr ⟨(a, b, n), hab⟩) = b' := by
+  simp only [partL, had, ↓reduceDIte]
+  rw [dif_pos ⟨b', hdab'⟩]
+  congr
+  refine c_injective a ?_
+  rw [← hdab']
+  exact (⟨b', hdab'⟩ : ∃ b', d = c a b').choose_spec.symm
+
+lemma partL_of_inr_of_not_exists {d a b : A} (n : ℕ) (had : a ≠ d) (hab : a ≠ b) (h : ¬∃ b', d = c a b') :
+    partL d (.inr ⟨(a, b, n), hab⟩) = (A_op_surj_right a d).choose := by
+  simp [partL, had, ↓reduceDIte, h]
+
+end Extension
+
+---
+
+-- universe u
+-- variable {G : Type u} [RelaxedVeryWeakCentralGroupoid G]
 
 
+-- variable (G) in
+-- def ExtBase := G × Nat
 
+-- instance [Countable G] : Countable G := inferInstance -- maybe not needed
 
+-- abbrev PreExtension := Finset G'
 
+-- def PreExtension.induced (E : PreExtension G) (x y : ExtBase G) : Set (ExtBase G) :=
+--   {z | IsGood x.1 z.1 y.1 ∧ (x, z) ∈ E ∧ (z, y) ∈ E}
 
+-- theorem PreExtension.induced_mono {E E' : PreExtension G} (H : E ≤ E') {x y : ExtBase G} :
+--     E.induced x y ⊆ E'.induced x y :=
+--   fun _ ⟨h1, h2, h3⟩ => ⟨h1, H h2, H h3⟩
 
+-- structure PreExtension.OK (E : PreExtension) : Prop where
+  -- path x y : (x, y) ∈ E → Path x.1 y.1
+  -- consistent x y : Set.Subsingleton (E.induced x y)
 
+  --todo: identify the correct body for this structure, it should include all the properties that we want a seed to have in this greedy construction, see the proof of Prop 17.5
 
+-- abbrev Extension := {E : PreExtension // E.OK}
 
+-- theorem Extension.next (E : Extension G) (a b) :
+--     ∃ E' : Extension G, E ≤ E' ∧ (E'.1.induced a b).Nonempty := by
+--   classical if h : (E.1.induced a b).Nonempty then exact ⟨_, le_rfl, h⟩ else
+--   let ⟨l, hl⟩ := Infinite.exists_not_mem_finset <|
+--     (insert a <| insert b <| E.1.image (·.1) ∪ E.1.image (·.2)).image (·.2)
+--   let c : ExtBase G := (a.1 ◇ b.1, l)
+--   refine ⟨⟨insert (a, c) (insert (c, b) E.1), ?_, fun x y z hz w hw => ?_⟩,
+--     fun _ => (by simp [·]), c, op_isGood .., by simp⟩
+--   · simp only [Finset.mem_insert, Prod.mk.injEq, or_imp, and_imp, forall_and,
+--       forall_eq_apply_imp_iff, forall_eq]
+--     exact have ⟨h1, h2⟩ := (isGood_path (op_isGood ..)); ⟨h1, h2, E.2.1⟩
+--   · simp only [PreExtension.induced, Finset.mem_insert, Set.mem_setOf_eq] at hz hw
+--     have ⟨hl1, hl2, hl3⟩ : a ≠ c ∧ b ≠ c ∧ ∀ {x y} (h : (x, y) ∈ E.1), x ≠ c ∧ y ≠ c := by
+--       simp only [Finset.image_insert, Finset.mem_insert, Finset.mem_image, Finset.mem_union,
+--         Prod.exists, exists_and_right, exists_eq_right, not_or, not_exists, not_and, or_imp,
+--         forall_exists_index, forall_and] at hl
+--       exact ⟨mt (congrArg (·.2)) (Ne.symm hl.1), mt (congrArg (·.2)) (Ne.symm hl.2.1),
+--         fun h => ⟨fun e => hl.2.2.1 _ _ h (e ▸ rfl), fun e => hl.2.2.2 _ _ h (e ▸ rfl)⟩⟩
+--     clear_value c; clear l hl
+--     obtain ⟨hz1, ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz2, hz3⟩ := hz <;> obtain ⟨hw1, ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw2, hw3⟩ := hw
+--     · rfl
+--     · cases hl1 rfl
+--     · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz3 := hz3
+--       · cases hl1 rfl
+--       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
+--         · cases hl2 rfl
+--         · cases (hl3 hw2).2 rfl
+--         · cases h ⟨_, hw1, hw2, hw3⟩
+--       · cases (hl3 hz3).1 rfl
+--     · cases hl1 rfl
+--     · rfl
+--     · cases (hl3 hw2).1 rfl
+--     · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
+--       · cases hl1 rfl
+--       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz3 := hz3
+--         · cases hl2 rfl
+--         · cases (hl3 hz2).2 rfl
+--         · cases h ⟨_, hz1, hz2, hz3⟩
+--       · cases (hl3 hw3).1 rfl
+--     · cases (hl3 hz2).1 rfl
+--     · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz3 := hz3
+--       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
+--         · rfl
+--         · cases hl2 rfl
+--         · cases (hl3 hw3).2 rfl
+--       · cases (hl3 hz2).2 rfl
+--       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
+--         · cases (hl3 hz3).2 rfl
+--         · cases (hl3 hw2).2 rfl
+--         · exact E.2.2 _ _ ⟨hz1, hz2, hz3⟩ ⟨hw1, hw2, hw3⟩
 
+-- variable [Countable G]
+
+-- variable (e₀ : Extension G)
 
 --maybe in  this part of the prof we can actually avoid using the greedy construction, at first glance it seems to me that we actually explicitely define the function at each
 theorem exists_extension :
@@ -1616,8 +1593,8 @@ theorem L_surjective (b : A) (x : G') : {y : G' | L b y = x}.Infinite := exists_
 
 theorem L_ne (b : A) (x : G') : L b x ≠ x := exists_extension.choose_spec.2.2.2 b x
 
-theorem L_self (a : A) : L a a = S a := by  --TO DO: da controllare
-  rw[L_extends a a, A_idempotent]
+theorem L_self (a : A) : L a a = S a := by
+  rw [L_extends a a, A_idempotent]
   rfl  -- by def of S
 
 end GreedyB
@@ -1820,6 +1797,7 @@ theorem seed_ok (x : G') : OK x (seed x) where
     rw[← final]
     exact Set.finite_singleton (Sum.inr x, Sum.inl x.1.1)
    --doable
+  inj x₁ x₂ := by simp_all [seed]
   func h1 h2 := by rw [h1.2, h2.2]
   aux1 := by simp [seed]
   aux2 h1 h2 := by simp_all [seed]
