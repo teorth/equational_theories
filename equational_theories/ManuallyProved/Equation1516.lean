@@ -1330,14 +1330,9 @@ namespace GreedyB
 -- Greedy construction to extend the operation from A×A to A×G' in order to satisfy Axiom B
 
 lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A, a ◇ ((c b) ◇ b) = c b := by
-  --doable
   rcases base2 a with ⟨c₁,hc1a, hc1b⟩
   have c_aux (b : A) (h : a ≠ b) : ∃ c, c ◇ a = b ∧ c ≠ c₁ := by
     have enc := base1 a b h
-    have noempty := (Set.encard_ne_zero (s := {c | c ◇ a = b}) ).mp   (by --serve veramente o basta noempty' ??
-      have easy : (0 : ENat ) < 3 := by norm_num
-      apply lt_of_lt_of_le easy at enc
-      exact Ne.symm (ne_of_lt enc) )
     have noempty' : ({c | c ◇ a = b} \ {c₁}).Nonempty := by
       apply Set.encard_ne_zero.mp
       have := Set.encard_tsub_one_le_encard_diff_singleton {c | c ◇ a = b} c₁
@@ -1347,12 +1342,9 @@ lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A,
       apply le_trans dis1 at this
       apply lt_of_lt_of_le easy2 at this
       exact Ne.symm (ne_of_lt this)
-      -----------------------
-    --obtain ⟨c, hc1, hc2 ⟩ := noempty'
     rcases noempty' with ⟨c, hc1, hc2⟩
     use c
     simp_all
-
   let c := fun b : A ↦ if h : a = b then c₁ else (c_aux b h ).choose
   use c
   constructor
@@ -1360,56 +1352,43 @@ lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A,
     intro x y
     unfold c
     rcases ne_or_eq a x  with hx | ha <;> rcases ne_or_eq a y  with hy | ha'
-
-    · --unfold c
-      rw[dif_neg hx,dif_neg hy]
+    · rw [dif_neg hx,dif_neg hy]
       intro hind
       have prop : (c_aux x hx).choose ◇ a = (c_aux y hy).choose ◇ a := by rw[hind]
       have h_aux : (c_aux x hx).choose ◇ a = x := by
         apply (c_aux x hx).choose_spec.1
       have h_aux2 : (c_aux y hy).choose ◇ a = y := by
         apply (c_aux y hy).choose_spec.1
-      rw[h_aux,h_aux2] at prop
+      rw [h_aux,h_aux2] at prop
       exact prop
-
-    · --unfold c
-      rw[dif_neg hx, dif_pos ha']
+    · rw [dif_neg hx, dif_pos ha']
       intro hind
       exfalso
       have h_aux : (c_aux x hx).choose ≠  c₁ := by
         apply (c_aux x hx).choose_spec.2
       tauto
-
-    · --unfold c
-      rw[dif_pos ha,dif_neg hy]
+    · rw [dif_pos ha,dif_neg hy]
       intro hind
       exfalso
       have h_aux : (c_aux y hy).choose ≠  c₁ := by
         apply (c_aux y hy).choose_spec.2
       tauto
-
     · intro h
-      rw[← ha, ← ha']
-
-
+      rw [← ha, ← ha']
   · intro b
     rcases ne_or_eq a b with h1 | h2
     · unfold c
-      rw[dif_neg h1]
-      --let c₂ := (c_aux b h1 ).choose
+      rw [dif_neg h1]
       have h_aux : (c_aux b h1).choose ◇ a = b := by  -- R_a c_(y,b) = b
         apply (c_aux b h1).choose_spec.1   -- è la dim che (c_aux b h1).choose soddisfa la p: _ ◇ a = b
-      have idem : a ◇ a = a := by
-        apply A_idempotent a
-      nth_rw 1 [ ← idem]
+      have idem : a ◇ a = a := A_idempotent a
+      nth_rw 1 [← idem]
       nth_rw 3 [← h_aux]
       symm
       apply A_satisfies_Equation1516
-
-    · rw[ ← h2]
-      have easy : a = a := by rfl
+    · rw [← h2]
       unfold c
-      rw [dif_pos easy]
+      rw [dif_pos rfl]
       exact hc1b
 
 noncomputable abbrev c (a : A) : A → A := (exists_extension_aux a).choose
@@ -1779,8 +1758,6 @@ def seed (x : G') : Rel G G := fun a b => a = x ∧ b = S x
 
 theorem seed_ok (x : G') : OK x (seed x) where
   finite := by   -- x = (a, b, _), so the only element in the set is (x, y = a)
-    --have h1 : (Sum.inr x, Sum.inl x.1.1) ∈ {(x_2, y) | seed x x_2 y} := by
-    --have h2 (z w : G) : (z, w) ∈ {(x_2, y) | seed x x_2 y} → z = x ∧ w = x.1.1 := by
     have h' : S (Sum.inr x) = x.1.1 := by
       rfl
     have final : {(Sum.inr x, Sum.inl x.1.1)} = {(x_2, y) | seed x x_2 y} := by
@@ -1793,10 +1770,8 @@ theorem seed_ok (x : G') : OK x (seed x) where
         rw[h']
         tauto
       apply Set.Subset.antisymm incl1 incl2
-
     rw[← final]
     exact Set.finite_singleton (Sum.inr x, Sum.inl x.1.1)
-   --doable
   inj x₁ x₂ := by simp_all [seed]
   func h1 h2 := by rw [h1.2, h2.2]
   aux1 := by simp [seed]
@@ -1826,19 +1801,12 @@ theorem G_satisfies_Equation1516 : Equation1516 G := by
   unfold Equation1516
   intro x y
   rcases x with (a | g) <;> rcases y with (a' | g')
-  · --doable
-    simp_rw[magG_op_def_A,L_extends]
-    rw[magG_op_def_A (a' ◇ a'),L_extends,← A_satisfies_Equation1516]
-
-
-  · --doable
-    simp_rw [magG_op_def_G, magG_op_def_A]
-    rw[L'_self, magG_op_def_A, L_1516 a g'] -- uso l'Ax B per concludere
-
-
-
-  · simp_rw[magG_op_def_A]
-    rw[L_self,magG_op_def_A]
+  · simp_rw [magG_op_def_A,L_extends]
+    rw [magG_op_def_A (a' ◇ a'),L_extends,← A_satisfies_Equation1516]
+  · simp_rw [magG_op_def_G, magG_op_def_A]
+    rw [L'_self, magG_op_def_A, L_1516 a g'] -- uso l'Ax B per concludere
+  · simp_rw [magG_op_def_A]
+    rw [L_self,magG_op_def_A]
     simp_rw [magG_op_def_G_new, L'_1516]
 
 
