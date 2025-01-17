@@ -1549,8 +1549,10 @@ theorem exists_extension :
     ∃ L : A → G → G,
     (∀ a b : A, L b a = b ◇ a) ∧ -- Lb extends a : A ↦ b ◇ a
     (∀ b : A, ∀ x : G', (L (S x) <| L b <| L b x) = b) ∧ -- Axiom B
-    (∀ b : A, ∀ x : G', {y : G' | L b y = x}.Infinite) ∧ -- infinite surjectivity
-    (∀ b : A, ∀ x : G', L b x ≠ x) := by sorry
+    (L 1 x₀ = .inl 1) ∧
+    (∀ b : A, ∀ x : G', {y : G' | L b y = x}.Infinite) -- infinite surjectivity
+    -- (∀ b : A, ∀ x : G', L b x ≠ x)
+    := by sorry
     -- ∃ op : ExtBase G → ExtBase G → ExtBase G, ∃ E : ExtBase G → ExtBase G → Prop,
     -- (∀ a b c, c = op a b ↔ IsGood a.1 c.1 b.1 ∧ E a c ∧ E c b) ∧
     -- (∀ a b, (a, b) ∈ e₀.1 → E a b) ∧
@@ -1573,9 +1575,11 @@ theorem L_extends (a b : A) : L b a = b ◇ a := exists_extension.choose_spec.1 
 
 theorem L_1516 (b : A) (x : G') : (L (S x) <| L b <| L b x) = b := exists_extension.choose_spec.2.1 b x
 
-theorem L_surjective (b : A) (x : G') : {y : G' | L b y = x}.Infinite := exists_extension.choose_spec.2.2.1 b x
+theorem L_x₀ : L 1 x₀ = .inl 1 := exists_extension.choose_spec.2.2.1
 
-theorem L_ne (b : A) (x : G') : L b x ≠ x := exists_extension.choose_spec.2.2.2 b x
+theorem L_surjective (b : A) (x : G') : {y : G' | L b y = x}.Infinite := exists_extension.choose_spec.2.2.2 b x
+
+-- theorem L_ne (b : A) (x : G') : L b x ≠ x := exists_extension.choose_spec.2.2 b x
 
 theorem L_self (a : A) : L a a = S a := by
   rw [L_extends a a, A_idempotent]
