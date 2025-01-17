@@ -1326,6 +1326,10 @@ def S : G → A
   | .inl a => a
   | .inr g => g.1.1
 
+-- we take a special x₀ = (*, 0, 0) ∈ G', where * is the identity of A, i.e. the empty word
+-- this is needed for Corollary 17.7, note that by doing this we are taking a sligthly different route from the proof of the corollary in the blueprint, in particular we make an explicit example of an element that does not verify eq 255
+def x₀ : G := .inr ⟨⟨1, x 0, 0⟩, fun h ↦ one_ne_of 0 h⟩
+
 namespace GreedyB
 -- Greedy construction to extend the operation from A×A to A×G' in order to satisfy Axiom B
 
@@ -1808,16 +1812,8 @@ theorem G_satisfies_Equation1516 : Equation1516 G := by
   · simp_rw [magG_op_def_A]
     rw [L_self,magG_op_def_A]
     simp_rw [magG_op_def_G_new, L'_1516]
-
-
-  · simp_rw[magG_op_def_G,L'_self,magG_op_def_A,magG_op_def_G_new]
-    rw[L'_1516]
-
-
-
--- we take a special x = (*, 0, 0) ∈ G', where * is the identity of A, i.e. the empty word
--- this is needed for Corollary 17.7, note that by doing this we are taking a sligthly different route from the proof of the corollary in the blueprint, in particular we make an explicit example of an element that does not verify eq 255
-def x₀ : G := .inr ⟨⟨1, x 0, 0⟩, fun h ↦ one_ne_of 0 h⟩
+  · simp_rw [magG_op_def_G,L'_self,magG_op_def_A,magG_op_def_G_new]
+    rw [L'_1516]
 
 --we may need to add some additional thesis to the theorem about the construction of L, so that the way L is defined is explicited
 lemma op_x₀_self : x₀ ◇ x₀ = (1 : A) := by
