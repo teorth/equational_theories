@@ -1403,20 +1403,21 @@ lemma c_spec (a b : A) : a ◇ ((c a b) ◇ b) = c a b := (exists_extension_aux 
 
 --- here I try to mimic the structure of GreedyAC below
 
-structure OK (E : Rel (A × G) G) : Prop where
-  finite : Set.Finite {(ax, y) : (A × G) × G | E ax y}
-  func {ax y y'} : E ax y → E ax y' → y = y'
+structure OK (E : A → G → G → Prop) : Prop where
+  finite : Set.Finite {(a, x, y) | E a x y}
+  func {a x y y'} : E a x y → E a x y' → y = y'
   -- inj {ax ax' y} : E ax y → E ax' y → ax = ax'
   -- aux1 : E x (S x) --Eq4 in the dim
-  -- aux2 {y z w} : E y z → E z w → L (S y) w = x
+  aux2 {x y z w} : E x y z → E x z w → E (S y) w x --eq1516
 
-abbrev PartialSolution := {E : Rel (A × G) G // OK E}
+abbrev PartialSolution := {E : A → G → G → Prop // OK E}
 
 class Extension where
-  E : Rel (A × G) G
+  E : A → G → G → Prop
   ok : OK E
-  dy : A × G
-  not_def {z} : ¬E dy z
+  d : A
+  y : G
+  not_def {z} : ¬E d y z
 
 namespace Extension
 
