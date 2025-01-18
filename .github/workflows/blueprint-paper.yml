@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - '**/*.lean'
-      - '**/blueprint.yml'
+      - '**/blueprint-paper.yml'
       - 'blueprint/**'
       - 'commentary/**'
       - 'home_page/**'
@@ -25,7 +25,7 @@ on:
       - main
     paths:
       - '**/*.lean'
-      - '**/blueprint.yml'
+      - '**/blueprint-paper.yml'
       - 'blueprint/**'
       - 'commentary/**'
       - 'home_page/**'
@@ -118,7 +118,7 @@ jobs:
       - name: Build blueprint and copy to `home_page/blueprint`
         uses: xu-cheng/texlive-action@v2
         with:
-          docker_image: ghcr.io/xu-cheng/texlive-full:20231201
+          docker_image: ghcr.io/xu-cheng/texlive-full:latest
           run: |
             # Install necessary dependencies and build the blueprint
             apk update
