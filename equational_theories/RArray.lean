@@ -96,7 +96,7 @@ theorem RArray.ofFn_correct {n : Nat} (f : Fin n → α) (h : 0 < n) (i : Fin n)
 where
   go lb ub h1 h2 (h3 : lb ≤ i.val) (h3 : i.val < ub) :
       RArray.get (.ofFn.go f lb ub h1 h2) (i - lb) = f i := by
-    induction lb, ub, h1, h2 using RArray.ofFn.go.induct (f := f) (n := n)
+    induction lb, ub, h1, h2 using RArray.ofFn.go.induct
     case case1 =>
       simp [ofFn.go, RArray.get_eq_getImpl, RArray.getImpl]
       congr
