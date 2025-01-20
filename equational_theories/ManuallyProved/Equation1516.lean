@@ -1757,7 +1757,7 @@ inductive Next : G → G → Prop
   | new {a b} : a = (d x) → b = (w x) → Next a b
 
 theorem next_d_is_w {y} : Next x (d x) y → y = w x
-  | .base hb => False.elim $ not_def hb
+  | .base hb => False.elim <| not_def hb
   | .new _ h => h
 
 theorem prev_w_is_d {y} : Next x y (w x) → y = d x
