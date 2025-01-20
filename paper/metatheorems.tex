@@ -124,10 +124,10 @@ We therefore consider $R$ to be both closed under substitutions and a congruence
 
 Naturally, a set of laws $w \formaleq w'$ can be seen, given a choice of orientation (left-to-right or right-to-left) for each law as such a rewrite system. In this case, it is very clear that the reflexive transitive closure $\leftrightarrow^*$ recovers the original equational theory $\Gamma\models \cdot\formaleq\cdot$. However, it's clear that sometimes these systems will either be not strongly normalizing, or confluent, or both.
 
-For example, it's clear that commutativity (the rule $x\cdot y\formaleq y\cdot x$ cannot possibly be oriented. Here is a non-confluent example:
+For example, it's clear that commutativity (the rule $x\cdot y\formaleq y\cdot x$) cannot possibly be oriented in such a way as to be terminating. Here is a non-confluent example:
 
 \[ x \cdot (y \cdot z) \rightarrow y \]
-We have $a\cdot (b \cdot (c \cdot d)) \rightarrow^* b$, but also $a\cdot (b\cdot (c\cdot d))\rightarrow^* a\cdot c$ for any $a, b, c, d$ (which are both in normal form).
+We have $a\cdot (b \cdot (c \cdot d)) \rightarrow^* b$, but also $a\cdot (b\cdot (c\cdot d))\rightarrow^* a\cdot c$ for any $a, b, c, d$ (which are all in normal form).
 
 Knuth and Bendix \cite{knuth-bendix} described a technique by which a theory or set of equations $\Gamma$ could be turned into a complete system. The crucial idea is the observation that the non-local-confluence of a rewrite system can be reduced to a finite (if the system is finite) set of ``worst offenders'' for confluence. If these pairs can be \emph{joined} (reduced to the same term) then the system is confluent. It is possible to compute such pairs.
 
@@ -148,10 +148,6 @@ Note that, in the above setting, $t\leftarrow l_1\sigma\rightarrow u$, giving us
 Note that building critical pairs of a finite system is computable. Therefore the only step of the completion process which require genuine creativity is the choice of the orientation of the equations, along with the proof that that orientation is strongly normalizing.
 
 We note that even in the event that such an orientation is not found, one can still partially apply the completion procedure, using any well-founded order on terms that is stable by substitution and congruence, to obtain a semi-decision procedure for equality. This process is sometimes called \emph{unfailing completion} and is at the core of the \emph{superposition calculus} used in Vampire.
-
-\note{Define a confluent law and give some examples.}
-
-\note{Define a complete rewriting system and give some examples.}
 
 The associative and commutative laws, $x \op (y \op z) \sim (x \op y) \op z$ and $x \op y \sim y \op x$ both have confluent rewrite systems associated to them (by orienting the equations left-to-right). But it is easy to se that only the former has a complete rewrite system associated to it.
 
