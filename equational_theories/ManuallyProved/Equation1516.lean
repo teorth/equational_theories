@@ -1446,8 +1446,8 @@ class Extension where
   E : A → G → G → Prop
   ok : OK E
   d : A
-  y : G
-  not_def {z} : ¬E d y z
+  g : G
+  not_def {z} : ¬E d g z
 
 namespace Extension
 
@@ -1521,6 +1521,26 @@ variable [Extension]
 
 --here I will put the definition and API for next
 
+@[mk_iff]
+inductive Next : A → G → G → Prop
+  | base {a y x} : E a y x → Next a y x
+  | new {a y x} : a = d → y = g → x = partL a y → Next a y x
+
+
+def next : PartialSolution :=
+  ⟨Next,
+  -- next_finite x,
+  sorry,
+  -- next_func x,
+  sorry,
+  sorry,
+  sorry,
+  -- next_aux1 x,
+  sorry,
+  -- next_aux2 x
+  sorry
+  ⟩
+  -- sorry
 
 end Extension
 
@@ -1542,8 +1562,11 @@ theorem exists_extension (seed : PartialSolution) :
       else
         let E1 : Extension := { E, ok, d, y, not_def := fun h' ↦ h ⟨_, h'⟩ }
         -- we need to define next to conclude here
-        -- exact ⟨E1.next, fun _ _ ↦ (.base ·), _, .new rfl rfl⟩
+        exact ⟨E1.next, fun _ _ _ ↦ (.base ·),
+        sorry,
         sorry
+        ⟩
+
   choose e he L hL using h3
   have L_of_e {a : A} {y x : G} {e₀ : PartialSolution} (he₀ : e₀   ∈ c)
       (h : e₀.val a y x) : L (a, y) = x := by
