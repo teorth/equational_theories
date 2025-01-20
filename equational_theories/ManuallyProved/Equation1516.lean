@@ -1750,11 +1750,11 @@ lemma w_equation' {z : G} (hz : E x z (d x)) : L (S z) (w x) = x := by
 @[mk_iff]
 inductive Next : G → G → Prop
   | base {a b} : E x a b → Next a b
-  | new {a b} : a = (d x) → b = (w x) → Next a b
+  | new : Next (d x) (w x)
 
 theorem next_d_is_w {y} : Next x (d x) y → y = w x
   | .base hb => False.elim <| not_def hb
-  | .new _ h => h
+  | .new => rfl
 
 theorem prev_w_is_d {y} : Next x y (w x) → y = d x
   | .base h => by
@@ -1762,42 +1762,42 @@ theorem prev_w_is_d {y} : Next x y (w x) → y = d x
     simp only [partial_range, partial_range', Rel.codom, Set.mem_toFinset, Set.mem_setOf_eq,
       not_exists] at this
     exact (this y h).elim
-  | .new h _ => h
+  | .new => rfl
 
 def next_finite : Set.Finite {(z, y) : G × G | Next x z y} := by
   simp [next_iff, Set.setOf_or, ← Prod.mk.injEq, ok.finite]
 
 def next_func {z y y'} : Next x z y → Next x z y' → y = y'
   | .base hb, .base hb' => ok.func hb hb'
-  | .new _ h, .new _ h' => h' ▸ h
-  | .base hb, .new h _ | .new h _, .base hb => (not_def (h ▸ hb)).elim
+  | .new , .new  => rfl
+  | .base hb, .new | .new, .base hb => (not_def hb).elim
 
 def next_inj {z z' y} : Next x z y → Next x z' y → z = z'
   | .base hb, .base hb' => ok.inj hb hb'
-  | .new h _, .new h' _ => h' ▸ h
-  | .base hz, .new hz' hy => hz' ▸ prev_w_is_d _ (.base (hy ▸ hz))
-  | .new hz hy, .base hz' => hz ▸ (prev_w_is_d _ (.base (hy ▸ hz'))).symm
+  | .new, .new => rfl
+  | .base hz, .new => prev_w_is_d _ (.base hz)
+  | .new, .base hz' => (prev_w_is_d _ (.base hz')).symm
 
 def next_aux1 : Next x x (S x) := Next.base ok.aux1
 
-def next_aux2 {y z t} : Next x y z → Next x z t → L (S y) t = x
-  | .base hb, .base hb' => ok.aux2 hb hb'
-  | .new hy hz, .new hz' ht => (w_ne_d x (hz ▸ hz')).elim
-  | .base hyz, .new hzd htw => by
-    rw [hzd] at hyz
-    rw [htw]
-    exact w_equation' x hyz
-  | .new hyd hzw, .base hzt => by
-    rw [hzw] at hzt
-    have := w_not_in_domain x
-    simp [partial_domain, partial_domain', Rel.dom] at this
-    exact (this t hzt).elim
+def next_aux2 {y z t} : Next x y z → Next x z t → L (S y) t = x := by
+  intro next1 next2
+  rcases next1 with ⟨hb⟩
+  · rcases next2 with ⟨hb'⟩ | ⟨⟩
+    · exact ok.aux2 hb hb'
+    · exact w_equation' x hb
+  · rw [next_iff] at next2
+    rcases next2 with h | h
+    · have := w_not_in_domain x
+      simp only [partial_domain, partial_domain', Rel.dom, Set.mem_toFinset, Set.mem_setOf_eq,
+        not_exists] at this
+      exact (this t h).elim
+    · exact (w_ne_d x h.1).elim
 
 def next : PartialSolution x :=
   ⟨Next x, next_finite x, next_func x, next_inj x, next_aux1 x, next_aux2 x⟩
 
 end Extension
-
 
 theorem exists_extension (x : G') (seed : PartialSolution x) :
     ∃ Lₓ : G → G,
@@ -1810,7 +1810,7 @@ theorem exists_extension (x : G') (seed : PartialSolution x) :
     fun ⟨E, ok⟩ d ↦ by
       if h : ∃ y, E d y then exact ⟨_, le_rfl, h⟩ else
         let E1 : Extension x := { E, ok, d, not_def := fun h' ↦ h ⟨_, h'⟩ }
-        exact ⟨E1.next, fun _ _ ↦ (.base ·), _, .new rfl rfl⟩
+        exact ⟨E1.next, fun _ _ ↦ (.base ·), _, .new⟩
   choose e he Lₓ hLₓ using h3
 
   refine ⟨Lₓ, (e x).2.func (e x).2.aux1 (hLₓ x) |>.symm, fun y ↦ ?_⟩
