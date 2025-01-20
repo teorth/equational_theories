@@ -10,30 +10,34 @@ for all $x,y$, and whether this implies equation 255,
 \end{equation}
 Using the usual notation $L_y x = y \op x$, $R_y x = x \op y$, $Sx = x \op x$, we can rewrite equation 677 as
 \begin{equation}\label{677-alt}
-  x = L_y L_x L_{L_y x} y
+  x = L_y L_x L_{L_y x} y = L_y (x \op R_y L_y x)
 \end{equation}
 and 255 as
 $$ x = (Sx \op x) \op x.$$
 
 \begin{lemma}[Basic properties of 677 magma]\label{677-basic} Let $M$ be a finite magma obeying \eqref{677}.
   \begin{itemize}
-  \item (i)  The left multiplication operators $L_y: M \to M$ are all invertible.
-  \item (ii) If $x,y \in M$ and $y \op x = x$, then $x = Sx \op x$.  In particular, 255 holds if and only if the equation $y \op x = x$ is solvable for every $x$.
+  \item (i)  The left multiplication operators $L_y: M \to M$ are all invertible, with $L_y^{-1} x = x \op R_y L_y x$.
+  \item (ii) If $x,y \in M$ and $y \op x = x$, then $y = Sx \op x$.  In particular, 255 holds if and only if the equation $y \op x = x$ is solvable for every $x$.
+  \item (iii)  For all $x,y \in M$, we have $x = L_y x \op R_y L_y^2 x$.
+  \item (iv) For $a,b \in M$, we have $a \diamond b = L_b^{-2} a \op ((L_b^{-1} a \op L_b^{-2} a) \op L_b^{-1} a)$.
 \end{itemize}
 \end{lemma}
 
-\begin{proof}  From \eqref{677-alt} we see that $L_y$ is surjective, hence invertible on finite magmas, giving (i).  For (ii), we apply \eqref{677} to conclude that
+\begin{proof}  From \eqref{677-alt} we see that $L_y$ is surjective, hence invertible on finite magmas, giving (i) (the formula for $L_y^{-1} x$ being immediate from \eqref{677-alt}).  For (ii), we apply \eqref{677} to conclude that
   $$ y \op x = x = y \op (x \op (x \op y))$$
   and hence by left invertibility
   $$ x = x \op (x \op y).$$
   On the other hand, from \eqref{677} with $y$ replaced by $x$ we have
   $$ x = x \op (x \op (Sx \op x))$$
   and the claim then follows by left invertibility.
+
+  For (iii), we apply (i) with $x$ replaced by $L_y x$.  For (iv), we rewrite $a \op b$ as $R_b L_b^2 (L_b^{-2} a)$, which by (iii) is equal to $L_{L_b^{-1} a}^{-1} (L_b^{-2} a)$.  The claim then follows from (i).
 \end{proof}
 
 This for instance gives the implication for linear magmas:
 
-\begin{lemma}[No linear counterexamples]\label{linear-obstruction}  Suppose we have a finite magma $M$ obeying 677 which is linear in the sense that $M$ is an abelian group and $x \op y = \alpha x + \beta y + c$ for some endomorhpisms $\alpha,\beta: M \to M$ and constant $c$.  Then $M$ obeys 255.
+\begin{lemma}[No linear counterexamples]\label{linear-obstruction}  Suppose we have a finite magma $M$ obeying 677 which is linear in the sense that $M$ is an abelian group and $x \op y = \alpha x + \beta y + c$ for some endomorphisms $\alpha,\beta: M \to M$ and constant $c$.  Then $M$ obeys 255.
 \end{lemma}
 
 \begin{proof}  By the previous lemma, it suffices to show that right multiplication $R_x$ is surjective, or equivalently injective by finiteness.  If this is not the case, then we can find distinct $y,y'$ such that $R_x y = R_x y'$, hence $L_y x = L_{y'} x$. But in this linear model, $L_y$ and $L_{y'}$ differ by a constant, hence we have $L_y = L_{y'}$.  Applying \eqref{677-alt} we have
@@ -62,6 +66,29 @@ Linear models $x \op y = \alpha x + \beta y + c$ on the finite field $F_p$ turn 
 \item (Type 2) $\alpha$ is a primitive third root of unity, $c$ is arbitrary, and $\beta$ solves $\beta^3+\beta+1=-\alpha$ and $\beta^4+\beta^3+2\beta^2+2\beta+1=0$.
 \end{itemize}
 An example of a Type I model is $x \op y = 2x-y$ on $F_5$.  Examples of Type II models include $x \op y = 4x+3y$ and $x \op y = 4x+y$ on $F_7$.  An exceptional class of Type II models are $x \op y = 5x-4y+c$ on $F_{31}$, these are the only Type II models that are translation-invariant and do not have idempotents (if $c \neq 0$).
+
+\section{A finite non-right-cancellative example}
+
+Suppose $G$ is already a 677 magma, and to each pair $x,y \in M$ we assign a binary operation $\diamond_{x,y}: M \times M \to M$ such that one has the functional equation
+\begin{equation}\label{ext-eq}
+  s = t \op_{y,L_y^{-1} x} (s \op_{x, (y \op x) \op y} ((t \op_{y,x} s) \op_{y \op x, y} t))
+\end{equation}
+for all $x,y \in M$, then the operation
+$$ (x,s) \diamond (y,t) := (x \diamond y, s \diamond_{x,y} t)$$
+is easily seen to be a 677 magma.  It is right-injective if $G$ and all of the $\op_{y,x}$ are right-injective.
+
+Suppose $M$ is a field that admits a primitive cube root of unity $\omega$ as well as a primitive fifth root of unity $\zeta$ (for instance, $M$ could be a field of order $16$).  Then the three operations
+$$ s \op^0 t := s - \zeta(t-s)$$
+$$ s \op^+ t := t$$
+$$ s \op^- t := s - \omega(t-s)$$
+can easily be seen to obey the identities
+$$s = t \op^0 (s \op^0 ((t \op^0 s) \op^0 t))$$
+$$s = t \op^+ (s \op^+ ((t \op^- s) \op^- t))$$
+$$s = t \op^- (s \op^- ((t \op^+ s) \op^+ t))$$
+for all $t,s$.
+
+Now suppose that $G$ is also a field with a primitive fifth root of unity $\beta$ (so that $\beta = \beta^4$ is a quadratic residue), but $-1$ and $\beta+1$ are non-zero quadratic non-residues (for instance, $G$ could be the field of order $31$, with $\beta=2$).  If we define $x \op y = x - \beta(y-x)$, and then define $\op_{x,y}$ to be $\op^0$ when $y=x$, $\op^+$ when $y-x$ is a non-zero quadratic residue, and $\op^-$ when $y-x$ is a quadratic residue, one can then check that \eqref{ext-eq} holds. Since $\op^0$ is not right-cancellative, this gives a finite 677 magma that is not right-cancellative.
+
 
 \section{The free 677 magma}
 
