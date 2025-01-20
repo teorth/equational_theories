@@ -1433,6 +1433,8 @@ lemma dom_projL_eq {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Fini
 structure OK (E : A → G → G → Prop) : Prop where
   finite : {(a, x, y) | E a x y}.Finite
   func {a x y y'} : E a x y → E a x y' → y = y'
+  extend {a b : A} {x} : E a b x → x = .inl (a ◇ b)
+  hx₀ {x} : E 1 x₀ x → x = .inl 1
   aux1 {x y z w} : E x y z → E x z w → E (S y) w x --eq1516
   aux2 (b) (x : G') : -- technical condition to ensure the infinite surjectivity
     letI s := dom_projL finite
@@ -1521,6 +1523,7 @@ variable [Extension]
 
 
 end Extension
+
 --maybe in  this part of the prof we can actually avoid using the greedy construction, at first glance it seems to me that we actually explicitely define the function at each
 set_option pp.proofs true
 theorem exists_extension (seed : PartialSolution) :
@@ -1641,6 +1644,8 @@ def seed : A → G → G → Prop := fun _ _ _ ↦ false
 
 theorem seed_ok : OK seed where
   finite := by simp [seed]
+  extend := by simp [seed]
+  hx₀ := by simp [seed]
   func h1 h2 := by simp_all [seed]
   aux1 := by simp [seed]
   aux2 := by simp [seed, dom_projL]
