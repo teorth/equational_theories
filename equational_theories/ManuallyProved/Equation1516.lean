@@ -1421,12 +1421,22 @@ we can add it as data to OK, I hope this does not lead to DTT hell. -> wrong, we
 
 3. Since we are using dom_projL for the other quantities we may as well use it for this one too. In parcitular we can limit the addition of new elements y in the following way: we add new relations E b y x until the cardinality of the set {y | E b y x} is bigger than dom_projL.card. This guarantees us that the new elements are finite for each of the (finite) pairs (b,x) we are considering. Moreover we can easily sento the quantity dom_projL.card to infinity.
 -/
+
+noncomputable
+def dom_projL {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) : Finset A :=
+  have := hE.fintype
+  Finset.image (fun (a, _, _) ↦ a) {(a, x, y) | E a x y}.toFinset
+
+lemma dom_projL_eq {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) :
+    dom_projL hE = {a | ∃ x y, E a x y} := by simp [dom_projL, Set.image]
+
 structure OK (E : A → G → G → Prop) : Prop where
-  finite : Set.Finite {(a, x, y) | E a x y}
+  finite : {(a, x, y) | E a x y}.Finite
   func {a x y y'} : E a x y → E a x y' → y = y'
-  -- inj {ax ax' y} : E ax y → E ax' y → ax = ax'
-  -- aux1 : E x (S x) --Eq4 in the dim
-  aux2 {x y z w} : E x y z → E x z w → E (S y) w x --eq1516
+  aux1 {x y z w} : E x y z → E x z w → E (S y) w x --eq1516
+  aux2 (b) (x : G') : -- technical condition to ensure the infinite surjectivity
+    letI s := dom_projL finite
+    b ∈ s → x.1.1 ∈ s → x.1.2.1 ∈ s → x.1.2.2 ≤ s.card → s.card ≤ {y : G' | E b y x}.ncard
 
 abbrev PartialSolution := {E : A → G → G → Prop // OK E}
 
