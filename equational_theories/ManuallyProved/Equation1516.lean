@@ -1449,8 +1449,6 @@ class Extension where
 
 namespace Extension
 
-variable [Extension]
-
 -- set_option diagnostics true
 -- define the element that should be the image of `L_c y`
 noncomputable def partL (d : A) (y : G) : G := by
@@ -1463,7 +1461,6 @@ noncomputable def partL (d : A) (y : G) : G := by
     by_cases hb : ∃ b', d = c a b'
     · exact .inl hb.choose
     · exact .inl (A_op_surj_right a d).choose
-
 
 lemma partL_of_inl (d : A) (a : A) : partL d a = d ◇ a := rfl
 
@@ -1518,6 +1515,12 @@ lemma _root_.ENat.eq_top_iff_forall_le (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m �
   simp only [ENat.some_eq_coe, Nat.cast_add, Nat.cast_one]
   exact (ENat.lt_add_one_iff (ENat.coe_ne_top m)).mpr (le_refl _)
 
+variable [Extension]
+
+--here I will put the definition and API for next
+
+
+end Extension
 --maybe in  this part of the prof we can actually avoid using the greedy construction, at first glance it seems to me that we actually explicitely define the function at each
 theorem exists_extension :
     ∃ L : A → G → G,
