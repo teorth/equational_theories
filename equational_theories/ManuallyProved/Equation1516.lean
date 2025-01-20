@@ -1487,90 +1487,36 @@ lemma partL_of_inr_of_not_exists {d a b : A} (n : ℕ) (had : a ≠ d) (hab : a 
     partL d (.inr ⟨(a, b, n), hab⟩) = (A_op_surj_right a d).choose := by
   simp [partL, had, ↓reduceDIte, h]
 
-end Extension
+--this lemma should be put into Mathlib, maybe in Set.ncard_le_encard somewhere after the definition of Set.ncard
+lemma _root_.Set.ncard_le_encard {α : Type*} (s : Set α) : Set.ncard s ≤ Set.encard s :=
+    ENat.coe_toNat_le_self _
 
----
+--this lemma should be put into Mathlib, maybe in Mathlib.Order.WithBot after WithTop.coe_ne_top
+lemma _root_.WithTop.eq_coe_of_ne_top {α : Type*} {a : WithTop α} (ha : a ≠ ⊤) :
+    ∃ b : α, b = a := Option.ne_none_iff_exists.mp ha
 
--- universe u
--- variable {G : Type u} [RelaxedVeryWeakCentralGroupoid G]
+--this lemma should be put into Mathlib, maybe in Mathlib.Order.WithBot after WithBot.coe_ne_bot
+lemma _root_.WithBot.eq_coe_of_ne_bot {α : Type*} {a : WithBot α} (ha : a ≠ ⊥) :
+    ∃ b : α, b = a := Option.ne_none_iff_exists.mp ha
 
+--this lemma should be put into Mathlib, maybe in Mathlib.Data.ENat.Basic next to ENat.ne_top_iff_exists
+lemma _root_.ENat.eq_top_iff_forall_ne (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, ↑m ≠ n :=
+  WithTop.forall_ne_iff_eq_top.symm
 
--- variable (G) in
--- def ExtBase := G × Nat
+--this lemma should be put into Mathlib, maybe in Mathlib.Data.ENat.Basic next to ENat.ne_top_iff_exists
+lemma _root_.ENat.eq_top_iff_forall_lt (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m < n := by
+  rw [ENat.eq_top_iff_forall_ne]
+  refine ⟨fun h m ↦ ?_, fun a m ↦ (a m).ne⟩
+  contrapose! h
+  refine WithTop.eq_coe_of_ne_top ?_
+  exact fun a ↦ ENat.coe_ne_top _ <| top_le_iff.mp (a ▸ h)
 
--- instance [Countable G] : Countable G := inferInstance -- maybe not needed
-
--- abbrev PreExtension := Finset G'
-
--- def PreExtension.induced (E : PreExtension G) (x y : ExtBase G) : Set (ExtBase G) :=
---   {z | IsGood x.1 z.1 y.1 ∧ (x, z) ∈ E ∧ (z, y) ∈ E}
-
--- theorem PreExtension.induced_mono {E E' : PreExtension G} (H : E ≤ E') {x y : ExtBase G} :
---     E.induced x y ⊆ E'.induced x y :=
---   fun _ ⟨h1, h2, h3⟩ => ⟨h1, H h2, H h3⟩
-
--- structure PreExtension.OK (E : PreExtension) : Prop where
-  -- path x y : (x, y) ∈ E → Path x.1 y.1
-  -- consistent x y : Set.Subsingleton (E.induced x y)
-
-  --todo: identify the correct body for this structure, it should include all the properties that we want a seed to have in this greedy construction, see the proof of Prop 17.5
-
--- abbrev Extension := {E : PreExtension // E.OK}
-
--- theorem Extension.next (E : Extension G) (a b) :
---     ∃ E' : Extension G, E ≤ E' ∧ (E'.1.induced a b).Nonempty := by
---   classical if h : (E.1.induced a b).Nonempty then exact ⟨_, le_rfl, h⟩ else
---   let ⟨l, hl⟩ := Infinite.exists_not_mem_finset <|
---     (insert a <| insert b <| E.1.image (·.1) ∪ E.1.image (·.2)).image (·.2)
---   let c : ExtBase G := (a.1 ◇ b.1, l)
---   refine ⟨⟨insert (a, c) (insert (c, b) E.1), ?_, fun x y z hz w hw => ?_⟩,
---     fun _ => (by simp [·]), c, op_isGood .., by simp⟩
---   · simp only [Finset.mem_insert, Prod.mk.injEq, or_imp, and_imp, forall_and,
---       forall_eq_apply_imp_iff, forall_eq]
---     exact have ⟨h1, h2⟩ := (isGood_path (op_isGood ..)); ⟨h1, h2, E.2.1⟩
---   · simp only [PreExtension.induced, Finset.mem_insert, Set.mem_setOf_eq] at hz hw
---     have ⟨hl1, hl2, hl3⟩ : a ≠ c ∧ b ≠ c ∧ ∀ {x y} (h : (x, y) ∈ E.1), x ≠ c ∧ y ≠ c := by
---       simp only [Finset.image_insert, Finset.mem_insert, Finset.mem_image, Finset.mem_union,
---         Prod.exists, exists_and_right, exists_eq_right, not_or, not_exists, not_and, or_imp,
---         forall_exists_index, forall_and] at hl
---       exact ⟨mt (congrArg (·.2)) (Ne.symm hl.1), mt (congrArg (·.2)) (Ne.symm hl.2.1),
---         fun h => ⟨fun e => hl.2.2.1 _ _ h (e ▸ rfl), fun e => hl.2.2.2 _ _ h (e ▸ rfl)⟩⟩
---     clear_value c; clear l hl
---     obtain ⟨hz1, ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz2, hz3⟩ := hz <;> obtain ⟨hw1, ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw2, hw3⟩ := hw
---     · rfl
---     · cases hl1 rfl
---     · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz3 := hz3
---       · cases hl1 rfl
---       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
---         · cases hl2 rfl
---         · cases (hl3 hw2).2 rfl
---         · cases h ⟨_, hw1, hw2, hw3⟩
---       · cases (hl3 hz3).1 rfl
---     · cases hl1 rfl
---     · rfl
---     · cases (hl3 hw2).1 rfl
---     · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
---       · cases hl1 rfl
---       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz3 := hz3
---         · cases hl2 rfl
---         · cases (hl3 hz2).2 rfl
---         · cases h ⟨_, hz1, hz2, hz3⟩
---       · cases (hl3 hw3).1 rfl
---     · cases (hl3 hz2).1 rfl
---     · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hz3 := hz3
---       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
---         · rfl
---         · cases hl2 rfl
---         · cases (hl3 hw3).2 rfl
---       · cases (hl3 hz2).2 rfl
---       · obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | hw3 := hw3
---         · cases (hl3 hz3).2 rfl
---         · cases (hl3 hw2).2 rfl
---         · exact E.2.2 _ _ ⟨hz1, hz2, hz3⟩ ⟨hw1, hw2, hw3⟩
-
--- variable [Countable G]
-
--- variable (e₀ : Extension G)
+--this lemma should be put into Mathlib, maybe in Mathlib.Data.ENat.Basic next to ENat.ne_top_iff_exists
+lemma _root_.ENat.eq_top_iff_forall_le (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m ≤ n := by
+  rw [ENat.eq_top_iff_forall_lt]
+  refine ⟨fun h m ↦ le_of_lt (h m), fun h m ↦ (h (m + 1)).trans_lt' ?_⟩
+  simp only [ENat.some_eq_coe, Nat.cast_add, Nat.cast_one]
+  exact (ENat.lt_add_one_iff (ENat.coe_ne_top m)).mpr (le_refl _)
 
 --maybe in  this part of the prof we can actually avoid using the greedy construction, at first glance it seems to me that we actually explicitely define the function at each
 theorem exists_extension :
