@@ -1541,16 +1541,10 @@ theorem exists_extension (seed : PartialSolution) :
       if h : ∃ z, E d y z then exact ⟨_, le_rfl, h⟩
       else
         let E1 : Extension := { E, ok, d, y, not_def := fun h' ↦ h ⟨_, h'⟩ }
-        -- we need to define next here
+        -- we need to define next to conclude here
         -- exact ⟨E1.next, fun _ _ ↦ (.base ·), _, .new rfl rfl⟩
         sorry
   choose e he L hL using h3
-
-  -- have L_of_e {p : A × G} {a : A} {y x : G} (h : (e p).val a y x) : L (a, y) = x := by
-  --   rcases hc.total (he p) (he (a, y)) with (h_le | h_le)
-  --   · exact (e (a, y)).2.func (hL (a, y)) (h_le _ _ _ h)
-  --   · exact (e p).2.func (h_le _ _ _ (hL (a, y))) h
-
   have L_of_e {a : A} {y x : G} {e₀ : PartialSolution} (he₀ : e₀   ∈ c)
       (h : e₀.val a y x) : L (a, y) = x := by
     rcases hc.total he₀ (he (a, y)) with (h_le | h_le)
@@ -1558,16 +1552,10 @@ theorem exists_extension (seed : PartialSolution) :
     · exact e₀.2.func (h_le _ _ _ (hL (a, y))) h
 
   refine ⟨L.curry,
-    fun a b ↦ ?_,
+    fun a b ↦ (e (a, b)).2.extend (hL (a, b)),
     fun a x ↦ ?_,
-    ?_,
-    -- fun b ⟨⟨a, c, n⟩, (hac : a ≠ c)⟩ ↦ ?_⟩
+    (e (1, x₀)).2.hx₀ (hL (1, x₀)),
     fun b ⟨x, hx⟩ ↦ ?_⟩
-
-  ·
-    simp
-    -- we may need to add something to the PartialSolution structure in order to make this work
-    sorry
   · let T : Finset (A × G) := {
       (a, (x : G)),
       (a, (L (a, x))),
@@ -1578,21 +1566,12 @@ theorem exists_extension (seed : PartialSolution) :
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at hT
     have ⟨e_a_x, e_a_L, e_Sx_L⟩ := hT
     exact L_of_e he <| e.2.aux1 e_a_x e_a_L
-  ·
-    -- we may need to add something to the PartialSolution structure in order to make this work
-    simp
-
-    sorry
-  ·
-    simp
-    rw [← Set.encard_eq_top_iff, ENat.eq_top_iff_forall_le]
+  · rw [← Set.encard_eq_top_iff, ENat.eq_top_iff_forall_le]
     intro n
     set m := max n x.2.2
     -- we have to find a PartialSolution e in the chain c such that n, x.2.2 ≤ {a | ∃ x y, ↑e a x y}.ncard, we do it by setting T' : Finset A that contains at least max(n, x.2.2) arbitrary elements of A, then we define T as {(a, x₀) | a ∈ T' ∪ {b, x.1, x.2.1}} and proceed as in the previous subproofs
-
     have ⟨(T' : Finset A), hT'⟩ := Finset.exists_card_eq m
     let T := Finset.image (fun a ↦ (a, x₀)) (T' ∪ {b, x.1, x.2.1})
-
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (T.image fun p ↦ ⟨e p, he p⟩)
     have hT := fun p hp ↦ Finset.forall_image.mp le p hp _ _ _ (hL p)
@@ -1605,38 +1584,22 @@ theorem exists_extension (seed : PartialSolution) :
 
     have h := e.2.aux2 b ⟨x, hx⟩
     simp_rw [← Finset.mem_coe, ← Set.ncard_coe_Finset, dom_projL_eq e.2.finite] at h
-
     have h_finite : {a | ∃ x y, e.1 a x y}.Finite := by
-      -- have hinj : Function.Injective fun (a : A) ↦ (a, x₀, L (a, x₀)) := by
-      --   simp [Function.Injective]
-
-      -- apply Set.Finite.of_finite_image _ hinj.injOn
-      -- apply Set.Finite.subset e.2.finite
-      -- simp only [Set.image_subset_iff, Set.preimage_setOf_eq,
-      --   forall_exists_index]
-      -- intro x hx
-      -- dsimp
-      -- simp only [Set.mem_image, Set.mem_setOf_eq] at hx
-
-      --should be doable but a bit annoying, the above strategy is flawed because it chooses the wrong function to inject
-      sorry
+      convert Set.Finite.image (fun (a, _, _) ↦ a) e.2.finite
+      ext a
+      simp
     have h_le : m ≤ {a | ∃ x y, e.1 a x y}.ncard := by
       rw [← hT', ← Set.ncard_coe_Finset T']
       refine Set.ncard_le_ncard ?_ h_finite
-      intro t ht
-      refine ⟨_, _, e_T' _ ht⟩
+      exact fun t ht ↦ ⟨_, _, e_T' _ ht⟩
 
     specialize h ⟨_, _, e_b⟩ ⟨_, _, e_x1⟩ ⟨_, _, e_x2⟩ <| (le_max_right _ _).trans h_le
 
-    refine (Set.ncard_le_encard {y : G'| L (b, y) = _}).trans' ?_
-    simp only [ENat.some_eq_coe, Nat.cast_le]
-
     calc
-      _ ≤ m := le_max_left _ _
-      _ ≤ _ := h_le
-      _ ≤ _ := h
-
-    sorry
+      _ ≤ Nat.cast {a | ∃ x y, e.1 a x y}.ncard :=
+        Nat.cast_le.mpr <| (le_max_left _ _).trans <| h_le
+      _ ≤ _ := (Nat.cast_le.mpr h).trans (Set.ncard_le_encard _)
+      _ ≤ _ := Set.encard_le_card fun y hy ↦ L_of_e he hy
 
 
 -- the empty seed, see if this actually works, otherwise maybe we can use the seed `E * x₀ *`
