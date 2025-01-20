@@ -1818,11 +1818,11 @@ theorem exists_extension (x : G') (seed : PartialSolution x) :
     := by
   classical
   have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain (a := seed)
-    (task := fun x' : _  => {e | ∃ y, e.1 x' y}) fun ⟨E, ok⟩ d => by
+    (task := fun x' ↦ {e | ∃ y, e.1 x' y})
+    fun ⟨E, ok⟩ d ↦ by
       if h : ∃ y, E d y then exact ⟨_, le_rfl, h⟩ else
-      let E1 : Extension x := { E, ok, d, not_def := fun h' => h ⟨_, h'⟩ }
-      exact ⟨E1.next, fun _ _ => (.base ·), _, .new rfl rfl⟩
-  classical
+        let E1 : Extension x := { E, ok, d, not_def := fun h' ↦ h ⟨_, h'⟩ }
+        exact ⟨E1.next, fun _ _ ↦ (.base ·), _, .new rfl rfl⟩
   choose e he Lₓ hLₓ using h3
 
   refine ⟨Lₓ, (e x).2.func (e x).2.aux1 (hLₓ x) |>.symm, fun y ↦ ?_⟩
@@ -1830,10 +1830,10 @@ theorem exists_extension (x : G') (seed : PartialSolution x) :
   -- We have a chain of partial solutions (i.e. partial functions Lₓ : G → G) that saturates the space, which means that if we have a finite number of elements of G we can find a single partial solution of the chain that captures all the elements, here we state this with `y` and `Lₓ y`
   let T : Finset G := {y, Lₓ y}
   have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
-    (T.image fun a => ⟨e a, he a⟩)
-  replace le a ha := Finset.forall_image.mp le a ha _ _ (hLₓ a)
-  simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at le
-  obtain ⟨ey, eLₓy⟩ := le
+    (T.image fun a ↦ ⟨e a, he a⟩)
+  have hT := fun a ha ↦ Finset.forall_image.mp le a ha _ _ (hLₓ a)
+  simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at hT
+  have ⟨ey, eLₓy⟩ := hT
 
   exact e.2.aux2 ey eLₓy
 
@@ -1880,9 +1880,7 @@ noncomputable scoped instance magG : Magma G := {
 
 theorem magG_op_def_A (a : A) (g : G) : magG.op a g = L a g := rfl
 
-theorem magG_op_def_G (g g' : G') : magG.op g g' = L' g g' := rfl
-
-theorem magG_op_def_G_new (g' : G') (g : G) : magG.op g' g = L' g' g := by rfl  -- TO DO : DA CONTROLLARE
+theorem magG_op_def_G (g' : G') (g : G) : magG.op g' g = L' g' g := rfl
 
 theorem G_satisfies_Equation1516 : Equation1516 G := by
   unfold Equation1516
@@ -1894,8 +1892,8 @@ theorem G_satisfies_Equation1516 : Equation1516 G := by
     rw [L'_self, magG_op_def_A, L_1516 a g'] -- uso l'Ax B per concludere
   · simp_rw [magG_op_def_A]
     rw [L_self,magG_op_def_A]
-    simp_rw [magG_op_def_G_new, L'_1516]
-  · simp_rw [magG_op_def_G,L'_self,magG_op_def_A,magG_op_def_G_new]
+    simp_rw [magG_op_def_G, L'_1516]
+  · simp_rw [magG_op_def_G, L'_self, magG_op_def_A]
     rw [L'_1516]
 
 --we may need to add some additional thesis to the theorem about the construction of L, so that the way L is defined is explicited
