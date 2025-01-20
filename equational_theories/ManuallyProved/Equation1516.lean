@@ -1430,6 +1430,13 @@ def dom_projL {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) :
 lemma dom_projL_eq {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) :
     dom_projL hE = {a | ∃ x y, E a x y} := by simp [dom_projL, Set.image]
 
+@[mk_iff]
+structure Relevant {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) (b : A) (x : G') : Prop where
+  hb : b ∈ dom_projL hE
+  hx1 : x.1.1 ∈ dom_projL hE
+  hx2 : x.1.2.1 ∈ dom_projL hE
+  hxn : x.1.2.2 ≤ (dom_projL hE).card
+
 structure OK (E : A → G → G → Prop) : Prop where
   finite : {(a, x, y) | E a x y}.Finite
   func {a x y y'} : E a x y → E a x y' → y = y'
@@ -1437,8 +1444,7 @@ structure OK (E : A → G → G → Prop) : Prop where
   hx₀ {x} : E 1 x₀ x → x = .inl 1
   aux1 {x y z w} : E x y z → E x z w → E (S y) w x --eq1516
   aux2 (b) (x : G') : -- technical condition to ensure the infinite surjectivity
-    letI s := dom_projL finite
-    b ∈ s → x.1.1 ∈ s → x.1.2.1 ∈ s → x.1.2.2 ≤ s.card → s.card ≤ {y : G' | E b y x}.ncard
+    Relevant finite b x → (dom_projL finite).card ≤ {y : G' | E b y x}.ncard
 
 abbrev PartialSolution := {E : A → G → G → Prop // OK E}
 
@@ -1561,7 +1567,7 @@ theorem exists_extension (seed : PartialSolution) :
       if h : ∃ z, E d g z then exact ⟨_, le_rfl, h⟩
       else
         let E1 : Extension := { E, ok, d, g, not_def := fun h' ↦ h ⟨_, h'⟩ }
-        exact ⟨E1.next, fun _ _ _ ↦ (.base ·), _, .new rfl rfl rfl⟩
+        exact ⟨E1.next, fun _ _ _ ↦ (.base ·), _, .new⟩
 
   choose e he L hL using h3
   have L_of_e {a : A} {y x : G} {e₀ : PartialSolution} (he₀ : e₀   ∈ c)
@@ -1602,7 +1608,7 @@ theorem exists_extension (seed : PartialSolution) :
     have ⟨e_b, e_x1, e_x2, e_T'⟩ := hT
 
     have h := e.2.aux2 b ⟨x, hx⟩
-    simp_rw [← Finset.mem_coe, ← Set.ncard_coe_Finset, dom_projL_eq e.2.finite] at h
+    simp_rw [relevant_iff, ← Finset.mem_coe, ← Set.ncard_coe_Finset, dom_projL_eq e.2.finite] at h
     have h_finite : {a | ∃ x y, e.1 a x y}.Finite := by
       convert Set.Finite.image (fun (a, _, _) ↦ a) e.2.finite
       ext a
@@ -1612,14 +1618,13 @@ theorem exists_extension (seed : PartialSolution) :
       refine Set.ncard_le_ncard ?_ h_finite
       exact fun t ht ↦ ⟨_, _, e_T' _ ht⟩
 
-    specialize h ⟨_, _, e_b⟩ ⟨_, _, e_x1⟩ ⟨_, _, e_x2⟩ <| (le_max_right _ _).trans h_le
+    specialize h ⟨⟨_, _, e_b⟩, ⟨_, _, e_x1⟩, ⟨_, _, e_x2⟩, (le_max_right _ _).trans h_le⟩
 
     calc
       _ ≤ Nat.cast {a | ∃ x y, e.1 a x y}.ncard :=
         Nat.cast_le.mpr <| (le_max_left _ _).trans <| h_le
       _ ≤ _ := (Nat.cast_le.mpr h).trans (Set.ncard_le_encard _)
       _ ≤ _ := Set.encard_le_card fun y hy ↦ L_of_e he hy
-
 
 -- the empty seed, see if this actually works, otherwise maybe we can use the seed `E * x₀ *`
 def seed : A → G → G → Prop := fun _ _ _ ↦ false
