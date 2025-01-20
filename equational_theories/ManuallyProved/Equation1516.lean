@@ -1333,32 +1333,34 @@ def x₀ : G := .inr ⟨⟨1, x 0, 0⟩, fun h ↦ one_ne_of 0 h⟩
 namespace GreedyB
 -- Greedy construction to extend the operation from A×A to A×G' in order to satisfy Axiom B
 
-lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A, a ◇ ((c b) ◇ b) = c b := by
-  rcases base2 a with ⟨c₁,hc1a, hc1b⟩
-  have c_aux (b : A) (h : a ≠ b) : ∃ c, c ◇ a = b ∧ c ≠ c₁ := by
+lemma exists_extension_aux (a : A) : ∃ c : A → A,
+    c.Injective ∧ (∀ b, a ◇ ((c b) ◇ b) = c b) ∧ (∀ b, c b ≠ b):= by
+  rcases base2 a with ⟨c₁, hc1a, hc1b⟩
+  have c_aux (b : A) (h : a ≠ b) : ∃ c, c ◇ a = b ∧ c ≠ c₁ ∧ c ≠ b := by
     have enc := base1 a b h
-    have noempty' : ({c | c ◇ a = b} \ {c₁}).Nonempty := by
-      apply Set.encard_ne_zero.mp
-      have := Set.encard_tsub_one_le_encard_diff_singleton {c | c ◇ a = b} c₁
-      have easy2 : (0 : ENat ) < 3 - 1  := by norm_num
-      have dis1 : (3 : ENat) - (1 : ENat) ≤ {c | c ◇ a = b}.encard - 1 := by
-        apply tsub_le_tsub_right enc 1
-      apply le_trans dis1 at this
-      apply lt_of_lt_of_le easy2 at this
-      exact Ne.symm (ne_of_lt this)
+    have noempty' : ({c | c ◇ a = b} \ {c₁, b}).Nonempty := by
+      refine Set.encard_ne_zero.mp (ne_of_gt ?_)
+      calc
+        _ < (3 : ENat) - 2 := by norm_num
+        _ ≤ _ := by
+          gcongr
+          refine Set.insert_eq _ _ ▸ (Set.encard_union_le _ _).trans ?_
+          simp_rw [Set.encard_singleton]
+          norm_num
+        {c | c ◇ a = b}.encard - _ ≤ _ := Set.tsub_encard_le_encard_diff _ {c₁, b}
     rcases noempty' with ⟨c, hc1, hc2⟩
     use c
     simp_all
-  let c := fun b : A ↦ if h : a = b then c₁ else (c_aux b h ).choose
+  let c := fun b : A ↦ if h : a = b then c₁ else (c_aux b h).choose
   use c
-  constructor
+  refine ⟨?_, ?_, ?_⟩
   · unfold Function.Injective
     intro x y
     unfold c
-    rcases ne_or_eq a x  with hx | ha <;> rcases ne_or_eq a y  with hy | ha'
+    rcases ne_or_eq a x  with hx | ha <;> rcases ne_or_eq a y with hy | ha'
     · rw [dif_neg hx,dif_neg hy]
       intro hind
-      have prop : (c_aux x hx).choose ◇ a = (c_aux y hy).choose ◇ a := by rw[hind]
+      have prop : (c_aux x hx).choose ◇ a = (c_aux y hy).choose ◇ a := by rw [hind]
       have h_aux : (c_aux x hx).choose ◇ a = x := by
         apply (c_aux x hx).choose_spec.1
       have h_aux2 : (c_aux y hy).choose ◇ a = y := by
@@ -1369,13 +1371,13 @@ lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A,
       intro hind
       exfalso
       have h_aux : (c_aux x hx).choose ≠  c₁ := by
-        apply (c_aux x hx).choose_spec.2
+        apply (c_aux x hx).choose_spec.2.1
       tauto
     · rw [dif_pos ha,dif_neg hy]
       intro hind
       exfalso
       have h_aux : (c_aux y hy).choose ≠  c₁ := by
-        apply (c_aux y hy).choose_spec.2
+        apply (c_aux y hy).choose_spec.2.1
       tauto
     · intro h
       rw [← ha, ← ha']
@@ -1387,19 +1389,27 @@ lemma exists_extension_aux (a : A) : ∃ c : A → A, c.Injective ∧ ∀ b : A,
         apply (c_aux b h1).choose_spec.1   -- è la dim che (c_aux b h1).choose soddisfa la p: _ ◇ a = b
       have idem : a ◇ a = a := A_idempotent a
       nth_rw 1 [← idem]
-      nth_rw 3 [← h_aux]
+      nth_rw 4 [← h_aux]
       symm
       apply A_satisfies_Equation1516
     · rw [← h2]
       unfold c
       rw [dif_pos rfl]
       exact hc1b
+  · intro b
+    rcases ne_or_eq a b with h1 | h2
+    · simp_rw [c, dif_neg h1]
+      exact (c_aux b h1).choose_spec.2.2
+    · simp_rw [c, dif_pos h2, ← h2]
+      exact hc1a
 
 noncomputable abbrev c (a : A) : A → A := (exists_extension_aux a).choose
 
 lemma c_injective (a : A) : (c a).Injective := (exists_extension_aux a).choose_spec.1
 
-lemma c_spec (a b : A) : a ◇ ((c a b) ◇ b) = c a b := (exists_extension_aux a).choose_spec.2 b
+lemma c_spec (a b : A) : a ◇ ((c a b) ◇ b) = c a b := (exists_extension_aux a).choose_spec.2.1 b
+
+lemma c_ne (a b : A) : c a b ≠ b := (exists_extension_aux a).choose_spec.2.2 b
 
 --- here I try to mimic the structure of GreedyAC below
 
