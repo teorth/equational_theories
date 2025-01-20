@@ -36,7 +36,7 @@ In this case, the conjecture was (classically) true, and the ATP has found a pro
 
 The underlying calculus varies from system to system, but they often have a variant of a resolution clause, a clause of a form:
 \[\infer{C \lor D}{C \lor L \quad D \lor \neg L} \]
-This can also be read as $C \lor L \quad D \lor \neg L$ implies $C \lor D$, where $C, D, L$ are formulas in e.g. first-order logic.
+This can also be read as $C \lor L$ with $D \lor \neg L$ implies $C \lor D$, where $C, D, L$ are formulas in e.g. first-order logic.
 Superposition calculi have a variant of this rule that deals with equality directly, and thus are more efficient at reasoning about equality.
 
 In this project we used Vampire~\cite{DBLP:conf/cav/KovacsV13}, Duper~\cite{DBLP:conf/itp/CluneQBA24} and Prover9 and Mace4~\cite{prover9-mace4} which are all based on variants of saturation for proving.
