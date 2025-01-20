@@ -1528,7 +1528,7 @@ end Extension
 set_option pp.proofs true
 theorem exists_extension (seed : PartialSolution) :
     ∃ L : A → G → G,
-      (∀ a b : A, L b a = b ◇ a) ∧ -- Lb extends a : A ↦ b ◇ a
+      (∀ a b : A, L a b = a ◇ b) ∧ -- Lb extends a : A ↦ b ◇ a
       (∀ b : A, ∀ x : G', (L (S x) <| L b <| L b x) = b) ∧ -- Axiom B
       (L 1 x₀ = .inl 1) ∧
       (∀ b : A, ∀ x : G', {y : G' | L b y = x}.Infinite) -- infinite surjectivity
@@ -1652,7 +1652,7 @@ theorem seed_ok : OK seed where
 
 noncomputable def L : A → G → G := (exists_extension ⟨seed, seed_ok⟩).choose
 
-theorem L_extends (a b : A) : L b a = b ◇ a := (exists_extension ⟨seed, seed_ok⟩).choose_spec.1 a b
+theorem L_extends (a b : A) : L a b = a ◇ b := (exists_extension ⟨seed, seed_ok⟩).choose_spec.1 a b
 
 theorem L_1516 (b : A) (x : G') : (L (S x) <| L b <| L b x) = b :=
   (exists_extension ⟨seed, seed_ok⟩).choose_spec.2.1 b x
