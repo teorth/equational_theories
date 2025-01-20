@@ -1403,6 +1403,24 @@ lemma c_spec (a b : A) : a ◇ ((c a b) ◇ b) = c a b := (exists_extension_aux 
 
 --- here I try to mimic the structure of GreedyAC below
 
+/- problem with the proof in the blueprint: the greedy procedure seems to be adding not only the image of the special pair (d,y) that is not yet in the domain, but also an infinite number of other images of pairs in order to make the function infinitely surjective. How can we do this inside the greedy extension framework that we are trying to mimic? I have 2 ways in mind:
+- we can drop the finiteness requirement in OK, this would allow us to actually add an infinite number of images even in intermediate steps. The issue is that I'm not sure wether the finiteness will prove to be crucial in some of the later proofs. to do this we will probably need to add a requirement to OK asking that some set be infinite. This is likely not doable, I think the informal proof actually uses the finiteness of the PartialSolution in a crucial way.
+- we can try to add a new requirement to OK asking that the size of the counter images is bigger than some number, we need to use a number that we can easily show to grow indefinitely and I would rather not add a new variable altogether, because it may be hard to make it fit into the proof structure. One quantity that we have at our disposal could be something related to the size of the domain, but I need to figure out wether some quantity that grows but not with the size of the relevant counterimages (otherwise it may be impossible to define it) or alternatively find a way to use the size of the domain of the previous iteration, instead of the current one (to do this I need to work directly inside Next, instead than inside the PartialSolution, not sure wether this is feasible)
+
+I try to implement the second solution. Since I want to add, for every b ∈ A and every x ∈ G', an infinite number of elements to the relation of the type E b y x, there are 3 things I need to keep in check during the iteration to avoid adding an infinite number of elements in a single step:
+1. the number of b ∈ A I am considering
+2. the number of x ∈ G' I am considering
+3. the number of y I am adding for each b and x
+
+Solutions:
+1. I already have a finite set {(a, x, y) | E a x y}, so in this case I can just take the slice of the set  corresponding to the first element, i.e. domain_slicel := {a | ∃ x y, E a x y}, this is finite and I can just ask that b ∈ domain_slicel. Moreover this set does not change if I add new elements of the form E b y x with b aready in domain_slicel.
+2. The naive idea could be to take the set domain_slicer := {x : G' | ∃ a y, E a x y} and ask for x ∈ domain_slicer. However as we add new elements of the form E b y x, the set domain_slicer will grow, so we need a way do limit the number of x without relying on this set. Remember, however, that elements of G' are of the form (a, c, n) ∈ A × A × ℕ, so we can use the set domain_slicel again to limit the number of x in the following way: we can ask that a c ∈ domain_slicel and that n < domain_slicel.card. For this reason it may be useful to define domain_slicel as a finset, so that we can use .card inside ℕ, avoiding coercions.
+Moreover, if we use a seed composed of only one element (I think it may be useful to use the seed `E * x₀ *`), it becomes easy to prove that it satisfies the requirement, because then dom_projL = {*} and there is no element of G' of the form (*, *, n). (Maybe it will actually be enough to use an empty seed)
+Maybe the set should be called dom_projL since it is a projection more than a slice;
+we can add it as data to OK, I hope this does not lead to DTT hell. -> wrong, we cannot do this, it would make the structure OK not be of type Prop anymore, change of plans: write an auxiliary definition dom_projL outside of OK.
+
+3. Since we are using dom_projL for the other quantities we may as well use it for this one too. In parcitular we can limit the addition of new elements y in the following way: we add new relations E b y x until the cardinality of the set {y | E b y x} is bigger than dom_projL.card. This guarantees us that the new elements are finite for each of the (finite) pairs (b,x) we are considering. Moreover we can easily sento the quantity dom_projL.card to infinity.
+-/
 structure OK (E : A → G → G → Prop) : Prop where
   finite : Set.Finite {(a, x, y) | E a x y}
   func {a x y y'} : E a x y → E a x y' → y = y'
