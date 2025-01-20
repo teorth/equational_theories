@@ -1557,10 +1557,10 @@ theorem exists_extension (seed : PartialSolution) :
   classical
   have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain (a := seed)
     (task := fun (a, x) ↦ {e | ∃ y, e.1 a x y})
-    fun ⟨E, ok⟩ ((d, y) : A × G) ↦ by
-      if h : ∃ z, E d y z then exact ⟨_, le_rfl, h⟩
+    fun ⟨E, ok⟩ ((d, g) : A × G) ↦ by
+      if h : ∃ z, E d g z then exact ⟨_, le_rfl, h⟩
       else
-        let E1 : Extension := { E, ok, d, y, not_def := fun h' ↦ h ⟨_, h'⟩ }
+        let E1 : Extension := { E, ok, d, g, not_def := fun h' ↦ h ⟨_, h'⟩ }
         -- we need to define next to conclude here
         exact ⟨E1.next, fun _ _ _ ↦ (.base ·),
         sorry,
