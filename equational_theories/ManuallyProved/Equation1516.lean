@@ -1692,6 +1692,7 @@ variable [Extension x]
 
 def partial_domain' : Set G := (E x).dom
 
+#check Set.Infinite.diff -- this may be useful to prove the following lemmas
 instance : Fintype (partial_domain' x) := by
   -- doable
   -- this set should be some kind of slice of {(x, y) : G × G | E x y}, which we already know to be finite (OK.finite)
