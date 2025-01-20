@@ -1636,15 +1636,26 @@ theorem exists_extension (seed : PartialSolution) :
     sorry
 
 
-noncomputable def L : A → G → G := exists_extension.choose
+-- the empty seed, see if this actually works, otherwise maybe we can use the seed `E * x₀ *`
+def seed : A → G → G → Prop := fun _ _ _ ↦ false
 
-theorem L_extends (a b : A) : L b a = b ◇ a := exists_extension.choose_spec.1 a b
+theorem seed_ok : OK seed where
+  finite := by simp [seed]
+  func h1 h2 := by simp_all [seed]
+  aux1 := by simp [seed]
+  aux2 := by simp [seed, dom_projL]
 
-theorem L_1516 (b : A) (x : G') : (L (S x) <| L b <| L b x) = b := exists_extension.choose_spec.2.1 b x
+noncomputable def L : A → G → G := (exists_extension ⟨seed, seed_ok⟩).choose
 
-theorem L_x₀ : L 1 x₀ = .inl 1 := exists_extension.choose_spec.2.2.1
+theorem L_extends (a b : A) : L b a = b ◇ a := (exists_extension ⟨seed, seed_ok⟩).choose_spec.1 a b
 
-theorem L_surjective (b : A) (x : G') : {y : G' | L b y = x}.Infinite := exists_extension.choose_spec.2.2.2 b x
+theorem L_1516 (b : A) (x : G') : (L (S x) <| L b <| L b x) = b :=
+  (exists_extension ⟨seed, seed_ok⟩).choose_spec.2.1 b x
+
+theorem L_x₀ : L 1 x₀ = .inl 1 := (exists_extension ⟨seed, seed_ok⟩).choose_spec.2.2.1
+
+theorem L_surjective (b : A) (x : G') : {y : G' | L b y = x}.Infinite :=
+  (exists_extension ⟨seed, seed_ok⟩).choose_spec.2.2.2 b x
 
 -- theorem L_ne (b : A) (x : G') : L b x ≠ x := exists_extension.choose_spec.2.2 b x
 
