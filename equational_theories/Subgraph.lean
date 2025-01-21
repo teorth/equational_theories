@@ -370,7 +370,7 @@ theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) 
     fun a b c ↦
     calc
       a ◇ (a ◇ (b ◇ c)) = a ◇ ((a ◇ (b ◇ c)) ◇ (b ◇ c)) := by rw [Lemma_eq1689_implies_h7 G h]
-      _ = a := by exact h9 a (b ◇ c)
+      _ = a := h9 a (b ◇ c)
   have h11: ∀ a b : G, (a ◇ b) ◇ b = a ◇ b :=
     fun a b ↦
     calc
@@ -386,12 +386,12 @@ theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) 
     calc
       (a ◇ b) ◇ b = (a ◇ b) ◇ ((b ◇ b) ◇ b) := by rw [h12]
       _ = b := by rw [← h]
-  have h14: ∀ a b : G, a ◇ b = b := fun _ _ ↦ h11 _ _ ▸ h13 _ _
+  have h14: ∀ a b : G, a ◇ b = b := fun _ _ ↦ h11 .. ▸ h13 ..
   fun a b ↦
   calc
     a = a ◇ ((a ◇ b) ◇ b) := by rw [h9 a b]
     _ = a ◇ b := by rw [h14 (a ◇ b) b]
-    _ = b := by rw [h14 a b]
+    _ = b := h14 a b
 
 /-- Putnam 1978, problem A4, part (b) -/
 @[equational_result]
@@ -488,8 +488,8 @@ theorem Equation4_implies_Equation3744 (G: Type _) [Magma G] (h: Equation4 G) : 
   fun x y z w ↦
     calc x ◇ y
     _ = (x ◇ z) ◇ y := by nth_rw 1 [h x z]
-    _ = x ◇ z := (h (x ◇ z) y).symm
-    _ = (x ◇ z) ◇ (w ◇ y) := h (x ◇ z) (w ◇ y)
+    _ = x ◇ z := (h ..).symm
+    _ = (x ◇ z) ◇ (w ◇ y) := h ..
 
 @[equational_result]
 theorem Equation5_implies_Equation381 (G: Type _) [Magma G] (h: Equation5 G) : Equation381 G :=
