@@ -1437,9 +1437,10 @@ def dom_projL {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) :
 
 lemma dom_projL_eq {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) :
     dom_projL hE = {a | ∃ x y, E a x y} := by simp [dom_projL, Set.image]
-
+--TODO: add a lemma saying that dom_projL of Next is equal to dom_projL of the previous iteration union {d}
 @[mk_iff]
 structure Relevant {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) (b : A) (x : G') : Prop where
+  hbx : ∃ z, E b x z
   hb : b ∈ dom_projL hE
   hx1 : x.1.1 ∈ dom_projL hE
   hx2 : x.1.2.1 ∈ dom_projL hE
@@ -1449,6 +1450,7 @@ structure OK (E : A → G → G → Prop) : Prop where
   finite : {(a, x, y) | E a x y}.Finite
   func {a x y y'} : E a x y → E a x y' → y = y'
   extend {a b : A} {x} : E a b x → x = .inl (a ◇ b)
+  -- hx₀ : E 1 x₀ (.inl 1)
   hx₀ {x} : E 1 x₀ x → x = .inl 1
   aux1 {x y z w} : E x y z → E x z w → E (S y) w x --eq1516
   aux2 (b) (x : G') : -- technical condition to ensure the infinite surjectivity
@@ -1604,16 +1606,17 @@ theorem exists_extension (seed : PartialSolution) :
     set m := max n x.2.2
     -- we have to find a PartialSolution e in the chain c such that n, x.2.2 ≤ {a | ∃ x y, ↑e a x y}.ncard, we do it by setting T' : Finset A that contains at least max(n, x.2.2) arbitrary elements of A, then we define T as {(a, x₀) | a ∈ T' ∪ {b, x.1, x.2.1}} and proceed as in the previous subproofs
     have ⟨(T' : Finset A), hT'⟩ := Finset.exists_card_eq m
-    let T := Finset.image (fun a ↦ (a, x₀)) (T' ∪ {b, x.1, x.2.1})
+    let T := Finset.image (fun a ↦ (a, x₀)) (T' ∪ {b, x.1, x.2.1}) ∪ {(b, .inr (⟨x, hx⟩ : G'))}
+    -- let T := Finset.image (fun a ↦ (a, x₀)) (T' ∪ {b, x.1, x.2.1})
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (T.image fun p ↦ ⟨e p, he p⟩)
     have hT := fun p hp ↦ Finset.forall_image.mp le p hp _ _ _ (hL p)
 
     simp only [Finset.union_comm T', Finset.insert_union, ← Finset.insert_eq, Finset.image_insert,
-      Finset.mem_insert, Finset.mem_image, forall_eq_or_imp, forall_exists_index, and_imp,
-      forall_apply_eq_imp_iff₂, T] at hT
+      Finset.mem_insert, Finset.mem_union, Finset.mem_image, Finset.mem_singleton, or_imp,
+      forall_exists_index, and_imp, forall_and, forall_eq, forall_apply_eq_imp_iff₂, T] at hT
 
-    have ⟨e_b, e_x1, e_x2, e_T'⟩ := hT
+    have ⟨e_b, e_x1, e_x2, e_T', e_bx⟩ := hT
 
     have h := e.2.aux2 b ⟨x, hx⟩
     simp_rw [relevant_iff, ← Finset.mem_coe, ← Set.ncard_coe_Finset, dom_projL_eq e.2.finite] at h
@@ -1626,7 +1629,7 @@ theorem exists_extension (seed : PartialSolution) :
       refine Set.ncard_le_ncard ?_ h_finite
       exact fun t ht ↦ ⟨_, _, e_T' _ ht⟩
 
-    specialize h ⟨⟨_, _, e_b⟩, ⟨_, _, e_x1⟩, ⟨_, _, e_x2⟩, (le_max_right _ _).trans h_le⟩
+    specialize h ⟨⟨_, e_bx⟩, ⟨_, _, e_b⟩, ⟨_, _, e_x1⟩, ⟨_, _, e_x2⟩, (le_max_right _ _).trans h_le⟩
 
     calc
       _ ≤ Nat.cast {a | ∃ x y, e.1 a x y}.ncard :=
