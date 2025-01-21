@@ -1575,7 +1575,8 @@ theorem exists_extension (seed : PartialSolution) :
       if h : ∃ z, E d g z then exact ⟨_, le_rfl, h⟩
       else
         let E1 : Extension := { E, ok, d, g, not_def := fun h' ↦ h ⟨_, h'⟩ }
-        exact ⟨E1.next, fun _ _ _ ↦ (.base ·), _, .new⟩
+        --exact ⟨E1.next, fun _ _ _ ↦ (.base ·), _, .new⟩
+        sorry
 
   choose e he L hL using h3
   have L_of_e {a : A} {y x : G} {e₀ : PartialSolution} (he₀ : e₀   ∈ c)
