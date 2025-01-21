@@ -1483,11 +1483,13 @@ noncomputable def partL (d : A) (y : G) : G := by
 lemma partL_of_inl (d : A) (a : A) : partL d a = d ◇ a := rfl
 
 lemma partL_of_inr_same_of_zero {a b : A} (hab : a ≠ b) : partL a (.inr ⟨(a, b, 0), hab⟩) = a := by
-  simp only [partL, ↓reduceDIte]
+  simp only [partL]
+  rfl
 
 lemma partL_of_inr_same_of_ne_zero {a b : A} (hab : a ≠ b) {n : ℕ} (hn : n ≠ 0) :
     partL a (.inr ⟨(a, b, n), hab⟩) = .inr ⟨(a, b, 0), hab⟩ := by
-  simp only [partL, ↓reduceDIte, hn]
+  simp only [partL, hn]
+  rfl
 
 lemma partL_of_inr_of_exists {d a b b' : A} (n : ℕ) (had : a ≠ d) (hab : a ≠ b) (hdab' : d = c a b') :
     partL d (.inr ⟨(a, b, n), hab⟩) = b' := by
@@ -1523,14 +1525,12 @@ lemma _root_.ENat.eq_top_iff_forall_lt (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m <
   rw [ENat.eq_top_iff_forall_ne]
   refine ⟨fun h m ↦ ?_, fun a m ↦ (a m).ne⟩
   contrapose! h
-  refine WithTop.eq_coe_of_ne_top ?_
-  exact fun a ↦ ENat.coe_ne_top _ <| top_le_iff.mp (a ▸ h)
+  exact WithTop.eq_coe_of_ne_top fun a ↦ ENat.coe_ne_top _ <| top_le_iff.mp (a ▸ h)
 
 --this lemma should be put into Mathlib, maybe in Mathlib.Data.ENat.Basic next to ENat.ne_top_iff_exists
 lemma _root_.ENat.eq_top_iff_forall_le (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m ≤ n := by
   rw [ENat.eq_top_iff_forall_lt]
   refine ⟨fun h m ↦ le_of_lt (h m), fun h m ↦ (h (m + 1)).trans_lt' ?_⟩
-  simp only [ENat.some_eq_coe, Nat.cast_add, Nat.cast_one]
   exact (ENat.lt_add_one_iff (ENat.coe_ne_top m)).mpr (le_refl _)
 
 variable [Extension]
@@ -1658,7 +1658,8 @@ theorem exists_extension (seed : PartialSolution) :
       if h : ∃ z, E d g z then exact ⟨_, le_rfl, h⟩
       else
         let E1 : Extension := { E, ok, d, g, not_def := fun h' ↦ h ⟨_, h'⟩ }
-        exact ⟨E1.next, fun _ _ _ ↦ (.base ·), _, .new⟩
+        --exact ⟨E1.next, fun _ _ _ ↦ (.base ·), _, .new⟩
+        sorry
 
   choose e he L hL using h3
   have L_of_e {a : A} {y x : G} {e₀ : PartialSolution} (he₀ : e₀   ∈ c)
@@ -1814,27 +1815,27 @@ noncomputable def w : G := by
 -- set_option pp.proofs true
 lemma w_not_in_domain : w x ∉ partial_domain x := by
   by_cases h : (∃ (z : G), E x z (d x))
-  · simp only [w, h, ↓reduceDIte]
+  · simp only [w, h]
     exact (exists_not_in_domain_range' x _).choose_spec.2.1
-  · simp only [w, h, ↓reduceDIte]
+  · simp only [w, h]
     exact (exists_not_in_domain_range x).choose_spec.1
 
 lemma w_not_in_range : w x ∉ partial_range x := by
   by_cases h : (∃ (z : G), E x z (d x))
-  · simp only [w, h, ↓reduceDIte]
+  · simp only [w, h]
     exact (w.proof_1 x _).choose_spec.2.2.1
-  · simp only [w, h, ↓reduceDIte]
+  · simp only [w, h]
     exact (exists_not_in_domain_range x).choose_spec.2.1
 
 lemma w_ne_d : w x ≠ d x := by
   by_cases h : (∃ (z : G), E x z (d x))
-  · simp only [w, h, ↓reduceDIte]
+  · simp only [w, h]
     exact (exists_not_in_domain_range' x _).choose_spec.2.2.2
-  · simp only [w, h, ↓reduceDIte]
+  · simp only [w, h]
     exact (exists_not_in_domain_range x).choose_spec.2.2
 
 lemma w_equation (h : (∃ (z : G), E x z (d x))) : L (S h.choose) (w x) = x := by
-  simp only [w, h, ↓reduceDIte]
+  simp only [w, h]
   exact (exists_not_in_domain_range' x _).choose_spec.1
 
 lemma z_unique {z z' : G} (hz : E x z (d x)) (hz' : E x z' (d x)) : z = z' := ok.inj hz hz'
@@ -1911,38 +1912,35 @@ theorem exists_extension (x : G') (seed : PartialSolution x) :
   choose e he Lₓ hLₓ using h3
 
   refine ⟨Lₓ, (e x).2.func (e x).2.aux1 (hLₓ x) |>.symm, fun y ↦ ?_⟩
-
-  -- We have a chain of partial solutions (i.e. partial functions Lₓ : G → G) that saturates the space, which means that if we have a finite number of elements of G we can find a single partial solution of the chain that captures all the elements, here we state this with `y` and `Lₓ y`
+  /- We have a chain of partial solutions (i.e. partial functions Lₓ : G → G) that saturates the space,
+  which means that if we have a finite number of elements of G we can find a single partial solution of
+  the chain that captures all the elements, here we state this with `y` and `Lₓ y`. -/
   let T : Finset G := {y, Lₓ y}
   have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
     (T.image fun a ↦ ⟨e a, he a⟩)
   have hT := fun a ha ↦ Finset.forall_image.mp le a ha _ _ (hLₓ a)
   simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at hT
   have ⟨ey, eLₓy⟩ := hT
-
   exact e.2.aux2 ey eLₓy
 
 end GreedyAC
 
 open GreedyAC GreedyB
 
-def seed (x : G') : Rel G G := fun a b => a = x ∧ b = S x
+def seed (x : G') : Rel G G := fun a b ↦ a = x ∧ b = S x
 
 theorem seed_ok (x : G') : OK x (seed x) where
   finite := by   -- x = (a, b, _), so the only element in the set is (x, y = a)
-    have h' : S (Sum.inr x) = x.1.1 := by
-      rfl
+    have h' : S (Sum.inr x) = x.1.1 := rfl
     have final : {(Sum.inr x, Sum.inl x.1.1)} = {(x_2, y) | seed x x_2 y} := by
       have incl1 : {(Sum.inr x, Sum.inl x.1.1)} ⊆ {(x_2, y) | seed x x_2 y}:= by
-        simp
-        tauto   -- by h
+        rw [Set.singleton_subset_iff]
+        exact Set.mem_sep rfl rfl
       have incl2 : {(x_2, y) | seed x x_2 y} ⊆ {(Sum.inr x, Sum.inl x.1.1)} := by
-        simp
-        unfold seed
-        rw[h']
-        tauto
-      apply Set.Subset.antisymm incl1 incl2
-    rw[← final]
+        simp only [Set.subset_singleton_iff, Set.mem_setOf_eq, Prod.forall, Prod.mk.injEq]
+        exact fun a b a ↦ a
+      exact Set.Subset.antisymm incl1 incl2
+    rw [← final]
     exact Set.finite_singleton (Sum.inr x, Sum.inl x.1.1)
   inj x₁ x₂ := by simp_all [seed]
   func h1 h2 := by rw [h1.2, h2.2]
@@ -1968,7 +1966,6 @@ theorem magG_op_def_A (a : A) (g : G) : magG.op a g = L a g := rfl
 theorem magG_op_def_G (g' : G') (g : G) : magG.op g' g = L' g' g := rfl
 
 theorem G_satisfies_Equation1516 : Equation1516 G := by
-  unfold Equation1516
   intro x y
   rcases x with (a | g) <;> rcases y with (a' | g')
   · simp_rw [magG_op_def_A,L_extends]
@@ -2047,8 +2044,7 @@ theorem Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] 
 
 -- @[equational_result]
 theorem _root_.Equation1516_not_implies_Equation255 : ∃ (G : Type) (_ : Magma G), Equation1516 G ∧ ¬ Equation255 G := by
-  use G, magG
-  refine ⟨G_satisfies_Equation1516, ?_⟩
+  refine ⟨G, magG, G_satisfies_Equation1516, ?_⟩
   unfold Equation255
   push_neg
   exact ⟨x₀, x₀_255_rhs ▸ x₀_ne_1⟩
