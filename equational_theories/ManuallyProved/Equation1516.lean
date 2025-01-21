@@ -1885,7 +1885,6 @@ theorem magG_op_def_A (a : A) (g : G) : magG.op a g = L a g := rfl
 theorem magG_op_def_G (g' : G') (g : G) : magG.op g' g = L' g' g := rfl
 
 theorem G_satisfies_Equation1516 : Equation1516 G := by
-  unfold Equation1516
   intro x y
   rcases x with (a | g) <;> rcases y with (a' | g')
   · simp_rw [magG_op_def_A,L_extends]
@@ -1964,8 +1963,7 @@ theorem Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] 
 
 -- @[equational_result]
 theorem _root_.Equation1516_not_implies_Equation255 : ∃ (G : Type) (_ : Magma G), Equation1516 G ∧ ¬ Equation255 G := by
-  use G, magG
-  refine ⟨G_satisfies_Equation1516, ?_⟩
+  refine ⟨G, magG, G_satisfies_Equation1516, ?_⟩
   unfold Equation255
   push_neg
   exact ⟨x₀, x₀_255_rhs ▸ x₀_ne_1⟩
