@@ -1847,19 +1847,16 @@ def seed (x : G') : Rel G G := fun a b => a = x ∧ b = S x
 
 theorem seed_ok (x : G') : OK x (seed x) where
   finite := by   -- x = (a, b, _), so the only element in the set is (x, y = a)
-    have h' : S (Sum.inr x) = x.1.1 := by
-      rfl
+    have h' : S (Sum.inr x) = x.1.1 := rfl
     have final : {(Sum.inr x, Sum.inl x.1.1)} = {(x_2, y) | seed x x_2 y} := by
       have incl1 : {(Sum.inr x, Sum.inl x.1.1)} ⊆ {(x_2, y) | seed x x_2 y}:= by
-        simp
-        tauto   -- by h
+        rw [Set.singleton_subset_iff]
+        exact Set.mem_sep rfl rfl
       have incl2 : {(x_2, y) | seed x x_2 y} ⊆ {(Sum.inr x, Sum.inl x.1.1)} := by
-        simp
-        unfold seed
-        rw[h']
-        tauto
-      apply Set.Subset.antisymm incl1 incl2
-    rw[← final]
+        simp only [Set.subset_singleton_iff, Set.mem_setOf_eq, Prod.forall, Prod.mk.injEq]
+        exact fun a b a ↦ a
+      exact Set.Subset.antisymm incl1 incl2
+    rw [← final]
     exact Set.finite_singleton (Sum.inr x, Sum.inl x.1.1)
   inj x₁ x₂ := by simp_all [seed]
   func h1 h2 := by rw [h1.2, h2.2]
