@@ -514,7 +514,7 @@ theorem Equation5_implies_Equation3744 (G: Type _) [Magma G] (h: Equation5 G) : 
 theorem Equation5_implies_Equation4564 (G: Type _) [Magma G] (h: Equation5 G) : Equation4564 G :=
   fun x y z w ↦
     calc x ◇ (y ◇ z)
-    _ = y ◇ (x ◇ (y ◇ z)) := (h (x ◇ (y ◇ z)) y)
+    _ = y ◇ (x ◇ (y ◇ z)) := (h ..)
     _ = (w ◇ y) ◇ (x ◇ (y ◇ z)) := by nth_rw 1 [h y w]
     _ = (w ◇ y) ◇ (x ◇ z) := by nth_rw 2 [h z y]
     _ = (w ◇ y) ◇ z := by rw [← h z x]
@@ -524,7 +524,7 @@ theorem Equation5_implies_Equation4579 (G: Type _) [Magma G] (h: Equation5 G) : 
   fun x y z w u ↦
     calc x ◇ (y ◇ z)
     _ = z := h z y ▸ (h z x).symm
-    _ = (w ◇ u) ◇ z := h z (w ◇ u)
+    _ = (w ◇ u) ◇ z := h ..
 
 @[equational_result]
 theorem Equation39_implies_Equation381 (G: Type _) [Magma G] (h: Equation39 G) : Equation381 G :=
@@ -562,12 +562,12 @@ theorem Equation46_implies_Equation3744 (G: Type _) [Magma G] (h: Equation46 G) 
 theorem Equation3744_implies_Equation4512 (G: Type _) [Magma G] (h: Equation3744 G) : Equation4512 G :=
   fun x y z ↦
     calc x ◇ (y ◇ z)
-    _ = (x ◇ y) ◇ (x ◇ (y ◇ z)) := (h x (y ◇ z) y x)
+    _ = (x ◇ y) ◇ (x ◇ (y ◇ z)) := h ..
     _ = ((x ◇ y) ◇ (x ◇ y)) ◇ (x ◇ (y ◇ z)) := by nth_rw 1 [h x y y x]
-    _ = (x ◇ y) ◇ (y ◇ z) := (h (x ◇ y) (y ◇ z) (x ◇ y) x).symm
-    _ = ((x ◇ y) ◇ x) ◇ ((y ◇ x) ◇ (y ◇ z)) := (h (x ◇ y) (y ◇ z) x (y ◇ x))
+    _ = (x ◇ y) ◇ (y ◇ z) := (h ..).symm
+    _ = ((x ◇ y) ◇ x) ◇ ((y ◇ x) ◇ (y ◇ z)) := h ..
     _ = ((x ◇ y) ◇ x) ◇ (y ◇ z) := by nth_rw 1 [← h y z x y]
-    _ = (x ◇ y) ◇ z := (h (x ◇ y) z x y).symm
+    _ = (x ◇ y) ◇ z := (h ..).symm
 
 @[equational_result]
 theorem Equation4564_implies_Equation4512 (G: Type _) [Magma G] (h: Equation4564 G) : Equation4512 G :=
