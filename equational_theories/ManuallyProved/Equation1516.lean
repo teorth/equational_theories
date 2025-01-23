@@ -1889,6 +1889,18 @@ lemma exists_disjoint_sets {α ι : Type*} [Finite ι] (n : ι → ℕ)
 example (α : Type*) (A : Set α) (hA : A.Finite) : Finite A := by
   exact hA
 
+lemma relevant_trichotomy {c' y} (h_rel : Relevant next_aux_finite c' y) :
+    (∃ w : G', Next_aux c' y w) ∨ ((∃ b : A, Next_aux c' y b) ∧ S y ≠ c') ∨
+      (∃ b : A, Next_aux c' y b) ∧ S y = c' ∧ y.1.2.2 = 0 := by
+  have ⟨x, h⟩ := h_rel.hbx
+  rcases x with (b | w)
+  · by_cases hSy : S y = c'
+    · by_cases hn : y.1.2.2 = 0
+      · exact Or.inr <| Or.inr ⟨⟨b, h⟩, hSy, hn⟩
+      · exact Or.inl (Sum.inl_ne_inr (next_aux_aux3 hSy hn h)).elim
+    · exact Or.inr <| Or.inl ⟨⟨b, h⟩, hSy⟩
+  · exact Or.inl ⟨w, h⟩
+
 def relevant_set1 := {(c', y) | Relevant next_aux_finite c' y ∧ ∃ w : G', Next_aux c' y w}
 
 def relevant_set2 := {(c', y) | Relevant next_aux_finite c' y ∧ (∃ b : A, Next_aux c' y b) ∧ S y ≠ c'}
