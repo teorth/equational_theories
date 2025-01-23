@@ -25,43 +25,30 @@ theorem FreeMagma.toTerm_realize {α M} (t : FreeMagma α)
 /-- Every law is TermStructural from its dual. -/
 theorem TermStructural_dual (L : NatMagmaLaw) : L.TermStructuralFrom L.dual := by
   intro G M hGL
-  use ⟨fun x y ↦ M.op y x⟩
-  constructor
+  refine ⟨⟨fun x y ↦ M.op y x⟩, ?_, ?_⟩
   · rw [← law_dual_dual L]
     exact @satisfies_dual_dual _ _ ⟨_⟩ _ hGL
-  constructor <;>
-  {
-    use Functions.apply₂ (Sum.inl ()) (Term.var 1) (Term.var 0)
-    funext
-    rfl
-  }
+  · constructor <;> exact ⟨Functions.apply₂ (Sum.inl ()) (Term.var 1) (Term.var 0), rfl⟩
 
 /-- The identity law x=x is TermDefinable from anything. This is a direct consequence of the
 fact that anything implies Eq1. -/
 theorem Equation1_termDefinableFrom_all (L : NatMagmaLaw) : Law1.TermDefinableFrom L := by
-  apply termDefinable_of_termStructural
-  apply termStructural_of_implies
-  intro
+  refine termDefinable_of_termStructural (termStructural_of_implies fun _ ↦ ?_)
   simp [Law1.models_iff, Equation1]
 
 /-- Anything is TermDefinable from Eq2. This is a direct consequence of the fact that Eq2 implies
 anything. -/
 theorem all_termDefinableFrom_Equation2 (L : NatMagmaLaw) : L.TermDefinableFrom Law2 := by
-  apply termDefinable_of_termStructural
-  apply termStructural_of_implies
+  refine termDefinable_of_termStructural (termStructural_of_implies ?_)
   simpa [implies] using Equation2_implies L
 
 /-- The left projection law is TermDefinable from anything. -/
 theorem Equation4_termDefinableFrom_all (L : NatMagmaLaw) : Law4.TermDefinableFrom L := by
   intro G M hGL
-  use ⟨fun x _ ↦ x⟩
-  constructor
+  refine ⟨⟨fun x _ ↦ x⟩, ?_, ?_⟩
   · rw [@Law4.models_iff]
-    intro x y
-    rfl
-  · use Term.var 0
-    funext
-    rfl
+    exact fun _ _ => rfl
+  · exact ⟨Term.var 0, rfl⟩
 
 /-- The right projection law is TermDefinable from anything. -/
 theorem Equation5_termDefinableFrom_all (L : NatMagmaLaw) : Law5.TermDefinableFrom L :=
