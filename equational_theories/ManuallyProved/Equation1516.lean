@@ -1652,11 +1652,54 @@ lemma _root_.ENat.eq_top_iff_forall_le (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m �
 variable [Extension]
 
 --here I will put the definition and API for next
+section extra_set
+
+/-
+Construction of `extra_set`:
+extra_set will be a function that takes `c'` and `y` such that `Relevant_aux c' y` and returns a finset of elements `z` to add the relations `E c' z y` for the last part of the construction.
+This finset will need to have a fixed cadinality that will be needed in the proof of the infinite surjectivity.
+There are 3 different cases to consider:
+1. `L c' y = w ∈ G'`
+2. `L c' y = b ∈ A` and `S y ≠ c'`
+3. `L c' y = b ∈ A` and `S y = c'` and `y.1.2.2 = 0`
+The case where `L c' y = b ∈ A` and `S y = c'` and `y.1.2.2 ≠ 0` is already considered in 1. and the case where `L c' y` is not defined is already ruled out by `Relevant_aux c' y`
+
+So `extra_set` will be defined as an if then else expression and we need to define 3 different sets `extra_set1`, `extra_set2`, `extra_set3` for the 3 different cases.
+To define each set I will be using the fact that some set `A` is infinite and to add some propeerties to the elements of the finset I will be subtracting from `A` some finite set `B`, excluding elements not meeting the properties.
+Doing this is fine, and we could do it for each `(c', y)` separately, the problem is that we actually need to do it in sucha way that the resulting finsets are all disjoint.
+Imposing the disjointness of `extra_seti` and `extra_setj` for `i ≠ j` is easy, it is sufficient to ask in the construction of `extra_set2` that the elements are not in any `extra_set1` and the same for `extra_set3`.
+The problem arises when we need to impose the disjointness of some `extra_seti (c'₁, y₁)` and `extra_seti (c'₂, y₂)`, the difficulty is enhanced by the fact that the infinite and finite sets `A₁` `B₁` and `A₂` `B₂` are different for each pair of elements (otherwise we could have taken the number `N` of pairs `(c', y)` such that `Relevant_aux c' y`, then take a subset of `A \ B` of cardinality `N` times the required cardinality and just partition it in N different parts, one for each pair `(c', y)`).
+The only way I am seeing to overcome this is by constructing the sets iteratively, in such a way that in the construction of each set I actively exclude the elements of the preceding sets.
+Rather than implementing this for the special case of the extra sets, I will implement it in a more general and reuasble manner, saying that if we have a finite set of indexes `ι`, some infinite sets `A : ι → Set α`, some finite sets `B : ι → Set α` and some numbers `n : ι → ℕ`, then we can construct a collection of disjoint finsets `s : ι → Finset α` such that `s i ⊆ A i \ B i` and such that the cardinality of `s i` is `n i`.
+For now I am leaving the proof of this lemma sorried, maybe there is already some similar result in mathlib. However if it is not the case the I think that the key will be to be able to give an order to ι and then construct the sets iteratively as suggested above (maybe via an induction on the cardinality of `ι`?) at each step one could use a lemma like `Finset.exists_card_eq` applied to `A i` and `B i ∪ ⋃ j < i, s j`.
+-/
+
+
+
+-- remember, during the construction of the extra sets, to also exclude the elements in relevant_aux_set (dom_projL ok.finite)
+
+-- lemma exists_multiple_sets {α : Type*}
+
+-- lemma exists_extra_set1 :
+--     -- ∃ s : {(c', y) | Relevant c' y ∧ ∃ w : G', }
+
+--     ∃ s : Finset G', s.card = (dom_projL ok.finite).card ∧
+--       ∀ z ∈ s, z.1.1 = c w1 c' ∧ z.1.2.1 = c' ∧ .inr z ≠ g ∧ ∀ x, ¬ E c' z x := by
+--   have : Set.Infinite <| ({((⟨⟨c w1 c', c', n'⟩, c_ne w1 c'⟩ : G') : G) | n'} \
+--       {y : G| ∃ w, E c' y w}) \ {g} := by
+--     refine (Set.Infinite.diff ?_ ?_).diff (Set.finite_singleton g)
+--     ·
+--       --doable, this set is the image of ℕ through the function n ↦ ⟨⟨c w1 c', c', n⟩, c_ne w1 c'⟩, which is injective
+--       sorry
+--     ·
+--       --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite
+--       sorry
+--   -- doable, use Finset.exists_card_eq
+--   sorry
 
 lemma exists_extra_set1 (c' w1 : A) :
     ∃ s : Finset G', s.card = (dom_projL ok.finite).card ∧
-      (s : Set G') ⊆ {⟨⟨c w1 c', c', n'⟩, c_ne w1 c'⟩ | n' : ℕ} ∧
-      (∀ z ∈ s, ∀ x, ¬ E c' z x) ∧ (∀ z ∈ s, (z : G) ≠ g) := by
+      ∀ z ∈ s, z.1.1 = c w1 c' ∧ z.1.2.1 = c' ∧ .inr z ≠ g ∧ ∀ x, ¬ E c' z x := by
   have : Set.Infinite <| ({((⟨⟨c w1 c', c', n'⟩, c_ne w1 c'⟩ : G') : G) | n'} \
       {y : G| ∃ w, E c' y w}) \ {g} := by
     refine (Set.Infinite.diff ?_ ?_).diff (Set.finite_singleton g)
@@ -1669,45 +1712,93 @@ lemma exists_extra_set1 (c' w1 : A) :
   -- doable, use Finset.exists_card_eq
   sorry
 
-
-
 noncomputable def extra_set1 (c' w1 : A) : Finset G' := (exists_extra_set1 c' w1).choose
 
 lemma extra_set1_card (c' w1 : A) : (extra_set1 c' w1).card = (dom_projL ok.finite).card :=
     (exists_extra_set1 c' w1).choose_spec.1
 
-lemma extra_set1_subset (c' w1 : A) : (extra_set1 c' w1 : Set G') ⊆ {⟨⟨c w1 c', c', n'⟩, c_ne w1 c'⟩ | n' : ℕ} :=
-  (exists_extra_set1 c' w1).choose_spec.2.1
+lemma extra_set1_eq1 (c' w1 : A) {z : G'} (hz : z ∈ extra_set1 c' w1) : z.1.1 = c w1 c' :=
+  (exists_extra_set1 c' w1).choose_spec.2 z hz |>.1
 
-lemma extra_set1_not_E (c' w1 : A) {z : G'} (hz : z ∈ extra_set1 c' w1) : ∀ x, ¬ E c' z x :=
-  (exists_extra_set1 c' w1).choose_spec.2.2.1 z hz
+lemma extra_set1_eq2 (c' w1 : A) {z : G'} (hz : z ∈ extra_set1 c' w1) : z.1.2.1 = c' :=
+  (exists_extra_set1 c' w1).choose_spec.2 z hz |>.2.1
 
 lemma extra_set1_not_g (c' w1 : A) {z : G'} (hz : z ∈ extra_set1 c' w1) : .inr z ≠ g :=
-  (exists_extra_set1 c' w1).choose_spec.2.2.2 z hz
+  (exists_extra_set1 c' w1).choose_spec.2 z hz |>.2.2.1
 
-def relevant_set : Set (A × G') := {(c', y) | Relevant ok.finite c' y}
+lemma extra_set1_not_E (c' w1 : A) {z : G'} (hz : z ∈ extra_set1 c' w1) : ∀ x, ¬ E c' z x :=
+  (exists_extra_set1 c' w1).choose_spec.2 z hz |>.2.2.2
 
-lemma relevant_set_finite : relevant_set.Finite := by
-  have : Set.Finite {(c', (y : G')) | ∃ w, E c' y w} := by
-    convert Set.Finite.image (fun (a, x, y) ↦ (a, x)) ok.finite
-    -- doable
-    sorry
-  exact Set.Finite.subset this fun _ h ↦ h.hbx
+-- NB: during the iteration it will not be guaranteed that L a' b is already defined, however this should not be an issue, in fact we only need to prove the 1516 if all its members are well defined and in this case L (S z) <| L c' <| L c' z = L a' <| L c' y = L a' b, if it it not well defined we are ok
+lemma exists_extra_set2 (c' b : A) :
+  ∃ s : Finset G', s.card = (dom_projL ok.finite).card ∧
+    -- (∀ c'₀ w1, Relevant ok.finite c' w1 → Disjoint s (extra_set1 c'₀ w1)) ∧
+    ∃ (a' : A), a' ◇ b = c' ∧ a' ≠ c' ∧
+      ∀ z ∈ s, z.1.1 = a' ∧ z.1.2.1 = c' ∧ .inr z ≠ g ∧ ∀ x, ¬ E c' z x := by
+  -- say that a' exists
+  -- have : Set.Infinite <| ({((⟨⟨a', c', n'⟩, c_ne a' c'⟩ : G') : G
+  sorry
+
+noncomputable def extra_set2 (c' b : A) : Finset G' := (exists_extra_set2 c' b).choose
+
+lemma extra_set2_card (c' b : A) : (extra_set2 c' b).card = (dom_projL ok.finite).card :=
+  (exists_extra_set2 c' b).choose_spec.1
+
+-- lemma extra_set2_disjoint (c' b : A) (c'₀ w1 : A) : Disjoint (extra_set2 c' b) (extra_set1 c'₀ w1) :=
+  -- (exists_extra_set2 c' b).choose_spec.2 c'₀ w1
+
+
+noncomputable def extra_set3 : Finset G' := sorry
 
 -- maybe it's useless
 -- noncomputable def relevant_finset : Finset (A × G') :=
 --   letI := Set.Finite.fintype relevant_set_finite
 --   relevant_set.toFinset
 
+--
 -- this set will hold all the different extra_sets generated by the greedy construction at a specific step, I will need to prove that it is finite, then it will be useful to prove finiteness later
-def extra_set_tot : Set G' := ⋃ c'y ∈ relevant_set, extra_set1 c'y.1 c'y.2.1.1
+-- def extra_set_tot : Set G' := ⋃ c'y ∈ relevant_set, extra_set1 c'y.1 c'y.2.1.1
+-- def extra_set_tot : Set G := ⋃ c'y ∈ relevant_set, (Finset.image Sum.inr (extra_set c'y.1 c'y.2.1.1)).toSet
+-- -- def extra_set_tot : Set G' := ⋃ c', ⋃ w, ⋃ (_ : Relevant ok.finite c' w), extra_set1 c' w.1.1
+
+-- -- for now I am not golfing the proof since this will change when I add more sets to extra_set_tot
+-- lemma extra_set_tot_finite : extra_set_tot.Finite := by
+--   simp_rw [extra_set_tot]
+--   refine Set.Finite.biUnion relevant_set_finite fun (c', y) h ↦ ?_
+--   exact Finset.finite_toSet _
+
+lemma exists_disjoint_sets {α ι : Type*} [Finite ι] (n : ι → ℕ)
+    (A : ι → Set α) (hA : ∀ i, (A i).Infinite)
+    (B : ι → Set α) (hB : ∀ i, (B i).Finite) :
+    ∃ s : ι → Finset α, (∀ i, (s i).toSet ⊆ A i \ B i) ∧
+      (∀ i, (s i).card = n i) ∧ ∀ i j, i ≠ j → Disjoint (s i) (s j) := by
+  sorry
+
+
+-- lemma exists_extra_set
+
+def extra_set (c' : A) (y : G') : Finset G' := sorry
+
+lemma extra_set_not_next_aux {c' : A} {y z : G'} (hz : z ∈ extra_set c' y) : ∀ x, ¬ Next_aux c' z x := sorry
+  -- (exists_extra_set c' y).choose_spec.2 z hz |>.2.2.2
+
+lemma extra_set_not_x₀ {c' : A} {y z : G'} (hz : z ∈ extra_set c' y) : .inr z ≠ x₀ := sorry
+  -- (exists_extra_set c' y).choose_spec.2 z hz |>.2.2.1
+
+lemma extra_set_disj {c'₁ c'₂ : A} {y y' : G'} (h : c'₁ ≠ c'₂ ∨ y ≠ y') : Disjoint (extra_set c'₁ y) (extra_set c'₂ y') := sorry
+  -- (exists_extra_set c' y).choose_spec.2 z hz |>.2.2.2
+
+-- def extra_set_tot : Set G := ⋃ c'y ∈ relevant_set, (Finset.image Sum.inr (extra_set c'y.1 c'y.2)).toSet
+def extra_set_tot : Set G := ⋃ c'y ∈ relevant_set, (Sum.inr '' (extra_set c'y.1 c'y.2))
 -- def extra_set_tot : Set G' := ⋃ c', ⋃ w, ⋃ (_ : Relevant ok.finite c' w), extra_set1 c' w.1.1
 
 -- for now I am not golfing the proof since this will change when I add more sets to extra_set_tot
 lemma extra_set_tot_finite : extra_set_tot.Finite := by
-  simp [extra_set_tot]
+  simp_rw [extra_set_tot]
   refine Set.Finite.biUnion relevant_set_finite fun (c', y) h ↦ ?_
-  exact Finset.finite_toSet _
+  exact (Finset.finite_toSet _).image _
+
+end extra_set
 
 @[mk_iff]
 inductive Next : A → G → G → Prop
