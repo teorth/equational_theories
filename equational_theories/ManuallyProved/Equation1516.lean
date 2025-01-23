@@ -1507,16 +1507,18 @@ namespace Extension
 
 -- set_option diagnostics true
 -- define the element that should be the image of `L_c y`
-noncomputable def partL (d : A) (y : G) : G := by
+noncomputable def partL (c' : A) (y : G) : G := by
   rcases y with (a | ⟨⟨a, b, n⟩, habn⟩)
-  · exact .inl (d ◇ a)
-  · by_cases ha : a = d
+  · exact .inl (c' ◇ a)
+  · by_cases ha : a = c'
     · by_cases hn : n = 0
       · exact .inl a
       · exact .inr ⟨(a, b, 0), habn⟩
-    by_cases hb : ∃ b', d = c a b'
+    by_cases hb : ∃ b', c' = c a b'
     · exact .inl hb.choose
-    · exact .inl (A_op_surj_right a d).choose
+    -- TODO: change the blueprint, the proof is incorrect, in the blueprint in this case we use the surjectivity once to find b such that a ◇ b = c', I didn't find a way to make this work, so I used the surjectivity twice to also find b' such that c' ◇ b' = b, this way it seems to be working. Also remember to notify the zulip chat about this.
+    · exact .inl (A_op_surj_right c' (A_op_surj_right a c').choose).choose
+
 
 lemma partL_of_inl (d : A) (a : A) : partL d a = d ◇ a := rfl
 
@@ -1524,23 +1526,99 @@ lemma partL_of_inr_same_of_zero {a b : A} (hab : a ≠ b) : partL a (.inr ⟨(a,
   simp only [partL]
   rfl
 
+lemma partL_of_inr_same_of_zero' {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2.2 = 0) :
+    partL a y = a := by
+  simp only [partL]
+  rw [S] at hSy
+  rw [dif_pos hSy, dif_pos hn, hSy]
+
 lemma partL_of_inr_same_of_ne_zero {a b : A} (hab : a ≠ b) {n : ℕ} (hn : n ≠ 0) :
     partL a (.inr ⟨(a, b, n), hab⟩) = .inr ⟨(a, b, 0), hab⟩ := by
   simp only [partL, hn]
   rfl
 
-lemma partL_of_inr_of_exists {d a b b' : A} (n : ℕ) (had : a ≠ d) (hab : a ≠ b) (hdab' : d = c a b') :
-    partL d (.inr ⟨(a, b, n), hab⟩) = b' := by
+lemma partL_of_inr_same_of_ne_zero' {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2.2 ≠ 0) :
+    partL a y = .inr ⟨(y.1.1, y.1.2.1, 0), y.2⟩ := by
+  simp only [partL]
+  rw [S] at hSy
+  rw [dif_pos hSy, dif_neg hn]
+
+lemma partL_of_inr_of_exists {c' a b b' : A} (n : ℕ) (had : a ≠ c') (hab : a ≠ b) (hdab' : c' = c a b') :
+    partL c' (.inr ⟨(a, b, n), hab⟩) = b' := by
   simp only [partL, had, ↓reduceDIte]
   rw [dif_pos ⟨b', hdab'⟩]
   congr
   refine c_injective a ?_
   rw [← hdab']
-  exact (⟨b', hdab'⟩ : ∃ b', d = c a b').choose_spec.symm
+  exact (⟨b', hdab'⟩ : ∃ b', c' = c a b').choose_spec.symm
 
-lemma partL_of_inr_of_not_exists {d a b : A} (n : ℕ) (had : a ≠ d) (hab : a ≠ b) (h : ¬∃ b', d = c a b') :
-    partL d (.inr ⟨(a, b, n), hab⟩) = (A_op_surj_right a d).choose := by
+lemma partL_of_inr_of_exists' {c' b' : A} {y : G'} (had : S y ≠ c') (hdab' : c' = c (S y) b') :
+    partL c' y = b' := by
+  rw [S] at had
+  simp only [partL, had, ↓reduceDIte]
+  rw [dif_pos ⟨b', hdab'⟩]
+  congr
+  refine c_injective (S y) ?_
+  rw [← hdab']
+  exact (⟨b', hdab'⟩ : ∃ b', c' = _).choose_spec.symm
+
+lemma partL_of_inr_of_not_exists {c' a b : A} (n : ℕ) (had : a ≠ c') (hab : a ≠ b) (h : ¬∃ b', c' = c a b') :
+    partL c' (.inr ⟨(a, b, n), hab⟩) =
+      (A_op_surj_right c' (A_op_surj_right a c').choose).choose := by
   simp [partL, had, ↓reduceDIte, h]
+
+lemma partL_of_inr_of_not_exists_spec {c' a b : A} (n : ℕ) (had : a ≠ c') (hab : a ≠ b) (h : ¬∃ b', c' = c a b') :
+    ∃ b' b'' : A, partL c' (.inr ⟨(a, b, n), hab⟩) = b'' ∧
+      a ◇ b' = c' ∧ c' ◇ b'' = b' := by
+  rw [partL_of_inr_of_not_exists _ had hab h]
+  refine ⟨(A_op_surj_right a c').choose, (A_op_surj_right c' _).choose, rfl,
+    (A_op_surj_right _ _).choose_spec, (A_op_surj_right _ _).choose_spec⟩
+
+lemma partL_of_inr_of_not_exists' {c' : A} {y : G'} (hSy : S y ≠ c') (h : ¬∃ b', c' = c (S y) b') :
+    partL c' y = (A_op_surj_right c' (A_op_surj_right (S y) c').choose).choose := by
+  simp only [partL]
+  rw [S] at hSy h
+  rw [dif_neg hSy, dif_neg h]
+
+lemma partL_of_inr_of_not_exists'_spec {c' : A} {y : G'} (hSy : S y ≠ c') (h : ¬∃ b', c' = c (S y) b') :
+    ∃ b b' : A, partL c' y = b' ∧ S y ◇ b = c' ∧ c' ◇ b' = b := by
+  rw [partL_of_inr_of_not_exists' hSy h]
+  exact ⟨(A_op_surj_right _ _).choose, (A_op_surj_right _ _).choose,
+    rfl, (A_op_surj_right _ _).choose_spec, (A_op_surj_right _ _).choose_spec⟩
+
+lemma partL_ne_c' {c' : A} {y : G'} (hSy : S y ≠ c') : partL c' y ≠ c' := by
+  rw [S] at hSy
+  by_cases hb' : ∃ b', c' = c (S y) b'
+  · obtain ⟨b', hb'⟩ := hb'
+    rw [partL_of_inr_of_exists' hSy hb', hb']
+    refine Function.Injective.ne Sum.inl_injective (c_ne _ _).symm
+  · obtain ⟨b, b', hb, hSb, hSb'⟩ := partL_of_inr_of_not_exists'_spec hSy hb'
+    rw [hb]
+    intro h
+    apply Sum.inl_injective at h
+    simp_all only
+    rw [A_idempotent] at hSb'
+    rw [← hSb', S] at hSb
+    exact hSy (A_op_eq_self_iff.mp hSb)
+
+lemma partL_ne_y {c' : A} {y : G} (h : .inl c' ≠ y) : partL c' y ≠ y := by
+  rcases y with (a | ⟨⟨a, b, n⟩, habn⟩)
+  · rw [partL_of_inl]
+    contrapose! h
+    rw [A_op_eq_self_iff.mp (Sum.inl_injective h)]
+  · by_cases ha : a = c'
+    · by_cases hn : n = 0
+      · rw [hn, ← ha, partL_of_inr_same_of_zero habn]
+        exact Sum.inl_ne_inr
+      · rw [← ha, partL_of_inr_same_of_ne_zero habn hn]
+        intro hh
+        have := Sum.inr_injective hh
+        simp_all
+    by_cases hb : ∃ b', c' = c a b'
+    · rw [partL_of_inr_of_exists n ha habn hb.choose_spec]
+      exact Sum.inl_ne_inr
+    · rw [partL_of_inr_of_not_exists _ ha habn hb]
+      exact Sum.inl_ne_inr
 
 --this lemma should be put into Mathlib, maybe in Set.ncard_le_encard somewhere after the definition of Set.ncard
 lemma _root_.Set.ncard_le_encard {α : Type*} (s : Set α) : Set.ncard s ≤ Set.encard s :=
