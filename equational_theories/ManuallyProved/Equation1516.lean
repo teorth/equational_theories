@@ -1298,6 +1298,10 @@ $$ L_{Sa} L_b L_b a = b$$
 for $a,b \in \Z$, with the left multiplication operators $L_b$ currently only defined as maps from $\Z$ to $\Z$.  Among other things, this means that $L_a = L_{Sa}$ is surjective as a map from $\Z$ to $\Z$ for any $a \in \Z$.-/
   sorry
 
+theorem A_op_eq_self_iff {a c : A} : c ◇ a = a ↔ c = a := by
+  -- doable, just use A_satisfies_Equation1516
+  sorry
+
 section Refutation255
 
 -- Follows https://teorth.github.io/equational_theories/blueprint/1516-chapter.html
