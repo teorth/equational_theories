@@ -209,9 +209,8 @@ theorem definable_of_structural (h : L'.StructuralFrom L) : L'.DefinableFrom L :
 /-- If law L' is term-definable from L, then L' is definable from L. -/
 theorem definable_of_termDefinable (h : L'.TermDefinableFrom L) : L'.DefinableFrom L := by
   intro G M hGL
-  obtain ⟨M',h2,h3⟩ := h M hGL
-  use M', h2
-  exact h3.Definable (inst := M.FOStructure)
+  obtain ⟨M', h2, h3⟩ := h M hGL
+  exact ⟨M', h2, h3.Definable (inst := M.FOStructure)⟩
 
 end hierarchy
 
@@ -229,15 +228,16 @@ theorem TermDefinable.trans_aux {G : Type} {M M₂ M₃ : Magma G}
   intro n f
   by_cases hn : n = 2
   · subst hn
-    simp
-    eta_reduce
-    convert h₁
+    simp only [realize_functions, Magma.FOStructure_funMap']
+    exact h₁
   by_cases hn₂ : n = 0
   · subst hn₂
-    simp [MagmaLanguage, Language.withConstants, Language.sum] at f
+    simp only [withConstants, Language.sum, MagmaLanguage, constantsOn_Functions, constantsOnFunc,
+      constantsOn_Relations, OfNat.zero_ne_ofNat, ↓reduceIte] at f
     exact (isEmptyElim f)
   · exact isEmptyElim (show _ by
-      simp [MagmaLanguage, hn, hn₂, Language.withConstants, Language.sum] at f
+      simp only [withConstants, Language.sum, MagmaLanguage, constantsOn_Functions, constantsOnFunc,
+        constantsOn_Relations, hn, ↓reduceIte] at f
       exact f.elim id fun h ↦ (Equiv.equivEmpty _) ((Nat.succ_pred_eq_of_ne_zero hn₂) ▸ h)
     )
 
@@ -246,18 +246,14 @@ theorem TermDefinable.trans (h₁₂ : L₂.TermDefinableFrom L₁) (h₂₃ : L
   intro G M hGL₁
   obtain ⟨M₂,hGL₂,hA⟩ := h₁₂ M hGL₁
   obtain ⟨M₃,hGL₃,hB⟩ := h₂₃ M₂ hGL₂
-  use M₃, hGL₃
-  exact trans_aux hA hB
+  exact ⟨M₃, hGL₃, trans_aux hA hB⟩
 
 theorem TermStructural.trans (h₁₂ : L₂.TermStructuralFrom L₁) (h₂₃ : L₃.TermStructuralFrom L₂) :
     L₃.TermStructuralFrom L₁ := by
   intro G M hGL₁
   obtain ⟨M₂,hGL₂,hA1,hA2⟩ := h₁₂ M hGL₁
   obtain ⟨M₃,hGL₃,hB1,hB2⟩ := h₂₃ M₂ hGL₂
-  use M₃, hGL₃
-  constructor
-  · exact TermDefinable.trans_aux hA1 hB1
-  · exact TermDefinable.trans_aux hB2 hA2
+  exact ⟨M₃, hGL₃, TermDefinable.trans_aux hA1 hB1, TermDefinable.trans_aux hB2 hA2⟩
 
 theorem Definable.trans_aux {G : Type} {M M₂ M₃ : Magma G}
     (h₁ : @Set.Definable _ (∅:Set _) MagmaLanguage M.FOStructure _ M₂.FinArityOp.arityGraph)
@@ -268,15 +264,16 @@ theorem Definable.trans_aux {G : Type} {M M₂ M₃ : Magma G}
   intro n f
   by_cases hn : n = 2
   · subst hn
-    simp
-    eta_reduce
-    convert h₁
+    simp only [realize_functions, Magma.FOStructure_funMap']
+    exact h₁
   by_cases hn₂ : n = 0
   · subst hn₂
-    simp [MagmaLanguage, Language.withConstants, Language.sum] at f
+    simp only [withConstants, Language.sum, MagmaLanguage, constantsOn_Functions, constantsOnFunc,
+      constantsOn_Relations, OfNat.zero_ne_ofNat, ↓reduceIte] at f
     exact (isEmptyElim f)
   · exact isEmptyElim (show _ by
-      simp [MagmaLanguage, hn, hn₂, Language.withConstants, Language.sum] at f
+      simp only [withConstants, Language.sum, MagmaLanguage, constantsOn_Functions, constantsOnFunc,
+        constantsOn_Relations, hn, ↓reduceIte] at f
       exact f.elim id fun h ↦ (Equiv.equivEmpty _) ((Nat.succ_pred_eq_of_ne_zero hn₂) ▸ h)
     )
 
@@ -285,18 +282,14 @@ theorem Definable.trans (h₁₂ : L₂.DefinableFrom L₁) (h₂₃ : L₃.Defi
   intro G M hGL₁
   obtain ⟨M₂,hGL₂,hA⟩ := h₁₂ M hGL₁
   obtain ⟨M₃,hGL₃,hB⟩ := h₂₃ M₂ hGL₂
-  use M₃, hGL₃
-  exact trans_aux hA hB
+  exact ⟨M₃, hGL₃, trans_aux hA hB⟩
 
 theorem Structural.trans (h₁₂ : L₂.StructuralFrom L₁) (h₂₃ : L₃.StructuralFrom L₂) :
     L₃.StructuralFrom L₁ := by
   intro G M hGL₁
   obtain ⟨M₂,hGL₂,hA1,hA2⟩ := h₁₂ M hGL₁
   obtain ⟨M₃,hGL₃,hB1,hB2⟩ := h₂₃ M₂ hGL₂
-  use M₃, hGL₃
-  constructor
-  · exact Definable.trans_aux hA1 hB1
-  · exact Definable.trans_aux hB2 hA2
+  exact ⟨M₃, hGL₃, Definable.trans_aux hA1 hB1, Definable.trans_aux hB2 hA2⟩
 
 @[simp]
 theorem TermStructural.refl : L₁.TermStructuralFrom L₁ :=

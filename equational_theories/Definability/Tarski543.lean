@@ -62,8 +62,7 @@ def CommSemigroupOf543 [Magma M] (h : Equation543 M) : CommSemigroup M :=
   have h4369 : ∀_,_ := Equation543_implies_Equation4369 h -- (1.3)
   have h11 : ∀_,_ := Equation543_implies_Equation11 h
   have h40 : ∀_,_ := Equation543_implies_Equation40 h
-  have hcomm' (x y : M) : x ◇ ((x ◇ x) ◇ y) = y ◇ ((y ◇ y) ◇ x) := by
-    rw [← h4369, h40]
+  have hcomm' (x y : M) : x ◇ ((x ◇ x) ◇ y) = y ◇ ((y ◇ y) ◇ x) := by rw [← h4369, h40]
   have hcomm (x y : M) : x * y = y * x :=
     hcomm' x y
   {
@@ -144,11 +143,9 @@ private lemma groupDef {M : Type*} [op : Magma M] (h : Equation543 M) :
   have h16 : ∀_,_ := Equation543_implies_Equation16 h
   have h3823 : ∀_,_ := Equation543_implies_Equation3823 h
   have h4369 : ∀_,_ := Equation543_implies_Equation4369 h
-  constructor
-  · intro h1
-    rw [← h1, ← h3823, ← h16]
-  · intro h1
-    rw [h16 y (z ◇ z), h1, h4369, ← h3823, h4369, h4369 _ _ y, ← h16, ← h3823, ← h11]
+  constructor <;> intro h1
+  · rw [← h1, ← h3823, ← h16]
+  · rw [h16 y (z ◇ z), h1, h4369, ← h3823, h4369, h4369 _ _ y, ← h16, ← h3823, ← h11]
 
 /-- Commuative structure, Equation 43, is given by a term from any magma obeying Tarski's
 one-equation abelian group subtraction law, Equation 543. -/
