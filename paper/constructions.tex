@@ -197,7 +197,7 @@ As an example, we present
 \begin{itemize}
 \item[1.] If $y \op (x \op y)$ is defined, then $y \op (y \op (x \op y))$ is defined and equal to $x$.
 \end{itemize}
-However, the greedy algorithm will fail just with this rule: if the partial operation has $x \op y$ and $z \op y$ both equal to some $w$ for some $x \neq z$, then any attempt to assign a value to $y \op w$ will lead to a contradiction, as the above rule will force $y \op w$ to equal both $x$ and $z$.  Indeed, it is clear that \eqref{eq73} forces all the right translation operators $R_y$ to be injective.  We therefore add this as an additional rule:
+However, the greedy algorithm will fail just with this rule: if the partial operation has $x \op y$ and $z \op y$ both equal to some $w$ for some $x \neq z$, then any attempt to assign a value to $y \op (y \op w)$ will lead to a contradiction, as the above rule will force $y \op w$ to equal both $x$ and $z$.  Indeed, it is clear that \eqref{eq73} forces all the right translation operators $R_y$ to be injective.  We therefore add this as an additional rule:
 \begin{itemize}
 \item[2.] If $x \op y$ and $z \op y$ are defined and equal, then $x=z$.
 \end{itemize}
