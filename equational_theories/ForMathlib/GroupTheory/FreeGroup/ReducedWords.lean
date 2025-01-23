@@ -277,21 +277,4 @@ theorem pow_eq_one_iff {x : FreeGroup α} {n : ℕ} (h : n ≠ 0) : x = 1 ↔ (x
   rw [isOfFinOrder_iff_pow_eq_one]
   exact ⟨n, Nat.ne_zero_iff_zero_lt.mp h, h2⟩
 
-theorem reduce_replicate_word {n : ℕ} (h : n ≠ 0) : reduce (List.replicate n L).flatten =
-    reduceCyclicallyConjugator L ++ (List.replicate n $ reduceCyclically L).flatten ++ invRev (reduceCyclicallyConjugator L) := by
-  let L' := reduceCyclically L
-  simp
-  sorry
-
-theorem reduceCyclically_norm {x : FreeGroup α}
-    : x.norm = (reduceCyclically x.toWord).length + (reduceCyclicallyConjugator x.toWord).length * 2 := by
-  simp [norm]
-  nth_rewrite 1 [reduceCyclically_conjugation x.toWord]
-  simp
-  nth_rewrite 1 [add_comm, add_assoc]
-  simp [mul_two]
-
-theorem pow_injective {n : ℕ} (h : n ≠ 0) : Function.Injective (fun x : FreeGroup α ↦ x ^ n) := by
-  sorry
-
 end FreeGroup

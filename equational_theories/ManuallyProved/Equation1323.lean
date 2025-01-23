@@ -1,5 +1,6 @@
 import Mathlib.Data.Finset.Order
 import Mathlib.Data.Set.Finite.Basic
+import Mathlib.GroupTheory.OrderOfElement
 
 import equational_theories.FreshGenerator
 import equational_theories.EquationalResult
@@ -124,24 +125,6 @@ theorem RtId_inv_snd (x : Rt') : x⁻¹.2 = x.2⁻¹ := rfl
 theorem RtId_pow_fst (x : Rt') (n : ℕ) : (x ^ n).1 = x.1 ^ n := rfl
 theorem RtId_pow_snd (x : Rt') (n : ℕ) : (x ^ n).2 = x.2 ^ n := rfl
 
--- inductive Mod3 (n : ℤ) : Prop
---   | rem0 : (k : ℤ) → n = 3 * k → Mod3 n
---   | rem1 : (k : ℤ) → n = 3 * k + 1 → Mod3 n
---   | rem2 : (k : ℤ) → n = 3 * k + 2 → Mod3 n
-
--- theorem Mod3.of (n : ℤ) : Mod3 n :=
---   let q := n / 3
---   let r := n % 3
---   let ⟨decomp, hl, hu⟩ := (Int.ediv_emod_unique (by simp)).mp ⟨Eq.refl q, Eq.refl r⟩
---   let decomp : n = 3 * q + r := by simp [decomp, add_comm]
---   if heq : r = 0 then .rem0 q (by simp [heq, decomp]) else
---   let hl := Int.le_of_sub_one_lt <| lt_of_le_of_ne hl <| Ne.symm heq
---   if heq : r = 1 then .rem1 q (by simp [heq, decomp]) else
---   let hl := Int.le_of_sub_one_lt <| lt_of_le_of_ne hl <| Ne.symm heq
---   if heq : r = 2 then .rem2 q (by simp [heq, decomp]) else
---   let hl := Int.le_of_sub_one_lt <| lt_of_le_of_ne hl <| Ne.symm heq
---   absurd hl (Int.not_le_of_gt hu)
-
 inductive Mod3 (n : ℕ) : Prop
   | rem0 : (k : ℕ) → n = 3 * k → Mod3 n
   | rem1 : (k : ℕ) → n = 3 * k + 1 → Mod3 n
@@ -236,6 +219,9 @@ variable {rel : Relation}
 variable {n m : ℕ}
 
 def Relation.lhs : NePair := ⟨rel.x, rel.y, rel.nonDiag.1⟩
+
+theorem Relation.lhs_eq_iff {rel rel' : Relation} : rel.lhs = rel'.lhs ↔ rel.x = rel'.x ∧ rel.y = rel'.y := by
+  simp [Relation.lhs]
 
 @[simp] def Relation.next (rel : Relation) : Relation :=
   ⟨rel.y, rel.z, ⟨rel.x.1 * ϕ rel.x.2 rel.y.2, rel.x.2⟩, by have := rel.nonDiag; tauto⟩
@@ -594,7 +580,7 @@ theorem exists_complete_function (seed : PartialSolution) :
     obtain ⟨⟨⟨S, func⟩, hS⟩, hS1, hS2⟩ := hc.directed (F' rel.lhs) (F' p')
     have hSn := ChosenRelations.closure_mono hS1 hn
     have hSfp' := ChosenRelations.closure_mono hS2 (hf p').1
-    exact func hSfp' hSn (by simp [hf]) (by simp [hf])
+    exact func hSfp' hSn  (Relation.lhs_eq_iff.mpr (hf _).2)
   use fun p => (f p).z
   split_ands
   · intro p
@@ -604,7 +590,7 @@ theorem exists_complete_function (seed : PartialSolution) :
     simp [Relation.lhs, Relation.next, hf, this]
   · intro rel h
     obtain ⟨hc, hx, hy⟩ := hf rel.lhs
-    exact (F _).prop hc ((F _).val.le_closure <| h2 _ (hF _) h) hx hy
+    exact (F _).prop hc ((F _).val.le_closure <| h2 _ (hF _) h) (Relation.lhs_eq_iff.mpr (hf _).2)
 
 end Greedy
 
@@ -685,6 +671,29 @@ def seed1 : Relation := .mk (1, a) (1, b) (1, c) (by simp [a, b, c]; split_ands 
 def seed2 : Relation := .mk (1, a) (1, b') (1, c) (by simp [a, b', c]; split_ands <;> {apply FreeAbGrpExp2.of_injective'; simp})
 
 def seed' : ChosenRelations := {seed1, seed2}
+
+theorem seed'_lhs_disjoint (n m : ℕ) : (seed1.skip n).lhs ≠ (seed2.skip m).lhs := by
+  intro heq
+  simp [Relation.lhs] at heq
+  have hx := congr_arg Prod.snd heq.left
+  have hy := congr_arg Prod.snd heq.right
+  rcases Mod3.of n, Mod3.of m with ⟨⟨k, hk⟩ | ⟨k, hk⟩ | ⟨k, hk⟩, ⟨l, hl⟩ | ⟨l, hl⟩ | ⟨l, hl⟩⟩
+  repeat simp [hk, hl, seed1, seed2, a, b, b', c, Nat.repeat, FreeAbGrpExp2.of_injective'] at hx hy
+  -- Remaining case: n = m = 2  (mod 3)
+  have hx := congr_arg (Prod.snd ∘ Prod.fst) heq.left
+  have hy := congr_arg (Prod.snd ∘ Prod.fst) heq.right
+  simp [hk, hl, seed1, seed2, Nat.repeat, FreeAbGrpExp2.of_injective', RtId_mul_snd, RtId_pow_snd] at hx hy
+  have : (ϕ c a).2 ≠ 1 := by
+    apply mt ϕ_unit_0_or_a
+    decide
+  apply (injective_pow_iff_not_isOfFinOrder.mpr (FreeGroup.infinite_order _ this)) at hx
+  -- hx : k = l
+  rw [hx] at hy
+  apply mul_left_cancel at hy
+  simp at hy
+  absurd ϕ_eq_diff_0_or_a hy
+  decide
+
 def seed : PartialSolution := .mk seed' <| by
   intro rel rel' hrel hrel' heq
   simp [Relation.lhs] at heq
@@ -692,41 +701,18 @@ def seed : PartialSolution := .mk seed' <| by
   obtain ⟨base', hb', hr'⟩ := seed'.mem_closure.mp hrel'
   simp [seed', seed1, seed2] at hb hb'
   rcases hb, hb' with ⟨rfl | rfl, rfl | rfl⟩
-  · apply Relation.orbit_func
-    assumption
-    assumption
-    simp [Relation.lhs]
-    assumption
+  · apply Relation.orbit_func hr hr' (Relation.lhs_eq_iff.mpr heq)
   · replace ⟨n, hr⟩ := hr
     replace ⟨m, hr'⟩ := hr'
-    rcases Mod3.of n, Mod3.of m with ⟨⟨k, hk⟩ | ⟨k, hk⟩ | ⟨k, hk⟩, ⟨l, hl⟩ | ⟨l, hl⟩ | ⟨l, hl⟩⟩
-    repeat {
-      simp [hk, hl] at hr hr'
-      simp [←hr, ←hr', a, b, b', c, Nat.repeat, FreeAbGrpExp2.of_injective'] at heq
-    }
-    simp [hk, hl] at hr hr'
-    simp [←hr, ←hr', a, b, b', c, Nat.repeat, FreeAbGrpExp2.of_injective'] at heq
-    by_cases h : k = l
-    · have hy := congr_arg Prod.snd heq.right
-      simp [←h, RtId_mul_snd, RtId_pow_snd] at hy
-      group at hy
-      apply FreeGroup.pow_injective (by simp : 1 + k ≠ 0) at hy
-      absurd ϕ_eq_diff_0_or_a hy
-      decide
-    · have hx := congr_arg Prod.snd heq.left
-      simp [RtId_pow_snd] at hx
-      have := Function.not_injective_iff.mpr ⟨_, _, hx, h⟩
-      have := mt injective_pow_iff_not_isOfFinOrder.mpr this
-      apply mt (FreeGroup.infinite_order _) at this
-      simp at this
-      absurd ϕ_unit_0_or_a this
-      decide
-  · sorry
-  · apply Relation.orbit_func
-    assumption
-    assumption
-    simp [Relation.lhs]
-    assumption
+    simp [←hr, ←hr'] at heq
+    exfalso
+    apply seed'_lhs_disjoint n m (Relation.lhs_eq_iff.mpr heq)
+  · replace ⟨n, hr⟩ := hr
+    replace ⟨m, hr'⟩ := hr'
+    simp [←hr, ←hr'] at heq
+    exfalso
+    apply seed'_lhs_disjoint m n (Relation.lhs_eq_iff.mpr heq).symm
+  · apply Relation.orbit_func hr hr' (Relation.lhs_eq_iff.mpr heq)
 
 
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1323/near/481475622 -/
