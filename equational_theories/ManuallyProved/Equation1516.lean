@@ -2018,7 +2018,7 @@ lemma exists_extra_set2 :
 
   have h_infinite (p : relevant_set2) :
       Set.Infinite <| (({⟨⟨a' p, p.1.1, n'⟩, (ha' p).2⟩ | n'} \ {y : G'| ∃ w, Next_aux p.1.1 y w}) \ {y | y = g}) \ ⋃ (p : relevant_set1), (extra_set1 p.2.1 p.2.2.choose_spec) := by
-    have ⟨⟨c', y⟩, ⟨h_rel, ⟨w, hw⟩⟩⟩ := p
+    have ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy⟩⟩ := p
     refine (Set.Infinite.diff ?_ ?_).diff ?_ |>.diff ?_
     ·
       simp
