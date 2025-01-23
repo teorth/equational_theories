@@ -1652,6 +1652,187 @@ lemma _root_.ENat.eq_top_iff_forall_le (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m �
 variable [Extension]
 
 --here I will put the definition and API for next
+
+
+/- Problem I am encountering while defining Next: I need to define the extra cases on the basis of Relevant (in a pair (c', y) is relevant with respect to Next I should add something to Next), the problem is that I cannot even state this inside Next, because in order to even say that (c', y) are Relevant wrt Next I need the fact that Next.2.finite, which I can only establish after having defined it.
+The soultion I will try to implement is this:
+instead of defining Next in one go, I define an auxiliary structure Next_aux, where I just add the base and new cases, this will of course not be a PratialSolution, but I can still use its Relevant set since its domain will still be finite.
+Then I will define Next as the extension of Next_aux, adding the extra cases. The control to add the extra cases will be based on Relevant wrt Next_aux and not Next, however it should be easy to prove that the relevant set does not change between Next_aux and Next, because the extra cases only add relations E a y x with a already in dom_projL, so dom_projL does not change
+-/
+
+@[mk_iff]
+inductive Next_aux : A → G → G → Prop
+  | base {a y x} : E a y x → Next_aux a y x
+  | new : Next_aux d g (partL d g)
+
+lemma next_aux_finite : {(a, x, y) | Next_aux a x y}.Finite := by
+  simp [next_aux_iff, Set.setOf_or, ← Prod.mk.injEq, ok.finite]
+
+lemma next_aux_func {a x y y'} : Next_aux a x y → Next_aux a x y' → y = y'
+  | .base hb, .base hb' => ok.func hb hb'
+  | .new , .new  => rfl
+  | .base hb, .new | .new, .base hb => (not_def hb).elim
+
+lemma next_aux_extend {a b : A} {x} : Next_aux a b x → x = .inl (a ◇ b) := by
+  simp only [next_aux_iff]
+  rintro (h | ⟨had, hbg, hx⟩)
+  · exact ok.extend h
+  · rw [hx, ← hbg, partL_of_inl, had]
+
+lemma next_aux_x₀ {x} : Next_aux 1 x₀ x → x = .inl 1 := by
+  simp only [next_aux_iff]
+  rintro (h | ⟨hd, hg, hx⟩)
+  · exact ok.hx₀ h
+  · rw [hx, ← hd, ← hg, x₀, partL_of_inr_same_of_zero]
+
+lemma next_aux_aux3 {a} {y : G'} {x} (hSy : S y = a) (hn : y.1.2.2 ≠ 0) (h : Next_aux a y x) :
+    x = .inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩ := by
+  rw [next_aux_iff] at h
+  rcases h with (h | ⟨had, hbg, hx⟩)
+  · exact ok.aux3 hSy hn h
+  · rw [hx, ← hbg, ← had, partL_of_inr_same_of_ne_zero' hSy hn]
+
+lemma next_aux_aux4 {a} {y : G'} {x} (hSy : S y = a) (hn : y.1.2.2 = 0) (h : Next_aux a y x) :
+    x = .inl a := by
+  rw [next_aux_iff] at h
+  rcases h with (h | ⟨had, hbg, hx⟩)
+  · exact ok.aux4 hSy hn h
+  · rw [hx, ← hbg, ← had, partL_of_inr_same_of_zero' hSy hn]
+
+lemma next_aux_aux5 {c} {y : G'} {x} (h : S y ≠ c) (h' : Next_aux c y x) : x ≠ .inl c := by
+  rw [next_aux_iff] at h'
+  rcases h' with (h' | ⟨had, hbg, hx⟩)
+  · exact ok.aux5 h h'
+  · rw [hx, ← had, ← hbg]
+    exact partL_ne_c' h
+
+lemma next_aux_aux1 {x y z w k} : Next_aux x y z → Next_aux x z w → Next_aux (S y) w k → k = x
+  | .base hb => by
+    rw [next_aux_iff]
+    rintro (h | ⟨had, hbg, hx⟩)
+    · rw [next_aux_iff]
+      rintro (h' | ⟨had', hbg', hx'⟩)
+      · exact ok.aux1 hb h h'
+      ·
+        --??? I need to figure this out, I'm not sure how though
+        simp_all
+        clear hbg' hx'
+
+        sorry
+        -- rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
+        -- ·
+        --   exact .inl (c' ◇ a)
+        -- ·
+        --   by_cases ha : a = d
+        --   · by_cases hn : n = 0
+        --     ·
+        --       simp_all
+        --       rw [partL_of_inr_same_of_zero]
+        --       exact .inl a
+        --     · exact .inr ⟨(a, b, 0), habn⟩
+        --   by_cases hb : ∃ b', c' = c a b'
+        --   · exact .inl hb.choose
+        --   · exact .inl (A_op_surj_right a c').choose
+        -- rw [hbg'] at h
+
+        -- sorry
+      -- exact Next_aux.base <| ok.aux1 hb h _
+    · rw [next_aux_iff]
+      rintro (h' | ⟨had', hbg', hx'⟩)
+      · simp_all
+        clear had hbg hx
+        -- divide the different cases of partL?
+        rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
+        · rw [hg, partL_of_inl] at h'
+          rw [ok.extend h']
+          clear h'
+          rcases hy : y with (a' | ⟨⟨a', b', n'⟩, habn'⟩)
+          · rw [hy] at hb
+            rw [ok.extend hb] at hg
+            apply Sum.inl_injective at hg
+            have := A_idempotent _ ▸ A_satisfies_Equation1516 d a'
+            rw [← hg, S, ← this]
+          · simp_all only [S]
+            clear hg hy
+            congr
+
+            sorry
+
+        ·
+          sorry
+      · by_cases h : .inl d = g
+        · rw [hx', ← h, partL_of_inl, A_idempotent, had]
+        · rw [hbg'] at hx
+          refine (partL_ne_y h hx.symm).elim
+  | .new => by
+    rw [next_aux_iff]
+    rintro (h | ⟨had, hbg, hx⟩)
+    · rw [next_aux_iff]
+      rintro (h' | ⟨had', hbg', hx'⟩)
+      · rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
+        · rw [hg, partL_of_inl] at h
+          rw [ok.extend h] at h'
+          rw [ok.extend h', hg, S]
+          nth_rw 3 [A_satisfies_Equation1516 d a]
+          rw [A_idempotent]
+        · simp_rw [hg, S] at h'
+          by_cases had : a = d
+          · by_cases hn : n = 0
+            · rw [hg, ← had, hn, partL_of_inr_same_of_zero] at h
+              rw [ok.extend h, A_idempotent] at h'
+              rw [ok.extend h', A_idempotent, had]
+            · rw [hg, ← had, partL_of_inr_same_of_ne_zero _ hn] at h
+              rw [ok.aux4 (by rw [S]) rfl h] at h'
+              rw [ok.extend h', A_idempotent, had]
+          · by_cases hb : ∃ b', d = c a b'
+            · obtain ⟨b', hb'⟩ := hb
+              rw [hg, partL_of_inr_of_exists _ had habn hb'] at h
+              rw [ok.extend h] at h'
+              rw [ok.extend h', hb', c_spec]
+            · have ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n had habn hb
+              rw [hg, hdg] at h
+              rw [ok.extend h] at h'
+              simp_rw [ok.extend h', hdb'', hab']
+      · rw [hx']
+        rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
+        · rw [hg, S] at had'
+          rw [partL_of_inl, had', A_idempotent]
+        · by_cases hn : n = 0
+          · rw [hn, partL_of_inr_same_of_zero' _ (by simp)]
+            simp_all
+          · simp_rw [hg, S] at had'
+            rw [← had', hg, partL_of_inr_same_of_ne_zero _ hn] at h
+            have := ok.aux4 (by rw [S]) rfl h
+            rw [hbg', hg] at this
+            exact (Sum.inr_ne_inl this).elim
+    · by_cases h : .inl d = g
+      · intro h'
+        rw [hx, hbg, ← h, S] at h'
+        rw [next_aux_extend h', A_idempotent]
+      · exact (partL_ne_y h hbg).elim
+
+def relevant_set : Set (A × G') := {(c', y) | Relevant next_aux_finite c' y}
+
+def relevant_set' : Set (A × G) := (fun (a, x) ↦ (a, .inr x)) '' relevant_set
+
+lemma relevant_set'_finite : relevant_set'.Finite := by
+  have : Set.Finite {(c', (y : G)) | ∃ w, Next_aux c' y w} := by
+    convert Set.Finite.image (fun (a, x, y) ↦ (a, x)) next_aux_finite
+    ext p
+    aesop
+  refine Set.Finite.subset this fun _ h ↦ ?_
+  simp only [relevant_set', relevant_set, Set.mem_image, Set.mem_setOf_eq, Prod.exists,
+    Subtype.exists] at h
+  have ⟨_, _, _, _, _, h_rel, h_eq⟩ := h
+  exact Set.mem_of_eq_of_mem h_eq.symm h_rel.hbx
+
+lemma relevant_set_finite : relevant_set.Finite := by
+  refine relevant_set'_finite.of_finite_image fun _ _ _ _ h ↦ ?_
+  simp only [Prod.mk.injEq] at h
+  ext : 1
+  · exact h.1
+  · exact Sum.inr_injective h.2
+
 section extra_set
 
 /-
