@@ -1441,14 +1441,44 @@ def dom_projL {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) :
 
 lemma dom_projL_eq {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) :
     dom_projL hE = {a | ∃ x y, E a x y} := by simp [dom_projL, Set.image]
---TODO: add a lemma saying that dom_projL of Next is equal to dom_projL of the previous iteration union {d}
+--TODO: add a lemma saying that dom_projL of Next is equal to dom_projL of the previous iteration union {d}, if it is needed
+
 @[mk_iff]
-structure Relevant {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) (b : A) (x : G') : Prop where
+structure Relevant_aux (s : Finset A) (x : G') :
+    Prop where
+  h1 : x.1.1 ∈ s
+  h2 : x.1.2.1 ∈ s
+  h3 : x.1.2.2 ≤ s.card
+
+def relevant_aux_set (s : Finset A) : Set G' :=
+  {x | Relevant_aux s x}
+
+lemma relevant_aux_set_eq (s : Finset A) :
+    relevant_aux_set s = {x | x.1.1 ∈ s ∧ x.1.2.1 ∈ s ∧ x.1.2.2 ≤ s.card} := by
+  ext
+  simp [relevant_aux_set, relevant_aux_iff]
+
+lemma relevant_aux_set_finite (s : Finset A) :
+    (relevant_aux_set s).Finite := by
+  -- have : fun x ↦ (x.1.1, x.1.2.1, x.1.2.2) |>.Injective
+  -- should be doable, maybe try to pass to a set in A × A × ℕ with an injective function, then this should be the product of 3 finite sets
+  sorry
+
+@[mk_iff]
+structure Relevant {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) (b : A) (x : G') :
+    Prop where
   hbx : ∃ z, E b x z
   hb : b ∈ dom_projL hE
-  hx1 : x.1.1 ∈ dom_projL hE
-  hx2 : x.1.2.1 ∈ dom_projL hE
-  hxn : x.1.2.2 ≤ (dom_projL hE).card
+  hx : Relevant_aux (dom_projL hE) x
+
+-- @[mk_iff]
+-- structure Relevant {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) (b : A) (x : G') :
+--     Prop where
+--   hbx : ∃ z, E b x z
+--   hb : b ∈ dom_projL hE
+--   hx1 : x.1.1 ∈ dom_projL hE
+--   hx2 : x.1.2.1 ∈ dom_projL hE
+--   hxn : x.1.2.2 ≤ (dom_projL hE).card
 
 structure OK (E : A → G → G → Prop) : Prop where
   finite : {(a, x, y) | E a x y}.Finite
@@ -1456,9 +1486,13 @@ structure OK (E : A → G → G → Prop) : Prop where
   extend {a b : A} {x} : E a b x → x = .inl (a ◇ b)
   -- hx₀ : E 1 x₀ (.inl 1)
   hx₀ {x} : E 1 x₀ x → x = .inl 1
-  aux1 {x y z w} : E x y z → E x z w → E (S y) w x --eq1516
+  -- aux1 {x y z w} : E x y z → E x z w → E (S y) w x --eq1516
+  aux1 {x y z w k} : E x y z → E x z w → E (S y) w k → k = x --eq1516
   aux2 (b) (x : G') : -- technical condition to ensure the infinite surjectivity
     Relevant finite b x → (dom_projL finite).card ≤ {y : G' | E b y x}.ncard
+  aux3 {a} {y : G'} {x} : S y = a → y.1.2.2 ≠ 0 → E a y x → x = .inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩
+  aux4 {a} {y : G'} {x} : S y = a → y.1.2.2 = 0 → E a y x → x = .inl a
+  aux5 {c} {y : G'} {x} : S y ≠ c → E c y x → x ≠ .inl c
 
 abbrev PartialSolution := {E : A → G → G → Prop // OK E}
 
