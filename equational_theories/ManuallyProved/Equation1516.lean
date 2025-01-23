@@ -1983,49 +1983,100 @@ end extra_set
 
 @[mk_iff]
 inductive Next : A → G → G → Prop
-  | base {a y x} : E a y x → Next a y x
-  | new : Next d g (partL d g)
-  | extra1 {c' y} {w z : G'} :
-    -- we need to define the extra_set1 which should be a set of cardinality (dom_projL finite).card of elements z = (c w c', c', n') such that L c' z is not yet defined (i.e. is not defined neither in base or in new, we can directly ask that z ≠ g and ¬ E c' z p for any p), we can do something like a lemma stating that {(c w c', c', n') | n'} is infinite and we just subtract from it {y | ∃ w, E c' y w} ∪ {g} which is finite, so there is a subset of cardinality (dom_projL finite).card
-    Relevant ok.finite c' y → Next c' y w → z ∈ extra_set1 c' w.1.1 → Next c' z y
-    -- sorry
+  -- | base {a y x} : E a y x → Next_aux a y x
+  -- | new : Next_aux d g (partL d g)
+  | aux {a y x} : Next_aux a y x → Next a y x
+
+  --this extra is how it should look at the end
+  | extra {c' y z} : Relevant next_aux_finite c' y → z ∈ extra_set c' y → Next c' z y
+
+  -- | extra1 {c' y} {w z : G'} : -- case1
+  --   -- we need to define the extra_set1 which should be a set of cardinality (dom_projL finite).card of elements z = (c w c', c', n') such that L c' z is not yet defined (i.e. is not defined neither in base or in new, we can directly ask that z ≠ g and ¬ E c' z p for any p), we can do something like a lemma stating that {(c w c', c', n') | n'} is infinite and we just subtract from it {y | ∃ w, E c' y w} ∪ {g} which is finite, so there is a subset of cardinality (dom_projL finite).card
+  --     Relevant next_aux_finite c' y → Next c' y w → z ∈ extra_set1 c' w.1.1 → Next c' z y
+  --     -- Relevant ok.finite c' y' → Next c' y' w' → z ∈ extra_set1 c' w'.1.1 → Next c' z y'
+  --   -- sorry
+  -- | extra2 {c' y} {b : A} {z : G'} : --case2
+  --     Relevant next_aux_finite c' y → Next c' y b → S y ≠ c' → z ∈ extra_set2 c' b → Next c' z y
+  -- | extra3 {c' y} {b : A} {z : G'} : --case4, we skipped case 3 because we are asking that L c' y is already defined
+  --     -- not finished! this is only a temporary test
+  --     Relevant next_aux_finite c' y → Next c' y b → S y = c' → y.1.2.2 = 0 → z ∈ extra_set3 → Next c' z y
+
+lemma Next_base {a y x} : E a y x → Next a y x := fun h ↦ Next.aux (Next_aux.base h)
+
+lemma Next_new : Next d g (partL d g) := Next.aux Next_aux.new
+
+lemma finite_relevant_extra_set_tot :
+    {(c', z, y) | (c', y) ∈ relevant_set' ∧ z ∈ extra_set_tot}.Finite := by
+  -- doable, it is the cartesian product of two finite sets
+  sorry
 
 def next_finite : {(a, x, y) | Next a x y}.Finite := by
   simp_rw (config := {singlePass := true}) [next_iff]
   simp only [Set.setOf_or, Set.finite_union]
+  refine ⟨next_aux_finite, ?_⟩
+  · refine Set.Finite.subset finite_relevant_extra_set_tot ?_
+    intro ⟨c', z, y⟩ ⟨y', z', h_rel, h_extra_set, hy', hz'⟩
+    simp only [Set.mem_setOf_eq] at *
+    refine ⟨?_, ?_⟩
+    · simp only [relevant_set', relevant_set, Set.mem_image, Set.mem_setOf_eq, Prod.mk.injEq]
+      use (c', y')
+      simp_all
+    · simp only [extra_set_tot, Set.mem_iUnion, Set.mem_image, Finset.mem_coe,
+         exists_prop, relevant_set]
+      use (c', y')
+      simp only [Set.mem_setOf_eq, true_and, h_rel]
+      exact ⟨z', h_extra_set, hy'.symm⟩
 
-  refine ⟨ok.finite, ?_, ?_⟩
-  · convert Set.finite_singleton (d, g, partL d g)
-    ext ⟨_, _, _⟩
-    simp only [Set.mem_setOf_eq, Set.mem_singleton_iff, Prod.mk.injEq]
-  ·
-    -- have : Set.Finite {(c', z, y) | Relevant ok.finite c' y ∧ } := by sorry
-    -- refine Set.Finite.subset ?_ ?_
-    sorry
+lemma dom_projL_next_aux : dom_projL next_finite = dom_projL next_aux_finite := by
+  -- doable, one direction should be imediate, for the other if there is a ∈ dom_projL next_finite then Next a y x for some x y, then either Next_aux a y x or the extra case, but in the extra case it must hold Relevant next_aux_finite a y, so a ∈ dom_projL next_aux_finite
+  sorry
 
-  -- sorry
+
+lemma relevant_next_iff_next_aux {c' y} :
+    Relevant next_finite c' y ↔ Relevant next_aux_finite c' y := by
+  -- dom_projL_next_aux to eliminate the dom_projL conditions in both directions, for the E c' y w condition one direction is immediate, for the other if there is a Next c' y w then either Next_aux c' y w (and so we are done) or the extra case, in particular in the extra case we have that y ∈ extra_set, so ¬ Relevant_aux (dom_projL ) y, which is absurd because we have Relevant c' y
+  sorry
 
 def next_func {a y x x'} : Next a y x → Next a y x' → x = x'
-  -- | .base hb, .base hb' => ok.func hb hb'
-  -- | .new , .new  => rfl
-  -- | .base hb, .new | .new, .base hb => (not_def hb).elim
-  := by sorry
+  | .aux hx, .aux hx' => next_aux_func hx hx'
+  | .aux ha, .extra h_rel h_ex => (extra_set_not_next_aux h_ex x ha).elim
+  | .extra h_rel h_ex, .aux ha => (extra_set_not_next_aux h_ex x' ha).elim
+  | .extra h_rel h_ex, .extra h_rel' h_ex' => by
+    rename_i z y z' y'
+    by_contra h_ne
+    have : y ≠ y' := fun h ↦ (h ▸ h_ne) rfl
+    have : Disjoint (extra_set a y).toSet (extra_set a y').toSet :=
+      Finset.disjoint_coe.mpr <| extra_set_disj (Or.inr this)
+    exact Set.not_disjoint_iff.mpr ⟨z', h_ex, h_ex'⟩ <| this
 
 def next_extend {a b : A} {x} : Next a b x → x = .inl (a ◇ b) := by
-  sorry
+  simp only [next_iff, reduceCtorEq, false_and, and_false, exists_false, or_false]
+  exact fun h ↦ next_aux_extend h
 
-def next_hx₀ {x} : Next 1 x₀ x → x = .inl 1 := by
-  sorry
+def next_hx₀ {x} : Next 1 x₀ x → x = .inl 1
+  | .aux ha => next_aux_x₀ ha
+  | .extra _ h_ex => (extra_set_not_x₀ h_ex rfl).elim
 
-def next_aux1 {x y z w} : Next x y z → Next x z w → Next (S y) w x := by
+def next_aux1 {x y z w k} : Next x y z → Next x z w → Next (S y) w k → k = x := by
   sorry
 
 def next_aux2 (b) (x : G') :
     Relevant next_finite b x → (dom_projL next_finite).card ≤ {y : G' | Next b y x}.ncard := by
   sorry
 
+def next_aux3 {a} {y : G'} {x} : S y = a → y.1.2.2 ≠ 0 → Next a y x → x = .inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩ := by
+  sorry
+
+def next_aux4 {a} {y : G'} {x} : S y = a → y.1.2.2 = 0 → Next a y x → x = .inl a := by
+  sorry
+
+def next_aux5 {c} {y : G'} {x} : S y ≠ c → Next c y x → x ≠ .inl c := by
+  sorry
+
 def next : PartialSolution :=
-  ⟨Next, next_finite, next_func, next_extend, next_hx₀, next_aux1, next_aux2⟩
+  ⟨Next, next_finite, next_func, next_extend, next_hx₀, next_aux1, next_aux2,
+
+  next_aux3, next_aux4, next_aux5⟩
 
 end Extension
 
