@@ -2080,6 +2080,8 @@ def next : PartialSolution :=
 
 end Extension
 
+open Extension
+
 --maybe in  this part of the prof we can actually avoid using the greedy construction, at first glance it seems to me that we actually explicitely define the function at each
 set_option pp.proofs true
 theorem exists_extension (seed : PartialSolution) :
@@ -2097,7 +2099,8 @@ theorem exists_extension (seed : PartialSolution) :
       if h : ∃ z, E d g z then exact ⟨_, le_rfl, h⟩
       else
         let E1 : Extension := { E, ok, d, g, not_def := fun h' ↦ h ⟨_, h'⟩ }
-        exact ⟨E1.next, fun _ _ _ ↦ (.base ·), _, .new⟩
+        -- exact ⟨E1.next, fun _ _ _ ↦ (.base ·), _, .new⟩
+        exact ⟨E1.next, fun _ _ _ ↦ Next_base, _, Next_new⟩
   choose e he L hL using h3
   have L_of_e {a : A} {y x : G} {e₀ : PartialSolution} (he₀ : e₀   ∈ c)
       (h : e₀.val a y x) : L (a, y) = x := by
@@ -2119,7 +2122,7 @@ theorem exists_extension (seed : PartialSolution) :
     have hT := fun p hp ↦ Finset.forall_image.mp le p hp _ _ _ (hL p)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at hT
     have ⟨e_a_x, e_a_L, e_Sx_L⟩ := hT
-    exact L_of_e he <| e.2.aux1 e_a_x e_a_L
+    exact e.2.aux1 e_a_x e_a_L e_Sx_L
   · rw [← Set.encard_eq_top_iff, ENat.eq_top_iff_forall_le]
     intro n
     set m := max n x.2.2
@@ -2148,7 +2151,15 @@ theorem exists_extension (seed : PartialSolution) :
       refine Set.ncard_le_ncard ?_ h_finite
       exact fun t ht ↦ ⟨_, _, e_T' _ ht⟩
 
-    specialize h ⟨⟨_, e_bx⟩, ⟨_, _, e_b⟩, ⟨_, _, e_x1⟩, ⟨_, _, e_x2⟩, (le_max_right _ _).trans h_le⟩
+    -- specialize h ⟨⟨_, e_bx⟩, ⟨_, _, e_b⟩, ⟨_, _, e_x1⟩, ⟨_, _, e_x2⟩, (le_max_right _ _).trans h_le⟩
+    specialize h ⟨⟨_, e_bx⟩, ⟨_, _, e_b⟩, ⟨?_, ?_, ?_⟩⟩
+    · simp only [dom_projL, Finset.mem_image, Set.mem_toFinset, Prod.exists, exists_and_right, exists_eq_right]
+      exact ⟨_, _, e_x1⟩
+    · simp only [dom_projL, Finset.mem_image, Set.mem_toFinset, Prod.exists,
+        exists_and_right, exists_eq_right]
+      exact ⟨_, _, e_x2⟩
+    · rw [← Set.ncard_coe_Finset, dom_projL_eq]
+      exact (le_max_right _ _).trans h_le
 
     calc
       _ ≤ Nat.cast {a | ∃ x y, e.1 a x y}.ncard :=
@@ -2166,6 +2177,9 @@ theorem seed_ok : OK seed where
   func h1 h2 := by simp_all [seed]
   aux1 := by simp [seed]
   aux2 := by simp [seed, dom_projL]
+  aux3 := by simp [seed]
+  aux4 := by simp [seed]
+  aux5 := by simp [seed]
 
 noncomputable def L : A → G → G := (exists_extension ⟨seed, seed_ok⟩).choose
 
@@ -2318,7 +2332,7 @@ def next_aux1 : Next x x (S x) := Next.base ok.aux1
 def next_aux2 {y z t} : Next x y z → Next x z t → L (S y) t = x := by
   intro next1 next2
   rcases next1 with ⟨hb⟩
-  · rcases next2 with ⟨hb'⟩ | ⟨⟩
+  · rcases next2 with ⟨hb'⟩ | _
     · exact ok.aux2 hb hb'
     · exact w_equation' x hb
   · rw [next_iff] at next2
