@@ -2362,6 +2362,23 @@ lemma extra_set_disjoint {c'₁ c'₂ : A} {y₁ y₂ : G'} (h_rel₁ : Relevant
   · rw [extra_set_case3 h_rel₁ hb₁ hSy₁ hn₁, extra_set_case3 h_rel₂ hb₂ hSy₂ hn₂]
     exact extra_set3_disjoint h_rel₁ hb₁ hSy₁ hn₁ h_rel₂ hb₂ hSy₂ hn₂ h
 
+-- this is false if we are in case 3, maybe there is no need for such a lemma
+-- lemma extra_set_Sz_ne_c' {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+--     (hz : z ∈ extra_set c' y) : S z ≠ c' := by
+--   rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
+--   · rw [extra_set_case1 h_rel hw] at hz
+--     rw [← extra_set1_eq2 h_rel hw hz]
+--     exact z.2
+--   ·
+--     rw [extra_set_case2 h_rel hb hSy] at hz
+--     rw [← extra_set2_eq2 h_rel hb hSy hz]
+--     exact z.2
+--   ·
+--     rw [extra_set_case3 h_rel hb hSy hn] at hz
+--     rw [← hSy, S, S, extra_set3_eq1 h_rel hb hSy hn hz]
+--     exact z.2
+--     sorry
+
 -- def extra_set_tot : Set G := ⋃ c'y ∈ relevant_set, (Finset.image Sum.inr (extra_set c'y.1 c'y.2)).toSet
 def extra_set_tot : Set G := ⋃ c'y ∈ relevant_set, (Sum.inr '' (extra_set c'y.1 c'y.2))
 -- def extra_set_tot : Set G' := ⋃ c', ⋃ w, ⋃ (_ : Relevant ok.finite c' w), extra_set1 c' w.1.1
