@@ -169,7 +169,7 @@ Abstractly, the greedy algorithm strategy can now be described as follows.
 \begin{itemize}
   \item[(i)] (Seed) There exists a finitely supported partial magma operation $\op_0 \colon \Omega_0 \to M$ satisfying $\Gamma$ that contradicts $E'$, in the sense that there is some assignment of variables in $E'$ in $M$ such that both sides of $E'$ are defined using $\op_0$, but not equal to each other.
   \item[(ii)]  (Soundness)  If $\op_n \colon \Omega_n \to M$ is a sequence of partial magma operations obeying $\Gamma$ with each $\op_{n+1}$ an extension of $\op_n$, and the direct limit $\op_\infty$ is total, then this limit obeys $E$.
-  \item[(iii)] (Greedy extension)  If $\op \colon \Omega \to M$ is a finitely supported partial magma operation obeying $\Gamma$, and $a,b \in M$, then there exists a finitely supported extension $\op' \colon \Omega' \to M'$ of $\op$ to a possibly larger carrier $M'$ such that $a \op' b$ is defined.
+  \item[(iii)] (Greedy extension)  If $\op \colon \Omega \to M$ is a finitely supported partial magma operation obeying $\Gamma$, and $a,b \in M$, then there exists a finitely supported extension $\op' \colon \Omega' \to M'$ of $\op$ to a possibly larger carrier $M'$, and also obeying $\Gamma$, such that $a \op' b$ is defined.
 \end{itemize}
 Then $E \not \vdash E'$.
 \end{theorem}
