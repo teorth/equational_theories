@@ -2076,29 +2076,29 @@ noncomputable def es2_a' {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c
     (hb : Next_aux c' y b) (hSy : S y ≠ c') : A :=
   (extra_set2_exists_a' h_rel hb hSy).choose
 
-lemma extra_set2_eq1 {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
-    (hb : Next_aux c' y b) (hSy : S y ≠ c') (z : G') (hz : z ∈ extra_set2 h_rel hb hSy) :
+lemma extra_set2_eq1 {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
     z.1.1 = es2_a' h_rel hb hSy :=
   (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.1
 
-lemma extra_set2_eq2 {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
-    (hb : Next_aux c' y b) (hSy : S y ≠ c') (z : G') (hz : z ∈ extra_set2 h_rel hb hSy) :
+lemma extra_set2_eq2 {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
     z.1.2.1 = c' :=
   (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.2.1
 
-lemma extra_set2_not_g {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
-    (hb : Next_aux c' y b) (hSy : S y ≠ c') (z : G') (hz : z ∈ extra_set2 h_rel hb hSy) :
+lemma extra_set2_not_g {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
     .inr z ≠ g :=
   (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.2.2.1
 
-lemma extra_set2_not_Next_aux {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
-    (hb : Next_aux c' y b) (hSy : S y ≠ c') (z : G') (hz : z ∈ extra_set2 h_rel hb hSy) :
+lemma extra_set2_not_Next_aux {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
     ∀ x, ¬ Next_aux c' z x :=
   (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.2.2.2
 
 lemma extra_set2_disjoint {c'₁ c'₂ b₁ b₂ : A} {y₁ y₂ : G'}
-    (h_rel₁ : Relevant next_aux_finite c'₁ y₁) (hb₁ : Next_aux c'₁ y₁ b₁) (hSy₂ : S y₂ ≠ c'₂)
-    (h_rel₂ : Relevant next_aux_finite c'₂ y₂) (hb₂ : Next_aux c'₂ y₂ b₂) (hSy₁ : S y₁ ≠ c'₁)
+    (h_rel₁ : Relevant next_aux_finite c'₁ y₁) (hb₁ : Next_aux c'₁ y₁ b₁) (hSy₁ : S y₁ ≠ c'₁)
+    (h_rel₂ : Relevant next_aux_finite c'₂ y₂) (hb₂ : Next_aux c'₂ y₂ b₂) (hSy₂ : S y₂ ≠ c'₂)
     (h : c'₁ ≠ c'₂ ∨ y₁ ≠ y₂) :
     Disjoint (extra_set2 h_rel₁ hb₁ hSy₁) (extra_set2 h_rel₂ hb₂ hSy₂) := by
   refine exists_extra_set2.choose_spec.2.2 _ _ ?_
@@ -2181,28 +2181,28 @@ lemma extra_set3_card {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y
     (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) : (extra_set3 h_rel hb hSy hn).card = (dom_projL next_aux_finite).card :=
   (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).1
 
-lemma extra_set3_eq1 {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
-    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (z : G') (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+lemma extra_set3_eq1 {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
     z.1.1 = y.1.1 :=
   (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.1
 
-lemma extra_set3_eq2 {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
-    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (z : G') (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+lemma extra_set3_eq2 {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
     z.1.2.1 = y.1.2.1 :=
   (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.1
 
-lemma extra_set3_neq0 {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
-    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (z : G') (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+lemma extra_set3_neq0 {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
     z.1.2.2 ≠ 0 :=
   (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.2.1
 
-lemma extra_set3_not_g {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
-    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (z : G') (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+lemma extra_set3_not_g {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
     .inr z ≠ g :=
   (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.2.2.1
 
-lemma extra_set3_not_Next_aux {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
-    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (z : G') (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+lemma extra_set3_not_Next_aux {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
     ∀ x, ¬ Next_aux c' z x :=
   (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.2.2.2
 
