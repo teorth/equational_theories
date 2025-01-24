@@ -7,7 +7,7 @@ import equational_theories.EquationalResult
 
 /-!
 Refutations found by interepeting the magma operation as a linear operation
-`x ◇ y = ax + by` and then solving for `a` and `b`.
+`x ◇ y = a*x + b*y` and then solving for `a` and `b`.
 
 Discussed on Zulip here:
 https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/An.20old.20new.20idea/near/475038501

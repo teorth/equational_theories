@@ -2,25 +2,30 @@
 
 """This module maps magma equations from/to their id
 
-It can be used a script, with a (space-separated) list of ids or of
-equations (in which the operation can be ".", "*", or "◇"), or used in
-interactive mode:
-
-    python find_equation_id.py 1234 "(w*u)=t*(u*x)" 4567 89 67 "x1=x2"
+It can be used as a script in interactive mode (with the -i switch), as
 
     python find_equation_id.py -i
+
+or by passing arguments to it from stdin or as arguments: a (space-separated)
+list of ids or of equations (in which the operation can be ".", "*", or "◇"),
+optionally preceeded by "*" to dualize the equation (and characters "[,]" are
+ignored):
+
+    python find_equation_id.py [12, 34] "(w*u)=t*(u*x)" 4567 "*89" "*67" "0=(1*2)*(0*1)"
 
 When used as a module imported in python code, one can use
 - eq = Equation.from_id(integer id)
 - eq = Equation.from_str(string)
 - eq.id()
 - all_eqs(integer order)
+- eq.dual()
 
 The theory of magma operations and their labeling is explained in
 https://teorth.github.io/equational_theories/blueprint/basic-theory-chapter.html
 
 """
 
+import sys
 import argparse
 import itertools
 import typing
@@ -30,7 +35,6 @@ import math
 import string
 
 VAR_NAMES = "xyzwuvrst"
-ALLOWED_VARS = string.ascii_lowercase + string.ascii_uppercase + "".join(map(chr, range(0x3b1, 0x3ca)))
 
 ExprType = typing.Union[str, int, typing.Tuple["ExprType", str, "ExprType"]]
 ShapeType = typing.Union[None, typing.Tuple["ShapeType", "ShapeType"]]
@@ -40,13 +44,13 @@ class Equation(typing.NamedTuple):
     """Equation(lhs_shape, rhs_shape, rhyme) denotes an equation
 
     lhs_shape and rhs_shape are nested pairs (tuples) of None giving how
-    the operation is nested, and rhyme a list of int (starting with 0)
+    the operation is nested, and rhyme a tuple of int (starting with 0)
     giving the rhyme scheme (variable names, as numbers).  For instance,
-    Equation(None, ((None, None), None), [0, 1, 0, 2]) is x=(y*x)*z.
+    Equation(None, ((None, None), None), (0, 1, 0, 2)) is x=(y*x)*z.
     """
     lhs_shape: ShapeType
     rhs_shape: ShapeType
-    rhyme: typing.List[int]
+    rhyme: typing.Tuple[int]
 
     @classmethod
     def from_id(cls, eq_id: int) -> "Equation":
@@ -84,13 +88,26 @@ class Equation(typing.NamedTuple):
 
     def orders(self) -> typing.Tuple[int, int]:
         """Number of operations on the lhs and rhs as a tuple."""
-        return (_shape_order(self.lhs_shape), _shape_order(self.rhs_shape))
+        return (shape_order(self.lhs_shape), shape_order(self.rhs_shape))
 
     def num_vars(self) -> int:
         """Number of distinct variables in the equation."""
         return max(self.rhyme) + 1
 
-
+    def dual(self) -> "Equation":
+        """Swap all left and right operands, swap lhs and rhs if needed."""
+        lhs_shape = shape_dual(self.lhs_shape)
+        rhs_shape = shape_dual(self.rhs_shape)
+        lhs_order = shape_order(self.lhs_shape)
+        lhs_rhyme = tuple(reversed(self.rhyme[:lhs_order + 1]))
+        rhs_rhyme = tuple(reversed(self.rhyme[lhs_order + 1:]))
+        if shape_lt(rhs_shape, lhs_shape):
+            lhs_shape, rhs_shape = rhs_shape, lhs_shape
+            lhs_rhyme, rhs_rhyme = rhs_rhyme, lhs_rhyme
+        rhyme = canonicalize_rhyme(lhs_rhyme + rhs_rhyme)
+        if lhs_shape == rhs_shape:
+            rhyme = min(rhyme, canonicalize_rhyme(rhs_rhyme + lhs_rhyme))
+        return Equation(lhs_shape, rhs_shape, rhyme)
 
 ##### Parsing an equation string
 
@@ -125,14 +142,10 @@ def _parse_expr(tokens: typing.List[str]) -> ExprType:
                 raise ValueError("Missing closing parenthesis")
             tokens.pop(0)  # Remove closing parenthesis
             return (left, "◇", right)
-        if len(tokens[0]) == 1 and tokens[0] in ALLOWED_VARS:
+        if (tokens[0].isidentifier() or tokens[0] == "0" or
+            (tokens[0][0] in "123456789" and
+             all(c in "0123456789" for c in tokens[0][1:]))):
             return tokens.pop(0)
-        if tokens[0][0] in ALLOWED_VARS: # Allows x123 but not x-1 or xyz
-            try:
-                if int(tokens[0][1:]) >= 0:
-                    return tokens.pop(0)
-            except ValueError:
-                pass
         raise ValueError(f"Unexpected token: {tokens[0]}")
 
     result = parse_element()
@@ -167,7 +180,7 @@ def _equation_from_str(eq_str: str) -> Equation:
     rhs = _parse_expr(_tokenize(rhs))
     lhs_shape, lhs_rhyme = _deconstruct_tree(lhs)
     rhs_shape, rhs_rhyme = _deconstruct_tree(rhs)
-    if _shape_lt(rhs_shape, lhs_shape):
+    if shape_lt(rhs_shape, lhs_shape):
         lhs_shape, rhs_shape = rhs_shape, lhs_shape
         lhs_rhyme, rhs_rhyme = rhs_rhyme, lhs_rhyme
     rhyme = canonicalize_rhyme(lhs_rhyme + rhs_rhyme)
@@ -178,65 +191,64 @@ def _equation_from_str(eq_str: str) -> Equation:
 
 ##### On shapes
 
-def _shape_order(shape: ShapeType) -> int:
+def shape_dual(shape: ShapeType) -> ShapeType:
+    if shape is None:
+        return None
+    return (shape_dual(shape[1]), shape_dual(shape[0]))
+
+def shape_order(shape: ShapeType) -> int:
     if shape is None:
         return 0
-    return 1 + _shape_order(shape[0]) + _shape_order(shape[1])
+    return 1 + shape_order(shape[0]) + shape_order(shape[1])
 
 
-def _shape_cmp(shape1: ShapeType, shape2: ShapeType) -> int:
+def shape_cmp(shape1: ShapeType, shape2: ShapeType) -> int:
+    shape1_order = shape_order(shape1)
+    shape2_order = shape_order(shape2)
+    if shape1_order < shape2_order:
+        return -1
+    if shape1_order > shape2_order:
+        return 1
     if shape1 is None and shape2 is None:
         return 0
-    if shape1 is None and isinstance(shape2, tuple):
-        return -1
-    if isinstance(shape1, tuple) and shape2 is None:
-        return 1
-    left_cmp = _shape_cmp(shape1[0], shape2[0])
+    left_cmp = shape_cmp(shape1[0], shape2[0])
     if left_cmp != 0:
         return left_cmp
-    return _shape_cmp(shape1[1], shape2[1])
+    return shape_cmp(shape1[1], shape2[1])
 
 
-def _shape_lt(shape1: ShapeType, shape2: ShapeType) -> bool:
-    shape1_order = _shape_order(shape1)
-    shape2_order = _shape_order(shape2)
-    if shape1_order < shape2_order:
-        return True
-    if shape1_order > shape2_order:
-        return False
-    if _shape_cmp(shape1, shape2) < 0:
-        return True
-    return False
+def shape_lt(shape1: ShapeType, shape2: ShapeType) -> bool:
+    return shape_cmp(shape1, shape2) < 0
 
 
 ##### Generating all rhymes, all shapes, all equations
 
-def canonicalize_rhyme(rhyme: typing.List[int]) -> typing.List[int]:
+def canonicalize_rhyme(rhyme: typing.Tuple[int]) -> typing.Tuple[int]:
     """Canonicalize the rhyme to increasing order."""
     variables = {}
     for x in rhyme:
         if x not in variables:
             variables[x] = len(variables)
-    return [variables[x] for x in rhyme]
+    return tuple(variables[x] for x in rhyme)
 
 
-def all_rhymes(n: int) -> typing.Iterator[typing.List[int]]:
+def all_rhymes(n: int) -> typing.Iterator[typing.Tuple[int]]:
     """Generate all rhymes of a given length."""
     if n == 0:
-        yield []
+        yield ()
         return
     for next in _all_rhymes_help(n, 0):
-        yield [0] + next
+        yield (0,) + next
 
 
-def _all_rhymes_help(n: int, max_used: int) -> typing.Iterator[typing.List[int]]:
+def _all_rhymes_help(n: int, max_used: int) -> typing.Iterator[typing.Tuple[int]]:
     """Generates all rhymes whose minimum is at most max_used + 1"""
     if n == 0:
-        yield []
+        yield ()
         return
     for x in range(max_used + 2):
         for next in _all_rhymes_help(n - 1, max(max_used, x)):
-            yield [x] + next
+            yield (x,) + next
 
 
 def all_shapes(order: int) -> typing.Iterator[ShapeType]:
@@ -259,7 +271,7 @@ def all_eqs(order: int) -> typing.Iterator[Equation]:
     for lhs_order in range(half):
         for lhs_shape in all_shapes(lhs_order):
             for rhs_shape in all_shapes(order - lhs_order):
-                if order == lhs_order * 2 and _shape_lt(rhs_shape, lhs_shape):
+                if order == lhs_order * 2 and shape_lt(rhs_shape, lhs_shape):
                     continue
                 symmetric_shape = lhs_shape == rhs_shape
                 for rhyme in all_rhymes(order + 1):
@@ -276,7 +288,7 @@ def all_eqs(order: int) -> typing.Iterator[Equation]:
 
 # Counting equations of some order, based on https://oeis.org/A103293, refactored to access intermediate results.
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def num_eqs(n: int) -> int:
     """Sequence https://oeis.org/A376640 of the number of magma equations"""
     if n % 2 == 1:
@@ -287,7 +299,7 @@ def num_eqs(n: int) -> int:
                 + catalan(n // 2) * bell_same_shape(n))
 
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def bell_same_shape(n: int) -> int:
     """Number of rhymes when lhs and rhs have the same (n//2)-operations shape"""
     if n == 0:
@@ -296,7 +308,7 @@ def bell_same_shape(n: int) -> int:
             - 2 * bell(1 + n // 2)) // 2
 
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def stirling_sym(n: int, k: int) -> int:
     """Number of symmetric k-partitions of range(n), see https://oeis.org/A103293"""
     if n < 2:
@@ -308,14 +320,14 @@ def stirling_sym(n: int, k: int) -> int:
 
 def shape_id(shape: ShapeType) -> int:
     """Gives the shape id (zero-based) among shapes of a given order"""
-    return _shape_id_help(shape, _shape_order(shape))
+    return _shape_id_help(shape, shape_order(shape))
 
 
 def _shape_id_help(shape: ShapeType, n: int) -> int:
     if n == 0:
         return 0
     lhs_shape, rhs_shape = shape
-    lhs_n = _shape_order(lhs_shape)
+    lhs_n = shape_order(lhs_shape)
     rhs_n = n - 1 - lhs_n
     return (sum(catalan(n1) * catalan(n - n1 - 1) for n1 in range(lhs_n))
             + _shape_id_help(lhs_shape, lhs_n) * catalan(rhs_n)
@@ -340,7 +352,7 @@ def shape_from_id(nodes: int, tree_num: int) -> ShapeType:
 
 # Map from rhyme to id and back
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def _num_rhyme_help(n: int, max_used: int) -> int:
     """Number of rhymes of n slots whose minimum number is at most max_used + 1"""
     if n==0:
@@ -348,23 +360,23 @@ def _num_rhyme_help(n: int, max_used: int) -> int:
     return (max_used + 1) * _num_rhyme_help(n - 1, max_used) + _num_rhyme_help(n - 1, max_used + 1)
 
 
-def find_rhyme_id(p: typing.List[int]) -> int:
+def find_rhyme_id(p: typing.Tuple[int]) -> int:
     """Gives the rhyme id (zero-based) among rhymes with a given number of variables"""
     if (not p) or p[0]:
-        raise ValueError(f"Argument of find_rhyme_id should be [0,...] not {p}")
+        raise ValueError(f"Argument of find_rhyme_id should be (0,...) not {p}")
     return _find_rhyme_id_help(p[1:], 0)
 
 
-def _find_rhyme_id_help(p: typing.List[int], max_used: int) -> int:
+def _find_rhyme_id_help(p: typing.Tuple[int], max_used: int) -> int:
     return p[0] * _num_rhyme_help(len(p)-1, max_used) + _find_rhyme_id_help(p[1:], max(p[0], max_used)) if p else 0
 
 
-def get_rhyme_by_id(n: int, rhyme_num: int, max_used: int = 0) -> typing.List[int]:
+def get_rhyme_by_id(n: int, rhyme_num: int, max_used: int = 0) -> typing.Tuple[int]:
     """Find a rhyme scheme for n slots by its number (zero-indexed)."""
-    result = [0]
+    result = (0,)
     while n > 0:
         var1 = min(max_used + 1, rhyme_num // _num_rhyme_help(n - 1, max_used))
-        result += [var1]
+        result += (var1,)
         rhyme_num -= var1 * _num_rhyme_help(n - 1, max_used)
         max_used = max(max_used, var1)
         n -= 1
@@ -373,7 +385,7 @@ def get_rhyme_by_id(n: int, rhyme_num: int, max_used: int = 0) -> typing.List[in
 
 # Map from equation to id and back.
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def _num_eqs_unbalanced(n: int) -> int:
     """Counts magma equations that have strictly fewer operations on the left than on the right"""
     return ((catalan(n + 1) - (0 if n % 2 == 1 else catalan(n // 2) ** 2))
@@ -391,8 +403,8 @@ def _equation_id(input_eq: Equation) -> typing.Tuple[int, Equation]:
     """Equation id from a processed Equation"""
     lhs_shape = input_eq.lhs_shape
     rhs_shape = input_eq.rhs_shape
-    n_lhs = _shape_order(lhs_shape)
-    n_rhs = _shape_order(rhs_shape)
+    n_lhs = shape_order(lhs_shape)
+    n_rhs = shape_order(rhs_shape)
     n = n_lhs + n_rhs
     if n_lhs != n_rhs:
         return (1 + sum(num_eqs(i) for i in range(n))
@@ -470,18 +482,33 @@ def _equation_from_id(input_eq: int) -> Equation:
 
 def process_equation(eq_str: str) -> None:
     """Process a given equation, printing its id and canonical form."""
+    eq_str = eq_str.strip("[,]")
+    if eq_str.startswith("*"):
+        dual = True
+        eq_str = eq_str[1:]
+    else:
+        dual = False
     try:
         input_eq = int(eq_str)
     except ValueError:
         input_eq = None
     if isinstance(input_eq, int):
         eq = Equation.from_id(input_eq)
-        print(f"Equation {input_eq}: {eq}")
+        if dual:
+            eq = eq.dual()
+            eq_num = eq.id
+            print(f"The dual of Equation {input_eq} is Equation {eq_num}: {eq}")
+        else:
+            print(f"Equation {input_eq}: {eq}")
     else:
         input_eq = Equation.from_str(eq_str)
-        eq_num = input_eq.id
-        print(f"The equation '{eq_str}' is Equation {eq_num}: {input_eq}")
-
+        if dual:
+            dual_eq = input_eq.dual()
+            dual_num = dual_eq.id
+            print(f"The dual of '{eq_str}' is Equation {dual_num}: {dual_eq}")
+        else:
+            eq_num = input_eq.id
+            print(f"The equation '{eq_str}' is Equation {eq_num}: {input_eq}")
 
 def main():
     """Main function to run the program."""
@@ -508,11 +535,14 @@ def main():
                 print("Goodbye!")
                 break
             process_equation(eq)
-    elif args.equations:
-        for eq in args.equations:
-            process_equation(eq)
     else:
-        parser.print_help()
+        if not sys.stdin.isatty():
+            args.equations = [eq for l in sys.stdin for eq in l.split()] + args.equations
+        if args.equations:
+            for eq in args.equations:
+                process_equation(eq)
+        else:
+            parser.print_help()
 
 
 if __name__ == "__main__":
