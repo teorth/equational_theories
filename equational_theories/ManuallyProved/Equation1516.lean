@@ -2471,12 +2471,41 @@ def next_aux2 (b) (x : G') :
     Relevant next_finite b x → (dom_projL next_finite).card ≤ {y : G' | Next b y x}.ncard := by
   sorry
 
-def next_aux3 {a} {y : G'} {x} : S y = a → y.1.2.2 ≠ 0 → Next a y x → x = .inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩ := by
-  sorry
+def next_aux3 {a} {y : G'} {x} (hSy : S y = a) (hn : y.1.2.2 ≠ 0) : Next a y x → x = .inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩
+  | .aux ha => next_aux_aux3 hSy hn ha
+  | .extra h_rel h_ex => by
+    rename_i _ x
+    rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy'⟩ | ⟨⟨b, hb⟩, hSy', hn⟩
+    · rw [extra_set_case1 h_rel hw] at h_ex
+      rw [← extra_set1_eq2 h_rel hw h_ex] at hSy
+      exact (y.2 hSy).elim
+    · rw [extra_set_case2 h_rel hb hSy'] at h_ex
+      rw [← extra_set2_eq2 h_rel hb hSy' h_ex] at hSy
+      exact (y.2 hSy).elim
+    · congr with
+      · rw [S] at hSy hSy'
+        rw [hSy, hSy']
+      · rw [extra_set_case3 h_rel hb hSy' hn] at h_ex
+        exact (extra_set3_eq2 h_rel hb hSy' hn h_ex).symm
+      · exact hn
 
-def next_aux4 {a} {y : G'} {x} : S y = a → y.1.2.2 = 0 → Next a y x → x = .inl a := by
-  sorry
+def next_aux4 {a} {y : G'} {x} (hSy : S y = a) (hn : y.1.2.2 = 0) : Next a y x → x = .inl a
+  | .aux ha => next_aux_aux4 hSy hn ha
+  | .extra h_rel h_ex => by
+    rename_i _ x
+    rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy'⟩ | ⟨⟨b, hb⟩, hSy', hn'⟩
+    · rw [extra_set_case1 h_rel hw] at h_ex
+      rw [← extra_set1_eq2 h_rel hw h_ex] at hSy
+      exact (y.2 hSy).elim
+    · rw [extra_set_case2 h_rel hb hSy'] at h_ex
+      rw [← extra_set2_eq2 h_rel hb hSy' h_ex] at hSy
+      exact (y.2 hSy).elim
+    · rw [extra_set_case3 h_rel hb hSy' hn'] at h_ex
+      exact (extra_set3_neq0 h_rel hb hSy' hn' h_ex hn).elim
 
+def next_aux5 {c} {y : G'} {x} (hSy : S y ≠ c) : Next c y x → x ≠ .inl c
+  | .aux ha => next_aux_aux5 hSy ha
+  | .extra _ _ => Sum.inr_ne_inl
 
 def next_aux1 {x y z w k} : Next x y z → Next x z w → Next (S y) w k → k = x := by
   sorry
