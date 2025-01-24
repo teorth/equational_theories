@@ -2243,9 +2243,10 @@ lemma extra_set23_disjoint {c'₂ c'₃ b₂ b₃ : A} {y₂ y₃ : G'}
 --   refine Set.Finite.biUnion relevant_set_finite fun (c', y) h ↦ ?_
 --   exact Finset.finite_toSet _
 
--- lemma exists_extra_set
 
-def extra_set (c' : A) (y : G') : Finset G' := sorry
+
+open Classical in
+noncomputable def extra_set (c' : A) (y : G') : Finset G' := sorry
 
 lemma extra_set_not_next_aux {c' : A} {y z : G'} (hz : z ∈ extra_set c' y) : ∀ x, ¬ Next_aux c' z x := sorry
   -- (exists_extra_set c' y).choose_spec.2 z hz |>.2.2.2
