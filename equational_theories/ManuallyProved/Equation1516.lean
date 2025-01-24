@@ -2449,14 +2449,14 @@ lemma relevant_next_iff_next_aux {c' y} :
 
 def next_func {a y x x'} : Next a y x → Next a y x' → x = x'
   | .aux hx, .aux hx' => next_aux_func hx hx'
-  | .aux ha, .extra h_rel h_ex => (extra_set_not_next_aux h_ex x ha).elim
-  | .extra h_rel h_ex, .aux ha => (extra_set_not_next_aux h_ex x' ha).elim
+  | .aux ha, .extra h_rel h_ex => (extra_set_not_Next_aux h_rel h_ex x ha).elim
+  | .extra h_rel h_ex, .aux ha => (extra_set_not_Next_aux h_rel h_ex x' ha).elim
   | .extra h_rel h_ex, .extra h_rel' h_ex' => by
     rename_i z y z' y'
     by_contra h_ne
     have : y ≠ y' := fun h ↦ (h ▸ h_ne) rfl
     have : Disjoint (extra_set a y).toSet (extra_set a y').toSet :=
-      Finset.disjoint_coe.mpr <| extra_set_disj (Or.inr this)
+      Finset.disjoint_coe.mpr <| extra_set_disjoint h_rel h_rel' (Or.inr this)
     exact Set.not_disjoint_iff.mpr ⟨z', h_ex, h_ex'⟩ <| this
 
 def next_extend {a b : A} {x} : Next a b x → x = .inl (a ◇ b) := by
