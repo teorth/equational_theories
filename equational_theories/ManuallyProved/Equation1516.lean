@@ -2246,16 +2246,80 @@ lemma extra_set23_disjoint {c'₂ c'₃ b₂ b₃ : A} {y₂ y₃ : G'}
 
 
 open Classical in
-noncomputable def extra_set (c' : A) (y : G') : Finset G' := sorry
+noncomputable def extra_set (c' : A) (y : G') : Finset G' :=
+  if h_rel : Relevant next_aux_finite c' y then
+    if h : ∃ w : G', Next_aux c' y w then extra_set1 h_rel h.choose_spec
+    else if h : (∃ b : A, Next_aux c' y b) ∧ S y ≠ c' then extra_set2 h_rel h.1.choose_spec h.2
+      else if h : (∃ b : A, Next_aux c' y b) ∧ S y = c' ∧ y.1.2.2 = 0 then extra_set3 h_rel h.1.choose_spec h.2.1 h.2.2
+        else ∅
+  else ∅
 
-lemma extra_set_not_next_aux {c' : A} {y z : G'} (hz : z ∈ extra_set c' y) : ∀ x, ¬ Next_aux c' z x := sorry
-  -- (exists_extra_set c' y).choose_spec.2 z hz |>.2.2.2
+lemma extra_set_case1 {c' : A} {y w : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hw : Next_aux c' y w) : extra_set c' y = extra_set1 h_rel hw := by
+  rw [extra_set, dif_pos h_rel, dif_pos ⟨w, hw⟩]
+  rfl
 
-lemma extra_set_not_x₀ {c' : A} {y z : G'} (hz : z ∈ extra_set c' y) : .inr z ≠ x₀ := sorry
-  -- (exists_extra_set c' y).choose_spec.2 z hz |>.2.2.1
+lemma extra_set_case2 {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') : extra_set c' y = extra_set2 h_rel hb hSy := by
+  rw [extra_set, dif_pos h_rel, dif_neg fun ⟨w, hw⟩ ↦ (Sum.inl_ne_inr (next_aux_func hb hw)), dif_pos ⟨⟨b, hb⟩, hSy⟩]
+  rfl
 
-lemma extra_set_disj {c'₁ c'₂ : A} {y y' : G'} (h : c'₁ ≠ c'₂ ∨ y ≠ y') : Disjoint (extra_set c'₁ y) (extra_set c'₂ y') := sorry
-  -- (exists_extra_set c' y).choose_spec.2 z hz |>.2.2.2
+lemma extra_set_case3 {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) :
+    extra_set c' y = extra_set3 h_rel hb hSy hn := by
+  rw [extra_set, dif_pos h_rel, dif_neg fun ⟨w, hw⟩ ↦ (Sum.inl_ne_inr (next_aux_func hb hw)), dif_neg fun ⟨_, hSy'⟩ ↦ hSy' hSy, dif_pos ⟨⟨b, hb⟩, hSy, hn⟩]
+  rfl
+
+lemma extra_set_card {c' : A} {y : G'} (h_rel : Relevant next_aux_finite c' y) :
+    (extra_set c' y).card = (dom_projL next_aux_finite).card := by
+  rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
+  · rw [extra_set_case1 h_rel hw, extra_set1_card h_rel hw]
+  · rw [extra_set_case2 h_rel hb hSy, extra_set2_card h_rel hb hSy]
+  · rw [extra_set_case3 h_rel hb hSy hn, extra_set3_card h_rel hb hSy hn]
+
+lemma extra_set_not_g {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hz : z ∈ extra_set c' y) : .inr z ≠ g := by
+  rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
+  · rw [extra_set_case1 h_rel hw] at hz
+    exact extra_set1_not_g h_rel hw hz
+  · rw [extra_set_case2 h_rel hb hSy] at hz
+    exact extra_set2_not_g h_rel hb hSy hz
+  · rw [extra_set_case3 h_rel hb hSy hn] at hz
+    exact extra_set3_not_g h_rel hb hSy hn hz
+
+lemma extra_set_not_Next_aux {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hz : z ∈ extra_set c' y) : ∀ x, ¬ Next_aux c' z x := by
+  rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
+  · rw [extra_set_case1 h_rel hw] at hz
+    exact extra_set1_not_Next_aux h_rel hw hz
+  · rw [extra_set_case2 h_rel hb hSy] at hz
+    exact extra_set2_not_Next_aux h_rel hb hSy hz
+  · rw [extra_set_case3 h_rel hb hSy hn] at hz
+    exact extra_set3_not_Next_aux h_rel hb hSy hn hz
+
+lemma extra_set_disjoint {c'₁ c'₂ : A} {y₁ y₂ : G'} (h_rel₁ : Relevant next_aux_finite c'₁ y₁)
+    (h_rel₂ : Relevant next_aux_finite c'₂ y₂) (h : c'₁ ≠ c'₂ ∨ y₁ ≠ y₂) :
+    Disjoint (extra_set c'₁ y₁) (extra_set c'₂ y₂) := by
+  rcases relevant_trichotomy h_rel₁ with ⟨w₁, hw₁⟩ | ⟨⟨b₁, hb₁⟩, hSy₁⟩ | ⟨⟨b₁, hb₁⟩, hSy₁, hn₁⟩
+    <;> rcases relevant_trichotomy h_rel₂ with ⟨w₂, hw₂⟩ | ⟨⟨b₂, hb₂⟩, hSy₂⟩ | ⟨⟨b₂, hb₂⟩, hSy₂, hn₂⟩
+  · rw [extra_set_case1 h_rel₁ hw₁, extra_set_case1 h_rel₂ hw₂]
+    exact extra_set1_disjoint h_rel₁ hw₁ h_rel₂ hw₂ h
+  · rw [extra_set_case1 h_rel₁ hw₁, extra_set_case2 h_rel₂ hb₂ hSy₂]
+    exact extra_set12_disjoint h_rel₁ hw₁ h_rel₂ hb₂ hSy₂
+  · rw [extra_set_case1 h_rel₁ hw₁, extra_set_case3 h_rel₂ hb₂ hSy₂ hn₂]
+    exact extra_set13_disjoint h_rel₁ hw₁ h_rel₂ hb₂ hSy₂ hn₂
+  · rw [extra_set_case2 h_rel₁ hb₁ hSy₁, extra_set_case1 h_rel₂ hw₂]
+    exact (extra_set12_disjoint h_rel₂ hw₂ h_rel₁ hb₁ hSy₁).symm
+  · rw [extra_set_case2 h_rel₁ hb₁ hSy₁, extra_set_case2 h_rel₂ hb₂ hSy₂]
+    refine extra_set2_disjoint h_rel₁ hb₁ hSy₁ h_rel₂ hb₂ hSy₂ h
+  · rw [extra_set_case2 h_rel₁ hb₁ hSy₁, extra_set_case3 h_rel₂ hb₂ hSy₂ hn₂]
+    exact extra_set23_disjoint h_rel₁ hb₁ hSy₁ h_rel₂ hb₂ hSy₂ hn₂
+  · rw [extra_set_case3 h_rel₁ hb₁ hSy₁ hn₁, extra_set_case1 h_rel₂ hw₂]
+    exact (extra_set13_disjoint h_rel₂ hw₂ h_rel₁ hb₁ hSy₁ hn₁).symm
+  · rw [extra_set_case3 h_rel₁ hb₁ hSy₁ hn₁, extra_set_case2 h_rel₂ hb₂ hSy₂]
+    exact (extra_set23_disjoint h_rel₂ hb₂ hSy₂ h_rel₁ hb₁ hSy₁ hn₁).symm
+  · rw [extra_set_case3 h_rel₁ hb₁ hSy₁ hn₁, extra_set_case3 h_rel₂ hb₂ hSy₂ hn₂]
+    exact extra_set3_disjoint h_rel₁ hb₁ hSy₁ hn₁ h_rel₂ hb₂ hSy₂ hn₂ h
 
 -- def extra_set_tot : Set G := ⋃ c'y ∈ relevant_set, (Finset.image Sum.inr (extra_set c'y.1 c'y.2)).toSet
 def extra_set_tot : Set G := ⋃ c'y ∈ relevant_set, (Sum.inr '' (extra_set c'y.1 c'y.2))
