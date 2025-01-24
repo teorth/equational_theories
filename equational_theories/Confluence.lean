@@ -183,12 +183,7 @@ theorem bu_nf : ∀ x, NF rw (bu rw x) := by
     · exact everywhere_of_subterm_of_everywhere ihy hsub
     · exact hnf
 
-lemma NF_iff_buFixed {x}: NF rw x ↔ buFixed rw x := by
-  constructor
-  · exact buFixed_of_NF rw
-  · intro h
-    rw [← h]
-    apply bu_nf
+lemma NF_iff_buFixed {x}: NF rw x ↔ buFixed rw x := ⟨buFixed_of_NF rw, fun h ↦ h ▸ bu_nf _ _⟩
 
 @[simp] theorem bu_idem x : buFixed rw (bu rw x) := buFixed_of_NF rw (bu_nf rw x)
 

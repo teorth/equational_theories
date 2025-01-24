@@ -38,10 +38,10 @@ theorem Finite.Equation1443_implies_Equation3055 (G : Type) [Magma G] [Finite G]
   have eq1441 : Equation1441 G := by intro x y; apply h x y x
   have eq4067 : Equation4067 G := by apply Finite.Equation1441_implies_Equation4067 G eq1441
   rw [← eq4067]
-  have : x = C (S x) := by exact (inv2 x).symm
+  have : x = C (S x) := (inv2 x).symm
   nth_rewrite 4 [this]
   nth_rewrite 1 [this]
-  have (x z : G) : x = S (x ◇ (x ◇ z)) := by exact h x (x ◇ z) z
+  have (x z : G) : x = S (x ◇ (x ◇ z)) := h x (x ◇ z) z
   have (x z : G) : C x = x ◇ (x ◇ z) := by
     apply inv2.injective
     simp only
@@ -63,7 +63,7 @@ theorem Finite.Equation1681_implies_Equation3877 (G : Type) [Magma G] [Finite G]
     apply h
   have inv2 := Function.leftInverse_of_surjective_of_rightInverse
     (Finite.surjective_of_injective inv.injective) inv
-  have t : S x = (y ◇ (S x)) ◇ (C (S x)) := by exact h (S x) y
+  have t : S x = (y ◇ (S x)) ◇ (C (S x)) := h (S x) y
   rw [show C (S x) = x by apply inv2] at t
   exact t
 
@@ -82,10 +82,10 @@ theorem Finite.Equation1701_implies_Equation1035 (G : Type) [Magma G] [Finite G]
   have eq1681 : Equation1681 G := by intro x y; apply h x y x
   have eq3877 : Equation3877 G := by apply Finite.Equation1681_implies_Equation3877 G eq1681
   rw [← eq3877]
-  have : x = C (S x) := by exact (inv2 x).symm
+  have : x = C (S x) := (inv2 x).symm
   nth_rewrite 2 [this]
   nth_rewrite 1 [this]
-  have (x z : G) : x = S ((z ◇ x) ◇ x) := by exact h x (z ◇ x) z
+  have (x z : G) : x = S ((z ◇ x) ◇ x) := h x (z ◇ x) z
   have (x z : G) : C x = (z ◇ x) ◇ x := by
     apply inv2.injective
     simp only
