@@ -2465,10 +2465,7 @@ def next_extend {a b : A} {x} : Next a b x → x = .inl (a ◇ b) := by
 
 def next_hx₀ {x} : Next 1 x₀ x → x = .inl 1
   | .aux ha => next_aux_x₀ ha
-  | .extra _ h_ex => (extra_set_not_x₀ h_ex rfl).elim
-
-def next_aux1 {x y z w k} : Next x y z → Next x z w → Next (S y) w k → k = x := by
-  sorry
+  | .extra h_rel h_ex => (extra_set_not_x₀ h_rel h_ex rfl).elim
 
 def next_aux2 (b) (x : G') :
     Relevant next_finite b x → (dom_projL next_finite).card ≤ {y : G' | Next b y x}.ncard := by
@@ -2480,7 +2477,8 @@ def next_aux3 {a} {y : G'} {x} : S y = a → y.1.2.2 ≠ 0 → Next a y x → x 
 def next_aux4 {a} {y : G'} {x} : S y = a → y.1.2.2 = 0 → Next a y x → x = .inl a := by
   sorry
 
-def next_aux5 {c} {y : G'} {x} : S y ≠ c → Next c y x → x ≠ .inl c := by
+
+def next_aux1 {x y z w k} : Next x y z → Next x z w → Next (S y) w k → k = x := by
   sorry
 
 def next : PartialSolution :=
