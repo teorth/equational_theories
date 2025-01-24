@@ -2359,7 +2359,7 @@ lemma Next_new : Next d g (partL d g) := Next.aux Next_aux.new
 
 lemma finite_relevant_extra_set_tot :
     {(c', z, y) | (c', y) ∈ relevant_set' ∧ z ∈ extra_set_tot}.Finite := by
-  -- doable, it is the cartesian product of two finite sets
+  -- doable, it is the image through (c', y, z) ↦ (c', z, y) of the cartesian product of two finite sets
   sorry
 
 def next_finite : {(a, x, y) | Next a x y}.Finite := by
@@ -2380,7 +2380,7 @@ def next_finite : {(a, x, y) | Next a x y}.Finite := by
       exact ⟨z', h_extra_set, hy'.symm⟩
 
 lemma dom_projL_next_aux : dom_projL next_finite = dom_projL next_aux_finite := by
-  -- doable, one direction should be imediate, for the other if there is a ∈ dom_projL next_finite then Next a y x for some x y, then either Next_aux a y x or the extra case, but in the extra case it must hold Relevant next_aux_finite a y, so a ∈ dom_projL next_aux_finite
+  -- doable, one direction should be immediate, for the other if there is a ∈ dom_projL next_finite then Next a y x for some x y, then either Next_aux a y x or the extra case, but in the extra case it must hold Relevant next_aux_finite a y, so a ∈ dom_projL next_aux_finite
   sorry
 
 
