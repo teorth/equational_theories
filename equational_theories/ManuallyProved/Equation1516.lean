@@ -1914,19 +1914,23 @@ lemma exists_extra_set1 :
         ∀ z ∈ s ⟨⟨c', y⟩, ⟨h_rel, ⟨w, hw⟩⟩⟩,
           z.1.1 = c w.1.1 c' ∧ z.1.2.1 = c' ∧
           .inr z ≠ g ∧
-          (∀ x, ¬ Next_aux c' z x) ∧
+          (∀ a x, ¬ Next_aux a z x) ∧
+          (∀ a x, ¬ Next_aux a x z) ∧
           .inr z ≠ x₀
           ) ∧
       ∀ p₁ p₂, p₁ ≠ p₂ → Disjoint (s p₁) (s p₂) := by
     have h_infinite (p : relevant_set1) :
-        Set.Infinite <| (({⟨⟨c p.2.2.choose.1.1 p.1.1, p.1.1, n'⟩, c_ne p.2.2.choose.1.1 p.1.1⟩ | n'} \ {y : G'| ∃ w, Next_aux p.1.1 y w}) \ {y | y = g}) \ {y | y = x₀} := by
+        Set.Infinite <| ((({⟨⟨c p.2.2.choose.1.1 p.1.1, p.1.1, n'⟩, c_ne p.2.2.choose.1.1 p.1.1⟩ | n'} \ {y : G'| ∃ a x, Next_aux a y x}) \ {y : G'| ∃ a x, Next_aux a x y}) \ {y | y = g}) \ {y | y = x₀} := by
       have ⟨⟨c', y⟩, ⟨h_rel, ⟨w, hw⟩⟩⟩ := p
-      refine (Set.Infinite.diff ?_ ?_).diff ?_ |>.diff ?_
+      refine (Set.Infinite.diff ?_ ?_).diff ?_ |>.diff ?_ |>.diff ?_
       ·
         --doable, this set is the image of ℕ through the function n ↦ ⟨⟨c w1 c', c', n⟩, c_ne w1 c'⟩, which is injective
         sorry
       ·
-        --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite
+        --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite. This may become a separate lemma, I think we use it also in the construction of the other extra sets
+        sorry
+      ·
+        --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite. This may become a separate lemma, I think we use it also in the construction of the other extra sets
         sorry
       ·
         --doable it is just a singleton
@@ -1943,15 +1947,16 @@ lemma exists_extra_set1 :
     -- here we prove the conditions, this will need to be changed when we change the conditions, this is why I leave it ungolfed for now
     have hz := hs_subs ⟨⟨c', y⟩, ⟨h_rel, ⟨w, hw⟩⟩⟩ hz
     simp only [Set.mem_diff, Set.mem_setOf_eq, not_exists] at hz
-    obtain ⟨⟨⟨⟨n', hz₁⟩, hz₂⟩, hz₃⟩, hz₄⟩ := hz
-    refine ⟨?_, ?_, ?_, ?_, ?_⟩
+    obtain ⟨⟨⟨⟨⟨n', hz₁⟩, hz₂⟩, hz₃⟩, hz₄⟩, hz₅⟩ := hz
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
     · simp_rw [← hz₁]
       have : ∃ _, Next_aux c' (Sum.inr y) _ := ⟨w, hw⟩
       rw [Sum.inr_injective <| next_aux_func this.choose_spec hw]
     · rw [← hz₁]
-    · exact hz₃
-    · exact fun x ↦ hz₂ x
     · exact hz₄
+    · exact fun x ↦ hz₂ x
+    · exact fun x ↦ hz₃ x
+    · exact hz₅
 
 noncomputable def extra_set1 {c' : A} {y w : G'} (h_rel : Relevant next_aux_finite c' y)
     (hw : Next_aux c' y w) : Finset G' :=
@@ -1974,12 +1979,16 @@ lemma extra_set1_not_g {c' : A} {y w z : G'} (h_rel : Relevant next_aux_finite c
   ((exists_extra_set1.choose_spec.1 c' y h_rel w hw).2 z hz).2.2.1
 
 lemma extra_set1_not_Next_aux {c' : A} {y w z : G'} (h_rel : Relevant next_aux_finite c' y)
-    (hw : Next_aux c' y w) (hz : z ∈ extra_set1 h_rel hw) : ∀ x, ¬ Next_aux c' z x :=
+    (hw : Next_aux c' y w) (hz : z ∈ extra_set1 h_rel hw) : ∀ a x, ¬ Next_aux a z x :=
   ((exists_extra_set1.choose_spec.1 c' y h_rel w hw).2 z hz).2.2.2.1
+
+lemma extra_set1_not_Next_aux' {c' : A} {y w z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hw : Next_aux c' y w) (hz : z ∈ extra_set1 h_rel hw) : ∀ a x, ¬ Next_aux a x z :=
+  ((exists_extra_set1.choose_spec.1 c' y h_rel w hw).2 z hz).2.2.2.2.1
 
 lemma extra_set1_not_x₀ {c' : A} {y w z : G'} (h_rel : Relevant next_aux_finite c' y)
     (hw : Next_aux c' y w) (hz : z ∈ extra_set1 h_rel hw) : .inr z ≠ x₀ :=
-  ((exists_extra_set1.choose_spec.1 c' y h_rel w hw).2 z hz).2.2.2.2
+  ((exists_extra_set1.choose_spec.1 c' y h_rel w hw).2 z hz).2.2.2.2.2
 
 lemma extra_set1_disjoint {c'₁ c'₂ : A} {y₁ y₂ w₁ w₂ : G'}
     (h_rel₁ : Relevant next_aux_finite c'₁ y₁) (hw₁ : Next_aux c'₁ y₁ w₁)
@@ -1995,7 +2004,8 @@ lemma exists_extra_set2 :
           ∀ z ∈ s ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy⟩⟩,
             z.1.1 = a' ∧ z.1.2.1 = c' ∧
             .inr z ≠ g ∧
-            (∀ x, ¬ Next_aux c' z x) ∧
+            (∀ a x, ¬ Next_aux a z x) ∧
+            (∀ a x, ¬ Next_aux a x z) ∧
             .inr z ≠ x₀
           ) ∧
       (∀ (p₁ : relevant_set1) p₂, Disjoint (extra_set1 p₁.2.1 p₁.2.2.choose_spec) (s p₂)) ∧
@@ -2018,12 +2028,16 @@ lemma exists_extra_set2 :
     rw [← (ha' p).1, Sum.inl_injective <| next_aux_func p.property.right.left.choose_spec hb]
 
   have h_infinite (p : relevant_set2) :
-      Set.Infinite <| ((({⟨⟨a' p, p.1.1, n'⟩, (ha' p).2⟩ | n'} \ {y : G'| ∃ w, Next_aux p.1.1 y w}) \ {y | y = g}) \ {y | y = x₀}) \ ⋃ (p : relevant_set1), (extra_set1 p.2.1 p.2.2.choose_spec) := by
+      Set.Infinite <| (((({⟨⟨a' p, p.1.1, n'⟩, (ha' p).2⟩ | n'} \ {y : G'| ∃ a x, Next_aux a y x}) \ {y : G'| ∃ a x, Next_aux a x y}) \ {y | y = g}) \ {y | y = x₀}) \ ⋃ (p : relevant_set1), (extra_set1 p.2.1 p.2.2.choose_spec) := by
     have ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy⟩⟩ := p
-    refine (Set.Infinite.diff ?_ ?_).diff ?_ |>.diff ?_ |>.diff ?_
+    refine (Set.Infinite.diff ?_ ?_).diff ?_ |>.diff ?_ |>.diff ?_ |>.diff ?_
     ·
       simp
       --doable, this set is the image of ℕ through the function n ↦ ⟨⟨a', c', n⟩, _⟩, which is injective
+      --similar to exists_extra_set1
+      sorry
+    ·
+      --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite
       --similar to exists_extra_set1
       sorry
     ·
@@ -2051,13 +2065,14 @@ lemma exists_extra_set2 :
     have hz := hs_subs ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy⟩⟩ hz
 
     simp only [Set.mem_diff, Set.mem_setOf_eq, not_exists] at hz
-    obtain ⟨⟨⟨⟨⟨n', hz₁⟩, hz₂⟩, hz₃⟩, hz₄⟩, hz₅⟩ := hz
-    refine ⟨?_, ?_, ?_, ?_, ?_⟩
+    obtain ⟨⟨⟨⟨⟨⟨n', hz₁⟩, hz₂⟩, hz₃⟩, hz₄⟩, hz₅⟩, hz₆⟩ := hz
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
     · simp_rw [← hz₁]
     · rw [← hz₁]
-    · exact hz₃
-    · exact fun x ↦ hz₂ x
     · exact hz₄
+    · exact fun x ↦ hz₂ x
+    · exact fun x ↦ hz₃ x
+    · exact hz₅
   · refine Finset.disjoint_right.mpr fun z hz ↦ ?_
     have ⟨_, h⟩ := hs_subs p₂ hz
     simp only [Set.mem_iUnion, Finset.mem_coe, not_exists] at h
@@ -2075,7 +2090,7 @@ lemma extra_set2_exists_a' {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite
     (hb : Next_aux c' y b) (hSy : S y ≠ c') :
     ∃ (a' : A), a' ◇ b = c' ∧ a' ≠ c' ∧
       ∀ z ∈ extra_set2 h_rel hb hSy, z.1.1 = a' ∧ z.1.2.1 = c' ∧ .inr z ≠ g ∧
-        (∀ x, ¬ Next_aux c' z x) ∧ .inr z ≠ x₀ :=
+        (∀ a x, ¬ Next_aux a z x) ∧ (∀ a x, ¬ Next_aux a x z) ∧ .inr z ≠ x₀ :=
   (exists_extra_set2.choose_spec.1 c' y h_rel b hb hSy).2
 
 noncomputable def es2_a' {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
@@ -2099,13 +2114,18 @@ lemma extra_set2_not_g {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c
 
 lemma extra_set2_not_Next_aux {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
     (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
-    ∀ x, ¬ Next_aux c' z x :=
+    ∀ a x, ¬ Next_aux a z x :=
   (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.2.2.2.1
+
+lemma extra_set2_not_Next_aux' {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
+    ∀ a x, ¬ Next_aux a x z :=
+  (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.2.2.2.2.1
 
 lemma extra_set2_not_x₀ {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
     (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
     .inr z ≠ x₀ :=
-  (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.2.2.2.2
+  (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.2.2.2.2.2
 
 lemma extra_set2_disjoint {c'₁ c'₂ b₁ b₂ : A} {y₁ y₂ : G'}
     (h_rel₁ : Relevant next_aux_finite c'₁ y₁) (hb₁ : Next_aux c'₁ y₁ b₁) (hSy₁ : S y₁ ≠ c'₁)
@@ -2129,22 +2149,28 @@ lemma exists_extra_set3 :
           z.1.1 = y.1.1 ∧ z.1.2.1 = y.1.2.1 ∧
           z.1.2.2 ≠ 0 ∧
           .inr z ≠ g ∧
-          (∀ x, ¬ Next_aux c' z x) ∧
+          (∀ a x, ¬ Next_aux a z x) ∧
+          (∀ a x, ¬ Next_aux a x z) ∧
           .inr z ≠ x₀
           ) ∧
       (∀ (p₁ : relevant_set1) p₃, Disjoint (extra_set1 p₁.2.1 p₁.2.2.choose_spec) (s p₃)) ∧
       (∀ (p₂ : relevant_set2) p₃, Disjoint (extra_set2 p₂.2.1 p₂.2.2.1.choose_spec p₂.2.2.2) (s p₃)) ∧
       ∀ p₁ p₂, p₁ ≠ p₂ → Disjoint (s p₁) (s p₂) := by
     have h_infinite (p : relevant_set3) :
-        Set.Infinite <| (((({⟨⟨p.1.2.1.1, p.1.2.1.2.1, n'⟩, p.1.2.2⟩ | n' ≠ 0} \
-          {y : G'| ∃ w, Next_aux p.1.1 y w}) \ {y | y = g}) \ {y | y = x₀}) \
+        Set.Infinite <| ((((({⟨⟨p.1.2.1.1, p.1.2.1.2.1, n'⟩, p.1.2.2⟩ | n' ≠ 0} \
+          {y : G'| ∃ a x, Next_aux a y x}) \ {y : G'| ∃ a x, Next_aux a x y}) \
+          {y | y = g}) \ {y | y = x₀}) \
           ⋃ (p : relevant_set1), (extra_set1 p.2.1 p.2.2.choose_spec)) \
           ⋃ (p : relevant_set2), (extra_set2 p.2.1 p.2.2.1.choose_spec p.2.2.2) := by
       have ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy, hn⟩⟩ := p
-      refine (Set.Infinite.diff ?_ ?_).diff ?_ |>.diff ?_ |>.diff ?_ |>.diff ?_
+      refine (Set.Infinite.diff ?_ ?_).diff ?_ |>.diff ?_ |>.diff ?_ |>.diff ?_ |>.diff ?_
       ·
         simp
         --doable, this set is the image of ℕ \ {0} through the function n ↦ ⟨⟨a', c', n⟩, _⟩, which is injective
+        --similar to exists_extra_set1
+        sorry
+      ·
+        --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite
         --similar to exists_extra_set1
         sorry
       ·
@@ -2172,15 +2198,16 @@ lemma exists_extra_set3 :
       have hz := hs_subs ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy, hn⟩⟩ hz
       simp only [Set.mem_diff, Set.mem_setOf_eq, not_exists] at hz
 
-      obtain ⟨⟨⟨⟨⟨⟨n', ⟨hz₀, hz₁⟩⟩, hz₂⟩, hz₃⟩, hz₄⟩, hz₅⟩, hz₆⟩ := hz
-      refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+      obtain ⟨⟨⟨⟨⟨⟨⟨n', ⟨hz₀, hz₁⟩⟩, hz₂⟩, hz₃⟩, hz₄⟩, hz₅⟩, hz₆⟩, hz₇⟩ := hz
+      refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
       · simp_rw [← hz₁]
       · rw [← hz₁]
       · rw [← hz₁]
         exact hz₀
-      · exact hz₃
-      · exact fun x ↦ hz₂ x
       · exact hz₄
+      · exact fun x ↦ hz₂ x
+      · exact fun x ↦ hz₃ x
+      · exact hz₅
     · refine Finset.disjoint_right.mpr fun z hz ↦ ?_
       have ⟨⟨_, h⟩, _⟩ := hs_subs p₃ hz
       simp only [Set.mem_iUnion, Finset.mem_coe, not_exists] at h
@@ -2220,13 +2247,18 @@ lemma extra_set3_not_g {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c
 
 lemma extra_set3_not_Next_aux {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
     (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
-    ∀ x, ¬ Next_aux c' z x :=
+    ∀ a x, ¬ Next_aux a z x :=
   (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.2.2.2.1
+
+lemma extra_set3_not_Next_aux' {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+    ∀ a x, ¬ Next_aux a x z :=
+  (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.2.2.2.2.1
 
 lemma extra_set3_not_x₀ {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
     (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
     .inr z ≠ x₀ :=
-  (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.2.2.2.2
+  (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.2.2.2.2.2
 
 lemma extra_set3_disjoint {c'₁ c'₂ b₁ b₂ : A} {y₁ y₂ : G'}
     (h_rel₁ : Relevant next_aux_finite c'₁ y₁) (hb₁ : Next_aux c'₁ y₁ b₁) (hSy₁ : S y₁ = c'₁) (hn₁ : y₁.1.2.2 = 0)
@@ -2247,25 +2279,6 @@ lemma extra_set23_disjoint {c'₂ c'₃ b₂ b₃ : A} {y₂ y₃ : G'}
     (h_rel₃ : Relevant next_aux_finite c'₃ y₃) (hb₃ : Next_aux c'₃ y₃ b₃) (hSy₃ : S y₃ = c'₃) (hn₃ : y₃.1.2.2 = 0) :
     Disjoint (extra_set2 h_rel₂ hb₂ hSy₂) (extra_set3 h_rel₃ hb₃ hSy₃ hn₃) := by
   refine exists_extra_set3.choose_spec.2.2.1 ⟨⟨c'₂, y₂⟩, ⟨h_rel₂, ⟨b₂, hb₂⟩, hSy₂⟩⟩ _
-
--- maybe it's useless
--- noncomputable def relevant_finset : Finset (A × G') :=
---   letI := Set.Finite.fintype relevant_set_finite
---   relevant_set.toFinset
-
---
--- this set will hold all the different extra_sets generated by the greedy construction at a specific step, I will need to prove that it is finite, then it will be useful to prove finiteness later
--- def extra_set_tot : Set G' := ⋃ c'y ∈ relevant_set, extra_set1 c'y.1 c'y.2.1.1
--- def extra_set_tot : Set G := ⋃ c'y ∈ relevant_set, (Finset.image Sum.inr (extra_set c'y.1 c'y.2.1.1)).toSet
--- -- def extra_set_tot : Set G' := ⋃ c', ⋃ w, ⋃ (_ : Relevant ok.finite c' w), extra_set1 c' w.1.1
-
--- -- for now I am not golfing the proof since this will change when I add more sets to extra_set_tot
--- lemma extra_set_tot_finite : extra_set_tot.Finite := by
---   simp_rw [extra_set_tot]
---   refine Set.Finite.biUnion relevant_set_finite fun (c', y) h ↦ ?_
---   exact Finset.finite_toSet _
-
-
 
 open Classical in
 noncomputable def extra_set (c' : A) (y : G') : Finset G' :=
@@ -2320,7 +2333,7 @@ lemma extra_set_not_x₀ {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c
     exact extra_set3_not_x₀ h_rel hb hSy hn hz
 
 lemma extra_set_not_Next_aux {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
-    (hz : z ∈ extra_set c' y) : ∀ x, ¬ Next_aux c' z x := by
+    (hz : z ∈ extra_set c' y) : ∀ a x, ¬ Next_aux a z x := by
   rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
   · rw [extra_set_case1 h_rel hw] at hz
     exact extra_set1_not_Next_aux h_rel hw hz
@@ -2328,6 +2341,16 @@ lemma extra_set_not_Next_aux {c' : A} {y z : G'} (h_rel : Relevant next_aux_fini
     exact extra_set2_not_Next_aux h_rel hb hSy hz
   · rw [extra_set_case3 h_rel hb hSy hn] at hz
     exact extra_set3_not_Next_aux h_rel hb hSy hn hz
+
+lemma extra_set_not_Next_aux' {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hz : z ∈ extra_set c' y) : ∀ a x, ¬ Next_aux a x z := by
+  rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
+  · rw [extra_set_case1 h_rel hw] at hz
+    exact extra_set1_not_Next_aux' h_rel hw hz
+  · rw [extra_set_case2 h_rel hb hSy] at hz
+    exact extra_set2_not_Next_aux' h_rel hb hSy hz
+  · rw [extra_set_case3 h_rel hb hSy hn] at hz
+    exact extra_set3_not_Next_aux' h_rel hb hSy hn hz
 
 lemma extra_set_disjoint {c'₁ c'₂ : A} {y₁ y₂ : G'} (h_rel₁ : Relevant next_aux_finite c'₁ y₁)
     (h_rel₂ : Relevant next_aux_finite c'₂ y₂) (h : c'₁ ≠ c'₂ ∨ y₁ ≠ y₂) :
