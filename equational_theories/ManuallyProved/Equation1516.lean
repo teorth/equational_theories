@@ -1510,7 +1510,7 @@ noncomputable def partL (c' : A) (y : G) : G := by
       · exact .inr ⟨(a, b, 0), habn⟩
     by_cases hb : ∃ b', c' = c a b'
     · exact .inl hb.choose
-    -- TODO: change the blueprint, the proof is incorrect: in the blueprint in this case we use the surjectivity once to find `b` such that `a ◇ b = c'` and then define `L_c' y = b`. I didn't find a way to make this work, so I used the surjectivity twice to also find `b'` such that `c' ◇ b' = b`, and then define `L_c y = b'`, this way it seems to be working.
+    -- The blueprint proof is incorrect: in the blueprint in this case we use the surjectivity once to find `b` such that `a ◇ b = c'` and then define `L_c' y = b`. I didn't find a way to make this work, so I used the surjectivity twice to also find `b'` such that `c' ◇ b' = b`, and then define `L_c y = b'`, this way it seems to be working.
     · exact .inl (A_op_surj_right c' (A_op_surj_right a c').choose).choose
 
 lemma partL_of_inl (d : A) (a : A) : partL d a = d ◇ a := rfl
