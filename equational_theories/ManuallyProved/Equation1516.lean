@@ -1475,7 +1475,7 @@ structure OK (E : A → G → G → Prop) : Prop where
   func {a x y y'} : E a x y → E a x y' → y = y'
   extend {a b : A} {x} : E a b x → x = .inl (a ◇ b)
   -- hx₀ : E 1 x₀ (.inl 1)
-  hx₀ {x} : E 1 x₀ x → x = .inl 1
+  -- hx₀ {x} : E 1 x₀ x → x = .inl 1 --maybe this is not even necassary, aux4 should suffice
   -- aux1 {x y z w} : E x y z → E x z w → E (S y) w x --eq1516
   aux1 {x y z w k} : E x y z → E x z w → E (S y) w k → k = x --eq1516
   aux2 {b} {x : G'} : -- technical condition to ensure the infinite surjectivity
@@ -1492,6 +1492,9 @@ class Extension where
   d : A
   g : G
   not_def {z} : ¬E d g z
+
+lemma E_1_x₀_eq_1 {E : PartialSolution} {z : G} (hE : E.val 1 x₀ z) : z = .inl 1 := by
+  convert E.property.aux4 rfl (show (⟨⟨_, _, _⟩, _⟩ : G').1.2.2 = 0 from rfl) hE
 
 namespace Extension
 
@@ -1664,11 +1667,11 @@ lemma next_aux_extend {a b : A} {x} : Next_aux a b x → x = .inl (a ◇ b) := b
   · exact ok.extend h
   · rw [hx, ← hbg, partL_of_inl, had]
 
-lemma next_aux_x₀ {x} : Next_aux 1 x₀ x → x = .inl 1 := by
-  simp only [next_aux_iff]
-  rintro (h | ⟨hd, hg, hx⟩)
-  · exact ok.hx₀ h
-  · rw [hx, ← hd, ← hg, x₀, partL_of_inr_same_of_zero]
+-- lemma next_aux_x₀ {x} : Next_aux 1 x₀ x → x = .inl 1 := by
+--   simp only [next_aux_iff]
+--   rintro (h | ⟨hd, hg, hx⟩)
+--   · exact ok.hx₀ h
+--   · rw [hx, ← hd, ← hg, x₀, partL_of_inr_same_of_zero]
 
 lemma next_aux_aux3 {a} {y : G'} {x} (hSy : S y = a) (hn : y.1.2.2 ≠ 0) (h : Next_aux a y x) :
     x = .inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩ := by
@@ -2433,9 +2436,9 @@ def next_extend {a b : A} {x} : Next a b x → x = .inl (a ◇ b) := by
   simp only [next_iff, reduceCtorEq, false_and, and_false, exists_false, or_false]
   exact fun h ↦ next_aux_extend h
 
-def next_hx₀ {x} : Next 1 x₀ x → x = .inl 1
-  | .aux ha => next_aux_x₀ ha
-  | .extra h_rel h_ex => (extra_set_not_x₀ h_rel h_ex rfl).elim
+-- def next_hx₀ {x} : Next 1 x₀ x → x = .inl 1
+--   | .aux ha => next_aux_x₀ ha
+--   | .extra h_rel h_ex => (extra_set_not_x₀ h_rel h_ex rfl).elim
 
 def next_aux2 {b} {x : G'} (h_rel : Relevant next_finite b x) :
     (dom_projL next_finite).card ≤ {y : G' | Next b y x}.ncard := by
@@ -2541,7 +2544,9 @@ def next_aux1 {x y z w k} : Next x y z → Next x z w → Next (S y) w k → k =
     (extra_set_not_relevant h_rel' h_ex' x h_rel).elim
 
 def next : PartialSolution :=
-  ⟨Next, next_finite, next_func, next_extend, next_hx₀, next_aux1, next_aux2,
+  ⟨Next, next_finite, next_func, next_extend,
+  -- next_hx₀,
+  next_aux1, next_aux2,
 
   next_aux3, next_aux4, next_aux5⟩
 
@@ -2576,7 +2581,7 @@ theorem exists_extension (seed : PartialSolution) :
   refine ⟨L.curry,
     fun a b ↦ (e (a, b)).2.extend (hL (a, b)),
     fun a x ↦ ?_,
-    (e (1, x₀)).2.hx₀ (hL (1, x₀)),
+    E_1_x₀_eq_1 (hL (1, x₀)),
     fun b ⟨x, hx⟩ ↦ ?_⟩
   · let T : Finset (A × G) := {
       (a, (x : G)),
@@ -2638,8 +2643,7 @@ def seed : A → G → G → Prop := fun _ _ _ ↦ false
 theorem seed_ok : OK seed where
   finite := by simp [seed]
   extend := by simp [seed]
-  hx₀ := by simp [seed]
-  func h1 h2 := by simp_all [seed]
+  func := by simp [seed]
   aux1 := by simp [seed]
   aux2 := by simp [seed, dom_projL]
   aux3 := by simp [seed]
