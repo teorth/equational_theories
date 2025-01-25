@@ -1296,7 +1296,12 @@ theorem A_op_surj_right (a b : A) : ∃ c : A, a ◇ c = b := by
   /-By construction, $S$ is already defined and equal to the identity on $\Z$, and we have the 1516 equation
 $$ L_{Sa} L_b L_b a = b$$
 for $a,b \in \Z$, with the left multiplication operators $L_b$ currently only defined as maps from $\Z$ to $\Z$.  Among other things, this means that $L_a = L_{Sa}$ is surjective as a map from $\Z$ to $\Z$ for any $a \in \Z$.-/
-  sorry
+  have :=  A_satisfies_Equation1516 b a
+  rw[A_idempotent a] at this
+  use b ◇ (b ◇ a)
+  tauto
+
+
 
 theorem A_op_eq_self_iff {a c : A} : c ◇ a = a ↔ c = a := by
   -- doable, just use A_satisfies_Equation1516
@@ -2709,16 +2714,96 @@ instance : Fintype (partial_domain' x) := by
   -- doable
   -- this set should be some kind of slice of {(x, y) : G × G | E x y}, which we already know to be finite (OK.finite)
   -- find the right definition of slice, then there will probably already be an instance proving the finiteness of a slice given the finiteness of the initial set
-  sorry
+  have finite : Set.Finite {(z, y) : G × G | E x z y} := by
+    apply (ok).finite  -- ok sarebbe OK x E
+  have h1 : Set.Finite {z : G | ∃ (y : G) , E x z y} := by  --sarebbe il partial domain' x
+    let A := {(z, y) : G × G | E x z y}
+    let B := {z : G | ∃ (y : G) , E x z y}
+    let f : G × G → G := fun x ↦ x.1
+    have h' : f '' A = B := by
+      have sxdx : f '' A ⊆ B := by
+        intro a ha
+        simp at ha
+        rcases ha with ⟨ a1, a2, ha1, ha2 ⟩  --  ha2 dice che a = a1
+        unfold f at ha2
+        unfold A at ha1
+        simp at ha1
+        unfold B
+        simp
+        use a2
+        rw [← ha2]
+        tauto
+      have dxsx : B ⊆ f '' A := by
+        intro y hy
+        simp
+        unfold B at hy
+        rcases hy with ⟨y2, hy2⟩ --ora voglio provare che (y,y2) ∈ A e f(y,y2)=y
+        use y, y2
+        constructor
+        · unfold A
+          simp
+          exact hy2
+        · unfold f
+          rfl
+      apply Set.Subset.antisymm sxdx dxsx
+    unfold A B at h'
+    rw [← h']
+    apply Set.Finite.image f finite
+  unfold partial_domain'
+  have dom : (E x).dom = {z : G | ∃ (y : G) , E x z y} := by
+    tauto
+  rw [dom]
+  exact h1.fintype
+
+
+
+
+
+
 
 def partial_domain : Finset G := (partial_domain' x).toFinset
 
 
-def partial_range' : Set G := (E x).codom
+def partial_range' : Set G := (E x).codom  -- {y : G | ∃ z : G, E x z y}
 
 instance : Fintype (partial_range' x) := by
   -- doable, same as above for the domain
-  sorry
+  have finite : Set.Finite {(z, y) : G × G | E x z y} := by
+    apply (ok).finite
+  have h1 : Set.Finite {y : G | ∃ (z : G) , E x z y} := by  --sarebbe il partial_range' x
+    let A := {(z, y) : G × G | E x z y}
+    let B := {y : G | ∃ (z : G) , E x z y}
+    let f : G × G → G := fun x ↦ x.2
+    have h' : f '' A = B := by
+      have sxdx : f '' A ⊆ B := by
+        intro a ha
+        simp at ha -- f(a_1, a) = a
+        rcases ha with ⟨ a1, ha1⟩  -- call a_1 = a1
+        unfold A at ha1
+        simp at ha1
+        unfold B
+        simp
+        use a1
+      have dxsx : B ⊆ f '' A := by
+        intro y hy
+        simp -- we have to proof ∃ a, (a,y) ∈ A, because Lean knows f(a,y)=y
+        unfold B at hy
+        rcases hy with ⟨y2, hy2⟩   --ora voglio provare che (y,y2) ∈ A e f(y,y2)=y
+        use y2
+        unfold A
+        simp
+        exact hy2
+      apply Set.Subset.antisymm sxdx dxsx
+    unfold A B at h'
+    rw [← h']
+    apply Set.Finite.image f finite
+  unfold partial_range'
+  have dom : (E x).codom = {y : G | ∃ (z : G) , E x z y} := by
+    tauto
+  rw [dom]
+  exact h1.fintype
+
+
 
 def partial_range : Finset G := (partial_range' x).toFinset
 
@@ -2726,6 +2811,8 @@ def partial_range : Finset G := (partial_range' x).toFinset
 lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
   -- doable
   -- we know that the domain and the image are finite while G is infinite, so we can just take an element that is not in either
+
+
   sorry
 
 lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧ w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
