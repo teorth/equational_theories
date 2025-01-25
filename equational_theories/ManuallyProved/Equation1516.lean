@@ -1488,7 +1488,7 @@ structure OK (E : A → G → G → Prop) : Prop where
   hx₀ {x} : E 1 x₀ x → x = .inl 1
   -- aux1 {x y z w} : E x y z → E x z w → E (S y) w x --eq1516
   aux1 {x y z w k} : E x y z → E x z w → E (S y) w k → k = x --eq1516
-  aux2 (b) (x : G') : -- technical condition to ensure the infinite surjectivity
+  aux2 {b} {x : G'} : -- technical condition to ensure the infinite surjectivity
     Relevant finite b x → (dom_projL finite).card ≤ {y : G' | E b y x}.ncard
   aux3 {a} {y : G'} {x} : S y = a → y.1.2.2 ≠ 0 → E a y x → x = .inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩
   aux4 {a} {y : G'} {x} : S y = a → y.1.2.2 = 0 → E a y x → x = .inl a
@@ -1516,9 +1516,8 @@ noncomputable def partL (c' : A) (y : G) : G := by
       · exact .inr ⟨(a, b, 0), habn⟩
     by_cases hb : ∃ b', c' = c a b'
     · exact .inl hb.choose
-    -- TODO: change the blueprint, the proof is incorrect, in the blueprint in this case we use the surjectivity once to find b such that a ◇ b = c', I didn't find a way to make this work, so I used the surjectivity twice to also find b' such that c' ◇ b' = b, this way it seems to be working. Also remember to notify the zulip chat about this.
+    -- TODO: change the blueprint, the proof is incorrect: in the blueprint in this case we use the surjectivity once to find `b` such that `a ◇ b = c'` and then define `L_c' y = b`. I didn't find a way to make this work, so I used the surjectivity twice to also find `b'` such that `c' ◇ b' = b`, and then define `L_c y = b'`, this way it seems to be working.
     · exact .inl (A_op_surj_right c' (A_op_surj_right a c').choose).choose
-
 
 lemma partL_of_inl (d : A) (a : A) : partL d a = d ◇ a := rfl
 
@@ -1651,9 +1650,6 @@ lemma _root_.ENat.eq_top_iff_forall_le (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m �
 
 variable [Extension]
 
---here I will put the definition and API for next
-
-
 /- Problem I am encountering while defining Next: I need to define the extra cases on the basis of Relevant (in a pair (c', y) is relevant with respect to Next I should add something to Next), the problem is that I cannot even state this inside Next, because in order to even say that (c', y) are Relevant wrt Next I need the fact that Next.2.finite, which I can only establish after having defined it.
 The soultion I will try to implement is this:
 instead of defining Next in one go, I define an auxiliary structure Next_aux, where I just add the base and new cases, this will of course not be a PratialSolution, but I can still use its Relevant set since its domain will still be finite.
@@ -1713,35 +1709,34 @@ lemma next_aux_aux1 {x y z w k} : Next_aux x y z → Next_aux x z w → Next_aux
     · rw [next_aux_iff]
       rintro (h' | ⟨had', hbg', hx'⟩)
       · exact ok.aux1 hb h h'
-      ·
-        --??? I need to figure this out, I'm not sure how though
+      · -- This is the case where `Lₓy` and `LₓLₓy` are already defined and we are defining `L_{Sy}LₓLₓy` as a new element with `d = S y` and `g = LₓLₓy`.
         simp_all
         clear hbg' hx'
+        rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
+        · rw [partL_of_inl]
+          sorry
+        · by_cases ha : a = d
+          · by_cases hn : n = 0
+            · subst hn ha
+              rw [partL_of_inr_same_of_zero]
+              sorry
+            · rw [← ha, partL_of_inr_same_of_ne_zero _ hn]
+              -- the goal here is impossible because of Sum.inr_ne_inl, so we need to find a contradiction from the hypotheses
+              -- observation, not sure if it is useful: we have g = (a, b, n) with n ≠ 0, the relations generated through the first phase can only have output in A or of the form (a, b, 0), so the relation h : E x z g must have been generated in the second phase
+              sorry
+          · by_cases hb : ∃ b', d = c a b'
+            · obtain ⟨b', hb'⟩ := hb
+              rw [partL_of_inr_of_exists _ ha habn hb']
+              sorry
+            · obtain ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n ha habn hb
+              rw [hdg]
+              sorry
+        -- 🛑 Problem 🛑: try to fix this again, if you do not succeed write some comment better describing the situation
 
-        sorry
-        -- rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
-        -- ·
-        --   exact .inl (c' ◇ a)
-        -- ·
-        --   by_cases ha : a = d
-        --   · by_cases hn : n = 0
-        --     ·
-        --       simp_all
-        --       rw [partL_of_inr_same_of_zero]
-        --       exact .inl a
-        --     · exact .inr ⟨(a, b, 0), habn⟩
-        --   by_cases hb : ∃ b', c' = c a b'
-        --   · exact .inl hb.choose
-        --   · exact .inl (A_op_surj_right a c').choose
-        -- rw [hbg'] at h
-
-        -- sorry
-      -- exact Next_aux.base <| ok.aux1 hb h _
     · rw [next_aux_iff]
       rintro (h' | ⟨had', hbg', hx'⟩)
       · simp_all
         clear had hbg hx
-        -- divide the different cases of partL?
         rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
         · rw [hg, partL_of_inl] at h'
           rw [ok.extend h']
@@ -1755,11 +1750,31 @@ lemma next_aux_aux1 {x y z w k} : Next_aux x y z → Next_aux x z w → Next_aux
           · simp_all only [S]
             clear hg hy
             congr
-
+            -- 🛑 Problem 🛑: see other sorries in this proof
             sorry
-
-        ·
-          sorry
+        · -- 🛑 Problem 🛑: see other sorries in this proof
+          by_cases had : a = d
+          · by_cases hn : n = 0
+            · subst had hn
+              rw [hg, partL_of_inr_same_of_zero] at h'
+              rw [ok.extend h']
+              congr
+              rw [A_op_eq_self_iff]
+              -- notice that E d y g and g = (d, b, 0). if this relation was generated in the first phase, then the only possible combination that gives an output like (a, b, 0) is if S y = d and we would be done. If instead the relation was generated in the second phase, L_d g was already defined and since g = (d, b, 0) it must be equal to d ∈ A, so we would be in case 3 and y would be of the form (d, ., n) and we are done again. How should we implement this? Maybe we could add a hypothesis to PartialSolution saying that E d y (d, b, 0) implies S y = d
+              sorry
+            · subst had
+              rw [hg, partL_of_inr_same_of_ne_zero _ hn] at h'
+              -- notice that E d y g and g = (d, b, n). This relation cannot be generated in the first phase. If it was generated in the second phase, L_d g was already defined and equal to (d, b, 0), so we would be in case 1 and y would be of the form (c_{d, d}, d, n). I'm not sure if this helps.
+              sorry
+          · by_cases hb : ∃ b', d = c a b'
+            · obtain ⟨b', hb'⟩ := hb
+              rw [hg, partL_of_inr_of_exists _ had habn hb'] at h'
+              rw [ok.extend h']
+              sorry
+            · have ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n had habn hb
+              rw [hg, hdg] at h'
+              rw [ok.extend h']
+              sorry
       · by_cases h : .inl d = g
         · rw [hx', ← h, partL_of_inl, A_idempotent, had]
         · rw [hbg'] at hx
@@ -1857,34 +1872,10 @@ Further simplification of this approach: I don't really need to use both `A`s an
 -/
 
 lemma exists_disjoint_sets {α ι : Type*} [Finite ι] (n : ι → ℕ)
-    {A : ι → Set α} (hA : ∀ i, (A i).Infinite)
-    -- {B : ι → Set α} (hB : ∀ i, (B i).Finite)
-    :
+    {A : ι → Set α} (hA : ∀ i, (A i).Infinite) :
     ∃ s : ι → Finset α, (∀ i, (s i).toSet ⊆ A i) ∧
       (∀ i, (s i).card = n i) ∧ ∀ i j, i ≠ j → Disjoint (s i) (s j) := by
   sorry
-
-
--- remember, during the construction of the extra sets, to also exclude the elements in relevant_aux_set (dom_projL ok.finite)
-
--- lemma exists_multiple_sets {α : Type*}
-
--- lemma exists_extra_set1 :
---     -- ∃ s : {(c', y) | Relevant c' y ∧ ∃ w : G', }
-
---     ∃ s : Finset G', s.card = (dom_projL ok.finite).card ∧
---       ∀ z ∈ s, z.1.1 = c w1 c' ∧ z.1.2.1 = c' ∧ .inr z ≠ g ∧ ∀ x, ¬ E c' z x := by
---   have : Set.Infinite <| ({((⟨⟨c w1 c', c', n'⟩, c_ne w1 c'⟩ : G') : G) | n'} \
---       {y : G| ∃ w, E c' y w}) \ {g} := by
---     refine (Set.Infinite.diff ?_ ?_).diff (Set.finite_singleton g)
---     ·
---       --doable, this set is the image of ℕ through the function n ↦ ⟨⟨c w1 c', c', n⟩, c_ne w1 c'⟩, which is injective
---       sorry
---     ·
---       --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite
---       sorry
---   -- doable, use Finset.exists_card_eq
---   sorry
 
 example (α : Type*) (A : Set α) (hA : A.Finite) : Finite A := by
   exact hA
