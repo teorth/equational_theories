@@ -2560,8 +2560,6 @@ end Extension
 
 open Extension
 
---maybe in  this part of the prof we can actually avoid using the greedy construction, at first glance it seems to me that we actually explicitely define the function at each
-set_option pp.proofs true
 theorem exists_extension (seed : PartialSolution) :
     ∃ L : A → G → G,
       (∀ a b : A, L a b = a ◇ b) ∧ -- Lb extends a : A ↦ b ◇ a
@@ -2618,7 +2616,7 @@ theorem exists_extension (seed : PartialSolution) :
 
     have ⟨e_b, e_x1, e_x2, e_T', e_bx⟩ := hT
 
-    have h := e.2.aux2 b ⟨x, hx⟩
+    have h := @e.2.aux2 b ⟨x, hx⟩
     simp_rw [relevant_iff, ← Finset.mem_coe, ← Set.ncard_coe_Finset, dom_projL_eq e.2.finite] at h
     have h_finite : {a | ∃ x y, e.1 a x y}.Finite := by
       convert Set.Finite.image (fun (a, _, _) ↦ a) e.2.finite
@@ -2741,7 +2739,6 @@ noncomputable def w : G := by
   exact if h : (∃ (z : G), E x z (d x)) then (exists_not_in_domain_range' x h.choose).choose
     else (exists_not_in_domain_range x).choose
 
--- set_option pp.proofs true
 lemma w_not_in_domain : w x ∉ partial_domain x := by
   by_cases h : (∃ (z : G), E x z (d x))
   · simp only [w, h]
