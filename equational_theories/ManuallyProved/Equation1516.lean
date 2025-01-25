@@ -1292,16 +1292,10 @@ theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
     simp
 
 theorem A_op_surj_right (a b : A) : ∃ c : A, a ◇ c = b := by
-  --doable, first check if there is already a proof in some lemma around here, I did a quick search and didn't find one. The proof of this is:
-  /-By construction, $S$ is already defined and equal to the identity on $\Z$, and we have the 1516 equation
-$$ L_{Sa} L_b L_b a = b$$
-for $a,b \in \Z$, with the left multiplication operators $L_b$ currently only defined as maps from $\Z$ to $\Z$.  Among other things, this means that $L_a = L_{Sa}$ is surjective as a map from $\Z$ to $\Z$ for any $a \in \Z$.-/
-  have :=  A_satisfies_Equation1516 b a
-  rw[A_idempotent a] at this
+  have := A_satisfies_Equation1516 b a
+  rw [A_idempotent a] at this
   use b ◇ (b ◇ a)
   tauto
-
-
 
 theorem A_op_eq_self_iff {a c : A} : c ◇ a = a ↔ c = a := by
   -- doable, just use A_satisfies_Equation1516
@@ -1310,10 +1304,8 @@ theorem A_op_eq_self_iff {a c : A} : c ◇ a = a ↔ c = a := by
 section Refutation255
 
 -- Follows https://teorth.github.io/equational_theories/blueprint/1516-chapter.html
--- We try to mimick the proof structure from Equation63 for the greedy construction parts. For now we are focusing on the second greedy construction (the one to prove axioms A and C) as it looks to be simpler than the other one. There are still big chunks of copy pasted and commented code. We will try to uncomment and adapt it as we go.
+-- We try to mimick the proof structure from Equation63 for the greedy construction parts.
 -- There are some sorries marked with `doable`, those can be tackled with relatively limited effort, without having to first understand all the greedy construction.
--- Current big task: build `next` for the second greedy construction
-
 
 def G' := {(a, b, _) : A × A × ℕ | a ≠ b}
 
@@ -1335,12 +1327,12 @@ def S : G → A
   | .inl a => a
   | .inr g => g.1.1
 
--- we take a special x₀ = (*, 0, 0) ∈ G', where * is the identity of A, i.e. the empty word
--- this is needed for Corollary 17.7, note that by doing this we are taking a sligthly different route from the proof of the corollary in the blueprint, in particular we make an explicit example of an element that does not verify eq 255
+/- We consider a special element `x₀ = (*, 0, 0) ∈ G'`, where `*` is the identity of `A`, i.e. the empty word.
+This is needed for Corollary 17.7; note that by doing this we are taking a sligthly different route from the proof of the corollary in the blueprint, in particular we make an explicit example of an element that does not verify eq 255. -/
 def x₀ : G := .inr ⟨⟨1, x 0, 0⟩, fun h ↦ one_ne_of 0 h⟩
 
 namespace GreedyB
--- Greedy construction to extend the operation from A×A to A×G' in order to satisfy Axiom B
+-- Greedy construction to extend the operation from A×A to A×G' in order to satisfy Axiom B, we try to mimic the structure of GreedyAC below
 
 lemma exists_extension_aux (a : A) : ∃ c : A → A,
     c.Injective ∧ (∀ b, a ◇ ((c b) ◇ b) = c b) ∧ (∀ b, c b ≠ b):= by
@@ -1394,8 +1386,8 @@ lemma exists_extension_aux (a : A) : ∃ c : A → A,
     rcases ne_or_eq a b with h1 | h2
     · unfold c
       rw [dif_neg h1]
-      have h_aux : (c_aux b h1).choose ◇ a = b := by  -- R_a c_(y,b) = b
-        apply (c_aux b h1).choose_spec.1   -- è la dim che (c_aux b h1).choose soddisfa la p: _ ◇ a = b
+      have h_aux : (c_aux b h1).choose ◇ a = b := by
+        apply (c_aux b h1).choose_spec.1
       have idem : a ◇ a = a := A_idempotent a
       nth_rw 1 [← idem]
       nth_rw 4 [← h_aux]
@@ -1420,23 +1412,22 @@ lemma c_spec (a b : A) : a ◇ ((c a b) ◇ b) = c a b := (exists_extension_aux 
 
 lemma c_ne (a b : A) : c a b ≠ b := (exists_extension_aux a).choose_spec.2.2 b
 
---- here I try to mimic the structure of GreedyAC below
-
 /- Problem with the proof in the blueprint: the greedy procedure seems to be adding not only the image of the special pair `(d,g)` that is not yet in the domain, but also an infinite number of other images of pairs in order to make the function infinitely surjective. How can we do this inside the greedy extension framework that we are trying to mimic? I have 2 ways in mind:
 - we can drop the finiteness requirement in `OK`, this would allow us to actually add an infinite number of images even in intermediate steps. The issue is that I'm not sure wether the finiteness will prove to be crucial in some of the later proofs. To do this we will probably need to add a requirement to `OK` asking that some set be infinite. This is likely not doable, I think the informal proof actually uses the finiteness of the `PartialSolution` in a crucial way.
 - we can try to add a new requirement to OK asking that the size of the counter images is bigger than some number, we need to use a number that we can easily show to grow indefinitely and I would rather not add a new variable altogether, because it may be hard to make it fit into the proof structure. One quantity that we have at our disposal could be something related to the size of the domain, but we need something that can grow indefinitely but does not grow too much when we add the new elements for the infinite surjectivity, otherwise we may end up trying to reach a target that moves as we advance towards it. Alternatively try to find a way to use the size of the domain of the previous iteration, instead of the current one (to do this I think I need to work directly inside Next, instead than inside the `PartialSolution`, not sure wether this is feasible).
 
-I try to implement the second solution. Since I want to add, for every `b ∈ A` and every `x ∈ G'`, an infinite number relations of the form `E b y x`, there are 3 things I need to keep in check during the iteration to avoid adding an infinite number of elements in a single step:
+I implement the second solution. Since I want to add, for every `b ∈ A` and every `x ∈ G'`, an infinite number relations of the form `E b y x`, there are 3 things I need to keep in check during the iteration to avoid adding an infinite number of elements in a single step:
 1. the number of `b ∈ A` I am considering
 2. the number of `x ∈ G'` I am considering
-3. the number of `y` I am adding for each `b` and `x`
+3. the number of `y` I am adding for each `(b, x)` pair
 
 Solutions:
-1. I already have a finite set `{(a, x, y) | E a x y}`, so in this case I can just take the projection of the set on the first element, i.e. `dom_projL := {a | ∃ x y, E a x y}`, this is finite and I can just ask that `b ∈ dom_projL`. Moreover this set does not change if I add new elements of the form `E b y x` with `b` aready in `dom_projL`.
-2. The naive idea could be to take the set `dom_projR := {x : G' | ∃ a y, E a x y}` and ask for `x ∈ dom_projR`. However as we add new elements of the form `E b y x`, the set `dom_projR` will grow, so we need a way do limit the number of `x`s without relying on this set. Remember, however, that elements of `G'` are of the form `(a, c, n) ∈ A × A × ℕ`, so we can use the set `dom_projL` again to limit the number of `x`s in the following way: we can ask that `a, c ∈ dom_projL` and that `n < dom_projL.card`. For this reason it may be useful to define `dom_projL` as a finset, so that we can use `.card` inside `ℕ`, avoiding coercions.
-Moreover, if we use a seed composed of only one element (I think it may be useful to use the seed `E * x₀ *`), it becomes easy to prove that it satisfies the requirement, because then `dom_projL = {*}` and there is no element of `G'` of the form `(*, *, n)`. (Maybe it will actually be enough to use an empty seed).
-3. Since we are using `dom_projL` for the other quantities we may as well use it for this one too. In parcitular we can limit the addition of new elements `y` in the following way: we add new relations `E b y x` until the cardinality of the set `{y | E b y x}` is bigger than `dom_projL.card`. This guarantees us that the number of new elements is finite for each of the (finitely many thanks to 1. and 2.) pairs `(b,x)` we are considering. Moreover we can easily send the quantity `dom_projL.card` to infinity.
-Moreover, note that in 1. and 2. we further restrict the situation by only considering `(b, x)` such that `L b x` is already defined, this will be done implicitely in the construction of `Next` by putting as a condition `Next b x w` or `Next b x c` and is needed because the elements `y` that we add for the infinite surjectivity depend on the value of `L b x`.
+1. I already have a finite set `{(a, x, y) | E a x y}` within the data of `PartialSolution`, so in this case I can just take the projection of the set on the first element, i.e. `dom_projL := {a | ∃ x y, E a x y}`; this is finite and I can just ask that `b ∈ dom_projL`. Moreover, this set does not change if I add new elements of the form `E b y x` with `b` aready in `dom_projL`.
+2. The naive idea could be to take the set `dom_projR := {x : G' | ∃ a y, E a x y}` and ask for `x ∈ dom_projR := {x | ∃ a y, E a x y}`. However as we add new elements of the form `E b y x`, the set `dom_projR` will grow, so we need a way do limit the number of `x`s without relying on this set. Remember, however, that elements of `G'` are of the form `(a, c, n) ∈ A × A × ℕ`, so we can use the set `dom_projL` again to limit the number of `x`s in the following way: we can ask that `a, c ∈ dom_projL` and that `n ≤ dom_projL.card`. For this reason it may be useful to define `dom_projL` as a finset, so that we can use `.card` inside `ℕ`, avoiding coercions.
+Moreover, if we use a seed composed of only one element (I think it may be useful to use the seed `E * x₀ *`), it becomes easy to prove that it satisfies the requirement, because then `dom_projL = {*}` and there is no element of `G'` of the form `(*, *, n)`. (Maybe it will actually be enough to use an empty seed, for which the proofs are even easier).
+3. Since we are using `dom_projL` for the other quantities, we may as well use it for this one too. In parcitular we can limit the addition of new elements `y` in the following way: we add new relations `E b y x` until the cardinality of the set `{y | E b y x}` is bigger than `dom_projL.card`. This guarantees us that the number of new elements is finite for each of the (finitely many thanks to 1. and 2.) pairs `(b,x)` we are considering. At the same time, this number can grow indefinitely as we add new pairs `(b,x)`, so we can use it to prove that the final function is infinitely surjective.
+
+Moreover, note that in 1. and 2. we further restrict the situation by only considering `(b, x)` such that `L b x` is already defined, this is useful because the elements `y` that we add for the infinite surjectivity depend on the value of `L b x`; it is also non restrictive, since eventually `L b x` will be defined for all `(b, x)`.
 -/
 
 noncomputable
@@ -1446,7 +1437,6 @@ def dom_projL {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) :
 
 lemma dom_projL_eq {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) :
     dom_projL hE = {a | ∃ x y, E a x y} := by simp [dom_projL, Set.image]
---TODO: add a lemma saying that dom_projL of Next is equal to dom_projL of the previous iteration union {d}, if it is needed
 
 @[mk_iff]
 structure Relevant_aux (s : Finset A) (x : G') :
@@ -1455,12 +1445,10 @@ structure Relevant_aux (s : Finset A) (x : G') :
   h2 : x.1.2.1 ∈ s
   h3 : x.1.2.2 ≤ s.card
 
-def relevant_aux_set (s : Finset A) : Set G' :=
-  {x | Relevant_aux s x}
+def relevant_aux_set (s : Finset A) : Set G' := {x | Relevant_aux s x}
 
 lemma relevant_aux_set_eq (s : Finset A) :
     relevant_aux_set s = {x | x.1.1 ∈ s ∧ x.1.2.1 ∈ s ∧ x.1.2.2 ≤ s.card} := by
-  ext
   simp [relevant_aux_set, relevant_aux_iff]
 
 lemma relevant_aux_set_finite (s : Finset A) :
@@ -1476,14 +1464,11 @@ structure Relevant {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Fini
   hb : b ∈ dom_projL hE
   hx : Relevant_aux (dom_projL hE) x
 
--- @[mk_iff]
--- structure Relevant {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) (b : A) (x : G') :
---     Prop where
---   hbx : ∃ z, E b x z
---   hb : b ∈ dom_projL hE
---   hx1 : x.1.1 ∈ dom_projL hE
---   hx2 : x.1.2.1 ∈ dom_projL hE
---   hxn : x.1.2.2 ≤ (dom_projL hE).card
+/-Design choice:
+for the condition `hx₀` in the structure `OK`, we could ask two different things:
+- `hx₀ {x} : E 1 x₀ x → x = .inl 1`, that is, if L₁ x₀ is defined then it is equal to 1
+- `hx₀ : E 1 x₀ (.inl 1)`, that is L₁ x₀ is always defined and equal to 1
+In the end we chose the first option, since it is the most flexible and in particular it allows us to define the starting seed as an empty `PartialSolution`, which is easier to work with. -/
 
 structure OK (E : A → G → G → Prop) : Prop where
   finite : {(a, x, y) | E a x y}.Finite
@@ -1510,7 +1495,6 @@ class Extension where
 
 namespace Extension
 
--- set_option diagnostics true
 -- define the element that should be the image of `L_c y`
 noncomputable def partL (c' : A) (y : G) : G := by
   rcases y with (a | ⟨⟨a, b, n⟩, habn⟩)
