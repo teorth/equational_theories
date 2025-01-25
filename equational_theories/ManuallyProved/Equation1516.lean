@@ -2376,54 +2376,22 @@ lemma extra_set_disjoint {c'₁ c'₂ : A} {y₁ y₂ : G'} (h_rel₁ : Relevant
   · rw [extra_set_case3 h_rel₁ hb₁ hSy₁ hn₁, extra_set_case3 h_rel₂ hb₂ hSy₂ hn₂]
     exact extra_set3_disjoint h_rel₁ hb₁ hSy₁ hn₁ h_rel₂ hb₂ hSy₂ hn₂ h
 
--- this is false if we are in case 3, maybe there is no need for such a lemma
--- lemma extra_set_Sz_ne_c' {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
---     (hz : z ∈ extra_set c' y) : S z ≠ c' := by
---   rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
---   · rw [extra_set_case1 h_rel hw] at hz
---     rw [← extra_set1_eq2 h_rel hw hz]
---     exact z.2
---   ·
---     rw [extra_set_case2 h_rel hb hSy] at hz
---     rw [← extra_set2_eq2 h_rel hb hSy hz]
---     exact z.2
---   ·
---     rw [extra_set_case3 h_rel hb hSy hn] at hz
---     rw [← hSy, S, S, extra_set3_eq1 h_rel hb hSy hn hz]
---     exact z.2
---     sorry
+lemma extra_set_not_relevant {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hz : z ∈ extra_set c' y) : ∀ a, ¬ Relevant next_aux_finite a z := by
+  simp_rw [relevant_iff, extra_set_not_Next_aux h_rel hz]
+  simp
 
--- def extra_set_tot : Set G := ⋃ c'y ∈ relevant_set, (Finset.image Sum.inr (extra_set c'y.1 c'y.2)).toSet
 def extra_set_tot : Set G := ⋃ c'y ∈ relevant_set, (Sum.inr '' (extra_set c'y.1 c'y.2))
--- def extra_set_tot : Set G' := ⋃ c', ⋃ w, ⋃ (_ : Relevant ok.finite c' w), extra_set1 c' w.1.1
 
--- for now I am not golfing the proof since this will change when I add more sets to extra_set_tot
-lemma extra_set_tot_finite : extra_set_tot.Finite := by
-  simp_rw [extra_set_tot]
-  refine Set.Finite.biUnion relevant_set_finite fun (c', y) h ↦ ?_
-  exact (Finset.finite_toSet _).image _
+lemma extra_set_tot_finite : extra_set_tot.Finite :=
+  relevant_set_finite.biUnion fun _ _ ↦ (Finset.finite_toSet _).image _
 
 end extra_set
 
 @[mk_iff]
 inductive Next : A → G → G → Prop
-  -- | base {a y x} : E a y x → Next_aux a y x
-  -- | new : Next_aux d g (partL d g)
   | aux {a y x} : Next_aux a y x → Next a y x
-
-  --this extra is how it should look at the end
   | extra {c' y z} : Relevant next_aux_finite c' y → z ∈ extra_set c' y → Next c' z y
-
-  -- | extra1 {c' y} {w z : G'} : -- case1
-  --   -- we need to define the extra_set1 which should be a set of cardinality (dom_projL finite).card of elements z = (c w c', c', n') such that L c' z is not yet defined (i.e. is not defined neither in base or in new, we can directly ask that z ≠ g and ¬ E c' z p for any p), we can do something like a lemma stating that {(c w c', c', n') | n'} is infinite and we just subtract from it {y | ∃ w, E c' y w} ∪ {g} which is finite, so there is a subset of cardinality (dom_projL finite).card
-  --     Relevant next_aux_finite c' y → Next c' y w → z ∈ extra_set1 c' w.1.1 → Next c' z y
-  --     -- Relevant ok.finite c' y' → Next c' y' w' → z ∈ extra_set1 c' w'.1.1 → Next c' z y'
-  --   -- sorry
-  -- | extra2 {c' y} {b : A} {z : G'} : --case2
-  --     Relevant next_aux_finite c' y → Next c' y b → S y ≠ c' → z ∈ extra_set2 c' b → Next c' z y
-  -- | extra3 {c' y} {b : A} {z : G'} : --case4, we skipped case 3 because we are asking that L c' y is already defined
-  --     -- not finished! this is only a temporary test
-  --     Relevant next_aux_finite c' y → Next c' y b → S y = c' → y.1.2.2 = 0 → z ∈ extra_set3 → Next c' z y
 
 lemma Next_base {a y x} : E a y x → Next a y x := fun h ↦ Next.aux (Next_aux.base h)
 
@@ -2451,20 +2419,19 @@ def next_finite : {(a, x, y) | Next a x y}.Finite := by
       simp only [Set.mem_setOf_eq, true_and, h_rel]
       exact ⟨z', h_extra_set, hy'.symm⟩
 
-lemma dom_projL_next_aux : dom_projL next_finite = dom_projL next_aux_finite := by
+lemma dom_projL_next_aux_eq : dom_projL next_finite = dom_projL next_aux_finite := by
   -- doable, one direction should be immediate, for the other if there is a ∈ dom_projL next_finite then Next a y x for some x y, then either Next_aux a y x or the extra case, but in the extra case it must hold Relevant next_aux_finite a y, so a ∈ dom_projL next_aux_finite
   sorry
 
-
 lemma relevant_next_iff_next_aux {c' y} :
     Relevant next_finite c' y ↔ Relevant next_aux_finite c' y := by
-  -- dom_projL_next_aux to eliminate the dom_projL conditions in both directions, for the E c' y w condition one direction is immediate, for the other if there is a Next c' y w then either Next_aux c' y w (and so we are done) or the extra case, in particular in the extra case we have that y ∈ extra_set, so ¬ Relevant_aux (dom_projL ) y, which is absurd because we have Relevant c' y
+  -- dom_projL_next_aux to eliminate the dom_projL conditions in both directions, for the E c' y w condition one direction is immediate, for the other if there is a Next c' y w then either Next_aux c' y w (and so we are done) or the extra case, in particular in the extra case we have that y ∈ extra_set, so ¬ Relevant_aux (dom_projL ) y (see extra_set_not_relevant), which is absurd because we have Relevant c' y
   sorry
 
 def next_func {a y x x'} : Next a y x → Next a y x' → x = x'
   | .aux hx, .aux hx' => next_aux_func hx hx'
-  | .aux ha, .extra h_rel h_ex => (extra_set_not_Next_aux h_rel h_ex x ha).elim
-  | .extra h_rel h_ex, .aux ha => (extra_set_not_Next_aux h_rel h_ex x' ha).elim
+  | .aux ha, .extra h_rel h_ex => (extra_set_not_Next_aux h_rel h_ex _ x ha).elim
+  | .extra h_rel h_ex, .aux ha => (extra_set_not_Next_aux h_rel h_ex _ x' ha).elim
   | .extra h_rel h_ex, .extra h_rel' h_ex' => by
     rename_i z y z' y'
     by_contra h_ne
@@ -2481,8 +2448,12 @@ def next_hx₀ {x} : Next 1 x₀ x → x = .inl 1
   | .aux ha => next_aux_x₀ ha
   | .extra h_rel h_ex => (extra_set_not_x₀ h_rel h_ex rfl).elim
 
-def next_aux2 (b) (x : G') :
-    Relevant next_finite b x → (dom_projL next_finite).card ≤ {y : G' | Next b y x}.ncard := by
+def next_aux2 {b} {x : G'} (h_rel : Relevant next_finite b x) :
+    (dom_projL next_finite).card ≤ {y : G' | Next b y x}.ncard := by
+  rw [relevant_next_iff_next_aux] at h_rel
+  rw [dom_projL_next_aux_eq, ← extra_set_card h_rel, ← Set.ncard_coe_Finset]
+  refine Set.ncard_le_ncard (fun z hz ↦ Next.extra h_rel hz) ?_
+  --doable, similar to other sorries remaining
   sorry
 
 def next_aux3 {a} {y : G'} {x} (hSy : S y = a) (hn : y.1.2.2 ≠ 0) : Next a y x → x = .inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩
