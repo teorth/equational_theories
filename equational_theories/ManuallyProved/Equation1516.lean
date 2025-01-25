@@ -1694,6 +1694,13 @@ lemma next_aux_aux5 {c} {y : G'} {x} (h : S y ≠ c) (h' : Next_aux c y x) : x �
   · rw [hx, ← had, ← hbg]
     exact partL_ne_c' h
 
+/- Problem with proving that Next_aux (that is, the partial solution after we add only the image of a single pair `(d, g)`) verifies the equation 1516.
+Since the domain of our operation is still only partial, it makes no sense to ask that the equation `L_{S y} LₓLₓy = x` holds for all `x, y` in the partial domain, because for example the image of `x` and `Lₓ y` may not yet be defined.
+For this reason the condition that we put in the `PartialSolution` structure is that the equation holds whenever all the relevant operations are defined, that is the operation is defined for the pairs `(x, y)`, `(x, Lₓ y)` and `(S y, LₓLₓy)`.
+If the pair `(d, g)` that is being defined in the current step (using `partL`) is the first one `(x, y)`, then the proof goes as originally intended and there is no issue. However, if the image of `(x, y)` is already defined and we are introducing one of the other pairs as `(d, g)`, then the proof becomes problematic.
+I tried to find some arguments to prove this by splitting the different cases that can occur in the definiton of `partL`, but I was not able to find a way to make it work.
+I'm not sure if the statement is false with the current implementation and we should tweak the structure upstream somehow (maybe by adding some extra conditions to the `PartialSolution` structure) or if I'm just missing some argument that would make the proof work. -/
+
 lemma next_aux_aux1 {x y z w k} : Next_aux x y z → Next_aux x z w → Next_aux (S y) w k → k = x
   | .base hb => by
     rw [next_aux_iff]
@@ -1701,7 +1708,7 @@ lemma next_aux_aux1 {x y z w k} : Next_aux x y z → Next_aux x z w → Next_aux
     · rw [next_aux_iff]
       rintro (h' | ⟨had', hbg', hx'⟩)
       · exact ok.aux1 hb h h'
-      · -- This is the case where `Lₓy` and `LₓLₓy` are already defined and we are defining `L_{Sy}LₓLₓy` as a new element with `d = S y` and `g = LₓLₓy`.
+      · -- 🛑 Problem 🛑: This is the case where `Lₓ y` and `Lₓ (Lₓy)` are already defined and we are defining `L_{Sy} (LₓLₓy)` as a new element with `d = S y` and `g = LₓLₓy`. See the comment above.
         simp_all
         clear hbg' hx'
         rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
@@ -1723,11 +1730,10 @@ lemma next_aux_aux1 {x y z w k} : Next_aux x y z → Next_aux x z w → Next_aux
             · obtain ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n ha habn hb
               rw [hdg]
               sorry
-        -- 🛑 Problem 🛑: try to fix this again, if you do not succeed write some comment better describing the situation
-
     · rw [next_aux_iff]
       rintro (h' | ⟨had', hbg', hx'⟩)
-      · simp_all
+      · -- 🛑 Problem 🛑: Here `Lₓ y` and `L_{Sy} (LₓLₓy)` are already defined and we are defining `Lₓ (Lₓy)` as a new element with `d = x` and `g = Lₓy`. See the comment above.
+        simp_all
         clear had hbg hx
         rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
         · rw [hg, partL_of_inl] at h'
@@ -1742,10 +1748,8 @@ lemma next_aux_aux1 {x y z w k} : Next_aux x y z → Next_aux x z w → Next_aux
           · simp_all only [S]
             clear hg hy
             congr
-            -- 🛑 Problem 🛑: see other sorries in this proof
             sorry
-        · -- 🛑 Problem 🛑: see other sorries in this proof
-          by_cases had : a = d
+        · by_cases had : a = d
           · by_cases hn : n = 0
             · subst had hn
               rw [hg, partL_of_inr_same_of_zero] at h'
@@ -1758,12 +1762,12 @@ lemma next_aux_aux1 {x y z w k} : Next_aux x y z → Next_aux x z w → Next_aux
               rw [hg, partL_of_inr_same_of_ne_zero _ hn] at h'
               -- notice that E d y g and g = (d, b, n). This relation cannot be generated in the first phase. If it was generated in the second phase, L_d g was already defined and equal to (d, b, 0), so we would be in case 1 and y would be of the form (c_{d, d}, d, n). I'm not sure if this helps.
               sorry
-          · by_cases hb : ∃ b', d = c a b'
-            · obtain ⟨b', hb'⟩ := hb
+          · by_cases hb₀ : ∃ b', d = c a b'
+            · obtain ⟨b', hb'⟩ := hb₀
               rw [hg, partL_of_inr_of_exists _ had habn hb'] at h'
               rw [ok.extend h']
               sorry
-            · have ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n had habn hb
+            · have ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n had habn hb₀
               rw [hg, hdg] at h'
               rw [ok.extend h']
               sorry
