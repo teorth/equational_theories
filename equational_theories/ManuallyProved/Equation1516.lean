@@ -1316,6 +1316,8 @@ instance : Countable G' := inferInstance
 
 instance : Countable G := inferInstanceAs (Countable (_ ⊕ _))
 
+instance : Infinite G := inferInstanceAs (Infinite (_ ⊕ _))
+
 -- coercion from A to G
 instance : Coe A G := ⟨.inl⟩
 
