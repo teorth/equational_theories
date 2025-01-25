@@ -2492,8 +2492,64 @@ def next_aux5 {c} {y : G'} {x} (hSy : S y ≠ c) : Next c y x → x ≠ .inl c
   | .aux ha => next_aux_aux5 hSy ha
   | .extra _ _ => Sum.inr_ne_inl
 
-def next_aux1 {x y z w k} : Next x y z → Next x z w → Next (S y) w k → k = x := by
-  sorry
+/-
+There is a bug in the proof of the next lemma that I do not see how to fix, I will describe it here.
+The lemma is `next_aux1`, which is essentially the proof that when we enlarge the domain of the partial solution by adding the elements from the extra sets the equation 1516 still holds.
+The problem arises when we are in case 1, which is when we need to add relations of the form `L_c' z = y` for `c'` and `y` such that `L_c' y` is already defined and equal to an element `w` of `G'`.
+
+Here is the informal proof of this part:
+'''
+Case 1: $L_{c'} y = w$ for some $w \in G'$.  By construction, $c_{w,c'}$ is distinct from $c'$ and `$L_{c_{w,c'}} w = c'$`.  Set $z = (c_{w,c'}, c', n', 0)$ where $n'$ is large enough that $L_{c'} z$ has not yet been assigned.  Then set $L_{c'} z = y$, so that we have $L_{Sz} L_{c'} L_{c'} z = c'$ as required.
+'''
+
+The problem is with the statement that by construction `◆ : L_{c_{w,c'}} w = c'`, in fact this holds whenever the value of `L_{c_{w,c'}} w` is assigned during the first part of the construction (`Next_aux`, the one that assigns a single new value using `partL`). However if `L_{c_{w,c'}} w` happens to be assigned during the second part of the construction (`Next`, when we assign new values based on the `extra_set` in order to satisfy the infinite surjectivity) there is no guarantee that ◆ holds.
+Moreover, I see no way to modify the construction of the extra sets in order to ensure this condition.
+
+Let us analyze the situation more closely: For simplicity let us call `c := c_{w,c'}`. If the value of `L_c w` gets assigned during the second phase, it means that `w` ended up being an element of `extra_set c y` for some `y ∈ G'` and `L_c w` gets assigned the value `y`, which is incompatible with ◆, since `c' ∈ A`.
+Therefore, in order to avoid this issue, the only solution is to avoid that `w` gets chosen for `extra_set c y`. Notice, however, that `c_{w, c'}` only depends on the first coordinate of `w`, let's call it `w₁ ∈ A` and write `c_{w₁, c'}`. We would need to exclude from `extra_set c y` all the elements of `G'` with first coodinate equal to `w₁`, this is already problematic, since these elements are infinite and excluding those can potentially exhaust the options for `extra_set c y`, (not even counting the fact that we do not have injectivity for the function `c_{·, c'}`, so there may be multiple elements `a ∈ A` such that `c_{a, c'} = c_{w₁, c'}` and we need to exclude also the elements of `G'` with first coodinate equal to those).
+
+Moreover, an element of `extra_set c y` can be of 3 different forms:
+1. `(c_{w₁, c}, c, n')` with `L_c y = w`
+2. `(a', c, n')` with `L_c y = b` and `a' ◇ b = c`
+3. `(c, y₂, n')` with `y₂` the second coordinate of `y`
+
+We can notice that the first coordinate is fixed in the cases 1. and 3. and almost fixed in case 2. (a' is chosen from a set whose cardinality is at least 2, but we have no other guarantee on the size of this set and, as mentioned earlier, we may need to exclude more than 1 option for the first variable).
+
+So proving that `w ∉ extra_set c y` by adapting the construction of this set seems impossible, the other way that we could ensure this is by proving that for some other reason `w₁` is already different from `c_{w₁, c}`, `a'` and `c`.
+I see no reason why such a condition should hold true, but I do not exclude it does.
+-/
+
+def next_aux1 {x y z w k} : Next x y z → Next x z w → Next (S y) w k → k = x
+  | .aux ha, .aux ha', .aux ha'' => next_aux_aux1 ha ha' ha''
+  | .aux ha, .aux ha', .extra h_rel h_ex => (extra_set_not_Next_aux' h_rel h_ex x z ha').elim
+  | .aux ha, .extra h_rel h_ex, .aux ha'' => (extra_set_not_Next_aux' h_rel h_ex x y ha).elim
+  | .aux ha, .extra h_rel h_ex, .extra h_rel' _ => (extra_set_not_Next_aux' h_rel h_ex x y ha).elim
+  | .extra h_rel h_ex, .aux ha, .aux ha' => by
+    rename_i _ _ _ y' z'
+    rcases relevant_trichotomy h_rel with ⟨w', hw'⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
+    ·
+      rw [extra_set_case1 h_rel hw'] at h_ex
+      have := extra_set1_eq1 h_rel hw' h_ex
+      rw [S, this] at ha'
+      -- 🛑 Problem 🛑: see comment above
+      sorry
+    · rw [extra_set_case2 h_rel hb hSy] at h_ex
+      have ⟨a', ha'b, _, h_ex2⟩ := extra_set2_exists_a' h_rel hb hSy
+      have ⟨hz'a', _⟩ := h_ex2 _ h_ex
+      rw [S, hz'a', next_aux_func ha hb] at ha'
+      rw [← ha'b]
+      exact next_aux_extend ha'
+    · rw [extra_set_case3 h_rel hb hSy hn] at h_ex
+      have hbx := Sum.inl_injective <| next_aux_aux4 hSy hn hb
+      have hzy := extra_set3_eq1 h_rel hb hSy hn h_ex
+      rw [S] at hSy
+      rw [S, next_aux_func ha hb, hzy, hSy] at ha'
+      rw [next_aux_extend ha', hbx, A_idempotent]
+  | .extra _ _, .aux ha, .extra h_rel' h_ex' => (extra_set_not_Next_aux' h_rel' h_ex' x _ ha).elim
+  | .extra h_rel _, .extra h_rel' h_ex', .aux _ =>
+    (extra_set_not_relevant h_rel' h_ex' x h_rel).elim
+  | .extra h_rel _, .extra h_rel' h_ex', .extra _ _ =>
+    (extra_set_not_relevant h_rel' h_ex' x h_rel).elim
 
 def next : PartialSolution :=
   ⟨Next, next_finite, next_func, next_extend, next_hx₀, next_aux1, next_aux2,
