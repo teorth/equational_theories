@@ -2710,7 +2710,7 @@ variable [Extension x]
 def partial_domain' : Set G := (E x).dom
 
 #check Set.Infinite.diff -- this may be useful to prove the following lemmas
-instance : Fintype (partial_domain' x) := by
+noncomputable instance : Fintype (partial_domain' x) := by
   -- doable
   -- this set should be some kind of slice of {(x, y) : G × G | E x y}, which we already know to be finite (OK.finite)
   -- find the right definition of slice, then there will probably already be an instance proving the finiteness of a slice given the finiteness of the initial set
@@ -2755,18 +2755,11 @@ instance : Fintype (partial_domain' x) := by
   rw [dom]
   exact h1.fintype
 
-
-
-
-
-
-
-def partial_domain : Finset G := (partial_domain' x).toFinset
-
+noncomputable def partial_domain : Finset G := (partial_domain' x).toFinset
 
 def partial_range' : Set G := (E x).codom  -- {y : G | ∃ z : G, E x z y}
 
-instance : Fintype (partial_range' x) := by
+noncomputable instance : Fintype (partial_range' x) := by
   -- doable, same as above for the domain
   have finite : Set.Finite {(z, y) : G × G | E x z y} := by
     apply (ok).finite
@@ -2803,9 +2796,7 @@ instance : Fintype (partial_range' x) := by
   rw [dom]
   exact h1.fintype
 
-
-
-def partial_range : Finset G := (partial_range' x).toFinset
+noncomputable def partial_range : Finset G := (partial_range' x).toFinset
 
 -- NOTE: I added the requirement that w ≠ d for technical reasons, consider adding it to the blueprint
 lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
