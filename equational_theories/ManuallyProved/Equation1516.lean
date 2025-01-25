@@ -2527,6 +2527,10 @@ def next_aux1 {x y z w k} : Next x y z → Next x z w → Next (S y) w k → k =
       rw [extra_set_case1 h_rel hw'] at h_ex
       have := extra_set1_eq1 h_rel hw' h_ex
       rw [S, this] at ha'
+      /- If we had some lemma like this
+      lemma next_aux_c {a y x b} : Next_aux (c a b) y x → x = Sum.inl b := by sorry
+      this would be an immediate consequence of it and `ha' : Next_aux (c (↑w').1 x) w k`.
+      -/
       -- 🛑 Problem 🛑: see comment above
       sorry
     · rw [extra_set_case2 h_rel hb hSy] at h_ex
@@ -2550,9 +2554,7 @@ def next_aux1 {x y z w k} : Next x y z → Next x z w → Next (S y) w k → k =
 def next : PartialSolution :=
   ⟨Next, next_finite, next_func, next_extend,
   -- next_hx₀,
-  next_aux1, next_aux2,
-
-  next_aux3, next_aux4, next_aux5⟩
+  next_aux1, next_aux2, next_aux3, next_aux4, next_aux5⟩
 
 end Extension
 
