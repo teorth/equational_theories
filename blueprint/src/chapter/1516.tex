@@ -45,57 +45,104 @@ For technical reasons (which will be helpful later when we expand the magma) we 
 \end{proof}
 
 
-\begin{corollary}[Base magma]\label{1516-base} There exists a 1516 magma with carrier $\Z$ with the property that $Sa=a$ for all $a$, and such that for any distinct $a,b \in \Z$, the equation $R_a c = b$ has at least three solutions $c$.  Furthermore, for each $a \in \Z$, there exists $b \neq a$ such that $L_a R_a b = b$.
+\begin{corollary}[Base magma]\label{1516-base} There exists a 1516 magma with carrier $\Z$ with the properties that
+  \begin{itemize}
+    \item[(i)] $Sa=a$ for all $a$.
+    \item[(ii)] For any distinct $a,b \in \Z$, the equation $R_a c = b$ has at least three solutions $c$.
+    \item[(iii)] For each $a \in \Z$, there exist at least two $b \neq a$ such that $L_a R_a b = b$.
+  \end{itemize}
 \end{corollary}
 
-Note from \Cref{1516} and the hypothesis $Sa=a$ that $R_a c = a$ if and only if $c=a$.  Thus the requirement that $a,b$ be distinct is necessary.
+Note from \Cref{1516} and the hypothesis $Sa=a$ that $R_a c = a$ if and only if $c=a$.  Thus the requirement that $a,b$ be distinct in (ii)is necessary.
 
-\begin{proof}  By \Cref{1516-ext}, \Cref{1516-ext-var} and the greedy algorithm starting with the seed consisting of $(0,0)$, $(-1,2)$, $(3,1)$, we obtain a graph $\{ (a,f(a)): a \in \Z \}$ of a function $f:\Z \to \Z$ with $f(0)=0$, $f(-1)=2$, $f(3)=1$ and the property that if $f(a)=b$ and $f(b)=c$, then $f(c-a)=-a$, and also with the property that for every non-zero $h$ there are distinct $a_h, a'_h, a''_h$ with $f(a_h)=a_h+h$, $f(a'_h) = a'_h+h$, and $f(a''_h) = a''_h+h$.  We then have \Cref{1516-f} holds.  If we then define the magma operation $\op$ by \Cref{xy-1516}, we obtain \Cref{1516}.  Also, from construction we see that $R_d (d - a_h) = R_d (d - a'_h) = R_d (d - a''_h) = d+h$ for any $d,h$, giving the second claim.  Finally, from construction we have $R_a (a+1) = a+1+f(-1) = a+3$, so $L_a R_a (a+1) = a + f(3) = a+1$, giving the final claim.
+\begin{proof}  By \Cref{1516-ext}, \Cref{1516-ext-var} and the greedy algorithm starting with the seed consisting of $(0,0)$, $(-1,2)$, $(3,1)$, $(-10,20)$, $(30,10)$, we obtain a graph $\{ (a,f(a)): a \in \Z \}$ of a function $f:\Z \to \Z$ with $f(0)=0$, $f(-1)=2$, $f(3)=1$, $f(-10) = 20$, $f(30)=10$ and the property that if $f(a)=b$ and $f(b)=c$, then $f(c-a)=-a$, and also with the property that for every non-zero $h$ there are distinct $a_h, a'_h, a''_h$ with $f(a_h)=a_h+h$, $f(a'_h) = a'_h+h$, and $f(a''_h) = a''_h+h$.  We then have that \Cref{1516-f} holds.  If we then define the magma operation $\op$ by \Cref{xy-1516}, we obtain \Cref{1516}, and since $f(0)=0$ we have (i).  Also, from construction we see that $R_d (d - a_h) = R_d (d - a'_h) = R_d (d - a''_h) = d+h$ for any $d,h$, giving (ii).  Finally, from construction we have $R_a (a+1) = a+1+f(-1) = a+3$, so $L_a R_a (a+1) = a + f(3) = a+1$, and similarly $R_a (a+10) = a+10$, giving (iii).
 \end{proof}
 
 Now we construct a more complex 1516 magma, whose carrier $G$ is $\Z \cup G'$, where
 $$G' := \{ (a,c,n) \in \Z \times \Z \times \N : a \neq c\}.$$
-The first component $\Z$ will represent the squares, and the second component $G'$ will represent the non-squares, and the third component is a technical label needed to ensure a certain infinite surjectivity property.  The 1516 magma constructed in \Cref{1516-base} will be the restriction of $G$ to $\Z$; thus $a \op b$ is already defined in $G$ for $a,b \in \Z$, but the rest of the multiplication table is not currently defined.  By construction, $S$ is already defined and equal to the identity on $\Z$, and we have the 1516 equation
+The first component $\Z$ will represent the squares, and the second component $G'$ will represent the non-squares.  The most important coordinate of an element $(a,c,n)$ of $G'$ is $a$; the other two components $c,n$ are technical, with $n$ being needed to ensure a certain infinite surjectivity property, and $c$ being such that $L_c (a,c,n)$ remains at one's disposal to select at certain stages of the inductive process.
+
+The 1516 magma constructed in \Cref{1516-base} will be the restriction of $G$ to $\Z$; thus $a \op b$ is already defined in $G$ for $a,b \in \Z$, but the rest of the multiplication table is not currently defined.  By construction, $S$ is already defined and equal to the identity on $\Z$, and we have the 1516 equation
 $$ L_{Sa} L_b L_b a = b$$
 for $a,b \in \Z$, with the left multiplication operators $L_b$ currently only defined as maps from $\Z$ to $\Z$.  Among other things, this means that $L_a = L_{Sa}$ is surjective as a map from $\Z$ to $\Z$ for any $a \in \Z$.
 
-We extend the squaring map $S$ to all of $G$ by declaring $S(a,b,n_1,n_2) := a$, thus $S$ maps $G$ to $\Z$.  To create a 1516 magma structure on all of $G$, we need to extend the left multiplication operators $L_b$, $b \in \Z$ as maps from $G$ to $G$, and also introduce additional maps $L_x: G \to G$ for $x \in G'$, obeying the following axioms:
+We extend the squaring map $S$ to all of $G$ by declaring $S(a,c,n) := a$, thus $S$ maps $G$ to $\Z$.  To create a 1516 magma structure on all of $G$, we need to extend the left multiplication operators $L_b$, $b \in \Z$ as maps from $G$ to $G$, and also introduce additional maps $L_x: G \to G$ for $x \in G'$, obeying the following axioms:
 \begin{itemize}
 \item Axiom A: For any $x \in G'$, $L_x x = Sx$.
 \item Axiom B: For any $x \in G'$ and $b \in \Z$, $L_{Sx} L_b L_b x = b$.
 \item Axiom C: For any $x \in G$ and $y \in G'$, $L_{Sx} L_y L_y x = y$.
 \end{itemize}
 
-We first address Axiom B, which purely concerns how to extend the $L_b$ operators for $b \in \Z$, and also impose an additional technical ``infinitely surjective'' requirement that will help us satisfy Axiom C later.
+We first address Axiom B, which purely concerns how to extend the $L_b$ operators for $b \in \Z$, and also impose an additional technical ``infinitely surjective'' requirement that will help us satisfy Axiom C later.  We first need some preparatory lemmas.  We begin by locating some useful elements $c_{y,b}$ of $\Z$ for all $y \in G'$ and $b \in \Z$.
+
+\begin{lemma}[Useful elements]\label{aux}  One can assign $c_{y,b} \in \Z$ for each $y = (a,c,n) \in G'$ and $b \in \Z$ with the following properties:
+\begin{itemize}
+\item[(i)] For all $y = (a,c,n) \in G'$ and $b \in \Z$, $c_{y,b} \neq a,b,c$ and $L_a L_{c_{y,b}} b = c_{y,b}$.
+\item[(ii)] For all $y \in G'$, the map $b \mapsto c_{y,b}$ is injective.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}  Let $y = (a,c,n)$.  By \Cref{1516-base}(iii), we can find $c_{y,a} \neq a,c$ such that $L_a R_a c_{y,a} = c_{y,a}$, or equivalently $L_a L_{c_{y,a}} a = c_{y,a}$.  Next, for any $b \neq a$, we can apply \Cref{1516-base}(ii) to find $c_{y,b} \neq b, c_{y,a}$ such that $R_a c_{y,b} = b$; note that as $R_a a = Sa = a \neq b$, this also implies that $c_{y,b} \neq a$, and that the $c_{y,b}$ are distinct as $b$ variables.  We now have $L_a L_{c_{y,b}} b = L_{Sa} L_{c_{y,b}} L_{c_{y,b}} a = c_{y,b}$ for such $b$, giving the claim.
+\end{proof}
+
+Let $c_{y,b}$ be as above. Define a \emph{partial solution} to be a partial assignment of $L_{c'} y \in G$ for $c' \in \Z$ and $y \in G$ that obeys the following properties:
+\begin{itemize}
+\item[(a)] If $y \in \Z$, then $L_{c'} y$ agrees with the operation defined in \Cref{1516-base}.
+\item[(b)] If $y = (a,c,0) \in G'$, then $L_a y = a$.
+\item[(c)] If $y = (a,c,n) \in G'$ and $n \neq 0$, then $L_a y = (a,c,0)$.
+\item[(d)] If $y = (a,c,n) \in G'$ and $b \in \Z$, then $L_{c_{y,b}} y = b$.
+\item[(e)] For any $a,c$, $L_c (a,c,n)$ is only defined for finitely many $n$.
+\item[(f)] If $y = (a,c,n) \in G'$ and $c' \in \Z$ are such that $L_{c'} y$ is defined, then $L_{c'} L_{c'} y$ and $L_a L_{c'} L_{c'} y$ are defined, with $L_a L_{c'} L_{c'} y$ equal to $c'$.
+\item[(g)] If $y = (a,c,n) \in G'$ and $c' \in \Z$ is such that $c' \neq a$, then $L_{c'} y \neq c'$.
+\end{itemize}
+
+\begin{lemma}[Existence of partial solution]\label{part-exist}  A partial solution exists.
+\end{lemma}
+
+\begin{proof}  We define $L_{c'} y$ for $y = (a,c,n) \in G'$ as follows:
+\begin{itemize}
+  \item[(i)] If $c' = a$ and $n=0$, then $L_{c'} y := a$.
+  \item[(ii)] If $c' = a$ and $n \neq 0$, then $L_{c'} y := (a,c,0)$.
+  \item[(iii)] If $c' = c_{y,b}$ for some $b$, then $L_{c'} y := b$.
+  \item[(iv)] In all other cases, $L_{c'} y$ is undefined.
+\end{itemize}
+We of course also define $L_{c'} y$ for $y \in \Z$ using \Cref{1516-base}.
+
+From Lemma \ref{aux} we see that this is a well-defined operation, with $L_c y$ undefined for any $y = (a,c,n) \in G'$.  So properties (a)-(e) and (g) are clear from construction.  Property (e) is also clear from construction in each of the three cases (i), (ii), (iii) (for (i), (ii) we also use the fact that $L_a a = a$).
+\end{proof}
+
+We can make $L_{c'} y$ defined in a partial solution:
+
+\begin{lemma}[First extension]\label{first-ext}  Suppose we have a partial solution for which $L_{c'} y$ is currently undefined for some $c' \in \Z$ and $y \in G$.  Then one can extend this partial solution in such a manner that $L_{c'} y$ is now defined.
+\end{lemma}
+
+\begin{proof} Write $y = (a,c,n)$. Because $L_a: \Z \to \Z$ and $L_{c'}: \Z \to \Z$ are surjective, we can find $b \in \Z$ such that $L_a L_{c'} b = c'$.  If we had $b=c'$, then $L_a c' = c'$, which from \eqref{1516} (and $Sc' = c'$) implies that $a = c'$, which contradicts the undefined nature of $L_{c'} y$ thanks to properties (b), (c) of a partial solution.  Hence $b \neq c'$.
+  We then set $L_{c'} y := b$.  It is then clear that all of the properties (a)-(g) of a partial solution are maintained.
+\end{proof}
+
+We can also insert inverses of $L_{c'}$:
+
+\begin{lemma}[Second extension]\label{second-ext}  Suppose we have a partial solution, and let $c' \in \Z$ and $y = (a,c,n) \in G$.  Then, unless one is in the case when $c'=a$ and $n=0$, then one can find $z \in G$ such that $L_{c'} z$ is currently undefined, but for which one can find an extension of the partial solution for which $L_{c'} z$ is now equal to $y$.
+\end{lemma}
+
+\begin{proof} Write $y = (a,c,n)$. There are several cases.
+  \begin{itemize}
+    \item Case 1: $L_{c'} y = w$ for some $w \in G'$.  By Lemma \ref{aux}, $c_{w,c'}$ is distinct from $c'$, and from property (d) of a partial solution, $L_{c_{w,c'}} w = c'$.  By property (e) of a partial solution, we can find $z = (c_{w,c'}, c', n')$ such that $L_{c'} z$ is currently undefined.  Then set $L_{c'} z := y$, so that we have $L_{c_{w,c'}} L_{c'} L_{c'} z = c'$.  One then verifies that all the axioms (a)-(g) of a partial solution are valid in this case.
+    \item Case 2: $c' \neq a$ and $L_{c'} y = b$ for some $b \in \Z$. By property (g) of a partial solution, $c' \neq b$.  By \Cref{1516-base}, we can find $a'$ such that $L_{a'} b = R_b a' = c'$ and $a' \neq c'$.  By property (e) of a partial solution, we can find $z = (a', c', n', 0)$ such that $L_{c'} z$ is currently undefined.  Then set $L_{c'} z = y$, so that we have $L_{a'} L_{c'} L_{c'} z = c'$. One then verifies that all the axioms (a)-(g) of a partial solution are valid in this case.
+    \item Case 3: $c' \neq a$ and $L_{c'} y$ is currently undefined.  Use Lemma \ref{first-ext} set $L_{c'} y$ equal to some $b \in \Z$, then apply the Case 2 analysis.
+    \item Case 4: $c' = a$.  Because we are excluding the case $n=0$, we are now in Case 1 thanks to property (c) of a partial solution.
+  \end{itemize}
+\end{proof}
+
+
+Now we can establish Axiom B.
 
 \begin{proposition}[Obtaining Axiom B]\label{axiom-b}  There exists a way to extend $L_b: \Z \to \Z$ to $L_b: G \to G$ for all $b \in \Z$, in such a way that Axiom B holds, and furthermore for each $b \in \Z$ and $x \in G'$, the set $\{ y \in G': L_b y = x \}$ is infinite. Also we can ensure that $L_b x \neq x$ for any $b \in \Z$ and $x \in G'$.
 \end{proposition}
 
-\begin{proof}  Let $y = (a,c,n)$ be a ``non-square'' in $G'$, thus $a \neq c$ and $Sy = a$.  We first define the operation $L_a$ on $y$ as follows:
-\begin{itemize}
-  \item If $n \neq 0$, we set $L_a y := (a,c,0)$.
-  \item If $n=0$, we set $L_a y = a$.
-\end{itemize}
-In particular, we obtain the special case $L_{Sy} L_a L_a y = a$ of Axiom B.  We also see that the the preimage $\{ z \in G': L_a z = y \}$ is already infinite if $n = 0$, but this has not yet been established in the $n \neq 0$ case.
-
-We still need to define $L_c y$ for other $c \in \Z$.  We claim that for each $b \in \Z$ we can find $c_{y,b} \in \Z$, which are distinct as $b$ varies, such that
-$L_a L_{c_{y,b}} b = c_{y,b}$.  For $b=a$, we can write $L_a L_{c_{y,b}} b = L_a R_a c_{y,b}$ and invoke the final property of \Cref{1516-base}.  For $b \neq a$, we apply \Cref{1516-base} to find $c_{y,b} \in \Z$ distinct from $b, c_{y,a}$ such that $R_a c_{y,b} = b$; note that $c_{y,b}$ is also distinct from $a$ since $R_a a = a \neq b$.  Clearly the $c_{y,b}$ are distinct as $b$ varies.  We now have $L_a L_{c_{y,b}} b = L_{Sa} L_{c_{y,b}} L_{c_{y,b}} a = c_{y,b}$ as desired.
-
-So if we define $L_{c_{y,b}} y := b$ for all $b \in \Z$, then we have $L_{Sy} L_{c'} L_{c'} y = c'$ whenever $c'$ is of the form $c' = c_{y,b}$ for some $b \in \Z$.  But we still have $L_{c'} y$ undefined if $c'$ is not of this form or equal to $a$, in particular, $L_c y$ is currently not defined.
-
-We also note that with our construction so far, that $L_c y \neq c$ whenever $y \in G'$ and $c \in \Z$ is distinct from $Sy$.  This property will be preserved in the construction below (because all future assignments of $L_c y$ will take values in $G'$ rather than $\Z$).
-
-Now we greedily fill in the rest of the $L_{c'}$ functions.  Suppose at some stage of this process, we have a non-square element $y = (a,c,n)$ for which $L_{c'} y$ is not yet defined for some $c'$, then $c' \neq a$. We can use the surjectivity of $L_a: \Z \to \Z$ to write $c' = L_a b$ for some $b \in \Z$, then set $L_{c'} y = b$; then we have $L_{Sy} L_{c'} L_{c'} y = c'$.
-
-Next, suppose we want to write $y$ as $L_{c'} z$ for some $z$ where $L_{c'}$ is not currently defined, in such a way that $L_{Sz} L_{c'} L_{c'} z = c'$.  There are several cases:
-\begin{itemize}
-\item Case 1: $L_{c'} y = w$ for some $w \in G'$.  By construction, $c_{w,c'}$ is distinct from $c'$ and $L_{c_{w,c'}} w = c'$.  Set $z = (c_{w,c'}, c', n', 0)$ where $n'$ is large enough that $L_{c'} z$ has not yet been assigned.  Then set $L_{c'} z = y$, so that we have $L_{Sz} L_{c'} L_{c'} z = c'$ as required.
-\item Case 2: $c' \neq Sy$ and $L_{c'} y = b$ for some $b \in \Z$. By the previous property, $c' \neq b$.  By \Cref{1516-base}, we can find $a'$ such that $R_b a' = c'$ and $a' \neq c'$.  Then set $z = (a', c', n', 0)$ where $n'$ is large enough that $L_{c'} z$ has not yet been assigned.  Then set $L_{c'} z = y$, so that we have $L_{Sz} L_{c'} L_{c'} z = c'$ as required.
-\item Case 3: $c' \neq Sy$ and $L_{c'} y$ is currently undefined.  Use the previous procedure to set $L_{c'} y$ equal to some $b \in \Z$, then apply the Case 2 analysis.
-\item Case 4: $c' = Sy$.  We can assume $n=0$, since otherwise we are in Case 1 by construction.  But then we do not need to locate any $z$ because, as previously mentioned, the set $\{ z \in G': L_{c'} z = y \}$ is already infinite.
-\end{itemize}
-
-Iterating these procedures over a well-ordering of $G' \times \Z \times \N$, we can show that for any finite initial segment in this well-ordering, we can create a partially defined extension of all the $L_b$, such that if $(x,c',m)$ is in this initial segment, then $L_{Sx} L_{c'} L_{c'} x$ is well-defined and equal to $x$,  and $\{ y \in G': L_b y = x \}$ has at least $m$ elements.  Running this iteration over the entire well-ordering, we obtain the claim.
+\begin{proof}
+By iterating \Cref{first-ext} and \Cref{second-ext} in alternation, we can find an increasing chain of partial solutions with the property that for any $y = (a,c,n) \in G'$ and $c' \in \Z$ and any natural number $k$, excluding the case where $c'=a$ and $n=0$, that one can find a partial solution on this chain for which $L_{c'} y$ is defined, and such that $L_{c'} z = y$ for at least $k$ distinct choices of $z \in G'$.  Taking the limit of this chain, we can then find a fully defined operation $L_{c'} y$ for $c' \i \Z$ and $y \in G$ obeying the properties (a)-(d), (f), (g) (but not (e)) of a partial solution, with the property that
+$y = (a,c,n) \in G'$ and $c' \in \Z$, excluding the case $c'=a$ and $n=0$, that there are infinitely many $z \in G'$ such that $L_{c'} z = y$.  The excluded case $c'=a, n=0$ is also covered by property (b) of a partial solution.  The claim follows.
 \end{proof}
 
 Finally, we construct the remaining $L_x$.
