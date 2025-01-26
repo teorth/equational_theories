@@ -2776,38 +2776,23 @@ def partial_range' : Set G := (E x).codom  -- {y : G | ∃ z : G, E x z y}
 
 noncomputable instance : Fintype (partial_range' x) := by
   -- doable, same as above for the domain
-  have finite : Set.Finite {(z, y) : G × G | E x z y} := by
-    apply (ok).finite
-  have h1 : Set.Finite {y : G | ∃ (z : G) , E x z y} := by  --sarebbe il partial_range' x
-    let A := {(z, y) : G × G | E x z y}
-    let B := {y : G | ∃ (z : G) , E x z y}
+  have h1 : Set.Finite {y : G | ∃ (z : G) , E x z y} := by
     let f : G × G → G := fun x ↦ x.2
-    have h' : f '' A = B := by
-      have sxdx : f '' A ⊆ B := by
+    have h' : f '' {(z, y) : G × G | E x z y} = {y : G | ∃ (z : G) , E x z y} := by
+      have sxdx : f '' {(z, y) : G × G | E x z y} ⊆ {y : G | ∃ (z : G) , E x z y} := by
         intro a ha
-        simp at ha -- f(a_1, a) = a
-        rcases ha with ⟨ a1, ha1⟩  -- call a_1 = a1
-        unfold A at ha1
-        simp at ha1
-        unfold B
-        simp
+        simp only [Set.mem_image, Set.mem_setOf_eq, Prod.exists, exists_eq_right] at ha
+        rcases ha with ⟨ a1, ha1⟩
         use a1
-      have dxsx : B ⊆ f '' A := by
+      have dxsx : {y : G | ∃ (z : G) , E x z y} ⊆ f '' {(z, y) : G × G | E x z y} := by
         intro y hy
-        simp -- we have to proof ∃ a, (a,y) ∈ A, because Lean knows f(a,y)=y
-        unfold B at hy
-        rcases hy with ⟨y2, hy2⟩   --ora voglio provare che (y,y2) ∈ A e f(y,y2)=y
-        use y2
-        unfold A
-        simp
-        exact hy2
-      apply Set.Subset.antisymm sxdx dxsx
-    unfold A B at h'
-    rw [← h']
-    apply Set.Finite.image f finite
+        simp only [Set.mem_image, Prod.exists, exists_eq_right]
+        rcases hy with ⟨y2, hy2⟩
+        exact ⟨y2, hy2⟩
+      exact Set.Subset.antisymm sxdx dxsx
+    exact h' ▸ Set.Finite.image f (ok).finite
   unfold partial_range'
-  have dom : (E x).codom = {y : G | ∃ (z : G) , E x z y} := by
-    tauto
+  have dom : (E x).codom = {y : G | ∃ (z : G) , E x z y} := rfl
   rw [dom]
   exact h1.fintype
 
@@ -2820,20 +2805,19 @@ lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ parti
   let A := (partial_domain x).toSet
   let B := (partial_range x).toSet
   let C1 := (Set.univ : Set G) \ A
-  have h1 : Set.Finite A := by
+  have hA : Set.Finite A := by
     unfold A partial_domain
     rw [Set.coe_toFinset]
     exact (partial_domain' x).toFinite
-  have h1' : Set.Finite B := by
+  have hB : Set.Finite B := by
     unfold B partial_range
     rw [Set.coe_toFinset]
     exact (partial_range' x).toFinite
   have h2 : ¬ Set.Finite (Set.univ : Set G) := by  -- G infinite
     rw [Set.finite_univ_iff]
     exact Infinite.not_finite
-  have C2inf : ¬ Set.Finite (C1 \ B) := Set.Infinite.diff (Set.Infinite.diff h2 h1) h1'
-  have := Set.Nontrivial.exists_ne (Set.Infinite.nontrivial C2inf) (d x)
-  rcases this with ⟨x1, hx1, hx2⟩
+  rcases Set.Nontrivial.exists_ne (Set.Infinite.nontrivial
+    (Set.Infinite.diff (Set.Infinite.diff h2 hA) hB)) (d x) with ⟨x1, hx1, hx2⟩
   refine ⟨x1, ?_, ⟨Set.not_mem_of_mem_diff hx1, hx2⟩⟩
   apply Set.mem_of_mem_diff at hx1
   exact Set.not_mem_of_mem_diff hx1
@@ -2844,16 +2828,16 @@ lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧ w ∉ parti
   have Iinf : ¬ Set.Finite {y : G' | L (S z) y = x} := L_surjective ((S z) : A) (x : G')
   let A := (partial_domain x).toSet
   let B := (partial_range x).toSet -- we do the same as the above proof, but we use I instead of G
-  have h1 : Set.Finite A := by
+  have hA : Set.Finite A := by
     unfold A partial_domain
     simp only [Set.coe_toFinset]
-    exact Set.toFinite (partial_domain' x)
-  have h1' : Set.Finite B := by
+    exact (partial_domain' x).toFinite
+  have hB : Set.Finite B := by
     unfold B partial_range
     simp only [Set.coe_toFinset]
-    exact Set.toFinite (partial_range' x)
+    exact (partial_range' x).toFinite
   rcases Set.Nontrivial.exists_ne (Set.Infinite.nontrivial (Set.Infinite.diff (Set.Infinite.diff
-    (Set.Infinite.image (fun _ _ _ _ ↦ fun a ↦ Sum.inr_injective a) Iinf) h1) h1')) (d x) with ⟨ x1, hx1, hx2⟩
+    (Set.Infinite.image (fun _ _ _ _ ↦ fun a ↦ Sum.inr_injective a) Iinf) hA) hB)) (d x) with ⟨ x1, hx1, hx2⟩
   refine ⟨x1, ?_, ?_⟩
   · apply Set.mem_of_mem_diff at hx1
     apply Set.mem_of_mem_diff at hx1
@@ -3062,7 +3046,7 @@ theorem _root_.Equation1516_not_implies_Equation1489 : ∃ (G : Type) (_ : Magma
     repeat rw [mul_assoc] at *
     exact this.symm
   · simp only [not_forall]
-    exists x₁, 1
+    use x₁, 1
     repeat rw [magA_op_def]
     simp only [one_mul, fromList_eval x₁⁻¹ x₃, inv_one, mul_one, fromList_eval (x₃ * x₁) x₄,
       fromList_eval x₁ x₂, fromList_eval (x₄ * x₂⁻¹) x₅]
