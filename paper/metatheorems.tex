@@ -67,6 +67,16 @@ We first work in the abstract taking an arbitrary set $A$, with a given equivale
   We sometimes write $b\leftarrow a$, (resp. $b\ {}^*\leftarrow a$ etc) to mean $a\rightarrow b$ (resp. $a\rightarrow^*b$ etc), and chain notations, e.g. $b_1\leftarrow a\rightarrow b_2$.
 \end{definition}
 
+\begin{example}\label{ex:group-trs}
+  Consider the relation over terms with a binary operation $\cdot$ defined by:
+  \begin{align*}
+    x \cdot (y \cdot x) &\rightarrow y\\
+    (x\cdot y)\cdot x &\rightarrow y
+  \end{align*}
+  and the closure of this relation under substitution of the variables $x$ and $y$, as well as the \emph{congurence closure} of the rules, that is $t\rightarrow t'$ if any subterm of $t$ is related to the corresponding subterm of $t'$ by the rules above.
+\end{example}
+
+
 Note that $\leftrightarrow^*$ is an equivalence relation and the hope is for it to be equal to $\approx$, in order to deduce properties of the latter.
 
 One should first note that if even $R$ is contained in $\approx$, then so are $\rightarrow^+, \rightarrow^*$ and $\leftrightarrow^*$ (as it is an equivalence relation), so we will focus on that case. Generally $a \rightarrow^* b$ can be seen as a way to \emph{compute} the $\approx$ relation, as it is directed, in a way to constrain our search space.
@@ -114,6 +124,8 @@ The task is helped by the following facts, which we state here also without proo
   \end{enumerate}
 \end{theorem}
 
+The example above is both locally confluent and normalizing, and therefore confluent.
+
 This strategy can be leveraged by looking at the particulars of the equivalence relation of interest, namely quantified equations over syntactic trees as in \Cref{abstract-nonsense-chapter}, and a theory $\Gamma$, which we will usually take to be finite (usually it will have a single equation!).
 
 We will therefore consider relations over the set of elements of the free magma $M_{X}$, and the aim is to find a rewrite system $R$ is complete for $\formaleq$.
@@ -129,9 +141,11 @@ For example, it's clear that commutativity (the rule $x\cdot y\formaleq y\cdot x
 \[ x \cdot (y \cdot z) \rightarrow y \]
 We have $a\cdot (b \cdot (c \cdot d)) \rightarrow^* b$, but also $a\cdot (b\cdot (c\cdot d))\rightarrow^* a\cdot c$ for any $a, b, c, d$ (which are all in normal form).
 
-Knuth and Bendix \cite{knuth-bendix} described a technique by which a theory or set of equations $\Gamma$ could be turned into a complete system. The crucial idea is the observation that the non-local-confluence of a rewrite system can be reduced to a finite (if the system is finite) set of ``worst offenders'' for confluence. If these pairs can be \emph{joined} (reduced to the same term) then the system is confluent. It is possible to compute such pairs.
+Knuth and Bendix \cite{knuth-bendix} described a technique by which a theory or set of equations $\Gamma$ could be turned into a complete system. The crucial idea is the observation that the non-local confluence of a rewrite system can be reduced to a finite (if the system is finite) set of ``worst offenders'' for confluence. If these pairs can be \emph{joined} (reduced to the same term) then the system is confluent. It is possible to compute such pairs.
 
 The high-level idea is therefore to identify such pairs, and add them as an unoriented equation, to be oriented if possible, and repeating until no un-joinable pairs exist. If this procedure succeeds and terminates, the system is successfully completed, and as a result the theory $\Gamma$ is decidable, via the completed system as described above.
+
+The example given above (\ref{ex:group-trs}) is exactly the Knuth Bendix proceedure applied to the single equation $x\cdot (y\cdot x) = y$ (which is Equation 14 in our numbering); and indeed, it is possible to decide any word problem over (free) magmas satisfying this equation by repeatedly applying those rules, and examining the normal forms for syntactic equality.
 
 We use the intuitive notions of ``position in a word'' and ``word at a position $p$''. We denote by $w[w']_p$ the word $w$ with $w'$ inserted at position $p$.
 
