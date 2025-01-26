@@ -2841,72 +2841,27 @@ lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ parti
 lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧ w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
   -- doable
   -- use the infinite surjectivity of L, then proceed like in the previous lemma
-  let I := {y : G' | L (S z) y = x}   -- we need w in G, so we will take sum.inr y
-  let I' := {y : G | ∃ y' ∈ I, Sum.inr y' = y }
-  --let I' := Sum.inr '' I  -- non funziona però così
-  have Iinf : ¬ Set.Finite I := by
-    apply  L_surjective ((S z) : A) (x : G')
-  let f : G' → G := fun  y ↦ Sum.inr y
-  have fin : f.Injective := by     --non ho ben capito a cosa serve questa ipotesi, ma se la rimuovo ho dei problemi, il problema potrebbe essere che non vede Sum.inr come una vera e propria funzione, quindi è più comodo definire la funzione f in quel modo
-    apply Sum.inr_injective
-  have I'inf : ¬ Set.Finite I' := by
-    have this : Sum.inr '' I ⊆ I' := by
-      intro y hy
-      unfold I'
-      tauto -- it's trivial from hy
-    apply  Set.Infinite.image
-    tauto
-    exact Iinf
+  have Iinf : ¬ Set.Finite {y : G' | L (S z) y = x} := L_surjective ((S z) : A) (x : G')
   let A := (partial_domain x).toSet
   let B := (partial_range x).toSet -- we do the same as the above proof, but we use I instead of G
   have h1 : Set.Finite A := by
     unfold A partial_domain
-    simp
+    simp only [Set.coe_toFinset]
     exact Set.toFinite (partial_domain' x)
   have h1' : Set.Finite B := by
     unfold B partial_range
-    simp
+    simp only [Set.coe_toFinset]
     exact Set.toFinite (partial_range' x)
-  let C1 := I' \ A
-  have C1inf : ¬ Set.Finite C1 := by
-    apply Set.Infinite.diff I'inf h1
-  let C2 := C1 \ B
-  have C2inf : ¬ Set.Finite C2 := by
-    apply Set.Infinite.diff C1inf h1'
-  have nontriv : C2.Nontrivial := by  -- C2 non trivial
-    exact Set.Infinite.nontrivial C2inf
-  have := Set.Nontrivial.exists_ne nontriv (d x)
-  rcases this with ⟨ x1, hx1, hx2⟩
-  use x1
-  unfold C2 at hx1
-  constructor
-  · apply Set.mem_of_mem_diff at hx1 --la prima è la più difficile da provare
-    unfold C1 A at hx1
+  rcases Set.Nontrivial.exists_ne (Set.Infinite.nontrivial (Set.Infinite.diff (Set.Infinite.diff
+    (Set.Infinite.image (fun _ _ _ _ ↦ fun a ↦ Sum.inr_injective a) Iinf) h1) h1')) (d x) with ⟨ x1, hx1, hx2⟩
+  refine ⟨x1, ?_, ?_⟩
+  · apply Set.mem_of_mem_diff at hx1
     apply Set.mem_of_mem_diff at hx1
-    unfold I' at hx1
     rcases hx1 with ⟨w, hw1, hw2⟩
-    unfold I at hw1
-    simp at hw1
-    rw [← hw2]
-    exact hw1
-  · constructor
-    · apply Set.mem_of_mem_diff at hx1
-      unfold C1 at hx1
-      apply Set.not_mem_of_mem_diff at hx1
-      unfold A at hx1
-      exact hx1
-    · constructor
-      · apply Set.not_mem_of_mem_diff at hx1
-        unfold B at hx1
-        exact hx1
-      · exact hx2
-
-
-
-
-
-
-
+    exact hw2 ▸ hw1
+  · refine ⟨?_, ⟨Set.not_mem_of_mem_diff hx1, hx2⟩⟩
+    apply Set.mem_of_mem_diff at hx1
+    exact Set.not_mem_of_mem_diff hx1
 
 -- Given an extension, which is a partial solution with an undefined element of the domain called `d`, we define a new element `w` that represents the image of `d` (`Lₓ d`).
 noncomputable def w : G := by
