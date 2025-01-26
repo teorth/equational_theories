@@ -14,6 +14,10 @@ import equational_theories.EquationalResult
 import equational_theories.Equations.All
 import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
 
+
+import Mathlib.Data.Rel
+import Mathlib.Tactic.Linarith.Frontend
+import Init.Core
 --import Mathlib.Tactic.Group --This breaks some instance, I haven't understood why exactly
 
 namespace Eq1516
@@ -24,7 +28,7 @@ open FreshGenerator
 private abbrev A := FreeGroup Nat
 
 
-private abbrev x : Nat -> A := FreeGroup.of
+private abbrev x : Nat → A := FreeGroup.of
 private abbrev x₁ := x 1
 private abbrev x₂ := x 2
 private abbrev x₃ := x 3
@@ -133,13 +137,10 @@ def PartialSolution.DomId (ps : PartialSolution) : 1 ∈ ps.E := by
   rw [ps.fId]
   rfl
 
-
 def PartialSolution.Im (ps : PartialSolution) : Finset A :=
   (ps.E.entries.map Sigma.snd).toFinset
 
-
-
-def helper {α β γ} (g : α -> β) (f : ∀ b : α, γ (g b)) (h_g : Function.Injective g) (s : Finset α)
+def helper {α β γ} (g : α → β) (f : ∀ b : α, γ (g b)) (h_g : Function.Injective g) (s : Finset α)
 : Finmap γ where
   entries := Multiset.map (fun a => ⟨g a, f a⟩) s.1
   nodupKeys := by
@@ -150,7 +151,7 @@ def helper {α β γ} (g : α -> β) (f : ∀ b : α, γ (g b)) (h_g : Function.
     exact s.2
     exact h_g
 
-theorem helper_mem {α β} {γ : β -> Type} [DecidableEq β] (g : α -> β) (f : ∀ b : α, γ (g b))
+theorem helper_mem {α β} {γ : β → Type} [DecidableEq β] (g : α → β) (f : ∀ b : α, γ (g b))
 (h_g : Function.Injective g) (s : Finset α) (b : β) (c : γ b) :
 c ∈ Finmap.lookup b (helper g f h_g s) ↔ ∃ a ∈ s, g a = b ∧ HEq (f a) c := by
   unfold helper
@@ -158,7 +159,7 @@ c ∈ Finmap.lookup b (helper g f h_g s) ↔ ∃ a ∈ s, g a = b ∧ HEq (f a) 
   simp
 
 
-def helper' {α β γ} (g : α -> β) (f : ∀ b : α, γ (g b)) (s : Finset α) (d : ∀ x ∈ s, ∀ y ∈ s, g x = g y → x = y)
+def helper' {α β γ} (g : α → β) (f : ∀ b : α, γ (g b)) (s : Finset α) (d : ∀ x ∈ s, ∀ y ∈ s, g x = g y → x = y)
 : Finmap γ where
   entries := Multiset.map (fun a => ⟨g a, f a⟩) s.1
   nodupKeys := by
@@ -169,7 +170,7 @@ def helper' {α β γ} (g : α -> β) (f : ∀ b : α, γ (g b)) (s : Finset α)
     exact s.2
     exact d
 
-theorem helper'_mem {α β} {γ : β -> Type} [DecidableEq β] (g : α -> β) (f : ∀ b : α, γ (g b))
+theorem helper'_mem {α β} {γ : β → Type} [DecidableEq β] (g : α → β) (f : ∀ b : α, γ (g b))
 (s : Finset α) (d : ∀ x ∈ s, ∀ y ∈ s, g x = g y → x = y) (b : β) (c : γ b) :
 c ∈ Finmap.lookup b (helper' g f s d) ↔ ∃ a ∈ s, g a = b ∧ HEq (f a) c := by
   unfold helper'
@@ -1163,7 +1164,7 @@ theorem extension2 (ps : PartialSolution) (b : A) (h : b ≠ 1) (n : Nat) :
 
 def translation_invariant_1516 (f : A → A) : Prop := ∀ (x : A), (f ( f ( f x )* x⁻¹ * (f 1)⁻¹)) = x⁻¹ * (f 1)⁻¹
 
-theorem completion (ps : PartialSolution) : ∃ (f : A → A), translation_invariant_1516 f ∧ (∀ x y, y ∈ ps.E ⬝ x -> f x = y)
+theorem completion (ps : PartialSolution) : ∃ (f : A → A), translation_invariant_1516 f ∧ (∀ x y, y ∈ ps.E ⬝ x → f x = y)
 ∧ ∀ b, (b ≠ 1) → Set.encard {c | b*c = f c } ≥ 3 := by
   have ⟨c, hc, h1, h2, h3⟩  := exists_greedy_chain (α := PartialSolution) (β := A ⊕ {b : A // b ≠ 1})
     (task := fun b ps => match b with
@@ -1290,29 +1291,1849 @@ theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
     rw [fromList_eval (x₆^(-1)) (x₆^2), fromList_eval (x₆^2 * x₆) (x₆^1)]
     simp
 
+theorem A_op_surj_right (a b : A) : ∃ c : A, a ◇ c = b := by
+  have := A_satisfies_Equation1516 b a
+  rw [A_idempotent a] at this
+  use b ◇ (b ◇ a)
+  tauto
+
+theorem A_op_eq_self_iff {a c : A} : c ◇ a = a ↔ c = a := by
+  -- doable, just use A_satisfies_Equation1516
+  constructor
+  · intro h
+    have := A_satisfies_Equation1516 c a
+    simp_rw [h] at this
+    simp_rw[A_idempotent] at this
+    exact this
+  · intro h
+    rw [h]
+    apply A_idempotent
+
+
+
+section Refutation255
+
+-- Follows https://teorth.github.io/equational_theories/blueprint/1516-chapter.html
+-- We try to mimick the proof structure from Equation63 for the greedy construction parts.
+-- There are some sorries marked with `doable`, those can be tackled with relatively limited effort, without having to first understand all the greedy construction.
+
+def G' := {(a, b, _) : A × A × ℕ | a ≠ b}
+
+-- G is the disjoint union of A and G'
+def G := A ⊕ G'
+
+instance : Countable G' := inferInstance
+
+instance : Countable G := inferInstanceAs (Countable (_ ⊕ _))
+
+instance : Infinite G := inferInstanceAs (Infinite (_ ⊕ _))
+
+-- coercion from A to G
+instance : Coe A G := ⟨.inl⟩
+
+-- coercion from G' to G
+instance : Coe G' G := ⟨.inr⟩
+
+-- square function: on A it is the identity, on G' it is (a, b, n) ↦ a
+def S : G → A
+  | .inl a => a
+  | .inr g => g.1.1
+
+/- We consider a special element `x₀ = (*, 0, 0) ∈ G'`, where `*` is the identity of `A`, i.e. the empty word.
+This is needed for Corollary 17.7; note that by doing this we are taking a sligthly different route from the proof of the corollary in the blueprint, in particular we make an explicit example of an element that does not verify eq 255. -/
+def x₀ : G := .inr ⟨⟨1, x 0, 0⟩, fun h ↦ one_ne_of 0 h⟩
+
+namespace GreedyB
+-- Greedy construction to extend the operation from A×A to A×G' in order to satisfy Axiom B, we try to mimic the structure of GreedyAC below
+
+lemma exists_extension_aux (a : A) : ∃ c : A → A,
+    c.Injective ∧ (∀ b, a ◇ ((c b) ◇ b) = c b) ∧ (∀ b, c b ≠ b):= by
+  rcases base2 a with ⟨c₁, hc1a, hc1b⟩
+  have c_aux (b : A) (h : a ≠ b) : ∃ c, c ◇ a = b ∧ c ≠ c₁ ∧ c ≠ b := by
+    have enc := base1 a b h
+    have noempty' : ({c | c ◇ a = b} \ {c₁, b}).Nonempty := by
+      refine Set.encard_ne_zero.mp (ne_of_gt ?_)
+      calc
+        _ < (3 : ENat) - 2 := by norm_num
+        _ ≤ _ := by
+          gcongr
+          refine Set.insert_eq _ _ ▸ (Set.encard_union_le _ _).trans ?_
+          simp_rw [Set.encard_singleton]
+          norm_num
+        {c | c ◇ a = b}.encard - _ ≤ _ := Set.tsub_encard_le_encard_diff _ {c₁, b}
+    rcases noempty' with ⟨c, hc1, hc2⟩
+    use c
+    simp_all
+  let c := fun b : A ↦ if h : a = b then c₁ else (c_aux b h).choose
+  use c
+  refine ⟨?_, ?_, ?_⟩
+  · unfold Function.Injective
+    intro x y
+    unfold c
+    rcases ne_or_eq a x  with hx | ha <;> rcases ne_or_eq a y with hy | ha'
+    · rw [dif_neg hx,dif_neg hy]
+      intro hind
+      have prop : (c_aux x hx).choose ◇ a = (c_aux y hy).choose ◇ a := by rw [hind]
+      have h_aux : (c_aux x hx).choose ◇ a = x := by
+        apply (c_aux x hx).choose_spec.1
+      have h_aux2 : (c_aux y hy).choose ◇ a = y := by
+        apply (c_aux y hy).choose_spec.1
+      rw [h_aux,h_aux2] at prop
+      exact prop
+    · rw [dif_neg hx, dif_pos ha']
+      intro hind
+      exfalso
+      have h_aux : (c_aux x hx).choose ≠  c₁ := by
+        apply (c_aux x hx).choose_spec.2.1
+      tauto
+    · rw [dif_pos ha,dif_neg hy]
+      intro hind
+      exfalso
+      have h_aux : (c_aux y hy).choose ≠  c₁ := by
+        apply (c_aux y hy).choose_spec.2.1
+      tauto
+    · intro h
+      rw [← ha, ← ha']
+  · intro b
+    rcases ne_or_eq a b with h1 | h2
+    · unfold c
+      rw [dif_neg h1]
+      have h_aux : (c_aux b h1).choose ◇ a = b := by
+        apply (c_aux b h1).choose_spec.1
+      have idem : a ◇ a = a := A_idempotent a
+      nth_rw 1 [← idem]
+      nth_rw 4 [← h_aux]
+      symm
+      apply A_satisfies_Equation1516
+    · rw [← h2]
+      unfold c
+      rw [dif_pos rfl]
+      exact hc1b
+  · intro b
+    rcases ne_or_eq a b with h1 | h2
+    · simp_rw [c, dif_neg h1]
+      exact (c_aux b h1).choose_spec.2.2
+    · simp_rw [c, dif_pos h2, ← h2]
+      exact hc1a
+
+noncomputable abbrev c (a : A) : A → A := (exists_extension_aux a).choose
+
+lemma c_injective (a : A) : (c a).Injective := (exists_extension_aux a).choose_spec.1
+
+lemma c_spec (a b : A) : a ◇ ((c a b) ◇ b) = c a b := (exists_extension_aux a).choose_spec.2.1 b
+
+lemma c_ne (a b : A) : c a b ≠ b := (exists_extension_aux a).choose_spec.2.2 b
+
+/- Problem with the proof in the blueprint: the greedy procedure seems to be adding not only the image of the special pair `(d,g)` that is not yet in the domain, but also an infinite number of other images of pairs in order to make the function infinitely surjective. How can we do this inside the greedy extension framework that we are trying to mimic? I have 2 ways in mind:
+- we can drop the finiteness requirement in `OK`, this would allow us to actually add an infinite number of images even in intermediate steps. The issue is that I'm not sure wether the finiteness will prove to be crucial in some of the later proofs. To do this we will probably need to add a requirement to `OK` asking that some set be infinite. This is likely not doable, I think the informal proof actually uses the finiteness of the `PartialSolution` in a crucial way.
+- we can try to add a new requirement to OK asking that the size of the counter images is bigger than some number, we need to use a number that we can easily show to grow indefinitely and I would rather not add a new variable altogether, because it may be hard to make it fit into the proof structure. One quantity that we have at our disposal could be something related to the size of the domain, but we need something that can grow indefinitely but does not grow too much when we add the new elements for the infinite surjectivity, otherwise we may end up trying to reach a target that moves as we advance towards it. Alternatively try to find a way to use the size of the domain of the previous iteration, instead of the current one (to do this I think I need to work directly inside Next, instead than inside the `PartialSolution`, not sure wether this is feasible).
+
+I implement the second solution. Since I want to add, for every `b ∈ A` and every `x ∈ G'`, an infinite number relations of the form `E b y x`, there are 3 things I need to keep in check during the iteration to avoid adding an infinite number of elements in a single step:
+1. the number of `b ∈ A` I am considering
+2. the number of `x ∈ G'` I am considering
+3. the number of `y` I am adding for each `(b, x)` pair
+
+Solutions:
+1. I already have a finite set `{(a, x, y) | E a x y}` within the data of `PartialSolution`, so in this case I can just take the projection of the set on the first element, i.e. `dom_projL := {a | ∃ x y, E a x y}`; this is finite and I can just ask that `b ∈ dom_projL`. Moreover, this set does not change if I add new elements of the form `E b y x` with `b` aready in `dom_projL`.
+2. The naive idea could be to take the set `dom_projR := {x : G' | ∃ a y, E a x y}` and ask for `x ∈ dom_projR := {x | ∃ a y, E a x y}`. However as we add new elements of the form `E b y x`, the set `dom_projR` will grow, so we need a way do limit the number of `x`s without relying on this set. Remember, however, that elements of `G'` are of the form `(a, c, n) ∈ A × A × ℕ`, so we can use the set `dom_projL` again to limit the number of `x`s in the following way: we can ask that `a, c ∈ dom_projL` and that `n ≤ dom_projL.card`. For this reason it may be useful to define `dom_projL` as a finset, so that we can use `.card` inside `ℕ`, avoiding coercions.
+Moreover, if we use a seed composed of only one element (I think it may be useful to use the seed `E * x₀ *`), it becomes easy to prove that it satisfies the requirement, because then `dom_projL = {*}` and there is no element of `G'` of the form `(*, *, n)`. (Maybe it will actually be enough to use an empty seed, for which the proofs are even easier).
+3. Since we are using `dom_projL` for the other quantities, we may as well use it for this one too. In parcitular we can limit the addition of new elements `y` in the following way: we add new relations `E b y x` until the cardinality of the set `{y | E b y x}` is bigger than `dom_projL.card`. This guarantees us that the number of new elements is finite for each of the (finitely many thanks to 1. and 2.) pairs `(b,x)` we are considering. At the same time, this number can grow indefinitely as we add new pairs `(b,x)`, so we can use it to prove that the final function is infinitely surjective.
+
+Moreover, note that in 1. and 2. we further restrict the situation by only considering `(b, x)` such that `L b x` is already defined, this is useful because the elements `y` that we add for the infinite surjectivity depend on the value of `L b x`; it is also non restrictive, since eventually `L b x` will be defined for all `(b, x)`.
+-/
+
+noncomputable
+def dom_projL {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) : Finset A :=
+  have := hE.fintype
+  Finset.image (fun (a, _, _) ↦ a) {(a, x, y) | E a x y}.toFinset
+
+lemma dom_projL_eq {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) :
+    dom_projL hE = {a | ∃ x y, E a x y} := by simp [dom_projL, Set.image]
+
+@[mk_iff]
+structure Relevant_aux (s : Finset A) (x : G') :
+    Prop where
+  h1 : x.1.1 ∈ s
+  h2 : x.1.2.1 ∈ s
+  h3 : x.1.2.2 ≤ s.card
+
+def relevant_aux_set (s : Finset A) : Set G' := {x | Relevant_aux s x}
+
+lemma relevant_aux_set_eq (s : Finset A) :
+    relevant_aux_set s = {x | x.1.1 ∈ s ∧ x.1.2.1 ∈ s ∧ x.1.2.2 ≤ s.card} := by
+  simp [relevant_aux_set, relevant_aux_iff]
+
+lemma relevant_aux_set_finite (s : Finset A) :
+    (relevant_aux_set s).Finite := by
+  -- have : fun x ↦ (x.1.1, x.1.2.1, x.1.2.2) |>.Injective
+  -- should be doable, maybe try to pass to a set in A × A × ℕ with an injective function, then this should be the product of 3 finite sets
+  let card := s.card
+  --let C := (Set.univ : Set (A × A × ℕ))
+  let f := fun (x : G') ↦ ((x.1.1, x.1.2.1, x.1.2.2) : (A × A × ℕ))  -- il problema qui è che A × A × ℕ è un tipo, quindi non posso riferirmi a lui come un insieme, a differenza di G'
+  have := relevant_aux_set_eq s
+  rw [this]
+  have f_in : Function.Injective f := by
+    intro a b h
+    unfold f at h
+    exact SetCoe.ext h
+  let A' := {z : A × A × ℕ | z.2.2 ≤ card}
+
+
+
+
+
+
+  sorry
+
+@[mk_iff]
+structure Relevant {E : A → G → G → Prop} (hE : {(a, x, y) | E a x y}.Finite) (b : A) (x : G') :
+    Prop where
+  hbx : ∃ z, E b x z
+  hb : b ∈ dom_projL hE
+  hx : Relevant_aux (dom_projL hE) x
+
+/-Design choice:
+for the condition `hx₀` in the structure `OK`, we could ask two different things:
+- `hx₀ {x} : E 1 x₀ x → x = .inl 1`, that is, if L₁ x₀ is defined then it is equal to 1
+- `hx₀ : E 1 x₀ (.inl 1)`, that is L₁ x₀ is always defined and equal to 1
+In the end we chose the first option, since it is the most flexible and in particular it allows us to define the starting seed as an empty `PartialSolution`, which is easier to work with. -/
+
+structure OK (E : A → G → G → Prop) : Prop where
+  finite : {(a, x, y) | E a x y}.Finite
+  func {a x y y'} : E a x y → E a x y' → y = y'
+  extend {a b : A} {x} : E a b x → x = .inl (a ◇ b)
+  -- hx₀ : E 1 x₀ (.inl 1)
+  -- hx₀ {x} : E 1 x₀ x → x = .inl 1 --maybe this is not even necassary, aux4 should suffice
+  -- aux1 {x y z w} : E x y z → E x z w → E (S y) w x --eq1516
+  aux1 {x y z w k} : E x y z → E x z w → E (S y) w k → k = x --eq1516
+  aux2 {b} {x : G'} : -- technical condition to ensure the infinite surjectivity
+    Relevant finite b x → (dom_projL finite).card ≤ {y : G' | E b y x}.ncard
+  aux3 {a} {y : G'} {x} : S y = a → y.1.2.2 ≠ 0 → E a y x → x = .inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩
+  aux4 {a} {y : G'} {x} : S y = a → y.1.2.2 = 0 → E a y x → x = .inl a
+  aux5 {c} {y : G'} {x} : S y ≠ c → E c y x → x ≠ .inl c
+
+abbrev PartialSolution := {E : A → G → G → Prop // OK E}
+
+class Extension where
+  E : A → G → G → Prop
+  ok : OK E
+  d : A
+  g : G
+  not_def {z} : ¬E d g z
+
+lemma E_1_x₀_eq_1 {E : PartialSolution} {z : G} (hE : E.val 1 x₀ z) : z = .inl 1 := by
+  convert E.property.aux4 rfl (show (⟨⟨_, _, _⟩, _⟩ : G').1.2.2 = 0 from rfl) hE
+
+namespace Extension
+
+-- define the element that should be the image of `L_c y`
+noncomputable def partL (c' : A) (y : G) : G := by
+  rcases y with (a | ⟨⟨a, b, n⟩, habn⟩)
+  · exact .inl (c' ◇ a)
+  · by_cases ha : a = c'
+    · by_cases hn : n = 0
+      · exact .inl a
+      · exact .inr ⟨(a, b, 0), habn⟩
+    by_cases hb : ∃ b', c' = c a b'
+    · exact .inl hb.choose
+    -- The blueprint proof is incorrect: in the blueprint in this case we use the surjectivity once to find `b` such that `a ◇ b = c'` and then define `L_c' y = b`. I didn't find a way to make this work, so I used the surjectivity twice to also find `b'` such that `c' ◇ b' = b`, and then define `L_c y = b'`, this way it seems to be working.
+    · exact .inl (A_op_surj_right c' (A_op_surj_right a c').choose).choose
+
+lemma partL_of_inl (d : A) (a : A) : partL d a = d ◇ a := rfl
+
+lemma partL_of_inr_same_of_zero {a b : A} (hab : a ≠ b) : partL a (.inr ⟨(a, b, 0), hab⟩) = a := by
+  simp only [partL]
+  rfl
+
+lemma partL_of_inr_same_of_zero' {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2.2 = 0) :
+    partL a y = a := by
+  simp only [partL]
+  rw [S] at hSy
+  rw [dif_pos hSy, dif_pos hn, hSy]
+
+lemma partL_of_inr_same_of_ne_zero {a b : A} (hab : a ≠ b) {n : ℕ} (hn : n ≠ 0) :
+    partL a (.inr ⟨(a, b, n), hab⟩) = .inr ⟨(a, b, 0), hab⟩ := by
+  simp only [partL, hn]
+  rfl
+
+lemma partL_of_inr_same_of_ne_zero' {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2.2 ≠ 0) :
+    partL a y = .inr ⟨(y.1.1, y.1.2.1, 0), y.2⟩ := by
+  simp only [partL]
+  rw [S] at hSy
+  rw [dif_pos hSy, dif_neg hn]
+
+lemma partL_of_inr_of_exists {c' a b b' : A} (n : ℕ) (had : a ≠ c') (hab : a ≠ b) (hdab' : c' = c a b') :
+    partL c' (.inr ⟨(a, b, n), hab⟩) = b' := by
+  simp only [partL, had, ↓reduceDIte]
+  rw [dif_pos ⟨b', hdab'⟩]
+  congr
+  refine c_injective a ?_
+  rw [← hdab']
+  exact (⟨b', hdab'⟩ : ∃ b', c' = c a b').choose_spec.symm
+
+lemma partL_of_inr_of_exists' {c' b' : A} {y : G'} (had : S y ≠ c') (hdab' : c' = c (S y) b') :
+    partL c' y = b' := by
+  rw [S] at had
+  simp only [partL, had, ↓reduceDIte]
+  rw [dif_pos ⟨b', hdab'⟩]
+  congr
+  refine c_injective (S y) ?_
+  rw [← hdab']
+  exact (⟨b', hdab'⟩ : ∃ b', c' = _).choose_spec.symm
+
+lemma partL_of_inr_of_not_exists {c' a b : A} (n : ℕ) (had : a ≠ c') (hab : a ≠ b) (h : ¬∃ b', c' = c a b') :
+    partL c' (.inr ⟨(a, b, n), hab⟩) =
+      (A_op_surj_right c' (A_op_surj_right a c').choose).choose := by
+  simp [partL, had, ↓reduceDIte, h]
+
+lemma partL_of_inr_of_not_exists_spec {c' a b : A} (n : ℕ) (had : a ≠ c') (hab : a ≠ b) (h : ¬∃ b', c' = c a b') :
+    ∃ b' b'' : A, partL c' (.inr ⟨(a, b, n), hab⟩) = b'' ∧
+      a ◇ b' = c' ∧ c' ◇ b'' = b' := by
+  rw [partL_of_inr_of_not_exists _ had hab h]
+  refine ⟨(A_op_surj_right a c').choose, (A_op_surj_right c' _).choose, rfl,
+    (A_op_surj_right _ _).choose_spec, (A_op_surj_right _ _).choose_spec⟩
+
+lemma partL_of_inr_of_not_exists' {c' : A} {y : G'} (hSy : S y ≠ c') (h : ¬∃ b', c' = c (S y) b') :
+    partL c' y = (A_op_surj_right c' (A_op_surj_right (S y) c').choose).choose := by
+  simp only [partL]
+  rw [S] at hSy h
+  rw [dif_neg hSy, dif_neg h]
+
+lemma partL_of_inr_of_not_exists'_spec {c' : A} {y : G'} (hSy : S y ≠ c') (h : ¬∃ b', c' = c (S y) b') :
+    ∃ b b' : A, partL c' y = b' ∧ S y ◇ b = c' ∧ c' ◇ b' = b := by
+  rw [partL_of_inr_of_not_exists' hSy h]
+  exact ⟨(A_op_surj_right _ _).choose, (A_op_surj_right _ _).choose,
+    rfl, (A_op_surj_right _ _).choose_spec, (A_op_surj_right _ _).choose_spec⟩
+
+lemma partL_ne_c' {c' : A} {y : G'} (hSy : S y ≠ c') : partL c' y ≠ c' := by
+  rw [S] at hSy
+  by_cases hb' : ∃ b', c' = c (S y) b'
+  · obtain ⟨b', hb'⟩ := hb'
+    rw [partL_of_inr_of_exists' hSy hb', hb']
+    refine Function.Injective.ne Sum.inl_injective (c_ne _ _).symm
+  · obtain ⟨b, b', hb, hSb, hSb'⟩ := partL_of_inr_of_not_exists'_spec hSy hb'
+    rw [hb]
+    intro h
+    apply Sum.inl_injective at h
+    simp_all only
+    rw [A_idempotent] at hSb'
+    rw [← hSb', S] at hSb
+    exact hSy (A_op_eq_self_iff.mp hSb)
+
+lemma partL_ne_y {c' : A} {y : G} (h : .inl c' ≠ y) : partL c' y ≠ y := by
+  rcases y with (a | ⟨⟨a, b, n⟩, habn⟩)
+  · rw [partL_of_inl]
+    contrapose! h
+    rw [A_op_eq_self_iff.mp (Sum.inl_injective h)]
+  · by_cases ha : a = c'
+    · by_cases hn : n = 0
+      · rw [hn, ← ha, partL_of_inr_same_of_zero habn]
+        exact Sum.inl_ne_inr
+      · rw [← ha, partL_of_inr_same_of_ne_zero habn hn]
+        intro hh
+        have := Sum.inr_injective hh
+        simp_all
+    by_cases hb : ∃ b', c' = c a b'
+    · rw [partL_of_inr_of_exists n ha habn hb.choose_spec]
+      exact Sum.inl_ne_inr
+    · rw [partL_of_inr_of_not_exists _ ha habn hb]
+      exact Sum.inl_ne_inr
+
+--this lemma should be put into Mathlib, maybe in Set.ncard_le_encard somewhere after the definition of Set.ncard
+lemma _root_.Set.ncard_le_encard {α : Type*} (s : Set α) : Set.ncard s ≤ Set.encard s :=
+    ENat.coe_toNat_le_self _
+
+--this lemma should be put into Mathlib, maybe in Mathlib.Order.WithBot after WithTop.coe_ne_top
+lemma _root_.WithTop.eq_coe_of_ne_top {α : Type*} {a : WithTop α} (ha : a ≠ ⊤) :
+    ∃ b : α, b = a := Option.ne_none_iff_exists.mp ha
+
+--this lemma should be put into Mathlib, maybe in Mathlib.Order.WithBot after WithBot.coe_ne_bot
+lemma _root_.WithBot.eq_coe_of_ne_bot {α : Type*} {a : WithBot α} (ha : a ≠ ⊥) :
+    ∃ b : α, b = a := Option.ne_none_iff_exists.mp ha
+
+--this lemma should be put into Mathlib, maybe in Mathlib.Data.ENat.Basic next to ENat.ne_top_iff_exists
+lemma _root_.ENat.eq_top_iff_forall_ne (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, ↑m ≠ n :=
+  WithTop.forall_ne_iff_eq_top.symm
+
+--this lemma should be put into Mathlib, maybe in Mathlib.Data.ENat.Basic next to ENat.ne_top_iff_exists
+lemma _root_.ENat.eq_top_iff_forall_lt (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m < n := by
+  rw [ENat.eq_top_iff_forall_ne]
+  refine ⟨fun h m ↦ ?_, fun a m ↦ (a m).ne⟩
+  contrapose! h
+  exact WithTop.eq_coe_of_ne_top fun a ↦ ENat.coe_ne_top _ <| top_le_iff.mp (a ▸ h)
+
+--this lemma should be put into Mathlib, maybe in Mathlib.Data.ENat.Basic next to ENat.ne_top_iff_exists
+lemma _root_.ENat.eq_top_iff_forall_le (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m ≤ n := by
+  rw [ENat.eq_top_iff_forall_lt]
+  refine ⟨fun h m ↦ le_of_lt (h m), fun h m ↦ (h (m + 1)).trans_lt' ?_⟩
+  exact (ENat.lt_add_one_iff (ENat.coe_ne_top m)).mpr (le_refl _)
+
+variable [Extension]
+
+/- Problem I am encountering while defining Next: I need to define the extra cases on the basis of Relevant (in a pair (c', y) is relevant with respect to Next I should add something to Next), the problem is that I cannot even state this inside Next, because in order to even say that (c', y) are Relevant wrt Next I need the fact that Next.2.finite, which I can only establish after having defined it.
+The soultion I will try to implement is this:
+instead of defining Next in one go, I define an auxiliary structure Next_aux, where I just add the base and new cases, this will of course not be a PratialSolution, but I can still use its Relevant set since its domain will still be finite.
+Then I will define Next as the extension of Next_aux, adding the extra cases. The control to add the extra cases will be based on Relevant wrt Next_aux and not Next, however it should be easy to prove that the relevant set does not change between Next_aux and Next, because the extra cases only add relations E a y x with a already in dom_projL, so dom_projL does not change
+-/
+
+@[mk_iff]
+inductive Next_aux : A → G → G → Prop
+  | base {a y x} : E a y x → Next_aux a y x
+  | new : Next_aux d g (partL d g)
+
+lemma next_aux_finite : {(a, x, y) | Next_aux a x y}.Finite := by
+  simp [next_aux_iff, Set.setOf_or, ← Prod.mk.injEq, ok.finite]
+
+lemma next_aux_func {a x y y'} : Next_aux a x y → Next_aux a x y' → y = y'
+  | .base hb, .base hb' => ok.func hb hb'
+  | .new , .new  => rfl
+  | .base hb, .new | .new, .base hb => (not_def hb).elim
+
+lemma next_aux_extend {a b : A} {x} : Next_aux a b x → x = .inl (a ◇ b) := by
+  simp only [next_aux_iff]
+  rintro (h | ⟨had, hbg, hx⟩)
+  · exact ok.extend h
+  · rw [hx, ← hbg, partL_of_inl, had]
+
+-- lemma next_aux_x₀ {x} : Next_aux 1 x₀ x → x = .inl 1 := by
+--   simp only [next_aux_iff]
+--   rintro (h | ⟨hd, hg, hx⟩)
+--   · exact ok.hx₀ h
+--   · rw [hx, ← hd, ← hg, x₀, partL_of_inr_same_of_zero]
+
+lemma next_aux_aux3 {a} {y : G'} {x} (hSy : S y = a) (hn : y.1.2.2 ≠ 0) (h : Next_aux a y x) :
+    x = .inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩ := by
+  rw [next_aux_iff] at h
+  rcases h with (h | ⟨had, hbg, hx⟩)
+  · exact ok.aux3 hSy hn h
+  · rw [hx, ← hbg, ← had, partL_of_inr_same_of_ne_zero' hSy hn]
+
+lemma next_aux_aux4 {a} {y : G'} {x} (hSy : S y = a) (hn : y.1.2.2 = 0) (h : Next_aux a y x) :
+    x = .inl a := by
+  rw [next_aux_iff] at h
+  rcases h with (h | ⟨had, hbg, hx⟩)
+  · exact ok.aux4 hSy hn h
+  · rw [hx, ← hbg, ← had, partL_of_inr_same_of_zero' hSy hn]
+
+lemma next_aux_aux5 {c} {y : G'} {x} (h : S y ≠ c) (h' : Next_aux c y x) : x ≠ .inl c := by
+  rw [next_aux_iff] at h'
+  rcases h' with (h' | ⟨had, hbg, hx⟩)
+  · exact ok.aux5 h h'
+  · rw [hx, ← had, ← hbg]
+    exact partL_ne_c' h
+
+/- Problem with proving that Next_aux (that is, the partial solution after we add only the image of a single pair `(d, g)`) verifies the equation 1516.
+Since the domain of our operation is still only partial, it makes no sense to ask that the equation `L_{S y} LₓLₓy = x` holds for all `x, y` in the partial domain, because for example the image of `x` and `Lₓ y` may not yet be defined.
+For this reason the condition that we put in the `PartialSolution` structure is that the equation holds whenever all the relevant operations are defined, that is the operation is defined for the pairs `(x, y)`, `(x, Lₓ y)` and `(S y, LₓLₓy)`.
+If the pair `(d, g)` that is being defined in the current step (using `partL`) is the first one `(x, y)`, then the proof goes as originally intended and there is no issue. However, if the image of `(x, y)` is already defined and we are introducing one of the other pairs as `(d, g)`, then the proof becomes problematic.
+I tried to find some arguments to prove this by splitting the different cases that can occur in the definiton of `partL`, but I was not able to find a way to make it work.
+I'm not sure if the statement is false with the current implementation and we should tweak the structure upstream somehow (maybe by adding some extra conditions to the `PartialSolution` structure) or if I'm just missing some argument that would make the proof work. -/
+
+lemma next_aux_aux1 {x y z w k} : Next_aux x y z → Next_aux x z w → Next_aux (S y) w k → k = x
+  | .base hb => by
+    rw [next_aux_iff]
+    rintro (h | ⟨had, hbg, hx⟩)
+    · rw [next_aux_iff]
+      rintro (h' | ⟨had', hbg', hx'⟩)
+      · exact ok.aux1 hb h h'
+      · -- 🛑 Problem 🛑: This is the case where `Lₓ y` and `Lₓ (Lₓy)` are already defined and we are defining `L_{Sy} (LₓLₓy)` as a new element with `d = S y` and `g = LₓLₓy`. See the comment above.
+        simp_all
+        clear hbg' hx'
+        rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
+        · rw [partL_of_inl]
+          sorry
+        · by_cases ha : a = d
+          · by_cases hn : n = 0
+            · subst hn ha
+              rw [partL_of_inr_same_of_zero]
+              sorry
+            · rw [← ha, partL_of_inr_same_of_ne_zero _ hn]
+              -- the goal here is impossible because of Sum.inr_ne_inl, so we need to find a contradiction from the hypotheses
+              -- observation, not sure if it is useful: we have g = (a, b, n) with n ≠ 0, the relations generated through the first phase can only have output in A or of the form (a, b, 0), so the relation h : E x z g must have been generated in the second phase
+              sorry
+          · by_cases hb : ∃ b', d = c a b'
+            · obtain ⟨b', hb'⟩ := hb
+              rw [partL_of_inr_of_exists _ ha habn hb']
+              sorry
+            · obtain ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n ha habn hb
+              rw [hdg]
+              sorry
+    · rw [next_aux_iff]
+      rintro (h' | ⟨had', hbg', hx'⟩)
+      · -- 🛑 Problem 🛑: Here `Lₓ y` and `L_{Sy} (LₓLₓy)` are already defined and we are defining `Lₓ (Lₓy)` as a new element with `d = x` and `g = Lₓy`. See the comment above.
+        simp_all
+        clear had hbg hx
+        rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
+        · rw [hg, partL_of_inl] at h'
+          rw [ok.extend h']
+          clear h'
+          rcases hy : y with (a' | ⟨⟨a', b', n'⟩, habn'⟩)
+          · rw [hy] at hb
+            rw [ok.extend hb] at hg
+            apply Sum.inl_injective at hg
+            have := A_idempotent _ ▸ A_satisfies_Equation1516 d a'
+            rw [← hg, S, ← this]
+          · simp_all only [S]
+            clear hg hy
+            congr
+            sorry
+        · by_cases had : a = d
+          · by_cases hn : n = 0
+            · subst had hn
+              rw [hg, partL_of_inr_same_of_zero] at h'
+              rw [ok.extend h']
+              congr
+              rw [A_op_eq_self_iff]
+              -- notice that E d y g and g = (d, b, 0). if this relation was generated in the first phase, then the only possible combination that gives an output like (a, b, 0) is if S y = d and we would be done. If instead the relation was generated in the second phase, L_d g was already defined and since g = (d, b, 0) it must be equal to d ∈ A, so we would be in case 3 and y would be of the form (d, ., n) and we are done again. How should we implement this? Maybe we could add a hypothesis to PartialSolution saying that E d y (d, b, 0) implies S y = d
+              sorry
+            · subst had
+              rw [hg, partL_of_inr_same_of_ne_zero _ hn] at h'
+              -- notice that E d y g and g = (d, b, n). This relation cannot be generated in the first phase. If it was generated in the second phase, L_d g was already defined and equal to (d, b, 0), so we would be in case 1 and y would be of the form (c_{d, d}, d, n). I'm not sure if this helps.
+              sorry
+          · by_cases hb₀ : ∃ b', d = c a b'
+            · obtain ⟨b', hb'⟩ := hb₀
+              rw [hg, partL_of_inr_of_exists _ had habn hb'] at h'
+              rw [ok.extend h']
+              sorry
+            · have ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n had habn hb₀
+              rw [hg, hdg] at h'
+              rw [ok.extend h']
+              sorry
+      · by_cases h : .inl d = g
+        · rw [hx', ← h, partL_of_inl, A_idempotent, had]
+        · rw [hbg'] at hx
+          refine (partL_ne_y h hx.symm).elim
+  | .new => by
+    rw [next_aux_iff]
+    rintro (h | ⟨had, hbg, hx⟩)
+    · rw [next_aux_iff]
+      rintro (h' | ⟨had', hbg', hx'⟩)
+      · rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
+        · rw [hg, partL_of_inl] at h
+          rw [ok.extend h] at h'
+          rw [ok.extend h', hg, S]
+          nth_rw 3 [A_satisfies_Equation1516 d a]
+          rw [A_idempotent]
+        · simp_rw [hg, S] at h'
+          by_cases had : a = d
+          · by_cases hn : n = 0
+            · rw [hg, ← had, hn, partL_of_inr_same_of_zero] at h
+              rw [ok.extend h, A_idempotent] at h'
+              rw [ok.extend h', A_idempotent, had]
+            · rw [hg, ← had, partL_of_inr_same_of_ne_zero _ hn] at h
+              rw [ok.aux4 (by rw [S]) rfl h] at h'
+              rw [ok.extend h', A_idempotent, had]
+          · by_cases hb : ∃ b', d = c a b'
+            · obtain ⟨b', hb'⟩ := hb
+              rw [hg, partL_of_inr_of_exists _ had habn hb'] at h
+              rw [ok.extend h] at h'
+              rw [ok.extend h', hb', c_spec]
+            · have ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n had habn hb
+              rw [hg, hdg] at h
+              rw [ok.extend h] at h'
+              simp_rw [ok.extend h', hdb'', hab']
+      · rw [hx']
+        rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
+        · rw [hg, S] at had'
+          rw [partL_of_inl, had', A_idempotent]
+        · by_cases hn : n = 0
+          · rw [hn, partL_of_inr_same_of_zero' _ (by simp)]
+            simp_all
+          · simp_rw [hg, S] at had'
+            rw [← had', hg, partL_of_inr_same_of_ne_zero _ hn] at h
+            have := ok.aux4 (by rw [S]) rfl h
+            rw [hbg', hg] at this
+            exact (Sum.inr_ne_inl this).elim
+    · by_cases h : .inl d = g
+      · intro h'
+        rw [hx, hbg, ← h, S] at h'
+        rw [next_aux_extend h', A_idempotent]
+      · exact (partL_ne_y h hbg).elim
+
+def relevant_set : Set (A × G') := {(c', y) | Relevant next_aux_finite c' y}
+
+def relevant_set' : Set (A × G) := (fun (a, x) ↦ (a, .inr x)) '' relevant_set
+
+lemma relevant_set'_finite : relevant_set'.Finite := by
+  have : Set.Finite {(c', (y : G)) | ∃ w, Next_aux c' y w} := by
+    convert Set.Finite.image (fun (a, x, y) ↦ (a, x)) next_aux_finite
+    ext p
+    aesop
+  refine Set.Finite.subset this fun _ h ↦ ?_
+  simp only [relevant_set', relevant_set, Set.mem_image, Set.mem_setOf_eq, Prod.exists,
+    Subtype.exists] at h
+  have ⟨_, _, _, _, _, h_rel, h_eq⟩ := h
+  exact Set.mem_of_eq_of_mem h_eq.symm h_rel.hbx
+
+lemma relevant_set_finite : relevant_set.Finite := by
+  refine relevant_set'_finite.of_finite_image fun _ _ _ _ h ↦ ?_
+  simp only [Prod.mk.injEq] at h
+  ext : 1
+  · exact h.1
+  · exact Sum.inr_injective h.2
+
+section extra_set
+
+/-
+Construction of `extra_set`:
+extra_set will be a function that takes `c'` and `y` such that `Relevant_aux c' y` and returns a finset of elements `z` to add the relations `E c' z y` for the last part of the construction.
+This finset will need to have a fixed cadinality that will be needed in the proof of the infinite surjectivity.
+There are 3 different cases to consider:
+1. `L c' y = w ∈ G'`
+2. `L c' y = b ∈ A` and `S y ≠ c'`
+3. `L c' y = b ∈ A` and `S y = c'` and `y.1.2.2 = 0`
+The case where `L c' y = b ∈ A` and `S y = c'` and `y.1.2.2 ≠ 0` is already considered in 1. and the case where `L c' y` is not defined is already ruled out by `Relevant_aux c' y`
+
+So `extra_set` will be defined as an if then else expression and we need to define 3 different sets `extra_set1`, `extra_set2`, `extra_set3` for the 3 different cases.
+To define each set I will be using the fact that some set `A` is infinite and to add some propeerties to the elements of the finset I will be subtracting from `A` some finite set `B`, excluding elements not meeting the properties.
+Doing this is fine, and we could do it for each `(c', y)` separately, the problem is that we actually need to do it in sucha way that the resulting finsets are all disjoint.
+Imposing the disjointness of `extra_seti` and `extra_setj` for `i ≠ j` is easy, it is sufficient to ask in the construction of `extra_set2` that the elements are not in any `extra_set1` and the same for `extra_set3`.
+The problem arises when we need to impose the disjointness of some `extra_seti (c'₁, y₁)` and `extra_seti (c'₂, y₂)`, the difficulty is enhanced by the fact that the infinite and finite sets `A₁` `B₁` and `A₂` `B₂` are different for each pair of elements (otherwise we could have taken the number `N` of pairs `(c', y)` such that `Relevant_aux c' y`, then take a subset of `A \ B` of cardinality `N` times the required cardinality and just partition it in N different parts, one for each pair `(c', y)`).
+The only way I am seeing to overcome this is by constructing the sets iteratively, in such a way that in the construction of each set I actively exclude the elements of the preceding sets.
+Rather than implementing this for the special case of the extra sets, I will implement it in a more general and reuasble manner, saying that if we have a finite set of indexes `ι`, some infinite sets `A : ι → Set α`, some finite sets `B : ι → Set α` and some numbers `n : ι → ℕ`, then we can construct a collection of disjoint finsets `s : ι → Finset α` such that `s i ⊆ A i \ B i` and such that the cardinality of `s i` is `n i`.
+For now I am leaving the proof of this lemma sorried, maybe there is already some similar result in mathlib. However if it is not the case the I think that the key will be to be able to give an order to ι and then construct the sets iteratively as suggested above (maybe via an induction on the cardinality of `ι`?) at each step one could use a lemma like `Finset.exists_card_eq` applied to `A i` and `B i ∪ ⋃ j < i, s j`.
+Further simplification of this approach: I don't really need to use both `A`s and `B`s, I can just use `A`s, and then when I use the lemma I can just put what would be `A i \ B i` as `A i`.
+-/
+
+lemma exists_disjoint_sets {α ι : Type*} [Finite ι] (n : ι → ℕ)
+    {A : ι → Set α} (hA : ∀ i, (A i).Infinite) :
+    ∃ s : ι → Finset α, (∀ i, (s i).toSet ⊆ A i) ∧
+      (∀ i, (s i).card = n i) ∧ ∀ i j, i ≠ j → Disjoint (s i) (s j) := by
+  sorry
+
+example (α : Type*) (A : Set α) (hA : A.Finite) : Finite A := by
+  exact hA
+
+lemma relevant_trichotomy {c' y} (h_rel : Relevant next_aux_finite c' y) :
+    (∃ w : G', Next_aux c' y w) ∨ ((∃ b : A, Next_aux c' y b) ∧ S y ≠ c') ∨
+      (∃ b : A, Next_aux c' y b) ∧ S y = c' ∧ y.1.2.2 = 0 := by
+  have ⟨x, h⟩ := h_rel.hbx
+  rcases x with (b | w)
+  · by_cases hSy : S y = c'
+    · by_cases hn : y.1.2.2 = 0
+      · exact Or.inr <| Or.inr ⟨⟨b, h⟩, hSy, hn⟩
+      · exact Or.inl (Sum.inl_ne_inr (next_aux_aux3 hSy hn h)).elim
+    · exact Or.inr <| Or.inl ⟨⟨b, h⟩, hSy⟩
+  · exact Or.inl ⟨w, h⟩
+
+def relevant_set1 := {(c', y) | Relevant next_aux_finite c' y ∧ ∃ w : G', Next_aux c' y w}
+
+def relevant_set2 := {(c', y) | Relevant next_aux_finite c' y ∧ (∃ b : A, Next_aux c' y b) ∧ S y ≠ c'}
+
+def relevant_set3 := {(c', y) | Relevant next_aux_finite c' y ∧ (∃ b : A, Next_aux c' y b) ∧ S y = c' ∧ y.1.2.2 = 0}
+
+lemma relevant_set1_finite : relevant_set1.Finite :=
+  relevant_set_finite.subset fun _ h ↦ Set.mem_of_mem_inter_left h
+
+lemma relevant_set2_finite : relevant_set2.Finite :=
+  relevant_set_finite.subset fun _ h ↦ Set.mem_of_mem_inter_left h
+
+lemma relevant_set3_finite : relevant_set3.Finite :=
+  relevant_set_finite.subset fun _ h ↦ Set.mem_of_mem_inter_left h
+
+--for now I am leaving the statement partially commented, this is to try and see if the proof can be done, then I will add more conditions to the statement as needed also in the next section, each condition should just add a new part to the set that we need to show being finite
+lemma exists_extra_set1 :
+    ∃ s : relevant_set1 → Finset G',
+      (∀ c' y h_rel w hw, (s ⟨⟨c', y⟩, ⟨h_rel, ⟨w, hw⟩⟩⟩).card = (dom_projL next_aux_finite).card ∧
+        ∀ z ∈ s ⟨⟨c', y⟩, ⟨h_rel, ⟨w, hw⟩⟩⟩,
+          z.1.1 = c w.1.1 c' ∧ z.1.2.1 = c' ∧
+          .inr z ≠ g ∧
+          (∀ a x, ¬ Next_aux a z x) ∧
+          (∀ a x, ¬ Next_aux a x z) ∧
+          .inr z ≠ x₀
+          ) ∧
+      ∀ p₁ p₂, p₁ ≠ p₂ → Disjoint (s p₁) (s p₂) := by
+    have h_infinite (p : relevant_set1) :
+        Set.Infinite <| ((({⟨⟨c p.2.2.choose.1.1 p.1.1, p.1.1, n'⟩, c_ne p.2.2.choose.1.1 p.1.1⟩ | n'} \ {y : G'| ∃ a x, Next_aux a y x}) \ {y : G'| ∃ a x, Next_aux a x y}) \ {y | y = g}) \ {y | y = x₀} := by
+      have ⟨⟨c', y⟩, ⟨h_rel, ⟨w, hw⟩⟩⟩ := p
+      refine (Set.Infinite.diff ?_ ?_).diff ?_ |>.diff ?_ |>.diff ?_
+      ·
+        --doable, this set is the image of ℕ through the function n ↦ ⟨⟨c w1 c', c', n⟩, c_ne w1 c'⟩, which is injective
+        sorry
+      ·
+        --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite. This may become a separate lemma, I think we use it also in the construction of the other extra sets
+        sorry
+      ·
+        --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite. This may become a separate lemma, I think we use it also in the construction of the other extra sets
+        sorry
+      ·
+        --doable it is just a singleton
+        -- simp [Sum.inr_injective]
+        sorry
+      ·
+        --doable it is just a singleton
+        sorry
+    have : Finite relevant_set1 := relevant_set1_finite
+    have ⟨s, hs_subs, hs_card, hs_disj⟩ := exists_disjoint_sets (fun _ ↦ (dom_projL next_aux_finite).card) h_infinite
+
+    refine ⟨s, fun c' y h_rel w hw ↦ ⟨hs_card _, fun z hz ↦ ?_⟩, fun p₁ p₂ a ↦ hs_disj p₁ p₂ a⟩
+
+    -- here we prove the conditions, this will need to be changed when we change the conditions, this is why I leave it ungolfed for now
+    have hz := hs_subs ⟨⟨c', y⟩, ⟨h_rel, ⟨w, hw⟩⟩⟩ hz
+    simp only [Set.mem_diff, Set.mem_setOf_eq, not_exists] at hz
+    obtain ⟨⟨⟨⟨⟨n', hz₁⟩, hz₂⟩, hz₃⟩, hz₄⟩, hz₅⟩ := hz
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+    · simp_rw [← hz₁]
+      have : ∃ _, Next_aux c' (Sum.inr y) _ := ⟨w, hw⟩
+      rw [Sum.inr_injective <| next_aux_func this.choose_spec hw]
+    · rw [← hz₁]
+    · exact hz₄
+    · exact fun x ↦ hz₂ x
+    · exact fun x ↦ hz₃ x
+    · exact hz₅
+
+noncomputable def extra_set1 {c' : A} {y w : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hw : Next_aux c' y w) : Finset G' :=
+  exists_extra_set1.choose ⟨⟨c', y⟩, ⟨h_rel, ⟨w, hw⟩⟩⟩
+
+lemma extra_set1_card {c' : A} {y w : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hw : Next_aux c' y w) : (extra_set1 h_rel hw).card = (dom_projL next_aux_finite).card :=
+  (exists_extra_set1.choose_spec.1 c' y h_rel w hw).1
+
+lemma extra_set1_eq1 {c' : A} {y w z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hw : Next_aux c' y w) (hz : z ∈ extra_set1 h_rel hw) : z.1.1 = c w.1.1 c' :=
+  ((exists_extra_set1.choose_spec.1 c' y h_rel w hw).2 z hz).1
+
+lemma extra_set1_eq2 {c' : A} {y w z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hw : Next_aux c' y w) (hz : z ∈ extra_set1 h_rel hw) : z.1.2.1 = c' :=
+  ((exists_extra_set1.choose_spec.1 c' y h_rel w hw).2 z hz).2.1
+
+lemma extra_set1_not_g {c' : A} {y w z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hw : Next_aux c' y w) (hz : z ∈ extra_set1 h_rel hw) : .inr z ≠ g :=
+  ((exists_extra_set1.choose_spec.1 c' y h_rel w hw).2 z hz).2.2.1
+
+lemma extra_set1_not_Next_aux {c' : A} {y w z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hw : Next_aux c' y w) (hz : z ∈ extra_set1 h_rel hw) : ∀ a x, ¬ Next_aux a z x :=
+  ((exists_extra_set1.choose_spec.1 c' y h_rel w hw).2 z hz).2.2.2.1
+
+lemma extra_set1_not_Next_aux' {c' : A} {y w z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hw : Next_aux c' y w) (hz : z ∈ extra_set1 h_rel hw) : ∀ a x, ¬ Next_aux a x z :=
+  ((exists_extra_set1.choose_spec.1 c' y h_rel w hw).2 z hz).2.2.2.2.1
+
+lemma extra_set1_not_x₀ {c' : A} {y w z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hw : Next_aux c' y w) (hz : z ∈ extra_set1 h_rel hw) : .inr z ≠ x₀ :=
+  ((exists_extra_set1.choose_spec.1 c' y h_rel w hw).2 z hz).2.2.2.2.2
+
+lemma extra_set1_disjoint {c'₁ c'₂ : A} {y₁ y₂ w₁ w₂ : G'}
+    (h_rel₁ : Relevant next_aux_finite c'₁ y₁) (hw₁ : Next_aux c'₁ y₁ w₁)
+    (h_rel₂ : Relevant next_aux_finite c'₂ y₂) (hw₂ : Next_aux c'₂ y₂ w₂)
+    (h : c'₁ ≠ c'₂ ∨ y₁ ≠ y₂) : Disjoint (extra_set1 h_rel₁ hw₁) (extra_set1 h_rel₂ hw₂) := by
+  refine exists_extra_set1.choose_spec.2 _ _ ?_
+  simp only [ne_eq, Subtype.mk.injEq, Prod.mk.injEq, not_and_or, h]
+
+lemma exists_extra_set2 :
+    ∃ s : relevant_set2 → Finset G',
+      (∀ c' y h_rel b hb hSy, (s ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy⟩⟩).card = (dom_projL next_aux_finite).card ∧
+        ∃ (a' : A), a' ◇ b = c' ∧ a' ≠ c' ∧
+          ∀ z ∈ s ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy⟩⟩,
+            z.1.1 = a' ∧ z.1.2.1 = c' ∧
+            .inr z ≠ g ∧
+            (∀ a x, ¬ Next_aux a z x) ∧
+            (∀ a x, ¬ Next_aux a x z) ∧
+            .inr z ≠ x₀
+          ) ∧
+      (∀ (p₁ : relevant_set1) p₂, Disjoint (extra_set1 p₁.2.1 p₁.2.2.choose_spec) (s p₂)) ∧
+      ∀ p₁ p₂, p₁ ≠ p₂ → Disjoint (s p₁) (s p₂) := by
+  have h_a' {c' b : A} {y : G'} (hb : Next_aux c' y b) (hSy : S y ≠ c') : ∃ a', a' ◇ b = c' ∧ a' ≠ c' := by
+    have ⟨a', (ha'1 : a' ◇ b = c'), ha'2⟩ : ({c | c ◇ b = c'} \ {c'}).Nonempty := by
+      refine Set.encard_ne_zero.mp (ne_of_gt ?_)
+      calc (0 : ℕ∞) < 3 - 1 := by norm_num
+        _ ≤ _ := by
+          gcongr
+          · exact base1 _ _ fun h ↦ next_aux_aux5 hSy hb (h ▸ rfl)
+          · exact (Set.encard_singleton _).le
+        {c | c ◇ b = c'}.encard - _ ≤ _ := Set.tsub_encard_le_encard_diff _ _
+    refine ⟨a', ?_, ha'2⟩
+    exact ha'1
+
+  have ⟨a', ha'⟩ := Classical.skolem.mp (fun (p : relevant_set2) ↦ h_a' p.2.2.1.choose_spec p.2.2.2)
+
+  have ha'' (p : relevant_set2) {b : A} (hb : Next_aux p.1.1 p.1.2 b) : a' p ◇ b = p.1.1 := by
+    rw [← (ha' p).1, Sum.inl_injective <| next_aux_func p.property.right.left.choose_spec hb]
+
+  have h_infinite (p : relevant_set2) :
+      Set.Infinite <| (((({⟨⟨a' p, p.1.1, n'⟩, (ha' p).2⟩ | n'} \ {y : G'| ∃ a x, Next_aux a y x}) \ {y : G'| ∃ a x, Next_aux a x y}) \ {y | y = g}) \ {y | y = x₀}) \ ⋃ (p : relevant_set1), (extra_set1 p.2.1 p.2.2.choose_spec) := by
+    have ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy⟩⟩ := p
+    refine (Set.Infinite.diff ?_ ?_).diff ?_ |>.diff ?_ |>.diff ?_ |>.diff ?_
+    ·
+      simp
+      --doable, this set is the image of ℕ through the function n ↦ ⟨⟨a', c', n⟩, _⟩, which is injective
+      --similar to exists_extra_set1
+      sorry
+    ·
+      --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite
+      --similar to exists_extra_set1
+      sorry
+    ·
+      --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite
+      --similar to exists_extra_set1
+      sorry
+    ·
+      --doable it is just a singleton
+      --similar to exists_extra_set1
+      sorry
+    ·
+      --doable it is just a singleton
+      --similar to exists_extra_set1
+      -- simp [Sum.inr_injective]
+      sorry
+    · have : Finite relevant_set1 := relevant_set1_finite
+      exact Set.finite_iUnion fun p ↦ Finset.finite_toSet _
+  have : Finite relevant_set2 := relevant_set2_finite
+  have ⟨s, hs_subs, hs_card, hs_disj⟩ := exists_disjoint_sets (fun _ ↦ (dom_projL next_aux_finite).card) h_infinite
+
+  refine ⟨s, fun c' y h_rel b hb hSy ↦ ⟨hs_card _,  ?_⟩, fun p₁ p₂ ↦ ?_, fun p₁ p₂ a ↦ hs_disj p₁ p₂ a⟩
+  · have ha''₀ := ha'' ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy⟩⟩ hb
+    refine ⟨a' ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy⟩⟩, ha''₀, (ha' ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy⟩⟩).2,
+      fun z hz ↦ ?_⟩
+    have hz := hs_subs ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy⟩⟩ hz
+
+    simp only [Set.mem_diff, Set.mem_setOf_eq, not_exists] at hz
+    obtain ⟨⟨⟨⟨⟨⟨n', hz₁⟩, hz₂⟩, hz₃⟩, hz₄⟩, hz₅⟩, hz₆⟩ := hz
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+    · simp_rw [← hz₁]
+    · rw [← hz₁]
+    · exact hz₄
+    · exact fun x ↦ hz₂ x
+    · exact fun x ↦ hz₃ x
+    · exact hz₅
+  · refine Finset.disjoint_right.mpr fun z hz ↦ ?_
+    have ⟨_, h⟩ := hs_subs p₂ hz
+    simp only [Set.mem_iUnion, Finset.mem_coe, not_exists] at h
+    exact h p₁
+
+noncomputable def extra_set2 {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') : Finset G' :=
+  exists_extra_set2.choose ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy⟩⟩
+
+lemma extra_set2_card {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') : (extra_set2 h_rel hb hSy).card = (dom_projL next_aux_finite).card :=
+  (exists_extra_set2.choose_spec.1 c' y h_rel b hb hSy).1
+
+lemma extra_set2_exists_a' {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') :
+    ∃ (a' : A), a' ◇ b = c' ∧ a' ≠ c' ∧
+      ∀ z ∈ extra_set2 h_rel hb hSy, z.1.1 = a' ∧ z.1.2.1 = c' ∧ .inr z ≠ g ∧
+        (∀ a x, ¬ Next_aux a z x) ∧ (∀ a x, ¬ Next_aux a x z) ∧ .inr z ≠ x₀ :=
+  (exists_extra_set2.choose_spec.1 c' y h_rel b hb hSy).2
+
+noncomputable def es2_a' {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') : A :=
+  (extra_set2_exists_a' h_rel hb hSy).choose
+
+lemma extra_set2_eq1 {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
+    z.1.1 = es2_a' h_rel hb hSy :=
+  (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.1
+
+lemma extra_set2_eq2 {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
+    z.1.2.1 = c' :=
+  (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.2.1
+
+lemma extra_set2_not_g {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
+    .inr z ≠ g :=
+  (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.2.2.1
+
+lemma extra_set2_not_Next_aux {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
+    ∀ a x, ¬ Next_aux a z x :=
+  (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.2.2.2.1
+
+lemma extra_set2_not_Next_aux' {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
+    ∀ a x, ¬ Next_aux a x z :=
+  (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.2.2.2.2.1
+
+lemma extra_set2_not_x₀ {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') (hz : z ∈ extra_set2 h_rel hb hSy) :
+    .inr z ≠ x₀ :=
+  (extra_set2_exists_a' h_rel hb hSy).choose_spec.2.2 z hz |>.2.2.2.2.2
+
+lemma extra_set2_disjoint {c'₁ c'₂ b₁ b₂ : A} {y₁ y₂ : G'}
+    (h_rel₁ : Relevant next_aux_finite c'₁ y₁) (hb₁ : Next_aux c'₁ y₁ b₁) (hSy₁ : S y₁ ≠ c'₁)
+    (h_rel₂ : Relevant next_aux_finite c'₂ y₂) (hb₂ : Next_aux c'₂ y₂ b₂) (hSy₂ : S y₂ ≠ c'₂)
+    (h : c'₁ ≠ c'₂ ∨ y₁ ≠ y₂) :
+    Disjoint (extra_set2 h_rel₁ hb₁ hSy₁) (extra_set2 h_rel₂ hb₂ hSy₂) := by
+  refine exists_extra_set2.choose_spec.2.2 _ _ ?_
+  simp only [ne_eq, Subtype.mk.injEq, Prod.mk.injEq, not_and_or, h]
+
+lemma extra_set12_disjoint {c'₁ c'₂ b : A} {y₁ y₂ w : G'}
+    (h_rel₁ : Relevant next_aux_finite c'₁ y₁) (hw : Next_aux c'₁ y₁ w)
+    (h_rel₂ : Relevant next_aux_finite c'₂ y₂) (hb : Next_aux c'₂ y₂ b) (hSy₂ : S y₂ ≠ c'₂) :
+    Disjoint (extra_set1 h_rel₁ hw) (extra_set2 h_rel₂ hb hSy₂) :=
+  exists_extra_set2.choose_spec.2.1 ⟨⟨c'₁, y₁⟩, ⟨h_rel₁, ⟨w, hw⟩⟩⟩ _
+
+lemma exists_extra_set3 :
+    ∃ s : relevant_set3 → Finset G',
+      (∀ c' y h_rel b hb hSy hn,
+        (s ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy, hn⟩⟩).card = (dom_projL next_aux_finite).card ∧
+        ∀ z ∈ s ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy, hn⟩⟩,
+          z.1.1 = y.1.1 ∧ z.1.2.1 = y.1.2.1 ∧
+          z.1.2.2 ≠ 0 ∧
+          .inr z ≠ g ∧
+          (∀ a x, ¬ Next_aux a z x) ∧
+          (∀ a x, ¬ Next_aux a x z) ∧
+          .inr z ≠ x₀
+          ) ∧
+      (∀ (p₁ : relevant_set1) p₃, Disjoint (extra_set1 p₁.2.1 p₁.2.2.choose_spec) (s p₃)) ∧
+      (∀ (p₂ : relevant_set2) p₃, Disjoint (extra_set2 p₂.2.1 p₂.2.2.1.choose_spec p₂.2.2.2) (s p₃)) ∧
+      ∀ p₁ p₂, p₁ ≠ p₂ → Disjoint (s p₁) (s p₂) := by
+    have h_infinite (p : relevant_set3) :
+        Set.Infinite <| ((((({⟨⟨p.1.2.1.1, p.1.2.1.2.1, n'⟩, p.1.2.2⟩ | n' ≠ 0} \
+          {y : G'| ∃ a x, Next_aux a y x}) \ {y : G'| ∃ a x, Next_aux a x y}) \
+          {y | y = g}) \ {y | y = x₀}) \
+          ⋃ (p : relevant_set1), (extra_set1 p.2.1 p.2.2.choose_spec)) \
+          ⋃ (p : relevant_set2), (extra_set2 p.2.1 p.2.2.1.choose_spec p.2.2.2) := by
+      have ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy, hn⟩⟩ := p
+      refine (Set.Infinite.diff ?_ ?_).diff ?_ |>.diff ?_ |>.diff ?_ |>.diff ?_ |>.diff ?_
+      ·
+        simp
+        --doable, this set is the image of ℕ \ {0} through the function n ↦ ⟨⟨a', c', n⟩, _⟩, which is injective
+        --similar to exists_extra_set1
+        sorry
+      ·
+        --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite
+        --similar to exists_extra_set1
+        sorry
+      ·
+        --doable, the set is the image of the set {(c', y, x) | E c' y x} ⊆ {(a, x, y) | E a x y}, which is finite
+        --similar to exists_extra_set1
+        sorry
+      ·
+        --doable it is just a singleton
+        --similar to exists_extra_set1
+        -- simp [Sum.inr_injective]
+        sorry
+      ·
+        --doable it is just a singleton
+        --similar to exists_extra_set1
+        sorry
+      · have : Finite relevant_set1 := relevant_set1_finite
+        exact Set.finite_iUnion fun p ↦ Finset.finite_toSet _
+      · have : Finite relevant_set2 := relevant_set2_finite
+        exact Set.finite_iUnion fun p ↦ Finset.finite_toSet _
+    have : Finite relevant_set3 := relevant_set3_finite
+    have ⟨s, hs_subs, hs_card, hs_disj⟩ := exists_disjoint_sets (fun _ ↦ (dom_projL next_aux_finite).card) h_infinite
+
+    refine ⟨s, fun c' y h_rel b hb hSy hn ↦ ⟨hs_card _,  fun z hz ↦ ?_⟩, fun p₁ p₃ ↦ ?_, fun p₂ p₃ ↦ ?_, fun p₁ p₂ a ↦ hs_disj p₁ p₂ a⟩
+    ·
+      have hz := hs_subs ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy, hn⟩⟩ hz
+      simp only [Set.mem_diff, Set.mem_setOf_eq, not_exists] at hz
+
+      obtain ⟨⟨⟨⟨⟨⟨⟨n', ⟨hz₀, hz₁⟩⟩, hz₂⟩, hz₃⟩, hz₄⟩, hz₅⟩, hz₆⟩, hz₇⟩ := hz
+      refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+      · simp_rw [← hz₁]
+      · rw [← hz₁]
+      · rw [← hz₁]
+        exact hz₀
+      · exact hz₄
+      · exact fun x ↦ hz₂ x
+      · exact fun x ↦ hz₃ x
+      · exact hz₅
+    · refine Finset.disjoint_right.mpr fun z hz ↦ ?_
+      have ⟨⟨_, h⟩, _⟩ := hs_subs p₃ hz
+      simp only [Set.mem_iUnion, Finset.mem_coe, not_exists] at h
+      exact h p₁
+    · refine Finset.disjoint_right.mpr fun z hz ↦ ?_
+      have ⟨_, h⟩ := hs_subs p₃ hz
+      simp only [Set.mem_iUnion, Finset.mem_coe, not_exists] at h
+      exact h p₂
+
+noncomputable def extra_set3 {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) : Finset G' :=
+  exists_extra_set3.choose ⟨⟨c', y⟩, ⟨h_rel, ⟨b, hb⟩, hSy, hn⟩⟩
+
+lemma extra_set3_card {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) : (extra_set3 h_rel hb hSy hn).card = (dom_projL next_aux_finite).card :=
+  (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).1
+
+lemma extra_set3_eq1 {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+    z.1.1 = y.1.1 :=
+  (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.1
+
+lemma extra_set3_eq2 {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+    z.1.2.1 = y.1.2.1 :=
+  (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.1
+
+lemma extra_set3_neq0 {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+    z.1.2.2 ≠ 0 :=
+  (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.2.1
+
+lemma extra_set3_not_g {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+    .inr z ≠ g :=
+  (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.2.2.1
+
+lemma extra_set3_not_Next_aux {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+    ∀ a x, ¬ Next_aux a z x :=
+  (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.2.2.2.1
+
+lemma extra_set3_not_Next_aux' {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+    ∀ a x, ¬ Next_aux a x z :=
+  (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.2.2.2.2.1
+
+lemma extra_set3_not_x₀ {c' b : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) (hz : z ∈ extra_set3 h_rel hb hSy hn) :
+    .inr z ≠ x₀ :=
+  (exists_extra_set3.choose_spec.1 c' y h_rel b hb hSy hn).2 z hz |>.2.2.2.2.2.2
+
+lemma extra_set3_disjoint {c'₁ c'₂ b₁ b₂ : A} {y₁ y₂ : G'}
+    (h_rel₁ : Relevant next_aux_finite c'₁ y₁) (hb₁ : Next_aux c'₁ y₁ b₁) (hSy₁ : S y₁ = c'₁) (hn₁ : y₁.1.2.2 = 0)
+    (h_rel₂ : Relevant next_aux_finite c'₂ y₂) (hb₂ : Next_aux c'₂ y₂ b₂) (hSy₂ : S y₂ = c'₂) (hn₂ : y₂.1.2.2 = 0)
+    (h : c'₁ ≠ c'₂ ∨ y₁ ≠ y₂) :
+    Disjoint (extra_set3 h_rel₁ hb₁ hSy₁ hn₁) (extra_set3 h_rel₂ hb₂ hSy₂ hn₂) := by
+  refine exists_extra_set3.choose_spec.2.2.2 _ _ ?_
+  simp only [ne_eq, Subtype.mk.injEq, Prod.mk.injEq, not_and_or, h]
+
+lemma extra_set13_disjoint {c'₁ c'₂ b : A} {y₁ y₂ w : G'}
+    (h_rel₁ : Relevant next_aux_finite c'₁ y₁) (hw : Next_aux c'₁ y₁ w)
+    (h_rel₂ : Relevant next_aux_finite c'₂ y₂) (hb : Next_aux c'₂ y₂ b) (hSy₂ : S y₂ = c'₂) (hn₂ : y₂.1.2.2 = 0) :
+    Disjoint (extra_set1 h_rel₁ hw) (extra_set3 h_rel₂ hb hSy₂ hn₂) :=
+  exists_extra_set3.choose_spec.2.1 ⟨⟨c'₁, y₁⟩, ⟨h_rel₁, ⟨w, hw⟩⟩⟩ _
+
+lemma extra_set23_disjoint {c'₂ c'₃ b₂ b₃ : A} {y₂ y₃ : G'}
+    (h_rel₂ : Relevant next_aux_finite c'₂ y₂) (hb₂ : Next_aux c'₂ y₂ b₂) (hSy₂ : S y₂ ≠ c'₂)
+    (h_rel₃ : Relevant next_aux_finite c'₃ y₃) (hb₃ : Next_aux c'₃ y₃ b₃) (hSy₃ : S y₃ = c'₃) (hn₃ : y₃.1.2.2 = 0) :
+    Disjoint (extra_set2 h_rel₂ hb₂ hSy₂) (extra_set3 h_rel₃ hb₃ hSy₃ hn₃) := by
+  refine exists_extra_set3.choose_spec.2.2.1 ⟨⟨c'₂, y₂⟩, ⟨h_rel₂, ⟨b₂, hb₂⟩, hSy₂⟩⟩ _
+
+open Classical in
+noncomputable def extra_set (c' : A) (y : G') : Finset G' :=
+  if h_rel : Relevant next_aux_finite c' y then
+    if h : ∃ w : G', Next_aux c' y w then extra_set1 h_rel h.choose_spec
+    else if h : (∃ b : A, Next_aux c' y b) ∧ S y ≠ c' then extra_set2 h_rel h.1.choose_spec h.2
+      else if h : (∃ b : A, Next_aux c' y b) ∧ S y = c' ∧ y.1.2.2 = 0 then extra_set3 h_rel h.1.choose_spec h.2.1 h.2.2
+        else ∅
+  else ∅
+
+lemma extra_set_case1 {c' : A} {y w : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hw : Next_aux c' y w) : extra_set c' y = extra_set1 h_rel hw := by
+  rw [extra_set, dif_pos h_rel, dif_pos ⟨w, hw⟩]
+  rfl
+
+lemma extra_set_case2 {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y ≠ c') : extra_set c' y = extra_set2 h_rel hb hSy := by
+  rw [extra_set, dif_pos h_rel, dif_neg fun ⟨w, hw⟩ ↦ (Sum.inl_ne_inr (next_aux_func hb hw)), dif_pos ⟨⟨b, hb⟩, hSy⟩]
+  rfl
+
+lemma extra_set_case3 {c' b : A} {y : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hb : Next_aux c' y b) (hSy : S y = c') (hn : y.1.2.2 = 0) :
+    extra_set c' y = extra_set3 h_rel hb hSy hn := by
+  rw [extra_set, dif_pos h_rel, dif_neg fun ⟨w, hw⟩ ↦ (Sum.inl_ne_inr (next_aux_func hb hw)), dif_neg fun ⟨_, hSy'⟩ ↦ hSy' hSy, dif_pos ⟨⟨b, hb⟩, hSy, hn⟩]
+  rfl
+
+lemma extra_set_card {c' : A} {y : G'} (h_rel : Relevant next_aux_finite c' y) :
+    (extra_set c' y).card = (dom_projL next_aux_finite).card := by
+  rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
+  · rw [extra_set_case1 h_rel hw, extra_set1_card h_rel hw]
+  · rw [extra_set_case2 h_rel hb hSy, extra_set2_card h_rel hb hSy]
+  · rw [extra_set_case3 h_rel hb hSy hn, extra_set3_card h_rel hb hSy hn]
+
+lemma extra_set_not_g {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hz : z ∈ extra_set c' y) : .inr z ≠ g := by
+  rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
+  · rw [extra_set_case1 h_rel hw] at hz
+    exact extra_set1_not_g h_rel hw hz
+  · rw [extra_set_case2 h_rel hb hSy] at hz
+    exact extra_set2_not_g h_rel hb hSy hz
+  · rw [extra_set_case3 h_rel hb hSy hn] at hz
+    exact extra_set3_not_g h_rel hb hSy hn hz
+
+lemma extra_set_not_x₀ {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hz : z ∈ extra_set c' y) : .inr z ≠ x₀ := by
+  rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
+  · rw [extra_set_case1 h_rel hw] at hz
+    exact extra_set1_not_x₀ h_rel hw hz
+  · rw [extra_set_case2 h_rel hb hSy] at hz
+    exact extra_set2_not_x₀ h_rel hb hSy hz
+  · rw [extra_set_case3 h_rel hb hSy hn] at hz
+    exact extra_set3_not_x₀ h_rel hb hSy hn hz
+
+lemma extra_set_not_Next_aux {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hz : z ∈ extra_set c' y) : ∀ a x, ¬ Next_aux a z x := by
+  rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
+  · rw [extra_set_case1 h_rel hw] at hz
+    exact extra_set1_not_Next_aux h_rel hw hz
+  · rw [extra_set_case2 h_rel hb hSy] at hz
+    exact extra_set2_not_Next_aux h_rel hb hSy hz
+  · rw [extra_set_case3 h_rel hb hSy hn] at hz
+    exact extra_set3_not_Next_aux h_rel hb hSy hn hz
+
+lemma extra_set_not_Next_aux' {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hz : z ∈ extra_set c' y) : ∀ a x, ¬ Next_aux a x z := by
+  rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
+  · rw [extra_set_case1 h_rel hw] at hz
+    exact extra_set1_not_Next_aux' h_rel hw hz
+  · rw [extra_set_case2 h_rel hb hSy] at hz
+    exact extra_set2_not_Next_aux' h_rel hb hSy hz
+  · rw [extra_set_case3 h_rel hb hSy hn] at hz
+    exact extra_set3_not_Next_aux' h_rel hb hSy hn hz
+
+lemma extra_set_disjoint {c'₁ c'₂ : A} {y₁ y₂ : G'} (h_rel₁ : Relevant next_aux_finite c'₁ y₁)
+    (h_rel₂ : Relevant next_aux_finite c'₂ y₂) (h : c'₁ ≠ c'₂ ∨ y₁ ≠ y₂) :
+    Disjoint (extra_set c'₁ y₁) (extra_set c'₂ y₂) := by
+  rcases relevant_trichotomy h_rel₁ with ⟨w₁, hw₁⟩ | ⟨⟨b₁, hb₁⟩, hSy₁⟩ | ⟨⟨b₁, hb₁⟩, hSy₁, hn₁⟩
+    <;> rcases relevant_trichotomy h_rel₂ with ⟨w₂, hw₂⟩ | ⟨⟨b₂, hb₂⟩, hSy₂⟩ | ⟨⟨b₂, hb₂⟩, hSy₂, hn₂⟩
+  · rw [extra_set_case1 h_rel₁ hw₁, extra_set_case1 h_rel₂ hw₂]
+    exact extra_set1_disjoint h_rel₁ hw₁ h_rel₂ hw₂ h
+  · rw [extra_set_case1 h_rel₁ hw₁, extra_set_case2 h_rel₂ hb₂ hSy₂]
+    exact extra_set12_disjoint h_rel₁ hw₁ h_rel₂ hb₂ hSy₂
+  · rw [extra_set_case1 h_rel₁ hw₁, extra_set_case3 h_rel₂ hb₂ hSy₂ hn₂]
+    exact extra_set13_disjoint h_rel₁ hw₁ h_rel₂ hb₂ hSy₂ hn₂
+  · rw [extra_set_case2 h_rel₁ hb₁ hSy₁, extra_set_case1 h_rel₂ hw₂]
+    exact (extra_set12_disjoint h_rel₂ hw₂ h_rel₁ hb₁ hSy₁).symm
+  · rw [extra_set_case2 h_rel₁ hb₁ hSy₁, extra_set_case2 h_rel₂ hb₂ hSy₂]
+    refine extra_set2_disjoint h_rel₁ hb₁ hSy₁ h_rel₂ hb₂ hSy₂ h
+  · rw [extra_set_case2 h_rel₁ hb₁ hSy₁, extra_set_case3 h_rel₂ hb₂ hSy₂ hn₂]
+    exact extra_set23_disjoint h_rel₁ hb₁ hSy₁ h_rel₂ hb₂ hSy₂ hn₂
+  · rw [extra_set_case3 h_rel₁ hb₁ hSy₁ hn₁, extra_set_case1 h_rel₂ hw₂]
+    exact (extra_set13_disjoint h_rel₂ hw₂ h_rel₁ hb₁ hSy₁ hn₁).symm
+  · rw [extra_set_case3 h_rel₁ hb₁ hSy₁ hn₁, extra_set_case2 h_rel₂ hb₂ hSy₂]
+    exact (extra_set23_disjoint h_rel₂ hb₂ hSy₂ h_rel₁ hb₁ hSy₁ hn₁).symm
+  · rw [extra_set_case3 h_rel₁ hb₁ hSy₁ hn₁, extra_set_case3 h_rel₂ hb₂ hSy₂ hn₂]
+    exact extra_set3_disjoint h_rel₁ hb₁ hSy₁ hn₁ h_rel₂ hb₂ hSy₂ hn₂ h
+
+lemma extra_set_not_relevant {c' : A} {y z : G'} (h_rel : Relevant next_aux_finite c' y)
+    (hz : z ∈ extra_set c' y) : ∀ a, ¬ Relevant next_aux_finite a z := by
+  simp_rw [relevant_iff, extra_set_not_Next_aux h_rel hz]
+  simp
+
+def extra_set_tot : Set G := ⋃ c'y ∈ relevant_set, (Sum.inr '' (extra_set c'y.1 c'y.2))
+
+lemma extra_set_tot_finite : extra_set_tot.Finite :=
+  relevant_set_finite.biUnion fun _ _ ↦ (Finset.finite_toSet _).image _
+
+end extra_set
+
+@[mk_iff]
+inductive Next : A → G → G → Prop
+  | aux {a y x} : Next_aux a y x → Next a y x
+  | extra {c' y z} : Relevant next_aux_finite c' y → z ∈ extra_set c' y → Next c' z y
+
+lemma Next_base {a y x} : E a y x → Next a y x := fun h ↦ Next.aux (Next_aux.base h)
+
+lemma Next_new : Next d g (partL d g) := Next.aux Next_aux.new
+
+lemma finite_relevant_extra_set_tot :
+    {(c', z, y) | (c', y) ∈ relevant_set' ∧ z ∈ extra_set_tot}.Finite := by
+  -- doable, it is the image through (c', y, z) ↦ (c', z, y) of the cartesian product of two finite sets
+  sorry
+
+def next_finite : {(a, x, y) | Next a x y}.Finite := by
+  simp_rw (config := {singlePass := true}) [next_iff]
+  simp only [Set.setOf_or, Set.finite_union]
+  refine ⟨next_aux_finite, ?_⟩
+  · refine Set.Finite.subset finite_relevant_extra_set_tot ?_
+    intro ⟨c', z, y⟩ ⟨y', z', h_rel, h_extra_set, hy', hz'⟩
+    simp only [Set.mem_setOf_eq] at *
+    refine ⟨?_, ?_⟩
+    · simp only [relevant_set', relevant_set, Set.mem_image, Set.mem_setOf_eq, Prod.mk.injEq]
+      use (c', y')
+      simp_all
+    · simp only [extra_set_tot, Set.mem_iUnion, Set.mem_image, Finset.mem_coe,
+         exists_prop, relevant_set]
+      use (c', y')
+      simp only [Set.mem_setOf_eq, true_and, h_rel]
+      exact ⟨z', h_extra_set, hy'.symm⟩
+
+lemma dom_projL_next_aux_eq : dom_projL next_finite = dom_projL next_aux_finite := by
+  -- doable, one direction should be immediate, for the other if there is a ∈ dom_projL next_finite then Next a y x for some x y, then either Next_aux a y x or the extra case, but in the extra case it must hold Relevant next_aux_finite a y, so a ∈ dom_projL next_aux_finite
+  sorry
+
+lemma relevant_next_iff_next_aux {c' y} :
+    Relevant next_finite c' y ↔ Relevant next_aux_finite c' y := by
+  -- dom_projL_next_aux to eliminate the dom_projL conditions in both directions, for the E c' y w condition one direction is immediate, for the other if there is a Next c' y w then either Next_aux c' y w (and so we are done) or the extra case, in particular in the extra case we have that y ∈ extra_set, so ¬ Relevant_aux (dom_projL ) y (see extra_set_not_relevant), which is absurd because we have Relevant c' y
+  sorry
+
+def next_func {a y x x'} : Next a y x → Next a y x' → x = x'
+  | .aux hx, .aux hx' => next_aux_func hx hx'
+  | .aux ha, .extra h_rel h_ex => (extra_set_not_Next_aux h_rel h_ex _ x ha).elim
+  | .extra h_rel h_ex, .aux ha => (extra_set_not_Next_aux h_rel h_ex _ x' ha).elim
+  | .extra h_rel h_ex, .extra h_rel' h_ex' => by
+    rename_i z y z' y'
+    by_contra h_ne
+    have : y ≠ y' := fun h ↦ (h ▸ h_ne) rfl
+    have : Disjoint (extra_set a y).toSet (extra_set a y').toSet :=
+      Finset.disjoint_coe.mpr <| extra_set_disjoint h_rel h_rel' (Or.inr this)
+    exact Set.not_disjoint_iff.mpr ⟨z', h_ex, h_ex'⟩ <| this
+
+def next_extend {a b : A} {x} : Next a b x → x = .inl (a ◇ b) := by
+  simp only [next_iff, reduceCtorEq, false_and, and_false, exists_false, or_false]
+  exact fun h ↦ next_aux_extend h
+
+-- def next_hx₀ {x} : Next 1 x₀ x → x = .inl 1
+--   | .aux ha => next_aux_x₀ ha
+--   | .extra h_rel h_ex => (extra_set_not_x₀ h_rel h_ex rfl).elim
+
+def next_aux2 {b} {x : G'} (h_rel : Relevant next_finite b x) :
+    (dom_projL next_finite).card ≤ {y : G' | Next b y x}.ncard := by
+  rw [relevant_next_iff_next_aux] at h_rel
+  rw [dom_projL_next_aux_eq, ← extra_set_card h_rel, ← Set.ncard_coe_Finset]
+  refine Set.ncard_le_ncard (fun z hz ↦ Next.extra h_rel hz) ?_
+  --doable, similar to other sorries remaining
+  sorry
+
+def next_aux3 {a} {y : G'} {x} (hSy : S y = a) (hn : y.1.2.2 ≠ 0) : Next a y x → x = .inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩
+  | .aux ha => next_aux_aux3 hSy hn ha
+  | .extra h_rel h_ex => by
+    rename_i _ x
+    rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy'⟩ | ⟨⟨b, hb⟩, hSy', hn⟩
+    · rw [extra_set_case1 h_rel hw] at h_ex
+      rw [← extra_set1_eq2 h_rel hw h_ex] at hSy
+      exact (y.2 hSy).elim
+    · rw [extra_set_case2 h_rel hb hSy'] at h_ex
+      rw [← extra_set2_eq2 h_rel hb hSy' h_ex] at hSy
+      exact (y.2 hSy).elim
+    · congr with
+      · rw [S] at hSy hSy'
+        rw [hSy, hSy']
+      · rw [extra_set_case3 h_rel hb hSy' hn] at h_ex
+        exact (extra_set3_eq2 h_rel hb hSy' hn h_ex).symm
+      · exact hn
+
+def next_aux4 {a} {y : G'} {x} (hSy : S y = a) (hn : y.1.2.2 = 0) : Next a y x → x = .inl a
+  | .aux ha => next_aux_aux4 hSy hn ha
+  | .extra h_rel h_ex => by
+    rename_i _ x
+    rcases relevant_trichotomy h_rel with ⟨w, hw⟩ | ⟨⟨b, hb⟩, hSy'⟩ | ⟨⟨b, hb⟩, hSy', hn'⟩
+    · rw [extra_set_case1 h_rel hw] at h_ex
+      rw [← extra_set1_eq2 h_rel hw h_ex] at hSy
+      exact (y.2 hSy).elim
+    · rw [extra_set_case2 h_rel hb hSy'] at h_ex
+      rw [← extra_set2_eq2 h_rel hb hSy' h_ex] at hSy
+      exact (y.2 hSy).elim
+    · rw [extra_set_case3 h_rel hb hSy' hn'] at h_ex
+      exact (extra_set3_neq0 h_rel hb hSy' hn' h_ex hn).elim
+
+def next_aux5 {c} {y : G'} {x} (hSy : S y ≠ c) : Next c y x → x ≠ .inl c
+  | .aux ha => next_aux_aux5 hSy ha
+  | .extra _ _ => Sum.inr_ne_inl
+
+/-
+There is a bug in the proof of the next lemma that I do not see how to fix, I will describe it here.
+The lemma is `next_aux1`, which is essentially the proof that when we enlarge the domain of the partial solution by adding the elements from the extra sets the equation 1516 still holds.
+The problem arises when we are in case 1, which is when we need to add relations of the form `L_c' z = y` for `c'` and `y` such that `L_c' y` is already defined and equal to an element `w` of `G'`.
+
+Here is the informal proof of this part:
+'''
+Case 1: $L_{c'} y = w$ for some $w \in G'$.  By construction, $c_{w,c'}$ is distinct from $c'$ and `$L_{c_{w,c'}} w = c'$`.  Set $z = (c_{w,c'}, c', n', 0)$ where $n'$ is large enough that $L_{c'} z$ has not yet been assigned.  Then set $L_{c'} z = y$, so that we have $L_{Sz} L_{c'} L_{c'} z = c'$ as required.
+'''
+
+The problem is with the statement that by construction `◆ : L_{c_{w,c'}} w = c'`, in fact this holds whenever the value of `L_{c_{w,c'}} w` is assigned during the first part of the construction (`Next_aux`, the one that assigns a single new value using `partL`). However if `L_{c_{w,c'}} w` happens to be assigned during the second part of the construction (`Next`, when we assign new values based on the `extra_set` in order to satisfy the infinite surjectivity) there is no guarantee that ◆ holds.
+Moreover, I see no way to modify the construction of the extra sets in order to ensure this condition.
+
+Let us analyze the situation more closely: For simplicity let us call `c := c_{w,c'}`. If the value of `L_c w` gets assigned during the second phase, it means that `w` ended up being an element of `extra_set c y` for some `y ∈ G'` and `L_c w` gets assigned the value `y`, which is incompatible with ◆, since `c' ∈ A`.
+Therefore, in order to avoid this issue, the only solution is to avoid that `w` gets chosen for `extra_set c y`. Notice, however, that `c_{w, c'}` only depends on the first coordinate of `w`, let's call it `w₁ ∈ A` and write `c_{w₁, c'}`. We would need to exclude from `extra_set c y` all the elements of `G'` with first coodinate equal to `w₁`, this is already problematic, since these elements are infinite and excluding those can potentially exhaust the options for `extra_set c y`, (not even counting the fact that we do not have injectivity for the function `c_{·, c'}`, so there may be multiple elements `a ∈ A` such that `c_{a, c'} = c_{w₁, c'}` and we need to exclude also the elements of `G'` with first coodinate equal to those).
+
+Moreover, an element of `extra_set c y` can be of 3 different forms:
+1. `(c_{w₁, c}, c, n')` with `L_c y = w`
+2. `(a', c, n')` with `L_c y = b` and `a' ◇ b = c`
+3. `(c, y₂, n')` with `y₂` the second coordinate of `y`
+
+We can notice that the first coordinate is fixed in the cases 1. and 3. and almost fixed in case 2. (a' is chosen from a set whose cardinality is at least 2, but we have no other guarantee on the size of this set and, as mentioned earlier, we may need to exclude more than 1 option for the first variable).
+
+So proving that `w ∉ extra_set c y` by adapting the construction of this set seems impossible, the other way that we could ensure this is by proving that for some other reason `w₁` is already different from `c_{w₁, c}`, `a'` and `c`.
+I see no reason why such a condition should hold true, but I do not exclude it does.
+-/
+
+def next_aux1 {x y z w k} : Next x y z → Next x z w → Next (S y) w k → k = x
+  | .aux ha, .aux ha', .aux ha'' => next_aux_aux1 ha ha' ha''
+  | .aux ha, .aux ha', .extra h_rel h_ex => (extra_set_not_Next_aux' h_rel h_ex x z ha').elim
+  | .aux ha, .extra h_rel h_ex, .aux ha'' => (extra_set_not_Next_aux' h_rel h_ex x y ha).elim
+  | .aux ha, .extra h_rel h_ex, .extra h_rel' _ => (extra_set_not_Next_aux' h_rel h_ex x y ha).elim
+  | .extra h_rel h_ex, .aux ha, .aux ha' => by
+    rename_i _ _ _ y' z'
+    rcases relevant_trichotomy h_rel with ⟨w', hw'⟩ | ⟨⟨b, hb⟩, hSy⟩ | ⟨⟨b, hb⟩, hSy, hn⟩
+    ·
+      rw [extra_set_case1 h_rel hw'] at h_ex
+      have := extra_set1_eq1 h_rel hw' h_ex
+      rw [S, this] at ha'
+      /- If we had some lemma like this
+      lemma next_aux_c {a y x b} : Next_aux (c a b) y x → x = Sum.inl b := by sorry
+      this would be an immediate consequence of it and `ha' : Next_aux (c (↑w').1 x) w k`.
+      -/
+      -- 🛑 Problem 🛑: see comment above
+      sorry
+    · rw [extra_set_case2 h_rel hb hSy] at h_ex
+      have ⟨a', ha'b, _, h_ex2⟩ := extra_set2_exists_a' h_rel hb hSy
+      have ⟨hz'a', _⟩ := h_ex2 _ h_ex
+      rw [S, hz'a', next_aux_func ha hb] at ha'
+      rw [← ha'b]
+      exact next_aux_extend ha'
+    · rw [extra_set_case3 h_rel hb hSy hn] at h_ex
+      have hbx := Sum.inl_injective <| next_aux_aux4 hSy hn hb
+      have hzy := extra_set3_eq1 h_rel hb hSy hn h_ex
+      rw [S] at hSy
+      rw [S, next_aux_func ha hb, hzy, hSy] at ha'
+      rw [next_aux_extend ha', hbx, A_idempotent]
+  | .extra _ _, .aux ha, .extra h_rel' h_ex' => (extra_set_not_Next_aux' h_rel' h_ex' x _ ha).elim
+  | .extra h_rel _, .extra h_rel' h_ex', .aux _ =>
+    (extra_set_not_relevant h_rel' h_ex' x h_rel).elim
+  | .extra h_rel _, .extra h_rel' h_ex', .extra _ _ =>
+    (extra_set_not_relevant h_rel' h_ex' x h_rel).elim
+
+def next : PartialSolution :=
+  ⟨Next, next_finite, next_func, next_extend,
+  -- next_hx₀,
+  next_aux1, next_aux2, next_aux3, next_aux4, next_aux5⟩
+
+end Extension
+
+open Extension
+
+theorem exists_extension (seed : PartialSolution) :
+    ∃ L : A → G → G,
+      (∀ a b : A, L a b = a ◇ b) ∧ -- Lb extends a : A ↦ b ◇ a
+      (∀ b : A, ∀ x : G', (L (S x) <| L b <| L b x) = b) ∧ -- Axiom B
+      (L 1 x₀ = .inl 1) ∧
+      (∀ b : A, ∀ x : G', {y : G' | L b y = x}.Infinite) -- infinite surjectivity
+    -- (∀ b : A, ∀ x : G', L b x ≠ x)
+    := by
+  classical
+  have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain (a := seed)
+    (task := fun (a, x) ↦ {e | ∃ y, e.1 a x y})
+    fun ⟨E, ok⟩ ((d, g) : A × G) ↦ by
+      if h : ∃ z, E d g z then exact ⟨_, le_rfl, h⟩
+      else
+        let E1 : Extension := { E, ok, d, g, not_def := fun h' ↦ h ⟨_, h'⟩ }
+        -- exact ⟨E1.next, fun _ _ _ ↦ (.base ·), _, .new⟩
+        exact ⟨E1.next, fun _ _ _ ↦ Next_base, _, Next_new⟩
+  choose e he L hL using h3
+  have L_of_e {a : A} {y x : G} {e₀ : PartialSolution} (he₀ : e₀   ∈ c)
+      (h : e₀.val a y x) : L (a, y) = x := by
+    rcases hc.total he₀ (he (a, y)) with (h_le | h_le)
+    · exact (e (a, y)).2.func (hL (a, y)) (h_le _ _ _ h)
+    · exact e₀.2.func (h_le _ _ _ (hL (a, y))) h
+
+  refine ⟨L.curry,
+    fun a b ↦ (e (a, b)).2.extend (hL (a, b)),
+    fun a x ↦ ?_,
+    E_1_x₀_eq_1 (hL (1, x₀)),
+    fun b ⟨x, hx⟩ ↦ ?_⟩
+  · let T : Finset (A × G) := {
+      (a, (x : G)),
+      (a, (L (a, x))),
+      (S x, L (a, (L (a, x))))}
+    have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
+      (T.image fun p ↦ ⟨e p, he p⟩)
+    have hT := fun p hp ↦ Finset.forall_image.mp le p hp _ _ _ (hL p)
+    simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at hT
+    have ⟨e_a_x, e_a_L, e_Sx_L⟩ := hT
+    exact e.2.aux1 e_a_x e_a_L e_Sx_L
+  · rw [← Set.encard_eq_top_iff, ENat.eq_top_iff_forall_le]
+    intro n
+    set m := max n x.2.2
+    -- we have to find a PartialSolution e in the chain c such that n, x.2.2 ≤ {a | ∃ x y, ↑e a x y}.ncard, we do it by setting T' : Finset A that contains at least max(n, x.2.2) arbitrary elements of A, then we define T as {(a, x₀) | a ∈ T' ∪ {b, x.1, x.2.1}} and proceed as in the previous subproofs
+    have ⟨(T' : Finset A), hT'⟩ := Finset.exists_card_eq m
+    let T := Finset.image (fun a ↦ (a, x₀)) (T' ∪ {b, x.1, x.2.1}) ∪ {(b, .inr (⟨x, hx⟩ : G'))}
+    -- let T := Finset.image (fun a ↦ (a, x₀)) (T' ∪ {b, x.1, x.2.1})
+    have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
+      (T.image fun p ↦ ⟨e p, he p⟩)
+    have hT := fun p hp ↦ Finset.forall_image.mp le p hp _ _ _ (hL p)
+
+    simp only [Finset.union_comm T', Finset.insert_union, ← Finset.insert_eq, Finset.image_insert,
+      Finset.mem_insert, Finset.mem_union, Finset.mem_image, Finset.mem_singleton, or_imp,
+      forall_exists_index, and_imp, forall_and, forall_eq, forall_apply_eq_imp_iff₂, T] at hT
+
+    have ⟨e_b, e_x1, e_x2, e_T', e_bx⟩ := hT
+
+    have h := @e.2.aux2 b ⟨x, hx⟩
+    simp_rw [relevant_iff, ← Finset.mem_coe, ← Set.ncard_coe_Finset, dom_projL_eq e.2.finite] at h
+    have h_finite : {a | ∃ x y, e.1 a x y}.Finite := by
+      convert Set.Finite.image (fun (a, _, _) ↦ a) e.2.finite
+      ext a
+      simp
+    have h_le : m ≤ {a | ∃ x y, e.1 a x y}.ncard := by
+      rw [← hT', ← Set.ncard_coe_Finset T']
+      refine Set.ncard_le_ncard ?_ h_finite
+      exact fun t ht ↦ ⟨_, _, e_T' _ ht⟩
+
+    -- specialize h ⟨⟨_, e_bx⟩, ⟨_, _, e_b⟩, ⟨_, _, e_x1⟩, ⟨_, _, e_x2⟩, (le_max_right _ _).trans h_le⟩
+    specialize h ⟨⟨_, e_bx⟩, ⟨_, _, e_b⟩, ⟨?_, ?_, ?_⟩⟩
+    · simp only [dom_projL, Finset.mem_image, Set.mem_toFinset, Prod.exists, exists_and_right, exists_eq_right]
+      exact ⟨_, _, e_x1⟩
+    · simp only [dom_projL, Finset.mem_image, Set.mem_toFinset, Prod.exists,
+        exists_and_right, exists_eq_right]
+      exact ⟨_, _, e_x2⟩
+    · rw [← Set.ncard_coe_Finset, dom_projL_eq]
+      exact (le_max_right _ _).trans h_le
+
+    calc
+      _ ≤ Nat.cast {a | ∃ x y, e.1 a x y}.ncard :=
+        Nat.cast_le.mpr <| (le_max_left _ _).trans <| h_le
+      _ ≤ _ := (Nat.cast_le.mpr h).trans (Set.ncard_le_encard _)
+      _ ≤ _ := Set.encard_le_card fun y hy ↦ L_of_e he hy
+
+-- the empty seed, see if this actually works, otherwise maybe we can use the seed `E * x₀ *`
+def seed : A → G → G → Prop := fun _ _ _ ↦ false
+
+theorem seed_ok : OK seed where
+  finite := by simp [seed]
+  extend := by simp [seed]
+  func := by simp [seed]
+  aux1 := by simp [seed]
+  aux2 := by simp [seed, dom_projL]
+  aux3 := by simp [seed]
+  aux4 := by simp [seed]
+  aux5 := by simp [seed]
+
+noncomputable def L : A → G → G := (exists_extension ⟨seed, seed_ok⟩).choose
+
+theorem L_extends (a b : A) : L a b = a ◇ b := (exists_extension ⟨seed, seed_ok⟩).choose_spec.1 a b
+
+theorem L_1516 (b : A) (x : G') : (L (S x) <| L b <| L b x) = b :=
+  (exists_extension ⟨seed, seed_ok⟩).choose_spec.2.1 b x
+
+theorem L_x₀ : L 1 x₀ = .inl 1 := (exists_extension ⟨seed, seed_ok⟩).choose_spec.2.2.1
+
+theorem L_surjective (b : A) (x : G') : {y : G' | L b y = x}.Infinite :=
+  (exists_extension ⟨seed, seed_ok⟩).choose_spec.2.2.2 b x
+
+-- theorem L_ne (b : A) (x : G') : L b x ≠ x := exists_extension.choose_spec.2.2 b x
+
+theorem L_self (a : A) : L a a = S a := by
+  rw [L_extends a a, A_idempotent]
+  rfl  -- by def of S
+
+end GreedyB
+
+namespace GreedyAC
+open GreedyB
+
+variable (x : G')
+
+structure OK (E : Rel G G) : Prop where
+  finite : Set.Finite {(x, y) : G × G | E x y}
+  func {x y y'} : E x y → E x y' → y = y'
+  inj {x x' y} : E x y → E x' y → x = x'
+  aux1 : E x (S x) --Eq4 in the dim
+  aux2 {y z w} : E y z → E z w → L (S y) w = x --Eq5 in the dim, we are renaming L x y = z, L x z = w, so we are saying that (L (S y) <| L x <| L x y) = x, which is equation 1516
+
+abbrev PartialSolution := {E : Rel G G // OK x E}
+
+class Extension where
+  E : Rel G G
+  ok : OK x E
+  d : G
+  not_def {y} : ¬E d y
+
+
+namespace Extension
+
+variable [Extension x]
+
+def partial_domain' : Set G := (E x).dom
+
+#check Set.Infinite.diff -- this may be useful to prove the following lemmas
+noncomputable instance : Fintype (partial_domain' x) := by
+  -- doable
+  -- this set should be some kind of slice of {(x, y) : G × G | E x y}, which we already know to be finite (OK.finite)
+  -- find the right definition of slice, then there will probably already be an instance proving the finiteness of a slice given the finiteness of the initial set
+  have finite : Set.Finite {(z, y) : G × G | E x z y} := by
+    apply (ok).finite  -- ok sarebbe OK x E
+  have h1 : Set.Finite {z : G | ∃ (y : G) , E x z y} := by  --sarebbe il partial domain' x
+    let A := {(z, y) : G × G | E x z y}
+    let B := {z : G | ∃ (y : G) , E x z y}
+    let f : G × G → G := fun x ↦ x.1
+    have h' : f '' A = B := by
+      have sxdx : f '' A ⊆ B := by
+        intro a ha
+        simp at ha
+        rcases ha with ⟨ a1, a2, ha1, ha2 ⟩  --  ha2 dice che a = a1
+        unfold f at ha2
+        unfold A at ha1
+        simp at ha1
+        unfold B
+        simp
+        use a2
+        rw [← ha2]
+        tauto
+      have dxsx : B ⊆ f '' A := by
+        intro y hy
+        simp
+        unfold B at hy
+        rcases hy with ⟨y2, hy2⟩ --ora voglio provare che (y,y2) ∈ A e f(y,y2)=y
+        use y, y2
+        constructor
+        · unfold A
+          simp
+          exact hy2
+        · unfold f
+          rfl
+      apply Set.Subset.antisymm sxdx dxsx
+    unfold A B at h'
+    rw [← h']
+    apply Set.Finite.image f finite
+  unfold partial_domain'
+  have dom : (E x).dom = {z : G | ∃ (y : G) , E x z y} := by
+    tauto
+  rw [dom]
+  exact h1.fintype
+
+noncomputable def partial_domain : Finset G := (partial_domain' x).toFinset
+
+def partial_range' : Set G := (E x).codom  -- {y : G | ∃ z : G, E x z y}
+
+noncomputable instance : Fintype (partial_range' x) := by
+  -- doable, same as above for the domain
+  have finite : Set.Finite {(z, y) : G × G | E x z y} := by
+    apply (ok).finite
+  have h1 : Set.Finite {y : G | ∃ (z : G) , E x z y} := by  --sarebbe il partial_range' x
+    let A := {(z, y) : G × G | E x z y}
+    let B := {y : G | ∃ (z : G) , E x z y}
+    let f : G × G → G := fun x ↦ x.2
+    have h' : f '' A = B := by
+      have sxdx : f '' A ⊆ B := by
+        intro a ha
+        simp at ha -- f(a_1, a) = a
+        rcases ha with ⟨ a1, ha1⟩  -- call a_1 = a1
+        unfold A at ha1
+        simp at ha1
+        unfold B
+        simp
+        use a1
+      have dxsx : B ⊆ f '' A := by
+        intro y hy
+        simp -- we have to proof ∃ a, (a,y) ∈ A, because Lean knows f(a,y)=y
+        unfold B at hy
+        rcases hy with ⟨y2, hy2⟩   --ora voglio provare che (y,y2) ∈ A e f(y,y2)=y
+        use y2
+        unfold A
+        simp
+        exact hy2
+      apply Set.Subset.antisymm sxdx dxsx
+    unfold A B at h'
+    rw [← h']
+    apply Set.Finite.image f finite
+  unfold partial_range'
+  have dom : (E x).codom = {y : G | ∃ (z : G) , E x z y} := by
+    tauto
+  rw [dom]
+  exact h1.fintype
+
+noncomputable def partial_range : Finset G := (partial_range' x).toFinset
+
+-- NOTE: I added the requirement that w ≠ d for technical reasons, consider adding it to the blueprint
+lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
+  -- doable
+  -- we know that the domain and the image are finite while G is infinite, so we can just take an element that is not in either
+  let A := (partial_domain x).toSet
+  let B := (partial_range x).toSet
+  let C1 := (Set.univ : Set G) \ A
+  have h1 : Set.Finite A := by
+    unfold A partial_domain
+    simp
+    exact Set.toFinite (partial_domain' x)
+  have h1' : Set.Finite B := by
+    unfold B partial_range
+    simp
+    exact Set.toFinite (partial_range' x)
+  have h2 : ¬ Set.Finite (Set.univ : Set G) := by  -- G infinite
+    rw [Set.finite_univ_iff]
+    exact Infinite.not_finite
+  have C1inf : ¬ Set.Finite C1 := by
+    apply Set.Infinite.diff h2 h1
+  let C2 := C1 \ B
+  have C2inf : ¬ Set.Finite C2 := by
+    apply Set.Infinite.diff C1inf h1'
+  have nontriv : C2.Nontrivial := by  -- C2 non trivial
+    exact Set.Infinite.nontrivial C2inf
+  have := Set.Nontrivial.exists_ne nontriv (d x)
+  rcases this with ⟨ x1, hx1, hx2 ⟩
+  use x1
+  unfold C2 B at hx1
+  constructor
+  · apply Set.mem_of_mem_diff at hx1
+    unfold C1 A at hx1
+    apply Set.not_mem_of_mem_diff at hx1
+    exact hx1
+  · constructor
+    · apply Set.not_mem_of_mem_diff at hx1
+      exact hx1
+    · exact hx2
+
+
+lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧ w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
+  -- doable
+  -- use the infinite surjectivity of L, then proceed like in the previous lemma
+  let I := {y : G' | L (S z) y = x}   -- we need w in G, so we will take sum.inr y
+  let I' := {y : G | ∃ y' ∈ I, Sum.inr y' = y }
+  --let I' := Sum.inr '' I  -- non funziona però così
+  have Iinf : ¬ Set.Finite I := by
+    apply  L_surjective ((S z) : A) (x : G')
+  let f : G' → G := fun  y ↦ Sum.inr y
+  have fin : f.Injective := by     --non ho ben capito a cosa serve questa ipotesi, ma se la rimuovo ho dei problemi, il problema potrebbe essere che non vede Sum.inr come una vera e propria funzione, quindi è più comodo definire la funzione f in quel modo
+    apply Sum.inr_injective
+  have I'inf : ¬ Set.Finite I' := by
+    have this : Sum.inr '' I ⊆ I' := by
+      intro y hy
+      unfold I'
+      tauto -- it's trivial from hy
+    apply  Set.Infinite.image
+    tauto
+    exact Iinf
+  let A := (partial_domain x).toSet
+  let B := (partial_range x).toSet -- we do the same as the above proof, but we use I instead of G
+  have h1 : Set.Finite A := by
+    unfold A partial_domain
+    simp
+    exact Set.toFinite (partial_domain' x)
+  have h1' : Set.Finite B := by
+    unfold B partial_range
+    simp
+    exact Set.toFinite (partial_range' x)
+  let C1 := I' \ A
+  have C1inf : ¬ Set.Finite C1 := by
+    apply Set.Infinite.diff I'inf h1
+  let C2 := C1 \ B
+  have C2inf : ¬ Set.Finite C2 := by
+    apply Set.Infinite.diff C1inf h1'
+  have nontriv : C2.Nontrivial := by  -- C2 non trivial
+    exact Set.Infinite.nontrivial C2inf
+  have := Set.Nontrivial.exists_ne nontriv (d x)
+  rcases this with ⟨ x1, hx1, hx2⟩
+  use x1
+  unfold C2 at hx1
+  constructor
+  · apply Set.mem_of_mem_diff at hx1 --la prima è la più difficile da provare
+    unfold C1 A at hx1
+    apply Set.mem_of_mem_diff at hx1
+    unfold I' at hx1
+    rcases hx1 with ⟨w, hw1, hw2⟩
+    unfold I at hw1
+    simp at hw1
+    rw [← hw2]
+    exact hw1
+  · constructor
+    · apply Set.mem_of_mem_diff at hx1
+      unfold C1 at hx1
+      apply Set.not_mem_of_mem_diff at hx1
+      unfold A at hx1
+      exact hx1
+    · constructor
+      · apply Set.not_mem_of_mem_diff at hx1
+        unfold B at hx1
+        exact hx1
+      · exact hx2
+
+
+
+
+
+
+
+
+-- Given an extension, which is a partial solution with an undefined element of the domain called `d`, we define a new element `w` that represents the image of `d` (`Lₓ d`).
+noncomputable def w : G := by
+  classical
+  exact if h : (∃ (z : G), E x z (d x)) then (exists_not_in_domain_range' x h.choose).choose
+    else (exists_not_in_domain_range x).choose
+
+lemma w_not_in_domain : w x ∉ partial_domain x := by
+  by_cases h : (∃ (z : G), E x z (d x))
+  · simp only [w, h]
+    exact (exists_not_in_domain_range' x _).choose_spec.2.1
+  · simp only [w, h]
+    exact (exists_not_in_domain_range x).choose_spec.1
+
+lemma w_not_in_range : w x ∉ partial_range x := by
+  by_cases h : (∃ (z : G), E x z (d x))
+  · simp only [w, h]
+    exact (w.proof_1 x _).choose_spec.2.2.1
+  · simp only [w, h]
+    exact (exists_not_in_domain_range x).choose_spec.2.1
+
+lemma w_ne_d : w x ≠ d x := by
+  by_cases h : (∃ (z : G), E x z (d x))
+  · simp only [w, h]
+    exact (exists_not_in_domain_range' x _).choose_spec.2.2.2
+  · simp only [w, h]
+    exact (exists_not_in_domain_range x).choose_spec.2.2
+
+lemma w_equation (h : (∃ (z : G), E x z (d x))) : L (S h.choose) (w x) = x := by
+  simp only [w, h]
+  exact (exists_not_in_domain_range' x _).choose_spec.1
+
+lemma z_unique {z z' : G} (hz : E x z (d x)) (hz' : E x z' (d x)) : z = z' := ok.inj hz hz'
+
+lemma w_equation' {z : G} (hz : E x z (d x)) : L (S z) (w x) = x := by
+  have hh : ∃ z, E x z (d x) := ⟨z, hz⟩
+  convert w_equation x hh
+  exact z_unique x hz hh.choose_spec
+
+@[mk_iff]
+inductive Next : G → G → Prop
+  | base {a b} : E x a b → Next a b
+  | new : Next (d x) (w x)
+
+theorem next_d_is_w {y} : Next x (d x) y → y = w x
+  | .base hb => False.elim <| not_def hb
+  | .new => rfl
+
+theorem prev_w_is_d {y} : Next x y (w x) → y = d x
+  | .base h => by
+    have := w_not_in_range x
+    simp only [partial_range, partial_range', Rel.codom, Set.mem_toFinset, Set.mem_setOf_eq,
+      not_exists] at this
+    exact (this y h).elim
+  | .new => rfl
+
+def next_finite : Set.Finite {(z, y) : G × G | Next x z y} := by
+  simp [next_iff, Set.setOf_or, ← Prod.mk.injEq, ok.finite]
+
+def next_func {z y y'} : Next x z y → Next x z y' → y = y'
+  | .base hb, .base hb' => ok.func hb hb'
+  | .new , .new  => rfl
+  | .base hb, .new | .new, .base hb => (not_def hb).elim
+
+def next_inj {z z' y} : Next x z y → Next x z' y → z = z'
+  | .base hb, .base hb' => ok.inj hb hb'
+  | .new, .new => rfl
+  | .base hz, .new => prev_w_is_d _ (.base hz)
+  | .new, .base hz' => (prev_w_is_d _ (.base hz')).symm
+
+def next_aux1 : Next x x (S x) := Next.base ok.aux1
+
+def next_aux2 {y z t} : Next x y z → Next x z t → L (S y) t = x := by
+  intro next1 next2
+  rcases next1 with ⟨hb⟩
+  · rcases next2 with ⟨hb'⟩ | _
+    · exact ok.aux2 hb hb'
+    · exact w_equation' x hb
+  · rw [next_iff] at next2
+    rcases next2 with h | h
+    · have := w_not_in_domain x
+      simp only [partial_domain, partial_domain', Rel.dom, Set.mem_toFinset, Set.mem_setOf_eq,
+        not_exists] at this
+      exact (this t h).elim
+    · exact (w_ne_d x h.1).elim
+
+def next : PartialSolution x :=
+  ⟨Next x, next_finite x, next_func x, next_inj x, next_aux1 x, next_aux2 x⟩
+
+end Extension
+
+theorem exists_extension (x : G') (seed : PartialSolution x) :
+    ∃ Lₓ : G → G,
+      Lₓ x = S x ∧ -- Axiom A
+      (∀ y : G, (L (S y) <| Lₓ <| Lₓ y) = x) -- Axiom C
+    := by
+  classical
+  have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain (a := seed)
+    (task := fun x' ↦ {e | ∃ y, e.1 x' y})
+    fun ⟨E, ok⟩ d ↦ by
+      if h : ∃ y, E d y then exact ⟨_, le_rfl, h⟩ else
+        let E1 : Extension x := { E, ok, d, not_def := fun h' ↦ h ⟨_, h'⟩ }
+        exact ⟨E1.next, fun _ _ ↦ (.base ·), _, .new⟩
+  choose e he Lₓ hLₓ using h3
+
+  refine ⟨Lₓ, (e x).2.func (e x).2.aux1 (hLₓ x) |>.symm, fun y ↦ ?_⟩
+  /- We have a chain of partial solutions (i.e. partial functions Lₓ : G → G) that saturates the space,
+  which means that if we have a finite number of elements of G we can find a single partial solution of
+  the chain that captures all the elements, here we state this with `y` and `Lₓ y`. -/
+  let T : Finset G := {y, Lₓ y}
+  have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
+    (T.image fun a ↦ ⟨e a, he a⟩)
+  have hT := fun a ha ↦ Finset.forall_image.mp le a ha _ _ (hLₓ a)
+  simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at hT
+  have ⟨ey, eLₓy⟩ := hT
+  exact e.2.aux2 ey eLₓy
+
+end GreedyAC
+
+open GreedyAC GreedyB
+
+def seed (x : G') : Rel G G := fun a b ↦ a = x ∧ b = S x
+
+theorem seed_ok (x : G') : OK x (seed x) where
+  finite := by   -- x = (a, b, _), so the only element in the set is (x, y = a)
+    have h' : S (Sum.inr x) = x.1.1 := rfl
+    have final : {(Sum.inr x, Sum.inl x.1.1)} = {(x_2, y) | seed x x_2 y} := by
+      have incl1 : {(Sum.inr x, Sum.inl x.1.1)} ⊆ {(x_2, y) | seed x x_2 y}:= by
+        rw [Set.singleton_subset_iff]
+        exact Set.mem_sep rfl rfl
+      have incl2 : {(x_2, y) | seed x x_2 y} ⊆ {(Sum.inr x, Sum.inl x.1.1)} := by
+        simp only [Set.subset_singleton_iff, Set.mem_setOf_eq, Prod.forall, Prod.mk.injEq]
+        exact fun a b a ↦ a
+      exact Set.Subset.antisymm incl1 incl2
+    rw [← final]
+    exact Set.finite_singleton (Sum.inr x, Sum.inl x.1.1)
+  inj x₁ x₂ := by simp_all [seed]
+  func h1 h2 := by rw [h1.2, h2.2]
+  aux1 := by simp [seed]
+  aux2 h1 h2 := by simp_all [seed]
+
+noncomputable def L' (x : G') : G → G := (exists_extension x ⟨seed x, seed_ok x⟩).choose
+
+lemma L'_self (x : G') : L' x x = S x := (exists_extension x ⟨seed x, seed_ok x⟩).choose_spec.1
+
+lemma L'_1516 (x : G') (y : G) : (L (S y) <| L' x <| L' x y) = x :=
+  (exists_extension x ⟨seed x, seed_ok x⟩).choose_spec.2 y
+
+noncomputable scoped instance magG : Magma G := {
+    op := fun x y =>
+      match x with
+      | .inl a => L a y
+      | .inr g => L' g y
+    }
+
+theorem magG_op_def_A (a : A) (g : G) : magG.op a g = L a g := rfl
+
+theorem magG_op_def_G (g' : G') (g : G) : magG.op g' g = L' g' g := rfl
+
+theorem G_satisfies_Equation1516 : Equation1516 G := by
+  intro x y
+  rcases x with (a | g) <;> rcases y with (a' | g')
+  · simp_rw [magG_op_def_A,L_extends]
+    rw [magG_op_def_A (a' ◇ a'),L_extends,← A_satisfies_Equation1516]
+  · simp_rw [magG_op_def_G, magG_op_def_A]
+    rw [L'_self, magG_op_def_A, L_1516 a g'] -- uso l'Ax B per concludere
+  · simp_rw [magG_op_def_A]
+    rw [L_self,magG_op_def_A]
+    simp_rw [magG_op_def_G, L'_1516]
+  · simp_rw [magG_op_def_G, L'_self, magG_op_def_A]
+    rw [L'_1516]
+
+--we may need to add some additional thesis to the theorem about the construction of L, so that the way L is defined is explicited
+lemma op_x₀_self : x₀ ◇ x₀ = (1 : A) := by
+  unfold x₀
+  rw [magG_op_def_G, L'_self]
+  simp [S]
+
+lemma op_1_x₀ : (.inl (1 : A)) ◇ x₀ = (1 : A) := L_x₀
+
+lemma x₀_255_rhs : ((x₀ ◇ x₀) ◇ x₀) ◇ x₀ = (1 : A) := by
+  simp_rw [op_x₀_self, op_1_x₀]
+
+lemma x₀_ne_1 : x₀ ≠ (1 : A) := Sum.inr_ne_inl
+
+end Refutation255
 
 @[equational_result]
 theorem _root_.Equation1516_not_implies_Equation1489 : ∃ (G : Type) (_ : Magma G), Equation1516 G ∧ ¬ Equation1489 G := by
   let magA : Magma A := { op := fun x y => f (y*x⁻¹) * x  }
-  use A, magA
-  constructor
-  · unfold Equation1516
-    intro x y
+  refine ⟨A, magA, ?_, ?_⟩
+  · intro x y
     repeat rw [magA_op_def]
     simp only [mul_inv_cancel_right, mul_inv_cancel, mul_inv_rev]
-    have := f_translation_invariant_1516 (y*x⁻¹)
-    apply_fun fun a => a * (f 1) * y at this
+    have := f_translation_invariant_1516 (y * x⁻¹)
+    apply_fun fun a ↦ a * (f 1) * y at this
     simp only [mul_inv_rev, inv_inv, inv_mul_cancel_right] at this
     repeat rw [mul_assoc] at *
     exact this.symm
-  · unfold Equation1489
-    simp only [not_forall]
+  · simp only [not_forall]
     exists x₁, 1
     repeat rw [magA_op_def]
     simp only [one_mul, fromList_eval x₁⁻¹ x₃, inv_one, mul_one, fromList_eval (x₃ * x₁) x₄,
       fromList_eval x₁ x₂, fromList_eval (x₄ * x₂⁻¹) x₅]
     decide
-
 
 @[equational_result]
 theorem Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] (h : Equation1516 G) : Equation255 G := by
@@ -1325,30 +3146,31 @@ theorem Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] 
     intro x
     use x ◇ (x ◇ y)
     dsimp [L, S]
-    rw [<-(h x y)]
+    rw [← h]
   have inv_S : Function.Surjective S := by
-    rw [<-Finite.injective_iff_surjective]
+    rw [← Finite.injective_iff_surjective]
     intro x y hxy
-    have hS x : S x = (L (S x) <| L (S x) <| L (S x) <| x) := by
-      dsimp [L]
-      convert h (S x) x
+    have hS x : S x = (L (S x) <| L (S x) <| L (S x) <| x) := h (S x) x
     have hSy := hS y
-    rw [<-hxy] at hSy
+    rw [← hxy] at hSy
     nth_rewrite 1 [hS x] at hSy
     exact inv_LS x <| inv_LS x <| inv_LS x <| hSy
   have SC_id x : S x = (S (C x)) ◇ S x := by
-    convert h (S x) (C x) using 2
-    dsimp [C]
-    convert h (S x) x
-  have SC_CS_id x : S (C x) = C (S x) := by
-    rw [h (S (C x)) (S x), <-SC_id x, <-SC_id x]
+    convert h .. using 2
+    exact h ..
+  have SC_CS_id x : S (C x) = C (S x) := by rw [h (S (C x)) (S x), ← SC_id x, ← SC_id x]
   intro x
-  obtain ⟨ y, hy ⟩ := inv_S x
-  rw [<- hy]
+  obtain ⟨y, hy⟩ := inv_S x
+  rw [← hy]
   nth_rewrite 1 [SC_id y]
   rw [SC_CS_id y]
 
-
+-- @[equational_result]
+theorem _root_.Equation1516_not_implies_Equation255 : ∃ (G : Type) (_ : Magma G), Equation1516 G ∧ ¬ Equation255 G := by
+  refine ⟨G, magG, G_satisfies_Equation1516, ?_⟩
+  unfold Equation255
+  push_neg
+  exact ⟨x₀, x₀_255_rhs ▸ x₀_ne_1⟩
 
 /--  https://teorth.github.io/equational_theories/blueprint/1516-chapter.html -/
 @[equational_result]
