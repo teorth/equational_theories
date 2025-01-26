@@ -1299,17 +1299,10 @@ theorem A_op_surj_right (a b : A) : ∃ c : A, a ◇ c = b := by
 
 theorem A_op_eq_self_iff {a c : A} : c ◇ a = a ↔ c = a := by
   -- doable, just use A_satisfies_Equation1516
-  constructor
-  · intro h
-    have := A_satisfies_Equation1516 c a
-    simp_rw [h] at this
-    simp_rw[A_idempotent] at this
-    exact this
-  · intro h
-    rw [h]
-    apply A_idempotent
-
-
+  refine ⟨fun h ↦ ?_, fun h ↦ h ▸ A_idempotent _⟩
+  have := A_satisfies_Equation1516 c a
+  simp_rw [h, A_idempotent] at this
+  exact this
 
 section Refutation255
 
