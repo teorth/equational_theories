@@ -2822,36 +2822,21 @@ lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ parti
   let C1 := (Set.univ : Set G) \ A
   have h1 : Set.Finite A := by
     unfold A partial_domain
-    simp
-    exact Set.toFinite (partial_domain' x)
+    rw [Set.coe_toFinset]
+    exact (partial_domain' x).toFinite
   have h1' : Set.Finite B := by
     unfold B partial_range
-    simp
-    exact Set.toFinite (partial_range' x)
+    rw [Set.coe_toFinset]
+    exact (partial_range' x).toFinite
   have h2 : ¬ Set.Finite (Set.univ : Set G) := by  -- G infinite
     rw [Set.finite_univ_iff]
     exact Infinite.not_finite
-  have C1inf : ¬ Set.Finite C1 := by
-    apply Set.Infinite.diff h2 h1
-  let C2 := C1 \ B
-  have C2inf : ¬ Set.Finite C2 := by
-    apply Set.Infinite.diff C1inf h1'
-  have nontriv : C2.Nontrivial := by  -- C2 non trivial
-    exact Set.Infinite.nontrivial C2inf
-  have := Set.Nontrivial.exists_ne nontriv (d x)
-  rcases this with ⟨ x1, hx1, hx2 ⟩
-  use x1
-  unfold C2 B at hx1
-  constructor
-  · apply Set.mem_of_mem_diff at hx1
-    unfold C1 A at hx1
-    apply Set.not_mem_of_mem_diff at hx1
-    exact hx1
-  · constructor
-    · apply Set.not_mem_of_mem_diff at hx1
-      exact hx1
-    · exact hx2
-
+  have C2inf : ¬ Set.Finite (C1 \ B) := Set.Infinite.diff (Set.Infinite.diff h2 h1) h1'
+  have := Set.Nontrivial.exists_ne (Set.Infinite.nontrivial C2inf) (d x)
+  rcases this with ⟨x1, hx1, hx2⟩
+  refine ⟨x1, ?_, ⟨Set.not_mem_of_mem_diff hx1, hx2⟩⟩
+  apply Set.mem_of_mem_diff at hx1
+  exact Set.not_mem_of_mem_diff hx1
 
 lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧ w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
   -- doable
