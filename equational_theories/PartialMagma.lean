@@ -16,7 +16,7 @@ import equational_theories.AdjoinFresh
   For this, we model a partial magma on a type `α` by an element of `PreExtension α := α → α → Set α`
   For a given equation, we are only interested in partial magmas satisfying some laws.
   We encapsulate this in a class `ExtensionRules`. For each greedy construction, we give
-  an instance of `ExtensionRules`. Depedingin on this instance, we define the class `ExtensionBase`
+  an instance of `ExtensionRules`. Depending on this instance, we define the class `ExtensionBase`
   that collects our extension problem. For each diffierent case in a greedy construction, we extend
   `ExtensionBase` reflecting additional properties that `a` and `b` should satisfy (for example,
   we often treat the cases `a = b` and `a ≠ b` differently). For each such extension problem,
