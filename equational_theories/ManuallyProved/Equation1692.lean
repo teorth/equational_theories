@@ -1577,7 +1577,6 @@ def g_exclude := {g: G // g ≠ 0 }
 noncomputable def biject_with_zero: Equiv G ℕ := by
   haveI g_exclude_countable: Countable g_exclude := Subtype.countable
   haveI g_exclude_infinite: Infinite g_exclude := by
-    unfold g_exclude
     by_contra!
     simp at this
     have g_eq_union : @Set.univ G = Set.range (fun g: g_exclude => g.val) ∪ {0} := by
@@ -2590,7 +2589,6 @@ theorem not_equation_1832: 0 ≠ f (f (0)) + f ((f (0)) - f (f (0))) := by
 
 
   have my_one_tree: root_tree.right.left.getData.a  = fun₀ | 1 => 1 := by
-    unfold root_tree
     simp [TreeNode.getData, x_vals_zero, XVals.x_vals]
 
   rw [← my_one_tree, f_eval_at (n := 0)]
@@ -2615,42 +2613,25 @@ theorem not_equation_1832: 0 ≠ f (f (0)) + f ((f (0)) - f (f (0))) := by
   simp [a_eq, g_enum_inverse] at supp_increasing
   specialize supp_increasing x_diff_has_neg
   simp [x_diff_supp] at supp_increasing
-
   let max_supp := (f_data (g_to_num ((fun₀ | 1 => 1) - fun₀ | 7 => 1))).tree.getData.b.support.max' (tree_b_supp_nonempty _)
-
-  have seven_neq_max: 7 ≠ max_supp := by
-    unfold max_supp
-    omega
-
+  have seven_neq_max: 7 ≠ max_supp := by omega
   by_contra!
   have eval_at := DFunLike.congr (x := max_supp) this rfl
   simp [seven_neq_max] at eval_at
-
   have eval_max_nonzero: (f ((fun₀ | 1 => 1) - fun₀ | 7 => 1)) max_supp ≠ 0 := by
     rw [← Finsupp.mem_support_iff]
     apply Finset.max'_mem
-
   rw [eq_comm] at eval_at
   contradiction
   simp [f_data]
 
-
 lemma sum_1_3_eq_tree: (fun₀ | 1 => (1: ℚ)) + (fun₀ | 3 => 1) = (@TreeNode.root x_vals_zero).left.right.left.getData.a := by
-  simp [TreeNode.getData, x_vals_zero, XVals.x_vals, treeNum_neq_zero, treeNum]
-  rw [add_comm]
-
+  simp [TreeNode.getData, x_vals_zero, XVals.x_vals, treeNum_neq_zero, treeNum, add_comm]
 
 theorem not_equation_2441: 0 ≠ (f ((f 0) + (f (- f 0)))) + (f ( -(f ((f 0) + f (- f (0))))) ) := by
-  simp [neg_f_zero]
-  simp [f_eval_at (n := 0)]
-  simp [f_data, TreeNode.getData, x_vals_zero, XVals.x_vals, treeNum_neq_zero]
-  simp [f_zero_eq]
-  simp [treeNum]
-
-  rw [sum_1_3_eq_tree]
-  rw [f_eval_at (n := 0) _ rfl]
-
-  rw [f_neg_b (n := 0) _ rfl]
+  simp only [neg_f_zero, f_eval_at (n := 0), ne_eq]
+  simp [f_data, TreeNode.getData, x_vals_zero, XVals.x_vals, treeNum_neq_zero, f_zero_eq, treeNum]
+  rw [sum_1_3_eq_tree, f_eval_at (n := 0) _ rfl, f_neg_b (n := 0) _ rfl]
   simp only [TreeNode.getData]
   simp [x_vals_zero, XVals.x_vals, treeNum_neq_zero, treeNum]
   by_contra!
@@ -2659,32 +2640,24 @@ theorem not_equation_2441: 0 ≠ (f ((f 0) + (f (- f 0)))) + (f ( -(f ((f 0) + f
   simp at app_eq
 
 lemma x_vals_zero_left_b: (f_data 0).tree.left.getData.b = fun₀ | 3 => 1 := by
-  simp [TreeNode.getData]
-  simp [XVals.x_vals, treeNum_neq_zero, treeNum]
-  simp [f_data, x_vals_zero]
-
+  simp [TreeNode.getData, XVals.x_vals, treeNum_neq_zero, treeNum, f_data, x_vals_zero]
 
 theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0))) + (f (- (f 0) - f (- f 0) - f (- (f 0) - f (- f 0)))) := by
   let x_sum: G := (-fun₀ | 1 => 1) - fun₀ | 3 => 1
-
   have x_sum_nonpos: finsuppHasNeg x_sum := by
     simp [x_sum, finsuppHasNeg]
     use 1
     simp
-
   have f_supp_increasing := (f_data (g_to_num x_sum)).supp_increasing
   rw [(f_data (g_to_num x_sum)).a_val] at f_supp_increasing
   simp [g_enum_inverse] at f_supp_increasing
   specialize f_supp_increasing x_sum_nonpos
-
   simp [x_sum] at f_supp_increasing
-
   simp [neg_f_zero]
   simp [f_eval_at (n := 0)]
   simp [f_data, TreeNode.getData, x_vals_zero, XVals.x_vals, treeNum_neq_zero]
   simp [f_zero_eq]
   simp [treeNum]
-
   have x_sum_supp: x_sum.support = {1, 3} := by
     unfold x_sum
     rw [← Finsupp.single_neg, sub_eq_add_neg, ← Finsupp.single_neg]
@@ -2700,11 +2673,9 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
   . simp [f]
     match h_tree: (f_data (g_to_num (x_sum))).tree with
     | .root =>
-      unfold x_sum at h_tree
       rw [h_tree] at f_supp_increasing
       simp [XVals.x_vals, TreeNode.getData] at f_supp_increasing
       simp [same_vals, x_vals_zero] at f_supp_increasing
-      unfold x_sum at x_sum_supp
       rw [x_sum_supp] at f_supp_increasing
       simp at f_supp_increasing
       -- Obtain contradiction
@@ -3127,7 +3098,7 @@ theorem Equation1692_not_implies_Equation3456 :
   refine ⟨G, magG, f_equation_1692, ?_⟩
   simp only [magG, not_forall, sub_self, sub_add_cancel_left, add_right_inj]
   use 0
-  simp
+  rw [zero_add, sub_zero]
   exact not_equation_3456
 
 @[equational_result]
