@@ -1183,13 +1183,11 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
             | .right t2_parent_parent =>
                 simp [TreeNode.getData, vals.x_to_index_eq, basis_n] at h_a_eq
                 by_cases t_a_zero: t2_parent_parent.getData.a = 0
-                .
-                  simp [t_a_zero] at h_a_eq
+                · simp [t_a_zero] at h_a_eq
                   match t2_parent_parent with
                   | .root =>
                     simp [TreeNode.getData, XVals.x_vals, XVals.x_to_index] at h_a_eq
-                    rw [← Finsupp.single_neg] at h_a_eq
-                    rw [Finsupp.single_eq_single_iff] at h_a_eq
+                    rw [← Finsupp.single_neg, Finsupp.single_eq_single_iff] at h_a_eq
                     simp at h_a_eq
                     contradiction
                   | .left grandparent =>
@@ -1201,8 +1199,7 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
                     contradiction
                   | .right grandparent =>
                     simp [TreeNode.getData, XVals.x_vals, treeNum_neq_zero] at t_a_zero
-                .
-                  have vals_neq := basis_neq_elem_diff t2_parent_parent (vals.x_to_index 0) (-1) 1 1 (by simp) (by simp) (by simp) t_a_zero
+                · have vals_neq := basis_neq_elem_diff t2_parent_parent (vals.x_to_index 0) (-1) 1 1 (by simp) (by simp) (by simp) t_a_zero
                   simp only [one_smul, neg_one_smul] at vals_neq
                   rw [add_comm, ← sub_eq_add_neg] at vals_neq
                   simp [XVals.x_to_index] at h_a_eq
