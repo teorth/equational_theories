@@ -40,9 +40,7 @@ Secondary aims of the ETP included the possibility of discovering unusually inte
 
 \subsection{Outcomes}
 
-\note{This text assumes (optimistically) that both the original and finite implication graph will be completely formalized.}
-
-The ETP achieved its primary objectives, with all of the implications for both arbitrary magmas and finite magmas formalized in the proof assistant language \emph{Lean}, and can be found on the ETP GitHub repository.  See \Cref{fig:854}, \Cref{fig:1729} for some small fragments of the implication graphs produced. The experience of running such a large collaborative research project introduced several challenges, which we report upon in \Cref{project-sec}. Also, a variety of methods with varying degrees of automation or computer-assistance had to be developed to resolve all the implications, which had quite a variety of difficulty levels.
+The ETP achieved almost all of its primary objectives, with almost all of the implications for both arbitrary magmas and finite magmas formalized in the proof assistant language \emph{Lean}, and can be found on the ETP GitHub repository.  See \Cref{fig:854}, \Cref{fig:1729} for some small fragments of the implication graphs produced.  While the implication graph for the arbitrary magma entailment relation $\vdash$ was completely determined and formalized, one of the $22033636$ implications (and its dual) for the finite magma entailment relation $\vdashfin$ remains open.  Specifically, we were unable to obtain either a human-readable or formalized proof or disproof of the implication $E677 \vdashfin E255$ (or its equivalent dual $E2910 \vdashfin E47$), despite extensive efforts from the participants of the project; we tentatively conjecture this implication to be false (i.e., that there exists a finite magma obeying \eqref{eq677} but not \eqref{eq255}), but the refutation appears to be ``immune'' to most of the techniques that we developed for the project.  (We were however able to establish that the corresponding implication $E677 \vdash E255$ for arbitrary magmas was false, using the greedy construction discussed in \Cref{greedy-sec}.)
 
 \begin{figure}
 \centering
