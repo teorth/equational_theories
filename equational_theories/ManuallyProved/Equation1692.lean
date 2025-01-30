@@ -1422,27 +1422,21 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
           have linear_indep: LinearIndependent ℚ ![fun₀ | (vals.x_to_index (treeNum t1_parent - 1)) => (1 : ℚ), fun₀ | (vals.x_to_index (treeNum t2_parent_parent - 1)) => 1] := by
             apply LinearIndependent.pair_iff.mpr
             intro s t h_sum_zero
-
-            simp [linearIndependent_iff'] at basis_indep
+            simp only [linearIndependent_iff', Finsupp.smul_single, smul_eq_mul, mul_one] at basis_indep
             specialize basis_indep {vals.x_to_index (treeNum t1_parent - 1), vals.x_to_index (treeNum t2_parent_parent - 1)}
             have parents_neq: t1_parent ≠ t2_parent_parent := by
               by_contra! other_parents_eq
-              simp [other_parents_eq] at h_a_eq
-              simp [add_eq_zero_iff_eq_neg] at h_a_eq
+              rw [other_parents_eq, add_eq_zero_iff_eq_neg] at h_a_eq
               have eq_zero: (fun₀ | (vals.x_to_index (treeNum t2_parent_parent - 1)) => 1) = 0 := by
                 simp [XVals.x_vals, treeNum_neq_zero] at h_a_eq
-                rw [← Finsupp.single_neg] at h_a_eq
-                rw [Finsupp.single_eq_single_iff] at h_a_eq
-                simp at h_a_eq
+                rw [← Finsupp.single_neg, Finsupp.single_eq_single_iff] at h_a_eq
+                simp only [true_and, one_ne_zero, neg_eq_zero, and_self, or_false] at h_a_eq
                 contradiction
               simp at eq_zero
-
-            have base_nums_not_eq: treeNum t1_parent ≠  treeNum t2_parent_parent := by
-              apply Function.Injective.ne treeNum_injective parents_neq
-
+            have base_nums_not_eq: treeNum t1_parent ≠  treeNum t2_parent_parent :=
+              Function.Injective.ne treeNum_injective parents_neq
             have treeNum_t1_neq_zero := treeNum_neq_zero t1_parent
             have treeNum_t2_neq_zero := treeNum_neq_zero t2_parent_parent
-
             have nums_not_eq: treeNum t1_parent - 1 ≠ treeNum t2_parent_parent - 1 := by
               by_contra!
               apply_fun (fun y => y + 1) at this
@@ -1450,9 +1444,8 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
               have minus_plus_t2: treeNum t2_parent_parent - 1 + 1 = treeNum t2_parent_parent := by omega
               rw [minus_plus_t1, minus_plus_t2] at this
               contradiction
-
-            have num_reverse: treeNum t2_parent_parent - 1 ≠ treeNum t1_parent - 1 := by
-              exact id (Ne.symm nums_not_eq)
+            have num_reverse: treeNum t2_parent_parent - 1 ≠ treeNum t1_parent - 1 :=
+              id (Ne.symm nums_not_eq)
             have val_treeNums_neq: vals.x_to_index (treeNum t2_parent_parent - 1) ≠ vals.x_to_index (treeNum t1_parent - 1) := by
               apply Function.Injective.ne vals.x_to_index_inj num_reverse
             let g : ℕ → ℚ := fun n => if n = vals.x_to_index (treeNum t1_parent - 1) then s else if n = (vals.x_to_index (treeNum t2_parent_parent - 1)) then t else 0
@@ -1478,8 +1471,7 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
         --  b = p - q for some p and q. We know that p and q have disjoint coordinates, and q is not zero, so we have two different representations for 'a' - impossible.
         simp [TreeNode.getData, vals.x_to_index_eq, basis_n] at h_a_eq
         by_cases tree_a_zero: t2_parent_parent.getData.a = 0
-        .
-          simp [tree_a_zero] at h_a_eq
+        . simp [tree_a_zero] at h_a_eq
           match t2_parent_parent with
           | .root =>
             simp [TreeNode.getData] at tree_a_zero
@@ -1494,9 +1486,7 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
             contradiction
           | .right ancestor =>
             simp [TreeNode.getData, XVals.x_vals, treeNum_neq_zero] at tree_a_zero
-
-        .
-          have vals_neq := basis_neq_elem_diff t2_parent_parent (vals.x_to_index (treeNum t1_parent - 1)) 1 (-1) 1 (by simp) (by simp) (by simp) tree_a_zero
+        . have vals_neq := basis_neq_elem_diff t2_parent_parent (vals.x_to_index (treeNum t1_parent - 1)) 1 (-1) 1 (by simp) (by simp) (by simp) tree_a_zero
           simp only [one_smul, neg_one_smul, ← sub_eq_add_neg] at vals_neq
           simp [XVals.x_vals, treeNum_neq_zero] at h_a_eq
           simp [XVals.x_to_index] at vals_neq
@@ -1514,37 +1504,29 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
 lemma partial_function {vals: XVals}: ∀ {t1 t2: @TreeNode vals}, (t1.getData.a = t2.getData.a) → t1 = t2 := by
   intro t1 t2
   by_contra!
-
   -- Obtaain the smallest (by `treeNum`) counterexample from the set of all counterexamples, and use it
   -- with `partial_function_inner`
   let counterexamples := {(t1, t2) : (@TreeNode vals × TreeNode) | t1.getData.a = t2.getData.a ∧ t1 ≠ t2}
-
   have counter_nonempty: counterexamples.Nonempty := by
-    simp [Set.Nonempty, counterexamples]
-    use t1
-    use t2
-
+    simp only [Set.Nonempty, ne_eq, Set.mem_setOf_eq, Prod.exists, counterexamples]
+    use t1, t2
   let counter_nums := ((fun (t1, _) => treeNum t1) '' counterexamples)
   let counter_nums_nonempty : counter_nums.Nonempty := by
-    simp [counter_nums]
+    simp only [Set.image_nonempty, counter_nums]
     exact counter_nonempty
-
   have min_mem := Nat.sInf_mem counter_nums_nonempty
-  simp [counter_nums] at min_mem
+  simp only [Set.mem_image, Prod.exists, exists_and_right, counter_nums] at min_mem
   obtain ⟨a, ⟨x, a_x_in⟩, treenum_eq_inf⟩ := min_mem
-
   have new_min_treeNum_le: ∀ (tree1 tree2: @TreeNode vals), tree1.getData.a = tree2.getData.a ∧ tree1 ≠ tree2 → treeNum a ≤ treeNum tree1 := by
     intro tree1 tree2 h_neq
     have trees_in: (tree1, tree2) ∈ counterexamples := by
-      simp [counterexamples]
+      simp only [ne_eq, Set.mem_setOf_eq, counterexamples]
       exact h_neq
     have tree1_num_in: treeNum tree1 ∈ counter_nums := by
-      simp only [counter_nums]
-      simp only [Set.mem_image, Set.mem_setOf_eq]
+      simp only [counter_nums, Set.mem_image, Set.mem_setOf_eq]
       use (tree1, tree2)
     rw [treenum_eq_inf]
     exact Nat.sInf_le tree1_num_in
-
   exact partial_function_inner a_x_in.1 new_min_treeNum_le a_x_in.2
 
 def g_exclude := {g: G // g ≠ 0 }
@@ -1561,24 +1543,20 @@ noncomputable def biject_with_zero: Equiv G ℕ := by
       · intro g _
         by_cases g_zero: g = 0
         · simp [g_zero]
-        .
-          apply Set.mem_union_left
-          simp
+        · apply Set.mem_union_left
+          simp only [ne_eq, Set.mem_range]
           use ⟨g, g_zero⟩
       · intro g
         simp
-    have singleton_finite: Set.Finite ({0}: Set G) := by simp
-    have range_finite: Set.Finite (Set.range fun g: g_exclude ↦ g.val) := by
-      apply @Set.finite_range _ _ _ this
-    have finite_union := Set.Finite.union range_finite singleton_finite
+    have range_finite: Set.Finite (Set.range fun g: g_exclude ↦ g.val) :=
+      @Set.finite_range _ _ _ this
+    have finite_union := Set.Finite.union range_finite (Set.finite_singleton 0)
     rw [← g_eq_union] at finite_union
-    have g_infinite: Set.Infinite (@Set.univ G) := by
-      apply Set.infinite_univ
+    have g_infinite: Set.Infinite (@Set.univ G) := Set.infinite_univ
     contradiction
-
   let default_equiv := Classical.choice (nonempty_equiv_of_countable (α := g_exclude) (β := ℕ))
   exact {
-    toFun := fun g => by
+    toFun := fun g ↦ by
       by_cases g_eq_zero: g = 0
       · exact 0
       · exact 1 + default_equiv.toFun ⟨g, g_eq_zero⟩
@@ -1586,86 +1564,80 @@ noncomputable def biject_with_zero: Equiv G ℕ := by
       by_cases n = 0
       · exact 0
       · exact (default_equiv.invFun (n - 1)).val
-
     left_inv := by
       rw [Function.LeftInverse]
       intro x
       by_cases x_zero: x = 0
       <;> simp [x_zero]
-
     right_inv := by
       rw [Function.RightInverse]
       intro x
       by_cases x_zero: x = 0
       · simp [x_zero]
-      .
-        simp [x_zero]
-        have val_neq_zero: (default_equiv.symm (x - 1)).val ≠ 0 := by
-          exact (default_equiv.symm (x - 1)).property
-        simp [val_neq_zero]
+      · simp [x_zero]
+        have val_neq_zero: (default_equiv.symm (x - 1)).val ≠ 0 :=
+          (default_equiv.symm (x - 1)).property
+        simp only [val_neq_zero, ↓reduceIte]
         omega
   }
 
 @[irreducible] noncomputable def g_enumerate: ℕ → G := biject_with_zero.symm
 
-lemma g_enum_zero_eq_zero: g_enumerate 0 = 0 := by
-  simp [g_enumerate, biject_with_zero]
+lemma g_enum_zero_eq_zero: g_enumerate 0 = 0 := by simp [g_enumerate, biject_with_zero]
 
 lemma g_enum_nonzero_eq_nonzero (n: ℕ) (hn: n > 0): g_enumerate n ≠ 0 := by
-  simp [g_enumerate, biject_with_zero]
+  simp only [g_enumerate, biject_with_zero, ne_eq, Equiv.toFun_as_coe, Equiv.invFun_as_coe,
+    dite_eq_ite, Equiv.coe_fn_symm_mk, ite_eq_left_iff, Classical.not_imp]
   refine ⟨by omega, ?_⟩
-  have exclude_not_zero: ∀ g: g_exclude, g.val ≠ 0 := by
-    intro g
-    exact g.property
+  have exclude_not_zero: ∀ g: g_exclude, g.val ≠ 0 := fun g ↦ g.property
   simp [exclude_not_zero]
 
 @[irreducible] noncomputable def g_to_num (g: G): ℕ := biject_with_zero g
 
-def g_enum_inverse (g: G): g_enumerate (g_to_num g) = g := by
-  simp [g_enumerate, g_to_num]
+def g_enum_inverse (g: G): g_enumerate (g_to_num g) = g := by simp [g_enumerate, g_to_num]
 
-lemma g_num_zero_eq_zero: g_to_num 0 = 0 := by
-  simp [g_to_num, biject_with_zero]
+lemma g_num_zero_eq_zero: g_to_num 0 = 0 := by simp [g_to_num, biject_with_zero]
 
 -- Linear independence alone is insufficient to prove this - we could have an alterate definition of TreeNode
 -- with linearly independent elements, but with the root re-appearing somewhere later on
 lemma tree_b_neq_root_mul {vals: XVals} (t: @TreeNode vals) (a: ℚ): t.getData.b ≠ a • vals.root_elem := by
   induction t with
   | root =>
-    simp [TreeNode.getData]
+    rw [TreeNode.getData, ne_eq]
     have tree_sup := vals.supp_gt 0
-    simp at tree_sup
+    simp only [Finsupp.coe_basisSingleOne, zero_mul, add_zero] at tree_sup
     have supp_ne_zero := Finsupp.support_single_ne_zero (2 ^ vals.i) (b := (1 : ℚ)) (by simp)
     rw [supp_ne_zero] at tree_sup
-    simp at tree_sup
+    simp only [Finset.min_singleton, WithTop.coe_pow, WithTop.coe_ofNat] at tree_sup
     by_contra!
     have app_eq := DFunLike.congr (x := vals.x_to_index 0) this rfl
-    simp [XVals.x_vals, XVals.x_to_index] at app_eq
-
+    simp only [XVals.x_vals, one_ne_zero, ↓reduceIte, Finsupp.coe_basisSingleOne, tsub_self,
+      zero_mul, add_zero, XVals.x_to_index, Finsupp.single_eq_same, Finsupp.coe_smul, Pi.smul_apply,
+      smul_eq_mul] at app_eq
     have eval_zero: vals.root_elem (2 ^ vals.i) = 0 := by
       rw [← Finsupp.not_mem_support_iff]
       exact Finset.not_mem_of_max_lt_coe tree_sup
     rw [eval_zero] at app_eq
-    simp at app_eq
+    simp only [mul_zero, one_ne_zero] at app_eq
   | left t1_parent _ =>
-    simp [TreeNode.getData]
+    rw [TreeNode.getData, ne_eq]
     have tree_sup := vals.supp_gt (treeNum t1_parent - 1)
-    simp at tree_sup
+    simp only [Finsupp.coe_basisSingleOne] at tree_sup
     have supp_ne_zero := Finsupp.support_single_ne_zero (2 ^ vals.i + (treeNum t1_parent - 1) * 2 ^ (vals.i + 1)) (b := (1 : ℚ)) (by simp)
     rw [supp_ne_zero] at tree_sup
-    simp at tree_sup
+    simp only [Finset.min_singleton, WithTop.coe_add, WithTop.coe_pow, WithTop.coe_ofNat,
+      WithTop.coe_mul, WithTop.coe_sub, ENat.some_eq_coe, WithTop.coe_one] at tree_sup
     by_contra!
     have app_eq := DFunLike.congr (x := vals.x_to_index ((treeNum t1_parent - 1))) this rfl
-    simp [XVals.x_vals, XVals.x_to_index] at app_eq
-
+    simp only [XVals.x_vals, Finsupp.coe_basisSingleOne, XVals.x_to_index, Finsupp.coe_smul,
+      Pi.smul_apply, smul_eq_mul] at app_eq
     have eval_zero: vals.root_elem (2 ^ vals.i + (treeNum t1_parent - 1) * 2 ^ (vals.i + 1)) = 0 := by
       rw [← Finsupp.not_mem_support_iff]
-      apply Finset.not_mem_of_max_lt_coe
-      exact tree_sup
+      exact Finset.not_mem_of_max_lt_coe tree_sup
     rw [eval_zero] at app_eq
     simp [treeNum_neq_zero] at app_eq
   | right t2_parent h_parent =>
-    simp [TreeNode.getData]
+    simp only [TreeNode.getData, ne_eq]
     by_contra!
     match t2_parent with
     | .root =>
