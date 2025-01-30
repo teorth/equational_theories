@@ -2748,7 +2748,7 @@ lemma f_neg_b {other_vals: XVals} (t: @TreeNode other_vals) {n: ℕ} (hvals: (f_
   rw [eq_tree]
   rw [f_eval_at (n := n) _ hvals]
 
--- Proof of our non-implications. The general strategy is to obtain a particular support elemenet
+-- Proof of our non-implications. The general strategy is to obtain a particular support element
 -- (usually the largest one, resulting from repeated applications of `f`), and evaluate both sides
 -- of the equation at that element. Most of the terms are shown to drop out (since our element
 -- is constructed to be outside the support of most of them), leaving us with a contradiction (0 = 1)
