@@ -2453,7 +2453,6 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
         rw [eq_comm] at app_eq
         contradiction
       | ⊥ =>
-        unfold largest_support at h_bot
         rw [WithBot.none_eq_bot, Finset.max_eq_bot] at h_bot
         have supp_nonempty := tree_b_supp_nonempty (f_data (g_to_num
           (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - fun₀ | 1 + (treeNum parent - 1) * 2 => 1))).tree
@@ -2462,9 +2461,8 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
       simp only [eq_iff_iff, iff_false]
       exact not_zero
     | .right parent =>
-      have a_eq := (f_data (g_to_num (x_sum))).a_val
       have nonpos := nonpos_not_tree_right (f_data (g_to_num (x_sum))).tree
-      simp [a_eq, g_enum_inverse] at nonpos
+      simp [(f_data (g_to_num (x_sum))).a_val, g_enum_inverse] at nonpos
       specialize nonpos x_sum_nonpos parent
       rw [eq_comm] at nonpos
       contradiction
@@ -2474,27 +2472,21 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
     specialize cur_i_not_zero same_vals
     simp [x_vals_zero] at cur_i_not_zero
     unfold x_sum at cur_i_not_zero
-
     have first_app_supp_pos := (f_data (g_to_num x_sum)).supp_max_pos
     simp_rw [(f_data (g_to_num x_sum)).a_val, g_enum_inverse] at first_app_supp_pos
     specialize first_app_supp_pos x_sum_nonpos
-
     have three_lt_max: 3 < ((f_data (g_to_num x_sum)).tree.getData.b.support.max' (tree_b_supp_nonempty _)) := by
       rw [x_sum_supp] at f_supp_increasing
       simp at f_supp_increasing
       exact f_supp_increasing
-
     have three_lt_max_withbot: 3 < ((f_data (g_to_num x_sum)).tree.getData.b.support.max) := by
       rw [← WithBot.coe_lt_coe] at three_lt_max
       rw [Finset.coe_max'] at three_lt_max
       simp at three_lt_max
       exact three_lt_max
-
-
     have three_neq_max: 3 ≠ ((f_data (g_to_num x_sum)).tree.getData.b.support.max' (tree_b_supp_nonempty _)) := by omega
     have one_neq_max: 1 ≠ ((f_data (g_to_num x_sum)).tree.getData.b.support.max' (tree_b_supp_nonempty _)) := by
       omega
-
     have three_lt_second_term_max: 3 < (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)).support.max := by
       have max_in_supp: (f_data (g_to_num ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))).tree.getData.b.support.max' (tree_b_supp_nonempty _) ∈ (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)).support := by
         simp
@@ -2505,31 +2497,26 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
         have max_neq_3: 3 ≠ (f_data (g_to_num ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))).tree.getData.b.support.max' (tree_b_supp_nonempty _) := by omega
         simp [max_neq_one, max_neq_3]
         exact ne_of_gt first_app_supp_pos
-
       have max_le_mem := Finset.le_max' _ _ max_in_supp
       have my_trans := LT.lt.trans_le three_lt_max max_le_mem
       rw [← WithBot.coe_lt_coe] at my_trans
       rw [Finset.coe_max'] at my_trans
       simp at my_trans
       exact my_trans
-
     have second_app_has_neg: finsuppHasNeg (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)) := by
       simp [finsuppHasNeg]
       use (f_data (g_to_num x_sum)).tree.getData.b.support.max' (tree_b_supp_nonempty _)
       simp only [ne_eq, one_neq_max, not_false_eq_true, Finsupp.single_eq_of_ne, neg_zero,
         three_neq_max, sub_self]
       exact first_app_supp_pos
-
     have second_app_supp_increase := (f_data (g_to_num (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)))).supp_increasing
     have a_val := (f_data ((g_to_num (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))))).a_val
     simp_rw [a_val, g_enum_inverse] at second_app_supp_increase
     specialize second_app_supp_increase second_app_has_neg
-
     let max_supp := (f_data
                   (g_to_num
                     (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) -
                       f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)))).tree.getData.b.support.max' (tree_b_supp_nonempty _)
-
     by_contra!
     have app_eq:= DFunLike.congr (x := max_supp) this rfl
     have max_supp_gt_three: 3 < max_supp := by
@@ -2556,7 +2543,6 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
                 have two_n_ge_4: 2^2 ≤ 2^n := by
                   exact Nat.pow_le_pow_of_le_right (by simp) n_gt_two
                 omega
-
           match h_tree: (f_data (g_to_num (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) : Finsupp _ _))).tree with
           | .root =>
             simp [h_tree, TreeNode.getData, XVals.x_vals]
