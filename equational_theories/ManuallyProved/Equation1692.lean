@@ -1865,25 +1865,6 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
             have ta_sum := ta_comb.a_eq
             have tb_sum := tb_comb.a_eq
             have b_i_nonzero: b.i ≠ 0 := by simp [b_new, new_x_vals]
-            have tb_g_supp_nonempty: tb_comb.a_coords.support.Nonempty := by
-              by_contra!
-              have tb_eq_zero: tb_comb.a_coords = 0 := by
-                simp at this
-                exact this
-              simp [tb_eq_zero] at tb_sum
-              match h_tb: tb with
-              | .root =>
-                have tb_a_nonzero := b.root_nonzero b_i_nonzero
-                simp [h_tb, TreeNode.getData] at tb_sum
-                contradiction
-              | .left tb_parent =>
-                simp [h_tb, TreeNode.getData] at tb_sum
-                have b_nonzero := (tree_vals_nonzero tb_parent)
-                contradiction
-              | .right tb_parent =>
-                simp [h_tb, TreeNode.getData] at tb_sum
-                simp [XVals.x_vals] at tb_sum
-                simp [treeNum_neq_zero] at tb_sum
             by_cases tb_root: tb = TreeNode.root
             · simp [tb_root, TreeNode.getData] at h_tree_eq
               have simple_have_tree: ∃ x_vals: XVals, ∃ t: @TreeNode x_vals, x_vals ∈ prev_x_vals.vals ∧ t.getData.a = g_enumerate n := by
@@ -2110,9 +2091,7 @@ lemma f_eval_at {other_vals: XVals} (t: @TreeNode other_vals) {n: ℕ} (hvals: (
       have same_tree: ∃ ta: @TreeNode (f_data n).cur, ∃ tb: @TreeNode (f_data (g_to_num t.getData.a)).cur, ta.getData.a = tb.getData.a := by
         use (cast (vals_eq_to_types hvals.symm) t)
         use (f_data (g_to_num t.getData.a)).tree
-        rw [a_eq]
-        rw [g_enum_inverse]
-        rw [trees_eq]
+        rw [a_eq, g_enum_inverse, trees_eq]
       have x_vals_eq := (f_data (g_to_num t.getData.a)).distinct_trees (f_data n).cur vals_subset (f_data (g_to_num t.getData.a)).cur t_num_self same_tree
       rw [hvals] at x_vals_eq
       exact x_vals_eq.symm
