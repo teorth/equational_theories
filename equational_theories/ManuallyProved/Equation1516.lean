@@ -1649,6 +1649,30 @@ class Extension where
 lemma E_1_x₀_eq_1 {E : PartialSolution} {z : G} (hE : E.val 1 x₀ z) : z = .inl 1 := by
   convert E.property.aux4 rfl (show (⟨⟨_, _, _⟩, _⟩ : G').1.2.2 = 0 from rfl) hE
 
+-- I need to redefine a lot of structures that I had already written, for now I will leave the old structure and put in the new ones with an ₙ an the bottom to signal that they are new, this should be changed later
+
+structure OKₙ (E : A → G → G → Prop) : Prop where
+  func {a x y y'} : E a x y → E a x y' → y = y'
+  extend {a b : A} {x : G} : E a b x → x = .inl (a ◇ b) -- (a)
+  h_b {a : A} {y : G'} : S y = a → y.1.2.2 = 0 → E a y a -- (b)
+  h_c {a : A} {y : G'} : S y = a → y.1.2.2 ≠ 0 → E a y (.inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩) -- (c)
+  h_d {b : A} {y : G'} : E (useful_c y b) y b -- (d)
+  finite {a c : A} (hac : a ≠ c) : {n | ∃ x, E a (.inr ⟨⟨a, c, n⟩, hac⟩) x}.Finite -- (e)
+  h_1516 {c' : A} {y : G'} {x : G} : E c' y x → ∃ w, E c' x w ∧ E (S y) w c' -- (f)
+  h_g {c' : A} {y : G'} {x : G} : S y ≠ c' → E c' y x → x ≠ .inl c' -- (g)
+  -- TODO: in the blueprint (g) should be modified to require that condition only if L_c' y is defined
+
+abbrev PartialSolutionₙ := {E : A → G → G → Prop // OKₙ E}
+
+lemma E_1_x₀ {E : PartialSolutionₙ} : E.val 1 x₀ (.inl 1) := E.property.h_b rfl rfl
+
+class Extensionₙ where
+  E : A → G → G → Prop
+  ok : OK E
+  d : A
+  g : G
+  not_def {z} : ¬E d g z
+
 namespace Extension
 
 -- define the element that should be the image of `L_c y`
