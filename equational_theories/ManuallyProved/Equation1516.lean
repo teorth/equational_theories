@@ -1164,8 +1164,9 @@ theorem extension2 (ps : PartialSolution) (b : A) (h : b ≠ 1) (n : Nat) :
 
 def translation_invariant_1516 (f : A → A) : Prop := ∀ (x : A), (f ( f ( f x )* x⁻¹ * (f 1)⁻¹)) = x⁻¹ * (f 1)⁻¹
 
-theorem completion (ps : PartialSolution) : ∃ (f : A → A), translation_invariant_1516 f ∧ (∀ x y, y ∈ ps.E ⬝ x → f x = y)
-∧ ∀ b, (b ≠ 1) → Set.encard {c | b*c = f c } ≥ 3 := by
+theorem completion (ps : PartialSolution) :
+    ∃ (f : A → A), translation_invariant_1516 f ∧ (∀ x y, y ∈ ps.E ⬝ x → f x = y) ∧
+      ∀ b, (b ≠ 1) → Set.encard {c | b * c = f c } ≥ 3 := by
   have ⟨c, hc, h1, h2, h3⟩  := exists_greedy_chain (α := PartialSolution) (β := A ⊕ {b : A // b ≠ 1})
     (task := fun b ps => match b with
       | .inl b => ∃ c, c ∈ ps.E ⬝ b
@@ -1223,7 +1224,7 @@ def initial : PartialSolution := by
 noncomputable def f := (completion initial).choose
 end extension
 
-theorem fromList_eval (a b: A) (h : (a,b) ∈ E0 := by decide) : f a = b := by
+theorem fromList_eval (a b : A) (h : (a,b) ∈ E0 := by decide) : f a = b := by
   apply (completion initial).choose_spec.2.1
   unfold initial
   simp only [Finmap.dlookup_list_toFinmap]
@@ -1298,7 +1299,6 @@ theorem A_op_surj_right (a b : A) : ∃ c : A, a ◇ c = b := by
   tauto
 
 theorem A_op_eq_self_iff {a c : A} : c ◇ a = a ↔ c = a := by
-  -- doable, just use A_satisfies_Equation1516
   refine ⟨fun h ↦ ?_, fun h ↦ h ▸ A_idempotent _⟩
   have := A_satisfies_Equation1516 c a
   simp_rw [h, A_idempotent] at this
