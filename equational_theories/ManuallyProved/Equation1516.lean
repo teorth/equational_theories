@@ -1282,6 +1282,31 @@ theorem base1 (a b : A) (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 3 := by
   apply_fun (fun x => x * a)
   simp [ineq.symm]
 
+-- this needs to be adapted, it is not even in the blueprint, I'm not sure how to do it, but I suspect it is doable
+theorem base1' (a b : A) (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 4 := by
+  sorry
+  -- have eq1 : {c | c ◇ a = b} =  {c | f (a*c⁻¹) *  c = b} := by
+  --   ext
+  --   simp [magA_op_def]
+  -- let bij : A ≃ A := ⟨fun (c :A ) => a * c⁻¹, fun (c :A ) => c⁻¹ * a, fun _ => by simp, fun _ => by simp⟩
+  -- have eq2 :  {c| (b * a⁻¹) *c = f c} ≃ {c| f (a*c⁻¹) *  c = b} := by
+  --   simp only [Set.coe_setOf]
+  --   trans
+  --   · apply (Equiv.subtypeEquivOfSubtype bij).symm
+  --   · apply Equiv.subtypeEquivRight
+  --     intro x
+  --     unfold bij
+  --     simp only [Equiv.coe_fn_mk]
+  --     group
+  --     constructor
+  --     · intro h ; rw [←h] ; group
+  --     · intro h ; rw [←h] ; group
+  -- rw [eq1, ← (Set.encard_congr eq2)]
+  -- have := (completion initial).choose_spec.2.2 (b * a⁻¹)
+  -- apply this
+  -- apply_fun (fun x => x * a)
+  -- simp [ineq.symm]
+
 theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
   intro a
   use x₆ * a
@@ -1291,6 +1316,26 @@ theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
     group
     rw [fromList_eval (x₆^(-1)) (x₆^2), fromList_eval (x₆^2 * x₆) (x₆^1)]
     simp
+
+theorem base2' (a : A) : ∃ b₁ b₂, b₁ ≠ a ∧ b₂ ≠ a ∧ b₁ ≠ b₂ ∧
+    a ◇ (b₁ ◇ a) = b₁ ∧ a ◇ (b₂ ◇ a) = b₂ := by
+  -- this needs to be adapted, I am not managing to map precisely the blueprint to the current code, maybe because the blueprint still uses ℤ instead of A, I will leave this to be adapted later, maybe the ones who implemented the proof in the first place may be able to do it more easily.
+  sorry
+  -- intro a
+  -- use x₆ * a
+  -- constructor
+  -- · simp
+  -- · repeat rw [magA_op_def]
+    -- group
+    -- rw [fromList_eval (x₆^(-1)) (x₆^2), fromList_eval (x₆^2 * x₆) (x₆^1)]
+    -- simp
+
+-- this is to unpack the result of base2' into a more usable form, consider renaming it
+theorem base2'' (a a' : A) : ∃ b, b ≠ a ∧ b ≠ a' ∧ a ◇ (b ◇ a) = b := by
+  rcases base2' a with ⟨b₁, b₂, hb₁a, hb₂a, hb₁b₂, hb₁, hb₂⟩
+  by_cases h : b₁ = a'
+  · exact ⟨b₂, hb₂a, h ▸ hb₁b₂.symm, hb₂⟩
+  · exact ⟨b₁, hb₁a, h, hb₁⟩
 
 theorem A_op_surj_right (a b : A) : ∃ c : A, a ◇ c = b := by
   have := A_satisfies_Equation1516 b a
