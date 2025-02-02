@@ -752,16 +752,6 @@ lemma common_ancestor_helper {vals: XVals} (ancestor t1 t2: @TreeNode vals) (lef
 -- (`t1.getData.a - t1.getData.b = t2.getData.a - t2.getData.b`,
 -- then `t1` and `t2` have a common parent
 lemma cross_eq_same_parent {vals: XVals} {t1 t2: @TreeNode vals} (h_a_neq: t1.getData.a ≠ t2.getData.a) (h_eq: t1.getData.a - t1.getData.b = t2.getData.a - t2.getData.b) : ∃ ancestor: TreeNode, (t1 = ancestor.left ∧ t2 = ancestor.right) ∨ (t1 = ancestor.right ∧ t2 = ancestor.left) := by
-    have parents_b_neq: t1.getData.b ≠ t2.getData.b := by?
-      by_contra!
-      rw [this] at h_eq
-      simp only [sub_left_inj] at h_eq
-      contradiction
-    have treeNum_neq: treeNum t1 ≠ treeNum t2 := by
-      by_contra!
-      have t1_eq_t2: t1 = t2 := treeNum_injective t1 t2 this
-      rw [t1_eq_t2] at h_a_neq
-      contradiction
     match h_t1: t1 with
     | .root =>
       match h_t2: t2 with
@@ -841,10 +831,9 @@ lemma cross_eq_same_parent {vals: XVals} {t1 t2: @TreeNode vals} (h_a_neq: t1.ge
               sub_self, neg_eq_zero, one_ne_zero] at fun_congr
           | .left t2_parent =>
               by_cases is_t1_lt: treeNum t1_parent - 1 < treeNum t2_parent - 1
-              · have is_t1_le: treeNum t1_parent - 1 ≤ treeNum t2_parent - 1 := by omega
-                simp only [TreeNode.getData] at h_eq
+              · simp only [TreeNode.getData] at h_eq
                 have fun_congr := DFunLike.congr h_eq (x := vals.x_to_index (treeNum t2_parent - 1)) rfl
-                have t1_b_zero := eval_larger_b_eq_zero t1_parent (treeNum t2_parent - 1) is_t1_le
+                have t1_b_zero := eval_larger_b_eq_zero t1_parent (treeNum t2_parent - 1) (by omega)
                 have t2_a_zero := eval_larger_a_eq_zero t2_parent (treeNum t2_parent - 1) (by simp)
                 have t2_b_zero := eval_larger_b_eq_zero t2_parent (treeNum t2_parent - 1) (by simp)
                 simp only [XVals.x_to_index] at t1_b_zero
@@ -864,15 +853,16 @@ lemma cross_eq_same_parent {vals: XVals} {t1 t2: @TreeNode vals} (h_a_neq: t1.ge
                 rw [XVals.x_to_index] at t2_b_zero
                 by_cases treeNums_eq: treeNum t1_parent = treeNum t2_parent
                 · have t1_eq_t2: t1 = t2 := by
-                    rw [treeNum_injective t1_parent t2_parent treeNums_eq] at h_t1
-                    rwa [← h_t2] at h_t1
+                    rwa [treeNum_injective t1_parent t2_parent treeNums_eq, ← h_t2] at h_t1
                   rw [← h_t1, ← h_t2, t1_eq_t2] at h_a_neq
                   contradiction
                 · have treeNum_t2_gt: 1 < treeNum t2_parent := treeNum_gt_one t2_parent
                   have treeNums_neq: treeNum t1_parent - 1 ≠ treeNum t2_parent - 1 := by omega
                   have vals_neq: 2 ^ vals.i + (treeNum t1_parent - 1) * 2 ^ (vals.i + 1) ≠ 2 ^ vals.i + (treeNum t2_parent - 1) * 2 ^ (vals.i + 1) := by
                     by_contra!
-                    simp at this
+                    simp only [add_right_inj, mul_eq_mul_right_iff, ne_eq,
+                      AddLeftCancelMonoid.add_eq_zero, one_ne_zero, and_false, not_false_eq_true,
+                      pow_eq_zero_iff, OfNat.ofNat_ne_zero, or_false] at this
                     contradiction
                   simp [XVals.x_vals, XVals.x_to_index, treeNum_neq_zero, t1_b_zero, t2_a_zero,
                     t2_b_zero, treeNums_neq.symm, vals_neq.symm] at fun_congr
@@ -883,7 +873,7 @@ lemma cross_eq_same_parent {vals: XVals} {t1 t2: @TreeNode vals} (h_a_neq: t1.ge
                 · have is_t1_le: treeNum t1_parent - 1 ≤ treeNum t2_parent - 1 := by linarith
                   simp only [TreeNode.getData] at h_eq
                   have fun_congr := DFunLike.congr h_eq (x := vals.x_to_index (treeNum t2_parent - 1)) rfl
-                  simp at fun_congr
+                  simp only [Finsupp.coe_sub, Finsupp.coe_neg, Pi.sub_apply, Pi.neg_apply] at fun_congr
                   have t1_b_zero := eval_larger_b_eq_zero t1_parent (treeNum t2_parent - 1) is_t1_le
                   have t2_a_zero := eval_larger_a_eq_zero t2_parent (treeNum t2_parent - 1) (by simp)
                   have t2_b_zero := eval_larger_b_eq_zero t2_parent (treeNum t2_parent - 1) (by simp)
@@ -928,9 +918,8 @@ lemma cross_eq_same_parent {vals: XVals} {t1 t2: @TreeNode vals} (h_a_neq: t1.ge
           simp [XVals.x_to_index] at t1_b_zero
           simp [t1_a_zero, t1_b_zero] at fun_congr
           have t1_gt_one: 1 < treeNum t1_parent := treeNum_gt_one t1_parent
-          have pow_pow_ge_one: 1 ≤ 2 ^ (vals.i + 1) := Nat.one_le_two_pow
           have t1_sub_gt: 1 ≤ treeNum t1_parent - 1 := by omega
-          have mul_ge_one: 1 ≤ (treeNum t1_parent - 1) * 2 ^ (vals.i + 1) := one_le_mul_of_one_le_of_one_le t1_sub_gt pow_pow_ge_one
+          have mul_ge_one: 1 ≤ (treeNum t1_parent - 1) * 2 ^ (vals.i + 1) := one_le_mul_of_one_le_of_one_le t1_sub_gt Nat.one_le_two_pow
           have vals_neq: 2 ^ vals.i ≠ (2 ^ vals.i + (treeNum t1_parent - 1) * 2 ^ (vals.i + 1)) := by linarith
           simp [vals_neq] at fun_congr
           have root_not_supp := xvals_root_not_supp vals (treeNum t1_parent - 1)
@@ -941,16 +930,14 @@ lemma cross_eq_same_parent {vals: XVals} {t1 t2: @TreeNode vals} (h_a_neq: t1.ge
             have treeNums_eq: treeNum t1_parent = treeNum t2_parent := by
               by_contra!
               by_cases is_t1_lt: treeNum t1_parent - 1 < treeNum t2_parent - 1
-              · have is_t1_le: treeNum t1_parent - 1 ≤ treeNum t2_parent - 1 := by
-                  linarith
-                simp [TreeNode.getData] at h_eq
+              · simp only [TreeNode.getData] at h_eq
                 have fun_congr := DFunLike.congr h_eq (x := vals.x_to_index (treeNum t2_parent - 1)) rfl
-                simp at fun_congr
-                have t1_a_zero := eval_larger_a_eq_zero t1_parent (treeNum t2_parent - 1) is_t1_le
-                have t1_b_zero := eval_larger_b_eq_zero t1_parent (treeNum t2_parent - 1) is_t1_le
+                simp only [Finsupp.coe_sub, Pi.sub_apply, Finsupp.coe_neg, Pi.neg_apply] at fun_congr
+                have t1_a_zero := eval_larger_a_eq_zero t1_parent (treeNum t2_parent - 1) (Nat.le_of_succ_le is_t1_lt)
+                have t1_b_zero := eval_larger_b_eq_zero t1_parent (treeNum t2_parent - 1) (Nat.le_of_succ_le is_t1_lt)
                 have t2_a_zero := eval_larger_a_eq_zero t2_parent (treeNum t2_parent - 1) (by simp)
                 have t2_b_zero := eval_larger_b_eq_zero t2_parent (treeNum t2_parent - 1) (by simp)
-                simp [XVals.x_to_index] at t1_a_zero
+                simp only [XVals.x_to_index] at t1_a_zero
                 simp [XVals.x_to_index] at t1_b_zero
                 simp [XVals.x_to_index] at t2_a_zero
                 simp [XVals.x_to_index] at t2_b_zero
@@ -962,12 +949,11 @@ lemma cross_eq_same_parent {vals: XVals} {t1 t2: @TreeNode vals} (h_a_neq: t1.ge
                   simp at this
                   omega
                 simp [vals_neq] at fun_congr
-              · have is_t2_le: treeNum t2_parent - 1 ≤ treeNum t1_parent - 1 := by linarith
-                simp [TreeNode.getData] at h_eq
+              · simp [TreeNode.getData] at h_eq
                 have fun_congr := DFunLike.congr h_eq (x := vals.x_to_index (treeNum t1_parent - 1)) rfl
                 simp at fun_congr
-                have t2_a_zero := eval_larger_a_eq_zero t2_parent (treeNum t1_parent - 1) is_t2_le
-                have t2_b_zero := eval_larger_b_eq_zero t2_parent (treeNum t1_parent - 1) is_t2_le
+                have t2_a_zero := eval_larger_a_eq_zero t2_parent (treeNum t1_parent - 1) (Nat.le_of_not_lt is_t1_lt)
+                have t2_b_zero := eval_larger_b_eq_zero t2_parent (treeNum t1_parent - 1) (Nat.le_of_not_lt is_t1_lt)
                 have t1_a_zero := eval_larger_a_eq_zero t1_parent (treeNum t1_parent - 1) (by simp)
                 have t1_b_zero := eval_larger_b_eq_zero t1_parent (treeNum t1_parent - 1) (by simp)
                 simp [XVals.x_to_index] at t1_a_zero
@@ -976,7 +962,6 @@ lemma cross_eq_same_parent {vals: XVals} {t1 t2: @TreeNode vals} (h_a_neq: t1.ge
                 simp [XVals.x_to_index] at t2_b_zero
                 simp [XVals.x_to_index, XVals.x_vals, treeNum_neq_zero] at fun_congr
                 simp [t1_b_zero, t2_a_zero, t2_b_zero, t1_a_zero] at fun_congr
-                have treeNum_t1_gt: 1 < treeNum t1_parent := treeNum_gt_one t1_parent
                 have treeNum_t2_gt: 1 < treeNum t2_parent := treeNum_gt_one t2_parent
                 have vals_neq: 2 ^ vals.i + (treeNum t1_parent - 1) * 2 ^ (vals.i + 1) ≠ 2 ^ vals.i + (treeNum t2_parent - 1) * 2 ^ (vals.i + 1) := by
                   by_contra!
@@ -986,11 +971,10 @@ lemma cross_eq_same_parent {vals: XVals} {t1 t2: @TreeNode vals} (h_a_neq: t1.ge
             exact ⟨t1_parent, Or.inr (treeNum_injective t1_parent t2_parent treeNums_eq ▸ ⟨rfl, rfl⟩)⟩
         | .right t2_parent =>
             by_cases is_t2_lt: treeNum t2_parent - 1 < treeNum t1_parent - 1
-            · have is_t2_le: treeNum t2_parent - 1 ≤ treeNum t1_parent - 1 := by linarith
-              simp [TreeNode.getData, XVals.x_vals, treeNum_neq_zero] at h_eq
+            · simp [TreeNode.getData, XVals.x_vals, treeNum_neq_zero] at h_eq
               have fun_congr := DFunLike.congr h_eq (x := vals.x_to_index (treeNum t1_parent - 1)) rfl
-              have t2_a_zero := eval_larger_a_eq_zero t2_parent (treeNum t1_parent - 1) is_t2_le
-              have t2_b_zero := eval_larger_b_eq_zero t2_parent (treeNum t1_parent - 1) is_t2_le
+              have t2_a_zero := eval_larger_a_eq_zero t2_parent (treeNum t1_parent - 1) (Nat.le_of_succ_le is_t2_lt)
+              have t2_b_zero := eval_larger_b_eq_zero t2_parent (treeNum t1_parent - 1) (Nat.le_of_succ_le is_t2_lt)
               have t1_a_zero := eval_larger_a_eq_zero t1_parent (treeNum t1_parent - 1) (by simp)
               have t1_b_zero := eval_larger_b_eq_zero t1_parent (treeNum t1_parent - 1) (by simp)
               simp [XVals.x_to_index] at t1_a_zero
@@ -1005,20 +989,15 @@ lemma cross_eq_same_parent {vals: XVals} {t1 t2: @TreeNode vals} (h_a_neq: t1.ge
                 omega
               simp [vals_neq.symm] at fun_congr
             · by_cases treeNums_eq: treeNum t1_parent = treeNum t2_parent
-              · have parents_eq: t1_parent = t2_parent := treeNum_injective t1_parent t2_parent treeNums_eq
-                have t1_eq_t2: t1 = t2 := by
-                  rwa [parents_eq, ← h_t2] at h_t1
+              · have t1_eq_t2: t1 = t2 := by rwa [treeNum_injective t1_parent t2_parent treeNums_eq, ← h_t2] at h_t1
                 rw [← h_t1, ← h_t2, t1_eq_t2] at h_a_neq
                 contradiction
-              · have treeNum_t1_gt: 1 < treeNum t1_parent := treeNum_gt_one t1_parent
-                have treeNum_t2_gt: 1 < treeNum t2_parent := treeNum_gt_one t2_parent
-                have treeNums_neq: treeNum t1_parent - 1 ≠ treeNum t2_parent - 1 := by omega
-                have is_t1_minus_le: treeNum t1_parent - 1 ≤ treeNum t2_parent - 1 := by omega
+              · have treeNum_t2_gt: 1 < treeNum t2_parent := treeNum_gt_one t2_parent
                 simp [TreeNode.getData] at h_eq
                 have fun_congr := DFunLike.congr h_eq (x := vals.x_to_index (treeNum t2_parent - 1)) rfl
                 simp [XVals.x_to_index, XVals.x_vals, treeNum_neq_zero] at fun_congr
-                have t1_a_zero := eval_larger_a_eq_zero t1_parent (treeNum t2_parent - 1) is_t1_minus_le
-                have t1_b_zero := eval_larger_b_eq_zero t1_parent (treeNum t2_parent - 1) is_t1_minus_le
+                have t1_a_zero := eval_larger_a_eq_zero t1_parent (treeNum t2_parent - 1) (Nat.le_of_not_lt is_t2_lt)
+                have t1_b_zero := eval_larger_b_eq_zero t1_parent (treeNum t2_parent - 1) (Nat.le_of_not_lt is_t2_lt)
                 have t2_a_zero := eval_larger_a_eq_zero t2_parent (treeNum t2_parent - 1) (by simp)
                 have t2_b_zero := eval_larger_b_eq_zero t2_parent (treeNum t2_parent - 1) (by simp)
                 simp [XVals.x_to_index] at t1_a_zero
@@ -1050,8 +1029,7 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
         simp at b_neq
         contradiction
     | .right t2_parent =>
-        simp [TreeNode.getData, vals.x_to_index_eq, basis_n] at h_a_eq
-        simp [XVals.x_vals, treeNum_neq_zero] at h_a_eq
+        simp [TreeNode.getData, vals.x_to_index_eq, basis_n, XVals.x_vals, treeNum_neq_zero] at h_a_eq
         have root_not_range := vals.root_neq
         simp at root_not_range
         specialize root_not_range (treeNum t2_parent - 1)
@@ -1100,8 +1078,7 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
                   | .right grandparent =>
                     simp [TreeNode.getData, XVals.x_vals, treeNum_neq_zero] at t_a_zero
                 · have vals_neq := basis_neq_elem_diff t2_parent_parent (vals.x_to_index 0) (-1) 1 1 (by simp) (by simp) (by simp) t_a_zero
-                  simp only [one_smul, neg_one_smul] at vals_neq
-                  rw [add_comm, ← sub_eq_add_neg] at vals_neq
+                  rw [one_smul, neg_one_smul, add_comm, ← sub_eq_add_neg] at vals_neq
                   simp [XVals.x_to_index] at h_a_eq
                   simp [XVals.x_to_index] at vals_neq
                   contradiction
@@ -1127,15 +1104,13 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
                   match t2_parent_parent with
                   | .root =>
                     simp [TreeNode.getData, XVals.x_vals, XVals.x_to_index] at h_a_eq
-                    rw [← Finsupp.single_neg] at h_a_eq
-                    rw [Finsupp.single_eq_single_iff] at h_a_eq
+                    rw [← Finsupp.single_neg, Finsupp.single_eq_single_iff] at h_a_eq
                     simp at h_a_eq
                     have bad := h_a_eq.2
                     contradiction
                   | .left grandparent =>
                     simp [TreeNode.getData, XVals.x_vals, XVals.x_to_index, treeNum_neq_zero] at h_a_eq
-                    rw [← Finsupp.single_neg] at h_a_eq
-                    rw [Finsupp.single_eq_single_iff] at h_a_eq
+                    rw [← Finsupp.single_neg, Finsupp.single_eq_single_iff] at h_a_eq
                     simp at h_a_eq
                     have bad := h_a_eq.2
                     contradiction
@@ -1155,14 +1130,12 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
               match t1_parent_parent with
               | .root =>
                 simp [TreeNode.getData, XVals.x_vals, XVals.x_to_index] at h_a_eq
-                rw [← Finsupp.single_neg] at h_a_eq
-                rw [Finsupp.single_eq_single_iff] at h_a_eq
+                rw [← Finsupp.single_neg, Finsupp.single_eq_single_iff] at h_a_eq
                 simp at h_a_eq
                 contradiction
               | .left grandparent =>
                 simp [TreeNode.getData, XVals.x_vals, XVals.x_to_index, treeNum_neq_zero] at h_a_eq
-                rw [← Finsupp.single_neg] at h_a_eq
-                rw [Finsupp.single_eq_single_iff] at h_a_eq
+                rw [← Finsupp.single_neg, Finsupp.single_eq_single_iff] at h_a_eq
                 simp at h_a_eq
                 have bad := h_a_eq.2
                 contradiction
@@ -1251,10 +1224,8 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
         contradiction
       | .right t1_parent_parent =>
         simp [TreeNode.getData, vals.x_to_index_eq, basis_n] at h_a_eq
-
         by_cases t_a_zero: t1_parent_parent.getData.a = 0
-        ·
-          simp [t_a_zero] at h_a_eq
+        · simp [t_a_zero] at h_a_eq
           match t1_parent_parent with
           | .root =>
             simp [TreeNode.getData, XVals.x_vals, XVals.x_to_index, treeNum_neq_zero] at h_a_eq
@@ -1272,8 +1243,7 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
             contradiction
           | .right grandparent =>
             simp [TreeNode.getData, XVals.x_vals, treeNum_neq_zero] at t_a_zero
-        ·
-          have vals_neq := basis_neq_elem_diff t1_parent_parent (vals.x_to_index (treeNum t2_parent - 1)) 1 (-1) 1 (by simp) (by simp) (by simp) t_a_zero
+        · have vals_neq := basis_neq_elem_diff t1_parent_parent (vals.x_to_index (treeNum t2_parent - 1)) 1 (-1) 1 (by simp) (by simp) (by simp) t_a_zero
           simp only [one_smul, neg_one_smul, ← sub_eq_add_neg] at vals_neq
           rw [eq_comm] at h_a_eq
           simp [XVals.x_vals, treeNum_neq_zero] at h_a_eq
@@ -1294,8 +1264,7 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
       | .root =>
         simp [TreeNode.getData, vals.x_to_index_eq, basis_n] at h_a_eq
         simp [XVals.x_vals, XVals.x_to_index, treeNum_neq_zero] at h_a_eq
-        rw [← Finsupp.single_neg] at h_a_eq
-        rw [Finsupp.single_eq_single_iff] at h_a_eq
+        rw [← Finsupp.single_neg, Finsupp.single_eq_single_iff] at h_a_eq
         simp at h_a_eq
         have bad := h_a_eq.2
         contradiction
@@ -1330,17 +1299,15 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
               have minus_plus_t2: treeNum t2_parent_parent - 1 + 1 = treeNum t2_parent_parent := by omega
               rw [minus_plus_t1, minus_plus_t2] at this
               contradiction
-            have num_reverse: treeNum t2_parent_parent - 1 ≠ treeNum t1_parent - 1 :=
-              id (Ne.symm nums_not_eq)
-            have val_treeNums_neq: vals.x_to_index (treeNum t2_parent_parent - 1) ≠ vals.x_to_index (treeNum t1_parent - 1) := by
-              apply Function.Injective.ne vals.x_to_index_inj num_reverse
+            have num_reverse: treeNum t2_parent_parent - 1 ≠ treeNum t1_parent - 1 := id (Ne.symm nums_not_eq)
+            have val_treeNums_neq: vals.x_to_index (treeNum t2_parent_parent - 1) ≠ vals.x_to_index (treeNum t1_parent - 1) :=
+              Function.Injective.ne vals.x_to_index_inj num_reverse
             let g : ℕ → ℚ := fun n => if n = vals.x_to_index (treeNum t1_parent - 1) then s else if n = (vals.x_to_index (treeNum t2_parent_parent - 1)) then t else 0
             have finsum_to_pair := Finset.sum_pair (f := fun x => fun₀ | x => g x) val_treeNums_neq.symm
             specialize basis_indep g
             simp only [g] at basis_indep
             simp [g] at finsum_to_pair
-            simp only [finsum_to_pair] at basis_indep
-            simp only [val_treeNums_neq] at basis_indep
+            simp only [finsum_to_pair, val_treeNums_neq] at basis_indep
             simp at h_sum_zero
             specialize basis_indep h_sum_zero
             have s_eq_zero := basis_indep (vals.x_to_index (treeNum t1_parent - 1))
@@ -1363,8 +1330,7 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
             simp [TreeNode.getData] at tree_a_zero
             simp [TreeNode.getData, XVals.x_vals, treeNum_neq_zero] at h_a_eq
             simp [Finsupp.single_eq_single_iff] at h_a_eq
-            have treeNum_t1_gt: 1 < treeNum t1_parent := by
-              exact treeNum_gt_one t1_parent
+            have treeNum_t1_gt: 1 < treeNum t1_parent := treeNum_gt_one t1_parent
             omega
           | .left ancestor =>
             simp [TreeNode.getData] at tree_a_zero
@@ -1411,8 +1377,7 @@ lemma partial_function {vals: XVals}: ∀ {t1 t2: @TreeNode vals}, (t1.getData.a
     have tree1_num_in: treeNum tree1 ∈ counter_nums := by
       simp only [counter_nums, Set.mem_image, Set.mem_setOf_eq]
       use (tree1, tree2)
-    rw [treenum_eq_inf]
-    exact Nat.sInf_le tree1_num_in
+    exact treenum_eq_inf ▸ Nat.sInf_le tree1_num_in
   exact partial_function_inner a_x_in.1 new_min_treeNum_le a_x_in.2
 
 def g_exclude := {g: G // g ≠ 0 }
@@ -1425,18 +1390,14 @@ noncomputable def biject_with_zero: Equiv G ℕ := by
     simp at this
     have g_eq_union : @Set.univ G = Set.range (fun g: g_exclude => g.val) ∪ {0} := by
       apply Set.Subset.antisymm_iff.mpr
-      refine ⟨?_, ?_⟩
-      · intro g _
-        by_cases g_zero: g = 0
+      refine ⟨fun g _ ↦ ?_, fun g ↦ ?_⟩
+      · by_cases g_zero: g = 0
         · simp [g_zero]
-        · apply Set.mem_union_left
-          simp only [ne_eq, Set.mem_range]
+        · apply Set.mem_union_left _ ?_
           use ⟨g, g_zero⟩
-      · intro g
-        simp
-    have range_finite: Set.Finite (Set.range fun g: g_exclude ↦ g.val) :=
-      @Set.finite_range _ _ _ this
-    have finite_union := Set.Finite.union range_finite (Set.finite_singleton 0)
+      · simp
+    have range_finite: Set.Finite (Set.range fun g: g_exclude ↦ g.val) := @Set.finite_range _ _ _ this
+    have finite_union := Set.Finite.union (range_finite) (Set.finite_singleton 0)
     rw [← g_eq_union] at finite_union
     have g_infinite: Set.Infinite (@Set.univ G) := Set.infinite_univ
     contradiction
@@ -1461,8 +1422,7 @@ noncomputable def biject_with_zero: Equiv G ℕ := by
       by_cases x_zero: x = 0
       · simp [x_zero]
       · simp [x_zero]
-        have val_neq_zero: (default_equiv.symm (x - 1)).val ≠ 0 :=
-          (default_equiv.symm (x - 1)).property
+        have val_neq_zero: (default_equiv.symm (x - 1)).val ≠ 0 := (default_equiv.symm (x - 1)).property
         simp only [val_neq_zero, ↓reduceIte]
         omega
   }
@@ -1707,7 +1667,7 @@ def x_vals_zero: XVals := {
     rw [Finsupp.support_single_ne_zero]
     · simp
       norm_cast
-      apply WithBot.bot_lt_coe
+      exact WithBot.bot_lt_coe ..
     · simp
   root_nonzero := by simp
 }
@@ -1766,10 +1726,8 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
       distinct_i := by simp
       distinct_trees := by simp
       vals_has_zero := by simp
-      supp_increasing := by
-        simp [TreeNode.getData, finsuppHasNeg, x_vals, x_vals_zero]
-      supp_max_pos := by
-        simp [TreeNode.getData, finsuppHasNeg, x_vals, x_vals_zero]
+      supp_increasing := by simp [TreeNode.getData, finsuppHasNeg, x_vals, x_vals_zero]
+      supp_max_pos := by simp [TreeNode.getData, finsuppHasNeg, x_vals, x_vals_zero]
   }
   | a + 1 =>
     let prev_x_vals := f_data a
@@ -1825,8 +1783,7 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
         refine ⟨prev_x_vals.cur.i, prev_x_vals.cur, ⟨prev_x_vals.cur_in_vals, rfl⟩⟩
       let max_i := (prev_x_vals.vals.image XVals.i).max' img_nonempty
       let max_root_supp := ({(g_enumerate n).support.max.getD 0} ∪ (prev_x_vals.vals.image fun v => v.root_elem.support.max.getD 0)).max' (
-        by
-          refine ⟨Option.getD (g_enumerate n).support.max 0, by simp⟩
+        by refine ⟨Option.getD (g_enumerate n).support.max 0, by simp⟩
       )
       have g_supp_le: (g_enumerate n).support.max.getD 0 ≤ max max_i max_root_supp := by
         simp [le_max_iff]
@@ -1877,8 +1834,7 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
               simp [h_supp_max] at supp_max_lt
               rw [Nat.cast_withBot, WithBot.coe_lt_coe]
               omega
-            | ⊥ =>
-              apply WithBot.bot_lt_coe
+            | ⊥ => exact WithBot.bot_lt_coe ..
           · simp
         root_nonzero := by
           simp
@@ -2089,15 +2045,15 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
           match ha with
           | .inl a_prev =>
             match hb with
-            | .inl b_prev => apply prev_x_vals.distinct_trees a a_prev b b_prev exists_trees
-            | .inr b_new => apply helper_distinct a a_prev b b_new exists_trees
+            | .inl b_prev => exact prev_x_vals.distinct_trees a a_prev b b_prev exists_trees
+            | .inr b_new => exact helper_distinct a a_prev b b_new exists_trees
           | .inr a_new =>
             match hb with
             | .inl b_prev =>
               have new_exists: ∃ t_1: @TreeNode b, ∃ t_2: @TreeNode a, t_1.getData.a = t_2.getData.a := by
                 obtain ⟨t1, t2, h_eq⟩ := exists_trees
                 exact ⟨t2, t1, h_eq.symm⟩
-              apply (helper_distinct b b_prev a a_new new_exists).symm
+              exact (helper_distinct b b_prev a a_new new_exists).symm
             | .inr b_new => rw [a_new, b_new]
         distinct_i := by
           intro a ha b hb i_eq
@@ -2141,8 +2097,7 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
 lemma f_data_subset (a b: ℕ) (hab: a ≤ b): (f_data a).vals ⊆ (f_data b).vals := by
   induction b with
   | zero =>
-    have a_eq_zero: a = 0 := by
-      omega
+    have a_eq_zero: a = 0 := by omega
     rw [a_eq_zero]
   | succ new_b h_prev =>
     by_cases a_le_new_b: a ≤ new_b
@@ -2195,11 +2150,8 @@ lemma f_eval_at {other_vals: XVals} (t: @TreeNode other_vals) {n: ℕ} (hvals: (
       specialize vals_subset t_num_self
       have a_eq := (f_data (g_to_num t.getData.a)).a_val
       have same_tree: ∃ tb: @TreeNode (f_data (g_to_num t.getData.a)).cur, ∃ ta: @TreeNode (f_data n).cur, tb.getData.a = ta.getData.a := by
-        use (f_data (g_to_num t.getData.a)).tree
-        use (cast (vals_eq_to_types hvals.symm) t)
-        rw [a_eq]
-        rw [g_enum_inverse]
-        rw [trees_eq]
+        use (f_data (g_to_num t.getData.a)).tree, (cast (vals_eq_to_types hvals.symm) t)
+        rw [a_eq, g_enum_inverse, trees_eq]
       have x_vals_eq := (f_data n).distinct_trees (f_data (g_to_num t.getData.a)).cur vals_subset (f_data n).cur n_self same_tree
       rw [hvals] at x_vals_eq
       exact x_vals_eq
@@ -2272,8 +2224,7 @@ lemma f_zero_eq: f (0) = (fun₀ | 1 => 1) := by
 theorem not_equation_1832: 0 ≠ f (f (0)) + f ((f (0)) - f (f (0))) := by
   rw [f_zero_eq, ne_eq]
   let root_tree: @TreeNode x_vals_zero := TreeNode.root
-  have my_one_tree: root_tree.right.left.getData.a  = fun₀ | 1 => 1 := by
-    simp [TreeNode.getData, x_vals_zero, XVals.x_vals]
+  have my_one_tree: root_tree.right.left.getData.a  = fun₀ | 1 => 1 := by simp [TreeNode.getData, x_vals_zero, XVals.x_vals]
   rw [← my_one_tree, f_eval_at (n := 0)]
   simp [TreeNode.getData, x_vals_zero, XVals.x_vals, treeNum_neq_zero, treeNum]
   have x_diff_has_neg: finsuppHasNeg ((fun₀ | 1 => (1 : ℚ)) - fun₀ | 7 => 1) := by
@@ -2300,7 +2251,7 @@ theorem not_equation_1832: 0 ≠ f (f (0)) + f ((f (0)) - f (f (0))) := by
   simp [seven_neq_max] at eval_at
   have eval_max_nonzero: (f ((fun₀ | 1 => 1) - fun₀ | 7 => 1)) max_supp ≠ 0 := by
     rw [← Finsupp.mem_support_iff]
-    apply Finset.max'_mem
+    apply Finset.max'_mem _ _
   rw [eq_comm] at eval_at
   contradiction
   simp [f_data]
@@ -2333,11 +2284,8 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
   simp [g_enum_inverse] at f_supp_increasing
   specialize f_supp_increasing x_sum_nonpos
   simp [x_sum] at f_supp_increasing
-  simp [neg_f_zero]
-  simp [f_eval_at (n := 0)]
-  simp [f_data, TreeNode.getData, x_vals_zero, XVals.x_vals, treeNum_neq_zero]
-  simp [f_zero_eq]
-  simp [treeNum]
+  simp [neg_f_zero, f_eval_at (n := 0)]
+  simp [f_data, TreeNode.getData, x_vals_zero, XVals.x_vals, treeNum_neq_zero, f_zero_eq, treeNum]
   have x_sum_supp: x_sum.support = {1, 3} := by
     unfold x_sum
     rw [← Finsupp.single_neg, sub_eq_add_neg, ← Finsupp.single_neg]
@@ -2352,17 +2300,11 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
   · simp [f]
     match h_tree: (f_data (g_to_num (x_sum))).tree with
     | .root =>
-      rw [h_tree] at f_supp_increasing
-      simp [XVals.x_vals, TreeNode.getData] at f_supp_increasing
-      simp [same_vals, x_vals_zero] at f_supp_increasing
+      simp [h_tree, XVals.x_vals, TreeNode.getData, same_vals, x_vals_zero] at f_supp_increasing
       rw [x_sum_supp] at f_supp_increasing
-      simp at f_supp_increasing
-      -- Obtain contradiction
       simp [Finsupp.support_single_ne_zero _] at f_supp_increasing
-
     | .left parent =>
       by_contra!
-      unfold x_sum at same_vals
       have i_same := same_vals
       apply_fun (fun v => v.i) at i_same
       simp [TreeNode.getData] at this
@@ -2371,9 +2313,7 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
       rw [ite_cond_eq_false] at this
       simp [basis_n, n_q_basis] at this
       simp [Finsupp.basisSingleOne] at this
-      rw [i_same, x_vals_zero] at this
-      simp [XVals.i] at this
-
+      rw [i_same, x_vals_zero, XVals.i] at this
       have second_sum_has_neg : finsuppHasNeg ((-fun₀ | 1 => (1 : ℚ)) - (fun₀ | 3 => (1 : ℚ)) - (fun₀ | 1 + (treeNum parent - 1) * 2 => (1 : ℚ))) := by
         simp [finsuppHasNeg]
         use 1
@@ -2381,23 +2321,18 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
         by_cases val_eq_one: 1 + (treeNum parent - 1) * 2 = 1
         · simp [val_eq_one]
         · simp [val_eq_one]
-
-
       have second_supp_increase := (f_data (g_to_num ((((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - fun₀ | 1 + (treeNum parent - 1) * 2 => 1)))).supp_increasing
       rw [(f_data _).a_val] at second_supp_increase
       simp [g_enum_inverse] at second_supp_increase
       specialize second_supp_increase second_sum_has_neg
-
       let largest_support := (f_data
               (g_to_num
                 (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) -
                   fun₀ | 1 + (treeNum parent - 1) * 2 => 1))).tree.getData.b.support.max
-
       match h_bot: largest_support with
       | WithBot.some largest_supp_n =>
         have app_eq := DFunLike.congr (x := largest_supp_n) this rfl
         simp at app_eq
-
         have largest_gt_three: 3 < largest_supp_n ∧ 1 + (treeNum parent - 1) * 2 < largest_supp_n := by
           rw [h_tree] at f_supp_increasing
           simp [TreeNode.getData] at f_supp_increasing
@@ -2490,7 +2425,6 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
     have three_lt_second_term_max: 3 < (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)).support.max := by
       have max_in_supp: (f_data (g_to_num ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))).tree.getData.b.support.max' (tree_b_supp_nonempty _) ∈ (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)).support := by
         simp
-        unfold x_sum at x_sum_supp
         rw [x_sum_supp] at f_supp_increasing
         simp at f_supp_increasing
         have max_neq_one: 1 ≠ (f_data (g_to_num ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))).tree.getData.b.support.max' (tree_b_supp_nonempty _) := by omega
@@ -2499,15 +2433,12 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
         exact ne_of_gt first_app_supp_pos
       have max_le_mem := Finset.le_max' _ _ max_in_supp
       have my_trans := LT.lt.trans_le three_lt_max max_le_mem
-      rw [← WithBot.coe_lt_coe] at my_trans
-      rw [Finset.coe_max'] at my_trans
-      simp at my_trans
+      rw [← WithBot.coe_lt_coe, Finset.coe_max', WithBot.coe_ofNat] at my_trans
       exact my_trans
     have second_app_has_neg: finsuppHasNeg (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)) := by
       simp [finsuppHasNeg]
       use (f_data (g_to_num x_sum)).tree.getData.b.support.max' (tree_b_supp_nonempty _)
-      simp only [ne_eq, one_neq_max, not_false_eq_true, Finsupp.single_eq_of_ne, neg_zero,
-        three_neq_max, sub_self]
+      simp only [ne_eq, one_neq_max, not_false_eq_true, Finsupp.single_eq_of_ne, neg_zero, three_neq_max, sub_self]
       exact first_app_supp_pos
     have second_app_supp_increase := (f_data (g_to_num (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)))).supp_increasing
     have a_val := (f_data ((g_to_num (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))))).a_val
@@ -2532,17 +2463,6 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
           rw [eq_add]
           simp
         · simp only [f, Finsupp.support_neg]
-          have three_neq_two_n: ∀ n, 3 ≠ 2^n := by
-            intro n
-            by_cases n_eq_zero: n = 0
-            · simp [n_eq_zero]
-            · by_cases n_eq_one: n = 1
-              · simp [n_eq_one]
-              · have n_gt_two: 2 ≤ n := by
-                  omega
-                have two_n_ge_4: 2^2 ≤ 2^n := by
-                  exact Nat.pow_le_pow_of_le_right (by simp) n_gt_two
-                omega
           match h_tree: (f_data (g_to_num (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) : Finsupp _ _))).tree with
           | .root =>
             simp [h_tree, TreeNode.getData, XVals.x_vals]
