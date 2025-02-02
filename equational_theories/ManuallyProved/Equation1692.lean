@@ -904,7 +904,6 @@ lemma cross_eq_same_parent {vals: XVals} {t1 t2: @TreeNode vals} (h_a_neq: t1.ge
           simp [vals_neq] at fun_congr
           have root_not_supp := xvals_root_not_supp vals (treeNum t1_parent - 1)
           simp [XVals.x_to_index] at root_not_supp
-          -- Implicit contradiction
           simp [root_not_supp] at fun_congr
         | .left t2_parent =>
             have treeNums_eq: treeNum t1_parent = treeNum t2_parent := by
@@ -1050,13 +1049,11 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
                     contradiction
                   | .left grandparent =>
                     simp [TreeNode.getData, XVals.x_vals, XVals.x_to_index, treeNum_neq_zero] at h_a_eq
-                    rw [← Finsupp.single_neg] at h_a_eq
-                    rw [Finsupp.single_eq_single_iff] at h_a_eq
+                    rw [← Finsupp.single_neg, Finsupp.single_eq_single_iff] at h_a_eq
                     simp at h_a_eq
                     have bad := h_a_eq.2
                     contradiction
-                  | .right grandparent =>
-                    simp [TreeNode.getData, XVals.x_vals, treeNum_neq_zero] at t_a_zero
+                  | .right grandparent => simp [TreeNode.getData, XVals.x_vals, treeNum_neq_zero] at t_a_zero
                 · have vals_neq := basis_neq_elem_diff t2_parent_parent (vals.x_to_index 0) (-1) 1 1 (by simp) (by simp) (by simp) t_a_zero
                   rw [one_smul, neg_one_smul, add_comm, ← sub_eq_add_neg] at vals_neq
                   simp [XVals.x_to_index] at h_a_eq
@@ -1183,10 +1180,8 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
 --              0 = 2x_i + 2g - f
 --     This is impossible, because x_i is fresh: g and/or f would need to contain x_i, which is impossible.
             cases h_ancestor with
-            | inl left_right =>
-              exact common_ancestor_helper ancestor t1_parent_parent t2_parent_parent left_right h_a_eq
-            | inr right_left =>
-              exact common_ancestor_helper ancestor t2_parent_parent t1_parent_parent right_left.symm h_a_eq.symm
+            | inl left_right => exact common_ancestor_helper ancestor t1_parent_parent t2_parent_parent left_right h_a_eq
+            | inr right_left => exact common_ancestor_helper ancestor t2_parent_parent t1_parent_parent right_left.symm h_a_eq.symm
     | .right t2_parent =>
       simp [TreeNode.getData] at h_a_eq
       match t1_parent with
@@ -1197,8 +1192,7 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
         contradiction
       | .left t1_parent_parent =>
         simp [TreeNode.getData, vals.x_to_index_eq, basis_n, XVals.x_vals, treeNum_neq_zero] at h_a_eq
-        rw [← Finsupp.single_neg] at h_a_eq
-        rw [Finsupp.single_eq_single_iff] at h_a_eq
+        rw [← Finsupp.single_neg, Finsupp.single_eq_single_iff] at h_a_eq
         simp at h_a_eq
         have bad := h_a_eq.2
         contradiction
@@ -1211,8 +1205,7 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
             simp [TreeNode.getData, XVals.x_vals, XVals.x_to_index, treeNum_neq_zero] at h_a_eq
             rw [Finsupp.single_eq_single_iff] at h_a_eq
             simp at h_a_eq
-            have treeNum_parent_ge: 1 < treeNum t2_parent := by
-              exact treeNum_gt_one t2_parent
+            have treeNum_parent_ge: 1 < treeNum t2_parent := treeNum_gt_one t2_parent
             omega
           | .left grandparent =>
             simp [TreeNode.getData, XVals.x_vals, XVals.x_to_index, treeNum_neq_zero] at h_a_eq
@@ -1579,9 +1572,8 @@ lemma left_tree_supp_increasing {vals: XVals} (t: @TreeNode vals): t.left.getDat
       · rw [Finsupp.support_single_ne_zero]
         simp
         by_cases b_eq_zero: b = 0
-        · simp [b_eq_zero]
-          right
-          apply xvals_root_not_supp
+        · simp only [b_eq_zero, ↓reduceIte, Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul, mul_eq_zero]
+          exact Or.inr (xvals_root_not_supp ..)
         · simp [b_eq_zero]
           rw [← Finsupp.not_mem_support_iff]
           by_cases g_b_zero: tree_comb.b_coords b = 0
@@ -1643,10 +1635,9 @@ def x_vals_zero: XVals := {
   root_elem := 0
   supp_gt := by
     intro n
-    simp
+    simp only [Finsupp.support_zero, Finset.max_empty, Finsupp.coe_basisSingleOne, pow_zero, zero_add, pow_one]
     rw [Finsupp.support_single_ne_zero]
-    · simp
-      norm_cast
+    · simp only [Finset.min_singleton, WithTop.coe_add, WithTop.coe_one, WithTop.coe_mul, ENat.some_eq_coe, WithTop.coe_ofNat]
       exact WithBot.bot_lt_coe ..
     · simp
   root_nonzero := by simp
@@ -1701,8 +1692,7 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
       tree := TreeNode.root,
       a_val := by
         simp only [TreeNode.getData, x_vals, XVals.root_elem, hn]
-        rw [g_enum_zero_eq_zero]
-        simp only [x_vals_zero]
+        rw [g_enum_zero_eq_zero, x_vals_zero]
       distinct_i := by simp
       distinct_trees := by simp
       vals_has_zero := by simp
@@ -1740,7 +1730,7 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
       supp_increasing := by
         match Classical.choose (Classical.choose_spec has_tree) with
         | .root =>
-          simp [TreeNode.getData]
+          simp only [TreeNode.getData, exists_and_left]
           have supp_gt := (Classical.choose has_tree).supp_gt 0
           simp [basis_n, Finsupp.support_single_ne_zero _ ?_] at supp_gt
           simp [XVals.x_vals, Finsupp.support_single_ne_zero _ ?_]
