@@ -1534,17 +1534,20 @@ lemma exists_useful_c (y : G') : ∃ c : A → A,
 --     · simp_rw [c, dif_pos h2, ← h2]
 --       exact hc1a
 
-noncomputable abbrev c (y : G') : A → A := (exists_useful_c y).choose
+noncomputable abbrev useful_c (y : G') : A → A := (exists_useful_c y).choose
 
-lemma c_injective (y : G') : (c y).Injective := (exists_useful_c y).choose_spec.1
+lemma useful_c_injective (y : G') : (useful_c y).Injective := (exists_useful_c y).choose_spec.1
 
-lemma c_spec (y : G') (b : A) : y.1.1 ◇ ((c y b) ◇ b) = c y b := (exists_useful_c y).choose_spec.2.1 b
+lemma useful_c_spec (y : G') (b : A) : y.1.1 ◇ ((useful_c y b) ◇ b) = useful_c y b :=
+  (exists_useful_c y).choose_spec.2.1 b
 
-lemma c_ne_b (y : G') (b : A) : c y b ≠ b := ((exists_useful_c y).choose_spec.2.2 b).1
+lemma useful_c_ne_b (y : G') (b : A) : useful_c y b ≠ b := ((exists_useful_c y).choose_spec.2.2 b).1
 
-lemma c_ne_y₁ (y : G') (b : A) : c y b ≠ y.1.1 := ((exists_useful_c y).choose_spec.2.2 b).2.1
+lemma useful_c_ne_y₁ (y : G') (b : A) : useful_c y b ≠ y.1.1 :=
+  ((exists_useful_c y).choose_spec.2.2 b).2.1
 
-lemma c_ne_y₂ (y : G') (b : A) : c y b ≠ y.1.2.1 := ((exists_useful_c y).choose_spec.2.2 b).2.2
+lemma useful_c_ne_y₂ (y : G') (b : A) : useful_c y b ≠ y.1.2.1 :=
+  ((exists_useful_c y).choose_spec.2.2 b).2.2
 
 /- Problem with the proof in the blueprint: the greedy procedure seems to be adding not only the image of the special pair `(d,g)` that is not yet in the domain, but also an infinite number of other images of pairs in order to make the function infinitely surjective. How can we do this inside the greedy extension framework that we are trying to mimic? I have 2 ways in mind:
 - we can drop the finiteness requirement in `OK`, this would allow us to actually add an infinite number of images even in intermediate steps. The issue is that I'm not sure wether the finiteness will prove to be crucial in some of the later proofs. To do this we will probably need to add a requirement to `OK` asking that some set be infinite. This is likely not doable, I think the informal proof actually uses the finiteness of the `PartialSolution` in a crucial way.
@@ -1656,7 +1659,7 @@ noncomputable def partL (c' : A) (y : G) : G := by
     · by_cases hn : n = 0
       · exact .inl a
       · exact .inr ⟨(a, b, 0), habn⟩
-    by_cases hb : ∃ b', c' = c a b'
+    by_cases hb : ∃ b', c' = useful_c ⟨⟨a, b, n⟩, habn⟩ b'
     · exact .inl hb.choose
     -- The blueprint proof is incorrect: in the blueprint in this case we use the surjectivity once to find `b` such that `a ◇ b = c'` and then define `L_c' y = b`. I didn't find a way to make this work, so I used the surjectivity twice to also find `b'` such that `c' ◇ b' = b`, and then define `L_c y = b'`, this way it seems to be working.
     · exact .inl (A_op_surj_right c' (A_op_surj_right a c').choose).choose
@@ -1684,44 +1687,47 @@ lemma partL_of_inr_same_of_ne_zero' {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2
   rw [S] at hSy
   rw [dif_pos hSy, dif_neg hn]
 
-lemma partL_of_inr_of_exists {c' a b b' : A} (n : ℕ) (had : a ≠ c') (hab : a ≠ b) (hdab' : c' = c a b') :
+lemma partL_of_inr_of_exists {c' a b b' : A} (n : ℕ) (had : a ≠ c') (hab : a ≠ b)
+    (hdab' : c' = useful_c ⟨(a, b, n), hab⟩ b') :
     partL c' (.inr ⟨(a, b, n), hab⟩) = b' := by
   simp only [partL, had, ↓reduceDIte]
   rw [dif_pos ⟨b', hdab'⟩]
   congr
-  refine c_injective a ?_
+  refine useful_c_injective ⟨(a, b, n), hab⟩ ?_
   rw [← hdab']
-  exact (⟨b', hdab'⟩ : ∃ b', c' = c a b').choose_spec.symm
+  exact (⟨b', hdab'⟩ : ∃ b', c' = useful_c ⟨(a, b, n), hab⟩ b').choose_spec.symm
 
-lemma partL_of_inr_of_exists' {c' b' : A} {y : G'} (had : S y ≠ c') (hdab' : c' = c (S y) b') :
+lemma partL_of_inr_of_exists' {c' b' : A} {y : G'} (had : S y ≠ c') (hdab' : c' = useful_c y b') :
     partL c' y = b' := by
   rw [S] at had
   simp only [partL, had, ↓reduceDIte]
   rw [dif_pos ⟨b', hdab'⟩]
   congr
-  refine c_injective (S y) ?_
+  refine useful_c_injective y ?_
   rw [← hdab']
   exact (⟨b', hdab'⟩ : ∃ b', c' = _).choose_spec.symm
 
-lemma partL_of_inr_of_not_exists {c' a b : A} (n : ℕ) (had : a ≠ c') (hab : a ≠ b) (h : ¬∃ b', c' = c a b') :
+lemma partL_of_inr_of_not_exists {c' a b : A} (n : ℕ) (had : a ≠ c') (hab : a ≠ b)
+    (h : ¬∃ b', c' = useful_c ⟨(a, b, n), hab⟩ b') :
     partL c' (.inr ⟨(a, b, n), hab⟩) =
       (A_op_surj_right c' (A_op_surj_right a c').choose).choose := by
   simp [partL, had, ↓reduceDIte, h]
 
-lemma partL_of_inr_of_not_exists_spec {c' a b : A} (n : ℕ) (had : a ≠ c') (hab : a ≠ b) (h : ¬∃ b', c' = c a b') :
+lemma partL_of_inr_of_not_exists_spec {c' a b : A} (n : ℕ) (had : a ≠ c') (hab : a ≠ b)
+    (h : ¬∃ b', c' = useful_c ⟨(a, b, n), hab⟩ b') :
     ∃ b' b'' : A, partL c' (.inr ⟨(a, b, n), hab⟩) = b'' ∧
       a ◇ b' = c' ∧ c' ◇ b'' = b' := by
   rw [partL_of_inr_of_not_exists _ had hab h]
   refine ⟨(A_op_surj_right a c').choose, (A_op_surj_right c' _).choose, rfl,
     (A_op_surj_right _ _).choose_spec, (A_op_surj_right _ _).choose_spec⟩
 
-lemma partL_of_inr_of_not_exists' {c' : A} {y : G'} (hSy : S y ≠ c') (h : ¬∃ b', c' = c (S y) b') :
+lemma partL_of_inr_of_not_exists' {c' : A} {y : G'} (hSy : S y ≠ c') (h : ¬∃ b', c' = useful_c y b') :
     partL c' y = (A_op_surj_right c' (A_op_surj_right (S y) c').choose).choose := by
   simp only [partL]
-  rw [S] at hSy h
+  rw [S] at hSy
   rw [dif_neg hSy, dif_neg h]
 
-lemma partL_of_inr_of_not_exists'_spec {c' : A} {y : G'} (hSy : S y ≠ c') (h : ¬∃ b', c' = c (S y) b') :
+lemma partL_of_inr_of_not_exists'_spec {c' : A} {y : G'} (hSy : S y ≠ c') (h : ¬∃ b', c' = useful_c y b') :
     ∃ b b' : A, partL c' y = b' ∧ S y ◇ b = c' ∧ c' ◇ b' = b := by
   rw [partL_of_inr_of_not_exists' hSy h]
   exact ⟨(A_op_surj_right _ _).choose, (A_op_surj_right _ _).choose,
@@ -1729,10 +1735,10 @@ lemma partL_of_inr_of_not_exists'_spec {c' : A} {y : G'} (hSy : S y ≠ c') (h :
 
 lemma partL_ne_c' {c' : A} {y : G'} (hSy : S y ≠ c') : partL c' y ≠ c' := by
   rw [S] at hSy
-  by_cases hb' : ∃ b', c' = c (S y) b'
+  by_cases hb' : ∃ b', c' = useful_c y b'
   · obtain ⟨b', hb'⟩ := hb'
     rw [partL_of_inr_of_exists' hSy hb', hb']
-    refine Function.Injective.ne Sum.inl_injective (c_ne _ _).symm
+    refine Function.Injective.ne Sum.inl_injective (useful_c_ne_b _ _).symm
   · obtain ⟨b, b', hb, hSb, hSb'⟩ := partL_of_inr_of_not_exists'_spec hSy hb'
     rw [hb]
     intro h
@@ -1755,7 +1761,7 @@ lemma partL_ne_y {c' : A} {y : G} (h : .inl c' ≠ y) : partL c' y ≠ y := by
         intro hh
         have := Sum.inr_injective hh
         simp_all
-    by_cases hb : ∃ b', c' = c a b'
+    by_cases hb : ∃ b', c' = useful_c ⟨(a, b, n), habn⟩ b'
     · rw [partL_of_inr_of_exists n ha habn hb.choose_spec]
       exact Sum.inl_ne_inr
     · rw [partL_of_inr_of_not_exists _ ha habn hb]
