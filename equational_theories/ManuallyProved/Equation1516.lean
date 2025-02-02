@@ -1384,61 +1384,65 @@ def x₀ : G := .inr ⟨⟨1, x 0, 0⟩, fun h ↦ one_ne_of 0 h⟩
 namespace GreedyB
 -- Greedy construction to extend the operation from A×A to A×G' in order to satisfy Axiom B, we try to mimic the structure of GreedyAC below
 
-lemma exists_extension_aux (a : A) : ∃ c : A → A,
-    c.Injective ∧ (∀ b, a ◇ ((c b) ◇ b) = c b) ∧ (∀ b, c b ≠ b):= by
-  rcases base2 a with ⟨c₁, hc1a, hc1b⟩
-  have c_aux (b : A) (h : a ≠ b) : ∃ c, c ◇ a = b ∧ c ≠ c₁ ∧ c ≠ b := by
-    have enc := base1 a b h
-    have noempty' : ({c | c ◇ a = b} \ {c₁, b}).Nonempty := by
+lemma exists_useful_c (y : G') : ∃ c : A → A,
+    c.Injective ∧ (∀ b, y.1.1 ◇ ((c b) ◇ b) = c b) ∧ (∀ b, c b ≠ b ∧ c b ≠ y.1.1 ∧ c b ≠ y.1.2.1) := by
+  rcases base2'' y.1.1 y.1.2.1 with ⟨c₁, hc₁a, hc₁c, hc₁⟩
+  have c_aux (b : A) (h : y.1.1 ≠ b) : ∃ c, c ◇ y.1.1 = b ∧ c ≠ c₁ ∧ c ≠ b ∧ c ≠ y.1.2.1 := by
+    have enc := base1' y.1.1 b h
+    have noempty' : ({c | c ◇ y.1.1 = b} \ {c₁, b, y.1.2.1}).Nonempty := by
       refine Set.encard_ne_zero.mp (ne_of_gt ?_)
       calc
-        _ < (3 : ENat) - 2 := by norm_num
+        _ < (4 : ENat) - 3 := by norm_num
         _ ≤ _ := by
           gcongr
-          refine Set.insert_eq _ _ ▸ (Set.encard_union_le _ _).trans ?_
+          simp_rw [Set.insert_eq]
+          refine (Set.encard_union_le _ _).trans ?_
+          rw [Set.encard_singleton, show (3 : ENat) = 1 + 2 from rfl]
+          gcongr
+          refine (Set.encard_union_le _ _).trans ?_
           simp_rw [Set.encard_singleton]
           norm_num
-        {c | c ◇ a = b}.encard - _ ≤ _ := Set.tsub_encard_le_encard_diff _ {c₁, b}
+        {c | c ◇ y.1.1 = b}.encard - _ ≤ _ := Set.tsub_encard_le_encard_diff _ {c₁, b, y.1.2.1}
     rcases noempty' with ⟨c, hc1, hc2⟩
     use c
     simp_all
-  let c := fun b : A ↦ if h : a = b then c₁ else (c_aux b h).choose
+  let c := fun b : A ↦ if h : y.1.1 = b then c₁ else (c_aux b h).choose
   use c
   refine ⟨?_, ?_, ?_⟩
   · unfold Function.Injective
-    intro x y
+    intro b₁ b₂
     unfold c
-    rcases ne_or_eq a x  with hx | ha <;> rcases ne_or_eq a y with hy | ha'
+    rcases ne_or_eq y.1.1 b₁  with hx | ha <;> rcases ne_or_eq y.1.1 b₂ with hy | ha'
     · rw [dif_neg hx,dif_neg hy]
       intro hind
-      have prop : (c_aux x hx).choose ◇ a = (c_aux y hy).choose ◇ a := by rw [hind]
-      have h_aux : (c_aux x hx).choose ◇ a = x := by
-        apply (c_aux x hx).choose_spec.1
-      have h_aux2 : (c_aux y hy).choose ◇ a = y := by
-        apply (c_aux y hy).choose_spec.1
+      have prop : (c_aux b₁ hx).choose ◇ y.1.1 = (c_aux b₂ hy).choose ◇ y.1.1 := by rw [hind]
+      have h_aux : (c_aux b₁ hx).choose ◇ y.1.1 = b₁ := by
+        apply (c_aux b₁ hx).choose_spec.1
+      have h_aux2 : (c_aux b₂ hy).choose ◇ y.1.1 = b₂ := by
+        apply (c_aux b₂ hy).choose_spec.1
       rw [h_aux,h_aux2] at prop
       exact prop
     · rw [dif_neg hx, dif_pos ha']
       intro hind
       exfalso
-      have h_aux : (c_aux x hx).choose ≠  c₁ := by
-        apply (c_aux x hx).choose_spec.2.1
+      have h_aux : (c_aux b₁ hx).choose ≠  c₁ := by
+        apply (c_aux b₁ hx).choose_spec.2.1
       tauto
     · rw [dif_pos ha,dif_neg hy]
       intro hind
       exfalso
-      have h_aux : (c_aux y hy).choose ≠  c₁ := by
-        apply (c_aux y hy).choose_spec.2.1
+      have h_aux : (c_aux b₂ hy).choose ≠  c₁ := by
+        apply (c_aux b₂ hy).choose_spec.2.1
       tauto
     · intro h
       rw [← ha, ← ha']
   · intro b
-    rcases ne_or_eq a b with h1 | h2
+    rcases ne_or_eq y.1.1 b with h1 | h2
     · unfold c
       rw [dif_neg h1]
-      have h_aux : (c_aux b h1).choose ◇ a = b := by
+      have h_aux : (c_aux b h1).choose ◇ y.1.1 = b := by
         apply (c_aux b h1).choose_spec.1
-      have idem : a ◇ a = a := A_idempotent a
+      have idem : y.1.1 ◇ y.1.1 = y.1.1 := A_idempotent y.1.1
       nth_rw 1 [← idem]
       nth_rw 4 [← h_aux]
       symm
@@ -1446,21 +1450,101 @@ lemma exists_extension_aux (a : A) : ∃ c : A → A,
     · rw [← h2]
       unfold c
       rw [dif_pos rfl]
-      exact hc1b
+      exact hc₁
   · intro b
-    rcases ne_or_eq a b with h1 | h2
+    rcases ne_or_eq y.1.1 b with h1 | h2
     · simp_rw [c, dif_neg h1]
-      exact (c_aux b h1).choose_spec.2.2
+      refine ⟨(c_aux b h1).choose_spec.2.2.1, ?_, ?_⟩
+      · by_contra h
+        have := A_idempotent _ ▸ h ▸ (c_aux b h1).choose_spec.1
+        exact h1 this
+      · exact (c_aux b h1).choose_spec.2.2.2
+        -- problem: to solve this we need to modify c_aux and require also that c ≠ y.1.2.1, however this may be impossible with the current magma structure on A. I think we need to ask that the set in base1 has at least 4 (not 3) elements, I hope this is doable without too much effort. Notify the Zulip cha about this.
+        -- for now I modified base1 in base1', but it still needs to be proven, and to do that we may need to modify the construction of the base magma
     · simp_rw [c, dif_pos h2, ← h2]
-      exact hc1a
+      exact ⟨hc₁a, hc₁a, hc₁c⟩
 
-noncomputable abbrev c (a : A) : A → A := (exists_extension_aux a).choose
+-- lemma exists_extension_aux (a : A) : ∃ c : A → A,
+--     c.Injective ∧ (∀ b, a ◇ ((c b) ◇ b) = c b) ∧ (∀ b, c b ≠ b):= by
+--   rcases base2 a with ⟨c₁, hc1a, hc1b⟩
+--   have c_aux (b : A) (h : a ≠ b) : ∃ c, c ◇ a = b ∧ c ≠ c₁ ∧ c ≠ b := by
+--     have enc := base1 a b h
+--     have noempty' : ({c | c ◇ a = b} \ {c₁, b}).Nonempty := by
+--       refine Set.encard_ne_zero.mp (ne_of_gt ?_)
+--       calc
+--         _ < (3 : ENat) - 2 := by norm_num
+--         _ ≤ _ := by
+--           gcongr
+--           refine Set.insert_eq _ _ ▸ (Set.encard_union_le _ _).trans ?_
+--           simp_rw [Set.encard_singleton]
+--           norm_num
+--         {c | c ◇ a = b}.encard - _ ≤ _ := Set.tsub_encard_le_encard_diff _ {c₁, b}
+--     rcases noempty' with ⟨c, hc1, hc2⟩
+--     use c
+--     simp_all
+--   let c := fun b : A ↦ if h : a = b then c₁ else (c_aux b h).choose
+--   use c
+--   refine ⟨?_, ?_, ?_⟩
+--   · unfold Function.Injective
+--     intro x y
+--     unfold c
+--     rcases ne_or_eq a x  with hx | ha <;> rcases ne_or_eq a y with hy | ha'
+--     · rw [dif_neg hx,dif_neg hy]
+--       intro hind
+--       have prop : (c_aux x hx).choose ◇ a = (c_aux y hy).choose ◇ a := by rw [hind]
+--       have h_aux : (c_aux x hx).choose ◇ a = x := by
+--         apply (c_aux x hx).choose_spec.1
+--       have h_aux2 : (c_aux y hy).choose ◇ a = y := by
+--         apply (c_aux y hy).choose_spec.1
+--       rw [h_aux,h_aux2] at prop
+--       exact prop
+--     · rw [dif_neg hx, dif_pos ha']
+--       intro hind
+--       exfalso
+--       have h_aux : (c_aux x hx).choose ≠  c₁ := by
+--         apply (c_aux x hx).choose_spec.2.1
+--       tauto
+--     · rw [dif_pos ha,dif_neg hy]
+--       intro hind
+--       exfalso
+--       have h_aux : (c_aux y hy).choose ≠  c₁ := by
+--         apply (c_aux y hy).choose_spec.2.1
+--       tauto
+--     · intro h
+--       rw [← ha, ← ha']
+--   · intro b
+--     rcases ne_or_eq a b with h1 | h2
+--     · unfold c
+--       rw [dif_neg h1]
+--       have h_aux : (c_aux b h1).choose ◇ a = b := by
+--         apply (c_aux b h1).choose_spec.1
+--       have idem : a ◇ a = a := A_idempotent a
+--       nth_rw 1 [← idem]
+--       nth_rw 4 [← h_aux]
+--       symm
+--       apply A_satisfies_Equation1516
+--     · rw [← h2]
+--       unfold c
+--       rw [dif_pos rfl]
+--       exact hc1b
+--   · intro b
+--     rcases ne_or_eq a b with h1 | h2
+--     · simp_rw [c, dif_neg h1]
+--       exact (c_aux b h1).choose_spec.2.2
+--     · simp_rw [c, dif_pos h2, ← h2]
+--       exact hc1a
 
-lemma c_injective (a : A) : (c a).Injective := (exists_extension_aux a).choose_spec.1
+noncomputable abbrev c (y : G') : A → A := (exists_useful_c y).choose
 
-lemma c_spec (a b : A) : a ◇ ((c a b) ◇ b) = c a b := (exists_extension_aux a).choose_spec.2.1 b
+lemma c_injective (y : G') : (c y).Injective := (exists_useful_c y).choose_spec.1
 
-lemma c_ne (a b : A) : c a b ≠ b := (exists_extension_aux a).choose_spec.2.2 b
+lemma c_spec (y : G') (b : A) : y.1.1 ◇ ((c y b) ◇ b) = c y b := (exists_useful_c y).choose_spec.2.1 b
+
+lemma c_ne_b (y : G') (b : A) : c y b ≠ b := ((exists_useful_c y).choose_spec.2.2 b).1
+
+lemma c_ne_y₁ (y : G') (b : A) : c y b ≠ y.1.1 := ((exists_useful_c y).choose_spec.2.2 b).2.1
+
+lemma c_ne_y₂ (y : G') (b : A) : c y b ≠ y.1.2.1 := ((exists_useful_c y).choose_spec.2.2 b).2.2
 
 /- Problem with the proof in the blueprint: the greedy procedure seems to be adding not only the image of the special pair `(d,g)` that is not yet in the domain, but also an infinite number of other images of pairs in order to make the function infinitely surjective. How can we do this inside the greedy extension framework that we are trying to mimic? I have 2 ways in mind:
 - we can drop the finiteness requirement in `OK`, this would allow us to actually add an infinite number of images even in intermediate steps. The issue is that I'm not sure wether the finiteness will prove to be crucial in some of the later proofs. To do this we will probably need to add a requirement to `OK` asking that some set be infinite. This is likely not doable, I think the informal proof actually uses the finiteness of the `PartialSolution` in a crucial way.
