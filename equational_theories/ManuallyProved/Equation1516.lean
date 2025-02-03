@@ -1683,6 +1683,71 @@ class Extension2 where
   w : G
   h_def : E a y w
   n : ℕ
+
+namespace Extension1
+
+-- define the element that should be the image of `L_c' y` when it is not yet defined
+noncomputable def partL (c' : A) (y : G') : G :=
+  .inl (A_op_surj_right c' (A_op_surj_right (S y) c').choose).choose
+
+lemma partL_spec (c' : A) (y : G') :
+    ∃ b b' : A, partL c' y = b' ∧ S y ◇ b = c' ∧ c' ◇ b' = b :=
+  ⟨(A_op_surj_right y.1.1 c').choose, (A_op_surj_right c' _).choose, rfl,
+    (A_op_surj_right _ _).choose_spec, (A_op_surj_right _ _).choose_spec⟩
+
+variable [Extension1]
+
+@[mk_iff]
+inductive Next1 : A → G → G → Prop
+  | base {a y x} : E a y x → Next1 a y x
+  | new : Next1 d g (partL d g)
+
+lemma next1_func {a x y y'} : Next1 a x y → Next1 a x y' → y = y'
+  | .base hy, .base hy' => ok.func hy hy'
+  | .new, .new => rfl
+  | .base hy, .new | .new, .base hy => (not_def hy).elim
+
+lemma next1_extend {a b : A} : Next1 a b (.inl (a ◇ b)) := Next1.base (ok.extend _ _)
+
+lemma next1_h_b {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2.2 = 0) : Next1 a y (.inl a) :=
+  .base (ok.h_b hSy hn)
+
+lemma next1_h_c {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2.2 ≠ 0) : Next1 a y (.inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩) :=
+  .base (ok.h_c hSy hn)
+
+lemma next1_h_d {b : A} {y : G'} : Next1 (useful_c y b) y b :=
+  .base ok.h_d
+
+lemma next1_finite {a c : A} (hac : a ≠ c) : {n | ∃ x, Next1 a (.inr ⟨⟨a, c, n⟩, hac⟩) x}.Finite := by
+  simp only [next1_iff, exists_or, exists_and_left, exists_eq_right, Set.setOf_or, Set.finite_union,
+    ok.finite, true_and]
+  -- doable, the set is a singleton
+  sorry
+
+lemma next1_h_1516 {c' : A} {y : G'} {x : G} : Next1 c' y x → ∃ w, Next1 c' x w ∧ Next1 (S y) w c'
+  | .base h => by
+    have ⟨w, hw1, hw2⟩ := ok.h_1516 h
+    exact ⟨w, Next1.base hw1, Next1.base hw2⟩
+  | .new => by
+    have ⟨b, b', hb', hab, hdb'⟩ := partL_spec d g
+    rw [hb']
+    refine ⟨_, .base (ok.extend d _), ?_⟩
+    rw [hdb', ← hab]
+    exact next1_extend
+
+lemma next1_h_g {c' : A} {y : G'} {x : G} (hSy : S y ≠ c') : Next1 c' y x → x ≠ .inl c'
+  | .base h => ok.h_g hSy h
+  | .new => by
+    have ⟨b, b', hb', hab, hdb'⟩ := partL_spec d g
+    rw [hb']
+    intro h
+    apply Sum.inl_injective at h
+    simp_all only
+    rw [A_idempotent] at hdb'
+    rw [← hdb'] at hab
+    exact hSy (A_op_eq_self_iff.mp hab)
+
+end Extension1
 namespace Extension
 
 -- define the element that should be the image of `L_c y`
