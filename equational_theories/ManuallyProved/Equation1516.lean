@@ -1653,7 +1653,7 @@ lemma E_1_x₀_eq_1 {E : PartialSolution} {z : G} (hE : E.val 1 x₀ z) : z = .i
 
 structure OKₙ (E : A → G → G → Prop) : Prop where
   func {a x y y'} : E a x y → E a x y' → y = y'
-  extend {a b : A} {x : G} : E a b x → x = .inl (a ◇ b) -- (a)
+  extend (a b : A) : E a b (.inl (a ◇ b)) -- (a)
   h_b {a : A} {y : G'} : S y = a → y.1.2.2 = 0 → E a y a -- (b)
   h_c {a : A} {y : G'} : S y = a → y.1.2.2 ≠ 0 → E a y (.inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩) -- (c)
   h_d {b : A} {y : G'} : E (useful_c y b) y b -- (d)
