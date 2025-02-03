@@ -1845,12 +1845,10 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
               rw [← WithBot.some_eq_coe]
               simp [h_max, WithBot.some_eq_coe]
               rfl
-            | ⊥ =>
-              simp [h_max]
+            | ⊥ => simp [h_max]
           rw [← WithBot.coe_lt_coe] at g_supp_lt
           rw [← WithBot.coe_lt_coe] at lt_self_pow
-          have first_trans := LE.le.trans_lt le_getd g_supp_lt
-          have second_trans := lt_trans first_trans lt_self_pow
+          have second_trans := lt_trans (LE.le.trans_lt le_getd g_supp_lt) lt_self_pow
           simp at second_trans
           exact second_trans
         a_val := by
@@ -1868,8 +1866,7 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
             by_cases tb_root: tb = TreeNode.root
             · simp [tb_root, TreeNode.getData] at h_tree_eq
               have simple_have_tree: ∃ x_vals: XVals, ∃ t: @TreeNode x_vals, x_vals ∈ prev_x_vals.vals ∧ t.getData.a = g_enumerate n := by
-                use a
-                use ta
+                use a, ta
                 refine ⟨a_prev, ?_⟩
                 rw [h_tree_eq]
                 simp [b_new, new_x_vals]
@@ -1904,8 +1901,7 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
                 simp [XVals.x_vals] at tb_sum
                 contradiction
               | .right tb_parent =>
-                simp [h_tb, TreeNode.getData] at tb_sum
-                simp [XVals.x_vals, b_new, new_x_vals, treeNum_neq_zero] at tb_sum
+                simp [h_tb, TreeNode.getData, XVals.x_vals, b_new, new_x_vals, treeNum_neq_zero] at tb_sum
                 have app_eq := DFunLike.congr (x := new_x_vals.x_to_index (treeNum tb_parent - 1)) tb_sum rfl
                 simp [XVals.x_to_index, new_x_vals, Finsupp.single_apply] at app_eq
                 have eval_to_zero := (new_vals_not_supp_double_plus (treeNum tb_parent - 1))
@@ -1922,8 +1918,7 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
                 simp [new_x_vals, XVals.x_to_index] at y_outside
                 simp [b_new, new_x_vals]
                 exact y_outside
-              · simp [i_eq_zero]
-                simp [b_new, new_x_vals]
+              · simp [i_eq_zero, b_new, new_x_vals]
                 rw [Finsupp.single_apply]
                 simp
                 have ai_le_max: a.i ≤ max_i := by
@@ -1965,9 +1960,7 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
               lhs
               rw [Finset.sum_eq_zero]
               rfl
-              tactic =>
-                intro x hx
-                simp [outside_support x hx]
+              tactic => intro x hx; simp [outside_support x hx]
             rw [tb_sum] at eval_both_trees
             simp at eval_both_trees
             conv at eval_both_trees =>
@@ -2053,15 +2046,10 @@ lemma f_data_subset (a b: ℕ) (hab: a ≤ b): (f_data a).vals ⊆ (f_data b).va
   | succ new_b h_prev =>
     by_cases a_le_new_b: a ≤ new_b
     · have new_b_in: (f_data new_b).vals ⊆ (f_data (new_b + 1)).vals := by
-        conv =>
-          rhs
-          simp [f_data]
+        conv => rhs; simp [f_data]
         by_cases has_tree: ∃ x_vals ∈ (f_data new_b).vals, ∃ x: @TreeNode x_vals, x.getData.a = g_enumerate (new_b + 1)
-        · rw [dite_cond_eq_true]
-          simp [has_tree]
-        · rw [dite_cond_eq_false]
-          · simp
-          · simp [has_tree]
+        · rw [dite_cond_eq_true]; simp [has_tree]
+        · rw [dite_cond_eq_false]; simp; simp [has_tree]
       exact Finset.Subset.trans (h_prev a_le_new_b) new_b_in
     · have a_eq_new_b_succ: a = new_b + 1 := by omega
       rw [a_eq_new_b_succ]
@@ -2089,8 +2077,7 @@ lemma f_eval_at {other_vals: XVals} (t: @TreeNode other_vals) {n: ℕ} (hvals: (
       specialize vals_subset n_self
       have a_eq := (f_data (g_to_num t.getData.a)).a_val
       have same_tree: ∃ ta: @TreeNode (f_data n).cur, ∃ tb: @TreeNode (f_data (g_to_num t.getData.a)).cur, ta.getData.a = tb.getData.a := by
-        use (cast (vals_eq_to_types hvals.symm) t)
-        use (f_data (g_to_num t.getData.a)).tree
+        use (cast (vals_eq_to_types hvals.symm) t), (f_data (g_to_num t.getData.a)).tree
         rw [a_eq, g_enum_inverse, trees_eq]
       have x_vals_eq := (f_data (g_to_num t.getData.a)).distinct_trees (f_data n).cur vals_subset (f_data (g_to_num t.getData.a)).cur t_num_self same_tree
       rw [hvals] at x_vals_eq
@@ -2125,9 +2112,7 @@ lemma f_functional_eq (g: G): f (f (- f g)) = g - (f g) := by
   have eval_right := f_eval_at (f_data (g_to_num g)).tree.right (other_vals := (f_data (g_to_num g)).cur) (n := g_to_num g) rfl
   rw [left_eq_right_a, eval_right]
   simp [TreeNode.getData, f]
-  have g_eq := g_data.a_val
-  simp only [g_data] at g_eq
-  rw [g_eq, g_enum_inverse]
+  rw [g_data.a_val, g_enum_inverse]
 
 lemma diamond_law (x y: G): x = (diamond (x + (y - x) + (f (-(y - x)))) (diamond (x + (y - x) + (f (-(y - x)))) (x + y - x))) := by
   field_simp [diamond, f_functional_eq (x - y)]
@@ -2156,8 +2141,7 @@ theorem not_equation_23: 0 ≠ (f (0)) + (f (- (f (0)))) := by
   have val_neq_1: 1 + (treeNum (@TreeNode.root x_vals_zero) - 1) * 2 ≠ 1 := by omega
   simp [val_neq_1] at app_eq
   rw [g_num_zero_eq_zero] at app_eq
-  simp [f_data] at app_eq
-  simp [TreeNode.getData, x_vals_zero, XVals.x_vals] at app_eq
+  simp [f_data, TreeNode.getData, x_vals_zero, XVals.x_vals] at app_eq
 
 theorem not_equation_47: f (f (f 0)) ≠ 0 := by
   rw [f]
@@ -2254,13 +2238,8 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
       by_contra!
       have i_same := same_vals
       apply_fun (fun v => v.i) at i_same
-      simp [TreeNode.getData] at this
-      simp [same_vals, x_vals_zero, XVals.x_vals, treeNum_neq_zero] at this
-      have not_zero := treeNum_neq_zero parent
-      rw [ite_cond_eq_false] at this
-      simp [basis_n, n_q_basis] at this
-      simp [Finsupp.basisSingleOne] at this
-      rw [i_same, x_vals_zero, XVals.i] at this
+      simp [TreeNode.getData, same_vals, x_vals_zero, XVals.x_vals, treeNum_neq_zero] at this
+      rw [ite_cond_eq_false, basis_n, n_q_basis, Finsupp.basisSingleOne, i_same, x_vals_zero, XVals.i] at this
       have second_sum_has_neg : finsuppHasNeg ((-fun₀ | 1 => (1 : ℚ)) - (fun₀ | 3 => (1 : ℚ)) - (fun₀ | 1 + (treeNum parent - 1) * 2 => (1 : ℚ))) := by
         simp [finsuppHasNeg]
         use 1
@@ -2269,42 +2248,29 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
         · simp [val_eq_one]
         · simp [val_eq_one]
       have second_supp_increase := (f_data (g_to_num ((((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - fun₀ | 1 + (treeNum parent - 1) * 2 => 1)))).supp_increasing
-      rw [(f_data _).a_val] at second_supp_increase
-      simp [g_enum_inverse] at second_supp_increase
+      simp [(f_data _).a_val, g_enum_inverse] at second_supp_increase
       specialize second_supp_increase second_sum_has_neg
-      let largest_support := (f_data
-              (g_to_num
-                (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) -
-                  fun₀ | 1 + (treeNum parent - 1) * 2 => 1))).tree.getData.b.support.max
+      let largest_support := (f_data (g_to_num (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - fun₀ | 1 + (treeNum parent - 1) * 2 => 1))).tree.getData.b.support.max
       match h_bot: largest_support with
       | WithBot.some largest_supp_n =>
         have app_eq := DFunLike.congr (x := largest_supp_n) this rfl
         simp at app_eq
         have largest_gt_three: 3 < largest_supp_n ∧ 1 + (treeNum parent - 1) * 2 < largest_supp_n := by
           rw [h_tree] at f_supp_increasing
-          simp [TreeNode.getData] at f_supp_increasing
-          simp [same_vals, x_vals_zero, XVals.x_vals, treeNum_neq_zero] at f_supp_increasing
+          simp [TreeNode.getData, same_vals, x_vals_zero, XVals.x_vals, treeNum_neq_zero] at f_supp_increasing
           unfold x_sum at x_sum_supp
           simp [x_sum_supp] at f_supp_increasing
           simp [Finsupp.support_single_ne_zero _] at f_supp_increasing
-          rw [← Finsupp.single_neg, sub_eq_add_neg, ← Finsupp.single_neg] at second_supp_increase
-          rw [Finsupp.support_add_eq _] at second_supp_increase
-          rw [sub_eq_add_neg, ← Finsupp.single_neg] at second_supp_increase
-          rw [Finsupp.support_add_eq _] at second_supp_increase
+          rw [← Finsupp.single_neg, sub_eq_add_neg, ← Finsupp.single_neg, Finsupp.support_add_eq _,
+            sub_eq_add_neg, ← Finsupp.single_neg, Finsupp.support_add_eq _] at second_supp_increase
           simp [Finsupp.support_single_ne_zero _] at second_supp_increase
-          rw [← Finset.insert_eq] at second_supp_increase
-          rw [← Finset.insert_eq] at second_supp_increase
+          repeat rw [← Finset.insert_eq] at second_supp_increase
           unfold largest_support at h_bot
-          rw [sub_eq_add_neg] at h_bot
-          rw [← Finsupp.single_neg] at h_bot
-          rw [← Finsupp.single_neg] at h_bot
-          rw [sub_eq_add_neg] at h_bot
-          rw [← Finsupp.single_neg] at h_bot
+          rw [sub_eq_add_neg, ← Finsupp.single_neg, ← Finsupp.single_neg, sub_eq_add_neg, ← Finsupp.single_neg] at h_bot
           nth_rw 1 [← WithBot.coe_lt_coe]
           nth_rw 2 [← WithBot.coe_lt_coe]
           rw [WithBot.some_eq_coe] at h_bot
-          rw [← h_bot]
-          rw [← Finset.coe_max' (tree_b_supp_nonempty _)]
+          rw [← h_bot, ← Finset.coe_max' (tree_b_supp_nonempty _)]
           norm_cast
           simp only [Finset.max_insert, Finset.max_singleton, true_or, sup_of_le_right, sup_lt_iff] at second_supp_increase
           rw [Nat.cast_withBot] at second_supp_increase
@@ -2313,8 +2279,8 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
           norm_cast at three_plus_lt
           · simp [x_sum_supp, Finsupp.support_single_ne_zero _]
           · simp only [Finsupp.single_neg, x_sum_supp, Finsupp.support_neg,
-            Finset.disjoint_insert_left, Finsupp.mem_support_iff, ne_eq, Decidable.not_not,
-            Finset.disjoint_singleton_left]
+              Finset.disjoint_insert_left, Finsupp.mem_support_iff, ne_eq, Decidable.not_not,
+              Finset.disjoint_singleton_left]
             rw [Finsupp.single_apply]
             simp only [add_right_eq_self, mul_eq_zero, OfNat.ofNat_ne_zero, or_false,
               ite_eq_right_iff, one_ne_zero, imp_false]
@@ -2341,7 +2307,7 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
         rw [Finset.nonempty_iff_ne_empty] at supp_nonempty
         contradiction
       simp only [eq_iff_iff, iff_false]
-      exact not_zero
+      exact treeNum_neq_zero parent
     | .right parent =>
       have nonpos := nonpos_not_tree_right (f_data (g_to_num (x_sum))).tree
       simp [(f_data (g_to_num (x_sum))).a_val, g_enum_inverse] at nonpos
@@ -2412,13 +2378,10 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
             simp [Finsupp.support_single_ne_zero] at hb
             have cur_i_gt:  0 < (f_data (g_to_num ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))).cur.i := by omega
             by_cases cur_i_one: (f_data (g_to_num ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))).cur.i = 1
-            · simp [cur_i_one] at hb
-              rw [hb]
-              have two_not_mem: 2 ∉ ({1, 3}: Finset ℕ) := by simp
-              exact ne_of_mem_of_not_mem ha two_not_mem
-            · have cur_i_ge_two: 2 ≤ (f_data (g_to_num ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))).cur.i := by omega
-              have pow_ge_4: 2^2 ≤ 2^((f_data (g_to_num ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))).cur.i) :=
-                Nat.pow_le_pow_of_le_right (by simp) cur_i_ge_two
+            · simp only [cur_i_one, pow_one] at hb
+              exact hb ▸ ne_of_mem_of_not_mem ha (by simp)
+            · have pow_ge_4: 2^2 ≤ 2^((f_data (g_to_num ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))).cur.i) :=
+                Nat.pow_le_pow_of_le_right (by simp) (by omega)
               have a_le_3: a ≤ 3 := Nat.divisor_le ha
               omega
           | .left parent =>
@@ -2591,19 +2554,10 @@ theorem Equation1692_not_implies_Equation3050 :
   rw [magG, not_forall]
   use 0
   simp only [sub_self, zero_add, zero_sub, neg_add_rev]
-  conv =>
-    pattern f (-f (-f 0) + -f 0)
-    rw [add_comm, ← sub_eq_add_neg]
-  conv =>
-    pattern f (-f (-f (-f 0) + -f 0) + (-f (-f 0) + -f 0))
-    rw [add_comm]
-    arg 1
-    arg 1
-    rw [add_comm]
+  conv => pattern f (-f (-f 0) + -f 0); rw [add_comm, ← sub_eq_add_neg]
+  conv => pattern f (-f (-f (-f 0) + -f 0) + (-f (-f 0) + -f 0)); rw [add_comm]; arg 1; arg 1; rw [add_comm]
   conv => rw [← sub_eq_add_neg, ← sub_eq_add_neg]
-  conv =>
-    pattern f (-f (-f 0) + -f 0)
-    rw [add_comm, ← sub_eq_add_neg]
+  conv => pattern f (-f (-f 0) + -f 0); rw [add_comm, ← sub_eq_add_neg]
   exact not_equation_3050
 
 @[equational_result]
