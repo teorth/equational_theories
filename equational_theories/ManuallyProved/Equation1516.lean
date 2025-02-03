@@ -1666,13 +1666,23 @@ abbrev PartialSolutionₙ := {E : A → G → G → Prop // OKₙ E}
 
 lemma E_1_x₀ {E : PartialSolutionₙ} : E.val 1 x₀ (.inl 1) := E.property.h_b rfl rfl
 
-class Extensionₙ where
+-- a partial soution, alogn with a pair `(d, g)` such that `L d g` is not yet defined
+class Extension1 where
   E : A → G → G → Prop
-  ok : OK E
+  ok : OKₙ E
   d : A
-  g : G
+  g : G'
   not_def {z} : ¬E d g z
 
+-- a partial solution, along with a pair `(a, y)` such that `L a y` is already defined and `n ∈ ℕ`, the target cardinality for `{z | E a z y}`
+class Extension2 where
+  E : A → G → G → Prop
+  ok : OKₙ E
+  a : A
+  y : G
+  w : G
+  h_def : E a y w
+  n : ℕ
 namespace Extension
 
 -- define the element that should be the image of `L_c y`
