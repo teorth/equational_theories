@@ -2200,13 +2200,14 @@ lemma next_aux_aux1 {x y z w k} : Next_aux x y z → Next_aux x z w → Next_aux
               -- the goal here is impossible because of Sum.inr_ne_inl, so we need to find a contradiction from the hypotheses
               -- observation, not sure if it is useful: we have g = (a, b, n) with n ≠ 0, the relations generated through the first phase can only have output in A or of the form (a, b, 0), so the relation h : E x z g must have been generated in the second phase
               sorry
-          · by_cases hb : ∃ b', d = c a b'
-            · obtain ⟨b', hb'⟩ := hb
-              rw [partL_of_inr_of_exists _ ha habn hb']
-              sorry
-            · obtain ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n ha habn hb
-              rw [hdg]
-              sorry
+          -- · by_cases hb : ∃ b', d = useful_c _ b'
+          --   · obtain ⟨b', hb'⟩ := hb
+          --     rw [partL_of_inr_of_exists _ ha habn hb']
+          --     sorry
+          --   · obtain ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n ha habn hb
+          --     rw [hdg]
+          --     sorry
+          sorry
     · rw [next_aux_iff]
       rintro (h' | ⟨had', hbg', hx'⟩)
       · -- 🛑 Problem 🛑: Here `Lₓ y` and `L_{Sy} (LₓLₓy)` are already defined and we are defining `Lₓ (Lₓy)` as a new element with `d = x` and `g = Lₓy`. See the comment above.
@@ -2239,15 +2240,17 @@ lemma next_aux_aux1 {x y z w k} : Next_aux x y z → Next_aux x z w → Next_aux
               rw [hg, partL_of_inr_same_of_ne_zero _ hn] at h'
               -- notice that E d y g and g = (d, b, n). This relation cannot be generated in the first phase. If it was generated in the second phase, L_d g was already defined and equal to (d, b, 0), so we would be in case 1 and y would be of the form (c_{d, d}, d, n). I'm not sure if this helps.
               sorry
-          · by_cases hb₀ : ∃ b', d = c a b'
-            · obtain ⟨b', hb'⟩ := hb₀
-              rw [hg, partL_of_inr_of_exists _ had habn hb'] at h'
-              rw [ok.extend h']
-              sorry
-            · have ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n had habn hb₀
-              rw [hg, hdg] at h'
-              rw [ok.extend h']
-              sorry
+          ·
+            sorry
+            -- by_cases hb₀ : ∃ b', d = useful_c _ b'
+            -- · obtain ⟨b', hb'⟩ := hb₀
+            --   rw [hg, partL_of_inr_of_exists _ had habn hb'] at h'
+            --   rw [ok.extend h']
+            --   sorry
+            -- · have ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n had habn hb₀
+            --   rw [hg, hdg] at h'
+            --   rw [ok.extend h']
+            --   sorry
       · by_cases h : .inl d = g
         · rw [hx', ← h, partL_of_inl, A_idempotent, had]
         · rw [hbg'] at hx
@@ -2272,15 +2275,16 @@ lemma next_aux_aux1 {x y z w k} : Next_aux x y z → Next_aux x z w → Next_aux
             · rw [hg, ← had, partL_of_inr_same_of_ne_zero _ hn] at h
               rw [ok.aux4 (by rw [S]) rfl h] at h'
               rw [ok.extend h', A_idempotent, had]
-          · by_cases hb : ∃ b', d = c a b'
-            · obtain ⟨b', hb'⟩ := hb
-              rw [hg, partL_of_inr_of_exists _ had habn hb'] at h
-              rw [ok.extend h] at h'
-              rw [ok.extend h', hb', c_spec]
-            · have ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n had habn hb
-              rw [hg, hdg] at h
-              rw [ok.extend h] at h'
-              simp_rw [ok.extend h', hdb'', hab']
+          · sorry
+            -- by_cases hb : ∃ b', d = useful_c _ b'
+            -- · obtain ⟨b', hb'⟩ := hb
+            --   rw [hg, partL_of_inr_of_exists _ had habn hb'] at h
+            --   rw [ok.extend h] at h'
+            --   rw [ok.extend h', hb', c_spec]
+            -- · have ⟨b', b'', hdg, hab', hdb''⟩ := partL_of_inr_of_not_exists_spec n had habn hb
+            --   rw [hg, hdg] at h
+            --   rw [ok.extend h] at h'
+            --   simp_rw [ok.extend h', hdb'', hab']
       · rw [hx']
         rcases hg : g with (a | ⟨⟨a, b, n⟩, habn⟩)
         · rw [hg, S] at had'
@@ -2385,7 +2389,7 @@ lemma exists_extra_set1 :
     ∃ s : relevant_set1 → Finset G',
       (∀ c' y h_rel w hw, (s ⟨⟨c', y⟩, ⟨h_rel, ⟨w, hw⟩⟩⟩).card = (dom_projL next_aux_finite).card ∧
         ∀ z ∈ s ⟨⟨c', y⟩, ⟨h_rel, ⟨w, hw⟩⟩⟩,
-          z.1.1 = c w.1.1 c' ∧ z.1.2.1 = c' ∧
+          z.1.1 = useful_c w c' ∧ z.1.2.1 = c' ∧
           .inr z ≠ g ∧
           (∀ a x, ¬ Next_aux a z x) ∧
           (∀ a x, ¬ Next_aux a x z) ∧
@@ -2393,7 +2397,7 @@ lemma exists_extra_set1 :
           ) ∧
       ∀ p₁ p₂, p₁ ≠ p₂ → Disjoint (s p₁) (s p₂) := by
     have h_infinite (p : relevant_set1) :
-        Set.Infinite <| ((({⟨⟨c p.2.2.choose.1.1 p.1.1, p.1.1, n'⟩, c_ne p.2.2.choose.1.1 p.1.1⟩ | n'} \ {y : G'| ∃ a x, Next_aux a y x}) \ {y : G'| ∃ a x, Next_aux a x y}) \ {y | y = g}) \ {y | y = x₀} := by
+        Set.Infinite <| ((({⟨⟨useful_c p.2.2.choose p.1.1, p.1.1, n'⟩, useful_c_ne_b p.2.2.choose p.1.1⟩ | n'} \ {y : G'| ∃ a x, Next_aux a y x}) \ {y : G'| ∃ a x, Next_aux a x y}) \ {y | y = g}) \ {y | y = x₀} := by
       have ⟨⟨c', y⟩, ⟨h_rel, ⟨w, hw⟩⟩⟩ := p
       refine (Set.Infinite.diff ?_ ?_).diff ?_ |>.diff ?_ |>.diff ?_
       ·
@@ -2440,7 +2444,7 @@ lemma extra_set1_card {c' : A} {y w : G'} (h_rel : Relevant next_aux_finite c' y
   (exists_extra_set1.choose_spec.1 c' y h_rel w hw).1
 
 lemma extra_set1_eq1 {c' : A} {y w z : G'} (h_rel : Relevant next_aux_finite c' y)
-    (hw : Next_aux c' y w) (hz : z ∈ extra_set1 h_rel hw) : z.1.1 = c w.1.1 c' :=
+    (hw : Next_aux c' y w) (hz : z ∈ extra_set1 h_rel hw) : z.1.1 = useful_c w c' :=
   ((exists_extra_set1.choose_spec.1 c' y h_rel w hw).2 z hz).1
 
 lemma extra_set1_eq2 {c' : A} {y w z : G'} (h_rel : Relevant next_aux_finite c' y)
