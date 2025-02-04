@@ -1792,8 +1792,11 @@ lemma exists_extra_set1 (w : G') :
       (fun m ↦ ⟨⟨useful_c w d, d, m⟩, useful_c_ne_b w d⟩) ''
         {n | ∃ x, E d (.inr ⟨⟨useful_c w d, d, n⟩, useful_c_ne_b w d⟩) x}) \ {y} := by
     refine (Set.Infinite.diff ?_ ((ok.finite _).image _)).diff (Set.finite_singleton y)
-
-    sorry
+    let f : ℕ → G' := fun n ↦ ⟨⟨useful_c w d, d, n⟩, useful_c_ne_b w d⟩
+    have f_inj : f.Injective := by
+      intro n m h
+      simp_all only [Subtype.mk.injEq, Prod.mk.injEq, f]
+    exact Set.infinite_range_of_injective f_inj
   have ⟨s, hs_sub, hs_card⟩ := Set.Infinite.exists_subset_card_eq h_infinite n
   refine ⟨s, hs_card, fun z hz ↦ ?_⟩
   have hz := hs_sub hz
@@ -1833,8 +1836,11 @@ lemma exists_extra_set2 {b : A} (hb : E d y b) (hSy : S y ≠ d) :
   have h_infinite : Set.Infinite <| ({(⟨⟨a', d, n'⟩, ha'd⟩ : G') | n'} \
       (fun m ↦ ⟨⟨a', d, m⟩, ha'd⟩) '' {n | ∃ x, E d (.inr ⟨⟨a', d, n⟩, ha'd⟩) x}) \ {y} := by
     refine (Set.Infinite.diff ?_ ((ok.finite _).image _)).diff (Set.finite_singleton y)
-    -- doable, similar to the one inside exists_extra_set1
-    sorry
+    let f : ℕ → G' := fun n ↦ ⟨⟨a', d, n⟩, ha'd⟩
+    have f_inj : f.Injective := by
+      intro n m h
+      simp_all only [Subtype.mk.injEq, Prod.mk.injEq, f]
+    exact Set.infinite_range_of_injective f_inj
   have ⟨s, hs_sub, hs_card⟩ := Set.Infinite.exists_subset_card_eq h_infinite n
   refine ⟨s, hs_card, fun z hz ↦ ?_⟩
   have hz := hs_sub hz
@@ -1955,9 +1961,21 @@ lemma next2_le_encard : n ≤ {z : G' | Next2 d z y}.encard := by
     exact Set.encard_mono fun z hz ↦ .extra1 hw hz
   · rw [← extra_set2_card hb hSy, ← Set.encard_coe_eq_coe_finsetCard]
     exact Set.encard_mono fun z hz ↦ .extra2 hb hSy hz
-  · --doable, the set is infinite, since it contains all `z` of the form `⟨y.1, y.2.1, m⟩` with `m ∈ ℕ \ {0}`, it may be prove it with a calc block saying that n = (Finset.range n).card = (Finset.range n).encard = (f '' (Finset.range n)).encard ≤ {z | Next2 d (Sum.inr z) (Sum.inr y)}.encard.   Where f = fun m ↦ ⟨y.1, y.2.1, m + 1⟩
-
-    sorry
+  · let f : ℕ → G' := fun m ↦ ⟨⟨y.1.1, y.1.2.1, m + 1⟩, y.2⟩
+    have f_inj : f.Injective := by
+      intro n m h
+      simp_all only [Subtype.mk.injEq, Prod.mk.injEq, add_left_inj, f]
+    calc
+      (n : ENat) = (Finset.range n).card := by rw [Finset.card_range n]
+      _ = (Finset.range n).toSet.encard := (Set.encard_coe_eq_coe_finsetCard _).symm
+      _ = (f '' (Finset.range n)).encard := (f_inj.encard_image _).symm
+      _ ≤ _ := by
+        refine Set.encard_mono fun z hz ↦ ?_
+        have ⟨m, hm, hz⟩ := hz
+        simp_rw [← hz, Set.mem_setOf_eq, f]
+        convert next2_h_c _ _
+        · rw [S, ← hSy, S]
+        · exact Nat.add_one_ne_zero m
 
 end Extension2
 
