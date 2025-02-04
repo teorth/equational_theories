@@ -1701,8 +1701,8 @@ class Extension1 where
   E : A → G → G → Prop
   ok : OKₙ E
   d : A
-  g : G'
-  not_def {z} : ¬E d g z
+  y : G'
+  not_def {z} : ¬E d y z
 
 -- a partial solution, along with a pair `(a, y)` such that `L a y` is already defined and `n ∈ ℕ`, the target cardinality for `{z | E a z y}`
 class Extension2 where
@@ -1717,11 +1717,11 @@ class Extension2 where
 namespace Extension1
 
 -- define the element that should be the image of `L_c' y` when it is not yet defined
-noncomputable def partL (c' : A) (y : G') : G :=
+noncomputable def partLₙ (c' : A) (y : G') : G :=
   .inl (A_op_surj_right c' (A_op_surj_right (S y) c').choose).choose
 
 lemma partL_spec (c' : A) (y : G') :
-    ∃ b b' : A, partL c' y = b' ∧ S y ◇ b = c' ∧ c' ◇ b' = b :=
+    ∃ b b' : A, partLₙ c' y = b' ∧ S y ◇ b = c' ∧ c' ◇ b' = b :=
   ⟨(A_op_surj_right y.1.1 c').choose, (A_op_surj_right c' _).choose, rfl,
     (A_op_surj_right _ _).choose_spec, (A_op_surj_right _ _).choose_spec⟩
 
@@ -1730,7 +1730,7 @@ variable [Extension1]
 @[mk_iff]
 inductive Next1 : A → G → G → Prop
   | base {a y x} : E a y x → Next1 a y x
-  | new : Next1 d g (partL d g)
+  | new : Next1 d y (partLₙ d y)
 
 lemma next1_func {a x y y'} : Next1 a x y → Next1 a x y' → y = y'
   | .base hy, .base hy' => ok.func hy hy'
@@ -1751,25 +1751,25 @@ lemma next1_h_d {b : A} {y : G'} : Next1 (useful_c y b) y b :=
 lemma next1_finite {a c : A} (hac : a ≠ c) : {n | ∃ x, Next1 c (.inr ⟨⟨a, c, n⟩, hac⟩) x}.Finite := by
   simp only [next1_iff, exists_or, exists_and_left, exists_eq_right, Set.setOf_or, Set.finite_union,
     ok.finite, true_and]
-  refine  Set.Finite.subset (Set.finite_singleton g.1.2.2) fun n hn ↦ ?_
+  refine  Set.Finite.subset (Set.finite_singleton y.1.2.2) fun n hn ↦ ?_
   rw [← Sum.inr_injective hn.2.1]
   rfl
 
-lemma next1_h_1516 {c' : A} {y : G'} {x : G} : Next1 c' y x → ∃ w, Next1 c' x w ∧ Next1 (S y) w c'
+lemma next1_h_1516 {c' : A} {z : G'} {x : G} : Next1 c' z x → ∃ w, Next1 c' x w ∧ Next1 (S z) w c'
   | .base h => by
     have ⟨w, hw1, hw2⟩ := ok.h_1516 h
     exact ⟨w, Next1.base hw1, Next1.base hw2⟩
   | .new => by
-    have ⟨b, b', hb', hab, hdb'⟩ := partL_spec d g
+    have ⟨b, b', hb', hab, hdb'⟩ := partL_spec d y
     rw [hb']
     refine ⟨_, .base (ok.extend d _), ?_⟩
     rw [hdb', ← hab]
     exact next1_extend _ _
 
-lemma next1_h_g {c' : A} {y : G'} {x : G} (hSy : S y ≠ c') : Next1 c' y x → x ≠ .inl c'
+lemma next1_h_g {c' : A} {z : G'} {x : G} (hSy : S z ≠ c') : Next1 c' z x → x ≠ .inl c'
   | .base h => ok.h_g hSy h
   | .new => by
-    have ⟨b, b', hb', hab, hdb'⟩ := partL_spec d g
+    have ⟨b, b', hb', hab, hdb'⟩ := partL_spec d y
     rw [hb']
     intro h
     apply Sum.inl_injective at h
