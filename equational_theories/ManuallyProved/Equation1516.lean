@@ -1676,7 +1676,7 @@ structure OKₙ (E : A → G → G → Prop) : Prop where
   h_b {a : A} {y : G'} : S y = a → y.1.2.2 = 0 → E a y a -- (b)
   h_c {a : A} {y : G'} : S y = a → y.1.2.2 ≠ 0 → E a y (.inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩) -- (c)
   h_d {b : A} {y : G'} : E (useful_c y b) y b -- (d)
-  finite {a c : A} (hac : a ≠ c) : {n | ∃ x, E a (.inr ⟨⟨a, c, n⟩, hac⟩) x}.Finite -- (e)
+  finite {a c : A} (hac : a ≠ c) : {n | ∃ x, E c (.inr ⟨⟨a, c, n⟩, hac⟩) x}.Finite -- (e)
   h_1516 {c' : A} {y : G'} {x : G} : E c' y x → ∃ w, E c' x w ∧ E (S y) w c' -- (f)
   h_g {c' : A} {y : G'} {x : G} : S y ≠ c' → E c' y x → x ≠ .inl c' -- (g)
   -- TODO: in the blueprint (g) should be modified to require that condition only if L_c' y is defined
@@ -1697,10 +1697,10 @@ class Extension1 where
 class Extension2 where
   E : A → G → G → Prop
   ok : OKₙ E
-  a : A
-  y : G
-  w : G
-  h_def : E a y w
+  d : A
+  y : G'
+  g : G
+  h_def : E d y g
   n : ℕ
 
 namespace Extension1
@@ -1726,7 +1726,7 @@ lemma next1_func {a x y y'} : Next1 a x y → Next1 a x y' → y = y'
   | .new, .new => rfl
   | .base hy, .new | .new, .base hy => (not_def hy).elim
 
-lemma next1_extend {a b : A} : Next1 a b (.inl (a ◇ b)) := Next1.base (ok.extend _ _)
+lemma next1_extend (a b : A) : Next1 a b (.inl (a ◇ b)) := Next1.base (ok.extend _ _)
 
 lemma next1_h_b {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2.2 = 0) : Next1 a y (.inl a) :=
   .base (ok.h_b hSy hn)
@@ -1737,7 +1737,7 @@ lemma next1_h_c {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2.2 ≠ 0) : Next1 a 
 lemma next1_h_d {b : A} {y : G'} : Next1 (useful_c y b) y b :=
   .base ok.h_d
 
-lemma next1_finite {a c : A} (hac : a ≠ c) : {n | ∃ x, Next1 a (.inr ⟨⟨a, c, n⟩, hac⟩) x}.Finite := by
+lemma next1_finite {a c : A} (hac : a ≠ c) : {n | ∃ x, Next1 c (.inr ⟨⟨a, c, n⟩, hac⟩) x}.Finite := by
   simp only [next1_iff, exists_or, exists_and_left, exists_eq_right, Set.setOf_or, Set.finite_union,
     ok.finite, true_and]
   -- doable, the set is a singleton
@@ -1752,7 +1752,7 @@ lemma next1_h_1516 {c' : A} {y : G'} {x : G} : Next1 c' y x → ∃ w, Next1 c' 
     rw [hb']
     refine ⟨_, .base (ok.extend d _), ?_⟩
     rw [hdb', ← hab]
-    exact next1_extend
+    exact next1_extend _ _
 
 lemma next1_h_g {c' : A} {y : G'} {x : G} (hSy : S y ≠ c') : Next1 c' y x → x ≠ .inl c'
   | .base h => ok.h_g hSy h
