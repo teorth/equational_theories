@@ -1783,6 +1783,193 @@ def next1 : PartialSolutionₙ :=
     next1_h_1516, next1_h_g⟩
 
 end Extension1
+
+namespace Extension2
+
+variable [Extension2]
+
+lemma exists_extra_set1 {w : G'} (hw : E d y w) :
+    ∃ s : Finset G', s.card = n ∧
+      ∀ z ∈ s, z.1.1 = useful_c w d ∧ z.1.2.1 = d ∧
+        z ≠ y ∧ -- not sure wether it's useful
+        ∀ x, ¬ E d z x
+    := by
+  have h_infinite : Set.Infinite <| ({(⟨⟨useful_c w d, d, n'⟩, useful_c_ne_b w d⟩ : G') | n'} \
+      (fun m ↦ ⟨⟨useful_c w d, d, m⟩, useful_c_ne_b w d⟩) ''
+        {n | ∃ x, E d (.inr ⟨⟨useful_c w d, d, n⟩, useful_c_ne_b w d⟩) x}) \ {y} := by
+    refine (Set.Infinite.diff ?_ ((ok.finite _).image _)).diff (Set.finite_singleton y)
+
+    sorry
+  have ⟨s, hs_sub, hs_card⟩ := Set.Infinite.exists_subset_card_eq h_infinite n
+  refine ⟨s, hs_card, fun z hz ↦ ?_⟩
+  have hz := hs_sub hz
+  simp only [Set.mem_diff, Set.mem_image, not_exists, not_and] at hz
+  have ⟨⟨⟨n', hn'z⟩, h_not_E⟩, hzy⟩ := hz
+  simp only [← hn'z, ne_eq, true_and]
+  exact ⟨ne_of_eq_of_ne hn'z hzy, fun x hx ↦ h_not_E _ ⟨_, hx⟩ hn'z⟩
+
+noncomputable def extra_set1 {w : G'} (hw : E d y w) : Finset G' :=
+  (exists_extra_set1 hw).choose
+
+lemma extra_set1_card {w : G'} (hw : E d y w) : (extra_set1 hw).card = n :=
+  (exists_extra_set1 hw).choose_spec.1
+
+lemma extra_set1_eq1 {w z : G'} (hw : E d y w) (hz : z ∈ extra_set1 hw) :
+    z.1.1 = useful_c w d := (exists_extra_set1 hw).choose_spec.2 z hz |>.1
+
+lemma extra_set1_eq2 {w z : G'} (hw : E d y w) (hz : z ∈ extra_set1 hw) :
+    z.1.2.1 = d := (exists_extra_set1 hw).choose_spec.2 z hz |>.2.1
+
+lemma extra_set1_ne_y {w z : G'} (hw : E d y w) (hz : z ∈ extra_set1 hw) :
+    z ≠ y := (exists_extra_set1 hw).choose_spec.2 z hz |>.2.2.1
+
+lemma extra_set1_not_E {w z : G'} (hw : E d y w) (hz : z ∈ extra_set1 hw) {x : G} :
+    ¬ E d z x := (exists_extra_set1 hw).choose_spec.2 z hz |>.2.2.2 x
+
+
+lemma exists_extra_set2 {b : A} (hb : E d y b) (hSy : S y ≠ d) :
+    ∃ (a' : A), a' ◇ b = d ∧ a' ≠ d ∧
+      ∃ s : Finset G', s.card = n ∧
+        ∀ z ∈ s, z.1.1 = a' ∧ z.1.2.1 = d ∧
+          z ≠ y ∧ -- not sure wether it's useful
+          ∀ x, ¬ E d z x
+    := by
+  have ⟨a', ha'b, ha'd, _, _⟩ := base1'' b d d d d (fun h ↦ ok.h_g hSy hb (h ▸ rfl))
+  refine ⟨a', ha'b, ha'd, ?_⟩
+
+  have h_infinite : Set.Infinite <| ({(⟨⟨a', d, n'⟩, ha'd⟩ : G') | n'} \
+      (fun m ↦ ⟨⟨a', d, m⟩, ha'd⟩) '' {n | ∃ x, E d (.inr ⟨⟨a', d, n⟩, ha'd⟩) x}) \ {y} := by
+    refine (Set.Infinite.diff ?_ ((ok.finite _).image _)).diff (Set.finite_singleton y)
+    -- doable, similar to the one inside exists_extra_set1
+    sorry
+  have ⟨s, hs_sub, hs_card⟩ := Set.Infinite.exists_subset_card_eq h_infinite n
+  refine ⟨s, hs_card, fun z hz ↦ ?_⟩
+  have hz := hs_sub hz
+  simp only [Set.mem_diff, Set.mem_image, not_exists, not_and] at hz
+  have ⟨⟨⟨n', hn'z⟩, h_not_E⟩, hzy⟩ := hz
+  simp only [← hn'z, ne_eq, true_and]
+  exact ⟨ne_of_eq_of_ne hn'z hzy, fun x hx ↦ h_not_E _ ⟨_, hx⟩ hn'z⟩
+
+noncomputable def es2_a' {b : A} (hb : E d y b) (hSy : S y ≠ d) : A :=
+  (exists_extra_set2 hb hSy).choose
+
+lemma es2_a'_spec {b : A} (hb : E d y b) (hSy : S y ≠ d) :
+    es2_a' hb hSy ◇ b = d := (exists_extra_set2 hb hSy).choose_spec.1
+
+lemma es2_a'_ne {b : A} (hb : E d y b) (hSy : S y ≠ d) :
+    es2_a' hb hSy ≠ d := (exists_extra_set2 hb hSy).choose_spec.2.1
+
+noncomputable def extra_set2 {b : A} (hb : E d y b) (hSy : S y ≠ d) : Finset G' :=
+  (exists_extra_set2 hb hSy).choose_spec.2.2.choose
+
+lemma extra_set2_card {b : A} (hb : E d y b) (hSy : S y ≠ d) : (extra_set2 hb hSy).card = n :=
+  (exists_extra_set2 hb hSy).choose_spec.2.2.choose_spec.1
+
+lemma extra_set2_eq1 {b : A} (hb : E d y b) (hSy : S y ≠ d)
+    {z : G'} (hz : z ∈ extra_set2 hb hSy) : z.1.1 = es2_a' hb hSy :=
+  (exists_extra_set2 hb hSy).choose_spec.2.2.choose_spec.2 z hz |>.1
+
+lemma extra_set2_eq2 {b : A} (hb : E d y b) (hSy : S y ≠ d)
+    {z : G'} (hz : z ∈ extra_set2 hb hSy) : z.1.2.1 = d :=
+  (exists_extra_set2 hb hSy).choose_spec.2.2.choose_spec.2 z hz |>.2.1
+
+lemma extra_set2_ne_y {b : A} (hb : E d y b) (hSy : S y ≠ d)
+    {z : G'} (hz : z ∈ extra_set2 hb hSy) : z ≠ y :=
+  (exists_extra_set2 hb hSy).choose_spec.2.2.choose_spec.2 z hz |>.2.2.1
+
+lemma extra_set2_not_E {b : A} (hb : E d y b) (hSy : S y ≠ d)
+    {z : G'} (hz : z ∈ extra_set2 hb hSy) {x : G} : ¬ E d z x :=
+  (exists_extra_set2 hb hSy).choose_spec.2.2.choose_spec.2 z hz |>.2.2.2 _
+
+@[mk_iff]
+inductive Next2 : A → G → G → Prop
+  | base {a z x} : E a z x → Next2 a z x
+  | extra1 {z} {w₁ : G'} (hw₁ : E d y w₁) : z ∈ extra_set1 hw₁ → Next2 d z y
+  | extra2 {z} {b : A} (hb : E d y b) (hSy : S y ≠ d) : z ∈ extra_set2 hb hSy → Next2 d z y
+
+lemma next2_func {a x y y'} : Next2 a x y → Next2 a x y' → y = y'
+  | .base h, .base h' => ok.func h h'
+  | .base h, .extra1 hw hz => (extra_set1_not_E hw hz h).elim
+  | .base h, .extra2 hb hSy hz => (extra_set2_not_E hb hSy hz h).elim
+  | .extra1 hw hz, .base h => (extra_set1_not_E hw hz h).elim
+  | .extra1 .., .extra1 .. => rfl
+  | .extra1 .., .extra2 .. => rfl
+  | .extra2 hb hSy hz, .base h => (extra_set2_not_E hb hSy hz h).elim
+  | .extra2 .., .extra1 .. => rfl
+  | .extra2 .., .extra2 .. => rfl
+
+lemma next2_extend (a b : A) : Next2 a b (.inl (a ◇ b)) := Next2.base (ok.extend _ _)
+
+lemma next2_h_b {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2.2 = 0) : Next2 a y (.inl a) :=
+  .base (ok.h_b hSy hn)
+
+lemma next2_h_c {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2.2 ≠ 0) : Next2 a y (.inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩) :=
+  .base (ok.h_c hSy hn)
+
+lemma next2_h_d {b : A} {y : G'} : Next2 (useful_c y b) y b :=
+  .base ok.h_d
+
+lemma next2_finite {a c : A} (hac : a ≠ c) : {n | ∃ x, Next2 c (.inr ⟨⟨a, c, n⟩, hac⟩) x}.Finite := by
+  simp only [next2_iff, exists_or, Set.setOf_or, Set.finite_union, ok.finite, true_and]
+  rcases hw : g with (b | w)
+  · have {z} : ¬ E d y (.inr z) := fun h ↦ Sum.inr_ne_inl <| hw ▸ ok.func h h_def
+    simp only [this, IsEmpty.exists_iff, exists_false, Set.setOf_false, Set.finite_empty, true_and]
+    by_cases hSy : S y = d
+    · simp [hSy]
+    · refine Set.Finite.subset (s := {n' | ∃ z ∈ extra_set2 (hw ▸ h_def) hSy, z.1.2.2 = n'}) ?_ ?_
+      · exact (Finset.finite_toSet _).image _
+      · intro n' ⟨y₁, z, b₁, hb₁, _, hz_in, _, hz, hy₁⟩
+        simp only [exists_eq_right, Set.mem_setOf_eq]
+        refine ⟨z, ?_, ?_⟩
+        · convert hz_in
+          exact Sum.inl_injective <| ok.func (hw ▸ h_def) hb₁
+        · rw [← Sum.inr_injective hz]
+  · have {a} : ¬ E d y (.inl a) := fun h ↦ Sum.inl_ne_inr <| hw ▸ ok.func h h_def
+    simp only [this, IsEmpty.exists_iff, exists_false, Set.setOf_false, Set.finite_empty, and_true]
+    refine Set.Finite.subset (s := (fun (z : G') ↦ z.1.2.2) '' (extra_set1 (hw ▸ h_def))) ?_ ?_
+    · exact (Finset.finite_toSet _).image _
+    · intro n' ⟨y₁, ⟨z, w₁, hw₁, hz_in, hcd, hz, hy₁⟩⟩
+      simp only [Set.mem_image, Finset.mem_coe, exists_eq_right]
+      refine ⟨z, ?_, ?_⟩
+      · convert hz_in
+        exact Sum.inr_injective <| ok.func (hw ▸ h_def) hw₁
+      · rw [← Sum.inr_injective hz]
+
+lemma next2_h_1516 {c' : A} {z : G'} {x : G} : Next2 c' z x → ∃ w₁, Next2 c' x w₁ ∧ Next2 (S z) w₁ c'
+  | .base h => by
+    have ⟨w₂, hw1, hw2⟩ := ok.h_1516 h
+    exact ⟨w₂, Next2.base hw1, Next2.base hw2⟩
+  | .extra1 hw₀ hz => by
+    rw [S, extra_set1_eq1 hw₀ hz]
+    exact ⟨_, .base hw₀, .base ok.h_d⟩
+  | .extra2 hb hSy hz => by
+    refine ⟨_, .base hb, .base ?_⟩
+    have := extra_set2_eq1 hb hSy hz
+    rw [S, extra_set2_eq1 hb hSy hz, ← es2_a'_spec hb hSy]
+    exact ok.extend _ _
+
+lemma next2_h_g {c' : A} {z : G'} {x : G} (hSy : S z ≠ c') : Next2 c' z x → x ≠ .inl c'
+  | .base h => ok.h_g hSy h
+  | .extra1 .. | .extra2 .. => Sum.inr_ne_inl
+
+def next2 : PartialSolutionₙ :=
+  ⟨Next2, next2_func, next2_extend, next2_h_b, next2_h_c, next2_h_d, next2_finite,
+    next2_h_1516, next2_h_g⟩
+
+lemma next2_le_encard : n ≤ {z : G' | Next2 d z y}.encard := by
+  rcases def_trichotomy ok h_def with (⟨w, hw⟩ | ⟨hSy, ⟨b, hb⟩⟩ | ⟨hSy, hn, _⟩)
+  · rw [← extra_set1_card hw, ← Set.encard_coe_eq_coe_finsetCard]
+    exact Set.encard_mono fun z hz ↦ .extra1 hw hz
+  · rw [← extra_set2_card hb hSy, ← Set.encard_coe_eq_coe_finsetCard]
+    exact Set.encard_mono fun z hz ↦ .extra2 hb hSy hz
+  · --doable, the set is infinite, since it contains all `z` of the form `⟨y.1, y.2.1, m⟩` with `m ∈ ℕ \ {0}`, it may be prove it with a calc block saying that n = (Finset.range n).card = (Finset.range n).encard = (f '' (Finset.range n)).encard ≤ {z | Next2 d (Sum.inr z) (Sum.inr y)}.encard.   Where f = fun m ↦ ⟨y.1, y.2.1, m + 1⟩
+
+    sorry
+
+end Extension2
+
+
+
 namespace Extension
 
 -- define the element that should be the image of `L_c y`
