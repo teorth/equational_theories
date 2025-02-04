@@ -1740,8 +1740,9 @@ lemma next1_h_d {b : A} {y : G'} : Next1 (useful_c y b) y b :=
 lemma next1_finite {a c : A} (hac : a ≠ c) : {n | ∃ x, Next1 c (.inr ⟨⟨a, c, n⟩, hac⟩) x}.Finite := by
   simp only [next1_iff, exists_or, exists_and_left, exists_eq_right, Set.setOf_or, Set.finite_union,
     ok.finite, true_and]
-  -- doable, the set is a singleton
-  sorry
+  refine  Set.Finite.subset (Set.finite_singleton g.1.2.2) fun n hn ↦ ?_
+  rw [← Sum.inr_injective hn.2.1]
+  rfl
 
 lemma next1_h_1516 {c' : A} {y : G'} {x : G} : Next1 c' y x → ∃ w, Next1 c' x w ∧ Next1 (S y) w c'
   | .base h => by
@@ -1765,6 +1766,10 @@ lemma next1_h_g {c' : A} {y : G'} {x : G} (hSy : S y ≠ c') : Next1 c' y x → 
     rw [A_idempotent] at hdb'
     rw [← hdb'] at hab
     exact hSy (A_op_eq_self_iff.mp hab)
+
+def next1 : PartialSolutionₙ :=
+  ⟨Next1, next1_func, next1_extend, next1_h_b, next1_h_c, next1_h_d, next1_finite,
+    next1_h_1516, next1_h_g⟩
 
 end Extension1
 namespace Extension
