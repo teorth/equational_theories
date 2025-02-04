@@ -3126,7 +3126,7 @@ theorem exists_extensionₒ (seed : PartialSolution) :
       _ ≤ _ := (Nat.cast_le.mpr h).trans (Set.ncard_le_encard _)
       _ ≤ _ := Set.encard_le_card fun y hy ↦ L_of_e he hy
 
-theorem exists_extension (seed : PartialSolution) :
+theorem exists_extension (seed : PartialSolutionₙ) :
     ∃ L : A → G → G,
       (∀ a b : A, L a b = a ◇ b) ∧ -- Lb extends a : A ↦ b ◇ a
       (∀ b : A, ∀ x : G', (L (S x) <| L b <| L b x) = b) ∧ -- Axiom B
@@ -3136,58 +3136,59 @@ theorem exists_extension (seed : PartialSolution) :
     := by
   classical
   have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain (a := seed)
-    (task := fun (a, y, n) ↦ {e | (∃ x, e.1 a y x) ∧ n ≤ {z : G' | e.1 a z y}.ncard})
-    fun ⟨E, ok⟩ ((d, g, n) : A × G × ℕ) ↦ by
-      if h : ∃ z, E d g z then
-        -- put here the second extension
-        -- exact ⟨_, le_rfl, h⟩
-        sorry
+    (task := fun (a, y, n) ↦ {e | (∃ x, e.1 a y x) ∧ ((∃ a, y = .inl a) ∨ n ≤ {z : G' | e.1 a z y}.encard)})
+    fun ⟨E, ok⟩ ((d, y, n) : A × G × ℕ) ↦ by
+      rcases y with (a | y)
+      · exact ⟨⟨E, ok⟩, fun _ _ _ a ↦ a, ⟨⟨_, ok.extend d a⟩, Or.inl ⟨a, rfl⟩⟩⟩
+      if hg : ∃ g, E d y g then
+        have ⟨g, h_def⟩ := hg
+        let E2 : Extension2 := { E, ok, d, y, g, h_def, n }
+        exact ⟨E2.next2, fun _ _ _ ↦ (.base ·), ⟨_, .base h_def⟩, Or.inr E2.next2_le_encard⟩
       else
-        -- here we put the first extension followed by the second one
-        sorry
-        -- let E1 : Extension := { E, ok, d, g, not_def := fun h' ↦ h ⟨_, h'⟩ }
-        -- exact ⟨E1.next, fun _ _ _ ↦ (.base ·), _, .new⟩
-        -- exact ⟨E1.next, fun _ _ _ ↦ Next_base, _, Next_new⟩
-  choose e he L hL_card using h3
+        let E1 : Extension1 := { E, ok, d, y, not_def := fun h ↦ hg ⟨_, h⟩ }
+        match h : E1.next1 with | ⟨E, ok⟩ => ?_
+        simp_rw [Extension1.next1, Subtype.mk.injEq, eq_comm] at h
+        have h_def : E d y (Extension1.partLₙ d y) := by
+          convert Extension1.Next1.new
+        let E2 : Extension2 := { E, ok, d, y, g := _, h_def, n}
+        refine ⟨E2.next2, fun _ _ _ ha ↦ .base ?_, ⟨_, .base h_def⟩, Or.inr E2.next2_le_encard⟩
+        convert Extension1.Next1.base ha
+
+  choose! e he L hL_card using h3
   choose L hL using L
-  have L_of_e {a : A} {y x : G} {n : ℕ} {e₀ : PartialSolution} (he₀ : e₀ ∈ c)
+
+  have L_of_e {a : A} {y x : G} (n : ℕ) {e₀ : PartialSolutionₙ} (he₀ : e₀ ∈ c)
       (h : e₀.val a y x) : L (a, y, n) = x := by
     rcases hc.total he₀ (he (a, y, n)) with (h_le | h_le)
     · exact (e (a, y, n)).2.func (hL (a, y, n)) (h_le _ _ _ h)
     · exact e₀.2.func (h_le _ _ _ (hL (a, y, n))) h
-  -- --maybe not useful?
-  -- have L_func (a : A) (y : G) (n n' : ℕ) : L (a, y, n) = L (a, y, n') := by
-  --   let T : Finset (A × G × ℕ) := {
-  --     (a, y, n),
-  --     (a, y, n')}
-  --   have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
-  --     (T.image fun p ↦ ⟨e p, he p⟩)
-  --   have hT := fun p hp ↦ Finset.forall_image.mp le p hp _ _ _ (hL p)
-  --   simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at hT
-  --   have ⟨e_n, e_n'⟩ := hT
-  --   exact e.2.func e_n e_n'
-  refine ⟨fun a y ↦ L (a, y, 0),
-    fun a b ↦ (e (a, b, 0)).2.extend (hL (a, b, 0)),
-    fun a x ↦ ?_,
-    E_1_x₀_eq_1 (hL (1, x₀, 0)),
-    fun b y ↦ ?_⟩
-  · let T : Finset (A × G × ℕ) := {
-      (a, (x : G), 0),
-      (a, (L (a, x, 0)), 0),
-      (S x, L (a, (L (a, x, 0)), 0), 0)}
+  have L_func (a : A) (y : G) (n n' : ℕ) : L (a, y, n) = L (a, y, n') := by
+    let T : Finset (A × G × ℕ) := {
+      (a, y, n),
+      (a, y, n')}
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (T.image fun p ↦ ⟨e p, he p⟩)
     have hT := fun p hp ↦ Finset.forall_image.mp le p hp _ _ _ (hL p)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at hT
-    have ⟨e_a_x, e_a_L, e_Sx_L⟩ := hT
-    exact e.2.aux1 e_a_x e_a_L e_Sx_L
+    have ⟨e_n, e_n'⟩ := hT
+    exact e.2.func e_n e_n'
+  refine ⟨fun a y ↦ L (a, y, 0),
+    fun a b ↦ L_of_e _ h1 (seed.property.extend a b),
+    fun a x ↦ ?_,
+    L_of_e _ h1 E_1_x₀,
+    fun b y ↦ ?_⟩
+  · have e_a_x := hL (a, x, 0)
+    have ⟨w, e_a_L, e_Sx_L⟩ := (e (a, (x : G), 0)).2.h_1516 (hL (a, x, 0))
+    have hw := L_of_e 0 (he (a, (x : G), 0)) e_a_L
+    dsimp
+    exact L_of_e 0 (he (a, (x : G), 0)) (hw ▸ e_Sx_L)
   · rw [← Set.encard_eq_top_iff, ENat.eq_top_iff_forall_le]
     intro n
-    have := hL_card (b, y, n)
-    calc
-      _ ≤ ({z | _}.ncard : ENat) := by gcongr
-      _ ≤ {z | _}.encard := Set.ncard_le_encard _
-      _ ≤ _ := Set.encard_mono fun z hz ↦ L_of_e (he (b, y, n)) hz
+    have h_le := hL_card (b, y, n)
+    simp only [reduceCtorEq, exists_const, false_or] at h_le
+    refine h_le.trans <| Set.encard_mono fun z hz ↦ ?_
+    simp_rw [L_func _ _ _ n]
+    exact L_of_e n (he _) hz
 
 -- the empty seed, see if this actually works, otherwise maybe we can use the seed `E * x₀ *`
 def seed : A → G → G → Prop := fun _ _ _ ↦ false
