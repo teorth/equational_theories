@@ -18,6 +18,10 @@ $$ x = (Sx \op x) \op x.$$
 \begin{lemma}[Basic properties of 677 magma]\label{677-basic} Let $M$ be a finite magma obeying \eqref{677}.
   \begin{itemize}
   \item (i)  The left multiplication operators $L_y: M \to M$ are all invertible, with $L_y^{-1} x = x \op R_y L_y x$.
+  \item (ii) If $x,y \in M$ and $y \op x = x$, then $y = Sx \op x$.  In particular, 255 holds if and only if the equation $y \op x = x$ is solvable for every $x$.
+  \item (iii)  For all $x,y \in M$, we have $x = L_y x \op R_y L_y^2 x$.
+  \item (iv) For $a,b \in M$, we have $a \diamond b = L_b^{-2} a \op ((L_b^{-1} a \op L_b^{-2} a) \op L_b^{-1} a)$.
+  \item (v) Let $x \in M$.  If $y$ is a fixed point of $L_x S$, then it is a fixed point of $R_x L_x$, which in turn implies that $L_x y$ is a fixed point of $L_x R_x$.  Finally, if $z$ is a fixed point of $L_x R_x$, then $R_x L_x z = x$ (and hence $L_x z = Sx \op x$ by (ii)).
   \item (ii)  For all $x,y \in M$, we have $x = L_y x \op R_y L_y^2 x$.
   \item (iii) For $a,b \in M$, we have $a \diamond b = L_b^{-2} a \op ((L_b^{-1} a \op L_b^{-2} a) \op L_b^{-1} a)$.
 fixed point of $L_x R_x$.  Finally, if $z$ is a fixed point of $L_x R_x$, then $R_x L_x z = x$ (and hence $L_x z = Sx \op x$ by (ii)).
