@@ -1166,14 +1166,14 @@ def translation_invariant_1516 (f : A → A) : Prop := ∀ (x : A), (f ( f ( f x
 
 theorem completion (ps : PartialSolution) :
     ∃ (f : A → A), translation_invariant_1516 f ∧ (∀ x y, y ∈ ps.E ⬝ x → f x = y) ∧
-      ∀ b, (b ≠ 1) → Set.encard {c | b * c = f c } ≥ 3 := by
+      ∀ b, (b ≠ 1) → Set.encard {c | b * c = f c } ≥ 4 := by
   have ⟨c, hc, h1, h2, h3⟩  := exists_greedy_chain (α := PartialSolution) (β := A ⊕ {b : A // b ≠ 1})
     (task := fun b ps => match b with
       | .inl b => ∃ c, c ∈ ps.E ⬝ b
-      | .inr ⟨b, _⟩   => Finset.card {c ∈ ps.E.keys | (b*c) ∈ ps.E ⬝ c } ≥ 3)
+      | .inr ⟨b, _⟩   => Finset.card {c ∈ ps.E.keys | (b*c) ∈ ps.E ⬝ c } ≥ 4)
     ( fun ps b => match b with
       | .inl b => extension_or_nop ps b
-      | .inr ⟨b, h⟩   => extension2 ps b h 3) ps
+      | .inr ⟨b, h⟩   => extension2 ps b h 4) ps
   classical
   simp only [Sum.forall, Subtype.forall] at h3
   choose g hg1 f hf using h3.1
@@ -1261,31 +1261,29 @@ theorem A_idempotent (x : A) : x ◇ x = x := by
 
 -- This lemma needs to be adapted to the new proof of the refutation 1516 -> 255, the old version of the lemma is commented below. In order to adapt the lemma, also the above implmentation shall be tweaked. See also the new implementation of base2.
 theorem base1 {a b : A} (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 4 := by
-  sorry
--- theorem base1 {a b : A} (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 3 := by
-  -- have eq1 : {c | c ◇ a = b} =  {c | f (a*c⁻¹) *  c = b} := by
-  --   ext
-  --   simp [magA_op_def]
-  -- let bij : A ≃ A := ⟨fun (c :A ) => a * c⁻¹, fun (c :A ) => c⁻¹ * a, fun _ => by simp, fun _ => by simp⟩
-  -- have eq2 :  {c| (b * a⁻¹) *c = f c} ≃ {c| f (a*c⁻¹) *  c = b} := by
-  --   simp only [Set.coe_setOf]
-  --   trans
-  --   · apply (Equiv.subtypeEquivOfSubtype bij).symm
-  --   · apply Equiv.subtypeEquivRight
-  --     intro x
-  --     unfold bij
-  --     simp only [Equiv.coe_fn_mk]
-  --     group
-  --     constructor
-  --     · intro h ; rw [←h] ; group
-  --     · intro h ; rw [←h] ; group
-  -- rw [eq1, ← (Set.encard_congr eq2)]
-  -- have := (completion initial).choose_spec.2.2 (b * a⁻¹)
-  -- apply this
-  -- apply_fun (fun x => x * a)
-  -- simp [ineq.symm]
+  have eq1 : {c | c ◇ a = b} =  {c | f (a*c⁻¹) *  c = b} := by
+    ext
+    simp [magA_op_def]
+  let bij : A ≃ A := ⟨fun (c :A ) => a * c⁻¹, fun (c :A ) => c⁻¹ * a, fun _ => by simp, fun _ => by simp⟩
+  have eq2 :  {c| (b * a⁻¹) *c = f c} ≃ {c| f (a*c⁻¹) *  c = b} := by
+    simp only [Set.coe_setOf]
+    trans
+    · apply (Equiv.subtypeEquivOfSubtype bij).symm
+    · apply Equiv.subtypeEquivRight
+      intro x
+      unfold bij
+      simp only [Equiv.coe_fn_mk]
+      group
+      constructor
+      · intro h ; rw [←h] ; group
+      · intro h ; rw [←h] ; group
+  rw [eq1, ← (Set.encard_congr eq2)]
+  have := (completion initial).choose_spec.2.2 (b * a⁻¹)
+  apply this
+  apply_fun (fun x => x * a)
+  simp [ineq.symm]
 
-theorem base1' (a b c₁ c₂ c₃ : A) (hab : a ≠ b) : ∃ c, c ◇ a = b ∧ c ≠ c₁ ∧ c ≠ c₂ ∧ c ≠ c₃ := by
+theorem base1' {a b : A} (hab : a ≠ b) (c₁ c₂ c₃ : A) : ∃ c, c ◇ a = b ∧ c ≠ c₁ ∧ c ≠ c₂ ∧ c ≠ c₃ := by
   have := base1 hab
   have h : ({c | c ◇ a = b} \ {c₁, c₂, c₃}).Nonempty := by
     refine Set.encard_ne_zero.mp (ne_of_gt ?_)
@@ -1302,8 +1300,8 @@ theorem base1' (a b c₁ c₂ c₃ : A) (hab : a ≠ b) : ∃ c, c ◇ a = b ∧
         norm_num
       {c | c ◇ a = b}.encard - _ ≤ _ := Set.tsub_encard_le_encard_diff _ {c₁, c₂, c₃}
   rcases h with ⟨c, hc1, hc2⟩
-  refine ⟨c, hc1, ?_, ?_, ?_⟩ <;> simp_all
-
+  refine ⟨c, hc1, ?_⟩
+  simp_all
 
 -- This lemma needs to be adapted to the new proof of the refutation 1516 -> 255, the old version of the lemma is commented below. In order to adapt the lemma, also the above implmentation shall be tweaked.
 theorem base2 (a : A) : ∃ b₁ b₂, b₁ ≠ a ∧ b₂ ≠ a ∧ b₁ ≠ b₂ ∧
@@ -1376,27 +1374,8 @@ namespace GreedyB
 lemma exists_useful_c (y : G') : ∃ c : A → A,
     c.Injective ∧ (∀ b, y.1.1 ◇ ((c b) ◇ b) = c b) ∧ (∀ b, c b ≠ b ∧ c b ≠ y.1.1 ∧ c b ≠ y.1.2.1) := by
   rcases base2' y.1.1 y.1.2.1 with ⟨c₁, hc₁a, hc₁c, hc₁⟩
-  have c_aux (b : A) (h : y.1.1 ≠ b) : ∃ c, c ◇ y.1.1 = b ∧ c ≠ c₁ ∧ c ≠ b ∧ c ≠ y.1.2.1 := by
-
-
-    have enc := base1 h
-    have noempty' : ({c | c ◇ y.1.1 = b} \ {c₁, b, y.1.2.1}).Nonempty := by
-      refine Set.encard_ne_zero.mp (ne_of_gt ?_)
-      calc
-        _ < (4 : ENat) - 3 := by norm_num
-        _ ≤ _ := by
-          gcongr
-          simp_rw [Set.insert_eq]
-          refine (Set.encard_union_le _ _).trans ?_
-          rw [Set.encard_singleton, show (3 : ENat) = 1 + 2 from rfl]
-          gcongr
-          refine (Set.encard_union_le _ _).trans ?_
-          simp_rw [Set.encard_singleton]
-          norm_num
-        {c | c ◇ y.1.1 = b}.encard - _ ≤ _ := Set.tsub_encard_le_encard_diff _ {c₁, b, y.1.2.1}
-    rcases noempty' with ⟨c, hc1, hc2⟩
-    use c
-    simp_all
+  have c_aux (b : A) (h : y.1.1 ≠ b) : ∃ c, c ◇ y.1.1 = b ∧ c ≠ c₁ ∧ c ≠ b ∧ c ≠ y.1.2.1 :=
+    base1' h c₁ b y.1.2.1
   let c := fun b : A ↦ if h : y.1.1 = b then c₁ else (c_aux b h).choose
   use c
   refine ⟨?_, ?_, ?_⟩
@@ -1802,7 +1781,7 @@ lemma exists_extra_set2 {b : A} (hb : E d y b) (hSy : S y ≠ d) :
           z ≠ y ∧ -- not sure wether it's useful
           ∀ x, ¬ E d z x
     := by
-  have ⟨a', ha'b, ha'd, _, _⟩ := base1' b d d d d (fun h ↦ ok.h_g hSy hb (h ▸ rfl))
+  have ⟨a', ha'b, ha'd, _, _⟩ := base1' (fun (h : b = d) ↦ ok.h_g hSy hb (h ▸ rfl)) d d d
   refine ⟨a', ha'b, ha'd, ?_⟩
 
   have h_infinite : Set.Infinite <| ({(⟨⟨a', d, n'⟩, ha'd⟩ : G') | n'} \
