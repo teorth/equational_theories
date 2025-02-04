@@ -1259,32 +1259,10 @@ theorem A_idempotent (x : A) : x ◇ x = x := by
   rw [magA_op_def]
   simp [fromList_eval 1 1]
 
-theorem base1 (a b : A) (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 3 := by
-  have eq1 : {c | c ◇ a = b} =  {c | f (a*c⁻¹) *  c = b} := by
-    ext
-    simp [magA_op_def]
-  let bij : A ≃ A := ⟨fun (c :A ) => a * c⁻¹, fun (c :A ) => c⁻¹ * a, fun _ => by simp, fun _ => by simp⟩
-  have eq2 :  {c| (b * a⁻¹) *c = f c} ≃ {c| f (a*c⁻¹) *  c = b} := by
-    simp only [Set.coe_setOf]
-    trans
-    · apply (Equiv.subtypeEquivOfSubtype bij).symm
-    · apply Equiv.subtypeEquivRight
-      intro x
-      unfold bij
-      simp only [Equiv.coe_fn_mk]
-      group
-      constructor
-      · intro h ; rw [←h] ; group
-      · intro h ; rw [←h] ; group
-  rw [eq1, ← (Set.encard_congr eq2)]
-  have := (completion initial).choose_spec.2.2 (b * a⁻¹)
-  apply this
-  apply_fun (fun x => x * a)
-  simp [ineq.symm]
-
--- this needs to be adapted, it is not even in the blueprint, I'm not sure how to do it, but I suspect it is doable
-theorem base1' {a b : A} (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 4 := by
+-- This lemma needs to be adapted to the new proof of the refutation 1516 -> 255, the old version of the lemma is commented below. In order to adapt the lemma, also the above implmentation shall be tweaked. See also the new implementation of base2.
+theorem base1 {a b : A} (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 4 := by
   sorry
+-- theorem base1 {a b : A} (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 3 := by
   -- have eq1 : {c | c ◇ a = b} =  {c | f (a*c⁻¹) *  c = b} := by
   --   ext
   --   simp [magA_op_def]
@@ -1307,8 +1285,8 @@ theorem base1' {a b : A} (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 4 := by
   -- apply_fun (fun x => x * a)
   -- simp [ineq.symm]
 
-theorem base1'' (a b c₁ c₂ c₃ : A) (hab : a ≠ b) : ∃ c, c ◇ a = b ∧ c ≠ c₁ ∧ c ≠ c₂ ∧ c ≠ c₃ := by
-  have := base1' hab
+theorem base1' (a b c₁ c₂ c₃ : A) (hab : a ≠ b) : ∃ c, c ◇ a = b ∧ c ≠ c₁ ∧ c ≠ c₂ ∧ c ≠ c₃ := by
+  have := base1 hab
   have h : ({c | c ◇ a = b} \ {c₁, c₂, c₃}).Nonempty := by
     refine Set.encard_ne_zero.mp (ne_of_gt ?_)
     calc
@@ -1326,32 +1304,23 @@ theorem base1'' (a b c₁ c₂ c₃ : A) (hab : a ≠ b) : ∃ c, c ◇ a = b �
   rcases h with ⟨c, hc1, hc2⟩
   refine ⟨c, hc1, ?_, ?_, ?_⟩ <;> simp_all
 
-theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
-  intro a
-  use x₆ * a
-  constructor
-  · simp
-  · repeat rw [magA_op_def]
-    group
-    rw [fromList_eval (x₆^(-1)) (x₆^2), fromList_eval (x₆^2 * x₆) (x₆^1)]
-    simp
 
-theorem base2' (a : A) : ∃ b₁ b₂, b₁ ≠ a ∧ b₂ ≠ a ∧ b₁ ≠ b₂ ∧
+-- This lemma needs to be adapted to the new proof of the refutation 1516 -> 255, the old version of the lemma is commented below. In order to adapt the lemma, also the above implmentation shall be tweaked.
+theorem base2 (a : A) : ∃ b₁ b₂, b₁ ≠ a ∧ b₂ ≠ a ∧ b₁ ≠ b₂ ∧
     a ◇ (b₁ ◇ a) = b₁ ∧ a ◇ (b₂ ◇ a) = b₂ := by
-  -- this needs to be adapted, I am not managing to map precisely the blueprint to the current code, maybe because the blueprint still uses ℤ instead of A, I will leave this to be adapted later, maybe the ones who implemented the proof in the first place may be able to do it more easily.
   sorry
-  -- intro a
-  -- use x₆ * a
-  -- constructor
-  -- · simp
-  -- · repeat rw [magA_op_def]
-    -- group
-    -- rw [fromList_eval (x₆^(-1)) (x₆^2), fromList_eval (x₆^2 * x₆) (x₆^1)]
-    -- simp
+-- theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
+--   intro a
+--   use x₆ * a
+--   constructor
+--   · simp
+--   · repeat rw [magA_op_def]
+--     group
+--     rw [fromList_eval (x₆^(-1)) (x₆^2), fromList_eval (x₆^2 * x₆) (x₆^1)]
+--     simp
 
--- this is to unpack the result of base2' into a more usable form, consider renaming it
-theorem base2'' (a a' : A) : ∃ b, b ≠ a ∧ b ≠ a' ∧ a ◇ (b ◇ a) = b := by
-  rcases base2' a with ⟨b₁, b₂, hb₁a, hb₂a, hb₁b₂, hb₁, hb₂⟩
+theorem base2' (a a' : A) : ∃ b, b ≠ a ∧ b ≠ a' ∧ a ◇ (b ◇ a) = b := by
+  rcases base2 a with ⟨b₁, b₂, hb₁a, hb₂a, hb₁b₂, hb₁, hb₂⟩
   by_cases h : b₁ = a'
   · exact ⟨b₂, hb₂a, h ▸ hb₁b₂.symm, hb₂⟩
   · exact ⟨b₁, hb₁a, h, hb₁⟩
@@ -1370,13 +1339,14 @@ theorem A_op_eq_self_iff {a c : A} : c ◇ a = a ↔ c = a := by
 
 section Refutation255
 
--- Follows https://teorth.github.io/equational_theories/blueprint/1516-chapter.html
--- We try to mimick the proof structure from Equation63 for the greedy construction parts.
--- There are some sorries marked with `doable`, those can be tackled with relatively limited effort, without having to first understand all the greedy construction.
+
+/-
+Follows https://teorth.github.io/equational_theories/blueprint/1516-chapter.html.
+We try to mimick the proof structure from Equation63 for the greedy construction parts.
+-/
 
 def G' := {(a, b, _) : A × A × ℕ | a ≠ b}
 
--- G is the disjoint union of A and G'
 def G := A ⊕ G'
 
 instance : Countable G' := inferInstance
@@ -1385,13 +1355,13 @@ instance : Countable G := inferInstanceAs (Countable (_ ⊕ _))
 
 instance : Infinite G := inferInstanceAs (Infinite (_ ⊕ _))
 
--- coercion from A to G
 instance : Coe A G := ⟨.inl⟩
 
--- coercion from G' to G
 instance : Coe G' G := ⟨.inr⟩
 
--- square function: on A it is the identity, on G' it is (a, b, n) ↦ a
+
+/-- Square function: `S a = a ◇ a`.
+On `A` it is the identity, on `G'` it corresponds to the function `(a, b, n) ↦ a`. -/
 def S : G → A
   | .inl a => a
   | .inr g => g.1.1
@@ -1405,9 +1375,11 @@ namespace GreedyB
 
 lemma exists_useful_c (y : G') : ∃ c : A → A,
     c.Injective ∧ (∀ b, y.1.1 ◇ ((c b) ◇ b) = c b) ∧ (∀ b, c b ≠ b ∧ c b ≠ y.1.1 ∧ c b ≠ y.1.2.1) := by
-  rcases base2'' y.1.1 y.1.2.1 with ⟨c₁, hc₁a, hc₁c, hc₁⟩
+  rcases base2' y.1.1 y.1.2.1 with ⟨c₁, hc₁a, hc₁c, hc₁⟩
   have c_aux (b : A) (h : y.1.1 ≠ b) : ∃ c, c ◇ y.1.1 = b ∧ c ≠ c₁ ∧ c ≠ b ∧ c ≠ y.1.2.1 := by
-    have enc := base1' h
+
+
+    have enc := base1 h
     have noempty' : ({c | c ◇ y.1.1 = b} \ {c₁, b, y.1.2.1}).Nonempty := by
       refine Set.encard_ne_zero.mp (ne_of_gt ?_)
       calc
@@ -1830,7 +1802,7 @@ lemma exists_extra_set2 {b : A} (hb : E d y b) (hSy : S y ≠ d) :
           z ≠ y ∧ -- not sure wether it's useful
           ∀ x, ¬ E d z x
     := by
-  have ⟨a', ha'b, ha'd, _, _⟩ := base1'' b d d d d (fun h ↦ ok.h_g hSy hb (h ▸ rfl))
+  have ⟨a', ha'b, ha'd, _, _⟩ := base1' b d d d d (fun h ↦ ok.h_g hSy hb (h ▸ rfl))
   refine ⟨a', ha'b, ha'd, ?_⟩
 
   have h_infinite : Set.Infinite <| ({(⟨⟨a', d, n'⟩, ha'd⟩ : G') | n'} \
