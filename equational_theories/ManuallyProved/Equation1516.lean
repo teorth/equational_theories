@@ -3182,18 +3182,104 @@ theorem exists_extension (seed : PartialSolutionₙ) :
     simp_rw [L_func _ _ _ n]
     exact L_of_e n (he _) hz
 
--- the empty seed, see if this actually works, otherwise maybe we can use the seed `E * x₀ *`
-def seed : A → G → G → Prop := fun _ _ _ ↦ false
+-- -- the empty seed, see if this actually works, otherwise maybe we can use the seed `E * x₀ *`
+-- def seed : A → G → G → Prop := fun _ _ _ ↦ false
 
-theorem seed_ok : OK seed where
-  finite := by simp [seed]
-  extend := by simp [seed]
-  func := by simp [seed]
-  aux1 := by simp [seed]
-  aux2 := by simp [seed, dom_projL]
-  aux3 := by simp [seed]
-  aux4 := by simp [seed]
-  aux5 := by simp [seed]
+-- theorem seed_ok : OK seed where
+--   finite := by simp [seed]
+--   extend := by simp [seed]
+--   func := by simp [seed]
+--   aux1 := by simp [seed]
+--   aux2 := by simp [seed, dom_projL]
+--   aux3 := by simp [seed]
+--   aux4 := by simp [seed]
+--   aux5 := by simp [seed]
+
+-- def seed : A → G → G → Prop := sorry
+@[mk_iff]
+inductive seed : A → G → G → Prop
+  | case0 (a b : A) : seed a b (.inl (a ◇ b))
+  | case1 {c'} {y : G'} : S y = c' → y.1.2.2 = 0 → seed c' y c'
+  | case2 {c'} {y : G'} : S y = c' → y.1.2.2 ≠ 0 → seed c' y (.inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩)
+  | case3 (y : G') (b) : seed (useful_c y b) y b
+
+lemma seed_func {a x y y'} : seed a x y → seed a x y' → y = y' := by
+  intro h h'
+  rcases h with (_ | ⟨hSy, hn⟩ | ⟨hSy, hn⟩)
+  · rcases h'
+    rfl
+  · rcases h' with (_ | ⟨hSy', hn'⟩ | ⟨hSy', hn'⟩)
+    · rfl
+    · exact (hn' hn).elim
+    · exact (useful_c_ne_y₁ _ _ hSy.symm).elim
+  · rcases h' with (⟨hSy', hn'⟩ | ⟨hSy', hn'⟩ | _)
+    · exact (hn hn').elim
+    · rfl
+    · exact (useful_c_ne_y₁ _ _ hSy.symm).elim
+  · rw [seed_iff] at h'
+    rcases h' with (⟨b, hyb, _⟩ | ⟨_, hS, _, hy, _⟩ | ⟨_, hS, _, hy, _⟩ | ⟨_, b', hc, hy, hy'⟩)
+    · exact (Sum.inr_ne_inl hyb).elim
+    · rw [Sum.inr_injective hy, S] at hS
+      exact (useful_c_ne_y₁ _ _ hS.symm).elim
+    · rw [Sum.inr_injective hy, S] at hS
+      exact (useful_c_ne_y₁ _ _ hS.symm).elim
+    · rw [Sum.inr_injective hy] at hc
+      rw [hy', useful_c_injective _ hc]
+
+lemma seed_extend (a b : A) : seed a b (.inl (a ◇ b)) := .case0 a b
+
+lemma seed_h_b {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2.2 = 0) : seed a y a := .case1 hSy hn
+
+lemma seed_h_c {a : A} {y : G'} (hSy : S y = a) (hn : y.1.2.2 ≠ 0) :
+    seed a y (.inr ⟨⟨y.1.1, y.1.2.1, 0⟩, y.2⟩) := .case2 hSy hn
+
+lemma seed_h_d {b : A} {y : G'} : seed (useful_c y b) y b := .case3 y b
+
+lemma not_seed_of_eq_snd {a c : A} (hac : a ≠ c) (n : ℕ) (x : G) :
+    ¬ seed c (.inr ⟨⟨a, c, n⟩, hac⟩) x := by
+  intro h
+  rw [seed_iff] at h
+  rcases h with (⟨b, hb, hx⟩ | ⟨y, hSy, hn, hyy, hy⟩ | ⟨y, hSy, hn, hyy, hy⟩ | ⟨y, b', hc, hyy, hy⟩)
+  · exact Sum.inr_ne_inl hb
+  · rw [← hyy] at hSy
+    exact hac hSy
+  · rw [← hyy] at hSy
+    exact hac hSy
+  · rw [← Sum.inr_injective hyy] at hc
+    exact useful_c_ne_y₂ _ _ hc.symm
+
+lemma seed_finite {a c : A} (hac : a ≠ c) : {n | ∃ x, seed c (.inr ⟨⟨a, c, n⟩, hac⟩) x}.Finite := by
+  convert Set.finite_empty
+  rw [Set.eq_empty_iff_forall_not_mem]
+  exact fun n ⟨x, hx⟩ ↦ not_seed_of_eq_snd hac n x hx
+
+lemma seed_h_1516 {c' : A} {y : G'} {x : G} : seed c' y x → ∃ w, seed c' x w ∧ seed (S y) w c'
+  | .case1 hSy _ => by
+    have hc' := A_idempotent _ ▸ seed.case0 c' c'
+    exact ⟨c', hc', hSy ▸ hc'⟩
+  | .case2 hSy _ => by
+    have hc' := A_idempotent _ ▸ seed.case0 c' c'
+    refine ⟨c', seed.case1 ?_ rfl, hSy ▸ hc'⟩
+    rw [S, ← hSy, S]
+  | .case3 y b => by
+    have h := useful_c_spec _ _ ▸ seed.case0 (S y) (useful_c y b ◇ b)
+    exact ⟨.inl (useful_c y b ◇ b), seed.case0 _ _, h⟩
+
+lemma seed_h_g {c' : A} {y : G'} {x : G} (hSy : S y ≠ c') : seed c' y x → x ≠ .inl c'
+  | .case1 hSy' _ => (hSy hSy').elim
+  | .case2 hSy' _ => (hSy hSy').elim
+  | .case3 y b => Sum.inl_injective.mt (useful_c_ne_b y b).symm
+
+lemma seed_ok : OKₙ seed where
+  func := seed_func
+  extend := seed_extend
+  h_b := seed_h_b
+  h_c := seed_h_c
+  h_d := seed_h_d
+  finite := seed_finite
+  h_1516 := seed_h_1516
+  h_g := seed_h_g
+
 
 noncomputable def L : A → G → G := (exists_extension ⟨seed, seed_ok⟩).choose
 
