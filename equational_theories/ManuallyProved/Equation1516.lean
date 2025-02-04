@@ -1377,60 +1377,39 @@ lemma exists_useful_c (y : G') : ∃ c : A → A,
   have c_aux (b : A) (h : y.1.1 ≠ b) : ∃ c, c ◇ y.1.1 = b ∧ c ≠ c₁ ∧ c ≠ b ∧ c ≠ y.1.2.1 :=
     base1' h c₁ b y.1.2.1
   let c := fun b : A ↦ if h : y.1.1 = b then c₁ else (c_aux b h).choose
-  use c
-  refine ⟨?_, ?_, ?_⟩
-  · unfold Function.Injective
-    intro b₁ b₂
-    unfold c
-    rcases ne_or_eq y.1.1 b₁  with hx | ha <;> rcases ne_or_eq y.1.1 b₂ with hy | ha'
-    · rw [dif_neg hx,dif_neg hy]
+  refine ⟨c, fun b₁ b₂ ↦ ?_, fun b ↦ ?_, fun b ↦ ?_⟩
+  · unfold c
+    rcases ne_or_eq y.1.1 b₁ with hx | ha <;> rcases ne_or_eq y.1.1 b₂ with hy | ha'
+    · rw [dif_neg hx, dif_neg hy]
       intro hind
       have prop : (c_aux b₁ hx).choose ◇ y.1.1 = (c_aux b₂ hy).choose ◇ y.1.1 := by rw [hind]
-      have h_aux : (c_aux b₁ hx).choose ◇ y.1.1 = b₁ := by
-        apply (c_aux b₁ hx).choose_spec.1
-      have h_aux2 : (c_aux b₂ hy).choose ◇ y.1.1 = b₂ := by
-        apply (c_aux b₂ hy).choose_spec.1
-      rw [h_aux,h_aux2] at prop
+      have h_aux : (c_aux b₁ hx).choose ◇ y.1.1 = b₁ := (c_aux b₁ hx).choose_spec.1
+      have h_aux2 : (c_aux b₂ hy).choose ◇ y.1.1 = b₂ := (c_aux b₂ hy).choose_spec.1
+      rw [h_aux, h_aux2] at prop
       exact prop
     · rw [dif_neg hx, dif_pos ha']
-      intro hind
-      exfalso
-      have h_aux : (c_aux b₁ hx).choose ≠  c₁ := by
-        apply (c_aux b₁ hx).choose_spec.2.1
-      tauto
-    · rw [dif_pos ha,dif_neg hy]
-      intro hind
-      exfalso
-      have h_aux : (c_aux b₂ hy).choose ≠  c₁ := by
-        apply (c_aux b₂ hy).choose_spec.2.1
-      tauto
+      have h_aux : (c_aux b₁ hx).choose ≠ c₁ := (c_aux b₁ hx).choose_spec.2.1
+      exact fun h ↦ (h_aux h).elim
+    · rw [dif_pos ha, dif_neg hy]
+      have h_aux : (c_aux b₂ hy).choose ≠ c₁ := (c_aux b₂ hy).choose_spec.2.1
+      exact fun h ↦ (h_aux h.symm).elim
     · intro h
       rw [← ha, ← ha']
-  · intro b
-    rcases ne_or_eq y.1.1 b with h1 | h2
+  · rcases ne_or_eq y.1.1 b with h1 | h2
     · unfold c
       rw [dif_neg h1]
-      have h_aux : (c_aux b h1).choose ◇ y.1.1 = b := by
-        apply (c_aux b h1).choose_spec.1
-      have idem : y.1.1 ◇ y.1.1 = y.1.1 := A_idempotent y.1.1
-      nth_rw 1 [← idem]
-      nth_rw 4 [← h_aux]
+      nth_rw 1 [← A_idempotent y.1.1]
+      nth_rw 4 [← (c_aux b h1).choose_spec.1]
       symm
       apply A_satisfies_Equation1516
-    · rw [← h2]
-      unfold c
-      rw [dif_pos rfl]
-      exact hc₁
-  · intro b
-    rcases ne_or_eq y.1.1 b with h1 | h2
+    · unfold c
+      rw [← h2, dif_pos rfl, hc₁]
+  · rcases ne_or_eq y.1.1 b with h1 | h2
     · simp_rw [c, dif_neg h1]
-      refine ⟨(c_aux b h1).choose_spec.2.2.1, ?_, ?_⟩
+      refine ⟨(c_aux b h1).choose_spec.2.2.1, ?_, (c_aux b h1).choose_spec.2.2.2⟩
       · by_contra h
         have := A_idempotent _ ▸ h ▸ (c_aux b h1).choose_spec.1
         exact h1 this
-      · exact (c_aux b h1).choose_spec.2.2.2
-        -- problem: to solve this we need to modify c_aux and require also that c ≠ y.1.2.1, however this may be impossible with the current magma structure on A. I think we need to ask that the set in base1 has at least 4 (not 3) elements, I hope this is doable without too much effort. Notify the Zulip cha about this.
-        -- for now I modified base1 in base1', but it still needs to be proven, and to do that we may need to modify the construction of the base magma
     · simp_rw [c, dif_pos h2, ← h2]
       exact ⟨hc₁a, hc₁a, hc₁c⟩
 
