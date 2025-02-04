@@ -1283,7 +1283,7 @@ theorem base1 (a b : A) (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 3 := by
   simp [ineq.symm]
 
 -- this needs to be adapted, it is not even in the blueprint, I'm not sure how to do it, but I suspect it is doable
-theorem base1' (a b : A) (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 4 := by
+theorem base1' {a b : A} (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 4 := by
   sorry
   -- have eq1 : {c | c ◇ a = b} =  {c | f (a*c⁻¹) *  c = b} := by
   --   ext
@@ -1306,6 +1306,25 @@ theorem base1' (a b : A) (ineq : a ≠ b) : {c | c ◇ a = b}.encard ≥ 4 := by
   -- apply this
   -- apply_fun (fun x => x * a)
   -- simp [ineq.symm]
+
+theorem base1'' (a b c₁ c₂ c₃ : A) (hab : a ≠ b) : ∃ c, c ◇ a = b ∧ c ≠ c₁ ∧ c ≠ c₂ ∧ c ≠ c₃ := by
+  have := base1' hab
+  have h : ({c | c ◇ a = b} \ {c₁, c₂, c₃}).Nonempty := by
+    refine Set.encard_ne_zero.mp (ne_of_gt ?_)
+    calc
+      _ < (4 : ENat) - 3 := by norm_num
+      _ ≤ _ := by
+        gcongr
+        simp_rw [Set.insert_eq]
+        refine (Set.encard_union_le _ _).trans ?_
+        rw [Set.encard_singleton, show (3 : ENat) = 1 + 2 from rfl]
+        gcongr
+        refine (Set.encard_union_le _ _).trans ?_
+        simp_rw [Set.encard_singleton]
+        norm_num
+      {c | c ◇ a = b}.encard - _ ≤ _ := Set.tsub_encard_le_encard_diff _ {c₁, c₂, c₃}
+  rcases h with ⟨c, hc1, hc2⟩
+  refine ⟨c, hc1, ?_, ?_, ?_⟩ <;> simp_all
 
 theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
   intro a
@@ -1388,7 +1407,7 @@ lemma exists_useful_c (y : G') : ∃ c : A → A,
     c.Injective ∧ (∀ b, y.1.1 ◇ ((c b) ◇ b) = c b) ∧ (∀ b, c b ≠ b ∧ c b ≠ y.1.1 ∧ c b ≠ y.1.2.1) := by
   rcases base2'' y.1.1 y.1.2.1 with ⟨c₁, hc₁a, hc₁c, hc₁⟩
   have c_aux (b : A) (h : y.1.1 ≠ b) : ∃ c, c ◇ y.1.1 = b ∧ c ≠ c₁ ∧ c ≠ b ∧ c ≠ y.1.2.1 := by
-    have enc := base1' y.1.1 b h
+    have enc := base1' h
     have noempty' : ({c | c ◇ y.1.1 = b} \ {c₁, b, y.1.2.1}).Nonempty := by
       refine Set.encard_ne_zero.mp (ne_of_gt ?_)
       calc
