@@ -1685,6 +1685,17 @@ abbrev PartialSolutionₙ := {E : A → G → G → Prop // OKₙ E}
 
 lemma E_1_x₀ {E : PartialSolutionₙ} : E.val 1 x₀ (.inl 1) := E.property.h_b rfl rfl
 
+lemma def_trichotomy {E : A → G → G → Prop} (h_ok : OKₙ E) {a : A} {y : G'} {x : G} (h : E a y x) :
+    (∃ w : G', E a y w) ∨ (S y ≠ a ∧ ∃ b : A, E a y b) ∨
+      (S y = a ∧ y.1.2.2 = 0 ∧ E a y a) := by
+  rcases x with (b | w)
+  · by_cases hSy : S y = a
+    · by_cases hn : y.1.2.2 = 0
+      · exact Or.inr (Or.inr ⟨hSy, hn, h_ok.h_b hSy hn⟩)
+      · exact Or.inl ⟨_, h_ok.h_c hSy hn⟩
+    · exact Or.inr <| Or.inl ⟨hSy, ⟨_, h⟩⟩
+  · exact Or.inl ⟨_, h⟩
+
 -- a partial soution, alogn with a pair `(d, g)` such that `L d g` is not yet defined
 class Extension1 where
   E : A → G → G → Prop
