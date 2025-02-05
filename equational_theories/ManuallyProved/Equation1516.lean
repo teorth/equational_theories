@@ -1697,23 +1697,23 @@ lemma next2_le_encard : n ≤ {z : G' | Next2 d z y}.encard := by
 
 end Extension2
 
---this lemma should be put into Mathlib, maybe in Set.ncard_le_encard somewhere after the definition of Set.ncard
+-- PRed to Mathlib, see #21467
 lemma _root_.Set.ncard_le_encard {α : Type*} (s : Set α) : Set.ncard s ≤ Set.encard s :=
     ENat.coe_toNat_le_self _
 
---this lemma should be put into Mathlib, maybe in Mathlib.Order.WithBot after WithTop.coe_ne_top
+-- PRed to Mathlib, see #21469
 lemma _root_.WithTop.eq_coe_of_ne_top {α : Type*} {a : WithTop α} (ha : a ≠ ⊤) :
     ∃ b : α, b = a := Option.ne_none_iff_exists.mp ha
 
---this lemma should be put into Mathlib, maybe in Mathlib.Order.WithBot after WithBot.coe_ne_bot
+-- PRed to Mathlib, see #21469
 lemma _root_.WithBot.eq_coe_of_ne_bot {α : Type*} {a : WithBot α} (ha : a ≠ ⊥) :
     ∃ b : α, b = a := Option.ne_none_iff_exists.mp ha
 
---this lemma should be put into Mathlib, maybe in Mathlib.Data.ENat.Basic next to ENat.ne_top_iff_exists
+-- PRed to Mathlib, see #21473
 lemma _root_.ENat.eq_top_iff_forall_ne (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, ↑m ≠ n :=
   WithTop.forall_ne_iff_eq_top.symm
 
---this lemma should be put into Mathlib, maybe in Mathlib.Data.ENat.Basic next to ENat.ne_top_iff_exists
+-- PRed to Mathlib, see #21473
 lemma _root_.ENat.eq_top_iff_forall_lt (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m < n := by
   rw [ENat.eq_top_iff_forall_ne]
   refine ⟨fun h m ↦ ?_, fun a m ↦ (a m).ne⟩
@@ -2066,9 +2066,9 @@ theorem exists_extension (x : G') (seed : PartialSolution x) : ∃ Lₓ : G → 
         exact ⟨E1.next, fun _ _ ↦ (.base ·), _, .new⟩
   choose e he Lₓ hLₓ using h3
   refine ⟨Lₓ, (e x).2.func (e x).2.aux1 (hLₓ x) |>.symm, fun y ↦ ?_⟩
-  /- We have a chain of partial solutions (i.e. partial functions Lₓ : G → G) that saturates the space,
-  which means that if we have a finite number of elements of G we can find a single partial solution of
-  the chain that captures all the elements, here we state this with `y` and `Lₓ y`. -/
+  /- We have a chain of partial solutions (i.e. partial functions `Lₓ : G → G`) that saturates the
+  space, which means that if we have a finite number of elements of `G` we can find a single partial
+  solution of the chain that captures all the elements, here we state this with `y` and `Lₓ y`. -/
   classical
   let T : Finset G := {y, Lₓ y}
   have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩) (T.image fun a ↦ ⟨e a, he a⟩)
