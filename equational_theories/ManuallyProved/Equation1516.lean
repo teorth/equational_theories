@@ -2287,7 +2287,7 @@ theorem Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G] 
   nth_rewrite 1 [SC_id y]
   rw [SC_CS_id y]
 
--- @[equational_result]
+@[equational_result]
 theorem _root_.Equation1516_not_implies_Equation255 : ∃ (G : Type) (_ : Magma G), Equation1516 G ∧ ¬ Equation255 G := by
   refine ⟨G, magG, G_satisfies_Equation1516, ?_⟩
   unfold Equation255
