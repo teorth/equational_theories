@@ -1840,20 +1840,6 @@ theorem exists_extension (seed : PartialSolution) :
     simp_rw [L_func _ _ _ n]
     exact L_of_e n (he _) hz
 
--- -- the empty seed, see if this actually works, otherwise maybe we can use the seed `E * x₀ *`
--- def seed : A → G → G → Prop := fun _ _ _ ↦ false
-
--- theorem seed_ok : OK seed where
---   finite := by simp [seed]
---   extend := by simp [seed]
---   func := by simp [seed]
---   aux1 := by simp [seed]
---   aux2 := by simp [seed, dom_projL]
---   aux3 := by simp [seed]
---   aux4 := by simp [seed]
---   aux5 := by simp [seed]
-
--- def seed : A → G → G → Prop := sorry
 @[mk_iff]
 inductive seed : A → G → G → Prop
   | case0 (a b : A) : seed a b (.inl (a ◇ b))
