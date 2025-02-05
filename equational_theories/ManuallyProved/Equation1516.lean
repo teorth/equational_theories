@@ -297,58 +297,50 @@ noncomputable def e2 : TE := helper' (fun a' => (t.ps.E ⬝ (a'⁻¹)).iget * a'
     apply (Finset.mem_filter.mp (a''_mem_s)).2
   )
 
-theorem e0_spec : ∀ x y,  y ∈ t.e0 ⬝ x ↔ x = t.b ∧ y = t.c := by
-  intro x y
-  unfold e0
-  apply TE_mem_singleton'
+theorem e0_spec : ∀ x y,  y ∈ t.e0 ⬝ x ↔ x = t.b ∧ y = t.c := fun _ _ ↦ TE_mem_singleton'
 
 theorem e1_spec : ∀ x y, y ∈ t.e1 ⬝ x ↔ ∃ a', t.b ∈ t.ps.E ⬝ a' ∧ t.c * a'⁻¹ = x ∧ a'⁻¹ = y := by
-intro x y
-unfold e1
-rw [helper_mem]
-simp only [heq_eq_eq, Option.mem_def]
-constructor
-intro ⟨a', h⟩
-rw [t.preimages_of_b_spec] at h
-use a'
-tauto
-intro ⟨a', h⟩
-use a'
-rw [t.preimages_of_b_spec]
-tauto
+  intro x y
+  unfold e1
+  rw [helper_mem]
+  simp only [heq_eq_eq, Option.mem_def]
+  refine ⟨fun ⟨a', h⟩ ↦ ?_, fun ⟨a', h⟩ ↦ ?_⟩
+  · rw [t.preimages_of_b_spec] at h
+    exact ⟨a', h⟩
+  · use a'
+    rw [t.preimages_of_b_spec]
+    assumption
 
 theorem e2_spec : ∀ x y, y ∈ t.e2 ⬝ x ↔ ∃ a' d', t.b ∈ t.ps.E ⬝ a' ∧ d' ∈ t.ps.E ⬝ (a'⁻¹) ∧ d' * a' * t.c⁻¹ = x ∧  a' * t.c⁻¹ = y := by
-unfold e2
-intro x y
-rw [helper'_mem]
-simp only [heq_eq_eq, Option.mem_def, exists_and_left]
-constructor
-intro ⟨a', h⟩
-rw [t.s_spec] at h
-use a'
-rcases h with ⟨⟨eq1, d', eqd'⟩ ,eq2, eq3⟩
-use eq1, d', eqd'
-rw [eqd'] at eq2
-use eq2, eq3
-intro ⟨a', eq1, d', eqd', eq2, eq3⟩
-use a'
-rw [t.s_spec]
-use ⟨eq1, d', eqd'⟩
-rw [eqd']
-use eq2, eq3
+  unfold e2
+  intro x y
+  rw [helper'_mem]
+  simp only [heq_eq_eq, Option.mem_def, exists_and_left]
+  constructor
+  · intro ⟨a', h⟩
+    rw [t.s_spec] at h
+    use a'
+    rcases h with ⟨⟨eq1, d', eqd'⟩ ,eq2, eq3⟩
+    use eq1, d', eqd'
+    rw [eqd'] at eq2
+    use eq2, eq3
+  · intro ⟨a', eq1, d', eqd', eq2, eq3⟩
+    use a'
+    rw [t.s_spec]
+    use ⟨eq1, d', eqd'⟩
+    exact eqd' ▸ ⟨eq2, eq3⟩
 
 noncomputable def newE : TE := t.ps.E ∪ t.e0 ∪ t.e1 ∪ t.e2
 
 theorem disjoint_old_e0 [b_not_in_dom : Fact (t.b ∉ t.ps.E)]: t.ps.E.Disjoint t.e0 := by
   intro x hold he0
-  have := TE_lookup_exists.mpr he0
-  cases this with
+  cases TE_lookup_exists.mpr he0 with
   | intro y h =>
     rw [e0_spec] at h
     cases h with
     | intro left right =>
       rw [left] at hold
-      apply b_not_in_dom.out hold
+      exact b_not_in_dom.out hold
 
 theorem disjoint_old_e1 : t.ps.E.Disjoint t.e1 := by
   intro x hold he1
@@ -359,13 +351,12 @@ theorem disjoint_old_e1 : t.ps.E.Disjoint t.e1 := by
     match h with
     | ⟨a', left, eq, _⟩  =>
       apply fresh_ineq t.old x a'⁻¹
-      apply Subgroup.subset_closure
-      simp [dom_old _ _ hold]
-      simp only [inv_mem_iff]
-      apply Subgroup.subset_closure
-      simp [dom_old' _ _ _ left]
+      · apply Subgroup.subset_closure
+        simp [Subgroup.subset_closure, dom_old _ _ hold]
+      · rw [inv_mem_iff]
+        apply Subgroup.subset_closure
+        simp [dom_old' _ _ _ left]
       exact eq.symm
-
 
 theorem disjoint_old_e2 : t.ps.E.Disjoint t.e2 := by
   intro x hold he2
@@ -413,8 +404,7 @@ theorem disjoint_e0_e2 : t.e0.Disjoint t.e2 := by
     · apply Subgroup.subset_closure
       simp [dom_old' _ _ _ e_a'_b]
   · apply Subgroup.subset_closure
-    rw [eq_x_b]
-    simp [b_old]
+    simp [eq_x_b, b_old]
 
 theorem disjoint_e1_e2 : t.e1.Disjoint t.e2 := by
   intro x he1 he2
@@ -490,7 +480,7 @@ theorem newE_dom_and_inv : ∀ x y, y ∈ t.newE ⬝ x → x⁻¹ ∈ t.newE →
     rcases e_x_inv_z with ⟨⟨old' | e0'⟩ | e1'⟩ | e2'
     · apply fresh_ineq (eq:= eq.symm)
       · rw [← Subgroup.inv_mem_iff]
-        apply dom_old'_subgroup old'
+        exact dom_old'_subgroup old'
       · simp [dom_old'_subgroup e_a'_b]
     · apply fresh_ineq (eq:= eq.symm)
       · rw [← Subgroup.inv_mem_iff, e0'.1]
@@ -743,7 +733,7 @@ theorem extension_cond5_old_old (t : ExtensionTask) (a' : A) (a'_mem : a' ∈ t.
   (old' : d'' ∈ t.ps.E ⬝ a''⁻¹ ∧ t.ps.E ⬝ a''⁻¹⁻¹ = t.newE ⬝ a''⁻¹⁻¹) : a' = a'' := by
   apply t.ps.cond5
   · rw [inv_inv] at old
-    rw [←TE_lookup_isSome,← old.2,TE_lookup_isSome] at a'_mem
+    rw [← TE_lookup_isSome,← old.2,TE_lookup_isSome] at a'_mem
     exact a'_mem
   · rw [inv_inv] at old'
     rw [←TE_lookup_isSome,← old'.2,TE_lookup_isSome] at a''_mem
@@ -777,8 +767,7 @@ theorem extension_cond5_old_new2 (t : ExtensionTask) (a' : A) (a'' : A)
   rw [inv_inv] at *
   rw [← eq1, ← old2] at new3
   apply freshGenerator_not_in_span (α := Nat)
-  apply im_old_subgroup
-  exact new3
+  exact im_old_subgroup new3
 
 theorem extension_cond5_new1_new1 (t : ExtensionTask) (a' : A) (a'' : A)
   (new1 : (a'⁻¹ = t.b))
@@ -801,9 +790,6 @@ theorem extension_cond5_new1_new2 (t : ExtensionTask) (a' : A) (a'' : A)
       apply b_old_subgroup
   · rw [← Subgroup.inv_mem_iff, eq_a'_inv_b]
     apply b_old_subgroup
-
-
-
 
 theorem extension_cond5 : ∀ a ∈ t.newE, ∀ a' ∈ t.newE, ∀ d ∈ t.newE ⬝ a⁻¹, ∀ d' ∈ t.newE ⬝ a'⁻¹, t.newE ⬝ a = t.newE ⬝ a' → d * a = d' * a' → a = a' := by
   intro a' a'_mem a'' a''_mem d' e_a'_inv_d' d'' e_a''_inv_d'' eq1 eq2
@@ -1661,9 +1647,8 @@ lemma next2_h_1516 {c' : A} {z : G'} {x : G} : Next2 c' z x → ∃ w₁, Next2 
     exact ⟨_, .base hw₀, .base ok.h_d⟩
   | .extra2 hb hSy hz => by
     refine ⟨_, .base hb, .base ?_⟩
-    have := extra_set2_eq1 hb hSy hz
     rw [S, extra_set2_eq1 hb hSy hz, ← es2_a'_spec hb hSy]
-    exact ok.extend _ _
+    exact ok.extend ..
 
 lemma next2_h_g {c' : A} {z : G'} {x : G} (hSy : S z ≠ c') : Next2 c' z x → x ≠ .inl c'
   | .base h => ok.h_g hSy h
@@ -1691,7 +1676,7 @@ lemma next2_le_encard : n ≤ {z : G' | Next2 d z y}.encard := by
         refine Set.encard_mono fun z hz ↦ ?_
         have ⟨m, hm, hz⟩ := hz
         simp_rw [← hz, Set.mem_setOf_eq, f]
-        convert next2_h_c _ _
+        convert next2_h_c ..
         · rw [S, ← hSy, S]
         · exact Nat.add_one_ne_zero m
 
@@ -1745,8 +1730,7 @@ theorem exists_extension (seed : PartialSolution) : ∃ L : A → G → G,
         let E1 : Extension1 := { E, ok, d, y, not_def := fun h ↦ hg ⟨_, h⟩ }
         match h : E1.next1 with | ⟨E, ok⟩ => ?_
         simp_rw [Extension1.next1, Subtype.mk.injEq, eq_comm] at h
-        have h_def : E d y (Extension1.partL d y) := by
-          convert Extension1.Next1.new
+        have h_def : E d y (Extension1.partL d y) := by convert Extension1.Next1.new
         let E2 : Extension2 := { E, ok, d, y, g := _, h_def, n}
         refine ⟨E2.next2, fun _ _ _ ha ↦ .base ?_, ⟨_, .base h_def⟩, Or.inr E2.next2_le_encard⟩
         convert Extension1.Next1.base ha
@@ -1771,9 +1755,7 @@ theorem exists_extension (seed : PartialSolution) : ∃ L : A → G → G,
   refine ⟨fun a y ↦ L (a, y, 0), fun a b ↦ L_of_e _ h1 (seed.property.extend a b), fun a x ↦ ?_,
     L_of_e _ h1 E_1_x₀, fun b y ↦ ?_⟩
   · have ⟨w, e_a_L, e_Sx_L⟩ := (e _).2.h_1516 (hL (a, x, 0))
-    have hw := L_of_e 0 (he _) e_a_L
-    dsimp
-    exact L_of_e 0 (he _) (hw ▸ e_Sx_L)
+    exact L_of_e 0 (he _) (L_of_e 0 (he _) e_a_L ▸ e_Sx_L)
   · rw [← Set.encard_eq_top_iff, ENat.eq_top_iff_forall_le]
     intro n
     have h_le := hL_card (b, y, n)
@@ -1848,7 +1830,7 @@ lemma seed_h_1516 {c' : A} {y : G'} {x : G} : seed c' y x → ∃ w, seed c' x w
     rw [S, ← hSy, S]
   | .case3 y b => by
     have h := useful_c_spec _ _ ▸ seed.case0 (S y) (useful_c y b ◇ b)
-    exact ⟨.inl (useful_c y b ◇ b), seed.case0 _ _, h⟩
+    exact ⟨.inl (useful_c y b ◇ b), seed.case0 .., h⟩
 
 lemma seed_h_g {c' : A} {y : G'} {x : G} (hSy : S y ≠ c') : seed c' y x → x ≠ .inl c'
   | .case1 hSy' _ => (hSy hSy').elim
