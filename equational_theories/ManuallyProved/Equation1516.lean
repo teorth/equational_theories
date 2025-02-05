@@ -1108,8 +1108,7 @@ Finset.card {c ∈ t.ps.E.keys | (t.b*c) ∈ t.ps.E ⬝ c } + 1 := by
     intro c_mem
     exfalso
     apply c_not_old
-    apply t.dom_old
-    apply c_mem
+    exact t.dom_old _ c_mem
 
 end ExtensionTask
 end extension2
