@@ -1327,11 +1327,9 @@ theorem base2' (a a' : A) : ∃ b, b ≠ a ∧ b ≠ a' ∧ a ◇ (b ◇ a) = b 
   · exact ⟨b₂, hb₂a, h ▸ hb₁b₂.symm, hb₂⟩
   · exact ⟨b₁, hb₁a, h, hb₁⟩
 
-theorem A_op_surj_right (a b : A) : ∃ c : A, a ◇ c = b := by
-  have := A_satisfies_Equation1516 b a
-  rw [A_idempotent a] at this
-  use b ◇ (b ◇ a)
-  tauto
+theorem A_op_surj_right (a b : A) : ∃ c : A, a ◇ c = b :=
+  ⟨b ◇ (b ◇ a), (A_idempotent a ▸ A_satisfies_Equation1516 b a).symm⟩
+
 
 theorem A_op_eq_self_iff {a c : A} : c ◇ a = a ↔ c = a := by
   refine ⟨fun h ↦ ?_, fun h ↦ h ▸ A_idempotent _⟩
@@ -1392,22 +1390,17 @@ lemma exists_useful_c (y : G') : ∃ c : A → A,
       rw [h_aux, h_aux2] at prop
       exact prop
     · rw [dif_neg hx, dif_pos ha']
-      have h_aux : (c_aux b₁ hx).choose ≠ c₁ := (c_aux b₁ hx).choose_spec.2.1
-      exact fun h ↦ (h_aux h).elim
+      exact fun h ↦ ((c_aux b₁ hx).choose_spec.2.1 h).elim
     · rw [dif_pos ha, dif_neg hy]
-      have h_aux : (c_aux b₂ hy).choose ≠ c₁ := (c_aux b₂ hy).choose_spec.2.1
-      exact fun h ↦ (h_aux h.symm).elim
-    · intro h
-      rw [← ha, ← ha']
-  · rcases ne_or_eq y.1.1 b with h1 | h2
-    · unfold c
-      rw [dif_neg h1]
+      exact fun h ↦ ((c_aux b₂ hy).choose_spec.2.1 h.symm).elim
+    · exact fun h ↦ ha ▸ ha'
+  · unfold c
+    rcases ne_or_eq y.1.1 b with h1 | h2
+    · rw [dif_neg h1]
       nth_rw 1 [← A_idempotent y.1.1]
       nth_rw 4 [← (c_aux b h1).choose_spec.1]
-      symm
-      apply A_satisfies_Equation1516
-    · unfold c
-      rw [← h2, dif_pos rfl, hc₁]
+      exact (A_satisfies_Equation1516 _ _).symm
+    · rw [← h2, dif_pos rfl, hc₁]
   · rcases ne_or_eq y.1.1 b with h1 | h2
     · simp_rw [c, dif_neg h1]
       refine ⟨(c_aux b h1).choose_spec.2.2.1, ?_, (c_aux b h1).choose_spec.2.2.2⟩
