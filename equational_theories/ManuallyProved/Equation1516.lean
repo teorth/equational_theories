@@ -1122,9 +1122,8 @@ theorem extension_or_nop  : ∀ (ps : PartialSolution) (b : A), ∃ ps', ps ≤ 
     assumption
   case neg =>
     let t : ExtensionTask := { ps := ps, b := b}
-    have : Fact (t.b ∉ t.ps.E) := by use h
-    use t.extension
-    apply t.extension_spec
+    have : Fact (t.b ∉ t.ps.E) := ⟨h⟩
+    exact ⟨t.extension, t.extension_spec⟩
 
 theorem extension2 (ps : PartialSolution) (b : A) (h : b ≠ 1) (n : Nat) :
 ∃ ps', ps ≤ ps' ∧ Finset.card {c ∈ ps'.E.keys | (b*c) ∈ ps'.E ⬝ c } ≥ n := by
@@ -1139,13 +1138,12 @@ theorem extension2 (ps : PartialSolution) (b : A) (h : b ≠ 1) (n : Nat) :
     constructor
     · rw [PartialSolution.le_iff]
       apply le_trans (α := TE) (b := ps'.E)
-      · apply le
+      · exact le
       · exact this.1
     · rw [t.extension2_E]
       have def_t_ps : t.ps = ps' := rfl
       have def_b : t.b = b := rfl
-      rw [def_t_ps] at this
-      rw [def_b] at this
+      rw [def_t_ps, def_b] at this
       omega
 
 def translation_invariant_1516 (f : A → A) : Prop := ∀ (x : A), (f ( f ( f x )* x⁻¹ * (f 1)⁻¹)) = x⁻¹ * (f 1)⁻¹
@@ -1176,8 +1174,7 @@ theorem completion (ps : PartialSolution) :
     rw [← eq1]
     simp only [inv_one, mul_one] at *
     apply_fun some
-    rw [← (e.cond4 x (TE_lookup_mem' fx) (f x) fx (f (f x)) ffx), ← fffx]
-    rw [inv_one, mul_one]
+    rw [← (e.cond4 x (TE_lookup_mem' fx) (f x) fx (f (f x)) ffx), ← fffx, inv_one, mul_one]
     exact Option.some_injective A
   · intro h
     specialize h2 (g x) (hg1 x) h
@@ -1195,18 +1192,17 @@ theorem completion (ps : PartialSolution) :
     trans {c ∈ S | b * c ∈ ps.E ⬝ c}.toSet.encard
     · apply Set.encard_le_card
       simp only [Option.mem_def, Finset.coe_filter, Set.setOf_subset_setOf, and_imp]
-      apply this
+      exact this
     · rw [Set.encard_coe_eq_coe_finsetCard]
       simp only [ge_iff_le, Nat.ofNat_le_cast]
-      apply card_ps
+      exact card_ps
 
 def E0 : List (A × A) := [(1, 1), (x₁, x₂), (x₁⁻¹,x₃), (x₃ * x₁, x₄), (x₄ * x₂⁻¹, x₅),
   (x₆⁻¹, x₆^2), (x₆^3, x₆), (x₇⁻¹, x₇^2), (x₇^3, x₇)]
 
 def f0 (a : A) : A := (List.lookup a E0).getD 1
 
-def initial : PartialSolution := by
-  use List.toFinmap (E0.map Prod.toSigma) <;> decide
+def initial : PartialSolution := by use List.toFinmap (E0.map Prod.toSigma) <;> decide
 
 noncomputable def f := (completion initial).choose
 end extension
@@ -1221,9 +1217,7 @@ theorem fromList_eval (a b : A) (h : (a,b) ∈ E0 := by decide) : f a = b := by
   · unfold List.NodupKeys
     decide
 
-theorem f_translation_invariant_1516 : translation_invariant_1516 f := by
-  unfold f
-  apply (completion initial).choose_spec.1
+theorem f_translation_invariant_1516 : translation_invariant_1516 f := (completion initial).choose_spec.1
 
 theorem f_extends_initial : ∀ a b : A, b ∈ initial.E ⬝ a → f a = b := (completion initial).choose_spec.2.1
 
@@ -1232,7 +1226,6 @@ noncomputable scoped instance magA : Magma A := { op := fun x y => f (y*x⁻¹) 
 theorem magA_op_def (x y : A) : magA.op x y = f (y*x⁻¹) * x := rfl
 
 theorem A_satisfies_Equation1516 : Equation1516 A := by
-  unfold Equation1516
   intro x y
   repeat rw [magA_op_def]
   simp only [mul_inv_cancel_right, mul_inv_cancel, mul_inv_rev]
@@ -1283,7 +1276,7 @@ theorem base2 (a : A) : ∃ b₁ b₂, b₁ ≠ a ∧ b₂ ≠ a ∧ b₁ ≠ b�
   refine ⟨x₆ * a, x₇ * a, ?_, ?_, ?_, ?_, ?_⟩
   · simp
   · simp
-  · simp only [ne_eq, mul_left_inj]
+  · rw [ne_eq, mul_left_inj]
     exact ne_of_beq_false rfl
   · repeat rw [magA_op_def]
     group
