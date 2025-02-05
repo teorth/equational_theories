@@ -35,6 +35,7 @@ private abbrev x₃ := x 3
 private abbrev x₄ := x 4
 private abbrev x₅ := x 5
 private abbrev x₆ := x 6
+private abbrev x₇ := x 7
 
 
 /-- We will use `Finmap (fun _ : A => A)` to model the set E. There is no nondependent version of Finmap, so we have
@@ -1214,7 +1215,8 @@ theorem completion (ps : PartialSolution) :
       simp only [ge_iff_le, Nat.ofNat_le_cast]
       apply card_ps
 
-def E0 : List (A × A) := [(1, 1), (x₁, x₂), (x₁⁻¹,x₃), (x₃ * x₁, x₄), (x₄ * x₂⁻¹, x₅), (x₆⁻¹, x₆^2), (x₆^3, x₆)]
+def E0 : List (A × A) := [(1, 1), (x₁, x₂), (x₁⁻¹,x₃), (x₃ * x₁, x₄), (x₄ * x₂⁻¹, x₅),
+  (x₆⁻¹, x₆^2), (x₆^3, x₆), (x₇⁻¹, x₇^2), (x₇^3, x₇)]
 
 def f0 (a : A) : A := (List.lookup a E0).getD 1
 
@@ -1303,19 +1305,21 @@ theorem base1' {a b : A} (hab : a ≠ b) (c₁ c₂ c₃ : A) : ∃ c, c ◇ a =
   refine ⟨c, hc1, ?_⟩
   simp_all
 
--- This lemma needs to be adapted to the new proof of the refutation 1516 -> 255, the old version of the lemma is commented below. In order to adapt the lemma, also the above implmentation shall be tweaked.
 theorem base2 (a : A) : ∃ b₁ b₂, b₁ ≠ a ∧ b₂ ≠ a ∧ b₁ ≠ b₂ ∧
     a ◇ (b₁ ◇ a) = b₁ ∧ a ◇ (b₂ ◇ a) = b₂ := by
-  sorry
--- theorem base2 : ∀ a : A, ∃ b : A, b ≠ a ∧ a ◇ (b ◇ a) = b := by
---   intro a
---   use x₆ * a
---   constructor
---   · simp
---   · repeat rw [magA_op_def]
---     group
---     rw [fromList_eval (x₆^(-1)) (x₆^2), fromList_eval (x₆^2 * x₆) (x₆^1)]
---     simp
+  refine ⟨x₆ * a, x₇ * a, ?_, ?_, ?_, ?_, ?_⟩
+  · simp
+  · simp
+  · simp only [ne_eq, mul_left_inj]
+    exact ne_of_beq_false rfl
+  · repeat rw [magA_op_def]
+    group
+    rw [fromList_eval (x₆^(-1)) (x₆^2), fromList_eval (x₆^2 * x₆) (x₆^1)]
+    simp
+  · repeat rw [magA_op_def]
+    group
+    rw [fromList_eval (x₇^(-1)) (x₇^2), fromList_eval (x₇^2 * x₇) (x₇^1)]
+    simp
 
 theorem base2' (a a' : A) : ∃ b, b ≠ a ∧ b ≠ a' ∧ a ◇ (b ◇ a) = b := by
   rcases base2 a with ⟨b₁, b₂, hb₁a, hb₂a, hb₁b₂, hb₁, hb₂⟩
