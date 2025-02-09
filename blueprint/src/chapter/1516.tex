@@ -53,10 +53,14 @@ For technical reasons (which will be helpful later when we expand the magma) we 
   \end{itemize}
 \end{corollary}
 
-Note from \Cref{1516} and the hypothesis $Sa=a$ that $R_a c = a$ if and only if $c=a$.  Thus the requirement that $a,b$ be distinct in (ii)is necessary.
+
+Note from \Cref{1516} and the hypothesis $Sa=a$ that $R_a c = a$ if and only if $c=a$.  Thus the requirement that $a,b$ be distinct in (ii) is necessary.
 
 \begin{proof}  By \Cref{1516-ext}, \Cref{1516-ext-var} and the greedy algorithm starting with the seed consisting of $(0,0)$, $(-1,2)$, $(3,1)$, $(-10,20)$, $(30,10)$, we obtain a graph $\{ (a,f(a)): a \in \Z \}$ of a function $f:\Z \to \Z$ with $f(0)=0$, $f(-1)=2$, $f(3)=1$, $f(-10) = 20$, $f(30)=10$ and the property that if $f(a)=b$ and $f(b)=c$, then $f(c-a)=-a$, and also with the property that for every non-zero $h$ there are distinct $a_h, a'_h, a''_h$ with $f(a_h)=a_h+h$, $f(a'_h) = a'_h+h$, and $f(a''_h) = a''_h+h$.  We then have that \Cref{1516-f} holds.  If we then define the magma operation $\op$ by \Cref{xy-1516}, we obtain \Cref{1516}, and since $f(0)=0$ we have (i).  Also, from construction we see that $R_d (d - a_h) = R_d (d - a'_h) = R_d (d - a''_h) = d+h$ for any $d,h$, giving (ii).  Finally, from construction we have $R_a (a+1) = a+1+f(-1) = a+3$, so $L_a R_a (a+1) = a + f(3) = a+1$, and similarly $R_a (a+10) = a+10$, giving (iii).
 \end{proof}
+
+Let us denote by $A$ the free group over $\N$. Note that a magma with the same properties as in \Cref{1516-base} but having carrier $A$ can be constructed similarly.
+The same thing is true for the following results. In fact, the Lean implementation has $A$ whenever $\Z$ is; this has neen done to reuse some preexisting code.
 
 Now we construct a more complex 1516 magma, whose carrier $G$ is $\Z \cup G'$, where
 $$G' := \{ (a,c,n) \in \Z \times \Z \times \N : a \neq c\}.$$
@@ -67,6 +71,7 @@ $$ L_{Sa} L_b L_b a = b$$
 for $a,b \in \Z$, with the left multiplication operators $L_b$ currently only defined as maps from $\Z$ to $\Z$.  Among other things, this means that $L_a = L_{Sa}$ is surjective as a map from $\Z$ to $\Z$ for any $a \in \Z$.
 
 We extend the squaring map $S$ to all of $G$ by declaring $S(a,c,n) := a$, thus $S$ maps $G$ to $\Z$.  To create a 1516 magma structure on all of $G$, we need to extend the left multiplication operators $L_b$, $b \in \Z$ as maps from $G$ to $G$, and also introduce additional maps $L_x: G \to G$ for $x \in G'$, obeying the following axioms:
+
 \begin{itemize}
 \item Axiom A: For any $x \in G'$, $L_x x = Sx$.
 \item Axiom B: For any $x \in G'$ and $b \in \Z$, $L_{Sx} L_b L_b x = b$.
@@ -80,9 +85,10 @@ We first address Axiom B, which purely concerns how to extend the $L_b$ operator
 \item (i)  For all $y = (a,c,n) \in G'$ and $b \in \Z$, $c_{y,b} \neq a,b,c$ and $L_a L_{c_{y,b}} b = c_{y,b}$.
 \item (ii) For all $y \in G'$, the map $b \mapsto c_{y,b}$ is injective.
 \end{itemize}
+
 \end{lemma}
 
-\begin{proof}  Let $y = (a,c,n)$.  By \Cref{1516-base}(iii), we can find $c_{y,a} \neq a,c$ such that $L_a R_a c_{y,a} = c_{y,a}$, or equivalently $L_a L_{c_{y,a}} a = c_{y,a}$.  Next, for any $b \neq a$, we can apply \Cref{1516-base}(ii) to find $c_{y,b} \neq b, c_{y,a}$ such that $R_a c_{y,b} = b$; note that as $R_a a = Sa = a \neq b$, this also implies that $c_{y,b} \neq a$, and that the $c_{y,b}$ are distinct as $b$ variables.  We now have $L_a L_{c_{y,b}} b = L_{Sa} L_{c_{y,b}} L_{c_{y,b}} a = c_{y,b}$ for such $b$, giving the claim.
+\begin{proof}  Let $y = (a,c,n)$.  By \Cref{1516-base} (iii), we can find $c_{y,a} \neq a,c$ such that $L_a R_a c_{y,a} = c_{y,a}$, or equivalently $L_a L_{c_{y,a}} a = c_{y,a}$.  Next, for any $b \neq a$, we can apply \Cref{1516-base} (ii) to find $c_{y,b} \neq b, c_{y,a}$ such that $R_a c_{y,b} = b$; note that as $R_a a = Sa = a \neq b$, this also implies that $c_{y,b} \neq a$, and that the $c_{y,b}$ are distinct as $b$ variables.  We now have $L_a L_{c_{y,b}} b = L_{Sa} L_{c_{y,b}} L_{c_{y,b}} a = c_{y,b}$ for such $b$, giving the claim.
 \end{proof}
 
 Let $c_{y,b}$ be as above. Define a \emph{partial solution} to be a partial assignment of $L_{c'} y \in G$ for $c' \in \Z$ and $y \in G$ that obeys the following properties:
@@ -93,7 +99,7 @@ Let $c_{y,b}$ be as above. Define a \emph{partial solution} to be a partial assi
 \item (d) If $y = (a,c,n) \in G'$ and $b \in \Z$, then $L_{c_{y,b}} y = b$.
 \item (e) For any $a,c$, $L_c (a,c,n)$ is only defined for finitely many $n$.
 \item (f) If $y = (a,c,n) \in G'$ and $c' \in \Z$ are such that $L_{c'} y$ is defined, then $L_{c'} L_{c'} y$ and $L_a L_{c'} L_{c'} y$ are defined, with $L_a L_{c'} L_{c'} y$ equal to $c'$.
-\item (g) If $y = (a,c,n) \in G'$ and $c' \in \Z$ is such that $c' \neq a$, then $L_{c'} y \neq c'$.
+\item (g) If $y = (a,c,n) \in G'$ and $c' \in \Z$ are such that $c' \neq a$ and $L_{c'} y$ is defined, then $L_{c'} y \neq c'$.
 \end{itemize}
 
 \begin{lemma}[Existence of partial solution]\label{part-exist}  A partial solution exists.
@@ -117,7 +123,7 @@ We can make $L_{c'} y$ defined in a partial solution:
 \end{lemma}
 
 \begin{proof} Write $y = (a,c,n)$. Because $L_a: \Z \to \Z$ and $L_{c'}: \Z \to \Z$ are surjective, we can find $b \in \Z$ such that $L_a L_{c'} b = c'$.  If we had $b=c'$, then $L_a c' = c'$, which from \eqref{1516} (and $Sc' = c'$) implies that $a = c'$, which contradicts the undefined nature of $L_{c'} y$ thanks to properties (b), (c) of a partial solution.  Hence $b \neq c'$.
-  We then set $L_{c'} y := b$.  It is then clear that all of the properties (a)-(g) of a partial solution are maintained.
+  We then set $L_{c'} y := b$.  It is then clear that all the properties (a)-(g) of a partial solution are maintained.
 \end{proof}
 
 We can also insert inverses of $L_{c'}$:
@@ -128,7 +134,7 @@ We can also insert inverses of $L_{c'}$:
 \begin{proof} Write $y = (a,c,n)$. There are several cases.
   \begin{itemize}
     \item Case 1: $L_{c'} y = w$ for some $w \in G'$.  By Lemma \ref{aux}, $c_{w,c'}$ is distinct from $c'$, and from property (d) of a partial solution, $L_{c_{w,c'}} w = c'$.  By property (e) of a partial solution, we can find $z = (c_{w,c'}, c', n')$ such that $L_{c'} z$ is currently undefined.  Then set $L_{c'} z := y$, so that we have $L_{c_{w,c'}} L_{c'} L_{c'} z = c'$.  One then verifies that all the axioms (a)-(g) of a partial solution are valid in this case.
-    \item Case 2: $c' \neq a$ and $L_{c'} y = b$ for some $b \in \Z$. By property (g) of a partial solution, $c' \neq b$.  By \Cref{1516-base}, we can find $a'$ such that $L_{a'} b = R_b a' = c'$ and $a' \neq c'$.  By property (e) of a partial solution, we can find $z = (a', c', n', 0)$ such that $L_{c'} z$ is currently undefined.  Then set $L_{c'} z = y$, so that we have $L_{a'} L_{c'} L_{c'} z = c'$. One then verifies that all the axioms (a)-(g) of a partial solution are valid in this case.
+    \item Case 2: $c' \neq a$ and $L_{c'} y = b$ for some $b \in \Z$. By property (g) of a partial solution, $c' \neq b$.  By \Cref{1516-base}, we can find $a'$ such that $L_{a'} b = R_b a' = c'$ and $a' \neq c'$.  By property (e) of a partial solution, we can find $z = (a', c', n')$ such that $L_{c'} z$ is currently undefined.  Then set $L_{c'} z = y$, so that we have $L_{a'} L_{c'} L_{c'} z = c'$. One then verifies that all the axioms (a)-(g) of a partial solution are valid in this case.
     \item Case 3: $c' \neq a$ and $L_{c'} y$ is currently undefined.  Use Lemma \ref{first-ext} set $L_{c'} y$ equal to some $b \in \Z$, then apply the Case 2 analysis.
     \item Case 4: $c' = a$.  Because we are excluding the case $n=0$, we are now in Case 1 thanks to property (c) of a partial solution.
   \end{itemize}
@@ -137,7 +143,7 @@ We can also insert inverses of $L_{c'}$:
 
 Now we can establish Axiom B.
 
-\begin{proposition}[Obtaining Axiom B]\label{axiom-b}  There exists a way to extend $L_b: \Z \to \Z$ to $L_b: G \to G$ for all $b \in \Z$, in such a way that Axiom B holds, and furthermore for each $b \in \Z$ and $x \in G'$, the set $\{ y \in G': L_b y = x \}$ is infinite. Also we can ensure that $L_b x \neq x$ for any $b \in \Z$ and $x \in G'$.
+\begin{proposition}[Obtaining Axiom B]\label{axiom-b}  There exists a way to extend $L_b: \Z \to \Z$ to $L_b: G \to G$ for all $b \in \Z$, in such a way that Axiom B holds, and furthermore for each $b \in \Z$ and $x \in G'$, the set $\{ y \in G': L_b y = x \}$ is infinite. Also, we can ensure that $L_b x \neq x$ for any $b \in \Z$ and $x \in G'$.
 \end{proposition}
 
 \begin{proof}
@@ -160,11 +166,18 @@ and
 \end{equation}
 for all $y \in G$ (note that $L_{Sy}$ is already fully constructed).
 
-Define a \emph{seed} to be an injective partial function $L_x$ defined on finitely many values and obeying \Cref{axioma-again}, as well as \Cref{axiomb-again} whenever $L_x L_x y$ is defined.  If there is a $y \in G$ for which $L_x y$ is currently undefined, then by hypothesis $y$ is equal to $L_x z$ for at most one $z$.  If such a $z$ exists, we set $L_x y$ to be an element of $\{ w: L_{Sz} w = x \}$ that is not already in the domain or range of $L_x$; if no such $z$ exists, we set $L_x y$ to be arbitrary element of $G$ not already in the domain or range.  In either case, we see that the seed property is preserved.  Starting from the seed in which $L_x$ is only defined on $x$ and maps it to $Sx$, we obtain the claim.
+Define a \emph{seed} to be an injective partial function $L_x$ defined on finitely many values and obeying \Cref{axioma-again}, as well as \Cref{axiomb-again} whenever $L_x L_x y$ is defined.
+If there is a $y \in G$ for which $L_x y$ is currently undefined, then by hypothesis $y$ is equal to $L_x z$ for at most one $z$.
+If such a $z$ exists, we set $L_x y$ to be an element of $\{ w: L_{Sz} w = x \}$ different from $y$ that is not already in the domain or range of $L_x$; we are able to do so thanks to the infinite surjectivity (\Cref{1516-base} (ii)) and the fact that the domain and the range of $L_x$ are finite.
+If no such $z$ exists, we set $L_x y$ to be arbitrary element of $G$ not already in the domain or range.  In either case, we see that the seed property is preserved.  Starting from the seed in which $L_x$ is only defined on $x$ and maps it to $Sx$, we obtain the claim.
 \end{proof}
 
-\begin{corollary}\label{1516-no-255}  There exists a 1516 magma that does not obey the 255 equation $$x = ((x \op x) \op x) \op x$$.
+\begin{corollary}\label{1516-no-255}  There exists a 1516 magma that does not obey the 255 equation $$x = ((x \op x) \op x) \op x.$$
 \end{corollary}
 
-\begin{proof}  We perform the above construction, but with one refinement.  Pick some $x \in G'$.  Then after the constructions in \Cref{axiom-b}, $L_{Sx} x$ is defined and equal to some element $y$ distinct from $x$. If $y \in \Z$ then $L_y x \neq x$ by construction and we are done, so suppose $y \in G'$.  It is then a routine matter to modify the construction in \Cref{axiom-c} to ensure that $L_y x \neq x$, by adding one more element to the seed for $L_y$ to set $L_y x$ to some arbitrary value not equal to $x, y, Sy$.
+\begin{proof}
+  Let us define the element $x_0 := (0, 1, 0) \in G'$.
+  Since $S x_0 = 0$, we know that $0 \op x_0 = 0$ (see the first part of the proof of \Cref{axiom-b}).
+  Therefore, $x_0$ does not obey the 255 equation, as we have
+  $$((x_0 \op x_0) \op x_0) \op x_0 = (0 \op x_0) \op x_0 = 0 \op x_0 = 0 \neq x_0.$$
 \end{proof}
