@@ -20,23 +20,41 @@ $$ x = (Sx \op x) \op x.$$
   \item (i)  The left multiplication operators $L_y: M \to M$ are all invertible, with $L_y^{-1} x = x \op R_y L_y x$.
   \item (ii) If $x,y \in M$ and $y \op x = x$, then $y = Sx \op x$.  In particular, 255 holds if and only if the equation $y \op x = x$ is solvable for every $x$.
   \item (iii)  For all $x,y \in M$, we have $x = L_y x \op R_y L_y^2 x$.
-  \item (iv) For $a,b \in M$, we have $a \diamond b = L_b^{-2} a \op ((L_b^{-1} a \op L_b^{-2} a) \op L_b^{-1} a)$.
-  \item (v) Let $x \in M$.  If $y$ is a fixed point of $L_x S$, then it is a fixed point of $R_x L_x$, which in turn implies that $L_x y$ is a fixed point of $L_x R_x$.  Finally, if $z$ is a fixed point of $L_x R_x$, then $R_x L_x z = x$ (and hence $L_x z = Sx \op x$ by (ii)).
 \end{itemize}
 \end{lemma}
 
-\begin{proof}  From \eqref{677-alt} we see that $L_y$ is surjective, hence invertible on finite magmas, giving (i) (the formula for $L_y^{-1} x$ being immediate from \eqref{677-alt}).  For (ii), we apply \eqref{677} to conclude that
+\begin{proof}  From \eqref{677-alt} we see that $L_y$ is surjective, hence invertible on finite magmas, giving (i) (the formula for $L_y^{-1} x$ being immediate from \eqref{677-alt}).
+  For (ii), we apply (i) with $x$ replaced by $L_y x$.  For (iii), we rewrite $a \op b$ as $R_b L_b^2 (L_b^{-2} a)$, which by (ii) is equal to $L_{L_b^{-1} a}^{-1} (L_b^{-2} a)$.  The claim then follows from (i).
+\end{proof}
+
+We have the following equivalent characterizations of 255:
+
+\begin{lemma}\label{255-equiv} Let $M$ be a finite magma obeying \eqref{677}, and let $x \in M$.  Then the following are equivalent:
+\begin{itemize}
+  \item (i)  255 holds for $x$, that is to say $R_x (Sx \op x) = x$.
+  \item (ii) The equation $R_x y = x$ has the unique solution $y = Sx \op x$.
+  \item (iii) The equation $R_x x = x$ has a solution.
+  \item (iv) The equation $R_x L_x z = x$ has a solution.
+  \item (v) The equation $L_x R_x z = z$ has a solution.
+  \item (vi) The equation $R_x L_x y = y$ has a solution.
+  \item (vii) The equation $L_x S y = y$ has a solution.
+\end{itemize}
+\end{lemma}
+
+\begin{proof} Clearly (ii) implies (i), which implies (iii).  If (iii) holds,
+  we apply \eqref{677-alt} to conclude that
   $$ y \op x = x = y \op (x \op (x \op y))$$
   and hence by left invertibility
   $$ x = x \op (x \op y).$$
   On the other hand, from \eqref{677} with $y$ replaced by $x$ we have
   $$ x = x \op (x \op (Sx \op x))$$
-  and the claim then follows by left invertibility.
+ and hence by left invertibility $y = Sx \op x$, giving (ii).
 
-  For (iii), we apply (i) with $x$ replaced by $L_y x$.  For (iv), we rewrite $a \op b$ as $R_b L_b^2 (L_b^{-2} a)$, which by (iii) is equal to $L_{L_b^{-1} a}^{-1} (L_b^{-2} a)$.  The claim then follows from (i).
+From left cancellativity we see that (v) and (vi) are equivalent, as are (iii) and (iv).
 
-  Now we prove (v).  If $y$ is a fixed point of $L_x S$, then $L_x L_y y = y$, but from \eqref{677-alt} we have $y = L_x L_y R_x L_x y$, so the first claim follows from left-cancellativity.  The second claim is also clear from left-cancellativity.  Finally, if $z$ is a fixed point of $L_x R_x$, then we have $L_x L_z x = z$, but from \eqref{667-alt} one has $z = L_x L_z R_x L_x z$, giving the claim by right cancellativity.
+If (vii) holds, then $L_x L_y y = y$, but from \eqref{677-alt} we have $y = L_x L_y R_x L_x y$, so (vi) follows from left-cancellativity; the converse implication follows by reversing the steps.  If (v) holds, then we have $L_x L_z x = z$, but from \eqref{667-alt} one has $z = L_x L_z R_x L_x z$, giving the (iv) by left-cancellativity; the converse implication follows by reversing the steps.
 \end{proof}
+
 
 This for instance gives the implication for linear magmas:
 
