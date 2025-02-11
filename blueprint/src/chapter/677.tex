@@ -24,7 +24,12 @@ $$ x = (Sx \op x) \op x.$$
 \end{lemma}
 
 \begin{proof}  From \eqref{677-alt} we see that $L_y$ is surjective, hence invertible on finite magmas, giving (i) (the formula for $L_y^{-1} x$ being immediate from \eqref{677-alt}).
-  For (ii), we apply (i) with $x$ replaced by $L_y x$.  For (iii), we rewrite $a \op b$ as $R_b L_b^2 (L_b^{-2} a)$, which by (ii) is equal to $L_{L_b^{-1} a}^{-1} (L_b^{-2} a)$.  The claim then follows from (i).
+
+  For (ii), using the fact that $L_y x = x$, (i) becomes $x = x \op R_y x = L_x L_x y$, then, using the invertibility of $L_x$ given by (i) we have
+  \[y = L_x^{-1} L_x^{-1} x \stackrel{(i)}{=} L_x^{-1} (x \op R_x L_x x) = L_x^{-1} (L_x R_x L_x x) =
+  R_x L_x x = Sx \op x.\]
+
+  For (iii), we apply (i) with $x$ replaced by $L_y x$.
 \end{proof}
 
 We have the following equivalent characterizations of 255:
