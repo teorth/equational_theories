@@ -1,5 +1,4 @@
-import Batteries.Data.Array.Basic
-import Batteries.Tactic.Lint.Frontend
+import Init.Data.List
 import Cli.Basic
 import Lean.Util.SearchPath
 import equational_theories.Closure
@@ -13,15 +12,16 @@ def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → DualityRel
     return 1
   if modules.isEmpty then
     modules := #[`equational_theories]
-  searchPathRef.set compile_time_search_path%
-
-  unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
-    let ctx := {fileName := "", fileMap := default}
-    let state := {env}
-    Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
-      let rs ← Result.extractEquationalResults
-      action rs dualityRelation
-      pure 0
+  -- Instead of importing modules, read equations from "full_entries.json"
+  let jsonStr ← IO.FS.readFile "full_entries.json"
+  let json ← match Lean.Json.parse jsonStr with
+    | Except.error err => throw $ IO.userError ("Failed to parse JSON: " ++ err)
+    | Except.ok j    => pure j
+  let rs ← match Lean.FromJson.fromJson? json with
+    | Except.error err => throw $ IO.userError ("JSON decode error: " ++ err)
+    | Except.ok rs   => pure rs
+  action rs dualityRelation
+  return 0
 
 def matchFinite (rs : Array Entry) (finite : Bool) : Array Entry :=
   if finite then
@@ -170,17 +170,17 @@ def generateRaw (inp : Cli.Parsed) : IO UInt32 := do
     if inp.hasFlag "full-entries" then
       IO.println (toJson rs).compress
       return
-    let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
-    let mut implications : Array Implication := #[]
-    let mut facts : Array Facts := #[]
-    let mut unconditionals : Array String := #[]
-    for entry in rs do
-      match entry.variant with
-      | .implication imp => implications := implications.push imp
-      | .facts fact => facts := facts.push fact
-      | .unconditional s => unconditionals := unconditionals.push s
-    let output : OutputRaw := ⟨implications, facts, unconditionals⟩
-    IO.println (toJson output).pretty
+      let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
+      let mut implications : Array Implication := #[]
+      let mut facts : Array Facts := #[]
+      let mut unconditionals : Array String := #[]
+      for entry in rs do
+        match entry.variant with
+        | .implication imp => implications := implications.push imp
+        | .facts fact => facts := facts.push fact
+        | .unconditional s => unconditionals := unconditionals.push s
+      let output : OutputRaw := ⟨implications, facts, unconditionals⟩
+      IO.println (toJson output).pretty
 
 def raw : Cmd := `[Cli|
   raw VIA generateRaw;
