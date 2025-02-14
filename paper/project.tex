@@ -1,13 +1,20 @@
 \section{Project Management}\label{project-sec}
+\newcommand{\TODO}[1]{\todo[inline]{#1}}
 
-\note{TODO: expand this sketch.}
+\TODO{Shreyas Srinivas and Pietro Monticone have volunteered to take the lead on this section.}
 
-Shreyas Srinivas and Pietro Monticone have volunteered to take the lead on this section.
+This project is, among other things, an experiment on how to organise large scale collaborations for mathematical work. In this section, we describe several aspects of the mechanics of the collaborative effort.
 
+\subsection{Problems of scale in mathematical collaboration}
+In order to understand the difficulties of scaling that arise in large scale collaborations, it helps to revisit how traditional mathematical collaborations work and understand why they may not scale. Every collaboration is unique, and we cannot imagine that any universal template exists. However, some general patterns can be observed in any mathematical collaboration. Usually, a small number of contributors, usually under ten, who may know each other, join forces to tackle some class of problems. Typically the collaborators are academics who share substantial amounts of common knowledge. They discuss the problem at hand together, typically with some shared written medium such as a whiteboard. After several rounds of discussion and refinement, different members of the collaboration come up with different pieces of the solution and discuss how they fit together into a whole. Along the way, each collaborator writes out their specific contributions and reviews that of others. After several iterations of this process they synthesize the results into a single paper. At this point, the collaborators are reasonably confident about the correctness of their work, including theorem statements and proofs, and submit the paper for peer review. Of course, there are many variations to this general template, but the basic cycle of discuss, solve, write, cross-check, and revise process is always present in some form or another.
+
+\TODO{Discuss how the above breaks down when a large and diverse collection of collaborators work over the internet.
+    Consider citing the \href{https://euromathsoc.org/code-of-practice}{EMS webpage for code of practice} for joint responsibility rules
+}
 Discuss topics such as:
 \begin{itemize}
     \item Project generation from \href{https://github.com/pitmonticone/LeanProject}{template}
-    \item Github issue management with \href{https://github.com/teorth/equational_theories/labels}{labels} and \href{https://github.com/users/teorth/projects/1}{task management dashboard}
+    \item GitHub issue management with \href{https://github.com/teorth/equational_theories/labels}{labels} and \href{https://github.com/users/teorth/projects/1}{task management dashboard}
     \item Continuous integration (builds, blueprint compilation, task status transition)
     \item Pre-push git hooks
     \item Use of blueprint (small note, see \#406: blueprint chapters should be given names for stable URLs)
@@ -22,9 +29,9 @@ Mention that FLT is also using a similar workflow.
 
 Also mention some early human-managed efforts ("outstanding tasks", manually generated Hasse diagram, etc.) which suffices for the first one or two days of the project but rapidly became unable to handle the scale of the project.
 
-Mention that some forethought in setting up a Github organizational structure with explicit admin roles etc. may have had some advantages if we had done so in the planning stages of the project, but it was workable without this structure (the main issue is that a single person - Terry - had to be the one to perform various technical admin actions).
+Mention that some forethought in setting up a GitHub organizational structure with explicit admin roles etc. may have had some advantages if we had done so in the planning stages of the project, but it was workable without this structure (the main issue is that a single person -- Terry -- had to be the one to perform various technical admin actions).
 
-Use of transitive reduction etc. to keep the Lean codebase manageable. Note that the project is large enough that one cannot simply accept arbitrary amounts of Lean code into the codebase, as this could make compilation times explode. Also note somewhere that transitive completion can be viewed as directed graph completion on a doubled graph consisting of laws and their formal negations.
+Use of transitive reduction etc.\ to keep the Lean codebase manageable. Note that the project is large enough that one cannot simply accept arbitrary amounts of Lean code into the codebase, as this could make compilation times explode. Also note somewhere that transitive completion can be viewed as directed graph completion on a doubled graph consisting of laws and their formal negations.
 
 Technical debt issues, e.g., complications stemming from an early decision to make Equations.lean and AllEquations.lean the ground truth of equations for other analysis and visualization tools, leading to the need to refactor when AllEquations.lean had to be split up for performance reasons.
 
@@ -36,7 +43,7 @@ Explain what "trusting" Lean really means in a large project. Highlight the kind
 
 Note that despite the guarantees provided by Lean, non-Lean components still contained bugs. For instance, an off-by-one error in an ATP run created a large number of spurious conjectures, and some early implementations of duality reductions (external to Lean) were similarly buggy. "Unit tests", e.g., checking conjectured outputs against Lean-validated outputs, or by theoretical results such as duality symmetry, were helpful, and the Equation Explorer visualization tool also helped human collaborators detect bugs.
 
-Meta: documenting thoughts for the future record is quite valuable. It would be extremely tedious to try to reconstruct real-time impressions long after the fact just from the github commit history and Zulip chat archive.
+Meta: documenting thoughts for the future record is quite valuable. It would be extremely tedious to try to reconstruct real-time impressions long after the fact just from the GitHub commit history and Zulip chat archive.
 
 \subsection{Maintenance}
 
@@ -51,5 +58,5 @@ Describe the role of maintainers and explain why they need to be conversant in t
     \item Responding to task requests,
     \item Evaluating theorem and definition formulations (for example unifying many theorem statements into one using FactsSyntax),
     \item Suggesting better ones where possible,
-    \item Ensuring that there is no excessive and pointless overlap of content in different contributions (TODO: elaborate on what level of overlap was permissible and what we consider excessive).
+    \item Ensuring that there is no excessive and pointless overlap of content in different contributions \TODO{elaborate on what level of overlap was permissible and what we consider excessive}.
 \end{itemize}

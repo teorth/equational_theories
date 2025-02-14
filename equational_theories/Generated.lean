@@ -13,3 +13,4 @@ import equational_theories.Generated.MagmaEgg.small
 import equational_theories.Generated.Confluence
 import equational_theories.Generated.InvariantMetatheoremNonimplications
 import equational_theories.Generated.FiniteImplicationSearch
+import equational_theories.Generated.FullSpectrum

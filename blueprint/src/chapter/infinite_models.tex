@@ -113,21 +113,21 @@ The following result was established in \cite{austin_finite}:
 
 Many implications for finite magmas rely on the fact that if $f, g:X \to X$ are functions on a finite set $X$, then $f \circ g = I$ if and only if $g \circ f = I$.  Two more complicated variants of this are as follows.
 
-\begin{lemma}\label{ffg}  Let $X$ be finite, and let $f, g: X \to X$ be such that $f = f \circ f \circ g$.  Then $f = f \circ g \circ f$.
+\begin{lemma}\label{ffg} \lean{FiniteModel.Finite.f_ffg_implies_f_fgf} \leanok Let $X$ be finite, and let $f, g: X \to X$ be such that $f = f \circ f \circ g$.  Then $f = f \circ g \circ f$.
 \end{lemma}
 
-\begin{proof} Call a point $x \in X$ \emph{periodic} if $f^n(x) = x$ for some $n>0$.  Because the forward orbit $x, f(x), f^2(x), \dots$ in a finite space $X$ must repeat, we see that for each $x$ there exists an $n$ such that $f^n(x)$ is periodic.  Let $n_x$ be the first $n$ for which this occurs.  If $n_x > 1$, then $g(x), f(g(x)), f(f(g(x))$ cannot be periodic (as this would imply $f(x)$ periodic), and then we can see that $n_{g(x)} = n_x + 1$.  Hence the maximal value of $n_x$ is at most $1$, which implies that $f(x)$ is periodic for every $x$.  Thus there is an $n > 1$ such that $f^n = f$.  Since $f = f^2 \circ g$, we have $f^n = f^{n-2} \circ f \circ f = f^{n-2} \circ (f^2 \circ g) \circ f = f^n \circ g \circ f = f \circ g \circ f$, as desired.
+\begin{proof} \leanok Call a point $x \in X$ \emph{periodic} if $f^n(x) = x$ for some $n>0$.  Because the forward orbit $x, f(x), f^2(x), \dots$ in a finite space $X$ must repeat, we see that for each $x$ there exists an $n$ such that $f^n(x)$ is periodic.  Let $n_x$ be the first $n$ for which this occurs.  If $n_x > 1$, then $g(x), f(g(x)), f(f(g(x))$ cannot be periodic (as this would imply $f(x)$ periodic), and then we can see that $n_{g(x)} = n_x + 1$.  Hence the maximal value of $n_x$ is at most $1$, which implies that $f(x)$ is periodic for every $x$.  Thus there is an $n > 1$ such that $f^n = f$.  Since $f = f^2 \circ g$, we have $f^n = f^{n-2} \circ f \circ f = f^{n-2} \circ (f^2 \circ g) \circ f = f^n \circ g \circ f = f \circ g \circ f$, as desired.
 \end{proof}
 
-\begin{lemma}\label{gff} Let $X$ be finite, and let $f, g: X \to X$ be such that $f = g \circ f \circ f$.  Then $f = f \circ g \circ f$.
+\begin{lemma}\label{gff} \lean{FiniteModel.Finite.f_gff_implies_f_fgf} \leanok Let $X$ be finite, and let $f, g: X \to X$ be such that $f = g \circ f \circ f$.  Then $f = f \circ g \circ f$.
 \end{lemma}
 
-\begin{proof} By hypothesis, $f^2(x)$ uniquely determines $f(x)$.  This prevents $n_x = 2$ for any $x$ (because if $n>2$ is such that $f^{n+2}(x) = f^2(x)$, then $f^{n+1}(x) \neq f(x)$), and hence also prevents $n_x > 2$ for any $x$.   So again we have $f(x)$ periodic for all $x$, so $f^n = f$ for some $n>1$.  Then $f = f^n = f \circ (g \circ f^2) \circ f^{n-2} = f \circ g \circ f^n = f \circ g \circ f$ as required.
+\begin{proof} \leanok By hypothesis, $f^2(x)$ uniquely determines $f(x)$.  This prevents $n_x = 2$ for any $x$ (because if $n>2$ is such that $f^{n+2}(x) = f^2(x)$, then $f^{n+1}(x) \neq f(x)$), and hence also prevents $n_x > 2$ for any $x$.   So again we have $f(x)$ periodic for all $x$, so $f^n = f$ for some $n>1$.  Then $f = f^n = f \circ (g \circ f^2) \circ f^{n-2} = f \circ g \circ f^n = f \circ g \circ f$ as required.
 \end{proof}
 
 This can be used to obtain a few positive finite magma implications, for instance by setting $f,g$ to be left and right multiplication operators.  Another useful lemma is
 
-\begin{lemma}[Eventual period]\label{period} \lean{Eq3342.Finite.fn_periodic} \leanok  Let $X$ be finite and $f: X \to X$.  Then there exists $n \geq 1$ such that $f^{2n} = f^n$.
+\begin{lemma}[Eventual period]\label{period} \lean{FiniteModel.Finite.fn_eventually_periodic'} \leanok  Let $X$ be finite and $f: X \to X$.  Then there exists $n \geq 1$ such that $f^{2n} = f^n$.
 \end{lemma}
 
 \begin{proof} \leanok By the pigeonhole principle, there exists $n \geq 1$, $m \geq 0$ such that $f^{m+n} = f^m$, which implies on iteration that $f^{m+mn} = f^m$ and hence $f^{2mn} = f^{mn}$, giving the claim.
@@ -144,4 +144,76 @@ As a sample application, we have
 Note that $x \op y= y \op fx = fx \op fy$, hence $f$ is a homomorphism.  By \Cref{period}, there is $n \geq 1$ with $f^n = f^{2n}$.  From 3342 we have $Sx = S fx$ and $Cx = Sx \op x = f^n Sx \op f^n x = f^n Sx \op f^{2n} x = f^{2n-1} x \op f^n Sx = f^{n-1} x \op S x = f(f^{n-1} x) = f^n x$.  Then
 $$ Cx \op y = f^n x \op y = f^{2n} x \op f^n y = f^n x \op f^n y = x \op y$$
 and a similar argument gives $x \op Cy = x \op y$.
+\end{proof}
+
+\begin{proposition}[1167 implies 1096]\label{1167-1096}\leanok\lean{Eq1133.Finite.Equation1167_implies_Equation1096}
+  For finite magmas, Equation 1167,
+  $$ x = y \op ((z \op (y \op y)) \op x)$$
+implies Equation 1096,
+$$ x = y \op ((x \op (z \op y)) \op x).$$
+\end{proposition}
+
+\begin{proof}\leanok We write 1167 as
+  $$ L_y L_{z \op Sy} = I,$$
+hence $L_y$ is invertible and $L_{z \op Sy} L_y = I$.  In particular $L_{z \op Sy} Sy = y$, hence squaring is injective, hence surjective.  So 1167 can be rewritten as $L_{S^{-1} y} L_{z \op y} = I$, hence $L_{z \op y}$ is independent of $z$.  In particular
+$$ L_{x \op (z \op y)} = L_{S^{-2} z \op (z \op y)} = L_{L_{S^{-2} z} L_{S^{-1} z \op S S^{-2} z} y} = L_y$$
+by 1167, hence the right-hand side of 1096 is independent of $z$.  Replacing $z$ with $y$, the claim now follows from 1167.
+\end{proof}
+
+\begin{proposition}[1133 implies 1167]\label{1133-1167}\leanok\lean{Eq1133.Finite.Equation1133_implies_Equation1167}
+  For finite magmas, Equation 1133,
+$$ x = y \op ((y \op (z \op y)) \op x)$$
+implies Equation 1167,
+  $$ x = y \op ((z \op (y \op y)) \op x).$$
+\end{proposition}
+
+\begin{proof}\leanok
+1133 asserts that $L_y L_{y \op (z \op y)} = I$, hence $L_y$ is invertible and $L_{y \op (z \op y)} = L_y^{-1}$ does not depend on $z$.  Setting $z = y \op Sy$ we see from 1133 that $y \op (z \op y) = y$ and hence we have left-involution: $L_y = L_y^{-1}$. Replacing $y$ with $L_z y$ in 1133 we now get $L_{L_z y} L_{L_z y \op y} = I$, which since $L_{L_z y}$ is its own inverse gives
+\begin{equation}\label{intermediate}
+  L_{L_z y \op y} = L_{L_z y}.
+\end{equation}
+In particular
+$$ R_y^3 z = L_{L_z y \op y} y = L_{L_z y} y = R_y^2 z$$
+hence as $L_{R_y^2 z}$ is its own inverse
+$$ y =L_{R_y^2 z} L_{R_y^2 z} y = L_{R_y^2 z} R_y^3 z =
+L_{R_y^2 z} R_y^3 z = S( R_y^2 z).$$
+Thus squaring is surjective, hence invertible.
+
+Next, by \eqref{intermediate} we have $L_{z \op Sy} = L_w$ where $w = R_{Sy}^2 z$.  By \eqref{intermediate} and the fact that $L_w$ is its own inverse, we have
+$$ L_w^2 w = w = L_{z \op Sy} Sy =L_w Sy,$$
+hence $Sw = L_w w = Sy$.  As $S$ is injective, we have $L_w = L_y$, and then $L_y L_{z \op Sy} = L_y^2 = I$, giving 1167.
+\end{proof}
+
+\begin{proposition}[1441 implies 4067, 1443 implies 3055]\label{1441-4067-1443-3055}\leanok\lean{Eq1441.Finite.Equation1441_implies_Equation4067,Eq1441.Finite.Equation1443_implies_Equation3055}
+  For finite magmas, Equation 1441,
+$$ x = (x \op y) \op (x \op (x \op x))$$
+implies Equation 4067,
+$$ x \op x = ((x \op x) \op y) \op x,$$
+and equation 1443,
+$$ x = (x \op y) \op (x \op (x \op z))$$
+implies Equation 3055,
+$$ x = (((x \op x) \op y) \op x) \op x.$$
+\end{proposition}
+
+\begin{proof}\leanok
+  Write $\tilde C x = x \op Sx$, then 1441 asserts that $R_{\tilde Cx} R_y x = x$.  Setting $$y=Sx$$ we get $x = S\tilde Cx$, so by finiteness $\tilde C Sx = x$.  Replacing $x$ with $Sx$ in 1441 we conclude $R_x R_y Sx = Sx$ which is 4067.
+
+  Clearly 1443 implies 1441, hence 4067 by the previous implication, so that 3055 simplifies to $x = Sx \op x$.  Meanwhile, 1443 also implies $x = S(x \op (x \op z))$.  On taking square roots and using $S \tilde C = x$, we obtain $x \op (x \op z) = \tilde Cx$.  Applying this with $z = Sx$ we conclude $L_x \tilde Cx = \tilde Cx$, hence on replacing $x$ with $Sx$ we get $L_{Sx} x = x$ as required.
+\end{proof}
+
+\begin{proposition}[1681 implies 3877, 1701 implies 1035]\label{1681-3877-1701-1035}\leanok\lean{Eq1441.Finite.Equation1681_implies_Equation3877,Eq1441.Finite.Equation1701_implies_Equation1035}
+  For finite magmas, Equation 1681,
+$$ x = (y \op x) \op ((x \op x) \op x)$$
+implies Equation 3877,
+$$ x \op x = (y \op (x \op x)) \op x,$$
+and Equation 1701,
+$$ x = (y \op x) \op ((z \op x) \op x)$$
+implies Equation 1035,
+$$ x = x \op ((y \op (x \op x)) \op x).$$
+\end{proposition}
+
+\begin{proof}\leanok This is very similar to the previous proof.
+  Write $Cx = Sx \op x$, then 1681 asserts $R_{Cx} L_y x = x$.  Again setting $y=Sx$ yields $x=SCx$ hence $x = CSx$, and on replacing $x$ with $Sx$ in 1681 one obtains 3877.
+
+For the second part, we simplify to $x = x \op Sx$, while 1701 gives $x = S((z \op x) \op x)$ hence $(z \op x) \op x = Cx$, so $R_x Cx = Cx$, so $R_{Sx} x = x$ as required.
 \end{proof}

@@ -1,0 +1,164 @@
+\chapter{Equation 677}\label{677-chapter}
+
+In this chapter we study finite magmas that obey equation 677,
+\begin{equation}\label{677}
+  x = y \op (x \op ((y \op x) \op y))
+\end{equation}
+for all $x,y$, and whether this implies equation 255,
+\begin{equation}\label{255}
+  x = ((x \op x) \op x) \op x.
+\end{equation}
+Using the usual notation $L_y x = y \op x$, $R_y x = x \op y$, $Sx = x \op x$, we can rewrite equation 677 as
+\begin{equation}\label{677-alt}
+  x = L_y L_x L_{L_y x} y = L_y (x \op R_y L_y x)
+\end{equation}
+and 255 as
+$$ x = (Sx \op x) \op x.$$
+
+\begin{lemma}[Basic properties of 677 magma]\label{677-basic} Let $M$ be a finite magma obeying \eqref{677}.
+  \begin{itemize}
+  \item (i)  The left multiplication operators $L_y: M \to M$ are all invertible, with $L_y^{-1} x = x \op R_y L_y x$.
+  \item (ii) If $x,y \in M$ and $y \op x = x$, then $y = Sx \op x$.  In particular, 255 holds if and only if the equation $y \op x = x$ is solvable for every $x$.
+  \item (iii)  For all $x,y \in M$, we have $x = L_y x \op R_y L_y^2 x$.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}  From \eqref{677-alt} we see that $L_y$ is surjective, hence invertible on finite magmas, giving (i) (the formula for $L_y^{-1} x$ being immediate from \eqref{677-alt}).
+
+  For (ii), using the fact that $L_y x = x$, (i) becomes $x = x \op R_y x = L_x L_x y$, then, using the invertibility of $L_x$ given by (i) we have
+  \[y = L_x^{-1} L_x^{-1} x \stackrel{(i)}{=} L_x^{-1} (x \op R_x L_x x) = L_x^{-1} (L_x R_x L_x x) =
+  R_x L_x x = Sx \op x.\]
+
+  For (iii), we apply (i) with $x$ replaced by $L_y x$.
+\end{proof}
+
+We have the following equivalent characterizations of 255:
+
+\begin{lemma}\label{255-equiv} Let $M$ be a finite magma obeying \eqref{677}, and let $x \in M$.  Then the following are equivalent:
+\begin{itemize}
+  \item (i)  255 holds for $x$, that is to say $R_x (Sx \op x) = x$.
+  \item (ii) The equation $R_x y = x$ has the unique solution $y = Sx \op x$.
+  \item (iii) The equation $R_x x = x$ has a solution.
+  \item (iv) The equation $R_x L_x z = x$ has a solution.
+  \item (v) The equation $L_x R_x z = z$ has a solution.
+  \item (vi) The equation $R_x L_x y = y$ has a solution.
+  \item (vii) The equation $L_x S y = y$ has a solution.
+\end{itemize}
+\end{lemma}
+
+\begin{proof} Clearly (ii) implies (i), which implies (iii).  If (iii) holds,
+  we apply \eqref{677-alt} to conclude that
+  $$ y \op x = x = y \op (x \op (x \op y))$$
+  and hence by left invertibility
+  $$ x = x \op (x \op y).$$
+  On the other hand, from \eqref{677} with $y$ replaced by $x$ we have
+  $$ x = x \op (x \op (Sx \op x))$$
+ and hence by left invertibility $y = Sx \op x$, giving (ii).
+
+From left cancellativity we see that (v) and (vi) are equivalent, as are (iii) and (iv).
+
+If (vii) holds, then $L_x L_y y = y$, but from \eqref{677-alt} we have $y = L_x L_y R_x L_x y$, so (vi) follows from left-cancellativity; the converse implication follows by reversing the steps.  If (v) holds, then we have $L_x L_z x = z$, but from \eqref{667-alt} one has $z = L_x L_z R_x L_x z$, giving the (iv) by left-cancellativity; the converse implication follows by reversing the steps.
+\end{proof}
+
+
+This for instance gives the implication for linear magmas:
+
+\begin{lemma}[No linear counterexamples]\label{linear-obstruction}  Suppose we have a finite magma $M$ obeying 677 which is linear in the sense that $M$ is an abelian group and $x \op y = \alpha x + \beta y + c$ for some endomorphisms $\alpha,\beta: M \to M$ and constant $c$.  Then $M$ obeys 255.
+\end{lemma}
+
+\begin{proof}  By the previous lemma, it suffices to show that right multiplication $R_x$ is surjective, or equivalently injective by finiteness.  If this is not the case, then we can find distinct $y,y'$ such that $R_x y = R_x y'$, hence $L_y x = L_{y'} x$. But in this linear model, $L_y$ and $L_{y'}$ differ by a constant, hence we have $L_y = L_{y'}$.  Applying \eqref{677-alt} we have
+$$  L_y L_x L_{L_y x} y = x =  L_y L_x L_{L_y x} y'$$
+and hence by left-invertibility $y=y'$, a contradiction.
+\end{proof}
+
+In fact the argument gives a stronger obstruction to refuting 255:
+
+\begin{lemma}[No counterexamples via linear extension]\label{linear-2} Suppose that we have a magma with carrier $G \times M$ obeying 677, where $G$ already is a magma obeying 677 and 255, $M$ is an abelian group, and the multiplication operation on $G \times M$ is of the form
+  $$ (x,s) \op (y,t) = (x \op y, \alpha_{x,y} s + \beta_{x,y} t + c_{x,y})$$
+for some endomorphisms $\alpha_{x,y},\beta_{x,y}: M \to M$ and constants $c_{x,y}$.  Then $G \times M$ obeys 255.
+\end{lemma}
+
+\begin{proof}  By \Cref{677-basic}, it suffices to show that for any $(y,t)$, the equation $(x,s) \op (y,t) = (y,t)$ is solvable.  Since $G$ already obeys 255, we know that we can find $x$ such that $x \op y = y$, so it suffices to show that the operation $s \mapsto \alpha_{x,y} s + \beta_{x,y} t + c_{x,y}$ is surjective, or equivalently injective.  If this were not the case, then we could find $s,s'$ such that $\alpha_{x,y} s = \alpha_{x,y} s'$, and hence $L_{(x,s)} (y,t') = L_{(x,s')} (y,t')$ for all $t' \in M$.  Since
+  $$ x \op y = y = x \op (y \op ((x \op y) \op x))$$
+  from \eqref{677}, we have $y = y \op ((x \op y) \op x)$, and hence $L_{(y,t)} L_{L_{(x,s)} (y,t)} (x,s)$ is of the form $(y,t')$ for some $t'$, and similarly with $(x,s)$ replaced by $(x,s')$.  We conclude that
+$$ L_{(x,s)} L_{(y,t)} L_{L_{(x,s)} (y,t)} (x,s) = (y,t) =
+L_{(x,s)} L_{(y,t)} L_{L_{(x,s)} (y,t)} (x,s')$$
+and hence by left invertibility $s=s'$, a contradiction.
+\end{proof}
+
+Linear models $x \op y = \alpha x + \beta y + c$ on the finite field $F_p$ turn out to be classified into two types:
+\begin{itemize}
+\item (Type 1) $\alpha=1-\beta$, $\beta$ is a primitive tenth root of unity, and $c=0$.  (These models are also translation-invariant.)
+\item (Type 2) $\alpha$ is a primitive third root of unity, $c$ is arbitrary, and $\beta$ solves $\beta^3+\beta+1=-\alpha$ and $\beta^4+\beta^3+2\beta^2+2\beta+1=0$.
+\end{itemize}
+An example of a Type I model is $x \op y = 2x-y$ on $F_5$.  Examples of Type II models include $x \op y = 4x+3y$ and $x \op y = 4x+y$ on $F_7$.  An exceptional class of Type II models are $x \op y = 5x-4y+c$ on $F_{31}$, these are the only Type II models that are translation-invariant and do not have idempotents (if $c \neq 0$).
+
+\section{A finite non-right-cancellative example}
+
+Suppose $G$ is already a 677 magma, and to each pair $x,y \in M$ we assign a binary operation $\diamond_{x,y}: M \times M \to M$ such that one has the functional equation
+\begin{equation}\label{ext-eq}
+  s = t \op_{y,L_y^{-1} x} (s \op_{x, (y \op x) \op y} ((t \op_{y,x} s) \op_{y \op x, y} t))
+\end{equation}
+for all $x,y \in M$, then the operation
+$$ (x,s) \diamond (y,t) := (x \diamond y, s \diamond_{x,y} t)$$
+is easily seen to be a 677 magma.  It is right-injective if $G$ and all of the $\op_{y,x}$ are right-injective.
+
+Suppose $M$ is a field that admits a primitive cube root of unity $\omega$ as well as a primitive fifth root of unity $\zeta$ (for instance, $M$ could be a field of order $16$).  Then the three operations
+$$ s \op^0 t := s - \zeta(t-s)$$
+$$ s \op^+ t := t$$
+$$ s \op^- t := s - \omega(t-s)$$
+can easily be seen to obey the identities
+$$s = t \op^0 (s \op^0 ((t \op^0 s) \op^0 t))$$
+$$s = t \op^+ (s \op^+ ((t \op^- s) \op^- t))$$
+$$s = t \op^- (s \op^- ((t \op^+ s) \op^+ t))$$
+for all $t,s$.
+
+Now suppose that $G$ is also a field with a primitive fifth root of unity $\beta$ (so that $\beta = \beta^4$ is a quadratic residue), but $-1$ and $\beta+1$ are non-zero quadratic non-residues (for instance, $G$ could be the field of order $31$, with $\beta=2$).  If we define $x \op y = x - \beta(y-x)$, and then define $\op_{x,y}$ to be $\op^0$ when $y=x$, $\op^+$ when $y-x$ is a non-zero quadratic residue, and $\op^-$ when $y-x$ is a quadratic residue, one can then check that \eqref{ext-eq} holds. Since $\op^0$ is not right-cancellative, this gives a finite 677 magma that is not right-cancellative.
+
+
+\section{The free 677 magma}
+
+In this section we construct the free 677 magma $M_{X,677}$ generated by some set of generators $X$.  First let $M_X$ be the free magma generated $X$ with operation given by pairing $x,y \mapsto (x,y)$; one can think of elements of $M_X$ as finite trees with leaves in $X$.  If $w = (x,y)$ we write $x = w_L$ and $y = w_R$ for the left and right components of $w$; we also define $w_{LL}$, $w_{LR}$, etc. iteratively if they are defined, for instance if $w = ((x,y),z)$ then $w_{LR} = y$.  We define a partial order $<$ on $M_X$ by declaring $w < w'$ if $w$ is a subtree of $w'$, thus $w < w'$ if one of $w \leq w'_L$, $w \leq w'_R$ holds.
+
+We define an operation $\diamond$ recursively on $M_X$ by the following rule:
+\begin{itemize}
+\item If $x,y \in M_X$ is such that $x < y = (y_L, (x \diamond y_L) \diamond x)$, then $x \diamond y := y_L$.  Otherwise, $x \diamond y = (x,y)$.
+\end{itemize}
+
+Note that to define $x \diamond y$, one only needs to be able to compute $x' \diamond y'$ for $y' < y$.  Since there are no infinite descending chains in the partial order $<$, we see that $\diamond$ is well-defined.  By construction, we observe the following properties:
+
+\begin{lemma}[Properties of operation]\label{op-prop}  Let $x,y \in M_X$ be such that $x \diamond y = z$.  Then either
+$$ x, y < z = (x,y)$$
+or
+$$ x, z < y = (z, (x \diamond z) \diamond x).$$
+In particular, $x$ is strictly upper bounded by one of $y,z$.
+\end{lemma}
+
+Next, we observe
+
+\begin{lemma}[Additional property]\label{op-2}  If $x,y \in M_X$, then
+  $$ x \op ((y \op x) \op y) = (x, (y \op x) \op y).$$
+\end{lemma}
+
+\begin{proof} Write $z := y \op x$, $u = z \op y$, $v = x \op u$.  Our task is to show that $v = (x,u)$.
+
+From \Cref{op-prop} we know that $y$ is upper bounded by one of $z,x$, $z$ is upper bounded by one of $u,y$, and $x$ is upper bounded by one of $u,v$.  So out of $x,y,z,u,v$, the only elements that can be maximal in this set are $u$ and $v$.  If $v$ is maximal, then by \Cref{op-prop} we have $v = (x,u)$ as required, hence we may assume for contradiction that $u$ is maximal.  From \Cref{op-prop}, this implies that $u = (z,y)$ and $u = (u_L, (x \op u_L) \op x)$, hence $u_L = z$ and $y = (x \op z) \op x$.
+
+From \Cref{op-prop}, $x$ is upper bounded by one of $x \op z$ and $z$, and $x \op z$ is upper bounded by one of $y$ and $x$.  We also recall that $y$ was upper bounded by one of $z,x$. We conclude that out of $x,y,z,x \op z$, the only one that can be maximal is $z$.  In particular $z$ is not bounded by $x$, hence by \Cref{op-prop} $z = (y,x)$.  $z$ is also not bounded by $w$, hence by \Cref{op-prop} $x \op z = z_L = y$, hence $y = y \op x = z$, contradicting the fact that $y$ was not maximal. This gives the required contradiction.
+\end{proof}
+
+\begin{corollary}\label{677-obey}  The operation $\diamond$ obeys \eqref{677}.
+\end{corollary}
+
+\begin{proof} By the previous lemma and definition of $\diamond$, it suffices to show that $y < (x, (y \op x) \op y)$.  Defining $z,y,v$ as before, this amounts to showing that $y < v$.  We already have $v = (x,u)$, hence by \Cref{op-prop} $x < u$.  Also recall that $y$ is bounded by one of $x,z$, and $z$ is bounded by one of $y,u$.  Since $u$ is also bounded by $v$, we obtain the claim.
+\end{proof}
+
+\begin{corollary} Let $M_{X,677}$ be the magma generated by $X$ with operation $\diamond$.  Then $M_{X,677}$ is the free magma for \eqref{677} generated by $X$.
+\end{corollary}
+
+\begin{proof}  By the previous corollary, it suffices to show that every function $f: X \to M$ into a 677 magma $M$ can be extended to a unique homomorphism $\varphi_f: M_{X,677} \to X$. Uniqueness is clear since $M_{X,677}$ is generated by $X$.  For existence, we define $\varphi_f$ by first extending $f$ to the unique homomorphism from $M_X$ to $X$ (using the pairing map) and then restricting to $M_{X,677}$.  To verify the homomorphism property $\varphi_f(x \diamond y) = \varphi_f(x) \diamond \varphi_f(y)$, we are already done when $x \diamond y = (x,y)$. The only remaining case is when $x \diamond y = y_L$ and $x < y = (y_L,  (x \diamond y_L) \diamond x)$.   If we assume inductively that the homomorphism property $\varphi_f(x' \diamond y') = \varphi_f(x') \diamond \varphi_f(y')$ has already been verified for $y' < y$, then we have
+  $$ \varphi_f(y) = \varphi_f(y_L) \diamond \varphi_f(y_R) = \varphi_f(y_L) \diamond (\varphi_f(x \diamond y_L) \diamond \varphi_f(x)) =  \varphi_f(y_L) \diamond ((\varphi_f(x) \diamond \varphi_f(y_L)) \diamond \varphi_f(x))$$
+  and the claim now follows since $M$ obeys 677.
+\end{proof}
+
+By construction, we have $x \op y > y$ or $x \op y < y$ for any $x,y$.  In particular, $M_{X,677}$ does not obey \eqref{255}.

@@ -18,7 +18,7 @@ dir = Path(__file__).parent.parent
 # we have 4694 equations
 full = range(1, 4694 + 1)
 
-with open(f"{dir}/data/implications.json") as f:
+with open(f"{dir}/data/implications.json", encoding='utf-8') as f:
     implications = json.load(f)["implications"]
 implications = [
     (int(i["lhs"].removeprefix("Equation")), int(i["rhs"].removeprefix("Equation")))
@@ -140,7 +140,7 @@ def generate_lean(data):
 
     table.replace("[", "#[")
 
-    name = f"FinitePoly {table}"
+    name = f"All4x4Tables {table}"
 
     out = f"""
 import Mathlib.Data.Finite.Prod
@@ -158,7 +158,7 @@ set_option linter.unusedVariables false
 
 /-! The magma definition -/
 def «{name}» : Magma (Fin {div}) where
-  op := memoFinOp fun x y => {table}[x.val]![y.val]!
+  op := finOpTable "{table}"
 
 /-! The facts -/
 @[equational_result]
@@ -202,8 +202,8 @@ def create_rows(f):
     return all_rows
 
 
-rows = create_rows(open(f"{dir}/data/plan.txt"))
-with open(f"{dir.parent}/All4x4Tables.lean", "w") as main:
+rows = create_rows(open(f"{dir}/data/plan.txt", encoding='utf-8'))
+with open(f"{dir.parent}/All4x4Tables.lean", "w", encoding='utf-8') as main:
     for i, row in enumerate(rows):
         leanfile = f"{dir}/Refutation{i}.lean"
         data = parse_row(row)
@@ -213,7 +213,7 @@ with open(f"{dir.parent}/All4x4Tables.lean", "w") as main:
             main.write(
                 f"import equational_theories.Generated.All4x4Tables.Refutation{i}\n"
             )
-            open(leanfile, "w").write(generate_lean(data))
+            open(leanfile, "w", encoding='utf-8').write(generate_lean(data))
 
 total = stats["total"]
 removed_by_implication = stats["removed_by_implication"]

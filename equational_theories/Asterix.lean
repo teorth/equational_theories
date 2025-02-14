@@ -60,7 +60,7 @@ def PartialSolution.move_rev_good (f : PartialSolution G) (x y : G) (z : G) (h1 
   f := f'
   E0_subset_E1 := by
     trans f.E1
-    · exact Finset.union_subset (f.E0_subset_E1) (Finset.filter_subset _ _)
+    · exact Finset.union_subset (f.E0_subset_E1) (Finset.filter_subset ..)
     · rw [Finset.union_assoc]; exact Finset.subset_union_left
   t_mem_of_mem_E0' := by
     rintro ⟨x', y'⟩ ha
@@ -463,8 +463,6 @@ lemma PartialSolution.le_add_e0 (f : PartialSolution G) (x y : G) :
 
 lemma PartialSolution.mem_add_e0 (f : PartialSolution G) (x y : G) :
     (y, x) ∈ (f.add_e0 x y).E0 := by
-  unfold add_e0
-  simp only
   apply mem_add_e1_of_app_eq
   · apply mem_add_e1
   · rfl
@@ -486,12 +484,9 @@ lemma closureSeq_mono (f : PartialSolution G) : Monotone (closureSeq f) := by
   intro n m hnm
   obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_le hnm
   clear hnm
-  induction m
-  case zero => simp
-  case succ m hm =>
-    apply hm.trans
-    rw [← add_assoc]
-    apply closureSeq_le_closureSeq_succ
+  induction m with
+  | zero => rfl
+  | succ m hm => exact hm.trans (closureSeq_le_closureSeq_succ ..)
 
 lemma le_closureSeq (f : PartialSolution G) (n : ℕ) : f ≤ closureSeq f n :=
   closureSeq_mono f (Nat.zero_le n)
@@ -503,8 +498,8 @@ lemma closure_eq_of_mem_e1 (f : PartialSolution G) (n : ℕ) (a b : G) (hn : (a,
     closure f a b = (closureSeq f n).f a b := by
   simp only [closure, Prod.mk.eta]
   rcases le_total n (Encodable.encode (a, b) + 1) with h | h
-  · apply (closureSeq_mono f h).2.2.symm hn
-  · apply (closureSeq_mono f h).2.2 (PartialSolution.E0_subset_E1 _ (mem_closureSeq_e0 f a b))
+  · exact (closureSeq_mono f h).2.2.symm hn
+  · exact (closureSeq_mono f h).2.2 (PartialSolution.E0_subset_E1 _ (mem_closureSeq_e0 f a b))
 
 theorem closure_prop (f : PartialSolution G) : ∀ x y, closure f x (closure f y (closure f x y)) = y := by
   intro x y
