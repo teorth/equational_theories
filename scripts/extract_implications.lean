@@ -170,17 +170,17 @@ def generateRaw (inp : Cli.Parsed) : IO UInt32 := do
     if inp.hasFlag "full-entries" then
       IO.println (toJson rs).compress
       return
-      let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
-      let mut implications : Array Implication := #[]
-      let mut facts : Array Facts := #[]
-      let mut unconditionals : Array String := #[]
-      for entry in rs do
-        match entry.variant with
-        | .implication imp => implications := implications.push imp
-        | .facts fact => facts := facts.push fact
-        | .unconditional s => unconditionals := unconditionals.push s
-      let output : OutputRaw := ⟨implications, facts, unconditionals⟩
-      IO.println (toJson output).pretty
+    let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
+    let mut implications : Array Implication := #[]
+    let mut facts : Array Facts := #[]
+    let mut unconditionals : Array String := #[]
+    for entry in rs do
+      match entry.variant with
+      | .implication imp => implications := implications.push imp
+      | .facts fact => facts := facts.push fact
+      | .unconditional s => unconditionals := unconditionals.push s
+    let output : OutputRaw := ⟨implications, facts, unconditionals⟩
+    IO.println (toJson output).pretty
 
 def raw : Cmd := `[Cli|
   raw VIA generateRaw;
