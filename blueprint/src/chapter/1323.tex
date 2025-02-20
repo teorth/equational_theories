@@ -5,14 +5,12 @@ In this chapter we study magmas that obey equation 1323,
   x = y \op (((y \op y) \op x) \op y)
 \end{equation}
 for all $x,y$.  Using the squaring operator $Sy := y \op y$ and the left and right multiplication operators $L_y x := y \op x$ and $R_y x = x \op y$, this law can be written as
-$$ L_y R_y L_{Sy} x = x$$
-and
-$$ R_{Sy} L_y R_y x = x$$
-respectively.  In particular, this gives a way to construct these magmas:
+$$ L_y R_y L_{Sy} x = x.$$
+In particular, this gives a way to construct these magmas:
 
-\begin{lemma}[Construction of 1323 magmas]\label{1323-construct}  Suppose that $M$ is a magma such that
+\begin{lemma}[Construction of 1323 magmas]\label{1323-construct}\leanok\lean{Eq1323.eq1323_if_conditions}  Suppose that $M$ is a magma such that
   \begin{equation}\label{lr}
-    L_{Sy} R_{Sy} = 1
+    R_{Sy} L_{Sy} = 1
    \end{equation}
 and
 \begin{equation}\label{lr-simp}
@@ -26,8 +24,8 @@ hold.  Then the magma obeys 1323.
 
  So now we would like to construct magmas satisfying \Cref{lr} and \Cref{lr-simp}.  We need some bijections:
 
- \begin{lemma}[Bijections]\label{bij}
-  Let $G$ be a countably infinite abelian group of order $2$.  Then there exists a bijection $\phi_a: G \to \Q^\times$ for each $a \in G \backslash \{0\}$ such that
+ \begin{lemma}[Bijections]\label{bij}\leanok\lean{Eq1323.Ingredients.ϕ}
+  Let $G$ be a countably infinite abelian torsion group of exponent $2$.  Then there exists a bijection $\phi_a: G \to \Q^\times$ for each $a \in G \backslash \{0\}$ such that
  $\phi_a(0) = 1$ and $\phi_a(a+b) = -\phi_a(b)$ for all $b \in G$, so in particular $\phi_a(a)=-1$.
  \end{lemma}
 
@@ -36,7 +34,7 @@ hold.  Then the magma obeys 1323.
  \end{proof}
 
 
- \begin{lemma}[Building a magma]\label{build-magma}  Let $G$ be a countably infinite abelian group of order $2$, and let $\phi_a$ be as in the previous lemma.  Let $N$ be the set of pairs $(x,a)$ with $x \in \Q^\times$ and $a \in G \backslash \{0\}$, and let $M = G \uplus N$ be the disjoint union of $G$ and $N$.  Suppose that we have an operation $\op : M \times M \to M$ obeying the following axioms:
+ \begin{lemma}[Building a magma]\label{build-magma}\leanok\lean{Eq1323.op}\lean{Eq1323.op_RSy_LSy_eq_Id}\lean{Eq1323.op_Ly_Ry_eq_LSy}  Let $G$ be a countably infinite abelian torsion group of exponent $2$, and let $\phi_a$ be as in the previous lemma.  Let $N$ be the set of pairs $(x,a)$ with $x \in \Q^\times$ and $a \in G \backslash \{0\}$, and let $M = G \uplus N$ be the disjoint union of $G$ and $N$.  Suppose that we have an operation $\op : M \times M \to M$ obeying the following axioms:
 \begin{itemize}
 \item (i) We have
 \begin{equation}\label{op-0}

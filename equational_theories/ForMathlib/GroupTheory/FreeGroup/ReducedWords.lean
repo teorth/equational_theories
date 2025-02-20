@@ -269,4 +269,13 @@ theorem ne_inv_of_ne_one {x : FreeGroup α} (x_ne_one : x ≠ 1) : x ≠ x⁻¹ 
   rw [← eq]
   exact pow_two x
 
+theorem pow_injective {x y : FreeGroup α} {n : ℕ} (hn : n ≠ 0) : x = y ↔ x ^ n = y ^ n := by
+  sorry
+
+theorem zpow_injective {x y : FreeGroup α} {n : ℤ} (hn : n ≠ 0) : x = y ↔ x ^ n = y ^ n := by
+  rw [pow_injective (Int.natAbs_ne_zero.mpr hn)]
+  rcases Int.natAbs_eq n with h | h
+  · rw [h, Int.natAbs_ofNat, zpow_natCast, zpow_natCast]
+  · rw [h, Int.natAbs_neg, Int.natAbs_ofNat, zpow_neg, zpow_neg, inv_inj, zpow_natCast, zpow_natCast]
+
 end FreeGroup
