@@ -10,6 +10,7 @@ When the proof is done, update the blueprint with \lean and \leanok tags as appr
 
 
 namespace Eq1323
+noncomputable section
 
 
 section Ingredients
@@ -45,8 +46,6 @@ theorem FreeAbGrpExp2.of_injective : Function.Injective (FreeAbGrpExp2.of : α �
   Finset.singleton_injective
 @[simp] theorem FreeAbGrpExp2.of_injective' {x y : α} : x ≠ y → FreeAbGrpExp2.of x ≠ FreeAbGrpExp2.of y :=
   mt (of_injective ·)
--- theorem FreeAbGrpExp2.add_coords [DecidableEq α] (a b : FreeAbGrpExp2 α) : (a + b).coords = a.coords ∆ b.coords :=
---   by dsimp [FreeAbGrpExp2.add_def]
 
 instance [DecidableEq α] : AddCommGroup (FreeAbGrpExp2 α) where
   add_zero x := by simp [FreeAbGrpExp2.add_def, symmDiff_def]
@@ -101,9 +100,6 @@ instance : CommGroup Sign where
   inv_mul_cancel a := by simp [sign_one, sign_inv_self]; cases a <;> simp [sign_mul]
   div_eq_mul_inv := Sign.div_eq_mul_inv
 
--- theorem sign_mul_cancel : (a : Sign) → a * a = 1
---   | .plus => by simp [sign_mul, sign_one] | .minus => by simp [sign_mul, sign_one]
-
 -- A corresponds to ℚˣ in the blueprint
 abbrev A₀ := FreeGroup Nat
 def A := Sign × A₀ deriving DecidableEq
@@ -115,13 +111,8 @@ instance : Neg A where neg x := ⟨.minus, 1⟩ * x
 @[simp] theorem A.neg {x : A} : -x = ⟨.minus, 1⟩ * x := rfl
 theorem A.mul_eta {x y : A} : (x * y) = (x.1 * y.1, x.2 * y.2) := rfl
 theorem A.inv_eta {x : A} : x⁻¹ = (x.1⁻¹, x.2⁻¹) := rfl
--- theorem A.pow_eta {x : A} {n : ℕ} : x ^ n = (x.1 ^ n, x.2 ^ n) := rfl
 
--- theorem A.mul_fst (x y : A) : (x * y).1 = x.1 * y.1 := rfl
 @[simp] theorem A.mul_snd (x y : A) : (x * y).2 = x.2 * y.2 := rfl
--- theorem A.inv_fst (x : A) : x⁻¹.1 = x.1⁻¹ := rfl
--- theorem A.inv_snd (x : A) : x⁻¹.2 = x.2⁻¹ := rfl
--- theorem A.pow_fst (x : A) (n : ℕ) : (x ^ n).1 = x.1 ^ n := rfl
 @[simp] theorem A.pow_snd (x : A) (n : ℕ) : (x ^ n).2 = x.2 ^ n := rfl
 
 abbrev R := A × S'
@@ -150,7 +141,7 @@ theorem Finset.eq_rot3 {α : Type} [DecidableEq α] {a b c : α} : {a, b, c} = (
 end Ingredients
 
 
-noncomputable section Phi
+section Phi
 
 instance : Denumerable S := Denumerable.finset
 
@@ -288,7 +279,7 @@ theorem ϕ_unit_0_or_a {a : S'} {b : S} (h : ϕ' a b = 1) : b = 0 ∨ b = a := b
 end Phi
 
 
-noncomputable section Relations
+section Relations
 
 structure Relation where
   x : R
@@ -414,7 +405,7 @@ theorem closure_next (F : Finset Relation) {rel : Relation}
 end Relations
 
 
-noncomputable section Greedy
+section Greedy
 
 class Extension where
   core : Finset Relation
@@ -595,7 +586,7 @@ inductive G where
   | square : S → G
   | root : R → G
 
-noncomputable def op (f : RelationLHS → R) : G → G → G
+def op (f : RelationLHS → R) : G → G → G
   | .square a, .square b => .square (a + b)
   | .root x, .square b => .root (x.1 * ϕ x.2 b, x.2)
   | .square b, .root x => .root (x.1 * (ϕ x.2 b)⁻¹, x.2)
@@ -730,5 +721,5 @@ theorem Equation1323_not_implies_Equation2744 :
     rw [←noninj, ←h1] at h2
     simp [b, b'] at h2
 
-
+end
 end Eq1323

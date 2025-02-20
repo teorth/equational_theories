@@ -1,4 +1,6 @@
 import Mathlib.GroupTheory.FreeGroup.Reduce
+import Mathlib.Tactic.Linarith
+
 import equational_theories.Mathlib.Data.List.Chain
 import equational_theories.Mathlib.Data.List.Lemmas
 import equational_theories.Mathlib.GroupTheory.OrderOfElement
@@ -78,6 +80,32 @@ theorem reduced_infix : reduced L₂ → L₁ <:+: L₂ → reduced L₁ := Chai
 theorem reduced_min (h : reduced L₁) : Red L₁ L₂ ↔ L₂ = L₁ :=
   Relation.reflTransGen_iff_eq fun _ => not_step_reduced h
 
+theorem reduced_cons_append_chain (x : α × Bool) (L₁ L₂ : List (α × Bool)) (h : L₁ ≠ []) :
+    reduced (x :: L₁) → reduced (L₁ ++ L₂) → reduced (x :: L₁ ++ L₂) := by
+  induction L₁
+  · contradiction
+  · intro h1 h2
+    apply reduced_cons.mpr
+    apply reduced_cons.mp at h1
+    tauto
+
+theorem reduced_append_chain (L₁ L₂ L₃ : List (α × Bool)) (h : L₂ ≠ []) :
+    reduced (L₁ ++ L₂) → reduced (L₂ ++ L₃) → reduced (L₁ ++ L₂ ++ L₃) := by
+  induction L₁
+  case nil => simp
+  case cons head tail ih =>
+    intro h1 h2
+    rw [cons_append]
+    if h3 : tail = []
+    then
+      rw [h3]
+      exact reduced_cons_append_chain _ _ _ h (h3 ▸ h1) h2
+    else
+      rw [cons_append] at h1
+      apply reduced_cons_append_chain head _ _ (by simp [h3]) h1
+      refine ih (reduced_infix h1 ?_) h2
+      exact ⟨[head], [], by simp⟩
+
 def cyclicallyReduced (L : List (α × Bool)) : Prop :=
   reduced L ∧ ∀ a ∈ L.getLast?, ∀ b ∈ L.head?, ¬(a.1 = b.1 ∧ (!a.2) = b.2)
 
@@ -149,14 +177,16 @@ theorem toWord_mul {x y : FreeGroup α} : (toWord (x*y)) = reduce (toWord x ++ t
   rw [← mk_toWord (x:= x), ← mk_toWord (x:= y), mul_mk]
   simp
 
-theorem reduce_append: (reduce (L₁ ++ L₂)) = reduce (reduce L₁ ++ reduce L₂) := by
+theorem toWord_pow {x : FreeGroup α} {n : ℕ} : (toWord (x^n)) = reduce (List.replicate n x.toWord).flatten := by
+  rw [← mk_toWord (x:= x), pow_mk]
+  simp
+
+theorem reduce_append : (reduce (L₁ ++ L₂)) = reduce (reduce L₁ ++ reduce L₂) := by
 rw [← FreeGroup.toWord_mk, ← FreeGroup.mul_mk, toWord_mul, FreeGroup.toWord_mk, FreeGroup.toWord_mk]
 
 theorem reduce_cons (a : α × Bool) (w : List (α × Bool)) :
     FreeGroup.reduce (a :: w) = FreeGroup.reduce (a :: FreeGroup.reduce w) := by
   simp only [FreeGroup.reduce.cons, FreeGroup.reduce.idem]
-
--- theorem reduce_singleton (a : α × Bool) : FreeGroup.reduce [a] = [a] := rfl
 
 def reduceCyclically : List (α × Bool) → List (α × Bool) :=
   List.bidirectionalRec
@@ -228,6 +258,65 @@ theorem reduceCyclically_sound (w : List (α × Bool)) :
       rw [Red.cyclicallyReduced_cons_append]
       trivial
 
+theorem reduce_invRev_cancel (L : List (α × Bool)) : reduce (invRev L ++ L) = [] := by
+  simp [←toWord_mk, ←mul_mk, ←inv_mk]
+
+theorem reduce_invRev_cancel' (L : List (α × Bool)) : reduce (L ++ invRev L) = [] := by
+  simp [←toWord_mk, ←mul_mk, ←inv_mk]
+
+theorem reduce_flatten_replicate' (n : ℕ) (L : List (α × Bool)) (h : Red.reduced L) :
+    reduce (List.replicate (n + 1) L).flatten = reduceCyclicallyConjugator L ++ (List.replicate (n + 1) (reduceCyclically L)).flatten ++ invRev (reduceCyclicallyConjugator L) := by
+  induction n
+  case zero => simpa [←append_assoc, ←reduceCyclically_conjugation, ←Red.reduced_iff_eq_reduce]
+  case succ n ih =>
+    nth_rewrite 1 [List.replicate_succ, List.flatten_cons]
+    rw [reduce_append, ih, Red.reduced_iff_eq_reduce.mp h]
+    nth_rewrite 1 [reduceCyclically_conjugation (w := L)]
+    have {L₁ L₂ L₃ L₄ L₅ : List (α × Bool)} : reduce (L₁ ++ L₂ ++ invRev L₃ ++ (L₃ ++ L₄ ++ L₅)) = reduce (L₁ ++ (L₂ ++ L₄) ++ L₅) := by
+      nth_rewrite 1 [append_assoc]
+      nth_rewrite 2 [←append_assoc, ←append_assoc]
+      nth_rewrite 1 [reduce_append]
+      nth_rewrite 3 [reduce_append]
+      nth_rewrite 4 [reduce_append]
+      simp [reduce_invRev_cancel, ←reduce_append]
+    rw [this, ←List.flatten_cons, ←List.replicate_succ, ←Red.reduced_iff_eq_reduce]
+    if he : L = [] then simp [he] else
+    have : reduceCyclically L ≠ [] := by
+      by_contra hc
+      absurd he
+      rw [Red.reduced_iff_eq_reduce] at h
+      nth_rewrite 1 [reduceCyclically_conjugation L] at h
+      simp [hc, reduce_invRev_cancel'] at h
+      assumption
+    apply Red.reduced_append_chain
+    · rw [List.flatten_ne_nil_iff]
+      use reduceCyclically L
+      simp [this]
+    · rw [List.replicate_succ, List.flatten_cons, ←append_assoc]
+      apply Red.reduced_append_chain
+      · exact this
+      · apply Red.reduced_infix (reduceCyclically_conjugation L ▸ h)
+        use [], invRev (reduceCyclicallyConjugator L)
+        trivial
+      · rw [←List.flatten_cons, ←List.replicate_succ]
+        apply Red.reduced_of_cyclicallyReduced
+        apply Red.cyclicallyReduced_flatten_replicate _ _ (reduceCyclically_sound _ h)
+    · rw [List.replicate_succ', List.flatten_concat]
+      apply Red.reduced_append_chain
+      · exact this
+      · rw [←List.flatten_concat, ←List.replicate_succ']
+        apply Red.reduced_of_cyclicallyReduced
+        apply Red.cyclicallyReduced_flatten_replicate _ _ (reduceCyclically_sound _ h)
+      · apply Red.reduced_infix (reduceCyclically_conjugation L ▸ h)
+        use reduceCyclicallyConjugator L, []
+        simp
+
+theorem reduce_flatten_replicate (n : ℕ) (hn : n ≠ 0) (L : List (α × Bool)) (h : Red.reduced L) :
+    reduce (List.replicate n L).flatten = reduceCyclicallyConjugator L ++ (List.replicate n (reduceCyclically L)).flatten ++ invRev (reduceCyclicallyConjugator L) := by
+  cases n
+  case zero => contradiction
+  case succ => exact reduce_flatten_replicate' _ _ h
+
 theorem infinite_order (x : FreeGroup α) (x_ne_1 : x ≠ 1) : ¬IsOfFinOrder x := by
   let x' := FreeGroup.mk $ reduceCyclically (x.toWord)
   have conj : IsConj x' x := by
@@ -270,7 +359,57 @@ theorem ne_inv_of_ne_one {x : FreeGroup α} (x_ne_one : x ≠ 1) : x ≠ x⁻¹ 
   exact pow_two x
 
 theorem pow_injective {x y : FreeGroup α} {n : ℕ} (hn : n ≠ 0) : x = y ↔ x ^ n = y ^ n := by
-  sorry
+  constructor
+  · exact congr_arg (· ^ n)
+  intro heq
+
+  -- let xCycle := mk (reduceCyclically x.toWord)
+  -- let xConj := mk (reduceCyclicallyConjugator x.toWord)
+  -- have xDecomp : x = xConj * xCycle * xConj⁻¹ :=
+  --   by rw [mul_mk, inv_mk, mul_mk, ←reduceCyclically_conjugation, mk_toWord]
+  -- have : xCycle ^ n = (xConj⁻¹ * y * xConj) ^ n := by
+  --   apply mul_left_cancel (a := xConj)
+  --   apply mul_right_cancel (b := xConj⁻¹)
+  --   rw [←conj_pow, ←conj_pow, ←xDecomp, heq]
+  --   group
+
+  have heq2 : x ^ (2 * n) = y ^ (2 * n) := by
+    apply_fun (· ^ 2) at heq
+    group at heq
+    rwa [mul_comm]
+  have hn2 : 2 * n ≠ 0 := by simp [hn]
+
+  apply_fun toWord at heq heq2
+  rw [toWord_pow, toWord_pow] at heq heq2
+  rw [reduce_flatten_replicate _ hn _ x.reduced_toWord, reduce_flatten_replicate _ hn _ y.reduced_toWord] at heq
+  rw [reduce_flatten_replicate _ hn2 _ x.reduced_toWord, reduce_flatten_replicate _ hn2 _ y.reduced_toWord] at heq2
+
+  have ⟨h1, h2⟩ : (reduceCyclically x.toWord).length = (reduceCyclically y.toWord).length ∧
+                  (reduceCyclicallyConjugator x.toWord).length = (reduceCyclicallyConjugator y.toWord).length := by
+    apply_fun List.length at heq heq2
+    simp [length_append, ←add_assoc, mul_assoc] at heq heq2
+    have : (reduceCyclically x.toWord).length = (reduceCyclically y.toWord).length := by
+      apply Nat.mul_left_cancel (Nat.ne_zero_iff_zero_lt.mp hn)
+      linarith
+    exact ⟨this, by linarith⟩
+
+  have hc : reduceCyclicallyConjugator x.toWord = reduceCyclicallyConjugator y.toWord := by
+    apply_fun (·.take (reduceCyclicallyConjugator x.toWord).length) at heq
+    simp [h2] at heq
+    assumption
+
+  have hm : reduceCyclically x.toWord = reduceCyclically y.toWord := by
+    simp [hc] at heq
+    apply_fun (·.take (reduceCyclically x.toWord).length) at heq
+    cases n
+    case zero => contradiction
+    case succ n =>
+      simp [List.replicate_succ, h1] at heq
+      assumption
+
+  rw [←mk_toWord (x := x), reduceCyclically_conjugation (w := x.toWord),
+      ←mk_toWord (x := y), reduceCyclically_conjugation (w := y.toWord),
+      hc, hm]
 
 theorem zpow_injective {x y : FreeGroup α} {n : ℤ} (hn : n ≠ 0) : x = y ↔ x ^ n = y ^ n := by
   rw [pow_injective (Int.natAbs_ne_zero.mpr hn)]
