@@ -56,6 +56,7 @@ instance [DecidableEq α] : AddCommGroup (FreeAbGrpExp2 α) where
   zsmul := zsmulRec
   neg_add_cancel := by simp [FreeAbGrpExp2.add_def, FreeAbGrpExp2.neg_def]
 
+-- We need these because the `abel` tactic doesn't have a special case for order 2
 @[simp] theorem FreeAbGrpExp2.add_cancel {α : Type} [inst : DecidableEq α] (x : FreeAbGrpExp2 α) :
   x + x = 0 := by simp [FreeAbGrpExp2.add_def]
 @[simp] theorem FreeAbGrpExp2.add_cancel_2 {α : Type} [inst : DecidableEq α] (x y : FreeAbGrpExp2 α) :
@@ -63,8 +64,10 @@ instance [DecidableEq α] : AddCommGroup (FreeAbGrpExp2 α) where
 @[simp] theorem FreeAbGrpExp2.add_cancel_3 {α : Type} [inst : DecidableEq α] (x y : FreeAbGrpExp2 α) :
   y + x + y = x := by simp [FreeAbGrpExp2.add_def]
 @[simp] theorem FreeAbGrpExp2.add_cancel_4 {α : Type} [inst : DecidableEq α] (x y z : FreeAbGrpExp2 α) :
-  x + y + z + y = x + z := by nth_rewrite 2 [add_comm]; nth_rewrite 4 [add_comm]; simp [←add_assoc]
+  x + y + z + x = y + z := by rw [add_comm]; simp [←add_assoc]
 @[simp] theorem FreeAbGrpExp2.add_cancel_5 {α : Type} [inst : DecidableEq α] (x y z : FreeAbGrpExp2 α) :
+  x + y + z + y = x + z := by nth_rewrite 2 [add_comm]; nth_rewrite 4 [add_comm]; simp [←add_assoc]
+@[simp] theorem FreeAbGrpExp2.add_cancel_6 {α : Type} [inst : DecidableEq α] (x y z : FreeAbGrpExp2 α) :
   x + y + z + y + z = x := by nth_rewrite 2 [add_comm]; nth_rewrite 4 [add_comm]; simp [←add_assoc]
 
 abbrev S := FreeAbGrpExp2 Nat
@@ -147,43 +150,44 @@ instance : Denumerable S := Denumerable.finset
 
 def iS : S ≃ ℕ := Denumerable.eqv S
 
-def S'_a_1 (a : S') : Set S := { x : S | iS x < iS (x + a) }
-def S'_a_2 (a : S') : Set S := { x : S | iS x > iS (x + a) }
+theorem translationNe (a : S') (b : S) : iS b < iS (b + a) ∨ iS (b + a) < iS b := by
+  rcases Nat.lt_trichotomy (iS b) (iS (b + a)) with h | h | h
+  · left; assumption
+  · apply_fun iS.invFun at h; simp [a.prop] at h
+  · right; assumption
 
-theorem S'_a_complete {a : S'} : S'_a_1 a ∪ S'_a_2 a = Set.univ := by
-  simp [S'_a_1, S'_a_2, ←Set.setOf_or, a.prop]
+def translationReprs (a : S') := { x | iS x < iS (x + a) }
 
-def S'_a_1_2_equiv {a : S'} : S'_a_1 a ≃ S'_a_2 a where
-  toFun x := ⟨x + a, by simp [S'_a_2]; exact x.prop⟩
-  invFun x := ⟨x + a, by simp [S'_a_1]; exact x.prop⟩
-  left_inv x := by simp
-  right_inv x := by simp
-
-instance {a : S'} : Infinite (S'_a_1 a) where
-  not_finite h := by
-    have h' : Finite (S'_a_2 a) := Finite.of_equiv _ S'_a_1_2_equiv
-    have := Set.finite_union.mpr ⟨h, h'⟩
-    rw [S'_a_complete, Set.finite_univ_iff] at this
-    apply instInfiniteFreeAbGrpExp2.not_finite this
-
-inductive SignS (a : S') (b : S)
-  | class1 : iS b < iS (b + a) → SignS a b
-  | class2 : iS (b + a) < iS b → SignS a b
-
-def project_SignS a b : SignS a b :=
+def reprOf (a : S') (b : S) : Sign × translationReprs a :=
   if h : iS b < iS (b + a)
-  then .class1 h
-  else .class2 <| lt_of_le_of_ne' (le_of_not_lt h) (by simp [a.prop])
+  then ⟨.plus, b, h⟩
+  else
+    let h : b + a ∈ translationReprs a := by
+      simp [translationReprs]
+      apply or_iff_not_imp_left.mp (translationNe ..) h
+    ⟨.minus, b + a, h⟩
 
-def ϕ₀ (a : S') : S'_a_1 a ≃ A₀ := nonempty_equiv_of_countable.some
+theorem reprsComplete (a : S') : translationReprs a ∪ (translationReprs a).image (· + a) = Set.univ := by
+  rw [Set.eq_univ_iff_forall]
+  intro x
+  rcases translationNe a x with h | h
+    <;> simp [translationReprs, h, FreeAbGrpExp2.neg_def]
+
+instance {a : S'} : Infinite (translationReprs a) where
+  not_finite h := by
+    have h' := Set.Finite.image (· + a.val) (Set.toFinite $ translationReprs a)
+    have := Set.finite_union.mpr ⟨h, h'⟩
+    rw [reprsComplete, Set.finite_univ_iff] at this
+    absurd (inferInstance : Infinite S)
+    rwa [not_infinite_iff_finite]
+
+def ϕ₀ (a : S') : translationReprs a ≃ A₀ := nonempty_equiv_of_countable.some
 
 def ϕ_offset (a : S') := (ϕ₀ a).invFun 1
 
 def ϕ (a : S') (b : S) : A :=
-  let b' := b + ϕ_offset a
-  match project_SignS a b' with
-  | .class1 h => ⟨.plus, ϕ₀ a ⟨b', h⟩⟩
-  | .class2 h => ⟨.minus, ϕ₀ a ⟨b' + a, by simp [S'_a_1, h]⟩⟩
+  let ⟨sign, repr⟩ := reprOf a (b + ϕ_offset a)
+  ⟨sign, ϕ₀ a repr⟩
 
 @[simp] abbrev ϕ' (a : S') (b : S) : A₀ := (ϕ a b).2
 
@@ -195,7 +199,7 @@ def invϕ (a : S') (x : A) : S :=
 
 @[simp]
 theorem ϕ_0 {a : S'} : ϕ a 0 = 1 := by
-  simp [ϕ, project_SignS]
+  simp [ϕ, reprOf]
   split_ifs
   case pos h => simp [ϕ_offset]; rfl
   case neg h => exfalso; exact h (ϕ_offset a).prop
@@ -203,55 +207,36 @@ theorem ϕ_0 {a : S'} : ϕ a 0 = 1 := by
 theorem ϕ'_0 {a : S'} : ϕ' a 0 = 1 := by simp [ϕ']
 
 theorem ϕ_duality {a : S'} {b : S} : ϕ a (a + b) = -ϕ a b := by
-  simp [ϕ, project_SignS]
-  split_ifs
-  · exfalso
-    rename_i h1 h2
-    nth_rewrite 1 2 [add_assoc] at h1
-    generalize b + ϕ_offset a = b' at h1 h2
-    simp at h1 h2
-    rw [add_comm] at h1
-    exact not_lt_of_lt h1 h2
-  · simp [A.mul_eta, sign_mul]
-    apply Prod.ext <;> simp
-    rw [add_assoc, add_comm]
-  · simp [A.mul_eta, sign_mul]
-    apply Prod.ext <;> simp
-    rw [add_comm]
-    simp [←add_assoc]
-  · exfalso
-    rename_i h1 h2
-    nth_rewrite 1 2 [add_assoc] at h1
-    generalize b + ϕ_offset a = b' at h1 h2
-    simp at h1 h2
-    absurd (eq_of_le_of_le (add_comm b' a ▸ h1) h2)
-    simp [a.prop]
+  have : a + b + ϕ_offset a = b + ϕ_offset a + a := by
+    nth_rewrite 3 [add_comm]
+    apply add_assoc
+  simp [ϕ, reprOf, this]
+  rcases translationNe a (b + ϕ_offset a) with h | h
+    <;> simp [h, lt_asymm h, A.mul_eta, sign_mul]
 
 @[simp]
 theorem ϕ_self {a : S'} : ϕ a a = -1 := by rw [←add_zero a.val, ϕ_duality]; simp
 
 @[simp]
 theorem ϕ_invϕ {a : S'} {x : A} : ϕ a (invϕ a x) = x := by
-  simp [ϕ, project_SignS]
+  simp [ϕ, reprOf]
   split_ifs
-  · simp [invϕ]
-    rcases x.1.plus_or_minus with h | h
-    · apply Prod.ext <;> simp [h]
-    · exfalso
-      rename_i h'
-      simp [invϕ, h] at h'
-      exact not_lt_of_lt h' ((ϕ₀ a).invFun x.2).prop
-  · simp [invϕ]
-    rcases x.1.plus_or_minus with h | h
-    · exfalso
-      rename_i h'
-      simp only [invϕ, h, Equiv.invFun_as_coe, FreeAbGrpExp2.add_cancel_2] at h'
-      exact h' ((ϕ₀ a).invFun x.2).prop
-    · apply Prod.ext <;> simp [h]
+  case pos h =>
+    suffices x.1 = .plus by apply Prod.ext <;> simp [invϕ, this]
+    by_contra hx
+    apply or_iff_not_imp_left.mp x.1.plus_or_minus at hx
+    simp [invϕ, hx] at h
+    apply not_lt_of_lt h ((ϕ₀ a).invFun x.2).prop
+  case neg h =>
+    suffices x.1 = .minus by apply Prod.ext <;> simp [invϕ, this]
+    by_contra hx
+    apply or_iff_not_imp_right.mp x.1.plus_or_minus at hx
+    simp [invϕ, hx] at h
+    apply not_lt_of_le h ((ϕ₀ a).invFun x.2).prop
 
 @[simp]
 theorem invϕ_ϕ {a : S'} {b : S} : invϕ a (ϕ a b) = b := by
-  simp [ϕ, project_SignS]
+  simp [ϕ, reprOf]
   split_ifs <;> simp [invϕ]
 
 @[simp]
@@ -265,7 +250,7 @@ theorem ϕ_eq_diff_0_or_a {a : S'} {b c : S} (h : ϕ' a b = ϕ' a c) : b = c ∨
     simp_all
   | .plus, .minus | .minus, .plus =>
     have : ϕ a b = -ϕ a c := by
-      simp [Neg.neg, A.mul_eta, h2, sign_mul]
+      simp only [A.neg, A.mul_eta, h2, sign_mul, one_mul]
       apply Prod.ext <;> tauto
     rw [←ϕ_duality] at this
     apply_fun invϕ a at this
@@ -273,8 +258,8 @@ theorem ϕ_eq_diff_0_or_a {a : S'} {b c : S} (h : ϕ' a b = ϕ' a c) : b = c ∨
 
 theorem ϕ_unit_0_or_a {a : S'} {b : S} (h : ϕ' a b = 1) : b = 0 ∨ b = a := by
   have := ϕ_eq_diff_0_or_a (a := a) (b := b) (c := 0)
-  rw [ϕ'_0, add_zero] at this
-  exact this h
+  simp [h] at this
+  exact this
 
 end Phi
 
@@ -536,18 +521,18 @@ def PartialSolution := { core : Finset Relation | isFunc (closure core) }
 theorem extend (S : PartialSolution) (p : RelationLHS) (not_def : ¬definedAt (closure S.val) p)
     : ∃ S', S ≤ S' ∧ definedAt (closure S'.val) p := by
   let E : Extension := {core := S, func := S.prop, p, not_def}
-  use ⟨E.next, E.next_func⟩
-  split_ands
-  · intro _ _
-    simp [Extension.next]
+  refine ⟨⟨E.next, E.next_func⟩, fun _ _ => ?_, E.newRelation, ?_, rfl⟩
+  · simp [Extension.next]
     tauto
-  · exact ⟨E.newRelation, by apply le_closure; simp [Extension.next], rfl⟩
+  · apply le_closure
+    simp [Extension.next]
 
-def Fn1323 (f : RelationLHS → R) : Prop := ∀ p : RelationLHS,
+-- A function that satisfies axiom (iii) from the blueprint
+def Axiom3 (f : RelationLHS → R) : Prop := ∀ p : RelationLHS,
   ∃ p' : RelationLHS, p'.x = p.y ∧ p'.y = f p ∧ f p' = (p.x.1 * ϕ p.x.2 p.y.2, p.x.2)
 
 theorem exists_complete_function (seed : PartialSolution) :
-    ∃ f, Fn1323 f ∧ (∀ rel, rel ∈ seed.val → f rel.lhs = rel.z) := by
+    ∃ f, Axiom3 f ∧ (∀ rel, rel ∈ seed.val → f rel.lhs = rel.z) := by
   have ⟨c, hc, h1, h2, h3⟩ := exists_greedy_chain
     (fun p => {S | definedAt (closure S.val) p})
     (fun S (p : RelationLHS) => by
@@ -556,28 +541,21 @@ theorem exists_complete_function (seed : PartialSolution) :
        else exact extend S p h)
     seed
   choose F hF f hf using h3
-  let hf' p : (f p).x = p.x ∧ (f p).y = p.y := RelationLHS.mk.injEq .. ▸ (hf p).2
-  let inF rel := f rel.lhs = rel
-  have hInF p : inF (f p) := by simp [inF, hf]
-  have hn {rel} (h : inF rel) : inF rel.next := by
+  let hf' p : (f p).x = p.x ∧ (f p).y = p.y := RelationLHS.mk.injEq .. ▸ (hf p).right
+  refine ⟨fun p => (f p).z, fun p => ?_, fun _ h => ?_⟩
+  · let p' := ((f p).next).lhs
+    suffices (f p').z = (p.x.1 * ϕ p.x.2 ↑p.y.2, p.x.2) by
+      use (f p).next.lhs
+      unfold p' at this
+      simpa [Relation.lhs, hf']
     let F' p : {S // S ∈ c} := ⟨F p, hF p⟩
-    obtain ⟨⟨⟨S, func⟩, hS⟩, hS1, hS2⟩ := hc.directed (F' rel.next.lhs) (F' rel.lhs)
+    obtain ⟨⟨⟨S, func⟩, hS⟩, hS1, hS2⟩ := hc.directed (F' p') (F' p)
+    obtain ⟨hx, hy⟩ := hf' p
     have hval := closure_mono hS1 (hf _).1
     have hnext := closure_mono hS2 <| closure_next _ (hf _).1
-    simp [Relation.lhs, Relation.next, inF] at h
-    simp [Relation.lhs, Relation.next, hf, h] at hnext
-    simp [inF, Relation.lhs]
-    rw [Relation.mk.injEq]
-    simp [hf']
-    exact func hval hnext (hf _).2
-  use fun p => (f p).z
-  split_ands
-  · intro p
-    use (f p).next.lhs
-    have := congr_arg (·.z) <| hn (hInF p)
-    simp_all [Relation.lhs]
-  · intro _ h
-    exact (F _).prop (hf _).1 (le_closure (F _).val <| h2 _ (hF _) h) (hf _).2
+    have := func hval hnext (hf _).2
+    simpa [←hx, ←hy]
+  · exact (F _).prop (hf _).left (le_closure (F _).val <| h2 _ (hF _) h) (hf _).right
 
 end Greedy
 
@@ -585,6 +563,7 @@ end Greedy
 inductive G where
   | square : S → G
   | root : R → G
+deriving DecidableEq
 
 def op (f : RelationLHS → R) : G → G → G
   | .square a, .square b => .square (a + b)
@@ -600,29 +579,20 @@ theorem op_RSy_LSy_eq_Id f x y : op f (op f (op f y y) x) (op f y y) = x := by
   cases x <;> cases y <;> simp [op]
 
 
-@[simp] theorem f_y {f p} (h : Fn1323 f) : (f p).2 ≠ p.y.2 := by
-  have ⟨p', h1, h2, h3⟩ := h p
-  rw [←h1, ←h2]
-  exact Ne.symm p'.nonDiag
-
-@[simp] theorem f_x {f p} (h : Fn1323 f) : (f p).2 ≠ p.x.2 := by
-  have ⟨p', h1, h2, h3⟩ := h p
-  have ⟨p'', h4, h5, h6⟩ := h p'
-  apply_fun Prod.snd at h3 h6
-  simp at h3 h6
-  rw [←h3, ←h2]
-  exact Ne.symm (f_y h)
-
-theorem roots_LyRy {x y a b f} (h : a ≠ b) (proper : Fn1323 f) :
+theorem roots_LyRy {x y a b f} (h : a ≠ b) (hf : Axiom3 f) :
     op f (.root (y, b)) (op f (.root (x, a)) (.root (y, b))) = .root (x * ϕ a b, a) := by
-  have : b ≠ (f ⟨(x,a), (y,b), h⟩).2 := Ne.symm (f_y proper)
+  let p : RelationLHS := ⟨(x, a), (y, b), h⟩
+  replace ⟨p', hx, hy, hf⟩ := hf p
+  have : b ≠ (f p).2 := by
+    have : b = p.y.2 := rfl
+    rw [this, ←hx, ←hy]
+    exact p'.nonDiag
   simp [op, h, this]
-  replace ⟨_, hx, hy, proper⟩ := proper ⟨(x, a), (y, b), h⟩
-  rw [←proper]
+  rw [←hf]
   congr <;> simp [hx, hy]
 
 
-theorem op_Ly_Ry_eq_LSy f (proper : Fn1323 f) : (x : G) → (y : G) → op f y (op f x y) = op f x (op f y y)
+theorem op_Ly_Ry_eq_LSy f (hf : Axiom3 f) : (x : G) → (y : G) → op f y (op f x y) = op f x (op f y y)
   | .square a, .square b => by simp [op, ←add_assoc]
   | .root (x, a), .square b => by simp [op, mul_assoc]
   | .square b, .root (x, a) => by simp [op]; apply add_comm
@@ -636,7 +606,7 @@ theorem op_Ly_Ry_eq_LSy f (proper : Fn1323 f) : (x : G) → (y : G) → op f y (
         group
       }
     else by
-      simp [roots_LyRy h proper]
+      rw [roots_LyRy h hf]
       simp [op]
 
 
@@ -662,22 +632,21 @@ theorem seed_lhs_disjoint (n m : ℕ) : (seed1.skip n).lhs ≠ (seed2.skip m).lh
   rcases Mod3.of n, Mod3.of m with ⟨⟨k, hk⟩ | ⟨k, hk⟩ | ⟨k, hk⟩, ⟨l, hl⟩ | ⟨l, hl⟩ | ⟨l, hl⟩⟩
   repeat simp [hk, hl, seed1, seed2, a, b, b', c] at hx hy
   -- Remaining case: n = m = 2  (mod 3)
-  have hx := congr_arg (Prod.snd ∘ Prod.fst) heq.left
-  have hy := congr_arg (Prod.snd ∘ Prod.fst) heq.right
-  simp [hk, hl, seed1, seed2] at hx hy
-  group at hy
+  replace ⟨hx, hy⟩ := heq
+  apply_fun (·.1.2) at hx hy
+  simp [hk, hl, seed1, seed2, ←pow_succ] at hx hy
+
   have : ϕ' c a ≠ 1 := by
     apply mt ϕ_unit_0_or_a
     decide
-  have k_eq_l : k = l :=
-    (injective_pow_iff_not_isOfFinOrder.mpr (FreeGroup.infinite_order _ this)) hx
-  have hl : (1 : ℤ) + l ≠ 0 := by
-    apply ne_of_gt
-    rw [←Int.ofNat_eq_natCast, add_comm, ←Int.succ]
-    apply Int.succ_ofNat_pos
-  rw [k_eq_l, ←FreeGroup.zpow_injective hl] at hy
+  apply FreeGroup.infinite_order at this
+  rw [←injective_pow_iff_not_isOfFinOrder] at this
+  have k_eq_l := this hx
+
+  rw [k_eq_l, ←FreeGroup.pow_injective] at hy
   · absurd ϕ_eq_diff_0_or_a hy
     decide
+  · apply Nat.succ_ne_zero
 
 def seed : PartialSolution := .mk {seed1, seed2} <| by
   intro rel rel' ⟨base, hb, n, hr⟩ ⟨base', hb', n', hr'⟩ heq
@@ -693,33 +662,35 @@ def seed : PartialSolution := .mk {seed1, seed2} <| by
   · apply Relation.orbit_func ⟨n, hr⟩ ⟨n', hr'⟩ heq
 
 
+theorem Equation2744_left_injectivity {G : Type} [Magma G] (h : Equation2744 G) (x : G)
+    : Function.Injective (x ◇ ·) := by
+  intro y z heq
+  dsimp at heq
+  have := h y x
+  rwa [heq, ←h z x] at this
+
+
 /-- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1323/near/481475622 -/
 @[equational_result]
 theorem Equation1323_not_implies_Equation2744 :
     ∃ (G: Type) (_: Magma G), Equation1323 G ∧ ¬ Equation2744 G := by
 
-  let ⟨f, proper, hf⟩ := exists_complete_function seed
+  let ⟨f, axiom3, hf⟩ := exists_complete_function seed
   use G, ⟨op f⟩
 
   constructor
   · apply eq1323_if_conditions G _
     apply op_RSy_LSy_eq_Id f
-    apply op_Ly_Ry_eq_LSy f proper
-  · unfold Equation2744
-    have neq : a ≠ b ∧ a ≠ b' := by simp [a, b, b']
-    have noninj : op f (.root (1, a)) (.root (1, b)) = op f (.root (1, a)) (.root (1, b')) := by
-      simp [op, neq]
-      have h1 := hf seed1 (by simp [seed])
-      simp [Relation.lhs, seed1] at h1
-      have h2 := hf seed2 (by simp [seed])
-      simp [Relation.lhs, seed2] at h2
-      simp [h1, h2]
-    by_contra hc
-    have h1 := hc (.root (1, b)) (.root (1, a))
-    have h2 := hc (.root (1, b')) (.root (1, a))
-    simp [Magma.op] at h1 h2
-    rw [←noninj, ←h1] at h2
-    simp [b, b'] at h2
+    apply op_Ly_Ry_eq_LSy f axiom3
+  · by_contra h2744
+    apply Equation2744_left_injectivity at h2744
+    have : f seed1.lhs = f seed2.lhs := by
+      rw [hf seed1 (by simp [seed]), seed1]
+      rw [hf seed2 (by simp [seed]), seed2]
+    have : op f (.root (seed1.lhs).x) (.root (seed1.lhs).y) = op f (.root (1, a)) (.root (1, b')) := by
+      simpa [op, Relation.lhs.nonDiag, (by decide : a ≠ b')]
+    absurd h2744 (.root (1, a)) this
+    decide
 
 end
 end Eq1323

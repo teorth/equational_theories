@@ -98,7 +98,7 @@ for all $n \geq 0$ and $(x,y,z,a,b,c) \in {\mathcal F}$, and no other operations
 \begin{proof} Routine.
 \end{proof}
 
-\begin{lemma}[Greedy extension]\label{greedy-1323}\uses{partial-1323-sound}  If $\op$ is defined by a partial solution, and $(x,a) \op (y,b)$ is undefined for some $x,y \in \Q^\times$ and distinct $a,b \in G \backslash \{0\}$, then it is possible to extend the partial solution so that $(x,a) \op (y,b)$ is now defined.
+\begin{lemma}[Greedy extension]\label{greedy-1323}\uses{partial-1323-sound}\leanok\lean{Eq1323.Greedy.extend}  If $\op$ is defined by a partial solution, and $(x,a) \op (y,b)$ is undefined for some $x,y \in \Q^\times$ and distinct $a,b \in G \backslash \{0\}$, then it is possible to extend the partial solution so that $(x,a) \op (y,b)$ is now defined.
 \end{lemma}
 
 \begin{proof} We select a $c \in G \backslash \{0\}$ that has not previously been used by the partial solution, let $z \in \Q^\times$ be arbitrary, (e.g., one could take $z=1$ if desired), and add $(x,y,z,a,b,c)$ to ${\mathcal F}$, thus we now also assign
@@ -108,13 +108,13 @@ $$ (\phi_c(a)^n z,c) \op (\phi_a(b)^{n+1} x, a) = (\phi_b(c)^{n+1} y,b)$$
 for all natural numbers $n$.  As the $a,b,c$ are distinct, the $\phi_a(b), \phi_b(c), \phi_c(a)$ are not equal to $\pm 1$, and the members of this infinite sequence do not collide with each other.  The second and third equations in this family cannot collide with previous assignments because $c$ is novel.  If we arrange matters so that $\phi_b(c)$ involves primes in the numerator or denominator that do not appear in any previous $\phi_a(b), \phi_b(c), \phi_c(a), x, y, z$ used by the greedy algorithm, or the current $x,y,z$, then we also see that the first infinite sequence does not collide with any previously assigned value of $\op$ either.
 \end{proof}
 
-\begin{corollary}[Iterated greedy extension]\label{greedy-iterate}  Every partial solution can be extended to a complete solution that obeys \Cref{lr} and \Cref{lr-simp}, and hence 1323.
+\begin{corollary}[Iterated greedy extension]\label{greedy-iterate}\leanok\lean{Eq1323.}  Every partial solution can be extended to a complete solution that obeys \Cref{lr} and \Cref{lr-simp}, and hence 1323.
 \end{corollary}
 
 \begin{proof}\uses{greedy-1323, build-magma, partial-1323-sound} Apply the usual greedy algorithm.
 \end{proof}
 
-\begin{corollary}[1323 does not imply 2744]\label{1323-refute-2744}  There exists a 1323 magma which does not obey the 2744 equation $R_y L_{Sy} L_y x = x$.
+\begin{corollary}[1323 does not imply 2744]\label{1323-refute-2744}\leanok\lean{Eq1323.Equation1323_not_implies_Equation2744.Greedy.exists_complete_function}  There exists a 1323 magma which does not obey the 2744 equation $R_y L_{Sy} L_y x = x$.
 \end{corollary}
 
 \begin{proof}\uses{greedy-iterate} It suffices to produce a partial solution in which $L_y$ is not injective. Pick distinct $a, b, b', c$ with $\phi_a(b)$, $\phi_a(b')$ having no prime factors in common in the numerator or denominator.  We take the partial solution consisting of $(1,1,1,a,b,c)$ and $(1,1,1,a,b',c)$, that is to say we impose the conditions

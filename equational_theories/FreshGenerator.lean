@@ -26,12 +26,6 @@ instance [Nonempty α] : Infinite (FreeGroup α) :=
   Infinite.of_injective (FreeGroup.of a ^ ·) <| by
     simp [FreeGroup.norm_of_pow, infinite_order]
 
-instance [DecidableEq α] : DecidableEq (FreeGroup α) :=
-  fun a b =>
-    if h : a.toWord = b.toWord
-      then isTrue (FreeGroup.toWord_inj.mp h)
-      else isFalse (mt FreeGroup.toWord_inj.mpr h)
-
 
 def generatorNames' : List (α × Bool) → Finset α
   | [] => ∅
