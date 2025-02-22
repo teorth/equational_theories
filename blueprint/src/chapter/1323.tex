@@ -114,7 +114,7 @@ for all natural numbers $n$.  As the $a,b,c$ are distinct, the $\phi_a(b), \phi_
 \begin{proof}\uses{greedy-1323, build-magma, partial-1323-sound} Apply the usual greedy algorithm.
 \end{proof}
 
-\begin{corollary}[1323 does not imply 2744]\label{1323-refute-2744}\leanok\lean{Eq1323.Equation1323_not_implies_Equation2744.Greedy.exists_complete_function}  There exists a 1323 magma which does not obey the 2744 equation $R_y L_{Sy} L_y x = x$.
+\begin{corollary}[1323 does not imply 2744]\label{1323-refute-2744}\leanok\lean{Eq1323.Equation1323_not_implies_Equation2744}  There exists a 1323 magma which does not obey the 2744 equation $R_y L_{Sy} L_y x = x$.
 \end{corollary}
 
 \begin{proof}\uses{greedy-iterate} It suffices to produce a partial solution in which $L_y$ is not injective. Pick distinct $a, b, b', c$ with $\phi_a(b)$, $\phi_a(b')$ having no prime factors in common in the numerator or denominator.  We take the partial solution consisting of $(1,1,1,a,b,c)$ and $(1,1,1,a,b',c)$, that is to say we impose the conditions
