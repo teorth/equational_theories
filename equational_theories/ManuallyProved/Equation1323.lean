@@ -3,11 +3,6 @@ import equational_theories.EquationalResult
 import equational_theories.Equations.All
 import equational_theories.Mathlib.Order.Greedy
 
-/- Refutes the implications from 1323.
-
-When the proof is done, update the blueprint with \lean and \leanok tags as appropriate.
--/
-
 
 namespace Eq1323
 noncomputable section
