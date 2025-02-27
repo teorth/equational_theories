@@ -38,30 +38,29 @@ This definition has an extension property:
 
 For technical reasons (which will be helpful later when we expand the magma) we also give a variant that will ensure a useful ``double surjectivity'' property:
 
-\begin{lemma}[1516 extension variant]\label{1516-ext-var}  Let $E$ be a 1516 seed, and let $h \in \Z$ be non-zero.  Then there exists an extension $E'$ of $E$ that contains $(a_i,a_i+h)$ for $i=1, 2, 3, 4$, for some distinct $a_1, a_2, a_3, a_4$.
+\begin{lemma}[1516 extension variant]\label{1516-ext-var}  Let $E$ be a 1516 seed, and let $h \in \Z$ be non-zero.  Then there exists an extension $E'$ of $E$ that contains $(a,a+h)$, $(a',a'+h)$, $(a'',a''+h)$ for some distinct $a,a',a''$.
 \end{lemma}
 
-\begin{proof}  If we choose $a$ sufficiently large, and set $a_i = i a$ (say) for $i=1, 2, 3, 4$, the claim simply follows by adding $(a_i,a_i+h)$ to $E$ and verifying that none of the axioms are violated.
+\begin{proof}  If we choose $a$ sufficiently large, and set $a' = 2a$ and $a''=3a$ (say), the claim simply follows by adding $(a,a+h)$, $(a',a'+h)$ and $(a'',a''+h)$ to $E$ and verifying that none of the axioms are violated.
 \end{proof}
 
 
 \begin{corollary}[Base magma]\label{1516-base} There exists a 1516 magma with carrier $\Z$ with the properties that
   \begin{itemize}
     \item (i) $Sa=a$ for all $a$.
-    \item (ii) For any distinct $a,b \in \Z$, the equation $R_a c = b$ has at least four solutions $c$.
+    \item (ii) For any distinct $a,b \in \Z$, the equation $R_a c = b$ has at least three solutions $c$.
     \item (iii) For each $a \in \Z$, there exist at least two $b \neq a$ such that $L_a R_a b = b$.
   \end{itemize}
 \end{corollary}
 
 
-Note from \Cref{1516} and the hypothesis $Sa=a$ that $R_a c = a$ if and only if $c=a$.  Thus, the requirement that $a,b$ be distinct in (ii) is necessary.
+Note from \Cref{1516} and the hypothesis $Sa=a$ that $R_a c = a$ if and only if $c=a$.  Thus the requirement that $a,b$ be distinct in (ii) is necessary.
 
-\begin{proof}  By \Cref{1516-ext}, \Cref{1516-ext-var} and the greedy algorithm starting with the seed consisting of $(0,0)$, $(-1,2)$, $(3,1)$, $(-10,20)$, $(30,10)$, we obtain a graph $\{ (a,f(a)): a \in \Z \}$ of a function $f:\Z \to \Z$ with $f(0)=0$, $f(-1)=2$, $f(3)=1$, $f(-10) = 20$, $f(30)=10$ and the property that if $f(a)=b$ and $f(b)=c$, then $f(c-a)=-a$, and also with the property that for every non-zero $h$ there are distinct $a_{h,1}, a_{h,2}, a_{h,3}, a_{h,4}$ with $f(a_{h,i})=a_{h,i}+h$ for $i=1, 2, 3, 4$.
-We then have that \Cref{1516-f} holds.  If we then define the magma operation $\op$ by \Cref{xy-1516}, we obtain \Cref{1516}, and since $f(0)=0$ we have (i).  Also, from construction we see that $R_d (d - a_{h,i}) = d+h$ for any $d,h,i$, giving (ii).  Finally, from construction we have $R_a (a+1) = a+1+f(-1) = a+3$, so $L_a R_a (a+1) = a + f(3) = a+1$, and similarly $L_a R_a (a+10) = a+10$, giving (iii).
+\begin{proof}  By \Cref{1516-ext}, \Cref{1516-ext-var} and the greedy algorithm starting with the seed consisting of $(0,0)$, $(-1,2)$, $(3,1)$, $(-10,20)$, $(30,10)$, we obtain a graph $\{ (a,f(a)): a \in \Z \}$ of a function $f:\Z \to \Z$ with $f(0)=0$, $f(-1)=2$, $f(3)=1$, $f(-10) = 20$, $f(30)=10$ and the property that if $f(a)=b$ and $f(b)=c$, then $f(c-a)=-a$, and also with the property that for every non-zero $h$ there are distinct $a_h, a'_h, a''_h$ with $f(a_h)=a_h+h$, $f(a'_h) = a'_h+h$, and $f(a''_h) = a''_h+h$.  We then have that \Cref{1516-f} holds.  If we then define the magma operation $\op$ by \Cref{xy-1516}, we obtain \Cref{1516}, and since $f(0)=0$ we have (i).  Also, from construction we see that $R_d (d - a_h) = R_d (d - a'_h) = R_d (d - a''_h) = d+h$ for any $d,h$, giving (ii).  Finally, from construction we have $R_a (a+1) = a+1+f(-1) = a+3$, so $L_a R_a (a+1) = a + f(3) = a+1$, and similarly $R_a (a+10) = a+10$, giving (iii).
 \end{proof}
 
 Let us denote by $A$ the free group over $\N$. Note that a magma with the same properties as in \Cref{1516-base} but having carrier $A$ can be constructed similarly.
-The same thing is true for the following results. In fact, the Lean implementation has $A$ whenever $\Z$ is; this has been done to reuse some preexisting code.
+The same thing is true for the following results. In fact, the Lean implementation has $A$ whenever $\Z$ is; this has neen done to reuse some preexisting code.
 
 Now we construct a more complex 1516 magma, whose carrier $G$ is $\Z \cup G'$, where
 $$G' := \{ (a,c,n) \in \Z \times \Z \times \N : a \neq c\}.$$
@@ -89,7 +88,7 @@ We first address Axiom B, which purely concerns how to extend the $L_b$ operator
 
 \end{lemma}
 
-\begin{proof}  Let $y = (a,c,n)$.  By \Cref{1516-base} (iii), we can find $c_{y,a} \neq a,c$ such that $L_a R_a c_{y,a} = c_{y,a}$, or equivalently $L_a L_{c_{y,a}} a = c_{y,a}$.  Next, for any $b \neq a$, we can apply \Cref{1516-base} (ii) to find $c_{y,b} \neq b, c, c_{y,a}$ such that $R_a c_{y,b} = b$; note that as $R_a a = Sa = a \neq b$, this also implies that $c_{y,b} \neq a$, and that the $c_{y,b}$ are distinct as $b$ variables.  We now have $L_a L_{c_{y,b}} b = L_{Sa} L_{c_{y,b}} L_{c_{y,b}} a = c_{y,b}$ for such $b$, giving the claim.
+\begin{proof}  Let $y = (a,c,n)$.  By \Cref{1516-base} (iii), we can find $c_{y,a} \neq a,c$ such that $L_a R_a c_{y,a} = c_{y,a}$, or equivalently $L_a L_{c_{y,a}} a = c_{y,a}$.  Next, for any $b \neq a$, we can apply \Cref{1516-base} (ii) to find $c_{y,b} \neq b, c_{y,a}$ such that $R_a c_{y,b} = b$; note that as $R_a a = Sa = a \neq b$, this also implies that $c_{y,b} \neq a$, and that the $c_{y,b}$ are distinct as $b$ variables.  We now have $L_a L_{c_{y,b}} b = L_{Sa} L_{c_{y,b}} L_{c_{y,b}} a = c_{y,b}$ for such $b$, giving the claim.
 \end{proof}
 
 Let $c_{y,b}$ be as above. Define a \emph{partial solution} to be a partial assignment of $L_{c'} y \in G$ for $c' \in \Z$ and $y \in G$ that obeys the following properties:
@@ -123,7 +122,7 @@ We can make $L_{c'} y$ defined in a partial solution:
 \begin{lemma}[First extension]\label{first-ext}  Suppose we have a partial solution for which $L_{c'} y$ is currently undefined for some $c' \in \Z$ and $y \in G$.  Then one can extend this partial solution in such a manner that $L_{c'} y$ is now defined.
 \end{lemma}
 
-\begin{proof} Write $y = (a,c,n)$. Because $L_a: \Z \to \Z$ and $L_{c'}: \Z \to \Z$ are surjective, we can find $b \in \Z$ such that $L_a L_{c'} b = c'$.  If we had $b=c'$, then $L_a c' = c'$, which from \eqref{1516} (and $Sc' = c'$) implies that $a = c'$, which contradicts the undefined nature of $L_{c'} y$ thanks to properties (b), (c) of a partial solution.  Hence, $b \neq c'$.
+\begin{proof} Write $y = (a,c,n)$. Because $L_a: \Z \to \Z$ and $L_{c'}: \Z \to \Z$ are surjective, we can find $b \in \Z$ such that $L_a L_{c'} b = c'$.  If we had $b=c'$, then $L_a c' = c'$, which from \eqref{1516} (and $Sc' = c'$) implies that $a = c'$, which contradicts the undefined nature of $L_{c'} y$ thanks to properties (b), (c) of a partial solution.  Hence $b \neq c'$.
   We then set $L_{c'} y := b$.  It is then clear that all the properties (a)-(g) of a partial solution are maintained.
 \end{proof}
 
@@ -148,7 +147,7 @@ Now we can establish Axiom B.
 \end{proposition}
 
 \begin{proof}
-By iterating \Cref{first-ext} and \Cref{second-ext} in alternation, we can find an increasing chain of partial solutions with the property that for any $y = (a,c,n) \in G'$ and $c' \in \Z$ and any natural number $k$, excluding the case where $c'=a$ and $n=0$, that one can find a partial solution on this chain for which $L_{c'} y$ is defined, and such that $L_{c'} z = y$ for at least $k$ distinct choices of $z \in G'$.  Taking the limit of this chain, we can then find a fully defined operation $L_{c'} y$ for $c' \in \Z$ and $y \in G$ obeying the properties (a)-(d), (f), (g) (but not (e)) of a partial solution, with the property that
+By iterating \Cref{first-ext} and \Cref{second-ext} in alternation, we can find an increasing chain of partial solutions with the property that for any $y = (a,c,n) \in G'$ and $c' \in \Z$ and any natural number $k$, excluding the case where $c'=a$ and $n=0$, that one can find a partial solution on this chain for which $L_{c'} y$ is defined, and such that $L_{c'} z = y$ for at least $k$ distinct choices of $z \in G'$.  Taking the limit of this chain, we can then find a fully defined operation $L_{c'} y$ for $c' \i \Z$ and $y \in G$ obeying the properties (a)-(d), (f), (g) (but not (e)) of a partial solution, with the property that
 $y = (a,c,n) \in G'$ and $c' \in \Z$, excluding the case $c'=a$ and $n=0$, that there are infinitely many $z \in G'$ such that $L_{c'} z = y$.  The excluded case $c'=a, n=0$ is also covered by property (b) of a partial solution.  The claim follows.
 \end{proof}
 
