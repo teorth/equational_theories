@@ -566,7 +566,7 @@ lemma tree_b_supp_nonempty {vals: XVals} (t: @TreeNode vals) : t.getData.b.suppo
   exact tree_vals_nonzero t
 
 -- A single `Finsupp` element is not equal to a linear combination of the `tree.getData.a` and `tree.getData.b`
--- (provded that several values are non-zero)
+-- (provided that several values are non-zero)
 lemma basis_neq_elem_diff {vals: XVals} (t: @TreeNode vals) (a: ℕ) (b c r: ℚ) (hb: b ≠ 0) (hc: c ≠ 0) (hr: r ≠ 0) (h_tree_a: t.getData.a ≠ 0): (fun₀ | a => r) ≠ b • t.getData.b + c • t.getData.a := by
   by_contra!
   have mul_support_disjoint: Disjoint (b • t.getData.b).support (c • t.getData.a).support := .mono Finsupp.support_smul Finsupp.support_smul (Finset.disjoint_iff_inter_eq_empty.mpr (tree_supp_disjoint t))
@@ -1325,7 +1325,7 @@ lemma partial_function_inner {vals: XVals} {t1 t2: @TreeNode vals} (h_a_eq: t1.g
 
 -- The main lemma - if two tree nodes have the same `a` values, then they're the same node.
 -- This implies that `f(g)` (defined as mapping `g = tree.getData.a` to `tree.getData.b`) is a partial function
--- (as we only have oen node with `g = tree.getData.a` to pick from)
+-- (as we only have one node with `g = tree.getData.a` to pick from)
 lemma partial_function {vals: XVals}: ∀ {t1 t2: @TreeNode vals}, (t1.getData.a = t2.getData.a) → t1 = t2 := by
   intro t1 t2
   by_contra!
@@ -1417,7 +1417,7 @@ def g_enum_inverse (g: G): g_enumerate (g_to_num g) = g := by simp [g_enumerate,
 
 lemma g_num_zero_eq_zero: g_to_num 0 = 0 := by simp [g_to_num, biject_with_zero]
 
--- Linear independence alone is insufficient to prove this - we could have an alterate definition of TreeNode
+-- Linear independence alone is insufficient to prove this - we could have an alternate definition of TreeNode
 -- with linearly independent elements, but with the root re-appearing somewhere later on
 lemma tree_b_neq_root_mul {vals: XVals} (t: @TreeNode vals) (a: ℚ): t.getData.b ≠ a • vals.root_elem := by
   induction t with
@@ -2101,7 +2101,7 @@ lemma f_eval_at {other_vals: XVals} (t: @TreeNode other_vals) {n: ℕ} (hvals: (
 -- The definition of the diamond operator from the paper
 noncomputable abbrev diamond (x y: G) := x + (f (y - x))
 
--- f satisfies the functional equation derived in the paper (based on substituing our diamond definition
+-- f satisfies the functional equation derived in the paper (based on substituting our diamond definition
 -- into Equation 1692)
 lemma f_functional_eq (g: G): f (f (- f g)) = g - (f g) := by
   let g_data := f_data (g_to_num g)
