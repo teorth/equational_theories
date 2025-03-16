@@ -24,7 +24,12 @@ $$ x = (Sx \op x) \op x.$$
 \end{lemma}
 
 \begin{proof}  From \eqref{677-alt} we see that $L_y$ is surjective, hence invertible on finite magmas, giving (i) (the formula for $L_y^{-1} x$ being immediate from \eqref{677-alt}).
-  For (ii), we apply (i) with $x$ replaced by $L_y x$.  For (iii), we rewrite $a \op b$ as $R_b L_b^2 (L_b^{-2} a)$, which by (ii) is equal to $L_{L_b^{-1} a}^{-1} (L_b^{-2} a)$.  The claim then follows from (i).
+
+  For (ii), using the fact that $L_y x = x$, (i) becomes $x = x \op R_y x = L_x L_x y$, then, using the invertibility of $L_x$ given by (i) we have
+  \[y = L_x^{-1} L_x^{-1} x \stackrel{(i)}{=} L_x^{-1} (x \op R_x L_x x) = L_x^{-1} (L_x R_x L_x x) =
+  R_x L_x x = Sx \op x.\]
+
+  For (iii), we apply (i) with $x$ replaced by $L_y x$.
 \end{proof}
 
 We have the following equivalent characterizations of 255:
@@ -33,7 +38,7 @@ We have the following equivalent characterizations of 255:
 \begin{itemize}
   \item (i)  255 holds for $x$, that is to say $R_x (Sx \op x) = x$.
   \item (ii) The equation $R_x y = x$ has the unique solution $y = Sx \op x$.
-  \item (iii) The equation $R_x x = x$ has a solution.
+  \item (iii) The equation $R_x y = x$ has a solution.
   \item (iv) The equation $R_x L_x z = x$ has a solution.
   \item (v) The equation $L_x R_x z = z$ has a solution.
   \item (vi) The equation $R_x L_x y = y$ has a solution.
@@ -90,11 +95,11 @@ An example of a Type I model is $x \op y = 2x-y$ on $F_5$.  Examples of Type II 
 
 \section{A finite non-right-cancellative example}
 
-Suppose $G$ is already a 677 magma, and to each pair $x,y \in M$ we assign a binary operation $\diamond_{x,y}: M \times M \to M$ such that one has the functional equation
+Suppose $G$ is already a 677 magma, and to each pair $x,y \in G$ we assign a binary operation $\diamond_{x,y}: M \times M \to M$ such that one has the functional equation
 \begin{equation}\label{ext-eq}
   s = t \op_{y,L_y^{-1} x} (s \op_{x, (y \op x) \op y} ((t \op_{y,x} s) \op_{y \op x, y} t))
 \end{equation}
-for all $x,y \in M$, then the operation
+for all $x,y \in G$, then the operation
 $$ (x,s) \diamond (y,t) := (x \diamond y, s \diamond_{x,y} t)$$
 is easily seen to be a 677 magma.  It is right-injective if $G$ and all of the $\op_{y,x}$ are right-injective.
 
@@ -108,7 +113,7 @@ $$s = t \op^+ (s \op^+ ((t \op^- s) \op^- t))$$
 $$s = t \op^- (s \op^- ((t \op^+ s) \op^+ t))$$
 for all $t,s$.
 
-Now suppose that $G$ is also a field with a primitive fifth root of unity $\beta$ (so that $\beta = \beta^4$ is a quadratic residue), but $-1$ and $\beta+1$ are non-zero quadratic non-residues (for instance, $G$ could be the field of order $31$, with $\beta=2$).  If we define $x \op y = x - \beta(y-x)$, and then define $\op_{x,y}$ to be $\op^0$ when $y=x$, $\op^+$ when $y-x$ is a non-zero quadratic residue, and $\op^-$ when $y-x$ is a quadratic residue, one can then check that \eqref{ext-eq} holds. Since $\op^0$ is not right-cancellative, this gives a finite 677 magma that is not right-cancellative.
+Now suppose that $G$ is also a field with a primitive fifth root of unity $\beta$ (so that $\beta = \beta^4$ is a quadratic residue), but $-1$ and $\beta+1$ are non-zero quadratic non-residues (for instance, $G$ could be the field of order $31$, with $\beta=2$).  If we define $x \op y = x - \beta(y-x)$, and then define $\op_{x,y}$ to be $\op^0$ when $y=x$, $\op^+$ when $y-x$ is a non-zero quadratic residue, and $\op^-$ when $y-x$ is a non-zero quadratic non-residue, one can then check that \eqref{ext-eq} holds. Since $\op^0$ is not right-cancellative, this gives a finite 677 magma that is not right-cancellative.
 
 
 \section{The free 677 magma}
@@ -139,13 +144,13 @@ Next, we observe
 
 From \Cref{op-prop} we know that $y$ is upper bounded by one of $z,x$, $z$ is upper bounded by one of $u,y$, and $x$ is upper bounded by one of $u,v$.  So out of $x,y,z,u,v$, the only elements that can be maximal in this set are $u$ and $v$.  If $v$ is maximal, then by \Cref{op-prop} we have $v = (x,u)$ as required, hence we may assume for contradiction that $u$ is maximal.  From \Cref{op-prop}, this implies that $u = (z,y)$ and $u = (u_L, (x \op u_L) \op x)$, hence $u_L = z$ and $y = (x \op z) \op x$.
 
-From \Cref{op-prop}, $x$ is upper bounded by one of $x \op z$ and $z$, and $x \op z$ is upper bounded by one of $y$ and $x$.  We also recall that $y$ was upper bounded by one of $z,x$. We conclude that out of $x,y,z,x \op z$, the only one that can be maximal is $z$.  In particular $z$ is not bounded by $x$, hence by \Cref{op-prop} $z = (y,x)$.  $z$ is also not bounded by $w$, hence by \Cref{op-prop} $x \op z = z_L = y$, hence $y = y \op x = z$, contradicting the fact that $y$ was not maximal. This gives the required contradiction.
+From \Cref{op-prop}, $x$ is upper bounded by one of $x \op z$ and $z$, and $x \op z$ is upper bounded by one of $y$ and $x$.  We also recall that $y$ was upper bounded by one of $z,x$. We conclude that out of $x,y,z,x \op z$, the only one that can be maximal is $z$.  In particular $z$ is not bounded by $x$, hence by \Cref{op-prop} $z = (y,x)$.  $z$ is also not bounded by $x \op z$, hence by \Cref{op-prop} $x \op z = z_L = y$, hence $y = y \op x = z$, contradicting the fact that $y$ was not maximal. This gives the required contradiction.
 \end{proof}
 
 \begin{corollary}\label{677-obey}  The operation $\diamond$ obeys \eqref{677}.
 \end{corollary}
 
-\begin{proof} By the previous lemma and definition of $\diamond$, it suffices to show that $y < (x, (y \op x) \op y)$.  Defining $z,y,v$ as before, this amounts to showing that $y < v$.  We already have $v = (x,u)$, hence by \Cref{op-prop} $x < u$.  Also recall that $y$ is bounded by one of $x,z$, and $z$ is bounded by one of $y,u$.  Since $u$ is also bounded by $v$, we obtain the claim.
+\begin{proof} By the previous lemma and definition of $\diamond$, it suffices to show that $y < (x, (y \op x) \op y)$.  Defining $z,u,v$ as before, this amounts to showing that $y < v$.  We already have $v = (x,u)$, hence by \Cref{op-prop} $x < v$.  Also recall that $y$ is bounded by one of $x,z$, and $z$ is bounded by one of $y,u$.  Since $u$ is also bounded by $v$, we obtain the claim.
 \end{proof}
 
 \begin{corollary} Let $M_{X,677}$ be the magma generated by $X$ with operation $\diamond$.  Then $M_{X,677}$ is the free magma for \eqref{677} generated by $X$.
