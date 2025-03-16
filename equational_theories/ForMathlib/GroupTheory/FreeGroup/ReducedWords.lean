@@ -10,7 +10,7 @@ This file defines some extra lemmas for free groups, in particular about (cyclic
 
 ## Main statements
 * `FreeGroup.infinite_order` : nontrivial elements of a free group have infinite order
-* corrollary `FreeGroup.ne_inv_of_ne_one` : nontrivial elements of a free group are not self-inverse.
+* corollary `FreeGroup.ne_inv_of_ne_one` : nontrivial elements of a free group are not self-inverse.
 
 -/
 open List
