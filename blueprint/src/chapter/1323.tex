@@ -5,14 +5,12 @@ In this chapter we study magmas that obey equation 1323,
   x = y \op (((y \op y) \op x) \op y)
 \end{equation}
 for all $x,y$.  Using the squaring operator $Sy := y \op y$ and the left and right multiplication operators $L_y x := y \op x$ and $R_y x = x \op y$, this law can be written as
-$$ L_y R_y L_{Sy} x = x$$
-and
-$$ R_{Sy} L_y R_y x = x$$
-respectively.  In particular, this gives a way to construct these magmas:
+$$ L_y R_y L_{Sy} x = x.$$
+In particular, this gives a way to construct these magmas:
 
-\begin{lemma}[Construction of 1323 magmas]\label{1323-construct}  Suppose that $M$ is a magma such that
+\begin{lemma}[Construction of 1323 magmas]\label{1323-construct}\leanok\lean{Eq1323.eq1323_if_conditions}  Suppose that $M$ is a magma such that
   \begin{equation}\label{lr}
-    L_{Sy} R_{Sy} = 1
+    R_{Sy} L_{Sy} = 1
    \end{equation}
 and
 \begin{equation}\label{lr-simp}
@@ -26,8 +24,8 @@ hold.  Then the magma obeys 1323.
 
  So now we would like to construct magmas satisfying \Cref{lr} and \Cref{lr-simp}.  We need some bijections:
 
- \begin{lemma}[Bijections]\label{bij}
-  Let $G$ be a countably infinite abelian group of order $2$.  Then there exists a bijection $\phi_a: G \to \Q^\times$ for each $a \in G \backslash \{0\}$ such that
+ \begin{lemma}[Bijections]\label{bij}\leanok\lean{Eq1323.ϕ}
+  Let $G$ be a countably infinite abelian torsion group of exponent $2$.  Then there exists a bijection $\phi_a: G \to \Q^\times$ for each $a \in G \backslash \{0\}$ such that
  $\phi_a(0) = 1$ and $\phi_a(a+b) = -\phi_a(b)$ for all $b \in G$, so in particular $\phi_a(a)=-1$.
  \end{lemma}
 
@@ -36,7 +34,7 @@ hold.  Then the magma obeys 1323.
  \end{proof}
 
 
- \begin{lemma}[Building a magma]\label{build-magma}  Let $G$ be a countably infinite abelian group of order $2$, and let $\phi_a$ be as in the previous lemma.  Let $N$ be the set of pairs $(x,a)$ with $x \in \Q^\times$ and $a \in G \backslash \{0\}$, and let $M = G \uplus N$ be the disjoint union of $G$ and $N$.  Suppose that we have an operation $\op : M \times M \to M$ obeying the following axioms:
+ \begin{lemma}[Building a magma]\label{build-magma}\leanok\lean{Eq1323.op}\lean{Eq1323.op_RSy_LSy_eq_Id}\lean{Eq1323.op_Ly_Ry_eq_LSy}  Let $G$ be a countably infinite abelian torsion group of exponent $2$, and let $\phi_a$ be as in the previous lemma.  Let $N$ be the set of pairs $(x,a)$ with $x \in \Q^\times$ and $a \in G \backslash \{0\}$, and let $M = G \uplus N$ be the disjoint union of $G$ and $N$.  Suppose that we have an operation $\op : M \times M \to M$ obeying the following axioms:
 \begin{itemize}
 \item (i) We have
 \begin{equation}\label{op-0}
@@ -90,7 +88,7 @@ It remains to handle the case when $a,b$ are distinct elements of $G \backslash 
 $(\phi_a(b)^n x,a, \phi_b(c)^n y,b)$, $(\phi_b(c)^n y,b,\phi_c(a)^n z,c)$, $(\phi_c(a)^n z,c,\phi_a(b)^{n+1} x, a)$ for $(x,y,z,a,b,c) \in {\mathcal F}$ and $n \geq 0$ are all distinct.
 \end{definition}
 
-\begin{lemma}[Soundness]\label{partial-1323-sound}\uses{partial-1323}  Let ${\mathcal F}$ be a parital solution.  Then if one defines a partial operation $\op$ on $M$ by requiring axioms (i), (ii), imposing the additional operations
+\begin{lemma}[Soundness]\label{partial-1323-sound}\uses{partial-1323}  Let ${\mathcal F}$ be a partial solution.  Then if one defines a partial operation $\op$ on $M$ by requiring axioms (i), (ii), imposing the additional operations
 $$ (\phi_a(b)^n x,a) \op (\phi_b(c)^n y,b) = (\phi_c(a)^n z,c)$$
 $$ (\phi_b(c)^n y,b) \op (\phi_c(a)^n z,c) = (\phi_a(b)^{n+1} x, a)$$
 $$ (\phi_c(a)^n z,c) \op (\phi_a(b)^{n+1} x, a) = (\phi_b(c)^{n+1} y,b)$$
@@ -100,7 +98,7 @@ for all $n \geq 0$ and $(x,y,z,a,b,c) \in {\mathcal F}$, and no other operations
 \begin{proof} Routine.
 \end{proof}
 
-\begin{lemma}[Greedy extension]\label{greedy-1323}\uses{partial-1323-sound}  If $\op$ is defined by a partial solution, and $(x,a) \op (y,b)$ is undefined for some $x,y \in \Q^\times$ and distinct $a,b \in G \backslash \{0\}$, then it is possible to extend the partial solution so that $(x,a) \op (y,b)$ is now defined.
+\begin{lemma}[Greedy extension]\label{greedy-1323}\uses{partial-1323-sound}\leanok\lean{Eq1323.extend}  If $\op$ is defined by a partial solution, and $(x,a) \op (y,b)$ is undefined for some $x,y \in \Q^\times$ and distinct $a,b \in G \backslash \{0\}$, then it is possible to extend the partial solution so that $(x,a) \op (y,b)$ is now defined.
 \end{lemma}
 
 \begin{proof} We select a $c \in G \backslash \{0\}$ that has not previously been used by the partial solution, let $z \in \Q^\times$ be arbitrary, (e.g., one could take $z=1$ if desired), and add $(x,y,z,a,b,c)$ to ${\mathcal F}$, thus we now also assign
@@ -110,13 +108,13 @@ $$ (\phi_c(a)^n z,c) \op (\phi_a(b)^{n+1} x, a) = (\phi_b(c)^{n+1} y,b)$$
 for all natural numbers $n$.  As the $a,b,c$ are distinct, the $\phi_a(b), \phi_b(c), \phi_c(a)$ are not equal to $\pm 1$, and the members of this infinite sequence do not collide with each other.  The second and third equations in this family cannot collide with previous assignments because $c$ is novel.  If we arrange matters so that $\phi_b(c)$ involves primes in the numerator or denominator that do not appear in any previous $\phi_a(b), \phi_b(c), \phi_c(a), x, y, z$ used by the greedy algorithm, or the current $x,y,z$, then we also see that the first infinite sequence does not collide with any previously assigned value of $\op$ either.
 \end{proof}
 
-\begin{corollary}[Iterated greedy extension]\label{greedy-iterate}  Every partial solution can be extended to a complete solution that obeys \Cref{lr} and \Cref{lr-simp}, and hence 1323.
+\begin{corollary}[Iterated greedy extension]\label{greedy-iterate}\leanok\lean{Eq1323.exists_complete_function}  Every partial solution can be extended to a complete solution that obeys \Cref{lr} and \Cref{lr-simp}, and hence 1323.
 \end{corollary}
 
 \begin{proof}\uses{greedy-1323, build-magma, partial-1323-sound} Apply the usual greedy algorithm.
 \end{proof}
 
-\begin{corollary}[1323 does not imply 2744]\label{1323-refute-2744}  There exists a 1323 magma which does not obey the 2744 equation $R_y L_{Sy} L_y x = x$.
+\begin{corollary}[1323 does not imply 2744]\label{1323-refute-2744}\leanok\lean{Eq1323.Equation1323_not_implies_Equation2744}  There exists a 1323 magma which does not obey the 2744 equation $R_y L_{Sy} L_y x = x$.
 \end{corollary}
 
 \begin{proof}\uses{greedy-iterate} It suffices to produce a partial solution in which $L_y$ is not injective. Pick distinct $a, b, b', c$ with $\phi_a(b)$, $\phi_a(b')$ having no prime factors in common in the numerator or denominator.  We take the partial solution consisting of $(1,1,1,a,b,c)$ and $(1,1,1,a,b',c)$, that is to say we impose the conditions

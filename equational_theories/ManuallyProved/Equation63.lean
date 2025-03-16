@@ -66,44 +66,23 @@ theorem mem_old {a b x}
   simp only [old, Finset.mem_biUnion, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Prod.exists]
   exact ⟨_, _, h1, h2⟩
 
-def c' := freshGeneratorName old
-def c := FreeGroup.of c'
+def c := FreeGroup.of (freshGeneratorName old)
 
-def project' (i : Nat) : Multiplicative ℤ := if i = c' then (1 : ℤ) else (0 : ℤ)
-def project (g : G) : ℤ := Multiplicative.toAdd (FreeGroup.lift project' g)
+def project (x : G) : ℤ := Multiplicative.toAdd <| FreshGenerator.projectFresh old x
 
 @[simp] theorem project_1 : project 1 = 0 := by simp [project]
 @[simp] theorem project_mul {x y} : project (x * y) = project x + project y := by simp [project]
 @[simp] theorem project_inv {x} : project x⁻¹ = -project x := by simp [project]
 
 @[simp] theorem project_c : project c = 1 := by
-  simp only [project, c, FreeGroup.lift.of, project']
+  simp [project, c, ←FreshGenerator.freshGenerator.eq_1]
   rfl
 
-theorem project_old' (a : List (Nat × Bool)) :
-    generatorNames' a ⊆ old.biUnion generatorNames → project (FreeGroup.mk a) = 0 := by
-  induction a
-  case nil => simp [generatorNames', ← FreeGroup.one_eq_mk]
-  case cons head _ ih =>
-    rw [← List.singleton_append]
-    intro hn
-    simp only [generatorNames', List.singleton_append] at hn
-    rw [← FreeGroup.mul_mk, project, MonoidHom.map_mul, toAdd_mul, ← project, ← project, ih]
-    · have : head.1 ∈ old.biUnion generatorNames :=
-        Finset.singleton_subset_iff.mp $ Finset.union_subset_left hn
-      have : c' ∉ old.biUnion generatorNames := (existsFreshGeneratorName old).choose_spec
-      simp only [project, FreeGroup.lift.mk, project']
-      by_cases head.2 <;> aesop
-    · exact Finset.union_subset_right hn
-
-theorem project_old {x} (h : x ∈ old) : project x = 0 :=
-  FreeGroup.mk_toWord (x := x) ▸ project_old' _ fun _ h' ↦ Finset.mem_biUnion.mpr ⟨x, h, h'⟩
-
-@[simp] theorem project_d : project d = 0 := project_old (by simp [old])
+@[simp] theorem project_d : project d = 0 := FreshGenerator.projectFresh_old (by simp [old])
 
 @[local aesop safe destruct]
 theorem project_E {x y} (h : E x y) : project x = 0 ∧ project y = 0 := by
-  constructor <;> (apply project_old; apply mem_old h; simp)
+  constructor <;> (apply FreshGenerator.projectFresh_old; apply mem_old h; simp)
 
 theorem aux3' {x x' z} : E x d → E x' d → E x⁻¹ z → x' ≠ x * z := by
   intro h1 h2 h3 h4
@@ -283,7 +262,6 @@ theorem exists_extension (seed : PartialSolution) :
       if h : ∃ y, E d y then exact ⟨_, le_rfl, h⟩ else
       let E1 : Extension := { E, ok, d, not_def := fun h' => h ⟨_, h'⟩ }
       exact ⟨E1.next, fun _ _ => (.base ·), _, .new rfl rfl⟩
-  classical
   choose e he f hf using h3
   refine ⟨f, fun x => ?_, fun {x y} h => ?_,⟩
   · let S : Finset G := {x, f x, x⁻¹ * f (f x)}
