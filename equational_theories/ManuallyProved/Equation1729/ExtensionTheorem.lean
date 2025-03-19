@@ -173,6 +173,12 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM]
 
 
 
+lemma ExtMagma_unsat_eq817 {SM N : Type} [Magma SM]
+  (E : ExtOpsWithProps SM N)
+  : ¬ @Equation817 (SM ⊕ N) (extMagmaInst E) := by
+  intro H
+  simp_all [Equation1729, Magma.op, operation]
+  sorry
 
 
 end Eq1729
