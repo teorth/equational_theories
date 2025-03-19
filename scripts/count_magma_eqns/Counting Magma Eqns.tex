@@ -1,0 +1,96 @@
+\documentclass[12pt]{amsart}
+\usepackage{amsmath}
+\usepackage{amssymb}   % has \smallsetminus
+\usepackage{mathabx}    %%% has \coloneq
+
+\renewcommand{\baselinestretch}{1.1}
+
+\newcommand{\Idem}{{\sf Idem}}
+\newcommand{\Eqns}{{\sf Eqns}}
+\newcommand{\eq}{{\;\approx\;}}    
+
+\title{Proposed formula for Counting Magma Equations}
+
+\author{Stanley Burris}
+\email{snburris@uwaterloo.ca}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+The symbol $+$ will be used for {\it the binary operation} of magma equations. The {\it order of a magma term} is the number of occurrences of $+$ in the term. Thus the order of $(x+y) + (x + z)$ is 3. There is an obvious 1-1 correspondence between magma terms of order $n$ and plane binary trees of order $n$ with the leaves labelled by the variables in the term. Let
+$$
+T(n) \coloneq \frac{1}{n+1} \cdot {2n \choose n}
+$$
+This counts the number of plane binary trees of order $n$.
+
+The {\it order of a magma equation} is the sum of the orders of the two sides. Thus the order of $(x+y) +(x+z) = z + (x +x)$ is 5. 
+The equation $(v+w) +(v+u) = u + (v +v)$ obtained by relabelling the variables is considered to be ``the same'' as the previous equation as far as counting is concerned, as is the equation 
+$ z + (x +x) = (x+y) +(x+z) $
+obtained by switching the two terms. The only equation of the form $t = t$ that will be included in the count is $x=x$.
+
+The {\it Stirling numbers $n \brace m$ of the second kind} count the number of ways to partition a set of $n$ elements into $m$ non-empty subsets.
+
+The number of bijections $\alpha$ of a set of $n$ elements to itself is $n!$ .
+The number of idempotent bijections $\alpha$ (that is, $\alpha^2 = \alpha$) is given by
+$$
+\Idem(n) = \sum_{0 \leq k \leq \lfloor n/2 \rfloor}  {n\choose 2k} (2k-1)!!.
+$$
+
+For integers $0 \le a \le b$ let $\fbox{E(a,b)}$ be the number of magma equations $t_1 = t_2$ with $t_1$ of order $a$, $t_2$ of order $b$, counting up to relabelling, up to switching terms, and only allowing the equation $x=x$ of the form $t=t$. 
+
+\pagebreak
+$\bullet$ If \fbox{$a\neq b$}: 
+$$
+E(a,b) = \frac{1}{2} T(a)(T(a) - 1)\cdot \sum_{\substack{1 \le p \le a+1\\ 1 \le q \le b+1\\0\le s \le \min(p,q)}} 
+{a+1 \brace p} {b+1 \brace q} {p \choose s} {q \choose s} s! \ .
+$$
+
+$\bullet$ If \fbox{$a= b$}: 
+\begin{multline*}
+E(a,b) = \frac{1}{2} T(a)^2\cdot \sum_{\substack{1 \le p,q \le a+1\\ 0\le s \le \min(p,q)}} 
+{a+1 \brace p} {a+1 \brace q} {p \choose s} {q \choose s} s! \\
++ \frac{1}{2} T(a) \cdot \sum_{\substack{1 \le p \le a+1\\ 0\le s \le p}} 
+{a+1 \brace p}  {p \choose s}  \Idem(s)\\
+- T(a)\cdot \sum_{1\le p \le a+1}  {a+1 \brace p} \ .
+\end{multline*}
+
+Let $\Eqns(n)$ be the number of magma equations of order $n$ (under the given constraints). Then
+$$
+\Eqns (n) = \sum_{0 \le a \le \lfloor n/2 \rfloor } E(a,n-a) .
+$$
+
+Let $\Eqns^\star(n)$ be the number of magma equations of order $\le n$. Then
+$$
+\Eqns^\star(n) = \sum_{0 \le k \le n} \Eqns (k) .
+$$
+
+{\bf Maple calculations} for $E(a,b)$ with $0\le a \le 2$, $0 \le b \le 5$, and for
+$Eqns(n)$, $Eqns^\star(n)$ with $0\le n \le 5$:
+\bigskip
+
+$
+\begin{array}{ r | r  r  r  r  r  r}
+E& 0 & 1 & 2 & 3 & 4 & 5\\
+\hline
+0& 2 & 5 & 30 & 260 & 2842 & 36834\\
+1&  & 9 & 104 & 1015 & 12278 & 173880\\
+2&  &  & 427 & 8770 & 115920 & 1776348\\
+\end{array}
+$
+\qquad
+$
+\begin{array} {r r r}
+n &\Eqns(n) & \Eqns^\star(n)\\
+\hline
+0 & 2 & 2\\
+1 & 5 & 7\\
+2 & 39 & 46\\
+3 & 364 & 410\\
+4 & 4284 & 4694\\
+5 & 57882 & 62576
+\end{array}
+$
+\end{document}
+
