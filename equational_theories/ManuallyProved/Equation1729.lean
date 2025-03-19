@@ -19,11 +19,11 @@ instance SM_countable : Countable SM := by sorry
 abbrev E (n:ℕ) : SM := (DirectSum.of (fun _ ↦ ZMod 4) n) 1
 
 /- The squaring map on SM -/
-def S_SM (a : SM) := a ◇ a
+def S (a : SM) := a ◇ a
 
-lemma SM_square_eq_double (a : SM) : S_SM a = a + a := rfl
+lemma SM_square_eq_double (a : SM) : S a = a + a := rfl
 
-lemma SM_square_square_eq_zero (a : SM) : S_SM (S_SM a) = 0 := by sorry
+lemma SM_square_square_eq_zero (a : SM) : S (S a) = 0 := by sorry
 
 lemma SM_obeys_1729 : Equation1729 SM := by sorry
 
