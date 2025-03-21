@@ -154,21 +154,17 @@ instance extMagmaInst {SM N : Type}
 lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM]
   (E : ExtOpsWithProps SM N)
   : @Equation1729 (SM ⊕ N) (extMagmaInst E) := by
-  simp [Equation1729, Magma.op, operation]
-  constructor
-  · intro a
-    constructor
-    · intro b
-      sorry
-    · intro b
-
-      sorry
-  · intro a
-    constructor
-    · intro b
-      sorry
-    · intro b
-      sorry
+  unfold Equation1729
+  intro x y
+  cases hx : x <;> cases hy : y  with
+  case inl.inl =>
+    sorry
+  case inl.inr =>
+    sorry
+  case inr.inl =>
+    sorry
+  case inr.inr =>
+    sorry
 
 
 
