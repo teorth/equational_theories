@@ -1,4 +1,10 @@
 import equational_theories.ManuallyProved.Equation1729.ExtensionTheorem
+import Mathlib.Algebra.DirectSum.Basic
+import Mathlib.GroupTheory.FreeGroup.Basic
+import Mathlib.Data.ZMod.Defs
+import Mathlib.Data.Countable.Defs
+
+import equational_theories.Equations.All
 
 
 namespace Eq1729
