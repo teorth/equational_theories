@@ -4,7 +4,9 @@ import Mathlib.Data.ZMod.Defs
 import Mathlib.Data.Countable.Defs
 
 import equational_theories.Equations.All
+import equational_theories.ManuallyProved.Equation1729.ExtensionTheorem
 
+/- Constructs the small magma SM, basic properties of the additional set N, and sets out the axioms these objects need to satisfy -/
 
 namespace Eq1729
 
@@ -49,12 +51,54 @@ def parent (x : N) : N := by sorry
 
 abbrev R' (a:SM) (x:N) := (e a) * x
 
+abbrev R'_inv (a:SM) (x:N) := (e a)⁻¹ * x
+
 /-- The R' operators are bijective -/
 lemma R'_bijective (a:SM) : Function.Bijective (R' a) := by sorry
+
+lemma R'_R'_inv_left (a:SM) : Function.LeftInverse (R'_inv a) (R' a) := by sorry
+
+lemma R'_R'_inv_right (a:SM) : Function.RightInverse (R'_inv a) (R' a) := by sorry
+
 
 lemma R'_axiom_iia (a b : SM) (y:N) (h: a ≠ b): R' a y ≠ R' b y := by sorry
 
 lemma R'_axiom_iib (a : SM) (y:N) : R' a y ≠ y := by sorry
 
+/- Now we rewrite the axioms using a single transformation L₀' instead of many transformations L' -/
+
+/- Not sure if this is the best spelling for this axiom -/
+def axiom_i' (L₀' : N → N) : Prop := L₀' ∘ L₀' = R'_inv 0
+
+def L' (L₀' : N → N) (a:SM) := (R'_inv a) ∘ L₀' ∘  (R' (S a))
+
+def L'_inv (L₀' : N → N) (a:SM) := (R'_inv (S a)) ∘ L₀' ∘ (R' 0) ∘  (R' a)
+
+lemma L'_0_eq_L₀' {L₀' : N → N} (h: axiom_i' L₀') : L' L₀' 0 = L₀' := by sorry
+
+lemma L'_bijective {L₀' : N → N} (h: Function.Bijective L₀') (a:SM) : Function.Bijective (L' L₀' a) := by sorry
+
+lemma L'_L'_inv_left {L₀' : N → N} (h1: axiom_i' L₀') (h2: Function.Bijective L₀') (a:SM) : Function.LeftInverse (L'_inv L₀' a) (L' L₀' a) := by sorry
+
+lemma L'_L'_inv_right {L₀' : N → N} (h1: axiom_i' L₀') (h2: Function.Bijective L₀') (a:SM) : Function.RightInverse (L'_inv L₀' a) (L' L₀' a) := by sorry
+
+
+def M := SM ⊕ N
+
+variable (f g h : ℕ → ℕ)
+
+example : ℕ := f $ g $ h 0
+
+def axiom_iii' (S': N → SM) (L₀' : N → N)  : Prop := ∀ (a : SM) (x y : N), R' a x = y → (R'_inv (S' y) $ L₀' $ R' (S (S' y)) $ R'_inv (a - S' x) $ L₀' $ R' (S (a - S' x)) y) = x
+
+def axiom_iv' (S': N → SM) (L₀' : N → N)  : Prop := ∀ x : N, (R'_inv (S' x) $ L₀' $ R' (S (S' x)) $ R'_inv (S' x) $ L₀' $ R' (S (S' x)) $ x) = x
+
+def axiom_v (S': N → SM) (op: N → N → M) : Prop := ∀ x : N, op x x = Sum.inl (S' x)
+
+def axiom_vi' (S': N → SM) (op: N → N → M) : Prop := ∀ (y : N) (a : SM), op (R' a y) y = Sum.inl (a - S' y)
+
+def axiom_vii' (S': N → SM) (L₀' : N → N) (op: N → N → M) : Prop := ∀ x y : N, x ≠ y → (∀ a : SM, x ≠ R' a y) → ∃ z : N, op x y = Sum.inr z ∧ op z x = Sum.inr (R'_inv (S (S' x)) $ L₀' $ R' 0 $ R' (S' x) $ y)
+
+lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} (hbij: Function.Bijective L₀') (h_i': axiom_i' L₀') (h_iii': axiom_iii' S' L₀') (h_iv': axiom_iv' S' L₀') (h_v: axiom_v S' op) (h_vi': axiom_vi' S' op) (h_vii': axiom_vii' S' L₀' op) : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by sorry
 
 end Eq1729
