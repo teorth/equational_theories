@@ -119,9 +119,8 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
 
   axiom_1 : ∀ a : SM, (L' (S a)) ∘ (R' a) ∘ L' a = id
 
-  axiom_21 : ∀ a b : SM, a ≠ b → R' a ≠ R' b
-  axiom_22 : ∀ a : SM, ∀ x y : N, x ≠ y → R' a x ≠ R' b y -- Redundant
-  axiom_23 : ∀ a : SM, ∀ x, R' a x ≠ x
+  axiom_21 : ∀ a b : SM, ∀ y : N, a ≠ b → R' a y ≠ R' b y -- Redundant
+  axiom_22 : ∀ a : SM, ∀ x, R' a x ≠ x
 
   -- axiom 3
   axiom_3 : ∀ x y, ∀ a, R' a x = y → (L' (S' y) (L' ((R_inv (S' x)).inv a) y)) = x
