@@ -1,4 +1,5 @@
 import equational_theories.ManuallyProved.Equation1729.ExtensionTheorem
+import equational_theories.ManuallyProved.Equation1729.SmallMagma
 import Mathlib.Algebra.DirectSum.Basic
 import Mathlib.GroupTheory.FreeGroup.Basic
 import Mathlib.Data.ZMod.Defs
