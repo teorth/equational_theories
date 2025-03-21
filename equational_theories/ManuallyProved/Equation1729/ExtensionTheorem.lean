@@ -119,7 +119,7 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
 
   axiom_1 : ∀ a : SM, (L' (S a)) ∘ (R' a) ∘ L' a = id
 
-  axiom_21 : ∀ a b : SM, ∀ y : N, a ≠ b → R' a y ≠ R' b y -- Redundant
+  axiom_21 : ∀ a b : SM, ∀ y : N, a ≠ b → R' a y ≠ R' b y
   axiom_22 : ∀ a : SM, ∀ x, R' a x ≠ x
 
   -- axiom 3
@@ -156,14 +156,21 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM]
   : @Equation1729 (SM ⊕ N) (extMagmaInst E) := by
   unfold Equation1729
   intro x y
-  cases hx : x <;> cases hy : y  with
+  cases hx : x <;> cases hy : y <;> simp [Magma.op, operation]
   case inl.inl =>
+    rw [←E.SM_sat_1729]
+  case inl.inr a x =>
+    symm
+    simp[E.axiom_5, E.axiom_6]
+    rw[←E.right_map_SM]
+
     sorry
-  case inl.inr =>
+  case inr.inl x b =>
+    rw [←E.squaring_prop_SM]
     sorry
-  case inr.inl =>
-    sorry
-  case inr.inr =>
+  case inr.inr x y =>
+    rw[E.axiom_5]
+
     sorry
 
 
@@ -172,8 +179,31 @@ lemma ExtMagma_unsat_eq817 {SM N : Type} [Magma SM]
   (E : ExtOpsWithProps SM N)
   : ¬ @Equation817 (SM ⊕ N) (extMagmaInst E) := by
   intro H
-  simp_all [Equation1729, Magma.op, operation]
-  sorry
+
+  simp_all [Equation1729]
+  cases H with
+  | intro left right =>
+      revert left
+      conv =>
+        lhs
+        rhs
+        simp [Magma.op, operation]
+      conv =>
+      intro left
+      revert right
+      conv =>
+        lhs
+        rhs
+        rhs
+        simp [Magma.op, operation, E.axiom_5, E.squaring_prop_SM]
+      intro left right
+      have h1 := E.axiom_22
+      have h2 := E.axiom_21
+      clear right
+
+
+
+      sorry
 
 
 end Eq1729
