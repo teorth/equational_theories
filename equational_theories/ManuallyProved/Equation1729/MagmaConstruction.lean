@@ -3,7 +3,7 @@ import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 import equational_theories.ManuallyProved.Equation1729.SmallMagma
 
-namespace eq1729
+namespace Eq1729
 
 /-- `fill D` is the set of elements of the form (e 0)^n x with x in D and n an integer. -/
 
@@ -42,4 +42,4 @@ lemma enlarge_S' (sol : PartialSolution) (x:N) : ∃ sol' : PartialSolution, sol
 lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, sol' ≥ sol ∧ (x,y) ∈ sol'.Dom_op := by sorry
 
 
-end eq1729
+end Eq1729
