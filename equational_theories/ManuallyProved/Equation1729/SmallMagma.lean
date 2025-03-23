@@ -2,6 +2,7 @@ import Mathlib.Algebra.DirectSum.Basic
 import Mathlib.GroupTheory.FreeGroup.Basic
 import Mathlib.Data.ZMod.Defs
 import Mathlib.Data.Countable.Defs
+import Mathlib.Data.DFinsupp.Encodable
 
 import equational_theories.Equations.All
 import equational_theories.ManuallyProved.Equation1729.ExtensionTheorem
@@ -16,7 +17,10 @@ abbrev SM := DirectSum ℕ (fun _ ↦ ZMod 4)
 
 open AddToMagma -- makes SM a magma automatically
 
-instance SM_countable : Countable SM := by sorry
+instance SM_countable : Countable SM := by
+  convert instCountableDFinsupp
+  . infer_instance
+  infer_instance
 
 abbrev E (n:ℕ) : SM := (DirectSum.of (fun _ ↦ ZMod 4) n) 1
 
@@ -33,7 +37,8 @@ lemma SM_obeys_1729 : Equation1729 SM := by sorry
 
 abbrev N := FreeGroup SM
 
-instance N_countable : Countable N := by sorry
+instance N_countable : Countable N := by
+  apply Quotient.countable
 
 abbrev e (a:SM) := FreeGroup.of a
 
