@@ -24,9 +24,13 @@ instance SM_countable : Countable SM := by
 
 abbrev E (n:ℕ) : SM := (DirectSum.of (fun _ ↦ ZMod 4) n) 1
 
+@[simp]
+lemma SM_op_eq_add (a b : SM) : a ◇ b = a + b := rfl
+
 /- The squaring map on SM -/
 def S (a : SM) := a ◇ a
 
+@[simp]
 lemma SM_square_eq_double (a : SM) : S a = a + a := rfl
 
 @[simp]
@@ -34,7 +38,7 @@ lemma S_zero : S 0 = 0 := rfl
 
 @[simp]
 lemma SM_square_square_eq_zero (a : SM) : S (S a) = 0 := by
-  change (a+a) + (a+a) = 0
+  simp only [SM_square_eq_double]
 -- when we update Mathlib, one can switch to DirectSum.ext_component, or use the new version of DirectSum.ext
   apply DirectSum.ext ℤ
   intro i
@@ -44,7 +48,7 @@ lemma SM_square_square_eq_zero (a : SM) : S (S a) = 0 := by
 
 lemma SM_obeys_1729 : Equation1729 SM := by
   intro x y
-  change x = (y + y) + ((y+x) + y)
+  simp only [SM_op_eq_add]
   abel_nf
 -- when we update Mathlib, one can switch to DirectSum.ext_component, or use the new version of DirectSum.ext
   apply DirectSum.ext ℤ
@@ -193,12 +197,10 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
         inv := fun y ↦ y - a
         inv_left := by
           ext y
-          change (a+y) - a = y
-          abel
+          simp only [SM_op_eq_add, Function.comp_apply, add_sub_cancel_left, id_eq]
         inv_right := by
           ext y
-          change a + (y-a) = y
-          abel
+          simp only [SM_op_eq_add, Function.comp_apply, add_sub_cancel, id_eq]
         bij := sorry -- redundant given the other data
       }
     L'_inv := by
@@ -215,12 +217,10 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
         inv := fun y ↦ y - a
         inv_left := by
           ext y
-          change (y+a) - a = y
-          abel
+          simp only [SM_op_eq_add, Function.comp_apply, add_sub_cancel_right, id_eq]
         inv_right := by
           ext y
-          change (y-a) + a = y
-          abel
+          simp only [SM_op_eq_add, Function.comp_apply, sub_add_cancel, id_eq]
         bij := sorry -- redundant given the other data
       }
     R'_inv := by
