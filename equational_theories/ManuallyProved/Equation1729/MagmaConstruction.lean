@@ -50,9 +50,6 @@ lemma PartialSolution_refl (sol : PartialSolution) : sol ≤ sol := by
 /-- Impose a preorder on solutions using the notion of an extension. -/
 instance PartialSolution_order : Preorder PartialSolution  := {
   le := PartialSolution_LE.le
-  lt := by
-    intro sol1 sol2
-    exact sol1 ≤ sol2 ∧ ¬ sol2 ≤ sol1
   le_refl := PartialSolution_refl
   le_trans := by
     intro sol1 sol2 sol3 h h'
@@ -66,7 +63,6 @@ instance PartialSolution_order : Preorder PartialSolution  := {
       rw [h.2.2.2.2.1 z hz, h'.2.2.2.2.1 z (h.2.1 hz)]
     intro x hx
     rw [h.2.2.2.2.2 x hx, h'.2.2.2.2.2 x (h.2.2.1 hx)]
-  lt_iff_le_not_le := fun a b ↦ Eq.to_iff rfl
 }
 
 /-- The trivial partial solution. -/
