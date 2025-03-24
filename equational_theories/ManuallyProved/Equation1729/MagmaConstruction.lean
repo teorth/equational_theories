@@ -13,8 +13,7 @@ def fill (D: Finset N) : Set N := { y | ∃ (n : ℤ) (x : N), y = (e 0)^n * x �
 lemma fill_empty : fill Finset.empty = ∅ := by
   ext y
   simp only [fill, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false, not_exists, not_and]
-  intros
-  exact Finset.not_mem_empty _
+  exact fun _ _ _ ↦ Finset.not_mem_empty _
 
 lemma fill_mono {D₁ D₂ : Finset N} (h : D₁ ⊆ D₂) : fill D₁ ⊆ fill D₂ := by
   intro y hy
@@ -46,13 +45,7 @@ instance PartialSolution_LE : LE PartialSolution  := {
 }
 
 lemma PartialSolution_refl (sol : PartialSolution) : sol ≤ sol := by
-  refine ⟨ ?_, ?_, ?_, ?_, ?_, ?_⟩
-  . exact subset_refl _
-  . exact subset_refl _
-  . exact subset_refl _
-  . simp only [implies_true]
-  . simp only [implies_true]
-  simp only [implies_true]
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩ <;> try {exact fun _ a ↦ a} <;> try {exact fun _ _ ↦ rfl}
 
 /-- Impose a preorder on solutions using the notion of an extension. -/
 instance PartialSolution_order : Preorder PartialSolution  := {
@@ -73,9 +66,7 @@ instance PartialSolution_order : Preorder PartialSolution  := {
       rw [h.2.2.2.2.1 z hz, h'.2.2.2.2.1 z (h.2.1 hz)]
     intro x hx
     rw [h.2.2.2.2.2 x hx, h'.2.2.2.2.2 x (h.2.2.1 hx)]
-  lt_iff_le_not_le := by
-    intro sol1 sol2
-    rfl
+  lt_iff_le_not_le := fun a b ↦ Eq.to_iff rfl
 }
 
 /-- The trivial partial solution. -/
