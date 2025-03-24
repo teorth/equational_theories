@@ -68,9 +68,14 @@ lemma R'_bijective (a:SM) : Function.Bijective (R' a) := by
   use R'_inv a
   exact ⟨ R'_R'_inv_left a, R'_R'_inv_right a ⟩
 
-lemma R'_axiom_iia (a b : SM) (y:N) (h: a ≠ b): R' a y ≠ R' b y := by sorry
+lemma R'_axiom_iia (a b : SM) (y:N) (h: a ≠ b): R' a y ≠ R' b y := by
+  contrapose! h
+  simp only [mul_left_inj] at h
+  exact FreeGroup.of_injective h
 
-lemma R'_axiom_iib (a : SM) (y:N) : R' a y ≠ y := by sorry
+lemma R'_axiom_iib (a : SM) (y:N) : R' a y ≠ y := by
+  by_contra! h
+  simp only [mul_left_eq_self, FreeGroup.of_ne_one] at h
 
 /- Now we rewrite the axioms using a single transformation L₀' instead of many transformations L' -/
 
