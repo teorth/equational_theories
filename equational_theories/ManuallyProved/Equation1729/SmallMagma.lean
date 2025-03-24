@@ -70,7 +70,9 @@ instance N_LE : LE N := {
 
 instance N_order : PartialOrder N  := {
   le := N_LE.le
-  lt := sorry
+  lt := by
+    intro x y
+    exact x ≤ y ∧ x ≠ y
   le_refl := sorry
   le_trans := sorry
   le_antisymm := sorry
@@ -78,7 +80,7 @@ instance N_order : PartialOrder N  := {
 }
 
 /-- the parent of x is defined to be the unique element adjacent to x whose reduced word is shorter, with the junk convention that the parent of the identity is itself -/
-def parent (x : N) : N := by sorry
+def parent (x : N) : N := FreeGroup.mk x.toWord.dropLast
 
 /- Right-multiplication by an element of SM on N is defined via the group action. -/
 
