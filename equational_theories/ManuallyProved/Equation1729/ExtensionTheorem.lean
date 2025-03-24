@@ -70,8 +70,6 @@ def is_right_extension_of (f' : β → γ) (f : α ⊕ β → γ) : Prop :=
   ∀ x : β, f' x = f (.inr x)
 
 structure ExtOps (SM N : Type) [Magma SM] where
-  -- The extended magma
-  EM : SM ⊕ N
 
   -- The squaring map on `SM`. In the blueprint this is `S`
   S : SM → SM
@@ -163,6 +161,7 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM]
     symm
     simp[E.axiom_5, E.axiom_6]
     rw[←E.right_map_SM]
+
     sorry
   case inr.inl x b =>
     rw [←E.squaring_prop_SM]
