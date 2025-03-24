@@ -58,13 +58,15 @@ abbrev R' (a:SM) (x:N) := (e a) * x
 
 abbrev R'_inv (a:SM) (x:N) := (e a)⁻¹ * x
 
+lemma R'_R'_inv_left (a:SM) : Function.LeftInverse (R'_inv a) (R' a) := inv_mul_cancel_left (e a)
+
+lemma R'_R'_inv_right (a:SM) : Function.RightInverse (R'_inv a) (R' a) := mul_inv_cancel_left (e a)
+
 /-- The R' operators are bijective -/
-lemma R'_bijective (a:SM) : Function.Bijective (R' a) := by sorry
-
-lemma R'_R'_inv_left (a:SM) : Function.LeftInverse (R'_inv a) (R' a) := by sorry
-
-lemma R'_R'_inv_right (a:SM) : Function.RightInverse (R'_inv a) (R' a) := by sorry
-
+lemma R'_bijective (a:SM) : Function.Bijective (R' a) := by
+  rw [Function.bijective_iff_has_inverse]
+  use R'_inv a
+  exact ⟨ R'_R'_inv_left a, R'_R'_inv_right a ⟩
 
 lemma R'_axiom_iia (a b : SM) (y:N) (h: a ≠ b): R' a y ≠ R' b y := by sorry
 
@@ -81,12 +83,14 @@ def L'_inv (L₀' : N → N) (a:SM) := (R'_inv (S a)) ∘ L₀' ∘ (R' 0) ∘  
 
 lemma L'_0_eq_L₀' {L₀' : N → N} (h: axiom_i' L₀') : L' L₀' 0 = L₀' := by sorry
 
-lemma L'_bijective {L₀' : N → N} (h: Function.Bijective L₀') (a:SM) : Function.Bijective (L' L₀' a) := by sorry
-
 lemma L'_L'_inv_left {L₀' : N → N} (h1: axiom_i' L₀') (h2: Function.Bijective L₀') (a:SM) : Function.LeftInverse (L'_inv L₀' a) (L' L₀' a) := by sorry
 
 lemma L'_L'_inv_right {L₀' : N → N} (h1: axiom_i' L₀') (h2: Function.Bijective L₀') (a:SM) : Function.RightInverse (L'_inv L₀' a) (L' L₀' a) := by sorry
 
+lemma L'_bijective {L₀' : N → N} (h1: axiom_i' L₀') (h2: Function.Bijective L₀') (a:SM) : Function.Bijective (L' L₀' a) := by
+  rw [Function.bijective_iff_has_inverse]
+  use L'_inv L₀' a
+  exact ⟨ L'_L'_inv_left h1 h2 a, L'_L'_inv_right h1 h2 a ⟩
 
 def M := SM ⊕ N
 
