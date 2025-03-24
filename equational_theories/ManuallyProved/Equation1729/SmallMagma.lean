@@ -236,8 +236,12 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
       calc
         _ = ⇑(R' (S a)).symm ∘ (L₀' ∘ (R' 0) ∘ ((R' a) ∘ (R' a).symm) ∘ L₀') ∘ (R' (S a))  := rfl
         _ = _ := by simp [L₀'_R'0_L₀'_eq_id h_i']
-    axiom_21 := sorry
-    axiom_22 := sorry
+    axiom_21 := by
+      intro a b y h
+      simp only [ne_eq, R'_axiom_iia a b y h, not_false_eq_true]
+    axiom_22 := by
+      intro a x
+      simp only [ne_eq, R'_axiom_iib a x, not_false_eq_true]
     axiom_3 := sorry
     axiom_4 := sorry
     axiom_5 := sorry
