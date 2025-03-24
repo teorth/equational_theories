@@ -112,12 +112,6 @@ def R' (a:SM) : N ≃ N := {
     simp only [inv_mul_cancel_right]
 }
 
-@[simp]
-lemma comp_id {X:Type*} (f:X → X) : f ∘ id = f := rfl
-
-@[simp]
-lemma id_comp {X:Type*} (f:X → X) : id ∘ f = f := rfl
-
 lemma R'_axiom_iia (a b : SM) (y:N) (h: a ≠ b): R' a y ≠ R' b y := by
   contrapose! h
   simp only [R', Equiv.coe_fn_mk, mul_right_inj] at h
@@ -132,18 +126,22 @@ lemma R'_axiom_iib (a : SM) (y:N) : R' a y ≠ y := by
 /- Not sure if this is the best spelling for this axiom -/
 def axiom_i' (L₀' : N → N) : Prop := L₀' ∘ L₀' = (R' 0).symm
 
+lemma L₀'_R'0_L₀'_eq_id {L₀' : N → N} (h: axiom_i' L₀') : L₀' ∘ R' 0 ∘ L₀' = id := by
+  unfold axiom_i' at h
+  calc
+    _ = L₀' ∘ R' 0 ∘ L₀' ∘ ((L₀' ∘ L₀') ∘ R' 0) := by aesop
+    _ = (L₀' ∘ (R' 0 ∘ (L₀' ∘ L₀')) ∘ L₀') ∘ R' 0 := rfl
+    _ = _ := by simp only [h, Equiv.self_comp_symm, CompTriple.comp_eq, Equiv.symm_comp_self]
+
 def L' {L₀' : N → N} (h: axiom_i' L₀') (a:SM) : N ≃ N := {
   toFun := (R' a).symm ∘ L₀' ∘  R' (S a)
   invFun := (R' (S a)).symm ∘ L₀' ∘ (R' 0) ∘  (R' a)
   left_inv := by
-    unfold axiom_i' at h
     rw [Function.leftInverse_iff_comp]
     calc
       _ = (R' (S a)).symm ∘ L₀' ∘ R' 0 ∘ (R' a ∘ (R' a).symm) ∘ L₀' ∘ R' (S a) := rfl
-      _ = (R' (S a)).symm ∘ L₀' ∘ R' 0 ∘ L₀' ∘ ((L₀' ∘ L₀') ∘ R' 0) ∘ R' (S a) := by aesop
-      _ = (R' (S a)).symm ∘ ((L₀' ∘ (R' 0 ∘ (L₀' ∘ L₀')) ∘ L₀') ∘ R' 0) ∘ R' (S a) := rfl
-      _ = _ := by
-        simp only [h, Equiv.self_comp_symm, CompTriple.comp_eq, Equiv.symm_comp_self]
+      _ = (R' (S a)).symm ∘ (L₀' ∘ R' 0 ∘ L₀') ∘ R' (S a) := by aesop
+      _ = _ := by simp only [L₀'_R'0_L₀'_eq_id h, CompTriple.comp_eq, Equiv.symm_comp_self]
   right_inv := by
     unfold axiom_i' at h
     rw [Function.rightInverse_iff_comp]
@@ -232,7 +230,12 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
         bij := sorry -- redundant given the other data
       }
     SM_sat_1729 := SM_obeys_1729
-    axiom_1 := sorry
+    axiom_1 := by
+      intro a
+      simp only [L', SM_square_square_eq_zero, Equiv.coe_fn_mk]
+      calc
+        _ = ⇑(R' (S a)).symm ∘ (L₀' ∘ (R' 0) ∘ ((R' a) ∘ (R' a).symm) ∘ L₀') ∘ (R' (S a))  := rfl
+        _ = _ := by simp [L₀'_R'0_L₀'_eq_id h_i']
     axiom_21 := sorry
     axiom_22 := sorry
     axiom_3 := sorry
