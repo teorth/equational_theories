@@ -246,7 +246,10 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
       simp only [L', Equiv.coe_fn_mk, Function.comp_apply]
       intro x y a h
       rw [h_iii' a x y h]
-    axiom_4 := sorry
+    axiom_4 := by
+      intro x
+      simp only [L', Equiv.coe_fn_mk, Function.comp_apply]
+      rw [h_iv' x]
     axiom_5 := sorry
     axiom_6 := sorry
    }
