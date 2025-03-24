@@ -132,7 +132,7 @@ def L'_inv (L₀' : N → N) (a:SM) := (R'_inv (S a)) ∘ L₀' ∘ (R' 0) ∘  
 
 lemma L'_0_eq_L₀' {L₀' : N → N} (h: axiom_i' L₀') : L' L₀' 0 = L₀' := by
   unfold L'
-  rw [← h, S_zero, Function.comp_assoc, <- Function.comp_assoc _ _ (R' 0), h, R'_inv_comp_R', comp_id]
+  rw [← h, S_zero, Function.comp_assoc, ← Function.comp_assoc _ _ (R' 0), h, R'_inv_comp_R', comp_id]
 
 lemma L'_L'_inv_left {L₀' : N → N} (h1: axiom_i' L₀') (a:SM) : Function.LeftInverse (L'_inv L₀' a) (L' L₀' a) := by
   unfold axiom_i' at h1
@@ -155,7 +155,7 @@ lemma L'_bijective {L₀' : N → N} (h1: axiom_i' L₀') (a:SM) : Function.Bije
   rw [Function.bijective_iff_has_inverse]
   exact ⟨L'_inv L₀' a, L'_L'_inv_left h1 a, L'_L'_inv_right h1 a ⟩
 
-def M := SM ⊕ N
+abbrev M := SM ⊕ N
 
 variable (f g h : ℕ → ℕ)
 
@@ -171,6 +171,74 @@ def axiom_vi' (S': N → SM) (op: N → N → M) : Prop := ∀ (y : N) (a : SM),
 
 def axiom_vii' (S': N → SM) (L₀' : N → N) (op: N → N → M) : Prop := ∀ x y : N, x ≠ y → (∀ a : SM, x ≠ R' a y) → ∃ z : N, op x y = Sum.inr z ∧ op z x = Sum.inr (R'_inv (S (S' x)) $ L₀' $ R' 0 $ R' (S' x) $ y)
 
-lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} (hbij: Function.Bijective L₀') (h_i': axiom_i' L₀') (h_iii': axiom_iii' S' L₀') (h_iv': axiom_iv' S' L₀') (h_v: axiom_v S' op) (h_vi': axiom_vi' S' op) (h_vii': axiom_vii' S' L₀' op) : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by sorry
+lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} (hbij: Function.Bijective L₀') (h_i': axiom_i' L₀') (h_iii': axiom_iii' S' L₀') (h_iv': axiom_iv' S' L₀') (h_v: axiom_v S' op) (h_vi': axiom_vi' S' op) (h_vii': axiom_vii' S' L₀' op) : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by
+  suffices : ExtOpsWithProps SM N
+  . exact ⟨ M, extMagmaInst this, ExtMagma_sat_eq1729 this, ExtMagma_unsat_eq817 this ⟩
+  exact
+   {
+    S := S
+    L := fun x ↦ (fun y ↦ x ◇ y)
+    R := fun x ↦ (fun y ↦ y ◇ x)
+    S' := S'
+    L' := L' L₀'
+    R' := R'
+    rest_map := op
+    squaring_prop_SM := by intros; rfl
+    left_map_SM := by intros; rfl
+    right_map_SM := by intros; rfl
+    sqN_extends_sqM := by intro _; aesop
+    L_inv := by
+      intro a
+      exact {
+        inv := fun y ↦ y - a
+        inv_left := by
+          ext y
+          change (a+y) - a = y
+          abel
+        inv_right := by
+          ext y
+          change a + (y-a) = y
+          abel
+        bij := sorry -- redundant given the other data
+      }
+    L'_inv := by
+      intro a
+      exact {
+        inv := L'_inv L₀' a
+        inv_left := Function.LeftInverse.comp_eq_id (L'_L'_inv_left h_i' a)
+        inv_right := Function.RightInverse.comp_eq_id (L'_L'_inv_right h_i' a)
+        bij := sorry -- redundant given the other data
+      }
+    R_inv := by
+      intro a
+      exact {
+        inv := fun y ↦ y - a
+        inv_left := by
+          ext y
+          change (y+a) - a = y
+          abel
+        inv_right := by
+          ext y
+          change (y-a) + a = y
+          abel
+        bij := sorry -- redundant given the other data
+      }
+    R'_inv := by
+      intro a
+      exact {
+        inv := R'_inv a
+        inv_left := Function.LeftInverse.comp_eq_id (R'_R'_inv_left a)
+        inv_right := Function.RightInverse.comp_eq_id (R'_R'_inv_right a)
+        bij := sorry -- redundant given the other data
+      }
+    SM_sat_1729 := SM_obeys_1729
+    axiom_1 := sorry
+    axiom_21 := sorry
+    axiom_22 := sorry
+    axiom_3 := sorry
+    axiom_4 := sorry
+    axiom_5 := sorry
+    axiom_6 := sorry
+   }
 
 end Eq1729
