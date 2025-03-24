@@ -163,6 +163,24 @@ theorem lt_iff_le_parent {x y : N} (h : y ≠ 1) : x < y ↔ x ≤ parent y := b
         rw [eq', h'] at h''
         simpa using h''.length_le
 
+instance : OrderBot N where
+  bot := 1
+  bot_le x := by simp [le_def]
+
+theorem bot_eq_one : (⊥ : N) = 1 := rfl
+
+instance : PredOrder N where
+  pred := parent
+  pred_le := parent_le
+  min_of_le_pred hap := by
+    rw [isMin_iff_eq_bot]
+    rw [le_def, parent_toWord] at hap
+    have := hap.length_le
+    simp only [List.length_tail] at this
+    rw [bot_eq_one, ← FreeGroup.toWord_eq_nil_iff, ← List.length_eq_zero]
+    omega
+  le_pred_of_lt {a} {b} hab := (lt_iff_le_parent hab.ne_bot).mp hab
+
 theorem parent_adjacent (x : N) (h : x ≠ 1) : adjacent x (parent x) := by
   cases h' : x.toWord
   case nil =>
