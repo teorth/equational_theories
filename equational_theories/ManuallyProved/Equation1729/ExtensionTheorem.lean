@@ -163,7 +163,6 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM]
     symm
     simp[E.axiom_5, E.axiom_6]
     rw[←E.right_map_SM]
-
     sorry
   case inr.inl x b =>
     rw [←E.squaring_prop_SM]

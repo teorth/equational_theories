@@ -57,8 +57,7 @@ lemma SM_obeys_1729 : Equation1729 SM := by
 
 abbrev N := FreeGroup SM
 
-instance N_countable : Countable N := by
-  apply Quotient.countable
+instance N_countable : Countable N := Quotient.countable
 
 abbrev e (a:SM) := FreeGroup.of a
 
@@ -111,12 +110,11 @@ lemma id_comp {X:Type*} (f:X → X) : id ∘ f = f := rfl
 /-- The R' operators are bijective -/
 lemma R'_bijective (a:SM) : Function.Bijective (R' a) := by
   rw [Function.bijective_iff_has_inverse]
-  use R'_inv a
-  exact ⟨ R'_R'_inv_left a, R'_R'_inv_right a ⟩
+  exact ⟨R'_inv a, R'_R'_inv_left a, R'_R'_inv_right a⟩
 
 lemma R'_axiom_iia (a b : SM) (y:N) (h: a ≠ b): R' a y ≠ R' b y := by
   contrapose! h
-  simp only [mul_left_inj] at h
+  rw [mul_left_inj] at h
   exact FreeGroup.of_injective h
 
 lemma R'_axiom_iib (a : SM) (y:N) : R' a y ≠ y := by
@@ -134,34 +132,28 @@ def L'_inv (L₀' : N → N) (a:SM) := (R'_inv (S a)) ∘ L₀' ∘ (R' 0) ∘  
 
 lemma L'_0_eq_L₀' {L₀' : N → N} (h: axiom_i' L₀') : L' L₀' 0 = L₀' := by
   unfold L'
-  rw [<- h, S_zero, Function.comp_assoc, <- Function.comp_assoc _ _ (R' 0), h, R'_inv_comp_R', comp_id]
+  rw [← h, S_zero, Function.comp_assoc, <- Function.comp_assoc _ _ (R' 0), h, R'_inv_comp_R', comp_id]
 
 lemma L'_L'_inv_left {L₀' : N → N} (h1: axiom_i' L₀') (a:SM) : Function.LeftInverse (L'_inv L₀' a) (L' L₀' a) := by
-  unfold L' L'_inv
   unfold axiom_i' at h1
   rw [Function.leftInverse_iff_comp]
   calc
-    _ = R'_inv (S a) ∘ L₀' ∘ R' 0 ∘ (R' a ∘ R'_inv a) ∘ L₀' ∘ R' (S a) := by ac_rfl
-    _ = R'_inv (S a) ∘ L₀' ∘ R' 0 ∘ L₀' ∘ ((L₀' ∘ L₀') ∘ R' 0) ∘ R' (S a) := by
-      simp only [R'_comp_R'_inv, R'_inv_comp_R', id_comp, h1]
-    _ = R'_inv (S a) ∘ ((L₀' ∘ (R' 0 ∘ (L₀' ∘ L₀')) ∘ L₀') ∘ R' 0) ∘ R' (S a) := by ac_rfl
-    _ = _ := by
-      simp only [R'_comp_R'_inv, R'_inv_comp_R', id_comp, h1]
+    _ = R'_inv (S a) ∘ L₀' ∘ R' 0 ∘ (R' a ∘ R'_inv a) ∘ L₀' ∘ R' (S a) := rfl
+    _ = R'_inv (S a) ∘ L₀' ∘ R' 0 ∘ L₀' ∘ ((L₀' ∘ L₀') ∘ R' 0) ∘ R' (S a) := by aesop
+    _ = R'_inv (S a) ∘ ((L₀' ∘ (R' 0 ∘ (L₀' ∘ L₀')) ∘ L₀') ∘ R' 0) ∘ R' (S a) := rfl
+    _ = _ := by simp only [R'_comp_R'_inv, R'_inv_comp_R', id_comp, h1]
 
 
 lemma L'_L'_inv_right {L₀' : N → N} (h1: axiom_i' L₀') (a:SM) : Function.RightInverse (L'_inv L₀' a) (L' L₀' a) := by
-  unfold L' L'_inv
   unfold axiom_i' at h1
   rw [Function.rightInverse_iff_comp]
   calc
-    _ = R'_inv a ∘ ((L₀' ∘ (R' (S a) ∘ R'_inv (S a)) ∘ L₀') ∘ R' 0) ∘ R' a := by ac_rfl
-    _ = _ := by
-      simp only [R'_comp_R'_inv, id_comp, h1, R'_inv_comp_R']
+    _ = R'_inv a ∘ ((L₀' ∘ (R' (S a) ∘ R'_inv (S a)) ∘ L₀') ∘ R' 0) ∘ R' a := rfl
+    _ = _ := by simp only [R'_comp_R'_inv, id_comp, h1, R'_inv_comp_R']
 
 lemma L'_bijective {L₀' : N → N} (h1: axiom_i' L₀') (a:SM) : Function.Bijective (L' L₀' a) := by
   rw [Function.bijective_iff_has_inverse]
-  use L'_inv L₀' a
-  exact ⟨ L'_L'_inv_left h1 a, L'_L'_inv_right h1 a ⟩
+  exact ⟨L'_inv L₀' a, L'_L'_inv_left h1 a, L'_L'_inv_right h1 a ⟩
 
 def M := SM ⊕ N
 
