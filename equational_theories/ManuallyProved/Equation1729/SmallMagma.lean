@@ -243,15 +243,17 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
       intro a x
       simp only [ne_eq, R'_axiom_iib a x, not_false_eq_true]
     axiom_3 := by
-      simp only [L', Equiv.coe_fn_mk, Function.comp_apply]
       intro x y a h
-      rw [h_iii' a x y h]
+      simp only [L', Equiv.coe_fn_mk, Function.comp_apply, h_iii' a x y h]
     axiom_4 := by
       intro x
-      simp only [L', Equiv.coe_fn_mk, Function.comp_apply]
-      rw [h_iv' x]
-    axiom_5 := sorry
-    axiom_6 := sorry
+      simp only [L', Equiv.coe_fn_mk, Function.comp_apply, h_iv' x]
+    axiom_5 := by
+      intro x
+      simp [L', h_v x]
+    axiom_6 := by
+      intro y a
+      simp [L', h_vi' y a]
    }
 
 end Eq1729
