@@ -31,20 +31,20 @@ lemma SM_op_eq_add (a b : SM) : a ◇ b = a + b := rfl
 def S (a : SM) := a ◇ a
 
 @[simp]
-lemma SM_square_eq_double (a : SM) : S a = a + a := rfl
-
-@[simp]
 lemma S_zero : S 0 = 0 := rfl
 
 @[simp]
 lemma SM_square_square_eq_zero (a : SM) : S (S a) = 0 := by
-  simp only [SM_square_eq_double]
+  simp only [S, SM_op_eq_add]
 -- when we update Mathlib, one can switch to DirectSum.ext_component, or use the new version of DirectSum.ext
   apply DirectSum.ext ℤ
   intro i
   simp only [map_add, map_zero]
   abel_nf
   exact ZModModule.char_nsmul_eq_zero 4 _
+
+@[simp]
+lemma SM_square_eq_double (a : SM) : S a = a + a := rfl
 
 lemma SM_obeys_1729 : Equation1729 SM := by
   intro x y
@@ -163,15 +163,15 @@ variable (f g h : ℕ → ℕ)
 
 example : ℕ := f $ g $ h 0
 
-def axiom_iii' (S': N → SM) (L₀' : N → N)  : Prop := ∀ (a : SM) (x y : N), R' a x = y → ((R' (S' y)).symm $ L₀' $ R' (S (S' y)) $ (R' (a - S' x)).symm $ L₀' $ R' (S (a - S' x)) y) = x
+abbrev axiom_iii' (S': N → SM) (L₀' : N → N)  := ∀ (a : SM) (x y : N), R' a x = y → ((R' (S' y)).symm $ L₀' $ R' (S (S' y)) $ (R' (a - S' x)).symm $ L₀' $ R' (S (a - S' x)) y) = x
 
-def axiom_iv' (S': N → SM) (L₀' : N → N)  : Prop := ∀ x : N, ((R' (S' x)).symm $ L₀' $ R' (S (S' x)) $ (R' (S' x)).symm $ L₀' $ R' (S (S' x)) $ x) = x
+abbrev axiom_iv' (S': N → SM) (L₀' : N → N) := ∀ x : N, ((R' (S' x)).symm $ L₀' $ R' (S (S' x)) $ (R' (S' x)).symm $ L₀' $ R' (S (S' x)) $ x) = x
 
-def axiom_v (S': N → SM) (op: N → N → M) : Prop := ∀ x : N, op x x = Sum.inl (S' x)
+abbrev axiom_v (S': N → SM) (op: N → N → M) := ∀ x : N, op x x = Sum.inl (S' x)
 
-def axiom_vi' (S': N → SM) (op: N → N → M) : Prop := ∀ (y : N) (a : SM), op (R' a y) y = Sum.inl (a - S' y)
+abbrev axiom_vi' (S': N → SM) (op: N → N → M) := ∀ (y : N) (a : SM), op (R' a y) y = Sum.inl (a - S' y)
 
-def axiom_vii' (S': N → SM) (L₀' : N → N) (op: N → N → M) : Prop := ∀ x y : N, x ≠ y → (∀ a : SM, x ≠ R' a y) → ∃ z : N, op x y = Sum.inr z ∧ op z x = Sum.inr ((R' (S (S' x))).symm $ L₀' $ R' 0 $ R' (S' x) $ y)
+abbrev axiom_vii' (S': N → SM) (L₀' : N → N) (op: N → N → M) := ∀ x y : N, x ≠ y → (∀ a : SM, x ≠ R' a y) → ∃ z : N, op x y = Sum.inr z ∧ op z x = Sum.inr ((R' (S (S' x))).symm $ L₀' $ R' 0 $ R' (S' x) $ y)
 
 lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} (hbij: Function.Bijective L₀') (h_i': axiom_i' L₀') (h_iii': axiom_iii' S' L₀') (h_iv': axiom_iv' S' L₀') (h_v: axiom_v S' op) (h_vi': axiom_vi' S' op) (h_vii': axiom_vii' S' L₀' op) : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by
   suffices : ExtOpsWithProps SM N
@@ -234,7 +234,7 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
       intro a
       simp only [L', SM_square_square_eq_zero, Equiv.coe_fn_mk]
       calc
-        _ = ⇑(R' (S a)).symm ∘ (L₀' ∘ (R' 0) ∘ ((R' a) ∘ (R' a).symm) ∘ L₀') ∘ (R' (S a))  := rfl
+        _ = (R' (S a)).symm ∘ (L₀' ∘ (R' 0) ∘ ((R' a) ∘ (R' a).symm) ∘ L₀') ∘ (R' (S a))  := rfl
         _ = _ := by simp [L₀'_R'0_L₀'_eq_id h_i']
     axiom_21 := by
       intro a b y h
@@ -242,7 +242,10 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
     axiom_22 := by
       intro a x
       simp only [ne_eq, R'_axiom_iib a x, not_false_eq_true]
-    axiom_3 := sorry
+    axiom_3 := by
+      simp only [L', Equiv.coe_fn_mk, Function.comp_apply]
+      intro x y a h
+      rw [h_iii' a x y h]
     axiom_4 := sorry
     axiom_5 := sorry
     axiom_6 := sorry
