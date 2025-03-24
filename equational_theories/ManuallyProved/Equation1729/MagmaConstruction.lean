@@ -16,6 +16,11 @@ lemma fill_empty : fill Finset.empty = ∅ := by
   intros
   exact Finset.not_mem_empty _
 
+lemma fill_mono {D₁ D₂ : Finset N} (h : D₁ ⊆ D₂) : fill D₁ ⊆ fill D₂ := by
+  intro y hy
+  rcases hy with ⟨n, x, hx, hD⟩
+  exact ⟨n, x, hx, h hD⟩
+
 class PartialSolution where
   L₀' : N → N
   op : N → N → M
@@ -37,18 +42,40 @@ class PartialSolution where
 instance PartialSolution_LE : LE PartialSolution  := {
   le := by
     intro sol1 sol2
-    exact sol1.Predom_L₀' ⊆ sol2.Predom_L₀' ∧ sol1.Dom_op ⊆ sol2.Dom_op ∧ sol1.Dom_S' ⊆ sol2.Dom_S' ∧ ∀ x, x ∈ fill sol1.Predom_L₀' → sol1.L₀' x = sol2.L₀' x ∧ ∀ z ∈ sol1.Dom_op, sol1.op z.1 z.2 = sol2.op z.1 z.2 ∧ ∀ x ∈ sol1.Dom_S', sol1.S' x = sol2.S' x
+    exact sol1.Predom_L₀' ⊆ sol2.Predom_L₀' ∧ sol1.Dom_op ⊆ sol2.Dom_op ∧ sol1.Dom_S' ⊆ sol2.Dom_S' ∧ (∀ x, x ∈ fill sol1.Predom_L₀' → sol1.L₀' x = sol2.L₀' x) ∧ (∀ z ∈ sol1.Dom_op, sol1.op z.1 z.2 = sol2.op z.1 z.2) ∧ (∀ x ∈ sol1.Dom_S', sol1.S' x = sol2.S' x)
 }
+
+lemma PartialSolution_refl (sol : PartialSolution) : sol ≤ sol := by
+  refine ⟨ ?_, ?_, ?_, ?_, ?_, ?_⟩
+  . exact subset_refl _
+  . exact subset_refl _
+  . exact subset_refl _
+  . simp only [implies_true]
+  . simp only [implies_true]
+  simp only [implies_true]
 
 /-- Impose a preorder on solutions using the notion of an extension. -/
 instance PartialSolution_order : Preorder PartialSolution  := {
   le := PartialSolution_LE.le
   lt := by
     intro sol1 sol2
-    exact sol1 ≤ sol2 ∧ sol1 ≠ sol2
-  le_refl := sorry
-  le_trans := sorry
-  lt_iff_le_not_le := sorry
+    exact sol1 ≤ sol2 ∧ ¬ sol2 ≤ sol1
+  le_refl := PartialSolution_refl
+  le_trans := by
+    intro sol1 sol2 sol3 h h'
+    refine ⟨ ?_, ?_, ?_, ?_, ?_, ?_⟩
+    . exact h.1.trans h'.1
+    . exact h.2.1.trans h'.2.1
+    . exact h.2.2.1.trans h'.2.2.1
+    . intro x hx
+      rw [h.2.2.2.1 x hx, h'.2.2.2.1 x (fill_mono h.1 hx)]
+    . intro z hz
+      rw [h.2.2.2.2.1 z hz, h'.2.2.2.2.1 z (h.2.1 hz)]
+    intro x hx
+    rw [h.2.2.2.2.2 x hx, h'.2.2.2.2.2 x (h.2.2.1 hx)]
+  lt_iff_le_not_le := by
+    intro sol1 sol2
+    rfl
 }
 
 /-- The trivial partial solution. -/
