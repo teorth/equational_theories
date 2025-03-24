@@ -29,6 +29,8 @@ def S (a : SM) := a ◇ a
 
 lemma SM_square_eq_double (a : SM) : S a = a + a := rfl
 
+lemma S_zero : S 0 = 0 := rfl
+
 lemma SM_square_square_eq_zero (a : SM) : S (S a) = 0 := by
   change (a+a) + (a+a) = 0
 -- when we update Mathlib, one can switch to DirectSum.ext_component, or use the new version of DirectSum.ext
@@ -116,16 +118,43 @@ def L' (L₀' : N → N) (a:SM) := (R'_inv a) ∘ L₀' ∘  (R' (S a))
 
 def L'_inv (L₀' : N → N) (a:SM) := (R'_inv (S a)) ∘ L₀' ∘ (R' 0) ∘  (R' a)
 
-lemma L'_0_eq_L₀' {L₀' : N → N} (h: axiom_i' L₀') : L' L₀' 0 = L₀' := by sorry
+lemma L'_0_eq_L₀' {L₀' : N → N} (h: axiom_i' L₀') : L' L₀' 0 = L₀' := by
+  unfold L'
+  rw [<- h, S_zero, Function.comp_assoc, <- Function.comp_assoc _ _ (R' 0), h, Function.LeftInverse.comp_eq_id (R'_R'_inv_left 0)]
+  rfl
 
-lemma L'_L'_inv_left {L₀' : N → N} (h1: axiom_i' L₀') (h2: Function.Bijective L₀') (a:SM) : Function.LeftInverse (L'_inv L₀' a) (L' L₀' a) := by sorry
+lemma L'_L'_inv_left {L₀' : N → N} (h1: axiom_i' L₀') (a:SM) : Function.LeftInverse (L'_inv L₀' a) (L' L₀' a) := by
+  unfold L' L'_inv
+  rw [Function.leftInverse_iff_comp]
+  calc
+    _ = R'_inv (S a) ∘ L₀' ∘ R' 0 ∘ (R' a ∘ R'_inv a) ∘ L₀' ∘ R' (S a) := by ac_rfl
+    _ = R'_inv (S a) ∘ L₀' ∘ R' 0 ∘ L₀' ∘ ((L₀' ∘ L₀') ∘ R' 0) ∘ R' (S a) := by
+      rw [Function.RightInverse.comp_eq_id (R'_R'_inv_right a), h1, Function.LeftInverse.comp_eq_id (R'_R'_inv_left 0)]
+      simp only [CompTriple.comp_eq]
+    _ = R'_inv (S a) ∘ ((L₀' ∘ (R' 0 ∘ (L₀' ∘ L₀')) ∘ L₀') ∘ R' 0) ∘ R' (S a) := by ac_rfl
+    _ = _ := by
+      rw [h1, Function.RightInverse.comp_eq_id (R'_R'_inv_right 0)]
+      simp only [CompTriple.comp_eq]
+      rw [h1, Function.LeftInverse.comp_eq_id (R'_R'_inv_left 0)]
+      simp only [CompTriple.comp_eq]
+      exact Function.LeftInverse.comp_eq_id (R'_R'_inv_left _)
 
-lemma L'_L'_inv_right {L₀' : N → N} (h1: axiom_i' L₀') (h2: Function.Bijective L₀') (a:SM) : Function.RightInverse (L'_inv L₀' a) (L' L₀' a) := by sorry
+lemma L'_L'_inv_right {L₀' : N → N} (h1: axiom_i' L₀') (a:SM) : Function.RightInverse (L'_inv L₀' a) (L' L₀' a) := by
+  unfold L' L'_inv
+  rw [Function.rightInverse_iff_comp]
+  calc
+    _ = R'_inv a ∘ ((L₀' ∘ (R' (S a) ∘ R'_inv (S a)) ∘ L₀') ∘ R' 0) ∘ R' a := by ac_rfl
+    _ = _ := by
+      rw [Function.RightInverse.comp_eq_id (R'_R'_inv_right _)]
+      simp only [CompTriple.comp_eq]
+      rw [h1, Function.LeftInverse.comp_eq_id (R'_R'_inv_left 0)]
+      simp only [CompTriple.comp_eq]
+      rw [Function.LeftInverse.comp_eq_id (R'_R'_inv_left _)]
 
-lemma L'_bijective {L₀' : N → N} (h1: axiom_i' L₀') (h2: Function.Bijective L₀') (a:SM) : Function.Bijective (L' L₀' a) := by
+lemma L'_bijective {L₀' : N → N} (h1: axiom_i' L₀') (a:SM) : Function.Bijective (L' L₀' a) := by
   rw [Function.bijective_iff_has_inverse]
   use L'_inv L₀' a
-  exact ⟨ L'_L'_inv_left h1 h2 a, L'_L'_inv_right h1 h2 a ⟩
+  exact ⟨ L'_L'_inv_left h1 a, L'_L'_inv_right h1 a ⟩
 
 def M := SM ⊕ N
 
