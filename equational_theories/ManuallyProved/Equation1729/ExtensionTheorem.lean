@@ -3,6 +3,8 @@ import equational_theories.FreshGenerator
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 
+import Mathlib.Logic.Equiv.Defs
+
 import Mathlib.Tactic
 
 namespace Eq1729
@@ -73,8 +75,8 @@ structure ExtOps (SM N : Type) [Magma SM] where
 
   -- The squaring map on `SM`. In the blueprint this is `S`
   S : SM → SM
-  L : SM → SM → SM
-  R : SM → SM → SM
+  L : SM → Equiv SM SM
+  R : SM → Equiv SM SM
 
   -- A complement squaring map from `N` to `SM`. Since we don't have a
   -- magma operation for `N` yet, we will wait for the magma operation construction
@@ -87,12 +89,12 @@ structure ExtOps (SM N : Type) [Magma SM] where
   -- In the blueprint this is `◇'`
   rest_map : N → N → Sum SM N
 
-  L' : SM → N → N
+  L' : SM → Equiv N N
 
-  R' : SM → N → N
+  R' : SM → Equiv N N
 
 
-
+#print Equiv
 
 structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
 
@@ -100,17 +102,6 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
   squaring_prop_SM : ∀ x : SM, S x = x ◇ x
   left_map_SM : ∀ x y : SM, L x y = x ◇ y
   right_map_SM : ∀ x y : SM, R x y = y ◇ x
-
-  -- `sqN` extends `sqM`. This fairly trivial from type theory
-  sqN_extends_sqM : is_right_extension_of S' (combine S S')
-
-  L_inv : (a : SM) → Invertible (L a)
-  -- The left mult operation is invertible
-  L'_inv : (a : SM) → Invertible (L' a)
-
-  R_inv : (a : SM) → Invertible (R a)
-  -- The right mult operation is invertible
-  R'_inv : (a : SM) →  Invertible (R' a)
 
   -- The small magma `SM` satisfies equation 1729
   SM_sat_1729 : Equation1729 SM
@@ -121,7 +112,7 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
   axiom_22 : ∀ a : SM, ∀ x, R' a x ≠ x
 
   -- axiom 3
-  axiom_3 : ∀ x y, ∀ a, R' a x = y → (L' (S' y) (L' ((R_inv (S' x)).inv a) y)) = x
+  axiom_3 : ∀ x y, ∀ a, R' a x = y → (L' (S' y) (L' ((R a).invFun (S' x)) y)) = x
   -- axiom 4
   axiom_4 : ∀ x : N, (L' (S' x) (L' (S' x) x)) = x
 
@@ -132,7 +123,7 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
 
   -- axiom 6
   axiom_6 : ∀ y : N, ∀ a : SM,
-    rest_map (R' a y) y = Sum.inl ((L_inv (S' y)).inv a)
+    rest_map (R' a y) y = Sum.inl ((L a).invFun (S' y))
 
 
 
