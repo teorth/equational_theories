@@ -79,10 +79,9 @@ instance N_order : PartialOrder N where
   le_antisymm x y hxy hyx := FreeGroup.toWord_injective <|
     List.IsSuffix.eq_of_length_le hxy (List.IsSuffix.length_le hyx)
 
-instance : LocallyFiniteOrderBot N where
-  finsetIic x := (List.map (FreeGroup.mk) x.toWord.tails).toFinset
-  finsetIio x := (List.map (FreeGroup.mk) x.toWord.tails.tail).toFinset
-  finset_mem_Iic a x := by
+instance : LocallyFiniteOrderBot N := LocallyFiniteOrderBot.ofIic
+  (finsetIic := fun x => (List.map (FreeGroup.mk) x.toWord.tails).toFinset)
+  (mem_Iic := fun a x => by
     simp only [List.mem_toFinset, List.mem_map, List.mem_tails, le_def]
     constructor
     · rintro ⟨a, h, eq⟩
@@ -91,41 +90,7 @@ instance : LocallyFiniteOrderBot N where
       · exact FreeGroup.Red.reduced_infix (FreeGroup.reduced_toWord) h.isInfix
     · intro h
       use x.toWord
-      simp [h, FreeGroup.mk_toWord]
-  finset_mem_Iio a x := by
-    simp only [List.mem_toFinset, List.mem_map, List.mem_tails, lt_iff_le_and_ne, le_def]
-    cases h : a.toWord
-    case nil => simp_all
-    case cons head tail =>
-      simp only [List.tails, List.tail_cons, List.mem_tails, ne_eq]
-      constructor
-      · rintro ⟨b, h', eq⟩
-        have h'' : b <:+ head :: tail := h'.trans (List.suffix_cons ..)
-        constructor
-        · rw [← eq, FreeGroup.toWord_mk, FreeGroup.Red.reduced_iff_eq_reduce.mp]
-          · exact h''
-          · exact FreeGroup.Red.reduced_infix (FreeGroup.reduced_toWord) (h ▸ h''.isInfix)
-        · intro eq'
-          have : x.norm < x.norm := by
-            calc x.norm
-            _ = (FreeGroup.mk b).norm := by rw [eq]
-            _ ≤ b.length := FreeGroup.norm_mk_le
-            _ ≤ tail.length := h'.length_le
-            _ < tail.length + 1 := Nat.lt_add_one _
-            _ = (head :: tail).length := List.length_cons head tail
-            _ = a.toWord.length := by rw [h]
-            _ = x.norm := by rw [eq',FreeGroup.norm]
-          exact (lt_self_iff_false (FreeGroup.norm x)).mp this
-      · rintro ⟨h', ineq⟩
-        use x.toWord
-        rw [List.suffix_cons_iff] at h'
-        cases h'
-        case h.inl eq =>
-          exfalso
-          apply ineq
-          apply FreeGroup.toWord_injective
-          rw [eq, h]
-        case h.inr h' => simp [h', FreeGroup.mk_toWord]
+      simp [h, FreeGroup.mk_toWord])
 
 /-- the parent of x is defined to be the unique element adjacent to x whose reduced word is shorter, with the junk convention that the parent of the identity is itself -/
 def parent (x : N) : N := FreeGroup.mk x.toWord.tail
