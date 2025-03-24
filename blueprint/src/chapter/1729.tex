@@ -73,12 +73,12 @@ The magma $SM$ is defined as follows:
 
 We now define $N$, as well as some Cayley graph structures on it.
 
-\begin{definition}[Definition of $N$]\label{n-def}\lean{Eq1729.N, Eq1729.N_order, Eq1729.parent} Take $N$ to be the free non-abelian group with a generator $e_a$ for each $a \in SM$, thus $N$ is the set of reduced words using the alphabet $e_a$, $e_a^{-1}$.  Two elements $x,y \in SM$ are said to be \emph{adjacent} if $x = e_a y$ or $y = e_a x$ for some $a \in SM$; this defines a left Cayley graph on $N$.  We make a partial ordering $\leq$ on $N$ by declaring $y \leq x$ if $y$ is a right subword of $x$ (or equivalently, $y$ is on the unique simple path from $1$ to $x$).  For instance, if $a,b,c \in SM$ are distinct, then
+\begin{definition}[Definition of $N$]\label{n-def}\lean{Eq1729.N, Eq1729.N_order, Eq1729.parent}\leanok Take $N$ to be the free non-abelian group with a generator $e_a$ for each $a \in SM$, thus $N$ is the set of reduced words using the alphabet $e_a$, $e_a^{-1}$.  Two elements $x,y \in SM$ are said to be \emph{adjacent} if $x = e_a y$ or $y = e_a x$ for some $a \in SM$; this defines a left Cayley graph on $N$.  We make a partial ordering $\leq$ on $N$ by declaring $y \leq x$ if $y$ is a right subword of $x$ (or equivalently, $y$ is on the unique simple path from $1$ to $x$).  For instance, if $a,b,c \in SM$ are distinct, then
   $$ 1 \leq e_c \leq e_b^{-1} e_c \leq e_a e_b^{-1} e_c.$$
 If $x \in N$ is not the identity, we define the \emph{parent} of $x$ to be the unique element $y \in N$ adjacent to $x$ whose reduced word is shorter.  For instance, the parent of $e_a e_b^{-1} e_c$ is $e_b^{-1} e_c$.
 \end{definition}
 
-\begin{lemma}[Basic properties of $N$]\label{n-prop}\uses{n-def}\lean{Eq1729.N_countable, Eq1729.N_order}  $N$ is countable, and $\leq$ is a partial ordering.
+\begin{lemma}[Basic properties of $N$]\label{n-prop}\uses{n-def}\lean{Eq1729.N_countable, Eq1729.N_order}\leanok  $N$ is countable, and $\leq$ is a partial ordering.
 \end{lemma}
 
 \begin{proof} Routine verification.
