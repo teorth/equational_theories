@@ -9,6 +9,13 @@ namespace Eq1729
 
 def fill (D: Finset N) : Set N := { y | ∃ (n : ℤ) (x : N), y = (e 0)^n * x ∧ x ∈ D }
 
+@[simp]
+lemma fill_empty : fill Finset.empty = ∅ := by
+  ext y
+  simp only [fill, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false, not_exists, not_and]
+  intros
+  exact Finset.not_mem_empty _
+
 class PartialSolution where
   L₀' : N → N
   op : N → N → M
@@ -27,7 +34,7 @@ class PartialSolution where
   axiom_P (x y z : N) (h: (x,y,z) ∈ I) : x ∉ Dom_S' ∧ (z,x) ∉ Dom_op ∧ z ≠ x ∧ (∀ a : SM, z ≠ R' a x)
 
 /-- Not sure if this is the canonical way to proceed, but in order to impose a partial order on PartialSolution I had to first define the LE instance. -/
-instance PartialSolution_le : LE PartialSolution  := {
+instance PartialSolution_LE : LE PartialSolution  := {
   le := by
     intro sol1 sol2
     exact sol1.Predom_L₀' ⊆ sol2.Predom_L₀' ∧ sol1.Dom_op ⊆ sol2.Dom_op ∧ sol1.Dom_S' ⊆ sol2.Dom_S' ∧ ∀ x, x ∈ fill sol1.Predom_L₀' → sol1.L₀' x = sol2.L₀' x ∧ ∀ z ∈ sol1.Dom_op, sol1.op z.1 z.2 = sol2.op z.1 z.2 ∧ ∀ x ∈ sol1.Dom_S', sol1.S' x = sol2.S' x
@@ -35,18 +42,56 @@ instance PartialSolution_le : LE PartialSolution  := {
 
 /-- Impose a preorder on solutions using the notion of an extension. -/
 instance PartialSolution_order : Preorder PartialSolution  := {
-  le := PartialSolution_le.le
+  le := PartialSolution_LE.le
   lt := by
     intro sol1 sol2
-    exact PartialSolution_le.le sol1 sol2 ∧ sol1 ≠ sol2
+    exact sol1 ≤ sol2 ∧ sol1 ≠ sol2
   le_refl := sorry
   le_trans := sorry
   lt_iff_le_not_le := sorry
 }
 
 /-- The trivial partial solution. -/
-def TrivialPartialSolution : PartialSolution := by
-  sorry
+def TrivialPartialSolution : PartialSolution := {
+  L₀' := fun _ ↦ 1
+  op := fun _ ↦ fun _ ↦ Sum.inl 0
+  S' := fun _ ↦ 0
+  I := Finset.empty
+  Predom_L₀' := Finset.empty
+  Dom_op := Finset.empty
+  Dom_S' := Finset.empty
+  axiom_i'' := by
+    intro _ _
+    simp only [fill_empty, Set.mem_empty_iff_false, IsEmpty.forall_iff]
+  axiom_S := by
+    intro _ _ h
+    contrapose! h
+    exact Finset.not_mem_empty _
+  axiom_iii'' := by
+    intro _ _ _ h
+    contrapose! h
+    exact Finset.not_mem_empty _
+  axiom_iv'' := by
+    intro _ h
+    contrapose! h
+    exact Finset.not_mem_empty _
+  axiom_v'' := by
+    intro _ h
+    contrapose! h
+    exact Finset.not_mem_empty _
+  axiom_vi'' := by
+    intro _ _ h
+    contrapose! h
+    exact Finset.not_mem_empty _
+  axiom_vii'' := by
+    intro _ _ _ _ h
+    contrapose! h
+    exact Finset.not_mem_empty _
+  axiom_P := by
+    intro _ _ _ h
+    contrapose! h
+    exact Finset.not_mem_empty _
+}
 
 lemma use_chain (sol : ℕ → PartialSolution) (hsol: Monotone sol) (htotal_L₀' : ∀ x : N, ∃ n : ℕ, x ∈ fill (sol n).Predom_L₀') (htotal_S' : ∀ x : N, ∃ n : ℕ, x ∈ (sol n).Dom_S') (htotal_op : ∀ (x y : N), ∃ n : ℕ, (x,y) ∈ (sol n).Dom_op) : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by sorry
 
