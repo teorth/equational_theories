@@ -60,10 +60,22 @@ abbrev e (a:SM) := FreeGroup.of a
 
 def adjacent (x y : N) := ∃ a, x = (e a) * y ∨ y = (e a) * x
 
-/- Impose an order on N: y ≤ x if y is a right subword of x  (or equivalently, y is on the unique simple path from
-1 to x).  -/
+/-- Impose an order on N: y ≤ x if y is a right subword of x  (or equivalently, y is on the unique simple path from
+1 to x).  The spelling may not be optimal. -/
+instance N_LE : LE N := {
+  le := by
+    intro x y
+    exact ∃ z, x = z * y ∧ x.norm = z.norm + y.norm
+}
 
-instance N_order : PartialOrder N  := by sorry
+instance N_order : PartialOrder N  := {
+  le := N_LE.le
+  lt := sorry
+  le_refl := sorry
+  le_trans := sorry
+  le_antisymm := sorry
+  lt_iff_le_not_le := sorry
+}
 
 /-- the parent of x is defined to be the unique element adjacent to x whose reduced word is shorter, with the junk convention that the parent of the identity is itself -/
 def parent (x : N) : N := by sorry
