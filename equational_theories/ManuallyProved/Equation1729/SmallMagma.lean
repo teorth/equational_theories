@@ -4,6 +4,7 @@ import Mathlib.Data.ZMod.Defs
 import Mathlib.Data.Countable.Defs
 import Mathlib.Data.DFinsupp.Encodable
 
+import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
 import equational_theories.Equations.All
 import equational_theories.ManuallyProved.Equation1729.ExtensionTheorem
 
@@ -64,27 +65,52 @@ abbrev e (a:SM) := FreeGroup.of a
 
 def adjacent (x y : N) := ∃ a, x = (e a) * y ∨ y = (e a) * x
 
-/-- Impose an order on N: y ≤ x if y is a right subword of x  (or equivalently, y is on the unique simple path from
-1 to x).  The spelling may not be optimal. -/
-instance N_LE : LE N := {
-  le := by
-    intro x y
-    exact ∃ z, x = z * y ∧ x.norm = z.norm + y.norm
-}
+/-- Impose an order on N: x ≤ y if x is a right subword of y  (or equivalently, x is on the unique
+simple path from 1 to y).  The spelling may not be optimal. -/
+instance N_LE : LE N where
+  le x y := x.toWord <:+ y.toWord
 
-instance N_order : PartialOrder N  := {
+theorem le_def (x y : N) : (x ≤ y) = (x.toWord <:+ y.toWord) := rfl
+
+instance N_order : PartialOrder N where
   le := N_LE.le
-  lt := by
-    intro x y
-    exact x ≤ y ∧ x ≠ y
-  le_refl := sorry
-  le_trans := sorry
-  le_antisymm := sorry
-  lt_iff_le_not_le := sorry
-}
+  le_refl _ := List.suffix_rfl
+  le_trans _ _ _ := List.IsSuffix.trans
+  le_antisymm x y hxy hyx := FreeGroup.toWord_injective <|
+    List.IsSuffix.eq_of_length_le hxy (List.IsSuffix.length_le hyx)
 
 /-- the parent of x is defined to be the unique element adjacent to x whose reduced word is shorter, with the junk convention that the parent of the identity is itself -/
-def parent (x : N) : N := FreeGroup.mk x.toWord.dropLast
+def parent (x : N) : N := FreeGroup.mk x.toWord.tail
+
+theorem parent_toWord (x : N) : (parent x).toWord = x.toWord.tail := by
+  rw [parent, FreeGroup.toWord_mk, FreeGroup.Red.reduced_iff_eq_reduce.mp]
+  exact FreeGroup.Red.reduced_infix (FreeGroup.reduced_toWord) (List.tail_suffix _).isInfix
+
+theorem parent_le (x : N) : parent x ≤ x := by
+  rw [le_def, parent_toWord]
+  exact List.tail_suffix _
+
+theorem parent_adjacent (x : N) (h : x ≠ 1) : adjacent x (parent x) := by
+  cases h' : x.toWord
+  case nil =>
+    simp only [FreeGroup.toWord_eq_nil_iff] at h'
+    exact (h h').elim
+  case cons head tail =>
+    have eq : x = FreeGroup.mk [head] * parent x := by
+      rw [← FreeGroup.mk_toWord (x := parent x), parent_toWord, h', ← FreeGroup.mk_toWord (x := x),
+      h']
+      rfl
+    nth_rw 1 [eq]
+    rcases head with ⟨a,⟨⟩⟩
+    · use a
+      right
+      have eq_inv : FreeGroup.mk [(a, false)] = (e a)⁻¹ := by
+        simp only [e, FreeGroup.of, FreeGroup.inv_mk]
+        rfl
+      simp [eq_inv]
+    · use a
+      left
+      rfl
 
 /- Right-multiplication by an element of SM on N is defined via the group action. -/
 
