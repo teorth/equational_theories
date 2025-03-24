@@ -30,11 +30,11 @@ class PartialSolution where
   Dom_S' : Finset N
   axiom_i'' (x y : N) (h: x ∈ fill Predom_L₀') (h' : L₀' x = y) (n:ℤ) : L₀' ((e 0)^n * x) = (e 0)^n * y ∧ L₀' ((e 0)^n * y) = (e 0)^(n-1) * x
   axiom_S (x y : N) (h : x ∈ Dom_S') (h' : y ≤ x) : y ∈ Dom_S'
-  axiom_iii'' (x y : N) (a : SM) (hx: x ∈ Dom_S') (hy: y ∈ Dom_S') (h: R' a x = y) : R' (S (a - S' x)) y ∈ fill Predom_L₀' ∧ (R' (S (S' x)) $ R'_inv (S' x) $ L₀' $ R' (S (a - S' x)) y ) ∈ fill Predom_L₀' ∧ (R'_inv (S' x) $ L₀' $ R' (S (S' x)) $ R'_inv (S' x) $ L₀' $ R' (S (a - S' x)) y ) = x
-  axiom_iv'' (x : N) (h : x ∈ Dom_S') : R' (S (S' x)) x ∈ fill Predom_L₀' ∧ (R' (S (S' x)) $ R'_inv (S' x) $ L₀' $ R' (S (S' x)) x) ∈ fill Predom_L₀' ∧ (R'_inv (S' x) $ L₀' $ R' (S (S' x)) $ R'_inv (S' x) $ L₀' $ R' (S (S' x)) x) = x
+  axiom_iii'' (x y : N) (a : SM) (hx: x ∈ Dom_S') (hy: y ∈ Dom_S') (h: R' a x = y) : R' (S (a - S' x)) y ∈ fill Predom_L₀' ∧ (R' (S (S' x)) $ (R' (S' x)).symm $ L₀' $ R' (S (a - S' x)) y ) ∈ fill Predom_L₀' ∧ ((R' (S' x)).symm $ L₀' $ R' (S (S' x)) $ (R' (S' x)).symm $ L₀' $ R' (S (a - S' x)) y ) = x
+  axiom_iv'' (x : N) (h : x ∈ Dom_S') : R' (S (S' x)) x ∈ fill Predom_L₀' ∧ (R' (S (S' x)) $ (R' (S' x)).symm $ L₀' $ R' (S (S' x)) x) ∈ fill Predom_L₀' ∧ ((R' (S' x)).symm $ L₀' $ R' (S (S' x)) $ (R' (S' x)).symm $ L₀' $ R' (S (S' x)) x) = x
   axiom_v'' (x : N) (h : (x,x) ∈ Dom_op) : x ∈ Dom_S' ∧ Sum.inl (S' x) = op x x
   axiom_vi'' (y : N) (a : SM) (h: (R' a y, y) ∈ Dom_op) : y ∈ Dom_S' ∧ Sum.inl ( a - S' y ) = op (R' a y) y
-  axiom_vii'' (x y : N) (h : x ≠ y) (h' : ∀ a : SM, x ≠ R' a y) (hop: (x,y) ∈ Dom_op) : ∃ z : N, op x y = Sum.inr z ∧ ((x,y,z) ∈ I ∨ ((z,x) ∈ Dom_op ∧ (R' 0 $ R' (S' x) $ y) ∈ fill Predom_L₀' ∧ op z x = Sum.inr (R'_inv (S (S' x)) $ L₀' $ R' 0 $ R' (S' x) $ y)))
+  axiom_vii'' (x y : N) (h : x ≠ y) (h' : ∀ a : SM, x ≠ R' a y) (hop: (x,y) ∈ Dom_op) : ∃ z : N, op x y = Sum.inr z ∧ ((x,y,z) ∈ I ∨ ((z,x) ∈ Dom_op ∧ (R' 0 $ R' (S' x) $ y) ∈ fill Predom_L₀' ∧ op z x = Sum.inr ((R' (S (S' x))).symm $ L₀' $ R' 0 $ R' (S' x) $ y)))
   axiom_P (x y z : N) (h: (x,y,z) ∈ I) : x ∉ Dom_S' ∧ (z,x) ∉ Dom_op ∧ z ≠ x ∧ (∀ a : SM, z ≠ R' a x)
 
 /-- Not sure if this is the canonical way to proceed, but in order to impose a partial order on PartialSolution I had to first define the LE instance. -/
@@ -50,9 +50,6 @@ lemma PartialSolution_refl (sol : PartialSolution) : sol ≤ sol := by
 /-- Impose a preorder on solutions using the notion of an extension. -/
 instance PartialSolution_order : Preorder PartialSolution  := {
   le := PartialSolution_LE.le
-  lt := by
-    intro sol1 sol2
-    exact sol1 ≤ sol2 ∧ ¬ sol2 ≤ sol1
   le_refl := PartialSolution_refl
   le_trans := by
     intro sol1 sol2 sol3 h h'
@@ -66,7 +63,6 @@ instance PartialSolution_order : Preorder PartialSolution  := {
       rw [h.2.2.2.2.1 z hz, h'.2.2.2.2.1 z (h.2.1 hz)]
     intro x hx
     rw [h.2.2.2.2.2 x hx, h'.2.2.2.2.2 x (h.2.2.1 hx)]
-  lt_iff_le_not_le := fun a b ↦ Eq.to_iff rfl
 }
 
 /-- The trivial partial solution. -/

@@ -71,7 +71,7 @@ def is_right_extension_of (f' : β → γ) (f : α ⊕ β → γ) : Prop :=
 
 structure ExtOps (SM N : Type) [Magma SM] where
   -- The extended magma
-  EM : SM ⊕ N
+  -- EM : SM ⊕ N  -- it seems unnecesary to specify an element of SM ⊕ N, and this component caused problems in applications
 
   -- The squaring map on `SM`. In the blueprint this is `S`
   S : SM → SM

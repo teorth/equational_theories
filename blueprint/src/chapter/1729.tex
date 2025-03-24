@@ -93,7 +93,7 @@ We will define the right multiplication operators $R'_a: N \to N$ using the grou
   for all $a \in SM$ and $x \in N$.
 \end{definition}
 
-\begin{lemma}[Basic properties of $R'_a$]\label{ra-prop}\uses{ra-defn}\lean{Eq1729.R'_bijective, Eq1729.R'_axiom_iia, Eq1729.R'_axiom_iib}  The operators $R'_a$ are bijective and obey axiom (ii).
+\begin{lemma}[Basic properties of $R'_a$]\label{ra-prop}\uses{ra-defn}\lean{Eq1729.R'_axiom_iia, Eq1729.R'_axiom_iib}\leanok  The operators $R'_a$ are bijective and obey axiom (ii).
 \end{lemma}
 
 \begin{proof}\leanok Routine verification.
@@ -112,14 +112,14 @@ Furthermore, from the $a=0$ case of \Cref{lys} we must also have the axiom
 
 Conversely, we have
 
-\begin{lemma}[Using $L'_0$ to construct $L'_a$]\label{l0-la}\lean{Eq1729.L', Eq1729.L'_bijective,Eq1729.L'_0_eq_L₀',Eq1729.L'_inv}\leanok  Suppose we have a bijection $L'_0: N \to N$ that obeys axiom (i'), and then define $L'_a$ for all $a \in SM$ by the formula \eqref{la0}.  Then this recovers $L'_0$ when $a=0$ (to formalize this it may be convenient to give $L'_0$ and $L'_a$ distinct names), and the $L'_a$ are all bijections and obey axiom (i).  Furthermore, we have
+\begin{lemma}[Using $L'_0$ to construct $L'_a$]\label{l0-la}\lean{Eq1729.L',Eq1729.L'_0_eq_L₀'}\leanok  Suppose we have a bijection $L'_0: N \to N$ that obeys axiom (i'), and then define $L'_a$ for all $a \in SM$ by the formula \eqref{la0}.  Then this recovers $L'_0$ when $a=0$ (to formalize this it may be convenient to give $L'_0$ and $L'_a$ distinct names), and the $L'_a$ are all bijections and obey axiom (i).  Furthermore, we have
 \begin{equation}\label{la1}
   (L'_a)^{-1} := (R'_{2a})^{-1} L'_0 R'_0 R'_{a}
 \end{equation}
 for all $a \in SM$.
 \end{lemma}
 
-\begin{proof} Routine verification.
+\begin{proof}\leanok Routine verification.
 \end{proof}
 
 We now write the other remaining axioms in terms of $L'_0$ rather than $L'_a$ using \Cref{la0}, \Cref{la1}, \Cref{ra-def}, and the magma law on $SM$:
