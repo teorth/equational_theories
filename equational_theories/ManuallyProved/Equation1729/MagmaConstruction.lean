@@ -26,8 +26,23 @@ class PartialSolution where
   axiom_vii'' (x y : N) (h : x ≠ y) (h' : ∀ a : SM, x ≠ R' a y) (hop: (x,y) ∈ Dom_op) : ∃ z : N, op x y = Sum.inr z ∧ ((x,y,z) ∈ I ∨ ((z,x) ∈ Dom_op ∧ (R' 0 $ R' (S' x) $ y) ∈ fill Predom_L₀' ∧ op z x = Sum.inr (R'_inv (S (S' x)) $ L₀' $ R' 0 $ R' (S' x) $ y)))
   axiom_P (x y z : N) (h: (x,y,z) ∈ I) : x ∉ Dom_S' ∧ (z,x) ∉ Dom_op ∧ z ≠ x ∧ (∀ a : SM, z ≠ R' a x)
 
-/-- Impose a partial order on solutions using the notion of an extension. -/
-instance PartialSolution_order : PartialOrder PartialSolution  := by sorry
+/-- Not sure if this is the canonical way to proceed, but in order to impose a partial order on PartialSolution I had to first define the LE instance. -/
+instance PartialSolution_le : LE PartialSolution  := {
+  le := by
+    intro sol1 sol2
+    exact sol1.Predom_L₀' ⊆ sol2.Predom_L₀' ∧ sol1.Dom_op ⊆ sol2.Dom_op ∧ sol1.Dom_S' ⊆ sol2.Dom_S' ∧ ∀ x, x ∈ fill sol1.Predom_L₀' → sol1.L₀' x = sol2.L₀' x ∧ ∀ z ∈ sol1.Dom_op, sol1.op z.1 z.2 = sol2.op z.1 z.2 ∧ ∀ x ∈ sol1.Dom_S', sol1.S' x = sol2.S' x
+}
+
+/-- Impose a preorder on solutions using the notion of an extension. -/
+instance PartialSolution_order : Preorder PartialSolution  := {
+  le := PartialSolution_le.le
+  lt := by
+    intro sol1 sol2
+    exact PartialSolution_le.le sol1 sol2 ∧ sol1 ≠ sol2
+  le_refl := sorry
+  le_trans := sorry
+  lt_iff_le_not_le := sorry
+}
 
 /-- The trivial partial solution. -/
 def TrivialPartialSolution : PartialSolution := by
