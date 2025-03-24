@@ -167,6 +167,52 @@ theorem parent_adjacent (x : N) (h : x ≠ 1) : adjacent x (parent x) := by
       left
       rfl
 
+theorem adjacent_comm (x y : N) : adjacent x y ↔ adjacent y x := exists_congr (by tauto)
+
+theorem parent_of_adjacent (x y : N) : adjacent x y → x = parent y ∨ y = parent x := by
+  unfold adjacent
+  rintro ⟨a, h⟩
+  wlog l : x = e a * y generalizing x y
+  · cases h
+    · tauto
+    case intro.inr.inr h => exact or_comm.mp (this y x (.inl h) h)
+  cases h : y.toWord
+  case nil =>
+    right
+    simp only [FreeGroup.toWord_eq_nil_iff] at h
+    rw [l,h]
+    simp only [parent, mul_one, FreeGroup.toWord_of, List.tail_cons]
+    rfl
+  case cons head tail =>
+    by_cases eq : head = ⟨a, false⟩
+    · left
+      have eq' : y = FreeGroup.mk [head] * parent y := by
+        rw [← FreeGroup.mk_toWord (x := parent y), parent_toWord, h, ← FreeGroup.mk_toWord (x := y),
+        h]
+        rfl
+      rw [l]
+      nth_rw 1 [eq']
+      have eq_inv : FreeGroup.mk [head] = (e a)⁻¹ := by
+        simp only [eq, e, FreeGroup.of, FreeGroup.inv_mk]
+        rfl
+      simp [eq_inv]
+    · right
+      have eq' : x.toWord = (a, true) :: y.toWord := by
+        rw [l, FreeGroup.toWord_mul, FreeGroup.Red.reduced_iff_eq_reduce.mp]
+        · rfl
+        · rw [h]
+          apply FreeGroup.Red.reduced_cons.mpr
+          rw [← h]
+          simp only [FreeGroup.reduced_toWord, and_true]
+          cases head
+          simp only [Bool.not_true, Bool.false_eq, not_and, Bool.not_eq_false]
+          intro eq'
+          simpa [eq'] using eq
+      apply FreeGroup.toWord_injective
+      simp [parent_toWord, eq']
+
+
+
 /- Right-multiplication by an element of SM on N is defined via the group action. -/
 
 abbrev R' (a:SM) (x:N) := (e a) * x
