@@ -107,7 +107,36 @@ def TrivialPartialSolution : PartialSolution := {
     exact Finset.not_mem_empty _
 }
 
-lemma use_chain (sol : ℕ → PartialSolution) (hsol: Monotone sol) (htotal_L₀' : ∀ x : N, ∃ n : ℕ, x ∈ fill (sol n).Predom_L₀') (htotal_S' : ∀ x : N, ∃ n : ℕ, x ∈ (sol n).Dom_S') (htotal_op : ∀ (x y : N), ∃ n : ℕ, (x,y) ∈ (sol n).Dom_op) : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by sorry
+lemma use_chain (sol : ℕ → PartialSolution) (hsol: Monotone sol) (htotal_L₀' : ∀ x : N, ∃ n : ℕ, x ∈ fill (sol n).Predom_L₀') (htotal_S' : ∀ x : N, ∃ n : ℕ, x ∈ (sol n).Dom_S') (htotal_op : ∀ (x y : N), ∃ n : ℕ, (x,y) ∈ (sol n).Dom_op) : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by
+  let S' (x:N) := (sol (Nat.find (htotal_S' x))).S' x
+  have S'_lim (x:N) : ∀ᶠ n in Filter.atTop, (sol n).S' x = S' x := by
+    apply Filter.Eventually.mono (Filter.eventually_ge_atTop (Nat.find (htotal_S' x))) _
+    intro n hn
+    replace hn := hsol hn
+    exact (hn.2.2.2.2.2 x (Nat.find_spec (htotal_S' x))).symm
+  let op (x y:N) := (sol (Nat.find (htotal_op x y))).op x y
+  have op_lim (x y:N) : ∀ᶠ n in Filter.atTop, (sol n).op x y = op x y := by
+    apply Filter.Eventually.mono (Filter.eventually_ge_atTop (Nat.find (htotal_op x y))) _
+    intro n hn
+    replace hn := hsol hn
+    exact (hn.2.2.2.2.1 (x,y) (Nat.find_spec (htotal_op x y))).symm
+  classical -- didn't want to deal with a Decidable issue
+  let L₀' (x:N) := (sol (Nat.find (htotal_L₀' x))).L₀' x
+  have L₀'_lim (x:N) : ∀ᶠ n in Filter.atTop, (sol n).L₀' x = L₀' x := by
+    apply Filter.Eventually.mono (Filter.eventually_ge_atTop (Nat.find (htotal_L₀' x))) _
+    intro n hn
+    replace hn := hsol hn
+    exact (hn.2.2.2.1 x (Nat.find_spec (htotal_L₀' x))).symm
+  apply reduce_to_new_axioms
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  sorry
 
 lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol' ≥ sol ∧ x ∈ fill sol'.Predom_L₀' := by sorry
 

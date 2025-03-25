@@ -301,7 +301,7 @@ abbrev axiom_vi' (S': N → SM) (op: N → N → M) := ∀ (y : N) (a : SM), op 
 
 abbrev axiom_vii' (S': N → SM) (L₀' : N → N) (op: N → N → M) := ∀ x y : N, x ≠ y → (∀ a : SM, x ≠ R' a y) → ∃ z : N, op x y = Sum.inr z ∧ op z x = Sum.inr ((R' (S (S' x))).symm $ L₀' $ R' 0 $ R' (S' x) $ y)
 
-lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} (hbij: Function.Bijective L₀') (h_i': axiom_i' L₀') (h_iii': axiom_iii' S' L₀') (h_iv': axiom_iv' S' L₀') (h_v: axiom_v S' op) (h_vi': axiom_vi' S' op) (h_vii': axiom_vii' S' L₀' op) : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by
+lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} (h_i': axiom_i' L₀') (h_iii': axiom_iii' S' L₀') (h_iv': axiom_iv' S' L₀') (h_v: axiom_v S' op) (h_vi': axiom_vi' S' op) (h_vii': axiom_vii' S' L₀' op) : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by
   suffices : ExtOpsWithProps SM N
   . exact ⟨ M, extMagmaInst this, ExtMagma_sat_eq1729 this, ExtMagma_unsat_eq817 this ⟩
   exact
