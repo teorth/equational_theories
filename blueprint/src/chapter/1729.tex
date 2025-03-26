@@ -143,11 +143,11 @@ We will again use a greedy construction for this, but with some modifications.  
 $$ L'_0 x = y$$
 for some $x,y \in N$ would automatically imply that
 \begin{equation}\label{itero}
- L'_0 R'_0^n x = R'_0^n y
+ L'_0 (R'_0)^n x = (R'_0)^n y
 \end{equation}
 and also
 \begin{equation}\label{itero-2}
-  L'_0 R'_0^n y = R'_0^{n-1} x
+  L'_0 (R'_0)^n y = (R'_0)^{n-1} x
 \end{equation}
 for all $n \in \Z$.  Thus, $L'_0$ becomes defined on two right cosets $\langle e_0 \rangle x$, $\langle e_0 \rangle y$ of $N$, where $\langle e_0 \rangle := \{ e_0^n: n \in \Z\}$ is an infinite cyclic subgroup of $N$.  In general, we will require that $L'_0$ is defined on a finite union of cosets of $\langle e_0\rangle$.
 
@@ -195,10 +195,10 @@ Now we seek to enlarge a partial solution. We first make an easy observation:
 \begin{proposition}[Enlarging $L'_0$]\label{enlarge-l0}\lean{Eq1729.enlarge_L₀'}\leanok  Suppose one has a partial solution in which $L'_0 x$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $L'_0 x$ is now defined.
 \end{proposition}
 
-\begin{proof}  By axiom (i''), $L'_0 R'_0^n x$ is undefined for every integer $n$.  Let $d = E_m$ be a generator of $SM$ that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution; such a $d$ exists due to the finiteness hypotheses.  We set $L'_0 x := e_d$, and then extend by \Cref{itero}, \Cref{itero-2}, thus
-$$L'_0 R'_0^n x := R'_0^n e_d$$
+\begin{proof}  By axiom (i''), $L'_0 (R'_0)^n x$ is undefined for every integer $n$.  Let $d = E_m$ be a generator of $SM$ that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution; such a $d$ exists due to the finiteness hypotheses.  We set $L'_0 x := e_d$, and then extend by \Cref{itero}, \Cref{itero-2}, thus
+$$L'_0 (R'_0)^n x := (R'_0)^n e_d$$
 and
-$$L'_0 R'_0^n e_d := R'_0^{n-1} x.$$
+$$L'_0 (R'_0)^n e_d := (R'_0)^{n-1} x.$$
 Because of the new nature of $d$, no collisions in the partial function $L_0$ are created by this operation.  It is then easy to check that axiom (i'') is preserved by this operation, whereas none of the other axioms (S), (iii''), (iv''), (v''), (vi''), (vii''), (P) are affected by this extension.
 \end{proof}
 
@@ -213,9 +213,9 @@ Let $d_0, d_1, d_2 \in SM$ be distinct generators $E_{n_0}, E_{n_1}, E_{n_2}$ of
 $$ L'_0 R'_{2d_0} x := e_{d_1}$$
 $$ L'_0 R'_{2e_{d_0}} (R'_{S'x})^{-1} e_{d_1} := e_{d_0} x$$
 and then extend these choices using \Cref{itero}, \Cref{itero-2} to recover axiom (i'), thus for instance
-$$ L'_0 R'_0^n e_{2d_0} x := R'_0^n e_{d_1}$$
+$$ L'_0 (R'_0)^n e_{2d_0} x := (R'_0)^n e_{d_1}$$
 and
-$$ L'_0 R'_0^n e_{d_1} x := R'_0^{n-1} e_{2d_0}$$
+$$ L'_0 (R'_0)^n e_{d_1} x := (R'_0)^{n-1} e_{2d_0}$$
 for all $n \in \Z$.  To retain axiom (iii''), we perform the following actions:
 \begin{itemize}
 \item If $y_0$ is undefined, do nothing.
