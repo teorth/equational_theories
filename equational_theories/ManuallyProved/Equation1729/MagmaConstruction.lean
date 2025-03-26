@@ -127,9 +127,7 @@ lemma IsChain.IsDirected {α: Type} [Preorder α] {s: Set α} (h: IsChain (fun x
 
 lemma use_chain {sols : Set PartialSolution} (hchain: IsChain (fun (sol1 sol2 : PartialSolution) => sol1 ≤ sol2) sols ) (hnon: Nonempty sols) (htotal_L₀' : ∀ x : N, ∃ sol ∈ sols, x ∈ fill sol.Predom_L₀') (htotal_S' : ∀ x : N, ∃ sol ∈ sols, x ∈ sol.Dom_S') (htotal_op : ∀ (x y : N), ∃ sol ∈ sols, (x,y) ∈ sol.Dom_op) : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by
   let f := Filter.atTop (α := sols)
-  have fnon : f.NeBot := by
-    rw [Filter.atTop_neBot_iff]
-    exact ⟨ hnon, IsChain.IsDirected hchain ⟩
+  have fnon : f.NeBot := Filter.atTop_neBot_iff.mpr ⟨ hnon, IsChain.IsDirected hchain ⟩
 
   let S' (x:N) := (Set.choose (htotal_S' x)).1.S' x
   have S'_lim (x:N) : ∀ᶠ sol in f, x ∈ sol.1.Dom_S' ∧ sol.1.S' x = S' x := by
