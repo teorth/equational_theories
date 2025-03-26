@@ -111,51 +111,42 @@ def TrivialPartialSolution : PartialSolution := {
 lemma use_chain (sol : ℕ → PartialSolution) (hsol: Monotone sol) (htotal_L₀' : ∀ x : N, ∃ n : ℕ, x ∈ fill (sol n).Predom_L₀') (htotal_S' : ∀ x : N, ∃ n : ℕ, x ∈ (sol n).Dom_S') (htotal_op : ∀ (x y : N), ∃ n : ℕ, (x,y) ∈ (sol n).Dom_op) : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by
   let f := Filter.atTop (α := ℕ)
   let S' (x:N) := (sol (Nat.find (htotal_S' x))).S' x
-  have S'_lim (x:N) : ∀ᶠ n in f, (sol n).S' x = S' x := by
+  have S'_lim (x:N) : ∀ᶠ n in f, x ∈ (sol n).Dom_S' ∧ (sol n).S' x = S' x := by
     apply Filter.Eventually.mono (Filter.eventually_ge_atTop (Nat.find (htotal_S' x))) _
     intro _ hn
-    exact ((hsol hn).2.2.2.2.2 x (Nat.find_spec (htotal_S' x))).symm
-  have S'_dom_lim (x:N) : ∀ᶠ n in f, x ∈ (sol n).Dom_S' := by
-    apply Filter.Eventually.mono (Filter.eventually_ge_atTop (Nat.find (htotal_S' x))) _
-    intro _ hn
-    exact (hsol hn).2.2.1 (Nat.find_spec (htotal_S' x))
+    exact ⟨ (hsol hn).2.2.1 (Nat.find_spec (htotal_S' x)), ((hsol hn).2.2.2.2.2 x (Nat.find_spec (htotal_S' x))).symm ⟩
   let op (x y:N) := (sol (Nat.find (htotal_op x y))).op x y
-  have op_lim (x y:N) : ∀ᶠ n in f, (sol n).op x y = op x y := by
+  have op_lim (x y:N) : ∀ᶠ n in f, (x,y) ∈ (sol n).Dom_op ∧ (sol n).op x y = op x y := by
     apply Filter.Eventually.mono (Filter.eventually_ge_atTop (Nat.find (htotal_op x y))) _
     intro _ hn
-    exact ((hsol hn).2.2.2.2.1 (x,y) (Nat.find_spec (htotal_op x y))).symm
-  have op_dom_lim (x y:N) : ∀ᶠ n in f, (x,y) ∈ (sol n).Dom_op := by
-    apply Filter.Eventually.mono (Filter.eventually_ge_atTop (Nat.find (htotal_op x y))) _
-    intro _ hn
-    exact (hsol hn).2.1 (Nat.find_spec (htotal_op x y))
+    exact ⟨(hsol hn).2.1 (Nat.find_spec (htotal_op x y)), ((hsol hn).2.2.2.2.1 (x,y) (Nat.find_spec (htotal_op x y))).symm ⟩
   classical -- didn't want to deal with a Decidable issue
   let L₀' (x:N) := (sol (Nat.find (htotal_L₀' x))).L₀' x
-  have L₀'_lim (x:N) : ∀ᶠ n in f, (sol n).L₀' x = L₀' x := by
+  have L₀'_lim (x:N) : ∀ᶠ n in f, x ∈ fill (sol n).Predom_L₀' ∧ (sol n).L₀' x = L₀' x := by
     apply Filter.Eventually.mono (Filter.eventually_ge_atTop (Nat.find (htotal_L₀' x))) _
     intro _ hn
-    exact ((hsol hn).2.2.2.1 x (Nat.find_spec (htotal_L₀' x))).symm
-  have L₀'_dom_lim (x:N) : ∀ᶠ n in f, x ∈ fill (sol n).Predom_L₀' := by
-    apply Filter.Eventually.mono (Filter.eventually_ge_atTop (Nat.find (htotal_L₀' x))) _
-    intro _ hn
-    exact (fill_mono (hsol hn).1) (Nat.find_spec (htotal_L₀' x))
+    exact ⟨(fill_mono (hsol hn).1) (Nat.find_spec (htotal_L₀' x)) , ((hsol hn).2.2.2.1 x (Nat.find_spec (htotal_L₀' x))).symm⟩
   apply @reduce_to_new_axioms S' L₀' op
   . ext x
     apply (Filter.eventually_const (f := f)).mp
-    filter_upwards [L₀'_lim x, L₀'_lim (L₀' x), L₀'_dom_lim x] with n h1 h2 h3
-    simp only [fill, Set.mem_setOf_eq] at h3
-    obtain ⟨ m, y, hx, hy ⟩ := h3
+    filter_upwards [L₀'_lim x, L₀'_lim (L₀' x)] with n h1 h2
+    simp only [fill, Set.mem_setOf_eq] at h1
+    obtain ⟨ m, y, hx, hy ⟩ := h1.1
     change L₀' (L₀' x) = x * (e 0)⁻¹
     have := (sol n).axiom_i'' y ((sol n).L₀' y) hy rfl m
-    rw [←h2, ←h1, hx, this.1, this.2, mul_assoc]
+    rw [←h2.2, ←h1.2, hx, this.1, this.2, mul_assoc]
     congr
     exact zpow_sub_one (e 0) m
   . intro a x y h
     apply (Filter.eventually_const (f := f)).mp
-    filter_upwards [L₀'_lim ((R' (S (a - S' x))) y), L₀'_lim ((R' (S (S' y))) ((R' (a - S' x)).symm (L₀' ((R' (S (a - S' x))) y)))), L₀'_dom_lim ((R' (S (a - S' x))) y), S'_lim x, S'_lim y, S'_dom_lim x, S'_dom_lim y] with n h1 h2 h3 h4 h5 h6 h7
-    have := (sol n).axiom_iii'' x y a h6 h7 h
-    rw [←h2, ←h1, ←h4, ←h5]
-    exact this.2.2
-  . sorry
+    filter_upwards [L₀'_lim ((R' (S (a - S' x))) y), L₀'_lim ((R' (S (S' y))) ((R' (a - S' x)).symm (L₀' ((R' (S (a - S' x))) y)))), S'_lim x, S'_lim y] with n h1 h2 h3 h4
+    rw [←h2.2, ←h1.2, ←h3.2, ←h4.2]
+    exact ((sol n).axiom_iii'' x y a h3.1 h4.1 h).2.2
+  . intro x
+    apply (Filter.eventually_const (f := f)).mp
+    filter_upwards [L₀'_lim ((R' (S (S' x))) x), L₀'_lim ((R' (S (S' x))) ((R' (S' x)).symm (L₀' ((R' (S (S' x))) x)))), S'_lim x] with n h1 h2 h3
+    rw [←h2.2, ←h1.2, ←h3.2]
+    exact ((sol n).axiom_iv'' x h3.1).2.2
   . sorry
   . sorry
   sorry
