@@ -88,7 +88,7 @@ We will define the right multiplication operators $R'_a: N \to N$ using the grou
 
 \begin{definition}[Definition of $R'_a$]\label{ra-defn}\uses{sm-def, n-def}\lean{Eq1729.R'}\leanok We set
   \begin{equation}\label{ra-def}
-    R'_a x := e_a x
+    R'_a x := x e_a
   \end{equation}
   for all $a \in SM$ and $x \in N$.
 \end{definition}
@@ -124,11 +124,11 @@ for all $a \in SM$.
 
 We now write the other remaining axioms in terms of $L'_0$ rather than $L'_a$ using \Cref{la0}, \Cref{la1}, \Cref{ra-def}, and the magma law on $SM$:
 \begin{itemize}
-\item (iii')  If $R'_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $e_{S'y}^{-1} L'_0 e_{2S'y} e_{a - S'x}^{-1} L'_0 e_{2(a - S'x)} y = x$.
-\item (iv')  For all $x \in N$, we have $e_{S'x}^{-1} L'_0 e_{2S'x} e_{S'x}^{-1} L'_0 e_{2S'x} x = x$.
+\item (iii')  If $R'_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $(R'_{S'y})^{-1} L'_0 R'_{2S'y} (R'_{a - S'x})^{-1} L'_0 e_{2(a - S'x)} y = x$.
+\item (iv')  For all $x \in N$, we have $(R'_{S'x})^{-1} L'_0 R'_{2S'x} (R'_{S'x})^{-1} L'_0 R'_{2S'x} x = x$.
 \item (v)  For all $x \in N$, we have $x \op' x = S'x$.
 \item (vi')  For all $y \in N$ and $a \in SM$, we have $e_a y \op' y = a - S'y$.
-\item (vii')  For all $x,y \in N$ with $x \op' y$ not already covered by rules (v) or (v'), we have $x \op' y = z$ for some $z \in N$.  Furthermore, $z \op' x = e_{2S'x}^{-1} L'_0 e_0 e_{S'x} y$.
+\item (vii')  For all $x,y \in N$ with $x \op' y$ not already covered by rules (v) or (v'), we have $x \op' y = z$ for some $z \in N$.  Furthermore, $z \op' x = (R'_{2S'x})^{-1} L'_0 e_0 e_{S'x} y$.
 \end{itemize}
 
 \begin{lemma}[Reduction to new axioms]\label{axiom-reduce}\label{Eq1729.reduce_to_new_axioms}\leanok  Suppose we can find a function $S': N \to SM$, a bijection $L'_0: N \to N$, and an operation $\op': N \times N \to SM \uplus N$ obeying axioms (i'), (iii'), (iv'), (v), (vi'), (vii').  Then there exists a magma obeying 1729 but not 817.
@@ -143,34 +143,34 @@ We will again use a greedy construction for this, but with some modifications.  
 $$ L'_0 x = y$$
 for some $x,y \in N$ would automatically imply that
 \begin{equation}\label{itero}
- L'_0 e_0^n x = e_0^n y
+ L'_0 R'_0^n x = R'_0^n y
 \end{equation}
 and also
 \begin{equation}\label{itero-2}
-  L'_0 e_0^n y = e_0^{n-1} x
+  L'_0 R'_0^n y = R'_0^{n-1} x
 \end{equation}
 for all $n \in \Z$.  Thus, $L'_0$ becomes defined on two right cosets $\langle e_0 \rangle x$, $\langle e_0 \rangle y$ of $N$, where $\langle e_0 \rangle := \{ e_0^n: n \in \Z\}$ is an infinite cyclic subgroup of $N$.  In general, we will require that $L'_0$ is defined on a finite union of cosets of $\langle e_0\rangle$.
 
-In a somewhat similar vein, axiom (vii'), if iterated naively, would mean that a given entry $x \op' y = z$ of the multiplication table could potentially generate an infinite sequence of further entries, which unfortunately do not have as regular a pattern as the iterations \Cref{itero}, \Cref{itero-2} of axiom (i').  So we will need to truncate this iteration by creating an addition category of ``pending'' identities $I[x,y,z]$ of the form ``$z \op' x = e_{2S'x}^{-1} L'_0 e_0 e_{S'x} y$'' for some $x,y,z \in N$, which will be temporarily undefined because $S'x$ is undefined. More precisely,
+In a somewhat similar vein, axiom (vii'), if iterated naively, would mean that a given entry $x \op' y = z$ of the multiplication table could potentially generate an infinite sequence of further entries, which unfortunately do not have as regular a pattern as the iterations \Cref{itero}, \Cref{itero-2} of axiom (i').  So we will need to truncate this iteration by creating an addition category of ``pending'' identities $I[x,y,z]$ of the form ``$z \op' x = (R'_{2S'x})^{-1} L'_0 R'_0 e_{S'x} y$'' for some $x,y,z \in N$, which will be temporarily undefined because $S'x$ is undefined. More precisely,
 
 \begin{definition}[Partial solution]\label{part-sol}\uses{sm-def, n-def}\lean{Eq1729.PartialSolution}\leanok  A \emph{partial solution} $(L'_0, \op', S', {\mathcal I})$ is a collection of the following data:
 \begin{itemize}
   \item A partially defined function $L'_0: N \to N$, defined on a finite union of right cosets of $\langle e_0\rangle$;
   \item A partially defined operation $\op': N \times N \to M$, defined on a finite set;
   \item A partially defined function $S': N \to SM$, defined on a finite set; and
-  \item A finite collection ${\mathcal  I}$ of ``pending identities'' $I[x,y,z]$, which one can think of either as ordered triples of elements $x,y,z \in N$, or as formal strings of the form ``$z \op' x = e_{2S'x}^{-1} L'_0 e_0 e_{S'x} y$'' for some $x,y,z \in N$.
+  \item A finite collection ${\mathcal  I}$ of ``pending identities'' $I[x,y,z]$, which one can think of either as ordered triples of elements $x,y,z \in N$, or as formal strings of the form ``$z \op' x = (R'_{2S'x})^{-1} L'_0 R'_0 R'_{S'x} y$'' for some $x,y,z \in N$.
 \end{itemize}
 
 Furthermore, the following axioms are satisfied:
 \begin{itemize}
   \item (i'')  $L'_0 x$ is defined and equal to $y$, then we have the identities \Cref{itero}, \Cref{itero-2} for all $n\in \Z$.
   \item (S) If $S'x$ is defined for some $x \in N$, then $S'y$ is defined for all $y \leq x$.
-  \item (iii'') If $R'_a x = y$ for some $a \in SM$ and some $x,y \in N$, and $S'x, S'y$ are defined, then $e_{S'y}^{-1} L'_0 e_{2S'y} e_{a-S'x}^{-1} L'_0 e_{2(a-S'x)} y$ is defined and equal to $x$.
-  \item (iv'') If $x \in N$ is such that $S'x$ is defined, then $e_{S'x}^{-1} L'_0 e_{2S'x} e_{S'x}^{-1} L'_0 e_{2S'x} x$ is defined and equal to $x$.
+  \item (iii'') If $R'_a x = y$ for some $a \in SM$ and some $x,y \in N$, and $S'x, S'y$ are defined, then $(R'_{S'y})^{-1} L'_0 R'_{2S'y} (R'_{a-S'x})^{-1} L'_0 R'_{2(a-S'x)} y$ is defined and equal to $x$.
+  \item (iv'') If $x \in N$ is such that $S'x$ is defined, then $(R'_{S'x})^{-1} L'_0 R'_{2S'x} (R'_{S'x})^{-1} L'_0 R'_{2S'x} x$ is defined and equal to $x$.
   \item (v'')  If $x \in N$ and $x \op' x$ is defined, then $S'x$ is defined and equal to $x \op' x$.
-  \item (vi'')  For all $y \in N$ and $a \in SM$, if $e_a y \op' y$ is defined, then $a - S'y$ is defined and equal to $e_a y \op' y$.
-  \item (vii'')  For all $x,y \in N$ and $x$ is not equal to $y$ or $e_a y$ for any $a \in SM$, and $x \op' y$ is defined, then it is equal to some $z \in N$.  Furthermore, either $I[x,y,z]$ is a pending identity, or else $z \op' x$ and $e_{2S'x}^{-1} L'_0 e_0 e_{S'x} y$ are defined and equal to each other.
-  \item (P) If $I[x,y,z]$ is a pending identity, then $x,y,z \in N$, and $Sx$ and $z \op' x$ are undefined.  Furthermore, $z$ is not equal to $x$ or $e_a x$ for any $a \in SM$.
+  \item (vi'')  For all $y \in N$ and $a \in SM$, if $e_a y \op' y$ is defined, then $a - S'y$ is defined and equal to $R'_a y \op' y$.
+  \item (vii'')  For all $x,y \in N$ and $x$ is not equal to $y$ or $R'_a y$ for any $a \in SM$, and $x \op' y$ is defined, then it is equal to some $z \in N$.  Furthermore, either $I[x,y,z]$ is a pending identity, or else $z \op' x$ and $(R'_{2S'x})^{-1} L'_0 R'_0 R'_{S'x} y$ are defined and equal to each other.
+  \item (P) If $I[x,y,z]$ is a pending identity, then $x,y,z \in N$, and $Sx$ and $z \op' x$ are undefined.  Furthermore, $z$ is not equal to $x$ or $R'_a x$ for any $a \in SM$.
 \end{itemize}
 
 We say that one partial solution $(\tilde L'_0, \tilde \op', \tilde S', \tilde {\mathcal I})$ \emph{extends} another if $(L'_0, \op', S',  {\mathcal I})$ if $\tilde L'$ is an extension of $L'_0$, $\tilde \op'$ is an extension of $\op'$, and $\tilde S'$ is an extension of $S'$.  (No constraint is imposed on the final components $\tilde {\mathcal I}, {\mathcal I}$.)  This is a preordering.
@@ -195,10 +195,10 @@ Now we seek to enlarge a partial solution. We first make an easy observation:
 \begin{proposition}[Enlarging $L'_0$]\label{enlarge-l0}\lean{Eq1729.enlarge_L₀'}\leanok  Suppose one has a partial solution in which $L'_0 x$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $L'_0 x$ is now defined.
 \end{proposition}
 
-\begin{proof}  By axiom (i''), $L'_0 e_0^n x$ is undefined for every integer $n$.  Let $d = E_m$ be a generator of $SM$ that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution; such a $d$ exists due to the finiteness hypotheses.  We set $L'_0 x := e_d$, and then extend by \Cref{itero}, \Cref{itero-2}, thus
-$$L'_0 e_0^n x := e_0^n e_d$$
+\begin{proof}  By axiom (i''), $L'_0 R'_0^n x$ is undefined for every integer $n$.  Let $d = E_m$ be a generator of $SM$ that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution; such a $d$ exists due to the finiteness hypotheses.  We set $L'_0 x := e_d$, and then extend by \Cref{itero}, \Cref{itero-2}, thus
+$$L'_0 R'_0^n x := R'_0^n e_d$$
 and
-$$L'_0 e_0^n e_d := e_0^{n-1} x.$$
+$$L'_0 R'_0^n e_d := R'_0^{n-1} x.$$
 Because of the new nature of $d$, no collisions in the partial function $L_0$ are created by this operation.  It is then easy to check that axiom (i'') is preserved by this operation, whereas none of the other axioms (S), (iii''), (iv''), (v''), (vi''), (vii''), (P) are affected by this extension.
 \end{proof}
 
@@ -207,29 +207,29 @@ Next, we provide a tool for enlarging the domain of definition of $S'$:
 \begin{proposition}[Enlarging $S'$]\label{enlarge-S}\lean{Eq1729.enlarge_S'}\leanok  Suppose one has a partial solution in which $S'x$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $S'x$ is now defined.
 \end{proposition}
 
-\begin{proof} By iteration we may assume inductively that $S'y$ is already defined for all $y$ on the unique path in the Cayley graph from $1$ to $x$.  (This hypothesis is vacuous if $x=1$.)  Let $y_0$ be the parent of $x$, that is to say the unique neighbor of $x$ in the path to $1$ (this is only defined for $x \neq 1$), then by axiom (i'') $y_0$ is the unique neighbor for which $S'y_0$ is defined, and we either have $x = e_a y_0$ or $e_a x = y_0$ for some $a \in SM$.
+\begin{proof} By iteration we may assume inductively that $S'y$ is already defined for all $y$ on the unique path in the Cayley graph from $1$ to $x$.  (This hypothesis is vacuous if $x=1$.)  Let $y_0$ be the parent of $x$, that is to say the unique neighbor of $x$ in the path to $1$ (this is only defined for $x \neq 1$), then by axiom (i'') $y_0$ is the unique neighbor for which $S'y_0$ is defined, and we either have $x = R'_a y_0$ or $R'_a x = y_0$ for some $a \in SM$.
 
 Let $d_0, d_1, d_2 \in SM$ be distinct generators $E_{n_0}, E_{n_1}, E_{n_2}$ of $SM$ that do not appear in the index $a$ of any $e_a$ that currently appears in the partial solution (of which there are only finitely many).  We also set some further distinct generators $d'_{y,z}, d''_{y,z} \in SM$ for $y,z \in SM$ that are distinct from each other and all previous generators (this is possible as we have infinitely many generators).  We set $S'x := e_{d_0}$; this preserves axiom (S).  In order to retain axiom (iv''), we now also set
-$$ L'_0 e_{2d_0} x := e_{d_1}$$
-$$ L'_0 e_{2e_{d_0}} e_{S'x}^{-1} e_{d_1} := e_{d_0} x$$
+$$ L'_0 R'_{2d_0} x := e_{d_1}$$
+$$ L'_0 R'_{2e_{d_0}} (R'_{S'x})^{-1} e_{d_1} := e_{d_0} x$$
 and then extend these choices using \Cref{itero}, \Cref{itero-2} to recover axiom (i'), thus for instance
-$$ L'_0 e_0^n e_{2d_0} x := e_0^n e_{d_1}$$
+$$ L'_0 R'_0^n e_{2d_0} x := R'_0^n e_{d_1}$$
 and
-$$ L'_0 e_0^n e_{d_1} x := e_0^{n-1} e_{2d_0}$$
+$$ L'_0 R'_0^n e_{d_1} x := R'_0^{n-1} e_{2d_0}$$
 for all $n \in \Z$.  To retain axiom (iii''), we perform the following actions:
 \begin{itemize}
 \item If $y_0$ is undefined, do nothing.
-\item If $e_a x = y_0$ for some $a \in SM$, set $L'_0 R'_{2(a-d_0)} y_0 := e_{d_2}$ and $L_0 e_{2S'y_0} e_{a-d_0}^{-1} e_{d_2} := e_{S'y_0} x$.  Then extend using \Cref{itero}, \Cref{itero-2}.
-\item If $x = e_a y_0$ for some $a \in SM$, and $L'_0 e_{2(a-Sy_0)}^{-1} x$ is already defined, set $L'_0 e_{2d_0} e^{-1}_{a-S'y_0} L'_0 e_{2(a-Sy_0)} x :=e_{d_0}x$, and extend using \Cref{itero}, \Cref{itero-2}.
-\item If $x = e_a y_0$ for some $a \in SM$, and $L'_0 e_{2(a-Sy_0)}^{-1} x$ is not yet defined, set $L'_0 e_{2(a-Sy_0)} x := e_{d_2}$ and $L'_0 e_{2d_0} e_{a-Sy_0}^{-1} e_{d_2} := e_{d_0} x$, and extend using \Cref{itero}, \Cref{itero-2}.
+\item If $e_a x = y_0$ for some $a \in SM$, set $L'_0 R'_{2(a-d_0)} y_0 := e_{d_2}$ and $L_0 R'_{2S'y_0} (R'_{a-d_0})^{-1} e_{d_2} := e_{S'y_0} x$.  Then extend using \Cref{itero}, \Cref{itero-2}.
+\item If $x = e_a y_0$ for some $a \in SM$, and $L'_0 (R'_{2(a-Sy_0)})^{-1} x$ is already defined, set $L'_0 R'_{2d_0} (R'_{a-S'y_0})^{-1} L'_0 R'_{2(a-Sy_0)} x :=R'_{d_0}x$, and extend using \Cref{itero}, \Cref{itero-2}.
+\item If $x = e_a y_0$ for some $a \in SM$, and $L'_0 (R'_{2(a-Sy_0)})^{-1} x$ is not yet defined, set $L'_0 R'_{2(a-Sy_0)} x := e_{d_2}$ and $L'_0 R'_{2d_0} (R'_{a-Sy_0})^{-1} e_{d_2} := e_{d_0} x$, and extend using \Cref{itero}, \Cref{itero-2}.
 \end{itemize}
 To retain axiom (P), we perform the following actions for each pending identity of the form $I[x,y,z]$ for some $y,z$, executed in some arbitrary order.
 \begin{itemize}
 \item Remove this identity $I[x,y,z]$ from the list of pending identities.
-\item Set $L_0 e_0 e_{d_0} y := e_{d'_{y,z}}$, and $x' \op y' := z'$, where $(x',y',z') := (z, x, e_{2d_0}^{-1} e_{d'_{y,z}})$.
+\item Set $L_0 R'_0 e_{d_0} y := e_{d'_{y,z}}$, and $x' \op y' := z'$, where $(x',y',z') := (z, x, (R'_{2d_0})^{-1} e_{d'_{y,z}})$.
 \item If $S'x'$ is undefined, add $I[x',y',z']$ as a pending identity.
-\item If instead $S'x'$ is defined, but $L'_0 e_0 e_{S'x'} y'$ is undefined, set $L'_0 e_0 e_{S'x'} y' = e_{d''_{y,z}}$.  Then set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', e_{2S'x'}^{-1} e_{d''_{y,z}})$.  Then add $I[x'',y'',z'']$ as a pending identity.
-\item If instead $S' x$ and $L_0 e_0 e_{S'x'} y'$ are both defined, set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', e_{2S'x'}^{-1} L_0 e_0 e_{Sx'} y')$.  Then add $I[x'',y'',z'']$ as a pending identity.
+\item If instead $S'x'$ is defined, but $L'_0 R'_0 R'_{S'x'} y'$ is undefined, set $L'_0 R'_0 R'_{S'x'} y' = e_{d''_{y,z}}$.  Then set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', (R'_{2S'x'})^{-1} e_{d''_{y,z}})$.  Then add $I[x'',y'',z'']$ as a pending identity.
+\item If instead $S' x$ and $L_0 R'_0 R'_{S'x'} y'$ are both defined, set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', (R'_{2S'x'})^{-1} L_0 R'_0 R'_{Sx'} y')$.  Then add $I[x'',y'',z'']$ as a pending identity.
 \item Extend all the new definitions of $L'_0$ using \Cref{itero}, \Cref{itero-2}.
 \end{itemize}
 One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (iii'), (iv''), (vii'), (P) are preserved; the remaining axioms (v''), (vi') are unaffected by this extension.
@@ -246,14 +246,14 @@ We now divide into cases:
 
 Case 1: $x=y$.  In this case we set $x \op' y := S'x$.  It is clear that this preserves axiom (v''), and no other axiom is impacted.
 
-Case 2: If $x = e_a y$ for some $a \in SM$, then we set $x \op' y := a - S'y$.  This preserves axiom (vi''), and no other axiom is impacted.
+Case 2: If $x = R'_a y$ for some $a \in SM$, then we set $x \op' y := a - S'y$.  This preserves axiom (vi''), and no other axiom is impacted.
 
-Case 3: If $x$ is not equal to $y$ or $e_a y$ for any $a \in SM$.  Let $d_0, d_1 \in SM$ be a generator that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution.  We set $x \op' y := z$ with $z := e_{d_0}$.
+Case 3: If $x$ is not equal to $y$ or $R'_a y$ for any $a \in SM$.  Let $d_0, d_1 \in SM$ be a generator that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution.  We set $x \op' y := z$ with $z := e_{d_0}$.
 
 This temporarily disrupts axiom (vii'').  To recover it, we perform the following actions.
 \begin{itemize}
-  \item If $L'_0 e_0 e_{S'x} y$ is not currently defined, we set it equal to $e_{d_1}$, and extend by \Cref{itero}, \Cref{itero-2}.
-  \item Set $x' \op y' = z'$, where $(x',y',z') := (z, x, e_{2S'x}^{-1} L_0 e_0 e_{Sx} y)$.
+  \item If $L'_0 R'_0 R'_{S'x} y$ is not currently defined, we set it equal to $e_{d_1}$, and extend by \Cref{itero}, \Cref{itero-2}.
+  \item Set $x' \op y' = z'$, where $(x',y',z') := (z, x, (R'_{2S'x})^{-1} L_0 R'_0 e_{Sx} y)$.
   \item Add $I[x',y',z']$`as a pending identity.
 \end{itemize}
 
