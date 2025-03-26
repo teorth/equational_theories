@@ -109,11 +109,7 @@ def TrivialPartialSolution : PartialSolution := {
 }
 
 -- for Mathlib?
-noncomputable def Set.choose {α: Type} {S: Set α} {P: α → Prop} (h: ∃ s ∈ S, P s) : S :=
-  {
-    val := Classical.choose h
-    property := (Classical.choose_spec h).1
-  }
+noncomputable abbrev Set.choose {α: Type} {S: Set α} {P: α → Prop} (h: ∃ s ∈ S, P s) : S := ⟨ _, (Classical.choose_spec h).1 ⟩
 
 -- for Mathlib?
 lemma Set.choose_spec {α: Type} {S: Set α} {P: α → Prop} (h: ∃ s ∈ S, P s) : P (Set.choose h) := (Classical.choose_spec h).2
