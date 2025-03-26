@@ -202,11 +202,11 @@ lemma use_chain {sols : Set PartialSolution} (hchain: IsChain (fun (sol1 sol2 : 
   rwa [←hz1] at hz5
 
 
-lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol' ≥ sol ∧ x ∈ fill sol'.Predom_L₀' := by sorry
+lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ fill sol'.Predom_L₀' := by sorry
 
-lemma enlarge_S' (sol : PartialSolution) (x:N) : ∃ sol' : PartialSolution, sol' ≥ sol ∧ x ∈ sol'.Dom_S' := by sorry
+lemma enlarge_S' (sol : PartialSolution) (x:N) : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by sorry
 
-lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, sol' ≥ sol ∧ (x,y) ∈ sol'.Dom_op := by sorry
+lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, sol ≤ sol' ∧ (x,y) ∈ sol'.Dom_op := by sorry
 
 
 end Eq1729
