@@ -20,6 +20,23 @@ lemma fill_mono {D₁ D₂ : Finset N} (h : D₁ ⊆ D₂) : fill D₁ ⊆ fill 
   rcases hy with ⟨n, x, hx, hD⟩
   exact ⟨n, x, hx, h hD⟩
 
+lemma fill_invar (D: Finset N) (x : N) (n : ℤ) : x ∈ fill D ↔ x * (e 0)^n ∈ fill D := by
+  constructor
+  . intro h
+    simp only [fill, Set.mem_setOf_eq] at h ⊢
+    obtain ⟨ m, y, hy, hD ⟩ := h
+    refine ⟨ m+n, y, ?_, hD ⟩
+    rw [hy, mul_assoc, zpow_add]
+  intro h
+  simp only [fill, Set.mem_setOf_eq] at h ⊢
+  obtain ⟨ m, y, hy, hD ⟩ := h
+  refine ⟨ m-n, y, ?_, hD ⟩
+  calc
+    _ = x * (e 0)^n * (e 0)^(-n) := by
+      rw [mul_assoc, zpow_neg, mul_inv_cancel, mul_one]
+    _ = _ := by
+      rw [hy, mul_assoc, zpow_sub, zpow_neg]
+
 class PartialSolution where
   L₀' : N → N
   op : N → N → M
