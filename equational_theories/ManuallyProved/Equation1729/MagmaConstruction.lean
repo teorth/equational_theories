@@ -258,10 +258,23 @@ lemma fresh_ne_generator (A: Finset SM) (n:ℕ) : ¬ (fresh A n) ∈ generators 
   by_contra! h
   linarith [Finset.le_max' _ _ h]
 
+abbrev basis_elements (x:N) : Finset SM := Finset.image (fun (a, _) ↦ a) x.toWord.toFinset
+
+abbrev basis_elements' (x:M) : Finset SM := match x with
+  | Sum.inl a => {a}
+  | Sum.inr x => basis_elements x
+
+abbrev PartialSolution.involved_elements (sol: PartialSolution) : Finset SM := Finset.biUnion sol.Predom_L₀' basis_elements ∪ Finset.biUnion sol.Predom_L₀' (fun x ↦ basis_elements (sol.L₀' x)) ∪ Finset.biUnion sol.Dom_S' basis_elements ∪ Finset.image  sol.S' sol.Dom_S' ∪ Finset.biUnion sol.Dom_op (fun (x, _) ↦ basis_elements x) ∪ Finset.biUnion sol.Dom_op (fun (_, y) ↦ basis_elements y) ∪ Finset.biUnion sol.Dom_op (fun (x, y) ↦ basis_elements' (sol.op x y))
+
+abbrev PartialSolution.involved_generators (sol : PartialSolution) : Finset ℕ := generators sol.involved_elements
+
+abbrev PartialSolution.fresh_generator (sol : PartialSolution) (n:ℕ) : ℕ := fresh sol.involved_elements n
+
+
 lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ fill sol'.Predom_L₀' := by
   by_cases hx : x ∈ fill sol.Predom_L₀'
   . exact ⟨ sol, PartialSolution_refl sol, hx ⟩
-  set a : SM := sorry
+  set a : ℕ := sol.fresh_generator 0
   set sol' : PartialSolution := {
     L₀' := sorry
     op := sol.op
