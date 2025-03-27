@@ -7,32 +7,30 @@ import equational_theories.ManuallyProved.Equation1729.SmallMagma
 
 namespace Eq1729
 
-abbrev rel (x y : N) : Prop := ∃ n : ℤ, y = x * (e 0)^n
-
-def rel_isEquiv : IsEquiv N rel := {
-  refl := by
-    intro _
-    use 0
-    simp only [zpow_zero, mul_one]
-  trans := by
-    intro x y z ⟨ n, h1 ⟩ ⟨ m, h2 ⟩
-    use n+m
-    rw [h2, h1,mul_assoc, zpow_add]
-  symm := by
-    intro x y ⟨ n, h ⟩
-    use -n
-    rw [h, mul_assoc, ←zpow_add,add_neg_cancel, zpow_zero, mul_one]
+instance rel : Setoid N := {
+  r := fun x y => ∃ n : ℤ, y = x * (e 0)^n
+  iseqv := by
+    constructor
+    . intro x
+      use 0
+      simp only [zpow_zero, mul_one]
+    . intro x y ⟨ n, h1 ⟩
+      use -n
+      rw [h1, mul_assoc, ←zpow_add, add_neg_cancel, zpow_zero, mul_one]
+    . intro x y z ⟨ n, h1 ⟩ ⟨ m, h2 ⟩
+      use n+m
+      rw [h2, h1, mul_assoc, zpow_add]
 }
 
 /-- `fill D` is the set of elements of the form (e 0)^n x with x in D and n an integer. -/
 
-def fill (D: Finset N) : Set N := { y | ∃ x, rel x y ∧ x ∈ D }
+def fill (D: Finset N) : Set N := { y | ∃ x, x ≈ y ∧ x ∈ D }
 
 @[simp]
 lemma fill_empty : fill Finset.empty = ∅ := by
   ext y
   simp [fill, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false, not_exists, not_and]
-  intro _ _ _
+  intro _ _
   exact Finset.not_mem_empty _
 
 lemma fill_mono {D₁ D₂ : Finset N} (h : D₁ ⊆ D₂) : fill D₁ ⊆ fill D₂ := by
@@ -40,16 +38,16 @@ lemma fill_mono {D₁ D₂ : Finset N} (h : D₁ ⊆ D₂) : fill D₁ ⊆ fill 
   rcases hy with ⟨x, hx, hD⟩
   exact ⟨x, hx, h hD⟩
 
-lemma fill_invar (D: Finset N) (x y : N) (h : rel x y) : x ∈ fill D ↔ y ∈ fill D := by
+lemma fill_invar (D: Finset N) (x y : N) (h : x ≈ y) : x ∈ fill D ↔ y ∈ fill D := by
   constructor
   . intro h
     simp only [fill, Set.mem_setOf_eq] at h ⊢
     obtain ⟨ z, hz, hD ⟩ := h
-    exact ⟨ z, rel_isEquiv.trans _ _ _ hz h, hD ⟩
+    exact ⟨ z, Setoid.trans hz h, hD ⟩
   intro h
   simp only [fill, Set.mem_setOf_eq] at h ⊢
   obtain ⟨ z, hz, hD ⟩ := h
-  exact ⟨ z, rel_isEquiv.trans _ _ _ hz (rel_isEquiv.symm _ _ h), hD ⟩
+  exact ⟨ z, Setoid.trans hz (Setoid.symm h), hD ⟩
 
 class PartialSolution where
   L₀' : N → N
@@ -270,11 +268,23 @@ lemma fresh_ne_generator (A: Finset SM) (n:ℕ) : ¬ (fresh A n) ∈ generators 
   by_contra! h
   linarith [Finset.le_max' _ _ h]
 
-abbrev basis_elements (x:N) : Finset SM := Finset.image (fun (a, _) ↦ a) x.toWord.toFinset
+abbrev basis_elements (x:N) : Finset SM := Finset.image (fun (a, _) ↦ a) x.toWord.toFinset ∪ {0}
 
 abbrev basis_elements' (x:M) : Finset SM := match x with
   | Sum.inl a => {a}
   | Sum.inr x => basis_elements x
+
+lemma basis_elements_of_rel' {x y:N} (h: x ≈ y) : basis_elements x ⊆ basis_elements y := by
+  intro a
+  sorry
+
+lemma basis_elements_of_rel {x y:N} (h: x ≈ y) : basis_elements x = basis_elements y := by
+  ext a
+  constructor
+  . intro h2
+    exact basis_elements_of_rel' h h2
+  intro h2
+  exact basis_elements_of_rel' (Setoid.symm h) h2
 
 abbrev PartialSolution.involved_elements (sol: PartialSolution) (extras: Finset N) : Finset SM := Finset.biUnion sol.Predom_L₀' basis_elements ∪ Finset.biUnion sol.Predom_L₀' (fun x ↦ basis_elements (sol.L₀' x)) ∪ Finset.biUnion sol.Dom_S' basis_elements ∪ Finset.image  sol.S' sol.Dom_S' ∪ Finset.biUnion sol.Dom_op (fun (x, _) ↦ basis_elements x) ∪ Finset.biUnion sol.Dom_op (fun (_, y) ↦ basis_elements y) ∪ Finset.biUnion sol.Dom_op (fun (x, y) ↦ basis_elements' (sol.op x y)) ∪ Finset.biUnion extras basis_elements
 
@@ -286,13 +296,15 @@ abbrev PartialSolution.fresh_generator (sol : PartialSolution) (extras: Finset N
 open Classical in
 /-- Extend a map L₀' to map (R' 0)^n x to (R' 0)^n y and (R' 0)^n y to (R' 0)^(n-1) x for all integers n -/
 noncomputable abbrev extend (x y:N) (L₀': N → N) (z : N): N :=
-  if rel z x then y * x⁻¹ * z else (if rel z y then x * (e 0)⁻¹ * y⁻¹ * z else L₀' z)
+  if z ≈ x then y * x⁻¹ * z else (if z ≈ y then x * (e 0)⁻¹ * y⁻¹ * z else L₀' z)
 
 
 lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ fill sol'.Predom_L₀' := by
   by_cases hx : x ∈ fill sol.Predom_L₀'
   . exact ⟨ sol, PartialSolution_refl sol, hx ⟩
   set d : SM := E (sol.fresh_generator {x} 0)
+  have d_not_rel_x : ¬ e d ≈ x := by sorry
+
   set sol' : PartialSolution := {
     L₀' := extend x (e d) sol.L₀'
     op := sol.op
