@@ -280,12 +280,13 @@ open RelaxedVeryWeakCentralGroupoid Greedy
 
 @[equational_result]
 theorem not_3457 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3457] := by
-  have ⟨x,y,z,w, h1, h2, h3⟩ : ∃ x y z w, IsGood x z x ∧ IsGood z w y ∧ ¬IsGood x z w :=
+  have ⟨x,y,z,w, h1, h2, h3⟩ : ∃ x y z w, RelaxedVeryWeakCentralGroupoid.IsGood x z x ∧
+    RelaxedVeryWeakCentralGroupoid.IsGood z w y ∧ ¬IsGood x z w :=
     ⟨.C true, .B false, .C false, .C false, .mk' ⟨⟩, ⟨.cc, .cb, nofun⟩, (·.2.2 ⟨nofun⟩)⟩
   classical
   let e : Extension G0 := by
     refine let S := {((x,0),(z,2)),((z,2),(x,0)),((z,2),(w,3)),((w,3),(y,1))}; ⟨S, ?_, ?_⟩
-    · simp [or_imp, forall_and, isGood_path h1, isGood_path h2, S]
+    · simp [or_imp, forall_and, isGood_path h1, isGood_path h2, S];
     · intro a b
       let f : ℕ → ExtBase G0 | 1 => (w, 3) | 2 => (x, 0) | _ => (z, 2)
       refine Set.subsingleton_of_forall_eq (a := f b.2) fun u ⟨hu1, hu2, hu3⟩ => ?_
@@ -299,7 +300,8 @@ theorem not_3457 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3457] := by
 
 @[equational_result]
 theorem not_3511 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3511] := by
-  have ⟨x,y,z,w, h1, h2, h3⟩ : ∃ x y z w, IsGood x z y ∧ IsGood z w x ∧ ¬IsGood x z w :=
+  have ⟨x,y,z,w, h1, h2, h3⟩ : ∃ x y z w, RelaxedVeryWeakCentralGroupoid.IsGood x z y ∧
+    RelaxedVeryWeakCentralGroupoid.IsGood z w x ∧ ¬IsGood x z w :=
     ⟨.C true, .B true, .C true, .C false, ⟨.cc, .cb, nofun⟩, .mk' ⟨⟩, (·.2.2 ⟨nofun⟩)⟩
   classical
   let e : Extension G0 := by
@@ -319,7 +321,9 @@ theorem not_3511 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3511] := by
 @[equational_result]
 theorem not_2087_2124 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [2087, 2124] := by
   have ⟨x,y,z,w,v, h1, h2, h3, h4, h5⟩ : ∃ x y z w v,
-      IsGood y z x ∧ IsGood y z y ∧ IsGood z w x ∧ IsGood x v x ∧ ¬IsGood w x v :=
+      RelaxedVeryWeakCentralGroupoid.IsGood y z x ∧ RelaxedVeryWeakCentralGroupoid.IsGood y z y ∧
+        RelaxedVeryWeakCentralGroupoid.IsGood z w x ∧ RelaxedVeryWeakCentralGroupoid.IsGood x v x ∧
+          ¬IsGood w x v :=
     ⟨.C true, .A, .B false, .C true, .C false,
       ⟨.ab, .bc, nofun⟩, ⟨.ab, .ba, nofun⟩, ⟨.bc, .cc, nofun⟩, .mk' ⟨⟩, (·.2.2 ⟨nofun⟩)⟩
   classical

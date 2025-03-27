@@ -246,7 +246,7 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
       | inl h =>
         rw [h.1] at h
         simp only [true_and] at h
-        exact ne_of_gt (Nat.lt_pow_self (by norm_num) z.val) h.symm
+        exact ne_of_gt (@Nat.lt_pow_self z.val _ (by norm_num)) h.symm
       | inr this => _
       cases this with
       | inl h =>
@@ -302,8 +302,7 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
           have h1 := h1.symm
           apply_fun PNat.val at h1
           simp at h1
-          have h2 := Nat.lt_pow_self (by norm_num: 1 < 2) y.val
-          exact ne_of_gt h2 h1
+          exact ne_of_gt (@Nat.lt_pow_self y.val _ (by norm_num: 1 < 2)) h1
         | inr this => _
         cases this with
         | inl h =>
@@ -313,8 +312,7 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
           have h1 := h1.symm
           apply_fun PNat.val at h1
           simp at h1
-          have h3 := Nat.lt_pow_self (by norm_num: 1 < 3) y.val
-          exact ne_of_gt h3 h1
+          exact ne_of_gt (@Nat.lt_pow_self y.val _ (by norm_num: 1 < 3)) h1
         | inr this => _
         cases this with
         | inl h =>
@@ -362,8 +360,7 @@ theorem Equation28770_not_implies_Equation2 : ∃ (G : Type) (_ : Magma G), Equa
         have h' := h.2
         apply_fun padicValNat 3 at h'
         simp [padicValNat_prime_prime_pow, padicValNat.mul] at h'
-        have h3 := Nat.lt_pow_self (by norm_num: 1 < 3) (padicValNat 3 y.val)
-        exact ne_of_gt h3 h'.symm
+        exact ne_of_gt (@Nat.lt_pow_self (padicValNat 3 y.val) _ (by norm_num: 1 < 3)) h'.symm
       | inr hyz => _
       have hyz := hyz.2
       cases hyz with
