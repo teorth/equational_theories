@@ -1,3 +1,5 @@
+import Mathlib.Order.WithBot
+
 import equational_theories.FreshGenerator
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
@@ -214,8 +216,78 @@ lemma use_chain {sols : Set PartialSolution} (hchain: IsChain (fun (sol1 sol2 : 
   simp only [Sum.inr.injEq] at hz1
   rwa [←hz1] at hz5
 
+-- `generators A` are all the indices involved in A
+abbrev generators (A : Finset SM) : Finset ℕ := Finset.biUnion A DFinsupp.support
 
-lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ fill sol'.Predom_L₀' := by sorry
+abbrev in_generators (A : Finset SM) (a : SM) := a.support ⊆ generators A
+
+lemma not_in_generators {A : Finset SM} {a : SM} (h: in_generators A a) {n:ℕ} (hn: ¬ n ∈ generators A): a n = 0 := by
+  contrapose! hn
+  rw [← DFinsupp.mem_support_toFun] at hn
+  exact Finset.mem_of_subset h hn
+
+lemma mem_in_generators {A : Finset SM} {a : SM} (h: a ∈ A) : in_generators A a := Finset.subset_biUnion_of_mem _ h
+
+lemma sum_in_generators {A : Finset SM} {a b : SM} (ha: in_generators A a) (hb: in_generators A b) : in_generators A (a+b) := by
+  intro n hn
+  simp only [DFinsupp.mem_support_toFun, DirectSum.add_apply, ne_eq] at hn
+  contrapose! hn
+  simp only [not_in_generators ha hn, not_in_generators hb hn, add_zero]
+
+lemma S_in_generators {A : Finset SM} {a : SM} (ha: in_generators A a) : in_generators A (S a) := sum_in_generators ha ha
+
+lemma diff_in_generators {A : Finset SM} {a b : SM} (ha: in_generators A a) (hb: in_generators A b) : in_generators A (a-b) := by
+  intro n hn
+  simp only [DFinsupp.mem_support_toFun, DirectSum.sub_apply, ne_eq] at hn
+  contrapose! hn
+  simp only [not_in_generators ha hn, not_in_generators hb hn, sub_zero]
+
+-- a fresh generator that does not appear in A
+abbrev fresh (A: Finset SM) (n:ℕ) : ℕ := (WithBot.unbot' 0 (generators A).max) + n + 1 -- on Mathlib bump, change unbot' to unbotD
+
+lemma fresh_ne_fresh (A: Finset SM) (n m:ℕ) (h: n ≠ m) : fresh A n ≠ fresh A m := by
+  contrapose! h
+  rwa [fresh, add_left_inj, add_right_inj] at h
+
+lemma fresh_ne_generator (A: Finset SM) (n:ℕ) : ¬ (fresh A n) ∈ generators A := by
+  by_contra! h
+  obtain ⟨ m, hm ⟩ := Finset.max_of_nonempty (Finset.nonempty_iff_ne_empty.mpr (Finset.ne_empty_of_mem h))
+  replace h := Finset.le_max h
+  simp only [fresh, hm, WithBot.unbot'_coe, WithBot.coe_le_coe] at h
+  linarith
+
+
+
+lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ fill sol'.Predom_L₀' := by
+  by_cases hx : x ∈ fill sol.Predom_L₀'
+  . exact ⟨ sol, PartialSolution_refl sol, hx ⟩
+  set a : SM := sorry
+  set sol' : PartialSolution := {
+    L₀' := sorry
+    op := sol.op
+    S' := sol.S'
+    I := sol.I
+    Predom_L₀' := sol.Predom_L₀' ∪ {x}
+    Dom_op := sol.Dom_op
+    Dom_S' := sol.Dom_S'
+    axiom_i'' := by
+      sorry
+    axiom_S := by
+      sorry
+    axiom_iii'' := by
+      sorry
+    axiom_iv'' := by
+      sorry
+    axiom_v'' := by
+      sorry
+    axiom_vi'' := by
+      sorry
+    axiom_vii'' := by
+      sorry
+    axiom_P := by
+      sorry
+  }
+  sorry
 
 lemma enlarge_S' (sol : PartialSolution) (x:N) : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by sorry
 
