@@ -271,16 +271,22 @@ abbrev PartialSolution.involved_generators (sol : PartialSolution) : Finset ℕ 
 abbrev PartialSolution.fresh_generator (sol : PartialSolution) (n:ℕ) : ℕ := fresh sol.involved_elements n
 
 
+open Classical in
+/-- Extend a map L₀' to map (R' 0)^n x to (R' 0)^n y and (R' 0)^n y to (R' 0)^(n-1) x for all integers n -/
+noncomputable abbrev extend (x y:N) (L₀': N → N) (z : N): N :=
+  if z ∈ fill {x} then y * x⁻¹ * z else (if z ∈ fill {y} then x * (e 0)⁻¹ * y⁻¹ * z else L₀' z)
+
+
 lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ fill sol'.Predom_L₀' := by
   by_cases hx : x ∈ fill sol.Predom_L₀'
   . exact ⟨ sol, PartialSolution_refl sol, hx ⟩
-  set a : ℕ := sol.fresh_generator 0
+  set d : SM := E (sol.fresh_generator 0)
   set sol' : PartialSolution := {
-    L₀' := sorry
+    L₀' := extend x (e d) sol.L₀'
     op := sol.op
     S' := sol.S'
     I := sol.I
-    Predom_L₀' := sol.Predom_L₀' ∪ {x}
+    Predom_L₀' := sol.Predom_L₀' ∪ {x, e d}
     Dom_op := sol.Dom_op
     Dom_S' := sol.Dom_S'
     axiom_i'' := by
