@@ -217,7 +217,7 @@ lemma use_chain {sols : Set PartialSolution} (hchain: IsChain (fun (sol1 sol2 : 
   rwa [←hz1] at hz5
 
 -- `generators A` are all the indices involved in A
-abbrev generators (A : Finset SM) : Finset ℕ := Finset.biUnion A DFinsupp.support
+abbrev generators (A : Finset SM) : Finset ℕ := Finset.biUnion A DFinsupp.support ∪ {0}
 
 abbrev in_generators (A : Finset SM) (a : SM) := a.support ⊆ generators A
 
@@ -226,7 +226,12 @@ lemma not_in_generators {A : Finset SM} {a : SM} (h: in_generators A a) {n:ℕ} 
   rw [← DFinsupp.mem_support_toFun] at hn
   exact Finset.mem_of_subset h hn
 
-lemma mem_in_generators {A : Finset SM} {a : SM} (h: a ∈ A) : in_generators A a := Finset.subset_biUnion_of_mem _ h
+lemma zero_in_generators (A : Finset SM): 0 ∈ generators A := Finset.mem_union_right _ (Finset.mem_singleton.mpr rfl)
+
+lemma generators_nonempty (A : Finset SM): (generators A).Nonempty := ⟨ 0, zero_in_generators A ⟩
+
+lemma mem_in_generators {A : Finset SM} {a : SM} (h: a ∈ A) : in_generators A a := by
+  exact (Finset.subset_biUnion_of_mem _ h).trans Finset.subset_union_left
 
 lemma sum_in_generators {A : Finset SM} {a b : SM} (ha: in_generators A a) (hb: in_generators A b) : in_generators A (a+b) := by
   intro n hn
@@ -243,20 +248,15 @@ lemma diff_in_generators {A : Finset SM} {a b : SM} (ha: in_generators A a) (hb:
   simp only [not_in_generators ha hn, not_in_generators hb hn, sub_zero]
 
 -- a fresh generator that does not appear in A
-abbrev fresh (A: Finset SM) (n:ℕ) : ℕ := (WithBot.unbot' 0 (generators A).max) + n + 1 -- on Mathlib bump, change unbot' to unbotD
+abbrev fresh (A: Finset SM) (n:ℕ) : ℕ := ((generators A).max' (generators_nonempty A)) + (n + 1)
 
 lemma fresh_ne_fresh (A: Finset SM) (n m:ℕ) (h: n ≠ m) : fresh A n ≠ fresh A m := by
   contrapose! h
-  rwa [fresh, add_left_inj, add_right_inj] at h
+  rwa [add_right_inj, add_left_inj] at h
 
 lemma fresh_ne_generator (A: Finset SM) (n:ℕ) : ¬ (fresh A n) ∈ generators A := by
   by_contra! h
-  obtain ⟨ m, hm ⟩ := Finset.max_of_nonempty (Finset.nonempty_iff_ne_empty.mpr (Finset.ne_empty_of_mem h))
-  replace h := Finset.le_max h
-  simp only [fresh, hm, WithBot.unbot'_coe, WithBot.coe_le_coe] at h
-  linarith
-
-
+  linarith [Finset.le_max' _ _ h]
 
 lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ fill sol'.Predom_L₀' := by
   by_cases hx : x ∈ fill sol.Predom_L₀'
