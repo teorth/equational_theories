@@ -152,7 +152,7 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
   case inl.inr a z =>
     simp[E.axiom_5, E.axiom_6]
     rw[←E.right_map_SM]
-    
+
     sorry
   case inr.inl x b =>
     rw [←E.squaring_prop_SM]
