@@ -394,6 +394,9 @@ open Classical in
 noncomputable abbrev extend (x y:N) (L₀': N → N) (z : N): N :=
   if z ≈ x then y * x⁻¹ * z else (if z ≈ y then x * (e 0)⁻¹ * y⁻¹ * z else L₀' z)
 
+lemma extend_not_rel {x y:N} (L₀': N → N) {z : N} (hx: ¬ z ≈ x) (hy: ¬ z ≈ y) : extend x y L₀' z = L₀' z := by
+  simp only [extend, hx, hy, if_false, if_false]
+
 lemma extend_axiom_i'' {L₀' : N → N} {Predom: Finset N} (h: axiom_i'' L₀' Predom) {x y:N} (hx: x ∉ fill Predom) (hy: y ∉ fill Predom) (hneq : ¬ y ≈ x): axiom_i'' (extend x y L₀') (Predom ∪ {x,y}) := by
   intro z w hz hw n
   simp only [Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton] at hz
@@ -481,6 +484,12 @@ lemma extend_axiom_i'' {L₀' : N → N} {Predom: Finset N} (h: axiom_i'' L₀' 
   simp [extend, Setoid.symm (rel_of_mul x (n-1))]
   group
 
+lemma gen_fresh_not_in_fill (sol : PartialSolution) (extras: Finset N) (n:ℕ) : e (E (sol.fresh_generator extras n)) ∉ fill sol.Predom_L₀' := by
+  by_contra hed
+  replace hed := PartialSolution.dom_L₀'_involved sol extras hed
+  simp only [basis_elements_of_generator] at hed
+  replace hed := mem_in_generators (hed (Finset.mem_insert_self (E (sol.fresh_generator extras n)) {0}))
+  exact fresh_not_in_generators (sol.involved_elements extras) n hed
 
 lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ fill sol'.Predom_L₀' := by
   by_cases hx : x ∈ fill sol.Predom_L₀'
@@ -508,16 +517,29 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution,
     Dom_S' := sol.Dom_S'
     axiom_i'' := by
       apply extend_axiom_i'' sol.axiom_i'' hx _ d_not_rel_x
-      by_contra h
-      replace h := sol.dom_L₀'_involved {x} h
-      simp only [basis_elements_of_generator] at h
-      have : ¬ in_generators (sol.involved_elements {x}) d := fresh_not_in_generators (sol.involved_elements {x}) 0
-      contrapose! this
-      apply mem_in_generators
-      apply h (Finset.mem_insert_self d {0})
-    axiom_S := PartialSolution.axiom_S 
+      exact gen_fresh_not_in_fill sol {x} 0
+    axiom_S := PartialSolution.axiom_S
     axiom_iii'' := by
-      sorry
+      intro x' y a hx' hy h
+      have := sol.axiom_iii'' x' y a hx' hy h
+      have hed : e d ∉ fill sol.Predom_L₀' := gen_fresh_not_in_fill sol {x} 0
+      have eval : extend x (e d) sol.L₀' ((R' (S (a - sol.S' x'))) y) = sol.L₀' ((R' (S (a - sol.S' x'))) y) := by
+        apply extend_not_rel _
+        . contrapose! hx
+          exact (fill_invar _ hx).mp this.1
+        contrapose! hed
+        exact (fill_invar _ hed).mp this.1
+
+      have eval' : extend x (e d) sol.L₀' ((R' (S (sol.S' y))) ((R' (a - sol.S' x')).symm (sol.L₀' ((R' (S (a - sol.S' x'))) y)))) = sol.L₀' ((R' (S (sol.S' y))) ((R' (a - sol.S' x')).symm (sol.L₀' ((R' (S (a - sol.S' x'))) y)))) := by
+        apply extend_not_rel _
+        . contrapose! hx
+          exact (fill_invar _ hx).mp this.2.1
+        contrapose! hed
+        exact (fill_invar _ hed).mp this.2.1
+      rw [eval, eval']
+
+      refine ⟨ (fill_mono Finset.subset_union_left) this.1, (fill_mono Finset.subset_union_left) this.2.1, this.2.2 ⟩
+
     axiom_iv'' := by
       sorry
     axiom_v'' := by
