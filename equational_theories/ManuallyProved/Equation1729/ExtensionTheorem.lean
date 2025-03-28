@@ -96,6 +96,7 @@ structure ExtOps (SM N : Type) [Magma SM] where
 
 #print Equiv
 
+
 structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
 
   -- Properties of functions on the small magma `SM`
@@ -106,13 +107,13 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
   -- The small magma `SM` satisfies equation 1729
   SM_sat_1729 : Equation1729 SM
 
-  axiom_1 : ∀ a : SM, (L' (S a)) ∘ (R' a) ∘ L' a = id
+  axiom_1 : ∀ a, (L' a).toFun = (R' a).invFun ∘ (L' (S a)).invFun
 
   axiom_21 : ∀ a b : SM, ∀ y : N, a ≠ b → R' a y ≠ R' b y
   axiom_22 : ∀ a : SM, ∀ x, R' a x ≠ x
 
   -- axiom 3
-  axiom_3 : ∀ x y, ∀ a, R' a x = y → (L' (S' y) (L' ((R a).invFun (S' x)) y)) = x
+  axiom_3 : ∀ x y, ∀ a, R' a x = y → ((L' (S' y)) (L' ((R a).invFun (S' x)) y)) = x
   -- axiom 4
   axiom_4 : ∀ x : N, (L' (S' x) (L' (S' x) x)) = x
 
@@ -140,7 +141,7 @@ instance extMagmaInst {SM N : Type}
   op := operation E.toExtOps
 
 
-lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM]
+lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
   (E : ExtOpsWithProps SM N)
   : @Equation1729 (SM ⊕ N) (extMagmaInst E) := by
   unfold Equation1729
@@ -148,24 +149,24 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM]
   cases hx : x <;> cases hy : y <;> simp [Magma.op, operation]
   case inl.inl =>
     rw [←E.SM_sat_1729]
-  case inl.inr a x =>
-    symm
+  case inl.inr a z =>
     simp[E.axiom_5, E.axiom_6]
     rw[←E.right_map_SM]
-
+    
     sorry
   case inr.inl x b =>
     rw [←E.squaring_prop_SM]
+    symm
+
     sorry
   case inr.inr x y =>
     rw[E.axiom_5]
-
     sorry
 
 
 
 lemma ExtMagma_unsat_eq817 {SM N : Type} [Magma SM]
-  (E : ExtOpsWithProps SM N)
+  (E : ExtOpsWithProps SM N) [Inhabited N] [Inhabited SM]
   : ¬ @Equation817 (SM ⊕ N) (extMagmaInst E) := by
   intro H
 
@@ -186,13 +187,17 @@ lemma ExtMagma_unsat_eq817 {SM N : Type} [Magma SM]
         rhs
         simp [Magma.op, operation, E.axiom_5, E.squaring_prop_SM]
       intro left right
-      have h1 := E.axiom_22
+      let x : N := Inhabited.default
+      let a : SM := Inhabited.default
+      have h1 := E.axiom_22 ((E.S' x ◇ E.S' x)) x
       have h2 := E.axiom_21
-      clear right
+      specialize left x
+      injection left with left
+      simp at h1
+      exact h1 left.symm
 
-
-
-      sorry
-
-
+example {α β : Type} {x y : β}: @Sum.inr α β x = @Sum.inr α β y →  x = y := by
+  intro h
+  injection h
+  done
 end Eq1729
