@@ -196,8 +196,4 @@ lemma ExtMagma_unsat_eq817 {SM N : Type} [Magma SM]
       simp at h1
       exact h1 left.symm
 
-example {α β : Type} {x y : β}: @Sum.inr α β x = @Sum.inr α β y →  x = y := by
-  intro h
-  injection h
-  done
 end Eq1729
