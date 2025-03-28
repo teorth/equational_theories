@@ -56,6 +56,11 @@ lemma fill_invar (D: Finset N) {x y : N} (h : x ≈ y) : x ∈ fill D ↔ y ∈ 
   obtain ⟨ z, hz, hD ⟩ := h
   exact ⟨ z, Setoid.trans hz (Setoid.symm h), hD ⟩
 
+lemma subset_fill (D: Finset N) : D.toSet ⊆ fill D := by
+  intro x hx
+  simp only [fill, Set.mem_setOf_eq]
+  exact ⟨ x, Setoid.refl x, hx ⟩
+
 abbrev axiom_i'' (L₀' : N → N) (Predom : Finset N) := ∀ (x y : N) (_: x ∈ Predom) (_ : L₀' x = y) (n:ℤ), y ∈ fill Predom ∧ L₀' (x * (e 0)^n) = y * (e 0)^n ∧ L₀' (y * (e 0)^n) = x * (e 0)^(n-1)
 
 class PartialSolution where
@@ -569,10 +574,23 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution,
         exact (fill_invar _ hx).mp h6
       contrapose! hed
       exact (fill_invar _ hed).mp h6
-    axiom_P := by
-      sorry
+    axiom_P := sol.axiom_P
   }
-  sorry
+
+  refine ⟨ sol', ?_, ?_ ⟩
+  . refine ⟨ Finset.subset_union_left, by rfl, by rfl, ?_, ?_, ?_ ⟩
+    . intro x' hx'
+      apply (extend_not_rel _ _ _).symm
+      . contrapose! hx
+        exact (fill_invar _ hx).mp hx'
+      contrapose! hed
+      exact (fill_invar _ hed).mp hx'
+    . intros; rfl
+    intros; rfl
+  apply subset_fill
+  rw [Finset.mem_coe]
+  apply Finset.mem_union_right
+  simp only [Finset.mem_insert, Finset.mem_singleton, true_or]
 
 lemma enlarge_S' (sol : PartialSolution) (x:N) : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by sorry
 
