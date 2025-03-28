@@ -22,6 +22,10 @@ instance rel : Setoid N := {
       rw [h2, h1, mul_assoc, zpow_add]
 }
 
+lemma rel_iff (x y:N): x ≈ y ↔ ∃ n : ℤ, y = x * (e 0)^n := by rfl
+
+lemma rel_def {x y:N} (h: x ≈ y) : ∃ n : ℤ, y = x * (e 0)^n := (rel_iff x y).mp h
+
 /-- `fill D` is the set of elements of the form (e 0)^n x with x in D and n an integer. -/
 
 def fill (D: Finset N) : Set N := { y | ∃ x, x ≈ y ∧ x ∈ D }
@@ -226,7 +230,7 @@ lemma use_chain {sols : Set PartialSolution} (hchain: IsChain (fun (sol1 sol2 : 
   simp only [Sum.inr.injEq] at hz1
   rwa [←hz1] at hz5
 
--- `generators A` are all the indices involved in A
+-- `generators A` are all the indices in ℕ involved in a finite set `A` of elements of `SM`
 abbrev generators (A : Finset SM) : Finset ℕ := Finset.biUnion A DFinsupp.support ∪ {0}
 
 abbrev in_generators (A : Finset SM) (a : SM) := a.support ⊆ generators A
@@ -274,9 +278,63 @@ abbrev basis_elements' (x:M) : Finset SM := match x with
   | Sum.inl a => {a}
   | Sum.inr x => basis_elements x
 
-lemma basis_elements_of_rel' {x y:N} (h: x ≈ y) : basis_elements x ⊆ basis_elements y := by
-  intro a
+@[simp]
+lemma basis_elements_of_id : basis_elements 1 = {0} := by
+  simp only [Finset.union_eq_right, FreeGroup.toWord_one, List.toFinset_nil, Finset.image_empty,
+    Finset.subset_singleton_iff, true_or]
+
+@[simp]
+lemma basis_elements_of_generator (a: SM) : basis_elements (e a) = {a,0} := by
+  simp only [basis_elements, FreeGroup.toWord_of, List.toFinset_cons, List.toFinset_nil,
+    insert_emptyc_eq, Finset.image_singleton]
+  rfl
+
+lemma basis_elements_of_mul (x y:N): basis_elements (x * y) ⊆ basis_elements x ∪ basis_elements y := by
+  unfold basis_elements
+  simp only [Finset.union_assoc]
+  rw [Finset.union_comm {0} _, Finset.union_assoc, Finset.union_idempotent, ← Finset.union_assoc, ← Finset.image_union]
+  gcongr
+  apply Finset.image_subset_image
+  intro n hn
+  simp at hn ⊢
+  replace hn := List.Sublist.mem hn (FreeGroup.toWord_mul_sublist x y)
+  rwa [List.mem_append] at hn
+
+/-- For Mathlib? -/
+@[simp]
+lemma List.toFinset_map {α β: Type*} [DecidableEq α] [DecidableEq β] (l: List α) (f : α → β) : (List.map f l).toFinset = Finset.image f l.toFinset := by
+  ext a
+  simp_all only [List.mem_toFinset, List.mem_map, Finset.mem_image]
+
+
+@[simp]
+lemma basis_elements_of_inv (x:N) : basis_elements x⁻¹ = basis_elements x := by
+  unfold basis_elements
+  congr 1
+  simp only [FreeGroup.toWord_inv, FreeGroup.invRev, List.toFinset_reverse, List.toFinset_map, Finset.image_image]
+  congr
+
+@[simp]
+lemma basis_elements_of_genzero_pow' (n: ℕ) : basis_elements ((e 0)^n) = {0} := by
+  unfold basis_elements
+  classical
+  simp
+  rw [Decidable.or_iff_not_imp_left]
+  intro hn
+  ext m
+  simp only [Finset.mem_image, List.mem_toFinset, List.mem_replicate, ne_eq, hn, not_false_eq_true,
+    true_and, eq_comm, exists_eq_left, Finset.mem_singleton]
+
+@[simp]
+lemma basis_elements_of_genzero_pow (n: ℤ) : basis_elements ((e 0)^n) = {0} := by
   sorry
+
+lemma basis_elements_of_rel' {x y:N} (h: x ≈ y) : basis_elements x ⊆ basis_elements y := by
+  obtain ⟨ n, hn ⟩ := rel_def (Setoid.symm h)
+  rw [hn]
+  apply (basis_elements_of_mul _ _).trans
+  rw [basis_elements_of_genzero_pow]
+  simp only [Finset.union_assoc, Finset.union_idempotent, subset_refl]
 
 lemma basis_elements_of_rel {x y:N} (h: x ≈ y) : basis_elements x = basis_elements y := by
   ext a
@@ -286,8 +344,10 @@ lemma basis_elements_of_rel {x y:N} (h: x ≈ y) : basis_elements x = basis_elem
   intro h2
   exact basis_elements_of_rel' (Setoid.symm h) h2
 
+/-- All the elements of `SM` that are involved in a partial solution, plus an additional set of extra elements of `N`-/
 abbrev PartialSolution.involved_elements (sol: PartialSolution) (extras: Finset N) : Finset SM := Finset.biUnion sol.Predom_L₀' basis_elements ∪ Finset.biUnion sol.Predom_L₀' (fun x ↦ basis_elements (sol.L₀' x)) ∪ Finset.biUnion sol.Dom_S' basis_elements ∪ Finset.image  sol.S' sol.Dom_S' ∪ Finset.biUnion sol.Dom_op (fun (x, _) ↦ basis_elements x) ∪ Finset.biUnion sol.Dom_op (fun (_, y) ↦ basis_elements y) ∪ Finset.biUnion sol.Dom_op (fun (x, y) ↦ basis_elements' (sol.op x y)) ∪ Finset.biUnion extras basis_elements
 
+/-- All the indices in ℕ that are involved in a partial solution, plus an additional set of extra elements of `N`-/
 abbrev PartialSolution.involved_generators (sol : PartialSolution) (extras: Finset N): Finset ℕ := generators (sol.involved_elements extras)
 
 abbrev PartialSolution.fresh_generator (sol : PartialSolution) (extras: Finset N) (n:ℕ) : ℕ := fresh (sol.involved_elements extras) n
@@ -303,7 +363,11 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution,
   by_cases hx : x ∈ fill sol.Predom_L₀'
   . exact ⟨ sol, PartialSolution_refl sol, hx ⟩
   set d : SM := E (sol.fresh_generator {x} 0)
-  have d_not_rel_x : ¬ e d ≈ x := by sorry
+  have d_not_rel_x : ¬ e d ≈ x := by
+    by_contra! h
+    replace h := basis_elements_of_rel h
+    simp only [basis_elements_of_generator] at h
+    sorry
 
   set sol' : PartialSolution := {
     L₀' := extend x (e d) sol.L₀'
