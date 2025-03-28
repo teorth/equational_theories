@@ -26,6 +26,9 @@ lemma rel_iff (x y:N): x ≈ y ↔ ∃ n : ℤ, y = x * (e 0)^n := by rfl
 
 lemma rel_def {x y:N} (h: x ≈ y) : ∃ n : ℤ, y = x * (e 0)^n := (rel_iff x y).mp h
 
+lemma rel_of_mul (x:N) (n:ℤ) : x ≈ x * (e 0)^n := by
+  use n
+
 /-- `fill D` is the set of elements of the form (e 0)^n x with x in D and n an integer. -/
 
 def fill (D: Finset N) : Set N := { y | ∃ x, x ≈ y ∧ x ∈ D }
@@ -42,7 +45,7 @@ lemma fill_mono {D₁ D₂ : Finset N} (h : D₁ ⊆ D₂) : fill D₁ ⊆ fill 
   rcases hy with ⟨x, hx, hD⟩
   exact ⟨x, hx, h hD⟩
 
-lemma fill_invar (D: Finset N) (x y : N) (h : x ≈ y) : x ∈ fill D ↔ y ∈ fill D := by
+lemma fill_invar (D: Finset N) {x y : N} (h : x ≈ y) : x ∈ fill D ↔ y ∈ fill D := by
   constructor
   . intro h
     simp only [fill, Set.mem_setOf_eq] at h ⊢
@@ -53,6 +56,8 @@ lemma fill_invar (D: Finset N) (x y : N) (h : x ≈ y) : x ∈ fill D ↔ y ∈ 
   obtain ⟨ z, hz, hD ⟩ := h
   exact ⟨ z, Setoid.trans hz (Setoid.symm h), hD ⟩
 
+abbrev axiom_i'' (L₀' : N → N) (Predom : Finset N) := ∀ (x y : N) (_: x ∈ Predom) (_ : L₀' x = y) (n:ℤ), y ∈ fill Predom ∧ L₀' (x * (e 0)^n) = y * (e 0)^n ∧ L₀' (y * (e 0)^n) = x * (e 0)^(n-1)
+
 class PartialSolution where
   L₀' : N → N
   op : N → N → M
@@ -61,7 +66,7 @@ class PartialSolution where
   Predom_L₀' : Finset N
   Dom_op : Finset (N × N)
   Dom_S' : Finset N
-  axiom_i'' (x y : N) (h: x ∈ Predom_L₀') (h' : L₀' x = y) (n:ℤ) : L₀' (x * (e 0)^n) = y * (e 0)^n ∧ L₀' (y * (e 0)^n) = x * (e 0)^(n-1)
+  axiom_i'' : axiom_i'' L₀' Predom_L₀'
   axiom_S (x y : N) (h : x ∈ Dom_S') (h' : y ≤ x) : y ∈ Dom_S'
   axiom_iii'' (x y : N) (a : SM) (hx: x ∈ Dom_S') (hy: y ∈ Dom_S') (h: R' a x = y) : R' (S (a - S' x)) y ∈ fill Predom_L₀' ∧ (R' (S (S' y)) $ (R' (a - S' x)).symm $ L₀' $ R' (S (a - S' x)) y ) ∈ fill Predom_L₀' ∧ ((R' (S' y)).symm $ L₀' $ R' (S (S' y)) $ (R' (a - S' x)).symm $ L₀' $ R' (S (a - S' x)) y ) = x
   axiom_iv'' (x : N) (h : x ∈ Dom_S') : R' (S (S' x)) x ∈ fill Predom_L₀' ∧ (R' (S (S' x)) $ (R' (S' x)).symm $ L₀' $ R' (S (S' x)) x) ∈ fill Predom_L₀' ∧ ((R' (S' x)).symm $ L₀' $ R' (S (S' x)) $ (R' (S' x)).symm $ L₀' $ R' (S (S' x)) x) = x
@@ -188,7 +193,7 @@ lemma use_chain {sols : Set PartialSolution} (hchain: IsChain (fun (sol1 sol2 : 
     obtain ⟨ y, ⟨ m, hx⟩, hy ⟩ := h1.1
     change L₀' (L₀' x) = x * (e 0)⁻¹
     have := sol.1.axiom_i'' y (sol.1.L₀' y) hy rfl m
-    rw [←h2.2, ←h1.2, hx, this.1, this.2, mul_assoc]
+    rw [←h2.2, ←h1.2, hx, this.2.1, this.2.2, mul_assoc]
     congr
     exact zpow_sub_one (e 0) m
   . intro a x y h
@@ -367,9 +372,95 @@ abbrev PartialSolution.fresh_generator (sol : PartialSolution) (extras: Finset N
 
 
 open Classical in
-/-- Extend a map L₀' to map (R' 0)^n x to (R' 0)^n y and (R' 0)^n y to (R' 0)^(n-1) x for all integers n -/
+/-- Extend a map L₀' to map (R' 0)^n x to (R' 0)^n y and (R' 0)^n y to (R' 0)^(n-1) x for all integers n.  One should also add x and y to the predomain when extending. -/
 noncomputable abbrev extend (x y:N) (L₀': N → N) (z : N): N :=
   if z ≈ x then y * x⁻¹ * z else (if z ≈ y then x * (e 0)⁻¹ * y⁻¹ * z else L₀' z)
+
+lemma extend_axiom_i'' {L₀' : N → N} {Predom: Finset N} (h: axiom_i'' L₀' Predom) {x y:N} (hx: x ∉ fill Predom) (hy: y ∉ fill Predom) (hneq : ¬ y ≈ x): axiom_i'' (extend x y L₀') (Predom ∪ {x,y}) := by
+  intro z w hz hw n
+  simp only [Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton] at hz
+  rcases hz with hz | hz | hz
+  . rw [← hw, hz]
+    refine ⟨ ?_, ?_, ?_ ⟩
+    . simp only [fill, Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton, Set.mem_setOf_eq]
+      use y
+      simp only [extend, Setoid.refl x, ↓reduceIte, inv_mul_cancel_right, Setoid.refl y, or_true,
+        and_self]
+    . simp only [extend, Setoid.symm (rel_of_mul x n), ↓reduceIte, Setoid.refl x, inv_mul_cancel_right]
+      group
+    have : extend x y L₀' x = y := by
+      simp only [extend, Setoid.refl x, ↓reduceIte, inv_mul_cancel_right]
+    rw [this]
+    have : ¬ y * e 0 ^ n ≈ x := by
+      contrapose! hneq
+      exact Setoid.trans (rel_of_mul y n) hneq
+    simp [extend, hneq, Setoid.refl x, Setoid.refl y, Setoid.symm (rel_of_mul y n), this]
+    group
+  . rw [← hw]
+    have hzx : ¬ z ≈ x := by
+      contrapose! hx
+      simp only [fill, Set.mem_setOf_eq]
+      exact ⟨ z, hx, hz ⟩
+    have hzy : ¬ z ≈ y := by
+      contrapose! hy
+      simp only [fill, Set.mem_setOf_eq]
+      exact ⟨ z, hy, hz ⟩
+    have hzx' : ¬ z * (e 0)^n ≈ x := by
+      contrapose! hzx
+      exact Setoid.trans (rel_of_mul z n) hzx
+    have hzy' : ¬ z * (e 0)^n ≈ y := by
+      contrapose! hzy
+      exact Setoid.trans (rel_of_mul z n) hzy
+    have L₀'_of_z : extend x y L₀' z = L₀' z := by
+      simp only [extend, hzx, ↓reduceIte, hzy]
+    have : L₀' z * (e 0)^n ∈ fill Predom := by
+      replace h := (h z (L₀' z) hz (rfl) 0).1
+      exact (fill_invar _ (rel_of_mul (L₀' z) n)).mp h
+    have L₀'_of_z' : extend x y L₀' (L₀' z * (e 0)^n) = L₀' (L₀' z * (e 0)^n) := by
+      have hx' : ¬ L₀' z * (e 0)^n ≈ x := by
+        contrapose! hx
+        exact (fill_invar _ hx).mp this
+      have hy' : ¬ L₀' z * (e 0)^n ≈ y := by
+        contrapose! hy
+        exact (fill_invar _ hy).mp this
+      simp only [extend, hx', ↓reduceIte, hy']
+    have L₀'_of_z'' : extend x y L₀' (z * (e 0)^n) = L₀' (z * (e 0)^n) := by
+      have hx' : ¬ z * (e 0)^n ≈ x := by
+        contrapose! hzx
+        exact Setoid.trans (rel_of_mul z n) hzx
+      have hy' : ¬ z * (e 0)^n ≈ y := by
+        contrapose! hzy
+        exact Setoid.trans (rel_of_mul z n) hzy
+      simp only [extend, hx', ↓reduceIte, hy']
+
+    rw [L₀'_of_z, L₀'_of_z', L₀'_of_z'']
+    refine ⟨ ?_, (h z (L₀' z) hz (rfl) n).2.1, (h z (L₀' z) hz (rfl) n).2.2 ⟩
+    simp only [fill, Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton, Set.mem_setOf_eq]
+    replace h := (h z (L₀' z) hz (rfl) 0).1
+    simp only [fill, Set.mem_setOf_eq] at h
+    obtain ⟨ u, hu, hu' ⟩ := h
+    refine ⟨ u, hu, Or.inr (Or.inl hu') ⟩
+
+  have hyx : ¬ y * (e 0)^n ≈ x := by
+    contrapose! hneq
+    exact Setoid.trans (rel_of_mul y n) hneq
+  refine ⟨ ?_, ?_, ?_ ⟩
+  . simp only [fill, Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton, Set.mem_setOf_eq]
+    use x
+    simp only [extend, hneq, ↓reduceIte, Setoid.refl y, inv_mul_cancel_right, rel_iff,
+      mul_right_inj, true_or, and_true]
+    use -1
+    rfl
+  . simp only [extend, hyx, ↓reduceIte, Setoid.symm (rel_of_mul y n), hneq, Setoid.refl y,
+    inv_mul_cancel_right]
+    group
+  have : extend x y L₀' y = x * (e 0)⁻¹ := by
+    simp only [extend, hneq, ↓reduceIte, Setoid.refl y, inv_mul_cancel_right]
+  rw [this]
+  have : x * (e 0)⁻¹ * e 0 ^ n = x * (e 0) ^ (n-1) := by group
+  rw [this]
+  simp [extend, Setoid.symm (rel_of_mul x (n-1))]
+  group
 
 
 lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ fill sol'.Predom_L₀' := by
