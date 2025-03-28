@@ -10,48 +10,12 @@ import Mathlib.Tactic
 namespace Eq1729
 
 set_option autoImplicit true
-#print Equation1729
-#print Equation817
-#print Magma
-
-
-
-
-
-def injective (f : α → β) := ∀ x₁ x₂ : α, f x₁ = f x₂ → x₁ = x₂
-
-def surjective (f : α → β) := ∀ y : β, ∃ x : α, f x = y
-
-def bijective (f : α → β) := surjective f ∧ injective f
-
-structure Invertible (f : α → β) where
-  bij : bijective f
-  inv : β → α
-  inv_left : inv ∘ f = id
-  inv_right : f ∘ inv = id
-
--- Tiny helper lemmas
-lemma invmap_left (f : α → α) (finv : Invertible f) : ∀ x : α, finv.inv (f x) = x := by
-  intro x
-  simp_rw[←Function.comp_apply, finv.inv_left, id]
-
-lemma invmap_right (f : α → α) (finv : Invertible f) : ∀ x : α, f (finv.inv x) = x := by
-  intro x
-  simp_rw [←Function.comp_apply, finv.inv_right, id]
-
-/- This structure contains the pieces needed for extending an eq1729 obeying magma
-to one that does not obey 817
--/
-
-#print Sum
 
 def extend_sum_inl (f : α → β) (γ : Type) : α → Sum β γ :=
   fun (x : α) => .inl (f x)
 
 def extend_sum_inr (f : α → γ) (β : Type) : α → Sum β γ :=
   fun (x : α) => .inr (f x)
-
-
 
 def combine (f : α → β) (g : γ → β) : Sum α γ → β :=
   fun x =>
@@ -93,8 +57,6 @@ structure ExtOps (SM N : Type) [Magma SM] where
 
   R' : SM → Equiv N N
 
-
-#print Equiv
 
 
 structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
@@ -152,8 +114,8 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
   case inl.inr a z =>
     simp[E.axiom_5, E.axiom_6]
     rw[←E.right_map_SM]
-
     sorry
+
   case inr.inl x b =>
     rw [←E.squaring_prop_SM]
     symm
