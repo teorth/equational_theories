@@ -245,6 +245,9 @@ lemma support_E (d:ℕ) : (E d).support = {d} := by
   rw [DirectSum.support_of]
   exact Ne.symm (ne_of_beq_false rfl)
 
+lemma E_in_generators {A : Finset SM} {d: ℕ} (h: d ∈ generators A) : in_generators A (E d) := by
+  rwa [in_generators, support_E, Finset.singleton_subset_iff]
+
 lemma not_in_generators {A : Finset SM} {a : SM} (h: in_generators A a) {n:ℕ} (hn: ¬ n ∈ generators A): a n = 0 := by
   contrapose! hn
   rw [← DFinsupp.mem_support_toFun] at hn
@@ -281,6 +284,10 @@ lemma fresh_ne_fresh (A: Finset SM) (n m:ℕ) (h: n ≠ m) : fresh A n ≠ fresh
 lemma fresh_ne_generator (A: Finset SM) (n:ℕ) : ¬ (fresh A n) ∈ generators A := by
   by_contra! h
   linarith [Finset.le_max' _ _ h]
+
+lemma fresh_not_in_generators (A: Finset SM) (n:ℕ) : ¬ in_generators A (E (fresh A n)) := by
+  simp only [in_generators, support_E, Finset.singleton_subset_iff]
+  exact fresh_ne_generator A n
 
 abbrev basis_elements (x:N) : Finset SM := Finset.image (fun (a, _) ↦ a) x.toWord.toFinset ∪ {0}
 
@@ -358,11 +365,22 @@ lemma basis_elements_of_rel {x y:N} (h: x ≈ y) : basis_elements x = basis_elem
   exact basis_elements_of_rel' (Setoid.symm h) h2
 
 /-- All the elements of `SM` that are involved in a partial solution, plus an additional set of extra elements of `N`-/
-abbrev PartialSolution.involved_elements (sol: PartialSolution) (extras: Finset N) : Finset SM := Finset.biUnion sol.Predom_L₀' basis_elements ∪ Finset.biUnion sol.Predom_L₀' (fun x ↦ basis_elements (sol.L₀' x)) ∪ Finset.biUnion sol.Dom_S' basis_elements ∪ Finset.image  sol.S' sol.Dom_S' ∪ Finset.biUnion sol.Dom_op (fun (x, _) ↦ basis_elements x) ∪ Finset.biUnion sol.Dom_op (fun (_, y) ↦ basis_elements y) ∪ Finset.biUnion sol.Dom_op (fun (x, y) ↦ basis_elements' (sol.op x y)) ∪ Finset.biUnion extras basis_elements
+abbrev PartialSolution.involved_elements (sol: PartialSolution) (extras: Finset N) : Finset SM := Finset.biUnion sol.Predom_L₀' basis_elements ∪ Finset.biUnion sol.Dom_S' basis_elements ∪ Finset.image  sol.S' sol.Dom_S' ∪ Finset.biUnion sol.Dom_op (fun (x, _) ↦ basis_elements x) ∪ Finset.biUnion sol.Dom_op (fun (_, y) ↦ basis_elements y) ∪ Finset.biUnion sol.Dom_op (fun (x, y) ↦ basis_elements' (sol.op x y)) ∪ Finset.biUnion extras basis_elements
 
 lemma PartialSolution.extras_involved (sol: PartialSolution) (extras: Finset N) {x : N} (hx: x ∈ extras) : basis_elements x ⊆ sol.involved_elements extras := calc
   _ ⊆ Finset.biUnion extras basis_elements := Finset.subset_biUnion_of_mem _ hx
   _ ⊆ _ := Finset.subset_union_right
+
+lemma PartialSolution.dom_L₀'_involved (sol: PartialSolution) (extras: Finset N) {x : N} (hx: x ∈ fill sol.Predom_L₀') : basis_elements x ⊆ sol.involved_elements extras := calc
+  _ ⊆ Finset.biUnion sol.Predom_L₀' basis_elements := by
+    simp [fill] at hx
+    obtain ⟨ y, hxy, hy ⟩ := hx
+    rw [<-basis_elements_of_rel hxy]
+    exact Finset.subset_biUnion_of_mem _ hy
+  _ ⊆ _ := by
+    intro _
+    simp only [Finset.mem_union]
+    tauto
 
 
 /-- All the indices in ℕ that are involved in a partial solution, plus an additional set of extra elements of `N`-/
@@ -414,7 +432,7 @@ lemma extend_axiom_i'' {L₀' : N → N} {Predom: Finset N} (h: axiom_i'' L₀' 
     have L₀'_of_z : extend x y L₀' z = L₀' z := by
       simp only [extend, hzx, ↓reduceIte, hzy]
     have : L₀' z * (e 0)^n ∈ fill Predom := by
-      replace h := (h z (L₀' z) hz (rfl) 0).1
+      replace h := (h z (L₀' z) hz rfl 0).1
       exact (fill_invar _ (rel_of_mul (L₀' z) n)).mp h
     have L₀'_of_z' : extend x y L₀' (L₀' z * (e 0)^n) = L₀' (L₀' z * (e 0)^n) := by
       have hx' : ¬ L₀' z * (e 0)^n ≈ x := by
@@ -434,9 +452,9 @@ lemma extend_axiom_i'' {L₀' : N → N} {Predom: Finset N} (h: axiom_i'' L₀' 
       simp only [extend, hx', ↓reduceIte, hy']
 
     rw [L₀'_of_z, L₀'_of_z', L₀'_of_z'']
-    refine ⟨ ?_, (h z (L₀' z) hz (rfl) n).2.1, (h z (L₀' z) hz (rfl) n).2.2 ⟩
+    refine ⟨ ?_, (h z (L₀' z) hz rfl n).2.1, (h z (L₀' z) hz rfl n).2.2 ⟩
     simp only [fill, Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton, Set.mem_setOf_eq]
-    replace h := (h z (L₀' z) hz (rfl) 0).1
+    replace h := (h z (L₀' z) hz rfl 0).1
     simp only [fill, Set.mem_setOf_eq] at h
     obtain ⟨ u, hu, hu' ⟩ := h
     refine ⟨ u, hu, Or.inr (Or.inl hu') ⟩
@@ -489,9 +507,15 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution,
     Dom_op := sol.Dom_op
     Dom_S' := sol.Dom_S'
     axiom_i'' := by
-      sorry
-    axiom_S := by
-      sorry
+      apply extend_axiom_i'' sol.axiom_i'' hx _ d_not_rel_x
+      by_contra h
+      replace h := sol.dom_L₀'_involved {x} h
+      simp only [basis_elements_of_generator] at h
+      have : ¬ in_generators (sol.involved_elements {x}) d := fresh_not_in_generators (sol.involved_elements {x}) 0
+      contrapose! this
+      apply mem_in_generators
+      apply h (Finset.mem_insert_self d {0})
+    axiom_S := PartialSolution.axiom_S 
     axiom_iii'' := by
       sorry
     axiom_iv'' := by
