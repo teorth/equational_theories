@@ -507,6 +507,8 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution,
     simp only [in_generators, d, support_E, Finset.singleton_subset_iff] at this
     exact fresh_ne_generator (sol.involved_elements {x} ) 0 this
 
+  have hed : e d ∉ fill sol.Predom_L₀' := gen_fresh_not_in_fill sol {x} 0
+
   set sol' : PartialSolution := {
     L₀' := extend x (e d) sol.L₀'
     op := sol.op
@@ -522,7 +524,6 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution,
     axiom_iii'' := by
       intro x' y a hx' hy h
       have := sol.axiom_iii'' x' y a hx' hy h
-      have hed : e d ∉ fill sol.Predom_L₀' := gen_fresh_not_in_fill sol {x} 0
       have eval : extend x (e d) sol.L₀' ((R' (S (a - sol.S' x'))) y) = sol.L₀' ((R' (S (a - sol.S' x'))) y) := by
         apply extend_not_rel _
         . contrapose! hx
@@ -537,11 +538,25 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution,
         contrapose! hed
         exact (fill_invar _ hed).mp this.2.1
       rw [eval, eval']
-
       refine ⟨ (fill_mono Finset.subset_union_left) this.1, (fill_mono Finset.subset_union_left) this.2.1, this.2.2 ⟩
 
     axiom_iv'' := by
-      sorry
+      intro x' hx'
+      have := sol.axiom_iv'' x' hx'
+      have eval: extend x (e d) sol.L₀' (((R' (S (sol.S' x'))) x')) = sol.L₀' (((R' (S (sol.S' x'))) x')) := by
+        apply extend_not_rel _
+        . contrapose! hx
+          exact (fill_invar _ hx).mp this.1
+        contrapose! hed
+        exact (fill_invar _ hed).mp this.1
+      have eval': extend x (e d) sol.L₀' (((R' (S (sol.S' x'))) ((R' (sol.S' x')).symm (sol.L₀' ((R' (S (sol.S' x'))) x'))))) = sol.L₀' (((R' (S (sol.S' x'))) ((R' (sol.S' x')).symm (sol.L₀' ((R' (S (sol.S' x'))) x'))))) := by
+        apply extend_not_rel _
+        . contrapose! hx
+          exact (fill_invar _ hx).mp this.2.1
+        contrapose! hed
+        exact (fill_invar _ hed).mp this.2.1
+      rw [eval, eval']
+      refine ⟨ (fill_mono Finset.subset_union_left) this.1, (fill_mono Finset.subset_union_left) this.2.1, this.2.2 ⟩
     axiom_v'' := by
       sorry
     axiom_vi'' := by
