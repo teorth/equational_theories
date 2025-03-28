@@ -557,12 +557,18 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution,
         exact (fill_invar _ hed).mp this.2.1
       rw [eval, eval']
       refine ⟨ (fill_mono Finset.subset_union_left) this.1, (fill_mono Finset.subset_union_left) this.2.1, this.2.2 ⟩
-    axiom_v'' := by
-      sorry
-    axiom_vi'' := by
-      sorry
+    axiom_v'' := sol.axiom_v''
+    axiom_vi'' := sol.axiom_vi''
     axiom_vii'' := by
-      sorry
+      intro x' y h1 h2 h3
+      obtain ⟨ z, h3, h4, h5, h6, h7 ⟩ := sol.axiom_vii'' x' y h1 h2 h3
+      refine ⟨ z, h3, h4, h5, (fill_mono Finset.subset_union_left) h6, ?_ ⟩
+      convert h7 using 3
+      apply extend_not_rel _
+      . contrapose! hx
+        exact (fill_invar _ hx).mp h6
+      contrapose! hed
+      exact (fill_invar _ hed).mp h6
     axiom_P := by
       sorry
   }
