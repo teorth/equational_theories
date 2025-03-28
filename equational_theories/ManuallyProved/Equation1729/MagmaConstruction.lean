@@ -326,9 +326,12 @@ lemma basis_elements_of_genzero_pow' (n: ℕ) : basis_elements ((e 0)^n) = {0} :
     true_and, eq_comm, exists_eq_left, Finset.mem_singleton]
 
 @[simp]
-lemma basis_elements_of_genzero_pow (n: ℤ) : basis_elements ((e 0)^n) = {0} := by
-  sorry
-
+lemma basis_elements_of_genzero_pow (n: ℤ) : basis_elements ((e 0)^n) = {0} := match n with
+ | Int.ofNat m => by
+    simp only [Int.ofNat_eq_coe, zpow_natCast, basis_elements_of_genzero_pow']
+ | Int.negSucc m => by
+    rw [Int.negSucc_coe, zpow_neg, basis_elements_of_inv, zpow_natCast, basis_elements_of_genzero_pow']
+ 
 lemma basis_elements_of_rel' {x y:N} (h: x ≈ y) : basis_elements x ⊆ basis_elements y := by
   obtain ⟨ n, hn ⟩ := rel_def (Setoid.symm h)
   rw [hn]
