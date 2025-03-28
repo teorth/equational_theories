@@ -444,6 +444,7 @@ lemma extend_axiom_i'' {L₀' : N → N} {Predom: Finset N} (h: axiom_i'' L₀' 
   have hyx : ¬ y * (e 0)^n ≈ x := by
     contrapose! hneq
     exact Setoid.trans (rel_of_mul y n) hneq
+  rw [← hw, hz]
   refine ⟨ ?_, ?_, ?_ ⟩
   . simp only [fill, Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton, Set.mem_setOf_eq]
     use x
