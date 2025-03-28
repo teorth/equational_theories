@@ -235,6 +235,11 @@ abbrev generators (A : Finset SM) : Finset ℕ := Finset.biUnion A DFinsupp.supp
 
 abbrev in_generators (A : Finset SM) (a : SM) := a.support ⊆ generators A
 
+@[simp]
+lemma support_E (d:ℕ) : (E d).support = {d} := by
+  rw [DirectSum.support_of]
+  exact Ne.symm (ne_of_beq_false rfl)
+
 lemma not_in_generators {A : Finset SM} {a : SM} (h: in_generators A a) {n:ℕ} (hn: ¬ n ∈ generators A): a n = 0 := by
   contrapose! hn
   rw [← DFinsupp.mem_support_toFun] at hn
@@ -331,7 +336,7 @@ lemma basis_elements_of_genzero_pow (n: ℤ) : basis_elements ((e 0)^n) = {0} :=
     simp only [Int.ofNat_eq_coe, zpow_natCast, basis_elements_of_genzero_pow']
  | Int.negSucc m => by
     rw [Int.negSucc_coe, zpow_neg, basis_elements_of_inv, zpow_natCast, basis_elements_of_genzero_pow']
- 
+
 lemma basis_elements_of_rel' {x y:N} (h: x ≈ y) : basis_elements x ⊆ basis_elements y := by
   obtain ⟨ n, hn ⟩ := rel_def (Setoid.symm h)
   rw [hn]
@@ -349,6 +354,11 @@ lemma basis_elements_of_rel {x y:N} (h: x ≈ y) : basis_elements x = basis_elem
 
 /-- All the elements of `SM` that are involved in a partial solution, plus an additional set of extra elements of `N`-/
 abbrev PartialSolution.involved_elements (sol: PartialSolution) (extras: Finset N) : Finset SM := Finset.biUnion sol.Predom_L₀' basis_elements ∪ Finset.biUnion sol.Predom_L₀' (fun x ↦ basis_elements (sol.L₀' x)) ∪ Finset.biUnion sol.Dom_S' basis_elements ∪ Finset.image  sol.S' sol.Dom_S' ∪ Finset.biUnion sol.Dom_op (fun (x, _) ↦ basis_elements x) ∪ Finset.biUnion sol.Dom_op (fun (_, y) ↦ basis_elements y) ∪ Finset.biUnion sol.Dom_op (fun (x, y) ↦ basis_elements' (sol.op x y)) ∪ Finset.biUnion extras basis_elements
+
+lemma PartialSolution.extras_involved (sol: PartialSolution) (extras: Finset N) {x : N} (hx: x ∈ extras) : basis_elements x ⊆ sol.involved_elements extras := calc
+  _ ⊆ Finset.biUnion extras basis_elements := Finset.subset_biUnion_of_mem _ hx
+  _ ⊆ _ := Finset.subset_union_right
+
 
 /-- All the indices in ℕ that are involved in a partial solution, plus an additional set of extra elements of `N`-/
 abbrev PartialSolution.involved_generators (sol : PartialSolution) (extras: Finset N): Finset ℕ := generators (sol.involved_elements extras)
@@ -370,7 +380,13 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution,
     by_contra! h
     replace h := basis_elements_of_rel h
     simp only [basis_elements_of_generator] at h
-    sorry
+    have : in_generators (sol.involved_elements {x}) d := by
+      apply mem_in_generators
+      apply sol.extras_involved {x} (Finset.mem_singleton.mpr rfl)
+      rw [← h]
+      simp only [Finset.mem_insert, Finset.mem_singleton, true_or]
+    simp only [in_generators, d, support_E, Finset.singleton_subset_iff] at this
+    exact fresh_ne_generator (sol.involved_elements {x} ) 0 this
 
   set sol' : PartialSolution := {
     L₀' := extend x (e d) sol.L₀'
