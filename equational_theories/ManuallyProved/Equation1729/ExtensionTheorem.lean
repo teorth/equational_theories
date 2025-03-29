@@ -3,53 +3,19 @@ import equational_theories.FreshGenerator
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 
+import Mathlib.Logic.Equiv.Defs
+
 import Mathlib.Tactic
 
 namespace Eq1729
 
 set_option autoImplicit true
-#print Equation1729
-#print Equation817
-#print Magma
-
-
-
-
-
-def injective (f : α → β) := ∀ x₁ x₂ : α, f x₁ = f x₂ → x₁ = x₂
-
-def surjective (f : α → β) := ∀ y : β, ∃ x : α, f x = y
-
-def bijective (f : α → β) := surjective f ∧ injective f
-
-structure Invertible (f : α → β) where
-  bij : bijective f
-  inv : β → α
-  inv_left : inv ∘ f = id
-  inv_right : f ∘ inv = id
-
--- Tiny helper lemmas
-lemma invmap_left (f : α → α) (finv : Invertible f) : ∀ x : α, finv.inv (f x) = x := by
-  intro x
-  simp_rw[←Function.comp_apply, finv.inv_left, id]
-
-lemma invmap_right (f : α → α) (finv : Invertible f) : ∀ x : α, f (finv.inv x) = x := by
-  intro x
-  simp_rw [←Function.comp_apply, finv.inv_right, id]
-
-/- This structure contains the pieces needed for extending an eq1729 obeying magma
-to one that does not obey 817
--/
-
-#print Sum
 
 def extend_sum_inl (f : α → β) (γ : Type) : α → Sum β γ :=
   fun (x : α) => .inl (f x)
 
 def extend_sum_inr (f : α → γ) (β : Type) : α → Sum β γ :=
   fun (x : α) => .inr (f x)
-
-
 
 def combine (f : α → β) (g : γ → β) : Sum α γ → β :=
   fun x =>
@@ -70,13 +36,11 @@ def is_right_extension_of (f' : β → γ) (f : α ⊕ β → γ) : Prop :=
   ∀ x : β, f' x = f (.inr x)
 
 structure ExtOps (SM N : Type) [Magma SM] where
-  -- The extended magma
-  -- EM : SM ⊕ N  -- it seems unnecesary to specify an element of SM ⊕ N, and this component caused problems in applications
 
   -- The squaring map on `SM`. In the blueprint this is `S`
   S : SM → SM
-  L : SM → SM → SM
-  R : SM → SM → SM
+  L : SM → Equiv SM SM
+  R : SM → Equiv SM SM
 
   -- A complement squaring map from `N` to `SM`. Since we don't have a
   -- magma operation for `N` yet, we will wait for the magma operation construction
@@ -89,10 +53,9 @@ structure ExtOps (SM N : Type) [Magma SM] where
   -- In the blueprint this is `◇'`
   rest_map : N → N → Sum SM N
 
-  L' : SM → N → N
+  L' : SM → Equiv N N
 
-  R' : SM → N → N
-
+  R' : SM → Equiv N N
 
 
 
@@ -103,27 +66,16 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
   left_map_SM : ∀ x y : SM, L x y = x ◇ y
   right_map_SM : ∀ x y : SM, R x y = y ◇ x
 
-  -- `sqN` extends `sqM`. This fairly trivial from type theory
-  sqN_extends_sqM : is_right_extension_of S' (combine S S')
-
-  L_inv : (a : SM) → Invertible (L a)
-  -- The left mult operation is invertible
-  L'_inv : (a : SM) → Invertible (L' a)
-
-  R_inv : (a : SM) → Invertible (R a)
-  -- The right mult operation is invertible
-  R'_inv : (a : SM) →  Invertible (R' a)
-
   -- The small magma `SM` satisfies equation 1729
   SM_sat_1729 : Equation1729 SM
 
-  axiom_1 : ∀ a : SM, (L' (S a)) ∘ (R' a) ∘ L' a = id
+  axiom_1 : ∀ a, (L' a).toFun = (R' a).invFun ∘ (L' (S a)).invFun
 
   axiom_21 : ∀ a b : SM, ∀ y : N, a ≠ b → R' a y ≠ R' b y
   axiom_22 : ∀ a : SM, ∀ x, R' a x ≠ x
 
   -- axiom 3
-  axiom_3 : ∀ x y, ∀ a, R' a x = y → (L' (S' y) (L' ((R_inv (S' x)).inv a) y)) = x
+  axiom_3 : ∀ x y, ∀ a, R' a x = y → ((L' (S' y)) (L' ((R a).invFun (S' x)) y)) = x
   -- axiom 4
   axiom_4 : ∀ x : N, (L' (S' x) (L' (S' x) x)) = x
 
@@ -134,7 +86,7 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
 
   -- axiom 6
   axiom_6 : ∀ y : N, ∀ a : SM,
-    rest_map (R' a y) y = Sum.inl ((L_inv (S' y)).inv a)
+    rest_map (R' a y) y = Sum.inl ((L a).invFun (S' y))
 
 
 
@@ -151,7 +103,7 @@ instance extMagmaInst {SM N : Type}
   op := operation E.toExtOps
 
 
-lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM]
+lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
   (E : ExtOpsWithProps SM N)
   : @Equation1729 (SM ⊕ N) (extMagmaInst E) := by
   unfold Equation1729
@@ -159,23 +111,24 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM]
   cases hx : x <;> cases hy : y <;> simp [Magma.op, operation]
   case inl.inl =>
     rw [←E.SM_sat_1729]
-  case inl.inr a x =>
-    symm
+  case inl.inr a z =>
     simp[E.axiom_5, E.axiom_6]
     rw[←E.right_map_SM]
     sorry
+
   case inr.inl x b =>
     rw [←E.squaring_prop_SM]
+    symm
+
     sorry
   case inr.inr x y =>
     rw[E.axiom_5]
-
     sorry
 
 
 
 lemma ExtMagma_unsat_eq817 {SM N : Type} [Magma SM]
-  (E : ExtOpsWithProps SM N)
+  (E : ExtOpsWithProps SM N) [Inhabited N] [Inhabited SM]
   : ¬ @Equation817 (SM ⊕ N) (extMagmaInst E) := by
   intro H
 
@@ -196,13 +149,13 @@ lemma ExtMagma_unsat_eq817 {SM N : Type} [Magma SM]
         rhs
         simp [Magma.op, operation, E.axiom_5, E.squaring_prop_SM]
       intro left right
-      have h1 := E.axiom_22
+      let x : N := Inhabited.default
+      let a : SM := Inhabited.default
+      have h1 := E.axiom_22 ((E.S' x ◇ E.S' x)) x
       have h2 := E.axiom_21
-      clear right
-
-
-
-      sorry
-
+      specialize left x
+      injection left with left
+      simp at h1
+      exact h1 left.symm
 
 end Eq1729
