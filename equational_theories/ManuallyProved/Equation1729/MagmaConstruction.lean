@@ -744,14 +744,17 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
         exact sol.axiom_iii'' x' y' a hx' hy' hneq
       simp only [hw, ↓reduceIte, new_L₀']
       obtain ⟨ h1, h2, h3 ⟩ := sol.axiom_iii'' x' y' a hx' hy' hneq
-      have := enlarge_L₀'_extends hw hed_notin h1
-      refine ⟨ fill_mono Finset.subset_union_left h1, ?_, ?_ ⟩
-      . apply fill_mono Finset.subset_union_left _
-        convert h2 using 3
-      rw [this]
-      convert h3 using 2
-      apply enlarge_L₀'_extends hw hed_notin h2
-    axiom_iv'' := by sorry
+      rw [enlarge_L₀'_extends hw hed_notin h1, enlarge_L₀'_extends hw hed_notin h2]
+      refine ⟨ fill_mono Finset.subset_union_left h1,  fill_mono Finset.subset_union_left h2, h3 ⟩
+    axiom_iv'' := by
+      intro x' hx'
+      by_cases hw : w ∈ fill sol.Predom_L₀'
+      . simp only [hw, ↓reduceIte, new_L₀']
+        exact sol.axiom_iv'' x' hx'
+      simp only [hw, ↓reduceIte, new_L₀']
+      obtain ⟨ h1, h2, h3 ⟩ := sol.axiom_iv'' x' hx'
+      rw [enlarge_L₀'_extends hw hed_notin h1, enlarge_L₀'_extends hw hed_notin h2]
+      refine ⟨ fill_mono Finset.subset_union_left h1, fill_mono Finset.subset_union_left h2, h3 ⟩
     axiom_v'' := by sorry
     axiom_vi'' := by sorry
     axiom_vii'' := by sorry
