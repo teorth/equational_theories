@@ -974,7 +974,28 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
       . sorry
       sorry
   }
-  sorry
-
+  refine ⟨ sol', ?_, Finset.mem_union_right _ $ Finset.mem_insert_self (x, y) {(z, x)} ⟩
+  refine ⟨ ?_, Finset.subset_union_left, by rfl, ?_, ?_, ?_ ⟩
+  . by_cases hw : w ∈ fill sol.Predom_L₀'
+    . simp only [Prod.mk.injEq, hw, ↓reduceIte, Finset.union_insert, subset_refl, sol']
+    simp only [Prod.mk.injEq, hw, ↓reduceIte, sol']
+    exact Finset.subset_union_left
+  . intro x' hx'
+    by_cases hw : w ∈ fill sol.Predom_L₀'
+    . simp only [hw, ↓reduceIte, Prod.mk.injEq, sol', new_L₀']
+    simp only [hw, ↓reduceIte, Prod.mk.injEq, sol', new_L₀']
+    exact (enlarge_L₀'_extends hw hed_notin hx').symm
+  . intro (x',y') hxy'
+    have h1 : ¬ (x' = x ∧ y' = y) := by
+      contrapose! hdef
+      rwa [hdef.1, hdef.2] at hxy'
+    have h2 : ¬ (x' = z ∧ y' = x) := by
+      by_contra h2
+      rw [h2.1, h2.2] at hxy'
+      replace hxy' := (sol.dom_op_involved {x,y,w} hxy').1
+      simp only [ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, basis_elements_of_generator_pow, z] at hxy'
+      exact sol.fresh_not_involved {x,y,w} 0 $ hxy' $ Finset.mem_insert_self d0 {0}
+    simp only [Prod.mk.injEq, h1, ↓reduceIte, h2, sol']
+  intros; rfl
 
 end Eq1729
