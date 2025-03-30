@@ -748,9 +748,28 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
           rwa [hdef.1, hdef.2] at h5
         rwa [if_neg h8]
       axiom_P := by
-        sorry
+        intro x' y' z' hI
+        obtain ⟨ h1, h2, h3 ⟩ := sol.axiom_P x' y' z' hI
+        refine ⟨ h1, ?_, h3 ⟩
+        simp only [Finset.mem_union, h2, Finset.mem_singleton, Prod.mk.injEq, false_or]
+        by_contra h4
+        obtain ⟨ h4, h5 ⟩ := h4
+        rw [←h5] at h4
+        exact h3.2 a h4
     }
-    sorry
+    refine ⟨ sol', ?_, ?_ ⟩
+    . refine ⟨ by rfl, ?_, by rfl, ?_, ?_, ?_ ⟩
+      . exact Finset.union_subset_left fun ⦃a⦄ a ↦ a
+      . intros; rfl
+      . intro (x',y') hxy
+        have : (x',y') ≠ (R' a y,y) := by
+          contrapose! hdef
+          rwa [hdef] at hxy
+        dsimp [sol']
+        simp only [this, ↓reduceIte]
+      intros; rfl
+    apply Finset.mem_union_right
+    exact Finset.mem_singleton.mpr rfl
   sorry
 
 
