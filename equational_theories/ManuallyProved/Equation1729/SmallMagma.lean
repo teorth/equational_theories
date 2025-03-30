@@ -316,47 +316,7 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
     squaring_prop_SM := by intros; rfl
     left_map_SM := by intros; rfl
     right_map_SM := by intros; rfl
-    sqN_extends_sqM := by intro _; aesop -- this is a tautology
-    L_inv := by
-      intro a
-      exact {
-        inv := fun y ↦ y - a
-        inv_left := by
-          ext y
-          simp only [SM_op_eq_add, Function.comp_apply, add_sub_cancel_left, id_eq]
-        inv_right := by
-          ext y
-          simp only [SM_op_eq_add, Function.comp_apply, add_sub_cancel, id_eq]
-        bij := sorry -- redundant given the other data
-      }
-    L'_inv := by
-      intro a
-      exact {
-        inv := (L' h_i' a).symm
-        inv_left := Equiv.symm_comp_self _
-        inv_right := Equiv.self_comp_symm _
-        bij := sorry -- redundant given the other data
-      }
-    R_inv := by
-      intro a
-      exact {
-        inv := fun y ↦ y - a
-        inv_left := by
-          ext y
-          simp only [SM_op_eq_add, Function.comp_apply, add_sub_cancel_right, id_eq]
-        inv_right := by
-          ext y
-          simp only [SM_op_eq_add, Function.comp_apply, sub_add_cancel, id_eq]
-        bij := sorry -- redundant given the other data
-      }
-    R'_inv := by
-      intro a
-      exact {
-        inv := (R' a).symm
-        inv_left := Equiv.symm_comp_self _
-        inv_right := Equiv.self_comp_symm _
-        bij := sorry -- redundant given the other data
-      }
+
     SM_sat_1729 := SM_obeys_1729
     axiom_1 := by
       intro a

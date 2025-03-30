@@ -114,6 +114,7 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
   case inl.inr a z =>
     simp[E.axiom_5, E.axiom_6]
     rw[←E.right_map_SM]
+
     sorry
 
   case inr.inl x b =>
@@ -123,6 +124,7 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
     sorry
   case inr.inr x y =>
     rw[E.axiom_5]
+
     sorry
 
 
@@ -131,7 +133,6 @@ lemma ExtMagma_unsat_eq817 {SM N : Type} [Magma SM]
   (E : ExtOpsWithProps SM N) [Inhabited N] [Inhabited SM]
   : ¬ @Equation817 (SM ⊕ N) (extMagmaInst E) := by
   intro H
-
   simp_all [Equation1729]
   cases H with
   | intro left right =>
@@ -148,11 +149,10 @@ lemma ExtMagma_unsat_eq817 {SM N : Type} [Magma SM]
         rhs
         rhs
         simp [Magma.op, operation, E.axiom_5, E.squaring_prop_SM]
-      intro left right
+      intro left _
       let x : N := Inhabited.default
       let a : SM := Inhabited.default
       have h1 := E.axiom_22 ((E.S' x ◇ E.S' x)) x
-      have h2 := E.axiom_21
       specialize left x
       injection left with left
       simp at h1
