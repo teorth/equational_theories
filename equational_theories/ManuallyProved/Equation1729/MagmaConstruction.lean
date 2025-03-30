@@ -608,8 +608,50 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
     obtain ⟨ z, hz ⟩ := this
     have := sol.axiom_P y z x hz
     exact this.1 hy
+  by_cases hdef : (x,y) ∈ sol.Dom_op
+  . exact ⟨ sol, PartialSolution_refl sol, hdef ⟩
   by_cases hxy : x = y
-  . sorry
+  . rw [←hxy] at hdef no_pending ⊢
+    set sol' : PartialSolution := {
+      L₀' := sol.L₀'
+      op := fun x' y' ↦ if (x',y') = (x,x) then Sum.inl (sol.S' x) else sol.op x' y'
+      S' := sol.S'
+      Predom_L₀' := sol.Predom_L₀'
+      Dom_op := sol.Dom_op ∪ {(x,x)}
+      Dom_S' := sol.Dom_S'
+      I := sol.I
+      axiom_i'' := sol.axiom_i''
+      axiom_S := sol.axiom_S
+      axiom_iii'' := sol.axiom_iii''
+      axiom_iv'' := sol.axiom_iv''
+      axiom_v'' := by
+        intro x' hx'
+        simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq, and_self] at hx'
+        rcases hx' with hx' | hx'
+        . have := sol.axiom_v'' x' hx'
+          by_cases hxx' : x' = x
+          . simp only [hxx', hx, ↓reduceIte, and_self]
+          simp only [this, Prod.mk.injEq, hxx', and_self, ↓reduceIte]
+        simp only [hx', hx, ↓reduceIte, and_self]
+      axiom_vi'' := by
+        intro y' a hya
+        have : ¬ (R' a y' = x ∧ y' = x) := by
+          by_contra this
+          obtain ⟨ h1, h2 ⟩ := this
+          rw [<-h2] at h1
+          simp only [R', Equiv.coe_fn_mk, mul_right_eq_self, FreeGroup.of_ne_one] at h1
+        simp [this]
+        have hya' : (R' a y', y') ∈ sol.Dom_op := by
+          simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hya
+          tauto
+        exact sol.axiom_vi'' y' a hya'
+      axiom_vii'' := by
+        sorry
+      axiom_P := by
+        sorry
+
+    }
+    sorry
   by_cases hray : ∃ a, x = R' a y
   . sorry
   sorry
