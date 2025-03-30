@@ -669,10 +669,27 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
         rw [if_neg hzne]
         exact h5
       axiom_P := by
-        sorry
-
+        intro x' y' z hI
+        obtain ⟨ h1, h2, h3, h4 ⟩ := sol.axiom_P x' y' z hI
+        refine ⟨ h1, ?_, h3, h4 ⟩
+        simp only [Finset.mem_union, h2, Finset.mem_singleton, Prod.mk.injEq, false_or, not_and]
+        intro hzx
+        rw [hzx] at h3
+        exact id (Ne.symm h3)
     }
-    sorry
+    refine ⟨ sol', ?_, ?_ ⟩
+    . refine ⟨ by rfl, ?_, by rfl, ?_, ?_, ?_ ⟩
+      . exact Finset.union_subset_left fun ⦃a⦄ a ↦ a
+      . intros; rfl
+      . intro (x',y') hxy
+        have : (x',y') ≠ (x,x) := by
+          contrapose! hdef
+          rwa [hdef] at hxy
+        dsimp [sol']
+        simp only [this, ↓reduceIte]
+      intros; rfl
+    apply Finset.mem_union_right
+    exact Finset.mem_singleton.mpr rfl
   by_cases hray : ∃ a, x = R' a y
   . sorry
   sorry
