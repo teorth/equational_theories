@@ -470,6 +470,14 @@ lemma gen_fresh_not_in_fill (sol : PartialSolution) (extras: Finset N) (n:ℕ) :
   replace hed := mem_in_generators (hed (Finset.mem_insert_self (E (sol.fresh_generator extras n)) {0}))
   exact fresh_not_in_generators (sol.involved_elements extras) n hed
 
+lemma gen_fresh_not_in_dom_S' (sol : PartialSolution) (extras: Finset N) (n:ℕ) : e (E (sol.fresh_generator extras n)) ∉ sol.Dom_S' := by
+  have := fresh_not_in_generators (sol.involved_elements extras) n
+  contrapose! this
+  apply mem_in_generators $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
+  simp only [Finset.mem_biUnion]
+  refine ⟨ _, this, ?_ ⟩
+  simp only [basis_elements_of_generator, Finset.mem_insert_self]
+
 lemma gen_fresh_not_rel_extra (sol : PartialSolution) {extras: Finset N} (n:ℕ) {x:N} (hx: x ∈ extras) : ¬ e (E (sol.fresh_generator extras n)) ≈ x := by
   set d:= E (sol.fresh_generator extras n)
   by_contra! h
@@ -723,7 +731,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
   have hed_notin : e d1 ∉ fill sol.Predom_L₀' := gen_fresh_not_in_fill sol {x, y, w} 1
   set sol' : PartialSolution := {
     L₀' := new_L₀'
-    op := fun x' y' ↦ if (x',y') = (x,y) then Sum.inr $ e d0 else if (x',y') = (e d0,x) then Sum.inr z' else sol.op x y
+    op := fun x' y' ↦ if (x',y') = (x,y) then Sum.inr $ e d0 else if (x',y') = (e d0,x) then Sum.inr z' else sol.op x' y'
     S' := sol.S'
     Predom_L₀' := if w ∈ fill sol.Predom_L₀' then sol.Predom_L₀' else sol.Predom_L₀' ∪ {w, e d1}
     Dom_op := sol.Dom_op ∪ { (x,y), (e d0, x) }
@@ -755,7 +763,26 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
       obtain ⟨ h1, h2, h3 ⟩ := sol.axiom_iv'' x' hx'
       rw [enlarge_L₀'_extends hw hed_notin h1, enlarge_L₀'_extends hw hed_notin h2]
       refine ⟨ fill_mono Finset.subset_union_left h1, fill_mono Finset.subset_union_left h2, h3 ⟩
-    axiom_v'' := by sorry
+    axiom_v'' := by
+      intro x' hx'
+      simp only [Finset.union_insert, Finset.mem_insert, Prod.mk.injEq, Finset.mem_union,
+        Finset.mem_singleton] at hx'
+      rcases hx' with hx' | hx' | hx'
+      . rw [<-hx'.1, <-hx'.2] at hxy
+        contrapose! hxy
+        rfl
+      . obtain ⟨ h1, h2 ⟩ := sol.axiom_v'' x' hx'
+        have h3 : ¬ (x' = x ∧ x' = y) := by
+          contrapose! hxy
+          rw [<-hxy.1, <-hxy.2]
+        have h4 : ¬ (x' = e d0 ∧ x' = x) := by
+          contrapose! hx
+          rw [<-hx.2, hx.1]
+          exact gen_fresh_not_in_dom_S' _ _ _
+        simp [h1, <-h2, h3, h4]
+      rw [<-hx'.2, hx'.1] at hx
+      contrapose! hx
+      exact gen_fresh_not_in_dom_S' _ _ _
     axiom_vi'' := by sorry
     axiom_vii'' := by sorry
     axiom_P := by sorry
