@@ -79,7 +79,7 @@ class PartialSolution where
   axiom_iv'' (x : N) (h : x ∈ Dom_S') : R' (S (S' x)) x ∈ fill Predom_L₀' ∧ (R' (S (S' x)) $ (R' (S' x)).symm $ L₀' $ R' (S (S' x)) x) ∈ fill Predom_L₀' ∧ ((R' (S' x)).symm $ L₀' $ R' (S (S' x)) $ (R' (S' x)).symm $ L₀' $ R' (S (S' x)) x) = x
   axiom_v'' (x : N) (h : (x,x) ∈ Dom_op) : x ∈ Dom_S' ∧ op x x = Sum.inl (S' x)
   axiom_vi'' (y : N) (a : SM) (h: (R' a y, y) ∈ Dom_op) : y ∈ Dom_S' ∧ op (R' a y) y = Sum.inl ( a - S' y )
-  axiom_vii'' (x y : N) (h : x ≠ y) (h' : ∀ a : SM, x ≠ R' a y) (hop: (x,y) ∈ Dom_op) : ∃ z : N, op x y = Sum.inr z ∧ ((x,y,z) ∈ I ∧ ((z,x) ∈ Dom_op ∧ (R' 0 $ R' (S' x) $ y) ∈ fill Predom_L₀' ∧ op z x = Sum.inr ((R' (S (S' x))).symm $ L₀' $ R' 0 $ R' (S' x) $ y)))
+  axiom_vii'' (x y : N) (h : x ≠ y) (h' : ∀ a : SM, x ≠ R' a y) (hop: (x,y) ∈ Dom_op) : ∃ z : N, op x y = Sum.inr z ∧ ((x,y,z) ∈ I ∨ ((z,x) ∈ Dom_op ∧ (R' 0 $ R' (S' x) $ y) ∈ fill Predom_L₀' ∧ op z x = Sum.inr ((R' (S (S' x))).symm $ L₀' $ R' 0 $ R' (S' x) $ y)))
   axiom_P (x y z : N) (h: (x,y,z) ∈ I) : x ∉ Dom_S' ∧ (z,x) ∉ Dom_op ∧ z ≠ x ∧ (∀ a : SM, z ≠ R' a x)
 
 /-- Not sure if this is the canonical way to proceed, but in order to impose a partial order on PartialSolution I had to first define the LE instance. -/
@@ -237,7 +237,13 @@ lemma use_chain {sols : Set PartialSolution} (hchain: IsChain (fun (sol1 sol2 : 
   filter_upwards [op_lim z x, op_lim x y, L₀'_lim ((R' 0) ((R' (S' x)) y)), S'_lim x] with sol h1 h2 h3 h4
   rw [←h1.2, ←h3.2, ←h4.2]
   have := sol.1.axiom_vii'' x y h h' h2.1
-  obtain ⟨ z', hz1, hz2, hz3, hz4, hz5 ⟩ := this
+  obtain ⟨ z', hz1, hz2 ⟩ := this
+  rcases hz2 with hz2 | ⟨ hz3, hz4, hz5 ⟩
+  . have := (sol.1.axiom_P x y z' hz2).2.1
+    rw [h2.2, hz, Sum.inr.injEq] at hz1
+    rw [←hz1] at this
+    contrapose! this
+    exact h1.1
   rw [h2.2,hz] at hz1
   simp only [Sum.inr.injEq] at hz1
   rwa [←hz1] at hz5
@@ -569,8 +575,12 @@ noncomputable def enlarge_L₀'_by {sol : PartialSolution} {x y:N} (hx: x ∉ fi
     axiom_vi'' := sol.axiom_vi''
     axiom_vii'' := by
       intro x' y' h1 h2 h3
-      obtain ⟨ z, h3, h4, h5, h6, h7 ⟩ := sol.axiom_vii'' x' y' h1 h2 h3
-      refine ⟨ z, h3, h4, h5, (fill_mono Finset.subset_union_left) h6, ?_ ⟩
+      obtain ⟨ z, h3, h4 ⟩ := sol.axiom_vii'' x' y' h1 h2 h3
+      refine ⟨ z, h3, ?_ ⟩
+      rcases h4 with h4 | ⟨ h5, h6, h7 ⟩
+      . exact Or.inl h4
+      right
+      refine ⟨ h5, (fill_mono Finset.subset_union_left) h6, ?_ ⟩
       convert h7 using 3
       exact enlarge_L₀'_extends hx hy h6
     axiom_P := sol.axiom_P
@@ -662,13 +672,17 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
           simp only [Prod.mk.injEq] at hxy'
           rw [hxy'.1, hxy'.2]
 
-        obtain ⟨ z, h1, h2, h3, h4, h5 ⟩ := sol.axiom_vii'' x' y' hxy' hxay hop'
+        obtain ⟨ z, h1, h2 ⟩ := sol.axiom_vii'' x' y' hxy' hxay hop'
+        rcases h2 with h2 | ⟨ h3, h4, h5 ⟩
+        . use z
+          simp only [hne, ↓reduceIte, h1, h2, Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq,
+            true_or, and_self]
         have hzne : ¬ (z = x ∧ x' = x) := by
           by_contra hzne
-          rw [hzne.1, hzne.2] at h2
-          exact no_pending ⟨ y', h2 ⟩
+          rw [hzne.1, hzne.2] at h3
+          exact hdef h3
         simp only [hne, ↓reduceIte, Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq]
-        refine ⟨z, h1, h2, Or.inl h3, h4, ?_ ⟩
+        refine ⟨z, h1, Or.inr ⟨ Or.inl h3, h4, ?_ ⟩ ⟩
         rw [if_neg hzne]
         exact h5
       axiom_P := by
@@ -744,8 +758,11 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
           by_contra hin'
           simp only [Finset.mem_union, hin', Finset.mem_singleton, Prod.mk.injEq, false_or, h1] at hin
         simp only [h1, ↓reduceIte, Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq]
-        obtain ⟨ z, h3, h4, h5, h6, h7 ⟩ := sol.axiom_vii'' x' y' hxy' hneq h2
-        refine ⟨ z, h3, h4, Or.inl h5, h6, ?_ ⟩
+        obtain ⟨ z, h3, h4 ⟩ := sol.axiom_vii'' x' y' hxy' hneq h2
+        refine ⟨ z, h3, ?_ ⟩
+        rcases h4 with h4 | ⟨ h5, h6, h7 ⟩
+        . exact Or.inl h4
+        refine Or.inr ⟨ Or.inl h5, h6, ?_ ⟩
         have h8 : ¬ (z = (R' a) y ∧ x' = y) := by
           contrapose! hdef
           rwa [hdef.1, hdef.2] at h5
@@ -859,16 +876,30 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
           replace hx := sol.dom_S'_involved {x,y,w} hx $ basis_elements_of_prod_gen d0 a
           contrapose! hx
           exact sol.fresh_not_involved {x,y,w} 0
-
-      rcases hray' with hray' | hray' | hray'
-      . exfalso
-        exact hnot hray'
-      . obtain ⟨ h1, h2 ⟩ := sol.axiom_vi'' y' a hray'
-        rw [←h2]
-        simp [h1, hnot, hnot']
-      exfalso
-      exact hnot' hray'
-    axiom_vii'' := by sorry
+      simp only [hnot, hnot', or_false, false_or] at hray'
+      obtain ⟨ h1, h2 ⟩ := sol.axiom_vi'' y' a hray'
+      rw [←h2]
+      simp [h1, hnot, hnot']
+    axiom_vii'' := by
+      intro x' y' hneq hxray hop
+      simp only [Finset.union_insert, Finset.mem_insert, Prod.mk.injEq, Finset.mem_union,
+        Finset.mem_singleton] at hop
+      rcases hop with hop | hop | hop
+      . simp only [hop.1, hop.2, ↓reduceIte, Sum.inr.injEq, Finset.mem_union, Finset.mem_singleton,
+        Prod.mk.injEq, Finset.union_insert, Finset.mem_insert, and_true, exists_eq_left', or_true, true_and]
+        right
+        by_cases hw : w ∈ fill sol.Predom_L₀'
+        . simp only [hw, ↓reduceIte, hxy, and_false, and_self, z', new_L₀']
+        simp only [hw, ↓reduceIte, hxy, and_false, Sum.inr.injEq, new_L₀', z', and_true]
+        apply subset_fill _
+        simp only [Finset.coe_insert,
+          Set.mem_insert_iff, Finset.mem_coe, true_or]
+      . have := sol.axiom_vii'' x' y' hneq hxray hop
+        sorry
+      rw [hop.1, hop.2]
+      use z'
+      simp only [Prod.mk.injEq, hxy, and_false, ↓reduceIte, Finset.mem_union, Finset.mem_singleton,
+        or_true, Finset.union_insert, Finset.mem_insert, true_or, and_self]
     axiom_P := by sorry
   }
   sorry
