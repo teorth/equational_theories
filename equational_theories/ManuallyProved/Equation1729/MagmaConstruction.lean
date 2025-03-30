@@ -646,7 +646,28 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
           tauto
         exact sol.axiom_vi'' y' a hya'
       axiom_vii'' := by
-        sorry
+        intro x' y' hxy' hxay hop
+        have hop' : (x',y') ∈ sol.Dom_op := by
+          simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hop
+          rcases hop  with hop | hop
+          . exact hop
+          rw [hop.2] at hxy'
+          exfalso
+          exact hxy' hop.1
+        have hne : (x',y') ≠ (x,x) := by
+          contrapose! hxy'
+          simp only [Prod.mk.injEq] at hxy'
+          rw [hxy'.1, hxy'.2]
+
+        obtain ⟨ z, h1, h2, h3, h4, h5 ⟩ := sol.axiom_vii'' x' y' hxy' hxay hop'
+        have hzne : ¬ (z = x ∧ x' = x) := by
+          by_contra hzne
+          rw [hzne.1, hzne.2] at h2
+          exact no_pending ⟨ y', h2 ⟩
+        simp only [hne, ↓reduceIte, Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq]
+        refine ⟨z, h1, h2, Or.inl h3, h4, ?_ ⟩
+        rw [if_neg hzne]
+        exact h5
       axiom_P := by
         sorry
 
