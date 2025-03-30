@@ -496,6 +496,46 @@ lemma gen_fresh_not_in_fill (sol : PartialSolution) (extras: Finset N) (n:ℕ) :
   replace hed := mem_in_generators (hed (Finset.mem_insert_self (E (sol.fresh_generator extras n)) {0}))
   exact fresh_not_in_generators (sol.involved_elements extras) n hed
 
+def enlarge_L₀'_extends {sol : PartialSolution} {x y:N} (hx: x ∉ fill sol.Predom_L₀') (hy: y ∉ fill sol.Predom_L₀') {z:N} (hz: z ∈ fill sol.Predom_L₀') : extend x y sol.L₀' z = sol.L₀' z := by
+  apply extend_not_rel _
+  . contrapose! hx
+    exact (fill_invar _ hx).mp hz
+  contrapose! hy
+  exact (fill_invar _ hy).mp hz
+
+noncomputable def enlarge_L₀'_by {sol : PartialSolution} {x y:N} (hx: x ∉ fill sol.Predom_L₀') (hy: y ∉ fill sol.Predom_L₀') (hneq: ¬ y ≈ x): PartialSolution := {
+    L₀' := extend x y sol.L₀'
+    op := sol.op
+    S' := sol.S'
+    I := sol.I
+    Predom_L₀' := sol.Predom_L₀' ∪ {x, y}
+    Dom_op := sol.Dom_op
+    Dom_S' := sol.Dom_S'
+    axiom_i'' := extend_axiom_i'' sol.axiom_i'' hx hy hneq
+    axiom_S := PartialSolution.axiom_S
+    axiom_iii'' := by
+      intro x' y' a hx' hy' h
+      have := sol.axiom_iii'' x' y' a hx' hy' h
+      rw [enlarge_L₀'_extends hx hy this.1, enlarge_L₀'_extends hx hy this.2.1]
+      refine ⟨ (fill_mono Finset.subset_union_left) this.1, (fill_mono Finset.subset_union_left) this.2.1, this.2.2 ⟩
+
+    axiom_iv'' := by
+      intro x' hx'
+      have := sol.axiom_iv'' x' hx'
+      rw [enlarge_L₀'_extends hx hy this.1, enlarge_L₀'_extends hx hy this.2.1]
+      refine ⟨ (fill_mono Finset.subset_union_left) this.1, (fill_mono Finset.subset_union_left) this.2.1, this.2.2 ⟩
+    axiom_v'' := sol.axiom_v''
+    axiom_vi'' := sol.axiom_vi''
+    axiom_vii'' := by
+      intro x' y' h1 h2 h3
+      obtain ⟨ z, h3, h4, h5, h6, h7 ⟩ := sol.axiom_vii'' x' y' h1 h2 h3
+      refine ⟨ z, h3, h4, h5, (fill_mono Finset.subset_union_left) h6, ?_ ⟩
+      convert h7 using 3
+      exact enlarge_L₀'_extends hx hy h6
+    axiom_P := sol.axiom_P
+}
+
+
 lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ fill sol'.Predom_L₀' := by
   by_cases hx : x ∈ fill sol.Predom_L₀'
   . exact ⟨ sol, PartialSolution_refl sol, hx ⟩
@@ -514,77 +554,12 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution,
 
   have hed : e d ∉ fill sol.Predom_L₀' := gen_fresh_not_in_fill sol {x} 0
 
-  set sol' : PartialSolution := {
-    L₀' := extend x (e d) sol.L₀'
-    op := sol.op
-    S' := sol.S'
-    I := sol.I
-    Predom_L₀' := sol.Predom_L₀' ∪ {x, e d}
-    Dom_op := sol.Dom_op
-    Dom_S' := sol.Dom_S'
-    axiom_i'' := by
-      apply extend_axiom_i'' sol.axiom_i'' hx _ d_not_rel_x
-      exact gen_fresh_not_in_fill sol {x} 0
-    axiom_S := PartialSolution.axiom_S
-    axiom_iii'' := by
-      intro x' y a hx' hy h
-      have := sol.axiom_iii'' x' y a hx' hy h
-      have eval : extend x (e d) sol.L₀' ((R' (S (a - sol.S' x'))) y) = sol.L₀' ((R' (S (a - sol.S' x'))) y) := by
-        apply extend_not_rel _
-        . contrapose! hx
-          exact (fill_invar _ hx).mp this.1
-        contrapose! hed
-        exact (fill_invar _ hed).mp this.1
-
-      have eval' : extend x (e d) sol.L₀' ((R' (S (sol.S' y))) ((R' (a - sol.S' x')).symm (sol.L₀' ((R' (S (a - sol.S' x'))) y)))) = sol.L₀' ((R' (S (sol.S' y))) ((R' (a - sol.S' x')).symm (sol.L₀' ((R' (S (a - sol.S' x'))) y)))) := by
-        apply extend_not_rel _
-        . contrapose! hx
-          exact (fill_invar _ hx).mp this.2.1
-        contrapose! hed
-        exact (fill_invar _ hed).mp this.2.1
-      rw [eval, eval']
-      refine ⟨ (fill_mono Finset.subset_union_left) this.1, (fill_mono Finset.subset_union_left) this.2.1, this.2.2 ⟩
-
-    axiom_iv'' := by
-      intro x' hx'
-      have := sol.axiom_iv'' x' hx'
-      have eval: extend x (e d) sol.L₀' (((R' (S (sol.S' x'))) x')) = sol.L₀' (((R' (S (sol.S' x'))) x')) := by
-        apply extend_not_rel _
-        . contrapose! hx
-          exact (fill_invar _ hx).mp this.1
-        contrapose! hed
-        exact (fill_invar _ hed).mp this.1
-      have eval': extend x (e d) sol.L₀' (((R' (S (sol.S' x'))) ((R' (sol.S' x')).symm (sol.L₀' ((R' (S (sol.S' x'))) x'))))) = sol.L₀' (((R' (S (sol.S' x'))) ((R' (sol.S' x')).symm (sol.L₀' ((R' (S (sol.S' x'))) x'))))) := by
-        apply extend_not_rel _
-        . contrapose! hx
-          exact (fill_invar _ hx).mp this.2.1
-        contrapose! hed
-        exact (fill_invar _ hed).mp this.2.1
-      rw [eval, eval']
-      refine ⟨ (fill_mono Finset.subset_union_left) this.1, (fill_mono Finset.subset_union_left) this.2.1, this.2.2 ⟩
-    axiom_v'' := sol.axiom_v''
-    axiom_vi'' := sol.axiom_vi''
-    axiom_vii'' := by
-      intro x' y h1 h2 h3
-      obtain ⟨ z, h3, h4, h5, h6, h7 ⟩ := sol.axiom_vii'' x' y h1 h2 h3
-      refine ⟨ z, h3, h4, h5, (fill_mono Finset.subset_union_left) h6, ?_ ⟩
-      convert h7 using 3
-      apply extend_not_rel _
-      . contrapose! hx
-        exact (fill_invar _ hx).mp h6
-      contrapose! hed
-      exact (fill_invar _ hed).mp h6
-    axiom_P := sol.axiom_P
-  }
+  set sol' : PartialSolution := enlarge_L₀'_by hx hed d_not_rel_x
 
   refine ⟨ sol', ?_, ?_ ⟩
   . refine ⟨ Finset.subset_union_left, by rfl, by rfl, ?_, ?_, ?_ ⟩
     . intro x' hx'
-      apply (extend_not_rel _ _ _).symm
-      . contrapose! hx
-        exact (fill_invar _ hx).mp hx'
-      contrapose! hed
-      exact (fill_invar _ hed).mp hx'
+      exact (enlarge_L₀'_extends hx hed hx').symm
     . intros; rfl
     intros; rfl
   apply subset_fill
