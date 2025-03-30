@@ -438,6 +438,20 @@ lemma PartialSolution.dom_L₀'_involved (sol: PartialSolution) (extras: Finset 
     simp only [Finset.mem_biUnion]
     exact ⟨ x, hx, ha ⟩
 
+  lemma PartialSolution.dom_op_involved (sol: PartialSolution) (extras: Finset N) {x y : N} (hxy: (x,y) ∈ sol.Dom_op) : basis_elements x ⊆ sol.involved_elements extras ∧ basis_elements y  ⊆ sol.involved_elements extras ∧ basis_elements' (sol.op x y) ⊆ sol.involved_elements extras := by
+    refine ⟨ ?_, ?_, ?_ ⟩
+    . intro a ha
+      apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
+      simp only [Finset.mem_biUnion]
+      exact ⟨ (x,y), hxy, ha ⟩
+    . intro a ha
+      apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
+      simp only [Finset.mem_biUnion]
+      exact ⟨ (x,y), hxy, ha ⟩
+    intro a ha
+    apply Finset.mem_union_left _ $ Finset.mem_union_right _ _
+    simp only [Finset.mem_biUnion]
+    exact ⟨ (x,y), hxy, ha ⟩
 
 
 /-- All the indices in ℕ that are involved in a partial solution, plus an additional set of extra elements of `N`-/
@@ -884,8 +898,8 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
       intro x' y' hneq hxray hop
       simp only [Finset.union_insert, Finset.mem_insert, Prod.mk.injEq, Finset.mem_union,
         Finset.mem_singleton] at hop
-      rcases hop with hop | hop | hop
-      . simp only [hop.1, hop.2, ↓reduceIte, Sum.inr.injEq, Finset.mem_union, Finset.mem_singleton,
+      by_cases hop1 : x' = x ∧ y' = y
+      . simp only [hop1.1, hop1.2, ↓reduceIte, Sum.inr.injEq, Finset.mem_union, Finset.mem_singleton,
         Prod.mk.injEq, Finset.union_insert, Finset.mem_insert, and_true, exists_eq_left', or_true, true_and]
         right
         by_cases hw : w ∈ fill sol.Predom_L₀'
@@ -894,12 +908,37 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
         apply subset_fill _
         simp only [Finset.coe_insert,
           Set.mem_insert_iff, Finset.mem_coe, true_or]
-      . have := sol.axiom_vii'' x' y' hneq hxray hop
-        sorry
-      rw [hop.1, hop.2]
-      use z'
-      simp only [Prod.mk.injEq, hxy, and_false, ↓reduceIte, Finset.mem_union, Finset.mem_singleton,
+      by_cases hop2 : x' = z ∧ y' = x
+      . rw [hop2.1, hop2.2]
+        use z'
+        simp only [Prod.mk.injEq, hxy, and_false, ↓reduceIte, Finset.mem_union, Finset.mem_singleton,
         or_true, Finset.union_insert, Finset.mem_insert, true_or, and_self]
+      have hop3 : (x', y') ∈ PartialSolution.Dom_op := by tauto
+      have := sol.axiom_vii'' x' y' hneq hxray hop3
+      obtain ⟨ z'', h1, h2 ⟩ := this
+      refine ⟨ z'', ?_, ?_ ⟩
+      . simp only [Prod.mk.injEq, hop1, ↓reduceIte, hop2, h1]
+      rcases h2 with h2 | ⟨ h3, h4, h5 ⟩
+      . simp only [Finset.mem_union, h2, Finset.mem_singleton, Prod.mk.injEq, true_or,
+        Finset.union_insert, Finset.mem_insert]
+      right
+      have h6 : ¬ (z'' = x ∧ x' = y) := by
+        contrapose! hdef
+        rwa [hdef.1, hdef.2] at h3
+      have h7 : ¬ (z'' = z ∧ x' = x) := by
+        by_contra h7
+        rw [h7.1] at h3
+        replace h3 := (sol.dom_op_involved {x,y,w} h3).1
+        simp only [ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, basis_elements_of_generator_pow, z] at h3
+        exact sol.fresh_not_involved {x,y,w} 0 $ h3 $ Finset.mem_insert_self d0 {0}
+      by_cases hw : w ∈ fill sol.Predom_L₀'
+      . simp only [Finset.union_insert, Finset.mem_insert, Prod.mk.injEq, h6, Finset.mem_union, h3,
+        Finset.mem_singleton, h7, or_false, or_true, hw, ↓reduceIte, true_and, h4, h5, new_L₀']
+      simp only [Prod.mk.injEq, h6, Finset.mem_union, h3,
+        Finset.mem_singleton, h7, or_false, or_true, hw, ↓reduceIte, true_and,
+        new_L₀', true_or, h5, enlarge_L₀'_extends hw hed_notin h4]
+      refine ⟨ fill_mono Finset.subset_union_left h4, ?_ ⟩
+      congr
     axiom_P := by sorry
   }
   sorry
