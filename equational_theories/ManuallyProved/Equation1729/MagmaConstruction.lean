@@ -603,6 +603,15 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
   . obtain ⟨ sol', hsol, hy ⟩ := enlarge_S' sol y
     obtain ⟨ sol'', hsol', hy' ⟩ := this sol' x y (hsol.2.2.1 hx) hy
     exact ⟨ sol'', hsol.trans hsol', hy' ⟩
+  have no_pending : ¬ ∃ z, (y,z,x) ∈ sol.I := by
+    by_contra this
+    obtain ⟨ z, hz ⟩ := this
+    have := sol.axiom_P y z x hz
+    exact this.1 hy
+  by_cases hxy : x = y
+  . sorry
+  by_cases hray : ∃ a, x = R' a y
+  . sorry
   sorry
 
 
