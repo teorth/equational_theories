@@ -711,8 +711,30 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
         dsimp [sol']
         simp only [this, ↓reduceIte]
       intros; rfl
-    apply Finset.mem_union_right
-    exact Finset.mem_singleton.mpr rfl
+    exact Finset.mem_union_right _ (Finset.mem_singleton.mpr rfl)
+  set w := R' 0 $ R' (sol.S' x) $ y
+  set d0 := E $ sol.fresh_generator {x,y,w} 0
+  set d1 := E $ sol.fresh_generator {x,y,w} 1
+  classical
+  set new_L₀' := if w ∈ fill sol.Predom_L₀' then sol.L₀' else extend w (e d1) sol.L₀'
+  set z' := (R' (S (sol.S' x))).symm $ new_L₀' w
+  set sol' : PartialSolution := {
+    L₀' := new_L₀'
+    op := fun x' y' ↦ if (x',y') = (x,y) then Sum.inr $ e d0 else if (x',y') = (e d0,x) then Sum.inr z' else sol.op x y
+    S' := sol.S'
+    Predom_L₀' := if w ∈ fill sol.Predom_L₀' then sol.Predom_L₀' else sol.Predom_L₀' ∪ {w}
+    Dom_op := sol.Dom_op ∪ { (x,y), (e d0, x) }
+    Dom_S' := sol.Dom_S'
+    I := sol.I ∪ {(e d0,x,z')}
+    axiom_i'' := by sorry
+    axiom_S := by sorry
+    axiom_iii'' := by sorry
+    axiom_iv'' := by sorry
+    axiom_v'' := by sorry
+    axiom_vi'' := by sorry
+    axiom_vii'' := by sorry
+    axiom_P := by sorry
+  }
   sorry
 
 
