@@ -56,6 +56,8 @@ lemma fill_invar (D: Finset N) {x y : N} (h : x ≈ y) : x ∈ fill D ↔ y ∈ 
   obtain ⟨ z, hz, hD ⟩ := h
   exact ⟨ z, Setoid.trans hz (Setoid.symm h), hD ⟩
 
+lemma fill_invar' (D: Finset N) {x:N} (hx: x ∈ fill D) (n:ℤ) : x * (e 0)^n ∈ fill D := (fill_invar D (rel_of_mul x n)).mp hx
+
 lemma subset_fill (D: Finset N) : D.toSet ⊆ fill D := by
   intro x hx
   simp only [fill, Set.mem_setOf_eq]
@@ -402,6 +404,15 @@ noncomputable abbrev extend (x y:N) (L₀': N → N) (z : N): N :=
 lemma extend_not_rel {x y:N} (L₀': N → N) {z : N} (hx: ¬ z ≈ x) (hy: ¬ z ≈ y) : extend x y L₀' z = L₀' z := by
   simp only [extend, hx, hy, if_false, if_false]
 
+def enlarge_L₀'_extends' (L₀': N → N) {x y:N} {A: Finset N} (hx: x ∉ fill A) (hy: y ∉ fill A) {z:N} (hz: z ∈ fill A) : extend x y L₀' z = L₀' z := by
+  apply extend_not_rel _
+  . contrapose! hx
+    exact (fill_invar _ hx).mp hz
+  contrapose! hy
+  exact (fill_invar _ hy).mp hz
+
+def enlarge_L₀'_extends {sol : PartialSolution} {x y:N} (hx: x ∉ fill sol.Predom_L₀') (hy: y ∉ fill sol.Predom_L₀') {z:N} (hz: z ∈ fill sol.Predom_L₀') : extend x y sol.L₀' z = sol.L₀' z := enlarge_L₀'_extends' sol.L₀' hx hy hz
+
 lemma extend_axiom_i'' {L₀' : N → N} {Predom: Finset N} (h: axiom_i'' L₀' Predom) {x y:N} (hx: x ∉ fill Predom) (hy: y ∉ fill Predom) (hneq : ¬ y ≈ x): axiom_i'' (extend x y L₀') (Predom ∪ {x,y}) := by
   intro z w hz hw n
   simp only [Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton] at hz
@@ -423,47 +434,10 @@ lemma extend_axiom_i'' {L₀' : N → N} {Predom: Finset N} (h: axiom_i'' L₀' 
     simp [extend, hneq, Setoid.refl x, Setoid.refl y, Setoid.symm (rel_of_mul y n), this]
     group
   . rw [← hw]
-    have hzx : ¬ z ≈ x := by
-      contrapose! hx
-      simp only [fill, Set.mem_setOf_eq]
-      exact ⟨ z, hx, hz ⟩
-    have hzy : ¬ z ≈ y := by
-      contrapose! hy
-      simp only [fill, Set.mem_setOf_eq]
-      exact ⟨ z, hy, hz ⟩
-    have hzx' : ¬ z * (e 0)^n ≈ x := by
-      contrapose! hzx
-      exact Setoid.trans (rel_of_mul z n) hzx
-    have hzy' : ¬ z * (e 0)^n ≈ y := by
-      contrapose! hzy
-      exact Setoid.trans (rel_of_mul z n) hzy
-    have L₀'_of_z : extend x y L₀' z = L₀' z := by
-      simp only [extend, hzx, ↓reduceIte, hzy]
-    have : L₀' z * (e 0)^n ∈ fill Predom := by
-      replace h := (h z (L₀' z) hz rfl 0).1
-      exact (fill_invar _ (rel_of_mul (L₀' z) n)).mp h
-    have L₀'_of_z' : extend x y L₀' (L₀' z * (e 0)^n) = L₀' (L₀' z * (e 0)^n) := by
-      have hx' : ¬ L₀' z * (e 0)^n ≈ x := by
-        contrapose! hx
-        exact (fill_invar _ hx).mp this
-      have hy' : ¬ L₀' z * (e 0)^n ≈ y := by
-        contrapose! hy
-        exact (fill_invar _ hy).mp this
-      simp only [extend, hx', ↓reduceIte, hy']
-    have L₀'_of_z'' : extend x y L₀' (z * (e 0)^n) = L₀' (z * (e 0)^n) := by
-      have hx' : ¬ z * (e 0)^n ≈ x := by
-        contrapose! hzx
-        exact Setoid.trans (rel_of_mul z n) hzx
-      have hy' : ¬ z * (e 0)^n ≈ y := by
-        contrapose! hzy
-        exact Setoid.trans (rel_of_mul z n) hzy
-      simp only [extend, hx', ↓reduceIte, hy']
-
-    rw [L₀'_of_z, L₀'_of_z', L₀'_of_z'']
+    rw [enlarge_L₀'_extends' L₀' hx hy (subset_fill _ hz), enlarge_L₀'_extends' L₀' hx hy ((fill_invar _ (rel_of_mul (L₀' z) n)).mp (h z (L₀' z) hz rfl 0).1), enlarge_L₀'_extends' L₀' hx hy (fill_invar' _ (subset_fill _ hz) n)]
     refine ⟨ ?_, (h z (L₀' z) hz rfl n).2.1, (h z (L₀' z) hz rfl n).2.2 ⟩
-    simp only [fill, Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton, Set.mem_setOf_eq]
     replace h := (h z (L₀' z) hz rfl 0).1
-    simp only [fill, Set.mem_setOf_eq] at h
+    simp only [fill, Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton, Set.mem_setOf_eq] at h ⊢
     obtain ⟨ u, hu, hu' ⟩ := h
     refine ⟨ u, hu, Or.inr (Or.inl hu') ⟩
 
@@ -496,12 +470,6 @@ lemma gen_fresh_not_in_fill (sol : PartialSolution) (extras: Finset N) (n:ℕ) :
   replace hed := mem_in_generators (hed (Finset.mem_insert_self (E (sol.fresh_generator extras n)) {0}))
   exact fresh_not_in_generators (sol.involved_elements extras) n hed
 
-def enlarge_L₀'_extends {sol : PartialSolution} {x y:N} (hx: x ∉ fill sol.Predom_L₀') (hy: y ∉ fill sol.Predom_L₀') {z:N} (hz: z ∈ fill sol.Predom_L₀') : extend x y sol.L₀' z = sol.L₀' z := by
-  apply extend_not_rel _
-  . contrapose! hx
-    exact (fill_invar _ hx).mp hz
-  contrapose! hy
-  exact (fill_invar _ hy).mp hz
 
 noncomputable def enlarge_L₀'_by {sol : PartialSolution} {x y:N} (hx: x ∉ fill sol.Predom_L₀') (hy: y ∉ fill sol.Predom_L₀') (hneq: ¬ y ≈ x): PartialSolution := {
     L₀' := extend x y sol.L₀'
