@@ -470,6 +470,18 @@ lemma gen_fresh_not_in_fill (sol : PartialSolution) (extras: Finset N) (n:ℕ) :
   replace hed := mem_in_generators (hed (Finset.mem_insert_self (E (sol.fresh_generator extras n)) {0}))
   exact fresh_not_in_generators (sol.involved_elements extras) n hed
 
+lemma gen_fresh_not_rel_extra (sol : PartialSolution) {extras: Finset N} (n:ℕ) {x:N} (hx: x ∈ extras) : ¬ e (E (sol.fresh_generator extras n)) ≈ x := by
+  set d:= E (sol.fresh_generator extras n)
+  by_contra! h
+  replace h := basis_elements_of_rel h
+  simp only [basis_elements_of_generator] at h
+  have : in_generators (sol.involved_elements extras) d := by
+    apply mem_in_generators
+    apply sol.extras_involved extras hx
+    rw [← h]
+    simp only [Finset.mem_insert, Finset.mem_singleton, true_or]
+  simp only [in_generators, d, support_E, Finset.singleton_subset_iff] at this
+  exact fresh_ne_generator (sol.involved_elements extras ) n this
 
 noncomputable def enlarge_L₀'_by {sol : PartialSolution} {x y:N} (hx: x ∉ fill sol.Predom_L₀') (hy: y ∉ fill sol.Predom_L₀') (hneq: ¬ y ≈ x): PartialSolution := {
     L₀' := extend x y sol.L₀'
@@ -507,22 +519,9 @@ noncomputable def enlarge_L₀'_by {sol : PartialSolution} {x y:N} (hx: x ∉ fi
 lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ fill sol'.Predom_L₀' := by
   by_cases hx : x ∈ fill sol.Predom_L₀'
   . exact ⟨ sol, PartialSolution_refl sol, hx ⟩
-  set d : SM := E (sol.fresh_generator {x} 0)
-  have d_not_rel_x : ¬ e d ≈ x := by
-    by_contra! h
-    replace h := basis_elements_of_rel h
-    simp only [basis_elements_of_generator] at h
-    have : in_generators (sol.involved_elements {x}) d := by
-      apply mem_in_generators
-      apply sol.extras_involved {x} (Finset.mem_singleton.mpr rfl)
-      rw [← h]
-      simp only [Finset.mem_insert, Finset.mem_singleton, true_or]
-    simp only [in_generators, d, support_E, Finset.singleton_subset_iff] at this
-    exact fresh_ne_generator (sol.involved_elements {x} ) 0 this
+  have hed : (e $ E $ sol.fresh_generator {x} 0) ∉ fill sol.Predom_L₀' := gen_fresh_not_in_fill sol {x} 0
 
-  have hed : e d ∉ fill sol.Predom_L₀' := gen_fresh_not_in_fill sol {x} 0
-
-  set sol' : PartialSolution := enlarge_L₀'_by hx hed d_not_rel_x
+  set sol' : PartialSolution := enlarge_L₀'_by hx hed (gen_fresh_not_rel_extra sol 0 (Finset.mem_singleton.mpr rfl))
 
   refine ⟨ sol', ?_, ?_ ⟩
   . refine ⟨ Finset.subset_union_left, by rfl, by rfl, ?_, ?_, ?_ ⟩
@@ -718,15 +717,25 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
   classical
   set new_L₀' := if w ∈ fill sol.Predom_L₀' then sol.L₀' else extend w (e d1) sol.L₀'
   set z' := (R' (S (sol.S' x))).symm $ new_L₀' w
+  have hedw : ¬ e d1 ≈ w := by
+
+    sorry
+  have hed_notin : e d1 ∉ fill sol.Predom_L₀' := gen_fresh_not_in_fill sol {x, y, w} 1
   set sol' : PartialSolution := {
     L₀' := new_L₀'
     op := fun x' y' ↦ if (x',y') = (x,y) then Sum.inr $ e d0 else if (x',y') = (e d0,x) then Sum.inr z' else sol.op x y
     S' := sol.S'
-    Predom_L₀' := if w ∈ fill sol.Predom_L₀' then sol.Predom_L₀' else sol.Predom_L₀' ∪ {w}
+    Predom_L₀' := if w ∈ fill sol.Predom_L₀' then sol.Predom_L₀' else sol.Predom_L₀' ∪ {w, e d1}
     Dom_op := sol.Dom_op ∪ { (x,y), (e d0, x) }
     Dom_S' := sol.Dom_S'
     I := sol.I ∪ {(e d0,x,z')}
-    axiom_i'' := by sorry
+    axiom_i'' := by
+      by_cases hw : w ∈ fill sol.Predom_L₀'
+      . simp only [hw, ↓reduceIte, new_L₀']
+        exact sol.axiom_i''
+      simp [hw, new_L₀']
+      convert extend_axiom_i'' sol.axiom_i'' hw hed_notin hedw using 1
+      simp_all only [not_exists, Finset.union_insert, d1, w]
     axiom_S := by sorry
     axiom_iii'' := by sorry
     axiom_iv'' := by sorry
