@@ -691,7 +691,66 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
     apply Finset.mem_union_right
     exact Finset.mem_singleton.mpr rfl
   by_cases hray : ∃ a, x = R' a y
-  . sorry
+  . obtain ⟨ a, hray ⟩ := hray
+    rw [hray] at hx no_pending hdef hxy ⊢
+    set sol' : PartialSolution := {
+      L₀' := sol.L₀'
+      op := fun x' y' ↦ if (x',y') = ((R' a) y,y) then Sum.inl (a - sol.S' y) else sol.op x' y'
+      S' := sol.S'
+      Predom_L₀' := sol.Predom_L₀'
+      Dom_op := sol.Dom_op ∪ {((R' a) y,y)}
+      Dom_S' := sol.Dom_S'
+      I := sol.I
+      axiom_i'' := sol.axiom_i''
+      axiom_S := sol.axiom_S
+      axiom_iii'' := sol.axiom_iii''
+      axiom_iv'' := sol.axiom_iv''
+      axiom_v'' := by
+        intro x' hx'
+        have : (x',x') ≠ ((R' a) y, y) := by
+          contrapose! hxy
+          simp only [Prod.mk.injEq] at hxy
+          rw [<-hxy.1, ←hxy.2]
+        simp only [Finset.mem_union, Finset.mem_singleton, this, or_false] at hx'
+        simp only [this, ↓reduceIte]
+        exact sol.axiom_v'' x' hx'
+      axiom_vi'' := by
+        intro y' a' hy'
+        simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hy'
+        by_cases heq : (R' a') y' = (R' a) y ∧ y' = y
+        . rw [heq.1, heq.2]
+          simp only [hy, ↓reduceIte, Sum.inl.injEq, sub_left_inj, true_and]
+          have := heq.1
+          rw [heq.2] at this
+          simp [R', e, FreeGroup.of_injective.eq_iff] at this
+          exact this.symm
+        have :  ((R' a') y', y') ∈ PartialSolution.Dom_op := by tauto
+        simp only [Prod.mk.injEq, heq, ↓reduceIte]
+        exact sol.axiom_vi'' y' a' this
+      axiom_vii'' := by
+        intro x' y' hxy' hneq hin
+        have h1 : (x',y') ≠ (R' a y, y) := by
+          contrapose! hxy'
+          simp only [Prod.mk.injEq] at hxy'
+          have := hxy'.1
+          rw [← hxy'.2] at this
+          exfalso
+          exact hneq a this
+
+        have h2 : (x',y') ∈ sol.Dom_op := by
+          by_contra hin'
+          simp only [Finset.mem_union, hin', Finset.mem_singleton, Prod.mk.injEq, false_or, h1] at hin
+        simp only [h1, ↓reduceIte, Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq]
+        obtain ⟨ z, h3, h4, h5, h6, h7 ⟩ := sol.axiom_vii'' x' y' hxy' hneq h2
+        refine ⟨ z, h3, h4, Or.inl h5, h6, ?_ ⟩
+        have h8 : ¬ (z = (R' a) y ∧ x' = y) := by
+          contrapose! hdef
+          rwa [hdef.1, hdef.2] at h5
+        rwa [if_neg h8]
+      axiom_P := by
+        sorry
+    }
+    sorry
   sorry
 
 
