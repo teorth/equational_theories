@@ -937,8 +937,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
       simp only [Prod.mk.injEq, h6, Finset.mem_union, h3,
         Finset.mem_singleton, h7, or_false, or_true, hw, ↓reduceIte, true_and,
         new_L₀', true_or, h5, enlarge_L₀'_extends hw hed_notin h4]
-      refine ⟨ fill_mono Finset.subset_union_left h4, ?_ ⟩
-      congr
+      refine ⟨ fill_mono Finset.subset_union_left h4, trivial ⟩
     axiom_P := by sorry
   }
   sorry
