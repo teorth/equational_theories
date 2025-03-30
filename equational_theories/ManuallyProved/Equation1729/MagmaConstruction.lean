@@ -718,8 +718,8 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
   set new_L₀' := if w ∈ fill sol.Predom_L₀' then sol.L₀' else extend w (e d1) sol.L₀'
   set z' := (R' (S (sol.S' x))).symm $ new_L₀' w
   have hedw : ¬ e d1 ≈ w := by
-
-    sorry
+    apply gen_fresh_not_rel_extra sol 1 _
+    simp only [Finset.mem_insert, Finset.mem_singleton, or_true]
   have hed_notin : e d1 ∉ fill sol.Predom_L₀' := gen_fresh_not_in_fill sol {x, y, w} 1
   set sol' : PartialSolution := {
     L₀' := new_L₀'
