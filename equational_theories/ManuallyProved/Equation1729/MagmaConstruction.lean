@@ -594,7 +594,16 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution,
 
 lemma enlarge_S' (sol : PartialSolution) (x:N) : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by sorry
 
-lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, sol ≤ sol' ∧ (x,y) ∈ sol'.Dom_op := by sorry
+lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, sol ≤ sol' ∧ (x,y) ∈ sol'.Dom_op := by
+  wlog hx : x ∈ sol.Dom_S'
+  . obtain ⟨ sol', hsol, hx ⟩ := enlarge_S' sol x
+    obtain ⟨ sol'', hsol', hx' ⟩ := this sol' x y hx
+    exact ⟨ sol'', hsol.trans hsol', hx' ⟩
+  wlog hy : y ∈ sol.Dom_S'
+  . obtain ⟨ sol', hsol, hy ⟩ := enlarge_S' sol y
+    obtain ⟨ sol'', hsol', hy' ⟩ := this sol' x y (hsol.2.2.1 hx) hy
+    exact ⟨ sol'', hsol.trans hsol', hy' ⟩
+  sorry
 
 
 end Eq1729
