@@ -938,7 +938,41 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
         Finset.mem_singleton, h7, or_false, or_true, hw, ↓reduceIte, true_and,
         new_L₀', true_or, h5, enlarge_L₀'_extends hw hed_notin h4]
       refine ⟨ fill_mono Finset.subset_union_left h4, trivial ⟩
-    axiom_P := by sorry
+    axiom_P := by
+      intro x'' y'' z'' hI
+      simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hI
+      rcases hI with hI | hI
+      . convert sol.axiom_P x'' y'' z'' hI using 2
+        have h1 : ¬ (z'' = x ∧ x'' = y) := by
+          contrapose! no_pending
+          rw [no_pending.1, no_pending.2] at hI
+          exact ⟨ y'', hI ⟩
+        have h2 : ¬ (z'' = z ∧ x'' = x) := by
+          by_contra h2
+          rw [h2.1, h2.2] at hI
+          exact (sol.axiom_P x y'' z hI).1 hx
+        simp only [Finset.union_insert, Finset.mem_insert, Prod.mk.injEq, h1, Finset.mem_union,
+          Finset.mem_singleton, h2, or_false, false_or]
+      rw [hI.1, hI.2.2]
+      have hz : z ∉ sol.Dom_S' := by
+        by_contra h3
+        replace h3 := sol.dom_S'_involved {x,y,w} h3
+        simp only [ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, basis_elements_of_generator_pow, z] at h3
+        exact sol.fresh_not_involved {x,y,w} 0 $ h3 $ Finset.mem_insert_self d0 {0}
+      refine ⟨ hz, ?_, ?_, ?_ ⟩
+      . by_contra h3
+        simp only [Finset.union_insert, Finset.mem_insert, Prod.mk.injEq, Finset.mem_union,
+          Finset.mem_singleton] at h3
+        rcases h3 with ⟨ h3, h4 ⟩ | h3 | ⟨ h3, h4 ⟩
+        . rw [h4] at hz
+          exact hz hy
+        . replace h3 := (sol.dom_op_involved {x,y,w} h3).2.1
+          simp only [ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, basis_elements_of_generator_pow, z] at h3
+          exact sol.fresh_not_involved {x,y,w} 0 $ h3 $ Finset.mem_insert_self d0 {0}
+        rw [h4] at hz
+        exact hz hx
+      . sorry
+      sorry
   }
   sorry
 
