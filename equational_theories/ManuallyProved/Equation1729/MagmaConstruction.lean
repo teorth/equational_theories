@@ -736,8 +736,21 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol' : PartialSolution, 
       simp [hw, new_L₀']
       convert extend_axiom_i'' sol.axiom_i'' hw hed_notin hedw using 1
       simp_all only [not_exists, Finset.union_insert, d1, w]
-    axiom_S := by sorry
-    axiom_iii'' := by sorry
+    axiom_S := sol.axiom_S
+    axiom_iii'' := by
+      intro x' y' a hx' hy' hneq
+      by_cases hw : w ∈ fill sol.Predom_L₀'
+      . simp only [hw, ↓reduceIte, new_L₀']
+        exact sol.axiom_iii'' x' y' a hx' hy' hneq
+      simp only [hw, ↓reduceIte, new_L₀']
+      obtain ⟨ h1, h2, h3 ⟩ := sol.axiom_iii'' x' y' a hx' hy' hneq
+      have := enlarge_L₀'_extends hw hed_notin h1
+      refine ⟨ fill_mono Finset.subset_union_left h1, ?_, ?_ ⟩
+      . apply fill_mono Finset.subset_union_left _
+        convert h2 using 3
+      rw [this]
+      convert h3 using 2
+      apply enlarge_L₀'_extends hw hed_notin h2
     axiom_iv'' := by sorry
     axiom_v'' := by sorry
     axiom_vi'' := by sorry
