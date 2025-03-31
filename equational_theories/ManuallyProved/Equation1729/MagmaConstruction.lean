@@ -81,6 +81,7 @@ class PartialSolution where
   axiom_vi'' (y : N) (a : SM) (h: (R' a y, y) ∈ Dom_op) : y ∈ Dom_S' ∧ op (R' a y) y = Sum.inl ( a - S' y )
   axiom_vii'' (x y : N) (h : x ≠ y) (h' : ∀ a : SM, x ≠ R' a y) (hop: (x,y) ∈ Dom_op) : ∃ z : N, op x y = Sum.inr z ∧ ((x,y,z) ∈ I ∨ ((z,x) ∈ Dom_op ∧ (R' 0 $ R' (S' x) $ y) ∈ fill Predom_L₀' ∧ op z x = Sum.inr ((R' (S (S' x))).symm $ L₀' $ R' 0 $ R' (S' x) $ y)))
   axiom_P (x y z : N) (h: (x,y,z) ∈ I) : x ∉ Dom_S' ∧ (z,x) ∉ Dom_op ∧ z ≠ x ∧ (∀ a : SM, z ≠ R' a x)
+  axiom_P' (x y y' z : N) (hy : (x,y,z) ∈ I) (hy' : (x,y',z) ∈ I) : y = y'
 
 def PartialSolution.Dom_L₀' (sol: PartialSolution) : Set N := fill sol.Predom_L₀'
 
@@ -151,6 +152,10 @@ def TrivialPartialSolution : PartialSolution := {
     exact Finset.not_mem_empty _
   axiom_P := by
     intro _ _ _ h
+    contrapose! h
+    exact Finset.not_mem_empty _
+  axiom_P' := by
+    intro _ _ _ _ h
     contrapose! h
     exact Finset.not_mem_empty _
 }
@@ -758,6 +763,7 @@ noncomputable def enlarge_L₀'_by {sol : PartialSolution} {x y:N} (hx: x ∉ so
       convert h7 using 3
       exact enlarge_L₀'_extends hx hy h6
     axiom_P := sol.axiom_P
+    axiom_P' := sol.axiom_P'
 }
 
 
@@ -781,11 +787,23 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol', sol ≤ sol' ∧ 
 
 lemma enlarge_L₀'_multiple (sol : PartialSolution) (A: Finset N)  : ∃ sol', sol ≤ sol' ∧ A.toSet ⊆ fill sol'.Predom_L₀' := by sorry
 
---     \item[(A)] If $R'_a x = y_0$ for some $a \in SM$, then $L'_0 R'_{S' y_0} x$ is defined.
---    \item[(B)] If $x = R'_a y_0$ for some $a \in SM$, then $L'_0 R'_{2(a-S'y_0)} x$ is defined.
---    \item[(C)]  If $I[x,y,z]$ for some $y,z \in N$, and $S'z$ is defined, then $L'_0 R'_0 R'_{S'z} x$ is defined
+lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') (hA: ∀ a, R' a x = parent x → R' (sol.S' (parent x)) x ∈ sol.Dom_L₀') (hB: ∀ a, x = R' a x → R' (S (a - sol.S' (parent x))) x ∈ sol.Dom_L₀') (hC : ∀ y z, (x,y,z) ∈ sol.I → z ∈ sol.Dom_S' → R' 0 ( R' (sol.S' z) x ) ∈ sol.Dom_L₀') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by
+  set enum : N × N → ℕ := fun  p ↦ Exists.choose (Countable.exists_injective_nat (N × N)) p + 2
+  have enum_injective : Function.Injective enum := by
+    intro _ _ h
+    simp only [add_left_inj, enum] at h
+    exact Exists.choose_spec (Countable.exists_injective_nat (N × N)) h
+  have enum_ne_0 (p : N × N) : enum p ≠ 0 := by dsimp [enum]; linarith
+  have enum_ne_1 (p : N × N) : enum p ≠ 1 := by dsimp [enum]; linarith
 
-lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') (hA: ∀ a, R' a x = parent x → R' (sol.S' (parent x)) x ∈ sol.Dom_L₀') (hB: ∀ a, x = R' a x → R' (S (a - sol.S' (parent x))) x ∈ sol.Dom_L₀') (hC : ∀ y z, (x,y,z) ∈ sol.I → z ∈ sol.Dom_S' → R' 0 ( R' (sol.S' z) x ) ∈ sol.Dom_L₀') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by sorry
+  set d₀ : SM := E (sol.fresh_generator {x} 0)
+  set d₁ : SM := E (sol.fresh_generator {x} 1)
+  set d : N → N → SM := fun y ↦ fun z ↦ E (sol.fresh_generator {x} (enum (y,z)))
+
+
+
+
+  sorry
 
 lemma enlarge_S'_induction {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by sorry
 
@@ -879,6 +897,9 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         intro hzx
         rw [hzx] at h3
         exact id (Ne.symm h3)
+      axiom_P' := by
+        intro x y y' z hy hy'
+        sorry
     }
     refine ⟨ sol', ?_, ?_ ⟩
     . refine ⟨ by rfl, ?_, by rfl, ?_, ?_, ?_ ⟩
@@ -962,6 +983,8 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         obtain ⟨ h4, h5 ⟩ := h4
         rw [←h5] at h4
         exact h3.2 a h4
+      axiom_P' := by
+        sorry
     }
     refine ⟨ sol', ?_, ?_ ⟩
     . refine ⟨ by rfl, ?_, by rfl, ?_, ?_, ?_ ⟩
@@ -1166,6 +1189,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
       simp only [R', hw, ↓reduceIte, extend, Setoid.refl w,
         inv_mul_cancel_right, Equiv.coe_fn_symm_mk, Equiv.coe_fn_mk, ne_eq, z', new_L₀', z]
       exact FreeGroup.div_ne_square_mul _ _ _ _
+    axiom_P' := by sorry
   }
   refine ⟨ sol', ?_, Finset.mem_union_right _ $ Finset.mem_insert_self (x, y) {(z, x)} ⟩
   refine ⟨ ?_, Finset.subset_union_left, by rfl, ?_, ?_, ?_ ⟩
