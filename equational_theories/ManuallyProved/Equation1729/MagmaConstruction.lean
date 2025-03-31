@@ -804,6 +804,28 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol', sol ≤ sol' ∧ 
 
 lemma enlarge_L₀'_multiple (sol : PartialSolution) (A: Finset N)  : ∃ sol', sol ≤ sol' ∧ A.toSet ⊆ fill sol'.Predom_L₀' := by sorry
 
+/-- Data type to store the various L₀' extensions needed to prove `enlarge_S'_induction_with_axioms` -/
+inductive L₀'_data (sol : PartialSolution) (x:N) where
+  | iv₁ : L₀'_data sol x
+  | iv₂ : L₀'_data sol x
+  | iii₁ (a:SM) (ha: R' a x = parent x) : L₀'_data sol x
+  | iii₂ (a:SM) (ha: parent x = R' a x) : L₀'_data sol x
+  | P (y z:N) (hI: (x,y,z) ∈ sol.I) : L₀'_data sol x
+
+/-- Data type to store the various op extensions needed to prove `enlarge_S'_induction_with_axioms` -/
+inductive op_data (sol: PartialSolution) (x:N) where
+  | old (y z:N) (hop: (y,z) ∈ sol.Dom_op) : op_data sol x
+  | v : op_data sol x
+  | P₁ (y z:N) (hI: (x,y,z) ∈ sol.I)  : op_data sol x
+  | P₂ (y z:N) (hI: (x,y,z) ∈ sol.I) (hz : z ∈ sol.Dom_S') : op_data sol x
+
+/-- Data type to store the various op extensions needed to prove `enlarge_S'_induction_with_axioms` -/
+inductive I_data (sol: PartialSolution) (x:N) where
+  | old (x' y z:N) (hI: (x',y,z) ∈ sol.I) (hxx': x ≠ x') : I_data sol x
+  | P₁ (y z:N) (hI: (x,y,z) ∈ sol.I) (hz : z ∉ sol.Dom_S') : I_data sol x
+  | P₂ (y z:N) (hI: (x,y,z) ∈ sol.I) (hz : z ∈ sol.Dom_S') : I_data sol x
+
+
 lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') (hA: ∀ a, R' a x = parent x → R' (sol.S' (parent x)) x ∈ sol.Dom_L₀') (hB: ∀ a, x = R' a x → R' (S (a - sol.S' (parent x))) x ∈ sol.Dom_L₀') (hC : ∀ y z, (x,y,z) ∈ sol.I → z ∈ sol.Dom_S' → R' 0 ( R' (sol.S' z) x ) ∈ sol.Dom_L₀') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by
   set enum : N × N → ℕ := fun  p ↦ Exists.choose (Countable.exists_injective_nat (N × N)) p + 2
   have enum_injective : Function.Injective enum := by
@@ -816,6 +838,59 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
   set d₀ : SM := E (sol.fresh_generator {x} 0)
   set d₁ : SM := E (sol.fresh_generator {x} 1)
   set d : N → N → SM := fun y ↦ fun z ↦ E (sol.fresh_generator {x} (enum (y,z)))
+
+  set y₀ := parent x
+
+  /- Each L₀'_data object `data` generates a new input-output pair for L₀':  `sol.L₀' (L₀'_input d₀ d data) = (L₀'_output d₀ d data)  -/
+  set L₀'_input : L₀'_data sol x → N := fun data ↦ match data with
+  | L₀'_data.iv₁ => R' (S d₀) x
+  | L₀'_data.iv₂ => R' (S d₀) $ (R' d₀).symm $ e d₁
+  | L₀'_data.iii₁ a _ => R' (S (a - d₀)) y₀
+  | L₀'_data.iii₂ a _ => R' (S d₀) $ (R' (a - sol.S' y₀)).symm $ sol.L₀' $ R' (S (a - sol.S' y₀)) x
+  | L₀'_data.P y z _ => R' 0 $ R' d₀ y
+
+  set L₀'_output : L₀'_data sol x → N := fun data ↦ match data with
+  | L₀'_data.iv₁ => R' (S d₀) x
+  | L₀'_data.iv₂ => R' (S d₀) $ (R' d₀).symm $ e d₁
+  | L₀'_data.iii₁ a _ => R' (S (a - d₀)) y₀
+  | L₀'_data.iii₂ a _ => R' (S d₀) $ (R' (a - sol.S' y₀)).symm $ sol.L₀' $ R' (S (a - sol.S' y₀)) x
+  | L₀'_data.P y z _ => R' 0 $ R' d₀ y
+
+/- Each op_data object `data` produces an instance of the operation `op`: `sol.op (op_x d₀ d data) (op_y d₀ d data) = (op_z d₀ d data). -/
+  set op_x : op_data sol x → N := fun data ↦ match data with
+  | op_data.old y z hop => y
+  | op_data.v => x
+  | op_data.P₁ y z hI => z
+  | op_data.P₂ y z hI hz => (R' (S d₀)).symm $ e $ d y z
+
+  set op_y : op_data sol x → N := fun data ↦ match data with
+  | op_data.old y z hop => z
+  | op_data.v => x
+  | op_data.P₁ y z hI => x
+  | op_data.P₂ y z hI hz => z
+
+  set op_z : op_data sol x → M := fun data ↦ match data with
+  | op_data.old y z hop => sol.op y z
+  | op_data.v => Sum.inl d₀
+  | op_data.P₁ y z hI => Sum.inr x
+  | op_data.P₂ y z hI hz => Sum.inr z
+
+/- Each I_data object `data` produces an instance of the operation `op`: `sol.op (op_x d₀ d data) (op_y d₀ d data) = (op_z d₀ d data). -/
+  set I_x : I_data sol x → N := fun data ↦ match data with
+  | I_data.old x' y z hI hxx' => x
+  | I_data.P₁ y z hI hz => z
+  | I_data.P₂ y z hI hz => (R' (S (sol.S' z))).symm $ e $ d y z
+
+  set I_y : I_data sol x → N := fun data ↦ match data with
+  | I_data.old x' y z hI hxx' => y
+  | I_data.P₁ y z hI hz => x
+  | I_data.P₂ y z hI hz => z
+
+  set I_z : I_data sol x → N := fun data ↦ match data with
+  | I_data.old x' y z hI hxx' => z
+  | I_data.P₁ y z hI hz => (R' (S (sol.S' z))).symm $ e $ d y z
+  | I_data.P₂ y z hI hz => (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) x
+
   sorry
 
 lemma enlarge_S'_induction {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by sorry

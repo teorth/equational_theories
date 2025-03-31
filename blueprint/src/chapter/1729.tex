@@ -238,9 +238,9 @@ for all $n \in \Z$.  To retain axiom (iii''), we perform the following actions:
 To retain axiom (P), we perform the following actions for each pending identity of the form $I[x,y,z]$ for some $y,z$, executed in some arbitrary order.
 \begin{itemize}
 \item Remove this identity $I[x,y,z]$ from the list of pending identities.
-\item Set $L_0 R'_0 e_{d_0} y := e_{d'_{y,z}}$, and $x' \op y' := z'$, where $(x',y',z') := (z, x, (R'_{2d_0})^{-1} e_{d'_{y,z}})$. Extend all the new definitions of $L'_0$ using \Cref{itero}, \Cref{itero-2}.
+\item Set $L_0 R'_0 R'_{d_0} y := e_{d'_{y,z}}$, and $x' \op y' := z'$, where $(x',y',z') := (z, x, (R'_{2d_0})^{-1} e_{d'_{y,z}})$. Extend all the new definitions of $L'_0$ using \Cref{itero}, \Cref{itero-2}.
 \item If $S'x'$ is undefined, add $I[x',y',z']$ as a pending identity.
-\item If instead $S'x'$ is defined (which makes $L_0 R'_0 R'_{S'x'} y'$ defined, by axiom (C)), set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', (R'_{2S'x'})^{-1} L_0 R'_0 R'_{Sx'} y')$.  Then add $I[x'',y'',z'']$ as a pending identity.
+\item If instead $S'x'$ is defined (which makes $L_0 R'_0 R'_{S'x'} y'$ defined, by axiom (C)), set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', (R'_{2S'x'})^{-1} L_0 R'_0 R'_{S'x'} y')$.  Then add $I[x'',y'',z'']$ as a pending identity.
 \end{itemize}
 One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (iii'), (iv''), (v''), (vii''), (P), (P') are preserved; the remaining axiom (vi'') is unaffected by this extension.
 \end{proof}
