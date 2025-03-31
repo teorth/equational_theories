@@ -44,7 +44,6 @@ lemma SM_square_square_eq_zero (a : SM) : S (S a) = 0 := by
   abel_nf
   exact ZModModule.char_nsmul_eq_zero 4 _
 
-@[simp]
 lemma SM_square_eq_double (a : SM) : S a = a + a := rfl
 
 lemma SM_obeys_1729 : Equation1729 SM := by
