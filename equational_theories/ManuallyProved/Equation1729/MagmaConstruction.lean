@@ -508,7 +508,7 @@ lemma basis_elements_of_rel {x y:N} (h: x ≈ y) : basis_elements x = basis_elem
   exact basis_elements_of_rel' (Setoid.symm h) h2
 
 /-- All the elements of `SM` that are involved in a partial solution, plus an additional set of extra elements of `N`-/
-abbrev PartialSolution.involved_elements (sol: PartialSolution) (extras: Finset N) : Finset SM := Finset.biUnion sol.Predom_L₀' basis_elements ∪ Finset.biUnion sol.Dom_S' basis_elements ∪ Finset.image  sol.S' sol.Dom_S' ∪ Finset.biUnion sol.Dom_op (fun (x, _) ↦ basis_elements x) ∪ Finset.biUnion sol.Dom_op (fun (_, y) ↦ basis_elements y) ∪ Finset.biUnion sol.Dom_op (fun (x, y) ↦ basis_elements' (sol.op x y)) ∪ Finset.biUnion extras basis_elements
+abbrev PartialSolution.involved_elements (sol: PartialSolution) (extras: Finset N) : Finset SM := Finset.biUnion sol.Predom_L₀' basis_elements ∪ Finset.biUnion sol.Dom_S' basis_elements ∪ Finset.image  sol.S' sol.Dom_S' ∪ Finset.biUnion sol.Dom_op (fun (x, _) ↦ basis_elements x) ∪ Finset.biUnion sol.Dom_op (fun (_, y) ↦ basis_elements y) ∪ Finset.biUnion sol.Dom_op (fun (x, y) ↦ basis_elements' (sol.op x y)) ∪ Finset.biUnion sol.I (fun (x, _, _) ↦ basis_elements x) ∪ Finset.biUnion sol.I (fun (_, y, _) ↦ basis_elements y) ∪ Finset.biUnion sol.I (fun (_, _, z) ↦ basis_elements z) ∪ Finset.biUnion extras basis_elements
 
 abbrev PartialSolution.directly_sees (sol:PartialSolution) (extras: Finset N) (x:N) := basis_elements x ⊆ sol.involved_elements extras
 
@@ -575,30 +575,47 @@ lemma PartialSolution.dom_S'_involved (sol: PartialSolution) (extras: Finset N) 
     constructor
     . apply sol.see_direct
       intro a ha
-      apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
+      apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
       simp only [Finset.mem_biUnion]
       exact ⟨ x, hx, ha ⟩
-    apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
+    apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
     exact Finset.mem_image_of_mem S' hx
 
 lemma PartialSolution.dom_op_involved (sol: PartialSolution) (extras: Finset N) {x y : N} (hxy: (x,y) ∈ sol.Dom_op) : sol.sees extras x ∧ sol.sees extras y ∧ sol.sees' extras (sol.op x y) := by
     refine ⟨ ?_, ?_, ?_ ⟩
     . apply see_direct
       intro a ha
-      apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
+      apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
       simp only [Finset.mem_biUnion]
       exact ⟨ (x,y), hxy, ha ⟩
     . apply see_direct
       intro a ha
-      apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
+      apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
       simp only [Finset.mem_biUnion]
       exact ⟨ (x,y), hxy, ha ⟩
     apply see_direct'
     intro a ha
-    apply Finset.mem_union_left _ $ Finset.mem_union_right _ _
+    apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
     simp only [Finset.mem_biUnion]
     exact ⟨ (x,y), hxy, ha ⟩
 
+lemma PartialSolution.I_involved (sol: PartialSolution) (extras: Finset N) {x y z: N} (hxyz: (x,y,z) ∈ sol.I) : sol.sees extras x ∧ sol.sees extras y ∧ sol.sees extras z := by
+    refine ⟨ ?_, ?_, ?_ ⟩
+    . apply see_direct
+      intro a ha
+      apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
+      simp only [Finset.mem_biUnion]
+      exact ⟨ (x,y,z), hxyz, ha ⟩
+    . apply see_direct
+      intro a ha
+      apply Finset.mem_union_left _ $ Finset.mem_union_left _ $ Finset.mem_union_right _ _
+      simp only [Finset.mem_biUnion]
+      exact ⟨ (x,y,z), hxyz, ha ⟩
+    apply see_direct
+    intro a ha
+    apply Finset.mem_union_left _ $ Finset.mem_union_right _ _
+    simp only [Finset.mem_biUnion]
+    exact ⟨ (x,y,z), hxyz, ha ⟩
 
 /-- All the indices in ℕ that are involved in a partial solution, plus an additional set of extra elements of `N`-/
 abbrev PartialSolution.involved_generators (sol : PartialSolution) (extras: Finset N): Finset ℕ := generators (sol.involved_elements extras)
@@ -799,10 +816,6 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
   set d₀ : SM := E (sol.fresh_generator {x} 0)
   set d₁ : SM := E (sol.fresh_generator {x} 1)
   set d : N → N → SM := fun y ↦ fun z ↦ E (sol.fresh_generator {x} (enum (y,z)))
-
-
-
-
   sorry
 
 lemma enlarge_S'_induction {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by sorry
@@ -897,9 +910,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         intro hzx
         rw [hzx] at h3
         exact id (Ne.symm h3)
-      axiom_P' := by
-        intro x y y' z hy hy'
-        sorry
+      axiom_P' := sol.axiom_P'
     }
     refine ⟨ sol', ?_, ?_ ⟩
     . refine ⟨ by rfl, ?_, by rfl, ?_, ?_, ?_ ⟩
@@ -983,8 +994,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         obtain ⟨ h4, h5 ⟩ := h4
         rw [←h5] at h4
         exact h3.2 a h4
-      axiom_P' := by
-        sorry
+      axiom_P' := sol.axiom_P'
     }
     refine ⟨ sol', ?_, ?_ ⟩
     . refine ⟨ by rfl, ?_, by rfl, ?_, ?_, ?_ ⟩
@@ -1002,7 +1012,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
   set d0 := E $ sol.fresh_generator {x,y,w} 0
   set d1 := E $ sol.fresh_generator {x,y,w} 1
   set z := (e d0)^2
-  have h_z_invis : ¬ sol.sees {x, y, w} z := sol.fresh_invis_pow {x, y, w} 0 (Ne.symm (Nat.zero_ne_add_one 1))
+  have hz_invis : ¬ sol.sees {x, y, w} z := sol.fresh_invis_pow {x, y, w} 0 (Ne.symm (Nat.zero_ne_add_one 1))
   classical
   set new_L₀' := if w ∈ sol.Dom_L₀' then sol.L₀' else extend w (e d1) sol.L₀'
   set z' := (R' (S (sol.S' x))).symm $ new_L₀' w
@@ -1125,7 +1135,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
       have h7 : ¬ (z'' = z ∧ x' = x) := by
         by_contra h7
         rw [h7.1] at h3
-        exact h_z_invis (sol.dom_op_involved {x,y,w} h3).1
+        exact hz_invis (sol.dom_op_involved {x,y,w} h3).1
       by_cases hw : w ∈ sol.Dom_L₀'
       . simp only [Finset.union_insert, Finset.mem_insert, Prod.mk.injEq, h6, Finset.mem_union, h3,
         Finset.mem_singleton, h7, or_false, or_true, hw, ↓reduceIte, true_and, h4, h5, new_L₀']
@@ -1152,7 +1162,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
 
       have hz : z ∉ sol.Dom_S' := by
         by_contra h3
-        exact h_z_invis $ (sol.dom_S'_involved {x,y,w} h3).1
+        exact hz_invis $ (sol.dom_S'_involved {x,y,w} h3).1
 
       have hz'_vis (hw : w ∈ sol.Dom_L₀') : sol.sees {x,y,w} z' := by
         simp only [hw, ↓reduceIte, z', new_L₀']
@@ -1164,12 +1174,12 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rcases h3 with ⟨ h3, h4 ⟩ | h3 | ⟨ h3, h4 ⟩
         . rw [h4] at hz
           exact hz hy
-        . exact h_z_invis (sol.dom_op_involved {x,y,w} h3).2.1
+        . exact hz_invis (sol.dom_op_involved {x,y,w} h3).2.1
         rw [h4] at hz
         exact hz hx
       . by_contra h
         by_cases hw : w ∈ sol.Dom_L₀'
-        . contrapose! h_z_invis
+        . contrapose! hz_invis
           rw [← h]
           exact hz'_vis hw
         simp only [R', hw, ↓reduceIte, extend, Setoid.refl w,
@@ -1189,7 +1199,24 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
       simp only [R', hw, ↓reduceIte, extend, Setoid.refl w,
         inv_mul_cancel_right, Equiv.coe_fn_symm_mk, Equiv.coe_fn_mk, ne_eq, z', new_L₀', z]
       exact FreeGroup.div_ne_square_mul _ _ _ _
-    axiom_P' := by sorry
+    axiom_P' := by
+      intro x₁ y₁ y'₁ z₁ hy hy'
+      simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hy hy'
+      have (y₁ : N) : (z, y₁, z₁) ∉ sol.I := by
+        contrapose! hz_invis
+        exact (sol.I_involved _ hz_invis).1
+
+      rcases hy with hy | ⟨ hy₁, hy₂, hy₃ ⟩
+      . rcases hy' with hy' | ⟨ hy'₁, hy'₂, hy'₃ ⟩
+        . exact sol.axiom_P' x₁ y₁ y'₁ z₁ hy hy'
+        replace this := this y₁
+        contrapose! this
+        rwa [hy'₁] at hy
+      rcases hy' with hy' | ⟨ hy'₁, hy'₂, hy'₃ ⟩
+      . replace this := this y'₁
+        contrapose! this
+        rwa [hy₁] at hy'
+      rw [hy₂, hy'₂]
   }
   refine ⟨ sol', ?_, Finset.mem_union_right _ $ Finset.mem_insert_self (x, y) {(z, x)} ⟩
   refine ⟨ ?_, Finset.subset_union_left, by rfl, ?_, ?_, ?_ ⟩
@@ -1209,7 +1236,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
     have h2 : ¬ (x' = z ∧ y' = x) := by
       by_contra h2
       rw [h2.1, h2.2] at hxy'
-      exact h_z_invis (sol.dom_op_involved {x,y,w} hxy').1
+      exact hz_invis (sol.dom_op_involved {x,y,w} hxy').1
     simp only [Prod.mk.injEq, h1, ↓reduceIte, h2, sol']
   intros; rfl
 
