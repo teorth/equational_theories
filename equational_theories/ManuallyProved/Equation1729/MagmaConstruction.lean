@@ -548,7 +548,7 @@ lemma PartialSolution.dom_L₀'_involved' (sol: PartialSolution) (extras: Finset
   apply sol.see_direct
   exact calc
     _ ⊆ Finset.biUnion sol.Predom_L₀' basis_elements := by
-      simp [fill] at hx
+      simp [PartialSolution.Dom_L₀', fill] at hx
       obtain ⟨ y, hxy, hy ⟩ := hx
       rw [←basis_elements_of_rel hxy]
       exact Finset.subset_biUnion_of_mem _ hy
@@ -559,7 +559,7 @@ lemma PartialSolution.dom_L₀'_involved' (sol: PartialSolution) (extras: Finset
 
 lemma PartialSolution.dom_L₀'_involved (sol: PartialSolution) (extras: Finset N) {x : N} (hx: x ∈ sol.Dom_L₀') : sol.sees extras x ∧ sol.sees extras (sol.L₀' x) := by
   refine ⟨ sol.dom_L₀'_involved' extras hx, sol.dom_L₀'_involved' extras ?_ ⟩
-  simp only [fill, Set.mem_setOf_eq] at hx
+  simp only [PartialSolution.Dom_L₀', fill, Set.mem_setOf_eq] at hx
   obtain ⟨ y, hxy, hy ⟩ := hx
   obtain ⟨ n, hn ⟩ := hxy
   have := sol.axiom_i'' y (sol.L₀' y) hy rfl n
@@ -1076,7 +1076,8 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         Prod.mk.injEq, Finset.union_insert, Finset.mem_insert, and_true, exists_eq_left', or_true, true_and]
         right
         by_cases hw : w ∈ sol.Dom_L₀'
-        . simp only [hw, ↓reduceIte, hxy, and_false, and_self, z', new_L₀']
+        . simp only [hw, ↓reduceIte, hxy, and_false, and_self, z', new_L₀', and_true]
+          exact hw
         simp only [hw, ↓reduceIte, hxy, and_false, Sum.inr.injEq, new_L₀', z', and_true]
         apply subset_fill _
         simp only [Finset.coe_insert,
