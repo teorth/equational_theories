@@ -195,7 +195,7 @@ Now we seek to enlarge a partial solution. We first make an easy observation:
 \begin{proposition}[Enlarging $L'_0$]\label{enlarge-l0}\lean{Eq1729.enlarge_L₀'}\leanok  Suppose one has a partial solution in which $L'_0 x$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $L'_0 x$ is now defined.
 \end{proposition}
 
-\begin{proof}  By axiom (i''), $L'_0 (R'_0)^n x$ is undefined for every integer $n$.  Let $d = E_m$ be a generator of $SM$ that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution; such a $d$ exists due to the finiteness hypotheses.  We set $L'_0 x := e_d$, and then extend by \Cref{itero}, \Cref{itero-2}, thus
+\begin{proof} \leanok By axiom (i''), $L'_0 (R'_0)^n x$ is undefined for every integer $n$.  Let $d = E_m$ be a generator of $SM$ that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution; such a $d$ exists due to the finiteness hypotheses.  We set $L'_0 x := e_d$, and then extend by \Cref{itero}, \Cref{itero-2}, thus
 $$L'_0 (R'_0)^n x := (R'_0)^n e_d$$
 and
 $$L'_0 (R'_0)^n e_d := (R'_0)^{n-1} x.$$
@@ -248,13 +248,13 @@ Case 1: $x=y$.  In this case we set $x \op' y := S'x$.  It is clear that this pr
 
 Case 2: If $x = R'_a y$ for some $a \in SM$, then we set $x \op' y := a - S'y$.  This preserves axiom (vi''), and no other axiom is impacted.
 
-Case 3: If $x$ is not equal to $y$ or $R'_a y$ for any $a \in SM$.  Let $d_0, d_1 \in SM$ be a generator that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution.  We set $x \op' y := z$ with $z := e_{d_0}$.
+Case 3: If $x$ is not equal to $y$ or $R'_a y$ for any $a \in SM$.  Let $d_0, d_1 \in SM$ be generators that do not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution.  We set $x \op' y := z$ with $z := e^2_{d_0}$.
 
 This temporarily disrupts axiom (vii'').  To recover it, we perform the following actions.
 \begin{itemize}
   \item If $L'_0 R'_0 R'_{S'x} y$ is not currently defined, we set it equal to $e_{d_1}$, and extend by \Cref{itero}, \Cref{itero-2}.
-  \item Set $x' \op y' = z'$, where $(x',y',z') := (z, x, (R'_{2S'x})^{-1} L_0 R'_0 e_{Sx} y)$.
-  \item Add $I[x',y',z']$`as a pending identity.
+  \item Set $x' \op' y' = z'$, where $(x',y',z') := (z, x, (R'_{2S'x})^{-1} L_0 R'_0 R'_{Sx} y)$.
+  \item Add $I[x',y',z']$ as a pending identity.
 \end{itemize}
 
 One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (vii'), (P) are preserved; the remaining axioms (S), (iii''), (iv''), (v''), (vi'') are unaffected by this extension.
