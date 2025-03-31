@@ -777,6 +777,8 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol' : PartialSolution,
   apply Finset.mem_union_right
   simp only [Finset.mem_insert, Finset.mem_singleton, true_or]
 
+lemma enlarge_L₀'_multiple (sol : PartialSolution) (A: Finset N)  : ∃ sol' : PartialSolution, sol ≤ sol' ∧ A.toSet ⊆ fill sol'.Predom_L₀' := by sorry
+
 lemma enlarge_S'_induction {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') : ∃ sol' : PartialSolution, sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by sorry
 
 -- derive this from the inductive step `enlarge_S'_induction` using the API for ordering on `N` in `SmallMagma.lean`
