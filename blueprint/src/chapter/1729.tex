@@ -124,7 +124,7 @@ for all $a \in SM$.
 
 We now write the other remaining axioms in terms of $L'_0$ rather than $L'_a$ using \Cref{la0}, \Cref{la1}, \Cref{ra-def}, and the magma law on $SM$:
 \begin{itemize}
-\item (iii')  If $R'_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $(R'_{S'y})^{-1} L'_0 R'_{2S'y} (R'_{a - S'x})^{-1} L'_0 e_{2(a - S'x)} y = x$.
+\item (iii')  If $R'_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $(R'_{S'y})^{-1} L'_0 R'_{2S'y} (R'_{a - S'x})^{-1} L'_0 R'_{2(a - S'x)} y = x$.
 \item (iv')  For all $x \in N$, we have $(R'_{S'x})^{-1} L'_0 R'_{2S'x} (R'_{S'x})^{-1} L'_0 R'_{2S'x} x = x$.
 \item (v)  For all $x \in N$, we have $x \op' x = S'x$.
 \item (vi')  For all $y \in N$ and $a \in SM$, we have $e_a y \op' y = a - S'y$.
@@ -202,26 +202,27 @@ $$L'_0 (R'_0)^n e_d := (R'_0)^{n-1} x.$$
 Because of the new nature of $d$, no collisions in the partial function $L_0$ are created by this operation.  It is then easy to check that axiom (i'') is preserved by this operation, whereas none of the other axioms (S), (iii''), (iv''), (v''), (vi''), (vii''), (P) are affected by this extension.
 \end{proof}
 
-Next, we provide a tool for enlarging the domain of definition of $S'$:
+Next, we provide a tool for enlarging the domain of definition of $S'$.  The main step is the following inductive one.
 
-\begin{proposition}[Enlarging $S'$]\label{enlarge-S}\lean{Eq1729.enlarge_S'}\leanok  Suppose one has a partial solution in which $S'x$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $S'x$ is now defined.
+\begin{proposition}[Enlarging $S'$ with induction hypothesis]\label{enlarge-S-induct}\lean{Eq1729.enlarge_S'}\leanok  Suppose one has a partial solution in which $S'x$ is undefined for some $x \in N$, but $S'y$ is defined for all $y < x$.  (This hypothesis is vacuous for $x=1$.) Then one can extend the partial solution so that $S'x$ is now defined.
 \end{proposition}
 
-\begin{proof} By iteration we may assume inductively that $S'y$ is already defined for all $y$ on the unique path in the Cayley graph from $1$ to $x$.  (This hypothesis is vacuous if $x=1$.)  Let $y_0$ be the parent of $x$, that is to say the unique neighbor of $x$ in the path to $1$ (this is only defined for $x \neq 1$), then by axiom (i'') $y_0$ is the unique neighbor for which $S'y_0$ is defined, and we either have $x = R'_a y_0$ or $R'_a x = y_0$ for some $a \in SM$.
+\begin{proof}\uses{enlarge-l0}  (This hypothesis is vacuous if $x=1$.)  Let $y_0$ be the parent of $x$, that is to say the unique neighbor of $x$ in the path to $1$ (this is only defined for $x \neq 1$), then by axiom (i'') $y_0$ is the unique neighbor for which $S'y_0$ is defined, and we either have $x = R'_a y_0$ or $R'_a x = y_0$ for some $a \in SM$.
 
-Let $d_0, d_1, d_2 \in SM$ be distinct generators $E_{n_0}, E_{n_1}, E_{n_2}$ of $SM$ that do not appear in the index $a$ of any $e_a$ that currently appears in the partial solution (of which there are only finitely many).  We also set some further distinct generators $d'_{y,z}, d''_{y,z} \in SM$ for $y,z \in SM$ that are distinct from each other and all previous generators (this is possible as we have infinitely many generators).  We set $S'x := e_{d_0}$; this preserves axiom (S).  In order to retain axiom (iv''), we now also set
+Let $d_0, d_1, d_2 \in SM$ be distinct generators $E_{n_0}, E_{n_1}, E_{n_2}$ of $SM$ that do not appear in the index $a$ of any $e_a$ that currently appears in the partial solution (of which there are only finitely many).  We also set some further distinct generators $d'_{y,z}, d''_{y,z} \in SM$ for $y,z \in SM$ that are distinct from each other and all previous generators (this is possible as we have infinitely many generators).  We set $S'x := d_0$; this preserves axiom (S).  In order to retain axiom (iv''), we now also set
 $$ L'_0 R'_{2d_0} x := e_{d_1}$$
-$$ L'_0 R'_{2e_{d_0}} (R'_{S'x})^{-1} e_{d_1} := e_{d_0} x$$
+$$ L'_0 R'_{2d_0} (R'_{d_0})^{-1} e_{d_1} := R'_{d_0} x$$
 and then extend these choices using \Cref{itero}, \Cref{itero-2} to recover axiom (i'), thus for instance
-$$ L'_0 (R'_0)^n e_{2d_0} x := (R'_0)^n e_{d_1}$$
+$$ L'_0 (R'_0)^n R'_{2d_0} x := (R'_0)^n e_{d_1}$$
 and
-$$ L'_0 (R'_0)^n e_{d_1} x := (R'_0)^{n-1} e_{2d_0}$$
+$$ L'_0 (R'_0)^n e_{d_1}  := (R'_0)^{n-1} R'_{2d_0} x$$
 for all $n \in \Z$.  To retain axiom (iii''), we perform the following actions:
 \begin{itemize}
 \item If $y_0$ is undefined, do nothing.
-\item If $e_a x = y_0$ for some $a \in SM$, set $L'_0 R'_{2(a-d_0)} y_0 := e_{d_2}$ and $L_0 R'_{2S'y_0} (R'_{a-d_0})^{-1} e_{d_2} := e_{S'y_0} x$.  Then extend using \Cref{itero}, \Cref{itero-2}.
-\item If $x = e_a y_0$ for some $a \in SM$, and $L'_0 (R'_{2(a-Sy_0)})^{-1} x$ is already defined, set $L'_0 R'_{2d_0} (R'_{a-S'y_0})^{-1} L'_0 R'_{2(a-Sy_0)} x :=R'_{d_0}x$, and extend using \Cref{itero}, \Cref{itero-2}.
-\item If $x = e_a y_0$ for some $a \in SM$, and $L'_0 (R'_{2(a-Sy_0)})^{-1} x$ is not yet defined, set $L'_0 R'_{2(a-Sy_0)} x := e_{d_2}$ and $L'_0 R'_{2d_0} (R'_{a-Sy_0})^{-1} e_{d_2} := e_{d_0} x$, and extend using \Cref{itero}, \Cref{itero-2}.
+\item If $R'_a x = y_0$ for some $a \in SM$ and $L'_0 R'_{S'y_0} x$ is undefined, set $L'_0 R'_{2(a-d_0)} y_0 := e_{d_2}$ and $L'_0 R'_{2S'y_0} (R'_{a-d_0})^{-1} e_{d_2} := R'_{S'y_0} x$.  Then extend using \Cref{itero}, \Cref{itero-2}.
+\item If $R'_a x = y_0$ for some $a \in SM$ and $L'_0 R'_{S'y_0} x$ is defined, set $L'_0 R'_{2(a-d_0)} y_0 := R'_{a-d_0} (R'_{2S'y_0})^{-1} R'_0 L'_0 R'_{S'y_0}$.
+\item If $x = R'_a y_0$ for some $a \in SM$, and $L'_0 R'_{2(a-Sy_0)} x$ is already defined, set $L'_0 R'_{2d_0} (R'_{a-S'y_0})^{-1} L'_0 R'_{2(a-Sy_0)} x :=R'_{d_0}x$, and extend using \Cref{itero}, \Cref{itero-2}.
+\item If $x = R'_a y_0$ for some $a \in SM$, and $L'_0 R'_{2(a-Sy_0)} x$ is not yet defined, set $L'_0 R'_{2(a-Sy_0)} x := e_{d_2}$ and $L'_0 R'_{2d_0} (R'_{a-Sy_0})^{-1} e_{d_2} := R'_{d_0} x$, and extend using \Cref{itero}, \Cref{itero-2}.
 \end{itemize}
 To retain axiom (P), we perform the following actions for each pending identity of the form $I[x,y,z]$ for some $y,z$, executed in some arbitrary order.
 \begin{itemize}
@@ -233,6 +234,14 @@ To retain axiom (P), we perform the following actions for each pending identity 
 \item Extend all the new definitions of $L'_0$ using \Cref{itero}, \Cref{itero-2}.
 \end{itemize}
 One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (iii'), (iv''), (vii'), (P) are preserved; the remaining axioms (v''), (vi') are unaffected by this extension.
+\end{proof}
+
+As a corollary, we have
+
+\begin{proposition}[Enlarging $S'$]\label{enlarge-S}\lean{Eq1729.enlarge_S'}\leanok  Suppose one has a partial solution in which $S'x$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $S'x$ is now defined.
+\end{proposition}
+
+\begin{proof}\uses{enlarge-S-induct}  Obtained by induction from Proposition \ref{enlarge-S-induct}, using the fact that there are no infinite descending chains in $N$.
 \end{proof}
 
 Finally, we give a tool for enlarging $\op$:
