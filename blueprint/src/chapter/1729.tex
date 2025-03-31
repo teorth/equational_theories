@@ -240,7 +240,7 @@ Finally, we give a tool for enlarging $\op$:
 \begin{proposition}[Enlarging $\op$]\label{enlarge-op}\lean{Eq1729.enlarge_op}\leanok  Suppose one has a partial solution in which $x \op' y$ is undefined for some $x,y \in N$.  Then one can extend the partial solution so that $x \op' y$ is now defined.
 \end{proposition}
 
-\begin{proof}\uses{enlarge-S}  By applying \Cref{enlarge-S} as needed, we may assume without loss of generality that $S'x$ and $S'y$ are already defined (among other things, this removes the possibility that $x \op' y$ is part of a pending identity).  If this makes $x \op' y$ defined, then we are done, so we may assume that this is not the case.
+\begin{proof}\uses{enlarge-S}\leanok  By applying \Cref{enlarge-S} as needed, we may assume without loss of generality that $S'x$ and $S'y$ are already defined (among other things, this removes the possibility that $x \op' y$ is part of a pending identity).  If this makes $x \op' y$ defined, then we are done, so we may assume that this is not the case.
 
 We now divide into cases:
 
@@ -264,6 +264,6 @@ One can check that these definitions do not cause any collisions in the partial 
 \begin{theorem}[1729 does not imply 817]\label{1729_refute_817}\lean{Eq1729.not_817}\leanok There exists a magma that obeys equation 1729 but not equation 817.
 \end{theorem}
 
-\begin{proof}\uses{partial-exist, enlarge-l0, enlarge-S, enlarge-op,chain}
+\begin{proof}\uses{partial-exist, enlarge-l0, enlarge-S, enlarge-op,chain}\leanok
   Starting from \Cref{partial-exist} and applying \Cref{enlarge-l0}, \Cref{enlarge-S}, \Cref{enlarge-op} alternatingly, one can find a chain of partial solution that are total in the limit.  The claim now follows from \Cref{chain}.
 \end{proof}
