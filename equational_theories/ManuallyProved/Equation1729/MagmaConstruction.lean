@@ -569,6 +569,13 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
     inj' := by sorry
   }
 
+  let L₀'_pre_embed : (L₀'_data sol x) × Bool ↪ N := {
+    toFun := fun input ↦ match input with
+    | (data, true) => (L₀'_pair data).1
+    | (data, false) => (L₀'_pair data).2
+    inj' := by sorry
+  }
+
   let L₀'_output : (L₀'_data sol x) × ℤ × Bool → N := fun input ↦ match input with
     | (data, n, true) => (L₀'_pair data).2 * (e 0)^n
     | (data, n, false) => (L₀'_pair data).1 * (e 0)^(n-1)
@@ -580,6 +587,10 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
 
   have new_L₀'_extend {y:N} (hy: y ∈ sol.Dom_L₀') : new_L₀' y = sol.L₀' y := by
     sorry
+
+  let new_predom : Finset N := L₀'_pre_embed.range_finset
+
+  have mem_new_predom (data : L₀'_data sol x) : (L₀'_pair data).1 ∈ new_predom := by sorry
 
 /- Construction of the new `op`.  Each op_data object `data` produces an instance of the operation `op`: `sol.op (op_triple d₀ d data).1 (op_triple d₀ d data).2.1 = (op_triple d₀ d data).2.2. -/
   let op_triple : op_data sol x → N × N × M := fun data ↦ match data with
@@ -616,18 +627,9 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
     inj' := by sorry
   }
 
-  let new_I : Set (N × N × N) := I_triple '' Set.univ
+  let new_I : Finset (N × N × N) := I_triple.range_finset
 
-  have new_I_finite : Set.Finite new_I := by sorry
-
--- Now start setting up the new operations
-
-
-  let new_predom : Set N := { y | ∃ data, (L₀'_pair data).1 = y ∨ (L₀'_pair data).2 = y }
-
-  have new_predom_finite : Set.Finite new_predom := by sorry
-
-  have mem_new_predom (data : L₀'_data sol x) : (L₀'_pair data).1 ∈ new_predom_finite.toFinset := by sorry
+-- Set up S
 
   let new_S : N → SM := fun y ↦ if y=x then d₀ else sol.S' y
 
@@ -644,8 +646,8 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
     L₀' := new_L₀'
     op := new_op
     S' := new_S
-    I := new_I_finite.toFinset
-    Predom_L₀' := sol.Predom_L₀' ∪ new_predom_finite.toFinset
+    I := new_I
+    Predom_L₀' := sol.Predom_L₀' ∪ new_predom
     Dom_op := new_dom_op
     Dom_S' := sol.Dom_S' ∪ {x}
     axiom_i'' := sorry
