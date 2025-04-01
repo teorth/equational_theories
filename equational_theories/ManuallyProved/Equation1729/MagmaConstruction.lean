@@ -902,8 +902,38 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
 
   let new_L₀' : N → N := fun y ↦ if h: ∃ data, ∃ (n:ℤ), y = (L₀'_input data) * (e 0)^n then (L₀'_output h.choose) * (e 0)^(h.choose_spec.choose) else (if h': ∃ data, ∃ (n:ℤ), y = (L₀'_output data) * (e 0)^n then (L₀'_input h'.choose) * (e 0)^(h'.choose_spec.choose-1) else sol.L₀' y)
 
+  let new_op : N → N → M := fun y ↦ (fun z ↦ if h : ∃ data, op_x data = y ∧ op_y data = z then op_z h.choose else sol.op y z)
 
+  let new_I : Set (N × N × N) := { (x',y',z') | ∃ data, I_x data = x' ∧ I_y data = y' ∧ I_z data = z' }
 
+  have new_I_finite : Set.Finite new_I := by sorry
+
+  let new_predom : Set N := { y | ∃ data, L₀'_input data = y ∨ L₀'_output data = y }
+
+  have new_predom_finite : Set.Finite new_predom := by sorry
+
+  have new_dom_op : Set (N × N) := { (y, z) | ∃ data, op_x data = y ∧ op_y data = z}
+
+  have new_dom_op_finite : Set.Finite new_dom_op := by sorry
+
+  let sol' : PartialSolution := {
+    L₀' := new_L₀'
+    op := new_op
+    S' := fun y ↦ if y=x then d₀ else sol.S' y
+    I := new_I_finite.toFinset
+    Predom_L₀' := sol.Predom_L₀' ∪ new_predom_finite.toFinset
+    Dom_op := new_dom_op_finite.toFinset
+    Dom_S' := sol.dom_S' ∪ {x}
+    axiom_i'' := sorry
+    axiom_S := sorry
+    axiom_iii'' := sorry
+    axiom_iv'' := sorry
+    axiom_v'' := sorry
+    axiom_vi'' := sorry
+    axiom_vii'' := sorry
+    axiom_P := sorry
+    axiom_P' := sorry
+  }
 
 
   sorry
