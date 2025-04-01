@@ -867,7 +867,7 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
   | I_data.P₁ y z hI hz => (z,x,(R' (S (sol.S' z))).symm $ e $ d y z)
   | I_data.P₂ y z hI hz => ((R' (S (sol.S' z))).symm $ e $ d y z, z, (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) x)
 
--- Now start setting up the new L₀'
+-- Now start setting up the new operations
 
   have L₀'_no_collide_1 (data : L₀'_data sol x) : (L₀'_pair data).1 ∉ sol.Dom_L₀' ∧ (L₀'_pair data).2 ∉ sol.Dom_L₀' := by sorry
 
@@ -897,16 +897,33 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
 
   have new_dom_op_finite : Set.Finite new_dom_op := by sorry
 
+  let new_S : N → SM := fun y ↦ if y=x then d₀ else sol.S' y
+
+  have new_S_extend {y:N} (h: y ∈ sol.Dom_S') : new_S y = sol.S' y := by
+    by_cases hy : y = x
+    . rw [hy] at h
+      contradiction
+    simp only [hy, ↓reduceIte, new_S]
+
+
   let sol' : PartialSolution := {
     L₀' := new_L₀'
     op := new_op
-    S' := fun y ↦ if y=x then d₀ else sol.S' y
+    S' := new_S
     I := new_I_finite.toFinset
     Predom_L₀' := sol.Predom_L₀' ∪ new_predom_finite.toFinset
     Dom_op := new_dom_op_finite.toFinset
     Dom_S' := sol.Dom_S' ∪ {x}
     axiom_i'' := sorry
-    axiom_S := sorry
+    axiom_S := by
+      intro x' y hx' hyx
+      simp only [Finset.mem_union, Finset.mem_singleton] at hx'
+      rcases hx' with hx' | hx'
+      . exact Finset.mem_union_left _ $ sol.axiom_S x' y hx' hyx
+      rw [hx', le_iff_lt_or_eq] at hyx
+      rcases hyx with hyx | hyx
+      . exact Finset.mem_union_left _ $ hind y hyx
+      simp only [hyx, Finset.mem_union, Finset.mem_singleton, or_true]
     axiom_iii'' := sorry
     axiom_iv'' := sorry
     axiom_v'' := by
@@ -921,17 +938,14 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
         have hxne : x' ≠ x := by
           contrapose! hx
           rwa [hx] at h3
-        simp only [Finset.mem_union, h3, Finset.mem_singleton, hxne, or_false, ↓reduceIte, ← h4,
-          true_and]
-        exact op_extend hop
+        simp only [Finset.mem_union, h3, Finset.mem_singleton, hxne, or_false, ↓reduceIte, h4, new_S_extend h3,
+          true_and, op_extend hop]
       | v =>
         simp only at h1
-        simp only [← h1, Finset.mem_union, Finset.mem_singleton, or_true, ↓reduceIte, true_and]
-        exact op_eval op_data.v
+        simp only [← h1, Finset.mem_union, Finset.mem_singleton, or_true, ↓reduceIte, true_and, op_eval op_data.v, new_S]
       | P₁ y z hI =>
         simp only at h2
-        simp only [← h2, Finset.mem_union, Finset.mem_singleton, or_true, ↓reduceIte, true_and]
-        exact op_eval op_data.v
+        simp only [← h2, Finset.mem_union, Finset.mem_singleton, or_true, ↓reduceIte, true_and, op_eval op_data.v, new_S]
       | P₂ y z hI hz =>
         simp only at h1 h2
         -- use h1 to get contradiction
