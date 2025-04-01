@@ -918,19 +918,23 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
         simp only at h1 h2
         rw [h1,h2] at hop
         obtain ⟨ h3, h4 ⟩ := sol.axiom_v'' x' hop
-        have hxne : x' ≠ x := by sorry
+        have hxne : x' ≠ x := by
+          contrapose! hx
+          rwa [hx] at h3
         simp only [Finset.mem_union, h3, Finset.mem_singleton, hxne, or_false, ↓reduceIte, ← h4,
           true_and]
         exact op_extend hop
       | v =>
-        simp only at h1 h2
-        simp [← h1]
+        simp only at h1
+        simp only [← h1, Finset.mem_union, Finset.mem_singleton, or_true, ↓reduceIte, true_and]
         exact op_eval op_data.v
       | P₁ y z hI =>
-        simp only at h1 h2
-        sorry
+        simp only at h2
+        simp only [← h2, Finset.mem_union, Finset.mem_singleton, or_true, ↓reduceIte, true_and]
+        exact op_eval op_data.v
       | P₂ y z hI hz =>
         simp only at h1 h2
+        -- use h1 to get contradiction
         sorry
     axiom_vi'' := sorry
     axiom_vii'' := sorry
