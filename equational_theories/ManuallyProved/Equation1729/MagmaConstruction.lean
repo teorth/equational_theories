@@ -827,6 +827,10 @@ inductive I_data (sol: PartialSolution) (x:N) where
 
 
 lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') (hA: ∀ a, R' a x = parent x → R' (sol.S' (parent x)) x ∈ sol.Dom_L₀') (hB: ∀ a, x = R' a x → R' (S (a - sol.S' (parent x))) x ∈ sol.Dom_L₀') (hC : ∀ y z, (x,y,z) ∈ sol.I → z ∈ sol.Dom_S' → R' 0 ( R' (sol.S' z) x ) ∈ sol.Dom_L₀') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by
+
+  by_cases hx : x ∈ sol.Dom_S'
+  . exact ⟨ sol, sol.refl, hx ⟩
+
   classical
   let enum : N × N → ℕ := fun  p ↦ Exists.choose (Countable.exists_injective_nat (N × N)) p + 2
   have enum_injective : Function.Injective enum := by
@@ -842,77 +846,54 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
 
   let y₀ := parent x
 
-  /- Each L₀'_data object `data` generates a new input-output pair for L₀':  `sol.L₀' (L₀'_input d₀ d data) = (L₀'_output d₀ d data)  -/
-  let L₀'_input : L₀'_data sol x → N := fun data ↦ match data with
-  | L₀'_data.iv₁ => R' (S d₀) x
-  | L₀'_data.iv₂ => R' (S d₀) $ (R' d₀).symm $ e d₁
-  | L₀'_data.iii₁ a _ => R' (S (a - d₀)) y₀
-  | L₀'_data.iii₂ a _ => R' (S d₀) $ (R' (a - sol.S' y₀)).symm $ sol.L₀' $ R' (S (a - sol.S' y₀)) x
-  | L₀'_data.P y z _ => R' 0 $ R' d₀ y
+  /- Each L₀'_data object `data` generates a new input-output pair for L₀':  `sol.L₀' (L₀'_pair d₀ d data).1 = (L₀'_pair d₀ d data).2  -/
+  let L₀'_pair : L₀'_data sol x → N × N := fun data ↦ match data with
+  | L₀'_data.iv₁ => (R' (S d₀) x, e d₁)
+  | L₀'_data.iv₂ => (R' (S d₀) $ (R' d₀).symm $ e d₁, R' d₀ x)
+  | L₀'_data.iii₁ a _ => (R' (S (a - d₀)) y₀, R' (a-d₀) $ (R' (S (sol.S' y₀))).symm $ sol.L₀' $ R' (S (a - sol.S' y₀)) x)
+  | L₀'_data.iii₂ a _ => (R' (S d₀) $ (R' (a - sol.S' y₀)).symm $ sol.L₀' $ R' (S (a - sol.S' y₀)) x, R' d₀ x)
+  | L₀'_data.P y z _ => (R' 0 $ R' d₀ y, e (d y z))
 
-  let L₀'_output : L₀'_data sol x → N := fun data ↦ match data with
-  | L₀'_data.iv₁ => R' (S d₀) x
-  | L₀'_data.iv₂ => R' (S d₀) $ (R' d₀).symm $ e d₁
-  | L₀'_data.iii₁ a _ => R' (S (a - d₀)) y₀
-  | L₀'_data.iii₂ a _ => R' (S d₀) $ (R' (a - sol.S' y₀)).symm $ sol.L₀' $ R' (S (a - sol.S' y₀)) x
-  | L₀'_data.P y z _ => R' 0 $ R' d₀ y
+/- Each op_data object `data` produces an instance of the operation `op`: `sol.op (op_triple d₀ d data).1 (op_triple d₀ d data).2.1 = (op_triple d₀ d data).2.2. -/
+  let op_triple : op_data sol x → N × N × M := fun data ↦ match data with
+  | op_data.old y z hop => (y, z, sol.op y z)
+  | op_data.v => (x, x, Sum.inl d₀)
+  | op_data.P₁ y z hI => (z, x, Sum.inr x)
+  | op_data.P₂ y z hI hz => ((R' (S d₀)).symm $ e $ d y z, z, Sum.inr $ (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) y)
 
-/- Each op_data object `data` produces an instance of the operation `op`: `sol.op (op_x d₀ d data) (op_y d₀ d data) = (op_z d₀ d data). -/
-  let op_x : op_data sol x → N := fun data ↦ match data with
-  | op_data.old y z hop => y
-  | op_data.v => x
-  | op_data.P₁ y z hI => z
-  | op_data.P₂ y z hI hz => (R' (S d₀)).symm $ e $ d y z
-
-  let op_y : op_data sol x → N := fun data ↦ match data with
-  | op_data.old y z hop => z
-  | op_data.v => x
-  | op_data.P₁ y z hI => x
-  | op_data.P₂ y z hI hz => z
-
-  let op_z : op_data sol x → M := fun data ↦ match data with
-  | op_data.old y z hop => sol.op y z
-  | op_data.v => Sum.inl d₀
-  | op_data.P₁ y z hI => Sum.inr x
-  | op_data.P₂ y z hI hz => Sum.inr z
-
-/- Each I_data object `data` produces an instance of the operation `op`: `sol.op (op_x d₀ d data) (op_y d₀ d data) = (op_z d₀ d data). -/
-  let I_x : I_data sol x → N := fun data ↦ match data with
-  | I_data.old x' y z hI hxx' => x
-  | I_data.P₁ y z hI hz => z
-  | I_data.P₂ y z hI hz => (R' (S (sol.S' z))).symm $ e $ d y z
-
-  let I_y : I_data sol x → N := fun data ↦ match data with
-  | I_data.old x' y z hI hxx' => y
-  | I_data.P₁ y z hI hz => x
-  | I_data.P₂ y z hI hz => z
-
-  let I_z : I_data sol x → N := fun data ↦ match data with
-  | I_data.old x' y z hI hxx' => z
-  | I_data.P₁ y z hI hz => (R' (S (sol.S' z))).symm $ e $ d y z
-  | I_data.P₂ y z hI hz => (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) x
+/- Each I_data object `data` produces a triple for I. -/
+  let I_triple : I_data sol x → N × N × N := fun data ↦ match data with
+  | I_data.old x' y z hI hxx' => (x,y,z)
+  | I_data.P₁ y z hI hz => (z,x,(R' (S (sol.S' z))).symm $ e $ d y z)
+  | I_data.P₂ y z hI hz => ((R' (S (sol.S' z))).symm $ e $ d y z, z, (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) x)
 
 -- Now start setting up the new L₀'
 
-  have L₀'_no_collide_1 (data : L₀'_data sol x) : L₀'_input data ∉ sol.Dom_L₀' ∧ L₀'_output data ∉ sol.Dom_L₀' := by sorry
+  have L₀'_no_collide_1 (data : L₀'_data sol x) : (L₀'_pair data).1 ∉ sol.Dom_L₀' ∧ (L₀'_pair data).2 ∉ sol.Dom_L₀' := by sorry
 
-  have L₀'_no_collide_2 (data data' : L₀'_data sol x) (hneq: data ≠ data') : ¬ L₀'_input data ≈ L₀'_input data' ∧ ¬ L₀'_output data ≈ L₀'_output data' := by sorry
+  have L₀'_no_collide_2 (data data' : L₀'_data sol x) (hneq: data ≠ data') : ¬ (L₀'_pair data).1 ≈ (L₀'_pair data').1 ∧ ¬ (L₀'_pair data).2 ≈ (L₀'_pair data').2 := by sorry
 
-  have L₀'_no_collide_3 (data data' : L₀'_data sol x) : ¬ L₀'_input data ≈ L₀'_output data' := by sorry
+  have L₀'_no_collide_3 (data data' : L₀'_data sol x) : ¬ (L₀'_pair data).1 ≈ (L₀'_pair data').2 := by sorry
 
-  let new_L₀' : N → N := fun y ↦ if h: ∃ data, ∃ (n:ℤ), y = (L₀'_input data) * (e 0)^n then (L₀'_output h.choose) * (e 0)^(h.choose_spec.choose) else (if h': ∃ data, ∃ (n:ℤ), y = (L₀'_output data) * (e 0)^n then (L₀'_input h'.choose) * (e 0)^(h'.choose_spec.choose-1) else sol.L₀' y)
+  let new_L₀' : N → N := fun y ↦ if h: ∃ data, ∃ (n:ℤ), y = (L₀'_pair data).1 * (e 0)^n then (L₀'_pair h.choose).2 * (e 0)^(h.choose_spec.choose) else (if h': ∃ data, ∃ (n:ℤ), y = (L₀'_pair data).2 * (e 0)^n then (L₀'_pair h'.choose).1 * (e 0)^(h'.choose_spec.choose-1) else sol.L₀' y)
 
-  let new_op : N → N → M := fun y ↦ (fun z ↦ if h : ∃ data, op_x data = y ∧ op_y data = z then op_z h.choose else sol.op y z)
+  let new_op : N → N → M := fun y ↦ (fun z ↦ if h : ∃ data, (op_triple data).1 = y ∧ (op_triple data).2.1 = z then (op_triple h.choose).2.2 else sol.op y z)
 
-  let new_I : Set (N × N × N) := { (x',y',z') | ∃ data, I_x data = x' ∧ I_y data = y' ∧ I_z data = z' }
+  have op_eval (data : op_data sol x) : new_op (op_triple data).1 (op_triple data).2.1 = (op_triple data).2.2 := by
+    sorry
+
+  have op_extend {y:N} {z:N} (h: (y,z) ∈ sol.Dom_op) : new_op y z = sol.op y z := by
+    sorry
+
+  let new_I : Set (N × N × N) := I_triple '' Set.univ
 
   have new_I_finite : Set.Finite new_I := by sorry
 
-  let new_predom : Set N := { y | ∃ data, L₀'_input data = y ∨ L₀'_output data = y }
+  let new_predom : Set N := { y | ∃ data, (L₀'_pair data).1 = y ∨ (L₀'_pair data).2 = y }
 
   have new_predom_finite : Set.Finite new_predom := by sorry
 
-  have new_dom_op : Set (N × N) := { (y, z) | ∃ data, op_x data = y ∧ op_y data = z}
+  let new_dom_op : Set (N × N) := { (y, z) | ∃ data, (op_triple data).1 = y ∧ (op_triple data).2.1 = z}
 
   have new_dom_op_finite : Set.Finite new_dom_op := by sorry
 
@@ -923,12 +904,34 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
     I := new_I_finite.toFinset
     Predom_L₀' := sol.Predom_L₀' ∪ new_predom_finite.toFinset
     Dom_op := new_dom_op_finite.toFinset
-    Dom_S' := sol.dom_S' ∪ {x}
+    Dom_S' := sol.Dom_S' ∪ {x}
     axiom_i'' := sorry
     axiom_S := sorry
     axiom_iii'' := sorry
     axiom_iv'' := sorry
-    axiom_v'' := sorry
+    axiom_v'' := by
+      intro x' hx'
+      simp only [Set.Finite.mem_toFinset, Set.mem_setOf_eq, new_dom_op] at hx'
+      obtain ⟨ data, h1, h2 ⟩  := hx'
+      cases data with
+      | old y z hop =>
+        simp only at h1 h2
+        rw [h1,h2] at hop
+        obtain ⟨ h3, h4 ⟩ := sol.axiom_v'' x' hop
+        have hxne : x' ≠ x := by sorry
+        simp only [Finset.mem_union, h3, Finset.mem_singleton, hxne, or_false, ↓reduceIte, ← h4,
+          true_and]
+        exact op_extend hop
+      | v =>
+        simp only at h1 h2
+        simp [← h1]
+        exact op_eval op_data.v
+      | P₁ y z hI =>
+        simp only at h1 h2
+        sorry
+      | P₂ y z hI hz =>
+        simp only at h1 h2
+        sorry
     axiom_vi'' := sorry
     axiom_vii'' := sorry
     axiom_P := sorry
