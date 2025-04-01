@@ -102,6 +102,7 @@ instance extMagmaInst {SM N : Type}
   [Magma SM] (E : ExtOpsWithProps SM N) : Magma (SM ⊕ N) where
   op := operation E.toExtOps
 
+#print Equiv.symm
 
 lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
   (E : ExtOpsWithProps SM N)
@@ -114,6 +115,7 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
   case inl.inr a z =>
     simp[E.axiom_5, E.axiom_6]
     rw[←E.right_map_SM]
+    simp only [Equiv.invFun_symm]
 
     sorry
 
