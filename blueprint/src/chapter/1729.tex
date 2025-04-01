@@ -171,6 +171,7 @@ Furthermore, the following axioms are satisfied:
   \item (vi'')  For all $y \in N$ and $a \in SM$, if $e_a y \op' y$ is defined, then $a - S'y$ is defined and equal to $R'_a y \op' y$.
   \item (vii'')  For all $x,y \in N$ and $x$ is not equal to $y$ or $R'_a y$ for any $a \in SM$, and $x \op' y$ is defined, then it is equal to some $z \in N$.  Furthermore, either $I[x,y,z]$ is a pending identity, or else $z \op' x$ and $(R'_{2S'x})^{-1} L'_0 R'_0 R'_{S'x} y$ are defined and equal to each other.
   \item (P) If $I[x,y,z]$ is a pending identity, then $x,y,z \in N$, and $Sx$ and $z \op' x$ are undefined.  Furthermore, $z$ is not equal to $x$ or $R'_a x$ for any $a \in SM$.
+  \item (P') If $I[x,y,z]$ and $I[x,y',z]$ are pending identities, then $y=y'$.
 \end{itemize}
 
 We say that one partial solution $(\tilde L'_0, \tilde \op', \tilde S', \tilde {\mathcal I})$ \emph{extends} another if $(L'_0, \op', S',  {\mathcal I})$ if $\tilde L'$ is an extension of $L'_0$, $\tilde \op'$ is an extension of $\op'$, and $\tilde S'$ is an extension of $S'$.  (No constraint is imposed on the final components $\tilde {\mathcal I}, {\mathcal I}$.)  This is a preordering.
@@ -199,7 +200,7 @@ Now we seek to enlarge a partial solution. We first make an easy observation:
 $$L'_0 (R'_0)^n x := (R'_0)^n e_d$$
 and
 $$L'_0 (R'_0)^n e_d := (R'_0)^{n-1} x.$$
-Because of the new nature of $d$, no collisions in the partial function $L_0$ are created by this operation.  It is then easy to check that axiom (i'') is preserved by this operation, whereas none of the other axioms (S), (iii''), (iv''), (v''), (vi''), (vii''), (P) are affected by this extension.
+Because of the new nature of $d$, no collisions in the partial function $L_0$ are created by this operation.  It is then easy to check that axiom (i'') is preserved by this operation, whereas none of the other axioms (S), (iii''), (iv''), (v''), (vi''), (vii''), (P), (P') are affected by this extension.
 \end{proof}
 
 As a corollary, we have
@@ -214,14 +215,14 @@ Next, we provide a tool for enlarging the domain of definition of $S'$.  The mai
 
 \begin{proposition}[Enlarging $S'$ with induction hypothesis and axioms]\label{enlarge-S-induct-axioms}\lean{Eq1729.enlarge_S'_induction_with_axioms}\leanok  Suppose one has a partial solution in which $S'x$ is undefined for some $x \in N$, but $S'y$ is defined for all $y < x$.  (This hypothesis is vacuous for $x=1$.) Let $y_0$ be the parent of $x$ (if $x \neq 1$), and assume the following additional axioms:
   \begin{itemize}
-    \item[(A)] If $R'_a x = y_0$ for some $a \in SM$, then $L'_0 R'_{S' y_0} x$ is defined.
-    \item[(B)] If $x = R'_a y_0$ for some $a \in SM$, then $L'_0 R'_{2(a-S'y_0)} x$ is defined.
-    \item[(C)]  If $I[x,y,z]$ for some $y,z \in N$, and $S'z$ is defined, then $L'_0 R'_0 R'_{S'z} x$ is defined.
+    \item (A) If $R'_a x = y_0$ for some $a \in SM$, then $L'_0 R'_{S' y_0} x$ is defined.
+    \item (B) If $x = R'_a y_0$ for some $a \in SM$, then $L'_0 R'_{2(a-S'y_0)} x$ is defined.
+    \item (C)  If $I[x,y,z]$ for some $y,z \in N$, and $S'z$ is defined, then $L'_0 R'_0 R'_{S'z} x$ is defined.
     \end{itemize}
   Then one can extend the partial solution so that $S'x$ is now defined.
 \end{proposition}
 
-\begin{proof}  Let $d_0, d_1 \in SM$ be distinct generators $E_{n_0}, E_{n_1}, E_{n_2}$ of $SM$ that do not appear in the index $a$ of any $e_a$ that currently appears in the partial solution (of which there are only finitely many).  We also set some further distinct generators $d'_{y,z} \in SM$ for $y,z \in SM$ that are distinct from each other and all previous generators (this is possible as we have infinitely many generators).  We set $S'x := d_0$; this preserves axiom (S).  In order to retain axiom (iv''), we now also set
+\begin{proof}  Let $d_0, d_1 \in SM$ be distinct generators $E_{n_0}, E_{n_1}$ of $SM$ that do not appear in the index $a$ of any $e_a$ that currently appears in the partial solution (of which there are only finitely many).  We also set some further distinct generators $d'_{y,z} \in SM$ for $y,z \in SM$ that are distinct from each other and all previous generators (this is possible as we have infinitely many generators).  We set $S'x,  x \op' x := d_0$; this preserves axiom (S) and (v'').  In order to retain axiom (iv''), we now also set
 $$ L'_0 R'_{2d_0} x := e_{d_1}$$
 $$ L'_0 R'_{2d_0} (R'_{d_0})^{-1} e_{d_1} := R'_{d_0} x$$
 and then extend these choices using \Cref{itero}, \Cref{itero-2} to recover axiom (i'), thus for instance
@@ -237,11 +238,11 @@ for all $n \in \Z$.  To retain axiom (iii''), we perform the following actions:
 To retain axiom (P), we perform the following actions for each pending identity of the form $I[x,y,z]$ for some $y,z$, executed in some arbitrary order.
 \begin{itemize}
 \item Remove this identity $I[x,y,z]$ from the list of pending identities.
-\item Set $L_0 R'_0 e_{d_0} y := e_{d'_{y,z}}$, and $x' \op y' := z'$, where $(x',y',z') := (z, x, (R'_{2d_0})^{-1} e_{d'_{y,z}})$. Extend all the new definitions of $L'_0$ using \Cref{itero}, \Cref{itero-2}.
+\item Set $L_0 R'_0 R'_{d_0} y := e_{d'_{y,z}}$, and $x' \op y' := z'$, where $(x',y',z') := (z, x, (R'_{2d_0})^{-1} e_{d'_{y,z}})$. Extend all the new definitions of $L'_0$ using \Cref{itero}, \Cref{itero-2}.
 \item If $S'x'$ is undefined, add $I[x',y',z']$ as a pending identity.
-\item If instead $S'x'$ is defined (which makes $L_0 R'_0 R'_{S'x'} y'$ defined, by axiom (C)), set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', (R'_{2S'x'})^{-1} L_0 R'_0 R'_{Sx'} y')$.  Then add $I[x'',y'',z'']$ as a pending identity.
+\item If instead $S'x'$ is defined (which makes $L_0 R'_0 R'_{S'x'} y'$ defined, by axiom (C)), set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', (R'_{2S'x'})^{-1} L_0 R'_0 R'_{S'x'} y')$.  Then add $I[x'',y'',z'']$ as a pending identity.
 \end{itemize}
-One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (iii'), (iv''), (vii'), (P) are preserved; the remaining axioms (v''), (vi') are unaffected by this extension.
+One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (iii'), (iv''), (v''), (vii''), (P), (P') are preserved; the remaining axiom (vi'') is unaffected by this extension.
 \end{proof}
 
 
@@ -286,7 +287,7 @@ This temporarily disrupts axiom (vii'').  To recover it, we perform the followin
   \item Add $I[x',y',z']$ as a pending identity.
 \end{itemize}
 
-One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (vii'), (P) are preserved; the remaining axioms (S), (iii''), (iv''), (v''), (vi'') are unaffected by this extension.
+One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (vii'), (P), (P'), are preserved; the remaining axioms (S), (iii''), (iv''), (v''), (vi'') are unaffected by this extension.
 \end{proof}
 
 
