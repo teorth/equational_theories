@@ -506,7 +506,14 @@ inductive L₀'_data (sol : PartialSolution) (x:N) where
   | iii₂ (a:SM) (ha: parent x = R' a x) : L₀'_data sol x
   | P (y z:N) (hI: (x,y,z) ∈ sol.I) : L₀'_data sol x
 
-instance  (sol : PartialSolution) (x:N) : Fintype (L₀'_data sol x) := by
+noncomputable instance  (sol : PartialSolution) (x:N) : Fintype (L₀'_data sol x) := by
+  set embed : L₀'_data sol x → Fin 4 ⊕ sol.I := fun data ↦ match data with
+  | L₀'_data.iv₁ => Sum.inl 0
+  | L₀'_data.iv₂ => Sum.inl 1
+  | L₀'_data.iii₁ a ha => Sum.inl 2
+  | L₀'_data.iii₂ a ha => Sum.inl 3
+  | L₀'_data.P y z hI => Sum.inr ⟨ (x,y,z), hI ⟩
+  apply Fintype.ofInjective embed
   sorry
 
 /-- Data type to store the various op extensions needed to prove `enlarge_S'_induction_with_axioms` -/
@@ -516,7 +523,13 @@ inductive op_data (sol: PartialSolution) (x:N) where
   | P₁ (y z:N) (hI: (x,y,z) ∈ sol.I)  : op_data sol x
   | P₂ (y z:N) (hI: (x,y,z) ∈ sol.I) (hz : z ∈ sol.Dom_S') : op_data sol x
 
-instance  (sol : PartialSolution) (x:N) : Fintype (op_data sol x) := by
+noncomputable instance  (sol : PartialSolution) (x:N) : Fintype (op_data sol x) := by
+  set embed : op_data sol x → sol.Dom_op ⊕ Fin 1 ⊕ sol.I ⊕ sol.I := fun data ↦ match data with
+  | op_data.old y z hop => Sum.inl ⟨ (y,z), hop ⟩
+  | op_data.v => Sum.inr $ Sum.inl 0
+  | op_data.P₁ y z hI => Sum.inr $ Sum.inr $ Sum.inl ⟨ (x,y,z), hI ⟩
+  | op_data.P₂ y z hI hz => Sum.inr $ Sum.inr $ Sum.inr ⟨ (x,y,z), hI ⟩
+  apply Fintype.ofInjective embed
   sorry
 
 /-- Data type to store the various I extensions needed to prove `enlarge_S'_induction_with_axioms` -/
@@ -525,7 +538,12 @@ inductive I_data (sol: PartialSolution) (x:N) where
   | P₁ (y z:N) (hI: (x,y,z) ∈ sol.I) (hz : z ∉ sol.Dom_S') : I_data sol x
   | P₂ (y z:N) (hI: (x,y,z) ∈ sol.I) (hz : z ∈ sol.Dom_S') : I_data sol x
 
-instance  (sol : PartialSolution) (x:N) : Fintype (I_data sol x) := by
+noncomputable instance  (sol : PartialSolution) (x:N) : Fintype (I_data sol x) := by
+  set embed : I_data sol x → sol.I ⊕ sol.I ⊕ sol.I := fun data ↦ match data with
+  | I_data.old x' y z hI hxx' => Sum.inl ⟨ (x',y,z), hI ⟩
+  | I_data.P₁ y z hI hz => Sum.inr $ Sum.inl ⟨ (x,y,z), hI ⟩
+  | I_data.P₂ y z hI hz => Sum.inr $ Sum.inr ⟨ (x,y,z), hI ⟩
+  apply Fintype.ofInjective embed
   sorry
 
 lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') (hA: ∀ a, R' a x = parent x → R' (sol.S' (parent x)) x ∈ sol.Dom_L₀') (hB: ∀ a, x = R' a x → R' (S (a - sol.S' (parent x))) x ∈ sol.Dom_L₀') (hC : ∀ y z, (x,y,z) ∈ sol.I → z ∈ sol.Dom_S' → R' 0 ( R' (sol.S' z) x ) ∈ sol.Dom_L₀') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by
