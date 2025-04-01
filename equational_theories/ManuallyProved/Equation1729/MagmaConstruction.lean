@@ -45,6 +45,12 @@ lemma fill_mono {D₁ D₂ : Finset N} (h : D₁ ⊆ D₂) : fill D₁ ⊆ fill 
   rcases hy with ⟨x, hx, hD⟩
   exact ⟨x, hx, h hD⟩
 
+@[simp]
+lemma fill_union {D₁ D₂ : Finset N} : fill (D₁ ∪ D₂) = (fill D₁) ∪ (fill D₂) := by
+  ext y
+  simp [fill]
+  aesop
+
 lemma fill_invar (D: Finset N) {x y : N} (h : x ≈ y) : x ∈ fill D ↔ y ∈ fill D := by
   constructor
   . intro h
@@ -62,6 +68,9 @@ lemma subset_fill (D: Finset N) : D.toSet ⊆ fill D := by
   intro x hx
   simp only [fill, Set.mem_setOf_eq]
   exact ⟨ x, Setoid.refl x, hx ⟩
+
+lemma mem_fill {D: Finset N} {x:N} (hx: x ∈ D) : x ∈ fill D :=  subset_fill D hx
+
 
 abbrev axiom_i'' (L₀' : N → N) (Predom : Finset N) := ∀ (x y : N) (_: x ∈ Predom) (_ : L₀' x = y) (n:ℤ), y ∈ fill Predom ∧ L₀' (x * (e 0)^n) = y * (e 0)^n ∧ L₀' (y * (e 0)^n) = x * (e 0)^(n-1)
 
@@ -877,6 +886,12 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
 
   let new_L₀' : N → N := fun y ↦ if h: ∃ data, ∃ (n:ℤ), y = (L₀'_pair data).1 * (e 0)^n then (L₀'_pair h.choose).2 * (e 0)^(h.choose_spec.choose) else (if h': ∃ data, ∃ (n:ℤ), y = (L₀'_pair data).2 * (e 0)^n then (L₀'_pair h'.choose).1 * (e 0)^(h'.choose_spec.choose-1) else sol.L₀' y)
 
+  have new_L₀'_eval (data : L₀'_data sol x) : new_L₀' (L₀'_pair data).1 = (L₀'_pair data).2 := by
+    sorry
+
+  have new_L₀'_extend {y:N} (hy: y ∈ sol.Dom_L₀') : new_L₀' y = sol.L₀' y := by
+    sorry
+
   let new_op : N → N → M := fun y ↦ (fun z ↦ if h : ∃ data, (op_triple data).1 = y ∧ (op_triple data).2.1 = z then (op_triple h.choose).2.2 else sol.op y z)
 
   have op_eval (data : op_data sol x) : new_op (op_triple data).1 (op_triple data).2.1 = (op_triple data).2.2 := by
@@ -893,9 +908,13 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
 
   have new_predom_finite : Set.Finite new_predom := by sorry
 
+  have mem_new_predom (data : L₀'_data sol x) : (L₀'_pair data).1 ∈ new_predom_finite.toFinset := by sorry
+
   let new_dom_op : Set (N × N) := { (y, z) | ∃ data, (op_triple data).1 = y ∧ (op_triple data).2.1 = z}
 
   have new_dom_op_finite : Set.Finite new_dom_op := by sorry
+
+  have mem_new_dom_op (data : op_data sol x) : ((op_triple data).1, (op_triple data).2.1) ∈ new_dom_op_finite.toFinset := by sorry
 
   let new_S : N → SM := fun y ↦ if y=x then d₀ else sol.S' y
 
@@ -925,7 +944,15 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
       . exact Finset.mem_union_left _ $ hind y hyx
       simp only [hyx, Finset.mem_union, Finset.mem_singleton, or_true]
     axiom_iii'' := sorry
-    axiom_iv'' := sorry
+    axiom_iv'' := by
+      intro x' hx'
+      simp only [Finset.mem_union, Finset.mem_singleton] at hx'
+      rcases hx' with hx' | hx'
+      . obtain ⟨ h1, h2, h3 ⟩ := sol.axiom_iv'' x' hx'
+        simp only [fill_union, new_S_extend hx', Set.mem_union, new_L₀'_extend h1, new_L₀'_extend h2, h3, and_true]
+        exact ⟨Or.inl h1, Or.inl h2⟩
+      simp only [hx', ↓reduceIte, new_L₀'_eval L₀'_data.iv₁, new_L₀'_eval L₀'_data.iv₂, Equiv.symm_apply_apply, and_true, new_S]
+      exact ⟨ mem_fill $ Finset.mem_union_right _ $ mem_new_predom L₀'_data.iv₁, mem_fill $ Finset.mem_union_right _ $ mem_new_predom L₀'_data.iv₂ ⟩
     axiom_v'' := by
       intro x' hx'
       simp only [Set.Finite.mem_toFinset, Set.mem_setOf_eq, new_dom_op] at hx'
@@ -948,6 +975,7 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
         simp only [← h2, Finset.mem_union, Finset.mem_singleton, or_true, ↓reduceIte, true_and, op_eval op_data.v, new_S]
       | P₂ y z hI hz =>
         simp only at h1 h2
+        rw [<-h2] at h1
         -- use h1 to get contradiction
         sorry
     axiom_vi'' := sorry
