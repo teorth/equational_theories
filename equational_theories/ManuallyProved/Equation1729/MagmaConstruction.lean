@@ -263,7 +263,7 @@ lemma PartialSolution.dom_L₀'_involved (sol: PartialSolution) (extras: Finset 
   obtain ⟨ n, hn ⟩ := hxy
   have := sol.axiom_i'' y (sol.L₀' y) hy rfl n
   rw [hn, this.2.1]
-  exact fill_invar' _ this.1 n
+  exact (fill_invar' _ n).mpr this.1
 
 lemma PartialSolution.dom_S'_involved (sol: PartialSolution) (extras: Finset N) {x : N} (hx: x ∈ sol.Dom_S') : sol.sees extras x ∧ sol.S' x ∈ sol.involved_elements extras := by
     constructor
@@ -374,7 +374,7 @@ lemma extend_axiom_i'' {L₀' : N → N} {Predom: Finset N} (h: axiom_i'' L₀' 
     simp [extend, hneq, Setoid.refl x, Setoid.refl y, Setoid.symm (rel_of_mul y n), this]
     group
   . rw [← hw]
-    rw [enlarge_L₀'_extends' L₀' hx hy (subset_fill _ hz), enlarge_L₀'_extends' L₀' hx hy ((fill_invar _ (rel_of_mul (L₀' z) n)).mp (h z (L₀' z) hz rfl 0).1), enlarge_L₀'_extends' L₀' hx hy (fill_invar' _ (subset_fill _ hz) n)]
+    rw [enlarge_L₀'_extends' L₀' hx hy (subset_fill _ hz), enlarge_L₀'_extends' L₀' hx hy ((fill_invar _ (rel_of_mul (L₀' z) n)).mp (h z (L₀' z) hz rfl 0).1), enlarge_L₀'_extends' L₀' hx hy ((fill_invar' _ n).mpr (subset_fill _ hz))]
     refine ⟨ ?_, (h z (L₀' z) hz rfl n).2.1, (h z (L₀' z) hz rfl n).2.2 ⟩
     replace h := (h z (L₀' z) hz rfl 0).1
     simp only [fill, Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton, Set.mem_setOf_eq] at h ⊢
@@ -601,14 +601,28 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
   let new_L₀' : N → N := L₀'_embed.edit sol.L₀' L₀'_output
 
   have new_L₀'_eval (data : L₀'_data sol x) : new_L₀' (L₀'_pair data).1 = (L₀'_pair data).2 := by
-    sorry
+    convert L₀'_embed.edit_of_attains _ _ ⟨ data, 0, true ⟩
+    . simp only [Function.Embedding.coeFn_mk, zpow_zero, mul_one, L₀'_embed]
+    simp only [zpow_zero, mul_one, L₀'_output]
 
   have new_L₀'_extend {y:N} (hy: y ∈ sol.Dom_L₀') : new_L₀' y = sol.L₀' y := by
-    sorry
+    apply L₀'_embed.edit_of_avoids
+    intro ⟨ data, n, b ⟩
+    by_cases hb:b
+    . simp only [hb, Function.Embedding.coeFn_mk, ne_eq, L₀'_embed]
+      by_contra this
+      simp only [PartialSolution.Dom_L₀', ← this, fill_invar'] at hy
+      exact (L₀'_no_collide_1 data).1 hy
+    simp only [hb, Function.Embedding.coeFn_mk, ne_eq, L₀'_embed]
+    by_contra this
+    simp only [PartialSolution.Dom_L₀', ← this, fill_invar'] at hy
+    exact (L₀'_no_collide_1 data).2 hy
 
   let new_predom : Finset N := L₀'_pre_embed.range_finset
 
-  have mem_new_predom (data : L₀'_data sol x) : (L₀'_pair data).1 ∈ new_predom := by sorry
+  have mem_new_predom (data : L₀'_data sol x) : (L₀'_pair data).1 ∈ new_predom := by
+    rw [←L₀'_pre_embed.attains_iff_in_range]
+    exact L₀'_pre_embed.attains_image (data, true)
 
 /- Construction of the new `op`.  Each op_data object `data` produces an instance of the operation `op`: `sol.op (op_triple d₀ d data).1 (op_triple d₀ d data).2.1 = (op_triple d₀ d data).2.2. -/
   let op_triple : op_data sol x → N × N × M := fun data ↦ match data with
@@ -626,15 +640,13 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
 
   let new_op : N → N → M := fun y ↦ (fun z ↦ op_embed.edit (fun (y,z) ↦ sol.op y z) op_output (y,z))
 
-  have op_eval (data : op_data sol x) : new_op (op_triple data).1 (op_triple data).2.1 = (op_triple data).2.2 := by
-    sorry
+  have op_eval (data : op_data sol x) : new_op (op_triple data).1 (op_triple data).2.1 = (op_triple data).2.2 := op_embed.edit_of_attains _ _ data
 
-  have op_extend {y:N} {z:N} (h: (y,z) ∈ sol.Dom_op) : new_op y z = sol.op y z := by
-    sorry
+  have op_extend {y:N} {z:N} (h: (y,z) ∈ sol.Dom_op) : new_op y z = sol.op y z := op_embed.edit_of_attains _ _ (op_data.old y z h)
 
   let new_dom_op : Finset (N × N) := op_embed.range_finset
 
-  have mem_new_dom_op (data : op_data sol x) : ((op_triple data).1, (op_triple data).2.1) ∈ new_dom_op := by sorry
+  have mem_new_dom_op (data : op_data sol x) : ((op_triple data).1, (op_triple data).2.1) ∈ new_dom_op := (op_embed.attains_iff_in_range _).mp $ op_embed.attains_image data
 
 /- Construction of the new I.  Each I_data object `data` produces a triple for I. -/
   let I_triple : I_data sol x ↪ N × N × N := {

@@ -439,7 +439,8 @@ lemma fill_invar (D: Finset N) {x y : N} (h : x ≈ y) : x ∈ fill D ↔ y ∈ 
   obtain ⟨ z, hz, hD ⟩ := h
   exact ⟨ z, Setoid.trans hz (Setoid.symm h), hD ⟩
 
-lemma fill_invar' (D: Finset N) {x:N} (hx: x ∈ fill D) (n:ℤ) : x * (e 0)^n ∈ fill D := (fill_invar D (rel_of_mul x n)).mp hx
+@[simp]
+lemma fill_invar' (D: Finset N) {x:N} (n:ℤ) : x * (e 0)^n ∈ fill D ↔ x ∈ fill D := (fill_invar D (rel_of_mul x n)).symm
 
 lemma subset_fill (D: Finset N) : D.toSet ⊆ fill D := by
   intro x hx
