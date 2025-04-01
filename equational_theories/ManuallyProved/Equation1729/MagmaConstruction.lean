@@ -984,8 +984,17 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
     axiom_P' := sorry
   }
 
-
-  sorry
+  refine ⟨ sol', ?_, ?_ ⟩
+  . refine ⟨ Finset.subset_union_left, ?_, Finset.subset_union_left, ?_, ?_, ?_ ⟩
+    . intro y hy
+      exact mem_new_dom_op $ op_data.old y.1 y.2 hy
+    . intro _ hy
+      exact (new_L₀'_extend hy).symm
+    . intro _ hxy
+      exact (op_extend hxy).symm
+    intro y hy
+    exact (new_S_extend hy).symm
+  simp only [Finset.mem_union, Finset.mem_singleton, or_true, sol']
 
 lemma enlarge_S'_induction {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by sorry
 
