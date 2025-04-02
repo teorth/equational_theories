@@ -405,6 +405,7 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
       simp [L', h_vi' y a]
    }
 
+-- Remark: a lot of the definitions and API below could be restated more abstractly using the quotient space construction on groups.  This might be worth doing in order to locate some further contributions to Mathlib in this area.
 
 instance rel : Setoid N := {
   r := fun x y => ∃ n : ℤ, y = (e 0)^n * x

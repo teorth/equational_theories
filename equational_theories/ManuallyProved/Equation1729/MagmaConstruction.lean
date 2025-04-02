@@ -643,11 +643,11 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
   let new_predom : Finset N := L₀'_pre_embed.range_finset
 
   have mem_new_predom (data : L₀'_data sol x): (L₀'_pair data).1 ∈ new_predom := by
-    rw [←L₀'_pre_embed.attains_iff_in_range]
+    rw [L₀'_pre_embed.in_range_iff_attains]
     exact L₀'_pre_embed.attains_image (data, true)
 
   have mem_new_predom' (data : L₀'_data sol x): (L₀'_pair data).2 ∈ new_predom := by
-    rw [←L₀'_pre_embed.attains_iff_in_range]
+    rw [L₀'_pre_embed.in_range_iff_attains]
     exact L₀'_pre_embed.attains_image (data, false)
 
 
@@ -673,7 +673,7 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
 
   let new_dom_op : Finset (N × N) := op_embed.range_finset
 
-  have mem_new_dom_op (data : op_data sol x) : ((op_triple data).1, (op_triple data).2.1) ∈ new_dom_op := (op_embed.attains_iff_in_range _).mp $ op_embed.attains_image data
+  have mem_new_dom_op (data : op_data sol x) : ((op_triple data).1, (op_triple data).2.1) ∈ new_dom_op := (op_embed.in_range_iff_attains _).mpr $ op_embed.attains_image data
 
 /- Construction of the new I.  Each I_data object `data` produces a triple for I. -/
   let I_triple : I_data sol x ↪ N × N × N := {
@@ -717,7 +717,7 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
         obtain ⟨ h1, h2, h3 ⟩ := sol.axiom_i'' x' (sol.L₀' x') hx' (by rfl) n
         simp only [h1, true_or, new_L₀'_extend $ (fill_invar' _ _ n).mpr $ mem_fill hx', h2,
           new_L₀'_extend $ (fill_invar' _ _ n).mpr h1, h3, and_self]
-      rw [← L₀'_pre_embed.attains_iff_in_range] at hx'
+      rw [L₀'_pre_embed.in_range_iff_attains] at hx'
       obtain ⟨ ⟨ data, b ⟩, hdata ⟩ := hx'
       simp only [← hdata]
       by_cases h:b
@@ -797,7 +797,7 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
       exact ⟨ mem_fill $ Finset.mem_union_right _ $ mem_new_predom L₀'_data.iv₁, mem_fill $ Finset.mem_union_right _ $ mem_new_predom L₀'_data.iv₂ ⟩
     axiom_v'' := by
       intro x' hx'
-      simp only [Set.Finite.mem_toFinset, Set.mem_setOf_eq, new_dom_op, ←Function.Embedding.attains_iff_in_range, Function.Embedding.attains] at hx'
+      simp only [Set.Finite.mem_toFinset, Set.mem_setOf_eq, new_dom_op, Function.Embedding.in_range_iff_attains, Function.Embedding.attains] at hx'
       obtain ⟨ data, h ⟩  := hx'
       cases data with
       | old y z hop =>
@@ -820,7 +820,34 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
         rw [<-h.2] at h
         -- use h.1 to get contradiction
         sorry
-    axiom_vi'' := sorry
+    axiom_vi'' := by
+      intro y a hya
+      simp only [op_embed.in_range_iff_attains, new_dom_op] at hya
+      obtain ⟨ data, h ⟩ := hya
+      cases data with
+      | old y' z' hop =>
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+        rw [h.1, h.2] at hop
+        have := sol.axiom_vi'' y a hop
+        simp only [Finset.mem_union, this.1, Finset.mem_singleton, true_or, op_extend hop, this.2,
+          new_S_extend this.1, and_self]
+      | v =>
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+        exfalso
+        exact (h.1 ▸ (R'_axiom_iib a y)) h.2
+      | P₁ y' z' hI =>
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+        rw [h.1, ←h.2] at hI
+        have := (sol.axiom_P _ _ _ hI).2.2.2 a
+        contrapose! this
+        rfl
+      | P₂ y' z' hI hz =>
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+        rw [h.2] at hz
+        replace h := h.2 ▸ h.1
+        simp [R'] at h
+        -- get a contradiction from h
+        sorry
     axiom_vii'' := sorry
     axiom_P := sorry
     axiom_P' := sorry
