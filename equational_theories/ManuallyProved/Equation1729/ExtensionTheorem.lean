@@ -10,6 +10,7 @@ import Mathlib.Tactic
 namespace Eq1729
 
 set_option autoImplicit true
+set_option relaxedAutoImplicit true
 
 def extend_sum_inl (f : α → β) (γ : Type) : α → Sum β γ :=
   fun (x : α) => .inl (f x)
@@ -69,7 +70,7 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
   -- The small magma `SM` satisfies equation 1729
   SM_sat_1729 : Equation1729 SM
 
-  axiom_1 : ∀ a, ∀ x, (L' a) x = ((L' (S a)).symm ∘ (R' a).symm) x
+  axiom_1 : ∀ a, ∀ x, (L' a) x = ( (R' a).symm ∘ (L' (S a)).symm) x
 
   axiom_21 : ∀ a b : SM, ∀ y : N, a ≠ b → R' a y ≠ R' b y
   axiom_22 : ∀ a : SM, ∀ x, R' a x ≠ x
@@ -92,6 +93,13 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
     → (∀ a : SM, x ≠ R' a y) -- the condition for axiom 6 doesn't hold
     → rest_map x y = .inr z -- for any `z` of this form
     → rest_map z x =  (Sum.inr <| (L' (S' x)).symm y)
+
+lemma axiom_1_alt [Magma SM] (E : ExtOpsWithProps SM N) :
+  ∀ a, ∀ x, ((E.L' (E.S a)) ∘ (E.R' a) ∘ (E.L' a)) x = x := by
+  intro a x
+  simp [←E.axiom_1 a x]
+
+  sorry
 
 /-
 attribute [simp] ExtOpsWithProps.SM_sat_1729
@@ -139,15 +147,14 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
   case inl.inl =>
     simp [←E.SM_sat_1729]
   case inl.inr a z =>
-    simp [E.axiom_6, E.axiom_5]
+    simp only [E.axiom_5, E.axiom_6, Sum.inl.injEq]
     rw[←E.left_map_SM]
     simp only [Equiv.apply_symm_apply]
     -- note, axiom 1 weas not needed here. Unlike what the blueprint says.
-  case inr.inl x a =>
-    simp [E.axiom_6, E.axiom_5]
-    rw[←E.squaring_prop_SM, E.axiom_1]
-    simp
-    sorry
+  case inr.inl z a =>
+    rw [←E.squaring_prop_SM]
+    nth_rw 1 [←axiom_1_alt E a z]
+    simp only [Function.comp_apply]
   case inr.inr x' y' =>
     simp only [E.axiom_5]
     by_cases hxy : x' = y' <;>
