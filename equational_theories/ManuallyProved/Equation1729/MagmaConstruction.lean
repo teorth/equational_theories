@@ -105,6 +105,20 @@ def TrivialPartialSolution : PartialSolution := {
     exact Finset.not_mem_empty _
 }
 
+lemma PartialSolution.R0_mem_L₀' {sol : PartialSolution} {x:N} (h:  x ∈ sol.Dom_L₀') : sol.L₀' x ∈ sol.Dom_L₀' := by
+  simp [PartialSolution.Dom_L₀', fill] at h
+  obtain ⟨ y, ⟨ n, _, _ ⟩, hy ⟩ := h
+  have := sol.axiom_i'' y (L₀' y) hy (by rfl) n
+  simp only [Dom_L₀', this.2.1, fill_invar', this.1]
+
+lemma PartialSolution.inv_L₀' {sol : PartialSolution} {x:N} (h: x ∈ sol.Dom_L₀') : (sol.L₀' $ R' 0 $ sol.L₀' x) = x := by
+  simp [PartialSolution.Dom_L₀', fill] at h
+  obtain ⟨ y, ⟨ n, _, _ ⟩, hy ⟩ := h
+  simp only [R', (sol.axiom_i'' y (L₀' y) hy (by rfl) n).2.1, Equiv.coe_fn_mk, <-mul_assoc]
+  convert (sol.axiom_i'' y (L₀' y) hy (by rfl) (n+1)).2.2
+  . group
+  exact Eq.symm (Int.add_sub_cancel n 1)
+
 -- for Mathlib?
 noncomputable abbrev Set.choose {α: Type} {S: Set α} {P: α → Prop} (h: ∃ s ∈ S, P s) : S := ⟨ _, (Classical.choose_spec h).1 ⟩
 
@@ -263,7 +277,7 @@ lemma PartialSolution.dom_L₀'_involved (sol: PartialSolution) (extras: Finset 
   obtain ⟨ n, hn ⟩ := hxy
   have := sol.axiom_i'' y (sol.L₀' y) hy rfl n
   rw [hn, this.2.1]
-  exact (fill_invar' _ n).mpr this.1
+  exact (fill_invar' _ _ n).mpr this.1
 
 lemma PartialSolution.dom_S'_involved (sol: PartialSolution) (extras: Finset N) {x : N} (hx: x ∈ sol.Dom_S') : sol.sees extras x ∧ sol.S' x ∈ sol.involved_elements extras := by
     constructor
@@ -374,7 +388,7 @@ lemma extend_axiom_i'' {L₀' : N → N} {Predom: Finset N} (h: axiom_i'' L₀' 
     simp [extend, hneq, Setoid.refl x, Setoid.refl y, Setoid.symm (rel_of_mul y n), this]
     group
   . rw [← hw]
-    rw [enlarge_L₀'_extends' L₀' hx hy (subset_fill _ hz), enlarge_L₀'_extends' L₀' hx hy ((fill_invar _ (rel_of_mul (L₀' z) n)).mp (h z (L₀' z) hz rfl 0).1), enlarge_L₀'_extends' L₀' hx hy ((fill_invar' _ n).mpr (subset_fill _ hz))]
+    rw [enlarge_L₀'_extends' L₀' hx hy (subset_fill _ hz), enlarge_L₀'_extends' L₀' hx hy ((fill_invar _ (rel_of_mul (L₀' z) n)).mp (h z (L₀' z) hz rfl 0).1), enlarge_L₀'_extends' L₀' hx hy ((fill_invar' _ _ n).mpr (subset_fill _ hz))]
     refine ⟨ ?_, (h z (L₀' z) hz rfl n).2.1, (h z (L₀' z) hz rfl n).2.2 ⟩
     replace h := (h z (L₀' z) hz rfl 0).1
     simp only [fill, Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton, Set.mem_setOf_eq] at h ⊢
@@ -569,7 +583,7 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
   let L₀'_pair : L₀'_data sol x → N × N := fun data ↦ match data with
   | L₀'_data.iv₁ => (R' (S d₀) x, e d₁)
   | L₀'_data.iv₂ => (R' (S d₀) $ (R' d₀).symm $ e d₁, R' d₀ x)
-  | L₀'_data.iii₁ a _ => (R' (S (a - d₀)) y₀, R' (a-d₀) $ (R' (S (sol.S' y₀))).symm $ sol.L₀' $ R' (S (a - sol.S' y₀)) x)
+  | L₀'_data.iii₁ a _ => (R' (S (a - d₀)) y₀, R' (a-d₀) $ (R' (S (sol.S' y₀))).symm $ R' 0 $ sol.L₀' $ R' (sol.S' y₀) x)
   | L₀'_data.iii₂ a _ => (R' (S d₀) $ (R' (a - sol.S' y₀)).symm $ sol.L₀' $ R' (S (a - sol.S' y₀)) x, R' d₀ y₀)
   | L₀'_data.P y z _ => (R' 0 $ R' d₀ y, e (d y z))
 
@@ -701,16 +715,42 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
         . obtain ⟨ h1, h2, h3 ⟩ := sol.axiom_iii'' x' y a hx' hy hray
           simp only [fill_union, new_S_extend hx', Set.mem_union, h1, true_or, new_S_extend hy,
             new_L₀'_extend h1, h2, new_L₀'_extend h2, h3, and_self]
-        rw [hy] at hray ⊢
-        have : x' = y₀ := by sorry
-        have hneq : x ≠ 1 := by sorry
+        rw [hy] at hray hneq ⊢
+        have : x' = y₀ := by
+          rcases hray ▸ (parent_of_adjacent $ R'_adjacent a x') with this | this
+          . exact this
+          contrapose! hx
+          exact sol.axiom_S x' x hx' $ this ▸ (parent_le x')
+        have hneq' : x ≠ 1 := by
+          contrapose! hneq
+          simp only [this, hneq, parent_one, y₀]
         rw [this] at hray ⊢
         replace hB := hB a hray.symm
         have h1 := mem_new_predom $ L₀'_data.iii₂ a hray.symm
         simp only [PartialSolution.Dom_L₀'] at hB
-        simp [y₀, new_S_x, new_S_y₀ hneq, hB, new_L₀'_extend hB, h1, new_L₀'_eval (L₀'_data.iii₂ a hray.symm), mem_fill h1]
+        simp only [fill_union, new_S_y₀ hneq', Set.mem_union, hB, true_or, new_S_x,
+          new_L₀'_extend hB, mem_fill h1, or_true, new_L₀'_eval (L₀'_data.iii₂ a hray.symm),
+          Equiv.symm_apply_apply, and_self, y₀]
       rcases hy with hy | hy
-      . sorry
+      . rw [hx'] at hray hneq ⊢
+        have : y = y₀ := by
+          rcases hray ▸ (parent_of_adjacent $ R'_adjacent a x) with this | this
+          . contrapose! hx
+            exact sol.axiom_S y x hy $ this ▸ (parent_le y)
+          exact this
+        have hneq' : x ≠ 1 := by
+          contrapose! hneq
+          simp only [this, hneq, parent_one, y₀]
+        rw [this] at hray ⊢
+        replace hA := hA a hray
+        have h1 := mem_new_predom $ L₀'_data.iii₁ a hray
+        simp only [PartialSolution.Dom_L₀'] at hA
+        simp [L₀'_pair] at h1
+        have hfill : (sol.L₀' $ R' (sol.S' (parent x)) x) ∈ fill sol.Predom_L₀' := sol.R0_mem_L₀' hA
+        have heval : (new_L₀' $ R' 0 $ sol.L₀' $ R' (sol.S' (parent x)) x) = R' (sol.S' (parent x)) x := by
+          rw [new_L₀'_extend $ (R0_mem_fill_iff _ _).mpr hfill]
+          exact PartialSolution.inv_L₀' hA
+        simp only [fill_union, new_S_x, Set.mem_union, mem_fill h1, new_S_y₀ hneq', new_L₀'_eval (L₀'_data.iii₁ a hray), Equiv.symm_apply_apply, Equiv.apply_symm_apply, true_and, true_or, or_true, y₀, hfill, heval, R0_mem_fill_iff]
       contrapose! hneq
       rw [hx',hy]
     axiom_iv'' := by
@@ -1145,8 +1185,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
       intro a
       simp only [R', hw, ↓reduceIte, extend, Setoid.refl w, mul_inv_cancel, one_mul,
         Equiv.coe_fn_symm_mk, Equiv.coe_fn_mk, ne_eq, z', new_L₀', z]
-      sorry
-      -- exact FreeGroup.div_ne_square_mul _ _ _ _
+      exact FreeGroup.div_ne_square_mul _ _ _ _
     axiom_P' := by
       intro x₁ y₁ y'₁ z₁ hy hy'
       simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hy hy'

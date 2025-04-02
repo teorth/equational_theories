@@ -115,6 +115,11 @@ theorem parent_toWord (x : N) : (parent x).toWord = x.toWord.tail := by
   rw [parent, FreeGroup.toWord_mk, FreeGroup.Red.reduced_iff_eq_reduce.mp]
   exact FreeGroup.Red.reduced_infix (FreeGroup.reduced_toWord) (List.tail_suffix _).isInfix
 
+@[simp]
+lemma parent_one : parent 1 = 1 := by
+  simp only [parent, FreeGroup.toWord_one, List.tail_nil]
+  rfl
+
 theorem parent_le (x : N) : parent x ≤ x := by
   rw [le_def, parent_toWord]
   exact List.tail_suffix _
@@ -195,13 +200,12 @@ theorem parent_lt {x : N} (h : x ≠ 1) : parent x < x := by
 
 theorem adjacent_comm (x y : N) : adjacent x y ↔ adjacent y x := exists_congr (by tauto)
 
-theorem parent_of_adjacent (x y : N) : adjacent x y → x = parent y ∨ y = parent x := by
-  unfold adjacent
-  rintro ⟨a, h⟩
+theorem parent_of_adjacent {x y : N} (h : adjacent x y) : x = parent y ∨ y = parent x := by
+  obtain ⟨a, h⟩ := h
   wlog l : x = e a * y generalizing x y
-  · cases h
+  · rcases h with h | h
     · tauto
-    case intro.inr.inr h => exact or_comm.mp (this y x (.inl h) h)
+    exact or_comm.mp (this (.inl h) h)
   cases h : y.toWord
   case nil =>
     right
@@ -424,6 +428,9 @@ lemma rel_def {x y:N} (h: x ≈ y) : ∃ n : ℤ, y = (e 0)^n * x := (rel_iff x 
 lemma rel_of_mul (x:N) (n:ℤ) : x ≈ (e 0)^n * x := by
   use n
 
+lemma rel_of_R0 (x:N) : x ≈ R' 0 x := rel_of_mul x 1
+
+
 /-- `fill D` is the set of elements of the form (e 0)^n x with x in D and n an integer. -/
 
 def fill (D: Finset N) : Set N := { y | ∃ x, x ≈ y ∧ x ∈ D }
@@ -458,7 +465,7 @@ lemma fill_invar (D: Finset N) {x y : N} (h : x ≈ y) : x ∈ fill D ↔ y ∈ 
   exact ⟨ z, Setoid.trans hz (Setoid.symm h), hD ⟩
 
 @[simp]
-lemma fill_invar' (D: Finset N) {x:N} (n:ℤ) : (e 0)^n * x ∈ fill D ↔ x ∈ fill D := (fill_invar D (rel_of_mul x n)).symm
+lemma fill_invar' (D: Finset N) (x:N) (n:ℤ) : (e 0)^n * x ∈ fill D ↔ x ∈ fill D := (fill_invar D (rel_of_mul x n)).symm
 
 lemma subset_fill (D: Finset N) : D.toSet ⊆ fill D := by
   intro x hx
@@ -466,6 +473,13 @@ lemma subset_fill (D: Finset N) : D.toSet ⊆ fill D := by
   exact ⟨ x, Setoid.refl x, hx ⟩
 
 lemma mem_fill {D: Finset N} {x:N} (hx: x ∈ D) : x ∈ fill D :=  subset_fill D hx
+
+@[simp]
+lemma R0_mem_fill_iff (D: Finset N) (x:N) : R' 0 x ∈ fill D ↔ x ∈ fill D := (fill_invar D (rel_of_R0 x)).symm
+
+
+
+
 
 
 -- `generators A` are all the indices in ℕ involved in a finite set `A` of elements of `SM`
