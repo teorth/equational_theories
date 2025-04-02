@@ -656,7 +656,7 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
   | op_data.old y z hop => (y, z, sol.op y z)
   | op_data.v => (x, x, Sum.inl d₀)
   | op_data.P₁ y z hI => (z, x, Sum.inr $ (R' (S d₀)).symm $ e $ d y z)
-  | op_data.P₂ y z hI hz => ((R' (S d₀)).symm $ e $ d y z, z, Sum.inr $ (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) y)
+  | op_data.P₂ y z hI hz => ((R' (S d₀)).symm $ e $ d y z, z, Sum.inr $ (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) x)
 
   let op_embed : op_data sol x ↪ N × N := {
     toFun := fun data ↦ ((op_triple data).1, (op_triple data).2.1)
@@ -679,8 +679,8 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
   let I_triple : I_data sol x ↪ N × N × N := {
     toFun := fun data ↦ match data with
       | I_data.old x' y z hI hxx' => (x',y,z)
-      | I_data.P₁ y z hI hz => (z,x,(R' (S (sol.S' z))).symm $ e $ d y z)
-      | I_data.P₂ y z hI hz => ((R' (S (sol.S' z))).symm $ e $ d y z, z, (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) x)
+      | I_data.P₁ y z hI hz => (z,x,(R' (S d₀)).symm $ e $ d y z)
+      | I_data.P₂ y z hI hz => ((R' (S d₀)).symm $ e $ d y z, z, (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) x)
     inj' := by sorry
   }
 
@@ -874,16 +874,34 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
           left
           convert I_triple.attains_in_range $ I_data.old x' y z' h2 hxx'
         right
-        simp? [h3, new_S_extend h3, mem_new_dom_op $ op_data.old z' x' h2, op_extend h2, h4, h5, (R0_mem_fill_iff _ _).mp h4, new_L₀'_extend h4]
+        simp only [mem_new_dom_op $ op_data.old z' x' h2, h3, true_or, new_S_extend h3,
+          (R0_mem_fill_iff _ _).mp h4, op_extend h2, h5, new_L₀'_extend h4, and_self]
       | v =>
         simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
-        sorry
-      | P₁ y z hI =>
+        rw [← h.1, ← h.2] at hneq
+        contrapose! hneq
+        rfl
+      | P₁ y' z hI =>
         simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
-        sorry
-      | P₂ y z hI hz =>
+        use (R' (S d₀)).symm $ e $ d y' z
+        simp only [← h.1, ← h.2, op_eval $ op_data.P₁ y' z hI, Finset.mem_union,
+          Finset.mem_singleton, fill_union, Set.mem_union, R0_mem_fill_iff, true_and]
+        by_cases hz : z ∈ sol.Dom_S'
+        . right
+          replace hC := hC y' z hI hz
+          simp only [mem_new_dom_op $ op_data.P₂ y' z hI hz, hz, true_or, new_S_extend hz,
+            (R0_mem_fill_iff _ _).mp hC, op_eval $ op_data.P₂ y' z hI hz, new_L₀'_extend hC,
+            and_self]
+        left
+        exact I_triple.attains_in_range $ I_data.P₁ y' z hI hz
+      | P₂ y' z hI hz =>
         simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
-        sorry
+        rw [h.2] at hz hI h
+        use (R' (S (sol.S' y))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' y) x
+        simp only [← h.1, op_eval $ op_data.P₂ y' y hI hz, Finset.mem_union, Finset.mem_singleton,
+          fill_union, Set.mem_union, R0_mem_fill_iff, true_and]
+        left
+        exact I_triple.attains_in_range $ I_data.P₂ y' y hI hz
     axiom_P := sorry
     axiom_P' := sorry
   }
