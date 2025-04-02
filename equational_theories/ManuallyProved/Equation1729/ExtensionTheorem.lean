@@ -69,15 +69,15 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
   -- The small magma `SM` satisfies equation 1729
   SM_sat_1729 : Equation1729 SM
 
-  axiom_1 : ∀ a, (L' a).toFun = (R' a).invFun ∘ (L' (S a)).invFun
+  axiom_1 : ∀ a, L' a = (R' a) ∘ (L' (S a))
 
   axiom_21 : ∀ a b : SM, ∀ y : N, a ≠ b → R' a y ≠ R' b y
   axiom_22 : ∀ a : SM, ∀ x, R' a x ≠ x
 
   -- axiom 3
-  axiom_3 : ∀ x y, ∀ a, R' a x = y → ((L' (S' y)) (L' ((R a).invFun (S' x)) y)) = x
+  axiom_3 : ∀ x y, ∀ a, R' a x = y → ((L' (S' y)) (L' ((R a).symm (S' x)) y)) = x
   -- axiom 4
-  axiom_4 : ∀ x : N, (L' (S' x) (L' (S' x) x)) = x
+  axiom_4 : ∀ x : N, L' (S' x) (L' (S' x) x) = x
 
   -- restmap axioms
 
@@ -86,12 +86,15 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
 
   -- axiom 6
   axiom_6 : ∀ y : N, ∀ a : SM,
-    rest_map (R' a y) y = Sum.inl ((L a).invFun (S' y))
+    rest_map (R' a y) y = .inl ((L (S' y)).symm a)
+
+
+
 
 
 
 def operation {SM N : Type}
-  [Magma SM] (E : ExtOps SM N) (a b : SM ⊕ N) : SM ⊕ N :=
+  [Magma SM] (E : ExtOpsWithProps SM N) (a b : SM ⊕ N) : SM ⊕ N :=
   match a,b with
   | .inl a, .inl b => .inl (a ◇ b)
   | .inl a, .inr b => .inr <| E.L' a b
@@ -100,32 +103,38 @@ def operation {SM N : Type}
 
 instance extMagmaInst {SM N : Type}
   [Magma SM] (E : ExtOpsWithProps SM N) : Magma (SM ⊕ N) where
-  op := operation E.toExtOps
+  op := operation E
 
 #print Equiv.symm
+
+lemma Equiv_symm_inv : ∀ e : Equiv α β, e.symm.toFun = e.invFun := by
+  intro e
+  rfl
+
 
 lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
   (E : ExtOpsWithProps SM N)
   : @Equation1729 (SM ⊕ N) (extMagmaInst E) := by
   unfold Equation1729
   intro x y
-  cases hx : x <;> cases hy : y <;> simp [Magma.op, operation]
+  cases hx : x
+  <;> cases hy : y
+  <;> simp only [Magma.op, operation]
   case inl.inl =>
-    rw [←E.SM_sat_1729]
+    simp [←E.SM_sat_1729]
   case inl.inr a z =>
-    simp[E.axiom_5, E.axiom_6]
-    rw[←E.right_map_SM]
-    simp only [Equiv.invFun_symm]
-
-    sorry
+    simp only [E.axiom_6, E.axiom_5]
+    rw [←E.right_map_SM ((E.L (E.S' z)).symm a) (E.S' z)]
+    
+    admit
 
   case inr.inl x b =>
     rw [←E.squaring_prop_SM]
-    symm
+    congr
 
     sorry
   case inr.inr x y =>
-    rw[E.axiom_5]
+    simp only [E.axiom_5]
 
     sorry
 
