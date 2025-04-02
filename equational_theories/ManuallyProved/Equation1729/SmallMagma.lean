@@ -604,61 +604,63 @@ theorem FreeGroup.mk_of_single_true {α : Type* } (a : α) : FreeGroup.mk [(a,tr
 @[simp]
 theorem FreeGroup.mk_of_single_false {α : Type*} (a : α) : FreeGroup.mk [(a,false)] = (FreeGroup.of a)⁻¹  := rfl
 
-lemma basis_elements_of_prod_gen (a b:SM) : a ∈ basis_elements ((e a)^2 * (e b)⁻¹) := by
-  by_cases h : a = b
+lemma basis_elements_of_prod_gen (a b:SM) : a ∈ basis_elements ((e b)⁻¹ * (e a)^2) := by
+  by_cases h : b = a
   . rw [← h]
     group
     simp only [basis_elements_of_generator, Finset.mem_insert, Finset.mem_singleton, true_or]
   simp only [basis_elements, Finset.mem_union, Finset.mem_image, List.mem_toFinset, Prod.exists,
     exists_and_right, Bool.exists_bool, exists_eq_right, Finset.mem_singleton]
   left; right
-  have : (e a)^2 * (e b)⁻¹ = FreeGroup.mk ([(a, true)] ++ [(a,true)] ++ [(b,false)]) := by
+  have : (e b)⁻¹ * (e a)^2  = FreeGroup.mk ([(b, false)] ++ [(a,true)] ++ [(a,true)]) := by
     simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true, FreeGroup.mk_of_single_false, e]
+    rw [mul_assoc]
     congr
 -- weirdly, the simp below breaks when using the recommend simp?
   simp [this, h]
 
-lemma div_eq (a b : SM) : (e a) * (e b)⁻¹ = FreeGroup.mk ([(a, true)] ++ [(b,false)]) := by
+lemma div_eq (a b : SM) : (e b)⁻¹ * (e a)  = FreeGroup.mk ([(b, false)] ++ [(a,true)]) := by
     simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true, FreeGroup.mk_of_single_false, e]
 
-lemma square_mul (a b : SM) : (e a)^2 * (e b) = FreeGroup.mk ([(a, true)] ++ [(a,true)] ++ [(b,true)]) := by
+lemma square_mul (a b : SM) : (e b) * (e a)^2 = FreeGroup.mk ([(b, true)] ++ [(a,true)] ++ [(a,true)]) := by
     simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true,  e]
+    rw [mul_assoc]
     congr
 
-lemma basis_elements_of_prod_gen' (a b:SM) : a ∈ basis_elements ((e a)^2 * (e b)) := by
-  by_cases h : a = b
+lemma basis_elements_of_prod_gen' (a b:SM) : a ∈ basis_elements ((e b) * (e a)^2) := by
+  by_cases h : b = a
   . rw [← h]
     group
-    change a ∈ basis_elements (e a ^ (3:ℕ))
+    change b ∈ basis_elements (e b ^ (3:ℕ))
     have : 3 ≠ 0 := by norm_num
-    simp only [basis_elements_of_generator_pow a this, Finset.mem_insert, Finset.mem_singleton, true_or]
+    simp only [basis_elements_of_generator_pow b this, Finset.mem_insert, Finset.mem_singleton, true_or]
   simp only [basis_elements, Finset.mem_union, Finset.mem_image, List.mem_toFinset, Prod.exists,
     exists_and_right, Bool.exists_bool, exists_eq_right, Finset.mem_singleton]
   left; right
   simp [square_mul a b, h]
 
-lemma FreeGroup.div_ne_square (a b c:SM) : (e a) * (e b)⁻¹ ≠ (e c)^2 := by
+lemma FreeGroup.div_ne_square (a b c:SM) : (e b)⁻¹ * (e a) ≠ (e c)^2 := by
   by_contra h
   apply_fun (fun x ↦ x.toWord) at h
   rw [div_eq a b] at h
   simp only [List.singleton_append, FreeGroup.toWord_mk, FreeGroup.reduce.cons, Bool.true_eq,
     Bool.not_eq_eq_eq_not, Bool.not_true, Bool.false_eq, Bool.not_false, FreeGroup.reduce_nil,
     and_true, e, FreeGroup.toWord_of_pow, List.reduceReplicate] at h
-  by_cases h1 : a=b
+  by_cases h1 : b=a
   . simp only [h1, ↓reduceIte, List.nil_eq, reduceCtorEq] at h
-  simp only [h1, ↓reduceIte, List.cons.injEq, Prod.mk.injEq, and_true, Bool.false_eq_true,
-    and_false] at h
+  simp only [h1, ↓reduceIte, List.cons.injEq, Prod.mk.injEq, Bool.false_eq_true, and_false,
+    and_true, false_and] at h
 
 
-lemma FreeGroup.div_ne_square_mul (a b c d:SM) : (e a) * (e b)⁻¹ ≠ (e c)^2 * (e d) := by
+lemma FreeGroup.div_ne_square_mul (a b c d:SM) : (e b)⁻¹ * (e a) ≠ (e d) * (e c)^2 := by
   by_contra h
   rw [square_mul c d, div_eq a b] at h
   apply_fun (fun x ↦ x.toWord) at h
   simp at h
-  by_cases h1 : a = b
+  by_cases h1 : b = a
   . simp only [h1, ↓reduceIte, List.nil_eq, reduceCtorEq] at h
-  simp only [h1, ↓reduceIte, List.cons.injEq, Prod.mk.injEq, and_true, Bool.false_eq_true,
-    and_false, List.ne_cons_self, and_self] at h
+  simp only [h1, ↓reduceIte, List.cons.injEq, Prod.mk.injEq, Bool.false_eq_true, and_false,
+    and_true, List.ne_cons_self, and_self] at h
 
 
 lemma basis_elements_of_mul (x y:N): basis_elements (x * y) ⊆ basis_elements x ∪ basis_elements y := by
