@@ -69,7 +69,7 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
   -- The small magma `SM` satisfies equation 1729
   SM_sat_1729 : Equation1729 SM
 
-  axiom_1 : ∀ a, L' a = (R' a) ∘ (L' (S a))
+  axiom_1 : ∀ a, ∀ x, (L' a) x = ((L' (S a)).symm ∘ (R' a).symm) x
 
   axiom_21 : ∀ a b : SM, ∀ y : N, a ≠ b → R' a y ≠ R' b y
   axiom_22 : ∀ a : SM, ∀ x, R' a x ≠ x
@@ -140,19 +140,18 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
     simp [←E.SM_sat_1729]
   case inl.inr a z =>
     simp [E.axiom_6, E.axiom_5]
-    simp only [←E.right_map_SM ((E.L (E.S' z)).symm a) (E.S' z)]
-    -- This should be solvable be axiom 6
-    sorry
-
-  case inr.inl x b =>
-    simp [←E.squaring_prop_SM]
-    -- use axiom 3 somehow
-
+    rw[←E.left_map_SM]
+    simp only [Equiv.apply_symm_apply]
+    -- note, axiom 1 weas not needed here. Unlike what the blueprint says.
+  case inr.inl x a =>
+    simp [E.axiom_6, E.axiom_5]
+    rw[←E.squaring_prop_SM, E.axiom_1]
+    simp
     sorry
   case inr.inr x' y' =>
     simp only [E.axiom_5]
     by_cases hxy : x' = y' <;>
-    cases h1 : (E.rest_map y' x') with (simp_all [h1, E.axiom_7,])
+    cases h1 : (E.rest_map y' x') with (simp_all [h1, E.axiom_7])
     | inl z =>
         sorry
     | inr z =>
@@ -160,7 +159,6 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
         rw [E.axiom_7]
         simp
         sorry
-
 
 
 lemma ExtMagma_unsat_eq817 {SM N : Type} [Magma SM]
