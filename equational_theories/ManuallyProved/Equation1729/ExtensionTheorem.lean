@@ -90,7 +90,7 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
     rest_map (R' a y) y = .inl ((L (S' y)).symm a)
 
   axiom_7 : ∀ x y z : N, x ≠ y -- the condition for axiom 5 doesn't hold
-    → (∀ a : SM, x ≠ R' a y) -- the condition for axiom 6 doesn't hold
+    → (∃ a : SM, x ≠ R' a y) -- the condition for axiom 6 doesn't hold
     → rest_map x y = .inr z -- for any `z` of this form
     → rest_map z x =  (Sum.inr <| (L' (S' x)).symm y)
 
@@ -157,10 +157,16 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
   case inr.inr x' y' =>
     by_cases hxy' : (y' = x') <;> simp_all [hxy', E.axiom_5]
     · rw[E.axiom_4]
-    · let mz := E.rest_map x' y'
-      
-
-      done
+    · by_cases ha2 : ∃ a, y' = E.R' a x'
+      · cases ha2 with
+      | intro a h2 =>
+          simp [h2, E.axiom_6]
+          -- Now use axiom 3
+          sorry
+        done
+      · let z' = E.rest_map x' y'
+        have ax7 := E.axiom_7 x' y'
+        done
 
 
 
