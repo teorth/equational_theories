@@ -97,9 +97,8 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
 lemma axiom_1_alt [Magma SM] (E : ExtOpsWithProps SM N) :
   ∀ a, ∀ x, ((E.L' (E.S a)) ∘ (E.R' a) ∘ (E.L' a)) x = x := by
   intro a x
-  simp [←E.axiom_1 a x]
+  simp [E.axiom_1 a x]
 
-  sorry
 
 /-
 attribute [simp] ExtOpsWithProps.SM_sat_1729
