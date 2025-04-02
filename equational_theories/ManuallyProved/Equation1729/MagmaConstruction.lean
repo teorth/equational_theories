@@ -902,7 +902,40 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
           fill_union, Set.mem_union, R0_mem_fill_iff, true_and]
         left
         exact I_triple.attains_in_range $ I_data.P₂ y' y hI hz
-    axiom_P := sorry
+    axiom_P := by
+      intro x' y z hI
+      obtain ⟨ data, hdata ⟩ := (I_triple.in_range_iff_attains _).mp hI
+      cases data with
+      | old x'' y' z' hI' hxx' =>
+        simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq, I_triple] at hdata
+        simp only [hdata.1, hdata.2.1, hdata.2.2] at hI' hxx'
+        have := sol.axiom_P x' y z hI'
+        simp only [Finset.mem_union, this.1, Finset.mem_singleton, false_or, ne_eq, this.2.2.1,
+          not_false_eq_true, this.2.2.2, implies_true, and_self, and_true]
+        constructor
+        . contrapose! hxx'
+          exact hxx'.symm
+        by_contra hop
+        obtain ⟨ opdata, h ⟩ := (op_embed.in_range_iff_attains _).mp hop
+        cases opdata with
+        | old y'' z'' hop' =>
+          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+          rw [h.1, h.2] at hop'
+          exact this.2.1 hop'
+        | v =>
+          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+          simp [←h.1, ←h.2] at this
+        | P₁ y'' z'' hI'' =>
+          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+          exact hxx' h.2
+        | P₂ y'' z'' hI'' hz' =>
+          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+          rw [h.2.2] at hz'
+          exact this.1 hz'
+      | P₁ y' z' hI hz =>
+        sorry
+      | P₂ y' z' hI hz =>
+        sorry
     axiom_P' := sorry
   }
 
