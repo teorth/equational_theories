@@ -88,11 +88,25 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
   axiom_6 : ∀ y : N, ∀ a : SM,
     rest_map (R' a y) y = .inl ((L (S' y)).symm a)
 
-  axiom_7 : ∀ x y z : N, x ≠ y → (∀ a : SM, x ≠ R' a y)
-    → rest_map x y = .inr z
+  axiom_7 : ∀ x y z : N, x ≠ y -- the condition for axiom 5 doesn't hold
+    → (∀ a : SM, x ≠ R' a y) -- the condition for axiom 6 doesn't hold
+    → rest_map x y = .inr z -- for any `z` of this form
     → rest_map z x =  (Sum.inr <| (L' (S' x)).symm y)
 
-
+/-
+attribute [simp] ExtOpsWithProps.SM_sat_1729
+attribute [simp] ExtOpsWithProps.left_map_SM
+attribute [simp] ExtOpsWithProps.right_map_SM
+attribute [simp] ExtOpsWithProps.squaring_prop_SM
+attribute [simp] ExtOpsWithProps.axiom_1
+attribute [simp] ExtOpsWithProps.axiom_21
+attribute [simp] ExtOpsWithProps.axiom_22
+attribute [simp] ExtOpsWithProps.axiom_3
+attribute [simp] ExtOpsWithProps.axiom_4
+attribute [simp] ExtOpsWithProps.axiom_5
+attribute [simp] ExtOpsWithProps.axiom_6
+attribute [simp] ExtOpsWithProps.axiom_7
+-/
 
 
 def operation {SM N : Type}
@@ -125,20 +139,27 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
   case inl.inl =>
     simp [←E.SM_sat_1729]
   case inl.inr a z =>
-    simp only [E.axiom_6, E.axiom_5]
-    rw [←E.right_map_SM ((E.L (E.S' z)).symm a) (E.S' z)]
-
+    simp [E.axiom_6, E.axiom_5]
+    simp only [←E.right_map_SM ((E.L (E.S' z)).symm a) (E.S' z)]
+    -- This should be solvable be axiom 6
     sorry
 
   case inr.inl x b =>
-    rw [←E.squaring_prop_SM]
-    congr
+    simp [←E.squaring_prop_SM]
+    -- use axiom 3 somehow
 
     sorry
-  case inr.inr x y =>
+  case inr.inr x' y' =>
     simp only [E.axiom_5]
-
-    sorry
+    by_cases hxy : x' = y' <;>
+    cases h1 : (E.rest_map y' x') with (simp_all [h1, E.axiom_7,])
+    | inl z =>
+        sorry
+    | inr z =>
+        by_cases hxy : x' = y' <;> simp_all [hxy]
+        rw [E.axiom_7]
+        simp
+        sorry
 
 
 
