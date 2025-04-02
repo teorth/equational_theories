@@ -155,16 +155,14 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
     nth_rw 1 [←axiom_1_alt E a z]
     simp only [Function.comp_apply]
   case inr.inr x' y' =>
-    simp only [E.axiom_5]
-    by_cases hxy : x' = y' <;>
-    cases h1 : (E.rest_map y' x') with (simp_all [h1, E.axiom_7])
-    | inl z =>
-        sorry
-    | inr z =>
-        by_cases hxy : x' = y' <;> simp_all [hxy]
-        rw [E.axiom_7]
-        simp
-        sorry
+    by_cases hxy' : (y' = x') <;> simp_all [hxy', E.axiom_5]
+    · rw[E.axiom_4]
+    · let mz := E.rest_map x' y'
+      
+
+      done
+
+
 
 
 lemma ExtMagma_unsat_eq817 {SM N : Type} [Magma SM]
