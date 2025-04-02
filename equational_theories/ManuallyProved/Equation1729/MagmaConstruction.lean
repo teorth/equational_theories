@@ -618,6 +618,15 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
     . simp only [Function.Embedding.coeFn_mk, zpow_zero, one_mul, L₀'_embed]
     simp only [zpow_zero, one_mul, L₀'_output]
 
+  have new_L₀'_eval' (data : L₀'_data sol x) (n:ℤ) : new_L₀' ((e 0)^n * (L₀'_pair data).1) = (e 0)^n * (L₀'_pair data).2 := L₀'_embed.edit_of_attains _ _ ⟨ data, n, true ⟩
+
+  have new_L₀'_eval'' (data : L₀'_data sol x) : new_L₀' (L₀'_pair data).2 = (e 0)⁻¹ * (L₀'_pair data).1 := by
+    convert L₀'_embed.edit_of_attains _ _ ⟨ data, 0, false ⟩
+    simp only [Function.Embedding.coeFn_mk, zpow_zero, one_mul, L₀'_embed]
+
+  have new_L₀'_eval''' (data : L₀'_data sol x) (n:ℤ) : new_L₀' ((e 0)^n * (L₀'_pair data).2) = (e 0)^(n-1) * (L₀'_pair data).1 := L₀'_embed.edit_of_attains _ _ ⟨ data, n, false ⟩
+
+
   have new_L₀'_extend {y:N} (hy: y ∈ sol.Dom_L₀') : new_L₀' y = sol.L₀' y := by
     apply L₀'_embed.edit_of_avoids
     intro ⟨ data, n, b ⟩
@@ -633,9 +642,14 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
 
   let new_predom : Finset N := L₀'_pre_embed.range_finset
 
-  have mem_new_predom (data : L₀'_data sol x) : (L₀'_pair data).1 ∈ new_predom := by
+  have mem_new_predom (data : L₀'_data sol x): (L₀'_pair data).1 ∈ new_predom := by
     rw [←L₀'_pre_embed.attains_iff_in_range]
     exact L₀'_pre_embed.attains_image (data, true)
+
+  have mem_new_predom' (data : L₀'_data sol x): (L₀'_pair data).2 ∈ new_predom := by
+    rw [←L₀'_pre_embed.attains_iff_in_range]
+    exact L₀'_pre_embed.attains_image (data, false)
+
 
 /- Construction of the new `op`.  Each op_data object `data` produces an instance of the operation `op`: `sol.op (op_triple d₀ d data).1 (op_triple d₀ d data).2.1 = (op_triple d₀ d data).2.2. -/
   let op_triple : op_data sol x → N × N × M := fun data ↦ match data with
@@ -694,7 +708,26 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
     Predom_L₀' := sol.Predom_L₀' ∪ new_predom
     Dom_op := new_dom_op
     Dom_S' := sol.Dom_S' ∪ {x}
-    axiom_i'' := sorry
+    axiom_i'' := by
+      intro x' y hx' hxy n
+      simp only [Finset.mem_union] at hx'
+      simp only [fill_union, ← hxy, Set.mem_union]
+      rcases hx' with hx' | hx'
+      . simp only [new_L₀'_extend (mem_fill hx')] at hxy ⊢
+        obtain ⟨ h1, h2, h3 ⟩ := sol.axiom_i'' x' (sol.L₀' x') hx' (by rfl) n
+        simp only [h1, true_or, new_L₀'_extend $ (fill_invar' _ _ n).mpr $ mem_fill hx', h2,
+          new_L₀'_extend $ (fill_invar' _ _ n).mpr h1, h3, and_self]
+      rw [← L₀'_pre_embed.attains_iff_in_range] at hx'
+      obtain ⟨ ⟨ data, b ⟩, hdata ⟩ := hx'
+      simp only [← hdata]
+      by_cases h:b
+      . simp only [h, Function.Embedding.coeFn_mk, new_L₀'_eval, mem_fill $ mem_new_predom' _,
+        or_true, new_L₀'_eval', new_L₀'_eval''', and_self, L₀'_pre_embed]
+      simp only [h, Function.Embedding.coeFn_mk, new_L₀'_eval'', L₀'_pre_embed]
+      group
+      simp only [Int.reduceNeg, zpow_one, new_L₀'_eval''', mul_left_inj, new_L₀'_eval', and_true]
+      exact ⟨ Or.inr $ (fill_invar' _ _ _).mpr $ mem_fill $ mem_new_predom data, by group ⟩
+
     axiom_S := by
       intro x' y hx' hyx
       simp only [Finset.mem_union, Finset.mem_singleton] at hx'

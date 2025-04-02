@@ -30,6 +30,10 @@ lemma attains_iff_in_range {X' X: Type*} (ι : X' ↪ X) [Fintype X'] (x : X) :
   by
     simp only [attains, range_finset, Finset.mem_image, Finset.mem_univ, true_and]
 
+lemma attains_iff_in_range' {X' X: Type*} (ι : X' ↪ X) [Fintype X'] (x' : X') :ι x' ∈ ι.range_finset :=
+(ι.attains_iff_in_range (ι x')).mp $ ι.attains_image x'
+
+
 lemma avoids_iff_not_in_range {X' X: Type*} (ι : X' ↪ X) [Fintype X'] (x : X) :
   ι.avoids x ↔ x ∉ ι.range_finset := by
     rw [ι.avoids_iff_not_attains]
