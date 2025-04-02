@@ -77,6 +77,10 @@ abbrev e (a:SM) := FreeGroup.of a
 
 def adjacent (x y : N) := ∃ a, x = (e a) * y ∨ y = (e a) * x
 
+lemma not_adjacent_self (x:N) : ¬ adjacent x x := by
+  by_contra this
+  simp only [adjacent, self_eq_mul_left, FreeGroup.of_ne_one, or_self, exists_const] at this
+
 /-- Impose an order on N: x ≤ y if x is a right subword of y  (or equivalently, x is on the unique
 simple path from 1 to y).  The spelling may not be optimal. -/
 instance N_LE : LE N where
@@ -158,7 +162,7 @@ instance : PredOrder N where
     omega
   le_pred_of_lt {a} {b} hab := (lt_iff_le_parent hab.ne_bot).mp hab
 
-theorem parent_adjacent (x : N) (h : x ≠ 1) : adjacent x (parent x) := by
+theorem parent_adjacent {x : N} (h : x ≠ 1) : adjacent x (parent x) := by
   cases h' : x.toWord
   case nil =>
     simp only [FreeGroup.toWord_eq_nil_iff] at h'
@@ -179,6 +183,15 @@ theorem parent_adjacent (x : N) (h : x ≠ 1) : adjacent x (parent x) := by
     · use a
       left
       rfl
+
+theorem parent_lt {x : N} (h : x ≠ 1) : parent x < x := by
+  rw [lt_iff_le_and_ne]
+  constructor
+  . exact parent_le x
+  . intro eq
+    have := parent_adjacent h
+    rw [eq] at this
+    exact not_adjacent_self x this
 
 theorem adjacent_comm (x y : N) : adjacent x y ↔ adjacent y x := exists_congr (by tauto)
 
@@ -229,24 +242,29 @@ theorem parent_of_adjacent (x y : N) : adjacent x y → x = parent y ∨ y = par
 /- Right-multiplication by an element of SM on N is defined via the group action. -/
 
 def R' (a:SM) : N ≃ N := {
-  toFun := fun x ↦ x * (e a)
-  invFun := fun x ↦ x * (e a)⁻¹
+  toFun := fun x ↦ (e a) * x
+  invFun := fun x ↦ (e a)⁻¹ * x
   left_inv := by
     intro x
-    simp only [mul_inv_cancel_right]
+    simp only [inv_mul_cancel_left]
   right_inv := by
     intro x
-    simp only [inv_mul_cancel_right]
+    simp only [mul_inv_cancel_left]
 }
 
 lemma R'_axiom_iia (a b : SM) (y:N) (h: a ≠ b): R' a y ≠ R' b y := by
   contrapose! h
-  simp only [R', Equiv.coe_fn_mk, mul_right_inj] at h
+  simp only [R', Equiv.coe_fn_mk, mul_left_inj] at h
   exact FreeGroup.of_injective h
 
 lemma R'_axiom_iib (a : SM) (y:N) : R' a y ≠ y := by
   by_contra! h
-  simp only [R', Equiv.coe_fn_mk, mul_right_eq_self, FreeGroup.of_ne_one] at h
+  simp only [R', Equiv.coe_fn_mk, mul_left_eq_self, FreeGroup.of_ne_one] at h
+
+lemma R'_adjacent (a : SM) (y:N) : adjacent y (R' a y) := by
+  use a
+  simp only [R', Equiv.coe_fn_mk, or_true]
+
 
 /- Now we rewrite the axioms using a single transformation L₀' instead of many transformations L' -/
 
@@ -385,25 +403,25 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
 
 
 instance rel : Setoid N := {
-  r := fun x y => ∃ n : ℤ, y = x * (e 0)^n
+  r := fun x y => ∃ n : ℤ, y = (e 0)^n * x
   iseqv := by
     constructor
     . intro x
       use 0
-      simp only [zpow_zero, mul_one]
+      simp only [zpow_zero, one_mul]
     . intro x y ⟨ n, h1 ⟩
       use -n
-      rw [h1, mul_assoc, ←zpow_add, add_neg_cancel, zpow_zero, mul_one]
+      rw [h1, <-mul_assoc, ←zpow_add, neg_add_cancel, zpow_zero, one_mul]
     . intro x y z ⟨ n, h1 ⟩ ⟨ m, h2 ⟩
       use n+m
-      rw [h2, h1, mul_assoc, zpow_add]
+      rw [h2, h1, <-mul_assoc, add_comm, zpow_add]
 }
 
-lemma rel_iff (x y:N): x ≈ y ↔ ∃ n : ℤ, y = x * (e 0)^n := by rfl
+lemma rel_iff (x y:N): x ≈ y ↔ ∃ n : ℤ, y = (e 0)^n * x := by rfl
 
-lemma rel_def {x y:N} (h: x ≈ y) : ∃ n : ℤ, y = x * (e 0)^n := (rel_iff x y).mp h
+lemma rel_def {x y:N} (h: x ≈ y) : ∃ n : ℤ, y = (e 0)^n * x := (rel_iff x y).mp h
 
-lemma rel_of_mul (x:N) (n:ℤ) : x ≈ x * (e 0)^n := by
+lemma rel_of_mul (x:N) (n:ℤ) : x ≈ (e 0)^n * x := by
   use n
 
 /-- `fill D` is the set of elements of the form (e 0)^n x with x in D and n an integer. -/
@@ -440,7 +458,7 @@ lemma fill_invar (D: Finset N) {x y : N} (h : x ≈ y) : x ∈ fill D ↔ y ∈ 
   exact ⟨ z, Setoid.trans hz (Setoid.symm h), hD ⟩
 
 @[simp]
-lemma fill_invar' (D: Finset N) {x:N} (n:ℤ) : x * (e 0)^n ∈ fill D ↔ x ∈ fill D := (fill_invar D (rel_of_mul x n)).symm
+lemma fill_invar' (D: Finset N) {x:N} (n:ℤ) : (e 0)^n * x ∈ fill D ↔ x ∈ fill D := (fill_invar D (rel_of_mul x n)).symm
 
 lemma subset_fill (D: Finset N) : D.toSet ⊆ fill D := by
   intro x hx
@@ -692,7 +710,7 @@ lemma basis_elements_of_rel' {x y:N} (h: x ≈ y) : basis_elements x ⊆ basis_e
   rw [hn]
   apply (basis_elements_of_mul _ _).trans
   rw [basis_elements_of_genzero_pow]
-  simp only [Finset.union_assoc, Finset.union_idempotent, subset_refl]
+  simp only [Finset.union_subset_iff, Finset.subset_union_right, subset_refl, and_self]
 
 lemma basis_elements_of_rel {x y:N} (h: x ≈ y) : basis_elements x = basis_elements y := by
   ext a

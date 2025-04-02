@@ -88,7 +88,7 @@ We will define the right multiplication operators $R'_a: N \to N$ using the grou
 
 \begin{definition}[Definition of $R'_a$]\label{ra-defn}\uses{sm-def, n-def}\lean{Eq1729.R'}\leanok We set
   \begin{equation}\label{ra-def}
-    R'_a x := x e_a
+    R'_a x := e_a x
   \end{equation}
   for all $a \in SM$ and $x \in N$.
 \end{definition}
@@ -233,7 +233,7 @@ for all $n \in \Z$.  To retain axiom (iii''), we perform the following actions:
 \begin{itemize}
 \item If $y_0$ is undefined, do nothing.
 \item If $R'_a x = y_0$ for some $a \in SM$ (so that $L'_0 R'_{S'y_0} x$ is defined, by hypothesis (A)), set $L'_0 R'_{2(a-d_0)} y_0 := R'_{a-d_0} (R'_{2S'y_0})^{-1} R'_0 L'_0 R'_{S'y_0}$. Then extend using \Cref{itero}, \Cref{itero-2}.
-\item If $x = R'_a y_0$ for some $a \in SM$ (so that $L'_0 R'_{2(a-Sy_0)} x$ is already defined, by hypothesis (B)), set $L'_0 R'_{2d_0} (R'_{a-S'y_0})^{-1} L'_0 R'_{2(a-Sy_0)} x :=R'_{d_0}x$, and extend using \Cref{itero}, \Cref{itero-2}.
+\item If $x = R'_a y_0$ for some $a \in SM$ (so that $L'_0 R'_{2(a-Sy_0)} x$ is already defined, by hypothesis (B)), set $L'_0 R'_{2d_0} (R'_{a-S'y_0})^{-1} L'_0 R'_{2(a-Sy_0)} x :=R'_{d_0} y_0$, and extend using \Cref{itero}, \Cref{itero-2}.
 \end{itemize}
 To retain axiom (P), we perform the following actions for each pending identity of the form $I[x,y,z]$ for some $y,z$, executed in some arbitrary order.
 \begin{itemize}
