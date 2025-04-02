@@ -924,17 +924,45 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
           exact this.2.1 hop'
         | v =>
           simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
-          simp [←h.1, ←h.2] at this
+          simp only [← h.2, ← h.1, ne_eq, not_true_eq_false, false_and, and_false] at this
         | P₁ y'' z'' hI'' =>
           simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
           exact hxx' h.2
         | P₂ y'' z'' hI'' hz' =>
           simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
-          rw [h.2.2] at hz'
+          rw [h.2] at hz'
           exact this.1 hz'
       | P₁ y' z' hI hz =>
+        simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq, I_triple] at hdata
+        simp only [← hdata.2.2, hdata.1] at hz hI ⊢
+        have := sol.axiom_P x y' x' hI
+        refine ⟨ ?_, ?_, ?_, ?_ ⟩
+        . simp only [Finset.mem_union, hz, Finset.mem_singleton, this.2.2.1,
+          or_self, not_false_eq_true]
+        . by_contra hop
+          obtain ⟨ opdata, h ⟩ := (op_embed.in_range_iff_attains _).mp hop
+          cases opdata with
+          | old y'' z'' hop' =>
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            rw [h.1, h.2] at hop'
+            -- get contradiction from first component of hop'
+            sorry
+          | v =>
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            simp only [← h.2, ne_eq, not_true_eq_false, false_and, and_false] at this
+          | P₁ y'' z'' hI'' =>
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            exact this.2.2.1 h.2.symm
+          | P₂ y'' z'' hI'' hz' =>
+            simp [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            rw [h.2] at hz'
+            exact hz hz'
+        . sorry -- direct calculation
+        intro a
+        -- direct calculation
         sorry
       | P₂ y' z' hI hz =>
+        simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq, I_triple] at hdata
         sorry
     axiom_P' := sorry
   }
