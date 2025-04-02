@@ -51,7 +51,7 @@ structure ExtOps (SM N : Type) [Magma SM] where
   -- `rest_of_the_map` is a function that will serve as part of our binary operation
   -- which deals with the situation where both operands come from `N`.
   -- In the blueprint this is `◇'`
-  rest_map : N → N → Sum SM N
+  rest_map : N → N → SM ⊕ N
 
   L' : SM → Equiv N N
 
@@ -88,7 +88,9 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
   axiom_6 : ∀ y : N, ∀ a : SM,
     rest_map (R' a y) y = .inl ((L (S' y)).symm a)
 
-
+  axiom_7 : ∀ x y z : N, x ≠ y → (∀ a : SM, x ≠ R' a y)
+    → rest_map x y = .inr z
+    → rest_map z x =  (Sum.inr <| (L' (S' x)).symm y)
 
 
 
@@ -125,8 +127,8 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
   case inl.inr a z =>
     simp only [E.axiom_6, E.axiom_5]
     rw [←E.right_map_SM ((E.L (E.S' z)).symm a) (E.S' z)]
-    
-    admit
+
+    sorry
 
   case inr.inl x b =>
     rw [←E.squaring_prop_SM]
