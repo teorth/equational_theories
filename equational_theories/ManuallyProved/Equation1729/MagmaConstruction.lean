@@ -1042,10 +1042,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
           rw [this] at hx
           replace hx := (sol.dom_S'_involved {x,y,w} hx).1
           simp only [PartialSolution.sees, generators_subset_iff] at hx
-          apply sol.fresh_not_in_gen {x,y,w} 0
-          -- $ hx d0
-          sorry
-          -- basis_elements_of_prod_gen d0 a
+          apply sol.fresh_not_in_gen {x,y,w} 0 $ hx d0 $ basis_elements_of_prod_gen d0 a
       simp only [hnot, hnot', or_false, false_or] at hray'
       obtain ⟨ h1, h2 ⟩ := sol.axiom_vi'' y' a hray'
       rw [←h2]
@@ -1134,16 +1131,14 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
           exact hz'_vis hw
         simp only [R', hw, ↓reduceIte, extend, Setoid.refl w, mul_inv_cancel, one_mul,
           Equiv.coe_fn_symm_mk, z', new_L₀', z] at h
-        sorry
-        -- exact FreeGroup.div_ne_square _ _ _ h
+        exact FreeGroup.div_ne_square _ _ _ h
       by_cases hw : w ∈ sol.Dom_L₀'
       . intro a
         have : ¬ sol.sees {x,y,w} ( R' a z ) := by
           by_contra h
           dsimp [R',z, PartialSolution.sees] at h
           simp only [generators_subset_iff] at h
-          apply sol.fresh_not_in_gen {x,y,w} 0
-          sorry -- $ h d0 $ basis_elements_of_prod_gen' d0 a
+          apply sol.fresh_not_in_gen {x,y,w} 0 $ h d0 $ basis_elements_of_prod_gen' d0 a
         contrapose! this
         rw [← this]
         exact hz'_vis hw
