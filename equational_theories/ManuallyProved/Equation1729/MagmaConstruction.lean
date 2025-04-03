@@ -963,6 +963,40 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
         sorry
       | P₂ y' z' hI hz =>
         simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq, I_triple] at hdata
+        simp [← hdata.1, ← hdata.2]
+        have hinvis : ¬ sol.sees (R' (S d₀)).symm (e (d y' z')) := by
+          -- direct calculation
+          sorry
+        refine ⟨ ⟨ ?_, ?_ ⟩, ?_, ?_, ?_ ⟩
+        . -- direct calculation
+          sorry
+        . -- direct calculation
+          sorry
+        . by_contra hop  -- or contrapose! hinvis
+          obtain ⟨ opdata, h ⟩ := (op_embed.in_range_iff_attains _).mp hop
+          cases opdata with
+          | old y'' z'' hop' =>
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            rw [h.1, h.2] at hop'
+            -- obtain contradiction from hop
+            sorry
+          | v =>
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            -- obtain contradiction from h.2, hinvis
+            sorry
+          | P₁ y'' z'' hI'' =>
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            -- obtain contradiction from h.2, hinvis
+            sorry
+          | P₂ y'' z'' hI'' hz' =>
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            rw [h.2] at hz'
+            -- obtain contradiction from hz', hinvis
+            sorry
+        . -- direct calculation
+          sorry
+        intro a
+        -- direct calculation
         sorry
     axiom_P' := sorry
   }
