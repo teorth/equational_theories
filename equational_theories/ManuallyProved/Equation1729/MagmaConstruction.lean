@@ -1039,7 +1039,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
           exfalso
-          sorry
+          exact sol.hinvis_lemma y''' z''' (hy'.1 ▸ (sol.I_involved {sol.x} hI').1)
       | P₁ y'' z'' hI' hz =>
         simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy
         simp only [hy.1, hy.2.1, hy.2.2] at hI' hz
@@ -1048,16 +1048,16 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hxx''
           exfalso
-          sorry
+          exact sol.hinvis_lemma y'' z'' (hy.2.2 ▸ (sol.I_involved {sol.x} hI'').2.2)
         | P₁ y''' z''' hI'' hz' =>
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
-          sorry
+          rw [←hy.2.1, ←hy'.2.1]
         | P₂ y''' z''' hI'' hz' =>
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
           exfalso
-          sorry
+          exact sol.hinvis_lemma y''' z''' (hy'.1 ▸ (sol.I_involved {sol.x} hI').2.2)
       | P₂ y'' z'' hI' hz =>
         simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy
         simp only [hy.1, hy.2.1, hy.2.2] at hI' hz
@@ -1066,16 +1066,16 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hxx''
           exfalso
-          sorry
+          exact sol.hinvis_lemma y'' z'' (hy.1 ▸ (sol.I_involved {sol.x} hI'').1)
         | P₁ y''' z''' hI'' hz' =>
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
           exfalso
-          sorry
+          exact sol.hinvis_lemma y'' z'' (hy.1 ▸ (sol.I_involved {sol.x} hI'').2.2)
         | P₂ y''' z''' hI'' hz' =>
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
-          sorry
+          rw [←hy.2.1, ←hy'.2.1]
   }
 
   refine ⟨ sol', ?_, ?_ ⟩
