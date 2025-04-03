@@ -4,6 +4,8 @@ import Mathlib.Logic.Embedding.Basic
 import Init.Classical
 import Init.Prelude
 
+-- Sets up API for the `Function.Embedding.edit` tool, which takes a function `f: X → Y` and updates it via an arbitrary embedding `ι: X' ↪ X` and a new function `f': X' → Y` by redefining `f ι x'$ to `f' x'` for all `x' : X'`.
+
 namespace Function.Embedding
 
 -- this is for convenience
@@ -25,15 +27,20 @@ lemma avoids_iff_not_attains {X' X: Type*} (ι : X' ↪ X) (x : X) : ι.avoids x
 
 noncomputable def range_finset {X' X: Type*} (ι : X' ↪ X) [Fintype X'] : Finset X := Finset.image ι Finset.univ
 
-lemma attains_iff_in_range {X' X: Type*} (ι : X' ↪ X) [Fintype X'] (x : X) :
-  ι.attains x ↔ x ∈ ι.range_finset :=
+@[simp]
+lemma in_range_iff_attains {X' X: Type*} (ι : X' ↪ X) [Fintype X'] (x : X) :
+  x ∈ ι.range_finset ↔ ι.attains x:=
   by
     simp only [attains, range_finset, Finset.mem_image, Finset.mem_univ, true_and]
+
+lemma attains_in_range {X' X: Type*} (ι : X' ↪ X) [Fintype X'] (x' : X') :ι x' ∈ ι.range_finset :=
+(ι.in_range_iff_attains (ι x')).mpr $ ι.attains_image x'
+
 
 lemma avoids_iff_not_in_range {X' X: Type*} (ι : X' ↪ X) [Fintype X'] (x : X) :
   ι.avoids x ↔ x ∉ ι.range_finset := by
     rw [ι.avoids_iff_not_attains]
-    exact not_congr $ ι.attains_iff_in_range x
+    exact not_congr $ (ι.in_range_iff_attains x).symm
 
 noncomputable def edit {X X' Y: Type*} (ι : X' ↪ X) (f : X → Y) (f' : X' → Y) (x:X) : Y := if h: ι.attains x then f' h.choose else f x
 
