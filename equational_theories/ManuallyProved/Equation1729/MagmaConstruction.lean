@@ -643,13 +643,30 @@ noncomputable abbrev PartialSolution_with_axioms.L₀'_embed (sol: PartialSoluti
             exact (sol.L₀'_no_collide_2 this).1
           simp [heq] at h ⊢
           exact zpow_of_e_inj 0 h
-        simp [hb, hb'] at h
-        sorry
+        simp [hb, hb'] at h ⊢
+        have : (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').2 := calc
+            _ ≈ (e 0)^n * (sol.L₀'_pair data).1 := rel_of_mul _ n
+            _ ≈ (e 0)^n' * (sol.L₀'_pair data').2 := by rw [h]
+            _ ≈ _ := Setoid.symm $ rel_of_mul _ n'
+        exact sol.L₀'_no_collide_3 _ _ this
       by_cases hb':b'
       . simp [hb, hb'] at h
-        sorry
-      simp [hb, hb'] at h
-      sorry
+        simp [hb, hb'] at h ⊢
+        have : (sol.L₀'_pair data).2 ≈ (sol.L₀'_pair data').1 := calc
+            _ ≈ (e 0)^n * (sol.L₀'_pair data).2 := rel_of_mul _ n
+            _ ≈ (e 0)^n' * (sol.L₀'_pair data').1 := by rw [h]
+            _ ≈ _ := Setoid.symm $ rel_of_mul _ n'
+        exact sol.L₀'_no_collide_3 _ _ $ Setoid.symm this
+      simp [hb, hb'] at h ⊢
+      have : (sol.L₀'_pair data).2 ≈ (sol.L₀'_pair data').2 := calc
+        _ ≈ (e 0)^n * (sol.L₀'_pair data).2 := rel_of_mul _ n
+        _ ≈ (e 0)^n' * (sol.L₀'_pair data').2 := by rw [h]
+        _ ≈ _ := Setoid.symm $ rel_of_mul _ n'
+      have heq : data = data' := by
+        contrapose! this
+        exact (sol.L₀'_no_collide_2 this).2
+      simp [heq] at h ⊢
+      exact zpow_of_e_inj 0 h
   }
 
 noncomputable abbrev PartialSolution_with_axioms.L₀'_pre_embed_base (sol: PartialSolution_with_axioms) (input: L₀'_data sol × Bool) : N := match input with
