@@ -805,7 +805,9 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       simp only [h, Function.Embedding.coeFn_mk, sol.new_L₀'_eval'']
       group
       simp only [Int.reduceNeg, zpow_one, new_L₀'_eval''', mul_left_inj, sol.new_L₀'_eval', and_true]
-      exact ⟨ Or.inr $ (fill_invar' _ _ _).mpr $ mem_fill $ sol.mem_new_predom data, by group ⟩
+      refine ⟨ Or.inr $ (fill_invar' _ _ _).mpr $ mem_fill $ sol.mem_new_predom data, ?_ ⟩
+      convert sol.new_L₀'_eval''' data n using 3
+      exact neg_add_eq_sub 1 n
 
     axiom_S := by
       intro x' y hx' hyx
