@@ -625,14 +625,28 @@ noncomputable abbrev PartialSolution_with_axioms.L₀'_embed (sol: PartialSoluti
     toFun := fun input ↦ match input with
     | (data, n, true) => (e 0)^n * (sol.L₀'_pair data).1
     | (data, n, false) => (e 0)^n * (sol.L₀'_pair data).2
-    inj' := by sorry
+    inj' := by
+      intro (data,n,b) (data',n',b') h
+      by_cases hb:b
+      . by_cases hb':b'
+        . simp [hb, hb'] at h
+          sorry
+        simp [hb, hb'] at h
+        sorry
+      by_cases hb':b'
+      . simp [hb, hb'] at h
+        sorry
+      simp [hb, hb'] at h
+      sorry
   }
 
 noncomputable abbrev PartialSolution_with_axioms.L₀'_pre_embed (sol: PartialSolution_with_axioms) : (L₀'_data sol) × Bool ↪ N := {
     toFun := fun input ↦ match input with
     | (data, true) => (sol.L₀'_pair data).1
     | (data, false) => (sol.L₀'_pair data).2
-    inj' := by sorry
+    inj' := by
+      intro (data, b) (data',b') h
+      sorry
   }
 
 noncomputable abbrev PartialSolution_with_axioms.L₀'_output  (sol: PartialSolution_with_axioms) : (L₀'_data sol) × ℤ × Bool → N := fun input ↦ match input with
