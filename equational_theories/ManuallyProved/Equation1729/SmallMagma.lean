@@ -580,6 +580,11 @@ lemma fresh_not_in_generators (A: Finset SM) (n:ℕ) : ¬ in_generators A (E (fr
   simp only [in_generators, support_E, Finset.singleton_subset_iff]
   exact fresh_ne_generator A n
 
+lemma fresh_injective (A: Finset SM) : Function.Injective (fresh A) := by
+  intros n m h
+  unfold fresh at h
+  linarith
+
 abbrev basis_elements (x:N) : Finset SM := Finset.image (fun (a, _) ↦ a) x.toWord.toFinset ∪ {0}
 
 abbrev basis_elements' (x:M) : Finset SM := match x with

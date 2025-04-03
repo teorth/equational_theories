@@ -586,6 +586,18 @@ abbrev PartialSolution_with_axioms.d₁ (sol: PartialSolution_with_axioms) := E 
 
 noncomputable abbrev PartialSolution_with_axioms.d (sol: PartialSolution_with_axioms) (y z: N) := E (sol.fresh_generator {sol.x} (enum (y,z)))
 
+lemma PartialSolution_with_axioms.d_injective (sol: PartialSolution_with_axioms) {y z y' z': N} (h: sol.d y z = sol.d y' z') : y = y' ∧ z = z' := by
+  unfold PartialSolution_with_axioms.d E at h
+  apply_fun (fun f ↦ f $ sol.fresh_generator {sol.x} (enum (y,z))) at h
+  have : sol.fresh_generator {sol.x} (enum (y',z')) = sol.fresh_generator {sol.x} (enum (y,z)) := by
+    contrapose! h
+    simp [DirectSum.of_eq_of_ne _ _ _ h]
+    decide
+  replace this := enum_injective $ fresh_injective _ this
+  simp at this
+  rw [this.1, this.2]
+  tauto
+
 lemma PartialSolution_with_axioms.hinvis_lemma (sol: PartialSolution_with_axioms) (y z:N) : ¬ (sol.sees {sol.x} $ (R' (S sol.d₀)).symm (e (sol.d y z))) := by
     sorry
 
@@ -1076,6 +1088,10 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
           rw [←hy.2.1, ←hy'.2.1]
+          have := hy.1 ▸ hy'.1
+          simp only [EmbeddingLike.apply_eq_iff_eq] at this
+          replace this := sol.d_injective $ FreeGroup.of_injective this
+          rw [this.2]
   }
 
   refine ⟨ sol', ?_, ?_ ⟩
