@@ -617,9 +617,19 @@ noncomputable abbrev PartialSolution_with_axioms.L₀'_pair (sol: PartialSolutio
 
 lemma PartialSolution_with_axioms.L₀'_no_collide_1  (sol: PartialSolution_with_axioms) (data : L₀'_data sol) : (sol.L₀'_pair data).1 ∉ sol.Dom_L₀' ∧ (sol.L₀'_pair data).2 ∉ sol.Dom_L₀' := by sorry
 
-lemma PartialSolution_with_axioms.L₀'_no_collide_2 (sol: PartialSolution_with_axioms) (data data' : L₀'_data sol) (hneq: data ≠ data') : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').1 ∧ ¬ (sol.L₀'_pair data).2 ≈ (sol.L₀'_pair data').2 := by sorry
+lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_axioms} {data data' : L₀'_data sol} (hneq: data ≠ data') : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').1 ∧ ¬ (sol.L₀'_pair data).2 ≈ (sol.L₀'_pair data').2 := by sorry
 
 lemma PartialSolution_with_axioms.L₀'_no_collide_3 (sol: PartialSolution_with_axioms) (data data' : L₀'_data sol) : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').2 := by sorry
+
+/-- For mathlib? It should follow from the Nelson-Schrier theorem -/
+lemma FreeGroup.torsionfree {α : Type*} [DecidableEq α] : Monoid.IsTorsionFree (FreeGroup α) := sorry
+
+lemma zpow_of_e_inj (a:SM) : Function.Injective (fun n:ℤ ↦ (e a)^n) := by
+  simp only [injective_zpow_iff_not_isOfFinOrder]
+  by_contra! this
+  have neq : e a ≠ 1 := by
+    simp only [e, ne_eq, FreeGroup.of_ne_one, not_false_eq_true]
+  exact Monoid.not_isTorsionFree_iff.mpr ⟨ e a, neq, this ⟩ FreeGroup.torsionfree
 
 noncomputable abbrev PartialSolution_with_axioms.L₀'_embed (sol: PartialSolution_with_axioms) : (L₀'_data sol) × ℤ × Bool ↪ N := {
     toFun := fun input ↦ match input with
@@ -629,8 +639,16 @@ noncomputable abbrev PartialSolution_with_axioms.L₀'_embed (sol: PartialSoluti
       intro (data,n,b) (data',n',b') h
       by_cases hb:b
       . by_cases hb':b'
-        . simp [hb, hb'] at h
-          sorry
+        . simp [hb, hb'] at h ⊢
+          have : (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').1 := calc
+            _ ≈ (e 0)^n * (sol.L₀'_pair data).1 := rel_of_mul _ n
+            _ ≈ (e 0)^n' * (sol.L₀'_pair data').1 := by rw [h]
+            _ ≈ _ := Setoid.symm $ rel_of_mul _ n'
+          have heq : data = data' := by
+            contrapose! this
+            exact (sol.L₀'_no_collide_2 this).1
+          simp [heq] at h ⊢
+          exact zpow_of_e_inj 0 h
         simp [hb, hb'] at h
         sorry
       by_cases hb':b'
