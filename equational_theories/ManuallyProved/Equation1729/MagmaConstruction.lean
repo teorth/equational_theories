@@ -658,13 +658,24 @@ noncomputable abbrev PartialSolution_with_axioms.L₀'_embed (sol: PartialSoluti
       sorry
   }
 
-noncomputable abbrev PartialSolution_with_axioms.L₀'_pre_embed (sol: PartialSolution_with_axioms) : (L₀'_data sol) × Bool ↪ N := {
-    toFun := fun input ↦ match input with
+noncomputable abbrev PartialSolution_with_axioms.L₀'_pre_embed_base (sol: PartialSolution_with_axioms) (input: L₀'_data sol × Bool) : N := match input with
     | (data, true) => (sol.L₀'_pair data).1
     | (data, false) => (sol.L₀'_pair data).2
+
+lemma PartialSolution_with_axioms.L₀'_pre_embed_base_eq (sol: PartialSolution_with_axioms) (data: L₀'_data sol) (b: Bool) : sol.L₀'_pre_embed_base (data, b) = sol.L₀'_embed (data,0,b) := match b with
+  | true => by
+      simp only [L₀'_pre_embed_base, L₀'_embed, Function.Embedding.coeFn_mk, zpow_zero, one_mul]
+  | false => by
+      simp only [L₀'_pre_embed_base, L₀'_embed, Function.Embedding.coeFn_mk, zpow_zero, one_mul]
+
+noncomputable abbrev PartialSolution_with_axioms.L₀'_pre_embed (sol: PartialSolution_with_axioms) : L₀'_data sol × Bool ↪ N := {
+    toFun := sol.L₀'_pre_embed_base
     inj' := by
       intro (data, b) (data',b') h
-      sorry
+      simp only [sol.L₀'_pre_embed_base_eq] at h
+      replace h := sol.L₀'_embed.inj' h
+      simp only [Prod.mk.injEq, true_and] at h ⊢
+      exact h
   }
 
 noncomputable abbrev PartialSolution_with_axioms.L₀'_output  (sol: PartialSolution_with_axioms) : (L₀'_data sol) × ℤ × Bool → N := fun input ↦ match input with
