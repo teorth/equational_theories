@@ -621,15 +621,9 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
 
 lemma PartialSolution_with_axioms.L₀'_no_collide_3 (sol: PartialSolution_with_axioms) (data data' : L₀'_data sol) : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').2 := by sorry
 
-/-- For mathlib? It should follow from the Nelson-Schrier theorem -/
-lemma FreeGroup.torsionfree {α : Type*} [DecidableEq α] : Monoid.IsTorsionFree (FreeGroup α) := sorry
+lemma zpow_of_e_inj (a:SM) : Function.Injective (fun n:ℤ ↦ (e a)^n) :=
+  injective_zpow_iff_not_isOfFinOrder.mpr (FreeGroup.infinite_order _ (FreeGroup.of_ne_one a))
 
-lemma zpow_of_e_inj (a:SM) : Function.Injective (fun n:ℤ ↦ (e a)^n) := by
-  simp only [injective_zpow_iff_not_isOfFinOrder]
-  by_contra! this
-  have neq : e a ≠ 1 := by
-    simp only [e, ne_eq, FreeGroup.of_ne_one, not_false_eq_true]
-  exact Monoid.not_isTorsionFree_iff.mpr ⟨ e a, neq, this ⟩ FreeGroup.torsionfree
 
 noncomputable abbrev PartialSolution_with_axioms.L₀'_embed (sol: PartialSolution_with_axioms) : (L₀'_data sol) × ℤ × Bool ↪ N := {
     toFun := fun input ↦ match input with
