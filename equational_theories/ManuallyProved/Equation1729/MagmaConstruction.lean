@@ -598,7 +598,13 @@ lemma PartialSolution_with_axioms.d_injective (sol: PartialSolution_with_axioms)
   rw [this.1, this.2]
   tauto
 
-lemma PartialSolution_with_axioms.hinvis_lemma (sol: PartialSolution_with_axioms) (y z:N) : ¬ (sol.sees {sol.x} $ (R' (S sol.d₀)).symm (e (sol.d y z))) := by
+lemma PartialSolution_with_axioms.invis_lemma (sol: PartialSolution_with_axioms) (y z:N) : ¬ (sol.sees {sol.x} $ (R' (S sol.d₀)).symm (e (sol.d y z))) := by
+    sorry
+
+lemma PartialSolution_with_axioms.invis_lemma' (sol: PartialSolution_with_axioms) (y z:N) (a:SM) : ¬ (sol.sees {sol.x} $ R' a $ (R' (S sol.d₀)).symm (e (sol.d y z))) := by
+    sorry
+
+lemma PartialSolution_with_axioms.invis_lemma'' (sol: PartialSolution_with_axioms) (y z:N) (a:SM) : ¬ (sol.sees {sol.x} $ (R' a).symm $ (R' (S sol.d₀)).symm (e (sol.d y z))) := by
     sorry
 
 /- Construction of the new L₀'.  Each L₀'_data object `data` generates a new input-output pair for L₀':  `sol.L₀' (sol.L₀'_pair d₀ d data).1 = (sol.L₀'_pair d₀ d data).2  -/
@@ -751,10 +757,8 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       obtain ⟨ ⟨ data, b ⟩, hdata ⟩ := hx'
       simp only [← hdata]
       by_cases h:b
-      . -- sol.L₀'_pre_embed
-        simp only [h, Function.Embedding.coeFn_mk, sol.new_L₀'_eval, mem_fill $ sol.mem_new_predom' _,
+      . simp only [h, Function.Embedding.coeFn_mk, sol.new_L₀'_eval, mem_fill $ sol.mem_new_predom' _,
         or_true, sol.new_L₀'_eval', sol.new_L₀'_eval''', and_self]
-      -- sol.L₀'_pre_embed
       simp only [h, Function.Embedding.coeFn_mk, sol.new_L₀'_eval'']
       group
       simp only [Int.reduceNeg, zpow_one, new_L₀'_eval''', mul_left_inj, sol.new_L₀'_eval', and_true]
@@ -852,7 +856,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
         rw [<-h.2] at h
         exfalso
-        exact (h.1 ▸ (sol.hinvis_lemma y z)) (sol.dom_S'_involved {x} hz).1
+        exact (h.1 ▸ (sol.invis_lemma y z)) (sol.dom_S'_involved {x} hz).1
 
     axiom_vi'' := by
       intro y a hya
@@ -878,10 +882,12 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       | P₂ y' z' hI hz =>
         simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
         rw [h.2] at hz
-        replace h := h.2 ▸ h.1
-        simp [R'] at h
-        -- get a contradiction from h
-        sorry
+        replace h := congrArg (R' a).symm $ h.2 ▸ h.1
+        simp only [R', Equiv.coe_fn_symm_mk, Equiv.coe_fn_mk, inv_mul_cancel_left] at h
+        rw [←h] at hz
+        replace hz := (sol.dom_S'_involved {x} hz).1
+        contrapose! hz
+        exact sol.invis_lemma'' y' y a
     axiom_vii'' := by
       intro x' y hneq hray hop
       simp only [sol.op_embed.in_range_iff_attains] at hop
@@ -979,7 +985,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           | old y'' z'' hop' =>
             simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             rw [h.1, h.2] at hop'
-            exact sol.hinvis_lemma y' x' (sol.dom_op_involved {x} hop').1
+            exact sol.invis_lemma y' x' (sol.dom_op_involved {x} hop').1
           | v =>
             simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             simp only [← h.2, ne_eq, not_true_eq_false, false_and, and_false] at this
@@ -990,14 +996,21 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
             simp [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             rw [h.2] at hz'
             exact hz hz'
-        . sorry -- direct calculation
+        . replace hI := (sol.I_involved {x} hI).2.2
+          by_contra h
+          rw [←h] at hI
+          exact sol.invis_lemma y' x' hI
         intro a
-        -- direct calculation
-        sorry
+        replace hI := (sol.I_involved {x} hI).2.2
+        contrapose! hI
+        apply_fun (R' a).symm at hI
+        simp only [R', Equiv.coe_fn_symm_mk, Equiv.coe_fn_mk, inv_mul_cancel_left] at hI
+        rw [<-hI]
+        exact sol.invis_lemma'' y' x' a
       | P₂ y' z' hI hz =>
         simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hdata
         simp [← hdata.1, ← hdata.2]
-        have hinvis := sol.hinvis_lemma y' z'
+        have hinvis := sol.invis_lemma y' z'
         refine ⟨ ⟨ ?_, ?_ ⟩, ?_, ?_, ?_ ⟩
         . contrapose! hinvis
           exact (sol.dom_S'_involved {x} hinvis).1
@@ -1024,11 +1037,14 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
             simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             rw [h.2] at hz'
             exact (sol.dom_S'_involved {x} hz').1
-        . -- direct calculation
-          sorry
+        . contrapose! hinvis
+          rw [←hinvis]
+          exact sol.sees_R'_inv (sol.reaches_S $ sol.reaches_involved (sol.dom_S'_involved {x} hz).2) (sol.dom_L₀'_involved {x} $ hC y' z' hI hz).2
         intro a
-        -- direct calculation
-        sorry
+        have hinvis' := sol.invis_lemma' y' z' a
+        contrapose! hinvis'
+        rw [←hinvis']
+        exact sol.sees_R'_inv (sol.reaches_S $ sol.reaches_involved (sol.dom_S'_involved {x} hz).2) (sol.dom_L₀'_involved {x} $ hC y' z' hI hz).2
     axiom_P' := by
       intro x' y y' z hy hy'
       obtain ⟨ data, hy ⟩ := (sol.I_triple.in_range_iff_attains _).mp hy
@@ -1046,12 +1062,12 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
           exfalso
-          exact sol.hinvis_lemma y''' z''' (hy'.2.2 ▸ (sol.I_involved {sol.x} hI').2.2)
+          exact sol.invis_lemma y''' z''' (hy'.2.2 ▸ (sol.I_involved {sol.x} hI').2.2)
         | P₂ y''' z''' hI'' hz' =>
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
           exfalso
-          exact sol.hinvis_lemma y''' z''' (hy'.1 ▸ (sol.I_involved {sol.x} hI').1)
+          exact sol.invis_lemma y''' z''' (hy'.1 ▸ (sol.I_involved {sol.x} hI').1)
       | P₁ y'' z'' hI' hz =>
         simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy
         simp only [hy.1, hy.2.1, hy.2.2] at hI' hz
@@ -1060,7 +1076,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hxx''
           exfalso
-          exact sol.hinvis_lemma y'' z'' (hy.2.2 ▸ (sol.I_involved {sol.x} hI'').2.2)
+          exact sol.invis_lemma y'' z'' (hy.2.2 ▸ (sol.I_involved {sol.x} hI'').2.2)
         | P₁ y''' z''' hI'' hz' =>
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
@@ -1069,7 +1085,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
           exfalso
-          exact sol.hinvis_lemma y''' z''' (hy'.1 ▸ (sol.I_involved {sol.x} hI').2.2)
+          exact sol.invis_lemma y''' z''' (hy'.1 ▸ (sol.I_involved {sol.x} hI').2.2)
       | P₂ y'' z'' hI' hz =>
         simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy
         simp only [hy.1, hy.2.1, hy.2.2] at hI' hz
@@ -1078,12 +1094,12 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hxx''
           exfalso
-          exact sol.hinvis_lemma y'' z'' (hy.1 ▸ (sol.I_involved {sol.x} hI'').1)
+          exact sol.invis_lemma y'' z'' (hy.1 ▸ (sol.I_involved {sol.x} hI'').1)
         | P₁ y''' z''' hI'' hz' =>
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
           exfalso
-          exact sol.hinvis_lemma y'' z'' (hy.1 ▸ (sol.I_involved {sol.x} hI'').2.2)
+          exact sol.invis_lemma y'' z'' (hy.1 ▸ (sol.I_involved {sol.x} hI'').2.2)
         | P₂ y''' z''' hI'' hz' =>
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
