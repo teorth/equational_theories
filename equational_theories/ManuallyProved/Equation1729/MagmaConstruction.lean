@@ -559,23 +559,30 @@ noncomputable instance  (sol : PartialSolution) (x:N) : Fintype (I_data sol x) :
   apply Fintype.ofInjective embed
   sorry
 
+noncomputable def  enum : N × N → ℕ := fun  p ↦ Exists.choose (Countable.exists_injective_nat (N × N)) p + 2
+
+lemma enum_injective : Function.Injective enum := by
+    intro _ _ h
+    simp only [add_left_inj, enum] at h
+    exact Exists.choose_spec (Countable.exists_injective_nat (N × N)) h
+
+lemma enum_ne_0 (p : N × N) : enum p ≠ 0 := by dsimp [enum]; linarith
+
+lemma enum_ne_1 (p : N × N) : enum p ≠ 1 := by dsimp [enum]; linarith
+
 lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') (hA: ∀ a, R' a x = parent x → R' (sol.S' (parent x)) x ∈ sol.Dom_L₀') (hB: ∀ a, x = R' a (parent x) → R' (S (a - sol.S' (parent x))) x ∈ sol.Dom_L₀') (hC : ∀ y z, (x,y,z) ∈ sol.I → z ∈ sol.Dom_S' → R' 0 ( R' (sol.S' z) x ) ∈ sol.Dom_L₀') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by
 
   by_cases hx : x ∈ sol.Dom_S'
   . exact ⟨ sol, sol.refl, hx ⟩
 
   classical
-  let enum : N × N → ℕ := fun  p ↦ Exists.choose (Countable.exists_injective_nat (N × N)) p + 2
-  have enum_injective : Function.Injective enum := by
-    intro _ _ h
-    simp only [add_left_inj, enum] at h
-    exact Exists.choose_spec (Countable.exists_injective_nat (N × N)) h
-  have enum_ne_0 (p : N × N) : enum p ≠ 0 := by dsimp [enum]; linarith
-  have enum_ne_1 (p : N × N) : enum p ≠ 1 := by dsimp [enum]; linarith
 
   let d₀ : SM := E (sol.fresh_generator {x} 0)
   let d₁ : SM := E (sol.fresh_generator {x} 1)
   let d : N → N → SM := fun y ↦ fun z ↦ E (sol.fresh_generator {x} (enum (y,z)))
+
+  have hinvis_lemma (y z:N) : ¬ (sol.sees {x} $ (R' (S d₀)).symm (e (d y z))) := by
+    sorry
 
   let y₀ := parent x
 
@@ -818,8 +825,9 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
       | P₂ y z hI hz =>
         simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed, op_triple] at h
         rw [<-h.2] at h
-        -- use h.1 to get contradiction
-        sorry
+        exfalso
+        exact (h.1 ▸ (hinvis_lemma y z)) (sol.dom_S'_involved {x} hz).1
+
     axiom_vi'' := by
       intro y a hya
       simp only [op_embed.in_range_iff_attains, new_dom_op] at hya
@@ -945,8 +953,7 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
           | old y'' z'' hop' =>
             simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
             rw [h.1, h.2] at hop'
-            -- get contradiction from first component of hop'
-            sorry
+            exact hinvis_lemma y' x' (sol.dom_op_involved {x} hop).1
           | v =>
             simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
             simp only [← h.2, ne_eq, not_true_eq_false, false_and, and_false] at this
@@ -964,41 +971,66 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
       | P₂ y' z' hI hz =>
         simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq, I_triple] at hdata
         simp [← hdata.1, ← hdata.2]
-        have hinvis : ¬ sol.sees (R' (S d₀)).symm (e (d y' z')) := by
-          -- direct calculation
-          sorry
+        have hinvis := hinvis_lemma y' z'
         refine ⟨ ⟨ ?_, ?_ ⟩, ?_, ?_, ?_ ⟩
-        . -- direct calculation
-          sorry
-        . -- direct calculation
-          sorry
-        . by_contra hop  -- or contrapose! hinvis
-          obtain ⟨ opdata, h ⟩ := (op_embed.in_range_iff_attains _).mp hop
+        . contrapose! hinvis
+          exact (sol.dom_S'_involved {x} hinvis).1
+        . contrapose! hinvis
+          rw [hinvis]
+          exact sol.extras_involved {x} $ Finset.mem_singleton.mpr rfl
+        . contrapose! hinvis
+          obtain ⟨ opdata, h ⟩ := (op_embed.in_range_iff_attains _).mp hinvis
           cases opdata with
           | old y'' z'' hop' =>
             simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
             rw [h.1, h.2] at hop'
-            -- obtain contradiction from hop
-            sorry
+            exact (sol.dom_op_involved {x} hop').2.1
           | v =>
             simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
-            -- obtain contradiction from h.2, hinvis
-            sorry
+            rw [← h.2]
+            exact sol.extras_involved {x} $ Finset.mem_singleton.mpr rfl
           | P₁ y'' z'' hI'' =>
             simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
-            -- obtain contradiction from h.2, hinvis
-            sorry
+            rw [← h.2]
+            exact sol.extras_involved {x} $ Finset.mem_singleton.mpr rfl
           | P₂ y'' z'' hI'' hz' =>
             simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
             rw [h.2] at hz'
-            -- obtain contradiction from hz', hinvis
-            sorry
+            exact (sol.dom_S'_involved {x} hz').1
         . -- direct calculation
           sorry
         intro a
         -- direct calculation
         sorry
-    axiom_P' := sorry
+    axiom_P' := by
+      intro x' y y' z hy hy'
+      obtain ⟨ data, hy ⟩ := (I_triple.in_range_iff_attains _).mp hy
+      obtain ⟨ data', hy' ⟩ := (I_triple.in_range_iff_attains _).mp hy'
+      cases data with
+      | old x'' y'' z'' hI' hxx' =>
+        simp [I_triple] at hy
+        simp only [hy.1, hy.2.1, hy.2.2] at hI' hxx'
+        cases data' with
+        | old x''' y''' z''' hI'' hxx'' =>
+          simp [I_triple] at hy'
+          simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hxx''
+          exact sol.axiom_P' x' y y' z hI' hI''
+        | P₁ y''' z''' hI'' hz' =>
+          simp [I_triple] at hy'
+          simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
+          sorry
+        | P₂ y''' z''' hI'' hz' =>
+          simp [I_triple] at hy'
+          simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
+          sorry
+      | P₁ y'' z'' hI' hz =>
+        simp [I_triple] at hy
+        simp only [hy.1, hy.2.1, hy.2.2] at hI' hz
+        sorry
+      | P₂ y'' z'' hI' hz =>
+        simp [I_triple] at hy
+        simp only [hy.1, hy.2.1, hy.2.2] at hI' hz
+        sorry
   }
 
   refine ⟨ sol', ?_, ?_ ⟩
