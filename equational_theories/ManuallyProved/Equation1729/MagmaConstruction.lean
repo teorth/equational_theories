@@ -29,7 +29,7 @@ class PartialSolution where
   axiom_P (x y z : N) (h: (x,y,z) ∈ I) : x ∉ Dom_S' ∧ (z,x) ∉ Dom_op ∧ z ≠ x ∧ (∀ a : SM, z ≠ R' a x)
   axiom_P' (x y y' z : N) (hy : (x,y,z) ∈ I) (hy' : (x,y',z) ∈ I) : y = y'
 
-def PartialSolution.Dom_L₀' (sol: PartialSolution) : Set N := fill sol.Predom_L₀'
+abbrev PartialSolution.Dom_L₀' (sol: PartialSolution) : Set N := fill sol.Predom_L₀'
 
 instance PartialSolution_LE : LE PartialSolution  := {
   le := by
@@ -511,51 +511,61 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol', sol ≤ sol' ∧ 
 
 lemma enlarge_L₀'_multiple (sol : PartialSolution) (A: Finset N)  : ∃ sol', sol ≤ sol' ∧ A.toSet ⊆ fill sol'.Predom_L₀' := by sorry
 
-/-- Data type to store the various L₀' extensions needed to prove `enlarge_S'_induction_with_axioms` -/
-inductive L₀'_data (sol : PartialSolution) (x:N) where
-  | iv₁ : L₀'_data sol x
-  | iv₂ : L₀'_data sol x
-  | iii₁ (a:SM) (ha: R' a x = parent x) : L₀'_data sol x
-  | iii₂ (a:SM) (ha: x = R' a (parent x)) : L₀'_data sol x
-  | P (y z:N) (hI: (x,y,z) ∈ sol.I) : L₀'_data sol x
+class PartialSolution_with_axioms extends PartialSolution where
+  x : N
+  hx : x ∉ Dom_S'
+  hind : ∀ y:N, y < x → y ∈ Dom_S'
+  hA : ∀ a, R' a x = parent x → R' (S' (parent x)) x ∈ fill Predom_L₀'
+  hB : ∀ a, x = R' a (parent x) → R' (S (a - S' (parent x))) x ∈ fill Predom_L₀'
+  hC : ∀ y z, (x,y,z) ∈ I → z ∈ Dom_S' → R' 0 (R' (S' z) x) ∈ fill Predom_L₀'
 
-noncomputable instance  (sol : PartialSolution) (x:N) : Fintype (L₀'_data sol x) := by
-  set embed : L₀'_data sol x → Fin 4 ⊕ sol.I := fun data ↦ match data with
+abbrev PartialSolution_with_axioms.y₀ (sol : PartialSolution_with_axioms) : N := parent sol.x
+
+/-- Data type to store the various L₀' extensions needed to prove `enlarge_S'_induction_with_axioms` -/
+inductive L₀'_data (sol : PartialSolution_with_axioms) where
+  | iv₁ : L₀'_data sol
+  | iv₂ : L₀'_data sol
+  | iii₁ (a:SM) (ha: R' a sol.x = sol.y₀) : L₀'_data sol
+  | iii₂ (a:SM) (ha: sol.x = R' a sol.y₀) : L₀'_data sol
+  | P (y z:N) (hI: (sol.x,y,z) ∈ sol.I) : L₀'_data sol
+
+noncomputable instance  (sol : PartialSolution_with_axioms) : Fintype (L₀'_data sol) := by
+  set embed : L₀'_data sol → Fin 4 ⊕ sol.I := fun data ↦ match data with
   | L₀'_data.iv₁ => Sum.inl 0
   | L₀'_data.iv₂ => Sum.inl 1
   | L₀'_data.iii₁ a ha => Sum.inl 2
   | L₀'_data.iii₂ a ha => Sum.inl 3
-  | L₀'_data.P y z hI => Sum.inr ⟨ (x,y,z), hI ⟩
+  | L₀'_data.P y z hI => Sum.inr ⟨ (sol.x,y,z), hI ⟩
   apply Fintype.ofInjective embed
   sorry
 
 /-- Data type to store the various op extensions needed to prove `enlarge_S'_induction_with_axioms` -/
-inductive op_data (sol: PartialSolution) (x:N) where
-  | old (y z:N) (hop: (y,z) ∈ sol.Dom_op) : op_data sol x
-  | v : op_data sol x
-  | P₁ (y z:N) (hI: (x,y,z) ∈ sol.I)  : op_data sol x
-  | P₂ (y z:N) (hI: (x,y,z) ∈ sol.I) (hz : z ∈ sol.Dom_S') : op_data sol x
+inductive op_data (sol: PartialSolution_with_axioms) where
+  | old (y z:N) (hop: (y,z) ∈ sol.Dom_op) : op_data sol
+  | v : op_data sol
+  | P₁ (y z:N) (hI: (sol.x,y,z) ∈ sol.I)  : op_data sol
+  | P₂ (y z:N) (hI: (sol.x,y,z) ∈ sol.I) (hz : z ∈ sol.Dom_S') : op_data sol
 
-noncomputable instance  (sol : PartialSolution) (x:N) : Fintype (op_data sol x) := by
-  set embed : op_data sol x → sol.Dom_op ⊕ Fin 1 ⊕ sol.I ⊕ sol.I := fun data ↦ match data with
+noncomputable instance  (sol : PartialSolution_with_axioms) : Fintype (op_data sol) := by
+  set embed : op_data sol → sol.Dom_op ⊕ Fin 1 ⊕ sol.I ⊕ sol.I := fun data ↦ match data with
   | op_data.old y z hop => Sum.inl ⟨ (y,z), hop ⟩
   | op_data.v => Sum.inr $ Sum.inl 0
-  | op_data.P₁ y z hI => Sum.inr $ Sum.inr $ Sum.inl ⟨ (x,y,z), hI ⟩
-  | op_data.P₂ y z hI hz => Sum.inr $ Sum.inr $ Sum.inr ⟨ (x,y,z), hI ⟩
+  | op_data.P₁ y z hI => Sum.inr $ Sum.inr $ Sum.inl ⟨ (sol.x,y,z), hI ⟩
+  | op_data.P₂ y z hI hz => Sum.inr $ Sum.inr $ Sum.inr ⟨ (sol.x,y,z), hI ⟩
   apply Fintype.ofInjective embed
   sorry
 
 /-- Data type to store the various I extensions needed to prove `enlarge_S'_induction_with_axioms` -/
-inductive I_data (sol: PartialSolution) (x:N) where
-  | old (x' y z:N) (hI: (x',y,z) ∈ sol.I) (hxx': x ≠ x') : I_data sol x
-  | P₁ (y z:N) (hI: (x,y,z) ∈ sol.I) (hz : z ∉ sol.Dom_S') : I_data sol x
-  | P₂ (y z:N) (hI: (x,y,z) ∈ sol.I) (hz : z ∈ sol.Dom_S') : I_data sol x
+inductive I_data (sol: PartialSolution_with_axioms) where
+  | old (x' y z:N) (hI: (x',y,z) ∈ sol.I) (hxx': sol.x ≠ x') : I_data sol
+  | P₁ (y z:N) (hI: (sol.x,y,z) ∈ sol.I) (hz : z ∉ sol.Dom_S') : I_data sol
+  | P₂ (y z:N) (hI: (sol.x,y,z) ∈ sol.I) (hz : z ∈ sol.Dom_S') : I_data sol
 
-noncomputable instance  (sol : PartialSolution) (x:N) : Fintype (I_data sol x) := by
-  set embed : I_data sol x → sol.I ⊕ sol.I ⊕ sol.I := fun data ↦ match data with
+noncomputable instance  (sol : PartialSolution_with_axioms) : Fintype (I_data sol) := by
+  set embed : I_data sol → sol.I ⊕ sol.I ⊕ sol.I := fun data ↦ match data with
   | I_data.old x' y z hI hxx' => Sum.inl ⟨ (x',y,z), hI ⟩
-  | I_data.P₁ y z hI hz => Sum.inr $ Sum.inl ⟨ (x,y,z), hI ⟩
-  | I_data.P₂ y z hI hz => Sum.inr $ Sum.inr ⟨ (x,y,z), hI ⟩
+  | I_data.P₁ y z hI hz => Sum.inr $ Sum.inl ⟨ (sol.x,y,z), hI ⟩
+  | I_data.P₂ y z hI hz => Sum.inr $ Sum.inr ⟨ (sol.x,y,z), hI ⟩
   apply Fintype.ofInjective embed
   sorry
 
@@ -570,170 +580,173 @@ lemma enum_ne_0 (p : N × N) : enum p ≠ 0 := by dsimp [enum]; linarith
 
 lemma enum_ne_1 (p : N × N) : enum p ≠ 1 := by dsimp [enum]; linarith
 
-lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') (hA: ∀ a, R' a x = parent x → R' (sol.S' (parent x)) x ∈ sol.Dom_L₀') (hB: ∀ a, x = R' a (parent x) → R' (S (a - sol.S' (parent x))) x ∈ sol.Dom_L₀') (hC : ∀ y z, (x,y,z) ∈ sol.I → z ∈ sol.Dom_S' → R' 0 ( R' (sol.S' z) x ) ∈ sol.Dom_L₀') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by
+abbrev PartialSolution_with_axioms.d₀ (sol: PartialSolution_with_axioms) := E (sol.fresh_generator {sol.x} 0)
 
-  by_cases hx : x ∈ sol.Dom_S'
-  . exact ⟨ sol, sol.refl, hx ⟩
+abbrev PartialSolution_with_axioms.d₁ (sol: PartialSolution_with_axioms) := E (sol.fresh_generator {sol.x} 1)
 
-  classical
+noncomputable abbrev PartialSolution_with_axioms.d (sol: PartialSolution_with_axioms) (y z: N) := E (sol.fresh_generator {sol.x} (enum (y,z)))
 
-  let d₀ : SM := E (sol.fresh_generator {x} 0)
-  let d₁ : SM := E (sol.fresh_generator {x} 1)
-  let d : N → N → SM := fun y ↦ fun z ↦ E (sol.fresh_generator {x} (enum (y,z)))
-
-  have hinvis_lemma (y z:N) : ¬ (sol.sees {x} $ (R' (S d₀)).symm (e (d y z))) := by
+lemma PartialSolution_with_axioms.hinvis_lemma (sol: PartialSolution_with_axioms) (y z:N) : ¬ (sol.sees {sol.x} $ (R' (S sol.d₀)).symm (e (sol.d y z))) := by
     sorry
 
-  let y₀ := parent x
+/- Construction of the new L₀'.  Each L₀'_data object `data` generates a new input-output pair for L₀':  `sol.L₀' (sol.L₀'_pair d₀ d data).1 = (sol.L₀'_pair d₀ d data).2  -/
+noncomputable abbrev PartialSolution_with_axioms.L₀'_pair (sol: PartialSolution_with_axioms) (data: L₀'_data sol) : N × N := match data with
+  | L₀'_data.iv₁ => (R' (S sol.d₀) sol.x, e sol.d₁)
+  | L₀'_data.iv₂ => (R' (S sol.d₀) $ (R' sol.d₀).symm $ e sol.d₁, R' sol.d₀ sol.x)
+  | L₀'_data.iii₁ a _ => (R' (S (a - sol.d₀)) sol.y₀, R' (a-sol.d₀) $ (R' (S (sol.S' sol.y₀))).symm $ R' 0 $ sol.L₀' $ R' (sol.S' sol.y₀) sol.x)
+  | L₀'_data.iii₂ a _ => (R' (S sol.d₀) $ (R' (a - sol.S' sol.y₀)).symm $ sol.L₀' $ R' (S (a - sol.S' sol.y₀)) sol.x, R' sol.d₀ sol.y₀)
+  | L₀'_data.P y z _ => (R' 0 $ R' sol.d₀ y, e (sol.d y z))
 
-  /- Construction of the new L₀'.  Each L₀'_data object `data` generates a new input-output pair for L₀':  `sol.L₀' (L₀'_pair d₀ d data).1 = (L₀'_pair d₀ d data).2  -/
-  let L₀'_pair : L₀'_data sol x → N × N := fun data ↦ match data with
-  | L₀'_data.iv₁ => (R' (S d₀) x, e d₁)
-  | L₀'_data.iv₂ => (R' (S d₀) $ (R' d₀).symm $ e d₁, R' d₀ x)
-  | L₀'_data.iii₁ a _ => (R' (S (a - d₀)) y₀, R' (a-d₀) $ (R' (S (sol.S' y₀))).symm $ R' 0 $ sol.L₀' $ R' (sol.S' y₀) x)
-  | L₀'_data.iii₂ a _ => (R' (S d₀) $ (R' (a - sol.S' y₀)).symm $ sol.L₀' $ R' (S (a - sol.S' y₀)) x, R' d₀ y₀)
-  | L₀'_data.P y z _ => (R' 0 $ R' d₀ y, e (d y z))
+lemma PartialSolution_with_axioms.L₀'_no_collide_1  (sol: PartialSolution_with_axioms) (data : L₀'_data sol) : (sol.L₀'_pair data).1 ∉ sol.Dom_L₀' ∧ (sol.L₀'_pair data).2 ∉ sol.Dom_L₀' := by sorry
 
-  have L₀'_no_collide_1 (data : L₀'_data sol x) : (L₀'_pair data).1 ∉ sol.Dom_L₀' ∧ (L₀'_pair data).2 ∉ sol.Dom_L₀' := by sorry
+lemma PartialSolution_with_axioms.L₀'_no_collide_2 (sol: PartialSolution_with_axioms) (data data' : L₀'_data sol) (hneq: data ≠ data') : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').1 ∧ ¬ (sol.L₀'_pair data).2 ≈ (sol.L₀'_pair data').2 := by sorry
 
-  have L₀'_no_collide_2 (data data' : L₀'_data sol x) (hneq: data ≠ data') : ¬ (L₀'_pair data).1 ≈ (L₀'_pair data').1 ∧ ¬ (L₀'_pair data).2 ≈ (L₀'_pair data').2 := by sorry
+lemma PartialSolution_with_axioms.L₀'_no_collide_3 (sol: PartialSolution_with_axioms) (data data' : L₀'_data sol) : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').2 := by sorry
 
-  have L₀'_no_collide_3 (data data' : L₀'_data sol x) : ¬ (L₀'_pair data).1 ≈ (L₀'_pair data').2 := by sorry
-
-  let L₀'_embed : (L₀'_data sol x) × ℤ × Bool ↪ N := {
+noncomputable abbrev PartialSolution_with_axioms.L₀'_embed (sol: PartialSolution_with_axioms) : (L₀'_data sol) × ℤ × Bool ↪ N := {
     toFun := fun input ↦ match input with
-    | (data, n, true) => (e 0)^n * (L₀'_pair data).1
-    | (data, n, false) => (e 0)^n * (L₀'_pair data).2
+    | (data, n, true) => (e 0)^n * (sol.L₀'_pair data).1
+    | (data, n, false) => (e 0)^n * (sol.L₀'_pair data).2
     inj' := by sorry
   }
 
-  let L₀'_pre_embed : (L₀'_data sol x) × Bool ↪ N := {
+noncomputable abbrev PartialSolution_with_axioms.L₀'_pre_embed (sol: PartialSolution_with_axioms) : (L₀'_data sol) × Bool ↪ N := {
     toFun := fun input ↦ match input with
-    | (data, true) => (L₀'_pair data).1
-    | (data, false) => (L₀'_pair data).2
+    | (data, true) => (sol.L₀'_pair data).1
+    | (data, false) => (sol.L₀'_pair data).2
     inj' := by sorry
   }
 
-  let L₀'_output : (L₀'_data sol x) × ℤ × Bool → N := fun input ↦ match input with
-    | (data, n, true) => (e 0)^n * (L₀'_pair data).2
-    | (data, n, false) =>  (e 0)^(n-1) * (L₀'_pair data).1
+noncomputable abbrev PartialSolution_with_axioms.L₀'_output  (sol: PartialSolution_with_axioms) : (L₀'_data sol) × ℤ × Bool → N := fun input ↦ match input with
+    | (data, n, true) => (e 0)^n * (sol.L₀'_pair data).2
+    | (data, n, false) =>  (e 0)^(n-1) * (sol.L₀'_pair data).1
 
-  let new_L₀' : N → N := L₀'_embed.edit sol.L₀' L₀'_output
+noncomputable abbrev PartialSolution_with_axioms.new_L₀' (sol: PartialSolution_with_axioms) : N → N := sol.L₀'_embed.edit sol.L₀' sol.L₀'_output
 
-  have new_L₀'_eval (data : L₀'_data sol x) : new_L₀' (L₀'_pair data).1 = (L₀'_pair data).2 := by
-    convert L₀'_embed.edit_of_attains _ _ ⟨ data, 0, true ⟩
-    . simp only [Function.Embedding.coeFn_mk, zpow_zero, one_mul, L₀'_embed]
-    simp only [zpow_zero, one_mul, L₀'_output]
+lemma PartialSolution_with_axioms.new_L₀'_eval (sol: PartialSolution_with_axioms) (data : L₀'_data sol) : sol.new_L₀' (sol.L₀'_pair data).1 = (sol.L₀'_pair data).2 := by
+    convert sol.L₀'_embed.edit_of_attains _ _ ⟨ data, 0, true ⟩
+    . simp only [Function.Embedding.coeFn_mk, zpow_zero, one_mul]
+    unfold PartialSolution_with_axioms.L₀'_output
+    simp only [zpow_zero, one_mul]
 
-  have new_L₀'_eval' (data : L₀'_data sol x) (n:ℤ) : new_L₀' ((e 0)^n * (L₀'_pair data).1) = (e 0)^n * (L₀'_pair data).2 := L₀'_embed.edit_of_attains _ _ ⟨ data, n, true ⟩
+lemma PartialSolution_with_axioms.new_L₀'_eval' (sol: PartialSolution_with_axioms) (data : L₀'_data sol) (n:ℤ) : sol.new_L₀' ((e 0)^n * (sol.L₀'_pair data).1) = (e 0)^n * (sol.L₀'_pair data).2 := sol.L₀'_embed.edit_of_attains _ _ ⟨ data, n, true ⟩
 
-  have new_L₀'_eval'' (data : L₀'_data sol x) : new_L₀' (L₀'_pair data).2 = (e 0)⁻¹ * (L₀'_pair data).1 := by
-    convert L₀'_embed.edit_of_attains _ _ ⟨ data, 0, false ⟩
-    simp only [Function.Embedding.coeFn_mk, zpow_zero, one_mul, L₀'_embed]
+lemma PartialSolution_with_axioms.new_L₀'_eval'' (sol: PartialSolution_with_axioms) (data : L₀'_data sol) : sol.new_L₀' (sol.L₀'_pair data).2 = (e 0)⁻¹ * (sol.L₀'_pair data).1 := by
+    convert sol.L₀'_embed.edit_of_attains _ _ ⟨ data, 0, false ⟩
+    simp only [Function.Embedding.coeFn_mk, zpow_zero, one_mul]
 
-  have new_L₀'_eval''' (data : L₀'_data sol x) (n:ℤ) : new_L₀' ((e 0)^n * (L₀'_pair data).2) = (e 0)^(n-1) * (L₀'_pair data).1 := L₀'_embed.edit_of_attains _ _ ⟨ data, n, false ⟩
+lemma PartialSolution_with_axioms.new_L₀'_eval''' (sol: PartialSolution_with_axioms) (data : L₀'_data sol) (n:ℤ) : sol.new_L₀' ((e 0)^n * (sol.L₀'_pair data).2) = (e 0)^(n-1) * (sol.L₀'_pair data).1 := sol.L₀'_embed.edit_of_attains _ _ ⟨ data, n, false ⟩
 
-
-  have new_L₀'_extend {y:N} (hy: y ∈ sol.Dom_L₀') : new_L₀' y = sol.L₀' y := by
-    apply L₀'_embed.edit_of_avoids
+lemma PartialSolution_with_axioms.new_L₀'_extend (sol: PartialSolution_with_axioms) {y:N} (hy: y ∈ sol.Dom_L₀') : sol.new_L₀' y = sol.L₀' y := by
+    apply sol.L₀'_embed.edit_of_avoids
     intro ⟨ data, n, b ⟩
     by_cases hb:b
-    . simp only [hb, Function.Embedding.coeFn_mk, ne_eq, L₀'_embed]
+    . simp only [hb, Function.Embedding.coeFn_mk, ne_eq]
       by_contra this
-      simp only [PartialSolution.Dom_L₀', ← this, fill_invar'] at hy
-      exact (L₀'_no_collide_1 data).1 hy
-    simp only [hb, Function.Embedding.coeFn_mk, ne_eq, L₀'_embed]
+      simp [← this, fill_invar'] at hy
+      exact (sol.L₀'_no_collide_1 data).1 hy
+    simp only [hb, Function.Embedding.coeFn_mk, ne_eq]
     by_contra this
-    simp only [PartialSolution.Dom_L₀', ← this, fill_invar'] at hy
-    exact (L₀'_no_collide_1 data).2 hy
+    simp only [← this, fill_invar'] at hy
+    exact (sol.L₀'_no_collide_1 data).2 hy
 
-  let new_predom : Finset N := L₀'_pre_embed.range_finset
+noncomputable abbrev PartialSolution_with_axioms.new_predom (sol : PartialSolution_with_axioms) : Finset N := sol.L₀'_pre_embed.range_finset
 
-  have mem_new_predom (data : L₀'_data sol x): (L₀'_pair data).1 ∈ new_predom := by
-    rw [L₀'_pre_embed.in_range_iff_attains]
-    exact L₀'_pre_embed.attains_image (data, true)
+lemma PartialSolution_with_axioms.mem_new_predom (sol : PartialSolution_with_axioms) (data : L₀'_data sol): (sol.L₀'_pair data).1 ∈ sol.new_predom := by
+    rw [sol.L₀'_pre_embed.in_range_iff_attains]
+    exact sol.L₀'_pre_embed.attains_image (data, true)
 
-  have mem_new_predom' (data : L₀'_data sol x): (L₀'_pair data).2 ∈ new_predom := by
-    rw [L₀'_pre_embed.in_range_iff_attains]
-    exact L₀'_pre_embed.attains_image (data, false)
-
+lemma PartialSolution_with_axioms.mem_new_predom' (sol : PartialSolution_with_axioms) (data : L₀'_data sol): (sol.L₀'_pair data).2 ∈ sol.new_predom := by
+    rw [sol.L₀'_pre_embed.in_range_iff_attains]
+    exact sol.L₀'_pre_embed.attains_image (data, false)
 
 /- Construction of the new `op`.  Each op_data object `data` produces an instance of the operation `op`: `sol.op (op_triple d₀ d data).1 (op_triple d₀ d data).2.1 = (op_triple d₀ d data).2.2. -/
-  let op_triple : op_data sol x → N × N × M := fun data ↦ match data with
-  | op_data.old y z hop => (y, z, sol.op y z)
-  | op_data.v => (x, x, Sum.inl d₀)
-  | op_data.P₁ y z hI => (z, x, Sum.inr $ (R' (S d₀)).symm $ e $ d y z)
-  | op_data.P₂ y z hI hz => ((R' (S d₀)).symm $ e $ d y z, z, Sum.inr $ (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) x)
+noncomputable abbrev PartialSolution_with_axioms.op_triple(sol : PartialSolution_with_axioms) : op_data sol → N × N × M := fun data ↦ match data with
+  | op_data.old y z _hop => (y, z, sol.op y z)
+  | op_data.v => (sol.x, sol.x, Sum.inl sol.d₀)
+  | op_data.P₁ y z _hI => (z, sol.x, Sum.inr $ (R' (S sol.d₀)).symm $ e $ sol.d y z)
+  | op_data.P₂ y z _hI _hz => ((R' (S sol.d₀)).symm $ e $ sol.d y z, z, Sum.inr $ (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) x)
 
-  let op_embed : op_data sol x ↪ N × N := {
-    toFun := fun data ↦ ((op_triple data).1, (op_triple data).2.1)
+noncomputable abbrev PartialSolution_with_axioms.op_embed (sol : PartialSolution_with_axioms) : op_data sol ↪ N × N := {
+    toFun := fun data ↦ ((sol.op_triple data).1, (sol.op_triple data).2.1)
     inj' := by sorry
   }
 
-  let op_output : op_data sol x → M := fun data ↦ (op_triple data).2.2
+noncomputable abbrev PartialSolution_with_axioms.op_output (sol : PartialSolution_with_axioms): op_data sol → M := fun data ↦ (sol.op_triple data).2.2
 
-  let new_op : N → N → M := fun y ↦ (fun z ↦ op_embed.edit (fun (y,z) ↦ sol.op y z) op_output (y,z))
+noncomputable abbrev PartialSolution_with_axioms.new_op (sol : PartialSolution_with_axioms) : N → N → M := fun y ↦ (fun z ↦ sol.op_embed.edit (fun (y,z) ↦ sol.op y z) sol.op_output (y,z))
 
-  have op_eval (data : op_data sol x) : new_op (op_triple data).1 (op_triple data).2.1 = (op_triple data).2.2 := op_embed.edit_of_attains _ _ data
+lemma PartialSolution_with_axioms.op_eval (sol : PartialSolution_with_axioms) (data : op_data sol) : sol.new_op (sol.op_triple data).1 (sol.op_triple data).2.1 = (sol.op_triple data).2.2 := sol.op_embed.edit_of_attains _ _ data
 
-  have op_extend {y:N} {z:N} (h: (y,z) ∈ sol.Dom_op) : new_op y z = sol.op y z := op_embed.edit_of_attains _ _ (op_data.old y z h)
+lemma PartialSolution_with_axioms.op_extend (sol : PartialSolution_with_axioms) {y:N} {z:N} (h: (y,z) ∈ sol.Dom_op) : sol.new_op y z = sol.op y z := sol.op_embed.edit_of_attains _ _ (op_data.old y z h)
 
-  let new_dom_op : Finset (N × N) := op_embed.range_finset
+noncomputable abbrev PartialSolution_with_axioms.new_dom_op (sol : PartialSolution_with_axioms) : Finset (N × N) := sol.op_embed.range_finset
 
-  have mem_new_dom_op (data : op_data sol x) : ((op_triple data).1, (op_triple data).2.1) ∈ new_dom_op := (op_embed.in_range_iff_attains _).mpr $ op_embed.attains_image data
+lemma PartialSolution_with_axioms.mem_new_dom_op (sol : PartialSolution_with_axioms) (data : op_data sol) : ((sol.op_triple data).1, (sol.op_triple data).2.1) ∈ sol.new_dom_op := (sol.op_embed.in_range_iff_attains _).mpr $ sol.op_embed.attains_image data
 
 /- Construction of the new I.  Each I_data object `data` produces a triple for I. -/
-  let I_triple : I_data sol x ↪ N × N × N := {
+noncomputable abbrev PartialSolution_with_axioms.I_triple (sol : PartialSolution_with_axioms) : I_data sol ↪ N × N × N := {
     toFun := fun data ↦ match data with
       | I_data.old x' y z hI hxx' => (x',y,z)
-      | I_data.P₁ y z hI hz => (z,x,(R' (S d₀)).symm $ e $ d y z)
-      | I_data.P₂ y z hI hz => ((R' (S d₀)).symm $ e $ d y z, z, (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) x)
+      | I_data.P₁ y z hI hz => (z,x,(R' (S sol.d₀)).symm $ e $ sol.d y z)
+      | I_data.P₂ y z hI hz => ((R' (S sol.d₀)).symm $ e $ sol.d y z, z, (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) x)
     inj' := by sorry
   }
 
-  let new_I : Finset (N × N × N) := I_triple.range_finset
+noncomputable abbrev PartialSolution_with_axioms.new_I (sol : PartialSolution_with_axioms) : Finset (N × N × N) := sol.I_triple.range_finset
 
 -- Set up S
 
-  let new_S : N → SM := fun y ↦ if y=x then d₀ else sol.S' y
+noncomputable abbrev PartialSolution_with_axioms.new_S (sol : PartialSolution_with_axioms) : N → SM := fun y ↦ if y=x then sol.d₀ else sol.S' y
 
-  have new_S_x : new_S x = d₀ := by simp only [↓reduceIte, new_S]
+lemma PartialSolution_with_axioms.new_S_x (sol : PartialSolution_with_axioms) : sol.new_S x = sol.d₀ := by simp only [↓reduceIte, new_S]
 
-  have new_S_extend {y:N} (h: y ∈ sol.Dom_S') : new_S y = sol.S' y := by
+lemma PartialSolution_with_axioms.new_S_extend (sol : PartialSolution_with_axioms) {y:N} (h: y ∈ sol.Dom_S') : sol.new_S y = sol.S' y := by
     by_cases hy : y = x
     . rw [hy] at h
-      contradiction
+      contrapose! h
+      exact sol.hx
     simp only [hy, ↓reduceIte, new_S]
 
-  have new_S_y₀ (h: x ≠ 1): new_S y₀ = sol.S' y₀ := new_S_extend $ hind y₀ $ parent_lt h
+lemma PartialSolution_with_axioms.new_S_y₀ (sol : PartialSolution_with_axioms) (h: x ≠ 1): sol.new_S sol.y₀ = sol.S' sol.y₀ := sol.new_S_extend $ hind sol.y₀ $ parent_lt h
+
+
+open PartialSolution_with_axioms
+
+lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃ sol' : PartialSolution, sol.toPartialSolution ≤ sol' ∧ sol.x ∈ sol'.Dom_S' := by
+  classical
+
+  have hxa := sol.hx
 
   let sol' : PartialSolution := {
-    L₀' := new_L₀'
-    op := new_op
-    S' := new_S
-    I := new_I
-    Predom_L₀' := sol.Predom_L₀' ∪ new_predom
-    Dom_op := new_dom_op
+    L₀' := sol.new_L₀'
+    op := sol.new_op
+    S' := sol.new_S
+    I := sol.new_I
+    Predom_L₀' := sol.Predom_L₀' ∪ sol.new_predom
+    Dom_op := sol.new_dom_op
     Dom_S' := sol.Dom_S' ∪ {x}
     axiom_i'' := by
       intro x' y hx' hxy n
       simp only [Finset.mem_union] at hx'
       simp only [fill_union, ← hxy, Set.mem_union]
       rcases hx' with hx' | hx'
-      . simp only [new_L₀'_extend (mem_fill hx')] at hxy ⊢
+      . simp only [sol.new_L₀'_extend (mem_fill hx')] at hxy ⊢
         obtain ⟨ h1, h2, h3 ⟩ := sol.axiom_i'' x' (sol.L₀' x') hx' (by rfl) n
-        simp only [h1, true_or, new_L₀'_extend $ (fill_invar' _ _ n).mpr $ mem_fill hx', h2,
-          new_L₀'_extend $ (fill_invar' _ _ n).mpr h1, h3, and_self]
-      rw [L₀'_pre_embed.in_range_iff_attains] at hx'
+        simp only [h1, true_or, sol.new_L₀'_extend $ (fill_invar' _ _ n).mpr $ mem_fill hx', h2,
+          sol.new_L₀'_extend $ (fill_invar' _ _ n).mpr h1, h3, and_self]
+      rw [sol.L₀'_pre_embed.in_range_iff_attains] at hx'
       obtain ⟨ ⟨ data, b ⟩, hdata ⟩ := hx'
       simp only [← hdata]
       by_cases h:b
-      . simp only [h, Function.Embedding.coeFn_mk, new_L₀'_eval, mem_fill $ mem_new_predom' _,
-        or_true, new_L₀'_eval', new_L₀'_eval''', and_self, L₀'_pre_embed]
-      simp only [h, Function.Embedding.coeFn_mk, new_L₀'_eval'', L₀'_pre_embed]
+      . -- sol.L₀'_pre_embed
+        simp only [h, Function.Embedding.coeFn_mk, sol.new_L₀'_eval, mem_fill $ sol.mem_new_predom' _,
+        or_true, sol.new_L₀'_eval', sol.new_L₀'_eval''', and_self]
+      -- sol.L₀'_pre_embed
+      simp only [h, Function.Embedding.coeFn_mk, sol.new_L₀'_eval'']
       group
-      simp only [Int.reduceNeg, zpow_one, new_L₀'_eval''', mul_left_inj, new_L₀'_eval', and_true]
-      exact ⟨ Or.inr $ (fill_invar' _ _ _).mpr $ mem_fill $ mem_new_predom data, by group ⟩
+      simp only [Int.reduceNeg, zpow_one, new_L₀'_eval''', mul_left_inj, sol.new_L₀'_eval', and_true]
+      exact ⟨ Or.inr $ (fill_invar' _ _ _).mpr $ mem_fill $ sol.mem_new_predom data, by group ⟩
 
     axiom_S := by
       intro x' y hx' hyx
@@ -753,29 +766,30 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
       rcases hx' with hx' | hx'
       . rcases hy with hy | hy
         . obtain ⟨ h1, h2, h3 ⟩ := sol.axiom_iii'' x' y a hx' hy hray
-          simp only [fill_union, new_S_extend hx', Set.mem_union, h1, true_or, new_S_extend hy,
-            new_L₀'_extend h1, h2, new_L₀'_extend h2, h3, and_self]
+          simp only [fill_union, sol.new_S_extend hx', Set.mem_union, h1, true_or, sol.new_S_extend hy,
+            sol.new_L₀'_extend h1, h2, sol.new_L₀'_extend h2, h3, and_self]
         rw [hy] at hray hneq ⊢
-        have : x' = y₀ := by
+        have : x' = sol.y₀ := by
           rcases hray ▸ (parent_of_adjacent $ R'_adjacent a x') with this | this
           . exact this
-          contrapose! hx
-          exact sol.axiom_S x' x hx' $ this ▸ (parent_le x')
-        have hneq' : x ≠ 1 := by
+          contrapose! hxa
+          exact sol.axiom_S x' sol.x hx' $ this ▸ (parent_le x')
+        have hneq' : sol.x ≠ 1 := by
           contrapose! hneq
-          simp only [this, hneq, parent_one, y₀]
+          unfold PartialSolution_with_axioms.y₀ at this
+          simp only [this, hneq, parent_one]
         rw [this] at hray ⊢
         replace hB := hB a hray.symm
-        have h1 := mem_new_predom $ L₀'_data.iii₂ a hray.symm
-        simp only [PartialSolution.Dom_L₀'] at hB
-        simp only [fill_union, new_S_y₀ hneq', Set.mem_union, hB, true_or, new_S_x,
-          new_L₀'_extend hB, mem_fill h1, or_true, new_L₀'_eval (L₀'_data.iii₂ a hray.symm),
+        have h1 := sol.mem_new_predom $ L₀'_data.iii₂ a hray.symm
+        unfold PartialSolution.Dom_L₀' at hB
+        simp only [fill_union, sol.new_S_y₀ hneq', Set.mem_union, hB, true_or, sol.new_S_x,
+          sol.new_L₀'_extend hB, mem_fill h1, or_true, sol.new_L₀'_eval (L₀'_data.iii₂ a hray.symm),
           Equiv.symm_apply_apply, and_self, y₀]
       rcases hy with hy | hy
       . rw [hx'] at hray hneq ⊢
-        have : y = y₀ := by
+        have : y = sol.y₀ := by
           rcases hray ▸ (parent_of_adjacent $ R'_adjacent a x) with this | this
-          . contrapose! hx
+          . contrapose! hxa
             exact sol.axiom_S y x hy $ this ▸ (parent_le y)
           exact this
         have hneq' : x ≠ 1 := by
@@ -783,14 +797,14 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
           simp only [this, hneq, parent_one, y₀]
         rw [this] at hray ⊢
         replace hA := hA a hray
-        have h1 := mem_new_predom $ L₀'_data.iii₁ a hray
-        simp only [PartialSolution.Dom_L₀'] at hA
-        simp [L₀'_pair] at h1
-        have hfill : (sol.L₀' $ R' (sol.S' (parent x)) x) ∈ fill sol.Predom_L₀' := sol.R0_mem_L₀' hA
-        have heval : (new_L₀' $ R' 0 $ sol.L₀' $ R' (sol.S' (parent x)) x) = R' (sol.S' (parent x)) x := by
-          rw [new_L₀'_extend $ (R0_mem_fill_iff _ _).mpr hfill]
+        have h1 := sol.mem_new_predom $ L₀'_data.iii₁ a hray
+        unfold PartialSolution.Dom_L₀' at hA
+        unfold PartialSolution_with_axioms.L₀'_pair at h1
+        have hfill : (sol.L₀' $ R' (sol.S' sol.y₀) sol.x) ∈ fill sol.Predom_L₀' := sol.R0_mem_L₀' hA
+        have heval : (sol.new_L₀' $ R' 0 $ sol.L₀' $ R' (sol.S' sol.y₀) sol.x) = R' (sol.S' sol.y₀) sol.x := by
+          rw [sol.new_L₀'_extend $ (R0_mem_fill_iff _ _).mpr hfill]
           exact PartialSolution.inv_L₀' hA
-        simp only [fill_union, new_S_x, Set.mem_union, mem_fill h1, new_S_y₀ hneq', new_L₀'_eval (L₀'_data.iii₁ a hray), Equiv.symm_apply_apply, Equiv.apply_symm_apply, true_and, true_or, or_true, y₀, hfill, heval, R0_mem_fill_iff]
+        simp only [fill_union, sol.new_S_x, Set.mem_union, mem_fill h1, sol.new_S_y₀ hneq', sol.new_L₀'_eval (L₀'_data.iii₁ a hray), Equiv.symm_apply_apply, Equiv.apply_symm_apply, true_and, true_or, or_true, y₀, hfill, heval, R0_mem_fill_iff]
       contrapose! hneq
       rw [hx',hy]
     axiom_iv'' := by
@@ -798,59 +812,59 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
       simp only [Finset.mem_union, Finset.mem_singleton] at hx'
       rcases hx' with hx' | hx'
       . obtain ⟨ h1, h2, h3 ⟩ := sol.axiom_iv'' x' hx'
-        simp only [fill_union, new_S_extend hx', Set.mem_union, new_L₀'_extend h1, new_L₀'_extend h2, h3, and_true]
+        simp only [fill_union, sol.new_S_extend hx', Set.mem_union, sol.new_L₀'_extend h1, sol.new_L₀'_extend h2, h3, and_true]
         exact ⟨Or.inl h1, Or.inl h2⟩
-      simp only [hx', new_L₀'_eval L₀'_data.iv₁, new_L₀'_eval L₀'_data.iv₂, Equiv.symm_apply_apply, and_true, new_S_x]
-      exact ⟨ mem_fill $ Finset.mem_union_right _ $ mem_new_predom L₀'_data.iv₁, mem_fill $ Finset.mem_union_right _ $ mem_new_predom L₀'_data.iv₂ ⟩
+      simp only [hx', sol.new_L₀'_eval L₀'_data.iv₁, sol.new_L₀'_eval L₀'_data.iv₂, Equiv.symm_apply_apply, and_true, sol.new_S_x]
+      exact ⟨ mem_fill $ Finset.mem_union_right _ $ sol.mem_new_predom L₀'_data.iv₁, mem_fill $ Finset.mem_union_right _ $ sol.mem_new_predom L₀'_data.iv₂ ⟩
     axiom_v'' := by
       intro x' hx'
       simp only [Set.Finite.mem_toFinset, Set.mem_setOf_eq, new_dom_op, Function.Embedding.in_range_iff_attains, Function.Embedding.attains] at hx'
       obtain ⟨ data, h ⟩  := hx'
       cases data with
       | old y z hop =>
-        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed, op_triple] at h
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
         rw [h.1,h.2] at hop
         obtain ⟨ h3, h4 ⟩ := sol.axiom_v'' x' hop
         have hxne : x' ≠ x := by
-          contrapose! hx
-          rwa [hx] at h3
-        simp only [Finset.mem_union, h3, Finset.mem_singleton, hxne, or_false, ↓reduceIte, h4, new_S_extend h3,
-          true_and, op_extend hop]
+          contrapose! hxa
+          rwa [hxa] at h3
+        simp only [Finset.mem_union, h3, Finset.mem_singleton, hxne, or_false, ↓reduceIte, h4, sol.new_S_extend h3,
+          true_and, sol.op_extend hop]
       | v =>
-        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, and_self, op_embed, op_triple] at h
-        simp only [← h, Finset.mem_union, Finset.mem_singleton, or_true, true_and, op_eval op_data.v, new_S_x]
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, and_self] at h
+        simp only [← h, Finset.mem_union, Finset.mem_singleton, or_true, true_and, sol.op_eval op_data.v, sol.new_S_x]
       | P₁ y z hI =>
-        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed, op_triple] at h
-        simp only [← h.2, Finset.mem_union, Finset.mem_singleton, or_true, true_and, op_eval op_data.v, new_S_x]
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
+        simp only [← h.2, Finset.mem_union, Finset.mem_singleton, or_true, true_and, sol.op_eval op_data.v, sol.new_S_x]
       | P₂ y z hI hz =>
-        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed, op_triple] at h
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
         rw [<-h.2] at h
         exfalso
-        exact (h.1 ▸ (hinvis_lemma y z)) (sol.dom_S'_involved {x} hz).1
+        exact (h.1 ▸ (sol.hinvis_lemma y z)) (sol.dom_S'_involved {x} hz).1
 
     axiom_vi'' := by
       intro y a hya
-      simp only [op_embed.in_range_iff_attains, new_dom_op] at hya
+      simp only [sol.op_embed.in_range_iff_attains] at hya
       obtain ⟨ data, h ⟩ := hya
       cases data with
       | old y' z' hop =>
-        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
         rw [h.1, h.2] at hop
         have := sol.axiom_vi'' y a hop
-        simp only [Finset.mem_union, this.1, Finset.mem_singleton, true_or, op_extend hop, this.2,
-          new_S_extend this.1, and_self]
+        simp only [Finset.mem_union, this.1, Finset.mem_singleton, true_or, sol.op_extend hop, this.2,
+          sol.new_S_extend this.1, and_self]
       | v =>
-        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
         exfalso
         exact (h.1 ▸ (R'_axiom_iib a y)) h.2
       | P₁ y' z' hI =>
-        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
         rw [h.1, ←h.2] at hI
         have := (sol.axiom_P _ _ _ hI).2.2.2 a
         contrapose! this
         rfl
       | P₂ y' z' hI hz =>
-        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
         rw [h.2] at hz
         replace h := h.2 ▸ h.1
         simp [R'] at h
@@ -858,64 +872,64 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
         sorry
     axiom_vii'' := by
       intro x' y hneq hray hop
-      simp only [op_embed.in_range_iff_attains, new_dom_op] at hop
+      simp only [sol.op_embed.in_range_iff_attains] at hop
       obtain ⟨ data, h ⟩ := hop
       cases data with
       | old y' z hop =>
-        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
         rw [h.1, h.2] at hop
         obtain ⟨ z', h1, h2 ⟩ := sol.axiom_vii'' x' y hneq hray hop
         use z'
-        simp only [op_extend hop, h1, Finset.mem_union, Finset.mem_singleton, fill_union,
+        simp only [sol.op_extend hop, h1, Finset.mem_union, Finset.mem_singleton, fill_union,
           Set.mem_union, R0_mem_fill_iff, true_and]
         rcases h2 with h2 | ⟨ h2, h3, h4, h5 ⟩
         . by_cases hxx' : x = x'
           . right
             rw [← hxx'] at h1 h2 ⊢
-            simp only [or_true, new_S_x, true_and]
-            refine ⟨ mem_new_dom_op $ op_data.P₁ y z' h2, ?_, ?_ ⟩
+            simp only [or_true, sol.new_S_x, true_and]
+            refine ⟨ sol.mem_new_dom_op $ op_data.P₁ y z' h2, ?_, ?_ ⟩
             . right
-              have := mem_fill $ mem_new_predom $ L₀'_data.P y z' h2
+              have := mem_fill $ sol.mem_new_predom $ L₀'_data.P y z' h2
               simp only [R0_mem_fill_iff] at this
               exact this
-            simp only [op_eval $ op_data.P₁ y z' h2, new_L₀'_eval $ L₀'_data.P y z' h2]
+            simp only [sol.op_eval $ op_data.P₁ y z' h2, sol.new_L₀'_eval $ L₀'_data.P y z' h2]
           left
-          convert I_triple.attains_in_range $ I_data.old x' y z' h2 hxx'
+          convert sol.I_triple.attains_in_range $ I_data.old x' y z' h2 hxx'
         right
-        simp only [mem_new_dom_op $ op_data.old z' x' h2, h3, true_or, new_S_extend h3,
-          (R0_mem_fill_iff _ _).mp h4, op_extend h2, h5, new_L₀'_extend h4, and_self]
+        simp only [sol.mem_new_dom_op $ op_data.old z' x' h2, h3, true_or, sol.new_S_extend h3,
+          (R0_mem_fill_iff _ _).mp h4, sol.op_extend h2, h5, sol.new_L₀'_extend h4, and_self]
       | v =>
-        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
         rw [← h.1, ← h.2] at hneq
         contrapose! hneq
         rfl
       | P₁ y' z hI =>
         simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
-        use (R' (S d₀)).symm $ e $ d y' z
-        simp only [← h.1, ← h.2, op_eval $ op_data.P₁ y' z hI, Finset.mem_union,
+        use (R' (S sol.d₀)).symm $ e $ sol.d y' z
+        simp only [← h.1, ← h.2, sol.op_eval $ op_data.P₁ y' z hI, Finset.mem_union,
           Finset.mem_singleton, fill_union, Set.mem_union, R0_mem_fill_iff, true_and]
         by_cases hz : z ∈ sol.Dom_S'
         . right
           replace hC := hC y' z hI hz
-          simp only [mem_new_dom_op $ op_data.P₂ y' z hI hz, hz, true_or, new_S_extend hz,
-            (R0_mem_fill_iff _ _).mp hC, op_eval $ op_data.P₂ y' z hI hz, new_L₀'_extend hC,
+          simp only [sol.mem_new_dom_op $ op_data.P₂ y' z hI hz, hz, true_or, sol.new_S_extend hz,
+            (R0_mem_fill_iff _ _).mp hC, sol.op_eval $ op_data.P₂ y' z hI hz, sol.new_L₀'_extend hC,
             and_self]
         left
-        exact I_triple.attains_in_range $ I_data.P₁ y' z hI hz
+        exact sol.I_triple.attains_in_range $ I_data.P₁ y' z hI hz
       | P₂ y' z hI hz =>
-        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+        simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
         rw [h.2] at hz hI h
-        use (R' (S (sol.S' y))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' y) x
-        simp only [← h.1, op_eval $ op_data.P₂ y' y hI hz, Finset.mem_union, Finset.mem_singleton,
+        use (R' (S (sol.S' y))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' y) sol.x
+        simp only [← h.1, sol.op_eval $ op_data.P₂ y' y hI hz, Finset.mem_union, Finset.mem_singleton,
           fill_union, Set.mem_union, R0_mem_fill_iff, true_and]
         left
-        exact I_triple.attains_in_range $ I_data.P₂ y' y hI hz
+        exact sol.I_triple.attains_in_range $ I_data.P₂ y' y hI hz
     axiom_P := by
       intro x' y z hI
-      obtain ⟨ data, hdata ⟩ := (I_triple.in_range_iff_attains _).mp hI
+      obtain ⟨ data, hdata ⟩ := (sol.I_triple.in_range_iff_attains _).mp hI
       cases data with
       | old x'' y' z' hI' hxx' =>
-        simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq, I_triple] at hdata
+        simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hdata
         simp only [hdata.1, hdata.2.1, hdata.2.2] at hI' hxx'
         have := sol.axiom_P x' y z hI'
         simp only [Finset.mem_union, this.1, Finset.mem_singleton, false_or, ne_eq, this.2.2.1,
@@ -924,44 +938,44 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
         . contrapose! hxx'
           exact hxx'.symm
         by_contra hop
-        obtain ⟨ opdata, h ⟩ := (op_embed.in_range_iff_attains _).mp hop
+        obtain ⟨ opdata, h ⟩ := (sol.op_embed.in_range_iff_attains _).mp hop
         cases opdata with
         | old y'' z'' hop' =>
-          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
           rw [h.1, h.2] at hop'
           exact this.2.1 hop'
         | v =>
-          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
           simp only [← h.2, ← h.1, ne_eq, not_true_eq_false, false_and, and_false] at this
         | P₁ y'' z'' hI'' =>
-          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
           exact hxx' h.2
         | P₂ y'' z'' hI'' hz' =>
-          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
           rw [h.2] at hz'
           exact this.1 hz'
       | P₁ y' z' hI hz =>
-        simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq, I_triple] at hdata
+        simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hdata
         simp only [← hdata.2.2, hdata.1] at hz hI ⊢
         have := sol.axiom_P x y' x' hI
         refine ⟨ ?_, ?_, ?_, ?_ ⟩
         . simp only [Finset.mem_union, hz, Finset.mem_singleton, this.2.2.1,
           or_self, not_false_eq_true]
         . by_contra hop
-          obtain ⟨ opdata, h ⟩ := (op_embed.in_range_iff_attains _).mp hop
+          obtain ⟨ opdata, h ⟩ := (sol.op_embed.in_range_iff_attains _).mp hop
           cases opdata with
           | old y'' z'' hop' =>
-            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             rw [h.1, h.2] at hop'
-            exact hinvis_lemma y' x' (sol.dom_op_involved {x} hop).1
+            exact sol.hinvis_lemma y' x' (sol.dom_op_involved {x} hop').1
           | v =>
-            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             simp only [← h.2, ne_eq, not_true_eq_false, false_and, and_false] at this
           | P₁ y'' z'' hI'' =>
-            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             exact this.2.2.1 h.2.symm
           | P₂ y'' z'' hI'' hz' =>
-            simp [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            simp [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             rw [h.2] at hz'
             exact hz hz'
         . sorry -- direct calculation
@@ -969,9 +983,9 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
         -- direct calculation
         sorry
       | P₂ y' z' hI hz =>
-        simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq, I_triple] at hdata
+        simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hdata
         simp [← hdata.1, ← hdata.2]
-        have hinvis := hinvis_lemma y' z'
+        have hinvis := sol.hinvis_lemma y' z'
         refine ⟨ ⟨ ?_, ?_ ⟩, ?_, ?_, ?_ ⟩
         . contrapose! hinvis
           exact (sol.dom_S'_involved {x} hinvis).1
@@ -979,22 +993,23 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
           rw [hinvis]
           exact sol.extras_involved {x} $ Finset.mem_singleton.mpr rfl
         . contrapose! hinvis
-          obtain ⟨ opdata, h ⟩ := (op_embed.in_range_iff_attains _).mp hinvis
+          unfold Function.Embedding.attains at hinvis
+          obtain ⟨ opdata, h ⟩ := hinvis
           cases opdata with
           | old y'' z'' hop' =>
-            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             rw [h.1, h.2] at hop'
             exact (sol.dom_op_involved {x} hop').2.1
           | v =>
-            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             rw [← h.2]
             exact sol.extras_involved {x} $ Finset.mem_singleton.mpr rfl
           | P₁ y'' z'' hI'' =>
-            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             rw [← h.2]
             exact sol.extras_involved {x} $ Finset.mem_singleton.mpr rfl
           | P₂ y'' z'' hI'' hz' =>
-            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq, op_embed] at h
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             rw [h.2] at hz'
             exact (sol.dom_S'_involved {x} hz').1
         . -- direct calculation
@@ -1004,45 +1019,75 @@ lemma enlarge_S'_induction_with_axioms {sol : PartialSolution} {x:N} (hind: ∀ 
         sorry
     axiom_P' := by
       intro x' y y' z hy hy'
-      obtain ⟨ data, hy ⟩ := (I_triple.in_range_iff_attains _).mp hy
-      obtain ⟨ data', hy' ⟩ := (I_triple.in_range_iff_attains _).mp hy'
+      obtain ⟨ data, hy ⟩ := (sol.I_triple.in_range_iff_attains _).mp hy
+      obtain ⟨ data', hy' ⟩ := (sol.I_triple.in_range_iff_attains _).mp hy'
       cases data with
       | old x'' y'' z'' hI' hxx' =>
-        simp [I_triple] at hy
+        simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy
         simp only [hy.1, hy.2.1, hy.2.2] at hI' hxx'
         cases data' with
         | old x''' y''' z''' hI'' hxx'' =>
-          simp [I_triple] at hy'
+          simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hxx''
           exact sol.axiom_P' x' y y' z hI' hI''
         | P₁ y''' z''' hI'' hz' =>
-          simp [I_triple] at hy'
+          simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
+          simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
+          exfalso
+          exact sol.hinvis_lemma y''' z''' (hy'.2.2 ▸ (sol.I_involved {sol.x} hI').2.2)
+        | P₂ y''' z''' hI'' hz' =>
+          simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
+          simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
+          exfalso
+          sorry
+      | P₁ y'' z'' hI' hz =>
+        simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy
+        simp only [hy.1, hy.2.1, hy.2.2] at hI' hz
+        cases data' with
+        | old x''' y''' z''' hI'' hxx'' =>
+          simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
+          simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hxx''
+          exfalso
+          sorry
+        | P₁ y''' z''' hI'' hz' =>
+          simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
           sorry
         | P₂ y''' z''' hI'' hz' =>
-          simp [I_triple] at hy'
+          simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
+          simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
+          exfalso
+          sorry
+      | P₂ y'' z'' hI' hz =>
+        simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy
+        simp only [hy.1, hy.2.1, hy.2.2] at hI' hz
+        cases data' with
+        | old x''' y''' z''' hI'' hxx'' =>
+          simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
+          simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hxx''
+          exfalso
+          sorry
+        | P₁ y''' z''' hI'' hz' =>
+          simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
+          simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
+          exfalso
+          sorry
+        | P₂ y''' z''' hI'' hz' =>
+          simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
           sorry
-      | P₁ y'' z'' hI' hz =>
-        simp [I_triple] at hy
-        simp only [hy.1, hy.2.1, hy.2.2] at hI' hz
-        sorry
-      | P₂ y'' z'' hI' hz =>
-        simp [I_triple] at hy
-        simp only [hy.1, hy.2.1, hy.2.2] at hI' hz
-        sorry
   }
 
   refine ⟨ sol', ?_, ?_ ⟩
   . refine ⟨ Finset.subset_union_left, ?_, Finset.subset_union_left, ?_, ?_, ?_ ⟩
     . intro y hy
-      exact mem_new_dom_op $ op_data.old y.1 y.2 hy
+      exact sol.mem_new_dom_op $ op_data.old y.1 y.2 hy
     . intro _ hy
-      exact (new_L₀'_extend hy).symm
+      exact (sol.new_L₀'_extend hy).symm
     . intro _ hxy
-      exact (op_extend hxy).symm
+      exact (sol.op_extend hxy).symm
     intro y hy
-    exact (new_S_extend hy).symm
+    exact (sol.new_S_extend hy).symm
   simp only [Finset.mem_union, Finset.mem_singleton, or_true, sol']
 
 lemma enlarge_S'_induction {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by sorry
@@ -1336,10 +1381,8 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         Prod.mk.injEq, Finset.union_insert, Finset.mem_insert, and_true, exists_eq_left', or_true, true_and]
         right
         by_cases hw : w ∈ sol.Dom_L₀'
-        . simp only [hw, ↓reduceIte, hxy, and_false, and_self, z', new_L₀', and_true]
-          exact ⟨ hx, hw⟩
-        simp only [hw, ↓reduceIte, hxy, and_false, Sum.inr.injEq, new_L₀', z', and_true]
-        refine ⟨ hx, ?_ ⟩
+        . simp only [hw, ↓reduceIte, hxy, and_false, and_self, z', new_L₀', and_true, hx]
+        simp only [hw, ↓reduceIte, hxy, and_false, Sum.inr.injEq, new_L₀', z', and_true, hx, true_and]
         apply subset_fill _
         simp only [Finset.coe_insert,
           Set.mem_insert_iff, Finset.mem_coe, true_or]
