@@ -619,20 +619,30 @@ lemma PartialSolution_with_axioms.noreach_invis (sol: PartialSolution_with_axiom
   contrapose! ha
   exact ha.trans hy
 
-lemma PartialSolution_with_axioms.Sd₀_invis (sol: PartialSolution_with_axioms) {y:N} (hy: sol.sees {x} y): val (S sol.d₀) y = 0 := by
-  apply sol.noreach_invis _ hy
-  by_contra! this
-  unfold PartialSolution.reaches at this
-  sorry
+lemma PartialSolution_with_axioms.Sd₀_invis (sol: PartialSolution_with_axioms) {y:N} (hy: sol.sees {x} y): val (S sol.d₀) y = 0 := sol.noreach_invis (Sfresh_not_in_generators _ _) hy
 
-lemma PartialSolution_with_axioms.invis_lemma (sol: PartialSolution_with_axioms) (y z:N) : ¬ (sol.sees {sol.x} $ (R' (S sol.d₀)).symm (e (sol.d y z))) := by
-    sorry
+lemma PartialSolution_with_axioms.d_invis (sol: PartialSolution_with_axioms) (y z:N) {w:N} (hw: sol.sees {x} w): val (sol.d y z) w = 0 := sol.noreach_invis (fresh_not_in_generators _ _) hw
 
-lemma PartialSolution_with_axioms.invis_lemma' (sol: PartialSolution_with_axioms) (y z:N) (a:SM) : ¬ (sol.sees {sol.x} $ R' a $ (R' (S sol.d₀)).symm (e (sol.d y z))) := by
-    sorry
+lemma PartialSolution_with_axioms.invis_lemma (sol: PartialSolution_with_axioms) (y z:N) : ¬ (sol.sees {sol.x} $ (R' (S sol.d₀)).symm $ e $ sol.d y z) := by
+    by_contra! this
+    have hd₀ := sol.Sd₀_invis this
+    have h : sol.d y z ≠ S sol.d₀ := E_ne_SE _ _
+    simp only [R', Equiv.coe_fn_symm_mk, val_hom, val_inv, val_e, ↓reduceIte, Int.reduceNeg, h,
+      add_zero, neg_eq_zero, one_ne_zero] at hd₀
 
-lemma PartialSolution_with_axioms.invis_lemma'' (sol: PartialSolution_with_axioms) (y z:N) (a:SM) : ¬ (sol.sees {sol.x} $ (R' a).symm $ (R' (S sol.d₀)).symm (e (sol.d y z))) := by
-    sorry
+lemma PartialSolution_with_axioms.invis_lemma' (sol: PartialSolution_with_axioms) (y z:N) (a:SM) : ¬ (sol.sees {sol.x} $ R' a $ (R' (S sol.d₀)).symm $ e $ sol.d y z) := by
+    by_contra! this
+    have h : sol.d y z ≠ S sol.d₀ := E_ne_SE _ _
+    have hdyz := sol.d_invis y z this
+    by_cases ha : a = sol.d y z
+    all_goals simp [R', h.symm, ha] at hdyz
+
+lemma PartialSolution_with_axioms.invis_lemma'' (sol: PartialSolution_with_axioms) (y z:N) (a:SM) : ¬ (sol.sees {sol.x} $ (R' a).symm $ (R' (S sol.d₀)).symm $ e $ sol.d y z) := by
+    by_contra! this
+    have h : sol.d y z ≠ S sol.d₀ := E_ne_SE _ _
+    have h₀ := sol.Sd₀_invis this
+    by_cases ha : a = S sol.d₀
+    all_goals simp [R', h, ha] at h₀
 
 /- Construction of the new L₀'.  Each L₀'_data object `data` generates a new input-output pair for L₀':  `sol.L₀' (sol.L₀'_pair d₀ d data).1 = (sol.L₀'_pair d₀ d data).2  -/
 noncomputable abbrev PartialSolution_with_axioms.L₀'_pair (sol: PartialSolution_with_axioms) (data: L₀'_data sol) : N × N := match data with

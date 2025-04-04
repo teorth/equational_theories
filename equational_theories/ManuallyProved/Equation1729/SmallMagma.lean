@@ -56,6 +56,13 @@ lemma SM_obeys_1729 : Equation1729 SM := by
   simp only [map_add, map_smul, zsmul_eq_mul, Int.cast_ofNat, self_eq_add_left]
   apply zero_mul
 
+lemma E_ne_SE (n m : ℕ): E n ≠ S (E m) := by
+  by_contra! this
+  apply_fun (fun f ↦ f n) at this
+  by_cases h:m=n
+  all_goals simp [E,S, DirectSum.of_apply,h] at this
+  all_goals contrapose! this; decide
+
 def L (a:SM) : SM ≃ SM := {
   toFun := fun x ↦ x + a
   invFun := fun x ↦ x - a
