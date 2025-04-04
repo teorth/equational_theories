@@ -1,0 +1,7 @@
+<div class="tikzcd" id="{{ obj.id }}">
+  {% if obj.renderer.vectorImager.enabled %}
+    <img src="{{ obj.vectorImage.url }}" class="tikzcd-vector" alt="{{ obj.source|e }}" />
+  {% else %}
+    <img src="{{ obj.image.url }}" class="tikzcd-bitmap" alt="{{ obj.source|e }}" />
+  {% endif %}
+</div>

@@ -1,0 +1,13 @@
+name: figure figure*
+<div class="figure" tal:attributes="id self/title/id" tal:content="self">
+</div>
+
+name: table table*
+<div class="table" tal:attributes="id self/title/id" tal:content="self">
+</div>
+
+name: marginpar
+<p class="marginpar" tal:content="self/attributes/right">margin par</p>
+
+name: caption
+<div class="caption"><b tal:content="string:${self/title} ${self/ref}">Figure 1.1</b>: <span tal:content="self">Caption text</span></div>

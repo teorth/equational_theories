@@ -1,0 +1,17 @@
+name: -hspace
+<span tal:attributes="style string:margin:0pt;;padding:0pt;;margin-right:${self/attributes/len}">&nbsp;</span>
+
+name: -vspace
+<div tal:attributes="style string:margin:0pt;;padding:0pt;;margin-bottom:${self/attributes/len}"></div>
+
+name: vspace
+
+name: -bigskip
+<div style="margin:0pt;padding:0pt;margin-bottom:24pt"></div>
+
+name: -medskip
+<div style="margin:0pt;padding:0pt;margin-bottom:12pt"></div>
+
+name: -smallskip
+<div style="margin:0pt;padding:0pt;margin-bottom:6pt"></div>
+

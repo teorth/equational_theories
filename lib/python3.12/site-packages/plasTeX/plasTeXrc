@@ -1,0 +1,12 @@
+[logging]
+render.images=WARNING
+parse.mathshift=ERROR
+parse.sections=ERROR
+parse.definitions=WARNING
+parse.persistent=ERROR
+parse.commands=WARNING
+parse.environments=WARNING
+context.stack=WARNING
+context.macros=ERROR
+parse.tokens=ERROR
+tex.kpsewhich=ERROR

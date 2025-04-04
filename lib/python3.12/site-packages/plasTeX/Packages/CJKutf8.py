@@ -1,0 +1,1 @@
+from plasTeX.Packages.CJK import *

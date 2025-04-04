@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html tal:define="links self/links">
+<head>
+<link rel="stylesheet" href="style.css" type='text/css' />
+<link rel="shortcut icon" href="icons/pyfav.png" type="image/png" />
+<link rel='start' tal:attributes='href links/start/url; title links/start/title/textContent' />
+<link rel="first" tal:attributes='href links/first/url; title links/first/title/textContent' />
+<link rel='contents' tal:attributes='href links/contents/url' title="Contents" />
+<link rel='index' tal:attributes='href links/index/url' title='Index' />
+<link tal:condition="links/next" rel="next" tal:attributes="href links/next/url" />
+<link tal:condition="links/prev" rel="prev" tal:attributes="href links/prev/url" />
+<link tal:condition="links/up" rel="parent" tal:attributes="href links/up/url" />
+<meta name='aesop' content='information' />
+<title tal:content="stripped self/fullTitle">1. Whetting Your Appetite </title>
+</head>
+<body>
+<div class="navigation">
+<div id='top-navigation-panel' xml:id='top-navigation-panel'>
+<table align="center" width="100%" cellpadding="0" cellspacing="2">
+<tr>
+<td class='online-navigation'><a tal:condition="links/prev" rel="prev" 
+  tal:attributes="title stripped:links/prev/fullTitle; href links/prev/url"
+  ><img src='icons/previous.png'
+  border='0' height='32'  alt='Previous Page' width='32' /></a><img tal:condition="not:links/prev" src="icons/blank.png" width="32" height="32" border="0" /></td>
+<td class='online-navigation'><a tal:condition="links/up" rel="parent" 
+  tal:attributes="title stripped:links/up/fullTitle; href links/up/url"
+  ><img src='icons/up.png'
+  border='0' height='32'  alt='Up One Level' width='32' /></a><img tal:condition="not:links/up" src="icons/blank.png" width="32" height="32" border="0" /></td>
+<td class='online-navigation'><a tal:condition="links/next" rel="next" 
+  tal:attributes="title stripped:links/next/title; href links/next/url"
+  ><img src='icons/next.png'
+  border='0' height='32'  alt='Next Page' width='32' /></a><img tal:condition="not:links/next" src="icons/blank.png" width="32" height="32" border="0" /></td>
+<td align="center" width="100%" tal:content="links/document/fullTitle">Python Tutorial</td>
+<td class='online-navigation'><a tal:condition="links/contents" rel="contents" title="Table of Contents"
+  tal:attributes="href links/contents/url"><img src='icons/contents.png'
+  border='0' height='32'  alt='Contents' width='32' /></a><img tal:condition="not:links/contents" src='icons/blank.png' border='0' height='32' width='32' /></td>
+<td class='online-navigation'><img src='icons/blank.png'
+  border='0' height='32'  alt='' width='32' /></td>
+<td class='online-navigation'><a tal:condition="links/index" rel="index" title="Index"
+  tal:attributes="href links/index/url"><img src='icons/index.png'
+  border='0' height='32'  alt='Index' width='32' /></a><img tal:condition="not:links/index" src="icons/blank.png" border="0" height="32" width="32" /></td>
+</tr></table>
+<div class='online-navigation'>
+<span tal:condition="links/prev"><b class="navlabel">Previous:</b>
+<a class="sectref" rel="prev" tal:attributes="href links/prev/url" tal:content="links/prev/title">Contents</a></span>
+<span tal:condition="links/up"><b class="navlabel">Up:</b>
+<a class="sectref" rel="parent" tal:attributes="href links/up/url" tal:content="links/up/title">Python Tutorial</a></span>
+<span tal:condition="links/next"><b class="navlabel">Next:</b>
+<a class="sectref" rel="next" tal:attributes="href links/next/url" tal:content="links/next/title">2. Using the Python</a></span>
+</div>
+<hr /></div>
+</div>
+
+<div tal:condition="self/tableofcontents" tal:attributes="class string:contents ${self/nodeName}-contents"><strong>Subsections</strong>
+<ul>
+<li tal:repeat="section self/tableofcontents"><a href="." tal:attributes="href section/url" tal:content="section/fullTocEntry">Aliquam est. Aliquam fringilla pede</a>
+   <ul tal:condition="section/tableofcontents">
+   <li tal:repeat="subsection section/tableofcontents"><a href="." tal:attributes="href subsection/url" tal:content="subsection/fullTocEntry"></a>
+       <ul tal:condition="subsection/tableofcontents">
+       <li tal:repeat="subsubsection subsection/tableofcontents"><a href="." tal:attributes="href subsubsection/url" tal:content="subsubsection/fullTocEntry"></a>
+           <ul tal:condition="subsubsection/tableofcontents">
+           <li tal:repeat="paragraph subsubsection/tableofcontents"><a href="." tal:attributes="href paragraph/url" tal:content="paragraph/fullTocEntry"></a>
+               <ul tal:condition="paragraph/tableofcontents">
+               <li tal:repeat="subparagraph paragraph/tableofcontents"><a href="." tal:attributes="href subparagraph/url" tal:content="subparagraph/fullTocEntry"></a></li>
+               </ul>
+           </li>
+           </ul>
+       </li>
+       </ul>
+   </li>
+   </ul>
+</li>
+<li tal:replace="nothing"><a href=".">Maecenas id purus</a></li>
+<li tal:replace="nothing"><a href=".">Duis et eros</a></li>
+<li tal:replace="nothing"><a href=".">Duis est</a></li>
+</ul>
+<hr />
+</div>
+
+<div tal:content="self">section content</div>
+
+<div id="footnotes" tal:condition="self/footnotes">
+<p><b>Footnotes</b></p>
+<ol>
+<li tal:repeat="footnote self/footnotes" tal:content="footnote" tal:attributes="id footnote/id">footnote text</li>
+</ol>
+</div>
+
+<div class="navigation">
+<div class='online-navigation'>
+<p></p><hr />
+<table align="center" width="100%" cellpadding="0" cellspacing="2">
+<tr>
+<td class='online-navigation'><a tal:condition="links/prev" rel="prev" 
+  tal:attributes="title stripped:links/prev/fullTitle; href links/prev/url"
+  ><img src='icons/previous.png'
+  border='0' height='32'  alt='Previous Page' width='32' /></a><img tal:condition="not:links/prev" src="icons/blank.png" width="32" height="32" border="0" /></td>
+<td class='online-navigation'><a tal:condition="links/up" rel="parent" 
+  tal:attributes="title stripped:links/up/fullTitle; href links/up/url"
+  ><img src='icons/up.png'
+  border='0' height='32'  alt='Up One Level' width='32' /></a><img tal:condition="not:links/up" src="icons/blank.png" width="32" height="32" border="0" /></td>
+<td class='online-navigation'><a tal:condition="links/next" rel="next" 
+  tal:attributes="title stripped:links/next/title; href links/next/url"
+  ><img src='icons/next.png'
+  border='0' height='32'  alt='Next Page' width='32' /></a><img tal:condition="not:links/next" src="icons/blank.png" width="32" height="32" border="0" /></td>
+<td align="center" width="100%" tal:content="links/document/fullTitle">Python Tutorial</td>
+<td class='online-navigation'><a tal:condition="links/contents" rel="contents" title="Table of Contents"
+  tal:attributes="href links/contents/url"><img src='icons/contents.png'
+  border='0' height='32'  alt='Contents' width='32' /></a><img tal:condition="not:links/contents" src='icons/blank.png' border='0' height='32' width='32' /></td>
+<td class='online-navigation'><img src='icons/blank.png'
+  border='0' height='32'  alt='' width='32' /></td>
+<td class='online-navigation'><a tal:condition="links/index" rel="index" title="Index"
+  tal:attributes="href links/index/url"><img src='icons/index.png'
+  border='0' height='32'  alt='Index' width='32' /></a><img tal:condition="not:links/index" src="icons/blank.png" border="0" height="32" width="32" /></td>
+</tr></table>
+<div class='online-navigation'>
+<span tal:condition="links/prev"><b class="navlabel">Previous:</b>
+<a class="sectref" rel="prev" tal:attributes="href links/prev/url" tal:content="links/prev/title">Contents</a></span>
+<span tal:condition="links/up"><b class="navlabel">Up:</b>
+<a class="sectref" rel="parent" tal:attributes="href links/up/url" tal:content="links/up/title">Python Tutorial</a></span>
+<span tal:condition="links/next"><b class="navlabel">Next:</b>
+<a class="sectref" rel="next" tal:attributes="href links/next/url" tal:content="links/next/title">2. Using the Python</a></span>
+</div>
+</div>
+<hr />
+<!--
+<span class="release-info">Release 2.4.3, documentation updated on 29 March 2006.</span>
+-->
+</div>
+<!--End of Navigation Panel-->
+<!--
+<address>
+See <i><a href="about.html">About this document...</a></i> for information on suggesting changes.
+</address>
+-->
+</body>
+</html>
+
+

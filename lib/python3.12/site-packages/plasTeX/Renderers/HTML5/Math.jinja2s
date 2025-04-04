@@ -1,0 +1,20 @@
+name: math
+{{ obj.mathjax_source }}
+
+name: ensuremath 
+\({{ obj.mathjax_source }}\)
+
+name: displaymath equation* eqnarray eqnarray* align align* gather gather* flalign flalign* multline multline* alignat alignat* split
+<div class="displaymath" id="{{ obj.id }}">
+  {{ obj.mathjax_source }}
+</div>
+
+name: equation
+<div class="equation" id="{{ obj.id }}">
+<p>
+  <div class="equation_content">
+    {{ obj.mathjax_source }}
+  </div>
+  <span class="equation_label">{{ obj.ref }}</span>
+</p>
+</div>

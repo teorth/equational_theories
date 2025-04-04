@@ -1,0 +1,5 @@
+name: subfigure subtable
+<table tal:attributes="class self/nodeName; id self/id" style="display:inline-table">
+<tr><td tal:content="self"></td></tr>
+<tr><td style="text-align:center">(<span tal:replace="self/ref">x</span>) <span tal:condition="self/title" tal:content="self/title">Sub-caption</span></td></tr>
+</table>

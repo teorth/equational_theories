@@ -1,0 +1,4 @@
+name: picture
+<div class="picture">
+<object tal:omit-tag="not:self/renderer/vectorImager/enabled" type="image/svg+xml" tal:attributes="data self/vectorImage/url; style string:width:${self/vectorImage/width/em};; height:${self/vectorImage/height/em}"><img tal:attributes="src self/image/url; alt self/source; style string:width:${self/image/width/px};; height:${self/image/height/px}" class="picture gen" /></object>
+</div>

@@ -1,0 +1,29 @@
+name: thebibliography
+<dl class="bibliography">
+{% for item in obj %}
+  <dt><a name="{{ item.id }}">{{ item.bibcite }}</a></dt>
+  <dd>{{ item }}</dd>
+{% endfor %}
+</dl>
+
+name: bibliographystyle
+
+name: bibliography
+<div class="bibliography">
+<h1>{{ obj.title }}</h1>
+{{ obj }}
+</div>
+
+name: cite
+<span class="cite">
+{% for item in obj.citation() %}
+  {% if item.idref and item.idref.bibitem.url %}
+  <a href="{{ item.idref.bibitem.url }}">{{ item }}</a>
+  {% else %}
+  {{ item }}
+  {% endif %}
+{% endfor %}
+</span>
+
+name: bibliographyref
+<a href="{{ obj.idref.bibitem.url }}">{{ obj }}</a>

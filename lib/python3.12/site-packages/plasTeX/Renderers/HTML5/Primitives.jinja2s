@@ -1,0 +1,12 @@
+name: par 
+{% if obj.blockType %}
+{{ obj }}
+{% else %}
+<p>{{ obj }}</p>
+{% endif %}
+
+name: active::^ 
+<sup>{{ obj }}</sup>
+
+name: active::_
+<sub>{{ obj }}</sub>

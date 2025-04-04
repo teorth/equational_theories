@@ -1,0 +1,13 @@
+name: includegraphics rotatebox scalebox reflectbox resizebox
+{% if obj.imageoverride.endswith('.svg') and obj.renderer.vectorImager.enabled %}
+{% set image = obj.vectorImage %}
+{% else %}
+{% set image = obj.image %}
+{% endif %}
+{% if obj.style %}
+<img src="{{ image.url}}" alt="{{ obj.source }}" style="{{ obj.style.inline}}" />
+{% else %}
+<img src="{{ image.url}}" alt="{{ obj.source }}" style="width: {{ image.width.px }}; height: {{ image.height.px }}" />
+{% endif %}
+
+name: DeclareGraphicsExtensions graphicspath

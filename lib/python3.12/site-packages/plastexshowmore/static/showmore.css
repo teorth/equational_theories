@@ -1,0 +1,12 @@
+p.hidden {
+  display: none; 
+}
+
+svg.showmore {
+  font-size: 150%;
+  margin: auto;
+  min-width: 2rem;
+  text-decoration: none;
+  text-shadow: 1px 2px 0 rgba(0, 0, 0, 0.8); 
+}
+
