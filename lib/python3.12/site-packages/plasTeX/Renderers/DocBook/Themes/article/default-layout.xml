@@ -1,0 +1,10 @@
+<article xmlns="http://docbook.org/ns/docbook"
+xmlns:mml="http://www.w3.org/1998/Math/MathML"
+xmlns:xl="http://www.w3.org/1999/xlink">
+<info>
+ <title tal:condition="self/title" tal:content="self/title"></title>
+ <title tal:condition="not:self/title">plasTeX Converted Content</title>
+</info>
+ <div tal:replace="self"></div>
+</article>
+

@@ -1,0 +1,39 @@
+name: dominitoc dominilof dominilot dosecttoc dosectlot dosectlof \
+      doparttoc dopartlot dopartlof mtcprepare mtcsetfont mtcsetdepth \
+      mtcskip mtcskipamount tightmtcfalse tightmtctrue ktightmtcfalse \
+      ktightmtctrue undottedmtctrue undottedmtcfalse addstarredpart \
+      addstarredsection addstarredchapter adjustptc adjustmtc adjust stc \
+      decrementptc decrementmtc decrementstc incrementptc incrementstc \
+      incrementmtc mtcaddpart mtcaddchapter mtcaddsection mtctitle \
+      mlftitle mlttitle ptctitle plftitle plttitle stctitle slttitle \
+      mtcsettitle mtcsettitlefont mtcsetformat mtcsetrules ptcrule \
+      noptcrule mtcrule nomtcrule stcrule nostcrule plfrule noplfrule \
+      mlfrule nomlfrule slfrule noslfrule pltrule nopltrule mltrule \
+      nomltrule sltrule nosltrule mtcsetpagenumbers ptcpagenumbers \
+      noptcpagenumbers plfpagenumbers noplfpagenumbers pltpagenumbers \
+      nopltpagenumbers mtcpagenumbers nomtcpagenumbers mlfpagenumbers \
+      nomlfpagenumbers mltpagenumbers nomltpagenumbers stcpagenumbers \
+      nostcpagenumbers slfpagenumbers noslfpagenumbers sltpagenumbers \
+      nosltpagenumbers mtcsetfeature firstpartis firstchapteris \
+      firstsectionis mtcfixglossary mtcfixindex faketableofcontents \
+      fakelistoffigures fakelistoftables mtcselectlanguage
+
+name: minilof sectlof partlof
+
+name: minilot sectlot partlot minitoc secttoc parttoc
+
+name: -minitoc -secttoc -parttoc
+<p><b>{{ obj.title }}</b></p>
+<div tal:condition="obj.tableofcontents" class="minitoc">
+<ul>
+{% for section in obj.tableofcontents recursive %}
+<li><a href="{{ section.url }}" >{{ section.fullTocEntry }}</a>
+   {% if section.tableofcontents %}
+   <ul>
+   {% loop(section.tableofcontents) %}
+   </ul>
+   {% endif %}
+</li>
+{% endfor %}
+</ul>
+</div>

@@ -1,0 +1,2 @@
+[console_scripts]
+leanblueprint = leanblueprint.client:safe_cli

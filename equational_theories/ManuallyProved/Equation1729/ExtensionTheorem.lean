@@ -91,8 +91,7 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
 
   axiom_7 : ∀ x y : N, ¬ x = y -- the condition for axiom 5 doesn't hold
     → ¬(∃ a : SM, x = R' a y) -- the condition for axiom 6 doesn't hold
-    → (∃ z, rest_map x y = .inr z -- for any `z` of this form
-      → rest_map z x =  (Sum.inr <| (L' (S' x)).symm y))
+    → (∃ z, rest_map x y = .inr z ∧ rest_map z x =  (Sum.inr <| (L' (S' x)).symm y))
 
 lemma axiom_1_alt [Magma SM] (E : ExtOpsWithProps SM N) :
   ∀ a, ∀ x, ((E.L' (E.S a)) ∘ (E.R' a) ∘ (E.L' a)) x = x := by
@@ -124,9 +123,12 @@ def operation {SM N : Type}
   | .inr a, .inl b => .inr <| E.R' b a
   | .inr a, .inr b => E.rest_map a b
 
+
+
 instance extMagmaInst {SM N : Type}
   [Magma SM] (E : ExtOpsWithProps SM N) : Magma (SM ⊕ N) where
   op := operation E
+
 
 #print Equiv.symm
 
@@ -158,8 +160,9 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
     by_cases hxy' : (y' = x') <;> simp_all [hxy', E.axiom_5]
     · rw[E.axiom_4]
     · by_cases ha2 : ∃ a, y' = E.R' a x'
-      · cases ha2 with
-      | intro a h2 =>
+      case pos =>
+        cases ha2 with
+        | intro a h2 =>
           simp [h2, E.axiom_6]
           have ax3 := E.axiom_3 x' y' a h2.symm
           nth_rw 1 [←h2]
@@ -168,9 +171,13 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
             sorry
 
           rw [hfinal.symm, ax3]
-      · have ax7 := E.axiom_7 y' x' hxy' ha2
+      case neg =>
+        have ax7 := E.axiom_7 y' x' (by intro hxy; exact hxy' hxy) ha2
+        obtain ⟨z, hz1, hz2⟩ := ax7
+        simp [hz1, hz2]
 
-        sorry
+
+
 
 
 

@@ -1,0 +1,48 @@
+name: abstract
+<div class="abstract" tal:content="self">abstract</div>
+
+name: title author date thanks
+
+name: maketitle
+<div class="titlepage" tal:define="metadata self/ownerDocument/userdata">
+<h1 tal:content="metadata/title">title</h1>
+<p tal:condition="metadata/author">
+<div tal:repeat="author metadata/author" tal:content="author">authors</div>
+</p>
+<p tal:condition="metadata/date" tal:content="metadata/date">date</p>
+<p tal:condition="metadata/thanks" tal:content="metadata/thanks">thanks</p>
+</div>
+
+
+name: document
+<p tal:replace="self"></p>
+
+
+name: part chapter section
+<h1 tal:attributes="id self/id" tal:content="self/fullTitle">Morbi metus pede, imperdiet vitae</h1>
+<p tal:replace="self"></p>
+
+
+name: subsection 
+<h2 tal:attributes="id self/id" tal:content="self/fullTitle">Cras dignissim</h2>
+<p tal:replace="self"></p>
+
+
+name: subsubsection
+<h3 tal:attributes="id self/id" tal:content="self/fullTitle">Velit id pharetra</h3>
+<p tal:replace="self"></p>
+
+
+name: paragraph
+<h4 tal:attributes="id self/id" tal:content="self/fullTitle">Donec elementum mauris vel urna</h4>
+<p tal:replace="self"></p>
+
+
+name: subparagraph
+<h5 tal:attributes="id self/id" tal:content="self/fullTitle">Duis orci</h5>
+<p tal:replace="self"></p>
+
+
+name: subsubparagraph
+<h6 tal:attributes="id self/id" tal:content="self/fullTitle">Mauris fringilla, metus</h6>
+<p tal:replace="self"></p>

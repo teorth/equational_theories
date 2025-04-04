@@ -1,0 +1,55 @@
+name: math ensuremath
+<object tal:omit-tag="not:self/renderer/vectorImager/enabled" type="image/svg+xml" 
+        tal:attributes="data self/vectorImage/url; style string:width:${self/vectorImage/width/em};; 
+                                                                height:${self/vectorImage/height/em};; 
+                                                                vertical-align:${self/vectorImage/depth/em}"><img 
+        tal:attributes="src self/image/url; alt self/source; 
+                        style string:vertical-align:${self/image/depth/px};; 
+                                     width:${self/image/width/px};; 
+                                     height:${self/image/height/px}" class="math gen" /></object>
+
+name: displaymath equation equation*
+<table class="equation" width="100%" tal:attributes="id self/id" cellspacing="0" cellpadding="7">
+<tr>
+    <td tal:condition="self/ownerDocument/context/packages/documentclass/fleqn" class="fleqn"></td>
+    <td tal:condition="not:self/ownerDocument/context/packages/documentclass/fleqn" style="width:40%"></td>
+    <td><object tal:omit-tag="not:self/renderer/vectorImager/enabled" type="image/svg+xml" 
+            tal:attributes="data self/vectorImage/url; style string:width:${self/vectorImage/width/em};; 
+                                                                    height:${self/vectorImage/height/em}"><img 
+            tal:attributes="src self/image/url; alt self/source; 
+                            style string:width:${self/image/width/px};; 
+                            height:${self/image/height/px}" class="math gen" /></object></td>
+    <td tal:condition="self/ownerDocument/context/packages/documentclass/fleqn" style="width:80%"></td>
+    <td tal:condition="not:self/ownerDocument/context/packages/documentclass/fleqn" style="width:40%"></td>
+    <td class="eqnnum" style="width:20%"><span tal:condition="self/ref">(<span tal:content="self/ref">1.1.1</span>)</span></td>
+</tr>
+</table>
+
+name: eqnarray eqnarray* align align* gather gather* falign falign* \
+      multiline multiline* alignat alignat* split
+type: xml
+<table class="eqnarray" cellspacing="0" cellpadding="7" width="100%"
+       tal:attributes="id self/id">
+<tr tal:repeat="row self" tal:attributes="id row/id">
+    <td tal:condition="self/ownerDocument/context/packages/documentclass/fleqn" class="fleqn"></td>
+    <td tal:condition="not:self/ownerDocument/context/packages/documentclass/fleqn" style="width:40%"></td>
+    <metal:block tal:repeat="cell row">
+    <metal:block tal:define="alignment 
+           python:test(cell.style.get('text-align'), cell.style.get('text-align'),
+                       path('repeat/cell/start'), 'right', 
+                       path('repeat/cell/end'), 'left', 'center')">
+        <td tal:attributes="style string:vertical-align:middle;; 
+                                  text-align:${alignment}; colspan cell/attributes/colspan"><object 
+            tal:omit-tag="not:self/renderer/vectorImager/enabled" type="image/svg+xml" 
+            tal:attributes="data cell/vectorImage/url; style string:width:${cell/vectorImage/width/em};; 
+            height:${cell/vectorImage/height/em};; vertical-align:${cell/vectorImage/depth/em}"><img 
+            tal:attributes="src cell/image/url; alt cell/source; style 
+            string:vertical-align:${cell/image/depth/px};; width:${cell/image/width/px};; 
+                   height:${cell/image/height/px}" class="math gen" /></object></td>
+    </metal:block>
+    </metal:block>
+    <td tal:condition="self/ownerDocument/context/packages/documentclass/fleqn" style="width:80%"></td>
+    <td tal:condition="not:self/ownerDocument/context/packages/documentclass/fleqn" style="width:40%"></td>
+    <td class="eqnnum" style="width:20%"><span tal:condition="row/ref">(<span tal:content="row/ref">1.1.1</span>)</span></td>
+</tr>
+</table>

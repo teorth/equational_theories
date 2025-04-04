@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta name="generator" content="plasTeX" />
+<meta http-equiv="content-type" 
+      tal:attributes="content string:text/html;; charset=${config/files/output-encoding}" />
+<title tal:content="self/title"></title>
+<link rel="stylesheet" href="styles/plastex-styles.css" />
+<link rel="stylesheet" href="styles/styles.css" />
+
+<!-- S5 links -->
+<meta name="version" content="S5 1.1" />
+<meta name="defaultView" content="slideshow" />
+<link rel="stylesheet" href="ui/default/slides.css" type="text/css" media="projection" id="slideProj" />
+<link rel="stylesheet" href="ui/default/outline.css" type="text/css" media="screen" id="outlineStyle" />
+<link rel="stylesheet" href="ui/default/print.css" type="text/css" media="print" id="slidePrint" />
+<link rel="stylesheet" href="ui/default/opera.css" type="text/css" media="projection" id="operaFix" />
+<script src="ui/default/slides.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+<div class="layout">
+<div id="controls"></div>
+<div id="currentSlide"></div>
+<div id="header"></div>
+<div id="footer"></div>
+</div>
+
+<div class="presentation">
+
+<div class="slide" tal:repeat="frame self/ownerDocument/userdata/frames">
+<h1 tal:condition="frame/title" tal:content="frame/title">[slide title]</h1>
+<h2 tal:condition="frame/subtitle" tal:content="frame/subtitle">[slide subtitle]</h2>
+<div tal:replace="frame"></div>
+</div>
+
+</div>
+
+</body>
+</html>

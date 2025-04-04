@@ -1,0 +1,25 @@
+name: longtable
+type: xml
+<div tal:attributes="id self/title/id">
+<div tal:condition="self/title" class="caption"><b 
+     tal:content="string:${self/title/title} ${self/title/ref}">Figure 1.1</b>: 
+     <span tal:content="self/title">Caption text</span></div>
+<table class="tabular" cellspacing="0">
+<tr tal:repeat="row self">
+<metal:block tal:repeat="cell row">
+    <th tal:condition="cell/isHeader"
+        tal:attributes="style cell/style/inline; 
+                        rowspan cell/attributes/rowspan;
+                        colspan cell/attributes/colspan"
+        tal:content="cell">
+    </th>
+    <td tal:condition="not:cell/isHeader"
+        tal:attributes="style cell/style/inline; 
+                        rowspan cell/attributes/rowspan;
+                        colspan cell/attributes/colspan"
+        tal:content="cell">
+    </td>
+</metal:block>
+</tr>
+</table>
+</div>

@@ -1,0 +1,5 @@
+name: verbatim
+<pre tal:content="self"></pre>
+
+name: verb
+<tt tal:content="self"></tt>

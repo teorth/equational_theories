@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html tal:define="links self/links" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta name="generator" content="plasTeX" />
+<meta http-equiv="content-type" 
+      tal:attributes="content string:text/html;; charset=${config/files/output-encoding}" />
+<title tal:condition="python:path('self/level') &gt; -10" tal:content="stripped string:${links/document/title}: ${self/title}">Morbi metus pede, imperdiet vitae</title>
+<title tal:condition="python:path('self/level') &lt;= -10" tal:content="stripped self/title">Morbi metus pede, imperdiet vitae</title>
+<link tal:condition="links/next" rel="next" tal:attributes="href links/next/url; title links/next/title/textContent" />
+<link tal:condition="links/prev" rel="prev" tal:attributes="href links/prev/url; title links/prev/title/textContent" />
+<link tal:condition="links/up" rel="up" tal:attributes="href links/up/url; title links/up/title/textContent" />
+<link rel="stylesheet" href="styles/styles.css" />
+</head>
+<body>
+
+<div class="navigation" metal:define-macro="navigation">
+<table cellspacing="2" cellpadding="0" width="100%">
+<tr>
+<td tal:condition="links/prev"><a tal:attributes="href links/prev/url; title stripped:links/prev/title"><img border="0" tal:attributes="alt stripped:Previous: ${links/prev/title}" src="icons/previous.gif" width="32" height="32" /></a></td>
+<td tal:condition="not:links/prev"><img border="0" alt="" src="icons/blank.gif" width="32" height="32" /></td>
+<td tal:condition="links/up"><a tal:attributes="href links/up/url; title stripped:links/up/title"><img border="0" tal:attributes="alt stripped:Up: ${links/up/title}" src="icons/up.gif" width="32" height="32" /></a></td>
+<td tal:condition="not:links/up"><img border="0" alt="" src="icons/blank.gif" width="32" height="32" /></td>
+<td tal:condition="links/next"><a tal:attributes="href links/next/url; title stripped:links/next/title"><img border="0" tal:attributes="alt stripped:Next: ${links/next/title}" src="icons/next.gif" width="32" height="32" /></a></td>
+<td tal:condition="not:links/next"><img border="0" alt="" src="icons/blank.gif" width="32" height="32" /></td>
+<td class="navtitle" align="center" tal:content="links/document/title">Section Title</td>
+<td tal:condition="links/contents"><a tal:attributes="href links/contents/url" title="Table of Contents"><img border="0" alt="" src="icons/contents.gif" width="32" height="32" /></a></td>
+<td tal:condition="not:links/contents"><img border="0" alt="" src="icons/blank.gif" width="32" height="32" /></td>
+<td tal:condition="links/index"><a tal:attributes="href links/index/url" title="Index"><img border="0" alt="" src="icons/index.gif" width="32" height="32" /></a></td>
+<td tal:condition="not:links/index"><img border="0" alt="" src="icons/blank.gif" width="32" height="32" /></td>
+<td><img border="0" alt="" src="icons/blank.gif" width="32" height="32" /></td>
+</tr>
+</table>
+</div>
+
+<div tal:condition="python:path('self/level') &gt; -10" class="breadcrumbs">
+<span tal:repeat="crumb links/breadcrumbs">
+<span tal:condition="not:repeat/crumb/end">
+<a href="." tal:attributes="href crumb/url" tal:content="crumb/title">Parent Section</a> <b>:</b>
+</span>
+<span tal:condition="repeat/crumb/end">
+<b class="current" tal:content="crumb/title">Current Section</b>
+</span>
+</span>
+<hr />
+</div>
+
+<div tal:content="self">File contents</div>
+
+<div tal:condition="self/tableofcontents" tal:attributes="class string:contents ${self/nodeName}-contents"><!--<strong>Subsections</strong>-->
+<ul>
+<li tal:repeat="section self/tableofcontents"><a href="." tal:attributes="href section/url" tal:content="section/fullTocEntry">Aliquam est. Aliquam fringilla pede</a>
+   <ul tal:condition="section/tableofcontents">
+   <li tal:repeat="subsection section/tableofcontents"><a href="." tal:attributes="href subsection/url" tal:content="subsection/fullTocEntry"></a>
+       <ul tal:condition="subsection/tableofcontents">
+       <li tal:repeat="subsubsection subsection/tableofcontents"><a href="." tal:attributes="href subsubsection/url" tal:content="subsubsection/fullTocEntry"></a>
+           <ul tal:condition="subsubsection/tableofcontents">
+           <li tal:repeat="paragraph subsubsection/tableofcontents"><a href="." tal:attributes="href paragraph/url" tal:content="paragraph/fullTocEntry"></a>
+               <ul tal:condition="paragraph/tableofcontents">
+               <li tal:repeat="subparagraph paragraph/tableofcontents"><a href="." tal:attributes="href subparagraph/url" tal:content="subparagraph/fullTocEntry"></a></li>
+               </ul>
+           </li>
+           </ul>
+       </li>
+       </ul>
+   </li>
+   </ul>
+</li>
+<li tal:replace="nothing"><a href=".">Maecenas id purus</a></li>
+<li tal:replace="nothing"><a href=".">Duis et eros</a></li>
+<li tal:replace="nothing"><a href=".">Duis est</a></li>
+</ul>
+</div>
+
+<div id="footnotes" tal:condition="self/footnotes">
+<p><b>Footnotes</b></p>
+<ol>
+<li tal:repeat="footnote self/footnotes" tal:content="footnote" tal:attributes="id footnote/id">footnote text</li>
+</ol>
+</div>
+
+<div class="navigation" metal:use-macro="template/macros/navigation">
+<table cellspacing="2" cellpadding="0" width="100%">
+<tr>
+<td tal:condition="links/prev"><a tal:attributes="href links/prev/url"><img border="0" tal:attributes="alt stripped:Previous: ${links/prev/title}" src="icons/previous.gif" width="32" height="32" /></a></td>
+<td tal:condition="not:links/prev"><img border="0" alt="" src="icons/blank.gif" width="32" height="32" /></td>
+<td tal:condition="links/up"><a tal:attributes="href links/up/url"><img border="0" tal:attributes="alt stripped:Up: ${links/up/title}" src="icons/up.gif" width="32" height="32" /></a></td>
+<td tal:condition="not:links/up"><img border="0" alt="" src="icons/blank.gif" width="32" height="32" /></td>
+<td tal:condition="links/next"><a tal:attributes="href links/next/url"><img border="0" tal:attributes="alt stripped:Next: ${links/next/title}" src="icons/next.gif" width="32" height="32" /></a></td>
+<td tal:condition="not:links/next"><img border="0" alt="" src="icons/blank.gif" width="32" height="32" /></td>
+<td class="navtitle" align="center" tal:content="links/document/title">Section Title</td>
+<td tal:condition="links/contents"><a tal:attributes="href links/contents/title"><img border="0" alt="" src="icons/contents.gif" width="32" height="32" /></a></td>
+<td tal:condition="not:links/contents"><img border="0" alt="" src="icons/blank.gif" width="32" height="32" /></td>
+<td tal:condition="links/index"><a tal:attributes="href links/index/url" title="Index"><img border="0" alt="" src="icons/index.gif" width="32" height="32" /></a></td>
+<td tal:condition="not:links/index"><img border="0" alt="" src="icons/blank.gif" width="32" height="32" /></td>
+<td><img border="0" alt="" src="icons/blank.gif" width="32" height="32" /></td>
+</tr>
+</table>
+</div>
+
+</body>
+</html>

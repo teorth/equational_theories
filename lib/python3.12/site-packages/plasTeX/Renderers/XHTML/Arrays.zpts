@@ -1,0 +1,25 @@
+name: tabular array tabular* tabularx
+type: xml
+<table class="tabular" cellspacing="0">
+<tr tal:repeat="row self">
+<metal:block tal:repeat="cell row">
+    <th tal:condition="cell/isHeader"
+        tal:attributes="style cell/style/inline; 
+                        rowspan cell/attributes/rowspan;
+                        colspan cell/attributes/colspan"
+        tal:content="cell">
+    </th>
+    <td tal:condition="not:cell/isHeader"
+        tal:attributes="style cell/style/inline; 
+                        rowspan cell/attributes/rowspan;
+                        colspan cell/attributes/colspan"
+        tal:content="cell">
+    </td>
+</metal:block>
+</tr>
+</table>
+
+name: multicolumn
+<span tal:replace="self"></span>
+
+name: cline toprule bottomrule midrule cmidrule morecmidrules addlinespace specialrule

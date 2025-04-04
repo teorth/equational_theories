@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% if config.html5['use-mathjax'] %}
+<script>
+  MathJax = { 
+    tex: {
+{% if config.html5['mathjax-dollars'] %}
+		    inlineMath: [['$','$'], ['\\(','\\)']]
+{% else %}
+		    inlineMath: [['\\(','\\)']]
+{% endif %}
+{% if config['mathjax-macros']['macros'] %}
+      macros: { {% for key, val in config['mathjax-macros']['macros'].items() %}
+        {{ key }}: {{ val }},
+        {% endfor %}
+      } 
+{% endif %}
+	} }
+</script>
+<script type="text/javascript" src="{{ config.html5['mathjax-url'] }}">
+</script>
+{% endif %}
+<meta name="generator" content="plasTeX" />
+<meta charset="{{ config.files['output-encoding']}}" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+{% if obj.title %}
+<title>{{ obj.title }}</title>
+{% endif %}
+</head>
+
+<body>
+{{ obj }}
+{% if obj.footnotes %}
+<footer id="footnotes">
+<ol>
+{% for footnote in obj.footnotes %}
+  <li id="{{ footnote.id }}">{{ footnote }}</li>
+{% endfor %}
+</ol>
+</footer>
+{% endif %}
+</body>
+</html>

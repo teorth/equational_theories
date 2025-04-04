@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: plastexshowmore
+Version: 0.0.2
+Summary: Show more buttons for plasTeX.
+Home-page: https://github.com/PatrickMassot/plastexshowmore
+Author: Patrick Massot
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: plasTeX >=3.1
+
+# plasTeX show more buttons
+
+This is a [plasTeX](https://github.com/plastex/plastex/) plugin allowing
+to add to the navigation buttons of the default HTML5 theme buttons
+showing or hiding proofs.
+
+

@@ -1,0 +1,30 @@
+name: thebibliography
+type: xml
+<dl class="bibliography">
+<metal:block tal:repeat="item self">
+<dt>
+[<a tal:attributes="name item/id" tal:content="item/bibcite"></a>]
+</dt>
+<dd tal:content="item">information</dd>
+</metal:block>
+</dl>
+
+name: bibliographystyle
+
+name: bibliography
+<div>
+<h1 tal:content="self/title">Bibliography</h1>
+
+<div tal:replace="self"></div>
+</div>
+
+name: cite
+type: xml
+<span class="cite"><metal:block tal:repeat="item self/citation"><a 
+      tal:condition="item/idref/bibitem/url" 
+      tal:attributes="href item/idref/bibitem/url" 
+      tal:content="item"></a><span tal:condition="not:item/idref/bibitem/url" 
+      tal:replace="item"></span></metal:block></span>
+
+name: bibliographyref
+<a tal:attributes="href self/idref/bibitem/url" tal:content="self"></a>

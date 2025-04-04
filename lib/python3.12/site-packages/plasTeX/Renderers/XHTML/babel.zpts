@@ -1,0 +1,2 @@
+name: foreignlanguage otherlanguage
+<span tal:replace="self"></span>

@@ -1,0 +1,8 @@
+name: fbox ovalbox Ovalbox
+<span style="border: 1px solid black" tal:content="self">content</span>
+
+name: shadowbox
+<span style="border: 1px solid black; border-bottom-width: 3px; border-right-width: 3px" tal:content="self">content</span>
+
+name: doublebox
+<span style="border: 3px double black" tal:content="self">content</span>

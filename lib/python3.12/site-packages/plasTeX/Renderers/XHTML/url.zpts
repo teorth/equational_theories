@@ -1,0 +1,4 @@
+name: -url email path
+<a tal:attributes="href self" tal:content="self">url text</a>
+
+name: urldef urlstyle DeclareUrlCommand

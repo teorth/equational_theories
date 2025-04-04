@@ -1,0 +1,22 @@
+name: longtable
+<div id="{{ obj.title.id }}">
+{% if obj.title %}
+<div class="caption">
+  <span class="table-label">{{ obj.title.title }} {{ obj.title.ref }}</span> 
+  <span class="table-caption">{{ obj.title }}</span>
+</div>
+{% endif %}
+<table class="tabular">
+{% for row in obj %}
+<tr>
+{% for cell in row %}
+  {% if cell.isHeader %}  
+  <th style="{{ cell.style.inline}}" rowspan="{{ cell.attributes.rowspan }}" colspan={{ cell.attributes.colspan }}">{{ cell }}</th>
+  {% else %}
+  <td style="{{ cell.style.inline}}" rowspan="{{ cell.attributes.rowspan }}" colspan={{ cell.attributes.colspan }}">{{ cell }}</td>
+  {% endif %}
+{% endfor %}
+{% endfor %}
+</tr>
+</table>
+</div>
