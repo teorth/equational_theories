@@ -1,0 +1,19 @@
+name: titlepage
+<div tal:define="metadata self/ownerDocument/userdata">
+<h1 tal:condition="metadata/title" tal:content="metadata/title">[slide title]</h1>
+<h2 tal:condition="frame/subtitle" tal:content="frame/subtitle">[slide subtitle]</h2>
+<h3 tal:condition="metadata/author">
+<div tal:repeat="author metadata/author" tal:content="author">authors</div>
+</h3>
+</div>
+
+name: tableofcontents
+type: xml
+<ul type="square">
+<metal:block tal:repeat="frame self/ownerDocument/userdata/frames">
+<li tal:condition="frame/title" tal:content="frame/title"></li>
+</metal:block>
+</ul>
+
+name: document frametitle framesubtitle
+

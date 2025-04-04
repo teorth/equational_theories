@@ -1,0 +1,41 @@
+name: eclipse-toc
+type: xml
+<toc tal:attributes="label self/title">
+    <topic tal:repeat="part self/fulltableofcontents" tal:attributes="label part/tocEntry/textContent; href part/url">
+       <topic tal:repeat="chapter part/fulltableofcontents" tal:attributes="label chapter/tocEntry/textContent; href chapter/url">
+          <topic tal:repeat="section chapter/fulltableofcontents" tal:attributes="label section/tocEntry/textContent; href section/url">
+             <topic tal:repeat="subsection section/fulltableofcontents" tal:attributes="label subsection/tocEntry/textContent; href subsection/url">
+                <topic tal:repeat="subsubsection subsection/fulltableofcontents" tal:attributes="label subsubsection/tocEntry/textContent; href subsubsection/url">
+                   <topic tal:repeat="paragraph subsubsection/fulltableofcontents" tal:attributes="label paragraph/tocEntry/textContent; href paragraph/url">
+                      <topic tal:repeat="subparagraph paragraph/fulltableofcontents" tal:attributes="label subparagraph/tocEntry/textContent; href subparagraph/url">
+                      </topic>
+                   </topic>
+                </topic>
+             </topic>
+          </topic>
+       </topic>
+    </topic>
+</toc>
+
+name: eclipse-plugin
+type: xml
+<plugin tal:attributes="name string:${self/title/textContent}; 
+                        provider-name self/author/textContent;
+                        id self/id" version="1.0.0">
+   <extension point="org.eclipse.help.toc">
+      <toc file="eclipse-contents.xml" primary="true" />
+   </extension>
+</plugin>
+
+name: eclipse-index
+type: xml
+<index>    
+<entry tal:repeat="item self/index" tal:attributes="keyword item/key/textContent">
+   <topic tal:condition="python:len(path('item/pages')) &lt;= 1" tal:repeat="page item/pages" tal:attributes="href page/url"/>
+   <topic tal:condition="python:len(path('item/pages')) &gt; 1" tal:repeat="page item/pages" tal:attributes="href page/url; title page/currentSection/title/textContent"/>
+   <entry tal:repeat="subitem item" tal:attributes="keyword subitem/key/textContent">
+      <topic tal:condition="python:len(path('subitem/pages')) &lt;= 1" tal:repeat="subpage subitem/pages" tal:attributes="href subpage/url"/>
+      <topic tal:condition="python:len(path('subitem/pages')) &gt; 1" tal:repeat="subpage subitem/pages" tal:attributes="href subpage/url; title subpage/currentSection/title/textContent"/>
+   </entry>
+</entry>
+</index>

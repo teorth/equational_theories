@@ -1,0 +1,8 @@
+name: quote
+<blockquote class="quote" tal:content="self"></blockquote>
+
+name: quotation
+<blockquote class="quotation" tal:content="self"></blockquote>
+
+name: verse altverse patverse
+<blockquote class="verse" tal:content="self"></blockquote>

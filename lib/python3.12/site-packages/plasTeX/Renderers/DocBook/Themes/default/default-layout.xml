@@ -1,0 +1,4 @@
+<book>
+ <div tal:replace="self"></div>
+</book>
+

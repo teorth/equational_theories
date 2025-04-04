@@ -1,0 +1,7 @@
+<div class="tikzpicture" id="{{ obj.id }}">
+  {% if obj.renderer.vectorImager.enabled %}
+    <img src="{{ obj.vectorImage.url }}" alt="{{ obj.source|e }}" />
+  {% else %}
+    <img src="{{ obj.image.url }}" alt="{{ obj.source|e }}" />
+  {% endif %}
+</div>

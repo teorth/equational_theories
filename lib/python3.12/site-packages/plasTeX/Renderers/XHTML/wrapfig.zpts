@@ -1,0 +1,2 @@
+name: wrapfigure wraptable
+<span tal:attributes="style string:float:${self/float}" tal:content="self">content</span>

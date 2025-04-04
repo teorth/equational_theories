@@ -1,0 +1,3 @@
+name: Nameref nameref
+<a tal:condition="self/idref/label" tal:attributes="href string:${self/idref/label/url}" tal:content="self/idref/label/title">text</a>
+<a tal:condition="not:self/idref/label" tal:attributes="href string:#${self/attributes/label}">Unknown Section</a>

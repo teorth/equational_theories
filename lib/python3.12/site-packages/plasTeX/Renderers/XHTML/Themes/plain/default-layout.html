@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html tal:define="links self/links">
+<head>
+<meta http-equiv="content-type" 
+      tal:attributes="content string:text/html;; charset=${config/files/output-encoding}" />
+<title tal:content="stripped self/title">Morbi metus pede, imperdiet vitae</title>
+<link tal:condition="links/next" rel="next" tal:attributes="href links/next/url; title links/next/title/textContent" />
+<link tal:condition="links/prev" rel="prev" tal:attributes="href links/prev/url; title links/prev/title/textContent" />
+<link tal:condition="links/up" rel="up" tal:attributes="href links/up/url; title links/up/title/textContent" />
+<link rel="stylesheet" href="styles/plastex-styles.css" />
+</head>
+<body>
+
+<div class="navigation">
+<span tal:condition="links/prev">Previous: <a tal:content="links/prev/title" tal:attributes="href links/prev/url"></a></span>
+<span tal:condition="links/next">Next: <a tal:content="links/next/title" tal:attributes="href links/next/url"></a></span>
+<span tal:condition="links/up">Up: <a tal:content="links/up/title" tal:attributes="href links/up/url"></a></span>
+</div>
+
+<div tal:content="self">File contents</div>
+
+<div tal:condition="self/tableofcontents" tal:attributes="class string:contents ${self/nodeName}-contents">
+<ul>
+<li tal:repeat="section self/tableofcontents"><a href="." tal:attributes="href section/url" tal:content="section/fullTocEntry">Aliquam est. Aliquam fringilla pede</a>
+   <ul tal:condition="section/tableofcontents">
+   <li tal:repeat="subsection section/tableofcontents"><a href="." tal:attributes="href subsection/url" tal:content="subsection/fullTocEntry"></a>
+       <ul tal:condition="subsection/tableofcontents">
+       <li tal:repeat="subsubsection subsection/tableofcontents"><a href="." tal:attributes="href subsubsection/url" tal:content="subsubsection/fullTocEntry"></a>
+           <ul tal:condition="subsubsection/tableofcontents">
+           <li tal:repeat="paragraph subsubsection/tableofcontents"><a href="." tal:attributes="href paragraph/url" tal:content="paragraph/fullTocEntry"></a>
+               <ul tal:condition="paragraph/tableofcontents">
+               <li tal:repeat="subparagraph paragraph/tableofcontents"><a href="." tal:attributes="href subparagraph/url" tal:content="subparagraph/fullTocEntry"></a></li>
+               </ul>
+           </li>
+           </ul>
+       </li>
+       </ul>
+   </li>
+   </ul>
+</li>
+<li tal:replace="nothing"><a href=".">Maecenas id purus</a></li>
+<li tal:replace="nothing"><a href=".">Duis et eros</a></li>
+<li tal:replace="nothing"><a href=".">Duis est</a></li>
+</ul>
+</div>
+
+<div id="footnotes" tal:condition="self/footnotes">
+<p><b>Footnotes</b></p>
+<ol>
+<li tal:repeat="footnote self/footnotes" tal:content="footnote" tal:attributes="id footnote/id">footnote text</li>
+</ol>
+</div>
+
+<div class="navigation">
+<span tal:condition="links/prev">Previous: <a tal:content="links/prev/title" tal:attributes="href links/prev/url"></a></span>
+<span tal:condition="links/next">Next: <a tal:content="links/next/title" tal:attributes="href links/next/url"></a></span>
+<span tal:condition="links/up">Up: <a tal:content="links/up/title" tal:attributes="href links/up/url"></a></span>
+</div>
+
+</body>
+</html>

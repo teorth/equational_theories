@@ -1,0 +1,14 @@
+name: mbox makebox
+<span class="mbox" tal:attributes="style string:width:${self/attributes/width}" tal:content="self">make box</span>
+
+name: fbox framebox
+<span class="fbox" tal:attributes="style string:width:${self/attributes/width}" tal:content="self">frame box</span>
+
+name: parbox
+<span class="parbox" tal:attributes="style string:width:${self/attributes/width}" tal:content="self">par box</span>
+
+name: minipage
+<div class="minipage" tal:attributes="style string:width:${self/attributes/width}" tal:content="self">minipage</div>
+
+name: raisebox rule
+<object tal:omit-tag="not:self/renderer/vectorImager/enabled" type="image/svg+xml" tal:attributes="data self/vectorImage/url; style string:width:${self/vectorImage/width/em};; height:${self/vectorImage/height/em};; vertical-align:${self/vectorImage/depth/em}"><img tal:attributes="src self/image/url; alt self/source; style string:vertical-align:${self/image/depth/px};; width:${self/image/width/px};; height:${self/image/height/px}" class="box gen" /></object>

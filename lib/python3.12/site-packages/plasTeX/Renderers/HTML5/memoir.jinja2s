@@ -1,0 +1,2 @@
+name: titleref
+<a href="{{ obj.idref.label.url }}">{{ obj.idref.label.title }}</a>

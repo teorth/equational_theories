@@ -1,0 +1,14 @@
+name: htmladdnormallink
+<a href="{{obj.attributes.url }}" >{{ obj }}</a>
+
+name: htmladdimg
+<img src="{{obj.attributes.url }}" />
+
+name: rawhtml
+{{ obj }}
+
+name: htmlonly latexhtml
+{{ obj }}
+
+name: htmlref hyperref
+<a href="{{obj.idref.label.url }}" >{{ obj }}</a>

@@ -1,0 +1,163 @@
+{% set links = obj.links %}
+{% set doc = obj.ownerDocument.getElementsByTagName('document')[0] %}
+{% set toc = doc.tableofcontents if config.html5['display-toc'] else None %}
+{% set rendererdata = obj.ownerDocument.rendererdata['html5'] %}
+{% macro tocEntry(section) %}
+<span class="toc_ref">{{ section.ref.textContent }}</span> <span class="toc_entry">{{ section.tocEntry }}</span>{% endmacro %}
+{% macro isActive(section) %}
+{% if section in links.breadcrumbs %} active{% endif %}
+{% endmacro %}
+{% macro isCurrent(section) %}
+{% if section.url == obj.url %} current{% endif %}
+{% endmacro %}
+{% macro icon(icon, id='', class='') %}
+<svg  {% if id %}id="{{id}}" {% endif %}class="icon icon-{{ icon }} {{ class }}"><use xlink:href="symbol-defs.svg#icon-{{ icon }}"></use></svg>
+{% endmacro %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% if config.html5['use-mathjax'] %}
+<script>
+  MathJax = { 
+    tex: {
+{% if config.html5['mathjax-dollars'] %}
+		    inlineMath: [['$','$'], ['\\(','\\)']]
+{% else %}
+		    inlineMath: [['\\(','\\)']]
+{% endif %}
+{% if config['mathjax-macros']['macros'] %}
+      macros: { {% for key, val in config['mathjax-macros']['macros'].items() %}
+        {{ key }}: {{ val }},
+        {% endfor %}
+      } 
+{% endif %}
+	} }
+</script>
+<script type="text/javascript" src="{{ config.html5['mathjax-url'] }}">
+</script>
+{% endif %}
+<meta name="generator" content="plasTeX" />
+<meta charset="{{ config.files['output-encoding']}}" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+{% if obj.title %}
+{% if obj.level > config.html5['localtoc-level'] %}
+<title>{{ links.document.title }}: {{ obj.title }}</title>
+{% else %}
+<title>{{ obj.title }}</title>
+{% endif %}
+{% endif %}
+{% if links.next.url %}
+<link rel="next" href="{{ links.next.url }}" title="{{ links.next.title.textContent }}" />
+{% endif %}
+{% if links.prev.url %}
+<link rel="prev" href="{{ links.prev.url }}" title="{{ links.prev.title.textContent }}" />
+{% endif %}
+{% if links.up.url %}
+<link rel="up" href="{{ links.up.url }}" title="{{ links.up.title.textContent }}" />
+{% endif %}
+{% for css in rendererdata.get('css', []) %}
+<link rel="stylesheet" href="styles/{{ css }}" />
+{% endfor %}
+</head>
+
+<body>
+{% if toc %}
+<header>
+{% if toc %}{{ icon('list-numbered', id='toc-toggle')}}{% endif %}
+</header>
+{% endif %}
+
+<div class="wrapper">
+{% if toc %}
+<nav class="toc">
+<ul class="sub-toc-0">
+{% for section in toc recursive %}
+<li class="{{ isActive(section) }}{{ isCurrent(section) }}">
+  {% if section.tableofcontents %}
+  <a href="{{ section.url }}">{{ tocEntry(section) }}</a>
+  <span class="expand-toc">{% if isActive(section) %}▼{% else %}▶{% endif %}</span>
+  <ul class="sub-toc-{{loop.depth}}{{ isActive(section) }}">
+     {{ loop(section.tableofcontents) }}
+  </ul>
+  {% else %}
+  <a href="{{ section.url }}">{{ tocEntry(section) }}</a>
+  {% endif %}
+ </li>
+ {% endfor %}
+{% for item in rendererdata.get('extra_toc_items', []) %}
+<li {% if item.url == obj.url %}class="current"{% endif %}><a href="{{ item.url }}">{{ item.text }}</a></li>
+{% endfor %}
+</ul>
+</nav>
+{% endif %}
+
+<div class="content">
+<div class="content-wrapper">
+
+{% if obj.level >= config.html5['breadcrumbs-level'] %}
+<ul class="breadcrumbs">
+{% for crumb in links.breadcrumbs %}
+{% if loop.last %}
+  <li class="last_crumb">{{ crumb.title }}</li>
+{% else %}
+<li class="crumb"><a href="{{ crumb.url }}" class="crumb">{{ crumb.title }}</a></li>
+{% endif %}
+{% endfor %}
+</ul>
+{% endif %}
+
+<div class="main-text">
+{{ obj }}
+</div> <!--main-text -->
+{% if obj.tableofcontents and obj.level <= config.html5['localtoc-level'] %}
+<nav class=local_toc>
+<ul>
+{% for section in obj.tableofcontents recursive %}
+  <li>	
+  <a href="{{ section.url }}">{{ tocEntry(section) }}</a>
+  {% if section.tableofcontents %}
+	<ul>
+		 {{ loop(section.tableofcontents) }}
+	</ul>
+  {% endif %}
+  </li>
+{% endfor %}
+</ul>
+</nav>
+{% endif %}
+{% if obj.footnotes %}
+<footer id="footnotes">
+<ol>
+{% for footnote in obj.footnotes %}
+  <li id="{{ footnote.id }}">{{ footnote }}</li>
+{% endfor %}
+</ol>
+</footer>
+{% endif %}
+</div> <!-- content-wrapper -->
+</div> <!-- content -->
+</div> <!-- wrapper -->
+
+<nav class="prev_up_next">
+{% for nav in rendererdata.get('extra-nav', []) %}
+  {{ icon(nav['icon'], id=nav['id'], class=nav['class']) }}
+{% endfor %}
+  {% if links.prev.url %}
+  <a href="{{ links.prev.url }}" title="{{ links.prev.title | striptags }}">{{ icon('arrow-left')}}</a>
+  {% endif %}
+  {% if links.up.url %}
+  <a href="{{ links.up.url }}" title="{{ links.up.title | striptags }}">{{ icon('arrow-up')}}</a>
+  {% endif %}
+  {% if links.next.url %}
+  <a href="{{ links.next.url }}" title="{{ links.next.title | striptags }}">{{ icon('arrow-right')}}</a>
+  {% endif %}
+  {% if links.index.url %}
+  <a href="{{ links.index.url }}" class="index">Index</a>
+  {% endif %}
+</nav>
+
+{% for js in rendererdata.get('js', []) %}
+<script type="text/javascript" src="js/{{ js }}"></script>
+{% endfor %}
+</body>
+</html>

@@ -1,0 +1,2 @@
+name: HTML XHTML html xhtml
+<div tal:replace="self"></div>

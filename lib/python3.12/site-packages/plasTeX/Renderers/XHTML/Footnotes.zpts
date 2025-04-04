@@ -1,0 +1,7 @@
+name: footnote
+<a class="footnote" tal:attributes="href string:#${self/id}"><sup class="footnotemark" tal:content="self/mark/attributes/num">&#8224;</sup></a>
+
+name: footnotemark
+<a class="footnote" href="#footnotes"><sup class="footnotemark" tal:content="self/mark/attributes/num">&#8224;</sup></a>
+
+name: footnotetext

@@ -1,0 +1,7 @@
+name: ifthenelse
+<span tal:replace="self/attributes/else"></span>
+
+name: newboolean provideboolean setboolean
+
+name: whiledo
+<span tal:replace="self/attributes/operations"></span>

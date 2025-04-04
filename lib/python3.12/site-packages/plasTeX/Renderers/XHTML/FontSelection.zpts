@@ -1,0 +1,85 @@
+name: mdseries textmd
+<span class="mdseries" tal:content="self">medium text</span>
+
+name: bfseries textbf
+<b class="bfseries" tal:content="self">bold text</b>
+
+name: rmfamily textrm
+<span class="rmfamily" tal:content="self">roman text</span>
+
+name: sffamily textsf
+<span class="sffamily" tal:content="self">sans-serif text</span>
+
+name: ttfamily texttt
+<tt class="ttfamily" tal:content="self">typewriter text</tt>
+
+name: upshape textup
+<span class="upshape" tal:content="self">upper-case text</span>
+
+name: itshape textit
+<i class="itshape" tal:content="self">italic text</i>
+
+name: slshape textsl
+<i class="slshape" tal:content="self">oblique text</i>
+
+name: scshape textsc
+<span class="scshape" tal:content="self">small-caps text</span>
+
+name: textnormal
+<span class="textnormal" tal:content="self">normal text</span>
+
+name: rm
+<span class="rm" tal:content="self">rm</span>
+
+name: cal
+<i class="cal" tal:content="self">cal</i>
+
+name: it
+<i class="it" tal:content="self">cal</i>
+
+name: sl
+<i class="sl" tal:content="self">sl</i>
+
+name: bf
+<b class="bf" tal:content="self">bf</b>
+
+name: tt
+<tt class="tt" tal:content="self">tt</tt>
+
+name: sc
+<i class="sc" tal:content="self">sc</i>
+
+
+name: tiny
+<small class="tiny" tal:content="self">tiny text</small>
+
+name: scriptsize
+<small class="scriptsize" tal:content="self">scriptsize text</small>
+
+name: footnotesize
+<small class="footnotesize" tal:content="self">footnotesize text</small>
+
+name: small
+<small class="small" tal:content="self">small text</small>
+
+name: normalsize
+<span class="normalsize" tal:content="self">normalsize text</span>
+
+name: large
+<big class="large" tal:content="self">large text</big>
+
+name: Large
+<big class="xlarge" tal:content="self">Large text</big>
+
+name: LARGE
+<big class="xxlarge" tal:content="self">LARGE text</big>
+
+name: huge
+<big class="huge" tal:content="self">huge text</big>
+
+name: Huge
+<big class="xhuge" tal:content="self">Huge text</big>
+
+
+name: symbol
+<object tal:omit-tag="not:self/renderer/vectorImager/enabled" type="image/svg+xml" tal:attributes="data self/vectorImage/url; style string:width:${self/vectorImage/width/em};; height:${self/vectorImage/height/em};; vertical-align:${self/vectorImage/depth/em}"><img tal:attributes="src self/image/url; alt self/source; style string:vertical-align:${self/image/depth/px};; width:${self/image/width/px};; height:${self/image/height/px}" class="symbol gen" /></object>

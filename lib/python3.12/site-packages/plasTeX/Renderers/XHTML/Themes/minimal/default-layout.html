@@ -1,0 +1,15 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" tal:attributes="content string:text/html;; charset=${config/files/output-encoding}" />
+</head>
+<body>
+<div tal:content="self"></div>
+<div id="footnotes" tal:condition="self/footnotes">
+<p><b>Footnotes</b></p>
+<ol>
+<li tal:repeat="footnote self/footnotes" tal:content="footnote" tal:attributes="id footnote/id">footnote text</li>
+</ol>
+</div>
+</body>
+</html>

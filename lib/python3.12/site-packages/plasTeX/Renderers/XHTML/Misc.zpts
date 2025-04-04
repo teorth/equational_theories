@@ -1,0 +1,10 @@
+name: egroup
+
+name: bgroup
+<span tal:replace="self"></span>
+
+name: tableofcontents input @vobeyspaces @noligs def protect let \
+      newcommand hfill hline openout renewcommand write hspace appendix \
+      global noindent include markboth setcounter refstepcounter \
+      medskip smallskip parindent indent setlength settowidth addtolength \
+      nopagebreak newwrite newcounter typeout sloppypar hfil thispagestyle vfill

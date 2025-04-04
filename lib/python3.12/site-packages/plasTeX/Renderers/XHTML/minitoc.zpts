@@ -1,0 +1,51 @@
+name: dominitoc dominilof dominilot dosecttoc dosectlot dosectlof \
+      doparttoc dopartlot dopartlof mtcprepare mtcsetfont mtcsetdepth \
+      mtcskip mtcskipamount tightmtcfalse tightmtctrue ktightmtcfalse \
+      ktightmtctrue undottedmtctrue undottedmtcfalse addstarredpart \
+      addstarredsection addstarredchapter adjustptc adjustmtc adjust stc \
+      decrementptc decrementmtc decrementstc incrementptc incrementstc \
+      incrementmtc mtcaddpart mtcaddchapter mtcaddsection mtctitle \
+      mlftitle mlttitle ptctitle plftitle plttitle stctitle slttitle \
+      mtcsettitle mtcsettitlefont mtcsetformat mtcsetrules ptcrule \
+      noptcrule mtcrule nomtcrule stcrule nostcrule plfrule noplfrule \
+      mlfrule nomlfrule slfrule noslfrule pltrule nopltrule mltrule \
+      nomltrule sltrule nosltrule mtcsetpagenumbers ptcpagenumbers \
+      noptcpagenumbers plfpagenumbers noplfpagenumbers pltpagenumbers \
+      nopltpagenumbers mtcpagenumbers nomtcpagenumbers mlfpagenumbers \
+      nomlfpagenumbers mltpagenumbers nomltpagenumbers stcpagenumbers \
+      nostcpagenumbers slfpagenumbers noslfpagenumbers sltpagenumbers \
+      nosltpagenumbers mtcsetfeature firstpartis firstchapteris \
+      firstsectionis mtcfixglossary mtcfixindex faketableofcontents \
+      fakelistoffigures fakelistoftables mtcselectlanguage
+
+name: minilof sectlof partlof
+
+name: minilot sectlot partlot minitoc secttoc parttoc
+
+name: -minitoc -secttoc -parttoc
+<p><b tal:content="self/title">Contents</b></p>
+<div tal:condition="self/tableofcontents" class="minitoc">
+<ul>
+<li tal:repeat="section self/tableofcontents"><a href="." tal:attributes="href section/url" tal:content="section/fullTocEntry">Aliquam est. Aliquam fringilla pede</a>
+   <ul tal:condition="section/tableofcontents">
+   <li tal:repeat="subsection section/tableofcontents"><a href="." tal:attributes="href subsection/url" tal:content="subsection/fullTocEntry"></a>
+       <ul tal:condition="subsection/tableofcontents">
+       <li tal:repeat="subsubsection subsection/tableofcontents"><a href="." tal:attributes="href subsubsection/url" tal:content="subsubsection/fullTocEntry"></a>
+           <ul tal:condition="subsubsection/tableofcontents">
+           <li tal:repeat="paragraph subsubsection/tableofcontents"><a href="." tal:attributes="href paragraph/url" tal:content="paragraph/fullTocEntry"></a>
+               <ul tal:condition="paragraph/tableofcontents">
+               <li tal:repeat="subparagraph paragraph/tableofcontents"><a href="." tal:attributes="href subparagraph/url" tal:content="subparagraph/fullTocEntry"></a></li>
+               </ul>
+           </li>
+           </ul>
+       </li>
+       </ul>
+   </li>
+   </ul>
+</li>
+<li tal:replace="nothing"><a href=".">Maecenas id purus</a></li>
+<li tal:replace="nothing"><a href=".">Duis et eros</a></li>
+<li tal:replace="nothing"><a href=".">Duis est</a></li>
+</ul>
+</div>
+

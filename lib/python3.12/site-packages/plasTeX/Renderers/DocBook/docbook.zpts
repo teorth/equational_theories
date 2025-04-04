@@ -1,0 +1,763 @@
+name: -----------TOC-----------------
+  sectioning
+  referencing
+  block elements
+  bibliography
+  indexing
+  code
+  font switching
+  math
+  characters and symbols
+  miscellaneous
+
+name: -----------SECTIONING----------------------
+
+name: document
+<para tal:replace="self"></para>
+
+name:article
+engine:cheetah
+<article remap="$here.captionName"
+         xmlns="http://docbook.org/ns/docbook" version="5.0"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:xl="http://www.w3.org/1999/xlink"  xml:id="${here.id}">
+  <info><title>${here.title}</title></info>
+  ${here}
+</article>
+
+name: abstract
+<abstract tal:content="self"></abstract>
+
+name: title author date thanks
+
+name: maketitle
+type:xml
+<span tal:omit-tag="" tal:define="metadata self/ownerDocument/userdata">
+<articleinfo>
+  <title tal:content="metadata/title"></title>
+  <authorgroup>
+    <author tal:repeat="auth metadata/author">
+      <surname tal:content="auth"></surname>
+    </author>
+  </authorgroup>
+  <date tal:condition="metadata/date" tal:content="metadata/date"></date>
+  <othercredit tal:condition="metadata/thanks" tal:content="metadata/thanks"></othercredit>
+</articleinfo>
+</span>
+
+name:part
+engine:cheetah
+<part xml:id="${here.id}" remap="$here.nodeName"
+ xmlns="http://docbook.org/ns/docbook" version="5.0"
+ xmlns:xl="http://www.w3.org/1999/xlink">
+  <info><title>${here.title}</title></info>
+  <div>${here}</div>
+</part>
+
+name:chapter
+engine:cheetah
+<chapter remap="$here.captionName"
+         xmlns="http://docbook.org/ns/docbook" version="5.0"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:xl="http://www.w3.org/1999/xlink"  xml:id="${here.id}">
+  <info><title>${here.title}</title></info>
+  ${here}
+</chapter>
+
+name:chapter*
+engine:cheetah
+<preface remap="$here.nodeName"
+         xmlns="http://docbook.org/ns/docbook" version="5.0"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:xl="http://www.w3.org/1999/xlink"  xml:id="${here.id}">
+  <info><title>${here.title}</title></info>
+  ${here}
+</preface>
+
+name: section subsection subsubsection paragraph subparagraph
+engine:cheetah
+<section remap="$here.nodeName" xml:id="${here.id}">
+  <info><title>${here.title}</title></info>
+  ${here}
+</section>
+
+name: phantomsection
+<anchor tal:attributes="name self/id" />
+
+name: -----------REFERENCING----------------------
+
+name: autoref
+type:xml
+<link tal:attributes="linkend self/idref/label/url" tal:content="string:${self/idref/label/captionName} ${self/idref/label/ref}"></link>
+
+name: ref
+type:xml
+<xref remap="ref" tal:attributes="linkend self/idref/label/id" />
+
+name: ref*
+<phrase tal:content="self/idref/label/ref"></phrase>
+
+name:href
+engine:cheetah
+<link remap="href" xl:href="${here.attributes.url}">${here.attributes.url}</link>
+
+name:url
+engine:cheetah
+<link remap="url" xl:href="${here.attributes.url}">${here.attributes.url}</link>
+
+name:label
+engine:cheetah
+<anchor
+ #if $varExists('here.label') and $here.label
+    xml:id="${here.label}"
+ #else
+    xml:id="${here.id}"
+ #end if
+remap="$here.nodeName" />
+
+name: titleref
+type:xml
+<link remap="titleref" tal:attributes="linkend self/idref/label/url"
+      tal:content="self/idref/label/title"></link>
+
+name: nolinkurl
+<span tal:replace="self/attributes/url">url</span>
+
+name: hyperbaseurl
+
+name: hyperimage
+<imageobject>
+  <imagedata tal:attributes="fileref self/attributes/url;contentwidth self/image/width/px;contentdepth self/image/height/px" />
+</imageobject>
+
+name: hyperdef
+<anchor tal:attributes="id string:${self/attributes/category}.${self/attributes/name}" />
+
+name: hyperref
+type:xml
+<link tal:attributes="linkend string:${self/attributes/url}#${self/attributes/category}.${self/attributes/name}" tal:content="self">link text</link>
+
+name: hyperlink
+type:xml
+<link tal:attributes="linkend string:${self/idref/label/url}" tal:content="self"></link>
+
+name: hypertarget
+<anchor tal:attributes="name self/id" />
+
+name: phantomsection
+<anchor tal:attributes="name self/id" />
+
+name: -----------BLOCK ELEMENTS--------------------------
+
+name: par
+<para tal:content="self" tal:omit-tag="self/blockType"></para>
+
+name: multicolumn
+<span tal:replace="self"></span>
+
+name: figure figure*
+<span tal:omit-tag="">
+  <informalfigure tal:condition="not:self/title"
+                  tal:content="self"></informalfigure>
+  <figure tal:condition="self/title"
+          tal:content="self"
+          tal:attributes="id self/title/id">
+    <title tal:content="self/title"></title>
+  </figure>
+</span>
+
+name:index
+<metal:block>
+  <indexterm>
+    <primary tal:attributes="sortas self/data/prisort"
+             tal:content="self/data/primary"></primary>
+    <secondary tal:condition="self/data/secondary"
+               tal:attributes="sortas self/data/secsort"
+               tal:content="self/data/secondary"></secondary>
+    <see tal:condition="self/data/see"
+         tal:content="self/data/see"></see>
+    <seealso tal:condition="self/data/seealso"
+             tal:content="self/data/seealso"></seealso>
+  </indexterm>
+</metal:block>
+
+name: table
+<table tal:condition="self/title" remap="table" tal:attributes="xml:id self/title/id">
+  <caption remap="tablecaption" tal:content="self/title"></caption>
+<span tal:replace="self"></span>
+</table>
+
+name: nestedtablecaption nestedfigurecaption
+
+name: nestedtabular
+<tbody remap="nestedtabular">
+  <tr tal:repeat="row self">
+    <metal:block tal:repeat="cell row">
+     <th tal:condition="cell/isHeader"
+         tal:attributes="style cell/style/inline;
+                     rowspan cell/attributes/rowspan;
+                     colspan cell/attributes/colspan"
+         tal:content="cell">
+     </th>
+     <td tal:condition="not:cell/isHeader"
+         tal:attributes="style cell/style/inline;
+                     rowspan cell/attributes/rowspan;
+                     colspan cell/attributes/colspan"
+         tal:content="cell">
+     </td>
+    </metal:block>
+  </tr>
+</tbody>
+
+name: tabular ctabular array tabular* tabularx
+type: xml
+<informaltable remap="tabular">
+  <tr tal:repeat="row self">
+    <metal:block tal:repeat="cell row">
+     <th tal:condition="cell/isHeader"
+         tal:attributes="style cell/style/inline;
+                     rowspan cell/attributes/rowspan;
+                     colspan cell/attributes/colspan"
+         tal:content="cell">
+     </th>
+     <td tal:condition="not:cell/isHeader"
+         tal:attributes="style cell/style/inline;
+                     rowspan cell/attributes/rowspan;
+                     colspan cell/attributes/colspan"
+         tal:content="cell">
+     </td>
+    </metal:block>
+  </tr>
+</informaltable>
+
+name: longtable longtable*
+type: xml
+<metal:block>
+   <metal:block tal:condition="self/title">
+     <table tal:attributes="xml:id self/title/id">
+     <caption tal:content="self/title"></caption>
+     <tr tal:repeat="row self">
+     <metal:block tal:repeat="cell row">
+       <th tal:condition="cell/isHeader"
+           tal:attributes="style cell/style/inline;
+                       rowspan cell/attributes/rowspan;
+                       colspan cell/attributes/colspan"
+           tal:content="cell">
+       </th>
+       <td tal:condition="not:cell/isHeader"
+           tal:attributes="style cell/style/inline;
+                       rowspan cell/attributes/rowspan;
+                       colspan cell/attributes/colspan"
+           tal:content="cell">
+       </td>
+     </metal:block>
+     </tr>
+     </table>
+   </metal:block>
+   <metal:block tal:condition="not:self/title">
+     <informaltable>
+     <tr tal:repeat="row self">
+     <metal:block tal:repeat="cell row">
+       <th tal:condition="cell/isHeader"
+           tal:attributes="style cell/style/inline;
+                       rowspan cell/attributes/rowspan;
+                       colspan cell/attributes/colspan"
+           tal:content="cell">
+       </th>
+       <td tal:condition="not:cell/isHeader"
+           tal:attributes="style cell/style/inline;
+                       rowspan cell/attributes/rowspan;
+                       colspan cell/attributes/colspan"
+           tal:content="cell">
+       </td>
+     </metal:block>
+     </tr>
+     </informaltable>
+   </metal:block>
+</metal:block>
+
+name: marginpar
+<para remap="marginpar" tal:content="self/attributes/right">margin par</para>
+
+name: itemize
+type:xml
+<itemizedlist>
+    <listitem tal:repeat="item self" tal:content="item"></listitem>
+</itemizedlist>
+
+name: enumerate
+<orderedlist>
+  <metal:block tal:repeat="item self">
+  <listitem tal:content="item"></listitem>
+  </metal:block>
+</orderedlist>
+
+name: description
+<variablelist>
+  <varlistentry tal:repeat="item self">
+    <term tal:content="item/attributes/term"></term>
+      <listitem tal:content="item"></listitem>
+  </varlistentry>
+</variablelist>
+
+name: list trivlist
+type:xml
+<simplelist type="inline">
+  <metal:block tal:repeat="item self">
+    <member
+    tal:content="string:${item/attributes/term} |${self/attributes/defaultlabel} ${item}"></member>
+  </metal:block>
+</simplelist>
+
+name: quote
+<blockquote remap="quote">
+  <para tal:content="self"></para>
+</blockquote>
+
+name: quotation
+<blockquote remap="quotation">
+  <para tal:content="self"></para>
+</blockquote>
+
+name: verse
+<blockquote remap="verse">
+  <para tal:content="self"></para>
+</blockquote>
+
+
+name:picture
+type:xml
+<metal:block>
+<mediaobject>
+  <imageobject>
+      <imagedata role="math" tal:attributes="depth self/image/depth/px;fileref
+      self/image/url;contentwidth self/image/width/px;contentdepth
+      self/image/height/px" />
+    </imageobject>
+    <textobject remap="picture" role="tex">
+      <phrase>LaTeX defined picture</phrase>
+    </textobject>
+</mediaobject>
+</metal:block>
+
+
+name: includegraphics rotatebox scalebox reflectbox resizebox
+<imageobject remap="includegraphics">
+  <imagedata tal:attributes="fileref self/image/url;contentwidth
+    self/image/width/px;contentdepth self/image/height/px" />
+  <textobject>
+    <phrase tal:content="text self/source"></phrase>
+  </textobject>
+</imageobject>
+
+name:footnote
+type:xml
+<footnote><para tal:content="self"></para></footnote>
+
+name: -----------BIBLIOGRAPHY--------------------------
+
+name:bibliography
+engine:cheetah
+<section remap="bibliography" xml:id="${here.id}">
+  <info>
+    <title>References</title>
+  </info>
+  <itemizedlist>${here}</itemizedlist>
+</section>
+
+name:thebibliography
+engine:cheetah
+#for $item in $here
+<listitem remap="bibitem" xml:id="${item.id}">
+  <para>${item}</para>
+</listitem>
+#end for
+
+name: cite citet citep citealt citealp citeauthor citeyear citeyearpar \
+      Cite Citet Citep Citealt Citealp Citeauthor citefullauthor citetalias \
+      citepalias
+type: xml
+<citation remap="cite"><metal:block tal:repeat="item self/citation"><link tal:condition="item/idref/bibitem/url"
+      tal:attributes="linkend item/idref/bibitem/id"
+      tal:content="item" ></link><span tal:condition="not:item/idref/bibitem/url"
+      tal:replace="item"></span></metal:block></citation>
+
+name: citetext
+<span tal:replace="self"></span>
+
+name: -----------------INDEXING---------------------
+
+name:-index
+engine:cheetah
+<indexterm remap="$here.nodeName" xml:id="${here.id}">
+  #if $varExists('here.attributes.prisort')
+    <primary sortas="${here.attributes.prisort}" >${here.attributes.prisort}</primary>
+  #else
+    <primary>${here.attributes.primary}</primary>
+  #end if
+  #if $varExists('here.attributes.secondary')
+    #if $here.attributes.secsort
+      <secondary sortas="${here.attributes.secsort}">${here.attributes.secsort}</secondary>
+    #else
+      <secondary>${here.attributes.secondary}</secondary>
+    #end if
+  #end if
+  #if $varExists('here.attributes.see')
+    <see>${here.attributes.see}</see>
+  #end if
+  #if $varExists('here.attributes.seealso')
+    <seealso>${here.attributes.seealso}</seealso>
+  #end if
+</indexterm>
+
+name: -------------------CODE---------------------
+
+name:alltt
+engine:cheetah
+<programlisting class="monospaced" remap="$here.nodeName">${here}</programlisting>
+
+name:verbatim verbatimtab
+engine:cheetah
+<programlisting remap="$here.nodeName">${here}</programlisting>
+
+name: verb
+<literal remap="verb" tal:content="self"></literal>
+
+
+name: --------------FONT SWITCHING----------------
+
+name: ` ' ^ " ~ = . u v H t c d b l L
+<span tal:omit-tag="">
+  <mediaobject tal:condition="self/renderer/vectorImager/enabled">
+    <imageobject>
+      <imagedata format="SVG" tal:attributes="fileref self/vectorImage/url" />
+    </imageobject>
+    <textobject>
+      <phrase tal:content="text self/source"></phrase>
+    </textobject>
+  </mediaobject>
+  <mediaobject tal:condition="not:self/renderer/vectorImager/enabled">
+    <imageobject>
+      <imagedata tal:attributes="fileref self/image/url;contentwidth self/image/width/px;contentdepth self/image/height/px" />
+    </imageobject>
+    <textobject>
+      <phrase tal:content="text self/source"></phrase>
+    </textobject>
+  </mediaobject>
+</span>
+
+name: LaTeX
+<application class="software">LaTeX</application>
+
+name: TeX
+<application class="software">TeX</application>
+
+
+name:footnotetext
+engine:cheetah
+<phrase remap="footnotetext">
+  #if $varExists('here.marker') and $here.marker
+    ${here.marker}
+  #end if
+  ${here.text}</phrase>
+
+name: path
+engine:cheetah
+<filename  remap="path">${here}</filename>
+
+name:texttt
+engine:cheetah
+<literal remap="texttt">${here}</literal>
+
+name:emph
+engine:cheetah
+<emphasis remap="Emph">${here}</emphasis>
+
+name:textsubscript
+engine:cheetah
+<subscript remap="textsubscript">${here.attributes.argument}</subscript>
+
+name:textsuperscript
+engine:cheetah
+<superscript  remap="textsuperscript">${here.attributes.argument}</superscript>
+
+name:uppercase
+engine:cheetah
+${here.attributes.argument}
+
+name: bfseries textbf
+<emphasis role="bold" tal:content="self"></emphasis>
+
+name: itshape textit
+<emphasis tal:content="self"></emphasis>
+
+name: mdseries textmd
+<span tal:replace="self"></span>
+
+name: rmfamily textrm sffamily textsf ttfamily texttt
+<span tal:replace="self"></span>
+
+name: upshape textup slshape textsl scshape textsc
+<span tal:replace="self"></span>
+
+name: tiny scriptsize footnotesize small normalsize large Large LARGE huge Huge
+<span tal:replace="self"></span>
+
+name: -----------MATH----------------
+
+name: math ensuremath
+type:xml
+<inlineequation>
+  <inlinemediaobject remap="math">
+    <imageobject role="math_images">
+      <imagedata role="math" tal:condition="self/image/url" tal:attributes="fileref self/image/url" />
+      <imagedata role="math" tal:condition="not:self/image/url" fileref="dummy.png" />
+    </imageobject>
+    <textobject role="tex">
+      <phrase tal:content="text self/source"></phrase>
+    </textobject>
+  </inlinemediaobject>
+</inlineequation>
+
+name: displaymath equation  equation* eqnarray eqnarray* gather gather* \
+      falign falign* multiline multiline* split multline multline* \
+      align align* alignat alignat*
+<informalequation>
+  <mediaobject remap="math">
+    <imageobject role="math_images">
+      <imagedata role="math" tal:condition="self/image/url" tal:attributes="fileref self/image/url" />
+      <imagedata role="math" tal:condition="not:self/image/url" fileref="dummy.png" />
+    </imageobject>
+    <textobject role="tex">
+      <phrase tal:content="text self/source"></phrase>
+    </textobject>
+  </mediaobject>
+</informalequation>
+
+name: -----------CHARACTERS AND SYMBOLS------------------------
+
+name: $
+$
+
+name: %
+%
+
+name: {
+{
+
+name: }
+}
+
+name: _
+_
+
+name: &
+&amp;
+
+name: #
+#
+
+name:
+&#160;
+
+name:@
+
+name: thinspace /
+&#8201;
+
+name: active::~
+&#160;
+
+name: active::^
+<superscript tal:content="self"></superscript>
+
+name: active::_
+<subscript tal:content="self"></subscript>
+
+name: enspace enskip
+&#8194;
+
+name: underbar
+<phrase remap="underbar">_</phrase>
+
+name:footnotemark
+engine:cheetah
+<superscript remap="footnotemark">${here.marker}</superscript>
+
+
+name:Euro euro
+<phrase tal:omit-tag="">&#8364;</phrase>
+
+name:ldots
+<phrase tal:omit-tag="">&#8230;</phrase>
+
+name: newline
+engine:cheetah
+<?linebreak?>
+
+name:qquad
+<phrase tal:omit-tag="">&#8195;</phrase>
+
+name:quad
+<phrase tal:omit-tag="">&#8194;</phrase>
+
+name:textbackslash
+engine:cheetah
+\
+
+name:textonehalf
+<phrase tal:omit-tag="">&#189;</phrase>
+
+name: shaded
+engine:cheetah
+${here}
+
+name: -----------MISCELLANEOUS------------------
+
+name:lipsum
+<para tal:replace="self/text"></para>
+
+name: center centering centerline
+<span tal:replace="self"></span>
+
+name: flushleft raggedright leftline
+<span tal:replace="self"></span>
+
+name: raggedleft flushright llap
+<span tal:replace="self"></span>
+
+name: foreignlanguage otherlanguage
+<foreignphrase tal:replace="self"></foreignphrase>
+
+name: color textcolor
+<phrase remap="color" tal:content="self"></phrase>
+
+name: colorbox fcolorbox
+<para remap="colorbox" tal:content="self"></para>
+
+name: bgroup
+<span tal:replace="self"></span>
+
+name:landscape
+type:xml
+<phrase tal:omit-tag="" tal:content="self"></phrase>
+
+name:mbox fbox parbox
+<para tal:replace="self"></para>
+
+name:makebox framebox minipage
+<phrase remap="makebox" tal:content="self"></phrase>
+
+
+name:par
+type:xml
+<para tal:content="self"></para>
+
+name:rotatebox
+engine:cheetah
+${here}
+
+name:raisebox
+engine:cheetah
+${here.text}
+
+
+name: -----------IGNORED------------------
+
+name: DeclareGraphicsExtensions graphicspath
+
+
+name: pageref*
+
+name: Form TextField CheckBox ChoiceMenu PushButton Submit Reset
+
+
+name: newblock nocite defcitealias fontseries selectfont
+
+name: symbol hspace hspace* vspace vspace*
+
+name: bigskip medskip smallskip
+
+name: enlargethispage
+
+name: tabbing
+
+name: linebreak \ newline
+
+name: pagebreak newpage clearpage cleardoublepage cleartorecto
+
+name: newfloat floatstyle restylefloat floatname floatplacement listof
+
+name: raisebox rule
+
+name: bibliographystyle
+
+name: cline toprule bottomrule midrule cmidrule morecmidrules addlinespace specialrule
+
+name: raggedbottom
+
+name:egroup strut
+
+name:bibpunct
+
+name:pageref parskip
+
+name:pagebreak newpage clearpage cleardoublepage
+
+name:hypersetup setkeys phantomsection adjustmtc
+
+name:tightlist firmlist toprule midrule bottomrule onelineskip rule
+
+name:theindex
+
+name:LTleft LTright
+
+name:addcontentsline addtocontents chapterend
+
+name:definecolor colorlet color pagecolor normalcolor
+
+name:onecolumn twocolumn
+
+name:hyphenation pagestyle phantom providecommand nocite
+
+name:unitlength enlargethispage nobreak vfill vskip
+
+name:leftskip hrulefill
+
+name:ifcopyedit
+
+name:tabularnewline
+
+name: textattachfile tabularnewline
+
+name:space vspace
+
+name: dominitoc dominilof dominilot dosecttoc dosectlot dosectlof \
+      doparttoc dopartlot dopartlof mtcprepare mtcsetfont mtcsetdepth \
+      mtcskip mtcskipamount tightmtcfalse tightmtctrue ktightmtcfalse \
+      ktightmtctrue undottedmtctrue undottedmtcfalse addstarredpart \
+      addstarredsection addstarredchapter adjustptc adjustmtc adjust stc \
+      decrementptc decrementmtc decrementstc incrementptc incrementstc \
+      incrementmtc mtcaddpart mtcaddchapter mtcaddsection mtctitle \
+      mlftitle mlttitle ptctitle plftitle plttitle stctitle slttitle \
+      mtcsettitle mtcsettitlefont mtcsetformat mtcsetrules ptcrule \
+      noptcrule mtcrule nomtcrule stcrule nostcrule plfrule noplfrule \
+      mlfrule nomlfrule slfrule noslfrule pltrule nopltrule mltrule \
+      nomltrule sltrule nosltrule mtcsetpagenumbers ptcpagenumbers \
+      noptcpagenumbers plfpagenumbers noplfpagenumbers pltpagenumbers \
+      nopltpagenumbers mtcpagenumbers nomtcpagenumbers mlfpagenumbers \
+      nomlfpagenumbers mltpagenumbers nomltpagenumbers stcpagenumbers \
+      nostcpagenumbers slfpagenumbers noslfpagenumbers sltpagenumbers \
+      nosltpagenumbers mtcsetfeature firstpartis firstchapteris \
+      firstsectionis mtcfixglossary mtcfixindex faketableofcontents \
+      fakelistoffigures fakelistoftables mtcselectlanguage
+
+name: minilof sectlof partlof
+
+name: minilot sectlot partlot minitoc secttoc parttoc
+
+name: tableofcontents input @vobeyspaces @noligs def protect let \
+      newcommand hfill hline openout renewcommand write hspace appendix \
+      global noindent include markboth setcounter refstepcounter \
+      medskip smallskip parindent indent setlength settowidth addtolength \
+      nopagebreak newwrite newcounter typeout sloppypar hfil thispagestyle vfill

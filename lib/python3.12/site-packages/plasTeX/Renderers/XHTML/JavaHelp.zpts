@@ -1,0 +1,269 @@
+name: javahelp-toc-2
+type: xml
+<!DOCTYPE toc PUBLIC "-//Sun Microsystems Inc.//DTD  JavaHelp TOC Version 2.0//EN"
+  "http://java.sun.com/products/javahelp/toc_2_0.dtd">
+<toc version="2.0">
+<tocitem tal:attributes="text self/tocEntry/textContent">
+    <tocitem tal:repeat="part self/fulltableofcontents" tal:attributes="target part/id; text part/tocEntry/textContent">
+        <tocitem tal:repeat="chapter part/fulltableofcontents" tal:attributes="target chapter/id; text chapter/tocEntry/textContent">
+            <tocitem tal:repeat="section chapter/fulltableofcontents" tal:attributes="target section/id; text section/tocEntry/textContent">
+               <tocitem tal:repeat="subsection section/fulltableofcontents" tal:attributes="href subsection/id; text subsection/tocEntry/textContent">
+                   <tocitem tal:repeat="subsubsection subsection/fulltableofcontents" tal:attributes="target subsubsection/id; text subsubsection/tocEntry/textContent">
+                       <tocitem tal:repeat="paragraph subsubsection/fulltableofcontents" tal:attributes="target paragraph/id; text paragraph/tocEntry/textContent">
+                           <tocitem tal:repeat="subparagraph paragraph/fulltableofcontents" tal:attributes="href subparagraph/id; text subparagraph/tocEntry/textContent" />
+                       </tocitem>
+                   </tocitem>
+               </tocitem>
+            </tocitem>
+        </tocitem>
+    </tocitem>
+</tocitem>
+</toc>
+
+name: javahelp-index-2
+type: xml
+<!DOCTYPE index PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 2.0//EN"
+ "http://java.sun.com/products/javahelp/index_2_0.dtd">
+<index version="2.0">
+   <metal:block tal:repeat="item self/index">
+   <metal:block tal:condition="item/pages" tal:repeat="page item/pages">
+      <indexitem tal:condition="not:repeat/page/end" tal:attributes="text item/key/textContent; target page/id" />
+      <indexitem tal:condition="repeat/page/end" tal:attributes="text item/key/textContent; target page/id">
+         <metal:block tal:repeat="subitem item">
+         <metal:block tal:repeat="subpage subitem/pages">
+            <indexitem tal:attributes="text subitem/key/textContent; target subpage/id" />
+         </metal:block>
+         </metal:block>
+       </indexitem>
+   </metal:block>
+   <metal:block tal:condition="not:item/pages">
+      <indexitem tal:attributes="text item/key/textContent">
+         <metal:block tal:repeat="subitem item">
+         <metal:block tal:repeat="subpage subitem/pages">
+            <indexitem tal:attributes="text subitem/key/textContent; target subpage/id" />
+         </metal:block>
+         </metal:block>
+       </indexitem>
+   </metal:block>
+   </metal:block>
+</index>
+
+name: javahelp-map-2
+type: xml
+<!DOCTYPE map PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 2.0//EN"
+ "http://java.sun.com/products/javahelp/map_2_0.dtd">
+<map version="2.0">
+<mapID target="toplevelfolder">
+   <metal:block tal:repeat="part self/fulltableofcontents">
+      <mapID tal:attributes="target part/id; url part/url" />
+      <metal:block tal:repeat="chapter part/fulltableofcontents">
+         <mapID tal:attributes="target chapter/id; url chapter/url" />
+         <metal:block tal:repeat="section chapter/fulltableofcontents">
+            <mapID tal:attributes="target section/id; url section/url" />
+            <metal:block tal:repeat="subsection section/fulltableofcontents">
+               <mapID tal:attributes="target subsection/id; url subsection/url" />
+               <metal:block tal:repeat="subsubsection subsection/fulltableofcontents">
+                  <mapID tal:attributes="target subsubsection/id; url subsubsection/url" />
+                  <metal:block tal:repeat="paragraph subsubsection/fulltableofcontents">
+                     <mapID tal:attributes="target paragraph/id; url paragraph/url" />
+                     <metal:block tal:repeat="subparagraph paragraph/fulltableofcontents">
+                        <mapID tal:attributes="target subparagraph/id; url subparagraph/url" />
+                     </metal:block>                 
+                  </metal:block>              
+               </metal:block>             
+            </metal:block>           
+         </metal:block>
+      </metal:block>   
+   </metal:block>
+   <metal:block tal:repeat="item self/index">
+      <metal:block tal:condition="item/pages" tal:repeat="page item/pages">
+         <mapID tal:attributes="target page/id; url page/url" />
+         <metal:block tal:repeat="subitem item">
+         <metal:block tal:repeat="subpage subitem/pages">
+            <mapID tal:attributes="target subpage/id; url subpage/url" />         
+         </metal:block>
+         </metal:block>
+      </metal:block>
+      <metal:block tal:condition="not:item/pages">
+         <metal:block tal:repeat="subitem item">
+         <metal:block tal:repeat="subpage subitem/pages">
+            <mapID tal:attributes="target subpage/id; url subpage/url" />         
+         </metal:block>
+         </metal:block>
+      </metal:block>
+   </metal:block>
+</mapID>
+</map>
+
+name: javahelp-helpset-2
+type: xml
+<!DOCTYPE helpset PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp HelpSet Version 2.0//EN"
+ "http://java.sun.com/products/javahelp/helpset_2_0.dtd">
+<helpset version="2.0">
+
+  <title tal:content="self/title"></title>
+
+  <maps>
+    <homeID>main_contents</homeID>
+    <mapref location="javahelp2.jhm"/>
+  </maps>
+
+  <view>
+    <name>TOC</name>
+    <label>Table of Contents</label>
+    <type>javax.help.TOCView</type>
+    <data>javahelp2-toc.xml</data>
+  </view>
+
+  <view>
+    <name>Search</name>
+    <label>Search</label>
+    <type>javax.help.SearchView</type>
+    <data engine="com.sun.java.help.search.DefaultSearchEngine">
+    JavaHelpSearch</data>
+  </view>
+
+  <view>
+    <name>Index</name>
+    <label>Index</label>
+    <type>javax.help.IndexView</type>
+    <data>javahelp2-index.xml</data>
+  </view>
+
+</helpset>
+
+
+
+name: javahelp-toc-1
+type: xml
+<!DOCTYPE toc PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN" 
+ "http://java.sun.com/products/javahelp/toc_1_0.dtd"> 
+<toc version="1.0"> 
+<tocitem><span tal:replace="self/tocEntry/textContent"></span>
+    <tocitem tal:repeat="part self/fulltableofcontents" tal:attributes="target part/id"><span tal:replace="part/tocEntry/textContent"></span>
+        <tocitem tal:repeat="chapter part/fulltableofcontents" tal:attributes="target chapter/id"><span tal:replace="chapter/tocEntry/textContent"></span>
+            <tocitem tal:repeat="section chapter/fulltableofcontents" tal:attributes="target section/id"><span tal:replace="section/tocEntry/textContent"></span>
+               <tocitem tal:repeat="subsection section/fulltableofcontents" tal:attributes="href subsection/id"><span tal:replace="subsection/tocEntry/textContent"></span>
+                   <tocitem tal:repeat="subsubsection subsection/fulltableofcontents" tal:attributes="target subsubsection/id"><span tal:replace="subsubsection/tocEntry/textContent"></span>
+                       <tocitem tal:repeat="paragraph subsubsection/fulltableofcontents" tal:attributes="target paragraph/id"><span tal:replace="paragraph/tocEntry/textContent"></span>
+                           <tocitem tal:repeat="subparagraph paragraph/fulltableofcontents" tal:attributes="href subparagraph/id"><span tal:replace="subparagraph/tocEntry/textContent"></span></tocitem>
+                       </tocitem>
+                   </tocitem>
+               </tocitem>
+            </tocitem>
+        </tocitem>
+    </tocitem>
+</tocitem>
+</toc>
+
+name: javahelp-index-1
+type: xml
+<!DOCTYPE index PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN" 
+ "http://java.sun.com/products/javahelp/index_1_0.dtd"> 
+<index version="1.0"> 
+   <metal:block tal:repeat="item self/index">
+   <metal:block tal:condition="item/pages" tal:repeat="page item/pages">
+      <indexitem tal:condition="not:repeat/page/end" tal:attributes="target page/id" tal:content="item/key/textContent"></indexitem>
+      <indexitem tal:condition="repeat/page/end" tal:attributes="target page/id"><span tal:replace="item/key/textContent"></span>
+         <metal:block tal:repeat="subitem item">
+         <metal:block tal:repeat="subpage subitem/pages">
+            <indexitem tal:attributes="target subpage/id" tal:content="subitem/key/textContent"></indexitem>
+         </metal:block>
+         </metal:block>
+       </indexitem>
+   </metal:block>
+   <metal:block tal:condition="not:item/pages">
+      <indexitem tal:attributes="text item/key/textContent">
+         <metal:block tal:repeat="subitem item">
+         <metal:block tal:repeat="subpage subitem/pages">
+            <indexitem tal:attributes="target subpage/id" tal:content="subitem/key/textContent"></indexitem>
+         </metal:block>
+         </metal:block>
+       </indexitem>
+   </metal:block>
+   </metal:block>
+</index>
+
+name: javahelp-map-1
+type: xml
+<!DOCTYPE map PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN" 
+ "http://java.sun.com/products/javahelp/map_1_0.dtd"> 
+<map version="1.0"> 
+<mapID target="toplevelfolder">
+   <metal:block tal:repeat="part self/fulltableofcontents">
+      <mapID tal:attributes="target part/id; url part/url" />
+      <metal:block tal:repeat="chapter part/fulltableofcontents">
+         <mapID tal:attributes="target chapter/id; url chapter/url" />
+         <metal:block tal:repeat="section chapter/fulltableofcontents">
+            <mapID tal:attributes="target section/id; url section/url" />
+            <metal:block tal:repeat="subsection section/fulltableofcontents">
+               <mapID tal:attributes="target subsection/id; url subsection/url" />
+               <metal:block tal:repeat="subsubsection subsection/fulltableofcontents">
+                  <mapID tal:attributes="target subsubsection/id; url subsubsection/url" />
+                  <metal:block tal:repeat="paragraph subsubsection/fulltableofcontents">
+                     <mapID tal:attributes="target paragraph/id; url paragraph/url" />
+                     <metal:block tal:repeat="subparagraph paragraph/fulltableofcontents">
+                        <mapID tal:attributes="target subparagraph/id; url subparagraph/url" />
+                     </metal:block>                 
+                  </metal:block>              
+               </metal:block>             
+            </metal:block>           
+         </metal:block>
+      </metal:block>   
+   </metal:block>
+   <metal:block tal:repeat="item self/index">
+      <metal:block tal:condition="item/pages" tal:repeat="page item/pages">
+         <mapID tal:attributes="target page/id; url page/url" />
+         <metal:block tal:repeat="subitem item">
+         <metal:block tal:repeat="subpage subitem/pages">
+            <mapID tal:attributes="target subpage/id; url subpage/url" />         
+         </metal:block>
+         </metal:block>
+      </metal:block>
+      <metal:block tal:condition="not:item/pages">
+         <metal:block tal:repeat="subitem item">
+         <metal:block tal:repeat="subpage subitem/pages">
+            <mapID tal:attributes="target subpage/id; url subpage/url" />         
+         </metal:block>
+         </metal:block>
+      </metal:block>
+   </metal:block>
+</mapID>
+</map>
+
+name: javahelp-helpset-1
+type: xml
+<!DOCTYPE helpset PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp HelpSet Version 1.0//EN" 
+ "http://java.sun.com/products/javahelp/helpset_1_0.dtd"> 
+<helpset version="1.0"> 
+
+  <title tal:content="self/title"></title>
+
+  <maps>
+    <homeID>main_contents</homeID>
+    <mapref location="javahelp1.jhm"/>
+  </maps>
+
+  <view>
+    <name>TOC</name>
+    <label>Table of Contents</label>
+    <type>javax.help.TOCView</type>
+    <data>javahelp1-toc.xml</data>
+  </view>
+
+  <view>
+    <name>Search</name>
+    <label>Search</label>
+    <type>javax.help.SearchView</type>
+    <data engine="com.sun.java.help.search.DefaultSearchEngine">
+    JavaHelpSearch</data>
+  </view>
+
+  <view>
+    <name>Index</name>
+    <label>Index</label>
+    <type>javax.help.IndexView</type>
+    <data>javahelp1-index.xml</data>
+  </view>
+
+</helpset>

@@ -1,0 +1,35 @@
+name: itemize
+<ul class="itemize">
+<li tal:repeat="item self" tal:content="item"></li>
+</ul>
+
+name: enumerate
+<ol class="enumerate">
+<li tal:repeat="item self" tal:content="item" tal:attributes="value item/position"></li>
+</ol>
+
+name: description
+type: xml
+<dl class="description">
+<metal:block tal:repeat="item self">
+    <dt tal:content="item/attributes/term"></dt>
+    <dd tal:content="item"></dd>
+</metal:block>
+</dl>
+
+name: list trivlist
+<table class="list" cellspacing="0" cellpadding="2">
+<tr tal:repeat="item self">
+<td tal:content="item/attributes/term | self/attributes/defaultlabel"></td>
+<td tal:content="item"></td>
+</tr>
+</table>
+
+name: list
+type: xml
+<dl class="description">
+<metal:block tal:repeat="item self">
+    <dt tal:content="item/attributes/term"></dt>
+    <dd tal:content="item"></dd>
+</metal:block>
+</dl>

@@ -1,0 +1,8 @@
+name: fbox ovalbox Ovalbox
+<span class="ovalbox">{{ obj }}</span>
+
+name: shadowbox
+<span class="shadowbox">{{ obj }}</span>
+
+name: doublebox
+<span class="doublebox">{{ obj }}</span>

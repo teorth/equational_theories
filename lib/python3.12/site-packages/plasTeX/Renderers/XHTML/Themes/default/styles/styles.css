@@ -1,0 +1,333 @@
+
+pre {
+    color: #004000;
+    width: 100%;
+    font-size: 90%;
+    background-color: #f0f0f0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 1px #aaffaa solid;
+    font-family: Monaco, "Courier New", Courier, fixed;
+    padding-left: 4ex;
+}
+
+.breadcrumbs {
+    font-family: "Lucida Grande", Arial, Helvetica, sans-serif;
+    font-size: small;
+    font-style: italic;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Lucida Grande", Arial, Helvetica, sans-serif;
+}
+
+.navigation { clear:both }
+.navigation td          { background-color: #669933;
+                          color: #ffffcc;
+                          font-weight: bold;
+                          font-family: avantgarde, sans-serif;
+                          font-size: 110% }
+
+.navigation img { border-width: 0px }
+.navtitle { width: 100% }
+
+.contents ul {
+    font-family: "Lucida Grande", Arial, Helvetica, sans-serif;
+    list-style-type: none;
+    font-weight: bold;
+}
+.contents ul ul {
+    font-size: small;
+    font-weight: normal;
+}
+
+hr {color: black}
+
+.minitoc {
+    border-top: 1px solid black;
+    border-bottom: 1px solid block;
+    margin-bottom: 1em;
+}
+
+.minitoc li {
+    list-style-type: none;
+}
+
+/*************/
+/* Footnotes */
+/*************/
+/*
+a.footnote .footnotemark {
+   color: #ff8000; 
+}
+a.footnote:hover .footnotemark {
+   cursor: help;
+}
+a.footnote .footnotetext {
+   display: none;
+}
+a.footnote:hover .footnotetext { 
+   display: block;
+   position: absolute;
+   bottom: 0em; 
+   left: 0em; 
+   background-color: #F8F8CB; 
+   color: #000;
+   text-align: left;
+   border: 7px #ff8000 solid;
+   padding: 10px;
+   margin: 0px;
+   z-index: 20;
+}
+*/
+a.footnote {
+    text-decoration: none;
+}
+#footnotes {
+    padding: 1em;
+    border-top: 1px solid black;
+    font-size: smaller;
+}
+
+/*******/
+/* TeX */
+/*******/
+
+/* Fonts */
+.rm {
+    font-family: serif;
+    font-style: normal;
+    font-weight: normal;
+}
+.cal {
+    font-family: serif;
+    font-style: italic;
+    font-weight: normal;
+}
+.it {
+    font-family: serif;
+    font-style: italic;
+    font-weight: normal;
+}
+.sl {
+    font-family: serif;
+    font-style: oblique;
+    font-weight: normal;
+}
+.bf {
+    font-family: serif;
+    font-style: normal;
+    font-weight: bold;
+}
+.tt {
+    font-family: monospace;
+    font-style: normal;
+    font-weight: normal;
+}
+
+/* Text */
+.underbar {text-decoration: underline}
+
+
+/*********/
+/* LaTeX */
+/*********/
+
+/* Alignment */
+.center, .centering      {text-align: center}
+.flushleft, .raggedright {text-align: left}
+.flushright, .raggedleft {text-align: right} 
+
+/* Arrays */
+.tabular { border-collapse: collapse }
+.tabular td, .tabular th {
+    vertical-align: baseline;
+    text-align: left;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+    empty-cells: show;
+}
+
+/* Boxes */
+.fbox, .framebox {
+    border: 1px black solid;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+/* Font Selection */
+.mdseries, .textmf {font-weight: normal}
+.bfseries, .textbf {font-weight: bold}
+.rmfamily, .textrm {font-family: serif}
+.sffamily, .textsf {font-family: sans-serif}
+.ttfamily, .texttt {font-family: monospace}
+.upshape, .textup  {text-transform: uppercase}
+.itshape, .textit  {font-style: italic}
+.slshape, .textsl  {font-style: oblique}
+.scshape, .textsc  {font-variant: small-caps}
+
+small.tiny         {font-size: x-small}
+small.scriptsize   {font-size: smaller}
+small.footnotesize {font-size: small}
+small.small        {font-size: small}
+.normalsize        {font-size: normal}
+big.large          {font-size: large}
+big.xlarge         {font-size: x-large}
+big.xxlarge        {font-size: x-large}
+big.huge           {font-size: xx-large}
+big.xhuge          {font-size: xx-large}
+
+/* Lists */
+/*ul.itemize {}*/
+/*ol.enumerate {}*/
+dl.description dt {font-weight: bold}
+table.list {
+    margin-left: 15px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+table.list td {
+    padding-right: 5px;
+}
+
+/* Title Page */
+.titlepage {text-align: center}
+.titlepage h1 {font-weight: normal}
+
+/* Math */
+.displaymath, .eqnarray, .equation {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.eqnnum { 
+    width: 16ex;
+    text-align: center;
+}
+.fleqn {width: 2em}
+
+/* Quotations and Verse */
+.quotation, .quote, .verse {
+}
+.quotation p, .quote p, .verse p {
+    margin-top: 0px;
+    margin-bottom: 0.5em;
+}
+
+/* Rules */
+hr {color: black}
+
+/* Image offset classes */
+.raise15 {margin-bottom: 10px}
+.raise14 {margin-bottom: 10px}
+.raise13 {margin-bottom: 10px}
+.raise12 {margin-bottom: 10px}
+.raise11 {margin-bottom: 10px}
+.raise10 {margin-bottom: 10px}
+.raise9  {margin-bottom: 9px}
+.raise8  {margin-bottom: 8px}
+.raise7  {margin-bottom: 7px}
+.raise6  {margin-bottom: 6px}
+.raise5  {margin-bottom: 5px}
+.raise4  {margin-bottom: 4px}
+.raise3  {margin-bottom: 3px}
+.raise2  {margin-bottom: 2px}
+.raise1  {margin-bottom: 1px}
+.raise0  {margin-bottom: 0px}
+.lower0  {margin-bottom: -0px}
+.lower1  {margin-bottom: -1px}
+.lower2  {margin-bottom: -2px}
+.lower3  {margin-bottom: -3px}
+.lower4  {margin-bottom: -4px}
+.lower5  {margin-bottom: -5px}
+.lower6  {margin-bottom: -6px}
+.lower7  {margin-bottom: -7px}
+.lower8  {margin-bottom: -8px}
+.lower10 {margin-bottom: -10px}
+.lower11 {margin-bottom: -11px}
+.lower12 {margin-bottom: -12px}
+.lower13 {margin-bottom: -13px}
+.lower14 {margin-bottom: -14px}
+.lower15 {margin-bottom: -15px}
+.lower16 {margin-bottom: -16px}
+.lower17 {margin-bottom: -17px}
+.lower18 {margin-bottom: -18px}
+.lower19 {margin-bottom: -19px}
+.lower20 {margin-bottom: -20px}
+.lower21 {margin-bottom: -21px}
+.lower22 {margin-bottom: -22px}
+.lower23 {margin-bottom: -23px}
+.lower24 {margin-bottom: -24px}
+.lower25 {margin-bottom: -25px}
+.lower26 {margin-bottom: -26px}
+.lower27 {margin-bottom: -27px}
+.lower28 {margin-bottom: -28px}
+.lower29 {margin-bottom: -29px}
+.lower30 {margin-bottom: -20px}
+.lower20 {margin-bottom: -20px}
+
+td p:first-child, th p:first-child {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+td p, th p {
+    margin-top: 1em;
+    margin-bottom: 0px;
+}
+
+p {
+    text-indent: 0em;
+    margin-top: 0px;
+    margin-bottom: 1em;
+}
+
+img {
+    border: none;
+    vertical-align: baseline;
+}
+
+img.ieimgfix {
+    width: 0;
+    visibility: hidden;
+    vertical-align: top;
+    display: none;
+}
+
+td img.ieimgfix {
+    display: inline;
+}
+
+body { 
+    color: #000000;
+    background-color: #ffffff; 
+}
+
+/* Index */
+.theindex li {
+    list-style-type: none
+}
+
+.changebar {
+    border-right: 2px solid red;
+    padding-right: 1em;
+}
+
+.deletebar {
+    color: red;
+    font-size: 150%;
+    padding-left: 0.5ex;
+    padding-right: 0.5ex;
+}
+
+/* subfig package styles */
+.subfloat { 
+    display: inline-table; 
+    padding: 1em 3em 1em 3em; 
+    text-align: center 
+}
+

@@ -1,0 +1,14 @@
+name: subfloat subfig
+<table class="subfloat" tal:attributes="id self/id">
+<tr><td tal:content="self"></td></tr>
+<tr><td style="text-align:center">(<span tal:replace="string:${self/subref}">x</span>) <span tal:content="self/title">Sub-caption</span></td></tr>
+</table>
+
+name: subref
+<a tal:attributes="href self/idref/label/url" tal:content="string:(${self/idref/label/subref})">#.#.#</a>
+
+name: subref*
+<a tal:attributes="href self/idref/label/url" tal:content="self/idref/label/subref">#.#.#</a>
+
+name: newsubfloat DeclareCaptionListOfFormat listsubcaptions \
+      captionsetup clearcaptionsetup ContinuedFloat

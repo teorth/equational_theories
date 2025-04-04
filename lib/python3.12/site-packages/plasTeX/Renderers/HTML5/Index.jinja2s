@@ -1,0 +1,41 @@
+name: theindex printindex
+{% set groups = obj.groups %}
+<h1>{{ obj.title }}</h1>
+
+<nav class="index-groups">
+{% for group in groups %}
+<a href="#{{ group.id }}" class="{% if loop.last %}index-group-last{% else %}index-group{% endif %}">{{ group.title }}</a>
+{% endfor %}
+</nav>
+
+{% if obj %}
+{% for group in groups %}
+<section class="theindex">
+
+<h2 id="{{ group.id}}">{{ group.title }}</h2>
+{% for column in group %}
+<ul class="index-column">
+{% for item in column recursive %}
+  <li>
+    <span class="index-item">{{ item.key }}</span>,
+    {% for page in item.pages %}
+    <a href="{{ page.url }}" title="{{ page.currentSection.title | striptags }}" class="{% if loop.last %}index-page-last{% else %}index-page{% endif %}">{{ page }}</a>
+    {% endfor %}
+    {% if item %}
+      <ul class="index-subitem-{{ loop.depth }}">
+      {{ loop(item) }}
+      </ul>
+    {% endif %}
+  </li>
+{% endfor %}
+</ul>
+{% endfor %}
+</section>
+{% endfor %}
+{% endif %}
+
+name: index
+<a name="{{ obj.id }}" id="{{ obj.id}}"></a>
+
+name: see seealso
+<i>{{ obj.captionName }}</i>{{ obj }}

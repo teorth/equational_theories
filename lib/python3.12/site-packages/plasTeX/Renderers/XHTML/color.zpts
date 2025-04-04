@@ -1,0 +1,4 @@
+name: color textcolor colorbox fcolorbox
+<span tal:attributes="style self/style/inline" tal:content="self"></span>
+
+name: pagecolor nopagecolor definecolor definecolors providecolor providecolors definecolorseries resetcolorseries colorlet

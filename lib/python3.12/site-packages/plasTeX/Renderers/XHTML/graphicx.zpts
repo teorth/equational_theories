@@ -1,0 +1,5 @@
+name: includegraphics rotatebox scalebox reflectbox resizebox
+<img tal:condition="not:self/style" tal:attributes="src self/image/url; alt self/source; style string:width:${self/image/width/px};; height:${self/image/height/px}" />
+<img tal:condition="self/style" tal:attributes="src self/image/url; alt self/source; style self/style/inline" />
+
+name: DeclareGraphicsExtensions graphicspath

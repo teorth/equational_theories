@@ -1,0 +1,14 @@
+name: htmladdnormallink
+<a tal:attributes="href self/attributes/url" tal:content="self">link text</a>
+
+name: htmladdimg
+<img tal:attributes="src self/attributes/url" />
+
+name: rawhtml
+<span tal:replace="structure self"></span>
+
+name: htmlonly latexhtml
+<span tal:replace="self"></span>
+
+name: htmlref hyperref
+<a tal:attributes="href self/idref/label/url" tal:content="self">link text</a>
