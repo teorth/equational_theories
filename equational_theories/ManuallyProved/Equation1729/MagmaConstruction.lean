@@ -767,7 +767,7 @@ lemma PartialSolution_with_axioms.mem_new_predom' (sol : PartialSolution_with_ax
     exact sol.L₀'_pre_embed.attains_image (data, false)
 
 /- Construction of the new `op`.  Each op_data object `data` produces an instance of the operation `op`: `sol.op (op_triple d₀ d data).1 (op_triple d₀ d data).2.1 = (op_triple d₀ d data).2.2. -/
-noncomputable abbrev PartialSolution_with_axioms.op_triple(sol : PartialSolution_with_axioms) : op_data sol → N × N × M := fun data ↦ match data with
+noncomputable abbrev PartialSolution_with_axioms.op_triple (sol : PartialSolution_with_axioms) : op_data sol → N × N × M := fun data ↦ match data with
   | op_data.old y z _hop => (y, z, sol.op y z)
   | op_data.v => (sol.x, sol.x, Sum.inl sol.d₀)
   | op_data.P₁ y z _hI => (z, sol.x, Sum.inr $ (R' (S sol.d₀)).symm $ e $ sol.d y z)
@@ -775,7 +775,37 @@ noncomputable abbrev PartialSolution_with_axioms.op_triple(sol : PartialSolution
 
 noncomputable abbrev PartialSolution_with_axioms.op_embed (sol : PartialSolution_with_axioms) : op_data sol ↪ N × N := {
     toFun := fun data ↦ ((sol.op_triple data).1, (sol.op_triple data).2.1)
-    inj' := by sorry
+    inj' := by
+      have hxx : (x,x) ∉ sol.Dom_op := by
+        by_contra! hxx
+        exact hx (sol.axiom_v'' _ hxx).1
+
+      intro data data' h
+      rcases data with ⟨ y,z,hop ⟩ | ⟨⟩ | ⟨ y,z,hI ⟩ | ⟨ y,z,hI,hz⟩
+      . rcases data' with ⟨ y',z',hop' ⟩ | ⟨⟩ | ⟨ y',z',hI' ⟩ | ⟨ y',z',hI',hz'⟩
+        all_goals simp [PartialSolution_with_axioms.op_triple] at h ⊢
+        . exact h
+        . rw [h.1,h.2] at hop; exact hxx hop
+        . exact (h.1 ▸ (sol.axiom_P x y' z' hI').2.1) (h.2 ▸ hop)
+        exact h.1 ▸ sol.invis_lemma y' z' $ (sol.dom_op_involved {x} hop).1
+      . rcases data' with ⟨ y',z',hop' ⟩ | ⟨⟩ | ⟨ y',z',hI' ⟩ | ⟨ y',z',hI',hz'⟩
+        all_goals simp [PartialSolution_with_axioms.op_triple] at h ⊢
+        . rw [←h.1,←h.2] at hop'; exact hxx hop'
+        . exact (sol.axiom_P _ _ _ hI').2.2.1 h.symm
+        exact hx $ h.2 ▸ hz'
+      . rcases data' with ⟨ y',z',hop' ⟩ | ⟨⟩ | ⟨ y',z',hI' ⟩ | ⟨ y',z',hI',hz'⟩
+        all_goals simp [PartialSolution_with_axioms.op_triple] at h ⊢
+        . rw [←h.1, ←h.2] at hop'
+          exact (sol.axiom_P _ _ _ hI).2.1 hop'
+        . exact (sol.axiom_P _ _ _ hI).2.2.1 h
+        . exact ⟨ sol.axiom_P' _ _ _ _ hI (h ▸ hI'), h ⟩
+        exact (sol.axiom_P _ _ _ hI').2.2.1 h.2.symm
+      rcases data' with ⟨ y',z',hop' ⟩ | ⟨⟩ | ⟨ y',z',hI' ⟩ | ⟨ y',z',hI',hz'⟩
+      all_goals simp [PartialSolution_with_axioms.op_triple] at h ⊢
+      . exact h.1 ▸ sol.invis_lemma y z $ (sol.dom_op_involved {x} hop').1
+      . exact hx $ h.2 ▸ hz
+      . exact (sol.axiom_P _ _ _ hI).2.2.1 h.2
+      exact sol.d_injective $ FreeGroup.of_injective h.1
   }
 
 noncomputable abbrev PartialSolution_with_axioms.op_output (sol : PartialSolution_with_axioms): op_data sol → M := fun data ↦ (sol.op_triple data).2.2
