@@ -826,7 +826,24 @@ noncomputable abbrev PartialSolution_with_axioms.I_triple (sol : PartialSolution
       | I_data.old x' y z hI hxx' => (x',y,z)
       | I_data.P₁ y z hI hz => (z,x,(R' (S sol.d₀)).symm $ e $ sol.d y z)
       | I_data.P₂ y z hI hz => ((R' (S sol.d₀)).symm $ e $ sol.d y z, z, (R' (S (sol.S' z))).symm $ sol.L₀' $ R' 0 $ R' (sol.S' z) x)
-    inj' := by sorry
+    inj' := by
+      intro data data' h
+      rcases data with ⟨ x',y,z,hI, hxx'⟩ | ⟨y,z,hI,hz⟩ | ⟨y,z,hI,hz⟩
+      . rcases data' with ⟨ x'',y',z',hI', hxx''⟩ | ⟨y',z',hI',hz'⟩ | ⟨y',z',hI',hz'⟩
+        all_goals simp at h ⊢
+        . exact h
+        . exact h.2.2 ▸ sol.invis_lemma y' z' $ (sol.I_involved {x} hI).2.2
+        exact h.1 ▸ sol.invis_lemma y' z' $ (sol.I_involved {x} hI).1
+      . rcases data' with ⟨ x'',y',z',hI', hxx''⟩ | ⟨y',z',hI',hz'⟩ | ⟨y',z',hI',hz'⟩
+        all_goals simp at h ⊢
+        . exact h.2.2 ▸ sol.invis_lemma y z $ (sol.I_involved {x} hI').2.2
+        . exact sol.d_injective $ FreeGroup.of_injective h.2
+        exact h.1 ▸ sol.invis_lemma y' z' $ (sol.I_involved {x} hI).2.2
+      rcases data' with ⟨ x'',y',z',hI', hxx''⟩ | ⟨y',z',hI',hz'⟩ | ⟨y',z',hI',hz'⟩
+      all_goals simp at h ⊢
+      . exact h.1 ▸ sol.invis_lemma y z $ (sol.I_involved {x} hI').1
+      . exact h.1 ▸ sol.invis_lemma y z $ (sol.I_involved {x} hI').2.2
+      exact sol.d_injective $ FreeGroup.of_injective h.1
   }
 
 noncomputable abbrev PartialSolution_with_axioms.new_I (sol : PartialSolution_with_axioms) : Finset (N × N × N) := sol.I_triple.range_finset
