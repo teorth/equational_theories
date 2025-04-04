@@ -589,6 +589,14 @@ lemma fresh_not_in_generators (A: Finset SM) (n:ℕ) : ¬ in_generators A (E (fr
   simp only [in_generators, support_E, Finset.singleton_subset_iff]
   exact fresh_ne_generator A n
 
+lemma Sfresh_not_in_generators (A: Finset SM) (n:ℕ) : ¬ (in_generators A $ S $ E $ fresh A n) := by
+  simp only [in_generators, Finset.not_subset]
+  refine ⟨ _, ?_, fresh_ne_generator A n ⟩
+  rw [DFinsupp.mem_support_iff]
+  simp only [S, E, SM_op_eq_add, DirectSum.add_apply, DirectSum.of_eq_same, ne_eq]
+  decide
+
+
 lemma fresh_injective (A: Finset SM) : Function.Injective (fresh A) := by
   intros n m h
   unfold fresh at h

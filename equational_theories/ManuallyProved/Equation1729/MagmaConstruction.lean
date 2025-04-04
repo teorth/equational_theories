@@ -619,8 +619,10 @@ lemma PartialSolution_with_axioms.noreach_invis (sol: PartialSolution_with_axiom
   contrapose! ha
   exact ha.trans hy
 
-lemma PartialSolution_with_axioms.d₀_invis (sol: PartialSolution_with_axioms) {y:N} (hy: sol.sees {x} y): val sol.d₀ y = 0 := by
-
+lemma PartialSolution_with_axioms.Sd₀_invis (sol: PartialSolution_with_axioms) {y:N} (hy: sol.sees {x} y): val (S sol.d₀) y = 0 := by
+  apply sol.noreach_invis _ hy
+  by_contra! this
+  unfold PartialSolution.reaches at this
   sorry
 
 lemma PartialSolution_with_axioms.invis_lemma (sol: PartialSolution_with_axioms) (y z:N) : ¬ (sol.sees {sol.x} $ (R' (S sol.d₀)).symm (e (sol.d y z))) := by
