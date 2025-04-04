@@ -76,7 +76,9 @@ structure ExtOpsWithProps (SM N : Type) [Magma SM] extends (ExtOps SM N) where
   axiom_22 : ∀ a : SM, ∀ x, R' a x ≠ x
 
   -- axiom 3
-  axiom_3 : ∀ x y, ∀ a, R' a x = y → ((L' (S' y)) (L' ((R a).symm (S' x)) y)) = x
+  --axiom_3 : ∀ x y, ∀ a, R' a x = y → ((L' (S' y)) (L' ((R a).symm (S' x)) y)) = x
+  axiom_3 : ∀ x y, ∀ a, R' a x = y → ((L' (S' y)) (L' ((L (S' x)).symm a) y)) = x
+
   -- axiom 4
   axiom_4 : ∀ x : N, L' (S' x) (L' (S' x) x) = x
 
@@ -161,16 +163,12 @@ lemma ExtMagma_sat_eq1729 {SM N : Type} [Magma SM] [Inhabited SM] [Inhabited N]
     · rw[E.axiom_4]
     · by_cases ha2 : ∃ a, y' = E.R' a x'
       case pos =>
-        cases ha2 with
-        | intro a h2 =>
-          simp [h2, E.axiom_6]
-          have ax3 := E.axiom_3 x' y' a h2.symm
-          nth_rw 1 [←h2]
-          nth_rw 1 [←h2]
-          have hfinal : (E.L' ((E.R a).symm (E.S' x'))) = (E.L' ((E.L (E.S' x')).symm a)) := by
-            sorry
-
-          rw [hfinal.symm, ax3]
+        obtain ⟨a, h2⟩ := ha2
+        simp [h2, E.axiom_6]
+        nth_rw 1 [←h2]
+        nth_rw 1 [←h2]
+        have ax3 := E.axiom_3 x' y' a h2.symm
+        tauto
       case neg =>
         have ax7 := E.axiom_7 y' x' (by intro hxy; exact hxy' hxy) ha2
         obtain ⟨z, hz1, hz2⟩ := ax7
