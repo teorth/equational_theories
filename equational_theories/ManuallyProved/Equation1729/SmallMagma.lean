@@ -261,6 +261,15 @@ lemma R'_axiom_iia (a b : SM) (y:N) (h: a ≠ b): R' a y ≠ R' b y := by
   simp only [R', Equiv.coe_fn_mk, mul_left_inj] at h
   exact FreeGroup.of_injective h
 
+@[simp]
+lemma R'_axiom_iia' {a b : SM} {y:N} : R' a y = R' b y ↔ a = b := by
+  constructor
+  . intro h
+    contrapose! h
+    exact R'_axiom_iia a b y h
+  intro h; rw [h]
+
+
 lemma R'_axiom_iib (a : SM) (y:N) : R' a y ≠ y := by
   by_contra! h
   simp only [R', Equiv.coe_fn_mk, mul_left_eq_self, FreeGroup.of_ne_one] at h

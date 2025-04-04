@@ -537,7 +537,22 @@ noncomputable instance  (sol : PartialSolution_with_axioms) : Fintype (L₀'_dat
   | L₀'_data.iii₂ a ha => Sum.inl 3
   | L₀'_data.P y z hI => Sum.inr ⟨ (sol.x,y,z), hI ⟩
   apply Fintype.ofInjective embed
-  sorry
+  intro data data' h
+  rcases data with ⟨⟩ | ⟨⟩ | ⟨a,ha⟩ | ⟨a,ha⟩ | ⟨y,z,hI⟩
+  . rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hI'⟩
+    all_goals simp [embed] at h ⊢
+  . rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hI'⟩
+    all_goals simp [embed] at h ⊢
+  . rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hI'⟩
+    all_goals simp [embed] at h ⊢
+    exact R'_axiom_iia'.mp (ha' ▸ ha)
+  . rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hI'⟩
+    all_goals simp [embed] at h ⊢
+    exact R'_axiom_iia'.mp (ha ▸ ha')
+  rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hI'⟩
+  all_goals simp [embed] at h ⊢
+  exact h
+
 
 /-- Data type to store the various op extensions needed to prove `enlarge_S'_induction_with_axioms` -/
 inductive op_data (sol: PartialSolution_with_axioms) where
@@ -553,7 +568,19 @@ noncomputable instance  (sol : PartialSolution_with_axioms) : Fintype (op_data s
   | op_data.P₁ y z hI => Sum.inr $ Sum.inr $ Sum.inl ⟨ (sol.x,y,z), hI ⟩
   | op_data.P₂ y z hI hz => Sum.inr $ Sum.inr $ Sum.inr ⟨ (sol.x,y,z), hI ⟩
   apply Fintype.ofInjective embed
-  sorry
+  intro data data' h
+  rcases data with ⟨y,z,hop⟩ | ⟨⟩ | ⟨y,z,hI⟩ | ⟨y,z,hI,hz⟩
+  . rcases data' with ⟨y',z',hop'⟩ | ⟨⟩ | ⟨y',z',hI'⟩ | ⟨y',z',hI',hz'⟩
+    all_goals simp [embed] at h ⊢
+    exact h
+  . rcases data' with ⟨y',z',hop'⟩ | ⟨⟩ | ⟨y',z',hI'⟩ | ⟨y',z',hI',hz'⟩
+    all_goals simp [embed] at h ⊢
+  . rcases data' with ⟨y',z',hop'⟩ | ⟨⟩ | ⟨y',z',hI'⟩ | ⟨y',z',hI',hz'⟩
+    all_goals simp [embed] at h ⊢
+    exact h
+  rcases data' with ⟨y',z',hop'⟩ | ⟨⟩ | ⟨y',z',hI'⟩ | ⟨y',z',hI',hz'⟩
+  all_goals simp [embed] at h ⊢
+  exact h
 
 /-- Data type to store the various I extensions needed to prove `enlarge_S'_induction_with_axioms` -/
 inductive I_data (sol: PartialSolution_with_axioms) where
@@ -567,7 +594,14 @@ noncomputable instance  (sol : PartialSolution_with_axioms) : Fintype (I_data so
   | I_data.P₁ y z hI hz => Sum.inr $ Sum.inl ⟨ (sol.x,y,z), hI ⟩
   | I_data.P₂ y z hI hz => Sum.inr $ Sum.inr ⟨ (sol.x,y,z), hI ⟩
   apply Fintype.ofInjective embed
-  sorry
+  intro data data' h
+  rcases data with ⟨x',y,z,hI,hxx'⟩ | ⟨y,z,hI,hz⟩ | ⟨y,z,hI,hz⟩
+  . rcases data' with ⟨x'',y',z',hI',hxx''⟩ | ⟨y',z',hI',hz'⟩ | ⟨y',z',hI',hz'⟩
+    all_goals { simp [embed] at h ⊢ ; try exact h }
+  . rcases data' with ⟨x'',y',z',hI',hxx''⟩ | ⟨y',z',hI',hz'⟩ | ⟨y',z',hI',hz'⟩
+    all_goals { simp [embed] at h ⊢ ; try exact h }
+  rcases data' with ⟨x'',y',z',hI',hxx''⟩ | ⟨y',z',hI',hz'⟩ | ⟨y',z',hI',hz'⟩
+  all_goals { simp [embed] at h ⊢ ; try exact h }
 
 noncomputable def  enum : N × N → ℕ := fun  p ↦ Exists.choose (Countable.exists_injective_nat (N × N)) p + 2
 
