@@ -649,11 +649,105 @@ noncomputable abbrev PartialSolution_with_axioms.L₀'_pair (sol: PartialSolutio
   | L₀'_data.iii₂ a _ => (R' (S sol.d₀) $ (R' (a - sol.S' sol.y₀)).symm $ sol.L₀' $ R' (S (a - sol.S' sol.y₀)) sol.x, R' sol.d₀ sol.y₀)
   | L₀'_data.P y z _ => (R' 0 $ R' sol.d₀ y, e (sol.d y z))
 
-lemma PartialSolution_with_axioms.L₀'_no_collide_1  (sol: PartialSolution_with_axioms) (data : L₀'_data sol) : (sol.L₀'_pair data).1 ∉ sol.Dom_L₀' ∧ (sol.L₀'_pair data).2 ∉ sol.Dom_L₀' := by sorry
+lemma PartialSolution_with_axioms.L₀'_no_collide_1  (sol: PartialSolution_with_axioms) (data : L₀'_data sol) : (sol.L₀'_pair data).1 ∉ sol.Dom_L₀' ∧ (sol.L₀'_pair data).2 ∉ sol.Dom_L₀' := by
+  rcases data with ⟨⟩ | ⟨⟩ | ⟨a,ha⟩ | ⟨a,ha⟩ | ⟨y,z,hz⟩
+  all_goals simp [PartialSolution_with_axioms.L₀'_pair]
+  all_goals constructor
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  sorry
 
-lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_axioms} {data data' : L₀'_data sol} (hneq: data ≠ data') : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').1 ∧ ¬ (sol.L₀'_pair data).2 ≈ (sol.L₀'_pair data').2 := by sorry
 
-lemma PartialSolution_with_axioms.L₀'_no_collide_3 (sol: PartialSolution_with_axioms) (data data' : L₀'_data sol) : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').2 := by sorry
+lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_axioms} {data data' : L₀'_data sol} (hneq: data ≠ data') : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').1 ∧ ¬ (sol.L₀'_pair data).2 ≈ (sol.L₀'_pair data').2 := by
+  rcases data with ⟨⟩ | ⟨⟩ | ⟨a,ha⟩ | ⟨a,ha⟩ | ⟨y,z,hz⟩
+  all_goals rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hz'⟩
+  all_goals try simp at hneq
+  all_goals simp [PartialSolution_with_axioms.L₀'_pair]
+  all_goals constructor
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  contrapose! hneq
+  sorry
+
+lemma PartialSolution_with_axioms.L₀'_no_collide_3 (sol: PartialSolution_with_axioms) (data data' : L₀'_data sol) : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').2 := by
+  rcases data with ⟨⟩ | ⟨⟩ | ⟨a,ha⟩ | ⟨a,ha⟩ | ⟨y,z,hz⟩
+  all_goals rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hz'⟩
+  all_goals simp [PartialSolution_with_axioms.L₀'_pair]
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  . sorry
+  sorry
 
 lemma zpow_of_e_inj (a:SM) : Function.Injective (fun n:ℤ ↦ (e a)^n) :=
   injective_zpow_iff_not_isOfFinOrder.mpr (FreeGroup.infinite_order _ (FreeGroup.of_ne_one a))
