@@ -101,22 +101,6 @@ lemma axiom_1_alt [Magma SM] (E : ExtOpsWithProps SM N) :
   simp [E.axiom_1 a x]
 
 
-/-
-attribute [simp] ExtOpsWithProps.SM_sat_1729
-attribute [simp] ExtOpsWithProps.left_map_SM
-attribute [simp] ExtOpsWithProps.right_map_SM
-attribute [simp] ExtOpsWithProps.squaring_prop_SM
-attribute [simp] ExtOpsWithProps.axiom_1
-attribute [simp] ExtOpsWithProps.axiom_21
-attribute [simp] ExtOpsWithProps.axiom_22
-attribute [simp] ExtOpsWithProps.axiom_3
-attribute [simp] ExtOpsWithProps.axiom_4
-attribute [simp] ExtOpsWithProps.axiom_5
-attribute [simp] ExtOpsWithProps.axiom_6
-attribute [simp] ExtOpsWithProps.axiom_7
--/
-
-
 def operation {SM N : Type}
   [Magma SM] (E : ExtOpsWithProps SM N) (a b : SM ⊕ N) : SM ⊕ N :=
   match a,b with
