@@ -539,18 +539,10 @@ noncomputable instance  (sol : PartialSolution_with_axioms) : Fintype (L₀'_dat
   apply Fintype.ofInjective embed
   intro data data' h
   rcases data with ⟨⟩ | ⟨⟩ | ⟨a,ha⟩ | ⟨a,ha⟩ | ⟨y,z,hI⟩
-  . rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hI'⟩
-    all_goals simp [embed] at h ⊢
-  . rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hI'⟩
-    all_goals simp [embed] at h ⊢
-  . rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hI'⟩
-    all_goals simp [embed] at h ⊢
-    exact R'_axiom_iia'.mp (ha' ▸ ha)
-  . rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hI'⟩
-    all_goals simp [embed] at h ⊢
-    exact R'_axiom_iia'.mp (ha ▸ ha')
-  rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hI'⟩
+  all_goals rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hI'⟩
   all_goals simp [embed] at h ⊢
+  . exact R'_axiom_iia'.mp (ha' ▸ ha)
+  . exact R'_axiom_iia'.mp (ha ▸ ha')
   exact h
 
 
@@ -570,17 +562,10 @@ noncomputable instance  (sol : PartialSolution_with_axioms) : Fintype (op_data s
   apply Fintype.ofInjective embed
   intro data data' h
   rcases data with ⟨y,z,hop⟩ | ⟨⟩ | ⟨y,z,hI⟩ | ⟨y,z,hI,hz⟩
-  . rcases data' with ⟨y',z',hop'⟩ | ⟨⟩ | ⟨y',z',hI'⟩ | ⟨y',z',hI',hz'⟩
-    all_goals simp [embed] at h ⊢
-    exact h
-  . rcases data' with ⟨y',z',hop'⟩ | ⟨⟩ | ⟨y',z',hI'⟩ | ⟨y',z',hI',hz'⟩
-    all_goals simp [embed] at h ⊢
-  . rcases data' with ⟨y',z',hop'⟩ | ⟨⟩ | ⟨y',z',hI'⟩ | ⟨y',z',hI',hz'⟩
-    all_goals simp [embed] at h ⊢
-    exact h
-  rcases data' with ⟨y',z',hop'⟩ | ⟨⟩ | ⟨y',z',hI'⟩ | ⟨y',z',hI',hz'⟩
+  all_goals rcases data' with ⟨y',z',hop'⟩ | ⟨⟩ | ⟨y',z',hI'⟩ | ⟨y',z',hI',hz'⟩
   all_goals simp [embed] at h ⊢
-  exact h
+  all_goals exact h
+
 
 /-- Data type to store the various I extensions needed to prove `enlarge_S'_induction_with_axioms` -/
 inductive I_data (sol: PartialSolution_with_axioms) where
@@ -596,11 +581,7 @@ noncomputable instance  (sol : PartialSolution_with_axioms) : Fintype (I_data so
   apply Fintype.ofInjective embed
   intro data data' h
   rcases data with ⟨x',y,z,hI,hxx'⟩ | ⟨y,z,hI,hz⟩ | ⟨y,z,hI,hz⟩
-  . rcases data' with ⟨x'',y',z',hI',hxx''⟩ | ⟨y',z',hI',hz'⟩ | ⟨y',z',hI',hz'⟩
-    all_goals { simp [embed] at h ⊢ ; try exact h }
-  . rcases data' with ⟨x'',y',z',hI',hxx''⟩ | ⟨y',z',hI',hz'⟩ | ⟨y',z',hI',hz'⟩
-    all_goals { simp [embed] at h ⊢ ; try exact h }
-  rcases data' with ⟨x'',y',z',hI',hxx''⟩ | ⟨y',z',hI',hz'⟩ | ⟨y',z',hI',hz'⟩
+  all_goals rcases data' with ⟨x'',y',z',hI',hxx''⟩ | ⟨y',z',hI',hz'⟩ | ⟨y',z',hI',hz'⟩
   all_goals { simp [embed] at h ⊢ ; try exact h }
 
 noncomputable def  enum : N × N → ℕ := fun  p ↦ Exists.choose (Countable.exists_injective_nat (N × N)) p + 2
@@ -631,6 +612,16 @@ lemma PartialSolution_with_axioms.d_injective (sol: PartialSolution_with_axioms)
   simp at this
   rw [this.1, this.2]
   tauto
+
+
+lemma PartialSolution_with_axioms.noreach_invis (sol: PartialSolution_with_axioms) {a:SM} {y:N} (ha: ¬ sol.reaches {x} a) (hy: sol.sees {x} y): val a y = 0 := by
+  apply val_of_nonsupp_eq_zero
+  contrapose! ha
+  exact ha.trans hy
+
+lemma PartialSolution_with_axioms.d₀_invis (sol: PartialSolution_with_axioms) {y:N} (hy: sol.sees {x} y): val sol.d₀ y = 0 := by
+
+  sorry
 
 lemma PartialSolution_with_axioms.invis_lemma (sol: PartialSolution_with_axioms) (y z:N) : ¬ (sol.sees {sol.x} $ (R' (S sol.d₀)).symm (e (sol.d y z))) := by
     sorry
@@ -669,7 +660,7 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
   rcases data with ⟨⟩ | ⟨⟩ | ⟨a,ha⟩ | ⟨a,ha⟩ | ⟨y,z,hz⟩
   all_goals rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hz'⟩
   all_goals try simp at hneq
-  all_goals simp [PartialSolution_with_axioms.L₀'_pair]
+  all_goals simp [PartialSolution_with_axioms.L₀'_pair, R']
   all_goals constructor
   . sorry
   . sorry
