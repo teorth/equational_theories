@@ -313,6 +313,7 @@ variable (f g h : ℕ → ℕ)
 example : ℕ := f $ g $ h 0
 
 abbrev axiom_iii' (S': N → SM) (L₀' : N → N)  := ∀ (a : SM) (x y : N), R' a x = y → ((R' (S' y)).symm $ L₀' $ R' (S (S' y)) $ (R' (a - S' x)).symm $ L₀' $ R' (S (a - S' x)) y) = x
+-- axiom_3 : ∀ x y, ∀ a, R' a x = y → ((L' (S' y)) (L' ((L (S' x)).symm a) y)) = x
 
 abbrev axiom_iv' (S': N → SM) (L₀' : N → N) := ∀ x : N, ((R' (S' x)).symm $ L₀' $ R' (S (S' x)) $ (R' (S' x)).symm $ L₀' $ R' (S (S' x)) $ x) = x
 
@@ -328,23 +329,25 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
   exact
    {
     S := S
-    L := fun x ↦ (fun y ↦ x ◇ y)
-    R := fun x ↦ (fun y ↦ y ◇ x)
+    L := sorry --fun x ↦ (fun y ↦ x ◇ y)
+    R := sorry--fun x ↦ (fun y ↦ y ◇ x)
     S' := S'
     L' := (fun a ↦ L' h_i' a)
     R' := (fun a ↦ R' a)
     rest_map := op
     squaring_prop_SM := by intros; rfl
-    left_map_SM := by intros; rfl
-    right_map_SM := by intros; rfl
+    left_map_SM := by intros; sorry
+    right_map_SM := by intros; sorry
 
     SM_sat_1729 := SM_obeys_1729
     axiom_1 := by
       intro a
       simp only [L', SM_square_square_eq_zero, Equiv.coe_fn_mk]
-      calc
+      /-calc
         _ = (R' (S a)).symm ∘ (L₀' ∘ (R' 0) ∘ ((R' a) ∘ (R' a).symm) ∘ L₀') ∘ (R' (S a))  := rfl
         _ = _ := by simp [L₀'_R'0_L₀'_eq_id h_i']
+      -/
+      sorry
     axiom_21 := by
       intro a b y h
       simp only [ne_eq, R'_axiom_iia a b y h, not_false_eq_true]
@@ -354,6 +357,7 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
     axiom_3 := by
       intro x y a h
       simp only [L', Equiv.coe_fn_mk, Function.comp_apply, h_iii' a x y h]
+      sorry
     axiom_4 := by
       intro x
       simp only [L', Equiv.coe_fn_mk, Function.comp_apply, h_iv' x]
@@ -363,6 +367,8 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
     axiom_6 := by
       intro y a
       simp [L', h_vi' y a]
+      sorry
+    axiom_7 := sorry
    }
 
 
