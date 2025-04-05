@@ -28,6 +28,13 @@ abbrev E (n:ℕ) : SM := (DirectSum.of (fun _ ↦ ZMod 4) n) 1
 @[simp]
 lemma SM_op_eq_add (a b : SM) : a ◇ b = a + b := rfl
 
+lemma E_inj : Function.Injective E := by
+  intro n m h
+  apply_fun (fun f ↦ f n) at h
+  contrapose! h
+  simp [E, DirectSum.of_eq_of_ne _ _ _ h.symm]
+  decide
+
 /- The squaring map on SM -/
 def S (a : SM) := a ◇ a
 
