@@ -1,5 +1,0 @@
-name: changebar
-<div class="changebar">{{ obj }}</div>
-
-name: cbdelete
-<span class="deletebar">&#9632;</span>

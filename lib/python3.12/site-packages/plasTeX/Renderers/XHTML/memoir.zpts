@@ -1,2 +1,0 @@
-name: titleref
-<a tal:attributes="href self/idref/label/url" tal:content="self/idref/label/title">Title of Node</a>

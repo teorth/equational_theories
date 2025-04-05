@@ -1,5 +1,0 @@
-name: changebar
-<div class="changebar" tal:content="self"></div>
-
-name: cbdelete
-<span class="deletebar">&#9632;</span>

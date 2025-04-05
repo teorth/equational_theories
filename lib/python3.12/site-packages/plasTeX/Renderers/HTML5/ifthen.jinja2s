@@ -1,7 +1,0 @@
-name: ifthenelse
-{{ obj.attributes.else }}
-
-name: newboolean provideboolean setboolean
-
-name: whiledo
-{{ obj.attributes.operations }}

@@ -1,8 +1,0 @@
-#!/home/shreyas/Projects/equational_theories/bin/python3
-# -*- coding: utf-8 -*-
-import re
-import sys
-from plasTeX.client import plastex
-if __name__ == '__main__':
-    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
-    sys.exit(plastex())
