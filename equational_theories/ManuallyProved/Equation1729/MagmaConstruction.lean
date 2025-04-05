@@ -817,11 +817,10 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     apply sol.nequiv_Sd₀
     simp [sol.Sd₀_invis sol.sees_x, sol.Sd₀_invis sol.sees_y₀, h]
   . apply sol.nequiv_d₁
-    simp
-    sorry
+    have : val sol.d₁ (sol.L₀' (e (sol.S' sol.y₀) * x)) = 0 := sol.d₁_invis (sol.dom_L₀'_involved sol.extras (sol.hA a ha)).2
+    simp [sol.d₁_neq_zero.symm, sol.ad₀_neq_d₁ ha, sol.SSy₀_neq_d₁, this]
   . apply sol.nequiv_d₁
-    simp
-    sorry
+    simp [sol.Sad₀_neq_d₁ ha, sol.Sd₀_neq_d₁, sol.d₀_neq_d₁, sol.d₁_invis sol.sees_y₀]
   . apply sol.nequiv_d₀
     simp
     sorry
@@ -841,11 +840,22 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
   . apply sol.nequiv_d y' z'
     simp
     sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
+  . by_contra! this
+    sorry -- use axiom L
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . apply sol.nequiv_d₁
+    simp
+    sorry
+  . by_contra! this
+    sorry -- noncommutative
+  . by_cases h : S a' = 0
+    . simp [h]
+      sorry -- noncommutative
+    apply sol.nequiv_Sd₀
+    have : val (S sol.d₀) (sol.L₀' (e (S a + S (PartialSolution.S' sol.y₀)) * x)) = 0 := sol.Sd₀_invis (sol.dom_L₀'_involved sol.extras (sol.hB a ha)).2
+    simp [sol.Sd₀_invis sol.sees_y₀, h, sol.aSy₀_neq_Sd₀ ha,this]
   . sorry
   . sorry
   . sorry
