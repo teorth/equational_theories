@@ -645,6 +645,8 @@ lemma PartialSolution_with_axioms.d₁_neq_zero (sol: PartialSolution_with_axiom
 
 lemma PartialSolution_with_axioms.d_neq_zero (sol: PartialSolution_with_axioms) {y z:N} : sol.d y z ≠ 0 := by sorry
 
+lemma PartialSolution_with_axioms.ad₀_neq_zero (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀):  a - sol.d₀ ≠ 0 := by sorry
+
 lemma PartialSolution_with_axioms.ad₀_neq_d₀ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀):  a - sol.d₀ ≠ sol.d₀ := by sorry
 
 lemma PartialSolution_with_axioms.ad₀_neq_d (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀) {y z: N} :  a - sol.d₀ ≠ sol.d y z := by sorry
@@ -664,6 +666,8 @@ lemma PartialSolution_with_axioms.SSy₀_neq_d₀ (sol: PartialSolution_with_axi
 lemma PartialSolution_with_axioms.SSy₀_neq_d₁ (sol: PartialSolution_with_axioms) : S ( sol.S' sol.y₀ ) ≠ sol.d₁ := by sorry
 
 lemma PartialSolution_with_axioms.SSy₀_neq_Sd₀ (sol: PartialSolution_with_axioms) : S ( sol.S' sol.y₀ ) ≠ S sol.d₀ := by sorry
+
+lemma PartialSolution_with_axioms.SSy₀_neq_ad₀ (sol: PartialSolution_with_axioms) {a:SM} (ha: R' a sol.x = sol.y₀) : S ( sol.S' sol.y₀ ) ≠ a - sol.d₀ := by sorry
 
 lemma PartialSolution_with_axioms.SSy₀_neq_d (sol: PartialSolution_with_axioms) {y z:N} : S ( sol.S' sol.y₀ ) ≠ sol.d y z := by sorry
 
@@ -825,7 +829,11 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     simp [sol.d₁_neq_zero.symm, sol.ad₀_neq_d₁ ha', sol.SSy₀_neq_d₁, sol.d₁_invis (sol.sees_hA ha')]
   . by_contra this
     replace this := sol.cancel sol.Sd₀_noreach sol.sees_x (sol.sees_R'_inv (sol.aSy₀_reach ha') (sol.sees_hB ha')) this
-    sorry -- use axiom L
+    have h := sol.axiom_L (R' (S (a' - sol.S' sol.y₀)) x) (a' - sol.S' sol.y₀) ?_
+    . contrapose! h
+      nth_rewrite 2 [this]
+      simp [R']
+    simp [sol.hB a' ha']
   . apply sol.nequiv_d₁
     simp [sol.d₀_neq_d₁, sol.d₁_invis sol.sees_y₀]
   . apply sol.nequiv_d₀
@@ -877,7 +885,11 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     simp [sol.ad₀_neq_d, sol.SSy₀_neq_d, sol.d_neq_zero.symm, sol.d_invis _ _ (sol.sees_hA ha), sol.ad₀_neq_d ha]
   . by_contra! this
     replace this := sol.cancel sol.Sd₀_noreach (sol.sees_R'_inv (sol.aSy₀_reach ha) (sol.sees_hB ha)) sol.sees_x this
-    sorry -- use axiom L
+    have h := sol.axiom_L (R' (S (a - sol.S' sol.y₀)) x) (a - sol.S' sol.y₀) ?_
+    . contrapose! h
+      nth_rewrite 2 [←this]
+      simp [R']
+    simp [sol.hB a ha]
   . apply sol.nequiv_d₀
     simp [sol.d₀_invis sol.sees_y₀, sol.d₀_neq_d₁.symm]
   . apply sol.nequiv_d₁
@@ -952,7 +964,16 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_3 (sol: PartialSolution_with_
     simp [sol.d₀_neq_d₁.symm, sol.Sad₀_neq_d₁ ha, sol.d₁_invis sol.sees_y₀]
   . apply sol.nequiv_d₀
     simp [sol.Sad₀_neq_d₀ ha, sol.d₀_invis sol.sees_y₀, sol.d₀_invis sol.sees_x]
-  . sorry -- tricky!
+  . rw [←ha', R'_axiom_iia'] at ha
+    obtain rfl := ha
+    apply sol.nequiv_test (sol.ad₀_noreach ha')
+    have : S a + S sol.d₀ ≠ a - sol.d₀ := by
+      have := sol.ad₀_neq_zero ha'
+      contrapose! this
+      rw [←sub_eq_zero, ← S_sub, SM_square_eq_double] at this
+      rw [←this]
+      abel
+    simp [(sol.ad₀_neq_zero ha').symm, this, sol.ad₀_invis ha' (sol.sees_hA ha'), sol.SSy₀_neq_ad₀ ha', sol.ad₀_invis ha' sol.sees_y₀]
   . apply sol.nequiv_d₀
     simp [sol.Sad₀_neq_d₀ ha]
   . apply sol.nequiv_d y' z'
