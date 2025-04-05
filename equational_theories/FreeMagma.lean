@@ -153,7 +153,13 @@ theorem forks_right_lt_self {α} (x y : FreeMagma α) : y.forks < (x ⋆ y).fork
   omega
 
 @[simp] theorem map_forks {α β} (m : FreeMagma α) (f : α → β) :
-    (fmapHom f m).forks = m.forks := by simp [fmapHom]; induction m <;> simp [forks, *]
+    (fmapHom f m).forks = m.forks := by
+  simp [fmapHom]
+  induction m with
+  | Leaf a => rfl
+  | Fork m1 m2 ih1 ih2 =>
+    simp only [forks, ← ih1, ← ih2, Nat.succ_eq_add_one]
+    rfl
 
 @[simp] def length {α} : FreeMagma α → Nat
   | .Leaf _ => 1
@@ -202,7 +208,13 @@ theorem toList_length {α} (m : FreeMagma α) : m.toList.length = m.length := by
   induction m <;> simp [*]
 
 @[simp] def map_toList {α β} (m : FreeMagma α) (f : α → β) :
-    (fmapHom f m).toList = m.toList.map f := by simp [fmapHom]; induction m <;> simp [*]
+    (fmapHom f m).toList = m.toList.map f := by
+  simp [fmapHom]
+  induction m with
+  | Leaf a => rfl
+  | Fork m1 m2 ih1 ih2 =>
+    dsimp only [evalInMagma, FreeMagma_op_eq_fork, toList]
+    rw [ih1, ih2, List.map_append]
 
 def elems {α} [DecidableEq α] : (m : FreeMagma α) → {l : List α // l.Nodup ∧ ∀ a, a ∈ l ↔ Mem a m}
   | Lf a => ⟨[a], List.nodup_singleton _, by simp [Mem]⟩
