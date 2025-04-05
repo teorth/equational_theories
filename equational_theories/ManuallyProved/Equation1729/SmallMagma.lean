@@ -371,6 +371,7 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
     axiom_7 := sorry
    }
 
+-- Remark: a lot of the definitions and API below could be restated more abstractly using the quotient space construction on groups.  This might be worth doing in order to locate some further contributions to Mathlib in this area.
 
 instance rel : Setoid N := {
   r := fun x y => ∃ n : ℤ, y = (e 0)^n * x
@@ -544,6 +545,11 @@ lemma fresh_ne_generator (A: Finset SM) (n:ℕ) : ¬ (fresh A n) ∈ generators 
 lemma fresh_not_in_generators (A: Finset SM) (n:ℕ) : ¬ in_generators A (E (fresh A n)) := by
   simp only [in_generators, support_E, Finset.singleton_subset_iff]
   exact fresh_ne_generator A n
+
+lemma fresh_injective (A: Finset SM) : Function.Injective (fresh A) := by
+  intros n m h
+  unfold fresh at h
+  linarith
 
 abbrev basis_elements (x:N) : Finset SM := Finset.image (fun (a, _) ↦ a) x.toWord.toFinset ∪ {0}
 
