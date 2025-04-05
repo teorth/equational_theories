@@ -36,6 +36,11 @@ abbrev E (n:ℕ) : SM := (DirectSum.of (fun _ ↦ ZMod 4) n) 1
 @[simp]
 lemma SM_op_eq_add (a b : SM) : a ◇ b = a + b := rfl
 
+@[simp]
+lemma E_apply (n m:ℕ) : E n m = if n=m then 1 else 0 := by
+  simp [DirectSum.of_apply]
+  
+
 lemma E_inj : Function.Injective E := by
   intro n m h
   apply_fun (fun f ↦ f n) at h
@@ -78,6 +83,11 @@ lemma S_sub (a b: SM) : S (a - b) = S a + S b := by
   rw [←sub_eq_zero]
   abel_nf
   exact SM_char_four _
+
+@[simp]
+lemma S_eval (a : SM) (n:ℕ) : S a n = a n + a n := by
+  simp only [SM_square_eq_double, DirectSum.add_apply]
+
 
 lemma SM_obeys_1729 : Equation1729 SM := by
   intro x y

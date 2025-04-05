@@ -621,11 +621,20 @@ lemma enum_ne_0 (p : N × N) : enum p ≠ 0 := by dsimp [enum]; linarith
 
 lemma enum_ne_1 (p : N × N) : enum p ≠ 1 := by dsimp [enum]; linarith
 
-abbrev PartialSolution_with_axioms.d₀ (sol: PartialSolution_with_axioms) := E (sol.fresh_generator sol.extras 0)
+abbrev PartialSolution_with_axioms.m (sol: PartialSolution_with_axioms) (i:ℕ) := sol.fresh_generator sol.extras i
 
-abbrev PartialSolution_with_axioms.d₁ (sol: PartialSolution_with_axioms) := E (sol.fresh_generator sol.extras 1)
+abbrev PartialSolution_with_axioms.d₀ (sol: PartialSolution_with_axioms) := E (sol.m 0)
 
-noncomputable abbrev PartialSolution_with_axioms.d (sol: PartialSolution_with_axioms) (y z: N) := E (sol.fresh_generator sol.extras (enum (y,z)))
+abbrev PartialSolution_with_axioms.d₁ (sol: PartialSolution_with_axioms) := E (sol.m 1)
+
+noncomputable abbrev PartialSolution_with_axioms.d (sol: PartialSolution_with_axioms) (y z: N) := E (sol.m (enum (y,z)))
+
+
+lemma PartialSolution_with_axioms.a_supp (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀) (i:ℕ) : a (sol.m i) = 0 := by sorry
+
+lemma PartialSolution_with_axioms.a_supp' (sol: PartialSolution_with_axioms) {a:SM} (h: sol.x = R' a sol.y₀) (i:ℕ) : a (sol.m i) = 0 := by sorry
+
+lemma PartialSolution_with_axioms.Sy₀_supp (sol: PartialSolution_with_axioms) (i:ℕ) : sol.S' sol.y₀ (sol.m i) = 0 := by sorry
 
 lemma PartialSolution_with_axioms.d₀_neq_d₁ (sol: PartialSolution_with_axioms) : sol.d₀ ≠ sol.d₁ := by
   by_contra! this
@@ -633,57 +642,140 @@ lemma PartialSolution_with_axioms.d₀_neq_d₁ (sol: PartialSolution_with_axiom
 
 lemma PartialSolution_with_axioms.d_injective (sol: PartialSolution_with_axioms) {y z y' z': N} (h: sol.d y z = sol.d y' z') : y = y' ∧ z = z' :=  (Prod.mk.injEq _ _ _ _) ▸ (enum_injective $ fresh_injective _ $ E_inj h)
 
-lemma PartialSolution_with_axioms.Sd₀_neq_d₀ (sol: PartialSolution_with_axioms) : S sol.d₀ ≠ sol.d₀ := by sorry
+lemma PartialSolution_with_axioms.test (sol: PartialSolution_with_axioms) {a b:SM} (i:ℕ) (h: a (sol.m i) ≠ b (sol.m i)) : a ≠ b := by
+  contrapose! h
+  rw [h]
 
-lemma PartialSolution_with_axioms.Sd₀_neq_d₁  (sol: PartialSolution_with_axioms) : S sol.d₀ ≠ sol.d₁ := by sorry
+lemma PartialSolution_with_axioms.Sd₀_neq_d₀ (sol: PartialSolution_with_axioms) : S sol.d₀ ≠ sol.d₀ := by
+  apply sol.test 0
+  simp
+  decide
 
-lemma PartialSolution_with_axioms.d₀_neq_zero (sol: PartialSolution_with_axioms) : sol.d₀ ≠ 0 := by sorry
+lemma PartialSolution_with_axioms.Sd₀_neq_d₁  (sol: PartialSolution_with_axioms) : S sol.d₀ ≠ sol.d₁ := by
+  apply sol.test 1
+  simp
+  decide
 
-lemma PartialSolution_with_axioms.Sd₀_neq_zero (sol: PartialSolution_with_axioms) : S sol.d₀ ≠ 0 := by sorry
+lemma PartialSolution_with_axioms.d₀_neq_zero (sol: PartialSolution_with_axioms) : sol.d₀ ≠ 0 := by
+  apply sol.test 0
+  simp
+  decide
 
-lemma PartialSolution_with_axioms.d₁_neq_zero (sol: PartialSolution_with_axioms) : sol.d₁ ≠ 0 := by sorry
+lemma PartialSolution_with_axioms.Sd₀_neq_zero (sol: PartialSolution_with_axioms) : S sol.d₀ ≠ 0 := by
+  apply sol.test 0
+  simp
+  decide
 
-lemma PartialSolution_with_axioms.d_neq_zero (sol: PartialSolution_with_axioms) {y z:N} : sol.d y z ≠ 0 := by sorry
+lemma PartialSolution_with_axioms.d₁_neq_zero (sol: PartialSolution_with_axioms) : sol.d₁ ≠ 0 := by
+  apply sol.test 1
+  simp
+  decide
 
-lemma PartialSolution_with_axioms.ad₀_neq_zero (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀):  a - sol.d₀ ≠ 0 := by sorry
+lemma PartialSolution_with_axioms.d_neq_zero (sol: PartialSolution_with_axioms) {y z:N} : sol.d y z ≠ 0 := by
+  apply sol.test (enum (y,z))
+  simp
+  decide
 
-lemma PartialSolution_with_axioms.ad₀_neq_d₀ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀):  a - sol.d₀ ≠ sol.d₀ := by sorry
+lemma PartialSolution_with_axioms.ad₀_neq_zero (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀):  a - sol.d₀ ≠ 0 := by
+  apply sol.test 0
+  simp [sol.a_supp h]
+  decide
 
-lemma PartialSolution_with_axioms.ad₀_neq_d (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀) {y z: N} :  a - sol.d₀ ≠ sol.d y z := by sorry
+lemma PartialSolution_with_axioms.ad₀_neq_d₀ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀):  a - sol.d₀ ≠ sol.d₀ := by
+  apply sol.test 0
+  simp [sol.a_supp h]
+  decide
 
-lemma PartialSolution_with_axioms.ad₀_neq_d₁ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀):  a - sol.d₀ ≠ sol.d₁ := by sorry
 
-lemma PartialSolution_with_axioms.ad₀_neq_Sd₀ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀):  a - sol.d₀ ≠ S sol.d₀ := by sorry
+lemma PartialSolution_with_axioms.ad₀_neq_d (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀) {y z: N} :  a - sol.d₀ ≠ sol.d y z := by
+  apply sol.test 0
+  simp [sol.a_supp h, enum_ne_0]
+  decide
 
-lemma PartialSolution_with_axioms.Sad₀_neq_d₀ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀): S  a + S sol.d₀ ≠ sol.d₀ := by sorry
+lemma PartialSolution_with_axioms.ad₀_neq_d₁ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀):  a - sol.d₀ ≠ sol.d₁ := by
+  apply sol.test 0
+  simp [sol.a_supp h]
+  decide
 
-lemma PartialSolution_with_axioms.Sad₀_neq_d₁ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀): S  a + S sol.d₀ ≠ sol.d₁ := by sorry
+lemma PartialSolution_with_axioms.ad₀_neq_Sd₀ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀):  a - sol.d₀ ≠ S sol.d₀ := by
+  apply sol.test 0
+  simp [sol.a_supp h]
+  decide
 
-lemma PartialSolution_with_axioms.Sad₀_neq_d (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀) {y z: N} : S  a + S sol.d₀ ≠ sol.d y z := by sorry
+lemma PartialSolution_with_axioms.Sad₀_neq_d₀ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀): S  a + S sol.d₀ ≠ sol.d₀ := by
+  apply sol.test 0
+  simp [sol.a_supp h]
+  decide
 
-lemma PartialSolution_with_axioms.SSy₀_neq_d₀ (sol: PartialSolution_with_axioms) : S ( sol.S' sol.y₀ ) ≠ sol.d₀ := by sorry
+lemma PartialSolution_with_axioms.Sad₀_neq_d₁ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀): S  a + S sol.d₀ ≠ sol.d₁ := by
+  apply sol.test 0
+  simp [sol.a_supp h]
+  decide
 
-lemma PartialSolution_with_axioms.SSy₀_neq_d₁ (sol: PartialSolution_with_axioms) : S ( sol.S' sol.y₀ ) ≠ sol.d₁ := by sorry
+lemma PartialSolution_with_axioms.Sad₀_neq_d (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀) {y z: N} : S  a + S sol.d₀ ≠ sol.d y z := by
+  apply sol.test 0
+  simp [enum_ne_0, sol.a_supp h]
+  decide
 
-lemma PartialSolution_with_axioms.SSy₀_neq_Sd₀ (sol: PartialSolution_with_axioms) : S ( sol.S' sol.y₀ ) ≠ S sol.d₀ := by sorry
+lemma PartialSolution_with_axioms.SSy₀_neq_d₀ (sol: PartialSolution_with_axioms) : S ( sol.S' sol.y₀ ) ≠ sol.d₀ := by
+  apply sol.test 0
+  simp [sol.Sy₀_supp]
+  decide
 
-lemma PartialSolution_with_axioms.SSy₀_neq_ad₀ (sol: PartialSolution_with_axioms) {a:SM} (ha: R' a sol.x = sol.y₀) : S ( sol.S' sol.y₀ ) ≠ a - sol.d₀ := by sorry
+lemma PartialSolution_with_axioms.SSy₀_neq_d₁ (sol: PartialSolution_with_axioms) : S ( sol.S' sol.y₀ ) ≠ sol.d₁ := by
+  apply sol.test 1
+  simp [sol.Sy₀_supp]
+  decide
 
-lemma PartialSolution_with_axioms.SSy₀_neq_d (sol: PartialSolution_with_axioms) {y z:N} : S ( sol.S' sol.y₀ ) ≠ sol.d y z := by sorry
+lemma PartialSolution_with_axioms.SSy₀_neq_Sd₀ (sol: PartialSolution_with_axioms) : S ( sol.S' sol.y₀ ) ≠ S sol.d₀ := by
+  apply sol.test 0
+  simp [sol.Sy₀_supp]
+  decide
 
-lemma PartialSolution_with_axioms.aSy₀_neq_d₀ (sol: PartialSolution_with_axioms) {a:SM} (h: sol.x = R' a sol.y₀):  a - sol.S' sol.y₀ ≠ sol.d₀ := by sorry
+lemma PartialSolution_with_axioms.SSy₀_neq_ad₀ (sol: PartialSolution_with_axioms) {a:SM} (ha: R' a sol.x = sol.y₀) : S ( sol.S' sol.y₀ ) ≠ a - sol.d₀ := by
+  apply sol.test 0
+  simp [sol.Sy₀_supp, sol.a_supp ha]
+  decide
 
-lemma PartialSolution_with_axioms.aSy₀_neq_d₁ (sol: PartialSolution_with_axioms) {a:SM} (h: sol.x = R' a sol.y₀):  a - sol.S' sol.y₀ ≠ sol.d₁ := by sorry
+lemma PartialSolution_with_axioms.SSy₀_neq_d (sol: PartialSolution_with_axioms) {y z:N} : S ( sol.S' sol.y₀ ) ≠ sol.d y z := by
+  apply sol.test (enum (y,z))
+  simp [sol.Sy₀_supp]
+  decide
 
-lemma PartialSolution_with_axioms.ad₀_neq_SSy₀ (sol: PartialSolution_with_axioms) {a:SM} (ha: R' a sol.x = sol.y₀) : a - sol.d₀ ≠ S (sol.S' sol.y₀) := by sorry
+lemma PartialSolution_with_axioms.aSy₀_neq_d₀ (sol: PartialSolution_with_axioms) {a:SM} (h: sol.x = R' a sol.y₀):  a - sol.S' sol.y₀ ≠ sol.d₀ := by
+  apply sol.test 0
+  simp [sol.Sy₀_supp, sol.a_supp' h]
+  decide
 
-lemma PartialSolution_with_axioms.aSy₀_neq_Sd₀ (sol: PartialSolution_with_axioms) {a:SM} (ha: sol.x = R' a sol.y₀) : a - sol.S' sol.y₀ ≠ S sol.d₀ := by sorry
+lemma PartialSolution_with_axioms.aSy₀_neq_d₁ (sol: PartialSolution_with_axioms) {a:SM} (h: sol.x = R' a sol.y₀):  a - sol.S' sol.y₀ ≠ sol.d₁ := by
+  apply sol.test 1
+  simp [sol.Sy₀_supp, sol.a_supp' h]
+  decide
 
-lemma PartialSolution_with_axioms.d_neq_d₀ (sol: PartialSolution_with_axioms) {y z: N} : sol.d y z ≠ sol.d₀ := by sorry
+lemma PartialSolution_with_axioms.ad₀_neq_SSy₀ (sol: PartialSolution_with_axioms) {a:SM} (ha: R' a sol.x = sol.y₀) : a - sol.d₀ ≠ S (sol.S' sol.y₀) := by
+  apply sol.test 0
+  simp [sol.Sy₀_supp, sol.a_supp ha]
+  decide
 
-lemma PartialSolution_with_axioms.d_neq_Sd₀ (sol: PartialSolution_with_axioms) {y z: N} : sol.d y z ≠ S sol.d₀ := by sorry
+lemma PartialSolution_with_axioms.aSy₀_neq_Sd₀ (sol: PartialSolution_with_axioms) {a:SM} (ha: sol.x = R' a sol.y₀) : a - sol.S' sol.y₀ ≠ S sol.d₀ := by
+  apply sol.test 0
+  simp [sol.Sy₀_supp, sol.a_supp' ha]
+  decide
 
-lemma PartialSolution_with_axioms.d_neq_d₁ (sol: PartialSolution_with_axioms) {y z: N} : sol.d y z ≠ sol.d₁ := by sorry
+lemma PartialSolution_with_axioms.d_neq_d₀ (sol: PartialSolution_with_axioms) {y z: N} : sol.d y z ≠ sol.d₀ := by
+  apply sol.test 0
+  simp [enum_ne_0]
+  decide
+
+lemma PartialSolution_with_axioms.d_neq_Sd₀ (sol: PartialSolution_with_axioms) {y z: N} : sol.d y z ≠ S sol.d₀ := by
+  apply sol.test 0
+  simp [enum_ne_0]
+  decide
+
+lemma PartialSolution_with_axioms.d_neq_d₁ (sol: PartialSolution_with_axioms) {y z: N} : sol.d y z ≠ sol.d₁ := by
+  apply sol.test 1
+  simp [enum_ne_1]
+  decide
 
 lemma PartialSolution_with_axioms.noreach_invis (sol: PartialSolution_with_axioms) {a:SM} {y:N} (ha: ¬ sol.reaches sol.extras a) (hy: sol.sees sol.extras y): val a y = 0 := by
   apply val_of_nonsupp_eq_zero
