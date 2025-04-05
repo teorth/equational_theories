@@ -18,7 +18,7 @@ We have the following procedure for extending a small magma $SM$ obeying \Cref{1
   \begin{itemize}
   \item (i) For all $a \in SM$, we have $L'_a = (R'_a)^{-1} (L'_{Sa})^{-1}$.
   \item (ii) For all $y \in N$, the elements $R'_a y \in N$ are distinct from each other and from $y$ as $a \in SM$ varies.
-  \item (iii)  If $R'_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $L'_{S'y} L_{R_{S'x}^{-1} a} y = x$.
+  \item (iii)  If $R'_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $L'_{S'y} L_{L_{S'x}^{-1} a} y = x$.
   \item (iv)  For all $x \in N$, we have $(L'_{S'x})^2 x = x$.
   \end{itemize}
 Suppose also that we have an operation $\op': N \times N \to M$ obeying the following axioms:
@@ -168,10 +168,11 @@ Furthermore, the following axioms are satisfied:
   \item (iii'') If $R'_a x = y$ for some $a \in SM$ and some $x,y \in N$, and $S'x, S'y$ are defined, then $(R'_{S'y})^{-1} L'_0 R'_{2S'y} (R'_{a-S'x})^{-1} L'_0 R'_{2(a-S'x)} y$ is defined and equal to $x$.
   \item (iv'') If $x \in N$ is such that $S'x$ is defined, then $(R'_{S'x})^{-1} L'_0 R'_{2S'x} (R'_{S'x})^{-1} L'_0 R'_{2S'x} x$ is defined and equal to $x$.
   \item (v'')  If $x \in N$ and $x \op' x$ is defined, then $S'x$ is defined and equal to $x \op' x$.
-  \item (vi'')  For all $y \in N$ and $a \in SM$, if $e_a y \op' y$ is defined, then $a - S'y$ is defined and equal to $R'_a y \op' y$.
+  \item (vi'')  For all $y \in N$ and $a \in SM$, if $R'_a y \op' y$ is defined, then $a - S'y$ is defined and equal to $R'_a y \op' y$.
   \item (vii'')  For all $x,y \in N$ and $x$ is not equal to $y$ or $R'_a y$ for any $a \in SM$, and $x \op' y$ is defined, then it is equal to some $z \in N$.  Furthermore, either $I[x,y,z]$ is a pending identity, or else $z \op' x$ and $(R'_{2S'x})^{-1} L'_0 R'_0 R'_{S'x} y$ are defined and equal to each other.
-  \item (P) If $I[x,y,z]$ is a pending identity, then $x,y,z \in N$, and $Sx$ and $z \op' x$ are undefined.  Furthermore, $z$ is not equal to $x$ or $R'_a x$ for any $a \in SM$.
+  \item (P) If $I[x,y,z]$ is a pending identity, then $x,y,z \in N$, and $Sx$ and $z \op' x$ are undefined.  Furthermore, $z$ is not equal to $x$ or $R'_a x$ for any $a \in SM$, and $y$ is not of the form $(R'_0)^n x$ or $(R'_0)^n y_0$ for any $n$, where $y_0$ is the parent of $x$.
   \item (P') If $I[x,y,z]$ and $I[x,y',z]$ are pending identities, then $y=y'$.
+  \item (L) If $L'_0 x$ is defined, then it is not of the form $R'_b R'_{2b}^{-1} x$ for any $b \in SM$.
 \end{itemize}
 
 We say that one partial solution $(\tilde L'_0, \tilde \op', \tilde S', \tilde {\mathcal I})$ \emph{extends} another if $(L'_0, \op', S',  {\mathcal I})$ if $\tilde L'$ is an extension of $L'_0$, $\tilde \op'$ is an extension of $\op'$, and $\tilde S'$ is an extension of $S'$.  (No constraint is imposed on the final components $\tilde {\mathcal I}, {\mathcal I}$.)  This is a preordering.
@@ -200,7 +201,7 @@ Now we seek to enlarge a partial solution. We first make an easy observation:
 $$L'_0 (R'_0)^n x := (R'_0)^n e_d$$
 and
 $$L'_0 (R'_0)^n e_d := (R'_0)^{n-1} x.$$
-Because of the new nature of $d$, no collisions in the partial function $L_0$ are created by this operation.  It is then easy to check that axiom (i'') is preserved by this operation, whereas none of the other axioms (S), (iii''), (iv''), (v''), (vi''), (vii''), (P), (P') are affected by this extension.
+Because of the new nature of $d$, no collisions in the partial function $L_0$ are created by this operation.  It is then easy to check that axiom (i'') is preserved by this operation, whereas none of the other axioms (S), (iii''), (iv''), (v''), (vi''), (vii''), (P), (P') are affected by this extension.  With some effort, axiom (L) can also be verified.
 \end{proof}
 
 As a corollary, we have
@@ -222,27 +223,29 @@ Next, we provide a tool for enlarging the domain of definition of $S'$.  The mai
   Then one can extend the partial solution so that $S'x$ is now defined.
 \end{proposition}
 
-\begin{proof}  Let $d_0, d_1 \in SM$ be distinct generators $E_{n_0}, E_{n_1}$ of $SM$ that do not appear in the index $a$ of any $e_a$ that currently appears in the partial solution (of which there are only finitely many).  We also set some further distinct generators $d'_{y,z} \in SM$ for $y,z \in SM$ that are distinct from each other and all previous generators (this is possible as we have infinitely many generators).  We set $S'x,  x \op' x := d_0$; this preserves axiom (S) and (v'').  In order to retain axiom (iv''), we now also set
+\begin{proof}  Let $d_0, d_1 \in SM$ be generators $E_{n_0}$ of $SM$ that do not appear in the index $a$ of any $e_a$ that currently appears in the partial solution (of which there are only finitely many).  We also set some further distinct generators $d'_{y,z} \in SM$ for $y,z \in SM$ that are distinct from each other and all previous generators (this is possible as we have infinitely many generators).  We set $S'x,  x \op' x := d_0$; this preserves axiom (S) and (v'').  We set
 $$ L'_0 R'_{2d_0} x := e_{d_1}$$
 $$ L'_0 R'_{2d_0} (R'_{d_0})^{-1} e_{d_1} := R'_{d_0} x$$
 and then extend these choices using \Cref{itero}, \Cref{itero-2} to recover axiom (i'), thus for instance
 $$ L'_0 (R'_0)^n R'_{2d_0} x := (R'_0)^n e_{d_1}$$
 and
 $$ L'_0 (R'_0)^n e_{d_1}  := (R'_0)^{n-1} R'_{2d_0} x$$
-for all $n \in \Z$.  To retain axiom (iii''), we perform the following actions:
+for all $n \in \Z$.
+
+To retain axiom (iii''), we perform the following actions:
 \begin{itemize}
 \item If $y_0$ is undefined, do nothing.
-\item If $R'_a x = y_0$ for some $a \in SM$ (so that $L'_0 R'_{S'y_0} x$ is defined, by hypothesis (A)), set $L'_0 R'_{2(a-d_0)} y_0 := R'_{a-d_0} (R'_{2S'y_0})^{-1} R'_0 L'_0 R'_{S'y_0}$. Then extend using \Cref{itero}, \Cref{itero-2}.
+\item If $R'_a x = y_0$ for some $a \in SM$ (so that $L'_0 R'_{S'y_0} x$ is defined, by hypothesis (A)), set $L'_0 R'_{2(a-d_0)} y_0 := R'_{a-d_0} (R'_{2S'y_0})^{-1} R'_0 L'_0 R'_{S'y_0} x$. Then extend using \Cref{itero}, \Cref{itero-2}.
 \item If $x = R'_a y_0$ for some $a \in SM$ (so that $L'_0 R'_{2(a-Sy_0)} x$ is already defined, by hypothesis (B)), set $L'_0 R'_{2d_0} (R'_{a-S'y_0})^{-1} L'_0 R'_{2(a-Sy_0)} x :=R'_{d_0} y_0$, and extend using \Cref{itero}, \Cref{itero-2}.
 \end{itemize}
 To retain axiom (P), we perform the following actions for each pending identity of the form $I[x,y,z]$ for some $y,z$, executed in some arbitrary order.
 \begin{itemize}
 \item Remove this identity $I[x,y,z]$ from the list of pending identities.
-\item Set $L_0 R'_0 R'_{d_0} y := e_{d'_{y,z}}$, and $x' \op y' := z'$, where $(x',y',z') := (z, x, (R'_{2d_0})^{-1} e_{d'_{y,z}})$. Extend all the new definitions of $L'_0$ using \Cref{itero}, \Cref{itero-2}.
+\item Set $L'_0 R'_0 R'_{d_0} y := e_{d'_{y,z}}$, and $x' \op y' := z'$, where $(x',y',z') := (z, x, (R'_{2d_0})^{-1} e_{d'_{y,z}})$. Extend all the new definitions of $L'_0$ using \Cref{itero}, \Cref{itero-2}.
 \item If $S'x'$ is undefined, add $I[x',y',z']$ as a pending identity.
 \item If instead $S'x'$ is defined (which makes $L'_0 R'_0 R'_{S'x'} y'$ defined, by axiom (C)), set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', (R'_{2S'x'})^{-1} L'_0 R'_0 R'_{S'x'} y')$.  Then add $I[x'',y'',z'']$ as a pending identity.
 \end{itemize}
-One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (iii'), (iv''), (v''), (vii''), (P), (P') are preserved; the remaining axiom (vi'') is unaffected by this extension.
+One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (iii'), (iv''), (v''), (vii''), (P), (P') are preserved; the remaining axiom (vi'') is unaffected by this extension.  Axiom (L) can also be shown to be preserved after a tedious calculation.
 \end{proof}
 
 

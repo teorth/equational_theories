@@ -56,6 +56,13 @@ lemma SM_obeys_1729 : Equation1729 SM := by
   simp only [map_add, map_smul, zsmul_eq_mul, Int.cast_ofNat, self_eq_add_left]
   apply zero_mul
 
+lemma E_ne_SE (n m : ℕ): E n ≠ S (E m) := by
+  by_contra! this
+  apply_fun (fun f ↦ f n) at this
+  by_cases h:m=n
+  all_goals simp [E,S, DirectSum.of_apply,h] at this
+  all_goals contrapose! this; decide
+
 def L (a:SM) : SM ≃ SM := {
   toFun := fun x ↦ x + a
   invFun := fun x ↦ x - a
@@ -260,6 +267,15 @@ lemma R'_axiom_iia (a b : SM) (y:N) (h: a ≠ b): R' a y ≠ R' b y := by
   contrapose! h
   simp only [R', Equiv.coe_fn_mk, mul_left_inj] at h
   exact FreeGroup.of_injective h
+
+@[simp]
+lemma R'_axiom_iia' {a b : SM} {y:N} : R' a y = R' b y ↔ a = b := by
+  constructor
+  . intro h
+    contrapose! h
+    exact R'_axiom_iia a b y h
+  intro h; rw [h]
+
 
 lemma R'_axiom_iib (a : SM) (y:N) : R' a y ≠ y := by
   by_contra! h
@@ -546,6 +562,14 @@ lemma fresh_not_in_generators (A: Finset SM) (n:ℕ) : ¬ in_generators A (E (fr
   simp only [in_generators, support_E, Finset.singleton_subset_iff]
   exact fresh_ne_generator A n
 
+lemma Sfresh_not_in_generators (A: Finset SM) (n:ℕ) : ¬ (in_generators A $ S $ E $ fresh A n) := by
+  simp only [in_generators, Finset.not_subset]
+  refine ⟨ _, ?_, fresh_ne_generator A n ⟩
+  rw [DFinsupp.mem_support_iff]
+  simp only [S, E, SM_op_eq_add, DirectSum.add_apply, DirectSum.of_eq_same, ne_eq]
+  decide
+
+
 lemma fresh_injective (A: Finset SM) : Function.Injective (fresh A) := by
   intros n m h
   unfold fresh at h
@@ -707,5 +731,64 @@ lemma basis_elements_of_rel {x y:N} (h: x ≈ y) : basis_elements x = basis_elem
     exact basis_elements_of_rel' h h2
   intro h2
   exact basis_elements_of_rel' (Setoid.symm h) h2
+
+abbrev val (a : SM) (x : N) : ℤ := Multiplicative.toAdd $ FreeGroup.lift (fun b ↦ if b=a then Multiplicative.ofAdd 1 else Multiplicative.ofAdd  0) x
+
+@[simp]
+lemma val_hom (a : SM) (x y : N): val a (x*y) = val a x + val a y := by
+  simp only [val, ofAdd_zero, map_mul]
+  rfl
+
+@[simp]
+lemma val_inv (a : SM) (x : N): val a x⁻¹ = -val a x := by
+  simp only [val, ofAdd_zero, map_inv]
+  rfl
+
+@[simp]
+lemma val_e (a b : SM) : val a (e b) = if b=a then 1 else 0 := by
+  simp only [val, ofAdd_zero, e, FreeGroup.lift.of]
+  rfl
+
+@[simp]
+lemma val_mk (a b: SM) (t:Bool)  : val a (FreeGroup.mk [(b,t)]) = if b=a then (if t then 1 else -1) else 0 := by
+  rcases t
+  all_goals by_cases h:b=a
+  all_goals simp [val,h]
+
+@[simp]
+lemma val_one (a:SM) : val a 1 = 0 := by
+  simp only [val, ofAdd_zero, map_one, toAdd_one]
+
+lemma FreeGroup.head_concat_tail {α:Type*} (head:α) (tail:List α) : [head] ++ tail = head :: tail := rfl
+
+lemma val_of_nonsupp_eq_zero' {a:SM} {L:List (SM × Bool)} (h: ∀ b : Bool, (a,b) ∉ L.toFinset) : val a (FreeGroup.mk L) = 0 := match L with
+| List.nil => by
+    simp only [toAdd_eq_zero, ofAdd_zero, FreeGroup.lift.mk, List.map_nil, List.prod_nil]
+| List.cons head tail => by
+    have h1 : head.1 ≠ a := by
+      contrapose! h
+      use head.2
+      simp only [List.toFinset_cons, ← h, Prod.mk.eta, Finset.mem_insert, List.mem_toFinset, true_or]
+    have h2 : ∀ b : Bool, (a,b) ∉ tail.toFinset := by
+      intro b
+      replace h := h b
+      contrapose! h
+      simp only [List.mem_toFinset, List.toFinset_cons, Finset.mem_insert] at h ⊢
+      exact Or.inr h
+    rw [← FreeGroup.head_concat_tail, ← FreeGroup.mul_mk, val_hom, val_mk, val_of_nonsupp_eq_zero' h2]
+    simp [h1]
+
+
+lemma val_of_nonsupp_eq_zero {a:SM} {y:N} (h: ¬ a.support ⊆  generators (basis_elements y)) : val a y = 0 := by
+  rw [← y.mk_toWord]
+  apply val_of_nonsupp_eq_zero'
+  contrapose! h
+  simp only [List.mem_toFinset] at h
+  calc
+    _ ⊆ (basis_elements y).biUnion DFinsupp.support := by
+      apply Finset.subset_biUnion_of_mem
+      apply Finset.mem_union_left
+      simp only [Finset.mem_image, List.mem_toFinset, Prod.exists, exists_and_right, exists_eq_right, h]
+    _ ⊆ _ := Finset.subset_union_left
 
 end Eq1729
