@@ -82,6 +82,27 @@ instance N_countable : Countable N := Quotient.countable
 
 abbrev e (a:SM) := FreeGroup.of a
 
+/-- For mathlib? -/
+@[simp]
+theorem FreeGroup.mk_of_single_true {α : Type* } (a : α) : FreeGroup.mk [(a,true)] = FreeGroup.of a := rfl
+
+/-- For mathlib? -/
+@[simp]
+theorem FreeGroup.mk_of_single_false {α : Type*} (a : α) : FreeGroup.mk [(a,false)] = (FreeGroup.of a)⁻¹  := rfl
+
+lemma div_eq (a b : SM) : (e b)⁻¹ * (e a)  = FreeGroup.mk ([(b, false)] ++ [(a,true)]) := by
+    simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true, FreeGroup.mk_of_single_false, e]
+
+lemma square_mul (a b : SM) : (e b) * (e a)^2 = FreeGroup.mk ([(b, true)] ++ [(a,true)] ++ [(a,true)]) := by
+    simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true,  e]
+    rw [mul_assoc]
+    congr
+
+lemma square (a : SM) : (e a)^2 = FreeGroup.mk ([(a,true)] ++ [(a,true)]) := by
+    simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true,  e]
+    congr
+
+
 def adjacent (x y : N) := ∃ a, x = (e a) * y ∨ y = (e a) * x
 
 lemma not_adjacent_self (x:N) : ¬ adjacent x x := by
@@ -248,7 +269,10 @@ theorem parent_of_adjacent {x y : N} (h : adjacent x y) : x = parent y ∨ y = p
       apply FreeGroup.toWord_injective
       simp [parent_toWord, eq']
 
-
+@[simp]
+lemma parent_of_e_sq (a:SM) : parent ((e a)^2) = e a := by
+  simp only [parent, e, FreeGroup.toWord_of_pow, List.reduceReplicate, List.tail_cons,
+    FreeGroup.mk_of_single_true]
 
 /- Right-multiplication by an element of SM on N is defined via the group action. -/
 
@@ -650,14 +674,6 @@ lemma basis_elements_of_generator_pow (a: SM) {n:ℕ} (hn: n ≠  0): basis_elem
   change Finset.image (fun x ↦ x.1) {(a,true)} ∪ {0} = {a} ∪ {0}
   congr
 
-/-- For mathlib? -/
-@[simp]
-theorem FreeGroup.mk_of_single_true {α : Type* } (a : α) : FreeGroup.mk [(a,true)] = FreeGroup.of a := rfl
-
-/-- For mathlib? -/
-@[simp]
-theorem FreeGroup.mk_of_single_false {α : Type*} (a : α) : FreeGroup.mk [(a,false)] = (FreeGroup.of a)⁻¹  := rfl
-
 lemma basis_elements_of_prod_gen (a b:SM) : a ∈ basis_elements ((e b)⁻¹ * (e a)^2) := by
   by_cases h : b = a
   . rw [← h]
@@ -672,14 +688,6 @@ lemma basis_elements_of_prod_gen (a b:SM) : a ∈ basis_elements ((e b)⁻¹ * (
     congr
 -- weirdly, the simp below breaks when using the recommend simp?
   simp [this, h]
-
-lemma div_eq (a b : SM) : (e b)⁻¹ * (e a)  = FreeGroup.mk ([(b, false)] ++ [(a,true)]) := by
-    simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true, FreeGroup.mk_of_single_false, e]
-
-lemma square_mul (a b : SM) : (e b) * (e a)^2 = FreeGroup.mk ([(b, true)] ++ [(a,true)] ++ [(a,true)]) := by
-    simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true,  e]
-    rw [mul_assoc]
-    congr
 
 lemma basis_elements_of_prod_gen' (a b:SM) : a ∈ basis_elements ((e b) * (e a)^2) := by
   by_cases h : b = a

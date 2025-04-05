@@ -1549,8 +1549,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rw [hzx] at h3
         exact id (Ne.symm h3)
       axiom_P' := sol.axiom_P'
-      axiom_L := by
-        sorry
+      axiom_L := sol.axiom_L
     }
     refine ⟨ sol', ?_, ?_ ⟩
     . refine ⟨ by rfl, ?_, by rfl, ?_, ?_, ?_ ⟩
@@ -1635,8 +1634,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rw [←h5] at h4
         exact h3.2.1 a h4
       axiom_P' := sol.axiom_P'
-      axiom_L := by
-        sorry
+      axiom_L := sol.axiom_L
     }
     refine ⟨ sol', ?_, ?_ ⟩
     . refine ⟨ by rfl, ?_, by rfl, ?_, ?_, ?_ ⟩
@@ -1652,15 +1650,11 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
     exact Finset.mem_union_right _ (Finset.mem_singleton.mpr rfl)
 
   set d0 := E $ sol.fresh_generator {x,y,w} 0
-  set d1 := E $ sol.fresh_generator {x,y,w} 1
   set z := (e d0)^2
   have hz_invis : ¬ sol.sees {x, y, w} z := sol.fresh_invis_pow {x, y, w} 0 (Ne.symm (Nat.zero_ne_add_one 1))
+  have hz_invis' : ¬ sol.sees {x, y, w} (e d0) := sol.fresh_invis {x, y, w} 0
   classical
   set z' := (R' (S (sol.S' x))).symm $ sol.L₀' w
-  have hedw : ¬ e d1 ≈ w := by
-    apply gen_fresh_not_rel_extra sol 1 _
-    simp only [Finset.mem_insert, Finset.mem_singleton, or_true]
-  have hed_notin : e d1 ∉ sol.Dom_L₀' := gen_fresh_not_in_fill sol {x, y, w} 1
   set sol' : PartialSolution := {
     L₀' := sol.L₀'
     op := fun x' y' ↦ if (x',y') = (x,y) then Sum.inr $ z else if (x',y') = (z,x) then Sum.inr z' else sol.op x' y'
@@ -1754,7 +1748,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
     axiom_P := by
       intro x'' y'' z'' hI
       simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hI
-      rcases hI with hI | hI
+      rcases hI with hI | ⟨ rfl, rfl, rfl ⟩
       . convert sol.axiom_P x'' y'' z'' hI using 2
         have h1 : ¬ (z'' = x ∧ x'' = y) := by
           contrapose! no_pending
@@ -1766,14 +1760,12 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
           exact (sol.axiom_P x y'' z hI).1 hx
         simp only [Finset.union_insert, Finset.mem_insert, Prod.mk.injEq, h1, Finset.mem_union,
           Finset.mem_singleton, h2, or_false, false_or]
-      rw [hI.1, hI.2.2]
-
       have hz : z ∉ sol.Dom_S' := by
         by_contra h3
-        exact hz_invis $ (sol.dom_S'_involved {x,y,w} h3).1
+        exact hz_invis $ (sol.dom_S'_involved {y'',y,w} h3).1
 
-      have hz'_vis (hw : w ∈ sol.Dom_L₀') : sol.sees {x,y,w} z' := by
-        simp only [hw, ↓reduceIte, z', new_L₀']
+      have hz'_vis : sol.sees {y'',y,w} z' := by
+        simp only [hw, ↓reduceIte, z']
         exact sol.sees_R'_inv (sol.reaches_S $ sol.reaches_involved $ (sol.dom_S'_involved _ hx).2) (sol.dom_L₀'_involved _ hw).2
       refine ⟨ hz, ?_, ?_, ?_, ?_, ?_ ⟩
       . by_contra h3
@@ -1782,24 +1774,31 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rcases h3 with ⟨ h3, h4 ⟩ | h3 | ⟨ h3, h4 ⟩
         . rw [h4] at hz
           exact hz hy
-        . exact hz_invis (sol.dom_op_involved {x,y,w} h3).2.1
+        . exact hz_invis (sol.dom_op_involved {y'',y,w} h3).2.1
         rw [h4] at hz
         exact hz hx
       . by_contra h
         contrapose! hz_invis
         rw [← h]
-        exact hz'_vis hw
+        exact hz'_vis
       . intro a
-        have : ¬ sol.sees {x,y,w} ( R' a z ) := by
+        have : ¬ sol.sees {y'',y,w} ( R' a z ) := by
           by_contra h
           dsimp [R',z, PartialSolution.sees] at h
           simp only [generators_subset_iff] at h
-          apply sol.fresh_not_in_gen {x,y,w} 0 $ h d0 $ basis_elements_of_prod_gen' d0 a
+          apply sol.fresh_not_in_gen {y'',y,w} 0 $ h d0 $ basis_elements_of_prod_gen' d0 a
         contrapose! this
         rw [← this]
-        exact hz'_vis hw
-      . sorry
-      sorry
+        exact hz'_vis
+      . contrapose! hz_invis
+        rw [←hz_invis]
+        apply sol.extras_involved
+        simp only [Finset.mem_insert, Finset.mem_singleton, true_or]
+      simp only [z, parent_of_e_sq]
+      contrapose! hz_invis'
+      rw [← hz_invis']
+      apply sol.extras_involved
+      simp only [Finset.mem_insert, Finset.mem_singleton, true_or]
     axiom_P' := by
       intro x₁ y₁ y'₁ z₁ hy hy'
       simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hy hy'
@@ -1818,8 +1817,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         contrapose! this
         rwa [hy₁] at hy'
       rw [hy₂, hy'₂]
-    axiom_L := by
-      sorry
+    axiom_L := sol.axiom_L
   }
   refine ⟨ sol', ?_, Finset.mem_union_right _ $ Finset.mem_insert_self (x, y) {(z, x)} ⟩
   refine ⟨ ?_, Finset.subset_union_left, by rfl, ?_, ?_, ?_ ⟩
