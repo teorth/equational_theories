@@ -28,6 +28,7 @@ class PartialSolution where
   axiom_vii'' (x y : N) (h : x ≠ y) (h' : ∀ a : SM, x ≠ R' a y) (hop: (x,y) ∈ Dom_op) : ∃ z : N, op x y = Sum.inr z ∧ ((x,y,z) ∈ I ∨ ((z,x) ∈ Dom_op ∧ x ∈ Dom_S' ∧ (R' 0 $ R' (S' x) $ y) ∈ fill Predom_L₀' ∧ op z x = Sum.inr ((R' (S (S' x))).symm $ L₀' $ R' 0 $ R' (S' x) $ y)))
   axiom_P (x y z : N) (h: (x,y,z) ∈ I) : x ∉ Dom_S' ∧ (z,x) ∉ Dom_op ∧ z ≠ x ∧ (∀ a : SM, z ≠ R' a x) ∧ (y ≠ x) ∧ (y ≠ parent x)
   axiom_P' (x y y' z : N) (hy : (x,y,z) ∈ I) (hy' : (x,y',z) ∈ I) : y = y'
+  axiom_P'' (x y z z' : N) (hy : (x,y,z) ∈ I) (hy' : (x,y,z') ∈ I) : z = z'
   axiom_L (x:N) (a:SM) (h: x ∈ fill Predom_L₀') : L₀' x ≠ (R' a $ (R' (S a)).symm $ x)
 
 abbrev PartialSolution.Dom_L₀' (sol: PartialSolution) : Set N := fill sol.Predom_L₀'
@@ -101,6 +102,10 @@ def TrivialPartialSolution : PartialSolution := {
     contrapose! h
     exact Finset.not_mem_empty _
   axiom_P' := by
+    intro _ _ _ _ h
+    contrapose! h
+    exact Finset.not_mem_empty _
+  axiom_P'' := by
     intro _ _ _ _ h
     contrapose! h
     exact Finset.not_mem_empty _
@@ -491,6 +496,7 @@ noncomputable def enlarge_L₀'_by {sol : PartialSolution} {x y:N} (hx: x ∉ so
       exact sol.enlarge_L₀'_extends hx hy h7
     axiom_P := sol.axiom_P
     axiom_P' := sol.axiom_P'
+    axiom_P'' := sol.axiom_P''
     axiom_L := by
       intro z a hz
       simp only [fill_union, fill_pair, fill_singleton, Set.mem_union] at hz
@@ -793,6 +799,8 @@ lemma PartialSolution_with_axioms.sees_hA {sol:PartialSolution_with_axioms} {a:S
 
 lemma PartialSolution_with_axioms.sees_hB {sol:PartialSolution_with_axioms} {a:SM} (ha: sol.x = (R' a) sol.y₀) : sol.sees sol.extras (PartialSolution.L₀' (e (S a + S (sol.S' sol.y₀)) * x)) := (sol.dom_L₀'_involved sol.extras (sol.hB a ha)).2
 
+lemma PartialSolution_with_axioms.cancel {sol:PartialSolution_with_axioms} {d:SM} {y z:N} (hd: ¬ sol.reaches sol.extras d) (hy: sol.sees sol.extras y) (hz: sol.sees sol.extras z) (hequiv: (e d) * y ≈ (e d) * z) : y = z := by sorry
+
 lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_axioms} {data data' : L₀'_data sol} (hneq: data ≠ data') : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').1 ∧ ¬ (sol.L₀'_pair data).2 ≈ (sol.L₀'_pair data').2 := by
   rcases data with ⟨⟩ | ⟨⟩ | ⟨a,ha⟩ | ⟨a,ha⟩ | ⟨y,z,hz⟩
   all_goals rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hz'⟩
@@ -803,7 +811,13 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     simp [sol.d₀_neq_d₁.symm, sol.d₀_invis sol.sees_x]
   . apply sol.nequiv_d₁
     simp [sol.d₀_neq_d₁, sol.d₁_invis sol.sees_x]
-  . sorry -- noncommutative
+  . by_cases h : S a' = 0
+    . simp [h]
+      contrapose! ha'
+      rw [← sol.cancel sol.Sd₀_noreach sol.sees_x sol.sees_y₀ ha']
+      exact R'_axiom_iib _ _
+    apply sol.nequiv_Sd₀
+    simp [h, sol.Sd₀_invis sol.sees_x, sol.Sd₀_invis sol.sees_y₀]
   . apply sol.nequiv_d₁
     simp [sol.d₁_neq_zero.symm, sol.ad₀_neq_d₁ ha', sol.SSy₀_neq_d₁, sol.d₁_invis (sol.sees_hA ha')]
   . by_contra this
@@ -824,15 +838,18 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     simp [sol.d₀_invis sol.sees_x, sol.d₀_neq_zero.symm, sol.ad₀_neq_d₀ ha', SSy₀_neq_d₀, sol.d₀_invis (sol.sees_hA ha')]
   . apply sol.nequiv_d₁
     simp [sol.d₀_neq_d₁, sol.aSy₀_neq_d₁ ha', sol.d₁_invis (sol.sees_hB ha')]
-  . by_contra this
-    sorry -- noncommutative
+  . contrapose! ha'
+    rw [← sol.cancel sol.d₀_noreach sol.sees_x sol.sees_y₀ ha']
+    exact (R'_axiom_iib _ _).symm
   . apply sol.nequiv_d₁
     simp [sol.d₀_neq_d₁, sol.Sd₀_neq_d₁, sol.d₁_invis (sol.I_involved sol.extras hz').2.1, sol.d₁_neq_zero.symm]
   . apply sol.nequiv_d₀
     simp [sol.d₀_invis sol.sees_x, sol.d_neq_d₀]
   . by_cases h : S a = 0
     . simp [h]
-      sorry -- noncommutative
+      contrapose! ha
+      rw [← sol.cancel sol.Sd₀_noreach sol.sees_y₀ sol.sees_x ha]
+      exact R'_axiom_iib _ _
     apply sol.nequiv_Sd₀
     simp [sol.Sd₀_invis sol.sees_x, sol.Sd₀_invis sol.sees_y₀, h]
   . apply sol.nequiv_d₁
@@ -845,11 +862,9 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     tauto
   . simp [←ha, R'_axiom_iia'] at ha'
     tauto
-  . by_cases h : S a = 0
-    . simp [h]
-      sorry -- noncommutative
-    apply sol.nequiv_Sd₀
-    simp [h, sol.Sd₀_invis (sol.sees_hB ha'), sol.Sd₀_invis sol.sees_y₀, sol.aSy₀_neq_Sd₀ ha']
+  . rw [ha'] at ha
+    exfalso
+    exact R'_R'_neq _ _ _ ha
   . apply sol.nequiv_d₀
     simp [sol.ad₀_neq_d₀ ha, sol.SSy₀_neq_d₀, sol.d₀_neq_zero.symm, sol.d₀_invis sol.sees_y₀, sol.d₀_invis (sol.sees_hA ha)]
   . apply sol.nequiv_d₀
@@ -862,13 +877,12 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     simp [sol.d₀_invis sol.sees_y₀, sol.d₀_neq_d₁.symm]
   . apply sol.nequiv_d₁
     simp [sol.d₀_neq_d₁, sol.aSy₀_neq_d₁ ha, sol.d₁_invis (sol.sees_hB ha)]
-  . by_contra! this
-    sorry -- noncommutative
-  . by_cases h : S a' = 0
-    . simp [h]
-      sorry -- noncommutative
-    apply sol.nequiv_Sd₀
-    simp [sol.Sd₀_invis sol.sees_y₀, h, sol.aSy₀_neq_Sd₀ ha, sol.Sd₀_invis (sol.sees_hB ha)]
+  . contrapose! ha
+    rw [← sol.cancel sol.d₀_noreach sol.sees_y₀ sol.sees_x ha]
+    exact (R'_axiom_iib _ _).symm
+  . rw [ha] at ha'
+    exfalso
+    exact R'_R'_neq _ _ _ ha'
   . apply sol.nequiv_d₀
     simp [sol.d₀_invis sol.sees_y₀, sol.ad₀_neq_d₀ ha', sol.SSy₀_neq_d₀, sol.d₀_neq_zero.symm, sol.d₀_invis (sol.sees_hA ha')]
   . simp [ha, R'_axiom_iia', hneq] at ha'
@@ -895,9 +909,16 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
   . apply sol.nequiv_d₀
     simp [sol.d_neq_d₀, sol.d₀_invis sol.sees_y₀]
   . contrapose! hneq
-    sorry -- noncommutative
-  contrapose! hneq
-  sorry -- noncommutative
+    replace hneq := Setoid.trans (Setoid.trans (rel_of_mul (e sol.d₀ * y) 1) hneq) (Setoid.symm (rel_of_mul (e sol.d₀ * y') 1))
+    replace hneq := sol.cancel sol.d₀_noreach (sol.I_involved sol.extras hz).2.1 (sol.I_involved sol.extras hz').2.1 hneq
+    simp [hneq] at hz ⊢
+    exact sol.axiom_P'' _ _ _ _ hz hz'
+  apply sol.nequiv_d y z
+  by_cases h : sol.d y' z' = sol.d y z
+  . contrapose! hneq
+    exact sol.d_injective h.symm
+  simp [h]
+
 
 lemma PartialSolution_with_axioms.L₀'_no_collide_3 (sol: PartialSolution_with_axioms) (data data' : L₀'_data sol) : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').2 := by
   rcases data with ⟨⟩ | ⟨⟩ | ⟨a,ha⟩ | ⟨a,ha⟩ | ⟨y,z,hz⟩
@@ -943,15 +964,14 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_3 (sol: PartialSolution_with_
   . apply sol.nequiv_Sd₀
     simp [sol.aSy₀_neq_Sd₀ ha, sol.d_neq_Sd₀, sol.Sd₀_invis (sol.sees_hB ha)]
   . apply sol.nequiv_d₁
-    simp [sol.d₁_neq_zero.symm, sol.d₀_neq_d₁, sol.d₁_invis (sol.I_involved hz).2.1]
-  . sorry -- noncommutative
+    simp [sol.d₁_neq_zero.symm, sol.d₀_neq_d₁, sol.d₁_invis (sol.I_involved sol.extras hz).2.1]
+  . by_contra! this
+    exact (sol.axiom_P _ _ _ hz).2.2.2.2.1 $ sol.cancel sol.d₀_noreach (sol.I_involved sol.extras hz).2.1 sol.sees_x $ Setoid.trans (rel_of_mul (e sol.d₀ * y) 1) this
   . apply sol.nequiv_d₀
-    simp []
-    sorry
+    simp [sol.d₀_neq_zero.symm, sol.d₀_invis (sol.I_involved sol.extras hz).2.1, sol.ad₀_neq_d₀ ha', sol.SSy₀_neq_d₀, sol.d₀_invis (sol.sees_hA ha')]
   . sorry -- noncommutative, axiom P
   apply sol.nequiv_d₀
-  simp
-  sorry
+  simp [sol.d₀_neq_zero.symm, sol.d₀_invis (sol.I_involved sol.extras hz).2.1, sol.d_neq_d₀]
 
 lemma zpow_of_e_inj (a:SM) : Function.Injective (fun n:ℤ ↦ (e a)^n) :=
   injective_zpow_iff_not_isOfFinOrder.mpr (FreeGroup.infinite_order _ (FreeGroup.of_ne_one a))
@@ -1551,6 +1571,8 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           simp only [EmbeddingLike.apply_eq_iff_eq] at this
           replace this := sol.d_injective $ FreeGroup.of_injective this
           rw [this.2]
+    axiom_P'' := by
+      sorry
     axiom_L := by
       intro x a h
       sorry
@@ -1667,6 +1689,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rw [hzx] at h3
         exact id (Ne.symm h3)
       axiom_P' := sol.axiom_P'
+      axiom_P'' := sol.axiom_P''
       axiom_L := sol.axiom_L
     }
     refine ⟨ sol', ?_, ?_ ⟩
@@ -1752,6 +1775,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rw [←h5] at h4
         exact h3.2.1 a h4
       axiom_P' := sol.axiom_P'
+      axiom_P'' := sol.axiom_P''
       axiom_L := sol.axiom_L
     }
     refine ⟨ sol', ?_, ?_ ⟩
@@ -1935,6 +1959,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         contrapose! this
         rwa [hy₁] at hy'
       rw [hy₂, hy'₂]
+    axiom_P'' := by sorry
     axiom_L := sol.axiom_L
   }
   refine ⟨ sol', ?_, Finset.mem_union_right _ $ Finset.mem_insert_self (x, y) {(z, x)} ⟩

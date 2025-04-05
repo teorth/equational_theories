@@ -172,6 +172,7 @@ Furthermore, the following axioms are satisfied:
   \item (vii'')  For all $x,y \in N$ and $x$ is not equal to $y$ or $R'_a y$ for any $a \in SM$, and $x \op' y$ is defined, then it is equal to some $z \in N$.  Furthermore, either $I[x,y,z]$ is a pending identity, or else $z \op' x$ and $(R'_{2S'x})^{-1} L'_0 R'_0 R'_{S'x} y$ are defined and equal to each other.
   \item (P) If $I[x,y,z]$ is a pending identity, then $x,y,z \in N$, and $Sx$ and $z \op' x$ are undefined.  Furthermore, $z$ is not equal to $x$ or $R'_a x$ for any $a \in SM$, and $y$ is not of the form $(R'_0)^n x$ or $(R'_0)^n y_0$ for any $n$, where $y_0$ is the parent of $x$.
   \item (P') If $I[x,y,z]$ and $I[x,y',z]$ are pending identities, then $y=y'$.
+  \item (P'') If $I[x,y,z]$ and $I[x,y,z']$ are pending identities, then $z=z'$.
   \item (L) If $L'_0 x$ is defined, then it is not of the form $R'_b (R'_{2b})^{-1} x$ for any $b \in SM$.
 \end{itemize}
 
@@ -201,7 +202,7 @@ Now we seek to enlarge a partial solution. We first make an easy observation:
 $$L'_0 (R'_0)^n x := (R'_0)^n e_d$$
 and
 $$L'_0 (R'_0)^n e_d := (R'_0)^{n-1} x.$$
-Because of the new nature of $d$, no collisions in the partial function $L_0$ are created by this operation.  It is then easy to check that axiom (i'') is preserved by this operation, whereas none of the other axioms (S), (iii''), (iv''), (v''), (vi''), (vii''), (P), (P') are affected by this extension.  With some effort, axiom (L) can also be verified.
+Because of the new nature of $d$, no collisions in the partial function $L_0$ are created by this operation.  It is then easy to check that axiom (i'') is preserved by this operation, whereas none of the other axioms (S), (iii''), (iv''), (v''), (vi''), (vii''), (P), (P'), (P'') are affected by this extension.  With some effort, axiom (L) can also be verified.
 \end{proof}
 
 As a corollary, we have
@@ -245,7 +246,7 @@ To retain axiom (P), we perform the following actions for each pending identity 
 \item If $S'x'$ is undefined, add $I[x',y',z']$ as a pending identity.
 \item If instead $S'x'$ is defined (which makes $L'_0 R'_0 R'_{S'x'} y'$ defined, by axiom (C)), set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', (R'_{2S'x'})^{-1} L'_0 R'_0 R'_{S'x'} y')$.  Then add $I[x'',y'',z'']$ as a pending identity.
 \end{itemize}
-One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (iii'), (iv''), (v''), (vii''), (P), (P') are preserved; the remaining axiom (vi'') is unaffected by this extension.  Axiom (L) can also be shown to be preserved after a tedious calculation.
+One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (iii'), (iv''), (v''), (vii''), (P), (P'), (P'') are preserved; the remaining axiom (vi'') is unaffected by this extension.  Axiom (L) can also be shown to be preserved after a tedious calculation.
 \end{proof}
 
 
@@ -291,7 +292,7 @@ This temporarily disrupts axiom (vii'').  To recover it, we perform the followin
   \item Add $I[x',y',z']$ as a pending identity.
 \end{itemize}
 
-One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (vii'), (P), (P'), are preserved; the remaining axioms (S), (iii''), (iv''), (v''), (vi'') are unaffected by this extension.
+One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (vii'), (P), (P'), (P'') are preserved; the remaining axioms (S), (iii''), (iv''), (v''), (vi'') are unaffected by this extension.
 \end{proof}
 
 

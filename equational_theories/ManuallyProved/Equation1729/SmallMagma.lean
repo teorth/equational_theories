@@ -336,6 +336,7 @@ lemma R'_axiom_iib (a : SM) (y:N) : R' a y ≠ y := by
   by_contra! h
   simp only [R', Equiv.coe_fn_mk, mul_left_eq_self, FreeGroup.of_ne_one] at h
 
+
 lemma R'_adjacent (a : SM) (y:N) : adjacent y (R' a y) := by
   use a
   simp only [R', Equiv.coe_fn_mk, or_true]
@@ -873,5 +874,13 @@ lemma val_of_nonsupp_eq_zero {a:SM} {y:N} (h: ¬ a.support ⊆  generators (basi
       apply Finset.mem_union_left
       simp only [Finset.mem_image, List.mem_toFinset, Prod.exists, exists_and_right, exists_eq_right, h]
     _ ⊆ _ := Finset.subset_union_left
+
+lemma R'_R'_neq (a b : SM) (y:N) : R' a (R' b y) ≠ y := by
+  by_contra! h
+  apply_fun (fun z ↦ val a z) at h
+  by_cases heq : b = a
+  all_goals simp [R', heq] at h
+  linarith
+
 
 end Eq1729
