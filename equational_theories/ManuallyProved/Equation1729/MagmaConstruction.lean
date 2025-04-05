@@ -702,6 +702,9 @@ lemma PartialSolution_with_axioms.ad₀_noreach (sol: PartialSolution_with_axiom
 
 lemma PartialSolution_with_axioms.Sad₀_noreach (sol: PartialSolution_with_axioms) {a:SM} (ha: R' a x = sol.y₀) : ¬ sol.reaches sol.extras (S a + S sol.d₀) := sorry
 
+lemma PartialSolution_with_axioms.aSy₀_reach (sol: PartialSolution_with_axioms) {a:SM} (h: sol.x = R' a sol.y₀): sol.reaches sol.extras (a - sol.S' sol.y₀) := by sorry
+
+
 lemma PartialSolution_with_axioms.Sd₀_invis (sol: PartialSolution_with_axioms) {y:N} (hy: sol.sees sol.extras y): val (S sol.d₀) y = 0 := sol.noreach_invis sol.Sd₀_noreach hy
 
 lemma PartialSolution_with_axioms.d₀_invis (sol: PartialSolution_with_axioms) {y:N} (hy: sol.sees sol.extras y): val sol.d₀ y = 0 := sol.noreach_invis sol.d₀_noreach hy
@@ -821,6 +824,7 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
   . apply sol.nequiv_d₁
     simp [sol.d₁_neq_zero.symm, sol.ad₀_neq_d₁ ha', sol.SSy₀_neq_d₁, sol.d₁_invis (sol.sees_hA ha')]
   . by_contra this
+    replace this := sol.cancel sol.Sd₀_noreach sol.sees_x (sol.sees_R'_inv (sol.aSy₀_reach ha') (sol.sees_hB ha')) this
     sorry -- use axiom L
   . apply sol.nequiv_d₁
     simp [sol.d₀_neq_d₁, sol.d₁_invis sol.sees_y₀]
@@ -872,6 +876,7 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
   . apply sol.nequiv_d y' z'
     simp [sol.ad₀_neq_d, sol.SSy₀_neq_d, sol.d_neq_zero.symm, sol.d_invis _ _ (sol.sees_hA ha), sol.ad₀_neq_d ha]
   . by_contra! this
+    replace this := sol.cancel sol.Sd₀_noreach (sol.sees_R'_inv (sol.aSy₀_reach ha) (sol.sees_hB ha)) sol.sees_x this
     sorry -- use axiom L
   . apply sol.nequiv_d₀
     simp [sol.d₀_invis sol.sees_y₀, sol.d₀_neq_d₁.symm]
@@ -900,8 +905,7 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
   . apply sol.nequiv_d₀
     simp [sol.d₀_invis sol.sees_x, sol.d_neq_d₀]
   . apply sol.nequiv_d₀
-    simp
-    sorry -- this one is tricky
+    simp [sol.d₀_neq_zero.symm, sol.d₀_invis (sol.I_involved sol.extras hz).2.1, sol.d₀_invis sol.sees_y₀, sol.Sad₀_neq_d₀ ha']
   . apply sol.nequiv_d y z
     simp [sol.ad₀_neq_d ha', sol.SSy₀_neq_d, sol.d_neq_zero.symm, sol.d_invis _ _ (sol.sees_hA ha')]
   . apply sol.nequiv_d₀
@@ -969,7 +973,8 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_3 (sol: PartialSolution_with_
     exact (sol.axiom_P _ _ _ hz).2.2.2.2.1 $ sol.cancel sol.d₀_noreach (sol.I_involved sol.extras hz).2.1 sol.sees_x $ Setoid.trans (rel_of_mul (e sol.d₀ * y) 1) this
   . apply sol.nequiv_d₀
     simp [sol.d₀_neq_zero.symm, sol.d₀_invis (sol.I_involved sol.extras hz).2.1, sol.ad₀_neq_d₀ ha', sol.SSy₀_neq_d₀, sol.d₀_invis (sol.sees_hA ha')]
-  . sorry -- noncommutative, axiom P
+  . by_contra! this
+    exact (sol.axiom_P _ _ _ hz).2.2.2.2.2 $ sol.cancel sol.d₀_noreach (sol.I_involved sol.extras hz).2.1 sol.sees_y₀ $ Setoid.trans (rel_of_mul (e sol.d₀ * y) 1) this
   apply sol.nequiv_d₀
   simp [sol.d₀_neq_zero.symm, sol.d₀_invis (sol.I_involved sol.extras hz).2.1, sol.d_neq_d₀]
 
