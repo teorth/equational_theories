@@ -851,7 +851,7 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
   . apply sol.nequiv_d₀
     simp [sol.d₀_invis sol.sees_y₀, sol.d₀_neq_d₁.symm]
   . apply sol.nequiv_d₁
-    simp [sol.d₁_neq_d₀.symm]
+    simp [sol.d₀_neq_d₁, sol.aSy₀_neq_d₁ ha, sol.d₁_invis (sol.sees_hB ha)]
   . by_contra! this
     sorry -- noncommutative
   . by_cases h : S a' = 0
@@ -879,47 +879,88 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     simp
     sorry -- this one is tricky
   . apply sol.nequiv_d y z
-    simp [sol.ad₀_neq_d, sol.SSy₀_neq_d, sol_d_neq_zero.symm, sol.d_invis (sol.sees_hA ha')]
-    sorry
+    simp [sol.ad₀_neq_d ha', sol.SSy₀_neq_d, sol.d_neq_zero.symm, sol.d_invis _ _ (sol.sees_hA ha')]
   . apply sol.nequiv_d₀
-    simp
-    sorry
+    simp [sol.d₀_neq_zero.symm, sol.d₀_invis (sol.I_involved sol.extras hz).2.1, sol.Sd₀_neq_d₀, sol.aSy₀_neq_d₀ ha', sol.d₀_invis (sol.sees_hB ha')]
   . apply sol.nequiv_d₀
-    simp
-    sorry
+    simp [sol.d_neq_d₀, sol.d₀_invis sol.sees_y₀]
   . contrapose! hneq
     sorry -- noncommutative
   contrapose! hneq
-  sorry
+  sorry -- noncommutative
 
 lemma PartialSolution_with_axioms.L₀'_no_collide_3 (sol: PartialSolution_with_axioms) (data data' : L₀'_data sol) : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').2 := by
   rcases data with ⟨⟩ | ⟨⟩ | ⟨a,ha⟩ | ⟨a,ha⟩ | ⟨y,z,hz⟩
   all_goals rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hz'⟩
   all_goals simp [PartialSolution_with_axioms.L₀'_pair]
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
+  . apply sol.nequiv_d₁
+    simp
+    sorry
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . apply sol.nequiv_Sd₀
+    simp
+    sorry
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . apply sol.nequiv_Sd₀
+    simp
+    sorry
+  . apply sol.nequiv_d₁
+    simp
+    sorry
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . apply sol.nequiv_Sd₀
+    simp
+    sorry
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . apply sol.nequiv_d₁
+    simp
+    sorry
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . sorry -- tricky!
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . apply sol.nequiv_d y' z'
+    simp
+    sorry
+  . apply sol.nequiv_d₁
+    simp
+    sorry
+  . apply sol.nequiv_Sd₀
+    simp
+    sorry
+  . apply sol.nequiv_Sd₀
+    simp
+    sorry
+  . apply sol.nequiv_Sd₀
+    simp
+    sorry
+  . apply sol.nequiv_Sd₀
+    simp
+    sorry
+  . apply sol.nequiv_d₁
+    simp
+    sorry
+  . sorry -- noncommutative
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . sorry -- noncommutative, axiom P
+  apply sol.nequiv_d₀
+  simp
   sorry
 
 lemma zpow_of_e_inj (a:SM) : Function.Injective (fun n:ℤ ↦ (e a)^n) :=
