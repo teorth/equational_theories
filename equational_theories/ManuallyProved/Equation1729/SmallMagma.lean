@@ -470,6 +470,16 @@ lemma fill_union {D₁ D₂ : Finset N} : fill (D₁ ∪ D₂) = (fill D₁) ∪
   simp [fill]
   aesop
 
+@[simp]
+lemma fill_pair {x y : N} : fill {x,y} = (fill {x}) ∪ (fill {y}) := by
+  convert fill_union using 2
+  rfl
+
+@[simp]
+lemma fill_singleton {x y : N} : x ∈ fill {y} ↔ x ≈ y := by
+  simp [fill]
+  exact Setoid.comm' _
+
 lemma fill_invar (D: Finset N) {x y : N} (h : x ≈ y) : x ∈ fill D ↔ y ∈ fill D := by
   constructor
   . intro h

@@ -172,7 +172,7 @@ Furthermore, the following axioms are satisfied:
   \item (vii'')  For all $x,y \in N$ and $x$ is not equal to $y$ or $R'_a y$ for any $a \in SM$, and $x \op' y$ is defined, then it is equal to some $z \in N$.  Furthermore, either $I[x,y,z]$ is a pending identity, or else $z \op' x$ and $(R'_{2S'x})^{-1} L'_0 R'_0 R'_{S'x} y$ are defined and equal to each other.
   \item (P) If $I[x,y,z]$ is a pending identity, then $x,y,z \in N$, and $Sx$ and $z \op' x$ are undefined.  Furthermore, $z$ is not equal to $x$ or $R'_a x$ for any $a \in SM$, and $y$ is not of the form $(R'_0)^n x$ or $(R'_0)^n y_0$ for any $n$, where $y_0$ is the parent of $x$.
   \item (P') If $I[x,y,z]$ and $I[x,y',z]$ are pending identities, then $y=y'$.
-  \item (L) If $L'_0 x$ is defined, then it is not of the form $R'_b R'_{2b}^{-1} x$ for any $b \in SM$.
+  \item (L) If $L'_0 x$ is defined, then it is not of the form $R'_b (R'_{2b})^{-1} x$ for any $b \in SM$.
 \end{itemize}
 
 We say that one partial solution $(\tilde L'_0, \tilde \op', \tilde S', \tilde {\mathcal I})$ \emph{extends} another if $(L'_0, \op', S',  {\mathcal I})$ if $\tilde L'$ is an extension of $L'_0$, $\tilde \op'$ is an extension of $\op'$, and $\tilde S'$ is an extension of $S'$.  (No constraint is imposed on the final components $\tilde {\mathcal I}, {\mathcal I}$.)  This is a preordering.
@@ -275,6 +275,8 @@ Finally, we give a tool for enlarging $\op$:
 
 \begin{proof}\uses{enlarge-S}\leanok  By applying \Cref{enlarge-S} as needed, we may assume without loss of generality that $S'x$ and $S'y$ are already defined (among other things, this removes the possibility that $x \op' y$ is part of a pending identity).  If this makes $x \op' y$ defined, then we are done, so we may assume that this is not the case.
 
+  Similarly, by using \Cref{enlarge-l0}, we may assume without loss of generality that  $L'_0 R'_0 R'_{S'x} y$ is defined.
+
 We now divide into cases:
 
 Case 1: $x=y$.  In this case we set $x \op' y := S'x$.  It is clear that this preserves axiom (v''), and no other axiom is impacted.
@@ -285,7 +287,6 @@ Case 3: If $x$ is not equal to $y$ or $R'_a y$ for any $a \in SM$.  Let $d_0, d_
 
 This temporarily disrupts axiom (vii'').  To recover it, we perform the following actions.
 \begin{itemize}
-  \item If $L'_0 R'_0 R'_{S'x} y$ is not currently defined, we set it equal to $e_{d_1}$, and extend by \Cref{itero}, \Cref{itero-2}.
   \item Set $x' \op' y' = z'$, where $(x',y',z') := (z, x, (R'_{2S'x})^{-1} L_0 R'_0 R'_{Sx} y)$.
   \item Add $I[x',y',z']$ as a pending identity.
 \end{itemize}
