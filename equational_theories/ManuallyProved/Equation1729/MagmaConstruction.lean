@@ -856,20 +856,41 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     apply sol.nequiv_Sd₀
     have : val (S sol.d₀) (sol.L₀' (e (S a + S (PartialSolution.S' sol.y₀)) * x)) = 0 := sol.Sd₀_invis (sol.dom_L₀'_involved sol.extras (sol.hB a ha)).2
     simp [sol.Sd₀_invis sol.sees_y₀, h, sol.aSy₀_neq_Sd₀ ha,this]
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . simp [ha, R'_axiom_iia', hneq] at ha'
+  . simp [ha, R'_axiom_iia', hneq] at ha'
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . apply sol.nequiv_d₁
+    simp
+    sorry
+  . apply sol.nequiv_d₁
+    simp
+    sorry
   . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
-  . sorry
+  . apply sol.nequiv_d₀
+    simp
+    sorry -- this one is tricky
+  . apply sol.nequiv_d y z
+    simp
+    sorry
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . apply sol.nequiv_d₀
+    simp
+    sorry
+  . contrapose! hneq
+    sorry -- noncommutative
   contrapose! hneq
   sorry
 
