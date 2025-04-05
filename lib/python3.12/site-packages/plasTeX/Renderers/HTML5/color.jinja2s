@@ -1,4 +1,0 @@
-name: color textcolor colorbox fcolorbox
-<span style="{{ obj.style.inline }}">{{ obj }}</span>
-
-name: pagecolor nopagecolor definecolor definecolors providecolor providecolors definecolorseries resetcolorseries colorlet

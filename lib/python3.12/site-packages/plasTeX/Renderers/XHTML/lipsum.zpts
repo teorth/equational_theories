@@ -1,2 +1,0 @@
-name:lipsum
-<span tal:replace="self/text"></span>
