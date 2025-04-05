@@ -509,7 +509,24 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol', sol ≤ sol' ∧ 
   apply Finset.mem_union_right
   simp only [Finset.mem_insert, Finset.mem_singleton, true_or]
 
-lemma enlarge_L₀'_multiple (sol : PartialSolution) (A: Finset N)  : ∃ sol', sol ≤ sol' ∧ A.toSet ⊆ fill sol'.Predom_L₀' := by sorry
+lemma enlarge_L₀'_multiple (sol : PartialSolution) (A: Finset N)  : ∃ sol', sol ≤ sol' ∧ A.toSet ⊆ fill sol'.Predom_L₀' := by
+  induction' A using Finset.induction_on with x B hx hprev
+  . use sol
+    simp
+  .
+    obtain ⟨sol_prev, hsol_le_solprev, hb_subset⟩ := hprev
+    obtain ⟨solx, hsol_prev_le_solx, hx_solx⟩ := enlarge_L₀' sol_prev x
+    use solx
+    refine ⟨?_, ?_⟩
+    . exact Preorder.le_trans sol sol_prev solx hsol_le_solprev hsol_prev_le_solx
+    .
+      simp only [Finset.coe_insert]
+      refine Set.insert_subset_iff.mpr ⟨hx_solx, ?_⟩
+      . apply subset_trans hb_subset
+        apply fill_mono
+        dsimp [LE.le] at hsol_prev_le_solx
+        exact hsol_prev_le_solx.1
+
 
 class PartialSolution_with_axioms extends PartialSolution where
   x : N
