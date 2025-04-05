@@ -528,7 +528,7 @@ class PartialSolution_with_axioms extends PartialSolution where
   hx : x ∉ Dom_S'
   hind : ∀ y:N, y < x → y ∈ Dom_S'
   hA : ∀ a, R' a x = parent x → R' (S' (parent x)) x ∈ fill Predom_L₀'
-  hB : ∀ a, x = R' a (parent x) → R' (S (a - S' (parent x))) x ∈ fill Predom_L₀'
+  hB : ∀ a, x = R' a (parent x) → R' (S a + S (S' (parent x))) x ∈ fill Predom_L₀'
   hC : ∀ y z, (x,y,z) ∈ I → z ∈ Dom_S' → R' 0 (R' (S' z) x) ∈ fill Predom_L₀'
 
 abbrev PartialSolution_with_axioms.y₀ (sol : PartialSolution_with_axioms) : N := parent sol.x
@@ -639,7 +639,7 @@ lemma PartialSolution_with_axioms.ad₀_neq_d₀ (sol: PartialSolution_with_axio
 
 lemma PartialSolution_with_axioms.ad₀_neq_d₁ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀):  a - sol.d₀ ≠ sol.d₁ := by sorry
 
-lemma PartialSolution_with_axioms.Sad₀_neq_d₁ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀): S ( a - sol.d₀) ≠ sol.d₁ := by sorry
+lemma PartialSolution_with_axioms.Sad₀_neq_d₁ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀): S  a + S sol.d₀ ≠ sol.d₁ := by sorry
 
 lemma PartialSolution_with_axioms.SSy₀_neq_d₀ (sol: PartialSolution_with_axioms) : S ( sol.S' sol.y₀ ) ≠ sol.d₀ := by sorry
 
@@ -652,6 +652,8 @@ lemma PartialSolution_with_axioms.aSy₀_neq_d₁ (sol: PartialSolution_with_axi
 lemma PartialSolution_with_axioms.ad₀_neq_SSy₀ (sol: PartialSolution_with_axioms) {a:SM} (ha: R' a sol.x = sol.y₀) : a - sol.d₀ ≠ S (sol.S' sol.y₀) := by sorry
 
 lemma PartialSolution_with_axioms.aSy₀_neq_Sd₀ (sol: PartialSolution_with_axioms) {a:SM} (ha: sol.x = R' a sol.y₀) : a - sol.S' sol.y₀ ≠ S sol.d₀ := by sorry
+
+lemma PartialSolution_with_axioms.d_neq_d₀ (sol: PartialSolution_with_axioms) {y z: N} : sol.d y z ≠ sol.d₀ := by sorry
 
 lemma PartialSolution_with_axioms.d_neq_d₁ (sol: PartialSolution_with_axioms) {y z: N} : sol.d y z ≠ sol.d₁ := by sorry
 
@@ -674,7 +676,7 @@ lemma PartialSolution_with_axioms.d_noreach (sol: PartialSolution_with_axioms) (
 
 lemma PartialSolution_with_axioms.ad₀_noreach (sol: PartialSolution_with_axioms) {a:SM} (ha: R' a x = sol.y₀) : ¬ sol.reaches sol.extras (a - sol.d₀) := sorry
 
-lemma PartialSolution_with_axioms.Sad₀_noreach (sol: PartialSolution_with_axioms) {a:SM} (ha: R' a x = sol.y₀) : ¬ sol.reaches sol.extras (S (a - sol.d₀)) := sorry
+lemma PartialSolution_with_axioms.Sad₀_noreach (sol: PartialSolution_with_axioms) {a:SM} (ha: R' a x = sol.y₀) : ¬ sol.reaches sol.extras (S a + S sol.d₀) := sorry
 
 lemma PartialSolution_with_axioms.Sd₀_invis (sol: PartialSolution_with_axioms) {y:N} (hy: sol.sees sol.extras y): val (S sol.d₀) y = 0 := sol.noreach_invis sol.Sd₀_noreach hy
 
@@ -686,7 +688,7 @@ lemma PartialSolution_with_axioms.d_invis (sol: PartialSolution_with_axioms) (y 
 
 lemma PartialSolution_with_axioms.ad₀_invis (sol: PartialSolution_with_axioms) {a:SM} {z:N} (ha: R' a x = sol.y₀) (hz: sol.sees sol.extras z): val (a - sol.d₀) z = 0 := sol.noreach_invis (sol.ad₀_noreach ha) hz
 
-lemma PartialSolution_with_axioms.Sad₀_invis (sol: PartialSolution_with_axioms) {a:SM} {z:N} (ha: R' a x = sol.y₀) (hz: sol.sees sol.extras z): val (S (a - sol.d₀)) z = 0 := sol.noreach_invis (sol.Sad₀_noreach ha) hz
+lemma PartialSolution_with_axioms.Sad₀_invis (sol: PartialSolution_with_axioms) {a:SM} {z:N} (ha: R' a x = sol.y₀) (hz: sol.sees sol.extras z): val (S a + S sol.d₀) z = 0 := sol.noreach_invis (sol.Sad₀_noreach ha) hz
 
 
 lemma PartialSolution_with_axioms.invis_lemma (sol: PartialSolution_with_axioms) (y z:N) : ¬ (sol.sees sol.extras $ (R' (S sol.d₀)).symm $ e $ sol.d y z) := by
@@ -714,8 +716,8 @@ lemma PartialSolution_with_axioms.invis_lemma'' (sol: PartialSolution_with_axiom
 noncomputable abbrev PartialSolution_with_axioms.L₀'_pair (sol: PartialSolution_with_axioms) (data: L₀'_data sol) : N × N := match data with
   | L₀'_data.iv₁ => (R' (S sol.d₀) sol.x, e sol.d₁)
   | L₀'_data.iv₂ => (R' (S sol.d₀) $ (R' sol.d₀).symm $ e sol.d₁, R' sol.d₀ sol.x)
-  | L₀'_data.iii₁ a _ => (R' (S (a - sol.d₀)) sol.y₀, R' (a-sol.d₀) $ (R' (S (sol.S' sol.y₀))).symm $ R' 0 $ sol.L₀' $ R' (sol.S' sol.y₀) sol.x)
-  | L₀'_data.iii₂ a _ => (R' (S sol.d₀) $ (R' (a - sol.S' sol.y₀)).symm $ sol.L₀' $ R' (S (a - sol.S' sol.y₀)) sol.x, R' sol.d₀ sol.y₀)
+  | L₀'_data.iii₁ a _ => (R' (S a + S sol.d₀) sol.y₀, R' (a-sol.d₀) $ (R' (S (sol.S' sol.y₀))).symm $ R' 0 $ sol.L₀' $ R' (sol.S' sol.y₀) sol.x)
+  | L₀'_data.iii₂ a _ => (R' (S sol.d₀) $ (R' (a - sol.S' sol.y₀)).symm $ sol.L₀' $ R' (S a + S (sol.S' sol.y₀)) sol.x, R' sol.d₀ sol.y₀)
   | L₀'_data.P y z _ => (R' 0 $ R' sol.d₀ y, e (sol.d y z))
 
 
@@ -741,7 +743,7 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_1  (sol: PartialSolution_with
     by_cases h : 0 = a - sol.d₀
     all_goals simp [h] at this
   . replace this := sol.Sd₀_invis this
-    have h1 : (val (S sol.d₀) $ sol.L₀' $ (e $ S $ a - sol.S' sol.y₀) * x) = 0 := sol.Sd₀_invis (sol.dom_L₀'_involved sol.extras $ sol.hB a ha).2
+    have h1 : (val (S sol.d₀) $ sol.L₀' $ e (S a + S (sol.S' sol.y₀)) * x) = 0 := sol.Sd₀_invis (sol.dom_L₀'_involved sol.extras $ sol.hB a ha).2
     simp [R',h1, sol.aSy₀_neq_Sd₀ ha] at this
   . replace this := sol.d₀_invis this
     simp [R', sol.d₀_invis sol.sees_y₀] at this
@@ -798,23 +800,22 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
   . apply sol.nequiv_d₁
     simp [sol.d₀_neq_d₁, sol.Sd₀_neq_d₁, sol.d₁_invis sol.sees_y₀, sol.Sad₀_neq_d₁ ha']
   . apply sol.nequiv_d₀
-    have : val sol.d₀ (PartialSolution.L₀' (e (PartialSolution.S' sol.y₀) * x)) = 0 := sol.d₀_invis (sol.dom_L₀'_involved sol.extras (sol.hA a' ha')).2
+    have : val sol.d₀ (sol.L₀' (e (sol.S' sol.y₀) * x)) = 0 := sol.d₀_invis (sol.dom_L₀'_involved sol.extras (sol.hA a' ha')).2
     simp [sol.d₀_invis sol.sees_x, sol.d₀_neq_zero.symm, sol.ad₀_neq_d₀ ha', SSy₀_neq_d₀, this]
   . apply sol.nequiv_d₁
-    have : val sol.d₁ (PartialSolution.L₀' (e (S (a' - PartialSolution.S' sol.y₀)) * x)) = 0 := sol.d₁_invis (sol.dom_L₀'_involved sol.extras (sol.hB a' ha')).2
+    have : val sol.d₁ (sol.L₀' (e (S a' + S (sol.S' sol.y₀)) * x)) = 0 :=  sol.d₁_invis (sol.dom_L₀'_involved sol.extras (sol.hB a' ha')).2
     simp [sol.d₀_neq_d₁, this, sol.aSy₀_neq_d₁ ha']
-    sorry
   . by_contra this
     sorry -- noncommutative
   . apply sol.nequiv_d₁
-    simp
-    sorry
+    simp [sol.d₀_neq_d₁, sol.Sd₀_neq_d₁, sol.d₁_invis (sol.I_involved sol.extras hz').2.1, sol.d₁_neq_zero.symm]
   . apply sol.nequiv_d₀
-    simp
-    sorry
-  . apply sol.nequiv_Sd₀
-    simp
-    sorry
+    simp [sol.d₀_invis sol.sees_x, sol.d_neq_d₀]
+  . by_cases h : S a = 0
+    . simp [h]
+      sorry -- noncommutative
+    apply sol.nequiv_Sd₀
+    simp [sol.Sd₀_invis sol.sees_x, sol.Sd₀_invis sol.sees_y₀, h]
   . apply sol.nequiv_d₁
     simp
     sorry
@@ -1174,7 +1175,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         unfold PartialSolution.Dom_L₀' at hB
         simp only [fill_union, sol.new_S_y₀ hneq', Set.mem_union, hB, true_or, sol.new_S_x,
           sol.new_L₀'_extend hB, mem_fill h1, or_true, sol.new_L₀'_eval (L₀'_data.iii₂ a hray.symm),
-          Equiv.symm_apply_apply, and_self, y₀]
+          Equiv.symm_apply_apply, and_self, y₀, S_sub]
       rcases hy with hy | hy
       . rw [hx'] at hray hneq ⊢
         have : y = sol.y₀ := by
@@ -1194,7 +1195,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         have heval : (sol.new_L₀' $ R' 0 $ sol.L₀' $ R' (sol.S' sol.y₀) sol.x) = R' (sol.S' sol.y₀) sol.x := by
           rw [sol.new_L₀'_extend $ (R0_mem_fill_iff _ _).mpr hfill]
           exact PartialSolution.inv_L₀' hA
-        simp only [fill_union, sol.new_S_x, Set.mem_union, mem_fill h1, sol.new_S_y₀ hneq', sol.new_L₀'_eval (L₀'_data.iii₁ a hray), Equiv.symm_apply_apply, Equiv.apply_symm_apply, true_and, true_or, or_true, y₀, hfill, heval, R0_mem_fill_iff]
+        simp only [fill_union, sol.new_S_x, Set.mem_union, mem_fill h1, sol.new_S_y₀ hneq', sol.new_L₀'_eval (L₀'_data.iii₁ a hray), Equiv.symm_apply_apply, Equiv.apply_symm_apply, true_and, true_or, or_true, y₀, hfill, heval, R0_mem_fill_iff, S_sub]
       contrapose! hneq
       rw [hx',hy]
     axiom_iv'' := by

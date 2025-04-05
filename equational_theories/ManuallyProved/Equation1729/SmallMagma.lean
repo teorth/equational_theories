@@ -23,6 +23,14 @@ instance SM_countable : Countable SM := by
   . infer_instance
   infer_instance
 
+@[simp]
+lemma SM_char_four (a : SM) : 4 • a = 0 := by
+-- when we update Mathlib, one can switch to DirectSum.ext_component, or use the new version of DirectSum.ext
+  apply DirectSum.ext ℤ
+  intro i
+  simp only [map_smul, map_zero]
+  exact ZModModule.char_nsmul_eq_zero 4 _
+
 abbrev E (n:ℕ) : SM := (DirectSum.of (fun _ ↦ ZMod 4) n) 1
 
 @[simp]
@@ -41,27 +49,43 @@ def S (a : SM) := a ◇ a
 @[simp]
 lemma S_zero : S 0 = 0 := rfl
 
+lemma SM_square_eq_double (a : SM) : S a = a + a := rfl
+
 @[simp]
 lemma SM_square_square_eq_zero (a : SM) : S (S a) = 0 := by
-  simp only [S, SM_op_eq_add]
--- when we update Mathlib, one can switch to DirectSum.ext_component, or use the new version of DirectSum.ext
-  apply DirectSum.ext ℤ
-  intro i
-  simp only [map_add, map_zero]
+  rw [←sub_eq_zero]
+  simp only [SM_square_eq_double]
   abel_nf
-  exact ZModModule.char_nsmul_eq_zero 4 _
+  exact SM_char_four _
 
-lemma SM_square_eq_double (a : SM) : S a = a + a := rfl
+@[simp]
+lemma S_neg (a : SM) : S (-a) = S a := by
+  simp only [SM_square_eq_double]
+  symm
+  rw [←sub_eq_zero]
+  abel_nf
+  exact SM_char_four _
+
+@[simp]
+lemma S_add (a b: SM) : S (a + b) = S a + S b := by
+  simp only [SM_square_eq_double]
+  abel
+
+@[simp]
+lemma S_sub (a b: SM) : S (a - b) = S a + S b := by
+  simp only [SM_square_eq_double]
+  symm
+  rw [←sub_eq_zero]
+  abel_nf
+  exact SM_char_four _
 
 lemma SM_obeys_1729 : Equation1729 SM := by
   intro x y
-  simp only [SM_op_eq_add]
+  simp only [SM_op_eq_add, SM_square_eq_double]
+  symm
+  rw [←sub_eq_zero]
   abel_nf
--- when we update Mathlib, one can switch to DirectSum.ext_component, or use the new version of DirectSum.ext
-  apply DirectSum.ext ℤ
-  intro i
-  simp only [map_add, map_smul, zsmul_eq_mul, Int.cast_ofNat, self_eq_add_left]
-  apply zero_mul
+  exact SM_char_four _
 
 lemma E_ne_SE (n m : ℕ): E n ≠ S (E m) := by
   by_contra! this
