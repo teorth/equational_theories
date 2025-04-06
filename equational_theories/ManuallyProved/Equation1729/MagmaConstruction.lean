@@ -1152,23 +1152,16 @@ lemma enlarge_S'_induction {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x �
 
 -- derive this from the inductive step `enlarge_S'_induction` using the API for ordering on `N` in `SmallMagma.lean`
 
-lemma enlarge_S' (sol : PartialSolution) (x:N) : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by
-  apply WellFoundedLT.induction x
-  intro z hz
+lemma enlarge_S' (sol : PartialSolution) (x : N) :
+    ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by
+  apply WellFoundedLT.induction x (fun z hz ↦ ?_)
   by_cases z_one: z = 1
-  .
-    have hind : ∀ y: N, y < z → y ∈ sol.Dom_S' := by simp [z_one, ← bot_eq_one]
-    exact enlarge_S'_induction hind
-  .
-    have h_z_parent := parent_lt z_one
-    obtain ⟨parent_sol, h_parent_sol, h_parent_z_in⟩ := hz (parent z) (h_z_parent)
-    have hind : ∀ y: N, y < z → y ∈ parent_sol.Dom_S' := by
-      intro y hy
-      have le_pred := PredOrder.le_pred_of_lt hy
-      exact parent_sol.axiom_S (parent z) y h_parent_z_in le_pred
+  · exact enlarge_S'_induction (by simp [z_one, ← bot_eq_one])
+  · obtain ⟨parent_sol, h_parent_sol, h_parent_z_in⟩ := hz (parent z) (parent_lt z_one)
+    have hind : ∀ y: N, y < z → y ∈ parent_sol.Dom_S' :=
+      fun y hy ↦ parent_sol.axiom_S (parent z) y h_parent_z_in <| PredOrder.le_pred_of_lt hy
     obtain ⟨sol', hsol', z_sol'⟩ := enlarge_S'_induction hind
-    refine ⟨sol', ?_, z_sol'⟩
-    exact Preorder.le_trans sol parent_sol sol' h_parent_sol hsol'
+    exact ⟨sol', Preorder.le_trans sol parent_sol sol' h_parent_sol hsol', z_sol'⟩
 
 lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (x,y) ∈ sol'.Dom_op := by
   wlog hx : x ∈ sol.Dom_S'
