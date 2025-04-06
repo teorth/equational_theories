@@ -29,7 +29,7 @@ class PartialSolution where
   axiom_P (x y z : N) (h: (x,y,z) ∈ I) : x ∉ Dom_S' ∧ (z,x) ∉ Dom_op ∧ z ≠ x ∧ (∀ a : SM, z ≠ R' a x ∧ R' a z ≠ x) ∧ (y ≠ x) ∧ (y ≠ parent x)
   axiom_P' (x y y' z : N) (hy : (x,y,z) ∈ I) (hy' : (x,y',z) ∈ I) : y = y'
   axiom_P'' (x y z : N) (hy : (x,y,z) ∈ I) : (x,y) ∈ Dom_op ∧ Sum.inr z = op x y
-  axiom_L (x:N) (a:SM) (h: x ∈ fill Predom_L₀') : L₀' x ≠ (R' a $ (R' (S a)).symm $ x)
+  axiom_L (x y₀:N) (a:SM) (hpar: y₀ = parent x) (hS : y₀ ∈ Dom_S') (h: R' (S (a - S' y₀)) x ∈ fill Predom_L₀') (ha: x = R' a y₀): ((R' (a - S' y₀)).symm $ L₀' $ R' (S (a - S' y₀)) $ x) ≠ x
 
 abbrev PartialSolution.Dom_L₀' (sol: PartialSolution) : Set N := fill sol.Predom_L₀'
 
@@ -110,7 +110,7 @@ def TrivialPartialSolution : PartialSolution := {
     contrapose! h
     exact Finset.not_mem_empty _
   axiom_L := by
-    intro _ _ h
+    intro _ _ _ _ _ h
     contrapose! h
     simp only [fill_empty, Set.mem_empty_iff_false, not_false_eq_true]
 }
@@ -498,17 +498,25 @@ noncomputable def enlarge_L₀'_by {sol : PartialSolution} {x y:N} (hx: x ∉ so
     axiom_P' := sol.axiom_P'
     axiom_P'' := sol.axiom_P''
     axiom_L := by
-      intro z a hz
+      intro z y₀ a hpar hS hz ha
       simp only [fill_union, fill_pair, fill_singleton, Set.mem_union] at hz
       rcases hz with hz | hz | hz
-      . convert sol.axiom_L z a hz using 1
+      . convert sol.axiom_L z y₀ a hpar hS hz ha using 2
         apply sol.enlarge_L₀'_extends hx hy hz
-      . obtain ⟨ n, rfl ⟩ := Setoid.symm hz
-        rw [(sol.enlarge_L₀'_new hneq n).1]
-        exact hcol1 a n
-      obtain ⟨ n, rfl ⟩ := Setoid.symm hz
-      rw [(sol.enlarge_L₀'_new hneq n).2]
-      exact hcol2 a n
+      . obtain ⟨ n, hn ⟩ := Setoid.symm hz
+        by_contra! this
+        apply_fun (R' (S (a - PartialSolution.S' y₀))) at this
+        apply_fun (R' (S (a - PartialSolution.S' y₀))).symm at this
+        apply_fun R' (a - PartialSolution.S' y₀) at this
+        rw [hn, (sol.enlarge_L₀'_new hneq n).1, Equiv.symm_apply_apply, Equiv.apply_symm_apply] at this
+        exact hcol1 _ n this
+      obtain ⟨ n, hn ⟩ := Setoid.symm hz
+      by_contra! this
+      apply_fun (R' (S (a - PartialSolution.S' y₀))) at this
+      apply_fun (R' (S (a - PartialSolution.S' y₀))).symm at this
+      apply_fun (R' ((a - PartialSolution.S' y₀))) at this
+      rw [hn, (sol.enlarge_L₀'_new hneq n).2, Equiv.symm_apply_apply, Equiv.apply_symm_apply] at this
+      exact hcol2 _ n this
 }
 
 
@@ -1048,11 +1056,17 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     simp [sol.d₁_neq_zero.symm, sol.ad₀_neq_d₁ ha', sol.SSy₀_neq_d₁, sol.d₁_invis (sol.sees_hA ha')]
   . by_contra this
     replace this := sol.cancel sol.Sd₀_noreach sol.sees_x (sol.sees_R'_inv (sol.aSy₀_reach ha') (sol.sees_hB ha')) this
-    have h := sol.axiom_L (R' (S (a' - sol.S' sol.y₀)) x) (a' - sol.S' sol.y₀) ?_
+    have h := sol.axiom_L x sol.y₀ a' (by rfl) ?_ ?_ ha'
     . contrapose! h
-      nth_rewrite 2 [this]
-      simp [R']
+      simp only [R', Equiv.coe_fn_symm_mk, S_sub, Equiv.coe_fn_mk] at this ⊢
+      exact this.symm
+    . by_cases h : x = 1
+      . simp [h, PartialSolution_with_axioms.y₀] at ha'
+        contrapose! ha'
+        exact (R'_axiom_iib _ _).symm
+      exact sol.hind _ (parent_lt h)
     simp [sol.hB a' ha']
+
   . apply sol.nequiv_d₁
     simp [sol.d₀_neq_d₁, sol.d₁_invis sol.sees_y₀]
   . apply sol.nequiv_d₀
@@ -1104,10 +1118,15 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     simp [sol.ad₀_neq_d, sol.SSy₀_neq_d, sol.d_neq_zero.symm, sol.d_invis _ _ (sol.sees_hA ha), sol.ad₀_neq_d ha]
   . by_contra! this
     replace this := sol.cancel sol.Sd₀_noreach (sol.sees_R'_inv (sol.aSy₀_reach ha) (sol.sees_hB ha)) sol.sees_x this
-    have h := sol.axiom_L (R' (S (a - sol.S' sol.y₀)) x) (a - sol.S' sol.y₀) ?_
+    have h := sol.axiom_L x sol.y₀ a (by rfl) ?_ ?_ ha
     . contrapose! h
-      nth_rewrite 2 [←this]
-      simp [R']
+      simp only [R', Equiv.coe_fn_symm_mk, S_sub, Equiv.coe_fn_mk] at this ⊢
+      exact this
+    . by_cases h : x = 1
+      . simp [h, PartialSolution_with_axioms.y₀] at ha
+        contrapose! ha
+        exact (R'_axiom_iib _ _).symm
+      exact sol.hind _ (parent_lt h)
     simp [sol.hB a ha]
   . apply sol.nequiv_d₀
     simp [sol.d₀_invis sol.sees_y₀, sol.d₀_neq_d₁.symm]
@@ -1853,72 +1872,80 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       . exact ⟨ sol.mem_new_dom_op (op_data.P₁ y₁ z₁ hI₁), (sol.op_eval (op_data.P₁ y₁ z₁ hI₁)).symm ⟩
       exact ⟨ sol.mem_new_dom_op (op_data.P₂ y₁ z₁ hI₁ hz₁), (sol.op_eval (op_data.P₂ y₁ z₁ hI₁ hz₁)).symm ⟩
     axiom_L := by
-      intro x a h
+      intro x' y₀ a hpar hS h ha
       save
       simp only [fill_union, Set.mem_union] at h
+      simp only [Finset.mem_union, Finset.mem_singleton] at hS
+      rcases hS with hS | rfl
+      swap
+      . sorry -- tricky
+      rw [sol.new_S_extend hS] at h ⊢
+      set a' := a - sol.S' y₀
       rcases h with h | h
-      . exact (sol.new_L₀'_extend h) ▸ sol.axiom_L x a h
+      . exact (sol.new_L₀'_extend h) ▸ sol.axiom_L x' y₀ a hpar hS h ha
       simp only [fill, Function.Embedding.in_range_iff_attains, Set.mem_setOf_eq] at h
       by_contra! this
-      obtain ⟨ y, ⟨ n, rfl ⟩, ⟨ ⟨ data, b ⟩, rfl ⟩ ⟩ := h
-      have hS_neq_d₀ : S a ≠ sol.d₀ := (E_ne_S _ _).symm
-      have hS_neq_d₁ : S a ≠ sol.d₁ := (E_ne_S _ _).symm
-      have hS_neq_d (a':SM) (y' z':N) : S a ≠ sol.d y' z' := (E_ne_S _ _).symm
-      have hS_neq_ad₀ {a':SM} (ha': (R' a') x = sol.y₀) (b:SM) : S b ≠ a' - sol.d₀ := by
+      obtain ⟨ y, ⟨ n, hn ⟩, ⟨ ⟨ data, b ⟩, rfl ⟩ ⟩ := h
+      have hS_neq_d₀ : S a' ≠ sol.d₀ := (E_ne_S _ _).symm
+      have hS_neq_d₁ : S a' ≠ sol.d₁ := (E_ne_S _ _).symm
+      have hS_neq_d (b:SM) (y' z':N) : S b ≠ sol.d y' z' := (E_ne_S _ _).symm
+      have hS_neq_ad₀ {c:SM} (hc: (R' c) x = sol.y₀) (b:SM) : S b ≠ c - sol.d₀ := by
         by_contra! this
         apply_fun S at this
         simp only [SM_square_square_eq_zero, S_sub] at this
-        exact (sol.Sad₀_neq_zero ha').symm this
-      have hSad₀_neq_ad₀ {a':SM} (ha': (R' a') x = sol.y₀)  : S a' + S sol.d₀ ≠ a' - sol.d₀ := by
-        convert hS_neq_ad₀ ha' (a' - sol.d₀) using 1
+        exact (sol.Sad₀_neq_zero hc).symm this
+      have hSad₀_neq_ad₀ {c:SM} (hc: (R' c) x = sol.y₀)  : S c + S sol.d₀ ≠ c - sol.d₀ := by
+        convert hS_neq_ad₀ hc (c - sol.d₀) using 1
         simp only [S_sub]
 
+      apply_fun R' (S a') at this
+      rw [hn] at this
       rcases b
       . have heval : sol.new_L₀' (e 0 ^ n * sol.L₀'_pre_embed (data, false)) = (e 0)^(n-1) * (sol.L₀'_pair data).1 := sol.new_L₀'_eval''' data n
         rw [heval] at this
-        rcases data with ⟨⟩ | ⟨⟩ | ⟨ a', ha' ⟩ | ⟨ a', ha' ⟩ | ⟨ y, z, hI ⟩
+        rcases data with ⟨⟩ | ⟨⟩ | ⟨ a'', ha'' ⟩ | ⟨ a'', ha'' ⟩ | ⟨ y, z, hI ⟩
         all_goals simp [R', PartialSolution_with_axioms.L₀'_pair, PartialSolution_with_axioms.L₀'_pre_embed_base] at this
         . have hd₁ := congrArg (val sol.d₁) this
-          by_cases h : a = sol.d₁
+          by_cases h : a' = sol.d₁
           all_goals simp [sol.Sd₀_neq_d₁, sol.Sd₁_neq_d₁, sol.d₁_neq_zero.symm, sol.d₁_invis sol.sees_x, hS_neq_d₁,h] at hd₁
         . have hd₀ := congrArg (val sol.d₀) this
-          by_cases h : a = sol.d₀
+          by_cases h : a' = sol.d₀
           all_goals simp [sol.Sd₀_neq_d₀, sol.d₀_neq_d₁.symm, sol.d₀_neq_zero.symm, sol.d₀_invis sol.sees_x, hS_neq_d₀, h] at hd₀
-        . have had₀ := congrArg (val (a' - sol.d₀)) this
-          have h1 : (val (a' - sol.d₀) $ sol.L₀' $ (e $ sol.S' sol.y₀) * x) = 0 := sol.ad₀_invis ha' (sol.dom_L₀'_involved sol.extras $ sol.hA a' ha').2
-          by_cases h : a = a' - sol.d₀
-          all_goals simp [h, hS_neq_ad₀ ha' a, hSad₀_neq_ad₀ ha', sol.SSy₀_neq_ad₀ ha', (sol.ad₀_neq_zero ha').symm, h1] at had₀
+        . have had₀ := congrArg (val (a'' - sol.d₀)) this
+          have h1 : (val (a'' - sol.d₀) $ sol.L₀' $ (e $ sol.S' sol.y₀) * x) = 0 := sol.ad₀_invis ha'' (sol.dom_L₀'_involved sol.extras $ sol.hA a'' ha'').2
+          by_cases h : a' = a'' - sol.d₀
+          all_goals simp [sol.ad₀_invis ha'' sol.sees_y₀, h, hS_neq_ad₀ ha'' a', hSad₀_neq_ad₀ ha'', sol.SSy₀_neq_ad₀ ha'', (sol.ad₀_neq_zero ha'').symm, h1] at had₀
         . have hd₀ := congrArg (val sol.d₀) this
-          have h1 : (val sol.d₀ $ sol.L₀' $ e (S a' + S (sol.S' sol.y₀)) * x) = 0 := sol.d₀_invis (sol.dom_L₀'_involved sol.extras $ sol.hB a' ha').2
-          by_cases h : a = sol.d₀
-          all_goals simp [sol.Sd₀_neq_d₀, sol.d₀_neq_zero.symm, sol.d₀_invis sol.sees_x, sol.d₀_invis sol.sees_y₀, hS_neq_d₀, h, sol.aSy₀_neq_d₀ ha', h1] at hd₀
+          have h1 : (val sol.d₀ $ sol.L₀' $ e (S a'' + S (sol.S' sol.y₀)) * x) = 0 := sol.d₀_invis (sol.dom_L₀'_involved sol.extras $ sol.hB a'' ha'').2
+          by_cases h : a' = sol.d₀
+          all_goals simp [sol.Sd₀_neq_d₀, sol.d₀_neq_zero.symm, sol.d₀_invis sol.sees_x, sol.d₀_invis sol.sees_y₀, hS_neq_d₀, h, sol.aSy₀_neq_d₀ ha'', h1] at hd₀
         have hd := congrArg (val (sol.d y z)) this
-        by_cases h : a = sol.d y z
-        all_goals simp [sol.Sd_neq_d _ _, sol.d_neq_zero.symm, sol.d_neq_d₀.symm, hS_neq_d a y z, sol.d_invis _ _ (sol.I_involved sol.extras hI).2.1, h] at hd
+        by_cases h : a' = sol.d y z
+        all_goals simp [sol.Sd_neq_d _ _, sol.d_neq_zero.symm, sol.d_neq_d₀.symm, hS_neq_d a' y z, sol.d_invis _ _ (sol.I_involved sol.extras hI).2.1, h] at hd
       have heval : sol.new_L₀' (e 0 ^ n * sol.L₀'_pre_embed (data, true)) = (e 0)^n * (sol.L₀'_pair data).2 := sol.new_L₀'_eval' data n
       rw [heval] at this
-      rcases data with ⟨⟩ | ⟨⟩ | ⟨ a', ha' ⟩ | ⟨ a', ha' ⟩ | ⟨ y, z, hI ⟩
+      rcases data with ⟨⟩ | ⟨⟩ | ⟨ a'', ha'' ⟩ | ⟨ a'', ha'' ⟩ | ⟨ y, z, hI ⟩
       all_goals simp [R', PartialSolution_with_axioms.L₀'_pair, PartialSolution_with_axioms.L₀'_pre_embed_base] at this
-      . by_cases h : a = sol.d₁
+      . by_cases h : a' = sol.d₁
         . have hSd₀ := congrArg (val (S sol.d₀)) this
           simp [sol.Sd₀_neq_d₁.symm, sol.Sd₀_neq_Sd₁.symm, sol.Sd₀_neq_zero.symm, sol.Sd₀_invis sol.sees_x,h] at hSd₀
         have hd₁ := congrArg (val sol.d₁) this
         simp [sol.Sd₀_neq_d₁, sol.Sd₁_neq_d₁, sol.d₁_neq_zero.symm, sol.d₁_invis sol.sees_x, hS_neq_d₁,h] at hd₁
       . have hd₀ := congrArg (val sol.d₀) this
-        by_cases h : a = sol.d₀
+        by_cases h : a' = sol.d₀
         all_goals simp [sol.Sd₀_neq_d₀, sol.d₀_neq_d₁.symm, sol.d₀_neq_zero.symm, sol.d₀_invis sol.sees_x, hS_neq_d₀, h] at hd₀
-      . by_cases h : a = a' - sol.d₀
+      . by_cases h : a' = a'' - sol.d₀
         . sorry
-        have had₀ := congrArg (val (a' - sol.d₀)) this
-        have h1 : (val (a' - sol.d₀) $ sol.L₀' $ (e $ sol.S' sol.y₀) * x) = 0 := sol.ad₀_invis ha' (sol.dom_L₀'_involved sol.extras $ sol.hA a' ha').2
-        simp [h, hS_neq_ad₀ ha' a, hSad₀_neq_ad₀ ha', sol.SSy₀_neq_ad₀ ha', (sol.ad₀_neq_zero ha').symm, h1] at had₀
-      . by_cases h : a = sol.d₀
+        have had₀ := congrArg (val (a'' - sol.d₀)) this
+        have h1 : (val (a'' - sol.d₀) $ sol.L₀' $ (e $ sol.S' sol.y₀) * x) = 0 := sol.ad₀_invis ha'' (sol.dom_L₀'_involved sol.extras $ sol.hA a'' ha'').2
+        simp [sol.ad₀_invis ha'' sol.sees_y₀, h, hS_neq_ad₀ ha'' a', hSad₀_neq_ad₀ ha'', sol.SSy₀_neq_ad₀ ha'', (sol.ad₀_neq_zero ha'').symm, h1] at had₀
+      . by_cases h : a' = sol.d₀
         . sorry
         have hd₀ := congrArg (val sol.d₀) this
-        have h1 : (val sol.d₀ $ sol.L₀' $ e (S a' + S (sol.S' sol.y₀)) * x) = 0 := sol.d₀_invis (sol.dom_L₀'_involved sol.extras $ sol.hB a' ha').2
-        simp [sol.Sd₀_neq_d₀, sol.d₀_neq_zero.symm, sol.d₀_invis sol.sees_x, sol.d₀_invis sol.sees_y₀, hS_neq_d₀, h, sol.aSy₀_neq_d₀ ha', h1] at hd₀
+        have h1 : (val sol.d₀ $ sol.L₀' $ e (S a'' + S (sol.S' sol.y₀)) * x) = 0 := sol.d₀_invis (sol.dom_L₀'_involved sol.extras $ sol.hB a'' ha'').2
+        simp [sol.Sd₀_neq_d₀, sol.d₀_neq_zero.symm, sol.d₀_invis sol.sees_x, sol.d₀_invis sol.sees_y₀, hS_neq_d₀, h, sol.aSy₀_neq_d₀ ha'', h1] at hd₀
       have hd₀ := congrArg (val sol.d₀) this
-      by_cases h : a = sol.d₀
+      by_cases h : a' = sol.d₀
       all_goals simp [sol.Sd₀_neq_d₀, sol.d₀_neq_zero.symm, sol.d_neq_d₀, hS_neq_d₀, sol.d₀_invis (sol.I_involved sol.extras hI).2.1, h] at hd₀
   }
 
