@@ -655,11 +655,13 @@ noncomputable abbrev PartialSolution_with_axioms.d₁ (sol: PartialSolution_with
 
 noncomputable abbrev PartialSolution_with_axioms.d (sol: PartialSolution_with_axioms) (y z: N) := E (sol.m (enum (y,z)))
 
-lemma PartialSolution_with_axioms.extras_supp (sol: PartialSolution_with_axioms) {a:SM} (h: Sum.inl a ∈ sol.extras) (i:ℕ) : a (sol.m i) = 0 := by
-  apply not_in_generators (mem_in_generators (Finset.mem_union_right _ _)) (fresh_ne_generator (sol.involved_elements sol.extras) i)
+lemma PartialSolution_with_axioms.extras_mem (sol: PartialSolution_with_axioms) {a:SM} (h: Sum.inl a ∈ sol.extras) : a ∈ sol.involved_elements sol.extras := by
+  apply Finset.mem_union_right _ _
   simp only [Finset.mem_biUnion]
   refine ⟨ Sum.inl a, h, ?_ ⟩
   simp only [basis_elements', Finset.mem_singleton]
+
+lemma PartialSolution_with_axioms.extras_supp (sol: PartialSolution_with_axioms) {a:SM} (h: Sum.inl a ∈ sol.extras) (i:ℕ) : a (sol.m i) = 0 := not_in_generators (mem_in_generators (sol.extras_mem h)) (fresh_ne_generator (sol.involved_elements sol.extras) i)
 
 
 lemma PartialSolution_with_axioms.a_supp (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀) (i:ℕ) : a (sol.m i) = 0 := sol.extras_supp (sol.a_in_extras h) i
@@ -843,8 +845,8 @@ lemma PartialSolution_with_axioms.Sad₀_noreach (sol: PartialSolution_with_axio
 
 lemma PartialSolution_with_axioms.aSy₀_reach (sol: PartialSolution_with_axioms) {a:SM} (h: sol.x = R' a sol.y₀): sol.reaches sol.extras (a - sol.S' sol.y₀) := by
   apply diff_in_generators
-  . sorry
-  sorry
+  . exact mem_in_generators (sol.extras_mem (sol.a_in_extras' h))
+  exact mem_in_generators (sol.extras_mem sol.Sy₀_in_extras)
 
 
 lemma PartialSolution_with_axioms.Sd₀_invis (sol: PartialSolution_with_axioms) {y:N} (hy: sol.sees sol.extras y): val (S sol.d₀) y = 0 := sol.noreach_invis sol.Sd₀_noreach hy
@@ -2100,12 +2102,12 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
       . contrapose! hz_invis
         rw [←hz_invis]
         apply sol.extras_involved
-        simp only [Finset.mem_insert, Finset.mem_singleton, true_or]
+        simp only [extras, Finset.mem_insert, Finset.mem_singleton, true_or]
       simp only [z, parent_of_e_sq]
       contrapose! hz_invis'
       rw [← hz_invis']
       apply sol.extras_involved
-      simp only [Finset.mem_insert, Finset.mem_singleton, true_or]
+      simp only [extras, Finset.mem_insert, Finset.mem_singleton, true_or]
     axiom_P' := by
       intro x₁ y₁ y'₁ z₁ hy hy'
       simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hy hy'
