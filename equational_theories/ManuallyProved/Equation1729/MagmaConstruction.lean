@@ -1640,6 +1640,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           exact sol.invis_lemma'' y' x' a
         . rw [← hdata.2.1]
           exact this.2.2.1.symm
+        rw [←hdata.2.1]
         sorry
       | P₂ y' z' hI hz =>
         simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hdata
