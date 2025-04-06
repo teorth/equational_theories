@@ -1738,7 +1738,6 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           simp only [EmbeddingLike.apply_eq_iff_eq] at this
           replace this := sol.d_injective $ FreeGroup.of_injective this
           rw [this.2]
-          save
     axiom_P'' := by
       intro x' y z hI
       obtain ⟨ data, hy ⟩ := (sol.I_triple.in_range_iff_attains _).mp hI
