@@ -1704,8 +1704,11 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         . contrapose! hinvis
           rw [← hinvis]
           exact (sol.I_involved _ hI).2.2
-        save
-        sorry
+        simp [R', parent_of_div (sol.d_neq_Sd₀).symm]
+        replace hz := (sol.dom_S'_involved sol.extras hz).1
+        by_contra! this
+        replace hz := sol.d_invis y' z' (this ▸ hz)
+        simp only [val_e, ↓reduceIte, one_ne_zero] at hz
     axiom_P' := by
       intro x' y y' z hy hy'
       obtain ⟨ data, hy ⟩ := (sol.I_triple.in_range_iff_attains _).mp hy

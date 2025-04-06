@@ -39,7 +39,7 @@ lemma SM_op_eq_add (a b : SM) : a ◇ b = a + b := rfl
 @[simp]
 lemma E_apply (n m:ℕ) : E n m = if n=m then 1 else 0 := by
   simp [DirectSum.of_apply]
-  
+
 
 lemma E_inj : Function.Injective E := by
   intro n m h
@@ -332,6 +332,11 @@ theorem parent_of_adjacent {x y : N} (h : adjacent x y) : x = parent y ∨ y = p
 lemma parent_of_e_sq (a:SM) : parent ((e a)^2) = e a := by
   simp only [parent, e, FreeGroup.toWord_of_pow, List.reduceReplicate, List.tail_cons,
     FreeGroup.mk_of_single_true]
+
+lemma parent_of_div {a b:SM} (h:a ≠ b) : parent ((e a)⁻¹ * e b) = e b := by
+  simp only [parent, e, div_eq, List.singleton_append, FreeGroup.toWord_mk, FreeGroup.reduce.cons,
+    Bool.false_eq, Bool.not_eq_eq_eq_not, Bool.not_false, Bool.true_eq, Bool.not_true,
+    FreeGroup.reduce_nil, h, and_true, ↓reduceIte, List.tail_cons, FreeGroup.mk_of_single_true]
 
 /- Right-multiplication by an element of SM on N is defined via the group action. -/
 
