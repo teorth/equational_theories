@@ -1642,7 +1642,14 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         . rw [← hdata.2.1]
           exact this.2.2.1.symm
         rw [←hdata.2.1]
-        sorry
+        by_cases h: x' = 1
+        . simp only [h, parent_one, ne_eq]
+          exact (h ▸ this.2.2.1).symm
+        replace this := this.2.2.2.1
+        contrapose! this
+        obtain ⟨ a, ha ⟩ := this ▸ (parent_adjacent h)
+        use a
+        tauto
       | P₂ y' z' hI hz =>
         simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hdata
         simp [← hdata.1, ← hdata.2]
