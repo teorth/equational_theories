@@ -1951,7 +1951,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rw [←h5] at h4
         exact h3.2.1 a h4
       axiom_P' := sol.axiom_P'
-      axiom_P'' := sol.axiom_P''
+      axiom_P'' := sorry
       axiom_L := sol.axiom_L
     }
     refine ⟨ sol', ?_, ?_ ⟩
@@ -2137,16 +2137,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rwa [hy₁] at hy'
       rw [hy₂, hy'₂]
     axiom_P'' := by
-      intro x' y' z₁ z₂ hI₁ hI₂
-      simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hI₁ hI₂
-      rcases hI₁ with hI₁ | ⟨ rfl, rfl, rfl ⟩
-      all_goals rcases hI₂ with hI₂ | ⟨ h1, h2, rfl⟩
-      . exact sol.axiom_P'' _ _ _ _ hI₁ hI₂
-      . have := h1 ▸ (sol.I_involved extras hI₁).1
-        contradiction
-      . have := (sol.I_involved extras hI₂).1
-        contradiction
-      rfl
+      sorry
     axiom_L := sol.axiom_L
   }
   refine ⟨ sol', ?_, Finset.mem_union_right _ $ Finset.mem_insert_self (x, y) {(z, x)} ⟩
