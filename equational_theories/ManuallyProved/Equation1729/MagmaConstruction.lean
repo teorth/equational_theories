@@ -539,7 +539,13 @@ class PartialSolution_with_axioms extends PartialSolution where
 
 abbrev PartialSolution_with_axioms.y₀ (sol : PartialSolution_with_axioms) : N := parent sol.x
 
-abbrev PartialSolution_with_axioms.extras (sol : PartialSolution_with_axioms) : Finset M := {Sum.inr sol.x, Sum.inr sol.y₀, Sum.inl (sol.S' sol.y₀)}
+open Classical
+
+noncomputable abbrev PartialSolution_with_axioms.a_right (sol : PartialSolution_with_axioms) : SM := if h : ∃ a, sol.x = R' a sol.y₀ then h.choose else 0
+
+noncomputable abbrev PartialSolution_with_axioms.a_left (sol : PartialSolution_with_axioms) : SM := if h : ∃ a, R' a sol.x = sol.y₀ then h.choose else 0
+
+noncomputable abbrev PartialSolution_with_axioms.extras (sol : PartialSolution_with_axioms) : Finset M := {Sum.inr sol.x, Sum.inr sol.y₀, Sum.inl (sol.S' sol.y₀), Sum.inl sol.a_left, Sum.inl sol.a_right}
 
 lemma PartialSolution_with_axioms.x_in_extras (sol : PartialSolution_with_axioms) : Sum.inr sol.x ∈ sol.extras := by
   simp only [PartialSolution_with_axioms.extras, Finset.mem_insert, Finset.mem_singleton, true_or]
@@ -550,9 +556,22 @@ lemma PartialSolution_with_axioms.y₀_in_extras (sol : PartialSolution_with_axi
 lemma PartialSolution_with_axioms.Sy₀_in_extras (sol : PartialSolution_with_axioms) : Sum.inl (sol.S' sol.y₀) ∈ sol.extras := by
   simp only [PartialSolution_with_axioms.extras, Finset.mem_insert, Finset.mem_singleton, or_true, true_or]
 
-lemma PartialSolution_with_axioms.a_in_extras (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀) : Sum.inl a ∈ sol.extras := by sorry
+lemma PartialSolution_with_axioms.a_in_extras (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀) : Sum.inl a ∈ sol.extras := by
+  have : ∃ a, R' a sol.x = sol.y₀ := ⟨ a, h ⟩
+  have h' : a = this.choose := by
+    rwa [←this.choose_spec, R'_axiom_iia'] at h
+  have h'' : a = sol.a_left := by
+    simp [h', PartialSolution_with_axioms.a_left, this]
+  simp [h'']
 
-lemma PartialSolution_with_axioms.a_in_extras' (sol: PartialSolution_with_axioms) {a:SM} (h: sol.x = R' a sol.y₀)  : Sum.inl a ∈ sol.extras := by sorry
+
+lemma PartialSolution_with_axioms.a_in_extras' (sol: PartialSolution_with_axioms) {a:SM} (h: sol.x = R' a sol.y₀)  : Sum.inl a ∈ sol.extras := by
+  have : ∃ a, sol.x = R' a sol.y₀ := ⟨ a, h ⟩
+  have h' : this.choose = a := by
+    rwa [this.choose_spec, R'_axiom_iia'] at h
+  have h'' : a = sol.a_right := by
+    simp [←h', PartialSolution_with_axioms.a_right, this]
+  simp [h'']
 
 /-- Data type to store the various L₀' extensions needed to prove `enlarge_S'_induction_with_axioms` -/
 inductive L₀'_data (sol : PartialSolution_with_axioms) where
@@ -628,11 +647,11 @@ lemma enum_ne_0 (p : N × N) : enum p ≠ 0 := by dsimp [enum]; linarith
 
 lemma enum_ne_1 (p : N × N) : enum p ≠ 1 := by dsimp [enum]; linarith
 
-abbrev PartialSolution_with_axioms.m (sol: PartialSolution_with_axioms) (i:ℕ) := sol.fresh_generator sol.extras i
+noncomputable abbrev PartialSolution_with_axioms.m (sol: PartialSolution_with_axioms) (i:ℕ) := sol.fresh_generator sol.extras i
 
-abbrev PartialSolution_with_axioms.d₀ (sol: PartialSolution_with_axioms) := E (sol.m 0)
+noncomputable abbrev PartialSolution_with_axioms.d₀ (sol: PartialSolution_with_axioms) := E (sol.m 0)
 
-abbrev PartialSolution_with_axioms.d₁ (sol: PartialSolution_with_axioms) := E (sol.m 1)
+noncomputable abbrev PartialSolution_with_axioms.d₁ (sol: PartialSolution_with_axioms) := E (sol.m 1)
 
 noncomputable abbrev PartialSolution_with_axioms.d (sol: PartialSolution_with_axioms) (y z: N) := E (sol.m (enum (y,z)))
 
