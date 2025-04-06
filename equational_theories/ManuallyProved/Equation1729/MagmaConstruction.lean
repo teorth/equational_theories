@@ -1633,12 +1633,16 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           exact sol.invis_lemma y' x' hI
         . intro a
           replace hI := (sol.I_involved sol.extras hI).2.2
-          stop
+          constructor
+          . contrapose! hI
+            apply_fun (R' a).symm at hI
+            simp only [R', Equiv.coe_fn_symm_mk, Equiv.coe_fn_mk, inv_mul_cancel_left] at hI
+            rw [<-hI]
+            exact sol.invis_lemma'' y' x' a
           contrapose! hI
-          apply_fun (R' a).symm at hI
           simp only [R', Equiv.coe_fn_symm_mk, Equiv.coe_fn_mk, inv_mul_cancel_left] at hI
           rw [<-hI]
-          exact sol.invis_lemma'' y' x' a
+          exact sol.invis_lemma' y' x' a
         . rw [← hdata.2.1]
           exact this.2.2.1.symm
         rw [←hdata.2.1]
