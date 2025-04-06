@@ -41,7 +41,8 @@ theorem not_817 : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 
   match b with
   | Sum.inl x =>
       simp only [Set.mem_setOf_eq, task]
-      exact enlarge_L₀' sol x
+      obtain ⟨sol', hsol', hx_sol', _⟩ := enlarge_L₀' sol x
+      exact ⟨sol', hsol', hx_sol'⟩
   | Sum.inr (Sum.inl x) =>
       simp only [Set.mem_setOf_eq, task]
       exact enlarge_S' sol x
