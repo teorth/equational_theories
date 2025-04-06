@@ -810,6 +810,11 @@ lemma PartialSolution_with_axioms.Sad₀_neq_d₀ (sol: PartialSolution_with_axi
   simp [sol.a_supp h]
   decide
 
+lemma PartialSolution_with_axioms.Sad₀_neq_zero (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀): S  a + S sol.d₀ ≠ 0 := by
+  apply sol.test 0
+  simp [sol.a_supp h]
+  decide
+
 lemma PartialSolution_with_axioms.Sad₀_neq_d₁ (sol: PartialSolution_with_axioms) {a:SM} (h: R' a sol.x = sol.y₀): S  a + S sol.d₀ ≠ sol.d₁ := by
   apply sol.test 0
   simp [sol.a_supp h]
@@ -1853,6 +1858,14 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       obtain ⟨ y, ⟨ n, rfl ⟩, ⟨ ⟨ data, b ⟩, rfl ⟩ ⟩ := h
       have hS_neq_d₀ : S a ≠ sol.d₀ := (E_ne_S _ _).symm
       have hS_neq_d₁ : S a ≠ sol.d₁ := (E_ne_S _ _).symm
+      have hS_neq_ad₀ {a':SM} (ha': (R' a') x = sol.y₀) (b:SM) : S b ≠ a' - sol.d₀ := by
+        by_contra! this
+        apply_fun S at this
+        simp only [SM_square_square_eq_zero, S_sub] at this
+        exact (sol.Sad₀_neq_zero ha').symm this
+      have hSad₀_neq_ad₀ {a':SM} (ha': (R' a') x = sol.y₀)  : S a' + S sol.d₀ ≠ a' - sol.d₀ := by
+        convert hS_neq_ad₀ ha' (a' - sol.d₀) using 1
+        simp only [S_sub]
 
       rcases b
       . have heval : sol.new_L₀' (e 0 ^ n * sol.L₀'_pre_embed (data, false)) = (e 0)^(n-1) * (sol.L₀'_pair data).1 := sol.new_L₀'_eval''' data n
@@ -1865,7 +1878,10 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         . have hd₀ := congrArg (val sol.d₀) this
           by_cases h : a = sol.d₀
           all_goals simp [sol.Sd₀_neq_d₀, sol.d₀_neq_d₁.symm, sol.d₀_neq_zero.symm, sol.d₀_invis sol.sees_x, hS_neq_d₀, h] at hd₀
-        . sorry
+        . have had₀ := congrArg (val (a' - sol.d₀)) this
+          have h1 : (val (a' - sol.d₀) $ sol.L₀' $ (e $ sol.S' sol.y₀) * x) = 0 := sol.ad₀_invis ha' (sol.dom_L₀'_involved sol.extras $ sol.hA a' ha').2
+          by_cases h : a = a' - sol.d₀
+          all_goals simp [sol.ad₀_invis ha' sol.sees_y₀, h, hS_neq_ad₀ ha' a, hSad₀_neq_ad₀ ha', sol.SSy₀_neq_ad₀ ha', (sol.ad₀_neq_zero ha').symm, h1] at had₀
         . sorry
         sorry
       have heval : sol.new_L₀' (e 0 ^ n * sol.L₀'_pre_embed (data, true)) = (e 0)^n * (sol.L₀'_pair data).2 := sol.new_L₀'_eval' data n
