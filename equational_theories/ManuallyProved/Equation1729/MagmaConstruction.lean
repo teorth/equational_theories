@@ -749,6 +749,16 @@ lemma PartialSolution_with_axioms.Sd₀_neq_d₁  (sol: PartialSolution_with_axi
   simp
   decide
 
+lemma PartialSolution_with_axioms.Sd₀_neq_Sd₁  (sol: PartialSolution_with_axioms) : S sol.d₀ ≠ S sol.d₁ := by
+  apply sol.test 1
+  simp
+  decide
+
+lemma PartialSolution_with_axioms.Sd₁_neq_d₁ (sol: PartialSolution_with_axioms) : S sol.d₁ ≠ sol.d₁ := by
+  apply sol.test 1
+  simp
+  decide
+
 lemma PartialSolution_with_axioms.d₀_neq_zero (sol: PartialSolution_with_axioms) : sol.d₀ ≠ 0 := by
   apply sol.test 0
   simp
@@ -1834,6 +1844,44 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       exact ⟨ sol.mem_new_dom_op (op_data.P₂ y₁ z₁ hI₁ hz₁), (sol.op_eval (op_data.P₂ y₁ z₁ hI₁ hz₁)).symm ⟩
     axiom_L := by
       intro x a h
+      save
+      simp only [fill_union, Set.mem_union] at h
+      rcases h with h | h
+      . exact (sol.new_L₀'_extend h) ▸ sol.axiom_L x a h
+      simp only [fill, Function.Embedding.in_range_iff_attains, Set.mem_setOf_eq] at h
+      by_contra! this
+      obtain ⟨ y, ⟨ n, rfl ⟩, ⟨ ⟨ data, b ⟩, rfl ⟩ ⟩ := h
+      have hS_neq_d₀ : S a ≠ sol.d₀ := (E_ne_S _ _).symm
+      have hS_neq_d₁ : S a ≠ sol.d₁ := (E_ne_S _ _).symm
+
+      rcases b
+      . have heval : sol.new_L₀' (e 0 ^ n * sol.L₀'_pre_embed (data, false)) = (e 0)^(n-1) * (sol.L₀'_pair data).1 := sol.new_L₀'_eval''' data n
+        rw [heval] at this
+        rcases data with ⟨⟩ | ⟨⟩ | ⟨ a', ha' ⟩ | ⟨ a', ha' ⟩ | ⟨ y, z, hI ⟩
+        all_goals simp [R', PartialSolution_with_axioms.L₀'_pair, PartialSolution_with_axioms.L₀'_pre_embed_base] at this
+        . have hd₁ := congrArg (val sol.d₁) this
+          by_cases h : a = sol.d₁
+          all_goals simp [sol.Sd₀_neq_d₁, sol.Sd₁_neq_d₁, sol.d₁_neq_zero.symm, sol.d₁_invis sol.sees_x, hS_neq_d₁,h] at hd₁
+        . have hd₀ := congrArg (val sol.d₀) this
+          by_cases h : a = sol.d₀
+          all_goals simp [sol.Sd₀_neq_d₀, sol.d₀_neq_d₁.symm, sol.d₀_neq_zero.symm, sol.d₀_invis sol.sees_x, hS_neq_d₀, h] at hd₀
+        . sorry
+        . sorry
+        sorry
+      have heval : sol.new_L₀' (e 0 ^ n * sol.L₀'_pre_embed (data, true)) = (e 0)^n * (sol.L₀'_pair data).2 := sol.new_L₀'_eval' data n
+      rw [heval] at this
+      rcases data with ⟨⟩ | ⟨⟩ | ⟨ a, ha ⟩ | ⟨ a, ha ⟩ | ⟨ y, z, hI ⟩
+      all_goals simp [R', PartialSolution_with_axioms.L₀'_pair, PartialSolution_with_axioms.L₀'_pre_embed_base] at this
+      . by_cases h : a = sol.d₁
+        . have hSd₀ := congrArg (val (S sol.d₀)) this
+          simp [sol.Sd₀_neq_d₁.symm, sol.Sd₀_neq_Sd₁.symm, sol.Sd₀_neq_zero.symm, sol.Sd₀_invis sol.sees_x,h] at hSd₀
+        have hd₁ := congrArg (val sol.d₁) this
+        simp [sol.Sd₀_neq_d₁, sol.Sd₁_neq_d₁, sol.d₁_neq_zero.symm, sol.d₁_invis sol.sees_x, hS_neq_d₁,h] at hd₁
+      . have hd₀ := congrArg (val sol.d₀) this
+        by_cases h : a = sol.d₀
+        all_goals simp [sol.Sd₀_neq_d₀, sol.d₀_neq_d₁.symm, sol.d₀_neq_zero.symm, sol.d₀_invis sol.sees_x, hS_neq_d₀, h] at hd₀
+      . sorry
+      . sorry
       sorry
   }
 
