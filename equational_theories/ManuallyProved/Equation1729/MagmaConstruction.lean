@@ -1658,6 +1658,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hdata
         simp [← hdata.1, ← hdata.2]
         have hinvis := sol.invis_lemma y' z'
+        have hvis := sol.sees_R'_inv (sol.reaches_S $ sol.reaches_involved (sol.dom_S'_involved sol.extras hz).2) (sol.dom_L₀'_involved sol.extras $ hC y' z' hI hz).2
         refine ⟨ ⟨ ?_, ?_ ⟩, ?_, ?_, ?_, ?_, ?_ ⟩
         . contrapose! hinvis
           exact (sol.dom_S'_involved sol.extras hinvis).1
@@ -1687,16 +1688,23 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
             exact (sol.dom_S'_involved sol.extras hz').1
         . contrapose! hinvis
           rw [←hinvis]
-          exact sol.sees_R'_inv (sol.reaches_S $ sol.reaches_involved (sol.dom_S'_involved sol.extras hz).2) (sol.dom_L₀'_involved sol.extras $ hC y' z' hI hz).2
+          exact hvis
         . intro a
-          have hinvis' := sol.invis_lemma' y' z' a
-          stop
+          constructor
+          . have hinvis' := sol.invis_lemma' y' z' a
+            contrapose! hinvis'
+            rw [←hinvis']
+            exact hvis
+          have hinvis' := sol.invis_lemma'' y' z' a
           contrapose! hinvis'
+          apply_fun (R' a).symm at hinvis'
+          simp only [Equiv.symm_apply_apply] at hinvis'
           rw [←hinvis']
-          exact sol.sees_R'_inv (sol.reaches_S $ sol.reaches_involved (sol.dom_S'_involved sol.extras hz).2) (sol.dom_L₀'_involved sol.extras $ hC y' z' hI hz).2
+          exact hvis
         . contrapose! hinvis
           rw [← hinvis]
           exact (sol.I_involved _ hI).2.2
+        save
         sorry
     axiom_P' := by
       intro x' y y' z hy hy'
@@ -2148,16 +2156,26 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rw [← h]
         exact hz'_vis
       . intro a
-        have : ¬ sol.sees extras ( R' a z ) := by
+        save
+        have h1 : ¬ sol.sees extras ( R' a z ) := by
           by_contra h
           dsimp [R',z, PartialSolution.sees] at h
           simp only [generators_subset_iff] at h
           apply sol.fresh_not_in_gen extras 0 $ h d₀ $ basis_elements_of_prod_gen' d₀ a
+        have h2 : ¬ sol.sees extras ( (R' a).symm z ) := by
+          by_contra h
+          dsimp [R',z, PartialSolution.sees] at h
+          simp only [generators_subset_iff] at h
+          apply sol.fresh_not_in_gen extras 0 $ h d₀ $ basis_elements_of_prod_gen d₀ a
         constructor
-        . contrapose! this
-          rw [← this]
+        . contrapose! h1
+          rw [← h1]
           exact hz'_vis
-        sorry
+        contrapose! h2
+        apply_fun (R' a).symm at h2
+        simp only [Equiv.symm_apply_apply] at h2
+        rw [← h2]
+        exact hz'_vis
       . contrapose! hz_invis
         rw [←hz_invis]
         apply sol.extras_involved
