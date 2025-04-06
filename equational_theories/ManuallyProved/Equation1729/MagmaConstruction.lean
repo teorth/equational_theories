@@ -1865,7 +1865,14 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         exact id (Ne.symm h3)
       axiom_P' := sol.axiom_P'
       axiom_P'' := by
-        sorry
+        intro x' y z hI
+        have := sol.axiom_P'' x' y z hI
+        constructor
+        . exact Finset.mem_union_left _ this.1
+        have hneq : ¬ (x',y) = (x,x) := by
+          contrapose! hdef
+          exact hdef ▸ this.1
+        simp [hneq, this.2]
       axiom_L := sol.axiom_L
     }
     refine ⟨ sol', ?_, ?_ ⟩
@@ -1951,7 +1958,15 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rw [←h5] at h4
         exact h3.2.1 a h4
       axiom_P' := sol.axiom_P'
-      axiom_P'' := sorry
+      axiom_P'' := by
+        intro x' y' z hI
+        have := sol.axiom_P'' x' y' z hI
+        constructor
+        . exact Finset.mem_union_left _ this.1
+        have hneq : ¬ (x',y') = ((R' a) y,y) := by
+          contrapose! hdef
+          exact hdef ▸ this.1
+        simp [hneq, this.2]
       axiom_L := sol.axiom_L
     }
     refine ⟨ sol', ?_, ?_ ⟩
@@ -2137,6 +2152,10 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rwa [hy₁] at hy'
       rw [hy₂, hy'₂]
     axiom_P'' := by
+      intro x₁ y₁ z₁ hI
+      simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hI
+      rcases hI with hI | ⟨ rfl, rfl, rfl ⟩
+      . sorry
       sorry
     axiom_L := sol.axiom_L
   }
