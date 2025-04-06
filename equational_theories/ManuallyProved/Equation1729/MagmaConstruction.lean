@@ -2155,8 +2155,27 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
       intro x₁ y₁ z₁ hI
       simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hI
       rcases hI with hI | ⟨ rfl, rfl, rfl ⟩
-      . sorry
-      sorry
+      . have := sol.axiom_P'' x₁ y₁ z₁ hI
+        constructor
+        . exact Finset.mem_union_left _ this.1
+        have h1 : (x₁,y₁) ≠ (x,y) := by
+          contrapose! hdef
+          rw [← hdef]
+          exact this.1
+        have h2 : (x₁,y₁) ≠ (z,x) := by
+          contrapose! hz_invis
+          simp only [Prod.mk.injEq] at hz_invis
+          rw [← hz_invis.1]
+          exact (sol.I_involved extras hI).1
+        simp [this.2, h1, h2]
+      constructor
+      . simp only [Finset.union_insert, Finset.mem_insert, Prod.mk.injEq, Finset.mem_union,
+        Finset.mem_singleton, or_true]
+      have : (z,y₁) ≠ (y₁,y) := by
+        contrapose! hxy
+        simp only [Prod.mk.injEq] at hxy
+        exact hxy.2
+      simp only [this, ↓reduceIte]
     axiom_L := sol.axiom_L
   }
   refine ⟨ sol', ?_, Finset.mem_union_right _ $ Finset.mem_insert_self (x, y) {(z, x)} ⟩
