@@ -28,7 +28,7 @@ class PartialSolution where
   axiom_vii'' (x y : N) (h : x ≠ y) (h' : ∀ a : SM, x ≠ R' a y) (hop: (x,y) ∈ Dom_op) : ∃ z : N, op x y = Sum.inr z ∧ ((x,y,z) ∈ I ∨ ((z,x) ∈ Dom_op ∧ x ∈ Dom_S' ∧ (R' 0 $ R' (S' x) $ y) ∈ fill Predom_L₀' ∧ op z x = Sum.inr ((R' (S (S' x))).symm $ L₀' $ R' 0 $ R' (S' x) $ y)))
   axiom_P (x y z : N) (h: (x,y,z) ∈ I) : x ∉ Dom_S' ∧ (z,x) ∉ Dom_op ∧ z ≠ x ∧ (∀ a : SM, z ≠ R' a x) ∧ (y ≠ x) ∧ (y ≠ parent x)
   axiom_P' (x y y' z : N) (hy : (x,y,z) ∈ I) (hy' : (x,y',z) ∈ I) : y = y'
-  axiom_P'' (x y z z' : N) (hy : (x,y,z) ∈ I) (hy' : (x,y,z') ∈ I) : z = z'
+  axiom_P'' (x y z : N) (hy : (x,y,z) ∈ I) : (x,y) ∈ Dom_op ∧ Sum.inr z = op x y
   axiom_L (x:N) (a:SM) (h: x ∈ fill Predom_L₀') : L₀' x ≠ (R' a $ (R' (S a)).symm $ x)
 
 abbrev PartialSolution.Dom_L₀' (sol: PartialSolution) : Set N := fill sol.Predom_L₀'
@@ -106,7 +106,7 @@ def TrivialPartialSolution : PartialSolution := {
     contrapose! h
     exact Finset.not_mem_empty _
   axiom_P'' := by
-    intro _ _ _ _ h
+    intro _ _ _ h
     contrapose! h
     exact Finset.not_mem_empty _
   axiom_L := by
@@ -1068,7 +1068,8 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     replace hneq := Setoid.trans (Setoid.trans (rel_of_mul (e sol.d₀ * y) 1) hneq) (Setoid.symm (rel_of_mul (e sol.d₀ * y') 1))
     replace hneq := sol.cancel sol.d₀_noreach (sol.I_involved sol.extras hz).2.1 (sol.I_involved sol.extras hz').2.1 hneq
     simp [hneq] at hz ⊢
-    exact sol.axiom_P'' _ _ _ _ hz hz'
+    apply Sum.inr_injective
+    rw [(sol.axiom_P'' _ _ _ hz).2, (sol.axiom_P'' _ _ _ hz').2]
   apply sol.nequiv_d y z
   by_cases h : sol.d y' z' = sol.d y z
   . contrapose! hneq
@@ -1737,8 +1738,19 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           simp only [EmbeddingLike.apply_eq_iff_eq] at this
           replace this := sol.d_injective $ FreeGroup.of_injective this
           rw [this.2]
+          save
     axiom_P'' := by
-      sorry
+      intro x' y z hI
+      obtain ⟨ data, hy ⟩ := (sol.I_triple.in_range_iff_attains _).mp hI
+      rcases data with ⟨ x₁, y₁, z₁, hI₁, hxx₁⟩ | ⟨ y₁, z₁, hI₁, hz₁ ⟩ | ⟨ y₁, z₁, hI₁, hz₁ ⟩
+      all_goals simp at hy
+      all_goals obtain ⟨ rfl, rfl, rfl ⟩ := hy
+      . have := sol.axiom_P'' _ _ _ hI₁
+        exact ⟨ sol.mem_new_dom_op (op_data.old x₁ y₁ this.1), (sol.op_extend this.1) ▸ this.2 ⟩
+      . exact ⟨ sol.mem_new_dom_op (op_data.P₁ y₁ z₁ hI₁), (sol.op_eval (op_data.P₁ y₁ z₁ hI₁)).symm ⟩
+      constructor
+      . exact sol.mem_new_dom_op (op_Data.P₂ y₁ z₁ hI₁ hz₁)
+      exact (sol.op_eval (op_Data.P₂ y₁ z₁ hI₁ hz₁)).symm
     axiom_L := by
       intro x a h
       sorry
@@ -1855,7 +1867,8 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rw [hzx] at h3
         exact id (Ne.symm h3)
       axiom_P' := sol.axiom_P'
-      axiom_P'' := sol.axiom_P''
+      axiom_P'' := by
+        sorry
       axiom_L := sol.axiom_L
     }
     refine ⟨ sol', ?_, ?_ ⟩
@@ -2126,7 +2139,17 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         contrapose! this
         rwa [hy₁] at hy'
       rw [hy₂, hy'₂]
-    axiom_P'' := by sorry
+    axiom_P'' := by
+      intro x' y' z₁ z₂ hI₁ hI₂
+      simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hI₁ hI₂
+      rcases hI₁ with hI₁ | ⟨ rfl, rfl, rfl ⟩
+      all_goals rcases hI₂ with hI₂ | ⟨ h1, h2, rfl⟩
+      . exact sol.axiom_P'' _ _ _ _ hI₁ hI₂
+      . have := h1 ▸ (sol.I_involved extras hI₁).1
+        contradiction
+      . have := (sol.I_involved extras hI₂).1
+        contradiction
+      rfl
     axiom_L := sol.axiom_L
   }
   refine ⟨ sol', ?_, Finset.mem_union_right _ $ Finset.mem_insert_self (x, y) {(z, x)} ⟩
