@@ -210,7 +210,7 @@ As a corollary, we have
 \begin{proposition}[Enlarging $L'_0$ many times]\label{enlarge-l0-many}\lean{Eq1729.enlarge_L₀'_multiple}\leanok  Suppose one has a partial solution.  Let $A$ be a finite subset of $N$.  Then one can extend the partial solution so that $L'_0 x$ is now defined for all $x \in A$.
 \end{proposition}
 
-\begin{proof}\uses{enlarge-l0} Iterate Proposition \ref{enlarge-l0} in the obvious fashion.
+\begin{proof} \leanok \uses{enlarge-l0} Iterate Proposition \ref{enlarge-l0} in the obvious fashion.
 \end{proof}
 
 Next, we provide a tool for enlarging the domain of definition of $S'$.  The main step is the following inductive one with extra axioms.
@@ -266,7 +266,7 @@ As a corollary, we have
 \begin{proposition}[Enlarging $S'$]\label{enlarge-S}\lean{Eq1729.enlarge_S'}\leanok  Suppose one has a partial solution in which $S'x$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $S'x$ is now defined.
 \end{proposition}
 
-\begin{proof}\uses{enlarge-S-induct}  Obtained by induction from Proposition \ref{enlarge-S-induct}, using the fact that there are no infinite descending chains in $N$.
+\begin{proof}\uses{enlarge-S-induct}\leanok  Obtained by induction from Proposition \ref{enlarge-S-induct}, using the fact that there are no infinite descending chains in $N$.
 \end{proof}
 
 Finally, we give a tool for enlarging $\op$:

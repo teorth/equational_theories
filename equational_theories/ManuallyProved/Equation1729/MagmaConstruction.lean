@@ -527,7 +527,16 @@ lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol', sol ≤ sol' ∧ 
   apply Finset.mem_union_right
   simp only [Finset.mem_insert, Finset.mem_singleton, true_or]
 
-lemma PartialSolution.enlarge_L₀'_multiple (sol : PartialSolution) (A: Finset N)  : ∃ sol', sol ≤ sol' ∧ A.toSet ⊆ fill sol'.Predom_L₀' := by sorry
+lemma enlarge_L₀'_multiple (sol : PartialSolution) (A: Finset N) :
+    ∃ sol', sol ≤ sol' ∧ A.toSet ⊆ fill sol'.Predom_L₀' := by
+  induction' A using Finset.induction_on with x B hx hprev
+  . exact ⟨sol, by simp⟩
+  . obtain ⟨sol_prev, hsol_le_solprev, hb_subset⟩ := hprev
+    obtain ⟨solx, hsol_prev_le_solx, hx_solx⟩ := enlarge_L₀' sol_prev x
+    refine ⟨solx, Preorder.le_trans sol sol_prev solx hsol_le_solprev hsol_prev_le_solx, ?_⟩
+    rw [Finset.coe_insert]
+    exact Set.insert_subset_iff.mpr
+      ⟨hx_solx, subset_trans hb_subset <| fill_mono <| hsol_prev_le_solx.1⟩
 
 class PartialSolution_with_axioms extends PartialSolution where
   x : N
@@ -1769,7 +1778,16 @@ lemma enlarge_S'_induction {sol : PartialSolution} {x:N} (hind: ∀ y:N, y < x �
 
 -- derive this from the inductive step `enlarge_S'_induction` using the API for ordering on `N` in `SmallMagma.lean`
 
-lemma enlarge_S' (sol : PartialSolution) (x:N) : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by sorry
+lemma enlarge_S' (sol : PartialSolution) (x : N) :
+    ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by
+  apply WellFoundedLT.induction x (fun z hz ↦ ?_)
+  by_cases z_one: z = 1
+  · exact enlarge_S'_induction (by simp [z_one, ← bot_eq_one])
+  · obtain ⟨parent_sol, h_parent_sol, h_parent_z_in⟩ := hz (parent z) (parent_lt z_one)
+    have hind : ∀ y: N, y < z → y ∈ parent_sol.Dom_S' :=
+      fun y hy ↦ parent_sol.axiom_S (parent z) y h_parent_z_in <| PredOrder.le_pred_of_lt hy
+    obtain ⟨sol', hsol', z_sol'⟩ := enlarge_S'_induction hind
+    exact ⟨sol', Preorder.le_trans sol parent_sol sol' h_parent_sol hsol', z_sol'⟩
 
 lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (x,y) ∈ sol'.Dom_op := by
   wlog hx : x ∈ sol.Dom_S'

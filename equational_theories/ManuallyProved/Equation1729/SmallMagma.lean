@@ -164,6 +164,24 @@ instance N_order : PartialOrder N where
   le_antisymm x y hxy hyx := FreeGroup.toWord_injective <|
     List.IsSuffix.eq_of_length_le hxy (List.IsSuffix.length_le hyx)
 
+def N_lt_hom_nat_lt: RelHom (fun x y : N => x < y) (fun x y : ℕ => x < y) := {
+  toFun := fun x => x.toWord.length
+  map_rel' := by
+    intro x y h
+    rw [lt_iff_le_not_le, le_def] at h
+
+    have len_le := List.IsSuffix.length_le h.1
+    have len_ne: x.toWord.length ≠ y.toWord.length := by
+      by_contra!
+      have word_eq := List.IsSuffix.eq_of_length_le h.1 (by exact Nat.le_of_eq (id (Eq.symm this)))
+      simp [le_def, word_eq] at h
+    exact Nat.lt_of_le_of_ne len_le len_ne
+}
+
+instance : WellFoundedLT N := {
+  wf := RelHomClass.wellFounded N_lt_hom_nat_lt IsWellFounded.wf
+}
+
 instance : LocallyFiniteOrderBot N := LocallyFiniteOrderBot.ofIic
   (finsetIic := fun x => (List.map (FreeGroup.mk) x.toWord.tails).toFinset)
   (mem_Iic := fun a x => by
@@ -395,6 +413,7 @@ variable (f g h : ℕ → ℕ)
 example : ℕ := f $ g $ h 0
 
 abbrev axiom_iii' (S': N → SM) (L₀' : N → N)  := ∀ (a : SM) (x y : N), R' a x = y → ((R' (S' y)).symm $ L₀' $ R' (S (S' y)) $ (R' (a - S' x)).symm $ L₀' $ R' (S (a - S' x)) y) = x
+-- axiom_3 : ∀ x y, ∀ a, R' a x = y → ((L' (S' y)) (L' ((L (S' x)).symm a) y)) = x
 
 abbrev axiom_iv' (S': N → SM) (L₀' : N → N) := ∀ x : N, ((R' (S' x)).symm $ L₀' $ R' (S (S' x)) $ (R' (S' x)).symm $ L₀' $ R' (S (S' x)) $ x) = x
 
@@ -410,63 +429,25 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
   exact
    {
     S := S
-    L := fun x ↦ (fun y ↦ x ◇ y)
-    R := fun x ↦ (fun y ↦ y ◇ x)
+    L := sorry --fun x ↦ (fun y ↦ x ◇ y)
+    R := sorry--fun x ↦ (fun y ↦ y ◇ x)
     S' := S'
     L' := (fun a ↦ L' h_i' a)
     R' := (fun a ↦ R' a)
     rest_map := op
     squaring_prop_SM := by intros; rfl
-    left_map_SM := by intros; rfl
-    right_map_SM := by intros; rfl
-    sqN_extends_sqM := by intro _; aesop -- this is a tautology
-    L_inv := by
-      intro a
-      exact {
-        inv := fun y ↦ y - a
-        inv_left := by
-          ext y
-          simp only [SM_op_eq_add, Function.comp_apply, add_sub_cancel_left, id_eq]
-        inv_right := by
-          ext y
-          simp only [SM_op_eq_add, Function.comp_apply, add_sub_cancel, id_eq]
-        bij := sorry -- redundant given the other data
-      }
-    L'_inv := by
-      intro a
-      exact {
-        inv := (L' h_i' a).symm
-        inv_left := Equiv.symm_comp_self _
-        inv_right := Equiv.self_comp_symm _
-        bij := sorry -- redundant given the other data
-      }
-    R_inv := by
-      intro a
-      exact {
-        inv := fun y ↦ y - a
-        inv_left := by
-          ext y
-          simp only [SM_op_eq_add, Function.comp_apply, add_sub_cancel_right, id_eq]
-        inv_right := by
-          ext y
-          simp only [SM_op_eq_add, Function.comp_apply, sub_add_cancel, id_eq]
-        bij := sorry -- redundant given the other data
-      }
-    R'_inv := by
-      intro a
-      exact {
-        inv := (R' a).symm
-        inv_left := Equiv.symm_comp_self _
-        inv_right := Equiv.self_comp_symm _
-        bij := sorry -- redundant given the other data
-      }
+    left_map_SM := by intros; sorry
+    right_map_SM := by intros; sorry
+
     SM_sat_1729 := SM_obeys_1729
     axiom_1 := by
       intro a
       simp only [L', SM_square_square_eq_zero, Equiv.coe_fn_mk]
-      calc
+      /-calc
         _ = (R' (S a)).symm ∘ (L₀' ∘ (R' 0) ∘ ((R' a) ∘ (R' a).symm) ∘ L₀') ∘ (R' (S a))  := rfl
         _ = _ := by simp [L₀'_R'0_L₀'_eq_id h_i']
+      -/
+      sorry
     axiom_21 := by
       intro a b y h
       simp only [ne_eq, R'_axiom_iia a b y h, not_false_eq_true]
@@ -476,6 +457,7 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
     axiom_3 := by
       intro x y a h
       simp only [L', Equiv.coe_fn_mk, Function.comp_apply, h_iii' a x y h]
+      sorry
     axiom_4 := by
       intro x
       simp only [L', Equiv.coe_fn_mk, Function.comp_apply, h_iv' x]
@@ -485,6 +467,8 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
     axiom_6 := by
       intro y a
       simp [L', h_vi' y a]
+      sorry
+    axiom_7 := sorry
    }
 
 -- Remark: a lot of the definitions and API below could be restated more abstractly using the quotient space construction on groups.  This might be worth doing in order to locate some further contributions to Mathlib in this area.
