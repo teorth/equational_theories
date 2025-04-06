@@ -26,7 +26,7 @@ class PartialSolution where
   axiom_v'' (x : N) (h : (x,x) ∈ Dom_op) : x ∈ Dom_S' ∧ op x x = Sum.inl (S' x)
   axiom_vi'' (y : N) (a : SM) (h: (R' a y, y) ∈ Dom_op) : y ∈ Dom_S' ∧ op (R' a y) y = Sum.inl ( a - S' y )
   axiom_vii'' (x y : N) (h : x ≠ y) (h' : ∀ a : SM, x ≠ R' a y) (hop: (x,y) ∈ Dom_op) : ∃ z : N, op x y = Sum.inr z ∧ ((x,y,z) ∈ I ∨ ((z,x) ∈ Dom_op ∧ x ∈ Dom_S' ∧ (R' 0 $ R' (S' x) $ y) ∈ fill Predom_L₀' ∧ op z x = Sum.inr ((R' (S (S' x))).symm $ L₀' $ R' 0 $ R' (S' x) $ y)))
-  axiom_P (x y z : N) (h: (x,y,z) ∈ I) : x ∉ Dom_S' ∧ (z,x) ∉ Dom_op ∧ z ≠ x ∧ (∀ a : SM, z ≠ R' a x) ∧ (y ≠ x) ∧ (y ≠ parent x)
+  axiom_P (x y z : N) (h: (x,y,z) ∈ I) : x ∉ Dom_S' ∧ (z,x) ∉ Dom_op ∧ z ≠ x ∧ (∀ a : SM, z ≠ R' a x ∧ R' a z ≠ x) ∧ (y ≠ x) ∧ (y ≠ parent x)
   axiom_P' (x y y' z : N) (hy : (x,y,z) ∈ I) (hy' : (x,y',z) ∈ I) : y = y'
   axiom_P'' (x y z : N) (hy : (x,y,z) ∈ I) : (x,y) ∈ Dom_op ∧ Sum.inr z = op x y
   axiom_L (x:N) (a:SM) (h: x ∈ fill Predom_L₀') : L₀' x ≠ (R' a $ (R' (S a)).symm $ x)
@@ -1507,7 +1507,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       | P₁ y' z' hI =>
         simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
         rw [h.1, ←h.2] at hI
-        have := (sol.axiom_P _ _ _ hI).2.2.2.1 a
+        have := ((sol.axiom_P _ _ _ hI).2.2.2.1 a).1
         contrapose! this
         rfl
       | P₂ y' z' hI hz =>
@@ -1633,6 +1633,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           exact sol.invis_lemma y' x' hI
         . intro a
           replace hI := (sol.I_involved sol.extras hI).2.2
+          stop
           contrapose! hI
           apply_fun (R' a).symm at hI
           simp only [R', Equiv.coe_fn_symm_mk, Equiv.coe_fn_mk, inv_mul_cancel_left] at hI
@@ -1678,6 +1679,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           exact sol.sees_R'_inv (sol.reaches_S $ sol.reaches_involved (sol.dom_S'_involved sol.extras hz).2) (sol.dom_L₀'_involved sol.extras $ hC y' z' hI hz).2
         . intro a
           have hinvis' := sol.invis_lemma' y' z' a
+          stop
           contrapose! hinvis'
           rw [←hinvis']
           exact sol.sees_R'_inv (sol.reaches_S $ sol.reaches_involved (sol.dom_S'_involved sol.extras hz).2) (sol.dom_L₀'_involved sol.extras $ hC y' z' hI hz).2
@@ -1975,7 +1977,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         by_contra h4
         obtain ⟨ h4, h5 ⟩ := h4
         rw [←h5] at h4
-        exact h3.2.1 a h4
+        exact (h3.2.1 a).1 h4
       axiom_P' := sol.axiom_P'
       axiom_P'' := by
         intro x' y' z hI
@@ -2140,9 +2142,11 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
           dsimp [R',z, PartialSolution.sees] at h
           simp only [generators_subset_iff] at h
           apply sol.fresh_not_in_gen extras 0 $ h d₀ $ basis_elements_of_prod_gen' d₀ a
-        contrapose! this
-        rw [← this]
-        exact hz'_vis
+        constructor
+        . contrapose! this
+          rw [← this]
+          exact hz'_vis
+        sorry
       . contrapose! hz_invis
         rw [←hz_invis]
         apply sol.extras_involved
