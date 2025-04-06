@@ -1748,7 +1748,6 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       . have := sol.axiom_P'' _ _ _ hI₁
         exact ⟨ sol.mem_new_dom_op (op_data.old x₁ y₁ this.1), (sol.op_extend this.1) ▸ this.2 ⟩
       . exact ⟨ sol.mem_new_dom_op (op_data.P₁ y₁ z₁ hI₁), (sol.op_eval (op_data.P₁ y₁ z₁ hI₁)).symm ⟩
-      constructor
       exact ⟨ sol.mem_new_dom_op (op_data.P₂ y₁ z₁ hI₁ hz₁), (sol.op_eval (op_Data.P₂ y₁ z₁ hI₁ hz₁)).symm ⟩
     axiom_L := by
       intro x a h
