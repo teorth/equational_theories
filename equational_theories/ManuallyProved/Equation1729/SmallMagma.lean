@@ -95,6 +95,24 @@ instance N_order : PartialOrder N where
   le_antisymm x y hxy hyx := FreeGroup.toWord_injective <|
     List.IsSuffix.eq_of_length_le hxy (List.IsSuffix.length_le hyx)
 
+def N_lt_hom_nat_lt: RelHom (fun x y : N => x < y) (fun x y : ℕ => x < y) := {
+  toFun := fun x => x.toWord.length
+  map_rel' := by
+    intro x y h
+    rw [lt_iff_le_not_le, le_def] at h
+
+    have len_le := List.IsSuffix.length_le h.1
+    have len_ne: x.toWord.length ≠ y.toWord.length := by
+      by_contra!
+      have word_eq := List.IsSuffix.eq_of_length_le h.1 (by exact Nat.le_of_eq (id (Eq.symm this)))
+      simp [le_def, word_eq] at h
+    exact Nat.lt_of_le_of_ne len_le len_ne
+}
+
+instance : WellFoundedLT N := {
+  wf := RelHomClass.wellFounded N_lt_hom_nat_lt IsWellFounded.wf
+}
+
 instance : LocallyFiniteOrderBot N := LocallyFiniteOrderBot.ofIic
   (finsetIic := fun x => (List.map (FreeGroup.mk) x.toWord.tails).toFinset)
   (mem_Iic := fun a x => by
