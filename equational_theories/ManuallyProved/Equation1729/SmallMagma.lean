@@ -23,10 +23,30 @@ instance SM_countable : Countable SM := by
   . infer_instance
   infer_instance
 
+@[simp]
+lemma SM_char_four (a : SM) : 4 • a = 0 := by
+-- when we update Mathlib, one can switch to DirectSum.ext_component, or use the new version of DirectSum.ext
+  apply DirectSum.ext ℤ
+  intro i
+  simp only [map_smul, map_zero]
+  exact ZModModule.char_nsmul_eq_zero 4 _
+
 abbrev E (n:ℕ) : SM := (DirectSum.of (fun _ ↦ ZMod 4) n) 1
 
 @[simp]
 lemma SM_op_eq_add (a b : SM) : a ◇ b = a + b := rfl
+
+@[simp]
+lemma E_apply (n m:ℕ) : E n m = if n=m then 1 else 0 := by
+  simp [DirectSum.of_apply]
+  
+
+lemma E_inj : Function.Injective E := by
+  intro n m h
+  apply_fun (fun f ↦ f n) at h
+  contrapose! h
+  simp [E, DirectSum.of_eq_of_ne _ _ _ h.symm]
+  decide
 
 /- The squaring map on SM -/
 def S (a : SM) := a ◇ a
@@ -34,27 +54,55 @@ def S (a : SM) := a ◇ a
 @[simp]
 lemma S_zero : S 0 = 0 := rfl
 
+lemma SM_square_eq_double (a : SM) : S a = a + a := rfl
+
 @[simp]
 lemma SM_square_square_eq_zero (a : SM) : S (S a) = 0 := by
-  simp only [S, SM_op_eq_add]
--- when we update Mathlib, one can switch to DirectSum.ext_component, or use the new version of DirectSum.ext
-  apply DirectSum.ext ℤ
-  intro i
-  simp only [map_add, map_zero]
+  rw [←sub_eq_zero]
+  simp only [SM_square_eq_double]
   abel_nf
-  exact ZModModule.char_nsmul_eq_zero 4 _
+  exact SM_char_four _
 
-lemma SM_square_eq_double (a : SM) : S a = a + a := rfl
+@[simp]
+lemma S_neg (a : SM) : S (-a) = S a := by
+  simp only [SM_square_eq_double]
+  symm
+  rw [←sub_eq_zero]
+  abel_nf
+  exact SM_char_four _
+
+@[simp]
+lemma S_add (a b: SM) : S (a + b) = S a + S b := by
+  simp only [SM_square_eq_double]
+  abel
+
+@[simp]
+lemma S_sub (a b: SM) : S (a - b) = S a + S b := by
+  simp only [SM_square_eq_double]
+  symm
+  rw [←sub_eq_zero]
+  abel_nf
+  exact SM_char_four _
+
+@[simp]
+lemma S_eval (a : SM) (n:ℕ) : S a n = a n + a n := by
+  simp only [SM_square_eq_double, DirectSum.add_apply]
+
 
 lemma SM_obeys_1729 : Equation1729 SM := by
   intro x y
-  simp only [SM_op_eq_add]
+  simp only [SM_op_eq_add, SM_square_eq_double]
+  symm
+  rw [←sub_eq_zero]
   abel_nf
--- when we update Mathlib, one can switch to DirectSum.ext_component, or use the new version of DirectSum.ext
-  apply DirectSum.ext ℤ
-  intro i
-  simp only [map_add, map_smul, zsmul_eq_mul, Int.cast_ofNat, self_eq_add_left]
-  apply zero_mul
+  exact SM_char_four _
+
+lemma E_ne_SE (n m : ℕ): E n ≠ S (E m) := by
+  by_contra! this
+  apply_fun (fun f ↦ f n) at this
+  by_cases h:m=n
+  all_goals simp [E,S, DirectSum.of_apply,h] at this
+  all_goals contrapose! this; decide
 
 def L (a:SM) : SM ≃ SM := {
   toFun := fun x ↦ x + a
@@ -74,6 +122,27 @@ abbrev N := FreeGroup SM
 instance N_countable : Countable N := Quotient.countable
 
 abbrev e (a:SM) := FreeGroup.of a
+
+/-- For mathlib? -/
+@[simp]
+theorem FreeGroup.mk_of_single_true {α : Type* } (a : α) : FreeGroup.mk [(a,true)] = FreeGroup.of a := rfl
+
+/-- For mathlib? -/
+@[simp]
+theorem FreeGroup.mk_of_single_false {α : Type*} (a : α) : FreeGroup.mk [(a,false)] = (FreeGroup.of a)⁻¹  := rfl
+
+lemma div_eq (a b : SM) : (e b)⁻¹ * (e a)  = FreeGroup.mk ([(b, false)] ++ [(a,true)]) := by
+    simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true, FreeGroup.mk_of_single_false, e]
+
+lemma square_mul (a b : SM) : (e b) * (e a)^2 = FreeGroup.mk ([(b, true)] ++ [(a,true)] ++ [(a,true)]) := by
+    simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true,  e]
+    rw [mul_assoc]
+    congr
+
+lemma square (a : SM) : (e a)^2 = FreeGroup.mk ([(a,true)] ++ [(a,true)]) := by
+    simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true,  e]
+    congr
+
 
 def adjacent (x y : N) := ∃ a, x = (e a) * y ∨ y = (e a) * x
 
@@ -259,7 +328,10 @@ theorem parent_of_adjacent {x y : N} (h : adjacent x y) : x = parent y ∨ y = p
       apply FreeGroup.toWord_injective
       simp [parent_toWord, eq']
 
-
+@[simp]
+lemma parent_of_e_sq (a:SM) : parent ((e a)^2) = e a := by
+  simp only [parent, e, FreeGroup.toWord_of_pow, List.reduceReplicate, List.tail_cons,
+    FreeGroup.mk_of_single_true]
 
 /- Right-multiplication by an element of SM on N is defined via the group action. -/
 
@@ -279,9 +351,19 @@ lemma R'_axiom_iia (a b : SM) (y:N) (h: a ≠ b): R' a y ≠ R' b y := by
   simp only [R', Equiv.coe_fn_mk, mul_left_inj] at h
   exact FreeGroup.of_injective h
 
+@[simp]
+lemma R'_axiom_iia' {a b : SM} {y:N} : R' a y = R' b y ↔ a = b := by
+  constructor
+  . intro h
+    contrapose! h
+    exact R'_axiom_iia a b y h
+  intro h; rw [h]
+
+
 lemma R'_axiom_iib (a : SM) (y:N) : R' a y ≠ y := by
   by_contra! h
   simp only [R', Equiv.coe_fn_mk, mul_left_eq_self, FreeGroup.of_ne_one] at h
+
 
 lemma R'_adjacent (a : SM) (y:N) : adjacent y (R' a y) := by
   use a
@@ -438,6 +520,16 @@ lemma fill_union {D₁ D₂ : Finset N} : fill (D₁ ∪ D₂) = (fill D₁) ∪
   simp [fill]
   aesop
 
+@[simp]
+lemma fill_pair {x y : N} : fill {x,y} = (fill {x}) ∪ (fill {y}) := by
+  convert fill_union using 2
+  rfl
+
+@[simp]
+lemma fill_singleton {x y : N} : x ∈ fill {y} ↔ x ≈ y := by
+  simp [fill]
+  exact Setoid.comm' _
+
 lemma fill_invar (D: Finset N) {x y : N} (h : x ≈ y) : x ∈ fill D ↔ y ∈ fill D := by
   constructor
   . intro h
@@ -564,6 +656,14 @@ lemma fresh_not_in_generators (A: Finset SM) (n:ℕ) : ¬ in_generators A (E (fr
   simp only [in_generators, support_E, Finset.singleton_subset_iff]
   exact fresh_ne_generator A n
 
+lemma Sfresh_not_in_generators (A: Finset SM) (n:ℕ) : ¬ (in_generators A $ S $ E $ fresh A n) := by
+  simp only [in_generators, Finset.not_subset]
+  refine ⟨ _, ?_, fresh_ne_generator A n ⟩
+  rw [DFinsupp.mem_support_iff]
+  simp only [S, E, SM_op_eq_add, DirectSum.add_apply, DirectSum.of_eq_same, ne_eq]
+  decide
+
+
 lemma fresh_injective (A: Finset SM) : Function.Injective (fresh A) := by
   intros n m h
   unfold fresh at h
@@ -600,14 +700,6 @@ lemma basis_elements_of_generator_pow (a: SM) {n:ℕ} (hn: n ≠  0): basis_elem
   change Finset.image (fun x ↦ x.1) {(a,true)} ∪ {0} = {a} ∪ {0}
   congr
 
-/-- For mathlib? -/
-@[simp]
-theorem FreeGroup.mk_of_single_true {α : Type* } (a : α) : FreeGroup.mk [(a,true)] = FreeGroup.of a := rfl
-
-/-- For mathlib? -/
-@[simp]
-theorem FreeGroup.mk_of_single_false {α : Type*} (a : α) : FreeGroup.mk [(a,false)] = (FreeGroup.of a)⁻¹  := rfl
-
 lemma basis_elements_of_prod_gen (a b:SM) : a ∈ basis_elements ((e b)⁻¹ * (e a)^2) := by
   by_cases h : b = a
   . rw [← h]
@@ -622,14 +714,6 @@ lemma basis_elements_of_prod_gen (a b:SM) : a ∈ basis_elements ((e b)⁻¹ * (
     congr
 -- weirdly, the simp below breaks when using the recommend simp?
   simp [this, h]
-
-lemma div_eq (a b : SM) : (e b)⁻¹ * (e a)  = FreeGroup.mk ([(b, false)] ++ [(a,true)]) := by
-    simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true, FreeGroup.mk_of_single_false, e]
-
-lemma square_mul (a b : SM) : (e b) * (e a)^2 = FreeGroup.mk ([(b, true)] ++ [(a,true)] ++ [(a,true)]) := by
-    simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true,  e]
-    rw [mul_assoc]
-    congr
 
 lemma basis_elements_of_prod_gen' (a b:SM) : a ∈ basis_elements ((e b) * (e a)^2) := by
   by_cases h : b = a
@@ -725,5 +809,72 @@ lemma basis_elements_of_rel {x y:N} (h: x ≈ y) : basis_elements x = basis_elem
     exact basis_elements_of_rel' h h2
   intro h2
   exact basis_elements_of_rel' (Setoid.symm h) h2
+
+abbrev val (a : SM) (x : N) : ℤ := Multiplicative.toAdd $ FreeGroup.lift (fun b ↦ if b=a then Multiplicative.ofAdd 1 else Multiplicative.ofAdd  0) x
+
+@[simp]
+lemma val_hom (a : SM) (x y : N): val a (x*y) = val a x + val a y := by
+  simp only [val, ofAdd_zero, map_mul]
+  rfl
+
+@[simp]
+lemma val_inv (a : SM) (x : N): val a x⁻¹ = -val a x := by
+  simp only [val, ofAdd_zero, map_inv]
+  rfl
+
+@[simp]
+lemma val_e (a b : SM) : val a (e b) = if b=a then 1 else 0 := by
+  simp only [val, ofAdd_zero, e, FreeGroup.lift.of]
+  rfl
+
+@[simp]
+lemma val_mk (a b: SM) (t:Bool)  : val a (FreeGroup.mk [(b,t)]) = if b=a then (if t then 1 else -1) else 0 := by
+  rcases t
+  all_goals by_cases h:b=a
+  all_goals simp [val,h]
+
+@[simp]
+lemma val_one (a:SM) : val a 1 = 0 := by
+  simp only [val, ofAdd_zero, map_one, toAdd_one]
+
+lemma FreeGroup.head_concat_tail {α:Type*} (head:α) (tail:List α) : [head] ++ tail = head :: tail := rfl
+
+lemma val_of_nonsupp_eq_zero' {a:SM} {L:List (SM × Bool)} (h: ∀ b : Bool, (a,b) ∉ L.toFinset) : val a (FreeGroup.mk L) = 0 := match L with
+| List.nil => by
+    simp only [toAdd_eq_zero, ofAdd_zero, FreeGroup.lift.mk, List.map_nil, List.prod_nil]
+| List.cons head tail => by
+    have h1 : head.1 ≠ a := by
+      contrapose! h
+      use head.2
+      simp only [List.toFinset_cons, ← h, Prod.mk.eta, Finset.mem_insert, List.mem_toFinset, true_or]
+    have h2 : ∀ b : Bool, (a,b) ∉ tail.toFinset := by
+      intro b
+      replace h := h b
+      contrapose! h
+      simp only [List.mem_toFinset, List.toFinset_cons, Finset.mem_insert] at h ⊢
+      exact Or.inr h
+    rw [← FreeGroup.head_concat_tail, ← FreeGroup.mul_mk, val_hom, val_mk, val_of_nonsupp_eq_zero' h2]
+    simp [h1]
+
+
+lemma val_of_nonsupp_eq_zero {a:SM} {y:N} (h: ¬ a.support ⊆  generators (basis_elements y)) : val a y = 0 := by
+  rw [← y.mk_toWord]
+  apply val_of_nonsupp_eq_zero'
+  contrapose! h
+  simp only [List.mem_toFinset] at h
+  calc
+    _ ⊆ (basis_elements y).biUnion DFinsupp.support := by
+      apply Finset.subset_biUnion_of_mem
+      apply Finset.mem_union_left
+      simp only [Finset.mem_image, List.mem_toFinset, Prod.exists, exists_and_right, exists_eq_right, h]
+    _ ⊆ _ := Finset.subset_union_left
+
+lemma R'_R'_neq (a b : SM) (y:N) : R' a (R' b y) ≠ y := by
+  by_contra! h
+  apply_fun (fun z ↦ val a z) at h
+  by_cases heq : b = a
+  all_goals simp [R', heq] at h
+  linarith
+
 
 end Eq1729
