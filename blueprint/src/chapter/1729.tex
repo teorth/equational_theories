@@ -255,7 +255,7 @@ One can check that these definitions do not cause any collisions in the partial 
 \end{proposition}
 
 \begin{proof}
-  \uses{enlarge-l0-many,enlarge-S-induct-axioms}  Let $y_0$ be the parent of $x$, that is to say the unique neighbor of $x$ in the path to $1$ (this is only defined for $x \neq 1$), then by axiom (i'') $y_0$ is the unique neighbor for which $S'y_0$ is defined, and we either have $x = R'_a y_0$ or $R'_a x = y_0$ for some unique $a \in SM$.
+  \uses{enlarge-l0-many,enlarge-S-induct-axioms}\leanok  Let $y_0$ be the parent of $x$, that is to say the unique neighbor of $x$ in the path to $1$ (this is only defined for $x \neq 1$), then by axiom (i'') $y_0$ is the unique neighbor for which $S'y_0$ is defined, and we either have $x = R'_a y_0$ or $R'_a x = y_0$ for some unique $a \in SM$.
 
   By using \Cref{enlarge-l0-many}, we may impose axioms (A), (B), (C) without loss of generality, as this only imposes a finite set of conditions.  The claim now follows from \Cref{enlarge-S-induct-axioms}.
 \end{proof}
