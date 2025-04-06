@@ -390,7 +390,7 @@ sol.extend x y y = (e 0)⁻¹ * x := by
   convert sol.enlarge_L₀'_new hneq 0
   all_goals group
 
-lemma PartialSolution.extend_axiom_i'' {sol : PartialSolution} {x y:N} (hx: x ∉ sol.Dom_L₀') (hy: y ∉ sol.Dom_L₀') (hneq : ¬ y ≈ x): Eq1729.axiom_i'' (sol.extend x y) (sol.Predom_L₀' ∪ {x,y}) := by
+lemma PartialSolution.extend_axiom_i'' {sol : PartialSolution} {x y:N} (hx: x ∉ sol.Dom_L₀') (hy: y ∉ sol.Dom_L₀') (hneq : ¬ y ≈ x) : Eq1729.axiom_i'' (sol.extend x y) (sol.Predom_L₀' ∪ {x,y}) := by
   intro z w hz hw n
   simp only [Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton] at hz
   rcases hz with rfl | hz | rfl
@@ -461,7 +461,7 @@ lemma gen_fresh_not_rel_extra (sol : PartialSolution) {extras: Finset M} (n:ℕ)
   exact fresh_ne_generator (sol.involved_elements extras ) n this
 
 -- will need a hypothesis to verify axiom L
-noncomputable def enlarge_L₀'_by {sol : PartialSolution} {x y:N} (hx: x ∉ sol.Dom_L₀') (hy: y ∉ sol.Dom_L₀') (hneq: ¬ y ≈ x): PartialSolution := {
+noncomputable def enlarge_L₀'_by {sol : PartialSolution} {x y:N} (hx: x ∉ sol.Dom_L₀') (hy: y ∉ sol.Dom_L₀') (hneq: ¬ y ≈ x) (hcol1: ∀ a (n:ℤ), (e 0)^n * y ≠ (R' a $ (R' (S a)).symm $ (e 0)^n * x) ) (hcol2: ∀ a (n:ℤ), (e 0)^(n-1) * x ≠ (R' a $ (R' (S a)).symm $ (e 0)^n * y) )  : PartialSolution := {
     L₀' := sol.extend x y
     op := sol.op
     S' := sol.S'
@@ -504,17 +504,67 @@ noncomputable def enlarge_L₀'_by {sol : PartialSolution} {x y:N} (hx: x ∉ so
       . convert sol.axiom_L z a hz using 1
         apply sol.enlarge_L₀'_extends hx hy hz
       . obtain ⟨ n, rfl ⟩ := Setoid.symm hz
-        sorry
-      sorry
+        rw [(sol.enlarge_L₀'_new hneq n).1]
+        exact hcol1 a n
+      obtain ⟨ n, rfl ⟩ := Setoid.symm hz
+      rw [(sol.enlarge_L₀'_new hneq n).2]
+      exact hcol2 a n
 }
 
 
 lemma enlarge_L₀' (sol : PartialSolution) (x:N)  : ∃ sol', sol ≤ sol' ∧ x ∈ fill sol'.Predom_L₀' := by
   by_cases hx : x ∈ sol.Dom_L₀'
   . exact ⟨ sol, sol.refl, hx ⟩
-  have hed : (e $ E $ sol.fresh_generator {Sum.inr x} 0) ∉ sol.Dom_L₀' := gen_fresh_not_in_fill sol {Sum.inr x} 0
+  set extras : Finset M := {Sum.inr x}
+  set d := E $ sol.fresh_generator extras 0
+  have hed : e d ∉ sol.Dom_L₀' := gen_fresh_not_in_fill sol extras 0
 
-  set sol' : PartialSolution := enlarge_L₀'_by hx hed (gen_fresh_not_rel_extra sol 0 (Finset.mem_singleton.mpr rfl))
+  have h_see_x : sol.sees extras x := by
+    apply sol.extras_involved extras
+    simp only [Finset.mem_singleton, extras]
+
+  have hd : 0 ≠ d := (E_ne_zero _).symm
+  have hsd : S d ≠ d := (E_ne_SE _ _).symm
+  have hsd' : 0 ≠ S d := (SE_ne_zero _).symm
+
+  have hvalx : val d x = 0 := by
+      apply val_of_nonsupp_eq_zero
+      have : ¬ sol.reaches extras d := fresh_not_in_generators _ _
+      contrapose! this
+      simp only [PartialSolution.reaches, in_generators]
+      exact this.trans h_see_x
+
+  have hvalx' : val (S d) x = 0 := by
+      apply val_of_nonsupp_eq_zero
+      have : ¬ sol.reaches extras (S d) := Sfresh_not_in_generators _ _
+      contrapose! this
+      simp only [PartialSolution.reaches, in_generators]
+      exact this.trans h_see_x
+
+  have hcol1 (a:SM) (n:ℤ) : (e 0)^n * e d ≠ (R' a $ (R' (S a)).symm $ (e 0)^n * x)  := by
+    by_contra! this
+    by_cases h : a = d
+    . rw [h] at this
+      apply_fun val (S d) at this
+      simp [R', hsd.symm, hvalx'] at this
+    apply_fun val d at this
+    by_cases h' : S a = d
+    all_goals simp [R',hvalx,h,h',hsd] at this
+    linarith
+
+  have hcol2 (a:SM) (n:ℤ): (e 0)^(n-1) * x ≠ (R' a $ (R' (S a)).symm $ (e 0)^n * e d) := by
+    by_contra this
+    by_cases h : a = d
+    . rw [h] at this
+      apply_fun val (S d) at this
+      simp [R', hsd.symm, hsd', hvalx'] at this
+    apply_fun val d at this
+    by_cases h' : S a = d
+    all_goals simp [R',hvalx,h,h',hsd,hd] at this
+    exact E_ne_S _ _ h'.symm
+
+
+  set sol' : PartialSolution := enlarge_L₀'_by hx hed (gen_fresh_not_rel_extra sol 0 (Finset.mem_singleton.mpr rfl)) hcol1 hcol2
 
   refine ⟨ sol', ?_, ?_ ⟩
   . refine ⟨ Finset.subset_union_left, by rfl, by rfl, ?_, ?_, ?_ ⟩

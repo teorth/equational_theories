@@ -48,6 +48,15 @@ lemma E_inj : Function.Injective E := by
   simp [E, DirectSum.of_eq_of_ne _ _ _ h.symm]
   decide
 
+@[simp]
+lemma E_ne_zero (n:ℕ): E n ≠ 0 := by
+  by_contra! this
+  apply_fun (fun f ↦ f n) at this
+  simp only [DirectSum.of_eq_same, DirectSum.zero_apply] at this
+  contrapose! this
+  decide
+
+
 /- The squaring map on SM -/
 def S (a : SM) := a ◇ a
 
@@ -97,12 +106,26 @@ lemma SM_obeys_1729 : Equation1729 SM := by
   abel_nf
   exact SM_char_four _
 
-lemma E_ne_SE (n m : ℕ): E n ≠ S (E m) := by
+lemma one_odd (n : ZMod 4) : 1 ≠ n + n := by
+  revert n
+  decide
+
+lemma E_ne_S (n:ℕ) (a:SM) : E n ≠ S a := by
   by_contra! this
   apply_fun (fun f ↦ f n) at this
-  by_cases h:m=n
-  all_goals simp [E,S, DirectSum.of_apply,h] at this
-  all_goals contrapose! this; decide
+  simp [E,SM_square_eq_double, DirectSum.of_apply] at this
+  exact one_odd (a n) this
+
+lemma E_ne_SE (n m : ℕ): E n ≠ S (E m) := E_ne_S _ _
+
+@[simp]
+lemma SE_ne_zero (n:ℕ): S (E n) ≠ 0 := by
+  by_contra! this
+  apply_fun (fun f ↦ f n) at this
+  simp only [SM_square_eq_double, DirectSum.add_apply, DirectSum.of_eq_same,
+    DirectSum.zero_apply] at this
+  contrapose! this
+  decide
 
 def L (a:SM) : SM ≃ SM := {
   toFun := fun x ↦ x + a
@@ -826,6 +849,10 @@ lemma val_hom (a : SM) (x y : N): val a (x*y) = val a x + val a y := by
 lemma val_inv (a : SM) (x : N): val a x⁻¹ = -val a x := by
   simp only [val, ofAdd_zero, map_inv]
   rfl
+
+@[simp]
+lemma val_zpow (a : SM) (x : N) (n : ℤ) : val a (x^n) = n * val a x := by
+  simp only [val, ofAdd_zero, map_zpow, toAdd_zpow, smul_eq_mul]
 
 @[simp]
 lemma val_e (a b : SM) : val a (e b) = if b=a then 1 else 0 := by
