@@ -264,6 +264,8 @@ lemma PartialSolution.sees_e (sol: PartialSolution) {extras: Finset M} {a:SM} (h
     Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, zero_in_generators',
     and_true, ha]
 
+lemma PartialSolution.reaches_zero (sol: PartialSolution) {extras: Finset M} : sol.reaches extras 0 := zero_in_generators' _
+
 lemma PartialSolution.reaches_involved (sol: PartialSolution) {extras: Finset M} {a:SM} (h: a ∈ sol.involved_elements extras) : sol.reaches extras a := mem_in_generators h
 
 lemma PartialSolution.reaches_shift_from_parent  (sol: PartialSolution) {extras: Finset M} {a:SM} {x:N} (h: x = R' a (parent x)) (hx: sol.sees extras x) : sol.reaches extras a :=  (mem_in_generators $ shift_from_parent_mem_basis h).trans hx
@@ -1062,6 +1064,20 @@ lemma PartialSolution_with_axioms.sees_hB {sol:PartialSolution_with_axioms} {a:S
 
 lemma PartialSolution_with_axioms.cancel {sol:PartialSolution_with_axioms} {d:SM} {y z:N} (hd: ¬ sol.reaches sol.extras d) (hy: sol.sees sol.extras y) (hz: sol.sees sol.extras z) (hequiv: (e d) * y ≈ (e d) * z) : y = z := by sorry
 
+lemma PartialSolution_with_axioms.cancel' {sol:PartialSolution_with_axioms} {a b:SM} {y z:N} (ha: ¬ sol.reaches sol.extras a) (hb: b ≠ a) {n:ℤ} (hy : sol.sees sol.extras y) (hz : sol.sees sol.extras z) (heq: (e b) * ((e a)⁻¹ * ((e 0)^n * ((e a) * y))) = (e 0)^n * ((e b) * z)) : n = 0 := by sorry
+-- use GL_2
+
+lemma PartialSolution_with_axioms.neq_one_if_shift_from {sol:PartialSolution_with_axioms} {a:SM} (ha: sol.x = (R' a) sol.y₀) : sol.x ≠ 1 := by
+  contrapose! ha
+  simp [ha, PartialSolution_with_axioms.y₀]
+  exact (R'_axiom_iib _ _).symm
+
+lemma PartialSolution_with_axioms.neq_one_if_shift_to {sol:PartialSolution_with_axioms} {a:SM} (ha: (R' a) sol.x = sol.y₀) : sol.x ≠ 1 := by
+  contrapose! ha
+  simp [ha, PartialSolution_with_axioms.y₀]
+  exact (R'_axiom_iib _ _)
+
+
 lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_axioms} {data data' : L₀'_data sol} (hneq: data ≠ data') : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').1 ∧ ¬ (sol.L₀'_pair data).2 ≈ (sol.L₀'_pair data').2 := by
   rcases data with ⟨⟩ | ⟨⟩ | ⟨a,ha⟩ | ⟨a,ha⟩ | ⟨y,z,hz⟩
   all_goals rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hz'⟩
@@ -1087,11 +1103,7 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     . contrapose! h
       simp only [R', Equiv.coe_fn_symm_mk, S_sub, Equiv.coe_fn_mk] at this ⊢
       exact this.symm
-    . by_cases h : x = 1
-      . simp [h, PartialSolution_with_axioms.y₀] at ha'
-        contrapose! ha'
-        exact (R'_axiom_iib _ _).symm
-      exact sol.hind _ (parent_lt h)
+    . exact sol.hind _ (parent_lt (sol.neq_one_if_shift_from ha'))
     simp [sol.hB a' ha']
 
   . apply sol.nequiv_d₁
@@ -1149,11 +1161,7 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     . contrapose! h
       simp only [R', Equiv.coe_fn_symm_mk, S_sub, Equiv.coe_fn_mk] at this ⊢
       exact this
-    . by_cases h : x = 1
-      . simp [h, PartialSolution_with_axioms.y₀] at ha
-        contrapose! ha
-        exact (R'_axiom_iib _ _).symm
-      exact sol.hind _ (parent_lt h)
+    . exact sol.hind _ (parent_lt (sol.neq_one_if_shift_from ha))
     simp [sol.hB a ha]
   . apply sol.nequiv_d₀
     simp [sol.d₀_invis sol.sees_y₀, sol.d₀_neq_d₁.symm]
@@ -1900,7 +1908,6 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       exact ⟨ sol.mem_new_dom_op (op_data.P₂ y₁ z₁ hI₁ hz₁), (sol.op_eval (op_data.P₂ y₁ z₁ hI₁ hz₁)).symm ⟩
     axiom_L := by
       intro x' y' a hpar hS h ha
-      save
       simp only [fill_union, Set.mem_union] at h
       simp only [Finset.mem_union, Finset.mem_singleton] at hS
       rcases h with h | h
@@ -1908,7 +1915,24 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         . rw [sol.new_S_extend hS] at h ⊢
           exact (sol.new_L₀'_extend h) ▸ sol.axiom_L x' y' a hpar hS h ha
         rw [sol.new_S_x] at h ⊢
-        sorry
+        rw [sol.new_L₀'_extend h]
+        nth_rewrite 2 [ha]
+        by_contra! this
+        simp [S_sub,R'] at h
+        by_cases hsee : sol.reaches sol.extras a
+        . have hsee' : ¬ sol.reaches sol.extras (a - sol.d₀) := by
+            by_contra! hsee'
+            replace hsee' := sol.reaches_diff hsee hsee'
+            have haad : a - (a - sol.d₀) = sol.d₀ := by abel
+            rw [haad] at hsee'
+            exact (fresh_not_in_generators _ _) hsee'
+          apply_fun val (a-sol.d₀) at this
+          simp [R', sol.noreach_invis hsee' (sol.dom_L₀'_involved sol.extras h).2, sol.noreach_invis hsee' sol.sees_x] at this
+          by_cases had : a = a - sol.d₀
+          . simp [←had] at this
+          simp [had] at this
+        apply_fun val a at this
+        simp [R', sol.noreach_invis hsee (sol.dom_L₀'_involved sol.extras h).2, sol.noreach_invis hsee sol.sees_x] at this
       set a' := a - sol.new_S y'
       simp only [fill, Function.Embedding.in_range_iff_attains, Set.mem_setOf_eq] at h
       by_contra! this
@@ -1976,15 +2000,25 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
                 apply sol.reaches_sum _ (sol.reaches_involved (sol.dom_S'_involved sol.extras hS).2)
                 exact sol.reaches_diff (sol.reaches_shift_to_parent ha'' sol.sees_x) (sol.reaches_shift_from_parent ha sol.sees_y₀)
               exact (fresh_not_in_generators _ _) hreach₄
-            by_cases hx : x = 1
-            . simp [h, PartialSolution_with_axioms.y₀] at ha''
-              contrapose! ha''
-              exact R'_axiom_iib _ _
             have : x < x := calc
-              _ ≤ x' := by rw [hpar]; exact parent_le _
-              _ < _ := parent_lt hx
+              _ ≤ sol.y₀ := by rw [← hn, hpar]; exact parent_le _
+              _ < _ := parent_lt (sol.neq_one_if_shift_to ha'')
             exact lt_irrefl _ this
-          sorry
+          contrapose! hn'
+          rw [h, S_sub] at this
+          apply sol.cancel' _ _ _ _ this
+          . by_contra! hreach
+            have h := sol.reaches_diff (sol.reaches_shift_to_parent ha'' sol.sees_x) hreach
+            have haad : a'' - (a'' - sol.d₀) = sol.d₀ := by abel
+            rw [haad] at h
+            exact (fresh_not_in_generators _ _) h
+          . convert hS_neq_ad₀ ha'' (a'' - sol.d₀) using 1
+            simp only [S_sub]
+          . apply sol.sees_mul (sol.sees_inv (sol.sees_e _)) (sol.sees_mul (sol.sees_e _) _)
+            . exact sol.reaches_S $ sol.reaches_involved (sol.dom_S'_involved sol.extras $ sol.hind _ $ parent_lt $ sol.neq_one_if_shift_to ha'').2
+            . exact sol.reaches_zero
+            exact (sol.dom_L₀'_involved sol.extras (sol.hA a'' ha'')).2
+          exact sol.sees_y₀
         have had₀ := congrArg (val (a'' - sol.d₀)) this
         have h1 : (val (a'' - sol.d₀) $ sol.L₀' $ (e $ sol.S' sol.y₀) * x) = 0 := sol.ad₀_invis ha'' (sol.dom_L₀'_involved sol.extras $ sol.hA a'' ha'').2
         simp [sol.ad₀_invis ha'' sol.sees_y₀, h, hS_neq_ad₀ ha'' a', hSad₀_neq_ad₀ ha'', sol.SSy₀_neq_ad₀ ha'', (sol.ad₀_neq_zero ha'').symm, h1] at had₀
@@ -1992,12 +2026,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         . by_cases hn' : n = 0
           . simp [PartialSolution_with_axioms.L₀'_pre_embed_base, hn', h, R'] at hn
             rw [hpar] at ha
-            have hy₀: sol.y₀ ∈ sol.Dom_S' := by
-              by_cases h : x = 1
-              . simp [h, PartialSolution_with_axioms.y₀] at ha''
-                contrapose! ha''
-                exact (R'_axiom_iib _ _).symm
-              exact sol.hind _ (parent_lt h)
+            have hy₀: sol.y₀ ∈ sol.Dom_S' := sol.hind _ (parent_lt (sol.neq_one_if_shift_to ha''))
             have hsee₂ : sol.sees sol.extras x' := by
               rw [hn]
               exact sol.sees_mul (sol.sees_inv (sol.sees_e (sol.reaches_diff (sol.reaches_shift_from_parent ha'' sol.sees_x) (sol.reaches_involved (sol.dom_S'_involved sol.extras hy₀).2)))) (sol.dom_L₀'_involved sol.extras (sol.hB a'' ha'')).2
@@ -2013,8 +2042,13 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
               simp [← haS]
               exact sol.reaches_shift_from_parent ha hsee₂
             exact (Sfresh_not_in_generators _ _) hreach₂
-
-          sorry
+          contrapose! hn'
+          rw [h] at this
+          apply sol.cancel' (fresh_not_in_generators _ _) (sol.Sd₀_neq_d₀) sol.sees_y₀ ?_ this
+          apply sol.sees_mul (sol.sees_inv (sol.sees_e _)) _
+          . apply sol.reaches_diff (sol.reaches_shift_from_parent ha'' sol.sees_x) (sol.reaches_involved (sol.dom_S'_involved sol.extras _).2)
+            exact sol.hind _ (parent_lt (sol.neq_one_if_shift_to ha''))
+          exact (sol.dom_L₀'_involved sol.extras (sol.hB a'' ha'')).2
         have hd₀ := congrArg (val sol.d₀) this
         have h1 : (val sol.d₀ $ sol.L₀' $ e (S a'' + S (sol.S' sol.y₀)) * x) = 0 := sol.d₀_invis (sol.dom_L₀'_involved sol.extras $ sol.hB a'' ha'').2
         simp [sol.Sd₀_neq_d₀, sol.d₀_neq_zero.symm, sol.d₀_invis sol.sees_x, sol.d₀_invis sol.sees_y₀, hS_neq_d₀, h, sol.aSy₀_neq_d₀ ha'', h1] at hd₀
@@ -2481,7 +2515,6 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         rw [← h]
         exact hz'_vis
       . intro a
-        save
         have h1 : ¬ sol.sees extras ( R' a z ) := by
           by_contra h
           dsimp [R',z, PartialSolution.sees] at h
