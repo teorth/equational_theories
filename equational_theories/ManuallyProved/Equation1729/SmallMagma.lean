@@ -790,6 +790,12 @@ lemma basis_elements_of_mul (x y:N): basis_elements (x * y) ⊆ basis_elements x
   replace hn := List.Sublist.mem hn (FreeGroup.toWord_mul_sublist x y)
   rwa [List.mem_append] at hn
 
+lemma shift_from_parent_mem_basis {x:N} {a:SM} (h: x = R' a (parent x)) : a ∈ basis_elements x := by
+  sorry
+
+lemma shift_to_parent_mem_basis {x:N} {a:SM} (h: R' a x = parent x) : a ∈ basis_elements x := by
+  sorry
+
 /-- For Mathlib? -/
 @[simp]
 lemma List.toFinset_map {α β: Type*} [DecidableEq α] [DecidableEq β] (l: List α) (f : α → β) : (List.map f l).toFinset = Finset.image f l.toFinset := by
