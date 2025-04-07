@@ -859,7 +859,7 @@ lemma val_inv (a : SM) (x : N): val a x⁻¹ = -val a x := by
 
 @[simp]
 lemma val_zpow (a : SM) (x : N) (n : ℤ) : val a (x^n) = n * val a x := by
-  simp only [val, ofAdd_zero, map_zpow, toAdd_zpow, smul_eq_mul]
+  simp [val]
 
 @[simp]
 lemma val_e (a b : SM) : val a (e b) = if b=a then 1 else 0 := by
