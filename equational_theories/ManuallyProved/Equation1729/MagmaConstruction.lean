@@ -1903,14 +1903,13 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       save
       simp only [fill_union, Set.mem_union] at h
       simp only [Finset.mem_union, Finset.mem_singleton] at hS
-      rcases hS with hS | rfl
-      swap
-      . rw [sol.new_S_x]
-        sorry -- tricky
-      rw [sol.new_S_extend hS] at h ⊢
-      set a' := a - sol.S' y'
       rcases h with h | h
-      . exact (sol.new_L₀'_extend h) ▸ sol.axiom_L x' y' a hpar hS h ha
+      . rcases hS with hS | rfl
+        . rw [sol.new_S_extend hS] at h ⊢
+          exact (sol.new_L₀'_extend h) ▸ sol.axiom_L x' y' a hpar hS h ha
+        rw [sol.new_S_x] at h ⊢
+        sorry
+      set a' := a - sol.new_S y'
       simp only [fill, Function.Embedding.in_range_iff_attains, Set.mem_setOf_eq] at h
       by_contra! this
       obtain ⟨ y, ⟨ n, hn ⟩, ⟨ ⟨ data, b ⟩, rfl ⟩ ⟩ := h
@@ -1966,14 +1965,25 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         . by_cases hn' : n = 0
           . simp [PartialSolution_with_axioms.L₀'_pre_embed_base, hn', h, R'] at hn
             rw [hpar, hn] at ha
-            have hd₀_eq : sol.d₀ = a'' - a + sol.S' y' := calc
-              _ = a'' - a' := by rw [h]; abel
-              _ = _ := by simp [a']; abel
-            have hreach₄ : sol.reaches sol.extras sol.d₀ := by
-              rw [hd₀_eq]
-              apply sol.reaches_sum _ (sol.reaches_involved (sol.dom_S'_involved sol.extras hS).2)
-              exact sol.reaches_diff (sol.reaches_shift_to_parent ha'' sol.sees_x) (sol.reaches_shift_from_parent ha sol.sees_y₀)
-            exact (fresh_not_in_generators _ _) hreach₄
+            rcases hS with hS | rfl
+            . have hd₀_eq : sol.d₀ = a'' - a + sol.S' y' := calc
+                _ = a'' - a' := by rw [h]; abel
+                _ = a'' - a + sol.new_S y' := by simp [a']; abel
+                _ = _ := by rw [sol.new_S_extend hS]
+
+              have hreach₄ : sol.reaches sol.extras sol.d₀ := by
+                rw [hd₀_eq]
+                apply sol.reaches_sum _ (sol.reaches_involved (sol.dom_S'_involved sol.extras hS).2)
+                exact sol.reaches_diff (sol.reaches_shift_to_parent ha'' sol.sees_x) (sol.reaches_shift_from_parent ha sol.sees_y₀)
+              exact (fresh_not_in_generators _ _) hreach₄
+            by_cases hx : x = 1
+            . simp [h, PartialSolution_with_axioms.y₀] at ha''
+              contrapose! ha''
+              exact R'_axiom_iib _ _
+            have : x < x := calc
+              _ ≤ x' := by rw [hpar]; exact parent_le _
+              _ < _ := parent_lt hx
+            exact lt_irrefl _ this
           sorry
         have had₀ := congrArg (val (a'' - sol.d₀)) this
         have h1 : (val (a'' - sol.d₀) $ sol.L₀' $ (e $ sol.S' sol.y₀) * x) = 0 := sol.ad₀_invis ha'' (sol.dom_L₀'_involved sol.extras $ sol.hA a'' ha'').2
@@ -1991,11 +2001,18 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
             have hsee₂ : sol.sees sol.extras x' := by
               rw [hn]
               exact sol.sees_mul (sol.sees_inv (sol.sees_e (sol.reaches_diff (sol.reaches_shift_from_parent ha'' sol.sees_x) (sol.reaches_involved (sol.dom_S'_involved sol.extras hy₀).2)))) (sol.dom_L₀'_involved sol.extras (sol.hB a'' ha'')).2
-
-            have hreach₂ : sol.reaches sol.extras sol.d₀ := by
-              rw [← h]
-              exact sol.reaches_diff (sol.reaches_shift_from_parent ha hsee₂) (sol.reaches_involved (sol.dom_S'_involved sol.extras hS).2)
-            exact (fresh_not_in_generators _ _) hreach₂
+            rcases hS with hS | rfl
+            . have hreach₂ : sol.reaches sol.extras sol.d₀ := by
+                simp [← h, a', sol.new_S_extend hS]
+                exact sol.reaches_diff (sol.reaches_shift_from_parent ha hsee₂) (sol.reaches_involved (sol.dom_S'_involved sol.extras hS).2)
+              exact (fresh_not_in_generators _ _) hreach₂
+            have haS: a = S sol.d₀ := calc
+              _ = a' + sol.new_S x := by simp [a']
+              _ = _ := by rw [sol.new_S_x, SM_square_eq_double, h]
+            have hreach₂ : sol.reaches sol.extras (S sol.d₀) := by
+              simp [← haS]
+              exact sol.reaches_shift_from_parent ha hsee₂
+            exact (Sfresh_not_in_generators _ _) hreach₂
 
           sorry
         have hd₀ := congrArg (val sol.d₀) this
