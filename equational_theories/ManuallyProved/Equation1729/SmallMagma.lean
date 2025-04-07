@@ -713,6 +713,11 @@ lemma basis_elements_of_id : basis_elements 1 = {0} := by
     Finset.subset_singleton_iff, true_or]
 
 @[simp]
+lemma zero_mem_basis_elements (x:N) : 0 ∈ basis_elements x := by
+  simp only [basis_elements, Finset.mem_union, Finset.mem_image, List.mem_toFinset, Prod.exists,
+    exists_and_right, Bool.exists_bool, exists_eq_right, Finset.mem_singleton, or_true]
+
+@[simp]
 lemma basis_elements_of_generator (a: SM) : basis_elements (e a) = {a,0} := by
   simp only [basis_elements, FreeGroup.toWord_of, List.toFinset_cons, List.toFinset_nil,
     insert_emptyc_eq, Finset.image_singleton]
@@ -914,12 +919,9 @@ lemma R'_R'_neq (a b : SM) (y:N) : R' a (R' b y) ≠ y := by
   linarith
 
 lemma basis_elements_parent_subset {x:N} : basis_elements (parent x) ⊆ basis_elements x := by
-  apply Finset.union_subset_union _ (fun ⦃a⦄ a ↦ a)
-  apply Finset.image_subset_image
+  refine Finset.union_subset_union (Finset.image_subset_image ?_) (fun _ a ↦ a)
   rw [parent_toWord]
-  rcases x.toWord with ⟨ ⟩ | ⟨ a, l' ⟩
-  . simp only [List.tail_nil, List.toFinset_nil, subset_refl]
-  simp only [List.tail_cons, List.toFinset_cons, Finset.subset_insert]
+  rcases x.toWord with ⟨ ⟩ | ⟨ a, l' ⟩ <;> simp
 
 lemma shift_from_parent_mem_basis {x:N} {a:SM} (h: x = R' a (parent x)) : a ∈ basis_elements x := by
   by_cases h' : a ∈ basis_elements (parent x)
@@ -1008,7 +1010,10 @@ lemma nonbasis_fixes {a:SM} {x:N} (h: a ∉ basis_elements x) : pre_repr a x (1,
 
 lemma cancel {a:SM} {x y:N} {n:ℤ} (hx: a ∉ basis_elements x) (hy: a ∉ basis_elements y) (h: (e a) * x = (e 0)^n * (e a) * y) : n = 0 := by
   apply_fun (fun x ↦ repr a x (1,0)) at h
-  have hneq : 0 ≠ a := by sorry
+  have hneq : 0 ≠ a := by
+    contrapose! hx
+    rw [←hx]
+    exact zero_mem_basis_elements x
   symm at h
   simp [map_mul, repr_of_self, MonoidHom.coe_comp, Function.comp_apply,
     LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply, LinearMap.mul_apply,
