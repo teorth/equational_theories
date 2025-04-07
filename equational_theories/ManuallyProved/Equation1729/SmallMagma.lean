@@ -115,8 +115,7 @@ lemma one_odd (n : ZMod 4) : 1 ≠ n + n := by
 lemma E_ne_S (n:ℕ) (a:SM) : E n ≠ S a := by
   by_contra! this
   apply_fun (fun f ↦ f n) at this
-  simp [E,SM_square_eq_double, DirectSum.of_apply] at this
-  exact one_odd (a n) this
+  simp [E,SM_square_eq_double, DirectSum.of_apply, one_odd] at this
 
 lemma E_ne_SE (n m : ℕ): E n ≠ S (E m) := E_ne_S _ _
 
