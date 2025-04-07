@@ -236,9 +236,12 @@ abbrev PartialSolution.sees (sol:PartialSolution) (extras: Finset M) (x:N) := ge
 
 abbrev PartialSolution.sees' (sol:PartialSolution) (extras: Finset M) (x:M) := generators (basis_elements' x) ⊆ generators (sol.involved_elements extras)
 
-def PartialSolution.see_direct (sol:PartialSolution) {extras: Finset M} {x:N} (h: sol.directly_sees extras x) : sol.sees extras x := generators_mono h
 
-def PartialSolution.see_direct' (sol:PartialSolution) {extras: Finset M} {x:M} (h: sol.directly_sees' extras x) : sol.sees' extras x := generators_mono h
+
+
+lemma PartialSolution.see_direct (sol:PartialSolution) {extras: Finset M} {x:N} (h: sol.directly_sees extras x) : sol.sees extras x := generators_mono h
+
+lemma PartialSolution.see_direct' (sol:PartialSolution) {extras: Finset M} {x:M} (h: sol.directly_sees' extras x) : sol.sees' extras x := generators_mono h
 
 lemma PartialSolution.sees_mul (sol: PartialSolution) {extras: Finset M} {x y:N} (hx: sol.sees extras x) (hy: sol.sees extras y) : sol.sees extras (x * y) := calc
   _ ⊆ generators (basis_elements x ∪ basis_elements y)  := generators_mono $ basis_elements_of_mul x y
@@ -253,6 +256,8 @@ lemma PartialSolution.sees_inv (sol: PartialSolution) {extras: Finset M} {x:N} (
 
 abbrev PartialSolution.reaches (sol: PartialSolution) (extras: Finset M) (a:SM) := in_generators (sol.involved_elements extras) a
 
+lemma PartialSolution.sees_iff (sol:PartialSolution) (extras: Finset M) (x:N) : sol.sees extras x ↔ ∀ a ∈ basis_elements x, sol.reaches extras a := generators_subset_iff
+
 lemma PartialSolution.reaches_S (sol: PartialSolution) {extras: Finset M} {a:SM} (h: sol.reaches extras a) : sol.reaches extras (S a) := S_in_generators h
 
 lemma PartialSolution.reaches_sum (sol: PartialSolution) {extras: Finset M} {a b:SM} (ha: sol.reaches extras a) (hb: sol.reaches extras b) : sol.reaches extras (a + b) := sum_in_generators ha hb
@@ -260,7 +265,7 @@ lemma PartialSolution.reaches_sum (sol: PartialSolution) {extras: Finset M} {a b
 lemma PartialSolution.reaches_diff (sol: PartialSolution) {extras: Finset M} {a b:SM} (ha: sol.reaches extras a) (hb: sol.reaches extras b) : sol.reaches extras (a - b) := diff_in_generators ha hb
 
 lemma PartialSolution.sees_e (sol: PartialSolution) {extras: Finset M} {a:SM} (ha: sol.reaches extras a) : sol.sees extras (e a) := by
-  simp only [sees, basis_elements_of_generator,generators_subset_iff,
+  simp only [basis_elements_of_generator,sees_iff,
     Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, zero_in_generators',
     and_true, ha]
 
@@ -376,13 +381,13 @@ lemma PartialSolution.fresh_not_in_gen (sol : PartialSolution) (extras: Finset M
 
 lemma PartialSolution.fresh_invis (sol : PartialSolution) (extras: Finset M) (n:ℕ) : ¬ sol.sees extras (e (E (sol.fresh_generator extras n))) := by
     by_contra h
-    simp only [sees, basis_elements_of_generator, generators_subset_iff,
+    simp only [basis_elements_of_generator, sees_iff,
       Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, zero_in_generators', and_true, E_in_generators_iff] at h
     exact fresh_ne_generator (sol.involved_elements extras) n h
 
 lemma PartialSolution.fresh_invis_pow (sol : PartialSolution) (extras: Finset M) (n:ℕ) {m:ℕ} (hm: m ≠ 0): ¬ sol.sees extras ((e (E (sol.fresh_generator extras n)))^m) := by
     by_contra h
-    simp only [sees, basis_elements_of_generator_pow _ hm, generators_subset_iff,
+    simp only [basis_elements_of_generator_pow _ hm, sees_iff,
       Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, zero_in_generators', and_true, E_in_generators_iff] at h
     exact fresh_ne_generator (sol.involved_elements extras) n h
 
@@ -453,7 +458,7 @@ lemma gen_fresh_not_in_fill (sol : PartialSolution) (extras: Finset M) (n:ℕ) :
   have := fresh_not_in_generators (sol.involved_elements extras) n
   contrapose! this
   have h := (sol.dom_L₀'_involved extras this).1
-  simp only [PartialSolution.sees, generators_subset_iff] at h
+  simp only [sol.sees_iff] at h
   apply h _ _
   simp only [basis_elements_of_generator, Finset.mem_singleton, Finset.mem_insert_self]
 
@@ -461,7 +466,7 @@ lemma gen_fresh_not_in_dom_S' (sol : PartialSolution) (extras: Finset M) (n:ℕ)
   have := fresh_not_in_generators (sol.involved_elements extras) n
   contrapose! this
   have h := (sol.dom_S'_involved extras this).1
-  simp only [PartialSolution.sees, generators_subset_iff] at h
+  simp only [sol.sees_iff] at h
   apply h _ _
   simp only [basis_elements_of_generator, Finset.mem_insert_self]
 
@@ -469,7 +474,7 @@ lemma gen_fresh_pow_not_in_dom_S' (sol : PartialSolution) (extras: Finset M) (n:
   have := fresh_not_in_generators (sol.involved_elements extras) n
   contrapose! this
   have h := (sol.dom_S'_involved extras this).1
-  simp only [PartialSolution.sees, generators_subset_iff] at h
+  simp only [sol.sees_iff] at h
   apply h _ _
   simp only [basis_elements_of_generator_pow _ hm, Finset.mem_insert_self]
 
@@ -480,7 +485,7 @@ lemma gen_fresh_not_rel_extra (sol : PartialSolution) {extras: Finset M} (n:ℕ)
   simp only [basis_elements_of_generator] at h
   have : in_generators (sol.involved_elements extras) d := by
     have := sol.extras_involved extras hx
-    simp only [PartialSolution.sees, generators_subset_iff] at this
+    simp only [sol.sees_iff] at this
     apply this _ _
     simp only [← h, Finset.mem_insert, Finset.mem_singleton, true_or]
   simp only [in_generators, d, support_E, Finset.singleton_subset_iff] at this
@@ -1062,10 +1067,24 @@ lemma PartialSolution_with_axioms.sees_hA {sol:PartialSolution_with_axioms} {a:S
 
 lemma PartialSolution_with_axioms.sees_hB {sol:PartialSolution_with_axioms} {a:SM} (ha: sol.x = (R' a) sol.y₀) : sol.sees sol.extras (PartialSolution.L₀' (e (S a + S (sol.S' sol.y₀)) * x)) := (sol.dom_L₀'_involved sol.extras (sol.hB a ha)).2
 
-lemma PartialSolution_with_axioms.cancel {sol:PartialSolution_with_axioms} {d:SM} {y z:N} (hd: ¬ sol.reaches sol.extras d) (hy: sol.sees sol.extras y) (hz: sol.sees sol.extras z) (hequiv: (e d) * y ≈ (e d) * z) : y = z := by sorry
+lemma PartialSolution_with_axioms.cancel {sol:PartialSolution_with_axioms} {d:SM} {y z:N} (hd: ¬ sol.reaches sol.extras d) (hy: sol.sees sol.extras y) (hz: sol.sees sol.extras z) (hequiv: (e d) * y ≈ (e d) * z) : y = z := by
+  obtain ⟨ n, hn ⟩ := hequiv
+  have hzero : n = 0 := by
+    rw [sol.sees_iff] at hy hz
+    apply cancel_lemma _ _ hn
+    all_goals contrapose! hd
+    . exact hz d hd
+    exact hy d hd
+  simp [hzero] at hn
+  exact hn.symm
 
-lemma PartialSolution_with_axioms.cancel' {sol:PartialSolution_with_axioms} {a b:SM} {y z:N} (ha: ¬ sol.reaches sol.extras a) (hb: b ≠ a) {n:ℤ} (hy : sol.sees sol.extras y) (hz : sol.sees sol.extras z) (heq: (e b) * ((e a)⁻¹ * ((e 0)^n * ((e a) * y))) = (e 0)^n * ((e b) * z)) : n = 0 := by sorry
--- use GL_2
+lemma PartialSolution_with_axioms.cancel' {sol:PartialSolution_with_axioms} {a b:SM} {y z:N} (ha: ¬ sol.reaches sol.extras a) (hb: b ≠ a) {n:ℤ} (hy : sol.sees sol.extras y) (hz : sol.sees sol.extras z) (heq: (e b) * ((e a)⁻¹ * ((e 0)^n * ((e a) * y))) = (e 0)^n * ((e b) * z)) : n = 0 := by
+  rw [sol.sees_iff] at hy hz
+  apply cancel_lemma' hb _ _ heq
+  all_goals contrapose! ha
+  . exact hy a ha
+  exact hz a ha
+ 
 
 lemma PartialSolution_with_axioms.neq_one_if_shift_from {sol:PartialSolution_with_axioms} {a:SM} (ha: sol.x = (R' a) sol.y₀) : sol.x ≠ 1 := by
   contrapose! ha
@@ -2440,7 +2459,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
               _ = _ := by rw [h1]
           rw [this] at hx
           replace hx := (sol.dom_S'_involved extras hx).1
-          simp only [PartialSolution.sees, generators_subset_iff] at hx
+          simp only [sol.sees_iff] at hx
           apply sol.fresh_not_in_gen extras 0 $ hx d₀ $ basis_elements_of_prod_gen d₀ a
       simp only [hnot, hnot', or_false, false_or] at hray'
       obtain ⟨ h1, h2 ⟩ := sol.axiom_vi'' y' a hray'
@@ -2517,13 +2536,13 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
       . intro a
         have h1 : ¬ sol.sees extras ( R' a z ) := by
           by_contra h
-          dsimp [R',z, PartialSolution.sees] at h
-          simp only [generators_subset_iff] at h
+          dsimp [R',z] at h
+          simp only [sol.sees_iff] at h
           apply sol.fresh_not_in_gen extras 0 $ h d₀ $ basis_elements_of_prod_gen' d₀ a
         have h2 : ¬ sol.sees extras ( (R' a).symm z ) := by
           by_contra h
-          dsimp [R',z, PartialSolution.sees] at h
-          simp only [generators_subset_iff] at h
+          dsimp [R',z] at h
+          simp only [sol.sees_iff] at h
           apply sol.fresh_not_in_gen extras 0 $ h d₀ $ basis_elements_of_prod_gen d₀ a
         constructor
         . contrapose! h1

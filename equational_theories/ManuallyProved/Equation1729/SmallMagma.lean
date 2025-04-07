@@ -1079,7 +1079,7 @@ lemma nonbasis_fixes {a:SM} {x:N} (h: a ∉ basis_elements x) : pre_repr a x (1,
 
 
 
-lemma cancel {a:SM} {x y:N} {n:ℤ} (hx: a ∉ basis_elements x) (hy: a ∉ basis_elements y) (h: (e a) * x = (e 0)^n * (e a) * y) : n = 0 := by
+lemma cancel_lemma {a:SM} {x y:N} {n:ℤ} (hx: a ∉ basis_elements x) (hy: a ∉ basis_elements y) (h: (e a) * x = (e 0)^n * ((e a) * y)) : n = 0 := by
   apply_fun (fun x ↦ repr a x (1,0)) at h
   have hneq : 0 ≠ a := by
     contrapose! hx
@@ -1092,7 +1092,7 @@ lemma cancel {a:SM} {x y:N} {n:ℤ} (hx: a ∉ basis_elements x) (hy: a ∉ basi
     T₁_zpow_acts, nonbasis_fixes hx, Prod.mk.injEq, Int.cast_eq_zero, and_true] at h
   exact h
 
-lemma cancel' {a b:SM} {x y:N} {n:ℤ} (hb: b ≠ a) (hx : a ∉ basis_elements x) (hy : a ∉ basis_elements y) {n:ℤ} (heq: (e b) * ((e a)⁻¹ * ((e 0)^n * ((e a) * x))) = (e 0)^n * ((e b) * y)) : n = 0 := by
+lemma cancel_lemma' {a b:SM} {x y:N} {n:ℤ} (hb: b ≠ a) (hx : a ∉ basis_elements x) (hy : a ∉ basis_elements y) (heq: (e b) * ((e a)⁻¹ * ((e 0)^n * ((e a) * x))) = (e 0)^n * ((e b) * y)) : n = 0 := by
   have heq' : (e 0)^n * ((e a) * x) = (e a) * (e b)⁻¹ * ((e 0)^n * ((e b) * y)) := by
     rw [← heq]
     group
