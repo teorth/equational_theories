@@ -975,14 +975,20 @@ noncomputable abbrev T₂ : V ≃ₗ[ℝ] V := {
     simp only
 }
 
-noncomputable abbrev repr (a:SM) : Representation ℝ N V := MonoidHom.comp LinearEquiv.automorphismGroup.toLinearMapMonoidHom $ FreeGroup.lift (fun b ↦ if b=a then T₂ else T₁)
+noncomputable abbrev pre_repr (a:SM) : N →* ( V ≃ₗ[ℝ] V) := FreeGroup.lift (fun b ↦ if b=a then T₂ else T₁)
+
+noncomputable abbrev repr (a:SM) : Representation ℝ N V := MonoidHom.comp LinearEquiv.automorphismGroup.toLinearMapMonoidHom $ pre_repr a
+
+lemma repr_eq_pre_repr (a:SM) (x:N) (v:V) : repr a x v = pre_repr a x v := by
+  simp only [MonoidHom.coe_comp, Function.comp_apply,
+    LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply, LinearEquiv.coe_coe]
 
 lemma repr_of_self (a:SM) : repr a (e a) = T₂ := by
   simp only [repr, MonoidHom.coe_comp, Function.comp_apply, FreeGroup.lift.of, ↓reduceIte,
     LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply]
 
-lemma repr_of_neq (a b:SM) (h: b ≠ a): repr a (e b) = T₁ := by
-  simp only [repr, MonoidHom.coe_comp, Function.comp_apply, FreeGroup.lift.of, h, ↓reduceIte,
+lemma repr_of_self_pow (a:SM) (n:ℤ) : repr a ((e a) ^ n) = (T₂ ^ n : V ≃ₗ[ℝ] V) := by
+  simp only [MonoidHom.coe_comp, Function.comp_apply, map_zpow, FreeGroup.lift.of, ↓reduceIte,
     LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply]
 
 lemma T₁_fixes : T₁ (1,0) = (1,0) := by
@@ -997,7 +1003,16 @@ lemma T₁_zpow_acts (n:ℤ) : (T₁ ^ n) (0,1) = ((n:ℝ),1) := by
 lemma T₂_acts : T₂ (1,0) = (0,1) := by
   simp only [T₂, LinearEquiv.coe_mk]
 
-lemma nonbasis_fixes (a:SM) (x:N) (h: a ∉ basis_elements x) : repr a x (1,0) = T₁ (1,0) := by
+lemma nonbasis_fixes {a:SM} {x:N} (h: a ∉ basis_elements x) : pre_repr a x (1,0) = (1,0) := by
   sorry
+
+lemma cancel {a:SM} {x y:N} {n:ℤ} (hx: a ∉ basis_elements x) (hy: a ∉ basis_elements y) (h: (e a) * x = (e 0)^n * (e a) * y) : n = 0 := by
+  apply_fun (fun x ↦ repr a x (1,0)) at h
+  have hneq : 0 ≠ a := by sorry
+  symm at h
+  simp [map_mul, repr_of_self, MonoidHom.coe_comp, Function.comp_apply,
+    LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply, LinearMap.mul_apply,
+    LinearEquiv.coe_coe, LinearMap.coe_mk, AddHom.coe_mk, map_zpow, FreeGroup.lift.of, ite_pow, hneq, nonbasis_fixes hx, nonbasis_fixes hy, T₁_zpow_acts, Int.cast_eq_zero] at h
+  exact h
 
 end Eq1729
