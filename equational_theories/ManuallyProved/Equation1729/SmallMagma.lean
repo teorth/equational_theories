@@ -913,12 +913,9 @@ lemma R'_R'_neq (a b : SM) (y:N) : R' a (R' b y) ≠ y := by
   linarith
 
 lemma basis_elements_parent_subset {x:N} : basis_elements (parent x) ⊆ basis_elements x := by
-  apply Finset.union_subset_union _ (fun ⦃a⦄ a ↦ a)
-  apply Finset.image_subset_image
+  refine Finset.union_subset_union (Finset.image_subset_image ?_) (fun _ a ↦ a)
   rw [parent_toWord]
-  rcases x.toWord with ⟨ ⟩ | ⟨ a, l' ⟩
-  . simp only [List.tail_nil, List.toFinset_nil, subset_refl]
-  simp only [List.tail_cons, List.toFinset_cons, Finset.subset_insert]
+  rcases x.toWord with ⟨ ⟩ | ⟨ a, l' ⟩ <;> simp
 
 lemma shift_from_parent_mem_basis {x:N} {a:SM} (h: x = R' a (parent x)) : a ∈ basis_elements x := by
   by_cases h' : a ∈ basis_elements (parent x)
