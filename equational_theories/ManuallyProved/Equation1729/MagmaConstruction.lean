@@ -2026,7 +2026,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         . by_cases hn' : n = 0
           . simp [PartialSolution_with_axioms.L₀'_pre_embed_base, hn', h, R'] at hn
             rw [hpar] at ha
-            have hy₀: sol.y₀ ∈ sol.Dom_S' := sol.hind _ (parent_lt (sol.neq_one_if_shift_to ha''))
+            have hy₀: sol.y₀ ∈ sol.Dom_S' := sol.hind _ (parent_lt (sol.neq_one_if_shift_from ha''))
             have hsee₂ : sol.sees sol.extras x' := by
               rw [hn]
               exact sol.sees_mul (sol.sees_inv (sol.sees_e (sol.reaches_diff (sol.reaches_shift_from_parent ha'' sol.sees_x) (sol.reaches_involved (sol.dom_S'_involved sol.extras hy₀).2)))) (sol.dom_L₀'_involved sol.extras (sol.hB a'' ha'')).2
@@ -2047,7 +2047,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           apply sol.cancel' (fresh_not_in_generators _ _) (sol.Sd₀_neq_d₀) sol.sees_y₀ ?_ this
           apply sol.sees_mul (sol.sees_inv (sol.sees_e _)) _
           . apply sol.reaches_diff (sol.reaches_shift_from_parent ha'' sol.sees_x) (sol.reaches_involved (sol.dom_S'_involved sol.extras _).2)
-            exact sol.hind _ (parent_lt (sol.neq_one_if_shift_to ha''))
+            exact sol.hind _ (parent_lt (sol.neq_one_if_shift_from ha''))
           exact (sol.dom_L₀'_involved sol.extras (sol.hB a'' ha'')).2
         have hd₀ := congrArg (val sol.d₀) this
         have h1 : (val sol.d₀ $ sol.L₀' $ e (S a'' + S (sol.S' sol.y₀)) * x) = 0 := sol.d₀_invis (sol.dom_L₀'_involved sol.extras $ sol.hB a'' ha'').2
