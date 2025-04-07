@@ -3,6 +3,8 @@ import Mathlib.GroupTheory.FreeGroup.Basic
 import Mathlib.Data.ZMod.Defs
 import Mathlib.Data.Countable.Defs
 import Mathlib.Data.DFinsupp.Encodable
+import Mathlib.Algebra.Module.LinearMap.Defs
+import Mathlib.RepresentationTheory.Basic
 
 import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
 import equational_theories.Equations.All
@@ -932,5 +934,70 @@ lemma shift_to_parent_mem_basis {x:N} {a:SM} (h: R' a x = parent x) : a ∈ basi
   apply_fun val a at h
   by_contra! h''
   simp [R', val_of_nonbasis_eq_zero h',  val_of_nonbasis_eq_zero h''] at h
+
+-- Time for some representation theory!
+
+abbrev V := ℝ × ℝ
+
+noncomputable abbrev T₁ : V ≃ₗ[ℝ] V := {
+  toFun := fun (x,y) ↦ (x+y,y)
+  invFun := fun (x,y) ↦ (x-y,y)
+  map_add' := by
+    intros
+    simp only [Prod.mk_add_mk, Prod.mk.injEq, and_true]
+    abel
+  map_smul' := by
+    intros
+    simp only [smul_eq_mul, RingHom.id_apply, Prod.smul_mk, Prod.mk.injEq, and_true]
+    ring
+  left_inv := by
+    intro (_,_)
+    simp only [add_sub_cancel_right]
+  right_inv := by
+    intro (_,_)
+    simp only [sub_add_cancel]
+}
+
+noncomputable abbrev T₂ : V ≃ₗ[ℝ] V := {
+  toFun := fun (x,y) ↦ (y,x)
+  invFun := fun (x,y) ↦ (y,x)
+  map_add' := by
+    intros
+    simp only [Prod.mk_add_mk, Prod.mk.injEq, and_true]
+  map_smul' := by
+    intros
+    simp only [smul_eq_mul, RingHom.id_apply, Prod.smul_mk, Prod.mk.injEq, and_true]
+  left_inv := by
+    intro (_,_)
+    simp only
+  right_inv := by
+    intro (_,_)
+    simp only
+}
+
+noncomputable abbrev repr (a:SM) : Representation ℝ N V := MonoidHom.comp LinearEquiv.automorphismGroup.toLinearMapMonoidHom $ FreeGroup.lift (fun b ↦ if b=a then T₂ else T₁)
+
+lemma repr_of_self (a:SM) : repr a (e a) = T₂ := by
+  simp only [repr, MonoidHom.coe_comp, Function.comp_apply, FreeGroup.lift.of, ↓reduceIte,
+    LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply]
+
+lemma repr_of_neq (a b:SM) (h: b ≠ a): repr a (e b) = T₁ := by
+  simp only [repr, MonoidHom.coe_comp, Function.comp_apply, FreeGroup.lift.of, h, ↓reduceIte,
+    LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply]
+
+lemma T₁_fixes : T₁ (1,0) = (1,0) := by
+  simp only [T₁, LinearEquiv.coe_mk, add_zero]
+
+lemma T₁_inv_fixes : T₁.symm (1,0) = (1,0) := by
+  simp only [T₁, LinearEquiv.coe_symm_mk, sub_zero]
+
+lemma T₁_zpow_acts (n:ℤ) : (T₁ ^ n) (0,1) = ((n:ℝ),1) := by
+  sorry
+
+lemma T₂_acts : T₂ (1,0) = (0,1) := by
+  simp only [T₂, LinearEquiv.coe_mk]
+
+lemma nonbasis_fixes (a:SM) (x:N) (h: a ∉ basis_elements x) : repr a x (1,0) = T₁ (1,0) := by
+  sorry
 
 end Eq1729
