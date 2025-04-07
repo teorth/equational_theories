@@ -697,6 +697,8 @@ lemma fresh_injective (A: Finset SM) : Function.Injective (fresh A) := by
   unfold fresh at h
   linarith
 
+
+/-- The basis elements of an element `x` of the free group `N` are the set of indices `a` of the generators `e a` appearing in the minimal word of `x`, together with `0`. -/
 abbrev basis_elements (x:N) : Finset SM := Finset.image (fun (a, _) ↦ a) x.toWord.toFinset ∪ {0}
 
 abbrev basis_elements' (x:M) : Finset SM := match x with
@@ -790,11 +792,6 @@ lemma basis_elements_of_mul (x y:N): basis_elements (x * y) ⊆ basis_elements x
   replace hn := List.Sublist.mem hn (FreeGroup.toWord_mul_sublist x y)
   rwa [List.mem_append] at hn
 
-lemma shift_from_parent_mem_basis {x:N} {a:SM} (h: x = R' a (parent x)) : a ∈ basis_elements x := by
-  sorry
-
-lemma shift_to_parent_mem_basis {x:N} {a:SM} (h: R' a x = parent x) : a ∈ basis_elements x := by
-  sorry
 
 /-- For Mathlib? -/
 @[simp]
@@ -894,18 +891,18 @@ lemma val_of_nonsupp_eq_zero' {a:SM} {L:List (SM × Bool)} (h: ∀ b : Bool, (a,
     rw [← FreeGroup.head_concat_tail, ← FreeGroup.mul_mk, val_hom, val_mk, val_of_nonsupp_eq_zero' h2]
     simp [h1]
 
-
-lemma val_of_nonsupp_eq_zero {a:SM} {y:N} (h: ¬ a.support ⊆  generators (basis_elements y)) : val a y = 0 := by
+lemma val_of_nonbasis_eq_zero {a:SM} {y:N} (h: a ∉ basis_elements y) : val a y = 0 := by
   rw [← y.mk_toWord]
   apply val_of_nonsupp_eq_zero'
   contrapose! h
   simp only [List.mem_toFinset] at h
-  calc
-    _ ⊆ (basis_elements y).biUnion DFinsupp.support := by
-      apply Finset.subset_biUnion_of_mem
-      apply Finset.mem_union_left
-      simp only [Finset.mem_image, List.mem_toFinset, Prod.exists, exists_and_right, exists_eq_right, h]
-    _ ⊆ _ := Finset.subset_union_left
+  apply Finset.subset_union_left
+  simp only [Finset.mem_image, List.mem_toFinset, Prod.exists, exists_and_right, exists_eq_right, h]
+
+lemma val_of_nonsupp_eq_zero {a:SM} {y:N} (h: ¬ a.support ⊆  generators (basis_elements y)) : val a y = 0 := by
+  apply val_of_nonbasis_eq_zero
+  contrapose! h
+  exact mem_in_generators h
 
 lemma R'_R'_neq (a b : SM) (y:N) : R' a (R' b y) ≠ y := by
   by_contra! h
@@ -914,5 +911,26 @@ lemma R'_R'_neq (a b : SM) (y:N) : R' a (R' b y) ≠ y := by
   all_goals simp [R', heq] at h
   linarith
 
+lemma basis_elements_parent_subset {x:N} : basis_elements (parent x) ⊆ basis_elements x := by
+  apply Finset.union_subset_union _ (fun ⦃a⦄ a ↦ a)
+  apply Finset.image_subset_image
+  rw [parent_toWord]
+  rcases x.toWord with ⟨ ⟩ | ⟨ a, l' ⟩
+  . simp only [List.tail_nil, List.toFinset_nil, subset_refl]
+  simp only [List.tail_cons, List.toFinset_cons, Finset.subset_insert]
+
+lemma shift_from_parent_mem_basis {x:N} {a:SM} (h: x = R' a (parent x)) : a ∈ basis_elements x := by
+  by_cases h' : a ∈ basis_elements (parent x)
+  . exact basis_elements_parent_subset h'
+  apply_fun val a at h
+  by_contra! h''
+  simp [R', val_of_nonbasis_eq_zero h',  val_of_nonbasis_eq_zero h''] at h
+
+lemma shift_to_parent_mem_basis {x:N} {a:SM} (h: R' a x = parent x) : a ∈ basis_elements x := by
+  by_cases h' : a ∈ basis_elements (parent x)
+  . exact basis_elements_parent_subset h'
+  apply_fun val a at h
+  by_contra! h''
+  simp [R', val_of_nonbasis_eq_zero h',  val_of_nonbasis_eq_zero h''] at h
 
 end Eq1729
