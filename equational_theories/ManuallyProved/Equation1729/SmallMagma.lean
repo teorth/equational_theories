@@ -358,9 +358,7 @@ lemma parent_of_e_sq (a:SM) : parent ((e a)^2) = e a := by
     FreeGroup.mk_of_single_true]
 
 lemma parent_of_div {a b:SM} (h:a ≠ b) : parent ((e a)⁻¹ * e b) = e b := by
-  simp only [parent, e, div_eq, List.singleton_append, FreeGroup.toWord_mk, FreeGroup.reduce.cons,
-    Bool.false_eq, Bool.not_eq_eq_eq_not, Bool.not_false, Bool.true_eq, Bool.not_true,
-    FreeGroup.reduce_nil, h, and_true, ↓reduceIte, List.tail_cons, FreeGroup.mk_of_single_true]
+  simp [parent, e, div_eq, FreeGroup.reduce_nil, h]
 
 /- Right-multiplication by an element of SM on N is defined via the group action. -/
 
@@ -861,7 +859,7 @@ lemma val_inv (a : SM) (x : N): val a x⁻¹ = -val a x := by
 
 @[simp]
 lemma val_zpow (a : SM) (x : N) (n : ℤ) : val a (x^n) = n * val a x := by
-  simp only [val, ofAdd_zero, map_zpow, toAdd_zpow, smul_eq_mul]
+  simp [val]
 
 @[simp]
 lemma val_e (a b : SM) : val a (e b) = if b=a then 1 else 0 := by
