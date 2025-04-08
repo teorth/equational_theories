@@ -19,7 +19,7 @@ theorem ExtMagma_shows_1729_not_implies_817 {SM N : Type} [Inhabited SM] [Inhabi
   · apply ExtMagma_unsat_eq817
 
 
-@[equational_result]
+-- @[equational_result]
 theorem not_817 : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by
   let β := N ⊕ N ⊕ (N × N)
   let task : β → Set PartialSolution := fun s => match s with
