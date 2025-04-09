@@ -3,6 +3,8 @@ import Mathlib.GroupTheory.FreeGroup.Basic
 import Mathlib.Data.ZMod.Defs
 import Mathlib.Data.Countable.Defs
 import Mathlib.Data.DFinsupp.Encodable
+import Mathlib.Algebra.Module.LinearMap.Defs
+import Mathlib.RepresentationTheory.Basic
 
 import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
 import equational_theories.Equations.All
@@ -39,7 +41,7 @@ lemma SM_op_eq_add (a b : SM) : a ◇ b = a + b := rfl
 @[simp]
 lemma E_apply (n m:ℕ) : E n m = if n=m then 1 else 0 := by
   simp [DirectSum.of_apply]
-  
+
 
 lemma E_inj : Function.Injective E := by
   intro n m h
@@ -47,6 +49,15 @@ lemma E_inj : Function.Injective E := by
   contrapose! h
   simp [E, DirectSum.of_eq_of_ne _ _ _ h.symm]
   decide
+
+@[simp]
+lemma E_ne_zero (n:ℕ): E n ≠ 0 := by
+  by_contra! this
+  apply_fun (fun f ↦ f n) at this
+  simp only [DirectSum.of_eq_same, DirectSum.zero_apply] at this
+  contrapose! this
+  decide
+
 
 /- The squaring map on SM -/
 def S (a : SM) := a ◇ a
@@ -97,12 +108,25 @@ lemma SM_obeys_1729 : Equation1729 SM := by
   abel_nf
   exact SM_char_four _
 
-lemma E_ne_SE (n m : ℕ): E n ≠ S (E m) := by
+lemma one_odd (n : ZMod 4) : 1 ≠ n + n := by
+  revert n
+  decide
+
+lemma E_ne_S (n:ℕ) (a:SM) : E n ≠ S a := by
   by_contra! this
   apply_fun (fun f ↦ f n) at this
-  by_cases h:m=n
-  all_goals simp [E,S, DirectSum.of_apply,h] at this
-  all_goals contrapose! this; decide
+  simp [E,SM_square_eq_double, DirectSum.of_apply, one_odd] at this
+
+lemma E_ne_SE (n m : ℕ): E n ≠ S (E m) := E_ne_S _ _
+
+@[simp]
+lemma SE_ne_zero (n:ℕ): S (E n) ≠ 0 := by
+  by_contra! this
+  apply_fun (fun f ↦ f n) at this
+  simp only [SM_square_eq_double, DirectSum.add_apply, DirectSum.of_eq_same,
+    DirectSum.zero_apply] at this
+  contrapose! this
+  decide
 
 def L (a:SM) : SM ≃ SM := {
   toFun := fun x ↦ x + a
@@ -332,6 +356,9 @@ theorem parent_of_adjacent {x y : N} (h : adjacent x y) : x = parent y ∨ y = p
 lemma parent_of_e_sq (a:SM) : parent ((e a)^2) = e a := by
   simp only [parent, e, FreeGroup.toWord_of_pow, List.reduceReplicate, List.tail_cons,
     FreeGroup.mk_of_single_true]
+
+lemma parent_of_div {a b:SM} (h:a ≠ b) : parent ((e a)⁻¹ * e b) = e b := by
+  simp [parent, e, div_eq, FreeGroup.reduce_nil, h]
 
 /- Right-multiplication by an element of SM on N is defined via the group action. -/
 
@@ -669,6 +696,8 @@ lemma fresh_injective (A: Finset SM) : Function.Injective (fresh A) := by
   unfold fresh at h
   linarith
 
+
+/-- The basis elements of an element `x` of the free group `N` are the set of indices `a` of the generators `e a` appearing in the minimal word of `x`, together with `0`. -/
 abbrev basis_elements (x:N) : Finset SM := Finset.image (fun (a, _) ↦ a) x.toWord.toFinset ∪ {0}
 
 abbrev basis_elements' (x:M) : Finset SM := match x with
@@ -679,6 +708,11 @@ abbrev basis_elements' (x:M) : Finset SM := match x with
 lemma basis_elements_of_id : basis_elements 1 = {0} := by
   simp only [Finset.union_eq_right, FreeGroup.toWord_one, List.toFinset_nil, Finset.image_empty,
     Finset.subset_singleton_iff, true_or]
+
+@[simp]
+lemma zero_mem_basis_elements (x:N) : 0 ∈ basis_elements x := by
+  simp only [basis_elements, Finset.mem_union, Finset.mem_image, List.mem_toFinset, Prod.exists,
+    exists_and_right, Bool.exists_bool, exists_eq_right, Finset.mem_singleton, or_true]
 
 @[simp]
 lemma basis_elements_of_generator (a: SM) : basis_elements (e a) = {a,0} := by
@@ -762,6 +796,7 @@ lemma basis_elements_of_mul (x y:N): basis_elements (x * y) ⊆ basis_elements x
   replace hn := List.Sublist.mem hn (FreeGroup.toWord_mul_sublist x y)
   rwa [List.mem_append] at hn
 
+
 /-- For Mathlib? -/
 @[simp]
 lemma List.toFinset_map {α β: Type*} [DecidableEq α] [DecidableEq β] (l: List α) (f : α → β) : (List.map f l).toFinset = Finset.image f l.toFinset := by
@@ -823,6 +858,10 @@ lemma val_inv (a : SM) (x : N): val a x⁻¹ = -val a x := by
   rfl
 
 @[simp]
+lemma val_zpow (a : SM) (x : N) (n : ℤ) : val a (x^n) = n * val a x := by
+  simp [val]
+
+@[simp]
 lemma val_e (a b : SM) : val a (e b) = if b=a then 1 else 0 := by
   simp only [val, ofAdd_zero, e, FreeGroup.lift.of]
   rfl
@@ -856,18 +895,18 @@ lemma val_of_nonsupp_eq_zero' {a:SM} {L:List (SM × Bool)} (h: ∀ b : Bool, (a,
     rw [← FreeGroup.head_concat_tail, ← FreeGroup.mul_mk, val_hom, val_mk, val_of_nonsupp_eq_zero' h2]
     simp [h1]
 
-
-lemma val_of_nonsupp_eq_zero {a:SM} {y:N} (h: ¬ a.support ⊆  generators (basis_elements y)) : val a y = 0 := by
+lemma val_of_nonbasis_eq_zero {a:SM} {y:N} (h: a ∉ basis_elements y) : val a y = 0 := by
   rw [← y.mk_toWord]
   apply val_of_nonsupp_eq_zero'
   contrapose! h
   simp only [List.mem_toFinset] at h
-  calc
-    _ ⊆ (basis_elements y).biUnion DFinsupp.support := by
-      apply Finset.subset_biUnion_of_mem
-      apply Finset.mem_union_left
-      simp only [Finset.mem_image, List.mem_toFinset, Prod.exists, exists_and_right, exists_eq_right, h]
-    _ ⊆ _ := Finset.subset_union_left
+  apply Finset.subset_union_left
+  simp only [Finset.mem_image, List.mem_toFinset, Prod.exists, exists_and_right, exists_eq_right, h]
+
+lemma val_of_nonsupp_eq_zero {a:SM} {y:N} (h: ¬ a.support ⊆  generators (basis_elements y)) : val a y = 0 := by
+  apply val_of_nonbasis_eq_zero
+  contrapose! h
+  exact mem_in_generators h
 
 lemma R'_R'_neq (a b : SM) (y:N) : R' a (R' b y) ≠ y := by
   by_contra! h
@@ -876,5 +915,191 @@ lemma R'_R'_neq (a b : SM) (y:N) : R' a (R' b y) ≠ y := by
   all_goals simp [R', heq] at h
   linarith
 
+lemma basis_elements_parent_subset {x:N} : basis_elements (parent x) ⊆ basis_elements x := by
+  refine Finset.union_subset_union (Finset.image_subset_image ?_) (fun _ a ↦ a)
+  rw [parent_toWord]
+  rcases x.toWord with ⟨ ⟩ | ⟨ a, l' ⟩ <;> simp
+
+lemma shift_from_parent_mem_basis {x:N} {a:SM} (h: x = R' a (parent x)) : a ∈ basis_elements x := by
+  by_cases h' : a ∈ basis_elements (parent x)
+  . exact basis_elements_parent_subset h'
+  apply_fun val a at h
+  by_contra! h''
+  simp [R', val_of_nonbasis_eq_zero h',  val_of_nonbasis_eq_zero h''] at h
+
+lemma shift_to_parent_mem_basis {x:N} {a:SM} (h: R' a x = parent x) : a ∈ basis_elements x := by
+  by_cases h' : a ∈ basis_elements (parent x)
+  . exact basis_elements_parent_subset h'
+  apply_fun val a at h
+  by_contra! h''
+  simp [R', val_of_nonbasis_eq_zero h',  val_of_nonbasis_eq_zero h''] at h
+
+-- Time for some representation theory!
+
+abbrev V := ℝ × ℝ
+
+noncomputable abbrev T₁ : V ≃ₗ[ℝ] V := {
+  toFun := fun (x,y) ↦ (x+y,y)
+  invFun := fun (x,y) ↦ (x-y,y)
+  map_add' := by
+    intros
+    simp only [Prod.mk_add_mk, Prod.mk.injEq, and_true]
+    abel
+  map_smul' := by
+    intros
+    simp only [smul_eq_mul, RingHom.id_apply, Prod.smul_mk, Prod.mk.injEq, and_true]
+    ring
+  left_inv := by
+    intro (_,_)
+    simp only [add_sub_cancel_right]
+  right_inv := by
+    intro (_,_)
+    simp only [sub_add_cancel]
+}
+
+noncomputable abbrev T₂ : V ≃ₗ[ℝ] V := {
+  toFun := fun (x,y) ↦ (y,x)
+  invFun := fun (x,y) ↦ (y,x)
+  map_add' := by
+    intros
+    simp only [Prod.mk_add_mk, Prod.mk.injEq, and_true]
+  map_smul' := by
+    intros
+    simp only [smul_eq_mul, RingHom.id_apply, Prod.smul_mk, Prod.mk.injEq, and_true]
+  left_inv := by
+    intro (_,_)
+    simp only
+  right_inv := by
+    intro (_,_)
+    simp only
+}
+
+noncomputable abbrev pre_repr (a:SM) : N →* ( V ≃ₗ[ℝ] V) := FreeGroup.lift (fun b ↦ if b=a then T₂ else T₁)
+
+noncomputable abbrev repr (a:SM) : Representation ℝ N V := MonoidHom.comp LinearEquiv.automorphismGroup.toLinearMapMonoidHom $ pre_repr a
+
+lemma repr_eq_pre_repr (a:SM) (x:N) (v:V) : repr a x v = pre_repr a x v := by
+  simp only [MonoidHom.coe_comp, Function.comp_apply,
+    LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply, LinearEquiv.coe_coe]
+
+lemma repr_of_self (a:SM) : repr a (e a) = T₂ := by
+  simp only [repr, MonoidHom.coe_comp, Function.comp_apply, FreeGroup.lift.of, ↓reduceIte,
+    LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply]
+
+lemma repr_of_self_pow (a:SM) (n:ℤ) : repr a ((e a) ^ n) = (T₂ ^ n : V ≃ₗ[ℝ] V) := by
+  simp only [MonoidHom.coe_comp, Function.comp_apply, map_zpow, FreeGroup.lift.of, ↓reduceIte,
+    LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply]
+
+lemma T₁_fixes : T₁ (1,0) = (1,0) := by
+  simp only [T₁, LinearEquiv.coe_mk, add_zero]
+
+lemma T₁_inv_fixes : T₁.symm (1,0) = (1,0) := by
+  simp only [T₁, LinearEquiv.coe_symm_mk, sub_zero]
+
+/-- When mathlib is bumped, replace this with LinearEquiv.mul_apply -/
+@[simp]
+lemma LinearEquiv.mul_apply (S T : V ≃ₗ[ℝ] V) (v : V) : (S * T) v = S (T v) := rfl
+
+/-- Not in Mathlib for some reason. -/
+@[simp]
+lemma LinearEquiv.inv_eq_symm {R : Type*} {E:Type*} [Semiring R] [SeminormedAddCommGroup E] [Module R E] (S : E ≃ₗ[R] E) : S⁻¹ = S.symm := rfl
+
+lemma T₁_pow_acts (n:ℕ) : (T₁ ^ n) (0,1) = ((n:ℝ),1) := by
+  induction' n with n hn
+  . simp only [pow_zero, LinearEquiv.coe_one, id_eq, CharP.cast_eq_zero]
+  rw [add_comm, pow_add, LinearEquiv.mul_apply, hn, pow_one]
+  simp only [T₁, LinearEquiv.coe_mk, add_comm, Nat.cast_add, Nat.cast_one]
+
+lemma T₁_inv_pow_acts (n:ℕ) : (T₁⁻¹ ^ n) (0,1) = (-(n:ℝ),1) := by
+  induction' n with n hn
+  . simp only [pow_zero, LinearEquiv.coe_one, id_eq, CharP.cast_eq_zero, neg_zero]
+  rw [add_comm, pow_add, LinearEquiv.mul_apply, hn, pow_one]
+  simp only [T₁, LinearEquiv.inv_eq_symm, LinearEquiv.coe_symm_mk, Nat.cast_add, Nat.cast_one,
+    neg_add_rev, Prod.mk.injEq, and_true]
+  abel
+
+@[simp]
+lemma T₁_zpow_acts (n:ℤ) : (T₁ ^ n) (0,1) = ((n:ℝ),1) := by
+  rcases n with n | n
+  . simp [T₁_pow_acts]
+  rw [zpow_negSucc, Int.cast_negSucc, ←inv_pow, T₁_inv_pow_acts]
+
+lemma T₁_pow_fixes (n:ℕ) : (T₁ ^ n) (1,0) = (1,0) := by
+  induction' n with n hn
+  . simp only [pow_zero, LinearEquiv.coe_one, id_eq, CharP.cast_eq_zero]
+  rw [add_comm, pow_add, LinearEquiv.mul_apply, hn, pow_one]
+  simp only [T₁, LinearEquiv.coe_mk, add_comm, zero_add]
+
+lemma T₁_inv_pow_fixes (n:ℕ) : (T₁⁻¹ ^ n) (1,0) = (1,0) := by
+  induction' n with n hn
+  . simp only [pow_zero, LinearEquiv.coe_one, id_eq, CharP.cast_eq_zero, neg_zero]
+  rw [add_comm, pow_add, LinearEquiv.mul_apply, hn, pow_one]
+  simp only [T₁, LinearEquiv.inv_eq_symm, LinearEquiv.coe_symm_mk, Nat.cast_add, Nat.cast_one,
+    neg_add_rev, Prod.mk.injEq, and_true]
+  abel
+
+@[simp]
+lemma T₁_zpow_fixes (n:ℤ) : (T₁ ^ n) (1,0) = (1,0) := by
+  rcases n with n | n
+  . simp [T₁_pow_fixes]
+  rw [zpow_negSucc, ←inv_pow, T₁_inv_pow_fixes]
+
+lemma T₂_acts : T₂ (1,0) = (0,1) := by
+  simp only [T₂, LinearEquiv.coe_mk]
+
+lemma nonbasis_fixes' {a:SM} {L:List (SM × Bool)} (h: ∀ b : Bool, (a,b) ∉ L.toFinset) : pre_repr a (FreeGroup.mk L) (1,0) = (1,0) := match L with
+| List.nil => by
+    simp only [FreeGroup.lift.mk, LinearEquiv.inv_eq_symm, List.map_nil, List.prod_nil,
+      LinearEquiv.coe_one, id_eq]
+| List.cons ⟨ a₀', b₀' ⟩ tail => by
+    have h' : ∀ b : Bool, (a,b) ∉ tail.toFinset := by
+      intro b
+      replace h := h b
+      contrapose! h
+      simp only [List.mem_toFinset, List.toFinset_cons, Finset.mem_insert] at h ⊢
+      exact Or.inr h
+    have h'' : a₀' ≠ a := by
+      contrapose! h
+      use b₀'
+      simp only [List.toFinset_cons, ← h, Prod.mk.eta, Finset.mem_insert, List.mem_toFinset, true_or]
+    rw [←FreeGroup.head_concat_tail, ←FreeGroup.mul_mk, MonoidHom.map_mul, LinearEquiv.mul_apply, nonbasis_fixes' h']
+    rcases b₀'
+    all_goals simp [h'']
+
+lemma nonbasis_fixes {a:SM} {x:N} (h: a ∉ basis_elements x) : pre_repr a x (1,0) = (1,0) := by
+  rw [← x.mk_toWord]
+  apply nonbasis_fixes'
+  contrapose! h
+  apply Finset.mem_union_left
+  simp only [List.mem_toFinset] at h
+  simp only [Finset.mem_image, List.mem_toFinset, Prod.exists, exists_and_right,
+    exists_eq_right, h]
+
+
+
+lemma cancel_lemma {a:SM} {x y:N} {n:ℤ} (hx: a ∉ basis_elements x) (hy: a ∉ basis_elements y) (h: (e a) * x = (e 0)^n * ((e a) * y)) : n = 0 := by
+  apply_fun (fun x ↦ repr a x (1,0)) at h
+  have hneq : 0 ≠ a := by
+    contrapose! hx
+    rw [←hx]
+    exact zero_mem_basis_elements x
+  symm at h
+  simp only [map_mul, MonoidHom.coe_comp, Function.comp_apply, map_zpow, FreeGroup.lift.of, hneq,
+    ↓reduceIte, LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply, repr_of_self,
+    LinearMap.mul_apply, LinearEquiv.coe_coe, nonbasis_fixes hy, LinearMap.coe_mk, AddHom.coe_mk,
+    T₁_zpow_acts, nonbasis_fixes hx, Prod.mk.injEq, Int.cast_eq_zero, and_true] at h
+  exact h
+
+lemma cancel_lemma' {a b:SM} {x y:N} {n:ℤ} (hb: b ≠ a) (hx : a ∉ basis_elements x) (hy : a ∉ basis_elements y) (heq: (e b) * ((e a)⁻¹ * ((e 0)^n * ((e a) * x))) = (e 0)^n * ((e b) * y)) : n = 0 := by
+  have heq' : (e 0)^n * ((e a) * x) = (e a) * (e b)⁻¹ * ((e 0)^n * ((e b) * y)) := by
+    rw [← heq]
+    group
+  apply_fun (fun x ↦ repr a x (1,0)) at heq'
+  have hneq : 0 ≠ a := by
+    contrapose! hx
+    rw [←hx]
+    exact zero_mem_basis_elements x
+  simp [hneq, hb, nonbasis_fixes hx, nonbasis_fixes hy] at heq'
+  exact heq'
 
 end Eq1729
