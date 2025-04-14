@@ -48,16 +48,10 @@ instance PartialSolution_order : Preorder PartialSolution  := {
   le_refl := PartialSolution.refl
   le_trans := by
     intro sol1 sol2 sol3 h h'
-    refine ⟨ ?_, ?_, ?_, ?_, ?_, ?_⟩
-    . exact h.1.trans h'.1
-    . exact h.2.1.trans h'.2.1
-    . exact h.2.2.1.trans h'.2.2.1
-    . intro x hx
-      rw [h.2.2.2.1 x hx, h'.2.2.2.1 x (fill_mono h.1 hx)]
-    . intro z hz
-      rw [h.2.2.2.2.1 z hz, h'.2.2.2.2.1 z (h.2.1 hz)]
-    intro x hx
-    rw [h.2.2.2.2.2 x hx, h'.2.2.2.2.2 x (h.2.2.1 hx)]
+    refine ⟨h.1.trans h'.1, h.2.1.trans h'.2.1, h.2.2.1.trans h'.2.2.1, ?_, ?_, ?_⟩
+    . intro x hx; rw [h.2.2.2.1 x hx, h'.2.2.2.1 x (fill_mono h.1 hx)]
+    . intro z hz; rw [h.2.2.2.2.1 z hz, h'.2.2.2.2.1 z (h.2.1 hz)]
+    · intro x hx; rw [h.2.2.2.2.2 x hx, h'.2.2.2.2.2 x (h.2.2.1 hx)]
 }
 
 /-- The trivial partial solution. -/
@@ -112,22 +106,22 @@ def TrivialPartialSolution : PartialSolution := {
   axiom_L := by
     intro _ _ _ _ _ h
     contrapose! h
-    simp only [fill_empty, Set.mem_empty_iff_false, not_false_eq_true]
+    simp
 }
 
 lemma PartialSolution.R0_mem_L₀' {sol : PartialSolution} {x:N} (h:  x ∈ sol.Dom_L₀') : sol.L₀' x ∈ sol.Dom_L₀' := by
   simp [PartialSolution.Dom_L₀', fill] at h
   obtain ⟨ y, ⟨ n, _, _ ⟩, hy ⟩ := h
   have := sol.axiom_i'' y (L₀' y) hy (by rfl) n
-  simp only [Dom_L₀', this.2.1, fill_invar', this.1]
+  simp [Dom_L₀', this.2.1, this.1]
 
 lemma PartialSolution.inv_L₀' {sol : PartialSolution} {x:N} (h: x ∈ sol.Dom_L₀') : (sol.L₀' $ R' 0 $ sol.L₀' x) = x := by
   simp [PartialSolution.Dom_L₀', fill] at h
   obtain ⟨ y, ⟨ n, _, _ ⟩, hy ⟩ := h
   simp only [R', (sol.axiom_i'' y (L₀' y) hy (by rfl) n).2.1, Equiv.coe_fn_mk, <-mul_assoc]
   convert (sol.axiom_i'' y (L₀' y) hy (by rfl) (n+1)).2.2
-  . group
-  exact Eq.symm (Int.add_sub_cancel n 1)
+  . exact mul_self_zpow ..
+  · exact (Int.add_sub_cancel n 1).symm
 
 -- for Mathlib?
 noncomputable abbrev Set.choose {α: Type} {S: Set α} {P: α → Prop} (h: ∃ s ∈ S, P s) : S := ⟨ _, (Classical.choose_spec h).1 ⟩
@@ -145,29 +139,25 @@ lemma IsChain.IsDirected {α: Type} [Preorder α] {s: Set α} (h: IsChain (fun x
 lemma use_chain {sols : Set PartialSolution} (hchain: IsChain (fun (sol1 sol2 : PartialSolution) => sol1 ≤ sol2) sols ) (hnon: Nonempty sols) (htotal_L₀' : ∀ x : N, ∃ sol ∈ sols, x ∈ sol.Dom_L₀') (htotal_S' : ∀ x : N, ∃ sol ∈ sols, x ∈ sol.Dom_S') (htotal_op : ∀ (x y : N), ∃ sol ∈ sols, (x,y) ∈ sol.Dom_op) : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by
   let f := Filter.atTop (α := sols)
   have fnon : f.NeBot := Filter.atTop_neBot_iff.mpr ⟨ hnon, IsChain.IsDirected hchain ⟩
-
   let S' (x:N) := (Set.choose (htotal_S' x)).1.S' x
   have S'_lim (x:N) : ∀ᶠ sol in f, x ∈ sol.1.Dom_S' ∧ sol.1.S' x = S' x := by
     set sol := Set.choose (htotal_S' x)
     set sol_spec := Set.choose_spec (htotal_S' x)
-    apply Filter.Eventually.mono (Filter.eventually_ge_atTop sol) _
-    intro _ h
-    exact ⟨ h.2.2.1 sol_spec, (h.2.2.2.2.2 x sol_spec).symm ⟩
+    apply Filter.Eventually.mono (Filter.eventually_ge_atTop sol)
+    exact fun _ h ↦ ⟨ h.2.2.1 sol_spec, (h.2.2.2.2.2 x sol_spec).symm ⟩
   let op (x y:N) := (Set.choose (htotal_op x y)).1.op x y
   have op_lim (x y:N) : ∀ᶠ sol in f, (x,y) ∈ sol.1.Dom_op ∧ sol.1.op x y = op x y := by
     set sol := Set.choose (htotal_op x y)
     set sol_spec := Set.choose_spec (htotal_op x y)
-    apply Filter.Eventually.mono (Filter.eventually_ge_atTop sol) _
-    intro _ h
-    exact ⟨h.2.1 sol_spec, (h.2.2.2.2.1 (x,y) sol_spec).symm ⟩
+    apply Filter.Eventually.mono (Filter.eventually_ge_atTop sol)
+    exact fun _ h ↦ ⟨h.2.1 sol_spec, (h.2.2.2.2.1 (x,y) sol_spec).symm ⟩
   classical -- didn't want to deal with a Decidable issue
   let L₀' (x:N) := (Set.choose (htotal_L₀' x)).1.L₀' x
   have L₀'_lim (x:N) : ∀ᶠ sol in f, x ∈ fill sol.1.Predom_L₀' ∧ sol.1.L₀' x = L₀' x := by
     set sol := Set.choose (htotal_L₀' x)
     set sol_spec := Set.choose_spec (htotal_L₀' x)
-    apply Filter.Eventually.mono (Filter.eventually_ge_atTop sol) _
-    intro _ h
-    exact ⟨fill_mono h.1 sol_spec , (h.2.2.2.1 x sol_spec).symm⟩
+    apply Filter.Eventually.mono (Filter.eventually_ge_atTop sol)
+    exact fun _ h ↦ ⟨fill_mono h.1 sol_spec , (h.2.2.2.1 x sol_spec).symm⟩
   apply @reduce_to_new_axioms S' L₀' op
   . ext x
     apply (Filter.eventually_const (f := f)).mp
@@ -182,7 +172,7 @@ lemma use_chain {sols : Set PartialSolution} (hchain: IsChain (fun (sol1 sol2 : 
   . intro a x y h
     apply (Filter.eventually_const (f := f)).mp
     filter_upwards [L₀'_lim ((R' (S (a - S' x))) y), L₀'_lim ((R' (S (S' y))) ((R' (a - S' x)).symm (L₀' ((R' (S (a - S' x))) y)))), S'_lim x, S'_lim y] with sol h1 h2 h3 h4
-    rw [←h2.2, ←h1.2, ←h3.2, ←h4.2]
+    rw [← h2.2, ← h1.2, ← h3.2, ← h4.2]
     exact (sol.1.axiom_iii'' x y a h3.1 h4.1 h).2.2
   . intro x
     apply (Filter.eventually_const (f := f)).mp
@@ -236,16 +226,13 @@ abbrev PartialSolution.sees (sol:PartialSolution) (extras: Finset M) (x:N) := ge
 
 abbrev PartialSolution.sees' (sol:PartialSolution) (extras: Finset M) (x:M) := generators (basis_elements' x) ⊆ generators (sol.involved_elements extras)
 
-
-
-
 lemma PartialSolution.see_direct (sol:PartialSolution) {extras: Finset M} {x:N} (h: sol.directly_sees extras x) : sol.sees extras x := generators_mono h
 
 lemma PartialSolution.see_direct' (sol:PartialSolution) {extras: Finset M} {x:M} (h: sol.directly_sees' extras x) : sol.sees' extras x := generators_mono h
 
 lemma PartialSolution.sees_mul (sol: PartialSolution) {extras: Finset M} {x y:N} (hx: sol.sees extras x) (hy: sol.sees extras y) : sol.sees extras (x * y) := calc
   _ ⊆ generators (basis_elements x ∪ basis_elements y)  := generators_mono $ basis_elements_of_mul x y
-  _ = generators (basis_elements x) ∪ generators (basis_elements y) := generators_union _ _
+  _ = generators (basis_elements x) ∪ generators (basis_elements y) := generators_union ..
   _ ⊆ _ := Finset.union_subset hx hy
 
 lemma PartialSolution.sees_inv (sol: PartialSolution) {extras: Finset M} {x:N} (hx: sol.sees extras x)  : sol.sees extras x⁻¹ := by
@@ -265,9 +252,8 @@ lemma PartialSolution.reaches_sum (sol: PartialSolution) {extras: Finset M} {a b
 lemma PartialSolution.reaches_diff (sol: PartialSolution) {extras: Finset M} {a b:SM} (ha: sol.reaches extras a) (hb: sol.reaches extras b) : sol.reaches extras (a - b) := diff_in_generators ha hb
 
 lemma PartialSolution.sees_e (sol: PartialSolution) {extras: Finset M} {a:SM} (ha: sol.reaches extras a) : sol.sees extras (e a) := by
-  simp only [basis_elements_of_generator,sees_iff,
-    Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, zero_in_generators',
-    and_true, ha]
+  simp only [sees_iff, basis_elements_of_generator, Finset.mem_insert, Finset.mem_singleton,
+    forall_eq_or_imp, ha, forall_eq, zero_in_generators', and_self]
 
 lemma PartialSolution.reaches_zero (sol: PartialSolution) {extras: Finset M} : sol.reaches extras 0 := zero_in_generators' _
 
@@ -286,11 +272,9 @@ lemma PartialSolution.sees_R'_inv (sol:PartialSolution) {extras: Finset M} {a:SM
   rw [generators_subset_iff]
   intro b hb
   simp only [Finset.mem_insert, Finset.mem_singleton] at hb
-  rcases hb with hb | hb
-  . rw [hb]
-    exact ha
-  rw [hb]
-  exact zero_in_generators' (sol.involved_elements extras)
+  rcases hb with hb | hb <;> rw [hb]
+  . exact ha
+  · exact zero_in_generators' (sol.involved_elements extras)
 
 lemma PartialSolution.extras_involved (sol: PartialSolution) (extras: Finset M) {x : N} (hx: Sum.inr x ∈ extras) : sol.sees extras x := by
   apply sol.see_direct
@@ -304,7 +288,7 @@ lemma PartialSolution.dom_L₀'_involved' (sol: PartialSolution) (extras: Finset
     _ ⊆ Finset.biUnion sol.Predom_L₀' basis_elements := by
       simp [PartialSolution.Dom_L₀', fill] at hx
       obtain ⟨ y, hxy, hy ⟩ := hx
-      rw [←basis_elements_of_rel hxy]
+      rw [← basis_elements_of_rel hxy]
       exact Finset.subset_biUnion_of_mem _ hy
     _ ⊆ _ := by
       intro _
@@ -377,7 +361,6 @@ lemma PartialSolution.fresh_not_involved (sol : PartialSolution) (extras: Finset
   exact mem_in_generators this
 
 lemma PartialSolution.fresh_not_in_gen (sol : PartialSolution) (extras: Finset M) (n:ℕ) : ¬ in_generators (sol.involved_elements extras) (E (sol.fresh_generator extras n)) := fresh_not_in_generators _ n
-
 
 lemma PartialSolution.fresh_invis (sol : PartialSolution) (extras: Finset M) (n:ℕ) : ¬ sol.sees extras (e (E (sol.fresh_generator extras n))) := by
     by_contra h
@@ -1084,7 +1067,7 @@ lemma PartialSolution_with_axioms.cancel' {sol:PartialSolution_with_axioms} {a b
   all_goals contrapose! ha
   . exact hy a ha
   exact hz a ha
- 
+
 
 lemma PartialSolution_with_axioms.neq_one_if_shift_from {sol:PartialSolution_with_axioms} {a:SM} (ha: sol.x = (R' a) sol.y₀) : sol.x ≠ 1 := by
   contrapose! ha
