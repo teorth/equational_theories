@@ -483,15 +483,11 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
         rfl
       specialize h'' y
       simp at h''
-      
-      /-
-      calc {
-        _ = (R' (S a)).symm ∘ (L₀' ∘ (R' 0) ∘ ((R' a) ∘ (R' a).symm) ∘ L₀') ∘ (R' (S a))  := rfl
-        _ = _ := by simp [L₀'_R'0_L₀'_eq_id h_i']
+      calc
+        _ = (L₀' ∘ (R' 0).symm ∘ (R' 0)) y := by simp only [Equiv.symm_comp_self,
+          Function.comp_apply, id_eq]
+        _ = _ := by rw [<-h_i']; rfl
 
-      }
-      -/
-      sorry
 
     axiom_21 := by
       intro a b y h
