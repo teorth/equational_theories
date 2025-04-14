@@ -11,15 +11,7 @@ import equational_theories.Equations.All
 
 namespace Eq1729
 
-theorem ExtMagma_shows_1729_not_implies_817 {SM N : Type} [Inhabited SM] [Inhabited N] [Magma SM]
-  (E : ExtOpsWithProps SM N)
-  : @Equation1729 (SM ⊕ N) (extMagmaInst E) ∧ ¬@Equation817 (SM ⊕ N) (extMagmaInst E) := by
-  constructor
-  . apply ExtMagma_sat_eq1729
-  · apply ExtMagma_unsat_eq817
-
-
--- @[equational_result]
+@[equational_result]
 theorem not_817 : ∃ (G: Type) (_: Magma G), Equation1729 G ∧ ¬ Equation817 G := by
   let β := N ⊕ N ⊕ (N × N)
   let task : β → Set PartialSolution := fun s => match s with
