@@ -42,7 +42,6 @@ lemma SM_op_eq_add (a b : SM) : a ◇ b = a + b := rfl
 lemma E_apply (n m:ℕ) : E n m = if n=m then 1 else 0 := by
   simp [DirectSum.of_apply]
 
-
 lemma E_inj : Function.Injective E := by
   intro n m h
   apply_fun (fun f ↦ f n) at h
@@ -58,7 +57,6 @@ lemma E_ne_zero (n:ℕ): E n ≠ 0 := by
   contrapose! this
   decide
 
-
 /- The squaring map on SM -/
 def S (a : SM) := a ◇ a
 
@@ -69,7 +67,7 @@ lemma SM_square_eq_double (a : SM) : S a = a + a := rfl
 
 @[simp]
 lemma SM_square_square_eq_zero (a : SM) : S (S a) = 0 := by
-  rw [←sub_eq_zero]
+  rw [← sub_eq_zero]
   simp only [SM_square_eq_double]
   abel_nf
   exact SM_char_four _
@@ -78,7 +76,7 @@ lemma SM_square_square_eq_zero (a : SM) : S (S a) = 0 := by
 lemma S_neg (a : SM) : S (-a) = S a := by
   simp only [SM_square_eq_double]
   symm
-  rw [←sub_eq_zero]
+  rw [← sub_eq_zero]
   abel_nf
   exact SM_char_four _
 
@@ -91,20 +89,19 @@ lemma S_add (a b: SM) : S (a + b) = S a + S b := by
 lemma S_sub (a b: SM) : S (a - b) = S a + S b := by
   simp only [SM_square_eq_double]
   symm
-  rw [←sub_eq_zero]
+  rw [← sub_eq_zero]
   abel_nf
   exact SM_char_four _
 
 @[simp]
 lemma S_eval (a : SM) (n:ℕ) : S a n = a n + a n := by
-  simp only [SM_square_eq_double, DirectSum.add_apply]
-
+  simp [SM_square_eq_double]
 
 lemma SM_obeys_1729 : Equation1729 SM := by
   intro x y
   simp only [SM_op_eq_add, SM_square_eq_double]
   symm
-  rw [←sub_eq_zero]
+  rw [← sub_eq_zero]
   abel_nf
   exact SM_char_four _
 
@@ -167,7 +164,6 @@ lemma square (a : SM) : (e a)^2 = FreeGroup.mk ([(a,true)] ++ [(a,true)]) := by
     simp only [← FreeGroup.mul_mk, FreeGroup.mk_of_single_true,  e]
     congr
 
-
 def adjacent (x y : N) := ∃ a, x = (e a) * y ∨ y = (e a) * x
 
 lemma not_adjacent_self (x:N) : ¬ adjacent x x := by
@@ -193,7 +189,6 @@ def N_lt_hom_nat_lt: RelHom (fun x y : N => x < y) (fun x y : ℕ => x < y) := {
   map_rel' := by
     intro x y h
     rw [lt_iff_le_not_le, le_def] at h
-
     have len_le := List.IsSuffix.length_le h.1
     have len_ne: x.toWord.length ≠ y.toWord.length := by
       by_contra!
@@ -241,8 +236,7 @@ theorem lt_iff_le_parent {x y : N} (h : y ≠ 1) : x < y ↔ x ≤ parent y := b
   case nil =>
     simp only [List.suffix_nil, FreeGroup.toWord_eq_nil_iff, ne_eq, List.tail_nil,
     and_iff_left_iff_imp]
-    intro eq1 eq2
-    exact h (eq2 ▸ eq1)
+    exact fun a ↦ ne_of_eq_of_ne a (Ne.symm h)
   case cons head tail =>
     simp only [List.tail_cons, List.suffix_cons_iff]
     constructor
@@ -252,13 +246,9 @@ theorem lt_iff_le_parent {x y : N} (h : y ≠ 1) : x < y ↔ x ≤ parent y := b
         apply FreeGroup.toWord_injective
         rw [eq, h']
       · assumption
-    · intro h''
-      constructor
-      · right
-        exact h''
-      · intro eq'
-        rw [eq', h'] at h''
-        simpa using h''.length_le
+    · refine fun h'' ↦ ⟨Or.inr h'', fun eq' ↦ ?_⟩
+      rw [eq', h'] at h''
+      simpa using h''.length_le
 
 instance : OrderBot N where
   bot := 1
@@ -296,9 +286,7 @@ theorem parent_adjacent {x : N} (h : x ≠ 1) : adjacent x (parent x) := by
         simp only [e, FreeGroup.of, FreeGroup.inv_mk]
         rfl
       simp [eq_inv]
-    · use a
-      left
-      rfl
+    · exact ⟨a, Or.symm (Or.inr rfl)⟩
 
 theorem parent_lt {x : N} (h : x ≠ 1) : parent x < x := by
   rw [lt_iff_le_and_ne]
@@ -380,22 +368,15 @@ lemma R'_axiom_iia (a b : SM) (y:N) (h: a ≠ b): R' a y ≠ R' b y := by
 
 @[simp]
 lemma R'_axiom_iia' {a b : SM} {y:N} : R' a y = R' b y ↔ a = b := by
-  constructor
-  . intro h
-    contrapose! h
-    exact R'_axiom_iia a b y h
-  intro h; rw [h]
-
+  refine ⟨fun h ↦ ?_, by aesop⟩
+  contrapose! h
+  exact R'_axiom_iia a b y h
 
 lemma R'_axiom_iib (a : SM) (y:N) : R' a y ≠ y := by
   by_contra! h
-  simp only [R', Equiv.coe_fn_mk, mul_left_eq_self, FreeGroup.of_ne_one] at h
+  simp [R'] at h
 
-
-lemma R'_adjacent (a : SM) (y:N) : adjacent y (R' a y) := by
-  use a
-  simp only [R', Equiv.coe_fn_mk, or_true]
-
+lemma R'_adjacent (a : SM) (y:N) : adjacent y (R' a y) := ⟨a, Or.inr rfl⟩
 
 /- Now we rewrite the axioms using a single transformation L₀' instead of many transformations L' -/
 
@@ -407,7 +388,7 @@ lemma L₀'_R'0_L₀'_eq_id {L₀' : N → N} (h: axiom_i' L₀') : L₀' ∘ R'
   calc
     _ = L₀' ∘ R' 0 ∘ L₀' ∘ ((L₀' ∘ L₀') ∘ R' 0) := by aesop
     _ = (L₀' ∘ (R' 0 ∘ (L₀' ∘ L₀')) ∘ L₀') ∘ R' 0 := rfl
-    _ = _ := by simp only [h, Equiv.self_comp_symm, CompTriple.comp_eq, Equiv.symm_comp_self]
+    _ = _ := by simp [h]
 
 def L' {L₀' : N → N} (h: axiom_i' L₀') (a:SM) : N ≃ N := {
   toFun := (R' a).symm ∘ L₀' ∘  R' (S a)
@@ -417,21 +398,20 @@ def L' {L₀' : N → N} (h: axiom_i' L₀') (a:SM) : N ≃ N := {
     calc
       _ = (R' (S a)).symm ∘ L₀' ∘ R' 0 ∘ (R' a ∘ (R' a).symm) ∘ L₀' ∘ R' (S a) := rfl
       _ = (R' (S a)).symm ∘ (L₀' ∘ R' 0 ∘ L₀') ∘ R' (S a) := by aesop
-      _ = _ := by simp only [L₀'_R'0_L₀'_eq_id h, CompTriple.comp_eq, Equiv.symm_comp_self]
+      _ = _ := by simp [L₀'_R'0_L₀'_eq_id h]
   right_inv := by
     unfold axiom_i' at h
     rw [Function.rightInverse_iff_comp]
     calc
       _ = (R' a).symm ∘ ((L₀' ∘ (R' (S a) ∘ (R' (S a)).symm) ∘ L₀') ∘ R' 0) ∘ R' a := rfl
-      _ = _ := by simp only [Equiv.self_comp_symm, CompTriple.comp_eq, h, Equiv.symm_comp_self]
+      _ = _ := by simp [h]
 }
 
 lemma L'_0_eq_L₀' {L₀' : N → N} (h: axiom_i' L₀') : L' h 0 = L₀' := by
-  unfold L'
   unfold axiom_i' at h
-  simp only [← h, SM_square_eq_double, add_zero, Equiv.coe_fn_mk]
-  rw [Function.comp_assoc, <- Function.comp_assoc _ _ (R' 0), h]
-  simp only [Equiv.symm_comp_self, CompTriple.comp_eq]
+  simp only [L', ← h, SM_square_eq_double, add_zero, Equiv.coe_fn_mk]
+  rw [Function.comp_assoc, ← Function.comp_assoc _ _ (R' 0), h]
+  simp
 
 abbrev M := SM ⊕ N
 
@@ -462,14 +442,11 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
     L' := (fun a ↦ L' h_i' a)
     R' := (fun a ↦ R' a)
     rest_map := op
-    squaring_prop_SM := by intros; rfl
+    squaring_prop_SM := fun _ ↦ rfl
     left_map_SM := by
       intro x y
-      simp only [Equiv.coe_fn_mk, SM_op_eq_add, L, AddCommMonoid.add_comm]
-    right_map_SM := by
-      intro x y
-      simp only [Equiv.coe_fn_mk, SM_op_eq_add, R, L]
-
+      simp [Equiv.coe_fn_mk, SM_op_eq_add, L, AddCommMonoid.add_comm]
+    right_map_SM := fun x y ↦ rfl
     SM_sat_1729 := SM_obeys_1729
     axiom_1 := by
       intro a x
@@ -477,45 +454,19 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
       have h' := L₀'_R'0_L₀'_eq_id h_i'
       set y := R' (S a) x with hy
       simp [Function.comp_def] at h'
-      have h'' : ∀ y, (fun x ↦ L₀' ((R' 0) (L₀' x))) y = y := by
-        intro y
-        rw [h']
-        rfl
+      have h'' : ∀ y, (fun x ↦ L₀' ((R' 0) (L₀' x))) y = y := fun _ ↦ h' ▸ rfl
       specialize h'' y
-      simp at h''
+      simp only at h''
       calc
-        _ = (L₀' ∘ (R' 0).symm ∘ (R' 0)) y := by simp only [Equiv.symm_comp_self,
-          Function.comp_apply, id_eq]
-        _ = _ := by rw [<-h_i']; rfl
-
-
-    axiom_21 := by
-      intro a b y h
-      simp only [ne_eq, R'_axiom_iia a b y h, not_false_eq_true]
-    axiom_22 := by
-      intro a x
-      simp only [ne_eq, R'_axiom_iib a x, not_false_eq_true]
-    axiom_3 := by
-      intro x y a h
-      simp_all [L', Equiv.coe_fn_mk, Function.comp_apply, h_iii' a x y h]
-      unfold axiom_iii' at h_iii'
-      specialize h_iii' a x y h
-      assumption
-    axiom_4 := by
-      intro x
-      simp only [L', Equiv.coe_fn_mk, Function.comp_apply, h_iv' x]
-    axiom_5 := by
-      intro x
-      simp [L', h_v x]
-    axiom_6 := by
-      intro y a
-      simp [L', h_vi' y a, L]
-    axiom_7 := by
-      intro x y x_neq_y no_a_exists
-      simp_all [h_vii']
-      unfold axiom_vii' at h_vii'
-      specialize h_vii' x y x_neq_y no_a_exists
-      assumption
+        _ = (L₀' ∘ (R' 0).symm ∘ (R' 0)) y := by simp
+        _ = _ := h_i' ▸ rfl
+    axiom_21 := fun a b y h ↦ R'_axiom_iia a b y h
+    axiom_22 := fun a x ↦ R'_axiom_iib a x
+    axiom_3 := fun x y a h ↦ h_iii' a x y h
+    axiom_4 := by intro x; simp [L', h_iv' x]
+    axiom_5 := fun x ↦ h_v x
+    axiom_6 := fun y a ↦ h_vi' y a
+    axiom_7 := by aesop
    }
 
 -- Remark: a lot of the definitions and API below could be restated more abstractly using the quotient space construction on groups.  This might be worth doing in order to locate some further contributions to Mathlib in this area.
@@ -523,38 +474,29 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
 instance rel : Setoid N := {
   r := fun x y => ∃ n : ℤ, y = (e 0)^n * x
   iseqv := by
-    constructor
-    . intro x
-      use 0
-      simp only [zpow_zero, one_mul]
+    refine ⟨fun _ ↦ ⟨0, by simp [zpow_zero, one_mul]⟩, ?_, ?_⟩
     . intro x y ⟨ n, h1 ⟩
-      use -n
-      rw [h1, <-mul_assoc, ←zpow_add, neg_add_cancel, zpow_zero, one_mul]
+      exact ⟨-n, by rw [h1, ← mul_assoc, ← zpow_add, neg_add_cancel, zpow_zero, one_mul]⟩
     . intro x y z ⟨ n, h1 ⟩ ⟨ m, h2 ⟩
-      use n+m
-      rw [h2, h1, <-mul_assoc, add_comm, zpow_add]
+      exact ⟨n + m, by rw [h2, h1, ← mul_assoc, add_comm, zpow_add]⟩
 }
 
 lemma rel_iff (x y:N): x ≈ y ↔ ∃ n : ℤ, y = (e 0)^n * x := by rfl
 
 lemma rel_def {x y:N} (h: x ≈ y) : ∃ n : ℤ, y = (e 0)^n * x := (rel_iff x y).mp h
 
-lemma rel_of_mul (x:N) (n:ℤ) : x ≈ (e 0)^n * x := by
-  use n
+lemma rel_of_mul (x:N) (n:ℤ) : x ≈ (e 0)^n * x := ⟨n, rfl⟩
 
 lemma rel_of_R0 (x:N) : x ≈ R' 0 x := rel_of_mul x 1
 
-
 /-- `fill D` is the set of elements of the form (e 0)^n x with x in D and n an integer. -/
-
 def fill (D: Finset N) : Set N := { y | ∃ x, x ≈ y ∧ x ∈ D }
 
 @[simp]
 lemma fill_empty : fill Finset.empty = ∅ := by
   ext y
-  simp [fill, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false, not_exists, not_and]
-  intro _ _
-  exact Finset.not_mem_empty _
+  simp only [fill, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false, not_exists, not_and]
+  exact fun _ _ ↦ Finset.not_mem_empty _
 
 lemma fill_mono {D₁ D₂ : Finset N} (h : D₁ ⊆ D₂) : fill D₁ ⊆ fill D₂ := by
   intro y hy
@@ -564,7 +506,7 @@ lemma fill_mono {D₁ D₂ : Finset N} (h : D₁ ⊆ D₂) : fill D₁ ⊆ fill 
 @[simp]
 lemma fill_union {D₁ D₂ : Finset N} : fill (D₁ ∪ D₂) = (fill D₁) ∪ (fill D₂) := by
   ext y
-  simp [fill]
+  simp only [fill, Finset.mem_union, Set.mem_setOf_eq, Set.mem_union]
   aesop
 
 @[simp]
@@ -574,32 +516,27 @@ lemma fill_pair {x y : N} : fill {x,y} = (fill {x}) ∪ (fill {y}) := by
 
 @[simp]
 lemma fill_singleton {x y : N} : x ∈ fill {y} ↔ x ≈ y := by
-  simp [fill]
+  simp only [fill, Finset.mem_singleton, exists_eq_right, Set.mem_setOf_eq]
   exact Setoid.comm' _
 
 lemma fill_invar (D: Finset N) {x y : N} (h : x ≈ y) : x ∈ fill D ↔ y ∈ fill D := by
-  constructor
-  . intro h
-    simp only [fill, Set.mem_setOf_eq] at h ⊢
-    obtain ⟨ z, hz, hD ⟩ := h
+  constructor <;> intro h; simp only [fill, Set.mem_setOf_eq] at h ⊢;
+  . obtain ⟨ z, hz, hD ⟩ := h
     exact ⟨ z, Setoid.trans hz h, hD ⟩
-  intro h
-  simp only [fill, Set.mem_setOf_eq] at h ⊢
-  obtain ⟨ z, hz, hD ⟩ := h
-  exact ⟨ z, Setoid.trans hz (Setoid.symm h), hD ⟩
+  · obtain ⟨ z, hz, hD ⟩ := h
+    exact ⟨ z, Setoid.trans hz (Setoid.symm h), hD ⟩
 
 @[simp]
-lemma fill_invar' (D: Finset N) (x:N) (n:ℤ) : (e 0)^n * x ∈ fill D ↔ x ∈ fill D := (fill_invar D (rel_of_mul x n)).symm
+lemma fill_invar' (D: Finset N) (x:N) (n:ℤ) : (e 0)^n * x ∈ fill D ↔ x ∈ fill D :=
+  (fill_invar D (rel_of_mul x n)).symm
 
-lemma subset_fill (D: Finset N) : D.toSet ⊆ fill D := by
-  intro x hx
-  simp only [fill, Set.mem_setOf_eq]
-  exact ⟨ x, Setoid.refl x, hx ⟩
+lemma subset_fill (D: Finset N) : D.toSet ⊆ fill D := fun x hx ↦ ⟨x, Setoid.refl x, hx⟩
 
-lemma mem_fill {D: Finset N} {x:N} (hx: x ∈ D) : x ∈ fill D :=  subset_fill D hx
+lemma mem_fill {D: Finset N} {x:N} (hx: x ∈ D) : x ∈ fill D := subset_fill D hx
 
 @[simp]
-lemma R0_mem_fill_iff (D: Finset N) (x:N) : R' 0 x ∈ fill D ↔ x ∈ fill D := (fill_invar D (rel_of_R0 x)).symm
+lemma R0_mem_fill_iff (D: Finset N) (x:N) : R' 0 x ∈ fill D ↔ x ∈ fill D :=
+  (fill_invar D (rel_of_R0 x)).symm
 
 
 
