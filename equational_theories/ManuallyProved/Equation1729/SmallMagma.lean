@@ -473,11 +473,17 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
     SM_sat_1729 := SM_obeys_1729
     axiom_1 := by
       intro a x
-      simp_all [L', SM_square_square_eq_zero, Equiv.coe_fn_mk]
-      conv => {
-        rhs
-        simp[L₀'_R'0_L₀'_eq_id h_i']
-      }
+      simp [L', SM_square_square_eq_zero, Equiv.coe_fn_mk]
+      have h' := L₀'_R'0_L₀'_eq_id h_i'
+      set y := R' (S a) x with hy
+      simp [Function.comp_def] at h'
+      have h'' : ∀ y, (fun x ↦ L₀' ((R' 0) (L₀' x))) y = y := by
+        intro y
+        rw [h']
+        rfl
+      specialize h'' y
+      simp at h''
+      
       /-
       calc {
         _ = (R' (S a)).symm ∘ (L₀' ∘ (R' 0) ∘ ((R' a) ∘ (R' a).symm) ∘ L₀') ∘ (R' (S a))  := rfl
