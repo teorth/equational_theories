@@ -456,25 +456,39 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
   exact
    {
     S := S
-    L := sorry --fun x ↦ (fun y ↦ x ◇ y)
-    R := sorry--fun x ↦ (fun y ↦ y ◇ x)
+    L := L
+    R := R
     S' := S'
     L' := (fun a ↦ L' h_i' a)
     R' := (fun a ↦ R' a)
     rest_map := op
     squaring_prop_SM := by intros; rfl
-    left_map_SM := by intros; sorry
-    right_map_SM := by intros; sorry
+    left_map_SM := by
+      intro x y
+      simp only [Equiv.coe_fn_mk, SM_op_eq_add, L, AddCommMonoid.add_comm]
+    right_map_SM := by
+      intro x y
+      simp only [Equiv.coe_fn_mk, SM_op_eq_add, R, L]
 
     SM_sat_1729 := SM_obeys_1729
     axiom_1 := by
-      intro a
-      simp only [L', SM_square_square_eq_zero, Equiv.coe_fn_mk]
-      /-calc
-        _ = (R' (S a)).symm ∘ (L₀' ∘ (R' 0) ∘ ((R' a) ∘ (R' a).symm) ∘ L₀') ∘ (R' (S a))  := rfl
-        _ = _ := by simp [L₀'_R'0_L₀'_eq_id h_i']
-      -/
-      sorry
+      intro a x
+      simp [L', SM_square_square_eq_zero, Equiv.coe_fn_mk]
+      have h' := L₀'_R'0_L₀'_eq_id h_i'
+      set y := R' (S a) x with hy
+      simp [Function.comp_def] at h'
+      have h'' : ∀ y, (fun x ↦ L₀' ((R' 0) (L₀' x))) y = y := by
+        intro y
+        rw [h']
+        rfl
+      specialize h'' y
+      simp at h''
+      calc
+        _ = (L₀' ∘ (R' 0).symm ∘ (R' 0)) y := by simp only [Equiv.symm_comp_self,
+          Function.comp_apply, id_eq]
+        _ = _ := by rw [<-h_i']; rfl
+
+
     axiom_21 := by
       intro a b y h
       simp only [ne_eq, R'_axiom_iia a b y h, not_false_eq_true]
@@ -483,8 +497,10 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
       simp only [ne_eq, R'_axiom_iib a x, not_false_eq_true]
     axiom_3 := by
       intro x y a h
-      simp only [L', Equiv.coe_fn_mk, Function.comp_apply, h_iii' a x y h]
-      sorry
+      simp_all [L', Equiv.coe_fn_mk, Function.comp_apply, h_iii' a x y h]
+      unfold axiom_iii' at h_iii'
+      specialize h_iii' a x y h
+      assumption
     axiom_4 := by
       intro x
       simp only [L', Equiv.coe_fn_mk, Function.comp_apply, h_iv' x]
@@ -493,9 +509,13 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
       simp [L', h_v x]
     axiom_6 := by
       intro y a
-      simp [L', h_vi' y a]
-      sorry
-    axiom_7 := sorry
+      simp [L', h_vi' y a, L]
+    axiom_7 := by
+      intro x y x_neq_y no_a_exists
+      simp_all [h_vii']
+      unfold axiom_vii' at h_vii'
+      specialize h_vii' x y x_neq_y no_a_exists
+      assumption
    }
 
 -- Remark: a lot of the definitions and API below could be restated more abstractly using the quotient space construction on groups.  This might be worth doing in order to locate some further contributions to Mathlib in this area.
