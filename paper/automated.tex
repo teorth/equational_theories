@@ -8,7 +8,7 @@ ATPs are complex software that can contain bugs.
 Instead of trusting ATP output, we used proof certificates, which many ATPs can produce, to reconstruct a proof in Lean.
 This process depends on the proof certificate and the ATP, and we describe it for the main reconstruction we have done.
 
-Tactics in Lean, on the other hand, are meta-programs~\cite{DBLP:journals/pacmpl/EbnerURAM17} that builds proofs.
+Tactics in Lean, on the other hand, are meta-programs~\cite{DBLP:journals/pacmpl/EbnerURAM17} that build proofs.
 In other words, tactics are programs that operate at the meta-level of Lean code: they essentially take in Lean code as input and produce Lean code as output.
 In this manner, they look like another keyword in the language, and are tightly integrated by producing proofs directly.
 Under the hood, they can implement essentially anything, from syntactic sugar to full decision procedures.

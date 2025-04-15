@@ -3,3 +3,7 @@
 \contentsline {todo}{Discuss how the above breaks down when a large and diverse collection of collaborators work over the internet. Consider citing the \href {https://euromathsoc.org/code-of-practice}{EMS webpage for code of practice} for joint responsibility rules. Start the project organisation setup in the next subsection }{12}{section*.4}%
 \contentsline {todo}{elaborate on what level of overlap was permissible and what we consider excessive}{14}{section*.5}%
 \contentsline {todo}{Discuss this further, perhaps give an example, or refer to the ATP section. See also the discussion threads ``Counterexamples by enumerating words in quotient magmas'' and ``Using SAT solvers for model generation'' threads (sorry, LaTeX is choking on the URLs for some reason).}{15}{section*.6}%
+\contentsline {todo}{Discuss performance of this method.}{17}{section*.7}%
+\contentsline {todo}{Give some statistics of what proportion of refutations can be resolved by linear models.}{17}{section*.8}%
+\contentsline {todo}{Report on how large the twisting semigroups are in practice, and how many implications can be refuted by this method.}{20}{section*.9}%
+\contentsline {todo}{Describe performance of this automated method. Discuss the issue that some implications required a large SAT solver calculation that was difficult to formalize efficiently in Lean, prompting human-generated simplified proofs using smaller rulesets.}{23}{section*.10}%
