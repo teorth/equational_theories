@@ -1,7 +1,6 @@
 # Contributions
 
-We will proceed systematically by discussing, interpreting, and extending each of
-the [CReDiT categories](https://credit.niso.org/):
+In this page we list the contributions of individual participants to the Equational Theories Project, by using the following interpretation of the [CReDiT categories](https://credit.niso.org/):
 
 - **Conceptualization**: Ideas; formulation or evolution of overarching research goals and aims.
 - **Data Curation**: Management activities to annotate (produce metadata), scrub data and maintain research data (including software code, where it is necessary for interpreting the data itself) for initial use and later reuse.  [This includes contributions to, or maintenance of, the blueprint for the project.]
@@ -18,18 +17,10 @@ the [CReDiT categories](https://credit.niso.org/):
 - **Writing - Original Draft Preparation**: Creation and/or presentation of the published work, specifically writing the initial draft (including substantive translation).
 - **Writing – Review and Editing**: Preparation, creation and/or presentation of the published work by those from the original research group, specifically critical review, commentary or revision – including pre- or post-publication stages.
 
-Once these extended categories are well-defined and agreed upon, individual contributors can easily
-identify their contributions across the relevant categories and propose to attribute them
-accordingly via a PR filling a simple table with a checkmark (✅).
-
-We could have a longer, less schematic description too written below the table to make sure that
-some major not-easily-classifiable contribution is not left out.
-
-## Extended Categories
-
-...
 
 ## Contributions Table
+
+A summary of contributions is listed in the table below.  More detail can be found in the [individual pull requests](https://github.com/teorth/equational_theories/issues?q=label%3Acontribution+) for the contributions.
 
 | Contributor         | Conceptualization | Data Curation | Formal Analysis | Funding Acquisition | Investigation | Methodology | Project Administration | Resources | Software | Supervision | Validation | Visualization | Writing - Original Draft Preparation | Writing – Review and Editing |
 |---------------------|-------------------|---------------|-----------------|---------------------|---------------|-------------|------------------------|-----------|----------|-------------|------------|---------------|--------------------------------------|------------------------------|
@@ -47,7 +38,7 @@ some major not-easily-classifiable contribution is not left out.
 | Bernhard Reinke     |                   |               |                 |                     | ✅             | ✅           |                        |           |         |             | ✅          |               |                                      |                              |
 | David Renshaw       |                   |               |                 |                     |               |             |                        |           |  ✅       |             |            |               |                                      |                              |
 | Marcus Rossel       |                   |               |                 |                     |               |             |                        |           |  ✅       |             |            |               |                                      |                              |
-| Cody Roux           |                   |               |                 |                     |               |             |                        |           | ✅       |             | ✅         |               | ✅                                  | 
+| Cody Roux           |                   |               |                 |                     |               |             |                        |           | ✅       |             | ✅         |               | ✅                                  |
 | Jérémy Scanvic      |                   |               |                 |                     |               |             |                        |           |          |             | ✅         |               |                                      |                              |
 | Shreyas Srinivas    |                   |               |                 |                     |               |             |                        |           |          |             |            |               |                                      |                              |
 | Anand Rao Tadipatri |                   |               |                 |                     |               |             |                        |           |          |             |            |               |                                      |                              |
