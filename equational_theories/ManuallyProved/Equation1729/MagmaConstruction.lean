@@ -1757,10 +1757,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hxx''
           exfalso
           exact sol.invis_lemma y'' z'' (hy.2.2 ▸ (sol.I_involved sol.extras hI'').2.2)
-        | P₁ y''' z''' hI'' hz' =>
-          simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
-          simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
-          rw [← hy.2.1, ←hy'.2.1]
+        | P₁ y''' z''' hI'' hz' => aesop
         | P₂ y''' z''' hI'' hz' =>
           simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hy'
           simp only [hy'.1, hy'.2.1, hy'.2.2] at hI'' hz'
@@ -1885,7 +1882,6 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
                 _ = a'' - a' := by rw [h]; abel
                 _ = a'' - a + sol.new_S y' := by simp [a']; abel
                 _ = _ := by rw [sol.new_S_extend hS]
-
               have hreach₄ : sol.reaches sol.extras sol.d₀ := by
                 rw [hd₀_eq]
                 apply sol.reaches_sum _ (sol.reaches_involved (sol.dom_S'_involved sol.extras hS).2)
@@ -1947,7 +1943,6 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       by_cases h : a' = sol.d₀
       all_goals simp [sol.Sd₀_neq_d₀, sol.d₀_neq_zero.symm, sol.d_neq_d₀, hS_neq_d₀, sol.d₀_invis (sol.I_involved sol.extras hI).2.1, h] at hd₀
   }
-
   refine ⟨sol', ?_, ?_⟩
   · refine ⟨Finset.subset_union_left, ?_, Finset.subset_union_left, ?_, ?_, ?_⟩
     · intro y hy
@@ -1966,15 +1961,13 @@ lemma freegroup_neq_inverse {G: Type*} [DecidableEq G] (x y: G): (FreeGroup.of x
   rw [← mul_eq_one_iff_eq_inv] at this
   apply_fun FreeGroup.toWord at this
   simp only [FreeGroup.of, FreeGroup.mul_mk, FreeGroup.toWord_mk] at this
-  rw [FreeGroup.toWord_one] at this
-  simp at this
+  simp [FreeGroup.toWord_one] at this
 
 lemma enlarge_S'_induction {sol : PartialSolution} {x : N} (hind: ∀ y:N, y < x → y ∈ sol.Dom_S') : ∃ sol', sol ≤ sol' ∧ x ∈ sol'.Dom_S' := by
   by_cases x_eq_one: x = 1
   · by_cases hx: x ∈ sol.Dom_S'
     · exact ⟨sol, sol.refl, hx⟩
-    .
-      let sol_axiom : PartialSolution_with_axioms := {
+    · let sol_axiom : PartialSolution_with_axioms := {
         x := x,
         hx := hx,
         hind := hind,
@@ -2240,11 +2233,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
       intro y' a hray'
       simp only [Finset.union_insert, Finset.mem_insert, Prod.mk.injEq, Finset.mem_union,
         Finset.mem_singleton] at hray'
-      have hnot : ¬ (R' a y' = x ∧ y' = y) := by
-          contrapose! hray
-          obtain ⟨h1, h2⟩ := hray
-          rw [h2] at h1
-          exact ⟨a, h1.symm⟩
+      have hnot : ¬ (R' a y' = x ∧ y' = y) := by aesop
       have hnot' : ¬ (R' a y' = z ∧ y' = x) := by
           by_contra h
           obtain ⟨h1, h2⟩ := h
