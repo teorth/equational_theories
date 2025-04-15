@@ -11,3 +11,6 @@
 \contentsline {todo}{discuss guided search in the finite implications or the Higman-Neumann work Jose Brox has done.}{39}{section*.12}%
 \contentsline {todo}{maybe add a screenshot here of the workflow of using a seed to find counterexamples with prover9 or vampire?}{39}{section*.13}%
 \contentsline {todo}{throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''. Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.}{39}{section*.14}%
+\contentsline {todo}{Expand this sketch}{39}{section*.15}%
+\contentsline {todo}{report on Higman--Neumann laws}{40}{section*.16}%
+\contentsline {todo}{expand this sketch}{46}{section*.17}%
