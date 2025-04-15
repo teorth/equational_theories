@@ -396,7 +396,6 @@ lemma PartialSolution.extend_axiom_i'' {sol : PartialSolution} {x y:N} (hx: x �
     simp only [fill, Finset.union_insert, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton, Set.mem_setOf_eq] at h ⊢
     obtain ⟨u, hu, hu'⟩ := h
     refine ⟨u, hu, Or.inr (Or.inl hu')⟩
-
   have hyx : ¬ (e 0)^n * z ≈ x := by
     contrapose! hneq
     exact Setoid.trans (rel_of_mul z n) hneq
@@ -411,14 +410,12 @@ lemma PartialSolution.extend_axiom_i'' {sol : PartialSolution} {x y:N} (hx: x �
   group
   exact (sol.enlarge_L₀'_new hneq _).1
 
-
 lemma gen_fresh_not_in_fill (sol : PartialSolution) (extras: Finset M) (n:ℕ) : e (E (sol.fresh_generator extras n)) ∉ sol.Dom_L₀' := by
   have := fresh_not_in_generators (sol.involved_elements extras) n
   contrapose! this
   have h := (sol.dom_L₀'_involved extras this).1
   simp only [sol.sees_iff] at h
-  apply h
-  simp only [basis_elements_of_generator, Finset.mem_singleton, Finset.mem_insert_self]
+  simp only [h, basis_elements_of_generator, Finset.mem_singleton, Finset.mem_insert_self]
 
 lemma gen_fresh_not_in_dom_S' (sol : PartialSolution) (extras: Finset M) (n:ℕ) : e (E (sol.fresh_generator extras n)) ∉ sol.Dom_S' := by
   have := fresh_not_in_generators (sol.involved_elements extras) n
