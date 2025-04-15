@@ -5,7 +5,7 @@ Many proofs or refutations of implications (or equivalences) between two equatio
 
 \subsection{Simple rewrites}\label{rewrite-sec}
 
-Many equational laws $E'$ can be formally deduced from a given law $E$ by applying the \emph{Lean} \mathtt{rw} tactic to rewrite $E'$ repeatedly by some forward or backward application of $E$ applied to arguments that match some portion of $E$.  For instance, the commutative law \eqref{eq43} clearly implies $\x \op (\y \op \z) \formaleq (\y \op \z) \op \x$ \eqref{eq4531}
+Many equational laws $E'$ can be formally deduced from a given law $E$ by applying the \emph{Lean} \texttt{rw} tactic to rewrite $E'$ repeatedly by some forward or backward application of $E$ applied to arguments that match some portion of $E$.  For instance, the commutative law \eqref{eq43} clearly implies $\x \op (\y \op \z) \formaleq (\y \op \z) \op \x$ \eqref{eq4531}
 by a single such rewrite.  A brute force application of such rewrite methods is already able to directly generate about $\num{15000}$ such implications, including many equivalences to the singleton law \eqref{eq2} and the constant law \eqref{eq46}.  After applying transitive closure, this generates about four million further such implications.
 
 A simple observation that already generates a reasonable number of equivalences is that any equation of the form $\x \formaleq f(\y,\z,\dots)$ necessarily is equivalent to the trivial law $\x \formaleq \y$, by transitivity; similarly, an equation of the form $f(\x,\y) \formaleq g(\z,\w,\dots)$ implies $f(\x,\y) \formaleq f(\x',\y')$; and so forth.  Equivalences of this form were useful early in the project by cutting down the number of distinct equivalence classes of laws that needed to be studied.
@@ -51,7 +51,7 @@ In practice, we found that these invariants could be used to establish a signifi
 \begin{remark}  One can also obtain matching invariants from the free objects associated to theories that involve additional operations beyond the magma operation $\op$, such as an identity element or an inverse operation.  We leave the precise generalization of \Cref{free-inv} to such theories to the interested reader.
 \end{remark}
 
-\subsection{Confluence}
+\subsection{Confluence}\label{confluence-sec}
 
 We briefly recall the basics of rewrite theory necessary to our exposition, following mostly Baader and Nipkow \cite{term-rewriting}, and generally omitting proofs when they can be found there.
 
