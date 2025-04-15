@@ -2014,18 +2014,15 @@ lemma enlarge_S'_induction {sol : PartialSolution} {x : N} (hind: ∀ y:N, y < x
           contradiction
       }
       exact enlarge_S'_induction_with_axioms sol_axiom
-  .
-    have x_parent := parent_adjacent x_eq_one
+  · have x_parent := parent_adjacent x_eq_one
     simp [adjacent] at x_parent
     obtain ⟨a, ha⟩ := x_parent
-
     -- Enlarge the solution with the terms we need for the hA, hB, and hC axioms
     let A: Finset N := { (R' (PartialSolution.S' (parent x))) x, (R' (S (a - PartialSolution.S' (parent x)))) x } ∪ (sol.Dom_S'.image (fun z => (R' 0) ((R' (PartialSolution.S' z)) x) ))
     obtain ⟨sol_enlarged, h_sol_extend, h_sol_enlarged, h_dom_preserved⟩ := enlarge_L₀'_multiple sol A
     by_cases x_enlarged: x ∈ sol_enlarged.Dom_S'
     · exact ⟨sol_enlarged, h_sol_extend, x_enlarged⟩
-    .
-      have parent_in := hind (parent x) (parent_lt x_eq_one)
+    · have parent_in := hind (parent x) (parent_lt x_eq_one)
       have dom_agree := h_sol_extend.2.2.2.2.2
       let sol_axiom : PartialSolution_with_axioms := {
         x := x,
@@ -2053,19 +2050,16 @@ lemma enlarge_S'_induction {sol : PartialSolution} {x : N} (hind: ∀ y:N, y < x
             simp [dom_agree (parent x) parent_in]
           | .inr h =>
             rw [h, ← mul_assoc, self_eq_mul_left, mul_eq_one_iff_eq_inv'] at hb
-            unfold e at hb
             have neq_inverse := freegroup_neq_inverse a b
             contradiction
         hC := by
           intro y z hyz hz
           have prev_hc := sol.axiom_P x y z
           rw [← h_dom_preserved] at hz
-          apply h_sol_enlarged
-          unfold A
-          apply Finset.mem_union_right
+          apply h_sol_enlarged <| Finset.mem_union_right _ _
           simp only [Finset.mem_image, EmbeddingLike.apply_eq_iff_eq]
           refine ⟨z, hz, ?_⟩
-          rw [dom_agree z hz]
+          simp_all
       }
       obtain ⟨sol_x, hsol_x, x_in_sol_x⟩ := enlarge_S'_induction_with_axioms sol_axiom
       simp only [sol_axiom] at x_in_sol_x
@@ -2165,19 +2159,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
         aesop
       axiom_L := sol.axiom_L
     }
-    refine ⟨sol', ?_, ?_⟩
-    · refine ⟨by rfl, ?_, by rfl, ?_, ?_, ?_⟩
-      · exact Finset.union_subset_left fun ⦃a⦄ a ↦ a
-      · intros; rfl
-      · intro (x',y') hxy
-        have : (x',y') ≠ (x,x) := by
-          contrapose! hdef
-          rwa [hdef] at hxy
-        dsimp [sol']
-        simp only [this, ↓reduceIte]
-      intros; rfl
-    apply Finset.mem_union_right
-    exact Finset.mem_singleton.mpr rfl
+    exact ⟨sol', ⟨by rfl, by aesop, by rfl, fun _ _ ↦ rfl, by aesop, fun _ _ ↦ rfl⟩, by aesop⟩
   by_cases hray : ∃ a, x = R' a y
   · obtain ⟨a, hray⟩ := hray
     rw [hray] at hx no_pending hdef hxy ⊢
@@ -2200,36 +2182,21 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
           simp only [Prod.mk.injEq] at hxy
           rw [← hxy.1, ←hxy.2]
         simp only [Finset.mem_union, Finset.mem_singleton, this, or_false] at hx'
-        simp only [this, ↓reduceIte]
+        simp [this, ↓reduceIte]
         exact sol.axiom_v'' x' hx'
       axiom_vi'' := by
         intro y' a' hy'
         simp only [Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq] at hy'
         by_cases heq : (R' a') y' = (R' a) y ∧ y' = y
-        · rw [heq.1, heq.2]
-          simp only [hy, ↓reduceIte, Sum.inl.injEq, sub_left_inj, true_and]
-          have := heq.1
-          rw [heq.2] at this
-          simp [R', e, FreeGroup.of_injective.eq_iff] at this
-          exact this.symm
-        have :  ((R' a') y', y') ∈ PartialSolution.Dom_op := by tauto
+        · aesop
+        have : ((R' a') y', y') ∈ PartialSolution.Dom_op := by tauto
         simp only [Prod.mk.injEq, heq, ↓reduceIte]
         exact sol.axiom_vi'' y' a' this
       axiom_vii'' := by
         intro x' y' hxy' hneq hin
-        have h1 : (x',y') ≠ (R' a y, y) := by
-          contrapose! hxy'
-          simp only [Prod.mk.injEq] at hxy'
-          have := hxy'.1
-          rw [← hxy'.2] at this
-          exfalso
-          exact hneq a this
-
-        have h2 : (x',y') ∈ sol.Dom_op := by
-          by_contra hin'
-          simp only [Finset.mem_union, hin', Finset.mem_singleton, Prod.mk.injEq, false_or, h1] at hin
+        have h1 : (x',y') ≠ (R' a y, y) := by aesop
         simp only [h1, ↓reduceIte, Finset.mem_union, Finset.mem_singleton, Prod.mk.injEq]
-        obtain ⟨z, h3, h4⟩ := sol.axiom_vii'' x' y' hxy' hneq h2
+        obtain ⟨z, h3, h4⟩ := sol.axiom_vii'' x' y' hxy' hneq (by aesop)
         refine ⟨z, h3, ?_⟩
         rcases h4 with h4 | ⟨h5, h6, h7⟩
         · exact Or.inl h4
@@ -2251,27 +2218,10 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
       axiom_P'' := by
         intro x' y' z hI
         have := sol.axiom_P'' x' y' z hI
-        constructor
-        · exact Finset.mem_union_left _ this.1
-        have hneq : ¬ (x',y') = ((R' a) y,y) := by
-          contrapose! hdef
-          exact hdef ▸ this.1
-        simp [hneq, this.2]
+        aesop
       axiom_L := sol.axiom_L
     }
-    refine ⟨sol', ?_, ?_⟩
-    · refine ⟨by rfl, ?_, by rfl, ?_, ?_, ?_⟩
-      · exact Finset.union_subset_left fun ⦃a⦄ a ↦ a
-      · intros; rfl
-      · intro (x',y') hxy
-        have : (x',y') ≠ (R' a y,y) := by
-          contrapose! hdef
-          rwa [hdef] at hxy
-        dsimp [sol']
-        simp only [this, ↓reduceIte]
-      intros; rfl
-    exact Finset.mem_union_right _ (Finset.mem_singleton.mpr rfl)
-
+    exact ⟨sol', ⟨by rfl, by aesop, by rfl, fun _ _ ↦ rfl, by aesop, fun _ _ ↦ rfl⟩, by aesop⟩
   set extras : Finset M := {Sum.inr x, Sum.inr y, Sum.inr w}
   set d₀ := E <| sol.fresh_generator extras 0
   set z := (e d₀)^2
@@ -2416,9 +2366,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
           simp only [sol.sees_iff] at h
           apply sol.fresh_not_in_gen extras 0 <| h d₀ <| basis_elements_of_prod_gen d₀ a
         constructor
-        · contrapose! h1
-          rw [← h1]
-          exact hz'_vis
+        · aesop
         contrapose! h2
         apply_fun (R' a).symm at h2
         simp only [Equiv.symm_apply_apply] at h2
