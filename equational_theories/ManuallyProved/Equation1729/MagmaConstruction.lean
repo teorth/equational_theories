@@ -1057,7 +1057,7 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
   · apply sol.nequiv_d₀
     simp [sol.d₀_invis sol.sees_x, sol.d_neq_d₀]
   · by_cases h : S a = 0
-    · simp [h]
+    · rw [h, zero_add]
       contrapose! ha
       rw [← sol.cancel sol.Sd₀_noreach sol.sees_y₀ sol.sees_x ha]
       exact R'_axiom_iib _ _
@@ -1135,7 +1135,6 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
   · contrapose! hneq
     exact sol.d_injective h.symm
   simp [h]
-
 
 lemma PartialSolution_with_axioms.L₀'_no_collide_3 (sol: PartialSolution_with_axioms) (data data' : L₀'_data sol) : ¬ (sol.L₀'_pair data).1 ≈ (sol.L₀'_pair data').2 := by
   rcases data with ⟨⟩ | ⟨⟩ | ⟨a,ha⟩ | ⟨a,ha⟩ | ⟨y,z,hz⟩
@@ -1388,8 +1387,6 @@ noncomputable abbrev PartialSolution_with_axioms.I_triple (sol : PartialSolution
 
 noncomputable abbrev PartialSolution_with_axioms.new_I (sol : PartialSolution_with_axioms) : Finset (N × N × N) := sol.I_triple.range_finset
 
--- Set up S
-
 noncomputable abbrev PartialSolution_with_axioms.new_S (sol : PartialSolution_with_axioms) : N → SM := fun y ↦ if y=x then sol.d₀ else sol.S' y
 
 lemma PartialSolution_with_axioms.new_S_x (sol : PartialSolution_with_axioms) : sol.new_S x = sol.d₀ := by simp only [↓reduceIte, new_S]
@@ -1609,8 +1606,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         use (R' (S (sol.S' y))).symm <| sol.L₀' <| R' 0 <| R' (sol.S' y) sol.x
         simp only [← h.1, sol.op_eval <| op_data.P₂ y' y hI hz, Finset.mem_union, Finset.mem_singleton,
           fill_union, Set.mem_union, R0_mem_fill_iff, true_and]
-        left
-        exact sol.I_triple.attains_in_range <| I_data.P₂ y' y hI hz
+        exact Or.inl <| sol.I_triple.attains_in_range <| I_data.P₂ y' y hI hz
     axiom_P := by
       intro x' y z hI
       obtain ⟨data, hdata⟩ := (sol.I_triple.in_range_iff_attains _).mp hI
@@ -1627,20 +1623,10 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
         by_contra hop
         obtain ⟨opdata, h⟩ := (sol.op_embed.in_range_iff_attains _).mp hop
         cases opdata with
-        | old y'' z'' hop' =>
-          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
-          rw [h.1, h.2] at hop'
-          exact this.2.1 hop'
-        | v =>
-          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
-          simp only [← h.2, ← h.1, ne_eq, not_true_eq_false, false_and, and_false] at this
-        | P₁ y'' z'' hI'' =>
-          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
-          exact hxx' h.2
-        | P₂ y'' z'' hI'' hz' =>
-          simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
-          rw [h.2] at hz'
-          exact this.1 hz'
+        | old y'' z'' hop' => aesop
+        | v => aesop
+        | P₁ y'' z'' hI'' => aesop
+        | P₂ y'' z'' hI'' hz' => aesop
       | P₁ y' z' hI hz =>
         simp only [ne_eq, Function.Embedding.coeFn_mk, Prod.mk.injEq] at hdata
         simp only [← hdata.2.2, hdata.1] at hz hI ⊢
@@ -1655,16 +1641,9 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
             simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             rw [h.1, h.2] at hop'
             exact sol.invis_lemma y' x' (sol.dom_op_involved sol.extras hop').1
-          | v =>
-            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
-            simp only [← h.2, ne_eq, not_true_eq_false, false_and, and_false] at this
-          | P₁ y'' z'' hI'' =>
-            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
-            exact this.2.2.1 h.2.symm
-          | P₂ y'' z'' hI'' hz' =>
-            simp [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
-            rw [h.2] at hz'
-            exact hz hz'
+          | v => aesop
+          | P₁ y'' z'' hI'' => aesop
+          | P₂ y'' z'' hI'' hz' => aesop
         · replace hI := (sol.I_involved sol.extras hI).2.2
           by_contra h
           rw [← h] at hI
