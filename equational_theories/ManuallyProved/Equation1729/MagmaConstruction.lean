@@ -1864,7 +1864,6 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       have hSad₀_neq_ad₀ {c:SM} (hc: (R' c) x = sol.y₀)  : S c + S sol.d₀ ≠ c - sol.d₀ := by
         convert hS_neq_ad₀ hc (c - sol.d₀) using 1
         simp only [S_sub]
-
       apply_fun R' (S a') at this
       rw [hn] at this
       rcases b
