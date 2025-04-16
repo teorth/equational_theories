@@ -179,6 +179,19 @@ Finite graph:
     )
 
     outfile.write("## Progress visualization\n\n")
-    outfile.write('<img src="{{site.url}}/dashboard/outcomes.png" width="700"/>')
-
+    outfile.write('<div id="progress-status"></div>\n')
+    outfile.write('<div id="progress-container" style="width:700px;height:700px;position:relative;background:white;"></div>\n')
+    outfile.write("""
+<script src="{{site.url}}/processwidget/processwidget.js"></script>
+<script>
+progresswidget({
+  container: 'progress-container',
+  statusbar: 'progress-status',
+  small: '{{site.url}}/progresswidget/thumbnail.jpg',
+  full: '{{site.url}}/dashboard/outcomes.png',
+  eqdb: '{{site.url}}/fme/eqdb.json'
+});
+</script>
+\n\n"""
+    )
     open(args.badge_file, "w").write(make_progress_badge(hist_general["ratio"]))
