@@ -21,8 +21,8 @@ When a pixel is selected, the widget opens a proof.
 */
 
 function progresswidget({ container, statusbar, small, full, eqdb }) {
-  // fixme: this should be a worker or at least async, see fme
   let equations = null;
+
   fetch(eqdb)
     .then(r => r.json())
     .then(json => {
@@ -48,7 +48,6 @@ function progresswidget({ container, statusbar, small, full, eqdb }) {
   const magCtx = magnifier.getContext('2d');
   target.appendChild(magnifier);
 
-  // create a pulsing animation to indicate that this is loading
   const loading = document.createElement('div');
   loading.style.position = 'absolute';
   loading.style.inset = '0';
@@ -57,6 +56,10 @@ function progresswidget({ container, statusbar, small, full, eqdb }) {
   loading.style.animation = 'pulse 2s infinite';
   loading.style.zIndex = 5;
   target.appendChild(loading);
+
+  const proofLink = document.createElement('a');
+  proofLink.target = '_blank';
+  proofLink.rel = 'noreferrer';
 
   const style = document.createElement('style');
   style.textContent = `
@@ -99,7 +102,6 @@ function progresswidget({ container, statusbar, small, full, eqdb }) {
   }
   window.addEventListener('resize', resizeCanvas);
 
-  // load both the small and large outcomes image
   displayImg.onload = () => {
     loading.remove();
     resizeCanvas();
@@ -122,9 +124,11 @@ function progresswidget({ container, statusbar, small, full, eqdb }) {
     }
     displayImg.src = small;
   };
-  fullImg.src = full;
 
-  // main magnifier functionality
+  setTimeout(() => {
+    fullImg.src = full;
+  }, 0);
+
   function getPixelStatus(x, y) {
     return statusBuffer[y * fullImg.width + x];
   }
@@ -140,22 +144,36 @@ function progresswidget({ container, statusbar, small, full, eqdb }) {
     if (snappedX !== lastX || snappedY !== lastY) {
       lastX = snappedX;
       lastY = snappedY;
+
       const status = getPixelStatus(snappedX, snappedY);
       const eqnX = `[${snappedX + 1}] ${equations[snappedX]}`;
       const eqnY = `${equations[snappedY]} [${snappedY + 1}]`;
-      let txt = `Select an equation below.`;
-      let explictness = "";
-      if (status === 'implicit_true') txt = `${eqnX} ⇒ ${eqnY}`;
-      if (status === 'implicit_false') txt = `${eqnX} ⇏ ${eqnY}`;
-      if (status === 'explicit_true') {
-        txt = `${eqnX} ⇒ ${eqnY}`;
-        explictness = " (explicit proof)";
+
+      statusDiv.textContent = "";
+      proofLink.href = `https://teorth.github.io/equational_theories/implications/show_proof.html?pair=${snappedX + 1},${snappedY + 1}`;
+      if (status === 'implicit_true') {
+        statusDiv.append(`${eqnX} ⇒ ${eqnY} - `);
+        proofLink.textContent = 'proof';
+        statusDiv.appendChild(proofLink);
       }
-      if (status === 'explicit_false') {
-        txt = `${eqnX} ⇏ ${eqnY}`;
-        explictness = " (explicit countermodel)";
+      else if (status === 'explicit_true') {
+        statusDiv.append(`${eqnX} ⇒ ${eqnY} - `);
+        proofLink.textContent = 'explicit proof';
+        statusDiv.appendChild(proofLink);
       }
-      statusDiv.textContent = txt + explictness;
+      else if (status === 'implicit_false') {
+        statusDiv.append(`${eqnX} ⇏ ${eqnY} - `);
+        proofLink.textContent = 'countermodel';
+        statusDiv.appendChild(proofLink);
+      }
+      else if (status === 'explicit_false') {
+        statusDiv.append(`${eqnX} ⇏ ${eqnY} - `);
+        proofLink.textContent = 'explicit countermodel';
+        statusDiv.appendChild(proofLink);
+      }
+      else {
+        statusDiv.textContent = `Select an equation below.`;
+      }
     }
 
     magCtx.clearRect(0, 0, MAG_SIZE, MAG_SIZE);
@@ -189,20 +207,11 @@ function progresswidget({ container, statusbar, small, full, eqdb }) {
     magnifier.style.top = `${virtualY - MAG_SIZE / 2}px`;
   }
 
-  function openProof(x, y) {
-    const a = document.createElement('a');
-    a.href = `https://teorth.github.io/equational_theories/implications/show_proof.html?pair=${x},${y}`;
-    a.rel = 'noreferrer';
-    a.target = '_blank';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-
   target.addEventListener('click', (e) => {
+    if (!equations) return;
+
     const rect = canvas.getBoundingClientRect();
     if (document.pointerLockElement !== canvas) {
-      // first click opens magnifier (tries to get in the right ballpark)
       rawX = e.clientX - rect.left;
       rawY = e.clientY - rect.top;
       rawX = clamp(rawX, 0, canvas.width);
@@ -211,10 +220,7 @@ function progresswidget({ container, statusbar, small, full, eqdb }) {
       virtualY = rawY;
       canvas.requestPointerLock();
     } else {
-      // click when the magnifier is open takes you to proof
-      const x = Math.floor(virtualX * scaleX);
-      const y = Math.floor(virtualY * scaleY);
-      openProof(x + 1, y + 1);
+      document.exitPointerLock();
     }
   });
 

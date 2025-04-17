@@ -178,11 +178,22 @@ Finite graph:
 \n\n"""
     )
 
-    outfile.write("## Progress visualization\n\n")
+    outfile.write("""
+## Progress visualization
+
+The image below visualizes the full implication graph from the
+Equational Theories Project.
+
+Each pixel indicates the relationship between two laws: A blue pixel means the
+first (horizontal coordinate) implies the second (vertical). Red means it does
+not. Bright colors mark explicit proofs or countermodels; darker shades mean
+the result follows indirectly. Click to magnify or select implications.
+
+\n\n""")
     outfile.write('<div id="progress-status"></div>\n')
     outfile.write('<div id="progress-container" style="width:700px;height:700px;position:relative;background:white;"></div>\n')
     outfile.write("""
-<script src="{{site.url}}/processwidget/processwidget.js"></script>
+<script src="{{site.url}}/progresswidget/progresswidget.js"></script>
 <script>
 progresswidget({
   container: 'progress-container',
