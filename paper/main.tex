@@ -21,6 +21,14 @@
 \usepackage{fancyvrb}
 \fvset{commandchars=\\\{\}}
 \usepackage{pmboxdraw}
+\usetikzlibrary{positioning,arrows.meta,fit}
+
+\tikzset{
+  human/.style   = {->, very thick, color=black, shorten >=2pt},
+  auto/.style    = {->, thin, dashed, color=black!60, shorten >=2pt},
+  semi/.style    = {->, thick, dash pattern=on 4pt off 2pt on 1pt off 2pt, color=black!80, shorten >=2pt}
+}
+
 
 % Page Setup
 \geometry{letterpaper, margin=1in}
