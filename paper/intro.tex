@@ -98,6 +98,56 @@ In the course of completing the implication graph, some interesting new algebrai
 
 The objective of using the data from the ETP to establish well-calibrated benchmarks to evaluate ATPs remains an interesting open problem; the participants of this project did not have the required expertise to develop and test such benchmarks to the standards expected in the area.  However, in \Cref{automated-sec} we present a more informal ``field report'' of our experiences using ATPs in the project, in the hope that this will provide some useful guidance to other researchers seeking to incorporate ATPs into their own research.
 
+\begin{figure}
+\centering
+\begin{tikzpicture}[
+    >=Latex,
+    node distance=1.5cm,
+    every node/.style={draw, rectangle, align=center},
+    label/.style={font=\bfseries}
+  ]
+
+  %% Column labels
+  \node[label] (ghlabel)   at (0,2) {GitHub};
+  \node[label] (zuliplabel) at (6,2) {Lean Zulip};
+
+  %% GitHub nodes
+  \node (blueprint)   {Blueprint};
+  \node (formal)     [below=of blueprint] {Lean formalization};
+  \node (viz)        [below=of formal]    {Visualization tools};
+
+  %% Lean Zulip nodes
+  \node (hproofs)    [right=of blueprint]       {Human‑generated proofs};
+  \node (cproofs)    [below right=of hproofs]         {Computer‑generated proofs};
+  \node (hdisc)      [below left=of cproofs]         {Human discussion};
+
+  %% External ATP box
+  \node (atp)        [right=of cproofs]         {ATPs and other\\external software tools};
+
+  %% Grouping boxes
+  % GitHub container
+  \node[draw,dotted,inner sep=8pt,fit=(blueprint)(formal)(viz), label=above:GitHub]
+    (ghbox) {};
+  % Lean Zulip container
+  \node[draw,dotted,inner sep=8pt,fit=(hproofs)(cproofs)(hdisc), label=above:Lean Zulip]
+    (zulipbox) {};
+
+  %% Arrows
+  \draw[human,->] (blueprint)  -- (formal);
+  \draw[auto,->] (formal)     -- (viz);
+  \draw[human,->] (viz)        -- (hdisc);
+  \draw[human,->] (hdisc)      -- (atp);
+  \draw[auto,->] (atp)        -- (cproofs);
+  \draw[human,->] (cproofs)    -- (hproofs);
+  \draw[semi,->] (cproofs)    -- (formal);
+  \draw[human,<->] (hproofs)   -- (hdisc);
+  \draw[human,->] (hproofs)  -- (blueprint);
+  \draw[human,->] (hproofs)  -- (formal);
+
+\end{tikzpicture}
+\caption{Some of the main dynamics in which proofs were generated, discussed within the Lean Zulip channel and then formalized in the Github repository.  Boldface arrows indicate human activities, such as proposing an automated attack on outstanding implications, converting a computer-generated proof into a human-readable format, formalizing a human readable proof directly, or first creating a more precise blueprint for other collaborators to work on.  Dashed arrows indicate fully automated processes, while the partly dashed line indicated a semi-automated process requiring human supervision. {\bf figure out where to put this image and discuss it}}
+\label{fig:flow}
+\end{figure}
 
 \subsection{Further directions}
 
