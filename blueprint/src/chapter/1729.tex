@@ -14,196 +14,291 @@ for all $y \in SM$.
 
 We have the following procedure for extending a small magma $SM$ obeying \Cref{1729} to a larger one $M$:
 
-\begin{theorem}[Extending a 1729 magma]\label{mag}  Let $SM$ be a magma obeying 1729, and let $N$ be another set disjoint from $SM$, and set $M := SM \uplus N$.  Suppose that we have a squaring map $S: N \to SM$, and bijections $L_a, R_a: N \to N$ for all $a \in SM$ (which, by abuse of notation, we will denote with the same symbols as the squaring map $S$ and left and right multiplication operators $L_a,R_a$ on $SM$), obeying the following axioms:
+\begin{theorem}[Extending a 1729 magma]\label{mag}  Let $SM$ be a magma obeying 1729, and let $N$ be another set disjoint from $SM$, and set $M := SM \uplus N$.  Suppose that we have a squaring map $S': N \to SM$ (which will complement the existing squaring map $S: SM \to SM$), and bijections $L'_a, R'_a: N \to N$ for all $a \in SM$ (which will complement the existing bijections $L_a, R_a: SM \to SM$ coming from $SM$), obeying the following axioms:
   \begin{itemize}
-  \item (i) For all $a \in SM$, we have $L_a = R_a^{-1} L_{Sa}^{-1}$.
-  \item (ii) For all $y \in N$, the elements $R_a y \in N$ are distinct from each other and from $y$ as $a \in SM$ varies.
-  \item (iii)  If $R_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $L_{Sy} L_{R_{Sx}^{-1} a} y = x$.
-  \item (iv)  For all $x \in N$, we have $L_{Sx}^2 x = x$.
+  \item (i) For all $a \in SM$, we have $L'_a = (R'_a)^{-1} (L'_{Sa})^{-1}$.
+  \item (ii) For all $y \in N$, the elements $R'_a y \in N$ are distinct from each other and from $y$ as $a \in SM$ varies.
+  \item (iii)  If $R'_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $L'_{S'y} L_{L_{S'x}^{-1} a} y = x$.
+  \item (iv)  For all $x \in N$, we have $(L'_{S'x})^2 x = x$.
   \end{itemize}
 Suppose also that we have an operation $\op': N \times N \to M$ obeying the following axioms:
 \begin{itemize}
-  \item (v)  For all $x \in N$, we have $x \op' x = Sx$.
-  \item (vi)  For all $y \in N$ and $a \in SM$, we have $R_a y \op' y = L_{Sy}^{-1} a$.
-  \item (vii)  For all $x,y \in N$ with $x \op' y$ not already covered by rules (iv) or (v), we have $x \op' y = z$ for some $z \in N$.  Furthermore, $z \op' x = L_{Sx}^{-1} y$.
+  \item (v)  For all $x \in N$, we have $x \op' x = S'x$.
+  \item (vi)  For all $y \in N$ and $a \in SM$, we have $R'_a y \op' y = L_{S'y}^{-1} a$.
+  \item (vii)  For all $x,y \in N$ with $x \op' y$ not already covered by rules (v) or (vi), we have $x \op' y = z$ for some $z \in N$.  Furthermore, $z \op' x = (L'_{S'x})^{-1} y$.
 \end{itemize}
 Then one can endow $M$ with an operation $\op'': M \times M \to M$ obeying 1729 defined as follows:
 \begin{itemize}
 \item  If $a,b \in SM$, then $a \op'' b = a \op b$.
-\item  If $a \in SM$ and $x \in N$, then $a \op'' b := L_a b$.
-\item  If $x \in N$ and $a \in SM$, then $b \op'' a := R_a b$.
+\item  If $a \in SM$ and $x \in N$, then $a \op'' b := L'_a b$.
+\item  If $x \in N$ and $a \in SM$, then $b \op'' a := R'_a b$.
 \item  If $x,y \in N$, then $x \op'' y := x \op' y$.
 \end{itemize}
-Furthermore, the 817 law $S^2 x \op'' x = x$ fails for any $x \in N$.
+Furthermore, the 817 law $x \op'' SS' x = x$ fails for any $x \in N$.
 \end{theorem}
 
-\begin{proof}  We need to show that $\op''$ verifies the law \Cref{1729}.  In the case when $x,y \in SM$, then the claim follows from the fact that $SM$ already obeyed this equation.  If $x$ was equal to an element $a \in SM$ and $y \in N$, then by construction the law is equivalent to $L_{Sa} R_a S_a y = y$, which follows from axiom (i).
+\begin{proof}  We need to show that $\op''$ verifies the law \Cref{1729}.  In the case when $x,y \in SM$, then the claim follows from the fact that $SM$ already obeyed this equation.  If $x$ was equal to an element $a \in SM$ and $y \in N$, then by construction the law is equivalent to $L'_{Sa} R'_a L'_a y = y$, which follows from axiom (i).
 
-Now suppose that $x \in N$ and $y$ is equal to some element $a$ of $SM$.  From axiom (v) we have $x \op'' x = Sx$, and then this case of \Cref{1729} becomes
-$$L_{Sx} ( R_a x \op' x ) = a$$
+Now suppose that $x \in N$ and $y$ is equal to some element $a$ of $SM$.  From axiom (v) we have $x \op'' x = S'x$, and then this case of \Cref{1729} becomes
+$$L_{S'x} ( R'_a x \op' x ) = a$$
 which follows from axiom (vi).  So the only remaining case is when $x,y \in N$.  Using axiom (ii), we can divide into cases:
 \begin{itemize}
-\item Case 1: $x=y$.  Then by (v) we need to show that $L_{Sx} L_{Sx} x = x$, which follows from axiom (iv).
-\item Case 2: $y = R_a x$ for some $a \in SM$.  Then by axiom (vi), we need to show that $L_{Sy} L_{L_{Sx}^{-1} a} y = x$, which follows from axiom (iii).
-\item Case 3: We are not in case 1 or case 2.  Then by axiom (vii), we have $y \op'' x = z$ for some $z \in N$ with $z \op'' y = L_{Sy}^{-1} x$.  But this implies $L_{Sy} (z \op'' y) = x$, which is \Cref{1729}.
+\item Case 1: $x=y$.  Then by (v) we need to show that $L'_{S'x} L'_{S'x} x = x$, which follows from axiom (iv).
+\item Case 2: $y = R'_a x$ for some $a \in SM$.  Then by axiom (vi), we need to show that $L'_{S'y} L'_{L_{S'x}^{-1} a} y = x$, which follows from axiom (iii).
+\item Case 3: We are not in case 1 or case 2.  Then by axiom (vii), we have $y \op'' x = z$ for some $z \in N$ with $z \op'' y = (L'_{S'y})^{-1} x$.  But this implies $L'_{S'y} (z \op'' y) = x$, which is \Cref{1729}.
 \end{itemize}
 
-We have now verified that $\op''$ obeys 1729.  For any $x \in N$, we have $x \op'' S^2 x = R_{S^2 x} x$, and so the final claim follows from axiom (ii).
+We have now verified that $\op''$ obeys 1729.  For any $x \in N$, we have $x \op'' SS' x = R'_{SS' x} x$, and so the final claim follows from axiom (ii).
 \end{proof}
 
 To build a magma obeying 1729 but not 817, it thus suffices to produce
 \begin{itemize}
   \item a 1729 magma $SM$;
   \item a set $N$ of ``non-squares'';
-  \item a squaring map $S: N \to SM$;
-  \item bijections $L_a, R_a: N \to N$ for all $a \in SM$ obeying the axioms (i)-(iv); and
-  \item an operation $\op': N \times N \to M$ obeying the axioms (v)-(vii).
+  \item a squaring map $S': N \to SM$;
+  \item bijections $L'_a, R'_a: N \to N$ for all $a \in SM$ obeying the axioms (i)-(iv); and
+  \item an operation $\op': N \times N \to SM \uplus N$ obeying the axioms (v)-(vii).
 \end{itemize}
 
-We will take $SM$ to be a countably infinite abelian group of exponent $4$, generated by generators $E_n$ for $n \in \N$ subject to the relations $4E_n=0$.   Here the squaring operation $S$ is just the doubling map $Sa = 2a$, and the double squaring map is constant: $S^2 a = 0$.
+The magma $SM$ is defined as follows:
 
-We take $N$ to be the free non-abelian group with one generator $e_a$ for each $a \in SM$, then this is a countable set that we view as disjoint from $SM$.  We do not attempt to define the squaring map $S: N \to SM$ at this point, but we define the right multiplication operators $R_a$ using the group action, setting
-\begin{equation}\label{ra-def}
-  R_a x = e_a x
-\end{equation}
-for all $a \in SM$ and $x \in N$.  Note that this automatically satisfies axiom (ii).  We view $N$ as an infinite Cayley graph rooted at the identity $1$, with all other elements of $N$ obtainable uniquely from $1$ by a finite path with edges $x \mapsto e_a x$.
+\begin{definition}[Definition of $SM$]\label{sm-def}\lean{Eq1729.SM}\leanok Take $SM$ to be a countably infinite abelian group of exponent $4$, generated by generators $E_n$ for $n \in \N$ subject to the relations $4E_n=0$.
+\end{definition}
 
-What about left multiplication?  From two applications of \Cref{lys} and the exponent 4 hypothesis we have
-$$ L_a = e_a^{-1} L_{2a}^{-1} = e_a L_0 e_{2a}^{-1}.$$
-(Here we abuse notation by identifying $e_a$ with the operation of left-multiplication by $e_a$.) Thus, once $L_0$ is specified, we can \emph{define} $L_a$ for all other $a \in SM$ by the rule
+\begin{lemma}[Basic properties of $SM$]\label{sm-1729}\lean{Eq1729.SM_square_eq_double, Eq1729.SM_square_square_eq_zero, Eq1729.SM_obeys_1729}\leanok $SM$ is a 1729 magma, the squaring operation $S: SM \to SM$ is just the doubling map $Sa = 2a$, and the double squaring map $S^2: SM \to SM$ is constant: $S^2 a = 0$ for all $a \in SM$.
+\end{lemma}
+
+\begin{proof}\leanok Routine verification.
+\end{proof}
+
+We now define $N$, as well as some Cayley graph structures on it.
+
+\begin{definition}[Definition of $N$]\label{n-def}\lean{Eq1729.N, Eq1729.N_order, Eq1729.parent}\leanok Take $N$ to be the free non-abelian group with a generator $e_a$ for each $a \in SM$, thus $N$ is the set of reduced words using the alphabet $e_a$, $e_a^{-1}$.  Two elements $x,y \in SM$ are said to be \emph{adjacent} if $x = e_a y$ or $y = e_a x$ for some $a \in SM$; this defines a left Cayley graph on $N$.  We make a partial ordering $\leq$ on $N$ by declaring $y \leq x$ if $y$ is a right subword of $x$ (or equivalently, $y$ is on the unique simple path from $1$ to $x$).  For instance, if $a,b,c \in SM$ are distinct, then
+  $$ 1 \leq e_c \leq e_b^{-1} e_c \leq e_a e_b^{-1} e_c.$$
+If $x \in N$ is not the identity, we define the \emph{parent} of $x$ to be the unique element $y \in N$ adjacent to $x$ whose reduced word is shorter.  For instance, the parent of $e_a e_b^{-1} e_c$ is $e_b^{-1} e_c$.
+\end{definition}
+
+\begin{lemma}[Basic properties of $N$]\label{n-prop}\uses{n-def}\lean{Eq1729.N_countable, Eq1729.N_order}\leanok  $N$ is countable, and $\leq$ is a partial ordering.
+\end{lemma}
+
+\begin{proof}\leanok Routine verification.
+\end{proof}
+
+We will define the right multiplication operators $R'_a: N \to N$ using the group action:
+
+\begin{definition}[Definition of $R'_a$]\label{ra-defn}\uses{sm-def, n-def}\lean{Eq1729.R'}\leanok We set
+  \begin{equation}\label{ra-def}
+    R'_a x := e_a x
+  \end{equation}
+  for all $a \in SM$ and $x \in N$.
+\end{definition}
+
+\begin{lemma}[Basic properties of $R'_a$]\label{ra-prop}\uses{ra-defn}\lean{Eq1729.R'_axiom_iia, Eq1729.R'_axiom_iib}\leanok  The operators $R'_a$ are bijective and obey axiom (ii).
+\end{lemma}
+
+\begin{proof}\leanok Routine verification.
+\end{proof}
+
+We defer construction of the squaring map $S': N \to SM$ for now, but turn to left-multiplication. From two applications of \Cref{lys} and the exponent 4 hypothesis we have
+$$ L'_a = (R'_a)^{-1} (L'_{2a})^{-1} = (R'_a)^{-1} L'_0 R'_{2a}.$$
+Thus, once $L'_0$ is specified, we can \emph{define} $L'_a$ for all other $a \in SM$ by the rule
 \begin{equation}\label{la0}
-  L_a := e_a L_0 e_{2a}^{-1}.
+  L'_a := (R'_a)^{-1} L'_0 R'_{2a}.
 \end{equation}
 Furthermore, from the $a=0$ case of \Cref{lys} we must also have the axiom
 \begin{itemize}
-  \item (i') $L_0^2 = e_0^{-1}$,
+  \item (i') $(L'_0)^2 = (R'_0)^{-1}$.
 \end{itemize}
-which also implies the $a=0$ case of \Cref{la0} (note that it implies $L_0$ commutes with $e_0$); note also that this axiom and the bijectivity of $e_0$ forces $L_0$ to be a bijection, and hence by \Cref{la0} all of the $L_a$ are bijections, so we can now drop the bijectivity requirements here.  We leave the function $L_0: N \to N$ unspecified for now, but observe that if axiom (i') is obeyed, one can use \Cref{la0} as a definition of $L_a$ for all other $a$, so that axiom (i) is now a consequence of axiom (i').  We also observe from \Cref{la0} and (i') that
+
+Conversely, we have
+
+\begin{lemma}[Using $L'_0$ to construct $L'_a$]\label{l0-la}\lean{Eq1729.L',Eq1729.L'_0_eq_L₀'}\leanok  Suppose we have a bijection $L'_0: N \to N$ that obeys axiom (i'), and then define $L'_a$ for all $a \in SM$ by the formula \eqref{la0}.  Then this recovers $L'_0$ when $a=0$ (to formalize this it may be convenient to give $L'_0$ and $L'_a$ distinct names), and the $L'_a$ are all bijections and obey axiom (i).  Furthermore, we have
 \begin{equation}\label{la1}
-  L_a^{-1} := e_{2a} L_0 e_0 e_{a}^{-1}.
+  (L'_a)^{-1} := (R'_{2a})^{-1} L'_0 R'_0 R'_{a}
 \end{equation}
+for all $a \in SM$.
+\end{lemma}
 
-We now write the other remaining axioms in terms of $L_0$ rather than $L_a$ using \Cref{la0}, \Cref{la1}, \Cref{ra-def}, and the magma law on $SM$:
+\begin{proof}\leanok Routine verification.
+\end{proof}
+
+We now write the other remaining axioms in terms of $L'_0$ rather than $L'_a$ using \Cref{la0}, \Cref{la1}, \Cref{ra-def}, and the magma law on $SM$:
 \begin{itemize}
-\item (iii')  If $e_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $e_{Sy} L_0 e_{2Sy}^{-1} e_{a - Sx} L_0 e_{2(R_{Sx}^{-1} a)}^{-1} y = x$.
-\item (iv')  For all $x \in N$, we have $e_{Sx} L_0 e_{2Sx}^{-1} e_{Sx} L_0 e_{2Sx} x = x$.
-\item (v)  For all $x \in N$, we have $x \op' x = Sx$.
-\item (vi')  For all $y \in N$ and $a \in SM$, we have $e_a y \op' y = a - Sy$.
-\item (vii')  For all $x,y \in N$ with $x \op' y$ not already covered by rules (iv) or (v), we have $x \op' y = z$ for some $z \in N$.  Furthermore, $z \op' x = e_{2Sx} L_0 e_0 e_{Sx} y$.
+\item (iii')  If $R'_a x = y$ for some $a \in SM$ and some $x,y \in N$, then $(R'_{S'y})^{-1} L'_0 R'_{2S'y} (R'_{a - S'x})^{-1} L'_0 R'_{2(a - S'x)} y = x$.
+\item (iv')  For all $x \in N$, we have $(R'_{S'x})^{-1} L'_0 R'_{2S'x} (R'_{S'x})^{-1} L'_0 R'_{2S'x} x = x$.
+\item (v)  For all $x \in N$, we have $x \op' x = S'x$.
+\item (vi')  For all $y \in N$ and $a \in SM$, we have $e_a y \op' y = a - S'y$.
+\item (vii')  For all $x,y \in N$ with $x \op' y$ not already covered by rules (v) or (v'), we have $x \op' y = z$ for some $z \in N$.  Furthermore, $z \op' x = (R'_{2S'x})^{-1} L'_0 e_0 e_{S'x} y$.
 \end{itemize}
 
-Our task is now to find a function $L_0: N \to N$ and an operation $\op': N \times N \to M$ obeying axioms (i'), (iii'), (iv'), (v), (vi'), (vii').
+\begin{lemma}[Reduction to new axioms]\label{axiom-reduce}\label{Eq1729.reduce_to_new_axioms}\leanok  Suppose we can find a function $S': N \to SM$, a bijection $L'_0: N \to N$, and an operation $\op': N \times N \to SM \uplus N$ obeying axioms (i'), (iii'), (iv'), (v), (vi'), (vii').  Then there exists a magma obeying 1729 but not 817.
+\end{lemma}
 
-We will again use a greedy construction for this, but with some modifications.  Firstly, the axiom (i') means that we cannot restrict $L_0$ to be partially defined on just finitely many values: any relation of the form
-$$ L_0 x = y$$
+\begin{proof}\uses{l0-la, ra-prop, mag}\leanok  Construct the $L'_a$ using \Cref{l0-la}.  By \Cref{ra-prop} and direct verification we can noe verify axioms (i)-(vii), and then the claim follows from \Cref{mag}.
+\end{proof}
+
+Our task is now to find a function $S': N \to SM$, a bijection $L'_0: N \to N$, and an operation $\op': N \times N \to M$ obeying axioms (i'), (iii'), (iv'), (v), (vi'), (vii').
+
+We will again use a greedy construction for this, but with some modifications.  Firstly, the axiom (i'), together with \eqref{ra-def} means that we cannot restrict $L'_0$ to be partially defined on just finitely many values: any relation of the form
+$$ L'_0 x = y$$
 for some $x,y \in N$ would automatically imply that
 \begin{equation}\label{itero}
- L_0 e_0^n x = e_0^n y
+ L'_0 (R'_0)^n x = (R'_0)^n y
 \end{equation}
 and also
 \begin{equation}\label{itero-2}
-  L_0 e_0^n y = e_0^{n-1} x
+  L'_0 (R'_0)^n y = (R'_0)^{n-1} x
 \end{equation}
-for all $n \in \Z$.  Thus, $L_0$ becomes defined on two right cosets $\langle e_0 \rangle x$, $\langle e_0 \rangle y$ of $N$, where $\langle e_0 \rangle := \{ e_0^n: n \in \Z\}$ is an infinite cyclic subgroup of $N$.  In general, we will require that $L_0$ is defined on a finite union of cosets of $\langle e_0\rangle$.
+for all $n \in \Z$.  Thus, $L'_0$ becomes defined on two right cosets $\langle e_0 \rangle x$, $\langle e_0 \rangle y$ of $N$, where $\langle e_0 \rangle := \{ e_0^n: n \in \Z\}$ is an infinite cyclic subgroup of $N$.  In general, we will require that $L'_0$ is defined on a finite union of cosets of $\langle e_0\rangle$.
 
-In a somewhat similar vein, axiom (vii'), if iterated naively, would mean that a given entry $x \op' y = z$ of the multiplication table could potentially generate an infinite sequence of further entries, which unfortunately do not have as regular a pattern as the iterations \Cref{itero}, \Cref{itero-2} of axiom (i').  So we will need to truncate this iteration by creating an addition category of ``pending'' identities of the form ``$z \op' x = e_{2Sx} L_0 e_0 e_{Sx} y$'' for some $x,y,z \in N$, which will be temporarily undefined because $Sx$ is undefined.
+In a somewhat similar vein, axiom (vii'), if iterated naively, would mean that a given entry $x \op' y = z$ of the multiplication table could potentially generate an infinite sequence of further entries, which unfortunately do not have as regular a pattern as the iterations \Cref{itero}, \Cref{itero-2} of axiom (i').  So we will need to truncate this iteration by creating an addition category of ``pending'' identities $I[x,y,z]$ of the form ``$z \op' x = (R'_{2S'x})^{-1} L'_0 R'_0 e_{S'x} y$'' for some $x,y,z \in N$, which will be temporarily undefined because $S'x$ is undefined. More precisely,
 
-More precisely, we define a \emph{partial solution} to consist of the following data:
+\begin{definition}[Partial solution]\label{part-sol}\uses{sm-def, n-def}\lean{Eq1729.PartialSolution}\leanok  A \emph{partial solution} $(L'_0, \op', S', {\mathcal I})$ is a collection of the following data:
 \begin{itemize}
-  \item A partially defined function $L_0: N \to N$, defined on a finite union of right cosets of $\langle R_0\rangle$;
+  \item A partially defined function $L'_0: N \to N$, defined on a finite union of right cosets of $\langle e_0\rangle$;
   \item A partially defined operation $\op': N \times N \to M$, defined on a finite set;
-  \item A partially defined function $S: N \to SM$, defined on a finite set;and
-  \item A finite collection of ``pending identities'', which are strings of the form ``$z \op' x = e_{2Sx} L_0 e_0 e_{Sx} y$'' for some $x,y,z \in N$.
+  \item A partially defined function $S': N \to SM$, defined on a finite set; and
+  \item A finite collection ${\mathcal  I}$ of ``pending identities'' $I[x,y,z]$, which one can think of either as ordered triples of elements $x,y,z \in N$, or as formal strings of the form ``$z \op' x = (R'_{2S'x})^{-1} L'_0 R'_0 R'_{S'x} y$'' for some $x,y,z \in N$.
 \end{itemize}
 
 Furthermore, the following axioms are satisfied:
 \begin{itemize}
-  \item (i'')  $L_0 x$ is defined and equal to $y$, then we have the identities \Cref{itero}, \Cref{itero-2} for all $n\in \Z$.
-  \item (S) If $Sx$ is defined for some $x \in N$, then $Sy$ is defined for all $y$ on the path in the Cayley graph connecting $1$ to $x$.
-  \item (iii'') If $e_a x = y$ for some $a \in SM$ and some $x,y \in N$, and $Sx, Sy$ are defined, then $e_{Sy} L_0 e_{2Sy}^{-1} e_{a-Sx} L_0 e_{2(a-Sx)}^{-1} y$ is defined and equal to $x$.
-  \item (iv'') If $x \in N$ is such that $Sx$ is defined, then $e_{Sx} L_0 e_{2Sx}^{-1} e_{Sx} L_0 e_{2Sx} x$ is defined and equal to $x$.
-  \item (v'')  If $x \in N$ and $x \op' x$ is defined, then $Sx$ is defined and equal to $x \op' x$.
-  \item (vi'')  For all $y \in N$ and $a \in SM$, if $e_a y \op' y$ is defined, then $a - Sy$ is defined and equal to $e_a y \op' y$.
-  \item (vii'')  For all $x,y \in N$ and $x$ is not equal to $y$ or $e_a y$ for any $a \in SM$, and $x \op' y$ is defined, then it is equal to some $z \in N$.  Furthermore, either ``$z \op' x = e_{2Sx} L_0 e_0 e_{Sx} y$'' is a pending identity, or else $z \op' x$ and $e_{2Sx} L_0 e_0 e_{Sx} y$ are defined and equal to each other.
-  \item (P) If ``$z \op' x = e_{2Sx} L_0 e_0 e_{Sx} y$'' is a pending identity, then $x,y,z \in N$, and $Sx$ and $z \op' x$ are undefined.  Furthermore, $z$ is not equal to $x$ or $e_a x$ for any $a \in SM$.
+  \item (i'')  $L'_0 x$ is defined and equal to $y$, then we have the identities \Cref{itero}, \Cref{itero-2} for all $n\in \Z$.
+  \item (S) If $S'x$ is defined for some $x \in N$, then $S'y$ is defined for all $y \leq x$.
+  \item (iii'') If $R'_a x = y$ for some $a \in SM$ and some $x,y \in N$, and $S'x, S'y$ are defined, then $(R'_{S'y})^{-1} L'_0 R'_{2S'y} (R'_{a-S'x})^{-1} L'_0 R'_{2(a-S'x)} y$ is defined and equal to $x$.
+  \item (iv'') If $x \in N$ is such that $S'x$ is defined, then $(R'_{S'x})^{-1} L'_0 R'_{2S'x} (R'_{S'x})^{-1} L'_0 R'_{2S'x} x$ is defined and equal to $x$.
+  \item (v'')  If $x \in N$ and $x \op' x$ is defined, then $S'x$ is defined and equal to $x \op' x$.
+  \item (vi'')  For all $y \in N$ and $a \in SM$, if $R'_a y \op' y$ is defined, then $a - S'y$ is defined and equal to $R'_a y \op' y$.
+  \item (vii'')  For all $x,y \in N$ and $x$ is not equal to $y$ or $R'_a y$ for any $a \in SM$, and $x \op' y$ is defined, then it is equal to some $z \in N$.  Furthermore, either $I[x,y,z]$ is a pending identity, or else $z \op' x$ and $(R'_{2S'x})^{-1} L'_0 R'_0 R'_{S'x} y$ are defined and equal to each other.
+  \item (P) If $I[x,y,z]$ is a pending identity, then $x,y,z \in N$, and $Sx$ and $z \op' x$ are undefined.  Furthermore, $z$ is not equal to $x$ or $R'_a x$ for any $a \in SM$, and $y$ is not of the form $(R'_0)^n x$ or $(R'_0)^n y_0$ for any $n$, where $y_0$ is the parent of $x$.
+  \item (P') If $I[x,y,z]$ and $I[x,y',z]$ are pending identities, then $y=y'$.
+  \item (P'') If $I[x,y,z]$ is a pending identity, then $x \op' y = z$.
+  \item (L) If $y$ is the parent of $x$ with $x = R'_a y$, and $(R'_{a-S'y})^{-1} L'_0 R'_{2(a-S'y)} x$ is defined, then it is not equal to $x$.
 \end{itemize}
 
-A trivial example of a partial solution is obtained by setting $L_0, \op', S$ to be empty functions, and to have an empty set pending identities.
+We say that one partial solution $(\tilde L'_0, \tilde \op', \tilde S', \tilde {\mathcal I})$ \emph{extends} another if $(L'_0, \op', S',  {\mathcal I})$ if $\tilde L'$ is an extension of $L'_0$, $\tilde \op'$ is an extension of $\op'$, and $\tilde S'$ is an extension of $S'$.  (No constraint is imposed on the final components $\tilde {\mathcal I}, {\mathcal I}$.)  This is a preordering.
+\end{definition}
+
+\begin{lemma}[Existence of partial solution]\label{partial-exist}\uses{part-sol}\lean{Eq1729.TrivialPartialSolution}\leanok  There exists a partial solution.
+\end{lemma}
+
+\begin{proof}\leanok Set $L'_0, \op', S'$ to be empty functions, and have the set of pending identities to also be empty.  The verification of the required axioms is then routine.
+\end{proof}
+
+\begin{lemma}[Chain of partial solutions]\label{chain}\uses{part-sol}\lean{Eq1729.use_chain}\leanok  Suppose that one has a sequence
+$(L'_{0,n}, \op'_{n}, S'_{n}, {\mathcal I}_n)$ of partial solutions, each one an extension of the previous, such that for any $x, y \in N$, $L'_{0,n} x$, $x \op'_{n} y$, and $S'_n x$ are defined for some $n$.  Then there exists a 1729 magma that does not obey 817.
+\end{lemma}
+
+\begin{proof}\uses{axiom-reduce}\leanok  Take the direct limit of the chain to obtain total functions $L'_0, \op', S'$.  The axioms (i'), (iii'), (iv''), (v''), (vi''), (vii'') of the partial solutions then easily imply that the direct limit obeys the axioms (i'), (iii'), (iv'), (v), (vi'), (vii') (one also uses axiom (P) to note that all pending identities disappear in the direct limit). The claim now follows from \Cref{axiom-reduce}.
+\end{proof}
+
 
 Now we seek to enlarge a partial solution. We first make an easy observation:
 
-\begin{proposition}[Enlarging $L_0$]\label{enlarge-l0}  Suppose one has a partial solution in which $L_0 x$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $L_0 x$ is now defined.
+\begin{proposition}[Enlarging $L'_0$]\label{enlarge-l0}\lean{Eq1729.enlarge_L₀'}\leanok  Suppose one has a partial solution in which $L'_0 x$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $L'_0 x$ is now defined.
 \end{proposition}
 
-\begin{proof}  By axiom (i''), $L_0 e_0^n x$ is undefined for every integer $n$.  Let $d = E_m$ be a generator of $SM$ that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution; such a $d$ exists due to the finiteness hypotheses.  We set $L_0 x := e_d$, and then extend by \Cref{itero}, \Cref{itero-2}, thus
-$$L_0 e_0^n x := e_0^n e_d$$
+\begin{proof} \leanok By axiom (i''), $L'_0 (R'_0)^n x$ is undefined for every integer $n$.  Let $d = E_m$ be a generator of $SM$ that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution; such a $d$ exists due to the finiteness hypotheses.  We set $L'_0 x := e_d$, and then extend by \Cref{itero}, \Cref{itero-2}, thus
+$$L'_0 (R'_0)^n x := (R'_0)^n e_d$$
 and
-$$L_0 e_0^n e_d := e_0^{n-1} x.$$
-Because of the new nature of $d$, no collisions in the partial function $L_0$ are created by this operation.  It is then easy to check that axiom (i'') is preserved by this operation, whereas none of the other axioms (S), (iii''), (iv''), (v''), (vi''), (vii''), (P) are affected by this extension.
+$$L'_0 (R'_0)^n e_d := (R'_0)^{n-1} x.$$
+Because of the new nature of $d$, no collisions in the partial function $L_0$ are created by this operation.  It is then easy to check that axiom (i'') is preserved by this operation, whereas none of the other axioms (S), (iii''), (iv''), (v''), (vi''), (vii''), (P), (P'), (P'') are affected by this extension.  With some effort, axiom (L) can also be verified.
 \end{proof}
 
-Next, we provide a tool for enlarging the domain of definition of $S$:
+As a corollary, we have
 
-\begin{proposition}[Enlarging $S$]\label{enlarge-S}  Suppose one has a partial solution in which $Sx$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $Sx$ is now defined.
+\begin{proposition}[Enlarging $L'_0$ many times]\label{enlarge-l0-many}\lean{Eq1729.enlarge_L₀'_multiple}\leanok  Suppose one has a partial solution.  Let $A$ be a finite subset of $N$.  Then one can extend the partial solution so that $L'_0 x$ is now defined for all $x \in A$.
 \end{proposition}
 
-\begin{proof} By iteration we may assume inductively that $Sy$ is already defined for all $y$ on the unique path in the Cayley graph from $1$ to $x$.  (This hypothesis is vacuous if $x=1$.)  Let $y_0$ be the parent of $x$, that is to say the unique neighbor of $x$ in the path to $1$ (this is only defined for $x \neq 1$), then by axiom (i'') $y_0$ is the unique neighbor for which $Sy_0$ is defined, and we either have $x = e_a y_0$ or $e_a x = y_0$ for some $a \in SM$.
+\begin{proof} \leanok \uses{enlarge-l0} Iterate Proposition \ref{enlarge-l0} in the obvious fashion.
+\end{proof}
 
-Let $d_0, d_1, d_2 \in SM$ be distinct generators $E_{n_0}, E_{n_1}, E_{n_2}$ of $SM$ that do not appear in the index $a$ of any $e_a$ that currently appears in the partial solution (of which there are only finitely many).  We also set some further distinct generators $d'_{y,z}, d''_{y,z} \in SM$ for $y,z \in SM$ that are distinct from each other and all previous generators (this is possible as we have infinitely many generators).  We set $Sx := e_{d_0}$; this preserves axiom (S).  In order to retain axiom (iv''), we now also set
-$$ L_0 e_{2d_0} x := e_{d_1}$$
-$$ L_0 e_{2e_{d_0}}^{-1} e_{Sx} e_{d_1} := e_{-d_0} x$$
+Next, we provide a tool for enlarging the domain of definition of $S'$.  The main step is the following inductive one with extra axioms.
+
+\begin{proposition}[Enlarging $S'$ with induction hypothesis and axioms]\label{enlarge-S-induct-axioms}\lean{Eq1729.enlarge_S'_induction_with_axioms}\leanok  Suppose one has a partial solution in which $S'x$ is undefined for some $x \in N$, but $S'y$ is defined for all $y < x$.  (This hypothesis is vacuous for $x=1$.) Let $y_0$ be the parent of $x$ (if $x \neq 1$), and assume the following additional axioms:
+  \begin{itemize}
+    \item (A) If $R'_a x = y_0$ for some $a \in SM$, then $L'_0 R'_{S' y_0} x$ is defined.
+    \item (B) If $x = R'_a y_0$ for some $a \in SM$, then $L'_0 R'_{2(a-S'y_0)} x$ is defined.
+    \item (C)  If $I[x,y,z]$ for some $y,z \in N$, and $S'z$ is defined, then $L'_0 R'_0 R'_{S'z} x$ is defined.
+    \end{itemize}
+  Then one can extend the partial solution so that $S'x$ is now defined.
+\end{proposition}
+
+\begin{proof}\leanok  Let $d_0, d_1 \in SM$ be generators $E_{n_0}$ of $SM$ that do not appear in the index $a$ of any $e_a$ that currently appears in the partial solution (of which there are only finitely many).  We also set some further distinct generators $d'_{y,z} \in SM$ for $y,z \in SM$ that are distinct from each other and all previous generators (this is possible as we have infinitely many generators).  We set $S'x,  x \op' x := d_0$; this preserves axiom (S) and (v'').  We set
+$$ L'_0 R'_{2d_0} x := e_{d_1}$$
+$$ L'_0 R'_{2d_0} (R'_{d_0})^{-1} e_{d_1} := R'_{d_0} x$$
 and then extend these choices using \Cref{itero}, \Cref{itero-2} to recover axiom (i'), thus for instance
-$$ L_0 e_0^n e_{2d_0} x := e_0^n e_{d_1}$$
+$$ L'_0 (R'_0)^n R'_{2d_0} x := (R'_0)^n e_{d_1}$$
 and
-$$ L_0 e_0^n e_{d_1} x := e_0^{n-1} e_{2d_0}$$
-for all $n \in \Z$.  To retain axiom (iii''), we perform the following actions:
+$$ L'_0 (R'_0)^n e_{d_1}  := (R'_0)^{n-1} R'_{2d_0} x$$
+for all $n \in \Z$.
+
+To retain axiom (iii''), we perform the following actions:
 \begin{itemize}
 \item If $y_0$ is undefined, do nothing.
-\item If $e_a x = y_0$ for some $a \in SM$, set $L_0 e_{2(a-d_0)}^{-1} y_0 := e_{d_2}$ and $L_0 e_{2Sy_0}^{-1} e_{a-d_0} e_{d_2} := e_{Sy_0}^{-1} x$.  Then extend using \Cref{itero}, \Cref{itero-2}.
-\item If $x = e_a y_0$ for some $a \in SM$, and $L_0 e_{2(a-Sy_0)}^{-1} x$ is already defined, set $L_0 e_{2d_0}^{-1} e_{a-Sy_0} L_0 e_{2(a-Sy_0)}^{-1} x :=e_{d_0}^{-1} x$, and extend using \Cref{itero}, \Cref{itero-2}.
-\item If $x = e_a y_0$ for some $a \in SM$, and $L_0 e_{2(a-Sy_0)}^{-1} x$ is not yet defined, set $L_0 e_{2(a-Sy_0)}^{-1} x := e_{d_2}$ and $L_0 e_{2d_0}^{-1} e_{a-Sy_0} e_{d_2} := e_{d_0}^{-1} x$, and extend using \Cref{itero}, \Cref{itero-2}.
+\item If $R'_a x = y_0$ for some $a \in SM$ (so that $L'_0 R'_{S'y_0} x$ is defined, by hypothesis (A)), set $L'_0 R'_{2(a-d_0)} y_0 := R'_{a-d_0} (R'_{2S'y_0})^{-1} R'_0 L'_0 R'_{S'y_0} x$. Then extend using \Cref{itero}, \Cref{itero-2}.
+\item If $x = R'_a y_0$ for some $a \in SM$ (so that $L'_0 R'_{2(a-Sy_0)} x$ is already defined, by hypothesis (B)), set $L'_0 R'_{2d_0} (R'_{a-S'y_0})^{-1} L'_0 R'_{2(a-Sy_0)} x :=R'_{d_0} y_0$, and extend using \Cref{itero}, \Cref{itero-2}.
 \end{itemize}
-To retain axiom (P), we perform the following actions for each pending identity of the form ``$z \op' x = e_{2Sx} L_0 e_0 e_{Sx} y$'' for some $y,z$, executed in some arbitrary order.
+To retain axiom (P), we perform the following actions for each pending identity of the form $I[x,y,z]$ for some $y,z$, executed in some arbitrary order.
 \begin{itemize}
-\item Remove this identity from the list of pending identities.
-\item Set $L_0 e_0 e_{d_0} y := e_{d'_{y,z}}$, and $x' \op y' = z'$, where $(x',y',z') := (z, x, e_{2d_0} e_{d'_{y,z}})$.
-\item If $Sx'$ is undefined, add ``$z' \op' x' = e_{2Sx'} L_0 e_0 e_{Sx'} y'$'' as a pending identity.
-\item If instead $Sx'$ is defined, but $L_0 e_0 e_{Sx'} y'$ is undefined, set $L_0 e_0 e_{Sx'} y' = e_{d''_{y,z}}$.  Then set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', e_{2Sx'} e_{d''_{y,z}})$.  Then add ``$z'' \op' x'' = e_{2Sx''} L_0 e_0 e_{Sx''} y''$'' as a pending identity.
-\item If instead $L_0 e_0 e_{Sx'} y'$ is defined, set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', e_{2Sx'} L_0 e_0 e_{Sx'} y')$.  Then add ``$z'' \op' x'' = e_{2Sx''} L_0 e_0 e_{Sx''} y''$'' as a pending identity.
-\item Extend all the new definitions of $L_0$ using \Cref{itero}, \Cref{itero-2}.
+\item Remove this identity $I[x,y,z]$ from the list of pending identities.
+\item Set $L'_0 R'_0 R'_{d_0} y := e_{d'_{y,z}}$, and $x' \op y' := z'$, where $(x',y',z') := (z, x, (R'_{2d_0})^{-1} e_{d'_{y,z}})$. Extend all the new definitions of $L'_0$ using \Cref{itero}, \Cref{itero-2}.
+\item If $S'x'$ is undefined, add $I[x',y',z']$ as a pending identity.
+\item If instead $S'x'$ is defined (which makes $L'_0 R'_0 R'_{S'x'} y'$ defined, by axiom (C)), set $x'' \op y'' = z''$, where $(x'',y'',z'') := (z', x', (R'_{2S'x'})^{-1} L'_0 R'_0 R'_{S'x'} y')$.  Then add $I[x'',y'',z'']$ as a pending identity.
 \end{itemize}
-One can check that these definitions do not cause any collisions in the partial function $L_0$, and that axioms (i'), (iii'), (iv''), (vii'), (P) are preserved; the remaining axioms (v''), (vi') are unaffected by this extension.
+One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (iii'), (iv''), (v''), (vii''), (P), (P'), (P'') are preserved; the remaining axiom (vi'') is unaffected by this extension.  Axiom (L) can also be shown to be preserved after a tedious calculation.
+\end{proof}
+
+
+
+\begin{proposition}[Enlarging $S'$ with induction hypothesis]\label{enlarge-S-induct}\lean{Eq1729.enlarge_S'_induction}\leanok  Suppose one has a partial solution in which $S'x$ is undefined for some $x \in N$, but $S'y$ is defined for all $y < x$.  (This hypothesis is vacuous for $x=1$.) Then one can extend the partial solution so that $S'x$ is now defined.
+\end{proposition}
+
+\begin{proof}
+  \uses{enlarge-l0-many,enlarge-S-induct-axioms}\leanok  Let $y_0$ be the parent of $x$, that is to say the unique neighbor of $x$ in the path to $1$ (this is only defined for $x \neq 1$), then by axiom (i'') $y_0$ is the unique neighbor for which $S'y_0$ is defined, and we either have $x = R'_a y_0$ or $R'_a x = y_0$ for some unique $a \in SM$.
+
+  By using \Cref{enlarge-l0-many}, we may impose axioms (A), (B), (C) without loss of generality, as this only imposes a finite set of conditions.  The claim now follows from \Cref{enlarge-S-induct-axioms}.
+\end{proof}
+
+
+As a corollary, we have
+
+\begin{proposition}[Enlarging $S'$]\label{enlarge-S}\lean{Eq1729.enlarge_S'}\leanok  Suppose one has a partial solution in which $S'x$ is undefined for some $x \in N$.  Then one can extend the partial solution so that $S'x$ is now defined.
+\end{proposition}
+
+\begin{proof}\uses{enlarge-S-induct}\leanok  Obtained by induction from Proposition \ref{enlarge-S-induct}, using the fact that there are no infinite descending chains in $N$.
 \end{proof}
 
 Finally, we give a tool for enlarging $\op$:
 
-\begin{proposition}[Enlarging $\op$]\label{enlarge-op}  Suppose one has a partial solution in which $x \op' y$ is undefined for some $x,y \in N$.  Then one can extend the partial solution so that $x \op' y$ is now defined.
+\begin{proposition}[Enlarging $\op$]\label{enlarge-op}\lean{Eq1729.enlarge_op}\leanok  Suppose one has a partial solution in which $x \op' y$ is undefined for some $x,y \in N$.  Then one can extend the partial solution so that $x \op' y$ is now defined.
 \end{proposition}
 
-\begin{proof}  By applying \Cref{enlarge-S} as needed, we may assume without loss of generality that $Sx$ and $Sy$ are already defined (among other things, this removes the possibility that $x \op' y$ is part of a pending identity).  If this makes $x \op' y$ defined, then we are done, so we may assume that this is not the case.
+\begin{proof}\uses{enlarge-S}\leanok  By applying \Cref{enlarge-S} as needed, we may assume without loss of generality that $S'x$ and $S'y$ are already defined (among other things, this removes the possibility that $x \op' y$ is part of a pending identity).  If this makes $x \op' y$ defined, then we are done, so we may assume that this is not the case.
+
+  Similarly, by using \Cref{enlarge-l0}, we may assume without loss of generality that  $L'_0 R'_0 R'_{S'x} y$ is defined.
 
 We now divide into cases:
 
-Case 1: $x=y$.  In this case we set $x \op' y := Sx$.  It is clear that this preserves axiom (v''), and no other axiom is impacted.
+Case 1: $x=y$.  In this case we set $x \op' y := S'x$.  It is clear that this preserves axiom (v''), and no other axiom is impacted.
 
-Case 2: If $x = e_a y$ for some $a \in SM$, then we set $x \op' y := a - Sy$.  This preserves axiom (vi''), and no other axiom is impacted.
+Case 2: If $x = R'_a y$ for some $a \in SM$, then we set $x \op' y := a - S'y$.  This preserves axiom (vi''), and no other axiom is impacted.
 
-Case 3: If $x$ is not equal to $y$ or $e_a y$ for any $a \in SM$.  Let $d_0, d_1 \in SM$ be a generator that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution.  We set $x \op' y := z$ with $z := e_{d_0}$.
+Case 3: If $x$ is not equal to $y$ or $R'_a y$ for any $a \in SM$.  Let $d_0 \in SM$ be a generator that does not appear as a component of any index of any of the generators $e_a$ appearing anywhere in the partial solution.  We set $x \op' y := z$ with $z := e^2_{d_0}$.
 
 This temporarily disrupts axiom (vii'').  To recover it, we perform the following actions.
 \begin{itemize}
-  \item If $L_0 e_0 e_{Sx} y$ is not currently defined, we set it equal to $e_{d_1}$, and extend by \Cref{itero}, \Cref{itero-2}.
-  \item Set $x' \op y' = z'$, where $(x',y',z') := (z, x, e_{2Sx} L_0 e_0 e_{Sx} y)$.
-  \item Add ``$z' \op' x' = e_{2Sx'} L_0 e_0 e_{Sx'} y'$'' as a pending identity.
+  \item Set $x' \op' y' = z'$, where $(x',y',z') := (z, x, (R'_{2S'x})^{-1} L_0 R'_0 R'_{Sx} y)$.
+  \item Add $I[x',y',z']$ as a pending identity.
 \end{itemize}
 
-One can check that these definitions do not cause any collisions in the partial function $L_0$, and that axioms (i'), (vii'), (P) are preserved; the remaining axioms (S), (iii''), (iv''), (v''), (vi'') are unaffected by this extension.
+One can check that these definitions do not cause any collisions in the partial function $L'_0$, and that axioms (i'), (vii'), (P), (P') are preserved; the remaining axioms (S), (iii''), (iv''), (v''), (vi'') are unaffected by this extension.
 \end{proof}
 
 
-\begin{theorem}[1729 does not imply 817]\label{1729_refute_817} There exists a magma that obeys equation 1729 but not equation 817.
+\begin{theorem}[1729 does not imply 817]\label{1729_refute_817}\lean{Eq1729.not_817}\leanok There exists a magma that obeys equation 1729 but not equation 817.
 \end{theorem}
 
-\begin{proof}
-  Applying the above propositions alternatingly, we can end up with a situation in which $S, \op', L_0$ are all total functions, which by axiom (P) ensures that no pending identities remain.  Invoking \Cref{mag}, we conclude the claim.
+\begin{proof}\uses{partial-exist, enlarge-l0, enlarge-S, enlarge-op,chain}\leanok
+  Starting from \Cref{partial-exist} and applying \Cref{enlarge-l0}, \Cref{enlarge-S}, \Cref{enlarge-op} alternatingly, one can find a chain of partial solution that are total in the limit.  The claim now follows from \Cref{chain}.
 \end{proof}

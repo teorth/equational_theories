@@ -47,7 +47,7 @@ noncomputable def adjoinFresh (m : ℕ) : ℕ ≃ ℕ ⊕ α where
     case inr => simp
 
 theorem adjoinFresh_fixed {m k: ℕ} (h : k  < m) :
-  adjoinFresh (α := α) m k = .inl k := by unfold adjoinFresh ; simp [h]
+  adjoinFresh (α := α) m k = .inl k := by unfold adjoinFresh; simp [h]
 
 theorem adjoinFresh_fixed' {m k: ℕ} (h : k  < m) :
-  (adjoinFresh (α := α ) m).symm (.inl k) = k := by unfold adjoinFresh ; simp [h]
+  (adjoinFresh (α := α ) m).symm (.inl k) = k := by unfold adjoinFresh; simp [h]

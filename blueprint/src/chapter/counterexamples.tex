@@ -9,6 +9,7 @@ Each magma can be used to establish anti-implications: if $\Gamma$ is the set of
   \item There are only $1410$ distinct cancellative magmas of order $5$ (up to isomorphism), and Mace4 can generate all of them in under 20 seconds. A shell script to do this is available \href{https://github.com/zaklogician/equational_theories/tree/cancellative_magmas/scripts/cancellative_magmas}{here}. A magma is cancellative if $xy=xz$ implies $y=z$ and $yx=zx$ implies $y=z$.
 \end{itemize}
 
+We also note that a systematic (computer-assisted) study of magmas of order $3$ was performed in \cite{berman-burris}, though with current computational resources it was feasible to iterate over all magmas of order up to $4$ by a brute force approach.
 
 Some other magmas have been used to establish counterexamples:
 \begin{itemize}
@@ -23,6 +24,6 @@ Some other magmas have been used to establish counterexamples:
   \item Cancellative magmas of orders 7 to 9, found by hand-guided search using various solvers.
   \item Two magmas of cardinality $8$ were \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/using.20z3/near/474918100}{constructed by Z3}.
   \item A large number of ad-hoc finite magmas were constructed using the Vampire theorem prover.  In some cases, inputting theoretical information is useful: see \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/478066872}{this discussion}.
-  \item Linear magmas $x\op y = ax+by$ on various fields, such as ${\mathbb F}_p$ for small primes $p$, have also been used to establish counterexamples.  One such choice is $(p,a,b) = (11,1,7)$. See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/An.20old.20new.20idea}{this discussion}.  For a noncommutative example, see \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/477928995.2E01}{this discussion}.
+  \item Linear magmas $x\op y = ax+by$ on various fields, such as ${\mathbb F}_p$ for small primes $p$, have also been used to establish counterexamples.  One such choice is $(p,a,b) = (11,1,7)$. See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/An.20old.20new.20idea}{this discussion}.  For a noncommutative example, see \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1/near/477928995.2E01}{this discussion}. For a more systematic exploration of the implications that can be obtained by both commutative and noncommutative linear models, see \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Non-commutative.20linear.20implications}{this discussion}.
   \item A variation of the translation-invariant magma construction which resolved the Asterix / Obelix anti-implication is used to show that \Cref{eq1661} does not imply \Cref{eq1657}.
 \end{itemize}

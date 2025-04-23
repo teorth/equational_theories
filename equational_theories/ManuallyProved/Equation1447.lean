@@ -28,7 +28,7 @@ notation "√" => square_roots
 
 omit hnofix in
 lemma square_roots_elem_iff_square_root (x y : M) :
-  y ∈ square_roots S x ↔ S y = x := by exact Set.mem_def
+  y ∈ square_roots S x ↔ S y = x := Set.mem_def
 
 -- which is disjoint from both `x` and `S x`.
 theorem elem_notin_square (x : M) : x ∉ square_roots S x := by
@@ -128,7 +128,7 @@ lemma square_times_square_root_eq_elem' (x : M) :
 omit hnofix arbitraryRoot_root in
 theorem square_times_square_root_eq_elem {x y : M} (hsq : y ∈ square_roots S x):
   Magma.op (self:= instMagma S arbitraryRoot) (S x) y = x := by
-    have hsy : S y = x := by exact hsq
+    have hsy : S y = x := hsq
     rw [← hsy]
     exact square_times_square_root_eq_elem' S arbitraryRoot y
 
@@ -136,8 +136,8 @@ theorem square_times_square_root_eq_elem {x y : M} (hsq : y ∈ square_roots S x
 omit hnofix arbitraryRoot_root in
 theorem square_root_times_square_root_eq_elem {x y z : M} (hsqy : y ∈ square_roots S x) (hsqz : z ∈ square_roots S x):
   Magma.op (self:= instMagma S arbitraryRoot) y z = x := by
-    have hsy : S y = x := by exact hsqy
-    have hsz : S z = x := by exact hsqz
+    have hsy : S y = x := hsqy
+    have hsz : S z = x := hsqz
     simp only [Magma.op, magmaOp]
     split_ifs <;> try aesop
     -- · case pos  => exact hsqy

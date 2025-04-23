@@ -15,6 +15,20 @@
 \usepackage{mathrsfs}
 \usepackage{proof}
 \usepackage{todonotes}
+\usepackage{siunitx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fancyvrb}
+\fvset{commandchars=\\\{\}}
+\usepackage{pmboxdraw}
+\usetikzlibrary{positioning,arrows.meta,fit}
+
+\tikzset{
+  human/.style   = {->, very thick, color=black, shorten >=2pt},
+  auto/.style    = {->, thin, dashed, color=black!60, shorten >=2pt},
+  semi/.style    = {->, thick, dash pattern=on 4pt off 2pt on 1pt off 2pt, color=black!80, shorten >=2pt}
+}
+
 
 % Page Setup
 \geometry{letterpaper, margin=1in}
@@ -48,23 +62,26 @@
 \newcommand{\formaleq}{\simeq}
 \newcommand{\eps}{\varepsilon}
 \newcommand{\vdashfin}{\vdash_{\mathrm{fin}}}
+\newcommand{\nvdashfin}{\nvdash_{\mathrm{fin}}}
 \newcommand{\note}[1]{{\bf #1}}
 \newcommand{\Magma}{{\mathcal{M}}}
 \newcommand{\MagmaN}{{\mathcal{N}}}
+\newcommand{\Eq}[1]{\mathrm{E}#1}
+\newcommand{\TODO}[1]{\todo[inline]{#1}}
+
 
 % Title Information
 \title[Equational Theories Project]{The Equational Theories Project: Using Lean and GitHub to complete an implication graph in universal algebra}
-\author[Equational Theories Project contributors]{Matthew Bolan, Jose Brox, Mario Carneiro, Martin Dvo\v{r}\'ak, Andr\'es Goens, Harald Husum, Zoltan Kocsis, Alex Meiburg, Pietro Monticone, David Renshaw, J\'er\'emy Scanvic, Shreyas Srinivas, Terence Tao, Anand Rao Tadipatri, Vlad Tsyrklevich, Daniel Weber, Fan Zheng, ... (in Alphabetical Order)}
+\author[Equational Theories Project contributors]{Matthew Bolan, Jose Brox, Mario Carneiro, Martin Dvo\v{r}\'ak, Andr\'es Goens, Aaron Hill, Harald Husum, Zoltan Kocsis, Alex Meiburg, Pietro Monticone, Bernhard Reinke, David Renshaw, Cody Roux, Marcus Rossel, J\'er\'emy Scanvic, Shreyas Srinivas, Anand Rao Tadipatri, Terence Tao, Vlad Tsyrklevich, Daniel Weber, Fan Zheng}
 \date{\today}
 
 \begin{document}
 
 \begin{abstract}
   We report on the \emph{Equational Theories Project} (ETP), an online collaborative pilot project
-  to explore new ways to collaborate in mathematics with machine assistance. The project sought to
-  determine the implication graph between $4694$ equational laws on magmas, by a combination of
+  to explore new ways to collaborate in mathematics with machine assistance. The project successfully determined all $\num{22028942}$ edges of the implication graph between the $4694$ simplest equational laws on magmas, by a combination of
   human-generated and automated proofs, all validated by the formal proof assistant language
-  \emph{Lean}. \note{state key outcomes}
+  \emph{Lean}. As a result of this project, several new constructions of magmas obeying specific laws were discovered, and several auxiliary questions were also addressed, such as the effect of restricting attention to finite magmas.
 \end{abstract}
 
 \maketitle
@@ -82,7 +99,6 @@
 \input{higman}
 \input{ml}
 \input{GUI}
-\input{statistics}
 \input{data}
 \input{conclusions}
 

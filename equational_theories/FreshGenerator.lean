@@ -247,4 +247,42 @@ theorem forgetOld_old {S : Finset (FreeGroup α)} {x : FreeGroup α} (hxS : x �
   apply dropGenerators_generatorNames
   exact Finset.subset_biUnion_of_mem _ hxS
 
+noncomputable section
+
+/- This is a simpler version of the above, that only projects into a single dimension - of the
+freshGenerator. Calculation with numbers works a bit better with `simp` so this is easier to use
+if it's suitable. -/
+
+def projectFresh' (S : Finset (FreeGroup α)) (a : α) : Multiplicative ℤ :=
+  if a = freshGeneratorName S then (1 : ℤ) else (0 : ℤ)
+
+def projectFresh (S : Finset (FreeGroup α)) : FreeGroup α →* Multiplicative ℤ where
+  toFun x := FreeGroup.lift (projectFresh' S) x
+  map_one' := rfl
+  map_mul' := by intros; simp
+
+@[simp] theorem projectFresh_fresh {S : Finset (FreeGroup α)} : projectFresh S (freshGenerator S) = (1 : ℤ) := by
+  simp [projectFresh, projectFresh', freshGenerator]
+
+theorem projectFresh_old' {S : Finset (FreeGroup α)} (L : List (α × Bool)) :
+    generatorNames' L ⊆ S.biUnion generatorNames → projectFresh S (mk L) = 1 := by
+  induction L
+  case nil => simp [generatorNames', ← one_eq_mk]
+  case cons head _ ih =>
+    rw [← List.singleton_append]
+    intro hn
+    simp only [generatorNames', List.singleton_append] at hn
+    rw [← mul_mk, projectFresh, MonoidHom.map_mul, ← projectFresh, ih]
+    · have : head.1 ∈ S.biUnion generatorNames :=
+        Finset.singleton_subset_iff.mp $ Finset.union_subset_left hn
+      have : freshGeneratorName S ∉ S.biUnion generatorNames := (existsFreshGeneratorName S).choose_spec
+      simp [projectFresh, projectFresh']
+      by_cases head.2 <;> aesop
+    · exact Finset.union_subset_right hn
+
+theorem projectFresh_old {S : Finset (FreeGroup α)} {x} (h : x ∈ S) : projectFresh S x = 1 :=
+  mk_toWord (x := x) ▸ projectFresh_old' _ fun _ h' ↦ Finset.mem_biUnion.mpr ⟨x, h, h'⟩
+
+end
+
 end FreshGenerator
