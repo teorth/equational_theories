@@ -16,4 +16,4 @@
 \contentsline {todo}{throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''. Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.}{40}{section*.17}%
 \contentsline {todo}{Expand this sketch}{41}{section*.18}%
 \contentsline {todo}{report on Higman--Neumann laws}{41}{section*.19}%
-\contentsline {todo}{Describe how data was handled during the project and how it will be managed going forward.}{47}{section*.20}%
+\contentsline {todo}{Describe how data was handled during the project and how it will be managed going forward.}{48}{section*.20}%
