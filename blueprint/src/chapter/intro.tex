@@ -235,7 +235,7 @@ For integers $0 \le a \le b$ let $\fbox{E(a,b)}$ be the number of magma equation
 \item $E(0,0) = 2$.
 \item  If \fbox{$a\neq b$}:
 $$
-E(a,b) = \frac{1}{2} T(a)(T(a) - 1)\cdot \sum_{\substack{1 \le p \le a+1\\ 1 \le q \le b+1\\0\le s \le \min(p,q)}}
+E(a,b) = T(a)\cdot T(b) \cdot \sum_{\substack{1 \le p \le a+1\\ 1 \le q \le b+1\\0\le s \le \min(p,q)}}
 {a+1 \brace p} {b+1 \brace q} {p \choose s} {q \choose s} s! \ .
 $$
 \item If \fbox{$a= b > 0$}:
@@ -243,7 +243,7 @@ $$
 E(a,b) = \frac{1}{2} T(a)^2\cdot \sum_{\substack{1 \le p,q \le a+1\\ 0\le s \le \min(p,q)}}
 {a+1 \brace p} {a+1 \brace q} {p \choose s} \binom{q}{s} s! \\
 + \frac{1}{2} T(a) \cdot \sum_{\substack{1 \le p \le a+1\\ 0\le s \le p}}
-{a+1 \brace p}  \binom{p}{s} {\sf Idem}(s)\\
+{a+1 \brace p}  \binom{p}{s} {\sf Invol}(s)\\
 - T(a)\cdot \sum_{1\le p \le a+1}  {a+1 \brace p} \ .
 \end{multline*}
 \end{itemize}
@@ -254,9 +254,9 @@ T(n) \coloneq \frac{1}{n+1} \cdot \binom{2n}{n}
 $$
 counts the number of plane binary trees of order $n$, and.
 $$
-{\sf Idem}(n) = \sum_{0 \leq k \leq \lfloor n/2 \rfloor}  {n\choose 2k} (2k-1)!!
+{\sf Invol}(n) = \sum_{0 \leq k \leq \lfloor n/2 \rfloor}  {n\choose 2k} (2k-1)!!
 $$
-counts the number of idempotent bijections on $n$ elements.
+counts the number of involutions on $n$ elements.
 
 The number of magma equations of order $n$ (under the given constraints) is then equal to
 $$\sum_{0 \le a \le \lfloor n/2 \rfloor } E(a,n-a) .
