@@ -242,21 +242,21 @@ $$
 \begin{align*}
 E(a,b) = \frac{1}{2} T(a)^2\cdot \sum_{\substack{1 \le p,q \le a+1\\ 0\le s \le \min(p,q)}}
 {a+1 \brace p} {a+1 \brace q} {p \choose s} \binom{q}{s} s! \\
-+ \frac{1}{2} T(a) \cdot \sum_{\substack{1 \le p \le a+1\\ 0\le s \le p}}
-{a+1 \brace p}  \binom{p}{s} {\sf Idem}(s)\\
-- T(a)\cdot \sum_{1\le p \le a+1}  {a+1 \brace p} \ .
+&\quad + \frac{1}{2} T(a) \cdot \sum_{\substack{1 \le p \le a+1\\ 0\le s \le p}}
+{a+1 \brace p}  \binom{p}{s} {\sf Invol}(s)\\
+&\qquad - T(a)\cdot \sum_{1\le p \le a+1}  {a+1 \brace p} \ .
 \end{align*}
 \end{itemize}
 
 Here the {\it Stirling numbers $n \brace m$ of the second kind} count the number of ways to partition a set of $n$ elements into $m$ non-empty subsets,
 $$
-T(n) \coloneq \frac{1}{n+1} \cdot \binom{2n}{n}
+T(n) = \frac{1}{n+1} \cdot \binom{2n}{n}
 $$
 counts the number of plane binary trees of order $n$, and.
 $$
-{\sf Idem}(n) = \sum_{0 \leq k \leq \lfloor n/2 \rfloor}  {n\choose 2k} (2k-1)!!
+{\sf Invol}(n) = \sum_{0 \leq k \leq \lfloor n/2 \rfloor}  {n\choose 2k} (2k-1)!!
 $$
-counts the number of idempotent bijections on $n$ elements.
+counts the number of involutions on $n$ elements.
 
 The number of magma equations of order $n$ (under the given constraints) is then equal to
 $$\sum_{0 \le a \le \lfloor n/2 \rfloor } E(a,n-a) .
