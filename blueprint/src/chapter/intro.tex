@@ -236,25 +236,25 @@ For integers $0 \le a \le b$ let $\fbox{E(a,b)}$ be the number of magma equation
 \item  If \fbox{$a\neq b$}:
 $$
 E(a,b) = T(a)\cdot T(b) \cdot \sum_{\substack{1 \le p \le a+1\\ 1 \le q \le b+1\\0\le s \le \min(p,q)}}
-\genfrac\{\}{0pt}{}{a+1}{p} \genfrac\{\}{0pt}{}{b+1}{q} \binom{p}{s} \binom{q}{s} s! \ .
+\left\{\substack{a+1\\p}\right\} \left\{\substack{b+1\\q}\right\} \binom{p}{s} \binom{q}{s} s! \ .
 $$
 \item If \fbox{$a= b > 0$}:
 \begin{align*}
 E(a,b) &= \frac{1}{2} T(a)^2\cdot \sum_{\substack{1 \le p,q \le a+1\\ 0\le s \le \min(p,q)}}
-\genfrac\{\}{0pt}{}{a+1}{p} \genfrac\{\}{0pt}{}{a+1}{q}\binom{p}{s} \binom{q}{s} s! \\
+\left\{\substack{a+1\\p}\right\} \left\{\substack{a+1\\q}\right\}\binom{p}{s} \binom{q}{s} s! \\
 &\quad + \frac{1}{2} T(a) \cdot \sum_{\substack{1 \le p \le a+1\\ 0\le s \le p}}
-\genfrac\{\}{0pt}{}{a+1}{p}  \binom{p}{s} {\sf Invol}(s)\\
-&\qquad - T(a)\cdot \sum_{1\le p \le a+1}  \genfrac\{\}{0pt}{}{a+1}{p} \ .
+\left\{\substack{a+1\\p}\right\}  \binom{p}{s} {\sf Invol}(s)\\
+&\qquad - T(a)\cdot \sum_{1\le p \le a+1}  \left\{\substack{a+1\\p}\right\} \ .
 \end{align*}
 \end{itemize}
 
-Here the {\it Stirling numbers $\genfrac\{\}{0pt}{}{n}{m}$ of the second kind} count the number of ways to partition a set of $n$ elements into $m$ non-empty subsets,
+Here the {\it Stirling numbers $\left\{\substack{n\\m}\right\}$ of the second kind} count the number of ways to partition a set of $n$ elements into $m$ non-empty subsets,
 $$
 T(n) = \frac{1}{n+1} \cdot \binom{2n}{n}
 $$
 counts the number of plane binary trees of order $n$, and.
 $$
-{\sf Invol}(n) = \sum_{0 \leq k \leq \lfloor n/2 \rfloor}  {n\choose 2k} (2k-1)!!
+{\sf Invol}(n) = \sum_{0 \leq k \leq \lfloor n/2 \rfloor}  \binom{n}{2k} (2k-1)!!
 $$
 counts the number of involutions on $n$ elements.
 
