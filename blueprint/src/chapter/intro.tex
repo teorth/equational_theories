@@ -227,7 +227,7 @@ Finally, we order (and reduce) equations of the form $w \formaleq w'$ as follows
 \item (iv) Any trivial equation $w \formaleq w$, other than the order zero law $0 \formaleq 0$, is discarded.
 \end{itemize}
 
-\subsection{Alternate formula}
+\section{Alternate formula}
 
 For integers $0 \le a \le b$ let $\fbox{E(a,b)}$ be the number of magma equations $t_1 = t_2$ with $t_1$ of order $a$, $t_2$ of order $b$, counting up to relabelling, up to switching terms, and only allowing the equation $x=x$ of the form $t=t$.  Then one has
 
@@ -236,19 +236,19 @@ For integers $0 \le a \le b$ let $\fbox{E(a,b)}$ be the number of magma equation
 \item  If \fbox{$a\neq b$}:
 $$
 E(a,b) = T(a)\cdot T(b) \cdot \sum_{\substack{1 \le p \le a+1\\ 1 \le q \le b+1\\0\le s \le \min(p,q)}}
-{a+1 \brace p} {b+1 \brace q} {p \choose s} {q \choose s} s! \ .
+\genfrac\{\}{0pt}{}{a+1}{p} \genfrac\{\}{0pt}{}{b+1}{q} \binom{p}{s} \binom{q}{s} s! \ .
 $$
 \item If \fbox{$a= b > 0$}:
 \begin{align*}
 E(a,b) &= \frac{1}{2} T(a)^2\cdot \sum_{\substack{1 \le p,q \le a+1\\ 0\le s \le \min(p,q)}}
-{a+1 \brace p} {a+1 \brace q} {p \choose s} \binom{q}{s} s! \\
+\genfrac\{\}{0pt}{}{a+1}{p} \genfrac\{\}{0pt}{}{a+1}{q}\binom{p}{s} \binom{q}{s} s! \\
 &\quad + \frac{1}{2} T(a) \cdot \sum_{\substack{1 \le p \le a+1\\ 0\le s \le p}}
-{a+1 \brace p}  \binom{p}{s} {\sf Invol}(s)\\
-&\qquad - T(a)\cdot \sum_{1\le p \le a+1}  {a+1 \brace p} \ .
+\genfrac\{\}{0pt}{}{a+1}{p}  \binom{p}{s} {\sf Invol}(s)\\
+&\qquad - T(a)\cdot \sum_{1\le p \le a+1}  \genfrac\{\}{0pt}{}{a+1}{p} \ .
 \end{align*}
 \end{itemize}
 
-Here the {\it Stirling numbers $n \brace m$ of the second kind} count the number of ways to partition a set of $n$ elements into $m$ non-empty subsets,
+Here the {\it Stirling numbers $\genfrac\{\}{0pt}{}{n}{m}$ of the second kind} count the number of ways to partition a set of $n$ elements into $m$ non-empty subsets,
 $$
 T(n) = \frac{1}{n+1} \cdot \binom{2n}{n}
 $$
