@@ -129,7 +129,7 @@ elab "finOpTable" str:str :term => do
   let table := toExpr (matrix.map rowToNat)
   let istable := mkApp2 (mkConst ``IsTable) (mkLit (.natVal matrix.length)) table
   let mv ← mkFreshExprMVar istable
-  discard <| withCurrHeartbeats <| Tactic.run mv.mvarId! do Lean.Elab.Tactic.evalTactic (← `(tactic| decide!))
+  discard <| withCurrHeartbeats <| Tactic.run mv.mvarId! do Lean.Elab.Tactic.evalTactic (← `(tactic| decide +kernel))
   return mkApp3 (mkConst ``extractWrapper) (mkLit (.natVal matrix.length)) table (← instantiateMVars mv)
 
 end MemoFinOp
