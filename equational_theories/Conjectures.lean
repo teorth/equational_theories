@@ -7,18 +7,6 @@ import Mathlib.Data.Set.Finite.Basic
 
 namespace Conjectures
 
-/- Some conjectures from https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/1076.20!.3D.3E.203/near/476293108 -/
-
-/-- See https://leanprover.zulipchat.com/user_uploads/3121/ASjTo5huToAvNGcg7pOGOOSy/Equation1692.pdf -/
-@[equational_result]
-conjecture Equation1692_facts : ∃ (G : Type) (_ : Magma G), Facts G [1692] [47, 1832, 2441, 3050, 3456, 4065]
-
-
-
-/--  https://teorth.github.io/equational_theories/blueprint/1729-chapter.html -/
-@[equational_result]
-conjecture Equation1729_facts : ∃ (G : Type) (_ : Magma G), Facts G [1729] [817]
-
 
 /- Finite conjectures follow -/
 
