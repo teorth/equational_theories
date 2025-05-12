@@ -320,40 +320,33 @@ lemma lem_fixf_implies_eq2 {G: Type*} [Magma G] (h: Equation1689 G)
     (hfixf: ∀ b : G, ∃ c : G, f b c = b) : Equation2 G := by
   have fproj (a b : G) : f a b = b := by
     obtain ⟨c, hfbc⟩ := hfixf b
-    simp [f] at hfbc
+    unfold f at hfbc
     exact (hfbc ▸ (h b a c)).symm
-  have eq30 (a b c : G) : a = (b ◇ a) ◇ c := by
-    rw [← fproj a c, ← h a b c]
-  have eq6 (a b : G) : a = b ◇ b := by
-    rw [eq30 a (a ◇ b) b, ← eq30 b a a]
-  intro a b ; rw [eq6 a b, ← eq6 b b]
+  have eq30 (a b c : G) : a = (b ◇ a) ◇ c := by rw [← fproj a c, ← h]
+  have eq6 (a b : G) : a = b ◇ b := by rw [eq30 a, ← eq30 b a]
+  intro a b ; rw [eq6 a b, ← eq6]
 
 lemma lem_1 {G: Type*} [Magma G] (h: Equation1689 G) :
     ∀ a b c : G, a ◇ (f (f a b) c) = f a b := by
   intro a b c
-  nth_rewrite 1 [h a a b]
-  exact (h (f a b) (a ◇ a) c).symm
+  nth_rewrite 1 [h a a]
+  exact (h ..).symm
 
 lemma lem_2 {G: Type*} [Magma G] (h: Equation1689 G) :
     ∀ a b c : G, a ◇ (g b c) = f a b := by
   intro a b c
-  simp [g]
-  nth_rewrite 1 [h b (a ◇ b) c]
-  exact (lem_1 h a b (f b c))
+  nth_rewrite 1 [g, h b]
+  exact lem_1 h ..
 
 lemma lem_fixf {G: Type*} [Magma G] (h: Equation1689 G) :
     ∀ a : G, ∃ b : G, f a b = a := by
   intro a
-  have h1 : pow3 a = a ◇ pow5 a := by
-    exact Eq.symm (lem_1 h a a a)
-  have h2 : f a (pow5 a) = g (pow3 a) a := by simp_rw [f,←h1]
-  have h3 : f a (pow3 a) = g a (pow5 a) := by
-    rw [← lem_2 h a (pow3 a) a, ← h2]
-  have h4 : pow3 a = a ◇ (g a (pow5 a)) := by
-    rw [lem_2 h]
+  have h1 : pow3 a = a ◇ pow5 a := (lem_1 h ..).symm
+  have h2 : g (pow3 a) a = f a (pow5 a) := congrArg (· ◇ _) h1
+  have h3 : g a (pow5 a) = f a (pow3 a) := by rw [← lem_2 h, h2]
+  have h4 : a ◇ (g a (pow5 a)) = pow3 a := by rw [lem_2 h]
   use (g a (pow5 a))
-  simp_rw [f,←h4,←h3]
-  exact Eq.symm (h a (a ◇ a) (pow3 a))
+  rw [f,h4,h3,←h]
 
 end Eq1689
 
