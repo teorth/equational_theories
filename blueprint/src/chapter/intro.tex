@@ -137,7 +137,7 @@ This definition is useful because of the following theorem:
 
 If $\pi$ is a bijection, we will call $\pi_*(w) \formaleq \pi_*(w')$ a \emph{relabeling} of the law $w \formaleq w'$. Thus for instance
 $$ 5 \op 7 \formaleq 7 \op 5$$
-is a relabeling of the commutative law \Cref{comm-law}. By the above lemma, relabeling does not affect whether a given magna satisfies a given law.
+is a relabeling of the commutative law \Cref{comm-law}. By the above lemma, relabeling does not affect whether a given magma satisfies a given law.
 
 \begin{lemma}[Equivalence]\label{equiv}\uses{law-def}
   Let $G$ be a magma and $X$ be an alphabet.
@@ -229,22 +229,29 @@ Finally, we order (and reduce) equations of the form $w \formaleq w'$ as follows
 
 \section{Alternate formula}
 
-For integers $0 \le a \le b$ let $\fbox{E(a,b)}$ be the number of magma equations $t_1 = t_2$ with $t_1$ of order $a$, $t_2$ of order $b$, counting up to relabelling, up to switching terms, and only allowing the equation $x=x$ of the form $t=t$.  Then one has
+For integers $0 \le a \le b$ let $E(a,b)$ be the number of magma equations $t_1 = t_2$ with $t_1$ of order $a$, $t_2$ of order $b$, counting up to relabelling, up to switching terms, and only allowing the equation $x=x$ of the form $t=t$.  Then one has
 
 \begin{itemize}
 \item $E(0,0) = 2$.
-\item  If \fbox{$a\neq b$}:
+\item  If $a\neq b$:
 $$
-E(a,b) = T(a)\cdot T(b) \cdot \sum_{\substack{1 \le p \le a+1\\ 1 \le q \le b+1\\0\le s \le \min(p,q)}}
-\left\{\substack{a+1\\p}\right\} \left\{\substack{b+1\\q}\right\} \binom{p}{s} \binom{q}{s} s! \ .
+E(a,b) = T(a) \cdot T(b) \cdot
+\sum_{\begin{smallmatrix} 1 \le p \le a+1 \\ 1 \le q \le b+1 \\ 0 \le s \le \min(p,q) \end{smallmatrix}}
+\left\{\begin{array}{c} a+1 \\ p \end{array}\right\}
+\left\{\begin{array}{c} b+1 \\ q \end{array}\right\}
+\binom{p}{s} \binom{q}{s} s! \ .
 $$
-\item If \fbox{$a= b > 0$}:
+\item If $a= b > 0$:
 \begin{align*}
-E(a,b) &= \frac{1}{2} T(a)^2\cdot \sum_{\substack{1 \le p,q \le a+1\\ 0\le s \le \min(p,q)}}
-\left\{\substack{a+1\\p}\right\} \left\{\substack{a+1\\q}\right\}\binom{p}{s} \binom{q}{s} s! \\
-&\quad + \frac{1}{2} T(a) \cdot \sum_{\substack{1 \le p \le a+1\\ 0\le s \le p}}
-\left\{\substack{a+1\\p}\right\}  \binom{p}{s} {\sf Invol}(s)\\
-&\qquad - T(a)\cdot \sum_{1\le p \le a+1}  \left\{\substack{a+1\\p}\right\} \ .
+  E(a,b) &= \frac{1}{2} T(a)^2 \cdot \sum_{\begin{smallmatrix}1 \le p,q \le a+1\\ 0 \le s \le \min(p,q)\end{smallmatrix}}
+  \left\{\begin{array}{c} a+1 \\ p \end{array}\right\}
+  \left\{\begin{array}{c} a+1 \\ q \end{array}\right\}
+  \binom{p}{s} \binom{q}{s} s! \\
+  &\quad + \frac{1}{2} T(a) \cdot \sum_{\begin{smallmatrix}1 \le p \le a+1\\ 0 \le s \le p\end{smallmatrix}}
+  \left\{\begin{array}{c} a+1 \\ p \end{array}\right\}
+  \binom{p}{s} \, {\sf Invol}(s) \\
+  &\quad - T(a) \cdot \sum_{1 \le p \le a+1}
+  \left\{\begin{array}{c} a+1 \\ p \end{array}\right\}.
 \end{align*}
 \end{itemize}
 
