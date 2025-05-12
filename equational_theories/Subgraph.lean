@@ -310,33 +310,29 @@ theorem Equation1571_implies_Equation4656 {G : Type} [Magma G] (h : Equation1571
 
 /- Proof that 1689 implies 2.  First proven by Kisielewicz in 1997 via computer assistance. -/
 namespace Eq1689
-def pow3 {G: Type*} [Magma G] (a : G) : G := (a ◇ a) ◇ a
-def pow5 {G: Type*} [Magma G] (a : G) : G := ((pow3 a) ◇ a) ◇ a
-def f {G: Type*} [Magma G] (a b : G) : G := (a ◇ b) ◇ b
-def g {G: Type*} [Magma G] (a b : G) : G := a ◇ ((a ◇ b) ◇ b)
-
--- Rewrite equation in terms of f
-lemma eq_f {G: Type*} [Magma G] (h: Equation1689 G) :
-    ∀ a b c : G, a = (b ◇ a) ◇ (f a c) := by exact h
+abbrev pow3 {G: Type*} [Magma G] (a : G) : G := (a ◇ a) ◇ a
+abbrev pow5 {G: Type*} [Magma G] (a : G) : G := ((pow3 a) ◇ a) ◇ a
+abbrev f {G: Type*} [Magma G] (a b : G) : G := (a ◇ b) ◇ b
+abbrev g {G: Type*} [Magma G] (a b : G) : G := a ◇ ((a ◇ b) ◇ b)
 
 -- Assuming there always exist b such that f a b = a, finish the proof
 lemma lem_fixf_implies_eq2 {G: Type*} [Magma G] (h: Equation1689 G)
     (hfixf: ∀ b : G, ∃ c : G, f b c = b) : Equation2 G := by
   have fproj (a b : G) : f a b = b := by
     obtain ⟨c, hfbc⟩ := hfixf b
-    nth_rewrite 2 [eq_f h b a c]
-    rw [hfbc] ; rfl
+    simp [f] at hfbc
+    exact (hfbc ▸ (h b a c)).symm
   have eq30 (a b c : G) : a = (b ◇ a) ◇ c := by
-    rw [← fproj a c, ← eq_f h a b c]
+    rw [← fproj a c, ← h a b c]
   have eq6 (a b : G) : a = b ◇ b := by
     rw [eq30 a (a ◇ b) b, ← eq30 b a a]
-  intro a b ; rw[eq6 a b, ← eq6 b b]
+  intro a b ; rw [eq6 a b, ← eq6 b b]
 
 lemma lem_1 {G: Type*} [Magma G] (h: Equation1689 G) :
     ∀ a b c : G, a ◇ (f (f a b) c) = f a b := by
   intro a b c
-  nth_rewrite 1 [eq_f h a a b]
-  exact Eq.symm (eq_f h (f a b) (a ◇ a) c)
+  nth_rewrite 1 [h a a b]
+  exact (h (f a b) (a ◇ a) c).symm
 
 lemma lem_2 {G: Type*} [Magma G] (h: Equation1689 G) :
     ∀ a b c : G, a ◇ (g b c) = f a b := by
@@ -350,14 +346,13 @@ lemma lem_fixf {G: Type*} [Magma G] (h: Equation1689 G) :
   intro a
   have h1 : pow3 a = a ◇ pow5 a := by
     exact Eq.symm (lem_1 h a a a)
-  have h2 : f a (pow5 a) = g (pow3 a) a := by simp [f,g] ; rw[← h1] ; rfl
+  have h2 : f a (pow5 a) = g (pow3 a) a := by simp_rw [f,←h1]
   have h3 : f a (pow3 a) = g a (pow5 a) := by
-    rw [← lem_2 h a (pow3 a) a, ← h2] ; rfl
+    rw [← lem_2 h a (pow3 a) a, ← h2]
   have h4 : pow3 a = a ◇ (g a (pow5 a)) := by
-    rw [lem_2 h] ; rfl
+    rw [lem_2 h]
   use (g a (pow5 a))
-  simp [f]
-  rw [← h4, ← h3]
+  simp_rw [f,←h4,←h3]
   exact Eq.symm (h a (a ◇ a) (pow3 a))
 
 end Eq1689
