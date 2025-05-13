@@ -308,7 +308,6 @@ theorem Equation1571_implies_Equation4656 {G : Type} [Magma G] (h : Equation1571
     {lhs := (Lf 0 ⋆ Lf 1) ⋆ Lf 1, rhs := (Lf 0 ⋆ Lf 2) ⋆ Lf 2} rfl fun | 0 => x | 1 => y | 2 => z
 
 
-/- Proof that 1689 implies 2.  First proven by Kisielewicz in 1997 via computer assistance. -/
 namespace Eq1689
 abbrev pow3 {G: Type*} [Magma G] (a : G) : G := (a ◇ a) ◇ a
 abbrev pow5 {G: Type*} [Magma G] (a : G) : G := ((pow3 a) ◇ a) ◇ a
@@ -346,10 +345,11 @@ lemma lem_fixf {G: Type*} [Magma G] (h: Equation1689 G) :
   have h3 : g a (pow5 a) = f a (pow3 a) := by rw [← lem_2 h, h2]
   have h4 : a ◇ (g a (pow5 a)) = pow3 a := by rw [lem_2 h]
   use (g a (pow5 a))
-  rw [f,h4,h3,←h]
+  rw [f, h4, h3, ← h]
 
 end Eq1689
 
+/-- This result was first obtained by Kisielewicz in 1997 via computer assistance. -/
 @[equational_result]
 theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G :=
   Eq1689.lem_fixf_implies_eq2 h (Eq1689.lem_fixf h)
