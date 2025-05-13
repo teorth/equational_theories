@@ -22,13 +22,15 @@ namespace FreeGroup
 
 variable {L L₁ L₂ : List (α × Bool)}
 
-theorem invRev_append : invRev (L₁ ++ L₂) = invRev L₂ ++ invRev L₁ := by
-  unfold invRev
-  simp
+-- [UPSTREAMED]
+-- theorem invRev_append : invRev (L₁ ++ L₂) = invRev L₂ ++ invRev L₁ := by
+--   unfold invRev
+--   simp
 
-theorem invRev_cons {a : (α × Bool)} : invRev (a:: L) = invRev L ++ invRev [a] := by
-  unfold FreeGroup.invRev
-  simp
+-- [UPSTREAMED]
+-- theorem invRev_cons {a : (α × Bool)} : invRev (a:: L) = invRev L ++ invRev [a] := by
+--   unfold FreeGroup.invRev
+--   simp
 
 namespace Red
 
@@ -137,8 +139,8 @@ cyclicallyReduced (List.replicate n L).flatten := by match n, L with
     · apply List.chain'_replicate_of_rel _ h.2
   · intro a ha b hb
     simp only [Option.mem_def] at ha hb
-    rw [List.getLast?_flatten_replicate (h := by simp_arith)] at ha
-    rw [List.head?_flatten_replicate (h := by simp_arith)] at hb
+    rw [List.getLast?_flatten_replicate (h := by simp +arith)] at ha
+    rw [List.head?_flatten_replicate (h := by simp +arith)] at hb
     apply h.2 _ ha _ hb
 
 variable [DecidableEq α]
@@ -388,7 +390,7 @@ theorem pow_injective {x y : FreeGroup α} {n : ℕ} (hn : n ≠ 0) : x = y ↔ 
 theorem zpow_injective {x y : FreeGroup α} {n : ℤ} (hn : n ≠ 0) : x = y ↔ x ^ n = y ^ n := by
   rw [pow_injective (Int.natAbs_ne_zero.mpr hn)]
   rcases Int.natAbs_eq n with h | h
-  · rw [h, Int.natAbs_ofNat, zpow_natCast, zpow_natCast]
-  · rw [h, Int.natAbs_neg, Int.natAbs_ofNat, zpow_neg, zpow_neg, inv_inj, zpow_natCast, zpow_natCast]
+  · rw [h, Int.natAbs_natCast, zpow_natCast, zpow_natCast]
+  · rw [h, Int.natAbs_neg, Int.natAbs_natCast, zpow_neg, zpow_neg, inv_inj, zpow_natCast, zpow_natCast]
 
 end FreeGroup
