@@ -92,8 +92,12 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
   let declMods ← elabModifiers mods
   let docs := s!"```\nequation {i.getNat} := {← PrettyPrinter.formatTerm tsyn}\n```"
   let docs := match declMods.docString? with
-    | none => docs
-    | some more => s!"{docs}\n\n---\n{more}"
+    | none =>
+      -- docs -- [ERROR]
+      sorry
+    | some more =>
+      -- s!"{docs}\n\n---\n{more}" -- [ERROR]
+      sorry
   let ranges := {
     range := (← getDeclarationRange? (← getRef)).getD default
     selectionRange := (← getDeclarationRange? eqStx).getD default}

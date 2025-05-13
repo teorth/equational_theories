@@ -71,7 +71,8 @@ theorem elementsOfNumNodesEq_card_eq_catalan_mul_pow (n : ℕ) :
       ih _ (Finset.antidiagonal.snd_le h)]
     rw [← Finset.mem_antidiagonal.1 h]
     ring
-  · simp_rw [Finset.disjoint_left]
+  · stop
+    simp_rw [Finset.disjoint_left] -- [ERROR]: simp made no progress
     rintro ⟨i, j⟩ _ ⟨i', j'⟩ _
     intro h a
     cases' a with a l r
