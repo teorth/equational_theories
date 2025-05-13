@@ -2385,7 +2385,7 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
             · simp only [cur_i_one, pow_one] at hb
               exact hb ▸ ne_of_mem_of_not_mem ha (by simp)
             · have pow_ge_4: 2^2 ≤ 2^((f_data (g_to_num ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))).cur.i) :=
-                Nat.pow_le_pow_of_le_right (by simp) (by omega)
+                Nat.pow_le_pow_right (by simp) (by omega)
               have a_le_3: a ≤ 3 := Nat.divisor_le ha
               omega
           | .left parent =>
@@ -2530,7 +2530,7 @@ theorem Equation1692_not_implies_Equation23 :
 theorem Equation1692_not_implies_Equation47 :
   ∃ (T : Type) (_ : Magma T), Equation1692 T ∧ ¬ Equation47 T := by
   refine ⟨G, magG, f_equation_1692, ?_⟩
-  simp only [Equation47, magG, sub_self, add_sub_cancel_left, self_eq_add_right, forall_const]
+  simp only [Equation47, magG, sub_self, add_sub_cancel_left, left_eq_add, forall_const]
   exact not_equation_47
 
 @[equational_result]
