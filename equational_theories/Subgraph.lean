@@ -242,56 +242,6 @@ theorem Equation387_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) :
   have op_idem (x y : G) : (x ◇ x) ◇ (y ◇ y) = x ◇ y := by repeat rw [← h]
   exact fun _ _ ↦ by rw [← op_idem, comm, op_idem]
 
-theorem Lemma_eq1689_implies_h2 (G: Type*) [Magma G] (h: Equation1689 G) :
-    ∀ a b c : G, a ◇ ((((a ◇ b) ◇ b) ◇ c) ◇ c) = (a ◇ b) ◇ b :=
-  fun a b c ↦
-  calc a ◇ ((((a ◇ b) ◇ b) ◇ c) ◇ c)
-    = ((a ◇ a) ◇ ((a ◇ b) ◇ b)) ◇ ((((a ◇ b) ◇ b) ◇ c) ◇ c) := by rw [← h a a b, h a b c]
-  _ = (a ◇ b) ◇ b := by rw [← h ((a ◇ b) ◇ b) (a ◇ a) c]
-
-theorem Lemma_eq1689_implies_h3 (G: Type*) [Magma G] (h: Equation1689 G) :
-    ∀ a b c d : G, (a ◇ (b ◇ c)) ◇ (c ◇ ((c ◇ d) ◇ d)) = b ◇ c :=
-  fun a b c d ↦
-  calc (a ◇ (b ◇ c)) ◇ (c ◇ ((c ◇ d) ◇ d))
-    = (a ◇ (b ◇ c)) ◇ (((b ◇ c) ◇ ((c ◇ d) ◇ d)) ◇ ((c ◇ d) ◇ d)) := by rw [← h c b d]
-  _ = b ◇ c := by rw [← h]
-
-theorem Lemma_eq1689_implies_h4 (G: Type*) [Magma G] (h: Equation1689 G) :
-    ∀ a b c : G, a ◇ (b ◇ ((b ◇ c) ◇ c)) = (a ◇ b) ◇ b := by
-  intro a b c
-  nth_rewrite 1 [h b (a ◇ b) c]
-  rw [Lemma_eq1689_implies_h2 G h a b ((b ◇ c) ◇ c)]
-
-theorem Lemma_eq1689_implies_h5 (G: Type*) [Magma G] (h: Equation1689 G) :
-    ∀ a b c : G, ((a ◇ (b ◇ c)) ◇ c) ◇ c = b ◇ c :=
-  fun a b c ↦
-  calc ((a ◇ (b ◇ c)) ◇ c) ◇ c
-    = (a ◇ (b ◇ c)) ◇ (c ◇ ((c ◇ b) ◇ b)) := by rw [Lemma_eq1689_implies_h4 G h]
-  _ = b ◇ c := by rw [Lemma_eq1689_implies_h3 G h]
-
-theorem Lemma_eq1689_implies_h6 (G: Type*) [Magma G] (h: Equation1689 G) :
-    ∀ a b c d : G, (a ◇ (b ◇ (c ◇ d))) ◇ (c ◇ d) = b ◇ (c ◇ d) :=
-  fun a b c d ↦ by
-  have hh : (a ◇ (b ◇ (c ◇ d))) ◇ (((b ◇ (c ◇ d)) ◇ d) ◇ d) = (b ◇ (c ◇ d)) := by rw [← h]
-  rw [Lemma_eq1689_implies_h5 G h] at hh
-  exact hh
-
-theorem Lemma_eq1689_implies_h7 (G: Type*) [Magma G] (h: Equation1689 G) :
-    ∀ a b c : G, (a ◇ (b ◇ c)) ◇ (b ◇ c) = a ◇ (b ◇ c) :=
-  fun a b c ↦
-  calc (a ◇ (b ◇ c)) ◇ (b ◇ c)
-    = ((a ◇ (a ◇ (b ◇ c))) ◇ (b ◇ c)) ◇ (b ◇ c) := by rw [Lemma_eq1689_implies_h6 G h]
-  _ = a ◇ (b ◇ c) := by rw [Lemma_eq1689_implies_h5 G h]
-
-theorem Lemma_eq1689_implies_h8 (G: Type*) [Magma G] (h: Equation1689 G) :
-    ∀ a b c : G, ((a ◇ b) ◇ ((b ◇ c) ◇ c)) ◇ ((b ◇ c) ◇ c) = b :=
-  fun a b c ↦
-  calc
-    ((a ◇ b) ◇ ((b ◇ c) ◇ c)) ◇ ((b ◇ c) ◇ c)
-      = ((a ◇ ((a ◇ b) ◇ ((b ◇ c) ◇ c))) ◇ ((b ◇ c) ◇ c)) ◇ ((b ◇ c) ◇ c) := by nth_rewrite 1 [h b a c]; rfl
-    _ = (a ◇ b) ◇ ((b ◇ c) ◇ c) := by rw [Lemma_eq1689_implies_h5 G h]
-    _ = b := by rw [← h]
-
 /-- The below results for Equation1571 are out of order because early ones are lemmas for later ones -/
 @[equational_result]
 theorem Equation1571_implies_Equation2662 (G: Type _) [Magma G] (h: Equation1571 G) : Equation2662 G :=
@@ -357,41 +307,52 @@ theorem Equation1571_implies_Equation4656 {G : Type} [Magma G] (h : Equation1571
   fun x y z ↦ ProveEquation1571Consequence (n := 2) h
     {lhs := (Lf 0 ⋆ Lf 1) ⋆ Lf 1, rhs := (Lf 0 ⋆ Lf 2) ⋆ Lf 2} rfl fun | 0 => x | 1 => y | 2 => z
 
+
+namespace Eq1689
+abbrev pow3 {G: Type*} [Magma G] (a : G) : G := (a ◇ a) ◇ a
+abbrev pow5 {G: Type*} [Magma G] (a : G) : G := ((pow3 a) ◇ a) ◇ a
+abbrev f {G: Type*} [Magma G] (a b : G) : G := (a ◇ b) ◇ b
+abbrev g {G: Type*} [Magma G] (a b : G) : G := a ◇ ((a ◇ b) ◇ b)
+
+-- Assuming there always exist b such that f a b = a, finish the proof
+lemma lem_fixf_implies_eq2 {G: Type*} [Magma G] (h: Equation1689 G)
+    (hfixf: ∀ b : G, ∃ c : G, f b c = b) : Equation2 G := by
+  have fproj (a b : G) : f a b = b := by
+    obtain ⟨c, hfbc⟩ := hfixf b
+    unfold f at hfbc
+    exact (hfbc ▸ (h b a c)).symm
+  have eq30 (a b c : G) : a = (b ◇ a) ◇ c := by rw [← fproj a c, ← h]
+  have eq6 (a b : G) : a = b ◇ b := by rw [eq30 a, ← eq30 b a]
+  intro a b ; rw [eq6 a b, ← eq6]
+
+lemma lem_1 {G: Type*} [Magma G] (h: Equation1689 G) :
+    ∀ a b c : G, a ◇ (f (f a b) c) = f a b := by
+  intro a b c
+  nth_rewrite 1 [h a a]
+  exact (h ..).symm
+
+lemma lem_2 {G: Type*} [Magma G] (h: Equation1689 G) :
+    ∀ a b c : G, a ◇ (g b c) = f a b := by
+  intro a b c
+  nth_rewrite 1 [g, h b]
+  exact lem_1 h ..
+
+lemma lem_fixf {G: Type*} [Magma G] (h: Equation1689 G) :
+    ∀ a : G, ∃ b : G, f a b = a := by
+  intro a
+  have h1 : pow3 a = a ◇ pow5 a := (lem_1 h ..).symm
+  have h2 : g (pow3 a) a = f a (pow5 a) := congrArg (· ◇ _) h1
+  have h3 : g a (pow5 a) = f a (pow3 a) := by rw [← lem_2 h, h2]
+  have h4 : a ◇ (g a (pow5 a)) = pow3 a := by rw [lem_2 h]
+  use (g a (pow5 a))
+  rw [f, h4, h3, ← h]
+
+end Eq1689
+
 /-- This result was first obtained by Kisielewicz in 1997 via computer assistance. -/
 @[equational_result]
-theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G:=
-  have h9: ∀ a b : G, a ◇ ((a ◇ b) ◇ b) = a :=
-    fun a b ↦
-    calc
-      a ◇ ((a ◇ b) ◇ b) = ((a ◇ a) ◇ ((a ◇ b) ◇ b)) ◇ ((a ◇ b) ◇ b) := by rw [← h a a b]
-      _ = (a ◇ a) ◇ ((a ◇ b) ◇ b) := by rw [Lemma_eq1689_implies_h7 G h]
-      _ = a := by rw [← h]
-  have h10: ∀ a b c : G, a ◇ (a ◇ (b ◇ c)) = a :=
-    fun a b c ↦
-    calc
-      a ◇ (a ◇ (b ◇ c)) = a ◇ ((a ◇ (b ◇ c)) ◇ (b ◇ c)) := by rw [Lemma_eq1689_implies_h7 G h]
-      _ = a := h9 a (b ◇ c)
-  have h11: ∀ a b : G, (a ◇ b) ◇ b = a ◇ b :=
-    fun a b ↦
-    calc
-      (a ◇ b) ◇ b = (a ◇ b) ◇ (((a ◇ b) ◇ ((b ◇ b) ◇ b)) ◇ ((b ◇ b) ◇ b)) := by rw [Lemma_eq1689_implies_h8 G h]
-      _ = a ◇ b := by rw [h9]
-  have h12: ∀ a : G, (a ◇ a) ◇ a = a :=
-    fun a ↦
-    calc
-      (a ◇ a) ◇ a = a ◇ (a ◇ ((a ◇ a) ◇ a)) := by rw [Lemma_eq1689_implies_h4 G h]
-      _ = a := by rw [h10]
-  have h13: ∀ a b : G, (a ◇ b) ◇ b = b :=
-    fun a b ↦
-    calc
-      (a ◇ b) ◇ b = (a ◇ b) ◇ ((b ◇ b) ◇ b) := by rw [h12]
-      _ = b := by rw [← h]
-  have h14: ∀ a b : G, a ◇ b = b := fun _ _ ↦ h11 .. ▸ h13 ..
-  fun a b ↦
-  calc
-    a = a ◇ ((a ◇ b) ◇ b) := by rw [h9 a b]
-    _ = a ◇ b := by rw [h14 (a ◇ b) b]
-    _ = b := h14 a b
+theorem Equation1689_implies_Equation2 (G: Type*) [Magma G] (h: Equation1689 G) : Equation2 G :=
+  Eq1689.lem_fixf_implies_eq2 h (Eq1689.lem_fixf h)
 
 /-- Putnam 1978, problem A4, part (b) -/
 @[equational_result]
