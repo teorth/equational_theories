@@ -146,6 +146,8 @@ def MagmaEquivClass.toMagmaEquiv {F G H : Type*} [Magma G] [Magma H] [EquivLike 
   left_inv := EquivLike.coe_symm_apply_apply f
   right_inv := EquivLike.apply_coe_symm_apply f
   map_op' := map_op f
+  toFun := f
+  invFun := EquivLike.inv f
 
 instance {F G H : Type*} [Magma G] [Magma H] [EquivLike F G H] [MagmaEquivClass F G H] :
     CoeTC F (G ≃◇ H) :=
