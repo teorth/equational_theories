@@ -135,7 +135,7 @@ def Bitset.toArray : Bitset → Array UInt64 := id
 
 instance : Inhabited Bitset := ⟨#[]⟩
 
-def Bitset.mk (n : Nat) : Bitset := Array.mkArray ((n + 63) >>> 6) 0
+def Bitset.mk (n : Nat) : Bitset := Array.replicate ((n + 63) >>> 6) 0
 
 def Bitset.set (b : Bitset) (n : Nat) : Bitset :=
   b.modify (n >>> 6) (fun x ↦ x ||| (1 <<< ((UInt64.ofNat n) &&& 63)))
@@ -192,7 +192,7 @@ This transforms the `Facts` in the input array to `Edge`s
 def toEdges (inp : Array EntryVariant) : Array Edge := Id.run do
   let eqs := number_equations inp
   let mut edges : Array Edge := Array.mkEmpty inp.size
-  let mut nonimplies : Array Bitset := Array.mkArray eqs.size (Bitset.mk eqs.size)
+  let mut nonimplies : Array Bitset := Array.replicate eqs.size (Bitset.mk eqs.size)
   for imp in inp do
     match imp with
     | .implication ⟨lhs, rhs, _⟩ =>
@@ -217,8 +217,8 @@ def closure_aux (inp : Array EntryVariant) (duals: Std.HashMap Nat Nat) (eqs : D
   -- construct the implication/non-implication graph
   let n := eqs.size
   let mut graph_size := 2 * n
-  let mut graph : Array (Array Nat) := Array.mkArray graph_size #[]
-  let mut revgraph : Array (Array Nat) := Array.mkArray graph_size #[]
+  let mut graph : Array (Array Nat) := Array.replicate graph_size #[]
+  let mut revgraph : Array (Array Nat) := Array.replicate graph_size #[]
   for imp in inp do
     match imp with
     | .implication imp =>
@@ -262,7 +262,7 @@ def closure_aux (inp : Array EntryVariant) (duals: Std.HashMap Nat Nat) (eqs : D
         graph := graph.modify i' (fun x => x.push j')
         revgraph := revgraph.modify j' (fun x => x.push i')
 
-  let mut vis : Array Bool := Array.mkArray graph_size false
+  let mut vis : Array Bool := Array.replicate graph_size false
   let mut order : Array Nat := Array.mkEmpty graph_size
 
   -- compute strongly connected components and the condensation graph using Kosaraju's algorithm
@@ -272,7 +272,7 @@ def closure_aux (inp : Array EntryVariant) (duals: Std.HashMap Nat Nat) (eqs : D
 
   order := order.reverse
 
-  let mut component : Array Nat := Array.mkArray graph_size 0
+  let mut component : Array Nat := Array.replicate graph_size 0
   let mut last_component : Nat := 0
 
   for i in order do
@@ -280,8 +280,8 @@ def closure_aux (inp : Array EntryVariant) (duals: Std.HashMap Nat Nat) (eqs : D
       last_component := last_component + 1
       component := dfs2 revgraph i component last_component
 
-  let mut components : Array (Array Nat) := Array.mkArray last_component #[]
-  let mut comp_graph : Array (Std.HashSet Nat) := Array.mkArray last_component {}
+  let mut components : Array (Array Nat) := Array.replicate last_component #[]
+  let mut comp_graph : Array (Std.HashSet Nat) := Array.replicate last_component {}
 
   for i in [:graph_size] do
     components := components.modify (component[i]!-1) (fun x ↦ x.push i)
@@ -290,7 +290,7 @@ def closure_aux (inp : Array EntryVariant) (duals: Std.HashMap Nat Nat) (eqs : D
         comp_graph := comp_graph.modify (component[i]!-1) (fun x ↦ x.insert (component[j]!-1))
 
   -- Run bitset transitive closure on the condensation graph
-  let mut reachable : Array Bitset := Array.mkArray last_component (Bitset.mk last_component)
+  let mut reachable : Array Bitset := Array.replicate last_component (Bitset.mk last_component)
 
   for i_ in [:last_component] do
     let i := last_component - 1 - i_
@@ -349,7 +349,7 @@ def list_outcomes (res : Array Entry) (duals: Std.HashMap String String): IO (Ar
   let eqs := number_equations rs
   let duals := number_duals duals eqs
   let n := eqs.size
-  let mut outcomes : Array (Array Outcome) := Array.mkArray n (Array.mkArray n .unknown)
+  let mut outcomes : Array (Array Outcome) := Array.replicate n (Array.replicate n .unknown)
   for edge in toEdges prs do
     outcomes := outcomes.modify eqs[edge.lhs]! (fun a ↦ a.set! eqs[edge.rhs]!
       (.explicit_theorem edge.isTrue))
@@ -376,7 +376,7 @@ def outcomes_mod_equiv (inp : Array EntryVariant) (duals: Std.HashMap String Str
   let comps := reachable.components.filter (·[0]! < n) |> DenseNumbering.fromArray
 
   let mut implies : Array (Array (Option Bool)) :=
-    Array.mkArray comps.size (Array.mkArray comps.size none)
+    Array.replicate comps.size (Array.replicate comps.size none)
 
   for i in reachable.components, i2 in reachable.reachable do
     if i[0]! >= reachable.size then continue
