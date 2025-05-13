@@ -25,7 +25,7 @@ namespace FullSpectrum
 abbrev EqFullSpectrum (Eq : (G: Type) -> (_: Magma G) -> Prop) :=
   ∀ n : ℕ, ∃ (M : Magma (Fin n)), Eq (Fin n) M
 
-syntax "HasFullSpectrum [" num,* "]" : term
+syntax "HasFullSpectrum" "[" num,* "]" : term
 open Lean Meta Elab Term Tactic Parser.Term in
 elab_rules : term | `(HasFullSpectrum [ $eqs,* ]) => do
   let s := eqs.getElems.map fun ⟨s⟩ =>
@@ -33,7 +33,7 @@ elab_rules : term | `(HasFullSpectrum [ $eqs,* ]) => do
   let e := mkAndN s.toList
   return e
 
-syntax "NotFullSpectrum [" num,* "]" : term
+syntax "NotFullSpectrum" "[" num,* "]" : term
 open Lean Meta Elab Term Tactic Parser.Term in
 elab_rules : term | `(NotFullSpectrum [ $eqs,* ]) => do
   let s := eqs.getElems.map fun ⟨s⟩ =>
@@ -62,7 +62,7 @@ theorem full_spectrum_constant : HasFullSpectrum [41] := by
   if h : 0 < n then
     let op (x y : Fin n) : Fin n := ⟨0, h⟩
     use ⟨op⟩
-    simp [Equation41]
+    simp [Equation41, op]
   else
     use ⟨fun x y => x⟩
     omega
@@ -87,13 +87,6 @@ theorem full_spectrum_square_cancellative : HasFullSpectrum [1523] := by
     use ⟨fun x y => x⟩
     omega
 
-@[simp] private theorem emod_sub_emod (m n k : Int) : (m % n - k) % n = (m - k) % n :=
-  Int.emod_add_emod m n (-k)
-
-@[simp] private theorem sub_emod_emod (m n k : Int) : (m - n % k) % k = (m - n) % k := by
-  apply (Int.emod_add_cancel_right (n % k)).mp
-  rw [Int.sub_add_cancel, Int.add_emod_emod, Int.sub_add_cancel]
-
 private lemma linear₁ {a n : Int} (h : n ≠ 0) : a % n ⊔ 0 = a % n := by
   have : 0 ≤ a % n := (Int.emod_nonneg a) h
   exact Int.max_eq_left this
@@ -108,7 +101,7 @@ theorem full_spectrum_linear_cancellative1 : HasFullSpectrum [492] := by
     intro _ _ _
     apply Fin.eq_mk_iff_val_eq.mpr
     zify at h
-    simp only [Int.natMod, Int.ofNat_toNat, linear₁ (ne_of_gt h), sub_emod_emod]
+    simp only [Int.natMod, Int.ofNat_toNat, linear₁ (ne_of_gt h), Int.sub_emod_emod, op]
     simp [Int.add_sub_assoc, ←Int.sub_sub, linear₂]
   else
     use ⟨fun x y => x⟩
@@ -125,7 +118,7 @@ theorem full_spectrum_linear_cancellative2 : HasFullSpectrum [1090] := by
       apply (Int.emod_add_cancel_right (-o)).mp
       simp
     zify at h
-    simp only [Int.natMod, Int.ofNat_toNat, linear₁ (ne_of_gt h), Int.add_emod_emod, this]
+    simp only [Int.natMod, Int.ofNat_toNat, linear₁ (ne_of_gt h), Int.add_emod_emod, this, op]
     simp [Int.add_sub_assoc, ←Int.sub_sub, linear₂]
   else
     use ⟨fun x y => x⟩
@@ -147,9 +140,10 @@ theorem full_spectrum_Equation1482 : HasFullSpectrum [1482] := by
     use ⟨op⟩
     intro x _
     apply Fin.eq_mk_iff_val_eq.mpr
-    simp only [Bool.and_self, decide_eq_true_eq, gt_iff_lt, Bool.and_eq_true]
+    simp only [Bool.and_self, decide_eq_true_eq, gt_iff_lt, Bool.and_eq_true, op]
     split
-    . simp only [lt_self_iff_false, ↓reduceIte, zero_ne_one, not_lt_zero', and_false, true_and, *]
+    . simp only [lt_self_iff_false, ↓reduceIte, zero_ne_one, not_lt_zero', and_false, true_and,
+        Nat.not_lt_zero, and_false, ↓reduceIte, *]
       split
       . simp [*]
       . split
@@ -202,30 +196,41 @@ theorem full_spectrum_Equation1682 : HasFullSpectrum [1682] := by
       (b + 1 + a) % 2 ≠ 0 := by omega
     have t₁ (n : Nat) : n = 0 ∨ n = 1 ∨ n = 2 ∨ n ≥ 3 := by omega
     rcases t₁ x.1 with h₁ | h₁ | h₁ | h₁ <;> rcases t₁ y.1 with h₂ | h₂ | h₂ | h₂
-    all_goals simp [*]
+    · simp [op, h₁, h₂]
+    · simp [op, h₁, h₂]
+    · simp [op, h₁, h₂]
+    . rcases eq_or_ne (y.1 % 2) 0 with h₃ | h₃ <;> simp [op, h₁, h₂, h₃, l₂]
+    · simp [op, h₁, h₂]
+    · simp [op, h₁, h₂]
+    · simp [op, h₁, h₂]
+    . rcases eq_or_ne (y.1 % 2) 0 with h₃ | h₃ <;> simp [op, h₁, h₂, h₃, l₂]
+    · simp [op, h₁, h₂]
+    · simp [op, h₁, h₂]
+    · simp [-Fin.val_fin_le, -Fin.val_fin_lt, op, h₁, h₂]
     . rcases eq_or_ne (y.1 % 2) 0 with h₃ | h₃
-      all_goals simp [*]
-    . rcases eq_or_ne (y.1 % 2) 0 with h₃ | h₃
-      all_goals simp [*]
-    . rcases eq_or_ne (y.1 % 2) 0 with h₃ | h₃
-      . simp [*]
-      . simp [show y.1 % 2 = 1 by omega, *]
+      . simp [-Fin.val_fin_le, -Fin.val_fin_lt, op, h₁, h₂, h₃, l₂, l₃]
+      . simp [-Fin.val_fin_le, -Fin.val_fin_lt, show y.1 % 2 = 1 by omega, op, h₁, h₂, h₃, l₂]
+    . rcases eq_or_ne (x.1 % 2) 0 with h₃ | h₃ <;> simp [op, h₁, h₂, h₃, l₁, l₂]
+    · simp [-Fin.val_fin_le, -Fin.val_fin_lt, op, h₁, h₂, l₁, l₂]
     . rcases eq_or_ne (x.1 % 2) 0 with h₃ | h₃
-      all_goals simp [*]
-    . rcases eq_or_ne (x.1 % 2) 0 with h₃ | h₃
-      . simp [show (3 + ↑x) % 2 ≠ 0 ∧ x.1 > 3 by omega, *]
-      . simp [show x.1 % 2 = 1 by omega, *]
+      . simp [show (3 + ↑x) % 2 ≠ 0 ∧ x.1 > 3 by omega, -Fin.val_fin_le, -Fin.val_fin_lt, op, h₁,
+          h₂, h₃, l₁, l₂]
+      . simp [show x.1 % 2 = 1 by omega, -Fin.val_fin_le, -Fin.val_fin_lt, op, h₁, h₂, h₃, l₁, l₂]
     . rcases eq_or_ne ((x.1 + y.1) % 2) 0 with h₃ | h₃ <;>
         rcases (show x < y ∨ x = y ∨ x > y by omega) with h₄ | h₄ | h₄
-      have l₄ {a b : Nat} (h : a > b) : a ≥ b ∧ b < a ∧ ¬a < b + 1 := by omega
-      . simp [show ¬y ≤ x ∧ x ≤ y by omega, *]
-      . simp [*]
-      . simp [show y ≤ x ∧ ¬x ≤ y ∧ y.1 + 1 < x.1 by omega, *]
+      . have l₄ {a b : Nat} (h : a > b) : a ≥ b ∧ b < a ∧ ¬a < b + 1 := by omega
+        simp [show ¬y ≤ x ∧ x ≤ y by omega, op, h₁, h₂, h₃, h₄, l₁, l₂, l₃, l₄]
+      . simp [op, h₁, h₂, h₃, h₄, h₄, l₁, l₂]
+      . simp [show y ≤ x ∧ ¬x ≤ y ∧ y.1 + 1 < x.1 by omega, op, h₁, h₂, h₃, h₄, l₁, l₂, l₃]
       all_goals have l₅ {a b : Nat} (h : (a + b) % 2 ≠ 0) : (b + a) % 2 = 1 ∧ (a + b) % 2 = 1 ∧
         (b + a) % 2 ≠ 0 := by omega
-      . simp [show ¬y < x ∧ (x.1 - 1 + y.1) % 2 = 0 ∧ ¬y.1 ≤ (x.1 - 1) by omega, *]
-      . simp [*]
-      . simp [show (x.1 + (y.1 - 1)) % 2 = 0 ∧ ¬x < y ∧ y.1 ≤ x.1 + 1 by omega, *]
+      . simp [show ¬y < x ∧ (x.1 - 1 + y.1) % 2 = 0 ∧ ¬y.1 ≤ (x.1 - 1) by omega, op, h₁, h₂, h₃,
+          h₄, l₁, l₂, l₅]
+      . simp [op, h₂, h₄, l₁, l₂]
+      . simp only [ge_iff_le, Bool.and_eq_true, decide_eq_true_eq, Fin.val_fin_le, gt_iff_lt,
+          Fin.val_fin_lt, and_self, le_refl, ↓reduceIte, lt_self_iff_false, op]
+        simp [show (x.1 + (y.1 - 1)) % 2 = 0 ∧ ¬x < y ∧ y.1 ≤ x.1 + 1 by omega, h₁, h₂, h₃, h₄,
+          l₁, l₂, l₅]
   else if h : n = 2 then
     let op (x y : Fin n) : Fin n := ⟨(x.1 + y.1) % 2, by omega⟩
     use ⟨op⟩
