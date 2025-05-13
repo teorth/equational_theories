@@ -1,4 +1,4 @@
--- import Batteries.Data.Array.Basic
+import Batteries.Data.Array.Basic
 import Batteries.Tactic.Lint.Frontend
 import Cli.Basic
 import Lean.Util.SearchPath
