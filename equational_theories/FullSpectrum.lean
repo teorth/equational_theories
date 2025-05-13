@@ -1,5 +1,5 @@
 import equational_theories.Equations.All
-import Init.Data.Int.DivModLemmas
+import Init.Data.Int.DivMod.Lemmas
 import equational_theories.MagmaOp
 import Mathlib.Algebra.Order.GroupWithZero.Canonical
 import Mathlib.Data.ZMod.Defs
