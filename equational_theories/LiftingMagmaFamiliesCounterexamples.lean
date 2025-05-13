@@ -30,7 +30,7 @@ def generateNonImplicationsTable : CoreM (Std.HashMap String (Array String) × S
   IO.println s!"Extracted {eqnThms.size} equational results. Generating their closure ..."
   let closure ← Closure.closure (eqnThms.map Entry.variant) (← Closure.getStoredDualityRelations).dualEquations
   IO.println s!"Generated the closure of size {closure.size} ..."
-  return closure.foldl (init := (.empty (capacity := 8192), .empty (capacity := 8192))) fun (implMap, nonImplMap) edge ↦
+  return closure.foldl (init := (.emptyWithCapacity (capacity := 8192), .emptyWithCapacity (capacity := 8192))) fun (implMap, nonImplMap) edge ↦
     match edge with
     | .implication ⟨lhs, rhs⟩ =>
       (implMap.push lhs rhs, nonImplMap)
@@ -92,7 +92,7 @@ def main : IO Unit := do
     IO.FS.writeFile (outputDir / "InvariantMetatheoremNonimplications" / s!"{inst.instName}_counterexamples.lean") ""
   IO.println "Generating counterexample files..."
   IO.println "Loading environment..."
-  searchPathRef.set compile_time_search_path%
+  initSearchPath (← findSysroot)
   let env ← importModules #[
     { module := `equational_theories },
     { module := `equational_theories.Equations.All }] .empty
