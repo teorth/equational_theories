@@ -1,4 +1,4 @@
-import Mathlib.Order.Chain
+import Mathlib.Order.Preorder.Chain
 import Mathlib.Data.Set.Countable
 
 theorem Exists.classicalRecOn_eq {α : Sort*} {p : α → Prop} (h : ∃ a, p a)
