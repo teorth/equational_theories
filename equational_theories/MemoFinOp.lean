@@ -92,7 +92,7 @@ def rowToNat (row : List Nat) : Nat :=
   | n :: ns => n + 256 * rowToNat ns
 
 def extract (matrix : List Nat) (row col : Nat) : Nat :=
-  255 &&& ((List.get! matrix row) >>> (col * 8))
+  255 &&& ((matrix[row]!) >>> (col * 8))
 
 def IsTable (n : Nat) (matrix : List Nat) : Prop :=
   ∀ x y : Fin n, extract matrix x y < n
@@ -129,7 +129,7 @@ elab "finOpTable" str:str :term => do
   let table := toExpr (matrix.map rowToNat)
   let istable := mkApp2 (mkConst ``IsTable) (mkLit (.natVal matrix.length)) table
   let mv ← mkFreshExprMVar istable
-  discard <| withCurrHeartbeats <| Tactic.run mv.mvarId! do Lean.Elab.Tactic.evalTactic (← `(tactic| decide!))
+  discard <| withCurrHeartbeats <| Tactic.run mv.mvarId! do Lean.Elab.Tactic.evalTactic (← `(tactic| native_decide))
   return mkApp3 (mkConst ``extractWrapper) (mkLit (.natVal matrix.length)) table (← instantiateMVars mv)
 
 end MemoFinOp
