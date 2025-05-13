@@ -86,7 +86,7 @@ theorem project_E {x y} (h : E x y) : project x = 0 ∧ project y = 0 := by
 
 theorem aux3' {x x' z} : E x d → E x' d → E x⁻¹ z → x' ≠ x * z := by
   intro h1 h2 h3 h4
-  simp only [ok.aux3 h1 h2 h3 h4, self_eq_mul_right] at h4
+  simp only [ok.aux3 h1 h2 h3 h4, left_eq_mul] at h4
   have := inv_eq_iff_eq_inv.1 $ ok.aux1 (h4 ▸ h3)
   rw [this] at h1
   have values : E g₂⁻¹ (g₁ * g₂) ∧ E (g₁ * g₂) (g₂⁻¹ * g₁) := by simp [ok.base]
