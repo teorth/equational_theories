@@ -31,7 +31,7 @@ noncomputable def adjoinFresh (m : ℕ) : ℕ ≃ ℕ ⊕ α where
       · simp only [add_lt_iff_neg_right, not_lt_zero', ↓reduceIte, add_tsub_cancel_right]
         rw [← h']
         simp only [Equiv.symm_apply_apply]
-        omega
+        aesop
       · simp [← h']
         omega
   right_inv a := by
