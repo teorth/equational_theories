@@ -629,31 +629,16 @@ theorem exists_extension :
   simp only [Subtype.exists, Prod.forall] at h3
   classical
   choose f hf1 hf2 op hop using h3
-  refine ⟨op, fun x y ↦ ?_, ?_⟩
-  · let S : Finset (ℕ × ℕ) := {(x, y), (y, x), (x, op y x), (x, op x (op y x))}
-    have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_,  h1⟩⟩)
-      (S.image (fun ⟨u, v⟩ => ⟨⟨f u v, hf1 u v⟩, hf2 u v⟩))
-    have hle := (Finset.forall_mem_image.1 le)
-    have xy_mem : op x y ∈ e.1 x y := by
-        have : (x, y) ∈ S := by simp [S]
-        exact hle this _ _ (hop ..)
-    have yx_mem : op y x ∈ e.1 y x := by
-        have : (y, x) ∈ S := by simp [S]
-        exact hle this _ _ (hop ..)
-    have xyx_mem : op x (op y x) ∈ e.1 x (op y x) := by
-        have : (x, op y x) ∈ S := by simp [S]
-        exact hle this _ _ (hop ..)
-    have xxyx_mem : op x (op x (op y x)) ∈ e.1 x (op x (op y x)) := by
-        have : (x, op x (op y x)) ∈ S := by simp [S]
-        exact hle this _ _ (hop ..)
-    obtain ⟨xyx', xyx'_mem, xy_to_xyx'⟩ := e.2.laws.eq3308 xy_mem yx_mem
-    have xyx_eq : (xyx' : ℕ) = op x (op y x) := e.2.func xyx'_mem xyx_mem
-    have xy_in_xyx : op x y ∈ e.1 x (op x (op y x)) := by
-      rw [xyx_eq] at xy_to_xyx'
-      exact xy_to_xyx'
-    exact e.2.func xy_in_xyx xxyx_mem
-  · intro x y z H
-    exact (hf1 ..).func (h2 _ (hf2 x y) _ _ H) (hop ..)
+  refine ⟨op, fun x y => ?_, fun {x y z} H => ?_⟩
+  · let S : Finset _ := {(x,y), (y,x), (x, op y x), (x, op x (op y x))}
+    have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
+      (S.image fun (a, b) => ⟨⟨f a b, hf1 a b⟩, hf2 a b⟩)
+    replace le a (ha : a ∈ S) := Finset.forall_mem_image.1 le ha _ _ (hop a.1 a.2)
+    simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
+    obtain ⟨xy, yx, xyx, xxyx⟩ := le
+    obtain ⟨xyx', xyx'_def, eq⟩ := (e.2.laws.eq3308 xy yx)
+    exact e.2.func eq (e.2.func xyx'_def xyx ▸ xxyx)
+  · exact (hf1 ..).func (h2 _ (hf2 x y) _ _ H) (hop ..)
 
 def GreedyMagma (_ : Extension ℕ) := ℕ
 
