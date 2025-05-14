@@ -224,14 +224,16 @@ theorem next_law2 {x y z xy zy} : xy ∈ next x y → zy ∈ next z y → xy = z
 -- better for pattern matching
 theorem next_law3' {x y xx} : x = y → xx ∈ next x y → ∃ xxx, ∃ xxxx, xxx ∈ next xx x ∧ xxxx ∈ next xxx x := by
   intro x_eq_y xx_mem
-  cases xx_mem
-  case base h =>
+  cases xx_mem with
+  | base h =>
     simp only [Sum.inl.injEq] at x_eq_y
     rw [← x_eq_y] at h
     obtain ⟨xxx, xxxx, xxx_mem, eq⟩ := ok.laws.law3 h
     exact ⟨.inl xxx, .inl xxxx, .base xxx_mem, .base eq⟩
-  all_goals simp_all
-  all_goals aesop
+  | new =>
+    injection x_eq_y with hab
+    exact (a_ne_b hab).elim
+  | extra => contradiction
 
 theorem next_eq1722 {x y xy xyy} : xy ∈ next x y → xyy ∈ next xy y → ∃yy, yy ∈ next y y ∧ x ∈ next yy xyy := by
   intro xy_mem xyy_mem
@@ -315,7 +317,7 @@ theorem exists_extension :
   · let S : Finset _ := {(y,y), (x, y), (op x y, y), (op y y, op (op x y) y)}
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (S.image fun (a, b) => ⟨⟨f a b, hf1 a b⟩, hf2 a b⟩)
-    replace le a ha := Finset.forall_image.1 le a ha _ _ (hop a.1 a.2)
+    replace le a (ha : a ∈ S) := Finset.forall_mem_image.1 le ha _ _ (hop a.1 a.2)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
     obtain ⟨yy, xy, xyy, final⟩ := le
     obtain ⟨yy', yy'_def, eq⟩ := (e.2.laws.eq1722 xy xyy)
