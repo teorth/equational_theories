@@ -32,7 +32,7 @@ def buildMemo {n : Nat} (f : Fin n → Fin n → Fin n) : Nat := Id.run do
 example :
     let f := fun (a b : Fin 4) => a * a * b + 2
     opOfTable (buildMemo f) = f := by
-  funext a b; revert a b; native_decide
+  funext a b; revert a b; decide +kernel
 
 private unsafe def evalNatImpl (e : Expr) : MetaM Nat := do
   let t ← inferType e
