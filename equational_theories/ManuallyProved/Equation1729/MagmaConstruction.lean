@@ -722,12 +722,12 @@ lemma PartialSolution_with_axioms.Sd₀_neq_Sd₁  (sol: PartialSolution_with_ax
 
 lemma PartialSolution_with_axioms.Sd₁_neq_d₁ (sol: PartialSolution_with_axioms) : S sol.d₁ ≠ sol.d₁ := by
   apply sol.test 1
-  rw [S_eval, DirectSum.of_eq_same, ne_eq, add_right_eq_self]
+  rw [S_eval, DirectSum.of_eq_same, ne_eq, add_eq_left]
   decide
 
 lemma PartialSolution_with_axioms.Sd_neq_d (sol: PartialSolution_with_axioms) (y z:N) : S (sol.d y z) ≠ sol.d y z := by
   apply sol.test (enum (y,z))
-  rw [S_eval, DirectSum.of_eq_same, ne_eq, add_right_eq_self]
+  rw [S_eval, DirectSum.of_eq_same, ne_eq, add_eq_left]
   decide
 
 lemma PartialSolution_with_axioms.d₀_neq_zero (sol: PartialSolution_with_axioms) : sol.d₀ ≠ 0 := by
@@ -762,7 +762,7 @@ lemma PartialSolution_with_axioms.ad₀_neq_d₀ (sol: PartialSolution_with_axio
 
 lemma PartialSolution_with_axioms.ad₀_neq_d (sol: PartialSolution_with_axioms) {a : SM} (h: R' a sol.x = sol.y₀) {y z: N} :  a - sol.d₀ ≠ sol.d y z := by
   apply sol.test 0
-  simp only [DirectSum.sub_apply, sol.a_supp h, E_apply, add_right_inj, add_left_eq_self, enum_ne_0]
+  simp only [DirectSum.sub_apply, sol.a_supp h, E_apply, add_right_inj, add_eq_right, enum_ne_0]
   decide
 
 lemma PartialSolution_with_axioms.ad₀_neq_d₁ (sol: PartialSolution_with_axioms) {a : SM} (h: R' a sol.x = sol.y₀):  a - sol.d₀ ≠ sol.d₁ := by
@@ -792,7 +792,7 @@ lemma PartialSolution_with_axioms.Sad₀_neq_d₁ (sol: PartialSolution_with_axi
 
 lemma PartialSolution_with_axioms.Sad₀_neq_d (sol: PartialSolution_with_axioms) {a : SM} (h: R' a sol.x = sol.y₀) {y z: N} : S  a + S sol.d₀ ≠ sol.d y z := by
   apply sol.test 0
-  simp only [DirectSum.add_apply, S_eval, sol.a_supp h, E_apply, add_right_inj, add_left_eq_self, enum_ne_0]
+  simp only [DirectSum.add_apply, S_eval, sol.a_supp h, E_apply, add_right_inj, add_eq_right, enum_ne_0]
   decide
 
 lemma PartialSolution_with_axioms.SSy₀_neq_d₀ (sol: PartialSolution_with_axioms) : S ( sol.S' sol.y₀ ) ≠ sol.d₀ := by
@@ -842,12 +842,12 @@ lemma PartialSolution_with_axioms.aSy₀_neq_Sd₀ (sol: PartialSolution_with_ax
 
 lemma PartialSolution_with_axioms.d_neq_d₀ (sol: PartialSolution_with_axioms) {y z: N} : sol.d y z ≠ sol.d₀ := by
   apply sol.test 0
-  simp only [E_apply, add_right_inj, add_left_eq_self, enum_ne_0, DirectSum.of_eq_same]
+  simp only [E_apply, add_right_inj, add_eq_right, enum_ne_0, DirectSum.of_eq_same]
   decide
 
 lemma PartialSolution_with_axioms.d_neq_Sd₀ (sol: PartialSolution_with_axioms) {y z: N} : sol.d y z ≠ S sol.d₀ := by
   apply sol.test 0
-  simp only [E_apply, add_right_inj, add_left_eq_self, enum_ne_0, S_eval, DirectSum.of_eq_same]
+  simp only [E_apply, add_right_inj, add_eq_right, enum_ne_0, S_eval, DirectSum.of_eq_same]
   decide
 
 lemma PartialSolution_with_axioms.d_neq_d₁ (sol: PartialSolution_with_axioms) {y z: N} : sol.d y z ≠ sol.d₁ := by
@@ -2017,7 +2017,7 @@ lemma enlarge_S'_induction {sol : PartialSolution} {x : N} (hind: ∀ y:N, y < x
             unfold A
             simp [dom_agree (parent x) parent_in]
           | .inr h =>
-            rw [h, ← mul_assoc, self_eq_mul_left, mul_eq_one_iff_eq_inv'] at hb
+            rw [h, ← mul_assoc, right_eq_mul, mul_eq_one_iff_eq_inv'] at hb
             have neq_inverse := freegroup_neq_inverse a b
             contradiction
         hC := by
@@ -2096,7 +2096,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
           by_contra this
           obtain ⟨h1, h2⟩ := this
           rw [← h2] at h1
-          simp only [R', Equiv.coe_fn_mk, mul_left_eq_self, FreeGroup.of_ne_one] at h1
+          simp only [R', Equiv.coe_fn_mk, right_eq_mul, FreeGroup.of_ne_one] at h1
         simp [this]
         exact sol.axiom_vi'' y' a (by aesop)
       axiom_vii'' := by
