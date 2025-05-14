@@ -1011,7 +1011,7 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
   all_goals rcases data' with ⟨⟩ | ⟨⟩ | ⟨a',ha'⟩ | ⟨a',ha'⟩ | ⟨y',z',hz'⟩
   all_goals try simp at hneq
   all_goals simp [PartialSolution_with_axioms.L₀'_pair, R']
-  all_goals constructor
+  all_goals try constructor
   · apply sol.nequiv_d₀
     simp [sol.d₀_neq_d₁.symm, sol.d₀_invis sol.sees_x]
   · apply sol.nequiv_d₁
@@ -1102,7 +1102,6 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_2 {sol: PartialSolution_with_
     exact R'_R'_neq _ _ _ ha'
   · apply sol.nequiv_d₀
     simp [sol.d₀_invis sol.sees_y₀, sol.ad₀_neq_d₀ ha', sol.SSy₀_neq_d₀, sol.d₀_neq_zero.symm, sol.d₀_invis (sol.sees_hA ha')]
-  · simp [ha, R'_axiom_iia', hneq] at ha'
   · simp [ha, R'_axiom_iia', hneq] at ha'
   · apply sol.nequiv_d₀
     simp [sol.Sd₀_neq_d₀, sol.d₀_neq_zero.symm, sol.d₀_invis (sol.sees_hB ha), sol.d₀_invis (sol.I_involved sol.extras hz').2.1, sol.aSy₀_neq_d₀ ha]
@@ -1432,8 +1431,7 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
       group
       simp only [Int.reduceNeg, zpow_one, new_L₀'_eval''', mul_left_inj, sol.new_L₀'_eval', and_true]
       refine ⟨Or.inr <| (fill_invar' _ _ _).mpr <| mem_fill <| sol.mem_new_predom data, ?_⟩
-      convert sol.new_L₀'_eval''' data n using 3
-      exact neg_add_eq_sub 1 n
+      rw [neg_add_eq_sub 1 n]
     axiom_S := by
       intro x' y hx' hyx
       rw [Finset.mem_union, Finset.mem_singleton] at hx'
@@ -1641,7 +1639,9 @@ lemma enlarge_S'_induction_with_axioms (sol : PartialSolution_with_axioms) : ∃
             simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
             rw [h.1, h.2] at hop'
             exact sol.invis_lemma y' x' (sol.dom_op_involved sol.extras hop').1
-          | v => aesop
+          | v =>
+            simp only [Function.Embedding.coeFn_mk, Prod.mk.injEq] at h
+            simp only [← h.2, ne_eq, not_true_eq_false, false_and, and_false] at this
           | P₁ y'' z'' hI'' => aesop
           | P₂ y'' z'' hI'' hz' => aesop
         · replace hI := (sol.I_involved sol.extras hI).2.2
@@ -2096,7 +2096,7 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
           by_contra this
           obtain ⟨h1, h2⟩ := this
           rw [← h2] at h1
-          simp only [R', Equiv.coe_fn_mk, right_eq_mul, FreeGroup.of_ne_one] at h1
+          simp only [R', Equiv.coe_fn_mk, mul_eq_right, FreeGroup.of_ne_one] at h1
         simp [this]
         exact sol.axiom_vi'' y' a (by aesop)
       axiom_vii'' := by
@@ -2256,10 +2256,12 @@ lemma enlarge_op (sol : PartialSolution) (x y :N) : ∃ sol', sol ≤ sol' ∧ (
       simp only [Finset.union_insert, Finset.mem_insert, Prod.mk.injEq, Finset.mem_union,
         Finset.mem_singleton] at hop
       by_cases hop1 : x' = x ∧ y' = y
-      · simp only [hop1.1, hop1.2, ↓reduceIte, Sum.inr.injEq, Finset.mem_union, Finset.mem_singleton,
-        Prod.mk.injEq, Finset.union_insert, Finset.mem_insert, and_true, exists_eq_left', or_true, true_and]
+      · simp only [hop1.1, hop1.2, ↓reduceIte, Sum.inr.injEq, Finset.mem_union,
+        Finset.mem_singleton, Prod.mk.injEq, Finset.union_insert, Finset.mem_insert, and_true,
+        exists_eq_left', or_true, true_and, z]
         right
-        simp only [hw, ↓reduceIte, hxy, and_false, and_self, z', and_true, hx]
+        simp only [hx, hxy, and_false, ↓reduceIte, and_true, true_and, z', w, z]
+        convert hw
       by_cases hop2 : x' = z ∧ y' = x
       · rw [hop2.1, hop2.2]
         use z'
