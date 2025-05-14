@@ -6,6 +6,7 @@ import Mathlib.Algebra.BigOperators.Fin
 --The notion of term-definable expressions in FO logic, as well other useful lemmas about
 --FO logic
 
+-- [UPSTREAMED]
 -- /-- Any `Unique` type is a left identity for type sigma up to equivalence. Compare with `uniqueProd`
 -- which is non-dependent. -/
 -- @[simps]
@@ -15,6 +16,7 @@ import Mathlib.Algebra.BigOperators.Fin
 --   by intro; ext; exact Unique.default_eq _; simp,
 --   by intro; rfl⟩
 
+-- [UPSTREAMED]
 -- /-- A type indexed by  disjoint sums of types is equivalent to the sum of the sums. Compare with
 -- `Equiv.sigmaSumDistrib`. -/
 -- @[simps]
@@ -27,6 +29,7 @@ import Mathlib.Algebra.BigOperators.Fin
 --   by rintro ⟨x|x,y⟩ <;> simp,
 --   by rintro (⟨x,y⟩|⟨x,y⟩) <;> simp⟩
 
+-- [UPSTREAMED]
 -- /-- Equivalence between `(i : Fin m) × Fin (n i)` and `Fin (∑ i : Fin m, n i)`. Compare with `finPiFinEquiv`. -/
 -- def finSigmaFinEquiv {m : ℕ} {n : Fin m → ℕ} : (i : Fin m) × Fin (n i) ≃ Fin (∑ i : Fin m, n i) :=
 --   match m with
@@ -407,12 +410,10 @@ theorem subst_definitions_eq {k : ℕ} (f : L.BoundedFormula α k)
         let hxs := fun i ↦ ((ts i).subst_definitions_extraVals hFs (Sum.elim vL vR)).2
         replace h := h xs (by
           intro i hi
-          simp at hi
-          rcases hi with ⟨w,hiw,hiw₂⟩
-          rw [List.mem_ofFn] at hiw -- [ERROR]
-          obtain ⟨j,rfl⟩ := hiw
-          simp at hiw₂
-          obtain ⟨a,ha₁,rfl⟩ := hiw₂
+          obtain ⟨w_list, hw_list_in_ofFn, hs_in_w_list⟩ := List.mem_flatten.mp hi
+          obtain ⟨j, rfl⟩ := List.mem_ofFn.mp hw_list_in_ofFn
+          simp at hs_in_w_list
+          obtain ⟨a,ha₁,rfl⟩ := hs_in_w_list
           have := hxs j a ha₁
           rw [Formula.Realize] at this
           rw [realize_relabel]
