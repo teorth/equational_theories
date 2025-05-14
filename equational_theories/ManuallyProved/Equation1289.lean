@@ -81,9 +81,11 @@ theorem next_right_cancel {x y z xy zy} : xy ∈ next x y → zy ∈ next z y �
   intro xy_mem zy_mem eq
   cases xy_mem <;> cases zy_mem
   case base.base xy_mem _ _ zy_mem =>
-    simp only [Sum.inl.injEq]
+    rw [Sum.inl.injEq]
     exact ok.laws.right_cancel xy_mem zy_mem (by simpa using eq)
-  all_goals aesop
+  case base.new xy_mem => exact False.elim <| not_im_r xy_mem
+  case new.base zy_mem => exact False.elim <| not_im_r zy_mem
+  case new.new => rfl
 
 theorem next_idem_l {x y xy} : xy ∈ next x y → x ∈ next x x := by
   intro xy_mem
