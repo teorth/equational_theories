@@ -27,3 +27,5 @@ import equational_theories.ManuallyProved.Equation3308
 import equational_theories.ManuallyProved.Equation3342
 import equational_theories.ManuallyProved.Equation1447
 import equational_theories.ManuallyProved.Equation1729
+import equational_theories.ManuallyProved.Equation3308
+import equational_theories.ManuallyProved.Equation3342
