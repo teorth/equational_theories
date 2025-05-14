@@ -267,7 +267,7 @@ theorem exists_extension (seed : PartialSolution) :
   · let S : Finset G := {x, f x, x⁻¹ * f (f x)}
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (S.image fun a => ⟨e a, he a⟩)
-    replace le a ha := Finset.forall_image.mp le a ha _ _ (hf a)
+    replace le a ha := Finset.forall_mem_image.mp le ha a _ (hf a)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
     obtain ⟨fx, ffx, fffxmx⟩ := le
     exact e.2.func fffxmx (e.2.eq63 fx ffx)
