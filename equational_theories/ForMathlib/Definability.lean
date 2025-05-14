@@ -409,7 +409,6 @@ theorem subst_definitions_eq {k : ℕ} (f : L.BoundedFormula α k)
           intro i hi
           simp at hi
           rcases hi with ⟨w,hiw,hiw₂⟩
-          stop
           rw [List.mem_ofFn] at hiw -- [ERROR]
           obtain ⟨j,rfl⟩ := hiw
           simp at hiw₂
