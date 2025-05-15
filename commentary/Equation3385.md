@@ -1,0 +1,3 @@
+This law implies the [commutative law 43](https://teorth.github.io/equational_theories/implications/?43).
+
+The submagma `P = {x◇y| x,y∈M}` is an associative sloop, namely it obeys the [Putnam law 14](https://teorth.github.io/equational_theories/implications/?14), the commutative law, has a two-sided identity element `e`, and obeys the [associative law 4512](https://teorth.github.io/equational_theories/implications/?4512).  (See also [law 492](https://teorth.github.io/equational_theories/implications/?492), the commutative version of the Putnam law.)  In addition, all squares are equal to the identity element, `x◇x=e` for `x∈M`.
