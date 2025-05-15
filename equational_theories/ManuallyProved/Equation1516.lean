@@ -18,7 +18,7 @@ import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
 import Mathlib.Data.Rel
 import Mathlib.Tactic.Linarith.Frontend
 import Init.Core
-import Mathlib.Tactic.Group --This breaks some instance, I haven't understood why exactly
+import Mathlib.Tactic.Group
 
 namespace Eq1516
 
