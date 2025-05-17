@@ -4,6 +4,7 @@ universe u
 
 variable {α : Type u}
 
+-- [UPSTREAMED]: https://github.com/leanprover-community/mathlib4/pull/24972
 theorem isOfFinOrder_of_isConj [Group α] {x y : α} :
       IsConj x y → (IsOfFinOrder x → IsOfFinOrder y) := by
    simp only [isConj_iff, isOfFinOrder_iff_pow_eq_one]
