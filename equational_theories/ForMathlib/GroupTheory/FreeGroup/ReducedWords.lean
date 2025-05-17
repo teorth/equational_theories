@@ -152,7 +152,7 @@ theorem reduced_iff_eq_reduce : reduced L ↔ reduce L = L := by
     exact reduce.red
   · intro h
     unfold reduced
-    rw [List.chain'_iff_all_append_cons_cons]
+    rw [List.chain'_iff_forall_rel_of_append_cons_cons]
     intro ⟨x₁, x₂⟩ ⟨y₁, y₂⟩ l₁ l₂ hl hx
     simp only at hl hx
     rw [hx.1, ← hx.2] at hl
