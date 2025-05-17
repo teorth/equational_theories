@@ -1,7 +1,6 @@
 import Mathlib.GroupTheory.FreeGroup.Reduce
 import Mathlib.Tactic.Linarith
 
-import equational_theories.Mathlib.Data.List.Chain
 import equational_theories.Mathlib.Data.List.Lemmas
 import equational_theories.Mathlib.GroupTheory.OrderOfElement
 
