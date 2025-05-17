@@ -11,7 +11,7 @@ theorem flip_dual {Law1 Law2 : NatMagmaLaw} (H : Law1.IsDual Law2.symm) : Law1.I
 
 def checkDual (map : List Nat) : FreeMagma Nat → FreeMagma Nat → Option (List Nat)
   | .Leaf a, .Leaf b =>
-    match map.get? a with
+    match map[a]? with
     | none => if map.contains b then none else some (map ++ [b])
     | some i => if i = b then some map else none
   | .Fork a1 a2, .Fork b1 b2 => do let map ← checkDual map a1 b1; checkDual map a2 b2
@@ -29,7 +29,7 @@ def checkDualLaw : MagmaLaw Nat → MagmaLaw Nat → Option (List Nat × Bool)
       return (map, true))
 
 def getInverse (l : List Nat) : List Nat :=
-  (List.range l.length).map fun i => l.indexOf i
+  (List.range l.length).map fun i => l.idxOf i
 
 elab tk:"duals " i:num " ↔ " j:num : command => Command.liftTermElabM do
   let ns ← getCurrNamespace

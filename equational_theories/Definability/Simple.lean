@@ -16,11 +16,12 @@ open Law.MagmaLaw
 @[simp]
 theorem FreeMagma.toTerm_realize {α M} (t : FreeMagma α)
     [inst : Magma M] (v : α → M) :
-    @Term.realize _ _ inst.FOStructure _ v t.toTerm = t.evalInMagma v :=
-  match t with
-  | .Leaf a => by simp only [Term.realize, evalInMagma]
-  | .Fork m1 m2 => by
-    simp [Term.realize, Magma.FinArityOp, evalInMagma, m1.toTerm_realize v, m2.toTerm_realize v]
+    @Term.realize _ _ inst.FOStructure _ v t.toTerm = t.evalInMagma v := by
+  induction t with
+  | Leaf a => rw [evalInMagma]; rfl
+  | Fork m1 m2 ih1 ih2 =>
+    rw [FreeMagma.toTerm]
+    simp [Term.realize, Magma.FinArityOp, evalInMagma, ih1, ih2]
 
 /-- Every law is TermStructural from its dual. -/
 theorem TermStructural_dual (L : NatMagmaLaw) : L.TermStructuralFrom L.dual := by

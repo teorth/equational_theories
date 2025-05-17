@@ -10,7 +10,7 @@ open Law.MagmaLaw
 lhs and rhs are the same shape, but with disjoint sets of variables. -/
 theorem Equation46_termDefinableFrom_equalShape {L : NatMagmaLaw}
   (hShape : L.lhs ⬝ (fun _ ↦ Lf 0) = L.rhs ⬝ (fun _ ↦ Lf 0) := by rfl)
-  (hDisjoint : L.lhs.elems.val.Disjoint L.rhs.elems := by rw [List.Disjoint]; decide!)
+  (hDisjoint : L.lhs.elems.val.Disjoint L.rhs.elems := by rw [List.Disjoint]; decide +kernel)
   : Law46.TermDefinableFrom L := by
   --There are two cases: there is at least one function application, or both sides of L are leaves.
   cases hlhs : L.lhs

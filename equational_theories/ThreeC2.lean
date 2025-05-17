@@ -161,7 +161,7 @@ where
     next => simp [red.go, *]
     next ih => exact ih
     next ih => simpa [red.go] using ih
-    next hne _ ih => simpa [red.go, hne] using ih
+    next hne _ ih => simp_all [red.go]
 
 theorem red_length_le (w : W) : (red w).length ≤ w.length := by
   simpa using go [] w
@@ -202,10 +202,10 @@ theorem red_reduce {ys} {x} {xs} : red (ys ++ x :: x :: xs) = red (ys ++ xs) :=
 where
   go zs ys (h : IsRed zs) : red.go zs (ys ++ x :: x :: xs) = red.go zs (ys ++ xs) := by
     induction zs, ys, h using red.go_induct
-    next ys _ _ =>
+    next ys _ =>
       cases ys
       next => simp [red.go]
-      next y ys h _  =>
+      next y ys h =>
         simp [red.go, *]
         intro he
         subst he
@@ -280,11 +280,7 @@ where
     next ys x xs _ =>
       exfalso
       simp [IsRed_not_repeated] at hxs
-    next ys y x xs hne ih =>
-      simp only [red.go, hne, List.reverse_cons, List.append_assoc]
-      simp only [List.reverse_cons, List.append_assoc] at ih
-      apply ih
-      simpa using hxs
+    next ys y x xs hne ih => simp_all [List.cons_append, red.go]
   -- This loop/induction now cancels the elements. Now the last case is impossible.
   go2 ys xs (hxs : IsRed xs) : red.go ys xs = [] → ys = xs := by
     intro h

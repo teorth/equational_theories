@@ -70,7 +70,9 @@ def CommSemigroupOf543 [Magma M] (h : Equation543 M) : CommSemigroup M :=
     mul_comm := hcomm
     mul_assoc := fun x y z ↦ by
       have h23 (x y z : M) : x * (y ◇ z) = x ◇ (z ◇ y) := by
-        simp only [HMul.hMul, Mul.mul, h4369 (x ◇ x) y z, ← h11]
+        simp only [HMul.hMul, Mul.mul]
+        apply congrArg (fun t ↦ x ◇ t)
+        rw [h4369 (x ◇ x) y z, ← h11 y x]
       have h26 (x y z : M) : x * (y ◇ z) = y * (x ◇ z) :=
         (h23 _ _ _).trans <| (h4369 _ _ _).trans (h23 _ _ _).symm
       have h28 (x y z : M) : x * (y ◇ ((y ◇ y) ◇ z)) = y * (x ◇ ((x ◇ x) ◇ z)) := by

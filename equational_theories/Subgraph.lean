@@ -1,5 +1,4 @@
 import Mathlib.Tactic
-import Mathlib.Data.Nat.Defs
 import equational_theories.EquationalResult
 import equational_theories.Equations.Basic
 import equational_theories.FactsSyntax
@@ -764,12 +763,12 @@ theorem Equation387_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equat
   ⟨ℝ, ⟨fun x y ↦ (x + y) / 2⟩, fun _ _ ↦ by ring_nf, fun h ↦ by specialize h 0 0 1; field_simp at h⟩
 
 @[equational_result]
-theorem Equation4512_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation42 G :=
-  ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ _ ↦ by abel_nf, fun h ↦ by simpa using h 0 0 1⟩
+theorem Equation4512_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation42 G := by
+  refine ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ _ ↦ by abel_nf; exact (add_rotate' ..).symm, fun h ↦ by simpa using h 0 0 1⟩
 
 @[equational_result]
 theorem Equation4512_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation4513 G :=
-  ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ _ ↦ by abel_nf, fun h ↦ by simpa using h 0 0 0 1⟩
+  ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ _ ↦ by abel_nf; exact (add_rotate' ..).symm, fun h ↦ by simpa using h 0 0 0 1⟩
 
 @[equational_result]
 theorem Equation4513_not_implies_Equation4522 : ∃ (G: Type) (_: Magma G), Equation4513 G ∧ ¬ Equation4522 G := by

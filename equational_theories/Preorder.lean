@@ -1,4 +1,3 @@
-import Mathlib.Data.Set.Basic
 import equational_theories.MagmaLaw
 
 open Law

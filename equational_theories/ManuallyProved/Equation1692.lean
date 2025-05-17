@@ -5,7 +5,7 @@ import Mathlib.Data.Finsupp.Pointwise
 import Mathlib.Data.Rat.Encodable
 import Mathlib.Data.Rat.Star
 import Mathlib.NumberTheory.NumberField.Basic
-import Mathlib.RingTheory.SimpleModule
+import Mathlib.RingTheory.SimpleModule.Basic
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
 
@@ -730,7 +730,9 @@ lemma common_ancestor_helper {vals: XVals} (ancestor t1 t2: @TreeNode vals) (lef
     by_cases x_eq_zero: x = 0
     · simp [vals.x_to_index_eq, index_x_neq_treeNum, x_eq_zero, XVals.x_vals, XVals.x_to_index,
         root_not_supp]
-    · simp only [XVals.x_to_index] at index_x_neq_treeNum
+    · simp only [XVals.x_to_index, ne_eq, Nat.add_left_cancel_iff, mul_eq_mul_right_iff,
+      Nat.pow_eq_zero, OfNat.ofNat_ne_zero, Nat.add_eq_zero, one_ne_zero, and_false,
+      not_false_eq_true, and_true, or_false] at index_x_neq_treeNum
       simp [vals.x_to_index_eq, index_x_neq_treeNum, x_eq_zero, XVals.x_vals, XVals.x_to_index,
         index_x_neq_treeNum]
   rw [sum_eq_zero] at sub_b
@@ -866,7 +868,10 @@ lemma cross_eq_same_parent {vals: XVals} {t1 t2: @TreeNode vals} (h_a_neq: t1.ge
                     by_contra!
                     simp at this
                     omega
-                  simp [vals_neq] at fun_congr
+                  subst h_t1 h_t2
+                  simp_all only [ne_eq, tsub_le_iff_right, Nat.add_left_cancel_iff, mul_eq_mul_right_iff,
+                    Nat.pow_eq_zero, OfNat.ofNat_ne_zero, Nat.add_eq_zero, one_ne_zero, and_false, not_false_eq_true,
+                    and_true, or_false, or_self, Finsupp.single_eq_of_ne, neg_zero, zero_ne_one]
                 · have is_t2_le: treeNum t2_parent - 1 ≤ treeNum t1_parent - 1 := by linarith
                   simp [TreeNode.getData] at h_eq
                   have fun_congr := DFunLike.congr h_eq (x := vals.x_to_index (treeNum t1_parent - 1)) rfl
@@ -1625,7 +1630,6 @@ lemma left_tree_supp_increasing {vals: XVals} (t: @TreeNode vals): t.left.getDat
     rw [Nat.cast_withBot, Nat.cast_withBot]
     norm_cast
     field_simp
-    omega
   rw [tree_comb.b_eq]
   exact lt_of_le_of_lt supp_max_sum m_supp_max_lt
 
@@ -2381,7 +2385,7 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
             · simp only [cur_i_one, pow_one] at hb
               exact hb ▸ ne_of_mem_of_not_mem ha (by simp)
             · have pow_ge_4: 2^2 ≤ 2^((f_data (g_to_num ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))).cur.i) :=
-                Nat.pow_le_pow_of_le_right (by simp) (by omega)
+                Nat.pow_le_pow_right (by simp) (by omega)
               have a_le_3: a ≤ 3 := Nat.divisor_le ha
               omega
           | .left parent =>
@@ -2526,7 +2530,7 @@ theorem Equation1692_not_implies_Equation23 :
 theorem Equation1692_not_implies_Equation47 :
   ∃ (T : Type) (_ : Magma T), Equation1692 T ∧ ¬ Equation47 T := by
   refine ⟨G, magG, f_equation_1692, ?_⟩
-  simp only [Equation47, magG, sub_self, add_sub_cancel_left, self_eq_add_right, forall_const]
+  simp only [Equation47, magG, sub_self, add_sub_cancel_left, left_eq_add, forall_const]
   exact not_equation_47
 
 @[equational_result]

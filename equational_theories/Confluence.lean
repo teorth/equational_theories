@@ -1,7 +1,6 @@
 import equational_theories.FreeMagma
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
-import Lean.Meta.Tactic.Simp.RegisterCommand
 import Mathlib.Tactic.NthRewrite
 import Mathlib.Tactic.CasesM
 

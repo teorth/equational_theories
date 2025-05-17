@@ -9,7 +9,6 @@ import Mathlib.Data.Int.Star
 import Mathlib.GroupTheory.FiniteAbelian.Basic
 import Mathlib.LinearAlgebra.Dimension.Localization
 import Mathlib.LinearAlgebra.FreeModule.StrongRankCondition
-
 import equational_theories.Equations.Basic
 import equational_theories.EquationalResult
 import equational_theories.FactsSyntax
