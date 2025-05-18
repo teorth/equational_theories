@@ -1,8 +1,7 @@
+import Mathlib.Data.List.Lemmas
 import Mathlib.GroupTheory.FreeGroup.Reduce
+import Mathlib.GroupTheory.OrderOfElement
 import Mathlib.Tactic.Linarith
-
-import equational_theories.Mathlib.Data.List.Lemmas
-import equational_theories.Mathlib.GroupTheory.OrderOfElement
 
 /-!
 This file defines some extra lemmas for free groups, in particular about (cyclically) reduced words.
@@ -11,6 +10,11 @@ This file defines some extra lemmas for free groups, in particular about (cyclic
 * `FreeGroup.infinite_order` : nontrivial elements of a free group have infinite order
 * corollary `FreeGroup.ne_inv_of_ne_one` : nontrivial elements of a free group are not self-inverse.
 
+Related mathlib PRs:
+* Overall: https://github.com/leanprover-community/mathlib4/pull/22639
+* [UPSTREAMED] https://github.com/leanprover-community/mathlib4/pull/23366
+* [UPSTREAMED] (but not yet in bump) https://github.com/leanprover-community/mathlib4/pull/23367
+* https://github.com/leanprover-community/mathlib4/pull/23368
 -/
 open List
 
@@ -21,12 +25,12 @@ namespace FreeGroup
 
 variable {L L₁ L₂ : List (α × Bool)}
 
--- [UPSTREAMED]
+-- [UPSTREAMED] https://github.com/leanprover-community/mathlib4/pull/23366
 -- theorem invRev_append : invRev (L₁ ++ L₂) = invRev L₂ ++ invRev L₁ := by
 --   unfold invRev
 --   simp
 
--- [UPSTREAMED]
+-- [UPSTREAMED]  https://github.com/leanprover-community/mathlib4/pull/23366
 -- theorem invRev_cons {a : (α × Bool)} : invRev (a:: L) = invRev L ++ invRev [a] := by
 --   unfold FreeGroup.invRev
 --   simp
@@ -166,17 +170,21 @@ theorem reduced_toWord {x : FreeGroup α} : Red.reduced (x.toWord) := by
   rw [Red.reduced_iff_eq_reduce]
   simp
 
+-- [UPSTREAMED] (but not yet in bump): https://github.com/leanprover-community/mathlib4/pull/23367
 theorem toWord_mul {x y : FreeGroup α} : (toWord (x*y)) = reduce (toWord x ++ toWord y) := by
   rw [← mk_toWord (x := x), ← mk_toWord (x:= y), mul_mk]
   simp
 
+-- [UPSTREAMED] (but not yet in bump): https://github.com/leanprover-community/mathlib4/pull/23367
 theorem toWord_pow {x : FreeGroup α} {n : ℕ} : (toWord (x^n)) = reduce (List.replicate n x.toWord).flatten := by
   rw [← mk_toWord (x := x), pow_mk]
   simp
 
+-- [UPSTREAMED] (but not yet in bump): https://github.com/leanprover-community/mathlib4/pull/23367
 theorem reduce_append : (reduce (L₁ ++ L₂)) = reduce (reduce L₁ ++ reduce L₂) := by
 rw [← FreeGroup.toWord_mk, ← FreeGroup.mul_mk, toWord_mul, FreeGroup.toWord_mk, FreeGroup.toWord_mk]
 
+-- [UPSTREAMED] (but not yet in bump): https://github.com/leanprover-community/mathlib4/pull/23367
 theorem reduce_cons (a : α × Bool) (w : List (α × Bool)) :
     FreeGroup.reduce (a :: w) = FreeGroup.reduce (a :: FreeGroup.reduce w) := by
   simp only [FreeGroup.reduce.cons, FreeGroup.reduce.idem]
@@ -253,6 +261,7 @@ theorem reduceCyclically_sound (w : List (α × Bool)) :
       rw [Red.cyclicallyReduced_cons_append]
       trivial
 
+-- [UPSTREAMED] (but not yet in bump): https://github.com/leanprover-community/mathlib4/pull/23367
 theorem reduce_invRev_left_cancel (L : List (α × Bool)) : reduce (invRev L ++ L) = [] := by
   simp [←toWord_mk, ←mul_mk, ←inv_mk]
 
@@ -313,7 +322,7 @@ theorem infinite_order (x : FreeGroup α) (x_ne_1 : x ≠ 1) : ¬IsOfFinOrder x 
     rw [FreeGroup.mul_mk,FreeGroup.inv_mk, FreeGroup.mul_mk]
   intro c
   obtain ⟨n, n_gt_0, eq'⟩ :=
-    isOfFinOrder_iff_pow_eq_one.mp $ isOfFinOrder_of_isConj (IsConj.symm conj) c
+    isOfFinOrder_iff_pow_eq_one.mp $ conj.symm.isOfFinOrder c
   have x'_ne_1 : x' ≠ 1 := by
     intro eq
     rw [eq] at conj
