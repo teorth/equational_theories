@@ -40,13 +40,13 @@ lemma FreeMagma.count_subst' {ι : Type*} [DecidableEq ι] {t : FreeMagma ι} {�
     {a : α} {s : Finset ι} (hs : t.vars ⊆ s.1) : (t ⬝ σ).count a = ∑ i ∈ s, t.count i * (σ i).count a := by
   induction t with
   | Leaf b =>
-    simp at hs
+    rw [vars_leaf, Multiset.singleton_subset, Finset.mem_val] at hs
     simp [evalInMagma, hs]
   | Fork a b iha ihb =>
-    simp at hs
-    simp [iha (Multiset.Subset.trans Multiset.subset_add_left hs),
-          ihb (Multiset.Subset.trans Multiset.subset_add_right hs),
-          Finset.sum_add_distrib, Multiset.isMagma, add_mul]
+    rw [vars_fork] at hs
+    simp [evalInMagma, iha (Multiset.Subset.trans Multiset.subset_add_left hs),
+      ihb (Multiset.Subset.trans Multiset.subset_add_right hs),
+        Finset.sum_add_distrib, Multiset.isMagma, add_mul]
 
 lemma FreeMagma.count_subst {ι : Type*} [DecidableEq ι] {t : FreeMagma ι} {σ : ι → FreeMagma α}
     {a : α} : (t ⬝ σ).count a = ∑ i ∈ t.vars.toFinset, t.count i * (σ i).count a :=

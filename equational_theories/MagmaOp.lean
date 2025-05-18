@@ -33,8 +33,9 @@ def Magma.opHom : G → Op G := fun x => x
 
 theorem evalInMagmaOp (φ : α → G) (w : FreeMagma α):
   evalInMagma (G := Op G) φ w.dual = evalInMagma (G := G) φ w := by
-  cases w; trivial
-  case Fork w₁ w₂ => simp only [Op, evalInMagma, opMagma]; repeat rw [evalInMagmaOp]
+  induction w with
+  | Leaf x => rfl
+  | Fork w₁ w₂ ih₁ ih₂ => simp [dual, evalInMagma, opMagma, ih₂, ih₁]
 
 theorem models.Op {w₁ w₂ : FreeMagma α} (h : G ⊧ w₁ ≃ w₂) :
     (Op G) ⊧ w₁.dual ≃ w₂.dual := by

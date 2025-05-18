@@ -36,7 +36,7 @@ def matrix_834_10 : List (List (Fin 8)) :=
    [4, 7, 7, 7, 1, 4, 4, 1]]
 
 def Magma834_10 : Magma (Fin 8)
-  where op := fun x y => (matrix_834_10.get! x.val).get! y.val
+  where op := fun x y => (matrix_834_10[x.val]!)[y.val]!
 
 -- TODO use calculate_facts to find more places where this magma helps.
 
@@ -46,7 +46,7 @@ theorem Equation834_not_implies_Equation10 : ∃ (G: Type) (_: Magma G) (_: Fini
 
 -- dual of the above
 def Magma_2702_25 : Magma (Fin 8)
-  where op := fun x y => (matrix_834_10.get! y.val).get! x.val
+  where op := fun x y => (matrix_834_10[y.val]!)[x.val]!
 
 @[equational_result]
 theorem Equation2702_not_implies_Equation25 : ∃ (G: Type) (_: Magma G) (_: Finite G), Facts G [2702] [25] :=
@@ -64,7 +64,7 @@ def matrix_1460_3050 : List (List (Fin 8)) :=
    [3,0,0,3,3,0,3,0]]
 
 def Magma_1460_3050 : Magma (Fin 8)
-  where op := fun x y => (matrix_1460_3050.get! x.val).get! y.val
+  where op := fun x y => (matrix_1460_3050[x.val]!)[y.val]!
 
 @[equational_result]
 theorem Equation1460_not_implies_Equation3050 : ∃ (G: Type) (_: Magma G) (_: Finite G), Facts G [1460] [3050] :=
@@ -72,7 +72,7 @@ theorem Equation1460_not_implies_Equation3050 : ∃ (G: Type) (_: Magma G) (_: F
 
 -- dual of the above
 def Magma_2227_411 : Magma (Fin 8)
-  where op := fun x y => (matrix_1460_3050.get! y.val).get! x.val
+  where op := fun x y => (matrix_1460_3050[y.val]!)[x.val]!
 
 @[equational_result]
 theorem Equation2227_not_implies_Equation411 : ∃ (G: Type) (_: Magma G) (_: Finite G), Facts G [2227] [411] :=

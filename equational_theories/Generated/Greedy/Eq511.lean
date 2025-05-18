@@ -1,7 +1,7 @@
 import equational_theories.Equations.All
 import equational_theories.Generated.Greedy.OrLemmas
 import equational_theories.Superposition
-import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Fintype.EquivFin
 import Mathlib.Data.Nat.Pairing
 
 namespace Eq511
@@ -2713,31 +2713,39 @@ theorem PartialSolution.toMagma_equation511 :
   simpa [← PartialSolution.complFun_eq_iff, eq_comm] using
     ps.compl_rule1 X0 X1 (ps.complFun X0 X1) (ps.complFun X1 (ps.complFun X0 X1)) (ps.complFun X1 (ps.complFun X1 (ps.complFun X0 X1)))
 
+macro "solution_enumerator" : tactic => `(tactic| (
+  simp only [← imp_iff_not_or, Finset.mem_insert, Prod.mk.injEq, Finset.mem_singleton]
+  intros
+  repeat
+    rename_i h1
+    contrapose h1
+    simp_all
+    try split_ands
+))
 
 set_option maxRecDepth 1000 in
-set_option maxHeartbeats 400000 in
 noncomputable def PartialSolution.counter614 : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({(1, 1, 2), (1, 3, 4), (1, 4, 5), (1, 5, 2), (2, 1, 3)} : Finset _)
-  rule_0 := by simp only [← imp_iff_not_or]; aesop
-  rule_1 := by simp only [← imp_iff_not_or]; aesop
-  rule_2 := by simp only [← imp_iff_not_or]; aesop
-  rule_3 := by simp only [← imp_iff_not_or]; aesop
-  rule_4 := by simp only [← imp_iff_not_or]; aesop
-  rule_5 := by simp only [← imp_iff_not_or]; aesop
-  rule_6 := by simp only [← imp_iff_not_or]; aesop
-  rule_7 := by simp only [← imp_iff_not_or]; aesop
-  rule_8 := by simp only [← imp_iff_not_or]; aesop
-  rule_9 := by simp only [← imp_iff_not_or]; aesop
-  rule_10 := by simp only [← imp_iff_not_or]; aesop
-  rule_11 := by simp only [← imp_iff_not_or]; aesop
-  rule_12 := by simp only [← imp_iff_not_or]; aesop
-  rule_13 := by simp only [← imp_iff_not_or]; aesop
-  rule_14 := by simp only [← imp_iff_not_or]; aesop
-  rule_15 := by simp only [← imp_iff_not_or]; aesop
+  rule_0 := by solution_enumerator
+  rule_1 := by solution_enumerator
+  rule_2 := by solution_enumerator
+  rule_3 := by solution_enumerator
+  rule_4 := by solution_enumerator
+  rule_5 := by solution_enumerator
+  rule_6 := by solution_enumerator
+  rule_7 := by solution_enumerator
+  rule_8 := by solution_enumerator
+  rule_9 := by solution_enumerator
+  rule_10 := by solution_enumerator
+  rule_11 := by solution_enumerator
+  rule_12 := by solution_enumerator
+  rule_13 := by solution_enumerator
+  rule_14 := by solution_enumerator
+  rule_15 := by solution_enumerator
   finsupp := {1, 2, 3, 4, 5}
-  mem_1 := by simp only [← imp_iff_not_or]; aesop
-  mem_2 := by simp only [← imp_iff_not_or]; aesop
-  mem_3 := by simp only [← imp_iff_not_or]; aesop
+  mem_1 := by solution_enumerator
+  mem_2 := by solution_enumerator
+  mem_3 := by solution_enumerator
 
 @[equational_result]
 theorem _root_.Equation511_not_implies_Equation614 : ∃ (G : Type) (_ : Magma G), Equation511 G ∧ ¬Equation614 G := by
@@ -2751,26 +2759,26 @@ theorem _root_.Equation511_not_implies_Equation614 : ∃ (G : Type) (_ : Magma G
 set_option maxRecDepth 1000 in
 noncomputable def PartialSolution.counter714 : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({(1, 1, 1), (1, 2, 1)} : Finset _)
-  rule_0 := by simp only [← imp_iff_not_or]; aesop
-  rule_1 := by simp only [← imp_iff_not_or]; aesop
-  rule_2 := by simp only [← imp_iff_not_or]; aesop
-  rule_3 := by simp only [← imp_iff_not_or]; aesop
-  rule_4 := by simp only [← imp_iff_not_or]; aesop
-  rule_5 := by simp only [← imp_iff_not_or]; aesop
-  rule_6 := by simp only [← imp_iff_not_or]; aesop
-  rule_7 := by simp only [← imp_iff_not_or]; aesop
-  rule_8 := by simp only [← imp_iff_not_or]; aesop
-  rule_9 := by simp only [← imp_iff_not_or]; aesop
-  rule_10 := by simp only [← imp_iff_not_or]; aesop
-  rule_11 := by simp only [← imp_iff_not_or]; aesop
-  rule_12 := by simp only [← imp_iff_not_or]; aesop
-  rule_13 := by simp only [← imp_iff_not_or]; aesop
-  rule_14 := by simp only [← imp_iff_not_or]; aesop
-  rule_15 := by simp only [← imp_iff_not_or]; aesop
+  rule_0 := by solution_enumerator
+  rule_1 := by solution_enumerator
+  rule_2 := by solution_enumerator
+  rule_3 := by solution_enumerator
+  rule_4 := by solution_enumerator
+  rule_5 := by solution_enumerator
+  rule_6 := by solution_enumerator
+  rule_7 := by solution_enumerator
+  rule_8 := by solution_enumerator
+  rule_9 := by solution_enumerator
+  rule_10 := by solution_enumerator
+  rule_11 := by solution_enumerator
+  rule_12 := by solution_enumerator
+  rule_13 := by solution_enumerator
+  rule_14 := by solution_enumerator
+  rule_15 := by solution_enumerator
   finsupp := {1, 2}
-  mem_1 := by simp only [← imp_iff_not_or]; aesop
-  mem_2 := by simp only [← imp_iff_not_or]; aesop
-  mem_3 := by simp only [← imp_iff_not_or]; aesop
+  mem_1 := by solution_enumerator
+  mem_2 := by solution_enumerator
+  mem_3 := by solution_enumerator
 
 @[equational_result]
 theorem _root_.Equation511_not_implies_Equation714 : ∃ (G : Type) (_ : Magma G), Equation511 G ∧ ¬Equation714 G := by
@@ -2784,26 +2792,26 @@ theorem _root_.Equation511_not_implies_Equation714 : ∃ (G : Type) (_ : Magma G
 set_option maxRecDepth 1000 in
 noncomputable def PartialSolution.counter1020 : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({(1, 1, 2), (1, 2, 3), (1, 4, 5), (3, 1, 4)} : Finset _)
-  rule_0 := by simp only [← imp_iff_not_or]; aesop
-  rule_1 := by simp only [← imp_iff_not_or]; aesop
-  rule_2 := by simp only [← imp_iff_not_or]; aesop
-  rule_3 := by simp only [← imp_iff_not_or]; aesop
-  rule_4 := by simp only [← imp_iff_not_or]; aesop
-  rule_5 := by simp only [← imp_iff_not_or]; aesop
-  rule_6 := by simp only [← imp_iff_not_or]; aesop
-  rule_7 := by simp only [← imp_iff_not_or]; aesop
-  rule_8 := by simp only [← imp_iff_not_or]; aesop
-  rule_9 := by simp only [← imp_iff_not_or]; aesop
-  rule_10 := by simp only [← imp_iff_not_or]; aesop
-  rule_11 := by simp only [← imp_iff_not_or]; aesop
-  rule_12 := by simp only [← imp_iff_not_or]; aesop
-  rule_13 := by simp only [← imp_iff_not_or]; aesop
-  rule_14 := by simp only [← imp_iff_not_or]; aesop
-  rule_15 := by simp only [← imp_iff_not_or]; aesop
+  rule_0 := by solution_enumerator
+  rule_1 := by solution_enumerator
+  rule_2 := by solution_enumerator
+  rule_3 := by solution_enumerator
+  rule_4 := by solution_enumerator
+  rule_5 := by solution_enumerator
+  rule_6 := by solution_enumerator
+  rule_7 := by solution_enumerator
+  rule_8 := by solution_enumerator
+  rule_9 := by solution_enumerator
+  rule_10 := by solution_enumerator
+  rule_11 := by solution_enumerator
+  rule_12 := by solution_enumerator
+  rule_13 := by solution_enumerator
+  rule_14 := by solution_enumerator
+  rule_15 := by solution_enumerator
   finsupp := {1, 2, 3, 4, 5}
-  mem_1 := by simp only [← imp_iff_not_or]; aesop
-  mem_2 := by simp only [← imp_iff_not_or]; aesop
-  mem_3 := by simp only [← imp_iff_not_or]; aesop
+  mem_1 := by solution_enumerator
+  mem_2 := by solution_enumerator
+  mem_3 := by solution_enumerator
 
 @[equational_result]
 theorem _root_.Equation511_not_implies_Equation1020 : ∃ (G : Type) (_ : Magma G), Equation511 G ∧ ¬Equation1020 G := by
@@ -2817,26 +2825,26 @@ theorem _root_.Equation511_not_implies_Equation1020 : ∃ (G : Type) (_ : Magma 
 set_option maxRecDepth 1000 in
 noncomputable def PartialSolution.counter1223 : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({(1, 1, 2), (1, 4, 5), (2, 1, 3), (3, 1, 4)} : Finset _)
-  rule_0 := by simp only [← imp_iff_not_or]; aesop
-  rule_1 := by simp only [← imp_iff_not_or]; aesop
-  rule_2 := by simp only [← imp_iff_not_or]; aesop
-  rule_3 := by simp only [← imp_iff_not_or]; aesop
-  rule_4 := by simp only [← imp_iff_not_or]; aesop
-  rule_5 := by simp only [← imp_iff_not_or]; aesop
-  rule_6 := by simp only [← imp_iff_not_or]; aesop
-  rule_7 := by simp only [← imp_iff_not_or]; aesop
-  rule_8 := by simp only [← imp_iff_not_or]; aesop
-  rule_9 := by simp only [← imp_iff_not_or]; aesop
-  rule_10 := by simp only [← imp_iff_not_or]; aesop
-  rule_11 := by simp only [← imp_iff_not_or]; aesop
-  rule_12 := by simp only [← imp_iff_not_or]; aesop
-  rule_13 := by simp only [← imp_iff_not_or]; aesop
-  rule_14 := by simp only [← imp_iff_not_or]; aesop
-  rule_15 := by simp only [← imp_iff_not_or]; aesop
+  rule_0 := by solution_enumerator
+  rule_1 := by solution_enumerator
+  rule_2 := by solution_enumerator
+  rule_3 := by solution_enumerator
+  rule_4 := by solution_enumerator
+  rule_5 := by solution_enumerator
+  rule_6 := by solution_enumerator
+  rule_7 := by solution_enumerator
+  rule_8 := by solution_enumerator
+  rule_9 := by solution_enumerator
+  rule_10 := by solution_enumerator
+  rule_11 := by solution_enumerator
+  rule_12 := by solution_enumerator
+  rule_13 := by solution_enumerator
+  rule_14 := by solution_enumerator
+  rule_15 := by solution_enumerator
   finsupp := {1, 2, 3, 4, 5}
-  mem_1 := by simp only [← imp_iff_not_or]; aesop
-  mem_2 := by simp only [← imp_iff_not_or]; aesop
-  mem_3 := by simp only [← imp_iff_not_or]; aesop
+  mem_1 := by solution_enumerator
+  mem_2 := by solution_enumerator
+  mem_3 := by solution_enumerator
 
 @[equational_result]
 theorem _root_.Equation511_not_implies_Equation1223 : ∃ (G : Type) (_ : Magma G), Equation511 G ∧ ¬Equation1223 G := by
@@ -2850,26 +2858,26 @@ theorem _root_.Equation511_not_implies_Equation1223 : ∃ (G : Type) (_ : Magma 
 set_option maxRecDepth 1000 in
 noncomputable def PartialSolution.counter2238 : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({(1, 1, 2), (1, 2, 1), (2, 1, 3)} : Finset _)
-  rule_0 := by simp only [← imp_iff_not_or]; aesop
-  rule_1 := by simp only [← imp_iff_not_or]; aesop
-  rule_2 := by simp only [← imp_iff_not_or]; aesop
-  rule_3 := by simp only [← imp_iff_not_or]; aesop
-  rule_4 := by simp only [← imp_iff_not_or]; aesop
-  rule_5 := by simp only [← imp_iff_not_or]; aesop
-  rule_6 := by simp only [← imp_iff_not_or]; aesop
-  rule_7 := by simp only [← imp_iff_not_or]; aesop
-  rule_8 := by simp only [← imp_iff_not_or]; aesop
-  rule_9 := by simp only [← imp_iff_not_or]; aesop
-  rule_10 := by simp only [← imp_iff_not_or]; aesop
-  rule_11 := by simp only [← imp_iff_not_or]; aesop
-  rule_12 := by simp only [← imp_iff_not_or]; aesop
-  rule_13 := by simp only [← imp_iff_not_or]; aesop
-  rule_14 := by simp only [← imp_iff_not_or]; aesop
-  rule_15 := by simp only [← imp_iff_not_or]; aesop
+  rule_0 := by solution_enumerator
+  rule_1 := by solution_enumerator
+  rule_2 := by solution_enumerator
+  rule_3 := by solution_enumerator
+  rule_4 := by solution_enumerator
+  rule_5 := by solution_enumerator
+  rule_6 := by solution_enumerator
+  rule_7 := by solution_enumerator
+  rule_8 := by solution_enumerator
+  rule_9 := by solution_enumerator
+  rule_10 := by solution_enumerator
+  rule_11 := by solution_enumerator
+  rule_12 := by solution_enumerator
+  rule_13 := by solution_enumerator
+  rule_14 := by solution_enumerator
+  rule_15 := by solution_enumerator
   finsupp := {1, 2, 3}
-  mem_1 := by simp only [← imp_iff_not_or]; aesop
-  mem_2 := by simp only [← imp_iff_not_or]; aesop
-  mem_3 := by simp only [← imp_iff_not_or]; aesop
+  mem_1 := by solution_enumerator
+  mem_2 := by solution_enumerator
+  mem_3 := by solution_enumerator
 
 @[equational_result]
 theorem _root_.Equation511_not_implies_Equation2238 : ∃ (G : Type) (_ : Magma G), Equation511 G ∧ ¬Equation2238 G := by
@@ -2883,26 +2891,26 @@ theorem _root_.Equation511_not_implies_Equation2238 : ∃ (G : Type) (_ : Magma 
 set_option maxRecDepth 1000 in
 noncomputable def PartialSolution.counter2338 : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({(1, 1, 1), (1, 2, 1)} : Finset _)
-  rule_0 := by simp only [← imp_iff_not_or]; aesop
-  rule_1 := by simp only [← imp_iff_not_or]; aesop
-  rule_2 := by simp only [← imp_iff_not_or]; aesop
-  rule_3 := by simp only [← imp_iff_not_or]; aesop
-  rule_4 := by simp only [← imp_iff_not_or]; aesop
-  rule_5 := by simp only [← imp_iff_not_or]; aesop
-  rule_6 := by simp only [← imp_iff_not_or]; aesop
-  rule_7 := by simp only [← imp_iff_not_or]; aesop
-  rule_8 := by simp only [← imp_iff_not_or]; aesop
-  rule_9 := by simp only [← imp_iff_not_or]; aesop
-  rule_10 := by simp only [← imp_iff_not_or]; aesop
-  rule_11 := by simp only [← imp_iff_not_or]; aesop
-  rule_12 := by simp only [← imp_iff_not_or]; aesop
-  rule_13 := by simp only [← imp_iff_not_or]; aesop
-  rule_14 := by simp only [← imp_iff_not_or]; aesop
-  rule_15 := by simp only [← imp_iff_not_or]; aesop
+  rule_0 := by solution_enumerator
+  rule_1 := by solution_enumerator
+  rule_2 := by solution_enumerator
+  rule_3 := by solution_enumerator
+  rule_4 := by solution_enumerator
+  rule_5 := by solution_enumerator
+  rule_6 := by solution_enumerator
+  rule_7 := by solution_enumerator
+  rule_8 := by solution_enumerator
+  rule_9 := by solution_enumerator
+  rule_10 := by solution_enumerator
+  rule_11 := by solution_enumerator
+  rule_12 := by solution_enumerator
+  rule_13 := by solution_enumerator
+  rule_14 := by solution_enumerator
+  rule_15 := by solution_enumerator
   finsupp := {1, 2}
-  mem_1 := by simp only [← imp_iff_not_or]; aesop
-  mem_2 := by simp only [← imp_iff_not_or]; aesop
-  mem_3 := by simp only [← imp_iff_not_or]; aesop
+  mem_1 := by solution_enumerator
+  mem_2 := by solution_enumerator
+  mem_3 := by solution_enumerator
 
 @[equational_result]
 theorem _root_.Equation511_not_implies_Equation2338 : ∃ (G : Type) (_ : Magma G), Equation511 G ∧ ¬Equation2338 G := by
@@ -2916,26 +2924,26 @@ theorem _root_.Equation511_not_implies_Equation2338 : ∃ (G : Type) (_ : Magma 
 set_option maxRecDepth 1000 in
 noncomputable def PartialSolution.counter2441 : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({(1, 1, 2), (1, 2, 1), (1, 3, 2), (2, 1, 3)} : Finset _)
-  rule_0 := by simp only [← imp_iff_not_or]; aesop
-  rule_1 := by simp only [← imp_iff_not_or]; aesop
-  rule_2 := by simp only [← imp_iff_not_or]; aesop
-  rule_3 := by simp only [← imp_iff_not_or]; aesop
-  rule_4 := by simp only [← imp_iff_not_or]; aesop
-  rule_5 := by simp only [← imp_iff_not_or]; aesop
-  rule_6 := by simp only [← imp_iff_not_or]; aesop
-  rule_7 := by simp only [← imp_iff_not_or]; aesop
-  rule_8 := by simp only [← imp_iff_not_or]; aesop
-  rule_9 := by simp only [← imp_iff_not_or]; aesop
-  rule_10 := by simp only [← imp_iff_not_or]; aesop
-  rule_11 := by simp only [← imp_iff_not_or]; aesop
-  rule_12 := by simp only [← imp_iff_not_or]; aesop
-  rule_13 := by simp only [← imp_iff_not_or]; aesop
-  rule_14 := by simp only [← imp_iff_not_or]; aesop
-  rule_15 := by simp only [← imp_iff_not_or]; aesop
+  rule_0 := by solution_enumerator
+  rule_1 := by solution_enumerator
+  rule_2 := by solution_enumerator
+  rule_3 := by solution_enumerator
+  rule_4 := by solution_enumerator
+  rule_5 := by solution_enumerator
+  rule_6 := by solution_enumerator
+  rule_7 := by solution_enumerator
+  rule_8 := by solution_enumerator
+  rule_9 := by solution_enumerator
+  rule_10 := by solution_enumerator
+  rule_11 := by solution_enumerator
+  rule_12 := by solution_enumerator
+  rule_13 := by solution_enumerator
+  rule_14 := by solution_enumerator
+  rule_15 := by solution_enumerator
   finsupp := {1, 2, 3}
-  mem_1 := by simp only [← imp_iff_not_or]; aesop
-  mem_2 := by simp only [← imp_iff_not_or]; aesop
-  mem_3 := by simp only [← imp_iff_not_or]; aesop
+  mem_1 := by solution_enumerator
+  mem_2 := by solution_enumerator
+  mem_3 := by solution_enumerator
 
 @[equational_result]
 theorem _root_.Equation511_not_implies_Equation2441 : ∃ (G : Type) (_ : Magma G), Equation511 G ∧ ¬Equation2441 G := by
@@ -2949,26 +2957,26 @@ theorem _root_.Equation511_not_implies_Equation2441 : ∃ (G : Type) (_ : Magma 
 set_option maxRecDepth 1000 in
 noncomputable def PartialSolution.counter2847 : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({(1, 1, 2), (1, 2, 1), (2, 1, 3)} : Finset _)
-  rule_0 := by simp only [← imp_iff_not_or]; aesop
-  rule_1 := by simp only [← imp_iff_not_or]; aesop
-  rule_2 := by simp only [← imp_iff_not_or]; aesop
-  rule_3 := by simp only [← imp_iff_not_or]; aesop
-  rule_4 := by simp only [← imp_iff_not_or]; aesop
-  rule_5 := by simp only [← imp_iff_not_or]; aesop
-  rule_6 := by simp only [← imp_iff_not_or]; aesop
-  rule_7 := by simp only [← imp_iff_not_or]; aesop
-  rule_8 := by simp only [← imp_iff_not_or]; aesop
-  rule_9 := by simp only [← imp_iff_not_or]; aesop
-  rule_10 := by simp only [← imp_iff_not_or]; aesop
-  rule_11 := by simp only [← imp_iff_not_or]; aesop
-  rule_12 := by simp only [← imp_iff_not_or]; aesop
-  rule_13 := by simp only [← imp_iff_not_or]; aesop
-  rule_14 := by simp only [← imp_iff_not_or]; aesop
-  rule_15 := by simp only [← imp_iff_not_or]; aesop
+  rule_0 := by solution_enumerator
+  rule_1 := by solution_enumerator
+  rule_2 := by solution_enumerator
+  rule_3 := by solution_enumerator
+  rule_4 := by solution_enumerator
+  rule_5 := by solution_enumerator
+  rule_6 := by solution_enumerator
+  rule_7 := by solution_enumerator
+  rule_8 := by solution_enumerator
+  rule_9 := by solution_enumerator
+  rule_10 := by solution_enumerator
+  rule_11 := by solution_enumerator
+  rule_12 := by solution_enumerator
+  rule_13 := by solution_enumerator
+  rule_14 := by solution_enumerator
+  rule_15 := by solution_enumerator
   finsupp := {1, 2, 3}
-  mem_1 := by simp only [← imp_iff_not_or]; aesop
-  mem_2 := by simp only [← imp_iff_not_or]; aesop
-  mem_3 := by simp only [← imp_iff_not_or]; aesop
+  mem_1 := by solution_enumerator
+  mem_2 := by solution_enumerator
+  mem_3 := by solution_enumerator
 
 @[equational_result]
 theorem _root_.Equation511_not_implies_Equation2847 : ∃ (G : Type) (_ : Magma G), Equation511 G ∧ ¬Equation2847 G := by
@@ -2982,26 +2990,26 @@ theorem _root_.Equation511_not_implies_Equation2847 : ∃ (G : Type) (_ : Magma 
 set_option maxRecDepth 1000 in
 noncomputable def PartialSolution.counter3050 : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({(1, 1, 2), (2, 1, 3), (3, 1, 4), (4, 1, 5)} : Finset _)
-  rule_0 := by simp only [← imp_iff_not_or]; aesop
-  rule_1 := by simp only [← imp_iff_not_or]; aesop
-  rule_2 := by simp only [← imp_iff_not_or]; aesop
-  rule_3 := by simp only [← imp_iff_not_or]; aesop
-  rule_4 := by simp only [← imp_iff_not_or]; aesop
-  rule_5 := by simp only [← imp_iff_not_or]; aesop
-  rule_6 := by simp only [← imp_iff_not_or]; aesop
-  rule_7 := by simp only [← imp_iff_not_or]; aesop
-  rule_8 := by simp only [← imp_iff_not_or]; aesop
-  rule_9 := by simp only [← imp_iff_not_or]; aesop
-  rule_10 := by simp only [← imp_iff_not_or]; aesop
-  rule_11 := by simp only [← imp_iff_not_or]; aesop
-  rule_12 := by simp only [← imp_iff_not_or]; aesop
-  rule_13 := by simp only [← imp_iff_not_or]; aesop
-  rule_14 := by simp only [← imp_iff_not_or]; aesop
-  rule_15 := by simp only [← imp_iff_not_or]; aesop
+  rule_0 := by solution_enumerator
+  rule_1 := by solution_enumerator
+  rule_2 := by solution_enumerator
+  rule_3 := by solution_enumerator
+  rule_4 := by solution_enumerator
+  rule_5 := by solution_enumerator
+  rule_6 := by solution_enumerator
+  rule_7 := by solution_enumerator
+  rule_8 := by solution_enumerator
+  rule_9 := by solution_enumerator
+  rule_10 := by solution_enumerator
+  rule_11 := by solution_enumerator
+  rule_12 := by solution_enumerator
+  rule_13 := by solution_enumerator
+  rule_14 := by solution_enumerator
+  rule_15 := by solution_enumerator
   finsupp := {1, 2, 3, 4, 5}
-  mem_1 := by simp only [← imp_iff_not_or]; aesop
-  mem_2 := by simp only [← imp_iff_not_or]; aesop
-  mem_3 := by simp only [← imp_iff_not_or]; aesop
+  mem_1 := by solution_enumerator
+  mem_2 := by solution_enumerator
+  mem_3 := by solution_enumerator
 
 @[equational_result]
 theorem _root_.Equation511_not_implies_Equation3050 : ∃ (G : Type) (_ : Magma G), Equation511 G ∧ ¬Equation3050 G := by
@@ -3015,26 +3023,26 @@ theorem _root_.Equation511_not_implies_Equation3050 : ∃ (G : Type) (_ : Magma 
 set_option maxRecDepth 1000 in
 noncomputable def PartialSolution.counter4380 : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({(1, 1, 2), (1, 2, 1), (2, 1, 3)} : Finset _)
-  rule_0 := by simp only [← imp_iff_not_or]; aesop
-  rule_1 := by simp only [← imp_iff_not_or]; aesop
-  rule_2 := by simp only [← imp_iff_not_or]; aesop
-  rule_3 := by simp only [← imp_iff_not_or]; aesop
-  rule_4 := by simp only [← imp_iff_not_or]; aesop
-  rule_5 := by simp only [← imp_iff_not_or]; aesop
-  rule_6 := by simp only [← imp_iff_not_or]; aesop
-  rule_7 := by simp only [← imp_iff_not_or]; aesop
-  rule_8 := by simp only [← imp_iff_not_or]; aesop
-  rule_9 := by simp only [← imp_iff_not_or]; aesop
-  rule_10 := by simp only [← imp_iff_not_or]; aesop
-  rule_11 := by simp only [← imp_iff_not_or]; aesop
-  rule_12 := by simp only [← imp_iff_not_or]; aesop
-  rule_13 := by simp only [← imp_iff_not_or]; aesop
-  rule_14 := by simp only [← imp_iff_not_or]; aesop
-  rule_15 := by simp only [← imp_iff_not_or]; aesop
+  rule_0 := by solution_enumerator
+  rule_1 := by solution_enumerator
+  rule_2 := by solution_enumerator
+  rule_3 := by solution_enumerator
+  rule_4 := by solution_enumerator
+  rule_5 := by solution_enumerator
+  rule_6 := by solution_enumerator
+  rule_7 := by solution_enumerator
+  rule_8 := by solution_enumerator
+  rule_9 := by solution_enumerator
+  rule_10 := by solution_enumerator
+  rule_11 := by solution_enumerator
+  rule_12 := by solution_enumerator
+  rule_13 := by solution_enumerator
+  rule_14 := by solution_enumerator
+  rule_15 := by solution_enumerator
   finsupp := {1, 2, 3}
-  mem_1 := by simp only [← imp_iff_not_or]; aesop
-  mem_2 := by simp only [← imp_iff_not_or]; aesop
-  mem_3 := by simp only [← imp_iff_not_or]; aesop
+  mem_1 := by solution_enumerator
+  mem_2 := by solution_enumerator
+  mem_3 := by solution_enumerator
 
 @[equational_result]
 theorem _root_.Equation511_not_implies_Equation4380 : ∃ (G : Type) (_ : Magma G), Equation511 G ∧ ¬Equation4380 G := by
@@ -3048,26 +3056,26 @@ theorem _root_.Equation511_not_implies_Equation4380 : ∃ (G : Type) (_ : Magma 
 set_option maxRecDepth 1000 in
 noncomputable def PartialSolution.counter4435 : PartialSolution ℕ where
   R x y z := (x, y, z) ∈ ({(1, 1, 2), (1, 2, 1), (2, 1, 3)} : Finset _)
-  rule_0 := by simp only [← imp_iff_not_or]; aesop
-  rule_1 := by simp only [← imp_iff_not_or]; aesop
-  rule_2 := by simp only [← imp_iff_not_or]; aesop
-  rule_3 := by simp only [← imp_iff_not_or]; aesop
-  rule_4 := by simp only [← imp_iff_not_or]; aesop
-  rule_5 := by simp only [← imp_iff_not_or]; aesop
-  rule_6 := by simp only [← imp_iff_not_or]; aesop
-  rule_7 := by simp only [← imp_iff_not_or]; aesop
-  rule_8 := by simp only [← imp_iff_not_or]; aesop
-  rule_9 := by simp only [← imp_iff_not_or]; aesop
-  rule_10 := by simp only [← imp_iff_not_or]; aesop
-  rule_11 := by simp only [← imp_iff_not_or]; aesop
-  rule_12 := by simp only [← imp_iff_not_or]; aesop
-  rule_13 := by simp only [← imp_iff_not_or]; aesop
-  rule_14 := by simp only [← imp_iff_not_or]; aesop
-  rule_15 := by simp only [← imp_iff_not_or]; aesop
+  rule_0 := by solution_enumerator
+  rule_1 := by solution_enumerator
+  rule_2 := by solution_enumerator
+  rule_3 := by solution_enumerator
+  rule_4 := by solution_enumerator
+  rule_5 := by solution_enumerator
+  rule_6 := by solution_enumerator
+  rule_7 := by solution_enumerator
+  rule_8 := by solution_enumerator
+  rule_9 := by solution_enumerator
+  rule_10 := by solution_enumerator
+  rule_11 := by solution_enumerator
+  rule_12 := by solution_enumerator
+  rule_13 := by solution_enumerator
+  rule_14 := by solution_enumerator
+  rule_15 := by solution_enumerator
   finsupp := {1, 2, 3}
-  mem_1 := by simp only [← imp_iff_not_or]; aesop
-  mem_2 := by simp only [← imp_iff_not_or]; aesop
-  mem_3 := by simp only [← imp_iff_not_or]; aesop
+  mem_1 := by solution_enumerator
+  mem_2 := by solution_enumerator
+  mem_3 := by solution_enumerator
 
 @[equational_result]
 theorem _root_.Equation511_not_implies_Equation4435 : ∃ (G : Type) (_ : Magma G), Equation511 G ∧ ¬Equation4435 G := by

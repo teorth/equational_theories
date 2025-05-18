@@ -21,6 +21,11 @@ instance MagmaHom.toFunLike {G H : Type*} [Magma G] [Magma H] : FunLike (G →�
 instance {G H : Type*} [Magma G] [Magma H] : CoeFun (G →◇ H) (fun _ ↦ G → H) where
   coe f := f
 
+@[simp]
+lemma MagmaHom.mk_apply {G H : Type*} [Magma G] [Magma H] {toFun : G → H}
+    {map_op' : ∀ x y : G, toFun (x ◇ y) = toFun x ◇ toFun y} {x : G} :
+  (MagmaHom.mk toFun map_op') x = toFun x := rfl
+
 @[ext]
 lemma MagmaHom.ext {G H : Type*} [Magma G] [Magma H] {f₁ f₂ : G →◇ H}
     (hf : ∀ x : G, f₁ x = f₂ x) :
@@ -146,6 +151,8 @@ def MagmaEquivClass.toMagmaEquiv {F G H : Type*} [Magma G] [Magma H] [EquivLike 
   left_inv := EquivLike.coe_symm_apply_apply f
   right_inv := EquivLike.apply_coe_symm_apply f
   map_op' := map_op f
+  toFun := f
+  invFun := EquivLike.inv f
 
 instance {F G H : Type*} [Magma G] [Magma H] [EquivLike F G H] [MagmaEquivClass F G H] :
     CoeTC F (G ≃◇ H) :=

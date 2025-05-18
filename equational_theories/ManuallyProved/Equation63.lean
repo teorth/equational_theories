@@ -86,7 +86,7 @@ theorem project_E {x y} (h : E x y) : project x = 0 ∧ project y = 0 := by
 
 theorem aux3' {x x' z} : E x d → E x' d → E x⁻¹ z → x' ≠ x * z := by
   intro h1 h2 h3 h4
-  simp only [ok.aux3 h1 h2 h3 h4, self_eq_mul_right] at h4
+  simp only [ok.aux3 h1 h2 h3 h4, left_eq_mul] at h4
   have := inv_eq_iff_eq_inv.1 $ ok.aux1 (h4 ▸ h3)
   rw [this] at h1
   have values : E g₂⁻¹ (g₁ * g₂) ∧ E (g₁ * g₂) (g₂⁻¹ * g₁) := by simp [ok.base]
@@ -267,7 +267,7 @@ theorem exists_extension (seed : PartialSolution) :
   · let S : Finset G := {x, f x, x⁻¹ * f (f x)}
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (S.image fun a => ⟨e a, he a⟩)
-    replace le a ha := Finset.forall_image.mp le a ha _ _ (hf a)
+    replace le a ha := Finset.forall_mem_image.mp le ha a _ (hf a)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
     obtain ⟨fx, ffx, fffxmx⟩ := le
     exact e.2.func fffxmx (e.2.eq63 fx ffx)

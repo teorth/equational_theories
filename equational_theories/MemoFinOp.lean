@@ -32,7 +32,7 @@ def buildMemo {n : Nat} (f : Fin n → Fin n → Fin n) : Nat := Id.run do
 example :
     let f := fun (a b : Fin 4) => a * a * b + 2
     opOfTable (buildMemo f) = f := by
-  funext a b; revert a b; native_decide
+  funext a b; revert a b; decide +kernel
 
 private unsafe def evalNatImpl (e : Expr) : MetaM Nat := do
   let t ← inferType e
@@ -92,7 +92,7 @@ def rowToNat (row : List Nat) : Nat :=
   | n :: ns => n + 256 * rowToNat ns
 
 def extract (matrix : List Nat) (row col : Nat) : Nat :=
-  255 &&& ((List.get! matrix row) >>> (col * 8))
+  255 &&& ((matrix[row]!) >>> (col * 8))
 
 def IsTable (n : Nat) (matrix : List Nat) : Prop :=
   ∀ x y : Fin n, extract matrix x y < n
@@ -129,7 +129,7 @@ elab "finOpTable" str:str :term => do
   let table := toExpr (matrix.map rowToNat)
   let istable := mkApp2 (mkConst ``IsTable) (mkLit (.natVal matrix.length)) table
   let mv ← mkFreshExprMVar istable
-  discard <| withCurrHeartbeats <| Tactic.run mv.mvarId! do Lean.Elab.Tactic.evalTactic (← `(tactic| decide!))
+  discard <| withCurrHeartbeats <| Tactic.run mv.mvarId! do Lean.Elab.Tactic.evalTactic (← `(tactic| decide +kernel))
   return mkApp3 (mkConst ``extractWrapper) (mkLit (.natVal matrix.length)) table (← instantiateMVars mv)
 
 end MemoFinOp

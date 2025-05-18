@@ -225,7 +225,6 @@ theorem dropGenerators_generatorNames' (S : Finset α) (a : List (α × Bool)) :
     simp only [generatorNames', List.singleton_append] at hn
     rw [← mul_mk, MonoidHom.map_mul, ih]
     · suffices head.1 ∈ S by simp [dropGenerators, this]
-      simp [generatorNames'] at hn
       exact Finset.singleton_subset_iff.mp (Finset.union_subset_left hn)
     · apply subset_trans _ hn; simp
 

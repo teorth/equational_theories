@@ -18,7 +18,7 @@ partial def Lean.MVarId.congrWith (mvarId_ : MVarId) (eqs : List Expr) : MetaM U
       let s ← saveState
       try mvarId.refl; go todo eqs true; return catch _ => s.restore
       for eq in eqs do
-        try mvarId.assignIfDefeq eq; go todo eqs true; return catch _ => s.restore
+        try mvarId.assignIfDefEq eq; go todo eqs true; return catch _ => s.restore
       try
         go (todo ++ (← mvarId.congrCore)) eqs true
       catch e =>
@@ -28,12 +28,12 @@ partial def Lean.MVarId.congrWith (mvarId_ : MVarId) (eqs : List Expr) : MetaM U
           | ~q(($a = $b) = ($c = $d)) =>
             s.restore
             let nmv ← mkFreshExprMVarQ q(($b = $a) = ($c = $d))
-            mvarId.assignIfDefeq (q(Eq.trans Eq.comm' $nmv) : Q(($a = $b) = ($c = $d)))
+            mvarId.assignIfDefEq (q(Eq.trans Eq.comm' $nmv) : Q(($a = $b) = ($c = $d)))
             go (nmv.mvarId! :: todo) eqs false
           | ~q(($a ≠ $b) = ($c ≠ $d)) =>
             s.restore
             let nmv ← mkFreshExprMVarQ q(($b ≠ $a) = ($c ≠ $d))
-            mvarId.assignIfDefeq (q(Eq.trans Ne.comm' $nmv) : Q(($a ≠ $b) = ($c ≠ $d)))
+            mvarId.assignIfDefEq (q(Eq.trans Ne.comm' $nmv) : Q(($a ≠ $b) = ($c ≠ $d)))
             go (nmv.mvarId! :: todo) eqs false
           | _ => throw e
         else throw e

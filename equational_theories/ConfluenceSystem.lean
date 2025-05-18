@@ -55,9 +55,9 @@ scoped macro "prove_elim_not" : tactic => `(tactic| (
     try any_goals trivial
 ))
 
-open Lean hiding HashMap
-open Meta Elab Command Term Parser Syntax
-open Std (HashMap)
+open Lean
+open Lean.Meta Lean.Elab Command Term Parser Lean.Syntax
+open Std HashMap
 
 scoped syntax (name := ruleSystem) "rule_system " ident " {" ident* " : " term "}" ("-" ident)* (ppLine "|" term "=>" term)+ : command
 
@@ -92,12 +92,12 @@ scoped macro_rules
   for idx in [:numRules] do
     let lhs := TSyntax.mk <| lhs[idx]!
     let rhs := TSyntax.mk <| rhs[idx]!
-    let mut varSet := Std.HashMap.empty
+    let mut varSet := Std.HashMap.emptyWithCapacity
     for var in vars do
       varSet := varSet.insert var.getId 0
     let (_, varCounts) := StateT.run (countVars lhs) varSet
 
-    let mut varIdx := Std.HashMap.empty
+    let mut varIdx := Std.HashMap.emptyWithCapacity
     for (name, count) in varCounts do
       if count > 1 then
         varIdx := varIdx.insert name 1

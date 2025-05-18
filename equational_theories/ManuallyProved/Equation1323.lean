@@ -2,7 +2,8 @@ import equational_theories.FreshGenerator
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
 import equational_theories.Mathlib.Order.Greedy
-
+import Mathlib.Logic.Equiv.Finset
+import Mathlib.Tactic.Group
 
 namespace Eq1323
 noncomputable section
@@ -569,10 +570,8 @@ def op (f : RelationLHS → R) : G → G → G
       then .square (x.2 + invϕ x.2 (y.1⁻¹ * x.1))
       else .root (f ⟨x, y, h⟩)
 
-
 theorem op_RSy_LSy_eq_Id f x y : op f (op f (op f y y) x) (op f y y) = x := by
   cases x <;> cases y <;> simp [op]
-
 
 theorem roots_LyRy {x y a b f} (h : a ≠ b) (hf : Axiom3 f) :
     op f (.root (y, b)) (op f (.root (x, a)) (.root (y, b))) = .root (x * ϕ a b, a) := by
@@ -583,9 +582,9 @@ theorem roots_LyRy {x y a b f} (h : a ≠ b) (hf : Axiom3 f) :
     rw [this, ←hx, ←hy]
     exact p'.nonDiag
   simp [op, h, this]
-  rw [←hf]
-  congr <;> simp [hx, hy]
-
+  rw [← hf]
+  cases p' with
+  | mk px py hxy => simp_all [p]
 
 theorem op_Ly_Ry_eq_LSy f (hf : Axiom3 f) : (x : G) → (y : G) → op f y (op f x y) = op f x (op f y y)
   | .square a, .square b => by simp [op, ←add_assoc]

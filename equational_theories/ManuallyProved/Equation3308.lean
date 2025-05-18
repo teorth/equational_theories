@@ -633,7 +633,7 @@ theorem exists_extension :
   · let S : Finset _ := {(x,y), (y,x), (x, op y x), (x, op x (op y x))}
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (S.image fun (a, b) => ⟨⟨f a b, hf1 a b⟩, hf2 a b⟩)
-    replace le a ha := Finset.forall_image.1 le a ha _ _ (hop a.1 a.2)
+    replace le a (ha : a ∈ S) := Finset.forall_mem_image.1 le ha _ _ (hop a.1 a.2)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
     obtain ⟨xy, yx, xyx, xxyx⟩ := le
     obtain ⟨xyx', xyx'_def, eq⟩ := (e.2.laws.eq3308 xy yx)

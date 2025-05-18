@@ -1,7 +1,7 @@
 import equational_theories.Equations.All
 import equational_theories.Generated.Greedy.OrLemmas
 import equational_theories.Superposition
-import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Fintype.EquivFin
 import Mathlib.Data.Nat.Pairing
 
 namespace Eq677

@@ -81,9 +81,11 @@ theorem next_right_cancel {x y z xy zy} : xy ∈ next x y → zy ∈ next z y �
   intro xy_mem zy_mem eq
   cases xy_mem <;> cases zy_mem
   case base.base xy_mem _ _ zy_mem =>
-    simp only [Sum.inl.injEq]
+    rw [Sum.inl.injEq]
     exact ok.laws.right_cancel xy_mem zy_mem (by simpa using eq)
-  all_goals aesop
+  case base.new xy_mem => exact False.elim <| not_im_r xy_mem
+  case new.base zy_mem => exact False.elim <| not_im_r zy_mem
+  case new.new => rfl
 
 theorem next_idem_l {x y xy} : xy ∈ next x y → x ∈ next x x := by
   intro xy_mem
@@ -109,8 +111,8 @@ theorem next_eq1289 {x y xy xyy xyyy} : xy ∈ next x y → xyy ∈ next xy y �
   cases xy_mem <;> cases xyy_mem <;> cases xyyy_mem
   case base.base.base xy_mem _ xyy_mem _ xyyy_mem =>
     exact .base <| ok.laws.eq1289 xy_mem xyy_mem xyyy_mem
+  case base.new.new => exact (not_im_r (by aesop)).elim
   all_goals aesop
-
 
 def domFresh : Finset (ℕ ⊕F )  := Finset.image (.inl) dom ∪ Finset.image (.inr) Finset.univ
 
@@ -198,12 +200,15 @@ theorem next_idem_l {x y xy} : xy ∈ next x y → x ∈ next x x := by
   intro xy_mem
   cases xy_mem
   case base xy_mem => exact (.base <| ok.laws.idem_l xy_mem)
-  all_goals aesop
+  case new => exact .base a_idem
+  case idem => exact .idem
+  case extra => exact .base b_idem
 
 theorem next_idem_r {x y xy} : xy ∈ next x y → y ∈ next y y := by
   intro xy_mem
   cases xy_mem
   case base xy_mem => exact (.base <| ok.laws.idem_r xy_mem)
+  case new xy_mem => exact .base b_idem
   all_goals aesop
 
 theorem next_idem_o {x y xy} : xy ∈ next x y → xy ∈ next xy xy := by
@@ -310,7 +315,7 @@ theorem exists_extension :
   · let S : Finset _ := {(x,y), (op x y, y), (op (op x y) y, y), (y, op (op (op x y) y) y)}
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (S.image fun (a, b) => ⟨⟨f a b, hf1 a b⟩, hf2 a b⟩)
-    replace le a ha := Finset.forall_image.1 le a ha _ _ (hop a.1 a.2)
+    replace le a (ha : a ∈ S) := Finset.forall_mem_image.1 le ha _ _ (hop a.1 a.2)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
     obtain ⟨xy, xyy, xyyy, final⟩ := le
     exact e.2.func (e.2.laws.eq1289 xy xyy xyyy) final
