@@ -262,13 +262,41 @@ theorem FreeMagma.canonicalize.go_leaf {α} [DecidableEq α] (xs : List α) (v) 
     | none => (.Leaf xs.length, ⟨xs ++ [v]⟩) := by
   simp [go, bind, StateT.bind, get, getThe, MonadStateOf.get, StateT.get]
 
+theorem List.findIdx?.go_eq_add {α} (p : α → Bool) (k i : ℕ) (l : List α) :
+    findIdx?.go p l (k + i) = (findIdx?.go p l k).map (· + i) := by
+    induction l generalizing k m
+    · simp [go]
+    · rename_i x l ih
+      simp [go]
+      split
+      · simp
+      · convert ih (k + 1) m using 2
+        exact Nat.add_right_comm k i 1
+
+theorem List.findIdx?.go_le {α} (p : α → Bool) (k m : ℕ) (l : List α) :
+    findIdx?.go p l k = some m → k ≤ m := by
+  induction l generalizing k m
+  · simp [go]
+  · rw [go]
+    split
+    · simpa using Nat.le_of_eq
+    · rename_i ih _
+      exact Nat.le_of_succ_le ∘ ih k.succ m
+
 theorem List.getElem?_of_idxOf? {α} [DecidableEq α] {v : α} {xs i} :
     List.idxOf? v xs = some i → xs[i]? = some v := by
-  simp [idxOf?]
-  induction' xs with _ _ ih generalizing i <;> simp [findIdx?, findIdx?.go]
+  simp [idxOf?, findIdx?]
+  suffices ∀ k, findIdx?.go (fun x ↦ x == v) xs k = some (k+i) → xs[i]? = some v by
+    convert this 0
+    rw [Nat.zero_add i]
+  induction' xs with _ _ ih generalizing i <;> simp [findIdx?.go]
   split
   · simp; rintro rfl; simp [*]
-  · rintro h; simp at h; simp [ih e]
+  · rintro k h
+    rcases i with _|i
+    · have := List.findIdx?.go_le (· == v) (k + 1) k _ h
+      omega
+    simpa using ih (i := i) (k+1) (by convert h using 2; omega)
 
 theorem List.lt_len_of_getElem? {α} {v : α} {xs i} (H : xs[i]? = some v) : i < length xs :=
   lt_of_not_le fun h => by simp [getElem?_eq_none h] at H
@@ -367,7 +395,11 @@ theorem FreeMagma.canonicalize_relabelling {α β} [DecidableEq α] [DecidableEq
       · simp; refine ⟨fun h => ?_, fun h => ?_⟩
         · rwa [← h, H.2] at h2
         · rw [← h, H.1]
-      · rw [ih]
+      · rw [List.findIdx?, List.findIdx?] at ih
+        rw [List.findIdx?.go_eq_add _ 0 1 _, List.findIdx?.go_eq_add _ 0 1 _]
+        cases h : List.findIdx?.go (fun x ↦ x == v) xs₁ 0
+        · simp [ih, h]
+        · simp [ih, h]
     revert e1 e2; rw [this]; cases xs₁.idxOf? v <;> simp <;> rintro rfl rfl rfl rfl
     · refine ⟨by rw [H.length_eq], ?_⟩
       rw [← List.forall₂_reverse_iff]; simp [h2, H]
@@ -376,6 +408,7 @@ theorem FreeMagma.canonicalize_relabelling {α β} [DecidableEq α] [DecidableEq
     revert e1 e2
     injection h2 with hl2 hr2
     rw [canonicalize.go]; split; split
+    rw [show (fmapHom f) (l ⋆ r) = _ ⋆ _ by rfl]
     simp (config := {iota := false}) [canonicalize.go]; split; split
     rename_i l1 _ _ _ r1 _ _ _ l2 _ _ _ r2; rintro rfl rfl ⟨⟩
     obtain ⟨rfl, H⟩ := ihl l1 H hl2 l2
