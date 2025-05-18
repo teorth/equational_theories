@@ -34,7 +34,7 @@ def FreeMagma.toTerm {α} : FreeMagma α → MagmaLanguage.Term α
   | .Fork m1 m2 => Functions.apply₂ () m1.toTerm m2.toTerm
 
 instance instMagmaLanguageUniq : Unique (MagmaLanguage.Functions 2) := by
-  simpa [MagmaLanguage] using PUnit.unique
+  simpa [MagmaLanguage] using PUnit.instUnique
 
 /-- Helper method to turn a 'normal' function that combines pairs into the correctly typed generic
   operation on MagmaLanguage functions. -/

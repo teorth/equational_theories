@@ -174,14 +174,17 @@ theorem next_law2 {x y} :  y ∉ next x y := by
 -- better for pattern matching
 theorem next_law3' {x y xy} : x = y → xy ∈ next x y → ∃ xyx, xyx ∈ next xy x:= by
   intro x_eq_y xy_mem
-  cases xy_mem
-  case base h =>
-    simp only [Sum.inl.injEq] at x_eq_y
-    rw [← x_eq_y] at h
-    obtain ⟨xxx, xxx_mem⟩ := ok.laws.law3 h
-    exact ⟨.inl xxx, .base xxx_mem⟩
-  all_goals simp_all
-  all_goals aesop
+  cases xy_mem with
+  | base h =>
+      simp only [Sum.inl.injEq] at x_eq_y
+      rw [← x_eq_y] at h
+      obtain ⟨xxx, xxx_mem⟩ := ok.laws.law3 h
+      exact ⟨.inl xxx, .base xxx_mem⟩
+  | new =>
+      injection x_eq_y with hab
+      exact False.elim (a_ne_b hab)
+  | extra1 => contradiction
+  | extra2 => contradiction
 
 theorem next_eq713 {x y yx yxx} : yx ∈ next y x → yxx ∈ next yx x → ∃
   yyxx, yyxx ∈ next y yxx ∧ x ∈ next y yyxx := by
@@ -260,7 +263,7 @@ theorem exists_extension :
   · let S : Finset _ := {(y,x), (op y x, x), (y, op (op y x) x), (y, op y (op (op y x) x))}
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (S.image fun (a, b) => ⟨⟨f a b, hf1 a b⟩, hf2 a b⟩)
-    replace le a ha := Finset.forall_image.1 le a ha _ _ (hop a.1 a.2)
+    replace le a (ha : a ∈ S) := Finset.forall_mem_image.1 le ha _ _ (hop a.1 a.2)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
     obtain ⟨yx, yxx, yyxx, final⟩ := le
     obtain ⟨yyxx', yyxx'_def, eq⟩ := (e.2.laws.eq713 yx yxx)

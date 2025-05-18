@@ -27,8 +27,7 @@ instance SM_countable : Countable SM := by
 
 @[simp]
 lemma SM_char_four (a : SM) : 4 • a = 0 := by
--- when we update Mathlib, one can switch to DirectSum.ext_component, or use the new version of DirectSum.ext
-  apply DirectSum.ext ℤ
+  apply DirectSum.ext_component ℤ
   intro i
   simp only [map_smul, map_zero]
   exact ZModModule.char_nsmul_eq_zero 4 _
@@ -168,7 +167,7 @@ def adjacent (x y : N) := ∃ a, x = (e a) * y ∨ y = (e a) * x
 
 lemma not_adjacent_self (x:N) : ¬ adjacent x x := by
   by_contra this
-  simp only [adjacent, self_eq_mul_left, FreeGroup.of_ne_one, or_self, exists_const] at this
+  simp only [adjacent, right_eq_mul, FreeGroup.of_ne_one, or_self, exists_const] at this
 
 /-- Impose an order on N: x ≤ y if x is a right subword of y  (or equivalently, x is on the unique
 simple path from 1 to y).  The spelling may not be optimal. -/
@@ -264,7 +263,7 @@ instance : PredOrder N where
     rw [le_def, parent_toWord] at hap
     have := hap.length_le
     simp only [List.length_tail] at this
-    rw [bot_eq_one, ← FreeGroup.toWord_eq_nil_iff, ← List.length_eq_zero]
+    rw [bot_eq_one, ← FreeGroup.toWord_eq_nil_iff, ← List.length_eq_zero_iff]
     omega
   le_pred_of_lt {a} {b} hab := (lt_iff_le_parent hab.ne_bot).mp hab
 
@@ -674,7 +673,7 @@ lemma zero_mem_basis_elements (x:N) : 0 ∈ basis_elements x := by
 @[simp]
 lemma basis_elements_of_generator (a: SM) : basis_elements (e a) = {a,0} := by
   simp only [basis_elements, FreeGroup.toWord_of, List.toFinset_cons, List.toFinset_nil,
-    insert_emptyc_eq, Finset.image_singleton]
+    insert_empty_eq, Finset.image_singleton]
   rfl
 
 /-- For Mathlib? -/
@@ -782,10 +781,8 @@ lemma basis_elements_of_genzero_pow' (n: ℕ) : basis_elements ((e 0)^n) = {0} :
 
 @[simp]
 lemma basis_elements_of_genzero_pow (n: ℤ) : basis_elements ((e 0)^n) = {0} := match n with
- | Int.ofNat m => by
-    simp only [Int.ofNat_eq_coe, zpow_natCast, basis_elements_of_genzero_pow']
- | Int.negSucc m => by
-    rw [Int.negSucc_coe, zpow_neg, basis_elements_of_inv, zpow_natCast, basis_elements_of_genzero_pow']
+ | Int.ofNat m => by simp
+ | Int.negSucc m => by simp
 
 lemma basis_elements_of_rel' {x y:N} (h: x ≈ y) : basis_elements x ⊆ basis_elements y := by
   obtain ⟨ n, hn ⟩ := rel_def (Setoid.symm h)
@@ -948,10 +945,10 @@ lemma repr_of_self_pow (a:SM) (n:ℤ) : repr a ((e a) ^ n) = (T₂ ^ n : V ≃�
     LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply]
 
 lemma T₁_fixes : T₁ (1,0) = (1,0) := by
-  simp only [T₁, LinearEquiv.coe_mk, add_zero]
+  simp [T₁, LinearEquiv.coe_mk]
 
 lemma T₁_inv_fixes : T₁.symm (1,0) = (1,0) := by
-  simp only [T₁, LinearEquiv.coe_symm_mk, sub_zero]
+  simp [T₁, LinearEquiv.coe_symm_mk]
 
 /-- When mathlib is bumped, replace this with LinearEquiv.mul_apply -/
 @[simp]
@@ -965,7 +962,7 @@ lemma T₁_pow_acts (n:ℕ) : (T₁ ^ n) (0,1) = ((n:ℝ),1) := by
   induction' n with n hn
   . simp only [pow_zero, LinearEquiv.coe_one, id_eq, CharP.cast_eq_zero]
   rw [add_comm, pow_add, LinearEquiv.mul_apply, hn, pow_one]
-  simp only [T₁, LinearEquiv.coe_mk, add_comm, Nat.cast_add, Nat.cast_one]
+  simp [T₁, LinearEquiv.coe_mk, add_comm, Nat.cast_add, Nat.cast_one]
 
 lemma T₁_inv_pow_acts (n:ℕ) : (T₁⁻¹ ^ n) (0,1) = (-(n:ℝ),1) := by
   induction' n with n hn
@@ -985,7 +982,7 @@ lemma T₁_pow_fixes (n:ℕ) : (T₁ ^ n) (1,0) = (1,0) := by
   induction' n with n hn
   . simp only [pow_zero, LinearEquiv.coe_one, id_eq, CharP.cast_eq_zero]
   rw [add_comm, pow_add, LinearEquiv.mul_apply, hn, pow_one]
-  simp only [T₁, LinearEquiv.coe_mk, add_comm, zero_add]
+  simp [T₁, LinearEquiv.coe_mk, add_comm, zero_add]
 
 lemma T₁_inv_pow_fixes (n:ℕ) : (T₁⁻¹ ^ n) (1,0) = (1,0) := by
   induction' n with n hn
@@ -1002,7 +999,7 @@ lemma T₁_zpow_fixes (n:ℤ) : (T₁ ^ n) (1,0) = (1,0) := by
   rw [zpow_negSucc, ←inv_pow, T₁_inv_pow_fixes]
 
 lemma T₂_acts : T₂ (1,0) = (0,1) := by
-  simp only [T₂, LinearEquiv.coe_mk]
+  simp [T₂, LinearEquiv.coe_mk]
 
 lemma nonbasis_fixes' {a:SM} {L:List (SM × Bool)} (h: ∀ b : Bool, (a,b) ∉ L.toFinset) : pre_repr a (FreeGroup.mk L) (1,0) = (1,0) := match L with
 | List.nil => by
@@ -1041,10 +1038,11 @@ lemma cancel_lemma {a:SM} {x y:N} {n:ℤ} (hx: a ∉ basis_elements x) (hy: a �
     rw [←hx]
     exact zero_mem_basis_elements x
   symm at h
-  simp only [map_mul, MonoidHom.coe_comp, Function.comp_apply, map_zpow, FreeGroup.lift.of, hneq,
-    ↓reduceIte, LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply, repr_of_self,
-    LinearMap.mul_apply, LinearEquiv.coe_coe, nonbasis_fixes hy, LinearMap.coe_mk, AddHom.coe_mk,
-    T₁_zpow_acts, nonbasis_fixes hx, Prod.mk.injEq, Int.cast_eq_zero, and_true] at h
+  simp only [MonoidHom.coe_comp, Function.comp_apply, map_mul, map_zpow, FreeGroup.lift.of, hneq,
+    ↓reduceIte, LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply,
+    LinearEquiv.coe_toLinearMap_mul, Module.End.mul_apply, LinearEquiv.coe_coe, nonbasis_fixes hy,
+    LinearMap.coe_mk, AddHom.coe_mk, T₁_zpow_acts, nonbasis_fixes hx, Prod.mk.injEq,
+    Int.cast_eq_zero, and_true] at h
   exact h
 
 lemma cancel_lemma' {a b:SM} {x y:N} {n:ℤ} (hb: b ≠ a) (hx : a ∉ basis_elements x) (hy : a ∉ basis_elements y) (heq: (e b) * ((e a)⁻¹ * ((e 0)^n * ((e a) * x))) = (e 0)^n * ((e b) * y)) : n = 0 := by
@@ -1056,7 +1054,12 @@ lemma cancel_lemma' {a b:SM} {x y:N} {n:ℤ} (hb: b ≠ a) (hx : a ∉ basis_ele
     contrapose! hx
     rw [←hx]
     exact zero_mem_basis_elements x
-  simp [hneq, hb, nonbasis_fixes hx, nonbasis_fixes hy] at heq'
+  simp only [MonoidHom.coe_comp, Function.comp_apply, map_mul, map_zpow, FreeGroup.lift.of, hneq,
+    ↓reduceIte, LinearEquiv.automorphismGroup.toLinearMapMonoidHom_apply,
+    LinearEquiv.coe_toLinearMap_mul, Module.End.mul_apply, LinearEquiv.coe_coe, nonbasis_fixes hx,
+    LinearMap.coe_mk, AddHom.coe_mk, T₁_zpow_acts, map_inv, hb, LinearEquiv.inv_eq_symm,
+    nonbasis_fixes hy, add_zero, T₁_zpow_fixes, LinearEquiv.coe_symm_mk, sub_zero, Prod.mk.injEq,
+    Int.cast_eq_zero, and_true] at heq'
   exact heq'
 
 end Eq1729

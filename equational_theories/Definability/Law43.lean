@@ -8,8 +8,8 @@ open Law.MagmaLaw
 
 --TODO: the commutative law is definable from anything of the form f(x,y) ≃ f(y,x).
 theorem Equation43_termDefinableFrom_swapped_args {L : NatMagmaLaw}
-    (hL2args : ∀ e ∈ L.lhs.elems.1, e ∈ [0,1] := by decide!)
-    (hR2args : ∀ e ∈ L.rhs.elems.1, e ∈ [0,1] := by decide!)
+    (hL2args : ∀ e ∈ L.lhs.elems.1, e ∈ [0,1] := by decide +kernel)
+    (hR2args : ∀ e ∈ L.rhs.elems.1, e ∈ [0,1] := by decide +kernel)
     (hSymm : L.lhs ⬝ (fun x ↦ Lf $ Equiv.swap 0 1 x) = L.rhs := by rfl)
     : Law43.TermDefinableFrom L := by
   sorry

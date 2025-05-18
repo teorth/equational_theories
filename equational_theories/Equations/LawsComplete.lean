@@ -2,6 +2,8 @@ import equational_theories.RArray
 import equational_theories.MagmaLaw
 import equational_theories.Equations.All
 
+import Batteries.Data.Array.Lemmas
+
 /-!
 This module proves that are actually looking at at the laws we claim to be looking at.
 
@@ -14,7 +16,7 @@ open Lean Elab in
 An elaborator to assemble all the separate `Law{n}` definitions into one data structure.
 -/
 elab "defineLaws%" : term => do
-  let consts : RArray Expr := RArray.ofFn (h := by omega) fun (⟨i, _⟩ : Fin 4694) =>
+  let consts : _root_.RArray Expr := RArray.ofFn (h := by omega) fun (⟨i, _⟩ : Fin 4694) =>
     mkConst (.mkSimple s!"Law{i+1}")
   return consts.toExpr (mkConst ``Law.NatMagmaLaw) id
 
@@ -35,9 +37,9 @@ example : laws[1000] = Law1001 := rfl
 The laws are in order, so we can use binary search to find it.
 -/
 
-@[simp] theorem Ordering.lt_then (o) : Ordering.lt.then o = .lt := rfl
-@[simp] theorem Ordering.eq_then (o) : Ordering.eq.then o = o := rfl
-@[simp] theorem Ordering.gt_then (o) : Ordering.gt.then o = .gt := rfl
+-- @[simp] theorem Ordering.lt_then (o) : Ordering.lt.then o = .lt := rfl
+-- @[simp] theorem Ordering.eq_then (o) : Ordering.eq.then o = o := rfl
+-- @[simp] theorem Ordering.gt_then (o) : Ordering.gt.then o = .gt := rfl
 @[simp] theorem Ordering.then_swap_self (o : Ordering) : o.then o.swap = o := by cases o <;> rfl
 
 theorem Ordering.then_assoc (o₁ o₂ o₃ : Ordering) :
@@ -192,7 +194,7 @@ def FreeMagma.canonicalize {α} [DecidableEq α] (m : FreeMagma α) : FreeMagma 
 where
   go : FreeMagma α → Array α → FreeMagma Nat × Array α
   | .Leaf v, xs =>
-    match xs.indexOf? v with
+    match xs.idxOf? v with
     | some i => (.Leaf i, xs)
     | none =>
       (.Leaf xs.size, xs.push v)
@@ -207,7 +209,7 @@ where
   go : List α → List α → List Nat × List α
   | [], xs => ([], xs)
   | v :: l, xs =>
-    match xs.indexOf? v with
+    match xs.idxOf? v with
     | some i => let (l', xs) := go l xs; (i::l', xs)
     | none => let (l', xs') := go l (xs ++ [v]); (xs.length :: l', xs')
 
@@ -253,43 +255,51 @@ def Law.MagmaLaw.IsCanonical (l : Law.MagmaLaw Nat) : Prop :=
   (l.lhs.cmp l.rhs = .lt ∨ l.lhs = .Leaf 0) ∧
   l.symm.canonicalize.cmp l ≠ .lt
 
-theorem Array.indexOf?_eq {α} [BEq α] (arr : Array α) (a : α) :
-    (arr.indexOf? a).map (·.1) = arr.toList.indexOf? a :=
-  (aux [] _ rfl).trans (by simp [List.indexOf?])
-where
-  aux (l r) (hi : arr.toList = l ++ r) :
-      (arr.indexOfAux a l.length).map (·.1) = (r.findIdx? (· == a)).map (· + l.length) := by
-    cases r <;> rw [indexOfAux] <;> simp
-    · simp at hi; simp [← hi]
-    · split
-      · next b r h =>
-        have IH := aux (l ++ [b]) r
-        simp [hi] at IH
-        have : arr[l.length] = b := by
-          simp [Array.getElem_eq_getElem_toList, hi]
-          rw [List.getElem_append_right] <;> simp
-        simp [this]
-        split <;> simp
-        apply IH.trans; congr; ext; simp; omega
-      · next h => rw [Array.size, hi] at h; simp at h
-
 theorem FreeMagma.canonicalize.go_leaf {α} [DecidableEq α] (xs : List α) (v) :
     FreeMagma.canonicalize.go (Lf v) ⟨xs⟩ =
-    match xs.indexOf? v with
+    match xs.idxOf? v with
     | some i => (.Leaf i, ⟨xs⟩)
     | none => (.Leaf xs.length, ⟨xs ++ [v]⟩) := by
-  simp [go, bind, StateT.bind, get, getThe, MonadStateOf.get, StateT.get, ← Array.indexOf?_eq ⟨xs⟩]
-  cases Array.indexOf? ⟨xs⟩ v <;> rfl
+  simp [go, bind, StateT.bind, get, getThe, MonadStateOf.get, StateT.get]
 
-theorem List.getElem?_of_indexOf? {α} [DecidableEq α] {v : α} {xs i} :
-    List.indexOf? v xs = some i → xs[i]? = some v := by
-  simp [indexOf?]
-  induction' xs with _ _ ih generalizing i <;> simp; split <;> simp
-  · rintro rfl; simp [*]
-  · rintro _ e rfl; simp [ih e]
+theorem List.findIdx?.go_eq_add {α} (p : α → Bool) (k i : ℕ) (l : List α) :
+    findIdx?.go p l (k + i) = (findIdx?.go p l k).map (· + i) := by
+    induction l generalizing k
+    · simp [go]
+    · rename_i x l ih
+      simp [go]
+      split
+      · simp
+      · convert ih (k + 1) using 2
+        exact Nat.add_right_comm k i 1
+
+theorem List.findIdx?.go_le {α} (p : α → Bool) (k m : ℕ) (l : List α) :
+    findIdx?.go p l k = some m → k ≤ m := by
+  induction l generalizing k m
+  · simp [go]
+  · rw [go]
+    split
+    · simpa using Nat.le_of_eq
+    · rename_i ih _
+      exact Nat.le_of_succ_le ∘ ih k.succ m
+
+theorem List.getElem?_of_idxOf? {α} [DecidableEq α] {v : α} {xs i} :
+    List.idxOf? v xs = some i → xs[i]? = some v := by
+  simp [idxOf?, findIdx?]
+  suffices ∀ k, findIdx?.go (fun x ↦ x == v) xs k = some (k+i) → xs[i]? = some v by
+    convert this 0
+    rw [Nat.zero_add i]
+  induction' xs with _ _ ih generalizing i <;> simp [findIdx?.go]
+  split
+  · simp; rintro rfl; simp [*]
+  · rintro k h
+    rcases i with _|i
+    · have := List.findIdx?.go_le (· == v) (k + 1) k _ h
+      omega
+    simpa using ih (i := i) (k+1) (by convert h using 2; omega)
 
 theorem List.lt_len_of_getElem? {α} {v : α} {xs i} (H : xs[i]? = some v) : i < length xs :=
-  lt_of_not_le fun h => by simp [getElem?_len_le h] at H
+  lt_of_not_le fun h => by simp [getElem?_eq_none h] at H
 
 theorem FreeMagma.canonicalize_prop {α} [DecidableEq α]
     {m : FreeMagma α} {xs : List α}
@@ -303,18 +313,18 @@ theorem FreeMagma.canonicalize_prop {α} [DecidableEq α]
   induction m generalizing xs m' xs' with
   | Leaf v =>
     simp [canonicalize.go_leaf, bind, StateT.bind, get, getThe, MonadStateOf.get, StateT.get] at H
-    revert H; cases' e : xs.indexOf? v with i <;> rintro ⟨⟩ <;>
-      simp only [isCanonical, Array.size_toArray, lt_self_iff_false, ↓reduceIte, pure, Array.size,
-        List.length_append, List.length_singleton, Fin.getElem_fin, Array.getElem_mk, true_and,
+    revert H; cases' e : xs.idxOf? v with i <;> rintro ⟨⟩ <;>
+      simp only [isCanonical, List.size_toArray, lt_self_iff_false, ↓reduceIte, pure, Array.size,
+        List.length_append, List.length_singleton, Fin.getElem_fin, List.size_toArray, true_and,
         ite_eq_left_iff, not_lt, Option.ite_none_right_eq_some, Option.some.injEq,
         Nat.succ_ne_self, and_false, imp_false, not_le, Fin.is_lt, exists_const, implies_true]
     · refine ⟨?_, fun H => ?_, fun i a h => ?_, ?_⟩
       · simp [List.canonicalize.go, e]
       · simp [List.nodup_append, H]
-        simpa using List.indexOf?_eq_none_iff.1 e v
+        simpa using List.idxOf?_eq_none_iff.1 e
       · rwa [List.getElem?_append_left (List.lt_len_of_getElem? h)]
       · constructor <;> (intro _ hf; simp [fmapHom, evalInMagma]; apply hf; simp)
-    · have := List.getElem?_of_indexOf? e
+    · have := List.getElem?_of_idxOf? e
       exact ⟨List.lt_len_of_getElem? this, by simp [List.canonicalize.go, e], id, fun _ _ => id,
         fun f hf => congrArg Lf (hf _ _ this), fun f hf => congrArg Lf (hf _ _ this)⟩
   | Fork l r ihl ihr =>
@@ -335,20 +345,20 @@ theorem FreeMagma.canonicalize_self
   | Leaf v =>
     rw [canonicalize.go_leaf, Array.toList_range]
     let _ := instBEqOfDecidableEq (α := Nat)
-    have : (List.range k).indexOf? v = if v < k then some v else none := by
-      cases' e : (List.range k).indexOf? v with i
-      · have := List.indexOf?_eq_none_iff.1 e
+    have : (List.range k).idxOf? v = if v < k then some v else none := by
+      cases' e : (List.range k).idxOf? v with i
+      · have := List.idxOf?_eq_none_iff.1 e
         simp at this; rw [if_neg]
-        exact fun h => this _ h rfl
-      · have := List.getElem?_of_indexOf? e
-        have ⟨hi, e⟩ := List.getElem?_eq_some.1 this
+        exact Nat.not_lt.mpr this
+      · have := List.getElem?_of_idxOf? e
+        have ⟨hi, e⟩ := List.getElem?_eq_some_iff.1 this
         simp [List.getElem_range] at e; simp_all
     simp [isCanonical] at can; split at can
     · cases can; rw [this]; split_ifs; simp [pure, StateT.pure]
     · simp at can; obtain ⟨rfl, rfl⟩ := can
-      simp [this]; congr 2; simp; exact (Array.toList_range _).symm
+      simp [this, ← List.range_succ]
   | Fork l r ihl ihr =>
-    simp [isCanonical, Option.bind_eq_some] at can
+    simp [isCanonical, Option.bind_eq_some_iff] at can
     obtain ⟨n', h1, h2⟩ := can
     simp [canonicalize.go, bind, StateT.bind, ihl h1, ihr h2]
 
@@ -378,15 +388,19 @@ theorem FreeMagma.canonicalize_relabelling {α β} [DecidableEq α] [DecidableEq
   | Leaf v =>
     injection h2 with h2; have ⟨xs₁⟩ := xs₁; have ⟨xs₂⟩ := xs₂
     simp [fmapHom, evalInMagma, canonicalize.go_leaf] at e1 e2 H
-    have : List.indexOf? (f v) xs₂ = List.indexOf? v xs₁ := by
-      simp [List.indexOf?]; clear e1 e2
-      induction' H with a b xs₁ xs₂ H _ ih <;> simp [List.indexOf?]
+    have : List.idxOf? (f v) xs₂ = List.idxOf? v xs₁ := by
+      simp [List.idxOf?]; clear e1 e2
+      induction' H with a b xs₁ xs₂ H _ ih <;> simp [List.findIdx?, List.findIdx?.go]
       congr 1
       · simp; refine ⟨fun h => ?_, fun h => ?_⟩
         · rwa [← h, H.2] at h2
         · rw [← h, H.1]
-      · rw [ih]
-    revert e1 e2; rw [this]; cases xs₁.indexOf? v <;> simp <;> rintro rfl rfl rfl rfl
+      · rw [List.findIdx?, List.findIdx?] at ih
+        rw [List.findIdx?.go_eq_add _ 0 1 _, List.findIdx?.go_eq_add _ 0 1 _]
+        cases h : List.findIdx?.go (fun x ↦ x == v) xs₁ 0
+        · simp [ih, h]
+        · simp [ih, h]
+    revert e1 e2; rw [this]; cases xs₁.idxOf? v <;> simp <;> rintro rfl rfl rfl rfl
     · refine ⟨by rw [H.length_eq], ?_⟩
       rw [← List.forall₂_reverse_iff]; simp [h2, H]
     · simp [H]
@@ -394,6 +408,7 @@ theorem FreeMagma.canonicalize_relabelling {α β} [DecidableEq α] [DecidableEq
     revert e1 e2
     injection h2 with hl2 hr2
     rw [canonicalize.go]; split; split
+    rw [show (fmapHom f) (l ⋆ r) = _ ⋆ _ by rfl]
     simp (config := {iota := false}) [canonicalize.go]; split; split
     rename_i l1 _ _ _ r1 _ _ _ l2 _ _ _ r2; rintro rfl rfl ⟨⟩
     obtain ⟨rfl, H⟩ := ihl l1 H hl2 l2
@@ -445,7 +460,7 @@ where
     | cons a r ih =>
       cases' e : canonicalize.go r (range n) with r₁ xs₁
       split at eq <;> cases eq <;> (cases l <;> [exact ⟨fun _ => rfl, nofun⟩; rename_i i eq v l])
-      · have := getElem?_of_indexOf? eq
+      · have := getElem?_of_idxOf? eq
         simp [List.cmp, Ordering.then_eq_lt, Ordering.then_eq_gt, Nat.compare_eq_lt,
           Nat.compare_eq_gt, Nat.compare_eq_eq]
         have hi := List.lt_len_of_getElem? this; simp at hi
@@ -455,9 +470,8 @@ where
         · rw [e]; exact (ih e).2 h2
       · simp [List.cmp, Ordering.then_eq_lt, Ordering.then_eq_gt, Nat.compare_eq_lt,
           Nat.compare_eq_gt, Nat.compare_eq_eq]
-        have := let _ := instBEqOfDecidableEq (α := ℕ); indexOf?_eq_none_iff.1 eq
+        have := let _ := instBEqOfDecidableEq (α := ℕ); idxOf?_eq_none_iff.1 eq
         simp at this
-        have := Nat.le_of_not_lt fun h => this _ h rfl
         constructor <;> rintro (h | ⟨rfl, h⟩)
         · exact .inl <| h.trans_le this
         · refine (lt_or_eq_of_le this).imp_right fun h' => ⟨h', ?_⟩
@@ -638,7 +652,7 @@ theorem TestFreeMagmas.succ {s n P}
   intro
   | .Fork l r, n, hadd =>
     simp (config := {contextual := true}) [TestFreeMagmas, FreeMagma.isCanonical,
-        TestAllSplits, Option.bind_eq_some, FreeMagma.forks] at *
+        TestAllSplits, Option.bind_eq_some_iff, FreeMagma.forks] at *
     rintro n'' hcan1
     exact H _ _ hadd _ _ rfl hcan1 _ _ rfl
 

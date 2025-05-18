@@ -13,15 +13,15 @@ def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → DualityRel
     return 1
   if modules.isEmpty then
     modules := #[`equational_theories]
-  searchPathRef.set compile_time_search_path%
+  initSearchPath (← findSysroot)
 
-  unsafe withImportModules (modules.map ({module := ·})) {} (trustLevel := 1024) fun env =>
-    let ctx := {fileName := "", fileMap := default}
-    let state := {env}
-    Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
-      let rs ← Result.extractEquationalResults
-      action rs dualityRelation
-      pure 0
+  let env ← importModules (modules.map ({module := ·})) {} (trustLevel := 1024) (loadExts := true)
+  let ctx := {fileName := "", fileMap := default}
+  let state := {env}
+  Prod.fst <$> (Meta.MetaM.toIO · ctx state) do
+    let rs ← Result.extractEquationalResults
+    action rs dualityRelation
+    pure 0
 
 def matchFinite (rs : Array Entry) (finite : Bool) : Array Entry :=
   if finite then

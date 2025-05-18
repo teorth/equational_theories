@@ -6,6 +6,7 @@ import Mathlib.Data.Set.Finite.Lattice
 import Mathlib.Data.Set.Basic
 import Mathlib.Data.Set.Functor
 import Mathlib.GroupTheory.FreeGroup.Basic
+import Mathlib.Tactic.Group
 
 import equational_theories.FreshGenerator
 import equational_theories.Equations.All
@@ -79,6 +80,12 @@ def c := freshGenerator old
 
 @[local aesop norm simp]
 theorem forgetOld_c : forgetOld old c = c := forgetOld_fresh
+
+@[local aesop norm simp]
+theorem forgetOld_d : forgetOld old d = 1 := forgetOld_old old_d
+
+@[local aesop norm simp]
+theorem forgetOld_x₁ : forgetOld old x₁ = 1 := forgetOld_old old_x₁
 
 attribute [local aesop norm simp] forgetOld_old
 attribute [local aesop norm simp] MonoidHom.map_mul
@@ -215,7 +222,7 @@ theorem exists_extension :
   · let S : Finset A := {x, op x * x⁻¹ * x₁⁻¹, 1, op (op x * x⁻¹*(op 1)⁻¹) * op 1}
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (S.image fun a => ⟨⟨f a, hf1 a⟩, hf2 a⟩)
-    replace le a ha := Finset.forall_image.1 le a ha _ (hop a)
+    replace le a ha := Finset.forall_mem_image.1 le ha a (hop a)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
     obtain ⟨opx, opopxxinv, op1, opfinal⟩ := le
     have eq : op 1 = x₁ := e.2.func op1 e.2.base
