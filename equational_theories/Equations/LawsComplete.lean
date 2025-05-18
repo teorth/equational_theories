@@ -264,13 +264,13 @@ theorem FreeMagma.canonicalize.go_leaf {α} [DecidableEq α] (xs : List α) (v) 
 
 theorem List.findIdx?.go_eq_add {α} (p : α → Bool) (k i : ℕ) (l : List α) :
     findIdx?.go p l (k + i) = (findIdx?.go p l k).map (· + i) := by
-    induction l generalizing k m
+    induction l generalizing k
     · simp [go]
     · rename_i x l ih
       simp [go]
       split
       · simp
-      · convert ih (k + 1) m using 2
+      · convert ih (k + 1) using 2
         exact Nat.add_right_comm k i 1
 
 theorem List.findIdx?.go_le {α} (p : α → Bool) (k m : ℕ) (l : List α) :
