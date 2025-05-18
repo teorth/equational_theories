@@ -790,7 +790,7 @@ def initial : PartialSolution where
     <;> rcases hy with (rfl|rfl|rfl|rfl)
     <;> decide
   Dom0 := by simp
-  Id := by repeat rw [DFinsupp.coe_update, Function.update_noteq] <;> decide
+  Id := by repeat rw [DFinsupp.coe_update, Function.update_of_ne] <;> decide
   Closed_sub := by decide
   Valid := by decide
   SubInj := by
