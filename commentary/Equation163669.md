@@ -1,5 +1,13 @@
 ## A law for groups of exponent 3
 
-It was shown by McCune and Wos (Application of automated deduction to the search for single axioms for exponent groups.  In A. Voronkov, editor, *Logic Programming and Automated Reasoning, LNAI Vol. 624,* pages 131-136, Berlin, 1992.) that groups of exponent 3 are characterized by any of the equivalent laws 163669, 180229, 225769 (or their duals 507289, 490729, 445189).  The laws 93289 and 279589 (and their duals 391369 and 577669) are also equivalent for finite magmas, but it is unknown whether they also are in general (cf. J. Hart, K. Kunen. Single axioms for odd exponent groups. *J. Automat. Reason.,* 14 (1995), pp. 383-412).
+Laws characterizing the operation in groups of exponent `n` must have an order that is a multiple of `n` strictly larger than `n`, as proven [by Kunen](https://doi.org/10.1016/0898-1221(94)00212-4).  The laws of minimal order are known for exponents 2, 4, and odd.
 
-See also the law 1571 for groups of exponent 2 (which are automatically abelian) and law 42903481 for groups of exponent 4.  Laws characterizing groups of any odd exponent are known (e.g., laws 9031790000 and 10215810757 for exponent 5).  All of these have shortest length.
+- For `n=2`, laws [895](https://teorth.github.io/equational_theories/implications/?895), 1334, 1571 as shown by [Mendelsohn and Padmanabhan](https://teorth.github.io/equational_theories/blueprint/sect0001.html#mendelsohn-padmanabhan), and their duals 2113, 2308, 2789.
+
+- For `n=3`, laws 163669, 180229, 225769 and their duals 445189, 490729, 507289, as shown by [McCune and Wos](https://doi.org/10.1007/BFb0013055).  The laws 93289, 279589 (and duals 391369, 577669) are also equivalent for finite magmas, by [Hart and Kunen](https://doi.org/10.1007/BF00881714), but it is unknown whether they also are in general.
+
+- For `n=4`, laws 42903481, 76884156, 90105306 and their duals [by Kunen](https://doi.org/10.1016/0898-1221(94)00212-4).
+
+- For `n=5`, laws 9031790000, 10215810757 (the complete list being unknown), and for all odd `n` thanks to [McCune and Wos](https://doi.org/10.1007/BFb0013055).
+
+An important difference with the Higman-Neumann axiom for group division is that these laws concern group multiplication, which is enough to reconstruct the inverse because of the finite exponent.
