@@ -1674,28 +1674,12 @@ lemma next2_le_encard : n ≤ {z : G' | Next2 d z y}.encard := by
 
 end Extension2
 
--- [UPSTREAMED] #21467
--- lemma _root_.Set.ncard_le_encard {α : Type*} (s : Set α) : Set.ncard s ≤ Set.encard s :=
---     ENat.coe_toNat_le_self _
-
--- [UPSTREAMED] #21469
-lemma _root_.WithTop.eq_coe_of_ne_top {α : Type*} {a : WithTop α} (ha : a ≠ ⊤) :
-    ∃ b : α, b = a := Option.ne_none_iff_exists.mp ha
-
--- [UPSTREAMED] #21469
-lemma _root_.WithBot.eq_coe_of_ne_bot {α : Type*} {a : WithBot α} (ha : a ≠ ⊥) :
-    ∃ b : α, b = a := Option.ne_none_iff_exists.mp ha
-
--- [UPSTREAMED] #21473
--- lemma _root_.ENat.eq_top_iff_forall_ne (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, ↑m ≠ n :=
---   WithTop.forall_ne_iff_eq_top.symm
-
 -- PRed to Mathlib, see #21473
 lemma _root_.ENat.eq_top_iff_forall_lt (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m < n := by
   rw [ENat.eq_top_iff_forall_ne]
   refine ⟨fun h m ↦ ?_, fun a m ↦ (a m).ne⟩
   contrapose! h
-  exact WithTop.eq_coe_of_ne_top fun a ↦ ENat.coe_ne_top _ <| top_le_iff.mp (a ▸ h)
+  exact Option.ne_none_iff_exists.mp fun a ↦ ENat.coe_ne_top _ <| top_le_iff.mp (a ▸ h)
 
 --this lemma should be put into Mathlib, maybe in Mathlib.Data.ENat.Basic next to ENat.ne_top_iff_exists
 lemma _root_.ENat.eq_top_iff_forall_le (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m ≤ n := by

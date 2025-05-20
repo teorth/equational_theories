@@ -1,7 +1,6 @@
 import Mathlib.Order.Preorder.Chain
 import Mathlib.Data.Set.Countable
 
--- [UPSTREAMED]: https://github.com/leanprover-community/mathlib4/pull/24971
 theorem Exists.classicalRecOn_eq {α : Sort*} {p : α → Prop} (h : ∃ a, p a)
     {C : Sort*} (H : ∀ a, p a → C) : ∃ a pa, h.classicalRecOn H = H a pa :=
   ⟨_, _, rfl⟩

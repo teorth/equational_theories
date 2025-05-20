@@ -6,44 +6,6 @@ import Mathlib.Algebra.BigOperators.Fin
 --The notion of term-definable expressions in FO logic, as well other useful lemmas about
 --FO logic
 
--- [UPSTREAMED]
--- /-- Any `Unique` type is a left identity for type sigma up to equivalence. Compare with `uniqueProd`
--- which is non-dependent. -/
--- @[simps]
--- def Equiv.uniqueSigma {α} (β : α → Type*) [Unique α] : (i:α) × β i ≃ β default :=
---   ⟨fun p ↦ Unique.eq_default p.1 ▸ p.2,
---   fun b ↦ ⟨default, b⟩,
---   by intro; ext; exact Unique.default_eq _; simp,
---   by intro; rfl⟩
-
--- [UPSTREAMED]
--- /-- A type indexed by  disjoint sums of types is equivalent to the sum of the sums. Compare with
--- `Equiv.sigmaSumDistrib`. -/
--- @[simps]
--- def Equiv.sumSigmaDistrib {α β} (t : α ⊕ β → Type*) :
---     (Σ i, t i) ≃ (Σ i, t (Sum.inl i)) ⊕ (Σ i, t (Sum.inr i)) :=
---   ⟨(match · with
---    | .mk (.inl x) y => .inl ⟨x, y⟩
---    | .mk (.inr x) y => .inr ⟨x, y⟩),
---   Sum.elim (fun a ↦ ⟨.inl a.1, a.2⟩) (fun b ↦ ⟨.inr b.1, b.2⟩),
---   by rintro ⟨x|x,y⟩ <;> simp,
---   by rintro (⟨x,y⟩|⟨x,y⟩) <;> simp⟩
-
--- [UPSTREAMED]
--- /-- Equivalence between `(i : Fin m) × Fin (n i)` and `Fin (∑ i : Fin m, n i)`. Compare with `finPiFinEquiv`. -/
--- def finSigmaFinEquiv {m : ℕ} {n : Fin m → ℕ} : (i : Fin m) × Fin (n i) ≃ Fin (∑ i : Fin m, n i) :=
---   match m with
---   | 0 => @Equiv.equivOfIsEmpty _ _ _ (by simp; exact Fin.isEmpty')
---   | Nat.succ m =>
---     calc _ ≃ _ := (@finSumFinEquiv m 1).sigmaCongrLeft.symm
---       _ ≃ _ := Equiv.sumSigmaDistrib _
---       _ ≃ _ := Equiv.sumCongr
---         (Equiv.sigmaCongrRight fun _ ↦ Equiv.refl _)
---         ((Equiv.uniqueSigma _).trans (Equiv.refl _))
---       _ ≃ _ := finSigmaFinEquiv.sumCongr (Equiv.refl _)
---       _ ≃ _ := finSumFinEquiv
---       _ ≃ _ := finCongr (Fin.sum_univ_castSucc n).symm
-
 section TermDef
 namespace Function
 

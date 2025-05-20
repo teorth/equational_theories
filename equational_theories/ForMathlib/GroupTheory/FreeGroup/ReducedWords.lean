@@ -13,7 +13,7 @@ This file defines some extra lemmas for free groups, in particular about (cyclic
 Related mathlib PRs:
 * Overall: https://github.com/leanprover-community/mathlib4/pull/22639
 * [UPSTREAMED] https://github.com/leanprover-community/mathlib4/pull/23366
-* [UPSTREAMED] (but not yet in bump) https://github.com/leanprover-community/mathlib4/pull/23367
+* [UPSTREAMED] https://github.com/leanprover-community/mathlib4/pull/23367
 * https://github.com/leanprover-community/mathlib4/pull/23368
 -/
 open List
@@ -24,16 +24,6 @@ variable {α : Type u}
 namespace FreeGroup
 
 variable {L L₁ L₂ : List (α × Bool)}
-
--- [UPSTREAMED] https://github.com/leanprover-community/mathlib4/pull/23366
--- theorem invRev_append : invRev (L₁ ++ L₂) = invRev L₂ ++ invRev L₁ := by
---   unfold invRev
---   simp
-
--- [UPSTREAMED]  https://github.com/leanprover-community/mathlib4/pull/23366
--- theorem invRev_cons {a : (α × Bool)} : invRev (a:: L) = invRev L ++ invRev [a] := by
---   unfold FreeGroup.invRev
---   simp
 
 namespace Red
 
@@ -170,27 +160,6 @@ theorem reduced_toWord {x : FreeGroup α} : Red.reduced (x.toWord) := by
   rw [Red.reduced_iff_eq_reduce]
   simp
 
--- [UPSTREAMED] (but not yet in bump): https://github.com/leanprover-community/mathlib4/pull/23367
-theorem toWord_mul {x y : FreeGroup α} : (toWord (x*y)) = reduce (toWord x ++ toWord y) := by
-  rw [← mk_toWord (x := x), ← mk_toWord (x:= y), mul_mk]
-  simp
-
--- [UPSTREAMED] (but not yet in bump): https://github.com/leanprover-community/mathlib4/pull/23367
-theorem toWord_pow {x : FreeGroup α} {n : ℕ} : (toWord (x^n)) = reduce (List.replicate n x.toWord).flatten := by
-  rw [← mk_toWord (x := x), pow_mk]
-  simp
-
--- [UPSTREAMED] (but not yet in bump): https://github.com/leanprover-community/mathlib4/pull/23367
-theorem reduce_append : (reduce (L₁ ++ L₂)) = reduce (reduce L₁ ++ reduce L₂) := by
-rw [← FreeGroup.toWord_mk, ← FreeGroup.mul_mk, toWord_mul, FreeGroup.toWord_mk, FreeGroup.toWord_mk]
-
--- [UPSTREAMED] (but not yet in bump): https://github.com/leanprover-community/mathlib4/pull/23367
-theorem reduce_cons (a : α × Bool) (w : List (α × Bool)) :
-    FreeGroup.reduce (a :: w) = FreeGroup.reduce (a :: FreeGroup.reduce w) := by
-  simp only [FreeGroup.reduce.cons, FreeGroup.reduce.idem]
-
--- theorem reduce_singleton (a : α × Bool) : FreeGroup.reduce [a] = [a] := rfl
-
 def reduceCyclically : List (α × Bool) → List (α × Bool) :=
   List.bidirectionalRec
     (nil := [])
@@ -261,10 +230,6 @@ theorem reduceCyclically_sound (w : List (α × Bool)) :
       rw [Red.cyclicallyReduced_cons_append]
       trivial
 
--- [UPSTREAMED] (but not yet in bump): https://github.com/leanprover-community/mathlib4/pull/23367
-theorem reduce_invRev_left_cancel (L : List (α × Bool)) : reduce (invRev L ++ L) = [] := by
-  simp [←toWord_mk, ←mul_mk, ←inv_mk]
-
 theorem reduced_flatten_replicate (n : ℕ) (hn : n ≠ 0) (L₁ L₂ L₃ : List (α × Bool))
     (h1 : Red.cyclicallyReduced L₂) (h2 : Red.reduced (L₁ ++ L₂ ++ L₃))
     : Red.reduced (L₁ ++ (List.replicate n L₂).flatten ++ L₃) := by
@@ -293,15 +258,15 @@ theorem reduce_flatten_replicate' (n : ℕ) (L : List (α × Bool)) (h : Red.red
   case zero =>
     simpa [←append_assoc, ←reduceCyclically_conjugation, ←Red.reduced_iff_eq_reduce]
   case succ n ih =>
-    rw [replicate_succ, flatten_cons, reduce_append, ih, Red.reduced_iff_eq_reduce.mp h]
+    rw [replicate_succ, flatten_cons, ← reduce_append_reduce_reduce, ih, Red.reduced_iff_eq_reduce.mp h]
     nth_rewrite 1 [reduceCyclically_conjugation L]
     have {L₁ L₂ L₃ L₄ L₅ : List (α × Bool)} : reduce (L₁ ++ L₂ ++ invRev L₃ ++ (L₃ ++ L₄ ++ L₅)) = reduce (L₁ ++ (L₂ ++ L₄) ++ L₅) := by
       nth_rewrite 1 [append_assoc]
       nth_rewrite 2 [←append_assoc, ←append_assoc]
-      nth_rewrite 1 [reduce_append]
-      nth_rewrite 3 [reduce_append]
-      nth_rewrite 4 [reduce_append]
-      simp [reduce_invRev_left_cancel, ←reduce_append]
+      nth_rewrite 1 [← reduce_append_reduce_reduce]
+      nth_rewrite 3 [← reduce_append_reduce_reduce]
+      nth_rewrite 4 [← reduce_append_reduce_reduce]
+      simp [reduce_invRev_left_cancel, reduce_append_reduce_reduce]
     rw [this, ←flatten_cons, ←replicate_succ, ←Red.reduced_iff_eq_reduce]
     apply reduced_flatten_replicate _ (by simp) ..
     · apply reduceCyclically_sound _ h
