@@ -21,7 +21,7 @@ We also define a variant: we say that $E$ \emph{entails} $E'$ \emph{for finite m
 The \emph{order} of an equational law is the number of occurrences of the magma operation, and can be viewed as a crude measure of complexity of the law. For instance, the commutative law \eqref{eq43} has order $2$, while the associative law \eqref{eq4512} has order $4$. We note some selected laws of small order that have previously appeared in the literature:
 \begin{itemize}
 \item The \emph{central groupoid law} $\x \formaleq (\y \op \x) \op (\x \op \z)$ \eqref{eq168} is an order-$3$ law introduced by Evans \cite{evans} and studied further by Knuth \cite{knuth} and many further authors, being closely related to central digraphs (also known as unique path property diagraphs), and leading in particular to the discovery of the Knuth-Bendix algorithm \cite{knuth-bendix}; see \cite{klt} for a more recent survey.
-\item \emph{Tarski's axiom} $\x \formaleq \y \op ( (\z \op (\x \op (\y \op \z))))$ \eqref{eq543} is an order-$4$ law that was shown by Tarski \cite{Tarski1938} to characterize the operation of subtraction in an abelian group; that is to say, a magma $\Magma = (M,\op)$ obeys \eqref{eq543} if and only if there is an abelian group structure on $\Magma$ for which $x \op y = x-y$ for all $x,y \in M$.
+\item \emph{Tarski's axiom} $\x \formaleq \y \op (\z \op (\x \op (\y \op \z)))$ \eqref{eq543} is an order-$4$ law that was shown by Tarski \cite{Tarski1938} to characterize the operation of subtraction in an abelian group; that is to say, a magma $\Magma = (M,\op)$ obeys \eqref{eq543} if and only if there is an abelian group structure on $\Magma$ for which $x \op y = x-y$ for all $x,y \in M$.
 \item In a similar vein, it was shown in \cite{mendelsohn-padmanabhan} (see also \cite{meredith-prior}) that the order-$4$ law
 $\x \formaleq (\y \op \z) \op (\y \op (\x \op \z))$ \eqref{eq1571} characterizes addition (or subtraction) in an abelian group of exponent $2$; it was shown in \cite{mccune_et_al} that the order-$6$ law $\x \formaleq (\y \op ((\x \op \y) \op \y)) \op (\x \op (\z \op \y))$ \eqref{eq345169} characterizes the Sheffer stroke in a boolean algebra, and it was shown in \cite{higman-neumann} that the order-$8$ law
 $\x \formaleq \y \op ((((\y \op \y) \op \x) \op \z) \op (((\y \op \y) \op \y) \op \z))$ \eqref{eq42323216} characterizes division in a (not necessarily abelian) group.
@@ -109,7 +109,7 @@ The objective of using the data from the ETP to establish well-calibrated benchm
 
   %% Column labels
   \node[label] (ghlabel)   at (0,2) {GitHub};
-  \node[label] (zuliplabel) at (7,2) {Lean Zulip};
+  \node[label] (zuliplabel) at (7,2) {Lean Zulip};
 
   %% GitHub nodes
   \node (blueprint)   {Blueprint};
@@ -117,8 +117,8 @@ The objective of using the data from the ETP to establish well-calibrated benchm
   \node (viz)        [below=of formal]    {Visualization tools};
 
   %% Lean Zulip nodes
-  \node (hproofs)    [right=of blueprint]       {Human‑generated proofs};
-  \node (cproofs)    [right=3cm of formal]         {Computer‑generated proofs};
+  \node (hproofs)    [right=of blueprint]       {Human-generated proofs};
+  \node (cproofs)    [right=3cm of formal]         {Computer-generated proofs};
   \node (hdisc)      [right=of viz]         {Human discussion};
 
   %% External ATP box
@@ -128,8 +128,8 @@ The objective of using the data from the ETP to establish well-calibrated benchm
   % GitHub container
   \node[draw,dotted,inner sep=8pt,fit=(blueprint)(formal)(viz), label=above:GitHub]
     (ghbox) {};
-  % Lean Zulip container
-  \node[draw,dotted,inner sep=8pt,fit=(hproofs)(cproofs)(hdisc), label=above:Lean Zulip]
+  % Lean Zulip container
+  \node[draw,dotted,inner sep=8pt,fit=(hproofs)(cproofs)(hdisc), label=above:Lean Zulip]
     (zulipbox) {};
 
   %% Arrows
@@ -153,7 +153,7 @@ The objective of using the data from the ETP to establish well-calibrated benchm
 
 While the primary objective of the ETP was being completed, some additional related results were generated as spinoffs.  Specifically:
 \begin{itemize}
-\item In the blueprint on the ETP web site, we report some partial progress on we report on classifying which of the $57882$ distinct laws of order $5$ are equivalent to the singleton law \eqref{eq2}, either with or without the requirement that the magma be finite.
+\item In the blueprint on the ETP web site, we report some partial progress on classifying which of the $57882$ distinct laws of order $5$ are equivalent to the singleton law \eqref{eq2}, either with or without the requirement that the magma be finite.
 \item In \Cref{higman-neumann} we report on classifying the laws of order $8$ that are equivalent to the Higman-Neumann law \eqref{eq42323216}.
 \item In \Cref{ml-sec} we report on preliminary experiments on using machine learning to determine to what extent the implication graph can be predicted by a neural network.
 \end{itemize}
