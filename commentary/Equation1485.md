@@ -11,4 +11,6 @@ The last-standing implications for this equation were resolved with a 32-element
 Non-trivial finite examples exist, but so far all known examples have an order that is either a square, or twice a square.
 For all known examples and all elements x, the non-empty preimages of left-multiplication by x all have the same cardinal (and likewise for right-multiplication).
 
+For commutative magmas, this law [characterizes the Sheffer stroke](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/A.20single.20axiom.20for.20Boolean.20algebra/near/519538543).
+
 See [this chapter of the blueprint](https://teorth.github.io/equational_theories/blueprint/weak-central-groupoids-chapter.html).
