@@ -214,5 +214,8 @@ equation 921941  :=  x ◇ ((y ◇ z) ◇ x) = (x ◇ y) ◇ (z ◇ x)
 /-- The Higman-Neumann axiom, which characterized (not necessarily Abelian) groups, as [proved by Higman and Neuman](https://doi.org/10.5486/pmd.1952.2.3-4.10) in 1956. -/
 equation 42323216 :=  x = y ◇ ((((y ◇ y) ◇ x) ◇ z) ◇ (((y ◇ y) ◇ y) ◇ z))
 
-/- A. K. Austin's law that permits infinite models, but no finite ones. -/
+/-- A. K. Austin's law that permits infinite models, but no finite ones. -/
 equation 1875916474  :=  x = (((y ◇ y) ◇ y) ◇ x) ◇ (((y ◇ y) ◇ ((y ◇ y) ◇ y)) ◇ z)
+
+/-- An equation [characterizing](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/The.20.22modules.20over.20Gaussian.20integers.22.20law/near/519928430) `x ◇ y = x + √-1 y` on modules over the ring `ℤ[√-1]`, the Gaussian integers. -/
+equation 27213516127903475784245028046357  :=  x = (y ◇ (w ◇ (z ◇ w))) ◇ (((y ◇ (x ◇ (x ◇ x))) ◇ (z ◇ (z ◇ z))) ◇ (((y ◇ (x ◇ (x ◇ x))) ◇ (z ◇ (z ◇ z))) ◇ ((y ◇ (x ◇ (x ◇ x))) ◇ (z ◇ (z ◇ z)))))
