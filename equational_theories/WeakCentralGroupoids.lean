@@ -102,7 +102,7 @@ abbrev Extension := {E : PreExtension G // E.OK}
 theorem Extension.next (E : Extension G) (a b) :
     ∃ E' : Extension G, E ≤ E' ∧ (E'.1.induced a b).Nonempty := by
   classical if h : (E.1.induced a b).Nonempty then exact ⟨_, le_rfl, h⟩ else
-  let ⟨l, hl⟩ := Infinite.exists_not_mem_finset <|
+  let ⟨l, hl⟩ := Infinite.exists_notMem_finset <|
     (insert a <| insert b <| E.1.image (·.1) ∪ E.1.image (·.2)).image (·.2)
   let c : ExtBase G := (a.1 ◇ b.1, l)
   refine ⟨⟨insert (a, c) (insert (c, b) E.1), ?_, fun x y z hz w hw => ?_⟩,
