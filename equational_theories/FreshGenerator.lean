@@ -34,7 +34,7 @@ def generatorNames' : List (α × Bool) → Finset α
 def generatorNames (x : FreeGroup α) : Finset α := generatorNames' $ FreeGroup.toWord x
 
 theorem existsFreshGeneratorName (A : Finset (FreeGroup α)) :
-    ∃ a, a ∉ A.biUnion generatorNames := by apply Finset.exists_not_mem
+    ∃ a, a ∉ A.biUnion generatorNames := by apply Finset.exists_notMem
 
 noncomputable def freshGeneratorName (A : Finset (FreeGroup α)) : α :=
   (existsFreshGeneratorName A).choose
