@@ -1793,7 +1793,7 @@ lemma not_seed_of_eq_snd {a c : A} (hac : a ≠ c) (n : ℕ) (x : G) :
 
 lemma seed_finite {a c : A} (hac : a ≠ c) : {n | ∃ x, seed c (.inr ⟨⟨a, c, n⟩, hac⟩) x}.Finite := by
   convert Set.finite_empty
-  rw [Set.eq_empty_iff_forall_not_mem]
+  rw [Set.eq_empty_iff_forall_notMem]
   exact fun n ⟨x, hx⟩ ↦ not_seed_of_eq_snd hac n x hx
 
 lemma seed_h_1516 {c' : A} {y : G'} {x : G} : seed c' y x → ∃ w, seed c' x w ∧ seed (S y) w c'
@@ -1913,7 +1913,7 @@ lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ parti
     exact (partial_range' x).toFinite
   have h2 : ¬ Set.Finite (Set.univ : Set G) := Set.finite_univ_iff.mp.mt Infinite.not_finite
   rcases (Set.Infinite.nontrivial (.diff (.diff h2 hA) hB)).exists_ne (d x) with ⟨x1, hx1, hx2⟩
-  exact ⟨x1, Set.not_mem_of_mem_diff (Set.mem_of_mem_diff hx1), ⟨Set.not_mem_of_mem_diff hx1, hx2⟩⟩
+  exact ⟨x1, Set.notMem_of_mem_diff (Set.mem_of_mem_diff hx1), ⟨Set.notMem_of_mem_diff hx1, hx2⟩⟩
 
 lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧
     w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
@@ -1928,7 +1928,7 @@ lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧
     (L_surjective _ _)) hA) hB)).exists_ne (d x) with ⟨ x1, hx1, hx2⟩
   have hx1' := Set.mem_of_mem_diff hx1
   rcases (Set.mem_of_mem_diff hx1') with ⟨w, hw1, hw2⟩
-  exact ⟨x1, hw2 ▸ hw1, ⟨Set.not_mem_of_mem_diff hx1', ⟨Set.not_mem_of_mem_diff hx1, hx2⟩⟩⟩
+  exact ⟨x1, hw2 ▸ hw1, ⟨Set.notMem_of_mem_diff hx1', ⟨Set.notMem_of_mem_diff hx1, hx2⟩⟩⟩
 
 /-- Given an extension, which is a partial solution with an undefined element of the domain
 called `d`, we define a new element `w` that represents the image of `d` under `Lₓ`. -/

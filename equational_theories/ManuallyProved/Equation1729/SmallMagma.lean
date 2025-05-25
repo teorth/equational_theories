@@ -495,7 +495,7 @@ def fill (D: Finset N) : Set N := { y | ∃ x, x ≈ y ∧ x ∈ D }
 lemma fill_empty : fill Finset.empty = ∅ := by
   ext y
   simp only [fill, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false, not_exists, not_and]
-  exact fun _ _ ↦ Finset.not_mem_empty _
+  exact fun _ _ ↦ Finset.notMem_empty _
 
 lemma fill_mono {D₁ D₂ : Finset N} (h : D₁ ⊆ D₂) : fill D₁ ⊆ fill D₂ := by
   intro y hy

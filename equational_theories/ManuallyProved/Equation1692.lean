@@ -60,11 +60,11 @@ lemma XVals.root_neq (vals: XVals) : vals.root_elem ∉ Set.range (fun n => basi
   have app_eq := DFunLike.congr (x := 2 ^ vals.i + x * 2 ^ (vals.i + 1)) this rfl
   simp only [Finsupp.single_eq_same] at app_eq
   have not_in_supp: (2 ^ vals.i + x * 2 ^ (vals.i + 1)) ∉ vals.root_elem.support := by
-    apply Finset.not_mem_of_max_lt_coe
+    apply Finset.notMem_of_max_lt_coe
     have supp_gt := vals.supp_gt x
     simp [basis_n, Finsupp.support_single_ne_zero] at supp_gt
     exact supp_gt
-  rw [Finsupp.not_mem_support_iff] at not_in_supp
+  rw [Finsupp.notMem_support_iff] at not_in_supp
   simp [not_in_supp] at app_eq
 
 lemma XVals.x_inj (vals: XVals): Function.Injective vals.x_vals := by
@@ -274,11 +274,11 @@ noncomputable def tree_linear_comb {vals: XVals} (t: @TreeNode vals): TreeLinear
         · intro x _ x_not_in
           rw [smul_eq_zero]
           have x_not_g_supp: x ∉ h_prev.b_coords.support := by
-            apply Finset.not_mem_of_max_lt_coe
+            apply Finset.notMem_of_max_lt_coe
             simp only [Finset.mem_range, not_lt] at x_not_in
             rw [← WithBot.coe_le_coe] at x_not_in
             exact gt_of_ge_of_gt x_not_in h_prev.b_coords_supp
-          exact Or.inl (Finsupp.not_mem_support_iff.mp x_not_g_supp)
+          exact Or.inl (Finsupp.notMem_support_iff.mp x_not_g_supp)
       b_eq := by
         simp only [f_b, TreeNode.getData, treeNum, Finsupp.single_apply, ite_smul, one_smul, zero_smul,
           Finset.sum_ite_eq, Finset.mem_range]
@@ -318,15 +318,15 @@ noncomputable def tree_linear_comb {vals: XVals} (t: @TreeNode vals): TreeLinear
           · simp only [Finset.mem_range, x_lt_treeNum, ↓reduceIte]
             simp only [not_lt] at x_lt_treeNum
             have x_not_g_supp: x ∉ h_prev.b_coords.support := by
-              apply Finset.not_mem_of_max_lt_coe
+              apply Finset.notMem_of_max_lt_coe
               rw [← WithBot.coe_le_coe] at x_lt_treeNum
               exact gt_of_ge_of_gt x_lt_treeNum h_prev.b_coords_supp
             have x_not_g_l_supp: x ∉ h_prev.a_coords.support := by
-              apply Finset.not_mem_of_max_lt_coe
+              apply Finset.notMem_of_max_lt_coe
               rw [← WithBot.coe_le_coe] at x_lt_treeNum
               exact gt_of_ge_of_gt x_lt_treeNum h_prev.a_coords_supp
-            rw [Finsupp.not_mem_support_iff] at x_not_g_supp
-            rw [Finsupp.not_mem_support_iff] at x_not_g_l_supp
+            rw [Finsupp.notMem_support_iff] at x_not_g_supp
+            rw [Finsupp.notMem_support_iff] at x_not_g_l_supp
             simp [x_not_g_supp, x_not_g_l_supp]
         · simp only [Finset.mem_range, not_lt, ite_eq_right_iff]
           omega
@@ -340,7 +340,7 @@ lemma n_not_supp {vals: XVals} (t: @TreeNode vals) (n: ℕ) (hn: treeNum t - 1 �
     have index_supp := Finsupp.support_single_ne_zero (b := (1 : ℚ)) (vals.x_to_index n) (by simp)
     rw [XVals.x_to_index] at index_supp
     rw [basis_n, Finsupp.coe_basisSingleOne, index_supp] at root_supp
-    exact Finsupp.not_mem_support_iff.mp (Finset.not_mem_of_max_lt_coe root_supp)
+    exact Finsupp.notMem_support_iff.mp (Finset.notMem_of_max_lt_coe root_supp)
   · rw [XVals.x_vals, XVals.x_to_index]
     simp only [i_eq_zero, ↓reduceIte, Finsupp.coe_basisSingleOne, Finsupp.mem_support_iff]
     rw [Finsupp.single_apply]
@@ -353,7 +353,7 @@ lemma eval_larger_a_eq_zero {vals: XVals} (t: @TreeNode vals) (n: ℕ) (hn: tree
     refine Finset.sum_congr rfl fun x hx ↦ ?_
     rw [Finset.mem_range] at hx
     have supp_subset := Finsupp.support_smul (g := vals.x_vals x) (b := tree_comb.a_coords x)
-    exact Finsupp.not_mem_support_iff.mp fun a ↦ n_not_supp t n hn x hx (supp_subset a)
+    exact Finsupp.notMem_support_iff.mp fun a ↦ n_not_supp t n hn x hx (supp_subset a)
   have fun_congr := DFunLike.congr tree_comb.a_eq (x := vals.x_to_index n) rfl
   rw [Finsupp.finset_sum_apply, sum_eval_eq_zero, Finset.sum_const_zero] at fun_congr
   exact fun_congr
@@ -364,15 +364,15 @@ lemma eval_larger_b_eq_zero {vals: XVals} (t: @TreeNode vals) (n: ℕ) (hn: tree
     refine Finset.sum_congr rfl fun x hx ↦ ?_
     simp only [Finset.mem_range] at hx
     have supp_subset := Finsupp.support_smul (g := vals.x_vals x) (b := tree_comb.b_coords x)
-    exact Finsupp.not_mem_support_iff.mp fun a ↦ n_not_supp t n hn x hx (supp_subset a)
+    exact Finsupp.notMem_support_iff.mp fun a ↦ n_not_supp t n hn x hx (supp_subset a)
   have fun_congr := DFunLike.congr tree_comb.b_eq (x := vals.x_to_index n) rfl
   rw [Finsupp.finset_sum_apply, sum_eval_eq_zero, Finset.sum_const_zero] at fun_congr
   exact fun_congr
 
 lemma xvals_root_not_supp (vals: XVals) (n: ℕ): vals.root_elem (vals.x_to_index (n)) = 0 := by
   have not_supp := vals.supp_gt n
-  rw [← Finsupp.not_mem_support_iff]
-  apply Finset.not_mem_of_max_lt_coe
+  rw [← Finsupp.notMem_support_iff]
+  apply Finset.notMem_of_max_lt_coe
   have supp_single := Finsupp.support_single_ne_zero (2 ^ vals.i + n * 2 ^ (vals.i + 1)) (b := (1 : ℚ)) (by simp)
   simp only [Finsupp.coe_basisSingleOne, supp_single] at not_supp
   exact not_supp
@@ -385,7 +385,7 @@ lemma tree_supp_disjoint {vals: XVals} (t: @TreeNode vals): t.getData.b.support 
       have root_supp_lt := vals.supp_gt 0
       simp only [Finsupp.coe_basisSingleOne, zero_mul, add_zero, ne_eq, one_ne_zero, not_false_eq_true,
         Finsupp.support_single_ne_zero] at root_supp_lt
-      exact Finset.singleton_inter_of_not_mem (Finset.not_mem_of_max_lt_coe root_supp_lt)
+      exact Finset.singleton_inter_of_notMem (Finset.notMem_of_max_lt_coe root_supp_lt)
     | .left parent =>
         rw [TreeNode.getData, Finsupp.support_neg]
         let tree_comb := tree_linear_comb parent
@@ -520,7 +520,7 @@ lemma tree_linear_independent {vals: XVals} (t: @TreeNode vals) (ht: t.getData.a
     exact ht
   obtain ⟨x, hx⟩ := supp_nonempty
   have x_not_b_supp: x ∉ t.getData.b.support := Finset.disjoint_right.mp (Finset.disjoint_iff_inter_eq_empty.mpr supp_disjoint) hx
-  rw [Finsupp.not_mem_support_iff] at x_not_b_supp
+  rw [Finsupp.notMem_support_iff] at x_not_b_supp
   rw [Finsupp.mem_support_iff] at hx
   have eval_at := DFunLike.congr h_sum_zero (x := x) rfl
   simp only [Finsupp.coe_add, Finsupp.coe_smul, Pi.add_apply, Pi.smul_apply, smul_eq_mul,
@@ -624,10 +624,10 @@ lemma xseq_zero_neq_b {vals: XVals} (t: @TreeNode vals) (s: ℚ) (hs: s ≠ 0): 
       simp at root_supp
       simp [Finsupp.support_single_ne_zero] at root_supp
       have two_i_not_supp: 2^vals.i ∉ vals.root_elem.support := by
-        apply Finset.not_mem_of_max_lt_coe
+        apply Finset.notMem_of_max_lt_coe
         simp only [WithBot.coe_pow, WithBot.coe_ofNat]
         exact root_supp
-      rw [Finsupp.not_mem_support_iff, eval_at] at two_i_not_supp
+      rw [Finsupp.notMem_support_iff, eval_at] at two_i_not_supp
       contradiction
   | .left t2_parent_parent =>
       simp only [TreeNode.getData, XVals.x_vals, treeNum_neq_zero, ↓reduceIte, Finsupp.coe_basisSingleOne,
@@ -1443,8 +1443,8 @@ lemma tree_b_neq_root_mul {vals: XVals} (t: @TreeNode vals) (a: ℚ): t.getData.
       zero_mul, add_zero, XVals.x_to_index, Finsupp.single_eq_same, Finsupp.coe_smul, Pi.smul_apply,
       smul_eq_mul] at app_eq
     have eval_zero: vals.root_elem (2 ^ vals.i) = 0 := by
-      rw [← Finsupp.not_mem_support_iff]
-      exact Finset.not_mem_of_max_lt_coe tree_sup
+      rw [← Finsupp.notMem_support_iff]
+      exact Finset.notMem_of_max_lt_coe tree_sup
     rw [eval_zero] at app_eq
     simp only [mul_zero, one_ne_zero] at app_eq
   | left t1_parent _ =>
@@ -1460,8 +1460,8 @@ lemma tree_b_neq_root_mul {vals: XVals} (t: @TreeNode vals) (a: ℚ): t.getData.
     simp only [XVals.x_vals, Finsupp.coe_basisSingleOne, XVals.x_to_index, Finsupp.coe_smul,
       Pi.smul_apply, smul_eq_mul] at app_eq
     have eval_zero: vals.root_elem (2 ^ vals.i + (treeNum t1_parent - 1) * 2 ^ (vals.i + 1)) = 0 := by
-      rw [← Finsupp.not_mem_support_iff]
-      exact Finset.not_mem_of_max_lt_coe tree_sup
+      rw [← Finsupp.notMem_support_iff]
+      exact Finset.notMem_of_max_lt_coe tree_sup
     rw [eval_zero] at app_eq
     simp [treeNum_neq_zero] at app_eq
   | right t2_parent h_parent =>
@@ -1584,7 +1584,7 @@ lemma left_tree_supp_increasing {vals: XVals} (t: @TreeNode vals): t.left.getDat
         · simp only [b_eq_zero, ↓reduceIte, Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul, mul_eq_zero]
           exact Or.inr (xvals_root_not_supp ..)
         · simp [b_eq_zero]
-          rw [← Finsupp.not_mem_support_iff]
+          rw [← Finsupp.notMem_support_iff]
           by_cases g_b_zero: tree_comb.b_coords b = 0
           · simp [g_b_zero]
           · rw [Finsupp.support_single_ne_zero]
@@ -1777,7 +1777,7 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
         have supp_max_lt: (g_enumerate n).support.max.getD 0 < (2 ^ (max max_i max_root_supp + 1)) := by
           have lt_self_pow := Nat.lt_pow_self Nat.one_lt_two (n := (max max_i max_root_supp + 1))
           omega
-        apply Finset.not_mem_of_max_lt_coe
+        apply Finset.notMem_of_max_lt_coe
         match h_supp_max: (g_enumerate n).support.max with
         | WithBot.some max_val =>
           norm_cast
@@ -1789,7 +1789,7 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
         have supp_max_lt: (g_enumerate n).support.max.getD 0 < (2 ^ (max max_i max_root_supp + 1)) := by
           have lt_self_pow := Nat.lt_pow_self Nat.one_lt_two (n := (max max_i max_root_supp + 1))
           omega
-        apply Finset.not_mem_of_max_lt_coe
+        apply Finset.notMem_of_max_lt_coe
         match h_supp_max: (g_enumerate n).support.max with
         | WithBot.some max_val =>
           norm_cast
@@ -1833,7 +1833,7 @@ noncomputable def f_data (n: ℕ): FData (g_enumerate n) := by
             right
             use vals
           omega
-        apply Finset.not_mem_of_max_lt_coe
+        apply Finset.notMem_of_max_lt_coe
         match h_supp_max: vals.root_elem.support.max with
         | WithBot.some max_val =>
           simp [h_supp_max] at supp_max_lt
@@ -2379,7 +2379,7 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
       exact lt_trans three_lt_second_term_max second_app_supp_increase
     have max_supp_not_first: max_supp ∉ (f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)).support := by
       have max_supp_not_in_superset: max_supp ∉ (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)).support :=
-        Finset.not_mem_of_max_lt_coe second_app_supp_increase
+        Finset.notMem_of_max_lt_coe second_app_supp_increase
       have first_subset := Finsupp.support_sub (f := (-fun₀ | 1 => 1) - fun₀ | 3 => 1) (g := f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))
       have correct_subset : (f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)).support ⊆ (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)).support := by
         have eq_add := Finsupp.support_add_eq (g₁ := (-fun₀ | 1 => (1 : ℚ)) - fun₀ | 3 => 1)  (g₂ := -f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1)) ?_
@@ -2436,7 +2436,7 @@ theorem not_equation_3050: 0 ≠ (f 0) + (f (- (f 0))) + (f (- (f 0) - f (- f 0)
     have max_supp_in: max_supp ∈ (f (((-fun₀ | 1 => 1) - fun₀ | 3 => 1) - f ((-fun₀ | 1 => 1) - fun₀ | 3 => 1))).support :=
       Finset.max'_mem ..
     simp [max_supp_neg_1, Nat.ne_of_lt max_supp_gt_three] at app_eq
-    rw [Finsupp.not_mem_support_iff] at max_supp_not_first
+    rw [Finsupp.notMem_support_iff] at max_supp_not_first
     rw [max_supp_not_first, zero_add] at app_eq
     simp only [Finsupp.mem_support_iff, ne_eq] at max_supp_in
     rw [eq_comm] at max_supp_in
