@@ -184,8 +184,20 @@ equation 60491  :=  (x ◇ y) ◇ z = (x ◇ z) ◇ (y ◇ z)
 
 /- Some order 6 laws -/
 
-/-- The Sheffer stroke law. -/
+/-- An equation [characterizing](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/The.20.22modules.20over.20Gaussian.20integers.22.20law/near/519928430) `x ◇ y = x + √-1 y` on modules over the ring `ℤ[√-1]`, the Gaussian integers. -/
+equation 86082  :=  x = y ◇ (z ◇ ((y ◇ z) ◇ (w ◇ (x ◇ w))))
+
+/-- One of the four order-six laws that characterize the Sheffer stroke. Dual to `Equation361729`. -/
+equation 321577  :=  x = ((y ◇ z) ◇ x) ◇ (y ◇ ((y ◇ x) ◇ y))
+
+/-- One of the four order-six laws that characterize the Sheffer stroke. This is referred to as `BA-1` in [McCune et al.](https://doi.org/10.2172/764209). Dual to `Equation345169`. -/
+equation 329857  :=  x = ((y ◇ z) ◇ x) ◇ ((y ◇ (y ◇ x)) ◇ y)
+
+/-- One of the four order-six laws that characterize the Sheffer stroke, what [McCune et al.](https://doi.org/10.1023/A:1020542009983) call `Sh₁`, or [in another work](https://doi.org/10.2172/764209) instead `BA-2`. Dual to `Equation329857`. -/
 equation 345169  :=  x = (y ◇ ((x ◇ y) ◇ y)) ◇ (x ◇ (z ◇ y))
+
+/-- One of the four order-six laws that characterize the Sheffer stroke, what [McCune et al.](link) call `Sh₂`. Dual to `Equation321577`. -/
+equation 361729  :=  x = ((y ◇ (x ◇ y)) ◇ y) ◇ (x ◇ (z ◇ y))
 
 /-- Kisielewicz's first Austin law, see `Equation28770` for the second. -/
 equation 374794  := x = (((y ◇ y) ◇ y) ◇ x) ◇ ((y ◇ y) ◇ z)
@@ -216,6 +228,3 @@ equation 42323216 :=  x = y ◇ ((((y ◇ y) ◇ x) ◇ z) ◇ (((y ◇ y) ◇ y
 
 /-- A. K. Austin's law that permits infinite models, but no finite ones. -/
 equation 1875916474  :=  x = (((y ◇ y) ◇ y) ◇ x) ◇ (((y ◇ y) ◇ ((y ◇ y) ◇ y)) ◇ z)
-
-/-- An equation [characterizing](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/The.20.22modules.20over.20Gaussian.20integers.22.20law/near/519928430) `x ◇ y = x + √-1 y` on modules over the ring `ℤ[√-1]`, the Gaussian integers. -/
-equation 27213516127903475784245028046357  :=  x = (y ◇ (w ◇ (z ◇ w))) ◇ (((y ◇ (x ◇ (x ◇ x))) ◇ (z ◇ (z ◇ z))) ◇ (((y ◇ (x ◇ (x ◇ x))) ◇ (z ◇ (z ◇ z))) ◇ ((y ◇ (x ◇ (x ◇ x))) ◇ (z ◇ (z ◇ z)))))
