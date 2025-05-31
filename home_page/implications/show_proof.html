@@ -83,7 +83,8 @@ if (isFiniteGraph) {
 
   let unconditionals = new Set(), all_eqs = new Set();
   let ctr = 0;
-  for (const [filename, entries] of Object.entries(full_entries)) {
+  for (const [filepath, entries] of Object.entries(full_entries)) {
+    const filename = filepath.replace(/^.*?equational_theories\//, "equational_theories/");
     for (const entry of entries) {
       const isConjecture = entry[1] === "?";
       const fields = entry.split("|");
