@@ -21,7 +21,7 @@ We also define a variant: we say that $E$ \emph{entails} $E'$ \emph{for finite m
 The \emph{order} of an equational law is the number of occurrences of the magma operation, and can be viewed as a crude measure of complexity of the law. For instance, the commutative law \eqref{eq43} has order $2$, while the associative law \eqref{eq4512} has order $4$. We note some selected laws of small order that have previously appeared in the literature:
 \begin{itemize}
 \item The \emph{central groupoid law} $\x \formaleq (\y \op \x) \op (\x \op \z)$ \eqref{eq168} is an order-$3$ law introduced by Evans \cite{evans} and studied further by Knuth \cite{knuth} and many further authors, being closely related to central digraphs (also known as unique path property diagraphs), and leading in particular to the discovery of the Knuth-Bendix algorithm \cite{knuth-bendix}; see \cite{klt} for a more recent survey.
-\item \emph{Tarski's axiom} $\x \formaleq \y \op ( (\z \op (\x \op (\y \op \z))))$ \eqref{eq543} is an order-$4$ law that was shown by Tarski \cite{Tarski1938} to characterize the operation of subtraction in an abelian group; that is to say, a magma $\Magma = (M,\op)$ obeys \eqref{eq543} if and only if there is an abelian group structure on $\Magma$ for which $x \op y = x-y$ for all $x,y \in M$.
+\item \emph{Tarski's axiom} $\x \formaleq \y \op (\z \op (\x \op (\y \op \z)))$ \eqref{eq543} is an order-$4$ law that was shown by Tarski \cite{Tarski1938} to characterize the operation of subtraction in an abelian group; that is to say, a magma $\Magma = (M,\op)$ obeys \eqref{eq543} if and only if there is an abelian group structure on $\Magma$ for which $x \op y = x-y$ for all $x,y \in M$.
 \item In a similar vein, it was shown in \cite{mendelsohn-padmanabhan} (see also \cite{meredith-prior}) that the order-$4$ law
 $\x \formaleq (\y \op \z) \op (\y \op (\x \op \z))$ \eqref{eq1571} characterizes addition (or subtraction) in an abelian group of exponent $2$; it was shown in \cite{mccune_et_al} that the order-$6$ law $\x \formaleq (\y \op ((\x \op \y) \op \y)) \op (\x \op (\z \op \y))$ \eqref{eq345169} characterizes the Sheffer stroke in a boolean algebra, and it was shown in \cite{higman-neumann} that the order-$8$ law
 $\x \formaleq \y \op ((((\y \op \y) \op \x) \op \z) \op (((\y \op \y) \op \y) \op \z))$ \eqref{eq42323216} characterizes division in a (not necessarily abelian) group.
@@ -42,7 +42,7 @@ Secondary aims of the ETP included the possibility of discovering unusually inte
 
 \subsection{Outcomes}
 
-The ETP achieved almost all of its primary objectives, with all of the $\num{22033636}$ implications $E \vdash E'$ and non-implications $E \not \vdash E'$ magmas formalized in the proof assistant language \emph{Lean}, and can be found on the ETP GitHub repository.  See \Cref{fig:854}, \Cref{fig:1729} for some small fragments of the implication graphs produced.
+The ETP achieved almost all of its primary objectives, with all of the $\num{22033636}$ implications $E \vdash E'$ and non-implications $E \not \vdash E'$ magmas formalized in the proof assistant language \emph{Lean}, and can be found on the ETP GitHub repository.  See \Cref{fig:854}, \Cref{fig:1729} and \Cref{fig:longchain} for some small fragments of the implication graphs produced.
 The $\num{4694}$ laws organized into $\num{1415}$ equivalence classes, with by far the largest class being the class of $\num{1486}$ equations equivalent to the trivial law $\Eq{2}$.
 
 For the finite implication graph $E \vdashfin E'$, we could similarly formalize all but two implications.  Specifically, we were unable to obtain either a human-readable or formalized proof or disproof of the implication $E677 \vdashfin E255$ (or its equivalent dual $E2910 \vdashfin E47$), despite extensive efforts from the participants of the project; we tentatively conjecture this implication to be false (i.e., that there exists a finite magma obeying \eqref{eq677} but not \eqref{eq255}), but the refutation appears to be ``immune'' to most of the techniques that we developed for the project.  (We were however able to establish that the corresponding implication $E677 \vdash E255$ for arbitrary magmas was false, using the greedy construction discussed in \Cref{greedy-sec}.)
@@ -64,8 +64,67 @@ For the finite implication graph $E \vdashfin E'$, we could similarly formalize 
 
 \begin{figure}
     \centering
-    \includegraphics[height=4 in]{longchain.png}
-    \caption{The longest chain of implications (length $15$) between inequivalent laws in the implication graph.}
+    \resizebox{\textwidth}{!}{%
+      \begin{tikzpicture}
+        \node(1)[draw] at (0,15) {$x = x$ (1)};
+        \node(3253)[draw] at (4,14) {$x \op x = x \op (x \op (x \op x))$ (3253)};
+        \node(3456)[draw] at (-4,14) {$x \op x = x \op ((x \op x) \op x)$ (3456)};
+        \node(3319)[draw] at (7,13) {$x \op y = x \op (y \op (y \op y))$ (3319)};
+        \node(307)[draw] at (1,13) {$x \op x = x \op (x \op x)$ (307)};
+        \node(3522)[draw] at (-5,13) {$x \op y = x \op ((y \op y) \op y)$ (3522)};
+        \node(326)[draw] at (0,12) {$x \op y = x \op (y \op y)$ (326)};
+        \node(3715)[draw] at (0,11) {$x \op y = (x \op x) \op (y \op y)$ (3715)};
+        \node(3)[draw] at (0,10) {$x = x \op x$ (3)};
+        \draw[dashed](3)--(-10,10);
+        \draw[dashed](3)--(10,10);
+        \node(412)[draw] at (0,9) {$x = x \op (x \op (x \op (x \op y)))$ (412)};
+        \node(48)[draw] at (0,8) {$x = x \op (x \op (x \op y))$ (48)};
+        \node(618)[draw] at (3,7) {$x = x \op (x \op ((x \op y) \op z))$ (618)};
+        \node(418)[draw] at (-3,7) {$x = x \op (x \op (y \op (x \op z)))$ (418)};
+        \node(9)[draw] at (0,6) {$x = x \op (x \op y)$ (9)};
+        \node(824)[draw] at (-9.7,5) {$x = x \op ((x \op y) \op (x \op z))$ (824)};
+        \node(829)[draw] at (-3.1,5) {$x = x \op ((x \op y) \op (z \op y))$ (829)};
+        \node(1027)[draw] at (3.1,5) {$x = x \op ((x \op (y \op x)) \op z)$ (1027)};
+        \node(1033)[draw] at (9.7,5) {$x = x \op ((x \op (y \op z)) \op z)$ (1033)};
+        \node(103)[draw] at (0,4) {$x = x \op ((x \op y) \op z)$ (103)};
+        \node(1235)[draw] at (-9,4) {$x = x \op (((x \op y) \op z) \op y)$ (1235)};
+        \node(1237)[draw] at (0,3) {$x = x \op (((x \op y) \op z) \op w)$ (1237)};
+        \node(1037)[draw] at (0,2) {$x = x \op ((y \op (x \op x)) \op z)$ (1037)};
+        \node(4)[draw] at (0,1) {$x = x \op y$ (4)};
+        \node(2)[draw] at (0,0) {$x = y$ (2)};
+        \draw(2)--(4);
+        \draw(4)--(1037);
+        \draw(1037)--(1237);
+        \draw(1237)--(1235);
+        \draw(1235)--(824);
+        \draw(1237)--(103);
+        \draw(103)--(1027);
+        \draw(103)--(1033.south west);
+        \draw(103)--(824.south east);
+        \draw(103)--(829);
+        \draw(1027)--(9);
+        \draw(1033.north west)--(9);
+        \draw(829)--(9);
+        \draw(824.north east)--(9);
+        \draw(9)--(418);
+        \draw(9)--(618);
+        \draw(418)--(48);
+        \draw(618)--(48);
+        \draw(48)--(412);
+        \draw(412)--(3);
+        \draw(3)--(3715);
+        \draw(3715)--(326);
+        \draw(326)--(3522);
+        \draw(3522)--(3456);
+        \draw(3456)--(1);
+        \draw(326)--(307);
+        \draw(307)--(3253);
+        \draw(3253)--(1);
+        \draw(326)--(3319);
+        \draw(3319)--(3253);
+      \end{tikzpicture}%
+    }
+    \caption{Longest chains of implications (length $15$) between inequivalent laws in the implication graph.  The parts above/below law 3 can be independently dualized. {\bf figure out where to put this image and discuss it}}
     \label{fig:longchain}
 \end{figure}
 
@@ -109,7 +168,7 @@ The objective of using the data from the ETP to establish well-calibrated benchm
 
   %% Column labels
   \node[label] (ghlabel)   at (0,2) {GitHub};
-  \node[label] (zuliplabel) at (7,2) {Lean Zulip};
+  \node[label] (zuliplabel) at (7,2) {Lean Zulip};
 
   %% GitHub nodes
   \node (blueprint)   {Blueprint};
@@ -117,8 +176,8 @@ The objective of using the data from the ETP to establish well-calibrated benchm
   \node (viz)        [below=of formal]    {Visualization tools};
 
   %% Lean Zulip nodes
-  \node (hproofs)    [right=of blueprint]       {Human‑generated proofs};
-  \node (cproofs)    [right=3cm of formal]         {Computer‑generated proofs};
+  \node (hproofs)    [right=of blueprint]       {Human-generated proofs};
+  \node (cproofs)    [right=3cm of formal]         {Computer-generated proofs};
   \node (hdisc)      [right=of viz]         {Human discussion};
 
   %% External ATP box
@@ -128,8 +187,8 @@ The objective of using the data from the ETP to establish well-calibrated benchm
   % GitHub container
   \node[draw,dotted,inner sep=8pt,fit=(blueprint)(formal)(viz), label=above:GitHub]
     (ghbox) {};
-  % Lean Zulip container
-  \node[draw,dotted,inner sep=8pt,fit=(hproofs)(cproofs)(hdisc), label=above:Lean Zulip]
+  % Lean Zulip container
+  \node[draw,dotted,inner sep=8pt,fit=(hproofs)(cproofs)(hdisc), label=above:Lean Zulip]
     (zulipbox) {};
 
   %% Arrows
@@ -153,7 +212,7 @@ The objective of using the data from the ETP to establish well-calibrated benchm
 
 While the primary objective of the ETP was being completed, some additional related results were generated as spinoffs.  Specifically:
 \begin{itemize}
-\item In the blueprint on the ETP web site, we report some partial progress on we report on classifying which of the $57882$ distinct laws of order $5$ are equivalent to the singleton law \eqref{eq2}, either with or without the requirement that the magma be finite.
+\item In the blueprint on the ETP web site, we report some partial progress on classifying which of the $57882$ distinct laws of order $5$ are equivalent to the singleton law \eqref{eq2}, either with or without the requirement that the magma be finite.
 \item In \Cref{higman-neumann} we report on classifying the laws of order $8$ that are equivalent to the Higman-Neumann law \eqref{eq42323216}.
 \item In \Cref{ml-sec} we report on preliminary experiments on using machine learning to determine to what extent the implication graph can be predicted by a neural network.
 \end{itemize}
