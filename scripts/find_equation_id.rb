@@ -24,3 +24,73 @@ When used as a module imported in python code, one can use
 The theory of magma operations and their labeling is explained in
 https://teorth.github.io/equational_theories/blueprint/basic-theory-chapter.html
 =end
+
+require 'optparse'
+
+VAR_NAMES = "xyzwuvrst"
+
+# ExprType: String, Integer, or [ExprType, String, ExprType]
+# ShapeType: nil or [ShapeType, ShapeType]
+
+def process_equation(eq)
+  puts "Processing: #{eq}"  # placeholder
+end
+
+def main()
+    # Main Functon to run the program
+
+    options = {}
+    parser = OptionParser.new do |opts|
+        opts.banner = "usage: find_equation_id.rb [-h] [--interactive] [equations ...]\n\n" +
+                "Canonicalize equations and find their numbers.\n\n"
+
+        opts.separator "positional arguments:"
+        opts.separator "  equations          The equations to canonicalize (if not in interactive mode)"
+        opts.separator ""
+
+        opts.separator "options:"
+
+        opts.on("-i", "--interactive", "Run in interactive mode") do
+            options[:interactive] = true
+        end
+
+        opts.on("-h", "--help", "show this help message and exit") do
+            puts opts
+            exit
+        end
+    end
+
+    parser.parse!
+    equations = ARGV
+
+    if options[:interactive]
+        puts "Welcome to the interactive equation canonicalizer!"
+        puts "Type 'exit' or 'quit' to end the session."
+
+        loop do
+            print "Enter an equation: "
+            eq = gets&.chomp
+            if eq.nil? || %w[exit quit].include?(eq.downcase)
+                puts "Goodbye!"
+                break
+            end
+            process_equation(eq)
+        end
+    else
+        # If stdin is piped (not a terminal)
+        unless $stdin.tty?
+            piped_equations = $stdin.each_line.flat_map { |line| line.split }
+            equations = piped_equations + equations
+        end
+
+        if equations.any?
+            equations.each { |eq| process_equation(eq) }
+        else
+            puts parser
+        end
+    end
+end
+
+if __FILE__ == $0
+  main()
+end
