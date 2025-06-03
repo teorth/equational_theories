@@ -32,8 +32,30 @@ VAR_NAMES = "xyzwuvrst"
 # ExprType: String, Integer, or [ExprType, String, ExprType]
 # ShapeType: nil or [ShapeType, ShapeType]
 
-def process_equation(eq)
-  puts "Processing: #{eq}"  # placeholder
+# Helper fuctions to supplement built in python methods not available in Ruby
+def strip_chars(str, chars)
+  pattern = /\A[#{Regexp.escape(chars)}]+|[#{Regexp.escape(chars)}]+\z/
+  str.gsub(pattern, '')
+end
+
+# Code used when module is used as a script
+
+def process_equation(eq_str)
+    # Process a given equation, printing its id and canonical form.
+    eq_str = strip_chars(eq_str, '[,]')
+    dual = false
+    if eq_str.start_with?("*")
+        dual = true
+        eq_str = eq_str[1..-1]
+    end
+
+    begin
+        input_eq = Integer(eq_str)
+    rescue ArgumentError
+        input_eq = nil
+    end
+
+    puts "Processing: #{eq_str}"  # placeholder
 end
 
 def main()
