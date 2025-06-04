@@ -7,3 +7,5 @@ As [discussed here](https://leanprover.zulipchat.com/#narrow/channel/458659-Equa
 - Idempotent totally-symmetric quasigroups, called Steiner quasigroups, or *squags*, which are fully characterized by [law 4964](https://teorth.github.io/equational_theories/implications/?4964);
 
 - Unital totally-symmetric quasigroups, called Steiner loops, or *sloops*, which are fully characterized by [law 63702].
+
+The equivalence class of this law (30 laws in our list of 4694 laws) is the most interesting among the twenty largest equivalence classes: all of these imply that the magma operation only depends on one (or none) of its operands, except for laws [4274](https://teorth.github.io/equational_theories/implications/?4274), [4526](https://teorth.github.io/equational_theories/implications/?4526), [4589](https://teorth.github.io/equational_theories/implications/?4589) which state that some triple products are all equal.

@@ -5,3 +5,5 @@ This law states that the magma operation is right-projection composed with squar
 Any law that implies this law (laws 5, 13, 41, 62, 336, 463, 3349, …) describes sets equipped with a self-map subject to a condition.
 
 The free magma on some set `S` of generators for this law is `ℕ×S` with `f(m,s)=(m+1,s)`, namely `(m,s) ◇ (n,t) = (m+1,s)`.
+
+The equivalence class of this law is among the largest ones (40 laws in our list of 4694 laws).
