@@ -1,6 +1,6 @@
 ## A law for groups of exponent 3
 
-Laws characterizing the operation in groups of exponent `n` (equivalently, `ℤ/nℤ`-modules) must have an order that is a multiple of `n` strictly larger than `n`, as proven [by Kunen](https://doi.org/10.1016/0898-1221(94)00212-4).  The laws of minimal order are known for exponents 2, 4, and odd.
+Laws characterizing the operation in (not necessarily abelian) groups of exponent `n` must have an order that is a multiple of `n` strictly larger than `n`, as proven [by Kunen](https://doi.org/10.1016/0898-1221(94)00212-4).  The laws of minimal order are known for exponents 2, 4, and odd.
 
 - For `n=2`, laws [895](https://teorth.github.io/equational_theories/implications/?895), 1334, 1571 as shown by [Mendelsohn and Padmanabhan](https://teorth.github.io/equational_theories/blueprint/sect0001.html#mendelsohn-padmanabhan), and their duals 2113, 2308, 2789.
 
@@ -11,5 +11,3 @@ Laws characterizing the operation in groups of exponent `n` (equivalently, `ℤ/
 - For `n=5`, laws 9031790000, 10215810757 (the complete list being unknown), and for all odd `n` thanks to [McCune and Wos](https://doi.org/10.1007/BFb0013055).
 
 An important difference with the Higman-Neumann axiom for group division is that these laws concern group multiplication, which is enough to reconstruct the inverse because of the finite exponent.
-
-See also the [law 85914](https://teorth.github.io/equational_theories/implications/?85914) for modules over Eisenstein integers and [law 86082](https://teorth.github.io/equational_theories/implications/?86082) for modules over Gaussian integers.
