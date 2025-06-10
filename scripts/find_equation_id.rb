@@ -79,7 +79,68 @@ class Equation
         # Construct an equation from its id
         _equation_from_id(eq_id)  
     end
+    
+    # property
+    def id
+      _equation_id(self)
+    end
+    
+    def dual
+      # Swap all left and right operands, swap lhs and rhs if needed
+      lhs_shape = shape_dual(@lhs_shape)
+      rhs_shape = shape_dual(@rhs_shape)
+      lhs_order = shape_order(@lhs_shape)
+      lhs_rhyme = @rhyme[0..lhs_order].reverse
+      rhs_rhyme = @rhyme[(lhs_order + 1)..].reverse
+    
+      if shape_lt(rhs_shape, lhs_shape)
+        lhs_shape, rhs_shape = rhs_shape, lhs_shape
+        lhs_rhyme, rhs_rhyme = rhs_rhyme, lhs_rhyme
+      end
+    
+      rhyme = canonicalize_rhyme(lhs_rhyme + rhs_rhyme)
+    
+      if lhs_shape == rhs_shape
+        alt_rhyme = canonicalize_rhyme(rhs_rhyme + lhs_rhyme)
+        rhyme = [rhyme, alt_rhyme].min
+      end
+    
+      Equation.new(lhs_shape, rhs_shape, rhyme)
+    end
+    
 end
+
+
+
+#### On shapes
+def shape_dual(shape)
+  return nil if shape.nil?
+  left, right = shape
+  [shape_dual(right), shape_dual(left)]
+end
+
+def shape_order(shape)
+  return 0 if shape.nil?
+  1 + shape_order(shape[0]) + shape_order(shape[1])
+end
+
+def shape_cmp(shape1, shape2)
+  shape1_order = shape_order(shape1)
+  shape2_order = shape_order(shape2)
+  return -1 if shape1_order < shape2_order
+  return 1 if shape1_order > shape2_order
+  return 0 if shape1.nil? && shape2.nil?
+
+  left_cmp = shape_cmp(shape1[0], shape2[0])
+  return left_cmp unless left_cmp == 0
+
+  shape_cmp(shape1[1], shape2[1])
+end
+
+def shape_lt(shape1, shape2)
+  shape_cmp(shape1, shape2) < 0
+end
+
 
 ##### Generating all rhymes, all shapes, all equational_theories
 def canonicalize_rhyme(rhyme)
@@ -146,6 +207,24 @@ def stirling_sym(n, k)
 end
 
 # Map from shape to id and back
+
+def shape_id(shape)
+  # Gives the shape id (zero-based) among shapes of a given order
+  _shape_id_help(shape, shape_order(shape))
+end
+
+def _shape_id_help(shape, n)
+  return 0 if n == 0
+
+  lhs_shape, rhs_shape = shape
+  lhs_n = shape_order(lhs_shape)
+  rhs_n = n - 1 - lhs_n
+
+  (0...lhs_n).sum { |n1| MathHelpers.catalan(n1) * MathHelpers.catalan(n - n1 - 1) } +
+    _shape_id_help(lhs_shape, lhs_n) * MathHelpers.catalan(rhs_n) +
+    _shape_id_help(rhs_shape, rhs_n)
+end
+
 def shape_from_id(nodes, tree_num)
   if nodes == 0
     raise ArgumentError, "Invalid tree_num for zero nodes" if tree_num != 0
@@ -186,6 +265,23 @@ def get_rhyme_by_id(n, rhyme_num, max_used = 0)
   result
 end
 
+# Map from rhyme tp id and back
+# Number of rhymes of n slots whose minimum number is at most max_used + 1
+def _num_rhyme_help(n, max_used)
+  return 1 if n == 0
+  (max_used + 1) * _num_rhyme_help(n - 1, max_used) + _num_rhyme_help(n - 1, max_used + 1)
+end
+
+# Gives the rhyme id (zero-based) among rhymes with a given number of variables
+def find_rhyme_id(p)
+  raise ArgumentError, "Argument of find_rhyme_id should be [0,...] not #{p.inspect}" if p.empty? || p[0] != 0
+  _find_rhyme_id_help(p[1..], 0)
+end
+
+def _find_rhyme_id_help(p, max_used)
+  return 0 if p.empty?
+  p[0] * _num_rhyme_help(p.length - 1, max_used) + _find_rhyme_id_help(p[1..], [p[0], max_used].max)
+end
 
 # Map from equation to id and back
 def _num_eqs_unbalanced(n)
@@ -204,6 +300,45 @@ def _num_eqs_balanced(n, l, r)
   part1 = bell_n2 * (MathHelpers.catalan(n / 2) * l - l * (l + 1) / 2 + r - l - (r > l ? 1 : 0))
   part2 = bell_same_shape(n) * (l + (r > l ? 1 : 0))
   part1 + part2
+end
+
+def _equation_id(input_eq)
+  # Equation id from a processed Equation
+  lhs_shape = input_eq.lhs_shape
+  rhs_shape = input_eq.rhs_shape
+  n_lhs = shape_order(lhs_shape)
+  n_rhs = shape_order(rhs_shape)
+  n = n_lhs + n_rhs
+
+  if n_lhs != n_rhs
+    return 1 + (0...n).sum { |i| num_eqs(i) } +
+           MathHelpers.bell(n + 2) * shape_id([lhs_shape, rhs_shape]) +
+           find_rhyme_id(input_eq.rhyme)
+  end
+
+  # For n_lhs == n_rhs the ordering halves the equations.  
+  # For different tree shapes get bell(n + 2) rhymes, otherwise bell_same_shape(n).
+  m = MathHelpers.catalan(n_lhs) # number of tree shapes on each side
+  l = shape_id(lhs_shape)
+  r = shape_id(rhs_shape)
+
+  if l != r
+    pid = find_rhyme_id(input_eq.rhyme)
+  else
+    # Slow code here
+    pid = 0
+    all_rhymes(n + 1).each do |rhyme|
+      break if rhyme == input_eq.rhyme
+      flipped = rhyme[n_lhs + 1..] + rhyme[0..n_lhs]
+      next if canonicalize_rhyme(flipped) <=> rhyme == -1
+      next if rhyme == flipped && n > 0
+      pid += 1
+    end
+  end
+
+  return 1 + (0...n).sum { |i| num_eqs(i) } +
+         _num_eqs_unbalanced(n) + _num_eqs_balanced(n, l, r) +
+         pid
 end
 
 def _equation_from_id(input_eq)
