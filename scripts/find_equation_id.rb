@@ -84,6 +84,12 @@ class Equation
     def id
       _equation_id(self)
     end
+
+    # Class method
+    def self.from_str(eq_str)
+      # Parse and canonicalize an equation given as a string.
+      _equation_from_str(eq_str)
+    end
     
     def dual
       # Swap all left and right operands, swap lhs and rhs if needed
@@ -110,6 +116,105 @@ class Equation
     
 end
 
+##### Parsing an equation string
+
+def _tokenize(expr)
+  # Convert an expression string into a list of tokens.
+  expr = expr.gsub(".", "◇")
+             .gsub("*", "◇")
+             .gsub("(", " ( ")
+             .gsub(")", " ) ")
+             .gsub("◇", " ◇ ")
+  expr.split.reject(&:empty?)
+end
+
+def _parse_expr(tokens)
+  # Parse a list of tokens into an expression tree.
+  #
+  # Return nested triplets (left, "◇", right) with variables as str or int.
+
+  parse_element = lambda do
+    raise "Unexpected end of expression" if tokens.empty?
+
+    if tokens[0] == "("
+      tokens.shift  # Remove opening parenthesis
+      left = parse_element.call
+      if tokens.empty? || tokens[0] != "◇"
+        raise "Expected '◇' after element in parentheses"
+      end
+      tokens.shift  # Remove '◇'
+      right = parse_element.call
+      if tokens.empty? || tokens[0] != ")"
+        raise "Missing closing parenthesis"
+      end
+      tokens.shift  # Remove closing parenthesis
+      return [left, "◇", right]
+    end
+
+    token = tokens[0]
+    if token.match?(/\A[a-zA-Z_]\w*\z/) || token == "0" || token.match?(/\A[1-9]\d*\z/)
+      return tokens.shift
+    end
+
+    raise "Unexpected token: #{token}"
+  end
+
+  result = parse_element.call
+  if !tokens.empty?
+    if tokens[0] != "◇"
+      raise "Unexpected token after main element: #{tokens[0]}"
+    end
+    tokens.shift  # Remove '◇'
+    right = parse_element.call
+    unless tokens.empty?
+      raise "Unexpected tokens at the end of expression: #{tokens.join(' ')}"
+    end
+    result = [result, "◇", right]
+  end
+
+  result
+end
+
+
+def _deconstruct_tree(tree)
+  if tree.is_a?(String)
+    return [nil, [tree]]
+  end
+
+  left, _op, right = tree
+  left_shape, left_rhyme = _deconstruct_tree(left)
+  right_shape, right_rhyme = _deconstruct_tree(right)
+
+  [[left_shape, right_shape], left_rhyme + right_rhyme]
+end
+
+
+def _equation_from_str(eq_str)
+  begin
+    lhs, rhs = eq_str.split('=')
+  rescue
+    raise ArgumentError, "No '=' or two '=' found in the equation."
+  end
+
+  lhs = _parse_expr(_tokenize(lhs))
+  rhs = _parse_expr(_tokenize(rhs))
+
+  lhs_shape, lhs_rhyme = _deconstruct_tree(lhs)
+  rhs_shape, rhs_rhyme = _deconstruct_tree(rhs)
+
+  if shape_lt(rhs_shape, lhs_shape)
+    lhs_shape, rhs_shape = rhs_shape, lhs_shape
+    lhs_rhyme, rhs_rhyme = rhs_rhyme, lhs_rhyme
+  end
+
+  rhyme = canonicalize_rhyme(lhs_rhyme + rhs_rhyme)
+
+  if lhs_shape == rhs_shape
+    rhyme = [rhyme, canonicalize_rhyme(rhs_rhyme + lhs_rhyme)].min
+  end
+
+  Equation.new(lhs_shape, rhs_shape, rhyme)
+end
 
 
 #### On shapes
@@ -471,7 +576,16 @@ def process_equation(eq_str)
       end
       #puts "Processing ID: #{input_eq}"  # placeholder for actual processing
     else
-        puts "Processing: #{eq_str}"  # placeholder
+      input_eq = Equation.from_str(eq_str)
+      if dual
+        dual_eq = input_eq.dual
+        dual_num = dual_eq.id
+        puts "The dual of '#{eq_str}' is Equation #{dual_num}: #{dual_eq}"
+      else
+        eq_num = input_eq.id
+        puts "The equation '#{eq_str}' is Equation #{eq_num}: #{input_eq}"
+      end
+      # puts "Processing: #{eq_str}"  # placeholder
     end
 end
 
