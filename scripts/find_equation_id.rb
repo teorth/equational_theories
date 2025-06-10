@@ -330,7 +330,7 @@ def _equation_id(input_eq)
     all_rhymes(n + 1).each do |rhyme|
       break if rhyme == input_eq.rhyme
       flipped = rhyme[n_lhs + 1..] + rhyme[0..n_lhs]
-      next if canonicalize_rhyme(flipped) <=> rhyme == -1
+      next if (canonicalize_rhyme(flipped) <=> rhyme) == -1
       next if rhyme == flipped && n > 0
       pid += 1
     end
