@@ -155,7 +155,7 @@ jobs:
 
       - name: Build project documentation.
         id: build-docgen
-        uses: leanprover-community/docgen-action@main
+        uses: leanprover-community/docgen-action@b210116d3e6096c0c7146f7a96a6d56b6884fef5 # 2025-06-12
         with:
           blueprint: true
           homepage: home_page
