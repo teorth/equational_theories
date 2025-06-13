@@ -153,6 +153,16 @@ jobs:
           ~/.elan/bin/lake exe extract_implications unknowns --finite-only > /tmp/unknowns.fin.json
           ruby scripts/generate_graphiti_data.rb data/duals.json /tmp/raw_data/general_implications_closure.json /tmp/unknowns.json /tmp/raw_data/finite_implications_closure.json /tmp/unknowns.fin.json > home_page/graphiti/graph.json
 
+      - name: Generate the paper PDF (+ add it to the site)
+        uses: xu-cheng/texlive-action@f886de8159e5952a131848a5fa9c3196a2132b5d # v2
+        with:
+          docker_image: ghcr.io/xu-cheng/texlive-full:20250401
+          run: |
+            cd paper
+            latexmk -pdf main.tex
+            cd ..
+            cp paper/main.pdf home_page/paper.pdf
+
       - name: Build project documentation.
         id: build-docgen
         uses: leanprover-community/docgen-action@b210116d3e6096c0c7146f7a96a6d56b6884fef5 # 2025-06-12
