@@ -1,22 +1,22 @@
 \section{Proof Automation}\label{automated-sec}
 
-In this project we used proof automation in two ways: automated theorem provers (ATPs) and Lean tactics.
+In this project we used proof automation in two ways: automated theorem provers (ATPs) and \emph{Lean} tactics.
 ATPs are generally stand-alone tools that implement a (semi-)decision procedure for a given formal language or related set of languages.
-For example, Vampire~\cite{DBLP:conf/cav/KovacsV13} is an ATP focused primarily on first-order logic using superposition, which we used extensively in this project.
+For example, \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13} is an ATP focused primarily on first-order logic using superposition, which we used extensively in this project.
 
 ATPs are complex software that can contain bugs.
-Instead of trusting ATP output, we used proof certificates, which many ATPs can produce, to reconstruct proofs in Lean.
+Instead of trusting ATP output, we used proof certificates, which many ATPs can produce, to reconstruct proofs in \emph{Lean}.
 The details of proof reconstruction depend on the form of the proof certificate produced by the ATP.
 We expand on this in \Cref{sec:proof-reconstruction}.
 
-Tactics in Lean, on the other hand, are meta-programs~\cite{DBLP:journals/pacmpl/EbnerURAM17} that build proofs.
-In other words, they essentially take Lean code as input and produce Lean code as output.
+Tactics in \emph{Lean}, on the other hand, are meta-programs~\cite{DBLP:journals/pacmpl/EbnerURAM17} that build proofs.
+In other words, they essentially take \emph{Lean} code as input and produce \emph{Lean} code as output.
 In this manner, they look like another keyword in the language, and are tightly integrated by producing proofs directly.
 Under the hood, their implementation can be arbitrarily complex, from syntactic sugar to full decision procedures.
-The \texttt{duper} tactic~\cite{DBLP:conf/itp/CluneQBA24}, for example, implements a superposition calculus, similar to Vampire's, but for dependent types --- Lean's underlying logical foundation.
+The \texttt{duper} tactic~\cite{DBLP:conf/itp/CluneQBA24}, for example, implements a superposition calculus, similar to \emph{Vampire}'s, but for dependent types --- \emph{Lean}'s underlying logical foundation.
 
 In the rest of this section we describe the different proof automation techniques used in this project.
-We first discuss the different proof methods used: primarily superposition and equational reasoning, we then discuss the integration in Lean, and finally we report some basic empirical results from this project.
+We first discuss the different proof methods used: primarily superposition and equational reasoning, we then discuss the integration in \emph{Lean}, and finally we report some basic empirical results from this project.
 
 \subsection{Proof Techniques}
 
@@ -28,7 +28,7 @@ We describe our use of \texttt{aesop} in \Cref{sec:proof-reconstruction} below.
 
 \textbf{Saturation.}
 Most of the ATPs used extensively in this project rely primarily on saturation procedures in the superposition calculus.
-For example, this is the case for Vampire~\cite{DBLP:conf/cav/KovacsV13}.\footnote{See also~\cite{DBLP:journals/cacm/BentkampBNTVW23} for a gentler exposition.}
+For example, this is the case for \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13}.\footnote{See also~\cite{DBLP:journals/cacm/BentkampBNTVW23} for a gentler exposition.}
 The core idea of these provers is that they take a set of assumptions and a conjecture, expressed in --- say --- first-order logic.
 The conjecture is negated and added to the set of assumptions, which are all put into a normal form.
 The ATP then tries to refute the negation by applying rules of an underlying calculus, until a proof of false (a contradiction) is derived.
@@ -39,8 +39,8 @@ The underlying calculi vary from system to system, but they often have a variant
 This can be read as $C \lor L$ with $D \lor \neg L$ implies $C \lor D$, where $C, D, L$ are formulas in e.g. first-order logic.
 Superposition calculi have a variant of this rule that deals with equality directly, and thus are more efficient at reasoning about equality.
 
-In this project we used Vampire~\cite{DBLP:conf/cav/KovacsV13}, Duper~\cite{DBLP:conf/itp/CluneQBA24} and Prover9 and Mace4~\cite{prover9-mace4} which are all based on variants of saturation for proving.
-\TODO{here we could add a screenshot of using vampire or prover9}
+In this project we used \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13}, Duper~\cite{DBLP:conf/itp/CluneQBA24} and \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4} which are all based on variants of saturation for proving.
+\TODO{here we could add a screenshot of using \emph{Vampire} or \emph{Prover9}}
 
 \textbf{Equational Reasoning.} As already discussed in \Cref{confluence-sec}, equational reasoning is a type of reasoning based on equational logic and rewriting with congruence~\cite{term-rewriting}.
 In general, an equational reasoning procedure takes a series of equations and determines whether another equation can be deduced from it.
@@ -48,26 +48,26 @@ A core tool in equational reasoning are e-graphs, a data structure used to repre
 By themselves, e-graphs provide an efficient means of implementing a decision procedure for congruence closure over ground equations (i.e. equations without variables).
 Extensions to this procedure, for example by quantifier instantiation via e-matching \cite{DBLP:conf/cade/MouraB07}, also allow for a semi-decision procedure for congruence closure over non-ground equations.
 
-SMT solvers like Z3~\cite{DBLP:conf/tacas/MouraB08} use equational reasoning for deciding the theory of equality with uninterpreted functions~\cite{DBLP:series/txtcs/KroeningS16,DBLP:conf/cade/MouraB07}.
+SMT solvers like \emph{Z3}~\cite{DBLP:conf/tacas/MouraB08} use equational reasoning for deciding the theory of equality with uninterpreted functions~\cite{DBLP:series/txtcs/KroeningS16,DBLP:conf/cade/MouraB07}.
 On the other hand, equality saturation~\cite{DBLP:journals/pacmpl/WillseyNWFTP21} uses e-graphs by extending congruence closure to a more controlled search, enabling optimization and conditional rewriting.
 One of the main advantages of using equational reasoning to reason about implications of magma laws is that we get very explicit proofs: a proof that $l \vdash l'$ is given by a sequence of rewrites that starts at the left-hand side of $l'$ and arrives at the right-hand side through applications of $l$.
 
-In this project we used Z3~\cite{DBLP:conf/tacas/MouraB08}, Prover9 and Mace4~\cite{prover9-mace4}, a custom ATP for magmas based on egg~\cite{DBLP:journals/pacmpl/WillseyNWFTP21}, and the Lean \texttt{egg} tactic~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24,rossel2024equality,rossel2024bridging}, which all work with equational logic. We have also reasoned with manual (custom written) heuristics about simple rewrites.
+In this project we used \emph{Z3}~\cite{DBLP:conf/tacas/MouraB08}, \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4}, a custom ATP for magmas based on egg~\cite{DBLP:journals/pacmpl/WillseyNWFTP21}, and the \emph{Lean} \texttt{egg} tactic~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24,rossel2024equality,rossel2024bridging}, which all work with equational logic. We have also reasoned with manual (custom written) heuristics about simple rewrites.
 
 \subsection{Proof Reconstruction and Integration}
 \label{sec:proof-reconstruction}
 
 \TODO{Improve the structure of this section}
 
-While ATPs are very useful for solving theorems in this project, they don't integrate with Lean out of the box.
+While ATPs are very useful for solving theorems in this project, they don't integrate with \emph{Lean} out of the box.
 ATPs may potentially produce unsound proofs, or worse, derive incorrect results.
-Thus, by default, theorems in Lean cannot be proven by deferring to the result of an ATP.
-Instead, the results of an ATP can be used to (re-)construct a proof of the form required by Lean.
+Thus, by default, theorems in \emph{Lean} cannot be proven by deferring to the result of an ATP.
+Instead, the results of an ATP can be used to (re-)construct a proof of the form required by \emph{Lean}.
 There are different approaches to proof (re-)construction which we employ in this project.
 
 
 
-An exception for this are tactics like \texttt{duper}, \texttt{aesop} and \texttt{egg}. Figure~\ref{fig:screenshot-egg} shows an example of the \texttt{egg} tactic as used in this project. It integrates directly in Lean, generating a Lean proof directly. With the variant \texttt{egg?}, depicted in the screenshot, it uses an auxiliary tactic \texttt{calcify}\footnote{\url{https://github.com/nomeata/lean-calcify}} to generate a human-readable proof as a series of calculation steps, which can be incorporated into the file with a single click.
+An exception for this are tactics like \texttt{duper}, \texttt{aesop} and \texttt{egg}. Figure~\ref{fig:screenshot-egg} shows an example of the \texttt{egg} tactic as used in this project. It integrates directly in \emph{Lean}, generating a \emph{Lean} proof directly. With the variant \texttt{egg?}, depicted in the screenshot, it uses an auxiliary tactic \texttt{calcify}\footnote{\url{https://github.com/nomeata/lean-calcify}} to generate a human-readable proof as a series of calculation steps, which can be incorporated into the file with a single click.
 
 \begin{figure}
   \centering
@@ -76,20 +76,20 @@ An exception for this are tactics like \texttt{duper}, \texttt{aesop} and \textt
   \label{fig:screenshot-egg}
 \end{figure}
 
-In general, integration implies two steps: invoking the decision procedures/ATPs (translating the problem from Lean into the languages and logics they use), and conversely, (re-)constructing the results from the decision procedure as a (persistent) Lean proof.
+In general, integration implies two steps: invoking the decision procedures/ATPs (translating the problem from \emph{Lean} into the languages and logics they use), and conversely, (re-)constructing the results from the decision procedure as a (persistent) \emph{Lean} proof.
 These two aspects present different challenges, and require different strategies, depending mostly on the kind of proof strategy the decision procedure uses.
 
 For saturation proofs $\ldots$
 \TODO{add explanations from the following URL}
 \url{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Vampire.20-.3E.20Lean/near/478147138}
 
-For equational proofs from external provers (e.g. MagmaEgg), we also used a simple version of reconstruction by (re-)constructing the proofs of equality from an explanation, using congruence lemmas from Lean.
+For equational proofs from external provers (e.g. MagmaEgg), we also used a simple version of reconstruction by (re-)constructing the proofs of equality from an explanation, using congruence lemmas from \emph{Lean}.
 In the case of equational proofs from the \texttt{egg} tactic, these could be converted into a series of \texttt{calc} steps, documenting the explicit calculation, using the \texttt{calcify} tactic.
 
-In general, we have observed that there are multiple ways of integrating decisions procedures within Lean, with different levels of integration.
+In general, we have observed that there are multiple ways of integrating decisions procedures within \emph{Lean}, with different levels of integration.
 \begin{enumerate}
-    \item Using a Lean tactic, which calls a decision procedure written in Lean (like \texttt{aesop} or \texttt{duper}).
-    \item Using a Lean tactic, which calls an existing (external) ATP and reconstructs a proof term from the ATP's result (like \texttt{bv\_decide} or \texttt{egg}).
+    \item Using a \emph{Lean} tactic, which calls a decision procedure written in \emph{Lean} (like \texttt{aesop} or \texttt{duper}).
+    \item Using a \emph{Lean} tactic, which calls an existing (external) ATP and reconstructs a proof term from the ATP's result (like \texttt{bv\_decide} or \texttt{egg}).
     \item\label{external} Using an external script which calls an existing ATP and generates a source file \texttt{.lean} which captures the result explicitly.
 \end{enumerate}
 
@@ -110,7 +110,7 @@ While equational reasoning can also be used in a semi-automatic fashion to prove
 
 \TODO{discuss guided search in the finite implications or the Higman-Neumann work Jose Brox has done.}
 
-\TODO{maybe add a screenshot here of the workflow of using a seed to find counterexamples with prover9 or vampire?}
+\TODO{maybe add a screenshot here of the workflow of using a seed to find counterexamples with \emph{Prover9} or \emph{Vampire}?}
 
 \subsection{Empirical Results}
 
