@@ -259,7 +259,7 @@ def shape_lt(shape1, shape2)
 end
 
 
-##### Generating all rhymes, all shapes, all equational_theories
+##### Generating all rhymes, all shapes, all equations
 def canonicalize_rhyme(rhyme)
   variables = {}
   rhyme.map do |x|
