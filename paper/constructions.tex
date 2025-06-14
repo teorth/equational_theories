@@ -317,7 +317,8 @@ The specific law $\x \formaleq \x \op ((\y \op \z) \op (\x \op \z))$ \eqref{eq85
 
 Combining several of these techniques allowed us to find refutations for $\Eq{854} \vdashfin \Eq{413}, \Eq{1045}, \Eq{1055}, \Eq{3316}, \Eq{3925}$.
 We started with a magma which satisfied \eqref{854} and \eqref{413} but had an $\Eq{10}$ violation.  After using it as a seed to generate larger magmas
-with more $\Eq{10}$ violations, randomly removing portions of those magmas and attempting to complete them to models that violated $\E$ eventually succeeded.
+with more $\Eq{10}$ violations (using Vampire \cite{DBLP:conf/cav/KovacsV13}), randomly removing portions of those magmas and attempting to complete
+them to models that violated $\E$ eventually succeeded.
 
 Note that these approaches have their limitations.  To be effective, it must be easy to move between different
 states, which usually involves finding a magma satisfying the equation of interest or at least some related one.
