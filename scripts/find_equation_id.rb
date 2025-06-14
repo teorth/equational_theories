@@ -54,12 +54,12 @@ class Equation
     
     def to_s
       rhyme_enum = @rhyme.each
-      lhs_str = self.class.expr_str(@lhs_shape, rhyme_enum, false)
-      rhs_str = self.class.expr_str(@rhs_shape, rhyme_enum, false)
+      lhs_str = self.class._expr_str(@lhs_shape, rhyme_enum, false)
+      rhs_str = self.class._expr_str(@rhs_shape, rhyme_enum, false)
       "#{lhs_str} = #{rhs_str}"
     end
     
-    def self.expr_str(shape, rhyme_enum, parenthesize)
+    def self._expr_str(shape, rhyme_enum, parenthesize)
       if shape.nil?
         i, j = rhyme_enum.next.divmod(VAR_NAMES.length)
         if i == 0
@@ -67,8 +67,8 @@ class Equation
         end
         return VAR_NAMES[j] + i.to_s
       end
-      left_str = expr_str(shape[0], rhyme_enum, true)
-      right_str = expr_str(shape[1], rhyme_enum, true)
+      left_str = _expr_str(shape[0], rhyme_enum, true)
+      right_str = _expr_str(shape[1], rhyme_enum, true)
       if parenthesize
         "(#{left_str} ◇ #{right_str})"
       else
