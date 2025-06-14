@@ -292,6 +292,57 @@ def _all_rhymes_help(n, max_used, &block)
   end
 end
 
+# Generate all possible shapes for expressions with a given number of operations.
+def all_shapes(order)
+  return enum_for(:all_shapes, order) unless block_given?
+
+  if order == 0
+    yield nil
+  else
+    order.times do |i|
+      all_shapes(i).each do |left|
+        all_shapes(order - 1 - i).each do |right|
+          yield [left, right]
+        end
+      end
+    end
+  end
+end
+
+# Generate all unique equations of some order up to symmetry.
+# To generate equations of all orders: (0..).lazy.flat_map { |n| all_eqs(n) }
+def all_eqs(order)
+  return enum_for(:all_eqs, order) unless block_given?
+
+  half = order / 2 + 1
+
+  (0...half).each do |lhs_order|
+    all_shapes(lhs_order).each do |lhs_shape|
+      all_shapes(order - lhs_order).each do |rhs_shape|
+        if order == lhs_order * 2 && shape_lt(rhs_shape, lhs_shape)
+          next
+        end
+
+        symmetric_shape = lhs_shape == rhs_shape
+
+        all_rhymes(order + 1).each do |rhyme|
+          if symmetric_shape
+            flipped = rhyme[half..] + rhyme[0...half]
+            if (canonicalize_rhyme(flipped) <=> rhyme) == -1
+              next
+            end
+            if rhyme == flipped && order > 0
+              next
+            end
+          end
+
+          yield Equation.new(lhs_shape, rhs_shape, rhyme)
+        end
+      end
+    end
+  end
+end
+
 # Recursive approach to mapping from equation number to id and vice-versa
 
 # Counting equations of some order, based on https://oeis.org/A103293, refactored to access intermediate results.
