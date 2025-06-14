@@ -93,6 +93,16 @@ class Equation
       _equation_from_str(eq_str)
     end
     
+    def orders
+      # Returns the number of operations on the lhs and rhs as a tuple.
+      [shape_order(@lhs_shape), shape_order(@rhs_shape)]
+    end
+    
+    def num_vars
+      # Returns the number of distinct variables in the equation.
+      @rhyme.max + 1
+    end
+    
     def dual
       # Swap all left and right operands, swap lhs and rhs if needed
       lhs_shape = shape_dual(@lhs_shape)
