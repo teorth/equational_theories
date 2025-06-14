@@ -433,12 +433,6 @@ def get_rhyme_by_id(n, rhyme_num, max_used = 0)
   result
 end
 
-# Number of rhymes of n slots whose minimum number is at most max_used + 1
-def _num_rhyme_help(n, max_used)
-  return 1 if n == 0
-  (max_used + 1) * _num_rhyme_help(n - 1, max_used) + _num_rhyme_help(n - 1, max_used + 1)
-end
-
 # Gives the rhyme id (zero-based) among rhymes with a given number of variables
 def find_rhyme_id(p)
   raise ArgumentError, "Argument of find_rhyme_id should be [0,...] not #{p.inspect}" if p.empty? || p[0] != 0
