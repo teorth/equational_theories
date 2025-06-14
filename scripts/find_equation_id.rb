@@ -433,7 +433,6 @@ def get_rhyme_by_id(n, rhyme_num, max_used = 0)
   result
 end
 
-# Map from rhyme tp id and back
 # Number of rhymes of n slots whose minimum number is at most max_used + 1
 def _num_rhyme_help(n, max_used)
   return 1 if n == 0
@@ -637,7 +636,6 @@ def process_equation(eq_str)
       else
         puts "Equation #{input_eq}: #{eq}"
       end
-      #puts "Processing ID: #{input_eq}"  # placeholder for actual processing
     else
       input_eq = Equation.from_str(eq_str)
       if dual
@@ -648,7 +646,6 @@ def process_equation(eq_str)
         eq_num = input_eq.id
         puts "The equation '#{eq_str}' is Equation #{eq_num}: #{input_eq}"
       end
-      # puts "Processing: #{eq_str}"  # placeholder
     end
 end
 
