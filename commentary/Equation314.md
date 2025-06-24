@@ -1,4 +1,4 @@
-This law is equivalent to stating that all squares and all three-fold products of the form `\_ ◇ (\_ ◇ \_)` are equal to the same element.
+This law is equivalent to stating that all squares and all three-fold products of the form `_ ◇ (_ ◇ _)` are equal to the same element.
 
 See also [law 4526](https://teorth.github.io/equational_theories/implications/?4526) which implies associativity and that three-fold products are all equal.
 

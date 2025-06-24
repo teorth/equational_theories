@@ -5,3 +5,5 @@ This law is equivalent to stating that the magma operation is right-projection c
 Such magmas are in one-to-one correspondence with sets equipped with a self-map `f: M→M` with `f ∘ f ∘ f ∘ f = id`.
 
 The free magma on some set `S` of generators for this law consists of four copies of `S` permuted cyclically by the bijection.
+
+The equivalence class of this law is large (27 laws in our list of 4694 laws).

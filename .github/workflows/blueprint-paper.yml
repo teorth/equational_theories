@@ -101,64 +101,9 @@ jobs:
           ./scripts/lean4_checker/run_lean4checker.sh
         shell: bash
 
-      - name: Build project API documentation
-        run: ~/.elan/bin/lake -R -Kenv=dev build equational_theories:docs
-
-      - name: Check for `home_page` folder
-        id: check_home_page
-        run: |
-          if [ -d home_page ]; then
-            echo "The 'home_page' folder exists in the repository."
-            echo "HOME_PAGE_EXISTS=true" >> $GITHUB_ENV
-          else
-            echo "The 'home_page' folder does not exist in the repository."
-            echo "HOME_PAGE_EXISTS=false" >> $GITHUB_ENV
-          fi
-
-      - name: Build blueprint and copy to `home_page/blueprint`
-        uses: xu-cheng/texlive-action@v2
-        with:
-          docker_image: ghcr.io/xu-cheng/texlive-full:latest
-          run: |
-            # Install necessary dependencies and build the blueprint
-            apk update
-            apk add --update make py3-pip git pkgconfig graphviz graphviz-dev gcc musl-dev
-            git config --global --add safe.directory $GITHUB_WORKSPACE
-            git config --global --add safe.directory `pwd`
-            python3 -m venv env
-            source env/bin/activate
-            pip install --upgrade pip requests wheel
-            pip install pygraphviz --global-option=build_ext --global-option="-L/usr/lib/graphviz/" --global-option="-R/usr/lib/graphviz/"
-            pip install leanblueprint
-
-            # Build the blueprint and copy it to `home_page`
-            leanblueprint pdf
-            mkdir -p home_page
-            cp blueprint/print/print.pdf home_page/blueprint.pdf
-            leanblueprint web
-            cp -r blueprint/web home_page/blueprint
-
-            # Compile the paper and copy it to `home_page`
-            cd paper
-            latexmk -pdf main.tex
-            cd ..
-            cp paper/main.pdf home_page/paper.pdf
-
-      - name: Check declarations mentioned in the blueprint exist in Lean code
-        run: |
-            ~/.elan/bin/lake exe checkdecls blueprint/lean_decls
-
       - name: Check with lean4lean
         run: |
             python scripts/lean4lean_checker/main.py
-
-      - name: Copy API documentation to `home_page/docs`
-        run: cp -r .lake/build/doc home_page/docs
-
-      - name: Remove unnecessary lake files from documentation in `home_page/docs`
-        run: |
-          find home_page/docs -name "*.trace" -delete
-          find home_page/docs -name "*.hash" -delete
 
       - name: Generate graph data
         run: |
@@ -202,40 +147,28 @@ jobs:
           COMMIT_HASH=$(git rev-parse --short HEAD)
           sed -i "s/UNKNOWN_VERSION/$COMMIT_HASH/g" home_page/fme/index.html
 
-      - name: Bundle dependencies
-        if: github.event_name == 'push'
-        uses: ruby/setup-ruby@v1
-        with:
-          working-directory: home_page
-          ruby-version: "3.0"  # Specify Ruby version
-          bundler-cache: true  # Enable caching for bundler
-
       - name: Generate home_page/graphiti/graph.json
         run: |
           ~/.elan/bin/lake exe extract_implications unknowns > /tmp/unknowns.json
           ~/.elan/bin/lake exe extract_implications unknowns --finite-only > /tmp/unknowns.fin.json
           ruby scripts/generate_graphiti_data.rb data/duals.json /tmp/raw_data/general_implications_closure.json /tmp/unknowns.json /tmp/raw_data/finite_implications_closure.json /tmp/unknowns.fin.json > home_page/graphiti/graph.json
 
-      - name: Build website using Jekyll
-        if: github.event_name == 'push' && env.HOME_PAGE_EXISTS == 'true'
-        working-directory: home_page
-        env:
-          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: JEKYLL_ENV=production bundle exec jekyll build  # Note this will also copy the blueprint and API doc into home_page/_site
-
-      - name: "Upload website (API documentation, blueprint, paper and any home page)"
-        if: github.event_name == 'push'
-        uses: actions/upload-pages-artifact@v3
+      - name: Generate the paper PDF (+ add it to the site)
+        uses: xu-cheng/texlive-action@f886de8159e5952a131848a5fa9c3196a2132b5d # v2
         with:
-          path: ${{ env.HOME_PAGE_EXISTS == 'true' && 'home_page/_site' || 'home_page/' }}
+          docker_image: ghcr.io/xu-cheng/texlive-full:20250401
+          run: |
+            cd paper
+            latexmk -pdf main.tex
+            cd ..
+            cp paper/main.pdf home_page/paper.pdf
 
-      - name: Deploy to GitHub Pages
-        if: github.event_name == 'push'
-        id: deployment
-        uses: actions/deploy-pages@v4
-
-      # - name: Make sure the API documentation cache works
-      #   run: mv home_page/docs .lake/build/doc
+      - name: Build project documentation.
+        id: build-docgen
+        uses: leanprover-community/docgen-action@b210116d3e6096c0c7146f7a96a6d56b6884fef5 # 2025-06-12
+        with:
+          blueprint: true
+          homepage: home_page
 
       - name: Remove 'awaiting-CI' label
         if: >
