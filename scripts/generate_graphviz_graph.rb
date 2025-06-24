@@ -11,6 +11,7 @@
 
 require 'optparse'
 require File.join(__dir__, 'graph')
+require File.join(__dir__, 'find_equation_id')
 
 SUBGRAPH = [1, 2, 3, 4, 5, 6, 7, 8, 23, 38, 39, 40, 41, 42, 43, 45, 46, 168, 387, 4512, 4513, 4522, 4564, 4579, 4582]
 
@@ -34,13 +35,10 @@ if ARGV.length != 1
 end
 
 $equations = {}
-["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"].each { |i|
-  File.read(File.join(__dir__, "../equational_theories/Equations/Eqns#{i}.lean")).split("\n").each { |s|
-    if s =~ /equation (\d+) := (.+)/
-      $equations[$1.to_i] = $2
-    end
-  }
-}
+for i in 1..4694
+    eq = Equation.from_id(i)
+    equations[i] = eq.to_s
+end
 File.read(File.join(__dir__, '../equational_theories/Equations/Basic.lean')).split("\n").each { |s|
   if s =~ /abbrev Equation(\d+).*: G, (.+)/
     if !$equations[$1.to_i]
