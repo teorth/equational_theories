@@ -12,8 +12,6 @@ However, it is not feasible to exhaustively search over the $5^{5^2} \approx 3 \
 
 For specific refutations, it was sometimes possible to locate a finite example with an ATP, particularly if one also imposed additional axioms (e.g., an idempotence axiom $x = x \op x$) that one suspected would be useful; see \Cref{automated-sec} for further discussion.  For medium-sized magmas (of order $n=5,6,7,8$), this appeared to be a more efficient approach than brute force exhaustion of all such magmas.
 
-\TODO{Discuss this further, perhaps give an example, or refer to the ATP section.  See also the discussion threads ``Counterexamples by enumerating words in quotient magmas'' and ``Using SAT solvers for model generation'' threads (sorry, LaTeX is choking on the URLs for some reason).}
-
 It is a result of Kisielewicz \cite{Kisielewicz} that every law $\Eq{n}$ with $n \leq 4694$ is either equivalent to the singleton law $\Eq{2}$, or else has a non-trivial finite model; in other words, the implications $\Eq{n} \vdash \Eq{2}$ and $\Eq{n} \vdashfin \Eq{2}$ are equivalent for $n \leq 4694$.  In fact our brute force search revealed that in the latter case there is always a model of order $2 \leq n \leq 5$, with the lone exception of \eqref{eq1286} (and its dual \eqref{eq2301}), for which the smallest non-trivial finite model was of order $7$, as presented in \Cref{1286-ex} below.  In fact, most of the $\num{4694}$ laws either only had trivial models, or had an order $2$ model, as shown in \Cref{size-table}.
 \begin{table}
 \centering
@@ -46,7 +44,7 @@ for some (possibly non-commutative) polynomial $P_{w,i}$ in $a,b$ with integer c
 As such, a necessary condition for such a law $w_1 \formaleq w_2$ to entail another law $w'_1 \formaleq w'_2$ is that one has the inclusion
 $$ V_{w_1,w_2}(M) \subset V_{w'_1,w'_2}(M)
 $$
-for all rings $M$.  For commutative rings, this criterion can be checked by standard Grobner basis techniques; in the noncommutative case one can use methods such as the diamond lemma \cite{diamond-lemma}.
+for all rings $M$.  For commutative rings, this criterion can be checked in an automatable fashion by standard Gr\"obner basis techniques; in the noncommutative case one can use methods such as the diamond lemma \cite{diamond-lemma}.
 
 \begin{example}[Commutative counterexample]\label{1286-ex} For the law $x = y \op (((x \op y) \op x) \op y)$ \eqref{eq1286}, the variety \Cref{variety} can be computed to be
 $$ \{ (a,b) \in M \times M: 1 = a+ba^3+bab, 0 = a + ba^2 b + b^2 \}$$
@@ -62,7 +60,7 @@ $$ \{ (a,b) \in M \times M: a^2 + aba^2 + abab + ab^2 + b = 1 \}.$$
 Observe that if $ba = -1$, then $(a,b)$ automatically lies in the first set, and lies in the second set if and only if $(ab+1)(b-1) = 0$.  One can then show that \eqref{eq1117} does not imply \eqref{eq2441} by setting $a = L$, $b = -R$ where $L, R$ are the left and right shift operators respectively on the ring of integer-valued sequences $\Z^\N$.  With some \emph{ad hoc} effort one can convert this example into a less linear, but simpler (and easier to formalize) example, namely the magma with carrier $\Z$ and operation $x \op y = 2x - \lfloor y/2 \rfloor$.
 \end{example}
 
-\begin{remark} As essentially observed in \cite{austin}, if there is a commutative linear counterexample to an implication $E \vdash E'$, then by the Lefschetz principle this counterexample can be realized in a finite field ${\mathbb F}_q$ for some prime power $q$ (and by the Chebotarev density theorem one can in fact take $q$ to be a prime, so that the carrier is of the form $\Z/p\Z$ for some prime $p$), so that one also has $E \vdashfin E'$.  As such, we have found that an effective way to refute implications by the commutative linear magma method is to simply perform a brute force search over linear magmas $x \op y = ax + by$ in $\Z/p\Z$ for various triples $(p,a,b)$. \TODO{Discuss performance of this method.}
+\begin{remark} As essentially observed in \cite{austin}, if there is a commutative linear counterexample to an implication $E \vdash E'$, then by the Lefschetz principle this counterexample can be realized in a finite field ${\mathbb F}_q$ for some prime power $q$ (and by the Chebotarev density theorem one can in fact take $q$ to be a prime, so that the carrier is of the form $\Z/p\Z$ for some prime $p$), so that one also has $E \vdashfin E'$.  As such, we have found that an effective way to refute implications by the commutative linear magma method is to simply perform a brute force search over linear magmas $x \op y = ax + by$ in $\Z/p\Z$ for various triples $(p,a,b)$.
 
 On the other hand, the refutations obtained by non-commutative linear constructions need not have a finite model.  For instance, consider the refutation $\Eq{1117} \nvdash \Eq{2441}$ from \Cref{1117-ex}.  The law \eqref{eq1117} can be rewritten as $L_y R_z L_y R_z x = x$.  This implies that $R_z$ is injective and $L_y$ is surjective for all $y,z$.  For finite magmas $\Magma$, this then implies that the $L_y, R_z$ are in fact invertible, and hence we have also $R_z L_y R_z L_y x = x$, which implies \eqref{eq2441} by setting $x=y=z$.  Thus, the refutation $\Eq{1117} \nvdash \Eq{2441}$ is ``immune'' to finite counterexamples.
 \end{remark}
@@ -72,8 +70,6 @@ On the other hand, the refutations obtained by non-commutative linear constructi
 
 \begin{remark} One can also consider the seemingly more general linear model $x \op y = ax + by$, where the carrier $M$ is now an abelian group, and $a,b$ act on $M$ by homomorphisms, that is to say that they are elements of the endomorphism ring $\mathrm{End}(M)$.  However, this leads to exactly the same varieties \Cref{variety} (where $M$ is now replaced by the endomorphism ring $\mathrm{End}(M)$) and so does not increase the power of the linear model for the purposes of refuting implications.
 \end{remark}
-
-\TODO{Give some statistics of what proportion of refutations can be resolved by linear models.}
 
 On the other hand, there are certainly some refutations $E \nvdash E'$ of implications that are ``immune'' to both commutative and non-commutative models, in the sense that all such models that obey $E$, also obey $E'$.  One such example is the refutation $\Eq{1485} \vdash \Eq{151}$, which we discuss further in \Cref{twisting-sec} below.
 

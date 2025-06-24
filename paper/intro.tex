@@ -124,7 +124,7 @@ For the finite implication graph $E \vdashfin E'$, we could similarly formalize 
         \draw(3319)--(3253);
       \end{tikzpicture}%
     }
-    \caption{Longest chains of implications (length $15$) between inequivalent laws in the implication graph.  The parts above/below law 3 can be independently dualized. {\bf figure out where to put this image and discuss it}}
+    \caption{Longest chains of implications (length $15$) between inequivalent laws in the implication graph.  The parts above/below law 3 can be independently dualized. }
     \label{fig:longchain}
 \end{figure}
 
@@ -140,7 +140,7 @@ Of the $\num{22033636}$ possible implications $E \vdash E'$, $8178279$ (or $37.1
 
 More challenging were the $\num{13855357}$ ($62.88\%$) implications that were false, $E \nvdash E'$, and particularly the slightly smaller set of $\num{13854535}$ or $\num{13854537}$ implications that were false even for finite magmas, $E \nvdashfin E'$. Here, the range of techniques needed to refute such implications were quite varied, and may be of independent interest:
 \begin{itemize}
-        \item \textbf{Syntactic methods}, such as observing a ``matching invariant'' of the law $E$ that was not shared by the law $E'$, could be used to obtain some refutations.  For instance, if both sides of $E$ had the same order, but both sides of $E'$ did not, this could be used to syntactically refute $E \vdash E'$.  Similarly, if the law $E$ was confluent, enjoyed a complete rewriting system, or otherwise permitted some understanding of the free magma associated to that law, one could decide the assertions $E \vdash E'$ for all possible laws $E'$, or at least a significant fraction of such laws.  We discuss these methods, and the extent to which they can be automated in \Cref{syntactic-sec}.
+        \item \textbf{Syntactic methods}, such as observing a ``matching invariant'' of the law $E$ that was not shared by the law $E'$, could be used to obtain some refutations.  For instance, if both sides of $E$ had the same order, but both sides of $E'$ did not, this could be used to syntactically refute $E \vdash E'$.  Similarly, if the law $E$ was confluent, enjoyed a complete rewriting system, or otherwise permitted some understanding of the free magma associated to that law, one could decide the assertions $E \vdash E'$ for all possible laws $E'$, or at least a significant fraction of such laws.  We discuss these methods, and the extent to which they can be automated, in \Cref{syntactic-sec}.
         \item \textbf{Small finite magmas}, which can be described explicitly by multiplication tables, could be tested by brute force computations to provide a large number of finite counterexamples to implications, or by ATP-assisted methods. See \Cref{finite-sec}.
         \item \textbf{Linear models}, in which the magma operation took the form $x \op y = ax + by$ for some (commuting or non-commuting) coefficients $a,b$, allowed for another large class of counterexamples to implications, which could be automatically scanned for either by brute force or by Grobner basis type calculations; many of these examples could also be made finite. See \Cref{linear-sec}.
         \item \textbf{Translation invariant models}, in which the magma operation took the form $x \op y = x + f(y-x)$ on an additive group, or $x \op y = x f(x^{-1} y)$ on a non-commutative group, reduce matters to analyzing certain functional equations; see \Cref{translation-sec}.
@@ -204,7 +204,7 @@ The objective of using the data from the ETP to establish well-calibrated benchm
   \draw[human,->] (hproofs)  -- (formal);
 
 \end{tikzpicture}
-\caption{Some of the main dynamics in which proofs were generated, discussed within the Lean Zulip channel and then formalized in the Github repository.  Boldface arrows indicate human activities, such as proposing an automated attack on outstanding implications, converting a computer-generated proof into a human-readable format, formalizing a human readable proof directly, or first creating a more precise blueprint for other collaborators to work on.  Dashed arrows indicate fully automated processes, while the partly dashed line indicated a semi-automated process requiring human supervision. {\bf figure out where to put this image and discuss it}}
+\caption{Some of the main dynamics in which proofs were generated, discussed within the Lean Zulip channel and then formalized in the Github repository.  Boldface arrows indicate human activities, such as proposing an automated attack on outstanding implications, converting a computer-generated proof into a human-readable format, formalizing a human readable proof directly, or first creating a more precise blueprint for other collaborators to work on.  Dashed arrows indicate fully automated processes, while the partly dashed line indicated a semi-automated process requiring human supervision. }
 \label{fig:flow}
 \end{figure}
 
