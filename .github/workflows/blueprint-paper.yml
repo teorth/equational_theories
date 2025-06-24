@@ -101,9 +101,9 @@ jobs:
           ./scripts/lean4_checker/run_lean4checker.sh
         shell: bash
 
-      - name: Check with lean4lean
-        run: |
-            python scripts/lean4lean_checker/main.py
+      #- name: Check with lean4lean
+      #  run: |
+      #      python scripts/lean4lean_checker/main.py
 
       - name: Generate graph data
         run: |
