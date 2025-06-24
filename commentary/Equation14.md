@@ -10,3 +10,5 @@ Among equations of order 2 this is the one whose [simple spectrum](https://leanp
 - Law 14 and existence of a two-sided unit ⇔ semi-symmetric loop [law 887](https://teorth.github.io/equational_theories/implications/?887).
 - Law 14 and idempotence ⇔ Mendelsohn quasigroup [law 4961](https://teorth.github.io/equational_theories/implications/?4961).
 - Law 14 and associativity ⇔ [law 895](https://teorth.github.io/equational_theories/implications/?895) characterizing abelian groups of exponent 2.
+
+The number of magmas of size n (modulo isomorphisms) satisfying this law is the [OEIS sequence A076017](https://oeis.org/A076017), whose asymptotics appear unknown.

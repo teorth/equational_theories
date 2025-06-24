@@ -1,0 +1,1 @@
+This law is equivalent to the Schweizer identity, law 3810 `x ◇ y = (z ◇ y) ◇ (z ◇ x)`.  Among quasigroups, it is equivalent to Tarski's [law 543](https://teorth.github.io/equational_theories/implications/?543) that characterizes abelian group subtraction.

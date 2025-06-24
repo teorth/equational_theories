@@ -5,3 +5,5 @@ Denoting `∞∈M` this element, and `P = {x◇y|x,y∈M}`, the magma is charact
 The free magma on some set `S` of generators for this law is `S ⊔ S×S ⊔ {∞}`, on which `s◇t=(s,t)` and every other product is `∞`.
 
 The equivalence class of this law is large (14 laws in our list of 4694 laws).
+
+The weaker [law 4274](https://teorth.github.io/equational_theories/implications/?4274) states constancy of only one set of triple products.
