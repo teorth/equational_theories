@@ -4,4 +4,4 @@ This law or its dual law 270 are part of all [longest chains of implications](ht
 
 It is the right 3-reductive law, which [plays a role](http://arxiv.org/abs/1409.8396) in the study of quandles.  The right m-reductive laws are [law 4](https://teorth.github.io/equational_theories/implications/?4), [law 9](https://teorth.github.io/equational_theories/implications/?9), law 48, [law 412](https://teorth.github.io/equational_theories/implications/?412), and so on.
 
-This law constrains each left multiplication independently to cube to a specific constant map.
+This law constrains each left multiplication independently to cube to a specific constant map.  On a set with n elements, the number of binary operations satisfying this law is the n-th power of [OEIS sequence A000949](https://oeis.org/A000949).

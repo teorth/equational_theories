@@ -7,3 +7,5 @@ Any law that implies this law (laws 4, 24, 41, 256, 374, 3051, 4117, …) descri
 The free magma on some set `S` of generators for this law is `ℕ×S` with `f(m,s)=(m+1,s)`, namely `(m,s) ◇ (n,t) = (m+1,s)`.
 
 The equivalence class of this law is among the largest ones (40 laws in our list of 4694 laws).
+
+The number of magmas of size n (modulo isomorphism) satisfying this law is [OEIS sequence A001372](https://oeis.org/A001372).
