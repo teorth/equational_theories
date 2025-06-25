@@ -1,0 +1,1 @@
+In finite magmas, or in quasigroups, this law is equivalent to [law 1695](https://teorth.github.io/equational_theories/implications/?1695), a twist of the semi-symmetric quasigroup [law 14](https://teorth.github.io/equational_theories/implications/?14).

@@ -1,0 +1,1 @@
+For finite magmas, or for quasigroups, the dual [law 219](https://teorth.github.io/equational_theories/implications/?219) is equivalent to [law 880](https://teorth.github.io/equational_theories/implications/?880), which is a twist of the semi-symmetric quasigroup [law 14](https://teorth.github.io/equational_theories/implications/?14).
