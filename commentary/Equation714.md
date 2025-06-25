@@ -1,0 +1,7 @@
+A magma satisfying this law is a quasigroup (left and right multiplication are bijective) in which right division is the cube of left multiplication.
+
+This law is equivalent to the conjunction of [law 511](https://teorth.github.io/equational_theories/implications/?511) and [law 2338](https://teorth.github.io/equational_theories/implications/?2388).  In finite magmas, or when left multiplications are assumed to be bijective, these three laws are equivalent.
+
+This law is parastrophically equivalent to [law 464](https://teorth.github.io/equational_theories/implications/?464).  More precisely, the operation `x◆y = x◇((x◇y)◇x)` satisfies law 464, and conversely, if an operation `◆` satisfies law 464 and is left-cancellative (which is automatic if the magma is finite) then `x◇y = y◆(y◆(y◆x))` satisfies law 714.  The inequivalent laws 714 and 464 share the same finite spectrum.
+
+This law is part of a series of laws that state that the magma is a quasigroup in which right division is some k-th power of left multiplication: the semi-symmetric quasigroup [law 14](https://teorth.github.io/equational_theories/implications/?14) for `k=1`, [law 125](https://teorth.github.io/equational_theories/implications/?125) for `k=2`, this law for `k=3`, law 5974 for `k=4`, and so on.  For each `k>1`, there exist two weaker laws that are equivalent to it in the finite case or when left multiplications are assumed to be bijective.
