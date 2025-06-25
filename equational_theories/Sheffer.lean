@@ -181,4 +181,23 @@ instance Equation345169_is_Boolean (G : Type*) [Magma G]
   let _ := Equation345169_is_Sheffer G h
   @ShefferToBooleanAlg G _
 
+/-- The four order-6 Sheffer axioms are equivalent: `Equation321577`, `Equation329857`, `Equation345169`, `Equation361729`. Here we state the minimal six implications, to and from `Equation321577`. -/
+@[equational_result]
+conjecture Equation321577_implies_Equation329857 (G: Type*) [Magma G] (_ : Equation321577 G) : Equation329857 G
+
+@[equational_result]
+conjecture Equation321577_implies_Equation345169 (G: Type*) [Magma G] (_ : Equation321577 G) : Equation345169 G
+
+@[equational_result]
+conjecture Equatio321577_implies_Equation361729 (G: Type*) [Magma G] (_ : Equation321577 G) : Equation361729 G
+
+@[equational_result]
+conjecture Equation329857_implies_Equation321577 (G: Type*) [Magma G] (_ : Equation329857 G) : Equation321577 G
+
+@[equational_result]
+conjecture Equation345169_implies_Equation321577 (G: Type*) [Magma G] (_ : Equation345169 G) : Equation321577 G
+
+@[equational_result]
+conjecture Equation361729_implies_Equation321577 (G: Type*) [Magma G] (_ : Equation361729 G) : Equation321577 G
+
 end Sheffer
