@@ -1,0 +1,1 @@
+This law states that the squaring map `S:x ↦ x◇x` is bijective and composing it four times gives the identity (`S(S(S(S(x))))=x`), and that all left multiplications cube to the inverse of `S` (and in particular are bijective).
