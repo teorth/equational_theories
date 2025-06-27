@@ -1,3 +1,8 @@
-## Dual of "Littlewood"
+## Dual of the Littlewood law
 
-Its dual, [2541](https://teorth.github.io/equational_theories/implications/?2541), is discussed [here](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1).  Littlewood is confluent, and implied by "Ramanujan" [1729](https://teorth.github.io/equational_theories/implications/?1729), but it is not implied by "Hardy" [917](https://teorth.github.io/equational_theories/implications/?917); and it does not imply either of these two laws.  However, for finite models, all three laws are equivalent.
+In finite magmas, or in quasigroups, the Littlewood law 2541 (dual of 1086) is equivalent to the
+[Ramanujan law 1729](https://teorth.github.io/equational_theories/implications/?1729) and [Hardy law 917](https://teorth.github.io/equational_theories/implications/?917).  Without such assumptions, the Ramanujan law 1729 implies the Littlewood law 2541, but no other implication holds.  For translation-invariant models, the Hardy law is a consequence of the Ramanujan law.
+
+Discussed [here](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1).  The Littlewood law is confluent.
+
+The laws 1729, 917, 2541 are twists of laws [125](https://teorth.github.io/equational_theories/implications/?125), [73](https://teorth.github.io/equational_theories/implications/?73), [229](https://teorth.github.io/equational_theories/implications/?229) by the squaring map.
