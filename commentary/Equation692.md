@@ -2,7 +2,7 @@
 
 A magma satisfying this law is a quasigroup (left and right multiplication are bijective).  The cubing map `C: x ↦ x◇(x◇x)` is an automorphism that cubes to the identity (`C(C(C(x)))=x` and `C(x◇y)=C(x)◇C(y)`).
 
-The magma obeys the middle crossed inverse property `C(y)◇(x◇y)=x` or equivalently `(C(y)◇x)◇y=x`.  It also obeys the left and right crossed inverse property stating that `(y◇x)◇y` and `y◇(x◇y)` are `y`-independent, specifically `(y◇x)◇y = C(C(x))` and `y◇(x◇y) = C(x)`.
+The magma obeys the middle crossed inverse property `C(y)◇(x◇y)=x` or equivalently `(C(y)◇x)◇y=x`.  It also obeys the left and right crossed inverse property stating that `(y◇x)◇y` and `y◇(x◇y)` are `y`-independent, specifically `(y◇x)◇y = C(C(x))` and `y◇(x◇y) = C(x)`, namely the dual laws [4588](https://teorth.github.io/equational_theories/implications/?4588) and [4273](https://teorth.github.io/equational_theories/implications/?4273).
 
 A more symmetrical way to state these facts is that for any three elements `x,y,z` of the magma the nine equations `x◇y=z`, `C(x◇C(y))=z`, `C(C(x)◇y)=z`, `y◇z=C(x)`, `y◇C(z)=x`, `C(y)◇z=x`, `C(z◇x)=y`, `z◇C(x)=C(y)`, `C(z)◇x=C(y)` are equivalent.
 

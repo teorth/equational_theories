@@ -1,6 +1,6 @@
 ## A twist of the semi-symmetric quasigroup law
 
-A magma satisfying this law is a quasigroup (left and right multiplication are bijective).  All squares are equal to the same element `e`, which is central (`x◇e=e◇x`), and the cubing map `C: x ↦ x◇(x◇x) = x◇e` is an involutive automorphism (`C(C(x))=x` and `C(x◇y)=C(x)◇C(y)`).  The magma obeys the middle crossed inverse property `C(y)◇(x◇y)=x`, or equivalently `(C(y)◇x)◇y=x`.
+A magma satisfying this law is a quasigroup (left and right multiplication are bijective).  All squares are equal to the same element `e`, which is central (`x◇e=e◇x`), and the cubing map `C: x ↦ x◇(x◇x) = x◇e` is an involutive automorphism (`C(C(x))=x` and `C(x◇y)=C(x)◇C(y)`).  The magma obeys the middle crossed inverse property `C(y)◇(x◇y)=x`, or equivalently `(C(y)◇x)◇y=x`.  (See the [commentary on law 4273](https://teorth.github.io/equational_theories/implications/?4273) for this terminology.)
 
 More symmetrically, for any three elements `x,y,z` of the magma, the equations `x=C(y◇z)`, `y=C(z◇x)`, `z=C(x◇y)` are equivalent.
 
