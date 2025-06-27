@@ -1,0 +1,1 @@
+This law, together with [Jordan's second law 906021](https://teorth.github.io/equational_theories/implications/?906021), defines a non-commutative Jordan algebra (with conventions dual to those of http://arxiv.org/abs/2410.10825).
