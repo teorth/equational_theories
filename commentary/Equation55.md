@@ -1,1 +1,1 @@
-This law is parastrophically equivalent to [law 72](https://teorth.github.io/equational_theories/implications/?72), in the sense that if left multiplications are bijective then the left division operation defined by `x ◇ (x : y) = y` obeys `x = y : (y : (x : x))`.
+For (left-)quasigroups, this law is parastrophically equivalent to [law 72](https://teorth.github.io/equational_theories/implications/?72).
