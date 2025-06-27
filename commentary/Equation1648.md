@@ -5,3 +5,5 @@ Discussed in [this thread](https://leanprover.zulipchat.com/#narrow/stream/45865
 A nice example of a translation-invariant magma obeying this equation is `x ◇ y = x - sgn(y-x)` on the integers.
 
 The coefficients of the linearization `ax+by` of 1648 are the golden ratio.
+
+This law implies that right multiplications are injective.
