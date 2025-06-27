@@ -1,0 +1,1 @@
+This law implies that all left multiplications are bijective.  The left division operation defined by `x◇(x:y) = y` satisfies the same law, namely `x = y : ((x : y) : x)`.  If the magma is a quasigroup, then right-division satisfies [law 167](https://teorth.github.io/equational_theories/implications/?167), namely laws 117 and 167 are parastrophically equivalent.
