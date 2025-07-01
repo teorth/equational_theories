@@ -18,7 +18,7 @@ import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
 import Mathlib.Data.Rel
 import Mathlib.Tactic.Linarith.Frontend
 import Init.Core
---import Mathlib.Tactic.Group --This breaks some instance, I haven't understood why exactly
+import Mathlib.Tactic.Group
 
 namespace Eq1516
 
@@ -500,7 +500,7 @@ theorem newE_dom_and_inv : ∀ x y, y ∈ t.newE ⬝ x → x⁻¹ ∈ t.newE →
       intro eq_a'_a''
       have eq_d''_1 : d'' = 1 := by
         rw [eq_a'_a''] at eq'
-        simp only [mul_left_inj, mul_left_eq_self] at eq'
+        simp only [mul_left_inj, mul_eq_right] at eq'
         exact eq'
       have eq_a''_1 : (a'')⁻¹ = 1 := by
         apply t.ps.cond8
@@ -537,7 +537,7 @@ theorem newE_dom_and_inv : ∀ x y, y ∈ t.newE ⬝ x → x⁻¹ ∈ t.newE →
       intro eq_a'_a''
       have eq_d'_1 : d' = 1 := by
         rw [eq_a'_a''] at eq'
-        simp only [self_eq_mul_left] at eq'
+        simp only [right_eq_mul] at eq'
         exact eq'
       have eq_a'_1 : (a')⁻¹ = 1 := by
         apply t.ps.cond8
@@ -625,7 +625,7 @@ theorem extension_cond4 : ∀ a ∈ t.newE, ∀ b ∈ t.newE ⬝ a, ∀ c ∈ t.
       rcases e1' with ⟨a', e_a'_b, eq, _⟩
       have a'_eq_1 : a' = 1 := by
         rw [e0.2] at eq
-        simp only [mul_right_eq_self, inv_eq_one] at eq
+        simp only [mul_eq_left, inv_eq_one] at eq
         exact eq
       apply t.b_ne_1
       rw [a'_eq_1, t.ps.fId] at e_a'_b
@@ -710,7 +710,7 @@ theorem extension_cond4 : ∀ a ∈ t.newE, ∀ b ∈ t.newE ⬝ a, ∀ c ∈ t.
       · intro eq_a'_a''
         have eq_d''_1 : d'' = 1 := by
           rw [← eq, eq_a'_a''] at eq'
-          simp only [mul_left_inj, mul_left_eq_self] at eq'
+          simp only [mul_left_inj, mul_eq_right] at eq'
           exact eq'
         have eq_a''_1 : (a'')⁻¹ = 1 := by
           apply t.ps.cond8
@@ -998,7 +998,7 @@ theorem newE2_comp {x y z : A} [b_ne_1 : Fact (t.b ≠ 1)] :  y ∈ t.newE2 ⬝ 
   · exfalso
     apply b_ne_1.out
     have : t.b * t.c = t.c := by rw [← new.2, new'.1]
-    simp only [mul_left_eq_self] at this
+    simp only [mul_eq_right] at this
     assumption
 
 theorem newE2_dom_and_inv {x y z :A } : y ∈ t.newE2 ⬝ x → z ∈ t.newE2 ⬝ x⁻¹ → y ∈ t.ps.E ⬝ x ∧ z ∈ t.ps.E ⬝ x⁻¹  := by
@@ -1165,7 +1165,7 @@ theorem completion (ps : PartialSolution) :
   · let S : Finset _ := {x, 1, f x, (f (f x) * x⁻¹ * (f 1)⁻¹)}
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (S.image fun a => ⟨g a, hg1 a⟩)
-    replace le a ha := Finset.forall_image.1 le a ha (hf a)
+    replace le a (ha : a ∈ S) := Finset.forall_mem_image.1 le ha (hf a)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, S] at le
     obtain ⟨fx, f1, ffx, fffx⟩ := le
     rw [e.fId] at f1
@@ -1190,7 +1190,7 @@ theorem completion (ps : PartialSolution) :
       apply Option.some_injective
       rw [← hps'1 hyp, ← hps'2 (hf x)]
     trans {c ∈ S | b * c ∈ ps.E ⬝ c}.toSet.encard
-    · apply Set.encard_le_card
+    · apply Set.encard_le_encard
       simp only [Option.mem_def, Finset.coe_filter, Set.setOf_subset_setOf, and_imp]
       exact this
     · rw [Set.encard_coe_eq_coe_finsetCard]
@@ -1674,28 +1674,12 @@ lemma next2_le_encard : n ≤ {z : G' | Next2 d z y}.encard := by
 
 end Extension2
 
--- PRed to Mathlib, see #21467
-lemma _root_.Set.ncard_le_encard {α : Type*} (s : Set α) : Set.ncard s ≤ Set.encard s :=
-    ENat.coe_toNat_le_self _
-
--- PRed to Mathlib, see #21469
-lemma _root_.WithTop.eq_coe_of_ne_top {α : Type*} {a : WithTop α} (ha : a ≠ ⊤) :
-    ∃ b : α, b = a := Option.ne_none_iff_exists.mp ha
-
--- PRed to Mathlib, see #21469
-lemma _root_.WithBot.eq_coe_of_ne_bot {α : Type*} {a : WithBot α} (ha : a ≠ ⊥) :
-    ∃ b : α, b = a := Option.ne_none_iff_exists.mp ha
-
--- PRed to Mathlib, see #21473
-lemma _root_.ENat.eq_top_iff_forall_ne (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, ↑m ≠ n :=
-  WithTop.forall_ne_iff_eq_top.symm
-
 -- PRed to Mathlib, see #21473
 lemma _root_.ENat.eq_top_iff_forall_lt (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m < n := by
   rw [ENat.eq_top_iff_forall_ne]
   refine ⟨fun h m ↦ ?_, fun a m ↦ (a m).ne⟩
   contrapose! h
-  exact WithTop.eq_coe_of_ne_top fun a ↦ ENat.coe_ne_top _ <| top_le_iff.mp (a ▸ h)
+  exact Option.ne_none_iff_exists.mp fun a ↦ ENat.coe_ne_top _ <| top_le_iff.mp (a ▸ h)
 
 --this lemma should be put into Mathlib, maybe in Mathlib.Data.ENat.Basic next to ENat.ne_top_iff_exists
 lemma _root_.ENat.eq_top_iff_forall_le (n : ENat) : n = ⊤ ↔ ∀ m : ℕ, m ≤ n := by
@@ -1740,7 +1724,7 @@ theorem exists_extension (seed : PartialSolution) : ∃ L : A → G → G,
       (a, y, n')}
     have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩)
       (T.image fun p ↦ ⟨e p, he p⟩)
-    have hT := fun p hp ↦ Finset.forall_image.mp le p hp _ _ _ (hL p)
+    have hT := fun p hp ↦ Finset.forall_mem_image.mp le hp _ _ _ (hL p)
     simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at hT
     have ⟨e_n, e_n'⟩ := hT
     exact e.2.func e_n e_n'
@@ -1809,7 +1793,7 @@ lemma not_seed_of_eq_snd {a c : A} (hac : a ≠ c) (n : ℕ) (x : G) :
 
 lemma seed_finite {a c : A} (hac : a ≠ c) : {n | ∃ x, seed c (.inr ⟨⟨a, c, n⟩, hac⟩) x}.Finite := by
   convert Set.finite_empty
-  rw [Set.eq_empty_iff_forall_not_mem]
+  rw [Set.eq_empty_iff_forall_notMem]
   exact fun n ⟨x, hx⟩ ↦ not_seed_of_eq_snd hac n x hx
 
 lemma seed_h_1516 {c' : A} {y : G'} {x : G} : seed c' y x → ∃ w, seed c' x w ∧ seed (S y) w c'
@@ -1910,11 +1894,11 @@ noncomputable instance : Fintype (partial_range' x) := by
   have h1 : f '' {(z, y) : G × G | E x z y} ⊆ {y : G | ∃ z, E x z y} := by
     intro a ha
     simp only [Set.mem_image, Prod.exists, exists_eq_right] at ha
-    exact ha
+    simp_all [f]
   have h2 : {y : G | ∃ z, E x z y} ⊆ f '' {(z, y) : G × G | E x z y} := by
     intro y hy
     simp only [Set.mem_image, Prod.exists, exists_eq_right]
-    exact hy
+    simp_all [f]
   exact h1.antisymm h2 ▸ Set.Finite.image f ok.finite
 
 /-- {z : G | ∃ y, E x y z} as a Finset. -/
@@ -1929,7 +1913,7 @@ lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ parti
     exact (partial_range' x).toFinite
   have h2 : ¬ Set.Finite (Set.univ : Set G) := Set.finite_univ_iff.mp.mt Infinite.not_finite
   rcases (Set.Infinite.nontrivial (.diff (.diff h2 hA) hB)).exists_ne (d x) with ⟨x1, hx1, hx2⟩
-  exact ⟨x1, Set.not_mem_of_mem_diff (Set.mem_of_mem_diff hx1), ⟨Set.not_mem_of_mem_diff hx1, hx2⟩⟩
+  exact ⟨x1, Set.notMem_of_mem_diff (Set.mem_of_mem_diff hx1), ⟨Set.notMem_of_mem_diff hx1, hx2⟩⟩
 
 lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧
     w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
@@ -1944,7 +1928,7 @@ lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧
     (L_surjective _ _)) hA) hB)).exists_ne (d x) with ⟨ x1, hx1, hx2⟩
   have hx1' := Set.mem_of_mem_diff hx1
   rcases (Set.mem_of_mem_diff hx1') with ⟨w, hw1, hw2⟩
-  exact ⟨x1, hw2 ▸ hw1, ⟨Set.not_mem_of_mem_diff hx1', ⟨Set.not_mem_of_mem_diff hx1, hx2⟩⟩⟩
+  exact ⟨x1, hw2 ▸ hw1, ⟨Set.notMem_of_mem_diff hx1', ⟨Set.notMem_of_mem_diff hx1, hx2⟩⟩⟩
 
 /-- Given an extension, which is a partial solution with an undefined element of the domain
 called `d`, we define a new element `w` that represents the image of `d` under `Lₓ`. -/
@@ -1960,7 +1944,7 @@ lemma w_not_in_domain : w x ∉ partial_domain x := by
 
 lemma w_not_in_range : w x ∉ partial_range x := by
   by_cases h : ∃ z, E x z (d x) <;> simp only [w, h]
-  · exact (w.proof_1 x _).choose_spec.2.2.1
+  · exact (exists_not_in_domain_range' x _).choose_spec.2.2.1
   · exact (exists_not_in_domain_range x).choose_spec.2.1
 
 lemma w_ne_d : w x ≠ d x := by
@@ -2046,7 +2030,7 @@ theorem exists_extension (x : G') (seed : PartialSolution x) : ∃ Lₓ : G → 
   classical
   let T : Finset G := {y, Lₓ y}
   have ⟨⟨e, he⟩, le⟩ := hc.directed.finset_le (hι := ⟨⟨_, h1⟩⟩) (T.image fun a ↦ ⟨e a, he a⟩)
-  have hT := fun a ha ↦ Finset.forall_image.mp le a ha _ _ (hLₓ a)
+  have hT := fun a ha ↦ Finset.forall_mem_image.mp le ha _ _ (hLₓ a)
   simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq, T] at hT
   exact e.2.aux2 hT.1 hT.2
 

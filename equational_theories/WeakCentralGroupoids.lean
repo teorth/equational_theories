@@ -102,7 +102,7 @@ abbrev Extension := {E : PreExtension G // E.OK}
 theorem Extension.next (E : Extension G) (a b) :
     ∃ E' : Extension G, E ≤ E' ∧ (E'.1.induced a b).Nonempty := by
   classical if h : (E.1.induced a b).Nonempty then exact ⟨_, le_rfl, h⟩ else
-  let ⟨l, hl⟩ := Infinite.exists_not_mem_finset <|
+  let ⟨l, hl⟩ := Infinite.exists_notMem_finset <|
     (insert a <| insert b <| E.1.image (·.1) ∪ E.1.image (·.2)).image (·.2)
   let c : ExtBase G := (a.1 ◇ b.1, l)
   refine ⟨⟨insert (a, c) (insert (c, b) E.1), ?_, fun x y z hz w hw => ?_⟩,
@@ -285,7 +285,9 @@ theorem not_3457 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3457] := by
   classical
   let e : Extension G0 := by
     refine let S := {((x,0),(z,2)),((z,2),(x,0)),((z,2),(w,3)),((w,3),(y,1))}; ⟨S, ?_, ?_⟩
-    · simp [or_imp, forall_and, isGood_path h1, isGood_path h2, S]
+    · simp only [Finset.mem_insert, Prod.mk.injEq, Finset.mem_singleton, or_imp, and_imp,
+      forall_and, forall_eq_apply_imp_iff, forall_eq, S]
+      exact ⟨(isGood_path h1).1, (isGood_path h1).2, (isGood_path h2).1, (isGood_path h2).2⟩
     · intro a b
       let f : ℕ → ExtBase G0 | 1 => (w, 3) | 2 => (x, 0) | _ => (z, 2)
       refine Set.subsingleton_of_forall_eq (a := f b.2) fun u ⟨hu1, hu2, hu3⟩ => ?_
@@ -293,8 +295,8 @@ theorem not_3457 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3457] := by
       obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ := hu3 <;> rfl
   refine ⟨GreedyMagma e, inferInstance, WeakCentralGroupoid.eqn1485, fun h => ?_⟩
   have := h (x, 0) (y, 1)
-  rw [← (e.induced' (x,0) (x,0) (z,2)).2 ⟨h1, e.base (by simp), e.base (by simp)⟩,
-      ← (e.induced' (z,2) (y,1) (w,3)).2 ⟨h2, e.base (by simp), e.base (by simp)⟩] at this
+  simp [← (e.induced' (x,0) (x,0) (z,2)).2 ⟨h1, e.base (by simp [e]), e.base (by simp [e])⟩,
+      ← (e.induced' (z,2) (y,1) (w,3)).2 ⟨h2, e.base (by simp [e]), e.base (by simp [e])⟩] at this
   exact h3 (e.induced.1 this).1
 
 @[equational_result]
@@ -304,7 +306,9 @@ theorem not_3511 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3511] := by
   classical
   let e : Extension G0 := by
     refine let S := {((x,0),(z,2)),((z,2),(y,1)),((z,2),(w,3)),((w,3),(x,0))}; ⟨S, ?_, ?_⟩
-    · simp [or_imp, forall_and, isGood_path h1, isGood_path h2, S]
+    · simp only [Finset.mem_insert, Prod.mk.injEq, Finset.mem_singleton, or_imp, and_imp,
+      forall_and, forall_eq_apply_imp_iff, forall_eq, S]
+      exact ⟨(isGood_path h1).1, (isGood_path h1).2, (isGood_path h2).1, (isGood_path h2).2⟩
     · intro a b
       let f : ℕ → ExtBase G0 | 0 => (w, 3) | 2 => (x, 0) | _ => (z, 2)
       refine Set.subsingleton_of_forall_eq (a := f b.2) fun u ⟨hu1, hu2, hu3⟩ => ?_
@@ -312,8 +316,8 @@ theorem not_3511 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3511] := by
       obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ := hu3 <;> rfl
   refine ⟨GreedyMagma e, inferInstance, WeakCentralGroupoid.eqn1485, fun h => ?_⟩
   have := h (x, 0) (y, 1)
-  rw [← (e.induced' (x,0) (y,1) (z,2)).2 ⟨h1, e.base (by simp), e.base (by simp)⟩,
-      ← (e.induced' (z,2) (x,0) (w,3)).2 ⟨h2, e.base (by simp), e.base (by simp)⟩] at this
+  rw [← (e.induced' (x,0) (y,1) (z,2)).2 ⟨h1, e.base (by simp [e]), e.base (by simp [e])⟩,
+      ← (e.induced' (z,2) (x,0) (w,3)).2 ⟨h2, e.base (by simp [e]), e.base (by simp [e])⟩] at this
   exact h3 (e.induced.1 this).1
 
 @[equational_result]
@@ -327,7 +331,9 @@ theorem not_2087_2124 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [2087, 2124
     refine let S := {
       ((y,1),(z,2)),((z,2),(x,0)),((z,2),(y,1)),((z,2),(w,3)),
       ((w,3),(x,0)),((x,0),(v,4)),((v,4),(x,0))}; ⟨S, ?_, ?_⟩
-    · simp [or_imp, forall_and, isGood_path h1, isGood_path h2, isGood_path h3, isGood_path h4, S]
+    · simp [or_imp, forall_and, isGood_path, isGood_path, isGood_path, isGood_path, S]
+      exact ⟨(isGood_path h1).1, (isGood_path h1).2, (isGood_path h2).2, (isGood_path h3).1,
+        (isGood_path h3).2, (isGood_path h4).1, (isGood_path h4).2⟩
     · intro a b
       let f : ℕ → ℕ → ExtBase G0
         | 2, 0 => (w, 3)
@@ -341,12 +347,12 @@ theorem not_2087_2124 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [2087, 2124
       obtain ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ | ⟨⟨⟩⟩ := hu3 <;> rfl
   refine ⟨GreedyMagma e, inferInstance, WeakCentralGroupoid.eqn1485, fun h => ?_, fun h => ?_⟩
   · have := h (x, 0) (y, 1)
-    rw [← (e.induced' (y,1) (x,0) (z,2)).2 ⟨h1, e.base (by simp), e.base (by simp)⟩,
-        ← (e.induced' (z,2) (x,0) (w,3)).2 ⟨h3, e.base (by simp), e.base (by simp)⟩,
-        ← (e.induced' (x,0) (x,0) (v,4)).2 ⟨h4, e.base (by simp), e.base (by simp)⟩] at this
+    rw [← (e.induced' (y,1) (x,0) (z,2)).2 ⟨h1, e.base (by simp [e]), e.base (by simp [e])⟩,
+        ← (e.induced' (z,2) (x,0) (w,3)).2 ⟨h3, e.base (by simp [e]), e.base (by simp [e])⟩,
+        ← (e.induced' (x,0) (x,0) (v,4)).2 ⟨h4, e.base (by simp [e]), e.base (by simp [e])⟩] at this
     exact h5 (e.induced.1 this).1
   · have := h (x, 0) (y, 1)
-    rw [← (e.induced' (y,1) (y,1) (z,2)).2 ⟨h2, e.base (by simp), e.base (by simp)⟩,
-        ← (e.induced' (z,2) (x,0) (w,3)).2 ⟨h3, e.base (by simp), e.base (by simp)⟩,
-        ← (e.induced' (x,0) (x,0) (v,4)).2 ⟨h4, e.base (by simp), e.base (by simp)⟩] at this
+    rw [← (e.induced' (y,1) (y,1) (z,2)).2 ⟨h2, e.base (by simp [e]), e.base (by simp [e])⟩,
+        ← (e.induced' (z,2) (x,0) (w,3)).2 ⟨h3, e.base (by simp [e]), e.base (by simp [e])⟩,
+        ← (e.induced' (x,0) (x,0) (v,4)).2 ⟨h4, e.base (by simp [e]), e.base (by simp [e])⟩] at this
     exact h5 (e.induced.1 this).1

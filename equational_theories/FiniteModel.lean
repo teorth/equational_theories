@@ -1,6 +1,7 @@
 import equational_theories.Equations.All
 import equational_theories.MagmaOp
 import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Fintype.Pigeonhole
 import Mathlib.Data.Fintype.Units
 import Mathlib.Data.Finite.Prod
 import Mathlib.Logic.Function.Defs
@@ -32,18 +33,18 @@ lemma Finite.fn_eventually_periodic' {G : Type*} [Finite G] (f : G → G) :
     induction n with
     | zero => simp only [zero_mul, add_zero]
     | succ i ih =>
-      have : s + j + (i + 1) * p = s + p + (j + i * p) := by simp_arith only [Nat.succ_mul]
+      have : s + j + (i + 1) * p = s + p + (j + i * p) := by simp +arith only [Nat.succ_mul]
       rw [this, Function.iterate_add f (s + p), ← hp, ← Function.iterate_add, ← Nat.add_assoc, ih]
   rcases eq_zero_or_pos s with h | h
   . simp only [h, zero_add] at hmod
-    have : f^[p] = f^[2*p] := by simp_arith only [hmod 1 p]
+    have : f^[p] = f^[2*p] := by simp +arith only [hmod 1 p]
     exact ⟨p, hpgt, this⟩
   . let n := s * p
     have : f^[n] = f^[2*n] := by
       unfold n
       obtain ⟨ppred, hppred⟩ := Nat.exists_eq_succ_of_ne_zero (by linarith)
       rw [hppred, Nat.mul_add_one, Nat.add_comm]
-      have : 2 * (s + s * ppred) = s + s * ppred + s * p := by simp_arith only [hppred, Nat.mul_succ]
+      have : 2 * (s + s * ppred) = s + s * ppred + s * p := by simp +arith only [hppred, Nat.mul_succ]
       rw [this, ← hmod]
     have ngt : n > 0 := by apply Nat.mul_pos h hpgt
     exact ⟨n, ngt, this⟩
@@ -59,7 +60,7 @@ lemma Finite.fn_mutually_eventually_periodic {G : Type*} [Finite G] (f g : G →
     | zero => simp only [mul_zero, add_zero]
     | succ n ih =>
       rw [Nat.mul_add, ← Nat.add_assoc, Function.iterate_add, ih, ← Function.iterate_add]
-      simp_arith only [mul_one, hperiod]
+      simp +arith only [mul_one, hperiod]
   have periodic_dvd {f : G → G} (p n : ℕ) (hperiod : f^[p] = f^[2*p]) (hngt : n > 0) :
       f^[n*p] = f^[p] := by
     obtain ⟨np, hnp⟩ := @Nat.exists_eq_succ_of_ne_zero n (by linarith)

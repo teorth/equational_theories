@@ -71,15 +71,11 @@ theorem elementsOfNumNodesEq_card_eq_catalan_mul_pow (n : ℕ) :
       ih _ (Finset.antidiagonal.snd_le h)]
     rw [← Finset.mem_antidiagonal.1 h]
     ring
-  · simp_rw [Finset.disjoint_left]
-    rintro ⟨i, j⟩ _ ⟨i', j'⟩ _
-    intro h a
-    cases' a with a l r
-    · intro h; simp at h
-    · refine fun h1 h2 ↦ h ?_
-      trans (order l, order r)
-      · simp at h1; simp [h1]
-      · simp at h2; simp [h2]
-
+  · rintro ⟨i, j⟩ _ ⟨i', j'⟩ _ hne x hxs hxt
+    dsimp only [pairwiseFork] at hxs hxt
+    intro y hy
+    have hy1 := hxs hy
+    have hy2 := hxt hy
+    aesop
 
 end FreeMagma

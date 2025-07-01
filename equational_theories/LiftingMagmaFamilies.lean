@@ -2,6 +2,8 @@ import equational_theories.MagmaLaw
 import equational_theories.Homomorphisms
 import Mathlib.Data.Finset.Basic
 import Mathlib.Data.Finsupp.Defs
+import Mathlib.Data.Multiset.Bind
+import Mathlib.Data.Finset.Union
 import equational_theories.Completeness
 
 open Law
@@ -42,10 +44,11 @@ instance instMagmaList {α : Type _} : Magma (List α) where
   op := List.append
 
 instance : LiftingMagmaFamily List where
+  instMagma := fun α [DecidableEq α] ↦ instMagmaList
   instMagmaDecidableEq := inferInstance
   ι := fun a ↦ [a]
   lift f := {
-    toFun := (List.flatMap · f),
+    toFun := List.flatMap f,
     map_op' := by
       intro x y
       dsimp [Magma.op, List.flatMap]
@@ -55,6 +58,7 @@ instance : LiftingMagmaFamily List where
     intro α _ f
     funext x
     exact (List.flatMap_singleton _ _).symm
+
 
 instance (priority := high) instMagmaMultiset (α : Type _) [DecidableEq α] : Magma (Multiset α) where
   op := (· + ·)

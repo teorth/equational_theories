@@ -336,18 +336,18 @@ lemma PartialSolution.mem_move_rev_bad_of_app_eq (f : PartialSolution G) (x y : 
 variable [Denumerable G]
 
 def Denumerable.notMemFinset (s : Finset G) : G :=
-  Denumerable.ofNat G (Nat.find (Infinite.exists_not_mem_finset (s.image Encodable.encode)))
+  Denumerable.ofNat G (Nat.find (Infinite.exists_notMem_finset (s.image Encodable.encode)))
 
 omit [DecidableEq G] in
 theorem Denumerable.notMemFinset_prop (s : Finset G) : Denumerable.notMemFinset s ∉ s := by
   simp only [notMemFinset, Finset.mem_image, not_exists, not_and, Denumerable.decode_eq_ofNat,
     Option.some.injEq]
   intro mem
-  have : Nat.find (Infinite.exists_not_mem_finset (s.image Encodable.encode)) ∈ s.image Encodable.encode := by
+  have : Nat.find (Infinite.exists_notMem_finset (s.image Encodable.encode)) ∈ s.image Encodable.encode := by
     rw [Finset.mem_image]
     exact ⟨_, mem, by simp⟩
-  have : Nat.find (Infinite.exists_not_mem_finset (s.image Encodable.encode)) ∉ s.image Encodable.encode :=
-    Nat.find_spec (Infinite.exists_not_mem_finset (s.image Encodable.encode))
+  have : Nat.find (Infinite.exists_notMem_finset (s.image Encodable.encode)) ∉ s.image Encodable.encode :=
+    Nat.find_spec (Infinite.exists_notMem_finset (s.image Encodable.encode))
   contradiction
 
 def PartialSolution.move_rev_good' (f : PartialSolution G) (x y : G) (h1 : (y, x) ∉ f.E1)

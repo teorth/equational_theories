@@ -1,4 +1,3 @@
-import Mathlib.Data.Nat.Defs
 import equational_theories.Equations.All
 import equational_theories.EquationalResult
 

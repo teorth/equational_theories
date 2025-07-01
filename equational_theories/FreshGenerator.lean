@@ -34,7 +34,7 @@ def generatorNames' : List (α × Bool) → Finset α
 def generatorNames (x : FreeGroup α) : Finset α := generatorNames' $ FreeGroup.toWord x
 
 theorem existsFreshGeneratorName (A : Finset (FreeGroup α)) :
-    ∃ a, a ∉ A.biUnion generatorNames := by apply Finset.exists_not_mem
+    ∃ a, a ∉ A.biUnion generatorNames := by apply Finset.exists_notMem
 
 noncomputable def freshGeneratorName (A : Finset (FreeGroup α)) : α :=
   (existsFreshGeneratorName A).choose
@@ -225,7 +225,6 @@ theorem dropGenerators_generatorNames' (S : Finset α) (a : List (α × Bool)) :
     simp only [generatorNames', List.singleton_append] at hn
     rw [← mul_mk, MonoidHom.map_mul, ih]
     · suffices head.1 ∈ S by simp [dropGenerators, this]
-      simp [generatorNames'] at hn
       exact Finset.singleton_subset_iff.mp (Finset.union_subset_left hn)
     · apply subset_trans _ hn; simp
 

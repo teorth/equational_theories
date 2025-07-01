@@ -383,7 +383,7 @@ instance ShefferToBooleanAlg : BooleanAlgebra α where
       a = b ⊓ a       := h₁
       _ = b ⊓ (c ⊓ a) := by conv => left; right; rw [h₂]
       _ = b ⊓ c ⊓ a  := by exact assoc₂ b c a
-  le_sup_inf := by intro a b c; simp; rw [distrib₁]; exact Sheffer.le_refl ..
+  le_sup_inf := by intro a b c; rw [distrib₁]; exact Sheffer.le_refl ..
   top := u
   bot := z
   inf_compl_le_bot := by intro a; simp only [compl₂]; exact Sheffer.le_refl ..

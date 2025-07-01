@@ -1,7 +1,7 @@
 import equational_theories.Equations.All
 import equational_theories.Generated.Greedy.OrLemmas
 import equational_theories.Superposition
-import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Fintype.EquivFin
 import Mathlib.Data.Nat.Pairing
 
 namespace Eq677
@@ -529,7 +529,7 @@ structure PartialSolution (G : Type*) where
   finsupp : Finset G
   mem_1 : ∀ X Y Z, ¬R X Y Z ∨ X ∈ finsupp
   mem_2 : ∀ X Y Z, ¬R X Y Z ∨ Y ∈ finsupp
-  mem_3 : ∀ X Y Z, ¬R X Y Z ∨ Z ∈ finsupp  
+  mem_3 : ∀ X Y Z, ¬R X Y Z ∨ Z ∈ finsupp
 
 variable {G : Type*} (ps : PartialSolution G)
 
@@ -583,8 +583,8 @@ theorem PartialSolution.adjoin (a b c : G) (ac : a ≠ c) (bc : c ≠ b) (p3 : �
 open scoped Classical in
 noncomputable def PartialSolution.addArbitrary [Infinite G] (a b : G) : PartialSolution G :=
   if h : ∃ c, ps.R a b c then ps else
-    let c := (Infinite.exists_not_mem_finset (ps.finsupp ∪ {a, b})).choose
-    have hc : c ∉ _ := (Infinite.exists_not_mem_finset (ps.finsupp ∪ {a, b})).choose_spec
+    let c := (Infinite.exists_notMem_finset (ps.finsupp ∪ {a, b})).choose
+    have hc : c ∉ _ := (Infinite.exists_notMem_finset (ps.finsupp ∪ {a, b})).choose_spec
     (ps.adjoin a b c (by simp_all [eq_comm]) (by simp_all)
         (by simpa using h) (fun _ _ h ↦ by have := (ps.mem_3 _ _ _).neg_resolve_left h; simp_all)
         (fun _ _ h ↦ by have := (ps.mem_2 _ _ _).neg_resolve_left h; simp_all)

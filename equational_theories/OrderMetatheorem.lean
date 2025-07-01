@@ -3,11 +3,11 @@ import equational_theories.Counting
 
 theorem FreeMagma.orderLtSubst {α} (t : FreeMagma α) (σ : α → FreeMagma α) :
   FreeMagma.order t ≤ FreeMagma.order (t ⬝ σ) := by
-  cases t <;> simp [order]
-  case Fork t u =>
-    have h₁ := FreeMagma.orderLtSubst t σ
-    have h₂ := FreeMagma.orderLtSubst u σ
-    omega
+  induction t with
+  | Leaf _ => simp
+  | Fork t u ht hu =>
+      rw [order]
+      exact add_le_add (Nat.add_le_add ht hu)  NeZero.one_le
 
 open Law
 -- We use min here, as we want terms of *at least* size n.

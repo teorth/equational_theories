@@ -6,41 +6,6 @@ import Mathlib.Algebra.BigOperators.Fin
 --The notion of term-definable expressions in FO logic, as well other useful lemmas about
 --FO logic
 
-/-- Any `Unique` type is a left identity for type sigma up to equivalence. Compare with `uniqueProd`
-which is non-dependent. -/
-@[simps]
-def Equiv.uniqueSigma {α} (β : α → Type*) [Unique α] : (i:α) × β i ≃ β default :=
-  ⟨fun p ↦ Unique.eq_default p.1 ▸ p.2,
-  fun b ↦ ⟨default, b⟩,
-  by intro; ext; exact Unique.default_eq _; simp,
-  by intro; rfl⟩
-
-/-- A type indexed by  disjoint sums of types is equivalent to the sum of the sums. Compare with
-`Equiv.sigmaSumDistrib`. -/
-@[simps]
-def Equiv.sumSigmaDistrib {α β} (t : α ⊕ β → Type*) :
-    (Σ i, t i) ≃ (Σ i, t (Sum.inl i)) ⊕ (Σ i, t (Sum.inr i)) :=
-  ⟨(match · with
-   | .mk (.inl x) y => .inl ⟨x, y⟩
-   | .mk (.inr x) y => .inr ⟨x, y⟩),
-  Sum.elim (fun a ↦ ⟨.inl a.1, a.2⟩) (fun b ↦ ⟨.inr b.1, b.2⟩),
-  by rintro ⟨x|x,y⟩ <;> simp,
-  by rintro (⟨x,y⟩|⟨x,y⟩) <;> simp⟩
-
-/-- Equivalence between `(i : Fin m) × Fin (n i)` and `Fin (∑ i : Fin m, n i)`. Compare with `finPiFinEquiv`. -/
-def finSigmaFinEquiv {m : ℕ} {n : Fin m → ℕ} : (i : Fin m) × Fin (n i) ≃ Fin (∑ i : Fin m, n i) :=
-  match m with
-  | 0 => @Equiv.equivOfIsEmpty _ _ _ (by simp; exact Fin.isEmpty')
-  | Nat.succ m =>
-    calc _ ≃ _ := (@finSumFinEquiv m 1).sigmaCongrLeft.symm
-      _ ≃ _ := Equiv.sumSigmaDistrib _
-      _ ≃ _ := Equiv.sumCongr
-        (Equiv.sigmaCongrRight fun _ ↦ Equiv.refl _)
-        ((Equiv.uniqueSigma _).trans (Equiv.refl _))
-      _ ≃ _ := finSigmaFinEquiv.sumCongr (Equiv.refl _)
-      _ ≃ _ := finSumFinEquiv
-      _ ≃ _ := finCongr (Fin.sum_univ_castSucc n).symm
-
 section TermDef
 namespace Function
 
@@ -59,15 +24,15 @@ namespace LEquiv
 variable {L L' : Language}
 variable {M α β γ: Type*}
 
-/-- Maps a term's symbols along a language equivalence. -/
-@[simps]
-def onTerm (φ : L ≃ᴸ L') : L.Term α ≃ L'.Term α where
-  toFun := φ.toLHom.onTerm
-  invFun := φ.invLHom.onTerm
-  left_inv := by
-    rw [Function.leftInverse_iff_comp, ← LHom.comp_onTerm, φ.left_inv, LHom.id_onTerm]
-  right_inv := by
-    rw [Function.rightInverse_iff_comp, ← LHom.comp_onTerm, φ.right_inv, LHom.id_onTerm]
+-- /-- Maps a term's symbols along a language equivalence. -/
+-- @[simps]
+-- def onTerm (φ : L ≃ᴸ L') : L.Term α ≃ L'.Term α where
+--   toFun := φ.toLHom.onTerm
+--   invFun := φ.invLHom.onTerm
+--   left_inv := by
+--     rw [Function.leftInverse_iff_comp, ← LHom.comp_onTerm, φ.left_inv, LHom.id_onTerm]
+--   right_inv := by
+--     rw [Function.rightInverse_iff_comp, ← LHom.comp_onTerm, φ.right_inv, LHom.id_onTerm]
 
 theorem onTerm_symm (φ : L ≃ᴸ L') : (φ.onTerm.symm : L'.Term α ≃ L.Term α) =  φ.symm.onTerm :=
   rfl
@@ -407,12 +372,10 @@ theorem subst_definitions_eq {k : ℕ} (f : L.BoundedFormula α k)
         let hxs := fun i ↦ ((ts i).subst_definitions_extraVals hFs (Sum.elim vL vR)).2
         replace h := h xs (by
           intro i hi
-          simp at hi
-          rcases hi with ⟨w,hiw,hiw₂⟩
-          rw [List.mem_ofFn] at hiw
-          obtain ⟨j,rfl⟩ := hiw
-          simp at hiw₂
-          obtain ⟨a,ha₁,rfl⟩ := hiw₂
+          obtain ⟨w_list, hw_list_in_ofFn, hs_in_w_list⟩ := List.mem_flatten.mp hi
+          obtain ⟨j, rfl⟩ := List.mem_ofFn.mp hw_list_in_ofFn
+          simp at hs_in_w_list
+          obtain ⟨a,ha₁,rfl⟩ := hs_in_w_list
           have := hxs j a ha₁
           rw [Formula.Realize] at this
           rw [realize_relabel]
