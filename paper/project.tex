@@ -43,12 +43,13 @@ Of these two pieces, \emph{only the kernel is considered trusted}. Programs in t
 \end{itemize}
 
 \begin{remark}
-    A bug in the kernel that allows wrong statements to be proved is usually called a \emph{soundness} bug. Concretely this means that a proof of the vacuous proposition $False$ can be produced and pass the kernel check. Such bugs are rare but not entirely non-existent \TODO{Collect github issues/tickets of soundness bugs across ITPs}. This is distinct from being able to proof $False$ by simply assuming contradictory or false statements. A proof of the proposition $False$ implies a proof of any statement by the emph{ex falso quod libet} inference rule.
+    A bug in the kernel that allows wrong statements to be proved is usually called a \emph{soundness} bug. Concretely this means that a proof of the vacuous proposition $False$ can be produced and pass the kernel check. Such bugs are rare but not entirely non-existent \TODO{Collect a couple of example github issues/tickets of soundness bugs across ITPs}. This is distinct from being able to proof $False$ by simply assuming contradictory or false statements. A proof of the proposition $False$ implies a proof of any statement by the emph{ex falso quod libet} inference rule.
+
 \end{remark}
 
 Users of lean only interact directly with the higher level programming language and usually get confirmation of the correctness of their proofs through the editor interface. Further, collaborators on a project such as ours are likely to deploy automated tools such as SAT solvers, SMT solvers, first-order theorem provers, and perhaps even modern AI tools. These tools usually produce proofs which are imported or inserted into a lean source files. Some modern AI tools are integrated into code editors which might automatically produce or edit even the statements of theorems and the definitions they deal with. Given the limits to trust mentioned above, a productive and useful collaboration using lean also requires a collaboration and verification infrastructure which involves both human effort and automated tools. It is in this context that we discuss the project infrastructure. It is a concrete answer to the questions posed by one of the authors at the beginning of this project \cite{Tao_blog_Sep_2024} that combines tools from the ITP community and the software engineering community. All these tools are known well in these fields.The goal of this exposition is to explain how they allay the concerns described above.
 
-
+\TODO{This would be a good point to describe the role of maintainers and reviewing. It would also serve to explain how the external checkers integrate with the CI. Maybe we can blend it all into what has been written so far}
 \begin{itemize}
     \item Project generation from \href{https://github.com/pitmonticone/LeanProject}{template}
     \item GitHub issue management with \href{https://github.com/teorth/equational_theories/labels}{labels} and \href{https://github.com/users/teorth/projects/1}{task management dashboard}
