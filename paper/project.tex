@@ -34,7 +34,7 @@ It helps to understand exactly what it means to trust lean. As mentioned before,
     \item A sophisticated programming language in which users express their definitions and theorems. Programs in this language are said to  be \emph{elaborated} to produce definitions and proofs in the core logic that the kernel can check.
 \end{enumerate}
 
-Of these two pieces, \emph{only the kernel is considered trusted}. Programs in the programming langauge are translated by an \emph{elaborator} to the spartan language of the kernel. In reality the elaborator does much more, but the key takeaways from this is the following:
+Of these two pieces, \emph{only the kernel is considered trusted}. Programs in the programming language are translated by an \emph{elaborator} to the spartan language of the kernel. In reality the elaborator does much more, but the key takeaways from this is the following:
 \begin{itemize}
     \item The kernel only verifies programs of a very simple barebones language. A proof verified by Lean can be trusted \emph{modulo} the correctness of the kernel implementation. This caveat can be usually dropped because, the kernel is also one of the most battle-hardened pieces of an ITP.
     \item The kernel checks proofs against a given specification. This means that if the formal theorem statement itself is flawed or incorrectly uses other definitions, a correct and verified proof of this theorem would be mathematically meaningless. The formal statement of a theorem gives expression to a mathematician's intuition and intention, and as such, the only check against mistakes in this area come from human review. Lean cannot offer any guarantees against false statements written by its users.
