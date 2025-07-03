@@ -11,10 +11,10 @@ A shorter Austin law of order $6$ was established in \cite{Kisielewicz}:
 \begin{theorem}[Kisielewicz's first Austin law]
   \lean{InfModel.Finite.Equation374794_implies_Equation2,InfModel.Equation374794_not_implies_Equation2}\leanok
   \label{kis-thm}\uses{eq374794,eq2}
-  \Cref{eq374794} is an Austin law.
+  \Equaref{374794} is an Austin law.
 \end{theorem}
 
-\begin{proof} \leanok  First we show that every finite model of \Cref{eq374794} is trivial.  Write $y^2 := y \op y$ and $y^3 := y^2 \op y$.  For any $y,z$, introduce the functions ${f_y: x \mapsto y^3 \op x}$ and ${g_{yz}: x \mapsto x \op (y^2 \op z)}$.  \Cref{eq374794} says that $g_{yz}(f_y(x))=x$, hence by finiteness $g_{yz}=f_y^{-1}$, showing that $g_{yz}$ does not depend on the value of $z$.  Since
+\begin{proof} \leanok  First we show that every finite model of \Equaref*{374794} is trivial.  Write $y^2 := y \op y$ and $y^3 := y^2 \op y$.  For any $y,z$, introduce the functions ${f_y: x \mapsto y^3 \op x}$ and ${g_{yz}: x \mapsto x \op (y^2 \op z)}$.  \Equaref*{374794} says that $g_{yz}(f_y(x))=x$, hence by finiteness $g_{yz}=f_y^{-1}$, showing that $g_{yz}$ does not depend on the value of $z$.  Since
 $$ f_y(y^2 \op z) = g_{yz}(y^3),$$
 it follows that $f_y(y^2 \op z)=f_y(y^3)$ which by injectivity of $f_y$ implies that $z\mapsto y^2 \op z$ is a constant function (with $y$ fixed).  Substituting $y^2$ for $y$ shows that the same is true for $z\mapsto (y^2 \op y^2) \op z$, and since
 $$ f_y(z) = (y^2 \op y) \op z = (y^2 \op y^2) \op z$$
@@ -36,12 +36,12 @@ and since $(y \op y) \op z$ is a power of two for all $y, z$ it follows that
 $$ 3^x \op ((y \op y) \op z) = x. $$
 The case $x=1$ requires a further argument: observe that $w = (y \op y) \op z$ evaluates to one unless $z = 2^y$, in which case it evaluates to $2^{2^y}$ (which is greater than or equal to four).  In particular, $w$ never takes the value two.  Thus
 $$ (((y \op y) \op y) \op 1) \op ((y \op y) \op z) = 2 \op w = 1, $$
-concluding our proof that this magma is a model of \Cref{eq374794}
+concluding our proof that this magma is a model of \Equaref*{374794}
 \end{proof}
 
 An even shorter law (order $5$) was obtained by the same author in a follow-up paper \cite{Kisielewicz2}:
 
-\begin{theorem}[Kisielewicz's second Austin law]\label{kis-thm2}\uses{eq2, eq28770}\lean{InfModel.Finite.Equation28770_implies_Equation2}\lean{InfModel.Equation28770_not_implies_Equation2}\leanok \Cref{eq28770} is an Austin law.
+\begin{theorem}[Kisielewicz's second Austin law]\label{kis-thm2}\uses{eq2, eq28770}\lean{InfModel.Finite.Equation28770_implies_Equation2}\lean{InfModel.Equation28770_not_implies_Equation2}\leanok \Equaref{28770} is an Austin law.
 \end{theorem}
 
 \begin{proof} \leanok Using the $y^2$ and $y^3$ notation as before, the law reads
@@ -65,20 +65,20 @@ for $z \neq 3^y, 2^{3^y}$.  All other assignments of $\op$ may be made arbitrari
 
 In that paper a computer search was also used to show that no law of order four or less is an Austin law.
 
-An open question is whether \Cref{eq5093} is an Austin law.  We have the following partial result from \cite{Kisielewicz2}:
+An open question is whether \Equaref{5093} is an Austin law.  We have the following partial result from \cite{Kisielewicz2}:
 
-\begin{theorem}[Equation 5093 has no non-trivial finite models]\lean{InfModel.Finite.Equation5093_implies_Equation2}\leanok\label{5093-nontrivial}\uses{eq5093, models-def} \Cref{eq5093} has no non-trivial finite models.
+\begin{theorem}[Equation 5093 has no non-trivial finite models]\lean{InfModel.Finite.Equation5093_implies_Equation2}\leanok\label{5093-nontrivial}\uses{eq5093, models-def} \Equaref*{5093} has no non-trivial finite models.
 \end{theorem}
 
-\begin{proof} \leanok From \Cref{eq5093} we see that the map $w \mapsto y \op w$ is onto, hence injective in a finite model.  Using this injectivity four times in \Cref{eq5093}, we see that $z \op y$ does not depend on $z$, hence the expression
-$x \op (z \op y)$ does not depend on $x$.  By \Cref{eq5093} again, this means that $x$ does not depend on $x$, which is absurd in a non-trivial model.
+\begin{proof} \leanok From \Equaref*{5093} we see that the map $w \mapsto y \op w$ is onto, hence injective in a finite model.  Using this injectivity four times in \Equaref*{5093}, we see that $z \op y$ does not depend on $z$, hence the expression
+$x \op (z \op y)$ does not depend on $x$.  By \Equaref*{5093} again, this means that $x$ does not depend on $x$, which is absurd in a non-trivial model.
 \end{proof}
 
 We also have such a non-implication involving two laws of order $4$:
 
 \begin{theorem}[3994 implies 3588 for finite models]\label{finite_imp_3994_3588_thm}\uses{eq3994,eq3588,models-def}
   \lean{InfModel.Finite.Equation3994_implies_Equation3588}\leanok
-  All finite magmas which satisfy \Cref{eq3994} also satisfy \Cref{eq3588}.
+  All finite magmas which satisfy \Equaref{3994} also satisfy \Equaref{3588}.
 \end{theorem}
 
 \begin{proof}\label{finite_imp_3994_3588} \leanok
@@ -91,16 +91,16 @@ We also have such a non-implication involving two laws of order $4$:
 
 \begin{theorem}[3994 does not imply 3588 for infinite models]\label{non_imp_3994_3588_thm}\uses{eq3994,eq3588,models-def}
   \lean{InfModel.Equation3994_not_implies_Equation3588}\leanok
-  There exists a magma which satisfies \Cref{eq3994} and not \Cref{eq3588}.
+  There exists a magma which satisfies \Equaref*{3994} and not \Equaref*{3588}.
 \end{theorem}
 
 \begin{proof} \leanok
   Consider $\mathbb{N}$, with $x \op y$ defined as $x \oplus y$ (bitwise XOR) if $x$ and $y$ are even,
   $y+2$ if only $y$ is even, $x \dot - 2$ if only $x$ is even, and $0$ if both are odd.
   Note that the range of the operation is the set of even naturals.
-  \Cref{eq3994} is satisfied, because for even $z$ we get $z \oplus (x \op y) \oplus z = x \op y$
+  \Equaref*{3994} is satisfied, because for even $z$ we get $z \oplus (x \op y) \oplus z = x \op y$
   and for odd $z$ we get $(x \op y) + 2 \dot - 2 = x \op y$.
-  Setting $x = y = z = 1$, \Cref{eq3588} isn't satisfied.
+  Setting $x = y = z = 1$, \Equaref*{3588} isn't satisfied.
 \end{proof}
 
 The following result was established in \cite{austin_finite}:
