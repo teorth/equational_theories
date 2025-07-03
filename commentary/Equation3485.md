@@ -1,0 +1,1 @@
+This law is equivalent to stating the [unipotence law 40](https://teorth.github.io/equational_theories/implications/?40) (all squares are equal to the same idempotent element `e`) and the relation `x ◇ (e ◇ x) = e`.
