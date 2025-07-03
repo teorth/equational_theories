@@ -1,1 +1,1 @@
-The magma operation is exactly characterized by the squaring map `S: x ↦ x◇x` and the operation `M × (M∖im(S)) → M`.
+The magma operation is exactly characterized by the squaring map `S: x ↦ x◇x`, which is idempotent (`S(S(x)) = S(x)`), and the operation `M × (M∖im(S)) → M`, as the operation on `M × im(S)` is left projection.

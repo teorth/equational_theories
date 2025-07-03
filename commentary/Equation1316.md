@@ -1,0 +1,6 @@
+A magma satisfying this law is a quasigroup (left and right multiplication are bijective) in which the square of left multiplication and the square of right division are inverses of each other.
+
+This law is equivalent to the conjunction of [law 707](https://teorth.github.io/equational_theories/implications/?707) and [law 2940](https://teorth.github.io/equational_theories/implications/?2940).  In finite magmas, or in quasigroups, these three laws individually are equivalent.  Without such assumptions, law 1316 implies 707 and its dual 2940, but no other implication holds.
+
+This law is part of a series of laws that state that the magma is a quasigroup in which some j-th power of right multiplication is the inverse of some k-th power of left multiplication.  For `j=1` one has the semi-symmetric quasigroup [law 14](https://teorth.github.io/equational_theories/implications/?14) for `k=1`, [law 125](https://teorth.github.io/equational_theories/implications/?125) for `k=2`, [law 714](https://teorth.github.io/equational_theories/implications/?714) for `k=3`, law 5974 for `k=4`, and so on.  For each `k>1`, there exist two weaker laws that are equivalent to it in the finite case or in quasigroups.  For `j=k=2` one has [law 1316](https://teorth.github.io/equational_theories/implications/?1316).
+

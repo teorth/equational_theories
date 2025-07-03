@@ -1,7 +1,9 @@
-## An involutive crossed inverse quasigroup law
+## The law for semi-symmetric loops equipped with an involutive automorphism
 
-This law is a twist of the semi-symmetric quasigroup [law 14](https://teorth.github.io/equational_theories/implications/?14) `y◇(x◇y) = x` by an involutive automorphism `f`.  Specifically, the middle crossed inverse property `f(y)◇(x◇y)=x` holds, or equivalently `(f(y)◇x)◇y=x`, for some map `f` with `f(f(x)) = x` and `f(x◇y) = f(x)◇f(y)`.
+A magma satisfying this law is a quasigroup (left and right multiplication are bijective).  All squares are equal to the same element `e`, which is idempotent and central (`x◇e=e◇x`), and the cubing map `C: x ↦ x◇(x◇x) = x◇e` is an involutive automorphism (`C(C(x))=x` and `C(x◇y)=C(x)◇C(y)`).
 
-It implies that all squares are equal to the same element `e`, which is central, and `f(x) = x ◇ e = e ◇ x`.
+The magma obeys the middle crossed inverse property `C(y)◇(x◇y)=x`, or equivalently `(C(y)◇x)◇y=x`.  (See the [commentary on law 4273](https://teorth.github.io/equational_theories/implications/?4273) for this terminology.)  More symmetrically, for any three elements `x,y,z` of the magma, the equations `x=C(y◇z)`, `y=C(z◇x)`, `z=C(x◇y)` are equivalent.
 
-A different twist is [law 692](https://teorth.github.io/equational_theories/implications/?692), in which `f` is not assumed to be involutive, but one imposes additionally that `y◇(x◇y)` and `(y◇x)◇y` are independent of `y`.
+The operation `x◆y = C(x◇y)` obeys the [semi-symmetric loop law 887](https://teorth.github.io/equational_theories/implications/?887).  Magmas satisfying law 695 are in one-to-one correspondence with such semi-symmetric loops equipped with the involutive automorphism `C`.
+
+Analogous twists of the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14) `x = y◇(x◇y)` include [law 66](https://teorth.github.io/equational_theories/implications/?66), [law 692](https://teorth.github.io/equational_theories/implications/?692), [law 695](https://teorth.github.io/equational_theories/implications/?695), [law 880](https://teorth.github.io/equational_theories/implications/?880), [law 978](https://teorth.github.io/equational_theories/implications/?978), [law 1073](https://teorth.github.io/equational_theories/implications/?1073), [law 1492](https://teorth.github.io/equational_theories/implications/?1492), [law 1492](https://teorth.github.io/equational_theories/implications/?1496), [law 1695](https://teorth.github.io/equational_theories/implications/?1695), [law 1719](https://teorth.github.io/equational_theories/implications/?1719).

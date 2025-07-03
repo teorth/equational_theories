@@ -1,0 +1,1 @@
+This law implies that left multiplication by squares, restricted to the submagma `P = {x ◇ y | x, y ∈ M}`, is the identity, namely `x ◇ x is a left unit in `P`.  In particular the squaring map `S: x ↦ x ◇ x` is idempotent, namely `S(S(x)) = S(x)`.

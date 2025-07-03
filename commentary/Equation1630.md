@@ -1,0 +1,1 @@
+This law implies that the squaring and cubing maps `S: x ↦ x◇x` and `C: x ↦ x◇(x◇x)` obey `C(S(x)) = x` (hence `S` is injective and `C` surjective).  In a finite magma, `C` and `S` are inverse bijections and `x◇(x◇y)` is `y`-independent (and equal to `C(x)`).

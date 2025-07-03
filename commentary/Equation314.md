@@ -1,4 +1,4 @@
-This law is equivalent to stating that all squares and all three-fold products of the form `_ ◇ (_ ◇ _)` are equal to the same element.
+This law is equivalent to stating that all squares and all three-fold products of the form `_ ◇ (_ ◇ _)` are equal to the same element.  In particular, the squaring map `S: x ↦ x◇x` is idempotent, namely `S(S(x)) = S(x)`.
 
 See also [law 4274](https://teorth.github.io/equational_theories/implications/?4274) which implies that three-fold products `_ ◇ (_ ◇ _)` are all equal.
 

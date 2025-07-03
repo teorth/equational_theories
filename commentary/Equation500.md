@@ -1,0 +1,3 @@
+This law states that the cubing map `C: x ↦ x◇(x◇x)` is an involution (`C(C(x))=x`), and that all left multiplications square to the inverse of `C` (and in particular are bijective).
+
+The left division operation defined by `x ◇ (x : y) = y` (or equivalently `x : y = x ◇ C(y)`) satisfies [law 419](https://teorth.github.io/equational_theories/implications/?419), namely `x = x : (x : (y : (y : x)))`.  Conversely, in a magma satisfying law 419, if left multiplications are bijective, then left division satisfies law 500.  Thus, laws 500 and 419 are parastrophically equivalent for (left-)quasigroups.

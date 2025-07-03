@@ -1,3 +1,6 @@
-## "Hardy"
+## Hardy law
 
-Discussed [here](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Outstanding.20equations.2C.20v1).  It neither implies nor is implied by the related equations "Ramanujan" [1729](https://teorth.github.io/equational_theories/implications/?1729) nor  "Littlewood" [2541](https://teorth.github.io/equational_theories/implications/?2541).  However, for translation-invariant models, "Hardy" is a consequence of "Ramanujan", and all three laws are equivalent for finite models.
+This law implies that left multiplications are surjective and right multiplications are injective.  In finite magmas, or in quasigroups, this law is equivalent to the
+[Ramanujan law 1729](https://teorth.github.io/equational_theories/implications/?1729) and [Littlewood law 2541](https://teorth.github.io/equational_theories/implications/?2541).  Without such assumptions, the Ramanujan law 1729 implies the Littlewood law 2541, but no other implication holds.  For translation-invariant models, the Hardy law is a consequence of the Ramanujan law.
+
+The laws 1729, 917, 2541 are twists of laws [125](https://teorth.github.io/equational_theories/implications/?125), [73](https://teorth.github.io/equational_theories/implications/?73), [229](https://teorth.github.io/equational_theories/implications/?229) by the squaring map.

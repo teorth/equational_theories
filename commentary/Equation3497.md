@@ -1,0 +1,1 @@
+This law states that all squares are equal to the same idempotent element ([unipotence law 40](https://teorth.github.io/equational_theories/implications/?40)) and all products of the form `x ◇ ((y ◇ x) ◇ y)` are equal to it too.

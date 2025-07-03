@@ -2,6 +2,8 @@ This law implies the [associative law 4512](https://teorth.github.io/equational_
 
 Denoting `∞∈M` this element, and `P = {x◇y|x,y∈M}`, the magma is characterized by the pointed set `(P,∞)`, the set `M∖P`, and an external operation `(M∖P)×(M∖P) → P`.
 
+This law implies that the squaring map `S: x ↦ x◇x` obeys `S(S(S(x))) = S(S(x))`.
+
 The free magma on some set `S` of generators for this law is `S ⊔ S×S ⊔ {∞}`, on which `s◇t=(s,t)` and every other product is `∞`.
 
 The equivalence class of this law is large (14 laws in our list of 4694 laws).

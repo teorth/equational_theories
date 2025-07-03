@@ -1,4 +1,4 @@
-This law implies the [associative law 4512](https://teorth.github.io/equational_theories/implications/?4512) and the [law 4362](https://teorth.github.io/equational_theories/implications/?4362) `x◇(y◇z) = y◇(x◇z)` dual to the non-associative-permutative law.
+This law implies the [associative law 4512](https://teorth.github.io/equational_theories/implications/?4512) and the [law 4362](https://teorth.github.io/equational_theories/implications/?4362) `x◇(y◇z) = y◇(x◇z)` dual to the non-associative-permutative law.  The squaring map `S: x ↦ x◇x` is idempotent, namely `S(S(x)) = S(x)`.
 
 Its commutative version is [law 3385](https://teorth.github.io/equational_theories/implications/?3385).
 

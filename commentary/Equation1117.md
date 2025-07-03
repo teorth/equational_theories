@@ -1,4 +1,6 @@
-This law states that `L_y ∘ R_z` is involutive for all `y,z`, where `L_z(x) = z◇x` and `R_z(x) = x◇z` are left/right multiplications.
+This law states that `L(y) ∘ R(z)` is involutive for all `y,z`, where `L(z) : x ↦ z◇x` and `R(z) : x ↦ x◇z` are left/right multiplications.
+
+This law implies that left multiplications are surjective and right multiplications are injective.  In finite magmas, or in quasigroups, it is equivalent to its dual, [law 2538](https://teorth.github.io/equational_theories/implications/?2538).
 
 Commutative magmas obeying this law are the same as magmas obeying [law 556](https://teorth.github.io/equational_theories/implications/?556).
 

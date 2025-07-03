@@ -1,0 +1,3 @@
+This law is a twist of the [Dupont law 63](https://teorth.github.io/equational_theories/implications/?63) by the squaring map.  It implies that left multiplications are surjective.
+
+Finite magmas satisfying this law are left quasigroups (left multiplications are bijective), the squaring and cubing maps `S: x ↦ x◇x` and `C: x ↦ x◇(x◇x)` are inverse bijections, and [law 2847](https://teorth.github.io/equational_theories/implications/?2847) holds.  In addition, the operation defined by `x◆y = x◇(x◇y)` satisfies [law 1722](https://teorth.github.io/equational_theories/implications/?1722) `x=(y◆y)◆((x◆y)◆y)`.

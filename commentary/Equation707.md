@@ -1,0 +1,1 @@
+In finite magmas, or when left multiplications are assumed to be bijective, this law is equivalent to its dual law 2940, and to [law 1316](https://teorth.github.io/equational_theories/implications/?1316) and its dual law 2331.  Without such assumptions, law 1316 is equivalent to 2331 and they imply the other two laws, but there are no other implications between these laws.
