@@ -30,3 +30,9 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\formaleq}{\simeq}
 \newcommand{\op}{\diamond}
+
+\newcommand{\Equadef}[2]{%
+  \expandafter\gdef\csname Equa#1\endcsname{\ensuremath{#2}}}
+\NewDocumentCommand{\Equaref}{sm}{%
+  \hyperref[eq#2]{Equation #2}%
+  \IfBooleanF{#1}{ $(\csname Equa#2\endcsname)$}}
