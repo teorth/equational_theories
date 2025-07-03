@@ -1,0 +1,1 @@
+This law implies that the cubing map `C: x ↦ x◇(x◇x)` is injective.  In a finite magma, it is bijective, with its inverse being the other cubing map `B: x ↦ (x◇x)◇x`, and additionally one has `(y◇y)◇x = B(x)` independently of `y`.
