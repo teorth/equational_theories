@@ -22,7 +22,7 @@ For these cases we used a simple heuristic, where we instantiate the variables w
 Out of the possible implications between the $34$ equations considered in \Cref{subgraph-eq}, this method found an additional 86 implications that were not found before.
 Some of these seem to be missing in the computation of the transitive closure of implications of the equalities (an investigation is in progress), but some of these are genuinely new theorems, and the \texttt{lean-egg} tactic finds good proofs of these (these can be rewritten using \texttt{calc} style with a different tactic, \texttt{calcify}: \url{https://github.com/nomeata/lean-calcify}). An example of this is the following proof, found by \texttt{lean-egg}:
 
-\begin{theorem}[14 implies 23]\label{14_implies_23} \uses{eq23,eq14}\lean{Subgraph.Equation14_implies_Equation23}\leanok  \Equaref{14} is equivalent to \Equaref{23}.
+\begin{theorem}[14 implies 23]\label{14_implies_23} \uses{eq23,eq14}\lean{Subgraph.Equation14_implies_Equation23}\leanok  \Equareffull{14} is equivalent to \Equareffull{23}.
 \end{theorem}
 
 \begin{proof}\leanok
