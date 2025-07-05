@@ -1,1 +1,3 @@
 This law is equivalent to stating that all squares are equal to the same element `e` ([unipotence law 40](https://teorth.github.io/equational_theories/implications/?40)) and that `e ◇ (x ◇ e) = x`.  The products `x ◇ y` for `x,y≠e` and `x≠y` are unconstrained.  In finite magmas, or in quasigroups, it is equivalent to its dual, [law 2132](https://teorth.github.io/equational_theories/implications/?2132).
+
+This law was among the last few (of order up to 4) for which the [full spectrum question](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Equations.20with.20full.20spectrum/near/489997789) was resolved: it has models of all finite sizes, but not necessarily linear ones.

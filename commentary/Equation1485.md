@@ -8,8 +8,7 @@ Has an intriguing graph-theoretic interpretation in terms of directed graphs wit
 
 The last-standing implications for this equation were resolved with a 32-element magma (that violates equations 151, 3456, 3862) that was later understood using the twisting semigroup method.
 
-Non-trivial finite examples exist, but so far all known examples have an order that is either a square, or twice a square.
-For all known examples and all elements x, the non-empty preimages of left-multiplication by x all have the same cardinal (and likewise for right-multiplication).
+The [finite spectrum](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Order.203.20Spectra/with/527073087) of (cardinalities of finite magmas satisfying) this law conjecturally consists of [squares and twice squares](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1485/near/480045734).
 
 This law implies that the squaring map `S: x ↦ x◇x` obeys `S(S(S(x))) = S(x)`.
 

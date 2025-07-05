@@ -5,3 +5,5 @@ Another weaker version of the central groupoid law, [Equation 168](https://teort
 It has a [graph-theoretic interpretation](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/484345673).  It has [finite models](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Understanding.20Finite.201486.20Magmas) obtained by duplicating a few elements in a natural central groupoid, but also has some sporadic finite models of order 21.  Many finite implications of this law were falsified through large finite models, as well as via the twisting semigroup method.
 
 This law implies that the squaring map `S: x ↦ x◇x` obeys `S(S(S(x))) = S(x)`.
+
+The finite spectrum of (cardinalities of finite magmas satisfying) this law is [unknown](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Order.203.20Spectra/with/527073087).
