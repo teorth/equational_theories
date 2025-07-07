@@ -1,6 +1,6 @@
-This law is equivalent to the [law 4379](https://teorth.github.io/equational_theories/implications/?4379) stating that all three-fold products of the form `_ ◇ (_ ◇ _)` are equal.
+This law is equivalent to the [law 4379](https://teorth.github.io/equational_theories/implications/?4379) stating that all three-fold products of the form `_ ◇ (_ ◇ _)` are equal to the same right zero element `∞`.
 
-Denoting `∞∈M` this element, and `P = {x◇y|x,y∈M}`, the magma is characterized by the pointed set `(P,∞)`, the set `M∖P`, and an operation `M×(M∖P) → P`.
+Denoting by `P = {x◇y|x,y∈M}`, the magma is characterized by the pointed set `(P,∞)`, the set `M∖P`, and an operation `M×(M∖P) → P`.
 
 In particular, this law implies that the squaring map `S: x ↦ x◇x` obeys `S(S(S(x))) = S(S(x))`.
 
