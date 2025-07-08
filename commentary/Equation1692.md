@@ -5,3 +5,5 @@ Closely related to the ["Dupont" equation, 63](https://teorth.github.io/equation
 This pair shares many similarities with the "Asterix" ([equation 65](https://teorth.github.io/equational_theories/implications/?65)) and "Obelix" ([equation 1491](https://teorth.github.io/equational_theories/implications/?1491)) pair.
 
 Law 1692 implies that left and right multiplications are injective (in contrast, law 63 implies their surjectivity).
+
+This law cannot hold in a non-trivial semigroup (associative magma).

@@ -3,3 +3,5 @@ This law implies that the squaring map `S: x ↦ x◇x` and cubing maps `B: x �
 This law is equivalent to [law 723](https://teorth.github.io/equational_theories/implications/?723) together with [law 3897](https://teorth.github.io/equational_theories/implications/?3897).
 
 The left division operation defined by `x ◇ (x : y) = y` obeys law 42146, `y : (x : (y : (z : x))) = z : x`.
+
+This law cannot hold in a (non-trivial) commutative magma or quasigroup.

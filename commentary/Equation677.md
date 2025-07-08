@@ -4,4 +4,6 @@ This equation is the last one to resist analysis for either the infinite or fini
 
 This law implies that left multiplications are surjective.  For finite magmas they are thus bijective.
 
+This law cannot hold in a non-trivial semigroup (associative magma).
+
 The finite spectrum of (cardinalities of finite magmas satisfying) this law is [unknown](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Order.203.20Spectra/with/527073087).

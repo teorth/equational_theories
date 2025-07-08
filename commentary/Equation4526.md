@@ -2,7 +2,7 @@ This law implies the [associative law 4512](https://teorth.github.io/equational_
 
 Denoting `∞∈M` this element, and `P = {x◇y|x,y∈M}`, the magma is characterized by the pointed set `(P,∞)`, the set `M∖P`, and an external operation `(M∖P)×(M∖P) → P`.
 
-This law implies that the squaring map `S: x ↦ x◇x` obeys `S(S(S(x))) = S(S(x))`.
+This law implies that the squaring map `S: x ↦ x◇x` obeys `S(S(S(x))) = S(S(x))`.  This law cannot hold in a non-trivial quasigroup.
 
 The free magma on some set `S` of generators for this law is `S ⊔ S×S ⊔ {∞}`, on which `s◇t=(s,t)` and every other product is `∞`.
 

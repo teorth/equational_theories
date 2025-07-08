@@ -8,4 +8,4 @@ A special type of central groupoid is a natural central groupoid, characterized 
 
 This [paper of Kundgen, Leander, and Thomassen](https://www.sciencedirect.com/science/article/pii/S0097316511000616) discusses a number of ways to generate new central groupoids from old, including "switchings" and "extensions".
 
-This law implies that the squaring map `S: x ↦ x◇x` is an involution.
+This law cannot hold in a (non-trivial) commutative or associative magma nor in a quasigroup.  This law implies that the squaring map `S: x ↦ x◇x` is an involution.
