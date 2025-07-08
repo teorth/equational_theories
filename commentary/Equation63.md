@@ -12,4 +12,4 @@ As observed by Belousov [1], in a quasigroup satisfying this law, the pair of eq
 
 [1]: V.D. Belousov. Parastrophic-orthogonal quasigroups. Translated from the 1983 Russian original. Quasigroups Relat. Syst., 13(1):25–72, 2005.
 
-This is the law of order 3 with the [most complicated finite spectrum](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Order.203.20Spectra/with/527073087) (cardinalities of finite magmas satisfying this law).
+This is the law of order 3 with the [most complicated finite spectrum](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Order.203.20Spectra/with/527073087) (cardinalities of finite magmas satisfying this law).  It has no non-trivial associative model.
