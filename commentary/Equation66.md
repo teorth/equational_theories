@@ -1,6 +1,8 @@
-## A twist of the semi-symmetric quasigroup law
+## The law for Mendelsohn quasigroups equipped with an involutive automorphism
 
 A magma satisfying this law is a quasigroup (left and right multiplication are bijective).  The squaring map `S: x ↦ x◇x` is an involutive automorphism (`S(S(x))=x` and `S(x◇y)=S(x)◇S(y)`), and for any three elements `x,y,z` of the magma the equations `x=S(y◇z)`, `y=S(z◇x)`, `z=S(x◇y)` are equivalent.
+
+The operation `x◆y = S(x◇y)` obeys the [Mendelsohn quasigroup law 4961](https://teorth.github.io/equational_theories/implications/?4961), namely the semi-symmetric quasigroup [law 14](https://teorth.github.io/equational_theories/implications/?14) together with the idempotence [law 3](https://teorth.github.io/equational_theories/implications/?3), and the map `S` is an involutive automorphism for `◆`.  Magmas satisfying law 66 are in one-to-one correspondence with Mendelsohn quasigroups equipped with such an involutive automorphism: the operation `◇` is reconstructed by `x◇y = S(x◆y)`.
 
 This law together with associativity is equivalent to stating that the magma is a commutative group of exponent 3.
 

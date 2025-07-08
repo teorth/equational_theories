@@ -1,3 +1,3 @@
 A magma satisfying this law is a quasigroup (left and right multiplication are bijective).
 
-The finite spectrum of (cardinalities of finite magmas satisfying) this law consists of all [sums of two squares](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Order.203.20Spectra/with/526300502).
+The left division operation defined by `x ◇ (x : y) = y` satisfies [law 556](https://teorth.github.io/equational_theories/implications/?556).  Conversely, a magma satisfying law 556 is a quasigroup and its left division satisfies law 546, so the two laws are parastrophically equivalent.  They share the same finite spectrum (cardinalities of finite magmas satisfying the law): all [sums of two squares](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Order.203.20Spectra/with/526300502).
