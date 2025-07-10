@@ -293,6 +293,40 @@ $$ (1,0) \neq ((0,0) \op' (1,0)) \op' (((1,0) \op' (1,0)) \op (1,t))$$
 for any $t \in \Z \backslash \{0\}$. But these are the only counterexamples created; and if one then sets $(0,0) \op' (1,t) = (0,0)$ for \emph{all} $t \in \Z$, then one can check that the modified operation $\op'$ now obeys \eqref{eq1659} but not \eqref{eq4315} as required.
 \end{proof}
 
-The specific law $\x \formaleq \x \op ((\y \op \z) \op (\x \op \z))$ \eqref{eq854} turned out to be somewhat ``mutable'', in that one can often change a small number of entries in the multiplication table of a finite magma obeying this law, and also add an additional row and column to the table, in ways that preserve the law \eqref{eq854}.  This renders this law suitable for using methods (i), (iii) to construct new models of this equation that refute various implications $\Eq{854} \vdashfin E$, for instance by starting with a model that already refuted some stronger law $E'$, and attempt to modify it (possibly with ATP assistance) by some combination of methods (i), (iii) to then violate $E$.
+The specific law $\x \formaleq \x \op ((\y \op \z) \op (\x \op \z))$ \eqref{eq854} turned out to be somewhat ``mutable'', in the sense that one can often change a small number
+ of entries in the multiplication table of a finite magma obeying this law, or add rows and columns to the table,
+ in ways that preserve the law \eqref{eq854}.  This makes the law amenable to methods (i) and (iii) to construct new models of this equation that
+ refute various implications  $\eqref{eq854} \nvdashfin E$, for instance by starting with a model that already refuted some stronger law $E'$, and then attempting to modify it
+ (possibly with ATP assistance) by some combination of methods (i) and (iii) to produce a model that violates $E$.
+
+ Some heuristics loosely inspired by discrete-time dynamical systems proved helpful.
+ The idea is to generate a sequence of magmas, each of which is generated from the previous entry by applying various operations expected to increase the likelihood of
+ finding a refutation.  This is similar to the greedy methods in \ref{greedy-sec}, except that we require our resulting magma to be finite and completely
+ defined, and our transformations need not be deterministic.  Note that, since the goal is simply to find a finite model, and given such a candidate we can easily
+ determine whether it works, we are not limited to operations we can rigorously justify.  SAT solvers like
+ Glucose~\cite{DBLP:conf/ijcai/AudemardS09,DBLP:conf/cp/AudemardS12} inspired by the earlier MiniSAT~\cite{DBLP:conf/sat/EenS03},
+ via convenient interfaces like PySAT~\cite{imms-sat18, itk-sat24}, counterexample finders like Mace4~\cite{prover9-mace4}, and more general ATPs like
+ Vampire~\cite{DBLP:conf/cav/KovacsV13} which can be used as solvers, all succeeded in finding useful magmas following this approach.
+
+ For example, one operation we can apply is fixing a random subset of the elements of the magma table while undefining the remainder,
+ and asking an ATP to find a magma which satisfies \eqref{eq854} while preserving the fixed values.
+ If in fact $\eqref{eq854} \nvdashfin E$, then the ATP may complete the table to a solution that violates $E$ as desired.  In some cases,
+ it appears that the magma entries can be sufficiently coupled that unless a large fraction of the values is removed,
+ every \eqref{eq854}-satisfying solution also satisfies $E$.
+ We can insert a known violation of $E$ into the magma cells we have emptied, hoping that a consistent completion still exists.
+ Another approach, by analogy with slowly introducing forcing terms into numerical integrations while preserving adiabatic invariants, is to impose selected
+ implications of a given equation without directly enforcing the equation itself.  This can gradually drive the magmas in the
+ sequence toward fewer violations of a given equation without immediately imposing it.
+
+Combining several of these techniques allowed us to find refutations for
+$\eqref{eq854} \nvdashfin \eqref{eq413}, \eqref{eq1045}, \eqref{eq1055}, \eqref{eq3316}, \eqref{eq3925}$.
+ We started with a magma which satisfied \eqref{eq854} and \eqref{eq413} but had an \eqref{eq10} violation.
+After using it as a seed to generate larger magmas with more \eqref{eq10} violations (using Vampire),
+randomly removing portions of those magmas and attempting to complete them to models that violated $E$ eventually succeeded.
+
+Note that these approaches have their limitations.  To be effective, it must be easy to move between different
+states, which usually involves finding a magma satisfying the equation of interest or at least some related one.
+Equations for which finite magmas are difficult to find (e.g.\ \eqref{eq677}), whether because of absolute rarity or the numerical challenges
+that our ATPs have in finding them without taking advantage of a structural ansatz, appear resistant to these methods in practice.
 
 Another way to utilize (iii), which proved useful for laws that involved the squaring operator $S$, was to adopt a ``squares first'' approach in which one selected a base model $S\Magma = (SM,\op)$ to serve as the set of squares, then extend it to a larger model $\Magma$ with carrier $M = SM \uplus N$ by first determining what the multiplication map should be on the diagonal $\{ (x,x): x\in N\}$ (i.e., to determine the squaring map $S \colon N \to SM$), together with the values on the blocks $SM \times N$, $N \times SM$, and then finally resolve the remaining values on the $N \times N$ block.  Often, versions of the greedy algorithm are useful for each of these stages of the construction.  The precise details are quite technical, particularly for the law $\x \formaleq (\y \op \y) \op ((\y \op \x) \op \y)$ \eqref{eq1729}, which was the last of the equations whose implications were settled by the ETP.  We refer the reader to the ETP blueprint for further details.
