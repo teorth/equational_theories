@@ -35,9 +35,9 @@ $7$ & $2$\\
 
 \subsection{Linear models}\label{linear-sec}
 
-As it turns out, a particularly fruitful source of counterexamples is the class of \emph{linear magmas}, where the carrier $M$ is a ring (which may be commutative or non-commutative, finite or infinite), and the operation $\op$ is given by $x \op y = ax + by$ for some coefficients $a,b \in M$; one can also generalize this slightly to \emph{affine magmas}, in which the operation is given by $x \op y = ax + by + c$, but for simplicity we shall focus on linear magmas here.  It is easy to see that in a linear magma, any word $w(x_1,\dots,x_n)$ of $n$ indeterminates also takes the linear form
+As it turns out, a particularly fruitful source of counterexamples is the class of \emph{linear magmas}, where the carrier $M$ is a ring (which may be commutative or noncommutative, finite or infinite), and the operation $\op$ is given by $x \op y = ax + by$ for some coefficients $a,b \in M$; one can also generalize this slightly to \emph{affine magmas}, in which the operation is given by $x \op y = ax + by + c$, but for simplicity we shall focus on linear magmas here.  It is easy to see that in a linear magma, any word $w(x_1,\dots,x_n)$ of $n$ indeterminates also takes the linear form
 $$ w(x_1,\dots,x_n) = \sum_{i=1}^n P_{w,i}(a,b) x_i$$
-for some (possibly non-commutative) polynomial $P_{w,i}$ in $a,b$ with integer coefficients.  Thus, a linear magma will obey an equational law $w_1 \formaleq w_2$ if and only if the pair $(a,b)$ lies in the (possibly non-commutative) variety
+for some (possibly noncommutative) polynomial $P_{w,i}$ in $a,b$ with integer coefficients.  Thus, a linear magma will obey an equational law $w_1 \formaleq w_2$ if and only if the pair $(a,b)$ lies in the (possibly noncommutative) variety
 \begin{equation}\label{variety}
   V_{w_1,w_2}(M) \coloneqq \{ (a,b) \in M \times M: P_{w_1,i}(a,b) = P_{w_2,i}(a,b) \hbox{ for all } i \} \subset M^2.
 \end{equation}
@@ -62,7 +62,7 @@ Observe that if $ba = -1$, then $(a,b)$ automatically lies in the first set, and
 
 \begin{remark} As essentially observed in \cite{austin}, if there is a commutative linear counterexample to an implication $E \vdash E'$, then by the Lefschetz principle this counterexample can be realized in a finite field ${\mathbb F}_q$ for some prime power $q$ (and by the Chebotarev density theorem one can in fact take $q$ to be a prime, so that the carrier is of the form $\Z/p\Z$ for some prime $p$), so that one also has $E \vdashfin E'$.  As such, we have found that an effective way to refute implications by the commutative linear magma method is to simply perform a brute force search over linear magmas $x \op y = ax + by$ in $\Z/p\Z$ for various triples $(p,a,b)$.
 
-On the other hand, the refutations obtained by non-commutative linear constructions need not have a finite model.  For instance, consider the refutation $\Eq{1117} \nvdash \Eq{2441}$ from \Cref{1117-ex}.  The law \eqref{eq1117} can be rewritten as $L_y R_z L_y R_z x = x$.  This implies that $R_z$ is injective and $L_y$ is surjective for all $y,z$.  For finite magmas $\Magma$, this then implies that the $L_y, R_z$ are in fact invertible, and hence we have also $R_z L_y R_z L_y x = x$, which implies \eqref{eq2441} by setting $x=y=z$.  Thus, the refutation $\Eq{1117} \nvdash \Eq{2441}$ is ``immune'' to finite counterexamples.
+On the other hand, the refutations obtained by noncommutative linear constructions need not have a finite model.  For instance, consider the refutation $\Eq{1117} \nvdash \Eq{2441}$ from \Cref{1117-ex}.  The law \eqref{eq1117} can be rewritten as $L_y R_z L_y R_z x = x$.  This implies that $R_z$ is injective and $L_y$ is surjective for all $y,z$.  For finite magmas $\Magma$, this then implies that the $L_y, R_z$ are in fact invertible, and hence we have also $R_z L_y R_z L_y x = x$, which implies \eqref{eq2441} by setting $x=y=z$.  Thus, the refutation $\Eq{1117} \nvdash \Eq{2441}$ is ``immune'' to finite counterexamples.
 \end{remark}
 
 \begin{remark}  One can also consider nonlinear magma models, such as quadratic models $x \op y = ax^2 + bxy + cy^2 + dx + ey + f$ in a cyclic group $\Z/N\Z$.  For small values of $N$, we have found such models somewhat useful in providing additional refutations of implications $E \vdashfin E'$ beyond what can be achieved by the linear or affine models.  However, as the polynomials associated to a word $w(x_1,\dots,x_n)$ tend to be of high degree (exponential in the order of the word), it becomes quite rare for such models to obey a given equation $E$ when $N$ is large.
@@ -71,7 +71,7 @@ On the other hand, the refutations obtained by non-commutative linear constructi
 \begin{remark} One can also consider the seemingly more general linear model $x \op y = ax + by$, where the carrier $M$ is now an abelian group, and $a,b$ act on $M$ by homomorphisms, that is to say that they are elements of the endomorphism ring $\mathrm{End}(M)$.  However, this leads to exactly the same varieties \Cref{variety} (where $M$ is now replaced by the endomorphism ring $\mathrm{End}(M)$) and so does not increase the power of the linear model for the purposes of refuting implications.
 \end{remark}
 
-On the other hand, there are certainly some refutations $E \nvdash E'$ of implications that are ``immune'' to both commutative and non-commutative models, in the sense that all such models that obey $E$, also obey $E'$.  One such example is the refutation $\Eq{1485} \vdash \Eq{151}$, which we discuss further in \Cref{twisting-sec} below.
+On the other hand, there are certainly some refutations $E \nvdash E'$ of implications that are ``immune'' to both commutative and noncommutative models, in the sense that all such models that obey $E$, also obey $E'$.  One such example is the refutation $\Eq{1485} \vdash \Eq{151}$, which we discuss further in \Cref{twisting-sec} below.
 
 \subsection{Translation-invariant models}\label{translation-sec}
 
@@ -216,7 +216,7 @@ Since $c \not \in M$, it is clear that $\op'$ is a finitely supported partial ma
 \item Case 3. $y \op' (x \op' y) = c$.  Only possible when $y=a$ and $x=d$, and holds in this case.
 \item Case 4: $x, y, x \op' y, y \op' (x \op' y) \neq c$: this case is covered by Rule 3 for $\op$.
 \end{itemize}
-To conclude, we need to locate a seed $\op_0$ obeying Rules 1,2,3 but contains a counterexample to \eqref{eq4380}.  One simple example is the carrier $\{0,1,2,3\}$ with $0 \op_0 0 = 1$, $0 \op_0 1 = 2$, $0 \op_0 2 = 0$, $1 \op_0 0 = 3$.
+To conclude, we need to locate a seed $\op_0$ obeying Rules 1,2,3 and containing a counterexample to \eqref{eq4380}.  One simple example is the carrier $\{0,1,2,3\}$ with $0 \op_0 0 = 1$, $0 \op_0 1 = 2$, $0 \op_0 2 = 0$, $1 \op_0 0 = 3$.
 \end{proof}
 
 This method is not guaranteed to halt in finite time, as there may be increasingly lengthy sets of rules one has to add to $\Gamma$ to avoid collisions.  However, in practice we have found many of the refutations that could not be resolved by simpler techniques to be amenable to this method (or variants thereof, as discussed below).
@@ -229,7 +229,7 @@ We also found that human verification of the greedy extension property was a hig
 
 The greedy method can also be combined with the translation-invariant method, both in abelian and non-abelian settings. For instance, we can modify the proof of \Cref{greedy-abstract} to obtain the following variant:
 
-\begin{theorem}[Non-commutative translation-invariant greedy algorithm]\label{nc-greedy-abstract} Let $F,F'$ be functional equations on groups, and let $\Gamma$ be a theory of first-order sentences regarding a partial function $f \colon \Omega \to G$ on a group $G = (G,\cdot)$.  Assume the following axioms:
+\begin{theorem}[Noncommutative translation-invariant greedy algorithm]\label{nc-greedy-abstract} Let $F,F'$ be functional equations on groups, and let $\Gamma$ be a theory of first-order sentences regarding a partial function $f \colon \Omega \to G$ on a group $G = (G,\cdot)$.  Assume the following axioms:
   \begin{itemize}
     \item[(i)] (Seed) There exists a finitely supported partial function $f_0 \colon \Omega_0 \to G$ satisfying $\Gamma$ that contradicts $F'$, in the sense that there is some assignment of variables in $F'$ in $G$ such that both sides of $F'$ are defined using $f_0$, but not equal to each other.
     \item[(ii)]  (Soundness)  If $f_n \colon \Omega_n \to G$ is a sequence of partial functions obeying $\Gamma$ with each $f_{n+1}$ an extension of $f_n$, and the direct limit $f_\infty$ is total, then this limit obeys $F$.
