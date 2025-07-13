@@ -1,4 +1,4 @@
-A challenging equation, discussed [here](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1516.20-.3E.20255).  This law implies [law 255](https://teorth.github.io/equational_theories/implications/?255) in linear models, translation-invariant models, and finite magmas, but can be refuted by a [complicated greedy construction](https://teorth.github.io/equational_theories/blueprint/1516-chapter.html).
+A challenging equation, discussed [here](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1516.20-.3E.20255) and in [this chapter of the blueprint](https://teorth.github.io/equational_theories/blueprint/1516-chapter.html).  This law implies [law 255](https://teorth.github.io/equational_theories/implications/?255) in linear models, translation-invariant models, and finite magmas, but can be refuted by a complicated greedy construction.
 
 The fact that it does not imply [law 1489](https://teorth.github.io/equational_theories/implications/?1489) even for finite models was resolved using the [cohomological method](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/485020624).
 
