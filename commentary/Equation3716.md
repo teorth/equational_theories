@@ -2,4 +2,6 @@ This law is equivalent to the [reduction law 327](https://teorth.github.io/equat
 
 The free magma on some set `S` of generators for this law consists of finite non-empty lists of elements of `S` whose first element does not appear elsewhere in the list except possibly in the last position, with the product `[s, …, t] ◇ [u, …, v] = [s, …, t, u]` unless `s=t` (and the left operand is not just `[s]`), in which case `t` is deleted from the list.
 
+In particular, the free magma with one generator `x` for this law is a two-element magma `{x,x◇x}`.
+
 This law cannot hold in a non-trivial quasigroup.

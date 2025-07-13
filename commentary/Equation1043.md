@@ -3,3 +3,5 @@ This law implies [law 10](https://teorth.github.io/equational_theories/implicati
 In terms of the undirected graph implied by law 10, which connects `x` and `y` if `x=x◇y` (equivalently `y=y◇x`), this means that squares are connected to all vertices including themselves.
 
 This law cannot hold in a (non-trivial) commutative magma or quasigroup.
+
+The free magma with one generator `x` for this law is a two-element magma `{x,x◇x}`.

@@ -2,4 +2,4 @@ This law is part of all [longest chains of implications](https://leanprover.zuli
 
 This law cannot hold in a non-trivial group.
 
-The free magma with one generator `0` for this law is `{0,1}` with the constant law `x ◇ y = 1`.
+The free magma with one generator `x` for this law is a two-element magma `{x,x◇x}` with the constant law.
