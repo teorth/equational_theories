@@ -1,0 +1,71 @@
+cff-version: 1.2.0
+message: >
+  If you use this project in your work, please cite it using the metadata below.
+title: "The Equational Theories Project"
+version: 0.1.0
+date-released: Sep 26, 2024
+authors:
+  - family-names: Bolan
+    given-names: Matthew
+  - family-names: Breitner
+    given-names: Joachim
+  - family-names: Brox
+    given-names: Jose
+  - family-names: Carneiro
+    given-names: Mario
+  - family-names: Dvorák
+    given-names: Martin
+  - family-names: Goens
+    given-names: Andres
+  - family-names: Hill
+    given-names: Aaron
+  - family-names: Husum
+    given-names: Harald
+  - family-names: Kocsis
+  - given-names: Zoltan
+  - family-names: Le Floch
+    given-names: Bruno
+  - family-names: Luccioli
+    given-names: Lorenzo
+  - family-names: McNeil
+    given-names: Douglas
+  - family-names: Meiburg
+    given-names: Alex
+  - family-names: Monticone
+    given-names: Pietro
+  - family-names: Paolini
+    given-names: Giovanni
+  - family-names: Petracci
+    given-names: Marco
+  - family-names: Reinke
+    given-names: Bernhard
+  - family-names: Renshaw
+    given-names: David
+  - family-names: Rossel
+    given-names: Marcus
+  - family-names: Roux
+    given-names: Cody
+  - family-names: Scanvic
+    given-names: Jeremy
+  - family-names: Srinivas
+    given-names: Shreyas
+  - family-names: Tadipatri
+    given-names: Anand Rao
+  - family-names: Tao
+    given-names: Terence
+    orcid: https://orcid.org/0000-0002-0140-7641
+  - family-names: Tsyrklevich
+    given-names: Vlad
+  - family-names: Weber
+    given-names: Daniel
+  - family-names: Zheng
+    given-names: Fan
+repository-code: https://github.com/teorth/equational_theories
+url: https://github.com/teorth/equational_theories
+abstract: >
+  A collaborative project to determine the logical relations between 4694 equational laws of magmas, and formalize them in the Lean4 proof assistant language.  The project produced a research paper https://teorth.github.io/equational_theories/paper.pdf, as well as a "blueprint" https://teorth.github.io/equational_theories/blueprint/ containing a significant amount of supplemental information that
+
+  Organized by Pietro Monticone, Shreyas Srinivas, and Terence Tao. Launched Sep 26, 2024.
+keywords:
+  - universal algebra
+  - formalization project
