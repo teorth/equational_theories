@@ -1,4 +1,4 @@
-## A law related to boolean subgroups of the bijections
+## A law related to Boolean subgroups of the bijections
 
 This law implies that left multiplications are bijective and commute.  The cubing maps `B: x ↦ (x◇x)◇x` and `C: x ↦ x◇(x◇x)` are bijections of order 3 and inverses of each other (`x = B(C(x)) = B(B(B(x)))`), and they commute with left multiplications (`B(x◇y) = x◇B(y)`).  The squaring map `S: x ↦ x◇x` is an endomorphism such that `S(S(S(S(x)))) = S(x)`.
 
