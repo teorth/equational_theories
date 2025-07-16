@@ -4,7 +4,7 @@ This law states that the magma operation is left-projection composed with squari
 
 Any law that implies this law or its dual (laws 4, 5, 13, 24, 38, 39, 41, 62, 256, 336, 374, 463, 3051, 3359, 4117 and higher-order laws) describes sets equipped with a self-map subject to a condition.  The equivalence class of this law is among the largest ones (40 laws in our list of 4694 laws), and a full 57% of the 4694 laws imply either law 38 or law 39.
 
-This law cannot hold in any non-trivial quasigroup.  In a commutative magma it is equivalent to the constant law.  This law together with associativity is equivalent to [law 374](https://teorth.github.io/equational_theories/implications/?374).  Magmas satisfying this law are always submagmas of linear magmas satifying this law.
+This law cannot hold in any non-trivial quasigroup.  In a commutative magma it is equivalent to the constant law.  This law together with associativity is equivalent to [law 374](https://teorth.github.io/equational_theories/implications/?374).  Magmas satisfying this law are always submagmas of linear magmas satisfying this law.
 
 The free magma on some set `S` of generators for this law is `ℕ×S` with `f(m,s)=(m+1,s)`, namely `(m,s) ◇ (n,t) = (m+1,s)`.
 

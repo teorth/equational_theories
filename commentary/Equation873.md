@@ -1,4 +1,4 @@
-This twist of the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14)
+This twist of the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14) by the squaring map is obeyed in idempotent semi-symmetric quasigroups.
 
 This law cannot hold in a non-trivial semigroup (associative magma).
 

@@ -1,0 +1,1 @@
+This law states that squares are right units within the submagma `P={x◇y|x,y∈M}`.  This submagma satisfies the [right-unit squares law 11](https://teorth.github.io/equational_theories/implications/?11).

@@ -4,4 +4,6 @@ The set of squares forms a submagma on which the operation obeys [law 39](https:
 
 The left division operation defined by `x ◇ (x : y) = y` obeys the same law, `x = y : (z : ((z : y) : x))`.
 
+Quasigroups satisfying this law are linear models on a Boolean group (abelian group of exponent 2), of the form `x◇y = x + y + c` or `x◇y = x + ω(y-x)` for `ω` an endomorphism satisfying `ω²+ω+id=0`.
+
 This law is implied by the very similar and much stronger [law 765](https://teorth.github.io/equational_theories/implications/?765), `x = y ◇ (z ◇ ((y ◇ z) ◇ x))`.
