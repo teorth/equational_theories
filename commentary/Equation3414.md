@@ -1,0 +1,1 @@
+This law states that left multiplication maps restricted to the submagma `P = {x◇y|x,y∈M}` are involutions.  It implies that `P` obeys [law 16](https://teorth.github.io/equational_theories/implications/?16) `p = q◇(q◇p)` for `p,q∈P`.

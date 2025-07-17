@@ -1,0 +1,1 @@
+In a quasigroup, this law is equivalent to stating [law 8](https://teorth.github.io/equational_theories/implications/?8) `x = x◇(x◇x)` together with [law 26](https://teorth.github.io/equational_theories/implications/?26) `x = (x◇y)◇y`.

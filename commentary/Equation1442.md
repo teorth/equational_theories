@@ -1,0 +1,1 @@
+If left multiplications are all injective or all surjective, then the magma is a semi-symmetric quasigroup, namely it satisfies [law 14](https://teorth.github.io/equational_theories/implications/?14).
