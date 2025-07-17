@@ -1,3 +1,1 @@
-This law cannot hold in a non-trivial quasigroup.
-
-On the submagma `P = {x◇y|x,y∈M}`, the operation `◇` obeys the [left unar law 38](https://teorth.github.io/equational_theories/implications/?38), namely it is left projection composed with squaring.  The set of squares is a submagma of `P` and the operation reduces to left projection.
+On the submagma `P = {x◇y|x,y∈M}`, the operation `◇` obeys the [left unar law 38](https://teorth.github.io/equational_theories/implications/?38), namely it is left projection composed with squaring.  The set of squares is a submagma of `P` and the operation reduces to left projection.  In particular, this law implies that the squaring map `S: x ↦ x◇x` is idempotent, namely `S(S(x))=S(x)`.  This law cannot hold in a non-trivial quasigroup.
