@@ -1,6 +1,6 @@
 ## A law whose quasigroups are affine ℤ[T,T⁻¹] modules
 
-This law states that `L(y) ∘ R(z)` is involutive for all `y,z`, where `L(z) : x ↦ z◇x` and `R(z) : x ↦ x◇z` are left/right multiplications.
+This law states that `L(y) ∘ R(z)` is involutive for all `y,z`, where `L(z): x ↦ z◇x` and `R(z): x ↦ x◇z` are left/right multiplications.
 
 This law implies that left multiplications are surjective and right multiplications are injective.  In finite magmas, or in quasigroups, it is equivalent to its dual, [law 2538](https://teorth.github.io/equational_theories/implications/?2538).  Magmas satisfying this law and its dual are quasigroup and are linear, (non-uniquely) isomorphic to a ℤ[T,T⁻¹]-module with the operation `x◇y = Tx - T⁻¹y + c` for some constant `c`.  The ℤ[T,T⁻¹]-module structure is only defined up to a choice of zero element.
 
