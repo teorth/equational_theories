@@ -6,4 +6,4 @@ The submagma `P = {x◇y| x,y∈M}` is an abelian group equipped with subtractio
 
 Altogether the magma is a pointed set fibration over an abelian group, and the operation is projection to the base, composed with the abelian group subtraction.  Magmas satisfying this law are always submagmas of linear magmas satisfying this law.
 
-The free magma on some set `S` of generators for this law is `S ⊔ ℤ[S]` where `ℤ[S]` is the free abelian group on `S`, with the magma operation `x◇y = π(x) - π(y)` where `π` maps each `s ∈ S` to the corresponding basis vector in `ℤ[S]`, and is the identity map on `ℤ[S]`.
+The free magma on some set `Σ` of generators for this law is `Σ ⊔ ℤ[Σ]` where `ℤ[Σ]` is the free abelian group on `Σ`, with the magma operation `x◇y = π(x) - π(y)` where `π` maps each `s ∈ Σ` to the corresponding basis vector in `ℤ[Σ]`, and is the identity map on `ℤ[Σ]`.

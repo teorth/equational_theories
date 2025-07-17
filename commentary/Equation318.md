@@ -2,4 +2,4 @@ This law implies the [right zeropotence law 312](https://teorth.github.io/equati
 
 This law cannot hold in any non-trivial quasigroup.
 
-The free magma on some set `S` of generators for this law consists of finite non-empty lists of elements of `S` equipped with the operation `[s1, …, sn] ◇ [t] = [s1, …, sn, t]` when the second operand has a single entry, and otherwise `_ ◇ [t1, …, tm] = [tm, tm]`.
+The free magma on some set `Σ` of generators for this law consists of finite non-empty lists of elements of `Σ` equipped with the operation `[s1, …, sn] ◇ [t] = [s1, …, sn, t]` when the second operand has a single entry, and otherwise `_ ◇ [t1, …, tm] = [tm, tm]`.

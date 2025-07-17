@@ -6,4 +6,4 @@ This law implies exactly the laws whose left-hand side and right-hand side have 
 
 The equivalence class of this law is among the largest ones (71 laws in our list of 4694 laws).  This law or its dual are part of all [longest chains of implications](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Longest.20implication.20chain/near/521750611) between inequivalent laws of order up to 4.
 
-The free magma on some set `S` of generators for this law is `S` itself.
+The free magma on some set `Σ` of generators for this law is `Σ` itself.

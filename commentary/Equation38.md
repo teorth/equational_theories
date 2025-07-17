@@ -6,6 +6,6 @@ Any law that implies this law or its dual (laws 4, 5, 13, 24, 38, 39, 41, 62, 25
 
 This law cannot hold in any non-trivial quasigroup.  In a commutative magma it is equivalent to the constant law.  This law together with associativity is equivalent to [law 374](https://teorth.github.io/equational_theories/implications/?374).  Magmas satisfying this law are always submagmas of linear magmas satisfying this law.
 
-The free magma on some set `S` of generators for this law is `ℕ×S` with `S(m,s)=(m+1,s)`, namely `(m,s) ◇ (n,t) = (m+1,s)`.
+The free magma on some set `Σ` of generators for this law is `ℕ×Σ` with `S(m,s)=(m+1,s)`, namely `(m,s) ◇ (n,t) = (m+1,s)`.
 
 The number of magmas of size n (modulo isomorphism) satisfying this law is [OEIS sequence A001372](https://oeis.org/A001372).

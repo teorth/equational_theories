@@ -4,6 +4,6 @@ This law is equivalent to stating that the magma operation is right-projection c
 
 Magmas satisfying this law are always submagmas of linear magmas satisfying this law.  This law cannot hold in a non-trivial quasigroup.
 
-The free magma on some set `S` of generators for this law consists of `{0,1}×S` with `f(a,s)=(1,s)`, namely `(_,_) ◇ (_,s) = (1,s)`.
+The free magma on some set `Σ` of generators for this law consists of `{0,1}×Σ` with `f(a,s)=(1,s)`, namely `(_,_) ◇ (_,s) = (1,s)`.
 
 The equivalence class of this law is among the largest ones (37 laws in our list of 4694 laws).

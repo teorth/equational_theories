@@ -2,4 +2,4 @@ This law is equivalent to the [associative law 4512](https://teorth.github.io/eq
 
 This law implies that the squaring map `S: x ↦ x◇x` obeys `S(S(S(x))) = S(S(x))`.  This law cannot hold in a non-trivial quasigroup.
 
-The free magma on some set `S` of generators for law 4517 is `S×(S ⊔ {0,∞})`, with the magma operation `(s,0)◇(t,0)=(s,t)`, `(s,0)◇(t,u)=(s,∞)`, `(s,0)◇(t,∞)=(s,∞)`, `(s,t)◇_=(s,∞)`, `(s,∞)◇_=(s,∞)`.
+The free magma on some set `Σ` of generators for law 4517 is `Σ×(Σ ⊔ {0,∞})`, with the magma operation `(s,0)◇(t,0)=(s,t)`, `(s,0)◇(t,u)=(s,∞)`, `(s,0)◇(t,∞)=(s,∞)`, `(s,t)◇_=(s,∞)`, `(s,∞)◇_=(s,∞)`.

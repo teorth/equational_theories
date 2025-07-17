@@ -2,4 +2,4 @@ This law is equivalent to [law 4468](https://teorth.github.io/equational_theorie
 
 In particular, this law implies that the squaring map `S: x ↦ x◇x` obeys `S(S(S(x))) = S(S(x))`.  This law cannot hold in a non-trivial quasigroup.
 
-The free magma on some set `S` of generators for this law consists of an element `∞` together with the set of finite non-empty lists of elements of `S` whose last and third to last element may not be equal, with the product `[s] ◇ [t, …, u] = [s, t, …, u]` except `[s] ◇ [t, s] = ∞`, and all other products equal to `∞`.
+The free magma on some set `Σ` of generators for this law consists of an element `∞` together with the set of finite non-empty lists of elements of `Σ` whose last and third to last element may not be equal, with the product `[s] ◇ [t, …, u] = [s, t, …, u]` except `[s] ◇ [t, s] = ∞`, and all other products equal to `∞`.

@@ -6,4 +6,4 @@ The submagma `P = {x◇y| x,y∈M}` is a Boolean group (abelian group of exponen
 
 Altogether the magma is a pointed set fibration over a Boolean group, and the operation is projection to the base, composed with the abelian group operation.  Magmas satisfying this law are always submagmas of linear magmas satisfying this law.
 
-The free magma on some set `S` of generators for this law is `S ⊔ 𝒫(S)` where `𝒫(S)` is the set of finite subsets of `S`, with the magma operation `s◇t={s}∆{t}`, `A◇s = s◇A = A∆{s}`, `A◇B = A∆B` where `∆` is the symmetric difference.  In particular, `s◇(s◇s) = {s} ≠ s`.
+The free magma on some set `Σ` of generators for this law is `Σ ⊔ 𝒫(Σ)` where `𝒫(Σ)` is the set of finite subsets of `Σ`, with the magma operation `s◇t={s}∆{t}`, `A◇s = s◇A = A∆{s}`, `A◇B = A∆B` where `∆` is the symmetric difference.  In particular, `s◇(s◇s) = {s} ≠ s`.

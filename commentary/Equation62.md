@@ -8,6 +8,6 @@ This law cannot hold in any (non-trivial) commutative magma or quasigroup.  This
 
 Such magmas are in one-to-one correspondence with sets equipped with a bijection that cubes to the identity.
 
-The free magma on some set `S` of generators for this law consists of three copies of `S` permuted cyclically by the bijection.
+The free magma on some set `Σ` of generators for this law consists of three copies of `Σ` permuted cyclically by the bijection.
 
 The equivalence class of this law is among the largest ones (76 laws in our list of 4694 laws).

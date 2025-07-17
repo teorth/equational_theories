@@ -8,4 +8,4 @@ Such magmas are in one-to-one correspondence with sets equipped with an involuti
 
 Magmas satisfying this law are always submagmas of linear magmas satisfying this law.  This law cannot hold in any (non-trivial) commutative magma or quasigroup.
 
-The free magma on some set `S` of generators for this law consists of two copies of `S` mapped to each other by the involution.
+The free magma on some set `Σ` of generators for this law consists of two copies of `Σ` mapped to each other by the involution.

@@ -4,5 +4,5 @@ This law states that all products are right zeros, namely `w ◇ z = z` for any 
 
 This law cannot hold in a non-trivial quasigroup.
 
-The free magma on some set `S` of generators for this law consists of finite non-empty lists of elements of `S`, with the operation `[s, …, t] ◇ [u, …, v] = [u, …, v]` when the second operand has more than one item, and otherwise `[s, …, t] ◇ [u] = [s, …, t, u]`.
+The free magma on some set `Σ` of generators for this law consists of finite non-empty lists of elements of `Σ`, with the operation `[s, …, t] ◇ [u, …, v] = [u, …, v]` when the second operand has more than one item, and otherwise `[s, …, t] ◇ [u] = [s, …, t, u]`.
 

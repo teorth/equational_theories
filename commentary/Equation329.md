@@ -6,4 +6,4 @@ Consider the equivalence relation `x ∼ y` when right multiplications by these 
 
 This law cannot hold in a non-trivial quasigroup.
 
-The free magma on some set `S` of generators for this law consists of finite non-empty lists of elements of `S` equipped with the operation `[s1, …, sn] ◇ [t1, …, tm] = [s1, …, sn, tm]`.
+The free magma on some set `Σ` of generators for this law consists of finite non-empty lists of elements of `Σ` equipped with the operation `[s1, …, sn] ◇ [t1, …, tm] = [s1, …, sn, tm]`.

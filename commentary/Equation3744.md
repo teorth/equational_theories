@@ -6,6 +6,6 @@ This law is equivalent to the [associative law 4512](https://teorth.github.io/eq
 
 The left cosets `x◇M = {x◇y|y∈M}` are pairwise equal or disjoint, and likewise for the right cosets.  The set of products `P = {x◇y|x,y∈M}` is isomorphic to a Cartesian product `S×T` of any of the left cosets with any of the right cosets, with the operation `(s,t)◇(u,v)=(s,v)` for `s,u∈S` and `t,v∈T`.  The whole magma is a fibration over `P` by pointed sets, with the projection `M → P` given by the squaring map `x ↦ x◇x`, which is a magma morphism.  In particular any magma satisfying this law is a submagma of a linear magma.
 
-The free magma on some set `S` of generators for this law is `S ⊔ S×S`, with the magma operation `s◇t=(s,t)`, `s◇(t,u)=(s,u)`, `(s,t)◇u=(s,u)`, `(s,t)◇(u,v)=(s,v)`.
+The free magma on some set `Σ` of generators for this law is `Σ ⊔ Σ×Σ`, with the magma operation `s◇t=(s,t)`, `s◇(t,u)=(s,u)`, `(s,t)◇u=(s,u)`, `(s,t)◇(u,v)=(s,v)`.
 
 This law cannot hold in a non-trivial quasigroup.

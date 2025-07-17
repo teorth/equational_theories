@@ -4,4 +4,4 @@ For any given element `0∈M`, left-multiplication by `0` squares to the cubing 
 
 The commutative version of this law is [law 3385](https://teorth.github.io/equational_theories/implications/?3385) describing pointed set fibrations over Boolean groups.
 
-The free magma on some set `S` of generators for this law is `S ⊔ (𝒫(S) × S)` where `𝒫(S)` is the set of finite subsets of `S`, with the magma operation `s◇t=({s},t)`, `(A,s)◇t=(A∆{s},t)`, `s◇(B,t)=({s}∆B,t)`, and `(A,s)◇(B,t)=(A∆{s}∆B,t)` where `∆` is the symmetric difference.  In particular, `s◇s◇t = (∅,t)`.
+The free magma on some set `Σ` of generators for this law is `Σ ⊔ (𝒫(Σ) × Σ)` where `𝒫(Σ)` is the set of finite subsets of `Σ`, with the magma operation `s◇t=({s},t)`, `(A,s)◇t=(A∆{s},t)`, `s◇(B,t)=({s}∆B,t)`, and `(A,s)◇(B,t)=(A∆{s}∆B,t)` where `∆` is the symmetric difference.  In particular, `s◇s◇t = (∅,t)`.

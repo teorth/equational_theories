@@ -8,4 +8,4 @@ Since division coincides with multiplication for groups of exponent 2, the law a
 
 For other laws (of minimal order `2*n`) characterizing groups of exponent `n` for `n=4` and `n` odd, see the commentary of [law 163669](https://teorth.github.io/equational_theories/implications/?163669).
 
-The free magma on some set `S` of generators for this law is the set `𝒫(S)` of finite subsets of `S`, with the magma operation being the symmetric difference.
+The free magma on some set `Σ` of generators for this law is the set `𝒫(Σ)` of finite subsets of `Σ`, with the magma operation being the symmetric difference.

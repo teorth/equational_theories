@@ -4,7 +4,7 @@ Denoting `∞∈M` this element, and `P = {x◇y|x,y∈M}`, the magma is charact
 
 This law implies that the squaring map `S: x ↦ x◇x` obeys `S(S(S(x))) = S(S(x))`.  This law cannot hold in a non-trivial quasigroup.
 
-The free magma on some set `S` of generators for this law is `S ⊔ S×S ⊔ {∞}`, on which `s◇t=(s,t)` and every other product is `∞`.
+The free magma on some set `Σ` of generators for this law is `Σ ⊔ Σ×Σ ⊔ {∞}`, on which `s◇t=(s,t)` and every other product is `∞`.
 
 The equivalence class of this law is large (14 laws in our list of 4694 laws).
 

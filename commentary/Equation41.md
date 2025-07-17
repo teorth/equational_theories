@@ -6,4 +6,4 @@ A non-trivial law is implied by the constant law if and only if both sides of th
 
 A magma subject to this law is also called a null semigroup.  It is trivially linear, associative and commutative, and cannot be a (non-trivial) quasigroup.  It is equivalent to a pointed set.
 
-The free magma on some set `S` of generators for this law is `S ⊔ {∞}` with constant law `x ◇ y = ∞`.
+The free magma on some set `Σ` of generators for this law is `Σ ⊔ {∞}` with constant law `x ◇ y = ∞`.

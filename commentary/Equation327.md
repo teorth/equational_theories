@@ -6,4 +6,4 @@ Partitioning the magma by the equivalence relation `x~y` if right multiplication
 
 This law cannot hold in a non-trivial quasigroup.
 
-The free magma on some set `S` of generators for this law consists of finite non-empty lists of elements of `S`, with the product `[s, …, t] ◇ [u, …, v] = [s, …, t, u]`.
+The free magma on some set `Σ` of generators for this law consists of finite non-empty lists of elements of `Σ`, with the product `[s, …, t] ◇ [u, …, v] = [s, …, t, u]`.
