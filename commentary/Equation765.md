@@ -1,6 +1,6 @@
 ## A law related to Boolean subgroups of the bijections
 
-This law implies that left multiplications are bijective and commute.  The cubing maps `B: x ↦ x◇(x◇x)` and `C: x ↦ (x◇x)◇x` are bijections of order 3 and inverses of each other (`x = B(C(x)) = B(B(B(x)))`), and they commute with left multiplications (`B(x◇y) = x◇B(y)`).  The squaring map `S: x ↦ x◇x` is an endomorphism such that `S(S(S(S(x)))) = S(x)`.
+This law implies that left multiplications are bijective and commute.  The cubing maps `B: x ↦ x◇(x◇x)` and `C: x ↦ (x◇x)◇x` are bijections of order 3 and inverses of each other (`x = B(C(x)) = B(B(B(x)))`), and they commute with left multiplications (`B(x◇y) = x◇B(y)`).  The squaring map `S: x ↦ x◇x` is an endomorphism such that `S(S(S(S(x)))) = S(x)`.  The set of squares is a submagma.
 
 The map `φ: (M,◇) → (Bij(M),∘)` from `M` to the group of bijections of `M` (equipped with composition), defined by setting `φ(x)` to be the bijection `y ↦ x ◇ B(y)`, is a magma morphism, namely, `x ◇ B(y ◇ B(z)) = (x ◇ y) ◇ B(z)`.  The image `H = φ(M)` consists of involutions, it is an abelian subgroup `H ⊂ Bij(M)` of exponent 2 which commutes with the `ℤ/3ℤ` subgroup `{id,B,C}`.  In particular, `φ` maps all squares to the identity, hence maps an element `x∈M` and `B(x)` and `C(x)` to the same bijection.
 

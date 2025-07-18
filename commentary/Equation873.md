@@ -1,4 +1,4 @@
-This twist of the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14) by the squaring map is obeyed in idempotent semi-symmetric quasigroups.  It implies that left multiplications are surjective and the squaring map `S: x ↦ x◇x` is injective.
+This twist of the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14) by the squaring map is obeyed in idempotent semi-symmetric quasigroups.  It implies that left multiplications are surjective and the squaring and right cubing maps `S: x ↦ x◇x` and `C: x ↦ (x◇x)◇x` obey `C(S(x)) = x`, so that `C` is surjective and `S` injective.
 
 This law cannot hold in a non-trivial semigroup (associative magma).
 

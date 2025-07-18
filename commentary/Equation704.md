@@ -1,4 +1,4 @@
-This law is a twist of [law 73](https://teorth.github.io/equational_theories/implications/?73) by the squaring map.  It implies that left multiplications are surjective.
+This law is a twist of [law 73](https://teorth.github.io/equational_theories/implications/?73) by the squaring map.  It implies that left multiplications are surjective and the squaring map is injective.
 
 This law cannot hold in a non-trivial semigroup (associative magma).
 

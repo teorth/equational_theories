@@ -1,6 +1,6 @@
 ## A twist of the semi-symmetric quasigroup law
 
-A magma satisfying this law is a quasigroup (left and right multiplication are bijective).  The left cubing map `B: x ↦ x◇(x◇x)` is an automorphism that cubes to the identity (`B(B(B(x)))=x` and `B(x◇y)=B(x)◇B(y)`).
+A magma satisfying this law is a quasigroup (left and right multiplication are bijective).  The left and right cubing maps `B: x ↦ x◇(x◇x)` and `C: x ↦ (x◇x)◇x` are automorphisms that cubes to the identity and are inverses of each other (`B(x◇y) = B(x)◇B(y)` and `B(B(B(x))) = C(C(C(x))) = B(C(x)) = C(B(x)) = x`).
 
 The magma obeys the middle crossed inverse property `B(y)◇(x◇y)=x` or equivalently `(B(y)◇x)◇y=x`.  It also obeys the left and right crossed inverse property stating that `(y◇x)◇y` and `y◇(x◇y)` are `y`-independent, specifically `(y◇x)◇y = B(B(x))` and `y◇(x◇y) = B(x)`, namely the dual laws [4588](https://teorth.github.io/equational_theories/implications/?4588) and [4273](https://teorth.github.io/equational_theories/implications/?4273).
 

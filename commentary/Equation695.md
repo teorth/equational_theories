@@ -1,6 +1,6 @@
 ## The law for semi-symmetric loops equipped with an involutive automorphism
 
-A magma satisfying this law is a quasigroup (left and right multiplication are bijective).  All squares are equal to the same element `e`, which is idempotent and central (`x◇e=e◇x`), and the left cubing map `B: x ↦ x◇(x◇x) = x◇e` is an involutive automorphism (`B(B(x))=x` and `B(x◇y)=B(x)◇B(y)`).
+A magma satisfying this law is a quasigroup (left and right multiplication are bijective).  All squares are equal to the same element `e`, which is idempotent and central (`x◇e=e◇x`), and the (left or right) cubing map `B: x ↦ x◇(x◇x) = x◇e` is an involutive automorphism (`B(B(x))=x` and `B(x◇y)=B(x)◇B(y)`).
 
 The magma obeys the middle crossed inverse property `B(y)◇(x◇y)=x`, or equivalently `(B(y)◇x)◇y=x`.  (See the [commentary on law 4273](https://teorth.github.io/equational_theories/implications/?4273) for this terminology.)  More symmetrically, for any three elements `x,y,z` of the magma, the equations `x=B(y◇z)`, `y=B(z◇x)`, `z=B(x◇y)` are equivalent.
 
