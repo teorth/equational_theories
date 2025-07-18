@@ -2,7 +2,7 @@
 
 This law is equivalent to the Schweizer identity, law 3810 `x ◇ y = (z ◇ y) ◇ (z ◇ x)`.  Among quasigroups, it is equivalent to Tarski's [law 543](https://teorth.github.io/equational_theories/implications/?543) that characterizes abelian group subtraction.
 
-The submagma `P = {x◇y| x,y∈M}` is an abelian group equipped with subtraction.  In addition, all squares (not just those of elements in `P`) are equal to the identity element `0` of that group, `x◇x=0` for `x∈M`.  The map `x ↦ x ◇ 0` is a map from `M` to `P` that is the identity on `P`, and one has `x ◇ y = (x ◇ 0) ◇ (y ◇ 0)`.
+The submagma `P = {x◇y| x,y∈M}` is an abelian group equipped with subtraction.  In addition, all squares (not just those of elements in `P`) are equal to the identity element `0` of that group, `x◇x=0` for `x∈M`.  The map `x ↦ x ◇ 0` (equivalently left cubing) is a map from `M` to `P` that is the identity on `P`, and one has `x ◇ y = (x ◇ 0) ◇ (y ◇ 0)`.
 
 Altogether the magma is a pointed set fibration over an abelian group, and the operation is projection to the base, composed with the abelian group subtraction.  Magmas satisfying this law are always submagmas of linear magmas satisfying this law.
 
