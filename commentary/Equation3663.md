@@ -1,1 +1,1 @@
-This law implies that the squaring map `S: x ↦ x◇x` is idempotent, namely `S(S(x))=S(x)`.  This law cannot hold in a non-trivial quasigroup.
+This law implies that the squaring map `S: x ↦ x◇x` is idempotent, namely `S(S(x))=S(x)`.  The set of squares is a submagma satisfying the [left projection law 4](https://teorth.github.io/equational_theories/implications/?4).  This law cannot hold in a non-trivial quasigroup.

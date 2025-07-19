@@ -1,1 +1,1 @@
-This law implies that the squaring map `S: x ↦ x◇x` is idempotent, namely `S(S(x))=S(x)`.  This law cannot hold in a non-trivial quasigroup.
+This law implies that the set of products `P = {x◇y|x,y∈M}`, the set of squares, and the set of idempotents coincide.  In particular the squaring map `S: x ↦ x◇x` is idempotent, namely `S(S(x))=S(x)`.   This law cannot hold in a non-trivial quasigroup.
