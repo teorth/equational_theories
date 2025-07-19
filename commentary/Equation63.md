@@ -11,3 +11,5 @@ The left division `x : y` defined in this way satisfies [law 229](https://teorth
 As observed by Belousov [1], in a quasigroup satisfying this law, the pair of equations `x◇y=a` and `x=y◇b` has a unique solution `x=b/a` and `y=(b/a)/b`, which means that the quasigroup is orthogonal to its (23)-parastrophe.  It is part of a collection of [seven laws](http://arxiv.org/abs/1509.00796) with similar properties.
 
 [1]: V.D. Belousov. Parastrophic-orthogonal quasigroups. Translated from the 1983 Russian original. Quasigroups Relat. Syst., 13(1):25–72, 2005.
+
+This is the law of order 3 with the [most complicated finite spectrum](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Order.203.20Spectra/with/527073087) (cardinalities of finite magmas satisfying this law).  It has no non-trivial associative model.

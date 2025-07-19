@@ -1,0 +1,1 @@
+This law is a twist of the [involutive left multiplication law 16](https://teorth.github.io/equational_theories/implications/?16) `x = y◇(y◇x)` by the squaring map `S: x ↦ x◇x` and is equivalent to it if `S` is surjective.

@@ -1,0 +1,1 @@
+This law states that left multiplication by a product is a constant map.  The subset `P={x◇y|x,y∈M}` is a left ideal, hence a submagma, that obeys the [right unar law 39](https://teorth.github.io/equational_theories/implications/?39).  This law cannot hold in a non-trivial quasigroup.
