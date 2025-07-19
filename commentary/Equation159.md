@@ -2,4 +2,6 @@ This law is [Schröder's second law](https://arxiv.org/pdf/2206.12844), as named
 
 In a magma satisfying this law, squaring is an involution (and in particular is bijective), and `x◇y = y◇x` implies `x = y`.
 
+Among semigroups (associative magmas) this law is equivalent to [law 10](https://teorth.github.io/equational_theories/implications/?10) characterizing [rectangular bands](https://en.wikipedia.org/wiki/Band_(algebra)).  It cannot hold in a non-trivial group.
+
 [1]: A. Sade. Quasigroupes obéissant à certaines lois. Rev. Fac. Sci. Univ. Istambul, 22:151–184, 1957.

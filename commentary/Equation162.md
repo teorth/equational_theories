@@ -1,1 +1,3 @@
 This law implies that the squaring map `S: x ↦ x◇x` is an involution.
+
+Among semigroups (associative magmas) this law is equivalent to [law 10](https://teorth.github.io/equational_theories/implications/?10) characterizing [rectangular bands](https://en.wikipedia.org/wiki/Band_(algebra)).  It cannot hold in a (non-trivial) commutative magma or quasigroup.

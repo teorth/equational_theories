@@ -1,0 +1,1 @@
+This law states that left multiplication by any square is an involution.  It is a twist of [law 16](https://teorth.github.io/equational_theories/implications/?16) `x = y◇(y◇x)` by the squaring map `S:x ↦ x◇x`, and is equivalent to it when `S` is surjective.

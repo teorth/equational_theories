@@ -1,0 +1,1 @@
+Among magmas whose left multiplication maps are injective, this law is equivalent to the [involutive right multiplication law 26](https://teorth.github.io/equational_theories/implications/?26) `x = (x◇y)◇y`.

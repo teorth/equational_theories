@@ -5,3 +5,5 @@ This law or its dual law 3102 are part of all [longest chains of implications](h
 It is the right 4-reductive law, which [plays a role](http://arxiv.org/abs/1409.8396) in the study of quandles.  The right m-reductive laws are [law 4](https://teorth.github.io/equational_theories/implications/?4), [law 9](https://teorth.github.io/equational_theories/implications/?9), [law 48](https://teorth.github.io/equational_theories/implications/?48), law 412, and so on.
 
 This law constrains each left multiplication independently to have as its fourth power a specific constant map.  On a set with n elements, the number of binary operations satisfying this law is the n-th power of [OEIS sequence A000950](https://oeis.org/A000950).
+
+This law cannot hold in a (non-trivial) commutative magma or (quasi)group.

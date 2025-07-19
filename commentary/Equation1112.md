@@ -1,1 +1,3 @@
 This equation implies that left multiplications are surjective.  Finite models of this equation are thus left quasigroups (bijective left multiplications) and left quasigroups obey [law 26110](https://teorth.github.io/equational_theories/implications/?26110) `x = (y◇((y◇x)◇y)) ◇ (y◇x)`.  Laws 1112 and 26110 together imply [law 3253](https://teorth.github.io/equational_theories/implications/?3253) `x◇x = x◇(x◇(x◇x))`, which in a left quasigroup implies [law 8](https://teorth.github.io/equational_theories/implications/?8) `x = x◇(x◇x)`.  Altogether, finite models obey that law.
+
+This law cannot hold in a non-trivial group.

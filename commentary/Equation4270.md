@@ -1,1 +1,1 @@
-This law states that right multiplications by any square coincide, namely `x ◇ (y ◇ y)` is independent of `y`.
+This law states that right multiplications by any square coincide, namely `x ◇ (y ◇ y)` is independent of `y`.  The set of squares is a submagma that obeys the [left unar law 38](https://teorth.github.io/equational_theories/implications/?38).

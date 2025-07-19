@@ -6,4 +6,4 @@ A nice example of a translation-invariant magma obeying this equation is `x ◇ 
 
 The coefficients of the linearization `ax+by` of 1648 are the golden ratio.
 
-This law implies that right multiplications are injective.
+This law implies that right multiplications are injective.  This law cannot hold in a non-trivial group.

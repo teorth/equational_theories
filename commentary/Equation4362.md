@@ -4,4 +4,4 @@ Its dual law, [4673](https://teorth.github.io/equational_theories/implications/?
 
 Equivalently, this law states that left multiplications commute.  It is also called the right-normal law, or left-permutability, or left-commutativity.  Its dual is one of the conditions defining [Novikov algebras](https://arxiv.org/pdf/1903.02238).
 
-Algebras that obey the two dual laws 4362 and 4673 are called bicommutative, or LR algebras.
+Algebras that obey the two dual laws 4362 and 4673 are called bicommutative, or LR algebras.  A magma that obeys law 4362 and [law 4684](https://teorth.github.io/equational_theories/implications/?4684) is an AG**-groupoid.
