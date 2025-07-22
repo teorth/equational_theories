@@ -7,7 +7,7 @@ infinite magma obeys $P$ without also obeying $Q$. Examples are given in \Cref{i
 
 Here we survey techniques for constructing infinite magmas that serve as counterexamples for implications
 between laws. Many of the techniques presented trace their origins to the first analysis of the Asterix equation
-(\Cref{eq65}), reviewed in \Cref{asterix-section}.
+(\Equareffull{65}), reviewed in \Cref{asterix-section}.
 
 \section{Translation-invariant magmas}
 
@@ -16,7 +16,7 @@ $$ y \op x = x + f(x-y)$$
 for some function $f: G \to G$.  Thus the translations on $G$ become magma isomorphisms.
 
 \begin{example}
-  A magma $G$ satisfying the left (\Cref{eq4}) or right (\Cref{eq5}) absorption laws is translation-invariant.
+  A magma $G$ satisfying the left (\Equaref{4}) or right (\Equaref{5}) absorption laws is translation-invariant.
   Equip the carrier $G$ with an Abelian group structure $(G,+,-,0)$ and define $f: G \to G$ as either $f(x) = -x$ or $f(x) = 0$.
 \end{example}
 
@@ -38,7 +38,7 @@ For instance, writing $x = y+h$, we have
 $$ y \op x = x + f(h)$$
 $$ x \op (y \op x) = x + f(h) + f^2(h)$$
 $$ y \op (x \op (y \op x)) = x + f(h) + f^2(h) + f( h + f(h) + f^2(h) )$$
-where $f^2 = f \circ f$, so the Asterix equation (\Cref{eq65}) for such magmas simplifies to the univariant functional equation
+where $f^2 = f \circ f$, so the Asterix equation (\Equaref{65}) for such magmas simplifies to the univariant functional equation
 \begin{equation}\label{fh}
    f(h) + f^2(h) + f( h + f(h) + f^2(h) ) = 0
 \end{equation}
@@ -174,7 +174,7 @@ and define $f: E_1 \to E_2$ by the formulae
 One can then check that $(E_0, E_1, E_2, f)$ is a partial solution to \Cref{fh}, and by construction $h \mapsto h + f(h)$ is not injective on $E_1$.  Using \Cref{iteration} to extend this partial solution to a full solution, we obtain the claim.
 \end{proof}
 
-\begin{corollary}[Asterix does not imply Obelix]\label{asterix-obelix}\uses{eq65,eq1491}  There exists a magma obeying the Asterix law (\Cref{eq65}) with carrier $\Z$ such that the left-multiplication maps $L_y: x \mapsto y \op x$ are not injective for any $y \in \Z$.  In particular, it does not obey the Obelix law (\Cref{eq1491}).
+\begin{corollary}[Asterix does not imply Obelix]\label{asterix-obelix}\uses{eq65,eq1491}  There exists a magma obeying the Asterix law (\Equaref{65}) with carrier $\Z$ such that the left-multiplication maps $L_y: x \mapsto y \op x$ are not injective for any $y \in \Z$.  In particular, it does not obey the Obelix law (\Equareffull{1491}).
 \end{corollary}
 
 \begin{proof}\uses{no-inject} Note that $L_y (y+h) = y + h + f(h)$, so the injectivity of the left-multiplication maps is equivalent to the injectivity of the map $h \mapsto h + f(h)$.  The non-injectivity then follows from \Cref{no-inject}. Note that the Obelix law clearly expresses $x$ as a function of $y$ and $L_y x = y \op x$, forcing injectivity of left-multiplication, so the Obelix law fails.
@@ -182,20 +182,20 @@ One can then check that $(E_0, E_1, E_2, f)$ is a partial solution to \Cref{fh},
 
 On the other hand, for finite magmas the situation is different:
 
-\begin{proposition}[Asterix implies Obelix for finite magmas]\label{asterix-obelix-finite}\uses{eq65,eq1491}  Any finite magma obeying the Asterix law (\Cref{eq65}) also is left-cancellative and obeys the Obelix law (\Cref{eq1491}).
+\begin{proposition}[Asterix implies Obelix for finite magmas]\label{asterix-obelix-finite}\uses{eq65,eq1491}  Any finite magma obeying the Asterix law (\Equaref{65}) also is left-cancellative and obeys the Obelix law (\Equaref{1491}).
 \end{proposition}
 
-\begin{proof}  From \Cref{eq65} we see the map $z \mapsto y \op z$ is surjective, hence injective on a finite magma; thus the magma is left-cancellative.  Replacing $x$ by $y \op x$ in this law, we see that
+\begin{proof}  From \Equaref{65} we see the map $z \mapsto y \op z$ is surjective, hence injective on a finite magma; thus the magma is left-cancellative.  Replacing $x$ by $y \op x$ in this law, we see that
 $$ y \op x = y \op ((y\op x) \op (y \op (y \op x)));$$
 using injectivity, we conclude
 $$ x = (y\op x) \op (y \op (y \op x))$$
-which is \Cref{eq1491}.
+which is \Equaref{1491}.
 \end{proof}
 
 A very similar argument shows that a finite magma that obeys the Obelix law has $z \mapsto y \op z$ injective, hence surjective, and then obeys the Asterix law.
 
 \section{Obelix}
-Obelix magmas are those obeying equation 1491, \Cref{eq1491}:
+Obelix magmas are those obeying equation 1491, \Equaref{1491}:
 $$x = (y \op x) \op (y \op (y \op x))$$
 Obelix is not particularly {\em structurally} similar to an Asterix, besides their shared resistance
 to small counterexamples. A related set of ideas can be used to construct an Obelix that does not
@@ -278,12 +278,12 @@ Such an operation is then associated (via a one-to-one correspondence) to a part
 
 Given a word $w(x_1,\dots,x_n)$ in variables $x_1,\dots,x_n$ (so $w$ is an element of the free magma on $n$ generators), we can say that $w(x_1,\dots,x_n)$ is \emph{well-defined} with respect to a partially defined magma operation $R$ if it can be fully evaluated using $R$.  For instance, the word $(x \op y) \op z$ is well-defined if there exists $w,u \in G$ such that $R(x,y,w)$ and $R(w,z,u)$ both hold, in which case $(x \op y) \op z$ evaluates to $u$.  Note from the axiom (VLT) that this evaluation is unique, if it exists.  Of course, in a genuine magma, all expressions are well-defined.  We say that an expression $w(x_1,\dots,x_n)$ is \emph{almost well-defined} if all strict subexpressions of $w$ are well-defined.  For instance, $(x \op y) \op z$ is almost well-defined if there exists $w \in G$ such that $R(x,y,w)$ holds.
 
-An equational law $w_1 \formaleq w_2$ involving some variables $x_1,\dots,x_n$ is said to be \emph{locally obeyed} by $R$ if,  whenever $w_1(x_1,\dots,x_n)$, $w_2(x_1,\dots,x_n)$ are almost well-defined, and one of the two expressions is well-defined and evaluates to some output $y$, then the other expression is also well-defined and evaluates to the same output $y$.  For instance, in order for $R$ to locally obey the associative law $(x \op y) \op z = x \op (y \op z)$ (\Cref{eq4512}), we require the following two axioms:
+An equational law $w_1 \formaleq w_2$ involving some variables $x_1,\dots,x_n$ is said to be \emph{locally obeyed} by $R$ if,  whenever $w_1(x_1,\dots,x_n)$, $w_2(x_1,\dots,x_n)$ are almost well-defined, and one of the two expressions is well-defined and evaluates to some output $y$, then the other expression is also well-defined and evaluates to the same output $y$.  For instance, in order for $R$ to locally obey the associative law $(x \op y) \op z = x \op (y \op z)$ (\Equaref{4512}), we require the following two axioms:
 \begin{description}
   \item[(4512-1)] If $R(x,y,w)$, $R(w,z,u)$, and $R(y,z,v)$, then $R(x,v,u)$.
   \item[(4512-2)] If $R(y,z,w)$, $R(x,w,u)$, and $R(x,y,v)$, then $R(v,z,u)$.
 \end{description}
-If a law involves a single variable on one side, then we only need one axiom.  For instance, the Asterix law (\Cref{eq65}) is locally obeyed by $R$ if and only if the following axiom holds:
+If a law involves a single variable on one side, then we only need one axiom.  For instance, the Asterix law (\Equaref{65}) is locally obeyed by $R$ if and only if the following axiom holds:
 \begin{description}
   \item[(65)] If $R(y,x,z)$ and $R(x,z,u)$, then $R(y,u,x)$.
 \end{description}
@@ -335,13 +335,13 @@ With this modification to $\Gamma$, if we run the above analysis, we now see tha
 \end{itemize}
 One can then finally (for instance, with the assistance of a automated theorem prover) verify that if $R$ is finitely supported and obeys $\Gamma = (VLT) + (65) + (65')$ and $a,b,c$ obey (novel-1), (novel-2), (undefined), then the $R'$ defined above is also finitely supported and obeys $\Gamma$, (extend), (define).  This shows that the theory $\Gamma$ is greedily extensible.
 
-Using this, one can for instance find a magma obeying \Cref{eq65} that fails the left-cancellative property
+Using this, one can for instance find a magma obeying \Equaref{65} that fails the left-cancellative property
 $$ y \op x = y \op x' \implies x=x'$$
 or in terms of ternary relations
 \begin{equation}\label{left-inject}
    R(y,x,z) \hbox{ and } R(y,x',z) \implies x=x'
 \end{equation}
-simply by starting with a partial solution, say on the natural numbers in which (e.g.) $R(1,2,0)$, $R(1,3,0)$ are the only situations in which $R$ holds.  One can easily verify that this obeys (VLT) and (65), (65'), but not \Cref{left-inject}, and so any magma constructed by the above greedy construction will not be left-cancellative.  Since the Obelix law \Cref{eq1491} forces left-cancellativity, this gives an alternate proof of \Cref{asterix-obelix}.
+simply by starting with a partial solution, say on the natural numbers in which (e.g.) $R(1,2,0)$, $R(1,3,0)$ are the only situations in which $R$ holds.  One can easily verify that this obeys (VLT) and (65), (65'), but not \Cref{left-inject}, and so any magma constructed by the above greedy construction will not be left-cancellative.  Since the Obelix law \Equaref{1491} forces left-cancellativity, this gives an alternate proof of \Cref{asterix-obelix}.
 
 \subsection{Equation 1722}
 
@@ -571,7 +571,7 @@ Similar: see \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equat
 
 \subsection{Translation-invariant models}
 
-The implication between the laws \Cref{eq1648} and \Cref{eq206} can be refuted by a translation-invariant
+The implication between the laws \Equareffull{1648} and \Equareffull{206} can be refuted by a translation-invariant
 magma on the integers. Define the function $f: \mathbb{Z} \to \mathbb{Z}$ by
 $$f(x) =
 \begin{cases}
@@ -587,11 +587,11 @@ Similar computations verify the other two cases.
 
 However, setting $x=0$ and $y=-1$ in Equation 206, we get
 $$(x \op (x \op y)) \op y = (x \op 1) \op y = (-1) \op y = -1 \neq x$$
-so the magma does not obey \Cref{eq206}. We can conclude
+so the magma does not obey \Equaref{206}. We can conclude
 
 \begin{theorem}[1648 does not imply 206]\label{non_imp_1648_206_thm}\uses{eq1648,eq206,models-def}
   \lean{Equation1648_not_implies_Equation206}\leanok
-  There exists a magma which satisfies \Cref{eq1648} and not \Cref{eq206}.
+  There exists a magma which satisfies \Equaref{1648} and not \Equaref{206}.
 \end{theorem}
 
 There are variation of the translation-invariant constructions refuting implications: e.g. in some cases,
@@ -612,18 +612,18 @@ consequent $Q$. This generally yields one or more counterexamples to the anteced
 \emph{trace} the effects of this initial modification and make further adjustments which restore the
 antecedent.
 
-A model refuting the implication between the laws \Cref{eq1659} and \Cref{eq4315} can be constructed using
-the modified base model technique. Start with the infinite model $(\mathbb{Z},\op)$ of \Cref{eq1659} given by the following operation:
+A model refuting the implication between the laws \Equareffull{1659} and \Equareffull{4315} can be constructed using
+the modified base model technique. Start with the infinite model $(\mathbb{Z},\op)$ of \Equaref{1659} given by the following operation:
 $$ x\op y = \begin{cases} x+1 & \text{if } x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases} $$
-A case analysis shows that the magma $(\mathbb{Z},\op)$  satisfies both \Cref{eq1659} and \Cref{eq4315}.
+A case analysis shows that the magma $(\mathbb{Z},\op)$  satisfies both \Equaref{1659} and \Equaref{4315}.
 We will eventually \emph{modify} it by setting
 $$x \op' y = \begin{cases} 0 & \text{if } x=0,\: x,y \text{ do not have the same parity} \\  x+1 & \text{if } x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases}$$
-and checking that $(\mathbb{N}, \op' )$ satisfies \Cref{eq1659} but refutes \Cref{eq4315}.
+and checking that $(\mathbb{N}, \op' )$ satisfies \Equaref{1659} but refutes \Equaref{4315}.
 
 One finds these modifications using the following strategy:
 
 First, choose some element (tuple) of the carrier $M$ that will constitute a counterexample to the
-consequent in the modified model. In this specific case, the consequent, \Cref{eq4315}, can be written as
+consequent in the modified model. In this specific case, the consequent, \Equaref{4315}, can be written as
 $$ x \op (y \op x) = x \op (y \op z)$$
 in equational form, which always holds when $x = z$. So let's choose the tuple $(0,0,1)$
 to constitute the required counterexample. Computing $0 \op (0 \op 0) = 0 \op 1 = -1$ and similarly
@@ -634,14 +634,14 @@ $0 \op'' 1 =0$, $0 \op'' 1 = 1$, $0 \op'' 1 = 2$, or perhaps even $0 \op'' 1 = -
 
 It's easy to rule out some of the possibilities. For instance, setting $0 \op'' 1 = 1$ would
 yield $0 \op'' (0 \op'' 0) = 0 \op'' 1 = 0 \op'' (0 \op'' 1)$ again. The simplest possibility which results in
-a counterexample to \Cref{eq4315} sets $0 \op'' 1 = 0$ and $x \op'' y = x \op y$ for any $x \neq 0, y \neq 1$.
+a counterexample to \Equaref{4315} sets $0 \op'' 1 = 0$ and $x \op'' y = x \op y$ for any $x \neq 0, y \neq 1$.
 
-Unfortunately, the resulting $(M,\op'')$ would not then obey \Cref{eq1659}. For any $z \in M$, one would have
+Unfortunately, the resulting $(M,\op'')$ would not then obey \Equaref{1659}. For any $z \in M$, one would have
 $$ (0 \op'' 1) \op'' ((1 \op'' 1) \op'' z) = 0 \op'' (2 \op'' z)$$
 which equals $0 \op'' 1 = 0$ as desired for even $z$, but equals $0 \op'' 3 = -1 \neq 0$ for odd $z$.
 
 However, since $f$ takes finitely many values in the base model, the breakage is tightly controlled:
-by considering what happens if $x \neq 0$ and $y \neq 1$, we see that all new counterexamples to \Cref{eq4315}
+by considering what happens if $x \neq 0$ and $y \neq 1$, we see that all new counterexamples to \Equaref{4315}
 have this form. The calculation now suggests defining yet another $\op'''$, where setting
 $0 \op''' 3 = 0$ would eliminate
 this counterexample. But doing that just moves the issue one level higher: one then has
@@ -657,7 +657,7 @@ operation is nonnegative whenever the operands are nonnegative. This finishes th
 
 \begin{theorem}[1659 does not imply 4315]\label{non_imp_1659_4315_thm}\uses{eq1659,eq4315,models-def}
   \lean{Equation1659_facts}\leanok
-  There exists a magma which satisfies \Cref{eq1659} and not \Cref{eq4315}.
+  There exists a magma which satisfies \Equaref{1659} and not \Equaref{4315}.
 \end{theorem}
 
 The result of a modified base model construction can be a finite modification (when $\op$ and $\op'$
@@ -669,7 +669,7 @@ more difficult refutations using this construction tend to require the latter so
 
 \section{The Dupont equation}\label{dupont-section}
 
-Now we consider the Dupont equation, \Cref{eq63}, which can be treated by a greedy translation invariant construction that is more complicated than the one considered for the Asterix law in \Cref{asterix-section}.
+Now we consider the Dupont equation, \Equareffull{63}, which can be treated by a greedy translation invariant construction that is more complicated than the one considered for the Asterix law in \Cref{asterix-section}.
 
 If we adopt a translation-invariant model
 $$ x \op y = x + f(y-x)$$
@@ -767,7 +767,7 @@ It is then a routine matter to check that $(E'_1,E'_2,f')$ is an extension of $(
 Now suppose that $h$ lies in $\tilde E_2$.  Then $h$ is of one of the forms \Cref{hp-form} for some $h' \in E_2 \backslash E_1$.  Suppose it is of the form $-h'$ or $f^2(h') - h'$.  We invoke \Cref{add-E1} to promote $h'$ to $E_1$ by using a suitable extension $(E'_1,E'_2,f')$; and now $h$ will lie in $E'_2$, giving the claim.  If instead $h$ is of the form $h'-f^2(h')$, then this procedure might not place $h$ in $E'_2$; but if it does not, it will be of the form $-h''$ for $h'' = f^2(h')-h' \in E'_2 \backslash E'_1$.  Applying \Cref{add-E1} one more time to now promote $h''$ to $E_1$, we will obtain a larger extension $(E''_1,E''_2,f'')$ with $h \in E''_2$, giving the claim.
 \end{proof}
 
-Iterating these lemmas in the usual fashion, we can conclude that any partial solution can be completed to a global model of \Cref{eq63}.
+Iterating these lemmas in the usual fashion, we can conclude that any partial solution can be completed to a global model of \Equaref{63}.
 
 Among other things, this permits one to generate models in which the function $f$ is not injective.  To see this, let $a$ be a non-zero element of $\Z^3$, let $x$ be an element of $\Z^3 \times \Z$ outside of $\Z^3$, and consider the partial solution $(\Z^3, \Z^3 \cup \{x\}, f)$ where $f(h) = Th$ for $h \in \Z^3$ and $f(x) = a$.  One can check that this is a partial solution and is not injective, since $f(x) = f(T^{-1} a)$.  This non-injectivity implies in particular that the model is not left-cancellative, and hence does not obey the law
 $$ x = (y \op x) \op ((y \op x) \op y)$$

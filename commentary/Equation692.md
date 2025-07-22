@@ -1,9 +1,9 @@
-## A crossed inverse quasigroup law
+## A twist of the semi-symmetric quasigroup law
 
-This law is a twist of the semi-symmetric quasigroup [law 14](https://teorth.github.io/equational_theories/implications/?14) `y◇(x◇y) = x` by an automorphism `f`, equal to the cube map `f(x) = x◇(x◇x)`.  It implies that the magma is a quasigroup that obeys
+A magma satisfying this law is a quasigroup (left and right multiplication are bijective).  The left and right cubing maps `B: x ↦ x◇(x◇x)` and `C: x ↦ (x◇x)◇x` are automorphisms that cubes to the identity and are inverses of each other (`B(x◇y) = B(x)◇B(y)` and `B(B(B(x))) = C(C(C(x))) = B(C(x)) = C(B(x)) = x`).
 
-- the middle crossed inverse property `f(y)◇(x◇y)=x` or equivalently `(f(y)◇x)◇y=x` (which imply that `f(x◇y) = f(x)◇f(y)`);
+The magma obeys the middle crossed inverse property `B(y)◇(x◇y)=x` or equivalently `(B(y)◇x)◇y=x`.  It also obeys the left and right crossed inverse property stating that `(y◇x)◇y` and `y◇(x◇y)` are `y`-independent, specifically `(y◇x)◇y = B(B(x))` and `y◇(x◇y) = B(x)`, namely the dual laws [4588](https://teorth.github.io/equational_theories/implications/?4588) and [4273](https://teorth.github.io/equational_theories/implications/?4273).
 
-- the left and right crossed inverse property stating that `(y◇x)◇y` and `y◇(x◇y)` are `y`-independent, specifically `(y◇x)◇y = f⁻¹(x)` and `y◇(x◇y) = f(x)`.
+A more symmetrical way to state these facts is that for any three elements `x,y,z` of the magma the nine equations `x◇y=z`, `B(x◇B(y))=z`, `B(B(x)◇y)=z`, `y◇z=B(x)`, `y◇B(z)=x`, `B(y)◇z=x`, `B(z◇x)=y`, `z◇B(x)=B(y)`, `B(z)◇x=B(y)` are equivalent.
 
-A different twist is [law 695](https://teorth.github.io/equational_theories/implications/?695), which only implies the middle but not the left/right crossed inverse properties.
+In short, this law is a twist of the semi-symmetric quasigroup [law 14](https://teorth.github.io/equational_theories/implications/?14) `x = y◇(x◇y)` by an automorphism that cubes to the identity.  Analogous twists of law 14 include [law 66](https://teorth.github.io/equational_theories/implications/?66), [law 692](https://teorth.github.io/equational_theories/implications/?692), [law 695](https://teorth.github.io/equational_theories/implications/?695), [law 880](https://teorth.github.io/equational_theories/implications/?880), [law 978](https://teorth.github.io/equational_theories/implications/?978), [law 1073](https://teorth.github.io/equational_theories/implications/?1073), [law 1492](https://teorth.github.io/equational_theories/implications/?1492), [law 1492](https://teorth.github.io/equational_theories/implications/?1496), [law 1695](https://teorth.github.io/equational_theories/implications/?1695), [law 1719](https://teorth.github.io/equational_theories/implications/?1719).

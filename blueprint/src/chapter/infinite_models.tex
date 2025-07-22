@@ -1,20 +1,22 @@
-\chapter{Infinite models}\label{infinite-model-chapter}
+\chapter{Finite implications and infinite models}\label{infinite-model-chapter}
 
-In this chapter we consider non-implications which are refuted only on infinite models, as those are
-more challenging to prove---they can't be proved by directly giving an operation table and checking
-which laws it satisfies.
+In this chapter we discuss implications that hold for finite magmas but not infinite ones.  The $820$ such implications between laws of order up to $4$ are listed at \url{https://github.com/teorth/equational_theories/blob/main/data/Austin_implications.txt}.  The implications are proven using consequences of finiteness such as the equivalence of injectivity and surjectivity.  The non-implications for infinite magmas are obtained by constructing infinite models, which are more challenging to construct---they can't be proved by directly giving an operation table and checking which laws it satisfies.  Here we simply build a few of these infinite counterexamples, while in \Cref{infinite-magma-constructions-chapter} we describe thoroughly the construction techniques developed throughout this project.
 
-The singleton or empty magma obeys all equational laws.  One can ask whether an equational law admits nontrivial finite or infinite models.  An \emph{Austin law} is a law which admits infinite models, but no nontrivial finite models.  Austin \cite{austin} established the first such law, namely the order $9$ law
+\section{Austin laws}
+
+The singleton or empty magma obeys all equational laws.  It is natural to ask whether an equational law admits nontrivial finite or infinite models.
+If no model exists, then the law is equivalent to \Equareffull{2}.  An \emph{Austin law} is a law which admits infinite models, but no nontrivial finite models: the law is equivalent to \Equaref{2} for finite magmas.
+Austin \cite{austin} established the first such law, namely the order $9$ law
 $$ (((1 \op 1) \op 1) \op 0) \op (((1 \op 1) \op ((1 \op 1) \op 1)) \op 2) \formaleq 0.$$
 A shorter Austin law of order $6$ was established in \cite{Kisielewicz}:
 
 \begin{theorem}[Kisielewicz's first Austin law]
   \lean{InfModel.Finite.Equation374794_implies_Equation2,InfModel.Equation374794_not_implies_Equation2}\leanok
   \label{kis-thm}\uses{eq374794,eq2}
-  \Cref{eq374794} is an Austin law.
+  \Equareffull{374794} is an Austin law.
 \end{theorem}
 
-\begin{proof} \leanok  First we show that every finite model of \Cref{eq374794} is trivial.  Write $y^2 := y \op y$ and $y^3 := y^2 \op y$.  For any $y,z$, introduce the functions ${f_y: x \mapsto y^3 \op x}$ and ${g_{yz}: x \mapsto x \op (y^2 \op z)}$.  \Cref{eq374794} says that $g_{yz}(f_y(x))=x$, hence by finiteness $g_{yz}=f_y^{-1}$, showing that $g_{yz}$ does not depend on the value of $z$.  Since
+\begin{proof} \leanok  First we show that every finite model of \Equaref{374794} is trivial.  Write $y^2 := y \op y$ and $y^3 := y^2 \op y$.  For any $y,z$, introduce the functions ${f_y: x \mapsto y^3 \op x}$ and ${g_{yz}: x \mapsto x \op (y^2 \op z)}$.  \Equaref{374794} says that $g_{yz}(f_y(x))=x$, hence by finiteness $g_{yz}=f_y^{-1}$, showing that $g_{yz}$ does not depend on the value of $z$.  Since
 $$ f_y(y^2 \op z) = g_{yz}(y^3),$$
 it follows that $f_y(y^2 \op z)=f_y(y^3)$ which by injectivity of $f_y$ implies that $z\mapsto y^2 \op z$ is a constant function (with $y$ fixed).  Substituting $y^2$ for $y$ shows that the same is true for $z\mapsto (y^2 \op y^2) \op z$, and since
 $$ f_y(z) = (y^2 \op y) \op z = (y^2 \op y^2) \op z$$
@@ -36,12 +38,12 @@ and since $(y \op y) \op z$ is a power of two for all $y, z$ it follows that
 $$ 3^x \op ((y \op y) \op z) = x. $$
 The case $x=1$ requires a further argument: observe that $w = (y \op y) \op z$ evaluates to one unless $z = 2^y$, in which case it evaluates to $2^{2^y}$ (which is greater than or equal to four).  In particular, $w$ never takes the value two.  Thus
 $$ (((y \op y) \op y) \op 1) \op ((y \op y) \op z) = 2 \op w = 1, $$
-concluding our proof that this magma is a model of \Cref{eq374794}
+concluding our proof that this magma is a model of \Equaref{374794}
 \end{proof}
 
 An even shorter law (order $5$) was obtained by the same author in a follow-up paper \cite{Kisielewicz2}:
 
-\begin{theorem}[Kisielewicz's second Austin law]\label{kis-thm2}\uses{eq2, eq28770}\lean{InfModel.Finite.Equation28770_implies_Equation2}\lean{InfModel.Equation28770_not_implies_Equation2}\leanok \Cref{eq28770} is an Austin law.
+\begin{theorem}[Kisielewicz's second Austin law]\label{kis-thm2}\uses{eq2, eq28770}\lean{InfModel.Finite.Equation28770_implies_Equation2}\lean{InfModel.Equation28770_not_implies_Equation2}\leanok \Equareffull{28770} is an Austin law.
 \end{theorem}
 
 \begin{proof} \leanok Using the $y^2$ and $y^3$ notation as before, the law reads
@@ -50,7 +52,7 @@ An even shorter law (order $5$) was obtained by the same author in a follow-up p
   \end{equation}
 In particular, for any $y$, the map $T_y \colon x \mapsto y^3 \op x$ is injective, hence bijective in a finite model $G$.  In particular we can find a function $f : G \to G$ such that $T_y f(y) = y^3$ for all $y$  Applying \Cref{kis2-law} with $x = f(y)$, we conclude
 $$ T_y(y \op z) = y^3 \op (y \op z) = f(y) $$
-and thus $y \op z$ is independent of $z$ by injectivity of $T_y$.  Thus, the left-hand side of \Cref{kis2-law} does not depend on $x$, and so the model is trivial.  This shows there are no non-trivial finite models.
+and thus $y \op z$ is independent of $z$ by injectivity of $T_y$.  Thus, the right-hand side of \Cref{kis2-law} does not depend on $x$, and so the model is trivial.  This shows there are no non-trivial finite models.
 
 To establish an infinite model, use $\N$ with $x \op y$ defined by requiring
 $$ y \op y = 2^y; \quad 2^y \op y = 3^y$$
@@ -60,47 +62,18 @@ for $x \neq 3^y$, and
 $$ (3^y 5^x) \op z = x$$
 for $z \neq 3^y 5^x$.  Finally set
 $$ 2^{3^y} \op z = 3^y$$
-for $z \neq 3^y, 2^{3^y}$.  All other assignments of $\op$ may be made arbitrarily. It is then a routine matter to establish \Cref{kis2-law}.
+for $z \neq 3^y, 2^{3^y}$.  All other assignments of $\op$ may be made almost arbitrarily, such as setting them to $1$. It is then a routine matter to establish \Cref{kis2-law}.
 \end{proof}
 
 In that paper a computer search was also used to show that no law of order four or less is an Austin law.
 
-An open question is whether \Cref{eq5093} is an Austin law.  We have the following partial result from \cite{Kisielewicz2}:
+An open question is whether \Equareffull{5093} is an Austin law.  We have the following partial result from \cite{Kisielewicz2}:
 
-\begin{theorem}[Equation 5093 has no non-trivial finite models]\lean{InfModel.Finite.Equation5093_implies_Equation2}\leanok\label{5093-nontrivial}\uses{eq5093, models-def} \Cref{eq5093} has no non-trivial finite models.
+\begin{theorem}[Equation 5093 has no non-trivial finite models]\lean{InfModel.Finite.Equation5093_implies_Equation2}\leanok\label{5093-nontrivial}\uses{eq5093, models-def} \Equaref{5093} has no non-trivial finite models.
 \end{theorem}
 
-\begin{proof} \leanok From \Cref{eq5093} we see that the map $w \mapsto y \op w$ is onto, hence injective in a finite model.  Using this injectivity four times in \Cref{eq5093}, we see that $z \op y$ does not depend on $z$, hence the expression
-$x \op (z \op y)$ does not depend on $x$.  By \Cref{eq5093} again, this means that $x$ does not depend on $x$, which is absurd in a non-trivial model.
-\end{proof}
-
-We also have such a non-implication involving two laws of order $4$:
-
-\begin{theorem}[3994 implies 3588 for finite models]\label{finite_imp_3994_3588_thm}\uses{eq3994,eq3588,models-def}
-  \lean{InfModel.Finite.Equation3994_implies_Equation3588}\leanok
-  All finite magmas which satisfy \Cref{eq3994} also satisfy \Cref{eq3588}.
-\end{theorem}
-
-\begin{proof}\label{finite_imp_3994_3588} \leanok
-  For a finite magma $M$, consider the set $S = \{x \op y | x, y \in M\}$.
-  Now $f_z : x \mapsto z \op x$ and $g_z : x \mapsto x \op z$.
-  They both map $S$ to $S$, and due to the hypothesis $g_z \op f_z$ is the identity on $S$,
-  so because $S$ is finite $f_z$ and $g_z$ must be inverse bijections on it, and therefore
-  they commute.
-\end{proof}
-
-\begin{theorem}[3994 does not imply 3588 for infinite models]\label{non_imp_3994_3588_thm}\uses{eq3994,eq3588,models-def}
-  \lean{InfModel.Equation3994_not_implies_Equation3588}\leanok
-  There exists a magma which satisfies \Cref{eq3994} and not \Cref{eq3588}.
-\end{theorem}
-
-\begin{proof} \leanok
-  Consider $\mathbb{N}$, with $x \op y$ defined as $x \oplus y$ (bitwise XOR) if $x$ and $y$ are even,
-  $y+2$ if only $y$ is even, $x \dot - 2$ if only $x$ is even, and $0$ if both are odd.
-  Note that the range of the operation is the set of even naturals.
-  \Cref{eq3994} is satisfied, because for even $z$ we get $z \oplus (x \op y) \oplus z = x \op y$
-  and for odd $z$ we get $(x \op y) + 2 \dot - 2 = x \op y$.
-  Setting $x = y = z = 1$, \Cref{eq3588} isn't satisfied.
+\begin{proof} \leanok From \Equaref{5093} we see that the map $w \mapsto y \op w$ is onto, hence injective in a finite model.  Using this injectivity four times in \Equaref{5093}, we see that $z \op y$ does not depend on $z$, hence the expression
+$x \op (z \op y)$ does not depend on $x$.  By \Equaref{5093} again, this means that $x$ does not depend on $x$, which is absurd in a non-trivial model.
 \end{proof}
 
 The following result was established in \cite{austin_finite}:
@@ -111,7 +84,9 @@ The following result was established in \cite{austin_finite}:
 \begin{proof} \leanok  If neither side of the law is a single variable then the zero law $x \op y = 0$ will work, so one can assume the law takes the form $x = f(x,y)$.  Consider a finite field $F$ with the operation $x \op y := ax+by$ for some coefficients $a,b \in F$.  Then the law becomes a pair of equations $P(a,b)=0$, $Q(a,b)=1$ in the coefficients for some polynomials $P,Q$ with integer coefficients, which one can verify to not divide each other (they have the same degree, and do not have the same set of non-zero monomials).  From Bezout's theorem, this equation has a solution in some field, and hence by the Lefschetz principle it has a solution in a finite field.
 \end{proof}
 
-Many implications for finite magmas rely on the fact that if $f, g:X \to X$ are functions on a finite set $X$, then $f \circ g = I$ if and only if $g \circ f = I$.  Two more complicated variants of this are as follows.
+\section{Austin implications}
+
+We now broaden the discussion to consider not only the implications to \Equareffull{2}, but also between any pair of equational laws.  Many implications for finite magmas rely on the fact that if $f, g:X \to X$ are functions on a finite set $X$, then $f \circ g = I$ if and only if $g \circ f = I$.  Two more complicated variants of this are as follows.
 
 \begin{lemma}\label{ffg} \lean{FiniteModel.Finite.f_ffg_implies_f_fgf} \leanok Let $X$ be finite, and let $f, g: X \to X$ be such that $f = f \circ f \circ g$.  Then $f = f \circ g \circ f$.
 \end{lemma}
@@ -133,11 +108,38 @@ This can be used to obtain a few positive finite magma implications, for instanc
 \begin{proof} \leanok By the pigeonhole principle, there exists $n \geq 1$, $m \geq 0$ such that $f^{m+n} = f^m$, which implies on iteration that $f^{m+mn} = f^m$ and hence $f^{2mn} = f^{mn}$, giving the claim.
 \end{proof}
 
-As a sample application, we have
+As a sample application, we have the following finite implications between laws of order up to~$4$.
 
-\begin{corollary}[3342]\label{3342} \lean{Eq3342.Finite.Equation3342_implies_Equation3522,Eq3342.Finite.Equation3342_implies_Equation4118} \leanok  On a finite magma $M$, equation 3342, $x \op y= y \op (x \op (x \op x))$, implies
+\begin{proposition}[3994 implies 3588 for finite models]\label{finite_imp_3994_3588_thm}\uses{eq3994,eq3588,models-def}
+  \lean{InfModel.Finite.Equation3994_implies_Equation3588}\leanok
+  All finite magmas which satisfy \Equareffull{3994} also satisfy \Equareffull{3588}.
+\end{proposition}
+
+\begin{proof}\label{finite_imp_3994_3588} \leanok
+  For a finite magma $M$, consider the set $S = \{x \op y | x, y \in M\}$.
+  Now $f_z : x \mapsto z \op x$ and $g_z : x \mapsto x \op z$.
+  They both map $S$ to $S$, and due to the hypothesis $g_z \op f_z$ is the identity on $S$,
+  so because $S$ is finite $f_z$ and $g_z$ must be inverse bijections on it, and therefore
+  they commute.
+\end{proof}
+
+\begin{proposition}[3994 does not imply 3588 for infinite models]\label{non_imp_3994_3588_thm}\uses{eq3994,eq3588,models-def}
+  \lean{InfModel.Equation3994_not_implies_Equation3588}\leanok
+  There exists a magma which satisfies \Equaref{3994} and not \Equaref{3588}.
+\end{proposition}
+
+\begin{proof} \leanok
+  Consider $\mathbb{N}$, with $x \op y$ defined as $x \oplus y$ (bitwise XOR) if $x$ and $y$ are even,
+  $y+2$ if only $y$ is even, $x \dot - 2$ if only $x$ is even, and $0$ if both are odd.
+  Note that the range of the operation is the set of even naturals.
+  \Equaref{3994} is satisfied, because for even $z$ we get $z \oplus (x \op y) \oplus z = x \op y$
+  and for odd $z$ we get $(x \op y) + 2 \dot - 2 = x \op y$.
+  Setting $x = y = z = 1$, \Equaref{3588} isn't satisfied.
+\end{proof}
+
+\begin{proposition}[3342]\label{3342} \lean{Eq3342.Finite.Equation3342_implies_Equation3522,Eq3342.Finite.Equation3342_implies_Equation4118} \leanok  On a finite magma $M$, equation 3342, $x \op y= y \op (x \op (x \op x))$, implies
   equation 3522, $x \op y = x \op ((y \op y) \op y)$, as well as equation 4118, $x \op y = ((x \op x) \op x) \op y$.
-\end{corollary}
+\end{proposition}
 
 \begin{proof}\uses{period} \leanok Write $Sx := x \op$, $fx := x \op Sx$ and $Cx = Sx \op x$, then we have $x \op y= y \op fx$, and our task is to show $x \op y = Cx \op y$ and $x \op y = x \op Cy$ for finite magmas, giving the four open implications.
 

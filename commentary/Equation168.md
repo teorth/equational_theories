@@ -7,3 +7,5 @@ A sample result from Knuth's paper: a finite central groupoid of order `n` exist
 A special type of central groupoid is a natural central groupoid, characterized by Equation 26302.
 
 This [paper of Kundgen, Leander, and Thomassen](https://www.sciencedirect.com/science/article/pii/S0097316511000616) discusses a number of ways to generate new central groupoids from old, including "switchings" and "extensions".
+
+This law cannot hold in a (non-trivial) commutative or associative magma nor in a quasigroup.  This law implies that the squaring map `S: x ↦ x◇x` is an involution.

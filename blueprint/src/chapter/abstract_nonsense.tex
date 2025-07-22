@@ -31,19 +31,19 @@ We remark that the ordinary free magma $M_X$ corresponds to the case when $\Gamm
 \end{proof}
 
 \begin{example}[Free associative magma]
-  Let $\Gamma$ consist solely of the associative law, \Cref{eq4512} (so $X$ contains $0,1,2$). Then one can take $M_{X,\Gamma}$ to be the set of nonempty strings with alphabet $X$, with magma operation given by concatenation, and $\iota_{X,\Gamma}(x)$ being the length one string $x$. It is a routine matter to verify that this obeys the axioms of a free magma subject to $\Gamma$.
+  Let $\Gamma$ consist solely of the associative law, \Equaref{4512} (so $X$ contains $0,1,2$). Then one can take $M_{X,\Gamma}$ to be the set of nonempty strings with alphabet $X$, with magma operation given by concatenation, and $\iota_{X,\Gamma}(x)$ being the length one string $x$. It is a routine matter to verify that this obeys the axioms of a free magma subject to $\Gamma$.
 \end{example}
 
 \begin{example}[Free associative commutative magma]\label{facm}
-  Let $\Gamma$ consist of the associative law (\Cref{eq4512}) and the commutative law (\Cref{eq43}). Then one can take $M_{X,\Gamma}$ to be the free abelian monoid $\N_0^X \backslash 0$ of tuples $(n_x)_{x \in X}$ with the $n_x$ natural numbers, not all zero, with all but finitely many of the $n_x$ vanishing, with the magma operation given by vector addition, and with $\iota_{X,\Gamma}(x)$ being the standard generator of $\N^X$ associated to $x \in X$; one can think of this space as the space of formal non-empty commuting associating sums of $X$. It is a routine matter to verify that this obeys the axioms of a free magma subject to $\Gamma$.
+  Let $\Gamma$ consist of the associative law (\Equaref{4512}) and the commutative law (\Equaref{43}). Then one can take $M_{X,\Gamma}$ to be the free abelian monoid $\N_0^X \backslash 0$ of tuples $(n_x)_{x \in X}$ with the $n_x$ natural numbers, not all zero, with all but finitely many of the $n_x$ vanishing, with the magma operation given by vector addition, and with $\iota_{X,\Gamma}(x)$ being the standard generator of $\N^X$ associated to $x \in X$; one can think of this space as the space of formal non-empty commuting associating sums of $X$. It is a routine matter to verify that this obeys the axioms of a free magma subject to $\Gamma$.
 \end{example}
 
 \begin{example}[Free left absorptive magma]\label{freeleft}
-  Let $\Gamma$ consist of the left absorptive law (\Cref{eq4}). Then one can take $M_{X,\Gamma}$ to be $X$ with the law $x \op y = x$, and $\iota_{X,\Gamma}$ to be the identity map. It is easy to see that this is indeed a free magma subject to $\Gamma$.
+  Let $\Gamma$ consist of the left absorptive law (\Equaref{4}). Then one can take $M_{X,\Gamma}$ to be $X$ with the law $x \op y = x$, and $\iota_{X,\Gamma}$ to be the identity map. It is easy to see that this is indeed a free magma subject to $\Gamma$.
 \end{example}
 
 \begin{example}[Free constant magma]\label{freeconst}
-  Let $\Gamma$ consist of the constant law (\Cref{eq46}). Then one can take $M_{X,\Gamma}$ to be the disjoint union $X \uplus \{0\}$ of $X$ and another object $0$, with $\iota_{X,\Gamma}$ being the identity embedding, and with the zero magma law $x \op y = 0$ for all $x,y \in X \uplus \{0\}$.
+  Let $\Gamma$ consist of the constant law (\Equaref{46}). Then one can take $M_{X,\Gamma}$ to be the disjoint union $X \uplus \{0\}$ of $X$ and another object $0$, with $\iota_{X,\Gamma}$ being the identity embedding, and with the zero magma law $x \op y = 0$ for all $x,y \in X \uplus \{0\}$.
 \end{example}
 
 Free magmas can be used to characterize entailment by $\Gamma$ in terms of a canonical invariant.
@@ -102,15 +102,15 @@ One promising source of theories $\Gamma$ for which the free magma $M_{X,\Gamma}
 \end{definition}
 
 \begin{example}
-  The associative law, \Cref{eq4512}, appears to be confluent {\bf check this}.
+  The associative law, \Equaref{4512}, appears to be confluent {\bf check this}.
 \end{example}
 
 \begin{example}
-  The theory consisting of both the associative and commutative laws, \Cref{eq4512}, \Cref{eq43}, appears to be confluent {\bf check this}.
+  The theory consisting of both the associative and commutative laws, \Equaref{4512}, \Equaref{43}, appears to be confluent {\bf check this}.
 \end{example}
 
 \begin{example}
-  The idempotent law, \Cref{eq3}, appears to be confluent {\bf check this}.
+  The idempotent law, \Equaref{3}, appears to be confluent {\bf check this}.
 \end{example}
 
 The significance of confluent theories lies in
@@ -134,7 +134,7 @@ The significance of confluent theories lies in
 It is thus of interest to locate some confluent laws.  Here is a non-trivial example:
 
 \begin{theorem}[477 confluent]\label{477-confl}\uses{confluent-theory, eq477}
-  \Cref{eq477} is confluent.
+  \Equareffull{477} is confluent.
 \end{theorem}
 
 \begin{proof}\uses{477-lemma}

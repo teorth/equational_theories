@@ -2,17 +2,17 @@
 
 We collect here some notable implications between the the selected laws in \Cref{subgraph-eq}.   By \Cref{sound-complete}, every implication can basically be established by a finite number of rewrites.  In most cases, the sequence of rewrites is quite straightforward, and the implication is very easy, but we record some less obvious examples.
 
-\begin{theorem}[387 implies 43]\label{387_implies_43}\uses{eq387,eq43}\lean{Subgraph.Equation387_implies_Equation43}\leanok  \Cref{eq387} implies \Cref{eq43}.
+\begin{theorem}[387 implies 43]\label{387_implies_43}\uses{eq387,eq43}\lean{Subgraph.Equation387_implies_Equation43}\leanok  \Equareffull{387} implies \Equareffull{43}.
 \end{theorem}
 
 \begin{proof}\leanok (From \href{https://mathoverflow.net/a/450905/766}{MathOverflow}).
-  By \Cref{eq387}, one has the law
+  By \Equaref{387}, one has the law
 \begin{equation}\label{387-again}
   (x \op x) \op y = y \op x.
 \end{equation}
 Specializing to $y=x \op x$, we conclude
 $$(x \op x) \op (x \op x) = (x \op x) \op x$$
-and hence by another application of \Cref{eq387} we see that $x \op x$ is idempotent:
+and hence by another application of \Equaref{387} we see that $x \op x$ is idempotent:
 \begin{equation}\label{idem}
   (x \op x) \op (x \op x) = x \op x.
 \end{equation}
@@ -23,22 +23,22 @@ so in particular $x \op x$ commutes with $y \op y$:
 \end{equation}
 Also, from two applications of \Cref{387-again} one has
 $$(x \op x) \op (y \op y) = (y \op y) \op x = x \op y.$$
-Thus \Cref{op-idem} simplifies to $x \op y = y \op x$, which is \Cref{eq43}.
+Thus \Cref{op-idem} simplifies to $x \op y = y \op x$, which is \Equaref{43}.
 \end{proof}
 
-\begin{theorem}[29 equivalent to 14]\label{29_equiv_14} \uses{eq29,eq14}\lean{Subgraph.Equation29_implies_Equation14}\leanok  \Cref{eq29} is equivalent to \Cref{eq14}.
+\begin{theorem}[29 equivalent to 14]\label{29_equiv_14} \uses{eq29,eq14}\lean{Subgraph.Equation29_implies_Equation14}\leanok  \Equareffull{29} is equivalent to \Equareffull{14}.
 \end{theorem}
 
 This result was posed as Problem A1 from Putnam 2001.
 
-\begin{proof}\leanok\uses{duality} By \Cref{duality} it suffices to show that \Cref{eq29} implies \Cref{eq14}.  From \Cref{eq29} one has
+\begin{proof}\leanok\uses{duality} By \Cref{duality} it suffices to show that \Equaref{29} implies \Equaref{14}.  From \Equaref{29} one has
   $$ x = ((x \op y) \op x) \op (x \op y)$$
   and also
   $$ y = (x \op y) \op x$$
-  giving $x = y \op (x \op y)$, which is \Cref{eq14}.
+  giving $x = y \op (x \op y)$, which is \Equaref{14}.
 \end{proof}
 
-\begin{theorem}[14 implies 29]\label{14_implies_29} \uses{eq29,eq14}\lean{Subgraph.Equation14_implies_Equation29}\leanok  \Cref{eq14} implies \Cref{eq29}.
+\begin{theorem}[14 implies 29]\label{14_implies_29} \uses{eq29,eq14}\lean{Subgraph.Equation14_implies_Equation29}\leanok  \Equaref{14} implies \Equaref{29}.
 \end{theorem}
 
 This result was posed as Problem A1 from Putnam 2001.
@@ -48,7 +48,7 @@ This result was posed as Problem A1 from Putnam 2001.
 
 The following result was Problem A4 on Putnam 1978.
 
-\begin{theorem}[3744 implies 3722, 381]\label{3744_implies_3722_381}\uses{eq3744, eq3722, eq381}\lean{Subgraph.Equation3744_implies_Equation3722, Subgraph.Equation3744_implies_Equation381}\leanok \Cref{eq3744} implies \Cref{eq3722} and \Cref{eq381}.
+\begin{theorem}[3744 implies 3722, 381]\label{3744_implies_3722_381}\uses{eq3744, eq3722, eq381}\lean{Subgraph.Equation3744_implies_Equation3722, Subgraph.Equation3744_implies_Equation381}\leanok \Equareffull{3744} implies \Equareffull{3722} and \Equareffull{381}.
 \end{theorem}
 
 \begin{proof}\leanok By hypothesis, one has
@@ -60,16 +60,16 @@ for all $x,y,z,w$.  Various specializations of this give
  x \op z &= (x \op z) \op (x \op z) \label{381-2} \\
 (x \op z) \op y &= ((x \op z) \op (x \op z)) \op (y \op y) \label{381-3}.
 \end{align}
-\Cref{381-2} gives \Cref{eq3722}, while \Cref{381-1}, \Cref{381-2}, \Cref{381-3} gives
+\Cref{381-2} gives \Equaref{3722}, while \Cref{381-1}, \Cref{381-2}, \Cref{381-3} gives
 $$ x \op y = (x\op z) \op y$$
-which is \Cref{eq381}.
+which is \Equaref{381}.
 \end{proof}
 
-\begin{theorem}[1689 is equivalent to 2]\label{1689_equiv_2}\uses{eq1689, eq2}\lean{Subgraph.Equation1689_implies_Equation2, Subgraph.Equation2_implies_Equation1689}\leanok \Cref{eq1689} is equivalent to \Cref{eq2}.
+\begin{theorem}[1689 is equivalent to 2]\label{1689_equiv_2}\uses{eq1689, eq2}\lean{Subgraph.Equation1689_implies_Equation2, Subgraph.Equation2_implies_Equation1689}\leanok \Equareffull{1689} is equivalent to \Equaref{2}.
 \end{theorem}
 
 
-\begin{proof}\leanok  The implication of \Cref{eq1689} from \Cref{eq2} is trivial.  The converse is a surprisingly long chain of implications; see pages 326--327 of \cite{Kisielewicz2}.  With some computer assistance, we found the following human-readable proof.
+\begin{proof}\leanok  The implication of \Equaref{1689} from \Equaref{2} is trivial.  The converse is a surprisingly long chain of implications; see pages 326--327 of \cite{Kisielewicz2}.  With some computer assistance, we found the following human-readable proof.
 We denote $y^1=y$ and $y^{n+1}=y^n\op y$ for $n\geq 1$.
 We also introduce the notation
 \begin{equation}
@@ -105,10 +105,10 @@ On the other hand, \eqref{Kisielewicz-ftg} with $(u,v)=(t,t^5)$ implies $t^3 = t
 
 The following result was established in \cite{mendelsohn-padmanabhan}.
 
-\begin{theorem}[Consequences of 1571]\label{1571_impl}\uses{eq1571, eq2662, eq40, eq23, eq8, eq16, eq14, eq43, eq4512}\lean{Subgraph.Equation1571_implies_Equation2662, Subgraph.Equation1571_implies_Equation40, Subgraph.Equation1571_implies_Equation23,Subgraph.Equation1571_implies_Equation8, Subgraph.Equation1571_implies_Equation16, Subgraph.Equation1571_implies_Equation43, Subgraph.Equation1571_implies_Equation4512}\leanok  Magmas obeying \Cref{eq1571} also obey \Cref{eq2662}, \Cref{eq40}, \Cref{eq23}, \Cref{eq8}, \Cref{eq16}, \Cref{eq14}, \Cref{eq43}, and \Cref{eq4512}, and are in fact abelian groups of exponent two.  Conversely, all abelian groups of exponent two obey \Cref{eq1571}.
+\begin{theorem}[Consequences of 1571]\label{1571_impl}\uses{eq1571, eq2662, eq40, eq23, eq8, eq16, eq14, eq43, eq4512}\lean{Subgraph.Equation1571_implies_Equation2662, Subgraph.Equation1571_implies_Equation40, Subgraph.Equation1571_implies_Equation23,Subgraph.Equation1571_implies_Equation8, Subgraph.Equation1571_implies_Equation16, Subgraph.Equation1571_implies_Equation43, Subgraph.Equation1571_implies_Equation4512}\leanok  Magmas obeying \Equareffull{1571} also obey \Equaref{2662}, \Equaref{40}, \Equaref{23}, \Equaref{8}, \Equaref{16}, \Equaref{14}, \Equaref{43}, and \Equaref{4512}, and are in fact abelian groups of exponent two.  Conversely, all abelian groups of exponent two obey \Equaref{1571}.
 \end{theorem}
 
-\begin{proof}\leanok  Suppose that a magma $G$ obeys \Cref{eq1571}, thus
+\begin{proof}\leanok  Suppose that a magma $G$ obeys \Equaref{1571}, thus
 \begin{equation}\label{1571-again}
  x = (y \op z) \op (y \op (x \op z)).
 \end{equation}
@@ -117,7 +117,7 @@ and
 $$ x = (x \op y) \op (x \op (x \op y))$$
 whence
 $$x = ((x \op y) \op (x \op y)) \op x$$
-which is \Cref{eq2662}.  This gives
+which is \Equaref{2662}.  This gives
 $$y = ((y \op z) \op (y \op z)) \op y$$
 while from \Cref{1571-again} one has
 $$ (y \op z) \op (y \op z) = (x \op y) \op (x \op ((y \op z) \op (y \op z) \op y))$$
@@ -128,7 +128,7 @@ $$ (x \op y) \op (x \op y) = e.$$
 From \Cref{1571-again} the magma operation is surjective, hence
 \begin{equation}\label{xxe} x \op x = e
 \end{equation}
-which gives \Cref{eq40}.  Applying \Cref{1571-again} with $x=y=z$ we conclude
+which gives \Equaref{40}.  Applying \Cref{1571-again} with $x=y=z$ we conclude
 $$ x = e \op (x \op e)$$
 while if we instead take $y=z=e$ we have
 $$ x = e \op (e \op (x \op e))$$
@@ -136,38 +136,38 @@ hence
 $$ x = e \op x$$
 and then also
 $$ x = x \op e$$
-from which we readily conclude \Cref{eq23}, \Cref{eq8}; thus $e$ is an identity element.  From \Cref{1571-again} with $z=e$ we now have
+from which we readily conclude \Equaref{23}, \Equaref{8}; thus $e$ is an identity element.  From \Cref{1571-again} with $z=e$ we now have
 \begin{equation}\label{16-again}
  x = y \op (y \op x)
 \end{equation}
-which is \Cref{eq16}. If instead we take $y=e$ we have
+which is \Equaref{16}. If instead we take $y=e$ we have
 \begin{equation}\label{14-again}
   x = z \op (x \op z)
 \end{equation}
-which is \Cref{eq14}.  So if we substitute $z = x \op y$ and use \Cref{16-again} we obtain
+which is \Equaref{14}.  So if we substitute $z = x \op y$ and use \Cref{16-again} we obtain
 $$ x = (x \op y) \op y$$
 and hence
 $$ y \op x = y \op ((x \op y) \op y) = x \op y$$
-thanks to \Cref{14-again}.  This gives \Cref{eq43}, thus $G$ is now commutative.  From \Cref{1571-again} once more one has
+thanks to \Cref{14-again}.  This gives \Equaref{43}, thus $G$ is now commutative.  From \Cref{1571-again} once more one has
 $$x \op (y \op z) = (y \op x) \op (z \op ((x \op (y \op z)) \op x))$$
 which one can simplify using commutativity and \Cref{16-again} (or \Cref{14-again}) to eventually obtain
 $$x \op (y \op z) = (x \op y) \op z$$
-which is \Cref{eq4512}.  $G$ is now commutative and associative, and every element is its own inverse and of exponent $2$, hence is an abelian group thanks to \Cref{xxe}, so $G$ is an abelian group of exponent $2$ as claimed.  The converse is easily verified.
+which is \Equaref{4512}.  $G$ is now commutative and associative, and every element is its own inverse and of exponent $2$, hence is an abelian group thanks to \Cref{xxe}, so $G$ is an abelian group of exponent $2$ as claimed.  The converse is easily verified.
 \end{proof}
 
-\begin{theorem}[953 is equivalent to 2]\label{953_equiv_2}\uses{eq953, eq2}\lean{Subgraph.Equation953_implies_Equation2}\leanok  \Cref{eq953} is equivalent to \Cref{eq2}.
+\begin{theorem}[953 is equivalent to 2]\label{953_equiv_2}\uses{eq953, eq2}\lean{Subgraph.Equation953_implies_Equation2}\leanok  \Equareffull{953} is equivalent to \Equaref{2}.
 \end{theorem}
 
-\begin{proof}\leanok  It suffices to show that \Cref{eq953} implies \Cref{eq2}.  Pick an element $0$ of $G$ and define $1 = 0 \op 0$ and $2 = 1 \op 1$ (we do not require $0,1,2$ to be distinct).
-From \Cref{eq953} with $x=z=0$ we have
+\begin{proof}\leanok  It suffices to show that \Equaref{953} implies \Equaref{2}.  Pick an element $0$ of $G$ and define $1 = 0 \op 0$ and $2 = 1 \op 1$ (we do not require $0,1,2$ to be distinct).
+From \Equaref{953} with $x=z=0$ we have
 $$ 0 = y \op 2.$$
-If we then apply \Cref{eq953} with $z=1$ we conclude that
+If we then apply \Equaref{953} with $z=1$ we conclude that
 $$ x = y \op 0$$
-for all $x,y$, from which one concludes $x=x'$ for any $x,x' \in G$, giving \Cref{eq2}.
+for all $x,y$, from which one concludes $x=x'$ for any $x,x' \in G$, giving \Equaref{2}.
 \end{proof}
 
 
-\begin{theorem}[Sheffer stroke axiom]\label{sheffer}\uses{eq345169}\lean{Sheffer.Equation345169_is_Boolean}\leanok  Definition \Cref{eq345169}
+\begin{theorem}[Sheffer stroke axiom]\label{sheffer}\uses{eq345169}\lean{Sheffer.Equation345169_is_Boolean}\leanok  Definition \Equareffull{345169}
 axiomatizes the Sheffer stroke operation $x \op y = \overline{xy}$ in a Boolean algebra.
 \end{theorem}
 
@@ -183,18 +183,18 @@ are satisfied.  A classical result of Sheffer \cite{sheffer} then allows one to 
 
 A \emph{natural central groupoid} is, up to isomorphism, a magma with carrier $S \times S$ for some set $S$ and operation
 $$ (a,b) \op (c,d) = (b,c).$$
-These are examples of central groupoids (\Cref{eq168}).
+These are examples of central groupoids, \Equareffull{168}.
 
-\begin{theorem}[Natural central groupoid axiom]\label{natural-central-groupoid}\uses{eq26302} \Cref{eq26302} characterizes natural central groupoids.
+\begin{theorem}[Natural central groupoid axiom]\label{natural-central-groupoid}\uses{eq26302} \Equareffull{26302} characterizes natural central groupoids.
 \end{theorem}
 
 \begin{proof}
-  See \cite[Theorem 5]{knuth}.  The proof is quite lengthy; a sketch is as follows. It is easy to see that natural central groupoids obey \Cref{eq26302}.  Conversely, if this law holds, then
+  See \cite[Theorem 5]{knuth}.  The proof is quite lengthy; a sketch is as follows. It is easy to see that natural central groupoids obey \Equaref{26302}.  Conversely, if this law holds, then
 \begin{align*}
   (y \op z) \op (z \op w) &= (( x \op ((w \op (y \op z)) \op w)) \op ((y \op z) \op w)) \op (z \op w)\\
   &= z
 \end{align*}
-so we have a central groupoid.  Setting $y = (t \op t) \op t$, $z = t \op (t \op t)$, $w = t \op t$ in \Cref{eq26302} we also obtain
+so we have a central groupoid.  Setting $y = (t \op t) \op t$, $z = t \op (t \op t)$, $w = t \op t$ in \Equaref{26302} we also obtain
 $$ (x \op t) \op t = (t \op t) \op t.$$
 Using the notation
 $$ x^{(1)} := (x \op x) \op x, \quad x^{(2)} := x \op (x \op x)$$
