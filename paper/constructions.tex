@@ -117,7 +117,7 @@ and then $f(aw)=a$ for any non-empty reduced word $w$ not starting with $a$, and
 \begin{remark} These constructions are necessarily infinitary in nature, because \eqref{eq206} and \eqref{eq1648} can be shown to be equivalent for finite magmas. Indeed, \eqref{eq206} can be written as $x = R_y L_x L_x y$, which implies that $R_y$ is surjective, hence injective, on a finite magma; writing $x = R_y z$ we conclude that $R_y z = R_y L_{z \op y} L_{z \op y} y$ and hence $z = L_{z \op y} L_{z \op y} y$, giving \eqref{eq1648}.  The opposite implication is similar (using \eqref{eq1648} to show that $R_y$ is injective, hence surjective), and is left to the reader.
 \end{remark}
 
-  Some refutations $E \nvdash E'$ are ``immune'' by translation-invariant models, in that any translation-invariant model that obeys $E$, also obeys $E'$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes force the implication $E \vdash E'$ to hold.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \eqref{eq4482} for a square and an arbitrary element will imply the full commutative law \eqref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
+  Some refutations $E \nvdash E'$ are ``immune'' by translation-invariant models, in the sense that any translation-invariant model that obeys $E$, also obeys $E'$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes force the implication $E \vdash E'$ to hold.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \eqref{eq4482} for a square and an arbitrary element will imply the full commutative law \eqref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
 
 \subsection{The twisting semigroup}\label{twisting-sec}
 
@@ -310,18 +310,18 @@ The specific law $\x \formaleq \x \op ((\y \op \z) \op (\x \op \z))$ \eqref{eq85
 
  For example, one operation we can apply is fixing a random subset of the elements of the magma table while undefining the remainder,
  and asking an ATP to find a magma which satisfies \eqref{eq854} while preserving the fixed values.
- If in fact $\eqref{eq854} \nvdashfin E$, then the ATP may complete the table to a solution that violates $E$ as desired.  In some cases,
+ If in fact $\Eq{854} \nvdashfin E$, then the ATP may complete the table to a solution that violates $E$ as desired.  In some cases,
  it appears that the magma entries can be sufficiently coupled that unless a large fraction of the values is removed,
- every \eqref{eq854}-satisfying solution also satisfies $E$.
+ every $\Eq{854}$-satisfying solution also satisfies $E$.
  We can insert a known violation of $E$ into the magma cells we have emptied, hoping that a consistent completion still exists.
  Another approach, by analogy with slowly introducing forcing terms into numerical integrations while preserving adiabatic invariants, is to impose selected
  implications of a given equation without directly enforcing the equation itself.  This can gradually drive the magmas in the
  sequence toward fewer violations of a given equation without immediately imposing it.
 
 Combining several of these techniques allowed us to find refutations for
-$\eqref{eq854} \nvdashfin \eqref{eq413}, \eqref{eq1045}, \eqref{eq1055}, \eqref{eq3316}, \eqref{eq3925}$.
- We started with a magma which satisfied \eqref{eq854} and \eqref{eq413} but had an \eqref{eq10} violation.
-After using it as a seed to generate larger magmas with more \eqref{eq10} violations (using Vampire),
+$$\Eq{854} \nvdashfin \Eq{413}, \Eq{1045}, \Eq{1055}, \Eq{3316}, \Eq{3925}.$$
+ We started with a magma which satisfied $\Eq{854}$ and $\Eq{413}$ but had an $\Eq{10}$ violation.
+After using it as a seed to generate larger magmas with more $\Eq{10}$ violations (using Vampire),
 randomly removing portions of those magmas and attempting to complete them to models that violated $E$ eventually succeeded.
 
 Note that these approaches have their limitations.  To be effective, it must be easy to move between different
