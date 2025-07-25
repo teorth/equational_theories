@@ -6,4 +6,4 @@ Such magmas `M` are in one-to-one correspondence with Steiner triple systems on 
 
 The lowest-numbered laws characterizing Steiner loops are 63702, 63747, 63942, but there are numerous others of that order.
 
-An associative sloop is the same as an abelian group of exponent 2, characterized by [law 895](https://teorth.github.io/equational_theories/implications/?895).
+An associative sloop is the same as a Boolean group (abelian group of exponent 2), characterized by [law 895](https://teorth.github.io/equational_theories/implications/?895).

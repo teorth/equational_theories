@@ -3,10 +3,10 @@
 Each magma can be used to establish anti-implications: if $\Gamma$ is the set of all laws obeyed by a magma $G$, then we have $\neg E \leq E'$ whenever $E \in \Gamma$ and $E' \not \in \Gamma$.  Large numbers of implications can already be obtained from
 
 \begin{itemize}
-  \item All magmas of order at most $4$, up to isomorphism (of which there are $178,985,294$);
-  \item All commutative magmas of order $5$, up to isomorphism {\bf determine their count};
+  \item All magmas of order at most $4$, up to isomorphism (of which \href{https://oeis.org/A001329}{there are $178\,985\,294$});
+  \item All commutative magmas of order $5$, up to isomorphism (of which \href{https://oeis.org/A001425}{there are $254\,429\,900$});
   \item Cyclic groups $\Z/N\Z$ with $2 \leq N \leq 12$ and $x \op y = ax^2+bxy+cy^2+dx+ey$ for randomly chosen $a,b,c,d,e$.
-  \item There are only $1410$ distinct cancellative magmas of order $5$ (up to isomorphism), and Mace4 can generate all of them in under 20 seconds. A shell script to do this is available \href{https://github.com/zaklogician/equational_theories/tree/cancellative_magmas/scripts/cancellative_magmas}{here}. A magma is cancellative if $xy=xz$ implies $y=z$ and $yx=zx$ implies $y=z$.
+  \item There are only \href{https://oeis.org/A057991}{$1411$ quasigroups of order $5$} (up to isomorphism), and Mace4 can generate all of them in under 20 seconds. A shell script to do this is available \href{https://github.com/zaklogician/equational_theories/tree/cancellative_magmas/scripts/cancellative_magmas}{here}. A magma is a quasigroup if, for all $y$, the left/right multiplications $x\mapsto y\op x$ and $x\mapsto x\op y$ are bijective (equivalent to injective in a finite magma).
 \end{itemize}
 
 We also note that a systematic (computer-assisted) study of magmas of order $3$ was performed in \cite{berman-burris}, though with current computational resources it was feasible to iterate over all magmas of order up to $4$ by a brute force approach.

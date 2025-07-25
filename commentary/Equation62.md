@@ -4,8 +4,10 @@ This law is equivalent to stating that the magma operation is right-projection c
 
 The left division operation defined by `x ◇ (x : y) = y` satisfies the same law, namely `x = y : (x : (x : x))`.
 
+This law cannot hold in any (non-trivial) commutative magma or quasigroup.  This law together with associativity is equivalent to the right-projection [law 5](https://teorth.github.io/equational_theories/implications/?5).  Magmas satisfying this law are always submagmas of linear magmas satisfying this law.
+
 Such magmas are in one-to-one correspondence with sets equipped with a bijection that cubes to the identity.
 
-The free magma on some set `S` of generators for this law consists of three copies of `S` permuted cyclically by the bijection.
+The free magma on some set `Σ` of generators for this law consists of three copies of `Σ` permuted cyclically by the bijection.
 
 The equivalence class of this law is among the largest ones (76 laws in our list of 4694 laws).

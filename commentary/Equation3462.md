@@ -1,0 +1,1 @@
+Among magmas whose left multiplication maps are injective, this law is equivalent to the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14) `x = y◇(x◇y)`.

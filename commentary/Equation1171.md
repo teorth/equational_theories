@@ -1,1 +1,1 @@
-This law implies that left multiplications are bijective.
+This law implies that the cubing maps `B: x ↦ x◇(x◇x)` and `C: x ↦ (x◇x)◇x` are involutions, that left multiplications are bijective, that left multiplications by `y` and by `B(y)` are inverses of each other ([law 1122](https://teorth.github.io/equational_theories/implications/?1122)), and that left multiplications by `y` and by `C(y)` coincide.

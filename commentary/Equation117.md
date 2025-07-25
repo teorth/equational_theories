@@ -1,1 +1,3 @@
 This law implies that all left multiplications are bijective.  The left division operation defined by `x ◇ (x : y) = y` (or equivalently `x : y = (y ◇ x) ◇ y`) satisfies the same law, namely `x = y : ((x : y) : x)`.  If right multiplications are bijective then right-division satisfies [law 167](https://teorth.github.io/equational_theories/implications/?167), and conversely, thus laws 117 and 167 are parastrophically equivalent for (right-)quasigroups.
+
+This law together with associativity is equivalent to the [right-projection law 5](https://teorth.github.io/equational_theories/implications/?5).  It cannot hold in a non-trivial group.

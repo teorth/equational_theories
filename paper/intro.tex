@@ -161,7 +161,7 @@ The objective of using the data from the ETP to establish well-calibrated benchm
 \centering
 \begin{tikzpicture}[
     >=Latex,
-    node distance=1.3cm,
+    node distance=1.1cm,
     every node/.style={draw, rectangle, align=center},
     label/.style={font=\bfseries}
   ]
@@ -176,12 +176,12 @@ The objective of using the data from the ETP to establish well-calibrated benchm
   \node (viz)        [below=of formal]    {Visualization tools};
 
   %% Lean Zulip nodes
-  \node (hproofs)    [right=of blueprint]       {Human-generated proofs};
-  \node (cproofs)    [right=3cm of formal]         {Computer-generated proofs};
+  \node (hproofs)    [right=of blueprint]       {Human-gen. proofs};
+  \node (cproofs)    [right=3cm of formal]         {Computer-gen. proofs};
   \node (hdisc)      [right=of viz]         {Human discussion};
 
   %% External ATP box
-  \node (atp)        [right=of cproofs]         {ATPs and other\\external software tools};
+  \node (atp)        [right=of cproofs]         {ATPs, other\\external tools};
 
   %% Grouping boxes
   % GitHub container
