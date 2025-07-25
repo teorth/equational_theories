@@ -99,8 +99,8 @@ It also makes integration with larger code bases more difficult: in this project
 For example, integration with the typeclass system becomes much more difficult when working with more complex mathematical objects that build on multiple, nested layers of structure in non-trivial ways.
 In that case, for example, tactics need to synthesize typeclass instances, deal with diamonds and different notions of equivalence~\cite{DBLP:conf/mkm/Wieser23}.
 
-\textbf{Semi-Automated Counterexample Guidance.}  Another use of ATPs has been in a semi-automatic fashion, to find counter-examples.
-The general strategy was to use ATPs to find counter-examples to implications by building magmas iteratively.
+\textbf{Semi-Automated Counterexample Guidance.}  Another use of ATPs has been in a semi-automatic fashion, to find counterexamples.
+The general strategy was to use ATPs to find counterexamples to implications by building magmas iteratively.
 If we want to build a counterexample to $l \vdash l'$, we want to construct a magma where $l$ holds but $l'$ does not.
 In this method, we iteratively strengthen a construction with additional hypotheses, and use the ATP to check whether these hypotheses are not too strong (to imply $l'$) or unsound (to disallow $l$).
 
