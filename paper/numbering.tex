@@ -44,7 +44,7 @@ if $n > 2$ is even, where $C_n, B_n$ are the Catalan and Bell numbers, and $D_n$
 $$ 1, 1, 2, 4, 11, 32, 117, \dots$$
 (\url{https://oeis.org/A103293}).  A proof of this claim can be found in the ETP blueprint.  In particular, there are $4694$ equations of order at most $4$.
 
-Below we record some specific equations appearing in this paper, using the alphabet $\x,\y,\z,\w,\uu,\vv$ in place of $0,1,2,3,4,5,\dots$ for readability.
+Below we record some specific equations appearing in this paper, using the alphabet $\x$, $\y$, $\z$, $\w$, $\uu$, $\vv$ in place of $0$, $1$, $2$, $3$, $4$, $5$, $\dots$ for readability.
 \begin{align}
     \x &\formaleq \x & \hbox{(Trivial law)} \label{eq1}\tag{E1} \\
     \x &\formaleq \y & \hbox{(Singleton law)} \label{eq2}\tag{E2} \\
@@ -65,10 +65,13 @@ Below we record some specific equations appearing in this paper, using the alpha
     \x \op \y &\formaleq \x \op (\y \op \z) \label{eq327}\tag{E327} \\
     \x &\formaleq (\x \op \y) \op \y \label{eq378}\tag{E378} \\
     \x \op \y &\formaleq (\z \op \x) \op \y \label{eq395}\tag{E395} \\
+    \x &\formaleq \x \op (\x \op (\x \op (\y \op \x))) \label{eq413}\tag{E413} \\
     \x &\formaleq \y \op ( (\z \op (\x \op (\y \op \z)))) & \hbox{(Tarski's axiom)} \label{eq543}\tag{E543} \\
     \x &\formaleq \y \op (\x \op ((\y \op \x) \op \y)) \label{eq677}\tag{E677} \\
     \x &\formaleq \x \op ((\x \op \x) \op (\x \op \x)) \label{eq817}\tag{E817} \\
     \x &\formaleq \x \op ((\y \op \z) \op (\x \op \z)) \label{eq854}\tag{E854}\\
+    \x &\formaleq \x \op ((\y \op (\y \op \x)) \op \x) \label{eq1045}\tag{E1045} \\
+    \x &\formaleq \x \op ((\y \op (\z \op \x)) \op \x) \label{eq1055}\tag{E1055} \\
     \x &\formaleq \y \op ((\y \op (\x \op \x)) \op \y) \label{eq1110}\tag{E1110} \\
     \x &\formaleq \y \op ((\y \op (\x \op \z)) \op \z) \label{eq1117}\tag{E1117} \\
     \x &\formaleq \y \op (((\x \op \y) \op \x) \op \y) \label{eq1286}\tag{E1286} \\
@@ -85,9 +88,10 @@ Below we record some specific equations appearing in this paper, using the alpha
         \x &\formaleq (\x \op ((\x \op \x) \op \x)) \op \x \label{eq2441}\tag{E2441} \\
         \x &\formaleq ((\y \op (\x \op \y)) \op \x) \op \y \label{eq2910}\tag{E2910} \\
         \x \op \y &\formaleq \x \op (\y \op (\x \op \y)) \label{eq3316}\tag{E3316} \\
+        \x \op y &\formaleq (\x \op (\y \op \x)) \op \y & \label{eq3925}\tag{E3925} \\
         \x \op (\y \op \x) &\formaleq \x \op (\y \op \z) \label{eq4315}\tag{E4315} \\
         \x \op (\x \op \x) &\formaleq (\x \op \x) \op \x \label{eq4380}\tag{E4380} \\
-        \x \op (\y \op \y) &= (\y \op \y) \op \x \label{eq4482}\tag{E4482} \\
+        \x \op (\y \op \y) &\formaleq (\y \op \y) \op \x \label{eq4482}\tag{E4482} \\
         (\x \op \y) \op \z &\formaleq \x \op (\y \op \z) &\hbox{(Associative law)} \label{eq4512}\tag{E4512}\\
         \x \op (\y \op \z) &\formaleq (\y \op \z) \op \x \label{eq4531}\tag{E4531} \\
         \x &\formaleq \y \op ((\y \op (\y \op \x)) \op (\z \op \y)) &  \label{eq5093}\tag{E5093} \\

@@ -56,9 +56,9 @@ The structure of the implication graph is summarized below:
     graph_summary = {
         "total_nodes": 4694,
         "total_directed_edges": 8178279,
-        "edge_density_percentage": 37,  # Percentage of possible edges that exist
+        "edge_density_percentage": 37,  # % of possible edges that exist
         "bidirectional_edges": 2475610,
-        "bidirectional_percentage": 30  # Percentage of all edges that are bidirectional
+        "bidirectional_percentage": 30  # % of all edges that are bidirectional
     }
 \end{verbatim}
 
@@ -231,18 +231,22 @@ The \emph{training / validation / test} split proportions are:
 
 \begin{table}[h]
 \centering
-\begin{tabular}{lcccccccccc}
+\makebox[\linewidth][c]{
+\resizebox{1.15\textwidth}{!}{
+\begin{tabular}{lcccccccc}
 \hline
-\textbf{Model} & \textbf{G\_ROC\_AUC} & \textbf{G\_AUPRC} & \textbf{G\_Hits@1} & \textbf{G\_Hits@3} & \textbf{G\_Hits@10} & \textbf{G\_MRR} & \textbf{D\_ROC\_AUC} & \textbf{D\_AUPRC} & \textbf{B\_ROC\_AUC} & \textbf{B\_AUPRC} \\
+\textbf{Model} & \textbf{G-ROC-AUC} & \textbf{G-AUPRC} & \textbf{G-Hits@10} & \textbf{G-MRR} & \textbf{D-ROC-AUC} & \textbf{D-AUPRC} & \textbf{B-ROC-AUC} & \textbf{B-AUPRC} \\
 \hline
-\texttt{gae}              & $0.8484 \pm 9 \times 10^{-4}$  & $0.8558 \pm 6 \times 10^{-4}$   & $6 \times 10^{-5} \pm 4 \times 10^{-5}$ & $6 \times 10^{-5} \pm 4 \times 10^{-5}$ & $0.0001 \pm 4 \times 10^{-5}$ & $0.0165 \pm 2 \times 10^{-4}$ & $0.5 \pm 0$          & $0.5 \pm 0$          & $0.941 \pm 5 \times 10^{-3}$    & $0.964 \pm 3 \times 10^{-3}$    \\
-\texttt{gravity\_gae}      & $0.9806 \pm 3 \times 10^{-4}$  & $0.9753 \pm 4 \times 10^{-4}$   & $0.069 \pm 6 \times 10^{-3}$ & $0.101 \pm 5 \times 10^{-3}$ & $0.17 \pm 3 \times 10^{-3}$   & $0.112 \pm 5 \times 10^{-3}$  & $0.9958 \pm 1 \times 10^{-4}$   & $0.9874 \pm 2 \times 10^{-4}$   & $0.99717 \pm 4 \times 10^{-5}$  & $0.99431 \pm 7 \times 10^{-5}$  \\
-\texttt{sourcetarget\_gae} & $0.99976 \pm 1 \times 10^{-5}$ & $0.999736 \pm 8 \times 10^{-6}$ & $0.077 \pm 4 \times 10^{-3}$ & $0.147 \pm 7 \times 10^{-3}$ & $0.279 \pm 9 \times 10^{-3}$  & $0.152 \pm 5 \times 10^{-3}$  & $0.999982 \pm 1 \times 10^{-6}$ & $0.999983 \pm 1 \times 10^{-6}$ & $0.999989 \pm 2 \times 10^{-6}$ & $0.999987 \pm 3 \times 10^{-6}$ \\
-\texttt{mlp\_gae}          & $0.99315 \pm 1 \times 10^{-5}$ & $0.99409 \pm 1 \times 10^{-5}$  & $0.181 \pm 7 \times 10^{-3}$ & $0.299 \pm 7 \times 10^{-3}$ & $0.53 \pm 2 \times 10^{-3}$   & $0.289 \pm 6 \times 10^{-3}$  & $0.99671 \pm 2 \times 10^{-5}$  & $0.9973 \pm 1 \times 10^{-5}$   & $0.99692 \pm 2 \times 10^{-5}$  & $0.99736 \pm 2 \times 10^{-5}$  \\
-\texttt{digae}            & $0.9978 \pm 3 \times 10^{-4}$  & $0.998 \pm 3 \times 10^{-4}$    & $0.035 \pm 6 \times 10^{-3}$ & $0.068 \pm 1 \times 10^{-2}$ & $0.18 \pm 2 \times 10^{-2}$   & $0.091 \pm 1 \times 10^{-2}$  & $0.9991 \pm 2 \times 10^{-4}$   & $0.9993 \pm 2 \times 10^{-4}$   & $0.9994 \pm 1 \times 10^{-4}$   & $0.9995 \pm 1 \times 10^{-4}$   \\
-\texttt{magnet}           & $0.989 \pm 1 \times 10^{-4}$   & $0.99076 \pm 3 \times 10^{-5}$  & $0.151 \pm 1 \times 10^{-2}$ & $0.26 \pm 2 \times 10^{-2}$  & $0.38 \pm 2 \times 10^{-2}$   & $0.24 \pm 1 \times 10^{-2}$   & $0.9962 \pm 1 \times 10^{-3}$   & $0.9969 \pm 6 \times 10^{-4}$   & $0.9976 \pm 4 \times 10^{-4}$   & $0.9979 \pm 2 \times 10^{-4}$   \\
+\texttt{gae}              & $0.8484 \pm 9 \times 10^{-4}$  & $0.8558 \pm 6 \times 10^{-4}$   & $0.0001 \pm 4 \times 10^{-5}$ & $0.0165 \pm 2 \times 10^{-4}$ & $0.5 \pm 0$          & $0.5 \pm 0$          & $0.941 \pm 5 \times 10^{-3}$    & $0.964 \pm 3 \times 10^{-3}$    \\
+\texttt{gr\_gae}      & $0.9806 \pm 3 \times 10^{-4}$  & $0.9753 \pm 4 \times 10^{-4}$   & $0.17 \pm 3 \times 10^{-3}$   & $0.112 \pm 5 \times 10^{-3}$  & $0.9958 \pm 1 \times 10^{-4}$   & $0.9874 \pm 2 \times 10^{-4}$   & $0.99717 \pm 4 \times 10^{-5}$  & $0.99431 \pm 7 \times 10^{-5}$  \\
+\texttt{st\_gae} & $0.99976 \pm 1 \times 10^{-5}$ & $0.999736 \pm 8 \times 10^{-6}$ & $0.279 \pm 9 \times 10^{-3}$  & $0.152 \pm 5 \times 10^{-3}$  & $0.999982 \pm 1 \times 10^{-6}$ & $0.999983 \pm 1 \times 10^{-6}$ & $0.999989 \pm 2 \times 10^{-6}$ & $0.999987 \pm 3 \times 10^{-6}$ \\
+\texttt{mlp\_gae}          & $0.99315 \pm 1 \times 10^{-5}$ & $0.99409 \pm 1 \times 10^{-5}$  & $0.53 \pm 2 \times 10^{-3}$   & $0.289 \pm 6 \times 10^{-3}$  & $0.99671 \pm 2 \times 10^{-5}$  & $0.9973 \pm 1 \times 10^{-5}$   & $0.99692 \pm 2 \times 10^{-5}$  & $0.99736 \pm 2 \times 10^{-5}$  \\
+\texttt{digae}            & $0.9978 \pm 3 \times 10^{-4}$  & $0.998 \pm 3 \times 10^{-4}$    & $0.18 \pm 2 \times 10^{-2}$   & $0.091 \pm 1 \times 10^{-2}$  & $0.9991 \pm 2 \times 10^{-4}$   & $0.9993 \pm 2 \times 10^{-4}$   & $0.9994 \pm 1 \times 10^{-4}$   & $0.9995 \pm 1 \times 10^{-4}$   \\
+\texttt{magnet}           & $0.989 \pm 1 \times 10^{-4}$   & $0.99076 \pm 3 \times 10^{-5}$  & $0.38 \pm 2 \times 10^{-2}$   & $0.24 \pm 1 \times 10^{-2}$   & $0.9962 \pm 1 \times 10^{-3}$   & $0.9969 \pm 6 \times 10^{-4}$   & $0.9976 \pm 4 \times 10^{-4}$   & $0.9979 \pm 2 \times 10^{-4}$   \\
 \hline
 \end{tabular}
+}}
+\vspace{0.1em}
 \caption{Results for various graph autoencoder models.}
 \end{table}
 
