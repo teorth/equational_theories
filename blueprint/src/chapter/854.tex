@@ -64,7 +64,7 @@ and after some relabeling we are again of the required form (now incrementing $n
 
 We have two useful corollaries:
 
-\begin{corollary}[Unique factorization]\label{unique factorization}\leanok\lean{Refutation_854.unique_factorization}  Two irreducible words $w, w'$ are equivalent if and only if they are either the same generator of $X$, or are of the form $w = w_1 \op w_2$, $w' = w'_1 \op w'_2$ with $w_1 \sim w'_1$ and $w_2 \sim w'_2$.
+\begin{corollary}[Unique factorization]\label{unique-factorization}\leanok\lean{Refutation_854.unique_factorization}  Two irreducible words $w, w'$ are equivalent if and only if they are either the same generator of $X$, or are of the form $w = w_1 \op w_2$, $w' = w'_1 \op w'_2$ with $w_1 \sim w'_1$ and $w_2 \sim w'_2$.
 \end{corollary}
 
 \begin{proof}\uses{irred-desc}\leanok  Immediate from \Cref{irred-desc}.
@@ -97,7 +97,7 @@ $$  x \op y \not \sim x \op (y \op (x \op y))$$
 and
 $$
 x \op y \not \sim (x \op (y \op x)) \op y.$$
-We begin with the first claim.  Suppose this were not the case, then by \Cref{unique factorization} one of the following statements must hold:
+We begin with the first claim.  Suppose this were not the case, then by \Cref{unique-factorization} one of the following statements must hold:
 \begin{itemize}
 \item (i) $$y \to x$$.
 \item (ii) $$(y \op (x \op y)) \to x$$.
@@ -122,7 +122,7 @@ For the latter equation, we similarly have the cases
 (iv) is (i), which was already ruled out, and (vi) is similarly a relabeled version of (iii). In case (v) holds, the claim to refute simplifies to
 $$
 x \op y \sim x \op (y \op x)$$
-and using \Cref{unique factorization} we reduce to either $y \sim y \op x$, $y \to x$, or $y \op x \to x$, and each of these is already known to fail.
+and using \Cref{unique-factorization} we reduce to either $y \sim y \op x$, $y \to x$, or $y \op x \to x$, and each of these is already known to fail.
 \end{proof}
 
 \section{Some further properties of 854 magmas}
@@ -188,7 +188,7 @@ Define a \emph{partial 854 magma} to be a partial function $\op: \N \times \N \t
   \item (Monotonicity)  If $x,y \in \N$ is such that $x \op y$ is defined, then either $x \op y = x$ or $x \op y > x, y$.
 \end{itemize}
 
-The first five laws are known consequences of 854.  The no idempotence law was known for the free magma $M_{854}$ because it maps to finite magmas without idempotents, such as $\Z/3\Z$ with law $x \op y = x - 1_{x=y}$.  The unique factorization law is also known for the free magma by \Cref{unique factorization}.  The auxiliary law is a ``leap of faith'' that helped close the greedy argument, and the monotonicity property is a technical consequence of the greedy construction that will also help close the argument.
+The first five laws are known consequences of 854.  The no idempotence law was known for the free magma $M_{854}$ because it maps to finite magmas without idempotents, such as $\Z/3\Z$ with law $x \op y = x - 1_{x=y}$.  The unique factorization law is also known for the free magma by \Cref{unique-factorization}.  The auxiliary law is a ``leap of faith'' that helped close the greedy argument, and the monotonicity property is a technical consequence of the greedy construction that will also help close the argument.
 
 The following observation is key.
 
