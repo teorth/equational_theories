@@ -85,7 +85,7 @@ x \op y = x f(x^{-1} y).
 \end{equation}
 For such models, the verification of an equational law in $n$ variables corresponds to a functional equation for $f$ in $n-1$ variables, as the translation symmetry allows one to normalize one variable to be the identity (say). This can simplify an implication to the point where an explicit counterexample can be found.  These functional equations are trivial to analyze when $n=1$.  For $n=2$, they are not as trivial, but still quite tractable, and has led to several refutations in practice.  The method does not appear to be particularly effective for $n>2$ due to the complexity of the functional equations.
 
-\begin{example}[Abelian example]\label{abex}  For the law $\x \formaleq (\x \op \y) \op ((\x \op \y) \op \y)$ \eqref{eq1648}, we apply the abelian translation-invariant model \Cref{xop-add} with $y=x+h$ to obtain
+\begin{example}[abelian example]\label{abex}  For the law $\x \formaleq (\x \op \y) \op ((\x \op \y) \op \y)$ \eqref{eq1648}, we apply the abelian translation-invariant model \Cref{xop-add} with $y=x+h$ to obtain
 \begin{align*}
   x \op y &= x + f(h) \\
   (x \op y) \op y &= x + f(h) + f(h-f(h)) \\
