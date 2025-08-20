@@ -140,7 +140,7 @@ for some word $f(\x,\y,\z)$, that are also known to imply the right-idempotent l
 \end{lemma}
 
 \begin{proof}  Clearly we have \eqref{left-absorptive} with $f(\x,\y,\z) \coloneqq (\y \op \z) \op (\x \op \z)$.  From \ref{left-absorptive} we have in any magma obeying \eqref{eq854} that
-$$x = x \op f(x,S^2 x,x) = x \op S(x \op S^2 x) = x \op S(x \op f(x,x,x)) = x \op Sx.$$
+$$x = x \op f(x,x,S^2 x) = x \op S(x \op S^2 x) = x \op S(x \op f(x,x,x)) = x \op Sx.$$
 This implies from a further application of \Cref{left-absorptive} that
 $$ y = y \op f(y,x,y) = (y \op Sy) \op ((x \op y) \op Sy) = f(x \op y, y, Sy)$$
 and hence by \Cref{left-absorptive} again
