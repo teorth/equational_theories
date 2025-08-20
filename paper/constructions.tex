@@ -286,11 +286,11 @@ Now we give an example of how method (ii) can be combined with method (i).
 \begin{proposition}[$\Eq{1659}$ does not imply $\Eq{4315}$]\label{1659-4315} $\x \formaleq (\x \op \y) \op ((\y \op \y) \op \z)$ \eqref{eq1659} does not imply $\x \op (\y \op \x) \formaleq \x \op (\y \op \z)$ \eqref{eq4315}.
 \end{proposition}
 
-\begin{proof}  There are two simple models for \eqref{eq1659}: the model $G$ with carrier $\Z/2\Z$ and operation $x \op y = x+1$, and the model $\Magma$ with carrier $\Z$ and operation $x \op y = x$.  Using the ansatz \eqref{xsyt}, one can soon discover that one obtains a magma operation $\op: (G \times M) \times (G \times M) \to G \times M$ with $f(0,0)=f(1,0)=0$, $f(0,1)=-1$, and $f(1,1)=1$.  This model still obeys \eqref{eq4315}. However, we can create a modification $\op'$ of $\op$ as follows.  We will seek to violate \eqref{eq4315} at $x = (0,0)$, $y = (0,0)$, $z = (1,0)$, thus we want
+\begin{proof}  There are two simple models for \eqref{eq1659}: the model $G$ with carrier $\Z/2\Z$ and operation $x \op y = x+1$, and the model $\Magma$ with carrier $\Z$ and operation $x \op y = x$.  Using the ansatz \eqref{xsyt}, one can soon discover that one obtains a magma operation $\op: (G \times \Z) \times (G \times \Z) \to G \times \Z$ with $f(0,0)=f(1,0)=0$, $f(0,1)=-1$, and $f(1,1)=1$.  This model still obeys \eqref{eq4315}. However, we can create a modification $\op'$ of $\op$ as follows.  We will seek to violate \eqref{eq4315} at $x = (0,0)$, $y = (0,0)$, $z = (1,0)$, thus we want
 $$ (0,0) \op' ((0,0) \op' (0,0)) \neq (0,0) \op' ((0,0) \op' (1,0)).$$
 We have $(0,0) \op (0,0) = (1,0)$ and $(0,0) \op (1,0) = (1,-1)$.  One can try to force the counterexample by setting $(0,0) \op' (1,0)$ to equal $(0,0)$ instead of $(1,-1)$. However, if this is the only change we make, then we no longer obey \eqref{eq1659}, since
-$$ (1,0) \neq ((0,0) \op' (1,0)) \op' (((1,0) \op' (1,0)) \op (1,t))$$
-for any $t \in \Z \backslash \{0\}$. But these are the only counterexamples created; and if one then sets $(0,0) \op' (1,t) = (0,0)$ for \emph{all} $t \in \Z$, then one can check that the modified operation $\op'$ now obeys \eqref{eq1659} but not \eqref{eq4315} as required.
+$$ (1,0) \neq ((0,0) \op' (1,0)) \op' (((1,0) \op' (1,0)) \op' (1,t))$$
+for any $t \in \N \backslash \{0\}$. But these are the only counterexamples created involving elements in the subset $G \times \N$ of $G \times \Z$; and if one then sets $(0,0) \op' (1,t) = (0,0)$ for \emph{all} $t \in \N$, and then restricts to $G \times \N$ (which is now closed under $\op'$), then one can check that the modified operation $\op'$ on this submagma now obeys \eqref{eq1659} but not \eqref{eq4315} as required.
 \end{proof}
 
 The specific law $\x \formaleq \x \op ((\y \op \z) \op (\x \op \z))$ \eqref{eq854} turned out to be somewhat ``mutable'', in the sense that one can often change a small number

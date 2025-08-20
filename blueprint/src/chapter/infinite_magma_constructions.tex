@@ -649,11 +649,9 @@ $$ (0 \op''' 3) \op''' ((3 \op''' 3) \op''' z) = 0 \op''' (4 \op''' z)$$ which e
 
 Instead, the infinitely many counterexamples arising from the iterated redefinition can be eliminated
 all at once by setting:
-
 $$x \op' y = \begin{cases} 0 & \text{if } x=0,\: x,y \text{ do not have the same parity} \\  x+1 & \text{if } x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases}$$
-
-At this point one might as well truncate the model to $\mathbb{N}$ since the result of the $\op'$
-operation is nonnegative whenever the operands are nonnegative. This finishes the construction and proves
+and also truncating the model to $\mathbb{N}$ since the result of the $\op'$
+operation is nonnegative whenever the operands are nonnegative. This finishes the construction without generating any further violations of \Equaref{1659} and proves
 
 \begin{theorem}[1659 does not imply 4315]\label{non_imp_1659_4315_thm}\uses{eq1659,eq4315,models-def}
   \lean{Equation1659_facts}\leanok
