@@ -2,4 +2,4 @@ In a magma satisfying this law, one can define an unoriented graph with an edge 
 
 Among semigroups (associative magmas) this law characterizes [rectangular bands](https://en.wikipedia.org/wiki/Band_(algebra)).  It cannot hold in any (non-trivial) commutative magma or quasigroup.
 
-The dual [law 25](https://teorth.github.io/equational_theories/implications/?25) holds in [travel groupoids](https://arxiv.org/abs/2412.05510) (see also [law 428](https://teorth.github.io/equational_theories/implications/?428)).  The law 25 characterizes De Morgan algebras [among implication zroupoids](https://arxiv.org/abs/1710.10559).
+The dual [law 25](https://teorth.github.io/equational_theories/implications/?25), dubbed contraction, holds in [implication algebras](https://www.jstor.org/stable/43679502) and [travel groupoids](https://arxiv.org/abs/2412.05510) (see also [law 428](https://teorth.github.io/equational_theories/implications/?428)).  The law 25 characterizes De Morgan algebras [among implication zroupoids](https://arxiv.org/abs/1710.10559).
