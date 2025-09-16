@@ -51,3 +51,8 @@ widget/node_modules/*
 .idea
 equational_theories/Generated/All4x4Tables/src/finite_magma_tools/bin
 equational_theories/Generated/All4x4Tables/src/finite_magma_tools/dist-newstyle
+
+# Ignore changes generated when running the ci locally to work on the equation explorer
+# Specifically folders that are untracked by git.
+home_page/dashboard/
+home_page/raw_data/
