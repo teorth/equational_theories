@@ -244,7 +244,7 @@ function findEquation() {
         else{
             eqNum = findEquationNumber(inputEq)-1;
         }
-
+console.log(`Equation num variable: ${eqNum}`); return false;
         if (eqNum) {
             renderImplications(eqNum);
             showPage('detailPage');
