@@ -3,7 +3,7 @@
 % Packages
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{geometry}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
 \usepackage{graphicx}
 \usepackage{enumitem}
@@ -90,7 +90,10 @@
 
 \maketitle
 
+{
+\setlength{\parskip}{0em}
 \tableofcontents
+}
 
 \input{intro}
 \input{foundations}
@@ -100,6 +103,7 @@
 \input{automated}
 \input{austin}
 % \input{order5}
+\input{spectrum}
 \input{higman}
 \input{ml}
 \input{GUI}
