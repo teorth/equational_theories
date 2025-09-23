@@ -3,7 +3,7 @@
 % Packages
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{geometry}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
 \usepackage{graphicx}
 \usepackage{enumitem}
@@ -74,7 +74,7 @@
 % Title Information
 \title[Equational Theories Project]{The Equational Theories Project: Advancing Collaborative Mathematical Research at Scale}
 \author[Equational Theories Project contributors]{Matthew Bolan, Joachim Breitner, Jose Brox, Mario Carneiro,
-  Martin Dvo\v{r}\'ak, Andr\'es Goens, Aaron Hill, Harald Husum, Zoltan Kocsis, Bruno Le Floch, Lorenzo Luccioli, Douglas McNeil,
+  Martin Dvorak, Andr\'es Goens, Aaron Hill, Harald Husum, Zoltan Kocsis, Bruno Le Floch, Lorenzo Luccioli, Douglas McNeil,
   Alex Meiburg, Pietro Monticone, Giovanni Paolini, Marco Petracci, Bernhard Reinke, David Renshaw, Marcus Rossel, Cody Roux,
   J\'er\'emy Scanvic, Shreyas Srinivas, Anand Rao Tadipatri, Terence Tao, Vlad Tsyrklevich,
   Daniel Weber, Fan Zheng}
@@ -91,7 +91,10 @@
 
 \maketitle
 
+{
+\setlength{\parskip}{0em}
 \tableofcontents
+}
 
 \input{intro}
 \input{foundations}
@@ -101,6 +104,7 @@
 \input{automated}
 \input{austin}
 % \input{order5}
+\input{spectrum}
 \input{higman}
 \input{ml}
 \input{GUI}

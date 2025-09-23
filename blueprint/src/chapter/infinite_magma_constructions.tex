@@ -11,18 +11,18 @@ between laws. Many of the techniques presented trace their origins to the first 
 
 \section{Translation-invariant magmas}
 
-A \emph{translation-invariant magma} is a magma whose carrier $G$ is an Abelian group $G = (G,+)$, and whose magma operation takes the form
+A \emph{translation-invariant magma} is a magma whose carrier $G$ is an abelian group $G = (G,+)$, and whose magma operation takes the form
 $$ y \op x = x + f(x-y)$$
 for some function $f: G \to G$.  Thus the translations on $G$ become magma isomorphisms.
 
 \begin{example}
   A magma $G$ satisfying the left (\Equaref{4}) or right (\Equaref{5}) absorption laws is translation-invariant.
-  Equip the carrier $G$ with an Abelian group structure $(G,+,-,0)$ and define $f: G \to G$ as either $f(x) = -x$ or $f(x) = 0$.
+  Equip the carrier $G$ with an abelian group structure $(G,+,-,0)$ and define $f: G \to G$ as either $f(x) = -x$ or $f(x) = 0$.
 \end{example}
 
 \begin{example}
   Linear magmas $x\op y = ax+by$ on a field $(\mathbb{F},+,-,\cdot,0,1)$ are translation-invariant if $a + b = 1$,
-  since $(\mathbb{F},+,-,0)$ forms an Abelian group, and one can set $f(x) = -ax$.
+  since $(\mathbb{F},+,-,0)$ forms an abelian group, and one can set $f(x) = -ax$.
 \end{example}
 
 Note that if an example of the latter sort suffices to refute the implication between $P$ and $Q$ then
@@ -201,7 +201,7 @@ Obelix is not particularly {\em structurally} similar to an Asterix, besides the
 to small counterexamples. A related set of ideas can be used to construct an Obelix that does not
 obey some given other equations. The common idea is to define the magma operation
 $$ x \op y = x + f(y-x) = x + f(h)$$
-on some underlying Abelian group. For the case of Obelix, the resulting functional equation is
+on some underlying abelian group. For the case of Obelix, the resulting functional equation is
 \begin{equation}\label{fh2}
   f(f^{2}(h) - f(h)) = h - f(h)
 \end{equation}
@@ -595,7 +595,7 @@ so the magma does not obey \Equaref{206}. We can conclude
 \end{theorem}
 
 There are variation of the translation-invariant constructions refuting implications: e.g. in some cases,
-similar constructions are carried out starting with a non-Abelian group. Translation-invariant models
+similar constructions are carried out starting with a non-abelian group. Translation-invariant models
 are also useful building blocks for the \emph{modified base model} constructions explained below.
 
 \subsection{Modified base models}
@@ -649,11 +649,9 @@ $$ (0 \op''' 3) \op''' ((3 \op''' 3) \op''' z) = 0 \op''' (4 \op''' z)$$ which e
 
 Instead, the infinitely many counterexamples arising from the iterated redefinition can be eliminated
 all at once by setting:
-
 $$x \op' y = \begin{cases} 0 & \text{if } x=0,\: x,y \text{ do not have the same parity} \\  x+1 & \text{if } x,y \text{ have the same parity} \\ x -1 & \text{otherwise} \end{cases}$$
-
-At this point one might as well truncate the model to $\mathbb{N}$ since the result of the $\op'$
-operation is nonnegative whenever the operands are nonnegative. This finishes the construction and proves
+and also truncating the model to $\mathbb{N}$ since the result of the $\op'$
+operation is nonnegative whenever the operands are nonnegative. This finishes the construction without generating any further violations of \Equaref{1659} and proves
 
 \begin{theorem}[1659 does not imply 4315]\label{non_imp_1659_4315_thm}\uses{eq1659,eq4315,models-def}
   \lean{Equation1659_facts}\leanok

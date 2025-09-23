@@ -39,7 +39,7 @@ The underlying calculi vary from system to system, but they often have a variant
 This can be read as $C \lor L$ with $D \lor \neg L$ implies $C \lor D$, where $C, D, L$ are formulas in e.g. first-order logic.
 Superposition calculi have a variant of this rule that deals with equality directly, and thus are more efficient at reasoning about equality.
 
-In this project we used \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13}, Duper~\cite{DBLP:conf/itp/CluneQBA24} and \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4} which are all based on variants of saturation for proving.
+In this project we used \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13}, \emph{Duper}~\cite{DBLP:conf/itp/CluneQBA24} and \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4} which are all based on variants of saturation for proving.
 \TODO{here we could add a screenshot of using \emph{Vampire} or \emph{Prover9}}
 
 \textbf{Equational Reasoning.} As already discussed in \Cref{canon-sec}, equational reasoning is a type of reasoning based on equational logic and rewriting with congruence~\cite{term-rewriting}.
@@ -52,52 +52,74 @@ SMT solvers like \emph{Z3}~\cite{DBLP:conf/tacas/MouraB08} use equational reason
 On the other hand, equality saturation~\cite{DBLP:journals/pacmpl/WillseyNWFTP21} uses e-graphs by extending congruence closure to a more controlled search, enabling optimization and conditional rewriting.
 One of the main advantages of using equational reasoning to reason about implications of magma laws is that we get very explicit proofs: a proof that $l \vdash l'$ is given by a sequence of rewrites that starts at the left-hand side of $l'$ and arrives at the right-hand side through applications of $l$.
 
-In this project we used \emph{Z3}~\cite{DBLP:conf/tacas/MouraB08}, \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4}, a custom ATP for magmas based on egg~\cite{DBLP:journals/pacmpl/WillseyNWFTP21}, and the \emph{Lean} \texttt{egg} tactic~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24,rossel2024equality,rossel2024bridging}, which all work with equational logic. We have also reasoned with manual (custom written) heuristics about simple rewrites.
+In this project we used \emph{Z3}~\cite{DBLP:conf/tacas/MouraB08}, \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4}, a custom ATP \emph{MagmaEgg} for magmas based on egg~\cite{DBLP:journals/pacmpl/WillseyNWFTP21}, and the \emph{Lean} \texttt{egg} tactic~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24,rossel2024equality}, which all work with equational logic. We have also reasoned with manual (custom written) heuristics about simple rewrites.
 
-\subsection{Proof Reconstruction and Integration}
+\subsection{Integration of Automation Procedures}
 \label{sec:proof-reconstruction}
 
-\TODO{Improve the structure of this section}
-
-While ATPs are very useful for solving theorems in this project, they don't integrate with \emph{Lean} out of the box.
-ATPs may potentially produce unsound proofs, or worse, derive incorrect results.
+While ATPs are very useful for solving theorems in this project, they do not integrate with \emph{Lean} out of the box.
+ATPs may produce unsound proofs, or worse, derive incorrect results.
 Thus, by default, theorems in \emph{Lean} cannot be proven by deferring to the result of an ATP.
-Instead, the results of an ATP can be used to (re-)construct a proof of the form required by \emph{Lean}.
-There are different approaches to proof (re-)construction which we employ in this project.
+Instead, the results of an ATP can be used to reconstruct a proof of the form required by \emph{Lean}.
+% There are different approaches to proof reconstruction which we employ in this project.
+Thus, in general, integration of ATPs requires two steps.
+First, there is the invocation of the ATPs by translating the problem from \emph{Lean} into the languages and logics they use. 
+And second, there is the reconstruction of the ATPs' results as a (persistent) \emph{Lean} proof.
+These two aspects present different challenges, and require different strategies, depending mostly on the kind of proof strategy the ATP uses.
 
+More generally, we have observed that there are multiple ways of integrating decisions procedures within \emph{Lean}, with different levels of integration.
 
-
-An exception for this are tactics like \texttt{duper}, \texttt{aesop} and \texttt{egg}. Figure~\ref{fig:screenshot-egg} shows an example of the \texttt{egg} tactic as used in this project. It integrates directly in \emph{Lean}, generating a \emph{Lean} proof directly. With the variant \texttt{egg?}, depicted in the screenshot, it uses an auxiliary tactic \texttt{calcify}\footnote{\url{https://github.com/nomeata/lean-calcify}} to generate a human-readable proof as a series of calculation steps, which can be incorporated into the file with a single click.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.85\textwidth]{screenshot-egg.png}
-  \caption{An example of the use of proof automation with tactics. This shows the egg tactic as it was used to generate (human-readable) equational proofs of positive implications.}
-  \label{fig:screenshot-egg}
-\end{figure}
-
-In general, integration implies two steps: invoking the decision procedures/ATPs (translating the problem from \emph{Lean} into the languages and logics they use), and conversely, (re-)constructing the results from the decision procedure as a (persistent) \emph{Lean} proof.
-These two aspects present different challenges, and require different strategies, depending mostly on the kind of proof strategy the decision procedure uses.
-
-For saturation proofs $\ldots$
-\TODO{add explanations from the following URL}
-\url{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Vampire.20-.3E.20Lean/near/478147138}
-
-For equational proofs from external provers (e.g. MagmaEgg), we also used a simple version of reconstruction by (re-)constructing the proofs of equality from an explanation, using congruence lemmas from \emph{Lean}.
-In the case of equational proofs from the \texttt{egg} tactic, these could be converted into a series of \texttt{calc} steps, documenting the explicit calculation, using the \texttt{calcify} tactic.
-
-In general, we have observed that there are multiple ways of integrating decisions procedures within \emph{Lean}, with different levels of integration.
 \begin{enumerate}
     \item Using a \emph{Lean} tactic, which calls a decision procedure written in \emph{Lean} (like \texttt{aesop} or \texttt{duper}).
-    \item Using a \emph{Lean} tactic, which calls an existing (external) ATP and reconstructs a proof term from the ATP's result (like \texttt{bv\_decide} or \texttt{egg}).
+    \item\label{inter} Using a \emph{Lean} tactic, which calls an existing (external) ATP and reconstructs a proof term from the ATP's result (like \texttt{bv\_decide} or \texttt{egg}).
     \item\label{external} Using an external script which calls an existing ATP and generates a source file \texttt{.lean} which captures the result explicitly.
 \end{enumerate}
 
-This project primarily used the least integrated approach, (Option \ref{external}), as it was fastest and required no dependencies on the other contributors.
-This also has drawbacks: primarily, while the upfront effort is lower, the effort to use is higher than with a tactic, once the tactic is developed.
-It also makes integration with larger code bases more difficult: in this project the (mathematical) dependencies were by design very minimal, magmas are simple, and we built our own definitions for them.
-For example, integration with the typeclass system becomes much more difficult when working with more complex mathematical objects that build on multiple, nested layers of structure in non-trivial ways.
-In that case, for example, tactics need to synthesize typeclass instances, deal with diamonds and different notions of equivalence~\cite{DBLP:conf/mkm/Wieser23}.
+This project primarily used the least integrated approach, Option \ref{external}, as it was fastest to implement and imposed no additional technical requirements on other contributors.
+The matter of technical requirements caused problems, for example, when integrating the \texttt{egg} tactic (Option \ref{inter}) as it initially expected certain software on the user's machine.
+Such trade-offs between Option \ref{inter} and Option \ref{external} are, however, mutual, as the higher upfront cost of integrating a proof tactic in Option \ref{inter} makes the decision procedure easier to use than with Option \ref{external}.
+Additionally, Option \ref{inter} can benefit from \emph{Lean}'s meta-programming capabilities when encoding the problem for use with an ATP, and when reconstructing a \emph{Lean} proof from the result.
+
+\textbf{Proof Reconstruction.}
+
+The relative simplicity of the objects used in this project benefit the implementations of proof reconstruction.
+By focussing on the given problem domain, difficult reconstruction issues, like complex dependent types, could be ignored.
+
+\TODO{Somebody knowledgeable about saturation/Vampire read/correct this.}
+% BASED ON: https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Vampire.20-.3E.20Lean/near/478147138
+For saturation proofs with \emph{Vampire}, we implement analogs of the \emph{superpose}, \emph{resolve}, and \emph{subsumption} steps in \emph{Lean}. 
+Proofs can then be reconstructed as sequences of these steps (and additional technicalities) as shown in Figure~\ref{fig:vampire-example}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{vampire-example.png}
+  \caption{Example of a proof reconstructed from output of \emph{Vampire}. Note how the proof proceeds by contradiction and uses the \texttt{superpose} and \texttt{subsumption} steps implemented in \emph{Lean}.}
+  \label{fig:vampire-example}
+\end{figure}
+\todo{Use listings or minted for this code block.}
+
+\todo{Explain how Prover9 and Mace4 were used.}
+
+For equational proofs from external provers, like \emph{MagmaEgg}, we also used a tailored version of reconstruction. 
+Specifically, the \emph{MagmaEgg} implementation turns \emph{explanations} \cite{nieuwenhuis2005proof} from \emph{egg} into \emph{Lean} proofs by simple applications of the defining properties of equality as shown in Figure~\ref{magma-egg-example}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{magma-egg-example.png}
+  % SOURCE: https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/MagmaEgg/small/_005.lean
+  \caption{Example of a proof reconstructed by \emph{MagmaEgg}. Note the proof only uses reflexivity, symmetry, transitivity, and congruence of equality.}
+  \label{fig:magma-egg-example}
+\end{figure}
+\todo{Use listings or minted for this code block.}
+
+In the case of the \texttt{egg} tactic, which also reconstructs proofs from \emph{egg} explanations, the proof could be converted into a more human-readable form by using the \texttt{calcify}\footnote{\url{https://github.com/nomeata/lean-calcify}} tactic, as shown in Figure~\ref{fig:egg-example}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{egg-example.png}
+  \caption{Example of the \texttt{egg} tactic reconstructing a proof in human-readable form with the help of \texttt{calcify} (invoked by the special syntax \texttt{egg?}).}
+  \label{fig:egg-example}
+\end{figure}
 
 \textbf{Semi-Automated Counterexample Guidance.}  Another use of ATPs has been in a semi-automatic fashion, to find counterexamples.
 The general strategy was to use ATPs to find counterexamples to implications by building magmas iteratively.
@@ -115,7 +137,7 @@ While equational reasoning can also be used in a semi-automatic fashion to prove
 \subsection{Empirical Results}
 
 Finally, we report some empirical results from use of ATPs for this project, in terms of performance.
-The aim of this section is not to be a careful evaluation and benchmark comparison of the different ATPs; instead, we present our work here as a more informal ``field report'' documenting our experiences.
+This section is not intended to be a careful evaluation and benchmark comparison of the different ATPs; instead, we present our work here as a more informal ``field report'' documenting our experiences.
 In particular, we do not draw firm conclusions about the overall capabilities\footnote{One reason for this is that different ATPs were deployed at different stages of the project.  In particular, the later ATP runs were performed in an environment when a large fraction of the implications had already been settled, and only a small remainder set was tested by our project.  The current set of ATP-generated formalized implications has also been subject to a number of reductions to optimize compilation time, so we would caution against reading too much into the raw number of such formalizations in the codebase.} of the different ATPs.
 Rather, this serves as a use-case documenting the experience of (mostly) novice users.
 

@@ -71,7 +71,7 @@ jobs:
             --data '["awaiting-CI"]'
 
       - name: Checkout project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0 # Fetch all history for all branches and tags
 
@@ -154,7 +154,7 @@ jobs:
           ruby scripts/generate_graphiti_data.rb data/duals.json /tmp/raw_data/general_implications_closure.json /tmp/unknowns.json /tmp/raw_data/finite_implications_closure.json /tmp/unknowns.fin.json > home_page/graphiti/graph.json
 
       - name: Generate the paper PDF (+ add it to the site)
-        uses: xu-cheng/texlive-action@f886de8159e5952a131848a5fa9c3196a2132b5d # v2
+        uses: xu-cheng/texlive-action@475ab07999e9709e524c3708488c8c170d3a6611 # v3
         with:
           docker_image: ghcr.io/xu-cheng/texlive-full:20250401
           run: |
