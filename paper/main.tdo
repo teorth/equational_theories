@@ -1,16 +1,14 @@
-\contentsline {todo}{This is my vague understanding of the situation - someone with experience should validate this.}{11}{section*.2}%
-\contentsline {todo}{Report on how large the twisting semigroups are in practice, and how many implications can be refuted by this method.}{27}{section*.4}%
-\contentsline {todo}{Describe performance of this automated method. Discuss the issue that some implications required a large SAT solver calculation that was difficult to formalize efficiently in Lean, prompting human-generated simplified proofs using smaller rulesets.}{30}{section*.5}%
-\contentsline {todo}{here we could add a screenshot of using \emph {Vampire} or \emph {Prover9}}{41}{section*.6}%
-\contentsline {todo}{Somebody knowledgeable about saturation/Vampire read/correct this.}{43}{section*.7}%
-\contentsline {todo}{Use listings or minted for this code block.}{43}{section*.8}%
-\contentsline {todo}{Explain how Prover9 and Mace4 were used.}{43}{section*.9}%
-\contentsline {todo}{Use listings or minted for this code block.}{43}{section*.10}%
-\contentsline {todo}{this should also be expanded more, at least with references to some of the constructions in other chapters.}{44}{section*.11}%
-\contentsline {todo}{discuss guided search in the finite implications or the Higman-Neumann work Jose Brox has done.}{45}{section*.12}%
-\contentsline {todo}{maybe add a screenshot here of the workflow of using a seed to find counterexamples with \emph {Prover9} or \emph {Vampire}?}{45}{section*.13}%
-\contentsline {todo}{throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''. Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.}{45}{section*.14}%
-\contentsline {todo}{Expand this sketch}{45}{section*.15}%
-\contentsline {todo}{report on Higman--Neumann laws}{47}{section*.16}%
-\contentsline {todo}{Describe how data was handled during the project and how it will be managed going forward.}{54}{section*.17}%
-\contentsline {todo}{Complete the affiliations here. For contributors with no affiliations to report, enter `Unaffiliated'.}{61}{section*.117}%
+\contentsline {todo}{Report on how large the twisting semigroups are in practice, and how many implications can be refuted by this method.}{27}{section*.3}%
+\contentsline {todo}{Describe performance of this automated method. Discuss the issue that some implications required a large SAT solver calculation that was difficult to formalize efficiently in Lean, prompting human-generated simplified proofs using smaller rulesets.}{29}{section*.4}%
+\contentsline {todo}{here we could add a screenshot of using \emph {Vampire} or \emph {Prover9}}{41}{section*.5}%
+\contentsline {todo}{Somebody knowledgeable about saturation/Vampire read/correct this.}{42}{section*.6}%
+\contentsline {todo}{Use listings or minted for this code block.}{43}{section*.7}%
+\contentsline {todo}{Explain how Prover9 and Mace4 were used.}{43}{section*.8}%
+\contentsline {todo}{Use listings or minted for this code block.}{43}{section*.9}%
+\contentsline {todo}{this should also be expanded more, at least with references to some of the constructions in other chapters.}{44}{section*.10}%
+\contentsline {todo}{discuss guided search in the finite implications or the Higman-Neumann work Jose Brox has done.}{44}{section*.11}%
+\contentsline {todo}{maybe add a screenshot here of the workflow of using a seed to find counterexamples with \emph {Prover9} or \emph {Vampire}?}{44}{section*.12}%
+\contentsline {todo}{throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''. Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.}{45}{section*.13}%
+\contentsline {todo}{Expand this sketch}{45}{section*.14}%
+\contentsline {todo}{report on Higman--Neumann laws}{47}{section*.15}%
+\contentsline {todo}{Complete the affiliations here. For contributors with no affiliations to report, enter `Unaffiliated'.}{61}{section*.115}%
