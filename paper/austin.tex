@@ -1,7 +1,10 @@
 \section{Implications for Finite Magmas}\label{austin-sec}
 
-\TODO{Expand this sketch}
+Many of techniques used to determine the graph of implications $E \vdash E'$ can also be used to determine the graph of finite implications $E \vdashfin E'$, with the notable exception of the greedy construction, which appears to be inherently infinitary in nature.  On the other hand, when the magma $M$ is finite, one can prove additional implications by using the fact that any function $f \colon M \to M$ which is surjective, is necessarily injective, or vice versa.  We could establish about 200 new implications by providing these two axioms to \emph{Vampire} or to the \emph{Lean} package \emph{Duper}, though in the latter case some human rewriting of the proof was needed to formalize it in the base installation of \emph{Lean}.  A small number of additional implications could be resolved by more complicated facts about functions $f,g \colon M \to M$, such as the fact that $f = f \circ f \circ g$ implies $f = f \circ g \circ f$.  We refer the reader to the blueprint for examples of such arguments, which were obtained by \emph{ad hoc} methods.
 
-{\bf
-Recap discussion from \url{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs}
-}
+In the end, we were able to establish $820$ new implications $E \vdashfin E'$ for which $E \not \vdash E'$; and for most other anti-implications $E \not \vdash E'$, we were able to strengthen the anti-implication to $E \not \vdashfin E'$.  However, there was (up to duality) precisely one finite implication which we could not settle, and leave as an open problem:
+
+\begin{problem}  Does the law $\x \formaleq \y \op (\x \op ((\y \op \x) \op y))$ \eqref{eq677} imply the law $\x \formaleq ((\x \op \x) \op \x) \op x$ \eqref{eq255} for finite magmas?
+\end{problem}
+
+This problem appears to be ``immune'' to many of our constructions, such as the linear magma construction or the magma cohomology construction; the greedy construction does show that $E677 \not \vdash E255$, but the construction is inherently infinite in nature.  We tentatively conjecture that $E677 \not \vdashfin E255$; we refer the reader to the blueprint for several partial results in this direction.
