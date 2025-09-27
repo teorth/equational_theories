@@ -40,11 +40,10 @@ This can be read as $C \lor L$ with $D \lor \neg L$ implies $C \lor D$, where $C
 Superposition calculi have a variant of this rule that deals with equality directly, and thus are more efficient at reasoning about equality.
 
 In this project we used \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13}, \emph{Duper}~\cite{DBLP:conf/itp/CluneQBA24} and \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4} which are all based on variants of saturation for proving.
-\TODO{here we could add a screenshot of using \emph{Vampire} or \emph{Prover9}}
 
 \textbf{Equational Reasoning.} As already discussed in \Cref{canon-sec}, equational reasoning is a type of reasoning based on equational logic and rewriting with congruence~\cite{term-rewriting}.
 In general, an equational reasoning procedure takes a series of equations and determines whether another equation can be deduced from it.
-A core tool in equational reasoning are e-graphs, a data structure used to represent congruence classes of terms.
+A core tool in equational reasoning are \emph{e-graphs}, a data structure used to represent congruence classes of terms.
 By themselves, e-graphs provide an efficient means of implementing a decision procedure for congruence closure over ground equations (i.e. equations without variables).
 Extensions to this procedure, for example by quantifier instantiation via e-matching \cite{DBLP:conf/cade/MouraB07}, also allow for a semi-decision procedure for congruence closure over non-ground equations.
 
@@ -63,7 +62,7 @@ Thus, by default, theorems in \emph{Lean} cannot be proven by deferring to the r
 Instead, the results of an ATP can be used to reconstruct a proof of the form required by \emph{Lean}.
 % There are different approaches to proof reconstruction which we employ in this project.
 Thus, in general, integration of ATPs requires two steps.
-First, there is the invocation of the ATPs by translating the problem from \emph{Lean} into the languages and logics they use. 
+First, there is the invocation of the ATPs by translating the problem from \emph{Lean} into the languages and logics they use.
 And second, there is the reconstruction of the ATPs' results as a (persistent) \emph{Lean} proof.
 These two aspects present different challenges, and require different strategies, depending mostly on the kind of proof strategy the ATP uses.
 
@@ -85,9 +84,7 @@ Additionally, Option \ref{inter} can benefit from \emph{Lean}'s meta-programming
 The relative simplicity of the objects used in this project benefit the implementations of proof reconstruction.
 By focussing on the given problem domain, difficult reconstruction issues, like complex dependent types, could be ignored.
 
-\TODO{Somebody knowledgeable about saturation/Vampire read/correct this.}
-% BASED ON: https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Vampire.20-.3E.20Lean/near/478147138
-For saturation proofs with \emph{Vampire}, we implement analogs of the \emph{superpose}, \emph{resolve}, and \emph{subsumption} steps in \emph{Lean}. 
+For saturation proofs with \emph{Vampire}, we implement analogs of the \emph{superpose}, \emph{resolve}, and \emph{subsumption} steps in \emph{Lean}.
 Proofs can then be reconstructed as sequences of these steps (and additional technicalities) as shown in Figure~\ref{fig:vampire-example}.
 
 \begin{figure}
@@ -100,8 +97,8 @@ Proofs can then be reconstructed as sequences of these steps (and additional tec
 
 \todo{Explain how Prover9 and Mace4 were used.}
 
-For equational proofs from external provers, like \emph{MagmaEgg}, we also used a tailored version of reconstruction. 
-Specifically, the \emph{MagmaEgg} implementation turns \emph{explanations} \cite{nieuwenhuis2005proof} from \emph{egg} into \emph{Lean} proofs by simple applications of the defining properties of equality as shown in Figure~\ref{magma-egg-example}.
+For equational proofs from external provers, like \emph{MagmaEgg}, we also used a tailored version of reconstruction.
+Specifically, the \emph{MagmaEgg} implementation turns \emph{explanations} \cite{nieuwenhuis2005proof} from \emph{egg} into \emph{Lean} proofs by simple applications of the defining properties of equality as shown in Figure~\ref{fig:magma-egg-example}.
 
 \begin{figure}
   \centering
