@@ -1,4 +1,5 @@
+The dual law 1849 `x = (x ◇ (y ◇ x)) ◇ (x ◇ z)` is a twist of [law 428](https://teorth.github.io/equational_theories/implications/?428) by the squaring map.  Indeed, it is equivalent to the conjunction of [law 152](https://teorth.github.io/equational_theories/implications/?152) `x = (x◇x)◇(x◇y)` and [law 309](https://teorth.github.io/equational_theories/implications/?309) `x◇x = x◇(y◇x)`, whereas law 428 is equivalent to [law 9](https://teorth.github.io/equational_theories/implications/?9) `x = x◇(x◇y)` and [law 10](https://teorth.github.io/equational_theories/implications/?10) `x = x◇(y◇x)`.
+
 The free magma with one generator `x` for this law is isomorphic to `ℤ/2ℤ` equipped with `x◇y = y+1`.  Thus in any magma this law implies the [trivial left cubing law 8](https://teorth.github.io/equational_theories/implications/?8) `x◇(x◇x) = x`, the [involutive squaring law 151](https://teorth.github.io/equational_theories/implications/?151) `(x◇x)◇(x◇x) = x`, and [law 359](https://teorth.github.io/equational_theories/implications/?359) `x◇x = (x◇x)◇x`.
 
 This law cannot hold in a (non-trivial) commutative magma or quasigroup.
-
