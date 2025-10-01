@@ -1,6 +1,6 @@
 ## The totally-symmetric quasigroup law
 
-This law is equivalent to the [commutative law 43](https://teorth.github.io/equational_theories/implications/?43) together with the [Putnam law 14](https://teorth.github.io/equational_theories/implications/?14).  Equivalently, the magma is a totally-symmetric quasigroup, in the sense that left and right divisions coincide with multiplication, which is commutative.
+This law is equivalent to any two of the following four laws: the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14), the [involutive left-multiplication law 16](https://teorth.github.io/equational_theories/implications/?16), its [dual law 26](https://teorth.github.io/equational_theories/implications/?26), and the [commutative law 43](https://teorth.github.io/equational_theories/implications/?43).  Equivalently, the magma is a totally-symmetric quasigroup, in the sense that left and right divisions coincide with multiplication, which is commutative.
 
 As [discussed here](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Simple.20and.20.28sub.29directly.20irreducible.20spectrum/near/494707714), such "commutative Putnam magmas" include two particularly interesting subclasses, both in one-to-one correspondence with Steiner triple systems:
 
