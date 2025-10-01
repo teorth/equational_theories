@@ -5,7 +5,7 @@ Many proofs or refutations of implications (or equivalences) between two equatio
 
 \subsection{Simple rewrites}\label{rewrite-sec}
 
-Many equational laws $E'$ can be formally deduced from a given law $E$ by applying the \emph{Lean} \texttt{rw} tactic to rewrite $E'$ repeatedly by some forward or backward application of $E$ applied to arguments that match some portion of $E$.  For instance, the commutative law \eqref{eq43} clearly implies $\x \op (\y \op \z) \formaleq (\y \op \z) \op \x$ \eqref{eq4531}
+Many equational laws $\E'$ can be formally deduced from a given law $\E$ by applying the \emph{Lean} \texttt{rw} tactic to rewrite $\E'$ repeatedly by some forward or backward application of $\E$ applied to arguments that match some portion of $\E$.  For instance, the commutative law \eqref{eq43} clearly implies $\x \op (\y \op \z) \formaleq (\y \op \z) \op \x$ \eqref{eq4531}
 by a single such rewrite.  A brute force application of such rewrite methods is already able to directly generate about $\num{15000}$ such implications, including many equivalences to the singleton law \eqref{eq2} and the constant law \eqref{eq46}.  After applying transitive closure, this generates about four million further such implications.
 
 A simple observation that already generates a reasonable number of equivalences is that any equation of the form $\x \formaleq f(\y,\z,\dots)$ necessarily is equivalent to the trivial law $\x \formaleq \y$, by transitivity; similarly, an equation of the form $f(\x,\y) \formaleq g(\z,\w,\dots)$ implies $f(\x,\y) \formaleq f(\x',\y')$; and so forth.  Equivalences of this form were useful early in the project by cutting down the number of distinct equivalence classes of laws that needed to be studied.
@@ -53,13 +53,13 @@ In practice, we found that these invariants could be used to establish a signifi
 
 \subsection{Canonization}\label{canon-sec}
 
-One possible way of obtaining refutations of a given implication $E_1 \Rightarrow E_2$ between equational laws is by building a special kind of syntactic model, via certain involutions on elements of the free magma $\Magma_X$ we call \emph{canonizers}.
+One possible way of obtaining refutations of a given implication $\E_1 \Rightarrow \E_2$ between equational laws is by building a special kind of syntactic model, via certain involutions on elements of the free magma $\Magma_X$ we call \emph{canonizers}.
 
 \begin{definition}
-  A function $C:\Magma_X\rightarrow\Magma_X$ is a \emph{canonizer} for an equation $E$ if
+  A function $C:\Magma_X\rightarrow\Magma_X$ is a \emph{canonizer} for an equation $\E$ if
   \begin{enumerate}
     \item $C$ is computable.
-    \item if $w_1\sim_E w_2$, then $C(w_1) = C(w_2)$.
+    \item if $w_1\sim_\E w_2$, then $C(w_1) = C(w_2)$.
   \end{enumerate}
 \end{definition}
 
@@ -72,11 +72,11 @@ Let $R$ be an arbitrary function $\Magma_X\rightarrow \Magma_X$.
 \begin{definition}\label{def:canon}
   We say that $R$ is (weakly) \emph{collapsing} if for every word $w$, $R(w)$ is a sub-word of $w$ (in the obvious sense).
 
-  A function $\theta : X\rightarrow\Magma_X$ is called a \emph{substitution}, and we can extend $\theta$ to be a homomorphism in the obvious way. We write $w\theta$ instead of $\theta(w)$ for application of substitutions.
+  A function $\theta\colon X\rightarrow\Magma_X$ is called a \emph{substitution}, and we can extend $\theta$ to be a homomorphism in the obvious way. We write $w\theta$ instead of $\theta(w)$ for application of substitutions.
 
-  If $E$ is the equation $l\simeq r$, and $l$ is not a variable, we say that $R$ is a \emph{weak canonizer} if for any substitution $\theta$, $R(l\theta)=r\theta$.
+  If $\E$ is the equation $l\simeq r$, and $l$ is not a variable, we say that $R$ is a \emph{weak canonizer} if for any substitution $\theta$, $R(l\theta)=r\theta$.
 
-  Finally we say that $R$ is \emph{non-overlapping} for $E$ if for every word $w\in\Magma_X$ which is a strict sub-word of $l$ that is not in $X$, and any substitution $\theta$, $R(w\theta) = w\theta$.
+  Finally we say that $R$ is \emph{non-overlapping} for $\E$ if for every word $w\in\Magma_X$ which is a strict sub-word of $l$ that is not in $X$, and any substitution $\theta$, $R(w\theta) = w\theta$.
 \end{definition}
 
 We can then define $C_R : \Magma_X\rightarrow\Magma_X$ as follows:
@@ -118,9 +118,9 @@ Though we note that the non-overlapping criterion seems very similar to the noti
 
 \subsection{Unique factorization}
 
-In general, the free magma $\Magma_{X,E}$ for a given equational law $E$, which we can canonically define as $\Magma_X/\!\sim_E$, is hard to describe explicitly; indeed, from the undecidability of implications between equational laws, such a magma cannot be computably described for arbitrary $E$.  Nevertheless, for some laws it is possible to obtain some partial understanding of $\Magma_{X,E}$ from a syntactic perspective.  For instance, if we can refute the equivalence $w'_1 \sim_E w'_2$ by constructing a counterexample magma $M$ that obeys $E$ but not $w'_1 \formaleq w'_2$, then this implies that the representatives $\iota_{X,E}(w'_1), \iota_{X,E}(w'_2)$ of  $w'_1, w'_2$ in $\Magma_{X,E}$ are distinct.
+In general, the free magma $\Magma_{X,\E}$ for a given equational law $\E$, which we can canonically define as $\Magma_X/\!\sim_\E$, is hard to describe explicitly; indeed, from the undecidability of implications between equational laws, such a magma cannot be computably described for arbitrary $\E$.  Nevertheless, for some laws it is possible to obtain some partial understanding of $\Magma_{X,\E}$ from a syntactic perspective.  For instance, if we can refute the equivalence $w'_1 \sim_\E w'_2$ by constructing a counterexample magma $M$ that obeys $\E$ but not $w'_1 \formaleq w'_2$, then this implies that the representatives $\iota_{X,\E}(w'_1), \iota_{X,\E}(w'_2)$ of  $w'_1, w'_2$ in $\Magma_{X,\E}$ are distinct.
 
-We illustrate this approach with equations $E$ of the left-absorptive form
+We illustrate this approach with equations $\E$ of the left-absorptive form
 \begin{equation}\label{left-absorptive}
 \x \formaleq \x \op f(\x,\y,\z)
 \end{equation}
@@ -146,31 +146,31 @@ $$ (x \op y) \op y = x \op y$$
 giving \eqref{eq378}.
 \end{proof}
 
-Let $E$ be a law of the form \eqref{left-absorptive} that implies \eqref{eq378}. We define a directed graph $\to_E$ on words in $\Magma_X$ by declaring $w' \to_E w$ if $w \sim_E w'' \op w'$ for some $w' \in \Magma_X$.  By \eqref{eq378} (applied to the quotient magma $\Magma_{X,E} = \Magma_X/\sim_E$), this is equivalent to requiring that $w \sim_E w \op w'$. In particular, from \eqref{left-absorptive} we have $f(x,y,z) \to x$ for all $x,y,z$.  Furthermore, the relation $\to_E$ factors through $\sim_E$: if $w \sim_E \tilde w$ and $w' \sim_E \tilde w'$, then $w' \to_E w$ if and only if $\tilde w \to_E \tilde w$.
+Let $\E$ be a law of the form \eqref{left-absorptive} that implies \eqref{eq378}. We define a directed graph $\to_\E$ on words in $\Magma_X$ by declaring $w' \to_\E w$ if $w \sim_\E w'' \op w'$ for some $w' \in \Magma_X$.  By \eqref{eq378} (applied to the quotient magma $\Magma_{X,E} = \Magma_X/\sim_\E$), this is equivalent to requiring that $w \sim_\E w \op w'$. In particular, from \eqref{left-absorptive} we have $f(x,y,z) \to x$ for all $x,y,z$.  Furthermore, the relation $\to_\E$ factors through $\sim_\E$: if $w \sim_\E \tilde w$ and $w' \sim_\E \tilde w'$, then $w' \to_\E w$ if and only if $\tilde w \to_\E \tilde w$.
 
-Call a word $w \in \Magma_X$ \emph{irreducible} if it is not of the form $w = w_1 \op w_2$ with $w_2 \to_E w_1$.  We can partially understand the equivalence relation $\sim_E$ on irreducible words:
+Call a word $w \in \Magma_X$ \emph{irreducible} if it is not of the form $w = w_1 \op w_2$ with $w_2 \to_\E w_1$.  We can partially understand the equivalence relation $\sim_\E$ on irreducible words:
 
-\begin{theorem}[Description of equivalence]\label{irred-desc}  Let $E$ be an equation of the form \eqref{left-absorptive}.  Let $w$ be an irreducible word, and let $w'$ be a word with $w \sim_E w'$.
+\begin{theorem}[Description of equivalence]\label{irred-desc}  Let $\E$ be an equation of the form \eqref{left-absorptive}.  Let $w$ be an irreducible word, and let $w'$ be a word with $w \sim_\E w'$.
   \begin{itemize}
     \item[(i)] If $w$ is a product $w = w_1 \op w_2$, then $w'$ takes the form
 $$ w' = (((w'_1 \op w'_2) \op v_1) \op \dots \op v_n)$$
-for some $w'_1 \sim_E w_1$, $w'_2 \sim_E w_2$, some $n \geq 0$, and some words $v_1, \dots, v_n$ such that for all $0 \leq i < n$, $v_{i+1}$ is of the form
-$$ v_{i+1} \sim_E f(x_i,y_i,z_i)$$
+for some $w'_1 \sim_\E w_1$, $w'_2 \sim_\E w_2$, some $n \geq 0$, and some words $v_1, \dots, v_n$ such that for all $0 \leq i < n$, $v_{i+1}$ is of the form
+$$ v_{i+1} \sim_\E f(x_i,y_i,z_i)$$
 for some $x_i, y_i, z_i$ with
-$$ x_i \sim_E (((w'_1 \op w'_2) \op v_1) \op \dots \op v_i).$$
-In particular, $v_{i+1} \to_E x_i$.
+$$ x_i \sim_\E (((w'_1 \op w'_2) \op v_1) \op \dots \op v_i).$$
+In particular, $v_{i+1} \to_\E x_i$.
   \item[(ii)] Similarly, if $w \in X$ is a generator of $\Magma_X$, then $w'$ takes the form
 $$ w' = ((w \op v_1) \op \dots \op v_n)$$
 for some $n \geq 0$, and some words $v_1, \dots, v_n$ such that for all $0 \leq i < n$, $v_{i+1}$ is of the form
-$$ v_{i+1} \sim_E f(x_i,y_i,z_i)$$
+$$ v_{i+1} \sim_\E f(x_i,y_i,z_i)$$
 for some $x_i, y_i, z_i$ with
-$$ x_i \sim_E ((w \op v_1) \op \dots \op v_i).$$
-In particular, $v_{i+1} \to_E x_i$.
+$$ x_i \sim_\E ((w \op v_1) \op \dots \op v_i).$$
+In particular, $v_{i+1} \to_\E x_i$.
 \end{itemize}
 Conversely, any word of the above forms is equivalent to $w$.
 \end{theorem}
 
-\begin{proof}  We just verify claim (i), as claim (ii) is similar.  The converse direction is clear from \eqref{left-absorptive} (after quotienting by $\sim_E$), so it suffices to prove the forward claim. By the Birkhoff completeness theorem, it suffices to prove that the class of words described by (i) is preserved by any term rewriting operation, in which a term in the word is replaced by an equivalent term using \eqref{left-absorptive}.  Clearly the term being rewritten is in $w'_1$ or $w'_2$ then the form of the word is preserved, and similarly if the term being rewritten is in one of the $v_i$.  The only remaining case is if we are rewriting a term of the form
+\begin{proof}  We just verify claim (i), as claim (ii) is similar.  The converse direction is clear from \eqref{left-absorptive} (after quotienting by $\sim_\E$), so it suffices to prove the forward claim. By the Birkhoff completeness theorem, it suffices to prove that the class of words described by (i) is preserved by any term rewriting operation, in which a term in the word is replaced by an equivalent term using \eqref{left-absorptive}.  Clearly the term being rewritten is in $w'_1$ or $w'_2$ then the form of the word is preserved, and similarly if the term being rewritten is in one of the $v_i$.  The only remaining case is if we are rewriting a term of the form
 $$ x_i = (((w'_1 \op w'_2) \op v_1) \op \dots \op v_i).$$
 If $i>0$ we can rewrite this term down to $x_{i-1}$, and this still preserves the required form (decrementing $n$ by one).  If $i=0$ then we cannot perform such a rewriting because of the irreducibility of $w_1 \op w_2$ and hence $w'_1 \op w'_2$.  Finally, we can rewrite $x_i$ to $x_i \op v$ where $v$ is of the form
 $$ v_i = f(x_i,y,z),$$
@@ -179,7 +179,7 @@ and after some relabeling we are again of the required form (now incrementing $n
 
 Specializing to the case where $w,w'$ are both irreducible, we conclude
 
-\begin{corollary}[Unique factorization]\label{unique-factorization}  Two irreducible words $w, w'$ are equivalent if and only if they are either the same generator of $X$, or are of the form $w = w_1 \op w_2$, $w' = w'_1 \op w'_2$ with $w_1 \sim_E w'_1$ and $w_2 \sim_E w'_2$.
+\begin{corollary}[Unique factorization]\label{unique-factorization}  Two irreducible words $w, w'$ are equivalent if and only if they are either the same generator of $X$, or are of the form $w = w_1 \op w_2$, $w' = w'_1 \op w'_2$ with $w_1 \sim_\E w'_1$ and $w_2 \sim_\E w'_2$.
 \end{corollary}
 
 As an application of this corollary, we establish
@@ -196,7 +196,7 @@ Suppose this were not the case, then by \Cref{unique-factorization} one of the f
 \item[(ii)] $(y \op (x \op y)) \to_{E854} x$.
 \item[(iii)] $y \op (x \op y) \sim_{E854} y$.
 \end{itemize}
-If (i) holds, then we have $x \op y = x$ must hold in $\Magma_X/\sim_E$, hence \eqref{eq854} would imply \eqref{eq4}.  However, it is possible to refute this implication by a finite counterexample.
+If (i) holds, then we have $x \op y = x$ must hold in $\Magma_X/\sim_\E$, hence \eqref{eq854} would imply \eqref{eq4}.  However, it is possible to refute this implication by a finite counterexample.
 
 Similarly, if (iii) held, then \eqref{eq854} would have to imply \eqref{eq10}, but this can also be refuted by a finite magma.
 
