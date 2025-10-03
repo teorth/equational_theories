@@ -4,6 +4,67 @@ As discussed in \Cref{automated-sec}, the ETP made extensive use of automated th
 
 On the other hand, we found that machine learning (ML) methods showed some promise of being able to heuristically predict the truth value of portions of implication graph, as we shall now discuss\footnote{For some discussion of other ML experiments performed during the project, see \url{https://leanprover.zulipchat.com/\#narrow/channel/458659-Equational/topic/Machine.20learning.2C.20first.20results}.}.
 
+\subsection{Convolutional neural network model for the implication graph}
+
+To model the implication graph, we used a convolutional neural network (CNN). For each pair of equations $(p,q)$, the input of the CNN consisted on a character-level tokenization (no vectorization) of the two equations, and the output of the CNN was a yes/no label depending on whether $p$ implies $q$. The CNN processed the input data using a 5-layer architecture, each layer composed of a 1-D convolution, followed by batch normalization and rectified linear unit activation functions\cite{Goodfellow-et-al-2016}. After the last convolutional layer, a flattening layer and a softmax activation function were used to obtain the output of the network, i.e., the prediction of the implication for the input pair of equations. Note that we trained our models with the 16/10/2024 version of the (infinite) implication graph, for which 362 of the hardest implications (less than 0,002\% of the total) were still unknown.
+
+\smallskip
+
+Prior to training the CNN, we divided the data into training (60\%),validation (20\%), and test (20\%) subsets. The CNN was implemented in TensorFlow 2.9.0\cite{tensorflow2015-whitepaper} and trained on an NVIDIA 3080 Ti GPU with the following configuration: the binary cross-entropy as the loss function to minimize, the Adam method with an initial learning rate of 10-3 for the adjustment of network weights, a batch size of 1024 with random shuffling, a learning rate reduction by a factor of 2 after 15 epochs without improvement in the validation loss, and early stopping if no improvement occurred for 40 epochs, being the model with the lowest validation loss retained as the final CNN.
+The final CNN was evaluated on the test set, reaching prediction accuracy of 99.7\%, which means that the model mis-classified around 66k of the 22 million implications. Since this accuracy was somewhat surprising for such a small and “simple” model, as a control we generated a random label (yes/no) for each pair of equations, then trained the CNN on this data with 60\%/20\%/20\% training/validation/test percentages, resulting in a 49.99\% accuracy, as expected from a nonbiased model.
+
+\smallskip
+
+It could be the case that the high accuracy of our CNN model was mostly due to it learning the transitivity of the implication relation, as opposed to it discovering patterns in the identities. To clarify this point, it was proposed to train our CNN model either on a random poset or on the equational poset with vertices and labels permuted, and check whether a similar accuracy was achieved. This experiment has not been performed yet.
+
+\smallskip
+
+In any case, since there are around 600k explicit implications from which the rest can be derived by transitivity (2.7\% of the total), if the CNN was learning transitivity it should perform well with a really small training dataset. Accordingly, we trained and assessed a CNN model with a 5\%/5\%/90\% training/validation/test proportion, with a resulting 99.6\% accuracy on test (the process finishing in under 20 minutes). But the high accuracy is maintained with even smaller training datasets, as evidenced in the following table:
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+  % after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
+  \textbf{Training/validation/test proportion (\%)} & \textbf{Prediction accuracy (\%)} \\\hline\hline
+  60/20/20 & 99.7 \\\hline
+  5/5/90 & 99.6 \\\hline
+  1/1/98 & 99.3 \\\hline
+  0.5/0.5/99 & 98.9 \\\hline
+  0.1/0.1/99.8 & 92.2 \\
+  \hline
+\end{tabular}
+\caption{Prediction accuracy as function of size of training set}
+\end{table}
+
+\noindent Since these training datasets were sensibly smaller than the subset of explicit implications, and were not carefully chosen from the poset extremes but taken randomly, we can conclude that even if the CNN was learning transitivity, probably this alone is not enough to explain the high accuracy achieved by the CNN model.
+
+\smallskip
+
+Since sometimes machine learning is announced as a form of data compression, let us now comment on the level of data compression achieved by our CNN model. In the table below we compare the sizes of three different encodings of the implication graph: a) As the simplest approach we can encode the full implication graph in one file as labelled pairs of equations of the form ($p$, $q$, yes/no). b) On the other extreme, we can encode it as a bit table not containing neither the explicit equation expressions nor their numbers, but just a 1/0 label for each point with coordinates ($p$,$q$), together with a table mapping each number to its corresponding equation expression and a small script to recover the file in a). c)Finally, we can encode it in the complete files of the CNN model produced by TensorFlow 2.9.0\cite{tensorflow2015-whitepaper}. In addition, we can either consider these files in their raw form, or we can highly (but losslessly) compress them to achieve a rough comparison of their actual information content; accordingly, in the table below we also include the sizes of the encoding models when compressed with 7-zip LZMA2 ultra compression with a 1536MB dictionary size and a 273 word size.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|}
+  \hline
+  % after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
+  \textbf{Encoding model} & \textbf{Uncompressed size} & \textbf{Compressed size} \\\hline\hline
+  Labelled pairs of equations & 1.5GB & 9MB \\\hline
+  Bit table & 42MB & 40KB \\\hline
+  CNN (99.7\% accuracy) & 1.34MB & 700KB \\
+  \hline
+\end{tabular}
+\caption{Size of different encodings for the implication graph}
+\end{table}
+
+\smallskip
+
+\noindent As we see, the information in the CNN model is more than 13 times less than in the labelled pairs model, while it is more than 18 times that of the bit table model. We also note that the CNN model in its raw form is already quite incompressible, and more than 30 times smaller than the raw bit table.
+
+\smallskip
+
+Lastly, take also into account that our CNN model does not only encode the implication graph up to order 4 (with a 0.03\% of noise) but a priori may also be able to predict it for higher orders with a significant accuracy, and could thus be used to guide and speed up the determination of the implication graph of order 5, by letting ATPs focus first on the CNN’s predicted status of the studied implication.
+
+
 \subsection{Graph ML: Directed link prediction on the implication graph}
 \label{sec:dlp}
 
