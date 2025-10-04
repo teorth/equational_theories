@@ -4,4 +4,4 @@ This is one of the laws where greedy completion has been shown (via extensive SA
 
 This law implies that left multiplications are surjective, hence finite magmas are left quasigroups (bijective left multiplications).  In left quasigroups, this law is equivalent to law 11228 `x = y ◇ ((y ◇ (y ◇ x)) ◇ (y ◇ x))`, whose free magma with one generator is `ℤ/3ℤ` equipped with `x ◇ y = y + 1`.  Hence the (infinite) free magma of the 713 equation has no finite quotient besides the trivial one and that 3-element magma.
 
-This law cannot hold in a non-trivial group.
+In quasigroups, this law implies the [idempotence law 3](https://teorth.github.io/equational_theories/implications/?3) `x = x◇x`.  It cannot hold in a non-trivial group.

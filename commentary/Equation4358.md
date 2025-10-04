@@ -1,1 +1,1 @@
-Among magmas with at least one injective left multiplication map, this law is equivalent to the [commutative law 43](https://teorth.github.io/equational_theories/implications/?43).
+Among quasigroups (more generally if any left multiplication map is injective), this law is equivalent to the [commutative law 43](https://teorth.github.io/equational_theories/implications/?43).

@@ -2,7 +2,9 @@
 
 This law implies the [commutative law 43](https://teorth.github.io/equational_theories/implications/?43) and [associative law 4512](https://teorth.github.io/equational_theories/implications/?4512).
 
-The submagma `P = {x◇y| x,y∈M}` is a Boolean group (abelian group of exponent 2).  In addition, all squares (not just those of elements in `P`) are equal to the identity element `0` of that group, `x◇x=0` for `x∈M`.  The map `x ↦ x ◇ 0` (equivalently left cubing) is a map from `M` to `P` that is the identity on `P`, and one has `x ◇ y = (x ◇ 0) ◇ (y ◇ 0)`.
+Quasigroups satisfying this law are Boolean groups (abelian groups of exponent 2).
+
+More generally, the submagma `P = {x◇y| x,y∈M}` is a Boolean group.  In addition, all squares (not just those of elements in `P`) are equal to the identity element `0` of that group, `x◇x=0` for `x∈M`.  The map `x ↦ x ◇ 0` (equivalently left cubing) is a map from `M` to `P` that is the identity on `P`, and one has `x ◇ y = (x ◇ 0) ◇ (y ◇ 0)`.
 
 Altogether the magma is a pointed set fibration over a Boolean group, and the operation is projection to the base, composed with the abelian group operation.  Magmas satisfying this law are always submagmas of linear magmas satisfying this law.
 
