@@ -1,1 +1,1 @@
-This law cannot hold in a non-trivial group.
+In a quasigroup this law is equivalent to the [idempotence law 3](https://teorth.github.io/equational_theories/implications/?3) `x = x◇x` together with [law 222](https://teorth.github.io/equational_theories/implications/?222) `x = (y◇(x◇y))◇y`.  It cannot hold in a non-trivial group.

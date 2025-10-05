@@ -8,4 +8,4 @@ The free magma with one generator for this law is isomorphic to `ℤ/3ℤ` equip
 
 This law also implies that left multiplications are injective.
 
-This law cannot hold in a non-trivial group.
+In a quasigroup this law is equivalent to the Asterix law 65, hence parastrophically equivalent to [law 4443](https://teorth.github.io/equational_theories/implications/?4443) in the sense that `◇` obeys the Obelix law if and only if the right division operation defined by `(x/y)◇y = x` obeys law 4443.  It cannot hold in a non-trivial group.
