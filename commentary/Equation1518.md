@@ -2,5 +2,4 @@ For finite models, magmas must be left-cancellative and squaring must be a bijec
 
 Some implications from equation 1518 were refuted using a [huge finite magma with 232 elements](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/486217486) which was barely verifiable using Lean.  See the end of [a list of useful magmas](https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/All4x4Tables/data/plan.txt) for its operation table.
 
-This law cannot hold in a non-trivial group.
-
+In a quasigroup this law is equivalent to the [idempotence law 3](https://teorth.github.io/equational_theories/implications/?3) `x = x◇x` together with the [Asterix law 65](https://teorth.github.io/equational_theories/implications/?3) `x = y◇(x◇(y◇x))`.  It cannot hold in a non-trivial group.

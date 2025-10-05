@@ -9,3 +9,5 @@ Such a magma is equivalent to
 - a map `S: M∖Q → Q` that describes squares of non-squares, to be completed by `S(x) = C(x)` for `x∈Q`,
 
 - for each non-square `x ∈ M∖Q`, a bijective left-multiplication map that squares to `C ∘ C`.
+
+In a quasigroup, this law implies that all squares are equal to the same element `e` ([unipotence law 40](https://teorth.github.io/equational_theories/implications/?40)) and that all left multiplications square to the inverse of the bijection `x ↦ e◇x`.

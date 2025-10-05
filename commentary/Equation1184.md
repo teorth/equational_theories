@@ -2,3 +2,4 @@ This law implies that the left cubing map `B: x ↦ x◇(x◇x)` is involutive, 
 
 This law implies that left multiplications are bijective.  The left division operation defined by `x ◇ (x : y) = y` obeys the same law.
 
+In a quasigroup, this law is equivalent to the [involutive left multiplications law 16](https://teorth.github.io/equational_theories/implications/?16) `x = y◇(y◇x)`.

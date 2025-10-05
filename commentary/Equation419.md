@@ -1,1 +1,1 @@
-For (left-)quasigroups, this law is parastrophically equivalent to [law 500](https://teorth.github.io/equational_theories/implications/?500).
+For left quasigroups, this law is equivalent to [law 500](https://teorth.github.io/equational_theories/implications/?500) `x = y:(y:(x:(x:x)))` which states that all left multiplications square to the same map, which is an involution.  The left division map defined by `x◇(x:y) = y` obeys the same law.

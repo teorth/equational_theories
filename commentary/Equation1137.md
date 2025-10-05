@@ -1,1 +1,3 @@
 This law implies that left multiplications are bijective, that the left cubing map `B: x ↦ x◇(x◇x)` is an involution (`B(B(x)) = x`) and that the squaring map `S: x ↦ x◇x` obeys `S(S(S(x))) = S(x)`.
+
+In a quasigroup, this law is equivalent to stating that all squares are equal ([unipotence law 40](https://teorth.github.io/equational_theories/implications/?40)) to the same element `e` such that `x = (y◇e)◇(y◇x)`.  In particular it is implied by [law 1387](https://teorth.github.io/equational_theories/implications/?1387).  Equivalently, the right division operation defined by `(x/y)◇y = x` obeys `x/y = (y/x)/e` and `e/y=y` and `(y/e)/e=y`.

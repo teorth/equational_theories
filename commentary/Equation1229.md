@@ -1,0 +1,1 @@
+In a quasigroup, this law implies that left and right cubes coincide, `x◇(x◇x) = (x◇x)◇x`.  With the left and right divisions being defined as `x◇(x:y) = y` and `(x/y)◇y = x`, the law implies `x:x = x/x`.

@@ -1,3 +1,5 @@
 This law is equivalent to the conjunction of [law 4270](https://teorth.github.io/equational_theories/implications/?4270) (right multiplications by squares all coincide) and [law 4273](https://teorth.github.io/equational_theories/implications/?4273) (right crossed-inverse property, namely `y ◇ (x ◇ y)` is independent of `y`).
 
 The set of squares, and the set of left cubes `x◇(x◇x)`, are submagmas.  The squaring map `S: x ↦ x◇x` is such that `S(S(x))` is constant, hence `S(S(S(x))) = S(S(x))`.
+
+In a quasigroup, this law is equivalent to stating that all squares are equal ([unipotence law 40](https://teorth.github.io/equational_theories/implications/?40)) to the same left-unit element `e` and that the [right crossed-inverse property 4273](https://teorth.github.io/equational_theories/implications/?4273) `y◇(x◇y) = y◇(y◇y)` holds.  This last identity is a twist of the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14).  In a quasigroup, law 4325 holds if and only if the right-division operation defined by `(x/y)◇y = x` obeys the same law.

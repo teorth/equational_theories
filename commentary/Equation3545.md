@@ -1,1 +1,1 @@
-Among magmas whose left multiplication maps are injective, this law is equivalent to the commutative [law 43](https://teorth.github.io/equational_theories/implications/?43) together with [law 23](https://teorth.github.io/equational_theories/implications/?23) `x = (x◇x)◇x`.
+In a quasigroup (more generally if left multiplications are injective), this law is equivalent to the commutative [law 43](https://teorth.github.io/equational_theories/implications/?43) together with [law 23](https://teorth.github.io/equational_theories/implications/?23) `x = (x◇x)◇x`.

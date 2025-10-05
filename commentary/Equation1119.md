@@ -6,5 +6,4 @@ This law implies that left multiplications are surjective.
 
 The free magma with one generator `x` for this law is isomorphic to ℤ/2ℤ equipped with `x◇y = y+1`.  In other words, in any magma the law implies the [trivial left cubes law 8](https://teorth.github.io/equational_theories/implications/?8) `x = x◇(x◇x)`, the [involutive squares law 151](https://teorth.github.io/equational_theories/implications/?151) `x = (x◇x)◇(x◇x)`, and [law 359](https://teorth.github.io/equational_theories/implications/?359) `x◇x = (x◇x)◇x`.
 
-This law cannot hold in a non-trivial group.
-
+In a quasigroup this law implies the [idempotence law 3](https://teorth.github.io/equational_theories/implications/?3) `x = x◇x`.  It cannot hold in a non-trivial group.

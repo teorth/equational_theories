@@ -1,1 +1,1 @@
-In magmas whose right multiplications maps are surjective, this law is equivalent to [law 16](https://teorth.github.io/equational_theories/implications/?16), `x = y◇(y◇x)`.
+In quasigroups (more generally, when right multiplications are surjective), this law is equivalent to the [involutive left multiplications law 16](https://teorth.github.io/equational_theories/implications/?16), `x = y◇(y◇x)`.
