@@ -51,6 +51,8 @@ $$ E_0 \subset E_1 \subset E_2 \subset \Z$$ together with a function $f: E_1 \to
 \begin{description}
   \item[(a)] If $h \in E_0$, then $f(h) \in E_1$, so that $f^2(h)$ is well-defined as an element of $E_2$; furthermore, $h + f(h) + f^2(h)$ lies in $E_1$, so that the left-hand side of \Cref{fh} makes sense; and \Cref{fh} holds.
   \item[(b)] The function $f$ is a bijection from $E_1 \backslash E_0$ to $E_2 \backslash E_1$.
+  \item[(c)] $f(0)=0$.
+  \item[(d)] $h+f(h) \neq 0$ for all non-zero $h \in E_1$.
 \end{description}
 
 We partially order the space of partial solutions to \Cref{fh} by writing $(E_0, E_1, E_2, f) \leq (E'_0, E'_1, E'_2, f')$ if the following properties hold:
@@ -60,7 +62,7 @@ We partially order the space of partial solutions to \Cref{fh} by writing $(E_0,
 \end{itemize}
 When this occurs we say that the partial solution $(E'_0, E'_1, E'_2, f')$ \emph{extends} the partial solution $(E_0, E_1, E_2, f)$.
 
-We define the \emph{empty partial solution} $(E_0,E_1,E_2,f)$ by setting $E_0=E_1=E_2$ to be the empty set, and $f$ to be the empty function; it is the minimal element of the above partial order.
+We define the \emph{trivial partial solution} $(E_0,E_1,E_2,f)$ by setting $E_0=E_1=E_2=\{0\}$ and $f(0)=0$; it is the minimal element of the above partial order.
 \end{definition}
 
 
@@ -81,8 +83,8 @@ We deal with these three cases in turn.
 First suppose that $h = h_0\in G \backslash E_2$.  We perform the following construction.
 
 \begin{itemize}
-  \item Choose an element $h_1 \in \Z$ that does not lie in $E_2 \cup \{h_0\}$; this is possible because $E_2$ is finite.
-  \item Choose an element $h_2 \in \Z$ such that $h_2, h_0+h_1+h_2$, and $-h_1-h_2$ are all distinct from each other and lie outside of $E_2 \cup \{h_0, h_1\}$; this is possible because $E_2$ is finite.
+  \item Choose an element $h_1 \in \Z$ that does not lie in $E_2 \cup \{h_0, -h_0\}$; this is possible because $E_2$ is finite.
+  \item Choose an element $h_2 \in \Z$ such that $h_2, h_0+h_1+h_2$, $-h_1$, and $-h_1-h_2$ are all distinct from each other and lie outside of $E_2 \cup \{h_0, h_1\}$; this is possible because $E_2$ is finite and $h_0+h_1 \neq 0$.
   \item Promote $h_0$ to $E_0$, promote $h_1, h_0+h_1+h_2$ to $E_1$, and promote $h_2, -h_1-h_2$ to $E_2$, creating new sets
   \begin{align*}
     E'_0 &:= E_0 \cup \{h_0\} \\
@@ -102,7 +104,7 @@ It is then a routine matter to verify that $(E'_0,E'_1,E'_2,f')$ is a partial so
 
 Now suppose that $h = h_0 \in E_1 \backslash E_0$, then the quantity $h_1 := f(h_0)$ lies in $E_2 \backslash E_1$.  We perform the following variant of the above construction:
 \begin{itemize}
-\item Choose an element $h_2 \in \Z$ such that $h_2, h_0+h_1+h_2$, and $-h_1-h_2$ are all distinct and lie outside of $E_2$.  This is possible because $E_2$ is finite.
+\item Choose an element $h_2 \in \Z$ such that $h_2, h_0+h_1+h_2$, and $-h_1-h_2$, $-h_1$ are all distinct and lie outside of $E_2$.  This is possible because $E_2$ is finite and $h_0+h_1 = h_0+f(h_0) \neq 0$.
 \item Promote $h_0$ to $E_0$, promote $h_1$ and $h_0+h_1+h_2$ to $E_1$, and promote $h_2, -h_1-h_2$ to $E_2$, thus creating new sets
 \begin{align*}
   E'_0 &:= E_0 \cup \{h_0\} \\
@@ -121,7 +123,7 @@ It is then a routine matter to verify that $(E'_0,E'_1,E'_2,f')$ is a partial so
 
 Finally, suppose that $h = h_1 = f(h_0)$ for some $h_0 \in E_1 \backslash E_0$, so that $h_1 \in E_2 \backslash E_1$.  Then we perform the following algorithm.
 \begin{itemize}
-  \item Choose an element $h_2 \in \Z$ such that $h_2, h_0+h_1+h_2$, and $-h_1-h_2$ are all distinct and lie outside of $E_2$.  This is possible because $E_2$ is finite.
+  \item Choose an element $h_2 \in \Z$ such that $h_2, h_0+h_1+h_2$, $-h_1$, and $-h_1-h_2$ are all distinct and lie outside of $E_2$.  This is possible because $E_2$ is finite and $h_0+h_1 = h_0+f(h_0) \neq 0$.
   \item Choose an element $h_3 \in \Z$ such that $h_3, h_1+h_2+h_3$, and $-h_2-h_3$ are all distinct and lie outside of $E_2 \cup \{h_2, h_0+h_1+h_2,-h_1-h_2\}$.  This is possible because $E_2$ is finite.
   \item Promote $h_0, h_1$ to $E_0$, promote $h_2, h_0+h_1+h_2, h_1+h_2+h_3$ to $E_1$, and promote $h_3, -h_1-h_2,-h_2-h_3$ to $E_2$, creating new sets
 \begin{align*}
@@ -153,17 +155,18 @@ It is then a routine matter to verify that $(E'_0,E'_1,E'_2,f')$ is a partial so
 \end{corollary}
 
 \begin{proof}  Select integers $h_0,h_1,h_2,h'_0,h'_1,h'_2$ such that the quantities
-  $$ h_0, h_1, h_2, h_0+h_1+h_2, -h_1-h_2, h'_0, h'_1, h'_2, h'_0+h'_1+h'_2, -h'_1-h'_2$$
+  $$ 0, h_0, h_1, h_2, h_0+h_1+h_2, -h_1-h_2, h'_0, h'_1, h'_2, h'_0+h'_1+h'_2, -h'_1-h'_2$$
   are all distinct, but such that
-  $$ h_0 + h_1 = h'_0 + h'_1$$
+  $$ h_0 + h_1 = h'_0 + h'_1 \neq 0$$
   (there are many assignments of variables that accomplish this).  Then set
 \begin{align*}
-  E_0 &:= \{h_0, h'_0\}\\
+  E_0 &:= \{0,h_0, h'_0\}\\
   E_1 &:= E_0 \cup \{ h_1, h'_1, h_0+h_1+h_2, h'_0+h'_1+h'_2\}\\
   E_2 &:= E_2 \cup \{ -h_1-h_2, -h'_1-h'_2\}
 \end{align*}
 and define $f: E_1 \to E_2$ by the formulae
 \begin{align*}
+  f(0) &:= 0 \\
   f(h_0) &:= h_1 \\
   f(h_1) &:= h_2 \\
   f(h_0+h_1+h_2) &:= -h_1-h_2 \\
