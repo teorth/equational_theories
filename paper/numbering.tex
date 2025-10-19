@@ -24,7 +24,7 @@ as follows:
 Thus for instance
 $$ (\ast \op \ast \formaleq \ast \op (\ast \op \ast)) < (\ast \op \ast \formaleq (\ast \op \ast) \op \ast).$$
 
-Finally for equational laws with alphabet $\x,\y,\z,\w,\uu,\vv,\mathrm{r},\mathrm{s},\mathrm{t}$, define the \emph{shape} of that law to be the law formed by replacing all indeterminates with $\ast$; for instance, the shape of \eqref{eq4512}, $(\ast \op \ast) \op \ast \formaleq \ast \op (\ast \op \ast)$, is $(\ast \op \ast) \op \ast \formaleq \ast \op (\ast \op \ast)$.  We then place a well-ordering $w_1 \formaleq w_2$ with indeterminates $\x,\y,\z,\w,\uu,\vv,\mathrm{r},\mathrm{s},\mathrm{t}$ by declaring $w_1 \formaleq w_2 > w'_1 \formaleq w'_2$ if one of the following holds:
+Finally for equational laws with alphabet $\x,\y,\z,\w,\uu,\vv,\mathrm{r},\mathrm{s},\mathrm{t}$, define the \emph{shape} of that law to be the law formed by replacing all indeterminates with $\ast$; for instance, the shape of \eqref{eq4512}, $\x \op (\y \op \z) = (\x \op \y) \op \z$, is $\ast \op (\ast \op \ast) \formaleq (\ast \op \ast) \op \ast$.  We then place a well-ordering $w_1 \formaleq w_2$ with indeterminates $\x,\y,\z,\w,\uu,\vv,\mathrm{r},\mathrm{s},\mathrm{t}$ by declaring $w_1 \formaleq w_2 > w'_1 \formaleq w'_2$ if one of the following holds:
 \begin{itemize}
 \item The shape of $w_1 \formaleq w_2$ is greater than the shape of $w'_1 \formaleq w'_2$.
 \item $w_1 \formaleq w_2$ and $w'_1 \formaleq w'_2$ have the same shape, and the string of variables appearing in $w_1 \formaleq w_2$ is lower in the lexicographical ordering (using $\x < \y < \z < \w < \uu < \vv < \mathrm{r} < \mathrm{s} < \mathrm{t}$) than the corresponding string for $w'_1 \formaleq w'_2$.
