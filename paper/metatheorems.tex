@@ -1,7 +1,7 @@
 
 \section{Syntactic arguments}\label{syntactic-sec}
 
-Many proofs or refutations of implications (or equivalences) between two equational laws $E,E'$ can be obtained from the syntactic form of the equation.  We discuss some techniques here that were useful in the ETP.
+Many proofs or refutations of implications (or equivalences) between two equational laws $\E,\E'$ can be obtained from the syntactic form of the equation.  We discuss some techniques here that were useful in the ETP.
 
 \subsection{Simple rewrites}\label{rewrite-sec}
 
@@ -53,7 +53,7 @@ In practice, we found that these invariants could be used to establish a signifi
 
 \subsection{Canonization}\label{canon-sec}
 
-One possible way of obtaining refutations of a given implication $\E_1 \Rightarrow \E_2$ between equational laws is by building a special kind of syntactic model, via certain involutions on elements of the free magma $\Magma_X$ we call \emph{canonizers}.
+One possible way of obtaining refutations of a given implication $\E \Rightarrow \E'$ between equational laws is by building a special kind of syntactic model, via certain involutions on elements of the free magma $\Magma_X$ we call \emph{canonizers}.
 
 \begin{definition}
   A function $C:\Magma_X\rightarrow\Magma_X$ is a \emph{canonizer} for an equation $\E$ if
@@ -118,7 +118,7 @@ Though we note that the non-overlapping criterion seems very similar to the noti
 
 \subsection{Unique factorization}
 
-In general, the free magma $\Magma_{X,\E}$ for a given equational law $\E$, which we can canonically define as $\Magma_X/\!\sim_\E$, is hard to describe explicitly; indeed, from the undecidability of implications between equational laws, such a magma cannot be computably described for arbitrary $\E$.  Nevertheless, for some laws it is possible to obtain some partial understanding of $\Magma_{X,\E}$ from a syntactic perspective.  For instance, if we can refute the equivalence $w'_1 \sim_\E w'_2$ by constructing a counterexample magma $M$ that obeys $\E$ but not $w'_1 \formaleq w'_2$, then this implies that the representatives $\iota_{X,\E}(w'_1), \iota_{X,\E}(w'_2)$ of  $w'_1, w'_2$ in $\Magma_{X,\E}$ are distinct.
+In general, the free magma $\Magma_{X,\E}$ for a given equational law $\E$, which we can canonically define as $\Magma_X/\!\sim_\E$, is hard to describe explicitly; indeed, from the undecidability of implications between equational laws, such a magma cannot be computably described for arbitrary $\E$.  Nevertheless, for some laws it is possible to obtain some partial understanding of $\Magma_{X,\E}$ from a syntactic perspective.  For instance, if we can refute the equivalence $w'_1 \sim_\E w'_2$ by constructing a counterexample magma $\Magma$ that obeys $\E$ but not $w'_1 \formaleq w'_2$, then this implies that the representatives $\iota_{X,\E}(w'_1), \iota_{X,\E}(w'_2)$ of  $w'_1, w'_2$ in $\Magma_{X,\E}$ are distinct.
 
 We illustrate this approach with equations $\E$ of the left-absorptive form
 \begin{equation}\label{left-absorptive}
@@ -129,7 +129,7 @@ for some word $f(\x,\y,\z)$, that are also known to imply the right-idempotent l
 \begin{figure}
   \centering
   \includegraphics[width=0.85\textwidth]{854-like.png}
-  \caption{Equations similar to \eqref{eq854} that are of the form \Cref{left-absorptive} (possibly involving a fourth indeterminate $\w$) and imply \eqref{eq378}.  For brevity, $70$ equations equivalent to \eqref{eq4} have been omitted.}
+  \caption{Equations similar to \eqref{eq854} that are of the form \eqref{left-absorptive} (possibly involving a fourth indeterminate $\w$) and imply \eqref{eq378}.  For brevity, $70$ equations equivalent to \eqref{eq4} have been omitted.}
   \label{fig:854-like}
   \end{figure}
 
@@ -137,7 +137,7 @@ for some word $f(\x,\y,\z)$, that are also known to imply the right-idempotent l
 \begin{lemma}\label{854} Equation \eqref{eq854} is of the form \eqref{left-absorptive} and implies \eqref{eq378}.
 \end{lemma}
 
-\begin{proof}  Clearly we have \eqref{left-absorptive} with $f(\x,\y,\z) \coloneqq (\y \op \z) \op (\x \op \z)$.  From \ref{left-absorptive} we have in any magma obeying \eqref{eq854} that
+\begin{proof}  Clearly we have \eqref{left-absorptive} with $f(\x,\y,\z) \coloneqq (\y \op \z) \op (\x \op \z)$.  From \eqref{left-absorptive} we have in any magma obeying \eqref{eq854} that
 $$x = x \op f(x,x,S^2 x) = x \op S(x \op S^2 x) = x \op S(x \op f(x,x,x)) = x \op Sx.$$
 This implies from a further application of \eqref{left-absorptive} that
 $$ y = y \op f(y,x,y) = (y \op Sy) \op ((x \op y) \op Sy) = f(x \op y, y, Sy)$$
@@ -192,17 +192,17 @@ As an application of this corollary, we establish
 $$  \x \op \y \not \sim_{\Eq{854}} \x \op (\y \op (\x \op \y)).$$
 Suppose this were not the case, then by \Cref{unique-factorization} one of the following statements must hold:
 \begin{itemize}
-\item[(i)] $y \to_{\Eq{854}} x$.
-\item[(ii)] $(y \op (x \op y)) \to_{\Eq{854}} x$.
-\item[(iii)] $y \op (x \op y) \sim_{\Eq{854}} y$.
+\item[(i)] $\y \to_{\Eq{854}} \x$.
+\item[(ii)] $(\y \op (\x \op \y)) \to_{\Eq{854}} \x$.
+\item[(iii)] $\y \op (\x \op \y) \sim_{\Eq{854}} \y$.
 \end{itemize}
-If (i) holds, then we have $x \op y = x$ must hold in $\Magma_X/\sim_\E$, hence \eqref{eq854} would imply \eqref{eq4}.  However, it is possible to refute this implication by a finite counterexample.
+If (i) holds, then we have $\x \op \y = \x$ must hold in $\Magma_X/\sim_\E$, hence \eqref{eq854} would imply \eqref{eq4}.  However, it is possible to refute this implication by a finite counterexample.
 
 Similarly, if (iii) held, then \eqref{eq854} would have to imply \eqref{eq10}, but this can also be refuted by a finite magma.
 
 Finally, if (ii) held, then the claim
-$$  x \op y \sim x \op (y \op (x \op y))$$
+$$  \x \op \y \sim \x \op (\y \op (\x \op \y))$$
 to refute simplifies to
-$$  x \op y \sim x$$
+$$  \x \op \y \sim \x$$
 and we are back to (i), which we already know not to be the case.
 \end{proof}
