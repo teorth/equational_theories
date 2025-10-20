@@ -1,4 +1,4 @@
-## A proto-unital shelf law
+## The left idempotence law
 
 This law states that left multiplication by any given element is idempotent.  It cannot hold in any non-trivial quasigroup.
 
