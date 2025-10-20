@@ -117,7 +117,7 @@ and then $f(aw)=a$ for any non-empty reduced word $w$ not starting with $a$, and
 \begin{remark} These constructions are necessarily infinitary in nature, because \eqref{eq206} and \eqref{eq1648} can be shown to be equivalent for finite magmas. Indeed, \eqref{eq206} can be written as $x = R_y L_x L_x y$, which implies that $R_y$ is surjective, hence injective, on a finite magma; writing $x = R_y z$ we conclude that $R_y z = R_y L_{z \op y} L_{z \op y} y$ and hence $z = L_{z \op y} L_{z \op y} y$, giving \eqref{eq1648}.  The opposite implication is similar (using \eqref{eq1648} to show that $R_y$ is injective, hence surjective), and is left to the reader.
 \end{remark}
 
-  Some refutations $E \nmodels {\E'}$ are ``immune'' by translation-invariant models, in the sense that any translation-invariant model that obeys $\E$, also obeys ${\E'}$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes force the implication $\E \models {\E'}$ to hold.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \eqref{eq4482} for a square and an arbitrary element will imply the full commutative law \eqref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
+  Some refutations $\E \nmodels {\E'}$ are ``immune'' by translation-invariant models, in the sense that any translation-invariant model that obeys $\E$, also obeys ${\E'}$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes force the implication $\E \models {\E'}$ to hold.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \eqref{eq4482} for a square and an arbitrary element will imply the full commutative law \eqref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
 
 \subsection{The twisting semigroup}\label{twisting-sec}
 
@@ -251,7 +251,7 @@ More complex (and \emph{ad hoc}) variants of the greedy algorithm are possible. 
 
 \subsection{Modifying base models}\label{modify-base}
 
-A general technique that we have found useful in obtaining a refutation such as $E \nmodels {\E'}$ is to start with a simple base model $\Magma = (M,\op)$ that obeys both $\E$ and ${\E'}$, and modify it in various ways to preserve $\E$, but create a violation of ${\E'}$.  There are many such possible modifications, but three general ways that have proven effective are as follows:
+A general technique that we have found useful in obtaining a refutation such as $\E \nmodels {\E'}$ is to start with a simple base model $\Magma = (M,\op)$ that obeys both $\E$ and ${\E'}$, and modify it in various ways to preserve $\E$, but create a violation of ${\E'}$.  There are many such possible modifications, but three general ways that have proven effective are as follows:
 
 \begin{itemize}
   \item[(i)]  Modify the magma operation $\op \colon M \times M \to M$ on a small set in order to violate ${\E'}$, and then make further modifications as needed to recover $\E$.
