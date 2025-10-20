@@ -45,6 +45,7 @@ $$ 1, 1, 2, 4, 11, 32, 117, \dots$$
 (\url{https://oeis.org/A103293}).  A proof of this claim can be found in the ETP blueprint.  In particular, there are $4694$ equations of order at most $4$.
 
 Below we record some specific equations appearing in this paper, using the alphabet $\x$, $\y$, $\z$, $\w$, $\uu$, $\vv$ in place of $0$, $1$, $2$, $3$, $4$, $5$, $\dots$ for readability.
+\begingroup\allowdisplaybreaks
 \begin{align}
     \x &\formaleq \x & \hbox{(Trivial law)} \label{eq1}\tag{E1} \\
     \x &\formaleq \y & \hbox{(Singleton law)} \label{eq2}\tag{E2} \\
@@ -52,8 +53,10 @@ Below we record some specific equations appearing in this paper, using the alpha
     \x &\formaleq \x \op \y & \hbox{(Left-absorptive law)} \label{eq4}\tag{E4} \\
     \x &\formaleq \y \op \x & \hbox{(Right-absorptive law)} \label{eq5}\tag{E5} \\
     \x &\formaleq \x \op (\y \op \x) \label{eq10}\tag{E10} \\
+    \x &\formaleq \x \op (\y \op \y) & \hbox{(Right-unit squares law)} \label{eq11}\tag{E11} \\
     \x &\formaleq (\x \op \x) \op \x \label{eq23}\tag{E23} \\
-    \x \op \x &\formaleq \y \op \z \label{eq41}\tag{E41} \\
+    \x \op \x &\formaleq \y \op \y & \hbox{(Unipotence law)} \label{eq40}\tag{E40} \\
+    \x \op \x &\formaleq \y \op \z & \hbox{(Constant law)} \label{eq41}\tag{E41} \\
     \x \op \y &\formaleq \y \op \x & \hbox{(Commutative law)} \label{eq43}\tag{E43} \\
     \x \op \y &\formaleq \z \op \w & \hbox{(Constant law)} \label{eq46}\tag{E46} \\
     \x &\formaleq \x \op (\x \op (\x \op \x)) \label{eq47}\tag{E47} \\
@@ -62,12 +65,12 @@ Below we record some specific equations appearing in this paper, using the alpha
     \x &\formaleq (\y \op \x) \op (\x \op \z) & \hbox{(Central groupoid law)} \label{eq168}\tag{E168} \\
     \x &\formaleq (\x \op (\x \op \y)) \op \y \label{eq206}\tag{E206} \\
     \x &\formaleq ((\x \op \x) \op \x) \op \x \label{eq255}\tag{E255} \\
-    \x \op \y &\formaleq \x \op (\y \op \z) \label{eq327}\tag{E327} \\
-    \x &\formaleq (\x \op \y) \op \y \label{eq378}\tag{E378} \\
-    \x \op \y &\formaleq (\z \op \x) \op \y \label{eq395}\tag{E395} \\
+    \x \op \y &\formaleq \x \op (\y \op \z) & \hbox{(Right reduction law)} \label{eq327}\tag{E327} \\
+    \x \op \y &\formaleq (\x \op \y) \op \y & \hbox{(Right idempotence law)} \label{eq378}\tag{E378} \\
+    \x \op \y &\formaleq (\z \op \x) \op \y & \hbox{(Left reduction law)} \label{eq395}\tag{E395} \\
     \x &\formaleq \x \op (\x \op (\x \op (\y \op \x))) \label{eq413}\tag{E413} \\
     \x &\formaleq \y \op (\z \op (\x \op (\y \op \z))) & \hbox{(Tarski's axiom)} \label{eq543}\tag{E543} \\
-    \x &\formaleq \y \op (\x \op ((\y \op \x) \op \y)) \label{eq677}\tag{E677} \\
+    \x &\formaleq \y \op (\x \op ((\y \op \x) \op \y)) & \hbox{(Last open implication)} \label{eq677}\tag{E677} \\
     \x &\formaleq \x \op ((\x \op \x) \op (\x \op \x)) \label{eq817}\tag{E817} \\
     \x &\formaleq \x \op ((\y \op \z) \op (\x \op \z)) \label{eq854}\tag{E854}\\
     \x &\formaleq \x \op ((\y \op (\y \op \x)) \op \x) \label{eq1045}\tag{E1045} \\
@@ -76,26 +79,31 @@ Below we record some specific equations appearing in this paper, using the alpha
     \x &\formaleq \y \op ((\y \op (\x \op \z)) \op \z) \label{eq1117}\tag{E1117} \\
     \x &\formaleq \y \op (((\x \op \y) \op \x) \op \y) \label{eq1286}\tag{E1286} \\
     \x &\formaleq (\y \op \x) \op (\x \op (\z \op \y)) & \hbox{(Weak central groupoids)}\label{eq1485}\tag{E1485} \\
-    \x &\formaleq (\y \op \z) \op (\y \op (\x \op \z)) & \hbox{(Exp. $2$ abelian groups)} \label{eq1571}\tag{E1571} \\
+    \x &\formaleq (\y \op \z) \op (\y \op (\x \op \z)) & \hbox{(Boolean groups)} \label{eq1571}\tag{E1571} \\
     \x &\formaleq (\x \op \x) \op ((\x \op \x) \op \x) \label{eq1629}\tag{E1629} \\
     \x &\formaleq (\x \op \y) \op ((\x \op \y) \op \y) \label{eq1648}\tag{E1648} \\
     \x &\formaleq (\x \op \y) \op ((\y \op \y) \op \z) \label{eq1659}\tag{E1659} \\
-    \x &\formaleq (\y \op \x) \op ((\x \op \z) \op \z) \label{eq1689}\tag{E1689} \\
+    \x &\formaleq (\y \op \x) \op ((\x \op \z) \op \z) & \hbox{(Equivalent to~\eqref{eq2})} \label{eq1689}\tag{E1689} \\
     \x &\formaleq (\y \op \y) \op ((\y \op \x) \op \y) \label{eq1729}\tag{E1729} \\
-    \x &\formaleq (\y \op (\x \op (\y \op \x))) \op \y \label{eq2301}\tag{E2301}
-\end{align}
-    \begin{align}
+    \x &\formaleq (\y \op (\x \op (\y \op \x))) \op \y \label{eq2301}\tag{E2301} \\
         \x &\formaleq (\x \op ((\x \op \x) \op \x)) \op \x \label{eq2441}\tag{E2441} \\
-        \x &\formaleq ((\y \op (\x \op \y)) \op \x) \op \y \label{eq2910}\tag{E2910} \\
+        \x &\formaleq ((\y \op (\x \op \y)) \op \x) \op \y & \hbox{(Dual of \eqref{eq677})} \label{eq2910}\tag{E2910} \\
         \x \op \y &\formaleq \x \op (\y \op (\x \op \y)) \label{eq3316}\tag{E3316} \\
-        \x \op \y &\formaleq (\x \op (\y \op \x)) \op \y & \label{eq3925}\tag{E3925} \\
+        \x \op \y &\formaleq (\x \op \z) \op (\y \op \z) \label{eq3737}\tag{E3737} \\
+        \x \op \y &\formaleq (\x \op (\y \op \x)) \op \y \label{eq3925}\tag{E3925} \\
         \x \op (\y \op \x) &\formaleq \x \op (\y \op \z) \label{eq4315}\tag{E4315} \\
-        \x \op (\x \op \x) &\formaleq (\x \op \x) \op \x \label{eq4380}\tag{E4380} \\
-        \x \op (\y \op \y) &\formaleq (\y \op \y) \op \x \label{eq4482}\tag{E4482} \\
-        (\x \op \y) \op \z &\formaleq \x \op (\y \op \z) &\hbox{(Associative law)} \label{eq4512}\tag{E4512}\\
-        \x \op (\y \op \z) &\formaleq (\y \op \z) \op \x \label{eq4531}\tag{E4531} \\
-        \x &\formaleq \y \op (\y \op (\y \op (\x \op (\z \op \y)))) &  \label{eq5093}\tag{E5093} \\
+        \x \op (\x \op \x) &\formaleq (\x \op \x) \op \x & \hbox{(Cube-associativity law)} \label{eq4380}\tag{E4380} \\
+        \x \op (\y \op \y) &\formaleq (\y \op \y) \op \x & \hbox{(Central squares law)} \label{eq4482}\tag{E4482} \\
+        \x \op (\y \op \z) &\formaleq (\x \op \y) \op \z & \hbox{(Associative law)} \label{eq4512}\tag{E4512} \\
+        \x \op (\y \op \z) &\formaleq (\y \op \z) \op \x & \hbox{(Central products law)} \label{eq4531}\tag{E4531} \\
+        \x &\formaleq \y \op (\y \op (\y \op (\x \op (\z \op \y)))) \label{eq5093}\tag{E5093} \\
+        \x &\formaleq \y \op (\z \op ((\y \op \x) \op (\z \op (\y \op \z)))) & \hbox{(Eisenstein modules)} \label{eq85914} \tag{E85914} \\
+        \x &\formaleq \y \op (\z \op ((\y \op \z) \op (\w \op (\x \op \w)))) & \hbox{(Gaussian modules)} \label{eq86082} \tag{E86082} \\
         \x &\formaleq (\y \op ((\x \op \y) \op \y)) \op (\x \op (\z \op \y)) & \hbox{(Sheffer stroke)} \label{eq345169}\tag{E345169} \\
-        \x &\formaleq \y \op ((((\y \op \y) \op \x) \op \z) & \hbox{(Division in groups)} \label{eq42323216}\tag{E42323216} \\
-        & \quad  \op (((\y \op \y) \op \y) \op \z)) \nonumber
+        \x &\formaleq \y \op ((((\x \op \x) \op \x) \op \z) \op (((\x \op \x) \op \y) \op \z)) \mspace{-45mu} & \hbox{(Group division)} \label{eq42302852}\tag{E42302852} \\
+        \x &\formaleq \y \op ((((\y \op \y) \op \x) \op \z) \op (((\y \op \y) \op \y) \op \z)) \mspace{-45mu} & \hbox{(Group division)} \label{eq42323216}\tag{E42323216} \\
+        \x &\formaleq (\y \op \y) \op (\y \op ((\x \op \z) \op (((\x \op \x) \op \y) \op \z))) \mspace{-45mu} & \hbox{(Finite group division)} \label{eq67953597}\tag{E67953597} \\
+        \x &\formaleq ((\y \op \y) \op ((\x \op \z) \op \x)) \op ((\z \op \w) \op (\x \op \w)) \mspace{-45mu} & \hbox{(Group division)} \label{eq102744082}\tag{E102744082} \\
+        \x &\formaleq ((\y \op \y) \op (\y \op (\x \op (((\y \op \y) \op \y) \op \z)))) \op \z \mspace{-45mu} & \hbox{(Group division)} \label{eq147976245}\tag{E147976245}
 \end{align}
+\endgroup
