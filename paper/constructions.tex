@@ -301,9 +301,9 @@ The specific law $\x \formaleq \x \op ((\y \op \z) \op (\x \op \z))$ \eqref{eq85
  finding a refutation.  This is similar to the greedy methods in \ref{greedy-sec}, except that we require our resulting magma to be finite and completely
  defined, and our transformations need not be deterministic.  Note that, since the goal is simply to find a finite model, and given such a candidate we can easily
  determine whether it works, we are not limited to operations we can rigorously justify.  SAT solvers like
- Glucose~\cite{DBLP:conf/ijcai/AudemardS09,DBLP:conf/cp/AudemardS12} inspired by the earlier MiniSAT~\cite{DBLP:conf/sat/EenS03},
- via convenient interfaces like PySAT~\cite{imms-sat18, itk-sat24}, counterexample finders like Mace4~\cite{prover9-mace4}, and more general ATPs like
- Vampire~\cite{DBLP:conf/cav/KovacsV13} which can be used as solvers, all succeeded in finding useful magmas following this approach.
+ \emph{Glucose}~\cite{DBLP:conf/ijcai/AudemardS09,DBLP:conf/cp/AudemardS12} inspired by the earlier \emph{MiniSAT}~\cite{DBLP:conf/sat/EenS03},
+ via convenient interfaces like \emph{PySAT}~\cite{imms-sat18, itk-sat24}, counterexample finders like \emph{Mace4}~\cite{prover9-mace4}, and more general ATPs like
+ \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13} which can be used as solvers, all succeeded in finding useful magmas following this approach.
 
  For example, one operation we can apply is fixing a random subset of the elements of the magma table while undefining the remainder,
  and asking an ATP to find a magma which satisfies \eqref{eq854} while preserving the fixed values.
@@ -318,7 +318,7 @@ The specific law $\x \formaleq \x \op ((\y \op \z) \op (\x \op \z))$ \eqref{eq85
 Combining several of these techniques allowed us to find refutations for
 $$\Eq{854} \nmodelsfin \Eq{413}, \Eq{1045}, \Eq{1055}, \Eq{3316}, \Eq{3925}.$$
  We started with a magma which satisfied $\Eq{854}$ and $\Eq{413}$ but had an $\Eq{10}$ violation.
-After using it as a seed to generate larger magmas with more $\Eq{10}$ violations (using Vampire),
+After using it as a seed to generate larger magmas with more $\Eq{10}$ violations (using \emph{Vampire}),
 randomly removing portions of those magmas and attempting to complete them to models that violated $\E$ eventually succeeded.
 
 Note that these approaches have their limitations.  To be effective, it must be easy to move between different
