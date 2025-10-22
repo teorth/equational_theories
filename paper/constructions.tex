@@ -6,13 +6,13 @@ In this section we collect the various techniques developed in the ETP to constr
 \subsection{Finite magmas}\label{finite-sec}
 
 A finite magma $\Magma$ of order $n$ can be labeled by the carrier $\{1,\dots,n\}$ and described by specifying the multiplication table $\op \colon \{1,\dots,n\} \times \{1,\dots,n\} \to \{1,\dots,n\}$.  By generating a list of all the equational laws $\Eq{j}$, $j=1,\dots,4694$ obeyed by this magma, one can create refutations: if $\Magma \models \Eq{j}$ and $\Magma \not \models \Eq{k}$, then clearly $\Eq{j} \nmodelsfin \Eq{k}$ and hence also $\Eq{j} \nmodels \Eq{k}$.  (As mentioned previously, these statements were organized in Lean using the \texttt{Facts} statement.) It is feasible to brute force over all $\sum_{n=2}^4 n^{n^2} \approx 4.3 \times 10^9$ non-trivial magmas of order at most $4$ to obtain many refutations of this type.
-By performing brute force over all magmas up to order $4$, a total of $13,632,566$ implications ($61.9\%$ of all implications, and $96.3\%$ of the false ones) can be refuted with $524$ distinct magmas. Of these implications, $13,345,053$ were refuted with magmas of order $3$, with the remaining $415,293$ requiring magmas of order $4$. Performing this search took 165 CPU-hours.
+By performing brute force over all magmas up to order $4$, a total of $\num{13632566}$ implications ($61.9\%$ of all implications, and $96.3\%$ of the false ones) can be refuted with $524$ distinct magmas. Of these implications, $\num{13345053}$ were refuted with magmas of order $3$, with the remaining $\num{415293}$ requiring magmas of order $4$. Performing this search took 165 CPU-hours.
 
 However, it is not feasible to exhaustively search over the $5^{5^2} \approx 3 \times 10^{17}$ magmas of order $5$, even after quotienting out by isomorphism and symmetry (which roughly saves a factor of $5! \times 2 = 240$).  Randomly sampling such magmas did not produce significant refutations, as random magmas of order $5$ tended to obey few laws, and the set of laws covered were usually also exhibited by smaller magmas.  A more fruitful approach was to randomly sample from magmas with additional properties that encouraged satisfiability of a greater set of laws.  These included linear and quadratic magmas (discussed below), and cancellative magmas.  On the other hand, some classes of magmas, such as commutative magmas, ended up producing a disappointingly small number of additional refutations.
 
 For specific refutations, it was sometimes possible to locate a finite example with an ATP, particularly if one also imposed additional axioms (e.g., an idempotence axiom $x = x \op x$) that one suspected would be useful; see \Cref{automated-sec} for further discussion.  For medium-sized magmas (of order $n=5,6,7,8$), this appeared to be a more efficient approach than brute force exhaustion of all such magmas.
 
-It is a result of Kisielewicz \cite{Kisielewicz} that every law $\Eq{n}$ with $n \leq 4694$ is either equivalent to the singleton law $\Eq{2}$, or else has a non-trivial finite model; in other words, the implications $\Eq{n} \models \Eq{2}$ and $\Eq{n} \modelsfin \Eq{2}$ are equivalent for $n \leq 4694$.  In fact our brute force search revealed that in the latter case there is always a model of order $2 \leq n \leq 5$, with the lone exception of \eqref{eq1286} (and its dual \eqref{eq2301}), for which the smallest non-trivial finite model was of order $7$, as presented in \Cref{1286-ex} below.  In fact, most of the $\num{4694}$ laws either only had trivial models, or had an order $2$ model, as shown in \Cref{size-table}.
+It is a result of Kisielewicz \cite{Kisielewicz} that every law $\Eq{n}$ with $n \leq 4694$ is either equivalent to the singleton law $\Eq{2}$, or else has a non-trivial finite model; in other words, the implications $\Eq{n} \models \Eq{2}$ and $\Eq{n} \modelsfin \Eq{2}$ are equivalent for $n \leq 4694$.  Our brute force search revealed that in the latter case there is always a model of order $2 \leq n \leq 5$, with the lone exception of \eqref{eq1286} (and its dual \eqref{eq2301}), for which the smallest non-trivial finite model was of order $7$, as presented in \Cref{1286-ex} below.  In fact, most of the $\num{4694}$ laws either only had trivial models, or had an order $2$ model, as shown in \Cref{size-table}.
 \begin{table}
 \centering
 \begin{tabular}{ll}
@@ -50,13 +50,13 @@ for all rings $M$.  For commutative rings, this criterion can be checked in an a
 $$ \{ (a,b) \in M \times M: 1 = ba^3+bab, 0 = a + ba^2 b + b^2 \}$$
 while the variety for the idempotent law \eqref{eq3} is
 $$ \{ (a,b) \in M: a+b=1 \}.$$
-Thus, to show that \eqref{eq1286} does not entail \eqref{eq3}, it suffices to locate elements $a,b$ of a ring $M$ for one has $1 = ba^3+bab$, $0 = a + ba^2 b + b^2$, and $a+b \neq 1$.  Here one can take a commutative example, for instance when $M = \Z/p\Z$ and $(p,a,b) = (11,1,7)$.
+Thus, to show that \eqref{eq1286} does not entail \eqref{eq3}, it suffices to locate elements $a,b$ of a ring $M$ for which one has $1 = ba^3+bab$, $0 = a + ba^2 b + b^2$, and $a+b \neq 1$.  Here one can take a commutative example, for instance when $M = \Z/p\Z$ and $(p,a,b) = (11,1,7)$.
 \end{example}
 
 \begin{example}[Noncommutative counterexample]\label{1117-ex} For the law $x \formaleq y \op ((y \op (x \op z)) \op z)$ \eqref{eq1117}, the variety \eqref{variety} can be computed to be
 $$ \{ (a,b) \in M \times M: 1 = baba, 0 = a+ba^2, 0 = bab^2 + b^2 \}$$
 while the variety for $x = (x \op ((x \op x) \op x)) \op x$ \eqref{eq2441} is
-$$ \{ (a,b) \in M \times M: a^2 + aba^2 + abab + ab^2 + b = 1 \}.$$
+$$ \{ (a,b) \in M \times M: 1 = a^2 + aba^2 + abab + ab^2 + b \}.$$
 Observe that if $ba = -1$, then $(a,b)$ automatically lies in the first set, and lies in the second set if and only if $(ab+1)(b-1) = 0$.  One can then show that \eqref{eq1117} does not imply \eqref{eq2441} by setting $a = L$, $b = -R$ where $L, R$ are the left and right shift operators respectively on the ring of integer-valued sequences $\Z^\N$.  With some \emph{ad hoc} effort one can convert this example into a less linear, but simpler (and easier to formalize) example, namely the magma with carrier $\Z$ and operation $x \op y = 2x - \lfloor y/2 \rfloor$.
 \end{example}
 
@@ -150,7 +150,7 @@ which obey the relations defining $\operatorname{Twist}_\E$.
 
 For instance, a non-trivial finite model for \eqref{eq1485} is given by the finite field $\mathbb{F}_2$ of two elements with the NAND operation $x \op y \coloneqq 1-xy$.  If we twist $\mathbb{F}_2^5$ by the left shift $T(x_i)_{i=1}^5 = (x_{i+1})_{i=1}^5$ and right shift $U(x_i)_{i=1}^5 = (x_{i-1})_{i=1}^5$, where we extend the indices periodically modulo $5$, then the resulting operation
 $$ (x_i)_{i=1}^5 \op' (y_i)_{i=1}^5 \coloneqq (1 - x_{i+1} y_{i-1})_{i=1}^5$$
-on $\mathbb{F}_2^5$ will still obey \eqref{eq1485}, but will not obey \eqref{eq151}, thus showing that $\Eq{1485} \nmodelsfin \Eq{151}$ and hence $\Eq{1485} \nmodels \Eq{151}$.  This particular implication does not seem to be easily establishable by any of the other methods discussed in this paper.
+on $\mathbb{F}_2^5$ still obeys \eqref{eq1485}, but does not obey \eqref{eq151}, thus showing that $\Eq{1485} \nmodelsfin \Eq{151}$ and hence $\Eq{1485} \nmodels \Eq{151}$.  This particular implication does not seem to be easily establishable by any of the other methods discussed in this paper.
 
 \subsection{Greedy constructions}\label{greedy-sec}
 
@@ -230,7 +230,7 @@ The greedy method can also be combined with the translation-invariant method, bo
   \begin{itemize}
     \item[(i)] (Seed) There exists a finitely supported partial function $f_0 \colon \Omega_0 \to G$ satisfying $\Gamma$ that contradicts $F'$, in the sense that there is some assignment of variables in $F'$ in $G$ such that both sides of $F'$ are defined using $f_0$, but not equal to each other.
     \item[(ii)]  (Soundness)  If $f_n \colon \Omega_n \to G$ is a sequence of partial functions obeying $\Gamma$ with each $f_{n+1}$ an extension of $f_n$, and the direct limit $f_\infty$ is total, then this limit obeys $F$.
-    \item[(iii)] (Greedy extension)  If $f \colon \Omega \to G$ is a finitely supported partial function obeying $\Gamma$, and $a,b \in G$, then there exists a finitely supported extension $f' \colon \Omega' \to G'$ of $f$ to a possibly larger group $G'$, and also obeying $\Gamma$, such that $a \op' b$ is defined.
+    \item[(iii)] (Greedy extension)  If $f \colon \Omega \to G$ is a finitely supported partial function obeying $\Gamma$, and $a \in G$, then there exists a finitely supported extension $f' \colon \Omega' \to G'$ of $f$ to a possibly larger group $G'$, and also obeying $\Gamma$, such that $f'(a)$ is defined.
   \end{itemize}
   Then $F \nmodels F'$.
 \end{theorem}
@@ -273,14 +273,17 @@ for some function $f \colon G \times G \to M$.  If $(M,\op_M)$ and $(G,\op_G)$ a
 for all $x,y \in \F_5$, and obeys \eqref{eq1629} if $f$ obeys the cocycle equation
 $$ f(2x,0) - f(2x,2x) = 0$$
 for all $x \in \F_5$.  A routine symbolic algebra package computation reveals that the space of $f$ that obeys the former equation is a six-dimensional vector space over $\F_5$, which is not contained in the solution space of the latter equation, giving the claim.
-In fact, since these equations preserve the space of homogeneous polynomials of a fixed degree, one can use linear algebra to locate an example that is a homogeneous polynomial; one explicit choice is $$f(x,y) = y^5 +xy^4 + x^2y^3 +3x^3 y^2 + 3x^4 y$$.
+In fact, since these equations preserve the space of homogeneous polynomials of a fixed degree, one can use linear algebra to locate an example that is a homogeneous polynomial; one explicit choice is
+\[
+f(x,y) = y^5 +xy^4 + x^2y^3 +3x^3 y^2 + 3x^4 y. \qedhere
+\]
 \end{proof}
 
 It may be of interest to develop this theory of ``magma cohomology'' further, for instance by defining higher order magma cohomology groups.
 
 Now we give an example of how method (ii) can be combined with method (i).
 
-\begin{proposition}[$\Eq{1659}$ does not imply $\Eq{4315}$]\label{1659-4315} $\x \formaleq (\x \op \y) \op ((\y \op \y) \op \z)$ \eqref{eq1659} does not imply $\x \op (\y \op \x) \formaleq \x \op (\y \op \z)$ \eqref{eq4315}.
+\begin{proposition}[$\Eq{1659}$ does not imply $\Eq{4315}$]\label{1659-4315} The law $\x \formaleq (\x \op \y) \op ((\y \op \y) \op \z)$ \eqref{eq1659} does not imply $\x \op (\y \op \x) \formaleq \x \op (\y \op \z)$ \eqref{eq4315}.
 \end{proposition}
 
 \begin{proof}  There are two simple models for \eqref{eq1659}: the model $G$ with carrier $\Z/2\Z$ and operation $x \op y = x+1$, and the model $\Magma$ with carrier $\Z$ and operation $x \op y = x$.  Using the ansatz \eqref{xsyt}, one can soon discover that one obtains a magma operation $\op: (G \times \Z) \times (G \times \Z) \to G \times \Z$ with $f(0,0)=f(1,0)=0$, $f(0,1)=-1$, and $f(1,1)=1$.  This model still obeys \eqref{eq4315}. However, we can create a modification $\op'$ of $\op$ as follows.  We will seek to violate \eqref{eq4315} at $x = (0,0)$, $y = (0,0)$, $z = (1,0)$, thus we want
@@ -288,6 +291,7 @@ $$ (0,0) \op' ((0,0) \op' (0,0)) \neq (0,0) \op' ((0,0) \op' (1,0)).$$
 We have $(0,0) \op (0,0) = (1,0)$ and $(0,0) \op (1,0) = (1,-1)$.  One can try to force the counterexample by setting $(0,0) \op' (1,0)$ to equal $(0,0)$ instead of $(1,-1)$. However, if this is the only change we make, then we no longer obey \eqref{eq1659}, since
 $$ (1,0) \neq ((0,0) \op' (1,0)) \op' (((1,0) \op' (1,0)) \op' (1,t))$$
 for any $t \in \N \backslash \{0\}$. But these are the only counterexamples created involving elements in the subset $G \times \N$ of $G \times \Z$; and if one then sets $(0,0) \op' (1,t) = (0,0)$ for \emph{all} $t \in \N$, and then restricts to $G \times \N$ (which is now closed under $\op'$), then one can check that the modified operation $\op'$ on this submagma now obeys \eqref{eq1659} but not \eqref{eq4315} as required.
+Incidentally, this submagma is isomorphic to the magma $\Magma'=(\Z,\op'')$ with $m\op''n=-m$ for $n<0$ and $m\op''n=-m-1$ for $n\geq 0$ under the bijection that maps $(0,s)$ to $s$ and $(1,s)$ to $-s-1$.
 \end{proof}
 
 The specific law $\x \formaleq \x \op ((\y \op \z) \op (\x \op \z))$ \eqref{eq854} turned out to be somewhat ``mutable'', in the sense that one can often change a small number
