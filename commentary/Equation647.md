@@ -1,1 +1,3 @@
 This law states that products of the form `x◇((x◇y)◇y)` are right units.  It implies [law 11](https://teorth.github.io/equational_theories/implications/?11) (squares are right units).
+
+In a quasigroup, this law is equivalent to stating that all squares are equal ([unipotence law 40](https://teorth.github.io/equational_theories/implications/?40)) to the same two-sided unit element and the [involutive right multiplication law 26](https://teorth.github.io/equational_theories/implications/?26) holds.  The left division operation defined by `x◇(x:y) = y` is commutative and all `x:x` are equal to the same unit element.

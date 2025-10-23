@@ -4,4 +4,4 @@ Connected to [Equation 381](https://teorth.github.io/equational_theories/implica
 
 States that all elements of the submagma `P = {x◇y|x,y∈M}` square to themselves.  In particular the squaring map `S: x ↦ x◇x` is idempotent, namely `S(S(x))=S(x)`.  The set of products `P`, the set of squares, and the set of idempotents coincide.
 
-This law cannot hold in a non-trivial group.
+In a quasigroup this law is equivalent to the [idempotence law 3](https://teorth.github.io/equational_theories/implications/?3) `x = x◇x`.  It cannot hold in a non-trivial group.

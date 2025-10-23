@@ -1,4 +1,4 @@
-This law implies that the squaring map `S: x ↦ x◇x` is surjective.  Explicitly, one has `x = S((C(x) ◇ (x ◇ C(x))) ◇ x)` with `C(x) = (x◇x)◇x` the cubing map.
+This law implies that the squaring map `S: x ↦ x◇x` is surjective.  Explicitly, one has `x = S((C(x) ◇ (x ◇ C(x))) ◇ x)` with `C(x) = (x◇x)◇x` the cubing map.  In a quasigroup, this law implies that the squaring map is bijective.
 
 The finite spectrum of (cardinalities of finite magmas satisfying) this law is [unknown](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Order.203.20Spectra/with/527073087).
 

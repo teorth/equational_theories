@@ -1,1 +1,1 @@
-This law implies that the squaring map `S: x ↦ x◇x` is an idempotent morphism, namely `S(S(x))=S(x)` and `S(x◇y) = S(x)◇S(y)`.  Its image is thus a submagma.
+This law implies that the squaring map `S: x ↦ x◇x` is an idempotent morphism, namely `S(S(x))=S(x)` and `S(x◇y) = S(x)◇S(y)`.  Its image is a submagma satisfying [Stein's third law 167](https://teorth.github.io/equational_theories/implications/?167) `x = (y◇x)◇(x◇y)`.

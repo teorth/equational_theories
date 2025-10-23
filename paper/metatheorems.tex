@@ -1,7 +1,7 @@
 
 \section{Syntactic arguments}\label{syntactic-sec}
 
-Many proofs or refutations of implications (or equivalences) between two equational laws $E,E'$ can be obtained from the syntactic form of the equation.  We discuss some techniques here that were useful in the ETP.
+Many proofs or refutations of implications (or equivalences) between two equational laws $\E,\E'$ can be obtained from the syntactic form of the equation.  We discuss some techniques here that were useful in the ETP.
 
 \subsection{Simple rewrites}\label{rewrite-sec}
 
@@ -12,13 +12,13 @@ A simple observation that already generates a reasonable number of equivalences 
 
 \subsection{Matching invariants}
 
-Fix an alphabet $X$. A \emph{matching invariant} is an assignment $I \colon \Magma_X \to {\mathcal I}$ of an object $I(w) \in {\mathcal I}$ in some space ${\mathcal I}$ to each word $w \in \Magma_X$ with the property that if an equational law $w_1 \formaleq w_2$ has matching invariants $I(w_1)=I(w_2)$, then the same matching $I(w'_1) = I(w'_2)$ holds for any consequence $w'_1 \formaleq w'_2$.  In particular, if one law $I(w_1)=I(w_2)$ and $I(w'_1) \neq I(w'_2)$, then the law $w_1 \formaleq w_2$ does not imply the law $w'_1 \formaleq w'_2$.
+Fix an alphabet $X$. A \emph{matching invariant} is an assignment $I \colon M_X \to {\mathcal I}$ of an object $I(w) \in {\mathcal I}$ in some space ${\mathcal I}$ to each word $w \in M_X$ with the property that if an equational law $w_1 \formaleq w_2$ has matching invariants $I(w_1)=I(w_2)$, then the same matching $I(w'_1) = I(w'_2)$ holds for any consequence $w'_1 \formaleq w'_2$.  In particular, if one law $I(w_1)=I(w_2)$ and $I(w'_1) \neq I(w'_2)$, then the law $w_1 \formaleq w_2$ does not imply the law $w'_1 \formaleq w'_2$.
 
 A simple example of a matching invariant is the multiplicity $(n_x)_{x \in X}$ of variables of a word: if $w_1,w_2$ have all variables $x$ appear the same number of times $n_x$ in both words, then any rewriting of a word $w$ using the law $w_1 \formaleq w_2$ will preserve this property.  Hence, if $w'_1, w'_2$ do not have that each variable appear the same number of times in both words, then $w_1 \formaleq w_2$ cannot imply $w'_1 \formaleq w'_2$.  For instance, the commutative law \eqref{eq43} cannot imply the left-absorptive law \eqref{eq4}.
 
 One source of matching invariants comes from the free magma $\Magma_{X,\Gamma}$ of a theory:
 
-\begin{proposition}[Free magmas and matching invariants]\label{free-inv}  Let $\iota_{X,\Gamma} \colon X \to \Magma_{X,\Gamma}$ be the map associated to the free magma $\Magma_{X,\Gamma}$ for a theory $\Gamma$.  Then the map $I \colon \Magma_X \to \Magma_{X,\Gamma}$ defined by $I(w) \coloneqq \varphi_{\iota_{X,\Gamma}}(w)$ is an invariant.
+\begin{proposition}[Free magmas and matching invariants]\label{free-inv}  Let $\iota_{X,\Gamma} \colon X \to M_{X,\Gamma}$ be the map associated to the free magma $\Magma_{X,\Gamma}$ for a theory $\Gamma$.  Then the map $I \colon M_X \to M_{X,\Gamma}$ defined by $I(w) \coloneqq \varphi_{\iota_{X,\Gamma}}(w)$ is an invariant.
 \end{proposition}
 
 \begin{proof}  Suppose that $w_1 \formaleq w_2$ entails $w'_1 \formaleq w'_2$, and that $I(w_1) = I(w_2)$.  For any $f \colon X \to \Magma_{X,\Gamma}$, the two maps $\varphi_f, \varphi_{f,\Gamma} \circ \varphi_{\iota_{X,\Gamma}} \colon \Magma_X \to \Magma_{X,\Gamma}$ are both homomorphisms that extend $f$, hence agree by the universal property of $\Magma_X$, as displayed by the following commutative diagram:
@@ -33,7 +33,7 @@ One source of matching invariants comes from the free magma $\Magma_{X,\Gamma}$ 
 	\arrow["{\varphi_f}"', curve={height=18pt}, pos=0.6, below, from=3-1, to=3-5]
 	\arrow["{\varphi_{f,\Gamma}}", pos=0.5, above, from=3-3, to=3-5]
 \end{tikzcd}\]
-In particular, the hypothesis $I(w_1)=I(w_2)$ implies that $\varphi_f(w_1) = \varphi_f(w_2)$ for all $f \colon X \to \Magma_{X,\Gamma}$; that is to say, the magma $\Magma_{X,\Gamma}$ obeys the law $w_1 \formaleq w_2$, and hence also $w'_1 \formaleq w'_2$ by hypothesis.  Thus $\varphi_{\iota_{X,\Gamma}}(w'_1) = \varphi_{\iota_{X,\Gamma}}(w'_2)$, which gives $I(w'_1) = I(w'_2)$ as required.
+In particular, the hypothesis $I(w_1)=I(w_2)$ implies that $\varphi_f(w_1) = \varphi_f(w_2)$ for all $f \colon X \to M_{X,\Gamma}$; that is to say, the magma $\Magma_{X,\Gamma}$ obeys the law $w_1 \formaleq w_2$, and hence also $w'_1 \formaleq w'_2$ by hypothesis.  Thus $\varphi_{\iota_{X,\Gamma}}(w'_1) = \varphi_{\iota_{X,\Gamma}}(w'_2)$, which gives $I(w'_1) = I(w'_2)$ as required.
 \end{proof}
 
 \begin{example}  If we take $\Gamma = \{\Eq{4}\}$ to be the theory of the left-absorptive law \eqref{eq4} as described in \Cref{left-absorb}, then the matching invariant $I(w)$ produced by \Cref{free-inv} is the left-most letter of the alphabet $X$ appearing in the word; for instance $I((\x \op \y) \op \z) = \x$.  Thus, for example, the left-absorptive law \eqref{eq4} cannot imply the right-absorptive law \eqref{eq5}.
@@ -53,10 +53,10 @@ In practice, we found that these invariants could be used to establish a signifi
 
 \subsection{Canonization}\label{canon-sec}
 
-One possible way of obtaining refutations of a given implication $\E_1 \Rightarrow \E_2$ between equational laws is by building a special kind of syntactic model, via certain involutions on elements of the free magma $\Magma_X$ we call \emph{canonizers}.
+One possible way of obtaining refutations of a given implication $\E \Rightarrow \E'$ between equational laws is by building a special kind of syntactic model, via certain involutions on elements of the free magma $\Magma_X$ we call \emph{canonizers}.
 
 \begin{definition}
-  A function $C:\Magma_X\rightarrow\Magma_X$ is a \emph{canonizer} for an equation $\E$ if
+  A function $C\colon M_X\rightarrow M_X$ is a \emph{canonizer} for an equation $\E$ if
   \begin{enumerate}
     \item $C$ is computable.
     \item if $w_1\sim_\E w_2$, then $C(w_1) = C(w_2)$.
@@ -67,24 +67,24 @@ In fact, a canonizer is simply a matching invariant with target in $\Magma_X$.
 
 We describe a concrete strategy for building such $C$s, which will require a number of definitions.
 
-Let $R$ be an arbitrary function $\Magma_X\rightarrow \Magma_X$.
 
 \begin{definition}\label{def:canon}
+Let $R \colon M_X \to M_X$ be an arbitrary function.
   We say that $R$ is (weakly) \emph{collapsing} if for every word $w$, $R(w)$ is a sub-word of $w$ (in the obvious sense).
 
-  A function $\theta\colon X\rightarrow\Magma_X$ is called a \emph{substitution}, and we can extend $\theta$ to be a homomorphism in the obvious way. We write $w\theta$ instead of $\theta(w)$ for application of substitutions.
+  A function $\theta\colon X\rightarrow M_X$ is called a \emph{substitution}, and we can extend $\theta$ to be a homomorphism in the obvious way. We write $w\theta$ instead of $\theta(w)$ for application of substitutions.
 
   If $\E$ is the equation $l\simeq r$, and $l$ is not a variable, we say that $R$ is a \emph{weak canonizer} if for any substitution $\theta$, $R(l\theta)=r\theta$.
 
-  Finally we say that $R$ is \emph{non-overlapping} for $\E$ if for every word $w\in\Magma_X$ which is a strict sub-word of $l$ that is not in $X$, and any substitution $\theta$, $R(w\theta) = w\theta$.
+  Finally we say that $R$ is \emph{non-overlapping} for $\E$ if for every word $w\in M_X$ which is a strict sub-word of $l$ that is not in $X$, and any substitution $\theta$, $R(w\theta) = w\theta$.
+
+  We can then define $C_R\colon M_X\rightarrow M_X$ as follows:
+\begin{align}
+  C_R(\x) &\coloneqq \x\\
+  C_R(w\op w') &\coloneqq R(C_R(w)\op C_R(w'))
+\end{align}
 \end{definition}
 
-We can then define $C_R : \Magma_X\rightarrow\Magma_X$ as follows:
-
-\begin{align}
-  C_R(x) &= x\\
-  C_R(w\op w') &= R(C_R(w)\op C_R(w'))
-\end{align}
 
 And the following theorem holds.
 \begin{theorem}\label{thm:canon}
@@ -105,11 +105,11 @@ And the following theorem holds.
 
 We work through an example to show why this is a useful theorem. Take $\E$ to be the equation
 \[
-  y \op (x \op (y \op (y \op y)))\simeq x
+  \y \op (\x \op (\y \op (\y \op \y)))\formaleq \x
 \]
 we can take $R$ to be the transformation which sends a term of the form $w \op (v \op (w \op (w \op w)))$ to $v$ for any two words $v, w$, and leaves all other words unchanged.
 It is then somewhat easy to show that this transformation satisfies the conditions of \Cref{thm:canon}, and so we have a canonizer $C_R$.
-This can be used, e.g. to refute the implication of $x = (x \op x) \op (x \op (x \op x))$ from the above equality.
+This can be used, e.g. to refute the implication of $\x \formaleq (\x \op \x) \op (\x \op (\x \op \x))$ from the above equality.
 
 As a conclusion for this section, we note that a very general strategy for building canonizers comes from the theory of \emph{rewrite systems}, see e.g. Baader \& Nipkow \cite{term-rewriting}.
 In that setting one defines rewriting as a transformation on words (or terms), and if this transformation is \emph{terminating} and \emph{confluent} (intuitively, rewrites cannot go on forever, or diverge forever), then one may simply pick the transformation which sends a term to its normal form as a canonizer.
@@ -118,7 +118,7 @@ Though we note that the non-overlapping criterion seems very similar to the noti
 
 \subsection{Unique factorization}
 
-In general, the free magma $\Magma_{X,\E}$ for a given equational law $\E$, which we can canonically define as $\Magma_X/\!\sim_\E$, is hard to describe explicitly; indeed, from the undecidability of implications between equational laws, such a magma cannot be computably described for arbitrary $\E$.  Nevertheless, for some laws it is possible to obtain some partial understanding of $\Magma_{X,\E}$ from a syntactic perspective.  For instance, if we can refute the equivalence $w'_1 \sim_\E w'_2$ by constructing a counterexample magma $M$ that obeys $\E$ but not $w'_1 \formaleq w'_2$, then this implies that the representatives $\iota_{X,\E}(w'_1), \iota_{X,\E}(w'_2)$ of  $w'_1, w'_2$ in $\Magma_{X,\E}$ are distinct.
+In general, the free magma $\Magma_{X,\E}$ for a given equational law $\E$, which we can canonically define as $\Magma_X/\!\sim_\E$, is hard to describe explicitly; indeed, from the undecidability of implications between equational laws, such a magma cannot be computably described for arbitrary $\E$.  Nevertheless, for some laws it is possible to obtain some partial understanding of $\Magma_{X,\E}$ from a syntactic perspective.  For instance, if we can refute the equivalence $w'_1 \sim_\E w'_2$ by constructing a counterexample magma $\Magma$ that obeys $\E$ but not $w'_1 \formaleq w'_2$, then this implies that the representatives $\iota_{X,\E}(w'_1), \iota_{X,\E}(w'_2)$ of  $w'_1, w'_2$ in $\Magma_{X,\E}$ are distinct.
 
 We illustrate this approach with equations $\E$ of the left-absorptive form
 \begin{equation}\label{left-absorptive}
@@ -129,7 +129,7 @@ for some word $f(\x,\y,\z)$, that are also known to imply the right-idempotent l
 \begin{figure}
   \centering
   \includegraphics[width=0.85\textwidth]{854-like.png}
-  \caption{Equations similar to \eqref{eq854} that are of the form \Cref{left-absorptive} (possibly involving a fourth indeterminate $\w$) and imply \eqref{eq378}.  For brevity, $70$ equations equivalent to \eqref{eq4} have been omitted.}
+  \caption{Equations similar to \eqref{eq854} that are of the form \eqref{left-absorptive} (possibly involving a fourth indeterminate $\w$) and imply \eqref{eq378}.  For brevity, $70$ equations equivalent to \eqref{eq4} have been omitted.}
   \label{fig:854-like}
   \end{figure}
 
@@ -137,7 +137,7 @@ for some word $f(\x,\y,\z)$, that are also known to imply the right-idempotent l
 \begin{lemma}\label{854} Equation \eqref{eq854} is of the form \eqref{left-absorptive} and implies \eqref{eq378}.
 \end{lemma}
 
-\begin{proof}  Clearly we have \eqref{left-absorptive} with $f(\x,\y,\z) \coloneqq (\y \op \z) \op (\x \op \z)$.  From \ref{left-absorptive} we have in any magma obeying \eqref{eq854} that
+\begin{proof}  Clearly we have \eqref{left-absorptive} with $f(\x,\y,\z) \coloneqq (\y \op \z) \op (\x \op \z)$.  From \eqref{left-absorptive} we have in any magma obeying \eqref{eq854} that
 $$x = x \op f(x,x,S^2 x) = x \op S(x \op S^2 x) = x \op S(x \op f(x,x,x)) = x \op Sx.$$
 This implies from a further application of \eqref{left-absorptive} that
 $$ y = y \op f(y,x,y) = (y \op Sy) \op ((x \op y) \op Sy) = f(x \op y, y, Sy)$$
@@ -146,9 +146,9 @@ $$ (x \op y) \op y = x \op y$$
 giving \eqref{eq378}.
 \end{proof}
 
-Let $\E$ be a law of the form \eqref{left-absorptive} that implies \eqref{eq378}. We define a directed graph $\to_\E$ on words in $\Magma_X$ by declaring $w' \to_\E w$ if $w \sim_\E w'' \op w'$ for some $w' \in \Magma_X$.  By \eqref{eq378} (applied to the quotient magma $\Magma_{X,E} = \Magma_X/\sim_\E$), this is equivalent to requiring that $w \sim_\E w \op w'$. In particular, from \eqref{left-absorptive} we have $f(x,y,z) \to x$ for all $x,y,z$.  Furthermore, the relation $\to_\E$ factors through $\sim_\E$: if $w \sim_\E \tilde w$ and $w' \sim_\E \tilde w'$, then $w' \to_\E w$ if and only if $\tilde w \to_\E \tilde w$.
+Let $\E$ be a law of the form \eqref{left-absorptive} that implies \eqref{eq378}. We define a directed graph $\to_\E$ on words in $\Magma_X$ by declaring $w' \to_\E w$ if $w \sim_\E w'' \op w'$ for some $w' \in M_X$.  By \eqref{eq378} (applied to the quotient magma $\Magma_{X,E} = \Magma_X/\sim_\E$), this is equivalent to requiring that $w \sim_\E w \op w'$. In particular, from \eqref{left-absorptive} we have $f(x,y,z) \to x$ for all $x,y,z$.  Furthermore, the relation $\to_\E$ factors through $\sim_\E$: if $w \sim_\E \tilde w$ and $w' \sim_\E \tilde w'$, then $w' \to_\E w$ if and only if $\tilde w \to_\E \tilde w$.
 
-Call a word $w \in \Magma_X$ \emph{irreducible} if it is not of the form $w = w_1 \op w_2$ with $w_2 \to_\E w_1$.  We can partially understand the equivalence relation $\sim_\E$ on irreducible words:
+Call a word $w \in M_X$ \emph{irreducible} if it is not of the form $w = w_1 \op w_2$ with $w_2 \to_\E w_1$.  We can partially understand the equivalence relation $\sim_\E$ on irreducible words:
 
 \begin{theorem}[Description of equivalence]\label{irred-desc}  Let $\E$ be an equation of the form \eqref{left-absorptive}.  Let $w$ be an irreducible word, and let $w'$ be a word with $w \sim_\E w'$.
   \begin{itemize}
@@ -192,17 +192,17 @@ As an application of this corollary, we establish
 $$  \x \op \y \not \sim_{\Eq{854}} \x \op (\y \op (\x \op \y)).$$
 Suppose this were not the case, then by \Cref{unique-factorization} one of the following statements must hold:
 \begin{itemize}
-\item[(i)] $y \to_{\Eq{854}} x$.
-\item[(ii)] $(y \op (x \op y)) \to_{\Eq{854}} x$.
-\item[(iii)] $y \op (x \op y) \sim_{\Eq{854}} y$.
+\item[(i)] $\y \to_{\Eq{854}} \x$.
+\item[(ii)] $(\y \op (\x \op \y)) \to_{\Eq{854}} \x$.
+\item[(iii)] $\y \op (\x \op \y) \sim_{\Eq{854}} \y$.
 \end{itemize}
-If (i) holds, then we have $x \op y = x$ must hold in $\Magma_X/\sim_\E$, hence \eqref{eq854} would imply \eqref{eq4}.  However, it is possible to refute this implication by a finite counterexample.
+If (i) holds, then we have $\x \op \y = \x$ must hold in $\Magma_X/\sim_\E$, hence \eqref{eq854} would imply \eqref{eq4}.  However, it is possible to refute this implication by a finite counterexample.
 
 Similarly, if (iii) held, then \eqref{eq854} would have to imply \eqref{eq10}, but this can also be refuted by a finite magma.
 
 Finally, if (ii) held, then the claim
-$$  x \op y \sim x \op (y \op (x \op y))$$
+$$  \x \op \y \sim_{\Eq{854}} \x \op (\y \op (\x \op \y))$$
 to refute simplifies to
-$$  x \op y \sim x$$
+$$  \x \op \y \sim_{\Eq{854}} \x$$
 and we are back to (i), which we already know not to be the case.
 \end{proof}

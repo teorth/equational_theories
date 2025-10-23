@@ -1,0 +1,1 @@
+In quasigroups (more generally when left multiplications are injective) this law is equivalent to [law 8](https://teorth.github.io/equational_theories/implications/?8) `x = x◇(x◇x)` together with [law 429](https://teorth.github.io/equational_theories/implications/?429) `x = x◇(y◇(x◇(y◇x)))`.

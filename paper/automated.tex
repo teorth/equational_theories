@@ -41,15 +41,15 @@ Superposition calculi have a variant of this rule that deals with equality direc
 
 In this project we used \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13}, \emph{Duper}~\cite{DBLP:conf/itp/CluneQBA24} and \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4} which are all based on variants of saturation for proving.
 
-\textbf{Equational Reasoning.} As already discussed in \Cref{canon-sec}, equational reasoning is a type of reasoning based on equational logic and rewriting with congruence~\cite{term-rewriting}.
-In general, an equational reasoning procedure takes a series of equations and determines whether another equation can be deduced from it.
+\textbf{Equational Reasoning.} As already discussed in \Cref{canon-sec}, equational reasoning is a type of reasoning that is based\footnote{More precisely, one can formalize this reasoning using Birkhoff's five rules of inference (reflexive, symmetric, transitive, replacement, and substitution); see, e.g., \cite{burris}.} on equational logic and rewriting with congruence~\cite{term-rewriting}.
+In general, an equational reasoning procedure takes a series of equations and tries to determine whether another equation can be deduced from it.
 A core tool in equational reasoning are \emph{e-graphs}, a data structure used to represent congruence classes of terms.
 By themselves, e-graphs provide an efficient means of implementing a decision procedure for congruence closure over ground equations (i.e. equations without variables).
 Extensions to this procedure, for example by quantifier instantiation via e-matching \cite{DBLP:conf/cade/MouraB07}, also allow for a semi-decision procedure for congruence closure over non-ground equations.
 
 SMT solvers like \emph{Z3}~\cite{DBLP:conf/tacas/MouraB08} use equational reasoning for deciding the theory of equality with uninterpreted functions~\cite{DBLP:series/txtcs/KroeningS16,DBLP:conf/cade/MouraB07}.
 On the other hand, equality saturation~\cite{DBLP:journals/pacmpl/WillseyNWFTP21} uses e-graphs by extending congruence closure to a more controlled search, enabling optimization and conditional rewriting.
-One of the main advantages of using equational reasoning to reason about implications of magma laws is that we get very explicit proofs: a proof that $l \vdash l'$ is given by a sequence of rewrites that starts at the left-hand side of $l'$ and arrives at the right-hand side through applications of $l$.
+One of the main advantages of using equational reasoning to reason about implications of magma laws is that we get very explicit proofs: a proof that $l \models l'$ is given by a sequence of rewrites that starts at the left-hand side of $l'$ and arrives at the right-hand side through applications of $l$.
 
 In this project we used \emph{Z3}~\cite{DBLP:conf/tacas/MouraB08}, \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4}, a custom ATP \emph{MagmaEgg} for magmas based on egg~\cite{DBLP:journals/pacmpl/WillseyNWFTP21}, and the \emph{Lean} \texttt{egg} tactic~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24,rossel2024equality}, which all work with equational logic. We have also reasoned with manual (custom written) heuristics about simple rewrites.
 
@@ -120,7 +120,7 @@ In the case of the \texttt{egg} tactic, which also reconstructs proofs from \emp
 
 \textbf{Semi-Automated Counterexample Guidance.}  Another use of ATPs has been in a semi-automatic fashion, to find counterexamples.
 The general strategy was to use ATPs to find counterexamples to implications by building magmas iteratively.
-If we want to build a counterexample to $l \vdash l'$, we want to construct a magma where $l$ holds but $l'$ does not.
+If we want to build a counterexample to $l \models l'$, we want to construct a magma where $l$ holds but $l'$ does not.
 In this method, we iteratively strengthen a construction with additional hypotheses, and use the ATP to check whether these hypotheses are not too strong (to imply $l'$) or unsound (to disallow $l$).
 
 \TODO{this should also be expanded more, at least with references to some of the constructions in other chapters.}

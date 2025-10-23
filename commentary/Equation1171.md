@@ -1,1 +1,3 @@
 This law implies that the cubing maps `B: x ↦ x◇(x◇x)` and `C: x ↦ (x◇x)◇x` are involutions, that left multiplications are bijective, that left multiplications by `y` and by `B(y)` are inverses of each other ([law 1122](https://teorth.github.io/equational_theories/implications/?1122)), and that left multiplications by `y` and by `C(y)` coincide.
+
+In a quasigroup, this law is equivalent to the [totally symmetric quasigroup law 492](https://teorth.github.io/equational_theories/implications/?492), namely the [commutative law 43](https://teorth.github.io/equational_theories/implications/?43) together with the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14) `x = y◇(x◇y)`.

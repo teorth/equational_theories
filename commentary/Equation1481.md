@@ -1,1 +1,1 @@
-If right multiplications are injective then the magma is a semi-symmetric quasigroup, namely it satisfies [law 14](https://teorth.github.io/equational_theories/implications/?14).
+In a quasigroup (more generally if right multiplications are injective) this law is equivalent to the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14) `x = y◇(x◇y)`.

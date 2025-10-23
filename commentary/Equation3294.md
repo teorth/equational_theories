@@ -1,1 +1,3 @@
 This law implies the [unipotent law 40](https://teorth.github.io/equational_theories/implications/?40): all squares are equal to the same idempotent element `e`.  In addition, `x ◇ (x ◇ e) = e` and `x ◇ (y ◇ (x ◇ y)) = e`.
+
+In quasigroups (more generally when left multiplications are injective) this law is equivalent to [the semi-symmetric loop law 887](https://teorth.github.io/equational_theories/implications/?887), which states that `x = y◇(x◇y)` and that all squares are equal to the same two-sided unit element.
