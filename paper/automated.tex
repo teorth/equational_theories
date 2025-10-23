@@ -41,8 +41,8 @@ Superposition calculi have a variant of this rule that deals with equality direc
 
 In this project we used \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13}, \emph{Duper}~\cite{DBLP:conf/itp/CluneQBA24} and \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4} which are all based on variants of saturation for proving.
 
-\textbf{Equational Reasoning.} As already discussed in \Cref{canon-sec}, equational reasoning is a type of reasoning based on equational logic and rewriting with congruence~\cite{term-rewriting}.
-In general, an equational reasoning procedure takes a series of equations and determines whether another equation can be deduced from it.
+\textbf{Equational Reasoning.} As already discussed in \Cref{canon-sec}, equational reasoning is a type of reasoning that is based\footnote{More precisely, one can formalize this reasoning using Birkhoff's five rules of inference (reflexive, symmetric, transitive, replacement, and substitution); see, e.g., \cite{burris}.} on equational logic and rewriting with congruence~\cite{term-rewriting}.
+In general, an equational reasoning procedure takes a series of equations and tries to determine whether another equation can be deduced from it.
 A core tool in equational reasoning are \emph{e-graphs}, a data structure used to represent congruence classes of terms.
 By themselves, e-graphs provide an efficient means of implementing a decision procedure for congruence closure over ground equations (i.e. equations without variables).
 Extensions to this procedure, for example by quantifier instantiation via e-matching \cite{DBLP:conf/cade/MouraB07}, also allow for a semi-decision procedure for congruence closure over non-ground equations.
