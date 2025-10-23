@@ -1,9 +1,9 @@
 \contentsline {todo}{Use listings or minted for this code block.}{42}{section*.3}%
 \contentsline {todo}{Explain how Prover9 and Mace4 were used.}{42}{section*.4}%
 \contentsline {todo}{Use listings or minted for this code block.}{42}{section*.5}%
-\contentsline {todo}{this should also be expanded more, at least with references to some of the constructions in other chapters.}{44}{section*.6}%
+\contentsline {todo}{this should also be expanded more, at least with references to some of the constructions in other chapters.}{43}{section*.6}%
 \contentsline {todo}{discuss guided search in the finite implications or the Higman-Neumann work Jose Brox has done.}{44}{section*.7}%
 \contentsline {todo}{maybe add a screenshot here of the workflow of using a seed to find counterexamples with \emph {Prover9} or \emph {Vampire}?}{44}{section*.8}%
 \contentsline {todo}{throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''. Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.}{44}{section*.9}%
 \contentsline {todo}{report on Higman--Neumann laws}{47}{section*.10}%
-\contentsline {todo}{Complete the affiliations here. For contributors with no affiliations to report, enter `Unaffiliated'.}{55}{section*.110}%
+\contentsline {todo}{Complete the affiliations here. For contributors with no affiliations to report, enter `Unaffiliated'.}{56}{section*.110}%
