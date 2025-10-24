@@ -63,21 +63,19 @@ One possible way of obtaining refutations of a given implication $\E \Rightarrow
   \end{enumerate}
 \end{definition}
 
-In fact, a canonizer is simply a matching invariant with target in $\Magma_X$.
+In fact, a canonizer is simply a matching invariant with target in $M_X$.
 
 We describe a concrete strategy for building such $C$s, which will require a number of definitions.
 
 
 \begin{definition}\label{def:canon}
 Let $R \colon M_X \to M_X$ be an arbitrary function.
-  We say that $R$ is (weakly) \emph{collapsing} if for every word $w$, $R(w)$ is a sub-word of $w$ (in the obvious sense).
-
-  A function $\theta\colon X\rightarrow M_X$ is called a \emph{substitution}, and we can extend $\theta$ to be a homomorphism in the obvious way. We write $w\theta$ instead of $\theta(w)$ for application of substitutions.
-
-  If $\E$ is the equation $l\simeq r$, and $l$ is not a variable, we say that $R$ is a \emph{weak canonizer} if for any substitution $\theta$, $R(l\theta)=r\theta$.
-
-  Finally we say that $R$ is \emph{non-overlapping} for $\E$ if for every word $w\in M_X$ which is a strict sub-word of $l$ that is not in $X$, and any substitution $\theta$, $R(w\theta) = w\theta$.
-
+\begin{itemize}
+  \item  We say that $R$ is (weakly) \emph{collapsing} if for every word $w$, $R(w)$ is a sub-word of $w$ (in the obvious sense).
+\item  A function $\theta\colon X\rightarrow M_X$ is called a \emph{substitution}, and we can extend $\theta$ to be a homomorphism in the obvious way. We write $w\theta$ instead of $\theta(w)$ for application of substitutions.
+\item  If $\E$ is the equation $l\simeq r$, and $l$ is not a variable, we say that $R$ is a \emph{weak canonizer} if for any substitution $\theta$, $R(l\theta)=r\theta$.
+\item  Finally we say that $R$ is \emph{non-overlapping} for $\E$ if for every word $w\in M_X$ which is a strict sub-word of $l$ that is not in $X$, and any substitution $\theta$, $R(w\theta) = w\theta$.
+\end{itemize}
   We can then define $C_R\colon M_X\rightarrow M_X$ as follows:
 \begin{align}
   C_R(\x) &\coloneqq \x\\
@@ -85,10 +83,10 @@ Let $R \colon M_X \to M_X$ be an arbitrary function.
 \end{align}
 \end{definition}
 
+We then have the following theorem.
 
-And the following theorem holds.
 \begin{theorem}\label{thm:canon}
-  Whenever $R$ satisfies all the conditions of Definition \ref{def:canon} then $C_R$ is a canonizer.
+  Whenever $R$ weakly collapsing, a weak canonizer, and non-overlapping, then conditions of Definition \ref{def:canon} then $C_R$ is a canonizer.
 \end{theorem}
 \begin{proof}
   Assume $w\sim_{\E}w'$. We proceed by induction over the proof of equality.
@@ -105,7 +103,7 @@ And the following theorem holds.
 
 We work through an example to show why this is a useful theorem. Take $\E$ to be the equation
 \[
-  \y \op (\x \op (\y \op (\y \op \y)))\formaleq \x
+  \y \op (\x \op (\y \op (\y \op \y)))\formaleq \x.
 \]
 we can take $R$ to be the transformation which sends a term of the form $w \op (v \op (w \op (w \op w)))$ to $v$ for any two words $v, w$, and leaves all other words unchanged.
 It is then somewhat easy to show that this transformation satisfies the conditions of \Cref{thm:canon}, and so we have a canonizer $C_R$.
