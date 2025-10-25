@@ -4,5 +4,4 @@ This law is a non-trivial example of a *confluent law*: a law in which every wor
 
 This law implies that left multiplications are surjective.
 
-For finite magmas, or for quasigroups, law 477, its dual [law 3150](https://teorth.github.io/equational_theories/implications/?3150), and [law 1492](https://teorth.github.io/equational_theories/implications/?1492) are equivalent.  Without such assumptions, law 1492 implies law 477 and 3150, but no other implication holds.  In a left quasigroup, this law holds if and only if the left division map defined by `x◇(x:y) = y` obeys [law 417](https://teorth.github.io/equational_theories/implications/?417) `x = x:(x:(y:(x:y)))`, namely these laws are parastrophically equivalent.
-
+For finite magmas, or for quasigroups, law 477, its dual [law 3150](https://teorth.github.io/equational_theories/implications/?3150), and [law 1492](https://teorth.github.io/equational_theories/implications/?1492) are equivalent.  Without such assumptions, law 1492 implies law 477 and 3150, but no other implication holds.  In a left quasigroup, this law holds if and only if the left division map defined by `x◇(x:y) = y` satisfies [law 417](https://teorth.github.io/equational_theories/implications/?417) `x = x:(x:(y:(x:y)))`, namely these laws are parastrophically equivalent.

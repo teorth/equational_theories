@@ -1,5 +1,5 @@
 \chapter{General implications}\label{general-implications-chapter}
-We will be interested in seeing which laws imply which other laws, in the sense that magmas obeying the former law automatically obey the latter. We will also be interested in \emph{anti-implications} showing that one law does \emph{not} imply another, by producing examples of magmas that obey the former law but not the latter. Here is a formal definition.
+We will be interested in seeing which laws imply which other laws, in the sense that magmas satisfying the former law automatically satisfy the latter. We will also be interested in \emph{anti-implications} showing that one law does \emph{not} imply another, by producing examples of magmas that satisfy the former law but not the latter. Here is a formal definition.
 
 \begin{definition}[Implication]\label{impl}\uses{models-def}
   A law $E$ is said to \emph{imply} another law $E'$ if $\{E\} \models E'$, or equivalently:
@@ -11,7 +11,7 @@ We will be interested in seeing which laws imply which other laws, in the sense 
   If we define $E \leq E'$ if $E$ implies $E'$, then this is a pre-order on the set of laws, and equivalence is an equivalence relation.
 \end{lemma}
 
-Note that we view the stronger law as less than or equal to the weaker law. This is because the class of magmas that obey the stronger law is a subset of the class of magmas that obey the weaker law. It is also consistent with the conventions of Lean's Mathlib.
+Note that we view the stronger law as less than or equal to the weaker law. This is because the class of magmas that satisfy the stronger law is a subset of the class of magmas that satisfy the weaker law. It is also consistent with the conventions of Lean's Mathlib.
 
 \begin{proof}\leanok
   Trivial.
@@ -98,5 +98,5 @@ Thus for instance, \Equareffull{7} is equivalent to \Equareffull{2}.
 \end{theorem}
 
 \begin{proof}
-  Consider the magma $\mathrm{MS}$ of multisets over an arbitrary set $A$ (which can be seen as finitely supported maps $A\rightarrow \N$), with the multiset addition law $+$. By hypothesis, this magma obeys $w \formaleq w'$, and hence $w'' \formaleq w'''$, giving the claim by comparing the orders of the elements of $A$ appearing in $w''$ and $w'''$ in this magma.
+  Consider the magma $\mathrm{MS}$ of multisets over an arbitrary set $A$ (which can be seen as finitely supported maps $A\rightarrow \N$), with the multiset addition law $+$. By hypothesis, this magma satisfies $w \formaleq w'$, and hence $w'' \formaleq w'''$, giving the claim by comparing the orders of the elements of $A$ appearing in $w''$ and $w'''$ in this magma.
 \end{proof}

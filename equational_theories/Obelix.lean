@@ -177,7 +177,7 @@ lemma fresh_ne_add_f (hx : x ∈ f.Dom) (hy : y ∈ f.Dom) : f.freshGenerator a 
 
 end freshGenerator_lemmas
 
-/-- Extend a partial solution at an element x in its domain, so that x obeys the functional equation. -/
+/-- Extend a partial solution at an element x in its domain, so that x  the functional equation. -/
 def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
   if hb : f.f x ∈ f.Dom then f else
     let b := f.f x;
@@ -395,7 +395,7 @@ theorem extend_dom (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) :
     · have : x ≠ f.freshGenerator - f.f x := (f.fresh_ne_add_f _ hx hx).symm ∘ add_eq_of_eq_sub
       simp [hxf, this]
 
-/-- Extend makes sure that x obeys the functional equation -/
+/-- Extend makes sure that x  the functional equation -/
 theorem extend_valid (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) :
     let f' := (f.extend hx).f; f' (f' (f' x) - f' x) = x - f' x :=
   (f.extend hx).Valid (f.extend_mono_dom hx x hx) (f.extend_dom hx)
@@ -581,11 +581,11 @@ private lemma close.lem_1 {f : PartialSolution} {x : Obelix.A}
     rw [← hfw₂]
     exact (f.extend hw).Valid hw₂ (f.extend_dom hw)
 
-/-- Given f, (possibly) extend it to ensure that x is in the domain, image, and obeys the functional
+/-- Given f, (possibly) extend it to ensure that x is in the domain, image, and  the functional
   equation. This is done by possibly using `add` to include x, and then `extend`. -/
 def close (f : PartialSolution) (x : A) : PartialSolution :=
   if hx : x ∈ f.Dom then
-    --If x is in the domain, just make sure that it obeys the functional equation with `extend`.
+    --If x is in the domain, just make sure that it  the functional equation with `extend`.
     f.extend hx
   else if hxi : x ∈ f.Im then
     f.closeImg x hxi
@@ -769,7 +769,7 @@ theorem closureLinear_extends (f₀ : PartialSolution) :
 def closure (f : PartialSolution) : A → A → A :=
   fun a b ↦ a + (closureLinear f) (b - a)
 
-/-- The resulting magma obeys the Obelix rule. -/
+/-- The resulting magma  the Obelix rule. -/
 theorem closure_prop (f : PartialSolution) : ∀ x y,
     x = closure f (closure f y x) (closure f y (closure f y x)) :=
   fun x y ↦ by simp [closure, closureLinear_funeq f (x - y)]
