@@ -120,30 +120,35 @@ Set the environmental variable `MACE4HOME` to point to the latter if not in your
 
 # Statistics
 
-Some information about the overlap between different magma sizes:
+Some information about the overlap between different magma sizes, from running
+`check_redundant.py`:
 
 ```
+Magmas of sizes up to 2 refute 12560783 implications
+Magmas of sizes up to 3 refute 13596121 implications
+Magmas of sizes up to 4 refute 13753982 implications
+
 When going from ../data/refutations2x2.txt to ../data/refutations3x3.txt
-The number of solved equations goes from 12567055 to 13602457 for a delta of 1035402
+The number of solved equations goes from 12560783 to 13596121 for a delta of 1035338
 And ../data/refutations3x3.txt has 9 / 299 already covered magmas
 
 When going from ../data/refutations2x2.txt to ../data/refutations4x4.txt
-The number of solved equations goes from 12567055 to 13732566 for a delta of 1165511
+The number of solved equations goes from 12560783 to 13726214 for a delta of 1165431
 And ../data/refutations4x4.txt has 7 / 515 already covered magmas
 
 When going from ../data/refutations3x3.txt to ../data/refutations2x2.txt
-The number of solved equations goes from 13345053 to 13602457 for a delta of 257404
+The number of solved equations goes from 13338841 to 13596121 for a delta of 257280
 And ../data/refutations2x2.txt has 8 / 10 already covered magmas
 
 When going from ../data/refutations3x3.txt to ../data/refutations4x4.txt
-The number of solved equations goes from 13345053 to 13760346 for a delta of 415293
+The number of solved equations goes from 13338841 to 13753982 for a delta of 415141
 And ../data/refutations4x4.txt has 100 / 515 already covered magmas
 
 When going from ../data/refutations4x4.txt to ../data/refutations2x2.txt
-The number of solved equations goes from 13732566 to 13732566 for a delta of 0
+The number of solved equations goes from 13726214 to 13726214 for a delta of 0
 And ../data/refutations2x2.txt has 10 / 10 already covered magmas
 
 When going from ../data/refutations4x4.txt to ../data/refutations3x3.txt
-The number of solved equations goes from 13732566 to 13760346 for a delta of 27780
+The number of solved equations goes from 13726214 to 13753982 for a delta of 27768
 And ../data/refutations3x3.txt has 291 / 299 already covered magmas
 ```
