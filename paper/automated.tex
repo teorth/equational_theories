@@ -93,9 +93,9 @@ Proofs can then be reconstructed as sequences of these steps (and additional tec
   \caption{Example of a proof reconstructed from output of \emph{Vampire}. Note how the proof proceeds by contradiction and uses the \texttt{superpose} and \texttt{subsumption} steps implemented in \emph{Lean}.}
   \label{fig:vampire-example}
 \end{figure}
-\todo{Use listings or minted for this code block.}
+% \todo{Use listings or minted for this code block.}
 
-\todo{Explain how Prover9 and Mace4 were used.}
+% \todo{Explain how Prover9 and Mace4 were used.}
 
 For equational proofs from external provers, like \emph{MagmaEgg}, we also used a tailored version of reconstruction.
 Specifically, the \emph{MagmaEgg} implementation turns \emph{explanations} \cite{nieuwenhuis2005proof} from \emph{egg} into \emph{Lean} proofs by simple applications of the defining properties of equality as shown in Figure~\ref{fig:magma-egg-example}.
@@ -107,7 +107,7 @@ Specifically, the \emph{MagmaEgg} implementation turns \emph{explanations} \cite
   \caption{Example of a proof reconstructed by \emph{MagmaEgg}. Note the proof only uses reflexivity, symmetry, transitivity, and congruence of equality.}
   \label{fig:magma-egg-example}
 \end{figure}
-\todo{Use listings or minted for this code block.}
+% \todo{Use listings or minted for this code block.}
 
 In the case of the \texttt{egg} tactic, which also reconstructs proofs from \emph{egg} explanations, the proof could be converted into a more human-readable form by using the \texttt{calcify}\footnote{\url{https://github.com/nomeata/lean-calcify}} tactic, as shown in Figure~\ref{fig:egg-example}
 
@@ -123,26 +123,26 @@ The general strategy was to use ATPs to find counterexamples to implications by 
 If we want to build a counterexample to $l \models l'$, we want to construct a magma where $l$ holds but $l'$ does not.
 In this method, we iteratively strengthen a construction with additional hypotheses, and use the ATP to check whether these hypotheses are not too strong (to imply $l'$) or unsound (to disallow $l$).
 
-\TODO{this should also be expanded more, at least with references to some of the constructions in other chapters.}
+% \TODO{this should also be expanded more, at least with references to some of the constructions in other chapters.}
 
 While equational reasoning can also be used in a semi-automatic fashion to prove equations~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24}, the positive implications in the main implication graph of project were all simple enough that we did not need a semi-automatic approach for them.
 
-\TODO{discuss guided search in the finite implications or the Higman-Neumann work Jose Brox has done.}
+% \TODO{discuss guided search in the finite implications or the Higman-Neumann work Jose Brox has done.}
 
-\TODO{maybe add a screenshot here of the workflow of using a seed to find counterexamples with \emph{Prover9} or \emph{Vampire}?}
+% \TODO{maybe add a screenshot here of the workflow of using a seed to find counterexamples with \emph{Prover9} or \emph{Vampire}?}
 
-\subsection{Empirical Results}
+% \subsection{Empirical Results}
 
-Finally, we report some empirical results from use of ATPs for this project, in terms of performance.
-This section is not intended to be a careful evaluation and benchmark comparison of the different ATPs; instead, we present our work here as a more informal ``field report'' documenting our experiences.
-In particular, we do not draw firm conclusions about the overall capabilities\footnote{One reason for this is that different ATPs were deployed at different stages of the project.  In particular, the later ATP runs were performed in an environment when a large fraction of the implications had already been settled, and only a small remainder set was tested by our project.  The current set of ATP-generated formalized implications has also been subject to a number of reductions to optimize compilation time, so we would caution against reading too much into the raw number of such formalizations in the codebase.} of the different ATPs.
-Rather, this serves as a use-case documenting the experience of (mostly) novice users.
+% Finally, we report some empirical results from use of ATPs for this project, in terms of performance.
+% This section is not intended to be a careful evaluation and benchmark comparison of the different ATPs; instead, we present our work here as a more informal ``field report'' documenting our experiences.
+% In particular, we do not draw firm conclusions about the overall capabilities\footnote{One reason for this is that different ATPs were deployed at different stages of the project.  In particular, the later ATP runs were performed in an environment when a large fraction of the implications had already been settled, and only a small remainder set was tested by our project.  The current set of ATP-generated formalized implications has also been subject to a number of reductions to optimize compilation time, so we would caution against reading too much into the raw number of such formalizations in the codebase.} of the different ATPs.
+% Rather, this serves as a use-case documenting the experience of (mostly) novice users.
 
-\TODO{throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''.  Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.}
+% \TODO{throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''.  Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.}
 
-{\bf Any comparative study of semi-automated methods with fully automated ones? In principle, the semi-automated approach could be more automated using a script or "agent" to call various theorem provers. See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/A.20magma.20of.20order.20.3C.2013.20-.20for.20Equation2531.3F}{this discussion}}
+% {\bf Any comparative study of semi-automated methods with fully automated ones? In principle, the semi-automated approach could be more automated using a script or "agent" to call various theorem provers. See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/A.20magma.20of.20order.20.3C.2013.20-.20for.20Equation2531.3F}{this discussion}}
 
 
-{\bf See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1516.20-.3E.20255/near/481547543}{this discussion} on the value of using different ATPs and setting run time parameters etc. at different values.}
+% {\bf See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1516.20-.3E.20255/near/481547543}{this discussion} on the value of using different ATPs and setting run time parameters etc. at different values.}
 
-{\bf What are the hardest implications to prove?  See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/What.20are.20the.20hardest.20positive.20implications.20for.20an.20ATP.3F}{this discussion}.}
+% {\bf What are the hardest implications to prove?  See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/What.20are.20the.20hardest.20positive.20implications.20for.20an.20ATP.3F}{this discussion}.}
