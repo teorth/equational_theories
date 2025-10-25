@@ -8,4 +8,4 @@ Simple examples of such laws include left-absorptive magmas (with `x ◇ y = x`)
 
 This law cannot hold in a (non-trivial) commutative magma or quasigroup.
 
-Its free magma is conjecturally understood and, while difficult to describe, does obey some interesting laws, such as a unique factorization property that can be used to refute some implications.  A greedy algorithm that incorporates this unique factorization law and some other axioms was used to resolve all remaining implications.
+Its free magma is conjecturally understood and, while difficult to describe, does satisfy some interesting laws, such as a unique factorization property that can be used to refute some implications.  A greedy algorithm that incorporates this unique factorization law and some other axioms was used to resolve all remaining implications.

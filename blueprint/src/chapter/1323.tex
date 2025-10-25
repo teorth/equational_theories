@@ -1,6 +1,6 @@
 \chapter{Equation 1323}\label{1323-chapter}
 
-In this chapter we study magmas that obey equation 1323,
+In this chapter we study magmas that satisfy equation 1323,
 \begin{equation}\label{1323}
   x = y \op (((y \op y) \op x) \op y)
 \end{equation}
@@ -16,7 +16,7 @@ and
 \begin{equation}\label{lr-simp}
   L_{y} R_{y} = R_{Sy}
 \end{equation}
-hold.  Then the magma obeys 1323.
+hold.  Then the magma satisfies 1323.
 \end{lemma}
 
 \begin{proof} Trivial.
@@ -34,7 +34,7 @@ hold.  Then the magma obeys 1323.
  \end{proof}
 
 
- \begin{lemma}[Building a magma]\label{build-magma}\leanok\lean{Eq1323.op}\lean{Eq1323.op_RSy_LSy_eq_Id}\lean{Eq1323.op_Ly_Ry_eq_LSy}  Let $G$ be a countably infinite abelian torsion group of exponent $2$, and let $\phi_a$ be as in the previous lemma.  Let $N$ be the set of pairs $(x,a)$ with $x \in \Q^\times$ and $a \in G \backslash \{0\}$, and let $M = G \uplus N$ be the disjoint union of $G$ and $N$.  Suppose that we have an operation $\op : M \times M \to M$ obeying the following axioms:
+ \begin{lemma}[Building a magma]\label{build-magma}\leanok\lean{Eq1323.op}\lean{Eq1323.op_RSy_LSy_eq_Id}\lean{Eq1323.op_Ly_Ry_eq_LSy}  Let $G$ be a countably infinite abelian torsion group of exponent $2$, and let $\phi_a$ be as in the previous lemma.  Let $N$ be the set of pairs $(x,a)$ with $x \in \Q^\times$ and $a \in G \backslash \{0\}$, and let $M = G \uplus N$ be the disjoint union of $G$ and $N$.  Suppose that we have an operation $\op : M \times M \to M$ satisfying the following axioms:
 \begin{itemize}
 \item (i) We have
 \begin{equation}\label{op-0}
@@ -92,7 +92,7 @@ $(\phi_a(b)^n x,a, \phi_b(c)^n y,b)$, $(\phi_b(c)^n y,b,\phi_c(a)^n z,c)$, $(\ph
 $$ (\phi_a(b)^n x,a) \op (\phi_b(c)^n y,b) = (\phi_c(a)^n z,c)$$
 $$ (\phi_b(c)^n y,b) \op (\phi_c(a)^n z,c) = (\phi_a(b)^{n+1} x, a)$$
 $$ (\phi_c(a)^n z,c) \op (\phi_a(b)^{n+1} x, a) = (\phi_b(c)^{n+1} y,b)$$
-for all $n \geq 0$ and $(x,y,z,a,b,c) \in {\mathcal F}$, and no other operations, then this is a well-defined partial operation that obeys axiom (iii) whenever it is defined.
+for all $n \geq 0$ and $(x,y,z,a,b,c) \in {\mathcal F}$, and no other operations, then this is a well-defined partial operation that satisfies axiom (iii) whenever it is defined.
 \end{lemma}
 
 \begin{proof} Routine.
@@ -108,13 +108,13 @@ $$ (\phi_c(a)^n z,c) \op (\phi_a(b)^{n+1} x, a) = (\phi_b(c)^{n+1} y,b)$$
 for all natural numbers $n$.  As the $a,b,c$ are distinct, the $\phi_a(b), \phi_b(c), \phi_c(a)$ are not equal to $\pm 1$, and the members of this infinite sequence do not collide with each other.  The second and third equations in this family cannot collide with previous assignments because $c$ is novel.  If we arrange matters so that $\phi_b(c)$ involves primes in the numerator or denominator that do not appear in any previous $\phi_a(b), \phi_b(c), \phi_c(a), x, y, z$ used by the greedy algorithm, or the current $x,y,z$, then we also see that the first infinite sequence does not collide with any previously assigned value of $\op$ either.
 \end{proof}
 
-\begin{corollary}[Iterated greedy extension]\label{greedy-iterate}\leanok\lean{Eq1323.exists_complete_function}  Every partial solution can be extended to a complete solution that obeys \Cref{lr} and \Cref{lr-simp}, and hence 1323.
+\begin{corollary}[Iterated greedy extension]\label{greedy-iterate}\leanok\lean{Eq1323.exists_complete_function}  Every partial solution can be extended to a complete solution that satisfies \Cref{lr} and \Cref{lr-simp}, and hence 1323.
 \end{corollary}
 
 \begin{proof}\uses{greedy-1323, build-magma, partial-1323-sound} Apply the usual greedy algorithm.
 \end{proof}
 
-\begin{corollary}[1323 does not imply 2744]\label{1323-refute-2744}\leanok\lean{Eq1323.Equation1323_not_implies_Equation2744}  There exists a 1323 magma which does not obey the 2744 equation $R_y L_{Sy} L_y x = x$.
+\begin{corollary}[1323 does not imply 2744]\label{1323-refute-2744}\leanok\lean{Eq1323.Equation1323_not_implies_Equation2744}  There exists a 1323 magma which does not satisfy the 2744 equation $R_y L_{Sy} L_y x = x$.
 \end{corollary}
 
 \begin{proof}\uses{greedy-iterate} It suffices to produce a partial solution in which $L_y$ is not injective. Pick distinct $a, b, b', c$ with $\phi_a(b)$, $\phi_a(b')$ having no prime factors in common in the numerator or denominator.  We take the partial solution consisting of $(1,1,1,a,b,c)$ and $(1,1,1,a,b',c)$, that is to say we impose the conditions

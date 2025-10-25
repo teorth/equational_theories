@@ -83,7 +83,7 @@ Indeed, the initial equation gives $t = (y \op t) \op f(t,w) = (y \op t) \op t =
 With such a simple expression of $f$ the initial equation becomes $x = (y \op x) \op z$, which easily implies the singleton law, for instance by writing $x = ((y \op w) \op x) \op z = w \op z$ for any $w,x,y,z \in M$.
 
 There remains to prove $f(t,w) = t$ for a well-chosen $w \in M$, explicitly, $w=g(t,t^5)=t\op t^7$.
-For any $t,u,v \in M$, the combinations $x = f(t,u)$ and $y = v \op t$ obey $y \op x = t$.  Inserting these values into the initial equation yields the identity
+For any $t,u,v \in M$, the combinations $x = f(t,u)$ and $y = v \op t$ satisfy $y \op x = t$.  Inserting these values into the initial equation yields the identity
 \begin{equation}\label{Kisielewicz-tfftuz}
 f(t,u) = t \op f(f(t,u),z) .
 \end{equation}
@@ -105,10 +105,10 @@ On the other hand, \eqref{Kisielewicz-ftg} with $(u,v)=(t,t^5)$ implies $t^3 = t
 
 The following result was established in \cite{mendelsohn-padmanabhan}.
 
-\begin{theorem}[Consequences of 1571]\label{1571_impl}\uses{eq1571, eq2662, eq40, eq23, eq8, eq16, eq14, eq43, eq4512}\lean{Subgraph.Equation1571_implies_Equation2662, Subgraph.Equation1571_implies_Equation40, Subgraph.Equation1571_implies_Equation23,Subgraph.Equation1571_implies_Equation8, Subgraph.Equation1571_implies_Equation16, Subgraph.Equation1571_implies_Equation43, Subgraph.Equation1571_implies_Equation4512}\leanok  Magmas obeying \Equareffull{1571} also obey \Equaref{2662}, \Equaref{40}, \Equaref{23}, \Equaref{8}, \Equaref{16}, \Equaref{14}, \Equaref{43}, and \Equaref{4512}, and are in fact abelian groups of exponent two.  Conversely, all abelian groups of exponent two obey \Equaref{1571}.
+\begin{theorem}[Consequences of 1571]\label{1571_impl}\uses{eq1571, eq2662, eq40, eq23, eq8, eq16, eq14, eq43, eq4512}\lean{Subgraph.Equation1571_implies_Equation2662, Subgraph.Equation1571_implies_Equation40, Subgraph.Equation1571_implies_Equation23,Subgraph.Equation1571_implies_Equation8, Subgraph.Equation1571_implies_Equation16, Subgraph.Equation1571_implies_Equation43, Subgraph.Equation1571_implies_Equation4512}\leanok  Magmas satisfying \Equareffull{1571} also satisfy \Equaref{2662}, \Equaref{40}, \Equaref{23}, \Equaref{8}, \Equaref{16}, \Equaref{14}, \Equaref{43}, and \Equaref{4512}, and are in fact abelian groups of exponent two.  Conversely, all abelian groups of exponent two satisfy \Equaref{1571}.
 \end{theorem}
 
-\begin{proof}\leanok  Suppose that a magma $G$ obeys \Equaref{1571}, thus
+\begin{proof}\leanok  Suppose that a magma $G$ satisfies \Equaref{1571}, thus
 \begin{equation}\label{1571-again}
  x = (y \op z) \op (y \op (x \op z)).
 \end{equation}
@@ -174,7 +174,7 @@ axiomatizes the Sheffer stroke operation $x \op y = \overline{xy}$ in a Boolean 
 \begin{proof}\leanok
 See \cite{mccune_et_al}.  In fact this is the shortest law with this property.
 
-A sketch of proof follows.  One can easily verify that the Sheffer stroke operation obeys this law.  Conversely, if this law holds, then automated theorem provers can show that the three Sheffer axioms
+A sketch of proof follows.  One can easily verify that the Sheffer stroke operation satisfies this law.  Conversely, if this law holds, then automated theorem provers can show that the three Sheffer axioms
 $$ (x \op x) \op (x \op x)  = x$$
 $$ x \op (y \op (y \op y)) = x \op x$$
 $$ (x \op (y \op z)) \op (x \op (y \op z)) = ((y \op y) \op x) \op ((z \op z) \op x)$$
@@ -189,7 +189,7 @@ These are examples of central groupoids, \Equareffull{168}.
 \end{theorem}
 
 \begin{proof}
-  See \cite[Theorem 5]{knuth}.  The proof is quite lengthy; a sketch is as follows. It is easy to see that natural central groupoids obey \Equaref{26302}.  Conversely, if this law holds, then
+  See \cite[Theorem 5]{knuth}.  The proof is quite lengthy; a sketch is as follows. It is easy to see that natural central groupoids satisfy \Equaref{26302}.  Conversely, if this law holds, then
 \begin{align*}
   (y \op z) \op (z \op w) &= (( x \op ((w \op (y \op z)) \op w)) \op ((y \op z) \op w)) \op (z \op w)\\
   &= z

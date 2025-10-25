@@ -1,4 +1,4 @@
-This law implies the equality of left and right cubes `x◇(x◇x) = (x◇x)◇x`, which form a submagma, and the set of squares is also a submagma.  The squaring map `S: x ↦ x◇x` obeys `S(S(S(x))) = S(S(x))`.  Any idempotent element (such as `S(S(x))`) is a left zero.
+This law implies the equality of left and right cubes `x◇(x◇x) = (x◇x)◇x`, which form a submagma, and the set of squares is also a submagma.  The squaring map `S: x ↦ x◇x`  `S(S(S(x))) = S(S(x))`.  Any idempotent element (such as `S(S(x))`) is a left zero.
 
 This law cannot hold in a non-trivial quasigroup.
 

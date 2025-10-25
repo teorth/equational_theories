@@ -2,8 +2,8 @@
 
 The need to construct infinite magmas primarily arises in the context of \emph{Austin laws} and \emph{Austin pairs}.
 An Austin law admits infinite models but no nontrivial finite ones, while an Austin pair consists of
-laws $P$ and $Q$ such that every finite model obeying the law $P$ also obeys $Q$, but some
-infinite magma obeys $P$ without also obeying $Q$. Examples are given in \Cref{infinite-model-chapter}.
+laws $P$ and $Q$ such that every finite model satisfying the law $P$ also satisfies $Q$, but some
+infinite magma satisfies $P$ without also satisfying $Q$. Examples are given in \Cref{infinite-model-chapter}.
 
 Here we survey techniques for constructing infinite magmas that serve as counterexamples for implications
 between laws. Many of the techniques presented trace their origins to the first analysis of the Asterix equation
@@ -177,7 +177,7 @@ and define $f: E_1 \to E_2$ by the formulae
 One can then check that $(E_0, E_1, E_2, f)$ is a partial solution to \Cref{fh}, and by construction $h \mapsto h + f(h)$ is not injective on $E_1$.  Using \Cref{iteration} to extend this partial solution to a full solution, we obtain the claim.
 \end{proof}
 
-\begin{corollary}[Asterix does not imply Obelix]\label{asterix-obelix}\uses{eq65,eq1491}  There exists a magma obeying the Asterix law (\Equaref{65}) with carrier $\Z$ such that the left-multiplication maps $L_y: x \mapsto y \op x$ are not injective for any $y \in \Z$.  In particular, it does not obey the Obelix law (\Equareffull{1491}).
+\begin{corollary}[Asterix does not imply Obelix]\label{asterix-obelix}\uses{eq65,eq1491}  There exists a magma satisfying the Asterix law (\Equaref{65}) with carrier $\Z$ such that the left-multiplication maps $L_y: x \mapsto y \op x$ are not injective for any $y \in \Z$.  In particular, it does not satisfy the Obelix law (\Equareffull{1491}).
 \end{corollary}
 
 \begin{proof}\uses{no-inject} Note that $L_y (y+h) = y + h + f(h)$, so the injectivity of the left-multiplication maps is equivalent to the injectivity of the map $h \mapsto h + f(h)$.  The non-injectivity then follows from \Cref{no-inject}. Note that the Obelix law clearly expresses $x$ as a function of $y$ and $L_y x = y \op x$, forcing injectivity of left-multiplication, so the Obelix law fails.
@@ -185,7 +185,7 @@ One can then check that $(E_0, E_1, E_2, f)$ is a partial solution to \Cref{fh},
 
 On the other hand, for finite magmas the situation is different:
 
-\begin{proposition}[Asterix implies Obelix for finite magmas]\label{asterix-obelix-finite}\uses{eq65,eq1491}  Any finite magma obeying the Asterix law (\Equaref{65}) also is left-cancellative and obeys the Obelix law (\Equaref{1491}).
+\begin{proposition}[Asterix implies Obelix for finite magmas]\label{asterix-obelix-finite}\uses{eq65,eq1491}  Any finite magma satisfying the Asterix law (\Equaref{65}) also is left-cancellative and satisfies the Obelix law (\Equaref{1491}).
 \end{proposition}
 
 \begin{proof}  From \Equaref{65} we see the map $z \mapsto y \op z$ is surjective, hence injective on a finite magma; thus the magma is left-cancellative.  Replacing $x$ by $y \op x$ in this law, we see that
@@ -195,14 +195,14 @@ $$ x = (y\op x) \op (y \op (y \op x))$$
 which is \Equaref{1491}.
 \end{proof}
 
-A very similar argument shows that a finite magma that obeys the Obelix law has $z \mapsto y \op z$ injective, hence surjective, and then obeys the Asterix law.
+A very similar argument shows that a finite magma that satisfies the Obelix law has $z \mapsto y \op z$ injective, hence surjective, and then satisfies the Asterix law.
 
 \section{Obelix}
-Obelix magmas are those obeying equation 1491, \Equaref{1491}:
+Obelix magmas are those satisfying equation 1491, \Equaref{1491}:
 $$x = (y \op x) \op (y \op (y \op x))$$
 Obelix is not particularly {\em structurally} similar to an Asterix, besides their shared resistance
 to small counterexamples. A related set of ideas can be used to construct an Obelix that does not
-obey some given other equations. The common idea is to define the magma operation
+satisfy some given other equations. The common idea is to define the magma operation
 $$ x \op y = x + f(y-x) = x + f(h)$$
 on some underlying abelian group. For the case of Obelix, the resulting functional equation is
 \begin{equation}\label{fh2}
@@ -227,7 +227,7 @@ with the properties:
 It's easiest to work over the group of finitely supported functions from $\mathbb{N}$ (or any other
 countable set) to $\mathbb{Z}$. When picking fresh elements, it's important not only to take something
 outside of the group closure of the elements already in $f$, but actually out of their $\mathbb{Q}$-span,
-because we need guarantees that the fresh element $g$ doesn't obey relations like $2g = x$ as well.
+because we need guarantees that the fresh element $g$ doesn't satisfy relations like $2g = x$ as well.
 
 Any partial solution can be extended to a complete solution.
 \begin{lemma}\label{obelix-extend}\uses{partial-solution2}
@@ -255,20 +255,20 @@ By picking an appropriate partial solution, we can then show that there are Obel
 There is an Obelix magma that is not Asterix (equation 65).
 \end{corollary}
 \begin{proof}
-This requires picking an initial set that still obeys the correct initial closure properties. Letting
+This requires picking an initial set that still satisfies the correct initial closure properties. Letting
 $x_1$, $x_2$, $x_3$ and $x_4$ be independent elements, then taking the function
 $$\{(0,0), (x_1,x_2), (x_2-x_1, x_3), (x_1+x_3, x_4)\}$$
 already has elements that contradict the Asterix equation, and it's a valid partial solution. By extending
-it, we can get an Obelix that does not obey the Asterix equation.
+it, we can get an Obelix that does not satisfy the Asterix equation.
 \end{proof}
 
 \section{Greedy algorithm constructions}\label{greedy-section}
 
-In \Cref{asterix-section} a magma obeying one law and refuting another was obtained by using the
+In \Cref{asterix-section} a magma satisfying one law and refuting another was obtained by using the
 fact that over translation-invariant magmas, equational laws simplify to univariate functional equations,
 and solving the resulting equation using a greedy algorithm.
 
-One way to construct infinite magmas obeying specific laws is via a greedy algorithm construction not on a
+One way to construct infinite magmas satisfying specific laws is via a greedy algorithm construction not on a
 one-variable functional equation, but on the operation table of the magma itself.
 
 Here, it is best to work with \emph{partially defined magma operations} on some carrier $G$.  These can be interpreted as ternary relations $R(x,y,z)$ in three variables $x,y,z \in G$ which pass the following ``vertical line test'':
@@ -281,39 +281,39 @@ Such an operation is then associated (via a one-to-one correspondence) to a part
 
 Given a word $w(x_1,\dots,x_n)$ in variables $x_1,\dots,x_n$ (so $w$ is an element of the free magma on $n$ generators), we can say that $w(x_1,\dots,x_n)$ is \emph{well-defined} with respect to a partially defined magma operation $R$ if it can be fully evaluated using $R$.  For instance, the word $(x \op y) \op z$ is well-defined if there exists $w,u \in G$ such that $R(x,y,w)$ and $R(w,z,u)$ both hold, in which case $(x \op y) \op z$ evaluates to $u$.  Note from the axiom (VLT) that this evaluation is unique, if it exists.  Of course, in a genuine magma, all expressions are well-defined.  We say that an expression $w(x_1,\dots,x_n)$ is \emph{almost well-defined} if all strict subexpressions of $w$ are well-defined.  For instance, $(x \op y) \op z$ is almost well-defined if there exists $w \in G$ such that $R(x,y,w)$ holds.
 
-An equational law $w_1 \formaleq w_2$ involving some variables $x_1,\dots,x_n$ is said to be \emph{locally obeyed} by $R$ if,  whenever $w_1(x_1,\dots,x_n)$, $w_2(x_1,\dots,x_n)$ are almost well-defined, and one of the two expressions is well-defined and evaluates to some output $y$, then the other expression is also well-defined and evaluates to the same output $y$.  For instance, in order for $R$ to locally obey the associative law $(x \op y) \op z = x \op (y \op z)$ (\Equaref{4512}), we require the following two axioms:
+An equational law $w_1 \formaleq w_2$ involving some variables $x_1,\dots,x_n$ is said to be \emph{locally satisfied} by $R$ if,  whenever $w_1(x_1,\dots,x_n)$, $w_2(x_1,\dots,x_n)$ are almost well-defined, and one of the two expressions is well-defined and evaluates to some output $y$, then the other expression is also well-defined and evaluates to the same output $y$.  For instance, in order for $R$ to locally satisfy the associative law $(x \op y) \op z = x \op (y \op z)$ (\Equaref{4512}), we require the following two axioms:
 \begin{description}
   \item[(4512-1)] If $R(x,y,w)$, $R(w,z,u)$, and $R(y,z,v)$, then $R(x,v,u)$.
   \item[(4512-2)] If $R(y,z,w)$, $R(x,w,u)$, and $R(x,y,v)$, then $R(v,z,u)$.
 \end{description}
-If a law involves a single variable on one side, then we only need one axiom.  For instance, the Asterix law (\Equaref{65}) is locally obeyed by $R$ if and only if the following axiom holds:
+If a law involves a single variable on one side, then we only need one axiom.  For instance, the Asterix law (\Equaref{65}) is locally satisfied by $R$ if and only if the following axiom holds:
 \begin{description}
   \item[(65)] If $R(y,x,z)$ and $R(x,z,u)$, then $R(y,u,x)$.
 \end{description}
-Note that if the relation $R$ is associated to a genuine magma operation $\op$, then it locally obeys a law $w_1 \formaleq w_2$ if and only if the magma operation $\op$ obeys the law $w_1 \formaleq w_2$.  For instance, the relation $R$ associated to a globally defined magma operation $\op$ obeys (4512-1) and (4512-2) if and only if the magma is associative.
+Note that if the relation $R$ is associated to a genuine magma operation $\op$, then it locally satisfies a law $w_1 \formaleq w_2$ if and only if the magma operation $\op$ satisfies the law $w_1 \formaleq w_2$.  For instance, the relation $R$ associated to a globally defined magma operation $\op$ satisfies (4512-1) and (4512-2) if and only if the magma is associative.
 
-More generally, one can ask for a ternary relation $R$ to obey some theory $\Gamma$ of universal laws, using the language of one ternary relation $R$, the equality symbol $=$, and possibly some constants (we will shortly introduce three constants $a,b,c$ for this purpose).
+More generally, one can ask for a ternary relation $R$ to satisfy some theory $\Gamma$ of universal laws, using the language of one ternary relation $R$, the equality symbol $=$, and possibly some constants (we will shortly introduce three constants $a,b,c$ for this purpose).
 
-Suppose we have a relation $R$ obeying some theory $\Gamma$ (for instance, (VLT) together with (65)), but which is only finitely supported (there are only finitely many triples $(x,y,z)$ for which $R(x,y,z)$ holds).  Then one can find $a,b \in G$ such that $a \op b$ is currently undefined.  If the carrier $G$ is infinite (e.g., if $G = \N$), one can then find another element $c$ which is \emph{novel}: it is not equal to $a, b$, or any of the $x,y,z$ for which $R(x,y,z)$ hold. In other words, the relation $R$ and the constants $a,b,c$ obey the following additional axioms:
+Suppose we have a relation $R$ satisfying some theory $\Gamma$ (for instance, (VLT) together with (65)), but which is only finitely supported (there are only finitely many triples $(x,y,z)$ for which $R(x,y,z)$ holds).  Then one can find $a,b \in G$ such that $a \op b$ is currently undefined.  If the carrier $G$ is infinite (e.g., if $G = \N$), one can then find another element $c$ which is \emph{novel}: it is not equal to $a, b$, or any of the $x,y,z$ for which $R(x,y,z)$ hold. In other words, the relation $R$ and the constants $a,b,c$ satisfy the following additional axioms:
 \begin{description}
   \item[(novel-1)] $c \neq a$ and $c \neq b$.
   \item[(novel-2)] If $R(x,y,z)$, then $c \neq x$, $c \neq y$, and $c \neq z$.
   \item[(undefined)]  $R(a,b,x)$ does not hold for any $x$.
 \end{description}
 
-Let us say that a theory $\Gamma$ is \emph{greedily extensible} if, whenever $R$ is a finitely supported ternary relation obeying $\Gamma$, and $a,b,c$ are constants obeying (novel-1), (novel-2), (undefined), then there exists an extension $R'$ of $R$, thus
+Let us say that a theory $\Gamma$ is \emph{greedily extensible} if, whenever $R$ is a finitely supported ternary relation satisfying $\Gamma$, and $a,b,c$ are constants satisfying (novel-1), (novel-2), (undefined), then there exists an extension $R'$ of $R$, thus
 \begin{description}
   \item[(extend)] $R(x,y,z) \implies R'(x,y,z)$ for all $x,y,z$,
 \end{description}
-which is also finitely supported and obeys $\Gamma$, and which also obeys the additional axiom
+which is also finitely supported and satisfies $\Gamma$, and which also satisfies the additional axiom
 \begin{description}
   \item[(define)] $R'(a,b,c)$.
 \end{description}
 Informally, $R'$ is formed from $R$ by ``forcing'' $a \op b = c$ and then adding other axioms as needed. (Indeed, our construction here can be viewed as a simple analogue of the forcing construction in set theory.)
 
-Observe that if a theory $\Gamma$ containing (VLT) is greedily extensible, then any finitely supported ternary relation $R$ obeying $\Gamma$ on a countably infinite carrier $G$ can be extended to a globally defined relation obeying $\Gamma$, by iteratively selecting the first $(a,b)$ (in some fixed enumeration of $G \times G$) for which $a \op b$ is undefined, and then selecting a novel element $c$ to define as $a \op b$, and applying the greedily extensible property, and then taking a direct limit of the countable sequence of relations thus produced.  This gives a flexible way to construct magmas that obey a given theory $\Gamma$, but which violate some other law $w_1 \formaleq w_2$, as the task then reduces to just finding a partial solution $R$ to $\Gamma$ and some constants $x_1,\dots,x_n$ for which the expressions $w_1(x_1,\dots,x_n), w_2(x_1,\dots,x_n)$ are already well-defined, but not equal to each other.
+Observe that if a theory $\Gamma$ containing (VLT) is greedily extensible, then any finitely supported ternary relation $R$ satisfying $\Gamma$ on a countably infinite carrier $G$ can be extended to a globally defined relation satisfying $\Gamma$, by iteratively selecting the first $(a,b)$ (in some fixed enumeration of $G \times G$) for which $a \op b$ is undefined, and then selecting a novel element $c$ to define as $a \op b$, and applying the greedily extensible property, and then taking a direct limit of the countable sequence of relations thus produced.  This gives a flexible way to construct magmas that satisfy a given theory $\Gamma$, but which violate some other law $w_1 \formaleq w_2$, as the task then reduces to just finding a partial solution $R$ to $\Gamma$ and some constants $x_1,\dots,x_n$ for which the expressions $w_1(x_1,\dots,x_n), w_2(x_1,\dots,x_n)$ are already well-defined, but not equal to each other.
 
-Unfortunately, most theories are not greedily extensible without further modification.  Consider for instance the theory $\Gamma$ consisting of (VLT) and the Asterix law (65).  Given $a,b,c$ and a finitely supported $R$ obeying $\Gamma$ as well as (novel-1), (novel-2), (undefined), we would like to construct a finitely supported  $R'$ obeying $\Gamma$, (extend), (define).  The naive guess would just be to take the minimal construction
+Unfortunately, most theories are not greedily extensible without further modification.  Consider for instance the theory $\Gamma$ consisting of (VLT) and the Asterix law (65).  Given $a,b,c$ and a finitely supported $R$ satisfying $\Gamma$ as well as (novel-1), (novel-2), (undefined), we would like to construct a finitely supported  $R'$ satisfying $\Gamma$, (extend), (define).  The naive guess would just be to take the minimal construction
 $$ R'(x,y,z) \hbox{ iff } R(x,y,z) \hbox{ or } (x,y,z) = (a,b,c).$$
 This can work, but there is an obstruction: if $R(w,a,b)$ for some $w$, then (65) forces $R'(w,c,a)$.  So one would have to enlarge the definition of $R'(x,y,z)$, to hold true if one of the following statements holds:
 \begin{itemize}
@@ -336,15 +336,15 @@ With this modification to $\Gamma$, if we run the above analysis, we now see tha
   \item $(x,y,z) = (w,c,a)$ for some $w$ with $R(w,a,b)$.
   \item $(x,y,z) = (a,c,a)$, $(b,c,a)$, or $(c,c,a)$, assuming $R(b,a,b)$ holds.
 \end{itemize}
-One can then finally (for instance, with the assistance of a automated theorem prover) verify that if $R$ is finitely supported and obeys $\Gamma = (VLT) + (65) + (65')$ and $a,b,c$ obey (novel-1), (novel-2), (undefined), then the $R'$ defined above is also finitely supported and obeys $\Gamma$, (extend), (define).  This shows that the theory $\Gamma$ is greedily extensible.
+One can then finally (for instance, with the assistance of a automated theorem prover) verify that if $R$ is finitely supported and satisfies $\Gamma = (VLT) + (65) + (65')$ and $a,b,c$ satisfy (novel-1), (novel-2), (undefined), then the $R'$ defined above is also finitely supported and satisfies $\Gamma$, (extend), (define).  This shows that the theory $\Gamma$ is greedily extensible.
 
-Using this, one can for instance find a magma obeying \Equaref{65} that fails the left-cancellative property
+Using this, one can for instance find a magma satisfying \Equaref{65} that fails the left-cancellative property
 $$ y \op x = y \op x' \implies x=x'$$
 or in terms of ternary relations
 \begin{equation}\label{left-inject}
    R(y,x,z) \hbox{ and } R(y,x',z) \implies x=x'
 \end{equation}
-simply by starting with a partial solution, say on the natural numbers in which (e.g.) $R(1,2,0)$, $R(1,3,0)$ are the only situations in which $R$ holds.  One can easily verify that this obeys (VLT) and (65), (65'), but not \Cref{left-inject}, and so any magma constructed by the above greedy construction will not be left-cancellative.  Since the Obelix law \Equaref{1491} forces left-cancellativity, this gives an alternate proof of \Cref{asterix-obelix}.
+simply by starting with a partial solution, say on the natural numbers in which (e.g.) $R(1,2,0)$, $R(1,3,0)$ are the only situations in which $R$ holds.  One can easily verify that this satisfies (VLT) and (65), (65'), but not \Cref{left-inject}, and so any magma constructed by the above greedy construction will not be left-cancellative.  Since the Obelix law \Equaref{1491} forces left-cancellativity, this gives an alternate proof of \Cref{asterix-obelix}.
 
 \subsection{Equation 1722}
 
@@ -354,7 +354,7 @@ We illustrate the above technique by constructing solutions to equation 1722,
 \end{equation}
 We abbreviate $Sy := y \op y$.
 
-Define a \emph{partial solution} to be a partial function $\op: E \to \N$ on some finite subset $E$ of $\N \times \N$ (which one can also think of as a finitely supported ternary relation $R(x,y,z)$ obeying VLT) obeying the following axioms:
+Define a \emph{partial solution} to be a partial function $\op: E \to \N$ on some finite subset $E$ of $\N \times \N$ (which one can also think of as a finitely supported ternary relation $R(x,y,z)$ satisfying VLT) satisfying the following axioms:
 \begin{itemize}
 \item (Law 1) If $(x \op y) \op y$ is defined, then $Sy \op ((x \op y) \op y)$ is defined and equal to $x$.
 \item (Law 2) If  If $x \op y$ and $z \op y$ are defined and equal to each other, then $x=z$.
@@ -374,7 +374,7 @@ Define a \emph{partial solution} to be a partial function $\op: E \to \N$ on som
 \end{itemize}
 
 Now suppose that $a \op b$ is undefined for some $a \neq b$.  By applying the previous construction, we may assume without loss of generality that $Sb$ is defined.  We may assume that $a \op b$ remains undefined after doing so, since we are done otherwise.  By Law 3, $a \neq Sb \op b$.  By Law 2, we have $d \op b = a$ for at most one $d$, which is necessarily different from $Sb$.  Choose a $c$ not previously appearing in the domain or range of $\op$, and set $a \op' b = c$.  If a $d$ exists as before, we additionally set $Sb \op' c = d$.  Finally we define $x \op' y = x \op y$ whenever the right-hand side is defined.
-It is again routine to check that $\op'$ obeys Laws 2,3,4.  Now we case check Law 1.
+It is again routine to check that $\op'$ satisfies Laws 2,3,4.  Now we case check Law 1.
 
 \begin{itemize}
 \item Case 1.  $x=c$ or $x \op' y = c$.  Not possible since no left multiplication by $c$ is defined.
@@ -590,7 +590,7 @@ Similar computations verify the other two cases.
 
 However, setting $x=0$ and $y=-1$ in Equation 206, we get
 $$(x \op (x \op y)) \op y = (x \op 1) \op y = (-1) \op y = -1 \neq x$$
-so the magma does not obey \Equaref{206}. We can conclude
+so the magma does not satisfy \Equaref{206}. We can conclude
 
 \begin{theorem}[1648 does not imply 206]\label{non_imp_1648_206_thm}\uses{eq1648,eq206,models-def}
   \lean{Equation1648_not_implies_Equation206}\leanok
@@ -603,8 +603,8 @@ are also useful building blocks for the \emph{modified base model} constructions
 
 \subsection{Modified base models}
 
-For some pairs of laws $P$ and $Q$, it is possible to start with an infinite model $(M,\op)$ obeying both $P$ and $Q$,
-then modify the operation $\op$ in a limited way, resulting in a model $(M,\op')$ of $P$ that does not obey $Q$.
+For some pairs of laws $P$ and $Q$, it is possible to start with an infinite model $(M,\op)$ satisfying both $P$ and $Q$,
+then modify the operation $\op$ in a limited way, resulting in a model $(M,\op')$ of $P$ that does not satisfy $Q$.
 
 This works especially well when this \emph{base model} $(M,\op)$ is a translation-invariant magma in which
 the function $f$ takes finitely many different values. This is common: e.g. the translation-invariant model
@@ -639,7 +639,7 @@ It's easy to rule out some of the possibilities. For instance, setting $0 \op'' 
 yield $0 \op'' (0 \op'' 0) = 0 \op'' 1 = 0 \op'' (0 \op'' 1)$ again. The simplest possibility which results in
 a counterexample to \Equaref{4315} sets $0 \op'' 1 = 0$ and $x \op'' y = x \op y$ for any $x \neq 0, y \neq 1$.
 
-Unfortunately, the resulting $(M,\op'')$ would not then obey \Equaref{1659}. For any $z \in M$, one would have
+Unfortunately, the resulting $(M,\op'')$ would not then satisfy \Equaref{1659}. For any $z \in M$, one would have
 $$ (0 \op'' 1) \op'' ((1 \op'' 1) \op'' z) = 0 \op'' (2 \op'' z)$$
 which equals $0 \op'' 1 = 0$ as desired for even $z$, but equals $0 \op'' 3 = -1 \neq 0$ for odd $z$.
 
@@ -682,12 +682,12 @@ and so the Dupont law $x = y \op (x \op (x \op y))$ becomes the functional equat
 \begin{equation}\label{dupont-eq}
   f(f^2(h)-h) = -h.
 \end{equation}
-One way to solve this equation is to have an automorphism $T: G \to G$ that obeys the identity
+One way to solve this equation is to have an automorphism $T: G \to G$ that satisfies the identity
 $$ T^3 - T = -I,$$
 then one can just take $f(h) = T(h)$.  For instance, if $G = \Z^3$, one can take the automorphism $T: \Z^3 \to \Z^3$ defined by
 $$ T(x,y,z) := (-z,x+z,y).$$
 
-We now extend this greedily to $\Z^3 \times \Z$ as follows.  Define a \emph{partial solution} $(E_1,E_2,f)$ to be a pair $\Z^3 \subset E_1 \subset E_2 \subset \Z^3 \times \Z$, and a function $f: E_2 \to E_1$ obeying the following axioms.
+We now extend this greedily to $\Z^3 \times \Z$ as follows.  Define a \emph{partial solution} $(E_1,E_2,f)$ to be a pair $\Z^3 \subset E_1 \subset E_2 \subset \Z^3 \times \Z$, and a function $f: E_2 \to E_1$ satisfying the following axioms.
 \begin{description}
   \item[(a)] The set $E_2 \backslash \Z^3$ is finite.
   \item[(b)] For $h \in \Z^3$, $f(h) = Th$; in particular, $f$ is a bijection on $\Z^3$.
@@ -734,7 +734,7 @@ We then define an extension $f'$ of $f$ to $E'_2$ by setting
  f'(h+x) &:= h \\
  f'(h - f^2(h)) &:= -h.
 \end{align*}
-It is easy to see that $(E'_1,E'_2,f')$ obeys properties (a), (b), (d).  By construction, we have
+It is easy to see that $(E'_1,E'_2,f')$ satisfies properties (a), (b), (d).  By construction, we have
 $$ f'( (f')^2(h') - h') = -h'$$
 for
 $$ h' = \pm h, \pm x, \pm x+Ta, \pm x-Ta$$
@@ -770,7 +770,7 @@ Now suppose that $h$ lies in $\tilde E_2$.  Then $h$ is of one of the forms \Cre
 
 Iterating these lemmas in the usual fashion, we can conclude that any partial solution can be completed to a global model of \Equaref{63}.
 
-Among other things, this permits one to generate models in which the function $f$ is not injective.  To see this, let $a$ be a non-zero element of $\Z^3$, let $x$ be an element of $\Z^3 \times \Z$ outside of $\Z^3$, and consider the partial solution $(\Z^3, \Z^3 \cup \{x\}, f)$ where $f(h) = Th$ for $h \in \Z^3$ and $f(x) = a$.  One can check that this is a partial solution and is not injective, since $f(x) = f(T^{-1} a)$.  This non-injectivity implies in particular that the model is not left-cancellative, and hence does not obey the law
+Among other things, this permits one to generate models in which the function $f$ is not injective.  To see this, let $a$ be a non-zero element of $\Z^3$, let $x$ be an element of $\Z^3 \times \Z$ outside of $\Z^3$, and consider the partial solution $(\Z^3, \Z^3 \cup \{x\}, f)$ where $f(h) = Th$ for $h \in \Z^3$ and $f(x) = a$.  One can check that this is a partial solution and is not injective, since $f(x) = f(T^{-1} a)$.  This non-injectivity implies in particular that the model is not left-cancellative, and hence does not satisfy the law
 $$ x = (y \op x) \op ((y \op x) \op y)$$
 (equation 1692).
 
@@ -781,7 +781,7 @@ We now give a second construction, with works on the integers $G = \Z$.
 We first define a seed solution $f_0: E_0 \to \Z$ defined on the set $E_0 := \{-7, -3, -2, -1, 0, 1, 3, 4, 6 \}$ with
 $$ f(-7)=-4, f(-3) = 4, f(-2)=-3, f(-1)=-1, f(0) = 1, f(1) = 3, f(3)=0, f(4) = -2, f(6) = 2.$$
 
-In this construction, we define a partial solution to be a function $f: E \to \Z$ defined on a finite subset of $E$ obeying the following axioms:
+In this construction, we define a partial solution to be a function $f: E \to \Z$ defined on a finite subset of $E$ satisfying the following axioms:
 \lean{Eq63.Greedy.PartialSolution}
 \begin{itemize}
 \item[(i)] $E$ contains $E_0$, and $f$ agrees with $f_0$ on $E_0$.
@@ -827,7 +827,7 @@ We then extend $f$ to $f': E' \to \Z$ by setting
   f(c-h) &:= -h \\
   f(-c+h'+f(-h')) &:= h' - c
 \end{align*}
-for all $h \in H$ and $h' \in H'$.  Axiom (i) is then obvious.  Axiom (ii) needs to be verified for the new elements $h_0$ and $c-h'$, $h' \in H'$ of $E'$ (the other elements will not obey the hypotheses of this axiom), but this is routine.  In particular $h_0$ obeys the required conclusion of this lemma.
+for all $h \in H$ and $h' \in H'$.  Axiom (i) is then obvious.  Axiom (ii) needs to be verified for the new elements $h_0$ and $c-h'$, $h' \in H'$ of $E'$ (the other elements will not satisfy the hypotheses of this axiom), but this is routine.  In particular $h_0$ satisfies the required conclusion of this lemma.
 
 We need to verify (iii) for the new elements of $E'$, but this is clear from property (a) and claim 2.
 
@@ -896,9 +896,9 @@ It is a routine matter to verify \Cref{fdef} and \Cref{xop}, so that equation 33
 \end{proof}
 
 %\begin{theorem}[3475 construction]\label{3475-construct}
-%There exists a magma that obeys equation 3475,
+%There exists a magma that satisfies equation 3475,
 %$$ x \op x = y \op ((x \op y) \op y),$$
-%but does not obey equation 3659,
+%but does not satisfy equation 3659,
 %$$x \op x = (x \op x) \op (x \op x)$$
 %\end{theorem}
 %
@@ -924,13 +924,13 @@ It is a routine matter to verify \Cref{fdef} and \Cref{xop}, so that equation 33
 %\end{proof}
 
 
-\begin{theorem}[1437 example]\label{1437-thm}  There exists a magma that obeys Equation 1437,
+\begin{theorem}[1437 example]\label{1437-thm}  There exists a magma that satisfies Equation 1437,
   $$ x = (x \op x) \op (y \op (z \op x)),$$
-but does not obey equation 4269,
+but does not satisfy equation 4269,
 $$ x \op (x \op x) = x \op (y \op x).$$
 \end{theorem}
 
-\begin{proof} A first attempt would be the operation $i \op j := j+1$ on $\Z/3\Z$; this obeys 1437, but unfortunately also obeys 4269.  However, an "extension" of this operation will work. Namely, we take the carrier $G = \N \times \Z/3\Z$ and define $(a,i) \op (b,j)$ to equal
+\begin{proof} A first attempt would be the operation $i \op j := j+1$ on $\Z/3\Z$; this satisfies 1437, but unfortunately also satisfies 4269.  However, an "extension" of this operation will work. Namely, we take the carrier $G = \N \times \Z/3\Z$ and define $(a,i) \op (b,j)$ to equal
   \begin{itemize}
     \item $(a-1,j+1)$ if $i=j+2$ and $a>0$;
     \item $(b,j+1)$ if $i=j+2$ and $a=0$;
