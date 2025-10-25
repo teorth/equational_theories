@@ -1,6 +1,6 @@
 ## A twist of the semi-symmetric quasigroup law
 
-A magma satisfying this law is a quasigroup (left and right multiplication are bijective).  The squaring and right cubing maps `S: x ↦ x◇x` and `C: x ↦ (x◇x)◇x` are automorphisms, inverses of each other (`S(C(x)) = C(S(x)) = x` and `S(x◇y)=S(x)◇S(y)`).  The magma obeys the left crossed inverse property, [law 4588](https://teorth.github.io/equational_theories/implications/?4588), stating that `(y◇x)◇y` is `y`-independent, specifically `(y◇x)◇y = S⁻¹(x)`.  More symmetrically, for any three elements `x,y,z` of the magma, the equations `x◇y=z`, `y◇S(z)=x`, `S(z◇x)=y` are equivalent.
+A magma satisfying this law is a quasigroup (left and right multiplication are bijective).  The squaring and right cubing maps `S: x ↦ x◇x` and `C: x ↦ (x◇x)◇x` are automorphisms, inverses of each other (`S(C(x)) = C(S(x)) = x` and `S(x◇y)=S(x)◇S(y)`).  The magma satisfies the left crossed inverse property, [law 4588](https://teorth.github.io/equational_theories/implications/?4588), stating that `(y◇x)◇y` is `y`-independent, specifically `(y◇x)◇y = S⁻¹(x)`.  More symmetrically, for any three elements `x,y,z` of the magma, the equations `x◇y=z`, `y◇S(z)=x`, `S(z◇x)=y` are equivalent.
 
 This law cannot hold in a non-trivial semigroup (associative magma).
 

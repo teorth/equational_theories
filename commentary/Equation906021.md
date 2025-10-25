@@ -1,3 +1,3 @@
 ## Second law of Jordan algebras
 
-The multiplication in a Jordan algebra obeys the [commutative law 43](https://teorth.github.io/equational_theories/implications/?43) together with this law.
+The multiplication in a Jordan algebra  the [commutative law 43](https://teorth.github.io/equational_theories/implications/?43) together with this law.
