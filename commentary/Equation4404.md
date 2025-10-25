@@ -1,4 +1,4 @@
-This law is equivalent to stating that `x ◇ (x ◇ _)` and `(x ◇ _) ◇ _` only depend on `x` and are equal.  The set of cubes `x◇(x◇x) = (x◇x)◇x`, and the set of squares `x◇x`, are submagmas.  The squaring map `S: x ↦ x◇x`  `S(S(S(x))) = S(S(x))`.  Any idempotent element (such as `S(S(x))`) is a left zero.
+This law is equivalent to stating that `x ◇ (x ◇ _)` and `(x ◇ _) ◇ _` only depend on `x` and are equal.  The set of cubes `x◇(x◇x) = (x◇x)◇x`, and the set of squares `x◇x`, are submagmas.  The squaring map `S: x ↦ x◇x` satisfies `S(S(S(x))) = S(S(x))`.  Any idempotent element (such as `S(S(x))`) is a left zero.
 
 This law cannot hold in a non-trivial quasigroup.
 

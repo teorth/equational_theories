@@ -96,7 +96,7 @@ lemma S_sub (a b: SM) : S (a - b) = S a + S b := by
 lemma S_eval (a : SM) (n:ℕ) : S a n = a n + a n := by
   simp [SM_square_eq_double]
 
-lemma SM__1729 : Equation1729 SM := by
+lemma SM_satisfies_1729 : Equation1729 SM := by
   intro x y
   simp only [SM_op_eq_add, SM_square_eq_double]
   symm
@@ -446,7 +446,7 @@ lemma reduce_to_new_axioms {S': N → SM} {L₀' : N → N} {op: N → N → M} 
       intro x y
       simp [Equiv.coe_fn_mk, SM_op_eq_add, L, AddCommMonoid.add_comm]
     right_map_SM := fun x y ↦ rfl
-    SM_sat_1729 := SM__1729
+    SM_sat_1729 := SM_satisfies_1729
     axiom_1 := by
       intro a x
       simp [L', SM_square_square_eq_zero, Equiv.coe_fn_mk]
