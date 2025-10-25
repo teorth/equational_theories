@@ -103,7 +103,7 @@ for all $x,y \in G$, then the operation
 $$ (x,s) \diamond (y,t) := (x \diamond y, s \diamond_{x,y} t)$$
 is easily seen to be a 677 magma.  It is right-injective if $G$ and all of the $\op_{y,x}$ are right-injective.
 
-Suppose $M$ is a field that admits a primitive cube root of unity $\omega$ as well as a primitive fifth root of unity $\zeta$ (for instance, $M$ could be a field of order $16$).  Then the three operations
+Suppose $M$ is a field that admits a primitive cube root of unity $\omega$ as well as a primitive fifth root of unity $\zeta$ (for instance, $M$ could be a field of size $16$).  Then the three operations
 $$ s \op^0 t := s - \zeta(t-s)$$
 $$ s \op^+ t := t$$
 $$ s \op^- t := s - \omega(t-s)$$
@@ -113,7 +113,7 @@ $$s = t \op^+ (s \op^+ ((t \op^- s) \op^- t))$$
 $$s = t \op^- (s \op^- ((t \op^+ s) \op^+ t))$$
 for all $t,s$.
 
-Now suppose that $G$ is also a field with a primitive fifth root of unity $\beta$ (so that $\beta = \beta^4$ is a quadratic residue), but $-1$ and $\beta+1$ are non-zero quadratic non-residues (for instance, $G$ could be the field of order $31$, with $\beta=2$).  If we define $x \op y = x - \beta(y-x)$, and then define $\op_{x,y}$ to be $\op^0$ when $y=x$, $\op^+$ when $y-x$ is a non-zero quadratic residue, and $\op^-$ when $y-x$ is a non-zero quadratic non-residue, one can then check that \eqref{ext-eq} holds. Since $\op^0$ is not right-cancellative, this gives a finite 677 magma that is not right-cancellative.
+Now suppose that $G$ is also a field with a primitive fifth root of unity $\beta$ (so that $\beta = \beta^4$ is a quadratic residue), but $-1$ and $\beta+1$ are non-zero quadratic non-residues (for instance, $G$ could be the field of size $31$, with $\beta=2$).  If we define $x \op y = x - \beta(y-x)$, and then define $\op_{x,y}$ to be $\op^0$ when $y=x$, $\op^+$ when $y-x$ is a non-zero quadratic residue, and $\op^-$ when $y-x$ is a non-zero quadratic non-residue, one can then check that \eqref{ext-eq} holds. Since $\op^0$ is not right-cancellative, this gives a finite 677 magma that is not right-cancellative.
 
 
 \section{The free 677 magma}
