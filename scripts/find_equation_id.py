@@ -16,7 +16,7 @@ ignored):
 When used as a module imported in python code, one can use
 - eq = Equation.from_id(integer id)
 - eq = Equation.from_str(string)
-- eq.id()
+- eq.id
 - all_eqs(integer order)
 - eq.dual()
 
