@@ -12,7 +12,7 @@ the `◇` operation is subtraction in the group. This was proved by Tarski.
 
 There are a few distinct ways one can look to generalize this, depending on what precisely one counts
 as "having the structure". These each induce a preorder, which include the "implies" preorder as a
-subset (because you can just take the same operation again, and it now  the implied equation).
+subset (because you can just take the same operation again, and it now satisfies the implied equation).
 -/
 
 section definitions
@@ -98,7 +98,7 @@ namespace Law.MagmaLaw
 
 /-- A MagmaLaw L is definable on a given Magma ⟨M,◇⟩ if it possible to define an
 operation □ on M in first-order logic, in the language given by just ◇, such that
-the new magma ⟨M,□⟩  the MagmaLaw L.
+the new magma ⟨M,□⟩ satisfies the MagmaLaw L.
 -/
 def DefinableOnMagma (L : Law.MagmaLaw β) (M : Magma G) : Prop :=
   --If there exists a magma M',
@@ -115,7 +115,7 @@ def DefinableFrom (L L' : Law.MagmaLaw β) : Prop :=
 
 /-- A MagmaLaw L is term-definable on a given Magma ⟨M,◇⟩ if it possible to define an
 operation □ on M as just an expression in terms of ◇, such that
-the new magma ⟨M,□⟩  the MagmaLaw L.
+the new magma ⟨M,□⟩ satisfies the MagmaLaw L.
 -/
 def TermDefinableOnMagma (L : Law.MagmaLaw β) (M : Magma G) : Prop :=
   --If there exists a magma M',

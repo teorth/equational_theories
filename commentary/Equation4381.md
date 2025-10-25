@@ -1,4 +1,4 @@
-This law implies that the squaring map `S: x ↦ x◇x`  `S(S(S(x))) = S(S(x))`.
+This law implies that the squaring map `S: x ↦ x◇x` satisfies `S(S(S(x))) = S(S(x))`.
 
 Any idempotent element (such as `S(S(x))`) is a left zero.
 

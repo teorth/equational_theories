@@ -33,7 +33,7 @@ One source of matching invariants comes from the free magma $\Magma_{X,\Gamma}$ 
 	\arrow["{\varphi_f}"', curve={height=18pt}, pos=0.6, below, from=3-1, to=3-5]
 	\arrow["{\varphi_{f,\Gamma}}", pos=0.5, above, from=3-3, to=3-5]
 \end{tikzcd}\]
-In particular, the hypothesis $I(w_1)=I(w_2)$ implies that $\varphi_f(w_1) = \varphi_f(w_2)$ for all $f \colon X \to M_{X,\Gamma}$; that is to say, the magma $\Magma_{X,\Gamma}$  the law $w_1 \formaleq w_2$, and hence also $w'_1 \formaleq w'_2$ by hypothesis.  Thus $\varphi_{\iota_{X,\Gamma}}(w'_1) = \varphi_{\iota_{X,\Gamma}}(w'_2)$, which gives $I(w'_1) = I(w'_2)$ as required.
+In particular, the hypothesis $I(w_1)=I(w_2)$ implies that $\varphi_f(w_1) = \varphi_f(w_2)$ for all $f \colon X \to M_{X,\Gamma}$; that is to say, the magma $\Magma_{X,\Gamma}$ satisfies the law $w_1 \formaleq w_2$, and hence also $w'_1 \formaleq w'_2$ by hypothesis.  Thus $\varphi_{\iota_{X,\Gamma}}(w'_1) = \varphi_{\iota_{X,\Gamma}}(w'_2)$, which gives $I(w'_1) = I(w'_2)$ as required.
 \end{proof}
 
 \begin{example}  If we take $\Gamma = \{\Eq{4}\}$ to be the theory of the left-absorptive law \eqref{eq4} as described in \Cref{left-absorb}, then the matching invariant $I(w)$ produced by \Cref{free-inv} is the left-most letter of the alphabet $X$ appearing in the word; for instance $I((\x \op \y) \op \z) = \x$.  Thus, for example, the left-absorptive law \eqref{eq4} cannot imply the right-absorptive law \eqref{eq5}.
@@ -116,7 +116,7 @@ Though we note that the non-overlapping criterion seems very similar to the noti
 
 \subsection{Unique factorization}
 
-In general, the free magma $\Magma_{X,\E}$ for a given equational law $\E$, which we can canonically define as $\Magma_X/\!\sim_\E$, is hard to describe explicitly; indeed, from the undecidability of implications between equational laws, such a magma cannot be computably described for arbitrary $\E$.  Nevertheless, for some laws it is possible to obtain some partial understanding of $\Magma_{X,\E}$ from a syntactic perspective.  For instance, if we can refute the equivalence $w'_1 \sim_\E w'_2$ by constructing a counterexample magma $\Magma$ that  $\E$ but not $w'_1 \formaleq w'_2$, then this implies that the representatives $\iota_{X,\E}(w'_1), \iota_{X,\E}(w'_2)$ of  $w'_1, w'_2$ in $\Magma_{X,\E}$ are distinct.
+In general, the free magma $\Magma_{X,\E}$ for a given equational law $\E$, which we can canonically define as $\Magma_X/\!\sim_\E$, is hard to describe explicitly; indeed, from the undecidability of implications between equational laws, such a magma cannot be computably described for arbitrary $\E$.  Nevertheless, for some laws it is possible to obtain some partial understanding of $\Magma_{X,\E}$ from a syntactic perspective.  For instance, if we can refute the equivalence $w'_1 \sim_\E w'_2$ by constructing a counterexample magma $\Magma$ that satisfies $\E$ but not $w'_1 \formaleq w'_2$, then this implies that the representatives $\iota_{X,\E}(w'_1), \iota_{X,\E}(w'_2)$ of  $w'_1, w'_2$ in $\Magma_{X,\E}$ are distinct.
 
 We illustrate this approach with equations $\E$ of the left-absorptive form
 \begin{equation}\label{left-absorptive}

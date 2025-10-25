@@ -1,7 +1,7 @@
 # Finite Magma Explorer
 
 The Finite Magma Explorer allows you to input the operation table of a finite magma, and tells
-you which equations the given magma . You can access the Finite Magma Explorer from the
+you which equations the given magma satisfies. You can access the Finite Magma Explorer from the
 website.
 
 **Features:**
