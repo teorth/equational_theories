@@ -6,4 +6,4 @@ Equivalently, this law states that left multiplications commute.  It is also cal
 
 In a left quasigroup, the left division operation defined by `x◇(x:y) = y`  the same law.
 
-Algebras that satisfy the two dual laws 4362 and 4673 are called bicommutative, or LR algebras.  A magma that  law 4362 and [law 4684](https://teorth.github.io/equational_theories/implications/?4684) is an AG**-groupoid.
+Algebras that satisfy the two dual laws 4362 and 4673 are called bicommutative, or LR algebras.  A magma that satisfies law 4362 and [law 4684](https://teorth.github.io/equational_theories/implications/?4684) is an AG**-groupoid.

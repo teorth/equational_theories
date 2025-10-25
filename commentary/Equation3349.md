@@ -1,6 +1,6 @@
 ## A law for sets equipped with a self-map satisfying `f ∘ f ∘ f = f`
 
-This law is equivalent to stating that the magma operation is right-projection composed with squaring (namely `x◇y=y◇y`, a form of [law 39](https://teorth.github.io/equational_theories/implications/?39)) and that the squaring map `S: M→M`  `S(S(S(S(x)))) = S(x)`.  The second condition can be replaced by the shorter [law 3253](https://teorth.github.io/equational_theories/implications/?3253) `x◇x=x◇(x◇(x◇x))`.
+This law is equivalent to stating that the magma operation is right-projection composed with squaring (namely `x◇y=y◇y`, a form of [law 39](https://teorth.github.io/equational_theories/implications/?39)) and that the squaring map `S: x ↦ x◇x` satisfies `S(S(S(S(x)))) = S(x)`.  The second condition can be replaced by the shorter [law 3253](https://teorth.github.io/equational_theories/implications/?3253) `x◇x=x◇(x◇(x◇x))`.
 
 Such magmas are in one-to-one correspondence with sets equipped with a self-map that cubes to itself.  This law cannot hold in a non-trivial quasigroup.  Magmas satisfying this law are always submagmas of linear magmas satisfying this law.
 

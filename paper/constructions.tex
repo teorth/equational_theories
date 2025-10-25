@@ -91,14 +91,14 @@ For such models, the verification of an equational law in $n$ variables correspo
   (x \op y) \op y &= x + f(h) + f(h-f(h)) \\
   (x \op y) \op ((x \op y) \op y) &= x + f(h) + f(f(h-f(h)))
 \end{align*}
-so that this law  \eqref{eq1648} if and only if the functional equation
+so that this model satisfies \eqref{eq1648} if and only if the functional equation
 $$f(h) + f(f(h-f(h))) = 0$$
 holds for all $h \in M$.  Similarly, the law $\x \formaleq (\x \op (\x \op \y)) \op \y$ \eqref{eq206} is satisfied if and only if
 $$ f(f(h)) + f(h - f(f(h))) = 0$$
-for all $h \in M$.  One can now check that the function $f \colon \Z \to \Z$ defined by $f(h) \coloneqq - \mathrm{sgn}(h)$ (thus $f(h)$ equals $-1$ when $h$ is positive, $+1$ when $h$ is negative, and $0$ when $h$ is zero)  the first functional equation but not the second, thus establishing that $\Eq{1648} \nmodels \Eq{206}$.
+for all $h \in M$.  One can now check that the function $f \colon \Z \to \Z$ defined by $f(h) \coloneqq - \mathrm{sgn}(h)$ (thus $f(h)$ equals $-1$ when $h$ is positive, $+1$ when $h$ is negative, and $0$ when $h$ is zero) satisfies the first functional equation but not the second, thus establishing that $\Eq{1648} \nmodels \Eq{206}$.
 \end{example}
 
-\begin{example}[Non-abelian example]\label{trans-nonab}  We now obtain the opposite refutation $\Eq{206} \nmodels \Eq{1648}$ to \Cref{abex} using the non-abelian translation-invariant model.  By similar calculations to before, we now seek to find a function $f \colon M \to M$ on a non-abelian group $(M,\cdot)$ that  the functional equation
+\begin{example}[Non-abelian example]\label{trans-nonab}  We now obtain the opposite refutation $\Eq{206} \nmodels \Eq{1648}$ to \Cref{abex} using the non-abelian translation-invariant model.  By similar calculations to before, we now seek to find a function $f \colon M \to M$ on a non-abelian group $(M,\cdot)$ that satisfies the functional equation
 \begin{equation}\label{206-eq}
  f(f(h)) f(f(f(h))^{-1} h) = 1
 \end{equation}
@@ -111,20 +111,20 @@ $$ f(1) = 1, f(a)=b, f(b) = c, f(c) = a$$
 and then $f(aw)=a$ for any non-empty reduced word $w$ not starting with $a$, and similarly for $b$ and $c$.  The equation \eqref{206-eq} can be checked directly for $h=1,a,b,c$.  If $h=aw$ with $w$ non-empty, reduced, and not starting with $a$, then $f(f(h))^{-1} = f(f(h)) = b$ and $f(f(f(h))^{-1} h) = f(baw) = b$, giving \eqref{206-eq} in this case, and similarly for cyclic permutations. Meanwhile, \eqref{1648-eq} can be checked to fail for $h=a$.
 \end{example}
 
-\begin{remark}  The construction in \Cref{trans-nonab} also has the following more ``geometric'' interpretation.  The carrier $M$ can be viewed as the infinite $3$-regular tree, in which every vertex imposes a cyclic ordering on its $3$ neighbors (for instance, if we embed $M$ as a planar graph, we can use the clockwise ordering).  For $x,y \in M$, we then define $x \op y$ to equal $x$ if $x=y$.  If $y$ is instead a neighbor of $x$, we define $x \op y$ to be the next neighbor of $x$ in the cyclic ordering.  Finally, if $y$ is distance two or more from $x$, we define $x \op y$ to be the neighbor of $x$ that is closest to $y$.  One can then check that this model  \eqref{206-eq} but not \eqref{1648-eq}.
+\begin{remark}  The construction in \Cref{trans-nonab} also has the following more ``geometric'' interpretation.  The carrier $M$ can be viewed as the infinite $3$-regular tree, in which every vertex imposes a cyclic ordering on its $3$ neighbors (for instance, if we embed $M$ as a planar graph, we can use the clockwise ordering).  For $x,y \in M$, we then define $x \op y$ to equal $x$ if $x=y$.  If $y$ is instead a neighbor of $x$, we define $x \op y$ to be the next neighbor of $x$ in the cyclic ordering.  Finally, if $y$ is distance two or more from $x$, we define $x \op y$ to be the neighbor of $x$ that is closest to $y$.  One can then check that this model satisfies \eqref{206-eq} but not \eqref{1648-eq}.
 \end{remark}
 
 \begin{remark} These constructions are necessarily infinitary in nature, because \eqref{eq206} and \eqref{eq1648} can be shown to be equivalent for finite magmas. Indeed, \eqref{eq206} can be written as $x = R_y L_x L_x y$, which implies that $R_y$ is surjective, hence injective, on a finite magma; writing $x = R_y z$ we conclude that $R_y z = R_y L_{z \op y} L_{z \op y} y$ and hence $z = L_{z \op y} L_{z \op y} y$, giving \eqref{eq1648}.  The opposite implication is similar (using \eqref{eq1648} to show that $R_y$ is injective, hence surjective), and is left to the reader.
 \end{remark}
 
-  Some refutations $\E \nmodels {\E'}$ are ``immune'' by translation-invariant models, in the sense that any translation-invariant model that  $\E$, also  ${\E'}$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes force the implication $\E \models {\E'}$ to hold.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \eqref{eq4482} for a square and an arbitrary element will imply the full commutative law \eqref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
+  Some refutations $\E \nmodels {\E'}$ are ``immune'' by translation-invariant models, in the sense that any translation-invariant model that satisfies $\E$, also satisfies ${\E'}$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes force the implication $\E \models {\E'}$ to hold.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \eqref{eq4482} for a square and an arbitrary element will imply the full commutative law \eqref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
 
 \subsection{The twisting semigroup}\label{twisting-sec}
 
 Suppose one has a magma $\Magma$ satisfying a law $\E$, that also enjoys some endomorphisms $T, U \colon \Magma \to \Magma$.  Then one can ``twist'' the operation $\op$ by $T,U$ to obtain a new magma operation
 \begin{equation}\label{twist} x \op' y := Tx \op Uy.
 \end{equation}
-If one then tests whether this new operation $\op'$  the same law $\E$ as the original operation $\op$, one will find that this will be the case provided that $T,U$ satisfy a certain set of relations.  The semigroup generated by formal generators $\mathrm{T}, \mathrm{U}$ with these relations will be called the \emph{twisting semigroup} $\operatorname{Twist}_\E$ of $\E$.  This can be best illustrated with some examples.
+If one then tests whether this new operation $\op'$ satisfies the same law $\E$ as the original operation $\op$, one will find that this will be the case provided that $T,U$ satisfy a certain set of relations.  The semigroup generated by formal generators $\mathrm{T}, \mathrm{U}$ with these relations will be called the \emph{twisting semigroup} $\operatorname{Twist}_\E$ of $\E$.  This can be best illustrated with some examples.
 
 \begin{example}  We compute the twisting semigroup of $\x \formaleq (\y \op \x) \op (\x \op (\z \op \y))$ \eqref{eq1485}.  We test this law on the operation \eqref{twist}, thus we consider whether
 $$x = (y \op' x) \op' (x \op' (z \op' y))$$
@@ -150,11 +150,11 @@ which satisfy the relations defining $\operatorname{Twist}_\E$.
 
 For instance, a non-trivial finite model for \eqref{eq1485} is given by the finite field $\mathbb{F}_2$ of two elements with the NAND operation $x \op y \coloneqq 1-xy$.  If we twist $\mathbb{F}_2^5$ by the left shift $T(x_i)_{i=1}^5 = (x_{i+1})_{i=1}^5$ and right shift $U(x_i)_{i=1}^5 = (x_{i-1})_{i=1}^5$, where we extend the indices periodically modulo $5$, then the resulting operation
 $$ (x_i)_{i=1}^5 \op' (y_i)_{i=1}^5 \coloneqq (1 - x_{i+1} y_{i-1})_{i=1}^5$$
-on $\mathbb{F}_2^5$ still  \eqref{eq1485}, but does not satisfy \eqref{eq151}, thus showing that $\Eq{1485} \nmodelsfin \Eq{151}$ and hence $\Eq{1485} \nmodels \Eq{151}$.  This particular implication does not seem to be easily establishable by any of the other methods discussed in this paper.
+on $\mathbb{F}_2^5$ still satisfies \eqref{eq1485}, but does not satisfy \eqref{eq151}, thus showing that $\Eq{1485} \nmodelsfin \Eq{151}$ and hence $\Eq{1485} \nmodels \Eq{151}$.  This particular implication does not seem to be easily establishable by any of the other methods discussed in this paper.
 
 \subsection{Greedy constructions}\label{greedy-sec}
 
-We have found \emph{greedy extension methods}, or \emph{greedy methods} for short, to be a powerful way to refute implications, especially when the carrier $M$ is allowed to be infinite.  Such constructions have a long history in model theory, with possibly the earliest\footnote{We thank Stanley Burris for this reference.} such construction due to Skolem \cite{skolem}. A basic implementation of this method is as follows.  To build a magma operation $\op \colon M \times M \to M$ that  one law $\E$ but not another ${\E'}$, one can first consider \emph{partial magma operations} $\op \colon \Omega \to M$, defined on some subset $\Omega$ of $M \times M$. Thus $x \op y$ is defined if and only if $(x,y) \in \Omega$. A magma operation is then simply a partial operation which is \emph{total} in the sense that $\Omega = M \times M$.  We say that a partial magma operation is \emph{finitely supported} if $\Omega$ is finite.
+We have found \emph{greedy extension methods}, or \emph{greedy methods} for short, to be a powerful way to refute implications, especially when the carrier $M$ is allowed to be infinite.  Such constructions have a long history in model theory, with possibly the earliest\footnote{We thank Stanley Burris for this reference.} such construction due to Skolem \cite{skolem}. A basic implementation of this method is as follows.  To build a magma operation $\op \colon M \times M \to M$ that satisfies one law $\E$ but not another ${\E'}$, one can first consider \emph{partial magma operations} $\op \colon \Omega \to M$, defined on some subset $\Omega$ of $M \times M$. Thus $x \op y$ is defined if and only if $(x,y) \in \Omega$. A magma operation is then simply a partial operation which is \emph{total} in the sense that $\Omega = M \times M$.  We say that a partial magma operation is \emph{finitely supported} if $\Omega$ is finite.
 
 In the language of first-order logic, a partial magma operation can also be viewed as a ternary relation $R(x,y,z)$ on $M$ with the axiom that $R(x,y,z) \wedge R(x,y,z') \implies z=z'$ for all $x,y,z \in M$.  The support $\Omega$ is then the set of $(x,y)$ for which $R(x,y,z)$ holds for some (necessarily unique) $z$, which one can then take to be the definition of $z = x \op y$.
 
@@ -165,7 +165,7 @@ Abstractly, the greedy algorithm strategy can now be described as follows.
 \begin{theorem}[Abstract greedy algorithm]\label{greedy-abstract} Let $\E,{\E'}$ be equational laws, and let $\Gamma$ be a theory of first-order sentences regarding a  partial magma operations $\op \colon \Omega \to M$ on a carrier $M$.  Assume the following axioms:
 \begin{itemize}
   \item[(i)] (Seed) There exists a finitely supported partial magma operation $\op_0 \colon \Omega_0 \to M$ satisfying $\Gamma$ that contradicts ${\E'}$, in the sense that there is some assignment of variables in ${\E'}$ in $M$ such that both sides of ${\E'}$ are defined using $\op_0$, but not equal to each other.
-  \item[(ii)]  (Soundness)  If $\op_n \colon \Omega_n \to M$ is a sequence of partial magma operations satisfying $\Gamma$ with each $\op_{n+1}$ an extension of $\op_n$, and the direct limit $\op_\infty$ is total, then this limit  $\E$.
+  \item[(ii)]  (Soundness)  If $\op_n \colon \Omega_n \to M$ is a sequence of partial magma operations satisfying $\Gamma$ with each $\op_{n+1}$ an extension of $\op_n$, and the direct limit $\op_\infty$ is total, then this limit satisfies $\E$.
   \item[(iii)] (Greedy extension)  If $\op \colon \Omega \to M$ is a finitely supported partial magma operation satisfying $\Gamma$, and $a,b \in M$, then there exists a finitely supported extension $\op' \colon \Omega' \to M'$ of $\op$ to a possibly larger carrier $M'$, and also satisfying $\Gamma$, such that $a \op' b$ is defined.
 \end{itemize}
 Then $\E \nmodels {\E'}$.
@@ -174,7 +174,7 @@ Then $\E \nmodels {\E'}$.
 We remark that this greedy method seems to be inherently infinitary in nature, and does not seem well adapted to refute finite magma implications $\E \modelsfin {\E'}$.
 
 \begin{proof}  We work on the countably infinite carrier $\N$.  By embedding the finitely supported operation $\op_0$ from axiom (i) into $\N$, we can assume without loss of generality that $\op_0$ has carrier $\N$.  By similar relabeling, we can assume in (iii) that $M' = M$ when $M=\N$, since any elements of $M' \backslash \N$ that
-appear in $\Omega'$ can simply be reassigned to natural numbers that did not previously appear in $\Omega$.  We well-order the pairs in $\N \times \N$ by $(a_n,b_n)$ for $n=1,2,\dots$.  Iterating (iii) starting from $\op_0$, we can thus create a sequence of finitely supported magma operations $\op_0, \op_1, \dots$ on $\N$ satisfying $\Gamma$, with each $\op_{n+1}$ an extension of $\op_n$, and $a_n \op_n b_n$ defined for all $n \geq 1$.  Then the direct limit $\op_\infty$ of these operations is total, and does not satisfy ${\E'}$ thanks to axiom (i).  On the other hand, by axiom (ii) it  $\E$, and the claim follows.
+appear in $\Omega'$ can simply be reassigned to natural numbers that did not previously appear in $\Omega$.  We well-order the pairs in $\N \times \N$ by $(a_n,b_n)$ for $n=1,2,\dots$.  Iterating (iii) starting from $\op_0$, we can thus create a sequence of finitely supported magma operations $\op_0, \op_1, \dots$ on $\N$ satisfying $\Gamma$, with each $\op_{n+1}$ an extension of $\op_n$, and $a_n \op_n b_n$ defined for all $n \geq 1$.  Then the direct limit $\op_\infty$ of these operations is total, and does not satisfy ${\E'}$ thanks to axiom (i).  On the other hand, by axiom (ii) it satisfies $\E$, and the claim follows.
 \end{proof}
 
 We refer to $\Gamma$ as the \emph{rule set} for the greedy extension method. To apply \Cref{greedy-abstract} to obtain a refutation $\E \models {\E'}$, we have found the following trial-and-error method to work well in practice:
@@ -204,9 +204,9 @@ To avoid some unwanted edge cases, it is also convenient to impose the additiona
 \end{itemize}
 Unlike Rule 2, this rule is not forced by \eqref{eq73}, but can be enforced as part of the greedy construction.
 
-The ruleset clearly  the soundness axiom (ii) of \Cref{greedy-abstract}.  We now verify the greedy extension axiom (iii).  Let $\Omega,a,b$ be as in that axiom. We may assume that $a \op b$ is undefined, since we are done otherwise. We adjoin a new element $c$ to $M$ to create $M'$, and set $a \op' b = c$.  If we also have $b = d \op a$ for some $d$ (unique by Rule 2, and only possible for $a \neq b$ by Rule 3), set $a \op' c = d$ (this is necessary to retain Rule 1).  Of course, we also set $x \op' y = x \op y$ whenever $x \op y$ is already defined.
+The ruleset clearly satisfies the soundness axiom (ii) of \Cref{greedy-abstract}.  We now verify the greedy extension axiom (iii).  Let $\Omega,a,b$ be as in that axiom. We may assume that $a \op b$ is undefined, since we are done otherwise. We adjoin a new element $c$ to $M$ to create $M'$, and set $a \op' b = c$.  If we also have $b = d \op a$ for some $d$ (unique by Rule 2, and only possible for $a \neq b$ by Rule 3), set $a \op' c = d$ (this is necessary to retain Rule 1).  Of course, we also set $x \op' y = x \op y$ whenever $x \op y$ is already defined.
 
-Since $c \not \in M$, it is clear that $\op'$ is a finitely supported partial magma operation on $M'$.  It is also clear that $\op'$  Rule 2 and Rule 3.   Now we case check Rule 1:
+Since $c \not \in M$, it is clear that $\op'$ is a finitely supported partial magma operation on $M'$.  It is also clear that $\op'$ satisfies Rule 2 and Rule 3.   Now we case check Rule 1:
 \begin{itemize}
 \item Case 1: $x=c$ or $y=c$.  Not possible since no left multiplication with $c$ is defined.
 \item Case 2: $x \op' y = c$.  Only possible when $x = a$, $y = b$, but then $y \op' (x \op' y)$ is undefined since $y = b \neq a$ if $d$ is defined.
@@ -229,7 +229,7 @@ The greedy method can also be combined with the translation-invariant method, bo
 \begin{theorem}[Noncommutative translation-invariant greedy algorithm]\label{nc-greedy-abstract} Let $F,F'$ be functional equations on groups, and let $\Gamma$ be a theory of first-order sentences regarding a partial function $f \colon \Omega \to G$ on a group $G = (G,\cdot)$.  Assume the following axioms:
   \begin{itemize}
     \item[(i)] (Seed) There exists a finitely supported partial function $f_0 \colon \Omega_0 \to G$ satisfying $\Gamma$ that contradicts $F'$, in the sense that there is some assignment of variables in $F'$ in $G$ such that both sides of $F'$ are defined using $f_0$, but not equal to each other.
-    \item[(ii)]  (Soundness)  If $f_n \colon \Omega_n \to G$ is a sequence of partial functions satisfying $\Gamma$ with each $f_{n+1}$ an extension of $f_n$, and the direct limit $f_\infty$ is total, then this limit  $F$.
+    \item[(ii)]  (Soundness)  If $f_n \colon \Omega_n \to G$ is a sequence of partial functions satisfying $\Gamma$ with each $f_{n+1}$ an extension of $f_n$, and the direct limit $f_\infty$ is total, then this limit satisfies $F$.
     \item[(iii)] (Greedy extension)  If $f \colon \Omega \to G$ is a finitely supported partial function satisfying $\Gamma$, and $a \in G$, then there exists a finitely supported extension $f' \colon \Omega' \to G'$ of $f$ to a possibly larger group $G'$, and also satisfying $\Gamma$, such that $f'(a)$ is defined.
   \end{itemize}
   Then $F \nmodels F'$.
@@ -251,11 +251,11 @@ More complex (and \emph{ad hoc}) variants of the greedy algorithm are possible. 
 
 \subsection{Modifying base models}\label{modify-base}
 
-A general technique that we have found useful in obtaining a refutation such as $\E \nmodels {\E'}$ is to start with a simple base model $\Magma = (M,\op)$ that  both $\E$ and ${\E'}$, and modify it in various ways to preserve $\E$, but create a violation of ${\E'}$.  There are many such possible modifications, but three general ways that have proven effective are as follows:
+A general technique that we have found useful in obtaining a refutation such as $\E \nmodels {\E'}$ is to start with a simple base model $\Magma = (M,\op)$ that satisfies both $\E$ and ${\E'}$, and modify it in various ways to preserve $\E$, but create a violation of ${\E'}$.  There are many such possible modifications, but three general ways that have proven effective are as follows:
 
 \begin{itemize}
   \item[(i)]  Modify the magma operation $\op \colon M \times M \to M$ on a small set in order to violate ${\E'}$, and then make further modifications as needed to recover $\E$.
-  \item[(ii)]  Construct an \emph{extension} $\MagmaN$ of $\Magma$, equipped with a surjective magma homomorphism $\pi: \MagmaN \to \Magma$, and defined in terms of some additional data.  Then solve for that data in such a way that $N$  $\E$ but not ${\E'}$.
+  \item[(ii)]  Construct an \emph{extension} $\MagmaN$ of $\Magma$, equipped with a surjective magma homomorphism $\pi: \MagmaN \to \Magma$, and defined in terms of some additional data.  Then solve for that data in such a way that $N$ satisfies $\E$ but not ${\E'}$.
   \item[(iii)]  Construct an \emph{enlargement} $\Magma' = (M',\op')$ of $\Magma = (M,\op)$, which is a magma that contains $\Magma$ as a submagma.  One needs to construct the multiplication table $\op$ on $(M' \times M') \backslash (M \times M)$ in order to retain $\E$ but disprove ${\E'}$.
 \end{itemize}
 
@@ -263,16 +263,16 @@ One appealing case of (ii) that our project discovered, involving a ``magma coho
 \begin{equation}\label{xsyt}
  (x, s) \op (y, t) \coloneqq (x \op_G y, s \op_M t + f(x,y))
 \end{equation}
-for some function $f \colon G \times G \to M$.  If $(M,\op_M)$ and $(G,\op_G)$ already satisfy a law $\E$, then this extension will also satisfy $\E$ if and only if $f$  a certain ``cocycle equation'', which is a linear equation on $f$.  One can then sometimes use linear algebra to locate an $f$ that  the cocycle equation for one law $\E$ but not another ${\E'}$, thus refuting the implication $\E \models {\E'}$.  An example is as follows:
+for some function $f \colon G \times G \to M$.  If $(M,\op_M)$ and $(G,\op_G)$ already satisfy a law $\E$, then this extension will also satisfy $\E$ if and only if $f$ satisfies a certain ``cocycle equation'', which is a linear equation on $f$.  One can then sometimes use linear algebra to locate an $f$ that satisfies the cocycle equation for one law $\E$ but not another ${\E'}$, thus refuting the implication $\E \models {\E'}$.  An example is as follows:
 
 \begin{proposition}[$\Eq{1110}$ does not imply $\Eq{1629}$]\label{1110-1629} The law $\x \formaleq \y \op ((\y \op (\x \op \x)) \op \y)$ \eqref{eq1110} does not imply $\x \formaleq (\x \op \x) \op ((\x \op \x) \op \x)$ \eqref{eq1629}, even for finite magmas.
 \end{proposition}
 
-\begin{proof}  (Sketch) Using the linear ansatz, we find that \eqref{eq1110} has a model $\Magma$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xsyt} with $G=M$.  One then finds that this operation  \eqref{eq1110} if $f \colon \F_5 \times \F_5 \to \F_5$  the cocycle equation
+\begin{proof}  (Sketch) Using the linear ansatz, we find that \eqref{eq1110} has a model $\Magma$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xsyt} with $G=M$.  One then finds that this operation satisfies \eqref{eq1110} if $f \colon \F_5 \times \F_5 \to \F_5$ satisfies the cocycle equation
   $$3f(x,x) - 3f(y,2x) - f(3y-2x,y) + f(y,3y-x) = 0$$
-for all $x,y \in \F_5$, and  \eqref{eq1629} if $f$  the cocycle equation
+for all $x,y \in \F_5$, and satisfies \eqref{eq1629} if $f$ satisfies the cocycle equation
 $$ f(2x,0) - f(2x,2x) = 0$$
-for all $x \in \F_5$.  A routine symbolic algebra package computation reveals that the space of $f$ that  the former equation is a six-dimensional vector space over $\F_5$, which is not contained in the solution space of the latter equation, giving the claim.
+for all $x \in \F_5$.  A routine symbolic algebra package computation reveals that the space of $f$ that satisfies the former equation is a six-dimensional vector space over $\F_5$, which is not contained in the solution space of the latter equation, giving the claim.
 In fact, since these equations preserve the space of homogeneous polynomials of a fixed degree, one can use linear algebra to locate an example that is a homogeneous polynomial; one explicit choice is
 \[
 f(x,y) = y^5 +xy^4 + x^2y^3 +3x^3 y^2 + 3x^4 y. \qedhere
@@ -286,11 +286,11 @@ Now we give an example of how method (ii) can be combined with method (i).
 \begin{proposition}[$\Eq{1659}$ does not imply $\Eq{4315}$]\label{1659-4315} The law $\x \formaleq (\x \op \y) \op ((\y \op \y) \op \z)$ \eqref{eq1659} does not imply $\x \op (\y \op \x) \formaleq \x \op (\y \op \z)$ \eqref{eq4315}.
 \end{proposition}
 
-\begin{proof}  There are two simple models for \eqref{eq1659}: the model $G$ with carrier $\Z/2\Z$ and operation $x \op y = x+1$, and the model $\Magma$ with carrier $\Z$ and operation $x \op y = x$.  Using the ansatz \eqref{xsyt}, one can soon discover that one obtains a magma operation $\op: (G \times \Z) \times (G \times \Z) \to G \times \Z$ with $f(0,0)=f(1,0)=0$, $f(0,1)=-1$, and $f(1,1)=1$.  This model still  \eqref{eq4315}. However, we can create a modification $\op'$ of $\op$ as follows.  We will seek to violate \eqref{eq4315} at $x = (0,0)$, $y = (0,0)$, $z = (1,0)$, thus we want
+\begin{proof}  There are two simple models for \eqref{eq1659}: the model $G$ with carrier $\Z/2\Z$ and operation $x \op y = x+1$, and the model $\Magma$ with carrier $\Z$ and operation $x \op y = x$.  Using the ansatz \eqref{xsyt}, one can soon discover that one obtains a magma operation $\op: (G \times \Z) \times (G \times \Z) \to G \times \Z$ with $f(0,0)=f(1,0)=0$, $f(0,1)=-1$, and $f(1,1)=1$.  This model still satisfies \eqref{eq4315}. However, we can create a modification $\op'$ of $\op$ as follows.  We will seek to violate \eqref{eq4315} at $x = (0,0)$, $y = (0,0)$, $z = (1,0)$, thus we want
 $$ (0,0) \op' ((0,0) \op' (0,0)) \neq (0,0) \op' ((0,0) \op' (1,0)).$$
 We have $(0,0) \op (0,0) = (1,0)$ and $(0,0) \op (1,0) = (1,-1)$.  One can try to force the counterexample by setting $(0,0) \op' (1,0)$ to equal $(0,0)$ instead of $(1,-1)$. However, if this is the only change we make, then we no longer satisfy \eqref{eq1659}, since
 $$ (1,0) \neq ((0,0) \op' (1,0)) \op' (((1,0) \op' (1,0)) \op' (1,t))$$
-for any $t \in \N \backslash \{0\}$. But these are the only counterexamples created involving elements in the subset $G \times \N$ of $G \times \Z$; and if one then sets $(0,0) \op' (1,t) = (0,0)$ for \emph{all} $t \in \N$, and then restricts to $G \times \N$ (which is now closed under $\op'$), then one can check that the modified operation $\op'$ on this submagma now  \eqref{eq1659} but not \eqref{eq4315} as required.
+for any $t \in \N \backslash \{0\}$. But these are the only counterexamples created involving elements in the subset $G \times \N$ of $G \times \Z$; and if one then sets $(0,0) \op' (1,t) = (0,0)$ for \emph{all} $t \in \N$, and then restricts to $G \times \N$ (which is now closed under $\op'$), then one can check that the modified operation $\op'$ on this submagma now satisfies \eqref{eq1659} but not \eqref{eq4315} as required.
 Incidentally, this submagma is isomorphic to the magma $\Magma'=(\Z,\op'')$ with $m\op''n=-m$ for $n<0$ and $m\op''n=-m-1$ for $n\geq 0$ under the bijection that maps $(0,s)$ to $s$ and $(1,s)$ to $-s-1$.
 \end{proof}
 
