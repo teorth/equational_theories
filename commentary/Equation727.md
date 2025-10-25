@@ -1,6 +1,6 @@
 This law implies that all left multiplications are bijective.  Composing any two right multiplications gives a constant map (namely `(z◇x)◇y` is independent of `z`).  The squaring map `S: x ↦ x◇x` and cubing maps `B: x ↦ x◇(x◇x)` and `C: x ↦ (x◇x)◇x` are bijections of order 9 with `B(x) = C(C(x))` and `S(x) = B(B(x))` and `x = C(S(S(x)))`.
 
-The left division operation defined by `x ◇ (x : y) = y` obeys law 10577, `x = y : ((z : y) : ((z : y) : x))`.
+The left division operation defined by `x ◇ (x : y) = y` satisfies law 10577, `x = y : ((z : y) : ((z : y) : x))`.
 
 Left multiplication by any expression is equal to left multiplication by its right-most variable, namely `(z1◇y)◇x`, `(z1◇(z2◇y))◇x`, `(z1◇(z2◇(z3◇y)))◇x` etc only depend on `y` and `x` and not on `z1,z2,z3` etc.  Additionally, one has `(z1◇(z2◇(z3◇y)))◇x = y◇x`.
 

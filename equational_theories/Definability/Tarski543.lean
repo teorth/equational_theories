@@ -4,7 +4,7 @@ import equational_theories.Generated.MagmaEgg.small
 import Mathlib.Algebra.Group.MinimalAxioms
 
 /-!
-Tarski proved that if an operation obeys `x = y ◇ (z ◇ (x ◇ (y ◇ z)))`, then there is a natural
+Tarski proved that if an operation  `x = y ◇ (z ◇ (x ◇ (y ◇ z)))`, then there is a natural
 abelian group structure given by
 ```
 0 := x ◇ x (for any, or all, x)
@@ -149,7 +149,7 @@ private lemma groupDef {M : Type*} [op : Magma M] (h : Equation543 M) :
   · rw [← h1, ← h3823, ← h16]
   · rw [h16 y (z ◇ z), h1, h4369, ← h3823, h4369, h4369 _ _ y, ← h16, ← h3823, ← h11]
 
-/-- Commuative structure, Equation 43, is given by a term from any magma obeying Tarski's
+/-- Commuative structure, Equation 43, is given by a term from any magma satisfying Tarski's
 one-equation abelian group subtraction law, Equation 543. -/
 theorem Equation4512_termDefinableFrom_Equation43 : Law43.TermDefinableFrom Law543 := by
   intro M op hl543
@@ -162,7 +162,7 @@ theorem Equation4512_termDefinableFrom_Equation43 : Law43.TermDefinableFrom Law5
   · --The group operation is term definable
     exact termDef he543
 
-/-- Associative structure, Equation 4512, is a structural definition from any magma obeying Tarski's
+/-- Associative structure, Equation 4512, is a structural definition from any magma satisfying Tarski's
 one-equation abelian group subtraction law, Equation 543. -/
 theorem Equation4512_StructuralFrom_Equation543 : Law4512.StructuralFrom Law543 := by
   intro M op hl543
@@ -175,7 +175,7 @@ theorem Equation4512_StructuralFrom_Equation543 : Law4512.StructuralFrom Law543 
   · exact (termDef he543).Definable (inst := op.FOStructure) --The group operation is definable
   · exact groupDef he543 --The subtraction operation can be recovered from the group operation
 
-/-- Commutative structure, Equation 4512, is a structural definition from any magma obeying Tarski's
+/-- Commutative structure, Equation 4512, is a structural definition from any magma satisfying Tarski's
 one-equation abelian group subtraction law, Equation 543. -/
 theorem Equation43_StructuralFrom_Equation543 : Law43.StructuralFrom Law543 := by
   intro M op hl543

@@ -1,6 +1,6 @@
 ## A twist of the semi-symmetric quasigroup law
 
-A magma satisfying this law is a quasigroup (left and right multiplication are bijective) and the squaring map `S: x ↦ x◇x` cubes to the identity (`S(S(S(x)))=x`) and obeys `S(y)◇(x◇y)=S(S(x))`.  The map `S` is not necessarily a magma morphism.  The operation `x◆y=S(x)◇y` obeys the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14), so for any three elements `x,y,z` of the magma the equations `S(x)◇y=z`, `S(y)◇z=x`, `S(z)◇x=y` are equivalent.
+A magma satisfying this law is a quasigroup (left and right multiplication are bijective) and the squaring map `S: x ↦ x◇x` cubes to the identity (`S(S(S(x)))=x`) and  `S(y)◇(x◇y)=S(S(x))`.  The map `S` is not necessarily a magma morphism.  The operation `x◆y=S(x)◇y`  the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14), so for any three elements `x,y,z` of the magma the equations `S(x)◇y=z`, `S(y)◇z=x`, `S(z)◇x=y` are equivalent.
 
 This law cannot hold in a non-trivial semigroup (associative magma).
 

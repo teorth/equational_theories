@@ -4,7 +4,7 @@ For finite magmas, or for quasigroups, [law 206](https://teorth.github.io/equati
 
 In quasigroups, this law is parastrophically equivalent to laws 124, 3343, 384 and their duals 206, 4130, and 335.  See the [commentary of law 124](https://teorth.github.io/equational_theories/implications/?124) for details.
 
-A nice example of a translation-invariant magma obeying this equation is `x ◇ y = x - sgn(y-x)` on the integers.
+A nice example of a translation-invariant magma satisfying this equation is `x ◇ y = x - sgn(y-x)` on the integers.
 
 The coefficients of the linearization `ax+by` of 1648 are the golden ratio.
 

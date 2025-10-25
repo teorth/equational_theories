@@ -1,1 +1,1 @@
-In a (left) quasigroup, this law holds if and only if the left division operation defined by `x◇(x:y) = y` obeys [law 2241](https://teorth.github.io/equational_theories/implications/?2241) `x = (x:(x:(x:y))):y`.
+In a (left) quasigroup, this law holds if and only if the left division operation defined by `x◇(x:y) = y`  [law 2241](https://teorth.github.io/equational_theories/implications/?2241) `x = (x:(x:(x:y))):y`.

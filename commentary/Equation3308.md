@@ -1,3 +1,3 @@
-This law, analogous to the dual of [law 3549](https://teorth.github.io/equational_theories/implications/?3549), states that left and right multiplications by `x`, namely `L(x) : y ↦ x◇y` and `R(x) : y ↦ y◇x`, obey `L(x) = L(x)∘L(x)∘R(x)`.  In finite magmas this implies `L(x) = L(x)∘R(x)∘L(x)`, namely [law 3511](https://teorth.github.io/equational_theories/implications/?3511).
+This law, analogous to the dual of [law 3549](https://teorth.github.io/equational_theories/implications/?3549), states that left and right multiplications by `x`, namely `L(x) : y ↦ x◇y` and `R(x) : y ↦ y◇x`, satisfy `L(x) = L(x)∘L(x)∘R(x)`.  In finite magmas this implies `L(x) = L(x)∘R(x)∘L(x)`, namely [law 3511](https://teorth.github.io/equational_theories/implications/?3511).
 
 In quasigroups (more generally when left multiplications are injective) this law is equivalent to [the semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14) `x = y◇(x◇y)`.

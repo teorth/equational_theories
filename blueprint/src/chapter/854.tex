@@ -1,6 +1,6 @@
 \chapter{Equation 854}\label{854-chapter}
 
-In this chapter we study magmas that obey \Equaref{854}, thus
+In this chapter we study magmas that satisfy \Equaref{854}, thus
 \begin{equation}\label{854}
   x = x \op ((y \op z) \op (x \op z))
 \end{equation}
@@ -103,9 +103,9 @@ We begin with the first claim.  Suppose this were not the case, then by \Cref{un
 \item (ii) $$(y \op (x \op y)) \to x$$.
 \item (iii) $$y \op (x \op y) \sim y.$$
 \end{itemize}
-If (i) holds, then we have $x \op y = x$ (Equation 4) in $M_X/\sim$, hence in every magma obeying \Equaref{854}.  But we have examples of such magmas in which this fails.
+If (i) holds, then we have $x \op y = x$ (Equation 4) in $M_X/\sim$, hence in every magma satisfying \Equaref{854}.  But we have examples of such magmas in which this fails.
 
-Similarly, if (iii) holds, then $y \op (x \op y) = y$ (Equation 10) holds in $M_X/\sim$, hence in every magma obeying \Equaref{854}.  But we have examples of such magmas in which this fails.
+Similarly, if (iii) holds, then $y \op (x \op y) = y$ (Equation 10) holds in $M_X/\sim$, hence in every magma satisfying \Equaref{854}.  But we have examples of such magmas in which this fails.
 
 Finally, if (ii) holds, then the claim
 $$  x \op y \sim x \op (y \op (x \op y))$$
@@ -174,7 +174,7 @@ and hence by (iv) $x \op (x \op y) = x$, giving (ii).
 
 \section{Running a greedy algorithm}
 
-Define a \emph{partial 854 magma} to be a partial function $\op: \N \times \N \to \N$ obeying the following axioms:
+Define a \emph{partial 854 magma} to be a partial function $\op: \N \times \N \to \N$ satisfying the following axioms:
 
 \begin{itemize}
   \item (Equation 854)  If $x,y,z \in \N$ are such that $(y \op z) \op (x \op z)$ is well-defined, then $x \op ((y \op z) \op (x \op z))$ is well-defined and equal to $x$.
@@ -229,13 +229,13 @@ Now we tackle the most difficult verification, which is 854.  This splits into a
 Iterating this in the usual fashion, we obtain
 
 \begin{corollary}[854 extension]\label{extend-854}\leanok\lean{Refutation_854.Greedy.exists_extension}
-Suppose one has a partial 854 magma on $\N$ that is only finitely defined.  Then it can be extended to a complete 854 magma that additionally obeys the no idempotence law, the monotonicity law, the auxiliary law, and the unique factorization law.
+Suppose one has a partial 854 magma on $\N$ that is only finitely defined.  Then it can be extended to a complete 854 magma that additionally satisfies the no idempotence law, the monotonicity law, the auxiliary law, and the unique factorization law.
 \end{corollary}
 
 \begin{proof}  Apply the usual greedy algorithm.
 \end{proof}
 
-\begin{corollary}[854 does not not imply 413]\leanok\lean{Refutation_854.not_413_1045}\label{854-413}  There is an 854 magma which does not obey the 413 law $x = x \op (x \op (x \op (y \op x)))$.
+\begin{corollary}[854 does not not imply 413]\leanok\lean{Refutation_854.not_413_1045}\label{854-413}  There is an 854 magma which does not satisfy the 413 law $x = x \op (x \op (x \op (y \op x)))$.
 \end{corollary}
 
 \begin{proof} Create a partial magma by imposing the laws $1 \op 0 = 2$, $0 \op 2 = 3$, $2 \op 0 = 2$, $3 \op 2 = 3$.  One can check that this is a partial magma.  We then extend it to a global magma using \Cref{extend-854}.  We claim that we have the 413 violation
@@ -245,7 +245,7 @@ Suppose one has a partial 854 magma on $\N$ that is only finitely defined.  Then
 Indeed this is immediate from the auxiliary law.
 \end{proof}
 
-\begin{corollary}[854 does not not imply 1045]\leanok\lean{Refutation_854.not_413_1045}\label{854-1045}  There is an 854 magma which does not obey the 1045 law $x = x \op ((y \op (y \op x)) \op x)$.
+\begin{corollary}[854 does not not imply 1045]\leanok\lean{Refutation_854.not_413_1045}\label{854-1045}  There is an 854 magma which does not satisfy the 1045 law $x = x \op ((y \op (y \op x)) \op x)$.
 \end{corollary}
 
 \begin{proof} Similar to previous, but start with the seed
@@ -312,7 +312,7 @@ We then define a new operation $\diamond$ on $M_X$ by the rule $x \diamond y = x
 
 \begin{proof}  Let  $f: X \to M$ be a function from $X$ to an $854$ magma $M$, then $\varphi_f$ is a homomorphism from $M_X$ (with the operation $*$) to $M$.  We claim that the restriction of $\varphi_f$ to $M_{X,854}$ is a homomorphism from $M_{X,854}$ (with operation $\diamond$) to $M$.  Since $\varphi_f$ was already a homomorphism for $*$, it suffices to show that $\varphi_f$ preserves $\to$: that is to say, for any $x,y \in M_{X,854}$, that $x \to y$ implies $\varphi_f(x) \to \varphi_f(y)$.  By definition, one of the five scenarios (i)-(v) in \Cref{free-relate} holds, and in each case one can establish the claim from the corresponding claim of \Cref{854-relation} and an induction on the max-length of the claim $x \to y$.
 
-It remains to show that $M_{854}$ actually obeys 854, that is to say that
+It remains to show that $M_{854}$ actually satisfies 854, that is to say that
 $$ (y \op z) \op (x \op z) \to x$$
 for all $x,y,z \in M_{854}$.  Writing $w = y \op z$, we have $z \to w$ by \Cref{free-relate}(i), and we need to show that $w \op (x \op z) \to x$.  We divide into four cases.
 

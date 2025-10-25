@@ -2,7 +2,7 @@ This law implies the [associative law 4512](https://teorth.github.io/equational_
 
 Denoting by `P = {x◇y|x,y∈M}`, the magma is characterized by the pointed set `(P,∞)`, the set `M∖P`, and an external operation `(M∖P)×(M∖P) → P`.
 
-This law implies that the set of squares and the set of cubes are submagmas.  The squaring map `S: x ↦ x◇x` obeys `S(S(S(x))) = S(S(x))`.  This law cannot hold in a non-trivial quasigroup.
+This law implies that the set of squares and the set of cubes are submagmas.  The squaring map `S: x ↦ x◇x`  `S(S(S(x))) = S(S(x))`.  This law cannot hold in a non-trivial quasigroup.
 
 The free magma on some set `Σ` of generators for this law is `Σ ⊔ Σ×Σ ⊔ {∞}`, on which `s◇t=(s,t)` and every other product is `∞`.
 

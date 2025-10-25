@@ -4,6 +4,6 @@ The free magma with one generator for this law is isomorphic to `ℤ/3ℤ` equip
 
 This law is equivalent to [law 723](https://teorth.github.io/equational_theories/implications/?723) `x=y◇(y◇((z◇x)◇x))` together with [law 3897](https://teorth.github.io/equational_theories/implications/?3897) `x◇x = (y◇(z◇x))◇x`.
 
-The left division operation defined by `x ◇ (x : y) = y` obeys law 42146, `y : (x : (y : (z : x))) = z : x`.
+The left division operation defined by `x ◇ (x : y) = y` satisfies law 42146, `y : (x : (y : (z : x))) = z : x`.
 
 This law cannot hold in a (non-trivial) commutative magma or quasigroup.

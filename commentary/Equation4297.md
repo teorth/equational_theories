@@ -1,5 +1,5 @@
 This law is equivalent to the conjunction of [law 4270](https://teorth.github.io/equational_theories/implications/?4270) which states that right multiplications by any square coincide and [law 4275](https://teorth.github.io/equational_theories/implications/?4275) which states that left multiplications all square to the same map.
 
-This law implies that the squaring map `S: x ↦ x◇x` squares to a constant map (`S(S(x)) = S(S(y))`) hence obeys `S(S(S(x))) = S(S(x))`.  It also implies that squares form a submagma, and that left cubes `x◇(x◇x)` form a submagma.
+This law implies that the squaring map `S: x ↦ x◇x` squares to a constant map (`S(S(x)) = S(S(y))`) hence  `S(S(S(x))) = S(S(x))`.  It also implies that squares form a submagma, and that left cubes `x◇(x◇x)` form a submagma.
 
 In a quasigroup, this law is equivalent to the [involutive left multiplications law 16](https://teorth.github.io/equational_theories/implications/?16) `x = y◇(y◇x)` together with the [right-unit squares law 11](https://teorth.github.io/equational_theories/implications/?11) which in this context states that all squares are equal ([unipotence law 40](https://teorth.github.io/equational_theories/implications/?40)) to the same right-unit element `e`, namely `x◇e=x`.

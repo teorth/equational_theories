@@ -12,7 +12,7 @@ the `◇` operation is subtraction in the group. This was proved by Tarski.
 
 There are a few distinct ways one can look to generalize this, depending on what precisely one counts
 as "having the structure". These each induce a preorder, which include the "implies" preorder as a
-subset (because you can just take the same operation again, and it now obeys the implied equation).
+subset (because you can just take the same operation again, and it now  the implied equation).
 -/
 
 section definitions
@@ -98,55 +98,55 @@ namespace Law.MagmaLaw
 
 /-- A MagmaLaw L is definable on a given Magma ⟨M,◇⟩ if it possible to define an
 operation □ on M in first-order logic, in the language given by just ◇, such that
-the new magma ⟨M,□⟩ obeys the MagmaLaw L.
+the new magma ⟨M,□⟩  the MagmaLaw L.
 -/
 def DefinableOnMagma (L : Law.MagmaLaw β) (M : Magma G) : Prop :=
   --If there exists a magma M',
   ∃ M' : Magma G,
-    -- obeying the law L,
+    -- satisfying the law L,
     @satisfies _ G M' L ∧
     -- with a graph definable in the FOStructure of M.
     (@Set.Definable _ ∅ MagmaLanguage M.FOStructure _ M'.Graph)
     -- These explicit @'s are needed because of instance disambiguation.
 
-/-- A MagmaLaw L is definable from another law L' if L is DefinableOn every magma obeying L'. -/
+/-- A MagmaLaw L is definable from another law L' if L is DefinableOn every magma satisfying L'. -/
 def DefinableFrom (L L' : Law.MagmaLaw β) : Prop :=
   ∀ {G : Type} (M : Magma G), satisfies G L' → DefinableOnMagma L M
 
 /-- A MagmaLaw L is term-definable on a given Magma ⟨M,◇⟩ if it possible to define an
 operation □ on M as just an expression in terms of ◇, such that
-the new magma ⟨M,□⟩ obeys the MagmaLaw L.
+the new magma ⟨M,□⟩  the MagmaLaw L.
 -/
 def TermDefinableOnMagma (L : Law.MagmaLaw β) (M : Magma G) : Prop :=
   --If there exists a magma M',
   ∃ M' : Magma G,
-    -- obeying the law L,
+    -- satisfying the law L,
     @satisfies _ G M' L ∧
     -- with a graph equal to some formula in M.
     (@Set.TermDefinable _ ∅ MagmaLanguage M.FOStructure _ M'.FinArityOp)
 
-/-- A MagmaLaw L is term-definable from another law L' if L is DefinableOn every magma obeying L'. -/
+/-- A MagmaLaw L is term-definable from another law L' if L is DefinableOn every magma satisfying L'. -/
 def TermDefinableFrom (L L' : Law.MagmaLaw β) : Prop :=
   ∀ {G : Type} (M : Magma G), satisfies G L' → TermDefinableOnMagma L M
 
-/-- A MagmaLaw L is structural on a given Magma ⟨M,◇⟩ there is a Magma ⟨M,□⟩ obeying L, so that ◇
+/-- A MagmaLaw L is structural on a given Magma ⟨M,◇⟩ there is a Magma ⟨M,□⟩ satisfying L, so that ◇
 and □ are first-order definable in terms of each other. This doesn't necessarily imply that □ is
 uniquely determined, but it means that □ can hold all of the information of the magma. -/
 def StructuralOnMagma (L : Law.MagmaLaw β) (M : Magma G) : Prop :=
   --If there exists a magma M',
   ∃ M' : Magma G,
-    -- obeying the law L,
+    -- satisfying the law L,
     @satisfies _ G M' L ∧
     -- with a graph definable in the FOStructure of M,
     (@Set.Definable _ ∅ MagmaLanguage M.FOStructure _ M'.Graph) ∧
     -- and vice versa
     (@Set.Definable _ ∅ MagmaLanguage M'.FOStructure _ M.Graph)
 
-/-- A MagmaLaw L is structural from another law L' if L is StructuralOn every magma obeying L'. -/
+/-- A MagmaLaw L is structural from another law L' if L is StructuralOn every magma satisfying L'. -/
 def StructuralFrom (L L' : Law.MagmaLaw β) : Prop :=
   ∀ {G : Type} (M : Magma G), satisfies G L' → StructuralOnMagma L M
 
-/-- A MagmaLaw L is term structural on a given Magma ⟨M,◇⟩ there is a Magma ⟨M,□⟩ obeying L, so that
+/-- A MagmaLaw L is term structural on a given Magma ⟨M,◇⟩ there is a Magma ⟨M,□⟩ satisfying L, so that
 ◇ and □ are term-definable in terms of each other. This doesn't necessarily imply that □ is
 uniquely determined, but it means that □ can hold all of the information of the magma. -/
 def TermStructuralOnMagma (L : Law.MagmaLaw β) (M : Magma G) : Prop :=
@@ -157,7 +157,7 @@ def TermStructuralOnMagma (L : Law.MagmaLaw β) (M : Magma G) : Prop :=
     (@Set.TermDefinable _ ∅ MagmaLanguage M'.FOStructure _ M.FinArityOp)
 
 /-- A MagmaLaw L is term-structural from another law L' if L is TermStructuralOn every
-magma obeying L'. -/
+magma satisfying L'. -/
 def TermStructuralFrom (L L' : Law.MagmaLaw β) : Prop :=
   ∀ {G : Type} (M : Magma G), satisfies G L' → TermStructuralOnMagma L M
 
