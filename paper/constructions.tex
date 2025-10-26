@@ -226,7 +226,7 @@ We also found that human verification of the greedy extension property was a hig
 
 The greedy method can also be combined with the translation-invariant method, both in abelian and non-abelian settings. For instance, we can modify the proof of \Cref{greedy-abstract} to obtain the following variant:
 
-\begin{theorem}[Noncommutative translation-invariant greedy algorithm]\label{nc-greedy-abstract} Let $F,F'$ be functional equations on groups, and let $\Gamma$ be a theory of first-order sentences regarding a partial function $f \colon \Omega \to G$ on a group $G = (G,\cdot)$.  Assume the following axioms:
+\begin{theorem}[Noncommutative translation-invariant greedy algorithm]\label{nc-greedy-abstract} Let $F,F'$ be functional equations on groups, and let $\Gamma$ be a theory of first-order sentences regarding a partial function $f \colon \Omega \to G$ on a group $(G,\cdot, \cdot^{-1},1)$.  Assume the following axioms:
   \begin{itemize}
     \item[(i)] (Seed) There exists a finitely supported partial function $f_0 \colon \Omega_0 \to G$ satisfying $\Gamma$ that contradicts $F'$, in the sense that there is some assignment of variables in $F'$ in $G$ such that both sides of $F'$ are defined using $f_0$, but not equal to each other.
     \item[(ii)]  (Soundness)  If $f_n \colon \Omega_n \to G$ is a sequence of partial functions satisfying $\Gamma$ with each $f_{n+1}$ an extension of $f_n$, and the direct limit $f_\infty$ is total, then this limit satisfies $F$.
@@ -235,7 +235,7 @@ The greedy method can also be combined with the translation-invariant method, bo
   Then $F \nmodels F'$.
 \end{theorem}
 
-One can of course also develop an abelian analogue of the above theorem, in which $G = (G,+)$ and $G' = (G',+)$ are now required to be abelian.  We can then give an alternate proof of \Cref{73-4380} as follows:
+One can of course also develop an abelian analogue of the above theorem, in which $(G,+,-,0)$ and $(G',+,-,0)$ are now required to be abelian.  We can then give an alternate proof of \Cref{73-4380} as follows:
 
 \begin{proof}[Second proof of \Cref{73-4380}] (Sketch)  The functional equations associated to \eqref{eq73} and \eqref{eq4380} are
 $f^2(h^{-1} f(h)) =h^{-1}$ and $f^2(1) = f(1) f(f(1)^{-1})$ respectively.  We apply \Cref{nc-greedy-abstract} with the following ruleset:
