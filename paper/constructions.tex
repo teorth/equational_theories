@@ -309,7 +309,7 @@ The specific law $\x \formaleq \x \op ((\y \op \z) \op (\x \op \z))$ \eqref{eq85
  via convenient interfaces like \emph{PySAT}~\cite{imms-sat18, itk-sat24}, counterexample finders like \emph{Mace4}~\cite{prover9-mace4}, and more general ATPs like
  \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13} which can be used as solvers, all succeeded in finding useful magmas following this approach.
 
- For example, one operation we can apply is fixing a random subset of the elements of the magma table while undefining the remainder,
+ For example, one operation we can apply is fixing a random subset of the elements of the magma table while leaving the remainder unspecified,
  and asking an ATP to find a magma which satisfies \eqref{eq854} while preserving the fixed values.
  If in fact $\Eq{854} \nmodelsfin \E$, then the ATP may complete the table to a solution that violates $\E$ as desired.  In some cases,
  it appears that the magma entries can be sufficiently coupled that unless a large fraction of the values is removed,
