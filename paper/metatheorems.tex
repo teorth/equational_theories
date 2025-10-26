@@ -53,7 +53,7 @@ In practice, we found that these invariants could be used to establish a signifi
 
 \subsection{Canonization}\label{canon-sec}
 
-One possible way of obtaining refutations of a given implication $\E \Rightarrow \E'$ between equational laws is by building a special kind of syntactic model, via certain involutions on elements of the free magma $\Magma_X$ we call \emph{canonizers}.
+One possible way of obtaining refutations of a given implication $\E \models \E'$ between equational laws is by building a special kind of syntactic model, via certain involutions on elements of the free magma $\Magma_X$ we call \emph{canonizers}.
 
 \begin{definition}
   A function $C\colon M_X\rightarrow M_X$ is a \emph{canonizer} for an equation $\E$ if
@@ -86,7 +86,7 @@ Let $R \colon M_X \to M_X$ be an arbitrary function.
 We then have the following theorem.
 
 \begin{theorem}\label{thm:canon}
-  Whenever $R$ weakly collapsing, a weak canonizer, and non-overlapping, then conditions of Definition \ref{def:canon} then $C_R$ is a canonizer.
+  Whenever $R$ weakly collapsing, a weak canonizer, and non-overlapping, then $C_R$ is a canonizer.
 \end{theorem}
 \begin{proof}
   Assume $w\sim_{\E}w'$. We proceed by induction over the proof of equality.
