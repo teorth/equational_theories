@@ -6,6 +6,6 @@ It implies that the set of squares, the set of left cubes `x◇(x◇x)`, and the
 
 This law implies the [medial law 934128](https://teorth.github.io/equational_theories/implications/?934128) hence quasigroups satisfying this law are linear.  Linear models take the form `x◇y = b²x+by+c`.
 
-In a left quasigroup, the left-division map defined by `x◇(x:y) = y`  [law 2538](https://teorth.github.io/equational_theories/implications/?2538) `x = (y:((y:x):z)):z`.
+In a left quasigroup, the left-division map defined by `x◇(x:y) = y` satisfies [law 2538](https://teorth.github.io/equational_theories/implications/?2538) `x = (y:((y:x):z)):z`.
 
 Magmas satisfying its dual, [the left-invertive law 4684](https://teorth.github.io/equational_theories/implications/?4684), are known as right-modular, or as AG-groupoids (Abel-Grassmann groupoids), and if they additionally satisfy [law 4362](https://teorth.github.io/equational_theories/implications/?4362) they are AG∗∗-groupoids.

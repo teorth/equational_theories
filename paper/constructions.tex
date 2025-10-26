@@ -91,14 +91,14 @@ For such models, the verification of an equational law in $n$ variables correspo
   (x \op y) \op y &= x + f(h) + f(h-f(h)) \\
   (x \op y) \op ((x \op y) \op y) &= x + f(h) + f(f(h-f(h)))
 \end{align*}
-so that this law  \eqref{eq1648} if and only if the functional equation
+so that this model satisfies \eqref{eq1648} if and only if the functional equation
 $$f(h) + f(f(h-f(h))) = 0$$
 holds for all $h \in M$.  Similarly, the law $\x \formaleq (\x \op (\x \op \y)) \op \y$ \eqref{eq206} is satisfied if and only if
 $$ f(f(h)) + f(h - f(f(h))) = 0$$
-for all $h \in M$.  One can now check that the function $f \colon \Z \to \Z$ defined by $f(h) \coloneqq - \mathrm{sgn}(h)$ (thus $f(h)$ equals $-1$ when $h$ is positive, $+1$ when $h$ is negative, and $0$ when $h$ is zero)  the first functional equation but not the second, thus establishing that $\Eq{1648} \nmodels \Eq{206}$.
+for all $h \in M$.  One can now check that the function $f \colon \Z \to \Z$ defined by $f(h) \coloneqq - \mathrm{sgn}(h)$ (thus $f(h)$ equals $-1$ when $h$ is positive, $+1$ when $h$ is negative, and $0$ when $h$ is zero) satisfies the first functional equation but not the second, thus establishing that $\Eq{1648} \nmodels \Eq{206}$.
 \end{example}
 
-\begin{example}[Non-abelian example]\label{trans-nonab}  We now obtain the opposite refutation $\Eq{206} \nmodels \Eq{1648}$ to \Cref{abex} using the non-abelian translation-invariant model.  By similar calculations to before, we now seek to find a function $f \colon M \to M$ on a non-abelian group $(M,\cdot)$ that  the functional equation
+\begin{example}[Non-abelian example]\label{trans-nonab}  We now obtain the opposite refutation $\Eq{206} \nmodels \Eq{1648}$ to \Cref{abex} using the non-abelian translation-invariant model.  By similar calculations to before, we now seek to find a function $f \colon M \to M$ on a non-abelian group $(M,\cdot)$ that satisfies the functional equation
 \begin{equation}\label{206-eq}
  f(f(h)) f(f(f(h))^{-1} h) = 1
 \end{equation}
@@ -111,20 +111,20 @@ $$ f(1) = 1, f(a)=b, f(b) = c, f(c) = a$$
 and then $f(aw)=a$ for any non-empty reduced word $w$ not starting with $a$, and similarly for $b$ and $c$.  The equation \eqref{206-eq} can be checked directly for $h=1,a,b,c$.  If $h=aw$ with $w$ non-empty, reduced, and not starting with $a$, then $f(f(h))^{-1} = f(f(h)) = b$ and $f(f(f(h))^{-1} h) = f(baw) = b$, giving \eqref{206-eq} in this case, and similarly for cyclic permutations. Meanwhile, \eqref{1648-eq} can be checked to fail for $h=a$.
 \end{example}
 
-\begin{remark}  The construction in \Cref{trans-nonab} also has the following more ``geometric'' interpretation.  The carrier $M$ can be viewed as the infinite $3$-regular tree, in which every vertex imposes a cyclic ordering on its $3$ neighbors (for instance, if we embed $M$ as a planar graph, we can use the clockwise ordering).  For $x,y \in M$, we then define $x \op y$ to equal $x$ if $x=y$.  If $y$ is instead a neighbor of $x$, we define $x \op y$ to be the next neighbor of $x$ in the cyclic ordering.  Finally, if $y$ is distance two or more from $x$, we define $x \op y$ to be the neighbor of $x$ that is closest to $y$.  One can then check that this model  \eqref{206-eq} but not \eqref{1648-eq}.
+\begin{remark}  The construction in \Cref{trans-nonab} also has the following more ``geometric'' interpretation.  The carrier $M$ can be viewed as the infinite $3$-regular tree, in which every vertex imposes a cyclic ordering on its $3$ neighbors (for instance, if we embed $M$ as a planar graph, we can use the clockwise ordering).  For $x,y \in M$, we then define $x \op y$ to equal $x$ if $x=y$.  If $y$ is instead a neighbor of $x$, we define $x \op y$ to be the next neighbor of $x$ in the cyclic ordering.  Finally, if $y$ is distance two or more from $x$, we define $x \op y$ to be the neighbor of $x$ that is closest to $y$.  One can then check that this model satisfies \eqref{206-eq} but not \eqref{1648-eq}.
 \end{remark}
 
 \begin{remark} These constructions are necessarily infinitary in nature, because \eqref{eq206} and \eqref{eq1648} can be shown to be equivalent for finite magmas. Indeed, \eqref{eq206} can be written as $x = R_y L_x L_x y$, which implies that $R_y$ is surjective, hence injective, on a finite magma; writing $x = R_y z$ we conclude that $R_y z = R_y L_{z \op y} L_{z \op y} y$ and hence $z = L_{z \op y} L_{z \op y} y$, giving \eqref{eq1648}.  The opposite implication is similar (using \eqref{eq1648} to show that $R_y$ is injective, hence surjective), and is left to the reader.
 \end{remark}
 
-  Some refutations $\E \nmodels {\E'}$ are ``immune'' by translation-invariant models, in the sense that any translation-invariant model that  $\E$, also  ${\E'}$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes force the implication $\E \models {\E'}$ to hold.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \eqref{eq4482} for a square and an arbitrary element will imply the full commutative law \eqref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
+  Some refutations $\E \nmodels {\E'}$ are ``immune'' by translation-invariant models, in the sense that any translation-invariant model that satisfies $\E$, also satisfies ${\E'}$.  One obstruction is that for such models, the squaring map $S$ is necessarily an invertible map, since $Sx = x + f(0)$ in the abelian case and $Sx = xf(1)$ in the non-abelian case. On the other hand, adding the assumption of invertibility of squares can sometimes force the implication $\E \models {\E'}$ to hold.  For instance, the commutative law $\x \op (\y \op \y) \formaleq (\y \op \y) \op \x$ \eqref{eq4482} for a square and an arbitrary element will imply the full commutative law \eqref{eq43} for translation-invariant models due to the surjectivity of $S$, but does not imply it in general (as one can easily see by considering models where $S$ is constant).
 
 \subsection{The twisting semigroup}\label{twisting-sec}
 
 Suppose one has a magma $\Magma$ satisfying a law $\E$, that also enjoys some endomorphisms $T, U \colon \Magma \to \Magma$.  Then one can ``twist'' the operation $\op$ by $T,U$ to obtain a new magma operation
 \begin{equation}\label{twist} x \op' y := Tx \op Uy.
 \end{equation}
-If one then tests whether this new operation $\op'$  the same law $\E$ as the original operation $\op$, one will find that this will be the case provided that $T,U$ satisfy a certain set of relations.  The semigroup generated by formal generators $\mathrm{T}, \mathrm{U}$ with these relations will be called the \emph{twisting semigroup} $\operatorname{Twist}_\E$ of $\E$.  This can be best illustrated with some examples.
+If one then tests whether this new operation $\op'$ satisfies the same law $\E$ as the original operation $\op$, one will find that this will be the case provided that $T,U$ satisfy a certain set of relations.  The semigroup generated by formal generators $\mathrm{T}, \mathrm{U}$ with these relations will be called the \emph{twisting semigroup} $\operatorname{Twist}_\E$ of $\E$.  This can be best illustrated with some examples.
 
 \begin{example}  We compute the twisting semigroup of $\x \formaleq (\y \op \x) \op (\x \op (\z \op \y))$ \eqref{eq1485}.  We test this law on the operation \eqref{twist}, thus we consider whether
 $$x = (y \op' x) \op' (x \op' (z \op' y))$$
@@ -165,7 +165,7 @@ Abstractly, the greedy algorithm strategy can now be described as follows.
 \begin{theorem}[Abstract greedy algorithm]\label{greedy-abstract} Let $\E,{\E'}$ be equational laws, and let $\Gamma$ be a theory of first-order sentences regarding a  partial magma operations $\op \colon \Omega \to M$ on a carrier $M$.  Assume the following axioms:
 \begin{itemize}
   \item[(i)] (Seed) There exists a finitely supported partial magma operation $\op_0 \colon \Omega_0 \to M$ satisfying $\Gamma$ that contradicts ${\E'}$, in the sense that there is some assignment of variables in ${\E'}$ in $M$ such that both sides of ${\E'}$ are defined using $\op_0$, but not equal to each other.
-  \item[(ii)]  (Soundness)  If $\op_n \colon \Omega_n \to M$ is a sequence of partial magma operations satisfying $\Gamma$ with each $\op_{n+1}$ an extension of $\op_n$, and the direct limit $\op_\infty$ is total, then this limit  $\E$.
+  \item[(ii)]  (Soundness)  If $\op_n \colon \Omega_n \to M$ is a sequence of partial magma operations satisfying $\Gamma$ with each $\op_{n+1}$ an extension of $\op_n$, and the direct limit $\op_\infty$ is total, then this limit satisfies $\E$.
   \item[(iii)] (Greedy extension)  If $\op \colon \Omega \to M$ is a finitely supported partial magma operation satisfying $\Gamma$, and $a,b \in M$, then there exists a finitely supported extension $\op' \colon \Omega' \to M'$ of $\op$ to a possibly larger carrier $M'$, and also satisfying $\Gamma$, such that $a \op' b$ is defined.
 \end{itemize}
 Then $\E \nmodels {\E'}$.
@@ -268,7 +268,7 @@ for some function $f \colon G \times G \to M$.  If $(M,\op_M)$ and $(G,\op_G)$ a
 \begin{proposition}[$\Eq{1110}$ does not imply $\Eq{1629}$]\label{1110-1629} The law $\x \formaleq \y \op ((\y \op (\x \op \x)) \op \y)$ \eqref{eq1110} does not imply $\x \formaleq (\x \op \x) \op ((\x \op \x) \op \x)$ \eqref{eq1629}, even for finite magmas.
 \end{proposition}
 
-\begin{proof}  (Sketch) Using the linear ansatz, we find that \eqref{eq1110} has a model $\Magma$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xsyt} with $G=M$.  One then finds that this operation  \eqref{eq1110} if $f \colon \F_5 \times \F_5 \to \F_5$ satisfies the cocycle equation
+\begin{proof}  (Sketch) Using the linear ansatz, we find that \eqref{eq1110} has a model $\Magma$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xsyt} with $G=M$.  One then finds that this operation  \eqref{eq1110} if $f \colon \F_5 \times \F_5 \to \F_5$  the cocycle equation
   $$3f(x,x) - 3f(y,2x) - f(3y-2x,y) + f(y,3y-x) = 0$$
 for all $x,y \in \F_5$, and satisfies \eqref{eq1629} if $f$ satisfies the cocycle equation
 $$ f(2x,0) - f(2x,2x) = 0$$
@@ -286,11 +286,11 @@ Now we give an example of how method (ii) can be combined with method (i).
 \begin{proposition}[$\Eq{1659}$ does not imply $\Eq{4315}$]\label{1659-4315} The law $\x \formaleq (\x \op \y) \op ((\y \op \y) \op \z)$ \eqref{eq1659} does not imply $\x \op (\y \op \x) \formaleq \x \op (\y \op \z)$ \eqref{eq4315}.
 \end{proposition}
 
-\begin{proof}  There are two simple models for \eqref{eq1659}: the model $\mathcal{G}$ with carrier $\Z/2\Z$ and operation $x \op y = x+1$, and the model $\Magma$ with carrier $\Z$ and operation $x \op y = x$.  Using the ansatz \eqref{xsyt}, one can soon discover that one obtains a magma operation $\op: (\Z/2\Z \times \Z) \times (\Z/2\Z \times \Z) \to \Z/2\Z \times \Z$ with $f(0,0)=f(1,0)=0$, $f(0,1)=-1$, and $f(1,1)=1$.  This model still satisfies \eqref{eq4315}. However, we can create a modification $\op'$ of $\op$ as follows.  We will seek to violate \eqref{eq4315} at $x = (0,0)$, $y = (0,0)$, $z = (1,0)$, thus we want
+\begin{proof}  There are two simple models for \eqref{eq1659}: the model $G$ with carrier $\Z/2\Z$ and operation $x \op y = x+1$, and the model $\Magma$ with carrier $\Z$ and operation $x \op y = x$.  Using the ansatz \eqref{xsyt}, one can soon discover that one obtains a magma operation $\op: (G \times \Z) \times (G \times \Z) \to G \times \Z$ with $f(0,0)=f(1,0)=0$, $f(0,1)=-1$, and $f(1,1)=1$.  This model still  \eqref{eq4315}. However, we can create a modification $\op'$ of $\op$ as follows.  We will seek to violate \eqref{eq4315} at $x = (0,0)$, $y = (0,0)$, $z = (1,0)$, thus we want
 $$ (0,0) \op' ((0,0) \op' (0,0)) \neq (0,0) \op' ((0,0) \op' (1,0)).$$
 We have $(0,0) \op (0,0) = (1,0)$ and $(0,0) \op (1,0) = (1,-1)$.  One can try to force the counterexample by setting $(0,0) \op' (1,0)$ to equal $(0,0)$ instead of $(1,-1)$. However, if this is the only change we make, then we no longer satisfy \eqref{eq1659}, since
 $$ (1,0) \neq ((0,0) \op' (1,0)) \op' (((1,0) \op' (1,0)) \op' (1,t))$$
-for any $t \in \N \backslash \{0\}$. But these are the only counterexamples created involving elements in the subset $\Z/2\Z \times \N$ of $\Z/2\Z \times \Z$; and if one then sets $(0,0) \op' (1,t) = (0,0)$ for \emph{all} $t \in \N$, and then restricts to $\Z/2\Z \times \N$ (which is now closed under $\op'$), then one can check that the modified operation $\op'$ on this submagma now satisfies \eqref{eq1659} but not \eqref{eq4315} as required.
+for any $t \in \N \backslash \{0\}$. But these are the only counterexamples created involving elements in the subset $G \times \N$ of $G \times \Z$; and if one then sets $(0,0) \op' (1,t) = (0,0)$ for \emph{all} $t \in \N$, and then restricts to $G \times \N$ (which is now closed under $\op'$), then one can check that the modified operation $\op'$ on this submagma now  \eqref{eq1659} but not \eqref{eq4315} as required.
 Incidentally, this submagma is isomorphic to the magma $\Magma'=(\Z,\op'')$ with $m\op''n=-m$ for $n<0$ and $m\op''n=-m-1$ for $n\geq 0$ under the bijection that maps $(0,s)$ to $s$ and $(1,s)$ to $-s-1$.
 \end{proof}
 

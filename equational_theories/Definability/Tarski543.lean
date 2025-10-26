@@ -4,7 +4,7 @@ import equational_theories.Generated.MagmaEgg.small
 import Mathlib.Algebra.Group.MinimalAxioms
 
 /-!
-Tarski proved that if an operation  `x = y ◇ (z ◇ (x ◇ (y ◇ z)))`, then there is a natural
+Tarski proved that if an operation satisfies `x = y ◇ (z ◇ (x ◇ (y ◇ z)))`, then there is a natural
 abelian group structure given by
 ```
 0 := x ◇ x (for any, or all, x)

@@ -2,7 +2,7 @@
 
 Quasigroups satisfying law 3737 are Ward quasigroups ([Ward 1930](https://doi.org/10.2307/1989585)), namely groups equipped with the division operation `x◇y = x y⁻¹`.  To characterize Ward quasigroups with a single law among all magmas, one needs the much longer [Higman–Neumann axiom](https://teorth.github.io/equational_theories/implications/?42323216), of order 8.
 
-In other words, this law is parastrophically equivalent to the [associativity law 4512](https://teorth.github.io/equational_theories/implications/?4512) in the sense that a quasigroup  this law if and only if the operation `x◆y` defined by `(x◆y)◇y = x` is associative.  Law 3737 has a long history.
+In other words, this law is parastrophically equivalent to the [associativity law 4512](https://teorth.github.io/equational_theories/implications/?4512) in the sense that a quasigroup satisfies this law if and only if the operation `x◆y` defined by `(x◆y)◇y = x` is associative.  Law 3737 has a long history.
 
 - [Suschkewitsch, in 1928](https://doi.org/10.2307/1989406), considered finite quasigroups such that `(x◇a)◇b = x◇(a∘b)` for some second binary operation `∘`.  This includes the case where `◇` is a group operation (where `∘` is `◇`).  Assuming the [unipotence law 40](https://teorth.github.io/equational_theories/implications/?40), he proves that `◇` is group division, with `∘` being the group operation.  (Law 3737 appears in the form `(R◇C)◇B = R◇Q` for `B=Q◇C` above Postulate J.)
 
