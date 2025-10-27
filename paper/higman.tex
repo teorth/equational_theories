@@ -1,6 +1,6 @@
 \section{Higman--Neumann laws}\label{higman-neumann}
 
-\subsection{Describing groups as magmas}
+\subsection*{Describing groups as magmas}
 
 The ETP is focused exclusively on magmas, which only feature a single (binary) operation.  Many mathematical structures traditionally defined using several operations can nevertheless be fully described as magmas with a well-chosen combined operation, from which the whole structure can be reconstructed.  The first example is how Boolean algebras defined in terms of three operations $(\land,\lor,\lnot)$ were equivalently described in 1913 in terms of the Sheffer stroke $x\op y\coloneqq \lnot(x\land y)$~\cite{sheffer}.  Once such a single operation is found, a separate endeavor is to determine which laws it must satisfy to get the desired structure, and, in favorable cases find a single law that encapsulates the whole structure, or even find all equivalent laws of minimum order.  The earliest such example is Tarski's description of abelian groups in terms of subtraction $x\op y\coloneqq x+(-y)$, subject to a single axiom $\x \formaleq \y \op (\z \op (\x \op (\y \op \z)))$ \eqref{eq543}, found in 1938~\cite{Tarski1938}.  It then took three decades~\cite{higman-neumann,Sholander01021959,Padmanabhan_1969} to sort out the full equivalence class of \eqref{eq543} among laws of order~$4$.  For Boolean algebras, a minimum-order single-law description was only found in~\cite{mccune_et_al}, nine decades after Sheffer's work.
 
@@ -14,7 +14,7 @@ These three laws are equivalent to a single law $\E_{\mathrm{HN}}\coloneqq\eqref
 McCune found two more laws equivalent to this one and of the same order \cite{mccune1993single}, \eqref{eq42302852} and \eqref{eq147976245}.  A natural question is to find all characterizations of Ward quasigroups (groups equipped with division) with minimum order.
 Throughout our exploration, we used two criteria: the law must be satisfied by group division, and must fail for magmas that are not Ward quasigroups.
 
-\subsection{Basic constraints}
+\subsection*{Basic constraints}
 
 There are $\num{298012537}$ laws of order up to~$8$, and running an ATP on all of them is too slow, so one needs efficient ways to filter them beforehand.  Let us begin with restrictions on the shape of any law equivalent to~$\E_{\mathrm{HN}}$.
 The law must take the form $\x\formaleq\dots$ as otherwise it would be satisfied by the constant operation on any set.
@@ -29,7 +29,7 @@ These basic constraints leave $54$, $\num{9000}$, and $\num{1841910}$~candidate 
 
 Imposing further that the law is satisfied by division in a free non-abelian group (with one generator per variable) reduces these numbers of laws to $0$, $59$, and $\num{5692}$ at these same orders.  All of the laws coming out of these filters are consequences of~$\E_{\mathrm{HN}}$; accordingly, one must determine which of these candidates imply said law.
 
-\subsection{Using automated theorem provers.}
+\subsection*{Using automated theorem provers}
 
 We repeatedly whittled down the list of candidates by accumulating a collection of finite countermodels, namely magmas that satisfy a candidate law while violating one of the laws \eqref{eq11}, \eqref{eq40} and~\eqref{eq3737} characterizing Ward quasigroups.  Automated searches of small magmas (of size up to~$8$) with \emph{Mace4} or \emph{Vampire} gave many countermodels (of which $12$ are enough).  A second source was that of linear models $x \op y \coloneqq ax+by$ on $\mathbb{Z}/n\mathbb{Z}$ with $(a,b)\neq(1,n-1)$: the largest one we used is $x \op y \coloneqq 261x + 33y \bmod 307$ to rule out the candidate law $\Eq{68185620}$, $\x \formaleq (\y \op \y) \op (\y \op ((\x \op (\z \op \y)) \op ((\x \op \x) \op \z)))$.  Finally, we introduced some models that are ``almost'' Ward quasigroups: the $7$-element smallest non-associative inverse loop (equipped with division), the $10$-element smallest non-associative Steiner loop (commutative loop in which divisions coincide with multiplication), and the $16$-element Moufang loop of unit octonions over~$\mathbb{Z}$.
 

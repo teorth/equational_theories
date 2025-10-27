@@ -1,4 +1,4 @@
-\section{Proof Automation}\label{automated-sec}
+\section{Proof automation}\label{automated-sec}
 
 In this project we used proof automation in two ways: automated theorem provers (ATPs) and \emph{Lean} tactics.
 ATPs are generally stand-alone tools that implement a (semi-)decision procedure for a given formal language or related set of languages.
@@ -18,7 +18,7 @@ The \texttt{duper} tactic~\cite{DBLP:conf/itp/CluneQBA24}, for example, implemen
 In the rest of this section we describe the different proof automation techniques used in this project.
 We first discuss the different proof methods used: primarily superposition and equational reasoning, we then discuss the integration in \emph{Lean}, and finally we report some basic empirical results from this project.
 
-\subsection{Proof Techniques}
+\subsection*{Proof techniques}
 
 The main two families of ATPs and tactics we used are based on superposition/saturation and equational reasoning.
 In this context we also include SMT solvers, which combine specific decision procedures for theories, like congruence closure for equational reasoning, with satisfiability (SAT) solving \cite{deMoura-Bjorner-2009}.
@@ -53,7 +53,7 @@ One of the main advantages of using equational reasoning to reason about implica
 
 In this project we used \emph{Z3}~\cite{DBLP:conf/tacas/MouraB08}, \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4}, a custom ATP \emph{MagmaEgg} for magmas based on egg~\cite{DBLP:journals/pacmpl/WillseyNWFTP21}, and the \emph{Lean} \texttt{egg} tactic~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24,rossel2024equality}, which all work with equational logic. We have also reasoned with manual (custom written) heuristics about simple rewrites.
 
-\subsection{Integration of Automation Procedures}
+\subsection{Integration of automation procedures}
 \label{sec:proof-reconstruction}
 
 While ATPs are very useful for solving theorems in this project, they do not integrate with \emph{Lean} out of the box.
@@ -131,7 +131,7 @@ While equational reasoning can also be used in a semi-automatic fashion to prove
 
 % \TODO{maybe add a screenshot here of the workflow of using a seed to find counterexamples with \emph{Prover9} or \emph{Vampire}?}
 
-% \subsection{Empirical Results}
+% \subsection{Empirical results}
 
 % Finally, we report some empirical results from use of ATPs for this project, in terms of performance.
 % This section is not intended to be a careful evaluation and benchmark comparison of the different ATPs; instead, we present our work here as a more informal ``field report'' documenting our experiences.
