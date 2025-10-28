@@ -11,8 +11,7 @@ In order to describe the mathematical goals of the ETP, we need some notation. A
 
 In the ETP, a unique number was assigned to each equational law, via a numbering system that we describe in \Cref{numbering-app}.  For instance, the \emph{commutative law} $\x \op \y \formaleq \y \op \x$ is assigned the equation number \eqref{eq43}, while the \emph{associative law} $\x \op (\y \op \z) \formaleq (\x \op \y) \op \z$ is assigned the equation number \eqref{eq4512}.  A list of all equations referred to by number in this paper is also provided in \Cref{numbering-app}.
 
-A magma $\Magma = (M,\op)$ satisfies a law $\E$ if the law $\E$ holds for all possible assignments of the indeterminate to elements of $M$, in which case we write $\Magma \models \E$. Thus, for instance $\Magma \models \Eq{43}$ if one has $x \op y = y \op x$ for all $x,y \in M$.  Note that the formal indeterminate symbols $\x, \y$ in $\Eq{43}$ are now replaced by concrete elements $x,y$ of the carrier $M$.
-A magma $\Magma = (M,\op)$ satisfies a law $\E$ if the law $\E$ holds for all possible assignments of the indeterminate to elements of $M$, in which case we write $\Magma \models \E$. Thus, for instance $\Magma \models \Eq{43}$ if one has $x \op y = y \op x$ for all $x,y \in M$.  Note that the formal indeterminate symbols $\x, \y$ in $\Eq{43}$ are now replaced by concrete elements $x,y$ of the carrier $M$.
+A magma $\Magma = (M,\op)$ satisfies a law $\E$ if the law $\E$ holds for all possible assignments of the indeterminates to elements of $M$, in which case we write $\Magma \models \E$. Thus, for instance $\Magma \models \Eq{43}$ if one has $x \op y = y \op x$ for all $x,y \in M$.  Note that the formal indeterminate symbols $\x, \y$ in $\Eq{43}$ are now replaced by concrete elements $x,y$ of the carrier $M$.
 
 We say that a law $\E$ \emph{entails} or \emph{implies} another law ${\E'}$ if every magma that satisfies $\E$, also satisfies ${\E'}$: $(\Magma \models \E) \implies (\Magma \models {\E'})$.  We write this relation as ${\E} \models {\E'}$. We say that two laws are \emph{equivalent} if they entail each other. For instance, the constant law $\x \op \y \formaleq \z \op \w$ \eqref{eq46} can easily be seen to be equivalent to the law $\x \op \x \formaleq \y \op \z$ \eqref{eq41}.  It is clear that $\models$ is a pre-order, that is to say a partial order after one quotients by equivalence.
 
@@ -45,7 +44,7 @@ Secondary aims of the ETP included the possibility of discovering unusually inte
 
 \subsection{Outcomes}
 
-The ETP achieved almost all of its primary objectives, with all of the $\num{22033636}$ implications ${\E} \models {\E'}$ and non-implications $\E \not \models {\E'}$ magmas formalized in the proof assistant language \emph{Lean}, and can be found on the ETP GitHub repository.  See \Cref{fig:854}, \Cref{fig:1729} and \Cref{fig:longchain} for some small fragments of the implication graphs produced.
+The ETP achieved almost all of its primary objectives, with all of the $\num{22033636}$ implications ${\E} \models {\E'}$ and non-implications $\E \not \models {\E'}$ formalized in the proof assistant language \emph{Lean}, and can be found on the ETP GitHub repository.  See \Cref{fig:854}, \Cref{fig:1729} and \Cref{fig:longchain} for some small fragments of the implication graphs produced.
 The $\num{4694}$ laws organized into $\num{1415}$ equivalence classes, with by far the largest class being the class of $\num{1496}$ equations equivalent to the trivial law $\Eq{2}$.
 
 For the finite implication graph ${\E} \modelsfin {\E'}$, we could similarly formalize all but two implications.  Specifically, we were unable to obtain either a human-readable or formalized proof or disproof of the implication $\Eq{677} \modelsfin \Eq{255}$ (or its equivalent dual $\Eq{2910} \modelsfin \Eq{47}$), despite extensive efforts from the participants of the project; we tentatively conjecture this implication to be false (i.e., that there exists a finite magma satisfying \eqref{eq677} but not \eqref{eq255}), but the refutation appears to be ``immune'' to most of the techniques that we developed for the project.  (We were however able to establish that the corresponding implication $\Eq{677} \models \Eq{255}$ for arbitrary magmas was false, using the greedy construction discussed in \Cref{greedy-sec}.)
@@ -127,7 +126,7 @@ For the finite implication graph ${\E} \modelsfin {\E'}$, we could similarly for
         \draw(3319)--(3253);
       \end{tikzpicture}%
     }
-    \caption{Longest chains of implications (length $15$) between inequivalent laws in the implication graph.  The parts above/below law 3 can be independently dualized. }
+    \caption{Longest chains of implications (length $15$) between inequivalent laws in the implication graph.  The parts above/below law \eqref{eq3} can be independently dualized. }
     \label{fig:longchain}
 \end{figure}
 
@@ -144,7 +143,7 @@ Of the $\num{22033636}$ possible implications ${\E} \models {\E'}$, $\num{817827
 More challenging were the $\num{13855357}$ ($62.88\%$) implications that were false, $\E \nmodels {\E'}$, and particularly the slightly smaller set of $\num{13854535}$ or $\num{13854537}$ implications that were false even for finite magmas, $\E \nmodelsfin {\E'}$. Here, the range of techniques needed to refute such implications were quite varied, and may be of independent interest:
 \begin{itemize}
         \item \textbf{Small finite magmas}, which can be described explicitly by multiplication tables, could be tested by brute force computations to provide a large number of finite counterexamples to implications, or by ATP-assisted methods. See \Cref{finite-sec}.
-        \item \textbf{Linear models}, in which the magma operation took the form $x \op y = ax + by$ for some (commuting or noncommuting) coefficients $a,b$, allowed for another large class of counterexamples to implications, which could be automatically scanned for either by brute force or by Grobner basis type calculations; many of these examples could also be made finite. See \Cref{linear-sec}.
+        \item \textbf{Linear models}, in which the magma operation took the form $x \op y = ax + by$ for some (commuting or noncommuting) coefficients $a,b$, allowed for another large class of counterexamples to implications, which could be automatically scanned for, either by brute force or by Grobner basis type calculations; many of these examples could also be made finite. See \Cref{linear-sec}.
         \item \textbf{Translation invariant models}, in which the magma operation took the form $x \op y = x + f(y-x)$ on an additive group, or $x \op y = x f(x^{-1} y)$ on a noncommutative group, reduce matters to analyzing certain functional equations; see \Cref{translation-sec}.
         \item To each equation $\E$ one can associate a ``\textbf{twisting semigroup}'' $S_{\E}$.  If $S_{\E}$ is larger than $S_{{\E'}}$, then this can often be used to disprove the implication ${\E} \models {\E'}$; see \Cref{twisting-sec}.
         \item \textbf{Greedy methods}, in which either the multiplication table $(x,y) \mapsto x \op y$ or the function $f$ determining a translation-invariant model are iteratively constructed by a greedy algorithm subject to a well-chosen ruleset, were effective in resolving many implications not easily disposed of by preceding methods. See \Cref{greedy-sec}.
@@ -216,6 +215,6 @@ The objective of using the data from the ETP to establish well-calibrated benchm
 While the primary objective of the ETP was being completed, some additional related results were generated as spinoffs.  Specifically:
 \begin{itemize}
 \item In the blueprint on the ETP web site, we report some partial progress on classifying which of the $57882$ distinct laws of order $5$ are equivalent to the singleton law \eqref{eq2}, either with or without the requirement that the magma be finite.
-\item In \Cref{spectrum-sec} we report on laws with full spectrum, namely magmas satisfying them of all finite sizes.
+\item In \Cref{spectrum-sec} we report on the determination of laws with full spectrum, i.e., with magmas satisfying them of all finite sizes.
 \item In \Cref{higman-neumann} we report on classifying the laws of order $8$ that are equivalent to the Higman-Neumann law \eqref{eq42323216}.
 \end{itemize}
