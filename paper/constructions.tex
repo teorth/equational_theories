@@ -15,6 +15,7 @@ For specific refutations, it was sometimes possible to locate a finite example w
 It is a result of Kisielewicz \cite{Kisielewicz} that every law $\Eq{n}$ with $n \leq 4694$ is either equivalent to the singleton law $\Eq{2}$, or else has a non-trivial finite model; in other words, the implications $\Eq{n} \models \Eq{2}$ and $\Eq{n} \modelsfin \Eq{2}$ are equivalent for $n \leq 4694$.  Our brute force search revealed that in the latter case there is always a model of size $2 \leq n \leq 5$, with the lone exception of \eqref{eq1286} (and its dual \eqref{eq2301}), for which the smallest non-trivial finite model was of size $7$, as presented in \Cref{1286-ex} below.  In fact, most of the $\num{4694}$ laws either only had trivial models, or had an size $2$ model, as shown in \Cref{size-table}.
 \begin{table}
 \centering
+\caption{Number of laws of order at most $4$ whose smallest non-trivial model (if any) is of a given size.}\label{size-table}
 \begin{tabular}{ll}
   \hline
 Size of smallest non-trivial model & Number of laws \\
@@ -27,7 +28,6 @@ $5$ & $14$ \\
 $7$ & $2$\\
 \hline
 \end{tabular}
-\caption{Number of laws of order at most $4$ whose smallest non-trivial model (if any) is of a given size.}\label{size-table}
 \end{table}
 
 \begin{remark} The laws satisfied by a given finite magma $\Magma$ need not be finitely axiomatizable.  The smallest example is the three-element magma $\{0,1,2\}$ with $1 \op 2 = 1$, $2 \op 1 = 2 \op 2 = 2$, and $x \op y = 0$ for all other $x,y$ \cite{murskii-1}.  It was also shown in \cite{murskii-2} that ``almost all'' magmas $\Magma$ (in a certain precise sense) are idemprimal\footnote{A magma is idemprimal if every idempotent function is expressed by a term.  This is weaker than being primal (in which \emph{every} function is expressible by a term), but stronger than being quasiprimal (in which the \emph{discriminator} $f(a,b,c)$, defined to equal $c$ if $a=b$ and $a$ otherwise, is expressed by a term); quasiprimality is sufficient to show that all other finite magmas satisfying the laws of $\Magma$ are isomorphic to products of submagmas of $\Magma$.  By combining these observations with \cite{Padmanabhan}, one can also show that quasiprimal finite magmas can be axiomatized by a single equation.  We thank Stanley Burris for these comments, as well as the other references and observations in this remark.}, which implies that their laws are finitely axiomatizable, and all other finite magmas satisfying these laws are isomorphic to powers of $\Magma$.
