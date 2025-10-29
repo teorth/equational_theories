@@ -9,7 +9,7 @@ The project achieved its primary goal on 14 April 2025, when the $\num{4694} \ti
 
 In order to describe the mathematical goals of the ETP, we need some notation. A \emph{magma} $\Magma = (M,\op)$ is a set $M$ (known as the \emph{carrier}) together with a binary operation $\op \colon M \times M \to M$. An \emph{equational law} for a magma, or \emph{law} for short, is an identity involving $\op$ and some formal indeterminates, which we will typically denote using the Roman letters $\x,\y,\z,\w,\uu,\vv$, as well as the formal equality symbol $\formaleq$ in place of the equality symbol $=$ to emphasize the formal nature of the law.  If $M$ is finite, we refer to its cardinality as the \emph{size} of the magma $\Magma$.
 
-In the ETP, a unique number was assigned to each equational law, via a numbering system that we describe in \Cref{numbering-app}.  For instance, the \emph{commutative law} $\x \op \y \formaleq \y \op \x$ is assigned the equation number \eqref{eq43}, while the \emph{associative law} $\x \op (\y \op \z) \formaleq (\x \op \y) \op \z$ is assigned the equation number \eqref{eq4512}.  A list of all equations referred to by number in this paper is also provided in \Cref{numbering-app}.
+In the ETP, a unique number was assigned to each equational law, via a numbering system that we describe in \Cref{numbering-app}.  For instance, the \emph{commutative law} $\x \op \y \formaleq \y \op \x$ is assigned to the equation number $\Eq{43}$, while the \emph{associative law} $\x \op (\y \op \z) \formaleq (\x \op \y) \op \z$ is assigned to the equation $\Eq{4512}$.  A list of all equations referred to by number in this paper is also provided in \Cref{numbering-app}.
 
 A magma $\Magma = (M,\op)$ satisfies a law $\E$ if the law $\E$ holds for all possible assignments of the indeterminates to elements of $M$, in which case we write $\Magma \models \E$. Thus, for instance $\Magma \models \Eq{43}$ if one has $x \op y = y \op x$ for all $x,y \in M$.  Note that the formal indeterminate symbols $\x, \y$ in $\Eq{43}$ are now replaced by concrete elements $x,y$ of the carrier $M$.
 
@@ -19,17 +19,17 @@ In this entailment pre-ordering, the maximal element is given by the trivial law
 
 We also define a variant: we say that $\E$ \emph{entails} ${\E'}$ \emph{for finite magmas}, and write ${\E} \modelsfin {\E'}$, if every \emph{finite} magma that satisfies $\E$, also satisfies ${\E'}$.  Clearly, the relation ${\E} \models {\E'}$ implies ${\E} \modelsfin {\E'}$; but, as observed by Austin \cite{austin_finite}, the converse is not true in general.
 
-The \emph{order} of an equational law is the number of occurrences of the magma operation, and can be viewed as a crude measure of complexity of the law. For instance, the commutative law \eqref{eq43} has order $2$, while the associative law \eqref{eq4512} has order $4$. We note some selected laws of small order that have previously appeared in the literature:
+The \emph{order} of an equational law is the number of occurrences of the magma operation, and can be viewed as a crude measure of complexity of the law. For instance, the commutative law $\Eq{43}$ has order $2$, while the associative law $\Eq{4512}$ has order $4$. We note some selected laws of small order that have previously appeared in the literature:
 \begin{itemize}
 \item The \emph{central groupoid law} $\x \formaleq (\y \op \x) \op (\x \op \z)$ \eqref{eq168} is an order-$3$ law introduced by Evans \cite{evans} and studied further by Knuth \cite{knuth} and many further authors, being closely related to central digraphs (also known as unique path property digraphs), and leading in particular to the discovery of the Knuth-Bendix algorithm \cite{knuth-bendix}; see \cite{klt} for a more recent survey.
-\item \emph{Tarski's axiom} $\x \formaleq \y \op (\z \op (\x \op (\y \op \z)))$ \eqref{eq543} is an order-$4$ law that was shown by Tarski \cite{Tarski1938} to characterize the operation of subtraction in an abelian group; that is to say, a magma $\Magma = (M,\op)$ satisfies \eqref{eq543} if and only if there is an abelian group structure on $\Magma$ for which $x \op y = x-y$ for all $x,y \in M$.
+\item \emph{Tarski's axiom} $\x \formaleq \y \op (\z \op (\x \op (\y \op \z)))$ \eqref{eq543} is an order-$4$ law that was shown by Tarski \cite{Tarski1938} to characterize the operation of subtraction in an abelian group; that is to say, a magma $\Magma = (M,\op)$ satisfies $\Eq{543}$ if and only if there is an abelian group structure on $\Magma$ for which $x \op y = x-y$ for all $x,y \in M$.
 \item In a similar vein, it was shown in \cite{mendelsohn-padmanabhan} (see also \cite{meredith-prior}) that the order-$4$ law
 $\x \formaleq (\y \op \z) \op (\y \op (\x \op \z))$ \eqref{eq1571} characterizes addition (or subtraction) in an abelian group of exponent $2$; it was shown in \cite{mccune_et_al} that the order-$6$ law $\x \formaleq (\y \op ((\x \op \y) \op \y)) \op (\x \op (\z \op \y))$ \eqref{eq345169} characterizes the Sheffer stroke in a boolean algebra, and it was shown in \cite{higman-neumann} that the order-$8$ law
 $\x \formaleq \y \op ((((\y \op \y) \op \x) \op \z) \op (((\y \op \y) \op \y) \op \z))$ \eqref{eq42323216} characterizes division in a (not necessarily abelian) group.
 \end{itemize}
 Some further examples of laws characterizing well-known algebraic structures are listed in \cite{mccune-survey}.
 
-The Birkhoff completeness theorem \cite[Th.~3.5.14]{term-rewriting} implies that an implication ${\E} \models {\E'}$ of equational laws holds if and only if the left-hand side of ${\E'}$ can be transformed into the right-hand side by a finite number of substitution rewrites using the law $\E$. However, the problem of determining whether such an implication holds is undecidable in general \cite{mckenzie}. Even when the order is small, some implications\footnote{Another contemporaneous example of this phenomenon was the solution of the Robbins problem \cite{robbins}.} can require lengthy computer-assisted proofs; for instance, it was noted in \cite{Kisielewicz2} that the order-$4$ law $\x \formaleq (\y \op \x) \op ((\x \op \z) \op \z)$ \eqref{eq1689} was equivalent to the singleton law \eqref{eq2}, but all known proofs were found with computer assistance.\footnote{We improved such a proof to make it human-readable, see \href{https://teorth.github.io/equational_theories/blueprint/implications-chapter.html}{the blueprint of the ETP}.}  Furthermore, for the finite magma implication relation ${\E} \modelsfin {\E'}$, no analogue of the Birkhoff completeness theorem is available.
+The Birkhoff completeness theorem \cite[Th.~3.5.14]{term-rewriting} implies that an implication ${\E} \models {\E'}$ of equational laws holds if and only if the left-hand side of ${\E'}$ can be transformed into the right-hand side by a finite number of substitution rewrites using the law $\E$. However, the problem of determining whether such an implication holds is undecidable in general \cite{mckenzie}. Even when the order is small, some implications\footnote{Another contemporaneous example of this phenomenon was the solution of the Robbins problem \cite{robbins}.} can require lengthy computer-assisted proofs; for instance, it was noted in \cite{Kisielewicz2} that the order-$4$ law $\x \formaleq (\y \op \x) \op ((\x \op \z) \op \z)$ \eqref{eq1689} was equivalent to the singleton law $\x \formaleq \y$ \eqref{eq2}, but all known proofs were found with computer assistance.\footnote{We improved such a proof to make it human-readable, see \href{https://teorth.github.io/equational_theories/blueprint/implications-chapter.html}{the blueprint of the ETP}.}  Furthermore, for the finite magma implication relation ${\E} \modelsfin {\E'}$, no analogue of the Birkhoff completeness theorem is available.
 
 \subsection{The Equational Theories Project}
 
@@ -44,14 +44,14 @@ Secondary aims of the ETP included the possibility of discovering unusually inte
 \subsection{Outcomes}
 
 The ETP achieved almost all of its primary objectives, with all of the $\num{22033636}$ implications ${\E} \models {\E'}$ and non-implications $\E \not \models {\E'}$ formalized in the proof assistant language \emph{Lean}, and can be found on the ETP GitHub repository.  See \Cref{fig:854}, \Cref{fig:1729} and \Cref{fig:longchain} for some small fragments of the implication graphs produced.
-The $\num{4694}$ laws organized into $\num{1415}$ equivalence classes, with by far the largest class being the class of $\num{1496}$ equations equivalent to the trivial law $\Eq{2}$.
+The $\num{4694}$ laws organized into $\num{1415}$ equivalence classes, with by far the largest class being the class of $\num{1496}$ equations equivalent to the singleton law $\Eq{2}$.
 
-For the finite implication graph ${\E} \modelsfin {\E'}$, we could similarly formalize all but two implications.  Specifically, we were unable to obtain either a human-readable or formalized proof or disproof of the implication $\Eq{677} \modelsfin \Eq{255}$ (or its equivalent dual $\Eq{2910} \modelsfin \Eq{47}$), despite extensive efforts from the participants of the project; we tentatively conjecture this implication to be false (i.e., that there exists a finite magma satisfying \eqref{eq677} but not \eqref{eq255}), but the refutation appears to be ``immune'' to most of the techniques that we developed for the project.  (We were however able to establish that the corresponding implication $\Eq{677} \models \Eq{255}$ for arbitrary magmas was false, using the greedy construction discussed in \Cref{greedy-sec}.)
+For the finite implication graph ${\E} \modelsfin {\E'}$, we could similarly formalize all but two implications.  Specifically, we were unable to obtain either a human-readable or formalized proof or disproof of the implication $\Eq{677} \modelsfin \Eq{255}$ (or its equivalent dual $\Eq{2910} \modelsfin \Eq{47}$), despite extensive efforts from the participants of the project; we tentatively conjecture this implication to be false (i.e., that there exists a finite magma satisfying $\Eq{677}$ but not $\Eq{255}$), but the refutation appears to be ``immune'' to most of the techniques that we developed for the project.  (We were however able to establish that the corresponding implication $\Eq{677} \models \Eq{255}$ for arbitrary magmas was false, using the greedy construction discussed in \Cref{greedy-sec}.)
 
 \begin{figure}
 \centering
 \includegraphics[width=0.85\textwidth]{854.png}
-\caption{A Hasse diagram of all the equational laws implied by \eqref{eq854} (for unrestricted magmas).  An edge in this diagram indicates that the lower equation implies the higher one. Rounded rectangles indicate groups of equivalent laws.  This graph was produced by the visualization tool \emph{Graphiti}, which was developed for this project.}
+\caption{A Hasse diagram of all the equational laws implied by $\Eq{854}$ (for unrestricted magmas).  An edge in this diagram indicates that the lower equation implies the higher one. Rounded rectangles indicate groups of equivalent laws.  This graph was produced by the visualization tool \emph{Graphiti}, which was developed for this project.}
 \label{fig:854}
 \end{figure}
 
@@ -59,7 +59,7 @@ For the finite implication graph ${\E} \modelsfin {\E'}$, we could similarly for
     \centering
     \includegraphics[width=0.4\textwidth]{ramanujan-infinite.png}
     \includegraphics[width=0.4\textwidth]{ramanujan-finite.png}
-    \caption{A Hasse diagram of all the equational laws implied by \eqref{eq1729}, both for unrestricted magmas (left) and finite magmas (right). Note the slightly larger number of implications in the latter.}
+    \caption{A Hasse diagram of all the equational laws implied by $\Eq{1729}$, both for unrestricted magmas (left) and finite magmas (right). Note the slightly larger number of implications in the latter.}
     \label{fig:1729}
 \end{figure}
 
@@ -125,7 +125,7 @@ For the finite implication graph ${\E} \modelsfin {\E'}$, we could similarly for
         \draw(3319)--(3253);
       \end{tikzpicture}%
     }
-    \caption{Longest chains of implications (length $15$) between inequivalent laws in the implication graph.  The parts above/below law \eqref{eq3} can be independently dualized. }
+    \caption{Longest chains of implications (length $15$) between inequivalent laws in the implication graph.  The parts above/below law $\Eq{3}$ can be independently dualized. }
     \label{fig:longchain}
 \end{figure}
 
@@ -133,7 +133,7 @@ Of the $\num{22033636}$ possible implications ${\E} \models {\E'}$, $\num{817827
 
 \begin{itemize}
     \item A very small number of positive implications were established and \textbf{formalized by hand}, mostly through direct rewriting of the laws; but this approach would not scale to the full project.
-    \item \textbf{Simple rewriting rules}, for instance based on the observation that any law of the form $\x \formaleq f(\y,\z,\dots)$ was necessarily equivalent to the trivial law \eqref{eq2}, could already reduce the size of potential equivalence classes by a significant fraction. We discuss this method in \Cref{rewrite-sec}.
+    \item \textbf{Simple rewriting rules}, for instance based on the observation that any law of the form $\x \formaleq f(\y,\z,\dots)$ was necessarily equivalent to the singleton law $\Eq{2}$, could already reduce the size of potential equivalence classes by a significant fraction. We discuss this method in \Cref{rewrite-sec}.
     \item The preorder axioms for $\models$, as well as the ``duality'' symmetry of the preorder with respect to replacing a magma operation $x \op y$ with its opposite $x \op^{\mathrm{op}} y \coloneqq y \op x$, can be used to significantly cut down on the number of implications that need to be proven explicitly; ultimately, only $10657$ ($0.13\%$) of the positive implications needed a direct proof.
     \item To obtain additional implications for finite magmas, heavy reliance was made on the fact that for functions $f \colon M \to M$ on a finite set $M$, surjectivity was equivalent to injectivity.  Some more sophisticated variants of this idea can lead to additional implications; see \Cref{finite-sec}.
     \item \textbf{Automated Theorem Provers} (ATP) could be deployed at extremely fast speeds to establish a complete generating set of positive implications; see \Cref{automated-sec}.
@@ -154,7 +154,7 @@ More challenging were the $\num{13855357}$ ($62.88\%$) implications that were fa
 
 While the vast majority of negative implications could be quickly resolved by one of the above techniques, either with human input or in a completely automated fashion, there were perhaps two dozen such negative results that required quite delicate and \emph{sui generis} constructions.  The hardest such implication, $\Eq{1729} \nmodels \Eq{817}$, took several months to establish and then formalize (using a combination of many of the above constructions), with the final proof in \emph{Lean} requiring just over $\num{4000}$ dedicated lines of code from multiple contributors.
 
-In the course of completing the implication graph, some interesting new algebraic structures were discovered.  One such example concerns the magmas satisfying \eqref{eq1485}, which we refer to as \emph{weak central groupoids} as they contain the central groupoids (satisfying \eqref{eq168}) as a subclass.  In \cite{knuth} it was observed that all finite central groupoids have order equal to a perfect square $n^2$; empirically, we have found that finite weak central groupoids always have order $n^2$ or $2n^2$, although we have no rigorous proof of this claim; they also have a graph-theoretic interpretation analogous to the interpretation of central groupoids as digraphs with the unique path property.  For these and other observations we refer the reader to \href{https://teorth.github.io/equational_theories/blueprint/weak-central-groupoids-chapter.html}{the blueprint of the ETP}.
+In the course of completing the implication graph, some interesting new algebraic structures were discovered.  One such example concerns the magmas satisfying $\Eq{1485}$, which we refer to as \emph{weak central groupoids} as they contain the central groupoids (satisfying $\Eq{168}$) as a subclass.  In \cite{knuth} it was observed that all finite central groupoids have order equal to a perfect square $n^2$; empirically, we have found that finite weak central groupoids always have order $n^2$ or $2n^2$, although we have no rigorous proof of this claim; they also have a graph-theoretic interpretation analogous to the interpretation of central groupoids as digraphs with the unique path property.  For these and other observations we refer the reader to \href{https://teorth.github.io/equational_theories/blueprint/weak-central-groupoids-chapter.html}{the blueprint of the ETP}.
 
 The objective of using the data from the ETP to establish well-calibrated benchmarks to evaluate ATPs remains an interesting open problem; the participants of this project did not have the required expertise to develop and test such benchmarks to the standards expected in the area.  However, in \Cref{automated-sec} we present a more informal ``field report'' of our experiences using ATPs in the project, in the hope that this will provide some useful guidance to other researchers seeking to incorporate ATPs into their own research.
 
@@ -213,7 +213,7 @@ The objective of using the data from the ETP to establish well-calibrated benchm
 
 While the primary objective of the ETP was being completed, some additional related results were generated as spinoffs.  Specifically:
 \begin{itemize}
-\item In the blueprint on the ETP web site, we report some partial progress on classifying which of the $57882$ distinct laws of order $5$ are equivalent to the singleton law \eqref{eq2}, either with or without the requirement that the magma be finite.
+\item In the blueprint on the ETP web site, we report some partial progress on classifying which of the $57882$ distinct laws of order $5$ are equivalent to the singleton law $\Eq{2}$, either with or without the requirement that the magma be finite.
 \item In \Cref{spectrum-sec} we report on the determination of laws with full spectrum, i.e., with magmas satisfying them of all finite sizes.
-\item In \Cref{higman-neumann} we report on classifying the laws of order $8$ that are equivalent to the Higman-Neumann law \eqref{eq42323216}.
+\item In \Cref{higman-neumann} we report on classifying the laws of order $8$ that are equivalent to the Higman-Neumann law $\Eq{42323216}$.
 \end{itemize}

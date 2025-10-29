@@ -5,8 +5,8 @@ Many proofs or refutations of implications (or equivalences) between two equatio
 
 \subsection{Simple rewrites}\label{rewrite-sec}
 
-Many equational laws $\E'$ can be formally deduced from a given law $\E$ by applying the \emph{Lean} \texttt{rw} tactic to rewrite $\E'$ repeatedly by some forward or backward application of $\E$ applied to arguments that match some portion of $\E$.  For instance, the commutative law \eqref{eq43} clearly implies $\x \op (\y \op \z) \formaleq (\y \op \z) \op \x$ \eqref{eq4531}
-by a single such rewrite.  A brute force application of such rewrite methods is already able to directly generate about $\num{15000}$ such implications, including many equivalences to the singleton law \eqref{eq2} and the constant law \eqref{eq46}.  After applying transitive closure, this generates about four million further such implications.
+Many equational laws $\E'$ can be formally deduced from a given law $\E$ by applying the \emph{Lean} \texttt{rw} tactic to rewrite $\E'$ repeatedly by some forward or backward application of $\E$ applied to arguments that match some portion of $\E$.  For instance, the commutative law $\Eq{43}$ clearly implies $\x \op (\y \op \z) \formaleq (\y \op \z) \op \x$ \eqref{eq4531}
+by a single such rewrite.  A brute force application of such rewrite methods is already able to directly generate about $\num{15000}$ such implications, including many equivalences to the singleton law $\Eq{2}$ and the constant law $\Eq{46}$.  After applying transitive closure, this generates about four million further such implications.
 
 A simple observation that already generates a reasonable number of equivalences is that any equation of the form $\x \formaleq f(\y,\z,\dots)$ necessarily is equivalent to the trivial law $\x \formaleq \y$, by transitivity; similarly, an equation of the form $f(\x,\y) \formaleq g(\z,\w,\dots)$ implies $f(\x,\y) \formaleq f(\x',\y')$; and so forth.  Equivalences of this form were useful early in the project by cutting down the number of distinct equivalence classes of laws that needed to be studied.
 
@@ -14,7 +14,7 @@ A simple observation that already generates a reasonable number of equivalences 
 
 Fix an alphabet $X$. A \emph{matching invariant} is an assignment $I \colon M_X \to {\mathcal I}$ of an object $I(w) \in {\mathcal I}$ in some space ${\mathcal I}$ to each word $w \in M_X$ with the property that if an equational law $w_1 \formaleq w_2$ has matching invariants $I(w_1)=I(w_2)$, then the same matching $I(w'_1) = I(w'_2)$ holds for any consequence $w'_1 \formaleq w'_2$.  In particular, if one has $I(w_1)=I(w_2)$ and $I(w'_1) \neq I(w'_2)$, then the law $w_1 \formaleq w_2$ does not imply the law $w'_1 \formaleq w'_2$.
 
-A simple example of a matching invariant is the multiplicity $(n_x)_{x \in X}$ of variables of a word: if $w_1,w_2$ have all variables $x$ appear the same number of times $n_x$ in both words, then any rewriting of a word $w$ using the law $w_1 \formaleq w_2$ will preserve this property.  Hence, if $w'_1, w'_2$ do not have that each variable appear the same number of times in both words, then $w_1 \formaleq w_2$ cannot imply $w'_1 \formaleq w'_2$.  For instance, the commutative law \eqref{eq43} cannot imply the left-absorptive law \eqref{eq4}.
+A simple example of a matching invariant is the multiplicity $(n_x)_{x \in X}$ of variables of a word: if $w_1,w_2$ have all variables $x$ appear the same number of times $n_x$ in both words, then any rewriting of a word $w$ using the law $w_1 \formaleq w_2$ will preserve this property.  Hence, if $w'_1, w'_2$ do not have that each variable appear the same number of times in both words, then $w_1 \formaleq w_2$ cannot imply $w'_1 \formaleq w'_2$.  For instance, the commutative law $\Eq{43}$ cannot imply the left-absorptive law $\Eq{4}$.
 
 One source of matching invariants comes from the free magma $\Magma_{X,\Gamma}$ of a theory:
 
@@ -36,10 +36,10 @@ One source of matching invariants comes from the free magma $\Magma_{X,\Gamma}$ 
 In particular, the hypothesis $I(w_1)=I(w_2)$ implies that $\varphi_f(w_1) = \varphi_f(w_2)$ for all $f \colon X \to M_{X,\Gamma}$; that is to say, the magma $\Magma_{X,\Gamma}$ satisfies the law $w_1 \formaleq w_2$, and hence also $w'_1 \formaleq w'_2$ by hypothesis.  Thus $\varphi_{\iota_{X,\Gamma}}(w'_1) = \varphi_{\iota_{X,\Gamma}}(w'_2)$, which gives $I(w'_1) = I(w'_2)$ as required.
 \end{proof}
 
-\begin{example}  If we take $\Gamma = \{\Eq{4}\}$ to be the theory of the left-absorptive law \eqref{eq4} as described in \Cref{left-absorb}, then the matching invariant $I(w)$ produced by \Cref{free-inv} is the left-most letter of the alphabet $X$ appearing in the word; for instance $I((\x \op \y) \op \z) = \x$.  Thus, for example, the left-absorptive law \eqref{eq4} cannot imply the right-absorptive law \eqref{eq5}.
+\begin{example}  If we take $\Gamma = \{\Eq{4}\}$ to be the theory of the left-absorptive law $\Eq{4}$ as described in \Cref{left-absorb}, then the matching invariant $I(w)$ produced by \Cref{free-inv} is the left-most letter of the alphabet $X$ appearing in the word; for instance $I((\x \op \y) \op \z) = \x$.  Thus, for example, the left-absorptive law $\Eq{4}$ cannot imply the right-absorptive law $\Eq{5}$.
 \end{example}
 
-\begin{example}  If we take $\Gamma = \{\Eq{43}, \Eq{4512}\}$ to be the theory of the commutative law \eqref{eq43} and the associative law \eqref{eq4512}, then by \Cref{semi-group}, the associated invariant $I(w) = \sum_{x \in X} n_x e_x$ is the formal sum of all the generators $e_x$ appearing in the word $w$, in the free abelian semigroup generated by those generators.  This recovers the preceding observation that the multiplicities $(n_x)_{x \in X}$ form a matching invariant.
+\begin{example}  If we take $\Gamma = \{\Eq{43}, \Eq{4512}\}$ to be the theory of the commutative law $\Eq{43}$ and the associative law $\Eq{4512}$, then by \Cref{semi-group}, the associated invariant $I(w) = \sum_{x \in X} n_x e_x$ is the formal sum of all the generators $e_x$ appearing in the word $w$, in the free abelian semigroup generated by those generators.  This recovers the preceding observation that the multiplicities $(n_x)_{x \in X}$ form a matching invariant.
 \end{example}
 
 \begin{example}  Let $n \geq 1$ be a positive integer, and consider the theory $\Gamma = \{\Eq{43}, \Eq{4512}, \E_n\}$ consisting of the previous theory $\{\Eq{43}, \Eq{4512}\}$ together with the order-$n$ law $L_x^n y = y$.  One can check that the free magma $\Magma_{X,\Gamma}$ can be described as the free abelian group of exponent $n$ with generators $e_x, x \in X$, with associated map $\iota_{X,\Gamma} \colon x \mapsto e_x$.  The associated matching invariant $I(w) = \sum_{x \in X} n_x e_x$ is essentially the multiplicities $(n_x \hbox{ mod } n)_{x \in X}$ modulo $n$, which gives a slightly stronger criterion than the preceding matching invariant for refuting implications.  For example, the cubic idempotent law $\x \formaleq (\x \op \x) \op \x$ \eqref{eq23}
@@ -122,29 +122,29 @@ We illustrate this approach with equations $\E$ of the left-absorptive form
 \begin{equation}\label{left-absorptive}
 \x \formaleq \x \op f(\x,\y,\z)
 \end{equation}
-for some word $f(\x,\y,\z)$, that are also known to imply the right-idempotent law \eqref{eq378}.  An illustrative example is the law \eqref{eq854} depicted in Figure \ref{fig:854}. Other examples are listed in \Cref{fig:854-like}.
+for some word $f(\x,\y,\z)$, that are also known to imply the right-idempotent law \eqref{eq378}.  An illustrative example is the law $\Eq{854}$ depicted in Figure \ref{fig:854}. Other examples are listed in \Cref{fig:854-like}.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.85\textwidth]{854-like.png}
-  \caption{Equations similar to \eqref{eq854} that are of the form \eqref{left-absorptive} (possibly involving a fourth indeterminate $\w$) and imply \eqref{eq378}.  For brevity, $70$ equations equivalent to \eqref{eq4} have been omitted.}
+  \caption{Equations similar to $\Eq{854}$ that are of the form \eqref{left-absorptive} (possibly involving a fourth indeterminate $\w$) and imply $\Eq{378}$.  For brevity, $70$ equations equivalent to $\Eq{4}$ have been omitted.}
   \label{fig:854-like}
   \end{figure}
 
 
-\begin{lemma}\label{854} Equation \eqref{eq854} is of the form \eqref{left-absorptive} and implies \eqref{eq378}.
+\begin{lemma}\label{854} Equation $\Eq{854}$ is of the form \eqref{left-absorptive} and implies $\Eq{378}$.
 \end{lemma}
 
-\begin{proof}  Clearly we have \eqref{left-absorptive} with $f(\x,\y,\z) \coloneqq (\y \op \z) \op (\x \op \z)$.  From \eqref{left-absorptive} we have in any magma satisfying \eqref{eq854} that
+\begin{proof}  Clearly we have \eqref{left-absorptive} with $f(\x,\y,\z) \coloneqq (\y \op \z) \op (\x \op \z)$.  From \eqref{left-absorptive} we have in any magma satisfying $\Eq{854}$ that
 $$x = x \op f(x,x,S^2 x) = x \op S(x \op S^2 x) = x \op S(x \op f(x,x,x)) = x \op Sx.$$
 This implies from a further application of \eqref{left-absorptive} that
 $$ y = y \op f(y,x,y) = (y \op Sy) \op ((x \op y) \op Sy) = f(x \op y, y, Sy)$$
 and hence by \eqref{left-absorptive} again
 $$ (x \op y) \op y = x \op y$$
-giving \eqref{eq378}.
+giving $\Eq{378}$.
 \end{proof}
 
-Let $\E$ be a law of the form \eqref{left-absorptive} that implies \eqref{eq378}. We define a directed graph $\to_\E$ on words in $\Magma_X$ by declaring $w' \to_\E w$ if $w \sim_\E w'' \op w'$ for some $w' \in M_X$.  By \eqref{eq378} (applied to the quotient magma $\Magma_{X,\E} = \Magma_X/\sim_\E$), this is equivalent to requiring that $w \sim_\E w \op w'$. In particular, from \eqref{left-absorptive} we have $f(x,y,z) \to x$ for all $x,y,z$.  Furthermore, the relation $\to_\E$ factors through $\sim_\E$: if $w \sim_\E \tilde w$ and $w' \sim_\E \tilde w'$, then $w' \to_\E w$ if and only if $\tilde w \to_\E \tilde w$.
+Let $\E$ be a law of the form \eqref{left-absorptive} that implies $\Eq{378}$. We define a directed graph $\to_\E$ on words in $\Magma_X$ by declaring $w' \to_\E w$ if $w \sim_\E w'' \op w'$ for some $w' \in M_X$.  By $\Eq{378}$ (applied to the quotient magma $\Magma_{X,\E} = \Magma_X/\sim_\E$), this is equivalent to requiring that $w \sim_\E w \op w'$. In particular, from \eqref{left-absorptive} we have $f(x,y,z) \to x$ for all $x,y,z$.  Furthermore, the relation $\to_\E$ factors through $\sim_\E$: if $w \sim_\E \tilde w$ and $w' \sim_\E \tilde w'$, then $w' \to_\E w$ if and only if $\tilde w \to_\E \tilde w$.
 
 Call a word $w \in M_X$ \emph{irreducible} if it is not of the form $w = w_1 \op w_2$ with $w_2 \to_\E w_1$.  We can partially understand the equivalence relation $\sim_\E$ on irreducible words:
 
@@ -182,7 +182,7 @@ Specializing to the case where $w,w'$ are both irreducible, we conclude
 
 As an application of this corollary, we establish
 
-\begin{proposition}[$\Eq{854}$ does not imply $\Eq{3316}$]\label{854-3316} Equation \eqref{eq854} does not imply \eqref{eq3316}.
+\begin{proposition}[$\Eq{854}$ does not imply $\Eq{3316}$]\label{854-3316} Equation $\Eq{854}$ does not imply $\Eq{3316}$ .
 \end{proposition}
 
 \begin{proof}(Sketch)
@@ -194,9 +194,9 @@ Suppose this were not the case, then by \Cref{unique-factorization} one of the f
 \item[(ii)] $(\y \op (\x \op \y)) \to_{\Eq{854}} \x$.
 \item[(iii)] $\y \op (\x \op \y) \sim_{\Eq{854}} \y$.
 \end{itemize}
-If (i) holds, then we have $\x \op \y = \x$ must hold in $\Magma_X/\sim_\E$, hence \eqref{eq854} would imply \eqref{eq4}.  However, it is possible to refute this implication by a finite counterexample.
+If (i) holds, then we have $\x \op \y = \x$ must hold in $\Magma_X/\sim_\E$, hence $\Eq{854}$ would imply $\Eq{4}$.  However, it is possible to refute this implication by a finite counterexample.
 
-Similarly, if (iii) held, then \eqref{eq854} would have to imply \eqref{eq10}, but this can also be refuted by a finite magma.
+Similarly, if (iii) held, then $\Eq{854}$ would have to imply $\Eq{10}$, but this can also be refuted by a finite magma.
 
 Finally, if (ii) held, then the claim
 $$  \x \op \y \sim_{\Eq{854}} \x \op (\y \op (\x \op \y))$$
