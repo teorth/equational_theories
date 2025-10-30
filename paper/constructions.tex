@@ -6,13 +6,13 @@ In this section we collect the various techniques developed in the ETP to constr
 \subsection{Finite magmas}\label{finite-sec}
 
 A finite magma $\Magma$ of size $n$ can be assumed without loss of generality to have carrier $\{1,\dots,n\}$ and described by specifying the multiplication table $\op \colon \{1,\dots,n\} \times \{1,\dots,n\} \to \{1,\dots,n\}$.  By generating a list of all the equational laws $\Eq{j}$, $j=1,\dots,4694$ satisfied by this magma, one can create refutations: if $\Magma \models \Eq{j}$ and $\Magma \not \models \Eq{k}$, then clearly $\Eq{j} \nmodelsfin \Eq{k}$ and hence also $\Eq{j} \nmodels \Eq{k}$.  (As mentioned previously, these statements were organized in Lean using the \texttt{Facts} statement.) It is feasible to brute force over all $\sum_{n=2}^4 n^{n^2} \approx 4.3 \times 10^9$ non-trivial magmas of size at most $4$ to obtain many refutations of this type.
-By performing brute force over all magmas up to size $4$, a total of $\num{13632566}$ implications ($61.9\%$ of all implications, and $96.3\%$ of the false ones) can be refuted with $524$ distinct magmas. Of these implications, $\num{13345053}$ were refuted with magmas of size $3$, with the remaining $\num{415293}$ requiring magmas of size $4$. Performing this search took 165 CPU-hours.
+By performing brute force over all magmas up to size $4$, a total of $\num{13632566}$ implications ($61.9\%$ of all implications, and $96.3\%$ of the false ones) can be refuted with $524$ distinct magmas. Of these implications, $\num{13345053}$ were refuted with magmas of size\footnote{For an earlier computer exploration of size $3$ magmas, see \cite{berman-burris}.} $3$, with the remaining $\num{415293}$ requiring magmas of size $4$. Performing this search took 165 CPU-hours.
 
 However, it is not feasible to exhaustively search over the $5^{5^2} \approx 3 \times 10^{17}$ magmas of size $5$, even after quotienting out by isomorphism and symmetry (which roughly saves a factor of $5! \times 2 = 240$).  Randomly sampling such magmas did not produce significant refutations, as random magmas of size $5$ tended to satisfy few laws, and the set of laws covered were usually also exhibited by smaller magmas.  A more fruitful approach was to randomly sample from magmas with additional properties that encouraged satisfiability of a greater set of laws.  These included linear and quadratic magmas (discussed below), and cancellative magmas.  On the other hand, some classes of magmas, such as commutative magmas, ended up producing a disappointingly small number of additional refutations.
 
 For specific refutations, it was sometimes possible to locate a finite example with an ATP, particularly if one also imposed additional axioms (e.g., an idempotence axiom $x = x \op x$) that one suspected would be useful; see \Cref{automated-sec} for further discussion.  For medium-sized magmas (of size $n=5,6,7,8$), this appeared to be a more efficient approach than brute force exhaustion of all such magmas.
 
-It is a result of Kisielewicz \cite{Kisielewicz} that every law $\Eq{n}$ with $n \leq 4694$ is either equivalent to the singleton law $\Eq{2}$, or else has a non-trivial finite model; in other words, the implications $\Eq{n} \models \Eq{2}$ and $\Eq{n} \modelsfin \Eq{2}$ are equivalent for $n \leq 4694$.  Our brute force search revealed that in the latter case there is always a model of size $2 \leq n \leq 5$, with the lone exception of \eqref{eq1286} (and its dual \eqref{eq2301}), for which the smallest non-trivial finite model was of size $7$, as presented in \Cref{1286-ex} below.  In fact, most of the $\num{4694}$ laws either only had trivial models, or had a size $2$ model, as shown in \Cref{size-table}.
+It is a result of Kisielewicz \cite{Kisielewicz} that every law $\Eq{n}$ with $n \leq 4694$ is either equivalent to the singleton law $\Eq{2}$, or else has a non-trivial finite model; in other words, the implications $\Eq{n} \models \Eq{2}$ and $\Eq{n} \modelsfin \Eq{2}$ are equivalent for $n \leq 4694$.  Our brute force search revealed that in the latter case there is always a model of size $2 \leq n \leq 5$, with the lone exception of $\Eq{1286}$ (and its dual $\Eq{2301}$), for which the smallest non-trivial finite model was of size $7$, as presented in \Cref{1286-ex} below.  In fact, most of the $\num{4694}$ laws either only had trivial models, or had a size $2$ model, as shown in \Cref{size-table}.
 \begin{table}
 \centering
 \caption{Number of laws of order at most $4$ whose smallest non-trivial model (if any) is of a given size.}\label{size-table}
@@ -55,7 +55,7 @@ Thus, to show that $\Eq{1286}$ does not entail $\Eq{3}$, it suffices to locate e
 
 \begin{example}[Noncommutative counterexample]\label{1117-ex} For the law $x \formaleq y \op ((y \op (x \op z)) \op z)$ \eqref{eq1117}, the variety \eqref{variety} can be computed to be
 $$ \{ (a,b) \in M \times M: 1 = baba, 0 = a+ba^2, 0 = bab^2 + b^2 \}$$
-while the variety for $x = (x \op ((x \op x) \op x)) \op x$ \eqref{eq2441} is
+while the variety for $x \formaleq (x \op ((x \op x) \op x)) \op x$ \eqref{eq2441} is
 $$ \{ (a,b) \in M \times M: 1 = a^2 + aba^2 + abab + ab^2 + b \}.$$
 Observe that if $ba = -1$, then $(a,b)$ automatically lies in the first set, and lies in the second set if and only if $(ab+1)(b-1) = 0$.  One can then show that $\Eq{1117}$ does not imply $\Eq{2441}$ by setting $a = L$, $b = -R$ where $L, R$ are the left and right shift operators respectively on the ring of integer-valued sequences $\Z^\N$.  With some \emph{ad hoc} effort one can convert this example into a less linear, but simpler (and easier to formalize) example, namely the magma with carrier $\Z$ and operation $x \op y = 2x - \lfloor y/2 \rfloor$.
 \end{example}
@@ -187,7 +187,7 @@ We refer to $\Gamma$ as the \emph{rule set} for the greedy extension method. To 
 
 As an example, we present
 
-\begin{proposition}[$\Eq{73}$ does not imply $\Eq{4380}$]\label{73-4380} The law $\x \formaleq \y \op (\y \op (\x \op \y))$ \eqref{eq73} does not imply $\x \op (\x \op \x) \formaleq (\x \op \x) \op \x$ \eqref{eq4380}.
+\begin{proposition}[$\Eq{73} \nmodels \Eq{4380}$]\label{73-4380} The law $\x \formaleq \y \op (\y \op (\x \op \y))$ \eqref{eq73} does not imply $\x \op (\x \op \x) \formaleq (\x \op \x) \op \x$ \eqref{eq4380}.
 \end{proposition}
 
 \begin{proof} To build a rule set $\Gamma$ that will imply $\Eq{73}$ when total, a natural first choice would be the single rule
@@ -265,10 +265,10 @@ One appealing case of (ii) that our project discovered, involving a ``magma coho
 \end{equation}
 for some function $f \colon G \times G \to M$.  If $(M,\op_M)$ and $(G,\op_G)$ already satisfy a law $\E$, then this extension will also satisfy $\E$ if and only if $f$ satisfies a certain ``cocycle equation'', which is a linear equation on $f$.  One can then sometimes use linear algebra to locate an $f$ that satisfies the cocycle equation for one law $\E$ but not another ${\E'}$, thus refuting the implication $\E \models {\E'}$.  An example is as follows:
 
-\begin{proposition}[$\Eq{1110}$ does not imply $\Eq{1629}$]\label{1110-1629} The law $\x \formaleq \y \op ((\y \op (\x \op \x)) \op \y)$ \eqref{eq1110} does not imply $\x \formaleq (\x \op \x) \op ((\x \op \x) \op \x)$ \eqref{eq1629}, even for finite magmas.
+\begin{proposition}[$\Eq{1110} \nmodels \Eq{1629}$]\label{1110-1629} The law $\x \formaleq \y \op ((\y \op (\x \op \x)) \op \y)$ \eqref{eq1110} does not imply $\x \formaleq (\x \op \x) \op ((\x \op \x) \op \x)$ \eqref{eq1629}, even for finite magmas.
 \end{proposition}
 
-\begin{proof}  (Sketch) Using the linear ansatz, we find that $\Eq{1110}$ has a model $\Magma$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xsyt} with $G=M$.  One then finds that this operation satisfies \eqref{eq1110} if $f \colon \F_5 \times \F_5 \to \F_5$  the cocycle equation
+\begin{proof}  (Sketch) Using the linear ansatz, we find that $\Eq{1110}$ has a model $\Magma$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xsyt} with $G=M$.  One then finds that this operation satisfies $\Eq{1110}$ if $f \colon \F_5 \times \F_5 \to \F_5$  the cocycle equation
   $$3f(x,x) - 3f(y,2x) - f(3y-2x,y) + f(y,3y-x) = 0$$
 for all $x,y \in \F_5$, and satisfies $\Eq{1629}$ if $f$ satisfies the cocycle equation
 $$ f(2x,0) - f(2x,2x) = 0$$
@@ -283,7 +283,7 @@ It may be of interest to develop this theory of ``magma cohomology'' further, fo
 
 Now we give an example of how method (ii) can be combined with method (i).
 
-\begin{proposition}[$\Eq{1659}$ does not imply $\Eq{4315}$]\label{1659-4315} The law $\x \formaleq (\x \op \y) \op ((\y \op \y) \op \z)$ \eqref{eq1659} does not imply $\x \op (\y \op \x) \formaleq \x \op (\y \op \z)$ \eqref{eq4315}.
+\begin{proposition}[$\Eq{1659} \nmodels \Eq{4315}$]\label{1659-4315} The law $\x \formaleq (\x \op \y) \op ((\y \op \y) \op \z)$ \eqref{eq1659} does not imply $\x \op (\y \op \x) \formaleq \x \op (\y \op \z)$ \eqref{eq4315}.
 \end{proposition}
 
 \begin{proof}  There are two simple models for $\Eq{1659}$: the model $G$ with carrier $\Z/2\Z$ and operation $x \op y = x+1$, and the model $\Magma$ with carrier $\Z$ and operation $x \op y = x$.  Using the ansatz \eqref{xsyt}, one can soon discover that one obtains a magma operation $\op: (G \times \Z) \times (G \times \Z) \to G \times \Z$ with $f(0,0)=f(1,0)=0$, $f(0,1)=-1$, and $f(1,1)=1$.  This model still satisfies $\Eq{4315}$. However, we can create a modification $\op'$ of $\op$ as follows.  We will seek to violate $\Eq{4315}$ at $x = (0,0)$, $y = (0,0)$, $z = (1,0)$, thus we want
