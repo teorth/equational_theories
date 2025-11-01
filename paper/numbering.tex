@@ -11,8 +11,11 @@ We place a well-ordering on words $w,w'$ with a single indeterminate $\ast$ by d
     \item $w = w_1 \op w_2$ and $w' = w'_1 \op w'_2$ have the same order $n \geq 1$ with $w_1 > w'_1$.
     \item $w = w_1 \op w_2$ and $w' = w'_1 \op w'_2$ have the same order $n \geq 1$ with $w_1 = w'_1$ and $w_2 > w'_2$.
 \end{itemize}
-Thus, for instance
-$$ \ast < \ast \op \ast < \ast \op (\ast \op \ast) < (\ast \op \ast) \op \ast.$$
+Thus
+\begin{align*}
+    \ast < \ast \op \ast &< \ast \op (\ast \op \ast) < (\ast \op \ast) \op \ast \\
+    < \ast \op (\ast \op (\ast \op \ast)) &< \ast \op ((\ast \op \ast) \op \ast) < \dots
+\end{align*}
 
 We similarly place a well-ordering on equational laws $w_1 \formaleq w_2$ with a single indeterminate $\ast$ by declaring $w_1 \formaleq w_2 > w'_1 \formaleq w'_2$ if one of the following holds:
 as follows:
