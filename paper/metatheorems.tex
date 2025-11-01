@@ -72,9 +72,9 @@ We describe a concrete strategy for building such $C$s, which will require a num
 Let $R \colon M_X \to M_X$ be an arbitrary function.
 \begin{itemize}
 \item  We say that $R$ is \emph{weakly collapsing} if for every word $w$, $R(w)$ is a (not necessarily proper) sub-word of $w$.
-\item  A function $\theta\colon X\rightarrow M_X$ is called a \emph{substitution}, and we can extend $\theta$ to an endomorphism~$\varphi:\Magma_X\rightarrow\Magma_X$ in the usual way. We write $\varphi_\theta w$ instead of $\varphi_\theta(w)$ for application of substitutions.
+\item  A function $\theta\colon X\rightarrow M_X$ is called a \emph{substitution}, and we can extend $\theta$ to an endomorphism~$\varphi_\theta \colon \Magma_X\rightarrow\Magma_X$ in the usual way. We write $\varphi_\theta w$ instead of $\varphi_\theta(w)$ for application of substitutions.
 \item  If $\E$ is the equation $l\simeq r$, and $l$ is not a variable, we say that $R$ is a \emph{weak canonizer} if for any substitution $\theta$, $R(\varphi_\theta l)=\varphi_\theta r$.
-\item  Finally we say that $R$ is \emph{non-overlapping} for $\E$ if for every word $w\in M_X$ which is a strict sub-word of $l$ that is not in $X$, and any substitution $\theta$, $R(w\theta) = \varphi_\theta w$.
+\item  Finally we say that $R$ is \emph{non-overlapping} for $\E$ if for every word $w\in M_X$ which is a strict sub-word of $l$ that is not in $X$, and any substitution $\theta$, $R(w\varphi_\theta) = \varphi_\theta w$.
 \end{itemize}
   We can then define $C_R\colon M_X\rightarrow M_X$ as follows:
 \begin{align}
@@ -90,19 +90,19 @@ The following lemma is readily proven by induction on the structure of terms.
 \end{lemma}
 We now have the following theorem.
 \begin{theorem}\label{thm:canon}
-  Whenever $R$ is weakly collapsing, a weak canonizer, and non-overlapping, then $C_R$ is a canonizer.
+  Whenever $R$ weakly collapsing, a weak canonizer, and non-overlapping, then $C_R$ is a canonizer.
 \end{theorem}
 \begin{proof}
   Assume $w\sim_{\E}w'$. We proceed by induction over the proof of equality.
 
-  The only non trivial case is $w = \varphi_\theta l$ and $w'=\varphi_\theta r$ for some substitution $\theta$.
+  The only non trivial case is $w = \varphi_\theta l$ and $w'=\varphi_\theta r$ for some substitution $\theta$.  The case $l=r$ is clear, so we may assume that $l \neq r$.
   Then we have
   \begin{align*}
     C_R(\varphi_\theta l) &= R(\varphi_{C_R\circ\theta}l) \\
                  &= \varphi_{C_R\circ\theta}r\\
                  &= C_R(\varphi_\theta r)
   \end{align*}
-  where the first and third equalities follow from the Lemma, observing that $r$ is a strict sub-term of $l$, and the second from weak canonicity.
+  where the first and third equalities follow from the Lemma, observing that $r$ is a strict sub-term of $l$ (since $R$ is weakly collapsing and a weak canonizer), and the second from weak canonicity.
 \end{proof}
 
 We mention an example to show why this is a useful theorem. Take $\E$ to be the equation
@@ -148,7 +148,7 @@ $$ (x \op y) \op y = x \op y$$
 giving $\Eq{378}$.
 \end{proof}
 
-Let $\E$ be a law of the form \eqref{left-absorptive} that implies $\Eq{378}$. We define a directed graph $\to_\E$ on words in $\Magma_X$ by declaring $w' \to_\E w$ if $w \sim_\E w'' \op w'$ for some $w' \in M_X$.  By $\Eq{378}$ (applied to the quotient magma $\Magma_{X,\E} = \Magma_X/\sim_\E$), this is equivalent to requiring that $w \sim_\E w \op w'$. In particular, from \eqref{left-absorptive} we have $f(x,y,z) \to x$ for all $x,y,z$.  Furthermore, the relation $\to_\E$ factors through $\sim_\E$: if $w \sim_\E \tilde w$ and $w' \sim_\E \tilde w'$, then $w' \to_\E w$ if and only if $\tilde w \to_\E \tilde w$.
+Let $\E$ be a law of the form \eqref{left-absorptive} that implies $\Eq{378}$. We define a directed graph $\to_\E$ on words in $\Magma_X$ by declaring $w' \to_\E w$ if $w \sim_\E w'' \op w'$ for some $w' \in M_X$.  By $\Eq{378}$ (applied to the quotient magma $\Magma_{X,\E} = \Magma_X/\sim_\E$), this is equivalent to requiring that $w \sim_\E w \op w'$. In particular, from \eqref{left-absorptive} we have $f(x,y,z) \to x$ for all $x,y,z$.  Furthermore, the relation $\to_\E$ factors through $\sim_\E$: if $w \sim_\E \tilde w$ and $w' \sim_\E \tilde w'$, then $w' \to_\E w$ if and only if $\tilde w' \to_\E \tilde w$.
 
 Call a word $w \in M_X$ \emph{irreducible} if it is not of the form $w = w_1 \op w_2$ with $w_2 \to_\E w_1$.  We can partially understand the equivalence relation $\sim_\E$ on irreducible words:
 
