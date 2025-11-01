@@ -39,10 +39,10 @@ As it turns out, a particularly fruitful source of counterexamples is the class 
 $$ w(x_1,\dots,x_n) = \sum_{i=1}^n P_{w,i}(a,b) x_i$$
 for some (possibly noncommutative) polynomial $P_{w,i}$ in $a,b$ with integer coefficients.  Thus, a linear magma will satisfy an equational law $w_1 \formaleq w_2$ if and only if the pair $(a,b)$ lies in the (possibly noncommutative) variety
 \begin{equation}\label{variety}
-  V_{w_1,w_2}(M) \coloneqq \{ (a,b) \in M \times M: P_{w_1,i}(a,b) = P_{w_2,i}(a,b) \hbox{ for all } i \} \subset M^2.
+  V_{w_1,w_2}(M) \coloneqq \{ (a,b) \in M \times M: P_{w_1,i}(a,b) = P_{w_2,i}(a,b) \hbox{ for all } i \} \subseteq M^2.
 \end{equation}
 As such, a necessary condition for such a law $w_1 \formaleq w_2$ to entail another law $w'_1 \formaleq w'_2$ is that one has the inclusion
-$$ V_{w_1,w_2}(M) \subset V_{w'_1,w'_2}(M)
+$$ V_{w_1,w_2}(M) \subseteq V_{w'_1,w'_2}(M)
 $$
 for all rings $M$.  For commutative rings, this criterion can be checked in an automatable fashion by standard Gr\"obner basis techniques; in the noncommutative case one can use methods such as the diamond lemma \cite{diamond-lemma}.
 

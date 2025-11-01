@@ -11,8 +11,11 @@ We place a well-ordering on words $w,w'$ with a single indeterminate $\ast$ by d
     \item $w = w_1 \op w_2$ and $w' = w'_1 \op w'_2$ have the same order $n \geq 1$ with $w_1 > w'_1$.
     \item $w = w_1 \op w_2$ and $w' = w'_1 \op w'_2$ have the same order $n \geq 1$ with $w_1 = w'_1$ and $w_2 > w'_2$.
 \end{itemize}
-Thus, for instance
-$$ \ast < \ast \op \ast < \ast \op (\ast \op \ast) < (\ast \op \ast) \op \ast.$$
+Thus
+\begin{align*}
+    \ast < \ast \op \ast &< \ast \op (\ast \op \ast) < (\ast \op \ast) \op \ast \\
+    < \ast \op (\ast \op (\ast \op \ast)) &< \ast \op ((\ast \op \ast) \op \ast) < \dots
+\end{align*}
 
 We similarly place a well-ordering on equational laws $w_1 \formaleq w_2$ with a single indeterminate $\ast$ by declaring $w_1 \formaleq w_2 > w'_1 \formaleq w'_2$ if one of the following holds:
 as follows:
@@ -44,7 +47,7 @@ if $n > 2$ is even, where $C_n, B_n$ are the Catalan and Bell numbers, and $D_n$
 $$ 1, 1, 2, 4, 11, 32, 117, \dots$$
 (\url{https://oeis.org/A103293}).  A proof of this claim can be found in the ETP blueprint.  In particular, there are $4694$ equations of order at most $4$.
 
-Below we record some specific equations appearing in this paper, using the alphabet $\x$, $\y$, $\z$, $\w$, $\uu$, $\vv$ in place of $0$, $1$, $2$, $3$, $4$, $5$, $\dots$ for readability.
+Below we record some specific equations appearing in this paper, using the alphabet $\x$, $\y$, $\z$, $\w$ in place of $0$, $1$, $2$, $3$ for readability.
 \begingroup\allowdisplaybreaks
 \begin{align}
     \x &\formaleq \x & \hbox{(Trivial law)} \label{eq1}\tag{E1} \\

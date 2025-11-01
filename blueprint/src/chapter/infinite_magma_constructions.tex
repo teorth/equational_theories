@@ -47,7 +47,7 @@ for $h \in G$.
 This equation has some degenerate solutions, for instance we can take $f(h) = c$ for any constant $c$ of order $3$ in $G$.  It is challenging to construct more interesting solutions to this equation; however, we can do this if $G=\Z$ by a greedy algorithm.  We need the following technical definition.
 
 \begin{definition}\label{partial-solution}  A \emph{partial solution} $(E_0, E_1, E_2, f)$ to \Cref{fh} consists of nested finite sets
-$$ E_0 \subset E_1 \subset E_2 \subset \Z$$ together with a function $f: E_1 \to E_2$ with the following properties:
+$$ E_0 \subseteq E_1 \subseteq E_2 \subseteq \Z$$ together with a function $f: E_1 \to E_2$ with the following properties:
 \begin{description}
   \item[(a)] If $h \in E_0$, then $f(h) \in E_1$, so that $f^2(h)$ is well-defined as an element of $E_2$; furthermore, $h + f(h) + f^2(h)$ lies in $E_1$, so that the left-hand side of \Cref{fh} makes sense; and \Cref{fh} holds.
   \item[(b)] The function $f$ is a bijection from $E_1 \backslash E_0$ to $E_2 \backslash E_1$.
@@ -57,7 +57,7 @@ $$ E_0 \subset E_1 \subset E_2 \subset \Z$$ together with a function $f: E_1 \to
 
 We partially order the space of partial solutions to \Cref{fh} by writing $(E_0, E_1, E_2, f) \leq (E'_0, E'_1, E'_2, f')$ if the following properties hold:
 \begin{itemize}
-  \item $E_i \subset E'_i$ for $i=0,1,2$.
+  \item $E_i \subseteq E'_i$ for $i=0,1,2$.
   \item $f$ agrees with $f'$ on $E_0$.
 \end{itemize}
 When this occurs we say that the partial solution $(E'_0, E'_1, E'_2, f')$ \emph{extends} the partial solution $(E_0, E_1, E_2, f)$.
@@ -91,7 +91,7 @@ First suppose that $h = h_0\in G \backslash E_2$.  We perform the following cons
     E'_1 &:= E_1 \cup \{h_0, h_1, h_0+h_1+h_2\} \\
     E'_2 &:= E_2 \cup \{h_0, h_1, h_0+h_1+h_2, h_2, -h_1-h_2\}.
   \end{align*}
-  Clearly we still have nested finite sets $E'_0 \subset E'_1 \subset E'_2$.
+  Clearly we still have nested finite sets $E'_0 \subseteq E'_1 \subseteq E'_2$.
   \item Extend $f : E_1 \to E_0$ to a function $f': E'_1 \to E'_0$ by defining
   \begin{align*}
     f'(h_0) &:= h_1 \\
@@ -111,7 +111,7 @@ Now suppose that $h = h_0 \in E_1 \backslash E_0$, then the quantity $h_1 := f(h
   E'_1 &:= E_1 \cup \{h_1, h_0+h_1+h_2\} \\
   E'_2 &:= E_2 \cup \{h_0+h_1+h_2, h_2, -h_1-h_2\}.
 \end{align*}
-Clearly we still have nested finite sets $E'_0 \subset E'_1 \subset E'_2$.
+Clearly we still have nested finite sets $E'_0 \subseteq E'_1 \subseteq E'_2$.
 \item Extend $f : E_1 \to E_0$ to a function $f': E'_1 \to E'_0$ by defining
 \begin{align*}
   f'(h_1) &:= h_2 \\
@@ -131,7 +131,7 @@ Finally, suppose that $h = h_1 = f(h_0)$ for some $h_0 \in E_1 \backslash E_0$, 
   E'_1 &:= E_1 \cup \{h_1, h_2, h_0+h_1+h_2, h_1+h_2+h_3 \}\\
   E'_2 &:= E_2 \cup \{h_2, h_3, h_0+h_1+h_2, h_1+h_2+h_3, -h_1-h_2, -h_2-h_3\}.
 \end{align*}
-Clearly we still have nested finite sets $E'_0 \subset E'_1 \subset E'_2$.
+Clearly we still have nested finite sets $E'_0 \subseteq E'_1 \subseteq E'_2$.
 \item Extend $f : E_1 \to E_0$ to a function $f': E'_1 \to E'_0$ by defining
 \begin{align*}
   f'(h_1) &:= h_2 \\
@@ -277,7 +277,7 @@ Here, it is best to work with \emph{partially defined magma operations} on some 
   \item[(VLT)] If $R(x,y,z)$ and $R(x,y,z')$ both hold for some $x,y,z,z' \in G$, then $z=z'$.
 \end{description}
 
-Such an operation is then associated (via a one-to-one correspondence) to a partially defined operation $\op : S \to G$ for some $S \subset G \times G$, with $R(x,y,z)$ holding if and only if $x \op y$ is well-defined (i.e., $(x,y) \in S$) and equal to $z$.  By abuse of notation, we shall also refer to $R$ as a partially defined magma operation.  Genuine magmas then correspond to the special case where $S = G \times G$, that is to say $x \op y$ is well-defined for all $x,y \in G$.
+Such an operation is then associated (via a one-to-one correspondence) to a partially defined operation $\op : S \to G$ for some $S \subseteq G \times G$, with $R(x,y,z)$ holding if and only if $x \op y$ is well-defined (i.e., $(x,y) \in S$) and equal to $z$.  By abuse of notation, we shall also refer to $R$ as a partially defined magma operation.  Genuine magmas then correspond to the special case where $S = G \times G$, that is to say $x \op y$ is well-defined for all $x,y \in G$.
 
 Given a word $w(x_1,\dots,x_n)$ in variables $x_1,\dots,x_n$ (so $w$ is an element of the free magma on $n$ generators), we can say that $w(x_1,\dots,x_n)$ is \emph{well-defined} with respect to a partially defined magma operation $R$ if it can be fully evaluated using $R$.  For instance, the word $(x \op y) \op z$ is well-defined if there exists $w,u \in G$ such that $R(x,y,w)$ and $R(w,z,u)$ both hold, in which case $(x \op y) \op z$ evaluates to $u$.  Note from the axiom (VLT) that this evaluation is unique, if it exists.  Of course, in a genuine magma, all expressions are well-defined.  We say that an expression $w(x_1,\dots,x_n)$ is \emph{almost well-defined} if all strict subexpressions of $w$ are well-defined.  For instance, $(x \op y) \op z$ is almost well-defined if there exists $w \in G$ such that $R(x,y,w)$ holds.
 
@@ -687,7 +687,7 @@ $$ T^3 - T = -I,$$
 then one can just take $f(h) = T(h)$.  For instance, if $G = \Z^3$, one can take the automorphism $T: \Z^3 \to \Z^3$ defined by
 $$ T(x,y,z) := (-z,x+z,y).$$
 
-We now extend this greedily to $\Z^3 \times \Z$ as follows.  Define a \emph{partial solution} $(E_1,E_2,f)$ to be a pair $\Z^3 \subset E_1 \subset E_2 \subset \Z^3 \times \Z$, and a function $f: E_2 \to E_1$ satisfying the following axioms.
+We now extend this greedily to $\Z^3 \times \Z$ as follows.  Define a \emph{partial solution} $(E_1,E_2,f)$ to be a pair $\Z^3 \subseteq E_1 \subseteq E_2 \subseteq \Z^3 \times \Z$, and a function $f: E_2 \to E_1$ satisfying the following axioms.
 \begin{description}
   \item[(a)] The set $E_2 \backslash \Z^3$ is finite.
   \item[(b)] For $h \in \Z^3$, $f(h) = Th$; in particular, $f$ is a bijection on $\Z^3$.
@@ -695,7 +695,7 @@ We now extend this greedily to $\Z^3 \times \Z$ as follows.  Define a \emph{part
   \item[(d)] For $h \in E_2 \backslash E_1$, $f(h) \in E_1$.
   \item[(e)] The elements $-h$, $h - f^2(h)$, and $f^2(h) - h$ for $h \in E_2 \backslash E_1$ are all distinct from each other, and all lie outside of $E_2$.  In particular this forces $f^2(h) \neq 0$, hence $f(h) \neq 0$. It also forces $f^2(h) \neq h$, hence $f(h) \neq h$.
 \end{description}
-Thus for instance one can take $(\Z^3,\Z^3,T)$ as a partial solution.  We say that a partial solution $(E'_1, E'_2, f')$ is an \emph{extension} of $(E_1,E_2,f)$ if $E_1 \subset E'_1$, $E'_2 \subset E_2$, and $f'$ agrees with $f$ on $E_2$.
+Thus for instance one can take $(\Z^3,\Z^3,T)$ as a partial solution.  We say that a partial solution $(E'_1, E'_2, f')$ is an \emph{extension} of $(E_1,E_2,f)$ if $E_1 \subseteq E'_1$, $E'_2 \subseteq E_2$, and $f'$ agrees with $f$ on $E_2$.
 
 Informally, $E_1$ represents the portion of $\Z^3 \times \Z$ where we have completely resolved the Dupont equation; the set $E_2 \backslash E_1$ represents the portion for which $f$ (and all forward iterates of $f$) have been defined, but the Dupont equation has not yet been verified; and the elements $-h$, $h - f^2(h)$, and $f^2(h) - h$ for $h \in E_2 \backslash E_1$ are the portion where $f$ is not yet defined, but for which one is ready to ``promote'' these elements to $E_2$ or $E_1$ by defining $f$ appropriately.
 
@@ -805,7 +805,7 @@ We say that a partial solution $f': E' \to \Z$ \emph{extends} another $f: E \to 
 
   {\bf Case 1:} $h_0 \in E$ and $f(h_0) \in E$.  In this case we are already done thanks to axiom (ii).
 
-  {\bf Case 2:} $h_0 \in E$ but $f(h_0) \not \in E$.  This is the main case.  Let $H$ be the set of all $h \in E$ such that $f(h) = f(h_0)$; this is a finite set containing $h_0$.  Let $H' \subset H$ be the set of all $h' \in H$ such that $-h' \in E$.  We make the following observations:
+  {\bf Case 2:} $h_0 \in E$ but $f(h_0) \not \in E$.  This is the main case.  Let $H$ be the set of all $h \in E$ such that $f(h) = f(h_0)$; this is a finite set containing $h_0$.  Let $H' \subseteq H$ be the set of all $h' \in H$ such that $-h' \in E$.  We make the following observations:
   \begin{itemize}
   \item[(a)] All elements $h$ of $H$ are non-zero.  For if $h=0$ then $f(h_0)=f(h)=1 \in E$, contradicting the hypothesis $f(h_0) \not \in E$.
   \item[(b)]  If $h' \in H'$ then $h' \neq h'+f(-h')$.  Otherwise we would have $f(-h')=0$, then by axiom (iii) we have $h' = -3$, hence $f(h_0) = f(h') = 4 \in E$ by axiom (i).  But this again contradicts the hypothesis $f(h_0) \not \in E$. (This is the main reason we take $E_0$ to be so large.)
