@@ -111,7 +111,7 @@ We mention an example to show why this is a useful theorem. Take $\E$ to be the 
 \]
 We can take $R$ to be the transformation which sends a term of the form $w \op (v \op (w \op (w \op w)))$ to $v$ for any two words $v, w$, and leaves all other words unchanged.
 It is then somewhat easy to show that this transformation satisfies the conditions of \Cref{thm:canon}, and so we have a canonizer $C_R$.
-This can be used, e.g.\@ to refute the implication of $\x \formaleq (\x \op \x) \op (\x \op (\x \op \x))$ from the above equality.
+This can be used, e.g.\@ to refute the implication of $\x \formaleq (\x \op \x) \op (\x \op (\x \op \x))$ from $\E$.
 
 As a conclusion for this section, we note that a very general strategy for building canonizers comes from the theory of \emph{rewrite systems}, see e.g.\@ Baader \& Nipkow \cite{term-rewriting}.
 In that setting one defines rewriting as a transformation on words (or terms), and if this transformation is \emph{terminating} and \emph{confluent} (intuitively, rewrites cannot go on forever, or diverge forever), then one may simply pick the transformation which sends a term to its normal form as a canonizer.
