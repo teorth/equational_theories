@@ -5598,6 +5598,7 @@ var $elm$browser$Browser$Document = F2(
 	function (title, body) {
 		return {aU: body, bm: title};
 	});
+var $elm$html$Html$a = _VirtualDom_node('a');
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
 		return A2(
@@ -5608,6 +5609,12 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
 var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
@@ -5718,7 +5725,6 @@ var $author$project$Main$viewLeftPanel = function (model) {
 };
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$html$Html$pre = _VirtualDom_node('pre');
-var $elm$html$Html$a = _VirtualDom_node('a');
 var $elm$core$String$filter = _String_filter;
 var $author$project$Main$graphitiEq = function (_v0) {
 	var a = _v0.a;
@@ -5729,12 +5735,6 @@ var $author$project$Main$graphitiLink = function (tags) {
 		$elm$core$String$join,
 		'+',
 		A2($elm$core$List$map, $author$project$Main$graphitiEq, tags));
-};
-var $elm$html$Html$Attributes$href = function (url) {
-	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
 };
 var $author$project$Main$matchInput = F2(
 	function (matcher, tag) {
@@ -6058,7 +6058,7 @@ var $author$project$Main$viewExportNovel = F3(
 											_Utils_ap(tableLine, prov))
 										]))
 								])),
-							$elm$html$Html$text('Finally, re-run `python3 equational_theories/Generated/All4x4Tables/src/generate_lean.py`!')
+							$elm$html$Html$text('Finally, re-run `python3 equational_theories/Generated/FinSearch/src/generate_lean.py`!')
 						]));
 			}
 		}
@@ -6304,6 +6304,44 @@ var $author$project$Main$view = function (model) {
 					[
 						$author$project$Main$viewLeftPanel(model),
 						$author$project$Main$viewRightPanel(model)
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('back-to-eqt')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$a,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$href('https://teorth.github.io/equational_theories')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Back to Equational Theories')
+							]))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('back-to-exp')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$a,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$href('https://teorth.github.io/equational_theories/implications')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Back to Equation Explorer')
+							]))
 					])),
 				A2(
 				$elm$html$Html$div,
