@@ -1,10 +1,10 @@
 /*
  * Automatically transpiled by Claude from find_equation_id.py
  */
-
+/*
 const EQ_SIZE = 4;
 const VAR_NAMES = 'xyzwuv';
-
+*/
 function showErrorPopup(message) {
     document.getElementById('errorMessage').textContent = message;
     document.getElementById('errorOverlay').style.display = 'block';
@@ -18,12 +18,12 @@ function closePopup(element_id) {
     document.getElementById(element_id).style.display = 'none';
 }
 
-function tokenize(expr) {
-    return expr.replace(/\./g, '◇').replace(/\*/g, '◇').replace(/\(/g, ' ( ').replace(/\)/g, ' ) ').replace(/◇/g, ' ◇ ')
-        .split(' ')
-        .filter(token => token.trim() !== '');
-}
-
+//function tokenize(expr) {
+    //return expr.replace(/\./g, '◇').replace(/\*/g, '◇').replace(/\(/g, ' ( ').replace(/\)/g, ' ) ').replace(/◇/g, ' ◇ ')
+ //       .split(' ')
+  //      .filter(token => token.trim() !== '');
+//}
+/*
 function parseExpr(tokens) {
     function parseElement() {
         if (tokens.length === 0) {
@@ -230,6 +230,7 @@ function findEquationNumber(inputEq) {
     }
     return null;
 }
+*/
 
 function findEquation() {
     const inputEq = document.getElementById('equationInput').value;
@@ -239,13 +240,14 @@ function findEquation() {
     try {
         // Determine if user entered integer input or equation input
         if (!isNaN(inputEq) && (/^\d+$/.test(inputEq))){
-            eqNum = parseInt(inputEq, 10) - 1;
+            eqNum = Equation.fromId(parseInt(inputEq)).id;
         }
         else{
-            eqNum = findEquationNumber(inputEq)-1;
+            eqNum = Equation.fromStr(inputEq).id;
         }
-console.log(`Equation num variable: ${eqNum}`); return false;
+
         if (eqNum) {
+            --eqNum;
             renderImplications(eqNum);
             showPage('detailPage');
         } else {

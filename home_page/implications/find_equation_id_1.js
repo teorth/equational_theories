@@ -770,6 +770,7 @@ function main() {
     }
 }
 
+/*
 // Export functions for module use
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -783,3 +784,4 @@ if (typeof module !== 'undefined' && module.exports) {
 if (require.main === module) {
     main();
 }
+*/

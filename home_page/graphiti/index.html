@@ -274,13 +274,20 @@
       </ul>
 
       <p>
-        Note that all vertices are clickable links to the Equation Explorer,
+        Note that all vertices are clickable links to the <a href="https://teorth.github.io/equational_theories/implications">Equation Explorer</a>,
         with equivalence classes linking to the lowest numbered equivalent.
       </p>
+      <a href="https://teorth.github.io/equational_theories/"
+        >Back to ETP</a
+      >
     </div>
 
     <div id="graph" style="display: none">
       <div class="top-bar">
+        <a href="https://teorth.github.io/equational_theories/"
+          >Back to ETP</a
+        >
+        ◇
         <a href="#" id="search-link" onclick="backToSearch(event)"
           >Back to search</a
         >
@@ -455,6 +462,30 @@
           "//" +
           window.location.host +
           window.location.pathname;
+
+        // Use history.replaceState to modify the URL without reloading the page
+        history.replaceState(null, "", url);
+
+        document.getElementById("finiteGreenBand").style.display = "none";
+      }
+
+      // Think it might be okay to just use the link directly.
+      function backToEqt(event) {
+        if (document.querySelector("svg")) {
+          document.querySelector("svg").remove();
+        }
+        hideVisibility("graph");
+        hideVisibility("container");
+
+        // Expecting pathname to be /equational_theories/graphiti + some queries, just trying to avoid hardcoding url.
+        let newPath = `/${window.location.pathname.split("/")[1]}`;
+
+        // Get the current URL without the query string
+        const url =
+          window.location.protocol +
+          "//" +
+          window.location.host +
+          newPath;
 
         // Use history.replaceState to modify the URL without reloading the page
         history.replaceState(null, "", url);

@@ -289,6 +289,12 @@ view model =
       [ viewLeftPanel model
       , viewRightPanel model
       ]
+    , div [class "back-to-eqt"]
+    [a [ href "https://teorth.github.io/equational_theories" ]
+        [ text "Back to Equational Theories" ]]
+    , div [class "back-to-exp"]
+    [a [ href "https://teorth.github.io/equational_theories/implications" ]
+        [ text "Back to Equation Explorer" ]]
     , div [class "copyright"]
       [text ("© 2024 The Equational Theories Project / data: " ++ String.left 7 model.version)]
     ]
