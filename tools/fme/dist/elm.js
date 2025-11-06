@@ -5616,6 +5616,7 @@ var $elm$html$Html$Attributes$href = function (url) {
 		_VirtualDom_noJavaScriptUri(url));
 };
 var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
+var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $author$project$Main$ClickProcessBtn = {$: 5};
@@ -5753,7 +5754,6 @@ var $author$project$Main$matchInput = F2(
 				},
 				eqn));
 	});
-var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $author$project$Main$ExploreEquation = function (a) {
 	return {$: 6, a: a};
@@ -6317,7 +6317,8 @@ var $author$project$Main$view = function (model) {
 						$elm$html$Html$a,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$href('https://teorth.github.io/equational_theories')
+								$elm$html$Html$Attributes$href('https://teorth.github.io/equational_theories'),
+								$elm$html$Html$Attributes$target('_blank')
 							]),
 						_List_fromArray(
 							[
@@ -6336,7 +6337,8 @@ var $author$project$Main$view = function (model) {
 						$elm$html$Html$a,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$href('https://teorth.github.io/equational_theories/implications')
+								$elm$html$Html$Attributes$href('https://teorth.github.io/equational_theories/implications'),
+								$elm$html$Html$Attributes$target('_blank')
 							]),
 						_List_fromArray(
 							[
