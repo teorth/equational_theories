@@ -346,6 +346,15 @@ function renderImplications(index) {
     let dualIndex = dualEq.id;
     if (dualIndex !== null) {
 	    selectedEquationDual.innerHTML = "(Dual equation: <a class='link' onclick='renderImplications("+(dualIndex-1)+");'>" + `Equation${dualIndex}[${dualEq}]` + "</a>)";
+
+        // If the equation has no commentary, but the dual has commentary, show that instead
+        if(!equationHasCommentary){
+            if (commentary[dualIndex] !== undefined) {
+                showVisibility("equationCommentary");
+                equationCommentary.innerHTML = `<h2>Comentary of the dual Equation${dualIndex}[${dualEq}]:<h2> ${commentary[dualIndex]}`;
+                equationHasCommentary = true;
+            }
+        }
     } else {
 	    selectedEquationDual.innerHTML = "";
     }
@@ -385,6 +394,30 @@ function renderImplications(index) {
     // Add this line to insert the equivalent equations HTML
     document.getElementById('equivalentEquations').innerHTML = equivalentEquationsHtml;
 
+    if (!equationHasCommentary) {
+        let eqIndex = equivalentClass[0];
+        if (commentary[eqIndex + 1] !== undefined) {
+            showVisibility("equationCommentary");
+            equationCommentary.innerHTML = `
+                <h2>Commentary of the equivalent ${equations[eqIndex]}:</h2>
+                ${commentary[eqIndex + 1]}
+            `;
+            equationHasCommentary = true;
+        }
+    }
+
+    if (!equationHasCommentary && dualIndex !== null) {
+        const dualEquivalentClass = equiv.find(cls => cls.includes(dualIndex - 1)) || [dualIndex - 1];
+        let eqIndex = dualEquivalentClass[0];
+        if (commentary[eqIndex + 1] !== undefined) {
+            showVisibility("equationCommentary");
+            equationCommentary.innerHTML = `
+                <h2>Commentary of ${equations[eqIndex]} which is equivalent to the dual Equation${dualIndex}[${dualEq}]:</h2>
+                ${commentary[eqIndex + 1]}
+            `;
+            equationHasCommentary = true;
+        }
+    }
 
     const onlyExplicit = showOnlyExplicitProofs.checked;
     const treatConjecturedAsUnknown = treatConjectedAsUnknownDetail.checked;
