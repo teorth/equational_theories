@@ -318,6 +318,7 @@ function renderImplications(index) {
         return;
     }
 
+    let equationHasCommentary = false;
     currentEquationIndex = index;
     selectedEquation.textContent = `Equation${index+1}[${eq.toString()}]`;
     selectedEquation.dataset.index = index;
@@ -328,6 +329,7 @@ function renderImplications(index) {
     } else {
         showVisibility("equationCommentary")
         equationCommentary.innerHTML = commentary[index+1];
+        equationHasCommentary = true;
     }
 
 
@@ -341,9 +343,17 @@ function renderImplications(index) {
 
     // Usage:
     let dualEq = eq.dual();
-    let dualIndex = dualEq.id; 
+    let dualIndex = dualEq.id;
     if (dualIndex !== null) {
 	    selectedEquationDual.innerHTML = "(Dual equation: <a class='link' onclick='renderImplications("+(dualIndex-1)+");'>" + `Equation${dualIndex}[${dualEq}]` + "</a>)";
+
+        if(!equationHasCommentary){
+            if (commentary[dualIndex] !== undefined) {
+                showVisibility("equationCommentary");
+                equationCommentary.innerHTML = `<h2>Commentary of the dual Equation${dualIndex}[${dualEq}]:</h2> ${commentary[dualIndex]}`;
+                equationCommentary = true;
+            }
+        }
     } else {
 	    selectedEquationDual.innerHTML = "";
     }
@@ -383,6 +393,30 @@ function renderImplications(index) {
     // Add this line to insert the equivalent equations HTML
     document.getElementById('equivalentEquations').innerHTML = equivalentEquationsHtml;
 
+    if (!equationHasCommentary) {
+        let eqIndex = equivalentClass[0];
+        if (commentary[eqIndex + 1] !== undefined) {
+            showVisibility("equationCommentary");
+            equationCommentary.innerHTML = `
+                <h2>Commentary of the equivalent ${equations[eqIndex]}:</h2>
+                ${commentary[eqIndex + 1]}
+            `;
+            equationHasCommentary = true;
+        }
+    }
+
+    if (!equationHasCommentary && dualIndex !== null) {
+        const dualEquivalentClass = equiv.find(cls => cls.includes(dualIndex - 1)) || [dualIndex - 1];
+        let eqIndex = dualEquivalentClass[0];
+        if (commentary[eqIndex + 1] !== undefined) {
+            showVisibility("equationCommentary");
+            equationCommentary.innerHTML = `
+                <h2>Commentary of ${equations[eqIndex]} which is equivalent to the dual Equation${dualIndex}[${dualEq}]:</h2>
+                ${commentary[eqIndex + 1]}
+            `;
+            equationHasCommentary = true;
+        }
+    }
 
     const onlyExplicit = showOnlyExplicitProofs.checked;
     const treatConjecturedAsUnknown = treatConjectedAsUnknownDetail.checked;
