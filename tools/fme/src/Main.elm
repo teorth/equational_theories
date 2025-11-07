@@ -233,7 +233,7 @@ viewExportNovel table satisfies novel =
                 , div [class "code-container"] [pre [] [text (magmaLine ++ sat ++ ref)]]
                 , text "Then add the following to extra.txt in `All4x4Tables/data`:"
                 , div [class "code-container"] [pre [] [text (tableLine ++ prov)]]
-                , text "Finally, re-run `python3 equational_theories/Generated/FinSearch/src/generate_lean.py`!"
+                , text "Finally, re-run `python3 equational_theories/Generated/All4x4Tables/src/generate_lean.py`!"
                 ]
 
 viewModelInfo : String -> String -> ModelInfoSuccess -> Html Msg
