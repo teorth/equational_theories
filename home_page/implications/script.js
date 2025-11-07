@@ -311,15 +311,15 @@ function renderEquationList(sortBy = 'index', sortOrder = 'asc') {
 
 
 function renderImplications(index) {
+    let eq = Equation.fromId(index+1);
     updateUrl(index+1);
-
-    if (index === null || index < 0 || index >= equations.length) {
+    if (index === null || index < 0) {
         console.error('Invalid equation index:', index);
         return;
     }
 
     currentEquationIndex = index;
-    selectedEquation.textContent = equations[index];
+    selectedEquation.textContent = `Equation${index+1}[${eq.toString()}]`;
     selectedEquation.dataset.index = index;
 
     if (commentary[index+1] === undefined) {
@@ -340,11 +340,34 @@ function renderImplications(index) {
     }
 
     // Usage:
-    let dualIndex = findDual(index+1, duals);
+    let dualEq = eq.dual();
+    let dualIndex = dualEq.id; 
     if (dualIndex !== null) {
-	    selectedEquationDual.innerHTML = "(Dual equation: <a class='link' onclick='renderImplications("+(dualIndex-1)+");'>" + equations[dualIndex-1] + "</a>)";
+	    selectedEquationDual.innerHTML = "(Dual equation: <a class='link' onclick='renderImplications("+(dualIndex-1)+");'>" + `Equation${dualIndex}[${dualEq}]` + "</a>)";
     } else {
 	    selectedEquationDual.innerHTML = "";
+    }
+
+    if(index > 4693){
+        document.querySelectorAll('.implication-box').forEach(el => {
+            el.style.display = 'none';
+        });
+        document.querySelectorAll('.checkbox-container').forEach(el => {
+            el.style.display = 'none';
+        });
+        hideVisibility("selectedEquationGraphitiLinks");
+        hideVisibility("smallestMagmaLink");
+        return;
+    }else{
+        // If user does not reload the page we need to show the elements again
+        document.querySelectorAll('.implication-box').forEach(el => {
+            el.style.display = 'block';
+        });
+        document.querySelectorAll('.checkbox-container').forEach(el => {
+            el.style.display = 'block';
+        });
+        showVisibility("selectedEquationGraphitiLinks");
+        showVisibility("smallestMagmaLink");
     }
 
     // Add this section to display equivalent equations
