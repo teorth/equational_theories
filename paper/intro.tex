@@ -136,7 +136,7 @@ Of the $\num{22033636}$ possible implications ${\E} \models {\E'}$, $\num{817827
 \begin{itemize}
     \item A very small number of positive implications were established and \textbf{formalized by hand}, mostly through direct rewriting of the laws; but this approach would not scale to the full project.
     \item \textbf{Simple rewriting rules}, for instance based on the observation that any law of the form $\x \formaleq f(\y,\z,\dots)$ was necessarily equivalent to the singleton law $\Eq{2}$, could already reduce the size of potential equivalence classes by a significant fraction. We discuss this method in \Cref{rewrite-sec}.
-    \item The preorder axioms for $\models$, as well as the ``duality'' symmetry of the preorder with respect to replacing a magma operation $x \op y$ with its opposite $x \op^{\mathrm{op}} y \coloneqq y \op x$, can be used to significantly cut down on the number of implications that need to be proven explicitly; ultimately, only $10657$ ($0.13\%$) of the positive implications needed a direct proof.
+    \item The preorder axioms for $\models$, as well as the ``duality'' symmetry of the preorder with respect to replacing a magma operation $x \op y$ with its opposite $x \op^{\mathrm{op}} y \coloneqq y \op x$, can be used to significantly cut down on the number of implications that need to be proven explicitly; ultimately, only $\num{10657}$ ($0.13\%$) of the positive implications needed a direct proof.
     \item To obtain additional implications for finite magmas, heavy reliance was made on the fact that for functions $f \colon M \to M$ on a finite set $M$, surjectivity was equivalent to injectivity.  Some more sophisticated variants of this idea can lead to additional implications; see \Cref{finite-sec}.
     \item \textbf{Automated Theorem Provers} (ATP) could be deployed at extremely fast speeds to establish a complete generating set of positive implications; see \Cref{automated-sec}.
 \end{itemize}
@@ -166,12 +166,8 @@ The objective of using the data from the ETP to establish well-calibrated benchm
     >=Latex,
     node distance=1.1cm,
     every node/.style={draw, rectangle, align=center},
-    label/.style={font=\bfseries}
+    every label/.style={draw=none, font=\bfseries\strut}
   ]
-
-  %% Column labels
-  \node[label] (ghlabel)   at (0,2) {GitHub};
-  \node[label] (zuliplabel) at (7,2) {Lean Zulip};
 
   %% GitHub nodes
   \node (blueprint)   {Blueprint};
@@ -179,8 +175,8 @@ The objective of using the data from the ETP to establish well-calibrated benchm
   \node (viz)        [below=of formal]    {Visualization tools};
 
   %% Lean Zulip nodes
-  \node (hproofs)    [right=of blueprint]       {Human-gen. proofs};
-  \node (cproofs)    [right=3cm of formal]         {Computer-gen. proofs};
+  \node (hproofs)    [right=1.4cm of blueprint]       {Human-gen.\ proofs};
+  \node (cproofs)    [right=3cm of formal]         {Computer-gen.\ proofs};
   \node (hdisc)      [right=of viz]         {Human discussion};
 
   %% External ATP box
@@ -215,7 +211,7 @@ The objective of using the data from the ETP to establish well-calibrated benchm
 
 While the primary objective of the ETP was being completed, some additional related results were generated as spinoffs.  Specifically:
 \begin{itemize}
-\item In the blueprint on the ETP web site, we report some partial progress on classifying which of the $57882$ distinct laws of order $5$ are equivalent to the singleton law $\Eq{2}$, either with or without the requirement that the magma be finite.
+\item In the blueprint on the ETP web site, we report some partial progress on classifying which of the $\num{57882}$ distinct laws of order $5$ are equivalent to the singleton law $\Eq{2}$, either with or without the requirement that the magma be finite.
 \item In \Cref{spectrum-sec} we report on the determination of laws with full spectrum, i.e., with magmas satisfying them of all finite sizes.
 \item In \Cref{higman-neumann} we report on classifying the laws of order $8$ that are equivalent to the Higman-Neumann law $\Eq{42323216}$.
 \end{itemize}
