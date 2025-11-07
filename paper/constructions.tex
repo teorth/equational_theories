@@ -268,7 +268,7 @@ for some function $f \colon G \times G \to M$.  If $(M,\op_M)$ and $(G,\op_G)$ a
 \begin{proposition}[$\Eq{1110} \nmodels \Eq{1629}$]\label{1110-1629} The law $\x \formaleq \y \op ((\y \op (\x \op \x)) \op \y)$ \eqref{eq1110} does not imply $\x \formaleq (\x \op \x) \op ((\x \op \x) \op \x)$ \eqref{eq1629}, even for finite magmas.
 \end{proposition}
 
-\begin{proof}  (Sketch) Using the linear ansatz, we find that $\Eq{1110}$ has a model $\Magma$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xsyt} with $G=M$.  One then finds that this operation satisfies $\Eq{1110}$ if $f \colon \F_5 \times \F_5 \to \F_5$  the cocycle equation
+\begin{proof}[Proof sketch] Using the linear ansatz, we find that $\Eq{1110}$ has a model $\Magma$ with carrier $\F_5$ (the finite field $\Z/5\Z$) with operation $x \op y = 3x-y$.  We then apply the ansatz \eqref{xsyt} with $G=M$.  One then finds that this operation satisfies $\Eq{1110}$ if $f \colon \F_5 \times \F_5 \to \F_5$  the cocycle equation
   $$3f(x,x) - 3f(y,2x) - f(3y-2x,y) + f(y,3y-x) = 0$$
 for all $x,y \in \F_5$, and satisfies $\Eq{1629}$ if $f$ satisfies the cocycle equation
 $$ f(2x,0) - f(2x,2x) = 0$$
@@ -327,7 +327,7 @@ $$\Eq{854} \nmodelsfin \Eq{413}, \Eq{1045}, \Eq{1055}, \Eq{3316}, \Eq{3925}.$$
 
 As an example of the process, we started with a magma that satisfied $\Eq{854}$ and all the above equations,
 but had an $\Eq{10}$ violation.  We suspected that $\Eq{10}$ might be relevant (and later found an
-argument showing multiple $\Eq{10}$ violations would be required in a magma which showed $$\Eq{854} \nmodelsfin \Eq{1055}$$),
+argument showing multiple $\Eq{10}$ violations would be required in a magma which showed $\Eq{854} \nmodelsfin \Eq{1055}$),
 and so used \emph{Kissat} and \emph{Vampire} to grow $\Eq{854}$ magmas with such violations.  These larger magmas were then used as
 seeds for the random evolution process, and the ATPs eventually succeeded in finding magmas which satisfied $\Eq{854}$ but refuted
 the implications in question.
