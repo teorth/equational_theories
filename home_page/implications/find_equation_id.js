@@ -817,7 +817,7 @@ function findEquation() {
             renderImplications(eqNum);
             showPage('detailPage');
         } else {
-            resultDiv.innerHTML = `The equation or equation id '${inputEq}' is invalid`;
+            resultDiv.innerHTML = `The equation '${inputEq}' is invalid`;
         }
     } catch (error) {
         showErrorPopup(error.message);
