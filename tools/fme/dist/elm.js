@@ -5520,11 +5520,17 @@ var $author$project$Main$update = F2(
 					var urlRequest = msg.a;
 					if (!urlRequest.$) {
 						var url = urlRequest.a;
-						return _Utils_Tuple2(
+						return A2(
+							$elm$core$String$startsWith,
+							'/equational_theories/fme/',
+							$elm$url$Url$toString(url)) ? _Utils_Tuple2(
 							model,
 							A2(
 								$elm$browser$Browser$Navigation$pushUrl,
 								model.M,
+								$elm$url$Url$toString(url))) : _Utils_Tuple2(
+							model,
+							$elm$browser$Browser$Navigation$load(
 								$elm$url$Url$toString(url)));
 					} else {
 						var href = urlRequest.a;
@@ -5616,7 +5622,6 @@ var $elm$html$Html$Attributes$href = function (url) {
 		_VirtualDom_noJavaScriptUri(url));
 };
 var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
-var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $author$project$Main$ClickProcessBtn = {$: 5};
@@ -5754,6 +5759,7 @@ var $author$project$Main$matchInput = F2(
 				},
 				eqn));
 	});
+var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $author$project$Main$ExploreEquation = function (a) {
 	return {$: 6, a: a};
@@ -6058,7 +6064,7 @@ var $author$project$Main$viewExportNovel = F3(
 											_Utils_ap(tableLine, prov))
 										]))
 								])),
-							$elm$html$Html$text('Finally, re-run `python3 equational_theories/Generated/FinSearch/src/generate_lean.py`!')
+							$elm$html$Html$text('Finally, re-run `python3 equational_theories/Generated/All4x4Tables/src/generate_lean.py`!')
 						]));
 			}
 		}
@@ -6317,8 +6323,7 @@ var $author$project$Main$view = function (model) {
 						$elm$html$Html$a,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$href('https://teorth.github.io/equational_theories'),
-								$elm$html$Html$Attributes$target('_blank')
+								$elm$html$Html$Attributes$href('https://teorth.github.io/equational_theories')
 							]),
 						_List_fromArray(
 							[
@@ -6337,8 +6342,7 @@ var $author$project$Main$view = function (model) {
 						$elm$html$Html$a,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$href('https://teorth.github.io/equational_theories/implications'),
-								$elm$html$Html$Attributes$target('_blank')
+								$elm$html$Html$Attributes$href('https://teorth.github.io/equational_theories/implications')
 							]),
 						_List_fromArray(
 							[

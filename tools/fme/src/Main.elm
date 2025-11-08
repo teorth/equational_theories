@@ -69,7 +69,10 @@ update msg model =
     UrlRequested urlRequest ->
       case urlRequest of
         Browser.Internal url ->
-          (model, Browser.Navigation.pushUrl model.key (Url.toString url))
+          if String.startsWith "/equational_theories/fme/" (Url.toString url) then
+            ( model, Browser.Navigation.pushUrl model.key (Url.toString url) )
+          else
+            ( model, Browser.Navigation.load (Url.toString url) )
         Browser.External href ->
           (model, Browser.Navigation.load href)
 
@@ -290,10 +293,10 @@ view model =
       , viewRightPanel model
       ]
     , div [class "back-to-eqt"]
-    [a [ href "https://teorth.github.io/equational_theories", target "_blank" ]
+    [a [ href "https://teorth.github.io/equational_theories" ]
         [ text "Back to Equational Theories" ]]
     , div [class "back-to-exp"]
-    [a [ href "https://teorth.github.io/equational_theories/implications", target "_blank" ]
+    [a [ href "https://teorth.github.io/equational_theories/implications" ]
         [ text "Back to Equation Explorer" ]]
     , div [class "copyright"]
       [text ("© 2024 The Equational Theories Project / data: " ++ String.left 7 model.version)]
