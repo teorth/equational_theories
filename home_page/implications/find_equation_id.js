@@ -150,12 +150,12 @@ function _parseExpr(tokens) {
             tokens.shift(); // Remove opening parenthesis
             const left = parseElement();
             if (tokens.length === 0 || tokens[0] !== "◇") {
-                throw new Error("Expected '◇' after element in parentheses");
+                throw new Error(`Expected '◇' after '${left}' in parentheses. Did you mean to write '(${left} ◇ ...)'?`);
             }
             tokens.shift(); // Remove '◇'
             const right = parseElement();
             if (tokens.length === 0 || tokens[0] !== ")") {
-                throw new Error("Missing closing parenthesis");
+                throw new Error(`Missing closing parenthesis after '(${left} ◇ ${right}'. Did you forget to close the parentheses?`);
             }
             tokens.shift(); // Remove closing parenthesis
             return [left, "◇", right];
@@ -164,20 +164,18 @@ function _parseExpr(tokens) {
             (/^[1-9]/.test(tokens[0]) && /^[0-9]+$/.test(tokens[0]))) {
             return tokens.shift();
         }
-        throw new Error(`Unexpected token: ${tokens[0]}`);
+        throw new Error(`Unexpected token: '${tokens[0]}'. Valid tokens are variables (${VAR_NAMES}), '◇', '(', or ')'.`);
     }
 
     let result = parseElement();
     if (tokens.length > 0) {
         if (tokens[0] !== "◇") {
-            throw new Error(`Unexpected token after main element: ${tokens[0]}`);
+            throw new Error(`Unexpected token '${tokens[0]}' after main element. Did you mean to use '◇' here?`);
         }
         tokens.shift(); // Remove '◇'
         const right = parseElement();
         if (tokens.length > 0) {
-            throw new Error(
-                `Unexpected tokens at the end of expression: ${tokens.join(' ')}`
-            );
+            throw new Error(`Unexpected tokens at the end of expression: '${tokens.join(' ')}'. Make sure your equation is properly formatted.`)
         }
         result = [result, "◇", right];
     }
@@ -197,7 +195,7 @@ function _deconstructTree(tree) {
 function _equationFromStr(eqStr) {
     const parts = eqStr.split("=");
     if (parts.length !== 2) {
-        throw new Error("No '=' or two '=' found in the equation.");
+        throw new Error("Your equation should have exactly one '=' sign. Please check your input.");
     }
     const [lhsStr, rhsStr] = parts;
     const lhs = _parseExpr(_tokenize(lhsStr));
