@@ -40,6 +40,13 @@ function closePopup(element_id) {
 
 const VAR_NAMES = "xyzwuvrst";
 
+function toBigIntSafe(n) {
+    if (typeof n === 'bigint') return n;
+    if (typeof n === 'number') return BigInt(n);
+    if (typeof n === 'string' && /^\d+$/.test(n)) return BigInt(n);
+    throw new Error('Cannot convert to BigInt: ' + n);
+}
+
 class Equation {
     /**
      * Equation(lhsShape, rhsShape, rhyme) denotes an equation
@@ -79,16 +86,18 @@ class Equation {
 
     static _exprStr(shape, rhymeIter, parenthesize) {
         if (shape === null) {
-            const nextVal = rhymeIter.next().value;
-            const i = Math.floor(nextVal / VAR_NAMES.length);
-            const j = nextVal % VAR_NAMES.length;
-            if (i === 0) {
-                return VAR_NAMES[j];
+            const nextVal = toBigIntSafe(rhymeIter.next().value);
+            const base = BigInt(VAR_NAMES.length);
+            const i = nextVal / base;
+            const j = nextVal % base;
+            const varName = VAR_NAMES[Number(j)];
+            if (i === 0n) {
+                return varName;
             }
-            return VAR_NAMES[j] + i.toString();
+            return varName + i.toString();
         }
-        const leftStr = this._exprStr(shape[0], rhymeIter, true);
-        const rightStr = this._exprStr(shape[1], rhymeIter, true);
+    const leftStr = this._exprStr(shape[0], rhymeIter, true);
+    const rightStr = this._exprStr(shape[1], rhymeIter, true);
         if (parenthesize) {
             return `(${leftStr} ◇ ${rightStr})`;
         }
@@ -102,7 +111,17 @@ class Equation {
 
     numVars() {
         /**Number of distinct variables in the equation.*/
-        return Math.max(...this.rhyme) + 1;
+        if (this.rhyme.length === 0) {
+            return 0n;
+        }
+        let maxVal = 0n;
+        for (const value of this.rhyme) {
+            const bigVal = toBigIntSafe(value);
+            if (bigVal > maxVal) {
+                maxVal = bigVal;
+            }
+        }
+        return maxVal + 1n;
     }
 
     dual() {
@@ -110,8 +129,9 @@ class Equation {
         let lhsShape = shapeDual(this.lhsShape);
         let rhsShape = shapeDual(this.rhsShape);
         const lhsOrder = shapeOrder(this.lhsShape);
-        let lhsRhyme = [...this.rhyme.slice(0, lhsOrder + 1)].reverse();
-        let rhsRhyme = [...this.rhyme.slice(lhsOrder + 1)].reverse();
+        const lhsCount = Number(lhsOrder + 1n);
+        let lhsRhyme = [...this.rhyme.slice(0, lhsCount)].reverse();
+        let rhsRhyme = [...this.rhyme.slice(lhsCount)].reverse();
         if (shapeLt(rhsShape, lhsShape)) {
             [lhsShape, rhsShape] = [rhsShape, lhsShape];
             [lhsRhyme, rhsRhyme] = [rhsRhyme, lhsRhyme];
@@ -194,7 +214,7 @@ function _deconstructTree(tree) {
 
 function _equationFromStr(eqStr) {
     const parts = eqStr.split("=");
-    if (parts.length !== 2) {
+    if (parts.length !== 2n) {
         throw new Error("Your equation should have exactly one '=' sign. Please check your input.");
     }
     const [lhsStr, rhsStr] = parts;
@@ -224,32 +244,32 @@ function shapeDual(shape) {
 
 function shapeOrder(shape) {
     if (shape === null) {
-        return 0;
+        return 0n;
     }
-    return 1 + shapeOrder(shape[0]) + shapeOrder(shape[1]);
+    return 1n + shapeOrder(shape[0]) + shapeOrder(shape[1]);
 }
 
 function shapeCmp(shape1, shape2) {
     const shape1Order = shapeOrder(shape1);
     const shape2Order = shapeOrder(shape2);
     if (shape1Order < shape2Order) {
-        return -1;
+        return -1n;
     }
     if (shape1Order > shape2Order) {
-        return 1;
+        return 1n;
     }
     if (shape1 === null && shape2 === null) {
-        return 0;
+        return 0n;
     }
     const leftCmp = shapeCmp(shape1[0], shape2[0]);
-    if (leftCmp !== 0) {
+    if (leftCmp !== 0n) {
         return leftCmp;
     }
     return shapeCmp(shape1[1], shape2[1]);
 }
 
 function shapeLt(shape1, shape2) {
-    return shapeCmp(shape1, shape2) < 0;
+    return shapeCmp(shape1, shape2) < 0n;
 }
 
 // Generating all rhymes, all shapes, all equations
@@ -259,7 +279,7 @@ function canonicalizeRhyme(rhyme) {
     const variables = new Map();
     for (const x of rhyme) {
         if (!variables.has(x)) {
-            variables.set(x, variables.size);
+            variables.set(x, BigInt(variables.size));
         }
     }
     return rhyme.map(x => variables.get(x));
@@ -267,23 +287,24 @@ function canonicalizeRhyme(rhyme) {
 
 function* allRhymes(n) {
     /**Generate all rhymes of a given length.*/
-    if (n === 0) {
+    if (n === 0n) {
         yield [];
         return;
     }
-    for (const next of _allRhymesHelp(n, 0)) {
-        yield [0, ...next];
+    for (const next of _allRhymesHelp(n, 0n)) {
+        yield [0n, ...next];
     }
 }
 
 function* _allRhymesHelp(n, maxUsed) {
-    /**Generates all rhymes whose minimum is at most maxUsed + 1*/
-    if (n === 0) {
+    /**Generates all rhymes whose minimum is at most maxUsed + 1n*/
+    if (n === 0n) {
         yield [];
         return;
     }
-    for (let x = 0; x < maxUsed + 2; x++) {
-        for (const next of _allRhymesHelp(n - 1, Math.max(maxUsed, x))) {
+    for (let x = 0n; x < maxUsed + 2n; x++) {
+        const nextMax = maxUsed > x ? maxUsed : x;
+        for (const next of _allRhymesHelp(n - 1n, nextMax)) {
             yield [x, ...next];
         }
     }
@@ -291,12 +312,12 @@ function* _allRhymesHelp(n, maxUsed) {
 
 function* allShapes(order) {
     /**Generate all possible shapes for expressions with a given number of operations.*/
-    if (order === 0) {
+    if (order === 0n) {
         yield null;
     }
-    for (let i = 0; i < order; i++) {
+    for (let i = 0n; i < order; i++) {
         for (const left of allShapes(i)) {
-            for (const right of allShapes(order - 1 - i)) {
+            for (const right of allShapes(order - 1n - i)) {
                 yield [left, right];
             }
         }
@@ -307,23 +328,24 @@ function* allEqs(order) {
     /* Generate all unique equations of some order up to symmetry.
 
     To generate unique equations of all orders, use
-    (function*() { for (let n = 0; ; n++) { yield* allEqs(n); } })().
+    (function*() { for (let n = 0n; ; n++) { yield* allEqs(n); } })().
     */
-    const half = Math.floor(order / 2) + 1;
-    for (let lhsOrder = 0; lhsOrder < half; lhsOrder++) {
+        const half = order / 2n + 1n;
+    for (let lhsOrder = 0n; lhsOrder < half; lhsOrder++) {
         for (const lhsShape of allShapes(lhsOrder)) {
             for (const rhsShape of allShapes(order - lhsOrder)) {
-                if (order === lhsOrder * 2 && shapeLt(rhsShape, lhsShape)) {
+                if (order === lhsOrder * 2n && shapeLt(rhsShape, lhsShape)) {
                     continue;
                 }
                 const symmetricShape = JSON.stringify(lhsShape) === JSON.stringify(rhsShape);
-                for (const rhyme of allRhymes(order + 1)) {
+                for (const rhyme of allRhymes(order + 1n)) {
                     if (symmetricShape) {
-                        const flipped = [...rhyme.slice(half), ...rhyme.slice(0, half)];
+                            const halfIndex = Number(half);
+                            const flipped = [...rhyme.slice(halfIndex), ...rhyme.slice(0, halfIndex)];
                         if (arrayLt(canonicalizeRhyme(flipped), rhyme)) {
                             continue;
                         }
-                        if (arrayEqual(rhyme, flipped) && order > 0) {
+                        if (arrayEqual(rhyme, flipped) && order > 0n) {
                             continue;
                         }
                     }
@@ -341,43 +363,54 @@ function* allEqs(order) {
 const memoCache = new Map();
 
 function numEqs(n) {
-    /**Sequence https://oeis.org/A376640 of the number of magma equations*/
-    if (memoCache.has(`numEqs:${n}`)) {
-        return memoCache.get(`numEqs:${n}`);
+    /**Sequence https://oeis.org/A376640 of the number of magma equations (BigInt-safe)*/
+    const key = `numEqs:${n.toString()}`;
+    if (memoCache.has(key)) {
+        return memoCache.get(key);
     }
+
     let result;
-    if (n % 2 === 1) {
-        result = Math.floor(catalan(n + 1) * bell(n + 2) / 2);
+    if (n % 2n === 1n) {
+        // Odd n
+        result = (catalan(n + 1n) * bell(n + 2n)) / 2n;
     } else {
-        if (n === 0) {
-            result = 2;
+        if (n === 0n) {
+            result = 2n;
         } else {
-            result = Math.floor(((catalan(n + 1) - catalan(n / 2)) * bell(n + 2)) / 2) +
-                     catalan(n / 2) * bellSameShape(n);
+            result = ((catalan(n + 1n) - catalan(n / 2n)) * bell(n + 2n)) / 2n +
+                     catalan(n / 2n) * bellSameShape(n);
         }
     }
-    memoCache.set(`numEqs:${n}`, result);
+
+    memoCache.set(key, result);
     return result;
 }
 
 function bellSameShape(n) {
-    /**Number of rhymes when lhs and rhs have the same (n//2)-operations shape*/
-    if (memoCache.has(`bellSameShape:${n}`)) {
-        return memoCache.get(`bellSameShape:${n}`);
+    /**Number of rhymes when lhs and rhs have the same (n//2)-operations shape (BigInt-safe)*/
+    const key = `bellSameShape:${n.toString()}`;
+    if (memoCache.has(key)) {
+        return memoCache.get(key);
     }
+
     let result;
-    if (n === 0) {
-        result = 2;
+    if (n === 0n) {
+        result = 2n;
     } else {
-        let sum = 0;
-        for (let k = 0; k < n + 3; k++) {
-            sum += stirlingSym(n + 2, k);
+        let sum = 0n;
+        for (let k = 0n; k < n + 3n; k++) {
+            sum += stirlingSym(n + 2n, k);
         }
-        result = Math.floor((bell(n + 2) + sum - 2 * bell(1 + Math.floor(n / 2))) / 2);
+
+        // Use BigInt integer division directly (flooring is implicit)
+        const halfN = n / 2n;
+        result = (bell(n + 2n) + sum - 2n * bell(1n + halfN)) / 2n;
     }
-    memoCache.set(`bellSameShape:${n}`, result);
+
+    memoCache.set(key, result);
     return result;
 }
+
 
 function stirlingSym(n, k) {
     /**Number of symmetric k-partitions of range(n), see https://oeis.org/A103293*/
@@ -385,10 +418,10 @@ function stirlingSym(n, k) {
         return memoCache.get(`stirlingSym:${n}:${k}`);
     }
     let result;
-    if (n < 2) {
-        result = k === n ? 1 : 0;
+    if (n < 2n) {
+        result = k === n ? 1n : 0n;
     } else {
-        result = k * stirlingSym(n - 2, k) + stirlingSym(n - 2, k - 1) + stirlingSym(n - 2, k - 2);
+        result = k * stirlingSym(n - 2n, k) + stirlingSym(n - 2n, k - 1n) + stirlingSym(n - 2n, k - 2n);
     }
     memoCache.set(`stirlingSym:${n}:${k}`, result);
     return result;
@@ -402,50 +435,51 @@ function shapeId(shape) {
 }
 
 function _shapeIdHelp(shape, n) {
-    if (n === 0) {
-        return 0;
+    if (n === 0n) {
+        return 0n;
     }
     const [lhsShape, rhsShape] = shape;
     const lhsN = shapeOrder(lhsShape);
-    const rhsN = n - 1 - lhsN;
-    let sum = 0;
-    for (let n1 = 0; n1 < lhsN; n1++) {
-        sum += catalan(n1) * catalan(n - n1 - 1);
+    const rhsN = n - 1n - lhsN;
+    let sum = 0n;
+    for (let n1 = 0n; n1 < lhsN; n1++) {
+        sum += catalan(n1) * catalan(n - n1 - 1n);
     }
     return sum + _shapeIdHelp(lhsShape, lhsN) * catalan(rhsN) + _shapeIdHelp(rhsShape, rhsN);
 }
 
 function shapeFromId(nodes, treeNum) {
-    if (nodes === 0) {
-        if (treeNum !== 0) {
-            throw new Error("Invalid tree number for nodes = 0");
+    if (nodes === 0n) {
+        if (treeNum !== 0n) {
+            throw new Error("Invalid tree number for nodes = 0n");
         }
         return null;
     }
-    for (let n1 = 0; n1 < nodes; n1++) {
-        const testNum = catalan(n1) * catalan(nodes - n1 - 1);
+    for (let n1 = 0n; n1 < nodes; n1++) {
+        const testNum = catalan(n1) * catalan(nodes - n1 - 1n);
         if (treeNum >= testNum) {
             treeNum -= testNum;
             continue;
         }
-        const treeNum1 = Math.floor(treeNum / catalan(nodes - n1 - 1));
-        const treeNum2 = treeNum % catalan(nodes - n1 - 1);
-        return [shapeFromId(n1, treeNum1), shapeFromId(nodes - n1 - 1, treeNum2)];
+        const denom = catalan(nodes - n1 - 1n);
+        const treeNum1 = treeNum / denom;
+        const treeNum2 = treeNum % denom;
+        return [shapeFromId(n1, treeNum1), shapeFromId(nodes - n1 - 1n, treeNum2)];
     }
 }
 
 // Map from rhyme to id and back
 
 function _numRhymeHelp(n, maxUsed) {
-    /**Number of rhymes of n slots whose minimum number is at most maxUsed + 1*/
+    /**Number of rhymes of n slots whose minimum number is at most maxUsed + 1n*/
     if (memoCache.has(`_numRhymeHelp:${n}:${maxUsed}`)) {
         return memoCache.get(`_numRhymeHelp:${n}:${maxUsed}`);
     }
     let result;
-    if (n === 0) {
-        result = 1;
+    if (n === 0n) {
+        result = 1n;
     } else {
-        result = (maxUsed + 1) * _numRhymeHelp(n - 1, maxUsed) + _numRhymeHelp(n - 1, maxUsed + 1);
+        result = (maxUsed + 1n) * _numRhymeHelp(n - 1n, maxUsed) + _numRhymeHelp(n - 1n, maxUsed + 1n);
     }
     memoCache.set(`_numRhymeHelp:${n}:${maxUsed}`, result);
     return result;
@@ -453,29 +487,40 @@ function _numRhymeHelp(n, maxUsed) {
 
 function findRhymeId(p) {
     /**Gives the rhyme id (zero-based) among rhymes with a given number of variables*/
-    if (p.length === 0 || p[0] !== 0) {
-        throw new Error(`Argument of findRhymeId should be [0,...] not ${p}`);
+    if (p.length === 0 || toBigIntSafe(p[0]) !== 0n) {
+        throw new Error(`Argument of findRhymeId should be [0n,...] not ${p}`);
     }
-    return _findRhymeIdHelp(p.slice(1), 0);
+    return _findRhymeIdHelp(p.slice(1), 0n);
 }
 
 function _findRhymeIdHelp(p, maxUsed) {
     if (p.length === 0) {
-        return 0;
+        return 0n;
     }
-    return p[0] * _numRhymeHelp(p.length - 1, maxUsed) +
-           _findRhymeIdHelp(p.slice(1), Math.max(p[0], maxUsed));
+    const first = toBigIntSafe(p[0]);
+    const remaining = BigInt(p.length - 1);
+    const nextMax = first > maxUsed ? first : maxUsed;
+    return first * _numRhymeHelp(remaining, maxUsed) +
+           _findRhymeIdHelp(p.slice(1), nextMax);
 }
 
-function getRhymeById(n, rhymeNum, maxUsed = 0) {
+function getRhymeById(n, rhymeNum, maxUsed = 0n) {
     /**Find a rhyme scheme for n slots by its number (zero-indexed).*/
-    let result = [0];
-    while (n > 0) {
-        const var1 = Math.min(maxUsed + 1, Math.floor(rhymeNum / _numRhymeHelp(n - 1, maxUsed)));
-        result.push(var1);
-        rhymeNum -= var1 * _numRhymeHelp(n - 1, maxUsed);
-        maxUsed = Math.max(maxUsed, var1);
-        n -= 1;
+    let result = [0n];
+    let slots = n;
+    let currentMax = maxUsed;
+    let remainder = rhymeNum;
+    while (slots > 0n) {
+        const helper = _numRhymeHelp(slots - 1n, currentMax);
+        let nextVar = remainder / helper;
+        const upperBound = currentMax + 1n;
+        if (nextVar > upperBound) {
+            nextVar = upperBound;
+        }
+        result.push(nextVar);
+        remainder -= nextVar * helper;
+        currentMax = currentMax > nextVar ? currentMax : nextVar;
+        slots -= 1n;
     }
     return result;
 }
@@ -483,21 +528,30 @@ function getRhymeById(n, rhymeNum, maxUsed = 0) {
 // Map from equation to id and back.
 
 function _numEqsUnbalanced(n) {
-    /**Counts magma equations that have strictly fewer operations on the left than on the right*/
-    if (memoCache.has(`_numEqsUnbalanced:${n}`)) {
-        return memoCache.get(`_numEqsUnbalanced:${n}`);
+    /**Counts magma equations that have strictly fewer operations on the left than on the right (BigInt-safe)*/
+    const key = `_numEqsUnbalanced:${n.toString()}`;
+    if (memoCache.has(key)) {
+        return memoCache.get(key);
     }
-    const catalanTerm = n % 2 === 1 ? 0 : catalan(Math.floor(n / 2)) ** 2;
-    const result = Math.floor(((catalan(n + 1) - catalanTerm) * bell(n + 2)) / 2);
-    memoCache.set(`_numEqsUnbalanced:${n}`, result);
+
+    const halfN = n / 2n; // BigInt integer division (floored)
+    const catalanTerm = n % 2n === 1n ? 0n : catalan(halfN) ** 2n;
+
+    // Integer division on BigInts is already floored
+    const result = ((catalan(n + 1n) - catalanTerm) * bell(n + 2n)) / 2n;
+
+    memoCache.set(key, result);
     return result;
 }
 
+
 function _numEqsBalanced(n, l, r) {
     /**Number of balanced equations before lhs/rhs shapes number l, r*/
-    return (bell(n + 2) * (catalan(Math.floor(n / 2)) * l - Math.floor(l * (l + 1) / 2) +
-                          r - l - (r > l ? 1 : 0)) +
-            bellSameShape(n) * (l + (r > l ? 1 : 0)));
+    const halfN = n / 2n;
+    const adjustment = r - l - (r > l ? 1n : 0n);
+    const linearTerm = bell(n + 2n) * (catalan(halfN) * l - (l * (l + 1n) / 2n) + adjustment);
+    const symmetryTerm = bellSameShape(n) * (l + (r > l ? 1n : 0n));
+    return linearTerm + symmetryTerm;
 }
 
 function _equationId(inputEq) {
@@ -508,14 +562,14 @@ function _equationId(inputEq) {
     const nRhs = shapeOrder(rhsShape);
     const n = nLhs + nRhs;
     if (nLhs !== nRhs) {
-        let sum = 1;
-        for (let i = 0; i < n; i++) {
+        let sum = 1n;
+        for (let i = 0n; i < n; i++) {
             sum += numEqs(i);
         }
-        return sum + bell(n + 2) * shapeId([lhsShape, rhsShape]) + findRhymeId(inputEq.rhyme);
+        return sum + bell(n + 2n) * shapeId([lhsShape, rhsShape]) + findRhymeId(inputEq.rhyme);
     }
     // For nLhs === nRhs the ordering halves the equations.  For
-    // different tree shapes get bell(n + 2) rhymes, otherwise
+    // different tree shapes get bell(n + 2n) rhymes, otherwise
     // bellSameShape(n).
     const m = catalan(nLhs); // number of tree shapes on each side
     const l = shapeId(lhsShape);
@@ -525,71 +579,94 @@ function _equationId(inputEq) {
         pid = findRhymeId(inputEq.rhyme);
     } else {
         // Slow code here
-        pid = 0;
-        for (const rhyme of allRhymes(n + 1)) {
+        pid = 0n;
+        for (const rhyme of allRhymes(n + 1n)) {
             if (arrayEqual(rhyme, inputEq.rhyme)) {
                 break;
             }
-            const flipped = [...rhyme.slice(nLhs + 1), ...rhyme.slice(0, nLhs + 1)];
+            const sliceIndex = Number(nLhs + 1n);
+            const flipped = [...rhyme.slice(sliceIndex), ...rhyme.slice(0, sliceIndex)];
             if (arrayLt(canonicalizeRhyme(flipped), rhyme)) {
                 continue;
             }
-            if (arrayEqual(rhyme, flipped) && n > 0) {
+            if (arrayEqual(rhyme, flipped) && n > 0n) {
                 continue;
             }
-            pid += 1;
+            pid += 1n;
         }
     }
-    let sum = 1;
-    for (let i = 0; i < n; i++) {
+    let sum = 1n;
+    for (let i = 0n; i < n; i++) {
         sum += numEqs(i);
     }
     return sum + _numEqsUnbalanced(n) + _numEqsBalanced(n, l, r) + pid;
 }
 
 function _equationFromId(inputEq) {
-    let n = 0;
-    let eqNum = inputEq - 1;
-    while (eqNum >= (numEqs(n))) {
+    let n = 0n;
+    let eqNum = inputEq - 1n;
+
+    // Find n such that eqNum < numEqs(n)
+    while (eqNum >= numEqs(n)) {
         eqNum -= numEqs(n);
-        n += 1;
+        n += 1n;
     }
+
+    // Unbalanced case
     if (eqNum < _numEqsUnbalanced(n)) {
-        const treeNum = Math.floor(eqNum / bell(n + 2));
-        const rhymeNum = eqNum % bell(n + 2);
-        const [lhsShape, rhsShape] = shapeFromId(n + 1, treeNum);
-        const rhyme = getRhymeById(n + 1, rhymeNum);
+        const treeNum = eqNum / bell(n + 2n);
+        const rhymeNum = eqNum % bell(n + 2n);
+        const [lhsShape, rhsShape] = shapeFromId(n + 1n, treeNum);
+        const rhyme = getRhymeById(n + 1n, rhymeNum);
         return new Equation(lhsShape, rhsShape, rhyme);
     }
+
+    // Balanced cases
     eqNum -= _numEqsUnbalanced(n);
-    const m = catalan(Math.floor(n / 2));
-    const l = Math.floor(((2*m - 1) * bell(n + 2) + 2 * bellSameShape(n) -
-                Math.floor(Math.sqrt(((2 * m - 1) * bell(n + 2) + 2 * bellSameShape(n)) ** 2 -
-                           8 * bell(n + 2) * eqNum - 1)) - 1) / (2*bell(n + 2)));
-    const lhsShape = shapeFromId(Math.floor(n / 2), l);
+    const m = catalan(n / 2n);
+
+    // --- Integer square root helper ---
+    const isqrt = (x) => {
+        if (x < 0n) throw new Error("BigInt square root of negative number");
+        if (x < 2n) return x;
+        let small = isqrt(x >> 2n) << 1n;
+        let large = small + 1n;
+        return (large * large > x) ? small : large;
+    };
+
+    const termA = (2n * m - 1n) * bell(n + 2n) + 2n * bellSameShape(n);
+    const termB = 8n * bell(n + 2n) * eqNum + 1n;
+    const sqrtPart = isqrt(termA ** 2n - termB);
+
+    const l = ((termA - sqrtPart - 1n) / (2n * bell(n + 2n)));
+    const lhsShape = shapeFromId(n / 2n, l);
+
     eqNum -= _numEqsBalanced(n, l, l);
+
     if (eqNum < bellSameShape(n)) {
         const rhsShape = lhsShape;
         // Slow code here
-        for (const rhyme of allRhymes(n + 1)) {
-            const flipped = [...rhyme.slice(Math.floor(n / 2) + 1), ...rhyme.slice(0, Math.floor(n / 2) + 1)];
-            if (arrayLt(canonicalizeRhyme(flipped), rhyme)) {
-                continue;
-            }
-            if (arrayEqual(rhyme, flipped) && n > 0) {
-                continue;
-            }
-            if (eqNum === 0) {
+        for (const rhyme of allRhymes(n + 1n)) {
+            const half = Number(n / 2n) + 1;
+            const flipped = [
+                ...rhyme.slice(half),
+                ...rhyme.slice(0, half)
+            ];
+
+            if (arrayLt(canonicalizeRhyme(flipped), rhyme)) continue;
+            if (arrayEqual(rhyme, flipped) && n > 0n) continue;
+
+            if (eqNum === 0n) {
                 return new Equation(lhsShape, rhsShape, rhyme);
             }
-            eqNum -= 1;
+            eqNum -= 1n;
         }
     } else {
         eqNum -= bellSameShape(n);
-        const shapeDiff = Math.floor(eqNum / bell(n + 2));
-        const pid = eqNum % bell(n + 2);
-        const rhsShape = shapeFromId(Math.floor(n / 2), l + 1 + shapeDiff);
-        const rhyme = getRhymeById(n + 1, pid);
+        const shapeDiff = eqNum / bell(n + 2n);
+        const pid = eqNum % bell(n + 2n);
+        const rhsShape = shapeFromId(n / 2n, l + 1n + shapeDiff);
+        const rhyme = getRhymeById(n + 1n, pid);
         return new Equation(lhsShape, rhsShape, rhyme);
     }
 }
@@ -597,60 +674,82 @@ function _equationFromId(inputEq) {
 // Utility functions for mathematical operations
 
 function bell(n) {
-    /**Bell number calculation*/
-    if (memoCache.has(`bell:${n}`)) {
-        return memoCache.get(`bell:${n}`);
+    /**Bell number calculation (BigInt-safe)*/
+    const key = `bell:${n.toString()}`;
+    if (memoCache.has(key)) {
+        return memoCache.get(key);
     }
-    if (n === 0) {
-        memoCache.set(`bell:${n}`, 1);
-        return 1;
+
+    if (n === 0n) {
+        memoCache.set(key, 1n);
+        return 1n;
     }
-    let result = 0;
-    for (let k = 0; k <= n; k++) {
+
+    let result = 0n;
+    for (let k = 0n; k <= n; k++) {
         result += stirling2(n, k);
     }
-    memoCache.set(`bell:${n}`, result);
+
+    memoCache.set(key, result);
     return result;
 }
+
 
 function stirling2(n, k) {
-    /**Stirling numbers of the second kind*/
-    if (memoCache.has(`stirling2:${n}:${k}`)) {
-        return memoCache.get(`stirling2:${n}:${k}`);
+    /**Stirling numbers of the second kind (BigInt-safe)*/
+    if (memoCache.has(`stirling2:${n.toString()}:${k.toString()}`)) {
+        return memoCache.get(`stirling2:${n.toString()}:${k.toString()}`);
     }
-    if (n === 0 && k === 0) return 1;
-    if (n === 0 || k === 0) return 0;
-    if (k > n) return 0;
-    const result = k * stirling2(n - 1, k) + stirling2(n - 1, k - 1);
-    memoCache.set(`stirling2:${n}:${k}`, result);
+
+    if (n === 0n && k === 0n) return 1n;
+    if (n === 0n || k === 0n) return 0n;
+    if (k > n) return 0n;
+
+    const result = k * stirling2(n - 1n, k) + stirling2(n - 1n, k - 1n);
+
+    memoCache.set(`stirling2:${n.toString()}:${k.toString()}`, result);
     return result;
 }
 
+
 function catalan(n) {
-    /**Catalan number calculation*/
+    /**Catalan number calculation (BigInt-safe)*/
     if (memoCache.has(`catalan:${n}`)) {
         return memoCache.get(`catalan:${n}`);
     }
-    if (n <= 1) {
-        memoCache.set(`catalan:${n}`, 1);
-        return 1;
+
+    if (n <= 1n) {
+        memoCache.set(`catalan:${n}`, 1n);
+        return 1n;
     }
-    const result = Math.floor(binomial(2 * n, n) / (n + 1));
+
+    // BigInt division is already floored
+    const result = binomial(2n * n, n) / (n + 1n);
+
     memoCache.set(`catalan:${n}`, result);
     return result;
 }
 
+
 function binomial(n, k) {
-    /**Binomial coefficient calculation*/
-    if (k > n) return 0;
-    if (k === 0 || k === n) return 1;
-    k = Math.min(k, n - k); // Take advantage of symmetry
-    let result = 1;
-    for (let i = 0; i < k; i++) {
-        result = Math.floor(result * (n - i) / (i + 1));
+    /**Binomial coefficient calculation (BigInt-safe)*/
+    if (k > n) return 0n;
+    if (k === 0n || k === n) return 1n;
+
+    // Replace Math.min(k, n - k)
+    if (k > n - k) {
+        k = n - k;
     }
+
+    let result = 1n;
+    for (let i = 0n; i < k; i++) {
+        // Integer division of BigInts is already floor division
+        result = result * (n - i) / (i + 1n);
+    }
+
     return result;
 }
+
 
 // Utility functions for array operations
 
@@ -659,7 +758,8 @@ function arrayEqual(arr1, arr2) {
 }
 
 function arrayLt(arr1, arr2) {
-    for (let i = 0; i < Math.min(arr1.length, arr2.length); i++) {
+    const limit = Math.min(arr1.length, arr2.length);
+    for (let i = 0; i < limit; i++) {
         if (arr1[i] < arr2[i]) return true;
         if (arr1[i] > arr2[i]) return false;
     }
@@ -682,11 +782,11 @@ function processEquation(eqStr) {
     }
     let inputEq;
     try {
-        inputEq = Number(eqStr);
+        inputEq = toBigIntSafe(eqStr);
     } catch (e) {
         inputEq = null;
     }
-    if (Number.isInteger(inputEq)) {
+    if (typeof inputEq === 'bigint' || Number.isInteger(inputEq)) {
         const eq = Equation.fromId(inputEq);
         if (dual) {
             const dualEq = eq.dual();
@@ -798,27 +898,40 @@ if (require.main === module) {
 
 
 function findEquation() {
-    const inputEq = document.getElementById('equationInput').value;
+    const rawInput = document.getElementById('equationInput').value.trim();
     const resultDiv = document.getElementById('result');
-    let eqNum = 0;
 
     try {
-        // Determine if user entered integer input or equation input
-        if (!isNaN(inputEq) && (/^\d+$/.test(inputEq))){
-            eqNum = Number(inputEq);
-        }else{
-            eqNum = Equation.fromStr(inputEq).id;
+        if (rawInput.length === 0) {
+            showErrorPopup('Please enter an equation number or expression.');
+            resultDiv.innerHTML = '';
+            return false;
         }
 
-        if (eqNum) {
-            --eqNum;
-            renderImplications(eqNum);
-            showPage('detailPage');
+        let eqNum;
+        if (/^\d+$/.test(rawInput)) {
+            eqNum = toBigIntSafe(rawInput);
         } else {
-            resultDiv.innerHTML = `The equation '${inputEq}' is invalid`;
+            const parsed = Equation.fromStr(rawInput);
+            eqNum = toBigIntSafe(parsed.id);
         }
+
+        if (eqNum <= 0n) {
+            showErrorPopup(`Equation indices start at 1. Received ${eqNum.toString()}.`);
+            resultDiv.innerHTML = '';
+            return false;
+        }
+
+        const zeroBasedIdx = eqNum - 1n;
+        renderImplications(zeroBasedIdx);
+        showPage('detailPage');
     } catch (error) {
-        showErrorPopup(error.message);
+        let message = `${error.name}: ${error.message}`;
+        if (error.stack) {
+            message += "\n\n" + error.stack;
+        }
+        console.error(message);
+        showErrorPopup(message);
         resultDiv.innerHTML = '';
     }
     return false;
