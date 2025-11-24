@@ -423,7 +423,7 @@ function renderImplications(index) {
 
     const seenClasses = new Set();
     implications.forEach((row, i) => {
-        if (i === indexNumber) return;
+        if (i === indexNumber) return;  // Skip self-implication
 
         const eqClass = equiv.find(cls => cls.includes(i));
         if (eqClass.includes(indexNumber) && !showEquivalences) return;
@@ -497,6 +497,7 @@ function renderImplications(index) {
     antiImpliedByList.innerHTML = antiImpliedBy.join('') || 'None';
     unknownImpliedByList.innerHTML = unknownImpliedBy.join('') || 'None';
 
+    // Add click event listeners to all implication items
     document.querySelectorAll('.implication-item').forEach(item => {
         item.addEventListener('click', (e) => {
             const clickedIndex = parseInt(e.target.attributes['uid'].value);
