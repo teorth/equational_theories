@@ -503,7 +503,7 @@ function renderImplications(index) {
             const clickedIndex = parseInt(e.target.attributes['uid'].value);
             renderImplications(clickedIndex);
             showPage('detailPage');
-            window.scrollTo(0, 0);
+            window.scrollTo(0, 0); // Scroll to the top of the page
         });
     });
 }
