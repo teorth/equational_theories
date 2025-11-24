@@ -346,13 +346,7 @@ function renderImplications(index) {
         selectedEquationDual.innerHTML = "";
     }
 
-    const equationsArray = (typeof equations !== 'undefined' && Array.isArray(equations)) ? equations : null;
-    const commentaryArray = (typeof commentary !== 'undefined' && Array.isArray(commentary)) ? commentary : null;
-    const totalEquations = equationsArray ? BigInt(equationsArray.length) : null;
-    const maxAddressableIndex = BigInt(Number.MAX_SAFE_INTEGER);
-    const datasetAvailable = totalEquations !== null && bigIndex < totalEquations && bigIndex <= maxAddressableIndex;
-
-    if (!datasetAvailable) {
+    if (!(bigIndex < BigInt(equations.length))) {
         hideVisibility("equationCommentary");
         equationCommentary.innerHTML = "";
 
@@ -391,9 +385,9 @@ function renderImplications(index) {
     showVisibility("smallestMagmaLink");
 
     const commentaryIndex = indexNumber + 1;
-    if (commentaryArray && commentaryArray[commentaryIndex] !== undefined) {
+    if (commentary && commentary[commentaryIndex] !== undefined) {
         showVisibility("equationCommentary");
-        equationCommentary.innerHTML = commentaryArray[commentaryIndex];
+        equationCommentary.innerHTML = commentary[commentaryIndex];
     } else {
         hideVisibility("equationCommentary");
         equationCommentary.innerHTML = "";
