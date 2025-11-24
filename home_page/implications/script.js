@@ -399,6 +399,7 @@ function renderImplications(index) {
         equationCommentary.innerHTML = "";
     }
 
+    // Add this section to display equivalent equations
     const equivalentClass = equiv.find(cls => cls.includes(indexNumber)) || [indexNumber];
     const equivalentEquations = equivalentClass
         .filter(eqIndex => eqIndex !== indexNumber)
@@ -407,6 +408,8 @@ function renderImplications(index) {
     const equivalentEquationsHtml = equivalentEquations.length > 0
         ? `<h3>Equivalent Equations:</h3><ul>${equivalentEquations.map(eqStr => `<li>${eqStr}</li>`).join('')}</ul>`
         : '';
+
+    // Add this line to insert the equivalent equations HTML
     document.getElementById('equivalentEquations').innerHTML = equivalentEquationsHtml;
 
     const onlyExplicit = showOnlyExplicitProofs.checked;
@@ -448,7 +451,7 @@ function renderImplications(index) {
             if (isUnknown(status, false)) {
                 const proofHref = gen_proof_url(forward, backward);
                 maybeProve = ` <a href='${proofHref}'>Prove This!</a>`;
-            } else if (isUnknown(status, true)) {
+            } else if (isUnknown(status, true)) { // conjectured
                 const proofHref = gen_proof_url(forward, backward, isImplies(status, false, false) ? "yes" : "no");
                 maybeProve = ` <a href='${proofHref}'>Prove This!</a> <a href="show_proof.html?pair=${forward + 1},${backward + 1}${finite}" target="_blank">Show Proof</a>`;
             } else {
