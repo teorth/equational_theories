@@ -419,27 +419,33 @@ function renderImplications(index) {
     document.getElementById('equivalentEquations').innerHTML = equivalentEquationsHtml;
 
     if (!equationHasCommentary) {
-        let eqIndex = equivalentClass[0];
-        if (commentary[eqIndex + 1] !== undefined) {
+        let baseEquivalentEquationId = equivalentClass[0];
+        if (commentary[baseEquivalentEquationId + 1] !== undefined) {
             showVisibility("equationCommentary");
             equationCommentary.innerHTML = `
-                <h2>Commentary of the equivalent ${equations[eqIndex]}:</h2>
-                ${commentary[eqIndex + 1]}
+                <h2>Commentary of the equivalent ${equations[baseEquivalentEquationId]}:</h2>
+                ${commentary[baseEquivalentEquationId + 1]}
             `;
             equationHasCommentary = true;
         }
     }
 
     if (!equationHasCommentary && dualIndex !== null) {
-        const dualEquivalentClass = equiv.find(cls => cls.includes(dualIndex - 1)) || [dualIndex - 1];
-        let eqIndex = dualEquivalentClass[0];
-        if (commentary[eqIndex + 1] !== undefined) {
-            showVisibility("equationCommentary");
-            equationCommentary.innerHTML = `
-                <h2>Commentary of ${equations[eqIndex]} which is equivalent to the dual Equation${dualIndex}[${dualEq}]:</h2>
-                ${commentary[eqIndex + 1]}
-            `;
-            equationHasCommentary = true;
+        // Try converting the dual index to Number safely
+        let dualIndexNumber = null;
+        if (dualIndex - 1n <= BigInt(Number.MAX_SAFE_INTEGER)) {
+            dualIndexNumber = Number(dualIndex - 1n);
+
+            const dualEquivalentClass = equiv.find(cls => cls.includes(dualIndexNumber)) || [dualIndexNumber];
+            let baseDualEquivalentEquationId = dualEquivalentClass[0];
+            if (commentary[baseDualEquivalentEquationId + 1] !== undefined) {
+                showVisibility("equationCommentary");
+                equationCommentary.innerHTML = `
+                    <h2>Commentary of ${equations[baseDualEquivalentEquationId]} which is equivalent to the dual Equation${dualIndex}[${dualEq}]:</h2>
+                    ${commentary[baseDualEquivalentEquationId + 1]}
+                `;
+                equationHasCommentary = true;
+            }
         }
     }
 
