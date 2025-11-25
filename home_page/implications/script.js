@@ -365,7 +365,7 @@ function renderImplications(index) {
             if (commentary[dualIndex] !== undefined) {
                 showVisibility("equationCommentary");
                 equationCommentary.innerHTML = `<h2>Commentary of the dual Equation${dualIndex}[${dualEq}]:</h2> ${commentary[dualIndex]}`;
-                equationCommentary = true;
+                equationHasCommentary = true;
             }
         }
     } else {
@@ -373,9 +373,6 @@ function renderImplications(index) {
     }
 
     if (!(bigIndex < BigInt(equations.length))) {
-        hideVisibility("equationCommentary");
-        equationCommentary.innerHTML = "";
-
         document.querySelectorAll('.implication-box').forEach(el => {
             el.style.display = 'none';
         });
