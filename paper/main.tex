@@ -26,9 +26,9 @@
 \usetikzlibrary{positioning,arrows.meta,fit}
 
 \tikzset{
-  human/.style   = {->, very thick, color=black, shorten >=2pt},
-  auto/.style    = {->, thin, dashed, color=black!60, shorten >=2pt},
-  semi/.style    = {->, thick, dash pattern=on 4pt off 2pt on 1pt off 2pt, color=black!80, shorten >=2pt}
+  human/.style   = {->, very thick, color=black, shorten >=1pt},
+  auto/.style    = {->, thin, dashed, color=black!60, shorten >=1pt},
+  semi/.style    = {->, thick, dash pattern=on 4pt off 2pt on 1pt off 2pt, color=black!80, shorten >=1pt}
 }
 
 
@@ -68,12 +68,10 @@
 \newcommand{\nmodels}{\not\models}
 \newcommand{\modelsfin}{\models_{\mathrm{fin}}}
 \newcommand{\nmodelsfin}{\nmodels_{\mathrm{fin}}}
-\newcommand{\note}[1]{{\bf #1}}
 \newcommand{\Magma}{{\mathcal{M}}}
 \newcommand{\MagmaN}{{\mathcal{N}}}
 \newcommand{\Eq}[1]{\mathrm{E}#1}
 \newcommand{\E}{\mathrm{E}}
-\newcommand{\TODO}[1]{\todo[inline]{#1}}
 
 
 % Title Information
@@ -114,7 +112,6 @@
 \input{metatheorems}
 \input{automated}
 \input{austin}
-% \input{order5}
 \input{spectrum}
 \input{higman}
 \input{ml}

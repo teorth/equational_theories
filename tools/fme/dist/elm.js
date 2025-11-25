@@ -5520,11 +5520,17 @@ var $author$project$Main$update = F2(
 					var urlRequest = msg.a;
 					if (!urlRequest.$) {
 						var url = urlRequest.a;
-						return _Utils_Tuple2(
+						return A2(
+							$elm$core$String$startsWith,
+							'/equational_theories/fme/',
+							$elm$url$Url$toString(url)) ? _Utils_Tuple2(
 							model,
 							A2(
 								$elm$browser$Browser$Navigation$pushUrl,
 								model.M,
+								$elm$url$Url$toString(url))) : _Utils_Tuple2(
+							model,
+							$elm$browser$Browser$Navigation$load(
 								$elm$url$Url$toString(url)));
 					} else {
 						var href = urlRequest.a;
@@ -6058,7 +6064,7 @@ var $author$project$Main$viewExportNovel = F3(
 											_Utils_ap(tableLine, prov))
 										]))
 								])),
-							$elm$html$Html$text('Finally, re-run `python3 equational_theories/Generated/FinSearch/src/generate_lean.py`!')
+							$elm$html$Html$text('Finally, re-run `python3 equational_theories/Generated/All4x4Tables/src/generate_lean.py`!')
 						]));
 			}
 		}

@@ -47,8 +47,8 @@ To facilitate the automatic generation of an implication graph from the \emph{Le
 \centering
 \begin{Verbatim}
 @[equational_result]
-theorem _root_.Equation1437_not_implies_Equation4269 : \ensuremath{\exists} (G : Type) (_ : Magma G),
-Equation1437 G \ensuremath{\wedge} \ensuremath{\neg} Equation4269 G := by
+theorem _root_.Equation1437_not_implies_Equation4269 :
+\ensuremath{\exists} (G : Type) (_ : Magma G), Equation1437 G \ensuremath{\wedge} \ensuremath{\neg} Equation4269 G := by
     use \ensuremath{\mathbb{N}} × Fin 3, ⟨op⟩
     constructor
     · intro x y z
@@ -69,9 +69,9 @@ A single construction of a magma could satisfy multiple laws $\E_1,\E_2,\dots$ a
 @[equational_result]
 theorem «Facts from All4x4Tables [[1,2,3,4,5,0],[4,1,2,5,0,3],[3,0,5,2,1,4],
 [0,5,4,3,2,1],[5,4,1,0,3,2],[2,3,0,1,4,5]]» :
-  \ensuremath{\exists} (G : Type) (_ : Magma G) (_: Finite G), Facts G [1316, 2863] [411, 680, 817, 1020,
-  1426, 2035, 2441, 2644, 2853, 2855, 2865, 2872, 2947, 3050, 3253, 3456, 4270,
-  4283, 4290, 4380, 4598, 4605, 4656] :=
+  \ensuremath{\exists} (G : Type) (_ : Magma G) (_: Finite G), Facts G [1316, 2863] [411, 680,
+  817, 1020, 1426, 2035, 2441, 2644, 2853, 2855, 2865, 2872, 2947, 3050,
+  3253, 3456, 4270, 4283, 4290, 4380, 4598, 4605, 4656] :=
 ⟨Fin 6, «All4x4Tables [[1,2,3,4,5,0],[4,1,2,5,0,3],[3,0,5,2,1,4],[0,5,4,3,2,1],
 [5,4,1,0,3,2],[2,3,0,1,4,5]]», Finite.of_fintype _, by decideFin!⟩
 \end{Verbatim}

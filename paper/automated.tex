@@ -13,14 +13,14 @@ Tactics in \emph{Lean}, on the other hand, are meta-programs~\cite{DBLP:journals
 In other words, they essentially take \emph{Lean} code as input and produce \emph{Lean} code as output.
 In this manner, they look like another keyword in the language, and are tightly integrated by producing proofs directly.
 Under the hood, their implementation can be arbitrarily complex, from syntactic sugar to full decision procedures.
-The \texttt{duper} tactic~\cite{DBLP:conf/itp/CluneQBA24}, for example, implements a superposition calculus, similar to \emph{Vampire}'s, but for dependent types --- \emph{Lean}'s underlying logical foundation.
+The \texttt{duper} tactic~\cite{DBLP:conf/itp/CluneQBA24}, for example, implements a superposition calculus similar to \emph{Vampire}'s, but for dependent types --- \emph{Lean}'s underlying logical foundation.
 
 In the rest of this section we describe the different proof automation techniques used in this project.
 We first discuss the different proof methods used: primarily superposition and equational reasoning, we then discuss the integration in \emph{Lean}, and finally we report some basic empirical results from this project.
 
 \subsection{Proof techniques}
 
-The main two families of ATPs and tactics we used are based on superposition/saturation and equational reasoning.
+The two main families of ATPs and tactics we used are based on superposition/saturation and equational reasoning.
 In this context we also include SMT solvers, which combine specific decision procedures for theories, like congruence closure for equational reasoning, with satisfiability (SAT) solving \cite{deMoura-Bjorner-2009}.
 Finally, we also used \texttt{aesop}~\cite{DBLP:conf/cpp/LimpergF23}, which implements a version of tableau search.
 This was used mainly to help specific constructions in refutations, and is not specific to proving or disproving magma implications in this sense.
@@ -29,7 +29,7 @@ We describe our use of \texttt{aesop} in \Cref{sec:proof-reconstruction} below.
 \textbf{Saturation.}
 Most of the ATPs used extensively in this project rely primarily on saturation procedures in the superposition calculus.
 For example, this is the case for \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13}.\footnote{See also~\cite{DBLP:journals/cacm/BentkampBNTVW23} for a gentler exposition.}
-The core idea of these provers is that they take a set of assumptions and a conjecture, expressed in --- say --- first-order logic.
+The core idea of these provers is that they take a set of assumptions and a conjecture, expressed in (say) first-order logic.
 The conjecture is negated and added to the set of assumptions, which are all put into a normal form.
 The ATP then tries to refute the negation by applying rules of an underlying calculus, until a proof of false (a contradiction) is derived.
 In this case, the conjecture was (classically) true, and the ATP has found a proof by contradiction, often called a ``refutation'' or ``saturation'' proof.
