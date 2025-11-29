@@ -329,6 +329,10 @@ function renderImplications(index) {
         return;
     }
 
+    // Hide commentary by default
+    hideVisibility("equationCommentary");
+    equationCommentary.innerHTML = "";
+
     const eqId = bigIndex + 1n;
     const eq = Equation.fromId(eqId);
     updateUrl(eqId);
@@ -337,29 +341,20 @@ function renderImplications(index) {
     selectedEquation.textContent = `Equation${eqId.toString()}[${eq.toString()}]`;
     selectedEquation.dataset.index = bigIndex.toString();
 
+    const dualEq = eq.dual();
+    const dualIndex = dualEq.id;
+    const dualDisplay = (dualIndex - 1n).toString();
+    selectedEquationDual.innerHTML = `(Dual equation: <a class='link' onclick="renderImplications('${dualDisplay}')">Equation${dualIndex.toString()}[${dualEq}]</a>)`;
+
     if (commentary[eqId] !== undefined) {
         showVisibility("equationCommentary");
         equationCommentary.innerHTML = commentary[eqId];
-    } else {
-        hideVisibility("equationCommentary");
-        equationCommentary.innerHTML = "";
+    }else if(commentary[dualIndex] !== undefined) {
+        showVisibility("equationCommentary");
+        equationCommentary.innerHTML = `<h2>Commentary of the dual Equation${dualIndex}[${dualEq}]:</h2> ${commentary[dualIndex]}`;
     }
 
-    const dualEq = eq.dual();
-    const dualIndex = dualEq.id;
-    if (dualIndex !== null) {
-        const dualDisplay = (dualIndex - 1n).toString();
-        selectedEquationDual.innerHTML = `(Dual equation: <a class='link' onclick="renderImplications('${dualDisplay}')">Equation${dualIndex.toString()}[${dualEq}]</a>)`;
-
-        if(commentary[eqId] === undefined && commentary[dualIndex] !== undefined) {
-            showVisibility("equationCommentary");
-            equationCommentary.innerHTML = `<h2>Commentary of the dual Equation${dualIndex}[${dualEq}]:</h2> ${commentary[dualIndex]}`;
-        }
-    } else {
-        selectedEquationDual.innerHTML = "";
-    }
-
-    if (!(bigIndex < BigInt(equations.length))) {
+    if (bigIndex > BigInt(equations.length - 1)) {
         document.querySelectorAll('.implication-box').forEach(el => {
             el.style.display = 'none';
         });
@@ -408,18 +403,18 @@ function renderImplications(index) {
     document.getElementById('equivalentEquations').innerHTML = equivalentEquationsHtml;
 
     let baseEquivalentEquationId = equivalentClass[0];
+
+    let dualIndexNumber = Number(dualIndex - 1n);
+    const dualEquivalentClass = equiv.find(cls => cls.includes(dualIndexNumber)) || [dualIndexNumber];
+    let baseDualEquivalentEquationId = dualEquivalentClass[0];
+
     if (commentary[eqId] === undefined && commentary[dualIndex] === undefined && commentary[baseEquivalentEquationId + 1] !== undefined) {
         showVisibility("equationCommentary");
         equationCommentary.innerHTML = `
             <h2>Commentary of the equivalent ${equations[baseEquivalentEquationId]}:</h2><br>
             ${commentary[baseEquivalentEquationId + 1]}
         `;
-    }
-
-    let dualIndexNumber = Number(dualIndex - 1n);
-    const dualEquivalentClass = equiv.find(cls => cls.includes(dualIndexNumber)) || [dualIndexNumber];
-    let baseDualEquivalentEquationId = dualEquivalentClass[0];
-    if (commentary[eqId] === undefined && commentary[dualIndex] === undefined && commentary[baseEquivalentEquationId + 1] === undefined && commentary[baseDualEquivalentEquationId + 1] !== undefined) {
+    }else if (commentary[baseDualEquivalentEquationId + 1] !== undefined) {
         showVisibility("equationCommentary");
         equationCommentary.innerHTML = `
             <h2>Commentary of ${equations[baseDualEquivalentEquationId]} which is equivalent to the dual Equation${dualIndex}[${dualEq}]:</h2><br>
