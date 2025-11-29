@@ -414,7 +414,7 @@ function renderImplications(index) {
             <h2>Commentary of the equivalent ${equations[baseEquivalentEquationId]}:</h2><br>
             ${commentary[baseEquivalentEquationId + 1]}
         `;
-    }else if (commentary[baseDualEquivalentEquationId + 1] !== undefined) {
+    }else if (commentary[eqId] === undefined && commentary[dualIndex] === undefined && commentary[baseDualEquivalentEquationId + 1] !== undefined) {
         showVisibility("equationCommentary");
         equationCommentary.innerHTML = `
             <h2>Commentary of ${equations[baseDualEquivalentEquationId]} which is equivalent to the dual Equation${dualIndex}[${dualEq}]:</h2><br>
