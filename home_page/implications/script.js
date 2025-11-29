@@ -416,20 +416,15 @@ function renderImplications(index) {
         `;
     }
 
-    // Try converting the dual index to Number safely
-    let dualIndexNumber = null;
-    if (dualIndex - 1n <= BigInt(Number.MAX_SAFE_INTEGER)) {
-        dualIndexNumber = Number(dualIndex - 1n);
-
-        const dualEquivalentClass = equiv.find(cls => cls.includes(dualIndexNumber)) || [dualIndexNumber];
-        let baseDualEquivalentEquationId = dualEquivalentClass[0];
-        if (commentary[eqId] === undefined && commentary[dualIndex] === undefined && commentary[baseEquivalentEquationId + 1] === undefined && commentary[baseDualEquivalentEquationId + 1] !== undefined) {
-            showVisibility("equationCommentary");
-            equationCommentary.innerHTML = `
-                <h2>Commentary of ${equations[baseDualEquivalentEquationId]} which is equivalent to the dual Equation${dualIndex}[${dualEq}]:</h2><br>
-                ${commentary[baseDualEquivalentEquationId + 1]}
-            `;
-        }
+    let dualIndexNumber = Number(dualIndex - 1n);
+    const dualEquivalentClass = equiv.find(cls => cls.includes(dualIndexNumber)) || [dualIndexNumber];
+    let baseDualEquivalentEquationId = dualEquivalentClass[0];
+    if (commentary[eqId] === undefined && commentary[dualIndex] === undefined && commentary[baseEquivalentEquationId + 1] === undefined && commentary[baseDualEquivalentEquationId + 1] !== undefined) {
+        showVisibility("equationCommentary");
+        equationCommentary.innerHTML = `
+            <h2>Commentary of ${equations[baseDualEquivalentEquationId]} which is equivalent to the dual Equation${dualIndex}[${dualEq}]:</h2><br>
+            ${commentary[baseDualEquivalentEquationId + 1]}
+        `;
     }
 
     const onlyExplicit = showOnlyExplicitProofs.checked;
