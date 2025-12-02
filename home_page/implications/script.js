@@ -403,7 +403,7 @@ function renderImplications(index) {
     document.getElementById('equivalentEquations').innerHTML = equivalentEquationsHtml;
 
     const baseEquivalentEquationId = equivalentClass[0];
-    const dualEquivalentClass = equiv.find(cls => cls.includes(dualIndex - 1n)) || [dualIndex - 1n];
+    const dualEquivalentClass = equiv.find(cls => cls.includes(Number(dualIndex - 1n))) || [Number(dualIndex - 1n)];
     const baseDualEquivalentEquationId = dualEquivalentClass[0];
     if (commentary[eqId] === undefined && commentary[dualIndex] === undefined && commentary[baseEquivalentEquationId + 1] !== undefined) {
         showVisibility("equationCommentary");
