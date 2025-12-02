@@ -402,12 +402,9 @@ function renderImplications(index) {
     // Add this line to insert the equivalent equations HTML
     document.getElementById('equivalentEquations').innerHTML = equivalentEquationsHtml;
 
-    let baseEquivalentEquationId = equivalentClass[0];
-
-    let dualIndexNumber = Number(dualIndex - 1n);
-    const dualEquivalentClass = equiv.find(cls => cls.includes(dualIndexNumber)) || [dualIndexNumber];
-    let baseDualEquivalentEquationId = dualEquivalentClass[0];
-
+    const baseEquivalentEquationId = equivalentClass[0];
+    const dualEquivalentClass = equiv.find(cls => cls.includes(dualIndex - 1n)) || [dualIndex - 1n];
+    const baseDualEquivalentEquationId = dualEquivalentClass[0];
     if (commentary[eqId] === undefined && commentary[dualIndex] === undefined && commentary[baseEquivalentEquationId + 1] !== undefined) {
         showVisibility("equationCommentary");
         equationCommentary.innerHTML = `
