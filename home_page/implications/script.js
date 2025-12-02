@@ -378,7 +378,7 @@ function renderImplications(index) {
         return;
     }
 
-    let indexNumber = Number(bigIndex);
+    const indexNumber = Number(bigIndex);
 
     document.querySelectorAll('.implication-box').forEach(el => {
         el.style.display = 'block';
