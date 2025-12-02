@@ -349,7 +349,7 @@ function renderImplications(index) {
     if (commentary[eqId] !== undefined) {
         showVisibility("equationCommentary");
         equationCommentary.innerHTML = commentary[eqId];
-    }else if(commentary[dualIndex] !== undefined) {
+    } else if(commentary[dualIndex] !== undefined) {
         showVisibility("equationCommentary");
         equationCommentary.innerHTML = `<h2>Commentary of the dual Equation${dualIndex}[${dualEq}]:</h2> ${commentary[dualIndex]}`;
     }
