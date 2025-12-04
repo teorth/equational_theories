@@ -1,6 +1,6 @@
 ## A law for sets equipped with a bijection of order 3
 
-This law is equivalent to stating that the magma operation is right-projection composed with squaring (namely `x◇y=y◇y`, a form of [law 39](https://teorth.github.io/equational_theories/implications/?39)) and that squaring is a bijection `f: M→M` that cubes to the identity (namely `x = f(f(f(x)))`, law 5476400).  The second condition can be replaced by the shorter [law 47](https://teorth.github.io/equational_theories/implications/?47) `x=x◇(x◇(x◇x))`.
+This law is equivalent to stating that the magma operation is right-projection composed with squaring (namely `x◇y=y◇y`, a form of [law 39](https://teorth.github.io/equational_theories/implications/?39)) and that squaring is a bijection `f: M→M` that cubes to the identity (namely `x = f(f(f(x)))`, [law 5476400](https://teorth.github.io/equational_theories/implications/?5476400)).  The second condition can be replaced by the shorter [law 47](https://teorth.github.io/equational_theories/implications/?47) `x=x◇(x◇(x◇x))`.
 
 The left division operation defined by `x ◇ (x : y) = y` satisfies the same law, namely `x = y : (x : (x : x))`.
 

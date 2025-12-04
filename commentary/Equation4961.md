@@ -6,4 +6,4 @@ Such magmas are in one-to-one correspondence with [Mendelsohn directed triple sy
 
 Magmas that satisfy this law together with the commutative [law 43](https://teorth.github.io/equational_theories/implications/?43) are called squags (Steiner quasigroups) and are characterized by [law 4964](https://teorth.github.io/equational_theories/implications/?4964).
 
-The lowest-numbered laws characterizing Mendelsohn quasigroups are 4961, 4999, but there are numerous others of that order.
+The lowest-numbered laws characterizing Mendelsohn quasigroups are 4961, [4999](https://teorth.github.io/equational_theories/implications/?4999), but there are numerous others of that order.

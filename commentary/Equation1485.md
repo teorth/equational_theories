@@ -6,7 +6,7 @@ Appears to be resistant to the linear magma method and the "pure" greedy algorit
 
 Has an intriguing graph-theoretic interpretation in terms of directed graphs with some "good" paths of length two, and an interesting axiom involving 5-cycles in the graph.
 
-The last-standing implications for this equation were resolved with a 32-element magma (that violates equations 151, 3456, 3862) that was later understood using the twisting semigroup method.
+The last-standing implications for this equation were resolved with a 32-element magma (that violates equations 151, 3456, 3862) that was later understood using the [twisting semigroup method](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1485/near/480128244).
 
 The [finite spectrum](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Order.203.20Spectra/with/527073087) of (cardinalities of finite magmas satisfying) this law conjecturally consists of [squares and twice squares](https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1485/near/480045734).
 
