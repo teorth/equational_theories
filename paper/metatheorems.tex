@@ -90,12 +90,12 @@ The following lemma is readily proven by induction on the structure of terms.
 \end{lemma}
 We now have the following theorem.
 \begin{theorem}\label{thm:canon}
-  Whenever $R$ weakly collapsing, a weak canonizer, and non-overlapping, then $C_R$ is a canonizer.
+  Whenever $R$ is weakly collapsing, a weak canonizer, and non-overlapping, then $C_R$ is a canonizer.
 \end{theorem}
 \begin{proof}
   Assume $w\sim_{\E}w'$. We proceed by induction over the proof of equality.
 
-  The only non trivial case is $w = \varphi_\theta l$ and $w'=\varphi_\theta r$ for some substitution $\theta$.  The case $l=r$ is clear, so we may assume that $l \neq r$.
+  The only nontrivial case is $w = \varphi_\theta l$ and $w'=\varphi_\theta r$ for some substitution $\theta$.  The case $l=r$ is clear, so we may assume that $l \neq r$.
   Then we have
   \begin{align*}
     C_R(\varphi_\theta l) &= R(\varphi_{C_R\circ\theta}l) \\
@@ -186,7 +186,7 @@ Specializing to the case where $w,w'$ are both irreducible, we conclude
 
 As an application of this corollary, we establish
 
-\begin{proposition}[$\Eq{854} \nmodels \Eq{3316}$]\label{854-3316} Equation $\Eq{854}$ does not imply $\Eq{3316}$ .
+\begin{proposition}[$\Eq{854} \nmodels \Eq{3316}$]\label{854-3316} Equation $\Eq{854}$ does not imply $\Eq{3316}$.
 \end{proposition}
 
 \begin{proof}[Proof sketch]
