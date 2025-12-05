@@ -162,7 +162,7 @@ We say that one partial operation $\op' \colon \Omega' \to M$ \emph{extends} ano
 
 Abstractly, the greedy algorithm strategy can now be described as follows.
 
-\begin{theorem}[Abstract greedy algorithm]\label{greedy-abstract} Let $\E,{\E'}$ be equational laws, and let $\Gamma$ be a theory of first-order sentences regarding a  partial magma operations $\op \colon \Omega \to M$ on a carrier $M$.  Assume the following axioms:
+\begin{theorem}[Abstract greedy algorithm]\label{greedy-abstract} Let $\E,{\E'}$ be equational laws, and let $\Gamma$ be a theory of first-order sentences regarding a partial magma operation $\op \colon \Omega \to M$ on a carrier $M$.  Assume the following axioms:
 \begin{itemize}
   \item[(i)] (Seed) There exists a finitely supported partial magma operation $\op_0 \colon \Omega_0 \to M$ satisfying $\Gamma$ that contradicts ${\E'}$, in the sense that there is some assignment of variables in ${\E'}$ in $M$ such that both sides of ${\E'}$ are defined using $\op_0$, but not equal to each other.
   \item[(ii)]  (Soundness)  If $\op_n \colon \Omega_n \to M$ is a sequence of partial magma operations satisfying $\Gamma$ with each $\op_{n+1}$ an extension of $\op_n$, and the direct limit $\op_\infty$ is total, then this limit satisfies $\E$.
@@ -173,7 +173,7 @@ Then $\E \nmodels {\E'}$.
 
 We remark that this greedy method seems to be inherently infinitary in nature, and does not seem well adapted to refute finite magma implications $\E \modelsfin {\E'}$.
 
-\begin{proof}  We work on the countably infinite carrier $\N$.  By embedding the finitely supported operation $\op_0$ from axiom (i) into $\N$, we can assume without loss of generality that $\op_0$ has carrier $\N$.  By similar relabeling, we can assume in (iii) that $M' = M$ when $M=\N$, since any elements of $M' \backslash \N$ that
+\begin{proof}  We work on the countably infinite carrier $\N$.  By embedding the finitely supported operation $\op_0$ from axiom (i) into $\N$, we can assume without loss of generality that $\op_0$ has carrier $\N$.  By similar relabeling, we can assume in (iii) that $M' = M$ when $M=\N$, since any elements of $M' \setminus \N$ that
 appear in $\Omega'$ can simply be reassigned to natural numbers that did not previously appear in $\Omega$.  We well-order the pairs in $\N \times \N$ by $(a_n,b_n)$ for $n=1,2,\dots$.  Iterating (iii) starting from $\op_0$, we can thus create a sequence of finitely supported magma operations $\op_0, \op_1, \dots$ on $\N$ satisfying $\Gamma$, with each $\op_{n+1}$ an extension of $\op_n$, and $a_n \op_n b_n$ defined for all $n \geq 1$.  Then the direct limit $\op_\infty$ of these operations is total, and does not satisfy ${\E'}$ thanks to axiom (i).  On the other hand, by axiom (ii) it satisfies $\E$, and the claim follows.
 \end{proof}
 
@@ -305,7 +305,7 @@ The specific law $\x \formaleq \x \op ((\y \op \z) \op (\x \op \z))$ \eqref{eq85
  finding a refutation.  This is similar to the greedy methods in \ref{greedy-sec}, except that we require our resulting magma to be finite and completely
  defined, and our transformations need not be deterministic.
 
- Since our goal is simply to find a finite model — and any candidate can be checked directly — we are not limited to transformations that can be rigorously justified.
+ Since our goal is simply to find a finite model---and any candidate can be checked directly---we are not limited to transformations that can be rigorously justified.
   SAT solvers like
  \emph{Glucose}~\cite{DBLP:conf/ijcai/AudemardS09,DBLP:conf/cp/AudemardS12} inspired by the earlier \emph{MiniSAT}~\cite{DBLP:conf/sat/EenS03},
  via convenient interfaces like \emph{PySAT}~\cite{imms-sat18, itk-sat24},

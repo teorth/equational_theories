@@ -16,7 +16,7 @@ Under the hood, their implementation can be arbitrarily complex, from syntactic 
 The \texttt{duper} tactic~\cite{DBLP:conf/itp/CluneQBA24}, for example, implements a superposition calculus similar to \emph{Vampire}'s, but for dependent types --- \emph{Lean}'s underlying logical foundation.
 
 In the rest of this section we describe the different proof automation techniques used in this project.
-We first discuss the different proof methods used: primarily superposition and equational reasoning, we then discuss the integration in \emph{Lean}, and finally we report some basic empirical results from this project.
+We first discuss the different proof methods used: primarily superposition and equational reasoning; we then discuss the integration in \emph{Lean}, and finally we report some basic empirical results from this project.
 
 \subsection{Proof techniques}
 
@@ -49,7 +49,7 @@ Extensions to this procedure, for example by quantifier instantiation via e-matc
 
 SMT solvers like \emph{Z3}~\cite{DBLP:conf/tacas/MouraB08} use equational reasoning for deciding the theory of equality with uninterpreted functions~\cite{DBLP:series/txtcs/KroeningS16,DBLP:conf/cade/MouraB07}.
 On the other hand, equality saturation~\cite{DBLP:journals/pacmpl/WillseyNWFTP21} uses e-graphs by extending congruence closure to a more controlled search, enabling optimization and conditional rewriting.
-One of the main advantages of using equational reasoning to reason about implications of magma laws is that we get very explicit proofs: a proof that $l \models l'$ is given by a sequence of rewrites that starts at the left-hand side of $l'$ and arrives at the right-hand side through applications of $l$.
+One of the main advantages of equational reasoning for implications of magma laws is that we get very explicit proofs: a proof that $l \models l'$ is given by a sequence of rewrites that starts at the left-hand side of $l'$ and arrives at the right-hand side through applications of $l$.
 
 In this project we used \emph{Z3}~\cite{DBLP:conf/tacas/MouraB08}, \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4}, a custom ATP \emph{MagmaEgg} for magmas based on egg~\cite{DBLP:journals/pacmpl/WillseyNWFTP21}, and the \emph{Lean} \texttt{egg} tactic~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24,rossel2024equality}, which all work with equational logic. We have also reasoned with manual (custom written) heuristics about simple rewrites.
 
@@ -66,7 +66,7 @@ First, there is the invocation of the ATPs by translating the problem from \emph
 And second, there is the reconstruction of the ATPs' results as a (persistent) \emph{Lean} proof.
 These two aspects present different challenges, and require different strategies, depending mostly on the kind of proof strategy the ATP uses.
 
-More generally, we have observed that there are multiple ways of integrating decisions procedures within \emph{Lean}, with different levels of integration.
+More generally, we have observed that there are multiple ways of integrating decision procedures within \emph{Lean}, with different levels of integration.
 
 \begin{enumerate}
     \item Using a \emph{Lean} tactic, which calls a decision procedure written in \emph{Lean} (like \texttt{aesop} or \texttt{duper}).
@@ -74,14 +74,14 @@ More generally, we have observed that there are multiple ways of integrating dec
     \item\label{external} Using an external script which calls an existing ATP and generates a source file \texttt{.lean} which captures the result explicitly.
 \end{enumerate}
 
-This project primarily used the least integrated approach, Option \ref{external}, as it was fastest to implement and imposed no additional technical requirements on other contributors.
+This project primarily used the least integrated approach, Option \ref{external}, as it was the fastest to implement and imposed no additional technical requirements on other contributors.
 The matter of technical requirements caused problems, for example, when integrating the \texttt{egg} tactic (Option \ref{inter}) as it initially expected certain software on the user's machine.
 Such trade-offs between Option \ref{inter} and Option \ref{external} are, however, mutual, as the higher upfront cost of integrating a proof tactic in Option \ref{inter} makes the decision procedure easier to use than with Option \ref{external}.
 Additionally, Option \ref{inter} can benefit from \emph{Lean}'s meta-programming capabilities when encoding the problem for use with an ATP, and when reconstructing a \emph{Lean} proof from the result.
 
 \textbf{Proof Reconstruction.}
 
-The relative simplicity of the objects used in this project benefit the implementations of proof reconstruction.
+The relative simplicity of the objects used in this project benefits the implementations of proof reconstruction.
 By focusing on the given problem domain, difficult reconstruction issues, like complex dependent types, could be ignored.
 
 For saturation proofs with \emph{Vampire}, we implemented analogs of the \emph{superpose}, \emph{resolve}, and \emph{subsumption} steps in \emph{Lean}.
@@ -125,7 +125,7 @@ In this method, we iteratively strengthen a construction with additional hypothe
 
 % \TODO{this should also be expanded more, at least with references to some of the constructions in other chapters.}
 
-While equational reasoning can also be used in a semi-automatic fashion to prove equations~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24}, the positive implications in the main implication graph of project were all simple enough that we did not need a semi-automatic approach for them.
+While equational reasoning can also be used in a semi-automatic fashion to prove equations~\cite{DBLP:journals/pacmpl/KoehlerGBGTS24}, the positive implications in the main implication graph of the project were all simple enough that we did not need a semi-automatic approach for them.
 
 \subsection{ATPs usage}\label{ATPs_usage}
 
