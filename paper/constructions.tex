@@ -46,16 +46,16 @@ $$ V_{w_1,w_2}(M) \subseteq V_{w'_1,w'_2}(M)
 $$
 for all rings $M$.  For commutative rings, this criterion can be checked in an automatable fashion by standard Gr\"obner basis techniques; in the noncommutative case one can use methods such as the diamond lemma \cite{diamond-lemma}.
 
-\begin{example}[Commutative counterexample]\label{1286-ex} For the law $x \formaleq y \op (((x \op y) \op x) \op y)$ \eqref{eq1286}, the variety \eqref{variety} can be computed to be
+\begin{example}[Commutative counterexample]\label{1286-ex} For the law $\x \formaleq \y \op (((\x \op \y) \op \x) \op \y)$ \eqref{eq1286}, the variety \eqref{variety} can be computed to be
 $$ \{ (a,b) \in M \times M: 1 = ba^3+bab, 0 = a + ba^2 b + b^2 \}$$
 while the variety for the idempotent law $\Eq{3}$ is
 $$ \{ (a,b) \in M \times M: a+b=1 \}.$$
 Thus, to show that $\Eq{1286}$ does not entail $\Eq{3}$, it suffices to locate elements $a,b$ of a ring $M$ for which one has $1 = ba^3+bab$, $0 = a + ba^2 b + b^2$, and $a+b \neq 1$.  Here one can take a commutative example, for instance when $M = \Z/p\Z$ and $(p,a,b) = (11,1,7)$.
 \end{example}
 
-\begin{example}[Noncommutative counterexample]\label{1117-ex} For the law $x \formaleq y \op ((y \op (x \op z)) \op z)$ \eqref{eq1117}, the variety \eqref{variety} can be computed to be
+\begin{example}[Noncommutative counterexample]\label{1117-ex} For the law $\x \formaleq \y \op ((\y \op (\x \op \z)) \op \z)$ \eqref{eq1117}, the variety \eqref{variety} can be computed to be
 $$ \{ (a,b) \in M \times M: 1 = baba, 0 = a+ba^2, 0 = bab^2 + b^2 \}$$
-while the variety for $x \formaleq (x \op ((x \op x) \op x)) \op x$ \eqref{eq2441} is
+while the variety for $\x \formaleq (\x \op ((\x \op \x) \op \x)) \op \x$ \eqref{eq2441} is
 $$ \{ (a,b) \in M \times M: 1 = a^2 + aba^2 + abab + ab^2 + b \}.$$
 Observe that if $ba = -1$, then $(a,b)$ automatically lies in the first set, and lies in the second set if and only if $(ab+1)(b-1) = 0$.  One can then show that $\Eq{1117}$ does not imply $\Eq{2441}$ by setting $a = L$, $b = -R$ where $L, R$ are the left and right shift operators respectively on the ring of integer-valued sequences $\Z^\N$.  With some \emph{ad hoc} effort one can convert this example into a less linear, but simpler (and easier to formalize) example, namely the magma with carrier $\Z$ and operation $x \op y = 2x - \lfloor y/2 \rfloor$.
 \end{example}
