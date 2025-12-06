@@ -177,7 +177,7 @@ We remark that this greedy method seems to be inherently infinitary in nature, a
 appear in $\Omega'$ can simply be reassigned to natural numbers that did not previously appear in $\Omega$.  We well-order the pairs in $\N \times \N$ by $(a_n,b_n)$ for $n=1,2,\dots$.  Iterating (iii) starting from $\op_0$, we can thus create a sequence of finitely supported magma operations $\op_0, \op_1, \dots$ on $\N$ satisfying $\Gamma$, with each $\op_{n+1}$ an extension of $\op_n$, and $a_n \op_n b_n$ defined for all $n \geq 1$.  Then the direct limit $\op_\infty$ of these operations is total, and does not satisfy ${\E'}$ thanks to axiom (i).  On the other hand, by axiom (ii) it satisfies $\E$, and the claim follows.
 \end{proof}
 
-We refer to $\Gamma$ as the \emph{rule set} for the greedy extension method. To apply \Cref{greedy-abstract} to obtain a refutation $\E \models {\E'}$, we have found the following trial-and-error method to work well in practice:
+We refer to $\Gamma$ as the \emph{rule set} for the greedy extension method. To apply \Cref{greedy-abstract} to obtain a refutation $\E \nmodels {\E'}$, we have found the following trial-and-error method to work well in practice:
 \begin{itemize}
 \item[1.] Start with a minimal rule set $\Gamma$ that has just enough axioms to imply the soundness property for the given hypothesis $\E$.
 \item[2.] Attempt to establish the greedy extension property for this rule set by setting $a \op' b$ equal to a new element $c \not \in M$, and then defining additional values of $\op'$ as necessary to recover the axioms of $\Gamma'$.
