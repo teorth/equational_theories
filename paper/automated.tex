@@ -206,10 +206,12 @@ Remarkably, \emph{Prover9} can establish all positive implications between laws 
 
 The configuration of \emph{Mace4} likewise has a substantial impact on its running time, with different parameter settings resulting in differences of orders of magnitude. In particular, model-computation time is greatly affected by the \verb|selection_measure| and \verb|skolems_last| parameters. The \verb|selection_order| parameter is also relevant, but our empirical data indicate that \verb|selection_order| 2 is by far the best general choice. It is outperformed by \verb|selection_order| 0 only in a few cases, and even then the improvement in computing time is not that substantial. The effect of setting \verb|skolems_last| can range from slightly detrimental to highly advantageous: as an example, a model of $\Eq{272260}\nmodels\Eq{42323216}$ of size $7$ is found in $0.0$s with (2,4,Y), and in $4.0$s with (2,4,N). Here and in the following we use notation (a,b,S) to mean the configuration \verb|selection_order| a, \verb|selection_measure| b, and \verb|skolems_last| set (S$=$Y) or clear (S$=$N).
 
-There is no universally optimal configuration (a,b,S): for each different (potential) implication or theory, configurations may be ranked differently. However, in the ETP context, certain configurations have been preferable due to their consistently better performance. An arguable ordering is (2,3,Y), (2,1,Y), (2,4,Y), (2,3,N), (2,1,N), (2,4,N), (0,1,N), (0,1,Y), with the remaining configurations being largely avoidable. Problems involving several algebraic operations, or presenting some kind of symmetry (see Figure \ref{figure:weakcentralgroupoids} with the example of weak central groupoids), tend to perform better with (2,4,N/Y). Problems may also exhibit considerable sensitivity to changes in formulas that apparently do not alter the problem significantly, for example adding $f^n(x)=x$ with different values of $n$ can result in different optimal configurations.
+There is no universally optimal configuration (a,b,S): for each different (potential) implication or theory, configurations may be ranked differently. However, in the ETP context, certain configurations have been preferable due to their consistently better performance. An arguable ordering is (2,3,Y), (2,1,Y), (2,4,Y), (2,3,N), (2,1,N), (2,4,N), (0,1,N), (0,1,Y), with the remaining configurations being largely avoidable. Problems involving several algebraic operations, or presenting some kind of symmetry (see Table \ref{table:weakcentralgroupoids} with the example of weak central groupoids), tend to perform better with (2,4,N/Y). Problems may also exhibit considerable sensitivity to changes in formulas that apparently do not alter the problem significantly, for example adding $f^n(x)=x$ with different values of $n$ can result in different optimal configurations.
 
-\begin{figure}[h]
+\begin{table}
 \centering
+\caption{Largest size of $\Eq{1485}$ (weak central groupoids) models exhausted by each configuration in under 300s. The skolems\_last parameter turns out to be irrelevant for this problem.}
+\label{table:weakcentralgroupoids}
 \begin{tabular}{|c|c|c|c|c|c|}
   \hline
   % after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
@@ -217,14 +219,14 @@ There is no universally optimal configuration (a,b,S): for each different (poten
   \textbf{Size:} &14 (in 127s) & 14 (in 166s) & 13 (in 290s) & 9 (in 33s) & 7 (in 8s) \\
   \hline
 \end{tabular}
-\caption{Largest size of $\Eq{1485}$ (weak central groupoids) models exhausted by each configuration in under 300s. The skolems\_last parameter turns out to be irrelevant for this problem.}
-\label{figure:weakcentralgroupoids}
-\end{figure}
+\end{table}
 
-In addition, while in the ETP we typically searched for a single model to contradict a given implication, in some cases we sought all models of a certain size for some given theory, either to better understand a collection of base examples in order to extend them, or just to improve our understanding. Accordingly, it should be noted that a configuration that is fast for finding one model of a given size may be slower than others for exhausting the whole size. A notorious example of this is (2,2,Y) for models of $\Eq{677}$ of size 9, which finds a single model in 160s, but is unable to exhaust the whole size after 20h (see Figure \ref{figure:677models}).
+In addition, while in the ETP we typically searched for a single model to contradict a given implication, in some cases we sought all models of a certain size for some given theory, either to better understand a collection of base examples in order to extend them, or just to improve our understanding. Accordingly, it should be noted that a configuration that is fast for finding one model of a given size may be slower than others for exhausting the whole size. A notorious example of this is (2,2,Y) for models of $\Eq{677}$ of size 9, which finds a single model in 160s, but is unable to exhaust the whole size after 20h (see Table~\ref{table:677models}).
 
-\begin{figure}[h]
+\begin{table}
 \centering
+\caption{Time to find one model of $\Eq{677}$ of size 9 and to exhaust the same size for different configurations. Some finite-setting formulas were included to speed up the search (see Section  \ref{finite setting}). The configurations not listed here were unable to find a model in 4000s.}
+\label{table:677models}
 {\small
 \begin{tabular}{|c||c|c|}\hline
 \textbf{Configuration} & \textbf{One model} & \textbf{Exhaust size} \\\hline\hline
@@ -242,9 +244,7 @@ In addition, while in the ETP we typically searched for a single model to contra
 (0,3,Y) & 3777s & 4254s \\\hline
 \end{tabular}
 }
-\caption{Time to find one model of $\Eq{677}$ of size 9 and to exhaust the same size for different configurations. Some finite-setting formulas were included to speed up the search (see Section  \ref{finite setting}). The configurations not listed here were unable to find a model in 4000s.}
-\label{figure:677models}
-\end{figure}
+\end{table}
 
 When undertaking a long-running model search at a large size, it is advisable to determine in advance the potentially optimal configuration(s) by examining smaller sizes. Throughout the ETP, we have employed the following procedure. If time permits, exhaust the previous size with all configurations to make a choice. If that process is prohibitively time-consuming, then set the target number of desired configurations (e.g. for parallel runs), initialize the pool of configurations with all possibilities, and iterate:
 \vspace{-10pt}
@@ -254,10 +254,12 @@ When undertaking a long-running model search at a large size, it is advisable to
 \item Based on the smallest collected time, determine a statistically significant time threshold.
 \item Remove from the pool those configurations whose time differs from the best one by more than the threshold (if any). End the loop once the number of configurations contained in the pool is the desired one.
 \end{enumerate}
-Be aware that this algorithm assumes that once a configuration outperforms another, this advantage carries over to larger sizes. This is not always the case (see Figure \ref{figure:Schneider} for an example). Additionally, the algorithm may be further refined by considering combinations of the configurations with different subsets of formulas.
+Be aware that this algorithm assumes that once a configuration outperforms another, this advantage carries over to larger sizes. This is not always the case (see Table~\ref{table:Schneider} for an example). Additionally, the algorithm may be further refined by considering combinations of the configurations with different subsets of formulas.
 
-\begin{figure}[h]
+\begin{table}
 \centering
+\caption{Comparison of the two best configurations for finding certain special 677 models, both for exhausting each size and for finding a single model, with best times in boldface. Note that initially (2,4,N) seems the best configuration, but in the long run, (2,3,Y) outperforms it. The comparison is particularly misleading at size 16 when searching for a single model.}
+\label{table:Schneider}
 \begin{tabular}{|c||c|c||c|c|}\hline
 \textbf{Size} & \textbf{(2,3,Y) exhaust} & \textbf{(2,4,N) exhaust} & \textbf{(2,3,Y) model} & \textbf{(2,4,N) model}\\\hline\hline
 9 & 0.14s & \textbf{0.04s} & 0.02s & \textbf{0.0s} \\\hline
@@ -272,9 +274,7 @@ Be aware that this algorithm assumes that once a configuration outperforms anoth
 18 & \textbf{883s} & 2382s & - & -  \\\hline
 19 & \textbf{2300s} & 3600s+ & \textbf{846s} & 2082s \\\hline
 \end{tabular}
-\caption{Comparison of the two best configurations for finding certain special 677 models, both for exhausting each size and for finding a single model, with best times in boldface. Note that initially (2,4,N) seems the best configuration, but in the long run, (2,3,Y) outperforms it. The comparison is particularly misleading at size 16 when searching for a single model.}
-\label{figure:Schneider}
-\end{figure}
+\end{table}
 
 
 \subsubsection{Search of compatible properties} When in search of a model, either theoretically or using a model builder, it is useful to be able to identify additional properties to impose on the model, strong enough to simplify the search, yet weak enough to guarantee compatibility with the original axioms. In particular, when seeking a countermodel to implication $\E\models\E'$, we should avoid properties that, together with $\E$, would imply $\E'$. This search can be greatly aided by an ATP: if we have an educated guess that some property $P$ is compatible with the problem $\E\nmodels\E'$, we can run the ATP on $\E\wedge P$ under various strategies to attempt a proof of $\E'$. If, after allowing ample time, no proof is found, this provides heuristic evidence that a countermodel satisfying $P$ exists. Note that even if no proof actually exists, it may well be that there are infinite countermodels but not finite ones.
@@ -285,7 +285,7 @@ In the ETP, we successfully applied this approach to several of the outstanding 
 
 There are situations in which one wants to work in the finite setting, for example, when proving a finite implication. Indeed, model builders typically search for finite models; therefore, when using them, we can usually assume we are operating in the finite setting. In this context, injective (resp. surjective) maps are bijective, bijections are periodic maps, and so on. In addition, any law of the form $x = f(y)\op g(x,y)$ for some maps $f,g$ has left multiplication map $L_{f(y)}$ surjective, hence bijective. Thus by applying the substitution $x\mapsto f(y)\op x$ and simplifying $f(y)$ on the left, the law finitely implies $x = g(f(y)\op x,y)$.
 
-By this and similar approaches we typically find some multiplication or related map (squaring, etc.) to be injective and surjective, properties that we may add to our initial formulas. In hindsight, adding injectivity to a finite model builder usually increases performance, whereas surjectivity (and other existentially quantified formulas) tend to diminish it. Moreover, \emph{Prover9}-\emph{Mace4} performs better with operations and equalities than with non-equational formulas. For this reason it is advantageous to convert an injectivity condition from an implication into a new operation. For example, injectivity of the left multiplication map is captured by $x \textbackslash (x * y) = y$ (where $*$ stands for $\op$); this substitution typically yields a threefold speedup. In contrast, this conversion appears to slow down \emph{Vampire} slightly.
+By this and similar approaches we typically find some multiplication or related map (squaring, etc.) to be injective and surjective, properties that we may add to our initial formulas. In hindsight, adding injectivity to a finite model builder usually increases performance, whereas surjectivity (and other existentially quantified formulas) tend to diminish it. Moreover, \emph{Prover9}-\emph{Mace4} performs better with operations and equalities than with non-equational formulas. For this reason it is advantageous to convert an injectivity condition from an implication into a new operation. For example, injectivity of the left multiplication map is captured by $x \backslash (x * y) = y$ (where $*$ stands for $\op$); this substitution typically yields a threefold speedup. In contrast, this conversion appears to slow down \emph{Vampire} slightly.
 
 \begin{example}
 As a case study, let us examine the model search for $\Eq{1518}\nmodels\Eq{47}$ using \emph{Mace4} (with $*$ standing for $\op$). It is currently known that the smallest models have size $15$. Initially, this search exceeded our ATPs expertise, hence we ended up constructing a theoretical model of size 232. If we restrict to the original formulas $\Eq{1518}$ and $\neg\Eq{47}$, the optimal configuration is (2,3,N), taking $2.5$ minutes to exhaust size 10 and already exceeding $7$ hours for exhausting size 11. Putting $S(x):=x\op x$, since $\Eq{1518}$ is $x = (y \op y) \op  (x \op  (y \op  x))$ we observe that $L_{S(y)}$ is surjective, hence injective. Accordingly we add \verb|(y*y)*x = (y*y)*z -> x = z| to \emph{Mace4} and then size 11 is exhausted in less than $5$ minutes. In addition, from the Equation Explorer we observe that $\Eq{1518}$ implies $\Eq{359}$, which states $S(x) \op x = S(x)$; when added as \verb|(x*x)*x = x*x|, \emph{Mace4} exhausts size 11 in under 1s, with the optimal configuration shifting to (2,1,N). Size 12 is exhausted in 18s. We also note that if $S(x)=S(y)$ then $S(x)\op x = S(x) = S(y) = S(y)\op y$, yielding $x=y$ by injectivity of $L_{S(x)}$. Therefore $S$ is injective, we can add \verb|x*x = y*y -> x = y|, and exhaust size 12 in 13.5s. Also, in $\Eq{1518}$ we can substitute $x\mapsto S(y)\op x$ and cancel $S(y)$ on the left to get $\Eq{320858}$, with which we exhaust size 12 in under $2$s and size 13 in under $1$ minute. Moreover, as $S$ is surjective every element is a square, so the injectivity of $L_{S(x)}$ implies that of $L_x$, and we can add \verb|x*y = x*z -> y = z| to the search. But this actually worsens the performance! After some experimentation, we observe that we should either add the injectivity of $L_{S(x)}$ or that of $L_x$, but not both. It turns out that for size 13, injectivity of $L_{S(x)}$ performs slightly better, so we retain it. Additionally, the implication formula for this injectivity can be replaced with an operation, by using \verb|x\((x*x)*y) = y|. This further reduces the exhausting time for size 13 to $33$s (we also check that injectivity of $L_x$ in operation form still performs slightly worse, and that including both operations is again less effective than using either one alone). Now size 14 is exhausted in 30 minutes, and size 15 is well within reach.
