@@ -111,7 +111,7 @@ $$ f(1) = 1, f(a)=b, f(b) = c, f(c) = a$$
 and then $f(aw)=a$ for any non-empty reduced word $w$ not starting with $a$, and similarly for $b$ and $c$.  The equation \eqref{206-eq} can be checked directly for $h=1,a,b,c$.  If $h=aw$ with $w$ non-empty, reduced, and not starting with $a$, then $f(f(h))^{-1} = f(f(h)) = b$ and $f(f(f(h))^{-1} h) = f(baw) = b$, giving \eqref{206-eq} in this case, and similarly for cyclic permutations. Meanwhile, \eqref{1648-eq} can be checked to fail for $h=a$.
 \end{example}
 
-\begin{remark}  The construction in \Cref{trans-nonab} also has the following more ``geometric'' interpretation.  The carrier $M$ can be viewed as the infinite $3$-regular tree, in which every vertex imposes a cyclic ordering on its $3$ neighbors (for instance, if we embed $M$ as a planar graph, we can use the clockwise ordering).  For $x,y \in M$, we then define $x \op y$ to equal $x$ if $x=y$.  If $y$ is instead a neighbor of $x$, we define $x \op y$ to be the next neighbor of $x$ in the cyclic ordering.  Finally, if $y$ is distance two or more from $x$, we define $x \op y$ to be the neighbor of $x$ that is closest to $y$.  One can then check that this model satisfies \eqref{206-eq} but not \eqref{1648-eq}.
+\begin{remark}  The construction in \Cref{trans-nonab} also has the following more ``geometric'' interpretation.  The carrier $M$ can be viewed as the infinite $3$-regular tree, in which every vertex imposes a cyclic ordering on its $3$ neighbors (for instance, if we embed $M$ as a planar graph, we can use the clockwise ordering).  For $x,y \in M$, we then define $x \op y$ to equal $x$ if $x=y$.  If $y$ is instead a neighbor of $x$, we define $x \op y$ to be the next neighbor of $x$ in the cyclic ordering.  Finally, if $y$ is distance two or more from $x$, we define $x \op y$ to be the neighbor of $x$ that is closest to $y$.  One can then check that this model satisfies \eqref{206-eq} but not~\eqref{1648-eq}.
 \end{remark}
 
 \begin{remark} These constructions are necessarily infinitary in nature, because $\Eq{206}$ and $\Eq{1648}$ can be shown to be equivalent for finite magmas. Indeed, $\Eq{206}$ can be written as $x = R_y L_x L_x y$, which implies that $R_y$ is surjective, hence injective, on a finite magma; writing $x = R_y z$ we conclude that $R_y z = R_y L_{z \op y} L_{z \op y} y$ and hence $z = L_{z \op y} L_{z \op y} y$, giving $\Eq{1648}$.  The opposite implication is similar (using $\Eq{1648}$ to show that $R_y$ is injective, hence surjective), and is left to the reader.
@@ -159,14 +159,17 @@ We have found \emph{greedy extension methods}, or \emph{greedy methods} for shor
 In the language of first-order logic (in which functions and relations must be total), it is convenient to view a partial magma operation as a ternary relation $R(x,y,z)$ on $M$ with the axiom that $R(x,y,z) \wedge R(x,y,z') \implies z=z'$ for all $x,y,z \in M$.  The support $\Omega$ is then the set of $(x,y)$ for which $R(x,y,z)$ holds for some (necessarily unique) $z$, which one can then take to be the definition of $z = x \op y$.
 
 We say that one partial operation $\op' \colon \Omega' \to M$ \emph{extends} another $\op \colon \Omega \to M$ if $\Omega'$ contains $\Omega$, and $x \op y = x \op' y$ whenever $x \op y$ (and hence $x \op' y$) are defined. Given a sequence $\op_n \colon \Omega_n \to M$ of partial operations, each of which is an extension of the previous, we can define the \emph{direct limit} $\op_\infty \colon \bigcup_n \Omega_n \to M$ to be the partial operation defined by $x \op_\infty y \coloneqq x \op_n y$ whenever $(x,y) \in \Omega_n$.
+\looseness=-1
 
 Abstractly, the greedy algorithm strategy can now be described as follows.
 
 \begin{theorem}[Abstract greedy algorithm]\label{greedy-abstract} Let $\E,{\E'}$ be equational laws, and let $\Gamma$ be a theory of first-order sentences regarding a partial magma operation $\op \colon \Omega \to M$ on a carrier $M$.  Assume the following axioms:
+  \setlength{\parskip}{0pt}
 \begin{itemize}
   \item[(i)] (Seed) There exists a finitely supported partial magma operation $\op_0 \colon \Omega_0 \to M$ satisfying $\Gamma$ that contradicts ${\E'}$, in the sense that there is some assignment of variables in ${\E'}$ in $M$ such that both sides of ${\E'}$ are defined using $\op_0$, but not equal to each other.
   \item[(ii)]  (Soundness)  If $\op_n \colon \Omega_n \to M$ is a sequence of partial magma operations satisfying $\Gamma$ with each $\op_{n+1}$ an extension of $\op_n$, and the direct limit $\op_\infty$ is total, then this limit satisfies $\E$.
   \item[(iii)] (Greedy extension)  If $\op \colon \Omega \to M$ is a finitely supported partial magma operation satisfying $\Gamma$, and $a,b \in M$, then there exists a finitely supported extension $\op' \colon \Omega' \to M'$ of $\op$ to a possibly larger carrier $M'$, and also satisfying $\Gamma$, such that $a \op' b$ is defined.
+    \looseness=-1
 \end{itemize}
 Then $\E \nmodels {\E'}$.
 \end{theorem}
@@ -175,6 +178,7 @@ We remark that this greedy method seems to be inherently infinitary in nature, a
 
 \begin{proof}  We work on the countably infinite carrier $\N$.  By embedding the finitely supported operation $\op_0$ from axiom (i) into $\N$, we can assume without loss of generality that $\op_0$ has carrier $\N$.  By similar relabeling, we can assume in (iii) that $M' = M$ when $M=\N$, since any elements of $M' \setminus \N$ that
 appear in $\Omega'$ can simply be reassigned to natural numbers that did not previously appear in $\Omega$.  We well-order the pairs in $\N \times \N$ by $(a_n,b_n)$ for $n=1,2,\dots$.  Iterating (iii) starting from $\op_0$, we can thus create a sequence of finitely supported magma operations $\op_0, \op_1, \dots$ on $\N$ satisfying $\Gamma$, with each $\op_{n+1}$ an extension of $\op_n$, and $a_n \op_n b_n$ defined for all $n \geq 1$.  Then the direct limit $\op_\infty$ of these operations is total, and does not satisfy ${\E'}$ thanks to axiom (i).  On the other hand, by axiom (ii) it satisfies $\E$, and the claim follows.
+\looseness=-1
 \end{proof}
 
 We refer to $\Gamma$ as the \emph{rule set} for the greedy extension method. To apply \Cref{greedy-abstract} to obtain a refutation $\E \nmodels {\E'}$, we have found the following trial-and-error method to work well in practice:
@@ -227,6 +231,7 @@ We also found that human verification of the greedy extension property was a hig
 The greedy method can also be combined with the translation-invariant method, both in abelian and non-abelian settings. For instance, we can modify the proof of \Cref{greedy-abstract} to obtain the following variant:
 
 \begin{theorem}[Noncommutative translation-invariant greedy algorithm]\label{nc-greedy-abstract} Let $F,F'$ be functional equations on groups, and let $\Gamma$ be a theory of first-order sentences regarding a partial function $f \colon \Omega \to G$ on a group $(G,\cdot, \cdot^{-1},1)$.  Assume the following axioms:
+  \setlength{\parskip}{0pt}
   \begin{itemize}
     \item[(i)] (Seed) There exists a finitely supported partial function $f_0 \colon \Omega_0 \to G$ satisfying $\Gamma$ that contradicts $F'$, in the sense that there is some assignment of variables in $F'$ in $G$ such that both sides of $F'$ are defined using $f_0$, but not equal to each other.
     \item[(ii)]  (Soundness)  If $f_n \colon \Omega_n \to G$ is a sequence of partial functions satisfying $\Gamma$ with each $f_{n+1}$ an extension of $f_n$, and the direct limit $f_\infty$ is total, then this limit satisfies $F$.

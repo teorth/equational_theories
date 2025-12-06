@@ -29,7 +29,7 @@ The \emph{order} of an equational law is the number of occurrences of the magma 
 $\x \formaleq (\y \op \z) \op (\y \op (\x \op \z))$ \eqref{eq1571} characterizes addition (or subtraction) in an abelian group of exponent $2$; it was shown in \cite{mccune_et_al} that the order-$6$ law $\x \formaleq (\y \op ((\x \op \y) \op \y)) \op (\x \op (\z \op \y))$ \eqref{eq345169} characterizes the Sheffer stroke in a boolean algebra, and it was shown in \cite{higman-neumann} that the order-$8$ law
 $\x \formaleq \y \op ((((\y \op \y) \op \x) \op \z) \op (((\y \op \y) \op \y) \op \z))$ \eqref{eq42323216} characterizes division in a (not necessarily abelian) group.
 \end{itemize}
-Some further examples of laws characterizing well-known algebraic structures are listed in \cite{mccune-survey}.
+Some further examples of laws characterizing well-known algebraic structures are listed in~\cite{mccune-survey}.
 
 The Birkhoff completeness theorem \cite[Th.~3.5.14]{term-rewriting} implies that an implication ${\E} \models {\E'}$ of equational laws holds if and only if the left-hand side of ${\E'}$ can be transformed into the right-hand side by a finite number of substitution rewrites using the law $\E$. However, the problem of determining whether such an implication holds is undecidable in general \cite{mckenzie}. Even when the order is small, some implications\footnote{Another contemporaneous example of this phenomenon was the solution of the Robbins problem \cite{robbins}.} can require lengthy computer-assisted proofs; for instance, it was noted in \cite{Kisielewicz2} that the order-$4$ law $\x \formaleq (\y \op \x) \op ((\x \op \z) \op \z)$ \eqref{eq1689} was equivalent to the singleton law $\x \formaleq \y$ \eqref{eq2}, but all known proofs were found with computer assistance.\footnote{We improved such a proof to make it human-readable, see \href{https://teorth.github.io/equational_theories/blueprint/implications-chapter.html}{the blueprint of the ETP}.}  Furthermore, for the finite magma implication relation ${\E} \modelsfin {\E'}$, no analogue of the Birkhoff completeness theorem is available.
 
@@ -59,8 +59,8 @@ For the finite implication graph ${\E} \modelsfin {\E'}$, we could similarly for
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.4\textwidth]{ramanujan-infinite.png}
-    \includegraphics[width=0.4\textwidth]{ramanujan-finite.png}
+    \includegraphics[width=0.42\textwidth]{ramanujan-infinite.png}
+    \includegraphics[width=0.42\textwidth]{ramanujan-finite.png}
     \caption{A Hasse diagram of all the equational laws implied by $\Eq{1729}$, both for unrestricted magmas (left) and finite magmas (right). Note the slightly larger number of implications in the latter.}
     \label{fig:1729}
 \end{figure}

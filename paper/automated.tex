@@ -170,7 +170,7 @@ In \emph{Prover9}, each clause is assigned a weight depending on its length (and
 
 Since there are more parameters affecting the search, and different proofs may be reachable depending on the configuration, the system's behaviour with respect to \verb|max_weight| and  \verb|sos_limit| is not straightforward, with several casuistics arising. When \verb|sos_limit| is fixed, the proof-finding time tends to rise with \verb|max_weight| until reaching a plateau, with the length of this increasing phase extending for higher \verb|sos_limit| values (see Figure \ref{figure:weight_time}). For this reason we recommend lowering \verb|sos_limit| from its default value of 20000 to substantially smaller values.
 
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=221pt]{450_max_weight}
 \includegraphics[width=230pt]{102744082_max_weight}
@@ -180,7 +180,7 @@ Since there are more parameters affecting the search, and different proofs may b
 
 On the other hand, when \verb|max_weight| is fixed, the smallest \verb|sos_limit| values that still yield proofs typically produce a chaotic transient phase with higher proof-finding times, after which a better-defined relation between proof-finding time and \verb|sos_limit| emerges, which tends to follow either a near-plateau pattern (Figure \ref{figure:sos_limit_time}a)), or a monotonically increasing trend (Figure \ref{figure:sos_limit_time}b)). We recommend avoiding an excessively low \verb|sos_limit|, in order to prevent the onset of the transient phase.
 
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=300pt]{450_sos_limit_time_CROPPED}
 \includegraphics[width=300pt]{650_sos_limit_time_CROPPED}
@@ -190,7 +190,7 @@ On the other hand, when \verb|max_weight| is fixed, the smallest \verb|sos_limit
 
 Other relevant characteristics related to the complexity of the resulting proof (such as proof level, length, weight, etc.) may also vary in nontrivial ways depending on the chosen \verb|sos_limit| value (see Figure \ref{figure:sos_limit_proof_data}).
 
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=230pt]{450_sos_limit_proof_data_CROPPED}
 \includegraphics[width=230pt]{650_sos_limit_proof_data_CROPPED}
@@ -247,8 +247,7 @@ In addition, while in the ETP we typically searched for a single model to contra
 \end{table}
 
 When undertaking a long-running model search at a large size, it is advisable to determine in advance the potentially optimal configuration(s) by examining smaller sizes. Throughout the ETP, we have employed the following procedure. If time permits, exhaust the previous size with all configurations to make a choice. If that process is prohibitively time-consuming, then set the target number of desired configurations (e.g. for parallel runs), initialize the pool of configurations with all possibilities, and iterate:
-\vspace{-10pt}
-\begin{enumerate}[wide, labelwidth=!, labelindent=0pt]
+\begin{enumerate}
 \item Pick the next available smallest size.
 \item Run all configurations on that size under a reasonable time limit and collect their running times, whether for finding a single model, a predetermined number of models, or for exhausting the size.
 \item Based on the smallest collected time, determine a statistically significant time threshold.
