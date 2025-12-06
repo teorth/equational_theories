@@ -13,7 +13,7 @@ Tactics in \emph{Lean}, on the other hand, are meta-programs~\cite{DBLP:journals
 In other words, they essentially take \emph{Lean} code as input and produce \emph{Lean} code as output.
 In this manner, they look like another keyword in the language, and are tightly integrated by producing proofs directly.
 Under the hood, their implementation can be arbitrarily complex, from syntactic sugar to full decision procedures.
-The \texttt{duper} tactic~\cite{DBLP:conf/itp/CluneQBA24}, for example, implements a superposition calculus similar to \emph{Vampire}'s, but for dependent types --- \emph{Lean}'s underlying logical foundation.
+The \texttt{duper} tactic~\cite{DBLP:conf/itp/CluneQBA24}, for example, implements a superposition calculus similar to \emph{Vampire}'s, but for dependent types\,---\,\emph{Lean}'s underlying logical foundation.
 
 In the rest of this section we describe the different proof automation techniques used in this project.
 We first discuss the different proof methods used: primarily superposition and equational reasoning; we then discuss the integration in \emph{Lean}, and finally we report some basic empirical results from this project.
