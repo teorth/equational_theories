@@ -74,10 +74,10 @@ More generally, we have observed that there are multiple ways of integrating dec
     \item\label{external} Using an external script which calls an existing ATP and generates a source file \texttt{.lean} which captures the result explicitly.
 \end{enumerate}
 
-This project primarily used the least integrated approach, Option \ref{external}, as it was the fastest to implement and imposed no additional technical requirements on other contributors.
-The matter of technical requirements caused problems, for example, when integrating the \texttt{egg} tactic (Option \ref{inter}) as it initially expected certain software on the user's machine.
-Such trade-offs between Option \ref{inter} and Option \ref{external} are, however, mutual, as the higher upfront cost of integrating a proof tactic in Option \ref{inter} makes the decision procedure easier to use than with Option \ref{external}.
-Additionally, Option \ref{inter} can benefit from \emph{Lean}'s meta-programming capabilities when encoding the problem for use with an ATP, and when reconstructing a \emph{Lean} proof from the result.
+This project primarily used the least integrated approach, Option~\ref{external}, as it was the fastest to implement and imposed no additional technical requirements on other contributors.
+The matter of technical requirements caused problems, for example, when integrating the \texttt{egg} tactic (Option~\ref{inter}) as it initially expected certain software on the user's machine.
+Such trade-offs between Option~\ref{inter} and Option~\ref{external} are, however, mutual, as the higher upfront cost of integrating a proof tactic in Option~\ref{inter} makes the decision procedure easier to use than with Option~\ref{external}.
+Additionally, Option~\ref{inter} can benefit from \emph{Lean}'s meta-programming capabilities when encoding the problem for use with an ATP, and when reconstructing a \emph{Lean} proof from the result.
 
 \textbf{Proof Reconstruction.}
 
@@ -85,7 +85,7 @@ The relative simplicity of the objects used in this project benefits the impleme
 By focusing on the given problem domain, difficult reconstruction issues, like complex dependent types, could be ignored.
 
 For saturation proofs with \emph{Vampire}, we implemented analogs of the \emph{superpose}, \emph{resolve}, and \emph{subsumption} steps in \emph{Lean}.
-Proofs can then be reconstructed as sequences of these steps (and additional technicalities) as shown in Figure~\ref{fig:vampire-example}.
+Proofs can then be reconstructed as sequences of these steps (and additional technicalities) as shown in \Cref{fig:vampire-example}.
 
 \begin{figure}
   \centering
@@ -98,7 +98,7 @@ Proofs can then be reconstructed as sequences of these steps (and additional tec
 % \todo{Explain how Prover9 and Mace4 were used.}
 
 For equational proofs from external provers, like \emph{MagmaEgg}, we also used a tailored version of reconstruction.
-Specifically, the \emph{MagmaEgg} implementation turns \emph{explanations} \cite{nieuwenhuis2005proof} from \emph{egg} into \emph{Lean} proofs by simple applications of the defining properties of equality as shown in Figure~\ref{fig:magma-egg-example}.
+Specifically, the \emph{MagmaEgg} implementation turns \emph{explanations} \cite{nieuwenhuis2005proof} from \emph{egg} into \emph{Lean} proofs by simple applications of the defining properties of equality as shown in \Cref{fig:magma-egg-example}.
 
 \begin{figure}
   \centering
@@ -109,7 +109,7 @@ Specifically, the \emph{MagmaEgg} implementation turns \emph{explanations} \cite
 \end{figure}
 % \todo{Use listings or minted for this code block.}
 
-In the case of the \texttt{egg} tactic, which also reconstructs proofs from \emph{egg} explanations, the proof could be converted into a more human-readable form by using the \texttt{calcify}\footnote{\url{https://github.com/nomeata/lean-calcify}} tactic, as shown in Figure~\ref{fig:egg-example}
+In the case of the \texttt{egg} tactic, which also reconstructs proofs from \emph{egg} explanations, the proof could be converted into a more human-readable form by using the \texttt{calcify}\footnote{\url{https://github.com/nomeata/lean-calcify}} tactic, as shown in \Cref{fig:egg-example}
 
 \begin{figure}
   \centering
@@ -134,7 +134,7 @@ When the project started, contributors had varying degrees of ATP knowledge and 
 \subsubsection{Employing several ATPs}
 In general, given a batch of problems on which one wants to work, it is useful to employ several ATPs when they complement each other on the batch--i.e., when they can solve different sets of problems. This is often the case with \emph{Vampire} and \emph{Prover9}: e.g., in a study from 2024 (\cite{LPAR2024:Prover9_Unleashed_Automated_Configuration}), it is shown that from a batch of around 770 TPTP problems solved with \emph{Vampire} and \emph{Prover9} together (with some restrictions), around $60\%$ are solved by both, $20\%$ are solved only by \emph{Vampire}, and the remaining $20\%$ is solved only by \emph{Prover9}.\footnote{In contrast, in said study the problems solved by the E prover happened to be a subset of those proved by \emph{Vampire}, except for one.}
 
-Although older and virtually discontinued, \emph{Prover9} is still very useful with equational logic and algebraic problems. Within the ETP we likewise identified several problems that were easier to solve with \emph{Prover9} than with \emph{Vampire}, and even some solved by \emph{Prover9} but not by \emph{Vampire} (with the configurations we tried). The most salient example is the proof of $\Eq{102744082}$ implying the injectivity of the right multiplication map, used in the Higman-Neumann side project (see Section \ref{higman-neumann}), which was originally found by \emph{Prover9} in several hours with parameters chosen to produce a big search space; an optimized choice of \emph{Prover9} options lowers the runtime to 0.2s. Upon contact with the \emph{Vampire} development team, after several attempts they were able to provide a \emph{Vampire} configuration (inspired by the \emph{Prover9} optimization) which produces a proof in 3s.
+Although older and virtually discontinued, \emph{Prover9} is still very useful with equational logic and algebraic problems. Within the ETP we likewise identified several problems that were easier to solve with \emph{Prover9} than with \emph{Vampire}, and even some solved by \emph{Prover9} but not by \emph{Vampire} (with the configurations we tried). The most salient example is the proof of $\Eq{102744082}$ implying the injectivity of the right multiplication map, used in the Higman-Neumann side project (see \Cref{higman-neumann}), which was originally found by \emph{Prover9} in several hours with parameters chosen to produce a big search space; an optimized choice of \emph{Prover9} options lowers the runtime to 0.2s. Upon contact with the \emph{Vampire} development team, after several attempts they were able to provide a \emph{Vampire} configuration (inspired by the \emph{Prover9} optimization) which produces a proof in 3s.
 
 In addition, \emph{Mace4}'s non-SAT algorithm generally makes it faster at finding models than generic SAT-based finite model builders, such as those implemented in \emph{Vampire}. For ETP problems in particular, a well-configured \emph{Mace4} is faster than \emph{Vampire}'s finite model builder in both the task of finding a model of a given size and that of exhausting a size with no models. For example, for $\Eq{677}$ models, \emph{Mace4} is able to exhaust size 8 in 1.5s, and to find a model of size 9 in 16s, while \emph{Vampire}'s finite model builder is unable to perform any of these tasks in 10 minutes. By contrast, \emph{Vampire}'s \verb|casc_sat| mode can be quicker at finding \emph{some} model of some size for a given problem.
 
@@ -155,20 +155,20 @@ Similarly, \emph{Vampire} uses the TPTP language, in which every variable must b
 
 We have in fact committed these two mistakes over the course of the ETP, thereby giving rise to false proofs of $\Eq{677}\modelsfin\Eq{255}$, our only open implication.
 
-Frequently, it is useful not to run an ATP alone, but to run it in a larger environment permitting multiple calls with different input files, strategies, etc. so that we can provide (automated) semiguidance or (user-guided) interactive guidance. Integrating the ATP into a computer algebra system further allows to leverage the latter's mathematical capabilities, such as preparing input files with operations from sophisticated algebraic structures. For example, in the ETP we have integrated \emph{Prover9}-\emph{Mace4} with Python and SAGE, and (among several other applications) used SAGE to access GAP's small groups library to search, via \emph{Mace4}, for translation-invariant countermodels with specific groups (see Section \ref{translation-sec}).
+Frequently, it is useful not to run an ATP alone, but to run it in a larger environment permitting multiple calls with different input files, strategies, etc. so that we can provide (automated) semiguidance or (user-guided) interactive guidance. Integrating the ATP into a computer algebra system further allows to leverage the latter's mathematical capabilities, such as preparing input files with operations from sophisticated algebraic structures. For example, in the ETP we have integrated \emph{Prover9}-\emph{Mace4} with Python and SAGE, and (among several other applications) used SAGE to access GAP's small groups library to search, via \emph{Mace4}, for translation-invariant countermodels with specific groups (see \Cref{translation-sec}).
 
 An important factor to take into consideration when generating an input file for proving a conjecture is, for both \emph{Vampire} and \emph{Prover9}, that owing to the way the saturation algorithm operates, the original order in which formulas are presented is actually important: it is perfectly possible to have a collection of axioms which produces a proof in some order but not in another. \emph{Vampire} includes the option \verb|--normalize| to prevent this effect. For \emph{Prover9}, one can use a larger environment to automate the permutations of the input file and make several tries with time restrictions. In contrast, the order of the formulas does not affect \emph{Mace4}'s response.
 
 Moreover, the inclusion of additional formulas redundant with the premises may significantly speed up the proof search, provided that those formulas are not quickly derived by the ATP algorithm (e.g., evaluations mapping different variables to the same one are routinely included).
 
-Finally, the use of demodulators can greatly reduce the search complexity and hence the proof-finding time. \emph{Prover9} \verb|eq_defs| command, when set to \verb|fold|, allows to substitute any specified subexpression by a user-defined symbol, simplifying all further expressions generated by the ATP. In fact, a valid strategy for finding a quick proof of $\Eq{102744082}$ implying the injectivity of the right multiplication map consists of setting \verb|fold| and adding the formula \verb|s(x) = x*x| (where $*$ stands for $\op$) to the premises (together with a good weight limit, see Section \ref{weight_strategy}). In \emph{Vampire}, deactivating the \verb|--function_definition_elimination| mode can serve a similar purpose.
+Finally, the use of demodulators can greatly reduce the search complexity and hence the proof-finding time. \emph{Prover9} \verb|eq_defs| command, when set to \verb|fold|, allows to substitute any specified subexpression by a user-defined symbol, simplifying all further expressions generated by the ATP. In fact, a valid strategy for finding a quick proof of $\Eq{102744082}$ implying the injectivity of the right multiplication map consists of setting \verb|fold| and adding the formula \verb|s(x) = x*x| (where $*$ stands for $\op$) to the premises (together with a good weight limit, see \Cref{weight_strategy}). In \emph{Vampire}, deactivating the \verb|--function_definition_elimination| mode can serve a similar purpose.
 
 
 \subsubsection{The weight-sos limit strategy}\label{weight_strategy}
 
 In \emph{Prover9}, each clause is assigned a weight depending on its length (and other customizable parameters), with newly generated clauses exceeding the \verb|max_weight| limit being discarded. In addition, the size of the list of clauses awaiting processing (the SOS list) is controlled with the \verb|sos_limit| parameter, with most newly generated clauses being discarded once the list is full. Consequently, the size and shape of the search space can be partially controlled through these parameters. Ideally, we would want to use the smallest values of \verb|max_weight| and \verb|sos_limit| that still guarantee a proof to be contained in the search space. Thus smaller values are preferable, provided they are not so low that the search is exhausted without finding a proof.
 
-Since there are more parameters affecting the search, and different proofs may be reachable depending on the configuration, the system's behaviour with respect to \verb|max_weight| and  \verb|sos_limit| is not straightforward, with several casuistics arising. When \verb|sos_limit| is fixed, the proof-finding time tends to rise with \verb|max_weight| until reaching a plateau, with the length of this increasing phase extending for higher \verb|sos_limit| values (see Figure \ref{figure:weight_time}). For this reason we recommend lowering \verb|sos_limit| from its default value of 20000 to substantially smaller values.
+Since there are more parameters affecting the search, and different proofs may be reachable depending on the configuration, the system's behaviour with respect to \verb|max_weight| and  \verb|sos_limit| is not straightforward, with several casuistics arising. When \verb|sos_limit| is fixed, the proof-finding time tends to rise with \verb|max_weight| until reaching a plateau, with the length of this increasing phase extending for higher \verb|sos_limit| values (see \Cref{figure:weight_time}). For this reason we recommend lowering \verb|sos_limit| from its default value of 20000 to substantially smaller values.
 
 \begin{figure}
 \centering
@@ -178,7 +178,7 @@ Since there are more parameters affecting the search, and different proofs may b
 \label{figure:weight_time}
 \end{figure}
 
-On the other hand, when \verb|max_weight| is fixed, the smallest \verb|sos_limit| values that still yield proofs typically produce a chaotic transient phase with higher proof-finding times, after which a better-defined relation between proof-finding time and \verb|sos_limit| emerges, which tends to follow either a near-plateau pattern (Figure \ref{figure:sos_limit_time}a)), or a monotonically increasing trend (Figure \ref{figure:sos_limit_time}b)). We recommend avoiding an excessively low \verb|sos_limit|, in order to prevent the onset of the transient phase.
+On the other hand, when \verb|max_weight| is fixed, the smallest \verb|sos_limit| values that still yield proofs typically produce a chaotic transient phase with higher proof-finding times, after which a better-defined relation between proof-finding time and \verb|sos_limit| emerges, which tends to follow either a near-plateau pattern (\Cref{figure:sos_limit_time}a)), or a monotonically increasing trend (\Cref{figure:sos_limit_time}b)). We recommend avoiding an excessively low \verb|sos_limit|, in order to prevent the onset of the transient phase.
 
 \begin{figure}
 \centering
@@ -188,7 +188,7 @@ On the other hand, when \verb|max_weight| is fixed, the smallest \verb|sos_limit
 \label{figure:sos_limit_time}
 \end{figure}
 
-Other relevant characteristics related to the complexity of the resulting proof (such as proof level, length, weight, etc.) may also vary in nontrivial ways depending on the chosen \verb|sos_limit| value (see Figure \ref{figure:sos_limit_proof_data}).
+Other relevant characteristics related to the complexity of the resulting proof (such as proof level, length, weight, etc.) may also vary in nontrivial ways depending on the chosen \verb|sos_limit| value (see \Cref{figure:sos_limit_proof_data}).
 
 \begin{figure}
 \centering
@@ -206,7 +206,7 @@ Remarkably, \emph{Prover9} can establish all positive implications between laws 
 
 The configuration of \emph{Mace4} likewise has a substantial impact on its running time, with different parameter settings resulting in differences of orders of magnitude. In particular, model-computation time is greatly affected by the \verb|selection_measure| and \verb|skolems_last| parameters. The \verb|selection_order| parameter is also relevant, but our empirical data indicate that \verb|selection_order| 2 is by far the best general choice. It is outperformed by \verb|selection_order| 0 only in a few cases, and even then the improvement in computing time is not that substantial. The effect of setting \verb|skolems_last| can range from slightly detrimental to highly advantageous: as an example, a model of $\Eq{272260}\nmodels\Eq{42323216}$ of size $7$ is found in $0.0$s with (2,4,Y), and in $4.0$s with (2,4,N). Here and in the following we use notation (a,b,S) to mean the configuration \verb|selection_order| a, \verb|selection_measure| b, and \verb|skolems_last| set (S$=$Y) or clear (S$=$N).
 
-There is no universally optimal configuration (a,b,S): for each different (potential) implication or theory, configurations may be ranked differently. However, in the ETP context, certain configurations have been preferable due to their consistently better performance. An arguable ordering is (2,3,Y), (2,1,Y), (2,4,Y), (2,3,N), (2,1,N), (2,4,N), (0,1,N), (0,1,Y), with the remaining configurations being largely avoidable. Problems involving several algebraic operations, or presenting some kind of symmetry (see Table \ref{table:weakcentralgroupoids} with the example of weak central groupoids), tend to perform better with (2,4,N/Y). Problems may also exhibit considerable sensitivity to changes in formulas that apparently do not alter the problem significantly, for example adding $f^n(x)=x$ with different values of $n$ can result in different optimal configurations.
+There is no universally optimal configuration (a,b,S): for each different (potential) implication or theory, configurations may be ranked differently. However, in the ETP context, certain configurations have been preferable due to their consistently better performance. An arguable ordering is (2,3,Y), (2,1,Y), (2,4,Y), (2,3,N), (2,1,N), (2,4,N), (0,1,N), (0,1,Y), with the remaining configurations being largely avoidable. Problems involving several algebraic operations, or presenting some kind of symmetry (see \Cref{table:weakcentralgroupoids} with the example of weak central groupoids), tend to perform better with (2,4,N/Y). Problems may also exhibit considerable sensitivity to changes in formulas that apparently do not alter the problem significantly, for example adding $f^n(x)=x$ with different values of $n$ can result in different optimal configurations.
 
 \begin{table}
 \centering
@@ -221,11 +221,11 @@ There is no universally optimal configuration (a,b,S): for each different (poten
 \end{tabular}
 \end{table}
 
-In addition, while in the ETP we typically searched for a single model to contradict a given implication, in some cases we sought all models of a certain size for some given theory, either to better understand a collection of base examples in order to extend them, or just to improve our understanding. Accordingly, it should be noted that a configuration that is fast for finding one model of a given size may be slower than others for exhausting the whole size. A notorious example of this is (2,2,Y) for models of $\Eq{677}$ of size 9, which finds a single model in 160s, but is unable to exhaust the whole size after 20h (see Table~\ref{table:677models}).
+In addition, while in the ETP we typically searched for a single model to contradict a given implication, in some cases we sought all models of a certain size for some given theory, either to better understand a collection of base examples in order to extend them, or just to improve our understanding. Accordingly, it should be noted that a configuration that is fast for finding one model of a given size may be slower than others for exhausting the whole size. A notorious example of this is (2,2,Y) for models of $\Eq{677}$ of size 9, which finds a single model in 160s, but is unable to exhaust the whole size after 20h (see \Cref{table:677models}).
 
 \begin{table}
 \centering
-\caption{Time to find one model of $\Eq{677}$ of size 9 and to exhaust the same size for different configurations. Some finite-setting formulas were included to speed up the search (see Section  \ref{finite setting}). The configurations not listed here were unable to find a model in 4000s.}
+\caption{Time to find one model of $\Eq{677}$ of size 9 and to exhaust the same size for different configurations. Some finite-setting formulas were included to speed up the search (see \Cref{finite setting}). The configurations not listed here were unable to find a model in 4000s.}
 \label{table:677models}
 {\small
 \begin{tabular}{|c||c|c|}\hline
@@ -253,7 +253,7 @@ When undertaking a long-running model search at a large size, it is advisable to
 \item Based on the smallest collected time, determine a statistically significant time threshold.
 \item Remove from the pool those configurations whose time differs from the best one by more than the threshold (if any). End the loop once the number of configurations contained in the pool is the desired one.
 \end{enumerate}
-Be aware that this algorithm assumes that once a configuration outperforms another, this advantage carries over to larger sizes. This is not always the case (see Table~\ref{table:Schneider} for an example). Additionally, the algorithm may be further refined by considering combinations of the configurations with different subsets of formulas.
+Be aware that this algorithm assumes that once a configuration outperforms another, this advantage carries over to larger sizes. This is not always the case (see \Cref{table:Schneider} for an example). Additionally, the algorithm may be further refined by considering combinations of the configurations with different subsets of formulas.
 
 \begin{table}
 \centering
