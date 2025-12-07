@@ -57,6 +57,7 @@ One possible way of obtaining refutations of a given implication $\E \models \E'
 
 \begin{definition}
   A function $C\colon M_X\rightarrow M_X$ is a \emph{canonizer} for an equation $\E$ if
+  \setlength{\parskip}{0pt}
   \begin{enumerate}
     \item $C$ is computable.
     \item if $w_1\sim_\E w_2$, then $C(w_1) = C(w_2)$.
@@ -70,6 +71,7 @@ We describe a concrete strategy for building such $C$s, which will require a num
 
 \begin{definition}\label{def:canon}
 Let $R \colon M_X \to M_X$ be an arbitrary function.
+\setlength{\parskip}{0pt}
 \begin{itemize}
 \item  We say that $R$ is \emph{weakly collapsing} if for every word $w$, $R(w)$ is a (not necessarily proper) sub-word of $w$.
 \item  A function $\theta\colon X\rightarrow M_X$ is called a \emph{substitution}, and we can extend $\theta$ to an endomorphism~$\varphi_\theta \colon \Magma_X\rightarrow\Magma_X$ in the usual way. We write $\varphi_\theta w$ instead of $\varphi_\theta(w)$ for application of substitutions.
@@ -126,7 +128,7 @@ We illustrate this approach with equations $\E$ of the left-absorptive form
 \begin{equation}\label{left-absorptive}
 \x \formaleq \x \op f(\x,\y,\z)
 \end{equation}
-for some word $f(\x,\y,\z)$, that are also known to imply the right-idempotent law $\Eq{378}$.  An illustrative example is the law $\Eq{854}$ depicted in Figure \ref{fig:854}. Other examples are listed in \Cref{fig:854-like}.
+for some word $f(\x,\y,\z)$, that are also known to imply the right-idempotent law $\Eq{378}$.  An illustrative example is the law $\Eq{854}$ depicted in \Cref{fig:854}. Other examples are listed in \Cref{fig:854-like}.
 
 \begin{figure}
   \centering
@@ -153,6 +155,7 @@ Let $\E$ be a law of the form \eqref{left-absorptive} that implies $\Eq{378}$. W
 Call a word $w \in M_X$ \emph{irreducible} if it is not of the form $w = w_1 \op w_2$ with $w_2 \to_\E w_1$.  We can partially understand the equivalence relation $\sim_\E$ on irreducible words:
 
 \begin{theorem}[Description of equivalence]\label{irred-desc}  Let $\E$ be an equation of the form \eqref{left-absorptive}.  Let $w$ be an irreducible word, and let $w'$ be a word with $w \sim_\E w'$.
+  \setlength{\parskip}{0pt}
   \begin{itemize}
     \item[(i)] If $w$ is a product $w = w_1 \op w_2$, then $w'$ takes the form
 $$ w' = ({}\dots((w'_1 \op w'_2) \op v_1) \op \dots{}) \op v_n$$
