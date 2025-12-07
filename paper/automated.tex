@@ -186,13 +186,13 @@ On the other hand, when \verb|max_weight| is fixed, the smallest \verb|sos_limit
 
 \begin{figure}
 \centering
-\includegraphics[width=300pt]{450_sos_limit_time_CROPPED}
-\includegraphics[width=300pt]{650_sos_limit_time_CROPPED}
+\includegraphics[width=305pt]{450_sos_limit_time_CROPPED}
+\includegraphics[width=310pt]{650_sos_limit_time_CROPPED}
 \caption{Proof-finding time as a function of \texttt{sos\_limit}, for different values of \texttt{max\_weight}. a) Stabilization as plateau, same for different weights. b) Different behaviours for different weights, with one trend monotonically increasing.}
 \label{figure:sos_limit_time}
 \end{figure}
 
-Other relevant characteristics related to the complexity of the resulting proof (such as proof level, length, weight, etc.) may also vary in nontrivial ways depending on the chosen \verb|sos_limit| value (see \Cref{figure:sos_limit_proof_data}).
+Other relevant characteristics related to the complexity of the resulting proof (such as proof level, length, weight, etc.\@) may also vary in nontrivial ways depending on the chosen \verb|sos_limit| value (see \Cref{figure:sos_limit_proof_data}).
 
 \begin{figure}
 \centering
@@ -210,7 +210,8 @@ Remarkably, \emph{Prover9} can establish all positive implications between laws 
 
 The configuration of \emph{Mace4} likewise has a substantial impact on its running time, with different parameter settings resulting in differences of orders of magnitude. In particular, model-computation time is greatly affected by the \verb|selection_measure| and \verb|skolems_last| parameters. The \verb|selection_order| parameter is also relevant, but our empirical data indicate that \verb|selection_order| 2 is by far the best general choice. It is outperformed by \verb|selection_order| 0 only in a few cases, and even then the improvement in computing time is not that substantial. The effect of setting \verb|skolems_last| can range from slightly detrimental to highly advantageous: as an example, a model of $\Eq{272260}\nmodels\Eq{42323216}$ of size $7$ is found in $0.0$s with (2,4,Y), and in $4.0$s with (2,4,N). Here and in the following we use notation (a,b,S) to mean the configuration \verb|selection_order| a, \verb|selection_measure| b, and \verb|skolems_last| set (S$=$Y) or clear (S$=$N).
 
-There is no universally optimal configuration (a,b,S): for each different (potential) implication or theory, configurations may be ranked differently. However, in the ETP context, certain configurations have been preferable due to their consistently better performance. An arguable ordering is (2,3,Y), (2,1,Y), (2,4,Y), (2,3,N), (2,1,N), (2,4,N), (0,1,N), (0,1,Y), with the remaining configurations being largely avoidable. Problems involving several algebraic operations, or presenting some kind of symmetry (see \Cref{table:weakcentralgroupoids} with the example of weak central groupoids), tend to perform better with (2,4,N/Y). Problems may also exhibit considerable sensitivity to changes in formulas that apparently do not alter the problem significantly, for example adding $f^n(x)=x$ with different values of $n$ can result in different optimal configurations.
+There is no universally optimal configuration (a,b,S): for each (potential) implication or theory, configurations may be ranked differently. However, in the ETP context, certain configurations have performed consistently better, roughly ordered as (2,3,Y), (2,1,Y), (2,4,Y), (2,3,N), (2,1,N), (2,4,N), (0,1,N), (0,1,Y), with the remaining configurations being largely avoidable. Problems involving several algebraic operations, or presenting some kind of symmetry (see \Cref{table:weakcentralgroupoids} on weak central groupoids), tend to perform better with (2,4,N/Y). Problems may also be considerably sensitive to changes in formulas that appear minor, for example adding $f^n(x)=x$ with different values of~$n$ can result in different optimal configurations.
+\looseness=-1
 
 \begin{table}
 \centering
@@ -254,7 +255,7 @@ When undertaking a long-running model search at a large size, it is advisable to
 \begin{enumerate}
 \item Pick the next available smallest size.
 \item Run all configurations on that size under a reasonable time limit and collect their running times, whether for finding a single model, a predetermined number of models, or for exhausting the size.
-\item Based on the smallest collected time, determine a statistically significant time threshold.
+\item Based on the smallest time found, determine a statistically significant time threshold.
 \item Remove from the pool those configurations whose time differs from the best one by more than the threshold (if any). End the loop once the number of configurations contained in the pool is the desired one.
 \end{enumerate}
 Be aware that this algorithm assumes that once a configuration outperforms another, this advantage carries over to larger sizes. This is not always the case (see \Cref{table:Schneider} for an example). Additionally, the algorithm may be further refined by considering combinations of the configurations with different subsets of formulas.
