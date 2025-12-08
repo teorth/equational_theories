@@ -197,7 +197,7 @@ The objective of using the data from the ETP to establish well-calibrated benchm
   \draw[auto,->] (atp)        -- (cproofs);
   \draw[human,->] (cproofs)    -- (hproofs);
   \draw[semi,->] (cproofs)    -- (formal);
-  \draw[human,<->] (hproofs)   -- (hdisc);
+  \draw[human,<->] (hproofs.south)   -- (hproofs.south|-hdisc.north);
   \draw[human,->] (hproofs)  -- (blueprint);
   \draw[human,->] (hproofs)  -- (formal);
 
