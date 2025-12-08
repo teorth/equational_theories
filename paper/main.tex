@@ -32,6 +32,23 @@
   semi/.style    = {->, thick, dash pattern=on 4pt off 2pt on 1pt off 2pt, color=black!80, shorten >=1pt}
 }
 
+% Setup for `minted`
+\usepackage{minted}
+\newminted[lean]{lean4}{fontsize=\small}
+\newmintinline[leaninline]{lean4}{fontsize=\small}
+
+% Setup for unicode characters in code (minted) blocks.
+\usepackage{newunicodechar}
+\newunicodechar{∃}{$\exists$}
+\newunicodechar{∧}{$\wedge$}
+\newunicodechar{⬝}{$\cdot$}
+\newunicodechar{ℕ}{$\mathbb{N}$}
+\newunicodechar{¬}{$\neg$}
+\newunicodechar{×}{$\times$}
+\newunicodechar{⟨}{$\langle$}
+\newunicodechar{⟩}{$\rangle$}
+\newunicodechar{≠}{$\ne$}
+\newunicodechar{◇}{$\diamond$}
 
 % Page Setup
 \geometry{letterpaper, margin=1in}

@@ -87,10 +87,22 @@ For saturation proofs with \emph{Vampire}, we implemented analogs of the \emph{s
 Proofs can then be reconstructed as sequences of these steps (and additional technicalities) as shown in \Cref{fig:vampire-example}.
 
 \begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{vampire-example.png}
-  \caption{Example of a proof reconstructed from output of \emph{Vampire}. Note how the proof proceeds by contradiction and uses the \texttt{superpose} and \texttt{subsumption} steps implemented in \emph{Lean}.}
-  \label{fig:vampire-example}
+\centering
+\begin{lean}
+@[equational_result] theorem Equation999_implies_Equation86
+    (G : Type*) [Magma G] (h : Equation999 G) : Equation86 G := by
+  by_contra nh
+  simp only [not_forall] at nh
+  obtain ⟨sK0, sK1, sK2, nh⟩ := nh
+  have eq9 (X0 X1 X2 X3 : G) : (X1 ◇ ((X2 ◇ X3) ◇ (X1 ◇ X0))) = X0 :=
+    mod_symm (h ..)
+  have eq10 : sK0 ≠ (sK1 ◇ (sK2 ◇ (sK1 ◇ sK0))) := mod_symm nh
+  have eq11 (X3 X4 X5 : G) : (X4 ◇ (X3 ◇ (X4 ◇ X5))) = X5 := superpose eq9 eq9
+  have eq21 : sK0 ≠ sK0 := superpose eq11 eq10
+  subsumption eq21 rfl
+\end{lean}
+\caption{Example of a proof reconstructed from output of \emph{Vampire}. Note how the proof proceeds by contradiction and uses the \texttt{superpose} and \texttt{subsumption} steps implemented in \emph{Lean}.}
+\label{fig:vampire-example}
 \end{figure}
 % \todo{Use listings or minted for this code block.}
 
@@ -100,11 +112,26 @@ For equational proofs from external provers, like \emph{MagmaEgg}, we also used 
 Specifically, the \emph{MagmaEgg} implementation turns \emph{explanations} \cite{nieuwenhuis2005proof} from \emph{egg} into \emph{Lean} proofs by simple applications of the defining properties of equality as shown in \Cref{fig:magma-egg-example}.
 
 \begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{magma-egg-example.png}
-  % SOURCE: https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/MagmaEgg/small/_005.lean
-  \caption{Example of a proof reconstructed by \emph{MagmaEgg}. Note the proof only uses reflexivity, symmetry, transitivity, and congruence of equality.}
-  \label{fig:magma-egg-example}
+\centering
+\begin{lean}
+@[equational_result] theorem Equation3973_implies_Equation4023
+    (G : Type _) [Magma G] (h : Equation3973 G) : Equation4023 G := fun x y z =>
+  let v0 := M z x
+  let v1 := M z v0
+  let v2 := M v1 y
+  let v3 := M z v1
+  have h4 := R v2
+  have h5 := R z
+  have h6 := h z x v1
+  let v7 := M x (M v1 z)
+  T (T (T (T (h x y z) (h (M y v0) z v2)) (C (C h5 (C h4 (T (T (h y v0 v2)
+  (C (C (T (T (T h6 (h v7 v1 v0)) (C (C (R v1) (T (h v0 v7 z) (C (S h6) h5)))
+  (R v0))) (S (h z v1 v0))) (R (M v2 y))) h4)) (S (h y v3 v2))))) h4))
+  (S (h (M y v3) z v2))) (S (h v1 y z))
+\end{lean}
+% SOURCE: https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/MagmaEgg/small/_005.lean
+\caption{Example of a proof reconstructed by \emph{MagmaEgg}. Note the proof only uses reflexivity, symmetry, transitivity, and congruence of equality.}
+\label{fig:magma-egg-example}
 \end{figure}
 % \todo{Use listings or minted for this code block.}
 
