@@ -16,18 +16,19 @@ It is a result of Kisielewicz \cite{Kisielewicz} that every law $\Eq{n}$ with $n
 \begin{table}
 \centering
 \caption{Number of laws of order at most $4$ whose smallest non-trivial model (if any) is of a given size.}\label{size-table}
-\begin{tabular}{lcccccc}
-  \hline
-  Size of smallest non-trivial model & $2$ & $3$ & $4$ & $5$ & $7$ & Trivial only \\
-  \hline
-  Number of laws of order $0$ & $1$ & & & & & $1$ \\
-  \phantom{Number of laws of }order $1$ & $3$ & & & & & $2$ \\
-  \phantom{Number of laws of }order $2$ & $27$ & & & & & $12$ \\
-  \phantom{Number of laws of }order $3$ & $229$ & $14$ & $2$ & & & $119$ \\
-  \phantom{Number of laws of }order $4$ & $2876$ & $18$ & $12$ & $14$ & $2$ & $1362$ \\
-  \hline
-  \qquad\qquad\, total (order $\leq 4$) & $3136$ & $32$ & $14$ & $14$ & $2$ & $1496$ \\
-  \hline
+\sisetup{table-format=2, table-alignment-mode=format, table-number-alignment=center}
+\begin{tabular}{lS[table-format=4]SSSS[table-format=1]S[table-format=4]}
+  \toprule
+  Size of smallest non-trivial model & {$2$} & {$3$} & {$4$} & {$5$} & {$7$} & {Trivial only} \\
+  \midrule
+  Number of laws of order $0$ & 1 & & & & & 1 \\
+  \phantom{Number of laws of }order $1$ & 3 & & & & & 2 \\
+  \phantom{Number of laws of }order $2$ & 27 & & & & & 12 \\
+  \phantom{Number of laws of }order $3$ & 229 & 14 & 2 & & & 119 \\
+  \phantom{Number of laws of }order $4$ & 2876 & 18 & 12 & 14 & 2 & 1362 \\
+  \cmidrule{1-7}
+  \qquad\qquad\, total (order $\leq 4$) & 3136 & 32 & 14 & 14 & 2 & 1496 \\
+  \bottomrule
 \end{tabular}
 \end{table}
 

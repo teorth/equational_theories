@@ -240,43 +240,7 @@ The configuration of \emph{Mace4} likewise has a substantial impact on its runni
 There is no universally optimal configuration (a,b,S): for each (potential) implication or theory, configurations may be ranked differently. However, in the ETP context, certain configurations have performed consistently better, roughly ordered as (2,3,Y), (2,1,Y), (2,4,Y), (2,3,N), (2,1,N), (2,4,N), (0,1,N), (0,1,Y), with the remaining configurations being largely avoidable. Problems involving several algebraic operations, or presenting some kind of symmetry (see \Cref{table:weakcentralgroupoids} on weak central groupoids), tend to perform better with (2,4,N/Y). Problems may also be considerably sensitive to changes in formulas that appear minor, for example adding $f^n(x)=x$ with different values of~$n$ can result in different optimal configurations.
 \looseness=-1
 
-\begin{table}
-\centering
-\caption{Largest size of $\Eq{1485}$ (weak central groupoids) models exhausted by each configuration in under 300s. The \texttt{skolems\_last} parameter turns out to be irrelevant for this problem.}
-\label{table:weakcentralgroupoids}
-\begin{tabular}{|c|c|c|c|c|c|}
-  \hline
-  % after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
-  \textbf{Configuration:} &(2,4,Y/N) & (0,4,Y/N) & (2,3,Y/N) & (2,2,Y/N) & (2,1,Y/N) \\\hline\hline
-  \textbf{Size:} &14 (in 127s) & 14 (in 166s) & 13 (in 290s) & 9 (in 33s) & 7 (in 8s) \\
-  \hline
-\end{tabular}
-\end{table}
-
 In addition, while in the ETP we typically searched for a single model to contradict a given implication, in some cases we sought all models of a certain size for some given theory, either to better understand a collection of base examples in order to extend them, or just to improve our understanding. Accordingly, it should be noted that a configuration that is fast for finding one model of a given size may be slower than others for exhausting the whole size. A notable example of this is (2,2,Y) for models of $\Eq{677}$ of size 9, which finds a single model in 160s, but is unable to exhaust the whole size after 20h (see \Cref{table:677models}).
-
-\begin{table}
-\centering
-\caption{Time to find one model of $\Eq{677}$ of size~$9$ and to exhaust the same size for different configurations. Some finite-setting formulas were included to speed up the search (see \Cref{finite setting}). The configurations not listed here were unable to find a model in 4000s.}
-\label{table:677models}
-{\small
-\begin{tabular}{|c||c|c|}\hline
-\textbf{Configuration} & \textbf{One model} & \textbf{Exhaust size} \\\hline\hline
-(2,1,N) & 16s & 190s \\\hline
-(2,1,Y) & 16s & 210s \\\hline
-(0,1,Y) & 20s & 149s \\\hline
-(0,1,N) & 32s & 169s \\\hline
-(2,2,Y) & 154s & 72000s+ \\\hline
-(2,2,N) & 180s & 43000s+ \\\hline
-(2,3,N) & 557s & 877s \\\hline
-(2,3,Y) & 587s & 941s \\\hline
-(2,4,Y) & 596s & 761s \\\hline
-(2,4,N) & 620s & 730s \\\hline
-(0,3,N) & 3746s & 4151s \\\hline
-(0,3,Y) & 3777s & 4254s \\\hline
-\end{tabular}
-}
-\end{table}
 
 When undertaking a long-running model search at a large size, it is advisable to determine in advance the potentially optimal configuration(s) by examining smaller sizes. Throughout the ETP, we have employed the following procedure. If time permits, exhaust the previous size with all configurations to make a choice. If that process is prohibitively time-consuming, then set the target number of desired configurations (e.g., for parallel runs), initialize the pool of configurations with all possibilities, and iterate:
 \begin{enumerate}
@@ -289,21 +253,61 @@ Be aware that this algorithm assumes that once a configuration outperforms anoth
 
 \begin{table}
 \centering
-\caption{Comparison of the two best configurations for finding certain special $\Eq{677}$ models, both for exhausting each size and for finding a single model, with best times in boldface. Note that initially (2,4,N) seems the best configuration, but in the long run, (2,3,Y) outperforms it. The comparison is particularly misleading at size 16 when searching for a single model.}
+\caption{Largest size of $\Eq{1485}$ (weak central groupoids) models exhausted by each configuration in under 300s. The \texttt{skolems\_last} parameter turns out to be irrelevant for this problem.}
+\label{table:weakcentralgroupoids}
+\begin{tabular}{cccccc}
+  \toprule
+  Configuration &(2,4,Y/N) & (0,4,Y/N) & (2,3,Y/N) & (2,2,Y/N) & (2,1,Y/N) \\\midrule
+  Size &14 (in \SI{127}{s}) & 14 (in \SI{166}{s}) & 13 (in \SI{290}{s}) & 9 (in \SI{33}{s}) & 7 (in \SI{8}{s}) \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Time to find one model of $\Eq{677}$ of size~$9$ and to exhaust the same size for different configurations. Some finite-setting formulas were included to speed up the search (see \Cref{finite setting}). The configurations not listed here were unable to find a model in \SI{4000}{s}.}
+\label{table:677models}
+\centering
+\small
+\sisetup{table-format=7.2, table-alignment-mode=format, table-number-alignment=center, table-align-text-post=false, table-align-text-pre=false}
+\begin{tabular}{cSS}\toprule
+Configuration & {One model} & {Exhaust size} \\\midrule
+(2,1,N) & 16 \,\unit{s} & 190\,\unit{s} \\
+(2,1,Y) & 16 \,\unit{s} & 210\,\unit{s}\\
+(0,1,Y) & 20 \,\unit{s} & 149\,\unit{s}\\
+(0,1,N) & 32 \,\unit{s} & 169\,\unit{s}\\
+(2,2,Y) & 154 \,\unit{s} & {$>$}72000\,\unit{s} \\
+(2,2,N) & 180 \,\unit{s} & {$>$}43000\,\unit{s} \\
+(2,3,N) & 557 \,\unit{s} & 877\,\unit{s}\\
+(2,3,Y) & 587 \,\unit{s} & 941\,\unit{s}\\
+(2,4,Y) & 596 \,\unit{s} & 761\,\unit{s}\\
+(2,4,N) & 620 \,\unit{s} & 730\,\unit{s}\\
+(0,3,N) & 3746 \,\unit{s} & 4151\,\unit{s}\\
+(0,3,Y) & 3777 \,\unit{s} & 4254\,\unit{s}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption{Comparison of the two best configurations for finding certain special $\Eq{677}$ models, both for exhausting each size and for finding a single model, with best times in boldface. Note that initially (2,4,N) seems the best configuration, but in the long run, (2,3,Y) outperforms it. The comparison is particularly misleading at size 16 when searching for a single model.  All times are in seconds.}
 \label{table:Schneider}
-\begin{tabular}{|c||c|c||c|c|}\hline
-\textbf{Size} & \textbf{(2,3,Y) exhaust} & \textbf{(2,4,N) exhaust} & \textbf{(2,3,Y) model} & \textbf{(2,4,N) model}\\\hline\hline
-9 & 0.14s & \textbf{0.04s} & 0.02s & \textbf{0.0s} \\\hline
-10 & 0.32s & \textbf{0.12s} & - & -   \\\hline
-11 & 0.82s & \textbf{0.37s} & 0.15s & \textbf{0.01s}  \\\hline
-12 & 2.17s & \textbf{1.2s} & - & -   \\\hline
-13 & 6.18s & \textbf{4.35s} & 2.74s & \textbf{0.91s}  \\\hline
-14 & 15.47s & \textbf{14.39s} & - & -   \\\hline
-15 & \textbf{38.82s} & 50.87s & - & -   \\\hline
-16 & \textbf{120s} & 175s & 11.95s & \textbf{0.02s}  \\\hline
-17 & \textbf{306s} & 660s & - & -   \\\hline
-18 & \textbf{883s} & 2382s & - & -  \\\hline
-19 & \textbf{2300s} & 3600s+ & \textbf{846s} & 2082s \\\hline
+\centering
+\small
+\sisetup{table-format=4.4, detect-weight=true, table-align-text-post=false}
+\begin{tabular}{cS@{}SS@{}S}\toprule
+& \multicolumn{2}{c}{Exhaustion} & \multicolumn{2}{c}{Finding one model} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Size & {(2,3,Y)} & {(2,4,N)} & {(2,3,Y)} & {(2,4,N)}\\\midrule
+9 & 0.14 & \bfseries 0.04 & 0.02 & \bfseries 0.0\\
+10 & 0.32& \bfseries 0.12& {---} & {---}   \\
+11 & 0.82& \bfseries 0.37& 0.15& \bfseries 0.01\\
+12 & 2.17& \bfseries 1.2& {---} & {---}   \\
+13 & 6.18& \bfseries 4.35& 2.74& \bfseries 0.91\\
+14 & 15.47& \bfseries 14.39& {---} & {---}   \\
+15 & \bfseries 38.82& 50.87& {---} & {---}   \\
+16 & \bfseries 120& 175& 11.95& \bfseries 0.02\\
+17 & \bfseries 306& 660& {---} & {---}   \\
+18 & \bfseries 883& 2382& {---} & {---}  \\
+19 & \bfseries 2300& {\!\llap{$>$}}3600 & \bfseries 846& 2082\\\bottomrule
 \end{tabular}
 \end{table}
 
