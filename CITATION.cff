@@ -2,21 +2,30 @@ cff-version: 1.2.0
 message: >
   If you use this project in your work, please cite it using the metadata below.
 title: "The Equational Theories Project"
-version: 0.1.0
-date-released: Sep 26, 2024
+version: 0.2.0
+date-released: Dec 8, 2025
 authors:
   - family-names: Bolan
     given-names: Matthew
   - family-names: Breitner
     given-names: Joachim
+    orcid: https://orcid.org/0000-0003-3753-6821
   - family-names: Brox
     given-names: Jose
+    orcid: https://orcid.org/0000-0001-9822-5838
+  - family-names: Carlini
+    given-names: Nicholas
   - family-names: Carneiro
     given-names: Mario
+  - family-names: van Doorn
+    given-names: Floris
+    orcid: https://orcid.org/0000-0003-2899-8565
   - family-names: Dvorak
     given-names: Martin
+    orcid: https://orcid.org/0000-0001-5293-214X
   - family-names: Goens
     given-names: Andres
+    orcid: https://orcid.org/0000-0002-0409-1363
   - family-names: Hill
     given-names: Aaron
   - family-names: Husum
@@ -24,42 +33,62 @@ authors:
   - family-names: Ibarra Mejia
     given-names: Hernán
   - family-names: Kocsis
-  - given-names: Zoltan
+    given-names: Zoltan
   - family-names: Le Floch
     given-names: Bruno
+    orcid: https://orcid.org/0000-0002-3965-9705
+  - family-names: Livne Bar-on
+    given-names: Amir
   - family-names: Luccioli
     given-names: Lorenzo
+    orcid: https://orcid.org/0009-0009-2256-2833
   - family-names: McNeil
     given-names: Douglas
   - family-names: Meiburg
     given-names: Alex
   - family-names: Monticone
     given-names: Pietro
+    orcid: https://orcid.org/0000-0002-2731-9623
+  - family-names: Nielsen
+    given-names: Pace
+  - family-names: Osazuwa
+    given-names: Emmanuel Osalotioman
+    orcid: https://orcid.org/0009-0003-1415-8263
   - family-names: Paolini
     given-names: Giovanni
   - family-names: Petracci
     given-names: Marco
   - family-names: Reinke
     given-names: Bernhard
+    orcid: https://orcid.org/0000-0001-9024-2449
   - family-names: Renshaw
     given-names: David
   - family-names: Rossel
     given-names: Marcus
+    orcid: https://orcid.org/0009-0001-3567-6890
   - family-names: Roux
     given-names: Cody
   - family-names: Scanvic
     given-names: Jeremy
+    orcid: https://orcid.org/0009-0003-6117-0492
   - family-names: Srinivas
     given-names: Shreyas
+    orcid: https://orcid.org/0000-0002-3993-1596
   - family-names: Tadipatri
     given-names: Anand Rao
+    orcid: https://orcid.org/0009-0007-0057-4169
   - family-names: Tao
     given-names: Terence
     orcid: https://orcid.org/0000-0002-0140-7641
   - family-names: Tsyrklevich
     given-names: Vlad
+    orcid: https://orcid.org/0009-0009-9511-5460
+  - family-names: Vaquerizo-Villar
+    given-names: Fernando
+    orcid: https://orcid.org/0000-0002-5898-2006
   - family-names: Weber
     given-names: Daniel
+    orcid: https://orcid.org/0009-0008-4615-6445
   - family-names: Zheng
     given-names: Fan
 repository-code: https://github.com/teorth/equational_theories
