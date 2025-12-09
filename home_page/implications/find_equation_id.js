@@ -214,7 +214,7 @@ function _deconstructTree(tree) {
 
 function _equationFromStr(eqStr) {
     const parts = eqStr.split("=");
-    if (parts.length !== 2n) {
+    if (parts.length !== 2) {
         throw new Error("Your equation should have exactly one '=' sign. Please check your input.");
     }
     const [lhsStr, rhsStr] = parts;
