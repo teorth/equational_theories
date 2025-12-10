@@ -49,14 +49,14 @@ function gen_proof_url(eq1, eq2, direction) {
     } else {
         template = TEMPLATE + TEMPLATE_YES + TEMPLATE_NO;
     }
-        
+
     let string = template.replace(/EQ1/g, eq1+1).replace(/EQ2/g, eq2+1);
     string = string.replace("CODE1", convertEquation(equations[eq1]))
     string = string.replace("CODE2", convertEquation(equations[eq2]))
     return "https://live.lean-lang.org/#codez=" + encode(string);
 }
 
-function encode(string) { 
+function encode(string) {
     const keyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
     return _compress(string, 6, x => keyStrUriSafe.charAt(x))
 }
@@ -85,7 +85,11 @@ function findRandom8(implications) {
 function randomProof() {
     var idx = findRandom8(implications);
     console.log(idx);
-    window.location.href = gen_proof_url(idx[0], idx[1]);
+    if(idx != null){
+        window.location.href = gen_proof_url(idx[0], idx[1]);
+    }else{
+        showErrorPopup("No unsolved implications found!", "Info:");
+    }
 }
 
 
