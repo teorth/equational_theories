@@ -1,4 +1,5 @@
-function showErrorPopup(message) {
+function showErrorPopup(message, header="Oops! There's an issue with your equation") {
+    document.getElementById('errorMessageHeader').textContent = header;
     document.getElementById('errorMessage').textContent = message;
     document.getElementById('errorOverlay').style.display = 'block';
 }
