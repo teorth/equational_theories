@@ -154,7 +154,7 @@ class Equation {
     }
 
     rhsRhyme() {
-        return this.rhyme.slice(Number(shapeOrder(this.rhsShape) + 1n));
+        return this.rhyme.slice(Number(shapeOrder(this.lhsShape) + 1n));
     }
 
     _shapeEqual(shapeA, shapeB) {
