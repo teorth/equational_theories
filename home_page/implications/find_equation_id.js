@@ -143,6 +143,40 @@ class Equation {
         }
         return new Equation(lhsShape, rhsShape, rhyme);
     }
+
+    /**
+     * Returns true if the equation is tautological (lhs == rhs structurally)
+     */
+    isTautology() {
+        // Compare the ASTs of lhs and rhs for structural equality
+        return this._shapeEqual(this.lhsShape, this.rhsShape) &&
+               arrayEqual(this.lhsRhyme(), this.rhsRhyme());
+    }
+
+    /**
+     * Extracts the rhyme for the left-hand side
+     */
+    lhsRhyme() {
+        return this.rhyme.slice(0, Number(shapeOrder(this.lhsShape) + 1n));
+    }
+
+    /**
+     * Extracts the rhyme for the right-hand side
+     */
+    rhsRhyme() {
+        // If shape order of lhs and rhs are different shape equal will detect it and isTautology will return false so no need to worry about using lhsShape here
+        return this.rhyme.slice(Number(shapeOrder(this.lhsShape) + 1n));
+    }
+
+    /**
+     * Recursively compare two shapes for structural equality
+     */
+    _shapeEqual(shapeA, shapeB) {
+        if (shapeA === null && shapeB === null) return true;
+        if (shapeA === null || shapeB === null) return false;
+        return this._shapeEqual(shapeA[0], shapeB[0]) &&
+               this._shapeEqual(shapeA[1], shapeB[1]);
+    }
 }
 
 // Parsing an equation string
@@ -914,6 +948,11 @@ function findEquation() {
             eqNum = toBigIntSafe(rawInput);
         } else {
             const parsed = Equation.fromStr(rawInput);
+            // This does not need to be in renderImplications, since the only time when renderImplications is called directly it makes use of equation id and not an equation string.
+            if (parsed.isTautology() && parsed.id !== 1n) {
+                showErrorPopup("This equation is tautological!");
+                return false;
+            }
             eqNum = toBigIntSafe(parsed.id);
         }
 
