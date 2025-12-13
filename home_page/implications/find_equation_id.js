@@ -144,33 +144,19 @@ class Equation {
         return new Equation(lhsShape, rhsShape, rhyme);
     }
 
-    /**
-     * Returns true if the equation is tautological (lhs == rhs structurally)
-     */
     isTautology() {
-        // Compare the ASTs of lhs and rhs for structural equality
         return this._shapeEqual(this.lhsShape, this.rhsShape) &&
                arrayEqual(this.lhsRhyme(), this.rhsRhyme());
     }
 
-    /**
-     * Extracts the rhyme for the left-hand side
-     */
     lhsRhyme() {
         return this.rhyme.slice(0, Number(shapeOrder(this.lhsShape) + 1n));
     }
 
-    /**
-     * Extracts the rhyme for the right-hand side
-     */
     rhsRhyme() {
-        // If shape order of lhs and rhs are different shape equal will detect it and isTautology will return false so no need to worry about using lhsShape here
-        return this.rhyme.slice(Number(shapeOrder(this.lhsShape) + 1n));
+        return this.rhyme.slice(Number(shapeOrder(this.rhsShape) + 1n));
     }
 
-    /**
-     * Recursively compare two shapes for structural equality
-     */
     _shapeEqual(shapeA, shapeB) {
         if (shapeA === null && shapeB === null) return true;
         if (shapeA === null || shapeB === null) return false;
@@ -950,8 +936,7 @@ function findEquation() {
             const parsed = Equation.fromStr(rawInput);
             // This does not need to be in renderImplications, since the only time when renderImplications is called directly it makes use of equation id and not an equation string.
             if (parsed.isTautology() && parsed.id !== 1n) {
-                showErrorPopup("This equation is tautological!");
-                return false;
+                throw new Error("This equation is tautological!");
             }
             eqNum = toBigIntSafe(parsed.id);
         }
@@ -966,12 +951,8 @@ function findEquation() {
         renderImplications(zeroBasedIdx);
         showPage('detailPage');
     } catch (error) {
-        let message = `${error.name}: ${error.message}`;
-        if (error.stack) {
-            message += "\n\n" + error.stack;
-        }
-        console.error(message);
-        showErrorPopup(message);
+        showErrorPopup(`${error.name}: ${error.message}`);
+        console.error(error);
         resultDiv.innerHTML = '';
     }
     return false;
