@@ -26,7 +26,7 @@ Finally, we also used \texttt{aesop}~\cite{DBLP:conf/cpp/LimpergF23}, which impl
 This was used mainly to help specific constructions in refutations, and is not specific to proving or disproving magma implications in this sense.
 We describe our use of \texttt{aesop} in \Cref{sec:proof-reconstruction} below.
 
-\textbf{Saturation.}
+\subsubsection{Saturation}
 Most of the ATPs used extensively in this project rely primarily on saturation procedures in the superposition calculus.
 For example, this is the case for \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13}.\footnote{See also~\cite{DBLP:journals/cacm/BentkampBNTVW23} for a gentler exposition.}
 The core idea of these provers is that they take a set of assumptions and a conjecture, expressed in (say) first-order logic.
@@ -41,7 +41,7 @@ Superposition calculi have a variant of this rule that deals with equality direc
 
 In this project we used \emph{Vampire}~\cite{DBLP:conf/cav/KovacsV13}, \emph{Duper}~\cite{DBLP:conf/itp/CluneQBA24} and \emph{Prover9} and \emph{Mace4}~\cite{prover9-mace4} which are all based on variants of saturation for proving.
 
-\textbf{Equational Reasoning.} As already discussed in \Cref{canon-sec}, equational reasoning is a type of reasoning that is based\footnote{More precisely, one can formalize this reasoning using Birkhoff's five rules of inference (reflexive, symmetric, transitive, replacement, and substitution); see, e.g., \cite{burris}.} on equational logic and rewriting with congruence~\cite{term-rewriting}.
+\subsubsection{Equational Reasoning} As already discussed in \Cref{canon-sec}, equational reasoning is a type of reasoning that is based\footnote{More precisely, one can formalize this reasoning using Birkhoff's five rules of inference (reflexive, symmetric, transitive, replacement, and substitution); see, e.g., \cite{burris}.} on equational logic and rewriting with congruence~\cite{term-rewriting}.
 In general, an equational reasoning procedure takes a series of equations and tries to determine whether another equation can be deduced from it.
 A core tool in equational reasoning are \emph{e-graphs}, a data structure used to represent congruence classes of terms.
 By themselves, e-graphs provide an efficient means of implementing a decision procedure for congruence closure over ground equations (i.e., equations without variables).
@@ -60,7 +60,6 @@ While ATPs are very useful for proving theorems in this project, they do not int
 ATPs may produce unsound proofs, or worse, derive incorrect results.
 Thus, by default, theorems in \emph{Lean} cannot be proven by deferring to the result of an ATP\@.
 Instead, the results of an ATP can be used to reconstruct a proof of the form required by \emph{Lean}.
-% There are different approaches to proof reconstruction which we employ in this project.
 Thus, in general, integration of ATPs requires two steps.
 First, there is the invocation of the ATPs by translating the problem from \emph{Lean} into the languages and logics they use.
 And second, there is the reconstruction of the ATPs' results as a (persistent) \emph{Lean} proof.
@@ -79,7 +78,7 @@ The matter of technical requirements caused problems, for example, when integrat
 Such trade-offs between Option~\ref{inter} and Option~\ref{external} are, however, mutual, as the higher upfront cost of integrating a proof tactic in Option~\ref{inter} makes the decision procedure easier to use than with Option~\ref{external}.
 Additionally, Option~\ref{inter} can benefit from \emph{Lean}'s meta-programming capabilities when encoding the problem for use with an ATP, and when reconstructing a \emph{Lean} proof from the result.
 
-\textbf{Proof Reconstruction.}
+\subsubsection{Proof Reconstruction}
 The relative simplicity of the objects used in this project benefits the implementations of proof reconstruction.
 By focusing on the given problem domain, difficult reconstruction issues, like complex dependent types, could be ignored.
 
@@ -104,9 +103,6 @@ Proofs can then be reconstructed as sequences of these steps (and additional tec
 \caption{Example of a proof reconstructed from output of \emph{Vampire}. Note how the proof proceeds by contradiction and uses the \texttt{superpose} and \texttt{subsumption} steps implemented in \emph{Lean}.}
 \label{fig:vampire-example}
 \end{figure}
-% \todo{Use listings or minted for this code block.}
-
-% \todo{Explain how Prover9 and Mace4 were used.}
 
 For equational proofs from external provers, like \emph{MagmaEgg}, we also used a tailored version of reconstruction.
 Specifically, the \emph{MagmaEgg} implementation turns \emph{explanations} \cite{nieuwenhuis2005proof} from \emph{egg} into \emph{Lean} proofs by simple applications of the defining properties of equality as shown in \Cref{fig:magma-egg-example}.
@@ -144,7 +140,7 @@ In the case of the \texttt{egg} tactic, which also reconstructs proofs from \emp
   \label{fig:egg-example}
 \end{figure}
 
-\textbf{Semi-Automated Counterexample Guidance.}  Another use of ATPs has been in a semi-automatic fashion, to find counterexamples.
+\subsubsection{Semi-Automated Counterexample Guidance}  Another use of ATPs has been in a semi-automatic fashion, to find counterexamples.
 The general strategy was to use ATPs to find counterexamples to implications by building magmas iteratively.
 If we want to build a counterexample to $l \models l'$, we want to construct a magma where $l$ holds but $l'$ does not.
 In this method, we iteratively strengthen a construction with additional hypotheses, and use the ATP to check whether these hypotheses are not too strong (to imply $l'$) or unsound (to disallow $l$).
@@ -328,22 +324,3 @@ As a case study, let us examine the model search for $\Eq{1518}\nmodels\Eq{47}$ 
 
 \subsubsection{Discriminators for Isofilter}
 \emph{Mace4}'s output may be redundant, in that many of the models found in a search may (and often will) be isomorphic to each other. To solve this problem, \emph{Mace4}'s output can be fed to another tool called \emph{Isofilter}, which returns a representative model of each isomorphism class. \emph{Isofilter} compares permutations of the models, restricted according to some discriminators: by default the only one used is the frequency with which each domain element appears in the operation tables\footnote{This discriminator is entirely ineffective with models having same number of copies of each element in their tables, such as quasigroups.}, but the user can include any number of other discriminators. \emph{Isofilter} ``as is'' handles models of size up to around 10 with ease; but the combinatorial explosion soon makes computations unfeasible for larger sizes, unless discriminators well suited to the problem are chosen. For example, \emph{Mace4} provides 10 models of size 15 for $\Eq{1518} \not\models \Eq{47}$, of which $6$ belong to different isomorphism classes. Vanilla \emph{Isofilter} requires 10 days and processes $3\cdot10^{13}$ permutations in order to determine these classes, while adding the discriminators \verb|x*x=x. (x*y)*z = x*(y*z). x*y=y. x*y=y*x.| reduces the task to $10^5$ permutations, completed in 0.02s.
-
-
-% \TODO{maybe add a screenshot here of the workflow of using a seed to find counterexamples with \emph{Prover9} or \emph{Vampire}?}
-
-% \subsection{Empirical results}
-
-% Finally, we report some empirical results from use of ATPs for this project, in terms of performance.
-% This section is not intended to be a careful evaluation and benchmark comparison of the different ATPs; instead, we present our work here as a more informal ``field report'' documenting our experiences.
-% In particular, we do not draw firm conclusions about the overall capabilities\footnote{One reason for this is that different ATPs were deployed at different stages of the project.  In particular, the later ATP runs were performed in an environment when a large fraction of the implications had already been settled, and only a small remainder set was tested by our project.  The current set of ATP-generated formalized implications has also been subject to a number of reductions to optimize compilation time, so we would caution against reading too much into the raw number of such formalizations in the codebase.} of the different ATPs.
-% Rather, this serves as a use-case documenting the experience of (mostly) novice users.
-
-% \TODO{throw a couple of "benchmarking" tables for the same ATP with different parameters and for different ATPs, talk about some relative gains in time (changing parameters we saw a 500 times speedup on this particular problem), etc. This is knowledge I think we have gained to some extent, and certainly I would have been glad to receive this kind of hints before we started!''.  Then leave it as an interesting open problem to properly develop and measure benchmarks for ATPs based on this project.}
-
-% {\bf Any comparative study of semi-automated methods with fully automated ones? In principle, the semi-automated approach could be more automated using a script or "agent" to call various theorem provers. See \href{https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/A.20magma.20of.20order.20.3C.2013.20-.20for.20Equation2531.3F}{this discussion}}
-
-
-% {\bf See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/1516.20-.3E.20255/near/481547543}{this discussion} on the value of using different ATPs and setting run time parameters etc. at different values.}
-
-% {\bf What are the hardest implications to prove?  See \href{https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/What.20are.20the.20hardest.20positive.20implications.20for.20an.20ATP.3F}{this discussion}.}
