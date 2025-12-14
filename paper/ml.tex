@@ -6,7 +6,7 @@ On the other hand, we found that machine learning (ML) methods showed some promi
 
 \subsection*{Convolutional neural network model for the implication graph}
 
-To model the implication graph, we used a convolutional neural network (CNN)\@. For each pair of equations $(p,q)$, the input of the CNN consisted of a character-level tokenization (no vectorization) of the two equations, and the output of the CNN was a yes/no label depending on whether $p$ implies $q$. The CNN processed the input data using a 5-layer architecture, each layer composed of a 1-D convolution, followed by batch normalization and rectified linear unit activation functions~\cite{Goodfellow-et-al-2016}. After the last convolutional layer, a flattening layer and a softmax activation function were used to obtain the output of the network, i.e.\@, the prediction of the implication for the input pair of equations. Note that we trained our models with the 2024-10-16 version of the (infinite) implication graph, for which 362 of the hardest implications (less than 0.002\% of the total) were still unknown.
+To model the implication graph, we used a convolutional neural network (CNN)\@. For each pair of equations $(p,q)$, the input of the CNN consisted of a character-level tokenization (no vectorization) of the two equations, and the output of the CNN was a yes/no label depending on whether $p$ implies $q$. The CNN processed the input data using a 5-layer architecture, each layer composed of a 1-D convolution, followed by batch normalization and rectified linear unit activation functions~\cite{Goodfellow-et-al-2016}. After the last convolutional layer, a flattening layer and a softmax activation function were used to obtain the output of the network, i.e.\@, the prediction of the implication for the input pair of equations. Note that we trained our models with the 16 October 2024 version of the (infinite) implication graph, for which 362 of the hardest implications (less than 0.002\% of the total) were still unknown.
 
 \smallskip
 
@@ -20,18 +20,18 @@ It could be the case that the high accuracy of our CNN model was mostly due to i
 \smallskip
 
 In any case, since there are around 600k explicit implications from which the rest can be derived by transitivity (2.7\% of the total), if the CNN was learning transitivity it should perform well with a very small training dataset. Accordingly, we trained and assessed a CNN model with a 5\%/5\%/90\% training/validation/test proportion, with a resulting 99.6\% accuracy on test (the process finishing in under 20 minutes). But the high accuracy is maintained with even smaller training datasets, as evidenced in \Cref{table:prediction-accuracy}.
-\begin{table}[h]
+\begin{table}
 \centering
 \caption{Prediction accuracy as a function of the size of the training set}
-\begin{tabular}{|c|c|}
-\hline
-  \textbf{Training/validation/test proportion (\%)} & \textbf{Prediction accuracy (\%)} \\\hline\hline
-  60/20/20 & 99.7 \\\hline
-  5/5/90 & 99.6 \\\hline
-  1/1/98 & 99.3 \\\hline
-  0.5/0.5/99 & 98.9 \\\hline
+\begin{tabular}{cc}
+\toprule
+  Training/validation/test proportion (\%) & Prediction accuracy (\%) \\\midrule
+  60/20/20 & 99.7 \\
+  5/5/90 & 99.6 \\
+  1/1/98 & 99.3 \\
+  0.5/0.5/99 & 98.9 \\
   0.1/0.1/99.8 & 92.2 \\
-  \hline
+  \bottomrule
 \end{tabular}
 \label{table:prediction-accuracy}
 \end{table}
@@ -42,16 +42,16 @@ In any case, since there are around 600k explicit implications from which the re
 
 Since sometimes machine learning is announced as a form of data compression, let us now comment on the level of data compression achieved by our CNN model. In \Cref{table:encoding-sizes} we compare the sizes of three different encodings of the implication graph: a) As the simplest approach, we can encode the full implication graph in one file as labelled pairs of equations of the form ($p$, $q$, yes/no). b) On the other extreme, we can encode it as a bit table containing neither the explicit equation expressions nor their numbers, but just a 1/0 label for each point with coordinates ($p$,$q$), together with a table mapping each number to its corresponding equation expression and a small script to recover the file in a). c) Finally, we can encode it in the complete files of the CNN model produced by TensorFlow 2.9.0. In addition, we can either consider these files in their raw form, or we can highly (but losslessly) compress them to achieve a rough comparison of their actual information content; accordingly, in \Cref{table:encoding-sizes} we also include the sizes of the encoding models when compressed with 7-zip LZMA2 ultra compression with a 1536MB dictionary size and a 273 word size.
 
-\begin{table}[h]
+\begin{table}
 \centering
 \caption{Sizes of different encodings for the implication graph}
-\begin{tabular}{|c|c|c|}
-  \hline
-  \textbf{Encoding model} & \textbf{Uncompressed size} & \textbf{Compressed size} \\\hline\hline
-  Labelled pairs of equations & 1.5GB & 9MB \\\hline
-  Bit table & 42MB & 40KB \\\hline
-  CNN (99.7\% accuracy) & 1.34MB & 700KB \\
-  \hline
+\begin{tabular}{ccc}
+  \toprule
+  Encoding model & Uncompressed size & Compressed size \\\midrule
+  Labelled pairs of equations & \SI{1.5}{\giga\byte} & \SI{9}{\mega\byte} \\
+  Bit table & \SI{42}{\mega\byte} & \SI{40}{\kilo\byte} \\
+  CNN (99.7\% accuracy) & \SI{1.34}{\mega\byte} & \SI{700}{\kilo\byte} \\
+  \bottomrule
 \end{tabular}
 \label{table:encoding-sizes}
 \end{table}

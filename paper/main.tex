@@ -4,8 +4,6 @@
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{thmtools}
 \usepackage{geometry}
-\usepackage[hidelinks]{hyperref}
-\usepackage{cleveref}
 \usepackage{graphicx}
 \usepackage{enumitem}
 \usepackage{color}
@@ -16,6 +14,8 @@
 \usepackage{mathrsfs}
 \usepackage{proof}
 \usepackage{todonotes}
+\usepackage{array}
+\usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -37,6 +37,9 @@
 \newminted[lean]{lean4}{fontsize=\small}
 \newmintinline[leaninline]{lean4}{fontsize=\small}
 
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+
 % Setup for unicode characters in code (minted) blocks.
 \usepackage{newunicodechar}
 \newunicodechar{∃}{$\exists$}
@@ -53,8 +56,7 @@
 % Page Setup
 \geometry{letterpaper, margin=1in}
 \setlength{\parindent}{0pt} % No indent for paragraphs
-\setlength{\parskip}{1em}   % Spacing between paragraphs
-
+\setlength{\parskip}{0.8\baselineskip plus 0.2\baselineskip minus 0.2\baselineskip}   % Spacing between paragraphs
 % Theorem Styles
 \newtheorem{theorem}{Theorem}[section]
 \renewcommand{\theHtheorem}{\theHsection.\the\value{theorem}}
@@ -99,7 +101,7 @@
   Alex Meiburg, Pietro Monticone, Pace P. Nielsen, Emmanuel Osalotioman Osazuwa, Giovanni Paolini, Marco Petracci, Bernhard Reinke, David Renshaw, Marcus Rossel, Cody Roux,
   J\'er\'emy Scanvic, Shreyas Srinivas, Anand Rao Tadipatri, Terence Tao, Vlad Tsyrklevich, Fernando Vaquerizo-Villar,
   Daniel Weber, Fan Zheng}
-\date{\today}
+\date{December 2025}
 
 \begin{document}
 
