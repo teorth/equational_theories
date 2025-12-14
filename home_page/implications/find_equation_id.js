@@ -143,6 +143,26 @@ class Equation {
         }
         return new Equation(lhsShape, rhsShape, rhyme);
     }
+
+    isTautology() {
+        return this._shapeEqual(this.lhsShape, this.rhsShape) &&
+               arrayEqual(this.lhsRhyme(), this.rhsRhyme());
+    }
+
+    lhsRhyme() {
+        return this.rhyme.slice(0, Number(shapeOrder(this.lhsShape) + 1n));
+    }
+
+    rhsRhyme() {
+        return this.rhyme.slice(Number(shapeOrder(this.lhsShape) + 1n));
+    }
+
+    _shapeEqual(shapeA, shapeB) {
+        if (shapeA === null && shapeB === null) return true;
+        if (shapeA === null || shapeB === null) return false;
+        return this._shapeEqual(shapeA[0], shapeB[0]) &&
+               this._shapeEqual(shapeA[1], shapeB[1]);
+    }
 }
 
 // Parsing an equation string
@@ -914,6 +934,10 @@ function findEquation() {
             eqNum = toBigIntSafe(rawInput);
         } else {
             const parsed = Equation.fromStr(rawInput);
+            // This does not need to be in renderImplications, since the only time when renderImplications is called directly it makes use of equation id and not an equation string.
+            if (parsed.isTautology() && parsed.id !== 1n) {
+                throw new Error("This equation is tautological!");
+            }
             eqNum = toBigIntSafe(parsed.id);
         }
 
@@ -927,12 +951,8 @@ function findEquation() {
         renderImplications(zeroBasedIdx);
         showPage('detailPage');
     } catch (error) {
-        let message = `${error.name}: ${error.message}`;
-        if (error.stack) {
-            message += "\n\n" + error.stack;
-        }
-        console.error(message);
-        showErrorPopup(message);
+        showErrorPopup(`${error.name}: ${error.message}`);
+        console.error(error);
         resultDiv.innerHTML = '';
     }
     return false;
