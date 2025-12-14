@@ -240,17 +240,6 @@ The configuration of \emph{Mace4} likewise has a substantial impact on its runni
 There is no universally optimal configuration (a,b,S): for each (potential) implication or theory, configurations may be ranked differently. However, in the ETP context, certain configurations have performed consistently better, roughly ordered as (2,3,Y), (2,1,Y), (2,4,Y), (2,3,N), (2,1,N), (2,4,N), (0,1,N), (0,1,Y), with the remaining configurations being largely avoidable. Problems involving several algebraic operations, or presenting some kind of symmetry (see \Cref{table:weakcentralgroupoids} on weak central groupoids), tend to perform better with (2,4,N/Y). Problems may also be considerably sensitive to changes in formulas that appear minor, for example adding $f^n(x)=x$ with different values of~$n$ can result in different optimal configurations.
 \looseness=-1
 
-In addition, while in the ETP we typically searched for a single model to contradict a given implication, in some cases we sought all models of a certain size for some given theory, either to better understand a collection of base examples in order to extend them, or just to improve our understanding. Accordingly, it should be noted that a configuration that is fast for finding one model of a given size may be slower than others for exhausting the whole size. A notable example of this is (2,2,Y) for models of $\Eq{677}$ of size 9, which finds a single model in 160s, but is unable to exhaust the whole size after 20h (see \Cref{table:677models}).
-
-When undertaking a long-running model search at a large size, it is advisable to determine in advance the potentially optimal configuration(s) by examining smaller sizes. Throughout the ETP, we have employed the following procedure. If time permits, exhaust the previous size with all configurations to make a choice. If that process is prohibitively time-consuming, then set the target number of desired configurations (e.g., for parallel runs), initialize the pool of configurations with all possibilities, and iterate:
-\begin{enumerate}
-\item Pick the next available smallest size.
-\item Run all configurations on that size under a reasonable time limit and collect their running times, whether for finding a single model, a predetermined number of models, or for exhausting the size.
-\item Based on the smallest time found, determine a statistically significant time threshold.
-\item Remove from the pool those configurations whose time differs from the best one by more than the threshold (if any). End the loop once the number of configurations contained in the pool is the desired one.
-\end{enumerate}
-Be aware that this algorithm assumes that once a configuration outperforms another, this advantage carries over to larger sizes. This is not always the case (see \Cref{table:Schneider} for an example). Additionally, the algorithm may be further refined by considering combinations of the configurations with different subsets of formulas.
-
 \begin{table}
 \centering
 \caption{Largest size of $\Eq{1485}$ (weak central groupoids) models exhausted by each configuration in under 300s. The \texttt{skolems\_last} parameter turns out to be irrelevant for this problem.}
@@ -262,6 +251,17 @@ Be aware that this algorithm assumes that once a configuration outperforms anoth
   \bottomrule
 \end{tabular}
 \end{table}
+
+In addition, while in the ETP we typically searched for a single model to contradict a given implication, in some cases we sought all models of a certain size for some given theory, either to better understand a collection of base examples in order to extend them, or just to improve our understanding. Accordingly, it should be noted that a configuration that is fast for finding one model of a given size may be slower than others for exhausting the whole size. A notable example of this is (2,2,Y) for models of $\Eq{677}$ of size 9, which finds a single model in 160s, but is unable to exhaust the whole size after 20h (see \Cref{table:677models}).
+
+When undertaking a long-running model search at a large size, it is advisable to determine in advance the potentially optimal configuration(s) by examining smaller sizes. Throughout the ETP, we have employed the following procedure. If time permits, exhaust the previous size with all configurations to make a choice. If that process is prohibitively time-consuming, then set the target number of desired configurations (e.g., for parallel runs), initialize the pool of configurations with all possibilities, and iterate:
+\begin{enumerate}
+\item Pick the next available smallest size.
+\item Run all configurations on that size under a reasonable time limit and collect their running times, whether for finding a single model, a predetermined number of models, or for exhausting the size.
+\item Based on the smallest time found, determine a statistically significant time threshold.
+\item Remove from the pool those configurations whose time differs from the best one by more than the threshold (if any). End the loop once the number of configurations contained in the pool is the desired one.
+\end{enumerate}
+Be aware that this algorithm assumes that once a configuration outperforms another, this advantage carries over to larger sizes. This is not always the case (see \Cref{table:Schneider} for an example). Additionally, the algorithm may be further refined by considering combinations of the configurations with different subsets of formulas.
 
 \begin{table}
 \caption{Time to find one model of $\Eq{677}$ of size~$9$ and to exhaust the same size for different configurations. Some finite-setting formulas were included to speed up the search (see \Cref{finite setting}). The configurations not listed here were unable to find a model in \SI{4000}{s}.}
