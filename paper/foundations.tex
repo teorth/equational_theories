@@ -51,9 +51,9 @@ theorem _root_.Equation1437_not_implies_Equation4269 :
     ∃ (G : Type) (_ : Magma G), Equation1437 G ∧ ¬ Equation4269 G := by
   use ℕ × Fin 3, ⟨op⟩
   constructor
-  ⬝ intro x y z
+  · intro x y z
     simp [op, add_assoc]
-  ⬝ simp only [not_forall, op]
+  · simp only [not_forall, op]
     use (0, 0), (2, 0)
     decide
 \end{lean}
