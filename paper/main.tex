@@ -32,26 +32,19 @@
   semi/.style    = {->, thick, dash pattern=on 4pt off 2pt on 1pt off 2pt, color=black!80, shorten >=1pt}
 }
 
-% Setup for `minted`
-\usepackage{minted}
-\newminted[lean]{lean4}{fontsize=\small}
-\newmintinline[leaninline]{lean4}{fontsize=\small}
+\usepackage{listings}
+\definecolor{keywordcolor}{rgb}{0.7, 0.1, 0.1}   % red
+\definecolor{tacticcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{commentcolor}{rgb}{0.4, 0.4, 0.4}   % grey
+\definecolor{symbolcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{sortcolor}{rgb}{0.1, 0.5, 0.1}      % green
+\definecolor{attributecolor}{rgb}{0.7, 0.1, 0.1} % red
+\def\lstlanguagefiles{lstlean.tex}
+\lstnewenvironment{lean}{\lstset{language=lean}}{}
+\DeclareUnicodeCharacter{25C7}{$\diamond$}
 
 \usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
-
-% Setup for unicode characters in code (minted) blocks.
-\usepackage{newunicodechar}
-\newunicodechar{∃}{$\exists$}
-\newunicodechar{∧}{$\wedge$}
-\newunicodechar{⬝}{$\cdot$}
-\newunicodechar{ℕ}{$\mathbb{N}$}
-\newunicodechar{¬}{$\neg$}
-\newunicodechar{×}{$\times$}
-\newunicodechar{⟨}{$\langle$}
-\newunicodechar{⟩}{$\rangle$}
-\newunicodechar{≠}{$\ne$}
-\newunicodechar{◇}{$\diamond$}
 
 % Page Setup
 \geometry{letterpaper, margin=1in}
