@@ -1,0 +1,12 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{@[}\PYG{n}{equational\PYGZus{}result}\PYG{k+kd}{]}
+\PYG{k+kn}{theorem}\PYG{+w}{ }\PYG{n+nb+bp}{\PYGZus{}}\PYG{n}{root\PYGZus{}}\PYG{n+nb+bp}{.}\PYG{n}{Equation1437\PYGZus{}not\PYGZus{}implies\PYGZus{}Equation4269}\PYG{+w}{ }\PYG{o}{:}
+\PYG{+w}{    }\PYG{n+nb+bp}{∃}\PYG{+w}{ }\PYG{o}{(}\PYG{n}{G}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{k+kt}{Type}\PYG{o}{)}\PYG{+w}{ }\PYG{o}{(}\PYG{n+nb+bp}{\PYGZus{}}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n}{Magma}\PYG{+w}{ }\PYG{n}{G}\PYG{o}{)}\PYG{o}{,}\PYG{+w}{ }\PYG{n}{Equation1437}\PYG{+w}{ }\PYG{n}{G}\PYG{+w}{ }\PYG{n+nb+bp}{∧}\PYG{+w}{ }\PYG{n+nb+bp}{¬}\PYG{+w}{ }\PYG{n}{Equation4269}\PYG{+w}{ }\PYG{n}{G}\PYG{+w}{ }\PYG{o}{:=}\PYG{+w}{ }\PYG{k}{by}
+\PYG{+w}{  }\PYG{n}{use}\PYG{+w}{ }\PYG{n}{ℕ}\PYG{+w}{ }\PYG{n+nb+bp}{×}\PYG{+w}{ }\PYG{n}{Fin}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{o}{,}\PYG{+w}{ }\PYG{n+nb+bp}{⟨}\PYG{n}{op}\PYG{n+nb+bp}{⟩}
+\PYG{+w}{  }\PYG{n}{constructor}
+\PYG{+w}{  }\PYG{n+nb+bp}{⬝}\PYG{+w}{ }\PYG{n}{intro}\PYG{+w}{ }\PYG{n}{x}\PYG{+w}{ }\PYG{n}{y}\PYG{+w}{ }\PYG{n}{z}
+\PYG{+w}{    }\PYG{n}{simp}\PYG{+w}{ }\PYG{o}{[}\PYG{n}{op}\PYG{o}{,}\PYG{+w}{ }\PYG{n}{add\PYGZus{}assoc}\PYG{o}{]}
+\PYG{+w}{  }\PYG{n+nb+bp}{⬝}\PYG{+w}{ }\PYG{n}{simp}\PYG{+w}{ }\PYG{n}{only}\PYG{+w}{ }\PYG{o}{[}\PYG{n}{not\PYGZus{}forall}\PYG{o}{,}\PYG{+w}{ }\PYG{n}{op}\PYG{o}{]}
+\PYG{+w}{    }\PYG{n}{use}\PYG{+w}{ }\PYG{o}{(}\PYG{l+m+mi}{0}\PYG{o}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{o}{)}\PYG{o}{,}\PYG{+w}{ }\PYG{o}{(}\PYG{l+m+mi}{2}\PYG{o}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{o}{)}
+\PYG{+w}{    }\PYG{n}{decide}
+\end{MintedVerbatim}

@@ -40,7 +40,6 @@ home_page/_site
 *.synctex.gz(busy)
 *.pdfsync
 *.pdf
-*/_minted
 ## Python
 **/venv
 **/.venv
