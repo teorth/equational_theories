@@ -49,13 +49,10 @@
   columns = fullflexible,
   keepspaces = true,
   morecomment = [s][\color{green!50!black}]{@[}{]},
-  %
   morekeywords = [1]{theorem, by, fun, let, have, obtain},
   keywordstyle = [1]{\ttfamily\color{kwcolor}},
-  %
   morekeywords = [2]{use, constructor, intro, only, simp, decide, decideFin, by_contra, subsumption},
   keywordstyle = [2]{\ttfamily\color{taccolor}},
-  %
   literate =
   {:=}{{{\color{kwcolor}\raise1pt\hbox{:}\hspace{-1pt}=}}}{2}
   {=>}{{{\color{kwcolor}=>}}}{2}
@@ -73,6 +70,27 @@
   {»}{{\color{gray}\guillemetright}\color{black}}{1}
   ,
 }
+\usepackage{iftex}
+\ifpdftex\else
+\usepackage{newunicodechar}
+\newunicodechar{∃}{\ensuremath{\exists}}
+\newunicodechar{∧}{\ensuremath{\wedge}}
+\newunicodechar{¬}{\ensuremath{\lnot}}
+\newunicodechar{×}{\ensuremath{\times}}
+\newunicodechar{◇}{\ensuremath{\diamond}}
+\newunicodechar{·}{\ensuremath{\bullet}}
+\newunicodechar{≠}{\ensuremath{\neq}}
+\newunicodechar{ℕ}{\ensuremath{\mathbb{N}}}
+\newunicodechar{⟨}{\ensuremath{\langle}}
+\newunicodechar{⟩}{\ensuremath{\rangle}}
+\newunicodechar{«}{\guillemetleft}
+\newunicodechar{»}{\guillemetright}
+\newunicodechar{–}{\textendash}
+\newunicodechar{’}{\textquoteright}
+\newunicodechar{“}{\textquotedblleft}
+\newunicodechar{”}{\textquotedblright}
+\newunicodechar{š}{\v s}
+\fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage[hidelinks]{hyperref}
