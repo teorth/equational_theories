@@ -32,16 +32,66 @@
   semi/.style    = {->, thick, dash pattern=on 4pt off 2pt on 1pt off 2pt, color=black!80, shorten >=1pt}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Minimal set of definitions, keywords etc to highlight
+% the specific Lean code examples in the paper.  A better
+% listings language definition is given in lstlean.tex
+% on the Lean4 repository, but its Apache license would
+% complicate our CC-BY arXiv submission
+%
 \usepackage{listings}
-\definecolor{keywordcolor}{rgb}{0.7, 0.1, 0.1}   % red
-\definecolor{tacticcolor}{rgb}{0.0, 0.1, 0.6}    % blue
-\definecolor{commentcolor}{rgb}{0.4, 0.4, 0.4}   % grey
-\definecolor{symbolcolor}{rgb}{0.0, 0.1, 0.6}    % blue
-\definecolor{sortcolor}{rgb}{0.1, 0.5, 0.1}      % green
-\definecolor{attributecolor}{rgb}{0.7, 0.1, 0.1} % red
-\def\lstlanguagefiles{lstlean.tex}
 \lstnewenvironment{lean}{\lstset{language=lean}}{}
-\DeclareUnicodeCharacter{25C7}{$\diamond$}
+\definecolor{kwcolor}{rgb}{0.8, 0.1, 0.1}    % red
+\definecolor{taccolor}{rgb}{0.1, 0.1, 0.8}    % blue
+\definecolor{opcolor}{rgb}{0.5, 0.1, 0.5}    % purple
+\lstdefinelanguage{lean} {
+  basicstyle = {\small \ttfamily},
+  columns = fullflexible,
+  keepspaces = true,
+  morecomment = [s][\color{green!50!black}]{@[}{]},
+  morekeywords = [1]{theorem, by, fun, let, have, obtain},
+  keywordstyle = [1]{\ttfamily\color{kwcolor}},
+  morekeywords = [2]{use, constructor, intro, only, simp, decide, decideFin, by_contra, subsumption},
+  keywordstyle = [2]{\ttfamily\color{taccolor}},
+  literate =
+  {:=}{{{\color{kwcolor}\raise1pt\hbox{:}\hspace{-1pt}=}}}{2}
+  {=>}{{{\color{kwcolor}=>}}}{2}
+  {∃}{{{\color{opcolor}\ensuremath{\exists}}}}{1}
+  {∧}{{{\color{opcolor}\ensuremath{\wedge}}}}{1}
+  {¬}{{{\color{opcolor}\ensuremath{\lnot}}}}{1}
+  {×}{{{\color{opcolor}\ensuremath{\times}}}}{1}
+  {◇}{{{\color{opcolor}\ensuremath{\diamond}}}}{1}
+  {·}{{{\color{taccolor}\ensuremath{\bullet}}}}{1}
+  {≠}{{{\color{opcolor}\ensuremath{\neq}}}}{1}
+  {ℕ}{{\ensuremath{\mathbb{N}}}}{1}
+  {⟨}{{\ensuremath{\langle}}}{1}
+  {⟩}{{\ensuremath{\rangle}}}{1}
+  {«}{\color{gray}{\guillemetleft}}{1}
+  {»}{{\color{gray}\guillemetright}\color{black}}{1}
+  ,
+}
+\usepackage{iftex}
+\ifpdftex\else
+\usepackage{newunicodechar}
+\newunicodechar{∃}{\ensuremath{\exists}}
+\newunicodechar{∧}{\ensuremath{\wedge}}
+\newunicodechar{¬}{\ensuremath{\lnot}}
+\newunicodechar{×}{\ensuremath{\times}}
+\newunicodechar{◇}{\ensuremath{\diamond}}
+\newunicodechar{·}{\ensuremath{\bullet}}
+\newunicodechar{≠}{\ensuremath{\neq}}
+\newunicodechar{ℕ}{\ensuremath{\mathbb{N}}}
+\newunicodechar{⟨}{\ensuremath{\langle}}
+\newunicodechar{⟩}{\ensuremath{\rangle}}
+\newunicodechar{«}{\guillemetleft}
+\newunicodechar{»}{\guillemetright}
+\newunicodechar{–}{\textendash}
+\newunicodechar{’}{\textquoteright}
+\newunicodechar{“}{\textquotedblleft}
+\newunicodechar{”}{\textquotedblright}
+\newunicodechar{š}{\v s}
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
