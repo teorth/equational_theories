@@ -359,11 +359,19 @@ def _num_rhyme_help(n: int, max_used: int) -> int:
         return 1
     return (max_used + 1) * _num_rhyme_help(n - 1, max_used) + _num_rhyme_help(n - 1, max_used + 1)
 
+def check_rhyme_id_is_canonical(p: typing.Tuple[int]) -> None:
+    if (not p):
+        raise ValueError("Argument of find_rhyme_id should be non-empty")
+    next_used = 0
+    for pi in p:
+        if pi > next_used:
+            raise ValueError(f"Argument of find_rhyme_id should have canonical form, not {p}")
+        elif pi == next_used:
+            next_used += 1
 
 def find_rhyme_id(p: typing.Tuple[int]) -> int:
     """Gives the rhyme id (zero-based) among rhymes with a given number of variables"""
-    if (not p) or p[0]:
-        raise ValueError(f"Argument of find_rhyme_id should be (0,...) not {p}")
+    check_rhyme_id_is_canonical(p)
     return _find_rhyme_id_help(p[1:], 0)
 
 
@@ -420,7 +428,10 @@ def _equation_id(input_eq: Equation) -> typing.Tuple[int, Equation]:
         pid = find_rhyme_id(input_eq.rhyme)
     else:
         # Slow code here
+        check_rhyme_id_is_canonical(input_eq.rhyme)
         pid = 0
+        if n > 0 and input_eq.rhyme == input_eq.rhyme[n_lhs + 1:] + input_eq.rhyme[:n_lhs + 1]:
+            return 0 # tautological equation
         for rhyme in all_rhymes(n + 1):
             if rhyme == input_eq.rhyme:
                 break
@@ -505,10 +516,16 @@ def process_equation(eq_str: str) -> None:
         if dual:
             dual_eq = input_eq.dual()
             dual_num = dual_eq.id
-            print(f"The dual of '{eq_str}' is Equation {dual_num}: {dual_eq}")
+            if dual_num == 0:
+                print(f"The dual of the tautological equation '{eq_str}' is: {dual_eq}")
+            else:
+                print(f"The dual of '{eq_str}' is Equation {dual_num}: {dual_eq}")
         else:
             eq_num = input_eq.id
-            print(f"The equation '{eq_str}' is Equation {eq_num}: {input_eq}")
+            if eq_num == 0:
+                print(f"The tautological equation '{eq_str}' is: {input_eq}")
+            else:
+                print(f"The equation '{eq_str}' is Equation {eq_num}: {input_eq}")
 
 def main():
     """Main function to run the program."""
