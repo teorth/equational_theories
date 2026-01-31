@@ -359,11 +359,19 @@ def _num_rhyme_help(n: int, max_used: int) -> int:
         return 1
     return (max_used + 1) * _num_rhyme_help(n - 1, max_used) + _num_rhyme_help(n - 1, max_used + 1)
 
+def check_rhyme_id_is_canonical(p: typing.Tuple[int]) -> None:
+    if (not p):
+        raise ValueError("Argument of find_rhyme_id should be non-empty")
+    next_used = 0
+    for pi in p:
+        if pi > next_used:
+            raise ValueError(f"Argument of find_rhyme_id should have canonical form, not {p}")
+        elif pi == next_used:
+            next_used += 1
 
 def find_rhyme_id(p: typing.Tuple[int]) -> int:
     """Gives the rhyme id (zero-based) among rhymes with a given number of variables"""
-    if (not p) or p[0]:
-        raise ValueError(f"Argument of find_rhyme_id should be (0,...) not {p}")
+    check_rhyme_id_is_canonical(p)
     return _find_rhyme_id_help(p[1:], 0)
 
 
@@ -420,6 +428,7 @@ def _equation_id(input_eq: Equation) -> typing.Tuple[int, Equation]:
         pid = find_rhyme_id(input_eq.rhyme)
     else:
         # Slow code here
+        check_rhyme_id_is_canonical(input_eq.rhyme)
         pid = 0
         for rhyme in all_rhymes(n + 1):
             if rhyme == input_eq.rhyme:
