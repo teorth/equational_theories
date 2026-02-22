@@ -170,7 +170,7 @@ equation 3163 := x = (((y ◇ y) ◇ z) ◇ y) ◇ x
 equation 3164 := x = (((y ◇ y) ◇ z) ◇ y) ◇ y
 equation 3165 := x = (((y ◇ y) ◇ z) ◇ y) ◇ z
 equation 3166 := x = (((y ◇ y) ◇ z) ◇ y) ◇ w
--- equation 3167 := x = (((y ◇ y) ◇ z) ◇ z) ◇ x
+equation 3167 := x = (((y ◇ y) ◇ z) ◇ z) ◇ x
 equation 3168 := x = (((y ◇ y) ◇ z) ◇ z) ◇ y
 equation 3169 := x = (((y ◇ y) ◇ z) ◇ z) ◇ z
 equation 3170 := x = (((y ◇ y) ◇ z) ◇ z) ◇ w
