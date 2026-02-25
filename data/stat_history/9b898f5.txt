@@ -1,0 +1,12 @@
+extract_implications outcomes
+Output the status of all implications.
+
+USAGE:
+    extract_implications outcomes [FLAGS] <files>...
+
+FLAGS:
+    -h, --help  Prints this message.
+    --hist      Create a histogram instead of outputting all outcomes
+
+ARGS:
+    files : Array ModuleName  The files to extract the implications from
