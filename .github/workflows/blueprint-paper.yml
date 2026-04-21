@@ -169,7 +169,7 @@ jobs:
           ruby scripts/generate_graphiti_data.rb data/duals.json /tmp/raw_data/general_implications_closure.json /tmp/unknowns.json /tmp/raw_data/finite_implications_closure.json /tmp/unknowns.fin.json > home_page/graphiti/graph.json
 
       - name: Generate the paper PDF (+ add it to the site)
-        uses: xu-cheng/texlive-action@8268537fedf1198f3ed7000c544bfdbddcbae3b7 # v3
+        uses: xu-cheng/texlive-action@22c04326a5d855880f9d39bb955138bf11c6df80 # v3
         with:
           docker_image: ghcr.io/xu-cheng/texlive-full:20251002
           run: |
