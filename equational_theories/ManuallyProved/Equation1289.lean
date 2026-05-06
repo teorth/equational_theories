@@ -123,7 +123,7 @@ theorem next_ok : next.OK where
     unfold domFresh
     simp at hx ⊢; cases hx with
     | base h => simp [dom_o h, dom_l h, dom_r h]
-    | _ => simp [dom_a, dom_b]
+    | _ => simp [dom_a]
   func {x y xy} hxy {xy'} hxy' := next_func hxy hxy'
   laws := {
   right_cancel := next_right_cancel
@@ -338,7 +338,7 @@ theorem Extension.base : ∀ {x y z : GreedyMagma e₀}, z ∈ e₀.1 x y → z 
 def fromList (S : List ((Nat × Nat) × Nat)) : PreExtension ℕ := fun a b => {c | ((a, b), c) ∈ S}
 
 theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
-    (sorted : S.Chain' (fun a b => a.1 < b.1) := by decide)
+    (sorted : S.IsChain (fun a b => a.1 < b.1) := by decide)
     (eq1289 : ∀ a ∈ S, ∀ b ∈ S, ∀ c ∈ S, a.1.2 = b.1.2 → a.2 = b.1.1 →
        c.1.1 = b.2 → c.1.2 = a.1.2 → ∃ d ∈ S, d.1.1 = a.1.2 ∧ d.1.2 = c.2 ∧ d.2 = a.1.1 := by decide)
     (right_cancel : ∀ a ∈ S, ∀ b ∈ S, a.1.2 = b.1.2 → a.2 = b.2 → a.1.1 = b.1.1 := by decide)
@@ -349,7 +349,7 @@ theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
   finite := List.finite_toSet S
   func h1 _ h2 := Decidable.by_contra fun h =>
     have : IsTrans ((ℕ ×ₗ ℕ) × ℕ) (·.1 < ·.1) := ⟨fun _ _ _ => lt_trans⟩
-    (List.chain'_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
+    (List.isChain_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
       |>.forall (fun _ _ => (·.symm)) h1 h2 (by rintro ⟨⟩; exact h rfl) rfl
   laws := {
   eq1289 := fun h1 h2 h3 => by
@@ -399,14 +399,20 @@ theorem not_3116_4435 : ∃ (G : Type) (_ : Magma G), Facts G [1289] [3116, 4435
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   have rules := fromList_eval' he
-  simp [seed, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
-    forall_eq] at rules
+  simp only [seed, List.mem_cons, forall_eq_or_imp] at rules
+  obtain ⟨r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11⟩ := rules
   refine ⟨GreedyMagma e, inferInstance, e.eq1289, fun h => ?_, fun h => ?_⟩
   · have := h 2 0
-    simp [rules] at this
+    rw [show ((0:GreedyMagma e) ◇ 2) = 1 from r3,
+        show ((1:GreedyMagma e) ◇ 0) = 2 from r5,
+        show ((2:GreedyMagma e) ◇ 0) = 3 from r7,
+        show ((3:GreedyMagma e) ◇ 0) = 4 from r9] at this
     cases this
   · have := h 0 1
-    simp [rules] at this
+    rw [show ((1:GreedyMagma e) ◇ 0) = 2 from r5,
+        show ((0:GreedyMagma e) ◇ 2) = 1 from r3,
+        show ((0:GreedyMagma e) ◇ 1) = 2 from r2,
+        show ((2:GreedyMagma e) ◇ 0) = 3 from r7] at this
     cases this
 
 end Eq1289
