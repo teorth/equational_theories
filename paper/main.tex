@@ -2,9 +2,8 @@
 
 % Packages
 \usepackage{amsmath, amssymb, amsthm}
+\usepackage{thmtools}
 \usepackage{geometry}
-\usepackage{hyperref}
-\usepackage{cleveref}
 \usepackage{graphicx}
 \usepackage{enumitem}
 \usepackage{color}
@@ -15,31 +14,99 @@
 \usepackage{mathrsfs}
 \usepackage{proof}
 \usepackage{todonotes}
+\usepackage{array}
+\usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{fancyvrb}
 \fvset{commandchars=\\\{\}}
 \usepackage{pmboxdraw}
+\usepackage{comment}
 \usetikzlibrary{positioning,arrows.meta,fit}
 
 \tikzset{
-  human/.style   = {->, very thick, color=black, shorten >=2pt},
-  auto/.style    = {->, thin, dashed, color=black!60, shorten >=2pt},
-  semi/.style    = {->, thick, dash pattern=on 4pt off 2pt on 1pt off 2pt, color=black!80, shorten >=2pt}
+  human/.style   = {->, very thick, color=black, shorten >=1pt},
+  auto/.style    = {->, thin, dashed, color=black!60, shorten >=1pt},
+  semi/.style    = {->, thick, dash pattern=on 4pt off 2pt on 1pt off 2pt, color=black!80, shorten >=1pt}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Minimal set of definitions, keywords etc to highlight
+% the specific Lean code examples in the paper.  A better
+% listings language definition is given in lstlean.tex
+% on the Lean4 repository, but its Apache license would
+% complicate our CC-BY arXiv submission
+%
+\usepackage{listings}
+\lstnewenvironment{lean}{\lstset{language=lean}}{}
+\definecolor{kwcolor}{rgb}{0.8, 0.1, 0.1}    % red
+\definecolor{taccolor}{rgb}{0.1, 0.1, 0.8}    % blue
+\definecolor{opcolor}{rgb}{0.5, 0.1, 0.5}    % purple
+\lstdefinelanguage{lean} {
+  basicstyle = {\small \ttfamily},
+  columns = fullflexible,
+  keepspaces = true,
+  morecomment = [s][\color{green!50!black}]{@[}{]},
+  morekeywords = [1]{theorem, by, fun, let, have, obtain},
+  keywordstyle = [1]{\ttfamily\color{kwcolor}},
+  morekeywords = [2]{use, constructor, intro, only, simp, decide, decideFin, by_contra, subsumption},
+  keywordstyle = [2]{\ttfamily\color{taccolor}},
+  literate =
+  {:=}{{{\color{kwcolor}\raise1pt\hbox{:}\hspace{-1pt}=}}}{2}
+  {=>}{{{\color{kwcolor}=>}}}{2}
+  {∃}{{{\color{opcolor}\ensuremath{\exists}}}}{1}
+  {∧}{{{\color{opcolor}\ensuremath{\wedge}}}}{1}
+  {¬}{{{\color{opcolor}\ensuremath{\lnot}}}}{1}
+  {×}{{{\color{opcolor}\ensuremath{\times}}}}{1}
+  {◇}{{{\color{opcolor}\ensuremath{\diamond}}}}{1}
+  {·}{{{\color{taccolor}\ensuremath{\bullet}}}}{1}
+  {≠}{{{\color{opcolor}\ensuremath{\neq}}}}{1}
+  {ℕ}{{\ensuremath{\mathbb{N}}}}{1}
+  {⟨}{{\ensuremath{\langle}}}{1}
+  {⟩}{{\ensuremath{\rangle}}}{1}
+  {«}{\color{gray}{\guillemetleft}}{1}
+  {»}{{\color{gray}\guillemetright}\color{black}}{1}
+  ,
+}
+\usepackage{iftex}
+\ifpdftex\else
+\usepackage{newunicodechar}
+\newunicodechar{∃}{\ensuremath{\exists}}
+\newunicodechar{∧}{\ensuremath{\wedge}}
+\newunicodechar{¬}{\ensuremath{\lnot}}
+\newunicodechar{×}{\ensuremath{\times}}
+\newunicodechar{◇}{\ensuremath{\diamond}}
+\newunicodechar{·}{\ensuremath{\bullet}}
+\newunicodechar{≠}{\ensuremath{\neq}}
+\newunicodechar{ℕ}{\ensuremath{\mathbb{N}}}
+\newunicodechar{⟨}{\ensuremath{\langle}}
+\newunicodechar{⟩}{\ensuremath{\rangle}}
+\newunicodechar{«}{\guillemetleft}
+\newunicodechar{»}{\guillemetright}
+\newunicodechar{–}{\textendash}
+\newunicodechar{’}{\textquoteright}
+\newunicodechar{“}{\textquotedblleft}
+\newunicodechar{”}{\textquotedblright}
+\newunicodechar{š}{\v s}
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
 
 % Page Setup
 \geometry{letterpaper, margin=1in}
 \setlength{\parindent}{0pt} % No indent for paragraphs
-\setlength{\parskip}{1em}   % Spacing between paragraphs
-
+\setlength{\parskip}{0.8\baselineskip plus 0.2\baselineskip minus 0.2\baselineskip}   % Spacing between paragraphs
 % Theorem Styles
 \newtheorem{theorem}{Theorem}[section]
+\renewcommand{\theHtheorem}{\theHsection.\the\value{theorem}}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{problem}[theorem]{Problem}
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
@@ -61,23 +128,23 @@
 \newcommand{\op}{\diamond}
 \newcommand{\formaleq}{\simeq}
 \newcommand{\eps}{\varepsilon}
-\newcommand{\vdashfin}{\vdash_{\mathrm{fin}}}
-\newcommand{\nvdashfin}{\nvdash_{\mathrm{fin}}}
-\newcommand{\note}[1]{{\bf #1}}
+\newcommand{\nmodels}{\not\models}
+\newcommand{\modelsfin}{\models_{\mathrm{fin}}}
+\newcommand{\nmodelsfin}{\nmodels_{\mathrm{fin}}}
 \newcommand{\Magma}{{\mathcal{M}}}
 \newcommand{\MagmaN}{{\mathcal{N}}}
 \newcommand{\Eq}[1]{\mathrm{E}#1}
-\newcommand{\TODO}[1]{\todo[inline]{#1}}
+\newcommand{\E}{\mathrm{E}}
 
 
 % Title Information
 \title[Equational Theories Project]{The Equational Theories Project: Advancing Collaborative Mathematical Research at Scale}
-\author[Equational Theories Project contributors]{Matthew Bolan, Joachim Breitner, Jose Brox, Mario Carneiro,
-  Martin Dvo\v{r}\'ak, Andr\'es Goens, Aaron Hill, Harald Husum, Zoltan Kocsis, Bruno Le Floch, Lorenzo Luccioli,
-  Alex Meiburg, Pietro Monticone, Giovanni Paolini, Bernhard Reinke, David Renshaw, Marcus Rossel, Cody Roux,
-  J\'er\'emy Scanvic, Shreyas Srinivas, Anand Rao Tadipatri, Terence Tao, Vlad Tsyrklevich,
+\author[Equational Theories Project contributors]{Matthew Bolan, Joachim Breitner, Jose Brox, Nicholas Carlini, Mario Carneiro, Floris van Doorn,
+  Martin Dvorak, Andr\'es Goens, Aaron Hill, Harald Husum, Hern\'an Ibarra Mejia, Zoltan A. Kocsis, Bruno Le Floch, Amir Livne Bar-on, Lorenzo Luccioli, Douglas McNeil,
+  Alex Meiburg, Pietro Monticone, Pace P. Nielsen, Emmanuel Osalotioman Osazuwa, Giovanni Paolini, Marco Petracci, Bernhard Reinke, David Renshaw, Marcus Rossel, Cody Roux,
+  J\'er\'emy Scanvic, Shreyas Srinivas, Anand Rao Tadipatri, Terence Tao, Vlad Tsyrklevich, Fernando Vaquerizo-Villar,
   Daniel Weber, Fan Zheng}
-\date{\today}
+\date{December 2025}
 
 \begin{document}
 
@@ -85,12 +152,21 @@
   We report on the \emph{Equational Theories Project} (ETP), an online collaborative pilot project
   to explore new ways to collaborate in mathematics with machine assistance. The project successfully determined all $\num{22028942}$ edges of the implication graph between the $4694$ simplest equational laws on magmas, by a combination of
   human-generated and automated proofs, all validated by the formal proof assistant language
-  \emph{Lean}. As a result of this project, several new constructions of magmas obeying specific laws were discovered, and several auxiliary questions were also addressed, such as the effect of restricting attention to finite magmas.
+  \emph{Lean}. As a result of this project, several new constructions of magmas satisfying specific laws were discovered, and several auxiliary questions were also addressed, such as the effect of restricting attention to finite magmas.
 \end{abstract}
 
+%\maketitle
+\begingroup
+\def\uppercasenonmath#1{} % this disables uppercasing title
+\let\MakeUppercase\relax % this disables uppercasing authors
 \maketitle
+\endgroup
 
+{
+\setlength{\parskip}{0em}
+\setcounter{tocdepth}{1}
 \tableofcontents
+}
 
 \input{intro}
 \input{foundations}
@@ -99,7 +175,7 @@
 \input{metatheorems}
 \input{automated}
 \input{austin}
-% \input{order5}
+\input{spectrum}
 \input{higman}
 \input{ml}
 \input{GUI}
@@ -107,13 +183,12 @@
 \input{conclusions}
 
 \appendix
-
+\crefalias{section}{appendix}
+\raggedbottom
 \input{numbering}
 \input{contributions}
 
-\bibliographystyle{plain}
+\bibliographystyle{plainurl}
 \bibliography{references}
 
-%delete this later
-\listoftodos{}
 \end{document}

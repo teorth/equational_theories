@@ -1,0 +1,1 @@
+In a quasigroup (more generally if left multiplications are all injective or all surjective), this law is equivalent to the [semi-symmetric quasigroup law 14](https://teorth.github.io/equational_theories/implications/?14) `x = y◇(x◇y)`.

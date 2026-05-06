@@ -1,0 +1,1 @@
+In a quasigroup this law is equivalent to the [idempotence law 3](https://teorth.github.io/equational_theories/implications/?3) `x = x◇x` together with Schröder's second law, [law 159](https://teorth.github.io/equational_theories/implications/?159) `x = (x◇y)◇(y◇x)`.  It cannot hold in a non-trivial group.

@@ -1,0 +1,1 @@
+In a quasigroup (more generally when right multiplications are surjective), this law is equivalent to the [involutive left multiplications law 16](https://teorth.github.io/equational_theories/implications/?16).

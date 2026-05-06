@@ -1,0 +1,3 @@
+This law is equivalent to stating that the right cubing map `C: x ↦ (x◇x)◇x` is an involution (`C(C(x)) = x`) and that the products `(y◇y)◇x` and `(x◇y)◇x` are both equal to `C(x)`.  It implies that `y◇(x◇x)` is also `y`-independent.  The squaring and left cubing maps `S: x ↦ x◇x` and `B: x ↦ x◇(x◇x)` satisfy `S(S(S(x))) = S(x)` and `B(x) = S(S(x))` and `B(B(x)) = B(x)`.  The set of squares is a submagma satisfying the [right unar law 39](https://teorth.github.io/equational_theories/implications/?39) `s◇t = t◇t`.
+
+This law cannot hold in a (non-trivial) commutative magma or quasigroup.

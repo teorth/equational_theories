@@ -1,0 +1,5 @@
+This law implies that the squaring map `S: x ↦ x◇x` is idempotent, namely `S(S(x)) = S(x)`.  Similarly to [law 11](https://teorth.github.io/equational_theories/implications/?11) and [law 414](https://teorth.github.io/equational_theories/implications/?414), once the squaring map is chosen, the law constrains each left multiplication independently.
+
+This law together with associativity is equivalent to the [left-projection law 4](https://teorth.github.io/equational_theories/implications/?4) hence it cannot hold in a (non-trivial) group.
+
+In left-quasigroups (where left multiplications are bijective) this law states that all squares are equal to the same element `e` ([unipotence law 40](https://teorth.github.io/equational_theories/implications/?40)) such that `x ◇ (x ◇ e) = x`, and it is parastrophically equivalent to the [right-unit left cubes law 56](https://teorth.github.io/equational_theories/implications/?56), in the sense that law 50 holds if and only if the left division operation defined by `x ◇ (x : y) = y` satisfies `x = x : (y : (y : y))`.

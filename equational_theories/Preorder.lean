@@ -42,8 +42,8 @@ theorem implies_set {α} {l₁ : MagmaLaw α} {l₂ : MagmaLaw β} (h : l₁.imp
 
 /--
 A stronger law is smaller than a weaker law, because this corresponds to the inclusion of
-the class of magmas that obey these laws:  the class of magmas that obey the stronger law is a
-subset of the class of magmas that obey the weaker law.
+the class of magmas that satisfy these laws:  the class of magmas that satisfy the stronger law is a
+subset of the class of magmas that satisfy the weaker law.
 -/
 theorem le_set {α} {l₁ l₂ : MagmaLaw α} (h : l₁ ≤ l₂) :
     ({ ⟨G, _⟩ | G ⊧ l₁ } : Set (Σ G : Type, Magma G)) ⊆ { ⟨G, _⟩ | G ⊧ l₂ } :=

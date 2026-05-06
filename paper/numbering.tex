@@ -2,7 +2,7 @@
 
 In this section we record the numbering conventions we use for equational laws.
 
-For this formal definition we use the natural numbers $0,1,2,\dots$ to represent and order indeterminate variables; however, in the main text, we use the symbols $x,y,z,w,u,v,r,s,t$ instead (and do not consider any laws with more than eight variables).
+For this formal definition we use the natural numbers $0,1,2,\dots$ to represent and order indeterminate variables; however, in the main text, we use the symbols $\x,\y,\z,\w,\uu,\vv,\mathrm{r},\mathrm{s},\mathrm{t}$ instead (and do not consider any laws with more than eight variables).
 
 To define the ordering we use on equational laws, we first consider the case where there is a single indeterminate $\ast$.
 We place a well-ordering on words $w,w'$ with a single indeterminate $\ast$ by declaring $w > w'$ if one of the following holds:
@@ -11,28 +11,30 @@ We place a well-ordering on words $w,w'$ with a single indeterminate $\ast$ by d
     \item $w = w_1 \op w_2$ and $w' = w'_1 \op w'_2$ have the same order $n \geq 1$ with $w_1 > w'_1$.
     \item $w = w_1 \op w_2$ and $w' = w'_1 \op w'_2$ have the same order $n \geq 1$ with $w_1 = w'_1$ and $w_2 > w'_2$.
 \end{itemize}
-Thus, for instance
-$$ \ast < \ast \op \ast < \ast \op (\ast \op \ast) < (\ast \op \ast) \op \ast.$$
+Thus
+\begin{align*}
+  \ast < \ast \op \ast &< \ast \op (\ast \op \ast) < (\ast \op \ast) \op \ast \\
+  & < \ast \op (\ast \op (\ast \op \ast)) < \ast \op ((\ast \op \ast) \op \ast) < \dots
+\end{align*}
 
 We similarly place a well-ordering on equational laws $w_1 \formaleq w_2$ with a single indeterminate $\ast$ by declaring $w_1 \formaleq w_2 > w'_1 \formaleq w'_2$ if one of the following holds:
-as follows:
 \begin{itemize}
-\item  $w_1 \formaleq w_2$ has a longer order than $w'_1 \formaleq w'_2$.
+\item  $w_1 \formaleq w_2$ has a larger order than $w'_1 \formaleq w'_2$.
 \item If $w_1 \formaleq w_2$ has the same order as $w'_1 \formaleq w'_2$, and $w_1 > w'_1$.
 \item If $w_1 \formaleq w_2$ has the same order as $w'_1 \formaleq w'_2$, $w_1 = w'_1$, and $w_2 > w'_2$.
 \end{itemize}
 Thus for instance
 $$ (\ast \op \ast \formaleq \ast \op (\ast \op \ast)) < (\ast \op \ast \formaleq (\ast \op \ast) \op \ast).$$
 
-Finally for equational laws with alphabet $x,y,z,w,u,v,r,s,t$, define the \emph{shape} of that law to be the law formed by replacing all indeterminates with $\ast$; for instance, the shape of \eqref{eq4512}, $(\ast \op \ast) \op \ast \formaleq \ast \op (\ast \op \ast)$, is $(\ast \op \ast) \op \ast \formaleq \ast \op (\ast \op \ast)$.  We then place a well-ordering $w_1 \formaleq w_2$ with indeterminates $x,y,z,w,u,v,r,s,t$ by declaring $w_1 \formaleq w_2 > w'_1 \formaleq w'_2$ if one of the following holds:
+Finally for equational laws with alphabet $\x,\y,\z,\w,\uu,\vv,\mathrm{r},\mathrm{s},\mathrm{t}$, define the \emph{shape} of that law to be the law formed by replacing all indeterminates with $\ast$; for instance, the shape of $\x \op (\y \op \z) = (\x \op \y) \op \z$ \eqref{eq4512}, is $\ast \op (\ast \op \ast) \formaleq (\ast \op \ast) \op \ast$.  We then place a well-ordering $w_1 \formaleq w_2$ with indeterminates $\x,\y,\z,\w,\uu,\vv,\mathrm{r},\mathrm{s},\mathrm{t}$ by declaring $w_1 \formaleq w_2 > w'_1 \formaleq w'_2$ if one of the following holds:
 \begin{itemize}
 \item The shape of $w_1 \formaleq w_2$ is greater than the shape of $w'_1 \formaleq w'_2$.
-\item $w_1 \formaleq w_2$ and $w'_1 \formaleq w'_2$ have the same shape, and the string of variables appearing in $w_1 \formaleq w_2$ is lower in the lexicographical ordering (using $x < y < z < w < u < v < r < s < t$) than the corresponding string for $w'_1 \formaleq w'_2$.
+\item $w_1 \formaleq w_2$ and $w'_1 \formaleq w'_2$ have the same shape, and the string of variables appearing in $w_1 \formaleq w_2$ is lower in the lexicographical ordering (using $\x < \y < \z < \w < \uu < \vv < \mathrm{r} < \mathrm{s} < \mathrm{t}$) than the corresponding string for $w'_1 \formaleq w'_2$.
 \end{itemize}
 Thus for instance any law of shape $\ast \op \ast \formaleq \ast \op (\ast \op \ast)$ is lower than any law of shape
 $\ast \op \ast \formaleq (\ast \op \ast) \op \ast$.  Among the laws of shape $\ast \op \ast \formaleq \ast \op (\ast \op \ast)$, the lowest is $\x \op \x \formaleq \x \op (\x \op \x)$, which is less than (say) $\x \op \x \formaleq \y \op (\y \op \y)$, which is in turn less than $\x \op \y \formaleq \x \op (\x \op \x)$.
 
-Two equational laws are equivalent if one can be obtained from another by some combination of relabeling the variables and applying the symmetric law $w_1 \formaleq w_2 \iff w_2 \formaleq w_1$.  For instance, $(0 \op 1) \op 2 \formaleq 1$ is equivalent to $0 \formaleq (1 \op 0) \op 2$.  We then replace every equational law with their minimal element in their equivalence class, which can be viewed as the \emph{normal form} for that law; for instance, the normal form of $(0 \op 1) \op 2 \formaleq 1$ would be $0 \formaleq (1 \op 0) \op 2$.  Finally, we eliminate any law of the form $w \formaleq w$ other than $0 \formaleq 0$.  We then number the remaining equations $E1, E2, \dots$.  For instance, $E1$ is the trivial law $0 \formaleq 0$, $E2$ is the constant law $0 \formaleq 1$, $E3$ is the idempotent law $0 \formaleq 0 \op 0$, and so forth.  Lists and code for generating these equations, or the equation number attached to a given equation, can be found in the ETP repository.
+We say that two equational laws are \emph{definitionally equivalent}\footnote{This can be distinguished from the weaker notion of \emph{propositional equivalence} (mutual entailment) used in the rest of the paper.} if one can be obtained from another by some combination of relabeling the variables and applying the symmetric law $w_1 \formaleq w_2 \iff w_2 \formaleq w_1$.  For instance, $(0 \op 1) \op 2 \formaleq 1$ is definitionally equivalent to $0 \formaleq (1 \op 0) \op 2$.  We then replace every equational law with their minimal element in their definitional equivalence class, which can be viewed as the \emph{normal form} for that law; for instance, the normal form of $(0 \op 1) \op 2 \formaleq 1$ would be $0 \formaleq (1 \op 0) \op 2$.  Finally, we eliminate any law of the form $w \formaleq w$ other than $0 \formaleq 0$.  We then number the remaining equations $\Eq{1}, \Eq{2}, \dots$.  For instance, $\Eq{1}$ is the trivial law $0 \formaleq 0$, $\Eq{2}$ is the singleton law $0 \formaleq 1$, $\Eq{3}$ is the idempotent law $0 \formaleq 0 \op 0$, and so forth.  Lists and code for generating these equations, or the equation number attached to a given equation, can be found in the ETP repository.
 
 The number of equations in this list of order $n=0,1,2,\dots$ is given by
 $$ 2, 5, 39, 364, 4284, 57882, 888365, \dots$$
@@ -44,7 +46,8 @@ if $n > 2$ is even, where $C_n, B_n$ are the Catalan and Bell numbers, and $D_n$
 $$ 1, 1, 2, 4, 11, 32, 117, \dots$$
 (\url{https://oeis.org/A103293}).  A proof of this claim can be found in the ETP blueprint.  In particular, there are $4694$ equations of order at most $4$.
 
-Below we record some specific equations appearing in this paper, using the alphabet $\x,\y,\z,\w,\uu,\vv$ in place of $0,1,2,3,4,5,\dots$ for readability.
+Below we record some specific equations appearing in this paper, using the alphabet $\x$, $\y$, $\z$, $\w$ in place of $0$, $1$, $2$, $3$ for readability.
+\begingroup\allowdisplaybreaks
 \begin{align}
     \x &\formaleq \x & \hbox{(Trivial law)} \label{eq1}\tag{E1} \\
     \x &\formaleq \y & \hbox{(Singleton law)} \label{eq2}\tag{E2} \\
@@ -52,8 +55,11 @@ Below we record some specific equations appearing in this paper, using the alpha
     \x &\formaleq \x \op \y & \hbox{(Left-absorptive law)} \label{eq4}\tag{E4} \\
     \x &\formaleq \y \op \x & \hbox{(Right-absorptive law)} \label{eq5}\tag{E5} \\
     \x &\formaleq \x \op (\y \op \x) \label{eq10}\tag{E10} \\
+    \x &\formaleq \x \op (\y \op \y) & \hbox{(Right-unit squares law)} \label{eq11}\tag{E11} \\
+    \x &\formaleq \y \op (\x \op \y) & \hbox{(Semi-symmetric quasigroups)} \label{eq14}\tag{E14} \\
     \x &\formaleq (\x \op \x) \op \x \label{eq23}\tag{E23} \\
-    \x \op \x &\formaleq \y \op \z \label{eq41}\tag{E41} \\
+    \x \op \x &\formaleq \y \op \y & \hbox{(Unipotence law)} \label{eq40}\tag{E40} \\
+    \x \op \x &\formaleq \y \op \z & \hbox{(Equivalent to~\eqref{eq46})} \label{eq41}\tag{E41} \\
     \x \op \y &\formaleq \y \op \x & \hbox{(Commutative law)} \label{eq43}\tag{E43} \\
     \x \op \y &\formaleq \z \op \w & \hbox{(Constant law)} \label{eq46}\tag{E46} \\
     \x &\formaleq \x \op (\x \op (\x \op \x)) \label{eq47}\tag{E47} \\
@@ -62,36 +68,57 @@ Below we record some specific equations appearing in this paper, using the alpha
     \x &\formaleq (\y \op \x) \op (\x \op \z) & \hbox{(Central groupoid law)} \label{eq168}\tag{E168} \\
     \x &\formaleq (\x \op (\x \op \y)) \op \y \label{eq206}\tag{E206} \\
     \x &\formaleq ((\x \op \x) \op \x) \op \x \label{eq255}\tag{E255} \\
-    \x \op \y &\formaleq \x \op (\y \op \z) \label{eq327}\tag{E327} \\
-    \x &\formaleq (\x \op \y) \op \y \label{eq378}\tag{E378} \\
-    \x \op \y &\formaleq (\z \op \x) \op \y \label{eq395}\tag{E395} \\
-    \x &\formaleq \y \op ( (\z \op (\x \op (\y \op \z)))) & \hbox{(Tarski's axiom)} \label{eq543}\tag{E543} \\
-    \x &\formaleq \y \op (\x \op ((\y \op \x) \op \y)) \label{eq677}\tag{E677} \\
+    \x \op \y &\formaleq \x \op (\y \op \z) & \hbox{(Right reduction law)} \label{eq327}\tag{E327} \\
+    \x \op \y &\formaleq (\x \op \y) \op \y & \hbox{(Right idempotence law)} \label{eq378}\tag{E378} \\
+    \x \op \y &\formaleq (\z \op \x) \op \y & \hbox{(Left reduction law)} \label{eq395}\tag{E395} \\
+    \x &\formaleq \x \op (\x \op (\x \op (\y \op \x))) \label{eq413}\tag{E413} \\
+    \x &\formaleq \x \op (\y \op (\z \op (\y \op \x))) \label{eq450}\tag{E450} \\
+    \x &\formaleq \y \op (\x \op (\z \op (\z \op \y))) & \hbox{(Totally symmetric quasigroups)} \label{eq492}\tag{E492} \\
+    \x &\formaleq \y \op (\z \op (\x \op (\y \op \z))) & \hbox{(Tarski's axiom)} \label{eq543}\tag{E543} \\
+    \x &\formaleq \x \op (\y \op ((\z \op \x) \op \y)) & \hbox{(Non-trivially equivalent to~\eqref{eq4})} \label{eq650}\tag{E650} \\
+    \x &\formaleq \y \op (\x \op ((\y \op \x) \op \y)) & \hbox{(Last open implication)} \label{eq677}\tag{E677} \\
     \x &\formaleq \x \op ((\x \op \x) \op (\x \op \x)) \label{eq817}\tag{E817} \\
     \x &\formaleq \x \op ((\y \op \z) \op (\x \op \z)) \label{eq854}\tag{E854}\\
+    \x &\formaleq \x \op ((\y \op (\y \op \x)) \op \x) \label{eq1045}\tag{E1045} \\
+    \x &\formaleq \x \op ((\y \op (\z \op \x)) \op \x) \label{eq1055}\tag{E1055} \\
     \x &\formaleq \y \op ((\y \op (\x \op \x)) \op \y) \label{eq1110}\tag{E1110} \\
     \x &\formaleq \y \op ((\y \op (\x \op \z)) \op \z) \label{eq1117}\tag{E1117} \\
     \x &\formaleq \y \op (((\x \op \y) \op \x) \op \y) \label{eq1286}\tag{E1286} \\
+    \x &\formaleq \y \op (((\y \op \y) \op \x) \op \y) \label{eq1323}\tag{E1323} \\
     \x &\formaleq (\y \op \x) \op (\x \op (\z \op \y)) & \hbox{(Weak central groupoids)}\label{eq1485}\tag{E1485} \\
-    \x &\formaleq (\y \op \z) \op (\y \op (\x \op \z)) & \hbox{(Exp. $2$ abelian groups)} \label{eq1571}\tag{E1571} \\
+    \x &\formaleq (\y \op \y) \op (\x \op (\y \op \x)) \label{eq1518}\tag{E1518} \\
+    \x &\formaleq (\y \op \z) \op (\y \op (\x \op \z)) & \hbox{(Boolean groups)} \label{eq1571}\tag{E1571} \\
     \x &\formaleq (\x \op \x) \op ((\x \op \x) \op \x) \label{eq1629}\tag{E1629} \\
     \x &\formaleq (\x \op \y) \op ((\x \op \y) \op \y) \label{eq1648}\tag{E1648} \\
     \x &\formaleq (\x \op \y) \op ((\y \op \y) \op \z) \label{eq1659}\tag{E1659} \\
-    \x &\formaleq (\y \op \x) \op ((\x \op \z) \op \z) \label{eq1689}\tag{E1689} \\
+    \x &\formaleq (\y \op \x) \op ((\x \op \z) \op \z) & \hbox{(Equivalent to~\eqref{eq2})} \label{eq1689}\tag{E1689} \\
     \x &\formaleq (\y \op \y) \op ((\y \op \x) \op \y) \label{eq1729}\tag{E1729} \\
-    \x &\formaleq (\y \op (\x \op (\y \op x))) \op \y \label{eq2301}\tag{E2301}
-\end{align}
-    \begin{align}
+    \x &\formaleq (\y \op (\x \op (\y \op \x))) \op \y \label{eq2301}\tag{E2301} \\
         \x &\formaleq (\x \op ((\x \op \x) \op \x)) \op \x \label{eq2441}\tag{E2441} \\
-        \x &\formaleq ((\y \op (\x \op \y)) \op \x) \op \y \label{eq2910}\tag{E2910} \\
+        \x &\formaleq ((\y \op \y) \op (\y \op \x)) \op \y \label{eq2744}\tag{E2744} \\
+        \x &\formaleq ((\y \op (\x \op \y)) \op \x) \op \y & \hbox{(Dual of \eqref{eq677})} \label{eq2910}\tag{E2910} \\
         \x \op \y &\formaleq \x \op (\y \op (\x \op \y)) \label{eq3316}\tag{E3316} \\
+        \x \op \y &\formaleq \x \op ((\y \op \y) \op \z) \label{eq3523}\tag{E3523} \\
+        \x \op \y &\formaleq (\x \op \z) \op (\y \op \z) \label{eq3737}\tag{E3737} \\
+        \x \op \y &\formaleq (\x \op (\y \op \x)) \op \y \label{eq3925}\tag{E3925} \\
         \x \op (\y \op \x) &\formaleq \x \op (\y \op \z) \label{eq4315}\tag{E4315} \\
-        \x \op (\x \op \x) &\formaleq (\x \op \x) \op \x \label{eq4380}\tag{E4380} \\
-        \x \op (\y \op \y) &= (\y \op \y) \op \x \label{eq4482}\tag{E4482} \\
-        (\x \op \y) \op \z &\formaleq \x \op (\y \op \z) &\hbox{(Associative law)} \label{eq4512}\tag{E4512}\\
-        \x \op (\y \op \z) &\formaleq (\y \op \z) \op \x \label{eq4531}\tag{E4531} \\
-        \x &\formaleq \y \op ((\y \op (\y \op \x)) \op (\z \op \y)) &  \label{eq5093}\tag{E5093} \\
-        \x &\formaleq (\y \op ((\x \op \y) \op \y)) \op (\x \op (\z \op \y)) & \hbox{(Sheffer stroke)} \label{eq345169}\tag{E345169} \\
-        \x &\formaleq \y \op ((((\y \op \y) \op \x) \op \z) & \hbox{(Division in groups)} \label{eq42323216}\tag{E42323216} \\
-        & \quad  \op (((\y \op \y) \op \y) \op \z)) \nonumber
+        \x \op (\x \op \x) &\formaleq (\x \op \x) \op \x & \hbox{(Cube-associativity law)} \label{eq4380}\tag{E4380} \\
+        \x \op (\y \op \y) &\formaleq (\y \op \y) \op \x & \hbox{(Central squares law)} \label{eq4482}\tag{E4482} \\
+        \x \op (\y \op \z) &\formaleq (\x \op \y) \op \z & \hbox{(Associative law)} \label{eq4512}\tag{E4512} \\
+        \x \op (\y \op \z) &\formaleq (\y \op \z) \op \x & \hbox{(Central products law)} \label{eq4531}\tag{E4531} \\
+        \x &\formaleq \y \op (\y \op (\y \op (\x \op (\z \op \y)))) \label{eq5093}\tag{E5093} \\
+        \x &\formaleq \y \op (\z \op ((\y \op \x) \op (\z \op (\y \op \z)))) & \hbox{(Eisenstein modules)} \label{eq85914} \tag{E85914} \\
+        \x &\formaleq \y \op (\z \op ((\y \op \z) \op (\w \op (\x \op \w)))) & \hbox{(Gaussian modules)} \label{eq86082} \tag{E86082} \\
+        \x &\formaleq (\y \op ((\x \op \y) \op \y)) \op (\x \op (\z \op \y)) & \hbox{(Sheffer stroke)} \label{eq345169}\tag{E345169}
 \end{align}
+We also list some order-$8$ characterizations of group division relevant for \Cref{higman-neumann}.
+\begin{align}
+        \x &\formaleq \y \op ((((\x \op \x) \op \x) \op \z) \op (((\x \op \x) \op \y) \op \z)) & \hbox{(McCune law)} \label{eq42302852}\tag{E42302852} \\
+        \x &\formaleq \y \op ((((\x \op \x) \op \x) \op \z) \op (((\y \op \y) \op \y) \op \z)) & \label{eq42302946}\tag{E42302946} \\
+        \x &\formaleq \y \op ((((\y \op \y) \op \x) \op \z) \op (((\y \op \y) \op \y) \op \z)) & \hbox{(Higman--Neumann law)} \label{eq42323216}\tag{E42323216} \\
+        \x &\formaleq (\y \op \y) \op (\y \op ((\x \op \z) \op (((\x \op \x) \op \y) \op \z))) & \hbox{(in finite magmas)} \label{eq67953597}\tag{E67953597} \\
+        \x &\formaleq ((\y \op \y) \op \y) \op ((((\x \op \x) \op \x) \op \z) \op (\y \op \z)) & \label{eq89176740}\tag{E89176740} \\
+        \x &\formaleq ((\y \op \y) \op ((\x \op \z) \op \x)) \op ((\z \op \w) \op (\x \op \w)) & \label{eq102744082}\tag{E102744082} \\
+        \x &\formaleq ((\y \op \y) \op (\y \op (\x \op (((\y \op \y) \op \y) \op \z)))) \op \z & \hbox{(McCune law)} \label{eq147976245}\tag{E147976245}
+\end{align}
+\endgroup

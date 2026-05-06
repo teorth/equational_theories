@@ -1,11 +1,11 @@
 \chapter{Equivalence with the constant and singleton laws}\label{constant-chapter}
 
 \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/Constant.lean}{85 laws}
-have been shown to be equivalent to the constant law (\Cref{eq46}), and
+have been shown to be equivalent to the constant law (\Equareffull{46}), and
 \href{https://github.com/teorth/equational_theories/blob/main/equational_theories/Generated/Singleton.lean}{815 laws}
-have been shown to be equivalent to the singleton law (\Cref{eq2}).
+have been shown to be equivalent to the singleton law (\Equareffull{2}).
 
-These are the laws up to 4 operations that follow from diagonalization of \Cref{eq2} and \Cref{eq46}.
+These are the laws up to 4 operations that follow from diagonalization of \Equaref{2} and \Equaref{46}.
 
 To formalize these in Lean, a search was run on the list of equations to discover
 diagonalizations of these two specific laws: equations of the form $x = R$ where $R$ doesn't include
@@ -15,5 +15,5 @@ The proofs themselves all look alike, and correspond exactly to the two steps de
 of \Cref{diag}. The Lean proofs were generated semi-manually, using search-and-replace starting from
 the output of \texttt{grep} that found the diagonalized laws.
 
-In the case of the constant law, \Cref{eq41} ($x \circ x = y \circ z$) wasn't detected using
+In the case of the constant law, \Equareffull{41} wasn't detected using
 this method. It was added manually to the file with the existing proof from the sub-graph project.

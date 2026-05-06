@@ -27,3 +27,14 @@
  {\clist_map_inline:nn{#1}{\vphantom{\ref{##1}}}%
   \ignorespaces}
 \ExplSyntaxOff
+
+% https://tex.stackexchange.com/a/730164
+% Workaround for broken interaction between cleveref and the 2025 LaTeX kernel
+\AddToHook{env/proposition/begin}{\crefalias{theorem}{proposition}}
+\AddToHook{env/lemma/begin}{\crefalias{theorem}{lemma}}
+\AddToHook{env/corollary/begin}{\crefalias{theorem}{corollary}}
+\AddToHook{env/metatheorem/begin}{\crefalias{theorem}{metatheorem}}
+\AddToHook{env/metametatheorem/begin}{\crefalias{theorem}{metametatheorem}}
+\AddToHook{env/example/begin}{\crefalias{theorem}{example}}
+\AddToHook{env/remark/begin}{\crefalias{theorem}{remark}}
+\AddToHook{env/definition/begin}{\crefalias{theorem}{definition}}

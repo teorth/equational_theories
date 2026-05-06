@@ -1,0 +1,1 @@
+In quasigroups (more generally if left multiplications are injective), this law is equivalent to [law 11](https://teorth.github.io/equational_theories/implications/?11) `x = x◇(y◇y)`, and equivalently all squares are equal ([unipotence law 40](https://teorth.github.io/equational_theories/implications/?40)) to the same right unit.

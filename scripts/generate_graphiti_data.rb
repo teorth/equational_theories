@@ -1,8 +1,9 @@
-# See .github/workflows/blueprint.yml for proper invocation to generate graphiti data. Then run:
+# See .github/workflows/blueprint-paper.yml for proper invocation to generate graphiti data. Then run:
 # python -m http.server 8000 --directory home_page/graphiti
 
 require 'json'
 require File.join(__dir__, 'graph')
+require File.join(__dir__, 'find_equation_id')
 
 if ARGV.length != 5
   $stderr.puts "Usage: scripts/generate_graphiti_data.rb <duals json> <implications json> <unknowns json> <finite implications json> <finite unknowns json>"
@@ -12,13 +13,12 @@ end
 duals = JSON.parse(File.read(ARGV[0]))
 
 equations = {}
-["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"].each { |i|
-  File.read(File.join(__dir__, "../equational_theories/Equations/Eqns#{i}.lean")).split("\n").each { |s|
-    if s =~ /equation\s*(\d+)\s*:=\s*(.+)/
-      equations[$1.to_i] = $2
-    end
-  }
-}
+
+for i in 1..4694
+    eq = Equation.from_id(i)
+    equations[i] = eq.to_s
+end
+
 File.read(File.join(__dir__, '../equational_theories/Equations/Basic.lean')).split("\n").each { |s|
   if s =~ /abbrev Equation(\d+).*: G, (.+)/ || s =~ /equation\s*(\d+)\s*:=\s*(.+)/
     if !equations[$1.to_i]

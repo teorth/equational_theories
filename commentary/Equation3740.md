@@ -1,4 +1,11 @@
-This law is a weaker form of [law 3591](https://teorth.github.io/equational_theories/implications/?3591).
-It implies the [associative law 4512](https://teorth.github.io/equational_theories/implications/?4512) and a very weak commutativity law 900874, which in the associative case reduces to `x◇y◇z◇w = x◇z◇y◇w`.
+## A law related to Boolean groups
 
-The free magma on some set `S` of generators for this law is `S ⊔ (S × 𝒫(S) × S)` where `𝒫` is the power set, with the magma operation `s◇u=(s,∅,u)`, `s◇(u,B,v) = (s,{u}∆B,v)`, `(s,A,t)◇u=(s,A∆{t},u)`, `(s,A,t)◇(u,B,v)=(s,A∆{t}∆{u}∆B,v)` where `∆` is the symmetric difference.
+This law, dubbed [Stein's fourth law](https://arxiv.org/abs/1408.0991) or [transitivity](https://arxiv.org/abs/1601.01922), can be seen either as a weaker form of the [Boolean left multiplications law 3591](https://teorth.github.io/equational_theories/implications/?3591) or of the [bypass law 3744](https://teorth.github.io/equational_theories/implications/?3744).
+
+This law implies the [associative law 4512](https://teorth.github.io/equational_theories/implications/?4512) and a very weak [commutativity law 900874](https://teorth.github.io/equational_theories/implications/?900874), which in the associative case reduces to `x◇y◇z◇w = x◇z◇y◇w`.  It implies exactly the laws whose left-hand side and right-hand side have at least one operation each, have the same first variable and the same last variable, and such that each variable appear an even number of times in total.
+
+The squaring map `S: x ↦ x◇x` is idempotent (namely `S(S(x))=S(x)`) so squares are precisely the idempotent elements.  For any fixed idempotent `0 = 0◇0` of the magma, left and right multiplication maps `x ↦ 0◇x` and `x ↦ x◇0` are (idempotent) morphisms that project onto their images `0◇M` and `M◇0`.  These submagmas satisfy [law 765](https://teorth.github.io/equational_theories/implications/?765) and its dual, respectively, and their intersection is a Boolean group (abelian group of exponent 2).  Let `Q ⊂ (0◇M)×(M◇0)` be the submagma consisting of pairs `(s,t)` such that `s◇0 = 0◇t`.  Then the map `φ: x ↦ (0◇x, x◇0)` from `M` to `Q` is a morphism.  Its restriction to the set of products `P={x◇y|x,y∈M}` is a magma isomorphism from `P` to `Q`.  It appears that all magmas satisfying this law are submagmas of linear magmas satisfying it.
+
+For quasigroups, this law is equivalent to the [Boolean group law 895](https://teorth.github.io/equational_theories/implications/?895).
+
+The free magma on some set `Σ` of generators for this law is `Σ ⊔ (Σ × 𝒫(Σ) × Σ)` where `𝒫(Σ)` is the set of finite subsets of `Σ`, with the magma operation `s◇u=(s,∅,u)`, `s◇(u,B,v) = (s,{u}∆B,v)`, `(s,A,t)◇u=(s,A∆{t},u)`, `(s,A,t)◇(u,B,v)=(s,A∆{t}∆{u}∆B,v)` where `∆` is the symmetric difference.

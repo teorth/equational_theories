@@ -30,3 +30,8 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\formaleq}{\simeq}
 \newcommand{\op}{\diamond}
+
+\newcommand{\Equadef}[2]{%
+  \expandafter\gdef\csname Equa#1\endcsname{\ensuremath{#2}}}
+\newcommand{\Equareffull}[1]{\Equaref{#1} $(\csname Equa#1\endcsname)$}
+\newcommand{\Equaref}[1]{\href{https://teorth.github.io/equational_theories/implications/?#1}{E#1}}

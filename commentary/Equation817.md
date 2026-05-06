@@ -1,0 +1,1 @@
+This law is a special case of the [Hardy law 917](https://teorth.github.io/equational_theories/implications/?917).  The proof that the [Ramanujan law 1729](https://teorth.github.io/equational_theories/implications/?1729) does not implies law 817 was the last one to be formalized.

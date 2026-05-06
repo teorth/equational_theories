@@ -69,7 +69,10 @@ update msg model =
     UrlRequested urlRequest ->
       case urlRequest of
         Browser.Internal url ->
-          (model, Browser.Navigation.pushUrl model.key (Url.toString url))
+          if String.startsWith "/equational_theories/fme/" (Url.toString url) then
+            ( model, Browser.Navigation.pushUrl model.key (Url.toString url) )
+          else
+            ( model, Browser.Navigation.load (Url.toString url) )
         Browser.External href ->
           (model, Browser.Navigation.load href)
 
@@ -233,7 +236,7 @@ viewExportNovel table satisfies novel =
                 , div [class "code-container"] [pre [] [text (magmaLine ++ sat ++ ref)]]
                 , text "Then add the following to extra.txt in `All4x4Tables/data`:"
                 , div [class "code-container"] [pre [] [text (tableLine ++ prov)]]
-                , text "Finally, re-run `python3 equational_theories/Generated/FinSearch/src/generate_lean.py`!"
+                , text "Finally, re-run `python3 equational_theories/Generated/All4x4Tables/src/generate_lean.py`!"
                 ]
 
 viewModelInfo : String -> String -> ModelInfoSuccess -> Html Msg
@@ -289,6 +292,12 @@ view model =
       [ viewLeftPanel model
       , viewRightPanel model
       ]
+    , div [class "back-to-eqt"]
+    [a [ href "https://teorth.github.io/equational_theories" ]
+        [ text "Back to Equational Theories" ]]
+    , div [class "back-to-exp"]
+    [a [ href "https://teorth.github.io/equational_theories/implications" ]
+        [ text "Back to Equation Explorer" ]]
     , div [class "copyright"]
       [text ("© 2024 The Equational Theories Project / data: " ++ String.left 7 model.version)]
     ]

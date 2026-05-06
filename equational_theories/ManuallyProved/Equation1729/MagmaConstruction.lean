@@ -63,43 +63,43 @@ def TrivialPartialSolution : PartialSolution := {
   axiom_i'' := by
     intro _ _ h
     contrapose! h
-    exact Finset.not_mem_empty _
+    exact Finset.notMem_empty _
   axiom_S := by
     intro _ _ h
     contrapose! h
-    exact Finset.not_mem_empty _
+    exact Finset.notMem_empty _
   axiom_iii'' := by
     intro _ _ _ h
     contrapose! h
-    exact Finset.not_mem_empty _
+    exact Finset.notMem_empty _
   axiom_iv'' := by
     intro _ h
     contrapose! h
-    exact Finset.not_mem_empty _
+    exact Finset.notMem_empty _
   axiom_v'' := by
     intro _ h
     contrapose! h
-    exact Finset.not_mem_empty _
+    exact Finset.notMem_empty _
   axiom_vi'' := by
     intro _ _ h
     contrapose! h
-    exact Finset.not_mem_empty _
+    exact Finset.notMem_empty _
   axiom_vii'' := by
     intro _ _ _ _ h
     contrapose! h
-    exact Finset.not_mem_empty _
+    exact Finset.notMem_empty _
   axiom_P := by
     intro _ _ _ h
     contrapose! h
-    exact Finset.not_mem_empty _
+    exact Finset.notMem_empty _
   axiom_P' := by
     intro _ _ _ _ h
     contrapose! h
-    exact Finset.not_mem_empty _
+    exact Finset.notMem_empty _
   axiom_P'' := by
     intro _ _ _ h
     contrapose! h
-    exact Finset.not_mem_empty _
+    exact Finset.notMem_empty _
   axiom_L := by
     intro _ _ _ _ _ h
     contrapose! h

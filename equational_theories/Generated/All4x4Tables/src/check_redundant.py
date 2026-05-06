@@ -12,7 +12,7 @@ def parse_line(line):
         return [0]
 
 
-def prune_rows(matrix, lines, matrix_size=4696):
+def prune_rows(matrix, lines, matrix_size=4695):
     useless = 0
 
     for i, line in enumerate(lines):
@@ -40,6 +40,15 @@ def load(fpath):
         lines.append(line)
     return lines
 
+matrix = np.zeros((4695, 4695), dtype=bool)
+for fp1 in [
+    "../data/refutations2x2.txt",
+    "../data/refutations3x3.txt",
+    "../data/refutations4x4.txt",
+]:
+    matrix, useless = prune_rows(matrix, load(fp1))
+    print("Magmas of sizes up to", fp1[-5], "refute", np.sum(matrix[1:4695, 1:4695]), "implications")
+print()
 
 for fp1 in [
     "../data/refutations2x2.txt",
@@ -53,12 +62,12 @@ for fp1 in [
     ]:
         if fp1 == fp2:
             continue
-        matrix = np.zeros((4696, 4696), dtype=bool)
+        matrix = np.zeros((4695, 4695), dtype=bool)
         matrix, useless = prune_rows(matrix, load(fp1))
         assert useless == 0
-        init_found = np.sum(matrix)
+        init_found = np.sum(matrix[1:4695, 1:4695])
         matrix, useless = prune_rows(matrix, load(fp2))
-        after_found = np.sum(matrix)
+        after_found = np.sum(matrix[1:4695, 1:4695])
         print("When going from", fp1, "to", fp2)
         print(
             "The number of solved equations goes from",
