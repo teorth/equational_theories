@@ -56,7 +56,7 @@ def MagmaLanguage.onFunctions' {motive : ℕ → Sort*} {S : Type} (f : motive 2
       (hn₂ ▸ f0).elim (isEmptyElim ∘ (by simpa [MagmaLanguage] using ·)) (hn₂ ▸ g)
     else
       isEmptyElim (show _ by
-        simp [MagmaLanguage, hn, hn₂, Language.withConstants, Language.sum] at f0
+        simp [MagmaLanguage, hn, Language.withConstants, Language.sum] at f0
         exact f0.elim id fun h ↦ (Equiv.equivEmpty _) ((Nat.succ_pred_eq_of_ne_zero hn₂) ▸ h)
       )
 
@@ -67,10 +67,11 @@ def FinArityOp (M : Magma G) : (Fin 2 → G) → G :=
   fun v ↦ M.op (v 0) (v 1)
 
 /-- The graph of a magma operation, as a set of Fin 2 ⊕ Unit → G (which is equivalent to G × G × G). -/
-def Graph (M : Magma G) : Set (Fin 2 ⊕ Unit → G) :=
-  M.FinArityOp.arityGraph
+def Graph (M : Magma G) : Set (Option (Fin 2) → G) :=
+  M.FinArityOp.tupleGraph
 
 /-- Magma.FOStructure gives the MagmaLanguage structure that corresponds to the Magma. -/
+@[implicit_reducible]
 def FOStructure (M : Magma G) : MagmaLanguage.Structure G where
   funMap :=
     @MagmaLanguage.onFunctions _ M.FinArityOp
@@ -191,8 +192,8 @@ theorem structural_of_termStructural (h : L'.TermStructuralFrom L) : L'.Structur
   obtain ⟨M',h2,h3,h4⟩ := h M hGL
   use M', h2
   constructor
-  · exact h3.Definable (inst := M.FOStructure)
-  · exact h4.Definable (inst := M'.FOStructure)
+  · let _ := M.FOStructure; exact h3.definable_tupleGraph
+  · let _ := M'.FOStructure; exact h4.definable_tupleGraph
 
 /-- If law L' is term-structural from L, then L' is term-definable from L. -/
 theorem termDefinable_of_termStructural (h : L'.TermStructuralFrom L) : L'.TermDefinableFrom L := by
@@ -210,7 +211,7 @@ theorem definable_of_structural (h : L'.StructuralFrom L) : L'.DefinableFrom L :
 theorem definable_of_termDefinable (h : L'.TermDefinableFrom L) : L'.DefinableFrom L := by
   intro G M hGL
   obtain ⟨M', h2, h3⟩ := h M hGL
-  exact ⟨M', h2, h3.Definable (inst := M.FOStructure)⟩
+  exact ⟨M', h2, let _ := M.FOStructure; h3.definable_tupleGraph⟩
 
 end hierarchy
 
@@ -220,15 +221,16 @@ section preorder
 
 variable {β : Type*} {L₁ L₂ L₃ : Law.MagmaLaw β}
 
+set_option backward.isDefEq.respectTransparency false in
 theorem TermDefinable.trans_aux {G : Type} {M M₂ M₃ : Magma G}
-    (h₁ : (∅:Set _).TermDefinable MagmaLanguage (inst := M.FOStructure) M₂.FinArityOp)
-    (h₂ : (∅:Set _).TermDefinable MagmaLanguage (inst := M₂.FOStructure) M₃.FinArityOp) :
-    (∅:Set _).TermDefinable MagmaLanguage (inst := M.FOStructure) M₃.FinArityOp := by
-  apply h₂.trans (inst := M₂.FOStructure) (inst' := M.FOStructure)
+    (h₁ : let _ := M.FOStructure; (∅:Set _).TermDefinable MagmaLanguage M₂.FinArityOp)
+    (h₂ : let _ := M₂.FOStructure; (∅:Set _).TermDefinable MagmaLanguage M₃.FinArityOp) :
+    let _ := M.FOStructure; (∅:Set _).TermDefinable MagmaLanguage M₃.FinArityOp := by
+  apply @Set.TermDefinable.trans _ _ _ _ M₂.FOStructure M.FOStructure _ _ h₂
   intro n f
   by_cases hn : n = 2
   · subst hn
-    simp only [realize_functions, Magma.FOStructure_funMap']
+    simp only [Term.realize_function_term, Magma.FOStructure_funMap']
     exact h₁
   by_cases hn₂ : n = 0
   · subst hn₂
@@ -256,15 +258,15 @@ theorem TermStructural.trans (h₁₂ : L₂.TermStructuralFrom L₁) (h₂₃ :
   exact ⟨M₃, hGL₃, TermDefinable.trans_aux hA1 hB1, TermDefinable.trans_aux hB2 hA2⟩
 
 theorem Definable.trans_aux {G : Type} {M M₂ M₃ : Magma G}
-    (h₁ : @Set.Definable _ (∅:Set _) MagmaLanguage M.FOStructure _ M₂.FinArityOp.arityGraph)
-    (h₂ : @Set.Definable _ (∅:Set _) MagmaLanguage M₂.FOStructure _ M₃.FinArityOp.arityGraph) :
-    @Set.Definable _ (∅:Set _) MagmaLanguage M.FOStructure _ M₃.FinArityOp.arityGraph := by
+    (h₁ : @Set.Definable _ (∅:Set _) MagmaLanguage M.FOStructure _ M₂.FinArityOp.tupleGraph)
+    (h₂ : @Set.Definable _ (∅:Set _) MagmaLanguage M₂.FOStructure _ M₃.FinArityOp.tupleGraph) :
+    @Set.Definable _ (∅:Set _) MagmaLanguage M.FOStructure _ M₃.FinArityOp.tupleGraph := by
   apply h₂.trans (inst := M₂.FOStructure) (inst' := M.FOStructure); swap
   · simp [MagmaLanguage, Language.withConstants]
   intro n f
   by_cases hn : n = 2
   · subst hn
-    simp only [realize_functions, Magma.FOStructure_funMap']
+    simp only [Term.realize_function_term, Magma.FOStructure_funMap']
     exact h₁
   by_cases hn₂ : n = 0
   · subst hn₂

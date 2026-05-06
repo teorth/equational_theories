@@ -27,17 +27,17 @@ variable {L L₁ L₂ : List (α × Bool)}
 
 namespace Red
 
-def reduced (L : List (α × Bool)) : Prop := List.Chain' (fun a b => ¬(a.1 = b.1 ∧ (!a.2) = b.2)) L
+def reduced (L : List (α × Bool)) : Prop := List.IsChain (fun a b => ¬(a.1 = b.1 ∧ (!a.2) = b.2)) L
 
 @[simp]
-theorem reduced_nil : reduced ([] : List (α × Bool)) := List.chain'_nil
+theorem reduced_nil : reduced ([] : List (α × Bool)) := List.IsChain.nil
 
 @[simp]
-theorem reduced_singleton {a : (α × Bool)} : reduced [a] := List.chain'_singleton a
+theorem reduced_singleton {a : (α × Bool)} : reduced [a] := List.IsChain.singleton a
 
 theorem reduced_cons {a b: (α × Bool)} :
     reduced (a :: b :: L) ↔ ¬(a.1 = b.1 ∧ (!a.2) = b.2) ∧ reduced (b :: L) :=
-  List.chain'_cons
+  List.isChain_cons_cons
 
 theorem not_step_reduced : reduced L₁ → ¬ Step L₁ L₂ := by
   intro red step
@@ -61,7 +61,7 @@ theorem not_step_reduced_iff : reduced L₁ ↔ ∀ L₂, ¬ Step L₁ L₂ := b
         simp only at eq1 eq2
         exact hL l' <| eq1 ▸ eq2 ▸ Step.cons_not
 
-theorem reduced_infix : reduced L₂ → L₁ <:+: L₂ → reduced L₁ := Chain'.infix
+theorem reduced_infix : reduced L₂ → L₁ <:+: L₂ → reduced L₁ := IsChain.infix
 
 theorem reduced_min (h : reduced L₁) : Red L₁ L₂ ↔ L₂ = L₁ :=
   Relation.reflTransGen_iff_eq fun _ ↦ not_step_reduced h
@@ -112,8 +112,8 @@ cyclicallyReduced (List.replicate n L).flatten := by match n, L with
 | n+1, (head::tail) =>
   unfold cyclicallyReduced at *
   unfold reduced at *
-  rw [List.chain'_flatten (by simp)]
-  refine ⟨⟨by simpa using h.1, List.chain'_replicate_of_rel _ h.2⟩, ?_⟩
+  rw [List.isChain_flatten (by simp)]
+  refine ⟨⟨by simpa using h.1, List.isChain_replicate_of_rel _ h.2⟩, ?_⟩
   intro a ha b hb
   simp only [Option.mem_def] at ha hb
   rw [List.getLast?_flatten_replicate (h := by simp +arith)] at ha
@@ -127,7 +127,7 @@ theorem reduced_iff_eq_reduce : reduced L ↔ reduce L = L := by
   · rw [← reduced_min h]
     exact reduce.red
   · unfold reduced
-    rw [List.chain'_iff_forall_rel_of_append_cons_cons]
+    rw [List.isChain_iff_forall_rel_of_append_cons_cons]
     intro ⟨x₁, x₂⟩ ⟨y₁, y₂⟩ l₁ l₂ hl hx
     simp only at hl hx
     rw [hx.1, ← hx.2] at hl
@@ -212,6 +212,7 @@ theorem reduceCyclically_sound (w : List (α × Bool)) :
       rw [Red.cyclicallyReduced_cons_append]
       trivial
 
+omit [DecidableEq α] in
 theorem reduced_flatten_replicate (n : ℕ) (hn : n ≠ 0) (L₁ L₂ L₃ : List (α × Bool))
     (h1 : Red.cyclicallyReduced L₂) (h2 : Red.reduced (L₁ ++ L₂ ++ L₃))
     : Red.reduced (L₁ ++ (List.replicate n L₂).flatten ++ L₃) := by

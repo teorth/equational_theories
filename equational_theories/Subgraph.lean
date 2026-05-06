@@ -584,7 +584,7 @@ theorem Equation4_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equatio
 @[equational_result]
 theorem Equation5_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Facts G [5] [42, 43, 4513] := by
   refine ⟨Fin 2, ⟨fun _ x ↦ x⟩, fun _ ↦ ?_, fun h ↦ ?_, fun h ↦ ?_, fun h ↦ ?_⟩
-  · simp [Equation5]
+  · simp
   · simpa using h 0 1 0
   · simpa using h 0 1
   · simpa using h 0 0 0 1
@@ -739,7 +739,7 @@ theorem Equation387_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equatio
 
 @[equational_result]
 theorem Equation387_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation387 G ∧ ¬ Equation4512 G :=
-  ⟨ℝ, ⟨fun x y ↦ (x + y) / 2⟩, fun _ _ ↦ by ring_nf, fun h ↦ by specialize h 0 0 1; field_simp at h⟩
+  ⟨ℝ, ⟨fun x y ↦ (x + y) / 2⟩, fun _ _ ↦ by ring_nf, fun h ↦ by specialize h 0 0 1; norm_num at h⟩
 
 @[equational_result]
 theorem Equation4512_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation42 G := by

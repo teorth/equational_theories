@@ -23,8 +23,7 @@ instance [Countable α] : Countable (FreeGroup α) := by
 
 instance [Nonempty α] : Infinite (FreeGroup α) :=
   let a := Nonempty.some (by assumption)
-  Infinite.of_injective (FreeGroup.of a ^ ·) <| by
-    simp [FreeGroup.norm_of_pow, infinite_order]
+  Infinite.of_injective (FreeGroup.of a ^ ·) <| by simp [infinite_order]
 
 
 def generatorNames' : List (α × Bool) → Finset α
@@ -48,7 +47,7 @@ theorem generatorNames'_sublist (L₁ L₂ : List (α × Bool)) (hL : L₁.Subli
   induction hL with
   | slnil => rfl
   | cons a _ ih => simp [generatorNames', subset_trans ih]
-  | cons₂ a _ ih => simp [generatorNames', Finset.union_subset_union _ ih]
+  | cons₂ a _ ih => simp [generatorNames']; grind
 
 omit [Infinite α] in
 theorem generatorNames_mk_le (L : List (α × Bool)) : generatorNames (FreeGroup.mk L) ⊆ generatorNames' L :=
@@ -59,7 +58,7 @@ theorem generatorNames'_append (L₁ L₂ : List (α × Bool)) :
     generatorNames' (L₁ ++ L₂) = generatorNames' L₁ ∪ generatorNames' L₂ := by
   induction L₁ with
   | nil => simp [generatorNames']
-  | cons _ _ ih => simp [generatorNames', List.append_eq, ih]
+  | cons _ _ ih => simp [generatorNames', ih]
 
 omit [Infinite α] in
 theorem generatorNames_mul_le (x y : FreeGroup α) : generatorNames (x * y) ⊆ generatorNames x ∪ generatorNames y := by
@@ -74,7 +73,7 @@ theorem generatorNames'_invRev (L : List (α × Bool)) : generatorNames' (FreeGr
   | nil => rfl
   | cons _ _ ih =>
     unfold FreeGroup.invRev at *
-    simp [generatorNames', generatorNames'_append, ih, FreeGroup.invRev, Finset.union_comm]
+    simp [generatorNames', generatorNames'_append, ih, Finset.union_comm]
 
 omit [Infinite α] in
 theorem generatorNames_inv (x : FreeGroup α) : generatorNames x⁻¹ = generatorNames x := by
@@ -191,7 +190,7 @@ theorem fresh_ineq'' (S : Finset (FreeGroup α)) (x y : FreeGroup α) (x_mem : x
   | nil => simp [invRev]
   | cons head tail =>
     simp only [freshGenerator_inv_toWord, List.cons_append, freshGenerator_toWord,
-    List.singleton_append, ne_eq, List.cons.injEq, not_and]
+      List.cons.injEq]
     intro eq'
     -- TODO: proof here very similar to fresh_old_no_cancellation
     exfalso

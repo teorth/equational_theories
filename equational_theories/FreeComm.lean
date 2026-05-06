@@ -31,8 +31,8 @@ def FreeMagma.count (w : FreeMagma α) (a : α) : ℕ :=
 lemma FreeMagma.count_vars {w : FreeMagma α} {a : α} :
     w.vars.count a = w.count a := by
   induction w with
-  | Leaf _ => simp [evalInMagma, Multiset.count_singleton]
-  | Fork _ _ ih₁ ih₂ => simp [evalInMagma, Magma.op, ih₁, ih₂]
+  | Leaf _ => simp [Multiset.count_singleton]
+  | Fork _ _ ih₁ ih₂ => simp [ih₁, ih₂]
 
 -- This (crucial) lemma and the next were devised and proven by Floris van Doorn
 -- https://florisvandoorn.com/
@@ -46,7 +46,7 @@ lemma FreeMagma.count_subst' {ι : Type*} [DecidableEq ι] {t : FreeMagma ι} {�
     rw [vars_fork] at hs
     simp [evalInMagma, iha (Multiset.Subset.trans Multiset.subset_add_left hs),
       ihb (Multiset.Subset.trans Multiset.subset_add_right hs),
-        Finset.sum_add_distrib, Multiset.isMagma, add_mul]
+        Finset.sum_add_distrib, add_mul]
 
 lemma FreeMagma.count_subst {ι : Type*} [DecidableEq ι] {t : FreeMagma ι} {σ : ι → FreeMagma α}
     {a : α} : (t ⬝ σ).count a = ∑ i ∈ t.vars.toFinset, t.count i * (σ i).count a :=
