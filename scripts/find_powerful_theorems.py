@@ -9,10 +9,14 @@ from scipy.sparse.csgraph import connected_components
 from itertools import permutations
 
 
-def load_data_from_lean():
+def load_data_from_lean(extra):
     try:
+        subp_args = ["lake", "exe", "extract_implications", "outcomes"]
+        if extra:
+            subp_args += ["--extra"]
+
         result = subprocess.run(
-            ["lake", "exe", "extract_implications", "outcomes"],
+            subp_args,
             capture_output=True,
             text=True,
             check=True,
@@ -40,18 +44,17 @@ def preprocess_data(data):
     ]
     ids = {x: i for i, x in enumerate(ids)}
 
-    n = 4694
+    n = len(order)
     r = np.zeros((n, n))
     for i, row in enumerate(outcomes):
         for j, col in enumerate(row):
-            if order[i] <= 4694 and order[j] <= 4694:
-                r[order[i] - 1, order[j] - 1] = ids[col]
+            r[i - 1, j - 1] = ids[col]
 
     ok = (r == 1) | (r == 3) | (r == 5) | (r == 7)
     no = (r == 0) | (r == 2) | (r == 4) | (r == 6)
     matrix = ok + no * 2
 
-    return matrix
+    return matrix, order
 
 
 def find_most_useful_implication(matrix, k, one_per_equiv_class=True):
@@ -111,28 +114,34 @@ def main():
     parser.add_argument(
         "--save-cache", type=str, help="Save the output to a cache file"
     )
+    parser.add_argument(
+        "--extra", action="store_true", help="Include extra equations beyond the base 4694"
+    )
 
     args = parser.parse_args()
 
     if args.load_cache:
         with open(args.load_cache, "rb") as f:
-            matrix = np.load(f)
+            matrix_and_order = np.load(f)
+            n = np.shape(matrix_and_order)[1]
+            matrix = matrix_and_order[:-1,:]
+            order = matrix_and_order[-1,:]
     else:
-        data = load_data_from_lean()
+        data = load_data_from_lean(args.extra)
         if data is None:
             print("Couldn't load data!")
             return
-        matrix = preprocess_data(data)
+        matrix, order = preprocess_data(data)
 
         if args.save_cache:
             with open(args.save_cache, "wb") as f:
-                np.save(f, matrix)
+                np.save(f, np.vstack([matrix,order]))
 
     implications = find_most_useful_implication(matrix, args.topk, args.one_per_equiv)
 
     print("EquationA", "EquationB", "ValueOfAImpliesB")
     for (a, b), value in implications:
-        print(a + 1, b + 1, value)
+        print(order[a], order[b], value)
 
 
 if __name__ == "__main__":
