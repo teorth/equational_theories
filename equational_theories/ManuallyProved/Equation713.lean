@@ -107,7 +107,7 @@ theorem next_ok : next.OK where
     unfold domFresh
     simp at hx ⊢; cases hx with
     | base h => simp [dom_o h, dom_l h, dom_r h]
-    | _ => simp [dom_a, dom_b]
+    | _ => simp [dom_a]
   func {x y xy} hxy {xy'} hxy' := next_func hxy hxy'
   laws := {
   law2 := next_law2
@@ -287,7 +287,7 @@ theorem Extension.base : ∀ {x y z : GreedyMagma e₀}, z ∈ e₀.1 x y → z 
 def fromList (S : List ((Nat × Nat) × Nat)) : PreExtension ℕ := fun a b => {c | ((a, b), c) ∈ S}
 
 theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
-    (sorted : S.Chain' (fun a b => a.1 < b.1) := by decide)
+    (sorted : S.IsChain (fun a b => a.1 < b.1) := by decide)
     (eq713 : ∀ a ∈ S, ∀ b ∈ S, a.1.2 = b.1.2 → a.2 = b.1.1 →
       ∃ c ∈ S, ∃ d ∈ S, c.1.1 = a.1.1 ∧ c.1.2 = b.2 ∧ d.1.1 = a.1.1 ∧ d.1.2 = c.2 ∧ d.2 = a.1.2 := by decide)
     (law2 : ∀ a ∈ S, a.1.2 ≠ a.2 := by decide)
@@ -296,7 +296,7 @@ theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
   finite := List.finite_toSet S
   func h1 _ h2 := Decidable.by_contra fun h =>
     have : IsTrans ((ℕ ×ₗ ℕ) × ℕ) (·.1 < ·.1) := ⟨fun _ _ _ => lt_trans⟩
-    (List.chain'_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
+    (List.isChain_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
       |>.forall (fun _ _ => (·.symm)) h1 h2 (by rintro ⟨⟩; exact h rfl) rfl
   laws := {
   eq713 := fun h1 h2 => by --TODO variable names are off
@@ -349,19 +349,26 @@ def seed : List ((Nat × Nat) × Nat) := [
 theorem not_817_1426_3862_4065 : ∃ (G : Type) (_ : Magma G), Facts G [713] [817,1426,3862,4065] := by
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
-  have rules := fromList_eval' he
-  simp [seed, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
-    forall_eq] at rules
   refine ⟨GreedyMagma e, inferInstance, e.eq713, fun h => ?_, fun h => ?_, fun h => ?_, fun h => ?_⟩
   · have := h 0
-    simp [rules] at this
+    rw [show ((0:GreedyMagma e) ◇ 0) = 1 from fromList_eval he 0 0 1,
+        show ((1:GreedyMagma e) ◇ 1) = 0 from fromList_eval he 1 1 0,
+        show ((0:GreedyMagma e) ◇ 0) = 1 from fromList_eval he 0 0 1] at this
+    exact absurd (show (0:ℕ) = 1 from this) (by decide)
   · have := h 0
-    simp [rules] at this
+    rw [show ((0:GreedyMagma e) ◇ 0) = 1 from fromList_eval he 0 0 1,
+        show ((0:GreedyMagma e) ◇ 1) = 3 from fromList_eval he 0 1 3,
+        show ((1:GreedyMagma e) ◇ 3) = 2 from fromList_eval he 1 3 2] at this
+    exact absurd (show (0:ℕ) = 2 from this) (by decide)
   · have := h 2
-    simp [rules] at this
-    cases this
+    rw [show ((2:GreedyMagma e) ◇ 2) = 4 from fromList_eval he 2 2 4,
+        show ((2:GreedyMagma e) ◇ 4) = 0 from fromList_eval he 2 4 0,
+        show ((0:GreedyMagma e) ◇ 2) = 3 from fromList_eval he 0 2 3] at this
+    exact absurd (show (4:ℕ) = 3 from this) (by decide)
   · have := h 0
-    simp [rules] at this
-    cases this
+    rw [show ((0:GreedyMagma e) ◇ 0) = 1 from fromList_eval he 0 0 1,
+        show ((1:GreedyMagma e) ◇ 0) = 2 from fromList_eval he 1 0 2,
+        show ((2:GreedyMagma e) ◇ 0) = 2 from fromList_eval he 2 0 2] at this
+    exact absurd (show (1:ℕ) = 2 from this) (by decide)
 
 end Eq713

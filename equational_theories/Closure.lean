@@ -164,8 +164,8 @@ def DenseNumbering.map {α β : Type} [BEq α] [BEq β] [Hashable α] [Hashable 
 def ltEquationNames (a b : String) : Bool :=
   assert! a.startsWith "Equation"
   assert! b.startsWith "Equation"
-  let aNum := (a.toSubstring.drop 8).toNat?.get!
-  let bNum := (b.toSubstring.drop 8).toNat?.get!
+  let aNum := (a.toRawSubstring.drop 8).toNat?.get!
+  let bNum := (b.toRawSubstring.drop 8).toNat?.get!
   aNum < bNum
 
 def equationSet (inp : Array EntryVariant) : Std.HashSet String := Id.run do
@@ -303,8 +303,8 @@ def closure_aux (inp : Array EntryVariant) (duals: Std.HashMap Nat Nat) (eqs : D
 
   pure ⟨n, reachable, components⟩
 
-instance {m : Type → Type} : ForIn m Reachability (Nat × Nat × Bool) where
-  forIn {β : Type} [Monad m] (reachability : Reachability) (state : β)
+instance {m : Type → Type} [Monad m] : ForIn m Reachability (Nat × Nat × Bool) where
+  forIn {β : Type} (reachability : Reachability) (state : β)
       (f : (Nat × Nat × Bool) → β → m (ForInStep β)) := do
     let mut v := state
     for i in reachability.components, i2 in reachability.reachable do

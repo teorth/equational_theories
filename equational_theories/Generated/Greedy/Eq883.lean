@@ -55,27 +55,27 @@ theorem rule_0_preserved (G : Type*) (a b c : G) (old : G → G → G → Prop) 
   have eq872 : (old sk0 c sk2) ∨ a = sk0 ∨ a = sk0 := Or.assoc2 (eq297.imp_left (fun h : c = sk1 ↦ superpose h eq850)) -- superposition 850,297, 297 into 850, unify on (0).2 in 297 and (0).2 in 850
   have eq876 : (old sk0 c sk2) ∨ a = sk0 := resolve eq872 rfl -- duplicate literal removal 872
   have eq882 : a = sk0 := resolve eq876 p4XZ -- subsumption resolution 876,48
-  have eq911 : (old a sk1 sk2) ∨ (old sk2 sk0 a) ∨ b = sk1 := Eq.mp (by simp only [eq882, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq118 -- backward demodulation 118,882
-  have eq1010 : (old a b sk2) ∨ c = sk2 ∨ c = sk1 := Eq.mp (by simp only [eq882, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq382 -- backward demodulation 382,882
-  have eq1013 : (old a b sk3) ∨ c = sk3 ∨ c = sk1 := Eq.mp (by simp only [eq882, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq385 -- backward demodulation 385,882
-  have eq1043 : (old a sk1 sk2) ∨ c = sk2 ∨ (old sk0 sk1 sk3) ∨ b = sk1 := Eq.mp (by simp only [eq882, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq786 -- backward demodulation 786,882
-  have eq1068 : (old sk2 a a) ∨ (old a sk1 sk2) ∨ b = sk1 := Eq.mp (by simp only [eq882, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq911 -- forward demodulation 911,882
+  have eq911 : (old a sk1 sk2) ∨ (old sk2 sk0 a) ∨ b = sk1 := Eq.mp (by grind only) eq118 -- backward demodulation 118,882
+  have eq1010 : (old a b sk2) ∨ c = sk2 ∨ c = sk1 := Eq.mp (by grind only) eq382 -- backward demodulation 382,882
+  have eq1013 : (old a b sk3) ∨ c = sk3 ∨ c = sk1 := Eq.mp (by grind only) eq385 -- backward demodulation 385,882
+  have eq1043 : (old a sk1 sk2) ∨ c = sk2 ∨ (old sk0 sk1 sk3) ∨ b = sk1 := Eq.mp (by grind only) eq786 -- backward demodulation 786,882
+  have eq1068 : (old sk2 a a) ∨ (old a sk1 sk2) ∨ b = sk1 := Eq.mp (by grind only) eq911 -- forward demodulation 911,882
   have eq1145 : c = sk2 ∨ c = sk1 := resolve eq1010 p3 -- subsumption resolution 1010,46
   have eq1146 : c = sk3 ∨ c = sk1 := resolve eq1013 p3 -- subsumption resolution 1013,46
-  have eq1162 : (old a sk1 sk3) ∨ (old a sk1 sk2) ∨ c = sk2 ∨ b = sk1 := Eq.mp (by simp only [eq882, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq1043 -- forward demodulation 1043,882
+  have eq1162 : (old a sk1 sk3) ∨ (old a sk1 sk2) ∨ c = sk2 ∨ b = sk1 := Eq.mp (by grind only) eq1043 -- forward demodulation 1043,882
   have eq1180 : c ≠ sk2 ∨ c = sk1 := eq1146.imp_left (fun h : c = sk3 ↦ superpose h preserve_2) -- superposition 68,1146, 1146 into 68, unify on (0).2 in 1146 and (0).2 in 68
   have eq1182 : c = sk1 := resolve eq1180 eq1145 -- subsumption resolution 1180,1145
-  have eq1200 : c = b ∨ (old sk2 a a) ∨ (old a sk1 sk2) := Eq.mp (by simp only [eq1182, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq1068 -- backward demodulation 1068,1182
-  have eq1257 : c = b ∨ (old a sk1 sk3) ∨ (old a sk1 sk2) ∨ c = sk2 := Eq.mp (by simp only [eq1182, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq1162 -- backward demodulation 1162,1182
+  have eq1200 : c = b ∨ (old sk2 a a) ∨ (old a sk1 sk2) := Eq.mp (by grind only) eq1068 -- backward demodulation 1068,1182
+  have eq1257 : c = b ∨ (old a sk1 sk3) ∨ (old a sk1 sk2) ∨ c = sk2 := Eq.mp (by grind only) eq1162 -- backward demodulation 1162,1182
   have eq1277 : (old sk2 a a) ∨ (old a sk1 sk2) := resolve eq1200 bc -- subsumption resolution 1200,45
-  have eq1278 : (old a c sk2) ∨ (old sk2 a a) := Eq.mp (by simp only [eq1182, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq1277 -- forward demodulation 1277,1182
+  have eq1278 : (old a c sk2) ∨ (old sk2 a a) := Eq.mp (by grind only) eq1277 -- forward demodulation 1277,1182
   have eq1279 : (old sk2 a a) := resolve eq1278 p4XZ -- subsumption resolution 1278,48
   have eq1334 : (old a sk1 sk3) ∨ (old a sk1 sk2) ∨ c = sk2 := resolve eq1257 bc -- subsumption resolution 1257,45
-  have eq1335 : (old a c sk3) ∨ (old a sk1 sk2) ∨ c = sk2 := Eq.mp (by simp only [eq1182, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq1334 -- forward demodulation 1334,1182
+  have eq1335 : (old a c sk3) ∨ (old a sk1 sk2) ∨ c = sk2 := Eq.mp (by grind only) eq1334 -- forward demodulation 1334,1182
   have eq1336 : (old a sk1 sk2) ∨ c = sk2 := resolve eq1335 p4XZ -- subsumption resolution 1335,48
-  have eq1337 : (old a c sk2) ∨ c = sk2 := Eq.mp (by simp only [eq1182, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq1336 -- forward demodulation 1336,1182
+  have eq1337 : (old a c sk2) ∨ c = sk2 := Eq.mp (by grind only) eq1336 -- forward demodulation 1336,1182
   have eq1338 : c = sk2 := resolve eq1337 p4XZ -- subsumption resolution 1337,48
-  have eq1343 : (old c a a) := Eq.mp (by simp only [eq1338, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq1279 -- backward demodulation 1279,1338
+  have eq1343 : (old c a a) := Eq.mp (by grind only) eq1279 -- backward demodulation 1279,1338
   subsumption p4YZ eq1343 -- subsumption resolution 1343,49
 
 set_option linter.all false in
@@ -181,38 +181,38 @@ theorem rule_1_preserved (G : Type*) (a b c : G) (old : G → G → G → Prop) 
   have eq11167 : (old c c b) ∨ c = b ∨ a = sk1 := resolve eq11048 p4YZ -- subsumption resolution 11048,52
   have eq11168 : c = b ∨ a = sk1 := resolve eq11167 p4YZ -- subsumption resolution 11167,52
   have eq11169 : a = sk1 := resolve eq11168 bc -- subsumption resolution 11168,48
-  have eq11172 : ¬(new a sk4 sk0) := Eq.mp (by simp only [eq11169, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) preserve_3 -- backward demodulation 73,11169
-  have eq11174 : ∀ (X0 : G) , ¬(new a a X0) ∨ sk3 = X0 := Eq.mp (by simp only [eq11169, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq79 -- backward demodulation 79,11169
-  have eq11190 : a = c ∨ ¬(old sk2 sk2 sk1) ∨ c = sk2 ∨ (old sk1 sk2 sk0) := Eq.mp (by simp only [eq11169, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq117 -- backward demodulation 117,11169
-  have eq11847 : a = c ∨ b = sk1 := Eq.mp (by simp only [eq11169, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq5442 -- backward demodulation 5442,11169
+  have eq11172 : ¬(new a sk4 sk0) := Eq.mp (by grind only) preserve_3 -- backward demodulation 73,11169
+  have eq11174 : ∀ (X0 : G) , ¬(new a a X0) ∨ sk3 = X0 := Eq.mp (by grind only) eq79 -- backward demodulation 79,11169
+  have eq11190 : a = c ∨ ¬(old sk2 sk2 sk1) ∨ c = sk2 ∨ (old sk1 sk2 sk0) := Eq.mp (by grind only) eq117 -- backward demodulation 117,11169
+  have eq11847 : a = c ∨ b = sk1 := Eq.mp (by grind only) eq5442 -- backward demodulation 5442,11169
   have eq12271 : ¬(old sk2 sk2 sk1) ∨ c = sk2 ∨ (old sk1 sk2 sk0) := resolve eq11190 ac -- subsumption resolution 11190,47
-  have eq12272 : ¬(old sk2 sk2 a) ∨ c = sk2 ∨ (old sk1 sk2 sk0) := Eq.mp (by simp only [eq11169, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq12271 -- forward demodulation 12271,11169
-  have eq12273 : ¬(old sk2 sk2 a) ∨ (old a sk2 sk0) ∨ c = sk2 := Eq.mp (by simp only [eq11169, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq12272 -- forward demodulation 12272,11169
+  have eq12272 : ¬(old sk2 sk2 a) ∨ c = sk2 ∨ (old sk1 sk2 sk0) := Eq.mp (by grind only) eq12271 -- forward demodulation 12271,11169
+  have eq12273 : ¬(old sk2 sk2 a) ∨ (old a sk2 sk0) ∨ c = sk2 := Eq.mp (by grind only) eq12272 -- forward demodulation 12272,11169
   have eq13070 : b = sk1 := resolve eq11847 ac -- subsumption resolution 11847,47
-  have eq13071 : a = b := Eq.mp (by simp only [eq11169, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq13070 -- forward demodulation 13070,11169
-  have eq13076 : (new a a c) := Eq.mp (by simp only [eq13071, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq76 -- backward demodulation 76,13071
-  have eq13077 : ∀ (X0 X2 : G) , ¬(old X2 X0 a) ∨ ¬(old X0 X0 a) ∨ (new X0 c X2) := Eq.mp (by simp only [eq13071, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq77 -- backward demodulation 77,13071
-  have eq13085 : (old sk2 sk2 a) ∨ (old sk2 sk3 sk4) ∨ b = sk3 := Eq.mp (by simp only [eq13071, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq165 -- backward demodulation 165,13071
-  have eq13086 : (old sk2 sk2 a) ∨ (old sk2 sk3 sk4) ∨ a = sk2 := Eq.mp (by simp only [eq13071, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq166 -- backward demodulation 166,13071
-  have eq13274 : a = sk3 ∨ (old sk2 sk2 a) ∨ (old sk2 sk3 sk4) := Eq.mp (by simp only [eq13071, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq13085 -- forward demodulation 13085,13071
+  have eq13071 : a = b := Eq.mp (by grind only) eq13070 -- forward demodulation 13070,11169
+  have eq13076 : (new a a c) := Eq.mp (by grind only) eq76 -- backward demodulation 76,13071
+  have eq13077 : ∀ (X0 X2 : G) , ¬(old X2 X0 a) ∨ ¬(old X0 X0 a) ∨ (new X0 c X2) := Eq.mp (by grind only) eq77 -- backward demodulation 77,13071
+  have eq13085 : (old sk2 sk2 a) ∨ (old sk2 sk3 sk4) ∨ b = sk3 := Eq.mp (by grind only) eq165 -- backward demodulation 165,13071
+  have eq13086 : (old sk2 sk2 a) ∨ (old sk2 sk3 sk4) ∨ a = sk2 := Eq.mp (by grind only) eq166 -- backward demodulation 166,13071
+  have eq13274 : a = sk3 ∨ (old sk2 sk2 a) ∨ (old sk2 sk3 sk4) := Eq.mp (by grind only) eq13085 -- forward demodulation 13085,13071
   have eq13603 : c = sk3 := resolve eq11174 eq13076 -- resolution 11174,13076
-  have eq13605 : ∀ (X0 : G) , ¬(new sk2 c X0) ∨ sk4 = X0 := Eq.mp (by simp only [eq13603, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq80 -- backward demodulation 80,13603
-  have eq13642 : (old sk2 c sk4) ∨ (old sk2 sk2 a) ∨ a = sk2 := Eq.mp (by simp only [eq13603, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq13086 -- backward demodulation 13086,13603
-  have eq13660 : (old sk2 c sk4) ∨ a = sk3 ∨ (old sk2 sk2 a) := Eq.mp (by simp only [eq13603, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq13274 -- backward demodulation 13274,13603
+  have eq13605 : ∀ (X0 : G) , ¬(new sk2 c X0) ∨ sk4 = X0 := Eq.mp (by grind only) eq80 -- backward demodulation 80,13603
+  have eq13642 : (old sk2 c sk4) ∨ (old sk2 sk2 a) ∨ a = sk2 := Eq.mp (by grind only) eq13086 -- backward demodulation 13086,13603
+  have eq13660 : (old sk2 c sk4) ∨ a = sk3 ∨ (old sk2 sk2 a) := Eq.mp (by grind only) eq13274 -- backward demodulation 13274,13603
   have eq13688 : (old sk2 sk2 a) ∨ a = sk2 := resolve eq13642 p4XZ -- subsumption resolution 13642,51
   have eq13707 : a = sk3 ∨ (old sk2 sk2 a) := resolve eq13660 p4XZ -- subsumption resolution 13660,51
-  have eq13708 : a = c ∨ (old sk2 sk2 a) := Eq.mp (by simp only [eq13603, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq13707 -- forward demodulation 13707,13603
+  have eq13708 : a = c ∨ (old sk2 sk2 a) := Eq.mp (by grind only) eq13707 -- forward demodulation 13707,13603
   have eq13709 : (old sk2 sk2 a) := resolve eq13708 ac -- subsumption resolution 13708,47
   have eq13720 : ¬(old sk2 sk2 a) ∨ (new sk2 c sk2) := resolve eq13709 eq13077 -- resolution 13709,13077
   have eq13726 : (new sk2 c sk2) := resolve eq13720 eq13709 -- subsumption resolution 13720,13709
   have eq13738 : sk2 = sk4 := resolve eq13726 eq13605 -- resolution 13726,13605
-  have eq13741 : ¬(new a sk2 sk0) := Eq.mp (by simp only [eq13738, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq11172 -- backward demodulation 11172,13738
+  have eq13741 : ¬(new a sk2 sk0) := Eq.mp (by grind only) eq11172 -- backward demodulation 11172,13738
   have eq13859 : (old a sk2 sk0) ∨ c = sk2 := resolve eq12273 eq13709 -- resolution 12273,13709
   have eq13864 : c = sk2 ∨ (new a sk2 sk0) := resolve eq13859 imp_new_0 -- resolution 13859,58
   have eq13865 : c = sk2 := resolve eq13864 eq13741 -- subsumption resolution 13864,13741
-  have eq13890 : a = c ∨ (old sk2 sk2 a) := Eq.mp (by simp only [eq13865, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq13688 -- backward demodulation 13688,13865
+  have eq13890 : a = c ∨ (old sk2 sk2 a) := Eq.mp (by grind only) eq13688 -- backward demodulation 13688,13865
   have eq13926 : (old sk2 sk2 a) := resolve eq13890 ac -- subsumption resolution 13890,47
-  have eq13927 : (old c c a) := Eq.mp (by simp only [eq13865, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq13926 -- forward demodulation 13926,13865
+  have eq13927 : (old c c a) := Eq.mp (by grind only) eq13926 -- forward demodulation 13926,13865
   subsumption p4YZ eq13927 -- subsumption resolution 13927,52
 
 set_option linter.all false in
@@ -252,32 +252,32 @@ theorem rule_2_preserved (G : Type*) (a b c : G) (old : G → G → G → Prop) 
   have eq407 : (old sk2 sk0 a) ∨ a = sk0 := resolve eq406 rule_def_0_0 -- subsumption resolution 406,61
   have eq424 : a ≠ sk0 ∨ c = sk1 := eq325.imp_left (fun h : a = sk3 ↦ superpose h preserve_2) -- superposition 74,325, 325 into 74, unify on (0).2 in 325 and (0).2 in 74
   have eq442 : c = sk1 := resolve eq424 eq324 -- subsumption resolution 424,324
-  have eq464 : (old sk0 c sk2) ∨ (old sk0 sk0 b) ∨ b = sk1 := Eq.mp (by simp only [eq442, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq135 -- backward demodulation 135,442
-  have eq466 : (old sk0 c sk2) ∨ (old sk2 sk0 a) ∨ c = sk2 := Eq.mp (by simp only [eq442, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq142 -- backward demodulation 142,442
-  have eq477 : (old sk3 c sk2) ∨ (old sk2 sk3 a) ∨ b = sk1 := Eq.mp (by simp only [eq442, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq159 -- backward demodulation 159,442
-  have eq516 : ∀ (X0 X1 X2 : G) , (old sk3 c sk2) ∨ b = sk1 ∨ sk3 = X0 ∨ ¬(old X1 sk3 X2) ∨ ¬(old X1 X0 X2) ∨ ¬(old X0 X0 b) := Eq.mp (by simp only [eq442, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq203 -- backward demodulation 203,442
+  have eq464 : (old sk0 c sk2) ∨ (old sk0 sk0 b) ∨ b = sk1 := Eq.mp (by grind only) eq135 -- backward demodulation 135,442
+  have eq466 : (old sk0 c sk2) ∨ (old sk2 sk0 a) ∨ c = sk2 := Eq.mp (by grind only) eq142 -- backward demodulation 142,442
+  have eq477 : (old sk3 c sk2) ∨ (old sk2 sk3 a) ∨ b = sk1 := Eq.mp (by grind only) eq159 -- backward demodulation 159,442
+  have eq516 : ∀ (X0 X1 X2 : G) , (old sk3 c sk2) ∨ b = sk1 ∨ sk3 = X0 ∨ ¬(old X1 sk3 X2) ∨ ¬(old X1 X0 X2) ∨ ¬(old X0 X0 b) := Eq.mp (by grind only) eq203 -- backward demodulation 203,442
   have eq571 : (old sk0 sk0 b) ∨ b = sk1 := resolve eq464 p4XZ -- subsumption resolution 464,52
-  have eq572 : c = b ∨ (old sk0 sk0 b) := Eq.mp (by simp only [eq442, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq571 -- forward demodulation 571,442
+  have eq572 : c = b ∨ (old sk0 sk0 b) := Eq.mp (by grind only) eq571 -- forward demodulation 571,442
   have eq573 : (old sk0 sk0 b) := resolve eq572 bc -- subsumption resolution 572,49
   have eq574 : (old sk2 sk0 a) ∨ c = sk2 := resolve eq466 p4XZ -- subsumption resolution 466,52
   have eq583 : (old sk2 sk3 a) ∨ b = sk1 := resolve eq477 p4XZ -- subsumption resolution 477,52
-  have eq584 : c = b ∨ (old sk2 sk3 a) := Eq.mp (by simp only [eq442, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq583 -- forward demodulation 583,442
+  have eq584 : c = b ∨ (old sk2 sk3 a) := Eq.mp (by grind only) eq583 -- forward demodulation 583,442
   have eq585 : (old sk2 sk3 a) := resolve eq584 bc -- subsumption resolution 584,49
   have eq627 (X0 X1 X2 : G) : b = sk1 ∨ sk3 = X0 ∨ ¬(old X1 sk3 X2) ∨ ¬(old X1 X0 X2) ∨ ¬(old X0 X0 b) := resolve eq516 p4XZ -- subsumption resolution 516,52
-  have eq628 : ∀ (X0 X1 X2 : G) , c = b ∨ sk3 = X0 ∨ ¬(old X1 sk3 X2) ∨ ¬(old X1 X0 X2) ∨ ¬(old X0 X0 b) := Eq.mp (by simp only [eq442, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq627 -- forward demodulation 627,442
+  have eq628 : ∀ (X0 X1 X2 : G) , c = b ∨ sk3 = X0 ∨ ¬(old X1 sk3 X2) ∨ ¬(old X1 X0 X2) ∨ ¬(old X0 X0 b) := Eq.mp (by grind only) eq627 -- forward demodulation 627,442
   have eq629 (X0 X1 X2 : G) : ¬(old X1 sk3 X2) ∨ sk3 = X0 ∨ ¬(old X1 X0 X2) ∨ ¬(old X0 X0 b) := resolve eq628 bc -- subsumption resolution 628,49
   have eq844 (X0 : G) : ¬(old sk2 X0 a) ∨ sk3 = X0 ∨ ¬(old X0 X0 b) := resolve eq629 eq585 -- resolution 629,585
   have eq845 : sk0 = sk3 ∨ ¬(old sk0 sk0 b) ∨ a = sk0 := resolve eq844 eq407 -- resolution 844,407
   have eq846 : sk0 = sk3 ∨ ¬(old sk0 sk0 b) ∨ c = sk2 := resolve eq844 eq574 -- resolution 844,574
   have eq852 : ¬(old sk0 sk0 b) ∨ a = sk0 := resolve eq845 preserve_2 -- subsumption resolution 845,74
   have eq853 : a = sk0 := resolve eq852 eq573 -- subsumption resolution 852,573
-  have eq854 : a ≠ sk3 := Eq.mp (by simp only [eq853, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) preserve_2 -- backward demodulation 74,853
-  have eq864 : (old a a b) := Eq.mp (by simp only [eq853, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq573 -- backward demodulation 573,853
-  have eq901 : a = sk3 ∨ ¬(old sk0 sk0 b) ∨ c = sk2 := Eq.mp (by simp only [eq853, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq846 -- forward demodulation 846,853
+  have eq854 : a ≠ sk3 := Eq.mp (by grind only) preserve_2 -- backward demodulation 74,853
+  have eq864 : (old a a b) := Eq.mp (by grind only) eq573 -- backward demodulation 573,853
+  have eq901 : a = sk3 ∨ ¬(old sk0 sk0 b) ∨ c = sk2 := Eq.mp (by grind only) eq846 -- forward demodulation 846,853
   have eq902 : ¬(old sk0 sk0 b) ∨ c = sk2 := resolve eq901 eq854 -- subsumption resolution 901,854
-  have eq903 : ¬(old a a b) ∨ c = sk2 := Eq.mp (by simp only [eq853, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq902 -- forward demodulation 902,853
+  have eq903 : ¬(old a a b) ∨ c = sk2 := Eq.mp (by grind only) eq902 -- forward demodulation 902,853
   have eq904 : c = sk2 := resolve eq903 eq864 -- subsumption resolution 903,864
-  have eq912 : (old c sk3 a) := Eq.mp (by simp only [eq904, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq585 -- backward demodulation 585,904
+  have eq912 : (old c sk3 a) := Eq.mp (by grind only) eq585 -- backward demodulation 585,904
   subsumption p4YZ eq912 -- subsumption resolution 912,53
 
 set_option linter.all false in
@@ -310,28 +310,28 @@ theorem rule_3_preserved (G : Type*) (a b c : G) (old : G → G → G → Prop) 
   have eq286 : (old c c b) ∨ c = b ∨ a = sk0 := resolve eq271 p4YZ -- subsumption resolution 271,55
   have eq287 : c = b ∨ a = sk0 := resolve eq286 p4YZ -- subsumption resolution 286,55
   have eq288 : a = sk0 := resolve eq287 bc -- subsumption resolution 287,51
-  have eq293 : ∀ (X0 : G) , a = X0 ∨ ¬(new sk2 sk1 X0) := Eq.mp (by simp only [eq288, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq83 -- backward demodulation 83,288
-  have eq307 : (old a a sk1) ∨ c = sk0 ∨ b = sk0 := Eq.mp (by simp only [eq288, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq118 -- backward demodulation 118,288
-  have eq342 : (old sk2 sk1 a) ∨ (old sk2 sk2 b) ∨ c = sk0 := Eq.mp (by simp only [eq288, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq159 -- backward demodulation 159,288
-  have eq356 : a = c ∨ c = sk1 := Eq.mp (by simp only [eq288, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq175 -- backward demodulation 175,288
-  have eq420 : a = c ∨ (old a a sk1) ∨ b = sk0 := Eq.mp (by simp only [eq288, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq307 -- forward demodulation 307,288
+  have eq293 : ∀ (X0 : G) , a = X0 ∨ ¬(new sk2 sk1 X0) := Eq.mp (by grind only) eq83 -- backward demodulation 83,288
+  have eq307 : (old a a sk1) ∨ c = sk0 ∨ b = sk0 := Eq.mp (by grind only) eq118 -- backward demodulation 118,288
+  have eq342 : (old sk2 sk1 a) ∨ (old sk2 sk2 b) ∨ c = sk0 := Eq.mp (by grind only) eq159 -- backward demodulation 159,288
+  have eq356 : a = c ∨ c = sk1 := Eq.mp (by grind only) eq175 -- backward demodulation 175,288
+  have eq420 : a = c ∨ (old a a sk1) ∨ b = sk0 := Eq.mp (by grind only) eq307 -- forward demodulation 307,288
   have eq421 : (old a a sk1) ∨ b = sk0 := resolve eq420 ac -- subsumption resolution 420,50
-  have eq422 : a = b ∨ (old a a sk1) := Eq.mp (by simp only [eq288, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq421 -- forward demodulation 421,288
-  have eq470 : a = c ∨ (old sk2 sk1 a) ∨ (old sk2 sk2 b) := Eq.mp (by simp only [eq288, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq342 -- forward demodulation 342,288
+  have eq422 : a = b ∨ (old a a sk1) := Eq.mp (by grind only) eq421 -- forward demodulation 421,288
+  have eq470 : a = c ∨ (old sk2 sk1 a) ∨ (old sk2 sk2 b) := Eq.mp (by grind only) eq342 -- forward demodulation 342,288
   have eq471 : (old sk2 sk1 a) ∨ (old sk2 sk2 b) := resolve eq470 ac -- subsumption resolution 470,50
   have eq486 : c = sk1 := resolve eq356 ac -- subsumption resolution 356,50
-  have eq491 : ∀ (X0 : G) , ¬(new sk2 c X0) ∨ a = X0 := Eq.mp (by simp only [eq486, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq293 -- backward demodulation 293,486
-  have eq504 : (old a a c) ∨ a = b := Eq.mp (by simp only [eq486, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq422 -- backward demodulation 422,486
-  have eq511 : (old sk2 c a) ∨ (old sk2 sk2 b) := Eq.mp (by simp only [eq486, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq471 -- backward demodulation 471,486
+  have eq491 : ∀ (X0 : G) , ¬(new sk2 c X0) ∨ a = X0 := Eq.mp (by grind only) eq293 -- backward demodulation 293,486
+  have eq504 : (old a a c) ∨ a = b := Eq.mp (by grind only) eq422 -- backward demodulation 422,486
+  have eq511 : (old sk2 c a) ∨ (old sk2 sk2 b) := Eq.mp (by grind only) eq471 -- backward demodulation 471,486
   have eq531 : a = b := resolve eq504 p4XY -- subsumption resolution 504,53
-  have eq533 : ∀ (X0 : G) , ¬(old a a X0) := Eq.mp (by simp only [eq531, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) p3 -- backward demodulation 52,531
-  have eq537 : ∀ (X0 X2 : G) , ¬(old X2 X0 a) ∨ ¬(old X0 X0 a) ∨ (new X0 c X2) := Eq.mp (by simp only [eq531, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq81 -- backward demodulation 81,531
+  have eq533 : ∀ (X0 : G) , ¬(old a a X0) := Eq.mp (by grind only) p3 -- backward demodulation 52,531
+  have eq537 : ∀ (X0 X2 : G) , ¬(old X2 X0 a) ∨ ¬(old X0 X0 a) ∨ (new X0 c X2) := Eq.mp (by grind only) eq81 -- backward demodulation 81,531
   have eq546 : (old sk2 sk2 b) := resolve eq511 p4XZ -- subsumption resolution 511,54
-  have eq547 : (old sk2 sk2 a) := Eq.mp (by simp only [eq531, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq546 -- forward demodulation 546,531
+  have eq547 : (old sk2 sk2 a) := Eq.mp (by grind only) eq546 -- forward demodulation 546,531
   have eq659 : ¬(old sk2 sk2 a) ∨ (new sk2 c sk2) := resolve eq537 eq547 -- resolution 537,547
   have eq661 : (new sk2 c sk2) := resolve eq659 eq547 -- subsumption resolution 659,547
   have eq672 : a = sk2 := resolve eq661 eq491 -- resolution 661,491
-  have eq686 : (old a a a) := Eq.mp (by simp only [eq672, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq547 -- backward demodulation 547,672
+  have eq686 : (old a a a) := Eq.mp (by grind only) eq547 -- backward demodulation 547,672
   subsumption eq533 eq686 -- subsumption resolution 686,533
 
 set_option linter.all false in
@@ -391,21 +391,21 @@ theorem rule_4_preserved (G : Type*) (a b c : G) (old : G → G → G → Prop) 
   have eq4640 : (old c c b) ∨ c = b ∨ a = sk0 := resolve eq4558 p4YZ -- subsumption resolution 4558,59
   have eq4641 : c = b ∨ a = sk0 := resolve eq4640 p4YZ -- subsumption resolution 4640,59
   have eq4642 : a = sk0 := resolve eq4641 bc -- subsumption resolution 4641,55
-  have eq4645 : a ≠ sk4 := Eq.mp (by simp only [eq4642, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) preserve_4 -- backward demodulation 84,4642
-  have eq5202 : a = c ∨ b = sk4 ∨ c = sk1 := Eq.mp (by simp only [eq4642, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq3768 -- backward demodulation 3768,4642
-  have eq5209 : a = c ∨ b = sk0 := Eq.mp (by simp only [eq4642, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq3884 -- backward demodulation 3884,4642
+  have eq4645 : a ≠ sk4 := Eq.mp (by grind only) preserve_4 -- backward demodulation 84,4642
+  have eq5202 : a = c ∨ b = sk4 ∨ c = sk1 := Eq.mp (by grind only) eq3768 -- backward demodulation 3768,4642
+  have eq5209 : a = c ∨ b = sk0 := Eq.mp (by grind only) eq3884 -- backward demodulation 3884,4642
   have eq6114 : b = sk4 ∨ c = sk1 := resolve eq5202 ac -- subsumption resolution 5202,54
   have eq6131 : b = sk0 := resolve eq5209 ac -- subsumption resolution 5209,54
-  have eq6132 : a = b := Eq.mp (by simp only [eq4642, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq6131 -- forward demodulation 6131,4642
-  have eq6317 : a = sk4 ∨ c = sk1 := Eq.mp (by simp only [eq6132, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq6114 -- backward demodulation 6114,6132
+  have eq6132 : a = b := Eq.mp (by grind only) eq6131 -- forward demodulation 6131,4642
+  have eq6317 : a = sk4 ∨ c = sk1 := Eq.mp (by grind only) eq6114 -- backward demodulation 6114,6132
   have eq6392 : c = sk1 := resolve eq6317 eq4645 -- subsumption resolution 6317,4645
-  have eq6402 : (old sk4 sk4 c) ∨ c = sk4 ∨ a = sk4 := Eq.mp (by simp only [eq6392, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq196 -- backward demodulation 196,6392
-  have eq6410 : (old sk4 sk4 c) ∨ (old sk1 sk4 a) ∨ a = sk4 := Eq.mp (by simp only [eq6392, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq266 -- backward demodulation 266,6392
+  have eq6402 : (old sk4 sk4 c) ∨ c = sk4 ∨ a = sk4 := Eq.mp (by grind only) eq196 -- backward demodulation 196,6392
+  have eq6410 : (old sk4 sk4 c) ∨ (old sk1 sk4 a) ∨ a = sk4 := Eq.mp (by grind only) eq266 -- backward demodulation 266,6392
   have eq6451 : c = sk4 ∨ a = sk4 := resolve eq6402 p4XY -- subsumption resolution 6402,57
   have eq6452 : c = sk4 := resolve eq6451 eq4645 -- subsumption resolution 6451,4645
   have eq6585 : (old sk1 sk4 a) ∨ a = sk4 := resolve eq6410 p4XY -- subsumption resolution 6410,57
   have eq6586 : (old sk1 sk4 a) := resolve eq6585 eq4645 -- subsumption resolution 6585,4645
-  have eq6587 : (old sk1 c a) := Eq.mp (by simp only [eq6452, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq6586 -- forward demodulation 6586,6452
+  have eq6587 : (old sk1 c a) := Eq.mp (by grind only) eq6586 -- forward demodulation 6586,6452
   subsumption p4XZ eq6587 -- subsumption resolution 6587,58
 
 set_option linter.all false in
@@ -420,8 +420,8 @@ theorem rule_finite_0_preserved (G : Type*) (a b c : G) (old : G → G → G →
   have eq105 : (old sk0 sk1 sk2) ∨ c = sk1 := resolve eq104 preserve_1 -- subsumption resolution 104,78
   have eq111 : c = sk1 ∨ memold sk0 := resolve eq105 old_mem1 -- resolution 105,74
   have eq114 : c = sk1 := resolve eq111 preserve_3 -- subsumption resolution 111,80
-  have eq117 : (sP0 sk0 c sk2) ∨ (old sk0 sk1 sk2) ∨ (old sk0 sk0 b) := Eq.mp (by simp only [eq114, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq96 -- backward demodulation 96,114
-  have eq126 : (old sk0 c sk2) ∨ (sP0 sk0 c sk2) ∨ (old sk0 sk0 b) := Eq.mp (by simp only [eq114, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq117 -- forward demodulation 117,114
+  have eq117 : (sP0 sk0 c sk2) ∨ (old sk0 sk1 sk2) ∨ (old sk0 sk0 b) := Eq.mp (by grind only) eq96 -- backward demodulation 96,114
+  have eq126 : (old sk0 c sk2) ∨ (sP0 sk0 c sk2) ∨ (old sk0 sk0 b) := Eq.mp (by grind only) eq117 -- forward demodulation 117,114
   have eq127 : (sP0 sk0 c sk2) ∨ (old sk0 sk0 b) := resolve eq126 p4XZ -- subsumption resolution 126,56
   have eq135 : (old sk0 sk0 b) ∨ c = b := resolve eq127 rule_def_0_1 -- resolution 127,66
   have eq137 : (old sk0 sk0 b) := resolve eq135 bc -- subsumption resolution 135,53
@@ -453,8 +453,8 @@ theorem rule_finite_2_preserved (G : Type*) (a b c : G) (old : G → G → G →
   have eq105 : (old sk0 sk1 sk2) ∨ c = sk1 := resolve eq102 preserve_4 -- subsumption resolution 102,81
   have eq113 : c = sk1 ∨ memold sk2 := resolve eq105 old_mem3 -- resolution 105,76
   have eq114 : c = sk1 := resolve eq113 preserve_3 -- subsumption resolution 113,80
-  have eq118 : (sP0 sk0 c sk2) ∨ (old sk0 sk1 sk2) ∨ (old sk2 sk0 a) := Eq.mp (by simp only [eq114, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq97 -- backward demodulation 97,114
-  have eq126 : (old sk0 c sk2) ∨ (sP0 sk0 c sk2) ∨ (old sk2 sk0 a) := Eq.mp (by simp only [eq114, or_comm, or_left_comm, or_assoc, eq_comm, ne_comm]) eq118 -- forward demodulation 118,114
+  have eq118 : (sP0 sk0 c sk2) ∨ (old sk0 sk1 sk2) ∨ (old sk2 sk0 a) := Eq.mp (by grind only) eq97 -- backward demodulation 97,114
+  have eq126 : (old sk0 c sk2) ∨ (sP0 sk0 c sk2) ∨ (old sk2 sk0 a) := Eq.mp (by grind only) eq118 -- forward demodulation 118,114
   have eq127 : (sP0 sk0 c sk2) ∨ (old sk2 sk0 a) := resolve eq126 p4XZ -- subsumption resolution 126,56
   have eq136 : (old sk2 sk0 a) ∨ c = sk2 := resolve eq127 rule_def_0_2 -- resolution 127,67
   have eq139 : (old sk2 sk0 a) := resolve eq136 preserve_4 -- subsumption resolution 136,81
@@ -498,8 +498,8 @@ theorem PartialSolution.adjoin (a b c : G) (ac : a ≠ c) (bc : c ≠ b) (p3 : �
   have new_imp (X Y Z) : new X Y Z → ps.R X Y Z ∨ sP0 X Y Z ∨ sP1 X Y Z := id
 
   simp only [imp_iff_not_or] at imp_new_0
-  simp only [not_and, not_exists, imp_iff_not_or, sP0, ← forall_or_right, or_assoc] at imp_new_1
-  simp only [not_and, not_exists, imp_iff_not_or, sP1, ← forall_or_right, or_assoc] at imp_new_2
+  simp only [not_and, imp_iff_not_or, sP0, or_assoc] at imp_new_1
+  simp only [not_and, imp_iff_not_or, sP1, or_assoc] at imp_new_2
   simp only [imp_iff_not_or] at new_imp
   clear_value sP0 sP1 new
 
@@ -628,13 +628,14 @@ lemma PartialSolution.of_R (a b c : ℕ) (h : ps.R a b c) : ps.complFun a b = c 
   rw [PartialSolution.complFun_eq_iff]
   apply PartialSolution.complSeq_mono _ 0 _ (by simp) _ _ _ h
 
+@[implicit_reducible]
 noncomputable def PartialSolution.toMagma : Magma ℕ where
   op := ps.complFun
 
 theorem PartialSolution.toMagma_equation883 :
     letI := ps.toMagma
     Equation883 ℕ := by
-  simp only [Equation883, PartialSolution.toMagma]
+  simp only [Equation883]
   intro X0 X1
   simpa [← PartialSolution.complFun_eq_iff, eq_comm] using
     ps.compl_rule1 X0 X1 (ps.complFun X0 X1) (ps.complFun X1 X1) (ps.complFun (ps.complFun X0 X1) (ps.complFun X1 X1))
@@ -655,11 +656,17 @@ noncomputable def PartialSolution.counter2035 : PartialSolution ℕ where
 
 @[equational_result]
 theorem _root_.Equation883_not_implies_Equation2035 : ∃ (G : Type) (_ : Magma G), Equation883 G ∧ ¬Equation2035 G := by
-  use ℕ, PartialSolution.counter2035.toMagma, PartialSolution.counter2035.toMagma_equation883
-  simp only [not_forall, PartialSolution.toMagma]
-  use 1
-  repeat (first | rw [PartialSolution.counter2035.of_R 1 1 2] | rw [PartialSolution.counter2035.of_R 1 2 2] | rw [PartialSolution.counter2035.of_R 2 1 1])
-  all_goals simp [PartialSolution.counter2035]
+  refine ⟨ℕ, PartialSolution.counter2035.toMagma,
+    PartialSolution.counter2035.toMagma_equation883, ?_⟩
+  have h1 := PartialSolution.counter2035.of_R 1 1 2 (by unfold PartialSolution.counter2035; decide)
+  have h2 := PartialSolution.counter2035.of_R 1 2 2 (by unfold PartialSolution.counter2035; decide)
+  have h3 := PartialSolution.counter2035.of_R 2 1 1 (by unfold PartialSolution.counter2035; decide)
+  intro h
+  specialize h 1
+  change 1 =
+    PartialSolution.counter2035.complFun (PartialSolution.counter2035.complFun (PartialSolution.counter2035.complFun 1 1) 1) (PartialSolution.counter2035.complFun 1 1) at h
+  simp only [h1, h2, h3] at h
+  exact absurd h (by decide)
 
 
 set_option maxRecDepth 1000 in
@@ -677,11 +684,17 @@ noncomputable def PartialSolution.counter2101 : PartialSolution ℕ where
 
 @[equational_result]
 theorem _root_.Equation883_not_implies_Equation2101 : ∃ (G : Type) (_ : Magma G), Equation883 G ∧ ¬Equation2101 G := by
-  use ℕ, PartialSolution.counter2101.toMagma, PartialSolution.counter2101.toMagma_equation883
-  simp only [not_forall, PartialSolution.toMagma]
-  use 1, 1
-  repeat (first | rw [PartialSolution.counter2101.of_R 1 1 2] | rw [PartialSolution.counter2101.of_R 1 2 2] | rw [PartialSolution.counter2101.of_R 2 1 1])
-  all_goals simp [PartialSolution.counter2101]
+  refine ⟨ℕ, PartialSolution.counter2101.toMagma,
+    PartialSolution.counter2101.toMagma_equation883, ?_⟩
+  have h1 := PartialSolution.counter2101.of_R 1 1 2 (by unfold PartialSolution.counter2101; decide)
+  have h2 := PartialSolution.counter2101.of_R 1 2 2 (by unfold PartialSolution.counter2101; decide)
+  have h3 := PartialSolution.counter2101.of_R 2 1 1 (by unfold PartialSolution.counter2101; decide)
+  intro h
+  specialize h 1 1
+  change 1 =
+    PartialSolution.counter2101.complFun (PartialSolution.counter2101.complFun (PartialSolution.counter2101.complFun 1 1) 1) (PartialSolution.counter2101.complFun 1 1) at h
+  simp only [h1, h2, h3] at h
+  exact absurd h (by decide)
 
 
 set_option maxRecDepth 1000 in
@@ -699,11 +712,18 @@ noncomputable def PartialSolution.counter2238 : PartialSolution ℕ where
 
 @[equational_result]
 theorem _root_.Equation883_not_implies_Equation2238 : ∃ (G : Type) (_ : Magma G), Equation883 G ∧ ¬Equation2238 G := by
-  use ℕ, PartialSolution.counter2238.toMagma, PartialSolution.counter2238.toMagma_equation883
-  simp only [not_forall, PartialSolution.toMagma]
-  use 1
-  repeat (first | rw [PartialSolution.counter2238.of_R 1 1 2] | rw [PartialSolution.counter2238.of_R 1 2 2] | rw [PartialSolution.counter2238.of_R 1 3 3] | rw [PartialSolution.counter2238.of_R 2 1 3])
-  all_goals simp [PartialSolution.counter2238]
+  refine ⟨ℕ, PartialSolution.counter2238.toMagma,
+    PartialSolution.counter2238.toMagma_equation883, ?_⟩
+  have h1 := PartialSolution.counter2238.of_R 1 1 2 (by unfold PartialSolution.counter2238; decide)
+  have h2 := PartialSolution.counter2238.of_R 1 2 2 (by unfold PartialSolution.counter2238; decide)
+  have h3 := PartialSolution.counter2238.of_R 1 3 3 (by unfold PartialSolution.counter2238; decide)
+  have h4 := PartialSolution.counter2238.of_R 2 1 3 (by unfold PartialSolution.counter2238; decide)
+  intro h
+  specialize h 1
+  change 1 =
+    PartialSolution.counter2238.complFun (PartialSolution.counter2238.complFun 1 (PartialSolution.counter2238.complFun 1 (PartialSolution.counter2238.complFun 1 1))) 1 at h
+  simp only [h1, h2, h4] at h
+  exact absurd h (by decide)
 
 
 set_option maxRecDepth 1000 in
@@ -721,10 +741,17 @@ noncomputable def PartialSolution.counter2304 : PartialSolution ℕ where
 
 @[equational_result]
 theorem _root_.Equation883_not_implies_Equation2304 : ∃ (G : Type) (_ : Magma G), Equation883 G ∧ ¬Equation2304 G := by
-  use ℕ, PartialSolution.counter2304.toMagma, PartialSolution.counter2304.toMagma_equation883
-  simp only [not_forall, PartialSolution.toMagma]
-  use 2, 1
-  repeat (first | rw [PartialSolution.counter2304.of_R 1 1 1] | rw [PartialSolution.counter2304.of_R 1 2 1] | rw [PartialSolution.counter2304.of_R 1 3 1] | rw [PartialSolution.counter2304.of_R 2 1 3])
-  all_goals simp [PartialSolution.counter2304]
+  refine ⟨ℕ, PartialSolution.counter2304.toMagma,
+    PartialSolution.counter2304.toMagma_equation883, ?_⟩
+  have h1 := PartialSolution.counter2304.of_R 1 1 1 (by unfold PartialSolution.counter2304; decide)
+  have h2 := PartialSolution.counter2304.of_R 1 2 1 (by unfold PartialSolution.counter2304; decide)
+  have h3 := PartialSolution.counter2304.of_R 1 3 1 (by unfold PartialSolution.counter2304; decide)
+  have h4 := PartialSolution.counter2304.of_R 2 1 3 (by unfold PartialSolution.counter2304; decide)
+  intro h
+  specialize h 2 1
+  change 2 =
+    PartialSolution.counter2304.complFun (PartialSolution.counter2304.complFun 1 (PartialSolution.counter2304.complFun 2 (PartialSolution.counter2304.complFun 1 1))) 1 at h
+  simp only [h1, h3, h4] at h
+  exact absurd h (by decide)
 
 end Eq883

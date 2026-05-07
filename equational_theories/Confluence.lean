@@ -225,7 +225,7 @@ instance [DecidableEq α] : DecidableEq (ConfMagma rw) :=
 macro "refute" : tactic =>
   `(tactic |(
     show (¬ ∀ _,_)
-    push_neg
+    push Not
     first
     | (use (0 : Nat); decide)
     | (use (0 : Nat), (1 : Nat); decide)

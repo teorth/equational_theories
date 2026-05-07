@@ -39,7 +39,7 @@ structure PartialSolution where
   Dom : Finset A
   f : A → A
   --f is injective on its domain.
-  Inj : Dom.toSet.InjOn f
+  Inj : Set.InjOn f Dom
   --f maps the identity to itself
   Dom0 : 0 ∈ Dom
   Id : f 0 = 0
@@ -67,18 +67,6 @@ theorem ExtendImg' (f : PartialSolution) : ∀ {a}, a ∈ f.Dom → f.f a ∉ f.
   funext x
   simp only [Im, Finset.mem_image, Set.mem_image, Finset.mem_coe]
 
-/-- The group Π₀ : T → ℤ is not finitely generated when T is infinite -/
-theorem DFinsuppInfiniteInt_not_FG {T : Type*} [Infinite T] : ¬(AddGroup.FG (Π₀ _ : T, ℤ)) :=
-  have h : ¬(AddGroup.FG (Π₀ _ : T, Fin 1064)) := fun _ ↦ DFinsupp.infinite_of_left.not_finite
-    <| AddCommGroup.finite_of_fg_torsion (Π₀ _ : T, Fin 1064) (fun _ ↦ by
-    rw [isOfFinAddOrder_iff_nsmul_eq_zero]
-    exact ⟨1064, by simp, by ext; simp [show (1064:Fin 1064) = 0 by rfl]⟩
-  )
-  let f : (Π₀ _ : T, ℤ) →+ (Π₀ _ : T, Fin 1064) := DFinsupp.mapRange.addMonoidHom fun _ ↦ Int.castAddHom _
-  have : Function.Surjective f := Function.HasRightInverse.surjective
-    ⟨DFinsupp.mapRange (fun _ x ↦ x) (by simp), fun _ ↦ by ext; simp [DFinsupp.mapRange, f]⟩
-  fun _ ↦ h (AddGroup.fg_of_surjective this)
-
 /-- The module Π₀ _ : ℕ, ℤ is not a finite rank module over ℤ -/
 theorem DFinsuppInfinite_not_Finite : ¬(Module.Finite ℤ A) := by
   /- Prove by giving a series of Module equivalences (LinearEquiv's) between DFinsupp,
@@ -87,10 +75,11 @@ theorem DFinsuppInfinite_not_Finite : ¬(Module.Finite ℤ A) := by
   have f : (Polynomial ℤ) ≃ₗ[ℤ] (Finsupp ℕ ℤ) := {
     toFun := Polynomial.toFinsupp
     invFun := Polynomial.ofFinsupp
-    map_add' := by simp
+    map_add' _ _ := by simp; rfl
     map_smul' := by
       intros
-      rw [zsmul_eq_mul, eq_intCast, Int.cast_id, ← Polynomial.toFinsupp_smul, zsmul_eq_mul]
+      rw [zsmul_eq_mul, eq_intCast, Int.cast_id, ← zsmul_eq_mul]
+      rfl
     left_inv := by simp [Function.LeftInverse]
     right_inv := by simp [Function.RightInverse, Function.LeftInverse]
   }
@@ -154,7 +143,7 @@ lemma fresh_ne_sum (hx : x ∈ f.Dom) (hy : y ∈ f.Dom) (h i j k l m : ℤ := 0
     else if n = 2 then ⟨y, by simp [hy]⟩
     else if n = 3 then ⟨f.f x, by simp [show f.f x ∈ f.Im by simp [Im]; use x]⟩
     else ⟨f.f y, by simp [show f.f y ∈ f.Im by simp [Im]; use y]⟩
-  simp [hf, Fin.sum_univ_def, List.finRange_succ_eq_map]
+  simp [hf, Fin.sum_univ_def, List.finRange_succ]
   abel
 
 lemma fresh_sum_ne_sum (hx : x ∈ f.Dom) (hy : y ∈ f.Dom)
@@ -272,7 +261,7 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
       · exact fun h ↦ (f.fresh_ne_f _ hz h).elim
       · exact (hczfz x hx).symm
       · have := by simpa using f.ExtendImg hx hb
-        exact fun h ↦ (this z hz h.symm).elim
+        grind only
       · exact fun h ↦ (f.fresh_ne_f _ hy h.symm).elim
       · have := by simpa using f.ExtendImg hx hb
         exact fun h ↦ (this y hy h).elim
@@ -291,7 +280,7 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
         · simp [hfyb]
         · have hfyb : f.f y ≠ b := fun h ↦ hb (h ▸ hfyd)
           have hffyb : f.f (f.f y) - f.f y ≠ b := fun h ↦ hb (h ▸ f.Closed_sub hy hfyd)
-          simp [hfyb, hfzcb y hy, hffyb, hffzcb y hy hfyd]
+          simp [hfyb, hffyb, hffzcb y hy hfyd]
           exact f.Closed_sub hy hfyd
     Valid := by
       intro y hy
@@ -306,7 +295,7 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
           exact f.Inj hx hy hfyb.symm
         · have hfyb : f.f y ≠ b := fun h ↦ hb (h ▸ hfyd)
           have hffyb : f.f (f.f y) - f.f y ≠ b := fun h ↦ hb (h ▸ f.Closed_sub hy hfyd)
-          simp [hfyb, hfzcb y hy, hffyb, hffzcb y hy hfyd]
+          simp [hfyb, hffyb, hffzcb y hy hfyd]
           exact f.Valid hy hfyd
     SubInj := by
       intro y z hy hz
@@ -316,8 +305,7 @@ def extend (f : PartialSolution) {x : A} (hx : x ∈ f.Dom) : PartialSolution :=
       <;> (try simp only [hy, hz, ↓reduceIte, imp_self, hcbb])
       <;> (try have hyb : y ≠ b := fun h ↦ hb (h ▸ hy); simp [hyb])
       <;> (try have hzb : z ≠ b := fun h ↦ hb (h ▸ hz); simp [hzb])
-      <;> (try simp only [hzcb y hy, ↓reduceIte,
-        not_false_eq_true, true_implies, imp_false, ne_eq])
+      <;> (try simp only [hzcb y hy, ↓reduceIte, imp_false, ne_eq])
       <;> (try simp only [hzcb z hz, ↓reduceIte])
       · exact fun h ↦ (hbccbxb h).elim
       · exact fun h ↦ (hbczfz z hz h).elim
@@ -476,16 +464,9 @@ def add (f : PartialSolution) {x : A} (hx : x ∉ f.Dom) (hxi : x ∉ f.Im)
       simp only [Finset.mem_insert, @eq_comm _ _ x] at hy hz
       rcases hy with rfl|hy <;> rcases hz with rfl|hz
       · simp
-      · have hxz : x ≠ z := fun h ↦ hx (h ▸ hz)
-        simp only [hxz, ↓reduceIte, imp_false, ← ne_eq]
-        exact hb2 z hz
-      · have hxy : x ≠ y := fun h ↦ hx (h ▸ hy)
-        simp only [hxy, ↓reduceIte, imp_false, ← ne_eq]
-        exact fun h ↦ ((hb2 y hy).symm h).elim
-      · have hxy : x ≠ y := fun h ↦ hx (h ▸ hy)
-        have hxz : x ≠ z := fun h ↦ hx (h ▸ hz)
-        simp only [hxy, hxz, ↓reduceIte, imp_false, ← ne_eq]
-        exact f.SubInj hy hz
+      · grind only
+      · grind only
+      · grind only [f.SubInj]
     ExtendDom := by
       intro y hy
       simp only [Finset.mem_insert, @eq_comm _ _ x] at hy
@@ -710,7 +691,7 @@ theorem closureSeq_extends (f : PartialSolution) (n : ℕ) :
 theorem closureSeq_ascDom (f : PartialSolution) (n k : ℕ) :
     ∀ x, x ∈ (f.closureSeq n).Dom → x ∈ (f.closureSeq (n+k)).Dom := by
   induction k
-  · simp [closureSeq]
+  · simp
   next k ih =>
     intro x hx
     rw [← add_assoc, closureSeq]
@@ -719,7 +700,7 @@ theorem closureSeq_ascDom (f : PartialSolution) (n k : ℕ) :
 theorem closureSeq_asc (f : PartialSolution) (n k : ℕ) :
     ∀ x, x ∈ (f.closureSeq n).Dom → (f.closureSeq (n+k)).f x = (f.closureSeq n).f x := by
   induction k
-  · simp [closureSeq]
+  · simp
   next k ih =>
     intro x hx
     rw [← add_assoc, closureSeq]
@@ -808,7 +789,7 @@ def initial : PartialSolution where
 @[equational_result]
 theorem Equation1491_facts : ∃ (G : Type) (_ : Magma G), Facts G [1491] [65] := by
   use A, ⟨initial.closure⟩
-  simp only [Equation1491, closure_prop, implies_true, not_forall, true_and]
+  simp only [Equation1491, not_forall]
   constructor
   · exact closure_prop initial
   · use 0, -x₁

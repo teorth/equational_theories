@@ -15,18 +15,21 @@ theorem Equation1648_not_implies_Equation206 : ∃ (G: Type) (_: Magma G),
     op := fun x y => x - sign (y -x)
   }
   use ℤ, instMagmaInt
-  simp only [Equation1648, Equation206, not_forall]
   constructor
   · intro x y
-    simp only [sign, sub_neg, Int.reduceNeg, sub_sub_cancel_left, neg_eq_zero, ite_eq_left_iff,
-      sub_lt_self_iff, instMagmaInt]
-    split <;> try simp_all
-    case h.left.isFalse =>
-      split <;> split <;> split <;> simp_all <;> linarith
-  · use 0,-1
-    simp only [sign, sub_neg, Int.reduceNeg, sub_zero, neg_eq_zero, one_ne_zero, ↓reduceIte,
-      Left.neg_neg_iff, zero_lt_one, sub_neg_eq_add, zero_add, Int.reduceLT, zero_sub, sub_self,
-      zero_eq_neg, not_false_eq_true, instMagmaInt]
+    have hop : ∀ a b : ℤ, a ◇ b = a - sign (b - a) := fun _ _ => rfl
+    rw [hop, hop, hop]
+    simp only [sub_sub_cancel_left]
+    unfold sign
+    split <;> simp_all
+    case isFalse =>
+      split <;> split <;> split <;> simp_all <;> omega
+  · intro h
+    have hop : ∀ a b : ℤ, a ◇ b = a - sign (b - a) := fun _ _ => rfl
+    have := h 0 (-1)
+    rw [hop, hop, hop] at this
+    revert this
+    decide
 
 @[equational_result]
 theorem Equation1648_facts : ∃ (G : Type) (_ : Magma G), Facts G [1648] [151, 203, 307, 1426, 1832, 2238, 2441, 3050, 3456, 3522, 4065] := by
@@ -34,15 +37,15 @@ theorem Equation1648_facts : ∃ (G : Type) (_ : Magma G), Facts G [1648] [151, 
     op := fun x y => if x > y then x + 1 else x - 1
   }
   use ℤ, instMagmaInt
-
+  have hop : ∀ a b : ℤ, a ◇ b = if a > b then a + 1 else a - 1 := fun _ _ => rfl
   constructor
   · intro x y
-    simp only [gt_iff_lt, instMagmaInt]
+    rw [hop, hop, hop]
     split <;> simp <;> split <;> simp_all <;> linarith
   · repeat' apply And.intro
     all_goals {
       by_contra h
       try specialize h 0 1
       try specialize h 0
-      simp [instMagmaInt] at h
+      simp [hop] at h
     }

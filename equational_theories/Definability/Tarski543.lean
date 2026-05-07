@@ -57,8 +57,9 @@ identity.
 We'll prove it is also `IsCancelMul` later, and give the noncomputable CommGroup structure that
 extends this when it's nonempty.
 -/
+@[implicit_reducible]
 def CommSemigroupOf543 [Magma M] (h : Equation543 M) : CommSemigroup M :=
-  let i : Mul M := ⟨fun x y ↦ x ◇ ((x ◇ x) ◇ y)⟩
+  let : Mul M := ⟨fun x y ↦ x ◇ ((x ◇ x) ◇ y)⟩
   have h4369 : ∀_,_ := Equation543_implies_Equation4369 h -- (1.3)
   have h11 : ∀_,_ := Equation543_implies_Equation11 h
   have h40 : ∀_,_ := Equation543_implies_Equation40 h
@@ -70,7 +71,7 @@ def CommSemigroupOf543 [Magma M] (h : Equation543 M) : CommSemigroup M :=
     mul_comm := hcomm
     mul_assoc := fun x y z ↦ by
       have h23 (x y z : M) : x * (y ◇ z) = x ◇ (z ◇ y) := by
-        simp only [HMul.hMul, Mul.mul]
+        simp only [HMul.hMul]
         apply congrArg (fun t ↦ x ◇ t)
         rw [h4369 (x ◇ x) y z, ← h11 y x]
       have h26 (x y z : M) : x * (y ◇ z) = y * (x ◇ z) :=
@@ -85,6 +86,7 @@ def CommSemigroupOf543 [Magma M] (h : Equation543 M) : CommSemigroup M :=
       exact (h32 x y z).trans <| (h34 x y z).trans (hcomm _ _)
   }
 
+@[implicit_reducible]
 noncomputable def CommGroupOf543 [Magma M] [hn : Nonempty M] (h : Equation543 M) : CommGroup M :=
   let iInv : Inv M := ⟨fun x ↦ (x ◇ x) ◇ x⟩
   let iOne : One M := ⟨Classical.choice hn ◇ Classical.choice hn⟩
@@ -109,11 +111,15 @@ theorem CommGroupOf543_eq_CommSemigroupOf543 [Magma M] [hn : Nonempty M] (h : Eq
     (CommGroupOf543 h).toCommSemigroup = CommSemigroupOf543 h :=
   rfl
 
+theorem commGroupOf543_mul_def [Magma M] (h : Equation543 M) (x y : M) :
+    let := CommSemigroupOf543 h; Mul.mul x y = x ◇ ((x ◇ x) ◇ y) :=
+  rfl
+
 open FirstOrder.Language
 
 --A term defining the group operation from subtraction
 private lemma termDef {M : Type*} [op : Magma M] (h : Equation543 M) :
-    (∅:Set M).TermDefinable MagmaLanguage (inst := op.FOStructure)
+    let := op.FOStructure; (∅:Set M).TermDefinable MagmaLanguage
     (⟨(CommSemigroupOf543 h).mul⟩ : Magma M).FinArityOp := by
   use (
     let f := Functions.apply₂ (L := (MagmaLanguage.withConstants (∅:Set M))) (α := Fin 2) (Sum.inl ());
@@ -122,9 +128,10 @@ private lemma termDef {M : Type*} [op : Magma M] (h : Equation543 M) :
   funext v
   simp only [Magma.FinArityOp, Fin.isValue, constantsOn_Functions, constantsOnFunc,
     Term.realize_functions_apply₂, Term.realize_var, Magma.FOStructure_funMap',
-    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons]
+    Matrix.cons_val_zero, Matrix.cons_val_one]
   rfl
 
+set_option backward.isDefEq.respectTransparency false in
 --A formula defining subtraction from the group operation.
 -- { (x,y,z) } is in the graph of the subtraction operation, -, if and only if
 -- x-y = z, so, if x=y+z.
@@ -133,13 +140,13 @@ private lemma groupDef {M : Type*} [op : Magma M] (h : Equation543 M) :
     _ op.Graph := by
   -- x = y + z
   use Term.equal
-    (Term.var (Sum.inl 0))
-    (Functions.apply₂ (Sum.inl ()) (Term.var (Sum.inl 1)) (Term.var (Sum.inr ())))
+    (Term.var (some 0))
+    (Functions.apply₂ (Sum.inl ()) (Term.var (some 1)) (Term.var none))
   ext v
-  simp [Magma.Graph, Function.arityGraph, Magma.FinArityOp, CommSemigroupOf543]
-  set x := v (Sum.inl 0)
-  set y := v (Sum.inl 1)
-  set z := v (Sum.inr ())
+  simp [Magma.Graph, Function.tupleGraph, Magma.FinArityOp, commGroupOf543_mul_def]
+  set x := v (some 0)
+  set y := v (some 1)
+  set z := v none
   -- Prove that  x ◇ y = z ↔ x = y ◇ ((y ◇ y) ◇ z)  where ◇ is the subtraction operation
   have h11 : ∀_,_ := Equation543_implies_Equation11 h
   have h16 : ∀_,_ := Equation543_implies_Equation16 h
@@ -172,7 +179,7 @@ theorem Equation4512_StructuralFrom_Equation543 : Law4512.StructuralFrom Law543 
   · rw [@Law4512.models_iff]
     exact fun x y z ↦ ((CommSemigroupOf543 he543).mul_assoc x y z).symm
   constructor
-  · exact (termDef he543).Definable (inst := op.FOStructure) --The group operation is definable
+  · exact @(termDef he543).definable_tupleGraph --The group operation is definable
   · exact groupDef he543 --The subtraction operation can be recovered from the group operation
 
 /-- Commutative structure, Equation 4512, is a structural definition from any magma satisfying Tarski's
@@ -185,5 +192,5 @@ theorem Equation43_StructuralFrom_Equation543 : Law43.StructuralFrom Law543 := b
   · rw [@Law43.models_iff]
     exact fun x y ↦ (CommSemigroupOf543 he543).mul_comm x y
   constructor
-  · exact (termDef he543).Definable (inst := op.FOStructure) --The group operation is definable
+  · exact @(termDef he543).definable_tupleGraph --The group operation is definable
   · exact groupDef he543 --The subtraction operation can be recovered from the group operation

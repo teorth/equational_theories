@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Cody Roux, Judah Towery
 -/
 import equational_theories.Magma
-import Mathlib.Order.BooleanAlgebra
+import Mathlib.Order.BooleanAlgebra.Set
 
 /-!
 In this file we introduce "Sheffer Algebras", which are simply a presentation of Boolean Algebras,
@@ -83,7 +83,7 @@ instance : Max α where
 
 lemma sup (a b : α) : a ⊔ b = (a | b)′ := rfl
 
-instance : HasCompl α where
+instance : Compl α where
   compl a := a′
 
 lemma comple (a : α) : aᶜ = a′ := rfl
@@ -118,7 +118,7 @@ lemma compl₁ (a : α) : a ⊔ aᶜ = u := by
 
 @[simp]
 lemma compl₂ (a  : α) : a ⊓ aᶜ = z := by
-  simp only [inf, z, u, comple, sh₁, commut]
+  simp only [inf, z, comple, sh₁, commut]
   exact all_bot a elt
 
 @[simp]
@@ -323,7 +323,10 @@ lemma assoc₂ (a b c : α) : a ⊓ (b ⊓ c) = (a ⊓ b) ⊓ c := by
 
 instance ShefferLE : LE α := ⟨ λ a b ↦ a = b ⊓ a ⟩
 
-lemma Sheffer.le_refl (a : α) : a ≤ a := by simp [ShefferLE]
+theorem shefferLE_iff (a b : α) : a ≤ b ↔ a = b ⊓ a := by
+  rfl
+
+lemma Sheffer.le_refl (a : α) : a ≤ a := by simp [shefferLE_iff]
 
 lemma Sheffer.le_trans (a b c : α) : a ≤ b → b ≤ c → a ≤ c := by
   rw [ShefferLE]
@@ -335,7 +338,7 @@ lemma Sheffer.le_trans (a b c : α) : a ≤ b → b ≤ c → a ≤ c := by
     _ = c ⊓ a       := by rw [← h₁]
 
 lemma Sheffer.le_antisymm (a b : α) : a ≤ b → b ≤ a → a = b := by
-  simp [ShefferLE]
+  simp [shefferLE_iff]
   intro h₁ h₂
   calc
     a = b ⊓ a := h₁
@@ -350,17 +353,17 @@ instance ShefferToBooleanAlg : BooleanAlgebra α where
   le_antisymm := Sheffer.le_antisymm
   le_sup_left := by
     intro a b
-    simp only [ShefferLE, Sup.sup]
+    simp only [shefferLE_iff]
     rw [commut₂]
     exact Eq.symm (absorb₂ a b)
   le_sup_right := by
     intro a b
-    simp only [ShefferLE]
+    simp only [shefferLE_iff]
     rw [commut₂, commut₁]
     exact Eq.symm (absorb₂ b a)
   sup_le := by
     intro a b c
-    simp only [ShefferLE]
+    simp only [shefferLE_iff]
     intro h₁ h₂
     calc
       a ⊔ b = (c ⊓ a) ⊔ b       := by conv => left; left; rw [h₁]
@@ -368,9 +371,9 @@ instance ShefferToBooleanAlg : BooleanAlgebra α where
       _     = c ⊓ (a ⊔ b)       := Eq.symm (distrib₂ ..)
   inf := (. ⊓ .)
   inf_le_left := by
-    intro a b; simp [ShefferLE]
+    intro a b; simp [shefferLE_iff]
   inf_le_right := by
-    intro a b; simp only [ShefferLE]
+    intro a b; simp only [shefferLE_iff]
     calc
       a ⊓ b = a ⊓ (b ⊓ b) := by rw [idemp₂]
       _     = a ⊓ b ⊓ b   := assoc₂ a b b
@@ -378,7 +381,7 @@ instance ShefferToBooleanAlg : BooleanAlgebra α where
       _     = b ⊓ (a ⊓ b) := Eq.symm (assoc₂ ..)
   le_inf := by
     intro a b c h₁ h₂
-    simp only [ShefferLE]
+    simp only [shefferLE_iff]
     calc
       a = b ⊓ a       := h₁
       _ = b ⊓ (c ⊓ a) := by conv => left; right; rw [h₂]
@@ -388,8 +391,8 @@ instance ShefferToBooleanAlg : BooleanAlgebra α where
   bot := z
   inf_compl_le_bot := by intro a; simp only [compl₂]; exact Sheffer.le_refl ..
   top_le_sup_compl := by intro a; simp only [compl₁]; exact Sheffer.le_refl ..
-  le_top := by intro a; simp only [ShefferLE]; rw [commut₂]; exact Eq.symm (ident₂ a)
-  bot_le := by intro a; simp [ShefferLE]
+  le_top := by intro a; simp only [shefferLE_iff]; rw [commut₂]; exact Eq.symm (ident₂ a)
+  bot_le := by intro a; simp [shefferLE_iff]
 
 end ShefferLaws
 
@@ -400,6 +403,7 @@ variable [BooleanAlgebra α]
 
 -- This is intentionally not an instance to avoid creating an instance cycle
 -- Boolean Algebra -> Sheffer Algebra -> Boolean Algebra.
+@[implicit_reducible]
 def BooleanAlgToSheffer : ShefferAlgebra α where
   stroke x y := (x ⊓ y)ᶜ
   elt := ⊥

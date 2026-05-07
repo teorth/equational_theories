@@ -1,24 +1,37 @@
-import Mathlib.GroupTheory.FreeGroup.Basic
+import Mathlib.Algebra.Group.Torsion
 import Mathlib.Data.Finmap
 import Mathlib.Data.Finset.Max
 import Mathlib.Data.List.Basic
 import Mathlib.Data.Finset.Order
 import Mathlib.Data.Set.Finite.Basic
+import Mathlib.GroupTheory.FreeGroup.CyclicallyReduced
 import Mathlib.Order.CompletePartialOrder
 
 import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Set.Card
+import Mathlib.Data.ENat.Basic
 import equational_theories.FactsSyntax
 import equational_theories.FreshGenerator
 import equational_theories.Mathlib.Order.Greedy
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
-import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
 
 
 import Mathlib.Data.Rel
 import Mathlib.Tactic.Linarith.Frontend
 import Init.Core
 import Mathlib.Tactic.Group
+
+namespace Rel
+variable {α β : Type*}
+
+/-- Domain of a relation. -/
+def dom (R : Rel α β) : Set α := {a | ∃ b, R a b}
+
+/-- Codomain of a relation. -/
+def codom (R : Rel α β) : Set β := {b | ∃ a, R a b}
+
+end Rel
 
 namespace Eq1516
 
@@ -352,7 +365,7 @@ theorem disjoint_old_e1 : t.ps.E.Disjoint t.e1 := by
     | ⟨a', left, eq, _⟩  =>
       apply fresh_ineq t.old x a'⁻¹
       · apply Subgroup.subset_closure
-        simp [Subgroup.subset_closure, dom_old _ _ hold]
+        simp [dom_old _ _ hold]
       · rw [inv_mem_iff]
         apply Subgroup.subset_closure
         simp [dom_old' _ _ _ left]
@@ -500,7 +513,7 @@ theorem newE_dom_and_inv : ∀ x y, y ∈ t.newE ⬝ x → x⁻¹ ∈ t.newE →
       intro eq_a'_a''
       have eq_d''_1 : d'' = 1 := by
         rw [eq_a'_a''] at eq'
-        simp only [mul_left_inj, mul_eq_right] at eq'
+        simp only [mul_eq_right] at eq'
         exact eq'
       have eq_a''_1 : (a'')⁻¹ = 1 := by
         apply t.ps.cond8
@@ -575,7 +588,7 @@ theorem newE_dom_and_inv' : ∀ x y, y ∈ t.newE ⬝ x → x⁻¹ ∈ t.newE �
     · rw [e_x_inv_d, old']
       simp [e0]
     · exfalso
-      apply ne_inv_of_ne_one t.b_ne_1
+      apply self_ne_inv.mpr t.b_ne_1
       nth_rw 1 [← e0.1, ← e0'.1]
       simp
 
@@ -1256,7 +1269,9 @@ theorem base1' {a b : A} (hab : a ≠ b) (c₁ c₂ c₃ : A) : ∃ c, c ◇ a =
   have h : ({c | c ◇ a = b} \ {c₁, c₂, c₃}).Nonempty := by
     refine Set.encard_ne_zero.mp (ne_of_gt ?_)
     calc
-      _ < (4 : ENat) - 3 := by norm_num
+      _ < (4 : ENat) - 3 := by
+        norm_num
+        decide
       _ ≤ _ := by
         gcongr
         simp_rw [Set.insert_eq]
@@ -1635,11 +1650,13 @@ lemma next2_h_1516 {c' : A} {z : G'} {x : G} : Next2 c' z x → ∃ w₁, Next2 
     have ⟨w₂, hw1, hw2⟩ := ok.h_1516 h
     exact ⟨w₂, Next2.base hw1, Next2.base hw2⟩
   | .extra1 hw₀ hz => by
-    rw [S, extra_set1_eq1 hz]
+    show ∃ w₁, _ ∧ Next2 z.1.1 w₁ _
+    rw [extra_set1_eq1 hz]
     exact ⟨_, .base hw₀, .base ok.h_d⟩
   | .extra2 hb hSy hz => by
     refine ⟨_, .base hb, .base ?_⟩
-    rw [S, extra_set2_eq1 hb hSy hz, ← es2_a'_spec hb hSy]
+    show E z.1.1 _ _
+    rw [extra_set2_eq1 hb hSy hz, ← es2_a'_spec hb hSy]
     exact ok.extend ..
 
 lemma next2_h_g {c' : A} {z : G'} {x : G} (hSy : S z ≠ c') : Next2 c' z x → x ≠ .inl c'
@@ -1668,9 +1685,12 @@ lemma next2_le_encard : n ≤ {z : G' | Next2 d z y}.encard := by
         refine Set.encard_mono fun z hz ↦ ?_
         have ⟨m, hm, hz⟩ := hz
         simp_rw [← hz, Set.mem_setOf_eq, f]
-        convert next2_h_c ..
-        · rw [S, ← hSy, S]
-        · exact Nat.add_one_ne_zero m
+        have hSy' : S (Sum.inr ⟨(y.1.1, y.1.2.1, m + 1), y.2⟩ : G) = d := hSy
+        convert next2_h_c hSy' (Nat.add_one_ne_zero m)
+        congr 1
+        apply Subtype.ext
+        ext
+        exacts [rfl, rfl, hn]
 
 end Extension2
 
@@ -1905,12 +1925,8 @@ noncomputable instance : Fintype (partial_range' x) := by
 noncomputable def partial_range : Finset G := (partial_range' x).toFinset
 
 lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
-  have hA : (partial_domain x).toSet.Finite := by
-    rw [partial_domain, Set.coe_toFinset]
-    exact (partial_domain' x).toFinite
-  have hB : (partial_range x).toSet.Finite := by
-    rw [partial_range, Set.coe_toFinset]
-    exact (partial_range' x).toFinite
+  have hA : (partial_domain x).toSet.Finite := (partial_domain x).finite_toSet
+  have hB : (partial_range x).toSet.Finite := (partial_range x).finite_toSet
   have h2 : ¬ Set.Finite (Set.univ : Set G) := Set.finite_univ_iff.mp.mt Infinite.not_finite
   rcases (Set.Infinite.nontrivial (.diff (.diff h2 hA) hB)).exists_ne (d x) with ⟨x1, hx1, hx2⟩
   exact ⟨x1, Set.notMem_of_mem_diff (Set.mem_of_mem_diff hx1), ⟨Set.notMem_of_mem_diff hx1, hx2⟩⟩
@@ -1918,12 +1934,8 @@ lemma exists_not_in_domain_range : ∃ w, w ∉ partial_domain x ∧ w ∉ parti
 lemma exists_not_in_domain_range' (z : G) : ∃ w, L (S z) w = x ∧
     w ∉ partial_domain x ∧ w ∉ partial_range x ∧ w ≠ d x := by
   have Iinf : ¬ Set.Finite {y : G' | L (S z) y = x} := L_surjective (S z) x
-  have hA : (partial_domain x).toSet.Finite := by
-    rw [partial_domain, Set.coe_toFinset]
-    exact (partial_domain' x).toFinite
-  have hB : (partial_range x).toSet.Finite := by
-    rw [partial_range, Set.coe_toFinset]
-    exact (partial_range' x).toFinite
+  have hA : (partial_domain x).toSet.Finite := (partial_domain x).finite_toSet
+  have hB : (partial_range x).toSet.Finite := (partial_range x).finite_toSet
   rcases (Set.Infinite.nontrivial (.diff (.diff (.image (fun _ _ _ _ a ↦ Sum.inr_injective a)
     (L_surjective _ _)) hA) hB)).exists_ne (d x) with ⟨ x1, hx1, hx2⟩
   have hx1' := Set.mem_of_mem_diff hx1
@@ -2043,8 +2055,9 @@ def seed (x : G') : Rel G G := fun a b ↦ a = x ∧ b = S x
 theorem seed_ok (x : G') : OK x (seed x) where
   finite := by
     refine (Set.finite_singleton (Sum.inr x, Sum.inl x.1.1)).subset ?_
-    simp only [Set.subset_singleton_iff, Prod.forall, Prod.mk.injEq]
-    exact fun _ _ a ↦ a
+    rintro ⟨a, b⟩ ⟨ha, hb⟩
+    simp [ha, hb]
+    rfl
   inj _ _ := by simp_all [seed]
   func h1 h2 := by rw [h1.2, h2.2]
   aux1 := by simp [seed]
@@ -2139,7 +2152,7 @@ theorem Finite.Equation1516_implies_Equation255 (G : Type) [Magma G] [Finite G]
 theorem _root_.Equation1516_not_implies_Equation255 : ∃ (G : Type) (_ : Magma G), Equation1516 G ∧ ¬ Equation255 G := by
   refine ⟨G, magG, G_satisfies_Equation1516, ?_⟩
   unfold Equation255
-  push_neg
+  push Not
   exact ⟨x₀, x₀_255_rhs ▸ x₀_ne_1⟩
 
 /--  https://teorth.github.io/equational_theories/blueprint/1516-chapter.html -/

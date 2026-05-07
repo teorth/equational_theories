@@ -98,7 +98,7 @@ theorem c_ne_1' : 1 = c → False := fun h => c_ne_1 h.symm
 
 -- There should be a simple direct proof, but we can also use the cyclic one
 @[local aesop safe destruct]
-theorem c_ne_c_inv : c = c⁻¹ → False := FreeGroup.ne_inv_of_ne_one c_ne_1
+theorem c_ne_c_inv : c = c⁻¹ → False := self_ne_inv.mpr c_ne_1
 
 @[local aesop safe destruct]
 theorem c_ne_c_inv' : c⁻¹ = c → False := fun h => c_ne_c_inv h.symm

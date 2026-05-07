@@ -31,35 +31,45 @@ All magmas of size 2, up to isomorphism and look at the dual operation.
 -/
 
 /-- `x ◇ y => ⊥` -/
+@[implicit_reducible]
 def Magma2a : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[0, 0] ])
 
 /-- `x ◇ y => x ∧ y` -/
+@[implicit_reducible]
 def Magma2b : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[0, 1] ])
 
 /-- `x ◇ y => x ∧ ¬ y` -/
+@[implicit_reducible]
 def Magma2c : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[1, 0] ])
 
 /-- `x ◇ y => x` -/
+@[implicit_reducible]
 def Magma2d : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 0], #[1, 1] ])
 
 /-- `x ◇ y => x ^ y` -/
+@[implicit_reducible]
 def Magma2e : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 1], #[1, 0] ])
 
 /-- `x ◇ y = ¬ x ∧ ¬ y` -/
+@[implicit_reducible]
 def Magma2f : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[1, 0], #[0, 0] ])
 
 /-- `x ◇ y = ¬ x` -/
+@[implicit_reducible]
 def Magma2g : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[1, 1], #[0, 0] ])
 
 /-! The magmas that are equivalent to one of the above up to duals. -/
 
 /-- `x ◇ y => ¬ x ∧ y` -/
+@[implicit_reducible]
 def Magma2c' : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 1], #[0, 0] ])
 
 /-- `x ◇ y => y` -/
+@[implicit_reducible]
 def Magma2d' : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[0, 1], #[0, 1] ])
 
 /-- `x ◇ y => ¬ y` -/
+@[implicit_reducible]
 def Magma2g' : Magma (Fin 2) where op := memoFinOp (ofMatrix #[ #[1, 0], #[1, 0] ])
 
 
@@ -132,7 +142,8 @@ instance magmaIsoSetoidDecidable {T : Type*} [DecidableEq T] [Fintype T] :
           left_inv := fun _ ↦ rfl
           right_inv := fun _ ↦ rfl }
     decidable_of_iff' _ (show _ ↔ @Exists (@MagmaEquiv T T a b) fun _ ↦ True by
-      simp_rw [MagmaIsoSetoid, MagmaIso, exists_true_iff_nonempty])
+      unfold MagmaIsoSetoid
+      simp_rw [MagmaIso, exists_true_iff_nonempty])
 
 instance (k : ℕ) : Fintype (MagmaUpToIso (Fin k)) :=
   @Quotient.fintype _ _ _ magmaIsoSetoidDecidable

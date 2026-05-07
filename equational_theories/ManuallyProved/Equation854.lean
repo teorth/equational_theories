@@ -66,6 +66,7 @@ inductive Invariant (a b : G) : FreeMagma ℕ → Prop
   | base {a' b'} : a = ↟a' → b = ↟b' → Invariant a b (a' ◇ b')
   | succ {x w} : ↟w ⇝ ↟x → Invariant a b x → Invariant a b (x ◇ w)
 
+set_option backward.isDefEq.respectTransparency false in
 theorem unique_factorization {a b c d : G}
     (h1 : a ◇ b = c ◇ d) (h2 : ¬b ⇝ a) (h3 : ¬d ⇝ c) : a = c ∧ b = d := by
   have {L} : {Law854} ⊢' L → (Invariant a b L.lhs ↔ Invariant a b L.rhs) := by
@@ -151,7 +152,7 @@ def dom : Finset Nat :=
 theorem mem_dom {a b c x}
     (h1 : c ∈ a ◯ b) (h2 : x ∈ ({a, b, c} : Finset ℕ)) : x ∈ dom := by
   refine Finset.mem_insert_of_mem <| Finset.mem_insert_of_mem ?_
-  simp only [dom, Finset.mem_biUnion, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Prod.exists]
+  simp only [Finset.mem_biUnion, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Prod.exists]
   exact ⟨_, _, _, h1, h2⟩
 
 theorem dom_l {a b c} (h : c ∈ a ◯ b) : a ∈ dom := mem_dom h (by simp)
@@ -163,7 +164,7 @@ theorem dom_b : b ∈ dom := Finset.mem_insert_of_mem <| Finset.mem_insert_self 
 
 def c : Nat := dom.sup id + 1
 
-theorem lt_c {x} (h : x ∈ dom) : x < c := Nat.lt_succ.2 <| dom.le_sup (f := id) h
+theorem lt_c {x} (h : x ∈ dom) : x < c := Nat.lt_succ_iff.2 <| dom.le_sup (f := id) h
 
 local notation x:51 " ≫ " y:51 => y ∈ y ◯ x
 
@@ -449,8 +450,21 @@ theorem Extension.base : ∀ {x y z : GreedyMagma e₀}, z ∈ e₀.1 x y → z 
 
 def fromList (S : List ((Nat × Nat) × Nat)) : PreExtension := fun a b => {c | ((a, b), c) ∈ S}
 
-theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
-    (sorted : S.Chain' (fun a b => a.1 < b.1) := by decide)
+private def lexLt : Nat × Nat → Nat × Nat → Prop :=
+  fun a b => a.1 < b.1 ∨ (a.1 = b.1 ∧ a.2 < b.2)
+
+private instance : DecidableRel lexLt := fun _ _ => instDecidableOr
+
+private theorem lexLt.ne {a b : Nat × Nat} (h : lexLt a b) : a.1 ≠ b.1 ∨ a.2 ≠ b.2 := by
+  grind [lexLt]
+
+private instance lexLt_isTrans :
+    IsTrans ((ℕ × ℕ) × ℕ) (fun a b : (ℕ × ℕ) × ℕ => lexLt a.1 b.1) :=
+  ⟨fun a b c hab hbc => by
+    rcases hab with hab | ⟨hab, hab2⟩ <;> grind [lexLt]⟩
+
+theorem fromList_ok {S : List ((Nat × Nat) × Nat)}
+    (sorted : S.IsChain (fun a b => lexLt a.1 b.1) := by decide)
     (eq854 : ∀ a ∈ S, ∀ b ∈ S, a.1.2 = b.1.2 →
       ∀ c ∈ S, c.1 = (b.2, a.2) → ((a.1.1, c.2), a.1.1) ∈ S := by decide)
     (eq8 : ∀ a ∈ S, a.1.1 = a.1.2 → ((a.1.1, a.2), a.1.1) ∈ S := by decide)
@@ -463,10 +477,12 @@ theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
     (mono : ∀ a ∈ S, a.2 = a.1.1 ∨ a.1.1 < a.2 ∧ a.1.2 < a.2 := by decide) :
     (fromList S).OK where
   finite := List.finite_toSet S
-  func h1 _ h2 := Decidable.by_contra fun h =>
-    have : IsTrans ((ℕ ×ₗ ℕ) × ℕ) (·.1 < ·.1) := ⟨fun _ _ _ => lt_trans⟩
-    (List.chain'_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
-      |>.forall (fun _ _ => (·.symm)) h1 h2 (by rintro ⟨⟩; exact h rfl) rfl
+  func h1 _ h2 := Decidable.by_contra fun h => by
+    have hpw : List.Pairwise (fun a b : (ℕ × ℕ) × ℕ => a.1 ≠ b.1) S :=
+      (List.isChain_iff_pairwise.1 sorted).imp (fun hab heq => by
+        rcases hab with hab | ⟨_, hab⟩ <;> simp_all)
+    have hsym : Symmetric (fun a b : (ℕ × ℕ) × ℕ => a.1 ≠ b.1) := fun _ _ => Ne.symm
+    exact hpw.forall hsym h1 h2 (by rintro ⟨⟩; exact h rfl) rfl
   eq854 h1 h2 h3 := eq854 _ h1 _ h2 rfl _ h3 rfl
   eq8 h1 := eq8 _ h1 rfl
   eq101 h1 h2 := eq101 _ h1 _ h2 rfl rfl
@@ -476,7 +492,6 @@ theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
   aux h1 h2 := Decidable.by_contra (aux _ h1 · h2)
   uniq_fac h1 h2 := Decidable.or_iff_not_imp_left.2 fun h => uniq_fac _ h1 h _ h2 rfl
   mono h1 := mono _ h1
-
 
 theorem fromList_eval {e : Extension} {S : List ((Nat × Nat) × Nat)} (hS : e.1 = fromList S)
     (a b c : Nat) (h : ((a, b), c) ∈ S := by decide) :
@@ -494,10 +509,19 @@ theorem not_413_1045 : ∃ (G : Type) (_ : Magma G), Facts G [854] [413, 1045] :
     [((0,0),2), ((0,1),0), ((0,2),0), ((1,2),3), ((2,0),2), ((2,1),2), ((2,3),2), ((3,2),3)] :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq854, fun h => ?_, fun h => ?_⟩
-  · have := h 1 2
-    rw [fromList_eval he 2 1 2, fromList_eval he 1 2 3] at this
+  · have h21 := fromList_eval he 2 1 2
+    have h123 := fromList_eval he 1 2 3
+    have := h 1 2
+    rw [show ((2 : GreedyMagma e) ◇ (1 : GreedyMagma e)) = 2 from h21,
+        show ((1 : GreedyMagma e) ◇ (2 : GreedyMagma e)) = 3 from h123] at this
     cases e.aux this.symm
-  · have := h 1 0
-    rw [fromList_eval he 0 1 0, fromList_eval he 0 0 2,
-        fromList_eval he 2 1 2, fromList_eval he 1 2 3] at this
+  · have h010 := fromList_eval he 0 1 0
+    have h002 := fromList_eval he 0 0 2
+    have h21 := fromList_eval he 2 1 2
+    have h123 := fromList_eval he 1 2 3
+    have := h 1 0
+    rw [show ((0 : GreedyMagma e) ◇ (1 : GreedyMagma e)) = 0 from h010,
+        show ((0 : GreedyMagma e) ◇ (0 : GreedyMagma e)) = 2 from h002,
+        show ((2 : GreedyMagma e) ◇ (1 : GreedyMagma e)) = 2 from h21,
+        show ((1 : GreedyMagma e) ◇ (2 : GreedyMagma e)) = 3 from h123] at this
     cases this

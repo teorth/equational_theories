@@ -62,7 +62,7 @@ theorem Finite.Equation906_implies_Equation3862 (G : Type*) [Magma G] [Finite G]
         have : p = 2*p-p := by omega
         rwa [this]
       exact cancel
-    rcases le_or_lt p 1
+    rcases le_or_gt p 1
     . have : p = 1 := by linarith
       rw [this] at hfperiodic
       rw [this] at hgperiodic

@@ -197,9 +197,9 @@ private def toListTR {α} : FreeMagma α → List α := go [] where
 
 @[csimp] private theorem toList_eq_toListTR : @toList = @toListTR := by
   funext α m
-  have (m acc) : @toListTR.go α acc m = toList m ++ acc := by
+  have h (m acc) : @toListTR.go α acc m = toList m ++ acc := by
     induction m generalizing acc <;> simp [toListTR.go, toList, *]
-  simpa using (this m []).symm
+  simpa using (h m []).symm
 
 theorem toList_length {α} (m : FreeMagma α) : m.toList.length = m.length := by
   induction m <;> simp [*]

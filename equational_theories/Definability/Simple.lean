@@ -21,7 +21,7 @@ theorem FreeMagma.toTerm_realize {α M} (t : FreeMagma α)
   | Leaf a => rw [evalInMagma]; rfl
   | Fork m1 m2 ih1 ih2 =>
     rw [FreeMagma.toTerm]
-    simp [Term.realize, Magma.FinArityOp, evalInMagma, ih1, ih2]
+    simp [Magma.FinArityOp, evalInMagma, ih1, ih2]
 
 /-- Every law is TermStructural from its dual. -/
 theorem TermStructural_dual (L : NatMagmaLaw) : L.TermStructuralFrom L.dual := by

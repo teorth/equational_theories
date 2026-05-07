@@ -43,23 +43,23 @@ private theorem op_1659_4315_satisfies_1659 :
       by_cases y1_cong_0 : (y + 1) % 2 = 0
       · have y_cong_1 : y % 2  = 1 :=
           mod_two_pred_0_1_to y y1_cong_0
-        simp [op_1659_4315,y1_cong_0,y_cong_1,z_cong_0]
+        simp [y1_cong_0,y_cong_1,z_cong_0]
       · have y1_cong_1 : (y + 1) % 2 = 1 :=
             Nat.mod_two_ne_zero.mp y1_cong_0
         have y_cong_0 : y % 2 = 0 :=
           mod_two_pred_1_0_to y y1_cong_1
-        simp [op_1659_4315,y1_cong_0,y_cong_0,z_cong_0]
+        simp [y1_cong_0,y_cong_0,z_cong_0]
     | x+1, 0 =>
       simp [op_1659_4315]
       by_cases x1_cong_0 : (x + 1) % 2 = 0
       · have x_cong_1 : x % 2  = 1 :=
           mod_two_pred_0_1_to x x1_cong_0
-        simp [op_1659_4315,x1_cong_0,x_cong_1,z_cong_0]
+        simp [x1_cong_0,x_cong_1,z_cong_0]
       · have x1_cong_1 : (x + 1) % 2 = 1 :=
             Nat.mod_two_ne_zero.mp x1_cong_0
         have x_cong_0 : x % 2 = 0 :=
           mod_two_pred_1_0_to x x1_cong_1
-        simp [op_1659_4315,x1_cong_0,x_cong_0,z_cong_0]
+        simp [x1_cong_0,x_cong_0,z_cong_0]
         split
         simp_all only [zero_add, one_ne_zero, not_false_eq_true, Nat.mod_succ, Nat.zero_mod]
         simp
@@ -94,7 +94,7 @@ private theorem op_1659_4315_satisfies_1659 :
             Nat.mod_two_ne_zero.mp x1_cong_0
           have x_cong_0 : x % 2  = 0 :=
             mod_two_pred_1_0_to x x1_cong_1
-          simp [op_1659_4315,y1_cong_0,y_cong_0,x1_cong_1,y1_cong_1,x_cong_0,z_cong_0]
+          simp [op_1659_4315,y_cong_0,x1_cong_1,y1_cong_1,x_cong_0,z_cong_0]
   · have z_cong_1 : z % 2 = 1 :=
       Nat.mod_two_ne_zero.mp z_cong_0
     match xo, yo with
@@ -108,23 +108,23 @@ private theorem op_1659_4315_satisfies_1659 :
       by_cases y1_cong_0 : (y + 1) % 2 = 0
       · have y_cong_1 : y % 2  = 1 :=
           mod_two_pred_0_1_to y y1_cong_0
-        simp [op_1659_4315,y1_cong_0,y_cong_1,z_cong_1]
+        simp [y1_cong_0,y_cong_1,z_cong_1]
       · have y1_cong_1 : (y + 1) % 2 = 1 :=
             Nat.mod_two_ne_zero.mp y1_cong_0
         have y_cong_0 : y % 2 = 0 :=
           mod_two_pred_1_0_to y y1_cong_1
-        simp [op_1659_4315,y1_cong_0,y_cong_0,z_cong_1]
+        simp [y1_cong_0,y_cong_0,z_cong_1]
     | x+1, 0 =>
       simp [op_1659_4315]
       by_cases x1_cong_0 : (x + 1) % 2 = 0
       · have x_cong_1 : x % 2  = 1 :=
           mod_two_pred_0_1_to x x1_cong_0
-        simp [op_1659_4315,x1_cong_0,x_cong_1,z_cong_1]
+        simp [x1_cong_0,x_cong_1,z_cong_1]
       · have x1_cong_1 : (x + 1) % 2 = 1 :=
             Nat.mod_two_ne_zero.mp x1_cong_0
         have x_cong_0 : x % 2 = 0 :=
           mod_two_pred_1_0_to x x1_cong_1
-        simp [op_1659_4315,x1_cong_0,x_cong_0,z_cong_1]
+        simp [x1_cong_0,x_cong_0,z_cong_1]
         split
         simp_all only [zero_add, one_ne_zero, not_false_eq_true, Nat.mod_succ, Nat.zero_mod]
         simp
@@ -159,7 +159,7 @@ private theorem op_1659_4315_satisfies_1659 :
             Nat.mod_two_ne_zero.mp x1_cong_0
           have x_cong_0 : x % 2  = 0 :=
             mod_two_pred_1_0_to x x1_cong_1
-          simp [op_1659_4315,y1_cong_0,y_cong_0,x1_cong_1,y1_cong_1,x_cong_0,z_cong_1]
+          simp [op_1659_4315,y_cong_0,x1_cong_1,y1_cong_1,x_cong_0,z_cong_1]
 
 @[equational_result]
 theorem Equation1659_facts :
@@ -169,8 +169,7 @@ theorem Equation1659_facts :
   use ℕ, magN
 
   constructor
-  · simp only [magN]
-    exact op_1659_4315_satisfies_1659
+  · exact op_1659_4315_satisfies_1659
   · repeat' apply And.intro
     all_goals {
       by_contra h
@@ -182,7 +181,7 @@ theorem Equation1659_facts :
       try specialize h2 0 1 1
       try specialize h 0 1
       try specialize h1 1 0
-      try simp [magN,op_1659_4315] at h
-      try simp [magN,op_1659_4315] at h1
-      try simp [magN,op_1659_4315] at h2
+      try (revert h; decide)
+      try (revert h h1 h2; decide)
+      try (revert h h1; decide)
     }

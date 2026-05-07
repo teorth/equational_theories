@@ -19,7 +19,7 @@ private theorem M.mul_def (a b : M) : a * b =
 
 @[simp]
 private theorem M.mul_self (a : M) : a * a = a := by
-  simp [M.mul_def a a, if_pos]
+  simp [M.mul_def a a]
 
 private theorem Msat3102 (x y : M) : x = (((y * x) * x) * x) * x := by
   rw [M.mul_def y x]
@@ -60,14 +60,14 @@ private theorem Mnot270 : ∃ (x y : M), x ≠ ((y * x) * x) * x := by
 theorem Equation3102_not_implies_Equation3176 : ∃ (G: Type) (_: Magma G), Equation3102 G ∧ ¬ Equation3176 G := by
   refine ⟨M, ⟨M.mul⟩, Msat3102, ?_⟩
   · unfold Equation3176
-    push_neg
+    push Not
     exact Mnot3176
 
 @[equational_result]
 theorem Equation3102_not_implies_Equation270 : ∃ (G: Type) (_: Magma G), Equation3102 G ∧ ¬ Equation270 G := by
   refine ⟨M, ⟨M.mul⟩, Msat3102, ?_⟩
   · unfold Equation270
-    push_neg
+    push Not
     exact Mnot270
 
 end StringMagmas

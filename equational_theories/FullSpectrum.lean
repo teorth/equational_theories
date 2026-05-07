@@ -82,7 +82,7 @@ theorem full_spectrum_square_cancellative : HasFullSpectrum [1523] := by
     intro x _
     rcases eq_or_ne x.1 0 with h | h
     . simp [op, h, Fin.eq_mk_iff_val_eq]
-    . simp [op, h, h.symm, Fin.eq_mk_iff_val_eq]
+    . simp [op, h, h.symm]
   else
     use ⟨fun x y => x⟩
     omega
@@ -119,7 +119,7 @@ theorem full_spectrum_linear_cancellative2 : HasFullSpectrum [1090] := by
       simp
     zify at h
     simp only [Int.natMod, Int.ofNat_toNat, linear₁ (ne_of_gt h), Int.add_emod_emod, this, op]
-    simp [Int.add_sub_assoc, ←Int.sub_sub, linear₂]
+    simp [←Int.sub_sub, linear₂]
   else
     use ⟨fun x y => x⟩
     omega
@@ -140,10 +140,10 @@ theorem full_spectrum_Equation1482 : HasFullSpectrum [1482] := by
     use ⟨op⟩
     intro x _
     apply Fin.eq_mk_iff_val_eq.mpr
-    simp only [Bool.and_self, decide_eq_true_eq, gt_iff_lt, Bool.and_eq_true, op]
+    simp only [decide_eq_true_eq, gt_iff_lt, Bool.and_eq_true, op]
     split
     . simp only [lt_self_iff_false, ↓reduceIte, zero_ne_one, not_lt_zero', and_false, true_and,
-        Nat.not_lt_zero, and_false, ↓reduceIte, *]
+        and_false, ↓reduceIte, *]
       split
       . simp [*]
       . split
@@ -209,19 +209,19 @@ theorem full_spectrum_Equation1682 : HasFullSpectrum [1682] := by
     · simp [-Fin.val_fin_le, -Fin.val_fin_lt, op, h₁, h₂]
     . rcases eq_or_ne (y.1 % 2) 0 with h₃ | h₃
       . simp [-Fin.val_fin_le, -Fin.val_fin_lt, op, h₁, h₂, h₃, l₂, l₃]
-      . simp [-Fin.val_fin_le, -Fin.val_fin_lt, show y.1 % 2 = 1 by omega, op, h₁, h₂, h₃, l₂]
+      . simp [-Fin.val_fin_le, -Fin.val_fin_lt, show y.1 % 2 = 1 by omega, op, h₁, h₂, l₂]
     . rcases eq_or_ne (x.1 % 2) 0 with h₃ | h₃ <;> simp [op, h₁, h₂, h₃, l₁, l₂]
     · simp [-Fin.val_fin_le, -Fin.val_fin_lt, op, h₁, h₂, l₁, l₂]
     . rcases eq_or_ne (x.1 % 2) 0 with h₃ | h₃
       . simp [show (3 + ↑x) % 2 ≠ 0 ∧ x.1 > 3 by omega, -Fin.val_fin_le, -Fin.val_fin_lt, op, h₁,
           h₂, h₃, l₁, l₂]
-      . simp [show x.1 % 2 = 1 by omega, -Fin.val_fin_le, -Fin.val_fin_lt, op, h₁, h₂, h₃, l₁, l₂]
+      . simp [show x.1 % 2 = 1 by omega, -Fin.val_fin_le, -Fin.val_fin_lt, op, h₁, h₂, l₁, l₂]
     . rcases eq_or_ne ((x.1 + y.1) % 2) 0 with h₃ | h₃ <;>
         rcases (show x < y ∨ x = y ∨ x > y by omega) with h₄ | h₄ | h₄
       . have l₄ {a b : Nat} (h : a > b) : a ≥ b ∧ b < a ∧ ¬a < b + 1 := by omega
         simp [show ¬y ≤ x ∧ x ≤ y by omega, op, h₁, h₂, h₃, h₄, l₁, l₂, l₃, l₄]
-      . simp [op, h₁, h₂, h₃, h₄, h₄, l₁, l₂]
-      . simp [show y ≤ x ∧ ¬x ≤ y ∧ y.1 + 1 < x.1 by omega, op, h₁, h₂, h₃, h₄, l₁, l₂, l₃]
+      . simp [op, h₂, h₄, l₁, l₂]
+      . simp [show y ≤ x ∧ ¬x ≤ y ∧ y.1 + 1 < x.1 by omega, op, h₁, h₂, h₃, l₁, l₂, l₃]
       all_goals have l₅ {a b : Nat} (h : (a + b) % 2 ≠ 0) : (b + a) % 2 = 1 ∧ (a + b) % 2 = 1 ∧
         (b + a) % 2 ≠ 0 := by omega
       . simp [show ¬y < x ∧ (x.1 - 1 + y.1) % 2 = 0 ∧ ¬y.1 ≤ (x.1 - 1) by omega, op, h₁, h₂, h₃,
@@ -256,19 +256,19 @@ theorem not_full_spectrum_card2_2var : NotFullSpectrum [66, 73, 118, 167, 467, 4
     all_goals try {
       try {
         use 1, 0
-        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
+        simp only [one_ne_zero, not_false_eq_true, *]
       }
       try {
         use 0, 1
-        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
+        simp only [zero_ne_one, not_false_eq_true, *]
       }
       try {
         use 0, 0
-        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
+        simp only [zero_ne_one, not_false_eq_true, *]
       }
       try {
         use 1, 1
-        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
+        simp only [one_ne_zero, not_false_eq_true, *]
       }
     }
   }
@@ -284,15 +284,15 @@ theorem not_full_spectrum_card2_3var : NotFullSpectrum [1480, 1486] := by
     all_goals {
       try {
         use 1, 0, 0
-        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
+        simp only [one_ne_zero, not_false_eq_true, *]
       }
       try {
         use 0, 1, 0
-        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
+        simp only [zero_ne_one, not_false_eq_true, *]
       }
       try {
         use 1, 0, 1
-        simp only [zero_ne_one, one_ne_zero, not_false_eq_true, *]
+        simp only [one_ne_zero, not_false_eq_true, *]
       }
     }
   }

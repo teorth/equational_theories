@@ -2,8 +2,8 @@
 -- https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/713.2C.201289.2C.201447/near/482236139
 import Mathlib.Logic.Function.Defs
 import Mathlib.Data.Set.Basic
-import Mathlib.Data.Real.Irrational
-import Mathlib.Topology.Instances.AddCircle
+import Mathlib.Data.Real.Sqrt
+import Mathlib.Topology.Instances.AddCircle.Real
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
@@ -28,7 +28,7 @@ notation "√" => square_roots
 
 omit hnofix in
 lemma square_roots_elem_iff_square_root (x y : M) :
-  y ∈ square_roots S x ↔ S y = x := Set.mem_def
+  y ∈ square_roots S x ↔ S y = x := Set.mem_setOf
 
 -- which is disjoint from both `x` and `S x`.
 theorem elem_notin_square (x : M) : x ∉ square_roots S x := by
@@ -92,13 +92,13 @@ theorem square_root_iff_neq (x y : M) :
    constructor
    · case mp =>
       have hnot := s_elem_notin_square S hnofix x
-      split_ifs <;> push_neg
+      split_ifs <;> push Not
       · case pos _ => intro h; contradiction
       · case pos _ => intro h; contradiction
       · case pos h1 h2 _ => intro _; exact Decidable.not_imp_iff_and_not.mp fun a ↦ h2 (a h1)
       · case neg h1 h2 _ => intro _; exact Decidable.not_imp_iff_and_not.mp fun a ↦ h2 (a h1)
    · case mpr =>
-      push_neg
+      push Not
       intro ⟨h1,h2⟩
       split_ifs <;> try contradiction
       · case pos _ h3 =>
@@ -136,12 +136,9 @@ theorem square_times_square_root_eq_elem {x y : M} (hsq : y ∈ square_roots S x
 omit hnofix arbitraryRoot_root in
 theorem square_root_times_square_root_eq_elem {x y z : M} (hsqy : y ∈ square_roots S x) (hsqz : z ∈ square_roots S x):
   Magma.op (self:= instMagma S arbitraryRoot) y z = x := by
-    have hsy : S y = x := hsqy
-    have hsz : S z = x := hsqz
+    rw [square_roots_elem_iff_square_root] at hsqz hsqy
     simp only [Magma.op, magmaOp]
-    split_ifs <;> try aesop
-    · case pos  => exact hsqy
-    · case pos => exact hsqz
+    grind
 
 omit hnofix arbitraryRoot_root in
 lemma S_times_eq_S_squared (x : M) :
@@ -310,7 +307,7 @@ theorem arbitraryRoot_root : ∀ (x : PNat), arbitraryRoot x ∈ square_roots S 
   intro ⟨n, hn⟩
   split_ifs
   · case pos h => exfalso; simp [pval_eq_val_eq] at h
-  · simp [pval_eq_val_eq]
+  · simp
 
 theorem PNat_S_satisfies_Equation1447 : @Equation1447 PNat (instMagma S arbitraryRoot) :=
   M_satisfies_Equation1447 S S.nofix arbitraryRoot arbitraryRoot_root
@@ -321,7 +318,7 @@ theorem PNat_S_refutes_Equation1431 : ¬ @Equation1431 PNat (instMagma S arbitra
   exists 3
 
 theorem PNat_S_refutes_Equation4269 : ¬ @Equation4269 PNat (instMagma S arbitraryRoot) := by
-  simp [Equation1431]
+  simp
   exists 1
   exists 3
 

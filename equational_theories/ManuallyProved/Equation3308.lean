@@ -254,6 +254,9 @@ theorem next_func : ∀ {x y}, Set.Subsingleton (next x y) := by
   case base.base x y z z_mem z' z'_mem =>
     congr
     exact ok.func z_mem z'_mem
+  all_goals
+    try (exfalso; subst_vars; first
+      | rename_i hh; exact not_def hh)
   all_goals aesop
 
 theorem next_eq3308 {x y xy yx} : xy ∈ next x y → yx ∈ next y x → ∃ xyx ∈ next x yx,
@@ -452,6 +455,9 @@ theorem next_func : ∀ {x y}, Set.Subsingleton (next x y) := by
   case base.base x y z z_mem z' z'_mem =>
     congr
     exact ok.func z_mem z'_mem
+  all_goals
+    try (exfalso; subst_vars; first
+      | rename_i hh; exact not_def hh)
   all_goals aesop
 
 theorem next_eq3308 {x y xy yx} : xy ∈ next x y → yx ∈ next y x → ∃ xyx ∈ next x yx,
@@ -468,10 +474,11 @@ theorem next_eq3308 {x y xy yx} : xy ∈ next x y → yx ∈ next y x → ∃ xy
     exact (a_ne_b ha).elim
   all_goals
     rw [← ha, ← hb] at *
-    clear ha hb
-    try clear a'
-    try clear b'
-    aesop
+    rename_i h'
+    clear * - h'
+    first
+    | exfalso; exact not_def h'
+    | aesop
 
 
 theorem next_not_left {x y z} : z ∈ next x y → x ≠ z := by
@@ -657,7 +664,7 @@ theorem Extension.base : ∀ {x y z : GreedyMagma e₀}, z ∈ e₀.1 x y → z 
 def fromList (S : List ((Nat × Nat) × Nat)) : PreExtension ℕ := fun a b => {c | ((a, b), c) ∈ S}
 
 theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
-    (sorted : S.Chain' (fun a b => a.1 < b.1) := by decide)
+    (sorted : S.IsChain (fun a b => a.1 < b.1) := by decide)
     (eq3308 : ∀ a ∈ S, ∀ b ∈ S, a.1.1 = b.1.2 → a.1.2 = b.1.1 → ∃ c ∈ S, c.1.1 = a.1.1 ∧ c.1.2 = b.2
     ∧ ∃ d ∈ S, d.1.1 = a.1.1 ∧ d.1.2 = c.2 ∧ d.2 = a.2 := by decide)
     (not_left : ∀ a ∈ S, a.1.1 ≠ a.2 := by decide)
@@ -673,7 +680,7 @@ theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
   finite := List.finite_toSet S
   func h1 _ h2 := Decidable.by_contra fun h =>
     have : IsTrans ((ℕ ×ₗ ℕ) × ℕ) (·.1 < ·.1) := ⟨fun _ _ _ => lt_trans⟩
-    (List.chain'_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
+    (List.isChain_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
       |>.forall (fun _ _ => (·.symm)) h1 h2 (by rintro ⟨⟩; exact h rfl) rfl
   laws := {
   eq3308 := fun h1 h2 => by
@@ -737,12 +744,16 @@ theorem not_3456_3511 : ∃ (G : Type) (_ : Magma G), Facts G [3308] [3456,3511]
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq3308, fun h => ?_, fun h => ?_⟩
   · have := h 0
-    rw [fromList_eval he 0 0 1,fromList_eval he 1 0 2,fromList_eval he 0 2 4] at this
+    rw [show ((0:GreedyMagma e) ◇ 0) = 1 from fromList_eval he 0 0 1,
+        show ((1:GreedyMagma e) ◇ 0) = 2 from fromList_eval he 1 0 2,
+        show ((0:GreedyMagma e) ◇ 2) = 4 from fromList_eval he 0 2 4] at this
     apply Ne.elim _ this
     unfold GreedyMagma
     simp
   · have := h 0 0
-    rw [fromList_eval he 0 0 1,fromList_eval he 1 0 2,fromList_eval he 0 2 4] at this
+    rw [show ((0:GreedyMagma e) ◇ 0) = 1 from fromList_eval he 0 0 1,
+        show ((1:GreedyMagma e) ◇ 0) = 2 from fromList_eval he 1 0 2,
+        show ((0:GreedyMagma e) ◇ 2) = 4 from fromList_eval he 0 2 4] at this
     apply Ne.elim _ this
     unfold GreedyMagma
     simp

@@ -91,7 +91,7 @@ elab mods:declModifiers tk:"equation " i:num " := " tsyn:term : command => Comma
   let some (law, is) := (parseMagmaLaw tsyn).run #[] | throwError "invalid magma law"
   let declMods ← elabModifiers mods
   let docs := s!"```\nequation {i.getNat} := {← PrettyPrinter.formatTerm tsyn}\n```"
-  let docs := match ← declMods.docString?.mapM getDocStringText with
+  let docs := match ← (declMods.docString?.map Prod.fst).mapM getDocStringText with
     | none => docs
     | some more => s!"{docs}\n\n---\n{more}"
   let ranges := {

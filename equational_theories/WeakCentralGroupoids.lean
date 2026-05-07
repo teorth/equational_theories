@@ -1,8 +1,9 @@
 import equational_theories.Mathlib.Order.Greedy
 import equational_theories.Equations.All
 import equational_theories.FactsSyntax
-import Mathlib.Data.ZMod.Defs
+import Mathlib.Data.Fintype.Sum
 import Mathlib.Data.PFun
+import Mathlib.Data.ZMod.Defs
 import Mathlib.Order.Part
 import Mathlib.Tactic.DeriveFintype
 
@@ -65,6 +66,7 @@ end WeakCentralGroupoid
 namespace RelaxedWeakCentralGroupoid
 open RelaxedVeryWeakCentralGroupoid
 
+@[implicit_reducible]
 def strictify {G : Type*} [inst : RelaxedVeryWeakCentralGroupoid G] [inst.IsWeak]
     (H : IsStrict G) : WeakCentralGroupoid G where
   eqn _ _ _ := .symm <| H <|
@@ -278,6 +280,7 @@ instance : RelaxedVeryWeakCentralGroupoid.IsWeak G0 where
 
 open RelaxedVeryWeakCentralGroupoid Greedy
 
+set_option backward.isDefEq.respectTransparency false in
 @[equational_result]
 theorem not_3457 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3457] := by
   have ⟨x,y,z,w, h1, h2, h3⟩ : ∃ x y z w, IsGood x z x ∧ IsGood z w y ∧ ¬IsGood x z w :=
@@ -299,6 +302,7 @@ theorem not_3457 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3457] := by
       ← (e.induced' (z,2) (y,1) (w,3)).2 ⟨h2, e.base (by simp [e]), e.base (by simp [e])⟩] at this
   exact h3 (e.induced.1 this).1
 
+set_option backward.isDefEq.respectTransparency false in
 @[equational_result]
 theorem not_3511 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3511] := by
   have ⟨x,y,z,w, h1, h2, h3⟩ : ∃ x y z w, IsGood x z y ∧ IsGood z w x ∧ ¬IsGood x z w :=
@@ -320,6 +324,7 @@ theorem not_3511 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [3511] := by
       ← (e.induced' (z,2) (x,0) (w,3)).2 ⟨h2, e.base (by simp [e]), e.base (by simp [e])⟩] at this
   exact h3 (e.induced.1 this).1
 
+set_option backward.isDefEq.respectTransparency false in
 @[equational_result]
 theorem not_2087_2124 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [2087, 2124] := by
   have ⟨x,y,z,w,v, h1, h2, h3, h4, h5⟩ : ∃ x y z w v,
@@ -331,7 +336,7 @@ theorem not_2087_2124 : ∃ (G : Type) (_ : Magma G), Facts G [1485] [2087, 2124
     refine let S := {
       ((y,1),(z,2)),((z,2),(x,0)),((z,2),(y,1)),((z,2),(w,3)),
       ((w,3),(x,0)),((x,0),(v,4)),((v,4),(x,0))}; ⟨S, ?_, ?_⟩
-    · simp [or_imp, forall_and, isGood_path, isGood_path, isGood_path, isGood_path, S]
+    · simp [or_imp, forall_and, S]
       exact ⟨(isGood_path h1).1, (isGood_path h1).2, (isGood_path h2).2, (isGood_path h3).1,
         (isGood_path h3).2, (isGood_path h4).1, (isGood_path h4).2⟩
     · intro a b

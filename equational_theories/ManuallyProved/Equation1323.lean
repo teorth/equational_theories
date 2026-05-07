@@ -2,8 +2,10 @@ import equational_theories.FreshGenerator
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
 import equational_theories.Mathlib.Order.Greedy
+import Mathlib.Algebra.Ring.NonZeroDivisors
 import Mathlib.Logic.Equiv.Finset
 import Mathlib.Tactic.Group
+import Mathlib.GroupTheory.OrderOfElement
 
 namespace Eq1323
 noncomputable section
@@ -167,7 +169,9 @@ theorem reprsComplete (a : S') : translationReprs a ∪ (translationReprs a).ima
   rw [Set.eq_univ_iff_forall]
   intro x
   rcases translationNe a x with h | h
-    <;> simp [translationReprs, h, FreeAbGrpExp2.neg_def]
+  case inl => simp [translationReprs, h]
+  case inr => exact .inr ⟨x + a, by simp [translationReprs, h]⟩
+
 
 instance {a : S'} : Infinite (translationReprs a) where
   not_finite h := by
@@ -200,7 +204,7 @@ theorem ϕ_0 {a : S'} : ϕ a 0 = 1 := by
   case pos h => simp [ϕ_offset]; rfl
   case neg h => exfalso; exact h (ϕ_offset a).prop
 
-theorem ϕ'_0 {a : S'} : ϕ' a 0 = 1 := by simp [ϕ']
+theorem ϕ'_0 {a : S'} : ϕ' a 0 = 1 := by simp [ϕ']; rfl
 
 theorem ϕ_duality {a : S'} {b : S} : ϕ a (a + b) = -ϕ a b := by
   have : a + b + ϕ_offset a = b + ϕ_offset a + a := by
@@ -222,13 +226,13 @@ theorem ϕ_invϕ {a : S'} {x : A} : ϕ a (invϕ a x) = x := by
     by_contra hx
     apply or_iff_not_imp_left.mp x.1.plus_or_minus at hx
     simp [invϕ, hx] at h
-    apply not_lt_of_lt h ((ϕ₀ a).invFun x.2).prop
+    apply not_lt_of_gt h ((ϕ₀ a).invFun x.2).prop
   case neg h =>
     suffices x.1 = .minus by apply Prod.ext <;> simp [invϕ, this]
     by_contra hx
     apply or_iff_not_imp_right.mp x.1.plus_or_minus at hx
     simp [invϕ, hx] at h
-    apply not_lt_of_le h ((ϕ₀ a).invFun x.2).prop
+    apply not_lt_of_ge h ((ϕ₀ a).invFun x.2).prop
 
 @[simp]
 theorem invϕ_ϕ {a : S'} {b : S} : invϕ a (ϕ a b) = b := by
@@ -255,7 +259,7 @@ theorem ϕ_eq_diff_0_or_a {a : S'} {b c : S} (h : ϕ' a b = ϕ' a c) : b = c ∨
 theorem ϕ_unit_0_or_a {a : S'} {b : S} (h : ϕ' a b = 1) : b = 0 ∨ b = a := by
   have := ϕ_eq_diff_0_or_a (a := a) (b := b) (c := 0)
   simp [h] at this
-  exact this
+  exact this rfl
 
 end Phi
 
@@ -328,11 +332,10 @@ theorem Relation.orbit_func' (n : ℕ) (h : (rel.skip n).lhs = rel.lhs) : n = 0 
         simp [hk, lhs] at h
         replace h := congr_arg (Prod.snd ∘ Prod.fst) h.left
         simpa using h
-      have : ϕ' rel.x.2 rel.y.2 = 1 :=
-        not_imp_not.mp (FreeGroup.infinite_order _) <| isOfFinOrder_iff_pow_eq_one.mpr ⟨k, hp, this⟩
+      have : ϕ' rel.x.2 rel.y.2 = 1 := (pow_eq_one_iff_left (by grind)).mp this
       apply ϕ_unit_0_or_a at this
       simp [rel.y.2.prop] at this
-      apply Subtype.eq at this
+      apply Subtype.ext at this
       tauto
   | .rem1 k hk | .rem2 k hk =>
     simp [hk, lhs] at h
@@ -345,7 +348,7 @@ theorem Relation.orbit_func : isFunc rel.orbit := by
   · symm; exact this _ hrel' _ hrel h.symm (Nat.le_of_not_le hn)
   rcases Nat.lt_or_eq_of_le hn with hn | hn
   · exfalso
-    have : n' = (n' - n) + n := by simp [Nat.sub_add_eq_max, le_of_lt, hn]
+    have : n' = (n' - n) + n := by simp [le_of_lt, hn]
     rw [this] at hrel'
     apply_fun (·.lhs) at hrel'
     simp [hrel, ←h] at hrel'
@@ -365,7 +368,7 @@ theorem Relation.orbit_squares {rel'} (h : rel' ∈ rel.orbit) : rel'.squares = 
 
 def closure (F : Finset Relation) : Set Relation := { rel' | ∃ rel ∈ F, rel' ∈ rel.orbit }
 
-theorem le_closure (F : Finset Relation) : F.toSet ≤ closure F := by
+theorem le_closure (F : Finset Relation) : F ≤ closure F := by
   intro rel h
   simp [closure]
   exact ⟨rel, h, rel.orbit_self⟩
@@ -435,10 +438,13 @@ def old : Finset A₀ :=
   simp [old]
   right; right; right
   use a, a.prop, b
-  simp [ha, hb, a.prop, b.prop]
+  simp [ha, hb, b.prop]
 
 abbrev freshA : A := ⟨.plus, FreeGroup.of <| FreshGenerator.freshGeneratorName old⟩
-abbrev w : R := ⟨1, ⟨invϕ p.y.2 freshA, by apply_fun ϕ' p.y.2; simp⟩⟩
+abbrev w : R := ⟨1, ⟨invϕ p.y.2 freshA, by
+  apply_fun ϕ' p.y.2
+  simp
+  exact FreeGroup.of_ne_one _⟩⟩
 
 def projectFresh (x : A) : ℤ := FreshGenerator.projectFresh old x.2
 
@@ -581,7 +587,7 @@ theorem roots_LyRy {x y a b f} (h : a ≠ b) (hf : Axiom3 f) :
     have : b = p.y.2 := rfl
     rw [this, ←hx, ←hy]
     exact p'.nonDiag
-  simp [op, h, this]
+  simp [op, h]
   rw [← hf]
   cases p' with
   | mk px py hxy => simp_all [p]
@@ -633,11 +639,9 @@ theorem seed_lhs_disjoint (n m : ℕ) : (seed1.skip n).lhs ≠ (seed2.skip m).lh
   have : ϕ' c a ≠ 1 := by
     apply mt ϕ_unit_0_or_a
     decide
-  apply FreeGroup.infinite_order at this
-  rw [←injective_pow_iff_not_isOfFinOrder] at this
-  have k_eq_l := this hx
 
-  rw [k_eq_l, ←FreeGroup.pow_injective] at hy
+  have k_eq_l := (IsMulTorsionFree.pow_right_inj this).mp hx
+  rw [k_eq_l, pow_left_inj] at hy
   · absurd ϕ_eq_diff_0_or_a hy
     decide
   · apply Nat.succ_ne_zero

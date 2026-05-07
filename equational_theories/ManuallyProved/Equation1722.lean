@@ -148,7 +148,7 @@ theorem next_ok : next.OK where
     unfold domFresh
     simp at hx ⊢; cases hx with
     | base h => simp [dom_o h, dom_l h, dom_r h]
-    | _ => simp [dom_a, dom_b]
+    | _ => simp [dom_a]
   func {x y xy} hxy {xy'} hxy' := next_func hxy hxy'
   laws := {
   law2 := next_law2
@@ -341,7 +341,7 @@ theorem Extension.base : ∀ {x y z : GreedyMagma e₀}, z ∈ e₀.1 x y → z 
 def fromList (S : List ((Nat × Nat) × Nat)) : PreExtension ℕ := fun a b => {c | ((a, b), c) ∈ S}
 
 theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
-    (sorted : S.Chain' (fun a b => a.1 < b.1) := by decide)
+    (sorted : S.IsChain (fun a b => a.1 < b.1) := by decide)
     (eq1722 : ∀ a ∈ S, ∀ b ∈ S, a.1.2 = b.1.2 → a.2 = b.1.1 →
       ∃ c ∈ S, ∃ d ∈ S, c.1.1 = a.1.2 ∧ c.1.2 = a.1.2 ∧ d.1.1 = c.2 ∧ d.1.2 = b.2 ∧ d.2 = a.1.1 := by decide)
     (law2 : ∀ a ∈ S, ∀ b ∈ S, a.1.2 = b.1.2 → a.2 = b.2 → a.1.1 = b.1.1 := by decide)
@@ -351,7 +351,7 @@ theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
   finite := List.finite_toSet S
   func h1 _ h2 := Decidable.by_contra fun h =>
     have : IsTrans ((ℕ ×ₗ ℕ) × ℕ) (·.1 < ·.1) := ⟨fun _ _ _ => lt_trans⟩
-    (List.chain'_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
+    (List.isChain_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
       |>.forall (fun _ _ => (·.symm)) h1 h2 (by rintro ⟨⟩; exact h rfl) rfl
   laws := {
   eq1722 := fun h1 h2 => by
@@ -362,7 +362,7 @@ theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
     rewrite [y_def, y'_def] at yy_mem
     use yy_mem
     use yy'_def ▸xyy_def ▸ x_def ▸ eq_mem
-  law2 := fun h h' eq => law2 _ h _ h' (by simp [eq]) (by simpa)
+  law2 := fun h h' eq => law2 _ h _ h' (by simp) (by simpa)
   law3 := fun h => by
     obtain ⟨⟨⟨x,x'⟩, xxx⟩, xxx_mem, ⟨⟨_, _⟩, _⟩, xxxx_mem, rfl, rfl, rfl, rfl⟩ := law3 _ h rfl
     exact ⟨_, ⟨_,  xxx_mem, xxxx_mem⟩⟩
@@ -403,14 +403,21 @@ theorem not_1832_2644_3050 : ∃ (G : Type) (_ : Magma G), Facts G [1722] [1832,
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq1722, fun h => ?_, fun h => ?_, fun h => ?_⟩
   · have := h 0
-    simp [fromList_eval he 0 0 1,fromList_eval he 0 1 2,fromList_eval he 2 1 4] at this
+    simp [show ((0:GreedyMagma e) ◇ 0) = 1 from fromList_eval he 0 0 1,
+          show ((0:GreedyMagma e) ◇ 1) = 2 from fromList_eval he 0 1 2,
+          show ((2:GreedyMagma e) ◇ 1) = 4 from fromList_eval he 2 1 4] at this
   · have := h 0
-    rw [fromList_eval he 0 0 1,fromList_eval he 1 1 3,fromList_eval he 3 0 4] at this
+    rw [show ((0:GreedyMagma e) ◇ 0) = 1 from fromList_eval he 0 0 1,
+        show ((1:GreedyMagma e) ◇ 1) = 3 from fromList_eval he 1 1 3,
+        show ((3:GreedyMagma e) ◇ 0) = 4 from fromList_eval he 3 0 4] at this
     apply Ne.elim _ this
     unfold GreedyMagma
     simp
   · have := h 0
-    rw [fromList_eval he 0 0 1,fromList_eval he 1 0 2,fromList_eval he 2 0 3,fromList_eval he 3 0 4] at this
+    rw [show ((0:GreedyMagma e) ◇ 0) = 1 from fromList_eval he 0 0 1,
+        show ((1:GreedyMagma e) ◇ 0) = 2 from fromList_eval he 1 0 2,
+        show ((2:GreedyMagma e) ◇ 0) = 3 from fromList_eval he 2 0 3,
+        show ((3:GreedyMagma e) ◇ 0) = 4 from fromList_eval he 3 0 4] at this
     apply Ne.elim _ this
     unfold GreedyMagma
     simp

@@ -41,11 +41,12 @@ lemma Finite.fn_eventually_periodic' {G : Type*} [Finite G] (f : G → G) :
     exact ⟨p, hpgt, this⟩
   . let n := s * p
     have : f^[n] = f^[2*n] := by
-      unfold n
-      obtain ⟨ppred, hppred⟩ := Nat.exists_eq_succ_of_ne_zero (by linarith)
-      rw [hppred, Nat.mul_add_one, Nat.add_comm]
-      have : 2 * (s + s * ppred) = s + s * ppred + s * p := by simp +arith only [hppred, Nat.mul_succ]
-      rw [this, ← hmod]
+      show f^[s * p] = f^[2 * (s * p)]
+      have hle : s ≤ s * p := Nat.le_mul_of_pos_right s hpgt
+      have key := hmod s (s * p - s)
+      rw [show s + (s * p - s) = s * p from by omega] at key
+      rw [show s * p + s * p = 2 * (s * p) from by omega] at key
+      exact key
     have ngt : n > 0 := by apply Nat.mul_pos h hpgt
     exact ⟨n, ngt, this⟩
 
@@ -87,10 +88,10 @@ lemma Finite.f_ffg_implies_f_fgf {G: Type*} [Finite G] (f g : G -> G) (h : f = f
     have S_nonempty : S.Nonempty := by
       use s
       simp only [Set.mem_setOf_eq, S, hperiodic]
-    let n : ℕ := WellFounded.min Nat.lt_wfRel.wf S S_nonempty
-    have n_mem : f^[n] = f^[n + p] := WellFounded.min_mem Nat.lt_wfRel.wf S S_nonempty
-    have n_min : ∀ k ∈ S, ¬k < n := fun k hk => WellFounded.not_lt_min Nat.lt_wfRel.wf S
-      S_nonempty hk
+    classical
+    set n : ℕ := Nat.find S_nonempty with hn
+    have n_mem : f^[n] = f^[n + p] := Nat.find_spec S_nonempty
+    have n_min : ∀ k ∈ S, ¬k < n := fun k hk hlt => Nat.find_min S_nonempty hlt hk
     have : n ≤ 1 := by
       by_contra nh
       simp at nh
@@ -141,10 +142,10 @@ lemma Finite.f_gff_implies_f_fgf {G: Type*} [Finite G] (f g : G -> G) (h : f = g
     have S_nonempty : S.Nonempty := by
       use s
       simp only [Set.mem_setOf_eq, S, hperiodic]
-    let n : ℕ := WellFounded.min Nat.lt_wfRel.wf S S_nonempty
-    have n_mem : f^[n] = f^[n + p] := WellFounded.min_mem Nat.lt_wfRel.wf S S_nonempty
-    have n_min : ∀ k ∈ S, ¬k < n := fun k hk => WellFounded.not_lt_min Nat.lt_wfRel.wf S
-      S_nonempty hk
+    classical
+    set n : ℕ := Nat.find S_nonempty with hn
+    have n_mem : f^[n] = f^[n + p] := Nat.find_spec S_nonempty
+    have n_min : ∀ k ∈ S, ¬k < n := fun k hk hlt => Nat.find_min S_nonempty hlt hk
     have : n ≤ 1 := by
       by_contra nh
       simp at nh
