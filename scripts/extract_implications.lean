@@ -1,7 +1,6 @@
 import Batteries.Data.Array.Basic
 import Batteries.Tactic.Lint.Frontend
 import Cli.Basic
-import Lean.Util.SearchPath
 import equational_theories.Closure
 
 open Lean Core Elab Cli Closure
@@ -25,9 +24,11 @@ def withExtractedResults (imp : Cli.Parsed) (action : Array Entry → DualityRel
 
 def matchFinite (rs : Array Entry) (finite : Bool) : Array Entry :=
   if finite then
-    rs.filter (fun r => r.variant matches .implication .. || r.variant matches .facts { finite := true, .. })
+    rs.filter (fun r => r.variant matches .implication .. || r.variant matches .facts { finite := true, .. }
+                     || r.variant matches .unconditional _)
   else
-    rs.filter (fun r => r.variant matches .implication { finite := false, .. } || r.variant matches .facts .. )
+    rs.filter (fun r => r.variant matches .implication { finite := false, .. } || r.variant matches .facts ..
+                     || r.variant matches .unconditional _)
 
 def generateUnknowns (inp : Cli.Parsed) : IO UInt32 := do
   let only_e_c := inp.hasFlag "equivalence_creators"

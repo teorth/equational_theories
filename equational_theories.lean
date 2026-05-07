@@ -31,5 +31,6 @@ import equational_theories.ThreeC2
 import equational_theories.Sheffer
 import equational_theories.Obelix
 import equational_theories.Definability
+import equational_theories.Finite677
 import equational_theories.FiniteModel
 import equational_theories.FullSpectrum

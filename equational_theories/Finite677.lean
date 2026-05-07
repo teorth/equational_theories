@@ -1,0 +1,2 @@
+import equational_theories.Finite677.SmallMagmas
+import equational_theories.Finite677.SimpleProofs
