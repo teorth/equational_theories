@@ -17,6 +17,7 @@ git = "https://github.com/PatrickMassot/checkdecls.git"
 
 [[lean_lib]]
 name = "equational_theories"
+moreLeanArgs = ["--tstack=262144"]
 
 [[lean_exe]]
 name = "extract_implications"
