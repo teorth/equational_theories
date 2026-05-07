@@ -1,3 +1,4 @@
+import Mathlib.Algebra.Ring.NonZeroDivisors
 import Mathlib.Order.WithBot
 import equational_theories.FreshGenerator
 import equational_theories.Equations.All
@@ -1204,7 +1205,7 @@ lemma PartialSolution_with_axioms.L₀'_no_collide_3 (sol: PartialSolution_with_
   simp [sol.d₀_neq_zero.symm, sol.d₀_invis (sol.I_involved sol.extras hz).2.1, sol.d_neq_d₀]
 
 lemma zpow_of_e_inj (a : SM) : Function.Injective (fun n:ℤ ↦ (e a)^n) :=
-  injective_zpow_iff_not_isOfFinOrder.mpr (FreeGroup.infinite_order _ (FreeGroup.of_ne_one a))
+  injective_zpow_iff_not_isOfFinOrder.mpr (not_isOfFinOrder_of_isMulTorsionFree (FreeGroup.of_ne_one a))
 
 
 noncomputable abbrev PartialSolution_with_axioms.L₀'_embed (sol: PartialSolution_with_axioms) : (L₀'_data sol) × ℤ × Bool ↪ N := {

@@ -1,5 +1,7 @@
-import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
-
+import Mathlib.Algebra.Ring.NonZeroDivisors
+import Mathlib.Data.Finset.Union
+import Mathlib.Data.Set.Countable
+import Mathlib.GroupTheory.FreeGroup.CyclicallyReduced
 
 /-! One technique for constructing magmas that serve as counterexamples for implications between laws
 are [translation-invariant magmas](https://teorth.github.io/equational_theories/blueprint/infinite-magma-constructions-chapter.html#a0000000032)
@@ -23,7 +25,7 @@ instance [Countable α] : Countable (FreeGroup α) := by
 
 instance [Nonempty α] : Infinite (FreeGroup α) :=
   let a := Nonempty.some (by assumption)
-  Infinite.of_injective (FreeGroup.of a ^ ·) <| by simp [infinite_order]
+  Infinite.of_injective (FreeGroup.of a ^ ·) <| by simp [IsMulTorsionFree.pow_right_injective]
 
 
 def generatorNames' : List (α × Bool) → Finset α

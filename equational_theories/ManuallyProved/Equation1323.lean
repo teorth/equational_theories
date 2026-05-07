@@ -2,8 +2,10 @@ import equational_theories.FreshGenerator
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
 import equational_theories.Mathlib.Order.Greedy
+import Mathlib.Algebra.Ring.NonZeroDivisors
 import Mathlib.Logic.Equiv.Finset
 import Mathlib.Tactic.Group
+import Mathlib.GroupTheory.OrderOfElement
 
 namespace Eq1323
 noncomputable section
@@ -167,7 +169,9 @@ theorem reprsComplete (a : S') : translationReprs a ∪ (translationReprs a).ima
   rw [Set.eq_univ_iff_forall]
   intro x
   rcases translationNe a x with h | h
-    <;> simp [translationReprs, h, FreeAbGrpExp2.neg_def]
+  case inl => simp [translationReprs, h]
+  case inr => exact .inr ⟨x + a, by simp [translationReprs, h]⟩
+
 
 instance {a : S'} : Infinite (translationReprs a) where
   not_finite h := by
@@ -328,8 +332,7 @@ theorem Relation.orbit_func' (n : ℕ) (h : (rel.skip n).lhs = rel.lhs) : n = 0 
         simp [hk, lhs] at h
         replace h := congr_arg (Prod.snd ∘ Prod.fst) h.left
         simpa using h
-      have : ϕ' rel.x.2 rel.y.2 = 1 :=
-        not_imp_not.mp (FreeGroup.infinite_order _) <| isOfFinOrder_iff_pow_eq_one.mpr ⟨k, hp, this⟩
+      have : ϕ' rel.x.2 rel.y.2 = 1 := (pow_eq_one_iff_left (by grind)).mp this
       apply ϕ_unit_0_or_a at this
       simp [rel.y.2.prop] at this
       apply Subtype.ext at this
@@ -636,11 +639,9 @@ theorem seed_lhs_disjoint (n m : ℕ) : (seed1.skip n).lhs ≠ (seed2.skip m).lh
   have : ϕ' c a ≠ 1 := by
     apply mt ϕ_unit_0_or_a
     decide
-  apply FreeGroup.infinite_order at this
-  rw [←injective_pow_iff_not_isOfFinOrder] at this
-  have k_eq_l := this hx
 
-  rw [k_eq_l, ←FreeGroup.pow_injective] at hy
+  have k_eq_l := (IsMulTorsionFree.pow_right_inj this).mp hx
+  rw [k_eq_l, pow_left_inj] at hy
   · absurd ϕ_eq_diff_0_or_a hy
     decide
   · apply Nat.succ_ne_zero

@@ -1,18 +1,20 @@
-import Mathlib.GroupTheory.FreeGroup.Basic
+import Mathlib.Algebra.Group.Torsion
 import Mathlib.Data.Finmap
 import Mathlib.Data.Finset.Max
 import Mathlib.Data.List.Basic
 import Mathlib.Data.Finset.Order
 import Mathlib.Data.Set.Finite.Basic
+import Mathlib.GroupTheory.FreeGroup.CyclicallyReduced
 import Mathlib.Order.CompletePartialOrder
 
 import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Set.Card
+import Mathlib.Data.ENat.Basic
 import equational_theories.FactsSyntax
 import equational_theories.FreshGenerator
 import equational_theories.Mathlib.Order.Greedy
 import equational_theories.EquationalResult
 import equational_theories.Equations.All
-import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
 
 
 import Mathlib.Data.Rel
@@ -586,7 +588,7 @@ theorem newE_dom_and_inv' : ∀ x y, y ∈ t.newE ⬝ x → x⁻¹ ∈ t.newE �
     · rw [e_x_inv_d, old']
       simp [e0]
     · exfalso
-      apply ne_inv_of_ne_one t.b_ne_1
+      apply self_ne_inv.mpr t.b_ne_1
       nth_rw 1 [← e0.1, ← e0'.1]
       simp
 
@@ -1267,7 +1269,9 @@ theorem base1' {a b : A} (hab : a ≠ b) (c₁ c₂ c₃ : A) : ∃ c, c ◇ a =
   have h : ({c | c ◇ a = b} \ {c₁, c₂, c₃}).Nonempty := by
     refine Set.encard_ne_zero.mp (ne_of_gt ?_)
     calc
-      _ < (4 : ENat) - 3 := by norm_num
+      _ < (4 : ENat) - 3 := by
+        norm_num
+        decide
       _ ≤ _ := by
         gcongr
         simp_rw [Set.insert_eq]
