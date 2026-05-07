@@ -1,12 +1,11 @@
 import Mathlib.Algebra.DirectSum.Basic
-import Mathlib.GroupTheory.FreeGroup.Basic
+import Mathlib.GroupTheory.FreeGroup.CyclicallyReduced
 import Mathlib.Data.ZMod.Defs
 import Mathlib.Data.Countable.Defs
 import Mathlib.Data.DFinsupp.Encodable
 import Mathlib.Algebra.Module.LinearMap.Defs
 import Mathlib.RepresentationTheory.Basic
 
-import equational_theories.ForMathlib.GroupTheory.FreeGroup.ReducedWords
 import equational_theories.Equations.All
 import equational_theories.ManuallyProved.Equation1729.ExtensionTheorem
 
@@ -206,9 +205,9 @@ instance : LocallyFiniteOrderBot N := LocallyFiniteOrderBot.ofIic
     simp only [List.mem_toFinset, List.mem_map, List.mem_tails, le_def]
     constructor
     · rintro ⟨a, h, eq⟩
-      rw [← eq, FreeGroup.toWord_mk, FreeGroup.Red.reduced_iff_eq_reduce.mp]
+      rw [← eq, FreeGroup.toWord_mk, FreeGroup.isReduced_iff_reduce_eq.mp]
       · exact h
-      · exact FreeGroup.Red.reduced_infix (FreeGroup.reduced_toWord) h.isInfix
+      · exact FreeGroup.isReduced_toWord.infix h.isInfix
     · intro h
       use x.toWord
       simp [h, FreeGroup.mk_toWord])
@@ -217,8 +216,8 @@ instance : LocallyFiniteOrderBot N := LocallyFiniteOrderBot.ofIic
 def parent (x : N) : N := FreeGroup.mk x.toWord.tail
 
 theorem parent_toWord (x : N) : (parent x).toWord = x.toWord.tail := by
-  rw [parent, FreeGroup.toWord_mk, FreeGroup.Red.reduced_iff_eq_reduce.mp]
-  exact FreeGroup.Red.reduced_infix (FreeGroup.reduced_toWord) (List.tail_suffix _).isInfix
+  rw [parent, FreeGroup.toWord_mk, FreeGroup.isReduced_iff_reduce_eq.mp]
+  exact FreeGroup.isReduced_toWord.infix (List.tail_suffix _).isInfix
 
 @[simp]
 lemma parent_one : parent 1 = 1 := by
@@ -326,14 +325,14 @@ theorem parent_of_adjacent {x y : N} (h : adjacent x y) : x = parent y ∨ y = p
       simp [eq_inv]
     · right
       have eq' : x.toWord = (a, true) :: y.toWord := by
-        rw [l, FreeGroup.toWord_mul, FreeGroup.Red.reduced_iff_eq_reduce.mp]
+        rw [l, FreeGroup.toWord_mul, FreeGroup.isReduced_iff_reduce_eq.mp]
         · rfl
         · rw [h]
-          apply FreeGroup.Red.reduced_cons.mpr
+          apply FreeGroup.isReduced_cons_cons.mpr
           rw [← h]
-          simp only [FreeGroup.reduced_toWord, and_true]
+          simp only [FreeGroup.isReduced_toWord, and_true]
           cases head
-          simp only [Bool.not_true, Bool.false_eq, not_and, Bool.not_eq_false]
+          simp only []
           intro eq'
           simpa [eq'] using eq
       apply FreeGroup.toWord_injective
