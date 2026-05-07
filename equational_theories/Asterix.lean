@@ -340,8 +340,7 @@ def Denumerable.notMemFinset (s : Finset G) : G :=
 
 omit [DecidableEq G] in
 theorem Denumerable.notMemFinset_prop (s : Finset G) : Denumerable.notMemFinset s ∉ s := by
-  simp only [notMemFinset, Finset.mem_image, not_exists, not_and, Denumerable.decode_eq_ofNat,
-    Option.some.injEq]
+  simp only [notMemFinset, Finset.mem_image, not_exists, not_and]
   intro mem
   have : Nat.find (Infinite.exists_notMem_finset (s.image Encodable.encode)) ∈ s.image Encodable.encode := by
     rw [Finset.mem_image]
@@ -477,7 +476,7 @@ lemma closureSeq_le_closureSeq_succ (f : PartialSolution G) (n : ℕ) :
 
 lemma mem_closureSeq_e0 (f : PartialSolution G) (a b : G) :
     (a, b) ∈ (closureSeq f (Encodable.encode (a, b) + 1)).E0 := by
-  simp only [closureSeq, ge_iff_le, Equiv.symm_apply_apply, Denumerable.ofNat_encode]
+  simp only [closureSeq, Denumerable.ofNat_encode]
   apply PartialSolution.mem_add_e0
 
 lemma closureSeq_mono (f : PartialSolution G) : Monotone (closureSeq f) := by
@@ -496,7 +495,7 @@ def closure (f : PartialSolution G) : G → G → G :=
 
 lemma closure_eq_of_mem_e1 (f : PartialSolution G) (n : ℕ) (a b : G) (hn : (a, b) ∈ (closureSeq f n).E1) :
     closure f a b = (closureSeq f n).f a b := by
-  simp only [closure, Prod.mk.eta]
+  simp only [closure]
   rcases le_total n (Encodable.encode (a, b) + 1) with h | h
   · exact (closureSeq_mono f h).2.2.symm hn
   · exact (closureSeq_mono f h).2.2 (PartialSolution.E0_subset_E1 _ (mem_closureSeq_e0 f a b))

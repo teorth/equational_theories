@@ -62,8 +62,9 @@ theorem mem_elementsOfNumNodesEq {x : FreeMagma X} {n : ℕ} :
 -- Compare to `Tree.treesOfNumNodesEq_card_eq_catalan`
 theorem elementsOfNumNodesEq_card_eq_catalan_mul_pow (n : ℕ) :
     (elementsOfNumNodesEq X n).card = catalan n * (Fintype.card X) ^ (n + 1) := by
-  induction' n using Nat.case_strong_induction_on with n ih
+  induction n using Nat.case_strong_induction_on
   · simp
+  case hi n ih =>
   rw [elementsOfNumNodesEq_succ, Finset.card_biUnion, catalan_succ', Finset.sum_mul]
   · apply Finset.sum_congr rfl
     rintro ⟨i, j⟩ h

@@ -84,6 +84,7 @@ def LeftProj (α : Type _) := α
 instance (priority := low) leftProj (α : Type _) : Magma (LeftProj α) where
   op := fun a _ => a
 
+set_option backward.isDefEq.respectTransparency false in
 instance instLiftingMagmaFamilyLeftProj : LiftingMagmaFamily LeftProj where
   instMagma := (leftProj ·)
   instMagmaDecidableEq := inferInstance
@@ -99,6 +100,7 @@ def RightProj (α : Type _) := α
 instance (priority := low+1) rightProj (α : Type _) : Magma (RightProj α) where
   op := fun _ a ↦ a
 
+set_option backward.isDefEq.respectTransparency false in
 instance instLiftingMagmaFamilyRightProj : LiftingMagmaFamily RightProj where
   instMagma := (rightProj ·)
   instMagmaDecidableEq := inferInstance

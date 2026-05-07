@@ -22,25 +22,28 @@ def FreeMagma.dual : FreeMagma α → FreeMagma α
 theorem FreeMagma.dual_dual (w : FreeMagma α) : w.dual.dual = w := by
  induction w <;> simp [dual, *]
 
-@[simp]
 def Op.{u} (G : Type u) : Type u := G
 
 variable {G : Type*} [Magma G]
 
 instance opMagma : Magma (Op G) where op x y := (y ◇ x : G)
 
+theorem opMagma_eq_op (x y : Op G) : x ◇ y = (y ◇ x : G) := rfl
+
 def Magma.opHom : G → Op G := fun x => x
 
+set_option backward.isDefEq.respectTransparency false in
 theorem evalInMagmaOp (φ : α → G) (w : FreeMagma α):
   evalInMagma (G := Op G) φ w.dual = evalInMagma (G := G) φ w := by
   induction w with
   | Leaf x => rfl
-  | Fork w₁ w₂ ih₁ ih₂ => simp [dual, evalInMagma, opMagma, ih₂, ih₁]
+  | Fork w₁ w₂ ih₁ ih₂ => simp [dual, evalInMagma, opMagma_eq_op, ih₂, ih₁]
 
+set_option backward.isDefEq.respectTransparency false in
 theorem models.Op {w₁ w₂ : FreeMagma α} (h : G ⊧ w₁ ≃ w₂) :
     (Op G) ⊧ w₁.dual ≃ w₂.dual := by
   intro φ
-  simp only [satisfiesPhi, _root_.Op, opMagma]
+  simp only [satisfiesPhi, _root_.Op]
   repeat rw [@evalInMagmaOp]
   apply h
 
@@ -53,9 +56,9 @@ theorem dual_symm (l : MagmaLaw α) : l.dual.symm = l.symm.dual := rfl
 
 theorem satisfiesPhi_dual {l : MagmaLaw α} {φ : α → G}
   (h : satisfiesPhi (Magma.opHom ∘ φ) l) : satisfiesPhi φ l.dual := by
-  simp only [satisfiesPhi, Op, opMagma, dual] at *
+  simp only [satisfiesPhi, Op, dual] at *
   rw [← evalInMagmaOp φ l.lhs.dual, ← evalInMagmaOp φ l.rhs.dual]
-  simp only [Op, opMagma, dual_dual]
+  simp only [Op, dual_dual]
   exact h
 
 theorem satisfies_dual_dual {l : MagmaLaw α} (h : (Op G) ⊧ l) : G ⊧ l.dual :=

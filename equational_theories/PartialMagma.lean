@@ -92,7 +92,7 @@ noncomputable def dom : Finset ℕ :=
 theorem mem_dom {a b c x}
     (h1 : c ∈ a ◯ b) (h2 : x ∈ ({a, b, c} : Finset ℕ)) : x ∈ dom := by
   refine Finset.mem_insert_of_mem <| Finset.mem_insert_of_mem ?_
-  simp only [dom, Finset.mem_biUnion, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Prod.exists]
+  simp only [Finset.mem_biUnion, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Prod.exists]
   exact ⟨_, _, _, h1, h2⟩
 
 @[scoped aesop safe forward]
@@ -108,7 +108,7 @@ theorem dom_b : b ∈ dom := Finset.mem_insert_of_mem <| Finset.mem_insert_self 
 
 noncomputable def dom_bound := dom.sup id + 1
 
-theorem lt_dom_bound {x} (h : x ∈ dom) : x < dom_bound := Nat.lt_succ.2 <| dom.le_sup (f := id) h
+theorem lt_dom_bound {x} (h : x ∈ dom) : x < dom_bound := Nat.lt_succ_iff.2 (dom.le_sup (f := id) h)
 
 namespace FreshExtension
 

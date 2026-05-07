@@ -33,7 +33,7 @@ theorem «Facts» :
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
     simp only [Magma.op, bu, hx, hy, buFixed_rw_op]
     symm
-    congr! 1
+    apply Subtype.ext
     apply comp3 ((NF_iff_buFixed rules).mpr hx)
   all_goals refute
 
@@ -75,7 +75,7 @@ theorem «Facts» :
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
     simp (disch := bufixed) only [Magma.op, bu, hx, hy, buFixed_rw_op]
     symm
-    congr! 1
+    apply Subtype.ext
     apply comp1_4
   all_goals refute
 
@@ -117,7 +117,7 @@ theorem «Facts» :
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
     simp (disch := bufixed) only [Magma.op, bu, hx, hy, buFixed_rw_op]
     symm
-    congr! 1
+    apply Subtype.ext
     apply comp1_4
   all_goals refute
 
@@ -153,7 +153,7 @@ theorem «Facts» :
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
     simp (disch := bufixed) only [Magma.op, bu, hx, hy, buFixed_rw_op]
     symm
-    congr! 1
+    apply Subtype.ext
     apply comp1_4
   all_goals refute
 
@@ -189,7 +189,7 @@ theorem «Facts» :
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
     simp (disch := bufixed) only [Magma.op, bu, hx, hy, buFixed_rw_op]
     symm
-    congr! 1
+    apply Subtype.ext
     apply comp1_4  ((NF_iff_buFixed rules).mpr hx)
   all_goals refute
 
@@ -239,7 +239,7 @@ theorem «Facts» :
   · rintro ⟨x, hx⟩ ⟨y, hy⟩ ⟨z, hz⟩
     simp (disch := bufixed) only [Magma.op, bu, hx, hy, hz, buFixed_rw_op]
     symm
-    congr! 1
+    apply Subtype.ext
     apply comp1_4
   all_goals refute
 
@@ -275,7 +275,7 @@ theorem «Facts» :
   · rintro ⟨x, hx⟩ ⟨y, hy⟩
     simp (disch := bufixed) only [Magma.op, bu, hx, hy, buFixed_rw_op]
     symm
-    congr! 1
+    apply Subtype.ext
     apply comp1_4
   all_goals refute
 
@@ -319,7 +319,7 @@ theorem «Facts» :
   · rintro ⟨x, hx⟩ ⟨y, hy⟩ ⟨z, hz⟩
     simp only [Magma.op, bu, hx, hy, hz, buFixed_rw_op]
     symm
-    congr! 1
+    apply Subtype.ext
     apply comp3 ((NF_iff_buFixed rules).mpr hx) ((NF_iff_buFixed rules).mpr hy)
   all_goals refute
 

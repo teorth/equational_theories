@@ -3,6 +3,7 @@ import Mathlib.Data.Finset.Order
 import Mathlib.Data.Rel
 import Mathlib.Tactic.Group
 import Mathlib.Tactic.Ring
+import Mathlib.Data.Finite.Prod
 
 import equational_theories.FreshGenerator
 import equational_theories.Equations.All
@@ -63,7 +64,7 @@ def old : Finset G :=
 theorem mem_old {a b x}
     (h1 : E a b) (h2 : x ∈ ({a, b} : Finset G)) : x ∈ old := by
   refine Finset.mem_insert_of_mem ?_
-  simp only [old, Finset.mem_biUnion, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Prod.exists]
+  simp only [Finset.mem_biUnion, Set.Finite.mem_toFinset, Set.mem_setOf_eq, Prod.exists]
   exact ⟨_, _, h1, h2⟩
 
 def c := FreeGroup.of (freshGeneratorName old)

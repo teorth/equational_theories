@@ -51,6 +51,6 @@ lemma edit_of_attains {X X' Y : Type*} (ι : X' ↪ X) (f : X → Y) (f' : X' �
 
 lemma edit_of_avoids {X X' Y : Type*} (ι : X' ↪ X) (f : X → Y) (f' : X' → Y) {x : X}
     (h : ι.avoids x) : ι.edit f f' x = f x := by
-  simp_all [edit, h, ι.avoids_iff_not_attains]
+  simp_all [edit, ι.avoids_iff_not_attains]
 
 end Function.Embedding
