@@ -9,7 +9,7 @@ set -e
 echo "::group::leanchecker Output"
 
 # https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/v4.2E29.20bump/near/593523380
-echo "Skipping leanchecker due to excessive memory consumption for large computations(?)
+echo "Skipping leanchecker due to excessive memory consumption for large computations(?)"
 # echo "Checking environment with leanchecker"
 # ~/.elan/bin/lake env leanchecker equational_theories
 
