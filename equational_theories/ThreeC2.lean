@@ -179,7 +179,7 @@ theorem red_eq_of_IsRed {w : W} (h : IsRed w) : red w = w :=
 where
   go ys xs  (h : IsRed (ys⁻¹ ++ xs)) : red.go ys xs = ys ⁻¹ ++ xs := by
     induction ys, xs using red.go.induct
-    next => simp [red.go, h]
+    next => simp [red.go]
     next ih =>
       apply ih
       simpa
@@ -189,7 +189,7 @@ where
       simpa [List.reverse_cons, List.append_assoc, List.singleton_append] using h
     next ih =>
       simp [red.go, *]
-      simp [red.go, *] at ih
+      simp [*] at ih
       apply ih
       simpa using h
 
@@ -303,7 +303,7 @@ where
       apply @IsRed_not_repeated [] x (y :: ys) hxs
 
 theorem red_append_nil_iff (w v : W) :
-    red (w ++ v) = [] ↔ red w = red v⁻¹ := by
+    red (w ++ v) = [] ↔ red w = (red v)⁻¹ := by
   rw [← red_append_red_right, ← red_append_red_left]
   apply red_append_nil_iff_eq_inv
   · exact red_IsRed w
@@ -360,7 +360,7 @@ theorem M.Satisfies206 : Equation206 M := by
 
 theorem M.Refutes1648 : ¬ Equation1648 M := by
   unfold Equation1648
-  push_neg
+  push Not
   use ⟨[1], by simp⟩, ⟨[3], by simp⟩
   decide
 
@@ -450,7 +450,7 @@ theorem M2.Satisfies1841 : Equation1841 M2 := by
 
 theorem M2.Refutes203 : ¬ Equation203 M2 := by
   unfold Equation203
-  push_neg
+  push Not
   use ⟨([], false), by simp⟩
   decide
 

@@ -91,11 +91,11 @@ def ofArray (xs : Array α) (h : 0 < xs.size) : RArray α :=
   .ofFn (fun i => xs.toList[i]) h
 
 theorem RArray.ofFn_correct {n : Nat} (f : Fin n → α) (h : 0 < n) (i : Fin n):
-    RArray.get (.ofFn f h) i = f i :=
+    RArray.get (RArray.ofFn f h) i = f i :=
   go 0 n h (Nat.le_refl _) (Nat.zero_le _) i.2
 where
   go lb ub h1 h2 (h3 : lb ≤ i.val) (h3 : i.val < ub) :
-      RArray.get (.ofFn.go f lb ub h1 h2) (i - lb) = f i := by
+      RArray.get (RArray.ofFn.go f lb ub h1 h2) (i - lb) = f i := by
     induction lb, ub, h1, h2 using RArray.ofFn.go.induct
     case case1 =>
       simp [ofFn.go, RArray.get_eq_getImpl, RArray.getImpl]

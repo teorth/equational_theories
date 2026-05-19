@@ -13,6 +13,7 @@ This file is generated from the following operator table:
 set_option linter.unusedVariables false
 
 /-! The magma definition -/
+@[implicit_reducible]
 def «All4x4Tables [[1,2,3,4,5,0,6],[5,4,0,3,6,1,2],[4,1,6,5,3,2,0],[0,6,4,2,1,3,5],[3,5,2,6,0,4,1],[6,3,1,0,2,5,4],[2,0,5,1,4,6,3]]» : Magma (Fin 7) where
   op := finOpTable "[[1,2,3,4,5,0,6],[5,4,0,3,6,1,2],[4,1,6,5,3,2,0],[0,6,4,2,1,3,5],[3,5,2,6,0,4,1],[6,3,1,0,2,5,4],[2,0,5,1,4,6,3]]"
 

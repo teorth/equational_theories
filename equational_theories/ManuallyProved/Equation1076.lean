@@ -125,15 +125,15 @@ def domFresh : Finset (ℕ ⊕F )  := Finset.image (.inl) dom ∪ Finset.image (
 
 theorem next_ok : next.OK where
   finite := by
-    apply Set.Finite.subset (s := ((domFresh ×ˢ domFresh) ×ˢ domFresh).toSet) (Finset.finite_toSet _)
+    apply Set.Finite.subset (s := SetLike.coe ((domFresh ×ˢ domFresh) ×ˢ domFresh)) (Finset.finite_toSet _)
     refine fun ((x,y),z) hx => ?_
     unfold domFresh
     simp at hx ⊢; cases hx with
     | base h => simp [dom_o h, dom_l h, dom_r h]
     | new => simp [dom_a, dom_b]
-    | extra1 h => simp [dom_a, dom_b, dom_r h]
-    | extra3_2 h _ h' => simp [dom_a, dom_b, dom_r h, dom_o h']
-    | _ h => simp [dom_a, dom_b, dom_r h]
+    | extra1 h => simp [dom_r h]
+    | extra3_2 h _ h' => simp [dom_o h']
+    | _ h => simp [dom_a, dom_r h]
   func {x y xy} hxy {xy'} hxy' := next_func hxy hxy'
   laws := {
   not_idempotent := next_not_idempotent rfl
@@ -196,7 +196,7 @@ theorem Extension.base : ∀ {x y z : GreedyMagma e₀}, z ∈ e₀.1 x y → z 
 def fromList (S : List ((Nat × Nat) × Nat)) : PreExtension ℕ := fun a b => {c | ((a, b), c) ∈ S}
 
 theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
-    (sorted : S.Chain' (fun a b => a.1 < b.1) := by decide)
+    (sorted : S.IsChain (fun a b => a.1 < b.1) := by decide)
     (eq1076 : ∀ a ∈ S, ∀ b ∈ S, a.1.1 = b.1.1 → a.2 = b.1.2 →
       ∃ c ∈ S, ∃ d ∈ S, c.1.1 = b.2 ∧ c.1.2 = a.1.2 ∧ d.1.2 = c.2 ∧ d.1.1 = a.1.2 ∧ d.2 = a.1.1 := by decide)
     (not_idempotent : ∀ a ∈ S, a.1.1 = a.1.2 → a.2 ≠ a.1.1 := by decide) :
@@ -204,7 +204,7 @@ theorem fromList_ok {S : List ((Nat ×ₗ Nat) × Nat)}
   finite := List.finite_toSet S
   func h1 _ h2 := Decidable.by_contra fun h =>
     have : IsTrans ((ℕ ×ₗ ℕ) × ℕ) (·.1 < ·.1) := ⟨fun _ _ _ => lt_trans⟩
-    (List.chain'_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
+    (List.isChain_iff_pairwise.1 sorted) |>.imp (fun h => h.ne)
       |>.forall (fun _ _ => (·.symm)) h1 h2 (by rintro ⟨⟩; exact h rfl) rfl
   laws := {
   eq1076 := fun h1 h2 => by -- variable names are off, copy pase from 1722 just worked
@@ -249,14 +249,18 @@ theorem refute_seed1 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [3, 23, 99, 
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed1 :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq1076, ?_⟩
-  have rules := fromList_eval' he
-  simp [seed1, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
-    forall_eq] at rules
+  have r1 : ((0:GreedyMagma e) ◇ 0) = 1 := fromList_eval he 0 0 1
+  have r2 : ((0:GreedyMagma e) ◇ 1) = 2 := fromList_eval he 0 1 2
+  have r3 : ((0:GreedyMagma e) ◇ 3) = 0 := fromList_eval he 0 3 0
+  have r4 : ((1:GreedyMagma e) ◇ 0) = 1 := fromList_eval he 1 0 1
+  have r5 : ((1:GreedyMagma e) ◇ 3) = 1 := fromList_eval he 1 3 1
+  have r6 : ((2:GreedyMagma e) ◇ 0) = 3 := fromList_eval he 2 0 3
   split_ands
+  all_goals (intro h)
   all_goals first
-    | intro h ; have := h 0 ; simp [rules] at this ; (try cases this); done
-    | intro h ; have := h 0 0 ; simp [rules] at this ; (try cases this); done
-    | intro h ; have := h 0 3 ; simp [rules] at this
+    | (have := h 0 ; simp [r1, r2, r4, r6] at this ; (try cases this); done)
+    | (have := h 0 0 ; simp [r1, r2, r4, r6] at this ; (try cases this); done)
+    | (have := h 0 3 ; simp [r1, r3, r4, r5] at this)
 
 def seed2 : List ((Nat × Nat) × Nat) := [
   ((0,0),1),
@@ -273,15 +277,18 @@ theorem refute_seed2 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [151, 326, 8
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed2 :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq1076, ?_⟩
-  have rules := fromList_eval' he
-  simp [seed2, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
-    forall_eq] at rules
+  have r1 : ((0:GreedyMagma e) ◇ 0) = 1 := fromList_eval he 0 0 1
+  have r2 : ((0:GreedyMagma e) ◇ 2) = 1 := fromList_eval he 0 2 1
+  have r3 : ((1:GreedyMagma e) ◇ 0) = 1 := fromList_eval he 1 0 1
+  have r4 : ((1:GreedyMagma e) ◇ 1) = 2 := fromList_eval he 1 1 2
+  have r5 : ((2:GreedyMagma e) ◇ 0) = 2 := fromList_eval he 2 0 2
   split_ands
+  all_goals (intro h)
   all_goals first
-    | intro h ; have := h 0 ; simp [rules] at this ; done
-    | intro h ; have := h 0 0 ; simp [rules] at this ; (try cases this); done
-    | intro h ; have := h 0 1 ; simp [rules] at this ; (try cases this); done
-    | intro h ; have := h 1 0 ; simp [rules] at this ; (try cases this)
+    | (have := h 0 ; simp [r1, r2, r3, r4, r5] at this ; done)
+    | (have := h 0 0 ; simp [r1, r3, r4] at this ; (try cases this); done)
+    | (have := h 0 1 ; simp [r1, r2, r4] at this ; (try cases this); done)
+    | (have := h 1 0 ; simp [r1, r3, r4] at this ; (try cases this))
 
 def seed3 : List ((Nat × Nat) × Nat) := [
   ((0,0),1),
@@ -307,13 +314,18 @@ theorem refute_seed3 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [8, 411, 142
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed3 :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq1076, ?_⟩
-  have rules := fromList_eval' he
-  simp [seed3, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
-    forall_eq] at rules
+  have r1 : ((0:GreedyMagma e) ◇ 0) = 1 := fromList_eval he 0 0 1
+  have r2 : ((0:GreedyMagma e) ◇ 1) = 2 := fromList_eval he 0 1 2
+  have r3 : ((0:GreedyMagma e) ◇ 2) = 4 := fromList_eval he 0 2 4
+  have r5 : ((0:GreedyMagma e) ◇ 4) = 1 := fromList_eval he 0 4 1
+  have r6 : ((1:GreedyMagma e) ◇ 2) = 5 := fromList_eval he 1 2 5
+  have r8 : ((1:GreedyMagma e) ◇ 4) = 0 := fromList_eval he 1 4 0
+  have r9 : ((2:GreedyMagma e) ◇ 0) = 3 := fromList_eval he 2 0 3
   split_ands
+  all_goals (intro h)
   all_goals first
-    | intro h ; have := h 0 ; simp [rules] at this ; (try cases this); done
-    | intro h ; have := h 0 1 ; simp [rules] at this ;
+    | (have := h 0 1 ; simp [r2, r3, r8] at this)
+    | (have := h 0 ; simp [r1, r2, r3, r5, r6, r9] at this ; try cases this)
 
 def seed4 : List ((Nat × Nat) × Nat) := [
   ((0,0),1),
@@ -333,13 +345,15 @@ theorem refute_seed4 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [47,2238,331
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed4 :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq1076, ?_⟩
-  have rules := fromList_eval' he
-  simp [seed4, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
-    forall_eq] at rules
+  have r1 : ((0:GreedyMagma e) ◇ 0) = 1 := fromList_eval he 0 0 1
+  have r2 : ((0:GreedyMagma e) ◇ 1) = 2 := fromList_eval he 0 1 2
+  have r3 : ((0:GreedyMagma e) ◇ 2) = 4 := fromList_eval he 0 2 4
+  have r9 : ((4:GreedyMagma e) ◇ 0) = 2 := fromList_eval he 4 0 2
   split_ands
+  all_goals (intro h)
   all_goals first
-    | intro h ; have := h 0 ; simp [rules] at this ; done
-    | intro h ; have := h 0 0 ; simp [rules] at this ; (try cases this)
+    | (have := h 0 ; simp [r1, r2, r3, r9] at this; done)
+    | (have := h 0 0 ; simp [r1, r2, r3] at this; cases this)
 
 def seed5 : List ((Nat × Nat) × Nat) := [
   ((0,0),1),
@@ -357,10 +371,11 @@ theorem refute_seed5 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [2847] := by
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed5 :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq1076, ?_⟩
-  have rules := fromList_eval' he
-  simp [seed5, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
-    forall_eq] at rules
-  intro h ; have := h 0 ; simp [rules] at this
+  have r1 : ((0:GreedyMagma e) ◇ 0) = 1 := fromList_eval he 0 0 1
+  have r2 : ((0:GreedyMagma e) ◇ 1) = 2 := fromList_eval he 0 1 2
+  have r6 : ((2:GreedyMagma e) ◇ 0) = 3 := fromList_eval he 2 0 3
+  have r7 : ((3:GreedyMagma e) ◇ 0) = 1 := fromList_eval he 3 0 1
+  intro h ; have := h 0 ; simp [r1, r2, r6, r7] at this
 
 def seed6 : List ((Nat × Nat) × Nat) := [
   ((0,0),1),
@@ -377,11 +392,11 @@ theorem refute_seed6 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [359,614] :=
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed6 :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq1076, ?_⟩
-  have rules := fromList_eval' he
-  simp [seed6, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
-    forall_eq] at rules
+  have r1 : ((0:GreedyMagma e) ◇ 0) = 1 := fromList_eval he 0 0 1
+  have r2 : ((0:GreedyMagma e) ◇ 2) = 0 := fromList_eval he 0 2 0
+  have r4 : ((1:GreedyMagma e) ◇ 0) = 2 := fromList_eval he 1 0 2
   split_ands
-  all_goals intro h ; have := h 0 ; simp [rules] at this; try cases this
+  all_goals (intro h ; have := h 0 ; simp [r1, r2, r4] at this; try cases this)
 
 def seed7 : List ((Nat × Nat) × Nat) := [
   ((0,0),1),
@@ -395,11 +410,11 @@ theorem refute_seed7 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [255,4065] :
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed7 :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq1076, ?_⟩
-  have rules := fromList_eval' he
-  simp [seed7, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
-    forall_eq] at rules
+  have r1 : ((0:GreedyMagma e) ◇ 0) = 1 := fromList_eval he 0 0 1
+  have r3 : ((1:GreedyMagma e) ◇ 0) = 2 := fromList_eval he 1 0 2
+  have r4 : ((2:GreedyMagma e) ◇ 0) = 2 := fromList_eval he 2 0 2
   split_ands
-  all_goals intro h ; have := h 0 ; simp [rules] at this ; try cases this
+  all_goals (intro h ; have := h 0 ; simp [r1, r3, r4] at this ; try cases this)
 
 def seed8 : List ((Nat × Nat) × Nat) := [
   ((0,0),1),
@@ -416,10 +431,10 @@ theorem refute_seed8 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [1832] := by
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed8 :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq1076, ?_⟩
-  have rules := fromList_eval' he
-  simp [seed8, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
-    forall_eq] at rules
-  intro h ; have := h 0 ; simp [rules] at this
+  have r1 : ((0:GreedyMagma e) ◇ 0) = 1 := fromList_eval he 0 0 1
+  have r2 : ((0:GreedyMagma e) ◇ 1) = 2 := fromList_eval he 0 1 2
+  have r6 : ((2:GreedyMagma e) ◇ 1) = 2 := fromList_eval he 2 1 2
+  intro h ; have := h 0 ; simp [r1, r2, r6] at this
 
 def seed9 : List ((Nat × Nat) × Nat) := [
   ((0,0),1),
@@ -431,9 +446,8 @@ theorem refute_seed9 : ∃ (G : Type) (_ : Magma G), Facts G [1076] [3659] := by
   have ⟨e, he⟩ : ∃ e : Extension ℕ, e.1 = fromList seed9 :=
     ⟨⟨_, fromList_ok⟩, rfl⟩
   refine ⟨GreedyMagma e, inferInstance, e.eq1076, ?_⟩
-  have rules := fromList_eval' he
-  simp [seed9, List.mem_cons, List.mem_singleton, forall_eq_or_imp,
-    forall_eq] at rules
-  intro h ; have := h 0 ; simp [rules] at this
+  have r1 : ((0:GreedyMagma e) ◇ 0) = 1 := fromList_eval he 0 0 1
+  have r2 : ((1:GreedyMagma e) ◇ 1) = 0 := fromList_eval he 1 1 0
+  intro h ; have := h 0 ; simp [r1, r2] at this
 
 end Eq1076

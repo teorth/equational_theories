@@ -114,9 +114,9 @@ def parseArray {α : Type} (p : Parser α) : Parser (List α) := do
   return arr.toList
 
 def parseData (data : String) : IO (List (List Nat)) := do
-  match parseArray (parseArray digits) (String.mkIterator data) with
-  | .success _ v => return v
-  | .error _ err => throw <| IO.userError err
+  match (parseArray (parseArray digits)).run data with
+  | .ok v => return v
+  | .error err => throw <| IO.userError (toString err)
 
 /-
 `finOpTable "[[0,1],[1,0]"` returns a method to compute the operation encoded by a given table, in

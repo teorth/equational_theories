@@ -18,7 +18,7 @@ namespace LinearOps
 -- The following tactic can be faster for larger magmas (roughly `Fin n` with `n ≥ 17`, although
 -- it of course depends on the number of variables in the equation)
 macro "ringFin" : tactic =>
-  `(tactic | (constructor; · solve | intro x; revert x; simp only [Magma.op]; ring_nf; simp) )
+  `(tactic | (constructor; · solve | intro x; revert x; simp only [Magma.op]; lia) )
 
 /--
 Found using the Rust program:

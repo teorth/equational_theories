@@ -48,8 +48,12 @@ theorem RelOfLaws.isEquivalence {α} (β) (Γ : Ctx α) : Equivalence (RelOfLaws
   case symm => exact fun h ↦ ⟨derive'.Sym h⟩
   case trans => exact fun h₁ h₂ ↦ ⟨derive'.Trans h₁ h₂⟩
 
-instance SetoidOfLaws {α} (β) (Γ : Ctx α) : Setoid (FreeMagma β) :=
+def SetoidOfLaws {α} (β) (Γ : Ctx α) : Setoid (FreeMagma β) :=
   ⟨ RelOfLaws β Γ, RelOfLaws.isEquivalence β Γ ⟩
+
+theorem SetoidOfLaws.iff {α} (β) (Γ : Ctx α) (x y : FreeMagma β) :
+    let _ := SetoidOfLaws β Γ; x ≈ y ↔ Nonempty (Γ ⊢' x ≃ y) := by
+  rfl
 
 -- This is the quotient type we care about: it will be a model of Γ.
 def FreeMagmaWithLaws.{u} {α} (β : Type u) (Γ : Ctx α) : Type u := Quotient (SetoidOfLaws β Γ)
@@ -68,7 +72,7 @@ theorem FreeMagmaWithLaws.eq {α β} {Γ : Ctx α} {x y : FreeMagma β} :
 def ForkWithLaws {α β} {Γ : Ctx α} :
     FreeMagmaWithLaws β Γ → FreeMagmaWithLaws β Γ → FreeMagmaWithLaws β Γ :=
   Quotient.lift₂ (λ x y ↦ embed Γ (x ⋆ y)) <| by
-    simp only [HasEquiv.Equiv, Setoid.r, RelOfLaws, embed, Nonempty.forall]
+    simp only [embed, Nonempty.forall, SetoidOfLaws.iff]
     exact fun x₁ x₂ y₁ y₂ d₁ d₂ ↦ (Quotient.sound ⟨derive'.Cong d₁ d₂⟩)
 
 protected instance FreeMagmaWithLaws.Magma {α} (β) (Γ : Ctx α) : Magma (FreeMagmaWithLaws β Γ) :=
@@ -95,12 +99,12 @@ def LfEmbed {α β} (Γ : Ctx α) : β → FreeMagmaWithLaws β Γ := embed Γ �
 -- Mostly forward reasoning here, so we delay the intros.
 theorem FreeMagmaWithLaws.isDerives {α β} {Γ : Ctx α} {E : MagmaLaw β} :
     FreeMagmaWithLaws β Γ ⊧ E → Nonempty (Γ ⊢' E) := by
-  simp [satisfies, satisfiesPhi, evalInMagma]
+  simp [satisfies, satisfiesPhi]
   intro eq; have h := eq (LfEmbed Γ)
   simp only [LfEmbed] at h
   repeat rw [FreeMagmaWithLaws.evalInMagmaIsQuot] at h
   have h' := Quotient.exact h
-  simp [HasEquiv.Equiv, Setoid.r, RelOfLaws] at h'
+  simp [SetoidOfLaws.iff] at h'
   repeat rw [evalInMagma_leaf] at h'
   exact h'
 
@@ -161,7 +165,7 @@ def FreeMagmaWithLaws.eval {α β G} {Γ : Ctx α} (φ : β → G) [Magma G] (mo
     FreeMagmaWithLaws β Γ → G :=
   Quotient.lift (evalInMagma φ) (by
     intro a b
-    simp only [HasEquiv.Equiv, SetoidOfLaws, RelOfLaws, Nonempty.forall]
+    simp only [SetoidOfLaws.iff, Nonempty.forall]
     intro h
     apply Soundness' (E := a ≃ b)
     . exact h

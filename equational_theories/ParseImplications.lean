@@ -59,7 +59,7 @@ def getEquationNumber (app : Expr) : Option Nat := do
 
 def isCoreEquationName (s : String) : Bool := Id.run do
   if !s.startsWith "Equation" then return false
-  let some n := (s.toSubstring.drop 8).toNat? | return false
+  let some n := (s.toRawSubstring.drop 8).toNat? | return false
   return 0 < n && n <= 4694
 
 def filterCoreEquationName (s : String) : Option String :=

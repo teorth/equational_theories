@@ -14,6 +14,7 @@ random generation of polynomials:
 set_option linter.unusedVariables false
 
 /-! The magma definition -/
+@[implicit_reducible]
 def «FinitePoly x² + y² + x + y % 2» : Magma (Fin 2) where
   op := memoFinOp fun x y => x*x + y*y + x + y
 
