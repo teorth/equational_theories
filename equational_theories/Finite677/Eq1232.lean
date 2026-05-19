@@ -129,12 +129,10 @@ lemma Magma_677_31_pow_3_264 : Equation264 (B × B × B) := fun (x, s0, s1) (y, 
 @[equational_result]
 theorem Magma_677_31_pow_3_facts : ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G
     [3, 264, 677, 1232]
-    [4293] := by
+    [474, 4293, 4435] := by
   refine ⟨B × B × B, Magma_677_31_pow_3, Finite.of_fintype _, Magma_677_31_pow_3_idem,
-  Magma_677_31_pow_3_264, Magma_677_31_pow_3_677, fun a b => ?_, fun h => ?_⟩
+  Magma_677_31_pow_3_264, Magma_677_31_pow_3_677, fun a b => ?_, ?_⟩
   · rw [← Magma_677_31_pow_3_264, ← Magma_677_31_pow_3_idem]
-  · specialize h (0,1,0) (1,0,1)
-    revert h
-    decide
+  · split_ands <;> intro h <;> specialize h (0,1,0) (1,0,1) <;> revert h <;> decide
 
 end Eq1232
