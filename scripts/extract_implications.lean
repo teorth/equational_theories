@@ -1,6 +1,7 @@
 import Batteries.Data.Array.Basic
 import Batteries.Tactic.Lint.Frontend
 import Cli.Basic
+import Lean.Util.Path
 import equational_theories.Closure
 
 open Lean Core Elab Cli Closure

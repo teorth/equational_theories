@@ -21,7 +21,7 @@ elab "defineLaws%" : term => do
     mkConst (.mkSimple s!"Law{i+1}")
   return consts.toExpr (mkConst ``Law.NatMagmaLaw) id
 
-set_option maxRecDepth 100000 in
+set_option maxRecDepth 15000 in
 /--
 All the separate `Law{n}` definitions in one data structure.
 
