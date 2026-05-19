@@ -1,2 +1,3 @@
+import equational_theories.Finite677.Eq1232
 import equational_theories.Finite677.SmallMagmas
 import equational_theories.Finite677.SimpleProofs
