@@ -85,12 +85,20 @@ initialize equationalResultAttr : Unit ←
        let ctx ← read
        let filename := ctx.fileName
        let line := stx.getPos?.map λ pos => ctx.fileMap.toPosition pos |>.line
+       let isNative ← match stx with
+      | `(attr| equational_result native) => pure true
+      | `(attr| equational_result) => pure false
+      | _ => throwError "invalid `equational_result` attribute syntax"
        discard <| Meta.MetaM.run do
        let mut is_conjecture := false
        let axioms ← Lean.collectAxioms declName
        for a in axioms do
          if a = `Conjecture.conjectureAx then
            is_conjecture := true
+         else if a.toString.contains "native_decide" then
+           if not isNative then
+             throwError ("declaration uses native_decide, but is not " ++
+               s!"marked with `equational_result native`: {a}")
          else if not (a ∈ [``propext, ``Classical.choice, ``Quot.sound]) then
            throwError s!"declaration uses a prohibited axiom: {a}"
 
