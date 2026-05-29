@@ -57,7 +57,7 @@ end
 def subtree_replace(tree, subtree, newsubtree)
   return newsubtree if tree == subtree
   return tree if tree.class != Array
-  
+
   [ subtree_replace(tree[0], subtree, newsubtree), subtree_replace(tree[1], subtree, newsubtree) ]
 end
 
@@ -425,6 +425,7 @@ opt_parser= OptionParser.new do |opt|
   opt.on('--bruteforce-bijections2 NUM_SAMPLES', 'Bruteforce the order and subset of the "simple" bijections')
 
   opt.on('--bruteforce-periodicity-heuristic', 'Generates axioms to test if this implication may be subject to proof using a periodicity heuristic as mentioned here: https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Austin.20pairs/near/483445305')
+  opt.on('--add_eq677', 'Adds Eq677 as a hypothesis')
 end
 
 opt_parser.parse!(into: options)
@@ -494,6 +495,10 @@ while $stdin.gets
   seen_eqs.add(dst)
 end
 
+if options[:"add_eq677"]
+  seen_eqs.add(677)
+end
+
 equations = find_equation_ids(seen_eqs.to_a)
 equations.each { |src_eq, e|
   next if !unknowns[src_eq]
@@ -501,6 +506,7 @@ equations.each { |src_eq, e|
   export = {
     "hypothesis_num" => src_eq,
     "finite" => options != {},
+    "eq677" => options[:"add_eq677"],
     "axioms" => {}
   }
 
@@ -523,6 +529,13 @@ equations.each { |src_eq, e|
       export["axioms"][name] = { "proof" => "Not implemented" }
       axioms_tptp[name] = tptp
     }
+  end
+
+  if options[:"add_eq677"]
+      export["axioms"]["eq677"] = { "proof" => "Not implemented" }
+      export["axioms"]["eq677inv"] = { "proof" => "Not implemented" }
+      axioms_tptp["eq677"] = tptp(equations[677])
+      axioms_tptp["eq677inv"] = "![X,Y] : X = mul(mul(Y, X), mul(mul(Y, mul(Y, X)), Y))"
   end
 
   unknowns[src_eq].each { |dst_eq|
