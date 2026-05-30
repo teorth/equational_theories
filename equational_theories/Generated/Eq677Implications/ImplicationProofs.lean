@@ -6560,6 +6560,75 @@ theorem Finite.Equation677_and_Equation4073_implies_Equation4065 (G : Type*) [Ma
 
 
 @[equational_result]
+theorem Finite.Equation677_and_Equation4093_implies_Equation2 (G : Type*) [Magma G] [Finite G] (h2 : Equation677 G) (h : Equation4093 G) : Equation2 G := by
+  by_contra nh
+  simp only [not_forall] at nh
+  obtain ⟨sK0, sK1, nh⟩ := nh
+  have step9 (X0 X1 : G) :  (X0 ◇ X0) = (((X1 ◇ X1) ◇ X1) ◇ X0) := mod_symm (h ..)
+  have step10 : sK0 ≠ sK1 := mod_symm nh
+  have step11 (X0 X1 : G) :  (X1 ◇ (X0 ◇ ((X1 ◇ X0) ◇ X1))) = X0 := mod_symm (h2 ..)
+  have step12 (X0 X1 : G) :  ((X1 ◇ X0) ◇ ((X1 ◇ (X1 ◇ X0)) ◇ X1)) = X0 := (Finite.Equation677_implies_Equation19855 G h2 _ _).symm
+  have step13 (X0 X1 X2 : G) :  (((X0 ◇ X0) ◇ X0) ◇ X1) = (((X2 ◇ X2) ◇ X2) ◇ X1) := superpose step9 step9
+  have step14 (X0 X1 X2 : G) :  (X2 ◇ X2) = (((((X0 ◇ X0) ◇ X0) ◇ X1) ◇ X1) ◇ X2) := superpose step9 step9
+  have step15 (X0 X1 : G) :  (X1 ◇ (X1 ◇ ((((X0 ◇ X0) ◇ X0) ◇ X1) ◇ X1))) = X1 := superpose step9 step11
+  have step17 (X0 X1 : G) :  (((X1 ◇ X1) ◇ X1) ◇ (X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1)))) = X0 := superpose step9 step11
+  have step20 (X0 X1 : G) :  ((X0 ◇ X0) ◇ ((((X1 ◇ X1) ◇ X1) ◇ (X0 ◇ X0)) ◇ ((X1 ◇ X1) ◇ X1))) = X0 := superpose step9 step12
+  have step21 (X0 X1 : G) :  ((X1 ◇ (X1 ◇ X0)) ◇ X1) = (X0 ◇ (((X1 ◇ X0) ◇ X0) ◇ (X1 ◇ X0))) := superpose step12 step12
+  have step22 (X0 : G) :  ((X0 ◇ X0) ◇ X0) = ((X0 ◇ ((X0 ◇ X0) ◇ X0)) ◇ (X0 ◇ X0)) := superpose step11 step12
+  have step23 (X0 X1 : G) :  ((X1 ◇ (X1 ◇ X0)) ◇ X1) = ((X1 ◇ X0) ◇ (((X1 ◇ (X1 ◇ X0)) ◇ X1) ◇ (X0 ◇ (X1 ◇ X0)))) := superpose step12 step11
+  have step58 (X0 X1 : G) :  (((X0 ◇ X0) ◇ X0) ◇ (((X1 ◇ X1) ◇ ((X1 ◇ X1) ◇ X1)) ◇ (X1 ◇ X1))) = X1 := superpose step13 step12
+  have step59 (X0 X1 X2 : G) :  ((X2 ◇ X2) ◇ X2) = (X1 ◇ (((X0 ◇ X0) ◇ X0) ◇ ((X1 ◇ ((X2 ◇ X2) ◇ X2)) ◇ X1))) := superpose step13 step11
+  have step82 (X0 X1 X2 X3 : G) :  (X3 ◇ X3) = (((((((X0 ◇ X0) ◇ X0) ◇ X1) ◇ X1) ◇ X2) ◇ X2) ◇ X3) := superpose step14 step9
+  have step154 (X0 X1 X2 : G) :  (((X2 ◇ X2) ◇ X2) ◇ (X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1)))) = X0 := superpose step17 step13
+  have step156 (X0 X1 : G) :  (X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1))) = (((X1 ◇ X1) ◇ X1) ◇ ((X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1))) ◇ (X0 ◇ ((X1 ◇ X1) ◇ X1)))) := superpose step17 step11
+  have step179 (X0 : G) :  (((X0 ◇ X0) ◇ ((X0 ◇ X0) ◇ X0)) ◇ (X0 ◇ X0)) = (X0 ◇ ((X0 ◇ X0) ◇ ((X0 ◇ X0) ◇ X0))) := superpose step9 step21
+  have step184 (X0 X1 : G) :  ((X0 ◇ X0) ◇ X0) = ((X0 ◇ ((((X1 ◇ X1) ◇ X1) ◇ X0) ◇ X0)) ◇ ((X0 ◇ (X0 ◇ ((((X1 ◇ X1) ◇ X1) ◇ X0) ◇ X0))) ◇ X0)) := superpose step15 step21
+  have step194 (X0 : G) :  (((X0 ◇ ((X0 ◇ X0) ◇ X0)) ◇ ((X0 ◇ X0) ◇ X0)) ◇ (X0 ◇ ((X0 ◇ X0) ◇ X0))) = ((X0 ◇ X0) ◇ ((((X0 ◇ X0) ◇ X0) ◇ (X0 ◇ X0)) ◇ ((X0 ◇ X0) ◇ X0))) := superpose step22 step21
+  have step199 (X0 X1 : G) :  ((((X0 ◇ X0) ◇ X0) ◇ (((X0 ◇ X0) ◇ X0) ◇ X1)) ◇ ((X0 ◇ X0) ◇ X0)) = (X1 ◇ ((((X0 ◇ X0) ◇ X0) ◇ X1) ◇ (((X0 ◇ X0) ◇ X0) ◇ X1))) := superpose step14 step21
+  have step215 (X0 : G) :  (((X0 ◇ ((X0 ◇ X0) ◇ X0)) ◇ ((X0 ◇ X0) ◇ X0)) ◇ (X0 ◇ ((X0 ◇ X0) ◇ X0))) = X0 := superpose step20 step194
+  have step222 (X0 X1 : G) :  ((X0 ◇ X0) ◇ X0) = ((((X1 ◇ X1) ◇ X1) ◇ X0) ◇ X0) := superpose step12 step184
+  have step562 (X0 X1 : G) :  ((X0 ◇ X0) ◇ (((X0 ◇ X0) ◇ (X0 ◇ X0)) ◇ ((X1 ◇ X1) ◇ X1))) = X0 := superpose step9 step20
+  have step749 (X0 X1 : G) :  (X1 ◇ X1) = (((((X0 ◇ X0) ◇ ((X0 ◇ X0) ◇ X0)) ◇ (X0 ◇ X0)) ◇ ((((X0 ◇ X0) ◇ ((X0 ◇ X0) ◇ X0)) ◇ (X0 ◇ X0)) ◇ (X0 ◇ ((X0 ◇ X0) ◇ X0)))) ◇ X1) := superpose step23 step14
+  have step768 (X0 X1 : G) :  (X1 ◇ X1) = (((X0 ◇ ((X0 ◇ X0) ◇ ((X0 ◇ X0) ◇ X0))) ◇ ((X0 ◇ ((X0 ◇ X0) ◇ ((X0 ◇ X0) ◇ X0))) ◇ (X0 ◇ ((X0 ◇ X0) ◇ X0)))) ◇ X1) := superpose step179 step749
+  have step1142 (X0 X1 : G) :  ((X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1))) ◇ (X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1)))) = X0 := superpose step154 step82
+  have step1176 (X0 X1 : G) :  (X0 ◇ (((X0 ◇ X0) ◇ X0) ◇ (X0 ◇ X0))) = (((X0 ◇ X0) ◇ (X0 ◇ X0)) ◇ ((X1 ◇ X1) ◇ X1)) := superpose step562 step12
+  have step1178 (X0 X1 : G) :  ((X0 ◇ (X0 ◇ X0)) ◇ X0) = (((X0 ◇ X0) ◇ (X0 ◇ X0)) ◇ ((X1 ◇ X1) ◇ X1)) := superpose step21 step1176
+  have step2311 (X0 X1 : G) :  (X0 ◇ X0) = (((X1 ◇ X1) ◇ X1) ◇ (((X0 ◇ (X0 ◇ X0)) ◇ X0) ◇ ((X0 ◇ X0) ◇ (X0 ◇ X0)))) := superpose step1178 step58
+  have step2371 (X0 X1 X2 : G) :  ((X1 ◇ X1) ◇ X1) = (((X0 ◇ X0) ◇ (X0 ◇ X0)) ◇ (((X2 ◇ X2) ◇ X2) ◇ (((X0 ◇ (X0 ◇ X0)) ◇ X0) ◇ ((X0 ◇ X0) ◇ (X0 ◇ X0))))) := superpose step1178 step59
+  have step2462 (X0 X1 : G) :  ((X1 ◇ X1) ◇ X1) = (((X0 ◇ X0) ◇ (X0 ◇ X0)) ◇ (X0 ◇ X0)) := superpose step2311 step2371
+  have step2499 (X0 X1 : G) :  ((X1 ◇ X1) ◇ X1) = ((X0 ◇ X0) ◇ X0) := superpose step2462 step2462
+  have step2909 (X0 X1 X2 : G) :  ((X0 ◇ X0) ◇ X0) = ((((X2 ◇ X2) ◇ X2) ◇ X1) ◇ X1) := superpose step2499 step222
+  have step2921 (X0 X1 : G) :  (X1 ◇ (X1 ◇ ((X0 ◇ X0) ◇ X0))) = X1 := superpose step2499 step11
+  have step2945 (X0 X1 X2 : G) :  ((X2 ◇ X2) ◇ X2) = (((X1 ◇ X1) ◇ X1) ◇ (((X2 ◇ X2) ◇ X2) ◇ ((X0 ◇ X0) ◇ X0))) := superpose step2499 step154
+  have step3547 (X0 X1 : G) :  ((X0 ◇ X0) ◇ X0) = (((X1 ◇ X1) ◇ X1) ◇ (((X0 ◇ X0) ◇ X0) ◇ (((X0 ◇ X0) ◇ X0) ◇ ((X0 ◇ X0) ◇ X0)))) := superpose step2921 step154
+  have step3577 (X0 X1 : G) :  (X0 ◇ ((X1 ◇ X1) ◇ X1)) = (X0 ◇ ((X0 ◇ X0) ◇ X0)) := superpose step2921 step12
+  have step3603 (X0 X1 : G) :  ((X0 ◇ X0) ◇ X0) = (((X1 ◇ X1) ◇ X1) ◇ ((X0 ◇ X0) ◇ X0)) := superpose step2945 step3547
+  have step4061 (X0 X1 X3 : G) :  ((X1 ◇ X1) ◇ X1) = (X0 ◇ (X0 ◇ ((X0 ◇ X0) ◇ ((X3 ◇ X3) ◇ X3)))) := superpose step154 step2909
+  have step5709 (X0 X1 X2 X3 : G) :  (X2 ◇ ((((X0 ◇ X0) ◇ X0) ◇ X1) ◇ X1)) = (X2 ◇ ((X3 ◇ X3) ◇ X3)) := superpose step2909 step3577
+  have step20597 (X0 X1 X2 : G) :  ((X1 ◇ ((X0 ◇ X0) ◇ X0)) ◇ X1) = ((X1 ◇ ((X1 ◇ X1) ◇ ((X2 ◇ X2) ◇ X2))) ◇ ((((X0 ◇ X0) ◇ X0) ◇ (X1 ◇ ((X1 ◇ X1) ◇ ((X2 ◇ X2) ◇ X2)))) ◇ ((X0 ◇ X0) ◇ X0))) := superpose step4061 step21
+  have step20633 (X0 X1 X2 : G) :  ((X1 ◇ ((X1 ◇ X1) ◇ ((X2 ◇ X2) ◇ X2))) ◇ (X1 ◇ ((X0 ◇ X0) ◇ X0))) = ((X1 ◇ ((X0 ◇ X0) ◇ X0)) ◇ X1) := superpose step154 step20597
+  have step47615 (X0 X1 : G) :  ((((X1 ◇ X1) ◇ X1) ◇ (X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1)))) ◇ ((X1 ◇ X1) ◇ X1)) = (((X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1))) ◇ (X0 ◇ ((X1 ◇ X1) ◇ X1))) ◇ ((X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1))) ◇ (X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1))))) := superpose step156 step199
+  have step47892 (X0 X1 : G) :  ((((X1 ◇ X1) ◇ X1) ◇ (X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1)))) ◇ ((X1 ◇ X1) ◇ X1)) = (((X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1))) ◇ (X0 ◇ ((X1 ◇ X1) ◇ X1))) ◇ X0) := superpose step1142 step47615
+  have step47971 (X0 X1 : G) :  ((((X1 ◇ X1) ◇ X1) ◇ (X0 ◇ ((X0 ◇ X0) ◇ ((X1 ◇ X1) ◇ X1)))) ◇ ((X1 ◇ X1) ◇ X1)) = (((X0 ◇ ((X1 ◇ X1) ◇ X1)) ◇ X0) ◇ X0) := superpose step20633 step47892
+  have step48029 (X0 X1 : G) :  (X0 ◇ ((X1 ◇ X1) ◇ X1)) = (((X0 ◇ ((X1 ◇ X1) ◇ X1)) ◇ X0) ◇ X0) := superpose step17 step47971
+  have step48224 (X0 : G) :  (X0 ◇ (X0 ◇ ((X0 ◇ X0) ◇ X0))) = ((X0 ◇ ((X0 ◇ X0) ◇ X0)) ◇ ((X0 ◇ X0) ◇ X0)) := superpose step215 step48029
+  have step48417 (X0 : G) :  ((X0 ◇ ((X0 ◇ X0) ◇ X0)) ◇ ((X0 ◇ X0) ◇ X0)) = X0 := superpose step11 step48224
+  have step48792 (X0 X1 : G) :  ((X1 ◇ ((X0 ◇ X0) ◇ X0)) ◇ ((X0 ◇ X0) ◇ X0)) = X1 := superpose step2499 step48417
+  have step48827 (X0 : G) :  (X0 ◇ ((X0 ◇ X0) ◇ X0)) = ((X0 ◇ ((X0 ◇ X0) ◇ X0)) ◇ X0) := superpose step48417 step2921
+  have step49773 (X0 X1 X2 X3 : G) :  ((X0 ◇ ((X1 ◇ X1) ◇ X1)) ◇ ((((X2 ◇ X2) ◇ X2) ◇ X3) ◇ X3)) = X0 := superpose step48792 step5709
+  have step54141 (X0 X1 X2 X3 : G) :  (((X0 ◇ X0) ◇ X0) ◇ ((X0 ◇ X0) ◇ X0)) = (((X1 ◇ ((X1 ◇ X1) ◇ ((X1 ◇ X1) ◇ X1))) ◇ ((X1 ◇ ((X1 ◇ X1) ◇ ((X1 ◇ X1) ◇ X1))) ◇ (X1 ◇ ((X1 ◇ X1) ◇ X1)))) ◇ ((((X2 ◇ X2) ◇ X2) ◇ X3) ◇ X3)) := superpose step768 step5709
+  have step54149 (X0 X1 X2 X3 : G) :  (((X0 ◇ X0) ◇ X0) ◇ ((X0 ◇ X0) ◇ X0)) = (((X1 ◇ ((X1 ◇ X1) ◇ ((X1 ◇ X1) ◇ X1))) ◇ ((X1 ◇ ((X1 ◇ X1) ◇ X1)) ◇ X1)) ◇ ((((X2 ◇ X2) ◇ X2) ◇ X3) ◇ X3)) := superpose step20633 step54141
+  have step54332 (X0 X1 X2 X3 : G) :  (((X0 ◇ X0) ◇ X0) ◇ ((X0 ◇ X0) ◇ X0)) = (((X1 ◇ ((X1 ◇ X1) ◇ ((X1 ◇ X1) ◇ X1))) ◇ (X1 ◇ ((X1 ◇ X1) ◇ X1))) ◇ ((((X2 ◇ X2) ◇ X2) ◇ X3) ◇ X3)) := superpose step48827 step54149
+  have step54491 (X0 X1 X2 X3 : G) :  (((X0 ◇ X0) ◇ X0) ◇ ((X0 ◇ X0) ◇ X0)) = (((X1 ◇ ((X1 ◇ X1) ◇ X1)) ◇ X1) ◇ ((((X2 ◇ X2) ◇ X2) ◇ X3) ◇ X3)) := superpose step20633 step54332
+  have step54627 (X0 X1 X2 X3 : G) :  (((X0 ◇ X0) ◇ X0) ◇ ((X0 ◇ X0) ◇ X0)) = ((X1 ◇ ((X1 ◇ X1) ◇ X1)) ◇ ((((X2 ◇ X2) ◇ X2) ◇ X3) ◇ X3)) := superpose step48827 step54491
+  have step54755 (X0 X1 : G) :  (((X0 ◇ X0) ◇ X0) ◇ ((X0 ◇ X0) ◇ X0)) = X1 := superpose step49773 step54627
+  have step54769 (X0 X1 : G) :  ((X0 ◇ X0) ◇ X0) = X1 := superpose step3603 step54755
+  have step54819 (X0 X2 : G) :  X0 = X2 := superpose step54769 step54769
+  have step57363 (X0 : G) :  sK0 ≠ X0 := superpose step54819 step10
+  subsumption step57363 step54819
+
+
+@[equational_result]
 theorem Finite.Equation677_and_Equation4093_implies_Equation4065 (G : Type*) [Magma G] [Finite G] (h2 : Equation677 G) (h : Equation4093 G) : Equation4065 G := by
   by_contra nh
   simp only [not_forall] at nh
