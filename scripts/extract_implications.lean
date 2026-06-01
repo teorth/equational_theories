@@ -154,7 +154,12 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
     let rs := matchFinite rs finite_only
     let rs := if only_implications then rs.filter (·.variant matches .implication ..) else rs
     let rs := rs.map (·.variant)
-    let rs ← if include_impl then Closure.closure rs dualityRelation.dualEquations else pure (Closure.toEdges rs)
+    let rs ← if include_impl then Closure.closure rs dualityRelation.dualEquations else do
+      let edges := Closure.toEdges rs
+      let duals := edges.filterMap fun
+        | .implication imp => (dualityRelation.dual imp).map (.implication ·)
+        | _ => none
+      pure (edges ++ duals)
     if inp.hasFlag "json" then
       let implications := (rs.filter (·.isTrue)).map (·.get)
       let nonimplications := (rs.filter (!·.isTrue)).map (·.get)
