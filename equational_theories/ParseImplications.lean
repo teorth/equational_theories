@@ -67,6 +67,7 @@ def filterCoreEquationName (s : String) : Option String :=
 
 /--
 Extracts an `Implication` from two expressions of the form `EquationN G inst`.
+Used by `addLawImplicationThm` for the single-hypothesis case.
 -/
 def implicationFromApps (lhs rhs : Expr) (finite : Bool) : Option Implication := do
   let lhsName ← getEquationName lhs
@@ -75,21 +76,30 @@ def implicationFromApps (lhs rhs : Expr) (finite : Bool) : Option Implication :=
 
 /--
 Attempts to parse an `Implication` from the type of a theorem.
+
+Handles theorems with one or more equation hypotheses. The `lhs` of the resulting
+`Implication` is a `&`-joined string of equation names, e.g. `"Equation677&Equation8"`,
+when multiple hypotheses are present.
 -/
 def parseImplication (thm_ty : Expr) : MetaM (Option Implication) := do
   Meta.forallTelescope thm_ty fun fvars rhs => do
-    match fvars with
-    | #[g, magma, lhsv] =>parse rhs g magma lhsv false
-    | #[g, magma, finite, lhsv] =>
-      let (.app (.const `Finite _) _) := ← Meta.inferType finite | return none
-      parse rhs g magma lhsv true
-    | _ => return none
-where
-  parse (rhs g magma lhsv : Expr) (finite : Bool) : MetaM (Option Implication) := do
+    -- Need at least: G (type), magma (Magma instance), one hypothesis
+    if fvars.size < 3 then return none
+    let g := fvars[0]!
+    let magma := fvars[1]!
     if !(← Meta.isType g) then return none
     let (.app (.const ``Magma _) _) := ← Meta.inferType magma | return none
-    let lhs ← Meta.inferType lhsv
-    return implicationFromApps lhs rhs finite
+    -- Detect optional Finite instance at position 2
+    let ty2 ← Meta.inferType fvars[2]!
+    let (finite, hypStart) :=
+      if let (.app (.const `Finite _) _) := ty2 then (true, 3)
+      else (false, 2)
+    let lhsvs := fvars.extract hypStart fvars.size
+    if lhsvs.isEmpty then return none
+    let lhss ← lhsvs.mapM Meta.inferType
+    let some lhsNames := (lhss.mapM getEquationName : Option (Array String)) | return none
+    let some rhsName := getEquationName rhs | return none
+    return some ⟨String.intercalate "&" lhsNames.toList, rhsName, finite⟩
 
 /--
 Builds an implication of Laws from the implication of theorems. It should look something like:
