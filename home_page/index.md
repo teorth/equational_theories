@@ -63,7 +63,7 @@ To build this project after [installing Lean](https://www.lean-lang.org/lean-get
     - [Text list of equations](https://github.com/teorth/equational_theories/tree/main/data/equations.txt).  [Larger list with equations of up to five operations](https://github.com/teorth/equational_theories/blob/main/data/eq_size5.txt)
     - [List of duals of equations](https://github.com/teorth/equational_theories/tree/main/data/dual_equations.md) ([JSON](https://github.com/teorth/equational_theories/blob/main/data/duals.json))
     - [The smallest magma satisfying a given equation (up to N=5)](https://github.com/teorth/equational_theories/blob/main/data/smallest_magma.txt), if it exists (and [the magmas themselves](https://github.com/teorth/equational_theories/blob/main/data/smallest_magma_examples.txt))
-    - To download the current state of the implication graph, see [this thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Database.20of.20implications).
+    - To download the current state of the implication graph, see [this thread](https://leanprover.zulipchat.com/#narrow/stream/458659-Equational/topic/Database.20of.20implications/near/476969963).
 - [Scripts](https://github.com/teorth/equational_theories/tree/main/scripts)
     - Shell
         - [`run_before_push`](https://github.com/teorth/equational_theories/tree/main/scripts/run_before_push.sh) - performs some of the CI checks, suitable for running just before pushing a new PR
