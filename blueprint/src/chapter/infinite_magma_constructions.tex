@@ -73,14 +73,14 @@ We have the following iterative construction, that lets us add arbitrary element
 
 \begin{proof}  Because $f$ maps $E_1 \backslash E_0$ bijectively to $E_2 \backslash E_1$, there are three cases:
 \begin{itemize}
-  \item $h$ is equal to an element $h_0$ of $G \backslash E_2$.
+  \item $h$ is equal to an element $h_0$ of $\Z \backslash E_2$.
   \item $h$ is equal to an element $h_0$ of $E_1 \backslash E_0$.
   \item $h$ is equal to $h_1 = f(h_0)$ for some $h_0 \in E_1 \backslash E_0$, so that $h_1 \in E_2 \backslash E_1$.
 \end{itemize}
 
 We deal with these three cases in turn.
 
-First suppose that $h = h_0\in G \backslash E_2$.  We perform the following construction.
+First suppose that $h = h_0\in \Z \backslash E_2$.  We perform the following construction.
 
 \begin{itemize}
   \item Choose an element $h_1 \in \Z$ that does not lie in $E_2 \cup \{h_0, -h_0\}$; this is possible because $E_2$ is finite.
@@ -92,7 +92,7 @@ First suppose that $h = h_0\in G \backslash E_2$.  We perform the following cons
     E'_2 &:= E_2 \cup \{h_0, h_1, h_0+h_1+h_2, h_2, -h_1-h_2\}.
   \end{align*}
   Clearly we still have nested finite sets $E'_0 \subseteq E'_1 \subseteq E'_2$.
-  \item Extend $f : E_1 \to E_0$ to a function $f': E'_1 \to E'_0$ by defining
+  \item Extend $f : E_1 \to E_2$ to a function $f': E'_1 \to E'_2$ by defining
   \begin{align*}
     f'(h_0) &:= h_1 \\
     f'(h_1) &:= h_2 \\
@@ -112,7 +112,7 @@ Now suppose that $h = h_0 \in E_1 \backslash E_0$, then the quantity $h_1 := f(h
   E'_2 &:= E_2 \cup \{h_0+h_1+h_2, h_2, -h_1-h_2\}.
 \end{align*}
 Clearly we still have nested finite sets $E'_0 \subseteq E'_1 \subseteq E'_2$.
-\item Extend $f : E_1 \to E_0$ to a function $f': E'_1 \to E'_0$ by defining
+\item Extend $f : E_1 \to E_2$ to a function $f': E'_1 \to E'_2$ by defining
 \begin{align*}
   f'(h_1) &:= h_2 \\
   f'(h_0+h_1+h_2) &:= -h_1-h_2
@@ -132,7 +132,7 @@ Finally, suppose that $h = h_1 = f(h_0)$ for some $h_0 \in E_1 \backslash E_0$, 
   E'_2 &:= E_2 \cup \{h_2, h_3, h_0+h_1+h_2, h_1+h_2+h_3, -h_1-h_2, -h_2-h_3\}.
 \end{align*}
 Clearly we still have nested finite sets $E'_0 \subseteq E'_1 \subseteq E'_2$.
-\item Extend $f : E_1 \to E_0$ to a function $f': E'_1 \to E'_0$ by defining
+\item Extend $f : E_1 \to E_2$ to a function $f': E'_1 \to E'_2$ by defining
 \begin{align*}
   f'(h_1) &:= h_2 \\
   f'(h_0+h_1+h_2) &:= -h_1-h_2
