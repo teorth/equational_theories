@@ -599,6 +599,11 @@ function _equationId(inputEq) {
     if (l !== r) {
         pid = findRhymeId(inputEq.rhyme);
     } else {
+        const sliceIndex = Number(nLhs + 1n);
+        const rotated = [...inputEq.rhyme.slice(sliceIndex), ...inputEq.rhyme.slice(0, sliceIndex)];
+        if (arrayEqual(inputEq.rhyme, rotated) && n > 0n) {
+            return 0n;
+        }
         // Slow code here
         pid = 0n;
         for (const rhyme of allRhymes(n + 1n)) {
