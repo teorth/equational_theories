@@ -7,7 +7,7 @@ import Mathlib.Data.ENat.Basic
 import Mathlib.Tactic.Zify
 
 /-! Equations with finite models of every cardinality are denoted 'full spectrum', see
-https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Equations.20with.20full.20spectrum
+https://leanprover.zulipchat.com/#narrow/channel/458659-Equational/topic/Equations.20with.20full.20spectrum/near/489997789
 
 This file proves that 7 equations are full spectrum and 32 are not: this should be a complete result
 for all order 4 equations through transitivity and duality. (All equations that are implied by a
