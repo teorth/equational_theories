@@ -564,7 +564,7 @@ def _equation_from_id(input_eq)
 end
 
 
-# Helper fuctions to supplement built in python methods not available in Ruby
+# Helper functions to supplement built in python methods not available in Ruby
 def strip_chars(str, chars)
   pattern = /\A[#{Regexp.escape(chars)}]+|[#{Regexp.escape(chars)}]+\z/
   str.gsub(pattern, '')
