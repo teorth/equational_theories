@@ -1,6 +1,6 @@
-## Left-projection
+## Left-projection law
 
-This law specifies the magma operation to be the projection on the left operand.  Such magmas are in one-to-one correspondence with sets with no structure.  Depending on context, they can be called left-zero semigroups, or left-zero bands.
+This law specifies the magma operation to be the projection on the left operand, namely every element is left-absorbing.  Such magmas are in one-to-one correspondence with sets with no structure.  Depending on context, they can be called left-zero semigroups, or left-zero bands.
 
 This law implies exactly the laws whose left-hand side and right-hand side have the same first variable, in particular the idempotent and associative laws.  Right multiplication is trivially bijective.  All elements are left zeros and right units.
 
