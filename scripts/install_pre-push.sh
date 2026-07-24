@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 # Rename the pre-push sample file if it exists
 if [ -f ".git/hooks/pre-push.sample" ]; then
