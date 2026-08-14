@@ -85,12 +85,20 @@ initialize equationalResultAttr : Unit ←
        let ctx ← read
        let filename := ctx.fileName
        let line := stx.getPos?.map λ pos => ctx.fileMap.toPosition pos |>.line
+       let isNative ← match stx with
+      | `(attr| equational_result native) => pure true
+      | `(attr| equational_result) => pure false
+      | _ => throwError "invalid `equational_result` attribute syntax"
        discard <| Meta.MetaM.run do
        let mut is_conjecture := false
        let axioms ← Lean.collectAxioms declName
        for a in axioms do
          if a = `Conjecture.conjectureAx then
            is_conjecture := true
+         else if a.toString.contains "native_decide" then
+           if not isNative then
+             throwError ("declaration uses native_decide, but is not " ++
+               s!"marked with `equational_result native`: {a}")
          else if not (a ∈ [``propext, ``Classical.choice, ``Quot.sound]) then
            throwError s!"declaration uses a prohibited axiom: {a}"
 
@@ -109,12 +117,12 @@ initialize equationalResultAttr : Unit ←
 
        let entry := if is_conjecture then entry.toConjecture else entry
 
-       -- Add law theorem as well
+       -- Add law theorem as well (only for simple, non-finite, single-hypothesis implications)
        match entry.variant with
         | .implication imp =>
             let _ ← match info with
               | .thmInfo  (val : TheoremVal) =>
-                 if !imp.finite then addLawImplicationThm val.type val.name
+                 if !imp.finite && !imp.lhs.contains '&' then addLawImplicationThm val.type val.name
               | _ => pure ()
         | .unconditional _ =>
             let _ ← match info with
@@ -144,17 +152,25 @@ def extractConjectures {m : Type → Type} [Monad m] [MonadEnv m] [MonadError m]
   return (equationalResultsExtension.getState (← getEnv)).filter (!·.proven)
 
 /-- Prints the contents of the equational results environment extension.
+By default, multi-hypothesis implications (with `&`-compound lhs) are omitted.
+Use `#print_equational_results multi` to include them.
 -/
 syntax (name := printEquationalResults) "#print_equational_results" : command
+syntax (name := printEquationalResultsMulti) "#print_equational_results" "multi" : command
 
-elab_rules : command
-| `(command| #print_equational_results) => do
+private def printEquationalResultsHelper (includeMulti : Bool) : CommandElabM Unit := do
   let rs ← extractTheorems
   for ⟨name, _filename, _line, res, _⟩ in rs do
     match res with
-    | .implication ⟨lhs, rhs, _⟩ => println! "{name}: {lhs} → {rhs}"
+    | .implication ⟨lhs, rhs, _⟩ =>
+        if !lhs.contains '&' || includeMulti then
+          println! "{name}: {lhs} → {rhs}"
     | .facts ⟨satisfied, refuted, _⟩ => println! "{name}: {satisfied} // {refuted}"
     | .unconditional rhs => println! "{name}: {rhs} holds unconditionally"
+
+elab_rules : command
+| `(command| #print_equational_results) => printEquationalResultsHelper false
+| `(command| #print_equational_results multi) => printEquationalResultsHelper true
 
 end Result
 

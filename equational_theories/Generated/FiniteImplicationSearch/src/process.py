@@ -24,6 +24,8 @@ def flatten_and_count_unique(nested_array):
     return len(unique_elements)
 
 def leanifyS(statement):
+    statement = re.sub(":\\$i", "", statement)
+    statement = re.sub(".*]:", "", statement)
     statement = re.sub("mul", "", statement)
     statement = re.sub(",", " ◇ ", statement)
     statement = re.sub("!=", "≠", statement)
@@ -47,16 +49,20 @@ def leanify(json, vampire_output):
     output = '@[equational_result]\ntheorem '
     if json["finite"]:
         output += "Finite."
+    if json["eq677"]:
+        output += "Equation677_and_"
     output += f'Equation{json["hypothesis_num"]}_implies_Equation{json["goal_num"]} (G : Type*) [Magma G]'
     if json["finite"]:
         output += " [Finite G]"
+    if json["eq677"]:
+        output += " (h2 : Equation677 G)"
 
     output += f' (h : Equation{json["hypothesis_num"]} G) : Equation{json["goal_num"]} G := by\n'
     output += "  by_contra nh\n  simp only [not_forall] at nh\n"
     output += f'  obtain ⟨{", ".join("sK" + str(i) for i in range(flatten_and_count_unique(json["goal_eq"])))}, nh⟩ := nh\n'
     eqnum_to_axiom = {}
     for eqnum, statement, proof in re.findall(r"(\d+)\. (.+) \[([^\]]+)\]", vampire_output):
-        #print(eqnum, "//", statement, "//", proof)
+        # print(eqnum, "//", statement, "//", proof)
         if proof.startswith("X") or proof.startswith("skolemisation"):
             continue
         if proof.startswith("input("):
@@ -87,6 +93,10 @@ def leanify(json, vampire_output):
 
                 if axiom_name == "hypothesis":
                     output += f"  have step{eqnum} {leanifyS(statement)} := mod_symm (h ..)\n"
+                elif axiom_name == "eq677":
+                    output += f"  have step{eqnum} {leanifyS(statement)} := mod_symm (h2 ..)\n"
+                elif axiom_name == "eq677inv":
+                    output += f"  have step{eqnum} {leanifyS(statement)} := (Finite.Equation677_implies_Equation19855 G h2 _ _).symm\n"
                 else:
                     output += json["axioms"][axiom_name]["proof"].replace("REPLACE", f"step{eqnum}")
             continue
@@ -116,6 +126,7 @@ if len(sys.argv) < 2:
 print("""import equational_theories.Equations.All
 import equational_theories.MagmaOp
 import equational_theories.Superposition
+import equational_theories.Finite677.Eq19855
 import Mathlib.Data.Set.Finite.Basic
 import Mathlib.Tactic.TypeStar
 import Mathlib.Tactic.ByContra
@@ -124,7 +135,7 @@ set_option linter.unusedVariables false
 """)
 
 for arg in sys.argv[1:]:
-    try: 
+    try:
         with open(arg, 'r') as f:
             first_line = f.readline()
             if not first_line.startswith('% JSON: '):
