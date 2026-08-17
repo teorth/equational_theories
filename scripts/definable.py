@@ -7,15 +7,20 @@ with open('imps.json', 'r') as file:
 with open('./data/duals.json', 'r') as file:
     duals_data = json.load(file)
 
-N_eq=4694
+#The base set is the equations listed in data/equations.txt, one per line and
+#numbered from 1, so its length is the largest base equation number.  Read it
+#rather than hardcoding, so that adding an equation does not silently push it
+#into the "sporadic" case below.
+with open('./data/equations.txt', 'r') as file:
+    N_eq = sum(1 for line in file if line.strip())
 
-#Store the implications as (4694+1)x(4694+1) array of bools. The extra 1 is to avoid array indexing
+#Store the implications as (N_eq+1)x(N_eq+1) array of bools. The extra 1 is to avoid array indexing
 #accidents here, since all our other data is 1-indexed
 imp_mat = np.eye(1+N_eq, dtype=np.bool)
 for imp in imps_data:
     lhs = int(imp["lhs"][len("Equation"):])
     rhs = int(imp["rhs"][len("Equation"):])
-    if lhs >= N_eq or rhs >= N_eq: #skip sporadics
+    if lhs > N_eq or rhs > N_eq: #skip sporadics
         continue
     imp_mat[lhs,rhs] = True
 
