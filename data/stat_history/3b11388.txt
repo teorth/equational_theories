@@ -1,0 +1,10 @@
+{"explicit_proof_true": 27803,
+"implicit_proof_true": 5294943,
+"explicit_conjecture_true": 38938,
+"implicit_conjecture_true": 1222463,
+"unknown": 2826,
+"implicit_conjecture_false": 1542808,
+"explicit_conjecture_false": 79615,
+"implicit_proof_false": 12994633,
+"explicit_proof_false": 829607
+}
