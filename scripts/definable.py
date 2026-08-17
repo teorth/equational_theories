@@ -15,7 +15,7 @@ imp_mat = np.eye(1+N_eq, dtype=np.bool)
 for imp in imps_data:
     lhs = int(imp["lhs"][len("Equation"):])
     rhs = int(imp["rhs"][len("Equation"):])
-    if lhs >= N_eq or rhs >= N_eq: #skip sporadics
+    if lhs > N_eq or rhs > N_eq: #skip sporadics
         continue
     imp_mat[lhs,rhs] = True
 
