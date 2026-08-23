@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from __future__ import annotations
+from pathlib import Path
 from typing import Optional, Set
 import re
 
@@ -180,9 +181,10 @@ def flip_top_most(node: ExprNode):
 
 
 def main():
+    equations_dir = Path(__file__).resolve().parents[1] / "equational_theories" / "Equations"
     trees = []
     for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]:
-        for line in open(f"../equational_theories/Equations/Eqns{file}.lean"):
+        for line in open(equations_dir / f"Eqns{file}.lean"):
             if "equation" in line and ":=" in line:
                 equation_number = line.split("equation")[1].split()[0]
                 trees.append(
