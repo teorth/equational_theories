@@ -65,7 +65,9 @@ class Equation {
 
     static fromId(eqId) {
         /**Construct an equation given its id.*/
-        return _equationFromId(eqId);
+        // The ids are BigInt internally; the documented entry point takes a
+        // plain integer, so coerce rather than throwing on `44 - 1n`.
+        return _equationFromId(toBigIntSafe(eqId));
     }
 
     get id() {
@@ -351,7 +353,9 @@ function* allEqs(order) {
     To generate unique equations of all orders, use
     (function*() { for (let n = 0n; ; n++) { yield* allEqs(n); } })().
     */
-        const half = order / 2n + 1n;
+    // Documented as taking a plain integer; the arithmetic below is BigInt.
+    order = toBigIntSafe(order);
+    const half = order / 2n + 1n;
     for (let lhsOrder = 0n; lhsOrder < half; lhsOrder++) {
         for (const lhsShape of allShapes(lhsOrder)) {
             for (const rhsShape of allShapes(order - lhsOrder)) {
@@ -905,9 +909,9 @@ function main() {
     }
 }
 
-/*
-// Commented out to prevent console errors in the browser.
-// Export functions for module use
+// Export functions for module use, and run main() when invoked as a script.
+// `require` does not exist in the browser, so both checks live inside the
+// module guard; testing `require.main` outside it is what used to throw here.
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         Equation,
@@ -915,12 +919,11 @@ if (typeof module !== 'undefined' && module.exports) {
         processEquation,
         main
     };
-}
 
-if (require.main === module) {
-    main();
+    if (typeof require !== 'undefined' && require.main === module) {
+        main();
+    }
 }
-*/
 
 
 function findEquation() {
