@@ -80,9 +80,8 @@ def parse_proofs_file_internal(
     # probably a way to get this directly from Lean.
     for file in equations_files:
         for line in open(file):
-            if m := re.match(r"abbrev\s+(Equation\d+)\s+", line):
-                universe.add(m.group(1))
-                known_implies.add((m.group(1), m.group(1)))
+            if m := re.match(r"equation\s+(\d+)\s*:=", line):
+                universe.add(f"Equation{m.group(1)}")
 
     try:
         for line in open(file_name):
@@ -118,6 +117,7 @@ def parse_proofs_file(equations_files, file_name):
     parse_proofs_file_internal(
         universe, known_implies, known_not_implies, equations_files, file_name
     )
+    known_implies.update((eq, eq) for eq in universe)
     return universe, known_implies, known_not_implies
 
 
@@ -128,6 +128,7 @@ def parse_proofs_files(equations_files, files):
         parse_proofs_file_internal(
             universe, known_implies, known_not_implies, equations_files, file_name
         )
+    known_implies.update((eq, eq) for eq in universe)
     return universe, known_implies, known_not_implies
 
 
@@ -265,7 +266,6 @@ if __name__ == "__main__":
         print("Usage: python process_implications.py <file_name.lean>")
         exit(1)
 
-    equations_file = os.path.join(os.path.dirname(file_name), "Equations/Basic.lean")
     universe, known_implies, known_not_implies = parse_proofs_file([], file_name)
 
     all_unknown = get_unknown_implications(universe, known_implies, known_not_implies)
