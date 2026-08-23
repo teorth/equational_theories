@@ -905,9 +905,9 @@ function main() {
     }
 }
 
-/*
-// Commented out to prevent console errors in the browser.
-// Export functions for module use
+// Export functions for module use, and run main() when invoked as a script.
+// `require` does not exist in the browser, so both checks live inside the
+// module guard; testing `require.main` outside it is what used to throw here.
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         Equation,
@@ -915,12 +915,11 @@ if (typeof module !== 'undefined' && module.exports) {
         processEquation,
         main
     };
-}
 
-if (require.main === module) {
-    main();
+    if (typeof require !== 'undefined' && require.main === module) {
+        main();
+    }
 }
-*/
 
 
 function findEquation() {
