@@ -14,6 +14,7 @@ import os
 from random import sample
 import re
 from sys import argv, stdin
+from pathlib import Path
 import networkx as nx
 
 
@@ -71,6 +72,18 @@ def get_unknown_implications(universe, known_implies, known_not_implies):
         - all_negative_implications
     )
 
+
+
+def default_equations_files():
+    """Equation definition files used to populate the universe for CLI runs."""
+    root = Path(__file__).resolve().parent.parent
+    eq_dir = root / "equational_theories" / "Equations"
+    files = sorted(eq_dir.glob("Eqns*.lean"))
+    if not files:
+        raise FileNotFoundError(
+            f"No Eqns*.lean files found under {eq_dir}; pass equation files explicitly."
+        )
+    return [str(f) for f in files]
 
 def parse_proofs_file_internal(
     universe, known_implies, known_not_implies, equations_files, file_name
@@ -266,7 +279,9 @@ if __name__ == "__main__":
         print("Usage: python process_implications.py <file_name.lean>")
         exit(1)
 
-    universe, known_implies, known_not_implies = parse_proofs_file([], file_name)
+    universe, known_implies, known_not_implies = parse_proofs_file(
+        default_equations_files(), file_name
+    )
 
     all_unknown = get_unknown_implications(universe, known_implies, known_not_implies)
 
