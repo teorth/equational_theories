@@ -138,5 +138,5 @@ if __name__ == "__main__":
             )
         exit(0)
 
-    for lhs, rhs in generate_all_eqs():
+    for lhs, rhs in eqs:
         print(format_expr(lhs), "=", format_expr(rhs))
