@@ -689,8 +689,8 @@ theorem Equation43_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation4
   ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ ↦ Nat.add_comm _ _, fun h ↦ by simpa using h 1⟩
 
 @[equational_result]
-theorem Equation43_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation3 G :=
-  ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ ↦ Nat.add_comm _ _, fun h ↦ by simpa using h 1⟩
+theorem Equation43_not_implies_Equation39 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation39 G :=
+  ⟨ℕ, ⟨fun x y ↦ x + y⟩, fun _ _ ↦ Nat.add_comm _ _, fun h ↦ by simpa using h 0 1⟩
 
 @[equational_result]
 theorem Equation43_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation42 G :=
