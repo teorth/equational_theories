@@ -53,7 +53,7 @@ commentary = {}
 for eq in os.listdir("commentary/"):
     if eq.startswith("Equation") and eq.endswith(".md"):
         commentary[eq.split(".")[0].replace("Equation", "")] = markdown.markdown(
-            open(ROOT / "commentary/" + eq).read()
+            open(ROOT / "commentary" / eq).read()
         )
 
 
