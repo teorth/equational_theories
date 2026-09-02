@@ -91,7 +91,7 @@ Continuing from the previous message. Same rules: claim an item by replying with
 - ~~**R2.T3**~~ **[DONE]** — p. 4 l. 24: "contributions had to be entered in..." — "entered" is clunky; use "written" or "formalized".
 - **R2.T4** **[CLAIMED]** — p. 4 l. 30: note the Coq → Rocq rename here at first occurrence (currently only on p. 17 l. 12) and use "Rocq" thereafter.
 - ~~**R2.T5**~~ **[DONE]** — p. 5 l. 10: "either 820 or 822 pairs" is confusing — if the gap is the two unknown-status implications, say so explicitly.
-- **R2.T6** **[CLAIMED]** — p. 10 l. 21: "generated as computer output" is redundant; drop "as computer output".
+- **R2.T6** **[DONE]** — p. 10 l. 21: "generated as computer output" is redundant; drop "as computer output".
 - ~~**R2.T7**~~ **[DONE]** — p. 10 l. 37: "two words in a free group" → "free **magma**", per the Lean definition of `EquationX`.
 - ~~**R2.T8**~~ **[DONE]** — p. 12 l. 11 uses "LeanBlueprint", p. 13 l. 22 onward "Lean blueprint" — pick one.
 - ~~**R2.T9**~~ **[DONE]** — p. 15 l. 30 uses "leanchecker", p. 11 l. 18 and p. 18 l. 15 use "lean4checker" — same tool or typo? If different, cite both.
