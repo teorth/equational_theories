@@ -4,7 +4,7 @@ ROOT = Path(__file__).resolve().parents[1]
 import json
 import numpy as np
 
-with open('imps.json', 'r') as file:
+with open(ROOT / 'imps.json', 'r') as file:
     imps_data = json.load(file)["implications"] #Don't need the non-implications
 
 with open(ROOT / "data/duals.json", 'r') as file:
