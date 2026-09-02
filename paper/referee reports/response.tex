@@ -262,12 +262,7 @@ this project.
 
 \item (p.~4) ``proof assistant language Lean'' is awkward; the referee suggests
 ``in the language of the proof assistant Lean''. (See also \textbf{R2.T1}.)
-\response{Done. The phrase ``the proof assistant language \emph{Lean}'' has been replaced by
-``the language of the proof assistant \emph{Lean}'' at its three occurrences in the
-introduction and in \S2, and by ``the formal proof assistant \emph{Lean}'' in the
-abstract (see \textbf{R2.T1}). The one remaining occurrence, ``the proof assistant
-language \emph{Coq}'', has been left alone for now, since \textbf{R2.T4} rewrites the
-same clause.}
+\response{\done}
 
 \item (p.~11) The explanation of the custom commands (\texttt{equation},
 \texttt{EquationX}, \texttt{LawX}) cannot be followed; examples would help.
@@ -295,27 +290,14 @@ recommendation for acceptance, subject to the comments below.
 Lean is first mentioned on p.~2, line~9 but first cited on p.~17; the same applies to
 the Lean blueprint tool (first appearing p.~12, line~11) and to \texttt{egg} and
 \texttt{duper} (p.~10, line~26).
-\response{Done. \emph{Lean} is now cited at its first mention in the introduction, rather
-than only at the later discussion in \S4.7; \emph{duper} and \emph{egg} are now cited at
-their first mention in \S2; and the \emph{Lean blueprint} tool is now cited where it is
-first named, in addition to the citation already attached to the earlier, generic mention
-of a blueprint. All four already had bibliography entries; no new ones were needed for
-this item.}
+\response{\done}
 
 \item Add citations for tools and libraries that currently lack them: Mathlib
 (p.~10, line~24; see \url{https://leanprover-community.github.io/cite.html}),
 SAGE (p.~45, line~36; see \url{https://wiki.sagemath.org/Publications_using_SageMath}),
 GAP (p.~45, line~37; see \url{https://www.gap-system.org/cite/}), and the GAP small
 group library (p.~45, line~37; see \url{https://gap-packages.github.io/smallgrp/#citing}).
-\response{Done. Bibliography entries have been added for \emph{Mathlib}, \emph{SageMath},
-\emph{GAP} and the \emph{SmallGrp} small groups library, in each case following the
-citation form recommended by the project itself at the address the referee kindly
-supplied, and each is now cited at its first occurrence in the text. \emph{GAP} and
-\emph{SmallGrp} are cited together at the sole mention of the small groups library in
-\S7. One caveat for our own attention: the \emph{GAP}, \emph{SmallGrp} and
-\emph{SageMath} entries currently record the versions that those projects recommend
-citing at the time of writing, and should be replaced by the versions actually used
-during the ETP.}
+\response{\done}
 
 \item (p.~11, lines~17--18 and p.~12, lines~1--2) The paper states that
 \texttt{lean4checker} was used to limit the axioms used to a ``small trusted set''.
@@ -406,22 +388,16 @@ and did not yield results.
 is confusing: validation is performed by the Lean kernel, whereas the Lean language is
 that in which the proofs are written and performs no validation itself. The referee
 suggests ``all validated by the formal proof assistant Lean'' or ``all validated by the
-interactive theorem prover Lean'', to match the terminology of \S4.7. (See also
-\textbf{R1.M1}.)
-\response{Done. The abstract now reads ``all validated by the formal proof assistant
-\emph{Lean}'', the first of the referee's two suggested formulations. See also
-\textbf{R1.M1}.}
+interactive theorem prover Lean'', to match the terminology of \S4.7.
+\response{\done}
 
 \item (p.~3, line~4) ``In this entailment pre-ordering'' \(\to\) ``In this entailment
 pre-order''.
-\response{Done. Changed to ``In this entailment pre-order''. This also removes an internal
-inconsistency, as the preceding paragraph already used ``pre-order''.}
+\response{\done}
 
 \item (p.~4, line~24) ``contributions had to be entered in the proof assistant language
 Lean'': ``entered'' is clunky; ``written'' or ``formalized'' would be better.
-\response{Done. The clause now reads ``contributions had to be written in the language of the
-proof assistant \emph{Lean}'', which also disposes of \textbf{R1.M1} at this
-occurrence.}
+\response{\done}
 
 \item (p.~4, line~30) ``written in the proof assistant language Coq'': since p.~17,
 line~12 notes the name change (``Rocq (formerly Coq)''), make that note here at the
@@ -431,11 +407,7 @@ first occurrence and use ``Rocq'' thereafter.
 \item (p.~5, line~10) ``either 820 or 822 pairs'' is confusing. If the discrepancy is
 due to the two implications of unknown status, say so explicitly --- that the finite
 implication held for 820 additional pairs and that for 2 pairs the status is unknown.
-\response{Done, and we thank the referee for catching the ambiguity: their reading is correct.
-The sentence now states that the finite implication held for an additional 820 pairs, and
-that for a further 2 pairs --- a single pair up to duality --- the status of the finite
-implication remains unknown, with a cross-reference to the section on implications for
-finite magmas, where that open problem is stated.}
+\response{\done (the discrepancy was indeed for this reason)}
 
 \item (p.~10, line~21) ``were also first generated as computer output from a source
 other than Lean'': ``generated'' already implies ``as computer output''. Consider
@@ -444,24 +416,16 @@ other than Lean'': ``generated'' already implies ``as computer output''. Conside
 
 \item (p.~10, line~37) ``containing two words in a free group'' should be ``in a free
 magma'', per the definition of \texttt{EquationX} in the Lean sources.
-\response{Done. Corrected to ``two words in a free magma''. The referee is right:
-\texttt{MagmaLaw} in the Lean sources is a structure whose \texttt{lhs} and \texttt{rhs}
-fields both have type \texttt{FreeMagma}. The other occurrence of ``free group'' in the
-same section refers to Mathlib's free group, is correct, and has been left as it
-stands.}
+\response{\done}
 
 \item (p.~12, line~11) ``LeanBlueprint'' is used, but p.~13, line~22 and thereafter use
 ``Lean blueprint''. Use one form consistently.
-\response{Done. The single occurrence of ``LeanBlueprint'' has been changed to ``Lean
-blueprint'', which is the form used at every other mention in the paper.}
+\response{\done}
 
 \item (p.~15, line~30) ``leanchecker'' is used, but p.~11, line~18 and p.~18, line~15
 use ``lean4checker''. Clarify whether these are the same tool or a typo; if they are
 genuinely different, cite each.
-\response{Done. This was a typo rather than a second tool: it is \emph{lean4checker} in both
-places, and has been corrected. The two passages describe the same thing --- Lean's
-environment replay tool, named alongside \emph{lean4lean} --- which is what makes the
-slip identifiable.}
+\response{\done (This was a typo rather than a second tool.)}
 
 \item (p.~17, lines~9 and~34) ``relatively spartan'' and ``spartan language'': the
 meaning is unclear, and if this is not technical jargon with a specific meaning another
@@ -470,18 +434,15 @@ adjective would be more appropriate.
 
 \item (p.~33, line~15) ``versions of the greedy algorithm are useful'': if this refers
 to the abstract greedy algorithm of Theorem~5.12, reference the theorem.
-\response{Done. The sentence now refers to ``versions of the greedy algorithm of
-Theorem~5.12'', cross-referenced to the abstract greedy algorithm, which is indeed the
-result intended.}
+\response{\done}
 
 \item (p.~34, line~9) ``One source of matching invariants comes from the free magma'':
 remind the reader that free magmas were defined in \S2.
-\response{Done. The sentence now reads ``\dots\ comes from the free magma
-$\Magma_{X,\Gamma}$ of a theory, defined in Section~2''.}
+\response{\done}
 
 \item (p.~38, line~18) ``Clearly the term being rewritten is in \dots'' should be
 ``Clearly, if the term being rewritten is in \dots''.
-\response{Done. Corrected to ``Clearly, if the term being rewritten is in \dots''.}
+\response{\done}
 
 \end{requests}
 
