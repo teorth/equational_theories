@@ -1,0 +1,266 @@
+Minor revisions
+
+Comment
+
+The article presents a large scale formalization project in mathematics:
+the determination and formalization in Lean of the implication graph of
+all equational laws of order at most 4. The proofs for implications were
+found using a mix of human and computer generated proofs using a wide variety
+of techniques and automated theorem provers. These proofs were then formalized
+and verified using the Lean 4 interactive theorem prover.
+Additionally, the article also presents results for related questions such as
+the implication graph for finite magmas and Higman-Neumann laws, showcasing
+how the tooling and methodology developed for the initial implication graph
+question could be adapted to a broader context.
+
+Apart from the contributions to mathematics and formalization, the article also
+describes a new methodology for organizing a large mathematical collaboration,
+which is of separate interest to the broader community.
+
+The article was very nice to review. The determination of the implication
+graph of the equational laws of order at most 4 is an outstanding achievement.
+I give this paper my highest recommendation for acceptance, subject to
+some minor comments and corrections below.
+
+Suggestions:
+
+1. The first mention of the Lean theorem prover appears on line 9 of page 2.
+However, the first citation for Lean appears only on page 17. To better inform
+the reader who may not be familiar with the tools used, it may be helpful to
+cite the relevant tools when they are first mentioned in addition
+to citing them when they come up topically.
+
+Similar comments apply to the Lean blueprint tool, first appearing on line 11 of page 12,
+and the egg and duper packages, first appearing on line 26 of page 10.
+
+2. Certain tools and libraries appearing in the paper
+lack citations, for example:
+
+* Mathlib, first appearing on line 24 of page 10, for citing see e.g.
+  https://leanprover-community.github.io/cite.html
+* SAGE, first appearing on line 36 of page 45, see e.g.
+  https://wiki.sagemath.org/Publications_using_SageMath
+* GAP, first appearing on line 37 of page 45, see e.g.
+  https://www.gap-system.org/cite/
+* The small group library for GAP, first appearing on line 37 of page 45,
+  see e.g.
+  https://gap-packages.github.io/smallgrp/#citing
+
+3. On lines 17 and 18 of page 11 and lines 1 and 2 of page 12, the authors
+note that the "lean4checker" tool was used to limit the set of axioms
+used in the project to a "small trusted set". Whenever adding axioms to
+a theory it is important to ensure the consistency of the resulting
+theory, so more clarification on this point would be good. Specifically, which
+axioms are in this small trusted set of axioms used by this project? Is the
+consistency of this set of axioms well known?
+
+4. On lines 3 - 9 of page 12 the authors mention that only a subset of
+the full implication graph was formalized in Lean due to an infeasible
+compilation time. To better showcase this, the authors should include
+timing data for the compilation for the full and reduced sets. Is it a
+difference of a couple of minutes, hours or days? Has there been any
+effort to speed up the compilation, or an investigation of potential
+avenues to do this?
+
+They also mention that extension to the full graph via transitivity and
+duality is done via external tools. Are these tools correct and can they be
+trusted? Indeed, in the prior paragraph the authors note that care was taken to
+avoid the use of `native_decide` due to concerns over reliance of external
+tools, so it is strange that the extension to the full implication graph is not
+treated with the same care.
+
+5. As explained in Section 4.2, the ETP blueprint is a document outlining
+the main theorems and definitions of a formalization project, together
+with links to specific parts of the formalization that implement the
+particular definition or theorem.
+
+The article repeatedly direct the reader to see the ETP blueprint for more
+details, e.g.
+
+* Footnote 4 on page 3;
+* Line 37 on page 7;
+* Line 11 on page 8;
+* Line 20 on page 8;
+* Line 5 on page 9;
+* Line 20 on page 30;
+* Line 18 on page 33;
+* Line 19 on page 52;
+* Line 30 on page 52;
+* Line 13 on page 67.
+
+However, in each case no specific chapter or section of the ETP blueprint is
+indicated. As the ETP blueprint is a rather large standalone document,
+consisting of 27 chapter across 128 pages, citations to specific
+chapters or sections of the ETP blueprint should be used instead.
+
+The explicit urls to chapters of the ETP blueprint on
+line 15 and line 40 of page 64 should also be replaced by a proper
+citation.
+
+6. On lines 6-7 of page 26 the authors mention that the 
+functional equations become too complex for n > 2.
+Was exploration of these functional equations performed by hand or were ATPs
+or other automation developed for the method? In other words, is the mention
+of complexity here informal, i.e. too complex for human analysis, or was complexity
+here meant in a formal sense, i.e. for n > 2 solving these equations belongs
+to some intractable complexity class?
+
+7. On lines 5-7 of page 29 the authors mention that the procedure for finding
+a rule set for the greedy extension method can be automated by using ATPs
+or SAT solvers.
+Was this automation implemented as a result of this project? Is there a lean
+tactic or external program for doing this? It should be made explicit whether
+such tooling exists.
+
+8. Remark 6.5 on line 7 of page 35 observes that matching invariants can come from
+other algebras with a larger signature. Were such matching invariants used
+in the formalization? If so, an example might be helpful to demonstrate this.
+
+9. In footnote 14 on page 43 the authors note that the timings presented in
+section 7.3 cannot be taken as benchmarks and were performed on heterogeneous
+environments. Later on various timing data for various experiments is presented
+in the section, but no mention is made of the hardware used for performing them.
+Stating the hardware used and making it explicit which experiments were
+performed on the same hardware is important for the interpretability of the
+timing data presented.
+
+Similarly, on line 2 of page 21, the authors mention that "Performing this
+search took 165 CPU-hours". The hardware used to perform this search should be
+noted.
+
+10. In footnote 22 on page 53, the authors claim to have found the lowest-numbered
+law that does not have full spectrum but does have models of sizes 2 and 3.
+The author should provide evidence of this claim.
+
+11. On page 54 lines 7-9, the authors mention results for the spectra of laws
+of higher orders, and mention this result will be reported elsewhere. An
+article in preparation should be cited here.
+
+The same remark applies to the claims about modules made
+on lines 25-27 of page 54 as well, and the extensions mentioned on line 3 of
+page 53.
+
+12. Footnote 25 on page 57 links to a json file containing the results of the section.
+There should be some description of the format and meaning of the data in the
+json file, as otherwise it is not immediately clear how to interpret it.
+
+13. Section 11 discusses modelling the implication graph via CNN's. The main
+motivation provided for this exploration is to develop a heuristic method to
+determine the truth values of parts of the implication graph, and to use these
+heuristics to guide future explorations of the implication graph, for example
+to speed up the determination of the implication graph up to order 5.
+
+However, prior to this, on page 48 lines 1-9, the authors mention that
+"Prover9 can establish all positive implications between laws of order up to 4"
+and similarly that
+"Vampire 5.0 can prove all true implications from the ETP".
+Hence, another heuristic for determining parts of the implication graph is as
+follows: run Prover9 and Vampire 5.0 for some fixed amount of time with the
+previously determined optimal parameters. If a proof is found, the implication
+holds, otherwise assume the implication does not hold. At least for
+order up to 4, this approach has 100% accuracy.
+
+It is unclear therefore, what the advantage of using the heuristic provided by
+the CNN versus the heuristic provided by running the ATPs like Prover9 or
+Vampire is. The section should make such an advantage explicit, if it does exist.
+
+Additionally, the data presented to justify that the CNN is not learning some
+property of transitivity is rather inconclusive. It would be more convincing
+if some of the additional tests that were described in lines 24-26 of page 58
+were performed, or if the structure of the CNN was analyzed from an explainability
+and interpretability perspective to understand the particular mechanisms
+underlying the decision made by the CNN.
+
+14. On lines 6-7 of page 64, the authors point out that ATPs were more
+effective than LLMs at generating proofs for the ETP. They then remark,
+however, that this is only the case "if one restricts to publicly available LLMs".
+This specific remark seems to imply that there are non-publicly
+available LLMs that are better than ATPs at generating proofs for the ETP,
+however no evidence of this appears in the article. If this is the case, and
+has been shown in a separate publication, then this should be cited to justify
+the remark.
+
+If the remark was simply made out of caution, i.e. to indicate that the authors
+only tried some, but not all LLM tools, and so in particular cannot speak to
+the efficiency of non-publicly available LLM tools, then it might be better to
+explicitly list the particular LLM tools that were used and did not yield
+results.
+
+---
+
+Typos and minor comments:
+
+1. Abstract line 5: "all validated by the formal proof assistant language Lean."
+
+This line is slightly confusing. The validation is done by the Lean kernel. The
+Lean language is the language in which the proofs are written in, and does not
+perform any validation by itself.
+Perhaps a better formulation would be
+"all validated by the formal proof assistant Lean."
+or even
+"all validated by the interactive theorem prover Lean."
+to match the terminology used in section 4.7.
+
+2. Page 3 line 4: "In this entailment pre-ordering" -> "In this entailment pre-order"
+
+3. Page 4 line 24: "contributions had to be entered in the proof assistant language Lean"
+
+The word "entered" seems a bit clunky in this context, perhaps "written" or
+"formalized" would be better.
+
+4. Page 4 line 30: "written in the proof assistant language Coq"
+
+Later on page 17 line 12 the authors note there was a name change:
+"Rocq (formerly Coq)". It might be better to make this note on page 4
+when it first appears and then only refer to it as "Rocq" later on.
+
+5. Page 5 line 10: "either 820 or 822 pairs"
+
+This is confusing. Is the discrepancy due to the 2 implications whose status is
+unknown? If so it might be better to note this explicitly, i.e. the finite
+implication held for 820 additional pairs, and for 2 pairs the status of the
+implication is not known.
+
+6. Page 10 line 21: "Many of the computer-assisted proofs were also first generated as computer output from a
+source other than Lean"
+
+The verb "generated" already implies "as computer output", hence this is redundant.
+Consider replacing by
+"Many of the computer-assisted proofs were also first generated from a source other than Lean"
+
+7. Page 10 line 37: "containing two words in a free group"
+
+Should be "containing two words in a free magma" according to the definition of "EquationX"
+in the Lean sources.
+
+8. Page 12 line 11: "LeanBlueprint" is used.
+
+On page 13 line 22 and thereafter the authors refer to the tool as
+"Lean blueprint". Either "LeanBlueprint" or "Lean blueprint" should be used
+consistently in the paper to refer to the tool.
+
+9. Page 15 line 30: "leanchecker" is used.
+
+On page 11 line 18 and page 18 line 15 the authors refer to "lean4checker".
+Is "leanchecker" the same as "lean4checker" or is this a typo?
+If these are genuinely different tools then a citation for each could help disambiguate this.
+
+10. Page 17 line 9 and line 34: "relatively spartan" and "spartan language".
+
+It is unclear what being "spartan" means in this context. If this is technical jargon with
+a specific meaning, then perhaps using an alternate adjective would be more appropriate.
+
+11. Page 33 line 15: "versions of the greedy algorithm are useful"
+
+If this refers to the "Abstract greedy algorithm" defined in Theorem 5.12,
+it might be useful to reference the theorem here for better clarity.
+
+12. Page 34 line 9: "One source of matching invariants comes from the free magma"
+
+Since free magmas were defined a while ago in Section 2, it might be useful to
+remind the reader of that this definition was made in Section 2 in the text for
+better clarity.
+
+13. Page 38 line 18: "Clearly the term being rewritten is in ..."
+
+Should be "Clearly, if the term being rewritten is in ..."
