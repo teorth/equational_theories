@@ -6,6 +6,8 @@ Two referee reports are in. Referee #1 asks for **major revisions**, Referee #2 
 
 Referee #2 numbered their own items, so R2.$$n$$ and R2.T$$n$$ match their report exactly. Referee #1's report is prose under five headings; R1.$$n$$ is our numbering, grouped under their headings.
 
+**Already handled:** the 11 items struck through below are already implemented in the manuscript (all of R1.M1 and the mechanical typos R2.T1, T2, T3, T5, T7, T8, T9, T11, T12, T13); R2.T4 and R2.T6 are claimed. **43 items remain unclaimed.**
+
 **Five requests are made by both referees** and need consistent answers: the unformalized transitivity/duality extension (R1.1–R1.6 + R2.4), compilation timings (R1.7 + R2.4), the trusted axiom set (R1.3 + R2.3), §11 (R1.18 + R2.13), and the phrase "proof assistant language Lean" (R1.M1 + R2.T1). Worth one person taking each cluster.
 
 ---
@@ -53,7 +55,7 @@ Referee #2 numbered their own items, so R2.$$n$$ and R2.T$$n$$ match their repor
 
 *Miscellaneous*
 
-- **R1.M1** — p. 4: "proof assistant language Lean" is awkward; suggests "in the language of the proof assistant Lean". *(See also R2.T1.)*
+- ~~**R1.M1**~~ **[DONE]** — p. 4: "proof assistant language Lean" is awkward; suggests "in the language of the proof assistant Lean". *(See also R2.T1.)*
 - **R1.M2** — p. 11: the explanation of the custom commands (`equation`, `EquationX`, `LawX`) cannot be followed; add examples.
 - **R1.M3** — p. 18: the paragraph beginning "ideally the environment" needs elaboration; unclear whether "practical implementations" means more than Lean.
 
@@ -84,18 +86,18 @@ Continuing from the previous message. Same rules: claim an item by replying with
 
 *Typos and minor comments*
 
-- **R2.T1** — Abstract l. 5: "all validated by the formal proof assistant language Lean" — validation is done by the kernel, not the language. Suggests "the formal proof assistant Lean" or "the interactive theorem prover Lean" (matching §4.7). *(See also R1.M1.)*
-- **R2.T2** — p. 3 l. 4: "entailment pre-ordering" → "entailment pre-order".
-- **R2.T3** — p. 4 l. 24: "contributions had to be entered in..." — "entered" is clunky; use "written" or "formalized".
-- **R2.T4** — p. 4 l. 30: note the Coq → Rocq rename here at first occurrence (currently only on p. 17 l. 12) and use "Rocq" thereafter.
-- **R2.T5** — p. 5 l. 10: "either 820 or 822 pairs" is confusing — if the gap is the two unknown-status implications, say so explicitly.
-- **R2.T6** — p. 10 l. 21: "generated as computer output" is redundant; drop "as computer output".
-- **R2.T7** — p. 10 l. 37: "two words in a free group" → "free **magma**", per the Lean definition of `EquationX`.
-- **R2.T8** — p. 12 l. 11 uses "LeanBlueprint", p. 13 l. 22 onward "Lean blueprint" — pick one.
-- **R2.T9** — p. 15 l. 30 uses "leanchecker", p. 11 l. 18 and p. 18 l. 15 use "lean4checker" — same tool or typo? If different, cite both.
+- ~~**R2.T1**~~ **[DONE]** — Abstract l. 5: "all validated by the formal proof assistant language Lean" — validation is done by the kernel, not the language. Suggests "the formal proof assistant Lean" or "the interactive theorem prover Lean" (matching §4.7). *(See also R1.M1.)*
+- ~~**R2.T2**~~ **[DONE]** — p. 3 l. 4: "entailment pre-ordering" → "entailment pre-order".
+- ~~**R2.T3**~~ **[DONE]** — p. 4 l. 24: "contributions had to be entered in..." — "entered" is clunky; use "written" or "formalized".
+- **R2.T4** **[CLAIMED]** — p. 4 l. 30: note the Coq → Rocq rename here at first occurrence (currently only on p. 17 l. 12) and use "Rocq" thereafter.
+- ~~**R2.T5**~~ **[DONE]** — p. 5 l. 10: "either 820 or 822 pairs" is confusing — if the gap is the two unknown-status implications, say so explicitly.
+- **R2.T6** **[CLAIMED]** — p. 10 l. 21: "generated as computer output" is redundant; drop "as computer output".
+- ~~**R2.T7**~~ **[DONE]** — p. 10 l. 37: "two words in a free group" → "free **magma**", per the Lean definition of `EquationX`.
+- ~~**R2.T8**~~ **[DONE]** — p. 12 l. 11 uses "LeanBlueprint", p. 13 l. 22 onward "Lean blueprint" — pick one.
+- ~~**R2.T9**~~ **[DONE]** — p. 15 l. 30 uses "leanchecker", p. 11 l. 18 and p. 18 l. 15 use "lean4checker" — same tool or typo? If different, cite both.
 - **R2.T10** — p. 17 ll. 9, 34: "relatively spartan" / "spartan language" — meaning unclear; consider another adjective.
-- **R2.T11** — p. 33 l. 15: if "versions of the greedy algorithm" means the abstract greedy algorithm of Theorem 5.12, reference the theorem.
-- **R2.T12** — p. 34 l. 9: remind the reader that free magmas were defined in §2.
-- **R2.T13** — p. 38 l. 18: "Clearly the term being rewritten is in..." → "Clearly, **if** the term being rewritten is in...".
+- ~~**R2.T11**~~ **[DONE]** — p. 33 l. 15: if "versions of the greedy algorithm" means the abstract greedy algorithm of Theorem 5.12, reference the theorem.
+- ~~**R2.T12**~~ **[DONE]** — p. 34 l. 9: remind the reader that free magmas were defined in §2.
+- ~~**R2.T13**~~ **[DONE]** — p. 38 l. 18: "Clearly the term being rewritten is in..." → "Clearly, **if** the term being rewritten is in...".
 
 ========== END OF MESSAGE 2 ==========
