@@ -114,7 +114,6 @@
   mrreviewer = {R.\ Artzy}
 }
 
-
 @article{mccune_et_al,
   author     = {McCune, William and Veroff, Robert and Fitelson, Branden and
                 Harris, Kenneth and Feist, Andrew and Wos, Larry},
@@ -132,7 +131,6 @@
   doi        = {10.1023/A:1020542009983},
   url        = {https://doi.org/10.1023/A:1020542009983}
 }
-
 
 @article{sheffer,
   author   = {Sheffer, Henry Maurice},
@@ -184,7 +182,6 @@
   doi        = {10.1016/j.jcta.2011.03.009},
   url        = {https://doi.org/10.1016/j.jcta.2011.03.009}
 }
-
 
 @article{evans,
   author     = {Evans, Trevor},
@@ -286,7 +283,6 @@
   url        = {https://doi.org/10.2307/2271899}
 }
 
-
 @book{term-rewriting,
   author     = {Baader, Franz and Nipkow, Tobias},
   title      = {Term rewriting and all that},
@@ -385,7 +381,6 @@
   archivePrefix = {arXiv},
   primaryClass = {math.HO},
 }
-
 
 @article{Gowers2009,
   title     = {Massively collaborative mathematics},
@@ -736,7 +731,6 @@
   mrreviewer = {J\'anos\ Demetrovics}
 }
 
-
 @inproceedings{deMoura-Bjorner-2009,
   author    = {de Moura, Leonardo
                and Bj{\o}rner, Nikolaj},
@@ -771,6 +765,17 @@
   version   = {8.20},
   doi       = {10.5281/zenodo.14542673},
   url       = {https://doi.org/10.5281/zenodo.14542673},
+}
+
+@software{the_rocq_development_team_2026_19256047,
+  author    = {The Rocq Development Team},
+  title     = {The {R}ocq Prover 9.2.0},
+  month     = mar,
+  year      = 2026,
+  publisher = {Zenodo},
+  version   = {9.2.0},
+  doi       = {10.5281/zenodo.19256047},
+  url       = {https://doi.org/10.5281/zenodo.19256047},
 }
 
 @misc{bbchallenge_bb5,
@@ -869,7 +874,6 @@
   bibsource    = {dblp computer science bibliography, https://dblp.org}
 }
 
-
 @online{EMS_code_of_practice,
   title        = {{EMS} Code of Practice for Mathematical Publication},
   author       = {European Mathematical Society},
@@ -901,7 +905,6 @@ journal={What’s new},
 author={Tao, Terence},
 year={2024},
 month=sep}
-
 
 @software{PFR_Tao_Dilles_2023,
 author = {Dillies, Yael and Tao, Terence},
@@ -1150,4 +1153,173 @@ title={Yet Another Paper on Group Theory Single Axioms},
 author={William McCune and Michael Kinyon},
 url={https://www.cs.unm.edu/~mccune/projects/gtsax/#division},
 note={[Accessed in 2025]}
+}
+
+% ---------------------------------------------------------------------------
+% Tool and library citations added in response to referee 2, items R2.1/R2.2.
+% Each follows the citation form recommended by the project itself.
+%
+% NOTE: the GAP, SmallGrp and SageMath entries deliberately omit a version
+% number, since the versions actually used during the ETP could not be
+% recovered.  The years are therefore nominal too.
+% ---------------------------------------------------------------------------
+
+@inproceedings{mathlib2020,
+  author = {The mathlib {C}ommunity},
+  title = {The {L}ean {M}athematical {L}ibrary},
+  booktitle = {Proceedings of the 9th {ACM} {SIGPLAN} {I}nternational {C}onference on {C}ertified {P}rograms and {P}roofs ({CPP} 2020)},
+  year = {2020},
+  location = {New Orleans, LA, USA},
+  publisher = {{ACM}},
+  pages = {367--381},
+  doi = {10.1145/3372885.3373824},
+  url = {https://doi.org/10.1145/3372885.3373824}
+}
+
+@manual{sagemath,
+  author = {{The Sage Developers}},
+  title = {{S}age{M}ath, the {S}age {M}athematics {S}oftware {S}ystem},
+  year = {2025},
+  doi = {10.5281/zenodo.593563},
+  url = {https://www.sagemath.org}
+}
+
+@manual{GAP4,
+  organization = {The {GAP} Group},
+  title = {{GAP} -- Groups, Algorithms, and Programming},
+  year = {2025},
+  url = {https://www.gap-system.org}
+}
+
+@misc{smallgrp,
+  author = {Besche, Hans Ulrich and Eick, Bettina and O'Brien, Eamonn},
+  title = {{SmallGrp}, the {GAP} Small Groups Library},
+  year = {2025},
+  note = {{GAP} package},
+  url = {https://gap-packages.github.io/smallgrp/}
+}
+
+% ---------------------------------------------------------------------------
+% References for the "why Lean was chosen" paragraph in the introduction
+% (addresses referee 1, items R1.11/R1.12/R1.14/R1.20).
+% ---------------------------------------------------------------------------
+
+@article{LTE_Scholze_2022,
+  author = {Scholze, Peter},
+  title = {Liquid Tensor Experiment},
+  journal = {Exp. Math.},
+  volume = {31},
+  number = {2},
+  pages = {349--354},
+  year = {2022},
+  doi = {10.1080/10586458.2021.1926016},
+  url = {https://doi.org/10.1080/10586458.2021.1926016}
+}
+
+@software{lean_liquid,
+  author = {Johan Commelin and others},
+  title = {The {L}iquid {T}ensor {E}xperiment},
+  year = {2022},
+  url = {https://github.com/leanprover-community/lean-liquid}
+}
+
+@misc{zulip_lean,
+  title = {The {L}ean {Z}ulip chat},
+  author = {{The Lean community}},
+  url = {https://leanprover.zulipchat.com},
+  note = {[Accessed September 2026]}
+}
+
+@article{flyspeck,
+  author = {Hales, Thomas and Adams, Mark and Bauer, Gertrud and Dang, Tat Dat
+            and Harrison, John and Le Hoang, Truong and Kaliszyk, Cezary and
+            Magron, Victor and McLaughlin, Sean and Nguyen, Tat Thang and
+            Nguyen, Quang Truong and Nipkow, Tobias and Obua, Steven and
+            Pleso, Joseph and Rute, Jason and Solovyev, Alexey and
+            Ta, Thi Hoai An and Tran, Nam Trung and Trieu, Thi Diep and
+            Urban, Josef and Vu, Ky and Zumkeller, Roland},
+  title = {A formal proof of the {K}epler conjecture},
+  journal = {Forum Math. Pi},
+  volume = {5},
+  pages = {e2},
+  year = {2017},
+  doi = {10.1017/fmp.2017.1},
+  url = {https://doi.org/10.1017/fmp.2017.1}
+}
+
+@misc{afp,
+  title = {The {A}rchive of {F}ormal {P}roofs},
+  url = {https://www.isa-afp.org/},
+  note = {[Accessed September 2026]}
+}
+
+@misc{mathcomp,
+  author = {Mahboubi, Assia and Tassi, Enrico},
+  title = {Mathematical {C}omponents},
+  publisher = {Zenodo},
+  year = {2022},
+  doi = {10.5281/zenodo.7118596},
+  url = {https://doi.org/10.5281/zenodo.7118596}
+}
+
+@book{isabelle_hol,
+  author = {Nipkow, Tobias and Paulson, Lawrence C. and Wenzel, Markus},
+  title = {{I}sabelle/{HOL} --- A Proof Assistant for Higher-Order Logic},
+  series = {Lecture Notes in Computer Science},
+  volume = {2283},
+  publisher = {Springer},
+  address = {Berlin, Heidelberg},
+  year = {2002},
+  doi = {10.1007/3-540-45949-9},
+  url = {https://doi.org/10.1007/3-540-45949-9}
+}
+
+@article{sledgehammer_smt,
+  author = {Blanchette, Jasmin Christian and B{\"o}hme, Sascha and Paulson, Lawrence C.},
+  title = {Extending {S}ledgehammer with {SMT} Solvers},
+  journal = {J. Automat. Reason.},
+  volume = {51},
+  number = {1},
+  pages = {109--128},
+  year = {2013},
+  doi = {10.1007/s10817-013-9278-5},
+  url = {https://doi.org/10.1007/s10817-013-9278-5}
+}
+
+@inproceedings{odd_order,
+  author = {Gonthier, Georges and Asperti, Andrea and Avigad, Jeremy and
+            Bertot, Yves and Cohen, Cyril and Garillot, Fran\c{c}ois and
+            Le Roux, St\'ephane and Mahboubi, Assia and O'Connor, Russell and
+            Ould Biha, Sidi and Pasca, Ioana and Rideau, Laurence and
+            Solovyev, Alexey and Tassi, Enrico and Th\'ery, Laurent},
+  title = {A Machine-Checked Proof of the Odd Order Theorem},
+  booktitle = {Interactive Theorem Proving ({ITP} 2013)},
+  editor = {Blazy, Sandrine and Paulin-Mohring, Christine and Pichardie, David},
+  series = {Lecture Notes in Computer Science},
+  volume = {7998},
+  pages = {163--179},
+  publisher = {Springer},
+  address = {Berlin, Heidelberg},
+  year = {2013},
+  doi = {10.1007/978-3-642-39634-2_14},
+  url = {https://doi.org/10.1007/978-3-642-39634-2_14}
+}
+
+@misc{ai_slop_oss,
+  author = {Afroz, Sadia and Miller, Courtney and Menezes, Tyler and
+            Gilmour, Edward and Sarma, Anita and Feng, Zixuan},
+  title = {``{AI} Slop is {DD}o{S}ing Open Source'': Understanding the Impact of
+           {AI}-Generated Contributions on Open Source Sustainability},
+  year = {2026},
+  eprint = {2607.04003},
+  archivePrefix = {arXiv},
+  url = {https://arxiv.org/abs/2607.04003}
+}
+
+@misc{curl_bugbounty,
+  author = {Stenberg, Daniel},
+  title = {The end of the curl bug-bounty},
+  year = {2026},
+  url = {https://daniel.haxx.se/blog/2026/01/26/the-end-of-the-curl-bug-bounty/},
+  note = {[Accessed September 2026]}
 }
