@@ -20,6 +20,14 @@
 \newcommand{\todo}{\textcolor{red}{\textbf{TO DO}}}
 \newcommand{\done}{\textcolor{green}{\textbf{DONE}}}
 
+% A few macros copied verbatim from the paper's preamble (main.tex), so that snippets
+% can be pasted straight from the manuscript into a response without redefining them.
+\newcommand{\Magma}{{\mathcal{M}}}
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Eq}[1]{\mathrm{E}#1}
+\newcommand{\op}{\diamond}
+
+
 \newcommand{\response}[1]{%
   \par\smallskip
   \noindent\hangindent=2em\hangafter=1
@@ -49,6 +57,13 @@ that report; Referee~2's items retain that report's own numbering, as
 minor comments.
 
 \medskip
+
+\medskip
+
+\noindent
+\textbf{Status.} Items whose response below begins ``Done'' have been implemented in the
+manuscript and verified against a clean build. \textbf{R2.T4} and \textbf{R2.T6} are
+claimed and in progress. Everything else is still \todo.
 
 \noindent
 \textbf{Overlapping requests.} The following are raised by both referees and should
@@ -247,7 +262,12 @@ this project.
 
 \item (p.~4) ``proof assistant language Lean'' is awkward; the referee suggests
 ``in the language of the proof assistant Lean''. (See also \textbf{R2.T1}.)
-\response{\todo}
+\response{Done. The phrase ``the proof assistant language \emph{Lean}'' has been replaced by
+``the language of the proof assistant \emph{Lean}'' at its three occurrences in the
+introduction and in \S2, and by ``the formal proof assistant \emph{Lean}'' in the
+abstract (see \textbf{R2.T1}). The one remaining occurrence, ``the proof assistant
+language \emph{Coq}'', has been left alone for now, since \textbf{R2.T4} rewrites the
+same clause.}
 
 \item (p.~11) The explanation of the custom commands (\texttt{equation},
 \texttt{EquationX}, \texttt{LawX}) cannot be followed; examples would help.
@@ -375,15 +395,20 @@ that in which the proofs are written and performs no validation itself. The refe
 suggests ``all validated by the formal proof assistant Lean'' or ``all validated by the
 interactive theorem prover Lean'', to match the terminology of \S4.7. (See also
 \textbf{R1.M1}.)
-\response{\todo}
+\response{Done. The abstract now reads ``all validated by the formal proof assistant
+\emph{Lean}'', the first of the referee's two suggested formulations. See also
+\textbf{R1.M1}.}
 
 \item (p.~3, line~4) ``In this entailment pre-ordering'' \(\to\) ``In this entailment
 pre-order''.
-\response{\todo}
+\response{Done. Changed to ``In this entailment pre-order''. This also removes an internal
+inconsistency, as the preceding paragraph already used ``pre-order''.}
 
 \item (p.~4, line~24) ``contributions had to be entered in the proof assistant language
 Lean'': ``entered'' is clunky; ``written'' or ``formalized'' would be better.
-\response{\todo}
+\response{Done. The clause now reads ``contributions had to be written in the language of the
+proof assistant \emph{Lean}'', which also disposes of \textbf{R1.M1} at this
+occurrence.}
 
 \item (p.~4, line~30) ``written in the proof assistant language Coq'': since p.~17,
 line~12 notes the name change (``Rocq (formerly Coq)''), make that note here at the
@@ -393,7 +418,11 @@ first occurrence and use ``Rocq'' thereafter.
 \item (p.~5, line~10) ``either 820 or 822 pairs'' is confusing. If the discrepancy is
 due to the two implications of unknown status, say so explicitly --- that the finite
 implication held for 820 additional pairs and that for 2 pairs the status is unknown.
-\response{\todo}
+\response{Done, and we thank the referee for catching the ambiguity: their reading is correct.
+The sentence now states that the finite implication held for an additional 820 pairs, and
+that for a further 2 pairs --- a single pair up to duality --- the status of the finite
+implication remains unknown, with a cross-reference to the section on implications for
+finite magmas, where that open problem is stated.}
 
 \item (p.~10, line~21) ``were also first generated as computer output from a source
 other than Lean'': ``generated'' already implies ``as computer output''. Consider
@@ -402,16 +431,24 @@ other than Lean'': ``generated'' already implies ``as computer output''. Conside
 
 \item (p.~10, line~37) ``containing two words in a free group'' should be ``in a free
 magma'', per the definition of \texttt{EquationX} in the Lean sources.
-\response{\todo}
+\response{Done. Corrected to ``two words in a free magma''. The referee is right:
+\texttt{MagmaLaw} in the Lean sources is a structure whose \texttt{lhs} and \texttt{rhs}
+fields both have type \texttt{FreeMagma}. The other occurrence of ``free group'' in the
+same section refers to Mathlib's free group, is correct, and has been left as it
+stands.}
 
 \item (p.~12, line~11) ``LeanBlueprint'' is used, but p.~13, line~22 and thereafter use
 ``Lean blueprint''. Use one form consistently.
-\response{\todo}
+\response{Done. The single occurrence of ``LeanBlueprint'' has been changed to ``Lean
+blueprint'', which is the form used at every other mention in the paper.}
 
 \item (p.~15, line~30) ``leanchecker'' is used, but p.~11, line~18 and p.~18, line~15
 use ``lean4checker''. Clarify whether these are the same tool or a typo; if they are
 genuinely different, cite each.
-\response{\todo}
+\response{Done. This was a typo rather than a second tool: it is \emph{lean4checker} in both
+places, and has been corrected. The two passages describe the same thing --- Lean's
+environment replay tool, named alongside \emph{lean4lean} --- which is what makes the
+slip identifiable.}
 
 \item (p.~17, lines~9 and~34) ``relatively spartan'' and ``spartan language'': the
 meaning is unclear, and if this is not technical jargon with a specific meaning another
@@ -420,15 +457,18 @@ adjective would be more appropriate.
 
 \item (p.~33, line~15) ``versions of the greedy algorithm are useful'': if this refers
 to the abstract greedy algorithm of Theorem~5.12, reference the theorem.
-\response{\todo}
+\response{Done. The sentence now refers to ``versions of the greedy algorithm of
+Theorem~5.12'', cross-referenced to the abstract greedy algorithm, which is indeed the
+result intended.}
 
 \item (p.~34, line~9) ``One source of matching invariants comes from the free magma'':
 remind the reader that free magmas were defined in \S2.
-\response{\todo}
+\response{Done. The sentence now reads ``\dots\ comes from the free magma
+$\Magma_{X,\Gamma}$ of a theory, defined in Section~2''.}
 
 \item (p.~38, line~18) ``Clearly the term being rewritten is in \dots'' should be
 ``Clearly, if the term being rewritten is in \dots''.
-\response{\todo}
+\response{Done. Corrected to ``Clearly, if the term being rewritten is in \dots''.}
 
 \end{requests}
 
