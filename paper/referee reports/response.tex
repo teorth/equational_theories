@@ -1,0 +1,434 @@
+\documentclass[11pt]{amsart}
+
+\usepackage{amsmath, amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue]{hyperref}
+
+% ---------------------------------------------------------------------------
+% Template macros.
+%
+%   \todo               placeholder for an unwritten response
+%   \response{...}      the response block attached to a referee request
+%   \refitem{tag}{...}  a referee request, tagged so it can be \cref'd/\ref'd
+%
+% To fill in the file, replace each \response{\todo} with \response{<text>}.
+% Grep for "TO DO" to find what is left.
+% ---------------------------------------------------------------------------
+
+\newcommand{\todo}{\textcolor{red}{\textbf{TO DO}}}
+
+\newcommand{\response}[1]{%
+  \par\smallskip
+  \noindent\hangindent=2em\hangafter=1
+  \textit{Response.}\ #1
+  \par\smallskip}
+
+% Referee items are labelled R1.n / R2.n / R2.Tn so that the numbering can be
+% quoted back to the referees and cross-referenced between the two reports.
+\newlist{requests}{enumerate}{1}
+\setlist[requests]{leftmargin=3.2em, itemsep=0.8em, label=\textbf{\rlabel.\arabic*}}
+\newcommand{\rlabel}{R}
+
+\title{Response to referees}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\noindent
+We thank both referees for their careful and constructive reading of the paper.
+Below we list each request in turn and describe the corresponding change to the
+manuscript. Referee~1's items are numbered \textbf{R1.$n$} following the order of
+that report; Referee~2's items retain that report's own numbering, as
+\textbf{R2.$n$} for the numbered suggestions and \textbf{R2.T$n$} for the typos and
+minor comments.
+
+\medskip
+
+\noindent
+\textbf{Overlapping requests.} The following are raised by both referees and should
+be answered consistently:
+\begin{itemize}[leftmargin=2em, itemsep=0.3em]
+  \item The status of the non-formalized extension of the generating set to the full
+        implication graph, and whether the external transitivity/duality tools can be
+        trusted: \textbf{R1.1}--\textbf{R1.6} and \textbf{R2.4}.
+  \item Compilation timing data for the full versus the reduced set:
+        \textbf{R1.7} and \textbf{R2.4}.
+  \item The trusted axiom set / trusted computing base: \textbf{R1.3} and \textbf{R2.3}.
+  \item Section~11 (the CNN section): \textbf{R1.18} (shorten and move to an appendix)
+        and \textbf{R2.13} (justify the CNN heuristic against simply running an ATP,
+        and strengthen the evidence against transitivity-learning).
+  \item The phrase ``proof assistant language Lean'': \textbf{R1.M1} and \textbf{R2.T1}.
+\end{itemize}
+
+% ===========================================================================
+\section*{Referee \#1}
+\renewcommand{\rlabel}{R1}
+
+Referee~1 recommends \emph{major revisions}, raising five major issues together with
+three miscellaneous comments.
+
+\subsection*{Exact theorem and trust base}
+
+\begin{requests}
+
+\item The abstract (``all validated by the formal proof assistant language Lean''),
+the introduction (``the \(4694 \times 4693 = 22\,028\,942\) implications \dots\ were
+completely determined, with proofs or refutations formalized in Lean'') and
+\S1.3 Outcomes (``with all of the 22\,033\,636 implications \dots\ formalized in the
+proof assistant language Lean'') all give the impression that the full implication
+graph was formalized in Lean. The referee regards the \S1.3 sentence as simply wrong.
+These passages must be corrected.
+\response{\todo}
+
+\item The decision to formalize only a reduced generating set (10\,657 positive and
+586\,925 negative implications), with the extension to the remaining implications
+performed by programs external to Lean, is currently explained only on page~12. The
+referee considers the decision itself entirely sound, but insists that it be stated
+early in the paper rather than deep in the technical sections.
+\response{\todo}
+
+\item Give a clear statement of exactly what must be trusted in order to believe that
+all 22\,028\,942 implications are settled. The referee's reading is that the trusted
+base consists of (i)~the Lean kernel, (ii)~the Lean program extending the generating
+set to the full graph, and (iii)~some process confirming that all 22M results are in
+fact settled; this should be confirmed or corrected explicitly.
+\response{\todo}
+
+\item Clarify the role and format of \texttt{full\_entries.json}. The referee expected
+it to be the artifact underlying point~(iii) above, but found its
+\texttt{"proven": false} entries confusing.
+\response{\todo}
+
+\item Provide instructions enabling an independent reader to verify the claim for
+themselves --- specifically, how one would write a hand-written checker that deduces
+the full implication table from the Lean-verified results. The referee states that in
+the paper's current state they cannot gain full confidence that all 22\,028\,942
+implications are settled.
+\response{\todo}
+
+\item Discuss which shortcomings of Lean, or of proof assistants in general, made the
+split into a Lean-formalized generating set plus an unverified deduction of its
+consequences necessary. (See also \textbf{R1.20}--\textbf{R1.23}.)
+\response{\todo}
+
+\end{requests}
+
+\subsection*{Discussion of the Lean 4 artifact}
+
+\begin{requests}[resume]
+
+\item Report the extent of the final formalization, at minimum in lines of code and
+compile times, and identify which parts dominate the compile time --- the
+ATP-derived parts or the manual ones.
+\response{\todo}
+
+\item Explain how the millions of theorem statements were generated, and why that
+generation process can be trusted.
+\response{\todo}
+
+\item State which sections of the paper correspond to formalized results and which do
+not (the referee notes \S10 as an example of the latter).
+\response{\todo}
+
+\item Reference a specific tag or commit of the repository described in the paper,
+and make clear which Lean and Mathlib versions are intended.
+\response{\todo}
+
+\end{requests}
+
+\subsection*{Discussion of the collaboration}
+
+\begin{requests}[resume]
+
+\item The paper states as its goal ``to explore new ways to collaboratively work on
+mathematical research projects using machine assistance'', but does not sufficiently
+analyse those new ways. A detailed comparison with other projects is requested.
+\response{\todo}
+
+\item Discuss the Liquid Tensor Experiment. The referee notes that it used the same
+organization as the PFR project, predates it, and was as far as they know the first
+project centred around blueprints; it was likewise coordinated via Zulip and relied
+on blueprints, but was more centralized and more clearly hierarchical than the ETP.
+Without a discussion of the differences, the referee suggests the accurate framing is
+that the ETP experimentally confirmed the model used in the LTE.
+\response{\todo}
+
+\item Treat the Busy Beaver Challenge (BB(5)) more accurately: the referee finds the
+present reference inaccurate, since that project was less about the use of proof
+assistants (it was developed with computer assistance but largely without proof
+assistants, with formalization following after the fact). Discuss how its coordination
+choices --- Discord and a wiki-like website --- compare with the ETP's, given that the
+paper sets the exploration of new ways of collaborating as its prime target.
+\response{\todo}
+
+\item Discuss earlier large collaborations: Flyspeck and the odd order theorem, and in
+a less ``named'' sense the AFP and math-comp. The referee also asks what differences
+were found between a large mathematical collaboration and the large collaborations
+typical of proof assistant and software development.
+\response{\todo}
+
+\item Provide more quantitative data on the collaboration itself: how the set of
+contributors varied over the course of the project, the shape of the curve along which
+results ``fell'', and how the two are correlated.
+\response{\todo}
+
+\end{requests}
+
+\subsection*{Structure of the paper}
+
+\begin{requests}[resume]
+
+\item The referee finds the structure chaotic, reading as separately written sections
+with no clear order, and the table of contents as mixing mathematics, methods and
+tools. Reorganize into a clear part on the mathematics, a second on the methods of
+collaboration, and a third on the tools used.
+\response{\todo}
+
+\item Section~7 is 13 pages long, with \S7.3 alone accounting for 9 of them. Move the
+most technical material --- \S\S7.3.2, 7.3.3, 7.3.5, 7.3.6, 7.3.9 and Example~7.1 ---
+to an appendix.
+\response{\todo}
+
+\item Section~11 contains no formalized results and reports mainly preliminary work,
+since the randomized control experiment was not run. Shorten it and move it to an
+appendix. (See also \textbf{R2.13}.)
+\response{\todo}
+
+\item The observation that using strong automation early in a project kills insights
+is, in the referee's view, one of the most interesting remarks in the paper, but is
+buried in \S14.1. Give insights of this kind greater prominence.
+\response{\todo}
+
+\end{requests}
+
+\subsection*{Discussion of the choice of Lean 4}
+
+\begin{requests}[resume]
+
+\item Address the question from \emph{Virtues of a Formalization Project}: did the
+choice of proof assistant or logical foundation crucially influence the formalization
+process? The referee regards this as expected of an AfM paper, and identifies three
+factors: ATP capabilities, native computation, and mathematical libraries.
+\response{\todo}
+
+\item On ATP capabilities: compare with Isabelle, where \texttt{sledgehammer} calls
+provers such as CVC4 and Vampire natively and proof reconstruction is natively
+supported, against the custom reconstruction architecture that had to be written here.
+\response{\todo}
+
+\item On native computation: the paper notes that \texttt{native\_decide} was avoided
+because of its known soundness issues, but the referee would like to see how much
+\texttt{native\_decide} would have sped up the counterexample computations of
+Figures~5 and~6 relative to \texttt{decide} and \texttt{decideFin!}, ideally with a
+build-time comparison.
+\response{\todo}
+
+\item Consider whether the external reconstruction of the 22M implication matrix could
+instead be validated inside a proof assistant using native computation, and in
+particular whether verifying the matrix in Rocq would be feasible.
+\response{\todo}
+
+\item On mathematical libraries: address the referee's impression that the Mathlib
+aspect --- usually the key reason Lean~4 is chosen --- did not actually matter for
+this project.
+\response{\todo}
+
+\end{requests}
+
+\subsection*{Miscellaneous comments}
+
+\begin{requests}[label=\textbf{R1.M\arabic*}]
+
+\item (p.~4) ``proof assistant language Lean'' is awkward; the referee suggests
+``in the language of the proof assistant Lean''. (See also \textbf{R2.T1}.)
+\response{\todo}
+
+\item (p.~11) The explanation of the custom commands (\texttt{equation},
+\texttt{EquationX}, \texttt{LawX}) cannot be followed; examples would help.
+\response{\todo}
+
+\item (p.~18) The paragraph beginning ``ideally the environment'' needs more
+elaboration; the referee does not understand the point it is making, and in particular
+whether ``practical implementations'' refers to more than just Lean.
+\response{\todo}
+
+\end{requests}
+
+% ===========================================================================
+\section*{Referee \#2}
+\renewcommand{\rlabel}{R2}
+
+Referee~2 recommends \emph{minor revisions} and gives the paper their highest
+recommendation for acceptance, subject to the comments below.
+
+\subsection*{Suggestions}
+
+\begin{requests}
+
+\item Cite tools at their first mention, not only where they are discussed topically.
+Lean is first mentioned on p.~2, line~9 but first cited on p.~17; the same applies to
+the Lean blueprint tool (first appearing p.~12, line~11) and to \texttt{egg} and
+\texttt{duper} (p.~10, line~26).
+\response{\todo}
+
+\item Add citations for tools and libraries that currently lack them: Mathlib
+(p.~10, line~24; see \url{https://leanprover-community.github.io/cite.html}),
+SAGE (p.~45, line~36; see \url{https://wiki.sagemath.org/Publications_using_SageMath}),
+GAP (p.~45, line~37; see \url{https://www.gap-system.org/cite/}), and the GAP small
+group library (p.~45, line~37; see \url{https://gap-packages.github.io/smallgrp/#citing}).
+\response{\todo}
+
+\item (p.~11, lines~17--18 and p.~12, lines~1--2) The paper states that
+\texttt{lean4checker} was used to limit the axioms used to a ``small trusted set''.
+Say explicitly which axioms are in that set, and whether the consistency of that set
+is well known. (See also \textbf{R1.3}.)
+\response{\todo}
+
+\item (p.~12, lines~3--9) Include timing data for compiling the full and the reduced
+sets, so the reader can judge whether the difference is minutes, hours or days, and
+say whether any effort has been made --- or any avenue investigated --- to speed the
+compilation up. The referee further notes that the extension to the full graph via
+transitivity and duality is done by external tools, and asks whether those tools are
+correct and can be trusted; they find it strange that this is not treated with the same
+care as the deliberate avoidance of \texttt{native\_decide} in the preceding paragraph.
+(See also \textbf{R1.1}--\textbf{R1.6} and \textbf{R1.7}.)
+\response{\todo}
+
+\item Replace the unlocated references to the ETP blueprint with citations to specific
+chapters or sections, since the blueprint is a standalone document of 27 chapters
+across 128 pages. The affected places are footnote~4 on p.~3; p.~7, line~37; p.~8,
+lines~11 and~20; p.~9, line~5; p.~30, line~20; p.~33, line~18; p.~52, lines~19 and~30;
+and p.~67, line~13. The explicit URLs to blueprint chapters on p.~64, lines~15 and~40
+should likewise be replaced by proper citations.
+\response{\todo}
+
+\item (p.~26, lines~6--7) The paper says the functional equations become too complex
+for \(n > 2\). Clarify whether this exploration was carried out by hand or with ATPs or
+other automation, and whether ``complex'' is meant informally (too complex for human
+analysis) or formally (belonging to some intractable complexity class).
+\response{\todo}
+
+\item (p.~29, lines~5--7) The paper says the procedure for finding a rule set for the
+greedy extension method can be automated using ATPs or SAT solvers. State explicitly
+whether this automation was implemented as part of the project, and whether a Lean
+tactic or external program for it exists.
+\response{\todo}
+
+\item (Remark~6.5, p.~35, line~7) The remark observes that matching invariants can come
+from other algebras with a larger signature. State whether such matching invariants
+were used in the formalization, and if so give an example.
+\response{\todo}
+
+\item (footnote~14, p.~43) The footnote notes that the timings in \S7.3 were performed
+in heterogeneous environments and cannot be taken as benchmarks, but the hardware used
+is never stated. State the hardware, and make explicit which experiments were run on
+the same hardware. The same applies to the ``165 CPU-hours'' search reported on p.~21,
+line~2.
+\response{\todo}
+
+\item (footnote~22, p.~53) Provide evidence for the claim that this is the
+lowest-numbered law that does not have full spectrum but does have models of sizes
+2 and~3.
+\response{\todo}
+
+\item (p.~54, lines~7--9) Cite the article in preparation in which the results on
+spectra of laws of higher orders will be reported. The same applies to the claims about
+modules on p.~54, lines~25--27, and to the extensions mentioned on p.~53, line~3.
+\response{\todo}
+
+\item (footnote~25, p.~57) Describe the format and meaning of the data in the linked
+JSON file, which is otherwise not straightforward to interpret.
+\response{\todo}
+
+\item (\S11) Make explicit what advantage the CNN heuristic has over simply running
+Prover9 or Vampire~5.0 with the previously determined optimal parameters for a fixed
+time and assuming failure means non-implication --- an approach which, given the
+paper's own statements on p.~48, lines~1--9, has 100\% accuracy up to order~4. The
+referee also finds the evidence that the CNN is not learning some form of transitivity
+inconclusive, and suggests either performing the additional tests described on p.~58,
+lines~24--26, or analysing the CNN from an explainability and interpretability
+standpoint. (See also \textbf{R1.18}.)
+\response{\todo}
+
+\item (p.~64, lines~6--7) The remark that ATPs outperformed LLMs ``if one restricts to
+publicly available LLMs'' implies the existence of non-public LLMs that outperform
+ATPs, for which no evidence is given. Either cite the publication establishing this, or,
+if the qualification was made out of caution, list explicitly which LLM tools were tried
+and did not yield results.
+\response{\todo}
+
+\end{requests}
+
+\subsection*{Typos and minor comments}
+
+\begin{requests}[label=\textbf{R2.T\arabic*}]
+
+\item (Abstract, line~5) ``all validated by the formal proof assistant language Lean''
+is confusing: validation is performed by the Lean kernel, whereas the Lean language is
+that in which the proofs are written and performs no validation itself. The referee
+suggests ``all validated by the formal proof assistant Lean'' or ``all validated by the
+interactive theorem prover Lean'', to match the terminology of \S4.7. (See also
+\textbf{R1.M1}.)
+\response{\todo}
+
+\item (p.~3, line~4) ``In this entailment pre-ordering'' \(\to\) ``In this entailment
+pre-order''.
+\response{\todo}
+
+\item (p.~4, line~24) ``contributions had to be entered in the proof assistant language
+Lean'': ``entered'' is clunky; ``written'' or ``formalized'' would be better.
+\response{\todo}
+
+\item (p.~4, line~30) ``written in the proof assistant language Coq'': since p.~17,
+line~12 notes the name change (``Rocq (formerly Coq)''), make that note here at the
+first occurrence and use ``Rocq'' thereafter.
+\response{\todo}
+
+\item (p.~5, line~10) ``either 820 or 822 pairs'' is confusing. If the discrepancy is
+due to the two implications of unknown status, say so explicitly --- that the finite
+implication held for 820 additional pairs and that for 2 pairs the status is unknown.
+\response{\todo}
+
+\item (p.~10, line~21) ``were also first generated as computer output from a source
+other than Lean'': ``generated'' already implies ``as computer output''. Consider
+``were also first generated from a source other than Lean''.
+\response{\todo}
+
+\item (p.~10, line~37) ``containing two words in a free group'' should be ``in a free
+magma'', per the definition of \texttt{EquationX} in the Lean sources.
+\response{\todo}
+
+\item (p.~12, line~11) ``LeanBlueprint'' is used, but p.~13, line~22 and thereafter use
+``Lean blueprint''. Use one form consistently.
+\response{\todo}
+
+\item (p.~15, line~30) ``leanchecker'' is used, but p.~11, line~18 and p.~18, line~15
+use ``lean4checker''. Clarify whether these are the same tool or a typo; if they are
+genuinely different, cite each.
+\response{\todo}
+
+\item (p.~17, lines~9 and~34) ``relatively spartan'' and ``spartan language'': the
+meaning is unclear, and if this is not technical jargon with a specific meaning another
+adjective would be more appropriate.
+\response{\todo}
+
+\item (p.~33, line~15) ``versions of the greedy algorithm are useful'': if this refers
+to the abstract greedy algorithm of Theorem~5.12, reference the theorem.
+\response{\todo}
+
+\item (p.~34, line~9) ``One source of matching invariants comes from the free magma'':
+remind the reader that free magmas were defined in \S2.
+\response{\todo}
+
+\item (p.~38, line~18) ``Clearly the term being rewritten is in \dots'' should be
+``Clearly, if the term being rewritten is in \dots''.
+\response{\todo}
+
+\end{requests}
+
+\end{document}
