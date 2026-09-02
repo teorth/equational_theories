@@ -7,19 +7,23 @@ import os
 import markdown
 import time
 import subprocess
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
 
 
 eqs = []
 N = 0
 for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]:
-    for line in open(f"equational_theories/Equations/Eqns{file}.lean"):
+    for line in open(ROOT / f"equational_theories/Equations/Eqns{file}.lean"):
         if ":=" in line:
             N += 1
             assert str(N) in line
             eqs.append("Equation" + str(N) + "[" + line.split(":=")[1].strip() + "]")
 print("var equations = ", eqs)
 
-print("var duals = ", open("data/duals.json").read())
+print("var duals = ", open(ROOT / "data/duals.json").read())
 
 def get_git_commit_hash():
     try:
@@ -49,14 +53,14 @@ commentary = {}
 for eq in os.listdir("commentary/"):
     if eq.startswith("Equation") and eq.endswith(".md"):
         commentary[eq.split(".")[0].replace("Equation", "")] = markdown.markdown(
-            open("commentary/" + eq).read()
+            open(ROOT / "commentary/" + eq).read()
         )
 
 
 print("var commentary = ", json.dumps(commentary))
 
 smallest_magma_examples = {}
-with open("data/smallest_magma_examples.txt") as f:
+with open(ROOT / "data/smallest_magma_examples.txt") as f:
     for line in f:
         line = line.strip()
         if line:
