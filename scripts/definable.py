@@ -1,17 +1,20 @@
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[1]
+
 import json
 import numpy as np
 
 with open('imps.json', 'r') as file:
     imps_data = json.load(file)["implications"] #Don't need the non-implications
 
-with open('./data/duals.json', 'r') as file:
+with open(ROOT / "data/duals.json", 'r') as file:
     duals_data = json.load(file)
 
 #The base set is the equations listed in data/equations.txt, one per line and
 #numbered from 1, so its length is the largest base equation number.  Read it
 #rather than hardcoding, so that adding an equation does not silently push it
 #into the "sporadic" case below.
-with open('./data/equations.txt', 'r') as file:
+with open(ROOT / "data/equations.txt", 'r') as file:
     N_eq = sum(1 for line in file if line.strip())
 
 #Store the implications as (N_eq+1)x(N_eq+1) array of bools. The extra 1 is to avoid array indexing
