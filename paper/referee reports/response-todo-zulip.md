@@ -6,7 +6,7 @@ Two referee reports are in. Referee #1 asks for **major revisions**, Referee #2 
 
 Referee #2 numbered their own items, so R2.$$n$$ and R2.T$$n$$ match their report exactly. Referee #1's report is prose under five headings; R1.$$n$$ is our numbering, grouped under their headings.
 
-**Already handled:** the 11 items struck through below are already implemented in the manuscript (all of R1.M1 and the mechanical typos R2.T1, T2, T3, T5, T7, T8, T9, T11, T12, T13); R2.T4 and R2.T6 are claimed. **43 items remain unclaimed.**
+**Already handled:** the 13 items struck through below are already implemented in the manuscript (R1.M1, the mechanical typos R2.T1, T2, T3, T5, T7, T8, T9, T11, T12, T13, and the two citation items R2.1 and R2.2); R2.T4 and R2.T6 are claimed. **41 items remain unclaimed.**
 
 **Five requests are made by both referees** and need consistent answers: the unformalized transitivity/duality extension (R1.1–R1.6 + R2.4), compilation timings (R1.7 + R2.4), the trusted axiom set (R1.3 + R2.3), §11 (R1.18 + R2.13), and the phrase "proof assistant language Lean" (R1.M1 + R2.T1). Worth one person taking each cluster.
 
@@ -69,8 +69,8 @@ Continuing from the previous message. Same rules: claim an item by replying with
 
 *Suggestions*
 
-- **R2.1** — Cite tools at first mention, not only where discussed topically: Lean (first mentioned p. 2 l. 9, first cited p. 17), Lean blueprint (p. 12 l. 11), `egg` and `duper` (p. 10 l. 26).
-- **R2.2** — Add missing citations for Mathlib (p. 10 l. 24), SAGE (p. 45 l. 36), GAP (p. 45 l. 37) and the GAP small group library (p. 45 l. 37). The referee supplies the canonical citation URLs for each.
+- ~~**R2.1**~~ **[DONE]** — Cite tools at first mention, not only where discussed topically: Lean (first mentioned p. 2 l. 9, first cited p. 17), Lean blueprint (p. 12 l. 11), `egg` and `duper` (p. 10 l. 26).
+- ~~**R2.2**~~ **[DONE]** — Add missing citations for Mathlib (p. 10 l. 24), SAGE (p. 45 l. 36), GAP (p. 45 l. 37) and the GAP small group library (p. 45 l. 37). The referee supplies the canonical citation URLs for each.
 - **R2.3** — p. 11 ll. 17–18 and p. 12 ll. 1–2: say which axioms are in the "small trusted set" enforced via `lean4checker`, and whether that set's consistency is well known. *(See also R1.3.)*
 - **R2.4** — p. 12 ll. 3–9: give compile timing data for the full vs. reduced sets (minutes? hours? days?), say whether speeding it up has been attempted or investigated, and address whether the external transitivity/duality tools can be trusted — the referee finds it strange that we avoided `native_decide` on trust grounds but did not treat this extension with the same care. *(See also R1.1–R1.6, R1.7.)*
 - **R2.5** — Replace the ten unlocated pointers to the ETP blueprint with citations to specific chapters/sections (fn. 4 p. 3; p. 7 l. 37; p. 8 ll. 11, 20; p. 9 l. 5; p. 30 l. 20; p. 33 l. 18; p. 52 ll. 19, 30; p. 67 l. 13). The blueprint is 27 chapters over 128 pages. Also replace the raw URLs on p. 64 ll. 15 and 40 with proper citations.
