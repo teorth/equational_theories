@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+from pathlib import Path
 from typing import Optional
 import re
 from eznf import modeler, utils, constants
 import argparse
 import json
+
+# Repo root: this file lives in scripts/generate_cadical/
+ROOT = Path(__file__).resolve().parents[2]
 
 # Usage:
 #   ./generate_cadical.py -s 6 37 42      Attempt to disprove 37 -> 42 using finite model of size 6
@@ -280,8 +284,9 @@ def main():
     def load_trees(first, second):
         first_tree = None
         second_tree = None
+        equations_dir = ROOT / "equational_theories" / "Equations"
         for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]:
-            for line in open(f"../../equational_theories/Equations/Eqns{file}.lean"):
+            for line in open(equations_dir / f"Eqns{file}.lean"):
                 if "equation" in line and ":=" in line:
                     equation_number = int(line.split("equation")[1].split()[0])
                     if equation_number == first:
@@ -300,7 +305,7 @@ def main():
         else:
             run(args.size, first_tree, second_tree)
     else:
-        with open("../../home_page/fme/unknowns.json", "r") as file:
+        with open(ROOT / "home_page" / "fme" / "unknowns.json", "r") as file:
             data = json.load(file)
         if args.incremental:
             for i in range(2, args.size + 1):
