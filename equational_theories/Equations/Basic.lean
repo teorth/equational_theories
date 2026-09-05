@@ -170,6 +170,9 @@ equation 4582  :=  x ◇ (y ◇ z) = (w ◇ u) ◇ v
 /-- Mentioned in [a paper of Kisielewicz](https://doi.org/10.1007/s000120050057) as a conjectural Austin law. -/
 equation 5093  :=  x = y ◇ (y ◇ (y ◇ (x ◇ (z ◇ y))))
 
+/-- Satisfied in finite `Equation677` models -/
+equation 19855 := x = (y ◇ x) ◇ ((y ◇ (y ◇ x)) ◇ y)
+
 /-- The natural central groupoid law. -/
 equation 26302  :=  x = (y ◇ ((z ◇ x) ◇ w)) ◇ (x ◇ w)
 
