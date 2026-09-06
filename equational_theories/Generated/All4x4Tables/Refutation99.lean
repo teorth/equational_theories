@@ -20,5 +20,5 @@ def «All4x4Tables [[0,0,0],[1,1,0],[1,0,1]]» : Magma (Fin 3) where
 /-! The facts -/
 @[equational_result]
 theorem «Facts from All4x4Tables [[0,0,0],[1,1,0],[1,0,1]]» :
-  ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [3730] [3255, 3256, 3862, 4065, 4269, 4314, 4583, 4598, 4629] :=
+  ∃ (G : Type) (_ : Magma G) (_: Finite G), Facts G [3730] [3255, 3256, 3862, 4065, 4269, 4314, 4583, 4598, 4629, 5093, 28770, 374794] :=
     ⟨Fin 3, «All4x4Tables [[0,0,0],[1,1,0],[1,0,1]]», Finite.of_fintype _, by decideFin!⟩
