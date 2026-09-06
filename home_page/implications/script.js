@@ -346,12 +346,34 @@ function renderImplications(index) {
     const dualDisplay = (dualIndex - 1n).toString();
     selectedEquationDual.innerHTML = `(Dual equation: <a class='link' onclick="renderImplications('${dualDisplay}')">Equation${dualIndex.toString()}[${dualEq}]</a>)`;
 
+    // Lowest-numbered equivalent, shown up top when this equation is not already the
+    // canonical representative of its class (issue 1218).
+    let canonicalIndex = Number(bigIndex);
+    if (Number(bigIndex) <= equations.length - 1) {
+        const cls = equiv.find(c => c.includes(Number(bigIndex))) || [Number(bigIndex)];
+        canonicalIndex = cls[0];
+        if (canonicalIndex !== Number(bigIndex)) {
+            const canonicalEqIdTop = BigInt(canonicalIndex) + 1n;
+            selectedEquationDual.innerHTML +=
+                ` (Canonically equivalent form: <a class='link' onclick="renderImplications('${canonicalIndex}')">Equation${canonicalEqIdTop.toString()}[${equations[canonicalIndex]}]</a>)`;
+        }
+    }
+    const canonicalEqId = BigInt(canonicalIndex) + 1n;
+
     if (commentary[eqId] !== undefined) {
         showVisibility("equationCommentary");
         equationCommentary.innerHTML = commentary[eqId];
+        if (canonicalEqId !== eqId && commentary[canonicalEqId] !== undefined) {
+            equationCommentary.innerHTML +=
+                `<h2>Commentary of the canonically equivalent ${equations[canonicalIndex]}:</h2><br>${commentary[canonicalEqId]}`;
+        }
     } else if(commentary[dualIndex] !== undefined) {
         showVisibility("equationCommentary");
         equationCommentary.innerHTML = `<h2>Commentary of the dual Equation${dualIndex}[${dualEq}]:</h2> ${commentary[dualIndex]}`;
+        if (canonicalEqId !== eqId && commentary[canonicalEqId] !== undefined) {
+            equationCommentary.innerHTML +=
+                `<h2>Commentary of the canonically equivalent ${equations[canonicalIndex]}:</h2><br>${commentary[canonicalEqId]}`;
+        }
     }
 
     if (bigIndex > BigInt(equations.length - 1)) {
