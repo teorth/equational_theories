@@ -50,6 +50,15 @@ if __name__ == "__main__":
     )
     parser.add_argument("--outfile", type=str, default=None, help="name of output file")
     parser.add_argument("--scale", type=int, default=1, help="integer scale factor")
+    parser.add_argument(
+        "--order",
+        choices=("eqid", "equiv"),
+        default="equiv",
+        help="row/column order: equation number (eqid), or equivalence-class "
+        "blocks then equation number within each block (equiv, default). "
+        "equiv groups large classes into contiguous blocks instead of a tartan "
+        "(issue #424).",
+    )
 
     args = parser.parse_args()
 
@@ -66,21 +75,49 @@ if __name__ == "__main__":
     size = len(eqs)
     print("size = ", size)
 
-    # We want to canonicalize the ordering of the rows and columns, using the ordering
-    # on equation numbers. We need to account for the fact that there may be gaps
-    # between equation numbers (e.g. if we only include Subgraph.lean).
-
     # `matrixidx` is an index into the `eqs` array or `outcomes` matrix.
     # `imageidx` is an index in image pixel coordinates
-    # `eqid` is an Equation number.
+    # `eqid` is an Equation number. Gaps between ids are allowed (e.g. Subgraph.lean).
 
     eqid_from_matrixidx = list(map(name_to_id, eqs))
 
-    # `imageidx` is just the index of the equation when all of the present
-    # equations are sorted by their equation number.
+    def is_proven_true(outcome):
+        return outcome in ("explicit_proof_true", "implicit_proof_true")
+
+    def equiv_roots():
+        parent = list(range(size))
+
+        def find(i):
+            while parent[i] != i:
+                parent[i] = parent[parent[i]]
+                i = parent[i]
+            return i
+
+        for i in range(size):
+            for j in range(i + 1, size):
+                if is_proven_true(outcomes[i][j]) and is_proven_true(outcomes[j][i]):
+                    ri, rj = find(i), find(j)
+                    if ri != rj:
+                        parent[rj] = ri
+        return [find(i) for i in range(size)]
+
     imageidx_from_eqid = dict()
-    for imageidx, eqid in enumerate(sorted(eqid_from_matrixidx)):
-        imageidx_from_eqid[eqid] = imageidx
+    if args.order == "eqid":
+        for imageidx, eqid in enumerate(sorted(eqid_from_matrixidx)):
+            imageidx_from_eqid[eqid] = imageidx
+    else:
+        roots = equiv_roots()
+        classes = {}
+        for matrixidx, root in enumerate(roots):
+            classes.setdefault(root, []).append(matrixidx)
+        ordered = []
+        for _root, members in sorted(
+            classes.items(),
+            key=lambda item: min(eqid_from_matrixidx[m] for m in item[1]),
+        ):
+            ordered.extend(sorted(members, key=lambda m: eqid_from_matrixidx[m]))
+        for imageidx, matrixidx in enumerate(ordered):
+            imageidx_from_eqid[eqid_from_matrixidx[matrixidx]] = imageidx
 
     img = Image.new("RGB", (size, size))
     pixels = img.load()
