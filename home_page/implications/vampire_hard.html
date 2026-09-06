@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vampire-hard unknowns</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 20px; }
+      table { border-collapse: collapse; }
+      th, td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+      th { background: #f2f2f2; }
+    </style>
+  </head>
+  <body>
+    <h1>Vampire-hard unknowns</h1>
+    <p>
+      Finite-model unknowns from <code>home_page/fme/unknowns.json</code>, each
+      with a Lean playground link. This is the “Unknown” difficulty asked for in
+      <a href="https://github.com/teorth/equational_theories/issues/370">#370</a>.
+    </p>
+    <p><a href="index.html">Back to Equation Explorer</a></p>
+    <p id="status">Loading…</p>
+    <table>
+      <thead>
+        <tr><th>Hypothesis</th><th>Goal</th><th>Playground</th></tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <script src="implications.js"></script>
+    <script src="to_lean.js"></script>
+    <script>
+      function eqNum(name) {
+        return parseInt(String(name).replace(/^Equation/, ""), 10);
+      }
+      fetch("../fme/unknowns.json")
+        .then((r) => r.json())
+        .then((unknowns) => {
+          const tbody = document.getElementById("rows");
+          let n = 0;
+          for (const pair of unknowns) {
+            const lhs = eqNum(pair.lhs);
+            const rhs = eqNum(pair.rhs);
+            if (!(lhs >= 1 && rhs >= 1 && lhs <= 4694 && rhs <= 4694)) continue;
+            n += 1;
+            const tr = document.createElement("tr");
+            const href = gen_proof_url(lhs - 1, rhs - 1);
+            tr.innerHTML =
+              `<td><a href="index.html?${lhs}">${pair.lhs}</a></td>` +
+              `<td><a href="index.html?${rhs}">${pair.rhs}</a></td>` +
+              `<td><a href="${href}">Prove this</a></td>`;
+            tbody.appendChild(tr);
+          }
+          document.getElementById("status").textContent =
+            n + " unknown implications with playground links.";
+        })
+        .catch((err) => {
+          document.getElementById("status").textContent =
+            "Could not load unknowns.json: " + err;
+        });
+    </script>
+  </body>
+</html>
