@@ -33,7 +33,7 @@ if __name__ == "__main__":
         print("Usage: python generate_most_wanted_list.py <file_name.lean>")
         exit(1)
 
-    universe, known_implies, known_not_implies = parse_proofs_file(file_name)
+    universe, known_implies, known_not_implies = parse_proofs_file([], file_name)
     known_implies = close(known_implies)
 
     ascendants = defaultdict(int)  # equation -> equations it's implied by
