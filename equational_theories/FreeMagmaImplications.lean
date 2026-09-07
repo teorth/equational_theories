@@ -14,9 +14,10 @@ theorem Equation37_implies_Equation2 (G : Type _) [Magma G] :
   ⟩
 
 theorem Equation514_implies_Equation2 (G : Type _) [Magma G] :
-    (∀ x y : G, x = y ◇ (y ◇ (y ◇ y))) → Equation2 G :=
+    (∀ x y : G, x = y ◇ (y ◇ (y ◇ (y ◇ y)))) → Equation2 G :=
   fun univ ↦ ExpressionEqualsAnything_implies_Equation2 G ⟨
     1,
-    Lf 0 ⋆ (Lf 0 ⋆ (Lf 0 ⋆ Lf 0)), -- The syntactic representation of y ◇ (y ◇ (y ◇ y)))
+    -- The syntactic representation of y ◇ (y ◇ (y ◇ (y ◇ y)))
+    Lf 0 ⋆ (Lf 0 ⋆ (Lf 0 ⋆ (Lf 0 ⋆ Lf 0))),
     fun k sub ↦ univ k (sub 0)
   ⟩
