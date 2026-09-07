@@ -58,11 +58,11 @@ minor comments.
 
 \medskip
 
-\medskip
-
 \noindent
-\textbf{Status.} Items whose response below begins ``Done'' have been implemented in the
-manuscript and verified against a clean build. \textbf{R2.T4} and \textbf{R2.T6} are
+\textbf{Status.} Items whose response below begins ``Done'' or \done\ have been implemented in
+the manuscript and verified against a clean build; the \done\ items are the ones
+settled by the new introductory paragraphs on why \emph{Lean} was chosen and on
+project logistics. \textbf{R2.T4} and \textbf{R2.T6} are
 claimed and in progress. Everything else is still \todo.
 
 \noindent
@@ -164,7 +164,15 @@ and make clear which Lean and Mathlib versions are intended.
 \item The paper states as its goal ``to explore new ways to collaboratively work on
 mathematical research projects using machine assistance'', but does not sufficiently
 analyse those new ways. A detailed comparison with other projects is requested.
-\response{\todo}
+\response{\done\ The introduction has been expanded with three new paragraphs that analyse
+the collaboration and compare it with its predecessors: why \emph{Lean} was chosen, what
+the GitHub/Zulip/blueprint paradigm did and did not achieve, and how the ETP's modularity
+compares with both the Busy Beaver Challenge and earlier formalization projects. The
+comparison is drawn along several concrete axes --- degree of centralization, the point at
+which a blueprint becomes necessary, the coordination platforms used, and the division of
+labour between informal proposers and formalizers --- rather than being confined to a
+single remark. We have kept this in the introduction rather than giving it a separate
+section, so that a reader meets it before the technical material.}
 
 \item Discuss the Liquid Tensor Experiment. The referee notes that it used the same
 organization as the PFR project, predates it, and was as far as they know the first
@@ -172,7 +180,11 @@ project centred around blueprints; it was likewise coordinated via Zulip and rel
 on blueprints, but was more centralized and more clearly hierarchical than the ETP.
 Without a discussion of the differences, the referee suggests the accurate framing is
 that the ETP experimentally confirmed the model used in the LTE.
-\response{\todo}
+\response{\done\ The introduction now names the Liquid Tensor Experiment first among the
+Lean formalization projects the ETP built on, ahead of PFR, and a new paragraph states
+that the ETP's experience ``confirms the previous experiences with such structures'' in
+the LTE and PFR. This adopts the framing the referee themselves proposed as the accurate
+one.}
 
 \item Treat the Busy Beaver Challenge (BB(5)) more accurately: the referee finds the
 present reference inaccurate, since that project was less about the use of proof
@@ -180,13 +192,25 @@ assistants (it was developed with computer assistance but largely without proof
 assistants, with formalization following after the fact). Discuss how its coordination
 choices --- Discord and a wiki-like website --- compare with the ETP's, given that the
 paper sets the exploration of new ways of collaborating as its prime target.
-\response{\todo}
+\response{\done\ The BB(5) discussion now records that the project was organized via a
+Discord and a wiki, and that it ``was not initially developed as a formalization
+project'', with the formal proof following afterwards. The contrasting ETP stack ---
+GitHub repository, Zulip channel and Lean blueprint --- is described in the paragraph
+that follows.}
 
 \item Discuss earlier large collaborations: Flyspeck and the odd order theorem, and in
 a less ``named'' sense the AFP and math-comp. The referee also asks what differences
 were found between a large mathematical collaboration and the large collaborations
 typical of proof assistant and software development.
-\response{\todo}
+\response{\done\ All four of the projects the referee names --- Flyspeck, the odd order
+theorem formalization, the AFP and math-comp --- are now cited in the introduction and
+contrasted with the ETP, which was able to decentralize further, and to do so before any
+blueprint had been written. We also record the observation that the ETP's modularity, in
+combination with a simple numerical completion criterion, is what permitted this, and
+suggest that future crowdsourced projects design modularity into their goals deliberately.
+We have not attempted the referee's further comparison with large-scale software and proof
+assistant development, which we felt would take the introduction some distance from the
+mathematics; we would be glad to add it if the referee considers it important.}
 
 \item Provide more quantitative data on the collaboration itself: how the set of
 contributors varied over the course of the project, the shape of the curve along which
@@ -218,7 +242,13 @@ appendix. (See also \textbf{R2.13}.)
 \item The observation that using strong automation early in a project kills insights
 is, in the referee's view, one of the most interesting remarks in the paper, but is
 buried in \S14.1. Give insights of this kind greater prominence.
-\response{\todo}
+\response{\done\ We agree that this was the wrong place for the observation, and it has been
+promoted to a paragraph of its own in the introduction, where it is now stated as one of
+the project's findings: that the success of the ETP was contingent on an
+\emph{intermediate} level of automation, enough to clear the millions of routine
+implications but not so rapid as to crowd out the slower and more fruitful search for
+conceptually novel arguments. The fuller discussion in \S14.1 is cross-referenced from
+there and left in place.}
 
 \end{requests}
 
@@ -230,12 +260,20 @@ buried in \S14.1. Give insights of this kind greater prominence.
 choice of proof assistant or logical foundation crucially influence the formalization
 process? The referee regards this as expected of an AfM paper, and identifies three
 factors: ATP capabilities, native computation, and mathematical libraries.
-\response{\todo}
+\response{\done\ A new paragraph in the introduction answers this directly: \emph{Lean} was
+chosen for the existing crowdsourced formalization projects in it and the infrastructure
+built around them, rather than for any technical property of the system; and, since the
+project needed relatively little advanced mathematics, comparable results could likely
+have been obtained with another proof assistant.}
 
 \item On ATP capabilities: compare with Isabelle, where \texttt{sledgehammer} calls
 provers such as CVC4 and Vampire natively and proof reconstruction is natively
 supported, against the custom reconstruction architecture that had to be written here.
-\response{\todo}
+\response{\done\ The introduction now grants that \emph{Isabelle} would have been a
+particularly plausible alternative for this project, because of its native support for SMT
+solvers via \emph{Sledgehammer}, and draws the contrast the referee intends: for the ETP,
+custom conversions from ATP-generated proofs into Lean code had to be written instead, as
+described in \S7.}
 
 \item On native computation: the paper notes that \texttt{native\_decide} was avoided
 because of its known soundness issues, but the referee would like to see how much
@@ -252,7 +290,9 @@ particular whether verifying the matrix in Rocq would be feasible.
 \item On mathematical libraries: address the referee's impression that the Mathlib
 aspect --- usually the key reason Lean~4 is chosen --- did not actually matter for
 this project.
-\response{\todo}
+\response{\done\ Conceded explicitly in the introduction: the project could likely have been
+carried out with ``other standard formal proof assistants that have not developed as
+extensive a library of mathematics as Lean's \emph{Mathlib}''.}
 
 \end{requests}
 
