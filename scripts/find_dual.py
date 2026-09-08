@@ -163,6 +163,22 @@ def expr_to_prefix(node: ExprNode):
         return node.value
 
 
+EQUATION_DECL = re.compile(r"^equation\s+(\d+)\s*:=")
+
+
+def iter_equation_decls(lines):
+    """Yield (number, rhs) for live `equation N := ...` lines, skipping comments."""
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("--"):
+            continue
+        match = EQUATION_DECL.match(stripped)
+        if not match:
+            continue
+        rhs = stripped.split(":=", 1)[1].strip()
+        yield int(match.group(1)), rhs
+
+
 def make_tree(equation: str):
     """Create an expression tree from an equation string."""
     lhs_expr, rhs_expr = equation.split("=")
@@ -184,12 +200,9 @@ def main():
     equations_dir = Path(__file__).resolve().parents[1] / "equational_theories" / "Equations"
     trees = []
     for file in ["1_999", "1000_1999", "2000_2999", "3000_3999", "4000_4694"]:
-        for line in open(equations_dir / f"Eqns{file}.lean"):
-            if "equation" in line and ":=" in line:
-                equation_number = line.split("equation")[1].split()[0]
-                trees.append(
-                    (int(equation_number), make_tree(line.split(":=")[1].strip()))
-                )
+        with open(equations_dir / f"Eqns{file}.lean") as handle:
+            for eq_num, rhs in iter_equation_decls(handle):
+                trees.append((eq_num, make_tree(rhs)))
 
     seen = {}
 
