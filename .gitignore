@@ -60,3 +60,7 @@ home_page/raw_data/
 
 # Ignore elm dependencies
 tools/fme/elm-stuff/
+
+## Referee reports (kept out of the public repo at the editors' request;
+## the response letter itself stays tracked)
+paper/referee reports/report*
