@@ -170,7 +170,7 @@ def iter_equation_decls(lines):
     """Yield (number, rhs) for live `equation N := ...` lines, skipping comments."""
     for line in lines:
         stripped = line.strip()
-        if stripped.startswith("--"):
+        if not stripped or stripped.startswith("--"):
             continue
         match = EQUATION_DECL.match(stripped)
         if not match:
