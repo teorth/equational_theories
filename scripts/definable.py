@@ -3,7 +3,7 @@ import json
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-BOOL = np.bool_
+BOOL = np.bool_  # np.bool was removed in NumPy 2
 
 
 def close_and_get_equivs(rel_mat):
