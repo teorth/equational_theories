@@ -106,7 +106,7 @@ def equation_implies(proof_state: str) -> bool:
 
 def load_outcomes(
     outcomes_path: Path,
-) -> tuple[npt.NDArray[np.bool], npt.NDArray[np.int64]]:
+) -> tuple[npt.NDArray[np.bool_], npt.NDArray[np.int64]]:
     """Load outcomes from file."""
     LOGGER.info("Attempting to load outcomes from %s", outcomes_path)
     with outcomes_path.open(encoding="UTF-8") as file:
@@ -124,7 +124,7 @@ def load_outcomes(
 
     return np.array(
         outcomes_binary,
-        dtype=np.bool,
+        dtype=np.bool_,
     ), np.array(
         equation_ids,
         dtype=np.int64,
@@ -136,7 +136,7 @@ def name_to_id(name: str) -> int:
     return int(name.removeprefix("Equation"))
 
 
-def equivalence_classes(outcomes: npt.NDArray[np.bool]) -> npt.NDArray[np.int32]:
+def equivalence_classes(outcomes: npt.NDArray[np.bool_]) -> npt.NDArray[np.int32]:
     """Assign each equation to an equivalence class, based on outcomes."""
     mutual_implications = outcomes & outcomes.T
     _, equivalence_class_indices = connected_components(
@@ -158,7 +158,7 @@ def operations_imbalance(statement: str) -> int:
 
 
 def construct_equivalence_class_data(
-    outcomes: npt.NDArray[np.bool],
+    outcomes: npt.NDArray[np.bool_],
     equation_ids: npt.NDArray[np.int64],
     equation_strings: list[str],
 ) -> pd.DataFrame:
