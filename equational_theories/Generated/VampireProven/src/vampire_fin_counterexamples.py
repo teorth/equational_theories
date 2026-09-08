@@ -8,6 +8,7 @@ import time
 from generate_eqs_list import *
 import re
 from collections import defaultdict
+from vampire_bin import vampire_executable
 
 random.seed(17)
 
@@ -85,7 +86,7 @@ for problem in tqdm(problems):
     try:
         out = subprocess.check_output(
             [
-                "~/Downloads/vampire",
+                vampire_executable(),
                 "--mode",
                 "portfolio",
                 "--schedule",
