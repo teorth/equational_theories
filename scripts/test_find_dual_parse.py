@@ -21,7 +21,12 @@ def test_ignores_non_decl_mentions():
     assert got == [(42, "x ◇ y = x ◇ z")]
 
 
+def test_blank_and_module_docs():
+    assert list(iter_equation_decls(["", "/- foo -/", "equation 3 := x = x"])) == [(3, "x = x")]
+
+
 if __name__ == "__main__":
     test_skips_commented_equations()
     test_ignores_non_decl_mentions()
+    test_blank_and_module_docs()
     print("ok - find_dual parse")
