@@ -7,6 +7,7 @@ from tqdm import tqdm
 from generate_eqs_list import *
 from find_powerful_theorems import *
 import re
+from vampire_bin import vampire_executable
 
 random.seed(17)
 
@@ -172,7 +173,7 @@ if __name__ == "__main__":
                 try:
                     out = subprocess.check_output(
                         [
-                            "~/Downloads/vampire",
+                            vampire_executable(),
                             "--mode",
                             "casc_sat",
                             "--cores",
@@ -188,7 +189,7 @@ if __name__ == "__main__":
                     try:
                         out = subprocess.check_output(
                             [
-                                "~/Downloads/vampire",
+                                vampire_executable(),
                                 "--mode",
                                 "casc",
                                 "--cores",
