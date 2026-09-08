@@ -6,6 +6,7 @@ from tqdm import tqdm
 import time
 from generate_eqs_list import *
 import re
+from vampire_bin import vampire_executable
 
 random.seed(17)
 
@@ -142,7 +143,7 @@ for problem in tqdm(problems):
     # print(problem)
     # print(pr)
     out = subprocess.check_output(
-        ["~/Downloads/vampire", "--proof_extra", "full", "/proc/self/fd/0", "-t", "1"],
+        [vampire_executable(), "--proof_extra", "full", "/proc/self/fd/0", "-t", "1"],
         input=pr.encode(),
     ).decode()
     lean_proof = leanify(out, problem)
