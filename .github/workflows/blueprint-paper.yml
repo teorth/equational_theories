@@ -181,10 +181,11 @@ jobs:
 
       - name: Build project documentation.
         id: build-docgen
-        uses: leanprover-community/docgen-action@deed0cdc44dd8e5de07a300773eb751d33e32fc8 # 2025-10-26
+        uses: leanprover-community/docgen-action@56023ee2a4b3630c1071825be5bafdb43f540bbd # supports ruby-version and PR homepage builds
         with:
           blueprint: true
           homepage: home_page
+          ruby-version: "3.3"
 
       - name: Remove 'awaiting-CI' label
         if: >
