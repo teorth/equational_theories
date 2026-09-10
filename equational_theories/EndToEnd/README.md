@@ -9,7 +9,7 @@ certificate contains the necessary information about the implication graph
 in a preprocessed-form to enable the final kernel-checked proof step to
 efficiently verify that the entire implication graph has been resolved.
 
-The final proof can be seen in `Verified.lean`, `graph_determined` shows
+The final proof can be seen in `Verified.lean`, `end_to_end1` shows
 that the `resolveImplication` function computes a proof of an implication
 or a refutation (as a refutation/chain of implications) always matches the
 expected result (e.g.  a proof of an implication/refutation always matches
@@ -40,7 +40,8 @@ implicatins than what is strictly minimal in the underlying data set.
 - `Load.lean`: meta-code to help load JSON files in the generated certificate and
   generate the appropriate terms.
 - `Print.lean`: Helper functions to pretty-print implications/refutations.
-- `Verified.lean`: The final end-to-end proof statements
+- `Verified.lean`: The final end-to-end proof statements, stated in three different
+  ways.
 
 ## Provenance
 

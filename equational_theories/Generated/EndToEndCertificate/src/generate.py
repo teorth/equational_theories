@@ -354,8 +354,8 @@ INDEXED_BY = {
     "fmask": "a bitset of the SCCs that model witness i refutes",
     "out":   "indices into `pos` of the cross-SCC edges out of SCC i",
     "rout":  "indices into `pos` of the cross-SCC edges into SCC i",
-    "sccUp": "a chain from equation index i to its SCC representative",
-    "sccDn": "a chain from the SCC representative to equation index i",
+    "sccUp": "an implication from equation index i to its SCC representative",
+    "sccDn": "an implication from the SCC representative to equation index i",
     "refuters": "indices into `neg` of the witnesses covering SCC i's non-implications",
 }
 
@@ -433,7 +433,7 @@ def emit_pos(impl, edges, impl_mod):
 
 
 def emit_dual_table(dual):
-    """`dualtable`: one `IsDual` fact per law, replacing the per-witness Forall2 chains."""
+    """`dualtable`: one `IsDual` fact per law."""
     rows = [([n - 1, dual[n] - 1, f"dual_{n}"], ["equational_theories.Duals.All"])
             for n in range(1, N + 1)]
     # `dualtable_ok` rides along with the table it is about: each `DualFact` carries its own
@@ -484,7 +484,7 @@ def emit_all(entries_path):
             r |= reachedBy[s]
         reachedBy[c] = r
 
-    # ---- within-class chains to and from the representative
+    # ---- within-class implications to and from the representative
     members = defaultdict(list)
     for v in range(1, N + 1):
         members[comp[v]].append(v)

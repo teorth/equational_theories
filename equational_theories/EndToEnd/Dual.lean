@@ -45,8 +45,7 @@ theorem refutesAll_op {ls ls' : List Law.NatMagmaLaw}
   | nil => trivial
   | cons hx _ ih => exact ⟨not_satisfies_op_of_isDual hx h.1, ih h.2⟩
 
-/-- The dual of a model witness. The generator emits the two `Forall₂` proofs as chains of
-the `dual_i` theorems from `equational_theories.Duals`. -/
+/-- The dual of a model witness, given the two laws-are-dual relations pointwise. -/
 theorem negFact_dual {sat ref sat' ref' : List Nat}
     (hS : List.Forall₂ MagmaLaw.IsDual (sat.map lawOf) (sat'.map lawOf))
     (hR : List.Forall₂ MagmaLaw.IsDual (ref.map lawOf) (ref'.map lawOf))
@@ -101,9 +100,8 @@ theorem forall2_dualIdx {dt : RArray DualFact} {numEq : Nat}
 
 /-- The dual of a model witness, with the duality supplied by the table.
 
-`hs`/`hr` say the stored dual index lists really are the pointwise duals; the generator
-discharges them by kernel computation, so they cost a constant-size proof term rather than a
-chain proportional to the number of laws. -/
+`hs`/`hr` say the stored dual index lists really are the pointwise duals. They are discharged
+by kernel computation, so they cost a constant-size proof term. -/
 theorem negFact_dual_table {dt : RArray DualFact} {numEq : Nat}
     (hdt : checkDualTable dt numEq = true) (sat ref sat' ref' : List Nat)
     (hsb : sat.all (fun n => Nat.blt n numEq) = true)

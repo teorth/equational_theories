@@ -100,45 +100,45 @@ structure NegFact where
         Law.SatisfiesAll G (satisfies.map lawOf) ∧ Law.RefutesAll G (refutes.map lawOf)
 
 /-- A derivation of `lawOf n ⟹ lawOf m`: a list of indices into `pos`, composed left to right. -/
-abbrev Chain := List Nat
+abbrev Implication := List Nat
 
 /-- A refutation of `lawOf n ⟹ lawOf m`: the model witness `fact`, one law `a` it satisfies with
-`a ⟹ n`, and one law `b` it refutes with `m ⟹ b`, each justified by a chain. -/
+`a ⟹ n`, and one law `b` it refutes with `m ⟹ b`, each justified by an implication. -/
 structure Refutation where
   fact : Nat
   a : Nat
   b : Nat
-  up : Chain
-  down : Chain
+  up : Implication
+  down : Implication
 deriving Repr
 
 variable (pos : RArray PosFact) (neg : RArray NegFact)
 
 /-- Check that `c` derives `lawOf n ⟹ lawOf m` from `pos`. -/
-def checkChain (pos : RArray PosFact) : Nat → Nat → Chain → Bool
+def checkImplication (pos : RArray PosFact) : Nat → Nat → Implication → Bool
   | n, m, [] => n == m
   | n, m, k :: ks =>
       let f := pos.get k
-      (f.hyp == n) && checkChain pos f.conc m ks
+      (f.hyp == n) && checkImplication pos f.conc m ks
 
 /-- Check that `r` refutes `lawOf n ⟹ lawOf m` using `neg`. -/
 def checkRefutation (n m : Nat) (r : Refutation) : Bool :=
   let f := neg.get r.fact
   f.satisfies.contains r.a && f.refutes.contains r.b
-    && checkChain pos r.a n r.up && checkChain pos m r.b r.down
+    && checkImplication pos r.a n r.up && checkImplication pos m r.b r.down
 
-theorem checkChain_sound : ∀ (c : Chain) (n m : Nat),
-    checkChain pos n m c = true → (lawOf n).implies (lawOf m) := by
+theorem checkImplication_sound : ∀ (c : Implication) (n m : Nat),
+    checkImplication pos n m c = true → (lawOf n).implies (lawOf m) := by
   intro c
   induction c with
   | nil =>
       intro n m h
-      simp only [checkChain, beq_iff_eq] at h
+      simp only [checkImplication, beq_iff_eq] at h
       subst h
       exact Law.MagmaLaw.implies_refl _
   | cons k ks ih =>
       intro n m h
-      simp only [checkChain, Bool.and_eq_true, beq_iff_eq] at h
+      simp only [checkImplication, Bool.and_eq_true, beq_iff_eq] at h
       obtain ⟨hn, hrest⟩ := h
       -- `subst` rather than `rw`: the type of `(pos.get k).conc` mentions `(pos.get k).hyp`,
       -- so rewriting inside `hstep` would need an ill-typed motive.
@@ -154,42 +154,42 @@ theorem checkRefutation_sound (n m : Nat) (r : Refutation)
   -- the model satisfies `lawOf r.a`, and `r.a ⟹ n`, so it satisfies `lawOf n`
   have hsa : @satisfies Nat G inst (lawOf r.a) :=
     hs.mem (List.mem_map_of_mem (List.mem_of_elem_eq_true haS))
-  have hn : @satisfies Nat G inst (lawOf n) := @checkChain_sound pos _ _ _ hup G inst hsa
+  have hn : @satisfies Nat G inst (lawOf n) := @checkImplication_sound pos _ _ _ hup G inst hsa
   -- so it satisfies `lawOf m`, and `m ⟹ r.b`, so it satisfies `lawOf r.b`
   have hb : @satisfies Nat G inst (lawOf r.b) :=
-    @checkChain_sound pos _ _ _ hdown G inst (@himp G inst hn)
+    @checkImplication_sound pos _ _ _ hdown G inst (@himp G inst hn)
   exact (hr.mem (List.mem_map_of_mem (List.mem_of_elem_eq_true hbR))) hb
 
-/-- Chains compose by concatenation. -/
-theorem checkChain_append : ∀ (c₁ : Chain) (n p : Nat) (c₂ : Chain) (m : Nat),
-    checkChain pos n p c₁ = true → checkChain pos p m c₂ = true →
-    checkChain pos n m (c₁ ++ c₂) = true := by
+/-- Implications compose by concatenation. -/
+theorem checkImplication_append : ∀ (c₁ : Implication) (n p : Nat) (c₂ : Implication) (m : Nat),
+    checkImplication pos n p c₁ = true → checkImplication pos p m c₂ = true →
+    checkImplication pos n m (c₁ ++ c₂) = true := by
   intro c₁
   induction c₁ with
   | nil =>
       intro n p c₂ m h₁ h₂
-      simp only [checkChain, beq_iff_eq] at h₁
+      simp only [checkImplication, beq_iff_eq] at h₁
       subst h₁
       simpa using h₂
   | cons k ks ih =>
       intro n p c₂ m h₁ h₂
       rw [List.cons_append]
-      simp only [checkChain, Bool.and_eq_true, beq_iff_eq] at h₁ ⊢
+      simp only [checkImplication, Bool.and_eq_true, beq_iff_eq] at h₁ ⊢
       exact ⟨h₁.1, ih _ p _ _ h₁.2 h₂⟩
 
-theorem checkChain_nil (n : Nat) : checkChain pos n n [] = true := by
-  simp [checkChain]
+theorem checkImplication_nil (n : Nat) : checkImplication pos n n [] = true := by
+  simp [checkImplication]
 
 /-- `lawOf n ⟹ lawOf m` is derivable from the proven implications. -/
-def Reachable (n m : Nat) : Prop := ∃ c, checkChain pos n m c = true
+def Implied (n m : Nat) : Prop := ∃ c, checkImplication pos n m c = true
 
 /-- `lawOf n ⟹ lawOf m` is refuted by one of the model witnesses. -/
-def Refutable (n m : Nat) : Prop := ∃ r, checkRefutation pos neg n m r = true
+def Refuted (n m : Nat) : Prop := ∃ r, checkRefutation pos neg n m r = true
 
-theorem Reachable.sound {n m} (h : Reachable pos n m) : (lawOf n).implies (lawOf m) := by
-  obtain ⟨c, hc⟩ := h; exact checkChain_sound pos c n m hc
+theorem Implied.sound {n m} (h : Implied pos n m) : (lawOf n).implies (lawOf m) := by
+  obtain ⟨c, hc⟩ := h; exact checkImplication_sound pos c n m hc
 
-theorem Refutable.sound {n m} (h : Refutable pos neg n m) : ¬ ((lawOf n).implies (lawOf m)) := by
+theorem Refuted.sound {n m} (h : Refuted pos neg n m) : ¬ ((lawOf n).implies (lawOf m)) := by
   obtain ⟨r, hr⟩ := h; exact checkRefutation_sound pos neg n m r hr
 
 end EndToEnd

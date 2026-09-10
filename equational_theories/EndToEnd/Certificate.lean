@@ -4,7 +4,7 @@ import equational_theories.EndToEnd.Basic
 # The certificate, its checker, and the decision procedure
 
 The certificate is untrusted data: `checkCert` validates it, and `resolve` uses it only to
-*find* a witness, which is then checked by `checkChain`/`checkRefutation` from `Basic.lean`.
+*find* a witness, which is then checked by `checkImplication`/`checkRefutation` from `Basic.lean`.
 
 Everything is done on the ~1415 strongly connected components rather than on the 4694
 equations, because the rank induction that justifies the forward walk has nowhere to descend
@@ -16,10 +16,10 @@ Both directions get their own fixpoint and rank:
 * `reaches`/`out`/`rank`   -- forward:  `reaches[i]` is the set of SCCs `i` implies
 * `reachedBy`/`rout`/`rrank` -- reverse: `reachedBy[c]` is the set of SCCs implying `c`
 
-The reverse copy is not a convenience. A refutation needs a *forward* chain `m ⟹ b`, while the
+The reverse copy is not a convenience. A refutation needs a *forward* implication `m ⟹ b`, while the
 refuters supply the reverse fact that `b` is implied by `m`. Deriving one from the other means
 checking that `reachedBy` is the transpose of `reaches`, which is Θ(K²); walking the reverse
-graph and emitting the chain in forward order avoids the transpose entirely.
+graph and emitting it in forward order avoids the transpose entirely.
 -/
 
 namespace EndToEnd
@@ -55,10 +55,10 @@ structure Certificate where
   out : RArray (List Nat)
   /-- SCC id → indices into `pos` of cross-SCC edges *into* it -/
   rout : RArray (List Nat)
-  /-- equation index → chain from it to its SCC representative -/
-  sccUp : RArray Chain
-  /-- equation index → chain from its SCC representative to it -/
-  sccDn : RArray Chain
+  /-- equation index → implication from it to its SCC representative -/
+  sccUp : RArray Implication
+  /-- equation index → implication from its SCC representative to it -/
+  sccDn : RArray Implication
   /-- SCC id → indices into `neg`: witnesses whose `fmask`s, together with `reaches[i]`,
   cover every SCC. Chosen by greedy set cover; `checkRefuters` is the covering condition. -/
   refuters : RArray (List Nat)
@@ -98,8 +98,8 @@ def checkRev (c : Nat) : Bool :=
 
 /-- Each equation is inter-implicable with its SCC representative. -/
 def checkScc (e : Nat) : Bool :=
-  checkChain pos e (C.rep.get (C.scc.get e)) (C.sccUp.get e) &&
-  checkChain pos (C.rep.get (C.scc.get e)) e (C.sccDn.get e)
+  checkImplication pos e (C.rep.get (C.scc.get e)) (C.sccUp.get e) &&
+  checkImplication pos (C.rep.get (C.scc.get e)) e (C.sccDn.get e)
 
 /-- `fmask k` really is the set of SCCs witness `k` refutes. -/
 def checkFmask (k : Nat) : Bool :=
@@ -124,10 +124,10 @@ def checkCert : Bool :=
   (List.range C.numSccs).all
     (fun i => checkFwd C pos i && checkRev C pos i && checkRefuters C neg i)
 
-/-- Chain from `rep i` to `rep j`, following forward edges whose target still reaches `j`.
+/-- Implication from `rep i` to `rep j`, following forward edges whose target still reaches `j`.
 Each cross-SCC step `a ⟹ b` is padded to run between representatives:
 `rep i ⟹ a` by `sccDn a`, the edge itself, then `b ⟹ rep (scc b)` by `sccUp b`. -/
-def walkFwd : Nat → Nat → Nat → Chain
+def walkFwd : Nat → Nat → Nat → Implication
   | 0, _, _ => []
   | fuel + 1, i, j =>
       if i == j then [] else
@@ -137,9 +137,9 @@ def walkFwd : Nat → Nat → Nat → Chain
           C.sccDn.get (pos.get k).hyp ++ k :: (C.sccUp.get (pos.get k).conc ++
             walkFwd fuel (tgtScc C pos k) j)
 
-/-- Chain from `rep j` to `rep c`, found by walking the reverse graph down from `c` but
+/-- Implication from `rep j` to `rep c`, found by walking the reverse graph down from `c` but
 emitted in forward order. -/
-def walkRev : Nat → Nat → Nat → Chain
+def walkRev : Nat → Nat → Nat → Implication
   | 0, _, _ => []
   | fuel + 1, c, j =>
       if c == j then [] else
@@ -155,8 +155,8 @@ Not named `resolve`: `Superposition.lean:172` declares a *term-level* elaborator
 `resolve e₁ e₂`, which would silently capture the first two arguments.
 
 The `.inl []` fallbacks are unreachable once `checkCert C pos neg = true`; they are there only
-to make the function total, and would be rejected by `checkChain` if they ever fired. -/
-def resolveImplication (n m : Nat) : Chain ⊕ Refutation :=
+to make the function total, and would be rejected by `checkImplication` if they ever fired. -/
+def resolveImplication (n m : Nat) : Implication ⊕ Refutation :=
   let i := C.scc.get n
   let j := C.scc.get m
   if Nat.testBit (C.reaches.get i) j then

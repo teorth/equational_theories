@@ -120,21 +120,21 @@ theorem valid_of_checkCert (h : checkCert C pos neg = true) : Valid C pos neg :=
     simp only [Bool.and_eq_true] at this
     exact this.2
 
-/-- `sccUp e` really is a chain from `e` to its representative. -/
+/-- `sccUp e` really is an implication from `e` to its representative. -/
 theorem sccUp_ok (V : Valid C pos neg) (he : e < C.numEq) :
-    checkChain pos e (C.rep.get (C.scc.get e)) (C.sccUp.get e) = true := by
+    checkImplication pos e (C.rep.get (C.scc.get e)) (C.sccUp.get e) = true := by
   have := V.scc e he
   simp only [checkScc, Bool.and_eq_true] at this
   exact this.1
 
-/-- `sccDn e` really is a chain from its representative to `e`. -/
+/-- `sccDn e` really is an implication from its representative to `e`. -/
 theorem sccDn_ok (V : Valid C pos neg) (he : e < C.numEq) :
-    checkChain pos (C.rep.get (C.scc.get e)) e (C.sccDn.get e) = true := by
+    checkImplication pos (C.rep.get (C.scc.get e)) e (C.sccDn.get e) = true := by
   have := V.scc e he
   simp only [checkScc, Bool.and_eq_true] at this
   exact this.2
 
-/-- The forward walk really produces a chain between the two representatives.
+/-- The forward walk really produces an implication between the two representatives.
 
 Induction on `fuel`, with the certificate's `rank` supplying the decreasing measure: the
 fixpoint identity guarantees an out-edge whose target still reaches `j`, and the rank check
@@ -142,13 +142,13 @@ guarantees that edge strictly descends. -/
 theorem walkFwd_correct (V : Valid C pos neg) :
     ∀ (fuel i j : Nat), i < C.numSccs → C.rank i ≤ fuel →
       (C.reaches.get i).testBit j = true →
-      checkChain pos (C.rep.get i) (C.rep.get j) (walkFwd C pos fuel i j) = true := by
+      checkImplication pos (C.rep.get i) (C.rep.get j) (walkFwd C pos fuel i j) = true := by
   intro fuel
   induction fuel with
   | zero =>
       intro i j hi hr hj
       by_cases hij : i = j
-      · subst hij; simp [walkFwd, checkChain]
+      · subst hij; simp [walkFwd, checkImplication]
       · exfalso
         obtain ⟨k, hk, _⟩ := fwd_exists (V.fwd i hi) hj hij
         obtain ⟨_, _, _, _, hrank⟩ := fwd_edge (V.fwd i hi) hk
@@ -157,7 +157,7 @@ theorem walkFwd_correct (V : Valid C pos neg) :
       intro i j hi hr hj
       simp only [walkFwd]
       by_cases hij : i = j
-      · subst hij; simp [checkChain]
+      · subst hij; simp [checkImplication]
       · rw [if_neg (by simpa using hij)]
         obtain ⟨k0, hk0, hb0⟩ := fwd_exists (V.fwd i hi) hj hij
         cases hfind : (C.out.get i).find?
@@ -169,25 +169,25 @@ theorem walkFwd_correct (V : Valid C pos neg) :
             have hbk : (C.reaches.get (tgtScc C pos k)).testBit j = true := by
               simpa using List.find?_some hfind
             obtain ⟨hsrc, htlt, ha, hb, hrank⟩ := fwd_edge (V.fwd i hi) hmem
-            refine checkChain_append pos _ _ (pos.get k).hyp _ _ ?_ ?_
+            refine checkImplication_append pos _ _ (pos.get k).hyp _ _ ?_ ?_
             · have h := sccDn_ok V ha
               rwa [show C.scc.get (pos.get k).hyp = i from hsrc] at h
-            · simp only [checkChain, Bool.and_eq_true, beq_self_eq_true, true_and]
-              refine checkChain_append pos _ _ (C.rep.get (tgtScc C pos k)) _ _ ?_ ?_
+            · simp only [checkImplication, Bool.and_eq_true, beq_self_eq_true, true_and]
+              refine checkImplication_append pos _ _ (C.rep.get (tgtScc C pos k)) _ _ ?_ ?_
               · exact sccUp_ok V hb
               · exact ih _ _ htlt (by omega) hbk
 
-/-- The reverse walk produces a chain from `rep j` to `rep c`, emitted in forward order. -/
+/-- The reverse walk produces an implication from `rep j` to `rep c`, emitted in forward order. -/
 theorem walkRev_correct (V : Valid C pos neg) :
     ∀ (fuel c j : Nat), c < C.numSccs → C.rrank c ≤ fuel →
       (C.reachedBy.get c).testBit j = true →
-      checkChain pos (C.rep.get j) (C.rep.get c) (walkRev C pos fuel c j) = true := by
+      checkImplication pos (C.rep.get j) (C.rep.get c) (walkRev C pos fuel c j) = true := by
   intro fuel
   induction fuel with
   | zero =>
       intro c j hc hr hj
       by_cases hcj : c = j
-      · subst hcj; simp [walkRev, checkChain]
+      · subst hcj; simp [walkRev, checkImplication]
       · exfalso
         obtain ⟨k, hk, _⟩ := rev_exists (V.rev c hc) hj hcj
         obtain ⟨_, _, _, _, hrank⟩ := rev_edge (V.rev c hc) hk
@@ -196,7 +196,7 @@ theorem walkRev_correct (V : Valid C pos neg) :
       intro c j hc hr hj
       simp only [walkRev]
       by_cases hcj : c = j
-      · subst hcj; simp [checkChain]
+      · subst hcj; simp [checkImplication]
       · rw [if_neg (by simpa using hcj)]
         obtain ⟨k0, hk0, hb0⟩ := rev_exists (V.rev c hc) hj hcj
         cases hfind : (C.rout.get c).find?
@@ -208,10 +208,10 @@ theorem walkRev_correct (V : Valid C pos neg) :
             have hbk : (C.reachedBy.get (srcScc C pos k)).testBit j = true := by
               simpa using List.find?_some hfind
             obtain ⟨htgt, hslt, ha, hb, hrank⟩ := rev_edge (V.rev c hc) hmem
-            refine checkChain_append pos _ _ (C.rep.get (srcScc C pos k)) _ _ ?_ ?_
+            refine checkImplication_append pos _ _ (C.rep.get (srcScc C pos k)) _ _ ?_ ?_
             · exact ih _ _ hslt (by omega) hbk
-            · refine checkChain_append pos _ _ (pos.get k).hyp _ _ (sccDn_ok V ha) ?_
-              simp only [checkChain, Bool.and_eq_true, beq_self_eq_true, true_and]
+            · refine checkImplication_append pos _ _ (pos.get k).hyp _ _ (sccDn_ok V ha) ?_
+              simp only [checkImplication, Bool.and_eq_true, beq_self_eq_true, true_and]
               have h := sccUp_ok V hb
               rwa [show C.scc.get (pos.get k).conc = c from htgt] at h
 
@@ -234,21 +234,21 @@ theorem refuters_exists (V : Valid C pos neg) (hi : i < C.numSccs) (hj : j < C.n
 /-- **Correctness of the decision procedure.**
 
 Whatever `resolveImplication` returns passes the corresponding checker, so by
-`checkChain_sound` / `checkRefutation_sound` the corresponding mathematical fact holds.
+`checkImplication_sound` / `checkRefutation_sound` the corresponding mathematical fact holds.
 Note the return type is a `Sum`, so totality is part of the type: there is no separate
 "a witness exists" obligation. -/
 theorem resolveImplication_correct (V : Valid C pos neg) (n m : Nat)
     (hn : n < C.numEq) (hm : m < C.numEq) :
     match resolveImplication C pos neg n m with
-    | .inl c => checkChain pos n m c = true
+    | .inl c => checkImplication pos n m c = true
     | .inr r => checkRefutation pos neg n m r = true := by
   have hi : C.scc.get n < C.numSccs := V.clsLt n hn
   have hj : C.scc.get m < C.numSccs := V.clsLt m hm
   simp only [resolveImplication]
   by_cases hbit : (C.reaches.get (C.scc.get n)).testBit (C.scc.get m) = true
   · rw [if_pos hbit]
-    refine checkChain_append pos _ _ (C.rep.get (C.scc.get n)) _ _ (sccUp_ok V hn) ?_
-    refine checkChain_append pos _ _ (C.rep.get (C.scc.get m)) _ _ ?_ (sccDn_ok V hm)
+    refine checkImplication_append pos _ _ (C.rep.get (C.scc.get n)) _ _ (sccUp_ok V hn) ?_
+    refine checkImplication_append pos _ _ (C.rep.get (C.scc.get m)) _ _ ?_ (sccDn_ok V hm)
     exact walkFwd_correct V _ _ _ hi (Nat.le_of_lt (fwd_rank_lt (V.fwd _ hi))) hbit
   · rw [if_neg hbit]
     have hfalse : (C.reaches.get (C.scc.get n)).testBit (C.scc.get m) = false := by
@@ -310,16 +310,16 @@ theorem resolveImplication_correct (V : Valid C pos neg) (n m : Nat)
         · exact List.elem_eq_true_of_mem hameme
         · exact List.elem_eq_true_of_mem hbmeme
         · -- a ⟹ rep (scc a) ⟹ rep (scc n) ⟹ n
-          refine checkChain_append pos _ _ (C.rep.get (C.scc.get a)) _ _
+          refine checkImplication_append pos _ _ (C.rep.get (C.scc.get a)) _ _
             (sccUp_ok V halt) ?_
-          refine checkChain_append pos _ _ (C.rep.get (C.scc.get n)) _ _ ?_
+          refine checkImplication_append pos _ _ (C.rep.get (C.scc.get n)) _ _ ?_
             (sccDn_ok V hn)
           exact walkFwd_correct V _ _ _ hia
             (Nat.le_of_lt (fwd_rank_lt (V.fwd _ hia))) hab
         · -- m ⟹ rep (scc m) ⟹ rep (scc b) ⟹ b
-          refine checkChain_append pos _ _ (C.rep.get (C.scc.get m)) _ _
+          refine checkImplication_append pos _ _ (C.rep.get (C.scc.get m)) _ _
             (sccUp_ok V hm) ?_
-          refine checkChain_append pos _ _ (C.rep.get (C.scc.get b)) _ _ ?_
+          refine checkImplication_append pos _ _ (C.rep.get (C.scc.get b)) _ _ ?_
             (sccDn_ok V hblt)
           exact walkRev_correct V _ _ _ hib
             (Nat.le_of_lt (rev_rank_lt (V.rev _ hib))) hbb

@@ -4,7 +4,7 @@ import equational_theories.EndToEnd.Load
 
 /-! `tsccdn` entries 2403-2974.
 
-An entry is a chain from the SCC representative to equation index i.
+An entry is an implication from the SCC representative to equation index i.
 
 The data itself is in `json/sccDn.json`, beside this module. The number
 after the path is that file's FNV-1a hash, checked on every elaboration because

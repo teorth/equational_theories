@@ -4,7 +4,7 @@ import equational_theories.EndToEnd.Load
 
 /-! `tsccup` entries 2863-4693.
 
-An entry is a chain from equation index i to its SCC representative.
+An entry is an implication from equation index i to its SCC representative.
 
 The data itself is in `json/sccUp.json`, beside this module. The number
 after the path is that file's FNV-1a hash, checked on every elaboration because
