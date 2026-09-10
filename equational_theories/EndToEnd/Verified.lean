@@ -5,28 +5,25 @@ import equational_theories.Generated.EndToEndCertificate.Neg
 import equational_theories.DecideBang
 
 /-!
-# The implication graph, determined
+# The end-to-end proof
 
-This ties the machinery together on the real data: for every ordered pair of the 4694 laws of
-order at most 4, `resolveImplication` returns either a derivation of the implication from the
-proven results, or one of the project's model witnesses refuting it -- and whichever it
-returns passes an independent check.
+This file shows that for every pair of 4,694 considered by the Equational Theories Project,
+`resolveImplication` returns either a derivation of the implication from the
+proven results, or one of the project's model witnesses refuting it. These return values are
+checked by the `checkChain`/`checkRefutation` functions.
 
-`checkCert` is discharged by `decide!`, i.e. by the Lean kernel, with no `native_decide`.
+Note that implications and refutations are witnessed by indices into a list of theorems
+proved in this repository.
 -/
 
 namespace EndToEnd
 
-/-- The generated certificate passes its checker. Kernel-checked. -/
-theorem cert_ok : checkCert cert pos neg = true := by decide!
+/-- The generated certificate is valid. -/
+theorem cert_valid : Valid cert pos neg := valid_of_checkCert (by decide!)
 
-theorem cert_valid : Valid cert pos neg := valid_of_checkCert cert_ok
-
-/-- **The implication graph is determined.**
-
-For every ordered pair of laws, `resolveImplication` produces a witness that passes its
-checker, and the corresponding mathematical fact holds. The return type is a `Sum`, so
-totality is part of the statement: there is no pair for which it fails to answer. -/
+/-- For every ordered pair of laws, `resolveImplication` produces a witness that passes its
+checker, and the corresponding mathematical fact holds. The return type is a `Sum`, so it
+always returns either an implication or a refutation. -/
 theorem graph_determined (n m : Nat) (hn : n < 4694) (hm : m < 4694) :
     match resolveImplication cert pos neg n m with
     | .inl c => checkChain pos n m c = true ∧ (lawOf n).implies (lawOf m)
@@ -40,9 +37,8 @@ theorem graph_determined (n m : Nat) (hn : n < 4694) (hm : m < 4694) :
       rw [hr] at h
       exact ⟨h, checkRefutation_sound pos neg n m r h⟩
 
-/-- Prop-level form: every pair is either derivable from the proven implications, or refuted
-by one of the model witnesses. Note this is not `P ∨ ¬ P` -- `Reachable` and `Refutable` are
-concrete relations over proof-carrying data, so excluded middle does not give it. -/
+/-- An alternative statement: every pair of equations is deriable as an implication or
+refutation from the theorems proved in this repository. -/
 theorem reachable_or_refutable (n m : Nat) (hn : n < 4694) (hm : m < 4694) :
     Reachable pos n m ∨ Refutable pos neg n m := by
   have h := graph_determined n m hn hm
@@ -50,7 +46,7 @@ theorem reachable_or_refutable (n m : Nat) (hn : n < 4694) (hm : m < 4694) :
   | inl c => rw [hr] at h; exact Or.inl ⟨c, h.1⟩
   | inr r => rw [hr] at h; exact Or.inr ⟨r, h.1⟩
 
-/-- The implication relation is exactly the closure of the proven implications. -/
+/-- An alternative statement: `Reachable` is the same as `MagmaLaw.implies` -/
 theorem implies_iff_reachable (n m : Nat) (hn : n < 4694) (hm : m < 4694) :
     (lawOf n).implies (lawOf m) ↔ Reachable pos n m := by
   refine ⟨fun himp => ?_, Reachable.sound pos⟩
