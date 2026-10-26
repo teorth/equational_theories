@@ -141,11 +141,11 @@ consequences necessary. (See also \textbf{R1.20}--\textbf{R1.23}.)
 \item Report the extent of the final formalization, at minimum in lines of code and
 compile times, and identify which parts dominate the compile time --- the
 ATP-derived parts or the manual ones.
-\response{\todo}
+\response{\done\ Noted in the Formal foundations section}
 
 \item Explain how the millions of theorem statements were generated, and why that
 generation process can be trusted.
-\response{\todo}
+\response{\done\ The Formal Foundations section was expanded to mention that the statements of machine-generated theorems were verified to follow a prescribed format using the \texttt{@{[}equational\_result{]}} attribute.}
 
 \item State which sections of the paper correspond to formalized results and which do
 not (the referee notes \S10 as an example of the latter).
@@ -343,7 +343,7 @@ group library (p.~45, line~37; see \url{https://gap-packages.github.io/smallgrp/
 \texttt{lean4checker} was used to limit the axioms used to a ``small trusted set''.
 Say explicitly which axioms are in that set, and whether the consistency of that set
 is well known. (See also \textbf{R1.3}.)
-\response{\todo}
+\response{\done\ The Formal foundations section was corrected to mention that the axiom check was performed by the \texttt{@{[}equational\_result{]}} attribute and to address axiom set.}
 
 \item (p.~12, lines~3--9) Include timing data for compiling the full and the reduced
 sets, so the reader can judge whether the difference is minutes, hours or days, and
@@ -353,7 +353,7 @@ transitivity and duality is done by external tools, and asks whether those tools
 correct and can be trusted; they find it strange that this is not treated with the same
 care as the deliberate avoidance of \texttt{native\_decide} in the preceding paragraph.
 (See also \textbf{R1.1}--\textbf{R1.6} and \textbf{R1.7}.)
-\response{\todo}
+\response{Timing and line counts for the reduced set were included in the Formal foundations section \todo\ Transitivity and duality}
 
 \item Replace the unlocated references to the ETP blueprint with citations to specific
 chapters or sections, since the blueprint is a standalone document of 27 chapters
