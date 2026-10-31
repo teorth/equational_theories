@@ -7,6 +7,8 @@ import Mathlib.Data.ZMod.Basic
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import Mathlib.Tactic.ComputeDegree
 
+open Law MagmaLaw
+
 
 namespace InfModel
 

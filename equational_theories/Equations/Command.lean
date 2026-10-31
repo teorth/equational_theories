@@ -3,7 +3,7 @@ import equational_theories.Magma
 import equational_theories.MagmaLaw
 import equational_theories.EquationLawConversion
 
-open Lean Elab Command Law Qq
+open Lean Elab Command Law MagmaLaw Qq
 
 initialize magmaLawExt : TagDeclarationExtension ← mkTagDeclarationExtension
 

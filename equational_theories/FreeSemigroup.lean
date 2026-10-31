@@ -6,7 +6,7 @@ import equational_theories.Homomorphisms
 import equational_theories.MagmaLaw
 
 open FreeMagma
-open Law
+open Law MagmaLaw
 
 def treeConcat {α : Type _} (t : FreeMagma α) : List α :=
   match t with

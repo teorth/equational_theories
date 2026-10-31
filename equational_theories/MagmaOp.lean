@@ -8,6 +8,7 @@ import equational_theories.MagmaLaw
 import equational_theories.Preorder
 
 open FreeMagma
+open Law MagmaLaw
 
 variable {α : Type _}
 

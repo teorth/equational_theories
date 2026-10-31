@@ -6,7 +6,7 @@ import Mathlib.Data.Multiset.Bind
 import Mathlib.Data.Finset.Union
 import equational_theories.Completeness
 
-open Law
+open Law MagmaLaw
 
 class LiftingMagmaFamily (G : Type _ → Type _) where
   instMagma (α) [DecidableEq α] : Magma (G α)
