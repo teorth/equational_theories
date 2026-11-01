@@ -39,7 +39,22 @@ The project relied on \emph{Lean}'s extensive \emph{Mathlib} library~\cite{mathl
 
 The concept of a magma could be modeled by existing \emph{Mathlib} classes such as \texttt{Mul}; however we chose early in the project to define a custom magma class \texttt{Magma} instead, as for some magma constructions the magma operation (which we denoted $\op$) was distinct from an existing multiplication structure $*$ on the same carrier.  Most components of the \emph{Lean} codebase were placed in namespaces to avoid collisions with each other, and with \emph{Mathlib}.
 
-Equational laws in the project were implemented both syntactically\,---\,as a structure \texttt{LawX} containing two words in a free magma\,---\,as well as semantically, as a predicate \texttt{EquationX} that could be applied to a magma. Here \texttt{X} is the number assigned to the law. The semantic formulation (\texttt{EquationX}) was more convenient for proving or refuting specific implications, while the syntactic formulation (\texttt{LawX}) was preferred for implementing metatheorems, such as the use of duality between laws. \emph{Lean}'s metaprogramming features proved to be vital to relate the two representations. A custom command, \texttt{equation}, was created for specifying equational laws. Elaborating the \texttt{equation} command generated both \texttt{EquationX} and \texttt{LawX} definitions from this description, as well as theorems relating them to each other. A similar construction was used to generate dual laws, where the dual law was given explicitly for simplicity.
+Equational laws in the project were implemented both syntactically\,---\,as a term \texttt{LawX} of the structure \texttt{MagmaLaw}, containing two words in a free magma\,---\,as well as semantically, as a predicate \texttt{EquationX} that could be applied to a magma. Here \texttt{X} is the number assigned to the law. The semantic formulation (\texttt{EquationX}) was more convenient for proving or refuting specific implications, while the syntactic formulation (\texttt{LawX}) was preferred for implementing metatheorems, such as the use of duality between laws. \emph{Lean}'s metaprogramming features proved to be vital to relate the two representations. A custom command, \texttt{equation}, was created for specifying equational laws. Elaborating the \texttt{equation} command generated both \texttt{EquationX} and \texttt{LawX} definitions from this description, as well as theorems relating them to each other; see \Cref{fig:eq43}. A similar construction was used to generate dual laws, where the dual law was given explicitly for simplicity.
+
+\begin{figure}
+\centering
+\begin{lean}
+equation 43 := x ◇ y = y ◇ x
+
+@[reducible] def Equation43.{u} : (G : Type u) → [a : Magma G] → Prop :=
+fun G [Magma G] => ∀ (x y : G), x ◇ y = y ◇ x
+
+def Law43 : NatMagmaLaw :=
+Lf 0 ⋆ Lf 1 ≃ Lf 1 ⋆ Lf 0
+\end{lean}
+\caption{Three forms of the commutative law \eqref{eq43} in the \emph{Lean} codebase.  Top: the \texttt{equation} command, which specifies the law and generates the other two forms.  Middle: the semantic form \texttt{Equation43}, a predicate asserting that a magma \texttt{G} obeys the law.  Bottom: the syntactic form \texttt{Law43}, a pair of words in the free magma on the natural numbers, in which the variables \texttt{x} and \texttt{y} are numbered $0$ and $1$, \texttt{Lf} denotes a generator, $\star$ denotes the free magma operation, and $\simeq$ separates the two sides of the law.}
+\label{fig:eq43}
+\end{figure}
 
 To facilitate the automatic generation of an implication graph from the \emph{Lean} codebase, a custom \texttt{@{[}equational\_result{]}} tag was formed to attach to propositions in \emph{Lean} to indicate that they were proving or refuting one or more implications; see \Cref{fig:impl}.  A \texttt{conjecture} keyword was also created for implications or refutations which we wished to identify as having an informal proof that had yet to be formalized in \emph{Lean}.
 
