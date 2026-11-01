@@ -24,4 +24,4 @@ law, and the class: 179 "HN-equivalent" equations whose models are
 groups equipped with division, 21 "finite-equivalent" equations whose
 finite models have the same property, and 13 "unknown-candidate"
 equations for which it is unknown whether they have finite or infinite
-non-group models.
+non-group models. See `Higman-Neumann.md` for a detailed description.
