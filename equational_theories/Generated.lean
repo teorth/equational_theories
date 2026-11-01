@@ -14,3 +14,6 @@ import equational_theories.Generated.Confluence
 import equational_theories.Generated.InvariantMetatheoremNonimplications
 import equational_theories.Generated.FiniteImplicationSearch
 import equational_theories.Generated.FullSpectrum
+import equational_theories.Generated.EndToEndCertificate.Data
+import equational_theories.Generated.EndToEndCertificate.Pos
+import equational_theories.Generated.EndToEndCertificate.Neg

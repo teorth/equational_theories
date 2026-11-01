@@ -244,7 +244,7 @@ private theorem op_1701_3253_satisfies_1701 :
 
 
 @[equational_result]
-theorem Equation1701_not_implies_Equation3252 :
+theorem Equation1701_not_implies_Equation3253 :
   ∃ (G : Type) (_ : Magma G), Equation1701 G ∧ ¬ Equation3253 G := by
   let op (x : ℕ) (y : ℕ) : ℕ := op_1701_3253 x y
   let magN : Magma ℕ := ⟨fun x y ↦ op x y⟩

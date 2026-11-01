@@ -189,7 +189,7 @@ conjecture Equation321577_implies_Equation329857 (G: Type*) [Magma G] (_ : Equat
 conjecture Equation321577_implies_Equation345169 (G: Type*) [Magma G] (_ : Equation321577 G) : Equation345169 G
 
 @[equational_result]
-conjecture Equatio321577_implies_Equation361729 (G: Type*) [Magma G] (_ : Equation321577 G) : Equation361729 G
+conjecture Equation321577_implies_Equation361729 (G: Type*) [Magma G] (_ : Equation321577 G) : Equation361729 G
 
 @[equational_result]
 conjecture Equation329857_implies_Equation321577 (G: Type*) [Magma G] (_ : Equation329857 G) : Equation321577 G

@@ -48,7 +48,7 @@ def preprocess_data(data):
     r = np.zeros((n, n))
     for i, row in enumerate(outcomes):
         for j, col in enumerate(row):
-            r[i - 1, j - 1] = ids[col]
+            r[i, j] = ids[col]
 
     ok = (r == 1) | (r == 3) | (r == 5) | (r == 7)
     no = (r == 0) | (r == 2) | (r == 4) | (r == 6)

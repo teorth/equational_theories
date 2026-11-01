@@ -44,6 +44,14 @@ const treatConjectedAsUnknownDetail = document.getElementById('treatConjectedAsU
 const showFiniteGraphList = document.getElementById('showFiniteGraphList');
 const showFiniteGraphDetail = document.getElementById('showFiniteGraphDetail');
 const hideFullySolvedCheckbox = document.getElementById('hideFullySolved');
+const showSporadicEquationsCheckbox = document.getElementById('showSporadicEquations');
+
+// Extra laws from Equations/Basic.lean numbered beyond the core 4694.
+const SPORADIC_EQUATION_IDS = [
+    5093, 26302, 28770, 56085, 60491, 86082, 321577, 329857, 345169, 361729,
+    374794, 906021, 910472, 914612, 916037, 930594, 936498, 921941, 42323216,
+    1875916474
+];
 
 let currentEquationIndex = null;
 
@@ -135,7 +143,7 @@ function filterEquations() {
     } else {
         const seenClasses = new Set();
         filteredCachedItems = cachedItems.filter(item => {
-            const eqClass = equiv.find(cls => cls.includes(item.index));
+            const eqClass = equiv.find(cls => cls.includes(item.index)) || [item.index];
             if (!seenClasses.has(eqClass[0])) {
                 seenClasses.add(eqClass[0]);
                 return true;
@@ -147,6 +155,7 @@ function filterEquations() {
     if (hideFullySolvedCheckbox.checked) {
         // Further filter by whether they are fully solved (e.g. they have any unknowns/conjectures remaining.)
         filteredCachedItems = filteredCachedItems.filter(item => {
+            if (item.sporadic) return true;
             return item.stats.unknown != 0 || item.stats.unknownBy != 0
         });
     }
@@ -252,6 +261,41 @@ function initializeEquationList() {
         };
     });
 
+    if (showSporadicEquationsCheckbox && showSporadicEquationsCheckbox.checked) {
+        for (const eqId of SPORADIC_EQUATION_IDS) {
+            const index = eqId - 1;
+            const eq = Equation.fromId(eqId);
+            const label = `Equation${eqId}[${eq.toString()}]`;
+            const element = document.createElement('div');
+            element.className = 'equation-item';
+            element.dataset.index = index;
+            element.innerHTML = `
+            <div class="equation-name special">${label}</div>
+            <div class="equation-stat implies">—</div>
+            <div class="equation-stat impliedBy">—</div>
+            <div class="equation-stat antiImplies">—</div>
+            <div class="equation-stat antiImpliedBy">—</div>
+            <div class="equation-stat unknown">—</div>
+            <div class="equation-stat unknownBy">—</div>
+        `;
+            cachedItems.push({
+                eq: label,
+                index,
+                stats: { implies: 0, impliedBy: 0, antiImplies: 0, antiImpliedBy: 0, unknown: 1, unknownBy: 1 },
+                sporadic: true,
+                element,
+                statElements: {
+                    implies: element.querySelector('.implies'),
+                    impliedBy: element.querySelector('.impliedBy'),
+                    antiImplies: element.querySelector('.antiImplies'),
+                    antiImpliedBy: element.querySelector('.antiImpliedBy'),
+                    unknown: element.querySelector('.unknown'),
+                    unknownBy: element.querySelector('.unknownBy')
+                }
+            });
+        }
+    }
+
     filterEquations();
 
 }
@@ -346,12 +390,34 @@ function renderImplications(index) {
     const dualDisplay = (dualIndex - 1n).toString();
     selectedEquationDual.innerHTML = `(Dual equation: <a class='link' onclick="renderImplications('${dualDisplay}')">Equation${dualIndex.toString()}[${dualEq}]</a>)`;
 
+    // Lowest-numbered equivalent, shown up top when this equation is not already the
+    // canonical representative of its class (issue 1218).
+    let canonicalIndex = Number(bigIndex);
+    if (Number(bigIndex) <= equations.length - 1) {
+        const cls = equiv.find(c => c.includes(Number(bigIndex))) || [Number(bigIndex)];
+        canonicalIndex = cls[0];
+        if (canonicalIndex !== Number(bigIndex)) {
+            const canonicalEqIdTop = BigInt(canonicalIndex) + 1n;
+            selectedEquationDual.innerHTML +=
+                ` (Canonically equivalent form: <a class='link' onclick="renderImplications('${canonicalIndex}')">Equation${canonicalEqIdTop.toString()}[${equations[canonicalIndex]}]</a>)`;
+        }
+    }
+    const canonicalEqId = BigInt(canonicalIndex) + 1n;
+
     if (commentary[eqId] !== undefined) {
         showVisibility("equationCommentary");
         equationCommentary.innerHTML = commentary[eqId];
+        if (canonicalEqId !== eqId && commentary[canonicalEqId] !== undefined) {
+            equationCommentary.innerHTML +=
+                `<h2>Commentary of the canonically equivalent ${equations[canonicalIndex]}:</h2><br>${commentary[canonicalEqId]}`;
+        }
     } else if(commentary[dualIndex] !== undefined) {
         showVisibility("equationCommentary");
         equationCommentary.innerHTML = `<h2>Commentary of the dual Equation${dualIndex}[${dualEq}]:</h2> ${commentary[dualIndex]}`;
+        if (canonicalEqId !== eqId && commentary[canonicalEqId] !== undefined) {
+            equationCommentary.innerHTML +=
+                `<h2>Commentary of the canonically equivalent ${equations[canonicalIndex]}:</h2><br>${commentary[canonicalEqId]}`;
+        }
     }
 
     if (bigIndex > BigInt(equations.length - 1)) {
@@ -668,6 +734,13 @@ hideFullySolvedCheckbox.addEventListener('change', () => {
     filterEquations();
     renderEquationList();
 });
+
+if (showSporadicEquationsCheckbox) {
+    showSporadicEquationsCheckbox.addEventListener('change', () => {
+        initializeEquationList();
+        renderEquationList();
+    });
+}
 
 // Function to handle URL changes (including back/forward navigation)
 function handleUrlChange() {
