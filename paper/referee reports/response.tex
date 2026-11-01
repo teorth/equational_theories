@@ -149,11 +149,11 @@ generation process can be trusted.
 
 \item State which sections of the paper correspond to formalized results and which do
 not (the referee notes \S10 as an example of the latter).
-\response{\todo}
+\response{\done\ The Formal foundations section now states which material is formalized: the implications and refutations themselves, and the full spectrum results for laws of order at most~4, but not the general methods of \S\S5--6 (only their applications to specific laws), the statistics and experiments, or \S10.}
 
 \item Reference a specific tag or commit of the repository described in the paper,
 and make clear which Lean and Mathlib versions are intended.
-\response{\todo}
+\response{\done\ The Formal foundations section now refers to tag \texttt{paper-v3} of the repository, which builds with Lean version 4.29.1 and Mathlib tag \texttt{v4.29.1}.}
 
 \end{requests}
 
@@ -311,12 +311,12 @@ extensive a library of mathematics as Lean's \emph{Mathlib}''.}
 
 \item (p.~11) The explanation of the custom commands (\texttt{equation},
 \texttt{EquationX}, \texttt{LawX}) cannot be followed; examples would help.
-\response{\todo}
+\response{\done}
 
 \item (p.~18) The paragraph beginning ``ideally the environment'' needs more
 elaboration; the referee does not understand the point it is making, and in particular
 whether ``practical implementations'' refers to more than just Lean.
-\response{\done More explanation added.}
+\response{\done. More explanation added.}
 
 \end{requests}
 
@@ -348,7 +348,7 @@ group library (p.~45, line~37; see \url{https://gap-packages.github.io/smallgrp/
 \texttt{lean4checker} was used to limit the axioms used to a ``small trusted set''.
 Say explicitly which axioms are in that set, and whether the consistency of that set
 is well known. (See also \textbf{R1.3}.)
-\response{\done\ The Formal foundations section was corrected to mention that the axiom check was performed by the \texttt{@{[}equational\_result{]}} attribute and to address axiom set.}
+\response{\done\ The Formal foundations section now states that the axiom check was performed by the \texttt{@{[}equational\_result{]}} attribute, and that the permitted axioms are \texttt{propext}, \texttt{Quot.sound} and \texttt{Classical.choice}. On consistency, it cites Carneiro's proof that the type theory of Lean~3 with these axioms is consistent relative to ZFC together with the existence of $n$ inaccessible cardinals for each natural number $n$. It also notes that this proof does not directly apply to Lean~4, whose kernel adds features such as nested inductive types and eta for structures; these are believed not to affect soundness, but the corresponding metatheory has not been fully worked out.}
 
 \item (p.~12, lines~3--9) Include timing data for compiling the full and the reduced
 sets, so the reader can judge whether the difference is minutes, hours or days, and
@@ -372,7 +372,7 @@ should likewise be replaced by proper citations.
 for \(n > 2\). Clarify whether this exploration was carried out by hand or with ATPs or
 other automation, and whether ``complex'' is meant informally (too complex for human
 analysis) or formally (belonging to some intractable complexity class).
-\response{\todo}
+\response{\done. Clarified that this was in the informal sense.}
 
 \item (p.~29, lines~5--7) The paper says the procedure for finding a rule set for the
 greedy extension method can be automated using ATPs or SAT solvers. State explicitly
@@ -383,7 +383,7 @@ tactic or external program for it exists.
 \item (Remark~6.5, p.~35, line~7) The remark observes that matching invariants can come
 from other algebras with a larger signature. State whether such matching invariants
 were used in the formalization, and if so give an example.
-\response{\todo}
+\response{\done}
 
 \item (footnote~14, p.~43) The footnote notes that the timings in \S7.3 were performed
 in heterogeneous environments and cannot be taken as benchmarks, but the hardware used
@@ -404,7 +404,7 @@ modules on p.~54, lines~25--27, and to the extensions mentioned on p.~53, line~3
 
 \item (footnote~25, p.~57) Describe the format and meaning of the data in the linked
 JSON file, which is otherwise not straightforward to interpret.
-\response{\todo}
+\response{\done A separate markdown file describing this has been added to the repository.}
 
 \item (\S11) Make explicit what advantage the CNN heuristic has over simply running
 Prover9 or Vampire~5.0 with the previously determined optimal parameters for a fixed
@@ -421,7 +421,7 @@ publicly available LLMs'' implies the existence of non-public LLMs that outperfo
 ATPs, for which no evidence is given. Either cite the publication establishing this, or,
 if the qualification was made out of caution, list explicitly which LLM tools were tried
 and did not yield results.
-\response{\todo}
+\response{\done. This is in reference to a private communication, which we have now mentioned.}
 
 \end{requests}
 
