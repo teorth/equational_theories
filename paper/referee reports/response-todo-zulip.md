@@ -6,7 +6,7 @@ Two referee reports are in. Referee #1 asks for **major revisions**, Referee #2 
 
 Referee #2 numbered their own items, so R2.$$n$$ and R2.T$$n$$ match their report exactly. Referee #1's report is prose under five headings; R1.$$n$$ is our numbering, grouped under their headings.
 
-**Already handled:** the 23 items struck through below are done in the manuscript — all of Referee #2’s typos except R2.T10, both citation items (R2.1, R2.2), and, from Referee #1, R1.11–R1.14, R1.19–R1.21, R1.24 and R1.M1, covered by the new introduction paragraphs on why Lean was chosen, on project logistics, on the intermediate level of automation, and on modularity. **31 items remain unclaimed.**
+**Already handled:** the 24 items struck through below are done in the manuscript — all of Referee #2’s typos, both citation items (R2.1, R2.2), and, from Referee #1, R1.11–R1.14, R1.19–R1.21, R1.24 and R1.M1, covered by the new introduction paragraphs on why Lean was chosen, on project logistics, on the intermediate level of automation, and on modularity. **30 items remain unclaimed.**
 
 **Five requests are made by both referees** and need consistent answers: the unformalized transitivity/duality extension (R1.1–R1.6 + R2.4), compilation timings (R1.7 + R2.4), the trusted axiom set (R1.3 + R2.3), §11 (R1.18 + R2.13), and the phrase "proof assistant language Lean" (R1.M1 + R2.T1). Worth one person taking each cluster.
 
@@ -95,7 +95,7 @@ Continuing from the previous message. Same rules: claim an item by replying with
 - ~~**R2.T7**~~ **[DONE]** — p. 10 l. 37: "two words in a free group" → "free **magma**", per the Lean definition of `EquationX`.
 - ~~**R2.T8**~~ **[DONE]** — p. 12 l. 11 uses "LeanBlueprint", p. 13 l. 22 onward "Lean blueprint" — pick one.
 - ~~**R2.T9**~~ **[DONE]** — p. 15 l. 30 uses "leanchecker", p. 11 l. 18 and p. 18 l. 15 use "lean4checker" — same tool or typo? If different, cite both.
-- **R2.T10** — p. 17 ll. 9, 34: "relatively spartan" / "spartan language" — meaning unclear; consider another adjective.
+- ~~**R2.T10**~~ **[DONE]** — p. 17 ll. 9, 34: "relatively spartan" / "spartan language" — meaning unclear; consider another adjective.
 - ~~**R2.T11**~~ **[DONE]** — p. 33 l. 15: if "versions of the greedy algorithm" means the abstract greedy algorithm of Theorem 5.12, reference the theorem.
 - ~~**R2.T12**~~ **[DONE]** — p. 34 l. 9: remind the reader that free magmas were defined in §2.
 - ~~**R2.T13**~~ **[DONE]** — p. 38 l. 18: "Clearly the term being rewritten is in..." → "Clearly, **if** the term being rewritten is in...".
