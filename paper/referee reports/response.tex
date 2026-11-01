@@ -149,7 +149,7 @@ generation process can be trusted.
 
 \item State which sections of the paper correspond to formalized results and which do
 not (the referee notes \S10 as an example of the latter).
-\response{\todo}
+\response{\done\ The Formal foundations section now states which material is formalized: the implications and refutations themselves, and the full spectrum results for laws of order at most~4, but not the general methods of \S\S5--6 (only their applications to specific laws), the statistics and experiments, or \S10.}
 
 \item Reference a specific tag or commit of the repository described in the paper,
 and make clear which Lean and Mathlib versions are intended.
@@ -348,7 +348,7 @@ group library (p.~45, line~37; see \url{https://gap-packages.github.io/smallgrp/
 \texttt{lean4checker} was used to limit the axioms used to a ``small trusted set''.
 Say explicitly which axioms are in that set, and whether the consistency of that set
 is well known. (See also \textbf{R1.3}.)
-\response{\done\ The Formal foundations section was corrected to mention that the axiom check was performed by the \texttt{@{[}equational\_result{]}} attribute and to address axiom set.}
+\response{\done\ The Formal foundations section now states that the axiom check was performed by the \texttt{@{[}equational\_result{]}} attribute, and that the permitted axioms are \texttt{propext}, \texttt{Quot.sound} and \texttt{Classical.choice}. On consistency, it cites Carneiro's proof that the type theory of Lean~3 with these axioms is consistent relative to ZFC together with the existence of $n$ inaccessible cardinals for each natural number $n$. It also notes that this proof does not directly apply to Lean~4, whose kernel adds features such as nested inductive types and eta for structures; these are believed not to affect soundness, but the corresponding metatheory has not been fully worked out.}
 
 \item (p.~12, lines~3--9) Include timing data for compiling the full and the reduced
 sets, so the reader can judge whether the difference is minutes, hours or days, and
