@@ -447,6 +447,8 @@ def _equation_id(input_eq: Equation) -> typing.Tuple[int, Equation]:
 
 
 def _equation_from_id(input_eq: int) -> Equation:
+    if input_eq < 1:
+        raise ValueError("Equation IDs must be positive integers")
     n = 0
     eq_num = input_eq - 1
     while eq_num >= (max_eq_num := num_eqs(n)):
