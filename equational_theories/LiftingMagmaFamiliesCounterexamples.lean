@@ -1,7 +1,7 @@
 import equational_theories.LiftingMagmaFamilies
 import equational_theories.Closure
 import equational_theories.Equations.All
-open Law
+open Law MagmaLaw
 open Lean Elab Command Term
 
 -- TODO: Automatically generate these structures when a lifting magma family is defined

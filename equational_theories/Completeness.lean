@@ -6,7 +6,7 @@ import equational_theories.MagmaLaw
 import Mathlib.Data.Set.Defs
 
 open FreeMagma
-open Law
+open Law MagmaLaw
 
 theorem Soundness'_u {α β G : Type*} [Magma G] {Γ : Ctx α} {E : MagmaLaw β} (h : Γ ⊢' E) :
     G ⊧ Γ → G ⊧ E := by

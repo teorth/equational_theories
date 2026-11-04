@@ -80,7 +80,7 @@ is satisfied by a magma $G$ if and only if
 for all $x, y \in G$. We refer to \Cref{comm-law-2} as the \emph{equation} associated to the law \Cref{comm-law}. One can think of equations as the ``semantic'' interpretation of a ``syntactic'' law. However, we shall often abuse notation and identify a law with its associated equation. In particular, we shall (somewhat carelessly) also refer to \Cref{comm-law-2} as ``the commutative law'' (rather than ``the commutative equation'').
 
 \begin{definition}[Models]\label{models-def}
-  \lean{models}\leanok
+  \lean{Law.MagmaLaw.models}\leanok
   \uses{law-def}
   A \emph{theory} is a set $\Gamma$ of laws.
   Given a theory $\Gamma$, a magma $G$ is a \emph{model} of $\Gamma$ with the
@@ -89,7 +89,7 @@ for all $x, y \in G$. We refer to \Cref{comm-law-2} as the \emph{equation} assoc
 \end{definition}
 
 \begin{definition}[Derivation]\label{derivation-def}
-  \lean{derive}\leanok
+  \lean{Law.MagmaLaw.derive}\leanok
   \uses{law-def}
   Given a theory $\Gamma$ and a law $w\formaleq w'$ over a fixed alphabet $X$, we say that
   $\Gamma$ \emph{derives} $w\formaleq w'$, and write $\Gamma\vdash w\formaleq w'$, if the law can

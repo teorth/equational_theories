@@ -96,10 +96,10 @@ Builds an implication of Laws from the implication of theorems. It should look s
 
 ```
 theorem LawN_implies_LawM : @Law.MagmaLaw.implies.{0} Nat LawN LawM :=
-fun (G : Type) (inst : Magma.{0} G) (h : @satisfies.{0, 0} Nat G inst LawN) ↦
-  @Iff.mpr (@satisfies.{0, 0} Nat G inst LawM) (@Equation3.{0} G inst) (@LawM.models_iff.{0} G inst)
+fun (G : Type) (inst : Magma.{0} G) (h : @Law.MagmaLaw.satisfies.{0, 0} Nat G inst LawN) ↦
+  @Iff.mpr (@Law.MagmaLaw.satisfies.{0, 0} Nat G inst LawM) (@Equation3.{0} G inst) (@LawM.models_iff.{0} G inst)
     (@Subgraph.EquationN_implies_EquationM.{0} G inst
-      (@Iff.mp (@satisfies.{0, 0} Nat G inst Law2) (@EquationN.{0} G inst) (@LawN.models_iff.{0} G inst) h))
+      (@Iff.mp (@Law.MagmaLaw.satisfies.{0, 0} Nat G inst Law2) (@EquationN.{0} G inst) (@LawN.models_iff.{0} G inst) h))
 ```
 -/
 def addLawImplicationThm (thm_ty : Expr) (thm_name : Name) : MetaM Unit := do
@@ -212,8 +212,8 @@ It should look something like:
 
 ```
 theorem Subgraph.LawN_implied : ∀ (l : Law.MagmaLaw.{0} Nat), @Law.MagmaLaw.implies.{0} Nat l LawN :=
-fun (l : Law.MagmaLaw.{0} Nat) {G : Type} [inst : Magma.{0} G] (a : @satisfies.{0, 0} Nat G inst l) ↦
-  @Iff.mpr (@satisfies.{0, 0} Nat G inst Law1) (@Equation1.{0} G inst) (@LawN.models_iff.{0} G inst)
+fun (l : Law.MagmaLaw.{0} Nat) {G : Type} [inst : Magma.{0} G] (a : @Law.MagmaLaw.satisfies.{0, 0} Nat G inst l) ↦
+  @Iff.mpr (@Law.MagmaLaw.satisfies.{0, 0} Nat G inst Law1) (@Equation1.{0} G inst) (@LawN.models_iff.{0} G inst)
     (@Subgraph.EquationN_true.{0} G inst)
 ```
 -/
