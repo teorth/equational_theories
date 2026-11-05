@@ -68,16 +68,6 @@ let equiv = [];
 let decoded = [];
 let implications = [];
 
-function decodeRLE(arr) {
-    const decoded = [];
-    for (let i = 0; i < arr.length; i += 2) {
-        const value = arr[i];
-        const count = arr[i + 1];
-        decoded.push(...Array(count).fill(value));
-    }
-    return decoded;
-}
-
 function reshape(array, rows, cols) {
     const result = [];
     for (let i = 0; i < rows; i++) {
