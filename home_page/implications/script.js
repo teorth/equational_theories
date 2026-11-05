@@ -46,6 +46,18 @@ const showFiniteGraphDetail = document.getElementById('showFiniteGraphDetail');
 const hideFullySolvedCheckbox = document.getElementById('hideFullySolved');
 const showSporadicEquationsCheckbox = document.getElementById('showSporadicEquations');
 
+const propertyFilter = document.getElementById('propertyFilter');
+const propertyFilterStatus = document.getElementById('propertyFilterStatus');
+const selectedEquationProperties = document.getElementById('selectedEquationProperties');
+const equationPropertyCache = new Map();
+
+function propertiesFor(eqId) {
+    if (!equationPropertyCache.has(eqId)) {
+        equationPropertyCache.set(eqId, EquationProperties.describe(Equation.fromId(eqId)));
+    }
+    return equationPropertyCache.get(eqId);
+}
+
 // Extra laws from Equations/Basic.lean numbered beyond the core 4694.
 const SPORADIC_EQUATION_IDS = [
     5093, 26302, 28770, 56085, 60491, 86082, 321577, 329857, 345169, 361729,
@@ -137,12 +149,29 @@ function showVisibility(elementId) {
 }
 
 function filterEquations() {
-    // First filter by whether to collapse by equivalence class
+    // Filter written forms before collapsing classes: the matching form may not
+    // be the lowest-numbered representative of an equivalence class.
+    let candidates = cachedItems;
+    try {
+        const query = propertyFilter.value.trim();
+        const matches = EquationProperties.compileFilter(query);
+        if (query) {
+            candidates = candidates.filter(item =>
+                matches(propertiesFor(item.index + 1), commentary[item.index + 1] !== undefined));
+        }
+        propertyFilter.removeAttribute('aria-invalid');
+    } catch (error) {
+        filteredCachedItems = [];
+        propertyFilter.setAttribute('aria-invalid', 'true');
+        propertyFilterStatus.textContent = error.message;
+        return;
+    }
+
     if (showEquivalences) {
-        filteredCachedItems = cachedItems;
+        filteredCachedItems = candidates;
     } else {
         const seenClasses = new Set();
-        filteredCachedItems = cachedItems.filter(item => {
+        filteredCachedItems = candidates.filter(item => {
             const eqClass = equiv.find(cls => cls.includes(item.index)) || [item.index];
             if (!seenClasses.has(eqClass[0])) {
                 seenClasses.add(eqClass[0]);
@@ -153,12 +182,12 @@ function filterEquations() {
     }
 
     if (hideFullySolvedCheckbox.checked) {
-        // Further filter by whether they are fully solved (e.g. they have any unknowns/conjectures remaining.)
         filteredCachedItems = filteredCachedItems.filter(item => {
             if (item.sporadic) return true;
-            return item.stats.unknown != 0 || item.stats.unknownBy != 0
+            return item.stats.unknown != 0 || item.stats.unknownBy != 0;
         });
     }
+    propertyFilterStatus.textContent = `${filteredCachedItems.length} equations match.`;
 }
 
 
@@ -317,8 +346,8 @@ function updateEquationListStats() {
     filterEquations();
 }
 
-function updateUrl(queryString) {
-    queries = []
+function updateUrl(queryString, replace = false) {
+    const queries = []
     if (queryString !== undefined) {
         queries.push(String(queryString));
     }
@@ -326,15 +355,21 @@ function updateUrl(queryString) {
         queries.push("finite");
     }
 
+    if (propertyFilter.value.trim()) {
+        queries.push('properties=' + encodeURIComponent(propertyFilter.value.trim()));
+    }
+
     let nextUrl = window.location.href.split("?")[0];
     if (queries.length > 0) {
         nextUrl += "?" + queries.join("&");
     }
-    history.pushState(null, '', nextUrl);
+    if (nextUrl !== window.location.href) {
+        history[replace ? 'replaceState' : 'pushState'](null, '', nextUrl);
+    }
 }
 
-function renderEquationList(sortBy = 'index', sortOrder = 'asc') {
-    updateUrl(undefined);
+function renderEquationList(sortBy = 'index', sortOrder = 'asc', replaceHistory = false) {
+    updateUrl(undefined, replaceHistory);
 
     const header = equationList.querySelector('.header');
 
@@ -384,6 +419,27 @@ function renderImplications(index) {
     currentEquationIndex = bigIndex;
     selectedEquation.textContent = `Equation${eqId.toString()}[${eq.toString()}]`;
     selectedEquation.dataset.index = bigIndex.toString();
+    const properties = EquationProperties.describe(eq);
+    selectedEquationProperties.replaceChildren();
+    for (const tag of EquationProperties.tags(properties, commentary[eqId] !== undefined)) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'equation-tag';
+        button.textContent = tag;
+        button.addEventListener('click', () => {
+            propertyFilter.value = tag;
+            if (cachedItems.length === 0) initializeEquationList();
+            filterEquations();
+            showPage('listPage');
+            renderEquationList();
+            propertyFilter.focus();
+        });
+        selectedEquationProperties.appendChild(button);
+    }
+    const content = document.createElement('p');
+    content.textContent = 'Content (multiset union): ' + properties.content.map(([name, count]) => `${name}:${count}`).join(', ')
+        + '. Cancellation (left minus right): ' + (properties.cancellation.map(([name, count]) => `${name}:${count}`).join(', ') || '0') + '.';
+    selectedEquationProperties.appendChild(content);
 
     const dualEq = eq.dual();
     const dualIndex = dualEq.id;
@@ -614,6 +670,7 @@ function loadGraphAndRender(jsondata) {
     implications = reshape(decoded, 4694, 4694);
 
     let params = urlParams();
+    propertyFilter.value = params.properties || '';
     if (params.equation) {
         renderImplications(params.equation - 1);
         showPage('detailPage');
@@ -730,6 +787,18 @@ showFiniteGraphList.addEventListener('change', () => {
     });
 });
 
+propertyFilter.addEventListener('input', () => {
+    filterEquations();
+    renderEquationList('index', 'asc', true);
+});
+
+document.getElementById('clearPropertyFilter').addEventListener('click', () => {
+    propertyFilter.value = '';
+    filterEquations();
+    renderEquationList('index', 'asc', true);
+    propertyFilter.focus();
+});
+
 hideFullySolvedCheckbox.addEventListener('change', () => {
     filterEquations();
     renderEquationList();
@@ -745,6 +814,8 @@ if (showSporadicEquationsCheckbox) {
 // Function to handle URL changes (including back/forward navigation)
 function handleUrlChange() {
     let params = urlParams();
+    propertyFilter.value = params.properties || '';
+    filterEquations();
     if (params.equation) {
         renderImplications(params.equation-1);
         showPage('detailPage');
