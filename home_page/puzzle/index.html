@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Magma Puzzle · Equational Theories</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="puzzle.mjs"></script>
+</head>
+<body>
+  <main>
+    <nav aria-label="Project"><a href="../">Equational Theories</a> / <a href="../fme/">Finite Magma Explorer</a></nav>
+    <h1>Magma Puzzle</h1>
+    <p>Fill a multiplication table so that the selected equations hold. A <strong>?</strong> is an unknown product. Each row gives the left input and each column the right input of ◇.</p>
+    <p id="loading" role="status">Loading equations…</p>
+    <section id="puzzle" hidden>
+      <div class="controls">
+        <label>Table order <select id="order"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
+        <button type="button" id="new">New commutative puzzle</button>
+        <button type="button" id="clear">Clear table</button>
+        <button type="button" id="undo" disabled>Undo</button>
+      </div>
+      <form id="laws-form">
+        <label for="law-numbers">Equation numbers</label>
+        <input id="law-numbers" value="3, 43, 4512" aria-describedby="law-help" required>
+        <button type="submit">Use these laws</button>
+        <p id="law-help">Choose up to eight numbers from the <a href="../implications/">Equation Explorer</a>, separated by commas. The starting laws are idempotence, commutativity, and associativity.</p>
+        <p id="law-error" role="alert"></p>
+      </form>
+      <div class="workspace">
+        <section aria-labelledby="table-heading">
+          <h2 id="table-heading">Multiplication table</h2>
+          <div class="table-wrap"><table id="products"><caption>Products: row ◇ column</caption></table></div>
+          <p id="progress" role="status"></p>
+          <button type="button" id="choices" disabled>Check choices for an empty cell</button>
+          <div id="choice-results" aria-live="polite"></div>
+          <p class="hint">Focus an empty cell, then check its choices. These exclude values already contradicted by filled products; other choices can still fail later.</p>
+        </section>
+        <section aria-labelledby="results-heading">
+          <h2 id="results-heading">Selected laws</h2>
+          <p>False includes a counterexample. Undetermined means no counterexample has been found yet. True is shown only for a completed table.</p>
+          <ul id="law-results"></ul>
+        </section>
+      </div>
+      <p class="hint">Checks enumerate the variable assignments in this finite table. For larger completed tables, use the <a href="../fme/">Finite Magma Explorer</a>.</p>
+    </section>
+  </main>
+</body>
+</html>
