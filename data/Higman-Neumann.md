@@ -14,17 +14,13 @@ The paper's search for all laws of order at most 8 with this property eliminated
 
 ## File format
 
-The file has one record per line, sorted by increasing `id`:
+The file is a JSON array with one object per law, sorted by increasing `id` and written one per line:
 
 ```
-{id = 42323216, law = "x = y ◇ ((((y ◇ y) ◇ x) ◇ z) ◇ (((y ◇ y) ◇ y) ◇ z))", parent = 42359357, class = "HN-equivalent"},
+{"id" : 42323216, "law" : "x = y ◇ ((((y ◇ y) ◇ x) ◇ z) ◇ (((y ◇ y) ◇ y) ◇ z))", "parent" : 42359357, "class" : "HN-equivalent"},
 ```
 
-Despite the `.json` extension, the file is not strict JSON: fields are written `key = value` with unquoted keys, and the enclosing braces hold a list of records. It therefore has to be read with a custom parser, or with a regular expression such as:
-
-```
-\{id = (\d+), law = "([^"]*)", parent = (\d+), class = "([^"]*)"\}
-```
+It can be read with any JSON parser, for example `json.load` in Python.
 
 ## Fields
 
