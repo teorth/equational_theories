@@ -5,6 +5,8 @@ import equational_theories.Equations.All
 import Batteries.Data.Array.Lemmas
 import Mathlib.Tactic.Cases
 
+open Law MagmaLaw
+
 /-!
 This module proves that are actually looking at at the laws we claim to be looking at.
 

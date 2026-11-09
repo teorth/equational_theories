@@ -1,6 +1,6 @@
 import equational_theories.MagmaLaw
 
-open Law
+open Law MagmaLaw
 
 def FreeMagma.evalBounded {G} [Magma G] (ls : List G) :
     (m : FreeMagma Nat) → (∀ a, m.Mem a → a < ls.length) → G
