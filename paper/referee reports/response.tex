@@ -99,38 +99,38 @@ completely determined, with proofs or refutations formalized in Lean'') and
 proof assistant language Lean'') all give the impression that the full implication
 graph was formalized in Lean. The referee regards the \S1.3 sentence as simply wrong.
 These passages must be corrected.
-\response{\todo}
+\response{\done\ The abstract no longer says ``all'' and \S1.3 has been updated to explicitly state a subset was formalized and the rest were determined by applying transitivity and duality.  In addition, a new ``end-to-end'' theorem has been added since the last revision that verifies that every pair of equations in the general graph is either an explicit implication or refutation determined during the ETP.  As discussed in the Formal foundations section, this theorem certifies that the generating set of implications and counterexamples determined by the ETP suffices to determine every implication.  Since \texttt{EndToEnd.resolveImplication} produces an explicit Lean witness for every pair of laws, the introduction's statement that the implications were determined ``with proofs or refutations formalized in Lean'' is now accurate, and was left unchanged.}
 
 \item The decision to formalize only a reduced generating set (10\,657 positive and
 586\,925 negative implications), with the extension to the remaining implications
 performed by programs external to Lean, is currently explained only on page~12. The
 referee considers the decision itself entirely sound, but insists that it be stated
 early in the paper rather than deep in the technical sections.
-\response{\todo}
+\response{\done\ \S1.3 now states more clearly that only a small subset of all 22 million possible statements was formalized and the rest determined by transitivity and duality.}
 
 \item Give a clear statement of exactly what must be trusted in order to believe that
 all 22\,028\,942 implications are settled. The referee's reading is that the trusted
 base consists of (i)~the Lean kernel, (ii)~the Lean program extending the generating
 set to the full graph, and (iii)~some process confirming that all 22M results are in
 fact settled; this should be confirmed or corrected explicitly.
-\response{\todo}
+\response{\done\ With the introduction of the new end-to-end proof, the status of the general implication graph now rests only on the Lean kernel and the definitions used in the statement of the theorem.  The Formal foundations section has been updated to discuss this result.  The finite implication graph has one remaining open question and verifying this does still rely on an unverified external tool extending the generating set to the full graph; this is also explicitly stated in the Formal foundations section.}
 
 \item Clarify the role and format of \texttt{full\_entries.json}. The referee expected
 it to be the artifact underlying point~(iii) above, but found its
 \texttt{"proven": false} entries confusing.
-\response{\todo}
+\response{\done\ The file included in the previous submission was an outdated copy. An updated copy lives in \texttt{data/full\_entries.json} along with a description of the format in \texttt{data/README.md}. In particular, the \texttt{"proven": false} entries denote conjectures.  These were used during the project to record results that were informally resolved but not yet formalized; a few such entries remain, but they are not used by the end-to-end theorem. Regarding (iii) above, this file lists the generating set of results for the general implication graph (together with a few results outside the $4694$ laws); the closure is certified by the end-to-end theorem rather than by this file.}
 
 \item Provide instructions enabling an independent reader to verify the claim for
 themselves --- specifically, how one would write a hand-written checker that deduces
 the full implication table from the Lean-verified results. The referee states that in
 the paper's current state they cannot gain full confidence that all 22\,028\,942
 implications are settled.
-\response{\todo}
+\response{\done\ A hand-written checker is no longer needed now that the end-to-end proof certifies this result in the Lean kernel.  This proof includes a function, \texttt{printResolution} in \texttt{equational\_theories/EndToEnd/Print.lean}, to print, for any pair of laws, an explicit witness to a given implication or counterexample.  The finite implication graph is not covered by this theorem as it has one remaining open question.}
 
 \item Discuss which shortcomings of Lean, or of proof assistants in general, made the
 split into a Lean-formalized generating set plus an unverified deduction of its
 consequences necessary. (See also \textbf{R1.20}--\textbf{R1.23}.)
-\response{\todo}
+\response{\done\ The Formal foundations section now mentions that formalizing a generating set of proofs was done due to compilation cost. The use of unverified tools to compute transitivity and duality of the generating set was originally due to expediency when the project was still under development.  After the project fully determined the implication graph, there was no fundamental impediment to an end-to-end ``completeness proof'' other than a lack of participant time.  The final closure proof, built using modern AI tools, is approximately 1.3k lines of Lean and requires only several minutes to compile.}
 
 \end{requests}
 
@@ -290,7 +290,7 @@ build-time comparison.
 \item Consider whether the external reconstruction of the 22M implication matrix could
 instead be validated inside a proof assistant using native computation, and in
 particular whether verifying the matrix in Rocq would be feasible.
-\response{\todo}
+\response{\done\ Native computation turned out to be unnecessary: the new end-to-end theorem checks the closure of the general implication graph in the Lean kernel, without \texttt{native\_decide}, in about five CPU-minutes. Given this, we did not pursue a verification in Rocq, though we see no obstacle to one.}
 
 \item On mathematical libraries: address the referee's impression that the Mathlib
 aspect --- usually the key reason Lean~4 is chosen --- did not actually matter for
@@ -358,7 +358,7 @@ transitivity and duality is done by external tools, and asks whether those tools
 correct and can be trusted; they find it strange that this is not treated with the same
 care as the deliberate avoidance of \texttt{native\_decide} in the preceding paragraph.
 (See also \textbf{R1.1}--\textbf{R1.6} and \textbf{R1.7}.)
-\response{Timing and line counts for the reduced set were included in the Formal foundations section \todo\ Transitivity and duality}
+\response{\done\ Timing and line counts for the reduced set were included in the Formal foundations section and we mention that compiling the full set would be impractical (roughly, $800 \times 92$ CPU-minutes is several CPU-weeks to compile the full set). We mention that some effort to optimize finite counterexample checking has been made, but not much more. Furthermore, a new ``end-to-end'' completeness proof has been added and discussed in the same section that certifies that the general implication graph is fully determined without relying on any external tools to compute the closure of the graph under transitivity and duality. It is also explicitly mentioned that external tools are still required to compute transitivity and duality of the finite implication graph since it still has one remaining open question.}
 
 \item Replace the unlocated references to the ETP blueprint with citations to specific
 chapters or sections, since the blueprint is a standalone document of 27 chapters

@@ -169,10 +169,24 @@ def generateOutput (inp : Cli.Parsed) : IO UInt32 := do
         if edge.isTrue then IO.println s!"{edge.lhs} → {edge.rhs}"
         else IO.println s!"¬ ({edge.lhs} → {edge.rhs})"
 
+-- Normalize `path` to be relative to `root` if it is an absolute path, and strip `./` components.
+def normalizePath (root path : System.FilePath) : System.FilePath := Id.run do
+  let mut parts := path.components.filter (· != ".")
+  let rootParts := root.components.filter (· != ".")
+  if path.isAbsolute && rootParts.isPrefixOf parts then
+    parts := parts.drop rootParts.length
+  return System.mkFilePath parts
+
 def generateRaw (inp : Cli.Parsed) : IO UInt32 := do
   withExtractedResults inp fun rs _dualityRelation => do
     let rs := matchFinite rs (inp.hasFlag "finite-only")
     if inp.hasFlag "full-entries" then
+      let cwd ← IO.currentDir
+      let rs := rs.map fun e => { e with filename := (normalizePath cwd e.filename).toString }
+      -- Sort the output so it does not depend on module import order.
+      let rs := rs.qsort fun a b =>
+        (compare a.filename b.filename |>.then (compare a.line b.line)
+          |>.then (compare a.name.toString b.name.toString)) == .lt
       IO.println (toJson rs).compress
       return
     let rs := if inp.hasFlag "proven" then rs.filter (·.proven) else rs
