@@ -28,6 +28,10 @@
       .header .equation-stat { cursor: pointer; }
       .header .equation-stat:hover { background-color: #e0e0e0; }
       .checkbox-container { margin: 10px 0; }
+      .equation-tag { margin: 2px; }
+      #propertyFilter { max-width: 100%; box-sizing: border-box; }
+      #propertyFilterStatus { display: block; margin: 5px 0; }
+      #propertyFilter[aria-invalid="true"] { border: 2px solid #b00; }
       #equationCommentary {
         border: 1px solid black;
         padding: 5px;
@@ -176,6 +180,17 @@
           <input type="checkbox" id="showSporadicEquations"> Show equations numbered &gt; 4694
         </label>
       </div>
+      <div>
+        <label for="propertyFilter">Filter by equation properties</label><br>
+        <input type="text" id="propertyFilter" aria-describedby="propertyFilterHelp propertyFilterStatus"
+               placeholder="e.g. order:4 width:3 balanced">
+        <button type="button" id="clearPropertyFilter">Clear properties</button>
+        <p id="propertyFilterHelp">Combine tags with spaces: <code>order:N</code> (total operations),
+          <code>width:N</code> (distinct variables), <code>degree:N</code> (maximum occurrences of a variable on either side),
+          <code>balanced</code>, <code>unbalanced</code>, or <code>has-commentary</code>.
+          Properties describe each equation's written form. “Hide equivalent equations” keeps one matching form per class.</p>
+        <output id="propertyFilterStatus" aria-live="polite"></output>
+      </div>
       <div id="equationList" class="equation-list">
         <div class="equation-item header">
           <div class="equation-name" data-sort="index">Equation</div>
@@ -192,6 +207,7 @@
       <button id="backButton">Back to List</button>
       <h1>Equation Details</h1>
       <h2 id="selectedEquation"></h2>
+      <div id="selectedEquationProperties"></div>
       <div id="equationCommentary"></div>
       <h3><span id="selectedEquationDual"></span> <span id="selectedEquationGraphitiLinks"></span> <span id="smallestMagmaLink"></span></h3>
       <div class="checkbox-container">
@@ -254,6 +270,7 @@
     <script src="implications.js?6"></script>
     <script src="find_equation_id.js"></script>
     <script src="to_lean.js"></script>
+    <script src="equation-properties.js"></script>
     <script src="script.js"></script>
 
     <div>
