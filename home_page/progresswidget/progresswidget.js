@@ -20,6 +20,20 @@ When clicked, the widget captures the mouse and displays a magnifier.
 When a pixel is selected, the widget opens a proof.
 */
 
+// Colors written by scripts/outcomes_to_image.py. The previous default of
+// explicit_true labeled unknown (black) and conjecture pixels as proofs.
+function statusFromPixel(r, g, b) {
+  if (r === 0 && g === 192 && b === 255) return 'explicit_true';
+  if (r === 0 && g === 96 && b === 128) return 'implicit_true';
+  if (r === 102 && g === 255 && b === 0) return 'explicit_conjecture_true';
+  if (r === 0 && g === 128 && b === 0) return 'implicit_conjecture_true';
+  if (r === 255 && g === 72 && b === 72) return 'explicit_false';
+  if (r === 128 && g === 0 && b === 0) return 'implicit_false';
+  if (r === 255 && g === 221 && b === 85) return 'explicit_conjecture_false';
+  if (r === 170 && g === 136 && b === 0) return 'implicit_conjecture_false';
+  return 'unknown';
+}
+
 function progresswidget({ container, statusbar, small, full, eqdb }) {
   let equations = null;
 
@@ -114,12 +128,7 @@ function progresswidget({ container, statusbar, small, full, eqdb }) {
     for (let y = 0; y < fullImg.height; y++) {
       for (let x = 0; x < fullImg.width; x++) {
         const i = (y * fullImg.width + x) * 4;
-        const [r, g, b] = [pixels[i], pixels[i+1], pixels[i+2]];
-        let status = 'explicit_true';
-        if (r === 0 && g === 96 && b === 128) status = 'implicit_true';
-        if (r === 128 && g === 0 && b === 0) status = 'implicit_false';
-        if (r === 255 && g === 72 && b === 72) status = 'explicit_false';
-        statusBuffer[y * fullImg.width + x] = status;
+        statusBuffer[y * fullImg.width + x] = statusFromPixel(pixels[i], pixels[i+1], pixels[i+2]);
       }
     }
     displayImg.src = small;
@@ -169,6 +178,16 @@ function progresswidget({ container, statusbar, small, full, eqdb }) {
       else if (status === 'explicit_false') {
         statusDiv.append(`${eqnX} ⇏ ${eqnY} - `);
         proofLink.textContent = 'explicit countermodel';
+        statusDiv.appendChild(proofLink);
+      }
+      else if (status === 'explicit_conjecture_true' || status === 'implicit_conjecture_true') {
+        statusDiv.append(`${eqnX} ⇒ ${eqnY} - `);
+        proofLink.textContent = 'conjecture';
+        statusDiv.appendChild(proofLink);
+      }
+      else if (status === 'explicit_conjecture_false' || status === 'implicit_conjecture_false') {
+        statusDiv.append(`${eqnX} ⇏ ${eqnY} - `);
+        proofLink.textContent = 'conjectured countermodel';
         statusDiv.appendChild(proofLink);
       }
       else {
