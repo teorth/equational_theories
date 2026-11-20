@@ -333,8 +333,8 @@ function updateUrl(queryString) {
     history.pushState(null, '', nextUrl);
 }
 
-function renderEquationList(sortBy = 'index', sortOrder = 'asc') {
-    updateUrl(undefined);
+function renderEquationList(sortBy = 'index', sortOrder = 'asc', updateHistory = true) {
+    if (updateHistory) updateUrl(undefined);
 
     const header = equationList.querySelector('.header');
 
@@ -354,7 +354,7 @@ function renderEquationList(sortBy = 'index', sortOrder = 'asc') {
 }
 
 
-function renderImplications(index) {
+function renderImplications(index, updateHistory = true) {
     if (index === null || index === undefined) {
         console.error('Invalid equation index:', index);
         return;
@@ -379,7 +379,7 @@ function renderImplications(index) {
 
     const eqId = bigIndex + 1n;
     const eq = Equation.fromId(eqId);
-    updateUrl(eqId);
+    if (updateHistory) updateUrl(eqId);
 
     currentEquationIndex = bigIndex;
     selectedEquation.textContent = `Equation${eqId.toString()}[${eq.toString()}]`;
@@ -742,14 +742,14 @@ if (showSporadicEquationsCheckbox) {
     });
 }
 
-// Function to handle URL changes (including back/forward navigation)
+// Re-render history entries without pushing a new entry or discarding Forward.
 function handleUrlChange() {
     let params = urlParams();
     if (params.equation) {
-        renderImplications(params.equation-1);
+        renderImplications(params.equation-1, false);
         showPage('detailPage');
     } else {
-        renderEquationList();
+        renderEquationList('index', 'asc', false);
         showPage('listPage');
     }
 }
