@@ -30,6 +30,10 @@ def neg(node):
 
 def build_graph(entries, duals):
     G = nx.DiGraph()
+    # An equation without recorded edges still has a reflexive implication.
+    # Include its negation so failed path searches report unknown, not a missing node.
+    G.add_nodes_from(duals)
+    G.add_nodes_from(neg(eq) for eq in duals)
     ctr = 0
     all_equations, unconditionals = set(), []
     for entry in entries:
