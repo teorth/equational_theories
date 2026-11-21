@@ -19,6 +19,15 @@ class CloseAndGetEquivsTest(unittest.TestCase):
         self.assertFalse(closed[3, 1])
         self.assertTrue(closed[1, 1])
 
+    def test_closure_preserves_256_parallel_paths(self):
+        rel = np.eye(258, dtype=bool)
+        rel[0, 1:257] = True
+        rel[1:257, 257] = True
+        closed, _, _ = close_and_get_equivs(rel)
+        self.assertTrue(closed[0, 257])
+        self.assertFalse(closed[257, 0])
+        self.assertTrue(np.all(np.diag(closed)))
+
     def test_mutual_implication_is_one_class(self):
         rel = np.eye(3, dtype=bool)
         rel[1, 2] = True

@@ -7,8 +7,8 @@ import numpy as np
 
 def _boolean_square(rel_mat):
     """One step of boolean matrix squaring (OR-AND), not integer walk counts."""
-    counts = np.matmul(np.asarray(rel_mat, dtype=np.uint8), np.asarray(rel_mat, dtype=np.uint8))
-    return counts > 0
+    support = np.asarray(rel_mat, dtype=bool)
+    return np.matmul(support, support)
 
 
 #Given an array of relations, get the transitive closure and equivalence class list
