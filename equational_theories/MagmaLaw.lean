@@ -33,6 +33,10 @@ instance Ctx.Membership α : Membership (MagmaLaw α) (Ctx α) := ⟨ Set.instMe
 instance {α : Type} : Singleton (MagmaLaw α) (Ctx α) := ⟨Set.singleton⟩
 
 
+namespace Law
+
+namespace MagmaLaw
+
 section DeriveDef
 
 set_option hygiene false
@@ -109,9 +113,6 @@ def models {α β} (Γ : Ctx α) (E : MagmaLaw β) : Prop :=
 
 @[inherit_doc] infix:50 " ⊢' " => derive'
 
-namespace Law
-
-namespace MagmaLaw
 
 def symm {α} (l : MagmaLaw α) : MagmaLaw α := {lhs := l.rhs, rhs := l.lhs}
 
@@ -171,6 +172,8 @@ theorem pmap_eq_map {α β} (m : MagmaLaw α)
     m.pmap f = m.map g := by
   simp only [pmap, map, mk.injEq]; constructor <;> exact FreeMagma.pmap_eq_map _ _ _ fun _ _ ↦ h _ _
 end MagmaLaw
+
+open MagmaLaw
 
 theorem satisfiesPhi_symm_law {α G} [Magma G] (φ : α → G) (E : MagmaLaw α)
     (h : satisfiesPhi φ E) : satisfiesPhi φ E.symm := by

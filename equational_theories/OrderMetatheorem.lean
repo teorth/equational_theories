@@ -9,7 +9,7 @@ theorem FreeMagma.orderLtSubst {α} (t : FreeMagma α) (σ : α → FreeMagma α
       rw [order]
       exact add_le_add (Nat.add_le_add ht hu)  NeZero.one_le
 
-open Law
+open Law MagmaLaw
 -- We use min here, as we want terms of *at least* size n.
 @[simp]
 def MagmaLaw.order {α} (E : MagmaLaw α) : Nat := min (FreeMagma.order E.lhs) (FreeMagma.order E.rhs)

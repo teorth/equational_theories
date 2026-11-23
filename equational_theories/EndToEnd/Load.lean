@@ -126,7 +126,7 @@ def factsProof (thm : Name) : MetaM Expr := do
         | throwError "`{thm}`: could not read an equation number from {eqTy}"
       let lawName := Name.mkSimple s!"Law{num}"
       let lawE := Lean.mkConst lawName
-      let satTy := mkApp4 (Lean.mkConst ``satisfies [levelZero, levelZero]) natTy G inst lawE
+      let satTy := mkApp4 (Lean.mkConst ``Law.MagmaLaw.satisfies [levelZero, levelZero]) natTy G inst lawE
       let mi := mkApp2 (Lean.mkConst (lawName.str "models_iff") [levelZero]) G inst
       if negated then
         -- `fun hh => compPf (mi.mp hh)`

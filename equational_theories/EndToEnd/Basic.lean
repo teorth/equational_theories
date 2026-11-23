@@ -152,11 +152,11 @@ theorem checkRefutation_sound (n m : Nat) (r : Refutation)
   intro himp
   obtain ⟨G, inst, hs, hr⟩ := (neg.get r.fact).h
   -- the model satisfies `lawOf r.a`, and `r.a ⟹ n`, so it satisfies `lawOf n`
-  have hsa : @satisfies Nat G inst (lawOf r.a) :=
+  have hsa : @MagmaLaw.satisfies Nat G inst (lawOf r.a) :=
     hs.mem (List.mem_map_of_mem (List.mem_of_elem_eq_true haS))
-  have hn : @satisfies Nat G inst (lawOf n) := @checkImplication_sound pos _ _ _ hup G inst hsa
+  have hn : @MagmaLaw.satisfies Nat G inst (lawOf n) := @checkImplication_sound pos _ _ _ hup G inst hsa
   -- so it satisfies `lawOf m`, and `m ⟹ r.b`, so it satisfies `lawOf r.b`
-  have hb : @satisfies Nat G inst (lawOf r.b) :=
+  have hb : @MagmaLaw.satisfies Nat G inst (lawOf r.b) :=
     @checkImplication_sound pos _ _ _ hdown G inst (@himp G inst hn)
   exact (hr.mem (List.mem_map_of_mem (List.mem_of_elem_eq_true hbR))) hb
 

@@ -1,6 +1,6 @@
 import equational_theories.MagmaLaw
 
-open Law
+open Law MagmaLaw
 
 namespace Law.MagmaLaw
 
