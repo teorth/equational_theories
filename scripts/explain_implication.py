@@ -156,7 +156,7 @@ def main():
     )
     parser.add_argument(
         "--entries-file",
-        default="full_entries.json",
+        default="data/full_entries.json",
         help="The output of extract_implications raw --full-entries",
     )
     parser.add_argument("--duals-file", default="data/duals.json")

@@ -4,7 +4,7 @@ import equational_theories.Equations.All
 -- open Lean Law
 -- run_meta do
 --   let mut laws := []
---   for i in [1:4694] do
+--   for i in [1:4695] do
 --     laws := (i, ← unsafe evalConstCheck NatMagmaLaw ``NatMagmaLaw (Name.mkSimple s!"Law{i}")) :: laws
 --   laws := laws.reverse
 --   repeat
@@ -2291,6 +2291,7 @@ duals 4375 ↔ 4690
 duals 4376 ↔ 4678
 duals 4377 ↔ 4683
 duals 4378 ↔ 4676
+duals 4379 ↔ 4694
 duals 4380 ↔ 4380
 duals 4381 ↔ 4483
 duals 4382 ↔ 4432

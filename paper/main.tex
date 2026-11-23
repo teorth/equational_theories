@@ -49,7 +49,7 @@
   columns = fullflexible,
   keepspaces = true,
   morecomment = [s][\color{green!50!black}]{@[}{]},
-  morekeywords = [1]{theorem, by, fun, let, have, obtain},
+  morekeywords = [1]{theorem, def, equation, by, fun, let, have, obtain},
   keywordstyle = [1]{\ttfamily\color{kwcolor}},
   morekeywords = [2]{use, constructor, intro, only, simp, decide, decideFin, by_contra, subsumption},
   keywordstyle = [2]{\ttfamily\color{taccolor}},
@@ -57,6 +57,10 @@
   {:=}{{{\color{kwcolor}\raise1pt\hbox{:}\hspace{-1pt}=}}}{2}
   {=>}{{{\color{kwcolor}=>}}}{2}
   {∃}{{{\color{opcolor}\ensuremath{\exists}}}}{1}
+  {∀}{{{\color{opcolor}\ensuremath{\forall}}}}{1}
+  {→}{{{\color{opcolor}\ensuremath{\to}}}}{1}
+  {⋆}{{{\color{opcolor}\ensuremath{\star}}}}{1}
+  {≃}{{{\color{opcolor}\ensuremath{\simeq}}}}{1}
   {∧}{{{\color{opcolor}\ensuremath{\wedge}}}}{1}
   {¬}{{{\color{opcolor}\ensuremath{\lnot}}}}{1}
   {×}{{{\color{opcolor}\ensuremath{\times}}}}{1}
@@ -74,6 +78,10 @@
 \ifpdftex\else
 \usepackage{newunicodechar}
 \newunicodechar{∃}{\ensuremath{\exists}}
+\newunicodechar{∀}{\ensuremath{\forall}}
+\newunicodechar{→}{\ensuremath{\to}}
+\newunicodechar{⋆}{\ensuremath{\star}}
+\newunicodechar{≃}{\ensuremath{\simeq}}
 \newunicodechar{∧}{\ensuremath{\wedge}}
 \newunicodechar{¬}{\ensuremath{\lnot}}
 \newunicodechar{×}{\ensuremath{\times}}
@@ -151,7 +159,7 @@
 \begin{abstract}
   We report on the \emph{Equational Theories Project} (ETP), an online collaborative pilot project
   to explore new ways to collaborate in mathematics with machine assistance. The project successfully determined all $\num{22028942}$ edges of the implication graph between the $4694$ simplest equational laws on magmas, by a combination of
-  human-generated and automated proofs, all validated by the formal proof assistant
+  human-generated and automated proofs, validated by the formal proof assistant
   \emph{Lean}. As a result of this project, several new constructions of magmas satisfying specific laws were discovered, and several auxiliary questions were also addressed, such as the effect of restricting attention to finite magmas.
 \end{abstract}
 
@@ -186,6 +194,7 @@
 \crefalias{section}{appendix}
 \raggedbottom
 \input{numbering}
+\input{atp-appendix}
 \input{contributions}
 
 \bibliographystyle{plainurl}

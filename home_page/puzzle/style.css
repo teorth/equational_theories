@@ -1,0 +1,52 @@
+:root { color-scheme: light dark; font-family: system-ui, sans-serif; line-height: 1.5; }
+body { margin: 0; background: #f5f6f8; color: #20252d; }
+main { max-width: 1100px; margin: auto; padding: 24px; }
+nav, .hint, #law-help { font-size: .9rem; color: #505967; }
+a { color: #1758a6; }
+h1 { margin-bottom: 8px; }
+h2 { margin-top: 0; font-size: 1.25rem; }
+button, select, input { font: inherit; }
+button, input, select { border: 1px solid #939ba6; border-radius: 4px; padding: 7px 10px; background: white; color: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: default; opacity: .5; }
+:focus-visible { outline: 3px solid #286fd4; outline-offset: 2px; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 24px 0; }
+#laws-form { margin-bottom: 24px; }
+#law-numbers { width: min(240px, 65vw); }
+#law-error { color: #a52121; }
+.workspace { display: grid; grid-template-columns: minmax(270px, 1fr) minmax(270px, 1.2fr); gap: 24px; align-items: start; }
+.workspace > section { background: white; border: 1px solid #d0d5dc; border-radius: 8px; padding: 20px; min-width: 0; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; margin: 12px 0; }
+caption { text-align: left; margin-bottom: 10px; }
+th, td { padding: 5px; text-align: center; }
+th { min-width: 30px; }
+td select { min-width: 50px; }
+td.witness select { background: #fff0b8; border-color: #976b00; }
+#law-results { padding: 0; list-style: none; }
+#law-results > li { padding: 12px 0; border-top: 1px solid #d0d5dc; }
+.law-status { display: block; font-weight: bold; margin-top: 5px; }
+.true { color: #17643e; }
+.false { color: #a52121; }
+.undetermined { color: #665723; }
+details { margin-top: 8px; }
+summary { cursor: pointer; }
+#choice-results button { margin: 6px 6px 0 0; }
+@media (max-width: 700px) {
+  main { padding: 16px; }
+  .workspace { grid-template-columns: 1fr; }
+  .workspace > section { padding: 14px; }
+  th { min-width: 22px; }
+  th, td { padding: 3px; }
+  td select { min-width: 44px; padding: 6px 2px; }
+}
+@media (prefers-color-scheme: dark) {
+  body { background: #15191f; color: #e7ebf1; }
+  .workspace > section, button, input, select { background: #222832; }
+  nav, .hint, #law-help { color: #b7c0cf; }
+  a { color: #9fc9ff; }
+  .true { color: #8cdbad; }
+  .false, #law-error { color: #ffa7a7; }
+  .undetermined { color: #e6ce8c; }
+  td.witness select { background: #5c4514; }
+}
