@@ -304,6 +304,8 @@ function updateEquationListStats() {
     const treatConjecturedAsUnknown = treatConjectedAsUnknownList.checked;
     const overallStats = calculateStats(treatConjecturedAsUnknown)
     cachedItems.forEach((item) => {
+        // Sporadic equations (id > 4694) are absent from the implication matrix.
+        if (item.sporadic) return;
         const stats = overallStats[item.index];
         item.stats = stats;
         item.statElements.implies.textContent = stats.implies;
